@@ -18,30 +18,25 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_INTERRUPTIBLE_CHECKPOINT_HANDLE_HPP
-#define __WCDB_INTERRUPTIBLE_CHECKPOINT_HANDLE_HPP
-
-#include <WCDB/Handle.hpp>
+#include <WCDB/Assertion.hpp>
+#include <WCDB/CheckpointHandle.hpp>
+#include <WCDB/Error.hpp>
 
 namespace WCDB {
 
-class InterruptibleCheckpointHandle final : public Handle {
-public:
-    InterruptibleCheckpointHandle();
-    ~InterruptibleCheckpointHandle();
+CheckpointHandle::CheckpointHandle()
+{
+    markErrorAsIgnorable(Error::Code::Interrupt);
+}
 
-    enum class Type {
-        Passive,
-        Truncate,
-    };
+CheckpointHandle::~CheckpointHandle()
+{
+    markErrorAsUnignorable();
+}
 
-    bool checkpoint(Type type);
-
-protected:
-    static const String& getSQLForTruncateCheckpoint();
-    static const String& getSQLForPassiveCheckpoint();
-};
+bool CheckpointHandle::checkpoint(CheckpointMode mode)
+{
+    return Handle::checkpoint(mode);
+}
 
 } // namespace WCDB
-
-#endif /* __WCDB_INTERRUPTIBLE_CHECKPOINT_HANDLE_HPP */

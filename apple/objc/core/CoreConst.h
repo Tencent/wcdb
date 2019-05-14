@@ -98,8 +98,8 @@ static constexpr const char* NotifierPreprocessorName = "com.Tencent.WCDB.Notifi
 static constexpr const char* NotifierLoggerName = "com.Tencent.WCDB.Notifier.Log";
 
 // Handle Pool
-static constexpr const int HandlePoolMaxAllowedNumberOfHandles = 64;
-static constexpr const unsigned int HandlePoolNumberOfSlots = 6;
+static constexpr const int HandlePoolMaxAllowedNumberOfHandles = 32;
+static constexpr const unsigned int HandlePoolNumberOfSlots = 8;
 
 // Checkpoint
 static constexpr const int CheckpointFramesThresholdForTruncating
@@ -125,6 +125,7 @@ static constexpr const char* ErrorSourceSQLite = "SQLite";
 static constexpr const char* ErrorSourceRepair = "Repair";
 static constexpr const char* ErrorSourceSystem = "System";
 static constexpr const char* ErrorSourceAssertion = "Assertion";
+static constexpr const char* ErrorSourceTrace = "Trace";
 static constexpr const char* ErrorSourceNative = "Native";
 
 // Tag

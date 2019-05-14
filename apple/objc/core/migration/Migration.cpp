@@ -149,7 +149,7 @@ void Migration::markAsNoNeedToMigrate(const String& table)
     m_hints.erase(table);
 }
 
-bool Migration::hintTable(InfoInitializer& initializer, const String& table)
+bool Migration::hintThatTableWillBeCreated(InfoInitializer& initializer, const String& table)
 {
     return initInfo(initializer, table);
 }
@@ -299,9 +299,9 @@ std::pair<bool, const MigrationInfo*> Migration::Binder::bindTable(const String&
     return { succeed, info.get() };
 }
 
-bool Migration::Binder::hintTable(const String& table)
+bool Migration::Binder::hintThatTableWillBeCreated(const String& table)
 {
-    return m_migration.hintTable(*this, table);
+    return m_migration.hintThatTableWillBeCreated(*this, table);
 }
 
 const MigrationInfo* Migration::Binder::getBoundInfo(const String& table)

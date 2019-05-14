@@ -258,10 +258,10 @@ bool Core::databaseShouldCheckpoint(const String& path, int frames)
     RecyclableDatabase database = m_databasePool.get(path);
     bool succeed = true; // mark as no error if database is not referenced.
     if (database != nullptr) {
-        succeed = database->interruptibleCheckpointIfAlreadyInitialized(
+        succeed = database->checkpointIfAlreadyInitialized(
         frames >= CheckpointFramesThresholdForTruncating ?
-        Database::CheckpointType::Truncate :
-        Database::CheckpointType::Passive);
+        Database::CheckpointMode::Truncate :
+        Database::CheckpointMode::Passive);
     }
     return succeed;
 }

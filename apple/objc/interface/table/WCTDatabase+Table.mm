@@ -35,7 +35,7 @@
     bool succeed, exists;
     std::tie(succeed, exists) = _database->tableExists(tableName);
     if (succeed) {
-        result = exists;
+        result.reset(exists);
     }
     return result;
 }

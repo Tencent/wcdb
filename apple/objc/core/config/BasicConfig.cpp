@@ -69,7 +69,7 @@ bool BasicConfig::invoke(Handle* handle)
 
     if (!getOrSetPragmaBegin(handle, m_getLockingMode)
         || !getOrSetPragmaEnd(
-           handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("NORMAL"))) {
+        handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("NORMAL"))) {
         return false;
     }
 
@@ -87,14 +87,14 @@ bool BasicConfig::invoke(Handle* handle)
         if (markBusyAsIgnored) {
             handle->markErrorAsIgnorable(Error::Code::Busy);
         }
-        succeed = getOrSetPragmaBegin(handle, m_getJournalMode)
-                  && getOrSetPragmaEnd(handle,
-                                       m_setJournalModeWAL,
-                                       !handle->getText(0).isCaseInsensiveEqual("WAL"));
+        succeed
+        = getOrSetPragmaBegin(handle, m_getJournalMode)
+          && getOrSetPragmaEnd(
+          handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("WAL"));
         if (markBusyAsIgnored) {
             handle->markErrorAsUnignorable();
         }
-        if (!succeed && handle->getResultCode() != Error::Code::Busy) {
+        if (!succeed && handle->getError().code() != Error::Code::Busy) {
             // failed
             numberOfRemainingAttempts = -1;
         }

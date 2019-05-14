@@ -38,29 +38,28 @@ bool BusyRetryConfig::invoke(Handle* handle)
 {
     handle->setNotificationWhenBusy(std::bind(
     &BusyRetryConfig::onBusy, this, std::placeholders::_1, std::placeholders::_2));
-    handle->setNotificationWhenStatementWillStep(
-    m_identifier, std::bind(&BusyRetryConfig::willStep, this, std::placeholders::_1));
-    handle->setNotificationWhenStatementDidStep(
+    handle->setNotificationWhenStatementStepping(
     m_identifier,
-    std::bind(&BusyRetryConfig::didStep, this, std::placeholders::_1, std::placeholders::_2));
+    std::bind(&BusyRetryConfig::handleWillStep, this, std::placeholders::_1),
+    std::bind(&BusyRetryConfig::handleDidStep, this, std::placeholders::_1, std::placeholders::_2));
     return true;
 }
 
 bool BusyRetryConfig::uninvoke(Handle* handle)
 {
     handle->setNotificationWhenBusy(nullptr);
-    handle->setNotificationWhenStatementDidStep(m_identifier, nullptr);
-    handle->setNotificationWhenStatementWillStep(m_identifier, nullptr);
+    handle->setNotificationWhenStatementStepping(m_identifier, nullptr, nullptr);
     return true;
 }
 
-void BusyRetryConfig::willStep(HandleStatement* handleStatement)
+bool BusyRetryConfig::handleWillStep(HandleStatement* handleStatement)
 {
     WCDB_UNUSED(handleStatement)
     ++m_numberOfSteppingHandles;
+    return true;
 }
 
-void BusyRetryConfig::didStep(HandleStatement* handleStatement, bool result)
+void BusyRetryConfig::handleDidStep(HandleStatement* handleStatement, bool result)
 {
     WCDB_UNUSED(result)
     --m_numberOfSteppingHandles;
@@ -76,39 +75,41 @@ void BusyRetryConfig::didStep(HandleStatement* handleStatement, bool result)
 
 bool BusyRetryConfig::onBusy(const String& path, int numberOfTimes)
 {
-    double remainingTime = pthread_main_np() != 0 ? BusyRetryTimeOutForMainThread :
-                                                    BusyRetryTimeOutForSubThread;
+    double totalTime = pthread_main_np() != 0 ? BusyRetryTimeOutForMainThread :
+                                                BusyRetryTimeOutForSubThread;
     std::map<String, double>& waitedTimes = *m_waitedTimes.getOrCreate();
     if (numberOfTimes == 0) {
         waitedTimes[path] = 0; // first retry, reset waited times
-    } else {
-        WCTInnerAssert(waitedTimes.find(path) != waitedTimes.end());
-        remainingTime -= waitedTimes[path];
     }
-    WCTInnerAssert(remainingTime > 0); // remaining time always >0
+    WCTInnerAssert(waitedTimes.find(path) != waitedTimes.end());
+    double remainingTime = totalTime - waitedTimes[path];
 
-    std::cv_status status = std::cv_status::timeout;
-
-    SteadyClock before = SteadyClock::now();
-    {
-        std::unique_lock<decltype(m_mutex)> lockGuard(m_mutex);
-        ++m_numberOfWaitingHandles;
-        if (m_numberOfSteppingHandles > 0) {
-            status = m_cond.wait_for(
-            lockGuard, std::chrono::nanoseconds((long long) (remainingTime * 1E9)));
+    bool retry = false;
+    if (remainingTime > 0) {
+        SteadyClock before = SteadyClock::now();
+        {
+            std::unique_lock<decltype(m_mutex)> lockGuard(m_mutex);
+            ++m_numberOfWaitingHandles;
+            if (m_numberOfSteppingHandles > 0) {
+                retry = m_cond.wait_for(
+                        lockGuard,
+                        std::chrono::nanoseconds((long long) (remainingTime * 1E9)))
+                        == std::cv_status::no_timeout;
+            }
+            --m_numberOfWaitingHandles;
         }
-        --m_numberOfWaitingHandles;
+        if (retry) {
+            std::time_t waitedTime
+            = (std::time_t) std::chrono::duration_cast<std::chrono::nanoseconds>(
+              SteadyClock::now() - before)
+              .count();
+            WCTInnerAssert(waitedTimes.find(path) != waitedTimes.end());
+            waitedTimes[path] += ((double) waitedTime / 1E9);
+        }
+        // waited times has no need to be reset since it will not retry.
     }
-    if (status == std::cv_status::no_timeout) {
-        std::time_t waitedTime
-        = (std::time_t) std::chrono::duration_cast<std::chrono::nanoseconds>(
-          SteadyClock::now() - before)
-          .count();
-        WCTInnerAssert(waitedTimes.find(path) != waitedTimes.end());
-        waitedTimes[path] += ((double) waitedTime / 1E9);
-    }
-    // waited times has no need to be reset since it will not retry.
-    return status == std::cv_status::no_timeout;
+
+    return retry;
 }
 
 } // namespace WCDB

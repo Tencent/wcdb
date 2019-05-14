@@ -61,6 +61,10 @@ typedef NSData* _Nonnull (^WCTCorruptDataBlock)(int size);
 
 - (BOOL)passiveCheckpoint;
 
+- (WCTOptionalBool)isAlreadyCheckpointed;
+
+- (WCTOptionalBool)isAlreadyTruncateCheckpointed;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -257,7 +257,7 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
             } break;
             case Syntax::Identifier::Type::CreateTableSTMT: {
                 Syntax::CreateTableSTMT& syntax = (Syntax::CreateTableSTMT&) identifier;
-                if (!hintTable(syntax.table)) {
+                if (!hintThatTableWillBeCreated(syntax.table)) {
                     succeed = false;
                 }
             } break;

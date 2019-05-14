@@ -63,7 +63,7 @@
 
     // check source table is already dropped.
     // It's not a good practice.
-    TestCaseAssertFalse([self.sourceDatabase tableExists:self.sourceTable]);
+    TestCaseAssertOptionalFalse([self.sourceDatabase tableExists:self.sourceTable]);
 }
 
 - (void)doTestNotification
@@ -111,14 +111,14 @@
         }
     }];
 
-    TestCaseResult *tested = [TestCaseResult no];
+    TestCaseCounter *tested = [TestCaseCounter value:0];
     weakify(self);
     [WCTDatabase globalTraceError:^(WCTError *error) {
         strongify_or_return(self);
         if (error.code == WCTErrorCodeInterrupt
             && error.level == WCTErrorLevelIgnore
             && error.tag == self.database.tag) {
-            [tested makeYES];
+            [tested increment];
         }
     }];
 
@@ -132,12 +132,11 @@
             TestCaseAssertTrue([self.database createTable:table withClass:TestCaseObject.class]);
         }
         TestCaseAssertTrue([self.database stepMigration]);
-    } while (tested.isNO);
+    } while (tested.value == 1000);
 
     [WCTDatabase globalTraceError:nil];
     [write makeNO];
 
-    TestCaseAssertResultYES(tested);
     TestCaseAssertFalse([self.database isMigrated]);
     [self.dispatch waitUntilDone];
 }

@@ -161,29 +161,28 @@ bool AbstractHandle::executeStatement(const Statement &statement)
     return executeSQL(statement.getDescription());
 }
 
-int AbstractHandle::getExtendedErrorCode()
-{
-    WCTInnerAssert(isOpened());
-    return sqlite3_extended_errcode(m_handle);
-}
-
 long long AbstractHandle::getLastInsertedRowID()
 {
     WCTInnerAssert(isOpened());
     return sqlite3_last_insert_rowid(m_handle);
 }
 
-Error::Code AbstractHandle::getResultCode()
-{
-    WCTInnerAssert(isOpened());
-    return (Error::Code) sqlite3_errcode(m_handle);
-}
-
-const char *AbstractHandle::getErrorMessage()
-{
-    WCTInnerAssert(isOpened());
-    return sqlite3_errmsg(m_handle);
-}
+//Error::Code AbstractHandle::getResultCode()
+//{
+//    WCTInnerAssert(isOpened());
+//    return (Error::Code) sqlite3_errcode(m_handle);
+//}
+//
+//const char *AbstractHandle::getErrorMessage()
+//{
+//    WCTInnerAssert(isOpened());
+//    return sqlite3_errmsg(m_handle);
+//}
+//int AbstractHandle::getExtendedErrorCode()
+//{
+//    WCTInnerAssert(isOpened());
+//    return sqlite3_extended_errcode(m_handle);
+//}
 
 int AbstractHandle::getChanges()
 {
@@ -201,31 +200,6 @@ bool AbstractHandle::isInTransaction()
 {
     WCTInnerAssert(isOpened());
     return sqlite3_get_autocommit(m_handle) == 0;
-}
-
-void AbstractHandle::interrupt()
-{
-    WCTInnerAssert(isOpened());
-    sqlite3_interrupt(m_handle);
-}
-
-int AbstractHandle::getNumberOfDirtyPages()
-{
-    WCTInnerAssert(isOpened());
-    return sqlite3_dirty_page_count(m_handle);
-}
-
-void AbstractHandle::enableExtendedResultCodes(bool enable)
-{
-    WCTInnerAssert(isOpened());
-    exitAPI(sqlite3_extended_result_codes(m_handle, (int) enable));
-}
-
-void AbstractHandle::disableCheckpointWhenClosing(bool disable)
-{
-    WCTInnerAssert(isOpened());
-    exitAPI(sqlite3_db_config(
-    m_handle, SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE, (int) disable, nullptr));
 }
 
 #pragma mark - Statement
@@ -265,7 +239,7 @@ std::pair<bool, bool> AbstractHandle::ft3TokenizerExists(const String &tokenizer
     if (succeed) {
         exists = true;
     } else {
-        if (getResultCode() == Error::Code::Error) {
+        if (m_error.code() == Error::Code::Error) {
             succeed = true;
         }
     }
@@ -290,7 +264,7 @@ std::pair<bool, bool> AbstractHandle::tableExists(const Schema &schema, const St
         exists = true;
         finalizeStatements();
     } else {
-        if (getResultCode() == Error::Code::Error) {
+        if (m_error.code() == Error::Code::Error) {
             succeed = true;
         }
     }
@@ -384,61 +358,115 @@ bool AbstractHandle::commitOrRollbackNestedTransaction()
         succeed = commitOrRollbackTransaction();
     } else {
         String savepointName = getSavepointName(m_nestedLevel);
-        if (!executeStatement(StatementRelease().release(savepointName))) {
-            executeStatement(StatementRollback().rollbackToSavepoint(savepointName));
-            succeed = false;
+        succeed = executeStatement(StatementRelease().release(savepointName));
+        if (succeed) {
+            --m_nestedLevel;
         }
-        --m_nestedLevel;
     }
     return succeed;
 }
 
 void AbstractHandle::rollbackNestedTransaction()
 {
+    unimpeded(true);
     if (m_nestedLevel == 0) {
         rollbackTransaction();
     } else {
         String savepointName = getSavepointName(m_nestedLevel);
-        executeStatement(StatementRollback().rollbackToSavepoint(savepointName));
-        --m_nestedLevel;
+        if (executeStatement(StatementRollback().rollbackToSavepoint(savepointName))) {
+            --m_nestedLevel;
+        }
     }
+    unimpeded(false);
 }
 
 bool AbstractHandle::beginTransaction()
 {
     static const String *s_beginImmediate
     = new String(StatementBegin().beginImmediate().getDescription());
-    return executeSQL(*s_beginImmediate);
+    bool succeed = executeSQL(*s_beginImmediate);
+    if (succeed) {
+        m_nestedLevel = 0;
+    }
+    return succeed;
 }
 
 bool AbstractHandle::commitOrRollbackTransaction()
 {
     static const String *s_commit
     = new String(StatementCommit().commit().getDescription());
-    if (!executeSQL(*s_commit)) {
-        rollbackTransaction();
-        return false;
+    bool succeed = executeSQL(*s_commit);
+    if (succeed) {
+        m_nestedLevel = 0;
+    } else {
+        if (isInTransaction()) {
+            // If certain kinds of errors occur within a transaction, the transaction may or may not be rolled back automatically: https://sqlite.org/lang_transaction.html
+            rollbackTransaction();
+        }
     }
-    m_nestedLevel = 0;
-    return true;
+    return succeed;
 }
 
 void AbstractHandle::rollbackTransaction()
 {
-    m_nestedLevel = 0;
-    if (isInTransaction()) {
-        // Transaction can be removed automatically in some case. e.g. interrupt step
-        static const String *s_rollback
-        = new String(StatementRollback().rollback().getDescription());
-        executeSQL(*s_rollback);
+    // Transaction can be removed automatically in some case. e.g. interrupt step
+    static const String *s_rollback
+    = new String(StatementRollback().rollback().getDescription());
+    unimpeded(true);
+    if (executeSQL(*s_rollback)) {
+        m_nestedLevel = 0;
     }
+    unimpeded(false);
 }
 
-#pragma mark - Cipher
+#pragma mark - Interface
+void AbstractHandle::suspend(bool suspend)
+{
+    WCTInnerAssert(isOpened());
+    sqlite3_suspend(m_handle, (int) suspend);
+}
+
+void AbstractHandle::unimpeded(bool unimpeded)
+{
+    WCTInnerAssert(isOpened());
+    sqlite3_unimpeded(m_handle, (int) unimpeded);
+}
+
 void AbstractHandle::setCipherKey(const UnsafeData &data)
 {
     WCTInnerAssert(isOpened());
     exitAPI(sqlite3_key(m_handle, data.buffer(), (int) data.size()));
+}
+
+int AbstractHandle::getNumberOfDirtyPages()
+{
+    WCTInnerAssert(isOpened());
+    return sqlite3_dirty_page_count(m_handle);
+}
+
+void AbstractHandle::enableExtendedResultCodes(bool enable)
+{
+    WCTInnerAssert(isOpened());
+    exitAPI(sqlite3_extended_result_codes(m_handle, (int) enable));
+}
+
+bool AbstractHandle::checkpoint(CheckpointMode mode)
+{
+    static_assert((int) CheckpointMode::Passive == SQLITE_CHECKPOINT_PASSIVE, "");
+    static_assert((int) CheckpointMode::Full == SQLITE_CHECKPOINT_FULL, "");
+    static_assert((int) CheckpointMode::Restart == SQLITE_CHECKPOINT_RESTART, "");
+    static_assert((int) CheckpointMode::Truncate == SQLITE_CHECKPOINT_TRUNCATE, "");
+    WCTInnerAssert(isOpened());
+
+    return exitAPI(sqlite3_wal_checkpoint_v2(
+    m_handle, Syntax::mainSchema, (int) mode, nullptr, nullptr));
+}
+
+void AbstractHandle::disableCheckpointWhenClosing(bool disable)
+{
+    WCTInnerAssert(isOpened());
+    exitAPI(sqlite3_db_config(
+    m_handle, SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE, (int) disable, nullptr));
 }
 
 #pragma mark - Notification
@@ -483,18 +511,12 @@ void AbstractHandle::setNotificationWhenBusy(const BusyNotification &busyNotific
     m_notification.setNotificationWhenBusy(busyNotification);
 }
 
-void AbstractHandle::setNotificationWhenStatementDidStep(const String &name,
-                                                         const StatementDidStepNotification &notification)
+void AbstractHandle::setNotificationWhenStatementStepping(const String &name,
+                                                          const StatementWillStepNotification &willStep,
+                                                          const StatementDidStepNotification &didStep)
 {
     WCTInnerAssert(isOpened());
-    m_notification.setNotificationWhenStatementDidStep(name, notification);
-}
-
-void AbstractHandle::setNotificationWhenStatementWillStep(const String &name,
-                                                          const StatementWillStepNotification &notification)
-{
-    WCTInnerAssert(isOpened());
-    m_notification.setNotificationWhenStatementWillStep(name, notification);
+    m_notification.setNotificationWhenStatementStepping(name, willStep, didStep);
 }
 
 #pragma mark - Error
@@ -521,8 +543,8 @@ bool AbstractHandle::exitAPI(int rc, const char *sql)
 void AbstractHandle::notifyError(int rc, const char *sql)
 {
     WCTInnerAssert(Error::isError(rc));
-    if (Error::rc2c(rc) != Error::Code::Misuse) {
-        m_error.setSQLiteCode(rc, getErrorMessage());
+    if (Error::rc2c(rc) != Error::Code::Misuse && sqlite3_errcode(m_handle) == rc) {
+        m_error.setSQLiteCode(rc, sqlite3_errmsg(m_handle));
     } else {
         // extended error code/message will not be set in some case for misuse error
         m_error.setSQLiteCode(rc);

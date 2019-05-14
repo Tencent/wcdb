@@ -261,7 +261,7 @@ void HandleNotification::setNotificationWhenCheckpointed(const String &name,
 {
     bool stateBefore = areCheckpointNotificationsSet();
     if (checkpointed != nullptr) {
-        m_checkpointedNotifications.emplace(name, checkpointed);
+        m_checkpointedNotifications[name] = checkpointed;
     } else {
         m_checkpointedNotifications.erase(name);
     }
@@ -311,36 +311,41 @@ bool HandleNotification::postBusyNotification(int numberOfTimes)
     return retry;
 }
 
-#pragma mark - Did Step
-void HandleNotification::setNotificationWhenStatementDidStep(const String &name,
-                                                             const StatementDidStepNotification &notification)
+#pragma mark - Step
+void HandleNotification::setNotificationWhenStatementStepping(
+const String &name,
+const StatementWillStepNotification &willStep,
+const StatementDidStepNotification &didStep)
 {
-    m_didStepNotifications.emplace(name, notification);
+    if (willStep != nullptr || didStep != nullptr) {
+        StepNotification notification;
+        notification.willStep = willStep;
+        notification.didStep = didStep;
+        notification.shouldInvokeDidStep = false;
+        m_stepNotifications[name] = notification;
+    } else {
+        m_stepNotifications.erase(name);
+    }
 }
 
-void HandleNotification::statementDidStep(HandleStatement *handleStatement, bool result)
+void HandleNotification::statementDidStep(HandleStatement *handleStatement, bool succeed)
 {
-    for (const auto &iter : m_didStepNotifications) {
-        WCTInnerAssert(iter.second != nullptr);
-        if (iter.second != nullptr) {
-            iter.second(handleStatement, result);
+    for (auto &iter : m_stepNotifications) {
+        StepNotification &notification = iter.second;
+        if (notification.shouldInvokeDidStep) {
+            notification.didStep(handleStatement, succeed);
         }
     }
 }
 
-#pragma mark - Will Step
-void HandleNotification::setNotificationWhenStatementWillStep(
-const String &name, const StatementWillStepNotification &notification)
-{
-    m_willStepNotifications.emplace(name, notification);
-}
-
 void HandleNotification::statementWillStep(HandleStatement *handleStatement)
 {
-    for (const auto &iter : m_willStepNotifications) {
-        WCTInnerAssert(iter.second != nullptr);
-        if (iter.second != nullptr) {
-            iter.second(handleStatement);
+    for (auto &iter : m_stepNotifications) {
+        StepNotification &notification = iter.second;
+        if (notification.willStep != nullptr) {
+            notification.shouldInvokeDidStep = notification.willStep(handleStatement);
+        } else {
+            notification.shouldInvokeDidStep = true;
         }
     }
 }

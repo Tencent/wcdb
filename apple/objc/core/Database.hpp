@@ -21,10 +21,10 @@
 #ifndef __WCDB_DATABASE_HPP
 #define __WCDB_DATABASE_HPP
 
+#include <WCDB/CheckpointHandle.hpp>
 #include <WCDB/Configs.hpp>
 #include <WCDB/Factory.hpp>
 #include <WCDB/HandlePool.hpp>
-#include <WCDB/InterruptibleCheckpointHandle.hpp>
 #include <WCDB/Migration.hpp>
 #include <WCDB/Tag.hpp>
 #include <WCDB/ThreadLocal.hpp>
@@ -81,20 +81,22 @@ protected:
         Normal = 0,
         Migrate,
         MigrationStep,
-        InterruptibleCheckpoint,
+        Checkpoint,
 
         BackupRead,
         BackupWrite,
-        // The handles below are not in HandlePool
-        Assemble = HandlePoolNumberOfSlots,
+
+        Assemble,
         Integrity,
     };
     std::shared_ptr<Handle> generateSlotedHandle(Slot slot) override final;
     bool willReuseSlotedHandle(Slot slot, Handle *handle) override final;
-    void handleWillStep(HandleStatement *handleStatement);
+    bool handleWillStep(HandleStatement *handleStatement);
+    void handleDidStep(HandleStatement *handleStatement, bool succeed);
 
 private:
     std::shared_ptr<Handle> generateHandle(HandleType type);
+    bool reconfigureHandle(Handle *handle);
 
 #pragma mark - Config
 public:
@@ -191,7 +193,7 @@ public:
     std::pair<bool, bool> stepMigration();
     std::pair<bool, bool> stepMigrationIfAlreadyInitialized();
 
-    void interruptMigration();
+    void suspendMigration(bool suspend);
 
     bool isMigrated() const;
 
@@ -205,10 +207,10 @@ protected:
 
 #pragma mark - Checkpoint
 public:
-    typedef InterruptibleCheckpointHandle::Type CheckpointType;
-    bool interruptibleCheckpointIfAlreadyInitialized(CheckpointType type);
+    typedef CheckpointHandle::CheckpointMode CheckpointMode;
+    bool checkpointIfAlreadyInitialized(CheckpointMode mode);
 
-    void interruptCheckpoint();
+    void suspendCheckpoint(bool suspend);
 
 #pragma mark - Memory
 public:

@@ -189,7 +189,9 @@
 
     int start = 0;
     BOOL create = NO;
-    if ([database tableExists:self.tableName]) {
+    auto optionalExists = [database tableExists:self.tableName];
+    TestCaseAssertFalse(optionalExists.failed());
+    if (optionalExists.value()) {
         start = [database getValueFromStatement:WCDB::StatementSelect().select(BenchmarkObject.identifier.count()).from(self.tableName)].numberValue.intValue;
     } else {
         create = YES;

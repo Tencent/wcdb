@@ -49,7 +49,7 @@
     size_t size;
     std::tie(succeed, size) = _database->getFilesSize();
     if (succeed) {
-        result = size;
+        result.reset(size);
     }
     return result;
 }

@@ -77,19 +77,12 @@ public:
     bool isOpened() const;
 
     long long getLastInsertedRowID();
-    const char *getErrorMessage();
-    int getExtendedErrorCode();
-    Error::Code getResultCode();
+    //    const char *getErrorMessage();
+    //    Error::ExtCode getExtendedErrorCode();
+    //    Error::Code getResultCode();
     int getChanges();
     bool isReadonly();
     bool isInTransaction();
-
-    int getNumberOfDirtyPages();
-
-    void interrupt(); // It's thread safe.
-
-    void disableCheckpointWhenClosing(bool disable);
-    void enableExtendedResultCodes(bool enable);
 
 protected:
     bool executeSQL(const String &sql);
@@ -135,9 +128,25 @@ private:
     String getSavepointName(int nestedLevel);
     int m_nestedLevel;
 
-#pragma mark - Cipher
+#pragma mark - Interface
 public:
     void setCipherKey(const UnsafeData &data);
+
+    void enableExtendedResultCodes(bool enable);
+
+    enum class CheckpointMode {
+        Passive = 0,
+        Full,
+        Restart,
+        Truncate,
+    };
+    bool checkpoint(CheckpointMode mode);
+    void disableCheckpointWhenClosing(bool disable);
+    int getNumberOfDirtyPages();
+
+    void suspend(bool suspend); // It's thread safe.
+private:
+    void unimpeded(bool unimpeded);
 
 #pragma mark - Notification
 public:
@@ -162,12 +171,10 @@ public:
     void setNotificationWhenBusy(const BusyNotification &busyNotification);
 
     typedef HandleNotification::StatementDidStepNotification StatementDidStepNotification;
-    void setNotificationWhenStatementDidStep(const String &name,
-                                             const StatementDidStepNotification &notification);
-
     typedef HandleNotification::StatementWillStepNotification StatementWillStepNotification;
-    void setNotificationWhenStatementWillStep(const String &name,
-                                              const StatementWillStepNotification &notification);
+    void setNotificationWhenStatementStepping(const String &name,
+                                              const StatementWillStepNotification &willStep,
+                                              const StatementDidStepNotification &didStep);
 
 private:
     HandleNotification m_notification;

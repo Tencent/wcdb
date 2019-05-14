@@ -20,6 +20,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/MigrationStepperHandle.hpp>
+#include <WCDB/Time.hpp>
 
 namespace WCDB {
 
