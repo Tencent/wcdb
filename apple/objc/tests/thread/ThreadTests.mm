@@ -160,7 +160,12 @@
 
     TestCaseObject* object = [self.random autoIncrementTestCaseObject];
 
-    while ([self.database getNumberOfWalFrames] < WCDB::CheckpointQueueFramesThresholdForCritical) {
+    while (YES) {
+        auto optionalNumberOfWalFrames = [self.database getNumberOfWalFrames];
+        TestCaseAssertFalse(optionalNumberOfWalFrames.failed());
+        if (optionalNumberOfWalFrames.value() >= WCDB::CheckpointQueueFramesThresholdForCritical) {
+            break;
+        }
         TestCaseAssertTrue([self.table insertObject:object]);
     }
 
@@ -177,7 +182,12 @@
 
     TestCaseObject* object = [self.random autoIncrementTestCaseObject];
 
-    while ([self.database getNumberOfWalFrames] < WCDB::CheckpointFramesThresholdForTruncating) {
+    while (YES) {
+        auto optionalNumberOfWalFrames = [self.database getNumberOfWalFrames];
+        TestCaseAssertFalse(optionalNumberOfWalFrames.failed());
+        if (optionalNumberOfWalFrames.value() >= WCDB::CheckpointFramesThresholdForTruncating) {
+            break;
+        }
         TestCaseAssertTrue([self.table insertObject:object]);
     }
 
@@ -195,7 +205,9 @@
     TestCaseObject* object = [self.random autoIncrementTestCaseObject];
 
     TestCaseAssertTrue([self.table insertObject:object]);
-    TestCaseAssertTrue([self.database getNumberOfWalFrames] < WCDB::CheckpointQueueFramesThresholdForCritical)
+    auto optionalNumberOfWalFrames = [self.database getNumberOfWalFrames];
+    TestCaseAssertFalse(optionalNumberOfWalFrames.failed());
+    TestCaseAssertTrue(optionalNumberOfWalFrames.value() < WCDB::CheckpointQueueFramesThresholdForCritical)
 
     TestCaseAssertOptionalFalse(self.database.isAlreadyCheckpointed);
 
@@ -223,7 +235,12 @@
 
     TestCaseObject* object = [self.random autoIncrementTestCaseObject];
 
-    while ([self.database getNumberOfWalFrames] < WCDB::CheckpointFramesThresholdForTruncating) {
+    while (YES) {
+        auto optionalNumberOfWalFrames = [self.database getNumberOfWalFrames];
+        TestCaseAssertFalse(optionalNumberOfWalFrames.failed());
+        if (optionalNumberOfWalFrames.value() >= WCDB::CheckpointFramesThresholdForTruncating) {
+            break;
+        }
         TestCaseAssertTrue([self.table insertObject:object]);
     }
 

@@ -145,15 +145,27 @@
 
     TestCaseObject *object = [self.random autoIncrementTestCaseObject];
 
-    while ([self.database getNumberOfWalFrames] < self.backupFramesIntervalForNonCritical - self.framesForTolerance) {
+    while (YES) {
+        auto optionalNumberOfWalFrames = [self.database getNumberOfWalFrames];
+        TestCaseAssertFalse(optionalNumberOfWalFrames.failed());
+        if (optionalNumberOfWalFrames.value() >= self.backupFramesIntervalForNonCritical - self.framesForTolerance) {
+            break;
+        }
         TestCaseAssertTrue([self.table insertObject:object]);
     }
+
     [NSThread sleepForTimeInterval:self.backupDelayForNonCritical + self.delayForTolerance];
     TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
 
-    while ([self.database getNumberOfWalFrames] < self.backupFramesIntervalForNonCritical) {
+    while (YES) {
+        auto optionalNumberOfWalFrames = [self.database getNumberOfWalFrames];
+        TestCaseAssertFalse(optionalNumberOfWalFrames.failed());
+        if (optionalNumberOfWalFrames.value() >= self.backupFramesIntervalForNonCritical) {
+            break;
+        }
         TestCaseAssertTrue([self.table insertObject:object]);
     }
+
     [NSThread sleepForTimeInterval:self.backupDelayForNonCritical + self.delayForTolerance];
     TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
 }
@@ -165,14 +177,24 @@
 
     TestCaseObject *object = [self.random autoIncrementTestCaseObject];
 
-    while ([self.database getNumberOfWalFrames] < self.backupFramesIntervalForCritical - self.framesForTolerance) {
+    while (YES) {
+        auto optionalNumberOfWalFrames = [self.database getNumberOfWalFrames];
+        TestCaseAssertFalse(optionalNumberOfWalFrames.failed());
+        if (optionalNumberOfWalFrames.value() >= self.backupFramesIntervalForCritical - self.framesForTolerance) {
+            break;
+        }
         TestCaseAssertTrue([self.table insertObject:object]);
     }
 
     [NSThread sleepForTimeInterval:self.backupDelayForCritical + self.delayForTolerance];
     TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
 
-    while ([self.database getNumberOfWalFrames] < self.backupFramesIntervalForCritical) {
+    while (YES) {
+        auto optionalNumberOfWalFrames = [self.database getNumberOfWalFrames];
+        TestCaseAssertFalse(optionalNumberOfWalFrames.failed());
+        if (optionalNumberOfWalFrames.value() >= self.backupFramesIntervalForCritical) {
+            break;
+        }
         TestCaseAssertTrue([self.table insertObject:object]);
     }
     [NSThread sleepForTimeInterval:self.backupDelayForCritical + self.delayForTolerance];
@@ -275,7 +297,12 @@
     self.database.autoBackup = YES;
 
     TestCaseObject *object = [self.random autoIncrementTestCaseObject];
-    while ([self.database getNumberOfWalFrames] < self.backupFramesIntervalForNonCritical) {
+    while (YES) {
+        auto optionalNumberOfWalFrames = [self.database getNumberOfWalFrames];
+        TestCaseAssertFalse(optionalNumberOfWalFrames.failed());
+        if (optionalNumberOfWalFrames.value() >= self.backupFramesIntervalForNonCritical) {
+            break;
+        }
         TestCaseAssertTrue([self.table insertObject:object]);
     }
 

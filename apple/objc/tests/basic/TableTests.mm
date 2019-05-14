@@ -49,11 +49,9 @@
 {
     TestCaseAssertTrue([self createTable]);
 
-    TestCaseAssertTrue([self.database tableExists:self.tableName]);
+    TestCaseAssertOptionalTrue([self.database tableExists:self.tableName]);
 
-    auto exists = [self.database tableExists:@"nonexists"];
-    TestCaseAssertFalse(exists.value());
-    TestCaseAssertFalse(exists.failed());
+    TestCaseAssertOptionalFalse([self.database tableExists:@"nonexists"]);
 }
 
 - (void)test_database_drop_table
@@ -62,7 +60,7 @@
          inOperation:^BOOL {
              return [self.database dropTable:self.tableName];
          }];
-    TestCaseAssertFalse([self.database tableExists:self.tableName]);
+    TestCaseAssertOptionalFalse([self.database tableExists:self.tableName]);
 }
 
 - (void)test_database_drop_index
@@ -80,11 +78,9 @@
 
     WCTHandle* handle = [self.database getHandle];
 
-    TestCaseAssertTrue([handle tableExists:self.tableName]);
+    TestCaseAssertOptionalTrue([handle tableExists:self.tableName]);
 
-    auto exists = [handle tableExists:@"nonexists"];
-    TestCaseAssertFalse(exists.value());
-    TestCaseAssertFalse(exists.failed());
+    TestCaseAssertOptionalFalse([handle tableExists:@"nonexists"]);
 }
 
 - (void)test_handle_drop_table
@@ -94,7 +90,7 @@
          inOperation:^BOOL {
              return [handle dropTable:self.tableName];
          }];
-    TestCaseAssertFalse([handle tableExists:self.tableName]);
+    TestCaseAssertOptionalFalse([handle tableExists:self.tableName]);
 }
 
 - (void)test_handle_drop_index
