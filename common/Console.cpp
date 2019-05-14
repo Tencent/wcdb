@@ -39,7 +39,7 @@ void Console::initialize()
 
 std::atomic<bool>& Console::debuggableValue()
 {
-#ifdef WCDB_DEBUG
+#if WCDB_DEBUG
     std::atomic<bool>* s_debuggable = new std::atomic<bool>(true);
 #else  // WCDB_DEBUG
     std::atomic<bool>* s_debuggable = new std::atomic<bool>(false);
