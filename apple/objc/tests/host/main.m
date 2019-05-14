@@ -25,6 +25,8 @@
 // watchOS doesn't support testing at this time.
 int main(int argc, const char *argv[])
 {
+    WCDB_UNUSED(argc);
+    WCDB_UNUSED(argv);
 }
 
 #elif TARGET_OS_IPHONE || TARGET_OS_TV
