@@ -27,7 +27,7 @@
 #define WCDB_LOCK_TRACE 0
 #endif
 
-#if WCDB_LOCK_TRACER
+#if WCDB_LOCK_TRACE
 #define WCTLockTrace(message) WCTTrace(message)
 #else
 #define WCTLockTrace(message)
