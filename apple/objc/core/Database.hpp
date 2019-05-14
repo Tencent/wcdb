@@ -81,12 +81,12 @@ protected:
         Normal = 0,
         Migrate,
         MigrationStep,
-        InterruptibleCheckpoint,
+        Checkpoint,
 
         BackupRead,
         BackupWrite,
-        // The handles below are not in HandlePool
-        Assemble = HandlePoolNumberOfSlots,
+
+        Assemble,
         Integrity,
     };
     std::shared_ptr<Handle> generateSlotedHandle(Slot slot) override final;
@@ -96,6 +96,7 @@ protected:
 
 private:
     std::shared_ptr<Handle> generateHandle(HandleType type);
+    bool reconfigureHandle(Handle *handle);
 
 #pragma mark - Config
 public:
@@ -207,7 +208,7 @@ protected:
 #pragma mark - Checkpoint
 public:
     typedef CheckpointHandle::CheckpointMode CheckpointMode;
-    bool interruptibleCheckpointIfAlreadyInitialized(CheckpointMode mode);
+    bool checkpointIfAlreadyInitialized(CheckpointMode mode);
 
     void suspendCheckpoint(bool suspend);
 

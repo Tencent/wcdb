@@ -243,16 +243,7 @@ bool Database::willReuseSlotedHandle(Slot slot, Handle *handle)
     WCTInnerAssert(handle->isOpened());
     WCTInnerAssert(slot < HandlePoolNumberOfSlots);
     WCDB_UNUSED(slot)
-    std::shared_ptr<Configs> configs;
-    {
-        SharedLockGuard memoryGuard(m_memory);
-        configs = m_configs;
-    }
-    bool succeed = handle->reconfigure(configs);
-    if (!succeed) {
-        setThreadedError(handle->getError());
-    }
-    return succeed;
+    return reconfigureHandle(handle);
 }
 
 std::shared_ptr<Handle> Database::generateHandle(HandleType type)
@@ -260,7 +251,7 @@ std::shared_ptr<Handle> Database::generateHandle(HandleType type)
     WCTInnerAssert(m_concurrency.readSafety());
     std::shared_ptr<Handle> handle;
     switch (type) {
-    case HandleType::InterruptibleCheckpoint:
+    case HandleType::Checkpoint:
         handle.reset(new CheckpointHandle);
         break;
     case HandleType::Migrate:
@@ -291,24 +282,13 @@ std::shared_ptr<Handle> Database::generateHandle(HandleType type)
         return nullptr;
     }
 
-    if (type != HandleType::Integrity) {
-        std::shared_ptr<Configs> configs;
-        {
-            SharedLockGuard memoryGuard(m_memory);
-            configs = m_configs;
-        }
-
-        // reconfigure
-        if (!handle->reconfigure(configs)) {
-            setThreadedError(handle->getError());
-            return nullptr;
-        }
+    if (!reconfigureHandle(handle.get())) {
+        return nullptr;
     }
 
     // open
-    if (type == HandleType::Normal || type == HandleType::Migrate
-        || type == HandleType::MigrationStep || type == HandleType::InterruptibleCheckpoint
-        || type == HandleType::Integrity) {
+    if (type == HandleType::Normal || type == HandleType::Migrate || type == HandleType::MigrationStep
+        || type == HandleType::Checkpoint || type == HandleType::Integrity) {
         handle->setPath(path);
         if (!handle->open()) {
             setThreadedError(handle->getError());
@@ -325,6 +305,20 @@ std::shared_ptr<Handle> Database::generateHandle(HandleType type)
     }
 
     return handle;
+}
+
+bool Database::reconfigureHandle(Handle *handle)
+{
+    std::shared_ptr<Configs> configs;
+    {
+        SharedLockGuard memoryGuard(m_memory);
+        configs = m_configs;
+    }
+    bool succeed = handle->reconfigure(configs);
+    if (!succeed) {
+        setThreadedError(handle->getError());
+    }
+    return succeed;
 }
 
 #pragma mark - Threaded
@@ -745,8 +739,10 @@ void Database::checkIntegrity()
     InitializedGuard initializedGuard = initialize();
     if (initializedGuard.valid()) {
         std::shared_ptr<Handle> handle = generateHandle(HandleType::Integrity);
-        WCTInnerAssert(dynamic_cast<IntegrityHandle *>(handle.get()) != nullptr);
-        static_cast<IntegrityHandle *>(handle.get())->check();
+        if (handle != nullptr) {
+            WCTInnerAssert(dynamic_cast<IntegrityHandle *>(handle.get()) != nullptr);
+            static_cast<IntegrityHandle *>(handle.get())->check();
+        }
     }
 }
 
@@ -755,8 +751,10 @@ void Database::checkIntegrityIfAlreadyInitialized()
     InitializedGuard initializedGuard = isInitialized();
     if (initializedGuard.valid()) {
         std::shared_ptr<Handle> handle = generateHandle(HandleType::Integrity);
-        WCTInnerAssert(dynamic_cast<IntegrityHandle *>(handle.get()) != nullptr);
-        static_cast<IntegrityHandle *>(handle.get())->check();
+        if (handle != nullptr) {
+            WCTInnerAssert(dynamic_cast<IntegrityHandle *>(handle.get()) != nullptr);
+            static_cast<IntegrityHandle *>(handle.get())->check();
+        }
     }
 }
 
@@ -853,12 +851,12 @@ std::set<String> Database::getPathsOfSourceDatabases() const
 }
 
 #pragma mark - Checkpoint
-bool Database::interruptibleCheckpointIfAlreadyInitialized(CheckpointMode mode)
+bool Database::checkpointIfAlreadyInitialized(CheckpointMode mode)
 {
     InitializedGuard initializedGuard = isInitialized();
     bool succeed = false;
     if (initializedGuard.valid()) {
-        RecyclableHandle handle = getSlotHandle(HandleType::InterruptibleCheckpoint);
+        RecyclableHandle handle = getSlotHandle(HandleType::Checkpoint);
         if (handle != nullptr) {
             WCTInnerAssert(dynamic_cast<CheckpointHandle *>(handle.get()) != nullptr);
             succeed = static_cast<CheckpointHandle *>(handle.get())->checkpoint(mode);
@@ -872,7 +870,7 @@ void Database::suspendCheckpoint(bool suspend)
     SharedLockGuard concurrencyGuard(m_concurrency);
     SharedLockGuard memoryGuard(m_memory);
     WCTInnerAssert(m_initialized);
-    for (const auto &handle : getHandles(HandleType::InterruptibleCheckpoint)) {
+    for (const auto &handle : getHandles(HandleType::Checkpoint)) {
         WCTInnerAssert(dynamic_cast<CheckpointHandle *>(handle.get()) != nullptr);
         static_cast<CheckpointHandle *>(handle.get())->suspend(suspend);
     }

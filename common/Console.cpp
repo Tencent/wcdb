@@ -22,6 +22,7 @@
 #include <WCDB/CoreConst.h>
 #include <WCDB/Error.hpp>
 #include <WCDB/Notifier.hpp>
+#include <WCDB/Time.hpp>
 #include <WCDB/Version.h>
 #include <iostream>
 
@@ -39,11 +40,11 @@ void Console::initialize()
 
 std::atomic<bool>& Console::debuggableValue()
 {
-#ifdef DEBUG
+#ifdef WCDB_DEBUG
     std::atomic<bool>* s_debuggable = new std::atomic<bool>(true);
-#else  // DEBUG
+#else  // WCDB_DEBUG
     std::atomic<bool>* s_debuggable = new std::atomic<bool>(false);
-#endif // DEBUG
+#endif // WCDB_DEBUG
     return *s_debuggable;
 }
 
@@ -95,7 +96,8 @@ void Console::breakpoint()
 {
 }
 
-#ifdef DEBUG
+#if WCDB_ASSERTION
+
 void Console::fatal(const String& message, const char* file, int line, const char* function)
 {
     Error error(Error::Code::Misuse, Error::Level::Fatal, message);
@@ -107,10 +109,10 @@ void Console::fatal(const String& message, const char* file, int line, const cha
     error.infos.set("BuildTime", WCDB_BUILD_TIME);
     error.infos.set("BuildTimestamp", WCDB_BUILD_TIMESTAMP);
     error.infos.set("CommitHash", WCDB_COMMIT_HASH);
-    Notifier::shared()->notify(error);
+    print(error.getDescription());
 }
 
-#else // DEBUG
+#else // WCDB_ASSERTION
 
 void Console::fatal(const String& message)
 {
@@ -120,9 +122,24 @@ void Console::fatal(const String& message)
     error.infos.set("BuildTime", WCDB_BUILD_TIME);
     error.infos.set("BuildTimestamp", WCDB_BUILD_TIMESTAMP);
     error.infos.set("CommitHash", WCDB_COMMIT_HASH);
-    Notifier::shared()->notify(error);
+    print(error.getDescription());
 }
 
-#endif // DEBUG
+#endif // WCDB_ASSERTION
+
+#if WCDB_TRACE
+
+void Console::trace(const String& message, const char* file, int line, const char* function)
+{
+    Error error(Error::Code::Notice, Error::Level::Notice, message);
+    error.infos.set(ErrorStringKeySource, ErrorSourceTrace);
+    error.infos.set("File", file);
+    error.infos.set("Line", line);
+    error.infos.set("Func", function);
+    error.infos.set("Time", Time::now().stringify());
+    print(error.getDescription());
+}
+
+#endif
 
 } // namespace WCDB

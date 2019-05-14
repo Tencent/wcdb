@@ -21,6 +21,7 @@
 #ifndef __WCDB_CONSOLE_HPP
 #define __WCDB_CONSOLE_HPP
 
+#include <WCDB/Debug.hpp>
 #include <WCDB/Macro.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/String.hpp>
@@ -41,12 +42,17 @@ public:
 
     static void errored(const Notifier::Callback& callback);
 
-#ifdef DEBUG
+#if WCDB_ASSERTION
     static void
     fatal(const String& message, const char* file, int line, const char* function);
-#else  // DEBUG
+#else  // WCDB_ASSERTION
     static void fatal(const String& message);
-#endif // DEBUG
+#endif // WCDB_ASSERTION
+
+#if WCDB_TRACE
+    static void
+    trace(const String& message, const char* file, int line, const char* function);
+#endif
 
 private:
     static void report(const Error& error);
