@@ -137,17 +137,11 @@ const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *p
                 return Error::c2rc(code);
             }
         } else {
-            if (m_bufferLength > m_buffer.capacity()) {
-                m_buffer.resize(m_bufferLength);
-            }
-            memcpy(m_buffer.data(), m_input + m_startOffset, m_bufferLength);
+            m_buffer.assign(m_input + m_startOffset, m_input + m_startOffset + m_bufferLength);
         }
     } else {
         subTokensStep();
-        if (m_bufferLength > m_buffer.capacity()) {
-            m_buffer.resize(m_bufferLength);
-        }
-        memcpy(m_buffer.data(), m_input + m_startOffset, m_bufferLength);
+        m_buffer.assign(m_input + m_startOffset, m_input + m_startOffset + m_bufferLength);
     }
 
     if (m_lemmaBufferLength == 0) {
@@ -250,13 +244,9 @@ int OneOrBinaryTokenizerCursorInfo::cursorSetup()
 
 int OneOrBinaryTokenizerCursorInfo::lemmatization(const char *input, int inputLength)
 {
-    //tolower only. You can implement your own lemmatization.
-    if (inputLength > m_buffer.size()) {
-        m_buffer.resize(inputLength);
-    }
-    for (int i = 0; i < inputLength; ++i) {
-        m_buffer.data()[i] = (char) tolower(input[i]);
-    }
+    // tolower only. You can implement your own lemmatization.
+    m_buffer.assign(input, input + inputLength);
+    std::transform(m_buffer.begin(), m_buffer.end(), m_buffer.begin(), ::tolower);
     m_bufferLength = porterStem(m_buffer.data(), 0, m_bufferLength - 1) + 1;
     return Error::c2rc(Error::Code::OK);
 }
