@@ -403,7 +403,6 @@
     TestCaseAssertTrue([self.database beginTransaction]);
     TestCaseAssertResultYES(rollbacked);
     [tested makeYES];
-    [self.database rollbackTransaction];
     [self.dispatch waitUntilDone];
 }
 
@@ -443,7 +442,6 @@
 
     TestCaseAssertFalse([self.database beginTransaction]);
     TestCaseAssertResultNO(rollbacked);
-    [self.database rollbackTransaction];
     [self.dispatch waitUntilDone];
 }
 
@@ -484,7 +482,6 @@
 
         TestCaseAssertFalse([self.database beginTransaction]);
         TestCaseAssertResultNO(rollbacked);
-        [self.database rollbackTransaction];
     }];
     [self.dispatch waitUntilDone];
 }
