@@ -172,18 +172,6 @@ RecyclableHandle Database::getHandle()
     return flowOut(m_migration.shouldMigrate() ? HandleType::Migrate : HandleType::Normal);
 }
 
-RecyclableHandle Database::getSlotHandle(Slot slot)
-{
-    WCTInnerAssert(slot != HandleType::Migrate);
-    WCTInnerAssert(slot != HandleType::Normal);
-    WCTInnerAssert(slot < HandlePoolNumberOfSlots);
-    InitializedGuard initializedGuard = initialize();
-    if (!initializedGuard.valid()) {
-        return nullptr;
-    }
-    return flowOut(slot);
-}
-
 bool Database::execute(const Statement &statement)
 {
     RecyclableHandle handle = getHandle();
@@ -215,40 +203,8 @@ std::pair<bool, bool> Database::tableExists(const String &table)
 std::shared_ptr<Handle> Database::generateSlotedHandle(Slot slot)
 {
     WCTInnerAssert(slot < HandlePoolNumberOfSlots);
-    return generateHandle((HandleType) slot);
-}
-
-bool Database::handleWillStep(HandleStatement *handleStatement)
-{
-    // Interrupt when a write operation will run
-    // If already in transaction, it's no need to interrupt since it already block others.
-    if (!handleStatement->isReadonly() && !handleStatement->getHandle()->isInTransaction()) {
-        suspendMigration(true);
-        suspendCheckpoint(true);
-        return true;
-    }
-    return false;
-}
-
-void Database::handleDidStep(HandleStatement *handleStatement, bool succeed)
-{
-    WCDB_UNUSED(succeed);
-    WCDB_UNUSED(handleStatement);
-    suspendMigration(false);
-    suspendCheckpoint(false);
-}
-
-bool Database::willReuseSlotedHandle(Slot slot, Handle *handle)
-{
-    WCTInnerAssert(handle->isOpened());
-    WCTInnerAssert(slot < HandlePoolNumberOfSlots);
-    WCDB_UNUSED(slot)
-    return reconfigureHandle(handle);
-}
-
-std::shared_ptr<Handle> Database::generateHandle(HandleType type)
-{
     WCTInnerAssert(m_concurrency.readSafety());
+    HandleType type = (HandleType) slot;
     std::shared_ptr<Handle> handle;
     switch (type) {
     case HandleType::Checkpoint:
@@ -305,6 +261,34 @@ std::shared_ptr<Handle> Database::generateHandle(HandleType type)
     }
 
     return handle;
+}
+
+bool Database::handleWillStep(HandleStatement *handleStatement)
+{
+    // Interrupt when a write operation will run
+    // If already in transaction, it's no need to interrupt since it already block others.
+    if (!handleStatement->isReadonly() && !handleStatement->getHandle()->isInTransaction()) {
+        suspendMigration(true);
+        suspendCheckpoint(true);
+        return true;
+    }
+    return false;
+}
+
+void Database::handleDidStep(HandleStatement *handleStatement, bool succeed)
+{
+    WCDB_UNUSED(succeed);
+    WCDB_UNUSED(handleStatement);
+    suspendMigration(false);
+    suspendCheckpoint(false);
+}
+
+bool Database::willReuseSlotedHandle(Slot slot, Handle *handle)
+{
+    WCTInnerAssert(handle->isOpened());
+    WCTInnerAssert(slot < HandlePoolNumberOfSlots);
+    WCDB_UNUSED(slot)
+    return reconfigureHandle(handle);
 }
 
 bool Database::reconfigureHandle(Handle *handle)
@@ -615,15 +599,15 @@ bool Database::deposit()
             return;
         }
 
-        std::shared_ptr<Handle> backupReadHandle = generateHandle(HandleType::BackupRead);
+        RecyclableHandle backupReadHandle = flowOut(HandleType::BackupRead);
         if (backupReadHandle == nullptr) {
             return;
         }
-        std::shared_ptr<Handle> backupWriteHandle = generateHandle(HandleType::BackupWrite);
+        RecyclableHandle backupWriteHandle = flowOut(HandleType::BackupWrite);
         if (backupWriteHandle == nullptr) {
             return;
         }
-        std::shared_ptr<Handle> assemblerHandle = generateHandle(HandleType::Assemble);
+        RecyclableHandle assemblerHandle = flowOut(HandleType::Assemble);
         if (assemblerHandle == nullptr) {
             return;
         }
@@ -663,15 +647,15 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
             return;
         }
 
-        std::shared_ptr<Handle> backupReadHandle = generateHandle(HandleType::BackupRead);
+        RecyclableHandle backupReadHandle = flowOut(HandleType::BackupRead);
         if (backupReadHandle == nullptr) {
             return;
         }
-        std::shared_ptr<Handle> backupWriteHandle = generateHandle(HandleType::BackupWrite);
+        RecyclableHandle backupWriteHandle = flowOut(HandleType::BackupWrite);
         if (backupWriteHandle == nullptr) {
             return;
         }
-        std::shared_ptr<Handle> assemblerHandle = generateHandle(HandleType::Assemble);
+        RecyclableHandle assemblerHandle = flowOut(HandleType::Assemble);
         if (assemblerHandle == nullptr) {
             return;
         }
@@ -738,7 +722,7 @@ void Database::checkIntegrity()
 {
     InitializedGuard initializedGuard = initialize();
     if (initializedGuard.valid()) {
-        std::shared_ptr<Handle> handle = generateHandle(HandleType::Integrity);
+        RecyclableHandle handle = flowOut(HandleType::Integrity);
         if (handle != nullptr) {
             WCTInnerAssert(dynamic_cast<IntegrityHandle *>(handle.get()) != nullptr);
             static_cast<IntegrityHandle *>(handle.get())->check();
@@ -750,7 +734,7 @@ void Database::checkIntegrityIfAlreadyInitialized()
 {
     InitializedGuard initializedGuard = isInitialized();
     if (initializedGuard.valid()) {
-        std::shared_ptr<Handle> handle = generateHandle(HandleType::Integrity);
+        RecyclableHandle handle = flowOut(HandleType::Integrity);
         if (handle != nullptr) {
             WCTInnerAssert(dynamic_cast<IntegrityHandle *>(handle.get()) != nullptr);
             static_cast<IntegrityHandle *>(handle.get())->check();
@@ -789,7 +773,7 @@ std::pair<bool, bool> Database::doStepMigration()
     WCTInnerAssert(m_initialized);
     bool succeed = false;
     bool done = false;
-    RecyclableHandle handle = getSlotHandle(HandleType::MigrationStep);
+    RecyclableHandle handle = flowOut(HandleType::MigrationStep);
     if (handle != nullptr) {
         WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()) != nullptr);
         std::tie(succeed, done)
@@ -856,7 +840,7 @@ bool Database::checkpointIfAlreadyInitialized(CheckpointMode mode)
     InitializedGuard initializedGuard = isInitialized();
     bool succeed = false;
     if (initializedGuard.valid()) {
-        RecyclableHandle handle = getSlotHandle(HandleType::Checkpoint);
+        RecyclableHandle handle = flowOut(HandleType::Checkpoint);
         if (handle != nullptr) {
             WCTInnerAssert(dynamic_cast<CheckpointHandle *>(handle.get()) != nullptr);
             succeed = static_cast<CheckpointHandle *>(handle.get())->checkpoint(mode);
