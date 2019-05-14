@@ -22,7 +22,6 @@
 #include <WCDB/CoreConst.h>
 #include <WCDB/Error.hpp>
 #include <WCDB/Notifier.hpp>
-#include <WCDB/Time.hpp>
 #include <WCDB/Version.h>
 #include <iostream>
 
@@ -136,7 +135,11 @@ void Console::trace(const String& message, const char* file, int line, const cha
     error.infos.set("File", file);
     error.infos.set("Line", line);
     error.infos.set("Func", function);
-    error.infos.set("Time", Time::now().stringify());
+    constexpr const int size = 100;
+    char name[size];
+    memset(name, 0, size);
+    pthread_getname_np(pthread_self(), name, size);
+    error.infos.set("Thread", name);
     print(error.getDescription());
 }
 
