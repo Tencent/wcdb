@@ -77,9 +77,9 @@ public:
     bool isOpened() const;
 
     long long getLastInsertedRowID();
-    const char *getErrorMessage();
-    int getExtendedErrorCode();
-    Error::Code getResultCode();
+    //    const char *getErrorMessage();
+    //    Error::ExtCode getExtendedErrorCode();
+    //    Error::Code getResultCode();
     int getChanges();
     bool isReadonly();
     bool isInTransaction();

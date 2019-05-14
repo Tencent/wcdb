@@ -114,7 +114,6 @@ bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
     }
 
     bool migrated = false;
-    printf("begin %s\n", Time::now().stringify().c_str());
     bool succeed = runTransaction([&migrated, this](Handle*) -> bool {
         // migrate one at least
         bool succeed;
@@ -129,20 +128,14 @@ bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
 
         int numberOfDirtyPages = getNumberOfDirtyPages();
         bool worked = false;
-        int i = 0;
-        printf("try migrate begin\n");
         do {
-            printf("try migrate sub begin\n");
             std::tie(succeed, worked, migrated)
             = tryMigrateRowWithoutIncreasingDirtyPage(numberOfDirtyPages);
-            printf("try migrate %d succeed: %d, worked: %d, migrated: %d\n", ++i, succeed, worked, migrated);
         } while (succeed && worked && !migrated);
-#warning TODO check interrupt
         // TODO - wait for the answer of SQLite staff about the dirty page of ROLLBACK TO stmt.
         //        WCTInnerAssert(numberOfDirtyPages == getNumberOfDirtyPages());
         return succeed;
     });
-    printf("end %s\n", Time::now().stringify().c_str());
     if (succeed && migrated) {
         done = true;
     }

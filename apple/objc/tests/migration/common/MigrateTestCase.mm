@@ -107,7 +107,6 @@
 
     [self.dispatch async:^{
         while (write.isYES) {
-            [NSThread sleepForTimeInterval:0.5];
             TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion()).to(1)]);
         }
     }];
@@ -121,9 +120,6 @@
             && error.tag == self.database.tag) {
             [tested increment];
         }
-        if (error.level == WCTErrorLevelError) {
-            TestCaseLog(@"hit");
-        }
     }];
 
     do {
@@ -136,12 +132,11 @@
             TestCaseAssertTrue([self.database createTable:table withClass:TestCaseObject.class]);
         }
         TestCaseAssertTrue([self.database stepMigration]);
-    } while (YES);
+    } while (tested.value == 1000);
 
     [WCTDatabase globalTraceError:nil];
     [write makeNO];
 
-    //    TestCaseAssertResultYES(tested);
     TestCaseAssertFalse([self.database isMigrated]);
     [self.dispatch waitUntilDone];
 }

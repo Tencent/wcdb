@@ -96,7 +96,7 @@ bool AssemblerHandle::assembleSQL(const String &sql)
 {
     markErrorAsIgnorable(Error::Code::Error);
     bool succeed = executeSQL(sql);
-    if (!succeed && getResultCode() == Error::Code::Error) {
+    if (!succeed && getError().code() == Error::Code::Error) {
         succeed = true;
     }
     markErrorAsUnignorable();
@@ -115,7 +115,7 @@ bool AssemblerHandle::assembleTable(const String &tableName, const String &sql)
     m_table.clear();
     markErrorAsIgnorable(Error::Code::Error);
     bool succeed = executeSQL(sql);
-    if (!succeed && getResultCode() == Error::Code::Error) {
+    if (!succeed && getError().code() == Error::Code::Error) {
         succeed = true;
     }
     markErrorAsUnignorable();

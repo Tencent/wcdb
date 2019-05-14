@@ -24,7 +24,6 @@
 #include <WCDB/Notifier.hpp>
 #include <WCDB/SQLite.h>
 #include <WCDB/String.hpp>
-#include <unistd.h>
 
 namespace WCDB {
 
@@ -151,9 +150,6 @@ bool AbstractHandle::executeSQL(const String &sql)
     HandleStatement handleStatement(this, &m_notification);
     bool succeed = handleStatement.prepare(sql);
     if (succeed) {
-        if (sql.hasCaseInsensivePrefix("RELEASE")) {
-            sleep(1);
-        }
         succeed = handleStatement.step();
         handleStatement.finalize();
     }
@@ -165,29 +161,28 @@ bool AbstractHandle::executeStatement(const Statement &statement)
     return executeSQL(statement.getDescription());
 }
 
-int AbstractHandle::getExtendedErrorCode()
-{
-    WCTInnerAssert(isOpened());
-    return sqlite3_extended_errcode(m_handle);
-}
-
 long long AbstractHandle::getLastInsertedRowID()
 {
     WCTInnerAssert(isOpened());
     return sqlite3_last_insert_rowid(m_handle);
 }
 
-Error::Code AbstractHandle::getResultCode()
-{
-    WCTInnerAssert(isOpened());
-    return (Error::Code) sqlite3_errcode(m_handle);
-}
-
-const char *AbstractHandle::getErrorMessage()
-{
-    WCTInnerAssert(isOpened());
-    return sqlite3_errmsg(m_handle);
-}
+//Error::Code AbstractHandle::getResultCode()
+//{
+//    WCTInnerAssert(isOpened());
+//    return (Error::Code) sqlite3_errcode(m_handle);
+//}
+//
+//const char *AbstractHandle::getErrorMessage()
+//{
+//    WCTInnerAssert(isOpened());
+//    return sqlite3_errmsg(m_handle);
+//}
+//int AbstractHandle::getExtendedErrorCode()
+//{
+//    WCTInnerAssert(isOpened());
+//    return sqlite3_extended_errcode(m_handle);
+//}
 
 int AbstractHandle::getChanges()
 {
@@ -244,7 +239,7 @@ std::pair<bool, bool> AbstractHandle::ft3TokenizerExists(const String &tokenizer
     if (succeed) {
         exists = true;
     } else {
-        if (getResultCode() == Error::Code::Error) {
+        if (m_error.code() == Error::Code::Error) {
             succeed = true;
         }
     }
@@ -269,7 +264,7 @@ std::pair<bool, bool> AbstractHandle::tableExists(const Schema &schema, const St
         exists = true;
         finalizeStatements();
     } else {
-        if (getResultCode() == Error::Code::Error) {
+        if (m_error.code() == Error::Code::Error) {
             succeed = true;
         }
     }
@@ -548,8 +543,8 @@ bool AbstractHandle::exitAPI(int rc, const char *sql)
 void AbstractHandle::notifyError(int rc, const char *sql)
 {
     WCTInnerAssert(Error::isError(rc));
-    if (Error::rc2c(rc) != Error::Code::Misuse) {
-        m_error.setSQLiteCode(rc, getErrorMessage());
+    if (Error::rc2c(rc) != Error::Code::Misuse && sqlite3_errcode(m_handle) == rc) {
+        m_error.setSQLiteCode(rc, sqlite3_errmsg(m_handle));
     } else {
         // extended error code/message will not be set in some case for misuse error
         m_error.setSQLiteCode(rc);
