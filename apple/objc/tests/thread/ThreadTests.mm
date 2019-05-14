@@ -148,7 +148,7 @@
 
     TestCaseAssertOptionalFalse([self.database isAlreadyCheckpointed]);
 
-    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueDelayForNonCritical + self.delayForTolerance];
+    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueTimeIntervalForNonCritical + self.delayForTolerance];
 
     TestCaseAssertOptionalFalse([self.database isAlreadyTruncateCheckpointed]);
     TestCaseAssertOptionalTrue([self.database isAlreadyCheckpointed]);
@@ -171,7 +171,7 @@
 
     TestCaseAssertOptionalFalse(self.database.isAlreadyCheckpointed);
 
-    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueDelayForCritical + self.delayForTolerance];
+    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueTimeIntervalForCritical + self.delayForTolerance];
 
     TestCaseAssertOptionalTrue(self.database.isAlreadyCheckpointed);
 }
@@ -193,7 +193,7 @@
 
     TestCaseAssertOptionalFalse(self.database.isAlreadyTruncateCheckpointed);
 
-    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueDelayForCritical + self.delayForTolerance];
+    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueTimeIntervalForCritical + self.delayForTolerance];
 
     TestCaseAssertOptionalTrue(self.database.isAlreadyTruncateCheckpointed);
 }
@@ -215,7 +215,7 @@
     [WCTDatabase simulateIOError:WCTSimulateWriteIOError];
     [self.database unblockade];
 
-    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueDelayForNonCritical + self.delayForTolerance];
+    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueTimeIntervalForNonCritical + self.delayForTolerance];
 
     TestCaseAssertOptionalFalse(self.database.isAlreadyCheckpointed);
 
@@ -223,7 +223,7 @@
     [WCTDatabase simulateIOError:WCTSimulateNoneIOError];
     [self.database unblockade];
 
-    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueDelayForRetryingAfterFailure + self.delayForTolerance];
+    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueTimeIntervalForRetryingAfterFailure + self.delayForTolerance];
 
     TestCaseAssertOptionalTrue(self.database.isAlreadyCheckpointed);
 }
@@ -248,7 +248,7 @@
     TestCaseAssertTrue(fileSizeBefore > 0);
 
     [self.database close];
-    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueDelayForCritical + self.delayForTolerance];
+    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueTimeIntervalForCritical + self.delayForTolerance];
     auto fileSizeAfter = [self.fileManager attributesOfItemAtPath:self.database.walPath error:nil].fileSize;
     TestCaseAssertTrue(fileSizeAfter > 0);
 }
@@ -379,7 +379,7 @@
 
     TestCaseAssertOptionalFalse(self.database.isAlreadyCheckpointed);
 
-    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueDelayForNonCritical + self.delayForTolerance];
+    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueTimeIntervalForNonCritical + self.delayForTolerance];
 
     TestCaseAssertOptionalTrue(self.database.isAlreadyCheckpointed);
 }
@@ -495,7 +495,7 @@
 
     TestCaseAssertOptionalFalse(self.database.isAlreadyCheckpointed);
 
-    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueDelayForNonCritical + self.delayForTolerance];
+    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueTimeIntervalForNonCritical + self.delayForTolerance];
 
     TestCaseAssertOptionalTrue(self.database.isAlreadyCheckpointed);
 
@@ -513,7 +513,7 @@
 
     TestCaseAssertOptionalFalse(self.database.isAlreadyCheckpointed);
 
-    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueDelayForNonCritical + self.delayForTolerance];
+    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueTimeIntervalForNonCritical + self.delayForTolerance];
 
     TestCaseAssertOptionalTrue(self.database.isAlreadyCheckpointed);
 }

@@ -32,8 +32,7 @@ CheckpointHandle::CheckpointHandle()
 
 CheckpointHandle::~CheckpointHandle()
 {
-    markErrorAsUnignorable();
-    markErrorAsUnignorable();
+    markErrorAsUnignorable(2);
 }
 
 bool CheckpointHandle::checkpoint(CheckpointMode mode)

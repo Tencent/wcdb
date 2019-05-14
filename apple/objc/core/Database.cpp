@@ -778,11 +778,8 @@ std::pair<bool, bool> Database::doStepMigration()
         WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()) != nullptr);
         std::tie(succeed, done)
         = m_migration.step(*(static_cast<MigrationStepperHandle *>(handle.get())));
-        if (!succeed) {
-            if (handle->getError().code() == Error::Code::Interrupt
-                || handle->getError().code() == Error::Code::Busy) {
-                succeed = true;
-            }
+        if (!succeed && handle->isErrorIgnorable()) {
+            succeed = true;
         }
     }
     return { succeed, done };

@@ -41,12 +41,12 @@
 
 - (NSTimeInterval)backupDelayForCritical
 {
-    return WCDB::BackupQueueDelayForCritical;
+    return WCDB::BackupQueueTimeIntervalForCritical;
 }
 
 - (NSTimeInterval)backupDelayForNonCritical
 {
-    return WCDB::BackupQueueDelayForNonCritical;
+    return WCDB::BackupQueueTimeIntervalForNonCritical;
 }
 
 - (NSTimeInterval)delayForTolerance

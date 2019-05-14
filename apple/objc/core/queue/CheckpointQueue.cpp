@@ -45,7 +45,7 @@ bool CheckpointQueue::onTimed(const String& path, const int& frames)
     bool result = m_event->databaseShouldCheckpoint(path, frames);
     if (!result) {
         // delay retry if failed
-        put(path, CheckpointQueueDelayForRetryingAfterFailure, frames);
+        put(path, CheckpointQueueTimeIntervalForRetryingAfterFailure, frames);
     }
     return result;
 }
@@ -53,10 +53,10 @@ bool CheckpointQueue::onTimed(const String& path, const int& frames)
 void CheckpointQueue::put(const String& path, int frames)
 {
     if (frames >= CheckpointQueueFramesThresholdForCritical) {
-        put(path, CheckpointQueueDelayForCritical, frames);
+        put(path, CheckpointQueueTimeIntervalForCritical, frames);
     } else {
-        m_timedQueue.queue(path, CheckpointQueueDelayForNonCritical, frames);
-        put(path, CheckpointQueueDelayForNonCritical, frames);
+        m_timedQueue.queue(path, CheckpointQueueTimeIntervalForNonCritical, frames);
+        put(path, CheckpointQueueTimeIntervalForNonCritical, frames);
     }
 }
 
