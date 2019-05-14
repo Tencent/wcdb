@@ -361,6 +361,8 @@ bool AbstractHandle::commitOrRollbackNestedTransaction()
         succeed = executeStatement(StatementRelease().release(savepointName));
         if (succeed) {
             --m_nestedLevel;
+        } else {
+            rollbackNestedTransaction();
         }
     }
     return succeed;
@@ -368,16 +370,16 @@ bool AbstractHandle::commitOrRollbackNestedTransaction()
 
 void AbstractHandle::rollbackNestedTransaction()
 {
-    unimpeded(true);
     if (m_nestedLevel == 0) {
         rollbackTransaction();
     } else {
+        unimpeded(true);
         String savepointName = getSavepointName(m_nestedLevel);
         if (executeStatement(StatementRollback().rollbackToSavepoint(savepointName))) {
             --m_nestedLevel;
         }
+        unimpeded(false);
     }
-    unimpeded(false);
 }
 
 bool AbstractHandle::beginTransaction()
