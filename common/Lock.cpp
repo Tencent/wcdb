@@ -111,7 +111,7 @@ void SharedLock::unlockShared()
     if (m_readers == 0) {
         WCTInnerAssert(*m_threadedReaders.getOrCreate() == 0);
         if (m_writers == 0 && m_pendingWriters > 0) {
-            WCTTrace("Notify");
+            WCTLockTrace("Notify");
             m_writersCond.notify_one();
         }
     }
@@ -163,10 +163,10 @@ void SharedLock::unlock()
         m_locking = std::thread::id();
         // write lock first
         if (m_pendingWriters > 0) {
-            WCTTrace("Notify one");
+            WCTLockTrace("Notify one");
             m_writersCond.notify_one();
         } else if (m_pendingReaders > 0) {
-            WCTTrace("Notify all");
+            WCTLockTrace("Notify all");
             m_readersCond.notify_all();
         }
     }
