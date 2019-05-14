@@ -30,6 +30,7 @@ MigrationStepperHandle::MigrationStepperHandle()
 , m_removeMigratedStatement(getStatement())
 {
     markErrorAsIgnorable(Error::Code::Interrupt);
+    markErrorAsIgnorable(Error::Code::Busy);
 }
 
 MigrationStepperHandle::~MigrationStepperHandle()
@@ -37,6 +38,7 @@ MigrationStepperHandle::~MigrationStepperHandle()
     finalizeMigrationStatement();
     returnStatement(m_migrateStatement);
     returnStatement(m_removeMigratedStatement);
+    markErrorAsUnignorable();
     markErrorAsUnignorable();
 }
 

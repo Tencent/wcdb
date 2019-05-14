@@ -27,10 +27,12 @@ namespace WCDB {
 CheckpointHandle::CheckpointHandle()
 {
     markErrorAsIgnorable(Error::Code::Interrupt);
+    markErrorAsIgnorable(Error::Code::Busy);
 }
 
 CheckpointHandle::~CheckpointHandle()
 {
+    markErrorAsUnignorable();
     markErrorAsUnignorable();
 }
 

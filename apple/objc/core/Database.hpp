@@ -80,13 +80,16 @@ protected:
     enum HandleType : unsigned int {
         Normal = 0,
         Migrate,
+
         MigrationStep,
+
         Checkpoint,
 
         BackupRead,
         BackupWrite,
 
         Assemble,
+
         Integrity,
     };
     std::shared_ptr<Handle> generateSlotedHandle(Slot slot) override final;
