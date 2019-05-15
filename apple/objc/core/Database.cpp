@@ -265,22 +265,24 @@ std::shared_ptr<Handle> Database::generateSlotedHandle(Slot slot)
 
 bool Database::handleWillStep(HandleStatement *handleStatement)
 {
-    // Interrupt when a write operation will run
-    // If already in transaction, it's no need to interrupt since it already block others.
-    if (!handleStatement->isReadonly() && !handleStatement->getHandle()->isInTransaction()) {
+    // Suspend if and only if it will enter the transaction.
+
+    if (!handleStatement->getHandle()->isInTransaction()) {
         suspendMigration(true);
         suspendCheckpoint(true);
-        return true;
     }
-    return false;
+    return true;
 }
 
 void Database::handleDidStep(HandleStatement *handleStatement, bool succeed)
 {
+    // Unsuspend if and only if it did leave the transaction.
+
     WCDB_UNUSED(succeed);
-    WCDB_UNUSED(handleStatement);
-    suspendMigration(false);
-    suspendCheckpoint(false);
+    if (!handleStatement->getHandle()->isInTransaction()) {
+        suspendMigration(false);
+        suspendCheckpoint(false);
+    }
 }
 
 bool Database::willReuseSlotedHandle(Slot slot, Handle *handle)

@@ -30,7 +30,7 @@ BusyRetryConfig::BusyRetryConfig()
 : Config()
 , m_identifier(String::formatted("Busy-%p", this))
 , m_numberOfWaitingHandles(0)
-, m_numberOfSteppingHandles(0)
+, m_numberOfWritingHandles(0)
 {
 }
 
@@ -54,18 +54,18 @@ bool BusyRetryConfig::uninvoke(Handle* handle)
 
 bool BusyRetryConfig::handleWillStep(HandleStatement* handleStatement)
 {
-    WCDB_UNUSED(handleStatement)
-    ++m_numberOfSteppingHandles;
+    if (!handleStatement->getHandle()->isInTransaction()) {
+        ++m_numberOfWritingHandles;
+    }
     return true;
 }
 
-void BusyRetryConfig::handleDidStep(HandleStatement* handleStatement, bool result)
+void BusyRetryConfig::handleDidStep(HandleStatement* handleStatement, bool succeed)
 {
-    WCDB_UNUSED(result)
-    --m_numberOfSteppingHandles;
-
-    AbstractHandle* handle = handleStatement->getHandle();
-    if (!handle->isInTransaction()) {
+    WCDB_UNUSED(succeed);
+    if (!handleStatement->getHandle()->isInTransaction()) {
+        --m_numberOfWritingHandles;
+        WCTInnerAssert(m_numberOfWritingHandles >= 0);
         std::lock_guard<decltype(m_mutex)> lockGuard(m_mutex);
         if (m_numberOfWaitingHandles > 0) {
             m_cond.notify_all();
@@ -85,20 +85,24 @@ bool BusyRetryConfig::onBusy(const String& path, int numberOfTimes)
     double remainingTime = totalTime - waitedTimes[path];
 
     bool retry = false;
+    bool waited = false;
     if (remainingTime > 0) {
         SteadyClock before = SteadyClock::now();
         {
             std::unique_lock<decltype(m_mutex)> lockGuard(m_mutex);
             ++m_numberOfWaitingHandles;
-            if (m_numberOfSteppingHandles > 0) {
+            if (m_numberOfWritingHandles > 0) {
                 retry = m_cond.wait_for(
                         lockGuard,
                         std::chrono::nanoseconds((long long) (remainingTime * 1E9)))
                         == std::cv_status::no_timeout;
+                waited = true;
+            } else {
+                retry = true;
             }
             --m_numberOfWaitingHandles;
         }
-        if (retry) {
+        if (retry && waited) {
             std::time_t waitedTime
             = (std::time_t) std::chrono::duration_cast<std::chrono::nanoseconds>(
               SteadyClock::now() - before)
