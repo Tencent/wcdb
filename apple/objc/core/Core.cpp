@@ -38,6 +38,7 @@ Core* Core::shared()
 Core::Core()
 // Database
 : m_databasePool(this)
+, m_modules(new TokenizerModules())
 // Corruption
 , m_observationQueue(new ObservationQueue(ObservationQueueName, this))
 // Checkpoint
@@ -163,19 +164,12 @@ void Core::preprocessError(Error& error)
 #pragma mark - Tokenizer
 void Core::registerTokenizer(const String& name, const TokenizerModule& module)
 {
-    m_modules.add(name, module);
+    m_modules->add(name, module);
 }
 
 std::shared_ptr<Config> Core::tokenizerConfig(const String& tokenizeName)
 {
-    std::shared_ptr<Config> config;
-    bool exists;
-    TokenizerModule module;
-    std::tie(exists, module) = m_modules.get(tokenizeName);
-    if (exists) {
-        config.reset(new TokenizerConfig(tokenizeName, module));
-    }
-    return config;
+    return std::make_shared<TokenizerConfig>(tokenizeName, m_modules);
 }
 
 #pragma mark - Observation

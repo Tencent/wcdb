@@ -112,6 +112,7 @@
     while (tested.isNO) {
     }
 
+    [NSThread sleepForTimeInterval:2];
     TestCaseAssertFalse([self.database isOpened]);
 
     // sleep for other tests
@@ -133,6 +134,7 @@
     while (tested.isNO) {
     }
     [tested makeNO];
+    [NSThread sleepForTimeInterval:2];
     TestCaseAssertFalse([self.database isOpened]);
 
     TestCaseAssertTrue([self.database canOpen]);
@@ -145,6 +147,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidReceiveMemoryWarningNotification object:nil];
     while (tested.isNO) {
     }
+    [NSThread sleepForTimeInterval:2];
     TestCaseAssertFalse([self.database isOpened]);
 
     // sleep for other tests

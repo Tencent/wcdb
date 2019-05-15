@@ -566,10 +566,28 @@ void AbstractHandle::markErrorAsIgnorable(Error::Code ignorableCode)
     m_ignorableCodes.emplace_back((int) ignorableCode);
 }
 
-void AbstractHandle::markErrorAsUnignorable()
+void AbstractHandle::markErrorAsUnignorable(int count)
 {
-    WCTInnerAssert(!m_ignorableCodes.empty());
-    m_ignorableCodes.pop_back();
+    while (!m_ignorableCodes.empty() && count > 0) {
+        m_ignorableCodes.pop_back();
+        --count;
+    }
+}
+
+bool AbstractHandle::isErrorIgnorable() const
+{
+    bool ignorable = true;
+    int rc = Error::c2rc(m_error.code());
+    if (Error::isError(rc)) {
+        ignorable = false;
+        for (const auto &code : m_ignorableCodes) {
+            if (code == rc) {
+                ignorable = true;
+                break;
+            }
+        }
+    }
+    return ignorable;
 }
 
 void AbstractHandle::tryNotifyError(int rc)

@@ -183,7 +183,9 @@ private:
 public:
     // call it as push/pop in stack structure.
     void markErrorAsIgnorable(Error::Code ignorableCode);
-    void markErrorAsUnignorable();
+    void markErrorAsUnignorable(int count = 1);
+
+    bool isErrorIgnorable() const;
 
 private:
     static void tryNotifyError(int rc);

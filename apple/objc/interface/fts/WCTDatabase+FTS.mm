@@ -46,11 +46,10 @@ static std::nullptr_t initialize()
     static auto _ = initialize();
     WCDB_UNUSED(_);
 
-    WCTRemedialAssert(tokenizerName.length > 0, "Tokenizer name can't be nil.", return;);
-    std::shared_ptr<WCDB::Config> config = WCDB::Core::shared()->tokenizerConfig({ tokenizerName });
-    WCTRemedialAssert(config != nullptr, "Config doesn't exist.", return;);
+    WCTRemedialAssert(WCDB::Core::shared()->tokenizerExists(tokenizerName), "Tokenizer does not exist.", return;);
+
     WCDB::String configName = WCDB::String(WCDB::TokenizeConfigPrefix) + tokenizerName.UTF8String;
-    _database->setConfig(configName, config, WCDB::Configs::Priority::Higher);
+    _database->setConfig(configName, WCDB::Core::shared()->tokenizerConfig(tokenizerName), WCDB::Configs::Priority::Higher);
 }
 
 + (void)registerTokenizer:(const WCDB::TokenizerModule&)module named:(NSString*)name

@@ -265,22 +265,24 @@ std::shared_ptr<Handle> Database::generateSlotedHandle(Slot slot)
 
 bool Database::handleWillStep(HandleStatement *handleStatement)
 {
-    // Interrupt when a write operation will run
-    // If already in transaction, it's no need to interrupt since it already block others.
-    if (!handleStatement->isReadonly() && !handleStatement->getHandle()->isInTransaction()) {
+    // Suspend if and only if it will enter the transaction.
+
+    if (!handleStatement->getHandle()->isInTransaction()) {
         suspendMigration(true);
         suspendCheckpoint(true);
-        return true;
     }
-    return false;
+    return true;
 }
 
 void Database::handleDidStep(HandleStatement *handleStatement, bool succeed)
 {
+    // Unsuspend if and only if it did leave the transaction.
+
     WCDB_UNUSED(succeed);
-    WCDB_UNUSED(handleStatement);
-    suspendMigration(false);
-    suspendCheckpoint(false);
+    if (!handleStatement->getHandle()->isInTransaction()) {
+        suspendMigration(false);
+        suspendCheckpoint(false);
+    }
 }
 
 bool Database::willReuseSlotedHandle(Slot slot, Handle *handle)
@@ -778,11 +780,8 @@ std::pair<bool, bool> Database::doStepMigration()
         WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()) != nullptr);
         std::tie(succeed, done)
         = m_migration.step(*(static_cast<MigrationStepperHandle *>(handle.get())));
-        if (!succeed) {
-            if (handle->getError().code() == Error::Code::Interrupt
-                || handle->getError().code() == Error::Code::Busy) {
-                succeed = true;
-            }
+        if (!succeed && handle->isErrorIgnorable()) {
+            succeed = true;
         }
     }
     return { succeed, done };

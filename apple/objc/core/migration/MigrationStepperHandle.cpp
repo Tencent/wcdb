@@ -31,6 +31,7 @@ MigrationStepperHandle::MigrationStepperHandle()
 {
     markErrorAsIgnorable(Error::Code::Interrupt);
     markErrorAsIgnorable(Error::Code::Busy);
+    markErrorAsIgnorable(Error::Code::Error);
 }
 
 MigrationStepperHandle::~MigrationStepperHandle()
@@ -38,8 +39,7 @@ MigrationStepperHandle::~MigrationStepperHandle()
     finalizeMigrationStatement();
     returnStatement(m_migrateStatement);
     returnStatement(m_removeMigratedStatement);
-    markErrorAsUnignorable();
-    markErrorAsUnignorable();
+    markErrorAsUnignorable(3);
 }
 
 bool MigrationStepperHandle::reAttach(const String& newPath, const Schema& newSchema)
@@ -111,7 +111,7 @@ bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
 
     if (!m_removeMigratedStatement->isPrepared()
         && !m_removeMigratedStatement->prepare(
-        m_migratingInfo->getStatementForDeletingMigratedOneRow())) {
+           m_migratingInfo->getStatementForDeletingMigratedOneRow())) {
         return false;
     }
 

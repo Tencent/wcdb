@@ -24,40 +24,41 @@
 namespace WCDB {
 
 // Async Queue
-static constexpr const double AsyncQueueTimeOutForExiting = 10.0f;
+static constexpr const double AsyncQueueTimeOutForExiting = 10.0;
 
 // Migration Queue
 static constexpr const char* MigrationQueueName = "com.Tencent.WCDB.Queue.Migration";
-static constexpr const double MigrationQueueTimeIntervalForMigrating = 1.0f;
+static constexpr const double MigrationQueueTimeIntervalForMigrating = 1.0;
+static constexpr const double MigrationQueueTimeIntervalForRetryingAfterFailure = 3.0;
 static constexpr const int MigrationQueueTolerableFailures = 3;
 
 // Observation Queue
 static constexpr const char* ObservationQueueName = "com.Tencent.WCDB.Queue.Observation";
-static constexpr const double ObservationQueueTimeIntervalForReinvokingCorruptedEvent = 5.0f;
-static constexpr const double ObservationQueueTimeIntervalForPurgingAgain = 10.0f;
-static constexpr const double ObservationQueueRateForTooManyFileDescriptors = 0.5f;
+static constexpr const double ObservationQueueTimeIntervalForReinvokingCorruptedEvent = 5.0;
+static constexpr const double ObservationQueueTimeIntervalForPurgingAgain = 10.0;
+static constexpr const double ObservationQueueRateForTooManyFileDescriptors = 0.5;
 static constexpr const int ObservationQueueTimesOfIgnoringBackupCorruption = 3;
 
 // Checkpoint Queue
 static constexpr const char* CheckpointQueueName = "com.Tencent.WCDB.Queue.Checkpoint";
-static constexpr const double CheckpointQueueDelayForRetryingAfterFailure = 10.0;
+static constexpr const double CheckpointQueueTimeIntervalForRetryingAfterFailure = 10.0;
 static constexpr const int CheckpointQueueFramesThresholdForCritical = 200;
-static constexpr const double CheckpointQueueDelayForCritical = 1.0;
-static constexpr const double CheckpointQueueDelayForNonCritical = 10.0;
+static constexpr const double CheckpointQueueTimeIntervalForCritical = 1.0;
+static constexpr const double CheckpointQueueTimeIntervalForNonCritical = 10.0;
 
 // Backup Queue
 static constexpr const char* BackupQueueName = "com.Tencent.WCDB.Queue.Backup";
-static constexpr double BackupQueueDelayForRetryingAfterFailure = 15.0;
+static constexpr double BackupQueueTimeIntervalForRetryingAfterFailure = 15.0;
 
 // Checkpoint Config
 static constexpr const char* CheckpointConfigName = "com.Tencent.WCDB.Config.Checkpoint";
 
 // Backup Config
 static constexpr const char* BackupConfigName = "com.Tencent.WCDB.Config.Backup";
-static constexpr const int BackupConfigFramesIntervalForNonCritical = 100;
 static constexpr const int BackupConfigFramesIntervalForCritical = 300;
-static constexpr const double BackupQueueDelayForCritical = 0;
-static constexpr const double BackupQueueDelayForNonCritical = 5.0;
+static constexpr const int BackupConfigFramesIntervalForNonCritical = 100;
+static constexpr const double BackupQueueTimeIntervalForCritical = 0;
+static constexpr const double BackupQueueTimeIntervalForNonCritical = 5.0;
 
 // BackupConfigFramesIntervalForCritical should be greater than CheckpointQueueFramesThresholdForCritical since a checkpoint will trigger critical checkpoint too.
 static_assert(BackupConfigFramesIntervalForCritical > CheckpointQueueFramesThresholdForCritical,

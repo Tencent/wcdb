@@ -209,7 +209,7 @@ const HandleStatement::BLOB HandleStatement::getBLOB(int index)
 bool HandleStatement::isReadonly()
 {
     WCTInnerAssert(isPrepared());
-    return sqlite3_stmt_readonly(m_stmt);
+    return sqlite3_stmt_readonly(m_stmt) != 0;
 }
 
 bool HandleStatement::isPrepared()

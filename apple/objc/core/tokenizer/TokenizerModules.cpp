@@ -29,20 +29,22 @@ void TokenizerModules::add(const String& name, const TokenizerModule& module)
 {
     WCTRemedialAssert(!name.empty(), "Name of module can't be null.", return;);
     LockGuard lockGuard(m_lock);
-    m_modules[name] = module;
+    WCTRemedialAssert(
+    m_modules.find(name) == m_modules.end(), "Module already exists.", return;);
+    auto iter = m_modules.emplace(name, module).first;
+    WCTInnerAssert(m_pointers.find(name) == m_pointer.end());
+    m_pointers.emplace(name, &iter->second);
 }
 
-std::pair<bool, TokenizerModule> TokenizerModules::get(const String& name) const
+const TokenizerModule* TokenizerModules::get(const String& name) const
 {
     SharedLockGuard lockGuard(m_lock);
-    bool exists = false;
-    TokenizerModule module;
-    auto iter = m_modules.find(name);
-    if (iter != m_modules.end()) {
-        exists = true;
+    const TokenizerModule* module = nullptr;
+    const auto iter = m_pointers.find(name);
+    if (iter != m_pointers.end()) {
         module = iter->second;
     }
-    return { exists, module };
+    return module;
 }
 
 } // namespace WCDB

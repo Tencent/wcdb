@@ -31,21 +31,13 @@ public:
     BasicConfig();
     bool invoke(Handle* handle) override final;
 
-protected:
-    const StatementPragma m_getJournalMode;
-    const StatementPragma m_setJournalModeWAL;
+private:
+    bool executeStatement(Handle* handle, const StatementPragma& statement, int& numberOfRemainingAttempts);
 
-    const StatementPragma m_getLockingMode;
-    const StatementPragma m_setLockingModeNormal;
-
-    const StatementPragma m_setSynchronousNormal;
-    const StatementPragma m_getSynchronous;
-
-    const StatementPragma m_enableFullfsync;
-    const StatementPragma m_isFullfsync;
-
-    bool getOrSetPragmaBegin(Handle* handle, const StatementPragma& get);
-    bool getOrSetPragmaEnd(Handle* handle, const StatementPragma& set, bool conditionToSet);
+    const StatementPragma m_journalModeWAL;
+    const StatementPragma m_lockingModeNormal;
+    const StatementPragma m_synchronousNormal;
+    const StatementPragma m_fullfsync;
 };
 
 } //namespace WCDB

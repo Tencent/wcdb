@@ -33,10 +33,11 @@ namespace WCDB {
 class TokenizerModules final {
 public:
     void add(const String& name, const TokenizerModule& module);
-    std::pair<bool, TokenizerModule> get(const String& name) const;
+    const TokenizerModule* get(const String& name) const;
 
 protected:
-    std::map<String, TokenizerModule> m_modules;
+    std::map<String, const TokenizerModule> m_modules;
+    std::map<String, const TokenizerModule*> m_pointers;
     mutable SharedLock m_lock;
 };
 
