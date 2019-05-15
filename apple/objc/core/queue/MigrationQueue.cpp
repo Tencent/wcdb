@@ -66,7 +66,7 @@ bool MigrationQueue::onTimed(const String& path, const int& numberOfFailures)
     } else {
         if (numberOfFailures < MigrationQueueTolerableFailures) {
             m_timedQueue.queue(
-            path, MigrationQueueTimeIntervalForRetryingMigrating, numberOfFailures + 1);
+            path, MigrationQueueTimeIntervalForRetryingAfterFailure, numberOfFailures + 1);
             erase = false;
         } else {
             Error error(Error::Code::Notice, Error::Level::Notice, "Async migration stopped due to the error.");
