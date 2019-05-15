@@ -38,7 +38,8 @@ public:
     bool invoke(Handle* handle) override final;
 
 protected:
-    const TokenizerModule m_module;
+    TokenizerModule m_holder;
+    TokenizerModule* m_module;
 };
 
 } //namespace WCDB

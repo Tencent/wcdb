@@ -25,7 +25,7 @@
 namespace WCDB {
 
 TokenizerConfig::TokenizerConfig(const String& name_, const TokenizerModule& module)
-: Config(), name(name_), m_module(module)
+: Config(), name(name_), m_holder(module), m_module(&m_holder)
 {
 }
 
@@ -39,8 +39,7 @@ bool TokenizerConfig::invoke(Handle* handle)
         Expression::function("fts3_tokenizer").invoke().arguments(BindParameter::bindParameters(2)));
         if (handle->prepare(statement)) {
             handle->bindText(name.c_str(), 1);
-            sqlite3_tokenizer_module* module = (sqlite3_tokenizer_module*) &m_module;
-            UnsafeData address((unsigned char*) &module, sizeof(sqlite3_tokenizer_module*));
+            UnsafeData address((unsigned char*) &m_module, sizeof(unsigned char*));
             handle->bindBLOB(address, 2);
             succeed = handle->step();
             handle->finalize();
