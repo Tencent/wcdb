@@ -167,9 +167,14 @@ void Core::registerTokenizer(const String& name, const TokenizerModule& module)
     m_modules->add(name, module);
 }
 
+bool Core::tokenizerExists(const String& name) const
+{
+    return m_modules->get(name) != nullptr;
+}
+
 std::shared_ptr<Config> Core::tokenizerConfig(const String& tokenizeName)
 {
-    return std::make_shared<TokenizerConfig>(tokenizeName, m_modules);
+    return std::shared_ptr<Config>(new TokenizerConfig(tokenizeName, m_modules));
 }
 
 #pragma mark - Observation

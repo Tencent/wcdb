@@ -73,7 +73,7 @@ protected:
 public:
     void registerTokenizer(const String& name, const TokenizerModule& module);
     std::shared_ptr<Config> tokenizerConfig(const String& tokenizeName);
-    bool tokenizerExists(const String& name);
+    bool tokenizerExists(const String& name) const;
 
 protected:
     std::shared_ptr<TokenizerModules> m_modules;

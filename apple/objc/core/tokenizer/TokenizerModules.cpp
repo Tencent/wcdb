@@ -32,7 +32,7 @@ void TokenizerModules::add(const String& name, const TokenizerModule& module)
     WCTRemedialAssert(
     m_modules.find(name) == m_modules.end(), "Module already exists.", return;);
     auto iter = m_modules.emplace(name, module).first;
-    WCTInnerAssert(m_pointers.find(name) == m_pointer.end());
+    WCTInnerAssert(m_pointers.find(name) == m_pointers.end());
     m_pointers.emplace(name, &iter->second);
 }
 
