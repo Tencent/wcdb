@@ -22,24 +22,22 @@
 #define __WCDB_TOKENIZER_CONFIG_HPP
 
 #include <WCDB/Config.hpp>
-#include <WCDB/TokenizerModule.hpp>
 #include <WCDB/WINQ.h>
 
 namespace WCDB {
 
-class Modules;
+class TokenizerModules;
 
 class TokenizerConfig final : public Config {
 public:
-    TokenizerConfig(const String& name, const TokenizerModule& module);
+    TokenizerConfig(const String& name, const std::shared_ptr<TokenizerModules>& modules);
 
     const String name;
 
     bool invoke(Handle* handle) override final;
 
 protected:
-    TokenizerModule m_holder;
-    TokenizerModule* m_module;
+    std::shared_ptr<TokenizerModules> m_modules;
 };
 
 } //namespace WCDB

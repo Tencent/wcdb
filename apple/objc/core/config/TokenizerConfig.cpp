@@ -24,25 +24,29 @@
 
 namespace WCDB {
 
-TokenizerConfig::TokenizerConfig(const String& name_, const TokenizerModule& module)
-: Config(), name(name_), m_holder(module), m_module(&m_holder)
+TokenizerConfig::TokenizerConfig(const String& name_,
+                                 const std::shared_ptr<TokenizerModules>& modules)
+: Config(), name(name_), m_modules(modules)
 {
 }
 
 bool TokenizerConfig::invoke(Handle* handle)
 {
-    bool succeed;
-    bool exists;
-    std::tie(succeed, exists) = handle->ft3TokenizerExists(name);
-    if (succeed && !exists) {
-        StatementSelect statement = StatementSelect().select(
-        Expression::function("fts3_tokenizer").invoke().arguments(BindParameter::bindParameters(2)));
-        if (handle->prepare(statement)) {
-            handle->bindText(name.c_str(), 1);
-            UnsafeData address((unsigned char*) &m_module, sizeof(unsigned char*));
-            handle->bindBLOB(address, 2);
-            succeed = handle->step();
-            handle->finalize();
+    bool succeed = true;
+    const TokenizerModule* module = m_modules->get(name);
+    if (module != nullptr) {
+        bool exists = false;
+        std::tie(succeed, exists) = handle->ft3TokenizerExists(name);
+        if (succeed && !exists) {
+            StatementSelect statement = StatementSelect().select(
+            Expression::function("fts3_tokenizer").invoke().arguments(BindParameter::bindParameters(2)));
+            if (handle->prepare(statement)) {
+                handle->bindText(name.c_str(), 1);
+                UnsafeData address((unsigned char*) &module, sizeof(unsigned char*));
+                handle->bindBLOB(address, 2);
+                succeed = handle->step();
+                handle->finalize();
+            }
         }
     }
     return succeed;
