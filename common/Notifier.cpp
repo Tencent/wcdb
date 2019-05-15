@@ -65,7 +65,6 @@ void Notifier::notify(Error &error) const
         return;
     }
 
-    Error::Infos infosToBeUpdated;
     SharedLockGuard lockGuard(m_lock);
     for (const auto &element : m_preprocessNotifications) {
         element.second(error);
