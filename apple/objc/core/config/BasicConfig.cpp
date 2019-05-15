@@ -29,32 +29,31 @@ namespace WCDB {
 BasicConfig::BasicConfig()
 : Config()
 // Journal Mode
-, m_getJournalMode(StatementPragma().pragma(Pragma::journalMode()))
-, m_setJournalModeWAL(StatementPragma().pragma(Pragma::journalMode()).to("WAL"))
+, m_journalModeWAL(StatementPragma().pragma(Pragma::journalMode()).to("WAL"))
 // Locking Mode
-, m_getLockingMode(StatementPragma().pragma(Pragma::lockingMode()))
-, m_setLockingModeNormal(StatementPragma().pragma(Pragma::lockingMode()).to("NORMAL"))
+, m_lockingModeNormal(StatementPragma().pragma(Pragma::lockingMode()).to("NORMAL"))
 // Synchronous
-, m_setSynchronousNormal(StatementPragma().pragma(Pragma::synchronous()).to("NORMAL"))
-, m_getSynchronous(StatementPragma().pragma(Pragma::synchronous()))
+, m_synchronousNormal(StatementPragma().pragma(Pragma::synchronous()).to("NORMAL"))
 // Fullfsync
-, m_enableFullfsync(StatementPragma().pragma(Pragma::fullfsync()).to(true))
-, m_isFullfsync(StatementPragma().pragma(Pragma::fullfsync()))
+, m_fullfsync(StatementPragma().pragma(Pragma::fullfsync()).to(true))
 {
 }
 
-bool BasicConfig::getOrSetPragmaBegin(Handle* handle, const StatementPragma& get)
+bool BasicConfig::executeStatement(Handle* handle, const StatementPragma& statement, int& numberOfRemainingAttempts)
 {
-    return handle->prepare(get) && handle->step();
-}
-
-bool BasicConfig::getOrSetPragmaEnd(Handle* handle, const StatementPragma& set, bool conditionToSet)
-{
-    handle->finalize();
-    bool succeed = true;
-    if (conditionToSet) {
-        succeed = handle->execute(set);
+    handle->markErrorAsIgnorable(Error::Code::Busy);
+    bool succeed = false;
+    while (!succeed && numberOfRemainingAttempts > 0) {
+        succeed = handle->execute(statement);
+        if (!succeed) {
+            if (handle->isErrorIgnorable()) {
+                --numberOfRemainingAttempts;
+            } else {
+                numberOfRemainingAttempts = -1;
+            }
+        }
     }
+    handle->markErrorAsUnignorable();
     return succeed;
 }
 
@@ -67,48 +66,12 @@ bool BasicConfig::invoke(Handle* handle)
     handle->enableExtendedResultCodes(true);
     handle->disableCheckpointWhenClosing(true);
 
-    if (!getOrSetPragmaBegin(handle, m_getLockingMode)
-        || !getOrSetPragmaEnd(
-        handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("NORMAL"))) {
-        return false;
-    }
-
-    // 1 for Normal: https://sqlite.org/pragma.html#pragma_synchronous
-    if (!getOrSetPragmaBegin(handle, m_getSynchronous)
-        || !getOrSetPragmaEnd(handle, m_setSynchronousNormal, handle->getInteger32(0) != 1)) {
-        return false;
-    }
-
     int numberOfRemainingAttempts = BasicConfigBusyRetryMaxAllowedNumberOfTimes;
-    bool succeed = false;
-    do {
-        --numberOfRemainingAttempts;
-        bool markBusyAsIgnored = numberOfRemainingAttempts > 0;
-        if (markBusyAsIgnored) {
-            handle->markErrorAsIgnorable(Error::Code::Busy);
-        }
-        succeed
-        = getOrSetPragmaBegin(handle, m_getJournalMode)
-          && getOrSetPragmaEnd(
-          handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("WAL"));
-        if (markBusyAsIgnored) {
-            handle->markErrorAsUnignorable();
-        }
-        if (!succeed && handle->getError().code() != Error::Code::Busy) {
-            // failed
-            numberOfRemainingAttempts = -1;
-        }
-    } while (!succeed && numberOfRemainingAttempts > 0);
-    if (!succeed) {
-        return false;
-    }
 
-    if (!getOrSetPragmaBegin(handle, m_isFullfsync)
-        || !getOrSetPragmaEnd(handle, m_enableFullfsync, handle->getInteger32(0) != 1)) {
-        return false;
-    }
-
-    return true;
+    return executeStatement(handle, m_lockingModeNormal, numberOfRemainingAttempts)
+           && executeStatement(handle, m_synchronousNormal, numberOfRemainingAttempts)
+           && executeStatement(handle, m_journalModeWAL, numberOfRemainingAttempts)
+           && executeStatement(handle, m_fullfsync, numberOfRemainingAttempts);
 }
 
 } //namespace WCDB
