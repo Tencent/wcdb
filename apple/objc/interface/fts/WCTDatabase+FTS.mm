@@ -46,8 +46,6 @@ static std::nullptr_t initialize()
     static auto _ = initialize();
     WCDB_UNUSED(_);
 
-    WCTRemedialAssert(WCDB::Core::shared()->tokenizerExists(tokenizerName), "Tokenizer does not exist.", return;);
-
     WCDB::String configName = WCDB::String(WCDB::TokenizeConfigPrefix) + tokenizerName.UTF8String;
     _database->setConfig(configName, WCDB::Core::shared()->tokenizerConfig(tokenizerName), WCDB::Configs::Priority::Higher);
 }

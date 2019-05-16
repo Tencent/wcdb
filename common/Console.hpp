@@ -34,6 +34,10 @@ class Error;
 
 class Console final {
 public:
+    Console() = delete;
+    Console(const Console&) = delete;
+    Console& operator=(const Console&) = delete;
+
     static void initialize();
 
     static void debug();
@@ -55,6 +59,8 @@ public:
 #endif
 
 private:
+    static std::nullptr_t _initialize();
+
     static void report(const Error& error);
     static void print(const String& message);
     static void breakpoint() WCDB_USED WCDB_NO_INLINE;

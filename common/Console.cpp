@@ -27,7 +27,7 @@
 
 namespace WCDB {
 
-static std::nullptr_t _initialize()
+std::nullptr_t Console::_initialize()
 {
     Console::errored(Console::report);
     return nullptr;
