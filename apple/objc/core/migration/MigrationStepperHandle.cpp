@@ -31,7 +31,6 @@ MigrationStepperHandle::MigrationStepperHandle()
 {
     markErrorAsIgnorable(Error::Code::Interrupt);
     markErrorAsIgnorable(Error::Code::Busy);
-    markErrorAsIgnorable(Error::Code::Error);
 }
 
 MigrationStepperHandle::~MigrationStepperHandle()
@@ -39,7 +38,7 @@ MigrationStepperHandle::~MigrationStepperHandle()
     finalizeMigrationStatement();
     returnStatement(m_migrateStatement);
     returnStatement(m_removeMigratedStatement);
-    markErrorAsUnignorable(3);
+    markErrorAsUnignorable(2);
 }
 
 bool MigrationStepperHandle::reAttach(const String& newPath, const Schema& newSchema)
@@ -97,6 +96,17 @@ bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
     WCTInnerAssert(info != nullptr);
     done = false;
 
+    bool succeed, exists;
+    std::tie(succeed, exists) = tableExists(info->getTable());
+    if (!succeed) {
+        return false;
+    }
+
+    if (!exists) {
+        done = true;
+        return true;
+    }
+
     if (m_migratingInfo != info) {
         if (!reAttach(info->getSourceDatabase(), info->getSchemaForSourceDatabase())) {
             return false;
@@ -111,12 +121,12 @@ bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
 
     if (!m_removeMigratedStatement->isPrepared()
         && !m_removeMigratedStatement->prepare(
-           m_migratingInfo->getStatementForDeletingMigratedOneRow())) {
+        m_migratingInfo->getStatementForDeletingMigratedOneRow())) {
         return false;
     }
 
     bool migrated = false;
-    bool succeed = runTransaction([&migrated, this](Handle*) -> bool {
+    succeed = runTransaction([&migrated, this](Handle*) -> bool {
         // migrate one at least
         bool succeed;
         std::tie(succeed, migrated) = migrateRow();
