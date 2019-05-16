@@ -401,10 +401,8 @@ bool AbstractHandle::commitOrRollbackTransaction()
     if (succeed) {
         m_nestedLevel = 0;
     } else {
-        if (isInTransaction()) {
-            // If certain kinds of errors occur within a transaction, the transaction may or may not be rolled back automatically: https://sqlite.org/lang_transaction.html
-            rollbackTransaction();
-        }
+        // If certain kinds of errors occur within a transaction, the transaction may or may not be rolled back automatically: https://sqlite.org/lang_transaction.html
+        rollbackTransaction();
     }
     return succeed;
 }
@@ -414,11 +412,13 @@ void AbstractHandle::rollbackTransaction()
     // Transaction can be removed automatically in some case. e.g. interrupt step
     static const String *s_rollback
     = new String(StatementRollback().rollback().getDescription());
-    unimpeded(true);
-    if (executeSQL(*s_rollback)) {
-        m_nestedLevel = 0;
+    if (isInTransaction()) {
+        unimpeded(true);
+        if (executeSQL(*s_rollback)) {
+            m_nestedLevel = 0;
+        }
+        unimpeded(false);
     }
-    unimpeded(false);
 }
 
 #pragma mark - Interface
