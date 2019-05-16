@@ -19,11 +19,21 @@
  */
 
 #import <WCDB/Assertion.hpp>
+#import <WCDB/Console.hpp>
 #import <WCDB/Notifier.hpp>
 #import <WCDB/WCTDatabase+Monitor.h>
 #import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTPerformanceFootprint.h>
+
+namespace WCDB {
+
+void Console::print(const String &message)
+{
+    NSLog(@"%s", message.c_str());
+}
+
+}
 
 @implementation WCTDatabase (Monitor)
 

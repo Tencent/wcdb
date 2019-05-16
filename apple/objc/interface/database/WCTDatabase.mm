@@ -18,7 +18,6 @@
  * limitations under the License.
  */
 
-#import <WCDB/Console.hpp>
 #import <WCDB/ThreadedErrors.hpp>
 #import <WCDB/WCTDatabase+FTS.h>
 #import <WCDB/WCTDatabase+Memory.h>
@@ -26,15 +25,6 @@
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTHandle+Private.h>
 #import <WCDB/WCTOneOrBinaryTokenizer.h>
-
-namespace WCDB {
-
-void Console::print(const String &message)
-{
-    NSLog(@"%s", message.c_str());
-}
-
-}
 
 @implementation WCTDatabase
 

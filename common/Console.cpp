@@ -27,14 +27,16 @@
 
 namespace WCDB {
 
-#warning TODO - refactor
+std::nullptr_t Console::_initialize()
+{
+    Console::errored(Console::report);
+    return nullptr;
+}
+
 void Console::initialize()
 {
-    static std::nullptr_t s_inited = []() -> std::nullptr_t {
-        Console::errored(Console::report);
-        return nullptr;
-    }();
-    WCDB_UNUSED(s_inited);
+    static std::nullptr_t _ = _initialize();
+    WCDB_UNUSED(_);
 }
 
 std::atomic<bool>& Console::debuggableValue()
