@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/BackupHandle.hpp>
+#include <WCDB/CoreConst.h>
 
 namespace WCDB {
 
@@ -28,6 +29,7 @@ BackupReadHandle::BackupReadHandle()
   StatementSelect().select(1).from(Syntax::masterTable).limit(0))
 , m_statementForReadTransaction(StatementBegin().beginDeferred())
 {
+    m_error.infos.set(ErrorStringKeyAction, ErrorActionBackup);
 }
 
 void BackupReadHandle::setPath(const String &path)
@@ -57,6 +59,11 @@ bool BackupReadHandle::releaseLock()
 {
     rollbackTransaction();
     return true;
+}
+
+BackupWriteHandle::BackupWriteHandle()
+{
+    m_error.infos.set(ErrorStringKeyAction, ErrorActionBackup);
 }
 
 void BackupWriteHandle::setPath(const String &path)

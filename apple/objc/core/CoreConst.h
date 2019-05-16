@@ -107,6 +107,13 @@ static constexpr const int CheckpointFramesThresholdForTruncating
 = 10 * 1024 * 1024 / 4096; // 10 MB / Default Page Size = 2560
 
 // Error Key
+static constexpr const char* ErrorStringKeyAction = "Action";
+static constexpr const char* ErrorActionMigrate = "Migrate";
+static constexpr const char* ErrorActionBackup = "Backup";
+static constexpr const char* ErrorActionCheckpoint = "Checkpoint";
+static constexpr const char* ErrorActionIntegrity = "Integrity";
+static constexpr const char* ErrorActionAssembler = "Assembler";
+
 #define WCDB_ERROR_STRING_KEY_SOURCE "Source";
 static constexpr const char* ErrorStringKeySource = WCDB_ERROR_STRING_KEY_SOURCE;
 

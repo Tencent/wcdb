@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/CoreConst.h>
 #include <WCDB/MigrationStepperHandle.hpp>
 #include <WCDB/Time.hpp>
 
@@ -29,6 +30,8 @@ MigrationStepperHandle::MigrationStepperHandle()
 , m_migrateStatement(getStatement())
 , m_removeMigratedStatement(getStatement())
 {
+    m_error.infos.set(ErrorStringKeyAction, ErrorActionMigrate);
+
     markErrorAsIgnorable(Error::Code::Interrupt);
     markErrorAsIgnorable(Error::Code::Busy);
 }
@@ -121,7 +124,7 @@ bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
 
     if (!m_removeMigratedStatement->isPrepared()
         && !m_removeMigratedStatement->prepare(
-        m_migratingInfo->getStatementForDeletingMigratedOneRow())) {
+           m_migratingInfo->getStatementForDeletingMigratedOneRow())) {
         return false;
     }
 

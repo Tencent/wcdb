@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/AssemblerHandle.hpp>
+#include <WCDB/CoreConst.h>
 
 namespace WCDB {
 
@@ -39,6 +40,7 @@ AssemblerHandle::AssemblerHandle()
                                .where(Column("name") == BindParameter(2)))
 , m_cellStatement(getStatement())
 {
+    m_error.infos.set(ErrorStringKeyAction, ErrorActionAssembler);
 }
 
 AssemblerHandle::~AssemblerHandle()
