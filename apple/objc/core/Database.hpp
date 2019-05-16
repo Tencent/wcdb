@@ -206,14 +206,12 @@ public:
     std::pair<bool, bool> stepMigration();
     std::pair<bool, bool> stepMigrationIfAlreadyInitialized();
 
-    void suspendMigration(bool suspend);
-
     bool isMigrated() const;
 
     std::set<String> getPathsOfSourceDatabases() const;
 
 protected:
-    std::pair<bool, bool> doStepMigration();
+    std::pair<bool, bool> doStepMigration(bool checkSuspended);
     void didMigrate(const MigrationBaseInfo *info) override final;
     MigratedCallback m_migratedCallback;
     Migration m_migration; // thread-safe
@@ -223,8 +221,6 @@ public:
     typedef CheckpointHandle::CheckpointMode CheckpointMode;
     bool checkpointIfAlreadyInitialized(CheckpointMode mode);
 
-    void suspendCheckpoint(bool suspend);
-
 #pragma mark - Memory
 public:
     using HandlePool::purge;
@@ -232,6 +228,14 @@ public:
 #pragma mark - Error
 public:
     using HandlePool::getThreadedError;
+
+#pragma mark - Suspend
+protected:
+    void suspend(bool suspend);
+    bool suspended() const;
+
+private:
+    std::atomic<int> m_suspend;
 };
 
 } //namespace WCDB

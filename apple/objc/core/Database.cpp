@@ -282,8 +282,7 @@ bool Database::handleWillStep(HandleStatement *handleStatement)
     // Suspend if and only if it will enter the transaction.
 
     if (!handleStatement->getHandle()->isInTransaction()) {
-        suspendMigration(true);
-        suspendCheckpoint(true);
+        suspend(true);
     }
     return true;
 }
@@ -294,8 +293,7 @@ void Database::handleDidStep(HandleStatement *handleStatement, bool succeed)
 
     WCDB_UNUSED(succeed);
     if (!handleStatement->getHandle()->isInTransaction()) {
-        suspendMigration(false);
-        suspendCheckpoint(false);
+        suspend(false);
     }
 }
 
@@ -764,7 +762,7 @@ std::pair<bool, bool> Database::stepMigration()
     InitializedGuard initializedGuard = initialize();
     std::pair<bool, bool> result = { false, false };
     if (initializedGuard.valid()) {
-        result = doStepMigration();
+        result = doStepMigration(false);
     }
     return result;
 }
@@ -775,12 +773,12 @@ std::pair<bool, bool> Database::stepMigrationIfAlreadyInitialized()
     bool succeed = false;
     bool done = false;
     if (initializedGuard.valid()) {
-        std::tie(succeed, done) = doStepMigration();
+        std::tie(succeed, done) = doStepMigration(true);
     }
     return { succeed, done };
 }
 
-std::pair<bool, bool> Database::doStepMigration()
+std::pair<bool, bool> Database::doStepMigration(bool checkSuspended)
 {
     WCTRemedialAssert(!isInTransaction(),
                       "Migrating can't be run in transaction.",
@@ -792,8 +790,16 @@ std::pair<bool, bool> Database::doStepMigration()
     WCTInnerAssert(m_initialized);
     bool succeed = false;
     bool done = false;
+    if (checkSuspended && suspended()) {
+        return { true, false };
+    }
+
     RecyclableHandle handle = flowOut(HandleType::MigrationStep);
     if (handle != nullptr) {
+        if (checkSuspended && suspended()) {
+            return { true, false };
+        }
+
         WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()) != nullptr);
         std::tie(succeed, done)
         = m_migration.step(*(static_cast<MigrationStepperHandle *>(handle.get())));
@@ -829,17 +835,6 @@ void Database::filterMigration(const MigrationFilter &filter)
     m_migration.filterTable(filter);
 }
 
-void Database::suspendMigration(bool suspend)
-{
-    SharedLockGuard concurrencyGuard(m_concurrency);
-    SharedLockGuard memoryGuard(m_memory);
-    WCTInnerAssert(m_initialized);
-    for (const auto &handle : getHandles(HandleType::MigrationStep)) {
-        WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()) != nullptr);
-        static_cast<MigrationStepperHandle *>(handle.get())->suspend(suspend);
-    }
-}
-
 bool Database::isMigrated() const
 {
     return m_migration.isMigrated();
@@ -853,10 +848,17 @@ std::set<String> Database::getPathsOfSourceDatabases() const
 #pragma mark - Checkpoint
 bool Database::checkpointIfAlreadyInitialized(CheckpointMode mode)
 {
+    if (suspended()) {
+        return true;
+    }
+
     InitializedGuard initializedGuard = isInitialized();
     bool succeed = false;
     if (initializedGuard.valid()) {
         RecyclableHandle handle = flowOut(HandleType::Checkpoint);
+        if (suspended()) {
+            return true;
+        }
         if (handle != nullptr) {
             WCTInnerAssert(dynamic_cast<CheckpointHandle *>(handle.get()) != nullptr);
             succeed = static_cast<CheckpointHandle *>(handle.get())->checkpoint(mode);
@@ -865,15 +867,35 @@ bool Database::checkpointIfAlreadyInitialized(CheckpointMode mode)
     return succeed;
 }
 
-void Database::suspendCheckpoint(bool suspend)
+#pragma mark - Suspend
+void Database::suspend(bool suspend)
 {
+    WCTInnerAssert(m_initialized);
+
+    if (suspend) {
+        ++m_suspend;
+    } else {
+        --m_suspend;
+        WCTInnerAssert(m_suspend >= 0);
+    }
+
     SharedLockGuard concurrencyGuard(m_concurrency);
     SharedLockGuard memoryGuard(m_memory);
-    WCTInnerAssert(m_initialized);
+
     for (const auto &handle : getHandles(HandleType::Checkpoint)) {
         WCTInnerAssert(dynamic_cast<CheckpointHandle *>(handle.get()) != nullptr);
         static_cast<CheckpointHandle *>(handle.get())->suspend(suspend);
     }
+
+    for (const auto &handle : getHandles(HandleType::MigrationStep)) {
+        WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()) != nullptr);
+        static_cast<MigrationStepperHandle *>(handle.get())->suspend(suspend);
+    }
+}
+
+bool Database::suspended() const
+{
+    return m_suspend > 0;
 }
 
 } //namespace WCDB
