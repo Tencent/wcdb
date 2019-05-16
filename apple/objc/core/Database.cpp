@@ -49,6 +49,7 @@ Database::Database(const String &path)
 , m_migratedCallback(nullptr)
 , m_migration(this)
 , m_event(nullptr)
+, m_suspend(0)
 {
 }
 
