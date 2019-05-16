@@ -182,6 +182,8 @@ public:
     StatementDelete
     getStatementForLimitedDeletingFromTable(const Statement& sourceStatement) const;
 
+    StatementDelete getStatementForDeletingFromTable(const Statement& sourceStatement) const;
+
 protected:
     StatementInsert m_statementForMigratingSpecifiedRowTemplate;
     StatementDelete m_statementForDeletingSpecifiedRow;
