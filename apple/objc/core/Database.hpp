@@ -39,6 +39,7 @@ public:
     virtual ~DatabaseEvent() = 0;
 
 protected:
+    virtual void databaseDidOpen(Database *database) = 0;
     virtual void databaseDidClose(Database *database) = 0;
     friend class Database;
 };

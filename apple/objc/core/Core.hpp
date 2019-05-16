@@ -67,8 +67,9 @@ public:
 
 protected:
     void preprocessError(Error& error);
-    void databaseDidClose(Database* database) override final;
     void databaseDidCreate(Database* database) override final;
+    void databaseDidOpen(Database* database) override final;
+    void databaseDidClose(Database* database) override final;
     DatabasePool m_databasePool;
 
 #pragma mark - Tokenizer

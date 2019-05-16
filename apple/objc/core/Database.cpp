@@ -134,6 +134,9 @@ Database::InitializedGuard Database::initialize()
             break;
         }
         m_initialized = true;
+        if (m_event != nullptr) {
+            m_event->databaseDidOpen(this);
+        }
     } while (true);
     return nullptr;
 }

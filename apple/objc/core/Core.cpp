@@ -134,27 +134,30 @@ void Core::purgeDatabasePool()
     m_databasePool.purge();
 }
 
-void Core::databaseDidClose(Database* database)
-{
-    m_migrationQueue->remove(database->getPath());
-    m_checkpointQueue->unregister(database->getPath());
-    m_backupQueue->unregister(database->getPath());
-}
-
 void Core::databaseDidCreate(Database* database)
 {
     WCTInnerAssert(database != nullptr);
 
     database->setEvent(this);
 
-    m_checkpointQueue->register_(database->getPath());
-    m_backupQueue->register_(database->getPath());
-
     database->setConfigs(m_configs);
 
     database->setConfig(BusyRetryConfigName,
                         std::shared_ptr<Config>(new BusyRetryConfig),
                         Configs::Priority::Highest);
+}
+
+void Core::databaseDidOpen(Database* database)
+{
+    m_checkpointQueue->register_(database->getPath());
+    m_backupQueue->register_(database->getPath());
+}
+
+void Core::databaseDidClose(Database* database)
+{
+    m_migrationQueue->remove(database->getPath());
+    m_checkpointQueue->unregister(database->getPath());
+    m_backupQueue->unregister(database->getPath());
 }
 
 void Core::preprocessError(Error& error)
