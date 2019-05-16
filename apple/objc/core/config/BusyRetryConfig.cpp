@@ -30,7 +30,7 @@ BusyRetryConfig::BusyRetryConfig()
 : Config()
 , m_identifier(String::formatted("Busy-%p", this))
 , m_numberOfWaitingHandles(0)
-, m_numberOfWritingHandles(0)
+, m_numberOfSteppingHandles(0)
 {
 }
 
@@ -55,7 +55,7 @@ bool BusyRetryConfig::uninvoke(Handle* handle)
 bool BusyRetryConfig::handleWillStep(HandleStatement* handleStatement)
 {
     if (!handleStatement->getHandle()->isInTransaction()) {
-        ++m_numberOfWritingHandles;
+        ++m_numberOfSteppingHandles;
     }
     return true;
 }
@@ -64,8 +64,8 @@ void BusyRetryConfig::handleDidStep(HandleStatement* handleStatement, bool succe
 {
     WCDB_UNUSED(succeed);
     if (!handleStatement->getHandle()->isInTransaction()) {
-        --m_numberOfWritingHandles;
-        WCTInnerAssert(m_numberOfWritingHandles >= 0);
+        --m_numberOfSteppingHandles;
+        WCTInnerAssert(m_numberOfSteppingHandles >= 0);
         std::lock_guard<decltype(m_mutex)> lockGuard(m_mutex);
         if (m_numberOfWaitingHandles > 0) {
             m_cond.notify_all();
@@ -91,7 +91,7 @@ bool BusyRetryConfig::onBusy(const String& path, int numberOfTimes)
         {
             std::unique_lock<decltype(m_mutex)> lockGuard(m_mutex);
             ++m_numberOfWaitingHandles;
-            if (m_numberOfWritingHandles > 0) {
+            if (m_numberOfSteppingHandles > 0) {
                 retry = m_cond.wait_for(
                         lockGuard,
                         std::chrono::nanoseconds((long long) (remainingTime * 1E9)))
