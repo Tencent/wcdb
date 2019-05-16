@@ -88,7 +88,8 @@ bool HandleStatement::step()
 void HandleStatement::finalize()
 {
     if (m_stmt != nullptr) {
-        exitAPI(sqlite3_finalize(m_stmt));
+        // no need to call exitAPI since it will return old code only.
+        sqlite3_finalize(m_stmt);
         m_stmt = nullptr;
     }
 }
