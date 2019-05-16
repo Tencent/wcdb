@@ -29,7 +29,7 @@ static constexpr const double AsyncQueueTimeOutForExiting = 10.0;
 // Migration Queue
 static constexpr const char* MigrationQueueName = "com.Tencent.WCDB.Queue.Migration";
 static constexpr const double MigrationQueueTimeIntervalForMigrating = 3.0;
-static constexpr const double MigrationQueueTimeIntervalForRetryingAfterFailure = 10.0;
+static constexpr const double MigrationQueueTimeIntervalForRetryingAfterFailure = 5.0;
 static constexpr const int MigrationQueueTolerableFailures = 5;
 
 // Observation Queue
