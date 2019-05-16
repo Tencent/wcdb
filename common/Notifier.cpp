@@ -59,7 +59,12 @@ void Notifier::setNotificationForPreprocessing(const String &key,
 
 void Notifier::notify(Error &error) const
 {
-    Error::Infos infosToBeUpdated;
+    WCTInnerAssert(m_lock.level() == SharedLock::Level::None);
+    if (m_lock.level() != SharedLock::Level::None) {
+        // avoid recursion errors
+        return;
+    }
+
     SharedLockGuard lockGuard(m_lock);
     for (const auto &element : m_preprocessNotifications) {
         element.second(error);

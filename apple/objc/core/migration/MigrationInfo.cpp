@@ -363,6 +363,19 @@ MigrationInfo::getStatementForLimitedDeletingFromTable(const Statement& sourceSt
     return statementDelete;
 }
 
+StatementDelete
+MigrationInfo::getStatementForDeletingFromTable(const Statement& sourceStatement) const
+{
+    WCTInnerAssert(sourceStatement.getType() == Syntax::Identifier::Type::DropTableSTMT);
+
+    Syntax::DropTableSTMT& dropTableSyntax
+    = ((const StatementDropTable&) sourceStatement).syntax();
+    WCDB::QualifiedTable table(dropTableSyntax.table);
+    table.syntax().schema = dropTableSyntax.schema;
+
+    return StatementDelete().deleteFrom(table);
+}
+
 const StatementDropTable& MigrationInfo::getStatementForDroppingSourceTable() const
 {
     return m_statementForDroppingSourceTable;

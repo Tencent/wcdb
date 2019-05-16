@@ -340,13 +340,12 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
             const Syntax::DropTableSTMT* falledBackSTMT
             = static_cast<const Syntax::DropTableSTMT*>(
             falledBackStatement.getSyntaxIdentifier());
-            statements.push_back(falledBackStatement);
+            statements.push_back(originStatement);
             if (!migratedSTMT->isTargetingSameTable(*falledBackSTMT)) {
-                statements.push_back(statements.back());
-                Syntax::DropTableSTMT* stmt = static_cast<Syntax::DropTableSTMT*>(
-                statements.back().getSyntaxIdentifier());
-                stmt->table = migratedSTMT->table;
-                stmt->schema = Schema::main();
+                // Don't drop source table. Instead, delete all contents from source table and wait the stepper do the dropping work.
+                const MigrationInfo* info = getBoundInfo(migratedSTMT->table);
+                WCTInnerAssert(info != nullptr);
+                statements.push_back(info->getStatementForDeletingFromTable(falledBackStatement));
             }
         } break;
         default:
