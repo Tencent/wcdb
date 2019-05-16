@@ -32,6 +32,17 @@
 
 namespace WCDB {
 
+class Database;
+
+class DatabaseEvent {
+public:
+    virtual ~DatabaseEvent() = 0;
+
+protected:
+    virtual void databaseDidClose(Database *database) = 0;
+    friend class Database;
+};
+
 // TODO: readonly manually - by removing basic config and adding query_only config?
 // TODO: support authorize
 class Database final : private HandlePool, public MigrationEvent {
@@ -42,12 +53,15 @@ public:
     Database(const Database &) = delete;
     Database &operator=(const Database &) = delete;
 
+    void setEvent(DatabaseEvent *event);
+
 protected:
     // All public interfaces that are related with concurrency should make sure the initialization.
     typedef SharedLockGuard InitializedGuard;
     InitializedGuard initialize();
     InitializedGuard isInitialized() const;
     bool m_initialized;
+    DatabaseEvent *m_event;
 
 #pragma mark - Basic
 public:

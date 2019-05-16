@@ -35,6 +35,10 @@
 
 namespace WCDB {
 
+DatabaseEvent::~DatabaseEvent()
+{
+}
+
 #pragma mark - Initializer
 Database::Database(const String &path)
 : HandlePool(path)
@@ -44,7 +48,14 @@ Database::Database(const String &path)
 , m_configs(nullptr)
 , m_migratedCallback(nullptr)
 , m_migration(this)
+, m_event(nullptr)
 {
+}
+
+void Database::setEvent(DatabaseEvent *event)
+{
+    LockGuard lockGuard(m_memory);
+    m_event = event;
 }
 
 #pragma mark - Basic
@@ -70,6 +81,9 @@ void Database::didDrain()
     WCTInnerAssert(m_memory.writeSafety());
     WCTInnerAssert(!isOpened());
     m_initialized = false;
+    if (m_event != nullptr) {
+        m_event->databaseDidClose(this);
+    }
 }
 
 void Database::close(const ClosedCallback &onClosed)
@@ -770,8 +784,11 @@ std::pair<bool, bool> Database::doStepMigration()
 {
     WCTRemedialAssert(!isInTransaction(),
                       "Migrating can't be run in transaction.",
-                      std::make_pair(false, false););
+                      return std::make_pair(false, false););
     WCTInnerAssert(m_concurrency.readSafety());
+    WCTRemedialAssert(m_migration.shouldMigrate(),
+                      "It's not configured for migration.",
+                      return std::make_pair(false, false););
     WCTInnerAssert(m_initialized);
     bool succeed = false;
     bool done = false;

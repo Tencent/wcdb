@@ -70,8 +70,11 @@ void BackupQueue::register_(const String& path)
 
 void BackupQueue::unregister(const String& path)
 {
-    LockGuard lockGuard(m_lock);
-    m_records.erase(path);
+    {
+        LockGuard lockGuard(m_lock);
+        m_records.erase(path);
+    }
+    m_timedQueue.remove(path);
 }
 
 bool BackupQueue::onTimed(const String& path, const int& frames)

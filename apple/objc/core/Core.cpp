@@ -134,9 +134,21 @@ void Core::purgeDatabasePool()
     m_databasePool.purge();
 }
 
-void Core::onDatabaseCreated(Database* database)
+void Core::databaseDidClose(Database* database)
+{
+    m_migrationQueue->remove(database->getPath());
+    m_checkpointQueue->unregister(database->getPath());
+    m_backupQueue->unregister(database->getPath());
+}
+
+void Core::databaseDidCreate(Database* database)
 {
     WCTInnerAssert(database != nullptr);
+
+    database->setEvent(this);
+
+    m_checkpointQueue->register_(database->getPath());
+    m_backupQueue->register_(database->getPath());
 
     database->setConfigs(m_configs);
 
@@ -272,10 +284,8 @@ void Core::setAutoBackup(Database* database, bool enable)
     if (enable) {
         database->setConfig(
         WCDB::BackupConfigName, m_backupConfig, WCDB::Configs::Priority::Low);
-        m_backupQueue->register_(database->getPath());
     } else {
         database->removeConfig(WCDB::BackupConfigName);
-        m_backupQueue->unregister(database->getPath());
     }
 }
 

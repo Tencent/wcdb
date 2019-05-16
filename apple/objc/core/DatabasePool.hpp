@@ -34,7 +34,7 @@ public:
     virtual ~DatabasePoolEvent() = 0;
 
 protected:
-    virtual void onDatabaseCreated(Database* database) = 0;
+    virtual void databaseDidCreate(Database* database) = 0;
     friend class DatabasePool;
 };
 

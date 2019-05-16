@@ -24,6 +24,7 @@
 #include <WCDB/AsyncQueue.hpp>
 #include <WCDB/TimedQueue.hpp>
 #include <WCDB/WINQ.h>
+#include <set>
 
 namespace WCDB {
 
@@ -43,6 +44,9 @@ public:
     void put(const String& path, int frames);
     void remove(const String& path);
 
+    void register_(const String& path);
+    void unregister(const String& path);
+
 protected:
     void put(const String& path, double delay, int frames);
     bool onTimed(const String& path, const int& frames);
@@ -50,6 +54,9 @@ protected:
 
     TimedQueue<String, int> m_timedQueue;
     CheckpointQueueEvent* m_event;
+
+    SharedLock m_lock;
+    std::set<String> m_records;
 };
 
 } // namespace WCDB
