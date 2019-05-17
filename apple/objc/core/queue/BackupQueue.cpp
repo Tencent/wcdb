@@ -49,7 +49,8 @@ void BackupQueue::put(const String& path, int frames)
         if (iter == m_records.end()) {
             return;
         }
-        recordedFrames = iter->second;
+        WCTInnerAssert(iter->second.registers > 0);
+        recordedFrames = iter->second.frames;
     }
     if (frames >= recordedFrames + BackupConfigFramesIntervalForCritical // expired too much
         || frames < recordedFrames // restarted
@@ -65,16 +66,23 @@ void BackupQueue::put(const String& path, int frames)
 void BackupQueue::register_(const String& path)
 {
     LockGuard lockGuard(m_lock);
-    m_records.emplace(path, 0);
+    ++m_records[path].registers;
 }
 
 void BackupQueue::unregister(const String& path)
 {
+    bool removed = false;
     {
         LockGuard lockGuard(m_lock);
-        m_records.erase(path);
+        removed = --m_records[path].registers == 0;
+        WCTInnerAssert(m_records[path].registers >= 0);
+        if (removed) {
+            m_records.erase(path);
+        }
     }
-    m_timedQueue.remove(path);
+    if (removed) {
+        m_timedQueue.remove(path);
+    }
 }
 
 bool BackupQueue::onTimed(const String& path, const int& frames)
@@ -86,13 +94,18 @@ bool BackupQueue::onTimed(const String& path, const int& frames)
         // already unregistered
         return true;
     }
+    WCTInnerAssert(iter->second.registers > 0);
     if (!result) {
         // retry if failed
         m_timedQueue.queue(path, BackupQueueTimeIntervalForRetryingAfterFailure, frames);
     } else {
-        iter->second = frames;
+        iter->second.frames = frames;
     }
     return result;
+}
+
+BackupQueue::Record::Record() : frames(0), registers(0)
+{
 }
 
 } // namespace WCDB

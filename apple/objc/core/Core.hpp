@@ -44,8 +44,7 @@ class Core final : public DatabasePoolEvent,
                    public BackupQueueEvent,
                    public MigrationQueueEvent,
                    public ObservationQueueEvent,
-                   public ObservationDelegate,
-                   public DatabaseEvent {
+                   public ObservationDelegate {
 #pragma mark - Core
 public:
     static Core* shared();
@@ -68,8 +67,6 @@ public:
 protected:
     void preprocessError(Error& error);
     void databaseDidCreate(Database* database) override final;
-    void databaseDidOpen(Database* database) override final;
-    void databaseDidClose(Database* database) override final;
     DatabasePool m_databasePool;
 
 #pragma mark - Tokenizer

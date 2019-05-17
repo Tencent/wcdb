@@ -56,7 +56,7 @@ protected:
     CheckpointQueueEvent* m_event;
 
     SharedLock m_lock;
-    std::set<String> m_records;
+    std::map<String, int> m_records;
 };
 
 } // namespace WCDB

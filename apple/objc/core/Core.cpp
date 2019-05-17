@@ -138,26 +138,11 @@ void Core::databaseDidCreate(Database* database)
 {
     WCTInnerAssert(database != nullptr);
 
-    database->setEvent(this);
-
     database->setConfigs(m_configs);
 
     database->setConfig(BusyRetryConfigName,
                         std::shared_ptr<Config>(new BusyRetryConfig),
                         Configs::Priority::Highest);
-}
-
-void Core::databaseDidOpen(Database* database)
-{
-    m_checkpointQueue->register_(database->getPath());
-    m_backupQueue->register_(database->getPath());
-}
-
-void Core::databaseDidClose(Database* database)
-{
-    m_migrationQueue->remove(database->getPath());
-    m_checkpointQueue->unregister(database->getPath());
-    m_backupQueue->unregister(database->getPath());
 }
 
 void Core::preprocessError(Error& error)
@@ -288,7 +273,7 @@ void Core::setAutoBackup(Database* database, bool enable)
         database->setConfig(
         WCDB::BackupConfigName, m_backupConfig, WCDB::Configs::Priority::Low);
     } else {
-        database->removeConfig(WCDB::BackupConfigName);
+        m_backupQueue->unregister(database->getPath());
     }
 }
 

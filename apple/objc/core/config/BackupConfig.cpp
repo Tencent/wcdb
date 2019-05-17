@@ -34,6 +34,7 @@ BackupConfig::BackupConfig(const std::shared_ptr<BackupQueue> &queue)
 
 bool BackupConfig::invoke(Handle *handle)
 {
+    m_queue->register_(handle->getPath());
     handle->setNotificationWhenCheckpointed(
     m_identifier, std::bind(&BackupConfig::onCheckpointed, this, std::placeholders::_1));
     handle->setNotificationWhenCommitted(
@@ -47,6 +48,7 @@ bool BackupConfig::uninvoke(Handle *handle)
 {
     handle->unsetNotificationWhenCommitted(m_identifier);
     handle->setNotificationWhenCheckpointed(m_identifier, nullptr);
+    m_queue->unregister(handle->getPath());
     return true;
 }
 

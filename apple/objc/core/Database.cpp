@@ -35,10 +35,6 @@
 
 namespace WCDB {
 
-DatabaseEvent::~DatabaseEvent()
-{
-}
-
 #pragma mark - Initializer
 Database::Database(const String &path)
 : HandlePool(path)
@@ -48,15 +44,8 @@ Database::Database(const String &path)
 , m_configs(nullptr)
 , m_migratedCallback(nullptr)
 , m_migration(this)
-, m_event(nullptr)
 , m_suspend(0)
 {
-}
-
-void Database::setEvent(DatabaseEvent *event)
-{
-    LockGuard lockGuard(m_memory);
-    m_event = event;
 }
 
 #pragma mark - Basic
@@ -82,9 +71,6 @@ void Database::didDrain()
     WCTInnerAssert(m_memory.writeSafety());
     WCTInnerAssert(!isOpened());
     m_initialized = false;
-    if (m_event != nullptr) {
-        m_event->databaseDidClose(this);
-    }
 }
 
 void Database::close(const ClosedCallback &onClosed)
@@ -134,9 +120,6 @@ Database::InitializedGuard Database::initialize()
             break;
         }
         m_initialized = true;
-        if (m_event != nullptr) {
-            m_event->databaseDidOpen(this);
-        }
     } while (true);
     return nullptr;
 }
