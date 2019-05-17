@@ -66,7 +66,7 @@ public:
 
 protected:
     void preprocessError(Error& error);
-    void onDatabaseCreated(Database* database) override final;
+    void databaseDidCreate(Database* database) override final;
     DatabasePool m_databasePool;
 
 #pragma mark - Tokenizer

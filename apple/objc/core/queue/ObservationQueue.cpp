@@ -197,9 +197,9 @@ void ObservationQueue::handleError(const Error& error)
 
     bool fromIntegrity = false;
     {
-        const auto& integerInfos = error.infos.getIntegers();
-        auto integrityIter = integerInfos.find("Integrity");
-        if (integrityIter != integerInfos.end() && integrityIter->second != 0) {
+        const auto& stringInfos = error.infos.getStrings();
+        auto actionIter = stringInfos.find(ErrorStringKeyAction);
+        if (actionIter != stringInfos.end() && actionIter->second == ErrorActionIntegrity) {
             fromIntegrity = true;
         }
     }

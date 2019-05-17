@@ -353,8 +353,6 @@
 
 - (void)test_feature_checkpoint_while_notice_recover_wal
 {
-    // avoid auto subthread checkpoint
-    [self.database removeCheckpointConfig];
     TestCaseAssertTrue([self.database truncateCheckpoint]);
 
     // trigger subthread checkpoint

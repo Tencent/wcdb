@@ -28,21 +28,22 @@ static constexpr const double AsyncQueueTimeOutForExiting = 10.0;
 
 // Migration Queue
 static constexpr const char* MigrationQueueName = "com.Tencent.WCDB.Queue.Migration";
-static constexpr const double MigrationQueueTimeIntervalForMigrating = 1.0;
-static constexpr const double MigrationQueueTimeIntervalForRetryingAfterFailure = 3.0;
-static constexpr const int MigrationQueueTolerableFailures = 3;
+static constexpr const double MigrationQueueTimeIntervalForMigrating = 3.0;
+static constexpr const double MigrationQueueTimeIntervalForRetryingAfterFailure = 5.0;
+static constexpr const int MigrationQueueTolerableFailures = 5;
 
 // Observation Queue
 static constexpr const char* ObservationQueueName = "com.Tencent.WCDB.Queue.Observation";
-static constexpr const double ObservationQueueTimeIntervalForReinvokingCorruptedEvent = 5.0;
+static constexpr const double ObservationQueueTimeIntervalForReinvokingCorruptedEvent = 10.0;
 static constexpr const double ObservationQueueTimeIntervalForPurgingAgain = 10.0;
-static constexpr const double ObservationQueueRateForTooManyFileDescriptors = 0.5;
+static constexpr const double ObservationQueueRateForTooManyFileDescriptors = 0.7;
 static constexpr const int ObservationQueueTimesOfIgnoringBackupCorruption = 3;
 
 // Checkpoint Queue
 static constexpr const char* CheckpointQueueName = "com.Tencent.WCDB.Queue.Checkpoint";
-static constexpr const double CheckpointQueueTimeIntervalForRetryingAfterFailure = 10.0;
-static constexpr const int CheckpointQueueFramesThresholdForCritical = 200;
+static constexpr const double CheckpointQueueTimeIntervalForRetryingAfterFailure = 3.0;
+static constexpr const int CheckpointQueueFramesThresholdForCritical
+= 4 * 1024 * 1024 / 4096; // 4 MB / Default Page Size = 1024
 static constexpr const double CheckpointQueueTimeIntervalForCritical = 1.0;
 static constexpr const double CheckpointQueueTimeIntervalForNonCritical = 10.0;
 
@@ -55,9 +56,11 @@ static constexpr const char* CheckpointConfigName = "com.Tencent.WCDB.Config.Che
 
 // Backup Config
 static constexpr const char* BackupConfigName = "com.Tencent.WCDB.Config.Backup";
-static constexpr const int BackupConfigFramesIntervalForCritical = 300;
-static constexpr const int BackupConfigFramesIntervalForNonCritical = 100;
-static constexpr const double BackupQueueTimeIntervalForCritical = 0;
+static constexpr const int BackupConfigFramesIntervalForCritical
+= 6 * 1024 * 1024 / 4096; // 6 MB / Default Page Size = 1536
+static constexpr const int BackupConfigFramesIntervalForNonCritical
+= 1 * 1024 * 1024 / 4096; // 1 MB / Default Page Size = 256
+static constexpr const double BackupQueueTimeIntervalForCritical = 1.0;
 static constexpr const double BackupQueueTimeIntervalForNonCritical = 5.0;
 
 // BackupConfigFramesIntervalForCritical should be greater than CheckpointQueueFramesThresholdForCritical since a checkpoint will trigger critical checkpoint too.
@@ -106,7 +109,17 @@ static constexpr const unsigned int HandlePoolNumberOfSlots = 8;
 static constexpr const int CheckpointFramesThresholdForTruncating
 = 10 * 1024 * 1024 / 4096; // 10 MB / Default Page Size = 2560
 
+// Migration Stepper
+static constexpr const int MigrationStepperNumberOfMaxAllowedStepping = 10;
+
 // Error Key
+static constexpr const char* ErrorStringKeyAction = "Action";
+static constexpr const char* ErrorActionMigrate = "Migrate";
+static constexpr const char* ErrorActionBackup = "Backup";
+static constexpr const char* ErrorActionCheckpoint = "Checkpoint";
+static constexpr const char* ErrorActionIntegrity = "Integrity";
+static constexpr const char* ErrorActionAssembler = "Assembler";
+
 #define WCDB_ERROR_STRING_KEY_SOURCE "Source";
 static constexpr const char* ErrorStringKeySource = WCDB_ERROR_STRING_KEY_SOURCE;
 

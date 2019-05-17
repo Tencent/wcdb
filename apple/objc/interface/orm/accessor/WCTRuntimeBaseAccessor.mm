@@ -44,22 +44,32 @@ WCTRuntimeBaseAccessor::~WCTRuntimeBaseAccessor()
 
 SEL WCTRuntimeBaseAccessor::getGetterSelector(objc_property_t property, const WCDB::String &propertyName)
 {
-    const char *getter = property_copyAttributeValue(property, "G");
-    if (getter == nullptr) {
-        getter = propertyName.c_str();
+    SEL selector = nil;
+    char *getter = property_copyAttributeValue(property, "G");
+    if (getter != nullptr) {
+        selector = sel_registerName(getter);
+        free(getter);
+    } else {
+        selector = sel_registerName(propertyName.c_str());
     }
-    return sel_registerName(getter);
+    WCTInnerAssert(selector != nil);
+    return selector;
 }
 
 SEL WCTRuntimeBaseAccessor::getSetterSelector(objc_property_t property, const WCDB::String &propertyName)
 {
-    const char *setter = property_copyAttributeValue(property, "S");
+    SEL selector = nil;
+    char *setter = property_copyAttributeValue(property, "S");
     if (setter != nullptr) {
-        return sel_registerName(setter);
+        selector = sel_registerName(setter);
+        free(setter);
+    } else {
+        WCDB::String defaultSetter = "set" + propertyName + ":";
+        defaultSetter[3] = (char) std::toupper(defaultSetter[3]);
+        selector = sel_registerName(defaultSetter.c_str());
     }
-    WCDB::String defaultSetter = "set" + propertyName + ":";
-    defaultSetter[3] = (char) std::toupper(defaultSetter[3]);
-    return sel_registerName(defaultSetter.c_str());
+    WCTInnerAssert(selector != nil);
+    return selector;
 }
 
 IMP WCTRuntimeBaseAccessor::getClassMethodImplementation(Class cls, SEL selector)

@@ -42,6 +42,7 @@ WCTBinding::WCTBinding(Class cls)
 
     unsigned int numberOfMethods = 0;
     Method *methods = class_copyMethodList(object_getClass(m_cls), &numberOfMethods);
+    WCTInnerAssert(methods != nullptr && numberOfMethods > 0);
     for (unsigned int i = 0; i < numberOfMethods; i++) {
         Method method = methods[i];
         NSString *selName = NSStringFromSelector(method_getName(method));
@@ -53,7 +54,9 @@ WCTBinding::WCTBinding(Class cls)
             }
         }
     }
-    free(methods);
+    if (methods != nullptr) {
+        free(methods);
+    }
 
     static auto s_numbericComparator = ^NSComparisonResult(NSString *str1, NSString *str2) {
         return [str1 compare:str2 options:NSNumericSearch];

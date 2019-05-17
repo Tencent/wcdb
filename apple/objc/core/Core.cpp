@@ -55,8 +55,8 @@ Core::Core()
 , m_configs(new Configs(OrderedUniqueList<String, std::shared_ptr<Config>>({
   { Configs::Priority::Highest, GlobalSQLTraceConfigName, m_globalSQLTraceConfig },
   { Configs::Priority::Highest, GlobalPerformanceTraceConfigName, m_globalPerformanceTraceConfig },
+  { Configs::Priority::Highest, CheckpointConfigName, std::shared_ptr<Config>(new CheckpointConfig(m_checkpointQueue)) },
   { Configs::Priority::Higher, BasicConfigName, std::shared_ptr<Config>(new BasicConfig) },
-  { Configs::Priority::Low, CheckpointConfigName, std::shared_ptr<Config>(new CheckpointConfig(m_checkpointQueue)) },
   })))
 {
     Handle::enableMultithread();
@@ -105,7 +105,9 @@ void Core::globalLog(void* parameter, int rc, const char* message)
                 if (frames > 0) {
                     // hint checkpoint
                     Core* core = static_cast<Core*>(parameter);
-                    core->m_checkpointQueue->put(match[2].str(), frames);
+                    String path = match[2].str();
+                    core->m_checkpointQueue->put(path, frames);
+                    core->m_backupQueue->put(path, frames);
                 }
             }
             WCTInnerAssert(match.size() == 3); // assert match and match 3.
@@ -134,7 +136,7 @@ void Core::purgeDatabasePool()
     m_databasePool.purge();
 }
 
-void Core::onDatabaseCreated(Database* database)
+void Core::databaseDidCreate(Database* database)
 {
     WCTInnerAssert(database != nullptr);
 
@@ -271,10 +273,8 @@ void Core::setAutoBackup(Database* database, bool enable)
     WCTInnerAssert(database != nullptr);
     if (enable) {
         database->setConfig(
-        WCDB::BackupConfigName, m_backupConfig, WCDB::Configs::Priority::Low);
-        m_backupQueue->register_(database->getPath());
+        WCDB::BackupConfigName, m_backupConfig, WCDB::Configs::Priority::Highest);
     } else {
-        database->removeConfig(WCDB::BackupConfigName);
         m_backupQueue->unregister(database->getPath());
     }
 }

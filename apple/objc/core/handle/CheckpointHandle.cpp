@@ -20,12 +20,15 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/CheckpointHandle.hpp>
+#include <WCDB/CoreConst.h>
 #include <WCDB/Error.hpp>
 
 namespace WCDB {
 
 CheckpointHandle::CheckpointHandle()
 {
+    m_error.infos.set(ErrorStringKeyAction, ErrorActionCheckpoint);
+
     markErrorAsIgnorable(Error::Code::Interrupt);
     markErrorAsIgnorable(Error::Code::Busy);
 }

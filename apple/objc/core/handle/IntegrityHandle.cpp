@@ -19,13 +19,14 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/CoreConst.h>
 #include <WCDB/IntegrityHandle.hpp>
 
 namespace WCDB {
 
 IntegrityHandle::IntegrityHandle()
 {
-    m_error.infos.set("Integrity", true);
+    m_error.infos.set(ErrorStringKeyAction, ErrorActionIntegrity);
 }
 
 void IntegrityHandle::check()

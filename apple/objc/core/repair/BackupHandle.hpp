@@ -44,6 +44,8 @@ protected:
 
 class BackupWriteHandle final : public Handle, public Repair::WriteLocker {
 public:
+    BackupWriteHandle();
+
     void setPath(const String &path) override final;
     const String &getPath() const override final;
     const Error &getError() const override final;

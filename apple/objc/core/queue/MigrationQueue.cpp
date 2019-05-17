@@ -64,7 +64,7 @@ bool MigrationQueue::onTimed(const String& path, const int& numberOfFailures)
             erase = false;
         }
     } else {
-        if (numberOfFailures < MigrationQueueTolerableFailures) {
+        if (numberOfFailures + 1 < MigrationQueueTolerableFailures) {
             m_timedQueue.queue(
             path, MigrationQueueTimeIntervalForRetryingAfterFailure, numberOfFailures + 1);
             erase = false;

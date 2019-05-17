@@ -52,8 +52,13 @@ protected:
     TimedQueue<String, int> m_timedQueue;
     SharedLock m_lock;
 
-    // path -> frame
-    std::map<String, int> m_records;
+    struct Record {
+        Record();
+        int frames;
+        int registers;
+    };
+    typedef struct Record Record;
+    std::map<String, Record> m_records;
     BackupQueueEvent* m_event;
 };
 

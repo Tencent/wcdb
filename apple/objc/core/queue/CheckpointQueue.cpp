@@ -52,22 +52,49 @@ bool CheckpointQueue::onTimed(const String& path, const int& frames)
 
 void CheckpointQueue::put(const String& path, int frames)
 {
-    if (frames >= CheckpointQueueFramesThresholdForCritical) {
-        put(path, CheckpointQueueTimeIntervalForCritical, frames);
-    } else {
-        m_timedQueue.queue(path, CheckpointQueueTimeIntervalForNonCritical, frames);
-        put(path, CheckpointQueueTimeIntervalForNonCritical, frames);
-    }
+    put(path,
+        frames >= CheckpointQueueFramesThresholdForCritical ?
+        CheckpointQueueTimeIntervalForCritical :
+        CheckpointQueueTimeIntervalForNonCritical,
+        frames);
 }
 
 void CheckpointQueue::put(const String& path, double delay, int frames)
 {
+    {
+        SharedLockGuard lockGuard(m_lock);
+        auto iter = m_records.find(path);
+        if (iter == m_records.end()) {
+            return;
+        }
+        WCTInnerAssert(iter->second > 0);
+    }
     m_timedQueue.queue(path, delay, frames);
     lazyRun();
 }
 
 void CheckpointQueue::remove(const String& path)
 {
+    m_timedQueue.remove(path);
+}
+
+void CheckpointQueue::register_(const String& path)
+{
+    LockGuard lockGuard(m_lock);
+    ++m_records[path];
+}
+
+void CheckpointQueue::unregister(const String& path)
+{
+    bool removed = false;
+    {
+        LockGuard lockGuard(m_lock);
+        removed = --m_records[path] == 0;
+        WCTInnerAssert(m_records[path] >= 0);
+        if (removed) {
+            m_records.erase(path);
+        }
+    }
     m_timedQueue.remove(path);
 }
 
