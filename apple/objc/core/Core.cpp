@@ -55,8 +55,8 @@ Core::Core()
 , m_configs(new Configs(OrderedUniqueList<String, std::shared_ptr<Config>>({
   { Configs::Priority::Highest, GlobalSQLTraceConfigName, m_globalSQLTraceConfig },
   { Configs::Priority::Highest, GlobalPerformanceTraceConfigName, m_globalPerformanceTraceConfig },
+  { Configs::Priority::Highest, CheckpointConfigName, std::shared_ptr<Config>(new CheckpointConfig(m_checkpointQueue)) },
   { Configs::Priority::Higher, BasicConfigName, std::shared_ptr<Config>(new BasicConfig) },
-  { Configs::Priority::Low, CheckpointConfigName, std::shared_ptr<Config>(new CheckpointConfig(m_checkpointQueue)) },
   })))
 {
     Handle::enableMultithread();
@@ -273,7 +273,7 @@ void Core::setAutoBackup(Database* database, bool enable)
     WCTInnerAssert(database != nullptr);
     if (enable) {
         database->setConfig(
-        WCDB::BackupConfigName, m_backupConfig, WCDB::Configs::Priority::Low);
+        WCDB::BackupConfigName, m_backupConfig, WCDB::Configs::Priority::Highest);
     } else {
         m_backupQueue->unregister(database->getPath());
     }
