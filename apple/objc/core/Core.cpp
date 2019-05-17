@@ -105,7 +105,9 @@ void Core::globalLog(void* parameter, int rc, const char* message)
                 if (frames > 0) {
                     // hint checkpoint
                     Core* core = static_cast<Core*>(parameter);
-                    core->m_checkpointQueue->put(match[2].str(), frames);
+                    String path = match[2].str();
+                    core->m_checkpointQueue->put(path, frames);
+                    core->m_backupQueue->put(path, frames);
                 }
             }
             WCTInnerAssert(match.size() == 3); // assert match and match 3.
