@@ -384,6 +384,10 @@ void AbstractHandle::rollbackNestedTransaction()
 
 bool AbstractHandle::beginTransaction()
 {
+    WCTRemedialAssert(!isInTransaction(),
+                      "Last transaction is not committed or rollbacked.",
+                      rollbackTransaction(););
+
     static const String *s_beginImmediate
     = new String(StatementBegin().beginImmediate().getDescription());
     bool succeed = executeSQL(*s_beginImmediate);
