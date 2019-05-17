@@ -210,7 +210,9 @@
         strongify_or_return(self);
         if (error.code == WCTErrorCodeIOError
             && error.level == WCTErrorLevelError
-            && error.tag == self.database.tag) {
+            && error.tag == self.database.tag
+            && [error.path isEqualToString:self.database.path]
+            && [[error.userInfo objectForKey:@(WCDB::ErrorStringKeyAction)] isEqualToString:@(WCDB::ErrorActionMigrate)]) {
             [numberOfFailures increment];
         }
     }];
@@ -221,18 +223,15 @@
     // wait until auto migrate stopped
     while (numberOfFailures.value < WCDB::MigrationQueueTolerableFailures)
         ;
+
+    // wait to confirm migration is stopped.
+    [NSThread sleepForTimeInterval:2 * WCDB::MigrationQueueTimeIntervalForMigrating];
+
+    TestCaseAssertTrue(numberOfFailures.value == WCDB::MigrationQueueTolerableFailures);
+
     [WCTDatabase simulateIOError:WCTSimulateNoneIOError];
 
     [WCTDatabase globalTraceError:nil];
-
-    TestCaseResult *result = [TestCaseResult yes];
-    [self.database traceSQL:^(NSString *sql) {
-        WCDB_UNUSED(sql)
-        [result makeNO];
-    }];
-    // wait to confirm migration is stopped.
-    [NSThread sleepForTimeInterval:2 * WCDB::MigrationQueueTimeIntervalForMigrating];
-    TestCaseAssertResultYES(result);
 }
 
 - (void)doTestFeatureAutoMigrateWillNotStopDueToInterrupt
