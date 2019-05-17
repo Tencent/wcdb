@@ -319,6 +319,7 @@
     TestCaseAssertTrue([attachedDatabase createTable:self.tableName withClass:TestCaseObject.class]);
 
     self.database.autoBackup = YES;
+    TestCaseAssertTrue([attachedDatabase canOpen]);
     TestCaseAssertTrue([self.database execute:WCDB::StatementAttach().attach(attachedPath).as(attachedName)]);
 
     TestCaseObject *object = [self.random autoIncrementTestCaseObject];
@@ -332,7 +333,7 @@
 
         TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).schema(attachedName).with("TRUNCATE")]);
 
-        [NSThread sleepForTimeInterval:self.delayForTolerance];
+        [NSThread sleepForTimeInterval:WCDB::BackupQueueTimeIntervalForCritical + self.delayForTolerance];
         TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
         TestCaseAssertFalse([self.fileManager fileExistsAtPath:attachedDatabase.firstMaterialPath]);
     }
@@ -340,6 +341,7 @@
     {
         // auto backup for other schema will be triggered if it's set up
         attachedDatabase.autoBackup = YES;
+        TestCaseAssertTrue([attachedDatabase canOpen]);
 
         WCTInsert *insert = [[self.table prepareInsert] value:object];
         insert.statement.schema(attachedName);
@@ -347,7 +349,7 @@
 
         TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).schema(attachedName).with("TRUNCATE")]);
 
-        [NSThread sleepForTimeInterval:self.delayForTolerance];
+        [NSThread sleepForTimeInterval:WCDB::BackupQueueTimeIntervalForCritical + self.delayForTolerance];
         TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
         TestCaseAssertTrue([self.fileManager fileExistsAtPath:attachedDatabase.firstMaterialPath]);
     }
