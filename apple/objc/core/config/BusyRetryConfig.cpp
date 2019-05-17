@@ -90,17 +90,19 @@ bool BusyRetryConfig::onBusy(const String& path, int numberOfTimes)
         SteadyClock before = SteadyClock::now();
         {
             std::unique_lock<decltype(m_mutex)> lockGuard(m_mutex);
-            ++m_numberOfWaitingHandles;
+            --m_numberOfSteppingHandles;
             if (m_numberOfSteppingHandles > 0) {
+                ++m_numberOfWaitingHandles;
                 retry = m_cond.wait_for(
                         lockGuard,
                         std::chrono::nanoseconds((long long) (remainingTime * 1E9)))
                         == std::cv_status::no_timeout;
+                --m_numberOfWaitingHandles;
                 waited = true;
             } else {
                 retry = true;
             }
-            --m_numberOfWaitingHandles;
+            ++m_numberOfSteppingHandles;
         }
         if (retry && waited) {
             std::time_t waitedTime
