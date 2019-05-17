@@ -124,7 +124,7 @@ bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
 
     if (!m_removeMigratedStatement->isPrepared()
         && !m_removeMigratedStatement->prepare(
-           m_migratingInfo->getStatementForDeletingMigratedOneRow())) {
+        m_migratingInfo->getStatementForDeletingMigratedOneRow())) {
         return false;
     }
 
@@ -136,12 +136,13 @@ bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
         if (!succeed) {
             return false;
         }
-        WCTInnerAssert(getNumberOfDirtyPages() != 0);
         if (migrated) {
             return true;
         }
 
         int numberOfDirtyPages = getNumberOfDirtyPages();
+        WCTInnerAssert(numberOfDirtyPages != 0);
+
         bool worked = true;
         WCTInnerAssert(succeed && worked && !migrated);
         for (int i = 0; succeed && worked && !migrated && i < MigrationStepperNumberOfMaxAllowedStepping;
