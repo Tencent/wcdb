@@ -127,7 +127,7 @@
     TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
     TestCaseAssertTrue([self.database passiveCheckpoint]);
 
-    [NSThread sleepForTimeInterval:self.delayForTolerance];
+    [NSThread sleepForTimeInterval:WCDB::BackupQueueTimeIntervalForCritical + self.delayForTolerance];
     return [self.fileManager fileExistsAtPath:self.database.firstMaterialPath];
 }
 
@@ -203,8 +203,6 @@
 
 - (void)test_cancel_auto_backup
 {
-    [self.database removeCheckpointConfig];
-
     self.database.autoBackup = YES;
     TestCaseAssertTrue([self checkAutoBackedup]);
 
