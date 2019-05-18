@@ -173,6 +173,7 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
         m_statementForMigratingOneRow
         = StatementInsert()
           .insertIntoTable(m_table)
+          .orReplace()
           .schema(Schema::main())
           .columns(columnsContainRowID)
           .values(StatementSelect()
