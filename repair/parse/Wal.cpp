@@ -311,7 +311,7 @@ void Wal::hint() const
         if (succeed) {
             error.infos.set("CurrentFileSize", fileSize);
         }
-        Notifier::shared()->notify(error);
+        Notifier::shared().notify(error);
     }
 
     //Pages to frames
@@ -333,7 +333,7 @@ void Wal::hint() const
                         "Wal pages hint " + std::to_string(i / 20));
             error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
             error.infos.set("Pages2Frames", stream.str());
-            Notifier::shared()->notify(error);
+            Notifier::shared().notify(error);
             stream.str("");
             stream.clear();
         }
@@ -359,7 +359,7 @@ void Wal::hint() const
                         "Wal disposed hint " + std::to_string(i / 20));
             error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
             error.infos.set("Disposed", stream.str());
-            Notifier::shared()->notify(error);
+            Notifier::shared().notify(error);
             stream.str("");
             stream.clear();
         }
@@ -375,7 +375,7 @@ void Wal::markAsCorrupted(int frame, const String &message)
     error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.set(ErrorStringKeyPath, getPath());
     error.infos.set("Frame", frame);
-    Notifier::shared()->notify(error);
+    Notifier::shared().notify(error);
     setError(std::move(error));
 }
 
@@ -384,7 +384,7 @@ void Wal::markAsCorrupted(int frame, const String &message)
 //    Error error(code, Error::Level::Ignore);
 //    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
 //    error.infos.set(ErrorStringKeyPath, getPath());
-//    Notifier::shared()->notify(error);
+//    Notifier::shared().notify(error);
 //    setError(std::move(error));
 //}
 

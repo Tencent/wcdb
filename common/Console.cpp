@@ -67,10 +67,10 @@ bool Console::debuggable()
 void Console::errored(const Notifier::Callback& callback)
 {
     if (callback != nullptr) {
-        Notifier::shared()->setNotification(
+        Notifier::shared().setNotification(
         std::numeric_limits<int>::min(), NotifierLoggerName, callback);
     } else {
-        Notifier::shared()->unsetNotification(NotifierLoggerName);
+        Notifier::shared().unsetNotification(NotifierLoggerName);
     }
 }
 

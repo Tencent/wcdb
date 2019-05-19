@@ -34,8 +34,8 @@ NSString* const WCTModuleFTS5 = @"fts5";
 
 static std::nullptr_t initialize()
 {
-    WCDB::Core::shared()->registerTokenizer(WCTTokenizerOneOrBinary, WCDB::TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizerCursorInfo>::specialize());
-    WCDB::Core::shared()->registerTokenizer(WCTTokenizerLegacyOneOrBinary, WCDB::TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizerCursorInfo>::specialize());
+    WCDB::Core::shared().registerTokenizer(WCTTokenizerOneOrBinary, WCDB::TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizerCursorInfo>::specialize());
+    WCDB::Core::shared().registerTokenizer(WCTTokenizerLegacyOneOrBinary, WCDB::TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizerCursorInfo>::specialize());
     return nullptr;
 }
 
@@ -47,13 +47,13 @@ static std::nullptr_t initialize()
     WCDB_UNUSED(_);
 
     WCDB::String configName = WCDB::String(WCDB::TokenizeConfigPrefix) + tokenizerName.UTF8String;
-    _database->setConfig(configName, WCDB::Core::shared()->tokenizerConfig(tokenizerName), WCDB::Configs::Priority::Higher);
+    _database->setConfig(configName, WCDB::Core::shared().tokenizerConfig(tokenizerName), WCDB::Configs::Priority::Higher);
 }
 
 + (void)registerTokenizer:(const WCDB::TokenizerModule&)module named:(NSString*)name
 {
     WCTRemedialAssert(name.length > 0, "Module name can't be nil.", return;);
-    WCDB::Core::shared()->registerTokenizer(name, module);
+    WCDB::Core::shared().registerTokenizer(name, module);
 }
 
 @end

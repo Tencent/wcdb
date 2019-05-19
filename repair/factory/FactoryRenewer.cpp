@@ -59,7 +59,7 @@ bool FactoryRenewer::work()
         Error error(Error::Code::Misuse, Error::Level::Warning, "Database already exists when renewing.");
         error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
         error.infos.set(ErrorStringKeyPath, database);
-        Notifier::shared()->notify(error);
+        Notifier::shared().notify(error);
         FileManager::removeItem(directory);
         factory.removeDirectoryIfEmpty();
         return true;
@@ -187,14 +187,14 @@ bool FactoryRenewer::resolveInfosForDatabase(std::map<String, Info> &infos,
         Error error(Error::Code::NotFound, Error::Level::Warning, "Material is not found when renewing.");
         error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
         error.infos.set(ErrorStringKeyPath, databaseForAcquisition);
-        Notifier::shared()->notify(error);
+        Notifier::shared().notify(error);
         return true;
     }
     Material material;
     for (const auto &materialPath : materialPaths) {
         succeed = material.deserialize(materialPath);
         if (!succeed) {
-            if (ThreadedErrors::shared()->getThreadedError().isCorruption()) {
+            if (ThreadedErrors::shared().getThreadedError().isCorruption()) {
                 continue;
             }
             break;
@@ -213,7 +213,7 @@ bool FactoryRenewer::resolveInfosForDatabase(std::map<String, Info> &infos,
                     error.infos.set(ErrorStringKeyPath, materialPath);
                     error.infos.set("SQL1", element.second.sql);
                     error.infos.set("SQL2", iter->second.sql);
-                    Notifier::shared()->notify(error);
+                    Notifier::shared().notify(error);
                 }
             }
             if (element.second.sequence > iter->second.sequence) {
@@ -225,7 +225,7 @@ bool FactoryRenewer::resolveInfosForDatabase(std::map<String, Info> &infos,
     Error error(Error::Code::Notice, Error::Level::Notice, "All materials are corrupted when renewing.");
     error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.set(ErrorStringKeyPath, databaseForAcquisition);
-    Notifier::shared()->notify(error);
+    Notifier::shared().notify(error);
     return true;
 }
 

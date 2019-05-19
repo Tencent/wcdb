@@ -34,7 +34,7 @@ const Error &ErrorProne::getError() const
 
 void ErrorProne::assignWithSharedThreadedError()
 {
-    setError(std::move(ThreadedErrors::shared()->moveThreadedError()));
+    setError(std::move(ThreadedErrors::shared().moveThreadedError()));
 }
 
 void ErrorProne::setError(const Error &error)
@@ -69,7 +69,7 @@ const Error &ThreadedErrorProne::getThreadedError()
 
 void ThreadedErrorProne::assignWithSharedThreadedError()
 {
-    setThreadedError(std::move(ThreadedErrors::shared()->moveThreadedError()));
+    setThreadedError(std::move(ThreadedErrors::shared().moveThreadedError()));
 }
 
 } //namespace WCDB

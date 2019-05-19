@@ -180,7 +180,7 @@ void Pager::markAsCorrupted(int page, const String &message)
     error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.set(ErrorStringKeyPath, getPath());
     error.infos.set("Page", page);
-    Notifier::shared()->notify(error);
+    Notifier::shared().notify(error);
     setError(std::move(error));
 }
 
@@ -189,7 +189,7 @@ void Pager::markAsError(Error::Code code)
     Error error(code, Error::Level::Ignore);
     error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.set(ErrorStringKeyPath, getPath());
-    Notifier::shared()->notify(error);
+    Notifier::shared().notify(error);
     setError(std::move(error));
 }
 
@@ -276,7 +276,7 @@ void Pager::hint() const
     if (succeed) {
         error.infos.set("CurrentFileSize", fileSize);
     }
-    Notifier::shared()->notify(error);
+    Notifier::shared().notify(error);
     m_wal.hint();
 }
 

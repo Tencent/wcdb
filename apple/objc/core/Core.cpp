@@ -29,10 +29,10 @@
 namespace WCDB {
 
 #pragma mark - Core
-Core* Core::shared()
+Core& Core::shared()
 {
     static Core* s_shared = new Core;
-    return s_shared;
+    return *s_shared;
 }
 
 Core::Core()
@@ -65,7 +65,7 @@ Core::Core()
     Handle::traceGlobalLog(Core::globalLog, this);
     Handle::hookFileOpen(Core::fileOpen);
 
-    Notifier::shared()->setNotificationForPreprocessing(
+    Notifier::shared().setNotificationForPreprocessing(
     NotifierPreprocessorName,
     std::bind(&Core::preprocessError, this, std::placeholders::_1));
 }
@@ -74,13 +74,13 @@ Core::~Core()
 {
     Handle::traceGlobalLog(nullptr, nullptr);
     Handle::hookFileOpen((AbstractHandle::FileOpen) open);
-    Notifier::shared()->setNotificationForPreprocessing(NotifierPreprocessorName, nullptr);
+    Notifier::shared().setNotificationForPreprocessing(NotifierPreprocessorName, nullptr);
 }
 
 int Core::fileOpen(const char* path, int flags, int mode)
 {
     int fd = open(path, flags, mode);
-    Core::shared()->observatedThatFileOpened(fd);
+    Core::shared().observatedThatFileOpened(fd);
     if (fd != -1 && ((flags & O_CREAT) != 0)) {
         FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
     }
@@ -117,7 +117,7 @@ void Core::globalLog(void* parameter, int rc, const char* message)
     }
 
     error.setSQLiteCode(rc, message);
-    Notifier::shared()->notify(error);
+    Notifier::shared().notify(error);
 }
 
 #pragma mark - Database

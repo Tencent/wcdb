@@ -88,7 +88,7 @@ int UpgradeableErrorProne::tryUpgradeError(Error &&error)
 
 int UpgradeableErrorProne::tryUpgradeErrorWithSharedThreadedError()
 {
-    return tryUpgradeError(std::move(ThreadedErrors::shared()->moveThreadedError()));
+    return tryUpgradeError(std::move(ThreadedErrors::shared().moveThreadedError()));
 }
 
 void UpgradeableErrorProne::setCriticalError(const Error &error)
@@ -107,7 +107,7 @@ void UpgradeableErrorProne::setCriticalError(Error &&error)
 
 void UpgradeableErrorProne::setCriticalErrorWithSharedThreadedError()
 {
-    setCriticalError(std::move(ThreadedErrors::shared()->moveThreadedError()));
+    setCriticalError(std::move(ThreadedErrors::shared().moveThreadedError()));
 }
 
 void UpgradeableErrorProne::setSeverity(int severity)

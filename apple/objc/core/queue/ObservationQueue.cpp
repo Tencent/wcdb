@@ -55,13 +55,13 @@ ObservationQueue::ObservationQueue(const String& name, ObservationQueueEvent* ev
 , m_event(event)
 , m_observerForMemoryWarning(registerNotificationWhenMemoryWarning())
 {
-    Notifier::shared()->setNotification(
+    Notifier::shared().setNotification(
     0, name, std::bind(&ObservationQueue::handleError, this, std::placeholders::_1));
 }
 
 ObservationQueue::~ObservationQueue()
 {
-    Notifier::shared()->unsetNotification(name);
+    Notifier::shared().unsetNotification(name);
     unregisterNotificationWhenMemoryWarning(m_observerForMemoryWarning);
 }
 
@@ -82,20 +82,20 @@ bool ObservationQueue::onTimed(const String& key, const Parameter& parameter)
 
         if (parameter.source == Parameter::Source::MemoryWarning) {
             Error error(Error::Code::Warning, Error::Level::Warning, "Purge due to memory warning.");
-            Notifier::shared()->notify(error);
+            Notifier::shared().notify(error);
         } else if (parameter.source == Parameter::Source::FileDescriptorsWarning) {
             Error error(Error::Code::Warning, Error::Level::Warning, "Purge due to file descriptors warning.");
             error.infos.set("MaxAllowedFileDescriptors",
                             maxAllowedNumberOfFileDescriptors());
             error.infos.set("FileDescriptor", parameter.numberOfFileDescriptors);
-            Notifier::shared()->notify(error);
+            Notifier::shared().notify(error);
         } else if (parameter.source == Parameter::Source::OutOfMaxAllowedFileDescriptors) {
             Error error(Error::Code::Warning,
                         Error::Level::Warning,
                         "Purge due to out of max allowed file descriptors.");
             error.infos.set("MaxAllowedFileDescriptors",
                             maxAllowedNumberOfFileDescriptors());
-            Notifier::shared()->notify(error);
+            Notifier::shared().notify(error);
         }
 
         // do purge

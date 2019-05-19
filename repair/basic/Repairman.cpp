@@ -68,7 +68,7 @@ bool Repairman::isEmptyDatabase()
             Error error(Error::Code::Empty, Error::Level::Warning, "Database is not found or empty.");
             error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
             error.infos.set(ErrorStringKeyPath, getPath());
-            Notifier::shared()->notify(error);
+            Notifier::shared().notify(error);
         } else {
             setCriticalErrorWithSharedThreadedError();
         }

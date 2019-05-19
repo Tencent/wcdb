@@ -29,9 +29,7 @@ namespace WCDB {
 
 class Notifier final {
 public:
-    static Notifier *shared();
-    Notifier(const Notifier &) = delete;
-    Notifier &operator=(const Notifier &) = delete;
+    static Notifier &shared();
 
     void notify(Error &error) const;
 
@@ -44,6 +42,8 @@ public:
 
 protected:
     Notifier();
+    Notifier(const Notifier &) = delete;
+    Notifier &operator=(const Notifier &) = delete;
 
     mutable SharedLock m_lock;
 

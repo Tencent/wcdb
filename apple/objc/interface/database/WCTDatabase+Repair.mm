@@ -33,7 +33,7 @@
             return onCorrupted([[WCTDatabase alloc] initWithUnsafeDatabase:database]);
         };
     }
-    WCDB::Core::shared()->setNotificationWhenDatabaseCorrupted(self.path, notification);
+    WCDB::Core::shared().setNotificationWhenDatabaseCorrupted(self.path, notification);
 }
 
 - (BOOL)checkIfCorrupted
@@ -44,7 +44,7 @@
 
 - (BOOL)isAlreadyCorrupted
 {
-    return WCDB::Core::shared()->isFileObservedCorrupted(self.path);
+    return WCDB::Core::shared().isFileObservedCorrupted(self.path);
 }
 
 - (void)filterBackup:(WCTBackupFilterBlock)tableShouldBeBackedUp
@@ -65,7 +65,7 @@
 
 - (void)setAutoBackup:(BOOL)flag
 {
-    WCDB::Core::shared()->setAutoBackup(_database, flag);
+    WCDB::Core::shared().setAutoBackup(_database, flag);
 }
 
 - (BOOL)backup

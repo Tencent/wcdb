@@ -47,13 +47,14 @@ class Core final : public DatabasePoolEvent,
                    public ObservationDelegate {
 #pragma mark - Core
 public:
-    static Core* shared();
-    Core(const Core&) = delete;
-    Core& operator=(const Core&) = delete;
+    static Core& shared();
     ~Core();
 
 protected:
     Core();
+    Core(const Core&) = delete;
+    Core& operator=(const Core&) = delete;
+
     static int fileOpen(const char* path, int flags, int mode);
     static void globalLog(void* core, int code, const char* message);
 

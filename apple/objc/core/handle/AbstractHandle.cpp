@@ -554,7 +554,7 @@ void AbstractHandle::notifyError(int rc, const char *sql)
         m_error.level = Error::Level::Ignore;
     }
     m_error.infos.set(ErrorStringKeySQL, sql);
-    Notifier::shared()->notify(m_error);
+    Notifier::shared().notify(m_error);
 }
 
 void AbstractHandle::markErrorAsIgnorable(Error::Code ignorableCode)
@@ -592,7 +592,7 @@ void AbstractHandle::tryNotifyError(int rc)
         Error error;
         error.level = Error::Level::Fatal;
         error.setSQLiteCode(rc);
-        Notifier::shared()->notify(error);
+        Notifier::shared().notify(error);
     }
 }
 

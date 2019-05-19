@@ -115,7 +115,7 @@ bool SQLiteBase::error(int rc, const char *sql)
         error.infos.set(ErrorStringKeySQL, sql);
     }
     error.infos.set(ErrorStringKeyPath, m_path);
-    Notifier::shared()->notify(error);
+    Notifier::shared().notify(error);
     ErrorProne::setError(std::move(error));
     return result;
 }

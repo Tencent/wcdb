@@ -44,7 +44,7 @@
 
     if (self = [super init]) {
         path = [path stringByStandardizingPath];
-        _databaseHolder = WCDB::Core::shared()->getOrCreateDatabase(path);
+        _databaseHolder = WCDB::Core::shared().getOrCreateDatabase(path);
         WCTInnerAssert(_databaseHolder != nullptr);
         _database = _databaseHolder.get();
         WCTInnerAssert(_database != nullptr);
@@ -56,7 +56,7 @@
 {
     if (self = [super init]) {
         path = [path stringByStandardizingPath];
-        _databaseHolder = WCDB::Core::shared()->getAlivingDatabase(path);
+        _databaseHolder = WCDB::Core::shared().getAlivingDatabase(path);
         if (_databaseHolder == nullptr) {
             return nil;
         }
