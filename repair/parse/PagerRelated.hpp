@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_PAGER_RELATED_HPP
-#define __WCDB_PAGER_RELATED_HPP
+#pragma once
 
 #include <WCDB/Error.hpp>
 
@@ -49,5 +48,3 @@ protected:
 } //namespace Repair
 
 } //namespace WCDB
-
-#endif /* __WCDB_PAGER_RELATED_HPP */

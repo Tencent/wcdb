@@ -18,13 +18,10 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_SQLITE_DECLARATION_H
-#define __WCDB_SQLITE_DECLARATION_H
+#pragma once
 
 extern "C" {
 typedef struct sqlite3 sqlite3;
 typedef struct sqlite3_stmt sqlite3_stmt;
 typedef struct sqlite3_tokenizer_module sqlite3_tokenizer_module;
 }
-
-#endif /* __WCDB_SQLITE_DECLARATION_H */

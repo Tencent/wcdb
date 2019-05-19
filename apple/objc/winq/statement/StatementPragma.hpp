@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_STATEMENT_PRAGMA_HPP
-#define __WCDB_STATEMENT_PRAGMA_HPP
+#pragma once
 
 #include <WCDB/Statement.hpp>
 
@@ -36,5 +35,3 @@ public:
 };
 
 } // namespace WCDB
-
-#endif /* __WCDB_STATEMENT_PRAGMA_HPP */

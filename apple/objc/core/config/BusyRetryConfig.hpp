@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_BUSY_RETRY_CONFIG_HPP
-#define __WCDB_BUSY_RETRY_CONFIG_HPP
+#pragma once
 
 #include <WCDB/Config.hpp>
 #include <WCDB/String.hpp>
@@ -52,5 +51,3 @@ protected:
 };
 
 } //namespace WCDB
-
-#endif /* __WCDB_BUSY_RETRY_CONFIG_HPP */

@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_NOTIFIER_HPP
-#define __WCDB_NOTIFIER_HPP
+#pragma once
 
 #include <WCDB/Error.hpp>
 #include <WCDB/Lock.hpp>
@@ -52,5 +51,3 @@ protected:
 };
 
 } //namespace WCDB
-
-#endif /* __WCDB_NOTIFIER_HPP */

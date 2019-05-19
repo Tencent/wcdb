@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_REPAIRMAN_HPP
-#define __WCDB_REPAIRMAN_HPP
+#pragma once
 
 #include <WCDB/Assembler.hpp>
 #include <WCDB/Crawlable.hpp>
@@ -94,5 +93,3 @@ private:
 } //namespace Repair
 
 } //namespace WCDB
-
-#endif /* __WCDB_REPAIRMAN_HPP */

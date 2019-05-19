@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_AGGREGATE_FUNCTION_HPP
-#define __WCDB_AGGREGATE_FUNCTION_HPP
+#pragma once
 
 #include <WCDB/ExpressionOperable.hpp>
 #include <WCDB/SQL.hpp>
@@ -57,5 +56,3 @@ public:
 };
 
 } // namespace WCDB
-
-#endif /* __WCDB_AGGREGATE_FUNCTION_HPP */

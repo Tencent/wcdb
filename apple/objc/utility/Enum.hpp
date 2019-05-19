@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_ENUM_HPP
-#define __WCDB_ENUM_HPP
+#pragma once
 
 #include <sstream>
 #include <type_traits>
@@ -40,5 +39,3 @@ std::ostream& operator<<(std::ostream& stream, const T& value)
     stream << WCDB::Enum::description(value);
     return stream;
 }
-
-#endif /* __WCDB_ENUM_HPP */

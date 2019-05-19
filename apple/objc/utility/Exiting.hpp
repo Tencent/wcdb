@@ -18,13 +18,10 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_EXITING_HPP
-#define __WCDB_EXITING_HPP
+#pragma once
 
 namespace WCDB {
 
 bool isExiting();
 
 }
-
-#endif /* __WCDB_EXITING_HPP */

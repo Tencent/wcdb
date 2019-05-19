@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_COLUMN_TYPE_HPP
-#define __WCDB_COLUMN_TYPE_HPP
+#pragma once
 
 #include <WCDB/String.hpp>
 #include <WCDB/Syntax.h>
@@ -315,5 +314,3 @@ public:
 };
 
 } //namespace WCDB
-
-#endif /* __WCDB_COLUMN_TYPE_HPP */

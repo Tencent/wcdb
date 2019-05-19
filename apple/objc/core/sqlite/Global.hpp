@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_GLOBAL_HPP
-#define __WCDB_GLOBAL_HPP
+#pragma once
 
 #include <WCDB/Lock.hpp>
 #include <WCDB/String.hpp>
@@ -71,5 +70,3 @@ private:
 };
 
 }; // namespace WCDB
-
-#endif /* __WCDB_GLOBAL_HPP */

@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_BACKUP_HPP
-#define __WCDB_BACKUP_HPP
+#pragma once
 
 #include <WCDB/Locker.hpp>
 #include <WCDB/MasterCrawler.hpp>
@@ -86,5 +85,3 @@ protected:
 } //namespace Repair
 
 } //namespace WCDB
-
-#endif /* __WCDB_BACKUP_HPP */

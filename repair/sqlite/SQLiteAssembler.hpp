@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_SQLITE_ASSEMBLER_HPP
-#define __WCDB_SQLITE_ASSEMBLER_HPP
+#pragma once
 
 #if WCDB_USE_BUILTIN_SQLITE_REPAIR
 
@@ -80,7 +79,3 @@ protected:
 } //namespace Repair
 
 } //namespace WCDB
-
-#endif /* WCDB_USE_BUILTIN_SQLITE_REPAIR */
-
-#endif /* __WCDB_SQLITE_ASSEMBLER_HPP */

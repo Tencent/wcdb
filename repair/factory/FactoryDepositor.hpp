@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_FACTORY_DEPOSITOR_HPP
-#define __WCDB_FACTORY_DEPOSITOR_HPP
+#pragma once
 
 #include <WCDB/ErrorProne.hpp>
 #include <WCDB/FactoryRelated.hpp>
@@ -37,5 +36,3 @@ public:
 } //namespace Repair
 
 } //namespace WCDB
-
-#endif /* __WCDB_FACTORY_DEPOSITOR_HPP */

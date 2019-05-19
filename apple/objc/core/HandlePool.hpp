@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_HANDLE_POOL_HPP
-#define __WCDB_HANDLE_POOL_HPP
+#pragma once
 
 #include <WCDB/CoreConst.h>
 #include <WCDB/ErrorProne.hpp>
@@ -108,5 +107,3 @@ private:
 };
 
 } //namespace WCDB
-
-#endif /* __WCDB_HANDLE_POOL_HPP */

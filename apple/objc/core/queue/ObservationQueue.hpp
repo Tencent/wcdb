@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_OBSERVATION_QUEUE_HPP
-#define __WCDB_OBSERVATION_QUEUE_HPP
+#pragma once
 
 #include <WCDB/AsyncQueue.hpp>
 #include <WCDB/Lock.hpp>
@@ -109,5 +108,3 @@ protected:
 };
 
 } //namespace WCDB
-
-#endif /* __WCDB_CORRUPTION_QUEUE_HPP */

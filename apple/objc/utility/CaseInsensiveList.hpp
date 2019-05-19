@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_CASE_INSENSIVE_LIST_HPP
-#define __WCDB_CASE_INSENSIVE_LIST_HPP
+#pragma once
 
 #include <WCDB/String.hpp>
 #include <functional>
@@ -62,5 +61,3 @@ protected:
 };
 
 } // namespace WCDB
-
-#endif /* __WCDB_CASE_INSENSIVE_LIST_HPP */

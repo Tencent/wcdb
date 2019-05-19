@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_MASTER_HPP
-#define __WCDB_MASTER_HPP
+#pragma once
 
 #include <WCDB/String.hpp>
 
@@ -43,5 +42,3 @@ public:
 } //namespace Repair
 
 } //namespace WCDB
-
-#endif /* __WCDB_MASTER_HPP */

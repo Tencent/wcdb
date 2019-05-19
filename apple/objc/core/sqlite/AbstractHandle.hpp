@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_ABSTRACT_HANDLE_HPP
-#define __WCDB_ABSTRACT_HANDLE_HPP
+#pragma once
 
 #include <WCDB/ColumnMeta.hpp>
 #include <WCDB/ErrorProne.hpp>
@@ -187,5 +186,3 @@ private:
 };
 
 } //namespace WCDB
-
-#endif /* __WCDB_ABSTRACT_HANDLE_HPP */

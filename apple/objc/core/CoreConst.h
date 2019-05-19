@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_CORE_CONST_H
-#define __WCDB_CORE_CONST_H
+#pragma once
 
 namespace WCDB {
 
@@ -146,5 +145,3 @@ static constexpr const char* ErrorSourceNative = "Native";
 static constexpr const int TagInvalidValue = 0;
 
 } // namespace WCDB
-
-#endif /* __WCDB_CORE_CONST_H */

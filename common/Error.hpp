@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_ERROR_HPP
-#define __WCDB_ERROR_HPP
+#pragma once
 
 #include <WCDB/String.hpp>
 #include <functional>
@@ -310,5 +309,3 @@ public:
 };
 
 } //namespace WCDB
-
-#endif /* __WCDB_ERROR_HPP */

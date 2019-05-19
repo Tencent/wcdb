@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_STATEMENT_CREATE_INDEX_HPP
-#define __WCDB_STATEMENT_CREATE_INDEX_HPP
+#pragma once
 
 #include <WCDB/Statement.hpp>
 
@@ -40,5 +39,3 @@ public:
 };
 
 } // namespace WCDB
-
-#endif /* __WCDB_STATEMENT_CREATE_INDEX_HPP */

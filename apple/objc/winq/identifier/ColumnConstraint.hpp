@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_COLUMN_CONSTRAINT_HPP
-#define __WCDB_COLUMN_CONSTRAINT_HPP
+#pragma once
 
 #include <WCDB/SQL.hpp>
 
@@ -47,5 +46,3 @@ public:
 };
 
 } // namespace WCDB
-
-#endif /* __WCDB_COLUMN_CONSTRAINT_HPP */

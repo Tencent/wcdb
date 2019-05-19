@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_HIGH_WATER_HPP
-#define __WCDB_HIGH_WATER_HPP
+#pragma once
 
 #include <WCDB/Lock.hpp>
 #include <unistd.h>
@@ -60,5 +59,3 @@ protected:
 };
 
 } // namespace WCDB
-
-#endif /* __WCDB_HIGH_WATER_HPP */

@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_INITIALIZEABLE_HPP
-#define __WCDB_INITIALIZEABLE_HPP
+#pragma once
 
 namespace WCDB {
 
@@ -50,5 +49,3 @@ private:
 } //namespace Repair
 
 } //namespace WCDB
-
-#endif /* __WCDB_INITIALIZEABLE_HPP */

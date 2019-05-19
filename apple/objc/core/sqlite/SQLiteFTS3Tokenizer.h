@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_SQLITE_FTS3_TOKENIZER_H
-#define __WCDB_SQLITE_FTS3_TOKENIZER_H
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,5 +32,3 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* __WCDB_SQLITE_FTS3_TOKENIZER_H */

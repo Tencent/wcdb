@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_CORE_HPP
-#define __WCDB_CORE_HPP
+#pragma once
 
 #include <WCDB/BackupQueue.hpp>
 #include <WCDB/CheckpointQueue.hpp>
@@ -132,5 +131,3 @@ protected:
 };
 
 } // namespace WCDB
-
-#endif /* __WCDB_CORE_HPP */

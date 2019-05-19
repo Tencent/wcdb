@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_TRACE_HPP
-#define __WCDB_TRACE_HPP
+#pragma once
 
 #include <WCDB/Console.hpp>
 #include <WCDB/Debug.hpp>
@@ -35,5 +34,3 @@
 #define WCTTrace(message)
 
 #endif // WCDB_TRACE
-
-#endif /* __WCDB_TRACE_HPP */

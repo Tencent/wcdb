@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_PAGE_HPP
-#define __WCDB_PAGE_HPP
+#pragma once
 
 #include <WCDB/Initializeable.hpp>
 #include <WCDB/MappedData.hpp>
@@ -88,5 +87,3 @@ protected:
 } //namespace Repair
 
 } //namespace WCDB
-
-#endif /* __WCDB_PAGE_HPP */

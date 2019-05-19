@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_CHECKPOINT_CONFIG_HPP
-#define __WCDB_CHECKPOINT_CONFIG_HPP
+#pragma once
 
 #include <WCDB/Config.hpp>
 
@@ -44,5 +43,3 @@ protected:
 };
 
 } //namespace WCDB
-
-#endif /* __WCDB_CHECKPOINT_CONFIG_HPP */

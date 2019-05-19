@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_CORE_H
-#define __WCDB_CORE_H
+#pragma once
 
 #include <WCDB/Core.hpp>
 #include <WCDB/CoreConst.h>
@@ -50,5 +49,3 @@
 #include <WCDB/TokenizerModules.hpp>
 
 #include <WCDB/MigrationInfo.hpp>
-
-#endif /* __WCDB_CORE_H */

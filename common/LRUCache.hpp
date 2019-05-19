@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_LRU_CACHE_HPP
-#define __WCDB_LRU_CACHE_HPP
+#pragma once
 
 #include <WCDB/Assertion.hpp>
 #include <list>
@@ -97,5 +96,3 @@ protected:
 };
 
 } // namespace WCDB
-
-#endif /* __WCDB_LRU_CACHE_HPP */

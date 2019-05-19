@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_STRING_HPP
-#define __WCDB_STRING_HPP
+#pragma once
 
 #include <WCDB/UnsafeString.hpp>
 #include <string>
@@ -76,5 +75,3 @@ public:
 };
 
 } //namespace WCDB
-
-#endif /* Utility_hpp */

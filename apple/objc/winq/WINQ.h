@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_WINQ_H
-#define __WCDB_WINQ_H
+#pragma once
 
 // See also: https://sqlite.org/syntaxdiagrams.html
 
@@ -89,5 +88,3 @@
 #include <WCDB/StatementVacuum.hpp>
 
 #include <WCDB/ConvertibleImplementation.hpp>
-
-#endif /* __WCDB_WINQ_H */

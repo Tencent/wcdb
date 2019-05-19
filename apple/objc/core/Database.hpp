@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_DATABASE_HPP
-#define __WCDB_DATABASE_HPP
+#pragma once
 
 #include <WCDB/CheckpointHandle.hpp>
 #include <WCDB/Configs.hpp>
@@ -223,5 +222,3 @@ private:
 };
 
 } //namespace WCDB
-
-#endif /* database_hpp */

@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_HANDLE_NOTIFICATION_HPP
-#define __WCDB_HANDLE_NOTIFICATION_HPP
+#pragma once
 
 #include <WCDB/HandleRelated.hpp>
 #include <WCDB/Lock.hpp>
@@ -118,5 +117,3 @@ private:
 };
 
 } //namespace WCDB
-
-#endif /* __WCDB_HANDLE_NOTIFICATION_HPP */

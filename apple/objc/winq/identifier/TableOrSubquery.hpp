@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_TABLE_OR_SUBQUERY_HPP
-#define __WCDB_TABLE_OR_SUBQUERY_HPP
+#pragma once
 
 #include <WCDB/SQL.hpp>
 
@@ -57,5 +56,3 @@ public:
 };
 
 } // namespace WCDB
-
-#endif /* __WCDB_TABLE_OR_SUBQUERY_HPP */

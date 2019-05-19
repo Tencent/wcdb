@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_SYNTAX_COMMIT_STMT_HPP
-#define __WCDB_SYNTAX_COMMIT_STMT_HPP
+#pragma once
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -43,5 +42,3 @@ public:
 } // namespace Syntax
 
 } // namespace WCDB
-
-#endif /* __WCDB_SYNTAX_COMMIT_STMT_HPP */

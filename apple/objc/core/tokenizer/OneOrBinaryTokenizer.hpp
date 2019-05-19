@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_ONE_OR_BINARY_TOKENIZER_HPP
-#define __WCDB_ONE_OR_BINARY_TOKENIZER_HPP
+#pragma once
 
 #include <WCDB/TokenizerModuleTemplate.hpp>
 #include <vector>
@@ -89,5 +88,3 @@ private:
 };
 
 } // namespace WCDB
-
-#endif /* __WCDB_ONE_OR_BINARY_TOKENIZER_HPP */

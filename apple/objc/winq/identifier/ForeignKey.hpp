@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_FOREIGN_KEY_HPP
-#define __WCDB_FOREIGN_KEY_HPP
+#pragma once
 
 #include <WCDB/SQL.hpp>
 
@@ -53,5 +52,3 @@ public:
 };
 
 } // namespace WCDB
-
-#endif /* __WCDB_FOREIGN_KEY_HPP */

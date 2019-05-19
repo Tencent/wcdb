@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_DATABASE_POOL_HPP
-#define __WCDB_DATABASE_POOL_HPP
+#pragma once
 
 #include <WCDB/Database.hpp>
 #include <WCDB/Lock.hpp>
@@ -67,5 +66,3 @@ protected:
 };
 
 } //namespace WCDB
-
-#endif /* __WCDB_DATABASE_POOL_HPP */

@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_MIGRATION_HPP
-#define __WCDB_MIGRATION_HPP
+#pragma once
 
 #include <WCDB/Lock.hpp>
 #include <WCDB/MigrationInfo.hpp>
@@ -181,5 +180,3 @@ protected:
 };
 
 } // namespace WCDB
-
-#endif /* __WCDB_MIGRATION_HPP */

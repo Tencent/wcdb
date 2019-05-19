@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_SYNTAX_IDENTIFIER_HPP
-#define __WCDB_SYNTAX_IDENTIFIER_HPP
+#pragma once
 
 #include <WCDB/Macro.hpp>
 #include <WCDB/Shadow.hpp>
@@ -179,5 +178,3 @@ std::ostream& operator<<(std::ostream& stream, const std::list<T>& identifiers)
     __WCDB_SYNTAX_ENUM(Switch, __VA_ARGS__);                                   \
     __WCDB_SYNTAX_UNION_ENUM(Switch, switcher, __valid);                       \
     bool isValid() const override final { return __valid >= 0; }
-
-#endif /* __WCDB_SYNTAX_IDENTIFIER_HPP */

@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_SYNTAX_ASSERTION_HPP
-#define __WCDB_SYNTAX_ASSERTION_HPP
+#pragma once
 
 #include <WCDB/Assertion.hpp>
 
@@ -28,5 +27,3 @@
 
 #define WCTIterateRemedialAssert(cond)                                         \
     WCTRemedialAssert(cond, "Invalid types detected.", return;)
-
-#endif /* __WCDB_SYNTAX_ASSERTION_HPP */

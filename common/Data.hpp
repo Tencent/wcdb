@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_DATA_HPP
-#define __WCDB_DATA_HPP
+#pragma once
 
 #include <WCDB/UnsafeData.hpp>
 #include <memory>
@@ -74,5 +73,3 @@ protected:
 };
 
 } //namespace WCDB
-
-#endif /* __WCDB_DATA_HPP */

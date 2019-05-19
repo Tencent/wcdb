@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_STATEMENT_DELETE_HPP
-#define __WCDB_STATEMENT_DELETE_HPP
+#pragma once
 
 #include <WCDB/Statement.hpp>
 
@@ -41,5 +40,3 @@ public:
 };
 
 } // namespace WCDB
-
-#endif /* __WCDB_STATEMENT_DELETE_HPP */

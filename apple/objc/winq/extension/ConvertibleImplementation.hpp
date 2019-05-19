@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_CONVERTIBLE_IMPLEMENTATION_HPP
-#define __WCDB_CONVERTIBLE_IMPLEMENTATION_HPP
+#pragma once
 
 #include <WCDB/Convertible.hpp>
 
@@ -240,5 +239,3 @@ public:
 };
 
 } // namespace WCDB
-
-#endif /* __WCDB_CONVERTIBLE_IMPLEMENTATION_HPP */

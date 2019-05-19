@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_HANDLE_RELATED_HPP
-#define __WCDB_HANDLE_RELATED_HPP
+#pragma once
 
 #include <WCDB/SQLiteDeclaration.h>
 #include <WCDB/String.hpp>
@@ -46,5 +45,3 @@ private:
 };
 
 } //namespace WCDB
-
-#endif /* __WCDB_HANDLE_RELATED_HPP */
