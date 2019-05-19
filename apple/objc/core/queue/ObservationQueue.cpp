@@ -167,6 +167,8 @@ void ObservationQueue::observatedThatNeedPurge(const Parameter& parameter)
 
 void ObservationQueue::observatedThatFileOpened(int fd, const char* path, int flags, int mode)
 {
+    WCDB_UNUSED(mode);
+
     if (fd != -1) {
         if ((flags | O_CREAT) != 0) {
             FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
