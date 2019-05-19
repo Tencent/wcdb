@@ -31,6 +31,12 @@ class HandleStatement final : public HandleRelated {
     friend class AbstractHandle;
 
 public:
+    HandleStatement() = delete;
+    HandleStatement(const HandleStatement &) = delete;
+    HandleStatement &operator=(const HandleStatement &) = delete;
+
+    HandleStatement(HandleStatement &&other);
+
     ~HandleStatement();
 
     bool prepare(const Statement &statement);
