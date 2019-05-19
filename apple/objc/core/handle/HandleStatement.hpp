@@ -70,12 +70,11 @@ public:
     bool isReadonly();
 
 protected:
-    HandleStatement(AbstractHandle *handle, HandleStatementEvent *event);
+    HandleStatement(AbstractHandle *handle);
 
 private:
     bool prepare(const String &sql);
     sqlite3_stmt *m_stmt;
-    HandleStatementEvent *m_event;
     bool m_done;
 };
 

@@ -91,8 +91,6 @@ protected:
     };
     std::shared_ptr<Handle> generateSlotedHandle(Slot slot) override final;
     bool willReuseSlotedHandle(Slot slot, Handle *handle) override final;
-    bool handleWillStep(HandleStatement *handleStatement);
-    void handleDidStep(HandleStatement *handleStatement, bool succeed);
 
 private:
     bool reconfigureHandle(Handle *handle);

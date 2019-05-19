@@ -25,8 +25,8 @@
 
 namespace WCDB {
 
-HandleStatement::HandleStatement(AbstractHandle *handle, HandleStatementEvent *event)
-: HandleRelated(handle), m_stmt(nullptr), m_event(event), m_done(false)
+HandleStatement::HandleStatement(AbstractHandle *handle)
+: HandleRelated(handle), m_stmt(nullptr), m_done(false)
 {
 }
 
@@ -68,9 +68,6 @@ bool HandleStatement::step()
 {
     WCTInnerAssert(isPrepared());
 
-    if (m_event != nullptr) {
-        m_event->statementWillStep(this);
-    }
     int rc = sqlite3_step(m_stmt);
     m_done = rc == SQLITE_DONE;
     const char *sql = nullptr;
@@ -78,11 +75,7 @@ bool HandleStatement::step()
         // There will be privacy issues if use sqlite3_expanded_sql
         sql = sqlite3_sql(m_stmt);
     }
-    bool succeed = exitAPI(rc, sql);
-    if (m_event != nullptr) {
-        m_event->statementDidStep(this, succeed);
-    }
-    return succeed;
+    return exitAPI(rc, sql);
 }
 
 void HandleStatement::finalize()

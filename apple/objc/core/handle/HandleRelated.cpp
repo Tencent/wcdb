@@ -58,8 +58,4 @@ sqlite3 *HandleRelated::getRawHandle()
     return m_handle->getRawHandle();
 }
 
-HandleStatementEvent::~HandleStatementEvent()
-{
-}
-
 } //namespace WCDB

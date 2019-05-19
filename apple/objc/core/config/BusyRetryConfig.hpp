@@ -48,7 +48,6 @@ protected:
     std::mutex m_mutex;
     int m_numberOfWaitingHandles;
 
-    std::atomic<int> m_numberOfSteppingHandles;
     ThreadLocal<std::map<String, double>> m_waitedTimes;
 };
 

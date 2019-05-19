@@ -29,7 +29,7 @@
 
 namespace WCDB {
 
-class HandleNotification final : public HandleRelated, public HandleStatementEvent {
+class HandleNotification final : public HandleRelated {
 public:
     using HandleRelated::HandleRelated;
 
@@ -114,26 +114,6 @@ private:
     static int busyRetry(void *p, int numberOfTimes);
     bool postBusyNotification(int numberOfTimes);
     BusyNotification m_busyNotification;
-
-#pragma mark - Step
-public:
-    typedef std::function<bool(HandleStatement *)> StatementWillStepNotification;
-    typedef std::function<void(HandleStatement *, bool succeed)> StatementDidStepNotification;
-    void setNotificationWhenStatementStepping(const String &name,
-                                              const StatementWillStepNotification &willStep,
-                                              const StatementDidStepNotification &didStep);
-
-private:
-    struct StepNotification {
-        StatementWillStepNotification willStep;
-        bool shouldInvokeDidStep;
-        StatementDidStepNotification didStep;
-    };
-    typedef struct StepNotification StepNotification;
-
-    std::map<String, StepNotification> m_stepNotifications;
-    void statementDidStep(HandleStatement *, bool result) override final;
-    void statementWillStep(HandleStatement *) override final;
 };
 
 } //namespace WCDB

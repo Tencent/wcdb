@@ -311,43 +311,4 @@ bool HandleNotification::postBusyNotification(int numberOfTimes)
     return retry;
 }
 
-#pragma mark - Step
-void HandleNotification::setNotificationWhenStatementStepping(
-const String &name,
-const StatementWillStepNotification &willStep,
-const StatementDidStepNotification &didStep)
-{
-    if (willStep != nullptr || didStep != nullptr) {
-        StepNotification notification;
-        notification.willStep = willStep;
-        notification.didStep = didStep;
-        notification.shouldInvokeDidStep = false;
-        m_stepNotifications[name] = notification;
-    } else {
-        m_stepNotifications.erase(name);
-    }
-}
-
-void HandleNotification::statementDidStep(HandleStatement *handleStatement, bool succeed)
-{
-    for (auto &iter : m_stepNotifications) {
-        StepNotification &notification = iter.second;
-        if (notification.shouldInvokeDidStep) {
-            notification.didStep(handleStatement, succeed);
-        }
-    }
-}
-
-void HandleNotification::statementWillStep(HandleStatement *handleStatement)
-{
-    for (auto &iter : m_stepNotifications) {
-        StepNotification &notification = iter.second;
-        if (notification.willStep != nullptr) {
-            notification.shouldInvokeDidStep = notification.willStep(handleStatement);
-        } else {
-            notification.shouldInvokeDidStep = true;
-        }
-    }
-}
-
 } //namespace WCDB

@@ -253,35 +253,7 @@ std::shared_ptr<Handle> Database::generateSlotedHandle(Slot slot)
         }
     }
 
-    // set stepped notification
-    if (type == HandleType::Normal || type == HandleType::Migrate) {
-        handle->setNotificationWhenStatementStepping(
-        String::formatted("Interrupt-%p", this),
-        std::bind(&Database::handleWillStep, this, std::placeholders::_1),
-        std::bind(&Database::handleDidStep, this, std::placeholders::_1, std::placeholders::_2));
-    }
-
     return handle;
-}
-
-bool Database::handleWillStep(HandleStatement *handleStatement)
-{
-    // Suspend if and only if it will enter the transaction.
-
-    if (!handleStatement->getHandle()->isInTransaction()) {
-        suspend(true);
-    }
-    return true;
-}
-
-void Database::handleDidStep(HandleStatement *handleStatement, bool succeed)
-{
-    // Unsuspend if and only if it did leave the transaction.
-
-    WCDB_UNUSED(succeed);
-    if (!handleStatement->getHandle()->isInTransaction()) {
-        suspend(false);
-    }
 }
 
 bool Database::willReuseSlotedHandle(Slot slot, Handle *handle)

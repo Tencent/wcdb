@@ -147,7 +147,7 @@ bool AbstractHandle::executeSQL(const String &sql)
 {
     // use seperated sqlite3_exec to get more information
     WCTInnerAssert(isOpened());
-    HandleStatement handleStatement(this, &m_notification);
+    HandleStatement handleStatement(this);
     bool succeed = handleStatement.prepare(sql);
     if (succeed) {
         succeed = handleStatement.step();
@@ -205,7 +205,7 @@ bool AbstractHandle::isInTransaction()
 #pragma mark - Statement
 HandleStatement *AbstractHandle::getStatement()
 {
-    m_handleStatements.push_back(HandleStatement(this, &m_notification));
+    m_handleStatements.push_back(HandleStatement(this));
     return &m_handleStatements.back();
 }
 
@@ -515,14 +515,6 @@ void AbstractHandle::setNotificationWhenBusy(const BusyNotification &busyNotific
 {
     WCTInnerAssert(isOpened());
     m_notification.setNotificationWhenBusy(busyNotification);
-}
-
-void AbstractHandle::setNotificationWhenStatementStepping(const String &name,
-                                                          const StatementWillStepNotification &willStep,
-                                                          const StatementDidStepNotification &didStep)
-{
-    WCTInnerAssert(isOpened());
-    m_notification.setNotificationWhenStatementStepping(name, willStep, didStep);
 }
 
 #pragma mark - Error

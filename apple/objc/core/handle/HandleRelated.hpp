@@ -27,7 +27,6 @@
 namespace WCDB {
 
 class AbstractHandle;
-class HandleStatement;
 
 class HandleRelated {
 public:
@@ -42,14 +41,6 @@ protected:
     bool exitAPI(int rc, const String &sql);
     bool exitAPI(int rc, const char *sql);
     AbstractHandle *m_handle;
-};
-
-class HandleStatementEvent {
-public:
-    virtual ~HandleStatementEvent() = 0;
-
-    virtual void statementWillStep(HandleStatement *) = 0;
-    virtual void statementDidStep(HandleStatement *, bool) = 0;
 };
 
 } //namespace WCDB
