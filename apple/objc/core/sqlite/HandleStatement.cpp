@@ -26,7 +26,7 @@
 namespace WCDB {
 
 HandleStatement::HandleStatement(HandleStatement &&other)
-: HandleRelated(getHandle()), m_stmt(other.m_stmt), m_done(other.m_done)
+: HandleRelated(other.getHandle()), m_stmt(other.m_stmt), m_done(other.m_done)
 {
     other.m_done = false;
     other.m_stmt = nullptr;
