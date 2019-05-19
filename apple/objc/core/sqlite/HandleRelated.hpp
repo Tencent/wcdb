@@ -37,9 +37,11 @@ public:
 
 protected:
     sqlite3 *getRawHandle();
-    bool exitAPI(int rc);
-    bool exitAPI(int rc, const String &sql);
-    bool exitAPI(int rc, const char *sql);
+    bool APIExit(int rc);
+    bool APIExit(int rc, const String &sql);
+    bool APIExit(int rc, const char *sql);
+
+private:
     AbstractHandle *m_handle;
 };
 

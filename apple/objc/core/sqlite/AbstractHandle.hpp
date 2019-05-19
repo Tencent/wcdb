@@ -41,20 +41,13 @@ public:
     AbstractHandle &operator=(const AbstractHandle &) = delete;
     virtual ~AbstractHandle() = 0;
 
-protected:
-    sqlite3 *getRawHandle();
+private:
     friend class HandleRelated;
+    sqlite3 *getRawHandle();
     sqlite3 *m_handle;
 
 #pragma mark - Global
 public:
-    static void enableMultithread();
-    static void enableMemoryStatus(bool enable);
-    //    static void setMemoryMapSize(int64_t defaultSizeLimit, int64_t maximumAllowedSizeLimit);
-
-    typedef void (*GlobalLog)(void *, int, const char *);
-    static void traceGlobalLog(const GlobalLog &log, void *parameter = nullptr);
-
     typedef int (*FileOpen)(const char *, int, int);
     static void hookFileOpen(const FileOpen &open);
 
@@ -182,13 +175,11 @@ public:
     bool isErrorIgnorable() const;
 
 private:
-    static void tryNotifyError(int rc);
-
     // The level of error will be "Ignore" if it's marked as ignorable.
     // But the return value will be still false.
-    bool exitAPI(int rc);
-    bool exitAPI(int rc, const String &sql);
-    bool exitAPI(int rc, const char *sql);
+    bool APIExit(int rc);
+    bool APIExit(int rc, const String &sql);
+    bool APIExit(int rc, const char *sql);
 
     void notifyError(int rc, const char *sql);
 

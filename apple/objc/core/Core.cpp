@@ -21,10 +21,9 @@
 #include <WCDB/BusyRetryConfig.hpp>
 #include <WCDB/Core.h>
 #include <WCDB/FileManager.hpp>
+#include <WCDB/Global.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/String.hpp>
-#include <fcntl.h>
-#include <regex>
 
 namespace WCDB {
 
@@ -59,11 +58,12 @@ Core::Core()
   { Configs::Priority::Higher, BasicConfigName, std::shared_ptr<Config>(new BasicConfig) },
   })))
 {
-    Handle::enableMultithread();
-    Handle::enableMemoryStatus(false);
-    //        Handle::setMemoryMapSize(0x7fff0000, 0x7fff0000);
-    Handle::traceGlobalLog(Core::globalLog, this);
-    Handle::hookFileOpen(Core::fileOpen);
+    Global::shared().enableMultithread();
+    Global::shared().enableMemoryStatus(false);
+    //    Global::shared().setMemoryMapSize(0x7fff0000, 0x7fff0000);
+    Global::shared().setNotificationForLog(
+    NotifierLoggerName,
+    std::bind(&Core::globalLog, this, std::placeholders::_1, std::placeholders::_2));
 
     Notifier::shared().setNotificationForPreprocessing(
     NotifierPreprocessorName,
@@ -72,52 +72,8 @@ Core::Core()
 
 Core::~Core()
 {
-    Handle::traceGlobalLog(nullptr, nullptr);
-    Handle::hookFileOpen((AbstractHandle::FileOpen) open);
+    Global::shared().setNotificationForLog(NotifierLoggerName, nullptr);
     Notifier::shared().setNotificationForPreprocessing(NotifierPreprocessorName, nullptr);
-}
-
-int Core::fileOpen(const char* path, int flags, int mode)
-{
-    int fd = open(path, flags, mode);
-    Core::shared().observatedThatFileOpened(fd);
-    if (fd != -1 && ((flags & O_CREAT) != 0)) {
-        FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
-    }
-    return fd;
-}
-
-void Core::globalLog(void* parameter, int rc, const char* message)
-{
-    Error error;
-
-    Error::Code c = Error::rc2c(rc);
-    if (c == Error::Code::Warning) {
-        error.level = Error::Level::Warning;
-    } else if (c == Error::Code::Notice) {
-        error.level = Error::Level::Ignore;
-        if (Error::rc2ec(rc) == Error::ExtCode::NoticeRecoverWal) {
-            std::regex pattern("recovered (\\w+) frames from WAL file (.+)\\-wal");
-            const String source = message;
-            std::smatch match;
-            if (std::regex_search(source.begin(), source.end(), match, pattern)) {
-                int frames = atoi(match[1].str().c_str());
-                if (frames > 0) {
-                    // hint checkpoint
-                    Core* core = static_cast<Core*>(parameter);
-                    String path = match[2].str();
-                    core->m_checkpointQueue->put(path, frames);
-                    core->m_backupQueue->put(path, frames);
-                }
-            }
-            WCTInnerAssert(match.size() == 3); // assert match and match 3.
-        }
-    } else {
-        error.level = Error::Level::Debug;
-    }
-
-    error.setSQLiteCode(rc, message);
-    Notifier::shared().notify(error);
 }
 
 #pragma mark - Database
@@ -199,11 +155,6 @@ void Core::observatedThatMayBeCorrupted(const String& path)
             }
         }
     }
-}
-
-ObservationQueue* Core::observationQueue()
-{
-    return m_observationQueue.get();
 }
 
 bool Core::isFileObservedCorrupted(const String& path)
@@ -311,6 +262,24 @@ void Core::setAutoMigration(const String& path, bool flag)
 }
 
 #pragma mark - Trace
+void Core::globalLog(int rc, const char* message)
+{
+    Error error;
+    error.setSQLiteCode(rc, message);
+    switch (error.code()) {
+    case Error::Code::Warning:
+        error.level = Error::Level::Warning;
+        break;
+    case Error::Code::Notice:
+        error.level = Error::Level::Ignore;
+        break;
+    default:
+        error.level = Error::Level::Debug;
+        break;
+    }
+    Notifier::shared().notify(error);
+}
+
 void Core::setNotificationForSQLGLobalTraced(const ShareableSQLTraceConfig::Notification& notification)
 {
     static_cast<ShareableSQLTraceConfig*>(m_globalSQLTraceConfig.get())->setNotification(notification);

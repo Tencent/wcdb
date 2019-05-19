@@ -28,7 +28,7 @@ namespace WCDB {
 
 void HandleNotification::purge()
 {
-    bool isOpened = m_handle->isOpened();
+    bool isOpened = getHandle()->isOpened();
     bool set = areSQLTraceNotificationsSet() || arePerformanceTraceNotificationsSet();
     m_sqlNotifications.clear();
     m_performanceNotifications.clear();
@@ -92,9 +92,9 @@ void HandleNotification::setupTraceNotifications()
         flag |= SQLITE_TRACE_PROFILE;
     }
     if (flag != 0) {
-        exitAPI(sqlite3_trace_v2(getRawHandle(), flag, HandleNotification::traced, this));
+        APIExit(sqlite3_trace_v2(getRawHandle(), flag, HandleNotification::traced, this));
     } else {
-        exitAPI(sqlite3_trace_v2(getRawHandle(), 0, nullptr, nullptr));
+        APIExit(sqlite3_trace_v2(getRawHandle(), 0, nullptr, nullptr));
     }
 }
 
@@ -280,7 +280,7 @@ void HandleNotification::postCheckpointNotification(const String &path)
 }
 
 #pragma mark - Busy
-int HandleNotification::busyRetry(void *p, int numberOfTimes)
+int HandleNotification::onBusy(void *p, int numberOfTimes)
 {
     HandleNotification *notification = reinterpret_cast<HandleNotification *>(p);
     int rc = SQLITE_OK;
@@ -295,9 +295,9 @@ void HandleNotification::setNotificationWhenBusy(const BusyNotification &busyNot
 {
     m_busyNotification = busyNotification;
     if (m_busyNotification != nullptr) {
-        exitAPI(sqlite3_busy_handler(getRawHandle(), HandleNotification::busyRetry, this));
+        APIExit(sqlite3_busy_handler(getRawHandle(), HandleNotification::onBusy, this));
     } else {
-        exitAPI(sqlite3_busy_handler(getRawHandle(), nullptr, nullptr));
+        APIExit(sqlite3_busy_handler(getRawHandle(), nullptr, nullptr));
     }
 }
 
@@ -306,7 +306,7 @@ bool HandleNotification::postBusyNotification(int numberOfTimes)
     WCTInnerAssert(m_busyNotification != nullptr);
     bool retry = false;
     if (m_busyNotification != nullptr) {
-        retry = m_busyNotification(m_handle->getPath(), numberOfTimes);
+        retry = m_busyNotification(getHandle()->getPath(), numberOfTimes);
     }
     return retry;
 }

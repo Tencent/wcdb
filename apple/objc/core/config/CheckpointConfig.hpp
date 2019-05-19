@@ -38,6 +38,7 @@ protected:
     const String m_identifier;
     bool onCommitted(const String &path, int pages);
     void onCheckpointed(const String &path);
+    void log(int rc, const char *message);
 
     std::shared_ptr<CheckpointQueue> m_queue;
 };

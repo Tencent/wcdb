@@ -39,16 +39,6 @@ protected:
     friend class ObservationQueue;
 };
 
-class ObservationQueue;
-class ObservationDelegate {
-public:
-    virtual ~ObservationDelegate() = 0;
-
-protected:
-    void observatedThatFileOpened(int fd);
-    virtual ObservationQueue* observationQueue() = 0;
-};
-
 class ObservationQueue final : public AsyncQueue {
 public:
     ObservationQueue(const String& name, ObservationQueueEvent* event);
@@ -94,8 +84,7 @@ private:
     void unregisterNotificationWhenMemoryWarning(void* observer);
     void* m_observerForMemoryWarning;
 
-    void observatedThatFileOpened(int fd);
-    friend class ObservationDelegate;
+    void observatedThatFileOpened(int fd, const char* path, int flags, int mode);
 
     SteadyClock m_lastPurgeTime;
 

@@ -51,7 +51,7 @@ bool HandleStatement::prepare(const String &sql)
 {
     WCTRemedialAssert(!isPrepared(), "Last statement is not finalized.", finalize(););
 
-    bool result = exitAPI(
+    bool result = APIExit(
     sqlite3_prepare_v2(getRawHandle(), sql.c_str(), -1, &m_stmt, nullptr), sql);
     m_done = false;
     if (!result) {
@@ -63,7 +63,7 @@ bool HandleStatement::prepare(const String &sql)
 void HandleStatement::reset()
 {
     WCTInnerAssert(isPrepared());
-    exitAPI(sqlite3_reset(m_stmt));
+    APIExit(sqlite3_reset(m_stmt));
 }
 
 bool HandleStatement::done()
@@ -82,13 +82,13 @@ bool HandleStatement::step()
         // There will be privacy issues if use sqlite3_expanded_sql
         sql = sqlite3_sql(m_stmt);
     }
-    return exitAPI(rc, sql);
+    return APIExit(rc, sql);
 }
 
 void HandleStatement::finalize()
 {
     if (m_stmt != nullptr) {
-        // no need to call exitAPI since it will return old code only.
+        // no need to call APIExit since it will return old code only.
         sqlite3_finalize(m_stmt);
         m_stmt = nullptr;
     }
@@ -138,26 +138,26 @@ ColumnType HandleStatement::getType(int index)
 void HandleStatement::bindInteger32(const Integer32 &value, int index)
 {
     WCTInnerAssert(isPrepared());
-    exitAPI(sqlite3_bind_int(m_stmt, index, value));
+    APIExit(sqlite3_bind_int(m_stmt, index, value));
 }
 
 void HandleStatement::bindInteger64(const Integer64 &value, int index)
 {
     WCTInnerAssert(isPrepared());
-    exitAPI(sqlite3_bind_int64(m_stmt, index, value));
+    APIExit(sqlite3_bind_int64(m_stmt, index, value));
 }
 
 void HandleStatement::bindDouble(const Float &value, int index)
 {
     WCTInnerAssert(isPrepared());
-    exitAPI(sqlite3_bind_double(m_stmt, index, value));
+    APIExit(sqlite3_bind_double(m_stmt, index, value));
 }
 
 void HandleStatement::bindText(const Text &value, int index)
 {
     WCTInnerAssert(isPrepared());
     // use SQLITE_STATIC if auto_commit?
-    exitAPI(sqlite3_bind_text(
+    APIExit(sqlite3_bind_text(
     m_stmt, index, value.cstring(), (int) value.length(), SQLITE_TRANSIENT));
 }
 
@@ -165,13 +165,13 @@ void HandleStatement::bindBLOB(const BLOB &value, int index)
 {
     WCTInnerAssert(isPrepared());
     // use SQLITE_STATIC if auto_commit?
-    exitAPI(sqlite3_bind_blob(m_stmt, index, value.buffer(), (int) value.size(), SQLITE_TRANSIENT));
+    APIExit(sqlite3_bind_blob(m_stmt, index, value.buffer(), (int) value.size(), SQLITE_TRANSIENT));
 }
 
 void HandleStatement::bindNull(int index)
 {
     WCTInnerAssert(isPrepared());
-    exitAPI(sqlite3_bind_null(m_stmt, index));
+    APIExit(sqlite3_bind_null(m_stmt, index));
 }
 
 HandleStatement::Integer32 HandleStatement::getInteger32(int index)

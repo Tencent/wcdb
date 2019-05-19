@@ -22,6 +22,7 @@
 #define __WCDB_HANDLE_NOTIFICATION_HPP
 
 #include <WCDB/HandleRelated.hpp>
+#include <WCDB/Lock.hpp>
 #include <WCDB/OrderedUniqueList.hpp>
 #include <WCDB/SQLiteDeclaration.h>
 #include <functional>
@@ -111,7 +112,7 @@ public:
     void setNotificationWhenBusy(const BusyNotification &busyNotification);
 
 private:
-    static int busyRetry(void *p, int numberOfTimes);
+    static int onBusy(void *p, int numberOfTimes);
     bool postBusyNotification(int numberOfTimes);
     BusyNotification m_busyNotification;
 };

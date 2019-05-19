@@ -45,36 +45,6 @@ sqlite3 *AbstractHandle::getRawHandle()
 }
 
 #pragma mark - Global
-void AbstractHandle::enableMultithread()
-{
-    int rc = sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
-    WCTInnerAssert(rc == SQLITE_OK);
-    tryNotifyError(rc);
-}
-
-//void AbstractHandle::setMemoryMapSize(int64_t defaultSizeLimit, int64_t maximumAllowedSizeLimit)
-//{
-//    int rc = sqlite3_config(SQLITE_CONFIG_MMAP_SIZE,
-//                   (sqlite3_int64) defaultSizeLimit,
-//                   (sqlite3_int64) maximumAllowedSizeLimit);
-//    WCTInnerAssert(rc == SQLITE_OK);
-//    tryNotifyError(rc);
-//}
-
-void AbstractHandle::enableMemoryStatus(bool enable)
-{
-    int rc = sqlite3_config(SQLITE_CONFIG_MEMSTATUS, (int) enable);
-    WCTInnerAssert(rc == SQLITE_OK);
-    tryNotifyError(rc);
-}
-
-void AbstractHandle::traceGlobalLog(const GlobalLog &log, void *parameter)
-{
-    int rc = sqlite3_config(SQLITE_CONFIG_LOG, log, parameter);
-    WCTInnerAssert(rc == SQLITE_OK);
-    tryNotifyError(rc);
-}
-
 void AbstractHandle::hookFileOpen(const FileOpen &open)
 {
     sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
@@ -118,7 +88,7 @@ String AbstractHandle::getJournalSuffix()
 bool AbstractHandle::open()
 {
     WCTInnerAssert(!isOpened());
-    bool succeed = exitAPI(sqlite3_open(m_path.c_str(), &m_handle));
+    bool succeed = APIExit(sqlite3_open(m_path.c_str(), &m_handle));
     if (!succeed) {
         m_handle = nullptr;
     }
@@ -138,7 +108,7 @@ void AbstractHandle::close()
                           "Unpaired transaction.",
                           rollbackTransaction(););
         m_notification.purge();
-        exitAPI(sqlite3_close_v2(m_handle));
+        APIExit(sqlite3_close_v2(m_handle));
         m_handle = nullptr;
     }
 }
@@ -441,7 +411,7 @@ void AbstractHandle::unimpeded(bool unimpeded)
 void AbstractHandle::setCipherKey(const UnsafeData &data)
 {
     WCTInnerAssert(isOpened());
-    exitAPI(sqlite3_key(m_handle, data.buffer(), (int) data.size()));
+    APIExit(sqlite3_key(m_handle, data.buffer(), (int) data.size()));
 }
 
 int AbstractHandle::getNumberOfDirtyPages()
@@ -453,7 +423,7 @@ int AbstractHandle::getNumberOfDirtyPages()
 void AbstractHandle::enableExtendedResultCodes(bool enable)
 {
     WCTInnerAssert(isOpened());
-    exitAPI(sqlite3_extended_result_codes(m_handle, (int) enable));
+    APIExit(sqlite3_extended_result_codes(m_handle, (int) enable));
 }
 
 bool AbstractHandle::checkpoint(CheckpointMode mode)
@@ -464,14 +434,14 @@ bool AbstractHandle::checkpoint(CheckpointMode mode)
     static_assert((int) CheckpointMode::Truncate == SQLITE_CHECKPOINT_TRUNCATE, "");
     WCTInnerAssert(isOpened());
 
-    return exitAPI(sqlite3_wal_checkpoint_v2(
+    return APIExit(sqlite3_wal_checkpoint_v2(
     m_handle, Syntax::mainSchema, (int) mode, nullptr, nullptr));
 }
 
 void AbstractHandle::disableCheckpointWhenClosing(bool disable)
 {
     WCTInnerAssert(isOpened());
-    exitAPI(sqlite3_db_config(
+    APIExit(sqlite3_db_config(
     m_handle, SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE, (int) disable, nullptr));
 }
 
@@ -518,17 +488,17 @@ void AbstractHandle::setNotificationWhenBusy(const BusyNotification &busyNotific
 }
 
 #pragma mark - Error
-bool AbstractHandle::exitAPI(int rc)
+bool AbstractHandle::APIExit(int rc)
 {
-    return exitAPI(rc, nullptr);
+    return APIExit(rc, nullptr);
 }
 
-bool AbstractHandle::exitAPI(int rc, const String &sql)
+bool AbstractHandle::APIExit(int rc, const String &sql)
 {
-    return exitAPI(rc, sql.c_str());
+    return APIExit(rc, sql.c_str());
 }
 
-bool AbstractHandle::exitAPI(int rc, const char *sql)
+bool AbstractHandle::APIExit(int rc, const char *sql)
 {
     bool result = true;
     if (Error::isError(rc)) {
@@ -584,16 +554,6 @@ bool AbstractHandle::isErrorIgnorable() const
         }
     }
     return ignorable;
-}
-
-void AbstractHandle::tryNotifyError(int rc)
-{
-    if (Error::isError(rc)) {
-        Error error;
-        error.level = Error::Level::Fatal;
-        error.setSQLiteCode(rc);
-        Notifier::shared().notify(error);
-    }
 }
 
 } //namespace WCDB

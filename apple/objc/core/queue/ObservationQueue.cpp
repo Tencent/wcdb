@@ -22,8 +22,10 @@
 #include <WCDB/CoreConst.h>
 #include <WCDB/Exiting.hpp>
 #include <WCDB/FileManager.hpp>
+#include <WCDB/Global.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/ObservationQueue.hpp>
+#include <fcntl.h>
 #include <unistd.h>
 
 namespace WCDB {
@@ -31,17 +33,6 @@ namespace WCDB {
 #pragma mark - Event
 ObservationQueueEvent::~ObservationQueueEvent()
 {
-}
-
-#pragma mark - Delegate
-ObservationDelegate::~ObservationDelegate()
-{
-}
-
-void ObservationDelegate::observatedThatFileOpened(int fd)
-{
-    WCTInnerAssert(observationQueue() != nullptr);
-    observationQueue()->observatedThatFileOpened(fd);
 }
 
 #pragma mark - Queue
@@ -55,6 +46,15 @@ ObservationQueue::ObservationQueue(const String& name, ObservationQueueEvent* ev
 , m_event(event)
 , m_observerForMemoryWarning(registerNotificationWhenMemoryWarning())
 {
+    Global::shared().setNotificationWhenFileOpened(
+    name,
+    std::bind(&ObservationQueue::observatedThatFileOpened,
+              this,
+              std::placeholders::_1,
+              std::placeholders::_2,
+              std::placeholders::_3,
+              std::placeholders::_4));
+
     Notifier::shared().setNotification(
     0, name, std::bind(&ObservationQueue::handleError, this, std::placeholders::_1));
 }
@@ -63,6 +63,8 @@ ObservationQueue::~ObservationQueue()
 {
     Notifier::shared().unsetNotification(name);
     unregisterNotificationWhenMemoryWarning(m_observerForMemoryWarning);
+
+    Global::shared().setNotificationWhenFileOpened(name, nullptr);
 }
 
 void ObservationQueue::loop()
@@ -163,9 +165,13 @@ void ObservationQueue::observatedThatNeedPurge(const Parameter& parameter)
     }
 }
 
-void ObservationQueue::observatedThatFileOpened(int fd)
+void ObservationQueue::observatedThatFileOpened(int fd, const char* path, int flags, int mode)
 {
-    if (fd >= 0) {
+    if (fd != -1) {
+        if ((flags | O_CREAT) != 0) {
+            FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
+        }
+
         int possibleNumberOfActiveFileDescriptors = fd + 1;
         if (possibleNumberOfActiveFileDescriptors
             > maxAllowedNumberOfFileDescriptors() * ObservationQueueRateForTooManyFileDescriptors) {

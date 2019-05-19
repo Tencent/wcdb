@@ -33,19 +33,19 @@ HandleRelated::~HandleRelated()
 {
 }
 
-bool HandleRelated::exitAPI(int rc)
+bool HandleRelated::APIExit(int rc)
 {
-    return m_handle->exitAPI(rc);
+    return m_handle->APIExit(rc);
 }
 
-bool HandleRelated::exitAPI(int rc, const String &sql)
+bool HandleRelated::APIExit(int rc, const String &sql)
 {
-    return m_handle->exitAPI(rc, sql);
+    return m_handle->APIExit(rc, sql);
 }
 
-bool HandleRelated::exitAPI(int rc, const char *sql)
+bool HandleRelated::APIExit(int rc, const char *sql)
 {
-    return m_handle->exitAPI(rc, sql);
+    return m_handle->APIExit(rc, sql);
 }
 
 AbstractHandle *HandleRelated::getHandle() const

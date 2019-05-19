@@ -43,8 +43,7 @@ class Core final : public DatabasePoolEvent,
                    public CheckpointQueueEvent,
                    public BackupQueueEvent,
                    public MigrationQueueEvent,
-                   public ObservationQueueEvent,
-                   public ObservationDelegate {
+                   public ObservationQueueEvent {
 #pragma mark - Core
 public:
     static Core& shared();
@@ -54,9 +53,6 @@ protected:
     Core();
     Core(const Core&) = delete;
     Core& operator=(const Core&) = delete;
-
-    static int fileOpen(const char* path, int flags, int mode);
-    static void globalLog(void* core, int code, const char* message);
 
 #pragma mark - Database
 public:
@@ -87,8 +83,6 @@ public:
                                               const CorruptedNotification& notification);
 
 protected:
-    ObservationQueue* observationQueue() override final;
-
     void observatedThatNeedPurge() override final;
     void observatedThatMayBeCorrupted(const String& path) override final;
 
@@ -126,6 +120,8 @@ public:
 protected:
     std::shared_ptr<Config> m_globalSQLTraceConfig;
     std::shared_ptr<Config> m_globalPerformanceTraceConfig;
+
+    void globalLog(int rc, const char* message);
 
 #pragma mark - Config
 public:
