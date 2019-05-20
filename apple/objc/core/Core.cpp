@@ -54,13 +54,11 @@ Core::Core()
 , m_configs(new Configs(OrderedUniqueList<String, std::shared_ptr<Config>>({
   { Configs::Priority::Highest, GlobalSQLTraceConfigName, m_globalSQLTraceConfig },
   { Configs::Priority::Highest, GlobalPerformanceTraceConfigName, m_globalPerformanceTraceConfig },
+  { Configs::Priority::Highest, BusyRetryConfigName, std::shared_ptr<Config>(new BusyRetryConfig) },
   { Configs::Priority::Highest, CheckpointConfigName, std::shared_ptr<Config>(new CheckpointConfig(m_checkpointQueue)) },
   { Configs::Priority::Higher, BasicConfigName, std::shared_ptr<Config>(new BasicConfig) },
   })))
 {
-    Global::shared().enableMultithread();
-    Global::shared().enableMemoryStatus(false);
-    //    Global::shared().setMemoryMapSize(0x7fff0000, 0x7fff0000);
     Global::shared().setNotificationForLog(
     NotifierLoggerName,
     std::bind(&Core::globalLog, this, std::placeholders::_1, std::placeholders::_2));
@@ -97,10 +95,6 @@ void Core::databaseDidCreate(Database* database)
     WCTInnerAssert(database != nullptr);
 
     database->setConfigs(m_configs);
-
-    database->setConfig(BusyRetryConfigName,
-                        std::shared_ptr<Config>(new BusyRetryConfig),
-                        Configs::Priority::Highest);
 }
 
 void Core::preprocessError(Error& error)

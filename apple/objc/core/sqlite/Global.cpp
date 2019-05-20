@@ -55,6 +55,26 @@ Global::Global()
         WCTInnerAssert(rc == SQLITE_OK);
         staticAPIExit(rc);
     }
+
+    {
+        int rc = sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
+        WCTInnerAssert(rc == SQLITE_OK);
+        staticAPIExit(rc);
+    }
+
+    {
+        int rc = sqlite3_config(SQLITE_CONFIG_MEMSTATUS, 0);
+        WCTInnerAssert(rc == SQLITE_OK);
+        staticAPIExit(rc);
+    }
+
+    {
+        sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
+        WCTInnerAssert(vfs != nullptr);
+        int rc = vfs->xSetSystemCall(vfs, "open", (sqlite3_syscall_ptr) Global::open);
+        WCTInnerAssert(rc == SQLITE_OK);
+        staticAPIExit(rc);
+    }
 }
 
 void Global::staticAPIExit(int rc)
@@ -67,14 +87,7 @@ void Global::staticAPIExit(int rc)
     }
 }
 
-#pragma mark - Config
-void Global::enableMultithread()
-{
-    int rc = sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
-    WCTInnerAssert(rc == SQLITE_OK);
-    staticAPIExit(rc);
-}
-
+//    Global::shared().setMemoryMapSize(0x7fff0000, 0x7fff0000);
 //void Global::setMemoryMapSize(int64_t defaultSizeLimit, int64_t maximumAllowedSizeLimit)
 //{
 //    int rc = sqlite3_config(SQLITE_CONFIG_MMAP_SIZE,
@@ -83,13 +96,6 @@ void Global::enableMultithread()
 //    WCTInnerAssert(rc == SQLITE_OK);
 //    staticAPIExit(rc);
 //}
-
-void Global::enableMemoryStatus(bool enable)
-{
-    int rc = sqlite3_config(SQLITE_CONFIG_MEMSTATUS, (int) enable);
-    WCTInnerAssert(rc == SQLITE_OK);
-    staticAPIExit(rc);
-}
 
 #pragma mark - Log
 void Global::setNotificationForLog(const String &name, const LogNotification &notification)
@@ -129,9 +135,9 @@ void Global::setNotificationWhenFileOpened(const String &name,
     }
 }
 
-int Global::opened(const char *path, int flags, int mode)
+int Global::open(const char *path, int flags, int mode)
 {
-    int fd = open(path, flags, mode);
+    int fd = ::open(path, flags, mode);
     Global::shared().postFileOpenedNotification(fd, path, flags, mode);
     return fd;
 }

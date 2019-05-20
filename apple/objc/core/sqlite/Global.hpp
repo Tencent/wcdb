@@ -40,12 +40,6 @@ protected:
 private:
     static void staticAPIExit(int rc);
 
-#pragma mark - Config
-public:
-    static void enableMultithread();
-    static void enableMemoryStatus(bool enable);
-    //    static void setMemoryMapSize(int64_t defaultSizeLimit, int64_t maximumAllowedSizeLimit);
-
 #pragma mark - Log
 public:
     // rc, message
@@ -64,7 +58,7 @@ public:
                                        const FileOpenedNotification &notification);
 
 private:
-    static int opened(const char *path, int flags, int mode);
+    static int open(const char *path, int flags, int mode);
     void postFileOpenedNotification(int fd, const char *path, int flags, int mode);
     std::map<String, FileOpenedNotification> m_fileOpenedNotifications;
 
