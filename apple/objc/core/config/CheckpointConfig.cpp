@@ -33,6 +33,15 @@ CheckpointConfig::CheckpointConfig(const std::shared_ptr<CheckpointQueue>& queue
 : Config(), m_identifier(String::formatted("Checkpoint-%p", this)), m_queue(queue)
 {
     WCTInnerAssert(m_queue != nullptr);
+
+    Global::shared().setNotificationForLog(
+    m_identifier,
+    std::bind(&CheckpointConfig::log, this, std::placeholders::_1, std::placeholders::_2));
+}
+
+CheckpointConfig::~CheckpointConfig()
+{
+    Global::shared().setNotificationForLog(m_identifier, nullptr);
 }
 
 bool CheckpointConfig::invoke(Handle* handle)
@@ -42,10 +51,6 @@ bool CheckpointConfig::invoke(Handle* handle)
     handle->setNotificationWhenCheckpointed(
     m_identifier,
     std::bind(&CheckpointConfig::onCheckpointed, this, std::placeholders::_1));
-
-    Global::shared().setNotificationForLog(
-    m_identifier,
-    std::bind(&CheckpointConfig::log, this, std::placeholders::_1, std::placeholders::_2));
 
     handle->setNotificationWhenCommitted(
     0,
@@ -58,8 +63,6 @@ bool CheckpointConfig::invoke(Handle* handle)
 bool CheckpointConfig::uninvoke(Handle* handle)
 {
     handle->unsetNotificationWhenCommitted(m_identifier);
-
-    Global::shared().setNotificationForLog(m_identifier, nullptr);
 
     handle->setNotificationWhenCheckpointed(m_identifier, nullptr);
 

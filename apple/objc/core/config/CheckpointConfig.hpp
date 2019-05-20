@@ -29,6 +29,7 @@ class CheckpointQueue;
 class CheckpointConfig final : public Config {
 public:
     CheckpointConfig(const std::shared_ptr<CheckpointQueue> &queue);
+    ~CheckpointConfig();
 
     bool invoke(Handle *handle) override final;
     bool uninvoke(Handle *handle) override final;
