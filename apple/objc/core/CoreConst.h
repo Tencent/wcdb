@@ -109,7 +109,7 @@ static constexpr const int CheckpointFramesThresholdForTruncating
 = 10 * 1024 * 1024 / 4096; // 10 MB / Default Page Size = 2560
 
 // Migration Stepper
-static constexpr const int MigrationStepperNumberOfMaxAllowedStepping = 10;
+static constexpr const double MigrationStepperMaxAllowedDurationForStepping = 1.0;
 
 // Error Key
 static constexpr const char* ErrorStringKeyAction = "Action";
