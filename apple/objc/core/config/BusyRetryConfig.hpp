@@ -40,12 +40,6 @@ protected:
     bool onBusy(const String& path, int numberOfTimes);
 
     const String m_identifier;
-
-    std::condition_variable m_cond;
-    std::mutex m_mutex;
-    int m_numberOfWaitingHandles;
-
-    ThreadLocal<std::map<String, double>> m_waitedTimes;
 };
 
 } //namespace WCDB

@@ -61,46 +61,6 @@ private:
     static int open(const char *path, int flags, int mode);
     void postFileOpenedNotification(int fd, const char *path, int flags, int mode);
     std::map<String, FileOpenedNotification> m_fileOpenedNotifications;
-
-#pragma mark - Lock
-public:
-    enum class LockAction {
-        Lock,
-        Unlock,
-    };
-
-    enum class LockType {
-        None = 0,
-        Shared = 1,
-        Reserved = 2,
-        Pending = 3,
-        Exclusive = 4,
-    };
-
-    enum class ShmLockType {
-        Shared = 4,
-        Exclusive = 8,
-    };
-
-    typedef std::function<void(const String &, LockAction, LockType)> LockNotification;
-    void setNotificationForLocking(const String &name, const LockNotification &notification);
-
-    typedef std::function<void(const String &, LockAction, ShmLockType, int, int)> ShmLockNotification;
-    void setNotificationForShmLocking(const String &name,
-                                      const ShmLockNotification &notification);
-
-private:
-    static void preLock(const char *path, int lockType);
-    static void postUnlock(const char *path, int lockType);
-    static void preShmLock(const char *path, int offset, int n, int lockType);
-    static void postShmUnlock(const char *path, int offset, int n, int lockType);
-
-    void postLockNotification(const String &path, LockAction action, LockType lockType);
-    void postShmLockNotification(
-    const String &path, LockAction action, ShmLockType lockType, int offset, int n);
-
-    std::map<String, LockNotification> m_lockNotifications;
-    std::map<String, ShmLockNotification> m_shmLockNotifications;
 };
 
 }; // namespace WCDB

@@ -24,15 +24,6 @@
 #include <WCDB/SQLite.h>
 #include <fcntl.h>
 
-static_assert((int) WCDB::Global::LockType::None == SQLITE_LOCK_NONE, "");
-static_assert((int) WCDB::Global::LockType::Shared == SQLITE_LOCK_SHARED, "");
-static_assert((int) WCDB::Global::LockType::Reserved == SQLITE_LOCK_RESERVED, "");
-static_assert((int) WCDB::Global::LockType::Pending == SQLITE_LOCK_PENDING, "");
-static_assert((int) WCDB::Global::LockType::Exclusive == SQLITE_LOCK_EXCLUSIVE, "");
-
-static_assert((int) WCDB::Global::ShmLockType::Shared == SQLITE_SHM_SHARED, "");
-static_assert((int) WCDB::Global::ShmLockType::Exclusive == SQLITE_SHM_EXCLUSIVE, "");
-
 namespace WCDB {
 
 Global &Global::shared()
@@ -45,13 +36,6 @@ Global::Global()
 {
     {
         int rc = sqlite3_config(SQLITE_CONFIG_LOG, Global::log, this);
-        WCTInnerAssert(rc == SQLITE_OK);
-        staticAPIExit(rc);
-    }
-
-    {
-        int rc = sqlite3_os_hook(
-        Global::preLock, Global::postUnlock, Global::preShmLock, Global::postShmUnlock);
         WCTInnerAssert(rc == SQLITE_OK);
         staticAPIExit(rc);
     }
@@ -149,80 +133,6 @@ void Global::postFileOpenedNotification(int fd, const char *path, int flags, int
         WCTInnerAssert(iter.second != nullptr);
         iter.second(fd, path, flags, mode);
     }
-}
-
-#pragma mark - Lock
-void Global::setNotificationForLocking(const String &name, const LockNotification &notification)
-{
-    LockGuard lockGuard(m_lock);
-    if (notification != nullptr) {
-        m_lockNotifications[name] = notification;
-    } else {
-        m_lockNotifications.erase(name);
-    }
-}
-
-void Global::setNotificationForShmLocking(const String &name, const ShmLockNotification &notification)
-{
-    LockGuard lockGuard(m_lock);
-    if (notification != nullptr) {
-        m_shmLockNotifications[name] = notification;
-    } else {
-        m_shmLockNotifications.erase(name);
-    }
-}
-
-void Global::postLockNotification(const String &path, LockAction action, LockType lockType)
-{
-    SharedLockGuard lockGuard(m_lock);
-    for (const auto &iter : m_lockNotifications) {
-        WCTInnerAssert(!path.empty());
-        WCTInnerAssert(iter.second != nullptr);
-        iter.second(path, action, lockType);
-    }
-}
-
-void Global::postShmLockNotification(
-const String &path, LockAction action, ShmLockType lockType, int offset, int n)
-{
-    SharedLockGuard lockGuard(m_lock);
-    for (const auto &iter : m_shmLockNotifications) {
-        WCTInnerAssert(!path.empty());
-        WCTInnerAssert(iter.second != nullptr);
-        iter.second(path, action, lockType, offset, n);
-    }
-}
-
-void Global::preLock(const char *path, int lockType)
-{
-    WCTInnerAssert(lockType == (int) LockType::None || lockType == (int) LockType::Shared
-                   || lockType == (int) LockType::Reserved || lockType == (int) LockType::Pending
-                   || lockType == (int) LockType::Exclusive);
-    Global::shared().postLockNotification(path, LockAction::Lock, (LockType) lockType);
-}
-
-void Global::postUnlock(const char *path, int lockType)
-{
-    WCTInnerAssert(lockType == (int) LockType::None || lockType == (int) LockType::Shared
-                   || lockType == (int) LockType::Reserved || lockType == (int) LockType::Pending
-                   || lockType == (int) LockType::Exclusive);
-    Global::shared().postLockNotification(path, LockAction::Unlock, (LockType) lockType);
-}
-
-void Global::preShmLock(const char *path, int offset, int n, int lockType)
-{
-    WCTInnerAssert(lockType == (int) ShmLockType::Shared
-                   || lockType == (int) ShmLockType::Exclusive);
-    Global::shared().postShmLockNotification(
-    path, LockAction::Lock, (ShmLockType) lockType, offset, n);
-}
-
-void Global::postShmUnlock(const char *path, int offset, int n, int lockType)
-{
-    WCTInnerAssert(lockType == (int) ShmLockType::Shared
-                   || lockType == (int) ShmLockType::Exclusive);
-    Global::shared().postShmLockNotification(
-    path, LockAction::Unlock, (ShmLockType) lockType, offset, n);
 }
 
 } // namespace WCDB

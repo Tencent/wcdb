@@ -27,7 +27,7 @@
 namespace WCDB {
 
 BusyRetryConfig::BusyRetryConfig()
-: Config(), m_identifier(String::formatted("Busy-%p", this)), m_numberOfWaitingHandles(0)
+: Config(), m_identifier(String::formatted("Busy-%p", this))
 {
 }
 
