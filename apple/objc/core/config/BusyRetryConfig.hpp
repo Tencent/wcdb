@@ -37,8 +37,6 @@ public:
     bool uninvoke(Handle* handle) override final;
 
 protected:
-    bool handleWillStep(HandleStatement* handleStatement);
-    void handleDidStep(HandleStatement* handleStatement, bool result);
     bool onBusy(const String& path, int numberOfTimes);
 
     const String m_identifier;
