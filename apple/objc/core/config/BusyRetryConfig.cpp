@@ -172,9 +172,13 @@ void BusyRetryConfig::State::updateLock(Lock lock)
 void BusyRetryConfig::State::updateShmLock(void* identifier, int sharedMask, int exclusiveMask)
 {
     pthread_mutex_lock(&m_mutex);
-    State::Mask& mask = m_masks[identifier];
-    mask.shared = sharedMask;
-    mask.exclusive = exclusiveMask;
+    if (sharedMask == 0 && exclusiveMask == 0) {
+        m_masks.erase(identifier);
+    } else {
+        State::Mask& mask = m_masks[identifier];
+        mask.shared = sharedMask;
+        mask.exclusive = exclusiveMask;
+    }
     tryNotify();
     pthread_mutex_unlock(&m_mutex);
 }
@@ -194,9 +198,15 @@ bool BusyRetryConfig::State::shouldWait(const Expecting& expecting) const
 
 bool BusyRetryConfig::State::wait(Trying& trying)
 {
-    bool result = false;
+    bool retry = false;
+
     double remainingTimeForRetring = trying.remainingTimeForRetring();
     if (remainingTimeForRetring > 0) {
+        // retry:
+        // 1. if the previous lock is released.
+        // 2. even if timeout
+        retry = true;
+
         pthread_mutex_lock(&m_mutex);
         if (shouldWait(trying)) {
             pthread_t currentThread = pthread_self();
@@ -212,23 +222,20 @@ bool BusyRetryConfig::State::wait(Trying& trying)
             relative.tv_nsec
             = (long) ((remainingTimeForRetring - (long) remainingTimeForRetring) * 1E9);
             relative.tv_sec = (long) remainingTimeForRetring;
-            result = pthread_cond_timedwait_relative_np(&m_cond, &m_mutex, &relative) == 0;
-            if (result) {
-                std::time_t cost
-                = (std::time_t) std::chrono::duration_cast<std::chrono::nanoseconds>(
-                  SteadyClock::now() - before)
-                  .count();
-                trying.retried((double) cost / 1E9);
-            }
+
+            pthread_cond_timedwait_relative_np(&m_cond, &m_mutex, &relative);
+
+            std::time_t cost
+            = (std::time_t) std::chrono::duration_cast<std::chrono::nanoseconds>(
+              SteadyClock::now() - before)
+              .count();
+            trying.retried((double) cost / 1E9);
 
             m_waitings.erase(currentThread);
-        } else {
-            // retry since the previous lock is released.
-            result = true;
         }
         pthread_mutex_unlock(&m_mutex);
     }
-    return result;
+    return retry;
 }
 
 void BusyRetryConfig::State::tryNotify()
