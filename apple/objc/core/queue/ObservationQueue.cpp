@@ -170,7 +170,7 @@ void ObservationQueue::observatedThatFileOpened(int fd, const char* path, int fl
     WCDB_UNUSED(mode);
 
     if (fd != -1) {
-        if ((flags | O_CREAT) != 0) {
+        if ((flags & O_CREAT) != 0) {
             FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
         }
 
