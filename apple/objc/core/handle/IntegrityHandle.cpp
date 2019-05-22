@@ -31,8 +31,6 @@ IntegrityHandle::IntegrityHandle()
 
 void IntegrityHandle::check()
 {
-    // no config should be run to avoid errors in other operations as much as possible.
-    WCTInnerAssert(!isConfigured());
     execute(StatementPragma().pragma(Pragma::integrityCheck()).schema(Schema::main()));
 }
 
