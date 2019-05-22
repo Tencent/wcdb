@@ -199,7 +199,14 @@ bool BusyRetryConfig::State::wait(Trying& trying)
     if (remainingTimeForRetring > 0) {
         pthread_mutex_lock(&m_mutex);
         if (shouldWait(trying)) {
-            m_waitings.insert(0, pthread_self(), trying);
+            pthread_t currentThread = pthread_self();
+            if (pthread_main_np() != 0) {
+                // Bigger order will let main thread be the end of the list, so that it will be woken up first.
+                m_waitings.insert(1, currentThread, trying);
+            } else {
+                m_waitings.insert(0, currentThread, trying);
+            }
+
             SteadyClock before = SteadyClock::now();
             struct timespec relative;
             relative.tv_nsec
@@ -213,7 +220,8 @@ bool BusyRetryConfig::State::wait(Trying& trying)
                   .count();
                 trying.retried((double) cost / 1E9);
             }
-            m_waitings.erase(pthread_self());
+
+            m_waitings.erase(currentThread);
         } else {
             // retry since the previous lock is released.
             result = true;
