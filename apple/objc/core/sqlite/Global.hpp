@@ -28,12 +28,12 @@ namespace WCDB {
 
 class Global {
 public:
-    static Global &shared();
+    static Global& shared();
 
 protected:
     Global();
-    Global(const Global &) = delete;
-    Global &operator=(const Global &) = delete;
+    Global(const Global&) = delete;
+    Global& operator=(const Global&) = delete;
 
     mutable SharedLock m_lock;
 
@@ -43,24 +43,74 @@ private:
 #pragma mark - Log
 public:
     // rc, message
-    typedef std::function<void(int, const char *)> LogNotification;
-    void setNotificationForLog(const String &name, const LogNotification &notification);
+    typedef std::function<void(int, const char*)> LogNotification;
+    void setNotificationForLog(const String& name, const LogNotification& notification);
 
 private:
-    static void log(void *parameter, int rc, const char *message);
-    void postLogNotification(int rc, const char *message);
+    static void log(void* parameter, int rc, const char* message);
+    void postLogNotification(int rc, const char* message);
     std::map<String, LogNotification> m_logNotifications;
 
 #pragma mark - File Opened
 public:
-    typedef std::function<void(int /* fd */, const char * /* path */, int /* flags */, int /* mode */)> FileOpenedNotification;
-    void setNotificationWhenFileOpened(const String &name,
-                                       const FileOpenedNotification &notification);
+    typedef std::function<void(int /* fd */, const char* /* path */, int /* flags */, int /* mode */)> FileOpenedNotification;
+    void setNotificationWhenFileOpened(const String& name,
+                                       const FileOpenedNotification& notification);
 
 private:
-    static int open(const char *path, int flags, int mode);
-    void postFileOpenedNotification(int fd, const char *path, int flags, int mode);
+    static int open(const char* path, int flags, int mode);
+    void postFileOpenedNotification(int fd, const char* path, int flags, int mode);
     std::map<String, FileOpenedNotification> m_fileOpenedNotifications;
+
+#pragma mark - Lock
+public:
+    enum class Lock {
+        None = 0,
+        Shared = 1,
+        Reserved = 2,
+        Pending = 3,
+        Exclusive = 4,
+    };
+    enum class ShmLock {
+        Shared = 4,
+        Exclusive = 8,
+    };
+    enum class ShmAction {
+        Lock,
+        Unlock,
+    };
+    typedef std::function<void(const String& /* path */, Lock)> WillLockNotification;
+    typedef std::function<void(const String& /* path */, Lock)> LockDidChangeNotification;
+    typedef std::function<void(const String& /* path */, ShmLock, int /* mask */)> WillShmLockNotification;
+    typedef std::function<void(const String& /* path */, ShmAction, ShmLock, void* /* identifier */, int /* mask */)> ShmLockDidChangeNotification;
+    void setNotificationForLockEvent(const String& name,
+                                     const WillLockNotification& willLock,
+                                     const LockDidChangeNotification& lockDidChange,
+                                     const WillShmLockNotification& willShmLock,
+                                     const ShmLockDidChangeNotification& shmLockDidChange);
+
+private:
+    static void willLock(void* parameter, const char* path, int lock);
+    void postWillLockNotification(const char* path, int lock);
+
+    static void lockDidChange(void* parameter, const char* path, int lock);
+    void postLockDidChangeNotification(const char* path, int lock);
+
+    static void willShmLock(void* parameter, const char* path, int flags, int mask);
+    void postWillShmLockNotification(const char* path, int flags, int mask);
+
+    static void
+    shmLockDidChange(void* parameter, const char* path, void* identifier, int flags, int mask);
+    void postShmLockDidChangeNotification(const char* path, void* identifier, int flags, int mask);
+
+    struct LockEvent {
+        WillLockNotification willLock;
+        LockDidChangeNotification lockDidChange;
+        WillShmLockNotification willShmLock;
+        ShmLockDidChangeNotification shmLockDidChange;
+    };
+    typedef struct LockEvent LockEvent;
+    std::map<String, LockEvent> m_lockEventNotifications;
 };
 
 }; // namespace WCDB
