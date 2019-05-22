@@ -320,35 +320,35 @@
     [self.database removeCheckpointConfig];
 
     NSCondition* condition = [[NSCondition alloc] init];
-    __block int currentConcurrency = 0;
+    TestCaseCounter* counter = [TestCaseCounter value:0];
     for (int i = 0; i < self.maxConcurrency; ++i) {
         [self.dispatch async:^{
             WCTHandle* handle = nil;
             @synchronized(self) {
                 handle = [self.database getHandle];
             }
+
+            while (counter.value < i) {
+            }
+
             TestCaseAssertTrue([handle validate]);
+
+            [counter increment];
             [condition lock];
-            ++currentConcurrency;
             [condition wait];
             [condition unlock];
             [handle invalidate];
+            [counter decrement];
         }];
     }
 
-    do {
-        BOOL prepared = NO;
-        [condition lock];
-        prepared = currentConcurrency == self.maxConcurrency;
-        [condition unlock];
-        if (prepared) {
-            break;
-        }
-    } while (YES);
+    while (counter.value != self.maxConcurrency) {
+    }
 
     TestCaseAssertFalse([[self.database getHandle] validate]);
     [condition broadcast];
     [self.dispatch waitUntilDone];
+    TestCaseAssertEqual(counter.value, 0);
 }
 
 - (void)test_feature_checkpoint_while_notice_recover_wal
