@@ -217,4 +217,9 @@
     }
 }
 
+- (NSTimeInterval)delayForTolerance
+{
+    return 2;
+}
+
 @end

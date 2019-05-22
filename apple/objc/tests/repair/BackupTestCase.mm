@@ -49,11 +49,6 @@
     return WCDB::BackupQueueTimeIntervalForNonCritical;
 }
 
-- (NSTimeInterval)delayForTolerance
-{
-    return 1.0;
-}
-
 - (int)framesForTolerance
 {
     return 10;
