@@ -46,11 +46,10 @@ protected:
 protected:
     typedef Global::Lock Lock;
     typedef Global::ShmLock ShmLock;
-    typedef Global::ShmAction ShmAction;
     void willLock(const String& path, Lock lock);
     void lockDidChange(const String& path, Lock lock);
     void willShmLock(const String& path, ShmLock lock, int mask);
-    void shmLockDidChange(const String& path, ShmAction action, ShmLock lock, void* identifier, int mask);
+    void shmLockDidChange(const String& path, void* identifier, int sharedMask, int exclusiveMask);
 
 #pragma mark - State
 protected:
@@ -86,9 +85,7 @@ protected:
         State();
 
         void updateLock(Lock lock);
-        void updateShmSharedLocked(void* identifier, int mask);
-        void updateShmExclusiveLocked(void* identifier, int mask);
-        void updateShmUnlocked(void* identifier, int mask);
+        void updateShmLock(void* identifier, int sharedMask, int exclusiveMask);
 
         bool wait(Trying& trying);
 

@@ -75,14 +75,10 @@ public:
         Shared = 4,
         Exclusive = 8,
     };
-    enum class ShmAction {
-        Lock,
-        Unlock,
-    };
     typedef std::function<void(const String& /* path */, Lock)> WillLockNotification;
     typedef std::function<void(const String& /* path */, Lock)> LockDidChangeNotification;
     typedef std::function<void(const String& /* path */, ShmLock, int /* mask */)> WillShmLockNotification;
-    typedef std::function<void(const String& /* path */, ShmAction, ShmLock, void* /* identifier */, int /* mask */)> ShmLockDidChangeNotification;
+    typedef std::function<void(const String& /* path */, void* /* identifier */, int /* sharedMask */, int /* exclMask */)> ShmLockDidChangeNotification;
     void setNotificationForLockEvent(const String& name,
                                      const WillLockNotification& willLock,
                                      const LockDidChangeNotification& lockDidChange,
@@ -100,8 +96,11 @@ private:
     void postWillShmLockNotification(const char* path, int flags, int mask);
 
     static void
-    shmLockDidChange(void* parameter, const char* path, void* identifier, int flags, int mask);
-    void postShmLockDidChangeNotification(const char* path, void* identifier, int flags, int mask);
+    shmLockDidChange(void* parameter, const char* path, void* identifier, int sharedMask, int exclusiveMask);
+    void postShmLockDidChangeNotification(const char* path,
+                                          void* identifier,
+                                          int sharedMask,
+                                          int exclusiveMask);
 
     struct LockEvent {
         WillLockNotification willLock;

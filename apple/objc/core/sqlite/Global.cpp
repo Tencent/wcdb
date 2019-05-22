@@ -231,40 +231,25 @@ void Global::postWillShmLockNotification(const char *path_, int flags, int mask)
     }
 }
 
-void Global::shmLockDidChange(void *parameter, const char *path, void *identifier, int flags, int mask)
+void Global::shmLockDidChange(void *parameter, const char *path, void *identifier, int sharedMask, int exclusiveMask)
 {
     reinterpret_cast<Global *>(parameter)->postShmLockDidChangeNotification(
-    path, identifier, flags, mask);
+    path, identifier, sharedMask, exclusiveMask);
 }
 
-void Global::postShmLockDidChangeNotification(const char *path_, void *identifier, int flags, int mask)
+void Global::postShmLockDidChangeNotification(const char *path_,
+                                              void *identifier,
+                                              int sharedMask,
+                                              int exclusiveMask)
 {
     WCTInnerAssert(identifier != nullptr);
 
     String path = path_;
     WCTInnerAssert(!path.empty());
 
-    ShmAction action;
-    if ((flags & SQLITE_SHM_LOCK) != 0) {
-        WCTInnerAssert((flags & SQLITE_SHM_UNLOCK) == 0);
-        action = ShmAction::Lock;
-    } else {
-        WCTInnerAssert((flags & SQLITE_SHM_UNLOCK) != 0);
-        action = ShmAction::Unlock;
-    }
-
-    ShmLock lock;
-    if ((flags & SQLITE_SHM_SHARED) != 0) {
-        WCTInnerAssert((flags & SQLITE_SHM_EXCLUSIVE) == 0);
-        lock = ShmLock::Shared;
-    } else {
-        WCTInnerAssert((flags & SQLITE_SHM_EXCLUSIVE) != 0);
-        lock = ShmLock::Exclusive;
-    }
-
     SharedLockGuard lockGuard(m_lock);
     for (const auto &iter : m_lockEventNotifications) {
-        iter.second.shmLockDidChange(path, action, lock, identifier, mask);
+        iter.second.shmLockDidChange(path, identifier, sharedMask, exclusiveMask);
     }
 }
 

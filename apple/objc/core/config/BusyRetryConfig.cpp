@@ -40,8 +40,7 @@ BusyRetryConfig::BusyRetryConfig()
               std::placeholders::_1,
               std::placeholders::_2,
               std::placeholders::_3,
-              std::placeholders::_4,
-              std::placeholders::_5));
+              std::placeholders::_4));
 }
 
 BusyRetryConfig::~BusyRetryConfig()
@@ -170,28 +169,12 @@ void BusyRetryConfig::State::updateLock(Lock lock)
     pthread_mutex_unlock(&m_mutex);
 }
 
-void BusyRetryConfig::State::updateShmSharedLocked(void* identifier, int mask)
-{
-    pthread_mutex_lock(&m_mutex);
-    m_masks[identifier].shared |= mask;
-    tryNotify();
-    pthread_mutex_unlock(&m_mutex);
-}
-
-void BusyRetryConfig::State::updateShmExclusiveLocked(void* identifier, int mask)
-{
-    pthread_mutex_lock(&m_mutex);
-    m_masks[identifier].exclusive |= mask;
-    tryNotify();
-    pthread_mutex_unlock(&m_mutex);
-}
-
-void BusyRetryConfig::State::updateShmUnlocked(void* identifier, int mask_)
+void BusyRetryConfig::State::updateShmLock(void* identifier, int sharedMask, int exclusiveMask)
 {
     pthread_mutex_lock(&m_mutex);
     State::Mask& mask = m_masks[identifier];
-    mask.shared &= ~mask_;
-    mask.exclusive &= ~mask_;
+    mask.shared = sharedMask;
+    mask.exclusive = exclusiveMask;
     tryNotify();
     pthread_mutex_unlock(&m_mutex);
 }
@@ -290,27 +273,9 @@ void BusyRetryConfig::willShmLock(const String& path, ShmLock lock, int mask)
     (*m_tryings.getOrCreate())[path].expecting(lock, mask);
 }
 
-void BusyRetryConfig::shmLockDidChange(
-const String& path, ShmAction action, ShmLock lock, void* identifier, int mask)
+void BusyRetryConfig::shmLockDidChange(const String& path, void* identifier, int sharedMask, int exclusiveMask)
 {
-    State& state = getOrCreateState(path);
-    switch (action) {
-    case ShmAction::Lock:
-        switch (lock) {
-        case ShmLock::Shared:
-            state.updateShmSharedLocked(identifier, mask);
-            break;
-        default:
-            WCTInnerAssert(lock == ShmLock::Exclusive);
-            state.updateShmExclusiveLocked(identifier, mask);
-            break;
-        }
-        break;
-    default:
-        WCTInnerAssert(action == ShmAction::Unlock);
-        state.updateShmUnlocked(identifier, mask);
-        break;
-    }
+    getOrCreateState(path).updateShmLock(identifier, sharedMask, exclusiveMask);
 }
 
 } // namespace WCDB
