@@ -172,32 +172,12 @@
 
 - (void)doTestFeatureClosedDatabaseWillNotPerformAutoMigrate
 {
-    TestCaseAssertTrue([self.database truncateCheckpoint]);
-    NSUInteger fileSize = [self.database getFilesSize];
-    if (self.isCrossDatabaseMigration) {
-        fileSize += [self.sourceDatabase getFilesSize];
-    }
-    int pages = int(fileSize / 4096);
-
-    TestCaseResult *tableMigrated = [TestCaseResult no];
-    TestCaseResult *migrated = [TestCaseResult no];
-    NSString *expectedTableName = self.tableName;
-    [self.database setNotificationWhenMigrated:^(WCTDatabase *database, WCTMigrationBaseInfo *info) {
-        WCDB_UNUSED(database);
-        if (info == nil) {
-            [migrated makeYES];
-        } else if ([info.table isEqualToString:expectedTableName]) {
-            [tableMigrated makeYES];
-        }
-    }];
     [self.database close];
     self.database.autoMigrate = YES;
 
-    // wait until auto migrate done
-    [NSThread sleepForTimeInterval:(pages + 2) * WCDB::MigrationQueueTimeIntervalForMigrating];
+    [NSThread sleepForTimeInterval:self.delayForTolerance + WCDB::MigrationQueueTimeIntervalForMigrating];
 
-    TestCaseAssertResultNO(tableMigrated);
-    TestCaseAssertResultNO(migrated);
+    TestCaseAssertFalse(self.database.isOpened);
 }
 
 - (void)doTestFeatureAutoMigrateWillStopDueToError
