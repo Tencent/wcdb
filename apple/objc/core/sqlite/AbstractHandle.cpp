@@ -223,14 +223,27 @@ std::pair<bool, bool> AbstractHandle::tableExists(const String &table)
 
 std::pair<bool, bool> AbstractHandle::tableExists(const Schema &schema, const String &table)
 {
-    markErrorAsIgnorable(Error::Code::Error);
-    bool succeed = APIExit(sqlite3_table_column_metadata(
-    m_handle, schema.getDescription().c_str(), table.c_str(), nullptr, nullptr, nullptr, nullptr, nullptr, nullptr));
-    bool exists = succeed;
-    if (!succeed && isErrorIgnorable()) {
-        succeed = true;
+    static StatementSelect *s_template = new StatementSelect(
+    StatementSelect()
+    .select(Column("sql"))
+    .where(Column("type") == "table"
+           && Column("name").collate("NOCASE") == BindParameter(1)));
+
+    StatementSelect statement = *s_template;
+    statement.from(TableOrSubquery(Syntax::masterTable).schema(schema));
+
+    HandleStatement *handleStatement = getStatement();
+    bool succeed = false;
+    bool exists = false;
+    if (handleStatement->prepare(statement)) {
+        handleStatement->bindText(table, 1);
+        succeed = handleStatement->step();
+        if (succeed) {
+            exists = !handleStatement->done();
+        }
+        handleStatement->finalize();
     }
-    markErrorAsUnignorable();
+    returnStatement(handleStatement);
     return { succeed, exists };
 }
 

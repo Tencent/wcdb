@@ -32,6 +32,7 @@ class Column : public TypedSyntax<Syntax::Column, SQL>,
                public ExpressionBinaryOperable,
                public ExpressionInOperable,
                public ExpressionBetweenOperable,
+               public ExpressionCollateOperable,
                public CoreFunctionOperable,
                public AggregateFunctionOperable,
                public FTS3FunctionOperable {
