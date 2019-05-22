@@ -66,6 +66,9 @@ static constexpr const double BackupQueueTimeIntervalForNonCritical = 5.0;
 static_assert(BackupConfigFramesIntervalForCritical > CheckpointQueueFramesThresholdForCritical,
               "");
 
+// MigrationQueueTimeIntervalForMigrating should be greater than CheckpointQueueTimeIntervalForCritical since migration may trigger checkpoint.
+static_assert(MigrationQueueTimeIntervalForMigrating > CheckpointQueueTimeIntervalForCritical, "");
+
 // Basic Config
 static constexpr const char* BasicConfigName = "com.Tencent.WCDB.Config.Basic";
 static constexpr const int BasicConfigBusyRetryMaxAllowedNumberOfTimes = 3;
