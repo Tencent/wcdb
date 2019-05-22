@@ -75,7 +75,7 @@ bool Mechanic::work()
             error.infos.set("WalSalt2", m_pager.getWalSalt().second);
             error.infos.set("MaterialSalt1", m_material->info.walSalt.first);
             error.infos.set("MaterialSalt2", m_material->info.walSalt.second);
-            Notifier::shared()->notify(error);
+            Notifier::shared().notify(error);
         }
     }
 

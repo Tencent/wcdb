@@ -27,95 +27,270 @@
 namespace WCDB {
 
 BusyRetryConfig::BusyRetryConfig()
-: Config()
-, m_identifier(String::formatted("Busy-%p", this))
-, m_numberOfWaitingHandles(0)
-, m_numberOfSteppingHandles(0)
+: Config(), m_identifier(String::formatted("Busy-%p", this))
 {
+    Global::shared().setNotificationForLockEvent(
+    m_identifier,
+    std::bind(&BusyRetryConfig::willLock, this, std::placeholders::_1, std::placeholders::_2),
+    std::bind(&BusyRetryConfig::lockDidChange, this, std::placeholders::_1, std::placeholders::_2),
+    std::bind(
+    &BusyRetryConfig::willShmLock, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3),
+    std::bind(&BusyRetryConfig::shmLockDidChange,
+              this,
+              std::placeholders::_1,
+              std::placeholders::_2,
+              std::placeholders::_3,
+              std::placeholders::_4));
+}
+
+BusyRetryConfig::~BusyRetryConfig()
+{
+    Global::shared().setNotificationForLockEvent(
+    m_identifier, nullptr, nullptr, nullptr, nullptr);
 }
 
 bool BusyRetryConfig::invoke(Handle* handle)
 {
     handle->setNotificationWhenBusy(std::bind(
     &BusyRetryConfig::onBusy, this, std::placeholders::_1, std::placeholders::_2));
-    handle->setNotificationWhenStatementStepping(
-    m_identifier,
-    std::bind(&BusyRetryConfig::handleWillStep, this, std::placeholders::_1),
-    std::bind(&BusyRetryConfig::handleDidStep, this, std::placeholders::_1, std::placeholders::_2));
     return true;
 }
 
 bool BusyRetryConfig::uninvoke(Handle* handle)
 {
     handle->setNotificationWhenBusy(nullptr);
-    handle->setNotificationWhenStatementStepping(m_identifier, nullptr, nullptr);
     return true;
-}
-
-bool BusyRetryConfig::handleWillStep(HandleStatement* handleStatement)
-{
-    if (!handleStatement->getHandle()->isInTransaction()) {
-        ++m_numberOfSteppingHandles;
-    }
-    return true;
-}
-
-void BusyRetryConfig::handleDidStep(HandleStatement* handleStatement, bool succeed)
-{
-    WCDB_UNUSED(succeed);
-    if (!handleStatement->getHandle()->isInTransaction()) {
-        --m_numberOfSteppingHandles;
-        WCTInnerAssert(m_numberOfSteppingHandles >= 0);
-        std::lock_guard<decltype(m_mutex)> lockGuard(m_mutex);
-        if (m_numberOfWaitingHandles > 0) {
-            m_cond.notify_all();
-        }
-    }
 }
 
 bool BusyRetryConfig::onBusy(const String& path, int numberOfTimes)
 {
-    double totalTime = pthread_main_np() != 0 ? BusyRetryTimeOutForMainThread :
-                                                BusyRetryTimeOutForSubThread;
-    std::map<String, double>& waitedTimes = *m_waitedTimes.getOrCreate();
+    WCTInnerAssert(m_tryings.getOrCreate()->find(path)
+                   != m_tryings.getOrCreate()->end());
+    Trying& trying = m_tryings.getOrCreate()->at(path);
     if (numberOfTimes == 0) {
-        waitedTimes[path] = 0; // first retry, reset waited times
+        trying.retrying(pthread_main_np() != 0 ? BusyRetryTimeOutForMainThread :
+                                                 BusyRetryTimeOutForSubThread);
     }
-    WCTInnerAssert(waitedTimes.find(path) != waitedTimes.end());
-    double remainingTime = totalTime - waitedTimes[path];
+    return getOrCreateState(path).wait(trying);
+}
 
-    bool retry = false;
-    bool waited = false;
-    if (remainingTime > 0) {
-        SteadyClock before = SteadyClock::now();
-        {
-            std::unique_lock<decltype(m_mutex)> lockGuard(m_mutex);
-            --m_numberOfSteppingHandles;
-            if (m_numberOfSteppingHandles > 0) {
-                ++m_numberOfWaitingHandles;
-                retry = m_cond.wait_for(
-                        lockGuard,
-                        std::chrono::nanoseconds((long long) (remainingTime * 1E9)))
-                        == std::cv_status::no_timeout;
-                --m_numberOfWaitingHandles;
-                waited = true;
-            } else {
-                retry = true;
-            }
-            ++m_numberOfSteppingHandles;
+#pragma mark - State
+BusyRetryConfig::Expecting::Expecting() : m_type(Type::None)
+{
+}
+
+void BusyRetryConfig::Expecting::expecting(ShmLock lock, int mask)
+{
+    m_type = Type::ShmLock;
+    m_shmLock = lock;
+    m_shmMask = mask;
+}
+
+void BusyRetryConfig::Expecting::expecting(Lock lock)
+{
+    m_type = Type::Lock;
+    WCTInnerAssert(lock != Lock::None);
+    m_lock = lock;
+}
+
+bool BusyRetryConfig::Expecting::satisfied(Lock lock) const
+{
+    WCTInnerAssert(m_type != Type::None);
+    bool satisfied = true;
+    if (m_type == Type::Lock) {
+        switch (m_lock) {
+        case Lock::Reserved:
+            satisfied = lock != Lock::Reserved && lock != Lock::Pending
+                        && lock != Lock::Exclusive;
+            break;
+        case Lock::Pending:
+            // fallthrough
+        case Lock::Exclusive:
+            satisfied = lock == Lock::None;
+            break;
+        default:
+            WCTInnerAssert(m_lock == Lock::Shared);
+            satisfied = lock != Lock::Pending && lock != Lock::Exclusive;
+            break;
         }
-        if (retry && waited) {
-            std::time_t waitedTime
+    }
+    return satisfied;
+}
+
+bool BusyRetryConfig::Expecting::satisfied(int sharedMask, int exclusiveMask) const
+{
+    bool satisified = true;
+    if (m_type == Type::ShmLock) {
+        switch (m_shmLock) {
+        case ShmLock::Shared:
+            satisified = (m_shmMask & exclusiveMask) == 0;
+            break;
+        default:
+            WCTInnerAssert(m_shmLock == ShmLock::Exclusive);
+            satisified
+            = (m_shmMask & sharedMask) == 0 && (m_shmMask & exclusiveMask) == 0;
+            break;
+        }
+    }
+    return satisified;
+}
+
+BusyRetryConfig::State::Mask::Mask() : shared(0), exclusive(0)
+{
+}
+
+BusyRetryConfig::State& BusyRetryConfig::getOrCreateState(const String& path)
+{
+    {
+        SharedLockGuard lockGuard(m_statesLock);
+        auto iter = m_states.find(path);
+        if (iter != m_states.end()) {
+            return iter->second;
+        }
+    }
+    {
+        LockGuard lockGuard(m_statesLock);
+        return m_states[path];
+    }
+}
+
+BusyRetryConfig::State::State()
+: m_lock(Lock::None), m_cond(PTHREAD_COND_INITIALIZER), m_mutex(PTHREAD_MUTEX_INITIALIZER)
+{
+}
+
+void BusyRetryConfig::State::updateLock(Lock lock)
+{
+    pthread_mutex_lock(&m_mutex);
+    if (m_lock != lock) {
+        m_lock = lock;
+        tryNotify();
+    }
+    pthread_mutex_unlock(&m_mutex);
+}
+
+void BusyRetryConfig::State::updateShmLock(void* identifier, int sharedMask, int exclusiveMask)
+{
+    pthread_mutex_lock(&m_mutex);
+    if (sharedMask == 0 && exclusiveMask == 0) {
+        m_masks.erase(identifier);
+    } else {
+        State::Mask& mask = m_masks[identifier];
+        mask.shared = sharedMask;
+        mask.exclusive = exclusiveMask;
+    }
+    tryNotify();
+    pthread_mutex_unlock(&m_mutex);
+}
+
+bool BusyRetryConfig::State::shouldWait(const Expecting& expecting) const
+{
+    if (!expecting.satisfied(m_lock)) {
+        return true;
+    }
+    for (const auto& iter : m_masks) {
+        if (!expecting.satisfied(iter.second.shared, iter.second.exclusive)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool BusyRetryConfig::State::wait(Trying& trying)
+{
+    bool retry = false;
+
+    double remainingTimeForRetring = trying.remainingTimeForRetring();
+    if (remainingTimeForRetring > 0) {
+        // retry:
+        // 1. if the previous lock is released.
+        // 2. even if timeout
+        retry = true;
+
+        pthread_mutex_lock(&m_mutex);
+        if (shouldWait(trying)) {
+            pthread_t currentThread = pthread_self();
+            if (pthread_main_np() != 0) {
+                // Bigger order will let main thread be the end of the list, so that it will be woken up first.
+                m_waitings.insert(1, currentThread, trying);
+            } else {
+                m_waitings.insert(0, currentThread, trying);
+            }
+
+            SteadyClock before = SteadyClock::now();
+            struct timespec relative;
+            relative.tv_nsec
+            = (long) ((remainingTimeForRetring - (long) remainingTimeForRetring) * 1E9);
+            relative.tv_sec = (long) remainingTimeForRetring;
+
+            pthread_cond_timedwait_relative_np(&m_cond, &m_mutex, &relative);
+
+            std::time_t cost
             = (std::time_t) std::chrono::duration_cast<std::chrono::nanoseconds>(
               SteadyClock::now() - before)
               .count();
-            WCTInnerAssert(waitedTimes.find(path) != waitedTimes.end());
-            waitedTimes[path] += ((double) waitedTime / 1E9);
-        }
-        // waited times has no need to be reset since it will not retry.
-    }
+            trying.retried((double) cost / 1E9);
 
+            m_waitings.erase(currentThread);
+        }
+        pthread_mutex_unlock(&m_mutex);
+    }
     return retry;
+}
+
+void BusyRetryConfig::State::tryNotify()
+{
+    const auto& elements = m_waitings.elements();
+    for (auto iter = elements.rbegin(); iter != elements.rend(); ++iter) {
+        if (shouldWait(iter->value)) {
+            return;
+        } else {
+            pthread_cond_signal_thread_np(&m_cond, iter->key);
+        }
+    }
+}
+
+#pragma mark - Trying
+BusyRetryConfig::Trying::Trying()
+: Expecting(), m_elapsedTime(0), m_timeout(std::numeric_limits<int>::max())
+{
+}
+
+void BusyRetryConfig::Trying::retrying(double timeout)
+{
+    m_timeout = timeout;
+    m_elapsedTime = 0;
+}
+
+void BusyRetryConfig::Trying::retried(double cost)
+{
+    m_elapsedTime += cost;
+}
+
+double BusyRetryConfig::Trying::remainingTimeForRetring() const
+{
+    return m_timeout - m_elapsedTime;
+}
+
+#pragma mark - Lock Event
+void BusyRetryConfig::willLock(const String& path, Lock lock)
+{
+    (*m_tryings.getOrCreate())[path].expecting(lock);
+}
+
+void BusyRetryConfig::lockDidChange(const String& path, Lock lock)
+{
+    getOrCreateState(path).updateLock(lock);
+}
+
+void BusyRetryConfig::willShmLock(const String& path, ShmLock lock, int mask)
+{
+    (*m_tryings.getOrCreate())[path].expecting(lock, mask);
+}
+
+void BusyRetryConfig::shmLockDidChange(const String& path, void* identifier, int sharedMask, int exclusiveMask)
+{
+    getOrCreateState(path).updateShmLock(identifier, sharedMask, exclusiveMask);
 }
 
 } // namespace WCDB

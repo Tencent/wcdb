@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_TOKENIZER_MODULES_HPP
-#define __WCDB_TOKENIZER_MODULES_HPP
+#pragma once
 
 #include <WCDB/Lock.hpp>
 #include <WCDB/String.hpp>
@@ -42,5 +41,3 @@ protected:
 };
 
 } // namespace WCDB
-
-#endif /* __WCDB_TOKENIZER_MODULES_HPP */

@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_SYNTAX_FORWARD_DECLARATION_H
-#define __WCDB_SYNTAX_FORWARD_DECLARATION_H
+#pragma once
 
 #include <WCDB/Syntax.h>
 
@@ -102,5 +101,3 @@ typedef SyntaxList<BindParameter> BindParameters;
 typedef SyntaxList<LiteralValue> LiteralValues;
 
 } // namespace WCDB
-
-#endif /* __WCDB_SYNTAX_FORWARD_DECLARATION_H */

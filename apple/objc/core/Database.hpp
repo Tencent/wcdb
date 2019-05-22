@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_DATABASE_HPP
-#define __WCDB_DATABASE_HPP
+#pragma once
 
 #include <WCDB/CheckpointHandle.hpp>
 #include <WCDB/Configs.hpp>
@@ -91,8 +90,6 @@ protected:
     };
     std::shared_ptr<Handle> generateSlotedHandle(Slot slot) override final;
     bool willReuseSlotedHandle(Slot slot, Handle *handle) override final;
-    bool handleWillStep(HandleStatement *handleStatement);
-    void handleDidStep(HandleStatement *handleStatement, bool succeed);
 
 private:
     bool reconfigureHandle(Handle *handle);
@@ -225,5 +222,3 @@ private:
 };
 
 } //namespace WCDB
-
-#endif /* database_hpp */

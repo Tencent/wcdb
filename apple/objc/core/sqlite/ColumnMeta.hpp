@@ -18,20 +18,25 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_SQLITE_FTS3_TOKENIZER_H
-#define __WCDB_SQLITE_FTS3_TOKENIZER_H
+#pragma once
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <WCDB/String.hpp>
+#include <WCDB/WINQ.h>
+#include <vector>
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wquoted-include-in-framework-header"
-#include <sqlcipher/fts3_tokenizer.h>
-#pragma GCC diagnostic pop
+namespace WCDB {
 
-#ifdef __cplusplus
-}
-#endif
+class ColumnMeta {
+public:
+    ColumnMeta(int id_, String name_, String type_, bool notnull_, int primary_);
 
-#endif /* __WCDB_SQLITE_FTS3_TOKENIZER_H */
+    int id;
+    String name;
+    String type;
+    bool notnull;
+    int primary;
+
+    static int getIndexOfIntegerPrimary(const std::vector<ColumnMeta>& columnMetas);
+};
+
+} // namespace WCDB

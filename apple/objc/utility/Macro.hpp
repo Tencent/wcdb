@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_MACRO_HPP
-#define __WCDB_MACRO_HPP
+#pragma once
 
 #define WCDB_BOOL_1 1
 #define WCDB_BOOL_0 0
@@ -80,5 +79,3 @@
 #define WCDB_NON_FIRST_ARGS(N, ...) __VA_ARGS__
 
 #define WCDB_UNUSED(variable) _Pragma(WCDB_STRINGIFY(unused(variable)))
-
-#endif /* __WCDB_MACRO_HPP */

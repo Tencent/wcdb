@@ -29,12 +29,12 @@ SharedThreadedErrorProne::~SharedThreadedErrorProne()
 
 void SharedThreadedErrorProne::setThreadedError(const Error &error)
 {
-    ThreadedErrors::shared()->setThreadedError(error);
+    ThreadedErrors::shared().setThreadedError(error);
 }
 
 void SharedThreadedErrorProne::setThreadedError(Error &&error)
 {
-    ThreadedErrors::shared()->setThreadedError(std::move(error));
+    ThreadedErrors::shared().setThreadedError(std::move(error));
 }
 
 } //namespace WCDB

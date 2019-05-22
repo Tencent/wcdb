@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_LOCKER_HPP
-#define __WCDB_LOCKER_HPP
+#pragma once
 
 #include <WCDB/String.hpp>
 
@@ -64,5 +63,3 @@ protected:
 } //namespace Repair
 
 } //namespace WCDB
-
-#endif /* __WCDB_LOCKER_HPP */

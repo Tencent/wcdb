@@ -18,48 +18,30 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Handle.hpp>
-#include <WCDB/HandleRelated.hpp>
+#pragma once
+
+#include <WCDB/SQLiteDeclaration.h>
+#include <WCDB/String.hpp>
 
 namespace WCDB {
 
-HandleRelated::HandleRelated(AbstractHandle *handle) : m_handle(handle)
-{
-    WCTInnerAssert(m_handle != nullptr);
-}
+class AbstractHandle;
 
-HandleRelated::~HandleRelated()
-{
-}
+class HandleRelated {
+public:
+    HandleRelated(AbstractHandle *handle);
+    virtual ~HandleRelated() = 0;
 
-bool HandleRelated::exitAPI(int rc)
-{
-    return m_handle->exitAPI(rc);
-}
+    AbstractHandle *getHandle() const;
 
-bool HandleRelated::exitAPI(int rc, const String &sql)
-{
-    return m_handle->exitAPI(rc, sql);
-}
+protected:
+    sqlite3 *getRawHandle();
+    bool APIExit(int rc);
+    bool APIExit(int rc, const String &sql);
+    bool APIExit(int rc, const char *sql);
 
-bool HandleRelated::exitAPI(int rc, const char *sql)
-{
-    return m_handle->exitAPI(rc, sql);
-}
-
-AbstractHandle *HandleRelated::getHandle() const
-{
-    return m_handle;
-}
-
-sqlite3 *HandleRelated::getRawHandle()
-{
-    return m_handle->getRawHandle();
-}
-
-HandleStatementEvent::~HandleStatementEvent()
-{
-}
+private:
+    AbstractHandle *m_handle;
+};
 
 } //namespace WCDB

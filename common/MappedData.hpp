@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_MAPPED_DATA_HPP
-#define __WCDB_MAPPED_DATA_HPP
+#pragma once
 
 #include <WCDB/HighWater.hpp>
 #include <WCDB/Recyclable.hpp>
@@ -57,5 +56,3 @@ protected:
 };
 
 } // namespace WCDB
-
-#endif /* __WCDB_MAPPED_DATA_HPP */

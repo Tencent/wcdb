@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_SHADOW_HPP
-#define __WCDB_SHADOW_HPP
+#pragma once
 
 #include <memory>
 
@@ -72,5 +71,3 @@ public:
 };
 
 } // namespace WCDB
-
-#endif /* __WCDB_SHADOW_HPP */

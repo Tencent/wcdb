@@ -22,8 +22,10 @@
 #include <WCDB/CoreConst.h>
 #include <WCDB/Exiting.hpp>
 #include <WCDB/FileManager.hpp>
+#include <WCDB/Global.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/ObservationQueue.hpp>
+#include <fcntl.h>
 #include <unistd.h>
 
 namespace WCDB {
@@ -31,17 +33,6 @@ namespace WCDB {
 #pragma mark - Event
 ObservationQueueEvent::~ObservationQueueEvent()
 {
-}
-
-#pragma mark - Delegate
-ObservationDelegate::~ObservationDelegate()
-{
-}
-
-void ObservationDelegate::observatedThatFileOpened(int fd)
-{
-    WCTInnerAssert(observationQueue() != nullptr);
-    observationQueue()->observatedThatFileOpened(fd);
 }
 
 #pragma mark - Queue
@@ -55,14 +46,25 @@ ObservationQueue::ObservationQueue(const String& name, ObservationQueueEvent* ev
 , m_event(event)
 , m_observerForMemoryWarning(registerNotificationWhenMemoryWarning())
 {
-    Notifier::shared()->setNotification(
+    Global::shared().setNotificationWhenFileOpened(
+    name,
+    std::bind(&ObservationQueue::observatedThatFileOpened,
+              this,
+              std::placeholders::_1,
+              std::placeholders::_2,
+              std::placeholders::_3,
+              std::placeholders::_4));
+
+    Notifier::shared().setNotification(
     0, name, std::bind(&ObservationQueue::handleError, this, std::placeholders::_1));
 }
 
 ObservationQueue::~ObservationQueue()
 {
-    Notifier::shared()->unsetNotification(name);
+    Notifier::shared().unsetNotification(name);
     unregisterNotificationWhenMemoryWarning(m_observerForMemoryWarning);
+
+    Global::shared().setNotificationWhenFileOpened(name, nullptr);
 }
 
 void ObservationQueue::loop()
@@ -82,20 +84,20 @@ bool ObservationQueue::onTimed(const String& key, const Parameter& parameter)
 
         if (parameter.source == Parameter::Source::MemoryWarning) {
             Error error(Error::Code::Warning, Error::Level::Warning, "Purge due to memory warning.");
-            Notifier::shared()->notify(error);
+            Notifier::shared().notify(error);
         } else if (parameter.source == Parameter::Source::FileDescriptorsWarning) {
             Error error(Error::Code::Warning, Error::Level::Warning, "Purge due to file descriptors warning.");
             error.infos.set("MaxAllowedFileDescriptors",
                             maxAllowedNumberOfFileDescriptors());
             error.infos.set("FileDescriptor", parameter.numberOfFileDescriptors);
-            Notifier::shared()->notify(error);
+            Notifier::shared().notify(error);
         } else if (parameter.source == Parameter::Source::OutOfMaxAllowedFileDescriptors) {
             Error error(Error::Code::Warning,
                         Error::Level::Warning,
                         "Purge due to out of max allowed file descriptors.");
             error.infos.set("MaxAllowedFileDescriptors",
                             maxAllowedNumberOfFileDescriptors());
-            Notifier::shared()->notify(error);
+            Notifier::shared().notify(error);
         }
 
         // do purge
@@ -163,9 +165,15 @@ void ObservationQueue::observatedThatNeedPurge(const Parameter& parameter)
     }
 }
 
-void ObservationQueue::observatedThatFileOpened(int fd)
+void ObservationQueue::observatedThatFileOpened(int fd, const char* path, int flags, int mode)
 {
-    if (fd >= 0) {
+    WCDB_UNUSED(mode);
+
+    if (fd != -1) {
+        if ((flags & O_CREAT) != 0) {
+            FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
+        }
+
         int possibleNumberOfActiveFileDescriptors = fd + 1;
         if (possibleNumberOfActiveFileDescriptors
             > maxAllowedNumberOfFileDescriptors() * ObservationQueueRateForTooManyFileDescriptors) {

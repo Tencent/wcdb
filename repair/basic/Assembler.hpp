@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_ASSEMBLER_HPP
-#define __WCDB_ASSEMBLER_HPP
+#pragma once
 
 #include <WCDB/String.hpp>
 #include <map>
@@ -73,5 +72,3 @@ protected:
 } //namespace Repair
 
 } //namespace WCDB
-
-#endif /* __WCDB_ASSEMBLER_HPP */

@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_SYNTAX_ENUM_HPP
-#define __WCDB_SYNTAX_ENUM_HPP
+#pragma once
 
 #include <WCDB/Enum.hpp>
 #include <WCDB/SyntaxCommonConst.hpp>
@@ -134,5 +133,3 @@ constexpr const char* Enum::description(const Syntax::ConflictAction& action)
 }
 
 } // namespace WCDB
-
-#endif /* __WCDB_SYNTAX_ENUM_HPP */

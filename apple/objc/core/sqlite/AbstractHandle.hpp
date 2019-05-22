@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_ABSTRACT_HANDLE_HPP
-#define __WCDB_ABSTRACT_HANDLE_HPP
+#pragma once
 
 #include <WCDB/ColumnMeta.hpp>
 #include <WCDB/ErrorProne.hpp>
@@ -41,20 +40,13 @@ public:
     AbstractHandle &operator=(const AbstractHandle &) = delete;
     virtual ~AbstractHandle() = 0;
 
-protected:
-    sqlite3 *getRawHandle();
+private:
     friend class HandleRelated;
+    sqlite3 *getRawHandle();
     sqlite3 *m_handle;
 
 #pragma mark - Global
 public:
-    static void enableMultithread();
-    static void enableMemoryStatus(bool enable);
-    //    static void setMemoryMapSize(int64_t defaultSizeLimit, int64_t maximumAllowedSizeLimit);
-
-    typedef void (*GlobalLog)(void *, int, const char *);
-    static void traceGlobalLog(const GlobalLog &log, void *parameter = nullptr);
-
     typedef int (*FileOpen)(const char *, int, int);
     static void hookFileOpen(const FileOpen &open);
 
@@ -170,12 +162,6 @@ public:
     typedef HandleNotification::BusyNotification BusyNotification;
     void setNotificationWhenBusy(const BusyNotification &busyNotification);
 
-    typedef HandleNotification::StatementDidStepNotification StatementDidStepNotification;
-    typedef HandleNotification::StatementWillStepNotification StatementWillStepNotification;
-    void setNotificationWhenStatementStepping(const String &name,
-                                              const StatementWillStepNotification &willStep,
-                                              const StatementDidStepNotification &didStep);
-
 private:
     HandleNotification m_notification;
 
@@ -188,13 +174,11 @@ public:
     bool isErrorIgnorable() const;
 
 private:
-    static void tryNotifyError(int rc);
-
     // The level of error will be "Ignore" if it's marked as ignorable.
     // But the return value will be still false.
-    bool exitAPI(int rc);
-    bool exitAPI(int rc, const String &sql);
-    bool exitAPI(int rc, const char *sql);
+    bool APIExit(int rc);
+    bool APIExit(int rc, const String &sql);
+    bool APIExit(int rc, const char *sql);
 
     void notifyError(int rc, const char *sql);
 
@@ -202,5 +186,3 @@ private:
 };
 
 } //namespace WCDB
-
-#endif /* __WCDB_ABSTRACT_HANDLE_HPP */

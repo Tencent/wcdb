@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_CORE_CONST_H
-#define __WCDB_CORE_CONST_H
+#pragma once
 
 namespace WCDB {
 
@@ -67,6 +66,9 @@ static constexpr const double BackupQueueTimeIntervalForNonCritical = 5.0;
 static_assert(BackupConfigFramesIntervalForCritical > CheckpointQueueFramesThresholdForCritical,
               "");
 
+// MigrationQueueTimeIntervalForMigrating should be greater than CheckpointQueueTimeIntervalForCritical since migration may trigger checkpoint.
+static_assert(MigrationQueueTimeIntervalForMigrating > CheckpointQueueTimeIntervalForCritical, "");
+
 // Basic Config
 static constexpr const char* BasicConfigName = "com.Tencent.WCDB.Config.Basic";
 static constexpr const int BasicConfigBusyRetryMaxAllowedNumberOfTimes = 3;
@@ -110,7 +112,7 @@ static constexpr const int CheckpointFramesThresholdForTruncating
 = 10 * 1024 * 1024 / 4096; // 10 MB / Default Page Size = 2560
 
 // Migration Stepper
-static constexpr const int MigrationStepperNumberOfMaxAllowedStepping = 10;
+static constexpr const double MigrationStepperMaxAllowedDurationForStepping = 1.0;
 
 // Error Key
 static constexpr const char* ErrorStringKeyAction = "Action";
@@ -146,5 +148,3 @@ static constexpr const char* ErrorSourceNative = "Native";
 static constexpr const int TagInvalidValue = 0;
 
 } // namespace WCDB
-
-#endif /* __WCDB_CORE_CONST_H */

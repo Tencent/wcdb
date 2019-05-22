@@ -115,7 +115,7 @@
                 error.infos.set("Table", tableName);
                 error.infos.set("Column", columnName);
                 error.infos.set(WCDB::ErrorStringKeyPath, handle->getPath());
-                WCDB::Notifier::shared()->notify(error);
+                WCDB::Notifier::shared().notify(error);
             }
         } else {
             if (!handle->execute(binding.generateCreateTableStatement(tableName))) {

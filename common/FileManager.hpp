@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_FILE_MANAGER_HPP
-#define __WCDB_FILE_MANAGER_HPP
+#pragma once
 
 #include <WCDB/Error.hpp>
 #include <WCDB/SharedThreadedErrorProne.hpp>
@@ -89,5 +88,3 @@ protected:
 };
 
 } //namespace WCDB
-
-#endif /* __WCDB_FILE_MANAGER_HPP */

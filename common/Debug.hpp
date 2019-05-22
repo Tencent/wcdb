@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_DEBUG_HPP
-#define __WCDB_DEBUG_HPP
+#pragma once
 
 #ifndef WCDB_DEBUG
 #if DEBUG
@@ -40,5 +39,3 @@
 #endif // WCDB_DEBUG
 
 #define WCDB_ASSERTION WCDB_TRACE
-
-#endif /* __WCDB_DEBUG_HPP */

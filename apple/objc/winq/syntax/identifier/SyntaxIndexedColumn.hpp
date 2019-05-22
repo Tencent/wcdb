@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_SYNTAX_INDEXED_COLUMN_HPP
-#define __WCDB_SYNTAX_INDEXED_COLUMN_HPP
+#pragma once
 
 #include <WCDB/SyntaxColumn.hpp>
 #include <WCDB/SyntaxExpression.hpp>
@@ -51,5 +50,3 @@ public:
 } // namespace Syntax
 
 } // namespace WCDB
-
-#endif /* __WCDB_SYNTAX_INDEXED_COLUMN_HPP */

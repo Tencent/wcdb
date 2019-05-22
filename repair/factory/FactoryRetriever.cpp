@@ -157,7 +157,7 @@ bool FactoryRetriever::restore(const String &databasePath)
                 }
                 break;
             }
-            if (!ThreadedErrors::shared()->getThreadedError().isCorruption()) {
+            if (!ThreadedErrors::shared().getThreadedError().isCorruption()) {
                 setCriticalErrorWithSharedThreadedError();
                 return false;
             }
@@ -193,7 +193,7 @@ bool FactoryRetriever::restore(const String &databasePath)
         Error warning(Error::Code::NotFound, Error::Level::Warning, "Material is not found");
         warning.infos.set(ErrorStringKeySource, ErrorSourceRepair);
         warning.infos.set(ErrorStringKeyPath, databasePath);
-        Notifier::shared()->notify(warning);
+        Notifier::shared().notify(warning);
     }
 
     FullCrawler fullCrawler(databasePath);
@@ -235,7 +235,7 @@ void FactoryRetriever::reportMechanic(const Fraction &score,
     error.infos.set("Material", material.stringify());
     finishReportOfPerformance(error, path, cost);
     error.infos.set("Weight", String::formatted("%.2f%%", getWeight(path).value() * 100.0f));
-    Notifier::shared()->notify(error);
+    Notifier::shared().notify(error);
 }
 
 void FactoryRetriever::reportFullCrawler(const Fraction &score, const String &path, double cost)
@@ -246,7 +246,7 @@ void FactoryRetriever::reportFullCrawler(const Fraction &score, const String &pa
     error.infos.set("Score", score.value());
     finishReportOfPerformance(error, path, cost);
     error.infos.set("Weight", String::formatted("%.2f%%", getWeight(path).value() * 100.0f));
-    Notifier::shared()->notify(error);
+    Notifier::shared().notify(error);
 }
 
 void FactoryRetriever::reportSummary(double cost)
@@ -256,7 +256,7 @@ void FactoryRetriever::reportSummary(double cost)
     error.infos.set(ErrorStringKeyPath, database);
     error.infos.set("Cost", String::formatted("%.2f%%", cost));
     error.infos.set("Score", getScore().value());
-    Notifier::shared()->notify(error);
+    Notifier::shared().notify(error);
 }
 
 void FactoryRetriever::finishReportOfPerformance(Error &error, const String &databasePath, double cost)

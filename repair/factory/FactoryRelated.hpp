@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_FACTORY_RELATED_HPP
-#define __WCDB_FACTORY_RELATED_HPP
+#pragma once
 
 #include <mutex>
 
@@ -41,5 +40,3 @@ protected:
 } //namespace Repair
 
 } //namespace WCDB
-
-#endif /* __WCDB_FACTORY_RELATED_HPP */

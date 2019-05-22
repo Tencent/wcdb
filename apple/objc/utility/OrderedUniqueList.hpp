@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_ORDERED_UNIQUE_LIST_HPP
-#define __WCDB_ORDERED_UNIQUE_LIST_HPP
+#pragma once
 
 #include <list>
 
@@ -122,5 +121,3 @@ protected:
 };
 
 } // namespace WCDB
-
-#endif /* __WCDB_ORDERED_UNIQUE_LIST_HPP */

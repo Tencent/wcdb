@@ -100,7 +100,7 @@ MappedData PageBasedFileHandle::mapPage(int pageno, off_t offsetWithinPage, size
                 error.infos.set(ErrorStringKeyPath, path);
                 error.infos.set("HighWater", highWater);
                 error.infos.set("AllowedHighWater", s_allowedHighWater);
-                Notifier::shared()->notify(error);
+                Notifier::shared().notify(error);
 
                 while (!m_cache.empty() && MappedData::getMappedHighWater() > s_allowedHighWater) {
                     m_cache.purge();

@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_CIPHER_CONFIG_HPP
-#define __WCDB_CIPHER_CONFIG_HPP
+#pragma once
 
 #include <WCDB/Config.hpp>
 #include <WCDB/Data.hpp>
@@ -38,5 +37,3 @@ protected:
 };
 
 } //namespace WCDB
-
-#endif /* __WCDB_CIPHER_CONFIG_HPP */

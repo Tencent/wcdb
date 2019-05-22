@@ -21,9 +21,11 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/CheckpointConfig.hpp>
 #include <WCDB/CheckpointQueue.hpp>
+#include <WCDB/Global.hpp>
 #include <WCDB/Handle.hpp>
 #include <WCDB/String.hpp>
 #include <mutex>
+#include <regex>
 
 namespace WCDB {
 
@@ -31,26 +33,41 @@ CheckpointConfig::CheckpointConfig(const std::shared_ptr<CheckpointQueue>& queue
 : Config(), m_identifier(String::formatted("Checkpoint-%p", this)), m_queue(queue)
 {
     WCTInnerAssert(m_queue != nullptr);
+
+    Global::shared().setNotificationForLog(
+    m_identifier,
+    std::bind(&CheckpointConfig::log, this, std::placeholders::_1, std::placeholders::_2));
+}
+
+CheckpointConfig::~CheckpointConfig()
+{
+    Global::shared().setNotificationForLog(m_identifier, nullptr);
 }
 
 bool CheckpointConfig::invoke(Handle* handle)
 {
     m_queue->register_(handle->getPath());
+
     handle->setNotificationWhenCheckpointed(
     m_identifier,
     std::bind(&CheckpointConfig::onCheckpointed, this, std::placeholders::_1));
+
     handle->setNotificationWhenCommitted(
     0,
     m_identifier,
     std::bind(&CheckpointConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
+
     return true;
 }
 
 bool CheckpointConfig::uninvoke(Handle* handle)
 {
     handle->unsetNotificationWhenCommitted(m_identifier);
+
     handle->setNotificationWhenCheckpointed(m_identifier, nullptr);
+
     m_queue->unregister(handle->getPath());
+
     return true;
 }
 
@@ -63,6 +80,26 @@ bool CheckpointConfig::onCommitted(const String& path, int frames)
 void CheckpointConfig::onCheckpointed(const String& path)
 {
     m_queue->remove(path);
+}
+
+void CheckpointConfig::log(int rc, const char* message)
+{
+    Error::ExtCode extCode = Error::rc2ec(rc);
+    if (extCode != Error::ExtCode::NoticeRecoverWal || message == nullptr) {
+        return;
+    }
+    std::regex pattern("recovered (\\w+) frames from WAL file (.+)\\-wal");
+    const String source = message;
+    std::smatch match;
+    if (std::regex_search(source.begin(), source.end(), match, pattern)) {
+        int frames = atoi(match[1].str().c_str());
+        if (frames > 0) {
+            // hint checkpoint
+            String path = match[2].str();
+            m_queue->put(path, frames);
+        }
+    }
+    WCTInnerAssert(match.size() == 3); // assert match and match 3.
 }
 
 } //namespace WCDB

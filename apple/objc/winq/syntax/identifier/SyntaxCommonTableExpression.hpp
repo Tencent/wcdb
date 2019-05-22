@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_SYNTAX_COMMON_TABLE_EXPRESSION_HPP
-#define __WCDB_SYNTAX_COMMON_TABLE_EXPRESSION_HPP
+#pragma once
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -47,5 +46,3 @@ public:
 } // namespace Syntax
 
 } // namespace WCDB
-
-#endif /* __WCDB_SYNTAX_COMMON_TABLE_EXPRESSION_HPP */

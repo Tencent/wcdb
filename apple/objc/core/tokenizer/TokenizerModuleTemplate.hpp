@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_TOKENIZER_MODULE_TEMPLATE_HPP
-#define __WCDB_TOKENIZER_MODULE_TEMPLATE_HPP
+#pragma once
 
 #include <WCDB/TokenizerModule.hpp>
 #include <type_traits>
@@ -108,5 +107,3 @@ public:
 };
 
 } // namespace WCDB
-
-#endif /* __WCDB_TOKENIZER_MODULE_TEMPLATE_HPP */

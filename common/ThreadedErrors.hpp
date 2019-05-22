@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_THREADED_ERRORS_HPP
-#define __WCDB_THREADED_ERRORS_HPP
+#pragma once
 
 #include <WCDB/Error.hpp>
 #include <WCDB/ThreadLocal.hpp>
@@ -28,7 +27,7 @@ namespace WCDB {
 
 class ThreadedErrors final {
 public:
-    static ThreadedErrors *shared();
+    static ThreadedErrors &shared();
     const Error &getThreadedError();
     Error &&moveThreadedError();
 
@@ -40,5 +39,3 @@ private:
 };
 
 } //namespace WCDB
-
-#endif /* __WCDB_THREADED_ERRORS_HPP */

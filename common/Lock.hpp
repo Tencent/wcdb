@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_LOCK_HPP
-#define __WCDB_LOCK_HPP
+#pragma once
 
 #include <WCDB/ThreadLocal.hpp>
 #include <atomic>
@@ -117,5 +116,3 @@ protected:
 };
 
 } //namespace WCDB
-
-#endif /* __WCDB_LOCK_HPP */

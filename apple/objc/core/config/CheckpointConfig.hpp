@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_CHECKPOINT_CONFIG_HPP
-#define __WCDB_CHECKPOINT_CONFIG_HPP
+#pragma once
 
 #include <WCDB/Config.hpp>
 
@@ -30,6 +29,7 @@ class CheckpointQueue;
 class CheckpointConfig final : public Config {
 public:
     CheckpointConfig(const std::shared_ptr<CheckpointQueue> &queue);
+    ~CheckpointConfig();
 
     bool invoke(Handle *handle) override final;
     bool uninvoke(Handle *handle) override final;
@@ -38,10 +38,9 @@ protected:
     const String m_identifier;
     bool onCommitted(const String &path, int pages);
     void onCheckpointed(const String &path);
+    void log(int rc, const char *message);
 
     std::shared_ptr<CheckpointQueue> m_queue;
 };
 
 } //namespace WCDB
-
-#endif /* __WCDB_CHECKPOINT_CONFIG_HPP */

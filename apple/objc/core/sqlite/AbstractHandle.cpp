@@ -45,36 +45,6 @@ sqlite3 *AbstractHandle::getRawHandle()
 }
 
 #pragma mark - Global
-void AbstractHandle::enableMultithread()
-{
-    int rc = sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
-    WCTInnerAssert(rc == SQLITE_OK);
-    tryNotifyError(rc);
-}
-
-//void AbstractHandle::setMemoryMapSize(int64_t defaultSizeLimit, int64_t maximumAllowedSizeLimit)
-//{
-//    int rc = sqlite3_config(SQLITE_CONFIG_MMAP_SIZE,
-//                   (sqlite3_int64) defaultSizeLimit,
-//                   (sqlite3_int64) maximumAllowedSizeLimit);
-//    WCTInnerAssert(rc == SQLITE_OK);
-//    tryNotifyError(rc);
-//}
-
-void AbstractHandle::enableMemoryStatus(bool enable)
-{
-    int rc = sqlite3_config(SQLITE_CONFIG_MEMSTATUS, (int) enable);
-    WCTInnerAssert(rc == SQLITE_OK);
-    tryNotifyError(rc);
-}
-
-void AbstractHandle::traceGlobalLog(const GlobalLog &log, void *parameter)
-{
-    int rc = sqlite3_config(SQLITE_CONFIG_LOG, log, parameter);
-    WCTInnerAssert(rc == SQLITE_OK);
-    tryNotifyError(rc);
-}
-
 void AbstractHandle::hookFileOpen(const FileOpen &open)
 {
     sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
@@ -118,7 +88,7 @@ String AbstractHandle::getJournalSuffix()
 bool AbstractHandle::open()
 {
     WCTInnerAssert(!isOpened());
-    bool succeed = exitAPI(sqlite3_open(m_path.c_str(), &m_handle));
+    bool succeed = APIExit(sqlite3_open(m_path.c_str(), &m_handle));
     if (!succeed) {
         m_handle = nullptr;
     }
@@ -138,7 +108,7 @@ void AbstractHandle::close()
                           "Unpaired transaction.",
                           rollbackTransaction(););
         m_notification.purge();
-        exitAPI(sqlite3_close_v2(m_handle));
+        APIExit(sqlite3_close_v2(m_handle));
         m_handle = nullptr;
     }
 }
@@ -147,7 +117,7 @@ bool AbstractHandle::executeSQL(const String &sql)
 {
     // use seperated sqlite3_exec to get more information
     WCTInnerAssert(isOpened());
-    HandleStatement handleStatement(this, &m_notification);
+    HandleStatement handleStatement(this);
     bool succeed = handleStatement.prepare(sql);
     if (succeed) {
         succeed = handleStatement.step();
@@ -205,7 +175,7 @@ bool AbstractHandle::isInTransaction()
 #pragma mark - Statement
 HandleStatement *AbstractHandle::getStatement()
 {
-    m_handleStatements.push_back(HandleStatement(this, &m_notification));
+    m_handleStatements.push_back(HandleStatement(this));
     return &m_handleStatements.back();
 }
 
@@ -253,22 +223,26 @@ std::pair<bool, bool> AbstractHandle::tableExists(const String &table)
 
 std::pair<bool, bool> AbstractHandle::tableExists(const Schema &schema, const String &table)
 {
-    // TODO: use sqlite3_table_column_metadata to check if table exists? 1. performance 2. table created by other handles?
+    static StatementSelect *s_template = new StatementSelect(
+    StatementSelect()
+    .select(Column("sql"))
+    .where(Column("type") == "table"
+           && Column("name").collate("NOCASE") == BindParameter(1)));
+
+    StatementSelect statement = *s_template;
+    statement.from(TableOrSubquery(Syntax::masterTable).schema(schema));
+
     HandleStatement *handleStatement = getStatement();
-    StatementSelect statementSelect
-    = StatementSelect().select(1).from(TableOrSubquery(table).schema(schema)).limit(0);
-    markErrorAsIgnorable(Error::Code::Error);
+    bool succeed = false;
     bool exists = false;
-    bool succeed = handleStatement->prepare(statementSelect);
-    if (succeed) {
-        exists = true;
-        finalizeStatements();
-    } else {
-        if (m_error.code() == Error::Code::Error) {
-            succeed = true;
+    if (handleStatement->prepare(statement)) {
+        handleStatement->bindText(table, 1);
+        succeed = handleStatement->step();
+        if (succeed) {
+            exists = !handleStatement->done();
         }
+        handleStatement->finalize();
     }
-    markErrorAsUnignorable();
     returnStatement(handleStatement);
     return { succeed, exists };
 }
@@ -441,7 +415,7 @@ void AbstractHandle::unimpeded(bool unimpeded)
 void AbstractHandle::setCipherKey(const UnsafeData &data)
 {
     WCTInnerAssert(isOpened());
-    exitAPI(sqlite3_key(m_handle, data.buffer(), (int) data.size()));
+    APIExit(sqlite3_key(m_handle, data.buffer(), (int) data.size()));
 }
 
 int AbstractHandle::getNumberOfDirtyPages()
@@ -453,7 +427,7 @@ int AbstractHandle::getNumberOfDirtyPages()
 void AbstractHandle::enableExtendedResultCodes(bool enable)
 {
     WCTInnerAssert(isOpened());
-    exitAPI(sqlite3_extended_result_codes(m_handle, (int) enable));
+    APIExit(sqlite3_extended_result_codes(m_handle, (int) enable));
 }
 
 bool AbstractHandle::checkpoint(CheckpointMode mode)
@@ -464,14 +438,14 @@ bool AbstractHandle::checkpoint(CheckpointMode mode)
     static_assert((int) CheckpointMode::Truncate == SQLITE_CHECKPOINT_TRUNCATE, "");
     WCTInnerAssert(isOpened());
 
-    return exitAPI(sqlite3_wal_checkpoint_v2(
+    return APIExit(sqlite3_wal_checkpoint_v2(
     m_handle, Syntax::mainSchema, (int) mode, nullptr, nullptr));
 }
 
 void AbstractHandle::disableCheckpointWhenClosing(bool disable)
 {
     WCTInnerAssert(isOpened());
-    exitAPI(sqlite3_db_config(
+    APIExit(sqlite3_db_config(
     m_handle, SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE, (int) disable, nullptr));
 }
 
@@ -517,26 +491,18 @@ void AbstractHandle::setNotificationWhenBusy(const BusyNotification &busyNotific
     m_notification.setNotificationWhenBusy(busyNotification);
 }
 
-void AbstractHandle::setNotificationWhenStatementStepping(const String &name,
-                                                          const StatementWillStepNotification &willStep,
-                                                          const StatementDidStepNotification &didStep)
-{
-    WCTInnerAssert(isOpened());
-    m_notification.setNotificationWhenStatementStepping(name, willStep, didStep);
-}
-
 #pragma mark - Error
-bool AbstractHandle::exitAPI(int rc)
+bool AbstractHandle::APIExit(int rc)
 {
-    return exitAPI(rc, nullptr);
+    return APIExit(rc, nullptr);
 }
 
-bool AbstractHandle::exitAPI(int rc, const String &sql)
+bool AbstractHandle::APIExit(int rc, const String &sql)
 {
-    return exitAPI(rc, sql.c_str());
+    return APIExit(rc, sql.c_str());
 }
 
-bool AbstractHandle::exitAPI(int rc, const char *sql)
+bool AbstractHandle::APIExit(int rc, const char *sql)
 {
     bool result = true;
     if (Error::isError(rc)) {
@@ -562,7 +528,7 @@ void AbstractHandle::notifyError(int rc, const char *sql)
         m_error.level = Error::Level::Ignore;
     }
     m_error.infos.set(ErrorStringKeySQL, sql);
-    Notifier::shared()->notify(m_error);
+    Notifier::shared().notify(m_error);
 }
 
 void AbstractHandle::markErrorAsIgnorable(Error::Code ignorableCode)
@@ -592,16 +558,6 @@ bool AbstractHandle::isErrorIgnorable() const
         }
     }
     return ignorable;
-}
-
-void AbstractHandle::tryNotifyError(int rc)
-{
-    if (Error::isError(rc)) {
-        Error error;
-        error.level = Error::Level::Fatal;
-        error.setSQLiteCode(rc);
-        Notifier::shared()->notify(error);
-    }
 }
 
 } //namespace WCDB

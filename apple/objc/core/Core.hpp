@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_CORE_HPP
-#define __WCDB_CORE_HPP
+#pragma once
 
 #include <WCDB/BackupQueue.hpp>
 #include <WCDB/CheckpointQueue.hpp>
@@ -43,19 +42,16 @@ class Core final : public DatabasePoolEvent,
                    public CheckpointQueueEvent,
                    public BackupQueueEvent,
                    public MigrationQueueEvent,
-                   public ObservationQueueEvent,
-                   public ObservationDelegate {
+                   public ObservationQueueEvent {
 #pragma mark - Core
 public:
-    static Core* shared();
-    Core(const Core&) = delete;
-    Core& operator=(const Core&) = delete;
+    static Core& shared();
     ~Core();
 
 protected:
     Core();
-    static int fileOpen(const char* path, int flags, int mode);
-    static void globalLog(void* core, int code, const char* message);
+    Core(const Core&) = delete;
+    Core& operator=(const Core&) = delete;
 
 #pragma mark - Database
 public:
@@ -86,8 +82,6 @@ public:
                                               const CorruptedNotification& notification);
 
 protected:
-    ObservationQueue* observationQueue() override final;
-
     void observatedThatNeedPurge() override final;
     void observatedThatMayBeCorrupted(const String& path) override final;
 
@@ -126,6 +120,8 @@ protected:
     std::shared_ptr<Config> m_globalSQLTraceConfig;
     std::shared_ptr<Config> m_globalPerformanceTraceConfig;
 
+    void globalLog(int rc, const char* message);
+
 #pragma mark - Config
 public:
     const std::shared_ptr<Configs>& configs();
@@ -135,5 +131,3 @@ protected:
 };
 
 } // namespace WCDB
-
-#endif /* __WCDB_CORE_HPP */

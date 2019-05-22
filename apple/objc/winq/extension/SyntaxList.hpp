@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_SYNTAX_LIST_HPP
-#define __WCDB_SYNTAX_LIST_HPP
+#pragma once
 
 #include <list>
 #include <type_traits>
@@ -131,5 +130,3 @@ public:
 };
 
 } // namespace WCDB
-
-#endif /* __WCDB_SYNTAX_LIST_HPP */

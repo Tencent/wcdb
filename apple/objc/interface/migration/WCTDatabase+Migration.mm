@@ -49,7 +49,7 @@
 
 - (void)setAutoMigrate:(BOOL)flag
 {
-    WCDB::Core::shared()->setAutoMigration(_database->getPath(), flag);
+    WCDB::Core::shared().setAutoMigration(_database->getPath(), flag);
 }
 
 - (void)setNotificationWhenMigrated:(WCTMigratedNotificationBlock)onMigrated

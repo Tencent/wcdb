@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_HANDLE_STATEMENT_HPP
-#define __WCDB_HANDLE_STATEMENT_HPP
+#pragma once
 
 #include <WCDB/HandleRelated.hpp>
 #include <WCDB/SQLiteDeclaration.h>
@@ -31,6 +30,12 @@ class HandleStatement final : public HandleRelated {
     friend class AbstractHandle;
 
 public:
+    HandleStatement() = delete;
+    HandleStatement(const HandleStatement &) = delete;
+    HandleStatement &operator=(const HandleStatement &) = delete;
+
+    HandleStatement(HandleStatement &&other);
+
     ~HandleStatement();
 
     bool prepare(const Statement &statement);
@@ -70,15 +75,12 @@ public:
     bool isReadonly();
 
 protected:
-    HandleStatement(AbstractHandle *handle, HandleStatementEvent *event);
+    HandleStatement(AbstractHandle *handle);
 
 private:
     bool prepare(const String &sql);
     sqlite3_stmt *m_stmt;
-    HandleStatementEvent *m_event;
     bool m_done;
 };
 
 } //namespace WCDB
-
-#endif /* __WCDB_HANDLE_STATEMENT_HPP */

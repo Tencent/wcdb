@@ -67,7 +67,17 @@
         if (threadName.length == 0) {
             threadName = [NSString stringWithFormat:@"%p", currentThread];
         }
-        TestCaseLog(@"%@ Thread %@: %@", currentThread.isMainThread ? @"*" : @"-", threadName, error);
+        switch (error.level) {
+        case WCTErrorLevelIgnore:
+        case WCTErrorLevelDebug:
+            if (!WCTDatabase.debug) {
+                break;
+            }
+            // passthrough
+        default:
+            TestCaseLog(@"%@ Thread %@: %@", currentThread.isMainThread ? @"*" : @"-", threadName, error);
+            break;
+        }
 
         switch (error.level) {
         case WCTErrorLevelError:

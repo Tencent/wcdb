@@ -69,8 +69,8 @@ bool FileManager::setFileProtection(const WCDB::String &path, WCDB::FileProtecti
     error.infos.set(WCDB::ErrorStringKeySource, WCDB::ErrorSourceNative);
     error.infos.set(WCDB::ErrorStringKeyPath, path);
     error.infos.set(WCDB::ErrorIntKeyExtCode, nsError.code);
-    WCDB::Notifier::shared()->notify(error);
-    WCDB::ThreadedErrors::shared()->setThreadedError(std::move(error));
+    WCDB::Notifier::shared().notify(error);
+    WCDB::ThreadedErrors::shared().setThreadedError(std::move(error));
     return false;
 }
 
@@ -87,8 +87,8 @@ std::pair<bool, WCDB::FileProtection> FileManager::getFileProtection(const WCDB:
     error.infos.set(WCDB::ErrorStringKeySource, WCDB::ErrorSourceNative);
     error.infos.set(WCDB::ErrorStringKeyPath, path);
     error.infos.set(WCDB::ErrorIntKeyExtCode, nsError.code);
-    WCDB::Notifier::shared()->notify(error);
-    WCDB::ThreadedErrors::shared()->setThreadedError(std::move(error));
+    WCDB::Notifier::shared().notify(error);
+    WCDB::ThreadedErrors::shared().setThreadedError(std::move(error));
     return { false, WCDB::FileProtection::None };
 }
 #else

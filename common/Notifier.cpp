@@ -23,10 +23,10 @@
 
 namespace WCDB {
 
-Notifier *Notifier::shared()
+Notifier &Notifier::shared()
 {
     static Notifier *s_shared = new Notifier;
-    return s_shared;
+    return *s_shared;
 }
 
 Notifier::Notifier()

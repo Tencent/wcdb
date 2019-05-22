@@ -48,12 +48,12 @@ void Console::print(const String &message)
     WCDB::Console::initialize();
 
     if (block != nil) {
-        WCDB::Notifier::shared()->setNotification(std::numeric_limits<int>::min(), identifier, [block](const WCDB::Error &error) {
+        WCDB::Notifier::shared().setNotification(std::numeric_limits<int>::min(), identifier, [block](const WCDB::Error &error) {
             WCTError *nsError = [[WCTError alloc] initWithError:error];
             block(nsError);
         });
     } else {
-        WCDB::Notifier::shared()->unsetNotification(identifier);
+        WCDB::Notifier::shared().unsetNotification(identifier);
     }
 }
 
@@ -70,7 +70,7 @@ void Console::print(const String &message)
             trace(array, (NSUInteger) cost);
         };
     }
-    WCDB::Core::shared()->setNotificationWhenPerformanceGlobalTraced(callback);
+    WCDB::Core::shared().setNotificationWhenPerformanceGlobalTraced(callback);
 }
 
 + (void)globalTraceSQL:(WCTSQLTraceBlock)trace
@@ -81,7 +81,7 @@ void Console::print(const String &message)
             trace([NSString stringWithUTF8String:sql.c_str()]);
         };
     }
-    WCDB::Core::shared()->setNotificationForSQLGLobalTraced(callback);
+    WCDB::Core::shared().setNotificationForSQLGLobalTraced(callback);
 }
 
 - (void)tracePerformance:(WCTPerformanceTraceBlock)trace

@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_COLUMN_HPP
-#define __WCDB_COLUMN_HPP
+#pragma once
 
 #include <WCDB/AggregateFunction.hpp>
 #include <WCDB/CoreFunction.hpp>
@@ -33,6 +32,7 @@ class Column : public TypedSyntax<Syntax::Column, SQL>,
                public ExpressionBinaryOperable,
                public ExpressionInOperable,
                public ExpressionBetweenOperable,
+               public ExpressionCollateOperable,
                public CoreFunctionOperable,
                public AggregateFunctionOperable,
                public FTS3FunctionOperable {
@@ -48,5 +48,3 @@ protected:
 };
 
 } // namespace WCDB
-
-#endif /* __WCDB_COLUMN_HPP */

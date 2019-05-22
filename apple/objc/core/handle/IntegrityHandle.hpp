@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_INTEGRITY_HANDLE_HPP
-#define __WCDB_INTEGRITY_HANDLE_HPP
+#pragma once
 
 #include <WCDB/Handle.hpp>
 
@@ -33,5 +32,3 @@ public:
 };
 
 } // namespace WCDB
-
-#endif /* __WCDB_INTEGRITY_HANDLE_HPP */

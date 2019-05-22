@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_OBSERVATION_QUEUE_HPP
-#define __WCDB_OBSERVATION_QUEUE_HPP
+#pragma once
 
 #include <WCDB/AsyncQueue.hpp>
 #include <WCDB/Lock.hpp>
@@ -37,16 +36,6 @@ protected:
     virtual void observatedThatMayBeCorrupted(const String& path) = 0; // check integrity
     virtual void observatedThatNeedPurge() = 0;
     friend class ObservationQueue;
-};
-
-class ObservationQueue;
-class ObservationDelegate {
-public:
-    virtual ~ObservationDelegate() = 0;
-
-protected:
-    void observatedThatFileOpened(int fd);
-    virtual ObservationQueue* observationQueue() = 0;
 };
 
 class ObservationQueue final : public AsyncQueue {
@@ -94,8 +83,7 @@ private:
     void unregisterNotificationWhenMemoryWarning(void* observer);
     void* m_observerForMemoryWarning;
 
-    void observatedThatFileOpened(int fd);
-    friend class ObservationDelegate;
+    void observatedThatFileOpened(int fd, const char* path, int flags, int mode);
 
     SteadyClock m_lastPurgeTime;
 
@@ -120,5 +108,3 @@ protected:
 };
 
 } //namespace WCDB
-
-#endif /* __WCDB_CORRUPTION_QUEUE_HPP */

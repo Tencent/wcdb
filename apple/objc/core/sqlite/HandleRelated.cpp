@@ -18,28 +18,44 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_COLUMN_META_HPP
-#define __WCDB_COLUMN_META_HPP
-
-#include <WCDB/String.hpp>
-#include <WCDB/WINQ.h>
-#include <vector>
+#include <WCDB/Assertion.hpp>
+#include <WCDB/Handle.hpp>
+#include <WCDB/HandleRelated.hpp>
 
 namespace WCDB {
 
-class ColumnMeta {
-public:
-    ColumnMeta(int id_, String name_, String type_, bool notnull_, int primary_);
+HandleRelated::HandleRelated(AbstractHandle *handle) : m_handle(handle)
+{
+    WCTInnerAssert(m_handle != nullptr);
+}
 
-    int id;
-    String name;
-    String type;
-    bool notnull;
-    int primary;
+HandleRelated::~HandleRelated()
+{
+}
 
-    static int getIndexOfIntegerPrimary(const std::vector<ColumnMeta>& columnMetas);
-};
+bool HandleRelated::APIExit(int rc)
+{
+    return m_handle->APIExit(rc);
+}
 
-} // namespace WCDB
+bool HandleRelated::APIExit(int rc, const String &sql)
+{
+    return m_handle->APIExit(rc, sql);
+}
 
-#endif /* __WCDB_COLUMN_META_HPP */
+bool HandleRelated::APIExit(int rc, const char *sql)
+{
+    return m_handle->APIExit(rc, sql);
+}
+
+AbstractHandle *HandleRelated::getHandle() const
+{
+    return m_handle;
+}
+
+sqlite3 *HandleRelated::getRawHandle()
+{
+    return m_handle->getRawHandle();
+}
+
+} //namespace WCDB

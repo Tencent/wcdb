@@ -71,7 +71,7 @@ bool MigrationQueue::onTimed(const String& path, const int& numberOfFailures)
         } else {
             Error error(Error::Code::Notice, Error::Level::Notice, "Async migration stopped due to the error.");
             error.infos.set(ErrorStringKeyPath, path);
-            Notifier::shared()->notify(error);
+            Notifier::shared().notify(error);
         }
     }
     return erase;

@@ -87,7 +87,7 @@ bool Backup::work()
     if (!succeed) {
         Error error(Error::Code::Notice, Error::Level::Notice, "Backup failed hint.");
         error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-        Notifier::shared()->notify(error);
+        Notifier::shared().notify(error);
         if (Console::debuggable()) {
             m_pager.hint();
         }

@@ -62,7 +62,7 @@ void Shm::markAsCorrupted(const String &message)
     Error error(Error::Code::Corrupt, Error::Level::Ignore, message);
     error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.set(ErrorStringKeyPath, getPath());
-    Notifier::shared()->notify(error);
+    Notifier::shared().notify(error);
     setError(std::move(error));
 }
 
@@ -123,7 +123,7 @@ void Shm::hint() const
     error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.set("Backfill", m_checkpointInfo.backfill);
     error.infos.set("MaxFrame", m_header.maxFrame);
-    Notifier::shared()->notify(error);
+    Notifier::shared().notify(error);
 }
 
 Shm::Header::Header()

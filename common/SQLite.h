@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_SQLITE_H
-#define __WCDB_SQLITE_H
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,5 +33,3 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* __WCDB_SQLITE_H */

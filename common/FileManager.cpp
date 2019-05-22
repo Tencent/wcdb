@@ -407,7 +407,7 @@ void FileManager::setThreadedError(const String &path)
     error.level = Error::Level::Error;
     error.setSystemCode(errno, Error::Code::IOError);
     error.infos.set(ErrorStringKeyPath, path);
-    Notifier::shared()->notify(error);
+    Notifier::shared().notify(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
 }
 
@@ -416,7 +416,7 @@ void FileManager::setThreadedError(Error::Code codeIfUnresolved)
     Error error;
     error.level = Error::Level::Error;
     error.setSystemCode(errno, codeIfUnresolved);
-    Notifier::shared()->notify(error);
+    Notifier::shared().notify(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
 }
 

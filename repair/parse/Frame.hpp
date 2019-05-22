@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_FRAME_HPP
-#define __WCDB_FRAME_HPP
+#pragma once
 
 #include <WCDB/Initializeable.hpp>
 #include <WCDB/Page.hpp>
@@ -60,5 +59,3 @@ protected:
 } //namespace Repair
 
 } //namespace WCDB
-
-#endif /* __WCDB_FRAME_HPP */

@@ -137,7 +137,7 @@ Data FileHandle::read(off_t offset, size_t size)
     error.level = m_errorIgnorable ? Error::Level::Warning : Error::Level::Error;
     error.setSystemCode(EIO, Error::Code::IOError, "Short read.");
     error.infos.set(ErrorStringKeyPath, path);
-    Notifier::shared()->notify(error);
+    Notifier::shared().notify(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
     return data.subdata(got + prior);
 }
@@ -175,7 +175,7 @@ bool FileHandle::write(off_t offset, const UnsafeData &unsafeData)
     error.level = m_errorIgnorable ? Error::Level::Warning : Error::Level::Error;
     error.setSystemCode(EIO, Error::Code::IOError, "Short write.");
     error.infos.set(ErrorStringKeyPath, path);
-    Notifier::shared()->notify(error);
+    Notifier::shared().notify(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
     return false;
 }
@@ -199,7 +199,7 @@ MappedData FileHandle::map(off_t offset, size_t size)
         error.setSystemCode(errno, Error::Code::IOError);
         error.infos.set(ErrorStringKeyPath, path);
         error.infos.set("MmapSize", roundedSize);
-        Notifier::shared()->notify(error);
+        Notifier::shared().notify(error);
         SharedThreadedErrorProne::setThreadedError(std::move(error));
         return MappedData::null();
     }
@@ -218,7 +218,7 @@ void FileHandle::setThreadedError()
     error.level = m_errorIgnorable ? Error::Level::Warning : Error::Level::Error;
     error.setSystemCode(errno, Error::Code::IOError);
     error.infos.set(ErrorStringKeyPath, path);
-    Notifier::shared()->notify(error);
+    Notifier::shared().notify(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
 }
 
@@ -228,7 +228,7 @@ void FileHandle::setThreadedError()
 //                m_errorIgnorable ? Error::Level::Warning : Error::Level::Error);
 //    error.message = message;
 //    error.infos.set(ErrorStringKeyPath, path);
-//    Notifier::shared()->notify(error);
+//    Notifier::shared().notify(error);
 //    SharedThreadedErrorProne::setThreadedError(std::move(error));
 //}
 

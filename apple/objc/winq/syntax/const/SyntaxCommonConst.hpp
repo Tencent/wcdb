@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_SYNTAX_COMMON_CONST_HPP
-#define __WCDB_SYNTAX_COMMON_CONST_HPP
+#pragma once
 
 namespace WCDB {
 
@@ -94,5 +93,3 @@ static const char* builtinTablePrefix = "sqlite_";
 } // namespace Syntax
 
 } // namespace WCDB
-
-#endif /* __WCDB_SYNTAX_COMMON_CONST_HPP */

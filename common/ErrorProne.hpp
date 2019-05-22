@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_ERROR_PRONE_HPP
-#define __WCDB_ERROR_PRONE_HPP
+#pragma once
 
 #include <WCDB/Error.hpp>
 #include <WCDB/ThreadedErrors.hpp>
@@ -54,5 +53,3 @@ private:
 };
 
 } //namespace WCDB
-
-#endif /* __WCDB_ERROR_PRONE_HPP */

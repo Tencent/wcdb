@@ -71,7 +71,7 @@ void Material::markAsEmpty(const String &element)
     Error error(Error::Code::Empty, Error::Level::Ignore, "Element of material is empty.");
     error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.set("Element", element);
-    Notifier::shared()->notify(error);
+    Notifier::shared().notify(error);
     setThreadedError(std::move(error));
 }
 
@@ -160,7 +160,7 @@ void Material::markAsCorrupt(const String &element)
     Error error(Error::Code::Corrupt, Error::Level::Ignore, "Material is corrupted");
     error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.set("Element", element);
-    Notifier::shared()->notify(error);
+    Notifier::shared().notify(error);
     setThreadedError(std::move(error));
 }
 
