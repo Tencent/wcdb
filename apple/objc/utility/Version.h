@@ -20,10 +20,10 @@
 
 #pragma once
 
-/* This file is generated automatically by `tools/version/bump.sh`. */
+/* This file is generated automatically by `/Users/ringo_d/Developer/gitcode/wcdb/tools/version/bump.sh`. */
 
 #define WCDB_IDENTIFIER "bfd56a1a2d98b0b21babd84fcf6db4ac"
 #define WCDB_VERSION "1.1.0"
-#define WCDB_COMMIT_HASH "7ef0820e9ae47f9ccb773f7a21747f824bfde02e"
-#define WCDB_BUILD_TIMESTAMP 1557018536
-#define WCDB_BUILD_TIME "2019-05-05 09:08:56 UTC+0800"
+#define WCDB_COMMIT_HASH "0363e96a67c2d1b7faf1857d7c0e629db4504520"
+#define WCDB_BUILD_TIMESTAMP 1558512062
+#define WCDB_BUILD_TIME "2019-05-22 16:01:02 UTC+0800"

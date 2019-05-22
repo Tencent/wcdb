@@ -43,18 +43,11 @@ HandlePool::~HandlePool()
 }
 
 #pragma mark - Concurrency
-int HandlePool::maxAllowedNumberOfHandles()
-{
-    static const int s_maxAllowedNumberOfHandles = std::max<int>(
-    HandlePoolMaxAllowedNumberOfHandles, std::thread::hardware_concurrency());
-    return s_maxAllowedNumberOfHandles;
-}
-
 bool HandlePool::isNumberOfHandlesAllowed() const
 {
     WCTInnerAssert(m_concurrency.readSafety());
     WCTInnerAssert(m_memory.readSafety());
-    return numberOfAliveHandles() < maxAllowedNumberOfHandles();
+    return numberOfAliveHandles() < HandlePoolMaxAllowedNumberOfHandles;
 }
 
 void HandlePool::blockade()
@@ -196,7 +189,7 @@ RecyclableHandle HandlePool::flowOut(Slot slot)
                 Error error(Error::Code::Exceed,
                             Error::Level::Error,
                             "The operating count of database exceeds the maximum allowed.");
-                error.infos.set("MaxAllowed", maxAllowedNumberOfHandles());
+                error.infos.set("MaxAllowed", HandlePoolMaxAllowedNumberOfHandles);
                 error.infos.set(ErrorStringKeyPath, path);
                 Notifier::shared().notify(error);
                 setThreadedError(std::move(error));
@@ -220,7 +213,7 @@ RecyclableHandle HandlePool::flowOut(Slot slot)
                 Error error(Error::Code::Exceed,
                             Error::Level::Error,
                             "The operating count of database exceeds the maximum allowed.");
-                error.infos.set("MaxAllowed", maxAllowedNumberOfHandles());
+                error.infos.set("MaxAllowed", HandlePoolMaxAllowedNumberOfHandles);
                 error.infos.set(ErrorStringKeyPath, path);
                 Notifier::shared().notify(error);
                 setThreadedError(std::move(error));

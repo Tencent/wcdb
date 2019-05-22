@@ -66,7 +66,6 @@ protected:
     mutable SharedLock m_concurrency;
 
 private:
-    static int maxAllowedNumberOfHandles();
     bool isNumberOfHandlesAllowed() const;
     void clearAllHandles();
 

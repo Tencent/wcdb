@@ -529,7 +529,7 @@ bool Database::backup()
 bool Database::backupIfAlreadyInitialized()
 {
     InitializedGuard initializedGuard = isInitialized();
-    bool succeed = false;
+    bool succeed = true;
     if (initializedGuard.valid()) {
         succeed = doBackup();
     }
@@ -729,7 +729,7 @@ std::pair<bool, bool> Database::stepMigration()
 std::pair<bool, bool> Database::stepMigrationIfAlreadyInitialized()
 {
     InitializedGuard initializedGuard = isInitialized();
-    bool succeed = false;
+    bool succeed = true;
     bool done = false;
     if (initializedGuard.valid()) {
         std::tie(succeed, done) = doStepMigration(true);

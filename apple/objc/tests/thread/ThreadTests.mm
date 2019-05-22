@@ -24,23 +24,9 @@
 
 @interface ThreadTests : TableTestCase
 
-@property (nonatomic, readonly) NSTimeInterval delayForTolerance;
-
-@property (nonatomic, readonly) int maxConcurrency;
-
 @end
 
 @implementation ThreadTests
-
-- (NSTimeInterval)delayForTolerance
-{
-    return 2;
-}
-
-- (int)maxConcurrency
-{
-    return std::max<int>(WCDB::HandlePoolMaxAllowedNumberOfHandles, std::thread::hardware_concurrency());
-}
 
 - (void)test_feature_read_concurrency
 {
@@ -321,7 +307,7 @@
 
     NSCondition* condition = [[NSCondition alloc] init];
     TestCaseCounter* counter = [TestCaseCounter value:0];
-    for (int i = 0; i < self.maxConcurrency; ++i) {
+    for (int i = 0; i < WCDB::HandlePoolMaxAllowedNumberOfHandles; ++i) {
         [self.dispatch async:^{
             WCTHandle* handle = nil;
             @synchronized(self) {
@@ -342,7 +328,7 @@
         }];
     }
 
-    while (counter.value != self.maxConcurrency) {
+    while (counter.value != WCDB::HandlePoolMaxAllowedNumberOfHandles) {
     }
 
     TestCaseAssertFalse([[self.database getHandle] validate]);

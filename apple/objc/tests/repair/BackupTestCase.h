@@ -28,7 +28,6 @@
 @property (nonatomic, readonly) NSTimeInterval backupDelayForCritical;
 @property (nonatomic, readonly) NSTimeInterval backupDelayForNonCritical;
 
-@property (nonatomic, readonly) NSTimeInterval delayForTolerance;
 @property (nonatomic, readonly) int framesForTolerance;
 
 @end
