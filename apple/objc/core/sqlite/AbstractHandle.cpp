@@ -223,23 +223,14 @@ std::pair<bool, bool> AbstractHandle::tableExists(const String &table)
 
 std::pair<bool, bool> AbstractHandle::tableExists(const Schema &schema, const String &table)
 {
-    // TODO: use sqlite3_table_column_metadata to check if table exists? 1. performance 2. table created by other handles?
-    HandleStatement *handleStatement = getStatement();
-    StatementSelect statementSelect
-    = StatementSelect().select(1).from(TableOrSubquery(table).schema(schema)).limit(0);
     markErrorAsIgnorable(Error::Code::Error);
-    bool exists = false;
-    bool succeed = handleStatement->prepare(statementSelect);
-    if (succeed) {
-        exists = true;
-        finalizeStatements();
-    } else {
-        if (m_error.code() == Error::Code::Error) {
-            succeed = true;
-        }
+    bool succeed = APIExit(sqlite3_table_column_metadata(
+    m_handle, schema.getDescription().c_str(), table.c_str(), nullptr, nullptr, nullptr, nullptr, nullptr, nullptr));
+    bool exists = succeed;
+    if (!succeed && isErrorIgnorable()) {
+        succeed = true;
     }
     markErrorAsUnignorable();
-    returnStatement(handleStatement);
     return { succeed, exists };
 }
 
