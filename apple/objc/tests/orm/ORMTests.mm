@@ -66,6 +66,12 @@
 
 @implementation ORMTests
 
+- (void)setUp
+{
+    [super setUp];
+    self.expectMode = DatabaseTestCaseExpectSomeSQLs;
+}
+
 - (void)doTestCreateTableAndIndexSQLsAsExpected:(NSArray<NSString*>*)expected
 {
     TestCaseAssertTrue(expected != nil);
