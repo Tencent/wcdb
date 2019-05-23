@@ -20,12 +20,12 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/CoreConst.h>
-#include <WCDB/MigrationStepperHandle.hpp>
+#include <WCDB/MigrateHandle.hpp>
 #include <WCDB/Time.hpp>
 
 namespace WCDB {
 
-MigrationStepperHandle::MigrationStepperHandle()
+MigrateHandle::MigrateHandle()
 : m_migratingInfo(nullptr)
 , m_migrateStatement(getStatement())
 , m_removeMigratedStatement(getStatement())
@@ -36,7 +36,7 @@ MigrationStepperHandle::MigrationStepperHandle()
     markErrorAsIgnorable(Error::Code::Busy);
 }
 
-MigrationStepperHandle::~MigrationStepperHandle()
+MigrateHandle::~MigrateHandle()
 {
     finalizeMigrationStatement();
     returnStatement(m_migrateStatement);
@@ -44,7 +44,7 @@ MigrationStepperHandle::~MigrationStepperHandle()
     markErrorAsUnignorable(2);
 }
 
-bool MigrationStepperHandle::reAttach(const String& newPath, const Schema& newSchema)
+bool MigrateHandle::reAttach(const String& newPath, const Schema& newSchema)
 {
     bool succeed = true;
     do {
@@ -71,7 +71,7 @@ bool MigrationStepperHandle::reAttach(const String& newPath, const Schema& newSc
 }
 
 #pragma mark - Stepper
-std::pair<bool, std::set<String>> MigrationStepperHandle::getAllTables()
+std::pair<bool, std::set<String>> MigrateHandle::getAllTables()
 {
     Column name("name");
     Column type("type");
@@ -83,7 +83,7 @@ std::pair<bool, std::set<String>> MigrationStepperHandle::getAllTables()
                      0);
 }
 
-bool MigrationStepperHandle::dropSourceTable(const MigrationInfo* info)
+bool MigrateHandle::dropSourceTable(const MigrationInfo* info)
 {
     WCTInnerAssert(info != nullptr);
     bool succeed = false;
@@ -94,7 +94,7 @@ bool MigrationStepperHandle::dropSourceTable(const MigrationInfo* info)
     return succeed;
 }
 
-bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
+bool MigrateHandle::migrateRows(const MigrationInfo* info, bool& done)
 {
     WCTInnerAssert(info != nullptr);
     done = false;
@@ -163,7 +163,7 @@ bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
     return succeed;
 }
 
-std::pair<bool, bool> MigrationStepperHandle::migrateRow()
+std::pair<bool, bool> MigrateHandle::migrateRow()
 {
     WCTInnerAssert(m_migrateStatement->isPrepared()
                    && m_removeMigratedStatement->isPrepared());
@@ -184,7 +184,7 @@ std::pair<bool, bool> MigrationStepperHandle::migrateRow()
 }
 
 std::tuple<bool, bool, bool>
-MigrationStepperHandle::tryMigrateRowWithoutIncreasingDirtyPage(int numberOfDirtyPages)
+MigrateHandle::tryMigrateRowWithoutIncreasingDirtyPage(int numberOfDirtyPages)
 {
     WCTInnerAssert(m_migrateStatement->isPrepared()
                    && m_removeMigratedStatement->isPrepared());
@@ -211,15 +211,14 @@ MigrationStepperHandle::tryMigrateRowWithoutIncreasingDirtyPage(int numberOfDirt
     return { succeed, needToWork, migrated };
 }
 
-void MigrationStepperHandle::finalizeMigrationStatement()
+void MigrateHandle::finalizeMigrationStatement()
 {
     m_migrateStatement->finalize();
     m_removeMigratedStatement->finalize();
 }
 
 #pragma mark - Info Initializer
-std::pair<bool, bool>
-MigrationStepperHandle::sourceTableExists(const MigrationUserInfo& userInfo)
+std::pair<bool, bool> MigrateHandle::sourceTableExists(const MigrationUserInfo& userInfo)
 {
     bool succeed = false;
     bool exists = false;
@@ -234,7 +233,7 @@ MigrationStepperHandle::sourceTableExists(const MigrationUserInfo& userInfo)
 }
 
 std::tuple<bool, bool, std::set<String>>
-MigrationStepperHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
+MigrateHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
 {
     bool succeed = true;
     bool integerPrimary = false;
@@ -260,7 +259,7 @@ MigrationStepperHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
     return { succeed, integerPrimary, columns };
 }
 
-String MigrationStepperHandle::getDatabasePath() const
+String MigrateHandle::getDatabasePath() const
 {
     return getPath();
 }

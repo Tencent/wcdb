@@ -75,9 +75,9 @@ public:
 protected:
     enum HandleType : unsigned int {
         Normal = 0,
-        Migrate,
+        Migrating,
 
-        MigrationStep,
+        Migrate,
 
         Checkpoint,
 
