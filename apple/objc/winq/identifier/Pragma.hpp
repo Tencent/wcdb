@@ -48,7 +48,6 @@ public:
     static Pragma cellSizeCheck();
     static Pragma checkpointFullfsync();
     static Pragma collationList();
-    static Pragma compileOptions();
     static Pragma dataVersion();
     static Pragma databaseList();
     static Pragma deferForeignKeys();
