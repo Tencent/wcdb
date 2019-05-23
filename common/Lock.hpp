@@ -20,9 +20,10 @@
 
 #pragma once
 
+#include <WCDB/Thread.hpp>
 #include <WCDB/ThreadLocal.hpp>
 #include <atomic>
-#include <thread>
+#include <mutex>
 
 namespace WCDB {
 
@@ -76,7 +77,7 @@ protected:
     int m_writers;
     int m_pendingReaders;
     int m_pendingWriters;
-    std::thread::id m_locking;
+    Thread m_locking;
     // mutable since it can be only modified threaded
     mutable ThreadLocal<int> m_threadedReaders;
 };

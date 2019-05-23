@@ -1379,6 +1379,10 @@
 		23F70FD620A07CEC00CCE3CD /* CustomConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F70FD420A07CEC00CCE3CD /* CustomConfig.cpp */; };
 		23F70FD820A07CEC00CCE3CD /* CustomConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FD520A07CEC00CCE3CD /* CustomConfig.hpp */; };
 		23FEC463206B3032001E7A3B /* WCTConvenient.h in Headers */ = {isa = PBXBuildFile; fileRef = 23FEC461206B3032001E7A3B /* WCTConvenient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		390E1C5C2296414C00C24598 /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 390E1C5A2296414C00C24598 /* Thread.cpp */; };
+		390E1C5D2296414C00C24598 /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 390E1C5A2296414C00C24598 /* Thread.cpp */; };
+		390E1C5E2296414C00C24598 /* Thread.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 390E1C5B2296414C00C24598 /* Thread.hpp */; };
+		390E1C5F2296414C00C24598 /* Thread.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 390E1C5B2296414C00C24598 /* Thread.hpp */; };
 		391F7C84225DE8FD0095E82D /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 391F7C83225DE8FD0095E82D /* Core.h */; };
 		391F7C85225DE8FD0095E82D /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 391F7C83225DE8FD0095E82D /* Core.h */; };
 		3934957C228265C900E43964 /* ColumnConstraintNotNull.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F06BA227AA57A00DD65A2 /* ColumnConstraintNotNull.mm */; };
@@ -2574,6 +2578,8 @@
 		23F70FD420A07CEC00CCE3CD /* CustomConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CustomConfig.cpp; sourceTree = "<group>"; };
 		23F70FD520A07CEC00CCE3CD /* CustomConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CustomConfig.hpp; sourceTree = "<group>"; };
 		23FEC461206B3032001E7A3B /* WCTConvenient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTConvenient.h; sourceTree = "<group>"; };
+		390E1C5A2296414C00C24598 /* Thread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Thread.cpp; sourceTree = "<group>"; };
+		390E1C5B2296414C00C24598 /* Thread.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Thread.hpp; sourceTree = "<group>"; };
 		391F7C83225DE8FD0095E82D /* Core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
 		3934962A228265C900E43964 /* Tests iOS static.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests iOS static.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		393496312282667100E43964 /* Tests iOS static.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Tests iOS static.xcconfig"; sourceTree = "<group>"; };
@@ -3626,6 +3632,8 @@
 			children = (
 				23F0FEB3215F5E9A008399FB /* Lock.cpp */,
 				23F0FEB1215F5E9A008399FB /* Lock.hpp */,
+				390E1C5A2296414C00C24598 /* Thread.cpp */,
+				390E1C5B2296414C00C24598 /* Thread.hpp */,
 				23F0FEB0215F5E99008399FB /* ThreadLocal.cpp */,
 				23F0FEB2215F5E9A008399FB /* ThreadLocal.hpp */,
 				2316D92E21057CA700707AFC /* MappedData.cpp */,
@@ -4516,6 +4524,7 @@
 				2367BCB52215004300380122 /* Frame.hpp in Headers */,
 				2367BCB62215004300380122 /* WCTChainCall+Private.h in Headers */,
 				2367BCB72215004300380122 /* WCTProperty.h in Headers */,
+				390E1C5F2296414C00C24598 /* Thread.hpp in Headers */,
 				2367BCB82215004300380122 /* WCTCppAccessor.h in Headers */,
 				2367BCB92215004300380122 /* FileHandle.hpp in Headers */,
 				2367BCBA2215004300380122 /* StatementDelete.hpp in Headers */,
@@ -4844,6 +4853,7 @@
 				23567CFC20CA3889005F1C35 /* Frame.hpp in Headers */,
 				23776CA7218C41E600E985DC /* WCTChainCall+Private.h in Headers */,
 				2349F7681EA0D6680021EFA7 /* WCTProperty.h in Headers */,
+				390E1C5E2296414C00C24598 /* Thread.hpp in Headers */,
 				2349F7561EA0D6680021EFA7 /* WCTCppAccessor.h in Headers */,
 				2308F85120E32A51001CD9C3 /* FileHandle.hpp in Headers */,
 				23EEDCCA217DFADC006E9E73 /* StatementDelete.hpp in Headers */,
@@ -5734,6 +5744,7 @@
 				2367BB852215004300380122 /* CheckpointConfig.cpp in Sources */,
 				2367BB862215004300380122 /* SyntaxCTETableName.cpp in Sources */,
 				2367BB872215004300380122 /* Filter.cpp in Sources */,
+				390E1C5D2296414C00C24598 /* Thread.cpp in Sources */,
 				2367BB882215004300380122 /* QualifiedTable.cpp in Sources */,
 				2367BB892215004300380122 /* BasicConfig.cpp in Sources */,
 				2367BB8A2215004300380122 /* StatementPragma.cpp in Sources */,
@@ -6012,6 +6023,7 @@
 				23F70FB820A055CF00CCE3CD /* CheckpointConfig.cpp in Sources */,
 				23EEDCF7217DFADC006E9E73 /* SyntaxCTETableName.cpp in Sources */,
 				23EEDC85217DFADC006E9E73 /* Filter.cpp in Sources */,
+				390E1C5C2296414C00C24598 /* Thread.cpp in Sources */,
 				23EEDC9B217DFADC006E9E73 /* QualifiedTable.cpp in Sources */,
 				23F70FA620A055BE00CCE3CD /* BasicConfig.cpp in Sources */,
 				23EEDCD7217DFADC006E9E73 /* StatementPragma.cpp in Sources */,
