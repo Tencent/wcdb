@@ -137,11 +137,6 @@ Pragma Pragma::collationList()
     return Pragma("collation_list");
 }
 
-Pragma Pragma::compileOptions()
-{
-    return Pragma("compile_options");
-}
-
 Pragma Pragma::dataVersion()
 {
     return Pragma("data_version");

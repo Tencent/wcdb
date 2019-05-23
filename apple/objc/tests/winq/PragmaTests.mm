@@ -78,7 +78,6 @@
     TestCaseAssertSQLEqual(WCDB::Pragma::cipherVersion(), @"cipher_version");
     TestCaseAssertSQLEqual(WCDB::Pragma::cipherPageSize(), @"cipher_page_size");
     TestCaseAssertSQLEqual(WCDB::Pragma::collationList(), @"collation_list");
-    TestCaseAssertSQLEqual(WCDB::Pragma::compileOptions(), @"compile_options");
     TestCaseAssertSQLEqual(WCDB::Pragma::dataVersion(), @"data_version");
     TestCaseAssertSQLEqual(WCDB::Pragma::databaseList(), @"database_list");
     TestCaseAssertSQLEqual(WCDB::Pragma::deferForeignKeys(), @"defer_foreign_keys");
