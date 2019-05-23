@@ -47,19 +47,14 @@ void SpinLock::unlock()
 }
 
 SharedLock::SharedLock()
-: m_readers(0)
-, m_writers(0)
-, m_pendingReaders(0)
-, m_pendingWriters(0)
-, m_locking(std::thread::id())
-, m_threadedReaders(0)
+: m_readers(0), m_writers(0), m_pendingReaders(0), m_pendingWriters(0), m_threadedReaders(0)
 {
 }
 
 void SharedLock::lockShared()
 {
     std::unique_lock<std::mutex> lockGuard(m_mutex);
-    if (m_writers > 0 ? m_locking != std::this_thread::get_id() :
+    if (m_writers > 0 ? !m_locking.isCurrentThread() :
                         (m_pendingWriters > 0 && *m_threadedReaders.getOrCreate() == 0)) {
         // If it is locked but not current thread, it should wait for the write lock.
         // If it is not locked but there is someone pending to lock and current thread is not already shared locked, it should wait for the pending lock to avoid the pending lock starve.
@@ -72,7 +67,7 @@ void SharedLock::lockShared()
     // it's already locked by current thread
     // or it's already shared locked by current thread
     // or it's not locked
-    WCTInnerAssert(m_locking == std::this_thread::get_id()
+    WCTInnerAssert(m_locking.isCurrentThread()
                    || *m_threadedReaders.getOrCreate() > 0 || m_writers == 0);
     ++m_readers;
     ++*m_threadedReaders.getOrCreate();
@@ -102,7 +97,7 @@ void SharedLock::lock()
     *m_threadedReaders.getOrCreate() == 0, "Upgrade lock is not supported.", return;);
 
     std::unique_lock<std::mutex> lockGuard(m_mutex);
-    if ((m_readers > 0 || m_writers > 0) && m_locking != std::this_thread::get_id()) {
+    if ((m_readers > 0 || m_writers > 0) && !m_locking.isCurrentThread()) {
         // If it is locked but not current thread, it should wait for the write lock
         // If it is shared locked but not current thread, it should wait for the read lock
         // Note that it can't be called when it is shared locked by current thread, no matter the write lock is hold or not.
@@ -114,10 +109,9 @@ void SharedLock::lock()
     }
     // it's already locked by current thread
     // or it's not locked and it's not shared locked
-    WCTInnerAssert(m_locking == std::this_thread::get_id()
-                   || (m_writers == 0 && m_readers == 0));
+    WCTInnerAssert(m_locking.isCurrentThread() || (m_writers == 0 && m_readers == 0));
     ++m_writers;
-    m_locking = std::this_thread::get_id();
+    m_locking = Thread::current();
 }
 
 void SharedLock::unlock()
@@ -126,11 +120,11 @@ void SharedLock::unlock()
     *m_threadedReaders.getOrCreate() == 0, "Downgrade lock is not supported.", return;);
 
     std::unique_lock<std::mutex> lockGuard(m_mutex);
-    WCTRemedialAssert(m_locking == std::this_thread::get_id(), "Unpaired unlock.", return;);
+    WCTRemedialAssert(m_locking.isCurrentThread(), "Unpaired unlock.", return;);
     WCTInnerAssert(m_readers == 0);
     WCTInnerAssert(m_writers > 0);
     if (--m_writers == 0) {
-        m_locking = std::thread::id();
+        m_locking = nullptr;
         // write lock first
         if (m_pendingWriters > 0) {
             m_writersCond.notify_one();
@@ -143,7 +137,7 @@ void SharedLock::unlock()
 SharedLock::Level SharedLock::level() const
 {
     std::lock_guard<std::mutex> lockGuard(m_mutex);
-    if (m_locking == std::this_thread::get_id()) {
+    if (m_locking.isCurrentThread()) {
         return Level::Write;
     } else if ((*m_threadedReaders.getOrCreate()) > 0) {
         return Level::Read;
