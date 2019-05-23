@@ -257,25 +257,4 @@
     TestCaseAssertTrue(self.database.isMigrated);
 }
 
-- (void)doTestFeatureStepAsLeastAsPossibleButNotWaste
-{
-#warning TODO - wait for the answer of SQLite staff about the dirty page of ROLLBACK TO stmt.
-    //    [self.database removeCheckpointConfig];
-    //    TestCaseAssertTrue([self.database truncateCheckpoint]);
-    //
-    //    BOOL succeed;
-    //    int lastWalFrameCount = [self getNumberOfWalFrames];
-    //    TestCaseAssertEqual(lastWalFrameCount, 0);
-    //    do {
-    //        succeed = [self.database stepMigration];
-    //
-    //        int walFrameCount = [self getNumberOfWalFrames];
-    //        // <=3: 1. sqlite_sequence 2. source table 3. table
-    //        TestCaseAssertTrue(walFrameCount - lastWalFrameCount <= 3);
-    //        lastWalFrameCount = walFrameCount;
-    //    } while (succeed && ![self.database isMigrated]);
-    //    TestCaseAssertTrue(succeed);
-    //    TestCaseAssertTrue(done);
-}
-
 @end

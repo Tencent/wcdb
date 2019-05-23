@@ -78,11 +78,6 @@
     [self doTestFeatureAutoMigrateWillNotStopDueToInterrupt];
 }
 
-- (void)test_feature_step_as_least_as_possible_but_not_waste
-{
-    [self doTestFeatureStepAsLeastAsPossibleButNotWaste];
-}
-
 - (NSArray<NSObject<WCTTableCoding>*>*)getAllObjects
 {
     return [self.table getObjectsOrders:MigrationObject.identifier.asOrder(WCTOrderedAscending)];

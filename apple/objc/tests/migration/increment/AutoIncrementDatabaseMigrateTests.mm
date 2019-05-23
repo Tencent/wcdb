@@ -78,11 +78,6 @@
     [self doTestFeatureAutoMigrateWillNotStopDueToInterrupt];
 }
 
-- (void)test_feature_step_as_least_as_possible_but_not_waste
-{
-    [self doTestFeatureStepAsLeastAsPossibleButNotWaste];
-}
-
 - (void)test_feature_migrate_newly_created_table_after_migrated
 {
     [self doTestFeatureMigrateNewlyCreatedTableAfterMigrated];

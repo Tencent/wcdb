@@ -40,8 +40,6 @@
 
 - (void)doTestFeatureAutoMigrateWillNotStopDueToInterrupt;
 
-- (void)doTestFeatureStepAsLeastAsPossibleButNotWaste;
-
 - (void)doTestFeatureMigrateNewlyCreatedTableAfterMigrated;
 
 @end
