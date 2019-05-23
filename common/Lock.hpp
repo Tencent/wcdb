@@ -38,19 +38,6 @@ public:
     virtual void unlock() = 0;
 };
 
-#pragma mark - Spin Lock
-// TODO: use Lock instead of SpinLock for single-core device.
-class SpinLock final : public Lockable {
-public:
-    using Lockable::Lockable;
-
-    void lock() override final;
-    void unlock() override final;
-
-protected:
-    std::atomic_flag m_locked = ATOMIC_FLAG_INIT;
-};
-
 #pragma mark - Lock
 class Lock final : public Lockable {
 public:
