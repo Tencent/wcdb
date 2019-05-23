@@ -49,7 +49,6 @@ void AsyncQueue::run()
     std::lock_guard<std::mutex> lockGuard(m_lock);
     if (!m_started && !isExiting()) {
         m_started = true;
-#warning TODO
         std::thread(std::bind(&AsyncQueue::doRun, this)).detach();
     }
 }
