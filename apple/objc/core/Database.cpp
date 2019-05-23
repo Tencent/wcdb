@@ -30,8 +30,8 @@
 #include <WCDB/BackupHandle.hpp>
 #include <WCDB/ConfiguredHandle.hpp>
 #include <WCDB/IntegrityHandle.hpp>
-#include <WCDB/MigrationHandle.hpp>
-#include <WCDB/MigrationStepperHandle.hpp>
+#include <WCDB/MigrateHandle.hpp>
+#include <WCDB/MigratingHandle.hpp>
 
 namespace WCDB {
 
@@ -170,7 +170,7 @@ RecyclableHandle Database::getHandle()
     if (!initializedGuard.valid()) {
         return nullptr;
     }
-    return flowOut(m_migration.shouldMigrate() ? HandleType::Migrate : HandleType::Normal);
+    return flowOut(m_migration.shouldMigrate() ? HandleType::Migrating : HandleType::Normal);
 }
 
 bool Database::execute(const Statement &statement)
@@ -211,11 +211,11 @@ std::shared_ptr<Handle> Database::generateSlotedHandle(Slot slot)
     case HandleType::Checkpoint:
         handle.reset(new CheckpointHandle);
         break;
-    case HandleType::Migrate:
-        handle.reset(new MigrationHandle(m_migration));
+    case HandleType::Migrating:
+        handle.reset(new MigratingHandle(m_migration));
         break;
-    case HandleType::MigrationStep:
-        handle.reset(new MigrationStepperHandle);
+    case HandleType::Migrate:
+        handle.reset(new MigrateHandle);
         break;
     case HandleType::BackupRead:
         handle.reset(new BackupReadHandle);
@@ -244,7 +244,7 @@ std::shared_ptr<Handle> Database::generateSlotedHandle(Slot slot)
     }
 
     // open
-    if (type == HandleType::Normal || type == HandleType::Migrate || type == HandleType::MigrationStep
+    if (type == HandleType::Normal || type == HandleType::Migrating || type == HandleType::Migrate
         || type == HandleType::Checkpoint || type == HandleType::Integrity) {
         handle->setPath(path);
         if (!handle->open()) {
@@ -753,15 +753,15 @@ std::pair<bool, bool> Database::doStepMigration(bool checkSuspended)
         return { true, false };
     }
 
-    RecyclableHandle handle = flowOut(HandleType::MigrationStep);
+    RecyclableHandle handle = flowOut(HandleType::Migrate);
     if (handle != nullptr) {
         if (checkSuspended && suspended()) {
             return { true, false };
         }
 
-        WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()) != nullptr);
+        WCTInnerAssert(dynamic_cast<MigrateHandle *>(handle.get()) != nullptr);
         std::tie(succeed, done)
-        = m_migration.step(*(static_cast<MigrationStepperHandle *>(handle.get())));
+        = m_migration.step(*(static_cast<MigrateHandle *>(handle.get())));
         if (!succeed && handle->isErrorIgnorable()) {
             succeed = true;
         }
@@ -846,9 +846,9 @@ void Database::suspend(bool suspend)
         static_cast<CheckpointHandle *>(handle.get())->suspend(suspend);
     }
 
-    for (const auto &handle : getHandles(HandleType::MigrationStep)) {
-        WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()) != nullptr);
-        static_cast<MigrationStepperHandle *>(handle.get())->suspend(suspend);
+    for (const auto &handle : getHandles(HandleType::Migrate)) {
+        WCTInnerAssert(dynamic_cast<MigrateHandle *>(handle.get()) != nullptr);
+        static_cast<MigrateHandle *>(handle.get())->suspend(suspend);
     }
 }
 

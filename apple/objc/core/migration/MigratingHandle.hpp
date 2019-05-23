@@ -27,11 +27,11 @@ namespace WCDB {
 
 class MigrationInfo;
 
-class MigrationHandle final : public Handle, public Migration::Binder {
+class MigratingHandle final : public Handle, public Migration::Binder {
 #pragma mark - Initialize
 public:
-    MigrationHandle(Migration &migration);
-    ~MigrationHandle();
+    MigratingHandle(Migration &migration);
+    ~MigratingHandle();
 
 #pragma mark - Binder
 protected:

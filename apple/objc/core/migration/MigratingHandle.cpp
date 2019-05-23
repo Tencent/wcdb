@@ -19,14 +19,14 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/MigrationHandle.hpp>
+#include <WCDB/MigratingHandle.hpp>
 #include <WCDB/MigrationInfo.hpp>
 #include <WCDB/String.hpp>
 
 namespace WCDB {
 
 #pragma mark - Initialize
-MigrationHandle::MigrationHandle(Migration& migration)
+MigratingHandle::MigratingHandle(Migration& migration)
 : Handle()
 , Migration::Binder(migration)
 , m_additionalStatement(getStatement())
@@ -38,7 +38,7 @@ MigrationHandle::MigrationHandle(Migration& migration)
 {
 }
 
-MigrationHandle::~MigrationHandle()
+MigratingHandle::~MigratingHandle()
 {
     returnStatement(m_additionalStatement);
     returnStatement(m_migrateStatement);
@@ -47,7 +47,7 @@ MigrationHandle::~MigrationHandle()
 
 #pragma mark - Info Initializer
 std::tuple<bool, bool, std::set<String>>
-MigrationHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
+MigratingHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
 {
     bool succeed = true;
     bool integerPrimary = false;
@@ -73,7 +73,7 @@ MigrationHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
     return { succeed, integerPrimary, columns };
 }
 
-std::pair<bool, bool> MigrationHandle::sourceTableExists(const MigrationUserInfo& userInfo)
+std::pair<bool, bool> MigratingHandle::sourceTableExists(const MigrationUserInfo& userInfo)
 {
     bool succeed = true;
     bool exists = false;
@@ -98,13 +98,13 @@ std::pair<bool, bool> MigrationHandle::sourceTableExists(const MigrationUserInfo
     return { succeed, exists };
 }
 
-String MigrationHandle::getDatabasePath() const
+String MigratingHandle::getDatabasePath() const
 {
     return getPath();
 }
 
 #pragma mark - Binder
-bool MigrationHandle::rebindViews(const std::map<String, RecyclableMigrationInfo>& migratings)
+bool MigratingHandle::rebindViews(const std::map<String, RecyclableMigrationInfo>& migratings)
 {
     std::map<String, const MigrationInfo*> views2MigratingInfos;
     for (const auto& iter : migratings) {
@@ -151,7 +151,7 @@ bool MigrationHandle::rebindViews(const std::map<String, RecyclableMigrationInfo
     return true;
 }
 
-bool MigrationHandle::rebindSchemas(const std::map<String, RecyclableMigrationInfo>& migratings)
+bool MigratingHandle::rebindSchemas(const std::map<String, RecyclableMigrationInfo>& migratings)
 {
     std::map<String, const MigrationInfo*> schemas2MigratingInfos;
     for (const auto& iter : migratings) {
@@ -194,13 +194,13 @@ bool MigrationHandle::rebindSchemas(const std::map<String, RecyclableMigrationIn
     return true;
 }
 
-bool MigrationHandle::bindInfos(const std::map<String, RecyclableMigrationInfo>& migratings)
+bool MigratingHandle::bindInfos(const std::map<String, RecyclableMigrationInfo>& migratings)
 {
     return rebindViews(migratings) && rebindSchemas(migratings);
 }
 
 #pragma mark - Migration
-std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& originStatement)
+std::pair<bool, std::list<Statement>> MigratingHandle::process(const Statement& originStatement)
 {
 #ifdef DEBUG
     m_processing = true;
@@ -362,7 +362,7 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
     return { succeed, std::move(statements) };
 }
 
-bool MigrationHandle::tryFallbackToUnionedView(Syntax::Schema& schema, String& table)
+bool MigratingHandle::tryFallbackToUnionedView(Syntax::Schema& schema, String& table)
 {
     bool succeed = true;
     if (schema.isMain()) {
@@ -376,7 +376,7 @@ bool MigrationHandle::tryFallbackToUnionedView(Syntax::Schema& schema, String& t
     return succeed;
 }
 
-bool MigrationHandle::tryFallbackToSourceTable(Syntax::Schema& schema, String& table)
+bool MigratingHandle::tryFallbackToSourceTable(Syntax::Schema& schema, String& table)
 {
     bool succeed = true;
     if (schema.isMain()) {
@@ -391,7 +391,7 @@ bool MigrationHandle::tryFallbackToSourceTable(Syntax::Schema& schema, String& t
 }
 
 #pragma mark - Override
-bool MigrationHandle::prepare(const Statement& statement)
+bool MigratingHandle::prepare(const Statement& statement)
 {
     WCTInnerAssert(!m_processing);
     WCTRemedialAssert(!isPrepared(), "Last statement is not finalized.", finalize(););
@@ -410,19 +410,19 @@ bool MigrationHandle::prepare(const Statement& statement)
     return false;
 }
 
-bool MigrationHandle::isPrepared()
+bool MigratingHandle::isPrepared()
 {
     return m_mainStatement->isPrepared();
 }
 
-void MigrationHandle::finalize()
+void MigratingHandle::finalize()
 {
     m_mainStatement->finalize();
     m_additionalStatement->finalize();
     finalizeMigrate();
 }
 
-bool MigrationHandle::step()
+bool MigratingHandle::step()
 {
     if (m_additionalStatement->isPrepared() || isMigratedPrepared()) {
         return runNestedTransaction(
@@ -431,7 +431,7 @@ bool MigrationHandle::step()
     return realStep();
 }
 
-bool MigrationHandle::realStep()
+bool MigratingHandle::realStep()
 {
     WCTInnerAssert(!(m_additionalStatement->isPrepared() && isMigratedPrepared()));
     return m_mainStatement->step()
@@ -439,12 +439,12 @@ bool MigrationHandle::realStep()
            && (!isMigratedPrepared() || stepMigration(getLastInsertedRowID()));
 }
 
-bool MigrationHandle::done()
+bool MigratingHandle::done()
 {
     return m_mainStatement->done();
 }
 
-void MigrationHandle::reset()
+void MigratingHandle::reset()
 {
     m_mainStatement->reset();
     WCTInnerAssert(!(m_additionalStatement->isPrepared() && isMigratedPrepared()));
@@ -456,7 +456,7 @@ void MigrationHandle::reset()
     }
 }
 
-void MigrationHandle::bindInteger32(const Integer32& value, int index)
+void MigratingHandle::bindInteger32(const Integer32& value, int index)
 {
     m_mainStatement->bindInteger32(value, index);
     if (m_additionalStatement->isPrepared()) {
@@ -464,7 +464,7 @@ void MigrationHandle::bindInteger32(const Integer32& value, int index)
     }
 }
 
-void MigrationHandle::bindInteger64(const Integer64& value, int index)
+void MigratingHandle::bindInteger64(const Integer64& value, int index)
 {
     m_mainStatement->bindInteger64(value, index);
     if (m_additionalStatement->isPrepared()) {
@@ -472,7 +472,7 @@ void MigrationHandle::bindInteger64(const Integer64& value, int index)
     }
 }
 
-void MigrationHandle::bindDouble(const Float& value, int index)
+void MigratingHandle::bindDouble(const Float& value, int index)
 {
     m_mainStatement->bindDouble(value, index);
     if (m_additionalStatement->isPrepared()) {
@@ -480,7 +480,7 @@ void MigrationHandle::bindDouble(const Float& value, int index)
     }
 }
 
-void MigrationHandle::bindText(const Text& value, int index)
+void MigratingHandle::bindText(const Text& value, int index)
 {
     m_mainStatement->bindText(value, index);
     if (m_additionalStatement->isPrepared()) {
@@ -488,7 +488,7 @@ void MigrationHandle::bindText(const Text& value, int index)
     }
 }
 
-void MigrationHandle::bindBLOB(const BLOB& value, int index)
+void MigratingHandle::bindBLOB(const BLOB& value, int index)
 {
     m_mainStatement->bindBLOB(value, index);
     if (m_additionalStatement->isPrepared()) {
@@ -496,7 +496,7 @@ void MigrationHandle::bindBLOB(const BLOB& value, int index)
     }
 }
 
-void MigrationHandle::bindNull(int index)
+void MigratingHandle::bindNull(int index)
 {
     m_mainStatement->bindNull(index);
     if (m_additionalStatement->isPrepared()) {
@@ -504,81 +504,81 @@ void MigrationHandle::bindNull(int index)
     }
 }
 
-MigrationHandle::Integer32 MigrationHandle::getInteger32(int index)
+MigratingHandle::Integer32 MigratingHandle::getInteger32(int index)
 {
     WCTInnerAssert(!m_additionalStatement->isPrepared());
     return m_mainStatement->getInteger32(index);
 }
 
-MigrationHandle::Integer64 MigrationHandle::getInteger64(int index)
+MigratingHandle::Integer64 MigratingHandle::getInteger64(int index)
 {
     WCTInnerAssert(!m_additionalStatement->isPrepared());
     return m_mainStatement->getInteger64(index);
 }
 
-MigrationHandle::Float MigrationHandle::getDouble(int index)
+MigratingHandle::Float MigratingHandle::getDouble(int index)
 {
     WCTInnerAssert(!m_additionalStatement->isPrepared());
     return m_mainStatement->getDouble(index);
 }
 
-MigrationHandle::Text MigrationHandle::getText(int index)
+MigratingHandle::Text MigratingHandle::getText(int index)
 {
     WCTInnerAssert(!m_additionalStatement->isPrepared());
     return m_mainStatement->getText(index);
 }
 
-MigrationHandle::BLOB MigrationHandle::getBLOB(int index)
+MigratingHandle::BLOB MigratingHandle::getBLOB(int index)
 {
     WCTInnerAssert(!m_additionalStatement->isPrepared());
     return m_mainStatement->getBLOB(index);
 }
 
-ColumnType MigrationHandle::getType(int index)
+ColumnType MigratingHandle::getType(int index)
 {
     WCTInnerAssert(!m_additionalStatement->isPrepared());
     return m_mainStatement->getType(index);
 }
 
-const UnsafeString MigrationHandle::getOriginColumnName(int index)
+const UnsafeString MigratingHandle::getOriginColumnName(int index)
 {
     WCTInnerAssert(!m_additionalStatement->isPrepared());
     return m_mainStatement->getOriginColumnName(index);
 }
 
-const UnsafeString MigrationHandle::getColumnName(int index)
+const UnsafeString MigratingHandle::getColumnName(int index)
 {
     WCTInnerAssert(!m_additionalStatement->isPrepared());
     return m_mainStatement->getColumnName(index);
 }
 
-const UnsafeString MigrationHandle::getColumnTableName(int index)
+const UnsafeString MigratingHandle::getColumnTableName(int index)
 {
     WCTInnerAssert(!m_additionalStatement->isPrepared());
     return m_mainStatement->getColumnTableName(index);
 }
 
-bool MigrationHandle::isStatementReadonly()
+bool MigratingHandle::isStatementReadonly()
 {
     WCTInnerAssert(!m_additionalStatement->isPrepared());
     return m_mainStatement->isReadonly();
 }
 
-int MigrationHandle::getNumberOfColumns()
+int MigratingHandle::getNumberOfColumns()
 {
     WCTInnerAssert(!m_additionalStatement->isPrepared());
     return m_mainStatement->getNumberOfColumns();
 }
 
 #pragma mark - Migrate
-bool MigrationHandle::isMigratedPrepared()
+bool MigratingHandle::isMigratedPrepared()
 {
     WCTInnerAssert(m_migrateStatement->isPrepared()
                    == m_removeMigratedStatement->isPrepared());
     return m_migrateStatement->isPrepared() /* || m_removeMigratedStatement->isPrepared() */;
 }
 
-bool MigrationHandle::stepMigration(const int64_t& rowid)
+bool MigratingHandle::stepMigration(const int64_t& rowid)
 {
     WCTInnerAssert(isMigratedPrepared());
     m_migrateStatement->bindInteger64(rowid, 1);
@@ -586,20 +586,20 @@ bool MigrationHandle::stepMigration(const int64_t& rowid)
     return m_migrateStatement->step() && m_removeMigratedStatement->step();
 }
 
-void MigrationHandle::finalizeMigrate()
+void MigratingHandle::finalizeMigrate()
 {
     m_migrateStatement->finalize();
     m_removeMigratedStatement->finalize();
 }
 
-void MigrationHandle::resetMigrate()
+void MigratingHandle::resetMigrate()
 {
     WCTInnerAssert(isMigratedPrepared());
     m_migrateStatement->reset();
     m_removeMigratedStatement->reset();
 }
 
-bool MigrationHandle::prepareMigrate(const String& table, Syntax::ConflictAction conflictAction)
+bool MigratingHandle::prepareMigrate(const String& table, Syntax::ConflictAction conflictAction)
 {
     WCTInnerAssert(!isMigratedPrepared());
     const MigrationInfo* info = getBoundInfo(table);
