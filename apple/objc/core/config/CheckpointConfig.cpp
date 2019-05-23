@@ -24,7 +24,6 @@
 #include <WCDB/Global.hpp>
 #include <WCDB/Handle.hpp>
 #include <WCDB/String.hpp>
-#include <mutex>
 #include <regex>
 
 namespace WCDB {

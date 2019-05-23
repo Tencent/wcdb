@@ -22,10 +22,10 @@
 
 #include <WCDB/Config.hpp>
 #include <WCDB/Global.hpp>
+#include <WCDB/Lock.hpp>
 #include <WCDB/OrderedUniqueList.hpp>
 #include <WCDB/String.hpp>
 #include <WCDB/ThreadLocal.hpp>
-#include <mutex>
 
 namespace WCDB {
 
@@ -44,11 +44,11 @@ protected:
 
 #pragma mark - Lock Event
 protected:
-    typedef Global::Lock Lock;
-    typedef Global::ShmLock ShmLock;
-    void willLock(const String& path, Lock lock);
-    void lockDidChange(const String& path, Lock lock);
-    void willShmLock(const String& path, ShmLock lock, int mask);
+    typedef Global::PagerLock PagerLockType;
+    typedef Global::ShmLock ShmLockType;
+    void willLock(const String& path, PagerLockType type);
+    void lockDidChange(const String& path, PagerLockType type);
+    void willShmLock(const String& path, ShmLockType type, int mask);
     void shmLockDidChange(const String& path, void* identifier, int sharedMask, int exclusiveMask);
 
 #pragma mark - State
@@ -57,25 +57,25 @@ protected:
     public:
         Expecting();
 
-        void expecting(ShmLock lock, int mask);
-        void expecting(Lock lock);
+        void expecting(ShmLockType type, int mask);
+        void expecting(PagerLockType type);
 
-        bool satisfied(Lock lock) const;
+        bool satisfied(PagerLockType type) const;
         bool satisfied(int sharedMask, int exclusiveMask) const;
 
     private:
-        enum class Type {
+        enum class Category {
             None,
-            Lock,
-            ShmLock,
+            Pager,
+            Shm,
         };
-        Type m_type;
+        Category m_category;
         union {
             struct {
-                ShmLock m_shmLock;
+                ShmLockType m_shmType;
                 int m_shmMask;
             };
-            Lock m_lock;
+            PagerLockType m_pagerType;
         };
     };
 
@@ -84,26 +84,26 @@ protected:
     public:
         State();
 
-        void updateLock(Lock lock);
+        void updatePagerLock(PagerLockType type);
         void updateShmLock(void* identifier, int sharedMask, int exclusiveMask);
 
         bool wait(Trying& trying);
 
     protected:
         bool shouldWait(const Expecting& expecting) const;
-        Lock m_lock;
-        struct Mask {
-            Mask();
+        PagerLockType m_pagerType;
+        struct ShmMask {
+            ShmMask();
             int shared;
             int exclusive;
         };
-        typedef struct Mask Mask;
-        std::map<void* /* identifier */, Mask> m_masks;
+        typedef struct ShmMask ShmMask;
+        std::map<void* /* identifier */, ShmMask> m_shmMasks;
 
         void tryNotify();
-        pthread_mutex_t m_mutex;
-        pthread_cond_t m_cond;
-        OrderedUniqueList<pthread_t, Expecting> m_waitings;
+        Lock m_lock;
+        Conditional m_conditional;
+        OrderedUniqueList<Thread, Expecting> m_waitings;
     };
 
     State& getOrCreateState(const String& path);

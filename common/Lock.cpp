@@ -23,6 +23,7 @@
 
 namespace WCDB {
 
+#pragma mark - Lockable
 Lockable::Lockable()
 {
 }
@@ -31,10 +32,7 @@ Lockable::~Lockable()
 {
 }
 
-SpinLock::SpinLock() : Lockable()
-{
-}
-
+#pragma mark - Spin Lock
 void SpinLock::lock()
 {
     while (m_locked.test_and_set(std::memory_order_acquire))
@@ -46,21 +44,73 @@ void SpinLock::unlock()
     m_locked.clear(std::memory_order_release);
 }
 
+#pragma mark - Lock
+void Lock::lock()
+{
+    m_mutex.lock();
+}
+
+void Lock::unlock()
+{
+    m_mutex.unlock();
+}
+
+#pragma mark - Conditional
+void Conditional::wait(Lock &lock)
+{
+    std::unique_lock<std::mutex> lockGuard(lock.m_mutex, std::adopt_lock);
+    m_condition.wait(lockGuard);
+}
+
+bool Conditional::wait_for(Lock &lock, double seconds)
+{
+    bool timeout = false;
+    if (seconds > 0) {
+        std::unique_lock<std::mutex> lockGuard(lock.m_mutex, std::defer_lock);
+        timeout = m_condition.wait_for(
+                  lockGuard, std::chrono::nanoseconds((long long) (seconds * 1E9)))
+                  == std::cv_status::timeout;
+    }
+    return !timeout;
+}
+
+void Conditional::signal()
+{
+    m_condition.notify_one();
+}
+
+void Conditional::notify()
+{
+    m_condition.notify_all();
+}
+
+void Conditional::notify(const Thread &thread)
+{
+    pthread_cond_signal_thread_np(m_condition.native_handle(), thread.m_id);
+}
+
+#pragma mark - Shared Lock
 SharedLock::SharedLock()
 : m_readers(0), m_writers(0), m_pendingReaders(0), m_pendingWriters(0), m_threadedReaders(0)
 {
 }
 
+SharedLock::~SharedLock()
+{
+    WCTRemedialAssert(m_writers == 0 && m_pendingWriters == 0, "Unpaired lock", ;);
+    WCTRemedialAssert(m_readers == 0 && m_pendingReaders == 0, "Unpaired shared lock", ;);
+}
+
 void SharedLock::lockShared()
 {
-    std::unique_lock<std::mutex> lockGuard(m_mutex);
+    LockGuard lockGuard(m_lock);
     if (m_writers > 0 ? !m_locking.isCurrentThread() :
                         (m_pendingWriters > 0 && *m_threadedReaders.getOrCreate() == 0)) {
         // If it is locked but not current thread, it should wait for the write lock.
         // If it is not locked but there is someone pending to lock and current thread is not already shared locked, it should wait for the pending lock to avoid the pending lock starve.
         ++m_pendingReaders;
         do {
-            m_readersCond.wait(lockGuard);
+            m_conditionalReaders.wait(m_lock);
         } while (m_writers > 0 || m_pendingWriters > 0);
         --m_pendingReaders;
     }
@@ -79,14 +129,14 @@ void SharedLock::unlockShared()
     WCTRemedialAssert(*threadedReader > 0, "Unpaired unlock shared.", return;);
     WCTInnerAssert(*threadedReader > 0);
 
-    std::unique_lock<std::mutex> lockGuard(m_mutex);
+    LockGuard lockGuard(m_lock);
     WCTInnerAssert(m_readers > 0);
     --*threadedReader;
     --m_readers;
     if (m_readers == 0) {
         WCTInnerAssert(*m_threadedReaders.getOrCreate() == 0);
         if (m_writers == 0 && m_pendingWriters > 0) {
-            m_writersCond.notify_one();
+            m_conditionalWriters.notify();
         }
     }
 }
@@ -96,14 +146,15 @@ void SharedLock::lock()
     WCTRemedialAssert(
     *m_threadedReaders.getOrCreate() == 0, "Upgrade lock is not supported.", return;);
 
-    std::unique_lock<std::mutex> lockGuard(m_mutex);
+    LockGuard lockGuard(m_lock);
+    m_conditionalWriters.wait(m_lock);
     if ((m_readers > 0 || m_writers > 0) && !m_locking.isCurrentThread()) {
         // If it is locked but not current thread, it should wait for the write lock
         // If it is shared locked but not current thread, it should wait for the read lock
         // Note that it can't be called when it is shared locked by current thread, no matter the write lock is hold or not.
         ++m_pendingWriters;
         do {
-            m_writersCond.wait(lockGuard);
+            m_conditionalWriters.wait(m_lock);
         } while (m_readers > 0 || m_writers > 0);
         --m_pendingWriters;
     }
@@ -119,7 +170,7 @@ void SharedLock::unlock()
     WCTRemedialAssert(
     *m_threadedReaders.getOrCreate() == 0, "Downgrade lock is not supported.", return;);
 
-    std::unique_lock<std::mutex> lockGuard(m_mutex);
+    LockGuard lockGuard(m_lock);
     WCTRemedialAssert(m_locking.isCurrentThread(), "Unpaired unlock.", return;);
     WCTInnerAssert(m_readers == 0);
     WCTInnerAssert(m_writers > 0);
@@ -127,16 +178,16 @@ void SharedLock::unlock()
         m_locking = nullptr;
         // write lock first
         if (m_pendingWriters > 0) {
-            m_writersCond.notify_one();
+            m_conditionalWriters.signal();
         } else if (m_pendingReaders > 0) {
-            m_readersCond.notify_all();
+            m_conditionalReaders.notify();
         }
     }
 }
 
 SharedLock::Level SharedLock::level() const
 {
-    std::lock_guard<std::mutex> lockGuard(m_mutex);
+    LockGuard lockGuard(m_lock);
     if (m_locking.isCurrentThread()) {
         return Level::Write;
     } else if ((*m_threadedReaders.getOrCreate()) > 0) {
@@ -155,12 +206,7 @@ bool SharedLock::writeSafety() const
     return level() >= SharedLock::Level::Write;
 }
 
-SharedLock::~SharedLock()
-{
-    WCTRemedialAssert(m_writers == 0 && m_pendingWriters == 0, "Unpaired lock", ;);
-    WCTRemedialAssert(m_readers == 0 && m_pendingReaders == 0, "Unpaired shared lock", ;);
-}
-
+#pragma mark - Lock Guard
 LockGuard::LockGuard(const std::nullptr_t &) : m_lock(nullptr)
 {
 }
@@ -170,9 +216,9 @@ LockGuard::LockGuard(Lockable &lock) : m_lock(&lock)
     m_lock->lock();
 }
 
-LockGuard::LockGuard(LockGuard &&guard) : m_lock(guard.m_lock)
+LockGuard::LockGuard(LockGuard &&movable) : m_lock(movable.m_lock)
 {
-    guard.m_lock = nullptr;
+    movable.m_lock = nullptr;
 }
 
 LockGuard::~LockGuard()
@@ -187,9 +233,11 @@ bool LockGuard::valid() const
     return m_lock != nullptr;
 }
 
-SharedLockGuard::SharedLockGuard(SharedLockGuard &&guard) : m_lock(guard.m_lock)
+#pragma mark - Shared Lock Guard
+SharedLockGuard::SharedLockGuard(SharedLockGuard &&movable)
+: m_lock(movable.m_lock)
 {
-    guard.m_lock = nullptr;
+    movable.m_lock = nullptr;
 }
 
 SharedLockGuard::SharedLockGuard(const std::nullptr_t &) : m_lock(nullptr)
