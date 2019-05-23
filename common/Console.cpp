@@ -110,7 +110,7 @@ void Console::fatal(const String& message, const char* file, int line, const cha
     error.infos.set("BuildTime", WCDB_BUILD_TIME);
     error.infos.set("BuildTimestamp", WCDB_BUILD_TIMESTAMP);
     error.infos.set("CommitHash", WCDB_COMMIT_HASH);
-    print(error.getDescription());
+    Notifier::shared().notify(error);
 }
 
 #else // WCDB_ASSERTION
@@ -123,7 +123,7 @@ void Console::fatal(const String& message)
     error.infos.set("BuildTime", WCDB_BUILD_TIME);
     error.infos.set("BuildTimestamp", WCDB_BUILD_TIMESTAMP);
     error.infos.set("CommitHash", WCDB_COMMIT_HASH);
-    print(error.getDescription());
+    Notifier::shared().notify(error);
 }
 
 #endif // WCDB_ASSERTION
