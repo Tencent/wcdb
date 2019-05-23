@@ -35,10 +35,10 @@ AsyncQueue::AsyncQueue(const String& name_)
 
 AsyncQueue::~AsyncQueue()
 {
-    LockGuard lockGuard(m_lock);
+    std::unique_lock<std::mutex> lockGuard(m_lock);
     while (m_running) {
         // wait until done
-        m_conditional.wait_for(m_lock, AsyncQueueTimeOutForExiting);
+        m_conditional.wait_for(lockGuard, AsyncQueueTimeOutForExiting);
     }
     WCTRemedialAssert(
     !m_running, String::formatted("Queue: %s does not exit on time.", name.c_str()), ;);
@@ -46,7 +46,7 @@ AsyncQueue::~AsyncQueue()
 
 void AsyncQueue::run()
 {
-    LockGuard lockGuard(m_lock);
+    std::lock_guard<std::mutex> lockGuard(m_lock);
     if (!m_started && !isExiting()) {
         m_started = true;
 #warning TODO
@@ -60,9 +60,9 @@ void AsyncQueue::doRun()
     if (!isExiting()) {
         m_running.store(true);
         loop();
-        LockGuard lockGuard(m_lock);
+        std::lock_guard<std::mutex> lockGuard(m_lock);
         m_running.store(false);
-        m_conditional.signal();
+        m_conditional.notify_one();
     }
 }
 

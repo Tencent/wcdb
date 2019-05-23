@@ -27,53 +27,26 @@
 
 namespace WCDB {
 
-#pragma mark - Lockable
-class Lockable {
-public:
-    Lockable();
-    Lockable(const Lockable &) = delete;
-    Lockable &operator=(const Lockable &) = delete;
-    virtual ~Lockable() = 0;
-    virtual void lock() = 0;
-    virtual void unlock() = 0;
-};
-
-#pragma mark - Lock
-class Lock final : public Lockable {
-public:
-    using Lockable::Lockable;
-
-    void lock() override final;
-    void unlock() override final;
-
-protected:
-    friend class Conditional;
-    std::mutex m_mutex;
-};
-
 #pragma mark - Conditional
-class Conditional final {
+class Conditional final : public std::condition_variable {
 public:
-    void wait(Lock &lock);
     // false for timeout
-    bool wait_for(Lock &lock, double seconds);
+    bool wait_for(std::unique_lock<std::mutex> &lockGuard, double seconds);
 
-    void signal(); // notify one
-    void notify(); // notify all
     void notify(const Thread &thread);
-
-protected:
-    std::condition_variable m_condition;
 };
 
 #pragma mark - Shared Lock
-class SharedLock final : public Lockable {
+// TODO:
+// std::shared_timed_mutex is supported since iOS 10 and macOS 10.12.
+// std::shared_mutex is supported in a more recent version.
+class SharedLock final {
 public:
     SharedLock();
     ~SharedLock();
 
-    void lock() override final;
-    void unlock() override final;
+    void lock();
+    void unlock();
 
     void lockShared();
     void unlockShared();
@@ -88,7 +61,7 @@ public:
     bool writeSafety() const;
 
 protected:
-    mutable Lock m_lock;
+    mutable std::mutex m_lock;
     Conditional m_conditionalReaders;
     Conditional m_conditionalWriters;
     int m_readers;
@@ -103,7 +76,7 @@ protected:
 #pragma mark - Lock Guard
 class LockGuard final {
 public:
-    LockGuard(Lockable &lock);
+    LockGuard(SharedLock &lock);
     LockGuard(LockGuard &&movable);
     LockGuard(const std::nullptr_t &);
     ~LockGuard();
@@ -115,7 +88,7 @@ public:
     bool valid() const;
 
 protected:
-    Lockable *m_lock;
+    SharedLock *m_lock;
 };
 
 #pragma mark - Shared Lock Guard

@@ -55,7 +55,7 @@ public:
     ssize_t getHighWater() const override final;
 
 protected:
-    mutable Lock m_lock;
+    mutable std::mutex m_lock;
 };
 
 } // namespace WCDB

@@ -56,25 +56,25 @@ ssize_t AbstractHighWater::getHighWater() const
 
 void ShareableHighWater::increase(size_t size)
 {
-    LockGuard lockGuard(m_lock);
+    std::lock_guard<std::mutex> lockGuard(m_lock);
     AbstractHighWater::increase(size);
 }
 
 void ShareableHighWater::decrease(size_t size)
 {
-    LockGuard lockGuard(m_lock);
+    std::lock_guard<std::mutex> lockGuard(m_lock);
     AbstractHighWater::decrease(size);
 }
 
 ssize_t ShareableHighWater::getCurrent() const
 {
-    LockGuard lockGuard(m_lock);
+    std::lock_guard<std::mutex> lockGuard(m_lock);
     return AbstractHighWater::getCurrent();
 }
 
 ssize_t ShareableHighWater::getHighWater() const
 {
-    LockGuard lockGuard(m_lock);
+    std::lock_guard<std::mutex> lockGuard(m_lock);
     return AbstractHighWater::getHighWater();
 }
 
