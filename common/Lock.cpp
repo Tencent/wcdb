@@ -32,18 +32,6 @@ Lockable::~Lockable()
 {
 }
 
-#pragma mark - Spin Lock
-void SpinLock::lock()
-{
-    while (m_locked.test_and_set(std::memory_order_acquire))
-        ;
-}
-
-void SpinLock::unlock()
-{
-    m_locked.clear(std::memory_order_release);
-}
-
 #pragma mark - Lock
 void Lock::lock()
 {
