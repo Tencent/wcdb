@@ -19,8 +19,11 @@
  */
 
 #import "TestCaseCounter.h"
+#import <atomic>
 
-@implementation TestCaseCounter
+@implementation TestCaseCounter {
+    std::atomic<int> m_i;
+}
 
 + (instancetype)value:(int)value
 {
@@ -30,19 +33,29 @@
 - (instancetype)initWithValue:(int)value
 {
     if (self = [super init]) {
-        self.value = value;
+        m_i.store(value);
     }
     return self;
 }
 
+- (int)value
+{
+    return m_i.load();
+}
+
+- (void)setValue:(int)value
+{
+    m_i.store(value);
+}
+
 - (void)increment
 {
-    ++self.value;
+    ++m_i;
 }
 
 - (void)decrement
 {
-    --self.value;
+    --m_i;
 }
 
 @end

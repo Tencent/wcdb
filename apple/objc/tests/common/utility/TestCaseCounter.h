@@ -24,7 +24,10 @@
 
 + (instancetype)value:(int)value;
 - (instancetype)initWithValue:(int)value;
-@property (atomic, assign) int value;
+
+- (int)value;
+- (void)setValue:(int)value;
+
 - (void)increment;
 - (void)decrement;
 
