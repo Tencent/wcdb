@@ -27,6 +27,7 @@
 
 namespace WCDB {
 
+#pragma mark - Lockable
 class Lockable {
 public:
     Lockable();
@@ -37,10 +38,11 @@ public:
     virtual void unlock() = 0;
 };
 
+#pragma mark - Spin Lock
 // TODO: use Lock instead of SpinLock for single-core device.
 class SpinLock final : public Lockable {
 public:
-    SpinLock();
+    using Lockable::Lockable;
 
     void lock() override final;
     void unlock() override final;
@@ -49,6 +51,35 @@ protected:
     std::atomic_flag m_locked = ATOMIC_FLAG_INIT;
 };
 
+#pragma mark - Lock
+class Lock final : public Lockable {
+public:
+    using Lockable::Lockable;
+
+    void lock() override final;
+    void unlock() override final;
+
+protected:
+    friend class Conditional;
+    std::mutex m_mutex;
+};
+
+#pragma mark - Conditional
+class Conditional final {
+public:
+    void wait(Lock &lock);
+    // false for timeout
+    bool wait_for(Lock &lock, double seconds);
+
+    void signal(); // notify one
+    void notify(); // notify all
+    void notify(const Thread &thread);
+
+protected:
+    std::condition_variable m_condition;
+};
+
+#pragma mark - Shared Lock
 class SharedLock final : public Lockable {
 public:
     SharedLock();
@@ -70,9 +101,9 @@ public:
     bool writeSafety() const;
 
 protected:
-    mutable std::mutex m_mutex;
-    std::condition_variable m_readersCond;
-    std::condition_variable m_writersCond;
+    mutable Lock m_lock;
+    Conditional m_conditionalReaders;
+    Conditional m_conditionalWriters;
     int m_readers;
     int m_writers;
     int m_pendingReaders;
@@ -82,27 +113,11 @@ protected:
     mutable ThreadLocal<int> m_threadedReaders;
 };
 
-class SharedLockGuard final {
-public:
-    SharedLockGuard(SharedLock &lock);
-    SharedLockGuard(SharedLockGuard &&guard);
-    SharedLockGuard(const std::nullptr_t &);
-    ~SharedLockGuard();
-
-    SharedLockGuard() = delete;
-    SharedLockGuard(const SharedLockGuard &) = delete;
-    SharedLockGuard &operator=(const SharedLockGuard &) = delete;
-
-    bool valid() const;
-
-protected:
-    SharedLock *m_lock;
-};
-
+#pragma mark - Lock Guard
 class LockGuard final {
 public:
     LockGuard(Lockable &lock);
-    LockGuard(LockGuard &&guard);
+    LockGuard(LockGuard &&movable);
     LockGuard(const std::nullptr_t &);
     ~LockGuard();
 
@@ -114,6 +129,24 @@ public:
 
 protected:
     Lockable *m_lock;
+};
+
+#pragma mark - Shared Lock Guard
+class SharedLockGuard final {
+public:
+    SharedLockGuard(SharedLock &lock);
+    SharedLockGuard(SharedLockGuard &&movable);
+    SharedLockGuard(const std::nullptr_t &);
+    ~SharedLockGuard();
+
+    SharedLockGuard() = delete;
+    SharedLockGuard(const SharedLockGuard &) = delete;
+    SharedLockGuard &operator=(const SharedLockGuard &) = delete;
+
+    bool valid() const;
+
+protected:
+    SharedLock *m_lock;
 };
 
 } //namespace WCDB

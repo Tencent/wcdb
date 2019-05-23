@@ -27,7 +27,6 @@
 #include <WCDB/Serialization.hpp>
 #include <algorithm>
 #include <map>
-#include <thread>
 
 namespace WCDB {
 

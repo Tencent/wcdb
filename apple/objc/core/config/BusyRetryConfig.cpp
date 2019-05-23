@@ -75,42 +75,42 @@ bool BusyRetryConfig::onBusy(const String& path, int numberOfTimes)
 }
 
 #pragma mark - State
-BusyRetryConfig::Expecting::Expecting() : m_type(Type::None)
+BusyRetryConfig::Expecting::Expecting() : m_category(Category::None)
 {
 }
 
-void BusyRetryConfig::Expecting::expecting(ShmLock lock, int mask)
+void BusyRetryConfig::Expecting::expecting(ShmLockType type, int mask)
 {
-    m_type = Type::ShmLock;
-    m_shmLock = lock;
+    m_category = Category::Shm;
+    m_shmType = type;
     m_shmMask = mask;
 }
 
-void BusyRetryConfig::Expecting::expecting(Lock lock)
+void BusyRetryConfig::Expecting::expecting(PagerLockType type)
 {
-    m_type = Type::Lock;
-    WCTInnerAssert(lock != Lock::None);
-    m_lock = lock;
+    m_category = Category::Pager;
+    WCTInnerAssert(type != PagerLockType::None);
+    m_pagerType = type;
 }
 
-bool BusyRetryConfig::Expecting::satisfied(Lock lock) const
+bool BusyRetryConfig::Expecting::satisfied(PagerLockType type) const
 {
-    WCTInnerAssert(m_type != Type::None);
+    WCTInnerAssert(m_category != Category::None);
     bool satisfied = true;
-    if (m_type == Type::Lock) {
-        switch (m_lock) {
-        case Lock::Reserved:
-            satisfied = lock != Lock::Reserved && lock != Lock::Pending
-                        && lock != Lock::Exclusive;
+    if (m_category == Category::Pager) {
+        switch (m_pagerType) {
+        case PagerLockType::Reserved:
+            satisfied = type != PagerLockType::Reserved && type != PagerLockType::Pending
+                        && type != PagerLockType::Exclusive;
             break;
-        case Lock::Pending:
+        case PagerLockType::Pending:
             // fallthrough
-        case Lock::Exclusive:
-            satisfied = lock == Lock::None;
+        case PagerLockType::Exclusive:
+            satisfied = type == PagerLockType::None;
             break;
         default:
-            WCTInnerAssert(m_lock == Lock::Shared);
-            satisfied = lock != Lock::Pending && lock != Lock::Exclusive;
+            WCTInnerAssert(m_pagerType == PagerLockType::Shared);
+            satisfied = type != PagerLockType::Pending && type != PagerLockType::Exclusive;
             break;
         }
     }
@@ -120,13 +120,13 @@ bool BusyRetryConfig::Expecting::satisfied(Lock lock) const
 bool BusyRetryConfig::Expecting::satisfied(int sharedMask, int exclusiveMask) const
 {
     bool satisified = true;
-    if (m_type == Type::ShmLock) {
-        switch (m_shmLock) {
-        case ShmLock::Shared:
+    if (m_category == Category::Shm) {
+        switch (m_shmType) {
+        case ShmLockType::Shared:
             satisified = (m_shmMask & exclusiveMask) == 0;
             break;
         default:
-            WCTInnerAssert(m_shmLock == ShmLock::Exclusive);
+            WCTInnerAssert(m_shmType == ShmLockType::Exclusive);
             satisified
             = (m_shmMask & sharedMask) == 0 && (m_shmMask & exclusiveMask) == 0;
             break;
@@ -135,7 +135,7 @@ bool BusyRetryConfig::Expecting::satisfied(int sharedMask, int exclusiveMask) co
     return satisified;
 }
 
-BusyRetryConfig::State::Mask::Mask() : shared(0), exclusive(0)
+BusyRetryConfig::State::ShmMask::ShmMask() : shared(0), exclusive(0)
 {
 }
 
@@ -154,41 +154,38 @@ BusyRetryConfig::State& BusyRetryConfig::getOrCreateState(const String& path)
     }
 }
 
-BusyRetryConfig::State::State()
-: m_lock(Lock::None), m_cond(PTHREAD_COND_INITIALIZER), m_mutex(PTHREAD_MUTEX_INITIALIZER)
+BusyRetryConfig::State::State() : m_pagerType(PagerLockType::None)
 {
 }
 
-void BusyRetryConfig::State::updateLock(Lock lock)
+void BusyRetryConfig::State::updatePagerLock(PagerLockType type)
 {
-    pthread_mutex_lock(&m_mutex);
-    if (m_lock != lock) {
-        m_lock = lock;
+    LockGuard lockGuard(m_lock);
+    if (m_pagerType != type) {
+        m_pagerType = type;
         tryNotify();
     }
-    pthread_mutex_unlock(&m_mutex);
 }
 
 void BusyRetryConfig::State::updateShmLock(void* identifier, int sharedMask, int exclusiveMask)
 {
-    pthread_mutex_lock(&m_mutex);
+    LockGuard lockGuard(m_lock);
     if (sharedMask == 0 && exclusiveMask == 0) {
-        m_masks.erase(identifier);
+        m_shmMasks.erase(identifier);
     } else {
-        State::Mask& mask = m_masks[identifier];
+        State::ShmMask& mask = m_shmMasks[identifier];
         mask.shared = sharedMask;
         mask.exclusive = exclusiveMask;
     }
     tryNotify();
-    pthread_mutex_unlock(&m_mutex);
 }
 
 bool BusyRetryConfig::State::shouldWait(const Expecting& expecting) const
 {
-    if (!expecting.satisfied(m_lock)) {
+    if (!expecting.satisfied(m_pagerType)) {
         return true;
     }
-    for (const auto& iter : m_masks) {
+    for (const auto& iter : m_shmMasks) {
         if (!expecting.satisfied(iter.second.shared, iter.second.exclusive)) {
             return true;
         }
@@ -207,10 +204,10 @@ bool BusyRetryConfig::State::wait(Trying& trying)
         // 2. even if timeout
         retry = true;
 
-        pthread_mutex_lock(&m_mutex);
+        LockGuard lockGuard(m_lock);
         if (shouldWait(trying)) {
-            pthread_t currentThread = pthread_self();
-            if (pthread_main_np() != 0) {
+            Thread currentThread = Thread::current();
+            if (Thread::isMain()) {
                 // Bigger order will let main thread be the end of the list, so that it will be woken up first.
                 m_waitings.insert(1, currentThread, trying);
             } else {
@@ -218,12 +215,7 @@ bool BusyRetryConfig::State::wait(Trying& trying)
             }
 
             SteadyClock before = SteadyClock::now();
-            struct timespec relative;
-            relative.tv_nsec
-            = (long) ((remainingTimeForRetring - (long) remainingTimeForRetring) * 1E9);
-            relative.tv_sec = (long) remainingTimeForRetring;
-
-            pthread_cond_timedwait_relative_np(&m_cond, &m_mutex, &relative);
+            m_conditional.wait_for(m_lock, remainingTimeForRetring);
 
             std::time_t cost
             = (std::time_t) std::chrono::duration_cast<std::chrono::nanoseconds>(
@@ -233,7 +225,6 @@ bool BusyRetryConfig::State::wait(Trying& trying)
 
             m_waitings.erase(currentThread);
         }
-        pthread_mutex_unlock(&m_mutex);
     }
     return retry;
 }
@@ -245,7 +236,7 @@ void BusyRetryConfig::State::tryNotify()
         if (shouldWait(iter->value)) {
             return;
         } else {
-            pthread_cond_signal_thread_np(&m_cond, iter->key);
+            m_conditional.notify(iter->key);
         }
     }
 }
@@ -273,19 +264,19 @@ double BusyRetryConfig::Trying::remainingTimeForRetring() const
 }
 
 #pragma mark - Lock Event
-void BusyRetryConfig::willLock(const String& path, Lock lock)
+void BusyRetryConfig::willLock(const String& path, PagerLockType type)
 {
-    (*m_tryings.getOrCreate())[path].expecting(lock);
+    (*m_tryings.getOrCreate())[path].expecting(type);
 }
 
-void BusyRetryConfig::lockDidChange(const String& path, Lock lock)
+void BusyRetryConfig::lockDidChange(const String& path, PagerLockType type)
 {
-    getOrCreateState(path).updateLock(lock);
+    getOrCreateState(path).updatePagerLock(type);
 }
 
-void BusyRetryConfig::willShmLock(const String& path, ShmLock lock, int mask)
+void BusyRetryConfig::willShmLock(const String& path, ShmLockType type, int mask)
 {
-    (*m_tryings.getOrCreate())[path].expecting(lock, mask);
+    (*m_tryings.getOrCreate())[path].expecting(type, mask);
 }
 
 void BusyRetryConfig::shmLockDidChange(const String& path, void* identifier, int sharedMask, int exclusiveMask)

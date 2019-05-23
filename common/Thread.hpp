@@ -20,26 +20,31 @@
 
 #pragma once
 
-#include <thread>
+#include <WCDB/SharedThreadedErrorProne.hpp>
+#include <WCDB/String.hpp>
+#include <cstddef>
+#include <pthread.h>
 
 namespace WCDB {
 
-class Thread {
+class Thread : public SharedThreadedErrorProne {
 public:
     Thread();
     Thread& operator=(const std::nullptr_t&);
 
 private:
-    Thread(const std::thread::id& id);
-    std::thread::id m_id;
+    Thread(pthread_t id);
+    friend class Conditional;
+    pthread_t m_id;
 
 public:
     static Thread current();
+    static bool isMain();
+    static void setName(const String& name);
 
     bool isCurrentThread() const;
     bool equal(const Thread& other) const;
-
-    static bool isMain();
+    bool operator==(const Thread& other) const;
 };
 
 } // namespace WCDB

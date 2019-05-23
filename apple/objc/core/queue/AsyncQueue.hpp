@@ -20,8 +20,8 @@
 
 #pragma once
 
+#include <WCDB/Lock.hpp>
 #include <WCDB/String.hpp>
-#include <mutex>
 
 namespace WCDB {
 
@@ -43,8 +43,8 @@ protected:
     virtual void loop() = 0;
 
 private:
-    std::mutex m_mutex;
-    std::condition_variable m_cond;
+    Lock m_lock;
+    Conditional m_conditional;
 
     bool m_started;
     std::atomic<bool> m_running;

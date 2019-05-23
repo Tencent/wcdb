@@ -20,7 +20,6 @@
 
 #import "CoreConst.h"
 #import "TestCase.h"
-#import <thread>
 
 @interface ThreadTests : TableTestCase
 

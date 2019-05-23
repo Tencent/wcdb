@@ -25,9 +25,7 @@
 #include <WCDB/Time.hpp>
 #include <chrono>
 #include <condition_variable>
-#include <mutex>
 #include <stdio.h>
-#include <thread>
 
 namespace WCDB {
 
@@ -36,8 +34,8 @@ class TimedQueue final {
 private:
     typedef OrderedUniqueList<Key, Info, SteadyClock> List;
     List m_list;
-    std::condition_variable m_cond;
-    std::mutex m_mutex;
+    Conditional m_conditional;
+    Lock m_lock;
     bool m_stop;
     std::atomic<bool> m_running;
 
@@ -60,7 +58,7 @@ public:
         }
         bool notify = false;
         {
-            std::lock_guard<std::mutex> lockGuard(m_mutex);
+            LockGuard lockGuard(m_lock);
             if (m_stop) {
                 return;
             }
@@ -85,14 +83,14 @@ public:
             }
         }
         if (notify) {
-            m_cond.notify_one();
+            m_conditional.signal();
         }
     }
 
     void remove(const Key &key)
     {
         {
-            std::lock_guard<std::mutex> lockGuard(m_mutex);
+            LockGuard lockGuard(m_lock);
             if (m_stop) {
                 return;
             }
@@ -107,11 +105,11 @@ public:
     void stop()
     {
         {
-            std::lock_guard<std::mutex> lockGuard(m_mutex);
+            LockGuard lockGuard(m_lock);
             m_list.clear();
             m_stop = true;
         }
-        m_cond.notify_one();
+        m_conditional.signal();
     }
 
     void waitUntilDone()
@@ -124,28 +122,29 @@ public:
     {
         m_running.store(true);
         while (!isExiting()) {
-            std::unique_lock<std::mutex> lockGuard(m_mutex);
+            LockGuard lockGuard(m_lock);
             if (m_stop) {
                 break;
             }
             if (m_list.elements().empty() && !isExiting()) {
-                m_cond.wait(lockGuard);
+                m_conditional.wait(m_lock);
                 continue;
             }
             SteadyClock now = SteadyClock::now();
             const auto &shortest = m_list.elements().begin();
             if (now < shortest->order && !isExiting()) {
-                m_cond.wait_for(lockGuard, shortest->order - now);
+                m_conditional.wait_for(
+                m_lock, shortest->order.timeIntervalSinceSteadyClock(now));
                 continue;
             }
             Key key = shortest->key;
             Info info = shortest->value;
-            lockGuard.unlock();
+            m_lock.unlock();
             bool erase = false;
             if (!isExiting()) {
                 erase = onElementExpired(key, info);
             }
-            lockGuard.lock();
+            m_lock.lock();
             if (erase) {
                 m_list.erase(key);
             }

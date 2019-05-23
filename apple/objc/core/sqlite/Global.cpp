@@ -26,11 +26,11 @@
 
 namespace WCDB {
 
-static_assert((int) Global::Lock::None == SQLITE_LOCK_NONE, "");
-static_assert((int) Global::Lock::Shared == SQLITE_LOCK_SHARED, "");
-static_assert((int) Global::Lock::Reserved == SQLITE_LOCK_RESERVED, "");
-static_assert((int) Global::Lock::Pending == SQLITE_LOCK_PENDING, "");
-static_assert((int) Global::Lock::Exclusive == SQLITE_LOCK_EXCLUSIVE, "");
+static_assert((int) Global::PagerLock::None == SQLITE_LOCK_NONE, "");
+static_assert((int) Global::PagerLock::Shared == SQLITE_LOCK_SHARED, "");
+static_assert((int) Global::PagerLock::Reserved == SQLITE_LOCK_RESERVED, "");
+static_assert((int) Global::PagerLock::Pending == SQLITE_LOCK_PENDING, "");
+static_assert((int) Global::PagerLock::Exclusive == SQLITE_LOCK_EXCLUSIVE, "");
 
 static_assert((int) Global::ShmLock::Shared == SQLITE_SHM_SHARED, "");
 static_assert((int) Global::ShmLock::Exclusive == SQLITE_SHM_EXCLUSIVE, "");
@@ -167,42 +167,44 @@ void Global::setNotificationForLockEvent(const String &name,
     m_lockEventNotifications[name] = event;
 }
 
-void Global::willLock(void *parameter, const char *path, int lock)
+void Global::willLock(void *parameter, const char *path, int type)
 {
-    reinterpret_cast<Global *>(parameter)->postWillLockNotification(path, lock);
+    reinterpret_cast<Global *>(parameter)->postWillLockNotification(path, type);
 }
 
-void Global::postWillLockNotification(const char *path_, int lock_)
+void Global::postWillLockNotification(const char *path_, int type_)
 {
     String path = path_;
     WCTInnerAssert(!path.empty());
 
-    Lock lock = (Lock) lock_;
-    WCTInnerAssert(lock == Lock::Shared || lock == Lock::Reserved || lock == Lock::Exclusive);
+    PagerLock type = (PagerLock) type_;
+    WCTInnerAssert(type == PagerLock::Shared || type == PagerLock::Reserved
+                   || type == PagerLock::Exclusive);
 
     SharedLockGuard lockGuard(m_lock);
     for (const auto &iter : m_lockEventNotifications) {
-        iter.second.willLock(path, lock);
+        iter.second.willLock(path, type);
     }
 }
 
-void Global::lockDidChange(void *parameter, const char *path, int lock)
+void Global::lockDidChange(void *parameter, const char *path, int type)
 {
-    reinterpret_cast<Global *>(parameter)->postLockDidChangeNotification(path, lock);
+    reinterpret_cast<Global *>(parameter)->postLockDidChangeNotification(path, type);
 }
 
-void Global::postLockDidChangeNotification(const char *path_, int lock_)
+void Global::postLockDidChangeNotification(const char *path_, int type_)
 {
     String path = path_;
     WCTInnerAssert(!path.empty());
 
-    Lock lock = (Lock) lock_;
-    WCTInnerAssert(lock == Lock::None || lock == Lock::Shared || lock == Lock::Reserved
-                   || lock == Lock::Pending || lock == Lock::Exclusive);
+    PagerLock type = (PagerLock) type_;
+    WCTInnerAssert(type == PagerLock::None || type == PagerLock::Shared
+                   || type == PagerLock::Reserved || type == PagerLock::Pending
+                   || type == PagerLock::Exclusive);
 
     SharedLockGuard lockGuard(m_lock);
     for (const auto &iter : m_lockEventNotifications) {
-        iter.second.lockDidChange(path, lock);
+        iter.second.lockDidChange(path, type);
     }
 }
 
@@ -216,18 +218,18 @@ void Global::postWillShmLockNotification(const char *path_, int flags, int mask)
     String path = path_;
     WCTInnerAssert(!path.empty());
 
-    ShmLock lock;
+    ShmLock type;
     if ((flags & SQLITE_SHM_SHARED) != 0) {
         WCTInnerAssert((flags & SQLITE_SHM_EXCLUSIVE) == 0);
-        lock = ShmLock::Shared;
+        type = ShmLock::Shared;
     } else {
         WCTInnerAssert((flags & SQLITE_SHM_EXCLUSIVE) != 0);
-        lock = ShmLock::Exclusive;
+        type = ShmLock::Exclusive;
     }
 
     SharedLockGuard lockGuard(m_lock);
     for (const auto &iter : m_lockEventNotifications) {
-        iter.second.willShmLock(path, lock, mask);
+        iter.second.willShmLock(path, type, mask);
     }
 }
 

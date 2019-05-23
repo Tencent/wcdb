@@ -64,7 +64,7 @@ private:
 
 #pragma mark - Lock
 public:
-    enum class Lock {
+    enum class PagerLock {
         None = 0,
         Shared = 1,
         Reserved = 2,
@@ -75,8 +75,8 @@ public:
         Shared = 4,
         Exclusive = 8,
     };
-    typedef std::function<void(const String& /* path */, Lock)> WillLockNotification;
-    typedef std::function<void(const String& /* path */, Lock)> LockDidChangeNotification;
+    typedef std::function<void(const String& /* path */, PagerLock)> WillLockNotification;
+    typedef std::function<void(const String& /* path */, PagerLock)> LockDidChangeNotification;
     typedef std::function<void(const String& /* path */, ShmLock, int /* mask */)> WillShmLockNotification;
     typedef std::function<void(const String& /* path */, void* /* identifier */, int /* sharedMask */, int /* exclMask */)> ShmLockDidChangeNotification;
     void setNotificationForLockEvent(const String& name,
@@ -86,11 +86,11 @@ public:
                                      const ShmLockDidChangeNotification& shmLockDidChange);
 
 private:
-    static void willLock(void* parameter, const char* path, int lock);
-    void postWillLockNotification(const char* path, int lock);
+    static void willLock(void* parameter, const char* path, int type);
+    void postWillLockNotification(const char* path, int type);
 
-    static void lockDidChange(void* parameter, const char* path, int lock);
-    void postLockDidChangeNotification(const char* path, int lock);
+    static void lockDidChange(void* parameter, const char* path, int type);
+    void postLockDidChangeNotification(const char* path, int type);
 
     static void willShmLock(void* parameter, const char* path, int flags, int mask);
     void postWillShmLockNotification(const char* path, int flags, int mask);
