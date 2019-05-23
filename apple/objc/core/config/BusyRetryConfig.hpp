@@ -101,7 +101,7 @@ protected:
         std::map<void* /* identifier */, ShmMask> m_shmMasks;
 
         void tryNotify();
-        Lock m_lock;
+        std::mutex m_lock;
         Conditional m_conditional;
         OrderedUniqueList<Thread, Expecting> m_waitings;
     };

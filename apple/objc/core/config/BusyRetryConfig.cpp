@@ -160,7 +160,7 @@ BusyRetryConfig::State::State() : m_pagerType(PagerLockType::None)
 
 void BusyRetryConfig::State::updatePagerLock(PagerLockType type)
 {
-    LockGuard lockGuard(m_lock);
+    std::lock_guard<std::mutex> lockGuard(m_lock);
     if (m_pagerType != type) {
         m_pagerType = type;
         tryNotify();
@@ -169,7 +169,7 @@ void BusyRetryConfig::State::updatePagerLock(PagerLockType type)
 
 void BusyRetryConfig::State::updateShmLock(void* identifier, int sharedMask, int exclusiveMask)
 {
-    LockGuard lockGuard(m_lock);
+    std::lock_guard<std::mutex> lockGuard(m_lock);
     if (sharedMask == 0 && exclusiveMask == 0) {
         m_shmMasks.erase(identifier);
     } else {
@@ -204,7 +204,7 @@ bool BusyRetryConfig::State::wait(Trying& trying)
         // 2. even if timeout
         retry = true;
 
-        LockGuard lockGuard(m_lock);
+        std::unique_lock<std::mutex> lockGuard(m_lock);
         if (shouldWait(trying)) {
             Thread currentThread = Thread::current();
             if (Thread::isMain()) {
@@ -215,7 +215,7 @@ bool BusyRetryConfig::State::wait(Trying& trying)
             }
 
             SteadyClock before = SteadyClock::now();
-            m_conditional.wait_for(m_lock, remainingTimeForRetring);
+            m_conditional.wait_for(lockGuard, remainingTimeForRetring);
 
             std::time_t cost
             = (std::time_t) std::chrono::duration_cast<std::chrono::nanoseconds>(

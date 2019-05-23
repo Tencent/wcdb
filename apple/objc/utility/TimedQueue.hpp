@@ -35,7 +35,7 @@ private:
     typedef OrderedUniqueList<Key, Info, SteadyClock> List;
     List m_list;
     Conditional m_conditional;
-    Lock m_lock;
+    std::mutex m_lock;
     bool m_stop;
     std::atomic<bool> m_running;
 
@@ -58,7 +58,7 @@ public:
         }
         bool notify = false;
         {
-            LockGuard lockGuard(m_lock);
+            std::lock_guard<std::mutex> lockGuard(m_lock);
             if (m_stop) {
                 return;
             }
@@ -83,14 +83,14 @@ public:
             }
         }
         if (notify) {
-            m_conditional.signal();
+            m_conditional.notify_one();
         }
     }
 
     void remove(const Key &key)
     {
         {
-            LockGuard lockGuard(m_lock);
+            std::lock_guard<std::mutex> lockGuard(m_lock);
             if (m_stop) {
                 return;
             }
@@ -105,11 +105,11 @@ public:
     void stop()
     {
         {
-            LockGuard lockGuard(m_lock);
+            std::lock_guard<std::mutex> lockGuard(m_lock);
             m_list.clear();
             m_stop = true;
         }
-        m_conditional.signal();
+        m_conditional.notify_one();
     }
 
     void waitUntilDone()
@@ -122,29 +122,29 @@ public:
     {
         m_running.store(true);
         while (!isExiting()) {
-            LockGuard lockGuard(m_lock);
+            std::unique_lock<std::mutex> lockGuard(m_lock);
             if (m_stop) {
                 break;
             }
             if (m_list.elements().empty() && !isExiting()) {
-                m_conditional.wait(m_lock);
+                m_conditional.wait(lockGuard);
                 continue;
             }
             SteadyClock now = SteadyClock::now();
             const auto &shortest = m_list.elements().begin();
             if (now < shortest->order && !isExiting()) {
                 m_conditional.wait_for(
-                m_lock, shortest->order.timeIntervalSinceSteadyClock(now));
+                lockGuard, shortest->order.timeIntervalSinceSteadyClock(now));
                 continue;
             }
             Key key = shortest->key;
             Info info = shortest->value;
-            m_lock.unlock();
+            lockGuard.unlock();
             bool erase = false;
             if (!isExiting()) {
                 erase = onElementExpired(key, info);
             }
-            m_lock.lock();
+            lockGuard.lock();
             if (erase) {
                 m_list.erase(key);
             }

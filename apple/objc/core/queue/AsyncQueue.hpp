@@ -43,7 +43,7 @@ protected:
     virtual void loop() = 0;
 
 private:
-    Lock m_lock;
+    std::mutex m_lock;
     Conditional m_conditional;
 
     bool m_started;
