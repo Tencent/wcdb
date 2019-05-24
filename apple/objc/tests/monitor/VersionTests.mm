@@ -19,7 +19,6 @@
  */
 
 #import "TestCase.h"
-#import "Version.h"
 
 @interface VersionTests : BaseTestCase
 
@@ -29,13 +28,8 @@
 
 - (void)test
 {
-    TestCaseAssertTrue([WCTDatabase.version isEqualToString:@WCDB_VERSION]);
-    TestCaseAssertTrue([WCTDatabase.commitHash isEqualToString:@WCDB_COMMIT_HASH]);
-    TestCaseAssertEqual(WCTDatabase.buildTimestamp, WCDB_BUILD_TIMESTAMP);
-    TestCaseAssertTrue([WCTDatabase.buildTime isEqualToDate:[NSDate dateWithTimeIntervalSince1970:WCDB_BUILD_TIMESTAMP]]);
-
-    NSString *identifier = [NSString stringWithFormat:@"%@_%@_%d", @WCDB_IDENTIFIER, @WCDB_VERSION, WCDB_BUILD_TIMESTAMP];
-    TestCaseAssertTrue([WCTDatabase.identifier isEqualToString:identifier]);
+    TestCaseLog(@"Version %@", WCTDatabase.version);
+    TestCaseLog(@"SourceId %@", WCTDatabase.sourceId);
 }
 
 @end

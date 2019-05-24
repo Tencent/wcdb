@@ -24,29 +24,14 @@
 
 @implementation WCTDatabase (Version)
 
-+ (NSString *)identifier
-{
-    return @(WCDB_IDENTIFIER "_" WCDB_VERSION "_" WCDB_STRINGIFY(WCDB_BUILD_TIMESTAMP));
-}
-
 + (NSString *)version
 {
-    return @WCDB_VERSION;
+    return @WCDB_VERSION_STRING;
 }
 
-+ (NSString *)commitHash
++ (NSString *)sourceId
 {
-    return @WCDB_COMMIT_HASH;
-}
-
-+ (NSUInteger)buildTimestamp
-{
-    return WCDB_BUILD_TIMESTAMP;
-}
-
-+ (NSDate *)buildTime
-{
-    return [NSDate dateWithTimeIntervalSince1970:WCDB_BUILD_TIMESTAMP];
+    return @WCDB_SOURCE_ID;
 }
 
 @end
