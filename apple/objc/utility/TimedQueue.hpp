@@ -40,7 +40,7 @@ private:
     std::atomic<bool> m_running;
 
 public:
-    TimedQueue() : m_stop(false), m_running(false){};
+    TimedQueue() : m_stop(false), m_running(false) {}
     ~TimedQueue()
     {
         stop();
