@@ -2585,6 +2585,7 @@
 		393496312282667100E43964 /* Tests iOS static.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Tests iOS static.xcconfig"; sourceTree = "<group>"; };
 		3934965E2282733700E43964 /* Benchmark iOS static.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Benchmark iOS static.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CaseInsensiveList.hpp; sourceTree = "<group>"; };
+		3949CC2622977428007F4C94 /* Version.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Version.xcconfig; sourceTree = "<group>"; };
 		39579856227FBC8A0069F985 /* WCTDatabase+Debug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Debug.h"; sourceTree = "<group>"; };
 		39579857227FBC8A0069F985 /* WCTDatabase+Debug.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Debug.mm"; sourceTree = "<group>"; };
 		3957985C227FD2370069F985 /* Syntax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Syntax.swift; sourceTree = "<group>"; };
@@ -4230,6 +4231,7 @@
 				234F036C227A9E3D00DD65A2 /* Release.xcconfig */,
 				234F0369227A9E3C00DD65A2 /* Info.plist */,
 				234F036E227A9E3D00DD65A2 /* WCDB.modulemap */,
+				3949CC2622977428007F4C94 /* Version.xcconfig */,
 				234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */,
 				234F036F227A9E3D00DD65A2 /* WCDB iOS Static.xcconfig */,
 				234F074F227AAEA200DD65A2 /* WCDBSwift.xcconfig */,

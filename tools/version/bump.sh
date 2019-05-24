@@ -1,35 +1,58 @@
 #!/bin/bash
 
-root=`git rev-parse --show-toplevel`
-version=`cat ${root}/VERSION`
-commitHash=`git rev-parse HEAD`
-buildTimestamp=`date +%s`
-buildTime=`date -r ${buildTimestamp} +"%Y-%m-%d %H:%M:%S UTC%z"`
+if [ ! -z "$(git status --porcelain)" ]; then 
+    echo "Git working directory is not clean."
+    exit 1
+fi
 
-echo "Bumping" $version
-echo "Hash" $commitHash
-echo "Timestamp" $buildTimestamp
-echo "Time" $buildTime
+version=""
 
-plists=(${root}/apple/support/Info.plist)
-for plist in ${plists[@]}; do
-    echo "Bumping plist" $plist
-    defaults write ${plist} CFBundleShortVersionString ${version}
-    defaults write ${plist} CFBundleVersion ${version}
+while [[ $# -gt 0 ]]
+do
+key="$1"
+case "$key" in
+    -v|--version)
+    version="$2"
+    shift
+    shift
+    ;;
+    *)
+    echo "Unknown option: $1"
+    exit 1
+    ;;
+esac
 done
 
-script=`git rev-parse --show-prefix`$0
-identifier=`md5 -q -s com.Tencent.WCDB`
+root=`git rev-parse --show-toplevel`
+
+if [ -z "$version" -a "$version" != " " ]; then
+    echo "Version is not specified."
+    exit 1
+fi
+
+build=`cat ${root}/BUILD`
+if [ -z "$build" -a "$build" != " " ]; then
+    echo "Build is not found."
+    exit 1
+fi
+build=$(($build+1))
+
+echo "Bumping $version.$build"
+
+# Root Version
+echo "$version" > "$root"/VERSION
+echo "$build" > "$root"/BUILD
 
 # ObjC Version
-echo "Bumping ObjC Version.h" 
-source=${root}/tools/version/Version.h
-target=${root}/apple/objc/utility/Version.h
+template="$root"/tools/version/template.xcconfig
+xcconfig="$root"/apple/support/Version.xcconfig
+sed -e "s/WCDB_VERSION_PLACEHOLDER/"$version"/g" \
+    -e "s/WCDB_BUILD_PLACEHOLDER/"$build"/g" \
+    "$template" > "$xcconfig"
+git add "$xcconfig"
 
-sed -e "s/WCDB_IDENTIFIER_PLACEHOLDER/${identifier}/g" \
-    -e "s/WCDB_VERSION_PLACEHOLDER/${version}/g" \
-    -e "s/WCDB_COMMIT_HASH_PLACEHOLDER/${commitHash}/g" \
-    -e "s/WCDB_BUILD_TIMESTAMP_PLACEHOLDER/${buildTimestamp}/g" \
-    -e "s/WCDB_BUILD_TIME_PLACEHOLDER/${buildTime}/g" \
-    -e "s/WCDB_VERSION_TOOL_PLACEHOLDER/${script////\\/}/g" \
-    ${source} > ${target}
+git add "$root"/VERSION
+git add "$root"/BUILD
+
+gitMessage="Bump $version.$build"
+git commit -m "$gitMessage"
