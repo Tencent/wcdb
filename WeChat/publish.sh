@@ -4,7 +4,7 @@ root=`git rev-parse --show-toplevel`
 
 # Bump
 version=`cat "$root"/VERSION`
-sh "$root"/tools/version/bump.sh "$version"
+sh "$root"/tools/version/bump.sh -v "$version"
 
 wechat="$root"/WeChat
 conan="$wechat"/conan
