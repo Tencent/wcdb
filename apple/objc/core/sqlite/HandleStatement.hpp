@@ -75,6 +75,7 @@ public:
     bool isReadonly();
 
 protected:
+    bool isBusy();
     HandleStatement(AbstractHandle *handle);
 
 private:

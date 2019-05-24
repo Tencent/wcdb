@@ -120,6 +120,7 @@
         succeed = YES;
         for (WCTObject *value in _values) {
             int index = 1;
+            [_handle reset];
             for (const WCTProperty &property : _properties) {
                 WCTInnerAssert(_autoIncrements.empty() || _autoIncrements.size() == _properties.size());
                 if (_autoIncrements.empty() || !_autoIncrements[index - 1]) {
@@ -160,7 +161,6 @@
                     }
                 }
             }
-            [_handle reset];
         }
         [_handle finalizeStatement];
     }
