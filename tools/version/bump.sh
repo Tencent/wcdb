@@ -37,7 +37,7 @@ if [ -z "$build" -a "$build" != " " ]; then
 fi
 build=$(($build+1))
 
-echo "Bumping" $version"."$build
+echo "Bumping $version.$build"
 
 # Root Version
 echo "$version" > "$root"/VERSION
@@ -54,5 +54,5 @@ git add "$xcconfig"
 git add "$root"/VERSION
 git add "$root"/BUILD
 
-gitMessage="Bump" $version"."$build
-git commit -m $gitMessage
+gitMessage="Bump $version.$build"
+git commit -m "$gitMessage"
