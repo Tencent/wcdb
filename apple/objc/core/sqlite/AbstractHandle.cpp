@@ -44,16 +44,6 @@ sqlite3 *AbstractHandle::getRawHandle()
     return m_handle;
 }
 
-#pragma mark - Global
-void AbstractHandle::hookFileOpen(const FileOpen &open)
-{
-    sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
-    sqlite3_mutex *mutex = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_MASTER);
-    sqlite3_mutex_enter(mutex);
-    vfs->xSetSystemCall(vfs, "open", (sqlite3_syscall_ptr) open);
-    sqlite3_mutex_leave(mutex);
-}
-
 #pragma mark - Path
 void AbstractHandle::setPath(const String &path)
 {
@@ -188,6 +178,7 @@ void AbstractHandle::returnStatement(HandleStatement *handleStatement)
                 return;
             }
         }
+        WCTInnerAssert(false);
     }
 }
 
@@ -232,18 +223,17 @@ std::pair<bool, bool> AbstractHandle::tableExists(const Schema &schema, const St
     StatementSelect statement = *s_template;
     statement.from(TableOrSubquery(Syntax::masterTable).schema(schema));
 
-    HandleStatement *handleStatement = getStatement();
+    HandleStatement handleStatement(this);
     bool succeed = false;
     bool exists = false;
-    if (handleStatement->prepare(statement)) {
-        handleStatement->bindText(table, 1);
-        succeed = handleStatement->step();
+    if (handleStatement.prepare(statement)) {
+        handleStatement.bindText(table, 1);
+        succeed = handleStatement.step();
         if (succeed) {
-            exists = !handleStatement->done();
+            exists = !handleStatement.done();
         }
-        handleStatement->finalize();
+        handleStatement.finalize();
     }
-    returnStatement(handleStatement);
     return { succeed, exists };
 }
 
@@ -264,23 +254,22 @@ std::pair<bool, std::vector<ColumnMeta>>
 AbstractHandle::getTableMeta(const Schema &schema, const String &table)
 {
     std::vector<ColumnMeta> columnMetas;
-    HandleStatement *handleStatement = getStatement();
+    HandleStatement handleStatement(this);
     bool succeed = false;
     do {
-        if (handleStatement->prepare(
+        if (handleStatement.prepare(
             StatementPragma().pragma(Pragma::tableInfo()).schema(schema).with(table))) {
-            while ((succeed = handleStatement->step()) && !handleStatement->done()) {
-                columnMetas.push_back(ColumnMeta(handleStatement->getInteger32(0), // cid
-                                                 handleStatement->getText(1), // name
-                                                 handleStatement->getText(2), // type
-                                                 handleStatement->getInteger32(3), // notnull
-                                                 handleStatement->getInteger32(5)) // pk
+            while ((succeed = handleStatement.step()) && !handleStatement.done()) {
+                columnMetas.push_back(ColumnMeta(handleStatement.getInteger32(0), // cid
+                                                 handleStatement.getText(1), // name
+                                                 handleStatement.getText(2), // type
+                                                 handleStatement.getInteger32(3), // notnull
+                                                 handleStatement.getInteger32(5)) // pk
                 );
             }
-            handleStatement->finalize();
+            handleStatement.finalize();
         }
     } while (false);
-    returnStatement(handleStatement);
     if (!succeed) {
         columnMetas.clear();
     }
@@ -290,16 +279,15 @@ AbstractHandle::getTableMeta(const Schema &schema, const String &table)
 std::pair<bool, std::set<String>>
 AbstractHandle::getValues(const Statement &statement, int index)
 {
-    HandleStatement *handleStatement = getStatement();
+    HandleStatement handleStatement(this);
     bool succeed = false;
     std::set<String> values;
-    if (handleStatement->prepare(statement)) {
-        while ((succeed = handleStatement->step()) && !handleStatement->done()) {
-            values.emplace(handleStatement->getText(index));
+    if (handleStatement.prepare(statement)) {
+        while ((succeed = handleStatement.step()) && !handleStatement.done()) {
+            values.emplace(handleStatement.getText(index));
         }
-        handleStatement->finalize();
+        handleStatement.finalize();
     }
-    returnStatement(handleStatement);
     if (!succeed) {
         values.clear();
     }

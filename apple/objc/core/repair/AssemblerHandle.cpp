@@ -210,29 +210,29 @@ bool AssemblerHandle::assembleSequence(const String &tableName, int64_t sequence
 std::pair<bool, bool>
 AssemblerHandle::updateSequence(const String &tableName, int64_t sequence)
 {
-    WCDB_UNUSED(tableName)
-    if (!prepare(m_statementForUpdateSequence)) {
-        return { false, false };
+    bool succeed = false;
+    bool worked = false;
+    if (prepare(m_statementForUpdateSequence)) {
+        bindInteger64(sequence, 1);
+        bindText(tableName, 2);
+        succeed = step();
+        finalize();
+        if (succeed) {
+            worked = getChanges() > 0;
+        }
     }
-    bindInteger64(sequence, 1);
-    bindText(tableName, 2);
-    bool succeed = step();
-    finalize();
-    if (succeed) {
-        return { true, getChanges() > 0 };
-    }
-    return { false, false };
+    return { succeed, worked };
 }
 
 bool AssemblerHandle::insertSequence(const String &tableName, int64_t sequence)
 {
-    if (!prepare(m_statementForInsertSequence)) {
-        return false;
+    bool succeed = false;
+    if (prepare(m_statementForInsertSequence)) {
+        bindText(tableName, 1);
+        bindInteger64(sequence, 2);
+        succeed = step();
+        finalize();
     }
-    bindText(tableName, 1);
-    bindInteger64(sequence, 2);
-    bool succeed = step();
-    finalize();
     return succeed;
 }
 
