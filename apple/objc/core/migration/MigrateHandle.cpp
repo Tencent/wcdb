@@ -145,11 +145,9 @@ bool MigrateHandle::migrateRows(const MigrationInfo* info, bool& done)
         int numberOfDirtyPages = getNumberOfDirtyPages();
         WCTInnerAssert(numberOfDirtyPages != 0);
 
-        bool worked = false;
         do {
-            std::tie(succeed, worked, migrated)
-            = tryMigrateRowWithoutIncreasingDirtyPage(numberOfDirtyPages);
-        } while (succeed && worked && !migrated
+            std::tie(succeed, migrated) = migrateRow();
+        } while (succeed && !migrated && getNumberOfDirtyPages() == numberOfDirtyPages
                  && SteadyClock::now().timeIntervalSinceSteadyClock(before)
                     < MigrationStepperMaxAllowedDurationForStepping);
 
@@ -181,34 +179,6 @@ std::pair<bool, bool> MigrateHandle::migrateRow()
         }
     }
     return { succeed, migrated };
-}
-
-std::tuple<bool, bool, bool>
-MigrateHandle::tryMigrateRowWithoutIncreasingDirtyPage(int numberOfDirtyPages)
-{
-    WCTInnerAssert(m_migrateStatement->isPrepared()
-                   && m_removeMigratedStatement->isPrepared());
-    WCTInnerAssert(isInTransaction());
-    bool needToWork = true;
-    bool migrated = false;
-    bool succeed = runNestedTransaction(
-    [numberOfDirtyPages, &needToWork, &migrated, this](Handle*) -> bool {
-        bool succeed;
-        std::tie(succeed, migrated) = migrateRow();
-        if (!succeed) {
-            return false;
-        }
-        needToWork = getNumberOfDirtyPages() <= numberOfDirtyPages;
-        return needToWork;
-    });
-    if (!succeed) {
-        migrated = false;
-        if (!needToWork) {
-            // rollback manually
-            succeed = true;
-        }
-    }
-    return { succeed, needToWork, migrated };
 }
 
 void MigrateHandle::finalizeMigrationStatement()
