@@ -5,6 +5,7 @@ root=`git rev-parse --show-toplevel`
 # Bump
 version=`cat "$root"/VERSION`
 sh "$root"/tools/version/bump.sh -v "$version"
+git push origin WeChat/iOS:WeChat/iOS
 
 wechat="$root"/WeChat
 conan="$wechat"/conan
