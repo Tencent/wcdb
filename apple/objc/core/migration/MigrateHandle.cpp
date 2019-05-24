@@ -131,28 +131,12 @@ bool MigrateHandle::migrateRows(const MigrationInfo* info, bool& done)
     bool migrated = false;
     succeed = runTransaction([&migrated, this](Handle*) -> bool {
         SteadyClock before = SteadyClock::now();
-
-        // migrate one at least
-        bool succeed;
-        std::tie(succeed, migrated) = migrateRow();
-        if (!succeed) {
-            return false;
-        }
-        if (migrated) {
-            return true;
-        }
-
-        int numberOfDirtyPages = getNumberOfDirtyPages();
-        WCTInnerAssert(numberOfDirtyPages != 0);
-
+        bool succeed = false;
         do {
             std::tie(succeed, migrated) = migrateRow();
-        } while (succeed && !migrated && getNumberOfDirtyPages() == numberOfDirtyPages
+        } while (succeed && !migrated
                  && SteadyClock::now().timeIntervalSinceSteadyClock(before)
-                    < MigrationStepperMaxAllowedDurationForStepping);
-
-        // TODO - wait for the answer of SQLite staff about the dirty page of ROLLBACK TO stmt.
-        //        WCTInnerAssert(numberOfDirtyPages == getNumberOfDirtyPages());
+                    < MigrateMaxAllowedDuration);
         return succeed;
     });
     if (succeed && migrated) {
