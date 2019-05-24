@@ -45,11 +45,6 @@ private:
     sqlite3 *getRawHandle();
     sqlite3 *m_handle;
 
-#pragma mark - Global
-public:
-    typedef int (*FileOpen)(const char *, int, int);
-    static void hookFileOpen(const FileOpen &open);
-
 #pragma mark - Path
 public:
     void setPath(const String &path);

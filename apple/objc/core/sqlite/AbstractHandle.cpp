@@ -44,16 +44,6 @@ sqlite3 *AbstractHandle::getRawHandle()
     return m_handle;
 }
 
-#pragma mark - Global
-void AbstractHandle::hookFileOpen(const FileOpen &open)
-{
-    sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
-    sqlite3_mutex *mutex = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_MASTER);
-    sqlite3_mutex_enter(mutex);
-    vfs->xSetSystemCall(vfs, "open", (sqlite3_syscall_ptr) open);
-    sqlite3_mutex_leave(mutex);
-}
-
 #pragma mark - Path
 void AbstractHandle::setPath(const String &path)
 {
