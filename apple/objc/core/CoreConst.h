@@ -27,7 +27,7 @@ static constexpr const double AsyncQueueTimeOutForExiting = 10.0;
 
 // Migration Queue
 static constexpr const char* MigrationQueueName = "com.Tencent.WCDB.Queue.Migration";
-static constexpr const double MigrationQueueTimeIntervalForMigrating = 3.0;
+static constexpr const double MigrationQueueTimeIntervalForMigrating = 2.0;
 static constexpr const double MigrationQueueTimeIntervalForRetryingAfterFailure = 5.0;
 static constexpr const int MigrationQueueTolerableFailures = 5;
 
@@ -61,13 +61,6 @@ static constexpr const int BackupConfigFramesIntervalForNonCritical
 = 1 * 1024 * 1024 / 4096; // 1 MB / Default Page Size = 256
 static constexpr const double BackupQueueTimeIntervalForCritical = 1.0;
 static constexpr const double BackupQueueTimeIntervalForNonCritical = 5.0;
-
-// BackupConfigFramesIntervalForCritical should be greater than CheckpointQueueFramesThresholdForCritical since a checkpoint will trigger critical checkpoint too.
-static_assert(BackupConfigFramesIntervalForCritical > CheckpointQueueFramesThresholdForCritical,
-              "");
-
-// MigrationQueueTimeIntervalForMigrating should be greater than CheckpointQueueTimeIntervalForCritical since migration may trigger checkpoint.
-static_assert(MigrationQueueTimeIntervalForMigrating > CheckpointQueueTimeIntervalForCritical, "");
 
 // Basic Config
 static constexpr const char* BasicConfigName = "com.Tencent.WCDB.Config.Basic";
@@ -111,8 +104,8 @@ static constexpr const unsigned int HandlePoolNumberOfSlots = 8;
 static constexpr const int CheckpointFramesThresholdForTruncating
 = 10 * 1024 * 1024 / 4096; // 10 MB / Default Page Size = 2560
 
-// Migration Stepper
-static constexpr const double MigrationStepperMaxAllowedDurationForStepping = 1.0;
+// Migrate
+static constexpr const double MigrateMaxAllowedDuration = 1.0 / 60; // 1 frame
 
 // Error Key
 static constexpr const char* ErrorStringKeyAction = "Action";
@@ -146,5 +139,16 @@ static constexpr const char* ErrorSourceNative = "Native";
 
 // Tag
 static constexpr const int TagInvalidValue = 0;
+
+// Constraint
+
+// checkpoint trigger backup.
+static_assert(BackupConfigFramesIntervalForCritical > CheckpointQueueFramesThresholdForCritical,
+              "");
+
+// migration may trigger checkpoint.
+static_assert(MigrationQueueTimeIntervalForMigrating > CheckpointQueueTimeIntervalForCritical, "");
+
+static_assert(MigrationQueueTimeIntervalForMigrating > MigrateMaxAllowedDuration, "");
 
 } // namespace WCDB
