@@ -14,8 +14,3 @@ git submodule update sqlcipher
 git checkout ${branch}
 git submodule update sqlcipher
 git merge ${githubBranch}
-
-sh ${root}/tools/version/bump.sh
-git add ${root}/apple/objc/utility/Version.h
-git commit -m "Re-bump version"
-git push origin ${branch}:${branch}

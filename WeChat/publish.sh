@@ -1,6 +1,11 @@
 #!/bin/bash
 
 root=`git rev-parse --show-toplevel`
+
+# Bump
+version=`cat "$root"/VERSION`
+sh "$root"/tools/version/bump.sh "$version"
+
 wechat="$root"/WeChat
 conan="$wechat"/conan
 build_tool="$root"/tools/version/build.sh
