@@ -37,26 +37,32 @@ Core& Core::shared()
 Core::Core()
 // Database
 : m_databasePool(this)
-, m_modules(new TokenizerModules())
+, m_modules(std::make_shared<TokenizerModules>())
 // Corruption
-, m_observationQueue(new ObservationQueue(ObservationQueueName, this))
+, m_observationQueue(std::make_shared<ObservationQueue>(ObservationQueueName, this))
 // Checkpoint
-, m_checkpointQueue(new CheckpointQueue(CheckpointQueueName, this))
+, m_checkpointQueue(std::make_shared<CheckpointQueue>(CheckpointQueueName, this))
 // Backup
-, m_backupQueue(new BackupQueue(BackupQueueName, this))
-, m_backupConfig(new BackupConfig(m_backupQueue))
+, m_backupQueue(std::make_shared<BackupQueue>(BackupQueueName, this))
+, m_backupConfig(std::make_shared<BackupConfig>(m_backupQueue))
 // Migration
-, m_migrationQueue(new MigrationQueue(MigrationQueueName, this))
+, m_migrationQueue(std::make_shared<MigrationQueue>(MigrationQueueName, this))
 // Trace
-, m_globalSQLTraceConfig(new ShareableSQLTraceConfig)
-, m_globalPerformanceTraceConfig(new ShareablePerformanceTraceConfig)
+, m_globalSQLTraceConfig(std::make_shared<ShareableSQLTraceConfig>())
+, m_globalPerformanceTraceConfig(std::make_shared<ShareablePerformanceTraceConfig>())
 // Config
-, m_configs(new Configs(OrderedUniqueList<String, std::shared_ptr<Config>>({
+, m_configs(std::make_shared<Configs>(OrderedUniqueList<String, std::shared_ptr<Config>>({
   { Configs::Priority::Highest, GlobalSQLTraceConfigName, m_globalSQLTraceConfig },
   { Configs::Priority::Highest, GlobalPerformanceTraceConfigName, m_globalPerformanceTraceConfig },
-  { Configs::Priority::Highest, BusyRetryConfigName, std::shared_ptr<Config>(new BusyRetryConfig) },
-  { Configs::Priority::Highest, CheckpointConfigName, std::shared_ptr<Config>(new CheckpointConfig(m_checkpointQueue)) },
-  { Configs::Priority::Higher, BasicConfigName, std::shared_ptr<Config>(new BasicConfig) },
+  { Configs::Priority::Highest,
+    BusyRetryConfigName,
+    std::static_pointer_cast<Config>(std::make_shared<BusyRetryConfig>()) },
+  { Configs::Priority::Highest,
+    CheckpointConfigName,
+    std::static_pointer_cast<Config>(std::make_shared<CheckpointConfig>(m_checkpointQueue)) },
+  { Configs::Priority::Higher,
+    BasicConfigName,
+    std::static_pointer_cast<Config>(std::make_shared<BasicConfig>()) },
   })))
 {
     Global::shared().setNotificationForLog(
@@ -126,7 +132,8 @@ bool Core::tokenizerExists(const String& name) const
 
 std::shared_ptr<Config> Core::tokenizerConfig(const String& tokenizeName)
 {
-    return std::shared_ptr<Config>(new TokenizerConfig(tokenizeName, m_modules));
+    return std::static_pointer_cast<Config>(
+    std::make_shared<TokenizerConfig>(tokenizeName, m_modules));
 }
 
 #pragma mark - Observation

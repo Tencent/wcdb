@@ -39,7 +39,7 @@
 - (void)enableStable
 {
     @synchronized(self) {
-        _engine.reset(new std::default_random_engine(0));
+        _engine = std::make_shared<std::default_random_engine>(0);
         _uniformUInt64 = nullptr;
         _uniformUInt32 = nullptr;
         _uniformUInt8 = nullptr;
@@ -50,7 +50,7 @@
         _uniformFloat = nullptr;
         _uniformFloat_0_1 = nullptr;
         _uniformUChar = nullptr;
-        _uniformLength.reset(new std::uniform_int_distribution<int>(100, 100));
+        _uniformLength = std::make_shared<std::uniform_int_distribution<int>>(100, 100);
     }
 }
 
@@ -59,7 +59,7 @@
     @synchronized(self) {
         if (_engine == nullptr) {
             std::random_device rd;
-            _engine.reset(new std::default_random_engine(rd()));
+            _engine = std::make_shared<std::default_random_engine>(rd());
         }
         return _engine;
     }
@@ -68,7 +68,7 @@
 {
     @synchronized(self) {
         if (_uniformUInt64 == nullptr) {
-            _uniformUInt64.reset(new std::uniform_int_distribution<uint64_t>(std::numeric_limits<uint64_t>::min(), std::numeric_limits<uint64_t>::max()));
+            _uniformUInt64 = std::make_shared<std::uniform_int_distribution<uint64_t>>(std::numeric_limits<uint64_t>::min(), std::numeric_limits<uint64_t>::max());
         }
         return _uniformUInt64;
     }
@@ -77,7 +77,7 @@
 {
     @synchronized(self) {
         if (_uniformUInt32 == nullptr) {
-            _uniformUInt32.reset(new std::uniform_int_distribution<uint32_t>(std::numeric_limits<uint32_t>::min(), std::numeric_limits<uint32_t>::max()));
+            _uniformUInt32 = std::make_shared<std::uniform_int_distribution<uint32_t>>(std::numeric_limits<uint32_t>::min(), std::numeric_limits<uint32_t>::max());
         }
         return _uniformUInt32;
     }
@@ -86,7 +86,7 @@
 {
     @synchronized(self) {
         if (_uniformUInt8 == nullptr) {
-            _uniformUInt8.reset(new std::uniform_int_distribution<uint8_t>(std::numeric_limits<uint8_t>::min(), std::numeric_limits<uint8_t>::max()));
+            _uniformUInt8 = std::make_shared<std::uniform_int_distribution<uint8_t>>(std::numeric_limits<uint8_t>::min(), std::numeric_limits<uint8_t>::max());
         }
         return _uniformUInt8;
     }
@@ -95,7 +95,7 @@
 {
     @synchronized(self) {
         if (_uniformInt64 == nullptr) {
-            _uniformInt64.reset(new std::uniform_int_distribution<int64_t>(std::numeric_limits<int64_t>::min(), std::numeric_limits<int64_t>::max()));
+            _uniformInt64 = std::make_shared<std::uniform_int_distribution<int64_t>>(std::numeric_limits<int64_t>::min(), std::numeric_limits<int64_t>::max());
         }
         return _uniformInt64;
     }
@@ -104,7 +104,7 @@
 {
     @synchronized(self) {
         if (_uniformInt32 == nullptr) {
-            _uniformInt32.reset(new std::uniform_int_distribution<int32_t>(std::numeric_limits<int32_t>::min(), std::numeric_limits<int32_t>::max()));
+            _uniformInt32 = std::make_shared<std::uniform_int_distribution<int32_t>>(std::numeric_limits<int32_t>::min(), std::numeric_limits<int32_t>::max());
         }
         return _uniformInt32;
     }
@@ -113,7 +113,7 @@
 {
     @synchronized(self) {
         if (_uniformBool == nullptr) {
-            _uniformBool.reset(new std::uniform_int_distribution<bool>(std::numeric_limits<bool>::min(), std::numeric_limits<bool>::max()));
+            _uniformBool = std::make_shared<std::uniform_int_distribution<bool>>(std::numeric_limits<bool>::min(), std::numeric_limits<bool>::max());
         }
         return _uniformBool;
     }
@@ -122,7 +122,7 @@
 {
     @synchronized(self) {
         if (_uniformDouble == nullptr) {
-            _uniformDouble.reset(new std::uniform_real_distribution<double>(std::numeric_limits<double>::min(), std::numeric_limits<double>::max()));
+            _uniformDouble = std::make_shared<std::uniform_real_distribution<double>>(std::numeric_limits<double>::min(), std::numeric_limits<double>::max());
         }
         return _uniformDouble;
     }
@@ -131,7 +131,7 @@
 {
     @synchronized(self) {
         if (_uniformFloat == nullptr) {
-            _uniformFloat.reset(new std::uniform_real_distribution<float>(std::numeric_limits<float>::min(), std::numeric_limits<float>::max()));
+            _uniformFloat = std::make_shared<std::uniform_real_distribution<float>>(std::numeric_limits<float>::min(), std::numeric_limits<float>::max());
         }
         return _uniformFloat;
     }
@@ -140,7 +140,7 @@
 {
     @synchronized(self) {
         if (_uniformFloat_0_1 == nullptr) {
-            _uniformFloat_0_1.reset(new std::uniform_real_distribution<float>(0, 1));
+            _uniformFloat_0_1 = std::make_shared<std::uniform_real_distribution<float>>(0, 1);
         }
         return _uniformFloat_0_1;
     }
@@ -149,7 +149,7 @@
 {
     @synchronized(self) {
         if (_uniformUChar == nullptr) {
-            _uniformUChar.reset(new std::uniform_int_distribution<unsigned char>(std::numeric_limits<unsigned char>::min(), std::numeric_limits<unsigned char>::max()));
+            _uniformUChar = std::make_shared<std::uniform_int_distribution<unsigned char>>(std::numeric_limits<unsigned char>::min(), std::numeric_limits<unsigned char>::max());
         }
         return _uniformUChar;
     }
@@ -159,7 +159,7 @@
 {
     @synchronized(self) {
         if (_uniformLength == nullptr) {
-            _uniformLength.reset(new std::uniform_int_distribution<int>(1, 100));
+            _uniformLength = std::make_shared<std::uniform_int_distribution<int>>(1, 100);
         }
         return _uniformLength;
     }

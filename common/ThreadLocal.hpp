@@ -94,7 +94,7 @@ public:
 
     std::shared_ptr<void> constructor() override final
     {
-        return std::shared_ptr<void>(new T(m_defaultValue));
+        return std::static_pointer_cast<void>(std::make_shared<T>(m_defaultValue));
     }
 
 protected:

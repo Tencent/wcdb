@@ -121,7 +121,8 @@ bool Data::reset(const unsigned char* buffer, size_t size)
         m_sharedSize = 0;
         return true;
     }
-    std::shared_ptr<unsigned char> newSharedBuffer(new unsigned char[size]);
+    std::shared_ptr<unsigned char> newSharedBuffer(
+    new unsigned char[size], [](unsigned char* p) { delete[] p; });
     if (newSharedBuffer == nullptr) {
         setThreadedError(Error(Error::Code::NoMemory, Error::Level::Error));
         return false;
