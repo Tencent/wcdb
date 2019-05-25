@@ -28,6 +28,7 @@
 namespace WCDB {
 
 class Thread : public SharedThreadedErrorProne {
+#pragma mark - Initialize
 public:
     Thread();
     Thread& operator=(const std::nullptr_t&);
@@ -37,14 +38,23 @@ private:
     friend class Conditional;
     pthread_t m_id;
 
+#pragma mark - Which
 public:
     static Thread current();
     static bool isMain();
-    static void setName(const String& name);
-
     bool isCurrentThread() const;
+
     bool equal(const Thread& other) const;
     bool operator==(const Thread& other) const;
+
+#pragma mark - Name
+public:
+    static void setName(const String& name);
+    String getName();
+
+#pragma mark - Error
+private:
+    void setThreadedError();
 };
 
 } // namespace WCDB
