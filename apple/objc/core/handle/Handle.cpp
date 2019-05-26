@@ -45,6 +45,14 @@ bool Handle::open()
     return true;
 }
 
+void Handle::close()
+{
+    if (isOpened()) {
+        unconfigure(false);
+    }
+    AbstractHandle::close();
+}
+
 bool Handle::isConfigured() const
 {
     return m_configs != nullptr;
@@ -56,12 +64,10 @@ bool Handle::reconfigure(const std::shared_ptr<Configs> &newConfigs)
         return true;
     }
     if (isOpened()) {
-        if (m_configs != nullptr) {
-            if (!m_configs->uninvoke(this)) {
-                return false;
-            }
-            m_configs = nullptr;
+        if (!unconfigure(true)) {
+            return false;
         }
+        WCTInnerAssert(m_configs == nullptr);
         if (newConfigs != nullptr) {
             if (!newConfigs->invoke(this)) {
                 return false;
@@ -69,6 +75,18 @@ bool Handle::reconfigure(const std::shared_ptr<Configs> &newConfigs)
         }
     }
     m_configs = newConfigs;
+    return true;
+}
+
+bool Handle::unconfigure(bool stopIfFailed)
+{
+    WCTInnerAssert(isOpened());
+    if (m_configs != nullptr) {
+        if (!m_configs->uninvoke(this, stopIfFailed)) {
+            return false;
+        }
+        m_configs = nullptr;
+    }
     return true;
 }
 

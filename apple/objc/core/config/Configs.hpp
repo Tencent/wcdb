@@ -46,7 +46,7 @@ public:
     void remove(const String &name);
 
     bool invoke(Handle *handle);
-    bool uninvoke(Handle *handle);
+    bool uninvoke(Handle *handle, bool stopIfFailed = true);
 
 protected:
     OrderedUniqueList<String, std::shared_ptr<Config>> m_list;
