@@ -73,7 +73,7 @@ void ObservationQueue::loop()
     &ObservationQueue::onTimed, this, std::placeholders::_1, std::placeholders::_2));
 }
 
-bool ObservationQueue::onTimed(const String& key, const Parameter& parameter)
+void ObservationQueue::onTimed(const String& key, const Parameter& parameter)
 {
     WCTInnerAssert(m_event != nullptr);
 
@@ -137,10 +137,8 @@ bool ObservationQueue::onTimed(const String& key, const Parameter& parameter)
             m_pendings.queue(s_notifyKey,
                              ObservationQueueTimeIntervalForReinvokingCorruptedEvent,
                              Parameter(Parameter::Source::Notify));
-            return false;
         }
     }
-    return true;
 }
 
 #pragma mark - Purge

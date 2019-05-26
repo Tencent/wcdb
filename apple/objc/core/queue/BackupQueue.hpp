@@ -45,7 +45,7 @@ public:
     void unregister(const String& path);
 
 protected:
-    bool onTimed(const String& path, const int& frames);
+    void onTimed(const String& path, const int& frames);
     void loop() override final;
 
     TimedQueue<String, int> m_timedQueue;

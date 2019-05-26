@@ -66,7 +66,7 @@ protected:
     static constexpr const char* s_notifyKey = "@notify";
 
     TimedQueue<String, Parameter> m_pendings;
-    bool onTimed(const String& path, const Parameter& parameter);
+    void onTimed(const String& path, const Parameter& parameter);
 
     void loop() override final;
     mutable SharedLock m_lock;

@@ -75,23 +75,22 @@ void BackupQueue::unregister(const String& path)
     }
 }
 
-bool BackupQueue::onTimed(const String& path, const int& frames)
+void BackupQueue::onTimed(const String& path, const int& frames)
 {
     bool result = m_event->databaseShouldBackup(path);
     LockGuard lockGuard(m_lock);
     auto iter = m_records.find(path);
-    if (iter == m_records.end()) {
+    if (iter != m_records.end()) {
         // already unregistered
-        return true;
+
+        WCTInnerAssert(iter->second.registers > 0);
+        if (!result) {
+            // retry if failed
+            m_timedQueue.queue(path, BackupQueueTimeIntervalForRetryingAfterFailure, frames);
+        } else {
+            iter->second.frames = frames;
+        }
     }
-    WCTInnerAssert(iter->second.registers > 0);
-    if (!result) {
-        // retry if failed
-        m_timedQueue.queue(path, BackupQueueTimeIntervalForRetryingAfterFailure, frames);
-    } else {
-        iter->second.frames = frames;
-    }
-    return result;
 }
 
 BackupQueue::Record::Record() : frames(0), registers(0)

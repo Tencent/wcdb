@@ -48,7 +48,7 @@ protected:
     void put(const String& path, double delay, int numberOfFailures);
     void loop() override final;
 
-    bool onTimed(const String& path, const int& numberOfFailures);
+    void onTimed(const String& path, const int& numberOfFailures);
     TimedQueue<String, int> m_timedQueue;
     MigrationQueueEvent* m_event;
 

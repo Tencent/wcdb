@@ -40,14 +40,13 @@ void CheckpointQueue::loop()
     &CheckpointQueue::onTimed, this, std::placeholders::_1, std::placeholders::_2));
 }
 
-bool CheckpointQueue::onTimed(const String& path, const int& frames)
+void CheckpointQueue::onTimed(const String& path, const int& frames)
 {
     bool result = m_event->databaseShouldCheckpoint(path, frames);
     if (!result) {
         // delay retry if failed
         put(path, CheckpointQueueTimeIntervalForRetryingAfterFailure, frames);
     }
-    return result;
 }
 
 void CheckpointQueue::put(const String& path, int frames)

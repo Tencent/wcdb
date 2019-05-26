@@ -48,7 +48,7 @@ public:
 
 protected:
     void put(const String& path, double delay, int frames);
-    bool onTimed(const String& path, const int& frames);
+    void onTimed(const String& path, const int& frames);
     void loop() override final;
 
     TimedQueue<String, int> m_timedQueue;

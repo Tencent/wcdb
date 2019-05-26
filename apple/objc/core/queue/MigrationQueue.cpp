@@ -81,27 +81,23 @@ void MigrationQueue::loop()
     &MigrationQueue::onTimed, this, std::placeholders::_1, std::placeholders::_2));
 }
 
-bool MigrationQueue::onTimed(const String& path, const int& numberOfFailures)
+void MigrationQueue::onTimed(const String& path, const int& numberOfFailures)
 {
     bool succeed, done;
     std::tie(succeed, done) = m_event->databaseShouldMigrate(path);
-    bool erase = true;
     if (succeed) {
         if (!done) {
             put(path, MigrationQueueTimeIntervalForMigrating, numberOfFailures);
-            erase = false;
         }
     } else {
         if (numberOfFailures + 1 < MigrationQueueTolerableFailures) {
             put(path, MigrationQueueTimeIntervalForRetryingAfterFailure, numberOfFailures + 1);
-            erase = false;
         } else {
             Error error(Error::Code::Notice, Error::Level::Notice, "Async migration stopped due to the error.");
             error.infos.set(ErrorStringKeyPath, path);
             Notifier::shared().notify(error);
         }
     }
-    return erase;
 }
 
 } // namespace WCDB
