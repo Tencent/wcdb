@@ -39,7 +39,14 @@ MigrationQueue::MigrationQueue(const String& name, MigrationQueueEvent* event)
 void MigrationQueue::register_(const String& path)
 {
     LockGuard lockGuard(m_lock);
-    ++m_records[path];
+    auto iter = m_records.find(path);
+    if (iter == m_records.end()) {
+        m_records.emplace(path, 1);
+        put(path);
+    } else {
+        WCTInnerAssert(iter->second > 0);
+        ++iter->second;
+    }
 }
 
 void MigrationQueue::unregister(const String& path)

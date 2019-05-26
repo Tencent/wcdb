@@ -24,7 +24,6 @@ AutoMigrateConfig::~AutoMigrateConfig()
 bool AutoMigrateConfig::invoke(Handle *handle)
 {
     m_queue->register_(handle->getPath());
-    m_queue->put(handle->getPath());
     return true;
 }
 
