@@ -108,9 +108,11 @@ bool BusyRetryConfig::Expecting::satisfied(PagerLockType type) const
         case PagerLockType::Exclusive:
             satisfied = type == PagerLockType::None;
             break;
-        default:
-            WCTInnerAssert(m_pagerType == PagerLockType::Shared);
+        case PagerLockType::Shared:
             satisfied = type != PagerLockType::Pending && type != PagerLockType::Exclusive;
+            break;
+        default:
+            WCTInnerAssert(false);
             break;
         }
     }
@@ -119,6 +121,7 @@ bool BusyRetryConfig::Expecting::satisfied(PagerLockType type) const
 
 bool BusyRetryConfig::Expecting::satisfied(int sharedMask, int exclusiveMask) const
 {
+    WCTInnerAssert(m_category != Category::None);
     bool satisified = true;
     if (m_category == Category::Shm) {
         switch (m_shmType) {
