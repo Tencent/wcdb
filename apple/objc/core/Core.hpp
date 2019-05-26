@@ -95,20 +95,19 @@ protected:
 
 #pragma mark - Backup
 public:
-    void setAutoBackup(Database* database, bool enable);
+    std::shared_ptr<Config> autoBackupConfig();
 
 protected:
     bool databaseShouldBackup(const String& path) override final;
-    std::shared_ptr<BackupQueue> m_backupQueue;
-    std::shared_ptr<Config> m_backupConfig;
+    std::shared_ptr<Config> m_autoBackupConfig;
 
 #pragma mark - Migration
 public:
-    void setAutoMigration(const String& path, bool flag);
+    std::shared_ptr<Config> autoMigrateConfig();
 
 protected:
     std::pair<bool, bool> databaseShouldMigrate(const String& path) override final;
-    std::shared_ptr<MigrationQueue> m_migrationQueue;
+    std::shared_ptr<Config> m_autoMigrateConfig;
 
 #pragma mark - Trace
 public:

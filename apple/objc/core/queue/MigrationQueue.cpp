@@ -36,15 +36,36 @@ MigrationQueue::MigrationQueue(const String& name, MigrationQueueEvent* event)
     WCTInnerAssert(m_event != nullptr);
 }
 
-void MigrationQueue::put(const String& path)
+void MigrationQueue::register_(const String& path)
 {
-    m_timedQueue.queue(path, MigrationQueueTimeIntervalForMigrating, 0);
-    lazyRun();
+    LockGuard lockGuard(m_lock);
+    ++m_records[path];
 }
 
-void MigrationQueue::remove(const String& path)
+void MigrationQueue::unregister(const String& path)
 {
-    m_timedQueue.remove(path);
+    LockGuard lockGuard(m_lock);
+    WCTInnerAssert(m_records[path] >= 0);
+    if (--m_records[path] == 0) {
+        m_records.erase(path);
+        m_timedQueue.remove(path);
+    }
+}
+
+void MigrationQueue::put(const String& path)
+{
+    put(path, MigrationQueueTimeIntervalForMigrating, 0);
+}
+
+void MigrationQueue::put(const String& path, double delay, int numberOfFailures)
+{
+    SharedLockGuard lockGuard(m_lock);
+    auto iter = m_records.find(path);
+    if (iter != m_records.end()) {
+        WCTInnerAssert(iter->second > 0);
+        m_timedQueue.queue(path, delay, numberOfFailures);
+        lazyRun();
+    }
 }
 
 void MigrationQueue::loop()
@@ -60,13 +81,12 @@ bool MigrationQueue::onTimed(const String& path, const int& numberOfFailures)
     bool erase = true;
     if (succeed) {
         if (!done) {
-            m_timedQueue.queue(path, MigrationQueueTimeIntervalForMigrating, numberOfFailures);
+            put(path, MigrationQueueTimeIntervalForMigrating, numberOfFailures);
             erase = false;
         }
     } else {
         if (numberOfFailures + 1 < MigrationQueueTolerableFailures) {
-            m_timedQueue.queue(
-            path, MigrationQueueTimeIntervalForRetryingAfterFailure, numberOfFailures + 1);
+            put(path, MigrationQueueTimeIntervalForRetryingAfterFailure, numberOfFailures + 1);
             erase = false;
         } else {
             Error error(Error::Code::Notice, Error::Level::Notice, "Async migration stopped due to the error.");

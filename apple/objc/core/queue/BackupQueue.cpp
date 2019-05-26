@@ -42,24 +42,20 @@ void BackupQueue::loop()
 
 void BackupQueue::put(const String& path, int frames)
 {
-    int recordedFrames = 0;
-    {
-        SharedLockGuard lockGuard(m_lock);
-        auto iter = m_records.find(path);
-        if (iter == m_records.end()) {
-            return;
-        }
+    SharedLockGuard lockGuard(m_lock);
+    auto iter = m_records.find(path);
+    if (iter != m_records.end()) {
         WCTInnerAssert(iter->second.registers > 0);
-        recordedFrames = iter->second.frames;
-    }
-    if (frames >= recordedFrames + BackupConfigFramesIntervalForCritical // expired too much
-        || frames < recordedFrames // restarted
-    ) {
-        m_timedQueue.queue(path, BackupQueueTimeIntervalForCritical, frames);
-        lazyRun();
-    } else if (frames >= recordedFrames + BackupConfigFramesIntervalForNonCritical) {
-        m_timedQueue.queue(path, BackupQueueTimeIntervalForNonCritical, frames);
-        lazyRun();
+        int recordedFrames = iter->second.frames;
+        if (frames >= recordedFrames + BackupConfigFramesIntervalForCritical // expired too much
+            || frames < recordedFrames // restarted
+        ) {
+            m_timedQueue.queue(path, BackupQueueTimeIntervalForCritical, frames);
+            lazyRun();
+        } else if (frames >= recordedFrames + BackupConfigFramesIntervalForNonCritical) {
+            m_timedQueue.queue(path, BackupQueueTimeIntervalForNonCritical, frames);
+            lazyRun();
+        }
     }
 }
 
@@ -71,16 +67,10 @@ void BackupQueue::register_(const String& path)
 
 void BackupQueue::unregister(const String& path)
 {
-    bool removed = false;
-    {
-        LockGuard lockGuard(m_lock);
-        removed = --m_records[path].registers == 0;
-        WCTInnerAssert(m_records[path].registers >= 0);
-        if (removed) {
-            m_records.erase(path);
-        }
-    }
-    if (removed) {
+    LockGuard lockGuard(m_lock);
+    WCTInnerAssert(m_records[path].registers >= 0);
+    if (--m_records[path].registers == 0) {
+        m_records.erase(path);
         m_timedQueue.remove(path);
     }
 }

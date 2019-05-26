@@ -27,9 +27,9 @@ namespace WCDB {
 
 class BackupQueue;
 
-class BackupConfig final : public Config {
+class AutoBackupConfig final : public Config {
 public:
-    BackupConfig(const std::shared_ptr<BackupQueue>& queue);
+    AutoBackupConfig(const std::shared_ptr<BackupQueue>& queue);
 
     bool invoke(Handle* handle) override final;
     bool uninvoke(Handle* handle) override final;

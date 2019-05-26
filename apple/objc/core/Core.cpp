@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/AutoMigrateConfig.hpp>
 #include <WCDB/BusyRetryConfig.hpp>
 #include <WCDB/Core.h>
 #include <WCDB/FileManager.hpp>
@@ -43,10 +44,11 @@ Core::Core()
 // Checkpoint
 , m_checkpointQueue(std::make_shared<CheckpointQueue>(CheckpointQueueName, this))
 // Backup
-, m_backupQueue(std::make_shared<BackupQueue>(BackupQueueName, this))
-, m_backupConfig(std::make_shared<BackupConfig>(m_backupQueue))
+, m_autoBackupConfig(std::make_shared<AutoBackupConfig>(
+  std::make_shared<BackupQueue>(BackupQueueName, this)))
 // Migration
-, m_migrationQueue(std::make_shared<MigrationQueue>(MigrationQueueName, this))
+, m_autoMigrateConfig(std::make_shared<AutoMigrateConfig>(
+  std::make_shared<MigrationQueue>(MigrationQueueName, this)))
 // Trace
 , m_globalSQLTraceConfig(std::make_shared<ShareableSQLTraceConfig>())
 , m_globalPerformanceTraceConfig(std::make_shared<ShareablePerformanceTraceConfig>())
@@ -220,15 +222,9 @@ bool Core::databaseShouldCheckpoint(const String& path, int frames)
 }
 
 #pragma mark - Backup
-void Core::setAutoBackup(Database* database, bool enable)
+std::shared_ptr<Config> Core::autoBackupConfig()
 {
-    WCTInnerAssert(database != nullptr);
-    if (enable) {
-        database->setConfig(
-        WCDB::BackupConfigName, m_backupConfig, WCDB::Configs::Priority::Highest);
-    } else {
-        m_backupQueue->unregister(database->getPath());
-    }
+    return m_autoBackupConfig;
 }
 
 bool Core::databaseShouldBackup(const String& path)
@@ -253,13 +249,9 @@ std::pair<bool, bool> Core::databaseShouldMigrate(const String& path)
     return { succeed, done };
 }
 
-void Core::setAutoMigration(const String& path, bool flag)
+std::shared_ptr<Config> Core::autoMigrateConfig()
 {
-    if (flag) {
-        m_migrationQueue->put(path);
-    } else {
-        m_migrationQueue->remove(path);
-    }
+    return m_autoMigrateConfig;
 }
 
 #pragma mark - Trace
