@@ -197,8 +197,9 @@
         }
     }];
 
-    [WCTDatabase simulateIOError:WCTSimulateWriteIOError];
     self.database.autoMigrate = YES;
+    TestCaseAssertTrue([self.database canOpen]);
+    [WCTDatabase simulateIOError:WCTSimulateWriteIOError];
 
     // wait until auto migrate stopped
     while (numberOfFailures.value < WCDB::MigrationQueueTolerableFailures)

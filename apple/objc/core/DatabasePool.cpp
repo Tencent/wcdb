@@ -48,7 +48,7 @@ RecyclableDatabase DatabasePool::getOrCreate(const String &path)
     if (iter != m_databases.end()) {
         return get(iter);
     }
-    ReferencedDatabase referencedDatabase(std::shared_ptr<Database>(new Database(normalized)));
+    ReferencedDatabase referencedDatabase(std::make_shared<Database>(normalized));
     auto result = m_databases.emplace(normalized, std::move(referencedDatabase));
     WCTInnerAssert(result.second);
     m_event->databaseDidCreate(result.first->second.database.get());

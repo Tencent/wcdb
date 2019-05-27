@@ -35,8 +35,10 @@ public:
                      const WCDB::String& propertyName,
                      T* = nullptr,
                      typename std::enable_if<!WCDB::IsObjCType<T>::value>::type* = nullptr)
-    : WCTColumnBinding(
-      cls, std::shared_ptr<WCTBaseAccessor>(new WCTRuntimeCppAccessor<T>(cls, propertyName)), propertyName)
+    : WCTColumnBinding(cls,
+                       std::static_pointer_cast<WCTBaseAccessor>(
+                       std::make_shared<WCTRuntimeCppAccessor<T>>(cls, propertyName)),
+                       propertyName)
     {
     }
 
@@ -45,8 +47,10 @@ public:
                      const WCDB::String& propertyName,
                      T* = nullptr,
                      typename std::enable_if<WCDB::IsObjCType<T>::value>::type* = nullptr)
-    : WCTColumnBinding(
-      cls, std::shared_ptr<WCTBaseAccessor>(new WCTRuntimeObjCAccessor(cls, propertyName)), propertyName)
+    : WCTColumnBinding(cls,
+                       std::static_pointer_cast<WCTBaseAccessor>(
+                       std::make_shared<WCTRuntimeObjCAccessor>(cls, propertyName)),
+                       propertyName)
     {
     }
 

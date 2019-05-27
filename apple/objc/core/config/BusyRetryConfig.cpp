@@ -108,9 +108,11 @@ bool BusyRetryConfig::Expecting::satisfied(PagerLockType type) const
         case PagerLockType::Exclusive:
             satisfied = type == PagerLockType::None;
             break;
-        default:
-            WCTInnerAssert(m_pagerType == PagerLockType::Shared);
+        case PagerLockType::Shared:
             satisfied = type != PagerLockType::Pending && type != PagerLockType::Exclusive;
+            break;
+        default:
+            WCTInnerAssert(false);
             break;
         }
     }
@@ -119,6 +121,7 @@ bool BusyRetryConfig::Expecting::satisfied(PagerLockType type) const
 
 bool BusyRetryConfig::Expecting::satisfied(int sharedMask, int exclusiveMask) const
 {
+    WCTInnerAssert(m_category != Category::None);
     bool satisified = true;
     if (m_category == Category::Shm) {
         switch (m_shmType) {
@@ -207,12 +210,10 @@ bool BusyRetryConfig::State::wait(Trying& trying)
         std::unique_lock<std::mutex> lockGuard(m_lock);
         if (shouldWait(trying)) {
             Thread currentThread = Thread::current();
-            if (Thread::isMain()) {
-                // Bigger order will let main thread be the end of the list, so that it will be woken up first.
-                m_waitings.insert(1, currentThread, trying);
-            } else {
-                m_waitings.insert(0, currentThread, trying);
-            }
+            // Bigger order will let main thread be the end of the list, so that it will be woken up first.
+            m_waitings.insert(Thread::isMain() ? WaitingOrder::MainThread : WaitingOrder::SubThread,
+                              currentThread,
+                              trying);
 
             SteadyClock before = SteadyClock::now();
             m_conditional.wait_for(lockGuard, remainingTimeForRetring);
@@ -232,7 +233,7 @@ bool BusyRetryConfig::State::wait(Trying& trying)
 void BusyRetryConfig::State::tryNotify()
 {
     const auto& elements = m_waitings.elements();
-    for (auto iter = elements.rbegin(); iter != elements.rend(); ++iter) {
+    for (auto iter = elements.begin(); iter != elements.end(); ++iter) {
         if (shouldWait(iter->value)) {
             return;
         } else {

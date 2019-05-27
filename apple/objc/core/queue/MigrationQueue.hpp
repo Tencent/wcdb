@@ -22,6 +22,7 @@
 
 #include <WCDB/AsyncQueue.hpp>
 #include <WCDB/TimedQueue.hpp>
+#include <map>
 
 namespace WCDB {
 
@@ -38,15 +39,21 @@ class MigrationQueue final : public AsyncQueue {
 public:
     MigrationQueue(const String& name, MigrationQueueEvent* event);
 
+    void register_(const String& path);
+    void unregister(const String& path);
+
     void put(const String& path);
-    void remove(const String& path);
 
 protected:
+    void put(const String& path, double delay, int numberOfFailures);
     void loop() override final;
 
-    bool onTimed(const String& path, const int& numberOfFailures);
+    void onTimed(const String& path, const int& numberOfFailures);
     TimedQueue<String, int> m_timedQueue;
     MigrationQueueEvent* m_event;
+
+    SharedLock m_lock;
+    std::map<String, int> m_records;
 };
 
 } // namespace WCDB

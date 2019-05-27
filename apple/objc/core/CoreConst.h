@@ -92,6 +92,9 @@ static constexpr const char* BusyRetryConfigName = "com.Tencent.WCDB.Config.Busy
 static constexpr const double BusyRetryTimeOutForMainThread = 2.0;
 static constexpr const double BusyRetryTimeOutForSubThread = 10.0;
 
+// Auto Migrate Config
+static constexpr const char* AutoMigrateConfigName = "com.Tencent.WCDB.Config.AutoMigrate";
+
 // Notifier
 static constexpr const char* NotifierPreprocessorName = "com.Tencent.WCDB.Notifier.PreprocessTag";
 static constexpr const char* NotifierLoggerName = "com.Tencent.WCDB.Notifier.Log";

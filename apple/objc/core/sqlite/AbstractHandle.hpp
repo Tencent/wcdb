@@ -60,7 +60,7 @@ private:
 #pragma mark - Basic
 public:
     virtual bool open();
-    void close();
+    virtual void close();
     bool isOpened() const;
 
     long long getLastInsertedRowID();

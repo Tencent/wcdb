@@ -23,8 +23,8 @@
 #include <WCDB/Exiting.hpp>
 #include <WCDB/OrderedUniqueList.hpp>
 #include <WCDB/Time.hpp>
-#include <chrono>
 #include <condition_variable>
+#include <list>
 #include <stdio.h>
 
 namespace WCDB {
@@ -40,7 +40,7 @@ private:
     std::atomic<bool> m_running;
 
 public:
-    TimedQueue() : m_stop(false), m_running(false){};
+    TimedQueue() : m_stop(false), m_running(false) {}
     ~TimedQueue()
     {
         stop();
@@ -48,7 +48,7 @@ public:
     }
 
     // return true to erase the element
-    typedef std::function<bool(const Key &, const Info &)> ExpiredCallback;
+    typedef std::function<void(const Key &, const Info &)> ExpiredCallback;
 
     void queue(const Key &key, double delay, const Info &info, bool reQueue = true)
     {
@@ -69,7 +69,7 @@ public:
             }
 
             SteadyClock expired
-            = SteadyClock::now() + std::chrono::nanoseconds((long long) (delay * 1E9));
+            = SteadyClock::now().steadyClockByAddingTimeInterval(delay);
 
             SteadyClock shortest;
             if (!m_list.elements().empty()) {
@@ -122,31 +122,29 @@ public:
     {
         m_running.store(true);
         while (!isExiting()) {
-            std::unique_lock<std::mutex> lockGuard(m_lock);
-            if (m_stop) {
-                break;
+            std::list<std::pair<Key, Info>> expireds;
+            {
+                std::unique_lock<std::mutex> lockGuard(m_lock);
+                if (m_stop) {
+                    break;
+                }
+                if (m_list.elements().empty() && !isExiting()) {
+                    m_conditional.wait(lockGuard);
+                    continue;
+                }
+                SteadyClock now = SteadyClock::now();
+                const auto &shortest = m_list.elements().begin();
+                if (now < shortest->order && !isExiting()) {
+                    m_conditional.wait_for(
+                    lockGuard, shortest->order.timeIntervalSinceSteadyClock(now));
+                    continue;
+                }
+                expireds.push_back(std::make_pair(shortest->key, shortest->value));
+                m_list.erase(shortest->key);
             }
-            if (m_list.elements().empty() && !isExiting()) {
-                m_conditional.wait(lockGuard);
-                continue;
-            }
-            SteadyClock now = SteadyClock::now();
-            const auto &shortest = m_list.elements().begin();
-            if (now < shortest->order && !isExiting()) {
-                m_conditional.wait_for(
-                lockGuard, shortest->order.timeIntervalSinceSteadyClock(now));
-                continue;
-            }
-            Key key = shortest->key;
-            Info info = shortest->value;
-            lockGuard.unlock();
-            bool erase = false;
             if (!isExiting()) {
-                erase = onElementExpired(key, info);
-            }
-            lockGuard.lock();
-            if (erase) {
-                m_list.erase(key);
+                WCTInnerAssert(expireds.size() == 1);
+                onElementExpired(expireds.begin()->first, expireds.begin()->second);
             }
         }
         m_running.store(false);

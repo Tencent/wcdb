@@ -73,7 +73,7 @@ void ObservationQueue::loop()
     &ObservationQueue::onTimed, this, std::placeholders::_1, std::placeholders::_2));
 }
 
-bool ObservationQueue::onTimed(const String& key, const Parameter& parameter)
+void ObservationQueue::onTimed(const String& key, const Parameter& parameter)
 {
     WCTInnerAssert(m_event != nullptr);
 
@@ -117,10 +117,13 @@ bool ObservationQueue::onTimed(const String& key, const Parameter& parameter)
         }
         std::set<uint32_t> resolveds;
         for (const auto& iter : notifys) {
+            WCTInnerAssert(iter.second.second != nullptr);
             if (iter.second.second != nullptr) {
                 if (iter.second.second(iter.second.first, iter.first)) {
                     resolveds.emplace(iter.first);
                 }
+            } else {
+                resolveds.emplace(iter.first);
             }
         }
         {
@@ -134,10 +137,8 @@ bool ObservationQueue::onTimed(const String& key, const Parameter& parameter)
             m_pendings.queue(s_notifyKey,
                              ObservationQueueTimeIntervalForReinvokingCorruptedEvent,
                              Parameter(Parameter::Source::Notify));
-            return false;
         }
     }
-    return true;
 }
 
 #pragma mark - Purge
@@ -228,18 +229,21 @@ void ObservationQueue::handleError(const Error& error)
                 return;
             }
         }
+        bool notify = false;
         {
             LockGuard lockGuard(m_lock);
             if (m_corrupteds.emplace(identifier).second) {
                 Notification notification = nullptr;
                 auto notificationIter = m_notifications.find(path);
                 if (notificationIter != m_notifications.end()) {
-                    notification = notificationIter->second;
+                    m_notifys[identifier] = { path, notificationIter->second };
                 }
-                m_notifys[identifier] = { path, notification };
             }
+            notify = !m_notifys.empty();
         }
-        m_pendings.queue(s_notifyKey, 0, Parameter(Parameter::Source::Notify));
+        if (notify) {
+            m_pendings.queue(s_notifyKey, 0, Parameter(Parameter::Source::Notify));
+        }
     } else {
         // dispatch to check integrity
         Parameter parameter(Parameter::Source::Integrity);

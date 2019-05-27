@@ -27,7 +27,6 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       enableASanStackUseAfterReturn = "YES"
-      enableThreadSanitizer = "YES"
       codeCoverageEnabled = "YES"
       onlyGenerateCoverageForSpecifiedTargets = "YES"
       shouldUseLaunchSchemeArgsEnv = "YES">

@@ -144,7 +144,7 @@ void Database::setConfigs(const std::shared_ptr<Configs> &configs)
 void Database::setConfig(const String &name, const std::shared_ptr<Config> &config, int priority)
 {
     LockGuard memoryGuard(m_memory);
-    std::shared_ptr<Configs> configs(new Configs(*m_configs.get()));
+    std::shared_ptr<Configs> configs = std::make_shared<Configs>(*m_configs.get());
     configs->insert(name, config, priority);
     m_configs = configs;
 }
@@ -152,7 +152,7 @@ void Database::setConfig(const String &name, const std::shared_ptr<Config> &conf
 void Database::removeConfig(const String &name)
 {
     LockGuard memoryGuard(m_memory);
-    std::shared_ptr<Configs> configs(new Configs(*m_configs.get()));
+    std::shared_ptr<Configs> configs = std::make_shared<Configs>(*m_configs.get());
     configs->remove(name);
     m_configs = configs;
 }
@@ -209,29 +209,29 @@ std::shared_ptr<Handle> Database::generateSlotedHandle(Slot slot)
     std::shared_ptr<Handle> handle;
     switch (type) {
     case HandleType::Checkpoint:
-        handle.reset(new CheckpointHandle);
+        handle = std::make_shared<CheckpointHandle>();
         break;
     case HandleType::Migrating:
-        handle.reset(new MigratingHandle(m_migration));
+        handle = std::make_shared<MigratingHandle>(m_migration);
         break;
     case HandleType::Migrate:
-        handle.reset(new MigrateHandle);
+        handle = std::make_shared<MigrateHandle>();
         break;
     case HandleType::BackupRead:
-        handle.reset(new BackupReadHandle);
+        handle = std::make_shared<BackupReadHandle>();
         break;
     case HandleType::BackupWrite:
-        handle.reset(new BackupWriteHandle);
+        handle = std::make_shared<BackupWriteHandle>();
         break;
     case HandleType::Assemble:
-        handle.reset(new AssemblerHandle);
+        handle = std::make_shared<AssemblerHandle>();
         break;
     case HandleType::Integrity:
-        handle.reset(new IntegrityHandle);
+        handle = std::make_shared<IntegrityHandle>();
         break;
     default:
         WCTInnerAssert(type == HandleType::Normal);
-        handle.reset(new ConfiguredHandle);
+        handle = std::make_shared<ConfiguredHandle>();
         break;
     }
     if (handle == nullptr) {

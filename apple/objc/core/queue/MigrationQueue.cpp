@@ -36,15 +36,43 @@ MigrationQueue::MigrationQueue(const String& name, MigrationQueueEvent* event)
     WCTInnerAssert(m_event != nullptr);
 }
 
-void MigrationQueue::put(const String& path)
+void MigrationQueue::register_(const String& path)
 {
-    m_timedQueue.queue(path, MigrationQueueTimeIntervalForMigrating, 0);
-    lazyRun();
+    LockGuard lockGuard(m_lock);
+    auto iter = m_records.find(path);
+    if (iter == m_records.end()) {
+        m_records.emplace(path, 1);
+        put(path);
+    } else {
+        WCTInnerAssert(iter->second > 0);
+        ++iter->second;
+    }
 }
 
-void MigrationQueue::remove(const String& path)
+void MigrationQueue::unregister(const String& path)
 {
-    m_timedQueue.remove(path);
+    LockGuard lockGuard(m_lock);
+    WCTInnerAssert(m_records[path] >= 0);
+    if (--m_records[path] == 0) {
+        m_records.erase(path);
+        m_timedQueue.remove(path);
+    }
+}
+
+void MigrationQueue::put(const String& path)
+{
+    put(path, MigrationQueueTimeIntervalForMigrating, 0);
+}
+
+void MigrationQueue::put(const String& path, double delay, int numberOfFailures)
+{
+    SharedLockGuard lockGuard(m_lock);
+    auto iter = m_records.find(path);
+    if (iter != m_records.end()) {
+        WCTInnerAssert(iter->second > 0);
+        m_timedQueue.queue(path, delay, numberOfFailures);
+        lazyRun();
+    }
 }
 
 void MigrationQueue::loop()
@@ -53,28 +81,23 @@ void MigrationQueue::loop()
     &MigrationQueue::onTimed, this, std::placeholders::_1, std::placeholders::_2));
 }
 
-bool MigrationQueue::onTimed(const String& path, const int& numberOfFailures)
+void MigrationQueue::onTimed(const String& path, const int& numberOfFailures)
 {
     bool succeed, done;
     std::tie(succeed, done) = m_event->databaseShouldMigrate(path);
-    bool erase = true;
     if (succeed) {
         if (!done) {
-            m_timedQueue.queue(path, MigrationQueueTimeIntervalForMigrating, numberOfFailures);
-            erase = false;
+            put(path, MigrationQueueTimeIntervalForMigrating, numberOfFailures);
         }
     } else {
         if (numberOfFailures + 1 < MigrationQueueTolerableFailures) {
-            m_timedQueue.queue(
-            path, MigrationQueueTimeIntervalForRetryingAfterFailure, numberOfFailures + 1);
-            erase = false;
+            put(path, MigrationQueueTimeIntervalForRetryingAfterFailure, numberOfFailures + 1);
         } else {
             Error error(Error::Code::Notice, Error::Level::Notice, "Async migration stopped due to the error.");
             error.infos.set(ErrorStringKeyPath, path);
             Notifier::shared().notify(error);
         }
     }
-    return erase;
 }
 
 } // namespace WCDB

@@ -103,6 +103,11 @@ protected:
         void tryNotify();
         std::mutex m_lock;
         Conditional m_conditional;
+
+        enum WaitingOrder {
+            MainThread = 0,
+            SubThread = 1,
+        };
         OrderedUniqueList<Thread, Expecting> m_waitings;
     };
 

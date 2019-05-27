@@ -29,7 +29,7 @@
 #include <WCDB/MigrationQueue.hpp>
 #include <WCDB/ObservationQueue.hpp>
 
-#include <WCDB/BackupConfig.hpp>
+#include <WCDB/AutoBackupConfig.hpp>
 #include <WCDB/BasicConfig.hpp>
 #include <WCDB/CheckpointConfig.hpp>
 #include <WCDB/CipherConfig.hpp>

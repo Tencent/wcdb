@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#import <WCDB/CoreConst.h>
 #import <WCDB/WCTDatabase+Migration.h>
 #import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTMigrationInfo+Private.h>
@@ -49,7 +50,11 @@
 
 - (void)setAutoMigrate:(BOOL)flag
 {
-    WCDB::Core::shared().setAutoMigration(_database->getPath(), flag);
+    if (flag) {
+        _database->setConfig(WCDB::AutoMigrateConfigName, WCDB::Core::shared().autoMigrateConfig(), WCDB::Configs::Priority::Highest);
+    } else {
+        _database->removeConfig(WCDB::AutoMigrateConfigName);
+    }
 }
 
 - (void)setNotificationWhenMigrated:(WCTMigratedNotificationBlock)onMigrated

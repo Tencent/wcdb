@@ -97,7 +97,7 @@ void Console::print(const String &message)
             trace(array, (NSUInteger) cost);
         };
         _database->setConfig(WCDB::PerformanceTraceConfigName,
-                             std::shared_ptr<WCDB::Config>(new WCDB::PerformanceTraceConfig(callback)),
+                             std::static_pointer_cast<WCDB::Config>(std::make_shared<WCDB::PerformanceTraceConfig>(callback)),
                              WCDB::Configs::Priority::Highest);
     } else {
         _database->removeConfig(WCDB::PerformanceTraceConfigName);
@@ -112,7 +112,7 @@ void Console::print(const String &message)
             trace([NSString stringWithUTF8String:sql.c_str()]);
         };
         _database->setConfig(WCDB::SQLTraceConfigName,
-                             std::shared_ptr<WCDB::Config>(new WCDB::SQLTraceConfig(callback)),
+                             std::static_pointer_cast<WCDB::Config>(std::make_shared<WCDB::SQLTraceConfig>(callback)),
                              WCDB::Configs::Priority::Highest);
     } else {
         _database->removeConfig(WCDB::SQLTraceConfigName);

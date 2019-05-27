@@ -34,9 +34,11 @@ public:
 #pragma mark - Config
 public:
     bool open() override final;
+    void close() override final;
     bool reconfigure(const std::shared_ptr<Configs> &newConfigs);
 
 protected:
+    bool unconfigure(bool stopIfFailed);
     bool isConfigured() const;
 
 private:

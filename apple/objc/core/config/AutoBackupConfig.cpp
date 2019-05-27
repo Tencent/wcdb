@@ -19,35 +19,36 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/BackupConfig.hpp>
+#include <WCDB/AutoBackupConfig.hpp>
 #include <WCDB/BackupQueue.hpp>
 #include <WCDB/Handle.hpp>
 #include <WCDB/String.hpp>
 
 namespace WCDB {
 
-BackupConfig::BackupConfig(const std::shared_ptr<BackupQueue> &queue)
+AutoBackupConfig::AutoBackupConfig(const std::shared_ptr<BackupQueue> &queue)
 : Config(), m_identifier(String::formatted("Backup-%p", this)), m_queue(queue)
 {
     WCTInnerAssert(m_queue != nullptr);
 }
 
-bool BackupConfig::invoke(Handle *handle)
+bool AutoBackupConfig::invoke(Handle *handle)
 {
     m_queue->register_(handle->getPath());
 
     handle->setNotificationWhenCheckpointed(
-    m_identifier, std::bind(&BackupConfig::onCheckpointed, this, std::placeholders::_1));
+    m_identifier,
+    std::bind(&AutoBackupConfig::onCheckpointed, this, std::placeholders::_1));
 
     handle->setNotificationWhenCommitted(
     0,
     m_identifier,
-    std::bind(&BackupConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
+    std::bind(&AutoBackupConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
 
     return true;
 }
 
-bool BackupConfig::uninvoke(Handle *handle)
+bool AutoBackupConfig::uninvoke(Handle *handle)
 {
     handle->unsetNotificationWhenCommitted(m_identifier);
 
@@ -58,13 +59,13 @@ bool BackupConfig::uninvoke(Handle *handle)
     return true;
 }
 
-bool BackupConfig::onCommitted(const String &path, int frames)
+bool AutoBackupConfig::onCommitted(const String &path, int frames)
 {
     m_queue->put(path, frames);
     return true;
 }
 
-void BackupConfig::onCheckpointed(const String &path)
+void AutoBackupConfig::onCheckpointed(const String &path)
 {
     // back up immediately if checkpointed
     m_queue->put(path, -1);

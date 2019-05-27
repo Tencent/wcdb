@@ -24,6 +24,7 @@
 
 namespace WCDB {
 
+#pragma mark - Initialize
 Thread::Thread(pthread_t id) : m_id(id)
 {
 }
@@ -38,6 +39,8 @@ Thread& Thread::operator=(const std::nullptr_t&)
     return *this;
 }
 
+#pragma mark - Which
+
 Thread Thread::current()
 {
     return Thread(pthread_self());
@@ -46,17 +49,6 @@ Thread Thread::current()
 bool Thread::isMain()
 {
     return pthread_main_np() != 0;
-}
-
-void Thread::setName(const String& name)
-{
-    if (pthread_setname_np(name.c_str()) != 0) {
-        Error error;
-        error.level = Error::Level::Error;
-        error.setSystemCode(errno, Error::Code::Error);
-        Notifier::shared().notify(error);
-        SharedThreadedErrorProne::setThreadedError(std::move(error));
-    }
 }
 
 bool Thread::isCurrentThread() const
@@ -72,6 +64,37 @@ bool Thread::equal(const Thread& other) const
 bool Thread::operator==(const Thread& other) const
 {
     return equal(other);
+}
+
+#pragma mark - Name
+void Thread::setName(const String& name)
+{
+    if (pthread_setname_np(name.c_str()) != 0) {
+        Error error;
+        error.level = Error::Level::Error;
+        error.setSystemCode(errno, Error::Code::Error);
+        Notifier::shared().notify(error);
+        SharedThreadedErrorProne::setThreadedError(std::move(error));
+    }
+}
+
+String Thread::getName()
+{
+    static constexpr const int s_maxLengthOfAllowedThreadName = 255;
+    char name[s_maxLengthOfAllowedThreadName];
+    memset(name, 0, s_maxLengthOfAllowedThreadName);
+    pthread_getname_np(m_id, name, s_maxLengthOfAllowedThreadName);
+    return name;
+}
+
+#pragma mark - Error
+void Thread::setThreadedError()
+{
+    Error error;
+    error.level = Error::Level::Error;
+    error.setSystemCode(errno, Error::Code::Error);
+    Notifier::shared().notify(error);
+    SharedThreadedErrorProne::setThreadedError(std::move(error));
 }
 
 } // namespace WCDB

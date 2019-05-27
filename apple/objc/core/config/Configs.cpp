@@ -45,10 +45,10 @@ bool Configs::invoke(Handle *handle)
     return true;
 }
 
-bool Configs::uninvoke(Handle *handle)
+bool Configs::uninvoke(Handle *handle, bool stopIfFailed)
 {
     for (const auto &element : m_list.elements()) {
-        if (element.value != nullptr && !element.value->uninvoke(handle)) {
+        if (element.value != nullptr && !element.value->uninvoke(handle) && stopIfFailed) {
             return false;
         }
     }
