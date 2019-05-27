@@ -27,8 +27,8 @@ static constexpr const double AsyncQueueTimeOutForExiting = 10.0;
 
 // Migration Queue
 static constexpr const char* MigrationQueueName = "com.Tencent.WCDB.Queue.Migration";
-static constexpr const double MigrationQueueTimeIntervalForMigrating = 1.0;
-static constexpr const double MigrationQueueTimeIntervalForRetryingAfterFailure = 3.0;
+static constexpr const double MigrationQueueTimeIntervalForMigrating = 3.0;
+static constexpr const double MigrationQueueTimeIntervalForRetryingAfterFailure = 5.0;
 static constexpr const int MigrationQueueTolerableFailures = 5;
 
 // Observation Queue
@@ -108,7 +108,7 @@ static constexpr const int CheckpointFramesThresholdForTruncating
 = 10 * 1024 * 1024 / 4096; // 10 MB / Default Page Size = 2560
 
 // Migrate
-static constexpr const double MigrateMaxAllowedDuration = 1.0 / 60; // 1 frame
+static constexpr const double MigrateMaxAllowedDuration = 0.01;
 
 // Error Key
 static constexpr const char* ErrorStringKeyAction = "Action";
