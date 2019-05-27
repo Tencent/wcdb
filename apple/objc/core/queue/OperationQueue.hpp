@@ -23,7 +23,10 @@
 #include <WCDB/AsyncQueue.hpp>
 #include <WCDB/Lock.hpp>
 #include <WCDB/String.hpp>
+#include <WCDB/Time.hpp>
 #include <WCDB/TimedQueue.hpp>
+#include <map>
+#include <set>
 
 #include <WCDB/AutoBackupConfig.hpp>
 #include <WCDB/AutoCheckpointConfig.hpp>
@@ -39,6 +42,8 @@ protected:
     virtual std::pair<bool, bool> migrationShouldBeOperated(const String& path) = 0;
     virtual bool backupShouldBeOperated(const String& path) = 0;
     virtual bool checkpointShouldBeOperated(const String& path, int frames) = 0;
+    virtual void integrityShouldBeChecked(const String& path) = 0;
+    virtual void purgeShouldBeOperated() = 0;
 
     friend class OperationQueue;
 };
@@ -49,10 +54,15 @@ class OperationQueue final : public AsyncQueue,
                              public AutoCheckpointOperator {
 public:
     OperationQueue(const String& name, OperationEvent* event);
+    ~OperationQueue();
+
+protected:
+    void handleError(const Error& error);
+    void observatedThatFileOpened(int fd, const char* path, int flags, int mode);
 
 private:
     OperationEvent* m_event;
-    SharedLock m_lock;
+    mutable SharedLock m_lock;
 
 #pragma mark - Operation
 protected:
@@ -61,7 +71,7 @@ protected:
         enum class Type {
             Integrity,
             Purge,
-            Corrupted,
+            NotifyCorruption,
             Checkpoint,
             Backup,
             Migrate,
@@ -80,7 +90,7 @@ protected:
     struct Parameter {
         Parameter();
         enum class Source {
-            None,
+            Other = -1,
             MemoryWarning,
             FileDescriptorsWarning,
             OutOfMaxAllowedFileDescriptors,
@@ -143,6 +153,45 @@ public:
 protected:
     void asyncCheckpoint(const String& path, double delay, int frames);
     void doCheckpoint(const String& path, int frames);
+
+#pragma mark - Purge
+protected:
+    void asyncPurge(const Parameter& parameter);
+
+    void doPurge(const Parameter& parameter);
+
+    static int maxAllowedNumberOfFileDescriptors();
+
+    void* registerNotificationWhenMemoryWarning();
+    void unregisterNotificationWhenMemoryWarning(void* observer);
+
+    void* m_observerForMemoryWarning;
+    SteadyClock m_lastPurge;
+
+#pragma mark - Integrity
+protected:
+    void asyncCheckIntegrity(const String& path, uint32_t identifier);
+
+    void doCheckIntegrity(const String& path);
+
+    // identifier of the corrupted database file -> the times of ignored corruption
+    // it will be kept forever in memory since the identifier will be changed after removed/recovered
+    std::set<uint32_t> m_corrupteds;
+
+#pragma mark - Corrupted
+public:
+    typedef std::function<void(const String& path, uint32_t identifier)> CorruptionNotification;
+    void setNotificationWhenCorrupted(const String& path,
+                                      const CorruptionNotification& notification);
+
+    bool isFileObservedCorrupted(const String& path) const;
+
+protected:
+    void asyncNotifyCorruption(const String& path, uint32_t identifier);
+
+    void doNotifyCorruption(const String& path, uint32_t identifier);
+
+    std::map<String, CorruptionNotification> m_corruptionNotifications;
 };
 
 } // namespace WCDB

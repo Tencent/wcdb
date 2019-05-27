@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef BOOL (^WCTBackupFilterBlock)(NSString * /* table */);
 typedef void (^WCTRetrieveProgressUpdateBlock)(double /* percentage */, double /* increment */);
-typedef BOOL (^WCTCorruptedNotificationBlock)(WCTDatabase *);
+typedef void (^WCTCorruptedNotificationBlock)(WCTDatabase *);
 
 @interface WCTDatabase (Repair)
 

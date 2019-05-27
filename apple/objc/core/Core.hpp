@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include <WCDB/ObservationQueue.hpp>
 #include <WCDB/OperationQueue.hpp>
 
 #include <WCDB/Config.hpp>
@@ -36,7 +35,7 @@
 namespace WCDB {
 
 // The order of member variables here is important.
-class Core final : public DatabasePoolEvent, public ObservationQueueEvent, public OperationEvent {
+class Core final : public DatabasePoolEvent, public OperationEvent {
 #pragma mark - Core
 public:
     static Core& shared();
@@ -69,25 +68,20 @@ protected:
     std::shared_ptr<TokenizerModules> m_modules;
 
 #pragma mark - Operation
-protected:
-    std::pair<bool, bool> migrationShouldBeOperated(const String& path) override final;
-    bool backupShouldBeOperated(const String& path) override final;
-    bool checkpointShouldBeOperated(const String& path, int frames) override final;
-
-    std::shared_ptr<OperationQueue> m_operationQueue;
-
-#pragma mark - Observartion
 public:
-    typedef std::function<bool(Database*)> CorruptedNotification;
+    typedef std::function<void(Database*)> CorruptedNotification;
     bool isFileObservedCorrupted(const String& path);
     void setNotificationWhenDatabaseCorrupted(const String& path,
                                               const CorruptedNotification& notification);
 
 protected:
-    void observatedThatNeedPurge() override final;
-    void observatedThatMayBeCorrupted(const String& path) override final;
+    std::pair<bool, bool> migrationShouldBeOperated(const String& path) override final;
+    bool backupShouldBeOperated(const String& path) override final;
+    bool checkpointShouldBeOperated(const String& path, int frames) override final;
+    void integrityShouldBeChecked(const String& path) override final;
+    void purgeShouldBeOperated() override final;
 
-    std::shared_ptr<ObservationQueue> m_observationQueue;
+    std::shared_ptr<OperationQueue> m_operationQueue;
 
 #pragma mark - Backup
 public:

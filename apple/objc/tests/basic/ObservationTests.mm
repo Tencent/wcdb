@@ -37,11 +37,11 @@
     [self insertPresetObjects];
 
     TestCaseResult* result = [TestCaseResult no];
-    [self.database setNotificationWhenCorrupted:^BOOL(WCTDatabase* database) {
+    [self.database setNotificationWhenCorrupted:^void(WCTDatabase* database) {
         if (![NSThread isMainThread] && database.isBlockaded) {
             [result makeYES];
         }
-        return [self.database removeFiles];
+        [self.database removeFiles];
     }];
 
     TestCaseAssertTrue([self.database corruptHeaderWithinCloseAfterTruncatedCheckpoint]);
@@ -53,35 +53,6 @@
     }
     TestCaseAssertResultYES(result);
     TestCaseAssertFalse(self.database.isAlreadyCorrupted);
-}
-
-- (void)test_feature_repeat_corrupted_notify_when_failed
-{
-    [self insertPresetObjects];
-
-    TestCaseResult* result = [TestCaseResult no];
-    [self.database setNotificationWhenCorrupted:^BOOL(WCTDatabase* database) {
-        WCDB_UNUSED(database)
-        [result makeYES];
-        return NO;
-    }];
-
-    TestCaseAssertTrue([self.database corruptHeaderWithinCloseAfterTruncatedCheckpoint]);
-
-    // trigger corruption
-    TestCaseAssertTrue([self.table getObjects] == nil);
-    [NSThread sleepForTimeInterval:1.0];
-    TestCaseAssertResultYES(result);
-    [result makeNO];
-
-    // trigger corruption
-    TestCaseAssertTrue([self.table getObjects] == nil);
-    [NSThread sleepForTimeInterval:1.0];
-    TestCaseAssertResultNO(result);
-    [NSThread sleepForTimeInterval:WCDB::ObservationQueueTimeIntervalForReinvokingCorruptedEvent];
-    TestCaseAssertResultYES(result);
-
-    TestCaseAssertTrue([self.database removeFiles]);
 }
 
 - (void)test_feature_purge_will_not_clear_active_handle

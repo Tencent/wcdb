@@ -29,8 +29,8 @@
 {
     WCDB::Core::CorruptedNotification notification = nullptr;
     if (onCorrupted != nil) {
-        notification = [onCorrupted](WCDB::Database *database) -> bool {
-            return onCorrupted([[WCTDatabase alloc] initWithUnsafeDatabase:database]);
+        notification = [onCorrupted](WCDB::Database *database) {
+            onCorrupted([[WCTDatabase alloc] initWithUnsafeDatabase:database]);
         };
     }
     WCDB::Core::shared().setNotificationWhenDatabaseCorrupted(self.path, notification);

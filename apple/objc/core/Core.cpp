@@ -40,8 +40,6 @@ Core::Core()
 : m_databasePool(this)
 , m_modules(std::make_shared<TokenizerModules>())
 , m_operationQueue(std::make_shared<OperationQueue>(OperationQueueName, this))
-// Corruption
-, m_observationQueue(std::make_shared<ObservationQueue>(ObservationQueueName, this))
 // Backup
 , m_autoBackupConfig(std::make_shared<AutoBackupConfig>(m_operationQueue))
 // Migration
@@ -163,13 +161,7 @@ bool Core::checkpointShouldBeOperated(const String& path, int frames)
     return succeed;
 }
 
-#pragma mark - Observation
-void Core::observatedThatNeedPurge()
-{
-    purgeDatabasePool();
-}
-
-void Core::observatedThatMayBeCorrupted(const String& path)
+void Core::integrityShouldBeChecked(const String& path)
 {
     RecyclableDatabase database = m_databasePool.get(path);
     if (database != nullptr) {
@@ -185,51 +177,56 @@ void Core::observatedThatMayBeCorrupted(const String& path)
     }
 }
 
+void Core::purgeShouldBeOperated()
+{
+    purgeDatabasePool();
+}
+
 bool Core::isFileObservedCorrupted(const String& path)
 {
-    return m_observationQueue->isFileObservedCorrupted(path);
+    return m_operationQueue->isFileObservedCorrupted(path);
 }
 
 void Core::setNotificationWhenDatabaseCorrupted(const String& path,
                                                 const CorruptedNotification& notification)
 {
-    ObservationQueue::Notification underlyingNotification = nullptr;
+    OperationQueue::CorruptionNotification underlyingNotification = nullptr;
     if (notification != nullptr) {
         underlyingNotification
-        = [this, notification](const String& path, uint32_t corruptedIdentifier) -> bool {
-            RecyclableDatabase database = m_databasePool.get(path);
-            if (database == nullptr) {
-                // delay it since the database is not referenced.
-                return false;
-            }
-            database->blockade();
-            bool succeed;
-            bool exists;
-            std::tie(succeed, exists) = FileManager::fileExists(path);
-            if (!succeed) {
-                // delay it due to the I/O error
-                return false;
-            }
-            if (!exists) {
-                // mark as resolved since it's alredy not existing
-                return true;
-            }
-            uint32_t identifier;
-            std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
-            if (!succeed) {
-                // delay it due to the I/O error
-                return false;
-            }
-            if (identifier != corruptedIdentifier) {
-                // mark as resolved since the file is changed.
-                return true;
-            }
-            succeed = notification(database.get());
-            database->unblockade();
-            return succeed;
-        };
+        = [this, notification](const String& path, uint32_t corruptedIdentifier) {
+              RecyclableDatabase database = m_databasePool.get(path);
+              if (database == nullptr) {
+                  return;
+              }
+              database->blockade();
+              do {
+                  bool succeed;
+                  bool exists;
+                  std::tie(succeed, exists) = FileManager::fileExists(path);
+                  if (!succeed) {
+                      // I/O error
+                      break;
+                  }
+                  if (!exists) {
+                      // it's already not existing
+                      break;
+                  }
+                  uint32_t identifier;
+                  std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
+                  if (!succeed) {
+                      // I/O error
+                      break;
+                  }
+                  if (identifier != corruptedIdentifier) {
+                      // file is changed.
+                      break;
+                  }
+                  notification(database.get());
+              } while (false);
+              database->unblockade();
+          };
     }
-    m_observationQueue->setNotificationWhenCorrupted(path, underlyingNotification);
+    m_operationQueue->setNotificationWhenCorrupted(path, underlyingNotification);
 }
 
 #pragma mark - Backup

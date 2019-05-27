@@ -24,7 +24,7 @@
 #include <WCDB/CoreConst.h>
 
 #include <WCDB/AsyncQueue.hpp>
-#include <WCDB/ObservationQueue.hpp>
+#include <WCDB/OperationQueue.hpp>
 
 #include <WCDB/BasicConfig.hpp>
 #include <WCDB/CipherConfig.hpp>
