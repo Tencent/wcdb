@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/Exiting.hpp>
 #include <WCDB/OrderedUniqueList.hpp>
 #include <WCDB/Time.hpp>

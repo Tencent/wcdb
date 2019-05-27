@@ -20,10 +20,8 @@
 
 #pragma once
 
-#include <WCDB/BackupQueue.hpp>
-#include <WCDB/CheckpointQueue.hpp>
-#include <WCDB/MigrationQueue.hpp>
 #include <WCDB/ObservationQueue.hpp>
+#include <WCDB/OperationQueue.hpp>
 
 #include <WCDB/Config.hpp>
 #include <WCDB/Configs.hpp>
@@ -38,11 +36,7 @@
 namespace WCDB {
 
 // The order of member variables here is important.
-class Core final : public DatabasePoolEvent,
-                   public CheckpointQueueEvent,
-                   public BackupQueueEvent,
-                   public MigrationQueueEvent,
-                   public ObservationQueueEvent {
+class Core final : public DatabasePoolEvent, public ObservationQueueEvent, public OperationEvent {
 #pragma mark - Core
 public:
     static Core& shared();
@@ -74,6 +68,14 @@ public:
 protected:
     std::shared_ptr<TokenizerModules> m_modules;
 
+#pragma mark - Operation
+protected:
+    std::pair<bool, bool> migrationShouldBeOperated(const String& path) override final;
+    bool backupShouldBeOperated(const String& path) override final;
+    bool checkpointShouldBeOperated(const String& path, int frames) override final;
+
+    std::shared_ptr<OperationQueue> m_operationQueue;
+
 #pragma mark - Observartion
 public:
     typedef std::function<bool(Database*)> CorruptedNotification;
@@ -87,18 +89,11 @@ protected:
 
     std::shared_ptr<ObservationQueue> m_observationQueue;
 
-#pragma mark - Checkpoint
-protected:
-    bool databaseShouldCheckpoint(const String& path, int frames) override final;
-
-    std::shared_ptr<CheckpointQueue> m_checkpointQueue;
-
 #pragma mark - Backup
 public:
     std::shared_ptr<Config> autoBackupConfig();
 
 protected:
-    bool databaseShouldBackup(const String& path) override final;
     std::shared_ptr<Config> m_autoBackupConfig;
 
 #pragma mark - Migration
@@ -106,7 +101,6 @@ public:
     std::shared_ptr<Config> autoMigrateConfig();
 
 protected:
-    std::pair<bool, bool> databaseShouldMigrate(const String& path) override final;
     std::shared_ptr<Config> m_autoMigrateConfig;
 
 #pragma mark - Trace

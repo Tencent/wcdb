@@ -19,8 +19,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/CheckpointConfig.hpp>
-#include <WCDB/CheckpointQueue.hpp>
+#include <WCDB/AutoCheckpointConfig.hpp>
 #include <WCDB/Global.hpp>
 #include <WCDB/Handle.hpp>
 #include <WCDB/String.hpp>
@@ -28,60 +27,53 @@
 
 namespace WCDB {
 
-CheckpointConfig::CheckpointConfig(const std::shared_ptr<CheckpointQueue>& queue)
-: Config(), m_identifier(String::formatted("Checkpoint-%p", this)), m_queue(queue)
+AutoCheckpointOperator::~AutoCheckpointOperator()
 {
-    WCTInnerAssert(m_queue != nullptr);
+}
+
+AutoCheckpointConfig::AutoCheckpointConfig(const std::shared_ptr<AutoCheckpointOperator>& operator_)
+: Config(), m_identifier(String::formatted("Checkpoint-%p", this)), m_operator(operator_)
+{
+    WCTInnerAssert(m_operator != nullptr);
 
     Global::shared().setNotificationForLog(
     m_identifier,
-    std::bind(&CheckpointConfig::log, this, std::placeholders::_1, std::placeholders::_2));
+    std::bind(&AutoCheckpointConfig::log, this, std::placeholders::_1, std::placeholders::_2));
 }
 
-CheckpointConfig::~CheckpointConfig()
+AutoCheckpointConfig::~AutoCheckpointConfig()
 {
     Global::shared().setNotificationForLog(m_identifier, nullptr);
 }
 
-bool CheckpointConfig::invoke(Handle* handle)
+bool AutoCheckpointConfig::invoke(Handle* handle)
 {
-    m_queue->register_(handle->getPath());
-
-    handle->setNotificationWhenCheckpointed(
-    m_identifier,
-    std::bind(&CheckpointConfig::onCheckpointed, this, std::placeholders::_1));
+    m_operator->registerAsRequiredCheckpoint(handle->getPath());
 
     handle->setNotificationWhenCommitted(
     0,
     m_identifier,
-    std::bind(&CheckpointConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
+    std::bind(&AutoCheckpointConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
 
     return true;
 }
 
-bool CheckpointConfig::uninvoke(Handle* handle)
+bool AutoCheckpointConfig::uninvoke(Handle* handle)
 {
     handle->unsetNotificationWhenCommitted(m_identifier);
 
-    handle->setNotificationWhenCheckpointed(m_identifier, nullptr);
-
-    m_queue->unregister(handle->getPath());
+    m_operator->registerAsNoCheckpointRequired(handle->getPath());
 
     return true;
 }
 
-bool CheckpointConfig::onCommitted(const String& path, int frames)
+bool AutoCheckpointConfig::onCommitted(const String& path, int frames)
 {
-    m_queue->put(path, frames);
+    m_operator->asyncCheckpoint(path, frames);
     return true;
 }
 
-void CheckpointConfig::onCheckpointed(const String& path)
-{
-    m_queue->remove(path);
-}
-
-void CheckpointConfig::log(int rc, const char* message)
+void AutoCheckpointConfig::log(int rc, const char* message)
 {
     Error::ExtCode extCode = Error::rc2ec(rc);
     if (extCode != Error::ExtCode::NoticeRecoverWal || message == nullptr) {
@@ -95,7 +87,7 @@ void CheckpointConfig::log(int rc, const char* message)
         if (frames > 0) {
             // hint checkpoint
             String path = match[2].str();
-            m_queue->put(path, frames);
+            m_operator->asyncCheckpoint(path, frames);
         }
     }
     WCTInnerAssert(match.size() == 3); // assert match and match 3.

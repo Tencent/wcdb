@@ -25,11 +25,19 @@
 
 namespace WCDB {
 
-class BackupQueue;
+class AutoBackupOperator {
+public:
+    virtual ~AutoBackupOperator() = 0;
+
+    virtual void registerAsRequiredBackup(const String& path) = 0;
+    virtual void registerAsNoBackupRequired(const String& path) = 0;
+
+    virtual void asyncBackup(const String& path, int frames) = 0;
+};
 
 class AutoBackupConfig final : public Config {
 public:
-    AutoBackupConfig(const std::shared_ptr<BackupQueue>& queue);
+    AutoBackupConfig(const std::shared_ptr<AutoBackupOperator>& operator_);
 
     bool invoke(Handle* handle) override final;
     bool uninvoke(Handle* handle) override final;
@@ -39,7 +47,7 @@ protected:
     bool onCommitted(const String& path, int frames);
     void onCheckpointed(const String& path);
 
-    std::shared_ptr<BackupQueue> m_queue;
+    std::shared_ptr<AutoBackupOperator> m_operator;
 };
 
 } //namespace WCDB

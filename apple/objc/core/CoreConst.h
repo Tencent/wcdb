@@ -25,6 +25,9 @@ namespace WCDB {
 // Async Queue
 static constexpr const double AsyncQueueTimeOutForExiting = 10.0;
 
+// Operation Queue
+static constexpr const char* OperationQueueName = "com.Tencent.WCDB.Queue.Operation";
+
 // Migration Queue
 static constexpr const char* MigrationQueueName = "com.Tencent.WCDB.Queue.Migration";
 static constexpr const double MigrationQueueTimeIntervalForMigrating = 3.0;

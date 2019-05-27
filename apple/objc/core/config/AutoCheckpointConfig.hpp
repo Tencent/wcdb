@@ -24,12 +24,20 @@
 
 namespace WCDB {
 
-class CheckpointQueue;
-
-class CheckpointConfig final : public Config {
+class AutoCheckpointOperator {
 public:
-    CheckpointConfig(const std::shared_ptr<CheckpointQueue> &queue);
-    ~CheckpointConfig();
+    virtual ~AutoCheckpointOperator() = 0;
+
+    virtual void registerAsRequiredCheckpoint(const String &path) = 0;
+    virtual void registerAsNoCheckpointRequired(const String &path) = 0;
+
+    virtual void asyncCheckpoint(const String &path, int frames) = 0;
+};
+
+class AutoCheckpointConfig final : public Config {
+public:
+    AutoCheckpointConfig(const std::shared_ptr<AutoCheckpointOperator> &operator_);
+    ~AutoCheckpointConfig();
 
     bool invoke(Handle *handle) override final;
     bool uninvoke(Handle *handle) override final;
@@ -37,10 +45,9 @@ public:
 protected:
     const String m_identifier;
     bool onCommitted(const String &path, int pages);
-    void onCheckpointed(const String &path);
     void log(int rc, const char *message);
 
-    std::shared_ptr<CheckpointQueue> m_queue;
+    std::shared_ptr<AutoCheckpointOperator> m_operator;
 };
 
 } //namespace WCDB
