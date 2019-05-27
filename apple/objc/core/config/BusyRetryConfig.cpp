@@ -218,11 +218,8 @@ bool BusyRetryConfig::State::wait(Trying& trying)
             SteadyClock before = SteadyClock::now();
             m_conditional.wait_for(lockGuard, remainingTimeForRetring);
 
-            std::time_t cost
-            = (std::time_t) std::chrono::duration_cast<std::chrono::nanoseconds>(
-              SteadyClock::now() - before)
-              .count();
-            trying.retried((double) cost / 1E9);
+            double cost = SteadyClock::now().timeIntervalSinceSteadyClock(before);
+            trying.retried(cost);
 
             m_waitings.erase(currentThread);
         }
@@ -235,7 +232,9 @@ void BusyRetryConfig::State::tryNotify()
     const auto& elements = m_waitings.elements();
     for (auto iter = elements.begin(); iter != elements.end(); ++iter) {
         if (shouldWait(iter->value)) {
-            return;
+            if (iter->order == WaitingOrder::SubThread) {
+                return;
+            }
         } else {
             m_conditional.notify(iter->key);
         }
