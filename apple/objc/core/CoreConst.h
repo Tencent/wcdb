@@ -28,20 +28,20 @@ static constexpr const double AsyncQueueTimeOutForExiting = 10.0;
 #pragma mark - Operation Queue
 static constexpr const char* OperationQueueName = "com.Tencent.WCDB.Queue.Operation";
 #pragma mark - Operation Queue - Migration
-static constexpr const double OperationQueueTimeIntervalForMigration = 3.0;
+static constexpr const double OperationQueueTimeIntervalForMigration = 2.0;
 static constexpr const double OperationQueueTimeIntervalForRetryingMigrationAfterFailure
 = 5.0;
 static constexpr const int OperationQueueTolerableFailuresForMigration = 5;
 #pragma mark - Operation Queue - Purge
 static constexpr const double OperationQueueTimeIntervalForPurgingAgain = 10.0;
 static constexpr const double OperationQueueRateForTooManyFileDescriptors = 0.7;
-static constexpr const double OperationQueueTimeIntervalForRetryingCheckpointAfterFailure
-= 3.0;
 #pragma mark - Operation Queue - Checkpoint
 static constexpr const int OperationQueueFramesThresholdForCriticalCheckpoint
-= 10 * 1024 * 1024 / 4096; // 4 MB / Default Page Size = 1024
-static constexpr const double OperationQueueTimeIntervalForCriticalCheckpoint = 0.5;
-static constexpr const double OperationQueueTimeIntervalForNonCriticalCheckpoint = 10.0;
+= 4 * 1024 * 1024 / 4096; // 4 MB / Default Page Size = 1024
+static constexpr const double OperationQueueTimeIntervalForCriticalCheckpoint = 1.0;
+static constexpr const double OperationQueueTimeIntervalForNonCriticalCheckpoint = 30.0;
+static constexpr const double OperationQueueTimeIntervalForRetryingCheckpointAfterFailure
+= 3.0;
 #pragma mark - Operation Queue - Backup
 static constexpr double OperationQueueTimeIntervalForRetryingBackupAfterFailure = 15.0;
 static constexpr const double OperationQueueTimeIntervalForBackup = 1.0;
