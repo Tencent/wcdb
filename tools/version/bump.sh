@@ -46,7 +46,7 @@ echo "$build" > "$root"/BUILD
 # ObjC Version
 template="$root"/tools/version/template.xcconfig
 xcconfig="$root"/apple/support/Version.xcconfig
-time=`date +"%Y-%m-%d\ %H:%M:%S\ UTC%z"`
+time=`date +"%Y-%m-%d %H:%M:%S UTC%z"`
 echo $time
 sed -e "s/WCDB_VERSION_PLACEHOLDER/""$version""/g" \
     -e "s/WCDB_BUILD_PLACEHOLDER/""$build""/g" \
