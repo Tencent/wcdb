@@ -21,7 +21,6 @@
 #pragma once
 
 #include <WCDB/Config.hpp>
-#include <WCDB/TimedQueue.hpp>
 
 namespace WCDB {
 

@@ -126,7 +126,7 @@
                        || [write2Begin compare:write1End] == NSOrderedDescending);
 }
 
-- (void)test_feature_subthread_checkpoint_when_idled
+- (void)test_feature_subthread_checkpoint
 {
     // trigger subthread checkpoint
     TestCaseAssertTrue([self createTable]);
@@ -137,21 +137,6 @@
 
     TestCaseAssertOptionalFalse([self.database isAlreadyTruncateCheckpointed]);
     TestCaseAssertOptionalTrue([self.database isAlreadyCheckpointed]);
-}
-
-- (void)test_feature_subthread_checkpoint_when_meet_frames_threshold
-{
-    TestCaseAssertTrue([self createTable]);
-
-    TestCaseObject* object = [self.random autoIncrementTestCaseObject];
-
-    TestCaseAssertTrue([self.table insertObject:object]);
-
-    TestCaseAssertOptionalFalse(self.database.isAlreadyCheckpointed);
-
-    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForCriticalCheckpoint + self.delayForTolerance];
-
-    TestCaseAssertOptionalTrue(self.database.isAlreadyCheckpointed);
 }
 
 - (void)test_feature_subthread_checkpoint_when_meet_truncate_threshold
@@ -178,16 +163,18 @@
 
 - (void)test_feature_retry_subthread_checkpoint_when_failed
 {
+    // trigger subthread checkpoint
     TestCaseAssertTrue([self createTable]);
 
-    TestCaseObject* object = [self.random autoIncrementTestCaseObject];
+    TestCaseAssertOptionalFalse([self.database isAlreadyCheckpointed]);
 
-    TestCaseAssertTrue([self.table insertObject:object]);
-    auto optionalNumberOfWalFrames = [self.database getNumberOfWalFrames];
-    TestCaseAssertFalse(optionalNumberOfWalFrames.failed());
-    TestCaseAssertTrue(optionalNumberOfWalFrames.value() < WCDB::OperationQueueFramesThresholdForCriticalCheckpoint)
-
-    TestCaseAssertOptionalFalse(self.database.isAlreadyCheckpointed);
+    TestCaseResult* tested = [TestCaseResult no];
+    [WCTDatabase globalTraceError:^(WCTError* error) {
+        if (error.code == WCTErrorCodeIOError
+            && [[error.userInfo objectForKey:@(WCDB::ErrorStringKeyAction)] isEqualToString:@(WCDB::ErrorActionCheckpoint)]) {
+            [tested makeYES];
+        }
+    }];
 
     [self.database blockade];
     [WCTDatabase simulateIOError:WCTSimulateWriteIOError];
@@ -195,15 +182,12 @@
 
     [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForNonCriticalCheckpoint + self.delayForTolerance];
 
-    TestCaseAssertOptionalFalse(self.database.isAlreadyCheckpointed);
+    TestCaseAssertOptionalFalse([self.database isAlreadyCheckpointed]);
+    TestCaseAssertResultYES(tested);
 
     [self.database blockade];
     [WCTDatabase simulateIOError:WCTSimulateNoneIOError];
     [self.database unblockade];
-
-    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForRetryingCheckpointAfterFailure + self.delayForTolerance];
-
-    TestCaseAssertOptionalTrue(self.database.isAlreadyCheckpointed);
 }
 
 - (void)test_feature_closed_database_will_not_perform_subthread_checkpoint
@@ -211,23 +195,13 @@
     // trigger subthread checkpoint
     TestCaseAssertTrue([self createTable]);
 
-    TestCaseObject* object = [self.random autoIncrementTestCaseObject];
-
-    while (YES) {
-        auto optionalNumberOfWalFrames = [self.database getNumberOfWalFrames];
-        TestCaseAssertFalse(optionalNumberOfWalFrames.failed());
-        if (optionalNumberOfWalFrames.value() >= WCDB::OperationQueueFramesThresholdForCriticalCheckpoint) {
-            break;
-        }
-        TestCaseAssertTrue([self.table insertObject:object]);
-    }
-
-    TestCaseAssertOptionalFalse([self.database isAlreadyTruncateCheckpointed]);
+    TestCaseAssertOptionalFalse([self.database isAlreadyCheckpointed]);
 
     [self.database close];
-    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForCriticalCheckpoint + self.delayForTolerance];
 
-    TestCaseAssertOptionalFalse([self.database isAlreadyTruncateCheckpointed]);
+    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForNonCriticalCheckpoint + self.delayForTolerance];
+
+    TestCaseAssertOptionalFalse([self.database isAlreadyCheckpointed]);
 }
 
 - (void)test_feature_threaded_handle
