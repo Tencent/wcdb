@@ -29,8 +29,8 @@
 {
     WCDB::Core::CorruptedNotification notification = nullptr;
     if (onCorrupted != nil) {
-        notification = [onCorrupted](WCDB::Database *database) -> bool {
-            return onCorrupted([[WCTDatabase alloc] initWithUnsafeDatabase:database]);
+        notification = [onCorrupted](WCDB::Database *database) {
+            onCorrupted([[WCTDatabase alloc] initWithUnsafeDatabase:database]);
         };
     }
     WCDB::Core::shared().setNotificationWhenDatabaseCorrupted(self.path, notification);
@@ -66,9 +66,9 @@
 - (void)setAutoBackup:(BOOL)flag
 {
     if (flag) {
-        _database->setConfig(WCDB::BackupConfigName, WCDB::Core::shared().autoBackupConfig(), WCDB::Configs::Priority::Highest);
+        _database->setConfig(WCDB::AutoBackupConfigName, WCDB::Core::shared().autoBackupConfig(), WCDB::Configs::Priority::Highest);
     } else {
-        _database->removeConfig(WCDB::BackupConfigName);
+        _database->removeConfig(WCDB::AutoBackupConfigName);
     }
 }
 

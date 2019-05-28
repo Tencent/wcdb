@@ -127,7 +127,7 @@
     TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
     TestCaseAssertTrue([self.database passiveCheckpoint]);
 
-    [NSThread sleepForTimeInterval:WCDB::BackupQueueTimeIntervalForCritical + self.delayForTolerance];
+    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForBackup + self.delayForTolerance];
     return [self.fileManager fileExistsAtPath:self.database.firstMaterialPath];
 }
 
@@ -136,69 +136,6 @@
     [self.database removeCheckpointConfig];
     self.database.autoBackup = YES;
     TestCaseAssertTrue([self checkAutoBackedup]);
-}
-
-- (void)test_auto_backup_when_meet_non_critical_frames_interval
-{
-    [self.database removeCheckpointConfig];
-    self.database.autoBackup = YES;
-
-    TestCaseObject *object = [self.random autoIncrementTestCaseObject];
-
-    while (YES) {
-        auto optionalNumberOfWalFrames = [self.database getNumberOfWalFrames];
-        TestCaseAssertFalse(optionalNumberOfWalFrames.failed());
-        if (optionalNumberOfWalFrames.value() >= self.backupFramesIntervalForNonCritical - self.framesForTolerance) {
-            break;
-        }
-        TestCaseAssertTrue([self.table insertObject:object]);
-    }
-
-    [NSThread sleepForTimeInterval:self.backupDelayForNonCritical + self.delayForTolerance];
-    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
-
-    while (YES) {
-        auto optionalNumberOfWalFrames = [self.database getNumberOfWalFrames];
-        TestCaseAssertFalse(optionalNumberOfWalFrames.failed());
-        if (optionalNumberOfWalFrames.value() >= self.backupFramesIntervalForNonCritical) {
-            break;
-        }
-        TestCaseAssertTrue([self.table insertObject:object]);
-    }
-
-    [NSThread sleepForTimeInterval:self.backupDelayForNonCritical + self.delayForTolerance];
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
-}
-
-- (void)test_auto_backup_when_meet_critical_frames_interval
-{
-    [self.database removeCheckpointConfig];
-    self.database.autoBackup = YES;
-
-    TestCaseObject *object = [self.random autoIncrementTestCaseObject];
-
-    while (YES) {
-        auto optionalNumberOfWalFrames = [self.database getNumberOfWalFrames];
-        TestCaseAssertFalse(optionalNumberOfWalFrames.failed());
-        if (optionalNumberOfWalFrames.value() >= self.backupFramesIntervalForCritical - self.framesForTolerance) {
-            break;
-        }
-        TestCaseAssertTrue([self.table insertObject:object]);
-    }
-
-    [NSThread sleepForTimeInterval:self.backupDelayForCritical + self.delayForTolerance];
-    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
-
-    while (YES) {
-        auto optionalNumberOfWalFrames = [self.database getNumberOfWalFrames];
-        TestCaseAssertFalse(optionalNumberOfWalFrames.failed());
-        if (optionalNumberOfWalFrames.value() >= self.backupFramesIntervalForCritical) {
-            break;
-        }
-        TestCaseAssertTrue([self.table insertObject:object]);
-    }
-    [NSThread sleepForTimeInterval:self.backupDelayForCritical + self.delayForTolerance];
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
 }
 
 - (void)test_cancel_auto_backup
@@ -224,65 +161,13 @@
     [self.database removeCheckpointConfig];
     self.database.autoBackup = YES;
 
-    TestCaseObject *object = [self.random autoIncrementTestCaseObject];
-    while (YES) {
-        auto optionalNumberOfWalFrames = [self.database getNumberOfWalFrames];
-        TestCaseAssertFalse(optionalNumberOfWalFrames.failed());
-        if (optionalNumberOfWalFrames.value() >= self.backupFramesIntervalForNonCritical) {
-            break;
-        }
-        TestCaseAssertTrue([self.table insertObject:object]);
-    }
+    TestCaseAssertTrue([self.database passiveCheckpoint]);
 
     TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
     [self.database close];
 
-    [NSThread sleepForTimeInterval:self.backupDelayForNonCritical + self.delayForTolerance];
+    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForBackup + self.delayForTolerance];
     TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
-}
-
-- (void)test_feature_auto_backup_for_attached
-{
-    NSString *attachedPath = [self.path stringByAppendingString:@"_attached"];
-    NSString *attachedName = @"test_attached";
-    WCTDatabase *attachedDatabase = [[WCTDatabase alloc] initWithPath:attachedPath];
-    TestCaseAssertTrue([attachedDatabase createTable:self.tableName withClass:TestCaseObject.class]);
-
-    self.database.autoBackup = YES;
-    TestCaseAssertTrue([attachedDatabase canOpen]);
-    TestCaseAssertTrue([self.database execute:WCDB::StatementAttach().attach(attachedPath).as(attachedName)]);
-
-    TestCaseObject *object = [self.random autoIncrementTestCaseObject];
-
-    {
-        // auto backup for main schema will not be triggered if operating other schemas
-        // auto backup for other schema will not be triggered if it's not set up
-        WCTInsert *insert = [[self.table prepareInsert] value:object];
-        insert.statement.schema(attachedName);
-        TestCaseAssertTrue([insert execute]);
-
-        TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).schema(attachedName).with("TRUNCATE")]);
-
-        [NSThread sleepForTimeInterval:WCDB::BackupQueueTimeIntervalForCritical + self.delayForTolerance];
-        TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
-        TestCaseAssertFalse([self.fileManager fileExistsAtPath:attachedDatabase.firstMaterialPath]);
-    }
-
-    {
-        // auto backup for other schema will be triggered if it's set up
-        attachedDatabase.autoBackup = YES;
-        TestCaseAssertTrue([attachedDatabase canOpen]);
-
-        WCTInsert *insert = [[self.table prepareInsert] value:object];
-        insert.statement.schema(attachedName);
-        TestCaseAssertTrue([insert execute]);
-
-        TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).schema(attachedName).with("TRUNCATE")]);
-
-        [NSThread sleepForTimeInterval:WCDB::BackupQueueTimeIntervalForCritical + self.delayForTolerance];
-        TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
-        TestCaseAssertTrue([self.fileManager fileExistsAtPath:attachedDatabase.firstMaterialPath]);
-    }
 }
 
 @end

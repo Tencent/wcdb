@@ -35,14 +35,14 @@ public:
 public:
     bool open() override final;
     void close() override final;
-    bool reconfigure(const std::shared_ptr<Configs> &newConfigs);
+    bool reconfigure(const Configs &newConfigs);
 
 protected:
-    bool unconfigure(bool stopIfFailed);
-    bool isConfigured() const;
+    bool configure();
 
 private:
-    std::shared_ptr<Configs> m_configs;
+    Configs m_cachedConfigs;
+    Configs m_configs;
 
 #pragma mark - Statement
 public:

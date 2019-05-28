@@ -20,55 +20,44 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/AutoBackupConfig.hpp>
-#include <WCDB/BackupQueue.hpp>
 #include <WCDB/Handle.hpp>
 #include <WCDB/String.hpp>
 
 namespace WCDB {
 
-AutoBackupConfig::AutoBackupConfig(const std::shared_ptr<BackupQueue> &queue)
-: Config(), m_identifier(String::formatted("Backup-%p", this)), m_queue(queue)
+AutoBackupOperator::~AutoBackupOperator()
 {
-    WCTInnerAssert(m_queue != nullptr);
+}
+
+AutoBackupConfig::AutoBackupConfig(const std::shared_ptr<AutoBackupOperator> &operator_)
+: Config(), m_identifier(String::formatted("Backup-%p", this)), m_operator(operator_)
+{
+    WCTInnerAssert(m_operator != nullptr);
 }
 
 bool AutoBackupConfig::invoke(Handle *handle)
 {
-    m_queue->register_(handle->getPath());
+    m_operator->registerAsRequiredBackup(handle->getPath());
 
     handle->setNotificationWhenCheckpointed(
     m_identifier,
     std::bind(&AutoBackupConfig::onCheckpointed, this, std::placeholders::_1));
-
-    handle->setNotificationWhenCommitted(
-    0,
-    m_identifier,
-    std::bind(&AutoBackupConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
 
     return true;
 }
 
 bool AutoBackupConfig::uninvoke(Handle *handle)
 {
-    handle->unsetNotificationWhenCommitted(m_identifier);
-
     handle->setNotificationWhenCheckpointed(m_identifier, nullptr);
 
-    m_queue->unregister(handle->getPath());
+    m_operator->registerAsNoBackupRequired(handle->getPath());
 
-    return true;
-}
-
-bool AutoBackupConfig::onCommitted(const String &path, int frames)
-{
-    m_queue->put(path, frames);
     return true;
 }
 
 void AutoBackupConfig::onCheckpointed(const String &path)
 {
-    // back up immediately if checkpointed
-    m_queue->put(path, -1);
+    m_operator->asyncBackup(path);
 }
 
 } //namespace WCDB

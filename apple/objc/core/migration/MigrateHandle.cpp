@@ -22,6 +22,7 @@
 #include <WCDB/CoreConst.h>
 #include <WCDB/MigrateHandle.hpp>
 #include <WCDB/Time.hpp>
+#include <cmath>
 
 namespace WCDB {
 
@@ -29,6 +30,7 @@ MigrateHandle::MigrateHandle()
 : m_migratingInfo(nullptr)
 , m_migrateStatement(getStatement())
 , m_removeMigratedStatement(getStatement())
+, m_samplePointing(0)
 {
     m_error.infos.set(ErrorStringKeyAction, ErrorActionMigrate);
 
@@ -128,19 +130,29 @@ bool MigrateHandle::migrateRows(const MigrationInfo* info, bool& done)
         return false;
     }
 
+    double timeIntervalWithinTransaction = calculateTimeIntervalWithinTransaction();
+    SteadyClock beforeTransaction = SteadyClock::now();
     bool migrated = false;
-    succeed = runTransaction([&migrated, this](Handle*) -> bool {
-        SteadyClock before = SteadyClock::now();
+    succeed = runTransaction(
+    [&migrated, &beforeTransaction, &timeIntervalWithinTransaction, this](Handle*) -> bool {
         bool succeed = false;
+        double cost = 0;
         do {
             std::tie(succeed, migrated) = migrateRow();
-        } while (succeed && !migrated
-                 && SteadyClock::now().timeIntervalSinceSteadyClock(before)
-                    < MigrateMaxAllowedDuration);
+            cost = SteadyClock::now().timeIntervalSinceSteadyClock(beforeTransaction);
+        } while (succeed && !migrated && cost < timeIntervalWithinTransaction);
+        timeIntervalWithinTransaction = cost;
         return succeed;
     });
-    if (succeed && migrated) {
-        done = true;
+    if (succeed) {
+        // update only if succeed
+        double timeIntervalWholeTranscation
+        = SteadyClock::now().timeIntervalSinceSteadyClock(beforeTransaction);
+        addSample(timeIntervalWithinTransaction, timeIntervalWholeTranscation);
+
+        if (migrated) {
+            done = true;
+        }
     }
     return succeed;
 }
@@ -169,6 +181,48 @@ void MigrateHandle::finalizeMigrationStatement()
 {
     m_migrateStatement->finalize();
     m_removeMigratedStatement->finalize();
+}
+
+#pragma mark - Sample
+MigrateHandle::Sample::Sample()
+: timeIntervalWithinTransaction(0), timeIntervalWholeTransaction(0)
+{
+}
+
+void MigrateHandle::addSample(double timeIntervalWithinTransaction, double timeIntervalForWholeTransaction)
+{
+    WCTInnerAssert(timeIntervalWithinTransaction > 0);
+    WCTInnerAssert(timeIntervalForWholeTransaction > 0);
+    WCTInnerAssert(m_samplePointing < numberOfSamples);
+    WCTInnerAssert(timeIntervalForWholeTransaction > timeIntervalWithinTransaction);
+
+    Sample& sample = m_samples[m_samplePointing];
+    sample.timeIntervalWithinTransaction = timeIntervalWithinTransaction;
+    sample.timeIntervalWholeTransaction = timeIntervalForWholeTransaction;
+    ++m_samplePointing;
+    if (m_samplePointing >= numberOfSamples) {
+        m_samplePointing = 0;
+    }
+}
+
+double MigrateHandle::calculateTimeIntervalWithinTransaction() const
+{
+    double totalTimeIntervalWithinTransaction = 0;
+    double totalTimeIntervalWholeTransaction = 0;
+    for (const auto& sample : m_samples) {
+        if (sample.timeIntervalWithinTransaction > 0
+            && sample.timeIntervalWholeTransaction > 0) {
+            totalTimeIntervalWithinTransaction += sample.timeIntervalWithinTransaction;
+            totalTimeIntervalWholeTransaction += sample.timeIntervalWholeTransaction;
+        }
+    }
+    double timeIntervalWithinTransaction = MigrateMaxExpectingDuration * totalTimeIntervalWithinTransaction
+                                           / totalTimeIntervalWholeTransaction;
+    if (timeIntervalWithinTransaction > MigrateMaxExpectingDuration
+        || timeIntervalWithinTransaction <= 0 || std::isnan(timeIntervalWithinTransaction)) {
+        timeIntervalWithinTransaction = MigrateMaxInitializeDuration;
+    }
+    return timeIntervalWithinTransaction;
 }
 
 #pragma mark - Info Initializer

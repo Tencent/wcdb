@@ -30,15 +30,11 @@
 
 - (void)doTestNotification;
 
-- (void)doTestFeatureInterruptMigrate;
-
 - (void)doTestAutoMigrate;
 
 - (void)doTestFeatureClosedDatabaseWillNotPerformAutoMigrate;
 
 - (void)doTestFeatureAutoMigrateWillStopDueToError;
-
-- (void)doTestFeatureAutoMigrateWillNotStopDueToInterrupt;
 
 - (void)doTestFeatureMigrateNewlyCreatedTableAfterMigrated;
 

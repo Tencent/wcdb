@@ -24,14 +24,9 @@
 #include <WCDB/CoreConst.h>
 
 #include <WCDB/AsyncQueue.hpp>
-#include <WCDB/BackupQueue.hpp>
-#include <WCDB/CheckpointQueue.hpp>
-#include <WCDB/MigrationQueue.hpp>
-#include <WCDB/ObservationQueue.hpp>
+#include <WCDB/OperationQueue.hpp>
 
-#include <WCDB/AutoBackupConfig.hpp>
 #include <WCDB/BasicConfig.hpp>
-#include <WCDB/CheckpointConfig.hpp>
 #include <WCDB/CipherConfig.hpp>
 #include <WCDB/Config.hpp>
 #include <WCDB/Configs.hpp>

@@ -26,7 +26,7 @@ namespace WCDB {
 
 // Small order first
 template<typename Key, typename Value, typename Order = int>
-class OrderedUniqueList final {
+class OrderedUniqueList {
 public:
     class Element {
     public:
@@ -36,8 +36,13 @@ public:
         }
 
         Value value;
-        const Order order;
-        const Key key;
+        Order order;
+        Key key;
+
+        bool operator==(const Element& other) const
+        {
+            return key == other.key && order == other.order && value == other.value;
+        }
     };
 
     OrderedUniqueList() {}
@@ -80,17 +85,17 @@ public:
         return nullptr;
     }
 
-    Element* find(const Key& key)
+    void clear() { m_elements.clear(); }
+
+    bool operator==(const OrderedUniqueList<Key, Value, Order>& other) const
     {
-        for (auto& element : m_elements) {
-            if (key == element.key) {
-                return &element;
-            }
-        }
-        return nullptr;
+        return elements() == other.elements();
     }
 
-    void clear() { m_elements.clear(); }
+    bool operator!=(const OrderedUniqueList<Key, Value, Order>& other) const
+    {
+        return !(operator==(other));
+    }
 
     const std::list<Element>& elements() const { return m_elements; }
 

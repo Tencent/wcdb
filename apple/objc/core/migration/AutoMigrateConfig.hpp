@@ -9,22 +9,28 @@
 #pragma once
 
 #include <WCDB/Config.hpp>
+#include <WCDB/String.hpp>
 #include <memory>
 
 namespace WCDB {
 
-class MigrationQueue;
+class AutoMigrateOperator {
+public:
+    virtual ~AutoMigrateOperator() = 0;
+    virtual void registerAsRequiredMigration(const String &path) = 0;
+    virtual void registerAsNoMigrationRequired(const String &path) = 0;
+};
 
 class AutoMigrateConfig final : public Config {
 public:
-    AutoMigrateConfig(const std::shared_ptr<MigrationQueue> &queue);
+    AutoMigrateConfig(const std::shared_ptr<AutoMigrateOperator> &operator_);
     ~AutoMigrateConfig();
 
     bool invoke(Handle *handle) override final;
     bool uninvoke(Handle *handle) override final;
 
 protected:
-    std::shared_ptr<MigrationQueue> m_queue;
+    std::shared_ptr<AutoMigrateOperator> m_operator;
 };
 
 } //namespace WCDB

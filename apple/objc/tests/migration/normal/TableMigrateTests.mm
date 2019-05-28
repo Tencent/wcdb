@@ -68,11 +68,6 @@
     [self doTestFeatureAutoMigrateWillStopDueToError];
 }
 
-- (void)test_feature_auto_migrate_will_not_stop_due_to_interrupt
-{
-    [self doTestFeatureAutoMigrateWillNotStopDueToInterrupt];
-}
-
 - (NSArray<NSObject<WCTTableCoding>*>*)getAllObjects
 {
     return [self.table getObjectsOrders:MigrationObject.identifier.asOrder(WCTOrderedAscending)];

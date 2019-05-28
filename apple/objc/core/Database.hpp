@@ -96,14 +96,14 @@ private:
 
 #pragma mark - Config
 public:
-    void setConfigs(const std::shared_ptr<Configs> &configs);
+    void setConfigs(const Configs &configs);
     void setConfig(const String &name,
                    const std::shared_ptr<Config> &config,
                    int priority = Configs::Priority::Default);
     void removeConfig(const String &name);
 
 private:
-    std::shared_ptr<Configs> m_configs;
+    Configs m_configs;
 
 #pragma mark - Threaded
 private:

@@ -20,27 +20,28 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/Macro.hpp>
-#import <WCDB/ObservationQueue.hpp>
+#import <WCDB/OperationQueue.hpp>
 
 #if TARGET_OS_IPHONE && !TARGET_OS_WATCH
 #import <UIKit/UIKit.h>
 
 namespace WCDB {
 
-void *ObservationQueue::registerNotificationWhenMemoryWarning()
+void *OperationQueue::registerNotificationWhenMemoryWarning()
 {
     id observer = [[NSNotificationCenter defaultCenter]
     addObserverForName:UIApplicationDidReceiveMemoryWarningNotification
                 object:nil
                  queue:nil
             usingBlock:^(NSNotification *) {
-                Parameter parameter(Parameter::Source::MemoryWarning);
-                this->observatedThatNeedPurge(parameter);
+                Parameter parameter;
+                parameter.source = Parameter::Source::MemoryWarning;
+                this->asyncPurge(parameter);
             }];
     return (void *) CFBridgingRetain(observer);
 }
 
-void ObservationQueue::unregisterNotificationWhenMemoryWarning(void *observer)
+void OperationQueue::unregisterNotificationWhenMemoryWarning(void *observer)
 {
     NSObject *nsObserver = (__bridge NSObject *) observer;
     [[NSNotificationCenter defaultCenter] removeObserver:nsObserver name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
@@ -52,12 +53,12 @@ void ObservationQueue::unregisterNotificationWhenMemoryWarning(void *observer)
 
 namespace WCDB {
 
-void* ObservationQueue::registerNotificationWhenMemoryWarning()
+void* OperationQueue::registerNotificationWhenMemoryWarning()
 {
     return nullptr;
 }
 
-void ObservationQueue::unregisterNotificationWhenMemoryWarning(void* observer)
+void OperationQueue::unregisterNotificationWhenMemoryWarning(void* observer)
 {
     WCDB_UNUSED(observer)
 }

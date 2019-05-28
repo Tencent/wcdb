@@ -22,6 +22,7 @@
 
 #include <WCDB/Handle.hpp>
 #include <WCDB/Migration.hpp>
+#include <array>
 
 namespace WCDB {
 
@@ -55,6 +56,22 @@ private:
     const MigrationInfo* m_migratingInfo;
     HandleStatement* m_migrateStatement;
     HandleStatement* m_removeMigratedStatement;
+
+#pragma mark - Sample
+protected:
+    void addSample(double timeIntervalWithinTransaction, double timeIntervalForWholeTransaction);
+    double calculateTimeIntervalWithinTransaction() const;
+
+private:
+    static constexpr const int numberOfSamples = 10;
+    struct Sample {
+        Sample();
+        double timeIntervalWithinTransaction;
+        double timeIntervalWholeTransaction;
+    };
+    typedef struct Sample Sample;
+    std::array<Sample, numberOfSamples> m_samples; // FILO
+    int m_samplePointing;
 
 #pragma mark - Info Initializer
 protected:

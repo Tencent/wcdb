@@ -39,33 +39,24 @@ Core::Core()
 // Database
 : m_databasePool(this)
 , m_modules(std::make_shared<TokenizerModules>())
-// Corruption
-, m_observationQueue(std::make_shared<ObservationQueue>(ObservationQueueName, this))
-// Checkpoint
-, m_checkpointQueue(std::make_shared<CheckpointQueue>(CheckpointQueueName, this))
+, m_operationQueue(std::make_shared<OperationQueue>(OperationQueueName, this))
 // Backup
-, m_autoBackupConfig(std::make_shared<AutoBackupConfig>(
-  std::make_shared<BackupQueue>(BackupQueueName, this)))
+, m_autoBackupConfig(std::make_shared<AutoBackupConfig>(m_operationQueue))
 // Migration
-, m_autoMigrateConfig(std::make_shared<AutoMigrateConfig>(
-  std::make_shared<MigrationQueue>(MigrationQueueName, this)))
+, m_autoMigrateConfig(std::make_shared<AutoMigrateConfig>(m_operationQueue))
 // Trace
 , m_globalSQLTraceConfig(std::make_shared<ShareableSQLTraceConfig>())
 , m_globalPerformanceTraceConfig(std::make_shared<ShareablePerformanceTraceConfig>())
 // Config
-, m_configs(std::make_shared<Configs>(OrderedUniqueList<String, std::shared_ptr<Config>>({
+, m_configs({
   { Configs::Priority::Highest, GlobalSQLTraceConfigName, m_globalSQLTraceConfig },
   { Configs::Priority::Highest, GlobalPerformanceTraceConfigName, m_globalPerformanceTraceConfig },
+  { Configs::Priority::Highest, BusyRetryConfigName, std::make_shared<BusyRetryConfig>() },
   { Configs::Priority::Highest,
-    BusyRetryConfigName,
-    std::static_pointer_cast<Config>(std::make_shared<BusyRetryConfig>()) },
-  { Configs::Priority::Highest,
-    CheckpointConfigName,
-    std::static_pointer_cast<Config>(std::make_shared<CheckpointConfig>(m_checkpointQueue)) },
-  { Configs::Priority::Higher,
-    BasicConfigName,
-    std::static_pointer_cast<Config>(std::make_shared<BasicConfig>()) },
-  })))
+    AutoCheckpointConfigName,
+    std::make_shared<AutoCheckpointConfig>(m_operationQueue) },
+  { Configs::Priority::Higher, BasicConfigName, std::make_shared<BasicConfig>() },
+  })
 {
     Global::shared().setNotificationForLog(
     NotifierLoggerName,
@@ -134,17 +125,43 @@ bool Core::tokenizerExists(const String& name) const
 
 std::shared_ptr<Config> Core::tokenizerConfig(const String& tokenizeName)
 {
-    return std::static_pointer_cast<Config>(
-    std::make_shared<TokenizerConfig>(tokenizeName, m_modules));
+    return std::make_shared<TokenizerConfig>(tokenizeName, m_modules);
 }
 
-#pragma mark - Observation
-void Core::observatedThatNeedPurge()
+#pragma mark - Operation
+std::pair<bool, bool> Core::migrationShouldBeOperated(const String& path)
 {
-    purgeDatabasePool();
+    RecyclableDatabase database = m_databasePool.get(path);
+    bool succeed = true; // mark as no error if database is not referenced.
+    bool done = false;
+    if (database != nullptr) {
+        std::tie(succeed, done) = database->stepMigrationIfAlreadyInitialized();
+    }
+    return { succeed, done };
 }
 
-void Core::observatedThatMayBeCorrupted(const String& path)
+bool Core::backupShouldBeOperated(const String& path)
+{
+    RecyclableDatabase database = m_databasePool.get(path);
+    bool succeed = true; // mark as no error if database is not referenced.
+    if (database != nullptr) {
+        succeed = database->backupIfAlreadyInitialized();
+    }
+    return succeed;
+}
+
+bool Core::checkpointShouldBeOperated(const String& path, bool critical)
+{
+    RecyclableDatabase database = m_databasePool.get(path);
+    bool succeed = true; // mark as no error if database is not referenced.
+    if (database != nullptr) {
+        succeed = database->checkpointIfAlreadyInitialized(
+        critical ? Database::CheckpointMode::Truncate : Database::CheckpointMode::Passive);
+    }
+    return succeed;
+}
+
+void Core::integrityShouldBeChecked(const String& path)
 {
     RecyclableDatabase database = m_databasePool.get(path);
     if (database != nullptr) {
@@ -160,65 +177,56 @@ void Core::observatedThatMayBeCorrupted(const String& path)
     }
 }
 
+void Core::purgeShouldBeOperated()
+{
+    purgeDatabasePool();
+}
+
 bool Core::isFileObservedCorrupted(const String& path)
 {
-    return m_observationQueue->isFileObservedCorrupted(path);
+    return m_operationQueue->isFileObservedCorrupted(path);
 }
 
 void Core::setNotificationWhenDatabaseCorrupted(const String& path,
                                                 const CorruptedNotification& notification)
 {
-    ObservationQueue::Notification underlyingNotification = nullptr;
+    OperationQueue::CorruptionNotification underlyingNotification = nullptr;
     if (notification != nullptr) {
         underlyingNotification
-        = [this, notification](const String& path, uint32_t corruptedIdentifier) -> bool {
-            RecyclableDatabase database = m_databasePool.get(path);
-            if (database == nullptr) {
-                // delay it since the database is not referenced.
-                return false;
-            }
-            database->blockade();
-            bool succeed;
-            bool exists;
-            std::tie(succeed, exists) = FileManager::fileExists(path);
-            if (!succeed) {
-                // delay it due to the I/O error
-                return false;
-            }
-            if (!exists) {
-                // mark as resolved since it's alredy not existing
-                return true;
-            }
-            uint32_t identifier;
-            std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
-            if (!succeed) {
-                // delay it due to the I/O error
-                return false;
-            }
-            if (identifier != corruptedIdentifier) {
-                // mark as resolved since the file is changed.
-                return true;
-            }
-            succeed = notification(database.get());
-            database->unblockade();
-            return succeed;
-        };
+        = [this, notification](const String& path, uint32_t corruptedIdentifier) {
+              RecyclableDatabase database = m_databasePool.get(path);
+              if (database == nullptr) {
+                  return;
+              }
+              database->blockade();
+              do {
+                  bool succeed;
+                  bool exists;
+                  std::tie(succeed, exists) = FileManager::fileExists(path);
+                  if (!succeed) {
+                      // I/O error
+                      break;
+                  }
+                  if (!exists) {
+                      // it's already not existing
+                      break;
+                  }
+                  uint32_t identifier;
+                  std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
+                  if (!succeed) {
+                      // I/O error
+                      break;
+                  }
+                  if (identifier != corruptedIdentifier) {
+                      // file is changed.
+                      break;
+                  }
+                  notification(database.get());
+              } while (false);
+              database->unblockade();
+          };
     }
-    m_observationQueue->setNotificationWhenCorrupted(path, underlyingNotification);
-}
-
-#pragma mark - Checkpoint
-bool Core::databaseShouldCheckpoint(const String& path, int frames)
-{
-    RecyclableDatabase database = m_databasePool.get(path);
-    bool succeed = true; // mark as no error if database is not referenced.
-    if (database != nullptr) {
-        succeed = database->checkpointIfAlreadyInitialized(
-        frames >= CheckpointFramesThresholdForTruncating ?
-        Database::CheckpointMode::Truncate :
-        Database::CheckpointMode::Passive);
-    }
-    return succeed;
+    m_operationQueue->setNotificationWhenCorrupted(path, underlyingNotification);
 }
 
 #pragma mark - Backup
@@ -227,28 +235,7 @@ std::shared_ptr<Config> Core::autoBackupConfig()
     return m_autoBackupConfig;
 }
 
-bool Core::databaseShouldBackup(const String& path)
-{
-    RecyclableDatabase database = m_databasePool.get(path);
-    bool succeed = true; // mark as no error if database is not referenced.
-    if (database != nullptr) {
-        succeed = database->backupIfAlreadyInitialized();
-    }
-    return succeed;
-}
-
 #pragma mark - Migration
-std::pair<bool, bool> Core::databaseShouldMigrate(const String& path)
-{
-    RecyclableDatabase database = m_databasePool.get(path);
-    bool succeed = true; // mark as no error if database is not referenced.
-    bool done = false;
-    if (database != nullptr) {
-        std::tie(succeed, done) = database->stepMigrationIfAlreadyInitialized();
-    }
-    return { succeed, done };
-}
-
 std::shared_ptr<Config> Core::autoMigrateConfig()
 {
     return m_autoMigrateConfig;
@@ -282,12 +269,6 @@ void Core::setNotificationWhenPerformanceGlobalTraced(const ShareablePerformance
 {
     static_cast<ShareablePerformanceTraceConfig*>(m_globalPerformanceTraceConfig.get())
     ->setNotification(notification);
-}
-
-#pragma mark - Config
-const std::shared_ptr<Configs>& Core::configs()
-{
-    return m_configs;
 }
 
 } // namespace WCDB

@@ -8,12 +8,15 @@
 
 #include <WCDB/AutoMigrateConfig.hpp>
 #include <WCDB/Handle.hpp>
-#include <WCDB/MigrationQueue.hpp>
 
 namespace WCDB {
 
-AutoMigrateConfig::AutoMigrateConfig(const std::shared_ptr<MigrationQueue> &queue)
-: Config(), m_queue(queue)
+AutoMigrateOperator::~AutoMigrateOperator()
+{
+}
+
+AutoMigrateConfig::AutoMigrateConfig(const std::shared_ptr<AutoMigrateOperator> &operator_)
+: Config(), m_operator(operator_)
 {
 }
 
@@ -23,13 +26,13 @@ AutoMigrateConfig::~AutoMigrateConfig()
 
 bool AutoMigrateConfig::invoke(Handle *handle)
 {
-    m_queue->register_(handle->getPath());
+    m_operator->registerAsRequiredMigration(handle->getPath());
     return true;
 }
 
 bool AutoMigrateConfig::uninvoke(Handle *handle)
 {
-    m_queue->unregister(handle->getPath());
+    m_operator->registerAsNoMigrationRequired(handle->getPath());
     return true;
 }
 
