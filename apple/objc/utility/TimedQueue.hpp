@@ -51,7 +51,7 @@ public:
     // return true to erase the element
     typedef std::function<void(const Key &, const Info &)> ExpiredCallback;
 
-    void queue(const Key &key, double delay, const Info &info, bool reQueue = true)
+    void queue(const Key &key, double delay, const Info &info)
     {
         if (isExiting()) {
             stop();
@@ -64,23 +64,14 @@ public:
                 return;
             }
 
-            if (!reQueue && m_list.find(key) != nullptr) {
-                // no need to queue
-                return;
-            }
-
             SteadyClock expired
             = SteadyClock::now().steadyClockByAddingTimeInterval(delay);
 
-            SteadyClock shortest;
-            if (!m_list.elements().empty()) {
-                shortest = m_list.elements().begin()->order;
-            } else {
-                shortest = SteadyClock::max();
-            }
-            m_list.insert(expired, key, info);
-            if (m_list.elements().begin()->order < shortest) {
-                notify = true;
+            auto *element = m_list.find(key);
+            if (element == nullptr || (element != nullptr && expired < element->order)) {
+                // insert if key doesn't exist or new key is arrived faster.
+                m_list.insert(expired, key, info);
+                notify = m_list.elements().front().key == key;
             }
         }
         if (notify) {
