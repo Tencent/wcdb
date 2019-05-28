@@ -41,7 +41,6 @@ Database::Database(const String &path)
 , m_factory(path)
 , m_tag(Tag::invalid())
 , m_initialized(false)
-, m_configs(nullptr)
 , m_migratedCallback(nullptr)
 , m_migration(this)
 , m_suspend(0)
@@ -135,7 +134,7 @@ Database::InitializedGuard Database::isInitialized() const
 }
 
 #pragma mark - Config
-void Database::setConfigs(const std::shared_ptr<Configs> &configs)
+void Database::setConfigs(const Configs &configs)
 {
     LockGuard memoryGuard(m_memory);
     m_configs = configs;
@@ -144,17 +143,13 @@ void Database::setConfigs(const std::shared_ptr<Configs> &configs)
 void Database::setConfig(const String &name, const std::shared_ptr<Config> &config, int priority)
 {
     LockGuard memoryGuard(m_memory);
-    std::shared_ptr<Configs> configs = std::make_shared<Configs>(*m_configs.get());
-    configs->insert(name, config, priority);
-    m_configs = configs;
+    m_configs.insert(priority, name, config);
 }
 
 void Database::removeConfig(const String &name)
 {
     LockGuard memoryGuard(m_memory);
-    std::shared_ptr<Configs> configs = std::make_shared<Configs>(*m_configs.get());
-    configs->remove(name);
-    m_configs = configs;
+    m_configs.erase(name);
 }
 
 #pragma mark - Handle
@@ -266,7 +261,7 @@ bool Database::willReuseSlotedHandle(Slot slot, Handle *handle)
 
 bool Database::reconfigureHandle(Handle *handle)
 {
-    std::shared_ptr<Configs> configs;
+    Configs configs;
     {
         SharedLockGuard memoryGuard(m_memory);
         configs = m_configs;

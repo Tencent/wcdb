@@ -48,13 +48,13 @@ Core::Core()
 , m_globalSQLTraceConfig(std::make_shared<ShareableSQLTraceConfig>())
 , m_globalPerformanceTraceConfig(std::make_shared<ShareablePerformanceTraceConfig>())
 // Config
-, m_configs(std::make_shared<Configs>(OrderedUniqueList<String, std::shared_ptr<Config>>({
+, m_configs({
   { Configs::Priority::Highest, GlobalSQLTraceConfigName, m_globalSQLTraceConfig },
   { Configs::Priority::Highest, GlobalPerformanceTraceConfigName, m_globalPerformanceTraceConfig },
   { Configs::Priority::Highest, BusyRetryConfigName, std::make_shared<BusyRetryConfig>() },
   { Configs::Priority::Highest, CheckpointConfigName, std::make_shared<AutoCheckpointConfig>(m_operationQueue) },
   { Configs::Priority::Higher, BasicConfigName, std::make_shared<BasicConfig>() },
-  })))
+  })
 {
     Global::shared().setNotificationForLog(
     NotifierLoggerName,
@@ -269,12 +269,6 @@ void Core::setNotificationWhenPerformanceGlobalTraced(const ShareablePerformance
 {
     static_cast<ShareablePerformanceTraceConfig*>(m_globalPerformanceTraceConfig.get())
     ->setNotification(notification);
-}
-
-#pragma mark - Config
-const std::shared_ptr<Configs>& Core::configs()
-{
-    return m_configs;
 }
 
 } // namespace WCDB

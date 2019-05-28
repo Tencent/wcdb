@@ -110,11 +110,8 @@ protected:
     void globalLog(int rc, const char* message);
 
 #pragma mark - Config
-public:
-    const std::shared_ptr<Configs>& configs();
-
 protected:
-    std::shared_ptr<Configs> m_configs;
+    Configs m_configs;
 };
 
 } // namespace WCDB

@@ -450,7 +450,6 @@
 		2367BB0B2215004300380122 /* StatementCreateVirtualTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBCB217DFADC006E9E73 /* StatementCreateVirtualTable.cpp */; };
 		2367BB0C2215004300380122 /* CTETable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB84217DFADC006E9E73 /* CTETable.cpp */; };
 		2367BB0D2215004300380122 /* StatementSavepoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBE3217DFADC006E9E73 /* StatementSavepoint.cpp */; };
-		2367BB0E2215004300380122 /* Configs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F70FC220A0618100CCE3CD /* Configs.cpp */; };
 		2367BB0F2215004300380122 /* Recyclable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 236996B121D5C4FF00E72E81 /* Recyclable.cpp */; };
 		2367BB102215004300380122 /* Data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775BCB20AD72BC00E21AB0 /* Data.cpp */; };
 		2367BB112215004300380122 /* SyntaxForeignKeyClause.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC04217DFADC006E9E73 /* SyntaxForeignKeyClause.cpp */; };
@@ -1362,7 +1361,6 @@
 		23F70FB820A055CF00CCE3CD /* AutoCheckpointConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F70FB620A055CF00CCE3CD /* AutoCheckpointConfig.cpp */; };
 		23F70FBE20A055D400CCE3CD /* TokenizerConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F70FBC20A055D400CCE3CD /* TokenizerConfig.cpp */; };
 		23F70FC020A055D400CCE3CD /* TokenizerConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FBD20A055D400CCE3CD /* TokenizerConfig.hpp */; };
-		23F70FC420A0618100CCE3CD /* Configs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F70FC220A0618100CCE3CD /* Configs.cpp */; };
 		23F70FC620A0618100CCE3CD /* Configs.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FC320A0618100CCE3CD /* Configs.hpp */; };
 		23F70FD620A07CEC00CCE3CD /* CustomConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F70FD420A07CEC00CCE3CD /* CustomConfig.cpp */; };
 		23F70FD820A07CEC00CCE3CD /* CustomConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FD520A07CEC00CCE3CD /* CustomConfig.hpp */; };
@@ -2559,7 +2557,6 @@
 		23F70FB620A055CF00CCE3CD /* AutoCheckpointConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AutoCheckpointConfig.cpp; sourceTree = "<group>"; };
 		23F70FBC20A055D400CCE3CD /* TokenizerConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TokenizerConfig.cpp; sourceTree = "<group>"; };
 		23F70FBD20A055D400CCE3CD /* TokenizerConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TokenizerConfig.hpp; sourceTree = "<group>"; };
-		23F70FC220A0618100CCE3CD /* Configs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Configs.cpp; sourceTree = "<group>"; };
 		23F70FC320A0618100CCE3CD /* Configs.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Configs.hpp; sourceTree = "<group>"; };
 		23F70FD420A07CEC00CCE3CD /* CustomConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CustomConfig.cpp; sourceTree = "<group>"; };
 		23F70FD520A07CEC00CCE3CD /* CustomConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CustomConfig.hpp; sourceTree = "<group>"; };
@@ -3911,6 +3908,8 @@
 				2304B42D22156E1500901953 /* TokenizerModules.hpp */,
 				233E09B52216BD7B0006E608 /* OneOrBinaryTokenizer.cpp */,
 				233E09B62216BD7B0006E608 /* OneOrBinaryTokenizer.hpp */,
+				23F70FBC20A055D400CCE3CD /* TokenizerConfig.cpp */,
+				23F70FBD20A055D400CCE3CD /* TokenizerConfig.hpp */,
 			);
 			path = tokenizer;
 			sourceTree = "<group>";
@@ -4226,7 +4225,6 @@
 		23F70F9D20A055A400CCE3CD /* config */ = {
 			isa = PBXGroup;
 			children = (
-				23F70FC220A0618100CCE3CD /* Configs.cpp */,
 				23F70FC320A0618100CCE3CD /* Configs.hpp */,
 				23F70F9F20A055B400CCE3CD /* Config.hpp */,
 				2327BC21220944D80078A85B /* Config.cpp */,
@@ -4240,8 +4238,6 @@
 				2360A60020D78F2B00E4A311 /* SQLTraceConfig.hpp */,
 				23F70FB620A055CF00CCE3CD /* AutoCheckpointConfig.cpp */,
 				3934DB25229B951C008A6AEC /* AutoCheckpointConfig.hpp */,
-				23F70FBC20A055D400CCE3CD /* TokenizerConfig.cpp */,
-				23F70FBD20A055D400CCE3CD /* TokenizerConfig.hpp */,
 				23F70FD420A07CEC00CCE3CD /* CustomConfig.cpp */,
 				23F70FD520A07CEC00CCE3CD /* CustomConfig.hpp */,
 				237A8D5D21EDBB2E003AF5BB /* BusyRetryConfig.cpp */,
@@ -5600,7 +5596,6 @@
 				2367BB0B2215004300380122 /* StatementCreateVirtualTable.cpp in Sources */,
 				2367BB0C2215004300380122 /* CTETable.cpp in Sources */,
 				2367BB0D2215004300380122 /* StatementSavepoint.cpp in Sources */,
-				2367BB0E2215004300380122 /* Configs.cpp in Sources */,
 				2367BB0F2215004300380122 /* Recyclable.cpp in Sources */,
 				2367BB102215004300380122 /* Data.cpp in Sources */,
 				2367BB112215004300380122 /* SyntaxForeignKeyClause.cpp in Sources */,
@@ -5878,7 +5873,6 @@
 				23EEDC81217DFADC006E9E73 /* CTETable.cpp in Sources */,
 				23545BA22224EAA40091C981 /* SyntaxCommonConst.cpp in Sources */,
 				23EEDCDF217DFADC006E9E73 /* StatementSavepoint.cpp in Sources */,
-				23F70FC420A0618100CCE3CD /* Configs.cpp in Sources */,
 				236996B221D5C4FF00E72E81 /* Recyclable.cpp in Sources */,
 				23775BCD20AD72BC00E21AB0 /* Data.cpp in Sources */,
 				23EEDCFD217DFADC006E9E73 /* SyntaxForeignKeyClause.cpp in Sources */,

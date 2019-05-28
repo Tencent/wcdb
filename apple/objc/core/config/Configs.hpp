@@ -26,10 +26,10 @@
 
 namespace WCDB {
 
-class Handle;
-
-class Configs final {
+class Configs final : public OrderedUniqueList<String, std::shared_ptr<Config>> {
 public:
+    using OrderedUniqueList<String, std::shared_ptr<Config>>::OrderedUniqueList;
+
     enum Priority : int {
         Highest = std::numeric_limits<int>::min(),
         Higher = std::numeric_limits<int>::min() + 1,
@@ -37,19 +37,6 @@ public:
         Default = 0,
         Low = 100,
     };
-
-    Configs(OrderedUniqueList<String, std::shared_ptr<Config>> &&list);
-
-    void insert(const String &name,
-                const std::shared_ptr<Config> &config,
-                int priority = Priority::Default);
-    void remove(const String &name);
-
-    bool invoke(Handle *handle);
-    bool uninvoke(Handle *handle, bool stopIfFailed = true);
-
-protected:
-    OrderedUniqueList<String, std::shared_ptr<Config>> m_list;
 };
 
 } //namespace WCDB

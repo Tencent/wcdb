@@ -35,58 +35,66 @@ Handle::~Handle()
 #pragma mark - Config
 bool Handle::open()
 {
-    if (!AbstractHandle::open()) {
-        return false;
+    bool succeed = false;
+    if (AbstractHandle::open()) {
+        if (configure()) {
+            succeed = true;
+        } else {
+            close();
+        }
     }
-    if (m_configs != nullptr && !m_configs->invoke(this)) {
-        close();
-        return false;
-    }
-    return true;
+    return succeed;
 }
 
 void Handle::close()
 {
     if (isOpened()) {
-        unconfigure(false);
+        while (!m_cachedConfigs.elements().empty()) {
+            auto last = m_cachedConfigs.elements().back();
+            last.value->uninvoke(this); // ignore errors
+            WCTInnerAssert(m_cachedConfigs.find(last.key) != nullptr);
+            WCTInnerAssert(m_cachedConfigs.find(last.key)->key == last.key);
+            WCTInnerAssert(m_cachedConfigs.find(last.key)->value == last.value);
+            WCTInnerAssert(m_cachedConfigs.find(last.key)->order == last.order);
+            m_cachedConfigs.erase(last.key);
+        }
     }
     AbstractHandle::close();
 }
 
-bool Handle::isConfigured() const
+bool Handle::reconfigure(const Configs &newConfigs)
 {
-    return m_configs != nullptr;
-}
-
-bool Handle::reconfigure(const std::shared_ptr<Configs> &newConfigs)
-{
-    if (m_configs == newConfigs) {
-        return true;
-    }
-    if (isOpened()) {
-        if (!unconfigure(true)) {
-            return false;
-        }
-        WCTInnerAssert(m_configs == nullptr);
-        if (newConfigs != nullptr) {
-            if (!newConfigs->invoke(this)) {
-                return false;
-            }
+    if (newConfigs != m_cachedConfigs) {
+        m_configs = newConfigs;
+        if (isOpened()) {
+            return configure();
         }
     }
-    m_configs = newConfigs;
     return true;
 }
 
-bool Handle::unconfigure(bool stopIfFailed)
+bool Handle::configure()
 {
-    WCTInnerAssert(isOpened());
-    if (m_configs != nullptr) {
-        if (!m_configs->uninvoke(this, stopIfFailed)) {
+    WCTInnerAssert(m_cachedConfigs != m_configs);
+    while (!m_cachedConfigs.elements().empty()) {
+        auto last = m_cachedConfigs.elements().back();
+        if (!last.value->uninvoke(this)) {
             return false;
         }
-        m_configs = nullptr;
+        WCTInnerAssert(m_cachedConfigs.find(last.key) != nullptr);
+        WCTInnerAssert(m_cachedConfigs.find(last.key)->key == last.key);
+        WCTInnerAssert(m_cachedConfigs.find(last.key)->value == last.value);
+        WCTInnerAssert(m_cachedConfigs.find(last.key)->order == last.order);
+        m_cachedConfigs.erase(last.key);
     }
+    WCTInnerAssert(m_cachedConfigs.elements().empty());
+    for (const auto &element : m_configs.elements()) {
+        if (!element.value->invoke(this)) {
+            return false;
+        }
+        m_cachedConfigs.insert(element.order, element.key, element.value);
+    }
+    m_configs = m_cachedConfigs;
     return true;
 }
 
