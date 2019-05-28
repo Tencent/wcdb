@@ -114,10 +114,7 @@ protected:
     struct Record {
         Record();
         int registeredForMigration;
-
         int registeredForBackup;
-        int framesThatBackedUp;
-
         int registeredForCheckpoint;
     };
     typedef struct Record Record;
@@ -137,11 +134,11 @@ public:
     void registerAsRequiredBackup(const String& path) override final;
     void registerAsNoBackupRequired(const String& path) override final;
 
-    void asyncBackup(const String& path, int frames) override final;
+    void asyncBackup(const String& path) override final;
 
 protected:
-    void asyncBackup(const String& path, double delay, int frames);
-    void doBackup(const String& path, int frames);
+    void asyncBackup(const String& path, double delay);
+    void doBackup(const String& path);
 
 #pragma mark - Checkpoint
 public:

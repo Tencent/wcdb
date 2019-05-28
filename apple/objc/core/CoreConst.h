@@ -58,12 +58,7 @@ static constexpr const char* CheckpointConfigName = "com.Tencent.WCDB.Config.Che
 
 // Backup Config
 static constexpr const char* BackupConfigName = "com.Tencent.WCDB.Config.Backup";
-static constexpr const int BackupConfigFramesIntervalForCritical
-= 6 * 1024 * 1024 / 4096; // 6 MB / Default Page Size = 1536
-static constexpr const int BackupConfigFramesIntervalForNonCritical
-= 1 * 1024 * 1024 / 4096; // 1 MB / Default Page Size = 256
-static constexpr const double BackupQueueTimeIntervalForCritical = 1.0;
-static constexpr const double BackupQueueTimeIntervalForNonCritical = 5.0;
+static constexpr const double BackupQueueTimeInterval = 1.0;
 
 // Basic Config
 static constexpr const char* BasicConfigName = "com.Tencent.WCDB.Config.Basic";
@@ -147,10 +142,6 @@ static constexpr const char* ErrorSourceNative = "Native";
 static constexpr const int TagInvalidValue = 0;
 
 // Constraint
-
-// checkpoint trigger backup.
-static_assert(BackupConfigFramesIntervalForCritical > CheckpointQueueFramesThresholdForCritical,
-              "");
 
 // migration may trigger checkpoint.
 static_assert(MigrationQueueTimeIntervalForMigrating > CheckpointQueueTimeIntervalForCritical, "");

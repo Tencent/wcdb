@@ -32,7 +32,7 @@ public:
     virtual void registerAsRequiredBackup(const String& path) = 0;
     virtual void registerAsNoBackupRequired(const String& path) = 0;
 
-    virtual void asyncBackup(const String& path, int frames) = 0;
+    virtual void asyncBackup(const String& path) = 0;
 };
 
 class AutoBackupConfig final : public Config {
@@ -44,7 +44,6 @@ public:
 
 protected:
     const String m_identifier;
-    bool onCommitted(const String& path, int frames);
     void onCheckpointed(const String& path);
 
     std::shared_ptr<AutoBackupOperator> m_operator;

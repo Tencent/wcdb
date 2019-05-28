@@ -179,7 +179,7 @@ void OperationQueue::onTimed(const Operation& operation, const Parameter& parame
         break;
     default:
         WCTInnerAssert(operation.type == Operation::Type::Backup);
-        doBackup(operation.path, parameter.frames);
+        doBackup(operation.path);
         break;
     }
 }
@@ -192,10 +192,7 @@ void OperationQueue::async(const Operation& operation, double delay, const Param
 
 #pragma mark - Record
 OperationQueue::Record::Record()
-: registeredForMigration(0)
-, registeredForBackup(0)
-, framesThatBackedUp(0)
-, registeredForCheckpoint(0)
+: registeredForMigration(0), registeredForBackup(0), registeredForCheckpoint(0)
 {
 }
 
@@ -282,55 +279,37 @@ void OperationQueue::registerAsNoBackupRequired(const String& path)
     --record.registeredForBackup;
     WCTInnerAssert(record.registeredForBackup >= 0);
     if (record.registeredForBackup == 0) {
-        record.framesThatBackedUp = 0;
         Operation operation(Operation::Type::Backup, path);
         m_timedQueue.remove(operation);
     }
 }
 
-void OperationQueue::asyncBackup(const String& path, int frames)
+void OperationQueue::asyncBackup(const String& path)
 {
     WCTInnerAssert(!path.empty());
 
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_records.find(path);
     if (iter != m_records.end() && iter->second.registeredForBackup > 0) {
-        int recordedFrames = iter->second.framesThatBackedUp;
-        if (frames >= recordedFrames + BackupConfigFramesIntervalForCritical // expired too much
-            || frames < recordedFrames // restarted
-        ) {
-            asyncBackup(path, BackupQueueTimeIntervalForCritical, frames);
-        } else if (frames >= recordedFrames + BackupConfigFramesIntervalForNonCritical) {
-            asyncBackup(path, BackupQueueTimeIntervalForNonCritical, frames);
-        }
+        asyncBackup(path, BackupQueueTimeInterval);
     }
 }
 
-void OperationQueue::asyncBackup(const String& path, double delay, int frames)
+void OperationQueue::asyncBackup(const String& path, double delay)
 {
     WCTInnerAssert(!path.empty());
 
     Operation operation(Operation::Type::Backup, path);
-    Parameter parameter;
-    parameter.frames = frames;
+    Parameter parameter; // no use
     async(operation, delay, parameter);
 }
 
-void OperationQueue::doBackup(const String& path, int frames)
+void OperationQueue::doBackup(const String& path)
 {
     WCTInnerAssert(!path.empty());
 
-    bool result = m_event->backupShouldBeOperated(path);
-    if (result) {
-        LockGuard lockGuard(m_lock);
-        auto iter = m_records.find(path);
-        if (iter != m_records.end()) {
-            if (iter->second.registeredForBackup > 0) {
-                iter->second.framesThatBackedUp = frames;
-            }
-        }
-    } else {
-        asyncBackup(path, BackupQueueTimeIntervalForRetryingAfterFailure, frames);
+    if (!m_event->backupShouldBeOperated(path)) {
+        asyncBackup(path, BackupQueueTimeIntervalForRetryingAfterFailure);
     }
 }
 

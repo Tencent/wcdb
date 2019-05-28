@@ -43,18 +43,11 @@ bool AutoBackupConfig::invoke(Handle *handle)
     m_identifier,
     std::bind(&AutoBackupConfig::onCheckpointed, this, std::placeholders::_1));
 
-    handle->setNotificationWhenCommitted(
-    0,
-    m_identifier,
-    std::bind(&AutoBackupConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
-
     return true;
 }
 
 bool AutoBackupConfig::uninvoke(Handle *handle)
 {
-    handle->unsetNotificationWhenCommitted(m_identifier);
-
     handle->setNotificationWhenCheckpointed(m_identifier, nullptr);
 
     m_operator->registerAsNoBackupRequired(handle->getPath());
@@ -62,16 +55,9 @@ bool AutoBackupConfig::uninvoke(Handle *handle)
     return true;
 }
 
-bool AutoBackupConfig::onCommitted(const String &path, int frames)
-{
-    m_operator->asyncBackup(path, frames);
-    return true;
-}
-
 void AutoBackupConfig::onCheckpointed(const String &path)
 {
-    // back up immediately if checkpointed
-    m_operator->asyncBackup(path, -1);
+    m_operator->asyncBackup(path);
 }
 
 } //namespace WCDB
