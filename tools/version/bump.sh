@@ -46,8 +46,11 @@ echo "$build" > "$root"/BUILD
 # ObjC Version
 template="$root"/tools/version/template.xcconfig
 xcconfig="$root"/apple/support/Version.xcconfig
-sed -e "s/WCDB_VERSION_PLACEHOLDER/"$version"/g" \
-    -e "s/WCDB_BUILD_PLACEHOLDER/"$build"/g" \
+time=`date +"%Y-%m-%d\ %H:%M:%S\ UTC%z"`
+echo $time
+sed -e "s/WCDB_VERSION_PLACEHOLDER/""$version""/g" \
+    -e "s/WCDB_BUILD_PLACEHOLDER/""$build""/g" \
+    -e "s/WCDB_TIMESTAMP_PLACEHOLDER/""$time""/g" \
     "$template" > "$xcconfig"
 git add "$xcconfig"
 

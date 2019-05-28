@@ -24,7 +24,11 @@
 
 #define WCDB_IDENTIFIER "bfd56a1a2d98b0b21babd84fcf6db4ac"
 
-#define WCDB_BUILD_TIME __TIMESTAMP__
+#ifdef WCDB_TIMESTAMP
+#define WCDB_TIMESTAMP_STRING WCDB_STRINGIFY(WCDB_TIMESTAMP)
+#else
+#define WCDB_TIMESTAMP_STRING "Undefine Timestamp"
+#endif
 
 #ifdef WCDB_VERSION
 #define WCDB_VERSION_STRING WCDB_STRINGIFY(WCDB_VERSION)
@@ -35,7 +39,7 @@
 #ifdef WCDB_BUILD
 #define WCDB_BUILD_STRING WCDB_STRINGIFY(WCDB_BUILD)
 #else
-#define WCDB_BUILD_STRING "Undefined build"
+#define WCDB_BUILD_STRING "Undefined Build"
 #endif
 
 #define WCDB_SOURCE_ID                                                         \
