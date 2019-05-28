@@ -93,7 +93,7 @@
 
 - (void)removeCheckpointConfig
 {
-    [self removeConfigForName:@(WCDB::CheckpointConfigName)];
+    [self removeConfigForName:@(WCDB::AutoCheckpointConfigName)];
 }
 
 - (WCTOptionalSize)getNumberOfPages

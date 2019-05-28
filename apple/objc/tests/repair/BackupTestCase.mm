@@ -29,26 +29,6 @@
     [self insertPresetObjects];
 }
 
-- (int)backupFramesIntervalForNonCritical
-{
-    return WCDB::BackupConfigFramesIntervalForNonCritical;
-}
-
-- (int)backupFramesIntervalForCritical
-{
-    return WCDB::BackupConfigFramesIntervalForCritical;
-}
-
-- (NSTimeInterval)backupDelayForCritical
-{
-    return WCDB::BackupQueueTimeIntervalForCritical;
-}
-
-- (NSTimeInterval)backupDelayForNonCritical
-{
-    return WCDB::BackupQueueTimeIntervalForNonCritical;
-}
-
 - (int)framesForTolerance
 {
     return 10;

@@ -52,7 +52,9 @@ Core::Core()
   { Configs::Priority::Highest, GlobalSQLTraceConfigName, m_globalSQLTraceConfig },
   { Configs::Priority::Highest, GlobalPerformanceTraceConfigName, m_globalPerformanceTraceConfig },
   { Configs::Priority::Highest, BusyRetryConfigName, std::make_shared<BusyRetryConfig>() },
-  { Configs::Priority::Highest, CheckpointConfigName, std::make_shared<AutoCheckpointConfig>(m_operationQueue) },
+  { Configs::Priority::Highest,
+    AutoCheckpointConfigName,
+    std::make_shared<AutoCheckpointConfig>(m_operationQueue) },
   { Configs::Priority::Higher, BasicConfigName, std::make_shared<BasicConfig>() },
   })
 {
@@ -148,15 +150,13 @@ bool Core::backupShouldBeOperated(const String& path)
     return succeed;
 }
 
-bool Core::checkpointShouldBeOperated(const String& path, int frames)
+bool Core::checkpointShouldBeOperated(const String& path, bool critical)
 {
     RecyclableDatabase database = m_databasePool.get(path);
     bool succeed = true; // mark as no error if database is not referenced.
     if (database != nullptr) {
         succeed = database->checkpointIfAlreadyInitialized(
-        frames >= CheckpointFramesThresholdForTruncating ?
-        Database::CheckpointMode::Truncate :
-        Database::CheckpointMode::Passive);
+        critical ? Database::CheckpointMode::Truncate : Database::CheckpointMode::Passive);
     }
     return succeed;
 }

@@ -111,7 +111,7 @@ void OperationQueue::observatedThatFileOpened(int fd, const char* path, int flag
 
         int possibleNumberOfActiveFileDescriptors = fd + 1;
         if (possibleNumberOfActiveFileDescriptors
-            > maxAllowedNumberOfFileDescriptors() * ObservationQueueRateForTooManyFileDescriptors) {
+            > maxAllowedNumberOfFileDescriptors() * OperationQueueRateForTooManyFileDescriptors) {
             Parameter parameter;
             parameter.source = Parameter::Source::FileDescriptorsWarning;
             parameter.numberOfFileDescriptors = possibleNumberOfActiveFileDescriptors;
@@ -148,7 +148,12 @@ bool OperationQueue::Operation::operator==(const Operation& other) const
 }
 
 OperationQueue::Parameter::Parameter()
-: source(Source::Other), frames(0), numberOfFailures(0), identifier(0), numberOfFileDescriptors(0)
+: source(Source::Other)
+, frames(0)
+, numberOfFailures(0)
+, identifier(0)
+, numberOfFileDescriptors(0)
+, critical(false)
 {
 }
 
@@ -165,7 +170,7 @@ void OperationQueue::onTimed(const Operation& operation, const Parameter& parame
         doMigrate(operation.path, parameter.numberOfFailures);
         break;
     case Operation::Type::Checkpoint:
-        doCheckpoint(operation.path, parameter.frames);
+        doCheckpoint(operation.path, parameter.critical);
         break;
     case Operation::Type::Purge:
         WCTInnerAssert(operation.path.empty());
@@ -205,7 +210,7 @@ void OperationQueue::registerAsRequiredMigration(const String& path)
     int queue = m_records[path].registeredForMigration == 0;
     ++m_records[path].registeredForMigration;
     if (queue) {
-        asyncMigrate(path, MigrationQueueTimeIntervalForMigrating, 0);
+        asyncMigrate(path, OperationQueueTimeIntervalForMigration, 0);
     }
 }
 
@@ -226,7 +231,8 @@ void OperationQueue::registerAsNoMigrationRequired(const String& path)
 void OperationQueue::asyncMigrate(const String& path, double delay, int numberOfFailures)
 {
     WCTInnerAssert(!path.empty());
-    WCTInnerAssert(numberOfFailures >= 0 && numberOfFailures < MigrationQueueTolerableFailures);
+    WCTInnerAssert(numberOfFailures >= 0
+                   && numberOfFailures < OperationQueueTolerableFailuresForMigration);
 
     SharedLockGuard lockGuard(m_lock);
     if (m_records[path].registeredForMigration > 0) {
@@ -240,18 +246,19 @@ void OperationQueue::asyncMigrate(const String& path, double delay, int numberOf
 void OperationQueue::doMigrate(const String& path, int numberOfFailures)
 {
     WCTInnerAssert(!path.empty());
-    WCTInnerAssert(numberOfFailures >= 0 && numberOfFailures < MigrationQueueTolerableFailures);
+    WCTInnerAssert(numberOfFailures >= 0
+                   && numberOfFailures < OperationQueueTolerableFailuresForMigration);
 
     bool succeed, done;
     std::tie(succeed, done) = m_event->migrationShouldBeOperated(path);
     if (succeed) {
         if (!done) {
-            asyncMigrate(path, MigrationQueueTimeIntervalForMigrating, numberOfFailures);
+            asyncMigrate(path, OperationQueueTimeIntervalForMigration, numberOfFailures);
         }
     } else {
-        if (numberOfFailures + 1 < MigrationQueueTolerableFailures) {
+        if (numberOfFailures + 1 < OperationQueueTolerableFailuresForMigration) {
             asyncMigrate(path,
-                         MigrationQueueTimeIntervalForRetryingAfterFailure,
+                         OperationQueueTimeIntervalForRetryingMigrationAfterFailure,
                          numberOfFailures + 1);
         } else {
             Error error(Error::Code::Notice, Error::Level::Notice, "Async migration stopped due to the error.");
@@ -291,7 +298,7 @@ void OperationQueue::asyncBackup(const String& path)
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_records.find(path);
     if (iter != m_records.end() && iter->second.registeredForBackup > 0) {
-        asyncBackup(path, BackupQueueTimeInterval);
+        asyncBackup(path, OperationQueueTimeIntervalForBackup);
     }
 }
 
@@ -309,7 +316,7 @@ void OperationQueue::doBackup(const String& path)
     WCTInnerAssert(!path.empty());
 
     if (!m_event->backupShouldBeOperated(path)) {
-        asyncBackup(path, BackupQueueTimeIntervalForRetryingAfterFailure);
+        asyncBackup(path, OperationQueueTimeIntervalForRetryingBackupAfterFailure);
     }
 }
 
@@ -343,31 +350,30 @@ void OperationQueue::asyncCheckpoint(const String& path, int frames)
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_records.find(path);
     if (iter != m_records.end() && iter->second.registeredForCheckpoint > 0) {
-        if (frames >= CheckpointQueueFramesThresholdForCritical) {
-            asyncCheckpoint(path, CheckpointQueueTimeIntervalForCritical, frames);
-        } else {
-            asyncCheckpoint(path, CheckpointQueueTimeIntervalForNonCritical, frames);
-        }
+        asyncCheckpoint(path,
+                        OperationQueueTimeIntervalForCriticalCheckpoint,
+                        frames >= OperationQueueFramesThresholdForCriticalCheckpoint);
     }
 }
 
-void OperationQueue::asyncCheckpoint(const String& path, double delay, int frames)
+void OperationQueue::asyncCheckpoint(const String& path, double delay, bool critical)
 {
     WCTInnerAssert(!path.empty());
 
     Operation operation(Operation::Type::Checkpoint, path);
     Parameter parameter;
-    parameter.frames = frames;
+    parameter.critical = critical;
     async(operation, delay, parameter);
 }
 
-void OperationQueue::doCheckpoint(const String& path, int frames)
+void OperationQueue::doCheckpoint(const String& path, bool critical)
 {
     WCTInnerAssert(!path.empty());
 
-    if (!m_event->checkpointShouldBeOperated(path, frames)) {
+    if (!m_event->checkpointShouldBeOperated(path, critical)) {
         // delay retry if failed
-        asyncCheckpoint(path, CheckpointQueueTimeIntervalForRetryingAfterFailure, frames);
+        asyncCheckpoint(
+        path, OperationQueueTimeIntervalForRetryingCheckpointAfterFailure, critical);
     }
 }
 
@@ -384,7 +390,7 @@ void OperationQueue::asyncPurge(const Parameter& parameter)
 
     SharedLockGuard lockGuard(m_lock);
     if (SteadyClock::now().timeIntervalSinceSteadyClock(m_lastPurge)
-        > ObservationQueueTimeIntervalForPurgingAgain) {
+        > OperationQueueTimeIntervalForPurgingAgain) {
         Operation operation(Operation::Type::Purge);
         async(operation, 0, parameter);
     }

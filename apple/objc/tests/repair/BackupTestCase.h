@@ -22,12 +22,6 @@
 
 @interface BackupTestCase : CRUDTestCase
 
-@property (nonatomic, readonly) int backupFramesIntervalForNonCritical;
-@property (nonatomic, readonly) int backupFramesIntervalForCritical;
-
-@property (nonatomic, readonly) NSTimeInterval backupDelayForCritical;
-@property (nonatomic, readonly) NSTimeInterval backupDelayForNonCritical;
-
 @property (nonatomic, readonly) int framesForTolerance;
 
 @end

@@ -77,7 +77,7 @@ public:
 protected:
     std::pair<bool, bool> migrationShouldBeOperated(const String& path) override final;
     bool backupShouldBeOperated(const String& path) override final;
-    bool checkpointShouldBeOperated(const String& path, int frames) override final;
+    bool checkpointShouldBeOperated(const String& path, bool critical) override final;
     void integrityShouldBeChecked(const String& path) override final;
     void purgeShouldBeOperated() override final;
 

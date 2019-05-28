@@ -133,7 +133,7 @@
 
     TestCaseAssertOptionalFalse([self.database isAlreadyCheckpointed]);
 
-    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueTimeIntervalForNonCritical + self.delayForTolerance];
+    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForNonCriticalCheckpoint + self.delayForTolerance];
 
     TestCaseAssertOptionalFalse([self.database isAlreadyTruncateCheckpointed]);
     TestCaseAssertOptionalTrue([self.database isAlreadyCheckpointed]);
@@ -145,18 +145,11 @@
 
     TestCaseObject* object = [self.random autoIncrementTestCaseObject];
 
-    while (YES) {
-        auto optionalNumberOfWalFrames = [self.database getNumberOfWalFrames];
-        TestCaseAssertFalse(optionalNumberOfWalFrames.failed());
-        if (optionalNumberOfWalFrames.value() >= WCDB::CheckpointQueueFramesThresholdForCritical) {
-            break;
-        }
-        TestCaseAssertTrue([self.table insertObject:object]);
-    }
+    TestCaseAssertTrue([self.table insertObject:object]);
 
     TestCaseAssertOptionalFalse(self.database.isAlreadyCheckpointed);
 
-    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueTimeIntervalForCritical + self.delayForTolerance];
+    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForCriticalCheckpoint + self.delayForTolerance];
 
     TestCaseAssertOptionalTrue(self.database.isAlreadyCheckpointed);
 }
@@ -170,7 +163,7 @@
     while (YES) {
         auto optionalNumberOfWalFrames = [self.database getNumberOfWalFrames];
         TestCaseAssertFalse(optionalNumberOfWalFrames.failed());
-        if (optionalNumberOfWalFrames.value() >= WCDB::CheckpointFramesThresholdForTruncating) {
+        if (optionalNumberOfWalFrames.value() >= WCDB::OperationQueueFramesThresholdForCriticalCheckpoint) {
             break;
         }
         TestCaseAssertTrue([self.table insertObject:object]);
@@ -178,7 +171,7 @@
 
     TestCaseAssertOptionalFalse(self.database.isAlreadyTruncateCheckpointed);
 
-    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueTimeIntervalForCritical + self.delayForTolerance];
+    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForCriticalCheckpoint + self.delayForTolerance];
 
     TestCaseAssertOptionalTrue(self.database.isAlreadyTruncateCheckpointed);
 }
@@ -192,7 +185,7 @@
     TestCaseAssertTrue([self.table insertObject:object]);
     auto optionalNumberOfWalFrames = [self.database getNumberOfWalFrames];
     TestCaseAssertFalse(optionalNumberOfWalFrames.failed());
-    TestCaseAssertTrue(optionalNumberOfWalFrames.value() < WCDB::CheckpointQueueFramesThresholdForCritical)
+    TestCaseAssertTrue(optionalNumberOfWalFrames.value() < WCDB::OperationQueueFramesThresholdForCriticalCheckpoint)
 
     TestCaseAssertOptionalFalse(self.database.isAlreadyCheckpointed);
 
@@ -200,7 +193,7 @@
     [WCTDatabase simulateIOError:WCTSimulateWriteIOError];
     [self.database unblockade];
 
-    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueTimeIntervalForNonCritical + self.delayForTolerance];
+    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForNonCriticalCheckpoint + self.delayForTolerance];
 
     TestCaseAssertOptionalFalse(self.database.isAlreadyCheckpointed);
 
@@ -208,7 +201,7 @@
     [WCTDatabase simulateIOError:WCTSimulateNoneIOError];
     [self.database unblockade];
 
-    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueTimeIntervalForRetryingAfterFailure + self.delayForTolerance];
+    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForRetryingCheckpointAfterFailure + self.delayForTolerance];
 
     TestCaseAssertOptionalTrue(self.database.isAlreadyCheckpointed);
 }
@@ -223,19 +216,18 @@
     while (YES) {
         auto optionalNumberOfWalFrames = [self.database getNumberOfWalFrames];
         TestCaseAssertFalse(optionalNumberOfWalFrames.failed());
-        if (optionalNumberOfWalFrames.value() >= WCDB::CheckpointFramesThresholdForTruncating) {
+        if (optionalNumberOfWalFrames.value() >= WCDB::OperationQueueFramesThresholdForCriticalCheckpoint) {
             break;
         }
         TestCaseAssertTrue([self.table insertObject:object]);
     }
 
-    auto fileSizeBefore = [self.fileManager attributesOfItemAtPath:self.database.walPath error:nil].fileSize;
-    TestCaseAssertTrue(fileSizeBefore > 0);
+    TestCaseAssertOptionalFalse([self.database isAlreadyTruncateCheckpointed]);
 
     [self.database close];
-    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueTimeIntervalForCritical + self.delayForTolerance];
-    auto fileSizeAfter = [self.fileManager attributesOfItemAtPath:self.database.walPath error:nil].fileSize;
-    TestCaseAssertTrue(fileSizeAfter > 0);
+    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForCriticalCheckpoint + self.delayForTolerance];
+
+    TestCaseAssertOptionalFalse([self.database isAlreadyTruncateCheckpointed]);
 }
 
 - (void)test_feature_threaded_handle
@@ -362,7 +354,7 @@
 
     TestCaseAssertOptionalFalse(self.database.isAlreadyCheckpointed);
 
-    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueTimeIntervalForNonCritical + self.delayForTolerance];
+    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForNonCriticalCheckpoint + self.delayForTolerance];
 
     TestCaseAssertOptionalTrue(self.database.isAlreadyCheckpointed);
 }
@@ -470,35 +462,6 @@
         TestCaseAssertResultNO(rollbacked);
     }];
     [self.dispatch waitUntilDone];
-}
-
-- (void)test_feature_sub_thread_checkpoint_for_attached
-{
-    TestCaseAssertTrue([self createTable]);
-
-    TestCaseAssertOptionalFalse(self.database.isAlreadyCheckpointed);
-
-    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueTimeIntervalForNonCritical + self.delayForTolerance];
-
-    TestCaseAssertOptionalTrue(self.database.isAlreadyCheckpointed);
-
-    NSString* toAttachPath = [self.path stringByAppendingString:@"_to_attach"];
-    NSString* attachedName = @"test_attached";
-    WCTDatabase* toAttachDatabase = [[WCTDatabase alloc] initWithPath:toAttachPath];
-    TestCaseAssertTrue([toAttachDatabase execute:WCDB::StatementAttach().attach(self.path).as(attachedName)]);
-
-    // trigger subthread checkpoint for attached
-    TestCaseObject* object = [self.random autoIncrementTestCaseObject];
-
-    WCTInsert* insert = [[[toAttachDatabase prepareInsert] intoTable:self.tableName] value:object];
-    insert.statement.schema(attachedName);
-    TestCaseAssertTrue([insert execute]);
-
-    TestCaseAssertOptionalFalse(self.database.isAlreadyCheckpointed);
-
-    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueTimeIntervalForNonCritical + self.delayForTolerance];
-
-    TestCaseAssertOptionalTrue(self.database.isAlreadyCheckpointed);
 }
 
 @end

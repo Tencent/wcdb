@@ -22,99 +22,72 @@
 
 namespace WCDB {
 
-// Async Queue
+#pragma mark - Async Queue
 static constexpr const double AsyncQueueTimeOutForExiting = 10.0;
 
-// Operation Queue
+#pragma mark - Operation Queue
 static constexpr const char* OperationQueueName = "com.Tencent.WCDB.Queue.Operation";
+#pragma mark - Operation Queue - Migration
+static constexpr const double OperationQueueTimeIntervalForMigration = 3.0;
+static constexpr const double OperationQueueTimeIntervalForRetryingMigrationAfterFailure
+= 5.0;
+static constexpr const int OperationQueueTolerableFailuresForMigration = 5;
+#pragma mark - Operation Queue - Purge
+static constexpr const double OperationQueueTimeIntervalForPurgingAgain = 10.0;
+static constexpr const double OperationQueueRateForTooManyFileDescriptors = 0.7;
+static constexpr const double OperationQueueTimeIntervalForRetryingCheckpointAfterFailure
+= 3.0;
+#pragma mark - Operation Queue - Checkpoint
+static constexpr const int OperationQueueFramesThresholdForCriticalCheckpoint
+= 10 * 1024 * 1024 / 4096; // 4 MB / Default Page Size = 1024
+static constexpr const double OperationQueueTimeIntervalForCriticalCheckpoint = 0.5;
+static constexpr const double OperationQueueTimeIntervalForNonCriticalCheckpoint = 10.0;
+#pragma mark - Operation Queue - Backup
+static constexpr double OperationQueueTimeIntervalForRetryingBackupAfterFailure = 15.0;
+static constexpr const double OperationQueueTimeIntervalForBackup = 1.0;
 
-// Migration Queue
-static constexpr const char* MigrationQueueName = "com.Tencent.WCDB.Queue.Migration";
-static constexpr const double MigrationQueueTimeIntervalForMigrating = 3.0;
-static constexpr const double MigrationQueueTimeIntervalForRetryingAfterFailure = 5.0;
-static constexpr const int MigrationQueueTolerableFailures = 5;
-
-// Observation Queue
-static constexpr const char* ObservationQueueName = "com.Tencent.WCDB.Queue.Observation";
-static constexpr const double ObservationQueueTimeIntervalForReinvokingCorruptedEvent = 10.0;
-static constexpr const double ObservationQueueTimeIntervalForPurgingAgain = 10.0;
-static constexpr const double ObservationQueueRateForTooManyFileDescriptors = 0.7;
-static constexpr const int ObservationQueueTimesOfIgnoringBackupCorruption = 3;
-
-// Checkpoint Queue
-static constexpr const char* CheckpointQueueName = "com.Tencent.WCDB.Queue.Checkpoint";
-static constexpr const double CheckpointQueueTimeIntervalForRetryingAfterFailure = 3.0;
-static constexpr const int CheckpointQueueFramesThresholdForCritical
-= 4 * 1024 * 1024 / 4096; // 4 MB / Default Page Size = 1024
-static constexpr const double CheckpointQueueTimeIntervalForCritical = 0.5;
-static constexpr const double CheckpointQueueTimeIntervalForNonCritical = 10.0;
-
-// Backup Queue
-static constexpr const char* BackupQueueName = "com.Tencent.WCDB.Queue.Backup";
-static constexpr double BackupQueueTimeIntervalForRetryingAfterFailure = 15.0;
-
-// Checkpoint Config
-static constexpr const char* CheckpointConfigName = "com.Tencent.WCDB.Config.Checkpoint";
-
-// Backup Config
-static constexpr const char* BackupConfigName = "com.Tencent.WCDB.Config.Backup";
-static constexpr const double BackupQueueTimeInterval = 1.0;
-
-// Basic Config
+#pragma mark - Config - Auto Checkpoint
+static constexpr const char* AutoCheckpointConfigName = "com.Tencent.WCDB.Config.AutoCheckpoint";
+#pragma mark - Config - Auto Backup
+static constexpr const char* AutoBackupConfigName = "com.Tencent.WCDB.Config.AutoBackup";
+#pragma mark - Config - Auto Migrate
+static constexpr const char* AutoMigrateConfigName = "com.Tencent.WCDB.Config.AutoMigrate";
+#pragma mark - Config - Basic
 static constexpr const char* BasicConfigName = "com.Tencent.WCDB.Config.Basic";
 static constexpr const int BasicConfigBusyRetryMaxAllowedNumberOfTimes = 3;
-
-// Tokenize Config
-static constexpr const char* TokenizeConfigPrefix = "com.Tencent.WCDB.Config.Tokenize.";
-
-// Cipher Config
-static constexpr const char* CipherConfigName = "com.Tencent.WCDB.Config.Cipher";
-static constexpr const int CipherConfigDefaultPageSize = 4096;
-
-// SQL Trace Config
-static constexpr const char* SQLTraceConfigName = "com.Tencent.WCDB.Config.SQLTrace";
-
-// Performance Trace Config
-static constexpr const char* PerformanceTraceConfigName
-= "com.Tencent.WCDB.Config.PerformanceTrace";
-
-// Global SQL Trace Config
-static constexpr const char* GlobalSQLTraceConfigName = "com.Tencent.WCDB.Config.GlobalSQLTrace";
-
-// Global Performance Trace Config
-static constexpr const char* GlobalPerformanceTraceConfigName
-= "com.Tencent.WCDB.Config.GlobalPerformanceTrace";
-
-// Busy Retry Config
+#pragma mark - Config - Busy Retry
 static constexpr const char* BusyRetryConfigName = "com.Tencent.WCDB.Config.BusyRetry";
 static constexpr const double BusyRetryTimeOutForMainThread = 2.0;
 static constexpr const double BusyRetryTimeOutForSubThread = 10.0;
+#pragma mark - Config - Cipher
+static constexpr const char* CipherConfigName = "com.Tencent.WCDB.Config.Cipher";
+static constexpr const int CipherConfigDefaultPageSize = 4096;
+#pragma mark - Config - Global SQL Trace
+static constexpr const char* GlobalSQLTraceConfigName = "com.Tencent.WCDB.Config.GlobalSQLTrace";
+#pragma mark - Config - Global Performance Trace
+static constexpr const char* GlobalPerformanceTraceConfigName
+= "com.Tencent.WCDB.Config.GlobalPerformanceTrace";
+#pragma mark - Config - Performance Trace
+static constexpr const char* PerformanceTraceConfigName
+= "com.Tencent.WCDB.Config.PerformanceTrace";
+#pragma mark - Config - SQL Trace
+static constexpr const char* SQLTraceConfigName = "com.Tencent.WCDB.Config.SQLTrace";
+#pragma mark - Config - Tokenize
+static constexpr const char* TokenizeConfigPrefix = "com.Tencent.WCDB.Config.Tokenize.";
 
-// Auto Migrate Config
-static constexpr const char* AutoMigrateConfigName = "com.Tencent.WCDB.Config.AutoMigrate";
-
-// Notifier
+#pragma mark - Notifier
 static constexpr const char* NotifierPreprocessorName = "com.Tencent.WCDB.Notifier.PreprocessTag";
 static constexpr const char* NotifierLoggerName = "com.Tencent.WCDB.Notifier.Log";
 
-// Handle Pool
+#pragma mark - Handle Pool
 static constexpr const int HandlePoolMaxAllowedNumberOfHandles = 32;
 static constexpr const unsigned int HandlePoolNumberOfSlots = 8;
 
-// Checkpoint
-static constexpr const int CheckpointFramesThresholdForTruncating
-= 10 * 1024 * 1024 / 4096; // 10 MB / Default Page Size = 2560
-
-// Migrate
+#pragma mark - Migrate
 static constexpr const double MigrateMaxAllowedDuration = 0.01;
 
-// Error Key
+#pragma mark - Error - Key
 static constexpr const char* ErrorStringKeyAction = "Action";
-static constexpr const char* ErrorActionMigrate = "Migrate";
-static constexpr const char* ErrorActionBackup = "Backup";
-static constexpr const char* ErrorActionCheckpoint = "Checkpoint";
-static constexpr const char* ErrorActionIntegrity = "Integrity";
-static constexpr const char* ErrorActionAssembler = "Assembler";
 
 #define WCDB_ERROR_STRING_KEY_SOURCE "Source";
 static constexpr const char* ErrorStringKeySource = WCDB_ERROR_STRING_KEY_SOURCE;
@@ -131,6 +104,14 @@ static constexpr const char* ErrorIntKeyTag = WCDB_ERROR_INT_KEY_TAG;
 #define WCDB_ERROR_INT_KEY_EXTCODE "ExtCode"
 static constexpr const char* ErrorIntKeyExtCode = WCDB_ERROR_INT_KEY_EXTCODE;
 
+#pragma mark - Error - Action
+static constexpr const char* ErrorActionMigrate = "Migrate";
+static constexpr const char* ErrorActionBackup = "Backup";
+static constexpr const char* ErrorActionCheckpoint = "Checkpoint";
+static constexpr const char* ErrorActionIntegrity = "Integrity";
+static constexpr const char* ErrorActionAssembler = "Assembler";
+
+#pragma mark - Error - Source
 static constexpr const char* ErrorSourceSQLite = "SQLite";
 static constexpr const char* ErrorSourceRepair = "Repair";
 static constexpr const char* ErrorSourceSystem = "System";
@@ -138,14 +119,12 @@ static constexpr const char* ErrorSourceAssertion = "Assertion";
 static constexpr const char* ErrorSourceTrace = "Trace";
 static constexpr const char* ErrorSourceNative = "Native";
 
-// Tag
+#pragma mark - Tag
 static constexpr const int TagInvalidValue = 0;
 
-// Constraint
-
-// migration may trigger checkpoint.
-static_assert(MigrationQueueTimeIntervalForMigrating > CheckpointQueueTimeIntervalForCritical, "");
-
-static_assert(MigrationQueueTimeIntervalForMigrating > MigrateMaxAllowedDuration, "");
+#pragma mark - Constraint
+static_assert(OperationQueueTimeIntervalForMigration > OperationQueueTimeIntervalForCriticalCheckpoint,
+              "");
+static_assert(OperationQueueTimeIntervalForMigration > MigrateMaxAllowedDuration, "");
 
 } // namespace WCDB

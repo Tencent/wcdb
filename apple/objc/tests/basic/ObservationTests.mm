@@ -87,7 +87,7 @@
     TestCaseAssertFalse([self.database isOpened]);
 
     // sleep for other tests
-    [NSThread sleepForTimeInterval:WCDB::ObservationQueueTimeIntervalForPurgingAgain];
+    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForPurgingAgain];
 }
 
 - (void)test_feature_auto_purge_will_not_be_too_frequent
@@ -114,7 +114,7 @@
     TestCaseAssertResultNO(tested);
     TestCaseAssertTrue([self.database isOpened]);
 
-    [NSThread sleepForTimeInterval:WCDB::ObservationQueueTimeIntervalForPurgingAgain];
+    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForPurgingAgain];
     [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidReceiveMemoryWarningNotification object:nil];
     while (tested.isNO) {
     }
@@ -122,14 +122,14 @@
     TestCaseAssertFalse([self.database isOpened]);
 
     // sleep for other tests
-    [NSThread sleepForTimeInterval:WCDB::ObservationQueueTimeIntervalForPurgingAgain];
+    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForPurgingAgain];
 }
 #endif
 
 - (void)test_feature_auto_purge_due_to_file_descriptors_warning
 {
     int maxAllowedNumberOfFileDescriptors = getdtablesize();
-    int numberOfFileDescriptorsForTooManyFileDescriptors = int(maxAllowedNumberOfFileDescriptors * WCDB::ObservationQueueRateForTooManyFileDescriptors);
+    int numberOfFileDescriptorsForTooManyFileDescriptors = int(maxAllowedNumberOfFileDescriptors * WCDB::OperationQueueRateForTooManyFileDescriptors);
 
     NSString* dummy = [self.directory stringByAppendingPathComponent:@"dummy"];
     TestCaseAssertTrue([self.fileManager createFileAtPath:dummy contents:nil attributes:nil]);
@@ -168,7 +168,7 @@
     }
 
     // sleep for other tests
-    [NSThread sleepForTimeInterval:WCDB::ObservationQueueTimeIntervalForPurgingAgain];
+    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForPurgingAgain];
 }
 
 - (void)test_feature_auto_purge_due_to_too_many_file_descriptors
@@ -208,7 +208,7 @@
     }
 
     // sleep for other tests
-    [NSThread sleepForTimeInterval:WCDB::ObservationQueueTimeIntervalForPurgingAgain];
+    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForPurgingAgain];
 }
 
 - (void)test_check_if_corrupted

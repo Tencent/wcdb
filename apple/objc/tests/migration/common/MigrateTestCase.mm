@@ -175,7 +175,7 @@
     [self.database close];
     self.database.autoMigrate = YES;
 
-    [NSThread sleepForTimeInterval:self.delayForTolerance + WCDB::MigrationQueueTimeIntervalForMigrating];
+    [NSThread sleepForTimeInterval:self.delayForTolerance + WCDB::OperationQueueTimeIntervalForMigration];
 
     TestCaseAssertFalse(self.database.isOpened);
 }
@@ -202,13 +202,13 @@
     [WCTDatabase simulateIOError:WCTSimulateWriteIOError];
 
     // wait until auto migrate stopped
-    while (numberOfFailures.value < WCDB::MigrationQueueTolerableFailures)
+    while (numberOfFailures.value < WCDB::OperationQueueTolerableFailuresForMigration)
         ;
 
     // wait to confirm migration is stopped.
-    [NSThread sleepForTimeInterval:2 * WCDB::MigrationQueueTimeIntervalForMigrating];
+    [NSThread sleepForTimeInterval:2 * WCDB::OperationQueueTimeIntervalForMigration];
 
-    TestCaseAssertTrue(numberOfFailures.value == WCDB::MigrationQueueTolerableFailures);
+    TestCaseAssertTrue(numberOfFailures.value == WCDB::OperationQueueTolerableFailuresForMigration);
 
     [WCTDatabase simulateIOError:WCTSimulateNoneIOError];
 
@@ -222,7 +222,7 @@
     //
     //    self.database.autoMigrate = YES;
     //
-    //    [NSThread sleepForTimeInterval:2 * WCDB::MigrationQueueTimeIntervalForMigrating];
+    //    [NSThread sleepForTimeInterval:2 * WCDB::OperationQueueTimeIntervalForMigration];
     //
     //    TestCaseResult *result = [TestCaseResult no];
     //    [self.database traceSQL:^(NSString *sql) {
@@ -232,7 +232,7 @@
     //    [handle invalidate];
     //
     //    // wait to confirm migration still running.
-    //    [NSThread sleepForTimeInterval:2 * WCDB::MigrationQueueTimeIntervalForMigrating];
+    //    [NSThread sleepForTimeInterval:2 * WCDB::OperationQueueTimeIntervalForMigration];
     //    TestCaseAssertResultYES(result);
 }
 
