@@ -260,7 +260,7 @@ void OperationQueue::doMigrate(const String& path, int numberOfFailures)
             asyncMigrate(
             path, OperationQueueTimeIntervalForRetringAfterFailure, numberOfFailures + 1);
         } else {
-            Error error(Error::Code::Notice, Error::Level::Notice, "Async migration stopped due to the error.");
+            Error error(Error::Code::Notice, Error::Level::Notice, "Auto migration stopped due to the error.");
             error.infos.set(ErrorStringKeyPath, path);
             Notifier::shared().notify(error);
         }
