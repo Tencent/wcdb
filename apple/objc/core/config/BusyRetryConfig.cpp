@@ -232,11 +232,12 @@ void BusyRetryConfig::State::tryNotify()
     const auto& elements = m_waitings.elements();
     for (auto iter = elements.begin(); iter != elements.end(); ++iter) {
         if (shouldWait(iter->value)) {
-            if (iter->order == WaitingOrder::SubThread) {
-                return;
-            }
+            return;
         } else {
             m_conditional.notify(iter->key);
+            if (iter->order == WaitingOrder::MainThread) {
+                return;
+            }
         }
     }
 }
