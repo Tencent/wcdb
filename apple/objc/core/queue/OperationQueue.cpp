@@ -257,9 +257,8 @@ void OperationQueue::doMigrate(const String& path, int numberOfFailures)
         }
     } else {
         if (numberOfFailures + 1 < OperationQueueTolerableFailuresForMigration) {
-            asyncMigrate(path,
-                         OperationQueueTimeIntervalForRetryingMigrationAfterFailure,
-                         numberOfFailures + 1);
+            asyncMigrate(
+            path, OperationQueueTimeIntervalForRetringAfterFailure, numberOfFailures + 1);
         } else {
             Error error(Error::Code::Notice, Error::Level::Notice, "Async migration stopped due to the error.");
             error.infos.set(ErrorStringKeyPath, path);
@@ -316,7 +315,7 @@ void OperationQueue::doBackup(const String& path)
     WCTInnerAssert(!path.empty());
 
     if (!m_event->backupShouldBeOperated(path)) {
-        asyncBackup(path, OperationQueueTimeIntervalForRetryingBackupAfterFailure);
+        asyncBackup(path, OperationQueueTimeIntervalForRetringAfterFailure);
     }
 }
 
@@ -374,8 +373,7 @@ void OperationQueue::doCheckpoint(const String& path, bool critical)
 
     if (!m_event->checkpointShouldBeOperated(path, critical)) {
         // delay retry if failed
-        asyncCheckpoint(
-        path, OperationQueueTimeIntervalForRetryingCheckpointAfterFailure, critical);
+        asyncCheckpoint(path, OperationQueueTimeIntervalForRetringAfterFailure, critical);
     }
 }
 
