@@ -350,9 +350,11 @@ void OperationQueue::asyncCheckpoint(const String& path, int frames)
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_records.find(path);
     if (iter != m_records.end() && iter->second.registeredForCheckpoint > 0) {
-        asyncCheckpoint(path,
-                        OperationQueueTimeIntervalForCriticalCheckpoint,
-                        frames >= OperationQueueFramesThresholdForCriticalCheckpoint);
+        if (frames >= OperationQueueFramesThresholdForCriticalCheckpoint) {
+            asyncCheckpoint(path, OperationQueueTimeIntervalForCriticalCheckpoint, true);
+        } else {
+            asyncCheckpoint(path, OperationQueueTimeIntervalForNonCriticalCheckpoint, false);
+        }
     }
 }
 
