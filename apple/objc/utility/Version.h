@@ -43,4 +43,4 @@
 #endif
 
 #define WCDB_SOURCE_ID                                                         \
-    WCDB_IDENTIFIER ", " WCDB_BUILD_TIME ", " WCDB_VERSION_STRING "." WCDB_BUILD_STRING
+    WCDB_IDENTIFIER ", " WCDB_VERSION_STRING "." WCDB_BUILD_STRING ", " WCDB_TIMESTAMP_STRING
