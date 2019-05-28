@@ -43,7 +43,7 @@ static constexpr const double OperationQueueTimeIntervalForNonCriticalCheckpoint
 static constexpr const double OperationQueueTimeIntervalForRetryingCheckpointAfterFailure
 = 3.0;
 #pragma mark - Operation Queue - Backup
-static constexpr double OperationQueueTimeIntervalForRetryingBackupAfterFailure = 15.0;
+static constexpr double OperationQueueTimeIntervalForRetryingBackupAfterFailure = 5.0;
 static constexpr const double OperationQueueTimeIntervalForBackup = 1.0;
 
 #pragma mark - Config - Auto Checkpoint
@@ -84,7 +84,8 @@ static constexpr const int HandlePoolMaxAllowedNumberOfHandles = 32;
 static constexpr const unsigned int HandlePoolNumberOfSlots = 8;
 
 #pragma mark - Migrate
-static constexpr const double MigrateMaxAllowedDuration = 0.01;
+static constexpr const double MigrateMaxExpectingDuration = 0.01;
+static constexpr const double MigrateMaxInitializeDuration = 0.005;
 
 #pragma mark - Error - Key
 static constexpr const char* ErrorStringKeyAction = "Action";
@@ -125,6 +126,6 @@ static constexpr const int TagInvalidValue = 0;
 #pragma mark - Constraint
 static_assert(OperationQueueTimeIntervalForMigration > OperationQueueTimeIntervalForCriticalCheckpoint,
               "");
-static_assert(OperationQueueTimeIntervalForMigration > MigrateMaxAllowedDuration, "");
+static_assert(OperationQueueTimeIntervalForMigration > MigrateMaxExpectingDuration, "");
 
 } // namespace WCDB

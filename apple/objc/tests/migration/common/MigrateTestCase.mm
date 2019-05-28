@@ -98,53 +98,8 @@
     TestCaseAssertEqual(migrated, 2);
 }
 
-- (void)doTestFeatureInterruptMigrate
-{
-    //    WCTHandle *handle = [self.database getHandle];
-    //    TestCaseAssertTrue([handle validate]);
-    //
-    //    TestCaseResult *write = [TestCaseResult yes];
-    //
-    //    [self.dispatch async:^{
-    //        while (write.isYES) {
-    //            TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion()).to(1)]);
-    //        }
-    //    }];
-    //
-    //    TestCaseCounter *tested = [TestCaseCounter value:0];
-    //    weakify(self);
-    //    [WCTDatabase globalTraceError:^(WCTError *error) {
-    //        strongify_or_return(self);
-    //        if (error.code == WCTErrorCodeInterrupt
-    //            && error.level == WCTErrorLevelIgnore
-    //            && error.tag == self.database.tag) {
-    //            [tested increment];
-    //        }
-    //    }];
-    //
-    //    do {
-    //        if ([self.database isMigrated]) {
-    //            // add more table to trigger migration
-    //            NSString *table = [NSString stringWithFormat:@"t_%@", self.random.string];
-    //            NSString *sourceTable = [NSString stringWithFormat:@"t_source_%@", self.random.string];
-    //            [self.toMigrate setObject:sourceTable forKey:table];
-    //            TestCaseAssertTrue([self.sourceDatabase createTable:sourceTable withClass:TestCaseObject.class]);
-    //            TestCaseAssertTrue([self.database createTable:table withClass:TestCaseObject.class]);
-    //        }
-    //        TestCaseAssertTrue([self.database stepMigration]);
-    //    } while (tested.value == 1000);
-    //
-    //    [WCTDatabase globalTraceError:nil];
-    //    [write makeNO];
-    //
-    //    TestCaseAssertFalse([self.database isMigrated]);
-    //    [self.dispatch waitUntilDone];
-}
-
 - (void)doTestAutoMigrate
 {
-    TestCaseAssertTrue([self.database canOpen]);
-
     TestCaseResult *tableMigrated = [TestCaseResult no];
     TestCaseResult *migrated = [TestCaseResult no];
     NSString *expectedTableName = self.tableName;
@@ -157,6 +112,8 @@
         }
     }];
     self.database.autoMigrate = YES;
+
+    TestCaseAssertTrue([self.database canOpen]);
 
     while (!tableMigrated.value) {
         [NSThread sleepForTimeInterval:self.delayForTolerance];
@@ -172,8 +129,11 @@
 
 - (void)doTestFeatureClosedDatabaseWillNotPerformAutoMigrate
 {
-    [self.database close];
     self.database.autoMigrate = YES;
+
+    TestCaseAssertTrue([self.database canOpen]);
+
+    [self.database close];
 
     [NSThread sleepForTimeInterval:self.delayForTolerance + WCDB::OperationQueueTimeIntervalForMigration];
 
@@ -213,27 +173,6 @@
     [WCTDatabase simulateIOError:WCTSimulateNoneIOError];
 
     [WCTDatabase globalTraceError:nil];
-}
-
-- (void)doTestFeatureAutoMigrateWillNotStopDueToInterrupt
-{
-    //    WCTHandle *handle = [self.database getHandle];
-    //    TestCaseAssertTrue([handle validate]);
-    //
-    //    self.database.autoMigrate = YES;
-    //
-    //    [NSThread sleepForTimeInterval:2 * WCDB::OperationQueueTimeIntervalForMigration];
-    //
-    //    TestCaseResult *result = [TestCaseResult no];
-    //    [self.database traceSQL:^(NSString *sql) {
-    //        WCDB_UNUSED(sql)
-    //        [result makeYES];
-    //    }];
-    //    [handle invalidate];
-    //
-    //    // wait to confirm migration still running.
-    //    [NSThread sleepForTimeInterval:2 * WCDB::OperationQueueTimeIntervalForMigration];
-    //    TestCaseAssertResultYES(result);
 }
 
 - (void)doTestFeatureMigrateNewlyCreatedTableAfterMigrated

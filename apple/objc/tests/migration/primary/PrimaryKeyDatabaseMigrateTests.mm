@@ -53,11 +53,6 @@
     [self doTestNotification];
 }
 
-- (void)test_feature_interrupt_migrate
-{
-    [self doTestFeatureInterruptMigrate];
-}
-
 - (void)test_auto_migrate
 {
     [self doTestAutoMigrate];
@@ -71,11 +66,6 @@
 - (void)test_feature_auto_migrate_will_stop_due_to_error
 {
     [self doTestFeatureAutoMigrateWillStopDueToError];
-}
-
-- (void)test_feature_auto_migrate_will_not_stop_due_to_interrupt
-{
-    [self doTestFeatureAutoMigrateWillNotStopDueToInterrupt];
 }
 
 - (void)test_feature_migrate_newly_created_table_after_migrated
