@@ -26,7 +26,10 @@ fi
 # push to conan
 
 # generate WCDB_COMMIT_ID file for recording the commit hash
-git rev-parse HEAD > "$conan"/WCDB_COMMIT_ID
+version=`cat "$root"/VERSION`
+build=`cat "$root"/BUILD`
+gitHash=`git rev-parse HEAD`
+echo $version.$build.$gitHash > "$conan"/WCDB_COMMIT_ID
 
 # check max subversion
 max_subversion=0
