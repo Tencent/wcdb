@@ -32,15 +32,15 @@ static constexpr double OperationQueueTimeIntervalForRetringAfterFailure = 5.0;
 static constexpr const double OperationQueueTimeIntervalForMigration = 2.0;
 static constexpr const int OperationQueueTolerableFailuresForMigration = 5;
 #pragma mark - Operation Queue - Purge
-static constexpr const double OperationQueueTimeIntervalForPurgingAgain = 10.0;
+static constexpr const double OperationQueueTimeIntervalForPurgingAgain = 30.0;
 static constexpr const double OperationQueueRateForTooManyFileDescriptors = 0.7;
 #pragma mark - Operation Queue - Checkpoint
 static constexpr const int OperationQueueFramesThresholdForCriticalCheckpoint
 = 4 * 1024 * 1024 / 4096; // 4 MB / Default Page Size = 1024
-static constexpr const double OperationQueueTimeIntervalForCriticalCheckpoint = 0.0;
-static constexpr const double OperationQueueTimeIntervalForNonCriticalCheckpoint = 30.0;
+static constexpr const double OperationQueueTimeIntervalForCriticalCheckpoint = 2.0;
+static constexpr const double OperationQueueTimeIntervalForNonCriticalCheckpoint = 10.0;
 #pragma mark - Operation Queue - Backup
-static constexpr const double OperationQueueTimeIntervalForBackup = 1.0;
+static constexpr const double OperationQueueTimeIntervalForBackup = 60.0;
 
 #pragma mark - Config - Auto Checkpoint
 static constexpr const char* AutoCheckpointConfigName = "com.Tencent.WCDB.Config.AutoCheckpoint";
@@ -119,8 +119,6 @@ static constexpr const char* ErrorSourceNative = "Native";
 static constexpr const int TagInvalidValue = 0;
 
 #pragma mark - Constraint
-static_assert(OperationQueueTimeIntervalForMigration > OperationQueueTimeIntervalForCriticalCheckpoint,
-              "");
 static_assert(OperationQueueTimeIntervalForMigration > MigrateMaxExpectingDuration, "");
 
 } // namespace WCDB
