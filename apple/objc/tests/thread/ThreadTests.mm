@@ -358,7 +358,7 @@
     [self.dispatch waitUntilDone];
 }
 
-- (void)test_feature_busy_retry_main_thread_timeout
+- (void)test_feature_busy_retry_timeout
 {
     TestCaseResult* began = [TestCaseResult no];
     TestCaseResult* rollbacked = [TestCaseResult no];
@@ -367,7 +367,7 @@
         TestCaseAssertTrue([self.database beginTransaction]);
         [began makeYES];
 
-        [NSThread sleepForTimeInterval:WCDB::BusyRetryTimeOutForMainThread - self.delayForTolerance];
+        [NSThread sleepForTimeInterval:WCDB::BusyRetryTimeOut - self.delayForTolerance];
         TestCaseAssertResultNO(tested);
 
         [NSThread sleepForTimeInterval:2 * self.delayForTolerance];
@@ -394,47 +394,6 @@
 
     TestCaseAssertFalse([self.database beginTransaction]);
     TestCaseAssertResultNO(rollbacked);
-    [self.dispatch waitUntilDone];
-}
-
-- (void)test_feature_busy_retry_sub_thread_timeout
-{
-    TestCaseResult* began = [TestCaseResult no];
-    TestCaseResult* rollbacked = [TestCaseResult no];
-    TestCaseResult* tested = [TestCaseResult no];
-    [self.dispatch async:^{
-        TestCaseAssertTrue([self.database beginTransaction]);
-        [began makeYES];
-
-        [NSThread sleepForTimeInterval:WCDB::BusyRetryTimeOutForSubThread - self.delayForTolerance];
-        TestCaseAssertResultNO(tested);
-
-        [NSThread sleepForTimeInterval:2 * self.delayForTolerance];
-        TestCaseAssertResultYES(tested);
-
-        [rollbacked makeYES];
-        [self.database rollbackTransaction];
-    }];
-
-    [self.dispatch async:^{
-        while ([began isNO]) {
-        }
-
-        weakify(self);
-        [WCTDatabase globalTraceError:^(WCTError* error) {
-            strongify_or_return(self);
-            if (error.code == WCTErrorCodeBusy
-                && error.level == WCTErrorLevelError
-                && [error.path isEqualToString:self.database.path]
-                && error.tag == self.database.tag
-                && [error.sql isEqualToString:@"BEGIN IMMEDIATE"]) {
-                [tested makeYES];
-            }
-        }];
-
-        TestCaseAssertFalse([self.database beginTransaction]);
-        TestCaseAssertResultNO(rollbacked);
-    }];
     [self.dispatch waitUntilDone];
 }
 

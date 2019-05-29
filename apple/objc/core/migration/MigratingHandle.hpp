@@ -41,6 +41,8 @@ private:
     bool rebindViews(const std::map<String, RecyclableMigrationInfo> &migratings);
     bool rebindSchemas(const std::map<String, RecyclableMigrationInfo> &migratings);
 
+    bool trySynchronousTransactionAfterAttached();
+
 #pragma mark - Info Initializer
 protected:
     std::tuple<bool, bool, std::set<String>>
