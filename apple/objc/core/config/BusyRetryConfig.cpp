@@ -315,13 +315,11 @@ void BusyRetryConfig::lockDidChange(const String& path, PagerLockType type)
 
 void BusyRetryConfig::willShmLock(const String& path, ShmLockType type, int mask)
 {
-    //    printf("Will shm lock %s %s %d %p\n", path.substr(path.find_last_of("/")).c_str(),  type == ShmLockType::Shared ? "S" : "E", mask, pthread_self());
     m_tryings.getOrCreate()->expecting(path, type, mask);
 }
 
 void BusyRetryConfig::shmLockDidChange(const String& path, void* identifier, int sharedMask, int exclusiveMask)
 {
-    //    printf("Did shm lock %s %p %d %d %p\n", path.substr(path.find_last_of("/")).c_str(), identifier, sharedMask, exclusiveMask, pthread_self());
     getOrCreateState(path).updateShmLock(identifier, sharedMask, exclusiveMask);
 }
 
