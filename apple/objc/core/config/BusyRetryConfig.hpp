@@ -57,11 +57,13 @@ protected:
     public:
         Expecting();
 
-        void expecting(ShmLockType type, int mask);
-        void expecting(PagerLockType type);
-
         bool satisfied(PagerLockType type) const;
         bool satisfied(int sharedMask, int exclusiveMask) const;
+
+    protected:
+        void expecting(ShmLockType type, int mask);
+        void expecting(PagerLockType type);
+        bool valid() const;
 
     private:
         enum class Category {
@@ -123,15 +125,22 @@ protected:
     public:
         Trying();
 
+        void expecting(const String& path, ShmLockType type, int mask);
+        void expecting(const String& path, PagerLockType type);
+
         void retrying(double timeout);
         void retried(double cost);
         double remainingTimeForRetring() const;
+        const String& getPath() const;
+
+        bool valid() const;
 
     private:
+        String m_path;
         double m_elapsedTime;
         double m_timeout;
     };
-    ThreadLocal<std::map<String, Trying>> m_tryings;
+    ThreadLocal<Trying> m_tryings;
 };
 
 } //namespace WCDB
