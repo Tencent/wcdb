@@ -69,8 +69,8 @@ bool BusyRetryConfig::onBusy(const String& path, int numberOfTimes)
     Trying& trying = *m_tryings.getOrCreate();
     WCTInnerAssert(trying.valid());
     if (numberOfTimes == 0) {
-        trying.retrying(pthread_main_np() != 0 ? BusyRetryTimeOutForMainThread :
-                                                 BusyRetryTimeOutForSubThread);
+        trying.retrying(Thread::isMain() ? BusyRetryTimeOutForMainThread :
+                                           BusyRetryTimeOutForSubThread);
     }
     return getOrCreateState(trying.getPath()).wait(trying);
 }
@@ -222,10 +222,7 @@ bool BusyRetryConfig::State::wait(Trying& trying)
         double remainingTimeForRetring = trying.remainingTimeForRetring();
         if (remainingTimeForRetring > 0) {
             Thread currentThread = Thread::current();
-            // Bigger order will let main thread be the first of the list, so that it will be woken up first.
-            m_waitings.insert(Thread::isMain() ? WaitingOrder::MainThread : WaitingOrder::SubThread,
-                              currentThread,
-                              trying);
+            m_waitings.insert(0, currentThread, trying);
 
             SteadyClock before = SteadyClock::now();
             m_conditional.wait_for(lockGuard, remainingTimeForRetring);
@@ -245,13 +242,8 @@ void BusyRetryConfig::State::tryNotify()
 {
     const auto& elements = m_waitings.elements();
     for (auto iter = elements.begin(); iter != elements.end(); ++iter) {
-        if (shouldWait(iter->value)) {
-            return;
-        } else {
+        if (!shouldWait(iter->value)) {
             m_conditional.notify(iter->key);
-            if (iter->order == WaitingOrder::MainThread) {
-                return;
-            }
         }
     }
 }
