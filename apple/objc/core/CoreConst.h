@@ -53,8 +53,7 @@ static constexpr const char* BasicConfigName = "com.Tencent.WCDB.Config.Basic";
 static constexpr const int BasicConfigBusyRetryMaxAllowedNumberOfTimes = 3;
 #pragma mark - Config - Busy Retry
 static constexpr const char* BusyRetryConfigName = "com.Tencent.WCDB.Config.BusyRetry";
-static constexpr const double BusyRetryTimeOutForMainThread = 2.0;
-static constexpr const double BusyRetryTimeOutForSubThread = 10.0;
+static constexpr const double BusyRetryTimeOut = 10.0;
 #pragma mark - Config - Cipher
 static constexpr const char* CipherConfigName = "com.Tencent.WCDB.Config.Cipher";
 static constexpr const int CipherConfigDefaultPageSize = 4096;

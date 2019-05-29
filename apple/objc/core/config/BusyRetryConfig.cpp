@@ -69,8 +69,7 @@ bool BusyRetryConfig::onBusy(const String& path, int numberOfTimes)
     Trying& trying = *m_tryings.getOrCreate();
     WCTInnerAssert(trying.valid());
     if (numberOfTimes == 0) {
-        trying.retrying(Thread::isMain() ? BusyRetryTimeOutForMainThread :
-                                           BusyRetryTimeOutForSubThread);
+        trying.retrying(BusyRetryTimeOut);
     }
     return getOrCreateState(trying.getPath()).wait(trying);
 }
@@ -82,7 +81,7 @@ BusyRetryConfig::Expecting::Expecting() : m_category(Category::None)
 
 bool BusyRetryConfig::Expecting::valid() const
 {
-    return m_category != Category::None;
+    return m_category == Category::Pager || m_category == Category::Shm;
 }
 
 void BusyRetryConfig::Expecting::expecting(ShmLockType type, int mask)
@@ -106,8 +105,7 @@ bool BusyRetryConfig::Expecting::satisfied(PagerLockType type) const
     if (m_category == Category::Pager) {
         switch (m_pagerType) {
         case PagerLockType::Reserved:
-            satisfied = type != PagerLockType::Reserved && type != PagerLockType::Pending
-                        && type != PagerLockType::Exclusive;
+            satisfied = type < PagerLockType::Reserved;
             break;
         case PagerLockType::Pending:
             // fallthrough
@@ -115,7 +113,7 @@ bool BusyRetryConfig::Expecting::satisfied(PagerLockType type) const
             satisfied = type == PagerLockType::None;
             break;
         case PagerLockType::Shared:
-            satisfied = type != PagerLockType::Pending && type != PagerLockType::Exclusive;
+            satisfied = type < PagerLockType::Pending;
             break;
         default:
             WCTInnerAssert(false);
@@ -172,8 +170,11 @@ void BusyRetryConfig::State::updatePagerLock(PagerLockType type)
 {
     std::lock_guard<std::mutex> lockGuard(m_lock);
     if (m_pagerType != type) {
+        bool notify = type < m_pagerType;
         m_pagerType = type;
-        tryNotify();
+        if (notify) {
+            tryNotify();
+        }
     }
 }
 
@@ -182,15 +183,11 @@ void BusyRetryConfig::State::updateShmLock(void* identifier, int sharedMask, int
     std::lock_guard<std::mutex> lockGuard(m_lock);
     bool notify = false;
     if (sharedMask == 0 && exclusiveMask == 0) {
-        auto iter = m_shmMasks.find(identifier);
-        if (iter != m_shmMasks.end()) {
-            notify = (iter->second.shared != sharedMask)
-                     || (iter->second.exclusive != exclusiveMask);
-            m_shmMasks.erase(iter);
-        }
+        m_shmMasks.erase(identifier);
+        notify = true;
     } else {
         State::ShmMask& mask = m_shmMasks[identifier];
-        notify = (mask.shared != sharedMask) || (mask.exclusive != exclusiveMask);
+        notify = sharedMask < mask.shared || exclusiveMask < mask.exclusive;
         mask.shared = sharedMask;
         mask.exclusive = exclusiveMask;
     }
