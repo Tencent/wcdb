@@ -40,7 +40,6 @@ Thread& Thread::operator=(const std::nullptr_t&)
 }
 
 #pragma mark - Which
-
 Thread Thread::current()
 {
     return Thread(pthread_self());
@@ -53,12 +52,12 @@ bool Thread::isMain()
 
 bool Thread::isCurrentThread() const
 {
-    return equal(Thread::current());
+    return pthreadEqual(m_id, pthread_self());
 }
 
 bool Thread::equal(const Thread& other) const
 {
-    return pthread_equal(m_id, other.m_id) != 0;
+    return pthreadEqual(m_id, other.m_id);
 }
 
 bool Thread::operator==(const Thread& other) const
@@ -66,15 +65,16 @@ bool Thread::operator==(const Thread& other) const
     return equal(other);
 }
 
+bool Thread::pthreadEqual(pthread_t left, pthread_t right)
+{
+    return pthread_equal(left, right) != 0;
+}
+
 #pragma mark - Name
 void Thread::setName(const String& name)
 {
     if (pthread_setname_np(name.c_str()) != 0) {
-        Error error;
-        error.level = Error::Level::Error;
-        error.setSystemCode(errno, Error::Code::Error);
-        Notifier::shared().notify(error);
-        SharedThreadedErrorProne::setThreadedError(std::move(error));
+        setThreadedError();
     }
 }
 
@@ -83,8 +83,19 @@ String Thread::getName()
     static constexpr const int s_maxLengthOfAllowedThreadName = 255;
     char name[s_maxLengthOfAllowedThreadName];
     memset(name, 0, s_maxLengthOfAllowedThreadName);
-    pthread_getname_np(m_id, name, s_maxLengthOfAllowedThreadName);
+    if (pthread_getname_np(m_id, name, s_maxLengthOfAllowedThreadName) != 0) {
+        setThreadedError();
+    }
     return name;
+}
+
+uint64_t Thread::getIdentifier()
+{
+    uint64_t identifier = 0;
+    if (pthread_threadid_np(m_id, &identifier) != 0) {
+        setThreadedError();
+    }
+    return identifier;
 }
 
 #pragma mark - Error

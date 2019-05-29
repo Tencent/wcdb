@@ -47,14 +47,18 @@ public:
     bool equal(const Thread& other) const;
     bool operator==(const Thread& other) const;
 
+private:
+    static bool pthreadEqual(pthread_t left, pthread_t right);
+
 #pragma mark - Name
 public:
     static void setName(const String& name);
     String getName();
+    uint64_t getIdentifier();
 
 #pragma mark - Error
 private:
-    void setThreadedError();
+    static void setThreadedError();
 };
 
 } // namespace WCDB
