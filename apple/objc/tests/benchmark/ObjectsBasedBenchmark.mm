@@ -172,7 +172,6 @@
 
 - (void)doTestVacuum
 {
-    [self.class enableSQLTrace];
     WCDB::StatementVacuum statement = WCDB::StatementVacuum().vacuum();
     __block BOOL result;
     [self
@@ -181,7 +180,7 @@
     }
     setUp:^{
         [self setUpDatabase];
-        TestCaseAssertTrue([self.database deleteFromTable:self.tableName]);
+        TestCaseAssertTrue([self.database deleteFromTable:self.tableName limit:(int) self.factory.expectedQuality / 10]);
     }
     tearDown:^{
         [self tearDownDatabase];
