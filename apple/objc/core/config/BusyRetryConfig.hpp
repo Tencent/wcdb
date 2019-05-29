@@ -72,13 +72,9 @@ protected:
             Shm,
         };
         Category m_category;
-        union {
-            struct {
-                ShmLockType m_shmType;
-                int m_shmMask;
-            };
-            PagerLockType m_pagerType;
-        };
+        ShmLockType m_shmType;
+        int m_shmMask;
+        PagerLockType m_pagerType;
     };
 
     class Trying;
@@ -106,10 +102,6 @@ protected:
         std::mutex m_lock;
         Conditional m_conditional;
 
-        enum WaitingOrder {
-            MainThread = 0,
-            SubThread = 1,
-        };
         OrderedUniqueList<Thread, Expecting> m_waitings;
     };
 
