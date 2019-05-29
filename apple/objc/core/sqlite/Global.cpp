@@ -183,7 +183,9 @@ void Global::postWillLockNotification(const char *path_, int type_)
 
     SharedLockGuard lockGuard(m_lock);
     for (const auto &iter : m_lockEventNotifications) {
-        iter.second.willLock(path, type);
+        if (iter.second.willLock != nullptr) {
+            iter.second.willLock(path, type);
+        }
     }
 }
 
@@ -204,7 +206,9 @@ void Global::postLockDidChangeNotification(const char *path_, int type_)
 
     SharedLockGuard lockGuard(m_lock);
     for (const auto &iter : m_lockEventNotifications) {
-        iter.second.lockDidChange(path, type);
+        if (iter.second.lockDidChange != nullptr) {
+            iter.second.lockDidChange(path, type);
+        }
     }
 }
 
@@ -229,7 +233,9 @@ void Global::postWillShmLockNotification(const char *path_, int flags, int mask)
 
     SharedLockGuard lockGuard(m_lock);
     for (const auto &iter : m_lockEventNotifications) {
-        iter.second.willShmLock(path, type, mask);
+        if (iter.second.willShmLock != nullptr) {
+            iter.second.willShmLock(path, type, mask);
+        }
     }
 }
 
@@ -251,7 +257,9 @@ void Global::postShmLockDidChangeNotification(const char *path_,
 
     SharedLockGuard lockGuard(m_lock);
     for (const auto &iter : m_lockEventNotifications) {
-        iter.second.shmLockDidChange(path, identifier, sharedMask, exclusiveMask);
+        if (iter.second.shmLockDidChange != nullptr) {
+            iter.second.shmLockDidChange(path, identifier, sharedMask, exclusiveMask);
+        }
     }
 }
 
