@@ -87,6 +87,9 @@ std::pair<bool, bool> MigratingHandle::sourceTableExists(const MigrationUserInfo
                 if (attacheds.find(schema.getDescription()) == attacheds.end()) {
                     succeed
                     = executeStatement(userInfo.getStatementForAttachingSchema());
+                    if (succeed) {
+                        succeed = trySynchronousTransactionAfterAttached();
+                    }
                 }
             }
             if (!succeed) {
@@ -185,11 +188,16 @@ bool MigratingHandle::rebindSchemas(const std::map<String, RecyclableMigrationIn
             }
         }
     }
+    bool attached = false;
     // attach all needed schemas
     for (const auto& iter : schemas2MigratingInfos) {
         if (!executeStatement(iter.second->getStatementForAttachingSchema())) {
             return false;
         }
+        attached = true;
+    }
+    if (attached) {
+        return trySynchronousTransactionAfterAttached();
     }
     return true;
 }
@@ -197,6 +205,21 @@ bool MigratingHandle::rebindSchemas(const std::map<String, RecyclableMigrationIn
 bool MigratingHandle::bindInfos(const std::map<String, RecyclableMigrationInfo>& migratings)
 {
     return rebindViews(migratings) && rebindSchemas(migratings);
+}
+
+bool MigratingHandle::trySynchronousTransactionAfterAttached()
+{
+    bool succeed = true;
+    if (isInTransaction()) {
+        markErrorAsIgnorable(Error::Code::Error);
+        succeed = beginTransaction(true);
+        WCTInnerAssert(!succeed);
+        if (!succeed && isErrorIgnorable()) {
+            succeed = true;
+        }
+        markErrorAsUnignorable();
+    }
+    return succeed;
 }
 
 #pragma mark - Migration
