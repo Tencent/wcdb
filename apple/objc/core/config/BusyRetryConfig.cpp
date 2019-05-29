@@ -219,7 +219,8 @@ bool BusyRetryConfig::State::wait(Trying& trying)
         double remainingTimeForRetring = trying.remainingTimeForRetring();
         if (remainingTimeForRetring > 0) {
             Thread currentThread = Thread::current();
-            m_waitings.insert(0, currentThread, trying);
+            // main thread first
+            m_waitings.insert(Thread::isMain() ? 0 : 1, currentThread, trying);
 
             SteadyClock before = SteadyClock::now();
             m_conditional.wait_for(lockGuard, remainingTimeForRetring);
