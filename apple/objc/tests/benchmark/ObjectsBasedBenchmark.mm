@@ -170,6 +170,28 @@
     }];
 }
 
+- (void)doTestVacuum
+{
+    [self.class enableSQLTrace];
+    WCDB::StatementVacuum statement = WCDB::StatementVacuum().vacuum();
+    __block BOOL result;
+    [self
+    doMeasure:^{
+        result = [self.database execute:statement];
+    }
+    setUp:^{
+        [self setUpDatabase];
+        TestCaseAssertTrue([self.database deleteFromTable:self.tableName]);
+    }
+    tearDown:^{
+        [self tearDownDatabase];
+        result = NO;
+    }
+    checkCorrectness:^{
+        TestCaseAssertTrue(result);
+    }];
+}
+
 #pragma mark - ReusableFactoryPreparation
 - (BOOL)willEndPreparing:(NSString*)path
 {

@@ -46,4 +46,9 @@
     [self doTestCreateIndex];
 }
 
+- (void)test_vacuum
+{
+    [self doTestVacuum];
+}
+
 @end
