@@ -65,7 +65,7 @@
 
 - (void)setAutoBackup:(BOOL)flag
 {
-    WCDB::Core::shared().enableAutoMigrate(_database, flag);
+    WCDB::Core::shared().enableAutoBackup(_database, flag);
 }
 
 - (BOOL)backup
