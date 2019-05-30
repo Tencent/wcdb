@@ -48,8 +48,6 @@ AutoCheckpointConfig::~AutoCheckpointConfig()
 
 bool AutoCheckpointConfig::invoke(Handle* handle)
 {
-    m_operator->registerAsRequiredCheckpoint(handle->getPath());
-
     handle->setNotificationWhenCommitted(
     0,
     m_identifier,
@@ -61,8 +59,6 @@ bool AutoCheckpointConfig::invoke(Handle* handle)
 bool AutoCheckpointConfig::uninvoke(Handle* handle)
 {
     handle->unsetNotificationWhenCommitted(m_identifier);
-
-    m_operator->registerAsNoCheckpointRequired(handle->getPath());
 
     return true;
 }

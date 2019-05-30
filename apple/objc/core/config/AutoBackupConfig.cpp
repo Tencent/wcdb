@@ -37,8 +37,6 @@ AutoBackupConfig::AutoBackupConfig(const std::shared_ptr<AutoBackupOperator> &op
 
 bool AutoBackupConfig::invoke(Handle *handle)
 {
-    m_operator->registerAsRequiredBackup(handle->getPath());
-
     handle->setNotificationWhenCheckpointed(
     m_identifier,
     std::bind(&AutoBackupConfig::onCheckpointed, this, std::placeholders::_1));
@@ -49,8 +47,6 @@ bool AutoBackupConfig::invoke(Handle *handle)
 bool AutoBackupConfig::uninvoke(Handle *handle)
 {
     handle->setNotificationWhenCheckpointed(m_identifier, nullptr);
-
-    m_operator->registerAsNoBackupRequired(handle->getPath());
 
     return true;
 }

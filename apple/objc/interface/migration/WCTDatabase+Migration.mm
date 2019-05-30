@@ -50,11 +50,7 @@
 
 - (void)setAutoMigrate:(BOOL)flag
 {
-    if (flag) {
-        _database->setConfig(WCDB::AutoMigrateConfigName, WCDB::Core::shared().autoMigrateConfig(), WCDB::Configs::Priority::Highest);
-    } else {
-        _database->removeConfig(WCDB::AutoMigrateConfigName);
-    }
+    WCDB::Core::shared().enableAutoMigrate(_database, flag);
 }
 
 - (void)setNotificationWhenMigrated:(WCTMigratedNotificationBlock)onMigrated

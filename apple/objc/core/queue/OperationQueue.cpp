@@ -207,11 +207,7 @@ void OperationQueue::registerAsRequiredMigration(const String& path)
     WCTInnerAssert(!path.empty());
 
     LockGuard lockGuard(m_lock);
-    int queue = m_records[path].registeredForMigration == 0;
-    ++m_records[path].registeredForMigration;
-    if (queue) {
-        asyncMigrate(path, OperationQueueTimeIntervalForMigration, 0);
-    }
+    m_records[path].registeredForMigration = true;
 }
 
 void OperationQueue::registerAsNoMigrationRequired(const String& path)
@@ -219,13 +215,21 @@ void OperationQueue::registerAsNoMigrationRequired(const String& path)
     WCTInnerAssert(!path.empty());
 
     LockGuard lockGuard(m_lock);
-    Record& record = m_records[path];
-    --record.registeredForMigration;
-    WCTInnerAssert(record.registeredForMigration >= 0);
-    if (record.registeredForMigration == 0) {
-        Operation operation(Operation::Type::Migrate, path);
-        m_timedQueue.remove(operation);
-    }
+    m_records[path].registeredForMigration = false;
+    Operation operation(Operation::Type::Migrate, path);
+    m_timedQueue.remove(operation);
+}
+
+void OperationQueue::asyncMigrate(const String& path)
+{
+    asyncMigrate(path, OperationQueueTimeIntervalForMigration, 0);
+}
+
+void OperationQueue::stopMigrate(const String& path)
+{
+    LockGuard lockGuard(m_lock);
+    Operation operation(Operation::Type::Migrate, path);
+    m_timedQueue.remove(operation);
 }
 
 void OperationQueue::asyncMigrate(const String& path, double delay, int numberOfFailures)
@@ -235,7 +239,7 @@ void OperationQueue::asyncMigrate(const String& path, double delay, int numberOf
                    && numberOfFailures < OperationQueueTolerableFailuresForMigration);
 
     SharedLockGuard lockGuard(m_lock);
-    if (m_records[path].registeredForMigration > 0) {
+    if (m_records[path].registeredForMigration) {
         Operation operation(Operation::Type::Migrate, path);
         Parameter parameter;
         parameter.numberOfFailures = numberOfFailures;
@@ -273,7 +277,7 @@ void OperationQueue::registerAsRequiredBackup(const String& path)
     WCTInnerAssert(!path.empty());
 
     LockGuard lockGuard(m_lock);
-    ++m_records[path].registeredForBackup;
+    m_records[path].registeredForBackup = true;
 }
 
 void OperationQueue::registerAsNoBackupRequired(const String& path)
@@ -281,13 +285,9 @@ void OperationQueue::registerAsNoBackupRequired(const String& path)
     WCTInnerAssert(!path.empty());
 
     LockGuard lockGuard(m_lock);
-    Record& record = m_records[path];
-    --record.registeredForBackup;
-    WCTInnerAssert(record.registeredForBackup >= 0);
-    if (record.registeredForBackup == 0) {
-        Operation operation(Operation::Type::Backup, path);
-        m_timedQueue.remove(operation);
-    }
+    m_records[path].registeredForBackup = false;
+    Operation operation(Operation::Type::Backup, path);
+    m_timedQueue.remove(operation);
 }
 
 void OperationQueue::asyncBackup(const String& path)
@@ -296,7 +296,7 @@ void OperationQueue::asyncBackup(const String& path)
 
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_records.find(path);
-    if (iter != m_records.end() && iter->second.registeredForBackup > 0) {
+    if (iter != m_records.end() && iter->second.registeredForBackup) {
         asyncBackup(path, OperationQueueTimeIntervalForBackup);
     }
 }
@@ -325,7 +325,7 @@ void OperationQueue::registerAsRequiredCheckpoint(const String& path)
     WCTInnerAssert(!path.empty());
 
     LockGuard lockGuard(m_lock);
-    ++m_records[path].registeredForCheckpoint;
+    m_records[path].registeredForCheckpoint = true;
 }
 
 void OperationQueue::registerAsNoCheckpointRequired(const String& path)
@@ -333,13 +333,10 @@ void OperationQueue::registerAsNoCheckpointRequired(const String& path)
     WCTInnerAssert(!path.empty());
 
     LockGuard lockGuard(m_lock);
-    Record& record = m_records[path];
-    --record.registeredForCheckpoint;
-    WCTInnerAssert(record.registeredForCheckpoint >= 0);
-    if (record.registeredForCheckpoint == 0) {
-        Operation operation(Operation::Type::Checkpoint, path);
-        m_timedQueue.remove(operation);
-    }
+    m_records[path].registeredForCheckpoint = false;
+    ;
+    Operation operation(Operation::Type::Checkpoint, path);
+    m_timedQueue.remove(operation);
 }
 
 void OperationQueue::asyncCheckpoint(const String& path, int frames)
@@ -348,7 +345,7 @@ void OperationQueue::asyncCheckpoint(const String& path, int frames)
 
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_records.find(path);
-    if (iter != m_records.end() && iter->second.registeredForCheckpoint > 0) {
+    if (iter != m_records.end() && iter->second.registeredForCheckpoint) {
         if (frames >= OperationQueueFramesThresholdForCriticalCheckpoint) {
             asyncCheckpoint(path, OperationQueueTimeIntervalForCriticalCheckpoint, true);
         } else {

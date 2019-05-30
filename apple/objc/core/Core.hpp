@@ -83,16 +83,23 @@ protected:
 
     std::shared_ptr<OperationQueue> m_operationQueue;
 
+#pragma mark - Checkpoint
+protected:
+    void enableAutoCheckpoint(Database* database, bool enable);
+
+private:
+    std::shared_ptr<Config> m_autoCheckpointConfig;
+
 #pragma mark - Backup
 public:
-    std::shared_ptr<Config> autoBackupConfig();
+    void enableAutoBackup(Database* database, bool enable);
 
 protected:
     std::shared_ptr<Config> m_autoBackupConfig;
 
 #pragma mark - Migration
 public:
-    std::shared_ptr<Config> autoMigrateConfig();
+    void enableAutoMigrate(Database* database, bool enable);
 
 protected:
     std::shared_ptr<Config> m_autoMigrateConfig;

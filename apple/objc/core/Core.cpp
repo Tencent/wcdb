@@ -44,6 +44,8 @@ Core::Core()
 , m_autoBackupConfig(std::make_shared<AutoBackupConfig>(m_operationQueue))
 // Migration
 , m_autoMigrateConfig(std::make_shared<AutoMigrateConfig>(m_operationQueue))
+// Checkpoint
+, m_autoCheckpointConfig(std::make_shared<AutoCheckpointConfig>(m_operationQueue))
 // Trace
 , m_globalSQLTraceConfig(std::make_shared<ShareableSQLTraceConfig>())
 , m_globalPerformanceTraceConfig(std::make_shared<ShareablePerformanceTraceConfig>())
@@ -52,9 +54,6 @@ Core::Core()
   { Configs::Priority::Highest, GlobalSQLTraceConfigName, m_globalSQLTraceConfig },
   { Configs::Priority::Highest, GlobalPerformanceTraceConfigName, m_globalPerformanceTraceConfig },
   { Configs::Priority::Highest, BusyRetryConfigName, std::make_shared<BusyRetryConfig>() },
-  { Configs::Priority::Highest,
-    AutoCheckpointConfigName,
-    std::make_shared<AutoCheckpointConfig>(m_operationQueue) },
   { Configs::Priority::Higher, BasicConfigName, std::make_shared<BasicConfig>() },
   })
 {
@@ -94,6 +93,8 @@ void Core::databaseDidCreate(Database* database)
     WCTInnerAssert(database != nullptr);
 
     database->setConfigs(m_configs);
+
+    enableAutoCheckpoint(database, true);
 }
 
 void Core::preprocessError(Error& error)
@@ -229,16 +230,45 @@ void Core::setNotificationWhenDatabaseCorrupted(const String& path,
     m_operationQueue->setNotificationWhenCorrupted(path, underlyingNotification);
 }
 
-#pragma mark - Backup
-std::shared_ptr<Config> Core::autoBackupConfig()
+#pragma mark - Checkpoint
+void Core::enableAutoCheckpoint(Database* database, bool enable)
 {
-    return m_autoBackupConfig;
+    if (enable) {
+        database->setConfig(
+        AutoCheckpointConfigName, m_autoCheckpointConfig, Configs::Priority::Highest);
+        m_operationQueue->registerAsRequiredCheckpoint(database->getPath());
+    } else {
+        database->removeConfig(AutoCheckpointConfigName);
+        m_operationQueue->registerAsNoCheckpointRequired(database->getPath());
+    }
+}
+
+#pragma mark - Backup
+void Core::enableAutoBackup(Database* database, bool enable)
+{
+    WCTInnerAssert(database != nullptr);
+    if (enable) {
+        database->setConfig(
+        AutoBackupConfigName, m_autoBackupConfig, WCDB::Configs::Priority::Highest);
+        m_operationQueue->registerAsRequiredBackup(database->getPath());
+    } else {
+        database->removeConfig(AutoBackupConfigName);
+        m_operationQueue->registerAsNoBackupRequired(database->getPath());
+    }
 }
 
 #pragma mark - Migration
-std::shared_ptr<Config> Core::autoMigrateConfig()
+void Core::enableAutoMigrate(Database* database, bool enable)
 {
-    return m_autoMigrateConfig;
+    WCTInnerAssert(database != nullptr);
+    if (enable) {
+        database->setConfig(
+        AutoMigrateConfigName, m_autoMigrateConfig, WCDB::Configs::Priority::Highest);
+        m_operationQueue->registerAsRequiredMigration(database->getPath());
+    } else {
+        database->removeConfig(AutoMigrateConfigName);
+        m_operationQueue->registerAsNoMigrationRequired(database->getPath());
+    }
 }
 
 #pragma mark - Trace

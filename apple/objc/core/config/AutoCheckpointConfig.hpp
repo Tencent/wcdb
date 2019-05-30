@@ -28,9 +28,6 @@ class AutoCheckpointOperator {
 public:
     virtual ~AutoCheckpointOperator() = 0;
 
-    virtual void registerAsRequiredCheckpoint(const String &path) = 0;
-    virtual void registerAsNoCheckpointRequired(const String &path) = 0;
-
     virtual void asyncCheckpoint(const String &path, int frames) = 0;
 };
 

@@ -17,8 +17,8 @@ namespace WCDB {
 class AutoMigrateOperator {
 public:
     virtual ~AutoMigrateOperator() = 0;
-    virtual void registerAsRequiredMigration(const String &path) = 0;
-    virtual void registerAsNoMigrationRequired(const String &path) = 0;
+    virtual void asyncMigrate(const String &path) = 0;
+    virtual void stopMigrate(const String &path) = 0;
 };
 
 class AutoMigrateConfig final : public Config {
@@ -31,6 +31,7 @@ public:
 
 protected:
     std::shared_ptr<AutoMigrateOperator> m_operator;
+    std::atomic<int> m_invoked;
 };
 
 } //namespace WCDB

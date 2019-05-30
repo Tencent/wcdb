@@ -28,9 +28,6 @@ class AutoBackupOperator {
 public:
     virtual ~AutoBackupOperator() = 0;
 
-    virtual void registerAsRequiredBackup(const String& path) = 0;
-    virtual void registerAsNoBackupRequired(const String& path) = 0;
-
     virtual void asyncBackup(const String& path) = 0;
 };
 
