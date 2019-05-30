@@ -24,105 +24,105 @@
 
 namespace WCDB {
 
+template<typename Key, typename Value, typename Order>
+class UniqueListElement {
+private:
+    typedef UniqueListElement<Key, Value, Order> SelfType;
+
+public:
+    UniqueListElement(const Key& key, const Value& value, const Order& order)
+    : m_key(key), m_value(value), m_order(order)
+    {
+    }
+
+    const Key& key() const { return m_key; }
+
+    Value& value() { return m_value; }
+
+    const Value& value() const { return m_value; }
+
+    const Order& order() const { return m_order; }
+
+    bool operator==(const SelfType& other) const
+    {
+        return m_order == other.m_order && m_key == other.m_key
+               && m_value == other.m_value;
+    }
+
+private:
+    Key m_key;
+    Value m_value;
+    Order m_order;
+};
+
 // Small order first
 template<typename Key, typename Value, typename Order = int>
-class UniqueList {
+class UniqueList : private std::list<UniqueListElement<Key, Value, Order>> {
+protected:
+    typedef UniqueListElement<Key, Value, Order> Element;
+    typedef std::list<Element> SuperType;
+    typedef UniqueList<Key, Value, Order> SelfType;
+    typedef typename SuperType::iterator Iterator;
+
 public:
-    class Element {
-    public:
-        Element(const Order& order_, const Key& key_, const Value& value_)
-        : order(order_), key(key_), value(value_)
-        {
-        }
-
-        Value value;
-        Order order;
-        Key key;
-
-        bool operator==(const Element& other) const
-        {
-            return key == other.key && order == other.order && value == other.value;
-        }
-    };
-
     UniqueList() {}
 
-    UniqueList(std::list<Element>&& elements)
+    UniqueList(const SelfType& elements)
     {
-        for (auto&& element : elements) {
-            insert(element.order, element.key, std::move(element));
+        for (const auto& element : elements) {
+            insert(element.order, element.key, element.value);
         }
     }
 
-    void insert(const Order& order, const Key& key, const Value& value)
+    Iterator s() {}
+
+    void insert(const Key& key, const Value& value, const Order& order)
     {
-        insert(order, key, std::move(Element(order, key, value)));
-    }
-
-    void insert(const Order& order, const Key& key, Value&& value)
-    {
-        insert(order, key, std::move(Element(order, key, std::move(value))));
-    }
-
-    void erase(const Key& key)
-    {
-        for (auto iter = m_elements.begin(); iter != m_elements.end(); ++iter) {
-            if (iter->key == key) {
-                m_elements.erase(iter);
-                return;
-            }
-        }
-    }
-
-    // TODO: return an iterator that can be erased.
-    const Element* find(const Key& key) const
-    {
-        for (const auto& element : m_elements) {
-            if (key == element.key) {
-                return &element;
-            }
-        }
-        return nullptr;
-    }
-
-    void clear() { m_elements.clear(); }
-
-    bool operator==(const UniqueList<Key, Value, Order>& other) const
-    {
-        return elements() == other.elements();
-    }
-
-    bool operator!=(const UniqueList<Key, Value, Order>& other) const
-    {
-        return !(operator==(other));
-    }
-
-    const std::list<Element>& elements() const { return m_elements; }
-
-protected:
-    void insert(const Order& order, const Key& key, Element&& element)
-    {
-        auto iter = m_elements.begin();
+        Iterator iter = this->begin();
         bool inserted = false;
         bool erased = false;
-        while (iter != m_elements.end() && (!inserted || !erased)) {
-            if (!erased && iter->key == key) {
-                iter = m_elements.erase(iter);
+        while (iter != this->end() && (!inserted || !erased)) {
+            if (!erased && iter->key() == key) {
+                iter = this->SuperType::erase(iter);
                 erased = true;
                 continue;
             }
-            if (!inserted && order < iter->order) {
-                iter = m_elements.insert(iter, std::move(element));
+            if (!inserted && order < iter->order()) {
+                iter = this->SuperType::insert(iter, Element(key, value, order));
                 inserted = true;
             }
             ++iter;
         }
         if (!inserted) {
-            m_elements.push_back(std::move(element));
+            this->push_back(Element(key, value, order));
         }
     }
 
-    std::list<Element> m_elements;
+    Iterator erase(const Key& key)
+    {
+        Iterator iter = find(key);
+        if (iter != this->end()) {
+            iter = this->SuperType::erase(iter);
+        }
+        return iter;
+    }
+
+    Iterator find(const Key& key)
+    {
+        return std::find_if(
+        this->begin(),
+        this->end(),
+        std::bind(&UniqueList<Key, Value, Order>::findKey, key, std::placeholders::_1));
+    }
+
+    using SuperType::begin;
+    using SuperType::end;
+
+private:
+    static bool findKey(const Key& key, const Element& element)
+    {
+        return element.key() == key;
+    }
 };
 
 } // namespace WCDB
