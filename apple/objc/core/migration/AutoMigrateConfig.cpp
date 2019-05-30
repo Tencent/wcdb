@@ -19,6 +19,7 @@ AutoMigrateOperator::~AutoMigrateOperator()
 AutoMigrateConfig::AutoMigrateConfig(const std::shared_ptr<AutoMigrateOperator> &operator_)
 : Config(), m_operator(operator_), m_invoked(0)
 {
+    WCTInnerAssert(m_operator != nullptr);
 }
 
 AutoMigrateConfig::~AutoMigrateConfig()
