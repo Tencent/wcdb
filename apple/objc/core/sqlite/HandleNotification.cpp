@@ -192,7 +192,7 @@ void HandleNotification::setNotificationWhenCommitted(int order,
 {
     WCTInnerAssert(onCommitted);
     bool stateBefore = isCommittedNotificationSet();
-    m_committedNotifications.insert(order, name, onCommitted);
+    m_committedNotifications.insert(name, onCommitted, order);
     bool stateAfter = isCommittedNotificationSet();
     if (stateBefore != stateAfter) {
         setupCommittedNotification();
@@ -220,13 +220,13 @@ void HandleNotification::setupCommittedNotification()
 
 bool HandleNotification::isCommittedNotificationSet() const
 {
-    return !m_committedNotifications.elements().empty();
+    return !m_committedNotifications.empty();
 }
 
 void HandleNotification::postCommittedNotification(const String &path, int numberOfFrames)
 {
-    WCTInnerAssert(!m_committedNotifications.elements().empty());
-    for (const auto &element : m_committedNotifications.elements()) {
+    WCTInnerAssert(!m_committedNotifications.empty());
+    for (const auto &element : m_committedNotifications) {
         if (!element.value(path, numberOfFrames)) {
             break;
         }

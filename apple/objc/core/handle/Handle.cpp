@@ -49,10 +49,10 @@ bool Handle::open()
 void Handle::close()
 {
     if (isOpened()) {
-        while (!m_cachedConfigs.elements().empty()) {
-            auto last = m_cachedConfigs.elements().back();
+        while (!m_cachedConfigs.empty()) {
+            auto last = m_cachedConfigs.back();
             last.value->uninvoke(this); // ignore errors
-            WCTInnerAssert(m_cachedConfigs.find(last.key) != nullptr);
+            WCTInnerAssert(m_cachedConfigs.find(last.key) != m_cachedConfigs.end());
             WCTInnerAssert(m_cachedConfigs.find(last.key)->key == last.key);
             WCTInnerAssert(m_cachedConfigs.find(last.key)->value == last.value);
             WCTInnerAssert(m_cachedConfigs.find(last.key)->order == last.order);

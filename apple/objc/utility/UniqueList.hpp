@@ -74,8 +74,6 @@ public:
         }
     }
 
-    Iterator s() {}
-
     void insert(const Key& key, const Value& value, const Order& order)
     {
         Iterator iter = this->begin();
@@ -115,8 +113,18 @@ public:
         std::bind(&UniqueList<Key, Value, Order>::findKey, key, std::placeholders::_1));
     }
 
+    bool operator==(const SelfType& other) const
+    {
+        return SuperType::operator==(other);
+    }
+
     using SuperType::begin;
     using SuperType::end;
+    using SuperType::clear;
+    using SuperType::size;
+    using SuperType::empty;
+    using SuperType::back;
+    using SuperType::front;
 
 private:
     static bool findKey(const Key& key, const Element& element)
