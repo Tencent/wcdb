@@ -22,8 +22,8 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Exiting.hpp>
-#include <WCDB/OrderedUniqueList.hpp>
 #include <WCDB/Time.hpp>
+#include <WCDB/UniqueList.hpp>
 #include <condition_variable>
 #include <list>
 #include <stdio.h>
@@ -33,7 +33,7 @@ namespace WCDB {
 template<typename Key, typename Info>
 class TimedQueue final {
 private:
-    typedef OrderedUniqueList<Key, Info, SteadyClock> List;
+    typedef UniqueList<Key, Info, SteadyClock> List;
     List m_list;
     Conditional m_conditional;
     std::mutex m_lock;

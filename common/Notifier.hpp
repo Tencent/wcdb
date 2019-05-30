@@ -22,7 +22,7 @@
 
 #include <WCDB/Error.hpp>
 #include <WCDB/Lock.hpp>
-#include <WCDB/OrderedUniqueList.hpp>
+#include <WCDB/UniqueList.hpp>
 
 namespace WCDB {
 
@@ -46,7 +46,7 @@ protected:
 
     mutable SharedLock m_lock;
 
-    OrderedUniqueList<String, Callback> m_notifications;
+    UniqueList<String, Callback> m_notifications;
     std::map<String, PreprocessCallback> m_preprocessNotifications;
 };
 

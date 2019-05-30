@@ -23,9 +23,9 @@
 #include <WCDB/Config.hpp>
 #include <WCDB/Global.hpp>
 #include <WCDB/Lock.hpp>
-#include <WCDB/OrderedUniqueList.hpp>
 #include <WCDB/String.hpp>
 #include <WCDB/ThreadLocal.hpp>
+#include <WCDB/UniqueList.hpp>
 
 namespace WCDB {
 
@@ -102,7 +102,7 @@ protected:
         std::mutex m_lock;
         Conditional m_conditional;
 
-        OrderedUniqueList<Thread, Expecting> m_waitings;
+        UniqueList<Thread, Expecting> m_waitings;
     };
 
     State& getOrCreateState(const String& path);

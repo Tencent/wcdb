@@ -21,14 +21,14 @@
 #pragma once
 
 #include <WCDB/Config.hpp>
-#include <WCDB/OrderedUniqueList.hpp>
 #include <WCDB/String.hpp>
+#include <WCDB/UniqueList.hpp>
 
 namespace WCDB {
 
-class Configs final : public OrderedUniqueList<String, std::shared_ptr<Config>> {
+class Configs final : public UniqueList<String, std::shared_ptr<Config>> {
 public:
-    using OrderedUniqueList<String, std::shared_ptr<Config>>::OrderedUniqueList;
+    using UniqueList<String, std::shared_ptr<Config>>::UniqueList;
 
     enum Priority : int {
         Highest = std::numeric_limits<int>::min(),

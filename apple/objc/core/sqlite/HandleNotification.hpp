@@ -22,8 +22,8 @@
 
 #include <WCDB/HandleRelated.hpp>
 #include <WCDB/Lock.hpp>
-#include <WCDB/OrderedUniqueList.hpp>
 #include <WCDB/SQLiteDeclaration.h>
+#include <WCDB/UniqueList.hpp>
 #include <functional>
 #include <map>
 
@@ -89,7 +89,7 @@ private:
     void setupCommittedNotification();
 
     void postCommittedNotification(const String &path, int numberOfFrames);
-    OrderedUniqueList<String, CommittedNotification> m_committedNotifications;
+    UniqueList<String, CommittedNotification> m_committedNotifications;
 
 #pragma mark - Checkpoint
 public:
