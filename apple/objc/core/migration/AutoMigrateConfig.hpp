@@ -9,7 +9,9 @@
 #pragma once
 
 #include <WCDB/Config.hpp>
+#include <WCDB/Lock.hpp>
 #include <WCDB/String.hpp>
+#include <map>
 #include <memory>
 
 namespace WCDB {
@@ -31,7 +33,12 @@ public:
 
 protected:
     std::shared_ptr<AutoMigrateOperator> m_operator;
-    std::atomic<int> m_invoked;
+
+    std::atomic<int> &getOrCreateRegister(const String &path);
+
+private:
+    SharedLock m_lock;
+    std::map<String, std::atomic<int>> m_registers;
 };
 
 } //namespace WCDB

@@ -16,8 +16,8 @@ AutoMigrateOperator::~AutoMigrateOperator()
 {
 }
 
-AutoMigrateConfig::AutoMigrateConfig(const std::shared_ptr<AutoMigrateOperator> &operator_)
-: Config(), m_operator(operator_), m_invoked(0)
+AutoMigrateConfig::AutoMigrateConfig(const std::shared_ptr<AutoMigrateOperator>& operator_)
+: Config(), m_operator(operator_)
 {
     WCTInnerAssert(m_operator != nullptr);
 }
@@ -26,21 +26,43 @@ AutoMigrateConfig::~AutoMigrateConfig()
 {
 }
 
-bool AutoMigrateConfig::invoke(Handle *handle)
+bool AutoMigrateConfig::invoke(Handle* handle)
 {
-    if (++m_invoked == 1) {
-        m_operator->asyncMigrate(handle->getPath());
+    const String& path = handle->getPath();
+    if (++getOrCreateRegister(path) == 1) {
+        m_operator->asyncMigrate(path);
     }
     return true;
 }
 
-bool AutoMigrateConfig::uninvoke(Handle *handle)
+bool AutoMigrateConfig::uninvoke(Handle* handle)
 {
-    if (--m_invoked == 0) {
-        m_operator->stopMigrate(handle->getPath());
+    const String& path = handle->getPath();
+    if (--getOrCreateRegister(path) == 0) {
+        m_operator->stopMigrate(path);
     }
-    WCTInnerAssert(m_invoked.load() >= 0);
     return true;
+}
+
+std::atomic<int>& AutoMigrateConfig::getOrCreateRegister(const String& path)
+{
+    {
+        SharedLockGuard lockGuard(m_lock);
+        auto iter = m_registers.find(path);
+        if (iter != m_registers.end()) {
+            WCTInnerAssert(iter->second.load() >= 0);
+            return iter->second;
+        }
+    }
+    {
+        LockGuard lockGuard(m_lock);
+        auto iter = m_registers.find(path);
+        if (iter == m_registers.end()) {
+            iter = m_registers.emplace(path, 0).first;
+        }
+        WCTInnerAssert(iter->second.load() >= 0);
+        return iter->second;
+    }
 }
 
 } // namespace WCDB

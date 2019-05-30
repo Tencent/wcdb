@@ -265,6 +265,7 @@ void Core::enableAutoMigrate(Database* database, bool enable)
         database->setConfig(
         AutoMigrateConfigName, m_autoMigrateConfig, WCDB::Configs::Priority::Highest);
         m_operationQueue->registerAsRequiredMigration(database->getPath());
+        m_operationQueue->asyncMigrate(database->getPath());
     } else {
         database->removeConfig(AutoMigrateConfigName);
         m_operationQueue->registerAsNoMigrationRequired(database->getPath());
