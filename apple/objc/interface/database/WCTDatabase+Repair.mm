@@ -65,11 +65,7 @@
 
 - (void)setAutoBackup:(BOOL)flag
 {
-    if (flag) {
-        _database->setConfig(WCDB::AutoBackupConfigName, WCDB::Core::shared().autoBackupConfig(), WCDB::Configs::Priority::Highest);
-    } else {
-        _database->removeConfig(WCDB::AutoBackupConfigName);
-    }
+    WCDB::Core::shared().enableAutoBackup(_database, flag);
 }
 
 - (BOOL)backup

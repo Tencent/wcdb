@@ -180,10 +180,12 @@ bool MigratingHandle::rebindSchemas(const std::map<String, RecyclableMigrationIn
                 // it is already attached
                 schemas2MigratingInfos.erase(iter);
             } else {
-                // it is not longer needed
-                if (!executeStatement(
-                    MigrationInfo::getStatementForDetachingSchema(existingSchema))) {
-                    return false;
+                if (!isInTransaction()) {
+                    // it is not longer needed
+                    if (!executeStatement(
+                        MigrationInfo::getStatementForDetachingSchema(existingSchema))) {
+                        return false;
+                    }
                 }
             }
         }

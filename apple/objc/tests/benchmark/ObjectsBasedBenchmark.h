@@ -38,4 +38,6 @@
 
 - (void)doTestCreateIndex;
 
+- (void)doTestVacuum;
+
 @end

@@ -58,11 +58,6 @@
     [self doTestBatchWrite];
 }
 
-- (void)test_create_index
-{
-    [self doTestCreateIndex];
-}
-
 #pragma mark - ReusableFactoryPreparation
 - (BOOL)willStartPreparing:(NSString *)path
 {

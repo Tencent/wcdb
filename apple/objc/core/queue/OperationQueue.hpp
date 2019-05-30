@@ -114,17 +114,19 @@ protected:
 protected:
     struct Record {
         Record();
-        int registeredForMigration;
-        int registeredForBackup;
-        int registeredForCheckpoint;
+        bool registeredForMigration;
+        bool registeredForBackup;
+        bool registeredForCheckpoint;
     };
     typedef struct Record Record;
     std::map<String, Record> m_records;
 
 #pragma mark - Migrate
 public:
-    void registerAsRequiredMigration(const String& path) override final;
-    void registerAsNoMigrationRequired(const String& path) override final;
+    void registerAsRequiredMigration(const String& path);
+    void registerAsNoMigrationRequired(const String& path);
+    void asyncMigrate(const String& path) override final;
+    void stopMigrate(const String& path) override final;
 
 protected:
     void asyncMigrate(const String& path, double delay, int numberOfFailures);
@@ -132,8 +134,8 @@ protected:
 
 #pragma mark - Backup
 public:
-    void registerAsRequiredBackup(const String& path) override final;
-    void registerAsNoBackupRequired(const String& path) override final;
+    void registerAsRequiredBackup(const String& path);
+    void registerAsNoBackupRequired(const String& path);
 
     void asyncBackup(const String& path) override final;
 
@@ -143,8 +145,8 @@ protected:
 
 #pragma mark - Checkpoint
 public:
-    void registerAsRequiredCheckpoint(const String& path) override final;
-    void registerAsNoCheckpointRequired(const String& path) override final;
+    void registerAsRequiredCheckpoint(const String& path);
+    void registerAsNoCheckpointRequired(const String& path);
 
     void asyncCheckpoint(const String& path, int frames) override final;
 

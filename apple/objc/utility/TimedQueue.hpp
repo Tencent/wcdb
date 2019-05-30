@@ -59,13 +59,13 @@ public:
         }
         bool notify = false;
         {
+            SteadyClock expired
+            = SteadyClock::now().steadyClockByAddingTimeInterval(delay);
+
             std::lock_guard<std::mutex> lockGuard(m_lock);
             if (m_stop) {
                 return;
             }
-
-            SteadyClock expired
-            = SteadyClock::now().steadyClockByAddingTimeInterval(delay);
 
             auto *element = m_list.find(key);
             if (element == nullptr || (element != nullptr && expired < element->order)) {
