@@ -197,7 +197,7 @@ void OperationQueue::async(const Operation& operation, double delay, const Param
 
 #pragma mark - Record
 OperationQueue::Record::Record()
-: registeredForMigration(0), registeredForBackup(0), registeredForCheckpoint(0)
+: registeredForMigration(false), registeredForBackup(false), registeredForCheckpoint(false)
 {
 }
 
