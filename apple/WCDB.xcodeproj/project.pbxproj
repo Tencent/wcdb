@@ -829,7 +829,7 @@
 		2367BCA12215004300380122 /* WCTRuntimeCppAccessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6801EA0D6680021EFA7 /* WCTRuntimeCppAccessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2367BCA22215004300380122 /* Wal.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EB91DD20CA1EBE00ECF668 /* Wal.hpp */; };
 		2367BCA32215004300380122 /* SyntaxSavepointSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDC5C217DFADC006E9E73 /* SyntaxSavepointSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		2367BCA42215004300380122 /* OrderedUniqueList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */; };
+		2367BCA42215004300380122 /* UniqueList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237A65F220F731DF008B4771 /* UniqueList.hpp */; };
 		2367BCA52215004300380122 /* HandleStatement.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2370980920590CA700E768B4 /* HandleStatement.hpp */; };
 		2367BCA62215004300380122 /* WCTCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 23BBE2A5204955CD00C4CBB6 /* WCTCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2367BCA72215004300380122 /* SQLiteLocker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C7559020DCF90F00031A93 /* SQLiteLocker.hpp */; };
@@ -988,7 +988,7 @@
 		237908F721928C9F0098797F /* WCTObjCAccessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237908F621928C9F0098797F /* WCTObjCAccessor.mm */; };
 		23790A7F219315E50098797F /* WCTColumnConstraintMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 23790A7D219315D50098797F /* WCTColumnConstraintMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23790A80219315E50098797F /* WCTVirtualTableMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 23790A7E219315DE0098797F /* WCTVirtualTableMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		237A65F520F731DF008B4771 /* OrderedUniqueList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */; };
+		237A65F520F731DF008B4771 /* UniqueList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237A65F220F731DF008B4771 /* UniqueList.hpp */; };
 		237A8D5821ED88DF003AF5BB /* SQLiteDeclaration.h in Headers */ = {isa = PBXBuildFile; fileRef = 237A8D5721ED88DF003AF5BB /* SQLiteDeclaration.h */; };
 		237A8D5F21EDBB2E003AF5BB /* BusyRetryConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237A8D5D21EDBB2E003AF5BB /* BusyRetryConfig.cpp */; };
 		237A8D6021EDBB2E003AF5BB /* BusyRetryConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237A8D5E21EDBB2E003AF5BB /* BusyRetryConfig.hpp */; };
@@ -2179,7 +2179,7 @@
 		237908F621928C9F0098797F /* WCTObjCAccessor.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTObjCAccessor.mm; sourceTree = "<group>"; };
 		23790A7D219315D50098797F /* WCTColumnConstraintMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTColumnConstraintMacro.h; sourceTree = "<group>"; };
 		23790A7E219315DE0098797F /* WCTVirtualTableMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTVirtualTableMacro.h; sourceTree = "<group>"; };
-		237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OrderedUniqueList.hpp; sourceTree = "<group>"; };
+		237A65F220F731DF008B4771 /* UniqueList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UniqueList.hpp; sourceTree = "<group>"; };
 		237A8D5721ED88DF003AF5BB /* SQLiteDeclaration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SQLiteDeclaration.h; sourceTree = "<group>"; };
 		237A8D5D21EDBB2E003AF5BB /* BusyRetryConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BusyRetryConfig.cpp; sourceTree = "<group>"; };
 		237A8D5E21EDBB2E003AF5BB /* BusyRetryConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BusyRetryConfig.hpp; sourceTree = "<group>"; };
@@ -2957,7 +2957,7 @@
 				23EEDD5F217DFB17006E9E73 /* Shadow.hpp */,
 				239776D0202AF2E2000A681C /* Macro.hpp */,
 				239776CE202AF2E2000A681C /* TimedQueue.hpp */,
-				237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */,
+				237A65F220F731DF008B4771 /* UniqueList.hpp */,
 				39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */,
 				231C35EA21DE090500B5D3D2 /* Exiting.hpp */,
 				231C35EC21DE09E400B5D3D2 /* Exiting.cpp */,
@@ -4479,7 +4479,7 @@
 				396C2C71228439390005A33D /* IntegrityHandle.hpp in Headers */,
 				2367BCA22215004300380122 /* Wal.hpp in Headers */,
 				2367BCA32215004300380122 /* SyntaxSavepointSTMT.hpp in Headers */,
-				2367BCA42215004300380122 /* OrderedUniqueList.hpp in Headers */,
+				2367BCA42215004300380122 /* UniqueList.hpp in Headers */,
 				23301BF82298FE9A00A8AB5A /* AutoMigrateConfig.hpp in Headers */,
 				2367BCA52215004300380122 /* HandleStatement.hpp in Headers */,
 				2367BCA62215004300380122 /* WCTCommon.h in Headers */,
@@ -4808,7 +4808,7 @@
 				23EB91E020CA1EBE00ECF668 /* Wal.hpp in Headers */,
 				23EEDD54217DFADC006E9E73 /* SyntaxSavepointSTMT.hpp in Headers */,
 				23301BF72298FE9A00A8AB5A /* AutoMigrateConfig.hpp in Headers */,
-				237A65F520F731DF008B4771 /* OrderedUniqueList.hpp in Headers */,
+				237A65F520F731DF008B4771 /* UniqueList.hpp in Headers */,
 				2370980B20590CA700E768B4 /* HandleStatement.hpp in Headers */,
 				23BBE2A8204955CE00C4CBB6 /* WCTCommon.h in Headers */,
 				23C7559320DCF90F00031A93 /* SQLiteLocker.hpp in Headers */,

@@ -59,6 +59,10 @@ public:
 
     double timeIntervalSinceSteadyClock(const SteadyClock &other) const;
 
+    double timeIntervalSinceNow() const;
+
+    static double timeIntervalSinceSteadyClockToNow(const SteadyClock &other);
+
     static SteadyClock now();
 };
 

@@ -49,14 +49,10 @@ bool Handle::open()
 void Handle::close()
 {
     if (isOpened()) {
-        while (!m_cachedConfigs.elements().empty()) {
-            auto last = m_cachedConfigs.elements().back();
-            last.value->uninvoke(this); // ignore errors
-            WCTInnerAssert(m_cachedConfigs.find(last.key) != nullptr);
-            WCTInnerAssert(m_cachedConfigs.find(last.key)->key == last.key);
-            WCTInnerAssert(m_cachedConfigs.find(last.key)->value == last.value);
-            WCTInnerAssert(m_cachedConfigs.find(last.key)->order == last.order);
-            m_cachedConfigs.erase(last.key);
+        while (!m_cachedConfigs.empty()) {
+            const auto last = m_cachedConfigs.back();
+            last.value()->uninvoke(this); // ignore errors
+            m_cachedConfigs.pop_back();
         }
     }
     AbstractHandle::close();
@@ -76,23 +72,19 @@ bool Handle::reconfigure(const Configs &newConfigs)
 bool Handle::configure()
 {
     WCTInnerAssert(m_cachedConfigs != m_configs);
-    while (!m_cachedConfigs.elements().empty()) {
-        auto last = m_cachedConfigs.elements().back();
-        if (!last.value->uninvoke(this)) {
+    while (!m_cachedConfigs.empty()) {
+        auto last = m_cachedConfigs.back();
+        if (!last.value()->uninvoke(this)) {
             return false;
         }
-        WCTInnerAssert(m_cachedConfigs.find(last.key) != nullptr);
-        WCTInnerAssert(m_cachedConfigs.find(last.key)->key == last.key);
-        WCTInnerAssert(m_cachedConfigs.find(last.key)->value == last.value);
-        WCTInnerAssert(m_cachedConfigs.find(last.key)->order == last.order);
-        m_cachedConfigs.erase(last.key);
+        m_cachedConfigs.pop_back();
     }
-    WCTInnerAssert(m_cachedConfigs.elements().empty());
-    for (const auto &element : m_configs.elements()) {
-        if (!element.value->invoke(this)) {
+    WCTInnerAssert(m_cachedConfigs.empty());
+    for (const auto &element : m_configs) {
+        if (!element.value()->invoke(this)) {
             return false;
         }
-        m_cachedConfigs.insert(element.order, element.key, element.value);
+        m_cachedConfigs.insert(element.key(), element.value(), element.order());
     }
     m_configs = m_cachedConfigs;
     return true;

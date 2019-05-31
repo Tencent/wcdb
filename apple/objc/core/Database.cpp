@@ -143,7 +143,7 @@ void Database::setConfigs(const Configs &configs)
 void Database::setConfig(const String &name, const std::shared_ptr<Config> &config, int priority)
 {
     LockGuard memoryGuard(m_memory);
-    m_configs.insert(priority, name, config);
+    m_configs.insert(name, config, priority);
 }
 
 void Database::removeConfig(const String &name)

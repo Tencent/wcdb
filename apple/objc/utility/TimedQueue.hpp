@@ -22,8 +22,8 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Exiting.hpp>
-#include <WCDB/OrderedUniqueList.hpp>
 #include <WCDB/Time.hpp>
+#include <WCDB/UniqueList.hpp>
 #include <condition_variable>
 #include <list>
 #include <stdio.h>
@@ -33,7 +33,7 @@ namespace WCDB {
 template<typename Key, typename Info>
 class TimedQueue final {
 private:
-    typedef OrderedUniqueList<Key, Info, SteadyClock> List;
+    typedef UniqueList<Key, Info, SteadyClock> List;
     List m_list;
     Conditional m_conditional;
     std::mutex m_lock;
@@ -67,11 +67,13 @@ public:
                 return;
             }
 
-            auto *element = m_list.find(key);
-            if (element == nullptr || (element != nullptr && expired < element->order)) {
+            auto iter = m_list.find(key);
+            if (iter == m_list.end() || expired < iter->order()) {
                 // insert if key doesn't exist or new key is arrived faster.
-                m_list.insert(expired, key, info);
-                notify = m_list.elements().front().key == key;
+                m_list.insert(key, info, expired);
+                notify = m_list.front().key() == key;
+            } else {
+                iter->value() = info;
             }
         }
         if (notify) {
@@ -120,19 +122,22 @@ public:
                 if (m_stop) {
                     break;
                 }
-                if (m_list.elements().empty() && !isExiting()) {
-                    m_conditional.wait(lockGuard);
+                auto shortest = m_list.begin();
+                if (shortest == m_list.end()) {
+                    if (!isExiting()) {
+                        m_conditional.wait(lockGuard);
+                    }
                     continue;
                 }
-                SteadyClock now = SteadyClock::now();
-                const auto &shortest = m_list.elements().begin();
-                if (now < shortest->order && !isExiting()) {
-                    m_conditional.wait_for(
-                    lockGuard, shortest->order.timeIntervalSinceSteadyClock(now));
+                double timeInterval = shortest->order().timeIntervalSinceNow();
+                if (timeInterval > 0) {
+                    if (!isExiting()) {
+                        m_conditional.wait_for(lockGuard, timeInterval);
+                    }
                     continue;
                 }
-                expireds.push_back(std::make_pair(shortest->key, shortest->value));
-                m_list.erase(shortest->key);
+                expireds.push_back(std::make_pair(shortest->key(), shortest->value()));
+                m_list.erase(shortest);
             }
             if (!isExiting()) {
                 WCTInnerAssert(expireds.size() == 1);

@@ -51,10 +51,10 @@ Core::Core()
 , m_globalPerformanceTraceConfig(std::make_shared<ShareablePerformanceTraceConfig>())
 // Config
 , m_configs({
-  { Configs::Priority::Highest, GlobalSQLTraceConfigName, m_globalSQLTraceConfig },
-  { Configs::Priority::Highest, GlobalPerformanceTraceConfigName, m_globalPerformanceTraceConfig },
-  { Configs::Priority::Highest, BusyRetryConfigName, std::make_shared<BusyRetryConfig>() },
-  { Configs::Priority::Higher, BasicConfigName, std::make_shared<BasicConfig>() },
+  { GlobalSQLTraceConfigName, m_globalSQLTraceConfig, Configs::Priority::Highest },
+  { GlobalPerformanceTraceConfigName, m_globalPerformanceTraceConfig, Configs::Priority::Highest },
+  { BusyRetryConfigName, std::make_shared<BusyRetryConfig>(), Configs::Priority::Highest },
+  { BasicConfigName, std::make_shared<BasicConfig>(), Configs::Priority::Higher },
   })
 {
     Global::shared().setNotificationForLog(

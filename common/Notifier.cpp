@@ -37,7 +37,7 @@ void Notifier::setNotification(int order, const String &key, const Callback &cal
 {
     WCTInnerAssert(callback != nullptr);
     LockGuard lockGuard(m_lock);
-    m_notifications.insert(order, key, callback);
+    m_notifications.insert(key, callback, order);
 }
 
 void Notifier::unsetNotification(const String &key)
@@ -69,8 +69,8 @@ void Notifier::notify(Error &error) const
     for (const auto &element : m_preprocessNotifications) {
         element.second(error);
     }
-    for (const auto &element : m_notifications.elements()) {
-        element.value(error);
+    for (const auto &element : m_notifications) {
+        element.value()(error);
     }
 }
 

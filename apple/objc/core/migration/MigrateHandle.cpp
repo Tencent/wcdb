@@ -139,7 +139,7 @@ bool MigrateHandle::migrateRows(const MigrationInfo* info, bool& done)
         double cost = 0;
         do {
             std::tie(succeed, migrated) = migrateRow();
-            cost = SteadyClock::now().timeIntervalSinceSteadyClock(beforeTransaction);
+            cost = SteadyClock::timeIntervalSinceSteadyClockToNow(beforeTransaction);
         } while (succeed && !migrated && cost < timeIntervalWithinTransaction);
         timeIntervalWithinTransaction = cost;
         return succeed;
@@ -147,7 +147,7 @@ bool MigrateHandle::migrateRows(const MigrationInfo* info, bool& done)
     if (succeed) {
         // update only if succeed
         double timeIntervalWholeTranscation
-        = SteadyClock::now().timeIntervalSinceSteadyClock(beforeTransaction);
+        = SteadyClock::timeIntervalSinceSteadyClockToNow(beforeTransaction);
         addSample(timeIntervalWithinTransaction, timeIntervalWholeTranscation);
 
         if (migrated) {

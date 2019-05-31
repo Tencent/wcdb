@@ -88,8 +88,7 @@ bool FactoryRetriever::work()
         }
     }
 
-    SteadyClock after = SteadyClock::now();
-    reportSummary(after.timeIntervalSinceSteadyClock(before));
+    reportSummary(SteadyClock::timeIntervalSinceSteadyClockToNow(before));
 
     //4. Do a backup on restore db.
     FactoryBackup backup(factory);
@@ -175,7 +174,6 @@ bool FactoryRetriever::restore(const String &databasePath)
                                                    std::placeholders::_2));
             SteadyClock before = SteadyClock::now();
             bool result = mechanic.work();
-            SteadyClock after = SteadyClock::now();
             if (!result) {
                 WCTInnerAssert(isErrorCritial());
                 setCriticalError(mechanic.getError());
@@ -186,7 +184,7 @@ bool FactoryRetriever::restore(const String &databasePath)
             score = mechanic.getScore();
             reportMechanic(mechanic.getScore(),
                            databasePath,
-                           after.timeIntervalSinceSteadyClock(before),
+                           SteadyClock::timeIntervalSinceSteadyClockToNow(before),
                            materialTime);
         }
     } else {
@@ -207,9 +205,9 @@ bool FactoryRetriever::restore(const String &databasePath)
                                               std::placeholders::_2));
     SteadyClock before = SteadyClock::now();
     if (fullCrawler.work()) {
-        SteadyClock after = SteadyClock::now();
-        reportFullCrawler(
-        fullCrawler.getScore(), databasePath, after.timeIntervalSinceSteadyClock(before));
+        reportFullCrawler(fullCrawler.getScore(),
+                          databasePath,
+                          SteadyClock::timeIntervalSinceSteadyClockToNow(before));
         score = std::max(score, fullCrawler.getScore());
     } else if (!useMaterial) {
         WCTInnerAssert(isErrorCritial());
