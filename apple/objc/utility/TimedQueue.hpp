@@ -51,7 +51,12 @@ public:
     // return true to erase the element
     typedef std::function<void(const Key &, const Info &)> ExpiredCallback;
 
-    void queue(const Key &key, double delay, const Info &info)
+    enum class Mode {
+        ForwardOnly,
+        ReQueue,
+    };
+
+    void queue(const Key &key, double delay, const Info &info, Mode mode = Mode::ForwardOnly)
     {
         if (isExiting()) {
             stop();
@@ -68,12 +73,11 @@ public:
             }
 
             auto iter = m_list.find(key);
-            if (iter == m_list.end() || expired < iter->order()) {
-                // insert if key doesn't exist or new key is arrived faster.
+            if (mode == Mode::ForwardOnly && iter != m_list.end() && iter->order() < expired) {
+                iter->value() = info;
+            } else {
                 m_list.insert(key, info, expired);
                 notify = m_list.front().key() == key;
-            } else {
-                iter->value() = info;
             }
         }
         if (notify) {
