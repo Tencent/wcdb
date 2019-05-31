@@ -107,7 +107,11 @@ protected:
     void loop() override final;
     void onTimed(const Operation& operation, const Parameter& parameter);
 
-    void async(const Operation& operation, double delay, const Parameter& parameter);
+    typedef TimedQueue<Operation, Parameter>::Mode AsyncMode;
+    void async(const Operation& operation,
+               double delay,
+               const Parameter& parameter,
+               AsyncMode mode = AsyncMode::ForwardOnly);
     TimedQueue<Operation, Parameter> m_timedQueue;
 
 #pragma mark - Record

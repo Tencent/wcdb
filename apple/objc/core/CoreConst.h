@@ -37,7 +37,7 @@ static constexpr const double OperationQueueRateForTooManyFileDescriptors = 0.7;
 #pragma mark - Operation Queue - Checkpoint
 static constexpr const int OperationQueueFramesThresholdForCriticalCheckpoint
 = 4 * 1024 * 1024 / 4096; // 4 MB / Default Page Size = 1024
-static constexpr const double OperationQueueTimeIntervalForCriticalCheckpoint = 2.0;
+static constexpr const double OperationQueueTimeIntervalForCriticalCheckpoint = 1.0;
 static constexpr const double OperationQueueTimeIntervalForNonCriticalCheckpoint = 10.0;
 #pragma mark - Operation Queue - Backup
 static constexpr const double OperationQueueTimeIntervalForBackup = 60.0;

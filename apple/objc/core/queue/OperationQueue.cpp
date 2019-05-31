@@ -189,9 +189,9 @@ void OperationQueue::onTimed(const Operation& operation, const Parameter& parame
     }
 }
 
-void OperationQueue::async(const Operation& operation, double delay, const Parameter& parameter)
+void OperationQueue::async(const Operation& operation, double delay, const Parameter& parameter, AsyncMode mode)
 {
-    m_timedQueue.queue(operation, delay, parameter);
+    m_timedQueue.queue(operation, delay, parameter, mode);
     lazyRun();
 }
 
@@ -361,7 +361,7 @@ void OperationQueue::asyncCheckpoint(const String& path, double delay, bool crit
     Operation operation(Operation::Type::Checkpoint, path);
     Parameter parameter;
     parameter.critical = critical;
-    async(operation, delay, parameter);
+    async(operation, delay, parameter, critical ? AsyncMode::ReQueue : AsyncMode::ForwardOnly);
 }
 
 void OperationQueue::doCheckpoint(const String& path, bool critical)
