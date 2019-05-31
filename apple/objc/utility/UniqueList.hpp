@@ -135,20 +135,19 @@ public:
 public:
     void insert(const Key& key, const Value& value, const Order& order)
     {
-        Iterator iter = this->begin();
         bool inserted = false;
         bool erased = false;
-        while (iter != this->end() && (!inserted || !erased)) {
+        for (auto iter = this->begin(); iter != this->end() && (!inserted || !erased);) {
             if (!erased && iter->key() == key) {
                 iter = this->SuperType::erase(iter);
                 erased = true;
-                continue;
+            } else {
+                if (!inserted && order < iter->order()) {
+                    iter = this->SuperType::insert(iter, Element(key, value, order));
+                    inserted = true;
+                }
+                ++iter;
             }
-            if (!inserted && order < iter->order()) {
-                iter = this->SuperType::insert(iter, Element(key, value, order));
-                inserted = true;
-            }
-            ++iter;
         }
         if (!inserted) {
             this->push_back(Element(key, value, order));
@@ -157,7 +156,7 @@ public:
 
     Iterator erase(const Key& key)
     {
-        Iterator iter = find(key);
+        auto iter = find(key);
         if (iter != this->end()) {
             iter = this->SuperType::erase(iter);
         }
