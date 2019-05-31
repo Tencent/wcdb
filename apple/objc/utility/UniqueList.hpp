@@ -20,6 +20,18 @@
 
 #pragma once
 
+/*
+ * Unique list is a data structure that
+ * 1. constrained by unique key.
+ * 2. sorted by ascending order.
+ *
+ * The performance is not good while
+ * 1. Both insert/find/erase are O(N)
+ * 2. Initialization is O(N^2)
+ *
+ * It's designed for tiny dataset less than 20 in usual thus... well.
+ */
+
 #include <list>
 
 namespace WCDB {
@@ -67,10 +79,17 @@ protected:
 public:
     UniqueList() {}
 
+    UniqueList(const std::initializer_list<Element>& elements)
+    {
+        for (const auto& element : elements) {
+            insert(element.key(), element.value(), element.order());
+        }
+    }
+
     UniqueList(const SelfType& elements)
     {
         for (const auto& element : elements) {
-            insert(element.order, element.key, element.value);
+            insert(element.key(), element.value(), element.order());
         }
     }
 
@@ -115,7 +134,12 @@ public:
 
     bool operator==(const SelfType& other) const
     {
-        return SuperType::operator==(other);
+        return std::equal(begin(), end(), other.begin(), other.end());
+    }
+
+    bool operator!=(const SelfType& other) const
+    {
+        return !std::equal(begin(), end(), other.begin(), other.end());
     }
 
     using SuperType::begin;
@@ -125,11 +149,16 @@ public:
     using SuperType::empty;
     using SuperType::back;
     using SuperType::front;
+    using SuperType::erase;
 
 private:
     static bool findKey(const Key& key, const Element& element)
     {
         return element.key() == key;
+    }
+    static bool compareKey(const Element& left, const Element& right)
+    {
+        return left.key() < right.key();
     }
 };
 

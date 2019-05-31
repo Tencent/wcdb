@@ -220,7 +220,7 @@ bool BusyRetryConfig::State::wait(Trying& trying)
         if (remainingTimeForRetring > 0) {
             Thread currentThread = Thread::current();
             // main thread first
-            m_waitings.insert(Thread::isMain() ? 0 : 1, currentThread, trying);
+            m_waitings.insert(currentThread, trying, Thread::isMain() ? 0 : 1);
 
             SteadyClock before = SteadyClock::now();
             m_conditional.wait_for(lockGuard, remainingTimeForRetring);
@@ -238,10 +238,10 @@ bool BusyRetryConfig::State::wait(Trying& trying)
 
 void BusyRetryConfig::State::tryNotify()
 {
-    const auto& elements = m_waitings.elements();
-    for (auto iter = elements.begin(); iter != elements.end(); ++iter) {
-        if (!shouldWait(iter->value)) {
-            m_conditional.notify(iter->key);
+#warning TODO
+    for (auto iter = m_waitings.begin(); iter != m_waitings.end(); ++iter) {
+        if (!shouldWait(iter->value())) {
+            m_conditional.notify(iter->key());
         }
     }
 }

@@ -211,7 +211,7 @@ void HandleNotification::unsetNotificationWhenCommitted(const String &name)
 
 void HandleNotification::setupCommittedNotification()
 {
-    if (!m_committedNotifications.elements().empty()) {
+    if (!m_committedNotifications.empty()) {
         sqlite3_wal_hook(getRawHandle(), HandleNotification::committed, this);
     } else {
         sqlite3_wal_hook(getRawHandle(), nullptr, nullptr);
@@ -227,7 +227,7 @@ void HandleNotification::postCommittedNotification(const String &path, int numbe
 {
     WCTInnerAssert(!m_committedNotifications.empty());
     for (const auto &element : m_committedNotifications) {
-        if (!element.value(path, numberOfFrames)) {
+        if (!element.value()(path, numberOfFrames)) {
             break;
         }
     }
