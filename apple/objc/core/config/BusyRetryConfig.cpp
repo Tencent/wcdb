@@ -238,10 +238,12 @@ bool BusyRetryConfig::State::wait(Trying& trying)
 
 void BusyRetryConfig::State::tryNotify()
 {
-#warning TODO
-    for (auto iter = m_waitings.begin(); iter != m_waitings.end(); ++iter) {
-        if (!shouldWait(iter->value())) {
+    for (auto iter = m_waitings.begin(); iter != m_waitings.end();) {
+        if (shouldWait(iter->value())) {
+            ++iter;
+        } else {
             m_conditional.notify(iter->key());
+            iter = m_waitings.erase(iter);
         }
     }
 }
