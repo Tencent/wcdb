@@ -129,11 +129,10 @@ public:
                     }
                     continue;
                 }
-                SteadyClock now = SteadyClock::now();
-                if (shortest->order() > now) {
+                double timeInterval = shortest->order().timeIntervalSinceNow();
+                if (timeInterval > 0) {
                     if (!isExiting()) {
-                        m_conditional.wait_for(
-                        lockGuard, shortest->order().timeIntervalSinceSteadyClock(now));
+                        m_conditional.wait_for(lockGuard, timeInterval);
                     }
                     continue;
                 }

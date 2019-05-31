@@ -88,7 +88,7 @@ bool FactoryRetriever::work()
         }
     }
 
-    reportSummary(SteadyClock::timeIntervalSinceSteadyClockToNow(before);
+    reportSummary(SteadyClock::timeIntervalSinceSteadyClockToNow(before));
 
     //4. Do a backup on restore db.
     FactoryBackup backup(factory);
