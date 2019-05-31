@@ -269,7 +269,7 @@
 		234F069A227AA54600DD65A2 /* TestCaseResult.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0687227AA54400DD65A2 /* TestCaseResult.mm */; };
 		234F069B227AA54600DD65A2 /* ReusableFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0688227AA54500DD65A2 /* ReusableFactory.mm */; };
 		234F069C227AA54600DD65A2 /* ReusableFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0688227AA54500DD65A2 /* ReusableFactory.mm */; };
-		234F069D227AA54600DD65A2 /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0689227AA54500DD65A2 /* Random.mm */; };
+		234F069D227AA54600DD65A2 /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0689227AA54500DD65A2 /* Random.mm */; settings = {COMPILER_FLAGS = "-fno-sanitize=signed-integer-overflow -fno-sanitize=unsigned-integer-overflow "; }; };
 		234F069E227AA54600DD65A2 /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0689227AA54500DD65A2 /* Random.mm */; };
 		234F069F227AA54600DD65A2 /* Dispatch.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F068D227AA54600DD65A2 /* Dispatch.mm */; };
 		234F06A0227AA54600DD65A2 /* Dispatch.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F068D227AA54600DD65A2 /* Dispatch.mm */; };
@@ -1529,7 +1529,7 @@
 		39349617228265C900E43964 /* JoinTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F05D4227AA4F500DD65A2 /* JoinTests.mm */; };
 		39349618228265C900E43964 /* StatementInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F05D5227AA4F500DD65A2 /* StatementInsertTests.mm */; };
 		39349619228265C900E43964 /* DepositTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0730227AA5C700DD65A2 /* DepositTests.mm */; };
-		3934961A228265C900E43964 /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0689227AA54500DD65A2 /* Random.mm */; };
+		3934961A228265C900E43964 /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0689227AA54500DD65A2 /* Random.mm */; settings = {COMPILER_FLAGS = "-fno-sanitize=signed-integer-overflow -fno-sanitize=unsigned-integer-overflow "; }; };
 		3934961B228265C900E43964 /* LiteralValueTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F05CB227AA4F300DD65A2 /* LiteralValueTests.mm */; };
 		3934961C228265C900E43964 /* StatementCreateTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F05B3227AA4F000DD65A2 /* StatementCreateTableTests.mm */; };
 		3934961D228265C900E43964 /* TestCaseResult.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0687227AA54400DD65A2 /* TestCaseResult.mm */; };
