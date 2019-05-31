@@ -52,9 +52,7 @@ void Handle::close()
         while (!m_cachedConfigs.empty()) {
             const auto last = m_cachedConfigs.back();
             last.value()->uninvoke(this); // ignore errors
-            WCTInnerAssert(m_cachedConfigs.find(last.key()) != m_cachedConfigs.end());
-            WCTInnerAssert(*(m_cachedConfigs.find(last.key())) == last);
-            m_cachedConfigs.erase(last.key());
+            m_cachedConfigs.pop_back();
         }
     }
     AbstractHandle::close();
@@ -79,9 +77,7 @@ bool Handle::configure()
         if (!last.value()->uninvoke(this)) {
             return false;
         }
-        WCTInnerAssert(m_cachedConfigs.find(last.key()) != m_cachedConfigs.end());
-        WCTInnerAssert(*(m_cachedConfigs.find(last.key())) == last);
-        m_cachedConfigs.erase(last.key());
+        m_cachedConfigs.pop_back();
     }
     WCTInnerAssert(m_cachedConfigs.empty());
     for (const auto &element : m_configs) {

@@ -122,16 +122,19 @@ public:
                 if (m_stop) {
                     break;
                 }
-                if (m_list.empty() && !isExiting()) {
-                    m_conditional.wait(lockGuard);
+                auto shortest = m_list.begin();
+                if (shortest == m_list.end()) {
+                    if (!isExiting()) {
+                        m_conditional.wait(lockGuard);
+                    }
                     continue;
                 }
                 SteadyClock now = SteadyClock::now();
-                const auto &shortest = m_list.begin();
-                WCTInnerAssert(shortest != m_list.end());
-                if (now < shortest->order() && !isExiting()) {
-                    m_conditional.wait_for(
-                    lockGuard, shortest->order().timeIntervalSinceSteadyClock(now));
+                if (shortest->order() > now) {
+                    if (!isExiting()) {
+                        m_conditional.wait_for(
+                        lockGuard, shortest->order().timeIntervalSinceSteadyClock(now));
+                    }
                     continue;
                 }
                 expireds.push_back(std::make_pair(shortest->key(), shortest->value()));

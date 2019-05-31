@@ -70,12 +70,14 @@ private:
 // Small order first
 template<typename Key, typename Value, typename Order = int>
 class UniqueList : private std::list<UniqueListElement<Key, Value, Order>> {
-protected:
+#pragma mark - Declaration
+private:
     typedef UniqueListElement<Key, Value, Order> Element;
-    typedef std::list<Element> SuperType;
     typedef UniqueList<Key, Value, Order> SelfType;
+    typedef std::list<Element> SuperType;
     typedef typename SuperType::iterator Iterator;
 
+#pragma mark - Initializer
 public:
     UniqueList() {}
 
@@ -93,6 +95,44 @@ public:
         }
     }
 
+#pragma mark - Element Access
+public:
+    using SuperType::back;
+    using SuperType::front;
+
+#pragma mark - Iterator
+public:
+    Iterator find(const Key& key)
+    {
+        return std::find_if(
+        this->begin(),
+        this->end(),
+        std::bind(&UniqueList<Key, Value, Order>::findKey, key, std::placeholders::_1));
+    }
+
+    using SuperType::begin;
+    using SuperType::end;
+    using SuperType::cbegin;
+    using SuperType::cend;
+    using SuperType::rbegin;
+    using SuperType::rend;
+    using SuperType::crbegin;
+    using SuperType::crend;
+
+private:
+    static bool findKey(const Key& key, const Element& element)
+    {
+        return element.key() == key;
+    }
+
+#pragma mark - Capacity
+public:
+    using SuperType::empty;
+    using SuperType::size;
+    using SuperType::max_size;
+
+#pragma mark - Modifiers
+public:
     void insert(const Key& key, const Value& value, const Order& order)
     {
         Iterator iter = this->begin();
@@ -124,14 +164,13 @@ public:
         return iter;
     }
 
-    Iterator find(const Key& key)
-    {
-        return std::find_if(
-        this->begin(),
-        this->end(),
-        std::bind(&UniqueList<Key, Value, Order>::findKey, key, std::placeholders::_1));
-    }
+    using SuperType::clear;
+    using SuperType::erase;
+    using SuperType::pop_back;
+    using SuperType::pop_front;
 
+#pragma mark - Comparator
+public:
     bool operator==(const SelfType& other) const
     {
         return std::equal(begin(), end(), other.begin(), other.end());
@@ -140,25 +179,6 @@ public:
     bool operator!=(const SelfType& other) const
     {
         return !std::equal(begin(), end(), other.begin(), other.end());
-    }
-
-    using SuperType::begin;
-    using SuperType::end;
-    using SuperType::clear;
-    using SuperType::size;
-    using SuperType::empty;
-    using SuperType::back;
-    using SuperType::front;
-    using SuperType::erase;
-
-private:
-    static bool findKey(const Key& key, const Element& element)
-    {
-        return element.key() == key;
-    }
-    static bool compareKey(const Element& left, const Element& right)
-    {
-        return left.key() < right.key();
     }
 };
 

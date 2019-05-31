@@ -386,7 +386,7 @@ void OperationQueue::asyncPurge(const Parameter& parameter)
     WCTInnerAssert(parameter.source != Parameter::Source::Other);
 
     SharedLockGuard lockGuard(m_lock);
-    if (SteadyClock::now().timeIntervalSinceSteadyClock(m_lastPurge)
+    if (SteadyClock::timeIntervalSinceSteadyClockToNow(m_lastPurge)
         > OperationQueueTimeIntervalForPurgingAgain) {
         Operation operation(Operation::Type::Purge);
         async(operation, 0, parameter);

@@ -225,7 +225,7 @@ bool BusyRetryConfig::State::wait(Trying& trying)
             SteadyClock before = SteadyClock::now();
             m_conditional.wait_for(lockGuard, remainingTimeForRetring);
 
-            double cost = SteadyClock::now().timeIntervalSinceSteadyClock(before);
+            double cost = SteadyClock::timeIntervalSinceSteadyClockToNow(before);
             trying.retried(cost);
 
             m_waitings.erase(currentThread);

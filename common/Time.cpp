@@ -37,8 +37,8 @@ Time::Time(Super &&super) : Super(std::move(super))
 
 Time::Time(const struct timespec &ts)
 : Super(std::chrono::system_clock::time_point{
-  std::chrono::duration_cast<std::chrono::system_clock::duration>(
-  std::chrono::seconds{ ts.tv_sec } + std::chrono::nanoseconds{ ts.tv_nsec }) })
+std::chrono::duration_cast<std::chrono::system_clock::duration>(
+std::chrono::seconds{ ts.tv_sec } + std::chrono::nanoseconds{ ts.tv_nsec }) })
 {
 }
 
@@ -101,6 +101,16 @@ SteadyClock SteadyClock::now()
 double SteadyClock::timeIntervalSinceSteadyClock(const SteadyClock &other) const
 {
     return (double) (*this - other).count() / 1E9;
+}
+
+double SteadyClock::timeIntervalSinceNow() const
+{
+    return timeIntervalSinceSteadyClock(SteadyClock::now());
+}
+
+double SteadyClock::timeIntervalSinceSteadyClockToNow(const SteadyClock &other)
+{
+    return SteadyClock::now().timeIntervalSinceSteadyClock(other);
 }
 
 SteadyClock SteadyClock::steadyClockByAddingTimeInterval(double seconds) const
