@@ -1,6 +1,6 @@
 [submodule "sqlcipher"]
 	path = sqlcipher
-	url = http://git.code.oa.com/wechat-team/wechat.git
+	url = http://git.code.oa.com/wcdb/sqlcipher.git
 [submodule "openssl"]
 	path = openssl
 	url = https://github.com/openssl/openssl.git
