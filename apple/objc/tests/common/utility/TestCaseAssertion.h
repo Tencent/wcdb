@@ -30,7 +30,7 @@
               [expect commonPrefixWithString:but \
                                      options:0]]
 
-#ifdef DEBUG
+#ifdef WCDB_DEBUG
 #define TestCaseFailure() abort()
 #else
 #define TestCaseFailure()

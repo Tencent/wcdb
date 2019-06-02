@@ -126,23 +126,4 @@ void Console::fatal(const String& message)
 
 #endif // WCDB_ASSERTION
 
-#if WCDB_TRACE
-
-void Console::trace(const String& message, const char* file, int line, const char* function)
-{
-    Error error(Error::Code::Notice, Error::Level::Notice, message);
-    error.infos.set(ErrorStringKeySource, ErrorSourceTrace);
-    error.infos.set("File", file);
-    error.infos.set("Line", line);
-    error.infos.set("Func", function);
-    constexpr const int size = 100;
-    char name[size];
-    memset(name, 0, size);
-    pthread_getname_np(pthread_self(), name, size);
-    error.infos.set("Thread", name);
-    print(error.getDescription());
-}
-
-#endif
-
 } // namespace WCDB

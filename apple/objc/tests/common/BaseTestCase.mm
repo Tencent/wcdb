@@ -54,11 +54,7 @@
 
     self.continueAfterFailure = YES;
 
-#ifdef DEBUG
-    WCTDatabase.debug = YES;
-#else
-    WCTDatabase.debug = NO;
-#endif
+    WCTDatabase.debug = WCDB_DEBUG;
 
     [WCTDatabase globalTraceError:nil];
     [WCTDatabase additionalGlobalTraceError:^(WCTError *error) {

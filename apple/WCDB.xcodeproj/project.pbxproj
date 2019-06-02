@@ -1590,10 +1590,6 @@
 		3957985D227FD2370069F985 /* Syntax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3957985C227FD2370069F985 /* Syntax.swift */; };
 		3957985F227FD4F20069F985 /* Expression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3957985E227FD4F20069F985 /* Expression.swift */; };
 		39579861227FD5770069F985 /* ForeignKeyClause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39579860227FD5770069F985 /* ForeignKeyClause.swift */; };
-		39649CE6228A587300827B1D /* Debug.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39649CE5228A587300827B1D /* Debug.hpp */; };
-		39649CE7228A587300827B1D /* Debug.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39649CE5228A587300827B1D /* Debug.hpp */; };
-		39649CE9228A5A3600827B1D /* Trace.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39649CE8228A5A3600827B1D /* Trace.hpp */; };
-		39649CEA228A5A3600827B1D /* Trace.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39649CE8228A5A3600827B1D /* Trace.hpp */; };
 		396C2C6E228439390005A33D /* IntegrityHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 396C2C6C228439390005A33D /* IntegrityHandle.cpp */; };
 		396C2C6F228439390005A33D /* IntegrityHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 396C2C6C228439390005A33D /* IntegrityHandle.cpp */; };
 		396C2C70228439390005A33D /* IntegrityHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 396C2C6D228439390005A33D /* IntegrityHandle.hpp */; };
@@ -2577,8 +2573,6 @@
 		3957985C227FD2370069F985 /* Syntax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Syntax.swift; sourceTree = "<group>"; };
 		3957985E227FD4F20069F985 /* Expression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expression.swift; sourceTree = "<group>"; };
 		39579860227FD5770069F985 /* ForeignKeyClause.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForeignKeyClause.swift; sourceTree = "<group>"; };
-		39649CE5228A587300827B1D /* Debug.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Debug.hpp; sourceTree = "<group>"; };
-		39649CE8228A5A3600827B1D /* Trace.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Trace.hpp; sourceTree = "<group>"; };
 		396C2C6C228439390005A33D /* IntegrityHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IntegrityHandle.cpp; sourceTree = "<group>"; };
 		396C2C6D228439390005A33D /* IntegrityHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IntegrityHandle.hpp; sourceTree = "<group>"; };
 		39D81661227EC1D9009EC067 /* ColumnDef.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnDef.swift; sourceTree = "<group>"; };
@@ -3664,8 +3658,6 @@
 				237A8D5721ED88DF003AF5BB /* SQLiteDeclaration.h */,
 				233A8530215E7CFE00BB8D4F /* Console.cpp */,
 				233A8531215E7CFE00BB8D4F /* Console.hpp */,
-				39649CE8228A5A3600827B1D /* Trace.hpp */,
-				39649CE5228A587300827B1D /* Debug.hpp */,
 			);
 			name = common;
 			path = ../../common;
@@ -4275,7 +4267,6 @@
 				2367BBD42215004300380122 /* Sequence.hpp in Headers */,
 				2367BBD52215004300380122 /* MappedData.hpp in Headers */,
 				2367BBD62215004300380122 /* SyntaxCommitSTMT.hpp in Headers */,
-				39649CEA228A5A3600827B1D /* Trace.hpp in Headers */,
 				2367BBD72215004300380122 /* Syntax.h in Headers */,
 				2367BBD82215004300380122 /* SyntaxAttachSTMT.hpp in Headers */,
 				2367BBD92215004300380122 /* CommonTableExpression.hpp in Headers */,
@@ -4371,7 +4362,6 @@
 				2367BC382215004300380122 /* WCTDatabase+Version.h in Headers */,
 				2304B42B22156CD700901953 /* TokenizerModule.hpp in Headers */,
 				2367BC392215004300380122 /* BackupHandle.hpp in Headers */,
-				39649CE7228A587300827B1D /* Debug.hpp in Headers */,
 				2367BC3A2215004300380122 /* CTETable.hpp in Headers */,
 				2367BC3B2215004300380122 /* AbstractHandle.hpp in Headers */,
 				2367BC3C2215004300380122 /* Factory.hpp in Headers */,
@@ -4602,7 +4592,6 @@
 				23AD52DF20DB56D200664B62 /* Sequence.hpp in Headers */,
 				2316D92F21057CA700707AFC /* MappedData.hpp in Headers */,
 				23EEDD32217DFADC006E9E73 /* SyntaxCommitSTMT.hpp in Headers */,
-				39649CE9228A5A3600827B1D /* Trace.hpp in Headers */,
 				23EEDD5D217DFADC006E9E73 /* Syntax.h in Headers */,
 				23EEDD2E217DFADC006E9E73 /* SyntaxAttachSTMT.hpp in Headers */,
 				23EEDC80217DFADC006E9E73 /* CommonTableExpression.hpp in Headers */,
@@ -4698,7 +4687,6 @@
 				23EEDD2A217DFADC006E9E73 /* SyntaxAlterTableSTMT.hpp in Headers */,
 				23EEDC8E217DFADC006E9E73 /* IndexedColumn.hpp in Headers */,
 				23176A9B21BA7D460051ACF9 /* WCTDatabase+Version.h in Headers */,
-				39649CE6228A587300827B1D /* Debug.hpp in Headers */,
 				2304B42A22156CD700901953 /* TokenizerModule.hpp in Headers */,
 				233B097E21BE50CA005AD534 /* BackupHandle.hpp in Headers */,
 				23EEDC82217DFADC006E9E73 /* CTETable.hpp in Headers */,
