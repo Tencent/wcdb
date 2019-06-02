@@ -97,7 +97,7 @@ void Console::breakpoint()
 {
 }
 
-#if WCDB_ASSERTION
+#if WCDB_DEBUG
 
 void Console::fatal(const String& message, const char* file, int line, const char* function)
 {
@@ -112,7 +112,7 @@ void Console::fatal(const String& message, const char* file, int line, const cha
     Notifier::shared().notify(error);
 }
 
-#else // WCDB_ASSERTION
+#else // WCDB_DEBUG
 
 void Console::fatal(const String& message)
 {
@@ -124,6 +124,6 @@ void Console::fatal(const String& message)
     Notifier::shared().notify(error);
 }
 
-#endif // WCDB_ASSERTION
+#endif // WCDB_DEBUG
 
 } // namespace WCDB
