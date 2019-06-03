@@ -31,18 +31,8 @@ build=`cat "$root"/BUILD`
 gitHash=`git rev-parse HEAD`
 echo $version.$build.$gitHash > "$conan"/WCDB_COMMIT_ID
 
-# check max subversion
-max_subversion=0
-while read ref
-do
-    subversion=`echo ${ref} | sed 's/WCDB-ios\/1\.0\.\([0-9]*\)\@conan\/stable\: conan\-mmclient/\1/g'`
-    if (( ${subversion} > ${max_subversion} )); then
-        ((max_subversion=${subversion}))
-    fi
-done < <(conan remote list_ref | grep WCDB-ios/1.0.)
-
 # 1.0.build for current WCDB version 1.1.0.build (skipping first major version number)
-version=1.0.$((${max_subversion} + 1))
+version=1.0.$build
 
 # publish to conan
 sh "$wechat"/publish_to_conan.sh -p ios -d conan -n "WCDB" -v "$version"
