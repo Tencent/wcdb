@@ -194,7 +194,7 @@ public:
     std::set<String> getPathsOfSourceDatabases() const;
 
 protected:
-    std::pair<bool, bool> doStepMigration(bool checkSuspended);
+    std::pair<bool, bool> doStepMigration();
     void didMigrate(const MigrationBaseInfo *info) override final;
     MigratedCallback m_migratedCallback;
     Migration m_migration; // thread-safe
@@ -211,14 +211,6 @@ public:
 #pragma mark - Error
 public:
     using HandlePool::getThreadedError;
-
-#pragma mark - Suspend
-protected:
-    void suspend(bool suspend);
-    bool suspended() const;
-
-private:
-    std::atomic<int> m_suspend;
 };
 
 } //namespace WCDB
