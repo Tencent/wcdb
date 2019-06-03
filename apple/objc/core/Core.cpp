@@ -64,6 +64,8 @@ Core::Core()
     Notifier::shared().setNotificationForPreprocessing(
     NotifierPreprocessorName,
     std::bind(&Core::preprocessError, this, std::placeholders::_1));
+
+    m_operationQueue->run();
 }
 
 Core::~Core()
@@ -151,13 +153,12 @@ bool Core::backupShouldBeOperated(const String& path)
     return succeed;
 }
 
-bool Core::checkpointShouldBeOperated(const String& path, bool critical)
+bool Core::checkpointShouldBeOperated(const String& path)
 {
     RecyclableDatabase database = m_databasePool.get(path);
     bool succeed = true; // mark as no error if database is not referenced.
     if (database != nullptr) {
-        succeed = database->checkpointIfAlreadyInitialized(
-        critical ? Database::CheckpointMode::Truncate : Database::CheckpointMode::Passive);
+        succeed = database->checkpointIfAlreadyInitialized(Database::CheckpointMode::Passive);
     }
     return succeed;
 }
@@ -258,7 +259,7 @@ void Core::enableAutoBackup(Database* database, bool enable)
 }
 
 #pragma mark - Migration
-void Core::enableAutoMigrate(Database* database, bool enable)
+void Core::enableAutoMigration(Database* database, bool enable)
 {
     WCTInnerAssert(database != nullptr);
     if (enable) {

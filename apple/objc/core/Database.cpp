@@ -43,7 +43,6 @@ Database::Database(const String &path)
 , m_initialized(false)
 , m_migratedCallback(nullptr)
 , m_migration(this)
-, m_suspend(0)
 {
 }
 
@@ -716,7 +715,7 @@ std::pair<bool, bool> Database::stepMigration()
     InitializedGuard initializedGuard = initialize();
     std::pair<bool, bool> result = { false, false };
     if (initializedGuard.valid()) {
-        result = doStepMigration(false);
+        result = doStepMigration();
     }
     return result;
 }
@@ -727,12 +726,12 @@ std::pair<bool, bool> Database::stepMigrationIfAlreadyInitialized()
     bool succeed = true;
     bool done = false;
     if (initializedGuard.valid()) {
-        std::tie(succeed, done) = doStepMigration(true);
+        std::tie(succeed, done) = doStepMigration();
     }
     return { succeed, done };
 }
 
-std::pair<bool, bool> Database::doStepMigration(bool checkSuspended)
+std::pair<bool, bool> Database::doStepMigration()
 {
     WCTRemedialAssert(!isInTransaction(),
                       "Migrating can't be run in transaction.",
@@ -744,16 +743,9 @@ std::pair<bool, bool> Database::doStepMigration(bool checkSuspended)
     WCTInnerAssert(m_initialized);
     bool succeed = false;
     bool done = false;
-    if (checkSuspended && suspended()) {
-        return { true, false };
-    }
 
     RecyclableHandle handle = flowOut(HandleType::Migrate);
     if (handle != nullptr) {
-        if (checkSuspended && suspended()) {
-            return { true, false };
-        }
-
         WCTInnerAssert(dynamic_cast<MigrateHandle *>(handle.get()) != nullptr);
         std::tie(succeed, done)
         = m_migration.step(*(static_cast<MigrateHandle *>(handle.get())));
@@ -802,54 +794,16 @@ std::set<String> Database::getPathsOfSourceDatabases() const
 #pragma mark - Checkpoint
 bool Database::checkpointIfAlreadyInitialized(CheckpointMode mode)
 {
-    if (suspended()) {
-        return true;
-    }
-
     InitializedGuard initializedGuard = isInitialized();
     bool succeed = false;
     if (initializedGuard.valid()) {
         RecyclableHandle handle = flowOut(HandleType::Checkpoint);
-        if (suspended()) {
-            return true;
-        }
         if (handle != nullptr) {
             WCTInnerAssert(dynamic_cast<CheckpointHandle *>(handle.get()) != nullptr);
             succeed = static_cast<CheckpointHandle *>(handle.get())->checkpoint(mode);
         }
     }
     return succeed;
-}
-
-#pragma mark - Suspend
-void Database::suspend(bool suspend)
-{
-    WCTInnerAssert(m_initialized);
-
-    if (suspend) {
-        ++m_suspend;
-    } else {
-        --m_suspend;
-        WCTInnerAssert(m_suspend >= 0);
-    }
-
-    SharedLockGuard concurrencyGuard(m_concurrency);
-    SharedLockGuard memoryGuard(m_memory);
-
-    for (const auto &handle : getHandles(HandleType::Checkpoint)) {
-        WCTInnerAssert(dynamic_cast<CheckpointHandle *>(handle.get()) != nullptr);
-        static_cast<CheckpointHandle *>(handle.get())->suspend(suspend);
-    }
-
-    for (const auto &handle : getHandles(HandleType::Migrate)) {
-        WCTInnerAssert(dynamic_cast<MigrateHandle *>(handle.get()) != nullptr);
-        static_cast<MigrateHandle *>(handle.get())->suspend(suspend);
-    }
-}
-
-bool Database::suspended() const
-{
-    return m_suspend > 0;
 }
 
 } //namespace WCDB

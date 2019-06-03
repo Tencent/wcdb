@@ -33,7 +33,7 @@ typedef void (^WCTMigratedNotificationBlock)(WCTDatabase* _Nonnull, WCTMigration
 
 - (BOOL)stepMigration;
 
-- (void)setAutoMigrate:(BOOL)flag;
+- (void)enableAutoMigration:(BOOL)flag;
 
 - (void)setNotificationWhenMigrated:(nullable WCDB_ESCAPE WCTMigratedNotificationBlock)onMigrated;
 

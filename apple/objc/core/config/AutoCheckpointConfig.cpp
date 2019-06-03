@@ -65,7 +65,10 @@ bool AutoCheckpointConfig::uninvoke(Handle* handle)
 
 bool AutoCheckpointConfig::onCommitted(const String& path, int frames)
 {
-    m_operator->asyncCheckpoint(path, frames);
+    WCDB_UNUSED(frames);
+    if (frames > 0) {
+        m_operator->asyncCheckpoint(path);
+    }
     return true;
 }
 
@@ -82,8 +85,10 @@ void AutoCheckpointConfig::log(int rc, const char* message)
         int frames = atoi(match[1].str().c_str());
         if (frames > 0) {
             // hint checkpoint
-            String path = match[2].str();
-            m_operator->asyncCheckpoint(path, frames);
+            if (frames > 0) {
+                String path = match[2].str();
+                m_operator->asyncCheckpoint(path);
+            }
         }
     }
     WCTInnerAssert(match.size() == 3); // assert match and match 3.

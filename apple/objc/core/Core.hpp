@@ -77,14 +77,14 @@ public:
 protected:
     std::pair<bool, bool> migrationShouldBeOperated(const String& path) override final;
     bool backupShouldBeOperated(const String& path) override final;
-    bool checkpointShouldBeOperated(const String& path, bool critical) override final;
+    bool checkpointShouldBeOperated(const String& path) override final;
     void integrityShouldBeChecked(const String& path) override final;
     void purgeShouldBeOperated() override final;
 
     std::shared_ptr<OperationQueue> m_operationQueue;
 
 #pragma mark - Checkpoint
-protected:
+public:
     void enableAutoCheckpoint(Database* database, bool enable);
 
 private:
@@ -99,7 +99,7 @@ protected:
 
 #pragma mark - Migration
 public:
-    void enableAutoMigrate(Database* database, bool enable);
+    void enableAutoMigration(Database* database, bool enable);
 
 protected:
     std::shared_ptr<Config> m_autoMigrateConfig;

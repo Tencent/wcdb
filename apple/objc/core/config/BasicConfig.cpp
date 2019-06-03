@@ -45,11 +45,19 @@ BasicConfig::BasicConfig()
 
 bool BasicConfig::getOrSetPragmaBegin(Handle* handle, const StatementPragma& get)
 {
-    return handle->prepare(get) && handle->step();
+    bool succeed = false;
+    if (handle->prepare(get)) {
+        succeed = handle->step();
+        if (!succeed) {
+            handle->finalize();
+        }
+    }
+    return succeed;
 }
 
 bool BasicConfig::getOrSetPragmaEnd(Handle* handle, const StatementPragma& set, bool conditionToSet)
 {
+    WCTInnerAssert(handle->isPrepared());
     handle->finalize();
     bool succeed = true;
     if (conditionToSet) {
@@ -67,6 +75,20 @@ bool BasicConfig::invoke(Handle* handle)
     handle->enableExtendedResultCodes(true);
     handle->disableCheckpointWhenClosing(true);
 
+    bool succeed = false;
+    for (int i = 0; i < BasicConfigBusyRetryMaxAllowedNumberOfTimes && !succeed; ++i) {
+        succeed
+        = getOrSetPragmaBegin(handle, m_getJournalMode)
+          && getOrSetPragmaEnd(
+          handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("WAL"));
+        if (!succeed && !handle->isErrorIgnorable()) {
+            break;
+        }
+    }
+    if (!succeed) {
+        return false;
+    }
+
     if (!getOrSetPragmaBegin(handle, m_getLockingMode)
         || !getOrSetPragmaEnd(
         handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("NORMAL"))) {
@@ -76,30 +98,6 @@ bool BasicConfig::invoke(Handle* handle)
     // 1 for Normal: https://sqlite.org/pragma.html#pragma_synchronous
     if (!getOrSetPragmaBegin(handle, m_getSynchronous)
         || !getOrSetPragmaEnd(handle, m_setSynchronousNormal, handle->getInteger32(0) != 1)) {
-        return false;
-    }
-
-    int numberOfRemainingAttempts = BasicConfigBusyRetryMaxAllowedNumberOfTimes;
-    bool succeed = false;
-    do {
-        --numberOfRemainingAttempts;
-        bool markBusyAsIgnored = numberOfRemainingAttempts > 0;
-        if (markBusyAsIgnored) {
-            handle->markErrorAsIgnorable(Error::Code::Busy);
-        }
-        succeed
-        = getOrSetPragmaBegin(handle, m_getJournalMode)
-          && getOrSetPragmaEnd(
-          handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("WAL"));
-        if (markBusyAsIgnored) {
-            handle->markErrorAsUnignorable();
-        }
-        if (!succeed && handle->getError().code() != Error::Code::Busy) {
-            // failed
-            numberOfRemainingAttempts = -1;
-        }
-    } while (!succeed && numberOfRemainingAttempts > 0);
-    if (!succeed) {
         return false;
     }
 

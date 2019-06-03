@@ -40,8 +40,6 @@ typedef NSData* _Nonnull (^WCTCorruptDataBlock)(int size);
 @property (nonatomic, readonly) int walFrameHeaderSize;
 @property (nonatomic, readonly) int walFrameSize;
 
-- (void)removeCheckpointConfig;
-
 - (WCTOptionalSize)getNumberOfPages;
 
 - (WCTOptionalSize)getNumberOfWalFrames;

@@ -28,49 +28,32 @@
 
 namespace WCDB {
 
-AsyncQueue::AsyncQueue(const String& name_)
-: name(name_), m_running(false), m_started(false)
+AsyncQueue::AsyncQueue(const String& name_) : name(name_)
 {
 }
 
 AsyncQueue::~AsyncQueue()
 {
-    std::unique_lock<std::mutex> lockGuard(m_lock);
-    while (m_running) {
-        // wait until done
-        m_conditional.wait_for(lockGuard, AsyncQueueTimeOutForExiting);
+    if (m_running.valid()
+        && m_running.wait_for(
+           std::chrono::nanoseconds((long long) (AsyncQueueTimeOutForExiting * 1E9)))
+           == std::future_status::timeout) {
+        Error error(Error::Code::Warning, Error::Level::Warning, "Queue does not exit on time.");
+        error.infos.set("Timeout", AsyncQueueTimeOutForExiting);
+        error.infos.set("Name", name);
+        Notifier::shared().notify(error);
     }
-    WCTRemedialAssert(
-    !m_running, String::formatted("Queue: %s does not exit on time.", name.c_str()), ;);
 }
 
 void AsyncQueue::run()
 {
-    std::lock_guard<std::mutex> lockGuard(m_lock);
-    if (!m_started && !isExiting()) {
-        m_started = true;
-        std::thread(std::bind(&AsyncQueue::doRun, this)).detach();
-    }
+    m_running = std::async(std::launch::async, &AsyncQueue::load, this);
 }
 
-void AsyncQueue::doRun()
+void AsyncQueue::load()
 {
     Thread::setName(name);
-    if (!isExiting()) {
-        m_running.store(true);
-        loop();
-        std::lock_guard<std::mutex> lockGuard(m_lock);
-        m_running.store(false);
-        m_conditional.notify_one();
-    }
-}
-
-void AsyncQueue::lazyRun()
-{
-    // lock free if it's already running
-    if (!m_running.load()) {
-        run();
-    }
+    main();
 }
 
 } // namespace WCDB

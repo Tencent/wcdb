@@ -335,12 +335,10 @@ void AbstractHandle::rollbackNestedTransaction()
     if (m_nestedLevel == 0) {
         rollbackTransaction();
     } else {
-        unimpeded(true);
         String savepointName = getSavepointName(m_nestedLevel);
         if (executeStatement(StatementRollback().rollbackToSavepoint(savepointName))) {
             --m_nestedLevel;
         }
-        unimpeded(false);
     }
 }
 
@@ -386,27 +384,13 @@ void AbstractHandle::rollbackTransaction()
     static const String *s_rollback
     = new String(StatementRollback().rollback().getDescription());
     if (isInTransaction()) {
-        unimpeded(true);
         if (executeSQL(*s_rollback)) {
             m_nestedLevel = 0;
         }
-        unimpeded(false);
     }
 }
 
 #pragma mark - Interface
-void AbstractHandle::suspend(bool suspend)
-{
-    WCTInnerAssert(isOpened());
-    sqlite3_suspend(m_handle, (int) suspend);
-}
-
-void AbstractHandle::unimpeded(bool unimpeded)
-{
-    WCTInnerAssert(isOpened());
-    sqlite3_unimpeded(m_handle, (int) unimpeded);
-}
-
 void AbstractHandle::setCipherKey(const UnsafeData &data)
 {
     WCTInnerAssert(isOpened());

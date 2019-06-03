@@ -28,11 +28,11 @@ typedef NS_OPTIONS(NSUInteger, WCTSimulateIOErrorOptions) {
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCTDatabase (Debug)
-
-@property (class, readwrite, nonatomic, assign) BOOL debug;
+@interface WCTDatabase (Test)
 
 + (void)simulateIOError:(WCTSimulateIOErrorOptions)options;
+
+- (void)enableAutoCheckpoint:(BOOL)flag;
 
 @end
 

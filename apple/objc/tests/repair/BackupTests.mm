@@ -133,18 +133,18 @@
 
 - (void)test_auto_backup_when_checkpointed
 {
-    [self.database removeCheckpointConfig];
-    self.database.autoBackup = YES;
+    [self.database enableAutoCheckpoint:NO];
+    [self.database enableAutoBackup:YES];
     TestCaseAssertTrue([self checkAutoBackedup]);
 }
 
 - (void)test_cancel_auto_backup
 {
-    self.database.autoBackup = YES;
+    [self.database enableAutoBackup:YES];
     TestCaseAssertTrue([self checkAutoBackedup]);
 
     TestCaseAssertTrue([self.fileManager removeItemAtPath:self.database.firstMaterialPath error:nil]);
-    self.database.autoBackup = NO;
+    [self.database enableAutoBackup:NO];
     TestCaseAssertFalse([self checkAutoBackedup]);
 }
 
@@ -158,8 +158,8 @@
 
 - (void)test_feature_closed_database_will_not_perform_auto_backup
 {
-    [self.database removeCheckpointConfig];
-    self.database.autoBackup = YES;
+    [self.database enableAutoCheckpoint:NO];
+    [self.database enableAutoBackup:YES];
 
     TestCaseAssertTrue([self.database passiveCheckpoint]);
 

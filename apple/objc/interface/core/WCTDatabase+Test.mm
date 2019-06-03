@@ -18,11 +18,12 @@
  * limitations under the License.
  */
 
+#import <WCDB/Core.hpp>
 #import <WCDB/CoreConst.h>
 #import <WCDB/Notifier.hpp>
 #import <WCDB/SQLite.h>
-#import <WCDB/WCTDatabase+Debug.h>
-#import <WCDB/WCTError+Private.h>
+#import <WCDB/WCTDatabase+Private.h>
+#import <WCDB/WCTDatabase+Test.h>
 
 static std::atomic<WCTSimulateIOErrorOptions> &simulateIOErrorOptions()
 {
@@ -56,26 +57,17 @@ static std::nullptr_t initialize()
 
 @implementation WCTDatabase (Debug)
 
-+ (BOOL)debug
-{
-    return WCDB::Console::debuggable();
-}
-
-+ (void)setDebug:(BOOL)debug
-{
-    if (debug) {
-        WCDB::Console::debug();
-    } else {
-        WCDB::Console::release();
-    }
-}
-
 + (void)simulateIOError:(WCTSimulateIOErrorOptions)options
 {
     static std::nullptr_t _ = initialize();
     WCDB_UNUSED(_)
 
     simulateIOErrorOptions().store(options);
+}
+
+- (void)enableAutoCheckpoint:(BOOL)flag
+{
+    WCDB::Core::shared().enableAutoCheckpoint(_database, flag);
 }
 
 @end

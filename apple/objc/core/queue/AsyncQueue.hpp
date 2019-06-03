@@ -22,6 +22,7 @@
 
 #include <WCDB/Lock.hpp>
 #include <WCDB/String.hpp>
+#include <future>
 
 namespace WCDB {
 
@@ -39,17 +40,11 @@ public:
     const String name;
 
 protected:
-    void lazyRun();
-    virtual void loop() = 0;
+    virtual void main() = 0;
 
 private:
-    std::mutex m_lock;
-    Conditional m_conditional;
-
-    bool m_started;
-    std::atomic<bool> m_running;
-
-    void doRun();
+    void load();
+    std::future<void> m_running;
 };
 
 } // namespace WCDB

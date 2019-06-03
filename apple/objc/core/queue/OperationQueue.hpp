@@ -41,7 +41,7 @@ public:
 protected:
     virtual std::pair<bool, bool> migrationShouldBeOperated(const String& path) = 0;
     virtual bool backupShouldBeOperated(const String& path) = 0;
-    virtual bool checkpointShouldBeOperated(const String& path, bool critical) = 0;
+    virtual bool checkpointShouldBeOperated(const String& path) = 0;
     virtual void integrityShouldBeChecked(const String& path) = 0;
     virtual void purgeShouldBeOperated() = 0;
 
@@ -57,6 +57,7 @@ public:
     ~OperationQueue();
 
 protected:
+    void main() override final;
     void handleError(const Error& error);
     void observatedThatFileOpened(int fd, const char* path, int flags, int mode);
 
@@ -96,7 +97,6 @@ protected:
             OutOfMaxAllowedFileDescriptors,
         } source;
 
-        bool critical;
         int frames;
         int numberOfFailures;
         uint32_t identifier;
@@ -104,7 +104,6 @@ protected:
     };
     typedef struct Parameter Parameter;
 
-    void loop() override final;
     void onTimed(const Operation& operation, const Parameter& parameter);
 
     typedef TimedQueue<Operation, Parameter>::Mode AsyncMode;
@@ -152,11 +151,10 @@ public:
     void registerAsRequiredCheckpoint(const String& path);
     void registerAsNoCheckpointRequired(const String& path);
 
-    void asyncCheckpoint(const String& path, int frames) override final;
+    void asyncCheckpoint(const String& path) override final;
 
 protected:
-    void asyncCheckpoint(const String& path, double delay, bool critical);
-    void doCheckpoint(const String& path, bool critical);
+    void doCheckpoint(const String& path);
 
 #pragma mark - Purge
 protected:

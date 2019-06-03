@@ -59,6 +59,12 @@ OperationQueue::~OperationQueue()
     unregisterNotificationWhenMemoryWarning(m_observerForMemoryWarning);
 }
 
+void OperationQueue::main()
+{
+    m_timedQueue.loop(std::bind(
+    &OperationQueue::onTimed, this, std::placeholders::_1, std::placeholders::_2));
+}
+
 void OperationQueue::handleError(const Error& error)
 {
     if (!error.isCorruption() || isExiting()) {
@@ -148,19 +154,8 @@ bool OperationQueue::Operation::operator==(const Operation& other) const
 }
 
 OperationQueue::Parameter::Parameter()
-: source(Source::Other)
-, frames(0)
-, numberOfFailures(0)
-, identifier(0)
-, numberOfFileDescriptors(0)
-, critical(false)
+: source(Source::Other), frames(0), numberOfFailures(0), identifier(0), numberOfFileDescriptors(0)
 {
-}
-
-void OperationQueue::loop()
-{
-    m_timedQueue.loop(std::bind(
-    &OperationQueue::onTimed, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 void OperationQueue::onTimed(const Operation& operation, const Parameter& parameter)
@@ -170,7 +165,7 @@ void OperationQueue::onTimed(const Operation& operation, const Parameter& parame
         doMigrate(operation.path, parameter.numberOfFailures);
         break;
     case Operation::Type::Checkpoint:
-        doCheckpoint(operation.path, parameter.critical);
+        doCheckpoint(operation.path);
         break;
     case Operation::Type::Purge:
         WCTInnerAssert(operation.path.empty());
@@ -192,7 +187,6 @@ void OperationQueue::onTimed(const Operation& operation, const Parameter& parame
 void OperationQueue::async(const Operation& operation, double delay, const Parameter& parameter, AsyncMode mode)
 {
     m_timedQueue.queue(operation, delay, parameter, mode);
-    lazyRun();
 }
 
 #pragma mark - Record
@@ -264,7 +258,9 @@ void OperationQueue::doMigrate(const String& path, int numberOfFailures)
             asyncMigrate(
             path, OperationQueueTimeIntervalForRetringAfterFailure, numberOfFailures + 1);
         } else {
-            Error error(Error::Code::Notice, Error::Level::Notice, "Auto migration stopped due to the error.");
+            Error error(Error::Code::Notice,
+                        Error::Level::Notice,
+                        "Auto migration is stopped due to too many errors.");
             error.infos.set(ErrorStringKeyPath, path);
             Notifier::shared().notify(error);
         }
@@ -314,9 +310,7 @@ void OperationQueue::doBackup(const String& path)
 {
     WCTInnerAssert(!path.empty());
 
-    if (!m_event->backupShouldBeOperated(path)) {
-        asyncBackup(path, OperationQueueTimeIntervalForRetringAfterFailure);
-    }
+    m_event->backupShouldBeOperated(path);
 }
 
 #pragma mark - Checkpoint
@@ -334,44 +328,29 @@ void OperationQueue::registerAsNoCheckpointRequired(const String& path)
 
     LockGuard lockGuard(m_lock);
     m_records[path].registeredForCheckpoint = false;
-    ;
+
     Operation operation(Operation::Type::Checkpoint, path);
     m_timedQueue.remove(operation);
 }
 
-void OperationQueue::asyncCheckpoint(const String& path, int frames)
+void OperationQueue::asyncCheckpoint(const String& path)
 {
     WCTInnerAssert(!path.empty());
 
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_records.find(path);
     if (iter != m_records.end() && iter->second.registeredForCheckpoint) {
-        if (frames >= OperationQueueFramesThresholdForCriticalCheckpoint) {
-            asyncCheckpoint(path, OperationQueueTimeIntervalForCriticalCheckpoint, true);
-        } else {
-            asyncCheckpoint(path, OperationQueueTimeIntervalForNonCriticalCheckpoint, false);
-        }
+        Operation operation(Operation::Type::Checkpoint, path);
+        Parameter parameter;
+        async(operation, OperationQueueTimeIntervalForCheckpoint, parameter, AsyncMode::ForwardOnly);
     }
 }
 
-void OperationQueue::asyncCheckpoint(const String& path, double delay, bool critical)
+void OperationQueue::doCheckpoint(const String& path)
 {
     WCTInnerAssert(!path.empty());
 
-    Operation operation(Operation::Type::Checkpoint, path);
-    Parameter parameter;
-    parameter.critical = critical;
-    async(operation, delay, parameter, critical ? AsyncMode::ReQueue : AsyncMode::ForwardOnly);
-}
-
-void OperationQueue::doCheckpoint(const String& path, bool critical)
-{
-    WCTInnerAssert(!path.empty());
-
-    if (!m_event->checkpointShouldBeOperated(path, critical)) {
-        // delay retry if failed
-        asyncCheckpoint(path, OperationQueueTimeIntervalForRetringAfterFailure, critical);
-    }
+    m_event->checkpointShouldBeOperated(path);
 }
 
 #pragma mark - Purge

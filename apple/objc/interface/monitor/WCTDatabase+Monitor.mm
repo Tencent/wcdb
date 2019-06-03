@@ -37,6 +37,20 @@ void Console::print(const String &message)
 
 @implementation WCTDatabase (Monitor)
 
++ (BOOL)debug
+{
+    return WCDB::Console::debuggable();
+}
+
++ (void)setDebug:(BOOL)debug
+{
+    if (debug) {
+        WCDB::Console::debug();
+    } else {
+        WCDB::Console::release();
+    }
+}
+
 + (void)globalTraceError:(WCTErrorTraceBlock)block
 {
     [self globalTraceError:block withIdentifier:WCDB::NotifierLoggerName];

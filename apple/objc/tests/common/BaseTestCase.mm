@@ -26,7 +26,7 @@
 #import "TestCaseLog.h"
 #import "WCTDatabase+TestCase.h"
 #import <WCDB/WCDB.h>
-#import <WCDB/WCTDatabase+Debug.h>
+#import <WCDB/WCTDatabase+Test.h>
 
 @implementation BaseTestCase {
     Random *_random;

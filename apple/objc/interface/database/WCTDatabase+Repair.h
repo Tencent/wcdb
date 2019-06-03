@@ -34,7 +34,7 @@ typedef void (^WCTCorruptedNotificationBlock)(WCTDatabase *);
 
 - (BOOL)isAlreadyCorrupted;
 
-- (void)setAutoBackup:(BOOL)flag;
+- (void)enableAutoBackup:(BOOL)flag;
 
 - (BOOL)backup;
 
