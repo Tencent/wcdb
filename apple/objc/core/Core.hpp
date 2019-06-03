@@ -99,7 +99,7 @@ protected:
 
 #pragma mark - Migration
 public:
-    void enableAutoMigrate(Database* database, bool enable);
+    void enableAutoMigration(Database* database, bool enable);
 
 protected:
     std::shared_ptr<Config> m_autoMigrateConfig;

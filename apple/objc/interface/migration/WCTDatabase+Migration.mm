@@ -48,9 +48,9 @@
     return succeed;
 }
 
-- (void)setAutoMigrate:(BOOL)flag
+- (void)enableAutoMigration:(BOOL)flag
 {
-    WCDB::Core::shared().enableAutoMigrate(_database, flag);
+    WCDB::Core::shared().enableAutoMigration(_database, flag);
 }
 
 - (void)setNotificationWhenMigrated:(WCTMigratedNotificationBlock)onMigrated

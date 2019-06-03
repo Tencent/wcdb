@@ -63,7 +63,7 @@
     return _database->deposit();
 }
 
-- (void)setAutoBackup:(BOOL)flag
+- (void)enableAutoBackup:(BOOL)flag
 {
     WCDB::Core::shared().enableAutoBackup(_database, flag);
 }

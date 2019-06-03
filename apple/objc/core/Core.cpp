@@ -258,7 +258,7 @@ void Core::enableAutoBackup(Database* database, bool enable)
 }
 
 #pragma mark - Migration
-void Core::enableAutoMigrate(Database* database, bool enable)
+void Core::enableAutoMigration(Database* database, bool enable)
 {
     WCTInnerAssert(database != nullptr);
     if (enable) {

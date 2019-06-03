@@ -111,7 +111,7 @@
             [tableMigrated makeYES];
         }
     }];
-    self.database.autoMigrate = YES;
+    [self.database enableAutoMigration:YES];
 
     TestCaseAssertTrue([self.database canOpen]);
 
@@ -129,7 +129,7 @@
 
 - (void)doTestFeatureClosedDatabaseWillNotPerformAutoMigrate
 {
-    self.database.autoMigrate = YES;
+    [self.database enableAutoMigration:YES];
 
     TestCaseAssertTrue([self.database canOpen]);
 
@@ -157,7 +157,7 @@
         }
     }];
 
-    self.database.autoMigrate = YES;
+    [self.database enableAutoMigration:YES];
     TestCaseAssertTrue([self.database canOpen]);
     [WCTDatabase simulateIOError:WCTSimulateWriteIOError];
 
