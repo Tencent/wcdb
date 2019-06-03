@@ -57,6 +57,7 @@ bool BasicConfig::getOrSetPragmaBegin(Handle* handle, const StatementPragma& get
 
 bool BasicConfig::getOrSetPragmaEnd(Handle* handle, const StatementPragma& set, bool conditionToSet)
 {
+    WCTInnerAssert(handle->isPrepared());
     handle->finalize();
     bool succeed = true;
     if (conditionToSet) {
