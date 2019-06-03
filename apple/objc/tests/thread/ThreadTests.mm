@@ -268,7 +268,7 @@
 
 - (void)test_feature_max_concurrency
 {
-    [self.database removeCheckpointConfig];
+    [self.database enableAutoCheckpoint:NO];
 
     NSCondition* condition = [[NSCondition alloc] init];
     TestCaseCounter* counter = [TestCaseCounter value:0];

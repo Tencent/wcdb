@@ -34,6 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)simulateIOError:(WCTSimulateIOErrorOptions)options;
 
+- (void)enableAutoCheckpoint:(BOOL)flag;
+
 @end
 
 NS_ASSUME_NONNULL_END

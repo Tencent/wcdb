@@ -84,7 +84,7 @@ protected:
     std::shared_ptr<OperationQueue> m_operationQueue;
 
 #pragma mark - Checkpoint
-protected:
+public:
     void enableAutoCheckpoint(Database* database, bool enable);
 
 private:

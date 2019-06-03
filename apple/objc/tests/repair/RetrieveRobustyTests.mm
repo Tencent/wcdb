@@ -40,7 +40,7 @@
 
     TestCaseAssertTrue(self.step >= self.shuffle);
 
-    [self.database removeCheckpointConfig];
+    [self.database enableAutoCheckpoint:NO];
 }
 
 - (double)expectedAttackRadio

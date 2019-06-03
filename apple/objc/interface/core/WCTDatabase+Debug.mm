@@ -18,11 +18,12 @@
  * limitations under the License.
  */
 
+#import <WCDB/Core.hpp>
 #import <WCDB/CoreConst.h>
 #import <WCDB/Notifier.hpp>
 #import <WCDB/SQLite.h>
 #import <WCDB/WCTDatabase+Debug.h>
-#import <WCDB/WCTError+Private.h>
+#import <WCDB/WCTDatabase+Private.h>
 
 static std::atomic<WCTSimulateIOErrorOptions> &simulateIOErrorOptions()
 {
@@ -76,6 +77,11 @@ static std::nullptr_t initialize()
     WCDB_UNUSED(_)
 
     simulateIOErrorOptions().store(options);
+}
+
+- (void)enableAutoCheckpoint:(BOOL)flag
+{
+    WCDB::Core::shared().enableAutoCheckpoint(_database, flag);
 }
 
 @end

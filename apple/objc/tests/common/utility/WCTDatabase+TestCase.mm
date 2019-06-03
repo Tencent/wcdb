@@ -91,11 +91,6 @@
     return self.walFrameHeaderSize + self.pageSize;
 }
 
-- (void)removeCheckpointConfig
-{
-    [self removeConfigForName:@(WCDB::AutoCheckpointConfigName)];
-}
-
 - (WCTOptionalSize)getNumberOfPages
 {
     WCTOptionalSize result = nullptr;

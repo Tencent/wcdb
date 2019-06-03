@@ -133,7 +133,7 @@
 
 - (void)test_auto_backup_when_checkpointed
 {
-    [self.database removeCheckpointConfig];
+    [self.database enableAutoCheckpoint:NO];
     [self.database enableAutoBackup:YES];
     TestCaseAssertTrue([self checkAutoBackedup]);
 }
@@ -158,7 +158,7 @@
 
 - (void)test_feature_closed_database_will_not_perform_auto_backup
 {
-    [self.database removeCheckpointConfig];
+    [self.database enableAutoCheckpoint:NO];
     [self.database enableAutoBackup:YES];
 
     TestCaseAssertTrue([self.database passiveCheckpoint]);
