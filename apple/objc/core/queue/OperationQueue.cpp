@@ -314,9 +314,7 @@ void OperationQueue::doBackup(const String& path)
 {
     WCTInnerAssert(!path.empty());
 
-    if (!m_event->backupShouldBeOperated(path)) {
-        asyncBackup(path, OperationQueueTimeIntervalForRetringAfterFailure);
-    }
+    m_event->backupShouldBeOperated(path);
 }
 
 #pragma mark - Checkpoint
@@ -368,10 +366,7 @@ void OperationQueue::doCheckpoint(const String& path, bool critical)
 {
     WCTInnerAssert(!path.empty());
 
-    if (!m_event->checkpointShouldBeOperated(path, critical)) {
-        // delay retry if failed
-        asyncCheckpoint(path, OperationQueueTimeIntervalForRetringAfterFailure, critical);
-    }
+    m_event->checkpointShouldBeOperated(path, critical);
 }
 
 #pragma mark - Purge
