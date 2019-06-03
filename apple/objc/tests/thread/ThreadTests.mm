@@ -133,32 +133,10 @@
 
     TestCaseAssertOptionalFalse([self.database isAlreadyCheckpointed]);
 
-    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForNonCriticalCheckpoint + self.delayForTolerance];
+    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForCheckpoint + self.delayForTolerance];
 
     TestCaseAssertOptionalFalse([self.database isAlreadyTruncateCheckpointed]);
     TestCaseAssertOptionalTrue([self.database isAlreadyCheckpointed]);
-}
-
-- (void)test_feature_subthread_checkpoint_when_meet_truncate_threshold
-{
-    TestCaseAssertTrue([self createTable]);
-
-    TestCaseObject* object = [self.random autoIncrementTestCaseObject];
-
-    while (YES) {
-        auto optionalNumberOfWalFrames = [self.database getNumberOfWalFrames];
-        TestCaseAssertFalse(optionalNumberOfWalFrames.failed());
-        if (optionalNumberOfWalFrames.value() >= WCDB::OperationQueueFramesThresholdForCriticalCheckpoint) {
-            break;
-        }
-        TestCaseAssertTrue([self.table insertObject:object]);
-    }
-
-    TestCaseAssertOptionalFalse(self.database.isAlreadyTruncateCheckpointed);
-
-    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForCriticalCheckpoint + self.delayForTolerance];
-
-    TestCaseAssertOptionalTrue(self.database.isAlreadyTruncateCheckpointed);
 }
 
 - (void)test_feature_closed_database_will_not_perform_subthread_checkpoint
@@ -170,7 +148,7 @@
 
     [self.database close];
 
-    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForNonCriticalCheckpoint + self.delayForTolerance];
+    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForCheckpoint + self.delayForTolerance];
 
     TestCaseAssertOptionalFalse([self.database isAlreadyCheckpointed]);
 }
@@ -299,7 +277,7 @@
 
     TestCaseAssertOptionalFalse(self.database.isAlreadyCheckpointed);
 
-    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForNonCriticalCheckpoint + self.delayForTolerance];
+    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForCheckpoint + self.delayForTolerance];
 
     TestCaseAssertOptionalTrue(self.database.isAlreadyCheckpointed);
 }
