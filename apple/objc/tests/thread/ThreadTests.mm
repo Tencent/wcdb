@@ -161,35 +161,6 @@
     TestCaseAssertOptionalTrue(self.database.isAlreadyTruncateCheckpointed);
 }
 
-- (void)test_feature_retry_subthread_checkpoint_when_failed
-{
-    // trigger subthread checkpoint
-    TestCaseAssertTrue([self createTable]);
-
-    TestCaseAssertOptionalFalse([self.database isAlreadyCheckpointed]);
-
-    TestCaseResult* tested = [TestCaseResult no];
-    [WCTDatabase globalTraceError:^(WCTError* error) {
-        if (error.code == WCTErrorCodeIOError
-            && [[error.userInfo objectForKey:@(WCDB::ErrorStringKeyAction)] isEqualToString:@(WCDB::ErrorActionCheckpoint)]) {
-            [tested makeYES];
-        }
-    }];
-
-    [self.database blockade];
-    [WCTDatabase simulateIOError:WCTSimulateWriteIOError];
-    [self.database unblockade];
-
-    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForNonCriticalCheckpoint + self.delayForTolerance];
-
-    TestCaseAssertOptionalFalse([self.database isAlreadyCheckpointed]);
-    TestCaseAssertResultYES(tested);
-
-    [self.database blockade];
-    [WCTDatabase simulateIOError:WCTSimulateNoneIOError];
-    [self.database unblockade];
-}
-
 - (void)test_feature_closed_database_will_not_perform_subthread_checkpoint
 {
     // trigger subthread checkpoint
