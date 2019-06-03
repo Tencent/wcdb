@@ -22,7 +22,7 @@
 #import "Random.h"
 #import "Signpost.h"
 #import "TestCaseLog.h"
-#import <WCDB/WCTDatabase+Debug.h>
+#import <WCDB/WCTDatabase+Test.h>
 
 @implementation Benchmark {
     Signpost *_signpost;

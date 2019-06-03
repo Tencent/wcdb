@@ -39,6 +39,8 @@ typedef void (^WCTSQLTraceBlock)(NSString * /* sql */);
 
 @interface WCTDatabase (Monitor)
 
+@property (class, readwrite, nonatomic, assign) BOOL debug;
+
 /**
  @brief You can register a reporter to monitor all errors.
  

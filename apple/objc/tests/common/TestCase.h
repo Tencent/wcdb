@@ -49,4 +49,4 @@
 
 #import "NSObject+TestCase.h"
 
-#import <WCDB/WCTDatabase+Debug.h>
+#import <WCDB/WCTDatabase+Test.h>

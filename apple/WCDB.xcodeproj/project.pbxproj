@@ -1583,10 +1583,10 @@
 		39411A4222437E7B00A388F5 /* CaseInsensiveList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		39579854227FBC6E0069F985 /* WCTDatabase+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0682227AA54400DD65A2 /* WCTDatabase+TestCase.mm */; };
 		39579855227FBC6F0069F985 /* WCTDatabase+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0682227AA54400DD65A2 /* WCTDatabase+TestCase.mm */; };
-		39579858227FBC8A0069F985 /* WCTDatabase+Debug.h in Headers */ = {isa = PBXBuildFile; fileRef = 39579856227FBC8A0069F985 /* WCTDatabase+Debug.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		39579859227FBC8A0069F985 /* WCTDatabase+Debug.h in Headers */ = {isa = PBXBuildFile; fileRef = 39579856227FBC8A0069F985 /* WCTDatabase+Debug.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3957985A227FBC8A0069F985 /* WCTDatabase+Debug.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39579857227FBC8A0069F985 /* WCTDatabase+Debug.mm */; };
-		3957985B227FBC8A0069F985 /* WCTDatabase+Debug.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39579857227FBC8A0069F985 /* WCTDatabase+Debug.mm */; };
+		39579858227FBC8A0069F985 /* WCTDatabase+Test.h in Headers */ = {isa = PBXBuildFile; fileRef = 39579856227FBC8A0069F985 /* WCTDatabase+Test.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		39579859227FBC8A0069F985 /* WCTDatabase+Test.h in Headers */ = {isa = PBXBuildFile; fileRef = 39579856227FBC8A0069F985 /* WCTDatabase+Test.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3957985A227FBC8A0069F985 /* WCTDatabase+Test.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39579857227FBC8A0069F985 /* WCTDatabase+Test.mm */; };
+		3957985B227FBC8A0069F985 /* WCTDatabase+Test.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39579857227FBC8A0069F985 /* WCTDatabase+Test.mm */; };
 		3957985D227FD2370069F985 /* Syntax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3957985C227FD2370069F985 /* Syntax.swift */; };
 		3957985F227FD4F20069F985 /* Expression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3957985E227FD4F20069F985 /* Expression.swift */; };
 		39579861227FD5770069F985 /* ForeignKeyClause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39579860227FD5770069F985 /* ForeignKeyClause.swift */; };
@@ -2568,8 +2568,8 @@
 		3934DB25229B951C008A6AEC /* AutoCheckpointConfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AutoCheckpointConfig.hpp; sourceTree = "<group>"; };
 		39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CaseInsensiveList.hpp; sourceTree = "<group>"; };
 		3949CC2622977428007F4C94 /* Version.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Version.xcconfig; sourceTree = "<group>"; };
-		39579856227FBC8A0069F985 /* WCTDatabase+Debug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Debug.h"; sourceTree = "<group>"; };
-		39579857227FBC8A0069F985 /* WCTDatabase+Debug.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Debug.mm"; sourceTree = "<group>"; };
+		39579856227FBC8A0069F985 /* WCTDatabase+Test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Test.h"; sourceTree = "<group>"; };
+		39579857227FBC8A0069F985 /* WCTDatabase+Test.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Test.mm"; sourceTree = "<group>"; };
 		3957985C227FD2370069F985 /* Syntax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Syntax.swift; sourceTree = "<group>"; };
 		3957985E227FD4F20069F985 /* Expression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expression.swift; sourceTree = "<group>"; };
 		39579860227FD5770069F985 /* ForeignKeyClause.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForeignKeyClause.swift; sourceTree = "<group>"; };
@@ -2840,8 +2840,8 @@
 				23F70F7A209FF0EC00CCE3CD /* WCTValue.mm */,
 				23176A9921BA7D460051ACF9 /* WCTDatabase+Version.h */,
 				23176A9A21BA7D460051ACF9 /* WCTDatabase+Version.mm */,
-				39579856227FBC8A0069F985 /* WCTDatabase+Debug.h */,
-				39579857227FBC8A0069F985 /* WCTDatabase+Debug.mm */,
+				39579856227FBC8A0069F985 /* WCTDatabase+Test.h */,
+				39579857227FBC8A0069F985 /* WCTDatabase+Test.mm */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -4272,7 +4272,7 @@
 				2367BBD92215004300380122 /* CommonTableExpression.hpp in Headers */,
 				2367BBDA2215004300380122 /* Console.hpp in Headers */,
 				2367BBDB2215004300380122 /* NSObject+WCTColumnCoding.h in Headers */,
-				39579859227FBC8A0069F985 /* WCTDatabase+Debug.h in Headers */,
+				39579859227FBC8A0069F985 /* WCTDatabase+Test.h in Headers */,
 				391F7C85225DE8FD0095E82D /* Core.h in Headers */,
 				2367BBDC2215004300380122 /* HandleNotification.hpp in Headers */,
 				2367BBDD2215004300380122 /* SyntaxCreateTableSTMT.hpp in Headers */,
@@ -4597,7 +4597,7 @@
 				23EEDC80217DFADC006E9E73 /* CommonTableExpression.hpp in Headers */,
 				233A8534215E7CFE00BB8D4F /* Console.hpp in Headers */,
 				2370B11F21914ED500D3227C /* NSObject+WCTColumnCoding.h in Headers */,
-				39579858227FBC8A0069F985 /* WCTDatabase+Debug.h in Headers */,
+				39579858227FBC8A0069F985 /* WCTDatabase+Test.h in Headers */,
 				391F7C84225DE8FD0095E82D /* Core.h in Headers */,
 				2360A5FB20D78F1B00E4A311 /* HandleNotification.hpp in Headers */,
 				23EEDD36217DFADC006E9E73 /* SyntaxCreateTableSTMT.hpp in Headers */,
@@ -5614,7 +5614,7 @@
 				2367BB2A2215004300380122 /* SyntaxCreateTriggerSTMT.cpp in Sources */,
 				2367BB2B2215004300380122 /* Column.cpp in Sources */,
 				2367BB2D2215004300380122 /* StatementSelect.cpp in Sources */,
-				3957985B227FBC8A0069F985 /* WCTDatabase+Debug.mm in Sources */,
+				3957985B227FBC8A0069F985 /* WCTDatabase+Test.mm in Sources */,
 				2367BB2E2215004300380122 /* WCTMaster.mm in Sources */,
 				2367BB2F2215004300380122 /* SyntaxReindexSTMT.cpp in Sources */,
 				2367BB302215004300380122 /* SyntaxCreateViewSTMT.cpp in Sources */,
@@ -5890,7 +5890,7 @@
 				23A64D0F214A4A7000ED28BB /* Migration.cpp in Sources */,
 				23EEDD37217DFADC006E9E73 /* SyntaxCreateTriggerSTMT.cpp in Sources */,
 				23EEDC79217DFADC006E9E73 /* Column.cpp in Sources */,
-				3957985A227FBC8A0069F985 /* WCTDatabase+Debug.mm in Sources */,
+				3957985A227FBC8A0069F985 /* WCTDatabase+Test.mm in Sources */,
 				23EEDCE1217DFADC006E9E73 /* StatementSelect.cpp in Sources */,
 				2370B12621914ED500D3227C /* WCTMaster.mm in Sources */,
 				23EEDD4D217DFADC006E9E73 /* SyntaxReindexSTMT.cpp in Sources */,
