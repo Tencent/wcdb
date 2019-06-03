@@ -57,6 +57,7 @@ public:
     ~OperationQueue();
 
 protected:
+    void main() override final;
     void handleError(const Error& error);
     void observatedThatFileOpened(int fd, const char* path, int flags, int mode);
 
@@ -104,7 +105,6 @@ protected:
     };
     typedef struct Parameter Parameter;
 
-    void loop() override final;
     void onTimed(const Operation& operation, const Parameter& parameter);
 
     typedef TimedQueue<Operation, Parameter>::Mode AsyncMode;

@@ -59,6 +59,12 @@ OperationQueue::~OperationQueue()
     unregisterNotificationWhenMemoryWarning(m_observerForMemoryWarning);
 }
 
+void OperationQueue::main()
+{
+    m_timedQueue.loop(std::bind(
+    &OperationQueue::onTimed, this, std::placeholders::_1, std::placeholders::_2));
+}
+
 void OperationQueue::handleError(const Error& error)
 {
     if (!error.isCorruption() || isExiting()) {
@@ -157,12 +163,6 @@ OperationQueue::Parameter::Parameter()
 {
 }
 
-void OperationQueue::loop()
-{
-    m_timedQueue.loop(std::bind(
-    &OperationQueue::onTimed, this, std::placeholders::_1, std::placeholders::_2));
-}
-
 void OperationQueue::onTimed(const Operation& operation, const Parameter& parameter)
 {
     switch (operation.type) {
@@ -192,7 +192,6 @@ void OperationQueue::onTimed(const Operation& operation, const Parameter& parame
 void OperationQueue::async(const Operation& operation, double delay, const Parameter& parameter, AsyncMode mode)
 {
     m_timedQueue.queue(operation, delay, parameter, mode);
-    lazyRun();
 }
 
 #pragma mark - Record
@@ -264,7 +263,9 @@ void OperationQueue::doMigrate(const String& path, int numberOfFailures)
             asyncMigrate(
             path, OperationQueueTimeIntervalForRetringAfterFailure, numberOfFailures + 1);
         } else {
-            Error error(Error::Code::Notice, Error::Level::Notice, "Auto migration stopped due to the error.");
+            Error error(Error::Code::Notice,
+                        Error::Level::Notice,
+                        "Auto migration is stopped due to too many errors.");
             error.infos.set(ErrorStringKeyPath, path);
             Notifier::shared().notify(error);
         }

@@ -64,6 +64,8 @@ Core::Core()
     Notifier::shared().setNotificationForPreprocessing(
     NotifierPreprocessorName,
     std::bind(&Core::preprocessError, this, std::placeholders::_1));
+
+    m_operationQueue->run();
 }
 
 Core::~Core()
