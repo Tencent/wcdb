@@ -32,7 +32,7 @@ MigratingHandle::MigratingHandle(Migration& migration)
 , m_additionalStatement(getStatement())
 , m_migrateStatement(getStatement())
 , m_removeMigratedStatement(getStatement())
-#ifdef DEBUG
+#ifdef WCDB_DEBUG
 , m_processing(false)
 #endif
 {
@@ -227,7 +227,7 @@ bool MigratingHandle::trySynchronousTransactionAfterAttached()
 #pragma mark - Migration
 std::pair<bool, std::list<Statement>> MigratingHandle::process(const Statement& originStatement)
 {
-#ifdef DEBUG
+#ifdef WCDB_DEBUG
     m_processing = true;
 #endif
 
@@ -381,7 +381,7 @@ std::pair<bool, std::list<Statement>> MigratingHandle::process(const Statement& 
     if (!succeed) {
         statements.clear();
     }
-#ifdef DEBUG
+#ifdef WCDB_DEBUG
     m_processing = false;
 #endif
     return { succeed, std::move(statements) };

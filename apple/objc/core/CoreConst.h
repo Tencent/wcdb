@@ -120,5 +120,7 @@ static constexpr const int TagInvalidValue = 0;
 
 #pragma mark - Constraint
 static_assert(OperationQueueTimeIntervalForMigration > MigrateMaxExpectingDuration, "");
+static_assert(OperationQueueTimeIntervalForCriticalCheckpoint < OperationQueueTimeIntervalForMigration,
+              "");
 
 } // namespace WCDB

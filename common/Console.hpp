@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include <WCDB/Debug.hpp>
 #include <WCDB/Macro.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/String.hpp>
@@ -45,17 +44,12 @@ public:
 
     static void errored(const Notifier::Callback& callback);
 
-#if WCDB_ASSERTION
+#if WCDB_DEBUG
     static void
     fatal(const String& message, const char* file, int line, const char* function);
-#else  // WCDB_ASSERTION
+#else  // WCDB_DEBUG
     static void fatal(const String& message);
-#endif // WCDB_ASSERTION
-
-#if WCDB_TRACE
-    static void
-    trace(const String& message, const char* file, int line, const char* function);
-#endif
+#endif // WCDB_DEBUG
 
 private:
     static std::nullptr_t _initialize();

@@ -27,6 +27,7 @@ namespace WCDB {
 #pragma mark - Conditional
 bool Conditional::wait_for(std::unique_lock<std::mutex> &lockGuard, double seconds)
 {
+    WCTInnerAssert(lockGuard.owns_lock());
     bool timeout = false;
     if (seconds > 0) {
         timeout = std::condition_variable::wait_for(

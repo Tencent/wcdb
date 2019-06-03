@@ -97,7 +97,7 @@ void Console::breakpoint()
 {
 }
 
-#if WCDB_ASSERTION
+#if WCDB_DEBUG
 
 void Console::fatal(const String& message, const char* file, int line, const char* function)
 {
@@ -112,7 +112,7 @@ void Console::fatal(const String& message, const char* file, int line, const cha
     Notifier::shared().notify(error);
 }
 
-#else // WCDB_ASSERTION
+#else // WCDB_DEBUG
 
 void Console::fatal(const String& message)
 {
@@ -124,25 +124,6 @@ void Console::fatal(const String& message)
     Notifier::shared().notify(error);
 }
 
-#endif // WCDB_ASSERTION
-
-#if WCDB_TRACE
-
-void Console::trace(const String& message, const char* file, int line, const char* function)
-{
-    Error error(Error::Code::Notice, Error::Level::Notice, message);
-    error.infos.set(ErrorStringKeySource, ErrorSourceTrace);
-    error.infos.set("File", file);
-    error.infos.set("Line", line);
-    error.infos.set("Func", function);
-    constexpr const int size = 100;
-    char name[size];
-    memset(name, 0, size);
-    pthread_getname_np(pthread_self(), name, size);
-    error.infos.set("Thread", name);
-    print(error.getDescription());
-}
-
-#endif
+#endif // WCDB_DEBUG
 
 } // namespace WCDB

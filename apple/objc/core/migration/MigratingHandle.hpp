@@ -88,7 +88,7 @@ protected:
     bool tryFallbackToUnionedView(Syntax::Schema &schema, String &table);
     bool tryFallbackToSourceTable(Syntax::Schema &schema, String &table);
 
-#ifdef DEBUG
+#ifdef WCDB_DEBUG
     bool m_processing;
 #endif
     HandleStatement *m_additionalStatement;
