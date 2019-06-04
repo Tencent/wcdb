@@ -1,6 +1,6 @@
 //___FILEHEADER___
 
-#import "WCTTokenizer+___VARIABLE_productName___.h"
+#import "WCTTokenize+___VARIABLE_productName___.h"
 #import <WCDB/WCDB.h>
 #import <WCDB/fts_module.hpp>
 
