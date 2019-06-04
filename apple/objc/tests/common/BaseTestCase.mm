@@ -90,6 +90,7 @@
             break;
         }
     }];
+    [WCTDatabase simulateIOError:WCTSimulateNoneIOError];
 
     if (WCTDatabase.debug) {
         [self log:@"debuggable."];
@@ -115,6 +116,7 @@
     [WCTDatabase globalTraceError:nil];
     [WCTDatabase globalTraceSQL:nil];
     [WCTDatabase globalTracePerformance:nil];
+    [WCTDatabase simulateIOError:WCTSimulateNoneIOError];
     [self cleanDirectory];
     [super tearDown];
 }
