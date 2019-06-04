@@ -32,8 +32,8 @@
 - (void)setUp
 {
     [super setUp];
-    property1 = WCTProperty(WCTColumnBinding::generate<int>(WCTResultColumnTests.class, "testProperty1"));
-    property2 = WCTProperty(WCTColumnBinding::generate<double>(WCTResultColumnTests.class, "testProperty2"));
+    property1 = WCTProperty(WCTColumnBinding::generate<int>(TestCaseObject.class, "identifier"));
+    property2 = WCTProperty(WCTColumnBinding::generate<double>(TestCaseObject.class, "content"));
 }
 
 - (void)test_default_constructible
@@ -47,7 +47,7 @@
 - (void)test_property_convertible
 {
     WCTResultColumn sql(property1);
-    NSString* expected = @"testProperty1";
+    NSString* expected = @"identifier";
     TestCaseAssertWINQConvertible(WCDB::ResultColumn, sql, expected);
     TestCaseAssertWINQConvertible(WCDB::ResultColumns, sql, expected);
 
@@ -61,7 +61,7 @@
         property1,
         property2,
     };
-    NSString* expected = @"testProperty1, testProperty2";
+    NSString* expected = @"identifier, content";
     TestCaseAssertWINQConvertible(WCDB::ResultColumns, sqls, expected);
 
     TestCaseAssertWINQConvertible(WCTResultColumns, sqls, expected);
