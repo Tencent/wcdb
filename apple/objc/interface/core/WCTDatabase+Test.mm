@@ -55,7 +55,7 @@ static std::nullptr_t initialize()
     return nullptr;
 }
 
-@implementation WCTDatabase (Debug)
+@implementation WCTDatabase (Test)
 
 + (void)simulateIOError:(WCTSimulateIOErrorOptions)options
 {
