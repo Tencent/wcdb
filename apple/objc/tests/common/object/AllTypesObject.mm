@@ -78,7 +78,7 @@ WCDB_PRIMARY(type)
     ASSIGN_WITH_MAX_VALUE(literalEnumValue);
 
     ASSIGN_WITH_MAX_VALUE(trueOrFalseValue);
-    ASSIGN_WITH_MAX_VALUE(yesOrNoValue);
+    object.yesOrNoValue = YES;
 
     ASSIGN_WITH_MAX_VALUE(intValue);
     ASSIGN_WITH_MAX_VALUE(unsignedIntValue);
@@ -120,7 +120,7 @@ WCDB_PRIMARY(type)
     ASSIGN_WITH_MIN_VALUE(literalEnumValue);
 
     ASSIGN_WITH_MIN_VALUE(trueOrFalseValue);
-    ASSIGN_WITH_MIN_VALUE(yesOrNoValue);
+    object.yesOrNoValue = NO;
 
     ASSIGN_WITH_MIN_VALUE(intValue);
     ASSIGN_WITH_MIN_VALUE(unsignedIntValue);
