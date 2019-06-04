@@ -76,6 +76,7 @@ bool BasicConfig::invoke(Handle* handle)
     handle->disableCheckpointWhenClosing(true);
 
     bool succeed = false;
+    handle->markErrorAsIgnorable(Error::Code::Busy);
     for (int i = 0; i < BasicConfigBusyRetryMaxAllowedNumberOfTimes && !succeed; ++i) {
         succeed
         = getOrSetPragmaBegin(handle, m_getJournalMode)
@@ -85,6 +86,7 @@ bool BasicConfig::invoke(Handle* handle)
             break;
         }
     }
+    handle->markErrorAsUnignorable();
     if (!succeed) {
         return false;
     }
