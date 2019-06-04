@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#import <WCDB/Global.hpp>
 #import <WCDB/ThreadedErrors.hpp>
 #import <WCDB/WCTDatabase+FTS.h>
 #import <WCDB/WCTDatabase+Memory.h>
@@ -27,6 +28,14 @@
 #import <WCDB/WCTOneOrBinaryTokenizer.h>
 
 @implementation WCTDatabase
+
++ (void)initialize
+{
+    if (self.class == WCTDatabase.class) {
+        WCDB::Console::initialize();
+        WCDB::Global::initialize();
+    }
+}
 
 - (instancetype)initWithUnsafeDatabase:(WCDB::Database *)database
 {
@@ -40,8 +49,6 @@
 
 - (instancetype)initWithPath:(NSString *)path
 {
-    WCDB::Console::initialize();
-
     if (self = [super init]) {
         path = [path stringByStandardizingPath];
         _databaseHolder = WCDB::Core::shared().getOrCreateDatabase(path);

@@ -42,7 +42,7 @@ Range PageBasedFileHandle::restrictedRange(Range::Location base,
 {
     Range result;
     result.length = std::min(maxLength, restrictor.length);
-    result.location = base - result.length / 2;
+    result.location = base - Range::Location(result.length / 2);
     if (result.location < restrictor.location) {
         result.shiftToLocation(restrictor.location);
     } else if (result.edge() > restrictor.edge()) {

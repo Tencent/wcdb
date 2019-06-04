@@ -44,6 +44,9 @@ WCTRuntimeBaseAccessor::~WCTRuntimeBaseAccessor()
 
 SEL WCTRuntimeBaseAccessor::getGetterSelector(objc_property_t property, const WCDB::String &propertyName)
 {
+    WCTInnerAssert(property != nil);
+    WCTInnerAssert(!propertyName.empty());
+
     SEL selector = nil;
     char *getter = property_copyAttributeValue(property, "G");
     if (getter != nullptr) {
@@ -58,6 +61,9 @@ SEL WCTRuntimeBaseAccessor::getGetterSelector(objc_property_t property, const WC
 
 SEL WCTRuntimeBaseAccessor::getSetterSelector(objc_property_t property, const WCDB::String &propertyName)
 {
+    WCTInnerAssert(property != nil);
+    WCTInnerAssert(!propertyName.empty());
+
     SEL selector = nil;
     char *setter = property_copyAttributeValue(property, "S");
     if (setter != nullptr) {
@@ -74,16 +80,23 @@ SEL WCTRuntimeBaseAccessor::getSetterSelector(objc_property_t property, const WC
 
 IMP WCTRuntimeBaseAccessor::getClassMethodImplementation(Class cls, SEL selector)
 {
+    WCTInnerAssert(cls != nil);
+    WCTInnerAssert(selector != nil);
     return [cls methodForSelector:selector];
 }
 
 IMP WCTRuntimeBaseAccessor::getInstanceMethodImplementation(Class cls, SEL selector)
 {
+    WCTInnerAssert(cls != nil);
+    WCTInnerAssert(selector != nil);
     return [cls instanceMethodForSelector:selector];
 }
 
 Class WCTRuntimeBaseAccessor::getPropertyClass(Class cls, const WCDB::String &propertyName)
 {
+    WCTInnerAssert(cls != nil);
+    WCTInnerAssert(!propertyName.empty());
+
     objc_property_t property = class_getProperty(cls, propertyName.c_str());
     NSString *attributes = [NSString stringWithUTF8String:property_getAttributes(property)];
     NSArray *splitAttributes = [attributes componentsSeparatedByString:@","];

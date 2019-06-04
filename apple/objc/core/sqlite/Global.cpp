@@ -35,6 +35,11 @@ static_assert((int) Global::PagerLock::Exclusive == SQLITE_LOCK_EXCLUSIVE, "");
 static_assert((int) Global::ShmLock::Shared == SQLITE_SHM_SHARED, "");
 static_assert((int) Global::ShmLock::Exclusive == SQLITE_SHM_EXCLUSIVE, "");
 
+void Global::initialize()
+{
+    Global::shared();
+}
+
 Global &Global::shared()
 {
     static Global *s_shared = new Global;

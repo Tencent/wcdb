@@ -28,6 +28,7 @@ namespace WCDB {
 
 class Global {
 public:
+    static void initialize();
     static Global& shared();
 
 protected:

@@ -54,7 +54,11 @@
 
     self.continueAfterFailure = YES;
 
-    WCTDatabase.debug = WCDB_DEBUG;
+#if WCDB_DEBUG
+    WCTDatabase.debug = YES;
+#else
+    WCTDatabase.debug = NO;
+#endif
 
     [WCTDatabase globalTraceError:nil];
     [WCTDatabase additionalGlobalTraceError:^(WCTError *error) {
@@ -86,6 +90,7 @@
             break;
         }
     }];
+    [WCTDatabase simulateIOError:WCTSimulateNoneIOError];
 
     if (WCTDatabase.debug) {
         [self log:@"debuggable."];
@@ -111,6 +116,7 @@
     [WCTDatabase globalTraceError:nil];
     [WCTDatabase globalTraceSQL:nil];
     [WCTDatabase globalTracePerformance:nil];
+    [WCTDatabase simulateIOError:WCTSimulateNoneIOError];
     [self cleanDirectory];
     [super tearDown];
 }
