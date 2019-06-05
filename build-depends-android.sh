@@ -15,7 +15,8 @@ SQLCIPHER_CFLAGS="-DSQLITE_DEFAULT_WORKER_THREADS=2 \
   -DSQLITE_ENABLE_FTS3_TOKENIZER \
   -DSQLITE_ENABLE_STAT4 \
   -DSQLITE_ENABLE_EXPLAIN_COMMENTS \
-  -DSQLITE_HAS_CODEC -DOMIT_MEMLOCK -DOMIT_CONSTTIME_MEM"
+  -DSQLITE_ENABLE_DBSTAT_VTAB \
+  -DSQLITE_HAS_CODEC -DOMIT_MEMLOCK -DOMIT_MEM_SECURITY"
 
 SQLCIPHER_CONFIG="--disable-shared --enable-static \
   --enable-fts3 --enable-fts4 --enable-fts5 --enable-json1 --enable-session \
@@ -23,7 +24,7 @@ SQLCIPHER_CONFIG="--disable-shared --enable-static \
 
 USE_CLANG=1
 BUILD_ARCHS="arm,arm64,x86,x86_64"
-BUILD_API=14
+BUILD_API=16
 BUILD_PIE=1
 BUILD_CRYPTO=1
 BUILD_SQLCIPHER=0
@@ -102,13 +103,14 @@ done
 
 # Fix API level and architectures
 case "$BUILD_API" in
-  [0-9]|1[0-1]) BUILD_API=9 ;;
+  [0-9]|1[0-5]) BUILD_API=16 ;;
   20) BUILD_API=19 ;;
   22) BUILD_API=21 ;;
+  25) BUILD_API=24 ;;
   [0-9][0-9]) ;;
-  *) BUILD_API=12 ;;
+  *) BUILD_API=16 ;;
 esac
-[ "$BUILD_API" -gt 24 ] && BUILD_API=24
+[ "$BUILD_API" -gt 28 ] && BUILD_API=28
 BUILD_ARCHS=${BUILD_ARCHS//,/ }
 
 # Check dependency sources
@@ -196,7 +198,7 @@ for android_arch in $BUILD_ARCHS; do
   fi
 
   android_cc="$gcc_prefix-gcc --sysroot=$android_sysroot"
-  android_cflags="$android_cflags -g -Wall -funwind-tables -fstack-protector -fomit-frame-pointer -DNDEBUG -DANDROID"
+  android_cflags="$android_cflags -g -Wall -funwind-tables -fstack-protector -fomit-frame-pointer -DNDEBUG -DANDROID -D__ANDROID_API__=$android_api"
   android_path="$ANDROID_NDK_ROOT/toolchains/$android_eabi-4.9/prebuilt/$ndk_host/bin"
   android_prefix="$(pwd)/android/prebuilt/$android_arch"
   
