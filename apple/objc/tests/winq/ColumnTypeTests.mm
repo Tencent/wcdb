@@ -36,7 +36,8 @@
 
 - (void)test_default_constructible
 {
-    WCDB::ColumnType constructible __attribute__((unused));
+    WCDB::ColumnType constructible;
+    WCDB_UNUSED(constructible);
 }
 
 - (void)test_type_integer32
