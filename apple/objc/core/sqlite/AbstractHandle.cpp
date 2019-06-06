@@ -305,7 +305,9 @@ AbstractHandle::getValues(const Statement &statement, int index)
 #pragma mark - Transaction
 String AbstractHandle::getSavepointName(int nestedLevel)
 {
-    return "WCDBSavepoint_" + std::to_string(nestedLevel);
+    String name("WCDBSavepoint_");
+    name.append(std::to_string(nestedLevel));
+    return name;
 }
 
 bool AbstractHandle::beginNestedTransaction()
@@ -313,8 +315,29 @@ bool AbstractHandle::beginNestedTransaction()
     bool succeed = true;
     if (isInTransaction()) {
         ++m_nestedLevel;
-        succeed = executeStatement(
-        StatementSavepoint().savepoint(getSavepointName(m_nestedLevel)));
+
+        static const String *s_savepoint_1 = new String(
+        StatementSavepoint().savepoint(getSavepointName(1)).getDescription());
+        static const String *s_savepoint_2 = new String(
+        StatementSavepoint().savepoint(getSavepointName(2)).getDescription());
+        static const String *s_savepoint_3 = new String(
+        StatementSavepoint().savepoint(getSavepointName(3)).getDescription());
+
+        switch (m_nestedLevel) {
+        case 1:
+            succeed = executeSQL(*s_savepoint_1);
+            break;
+        case 2:
+            succeed = executeSQL(*s_savepoint_2);
+            break;
+        case 3:
+            succeed = executeSQL(*s_savepoint_3);
+            break;
+        default:
+            succeed = executeStatement(
+            StatementSavepoint().savepoint(getSavepointName(m_nestedLevel)));
+            break;
+        }
     } else {
         succeed = beginTransaction();
     }
@@ -327,8 +350,28 @@ bool AbstractHandle::commitOrRollbackNestedTransaction()
     if (m_nestedLevel == 0) {
         succeed = commitOrRollbackTransaction();
     } else {
-        String savepointName = getSavepointName(m_nestedLevel);
-        succeed = executeStatement(StatementRelease().release(savepointName));
+        static const String *s_savepoint_1
+        = new String(StatementRelease().release(getSavepointName(1)).getDescription());
+        static const String *s_savepoint_2
+        = new String(StatementRelease().release(getSavepointName(2)).getDescription());
+        static const String *s_savepoint_3
+        = new String(StatementRelease().release(getSavepointName(3)).getDescription());
+
+        switch (m_nestedLevel) {
+        case 1:
+            succeed = executeSQL(*s_savepoint_1);
+            break;
+        case 2:
+            succeed = executeSQL(*s_savepoint_2);
+            break;
+        case 3:
+            succeed = executeSQL(*s_savepoint_3);
+            break;
+        default:
+            succeed = executeStatement(
+            StatementRelease().release(getSavepointName(m_nestedLevel)));
+            break;
+        }
         if (succeed) {
             --m_nestedLevel;
         } else {
@@ -343,8 +386,30 @@ void AbstractHandle::rollbackNestedTransaction()
     if (m_nestedLevel == 0) {
         rollbackTransaction();
     } else {
-        String savepointName = getSavepointName(m_nestedLevel);
-        if (executeStatement(StatementRollback().rollbackToSavepoint(savepointName))) {
+        static const String *s_savepoint_1 = new String(
+        StatementRollback().rollbackToSavepoint(getSavepointName(1)).getDescription());
+        static const String *s_savepoint_2 = new String(
+        StatementRollback().rollbackToSavepoint(getSavepointName(2)).getDescription());
+        static const String *s_savepoint_3 = new String(
+        StatementRollback().rollbackToSavepoint(getSavepointName(3)).getDescription());
+
+        bool succeed = false;
+        switch (m_nestedLevel) {
+        case 1:
+            succeed = executeSQL(*s_savepoint_1);
+            break;
+        case 2:
+            succeed = executeSQL(*s_savepoint_2);
+            break;
+        case 3:
+            succeed = executeSQL(*s_savepoint_3);
+            break;
+        default:
+            succeed = executeStatement(
+            StatementRollback().rollbackToSavepoint(getSavepointName(m_nestedLevel)));
+            break;
+        }
+        if (succeed) {
             --m_nestedLevel;
         }
     }
