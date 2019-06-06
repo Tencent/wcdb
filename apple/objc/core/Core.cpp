@@ -158,7 +158,7 @@ bool Core::checkpointShouldBeOperated(const String& path)
     RecyclableDatabase database = m_databasePool.get(path);
     bool succeed = true; // mark as no error if database is not referenced.
     if (database != nullptr) {
-        succeed = database->checkpointIfAlreadyInitialized(Database::CheckpointMode::Passive);
+        succeed = database->checkpointIfAlreadyInitialized();
     }
     return succeed;
 }

@@ -74,7 +74,21 @@ static constexpr const char* NotifierLoggerName = "com.Tencent.WCDB.Notifier.Log
 
 #pragma mark - Handle Pool
 static constexpr const int HandlePoolMaxAllowedNumberOfHandles = 32;
-static constexpr const unsigned int HandlePoolNumberOfSlots = 7;
+enum class HandleType : unsigned int {
+    Normal = 0,
+    Migrating = 1,
+
+    Migrate = 2,
+    Operation = 3,
+    OperationBackup = (1 << 8) | Operation,
+    OperationCheckpoint = (2 << 8) | Operation,
+    OperationIntegrity = (3 << 8) | Operation,
+    Assemble = 4,
+
+    Max,
+};
+static constexpr const unsigned int HandleSlotMask = 0xff;
+static constexpr const unsigned int HandleSlotCount = (unsigned int) HandleType::Max;
 
 #pragma mark - Migrate
 static constexpr const double MigrateMaxExpectingDuration = 0.01;

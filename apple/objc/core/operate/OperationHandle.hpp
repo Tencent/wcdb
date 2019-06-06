@@ -20,15 +20,31 @@
 
 #pragma once
 
+#include <WCDB/CoreConst.h>
 #include <WCDB/Handle.hpp>
 #include <WCDB/RepairKit.h>
 
 namespace WCDB {
 
-class BackupHandle final : public Handle, public Repair::ReadLocker, public Repair::WriteLocker {
+class OperationHandle final : public Handle, public Repair::ReadLocker, public Repair::WriteLocker {
 public:
-    BackupHandle();
+    OperationHandle();
 
+    void setType(HandleType type);
+
+#pragma mark - Checkpoint
+public:
+    bool checkpoint();
+
+#pragma mark - Integrity
+public:
+    void checkIntegrity();
+
+protected:
+    StatementPragma m_statementForIntegrityCheck;
+
+#pragma mark - Backup
+public:
     void setPath(const String &path) override final;
     const String &getPath() const override final;
     const Error &getError() const override final;

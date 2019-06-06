@@ -91,7 +91,7 @@ void HandlePool::clearAllHandles()
 {
     WCTInnerAssert(m_concurrency.writeSafety());
     WCTInnerAssert(m_memory.writeSafety());
-    for (int i = 0; i < HandlePoolNumberOfSlots; ++i) {
+    for (unsigned int i = 0; i < HandleSlotCount; ++i) {
         m_frees[i].clear();
         auto &handles = m_handles[i];
         for (const auto &handle : handles) {
@@ -106,7 +106,7 @@ void HandlePool::purge()
 {
     SharedLockGuard concurrencyGuard(m_concurrency);
     LockGuard memoryGuard(m_memory);
-    for (int i = 0; i < HandlePoolNumberOfSlots; ++i) {
+    for (unsigned int i = 0; i < HandleSlotCount; ++i) {
         auto &handles = m_handles[i];
         auto &frees = m_frees[i];
         for (const auto &handle : frees) {
@@ -130,14 +130,6 @@ size_t HandlePool::numberOfAliveHandles() const
     return count;
 }
 
-size_t HandlePool::numberOfActiveHandles(Slot slot) const
-{
-    WCTInnerAssert(slot < HandlePoolNumberOfSlots);
-    SharedLockGuard concurrencyGuard(m_concurrency);
-    SharedLockGuard memoryGuard(m_memory);
-    return m_handles[slot].size() - m_frees[slot].size();
-}
-
 bool HandlePool::isAliving() const
 {
     bool aliving = false;
@@ -154,9 +146,10 @@ bool HandlePool::isAliving() const
     return aliving;
 }
 
-RecyclableHandle HandlePool::flowOut(Slot slot)
+RecyclableHandle HandlePool::flowOut(HandleType type)
 {
-    WCTInnerAssert(slot < HandlePoolNumberOfSlots);
+    unsigned int slot = slotOfHandleType(type);
+    WCTInnerAssert(slot < HandleSlotCount);
 
     SharedLockGuard concurrencyGuard(m_concurrency);
     std::shared_ptr<Handle> handle;
@@ -185,7 +178,7 @@ RecyclableHandle HandlePool::flowOut(Slot slot)
     }
 
     if (handle == nullptr) {
-        handle = generateSlotedHandle(slot);
+        handle = generateSlotedHandle(type);
         if (handle == nullptr) {
             return nullptr;
         }
@@ -209,7 +202,7 @@ RecyclableHandle HandlePool::flowOut(Slot slot)
         WCTInnerAssert(m_handles[slot].find(handle) == m_handles[slot].end());
         m_handles[slot].emplace(handle);
     } else {
-        if (!willReuseSlotedHandle(slot, handle.get())) {
+        if (!willReuseSlotedHandle(type, handle.get())) {
             handle->close();
             LockGuard memoryGuard(m_memory);
             // remove if the exists handle fails in handles
@@ -222,30 +215,29 @@ RecyclableHandle HandlePool::flowOut(Slot slot)
 
     m_concurrency.lockShared();
     return RecyclableHandle(
-    handle, std::bind(&HandlePool::flowBack, this, slot, std::placeholders::_1));
+    handle, std::bind(&HandlePool::flowBack, this, type, std::placeholders::_1));
 }
 
-const std::set<std::shared_ptr<Handle>> &HandlePool::getHandles(Slot slot) const
+void HandlePool::flowBack(HandleType type, const std::shared_ptr<Handle> &handle)
 {
-    WCTInnerAssert(slot < HandlePoolNumberOfSlots);
-    WCTInnerAssert(m_concurrency.readSafety());
-    WCTInnerAssert(m_memory.readSafety());
-    return m_handles[slot];
-}
-
-void HandlePool::flowBack(Slot slot, const std::shared_ptr<Handle> &handle)
-{
-    WCTInnerAssert(slot < HandlePoolNumberOfSlots);
     WCTInnerAssert(handle != nullptr);
     WCTInnerAssert(m_concurrency.readSafety());
 
     WCTRemedialAssert(
     !handle->isPrepared(), "Statement is not finalized.", handle->finalize(););
     {
+        unsigned int slot = slotOfHandleType(type);
+        WCTInnerAssert(slot < HandleSlotCount);
+
         LockGuard memoryGuard(m_memory);
         m_frees[slot].push_back(handle);
     }
     m_concurrency.unlockShared();
+}
+
+unsigned int HandlePool::slotOfHandleType(HandleType type)
+{
+    return (unsigned int) type & HandleSlotMask;
 }
 
 HandlePool::ReferencedHandle::ReferencedHandle() : handle(nullptr), reference(0)
