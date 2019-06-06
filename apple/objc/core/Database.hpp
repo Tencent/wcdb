@@ -87,7 +87,7 @@ protected:
     bool willReuseSlotedHandle(Slot slot, Handle *handle) override final;
 
 private:
-    bool reconfigureHandle(Handle *handle);
+    bool setupHandle(Slot slot, Handle *handle);
 
 #pragma mark - Config
 public:

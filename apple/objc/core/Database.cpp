@@ -230,18 +230,8 @@ std::shared_ptr<Handle> Database::generateSlotedHandle(Slot slot)
         return nullptr;
     }
 
-    if (!reconfigureHandle(handle.get())) {
+    if (!setupHandle(slot, handle.get())) {
         return nullptr;
-    }
-
-    // open
-    if (type == HandleType::Normal || type == HandleType::Migrating || type == HandleType::Migrate
-        || type == HandleType::Checkpoint || type == HandleType::Integrity) {
-        handle->setPath(path);
-        if (!handle->open()) {
-            setThreadedError(handle->getError());
-            return nullptr;
-        }
     }
 
     return handle;
@@ -249,14 +239,14 @@ std::shared_ptr<Handle> Database::generateSlotedHandle(Slot slot)
 
 bool Database::willReuseSlotedHandle(Slot slot, Handle *handle)
 {
-    WCTInnerAssert(handle->isOpened());
-    WCTInnerAssert(slot < HandlePoolNumberOfSlots);
-    WCDB_UNUSED(slot)
-    return reconfigureHandle(handle);
+    return setupHandle(slot, handle);
 }
 
-bool Database::reconfigureHandle(Handle *handle)
+bool Database::setupHandle(Slot slot, Handle *handle)
 {
+    WCTInnerAssert(slot < HandlePoolNumberOfSlots);
+    WCTInnerAssert(handle != nullptr);
+
     Configs configs;
     {
         SharedLockGuard memoryGuard(m_memory);
@@ -265,8 +255,22 @@ bool Database::reconfigureHandle(Handle *handle)
     bool succeed = handle->reconfigure(configs);
     if (!succeed) {
         setThreadedError(handle->getError());
+        return false;
     }
-    return succeed;
+
+    HandleType type = (HandleType) slot;
+    if (type == HandleType::Normal || type == HandleType::Migrating || type == HandleType::Migrate
+        || type == HandleType::Checkpoint || type == HandleType::Integrity) {
+        handle->setPath(path);
+        if (!handle->open()) {
+            setThreadedError(handle->getError());
+            return false;
+        }
+    } else {
+        WCTInnerAssert(!handle->isOpened());
+    }
+
+    return true;
 }
 
 #pragma mark - Threaded

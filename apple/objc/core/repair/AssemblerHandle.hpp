@@ -31,6 +31,7 @@ public:
     ~AssemblerHandle();
 
     void setPath(const String &path) override final;
+    void clearPath() override final;
     const String &getPath() const override final;
 
     bool markAsAssembling() override final;

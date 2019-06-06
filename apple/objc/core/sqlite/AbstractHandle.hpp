@@ -48,6 +48,7 @@ private:
 #pragma mark - Path
 public:
     void setPath(const String &path);
+    void clearPath();
     const String &getPath() const;
 
     static String getSHMSuffix();

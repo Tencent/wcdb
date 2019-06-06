@@ -104,6 +104,9 @@ bool Backup::work()
         succeed = false;
     }
 
+    m_readLocker->clearPath();
+    m_writeLocker->clearPath();
+
     return succeed;
 }
 

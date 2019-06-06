@@ -50,6 +50,10 @@ protected:
 
     bool resolveInfosForDatabase(std::map<String, Info> &infos,
                                  const String &databaseForAcquisition);
+
+private:
+    bool assembleInfos(const std::map<String, Info> &infos);
+    bool doAssembleInfos(const std::map<String, Info> &infos);
 };
 
 } //namespace Repair

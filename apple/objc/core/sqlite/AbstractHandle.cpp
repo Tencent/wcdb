@@ -54,6 +54,12 @@ void AbstractHandle::setPath(const String &path)
     }
 }
 
+void AbstractHandle::clearPath()
+{
+    close();
+    m_path.clear();
+}
+
 const String &AbstractHandle::getPath() const
 {
     return m_path;

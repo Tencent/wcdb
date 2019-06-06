@@ -36,6 +36,11 @@ void BackupHandle::setPath(const String &path)
     Handle::setPath(path);
 }
 
+void BackupHandle::clearPath()
+{
+    Handle::clearPath();
+}
+
 const String &BackupHandle::getPath() const
 {
     return Handle::getPath();
@@ -48,10 +53,8 @@ const Error &BackupHandle::getError() const
 
 bool BackupHandle::acquireReadLock()
 {
-    if (!isOpened() && !open()) {
-        return false;
-    }
-    return execute(m_statementForReadTransaction) && execute(m_statementForAcquireReadLock);
+    return open() && execute(m_statementForReadTransaction)
+           && execute(m_statementForAcquireReadLock);
 }
 
 bool BackupHandle::releaseReadLock()
@@ -62,10 +65,7 @@ bool BackupHandle::releaseReadLock()
 
 bool BackupHandle::acquireWriteLock()
 {
-    if (!isOpened() && !open()) {
-        return false;
-    }
-    return beginTransaction();
+    return open() && beginTransaction();
 }
 
 bool BackupHandle::releaseWriteLock()
