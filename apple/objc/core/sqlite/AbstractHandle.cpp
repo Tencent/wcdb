@@ -77,10 +77,12 @@ String AbstractHandle::getJournalSuffix()
 #pragma mark - Basic
 bool AbstractHandle::open()
 {
-    WCTInnerAssert(!isOpened());
-    bool succeed = APIExit(sqlite3_open(m_path.c_str(), &m_handle));
-    if (!succeed) {
-        m_handle = nullptr;
+    bool succeed = true;
+    if (!isOpened()) {
+        succeed = APIExit(sqlite3_open(m_path.c_str(), &m_handle));
+        if (!succeed) {
+            m_handle = nullptr;
+        }
     }
     return succeed;
 }
@@ -92,7 +94,7 @@ bool AbstractHandle::isOpened() const
 
 void AbstractHandle::close()
 {
-    if (m_handle != nullptr) {
+    if (isOpened()) {
         finalizeStatements();
         WCTRemedialAssert(m_nestedLevel == 0 && !isInTransaction(),
                           "Unpaired transaction.",
