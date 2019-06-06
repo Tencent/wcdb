@@ -243,7 +243,7 @@ std::pair<bool, RecyclableMigrationInfo> Migration::getInfo(const String& table)
 
 #pragma mark - Bind
 Migration::Binder::Binder(Migration& migration)
-: m_migration(migration), m_binding(false)
+: m_migration(migration), m_binding(false), m_rebind(false)
 {
 }
 
@@ -255,31 +255,34 @@ void Migration::Binder::startBinding()
 {
     WCTInnerAssert(m_binding == false);
     m_binding = true;
-    WCTInnerAssert(m_cache.empty());
+    WCTInnerAssert(m_referenceds.empty());
 }
 
 bool Migration::Binder::stopBinding(bool succeed)
 {
     WCTInnerAssert(m_binding);
     if (succeed) {
-        m_migration.tryReduceBounds(m_boundsCache);
-        for (const auto& iter : m_cache) {
+        m_migration.tryReduceBounds(m_bindings);
+        for (const auto& iter : m_referenceds) {
             if (iter.second != nullptr) {
-                m_boundsCache.emplace(iter.first, iter.second);
+                m_bindings.emplace(iter.first, iter.second);
             }
         }
-        m_cache.clear();
+        m_referenceds.clear();
 
-        if (m_bounds != m_boundsCache) {
-            succeed = bindInfos(m_boundsCache);
+        if (m_rebind || m_bounds != m_bindings) {
+            succeed = bindInfos(m_bindings);
             if (succeed) {
-                m_bounds = m_boundsCache;
+                m_rebind = false;
+                m_bounds = m_bindings;
+            } else {
+                m_rebind = true;
             }
         } else {
             succeed = true;
         }
     } else {
-        m_cache.clear();
+        m_referenceds.clear();
     }
     m_binding = false;
     return succeed;
@@ -293,7 +296,7 @@ std::pair<bool, const MigrationInfo*> Migration::Binder::bindTable(const String&
     if (!table.empty()) {
         std::tie(succeed, info) = m_migration.getOrInitInfo(*this, table);
         if (succeed) {
-            m_cache.emplace(table, info);
+            m_referenceds.emplace(table, info);
         }
     }
     return { succeed, info.get() };

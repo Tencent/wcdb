@@ -133,9 +133,10 @@ public:
     private:
         bool m_binding;
         Migration& m_migration;
-        std::map<String, RecyclableMigrationInfo> m_cache; // all infos need to be bound during this cycle
-        std::map<String, RecyclableMigrationInfo> m_boundsCache;
+        std::map<String, RecyclableMigrationInfo> m_referenceds; // all infos need to be bound during this cycle
+        std::map<String, RecyclableMigrationInfo> m_bindings;
         std::map<String, RecyclableMigrationInfo> m_bounds;
+        bool m_rebind;
     };
 
 protected:
