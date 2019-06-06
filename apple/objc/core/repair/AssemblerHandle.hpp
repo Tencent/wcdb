@@ -25,15 +25,22 @@
 
 namespace WCDB {
 
-class AssemblerHandle final : public Handle, public Repair::Assembler {
+class AssemblerHandle final : public Handle,
+                              public Repair::Assembler,
+                              public Repair::ReadLocker,
+                              public Repair::WriteLocker {
 public:
     AssemblerHandle();
     ~AssemblerHandle();
 
+#pragma mark - Common
     void setPath(const String &path) override final;
     void clearPath() override final;
     const String &getPath() const override final;
+    const Error &getError() const override final;
 
+#pragma mark - Assembler
+public:
     bool markAsAssembling() override final;
     bool markAsAssembled() override final;
 
@@ -41,13 +48,11 @@ public:
 
     bool assembleSQL(const String &sql) override final;
 
-    const Error &getError() const override final;
-
 protected:
     StatementPragma m_statementForDisableJounral;
     StatementPragma m_statementForEnableMMap;
 
-#pragma mark - Table
+#pragma mark - Assembler - Table
 public:
     bool assembleTable(const String &tableName, const String &sql) override final;
     bool assembleCell(const Repair::Cell &cell) override final;
@@ -58,7 +63,7 @@ protected:
     String m_table;
     HandleStatement *m_cellStatement;
 
-#pragma mark - Sequence
+#pragma mark - Assembler - Sequence
 public:
     bool assembleSequence(const String &tableName, int64_t sequence) override final;
 
@@ -71,6 +76,18 @@ protected:
 
     StatementUpdate m_statementForUpdateSequence;
     StatementInsert m_statementForInsertSequence;
+
+#pragma mark - Backup
+public:
+    bool acquireReadLock() override final;
+    bool releaseReadLock() override final;
+
+    bool acquireWriteLock() override final;
+    bool releaseWriteLock() override final;
+
+protected:
+    StatementBegin m_statementForReadTransaction;
+    StatementSelect m_statementForAcquireReadLock;
 };
 
 } // namespace WCDB

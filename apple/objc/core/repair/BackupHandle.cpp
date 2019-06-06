@@ -73,4 +73,5 @@ bool BackupHandle::releaseWriteLock()
     rollbackTransaction();
     return true;
 }
+
 } // namespace WCDB

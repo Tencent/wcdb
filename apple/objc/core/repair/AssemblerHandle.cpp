@@ -39,6 +39,9 @@ AssemblerHandle::AssemblerHandle()
                                .to(BindParameter(1))
                                .where(Column("name") == BindParameter(2)))
 , m_cellStatement(getStatement())
+, m_statementForAcquireReadLock(
+  StatementSelect().select(1).from(Syntax::masterTable).limit(0))
+, m_statementForReadTransaction(StatementBegin().beginDeferred())
 {
     m_error.infos.set(ErrorStringKeyAction, ErrorActionAssembler);
 }
@@ -48,6 +51,7 @@ AssemblerHandle::~AssemblerHandle()
     returnStatement(m_cellStatement);
 }
 
+#pragma mark - Common
 void AssemblerHandle::setPath(const String &path)
 {
     Handle::setPath(path);
@@ -63,6 +67,12 @@ const String &AssemblerHandle::getPath() const
     return Handle::getPath();
 }
 
+const Error &AssemblerHandle::getError() const
+{
+    return Handle::getError();
+}
+
+#pragma mark - Assembler
 bool AssemblerHandle::markAsAssembling()
 {
     bool succeed = open();
@@ -110,12 +120,7 @@ bool AssemblerHandle::assembleSQL(const String &sql)
     return succeed;
 }
 
-const Error &AssemblerHandle::getError() const
-{
-    return Handle::getError();
-}
-
-#pragma mark - Table
+#pragma mark - Assembler - Table
 bool AssemblerHandle::assembleTable(const String &tableName, const String &sql)
 {
     m_cellStatement->finalize();
@@ -198,7 +203,7 @@ bool AssemblerHandle::lazyPrepareCell()
     return m_cellStatement->prepare(statement);
 }
 
-#pragma mark - Sequence
+#pragma mark - Assembler - Sequence
 bool AssemblerHandle::assembleSequence(const String &tableName, int64_t sequence)
 {
     bool succeed, updated;
@@ -254,6 +259,30 @@ bool AssemblerHandle::markSequenceAsAssembling()
 bool AssemblerHandle::markSequenceAsAssembled()
 {
     return executeStatement(StatementDropTable().dropTable(s_dummySequence).ifExists());
+}
+
+#pragma mark - Backup
+bool AssemblerHandle::acquireReadLock()
+{
+    return open() && execute(m_statementForReadTransaction)
+           && execute(m_statementForAcquireReadLock);
+}
+
+bool AssemblerHandle::releaseReadLock()
+{
+    rollbackTransaction();
+    return true;
+}
+
+bool AssemblerHandle::acquireWriteLock()
+{
+    return open() && beginTransaction();
+}
+
+bool AssemblerHandle::releaseWriteLock()
+{
+    rollbackTransaction();
+    return true;
 }
 
 } // namespace WCDB

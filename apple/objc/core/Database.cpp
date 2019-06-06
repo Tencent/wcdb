@@ -569,23 +569,29 @@ bool Database::deposit()
             return;
         }
 
-        RecyclableHandle backupReadHandle = flowOut(HandleType::Backup);
+        RecyclableHandle backupReadHandle = flowOut(HandleType::Assemble);
         if (backupReadHandle == nullptr) {
             return;
         }
-        RecyclableHandle backupWriteHandle = flowOut(HandleType::Backup);
+        RecyclableHandle backupWriteHandle = flowOut(HandleType::Assemble);
         if (backupWriteHandle == nullptr) {
             return;
         }
-        WCTInnerAssert(backupReadHandle.get() != backupWriteHandle.get());
         RecyclableHandle assemblerHandle = flowOut(HandleType::Assemble);
         if (assemblerHandle == nullptr) {
             return;
         }
+        WCTInnerAssert(backupReadHandle.get() != backupWriteHandle.get());
+        WCTInnerAssert(backupReadHandle.get() != assemblerHandle.get());
+        WCTInnerAssert(backupWriteHandle.get() != assemblerHandle.get());
+
+        WCTInnerAssert(!backupReadHandle->isOpened());
+        WCTInnerAssert(!backupWriteHandle->isOpened());
+        WCTInnerAssert(!assemblerHandle->isOpened());
 
         Repair::FactoryRenewer renewer = m_factory.renewer();
-        renewer.setReadLocker(static_cast<BackupHandle *>(backupReadHandle.get()));
-        renewer.setWriteLocker(static_cast<BackupHandle *>(backupWriteHandle.get()));
+        renewer.setReadLocker(static_cast<AssemblerHandle *>(backupReadHandle.get()));
+        renewer.setWriteLocker(static_cast<AssemblerHandle *>(backupWriteHandle.get()));
         renewer.setAssembler(static_cast<AssemblerHandle *>(assemblerHandle.get()));
         // Prepare a new database from material at renew directory and wait for moving
         if (!renewer.prepare()) {
@@ -598,7 +604,7 @@ bool Database::deposit()
             return;
         }
         // If app stop here, it results that the old database is moved to deposited directory and the renewed one is not moved to the origin directory.
-        // At next time this database launchs, the retrieveRenewed method will do the remaining work. So data will not lost.
+        // At next time this database launchs, the retrieveRenewed method will do the remaining work. So data will never lost.
         if (!renewer.work()) {
             setThreadedError(renewer.getError());
             return;
@@ -617,23 +623,30 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
             return;
         }
 
-        RecyclableHandle backupReadHandle = flowOut(HandleType::Backup);
+        RecyclableHandle backupReadHandle = flowOut(HandleType::Assemble);
         if (backupReadHandle == nullptr) {
             return;
         }
-        RecyclableHandle backupWriteHandle = flowOut(HandleType::Backup);
+        RecyclableHandle backupWriteHandle = flowOut(HandleType::Assemble);
         if (backupWriteHandle == nullptr) {
             return;
         }
-        WCTInnerAssert(backupWriteHandle.get() != backupReadHandle.get());
         RecyclableHandle assemblerHandle = flowOut(HandleType::Assemble);
         if (assemblerHandle == nullptr) {
             return;
         }
+        WCTInnerAssert(backupReadHandle.get() != backupWriteHandle.get());
+        WCTInnerAssert(backupReadHandle.get() != assemblerHandle.get());
+        WCTInnerAssert(backupWriteHandle.get() != assemblerHandle.get());
+
+        WCTInnerAssert(!backupReadHandle->isOpened());
+        WCTInnerAssert(!backupWriteHandle->isOpened());
+        WCTInnerAssert(!assemblerHandle->isOpened());
 
         Repair::FactoryRetriever retriever = m_factory.retriever();
-        retriever.setReadLocker(static_cast<BackupHandle *>(backupReadHandle.get()));
-        retriever.setWriteLocker(static_cast<BackupHandle *>(backupWriteHandle.get()));
+        retriever.setReadLocker(static_cast<AssemblerHandle *>(backupReadHandle.get()));
+        retriever.setWriteLocker(
+        static_cast<AssemblerHandle *>(backupWriteHandle.get()));
         retriever.setAssembler(static_cast<AssemblerHandle *>(assemblerHandle.get()));
         retriever.setProgressCallback(onProgressUpdate);
         if (retriever.work()) {
