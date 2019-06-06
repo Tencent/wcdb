@@ -49,10 +49,10 @@ bool Handle::open()
 void Handle::close()
 {
     if (isOpened()) {
-        while (!m_cachedConfigs.empty()) {
-            const auto last = m_cachedConfigs.back();
+        while (!m_invokeds.empty()) {
+            const auto last = m_invokeds.back();
             last.value()->uninvoke(this); // ignore errors
-            m_cachedConfigs.pop_back();
+            m_invokeds.pop_back();
         }
     }
     AbstractHandle::close();
@@ -60,8 +60,8 @@ void Handle::close()
 
 bool Handle::reconfigure(const Configs &newConfigs)
 {
-    if (newConfigs != m_cachedConfigs) {
-        m_configs = newConfigs;
+    if (newConfigs != m_pendings) {
+        m_pendings = newConfigs;
         if (isOpened()) {
             return configure();
         }
@@ -71,22 +71,23 @@ bool Handle::reconfigure(const Configs &newConfigs)
 
 bool Handle::configure()
 {
-    WCTInnerAssert(m_cachedConfigs != m_configs);
-    while (!m_cachedConfigs.empty()) {
-        auto last = m_cachedConfigs.back();
-        if (!last.value()->uninvoke(this)) {
-            return false;
+    if (m_pendings != m_invokeds) {
+        while (!m_invokeds.empty()) {
+            auto last = m_invokeds.back();
+            if (!last.value()->uninvoke(this)) {
+                return false;
+            }
+            m_invokeds.pop_back();
         }
-        m_cachedConfigs.pop_back();
-    }
-    WCTInnerAssert(m_cachedConfigs.empty());
-    for (const auto &element : m_configs) {
-        if (!element.value()->invoke(this)) {
-            return false;
+        WCTInnerAssert(m_invokeds.empty());
+        for (const auto &element : m_pendings) {
+            if (!element.value()->invoke(this)) {
+                return false;
+            }
+            m_invokeds.insert(element.key(), element.value(), element.order());
         }
-        m_cachedConfigs.insert(element.key(), element.value(), element.order());
+        m_pendings = m_invokeds;
     }
-    m_configs = m_cachedConfigs;
     return true;
 }
 
