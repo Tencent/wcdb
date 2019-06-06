@@ -53,14 +53,14 @@ bool Backup::work()
     bool succeed = false;
     do {
         //acquire read lock to avoid shm changed during initialize
-        if (!m_writeLocker->acquireLock()) {
+        if (!m_writeLocker->acquireWriteLock()) {
             setError(m_writeLocker->getError());
             break;
         }
         writeLocked = true;
 
         //acquire read lock to avoid wal truncated/restarted during whole iteration of pager
-        if (!m_readLocker->acquireLock()) {
+        if (!m_readLocker->acquireReadLock()) {
             setError(m_readLocker->getError());
             break;
         }
@@ -70,7 +70,7 @@ bool Backup::work()
             break;
         }
 
-        if (!m_writeLocker->releaseLock()) {
+        if (!m_writeLocker->releaseWriteLock()) {
             setError(m_writeLocker->getError());
             break;
         }
@@ -94,12 +94,12 @@ bool Backup::work()
         setError(m_pager.getError());
     }
 
-    if (writeLocked && !m_writeLocker->releaseLock() && succeed) {
+    if (writeLocked && !m_writeLocker->releaseWriteLock() && succeed) {
         setError(m_writeLocker->getError());
         succeed = false;
     }
 
-    if (readLocked && !m_readLocker->releaseLock() && succeed) {
+    if (readLocked && !m_readLocker->releaseReadLock() && succeed) {
         setError(m_readLocker->getError());
         succeed = false;
     }

@@ -34,18 +34,21 @@ public:
     virtual void setPath(const String &path) = 0;
     virtual const String &getPath() const = 0;
     virtual const Error &getError() const = 0;
-
-    virtual bool acquireLock() = 0;
-    virtual bool releaseLock() = 0;
 };
 
 class ReadLocker : public Locker {
 public:
     virtual ~ReadLocker() = 0;
+
+    virtual bool acquireReadLock() = 0;
+    virtual bool releaseReadLock() = 0;
 };
 class WriteLocker : public Locker {
 public:
     virtual ~WriteLocker() = 0;
+
+    virtual bool acquireWriteLock() = 0;
+    virtual bool releaseWriteLock() = 0;
 };
 
 class LockerHolder {

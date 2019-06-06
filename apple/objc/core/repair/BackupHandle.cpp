@@ -23,31 +23,30 @@
 
 namespace WCDB {
 
-BackupReadHandle::BackupReadHandle()
-: Handle()
-, m_statementForAcquireReadLock(
-  StatementSelect().select(1).from(Syntax::masterTable).limit(0))
+BackupHandle::BackupHandle()
+: m_statementForAcquireReadLock(
+StatementSelect().select(1).from(Syntax::masterTable).limit(0))
 , m_statementForReadTransaction(StatementBegin().beginDeferred())
 {
     m_error.infos.set(ErrorStringKeyAction, ErrorActionBackup);
 }
 
-void BackupReadHandle::setPath(const String &path)
+void BackupHandle::setPath(const String &path)
 {
     Handle::setPath(path);
 }
 
-const String &BackupReadHandle::getPath() const
+const String &BackupHandle::getPath() const
 {
     return Handle::getPath();
 }
 
-const Error &BackupReadHandle::getError() const
+const Error &BackupHandle::getError() const
 {
     return Handle::getError();
 }
 
-bool BackupReadHandle::acquireLock()
+bool BackupHandle::acquireReadLock()
 {
     if (!isOpened() && !open()) {
         return false;
@@ -55,33 +54,13 @@ bool BackupReadHandle::acquireLock()
     return execute(m_statementForReadTransaction) && execute(m_statementForAcquireReadLock);
 }
 
-bool BackupReadHandle::releaseLock()
+bool BackupHandle::releaseReadLock()
 {
     rollbackTransaction();
     return true;
 }
 
-BackupWriteHandle::BackupWriteHandle()
-{
-    m_error.infos.set(ErrorStringKeyAction, ErrorActionBackup);
-}
-
-void BackupWriteHandle::setPath(const String &path)
-{
-    Handle::setPath(path);
-}
-
-const String &BackupWriteHandle::getPath() const
-{
-    return Handle::getPath();
-}
-
-const Error &BackupWriteHandle::getError() const
-{
-    return Handle::getError();
-}
-
-bool BackupWriteHandle::acquireLock()
+bool BackupHandle::acquireWriteLock()
 {
     if (!isOpened() && !open()) {
         return false;
@@ -89,7 +68,7 @@ bool BackupWriteHandle::acquireLock()
     return beginTransaction();
 }
 
-bool BackupWriteHandle::releaseLock()
+bool BackupHandle::releaseWriteLock()
 {
     rollbackTransaction();
     return true;

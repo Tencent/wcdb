@@ -25,32 +25,23 @@
 
 namespace WCDB {
 
-class BackupReadHandle final : public Handle, public Repair::ReadLocker {
+class BackupHandle final : public Handle, public Repair::ReadLocker, public Repair::WriteLocker {
 public:
-    BackupReadHandle();
+    BackupHandle();
 
     void setPath(const String &path) override final;
     const String &getPath() const override final;
     const Error &getError() const override final;
 
-    bool acquireLock() override final;
-    bool releaseLock() override final;
+    bool acquireReadLock() override final;
+    bool releaseReadLock() override final;
+
+    bool acquireWriteLock() override final;
+    bool releaseWriteLock() override final;
 
 protected:
     StatementBegin m_statementForReadTransaction;
     StatementSelect m_statementForAcquireReadLock;
-};
-
-class BackupWriteHandle final : public Handle, public Repair::WriteLocker {
-public:
-    BackupWriteHandle();
-
-    void setPath(const String &path) override final;
-    const String &getPath() const override final;
-    const Error &getError() const override final;
-
-    bool acquireLock() override final;
-    bool releaseLock() override final;
 };
 
 } // namespace WCDB

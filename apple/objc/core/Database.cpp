@@ -211,11 +211,8 @@ std::shared_ptr<Handle> Database::generateSlotedHandle(Slot slot)
     case HandleType::Migrate:
         handle = std::make_shared<MigrateHandle>();
         break;
-    case HandleType::BackupRead:
-        handle = std::make_shared<BackupReadHandle>();
-        break;
-    case HandleType::BackupWrite:
-        handle = std::make_shared<BackupWriteHandle>();
+    case HandleType::Backup:
+        handle = std::make_shared<BackupHandle>();
         break;
     case HandleType::Assemble:
         handle = std::make_shared<AssemblerHandle>();
@@ -536,20 +533,22 @@ bool Database::doBackup()
     !isInTransaction(), "Backup can't be run in transaction.", return false;);
     WCTInnerAssert(m_concurrency.readSafety());
     WCTInnerAssert(m_initialized);
-    RecyclableHandle backupReadHandle = flowOut(HandleType::BackupRead);
+    RecyclableHandle backupReadHandle = flowOut(HandleType::Backup);
     if (backupReadHandle == nullptr) {
         return false;
     }
 
-    RecyclableHandle backupWriteHandle = flowOut(HandleType::BackupWrite);
+    RecyclableHandle backupWriteHandle = flowOut(HandleType::Backup);
     if (backupWriteHandle == nullptr) {
         return false;
     }
 
+    WCTInnerAssert(backupReadHandle.get() != backupWriteHandle.get());
+
     // TODO: get backed up frame, update backup queue
     Repair::FactoryBackup backup = m_factory.backup();
-    backup.setReadLocker(static_cast<BackupReadHandle *>(backupReadHandle.get()));
-    backup.setWriteLocker(static_cast<BackupWriteHandle *>(backupWriteHandle.get()));
+    backup.setReadLocker(static_cast<BackupHandle *>(backupReadHandle.get()));
+    backup.setWriteLocker(static_cast<BackupHandle *>(backupWriteHandle.get()));
     if (!backup.work(getPath())) {
         setThreadedError(backup.getError());
         return false;
@@ -566,23 +565,23 @@ bool Database::deposit()
             return;
         }
 
-        RecyclableHandle backupReadHandle = flowOut(HandleType::BackupRead);
+        RecyclableHandle backupReadHandle = flowOut(HandleType::Backup);
         if (backupReadHandle == nullptr) {
             return;
         }
-        RecyclableHandle backupWriteHandle = flowOut(HandleType::BackupWrite);
+        RecyclableHandle backupWriteHandle = flowOut(HandleType::Backup);
         if (backupWriteHandle == nullptr) {
             return;
         }
+        WCTInnerAssert(backupReadHandle.get() != backupWriteHandle.get());
         RecyclableHandle assemblerHandle = flowOut(HandleType::Assemble);
         if (assemblerHandle == nullptr) {
             return;
         }
 
         Repair::FactoryRenewer renewer = m_factory.renewer();
-        renewer.setReadLocker(static_cast<BackupReadHandle *>(backupReadHandle.get()));
-        renewer.setWriteLocker(
-        static_cast<BackupWriteHandle *>(backupWriteHandle.get()));
+        renewer.setReadLocker(static_cast<BackupHandle *>(backupReadHandle.get()));
+        renewer.setWriteLocker(static_cast<BackupHandle *>(backupWriteHandle.get()));
         renewer.setAssembler(static_cast<AssemblerHandle *>(assemblerHandle.get()));
         // Prepare a new database from material at renew directory and wait for moving
         if (!renewer.prepare()) {
@@ -614,23 +613,23 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
             return;
         }
 
-        RecyclableHandle backupReadHandle = flowOut(HandleType::BackupRead);
+        RecyclableHandle backupReadHandle = flowOut(HandleType::Backup);
         if (backupReadHandle == nullptr) {
             return;
         }
-        RecyclableHandle backupWriteHandle = flowOut(HandleType::BackupWrite);
+        RecyclableHandle backupWriteHandle = flowOut(HandleType::Backup);
         if (backupWriteHandle == nullptr) {
             return;
         }
+        WCTInnerAssert(backupWriteHandle.get() != backupReadHandle.get());
         RecyclableHandle assemblerHandle = flowOut(HandleType::Assemble);
         if (assemblerHandle == nullptr) {
             return;
         }
 
         Repair::FactoryRetriever retriever = m_factory.retriever();
-        retriever.setReadLocker(static_cast<BackupReadHandle *>(backupReadHandle.get()));
-        retriever.setWriteLocker(
-        static_cast<BackupWriteHandle *>(backupWriteHandle.get()));
+        retriever.setReadLocker(static_cast<BackupHandle *>(backupReadHandle.get()));
+        retriever.setWriteLocker(static_cast<BackupHandle *>(backupWriteHandle.get()));
         retriever.setAssembler(static_cast<AssemblerHandle *>(assemblerHandle.get()));
         retriever.setProgressCallback(onProgressUpdate);
         if (retriever.work()) {

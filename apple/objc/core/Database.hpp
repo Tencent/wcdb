@@ -78,14 +78,9 @@ protected:
         Migrating,
 
         Migrate,
-
         Checkpoint,
-
-        BackupRead,
-        BackupWrite,
-
+        Backup,
         Assemble,
-
         Integrity,
     };
     std::shared_ptr<Handle> generateSlotedHandle(Slot slot) override final;
