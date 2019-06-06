@@ -36,11 +36,6 @@ void BackupHandle::setPath(const String &path)
     Handle::setPath(path);
 }
 
-void BackupHandle::clearPath()
-{
-    Handle::clearPath();
-}
-
 const String &BackupHandle::getPath() const
 {
     return Handle::getPath();

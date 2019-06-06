@@ -57,16 +57,6 @@ void AssemblerHandle::setPath(const String &path)
     Handle::setPath(path);
 }
 
-void AssemblerHandle::clearPath()
-{
-    Handle::clearPath();
-}
-
-const String &AssemblerHandle::getPath() const
-{
-    return Handle::getPath();
-}
-
 const Error &AssemblerHandle::getError() const
 {
     return Handle::getError();

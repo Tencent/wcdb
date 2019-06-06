@@ -125,7 +125,6 @@ bool FactoryRetriever::exit(bool result)
 {
     factory.removeDirectoryIfEmpty();
     finishProgress();
-    m_assembler->clearPath();
     return result;
 }
 

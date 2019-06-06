@@ -88,6 +88,7 @@ bool FactoryRenewer::prepare()
     // 1. create temp directory for acquisition
     String tempDirectory = Path::addComponent(directory, "temp");
     String tempDatabase = Path::addComponent(tempDirectory, factory.getDatabaseName());
+    m_assembler->setPath(tempDatabase);
 
     if (!FileManager::removeItem(tempDirectory)
         || !FileManager::createDirectoryWithIntermediateDirectories(tempDirectory)) {
@@ -118,10 +119,22 @@ bool FactoryRenewer::prepare()
     }
 
     // 4. assemble infos
-    m_assembler->setPath(tempDatabase);
-    succeed = assembleInfos(infos);
-    m_assembler->clearPath();
-    if (!succeed) {
+    if (!m_assembler->markAsAssembling()) {
+        setError(m_assembler->getError());
+        return false;
+    }
+    for (const auto &element : infos) {
+        if (!m_assembler->assembleTable(element.first, element.second.sql)
+            || !m_assembler->assembleSequence(element.first, element.second.sequence)) {
+            succeed = false;
+            setError(m_assembler->getError());
+            break;
+        }
+    }
+    if (!m_assembler->markAsAssembled()) {
+        if (!succeed) {
+            setError(m_assembler->getError());
+        }
         return false;
     }
 
@@ -218,31 +231,6 @@ bool FactoryRenewer::resolveInfosForDatabase(std::map<String, Info> &infos,
 
 FactoryRenewer::Info::Info() : sequence(0)
 {
-}
-
-bool FactoryRenewer::assembleInfos(const std::map<String, Info> &infos)
-{
-    WCTInnerAssert(m_assembler != nullptr);
-    WCTInnerAssert(!m_assembler->getPath().empty());
-    bool succeed = m_assembler->markAsAssembling() && doAssembleInfos(infos)
-                   && m_assembler->markAsAssembled();
-    if (!succeed) {
-        setError(m_assembler->getError());
-    }
-    return succeed;
-}
-
-bool FactoryRenewer::doAssembleInfos(const std::map<String, Info> &infos)
-{
-    bool succeed = true;
-    for (const auto &element : infos) {
-        if (!m_assembler->assembleTable(element.first, element.second.sql)
-            || !m_assembler->assembleSequence(element.first, element.second.sequence)) {
-            succeed = false;
-            break;
-        }
-    }
-    return succeed;
 }
 
 } //namespace Repair

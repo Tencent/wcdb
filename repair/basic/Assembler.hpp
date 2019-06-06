@@ -37,7 +37,6 @@ public:
     virtual ~Assembler() = 0;
 
     virtual void setPath(const String &path) = 0;
-    virtual void clearPath() = 0;
     virtual const String &getPath() const = 0;
 
     virtual bool markAsAssembling() = 0;

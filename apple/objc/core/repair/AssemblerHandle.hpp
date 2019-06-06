@@ -35,7 +35,6 @@ public:
 
 #pragma mark - Common
     void setPath(const String &path) override final;
-    void clearPath() override final;
     const String &getPath() const override final;
     const Error &getError() const override final;
 
