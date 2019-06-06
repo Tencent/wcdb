@@ -268,7 +268,6 @@ bool Migration::Binder::stopBinding(bool succeed)
                 m_bindings.emplace(iter.first, iter.second);
             }
         }
-        m_referenceds.clear();
 
         if (m_rebind || m_bounds != m_bindings) {
             succeed = bindInfos(m_bindings);
@@ -281,9 +280,8 @@ bool Migration::Binder::stopBinding(bool succeed)
         } else {
             succeed = true;
         }
-    } else {
-        m_referenceds.clear();
     }
+    m_referenceds.clear();
     m_binding = false;
     return succeed;
 }
