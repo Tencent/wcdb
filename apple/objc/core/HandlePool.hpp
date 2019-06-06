@@ -101,8 +101,6 @@ private:
         int reference;
     };
     typedef struct ReferencedHandle ReferencedHandle;
-
-    ThreadLocal<std::array<ReferencedHandle, HandlePoolNumberOfSlots>> m_threadedHandles;
 };
 
 } //namespace WCDB
