@@ -549,7 +549,6 @@ bool Database::doBackup()
 
     WCTInnerAssert(backupReadHandle.get() != backupWriteHandle.get());
 
-    // TODO: get backed up frame, update backup queue
     Repair::FactoryBackup backup = m_factory.backup();
     backup.setReadLocker(static_cast<BackupHandle *>(backupReadHandle.get()));
     backup.setWriteLocker(static_cast<BackupHandle *>(backupWriteHandle.get()));
