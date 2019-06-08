@@ -116,7 +116,7 @@ protected:
     bool beginTransaction(bool force);
 
 private:
-    String getSavepointName(int nestedLevel);
+    static String getSavepointName(int nestedLevel);
     int m_nestedLevel;
 
 #pragma mark - Interface

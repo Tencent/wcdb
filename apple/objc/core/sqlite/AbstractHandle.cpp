@@ -305,9 +305,7 @@ AbstractHandle::getValues(const Statement &statement, int index)
 #pragma mark - Transaction
 String AbstractHandle::getSavepointName(int nestedLevel)
 {
-    String name("WCDBSavepoint_");
-    name.append(std::to_string(nestedLevel));
-    return name;
+    return String::formatted("WCDBSavepoint_%d", nestedLevel);
 }
 
 bool AbstractHandle::beginNestedTransaction()
