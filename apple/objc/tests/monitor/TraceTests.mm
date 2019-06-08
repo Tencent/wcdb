@@ -58,7 +58,7 @@
     ];
 
     __block BOOL tested = NO;
-    [self.database tracePerformance:^(NSArray<WCTPerformanceFootprint*>* footprints, NSInteger cost) {
+    [self.database tracePerformance:^(NSArray<WCTPerformanceFootprint*>* footprints, double cost) {
         if ([expectedFootprints isEqualToArray:footprints]
             && cost > 0) {
             tested = YES;
@@ -128,7 +128,7 @@
     ];
 
     __block BOOL tested = NO;
-    [WCTDatabase globalTracePerformance:^(NSArray<WCTPerformanceFootprint*>* footprints, NSInteger cost) {
+    [WCTDatabase globalTracePerformance:^(NSArray<WCTPerformanceFootprint*>* footprints, double cost) {
         if ([expectedFootprints isEqualToArray:footprints]
             && cost > 0) {
             tested = YES;

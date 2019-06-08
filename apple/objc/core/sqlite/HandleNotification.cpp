@@ -170,7 +170,7 @@ void HandleNotification::postPerformanceTraceNotification(const String &sql,
     if (!isInTransaction) {
         WCTInnerAssert(!m_performanceNotifications.empty());
         for (const auto &element : m_performanceNotifications) {
-            element.second(m_footprints, m_cost);
+            element.second(m_footprints, (double) m_cost / (int) 1E9);
         }
         m_footprints.clear();
         m_cost = 0;
