@@ -141,6 +141,24 @@
     [WCTDatabase globalTraceSQL:nil];
 }
 
++ (void)enablePerformanceTrace
+{
+    [WCTDatabase globalTracePerformance:^(NSArray<WCTPerformanceFootprint*>* footprints, NSInteger cost) {
+        NSThread* currentThread = [NSThread currentThread];
+        NSString* threadName = currentThread.name;
+        if (threadName.length == 0) {
+            threadName = [NSString stringWithFormat:@"%p", currentThread];
+        }
+        NSString* description = [NSString stringWithFormat:@"{%@}", [footprints componentsJoinedByString:@"; "]];
+        TestCaseLog(@"%@ Thread %@: %@ %ld", currentThread.isMainThread ? @"*" : @"-", threadName, description, cost);
+    }];
+}
+
++ (void)disablePerformanceTrace
+{
+    [WCTDatabase globalTracePerformance:nil];
+}
+
 #pragma mark - Test
 - (void)doTestSQLs:(NSArray<NSString*>*)testSQLs inOperation:(BOOL (^)())block
 {

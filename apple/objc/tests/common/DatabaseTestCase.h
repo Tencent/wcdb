@@ -43,6 +43,9 @@ typedef NS_ENUM(NSUInteger, DatabaseTestCaseExpect) {
 + (void)enableSQLTrace;
 + (void)disableSQLTrace;
 
++ (void)enablePerformanceTrace;
++ (void)disablePerformanceTrace;
+
 #pragma mark - Test
 @property (nonatomic, readonly) NSTimeInterval delayForTolerance;
 
