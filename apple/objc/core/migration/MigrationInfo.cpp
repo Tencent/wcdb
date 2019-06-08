@@ -81,8 +81,7 @@ Schema MigrationBaseInfo::getSchemaForDatabase(const String& database)
     return getSchemaPrefix() + std::to_string(database.hash());
 }
 
-#pragma mark - MigrationUserInfo
-void MigrationUserInfo::setSource(const String& table, const String& database)
+void MigrationBaseInfo::setSource(const String& table, const String& database)
 {
     WCTInnerAssert(!table.empty());
     m_sourceTable = table;
@@ -93,53 +92,55 @@ void MigrationUserInfo::setSource(const String& table, const String& database)
     }
 }
 
+#pragma mark - MigrationUserInfo
 StatementAttach MigrationUserInfo::getStatementForAttachingSchema() const
 {
     WCTInnerAssert(isCrossDatabase());
-    return StatementAttach().attach(m_sourceDatabase).as(getSchemaForDatabase(m_sourceDatabase));
+    return StatementAttach().attach(getSourceDatabase()).as(getSchemaForDatabase(getSourceDatabase()));
 }
 
 Schema MigrationUserInfo::getSchemaForSourceDatabase() const
 {
     if (isCrossDatabase()) {
-        return getSchemaForDatabase(m_sourceDatabase);
+        return getSchemaForDatabase(getSourceDatabase());
     }
     return Schema::main();
 }
 
 #pragma mark - MigrationInfo
 MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
-                             const std::set<String>& columns,
+                             const std::set<String>& uniqueColumns,
                              bool integerPrimaryKey)
 : MigrationBaseInfo(userInfo), m_integerPrimaryKey(integerPrimaryKey)
 {
     WCTInnerAssert(shouldMigrate());
-    WCTInnerAssert(!columns.empty());
+    WCTInnerAssert(!uniqueColumns.empty());
 
     // Schema
     if (isCrossDatabase()) {
-        m_schemaForSourceDatabase = getSchemaForDatabase(m_sourceDatabase);
+        m_schemaForSourceDatabase = getSchemaForDatabase(getSourceDatabase());
 
         m_statementForAttachingSchema
-        = StatementAttach().attach(m_sourceDatabase).as(m_schemaForSourceDatabase);
+        = StatementAttach().attach(getSourceDatabase()).as(m_schemaForSourceDatabase);
     } else {
         m_schemaForSourceDatabase = Schema::main();
     }
 
-    WCTInnerAssert(!columns.empty());
+    Columns columns;
+    columns.push_back(Column::rowid());
+    columns.insert(columns.end(), uniqueColumns.begin(), uniqueColumns.end());
+
+    ResultColumns resultColumns;
+    resultColumns.insert(resultColumns.begin(), columns.begin(), columns.end());
 
     // View
     {
-        m_unionedView = getUnionedViewPrefix() + m_table;
-
-        std::list<ResultColumn> resultColumns;
-        resultColumns.push_back(ResultColumn(Column::rowid()).as("rowid"));
-        for (const auto& column : columns) {
-            resultColumns.push_back(Column(column));
-        }
+        m_unionedView = getUnionedViewPrefix() + getTable();
 
         StatementSelect select
-        = StatementSelect().select(resultColumns).from(TableOrSubquery(m_table).schema(Schema::main()));
+        = StatementSelect()
+          .select(resultColumns)
+          .from(TableOrSubquery(getTable()).schema(Schema::main()));
 
         if (isCrossDatabase()) {
             // UNION ALL has better performance, but it will trigger a bug of SQLite. See https://github.com/RingoD/SQLiteBugOfUnionAll for further information.
@@ -149,21 +150,15 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
         }
 
         select.select(resultColumns)
-        .from(TableOrSubquery(m_sourceTable).schema(m_schemaForSourceDatabase))
+        .from(TableOrSubquery(getSourceTable()).schema(m_schemaForSourceDatabase))
         .order(OrderingTerm(Column::rowid()).order(Order::ASC));
 
-        m_statementForCreatingUnionedView
-        = StatementCreateView().createView(m_unionedView).temp().ifNotExists().as(select);
-    }
-
-    std::list<Column> columnsContainRowID;
-    std::list<ResultColumn> resultColumnsContainRowID;
-    columnsContainRowID.push_back(Column::rowid());
-    resultColumnsContainRowID.push_back(Column::rowid());
-    for (const auto& columnString : columns) {
-        Column column(columnString);
-        columnsContainRowID.push_back(column);
-        resultColumnsContainRowID.push_back(column);
+        m_statementForCreatingUnionedView = StatementCreateView()
+                                            .createView(m_unionedView)
+                                            .temp()
+                                            .ifNotExists()
+                                            .columns(columns)
+                                            .as(select);
     }
 
     // Migrate
@@ -172,27 +167,28 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
 
         m_statementForMigratingOneRow
         = StatementInsert()
-          .insertIntoTable(m_table)
+          .insertIntoTable(getTable())
           .orReplace()
           .schema(Schema::main())
-          .columns(columnsContainRowID)
+          .columns(columns)
           .values(StatementSelect()
-                  .select(resultColumnsContainRowID)
-                  .from(TableOrSubquery(m_sourceTable).schema(m_schemaForSourceDatabase))
+                  .select(resultColumns)
+                  .from(TableOrSubquery(getSourceTable()).schema(m_schemaForSourceDatabase))
                   .order(descendingRowid)
                   .limit(1));
 
         m_statementForDeletingMigratedOneRow
         = StatementDelete()
-          .deleteFrom(QualifiedTable(m_sourceTable).schema(m_schemaForSourceDatabase))
+          .deleteFrom(QualifiedTable(getSourceTable()).schema(m_schemaForSourceDatabase))
           .order(descendingRowid)
           .limit(1);
     }
 
     // Compatible
     {
+        ResultColumns resultColumnsForRowIDCompatible = resultColumns;
         if (!m_integerPrimaryKey) {
-            resultColumnsContainRowID.front()
+            resultColumnsForRowIDCompatible.front()
             = StatementSelect()
               .select(Column::rowid().max() + 1)
               .from(TableOrSubquery(m_unionedView).schema(Schema::temp()));
@@ -200,21 +196,21 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
 
         m_statementForMigratingSpecifiedRowTemplate
         = StatementInsert()
-          .insertIntoTable(m_table)
+          .insertIntoTable(getTable())
           .schema(Schema::main())
-          .columns(columnsContainRowID)
+          .columns(columns)
           .values(StatementSelect()
-                  .select(resultColumnsContainRowID)
-                  .from(TableOrSubquery(m_sourceTable).schema(m_schemaForSourceDatabase))
+                  .select(resultColumnsForRowIDCompatible)
+                  .from(TableOrSubquery(getSourceTable()).schema(m_schemaForSourceDatabase))
                   .where(Column::rowid() == BindParameter(1)));
 
         m_statementForDeletingSpecifiedRow
         = StatementDelete()
-          .deleteFrom(QualifiedTable(m_sourceTable).schema(m_schemaForSourceDatabase))
+          .deleteFrom(QualifiedTable(getSourceTable()).schema(m_schemaForSourceDatabase))
           .where(Column::rowid() == BindParameter(1));
 
         m_statementForDroppingSourceTable = StatementDropTable()
-                                            .dropTable(m_sourceTable)
+                                            .dropTable(getSourceTable())
                                             .schema(m_schemaForSourceDatabase)
                                             .ifExists();
     }

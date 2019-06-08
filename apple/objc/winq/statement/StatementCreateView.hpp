@@ -34,7 +34,7 @@ public:
 
     StatementCreateView& ifNotExists();
 
-    StatementCreateView& column(const Column& column);
+    StatementCreateView& columns(const Columns& columns);
 
     StatementCreateView& as(const StatementSelect& select);
 };
