@@ -93,6 +93,8 @@
         if (objects == nil) {
             objects = [self.random benchmarkObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.expectedQuality];
         }
+
+        TestCaseAssertOptionalEqual([self.database getNumberOfWalFrames], 0);
     }
     tearDown:^{
         [self tearDownDatabase];
@@ -112,6 +114,8 @@
     }
     setUp:^{
         [self setUpDatabase];
+
+        TestCaseAssertOptionalEqual([self.database getNumberOfWalFrames], 0);
     }
     tearDown:^{
         [self tearDownDatabase];
@@ -138,6 +142,8 @@
         if (objects == nil) {
             objects = [self.random benchmarkObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.expectedQuality];
         }
+
+        TestCaseAssertOptionalEqual([self.database getNumberOfWalFrames], 0);
     }
     tearDown:^{
         [self tearDownDatabase];
