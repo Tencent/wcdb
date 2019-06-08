@@ -39,8 +39,6 @@
     self.migratedTable = [NSString stringWithFormat:@"%@_migrated", self.sourceTable];
     if (self.isCrossDatabase) {
         self.migratedPath = [NSString stringWithFormat:@"%@_migrated", self.sourcePath];
-        WCTDatabase* database = [[WCTDatabase alloc] initWithPath:self.migratedPath];
-        TestCaseAssertTrue([database canOpen]);
     } else {
         self.migratedPath = self.sourcePath;
     }
@@ -62,6 +60,14 @@
 
     TestCaseAssertTrue([self.database stepMigration]);
     TestCaseAssertFalse([self.database isMigrated]);
+
+    TestCaseAssertTrue([self.database truncateCheckpoint]);
+
+    if (self.isCrossDatabase) {
+        WCTDatabase* database = [[WCTDatabase alloc] initWithPath:self.migratedPath];
+        TestCaseAssertTrue([database canOpen]);
+        TestCaseAssertTrue([database truncateCheckpoint]);
+    }
 }
 
 - (void)doTearDownDatabase
