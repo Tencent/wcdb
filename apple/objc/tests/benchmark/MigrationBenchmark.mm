@@ -22,33 +22,74 @@
 
 @interface MigrationBenchmark ()
 
-@property (nonatomic, retain) NSString* sourceTable;
-@property (nonatomic, retain) NSString* sourcePath;
+@property (nonatomic, readonly) NSString* sourceTable;
+@property (nonatomic, readonly) NSString* sourcePath;
 
-@property (nonatomic, retain) NSString* migratedTable;
-@property (nonatomic, retain) NSString* migratedPath;
+@property (nonatomic, readonly) NSString* migratedTable;
+@property (nonatomic, readonly) NSString* migratedPath;
 
 @end
 
-@implementation MigrationBenchmark
+@implementation MigrationBenchmark {
+    NSString* _sourceTable;
+    NSString* _sourcePath;
+    NSString* _migratedTable;
+    NSString* _migratedPath;
+}
+
+- (NSString*)sourceTable
+{
+    @synchronized(self) {
+        if (_sourceTable == nil) {
+            _sourceTable = self.tableName;
+        }
+        return _sourceTable;
+    }
+}
+
+- (NSString*)sourcePath
+{
+    @synchronized(self) {
+        if (_sourcePath == nil) {
+            _sourcePath = self.path;
+        }
+        return _sourcePath;
+    }
+}
+
+- (NSString*)migratedTable
+{
+    @synchronized(self) {
+        if (_migratedTable == nil) {
+            _migratedTable = [NSString stringWithFormat:@"%@_migrated", self.sourceTable];
+            ;
+        }
+        return _migratedTable;
+    }
+}
+
+- (NSString*)migratedPath
+{
+    @synchronized(self) {
+        if (_migratedPath == nil) {
+            if (self.isCrossDatabase) {
+                _migratedPath = [NSString stringWithFormat:@"%@_migrated", self.sourcePath];
+            } else {
+                _migratedPath = self.sourcePath;
+            }
+        }
+        return _migratedPath;
+    }
+}
 
 - (void)doSetUpDatabase
 {
-    self.sourcePath = self.path;
-    self.sourceTable = self.tableName;
-    self.migratedTable = [NSString stringWithFormat:@"%@_migrated", self.sourceTable];
-    if (self.isCrossDatabase) {
-        self.migratedPath = [NSString stringWithFormat:@"%@_migrated", self.sourcePath];
-    } else {
-        self.migratedPath = self.sourcePath;
-    }
-
-    self.tableName = self.migratedTable;
-    self.path = self.migratedPath;
-
     NSString* sourceTable = self.sourceTable;
     NSString* sourcePath = self.sourcePath;
     NSString* migratedTable = self.migratedTable;
+
+    self.tableName = self.migratedTable;
+    self.path = self.migratedPath;
     [self.database filterMigration:^(WCTMigrationUserInfo* info) {
         if ([info.table isEqualToString:migratedTable]) {
             info.sourceTable = sourceTable;
