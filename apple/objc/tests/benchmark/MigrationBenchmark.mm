@@ -62,9 +62,12 @@
 
 - (void)doTearDownDatabase
 {
+    TestCaseAssertTrue([self.database removeFiles]);
     if (self.sourceDatabase != nil) {
         TestCaseAssertTrue([self.sourceDatabase removeFiles]);
     }
+    self.path = self.sourcePath;
+    self.tableName = self.sourceTable;
 }
 
 - (void)doTestMigrate
