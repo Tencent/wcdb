@@ -265,7 +265,7 @@ bool Migration::Binder::stopBinding(bool succeed)
         m_migration.tryReduceBounds(m_bindings);
         for (const auto& iter : m_referenceds) {
             if (iter.second != nullptr) {
-                m_bindings.emplace(iter.first, iter.second);
+                m_bindings.emplace(iter.first, iter.second.get());
             }
         }
 
@@ -281,9 +281,13 @@ bool Migration::Binder::stopBinding(bool succeed)
             succeed = true;
         }
     }
-    m_referenceds.clear();
     m_binding = false;
     return succeed;
+}
+
+void Migration::Binder::stopReferenced()
+{
+    m_referenceds.clear();
 }
 
 std::pair<bool, const MigrationInfo*> Migration::Binder::bindTable(const String& table)
@@ -311,18 +315,18 @@ const MigrationInfo* Migration::Binder::getBoundInfo(const String& table)
     const MigrationInfo* info = nullptr;
     auto iter = m_bounds.find(table);
     if (iter != m_bounds.end()) {
-        info = iter->second.get();
+        info = iter->second;
     }
     return info;
 }
 
-void Migration::tryReduceBounds(std::map<String, RecyclableMigrationInfo>& bounds)
+void Migration::tryReduceBounds(std::map<String, const MigrationInfo*>& bounds)
 {
     bool reduce = false;
     {
         SharedLockGuard lockGuard(m_lock);
         for (const auto& iter : bounds) {
-            if (m_migratings.find(iter.second.get()) == m_migratings.end()) {
+            if (m_migratings.find(iter.second) == m_migratings.end()) {
                 reduce = true;
                 break;
             }
@@ -331,7 +335,7 @@ void Migration::tryReduceBounds(std::map<String, RecyclableMigrationInfo>& bound
     if (reduce) {
         LockGuard lockGuard(m_lock);
         for (auto iter = bounds.begin(); iter != bounds.end();) {
-            const MigrationInfo* info = iter->second.get();
+            const MigrationInfo* info = iter->second;
             if (m_migratings.find(info) == m_migratings.end()) {
                 iter = bounds.erase(iter);
             } else {
