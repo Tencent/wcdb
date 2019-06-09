@@ -28,23 +28,45 @@ namespace WCDB {
 class BasicConfig final : public Config {
 public:
     BasicConfig();
+
     bool invoke(Handle* handle) override final;
 
+#pragma mark - Pragma
+private:
+    bool getOrSetPragmaBegin(Handle* handle, const StatementPragma& get);
+    bool getOrSetPragmaEnd(Handle* handle, const StatementPragma& set, bool conditionToSet);
+
+#pragma mark - Pragma - Journal Mode
 protected:
+    bool lazySetJournalModeWAL(Handle* handle);
+
+private:
     const StatementPragma m_getJournalMode;
     const StatementPragma m_setJournalModeWAL;
 
+#pragma mark - Pragma - Locking Mode
+protected:
+    bool lazySetLockingModeNormal(Handle* handle);
+
+private:
     const StatementPragma m_getLockingMode;
     const StatementPragma m_setLockingModeNormal;
 
+#pragma mark - Pragma - Synchronous
+protected:
+    bool lazySetSynchronousNormal(Handle* handle);
+
+private:
     const StatementPragma m_setSynchronousNormal;
     const StatementPragma m_getSynchronous;
 
+#pragma mark - Pragma - FullFsync
+protected:
+    bool lazyEnableFullFsync(Handle* handle);
+
+private:
     const StatementPragma m_enableFullfsync;
     const StatementPragma m_isFullfsync;
-
-    bool getOrSetPragmaBegin(Handle* handle, const StatementPragma& get);
-    bool getOrSetPragmaEnd(Handle* handle, const StatementPragma& set, bool conditionToSet);
 };
 
 } //namespace WCDB
