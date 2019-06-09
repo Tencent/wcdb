@@ -50,8 +50,10 @@
 #pragma mark - Path
 - (void)setPath:(NSString*)path
 {
-    _path = path;
-    _database = nil;
+    @synchronized(self) {
+        _path = path;
+        _database = nil;
+    }
 }
 
 - (NSString*)path

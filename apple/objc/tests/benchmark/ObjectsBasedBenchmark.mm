@@ -33,13 +33,7 @@
 
 - (void)setUpDatabase
 {
-    __block NSString* path;
-    [self.database close:^{
-        TestCaseAssertTrue([self.database removeFiles]);
-        path = [self.factory production:self.directory];
-    }];
-    TestCaseAssertTrue(path != nil);
-    self.path = path;
+    self.path = [self.factory production:self.directory];
 
     [self doSetUpDatabase];
 
