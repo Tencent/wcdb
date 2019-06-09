@@ -97,7 +97,7 @@ public:
 
     String getDescription() const;
 
-    Identifier* clone() const override final;
+    std::unique_ptr<Identifier> clone() const override final;
 
     typedef int Valid;
     static constexpr const Valid invalid = -1;

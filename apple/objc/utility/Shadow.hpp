@@ -31,43 +31,70 @@ template<typename T>
 class Cloneable {
 public:
     virtual ~Cloneable() {}
-    virtual T* clone() const = 0;
+    virtual std::unique_ptr<T> clone() const = 0;
 };
 
 template<typename T>
-class Shadow final : public std::unique_ptr<T> {
-public:
+class Shadow final {
     //    static_assert(std::is_base_of<Cloneable<T>, T>::value, "");
-    using std::unique_ptr<T>::unique_ptr;
+#pragma mark - NULL
+public:
+    Shadow() : m_payload(nullptr) {}
 
-    Shadow(const T& value) { value.clone(*this); }
+    Shadow(const std::nullptr_t&) : m_payload(nullptr) {}
 
-    Shadow& operator=(const T& value)
+    Shadow& operator=(const std::nullptr_t&)
     {
-        this->reset(static_cast<T*>(value.clone()));
+        m_payload = nullptr;
         return *this;
     }
 
-    Shadow(const Shadow<T>& other)
+    bool operator==(std::nullptr_t) const { return m_payload == nullptr; }
+    bool operator!=(std::nullptr_t) const { return m_payload != nullptr; }
+
+#pragma mark - Value
+public:
+    Shadow(const T& value) : m_payload(value.clone()) {}
+
+    Shadow& operator=(const T& value)
     {
-        if (other.get() != nullptr) {
-            this->reset(static_cast<T*>(other->clone()));
-        } else {
-            this->reset(nullptr);
-        }
+        m_payload
+        = std::move(std::unique_ptr<T>{ static_cast<T*>(value.clone().release()) });
+        return *this;
+    }
+
+    T* get() const { return m_payload.get(); }
+
+    constexpr T* operator->() const { return m_payload.get(); }
+
+    T& operator*() const { return *m_payload.get(); }
+
+#pragma mark - Unique
+public:
+    Shadow(std::unique_ptr<T>&& value) : m_payload(std::move(value)) {}
+
+#pragma mark - Shadow
+public:
+    Shadow(const Shadow<T>& other)
+    : m_payload(other.get() != nullptr ? std::unique_ptr<T>{ static_cast<T*>(
+                                         other.m_payload.get()->clone().release()) } :
+                                         nullptr)
+    {
     }
 
     Shadow& operator=(const Shadow<T>& other)
     {
         if (other.get() != nullptr) {
-            this->reset(static_cast<T*>(other->clone()));
+            m_payload = std::move(std::unique_ptr<T>{
+            static_cast<T*>(other.m_payload.get()->clone().release()) });
         } else {
-            this->reset(nullptr);
+            m_payload = nullptr;
         }
         return *this;
     }
 
-    constexpr T* operator->() const { return this->get(); }
+private:
+    std::unique_ptr<T> m_payload;
 };
 
 } // namespace WCDB
