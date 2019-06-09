@@ -36,8 +36,4 @@
 
 - (void)doTestBatchWrite;
 
-- (void)doTestCreateIndex;
-
-- (void)doTestVacuum;
-
 @end

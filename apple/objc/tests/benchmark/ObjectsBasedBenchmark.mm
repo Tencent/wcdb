@@ -148,49 +148,6 @@
     }];
 }
 
-- (void)doTestCreateIndex
-{
-    NSString* indexName = [NSString stringWithFormat:@"%@_index", self.tableName];
-    WCDB::StatementCreateIndex statement = WCDB::StatementCreateIndex().createIndex(indexName).table(self.tableName).indexed(BenchmarkObject.identifier);
-
-    __block BOOL result;
-    [self
-    doMeasure:^{
-        result = [self.database execute:statement];
-    }
-    setUp:^{
-        [self setUpDatabase];
-    }
-    tearDown:^{
-        [self tearDownDatabase];
-        result = NO;
-    }
-    checkCorrectness:^{
-        TestCaseAssertTrue(result);
-    }];
-}
-
-- (void)doTestVacuum
-{
-    WCDB::StatementVacuum statement = WCDB::StatementVacuum().vacuum();
-    __block BOOL result;
-    [self
-    doMeasure:^{
-        result = [self.database execute:statement];
-    }
-    setUp:^{
-        [self setUpDatabase];
-        TestCaseAssertTrue([self.database deleteFromTable:self.tableName limit:(int) self.factory.expectedQuality / 10]);
-    }
-    tearDown:^{
-        [self tearDownDatabase];
-        result = NO;
-    }
-    checkCorrectness:^{
-        TestCaseAssertTrue(result);
-    }];
-}
-
 #pragma mark - ReusableFactoryPreparation
 - (BOOL)willEndPreparing:(NSString*)path
 {
