@@ -44,29 +44,9 @@ private:
     const StatementPragma m_getJournalMode;
     const StatementPragma m_setJournalModeWAL;
 
-#pragma mark - Pragma - Locking Mode
-protected:
-    bool lazySetLockingModeNormal(Handle* handle);
-
-private:
-    const StatementPragma m_getLockingMode;
-    const StatementPragma m_setLockingModeNormal;
-
-#pragma mark - Pragma - Synchronous
-protected:
-    bool lazySetSynchronousNormal(Handle* handle);
-
-private:
-    const StatementPragma m_setSynchronousNormal;
-    const StatementPragma m_getSynchronous;
-
 #pragma mark - Pragma - FullFsync
 protected:
-    bool lazyEnableFullFsync(Handle* handle);
-
-private:
     const StatementPragma m_enableFullfsync;
-    const StatementPragma m_isFullfsync;
 };
 
 } //namespace WCDB

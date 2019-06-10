@@ -31,15 +31,8 @@ BasicConfig::BasicConfig()
 // Journal Mode
 , m_getJournalMode(StatementPragma().pragma(Pragma::journalMode()))
 , m_setJournalModeWAL(StatementPragma().pragma(Pragma::journalMode()).to("WAL"))
-// Locking Mode
-, m_getLockingMode(StatementPragma().pragma(Pragma::lockingMode()))
-, m_setLockingModeNormal(StatementPragma().pragma(Pragma::lockingMode()).to("NORMAL"))
-// Synchronous
-, m_setSynchronousNormal(StatementPragma().pragma(Pragma::synchronous()).to("NORMAL"))
-, m_getSynchronous(StatementPragma().pragma(Pragma::synchronous()))
 // Fullfsync
-, m_enableFullfsync(StatementPragma().pragma(Pragma::fullfsync()).to(true))
-, m_isFullfsync(StatementPragma().pragma(Pragma::fullfsync()))
+, m_enableFullfsync(StatementPragma().pragma(Pragma::checkpointFullfsync()).to(true))
 {
 }
 
@@ -53,8 +46,7 @@ bool BasicConfig::invoke(Handle* handle)
     handle->disableCheckpointWhenClosing(true);
     bool succeed = true;
     if (!handle->isReadonly()) {
-        succeed = lazySetJournalModeWAL(handle) && lazySetLockingModeNormal(handle)
-                  && lazySetSynchronousNormal(handle) && lazyEnableFullFsync(handle);
+        succeed = lazySetJournalModeWAL(handle) && handle->execute(m_enableFullfsync);
     }
     return succeed;
 }
@@ -97,31 +89,6 @@ bool BasicConfig::lazySetJournalModeWAL(Handle* handle)
     } while (--remainingNumberOfBusyRetryTimes > 0 && !succeed && handle->isErrorIgnorable());
     handle->markErrorAsUnignorable();
     return succeed;
-}
-
-#pragma mark - Pragma - Locking Mode
-bool BasicConfig::lazySetLockingModeNormal(Handle* handle)
-{
-    return getOrSetPragmaBegin(handle, m_getLockingMode)
-           && getOrSetPragmaEnd(handle,
-                                m_setLockingModeNormal,
-                                !handle->getText(0).isCaseInsensiveEqual("NORMAL"));
-}
-
-#pragma mark - Pragma - Synchronous
-bool BasicConfig::lazySetSynchronousNormal(Handle* handle)
-{
-    // 1 for Normal: https://sqlite.org/pragma.html#pragma_synchronous
-    return getOrSetPragmaBegin(handle, m_getSynchronous)
-           && getOrSetPragmaEnd(
-           handle, m_setSynchronousNormal, handle->getInteger32(0) != 1);
-}
-
-#pragma mark - Pragma - FullFsync
-bool BasicConfig::lazyEnableFullFsync(Handle* handle)
-{
-    return getOrSetPragmaBegin(handle, m_isFullfsync)
-           && getOrSetPragmaEnd(handle, m_enableFullfsync, handle->getInteger32(0) != 1);
 }
 
 } //namespace WCDB
