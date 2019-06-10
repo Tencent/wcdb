@@ -63,25 +63,4 @@
     }];
 }
 
-- (void)test_vacuum
-{
-    WCDB::StatementVacuum statement = WCDB::StatementVacuum().vacuum();
-    __block BOOL result;
-    [self
-    doMeasure:^{
-        result = [self.database execute:statement];
-    }
-    setUp:^{
-        [self setUpDatabase];
-        TestCaseAssertTrue([self.database deleteFromTable:self.tableName limit:(int) self.factory.expectedQuality / 10]);
-    }
-    tearDown:^{
-        [self tearDownDatabase];
-        result = NO;
-    }
-    checkCorrectness:^{
-        TestCaseAssertTrue(result);
-    }];
-}
-
 @end
