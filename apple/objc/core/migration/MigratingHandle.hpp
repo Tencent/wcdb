@@ -41,7 +41,8 @@ private:
     bool rebindViews(const std::map<String, const MigrationInfo *> &migratings);
     bool rebindSchemas(const std::map<String, const MigrationInfo *> &migratings);
 
-    bool trySynchronousTransactionAfterAttached();
+    bool runSchemaTransactionForNewlyAttached();
+    void resetSynchronousToDefaultForNewlyAttached(const Schema &schema);
 
 #pragma mark - Info Initializer
 protected:

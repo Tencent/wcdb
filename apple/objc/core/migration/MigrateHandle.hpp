@@ -40,6 +40,7 @@ protected:
     bool reAttach(const String& newPath, const Schema& newSchema);
     bool attach(const String& newPath, const Schema& newSchema);
     bool detach();
+    void resetSynchrounousToDefaultForNewlyAttached(const Schema& newSchema);
 
 private:
     Schema m_attached;

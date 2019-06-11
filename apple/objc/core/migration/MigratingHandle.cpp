@@ -88,7 +88,9 @@ std::pair<bool, bool> MigratingHandle::sourceTableExists(const MigrationUserInfo
                     succeed
                     = executeStatement(userInfo.getStatementForAttachingSchema());
                     if (succeed) {
-                        succeed = trySynchronousTransactionAfterAttached();
+                        resetSynchronousToDefaultForNewlyAttached(
+                        userInfo.getSchemaForSourceDatabase());
+                        succeed = runSchemaTransactionForNewlyAttached();
                     }
                 }
             }
@@ -199,9 +201,11 @@ bool MigratingHandle::rebindSchemas(const std::map<String, const MigrationInfo*>
             return false;
         }
         attached = true;
+
+        resetSynchronousToDefaultForNewlyAttached(iter.second->getSchemaForSourceDatabase());
     }
     if (attached) {
-        return trySynchronousTransactionAfterAttached();
+        return runSchemaTransactionForNewlyAttached();
     }
     return true;
 }
@@ -211,7 +215,7 @@ bool MigratingHandle::bindInfos(const std::map<String, const MigrationInfo*>& mi
     return rebindViews(migratings) && rebindSchemas(migratings);
 }
 
-bool MigratingHandle::trySynchronousTransactionAfterAttached()
+bool MigratingHandle::runSchemaTransactionForNewlyAttached()
 {
     bool succeed = true;
     if (isInTransaction()) {
@@ -224,6 +228,14 @@ bool MigratingHandle::trySynchronousTransactionAfterAttached()
         markErrorAsUnignorable();
     }
     return succeed;
+}
+
+void MigratingHandle::resetSynchronousToDefaultForNewlyAttached(const Schema& newSchema)
+{
+    WCTInnerAssert(!newSchema.syntax().isMain());
+    // invoke setting syncronous since SQLite will set synchrounous full by default for attached pager.
+    executeStatement(
+    StatementPragma().pragma(Pragma::synchronous()).schema(newSchema).to(SQLITE_DEFAULT_SYNCHRONOUS));
 }
 
 #pragma mark - Migration
