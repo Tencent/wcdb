@@ -83,7 +83,9 @@ Schema MigrationBaseInfo::getSchemaForDatabase(const String& database)
 
 void MigrationBaseInfo::setSource(const String& table, const String& database)
 {
-    WCTInnerAssert(!table.empty());
+    WCTRemedialAssert(!table.empty() && (table != m_table || database != m_database),
+                      "Invalid migration source.",
+                      return;);
     m_sourceTable = table;
     if (!database.empty()) {
         m_sourceDatabase = database;

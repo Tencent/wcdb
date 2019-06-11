@@ -42,11 +42,16 @@
     }
     self.tableName = [self.sourceTable stringByAppendingString:@"_migrated"];
 
+    NSString* table = self.tableName;
+    NSString* path = self.path;
     NSString* sourceTable = self.sourceTable;
     NSString* sourcePath = self.sourcePath;
     [self.database filterMigration:^(WCTMigrationUserInfo* info) {
-        info.sourceTable = sourceTable;
-        info.sourceDatabase = sourcePath;
+        if ([info.table isEqualToString:table]
+            && [info.database isEqualToString:path]) {
+            info.sourceTable = sourceTable;
+            info.sourceDatabase = sourcePath;
+        }
     }];
 
     TestCaseAssertTrue([self.database createTable:self.tableName withClass:BenchmarkObject.class]);
