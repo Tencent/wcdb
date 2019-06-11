@@ -33,9 +33,6 @@ MigrateHandle::MigrateHandle()
 , m_samplePointing(0)
 {
     m_error.infos.set(ErrorStringKeyAction, ErrorActionMigrate);
-
-    markErrorAsIgnorable(Error::Code::Interrupt);
-    markErrorAsIgnorable(Error::Code::Busy);
 }
 
 MigrateHandle::~MigrateHandle()
@@ -43,7 +40,6 @@ MigrateHandle::~MigrateHandle()
     finalizeMigrationStatement();
     returnStatement(m_migrateStatement);
     returnStatement(m_removeMigratedStatement);
-    markErrorAsUnignorable(2);
 }
 
 bool MigrateHandle::reAttach(const String& newPath, const Schema& newSchema)

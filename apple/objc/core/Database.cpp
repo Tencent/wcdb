@@ -760,11 +760,14 @@ std::pair<bool, bool> Database::doStepMigration()
     RecyclableHandle handle = flowOut(HandleType::Migrate);
     if (handle != nullptr) {
         WCTInnerAssert(dynamic_cast<MigrateHandle *>(handle.get()) != nullptr);
-        std::tie(succeed, done)
-        = m_migration.step(*(static_cast<MigrateHandle *>(handle.get())));
+        MigrateHandle *migrateHandle = static_cast<MigrateHandle *>(handle.get());
+
+        migrateHandle->markErrorAsIgnorable(Error::Code::Busy);
+        std::tie(succeed, done) = m_migration.step(*migrateHandle);
         if (!succeed && handle->isErrorIgnorable()) {
             succeed = true;
         }
+        migrateHandle->markErrorAsUnignorable();
     }
     return { succeed, done };
 }
@@ -813,7 +816,15 @@ bool Database::checkpointIfAlreadyInitialized()
         RecyclableHandle handle = flowOut(HandleType::OperationCheckpoint);
         if (handle != nullptr) {
             WCTInnerAssert(dynamic_cast<OperationHandle *>(handle.get()) != nullptr);
-            succeed = static_cast<OperationHandle *>(handle.get())->checkpoint();
+            OperationHandle *operationHandle
+            = static_cast<OperationHandle *>(handle.get());
+
+            operationHandle->markErrorAsIgnorable(Error::Code::Busy);
+            succeed = operationHandle->checkpoint();
+            if (!succeed && operationHandle->isErrorIgnorable()) {
+                succeed = true;
+            }
+            operationHandle->markErrorAsUnignorable();
         }
     }
     return succeed;

@@ -222,26 +222,24 @@ std::pair<bool, bool> AbstractHandle::tableExists(const String &table)
 
 std::pair<bool, bool> AbstractHandle::tableExists(const Schema &schema, const String &table)
 {
-    static StatementSelect *s_template = new StatementSelect(
-    StatementSelect()
-    .select(Column("sql"))
-    .where(Column("type") == "table"
-           && Column("name").collate("NOCASE") == BindParameter(1)));
+    static StatementSelect *s_template
+    = new StatementSelect(StatementSelect().select(1).limit(1));
 
     StatementSelect statement = *s_template;
-    statement.from(TableOrSubquery(Syntax::masterTable).schema(schema));
+    statement.from(TableOrSubquery(table).schema(schema));
 
     HandleStatement handleStatement(this);
     bool succeed = false;
     bool exists = false;
-    if (handleStatement.prepare(statement)) {
-        handleStatement.bindText(table, 1);
-        succeed = handleStatement.step();
-        if (succeed) {
-            exists = !handleStatement.done();
-        }
+    markErrorAsIgnorable(Error::Code::Error);
+    succeed = handleStatement.prepare(statement);
+    exists = succeed;
+    if (succeed) {
         handleStatement.finalize();
+    } else if (isErrorIgnorable()) {
+        succeed = true;
     }
+    markErrorAsUnignorable();
     return { succeed, exists };
 }
 
