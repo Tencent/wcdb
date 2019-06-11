@@ -60,9 +60,6 @@ bool MigrateHandle::reAttach(const String& newPath, const Schema& newSchema)
 bool MigrateHandle::attach(const String& newPath, const Schema& newSchema)
 {
     WCTInnerAssert(m_attached.syntax().isMain());
-    WCTInnerAssert(!isInTransaction());
-    WCTInnerAssert(!isPrepared());
-
     bool succeed = true;
     if (!newSchema.syntax().isMain()) {
         succeed = execute(WCDB::StatementAttach().attach(newPath).as(newSchema));
@@ -73,19 +70,8 @@ bool MigrateHandle::attach(const String& newPath, const Schema& newSchema)
     return succeed;
 }
 
-void MigrateHandle::resetSynchrounousToDefaultForNewlyAttached(const Schema& newSchema)
-{
-    WCTInnerAssert(!newSchema.syntax().isMain());
-    // invoke setting syncronous since SQLite will set synchrounous full by default for attached pager.
-    executeStatement(
-    StatementPragma().pragma(Pragma::synchronous()).schema(newSchema).to(SQLITE_DEFAULT_SYNCHRONOUS));
-}
-
 bool MigrateHandle::detach()
 {
-    WCTInnerAssert(!isInTransaction());
-    WCTInnerAssert(!isPrepared());
-
     bool succeed = true;
     if (!m_attached.syntax().isMain()) {
         succeed = execute(WCDB::StatementDetach().detach(m_attached));
