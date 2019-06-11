@@ -229,11 +229,9 @@ std::pair<bool, bool> AbstractHandle::tableExists(const Schema &schema, const St
     = StatementSelect().select(1).from(TableOrSubquery(table).schema(schema)).limit(1);
 
     HandleStatement handleStatement(this);
-    bool succeed = false;
-    bool exists = false;
     markErrorAsIgnorable(Error::Code::Error);
-    succeed = handleStatement.prepare(statement);
-    exists = succeed;
+    bool succeed = handleStatement.prepare(statement);
+    bool exists = succeed;
     if (succeed) {
         handleStatement.finalize();
     } else if (isErrorIgnorable()) {
