@@ -72,15 +72,12 @@
 
 - (void)test_exists
 {
-    int numberOfTests = 10000;
-    NSString* pattern = [NSString stringWithFormat:@"%s%%", WCDB::Syntax::builtinTablePrefix];
-
-    __block NSString* tableName;
+    __block NSArray<NSString*>* tableNames;
     __block BOOL result;
     [self
     doMeasure:^{
         result = YES;
-        for (int i = 0; i < numberOfTests; ++i) {
+        for (NSString* tableName in tableNames) {
             if (![self.database tableExists:tableName]) {
                 result = NO;
                 break;
@@ -89,7 +86,16 @@
     }
     setUp:^{
         [self setUpDatabase];
-        tableName = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCTMaster.name).from(WCTMaster.tableName).where(WCTMaster.name.notLike(pattern)).limit(1)].stringValue;
+        if (tableNames == nil) {
+            NSString* pattern = [NSString stringWithFormat:@"%s%%", WCDB::Syntax::builtinTablePrefix];
+
+            NSMutableArray<NSString*>* names = [NSMutableArray arrayWithCapacity:(NSUInteger) self.factory.expectedQuality];
+            for (WCTValue* value in [self.database getColumnFromStatement:WCDB::StatementSelect().select(WCTMaster.name).from(WCTMaster.tableName).where(WCTMaster.name.notLike(pattern))]) {
+                [names addObject:value.stringValue];
+            }
+            tableNames = [NSArray arrayWithArray:names];
+        }
+        TestCaseAssertTrue(tableNames.count == self.factory.expectedQuality);
     }
     tearDown:^{
         [self tearDownDatabase];
