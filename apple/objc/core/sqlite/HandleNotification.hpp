@@ -61,7 +61,7 @@ public:
     typedef struct Footprint Footprint;
 
     using Footprints = std::list<Footprint>;
-    typedef std::function<void(const Footprints &, const int64_t &cost)> PerformanceNotification;
+    typedef std::function<void(const Footprints &, double cost)> PerformanceNotification;
     void setNotificationWhenPerformanceTraced(const String &name,
                                               const PerformanceNotification &onTraced);
 

@@ -50,8 +50,10 @@
 #pragma mark - Path
 - (void)setPath:(NSString*)path
 {
-    _path = path;
-    _database = nil;
+    @synchronized(self) {
+        _path = path;
+        _database = nil;
+    }
 }
 
 - (NSString*)path
@@ -139,6 +141,24 @@
 + (void)disableSQLTrace
 {
     [WCTDatabase globalTraceSQL:nil];
+}
+
++ (void)enablePerformanceTrace
+{
+    [WCTDatabase globalTracePerformance:^(NSArray<WCTPerformanceFootprint*>* footprints, double cost) {
+        NSThread* currentThread = [NSThread currentThread];
+        NSString* threadName = currentThread.name;
+        if (threadName.length == 0) {
+            threadName = [NSString stringWithFormat:@"%p", currentThread];
+        }
+        NSString* description = [NSString stringWithFormat:@"{%@}", [footprints componentsJoinedByString:@"; "]];
+        TestCaseLog(@"%@ Thread %@: %@ %.2f", currentThread.isMainThread ? @"*" : @"-", threadName, description, cost);
+    }];
+}
+
++ (void)disablePerformanceTrace
+{
+    [WCTDatabase globalTracePerformance:nil];
 }
 
 #pragma mark - Test

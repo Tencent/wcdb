@@ -54,6 +54,12 @@ void AbstractHandle::setPath(const String &path)
     }
 }
 
+void AbstractHandle::clearPath()
+{
+    close();
+    m_path.clear();
+}
+
 const String &AbstractHandle::getPath() const
 {
     return m_path;
@@ -77,10 +83,12 @@ String AbstractHandle::getJournalSuffix()
 #pragma mark - Basic
 bool AbstractHandle::open()
 {
-    WCTInnerAssert(!isOpened());
-    bool succeed = APIExit(sqlite3_open(m_path.c_str(), &m_handle));
-    if (!succeed) {
-        m_handle = nullptr;
+    bool succeed = true;
+    if (!isOpened()) {
+        succeed = APIExit(sqlite3_open(m_path.c_str(), &m_handle));
+        if (!succeed) {
+            m_handle = nullptr;
+        }
     }
     return succeed;
 }
@@ -92,7 +100,7 @@ bool AbstractHandle::isOpened() const
 
 void AbstractHandle::close()
 {
-    if (m_handle != nullptr) {
+    if (isOpened()) {
         finalizeStatements();
         WCTRemedialAssert(m_nestedLevel == 0 && !isInTransaction(),
                           "Unpaired transaction.",
@@ -297,7 +305,7 @@ AbstractHandle::getValues(const Statement &statement, int index)
 #pragma mark - Transaction
 String AbstractHandle::getSavepointName(int nestedLevel)
 {
-    return "WCDBSavepoint_" + std::to_string(nestedLevel);
+    return String::formatted("WCDBSavepoint_%d", nestedLevel);
 }
 
 bool AbstractHandle::beginNestedTransaction()
@@ -305,8 +313,29 @@ bool AbstractHandle::beginNestedTransaction()
     bool succeed = true;
     if (isInTransaction()) {
         ++m_nestedLevel;
-        succeed = executeStatement(
-        StatementSavepoint().savepoint(getSavepointName(m_nestedLevel)));
+
+        static const String *s_savepoint_1 = new String(
+        StatementSavepoint().savepoint(getSavepointName(1)).getDescription());
+        static const String *s_savepoint_2 = new String(
+        StatementSavepoint().savepoint(getSavepointName(2)).getDescription());
+        static const String *s_savepoint_3 = new String(
+        StatementSavepoint().savepoint(getSavepointName(3)).getDescription());
+
+        switch (m_nestedLevel) {
+        case 1:
+            succeed = executeSQL(*s_savepoint_1);
+            break;
+        case 2:
+            succeed = executeSQL(*s_savepoint_2);
+            break;
+        case 3:
+            succeed = executeSQL(*s_savepoint_3);
+            break;
+        default:
+            succeed = executeStatement(
+            StatementSavepoint().savepoint(getSavepointName(m_nestedLevel)));
+            break;
+        }
     } else {
         succeed = beginTransaction();
     }
@@ -319,8 +348,28 @@ bool AbstractHandle::commitOrRollbackNestedTransaction()
     if (m_nestedLevel == 0) {
         succeed = commitOrRollbackTransaction();
     } else {
-        String savepointName = getSavepointName(m_nestedLevel);
-        succeed = executeStatement(StatementRelease().release(savepointName));
+        static const String *s_savepoint_1
+        = new String(StatementRelease().release(getSavepointName(1)).getDescription());
+        static const String *s_savepoint_2
+        = new String(StatementRelease().release(getSavepointName(2)).getDescription());
+        static const String *s_savepoint_3
+        = new String(StatementRelease().release(getSavepointName(3)).getDescription());
+
+        switch (m_nestedLevel) {
+        case 1:
+            succeed = executeSQL(*s_savepoint_1);
+            break;
+        case 2:
+            succeed = executeSQL(*s_savepoint_2);
+            break;
+        case 3:
+            succeed = executeSQL(*s_savepoint_3);
+            break;
+        default:
+            succeed = executeStatement(
+            StatementRelease().release(getSavepointName(m_nestedLevel)));
+            break;
+        }
         if (succeed) {
             --m_nestedLevel;
         } else {
@@ -335,8 +384,30 @@ void AbstractHandle::rollbackNestedTransaction()
     if (m_nestedLevel == 0) {
         rollbackTransaction();
     } else {
-        String savepointName = getSavepointName(m_nestedLevel);
-        if (executeStatement(StatementRollback().rollbackToSavepoint(savepointName))) {
+        static const String *s_savepoint_1 = new String(
+        StatementRollback().rollbackToSavepoint(getSavepointName(1)).getDescription());
+        static const String *s_savepoint_2 = new String(
+        StatementRollback().rollbackToSavepoint(getSavepointName(2)).getDescription());
+        static const String *s_savepoint_3 = new String(
+        StatementRollback().rollbackToSavepoint(getSavepointName(3)).getDescription());
+
+        bool succeed = false;
+        switch (m_nestedLevel) {
+        case 1:
+            succeed = executeSQL(*s_savepoint_1);
+            break;
+        case 2:
+            succeed = executeSQL(*s_savepoint_2);
+            break;
+        case 3:
+            succeed = executeSQL(*s_savepoint_3);
+            break;
+        default:
+            succeed = executeStatement(
+            StatementRollback().rollbackToSavepoint(getSavepointName(m_nestedLevel)));
+            break;
+        }
+        if (succeed) {
             --m_nestedLevel;
         }
     }

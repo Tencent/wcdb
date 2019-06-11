@@ -35,11 +35,11 @@ public:
 
 #pragma mark - Binder
 protected:
-    bool bindInfos(const std::map<String, RecyclableMigrationInfo> &migratings) override final;
+    bool bindInfos(const std::map<String, const MigrationInfo *> &migratings) override final;
 
 private:
-    bool rebindViews(const std::map<String, RecyclableMigrationInfo> &migratings);
-    bool rebindSchemas(const std::map<String, RecyclableMigrationInfo> &migratings);
+    bool rebindViews(const std::map<String, const MigrationInfo *> &migratings);
+    bool rebindSchemas(const std::map<String, const MigrationInfo *> &migratings);
 
     bool trySynchronousTransactionAfterAttached();
 

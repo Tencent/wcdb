@@ -21,13 +21,9 @@
 #import "MigrationBenchmark.h"
 
 @interface MigrationBenchmark ()
-
+@property (nonatomic, retain) WCTDatabase* sourceDatabase;
 @property (nonatomic, retain) NSString* sourceTable;
 @property (nonatomic, retain) NSString* sourcePath;
-
-@property (nonatomic, retain) NSString* migratedTable;
-@property (nonatomic, retain) NSString* migratedPath;
-
 @end
 
 @implementation MigrationBenchmark
@@ -36,21 +32,23 @@
 {
     self.sourcePath = self.path;
     self.sourceTable = self.tableName;
-    self.migratedTable = [NSString stringWithFormat:@"%@_migrated", self.sourceTable];
+    self.sourceDatabase = self.database;
+
+    // pointing migrated
     if (self.isCrossDatabase) {
-        self.migratedPath = [NSString stringWithFormat:@"%@_migrated", self.sourcePath];
+        self.path = [self.sourcePath stringByAppendingString:@"_migrated"];
     } else {
-        self.migratedPath = self.sourcePath;
+        self.path = self.sourcePath;
     }
+    self.tableName = [self.sourceTable stringByAppendingString:@"_migrated"];
 
-    self.tableName = self.migratedTable;
-    self.path = self.migratedPath;
-
+    NSString* table = self.tableName;
+    NSString* path = self.path;
     NSString* sourceTable = self.sourceTable;
     NSString* sourcePath = self.sourcePath;
-    NSString* migratedTable = self.migratedTable;
     [self.database filterMigration:^(WCTMigrationUserInfo* info) {
-        if ([info.table isEqualToString:migratedTable]) {
+        if ([info.table isEqualToString:table]
+            && [info.database isEqualToString:path]) {
             info.sourceTable = sourceTable;
             info.sourceDatabase = sourcePath;
         }
@@ -60,16 +58,21 @@
 
     TestCaseAssertTrue([self.database stepMigration]);
     TestCaseAssertFalse([self.database isMigrated]);
+    TestCaseAssertTrue([self.database truncateCheckpoint]);
+    TestCaseAssertTrue([self.sourceDatabase truncateCheckpoint]);
+
+    [self.sourceDatabase close];
+    TestCaseAssertTrue([self.sourceDatabase canOpen]);
 }
 
 - (void)doTearDownDatabase
 {
-    self.tableName = self.sourceTable;
-    self.path = self.sourcePath;
-
-    if (self.isCrossDatabase) {
-        TestCaseAssertTrue([[[WCTDatabase alloc] initWithPath:self.migratedPath] removeFiles]);
+    TestCaseAssertTrue([self.database removeFiles]);
+    if (self.sourceDatabase != nil) {
+        TestCaseAssertTrue([self.sourceDatabase removeFiles]);
     }
+    self.path = self.sourcePath;
+    self.tableName = self.sourceTable;
 }
 
 - (void)doTestMigrate

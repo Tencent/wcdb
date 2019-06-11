@@ -38,6 +38,8 @@ public:
 #pragma mark - Schema
 protected:
     bool reAttach(const String& newPath, const Schema& newSchema);
+    bool attach(const String& newPath, const Schema& newSchema);
+    bool detach();
 
 private:
     Schema m_attached;

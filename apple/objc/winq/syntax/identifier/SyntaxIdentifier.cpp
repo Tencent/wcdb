@@ -57,118 +57,125 @@ void Identifier::iterate(const Iterator &iterator, bool &stop)
     }
 }
 
-Identifier *Identifier::clone() const
+std::unique_ptr<Identifier> Identifier::clone() const
 {
     switch (getType()) {
     case Type::Column:
-        return new Column(*static_cast<const Column *>(this));
+        return std::make_unique<Column>(*static_cast<const Column *>(this));
     case Type::Schema:
-        return new Schema(*static_cast<const Schema *>(this));
+        return std::make_unique<Schema>(*static_cast<const Schema *>(this));
     case Type::ColumnDef:
-        return new ColumnDef(*static_cast<const ColumnDef *>(this));
+        return std::make_unique<ColumnDef>(*static_cast<const ColumnDef *>(this));
     case Type::ColumnConstraint:
-        return new ColumnConstraint(*static_cast<const ColumnConstraint *>(this));
+        return std::make_unique<ColumnConstraint>(
+        *static_cast<const ColumnConstraint *>(this));
     case Type::Expression:
-        return new Expression(*static_cast<const Expression *>(this));
+        return std::make_unique<Expression>(*static_cast<const Expression *>(this));
     case Type::LiteralValue:
-        return new LiteralValue(*static_cast<const LiteralValue *>(this));
+        return std::make_unique<LiteralValue>(*static_cast<const LiteralValue *>(this));
     case Type::ForeignKeyClause:
-        return new ForeignKeyClause(*static_cast<const ForeignKeyClause *>(this));
+        return std::make_unique<ForeignKeyClause>(
+        *static_cast<const ForeignKeyClause *>(this));
     case Type::BindParameter:
-        return new BindParameter(*static_cast<const BindParameter *>(this));
+        return std::make_unique<BindParameter>(*static_cast<const BindParameter *>(this));
     case Type::RaiseFunction:
-        return new RaiseFunction(*static_cast<const RaiseFunction *>(this));
+        return std::make_unique<RaiseFunction>(*static_cast<const RaiseFunction *>(this));
     case Type::WindowDef:
-        return new WindowDef(*static_cast<const WindowDef *>(this));
+        return std::make_unique<WindowDef>(*static_cast<const WindowDef *>(this));
     case Type::Filter:
-        return new Filter(*static_cast<const Filter *>(this));
+        return std::make_unique<Filter>(*static_cast<const Filter *>(this));
     case Type::IndexedColumn:
-        return new IndexedColumn(*static_cast<const IndexedColumn *>(this));
+        return std::make_unique<IndexedColumn>(*static_cast<const IndexedColumn *>(this));
     case Type::TableConstraint:
-        return new TableConstraint(*static_cast<const TableConstraint *>(this));
+        return std::make_unique<TableConstraint>(*static_cast<const TableConstraint *>(this));
     case Type::CTETableName:
-        return new CTETableName(*static_cast<const CTETableName *>(this));
+        return std::make_unique<CTETableName>(*static_cast<const CTETableName *>(this));
     case Type::WithClause:
-        return new WithClause(*static_cast<const WithClause *>(this));
+        return std::make_unique<WithClause>(*static_cast<const WithClause *>(this));
     case Type::RecursiveCTE:
-        return new RecursiveCTE(*static_cast<const RecursiveCTE *>(this));
+        return std::make_unique<RecursiveCTE>(*static_cast<const RecursiveCTE *>(this));
     case Type::CommonTableExpression:
-        return new CommonTableExpression(*static_cast<const CommonTableExpression *>(this));
+        return std::make_unique<CommonTableExpression>(
+        *static_cast<const CommonTableExpression *>(this));
     case Type::QualifiedTableName:
-        return new QualifiedTableName(*static_cast<const QualifiedTableName *>(this));
+        return std::make_unique<QualifiedTableName>(
+        *static_cast<const QualifiedTableName *>(this));
     case Type::OrderingTerm:
-        return new OrderingTerm(*static_cast<const OrderingTerm *>(this));
+        return std::make_unique<OrderingTerm>(*static_cast<const OrderingTerm *>(this));
     case Type::UpsertClause:
-        return new UpsertClause(*static_cast<const UpsertClause *>(this));
+        return std::make_unique<UpsertClause>(*static_cast<const UpsertClause *>(this));
     case Type::Pragma:
-        return new Pragma(*static_cast<const Pragma *>(this));
+        return std::make_unique<Pragma>(*static_cast<const Pragma *>(this));
     case Type::JoinClause:
-        return new JoinClause(*static_cast<const JoinClause *>(this));
+        return std::make_unique<JoinClause>(*static_cast<const JoinClause *>(this));
     case Type::TableOrSubquery:
-        return new TableOrSubquery(*static_cast<const TableOrSubquery *>(this));
+        return std::make_unique<TableOrSubquery>(*static_cast<const TableOrSubquery *>(this));
     case Type::JoinConstraint:
-        return new JoinConstraint(*static_cast<const JoinConstraint *>(this));
+        return std::make_unique<JoinConstraint>(*static_cast<const JoinConstraint *>(this));
     case Type::SelectCore:
-        return new SelectCore(*static_cast<const SelectCore *>(this));
+        return std::make_unique<SelectCore>(*static_cast<const SelectCore *>(this));
     case Type::ResultColumn:
-        return new ResultColumn(*static_cast<const ResultColumn *>(this));
+        return std::make_unique<ResultColumn>(*static_cast<const ResultColumn *>(this));
     case Type::FrameSpec:
-        return new FrameSpec(*static_cast<const FrameSpec *>(this));
+        return std::make_unique<FrameSpec>(*static_cast<const FrameSpec *>(this));
     case Type::FunctionInvocation:
-        return new FunctionInvocation(*static_cast<const FunctionInvocation *>(this));
+        return std::make_unique<FunctionInvocation>(
+        *static_cast<const FunctionInvocation *>(this));
     case Type::WindowFunctionInvocation:
-        return new WindowFunctionInvocation(
+        return std::make_unique<WindowFunctionInvocation>(
         *static_cast<const WindowFunctionInvocation *>(this));
     case Type::AlterTableSTMT:
-        return new AlterTableSTMT(*static_cast<const AlterTableSTMT *>(this));
+        return std::make_unique<AlterTableSTMT>(*static_cast<const AlterTableSTMT *>(this));
     case Type::AnalyzeSTMT:
-        return new AnalyzeSTMT(*static_cast<const AnalyzeSTMT *>(this));
+        return std::make_unique<AnalyzeSTMT>(*static_cast<const AnalyzeSTMT *>(this));
     case Type::AttachSTMT:
-        return new AttachSTMT(*static_cast<const AttachSTMT *>(this));
+        return std::make_unique<AttachSTMT>(*static_cast<const AttachSTMT *>(this));
     case Type::BeginSTMT:
-        return new BeginSTMT(*static_cast<const BeginSTMT *>(this));
+        return std::make_unique<BeginSTMT>(*static_cast<const BeginSTMT *>(this));
     case Type::CommitSTMT:
-        return new CommitSTMT(*static_cast<const CommitSTMT *>(this));
+        return std::make_unique<CommitSTMT>(*static_cast<const CommitSTMT *>(this));
     case Type::RollbackSTMT:
-        return new RollbackSTMT(*static_cast<const RollbackSTMT *>(this));
+        return std::make_unique<RollbackSTMT>(*static_cast<const RollbackSTMT *>(this));
     case Type::SavepointSTMT:
-        return new SavepointSTMT(*static_cast<const SavepointSTMT *>(this));
+        return std::make_unique<SavepointSTMT>(*static_cast<const SavepointSTMT *>(this));
     case Type::ReleaseSTMT:
-        return new ReleaseSTMT(*static_cast<const ReleaseSTMT *>(this));
+        return std::make_unique<ReleaseSTMT>(*static_cast<const ReleaseSTMT *>(this));
     case Type::CreateIndexSTMT:
-        return new CreateIndexSTMT(*static_cast<const CreateIndexSTMT *>(this));
+        return std::make_unique<CreateIndexSTMT>(*static_cast<const CreateIndexSTMT *>(this));
     case Type::CreateTableSTMT:
-        return new CreateTableSTMT(*static_cast<const CreateTableSTMT *>(this));
+        return std::make_unique<CreateTableSTMT>(*static_cast<const CreateTableSTMT *>(this));
     case Type::CreateTriggerSTMT:
-        return new CreateTriggerSTMT(*static_cast<const CreateTriggerSTMT *>(this));
+        return std::make_unique<CreateTriggerSTMT>(
+        *static_cast<const CreateTriggerSTMT *>(this));
     case Type::SelectSTMT:
-        return new SelectSTMT(*static_cast<const SelectSTMT *>(this));
+        return std::make_unique<SelectSTMT>(*static_cast<const SelectSTMT *>(this));
     case Type::InsertSTMT:
-        return new InsertSTMT(*static_cast<const InsertSTMT *>(this));
+        return std::make_unique<InsertSTMT>(*static_cast<const InsertSTMT *>(this));
     case Type::DeleteSTMT:
-        return new DeleteSTMT(*static_cast<const DeleteSTMT *>(this));
+        return std::make_unique<DeleteSTMT>(*static_cast<const DeleteSTMT *>(this));
     case Type::UpdateSTMT:
-        return new UpdateSTMT(*static_cast<const UpdateSTMT *>(this));
+        return std::make_unique<UpdateSTMT>(*static_cast<const UpdateSTMT *>(this));
     case Type::CreateViewSTMT:
-        return new CreateViewSTMT(*static_cast<const CreateViewSTMT *>(this));
+        return std::make_unique<CreateViewSTMT>(*static_cast<const CreateViewSTMT *>(this));
     case Type::CreateVirtualTableSTMT:
-        return new CreateVirtualTableSTMT(*static_cast<const CreateVirtualTableSTMT *>(this));
+        return std::make_unique<CreateVirtualTableSTMT>(
+        *static_cast<const CreateVirtualTableSTMT *>(this));
     case Type::DetachSTMT:
-        return new DetachSTMT(*static_cast<const DetachSTMT *>(this));
+        return std::make_unique<DetachSTMT>(*static_cast<const DetachSTMT *>(this));
     case Type::DropIndexSTMT:
-        return new DropIndexSTMT(*static_cast<const DropIndexSTMT *>(this));
+        return std::make_unique<DropIndexSTMT>(*static_cast<const DropIndexSTMT *>(this));
     case Type::DropTableSTMT:
-        return new DropTableSTMT(*static_cast<const DropTableSTMT *>(this));
+        return std::make_unique<DropTableSTMT>(*static_cast<const DropTableSTMT *>(this));
     case Type::DropTriggerSTMT:
-        return new DropTriggerSTMT(*static_cast<const DropTriggerSTMT *>(this));
+        return std::make_unique<DropTriggerSTMT>(*static_cast<const DropTriggerSTMT *>(this));
     case Type::DropViewSTMT:
-        return new DropViewSTMT(*static_cast<const DropViewSTMT *>(this));
+        return std::make_unique<DropViewSTMT>(*static_cast<const DropViewSTMT *>(this));
     case Type::PragmaSTMT:
-        return new PragmaSTMT(*static_cast<const PragmaSTMT *>(this));
+        return std::make_unique<PragmaSTMT>(*static_cast<const PragmaSTMT *>(this));
     case Type::ReindexSTMT:
-        return new ReindexSTMT(*static_cast<const ReindexSTMT *>(this));
+        return std::make_unique<ReindexSTMT>(*static_cast<const ReindexSTMT *>(this));
     case Type::VacuumSTMT:
-        return new VacuumSTMT(*static_cast<const VacuumSTMT *>(this));
+        return std::make_unique<VacuumSTMT>(*static_cast<const VacuumSTMT *>(this));
     }
 }
 

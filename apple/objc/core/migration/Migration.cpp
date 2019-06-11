@@ -243,7 +243,7 @@ std::pair<bool, RecyclableMigrationInfo> Migration::getInfo(const String& table)
 
 #pragma mark - Bind
 Migration::Binder::Binder(Migration& migration)
-: m_migration(migration), m_binding(false)
+: m_migration(migration), m_binding(false), m_rebind(false)
 {
 }
 
@@ -255,34 +255,39 @@ void Migration::Binder::startBinding()
 {
     WCTInnerAssert(m_binding == false);
     m_binding = true;
-    WCTInnerAssert(m_cache.empty());
+    WCTInnerAssert(m_referenceds.empty());
 }
 
 bool Migration::Binder::stopBinding(bool succeed)
 {
     WCTInnerAssert(m_binding);
     if (succeed) {
-        m_migration.tryReduceBounds(m_boundsCache);
-        for (const auto& iter : m_cache) {
+        m_migration.tryReduceBounds(m_bindings);
+        for (const auto& iter : m_referenceds) {
             if (iter.second != nullptr) {
-                m_boundsCache.emplace(iter.first, iter.second);
+                m_bindings.emplace(iter.first, iter.second.get());
             }
         }
-        m_cache.clear();
 
-        if (m_bounds != m_boundsCache) {
-            succeed = bindInfos(m_boundsCache);
+        if (m_rebind || m_bounds != m_bindings) {
+            succeed = bindInfos(m_bindings);
             if (succeed) {
-                m_bounds = m_boundsCache;
+                m_rebind = false;
+                m_bounds = m_bindings;
+            } else {
+                m_rebind = true;
             }
         } else {
             succeed = true;
         }
-    } else {
-        m_cache.clear();
     }
     m_binding = false;
     return succeed;
+}
+
+void Migration::Binder::stopReferenced()
+{
+    m_referenceds.clear();
 }
 
 std::pair<bool, const MigrationInfo*> Migration::Binder::bindTable(const String& table)
@@ -293,7 +298,7 @@ std::pair<bool, const MigrationInfo*> Migration::Binder::bindTable(const String&
     if (!table.empty()) {
         std::tie(succeed, info) = m_migration.getOrInitInfo(*this, table);
         if (succeed) {
-            m_cache.emplace(table, info);
+            m_referenceds.emplace(table, info);
         }
     }
     return { succeed, info.get() };
@@ -310,18 +315,18 @@ const MigrationInfo* Migration::Binder::getBoundInfo(const String& table)
     const MigrationInfo* info = nullptr;
     auto iter = m_bounds.find(table);
     if (iter != m_bounds.end()) {
-        info = iter->second.get();
+        info = iter->second;
     }
     return info;
 }
 
-void Migration::tryReduceBounds(std::map<String, RecyclableMigrationInfo>& bounds)
+void Migration::tryReduceBounds(std::map<String, const MigrationInfo*>& bounds)
 {
     bool reduce = false;
     {
         SharedLockGuard lockGuard(m_lock);
         for (const auto& iter : bounds) {
-            if (m_migratings.find(iter.second.get()) == m_migratings.end()) {
+            if (m_migratings.find(iter.second) == m_migratings.end()) {
                 reduce = true;
                 break;
             }
@@ -330,7 +335,7 @@ void Migration::tryReduceBounds(std::map<String, RecyclableMigrationInfo>& bound
     if (reduce) {
         LockGuard lockGuard(m_lock);
         for (auto iter = bounds.begin(); iter != bounds.end();) {
-            const MigrationInfo* info = iter->second.get();
+            const MigrationInfo* info = iter->second;
             if (m_migratings.find(info) == m_migratings.end()) {
                 iter = bounds.erase(iter);
             } else {

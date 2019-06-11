@@ -123,25 +123,27 @@ public:
     protected:
         void startBinding();
         bool stopBinding(bool succeed);
+        void stopReferenced();
 
         std::pair<bool, const MigrationInfo*> bindTable(const String& table);
         bool hintThatTableWillBeCreated(const String& table);
         const MigrationInfo* getBoundInfo(const String& table);
 
-        virtual bool bindInfos(const std::map<String, RecyclableMigrationInfo>& infos) = 0;
+        virtual bool bindInfos(const std::map<String, const MigrationInfo*>& infos) = 0;
 
     private:
         bool m_binding;
         Migration& m_migration;
-        std::map<String, RecyclableMigrationInfo> m_cache; // all infos need to be bound during this cycle
-        std::map<String, RecyclableMigrationInfo> m_boundsCache;
-        std::map<String, RecyclableMigrationInfo> m_bounds;
+        std::map<String, RecyclableMigrationInfo> m_referenceds; // all infos need to be bound during this cycle
+        std::map<String, const MigrationInfo*> m_bindings;
+        std::map<String, const MigrationInfo*> m_bounds;
+        bool m_rebind;
     };
 
 protected:
     std::pair<bool, RecyclableMigrationInfo>
     getOrInitInfo(InfoInitializer& initializer, const String& table);
-    void tryReduceBounds(std::map<String, RecyclableMigrationInfo>& bounds);
+    void tryReduceBounds(std::map<String, const MigrationInfo*>& bounds);
 
 private:
 #pragma mark - Step

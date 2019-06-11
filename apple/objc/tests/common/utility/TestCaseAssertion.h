@@ -79,7 +79,7 @@
 
 #define TestCaseAssertOptionalEqual(optional, expected)   \
     {                                                     \
-        WCTOptionalBool _optional = optional;             \
+        auto _optional = optional;                        \
         TestCaseAssertFalse(_optional.failed());          \
         TestCaseAssertEqual(_optional.value(), expected); \
     }

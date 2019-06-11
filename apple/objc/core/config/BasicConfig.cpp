@@ -43,6 +43,23 @@ BasicConfig::BasicConfig()
 {
 }
 
+bool BasicConfig::invoke(Handle* handle)
+{
+    static_assert(SQLITE_DEFAULT_SYNCHRONOUS == 1, "");
+    static_assert(SQLITE_DEFAULT_WAL_SYNCHRONOUS == 1, "");
+    static_assert(SQLITE_DEFAULT_LOCKING_MODE == 0, "");
+
+    handle->enableExtendedResultCodes(true);
+    handle->disableCheckpointWhenClosing(true);
+    bool succeed = true;
+    if (!handle->isReadonly()) {
+        succeed = lazySetJournalModeWAL(handle) && lazySetLockingModeNormal(handle)
+                  && lazySetSynchronousNormal(handle) && lazyEnableFullFsync(handle);
+    }
+    return succeed;
+}
+
+#pragma mark - Pragma
 bool BasicConfig::getOrSetPragmaBegin(Handle* handle, const StatementPragma& get)
 {
     bool succeed = false;
@@ -66,49 +83,45 @@ bool BasicConfig::getOrSetPragmaEnd(Handle* handle, const StatementPragma& set, 
     return succeed;
 }
 
-bool BasicConfig::invoke(Handle* handle)
+#pragma mark - Pragma - Journal Mode
+bool BasicConfig::lazySetJournalModeWAL(Handle* handle)
 {
-    if (handle->isReadonly()) {
-        return true;
-    }
-
-    handle->enableExtendedResultCodes(true);
-    handle->disableCheckpointWhenClosing(true);
-
     bool succeed = false;
     handle->markErrorAsIgnorable(Error::Code::Busy);
-    for (int i = 0; i < BasicConfigBusyRetryMaxAllowedNumberOfTimes && !succeed; ++i) {
+    int remainingNumberOfBusyRetryTimes = BasicConfigBusyRetryMaxAllowedNumberOfTimes;
+    do {
         succeed
         = getOrSetPragmaBegin(handle, m_getJournalMode)
           && getOrSetPragmaEnd(
           handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("WAL"));
-        if (!succeed && !handle->isErrorIgnorable()) {
-            break;
-        }
-    }
+    } while (--remainingNumberOfBusyRetryTimes > 0 && !succeed && handle->isErrorIgnorable());
     handle->markErrorAsUnignorable();
-    if (!succeed) {
-        return false;
-    }
+    return succeed;
+}
 
-    if (!getOrSetPragmaBegin(handle, m_getLockingMode)
-        || !getOrSetPragmaEnd(
-        handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("NORMAL"))) {
-        return false;
-    }
+#pragma mark - Pragma - Locking Mode
+bool BasicConfig::lazySetLockingModeNormal(Handle* handle)
+{
+    return getOrSetPragmaBegin(handle, m_getLockingMode)
+           && getOrSetPragmaEnd(handle,
+                                m_setLockingModeNormal,
+                                !handle->getText(0).isCaseInsensiveEqual("NORMAL"));
+}
 
+#pragma mark - Pragma - Synchronous
+bool BasicConfig::lazySetSynchronousNormal(Handle* handle)
+{
     // 1 for Normal: https://sqlite.org/pragma.html#pragma_synchronous
-    if (!getOrSetPragmaBegin(handle, m_getSynchronous)
-        || !getOrSetPragmaEnd(handle, m_setSynchronousNormal, handle->getInteger32(0) != 1)) {
-        return false;
-    }
+    return getOrSetPragmaBegin(handle, m_getSynchronous)
+           && getOrSetPragmaEnd(
+           handle, m_setSynchronousNormal, handle->getInteger32(0) != 1);
+}
 
-    if (!getOrSetPragmaBegin(handle, m_isFullfsync)
-        || !getOrSetPragmaEnd(handle, m_enableFullfsync, handle->getInteger32(0) != 1)) {
-        return false;
-    }
-
-    return true;
+#pragma mark - Pragma - FullFsync
+bool BasicConfig::lazyEnableFullFsync(Handle* handle)
+{
+    return getOrSetPragmaBegin(handle, m_isFullfsync)
+           && getOrSetPragmaEnd(handle, m_enableFullfsync, handle->getInteger32(0) != 1);
 }
 
 } //namespace WCDB

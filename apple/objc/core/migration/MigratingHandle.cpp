@@ -107,12 +107,13 @@ String MigratingHandle::getDatabasePath() const
 }
 
 #pragma mark - Binder
-bool MigratingHandle::rebindViews(const std::map<String, RecyclableMigrationInfo>& migratings)
+bool MigratingHandle::rebindViews(const std::map<String, const MigrationInfo*>& migratings)
 {
     std::map<String, const MigrationInfo*> views2MigratingInfos;
     for (const auto& iter : migratings) {
-        const MigrationInfo* migrating = iter.second.get();
-        views2MigratingInfos.emplace(migrating->getUnionedView(), migrating);
+        const MigrationInfo* info = iter.second;
+        WCTInnerAssert(info != nullptr);
+        views2MigratingInfos.emplace(info->getUnionedView(), info);
     }
 
     std::set<String> existingViews;
@@ -154,11 +155,12 @@ bool MigratingHandle::rebindViews(const std::map<String, RecyclableMigrationInfo
     return true;
 }
 
-bool MigratingHandle::rebindSchemas(const std::map<String, RecyclableMigrationInfo>& migratings)
+bool MigratingHandle::rebindSchemas(const std::map<String, const MigrationInfo*>& migratings)
 {
     std::map<String, const MigrationInfo*> schemas2MigratingInfos;
     for (const auto& iter : migratings) {
-        const MigrationInfo* info = iter.second.get();
+        const MigrationInfo* info = iter.second;
+        WCTInnerAssert(info != nullptr);
         if (info->isCrossDatabase()) {
             schemas2MigratingInfos.emplace(
             info->getSchemaForSourceDatabase().getDescription(), info);
@@ -204,7 +206,7 @@ bool MigratingHandle::rebindSchemas(const std::map<String, RecyclableMigrationIn
     return true;
 }
 
-bool MigratingHandle::bindInfos(const std::map<String, RecyclableMigrationInfo>& migratings)
+bool MigratingHandle::bindInfos(const std::map<String, const MigrationInfo*>& migratings)
 {
     return rebindViews(migratings) && rebindSchemas(migratings);
 }
@@ -445,6 +447,7 @@ void MigratingHandle::finalize()
     m_mainStatement->finalize();
     m_additionalStatement->finalize();
     finalizeMigrate();
+    stopReferenced();
 }
 
 bool MigratingHandle::step()

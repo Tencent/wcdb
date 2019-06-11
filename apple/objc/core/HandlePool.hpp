@@ -72,25 +72,23 @@ private:
 #pragma mark - Handle
 public:
     typedef unsigned int Slot;
-    RecyclableHandle flowOut(Slot slot);
+    RecyclableHandle flowOut(HandleType type);
     void purge();
     size_t numberOfAliveHandles() const;
-    size_t numberOfActiveHandles(Slot slot) const;
     bool isAliving() const;
 
 protected:
-    virtual std::shared_ptr<Handle> generateSlotedHandle(Slot slot) = 0;
-    virtual bool willReuseSlotedHandle(Slot slot, Handle *handle) = 0;
+    virtual std::shared_ptr<Handle> generateSlotedHandle(HandleType type) = 0;
+    virtual bool willReuseSlotedHandle(HandleType type, Handle *handle) = 0;
 
     mutable SharedLock m_memory;
 
-    const std::set<std::shared_ptr<Handle>> &getHandles(Slot slot) const;
-
 private:
-    void flowBack(Slot slot, const std::shared_ptr<Handle> &handle);
+    static unsigned int slotOfHandleType(HandleType type);
+    void flowBack(HandleType type, const std::shared_ptr<Handle> &handle);
 
-    std::array<std::set<std::shared_ptr<Handle>>, HandlePoolNumberOfSlots> m_handles;
-    std::array<std::list<std::shared_ptr<Handle>>, HandlePoolNumberOfSlots> m_frees;
+    std::array<std::set<std::shared_ptr<Handle>>, HandleSlotCount> m_handles;
+    std::array<std::list<std::shared_ptr<Handle>>, HandleSlotCount> m_frees;
 
 #pragma mark - Threaded
 private:
@@ -101,8 +99,6 @@ private:
         int reference;
     };
     typedef struct ReferencedHandle ReferencedHandle;
-
-    ThreadLocal<std::array<ReferencedHandle, HandlePoolNumberOfSlots>> m_threadedHandles;
 };
 
 } //namespace WCDB

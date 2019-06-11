@@ -41,8 +41,8 @@ protected:
     bool configure();
 
 private:
-    Configs m_cachedConfigs;
-    Configs m_configs;
+    Configs m_invokeds;
+    Configs m_pendings;
 
 #pragma mark - Statement
 public:

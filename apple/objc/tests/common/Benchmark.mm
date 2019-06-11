@@ -53,6 +53,8 @@
 
                            if (@available(iOS 12.0, macOS 10.14, *)) {
                                BenchmarkSignpostBegin("measure");
+                           } else {
+                               [NSThread sleepForTimeInterval:0.5];
                            }
 
                            [self log:@"%d started.", i];
@@ -65,6 +67,8 @@
 
                            if (@available(iOS 12.0, macOS 10.14, *)) {
                                BenchmarkSignpostEnd("measure");
+                           } else {
+                               [NSThread sleepForTimeInterval:0.5];
                            }
 
                            [self log:@"%d passed.", i];

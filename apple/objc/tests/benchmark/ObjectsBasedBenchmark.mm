@@ -33,13 +33,7 @@
 
 - (void)setUpDatabase
 {
-    __block NSString* path;
-    [self.database close:^{
-        TestCaseAssertTrue([self.database removeFiles]);
-        path = [self.factory production:self.directory];
-    }];
-    TestCaseAssertTrue(path != nil);
-    self.path = path;
+    self.path = [self.factory production:self.directory];
 
     [self doSetUpDatabase];
 
@@ -93,6 +87,8 @@
         if (objects == nil) {
             objects = [self.random benchmarkObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.expectedQuality];
         }
+
+        TestCaseAssertOptionalEqual([self.database getNumberOfWalFrames], 0);
     }
     tearDown:^{
         [self tearDownDatabase];
@@ -112,6 +108,8 @@
     }
     setUp:^{
         [self setUpDatabase];
+
+        TestCaseAssertOptionalEqual([self.database getNumberOfWalFrames], 0);
     }
     tearDown:^{
         [self tearDownDatabase];
@@ -138,49 +136,8 @@
         if (objects == nil) {
             objects = [self.random benchmarkObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.expectedQuality];
         }
-    }
-    tearDown:^{
-        [self tearDownDatabase];
-        result = NO;
-    }
-    checkCorrectness:^{
-        TestCaseAssertTrue(result);
-    }];
-}
 
-- (void)doTestCreateIndex
-{
-    NSString* indexName = [NSString stringWithFormat:@"%@_index", self.tableName];
-    WCDB::StatementCreateIndex statement = WCDB::StatementCreateIndex().createIndex(indexName).table(self.tableName).indexed(BenchmarkObject.identifier);
-
-    __block BOOL result;
-    [self
-    doMeasure:^{
-        result = [self.database execute:statement];
-    }
-    setUp:^{
-        [self setUpDatabase];
-    }
-    tearDown:^{
-        [self tearDownDatabase];
-        result = NO;
-    }
-    checkCorrectness:^{
-        TestCaseAssertTrue(result);
-    }];
-}
-
-- (void)doTestVacuum
-{
-    WCDB::StatementVacuum statement = WCDB::StatementVacuum().vacuum();
-    __block BOOL result;
-    [self
-    doMeasure:^{
-        result = [self.database execute:statement];
-    }
-    setUp:^{
-        [self setUpDatabase];
-        TestCaseAssertTrue([self.database deleteFromTable:self.tableName limit:(int) self.factory.expectedQuality / 10]);
+        TestCaseAssertOptionalEqual([self.database getNumberOfWalFrames], 0);
     }
     tearDown:^{
         [self tearDownDatabase];

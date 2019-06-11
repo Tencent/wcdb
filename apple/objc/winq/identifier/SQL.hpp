@@ -47,7 +47,7 @@ public:
 
 protected:
     template<typename T, typename Enable = typename std::enable_if<std::is_base_of<Syntax::Identifier, T>::value>::type>
-    SQL(T* _) : m_syntax(new T)
+    SQL(T* _) : m_syntax(std::make_unique<T>())
     {
         WCDB_UNUSED(_)
     }

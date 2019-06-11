@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include <WCDB/CheckpointHandle.hpp>
 #include <WCDB/Configs.hpp>
 #include <WCDB/Factory.hpp>
 #include <WCDB/HandlePool.hpp>
@@ -73,26 +72,11 @@ public:
     std::pair<bool, bool> tableExists(const String &table);
 
 protected:
-    enum HandleType : unsigned int {
-        Normal = 0,
-        Migrating,
-
-        Migrate,
-
-        Checkpoint,
-
-        BackupRead,
-        BackupWrite,
-
-        Assemble,
-
-        Integrity,
-    };
-    std::shared_ptr<Handle> generateSlotedHandle(Slot slot) override final;
-    bool willReuseSlotedHandle(Slot slot, Handle *handle) override final;
+    std::shared_ptr<Handle> generateSlotedHandle(HandleType type) override final;
+    bool willReuseSlotedHandle(HandleType type, Handle *handle) override final;
 
 private:
-    bool reconfigureHandle(Handle *handle);
+    bool setupHandle(HandleType type, Handle *handle);
 
 #pragma mark - Config
 public:
@@ -174,6 +158,7 @@ public:
     void checkIntegrityIfAlreadyInitialized();
 
 private:
+    void doCheckIntegrity();
     bool doBackup();
     bool retrieveRenewed();
     Repair::Factory m_factory;
@@ -201,8 +186,7 @@ protected:
 
 #pragma mark - Checkpoint
 public:
-    typedef CheckpointHandle::CheckpointMode CheckpointMode;
-    bool checkpointIfAlreadyInitialized(CheckpointMode mode);
+    bool checkpointIfAlreadyInitialized();
 
 #pragma mark - Memory
 public:

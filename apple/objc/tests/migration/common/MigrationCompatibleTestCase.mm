@@ -62,7 +62,7 @@
                                                          [NSString stringWithFormat:@"INSERT INTO %@.%@(identifier, content) VALUES(?1, ?2)", self.schemaName, self.sourceTable] ]];
 
     if (self.mode == MigrationObjectORMModeNormal) {
-        [sqls addObject:[NSString stringWithFormat:@"INSERT INTO main.testTable(rowid, content, identifier) SELECT (SELECT max(rowid) + 1 FROM temp.WCDBUnioned_testTable), content, identifier FROM %@.%@ WHERE rowid == ?1", self.schemaName, self.sourceTable]];
+        [sqls addObject:[NSString stringWithFormat:@"INSERT INTO main.testTable(rowid, content, identifier) SELECT (SELECT max(maxRowID) + 1 AS rowid FROM (SELECT max(rowid) AS maxRowID FROM %@.%@ UNION ALL SELECT max(rowid) AS maxRowID FROM main.testTable)), content, identifier FROM %@.%@ WHERE rowid == ?1", self.schemaName, self.sourceTable, self.schemaName, self.sourceTable]];
     } else {
         [sqls addObject:[NSString stringWithFormat:@"INSERT INTO main.testTable(rowid, content, identifier) SELECT rowid, content, identifier FROM %@.%@ WHERE rowid == ?1", self.schemaName, self.sourceTable]];
     }

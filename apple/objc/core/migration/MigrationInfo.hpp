@@ -46,7 +46,9 @@ public:
 
 protected:
     static Schema getSchemaForDatabase(const String& database);
+    void setSource(const String& table, const String& database = "");
 
+private:
     String m_table;
     String m_database;
     String m_sourceTable;
@@ -58,7 +60,7 @@ class MigrationUserInfo final : public MigrationBaseInfo {
 public:
     using MigrationBaseInfo::MigrationBaseInfo;
 
-    void setSource(const String& table, const String& database = "");
+    using MigrationBaseInfo::setSource;
 
     /*
      ATTACH [sourceDatabase]
