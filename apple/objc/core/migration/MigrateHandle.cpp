@@ -49,7 +49,7 @@ MigrateHandle::~MigrateHandle()
 bool MigrateHandle::reAttach(const String& newPath, const Schema& newSchema)
 {
     WCTInnerAssert(!isInTransaction());
-    WCTInnerAssert(isPrepared());
+    WCTInnerAssert(!isPrepared());
 
     bool succeed = true;
     if (!m_attached.syntax().isTargetingSameSchema(newSchema.syntax())) {
@@ -63,7 +63,7 @@ bool MigrateHandle::reAttach(const String& newPath, const Schema& newSchema)
 bool MigrateHandle::attach(const String& newPath, const Schema& newSchema)
 {
     WCTInnerAssert(!isInTransaction());
-    WCTInnerAssert(isPrepared());
+    WCTInnerAssert(!isPrepared());
     WCTInnerAssert(m_attached.syntax().isMain());
 
     bool succeed = true;
@@ -79,7 +79,7 @@ bool MigrateHandle::attach(const String& newPath, const Schema& newSchema)
 bool MigrateHandle::detach()
 {
     WCTInnerAssert(!isInTransaction());
-    WCTInnerAssert(isPrepared());
+    WCTInnerAssert(!isPrepared());
 
     bool succeed = true;
     if (!m_attached.syntax().isMain()) {
