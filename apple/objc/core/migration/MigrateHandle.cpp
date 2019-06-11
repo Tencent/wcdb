@@ -48,6 +48,9 @@ MigrateHandle::~MigrateHandle()
 
 bool MigrateHandle::reAttach(const String& newPath, const Schema& newSchema)
 {
+    WCTInnerAssert(!isInTransaction());
+    WCTInnerAssert(isPrepared());
+
     bool succeed = true;
     if (!m_attached.syntax().isTargetingSameSchema(newSchema.syntax())) {
         succeed = detach() && attach(newPath, newSchema);
@@ -59,7 +62,10 @@ bool MigrateHandle::reAttach(const String& newPath, const Schema& newSchema)
 
 bool MigrateHandle::attach(const String& newPath, const Schema& newSchema)
 {
+    WCTInnerAssert(!isInTransaction());
+    WCTInnerAssert(isPrepared());
     WCTInnerAssert(m_attached.syntax().isMain());
+
     bool succeed = true;
     if (!newSchema.syntax().isMain()) {
         succeed = execute(WCDB::StatementAttach().attach(newPath).as(newSchema));
@@ -72,6 +78,9 @@ bool MigrateHandle::attach(const String& newPath, const Schema& newSchema)
 
 bool MigrateHandle::detach()
 {
+    WCTInnerAssert(!isInTransaction());
+    WCTInnerAssert(isPrepared());
+
     bool succeed = true;
     if (!m_attached.syntax().isMain()) {
         succeed = execute(WCDB::StatementDetach().detach(m_attached));
