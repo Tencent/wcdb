@@ -225,8 +225,8 @@ std::pair<bool, bool> AbstractHandle::tableExists(const Schema &schema, const St
     static StatementSelect *s_template
     = new StatementSelect(StatementSelect().select(1).limit(1));
 
-    StatementSelect statement = *s_template;
-    statement.from(TableOrSubquery(table).schema(schema));
+    StatementSelect statement
+    = StatementSelect().select(1).from(TableOrSubquery(table).schema(schema)).limit(1);
 
     HandleStatement handleStatement(this);
     bool succeed = false;
