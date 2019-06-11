@@ -48,6 +48,8 @@ AutoCheckpointConfig::~AutoCheckpointConfig()
 
 bool AutoCheckpointConfig::invoke(Handle* handle)
 {
+    static_assert(SQLITE_DEFAULT_WAL_AUTOCHECKPOINT == 0, "");
+
     handle->setNotificationWhenCommitted(
     0,
     m_identifier,
