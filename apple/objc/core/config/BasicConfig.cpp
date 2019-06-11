@@ -45,6 +45,10 @@ BasicConfig::BasicConfig()
 
 bool BasicConfig::invoke(Handle* handle)
 {
+    static_assert(SQLITE_DEFAULT_SYNCHRONOUS == 1, "");
+    static_assert(SQLITE_DEFAULT_WAL_SYNCHRONOUS == 1, "");
+    static_assert(SQLITE_DEFAULT_LOCKING_MODE == 0, "");
+
     handle->enableExtendedResultCodes(true);
     handle->disableCheckpointWhenClosing(true);
     bool succeed = true;
@@ -86,10 +90,10 @@ bool BasicConfig::lazySetJournalModeWAL(Handle* handle)
     handle->markErrorAsIgnorable(Error::Code::Busy);
     int remainingNumberOfBusyRetryTimes = BasicConfigBusyRetryMaxAllowedNumberOfTimes;
     do {
-        succeed = getOrSetPragmaBegin(handle, m_getJournalMode)
-                  && getOrSetPragmaEnd(handle,
-                                       m_setJournalModeWAL,
-                                       !handle->getText(0).isCaseInsensiveEqual("WAL"));
+        succeed
+        = getOrSetPragmaBegin(handle, m_getJournalMode)
+          && getOrSetPragmaEnd(
+          handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("WAL"));
     } while (--remainingNumberOfBusyRetryTimes > 0 && !succeed && handle->isErrorIgnorable());
     handle->markErrorAsUnignorable();
     return succeed;
@@ -110,7 +114,7 @@ bool BasicConfig::lazySetSynchronousNormal(Handle* handle)
     // 1 for Normal: https://sqlite.org/pragma.html#pragma_synchronous
     return getOrSetPragmaBegin(handle, m_getSynchronous)
            && getOrSetPragmaEnd(
-              handle, m_setSynchronousNormal, handle->getInteger32(0) != 1);
+           handle, m_setSynchronousNormal, handle->getInteger32(0) != 1);
 }
 
 #pragma mark - Pragma - FullFsync

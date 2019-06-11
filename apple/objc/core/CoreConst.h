@@ -54,7 +54,7 @@ static constexpr const char* BusyRetryConfigName = "com.Tencent.WCDB.Config.Busy
 static constexpr const double BusyRetryTimeOut = 10.0;
 #pragma mark - Config - Cipher
 static constexpr const char* CipherConfigName = "com.Tencent.WCDB.Config.Cipher";
-static constexpr const int CipherConfigDefaultPageSize = 4096;
+static constexpr const int CipherConfigDefaultPageSize = SQLITE_DEFAULT_PAGE_SIZE;
 #pragma mark - Config - Global SQL Trace
 static constexpr const char* GlobalSQLTraceConfigName = "com.Tencent.WCDB.Config.GlobalSQLTrace";
 #pragma mark - Config - Global Performance Trace

@@ -51,6 +51,8 @@ BusyRetryConfig::~BusyRetryConfig()
 
 bool BusyRetryConfig::invoke(Handle* handle)
 {
+    static_assert(SQLITE_DEFAULT_WAL_AUTOCHECKPOINT == 0, "");
+
     handle->setNotificationWhenBusy(std::bind(
     &BusyRetryConfig::onBusy, this, std::placeholders::_1, std::placeholders::_2));
     return true;
