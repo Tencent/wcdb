@@ -216,7 +216,9 @@ bool MigratingHandle::trySynchronousTransactionAfterAttached()
     bool succeed = true;
     if (isInTransaction()) {
         markErrorAsIgnorable(Error::Code::Error);
-        succeed = beginTransaction(true);
+        static const String *s_synchronousTransaction
+        = new String(StatementBegin().beginImmediate().getDescription());
+        succeed = executeSQL(*s_synchronousTransaction);
         WCTInnerAssert(!succeed);
         if (!succeed && isErrorIgnorable()) {
             succeed = true;
