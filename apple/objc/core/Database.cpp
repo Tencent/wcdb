@@ -788,13 +788,7 @@ void Database::setNotificationWhenMigrated(const MigratedCallback &callback)
 
 void Database::filterMigration(const MigrationFilter &filter)
 {
-    {
-        SharedLockGuard lockGuard(m_memory);
-        WCTRemedialAssert(!m_initialized,
-                          "Migration user info must be set before the very first operation.",
-                          return;);
-    }
-    m_migration.filterTable(filter);
+    close(std::bind(&Migration::filterTable, &m_migration, filter));
 }
 
 bool Database::isMigrated() const
