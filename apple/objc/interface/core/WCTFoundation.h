@@ -18,19 +18,15 @@
  * limitations under the License.
  */
 
-#include <WCDB/WINQ.h>
+#import <Foundation/Foundation.h>
+#import <WCDB/UnsafeStringView.hpp>
 
-namespace WCDB {
+NS_ASSUME_NONNULL_BEGIN
 
-CTETable::CTETable(const UnsafeStringView& name)
-{
-    syntax().name = name;
-}
+@interface NSString (WCDB)
 
-CTETable& CTETable::column(const Column& column)
-{
-    syntax().columns.push_back(column);
-    return *this;
-}
++ (NSString*)stringWithUnsafeStringView:(const WCDB::UnsafeStringView&)string;
 
-} // namespace WCDB
+@end
+
+NS_ASSUME_NONNULL_END

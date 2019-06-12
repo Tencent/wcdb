@@ -18,19 +18,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/WINQ.h>
+#import <WCDB/WCTFoundation.h>
 
-namespace WCDB {
+@implementation NSString (WCDB)
 
-CTETable::CTETable(const UnsafeStringView& name)
++ (NSString*)stringWithUnsafeStringView:(const WCDB::UnsafeStringView&)string
 {
-    syntax().name = name;
+    return [[NSString alloc] initWithBytes:string.data() length:string.length() encoding:NSUTF8StringEncoding];
 }
 
-CTETable& CTETable::column(const Column& column)
-{
-    syntax().columns.push_back(column);
-    return *this;
-}
-
-} // namespace WCDB
+@end

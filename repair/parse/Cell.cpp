@@ -156,13 +156,13 @@ double Cell::doubleValue(int index) const
     return m_deserialization.get8BytesDouble(cell.second);
 }
 
-UnsafeString Cell::textValue(int index) const
+UnsafeStringView Cell::textValue(int index) const
 {
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(index < m_columns.size());
     WCTInnerAssert(getValueType(index) == Type::Text);
     const auto &cell = m_columns[index];
-    return UnsafeString(reinterpret_cast<const char *>(m_payload.buffer() + cell.second),
+    return UnsafeStringView(reinterpret_cast<const char *>(m_payload.buffer() + cell.second),
                         getLengthOfSerialType(cell.first));
 }
 

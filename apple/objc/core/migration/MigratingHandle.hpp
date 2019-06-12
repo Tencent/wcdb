@@ -74,9 +74,9 @@ public:
     BLOB getBLOB(int index) override final;
 
     ColumnType getType(int index) override final;
-    const UnsafeString getOriginColumnName(int index) override final;
-    const UnsafeString getColumnName(int index) override final;
-    const UnsafeString getColumnTableName(int index) override final;
+    const UnsafeStringView getOriginColumnName(int index) override final;
+    const UnsafeStringView getColumnName(int index) override final;
+    const UnsafeStringView getColumnTableName(int index) override final;
 
     bool isStatementReadonly() override final;
     int getNumberOfColumns() override final;

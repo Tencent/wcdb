@@ -68,9 +68,9 @@ public:
     ColumnType getType(int index);
 
     int getNumberOfColumns();
-    const UnsafeString getOriginColumnName(int index);
-    const UnsafeString getColumnName(int index);
-    const UnsafeString getColumnTableName(int index);
+    const UnsafeStringView getOriginColumnName(int index);
+    const UnsafeStringView getColumnName(int index);
+    const UnsafeStringView getColumnTableName(int index);
 
     bool isReadonly();
 

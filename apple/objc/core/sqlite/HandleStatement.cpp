@@ -100,19 +100,19 @@ int HandleStatement::getNumberOfColumns()
     return sqlite3_column_count(m_stmt);
 }
 
-const UnsafeString HandleStatement::getOriginColumnName(int index)
+const UnsafeStringView HandleStatement::getOriginColumnName(int index)
 {
     WCTInnerAssert(isPrepared());
     return sqlite3_column_origin_name(m_stmt, index);
 }
 
-const UnsafeString HandleStatement::getColumnName(int index)
+const UnsafeStringView HandleStatement::getColumnName(int index)
 {
     WCTInnerAssert(isPrepared());
     return sqlite3_column_name(m_stmt, index);
 }
 
-const UnsafeString HandleStatement::getColumnTableName(int index)
+const UnsafeStringView HandleStatement::getColumnTableName(int index)
 {
     WCTInnerAssert(isPrepared());
     return sqlite3_column_table_name(m_stmt, index);
@@ -162,7 +162,7 @@ void HandleStatement::bindText(const Text &value, int index)
     WCTInnerAssert(!isBusy());
     // use SQLITE_STATIC if auto_commit?
     APIExit(sqlite3_bind_text(
-    m_stmt, index, value.cstring(), (int) value.length(), SQLITE_TRANSIENT));
+    m_stmt, index, value.data(), (int) value.length(), SQLITE_TRANSIENT));
 }
 
 void HandleStatement::bindBLOB(const BLOB &value, int index)
@@ -205,7 +205,7 @@ HandleStatement::Text HandleStatement::getText(int index)
 {
     WCTInnerAssert(isPrepared());
     WCTInnerAssert(isBusy());
-    return UnsafeString(reinterpret_cast<const char *>(sqlite3_column_text(m_stmt, index)),
+    return UnsafeStringView(reinterpret_cast<const char *>(sqlite3_column_text(m_stmt, index)),
                         sqlite3_column_bytes(m_stmt, index));
 }
 

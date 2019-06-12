@@ -76,9 +76,9 @@ public:
     virtual BLOB getBLOB(int index);
 
     virtual ColumnType getType(int index);
-    virtual const UnsafeString getOriginColumnName(int index);
-    virtual const UnsafeString getColumnName(int index);
-    virtual const UnsafeString getColumnTableName(int index);
+    virtual const UnsafeStringView getOriginColumnName(int index);
+    virtual const UnsafeStringView getColumnName(int index);
+    virtual const UnsafeStringView getColumnTableName(int index);
 
     virtual bool isStatementReadonly();
     virtual int getNumberOfColumns();

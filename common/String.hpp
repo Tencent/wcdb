@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <WCDB/UnsafeString.hpp>
+#include <WCDB/UnsafeStringView.hpp>
 #include <string>
 
 namespace WCDB {
@@ -31,7 +31,7 @@ public:
     String(const char *str);
     String(std::string &&str);
     String(const std::string &str);
-    String(const UnsafeString &str);
+    String(const UnsafeStringView &str);
 
     template<typename T, typename Enable = void>
     struct Convertible : public std::false_type {
@@ -44,7 +44,7 @@ public:
     {
     }
 
-    operator UnsafeString() const;
+    operator UnsafeStringView() const;
 
     static String formatted(const char *format, ...);
     static const String &null();
@@ -65,12 +65,12 @@ public:
 };
 
 template<typename T>
-struct String::Convertible<T, typename std::enable_if<UnsafeString::Convertible<T>::value>::type>
+struct String::Convertible<T, typename std::enable_if<UnsafeStringView::Convertible<T>::value>::type>
 : public std::true_type {
 public:
     static String asString(const T &t)
     {
-        return UnsafeString::Convertible<T>::asUnsafeString(t);
+        return UnsafeStringView::Convertible<T>::asUnsafeString(t);
     }
 };
 

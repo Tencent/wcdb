@@ -34,7 +34,7 @@ public:
     {
     }
 
-    Pragma(const UnsafeString& name);
+    Pragma(const UnsafeStringView& name);
 
 #pragma mark - SQLite
 public:

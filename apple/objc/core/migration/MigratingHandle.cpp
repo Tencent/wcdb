@@ -570,19 +570,19 @@ ColumnType MigratingHandle::getType(int index)
     return m_mainStatement->getType(index);
 }
 
-const UnsafeString MigratingHandle::getOriginColumnName(int index)
+const UnsafeStringView MigratingHandle::getOriginColumnName(int index)
 {
     WCTInnerAssert(!m_additionalStatement->isPrepared());
     return m_mainStatement->getOriginColumnName(index);
 }
 
-const UnsafeString MigratingHandle::getColumnName(int index)
+const UnsafeStringView MigratingHandle::getColumnName(int index)
 {
     WCTInnerAssert(!m_additionalStatement->isPrepared());
     return m_mainStatement->getColumnName(index);
 }
 
-const UnsafeString MigratingHandle::getColumnTableName(int index)
+const UnsafeStringView MigratingHandle::getColumnTableName(int index)
 {
     WCTInnerAssert(!m_additionalStatement->isPrepared());
     return m_mainStatement->getColumnTableName(index);

@@ -34,7 +34,7 @@ public:
     {
     }
 
-    Schema(const UnsafeString& name);
+    Schema(const UnsafeStringView& name);
 
     static Schema main();
     static Schema temp();

@@ -33,7 +33,7 @@ public:
     {
     }
 
-    CTETable(const UnsafeString& name);
+    CTETable(const UnsafeStringView& name);
     CTETable& column(const Column& column);
 };
 

@@ -34,7 +34,7 @@ public:
     {
     }
 
-    TableOrSubquery(const UnsafeString& table);
+    TableOrSubquery(const UnsafeStringView& table);
     TableOrSubquery& schema(const Schema& schema);
 
     TableOrSubquery& as(const String& alias);

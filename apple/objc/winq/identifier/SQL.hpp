@@ -25,7 +25,7 @@
 #include <WCDB/Syntax.h>
 #include <WCDB/SyntaxForwardDeclaration.h>
 #include <WCDB/SyntaxList.hpp>
-#include <WCDB/UnsafeString.hpp>
+#include <WCDB/UnsafeStringView.hpp>
 #include <memory>
 
 namespace WCDB {

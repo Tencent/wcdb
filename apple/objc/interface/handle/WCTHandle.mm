@@ -25,6 +25,7 @@
 #import <WCDB/WCTHandle+Private.h>
 #import <WCDB/WCTHandle+Transaction.h>
 #import <WCDB/WCTORM.h>
+#import <WCDB/WCTFoundation.h>
 
 @implementation WCTHandle
 
@@ -344,7 +345,7 @@
 - (NSString *)extractStringAtIndex:(int)index
 {
     WCTHandleAssert(return nil;);
-    return [NSString stringWithUTF8String:_handle->getText(index)];
+    return [NSString stringWithUnsafeStringView:_handle->getText(index)];
 }
 
 - (NSNumber *)extractNumberAtIndex:(int)index
@@ -401,19 +402,19 @@
 - (NSString *)extractOriginColumnNameAtIndex:(int)index
 {
     WCTHandleAssert(return nil;);
-    return [NSString stringWithUTF8String:_handle->getOriginColumnName(index)];
+    return [NSString stringWithUnsafeStringView:_handle->getOriginColumnName(index)];
 }
 
 - (NSString *)extractColumnNameAtIndex:(int)index
 {
     WCTHandleAssert(return nil;);
-    return [NSString stringWithUTF8String:_handle->getColumnName(index)];
+    return [NSString stringWithUnsafeStringView:_handle->getColumnName(index)];
 }
 
 - (NSString *)extractTableNameAtIndex:(int)index
 {
     WCTHandleAssert(return nil;);
-    return [NSString stringWithUTF8String:_handle->getColumnTableName(index)];
+    return [NSString stringWithUnsafeStringView:_handle->getColumnTableName(index)];
 }
 
 - (WCTOneRow *)extractRow
@@ -446,7 +447,7 @@
     NSMutableDictionary *multiObject = [NSMutableDictionary dictionary];
     int index = 0;
     for (const WCTResultColumn &resultColumn : resultColumns) {
-        NSString *tableName = [NSString stringWithUTF8String:_handle->getColumnTableName(index)];
+        NSString *tableName = [NSString stringWithUnsafeStringView:_handle->getColumnTableName(index)];
         WCTObject *object = [multiObject objectForKey:tableName];
         if (object == nil) {
             object = [[resultColumn.getColumnBinding().getClass() alloc] init];
@@ -513,7 +514,7 @@
                 value = [NSNumber numberWithDouble:_handle->getDouble(index)];
                 break;
             case WCDB::ColumnType::Text:
-                value = [NSString stringWithUTF8String:_handle->getText(index)];
+                value = [NSString stringWithUnsafeStringView:_handle->getText(index)];
                 break;
             case WCDB::ColumnType::BLOB: {
                 const WCDB::UnsafeData data = _handle->getBLOB(index);

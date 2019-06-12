@@ -26,7 +26,7 @@ Schema::Schema()
 {
 }
 
-Schema::Schema(const UnsafeString& name)
+Schema::Schema(const UnsafeStringView& name)
 {
     syntax().name = name;
 }

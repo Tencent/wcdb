@@ -24,38 +24,27 @@
 
 namespace WCDB {
 
-// TODO: refactor to readonly string
-class UnsafeString final {
+class UnsafeStringView final : public std::string_view {
 public:
-    UnsafeString();
-    UnsafeString(const char* str, ssize_t length);
-
+    using std::string_view::string_view;
+    
     template<typename T, typename Enable = void>
     struct Convertible : public std::false_type {
     public:
-        static UnsafeString asUnsafeString(const T&);
+        static UnsafeStringView asUnsafeString(const T&);
     };
 
     template<typename T, typename Enable = typename std::enable_if<Convertible<T>::value>::type>
-    UnsafeString(const T& t) : UnsafeString(Convertible<T>::asUnsafeString(t))
+    UnsafeStringView(const T& t) : UnsafeStringView(Convertible<T>::asUnsafeString(t))
     {
     }
+    
+    const char* data() const {
+        return std::string_view::data();
+    }
 
-    static const UnsafeString& null();
-
-    bool isCaseInsensiveEqual(const UnsafeString& target) const;
-    int caseInsensiveCompare(const UnsafeString& target) const;
-    const char* cstring() const;
-    size_t length() const;
-
-    operator const char*() const;
-
-protected:
-    const char* m_cstring;
-    ssize_t m_length;
-
-private:
-    static const char* emptyCString();
+    bool isCaseInsensiveEqual(const UnsafeStringView& target) const;
+    int caseInsensiveCompare(const UnsafeStringView& target) const;
 };
 
 } //namespace WCDB

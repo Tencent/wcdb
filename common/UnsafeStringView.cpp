@@ -18,19 +18,20 @@
  * limitations under the License.
  */
 
-#include <WCDB/WINQ.h>
+#include <WCDB/UnsafeStringView.hpp>
+#include <string>
+#include <zlib.h>
 
 namespace WCDB {
 
-CTETable::CTETable(const UnsafeStringView& name)
+bool UnsafeStringView::isCaseInsensiveEqual(const UnsafeStringView& target) const
 {
-    syntax().name = name;
+    return caseInsensiveCompare(target) == 0;
 }
 
-CTETable& CTETable::column(const Column& column)
+int UnsafeStringView::caseInsensiveCompare(const UnsafeStringView& target) const
 {
-    syntax().columns.push_back(column);
-    return *this;
+    return strncasecmp(data(), target.data(), std::min(length(), target.length()));
 }
 
-} // namespace WCDB
+} //namespace WCDB

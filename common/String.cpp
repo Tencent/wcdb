@@ -35,13 +35,13 @@ String::String(const std::string &str) : std::string(str)
 {
 }
 
-String::String(const UnsafeString &str) : std::string(str.cstring())
+String::String(const UnsafeStringView &str) : std::string(str.data(), str.length())
 {
 }
 
-String::operator UnsafeString() const
+String::operator UnsafeStringView() const
 {
-    return UnsafeString(c_str(), length());
+    return UnsafeStringView(c_str(), length());
 }
 
 const String &String::null()
