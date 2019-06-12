@@ -276,20 +276,12 @@ void Core::enableAutoMigration(Database* database, bool enable)
 #pragma mark - Trace
 void Core::globalLog(int rc, const char* message)
 {
-    Error error;
-    error.setSQLiteCode(rc, message);
-    switch (error.code()) {
-    case Error::Code::Warning:
+    if (Error::rc2c(rc) == Error::Code::Warning) {
+        Error error;
+        error.setSQLiteCode(rc, message);
         error.level = Error::Level::Warning;
-        break;
-    case Error::Code::Notice:
-        error.level = Error::Level::Ignore;
-        break;
-    default:
-        error.level = Error::Level::Debug;
-        break;
+        Notifier::shared().notify(error);
     }
-    Notifier::shared().notify(error);
 }
 
 void Core::setNotificationForSQLGLobalTraced(const ShareableSQLTraceConfig::Notification& notification)
