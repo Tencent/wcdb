@@ -112,9 +112,6 @@ public:
     bool commitOrRollbackNestedTransaction();
     void rollbackNestedTransaction();
 
-protected:
-    bool beginTransaction(bool force);
-
 private:
     static String getSavepointName(int nestedLevel);
     int m_nestedLevel;
