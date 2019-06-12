@@ -39,10 +39,6 @@ public:
     {
     }
     
-    const char* data() const {
-        return std::string_view::data();
-    }
-
     bool isCaseInsensiveEqual(const UnsafeStringView& target) const;
     int caseInsensiveCompare(const UnsafeStringView& target) const;
 };
