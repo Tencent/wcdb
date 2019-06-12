@@ -235,20 +235,8 @@
 
     [self.database close];
 
-    TestCaseResult* tested = [TestCaseResult no];
-    [WCTDatabase globalTraceError:^(WCTError* error) {
-        if (error.level == WCTErrorLevelIgnore
-            && error.code == WCTErrorCodeNotice
-            && error.extendedCode == WCTErrorExtendedCodeNoticeRecoverWal) {
-            [tested makeYES];
-        }
-    }];
-
     // trigger notice recover wal
     TestCaseAssertTrue([self.database canOpen]);
-    TestCaseAssertResultYES(tested);
-
-    [WCTDatabase globalTraceError:nil];
 
     TestCaseAssertOptionalFalse(self.database.isAlreadyCheckpointed);
 
