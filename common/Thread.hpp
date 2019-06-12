@@ -52,9 +52,12 @@ private:
 
 #pragma mark - Name
 public:
-    static void setName(const String& name);
+    static void setName(const UnsafeStringView& name);
     String getName();
     uint64_t getIdentifier();
+    
+private:
+    static constexpr const int maxLengthOfAllowedThreadName();
 
 #pragma mark - Error
 private:
