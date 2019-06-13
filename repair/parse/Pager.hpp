@@ -79,7 +79,6 @@ protected:
 #pragma mark - Error
 public:
     void markAsCorrupted(int page, const String &message);
-    void hint() const;
 
 protected:
     void markAsError(Error::Code code);

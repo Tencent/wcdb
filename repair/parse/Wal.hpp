@@ -88,9 +88,6 @@ protected:
     static bool isBigEndian();
 
 #pragma mark - Error
-public:
-    void hint() const;
-
 protected:
     void markAsCorrupted(int frame, const String &message);
     //    void markAsError(Error::Code code);

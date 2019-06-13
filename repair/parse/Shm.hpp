@@ -71,9 +71,6 @@ protected:
 
     Header m_header;
     CheckpointInfo m_checkpointInfo;
-
-public:
-    void hint() const;
 };
 
 } // namespace Repair

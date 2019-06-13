@@ -261,25 +261,6 @@ bool Pager::doInitialize()
     return true;
 }
 
-void Pager::hint() const
-{
-    if (!isInitialized()) {
-        return;
-    }
-    Error error(Error::Code::Notice, Error::Level::Notice, "Pager hint.");
-    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.set("NumberOfPages", m_numberOfPages);
-    error.infos.set("OriginFileSize", m_fileSize);
-    bool succeed;
-    size_t fileSize;
-    std::tie(succeed, fileSize) = FileManager::getFileSize(getPath());
-    if (succeed) {
-        error.infos.set("CurrentFileSize", fileSize);
-    }
-    Notifier::shared().notify(error);
-    m_wal.hint();
-}
-
 } //namespace Repair
 
 } //namespace WCDB

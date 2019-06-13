@@ -84,15 +84,6 @@ bool Backup::work()
         }
         succeed = m_masterCrawler.work(this);
     } while (false);
-    if (!succeed) {
-        Error error(Error::Code::Notice, Error::Level::Notice, "Backup failed hint.");
-        error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-        Notifier::shared().notify(error);
-        if (Console::debuggable()) {
-            m_pager.hint();
-        }
-        setError(m_pager.getError());
-    }
 
     if (writeLocked && !m_writeLocker->releaseWriteLock() && succeed) {
         setError(m_writeLocker->getError());
