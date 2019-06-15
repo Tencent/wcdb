@@ -23,9 +23,7 @@
 #include <pwd.h>
 #include <unistd.h>
 
-#if __cplusplus > 201402L
-#warning TODO std::filesystem is supported since C++17
-#endif
+// TODO std::filesystem is supported since C++17 and Clang with Xcode 11
 
 namespace WCDB {
 
