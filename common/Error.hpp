@@ -21,9 +21,8 @@
 #pragma once
 
 #include <WCDB/String.hpp>
-#include <functional>
+#include <any>
 #include <map>
-#include <sstream>
 
 namespace WCDB {
 
@@ -268,40 +267,39 @@ protected:
 
 #pragma mark - Info
 public:
-    class Infos final {
+    class InfoValue : public std::any {
     public:
-#if __cplusplus > 201402L
-#warning TODO \
-std::any is available since C++17.
-#endif
+        enum class Type {
+            Integer,
+            Float,
+            String,
+        };
+        Type valueType() const;
+
+    public:
         template<typename T>
-        typename std::enable_if<std::is_integral<T>::value, void>::type
-        set(const String &key, const T &value)
+        InfoValue(const T &value,
+                  typename std::enable_if<std::is_floating_point<T>::value>::type * = nullptr)
+        : std::any((double) value)
         {
-            m_integers[key] = (int64_t) value;
         }
+
         template<typename T>
-        typename std::enable_if<std::is_floating_point<T>::value, void>::type
-        set(const String &key, const T &value)
+        InfoValue(const T &value,
+                  typename std::enable_if<std::is_integral<T>::value>::type * = nullptr)
+        : std::any((int64_t) value)
         {
-            m_doubles[key] = (double) value;
         }
-        void set(const String &key, const String &value);
-        void unset(const String &key);
 
-        const std::map<String, int64_t> &getIntegers() const;
-        const std::map<String, String> &getStrings() const;
-        const std::map<String, double> &getDoubles() const;
+        InfoValue(const char *string);
+        InfoValue(const String &string);
+        InfoValue(String &&string);
 
-        void clear();
-        bool empty() const;
-
-    protected:
-        std::map<String, int64_t> m_integers;
-        std::map<String, double> m_doubles;
-        std::map<String, String> m_strings;
+        const String &stringValue() const;
+        const int64_t &integerValue() const;
+        const double &floatValue() const;
     };
-    Infos infos;
+    std::map<String, InfoValue> infos;
 
 #pragma mark - Descritpion
 public:

@@ -112,9 +112,9 @@ bool SQLiteBase::error(int rc, const char *sql)
         error.message = message;
     }
     if (sql != nullptr) {
-        error.infos.set(ErrorStringKeySQL, sql);
+        error.infos.insert_or_assign(ErrorStringKeySQL, sql);
     }
-    error.infos.set(ErrorStringKeyPath, m_path);
+    error.infos.insert_or_assign(ErrorStringKeyPath, m_path);
     Notifier::shared().notify(error);
     ErrorProne::setError(std::move(error));
     return result;

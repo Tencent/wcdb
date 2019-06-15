@@ -101,15 +101,15 @@ void Core::databaseDidCreate(Database* database)
 
 void Core::preprocessError(Error& error)
 {
-    const auto& strings = error.infos.getStrings();
+    auto& infos = error.infos;
 
-    auto iter = strings.find(ErrorStringKeyPath);
-    if (iter != strings.end()) {
-        auto database = m_databasePool.get(iter->second);
+    auto iter = infos.find(ErrorStringKeyPath);
+    if (iter != infos.end() && iter->second.valueType() == Error::InfoValue::Type::String) {
+        auto database = m_databasePool.get(iter->second.stringValue());
         if (database != nullptr) {
             auto tag = database->getTag();
             if (tag.isValid()) {
-                error.infos.set(ErrorIntKeyTag, tag);
+                error.infos.insert_or_assign(ErrorIntKeyTag, tag);
             }
         }
     }

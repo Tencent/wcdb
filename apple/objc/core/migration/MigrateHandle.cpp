@@ -32,7 +32,7 @@ MigrateHandle::MigrateHandle()
 , m_removeMigratedStatement(getStatement())
 , m_samplePointing(0)
 {
-    m_error.infos.set(ErrorStringKeyAction, ErrorActionMigrate);
+    m_error.infos.insert_or_assign(ErrorStringKeyAction, ErrorActionMigrate);
 }
 
 MigrateHandle::~MigrateHandle()
@@ -141,7 +141,7 @@ bool MigrateHandle::migrateRows(const MigrationInfo* info, bool& done)
 
     if (!m_removeMigratedStatement->isPrepared()
         && !m_removeMigratedStatement->prepare(
-        m_migratingInfo->getStatementForDeletingMigratedOneRow())) {
+           m_migratingInfo->getStatementForDeletingMigratedOneRow())) {
         return false;
     }
 

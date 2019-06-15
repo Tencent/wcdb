@@ -177,9 +177,9 @@ int Pager::getNumberOfWalFrames() const
 void Pager::markAsCorrupted(int page, const String &message)
 {
     Error error(Error::Code::Corrupt, Error::Level::Ignore, message);
-    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.set(ErrorStringKeyPath, getPath());
-    error.infos.set("Page", page);
+    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
+    error.infos.insert_or_assign("Page", page);
     Notifier::shared().notify(error);
     setError(std::move(error));
 }
@@ -187,8 +187,8 @@ void Pager::markAsCorrupted(int page, const String &message)
 void Pager::markAsError(Error::Code code)
 {
     Error error(code, Error::Level::Ignore);
-    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.set(ErrorStringKeyPath, getPath());
+    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
     Notifier::shared().notify(error);
     setError(std::move(error));
 }

@@ -43,7 +43,7 @@ AssemblerHandle::AssemblerHandle()
   StatementSelect().select(1).from(Syntax::masterTable).limit(0))
 , m_statementForReadTransaction(StatementBegin().beginDeferred())
 {
-    m_error.infos.set(ErrorStringKeyAction, ErrorActionAssembler);
+    m_error.infos.insert_or_assign(ErrorStringKeyAction, ErrorActionAssembler);
 }
 
 AssemblerHandle::~AssemblerHandle()

@@ -189,8 +189,8 @@ bool FactoryRetriever::restore(const String &databasePath)
         }
     } else {
         Error warning(Error::Code::NotFound, Error::Level::Warning, "Material is not found");
-        warning.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-        warning.infos.set(ErrorStringKeyPath, databasePath);
+        warning.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+        warning.infos.insert_or_assign(ErrorStringKeyPath, databasePath);
         Notifier::shared().notify(warning);
     }
 
@@ -227,33 +227,35 @@ void FactoryRetriever::reportMechanic(const Fraction &score,
                                       const Time &material)
 {
     Error error(Error::Code::Notice, Error::Level::Notice, "Mechanic Retrieve Report.");
-    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.set(ErrorStringKeyPath, path);
-    error.infos.set("Score", score.value());
-    error.infos.set("Material", material.stringify());
+    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.insert_or_assign(ErrorStringKeyPath, path);
+    error.infos.insert_or_assign("Score", score.value());
+    error.infos.insert_or_assign("Material", material.stringify());
     finishReportOfPerformance(error, path, cost);
-    error.infos.set("Weight", String::formatted("%f%%", getWeight(path).value() * 100.0f));
+    error.infos.insert_or_assign(
+    "Weight", String::formatted("%f%%", getWeight(path).value() * 100.0f));
     Notifier::shared().notify(error);
 }
 
 void FactoryRetriever::reportFullCrawler(const Fraction &score, const String &path, double cost)
 {
     Error error(Error::Code::Notice, Error::Level::Notice, "Crawler Retrieve Report.");
-    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.set(ErrorStringKeyPath, path);
-    error.infos.set("Score", score.value());
+    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.insert_or_assign(ErrorStringKeyPath, path);
+    error.infos.insert_or_assign("Score", score.value());
     finishReportOfPerformance(error, path, cost);
-    error.infos.set("Weight", String::formatted("%f%%", getWeight(path).value() * 100.0f));
+    error.infos.insert_or_assign(
+    "Weight", String::formatted("%f%%", getWeight(path).value() * 100.0f));
     Notifier::shared().notify(error);
 }
 
 void FactoryRetriever::reportSummary(double cost)
 {
     Error error(Error::Code::Notice, Error::Level::Notice, "Summary Retrieve Report.");
-    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.set(ErrorStringKeyPath, database);
-    error.infos.set("Cost", String::formatted("%f%%", cost));
-    error.infos.set("Score", getScore().value());
+    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.insert_or_assign(ErrorStringKeyPath, database);
+    error.infos.insert_or_assign("Cost", String::formatted("%f%%", cost));
+    error.infos.insert_or_assign("Score", getScore().value());
     Notifier::shared().notify(error);
 }
 
@@ -263,9 +265,9 @@ void FactoryRetriever::finishReportOfPerformance(Error &error, const String &dat
     size_t size = m_sizes[databasePath];
     double sizeInMB = (double) size / 1024 / 1024;
     double speed = cost > 0 ? sizeInMB / cost : 0;
-    error.infos.set("Cost", String::formatted("%f s", cost));
-    error.infos.set("Size", String::formatted("%f MB", sizeInMB));
-    error.infos.set("Speed", String::formatted("%f MB/s", speed));
+    error.infos.insert_or_assign("Cost", String::formatted("%f s", cost));
+    error.infos.insert_or_assign("Size", String::formatted("%f MB", sizeInMB));
+    error.infos.insert_or_assign("Speed", String::formatted("%f MB/s", speed));
 }
 
 #pragma mark - Score and Progress

@@ -168,8 +168,8 @@ RecyclableHandle HandlePool::flowOut(HandleType type)
                 Error error(Error::Code::Exceed,
                             Error::Level::Error,
                             "The operating count of database exceeds the maximum allowed.");
-                error.infos.set("MaxAllowed", HandlePoolMaxAllowedNumberOfHandles);
-                error.infos.set(ErrorStringKeyPath, path);
+                error.infos.insert_or_assign("MaxAllowed", HandlePoolMaxAllowedNumberOfHandles);
+                error.infos.insert_or_assign(ErrorStringKeyPath, path);
                 Notifier::shared().notify(error);
                 setThreadedError(std::move(error));
                 return nullptr;
@@ -192,8 +192,8 @@ RecyclableHandle HandlePool::flowOut(HandleType type)
                 Error error(Error::Code::Exceed,
                             Error::Level::Error,
                             "The operating count of database exceeds the maximum allowed.");
-                error.infos.set("MaxAllowed", HandlePoolMaxAllowedNumberOfHandles);
-                error.infos.set(ErrorStringKeyPath, path);
+                error.infos.insert_or_assign("MaxAllowed", HandlePoolMaxAllowedNumberOfHandles);
+                error.infos.insert_or_assign(ErrorStringKeyPath, path);
                 Notifier::shared().notify(error);
                 setThreadedError(std::move(error));
                 return nullptr;

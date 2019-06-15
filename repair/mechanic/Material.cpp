@@ -69,8 +69,8 @@ bool Material::serializeData(Serialization &serialization, const Data &data)
 void Material::markAsEmpty(const String &element)
 {
     Error error(Error::Code::Empty, Error::Level::Ignore, "Element of material is empty.");
-    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.set("Element", element);
+    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.insert_or_assign("Element", element);
     Notifier::shared().notify(error);
     setThreadedError(std::move(error));
 }
@@ -158,8 +158,8 @@ std::pair<bool, Data> Material::deserializeData(Deserialization &deserialization
 void Material::markAsCorrupt(const String &element)
 {
     Error error(Error::Code::Corrupt, Error::Level::Ignore, "Material is corrupted");
-    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.set("Element", element);
+    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.insert_or_assign("Element", element);
     Notifier::shared().notify(error);
     setThreadedError(std::move(error));
 }

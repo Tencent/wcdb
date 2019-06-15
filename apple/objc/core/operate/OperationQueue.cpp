@@ -71,14 +71,18 @@ void OperationQueue::handleError(const Error& error)
         return;
     }
 
-    const auto& infos = error.infos.getStrings();
+    const auto& infos = error.infos;
 
     auto iter = infos.find(ErrorStringKeyPath);
-    if (iter == infos.end() || iter->second.empty()) {
+    if (iter == infos.end() || iter->second.valueType() != Error::InfoValue::Type::String) {
         // make sure no empty path will be added into queue
         return;
     }
-    const String& path = iter->second;
+
+    const String& path = iter->second.stringValue();
+    if (path.empty()) {
+        return;
+    }
 
     bool succeed;
     uint32_t identifier;
@@ -88,9 +92,10 @@ void OperationQueue::handleError(const Error& error)
     }
 
     bool fromIntegrity = false;
-    const auto& stringInfos = error.infos.getStrings();
-    auto actionIter = stringInfos.find(ErrorStringKeyAction);
-    if (actionIter != stringInfos.end() && actionIter->second == ErrorActionIntegrity) {
+    auto actionIter = infos.find(ErrorStringKeyAction);
+    if (actionIter != infos.end()
+        && actionIter->second.valueType() == Error::InfoValue::Type::String
+        && actionIter->second.stringValue() == ErrorActionIntegrity) {
         fromIntegrity = true;
     }
 
@@ -261,7 +266,7 @@ void OperationQueue::doMigrate(const String& path, int numberOfFailures)
             Error error(Error::Code::Notice,
                         Error::Level::Notice,
                         "Auto migration is stopped due to too many errors.");
-            error.infos.set(ErrorStringKeyPath, path);
+            error.infos.insert_or_assign(ErrorStringKeyPath, path);
             Notifier::shared().notify(error);
         }
     }
@@ -381,8 +386,9 @@ void OperationQueue::doPurge(const Parameter& parameter)
     } break;
     case Parameter::Source::FileDescriptorsWarning: {
         Error error(Error::Code::Warning, Error::Level::Warning, "Purge due to file descriptors warning.");
-        error.infos.set("MaxAllowedFileDescriptors", maxAllowedNumberOfFileDescriptors());
-        error.infos.set("FileDescriptor", parameter.numberOfFileDescriptors);
+        error.infos.insert_or_assign("MaxAllowedFileDescriptors",
+                                     maxAllowedNumberOfFileDescriptors());
+        error.infos.insert_or_assign("FileDescriptor", parameter.numberOfFileDescriptors);
         Notifier::shared().notify(error);
     } break;
     default: {
@@ -390,7 +396,8 @@ void OperationQueue::doPurge(const Parameter& parameter)
         Error error(Error::Code::Warning,
                     Error::Level::Warning,
                     "Purge due to out of max allowed file descriptors.");
-        error.infos.set("MaxAllowedFileDescriptors", maxAllowedNumberOfFileDescriptors());
+        error.infos.insert_or_assign("MaxAllowedFileDescriptors",
+                                     maxAllowedNumberOfFileDescriptors());
         Notifier::shared().notify(error);
     } break;
     }

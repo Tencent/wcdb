@@ -66,8 +66,8 @@ bool Repairman::isEmptyDatabase()
     if (fileSize == 0) {
         if (succeed) {
             Error error(Error::Code::Empty, Error::Level::Warning, "Database is not found or empty.");
-            error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-            error.infos.set(ErrorStringKeyPath, getPath());
+            error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+            error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
             Notifier::shared().notify(error);
         } else {
             setCriticalErrorWithSharedThreadedError();

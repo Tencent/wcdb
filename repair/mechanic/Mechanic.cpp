@@ -69,12 +69,14 @@ bool Mechanic::work()
         if (m_pager.getWalSalt() != m_material->info.walSalt) {
             m_pager.disposeWal();
             Error error(Error::Code::Notice, Error::Level::Notice, "Dispose WAL of non-match salt.");
-            error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-            error.infos.set(ErrorStringKeyPath, m_pager.getPath());
-            error.infos.set("WalSalt1", m_pager.getWalSalt().first);
-            error.infos.set("WalSalt2", m_pager.getWalSalt().second);
-            error.infos.set("MaterialSalt1", m_material->info.walSalt.first);
-            error.infos.set("MaterialSalt2", m_material->info.walSalt.second);
+            error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+            error.infos.insert_or_assign(ErrorStringKeyPath, m_pager.getPath());
+            error.infos.insert_or_assign("WalSalt1", m_pager.getWalSalt().first);
+            error.infos.insert_or_assign("WalSalt2", m_pager.getWalSalt().second);
+            error.infos.insert_or_assign("MaterialSalt1",
+                                         m_material->info.walSalt.first);
+            error.infos.insert_or_assign("MaterialSalt2",
+                                         m_material->info.walSalt.second);
             Notifier::shared().notify(error);
         }
     }

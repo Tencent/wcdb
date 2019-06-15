@@ -60,8 +60,8 @@ uint32_t Shm::getBackfill() const
 void Shm::markAsCorrupted(const String &message)
 {
     Error error(Error::Code::Corrupt, Error::Level::Ignore, message);
-    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.set(ErrorStringKeyPath, getPath());
+    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
     Notifier::shared().notify(error);
     setError(std::move(error));
 }

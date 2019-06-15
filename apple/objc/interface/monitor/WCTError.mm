@@ -52,15 +52,20 @@ NSErrorUserInfoKey const WCTErrorKeySource = @WCDB_ERROR_STRING_KEY_SOURCE;
 - (instancetype)initWithError:(const WCDB::Error &)error
 {
     NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
-    for (const auto &info : error.infos.getIntegers()) {
-        [userInfo setObject:[NSNumber numberWithLongLong:info.second] forKey:[NSString stringWithUTF8String:info.first.c_str()]];
-    }
-    for (const auto &info : error.infos.getStrings()) {
-        [userInfo setObject:[NSString stringWithUTF8String:info.second.c_str()]
-                     forKey:[NSString stringWithUTF8String:info.first.c_str()]];
-    }
-    for (const auto &info : error.infos.getDoubles()) {
-        [userInfo setObject:[NSNumber numberWithDouble:info.second] forKey:[NSString stringWithUTF8String:info.first.c_str()]];
+    for (const auto &info : error.infos) {
+        switch (info.second.valueType()) {
+        case WCDB::Error::InfoValue::Type::String:
+            [userInfo setObject:[NSString stringWithUTF8String:info.second.stringValue().c_str()]
+                         forKey:[NSString stringWithUTF8String:info.first.c_str()]];
+            break;
+        case WCDB::Error::InfoValue::Type::Float:
+            [userInfo setObject:[NSNumber numberWithDouble:info.second.floatValue()] forKey:[NSString stringWithUTF8String:info.first.c_str()]];
+            break;
+        default:
+            WCTInnerAssert(info.second.valueType() == WCDB::Error::InfoValue::Type::Integer);
+            [userInfo setObject:[NSNumber numberWithLongLong:info.second.integerValue()] forKey:[NSString stringWithUTF8String:info.first.c_str()]];
+            break;
+        }
     }
     return [self initWithCode:(WCTErrorCode) error.code() level:(WCTErrorLevel) error.level message:[NSString stringWithUTF8String:error.getMessage().c_str()] userInfo:userInfo];
 }

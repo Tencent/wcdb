@@ -102,13 +102,13 @@ void Console::breakpoint()
 void Console::fatal(const String& message, const char* file, int line, const char* function)
 {
     Error error(Error::Code::Misuse, Error::Level::Fatal, message);
-    error.infos.set(ErrorStringKeySource, ErrorSourceAssertion);
-    error.infos.set("File", file);
-    error.infos.set("Line", line);
-    error.infos.set("Func", function);
-    error.infos.set("Version", WCDB_VERSION_STRING);
-    error.infos.set("Timestamp", WCDB_TIMESTAMP_STRING);
-    error.infos.set("Build", WCDB_BUILD_STRING);
+    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceAssertion);
+    error.infos.insert_or_assign("File", file);
+    error.infos.insert_or_assign("Line", line);
+    error.infos.insert_or_assign("Func", function);
+    error.infos.insert_or_assign("Version", WCDB_VERSION_STRING);
+    error.infos.insert_or_assign("Timestamp", WCDB_TIMESTAMP_STRING);
+    error.infos.insert_or_assign("Build", WCDB_BUILD_STRING);
     Notifier::shared().notify(error);
 }
 
@@ -117,10 +117,10 @@ void Console::fatal(const String& message, const char* file, int line, const cha
 void Console::fatal(const String& message)
 {
     Error error(Error::Code::Misuse, Error::Level::Fatal, message);
-    error.infos.set(ErrorStringKeySource, ErrorSourceAssertion);
-    error.infos.set("Version", WCDB_VERSION_STRING);
-    error.infos.set("Timestamp", WCDB_TIMESTAMP_STRING);
-    error.infos.set("Build", WCDB_BUILD_STRING);
+    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceAssertion);
+    error.infos.insert_or_assign("Version", WCDB_VERSION_STRING);
+    error.infos.insert_or_assign("Timestamp", WCDB_TIMESTAMP_STRING);
+    error.infos.insert_or_assign("Build", WCDB_BUILD_STRING);
     Notifier::shared().notify(error);
 }
 

@@ -66,9 +66,9 @@ bool FileManager::setFileProtection(const WCDB::String &path, WCDB::FileProtecti
         return true;
     }
     WCDB::Error error(WCDB::Error::Code::IOError, WCDB::Error::Level::Error, nsError.description);
-    error.infos.set(WCDB::ErrorStringKeySource, WCDB::ErrorSourceNative);
-    error.infos.set(WCDB::ErrorStringKeyPath, path);
-    error.infos.set(WCDB::ErrorIntKeyExtCode, nsError.code);
+    error.infos.insert_or_assign(WCDB::ErrorStringKeySource, WCDB::ErrorSourceNative);
+    error.infos.insert_or_assign(WCDB::ErrorStringKeyPath, path);
+    error.infos.insert_or_assign(WCDB::ErrorIntKeyExtCode, nsError.code);
     WCDB::Notifier::shared().notify(error);
     WCDB::ThreadedErrors::shared().setThreadedError(std::move(error));
     return false;
@@ -84,9 +84,9 @@ std::pair<bool, WCDB::FileProtection> FileManager::getFileProtection(const WCDB:
         return { true, fileProtectionForAttribute(attributes[NSFileProtectionKey]) };
     }
     WCDB::Error error(WCDB::Error::Code::IOError, WCDB::Error::Level::Error, nsError.description);
-    error.infos.set(WCDB::ErrorStringKeySource, WCDB::ErrorSourceNative);
-    error.infos.set(WCDB::ErrorStringKeyPath, path);
-    error.infos.set(WCDB::ErrorIntKeyExtCode, nsError.code);
+    error.infos.insert_or_assign(WCDB::ErrorStringKeySource, WCDB::ErrorSourceNative);
+    error.infos.insert_or_assign(WCDB::ErrorStringKeyPath, path);
+    error.infos.insert_or_assign(WCDB::ErrorIntKeyExtCode, nsError.code);
     WCDB::Notifier::shared().notify(error);
     WCDB::ThreadedErrors::shared().setThreadedError(std::move(error));
     return { false, WCDB::FileProtection::None };

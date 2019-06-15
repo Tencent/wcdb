@@ -50,7 +50,7 @@ void AbstractHandle::setPath(const String &path)
     if (m_path != path) {
         close();
         m_path = path;
-        m_error.infos.set(ErrorStringKeyPath, path);
+        m_error.infos.insert_or_assign(ErrorStringKeyPath, path);
     }
 }
 
@@ -563,7 +563,7 @@ void AbstractHandle::notifyError(int rc, const char *sql)
     } else {
         m_error.level = Error::Level::Ignore;
     }
-    m_error.infos.set(ErrorStringKeySQL, sql);
+    m_error.infos.insert_or_assign(ErrorStringKeySQL, sql);
     Notifier::shared().notify(m_error);
 }
 

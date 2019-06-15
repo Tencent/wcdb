@@ -112,9 +112,9 @@
             }
             for (const auto &columnName : columnNames) {
                 WCDB::Error error(WCDB::Error::Code::Mismatch, WCDB::Error::Level::Notice, "Skip column");
-                error.infos.set("Table", tableName);
-                error.infos.set("Column", columnName);
-                error.infos.set(WCDB::ErrorStringKeyPath, handle->getPath());
+                error.infos.insert_or_assign("Table", WCDB::String(tableName));
+                error.infos.insert_or_assign("Column", WCDB::String(columnName));
+                error.infos.insert_or_assign(WCDB::ErrorStringKeyPath, handle->getPath());
                 WCDB::Notifier::shared().notify(error);
             }
         } else {
