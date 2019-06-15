@@ -22,6 +22,8 @@
 
 #include <WCDB/String.hpp>
 
+// TODO std::filesystem is available since C++17 + Clang with Xcode 11.
+
 namespace WCDB {
 
 namespace Path {
@@ -31,10 +33,6 @@ String addComponent(const String &base, const String &component);
 String getFileName(const String &base);
 String getDirectoryName(const String &base);
 
-#if __cplusplus > 201402L
-#warning TODO \
-std::filesystem::path is available since C++17
-#endif
 String normalize(const String &path);
 
 } //namespace Path
