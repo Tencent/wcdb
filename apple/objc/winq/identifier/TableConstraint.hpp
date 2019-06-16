@@ -27,7 +27,7 @@ namespace WCDB {
 class TableConstraint final : public TypedSyntax<Syntax::TableConstraint, SQL> {
 public:
     TableConstraint();
-    explicit TableConstraint(const String& name);
+    explicit TableConstraint(const UnsafeStringView& name);
 
     TableConstraint& primaryKey();
     TableConstraint& unique();

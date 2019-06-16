@@ -28,11 +28,11 @@ class StatementCreateIndex final : public TypedSyntax<Syntax::CreateIndexSTMT, S
 public:
     using TypedSyntax<Syntax::CreateIndexSTMT, Statement>::TypedSyntax;
 
-    StatementCreateIndex& createIndex(const String& index);
+    StatementCreateIndex& createIndex(const UnsafeStringView& index);
     StatementCreateIndex& schema(const Schema& schema);
     StatementCreateIndex& unique();
     StatementCreateIndex& ifNotExists();
-    StatementCreateIndex& table(const String& table);
+    StatementCreateIndex& table(const UnsafeStringView& table);
 
     StatementCreateIndex& indexed(const IndexedColumn& indexedColumn);
     StatementCreateIndex& where(const Expression& condition);

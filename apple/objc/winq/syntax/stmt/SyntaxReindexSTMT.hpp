@@ -30,14 +30,14 @@ class ReindexSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     WCDB_SYNTAX_MAIN_UNION_ENUM(NotSet, Collation, TableOrIndex, );
-    String collationOrTableOrIndex;
+    StringView collationOrTableOrIndex;
     Schema schema;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::ReindexSTMT;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    StringView getValidDescription() const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

@@ -73,7 +73,7 @@ Identifier::Type FrameSpec::getType() const
     return type;
 }
 
-String FrameSpec::getValidDescription() const
+StringView FrameSpec::getValidDescription() const
 {
     std::ostringstream stream;
     stream << switcher << space;
@@ -103,7 +103,7 @@ String FrameSpec::getValidDescription() const
             break;
         }
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void FrameSpec::iterate(const Iterator& iterator, bool& stop)

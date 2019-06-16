@@ -39,7 +39,7 @@ protected:
     using UnderlyingType = typename CppAccessor::UnderlyingType;
 
 public:
-    WCTRuntimeCppAccessor(Class cls, const WCDB::String &propertyName)
+    WCTRuntimeCppAccessor(Class cls, const WCDB::UnsafeStringView &propertyName)
     : RuntimeAccessor(cls, propertyName), CppAccessor()
     {
     }

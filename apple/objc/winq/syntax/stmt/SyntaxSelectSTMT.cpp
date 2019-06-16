@@ -37,7 +37,7 @@ Identifier::Type SelectSTMT::getType() const
     return type;
 }
 
-String SelectSTMT::getValidDescription() const
+StringView SelectSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     if (!commonTableExpressions.empty()) {
@@ -74,7 +74,7 @@ String SelectSTMT::getValidDescription() const
             break;
         }
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void SelectSTMT::iterate(const Iterator& iterator, bool& stop)

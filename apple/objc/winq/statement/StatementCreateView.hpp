@@ -28,7 +28,7 @@ class StatementCreateView final : public TypedSyntax<Syntax::CreateViewSTMT, Sta
 public:
     using TypedSyntax<Syntax::CreateViewSTMT, Statement>::TypedSyntax;
 
-    StatementCreateView& createView(const String& view);
+    StatementCreateView& createView(const UnsafeStringView& view);
     StatementCreateView& schema(const Schema& schema);
     StatementCreateView& temp();
 

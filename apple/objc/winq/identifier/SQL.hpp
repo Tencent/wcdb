@@ -22,10 +22,10 @@
 
 #include <WCDB/ColumnType.hpp>
 #include <WCDB/Convertible.hpp>
+#include <WCDB/StringView.hpp>
 #include <WCDB/Syntax.h>
 #include <WCDB/SyntaxForwardDeclaration.h>
 #include <WCDB/SyntaxList.hpp>
-#include <WCDB/UnsafeStringView.hpp>
 #include <memory>
 
 namespace WCDB {
@@ -41,7 +41,7 @@ public:
     typedef Syntax::Identifier::Iterator Iterator;
     void iterate(const Iterator& iterator);
 
-    String getDescription() const;
+    StringView getDescription() const;
 
     Syntax::Identifier* getSyntaxIdentifier() const;
 

@@ -36,7 +36,7 @@ Identifier::Type Pragma::getType() const
     return type;
 }
 
-String Pragma::getValidDescription() const
+StringView Pragma::getValidDescription() const
 {
     return name;
 }

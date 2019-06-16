@@ -36,7 +36,7 @@ Identifier::Type FunctionInvocation::getType() const
     return type;
 }
 
-String FunctionInvocation::getValidDescription() const
+StringView FunctionInvocation::getValidDescription() const
 {
     std::ostringstream stream;
     stream << name << "(";
@@ -49,7 +49,7 @@ String FunctionInvocation::getValidDescription() const
         stream << "*";
     }
     stream << ")";
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void FunctionInvocation::iterate(const Iterator& iterator, bool& stop)

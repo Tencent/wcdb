@@ -23,7 +23,7 @@
 #include <WCDB/CoreConst.h>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/SQLite.h>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 
 namespace WCDB {
 
@@ -45,7 +45,7 @@ sqlite3 *AbstractHandle::getRawHandle()
 }
 
 #pragma mark - Path
-void AbstractHandle::setPath(const String &path)
+void AbstractHandle::setPath(const UnsafeStringView &path)
 {
     if (m_path != path) {
         close();
@@ -60,22 +60,22 @@ void AbstractHandle::clearPath()
     m_path.clear();
 }
 
-const String &AbstractHandle::getPath() const
+const StringView &AbstractHandle::getPath() const
 {
     return m_path;
 }
 
-String AbstractHandle::getSHMSuffix()
+StringView AbstractHandle::getSHMSuffix()
 {
     return "-shm";
 }
 
-String AbstractHandle::getWALSuffix()
+StringView AbstractHandle::getWALSuffix()
 {
     return "-wal";
 }
 
-String AbstractHandle::getJournalSuffix()
+StringView AbstractHandle::getJournalSuffix()
 {
     return "-journal";
 }
@@ -85,7 +85,7 @@ bool AbstractHandle::open()
 {
     bool succeed = true;
     if (!isOpened()) {
-        succeed = APIExit(sqlite3_open(m_path.c_str(), &m_handle));
+        succeed = APIExit(sqlite3_open(m_path.data(), &m_handle));
         if (!succeed) {
             m_handle = nullptr;
         }
@@ -111,7 +111,7 @@ void AbstractHandle::close()
     }
 }
 
-bool AbstractHandle::executeSQL(const String &sql)
+bool AbstractHandle::executeSQL(const UnsafeStringView &sql)
 {
     // use seperated sqlite3_exec to get more information
     WCTInnerAssert(isOpened());
@@ -198,7 +198,7 @@ void AbstractHandle::finalizeStatements()
 }
 
 #pragma mark - Meta
-std::pair<bool, bool> AbstractHandle::ft3TokenizerExists(const String &tokenizer)
+std::pair<bool, bool> AbstractHandle::ft3TokenizerExists(const UnsafeStringView &tokenizer)
 {
     bool exists = false;
     markErrorAsIgnorable(Error::Code::Error);
@@ -215,12 +215,13 @@ std::pair<bool, bool> AbstractHandle::ft3TokenizerExists(const String &tokenizer
     return { succeed, exists };
 }
 
-std::pair<bool, bool> AbstractHandle::tableExists(const String &table)
+std::pair<bool, bool> AbstractHandle::tableExists(const UnsafeStringView &table)
 {
     return tableExists(Schema::main(), table);
 }
 
-std::pair<bool, bool> AbstractHandle::tableExists(const Schema &schema, const String &table)
+std::pair<bool, bool>
+AbstractHandle::tableExists(const Schema &schema, const UnsafeStringView &table)
 {
     StatementSelect statement
     = StatementSelect().select(1).from(TableOrSubquery(table).schema(schema)).limit(1);
@@ -238,13 +239,14 @@ std::pair<bool, bool> AbstractHandle::tableExists(const Schema &schema, const St
     return { succeed, exists };
 }
 
-std::pair<bool, std::set<String>> AbstractHandle::getColumns(const String &table)
+std::pair<bool, std::set<StringView>>
+AbstractHandle::getColumns(const UnsafeStringView &table)
 {
     return getColumns(Schema::main(), table);
 }
 
-std::pair<bool, std::set<String>>
-AbstractHandle::getColumns(const Schema &schema, const String &table)
+std::pair<bool, std::set<StringView>>
+AbstractHandle::getColumns(const Schema &schema, const UnsafeStringView &table)
 {
     WCDB::StatementPragma statement
     = StatementPragma().pragma(Pragma::tableInfo()).schema(schema).with(table);
@@ -252,7 +254,7 @@ AbstractHandle::getColumns(const Schema &schema, const String &table)
 }
 
 std::pair<bool, std::vector<ColumnMeta>>
-AbstractHandle::getTableMeta(const Schema &schema, const String &table)
+AbstractHandle::getTableMeta(const Schema &schema, const UnsafeStringView &table)
 {
     std::vector<ColumnMeta> columnMetas;
     HandleStatement handleStatement(this);
@@ -277,12 +279,12 @@ AbstractHandle::getTableMeta(const Schema &schema, const String &table)
     return { succeed, std::move(columnMetas) };
 }
 
-std::pair<bool, std::set<String>>
+std::pair<bool, std::set<StringView>>
 AbstractHandle::getValues(const Statement &statement, int index)
 {
     HandleStatement handleStatement(this);
     bool succeed = false;
-    std::set<String> values;
+    std::set<StringView> values;
     if (handleStatement.prepare(statement)) {
         while ((succeed = handleStatement.step()) && !handleStatement.done()) {
             values.emplace(handleStatement.getText(index));
@@ -296,9 +298,9 @@ AbstractHandle::getValues(const Statement &statement, int index)
 }
 
 #pragma mark - Transaction
-String AbstractHandle::getSavepointName(int nestedLevel)
+StringView AbstractHandle::getSavepointName(int nestedLevel)
 {
-    return String::formatted("WCDBSavepoint_%d", nestedLevel);
+    return StringView::formatted("WCDBSavepoint_%d", nestedLevel);
 }
 
 bool AbstractHandle::beginNestedTransaction()
@@ -307,11 +309,11 @@ bool AbstractHandle::beginNestedTransaction()
     if (isInTransaction()) {
         ++m_nestedLevel;
 
-        static const String *s_savepoint_1 = new String(
+        static const StringView *s_savepoint_1 = new StringView(
         StatementSavepoint().savepoint(getSavepointName(1)).getDescription());
-        static const String *s_savepoint_2 = new String(
+        static const StringView *s_savepoint_2 = new StringView(
         StatementSavepoint().savepoint(getSavepointName(2)).getDescription());
-        static const String *s_savepoint_3 = new String(
+        static const StringView *s_savepoint_3 = new StringView(
         StatementSavepoint().savepoint(getSavepointName(3)).getDescription());
 
         switch (m_nestedLevel) {
@@ -341,12 +343,12 @@ bool AbstractHandle::commitOrRollbackNestedTransaction()
     if (m_nestedLevel == 0) {
         succeed = commitOrRollbackTransaction();
     } else {
-        static const String *s_savepoint_1
-        = new String(StatementRelease().release(getSavepointName(1)).getDescription());
-        static const String *s_savepoint_2
-        = new String(StatementRelease().release(getSavepointName(2)).getDescription());
-        static const String *s_savepoint_3
-        = new String(StatementRelease().release(getSavepointName(3)).getDescription());
+        static const StringView *s_savepoint_1 = new StringView(
+        StatementRelease().release(getSavepointName(1)).getDescription());
+        static const StringView *s_savepoint_2 = new StringView(
+        StatementRelease().release(getSavepointName(2)).getDescription());
+        static const StringView *s_savepoint_3 = new StringView(
+        StatementRelease().release(getSavepointName(3)).getDescription());
 
         switch (m_nestedLevel) {
         case 1:
@@ -377,11 +379,11 @@ void AbstractHandle::rollbackNestedTransaction()
     if (m_nestedLevel == 0) {
         rollbackTransaction();
     } else {
-        static const String *s_savepoint_1 = new String(
+        static const StringView *s_savepoint_1 = new StringView(
         StatementRollback().rollbackToSavepoint(getSavepointName(1)).getDescription());
-        static const String *s_savepoint_2 = new String(
+        static const StringView *s_savepoint_2 = new StringView(
         StatementRollback().rollbackToSavepoint(getSavepointName(2)).getDescription());
-        static const String *s_savepoint_3 = new String(
+        static const StringView *s_savepoint_3 = new StringView(
         StatementRollback().rollbackToSavepoint(getSavepointName(3)).getDescription());
 
         bool succeed = false;
@@ -412,8 +414,8 @@ bool AbstractHandle::beginTransaction()
                       "Last transaction is not committed or rollbacked.",
                       rollbackTransaction(););
 
-    static const String *s_beginImmediate
-    = new String(StatementBegin().beginImmediate().getDescription());
+    static const StringView *s_beginImmediate
+    = new StringView(StatementBegin().beginImmediate().getDescription());
     bool succeed = executeSQL(*s_beginImmediate);
     if (succeed) {
         m_nestedLevel = 0;
@@ -423,8 +425,8 @@ bool AbstractHandle::beginTransaction()
 
 bool AbstractHandle::commitOrRollbackTransaction()
 {
-    static const String *s_commit
-    = new String(StatementCommit().commit().getDescription());
+    static const StringView *s_commit
+    = new StringView(StatementCommit().commit().getDescription());
     bool succeed = executeSQL(*s_commit);
     if (succeed) {
         m_nestedLevel = 0;
@@ -438,8 +440,8 @@ bool AbstractHandle::commitOrRollbackTransaction()
 void AbstractHandle::rollbackTransaction()
 {
     // Transaction can be removed automatically in some case. e.g. interrupt step
-    static const String *s_rollback
-    = new String(StatementRollback().rollback().getDescription());
+    static const StringView *s_rollback
+    = new StringView(StatementRollback().rollback().getDescription());
     if (isInTransaction()) {
         if (executeSQL(*s_rollback)) {
             m_nestedLevel = 0;
@@ -486,14 +488,14 @@ void AbstractHandle::disableCheckpointWhenClosing(bool disable)
 }
 
 #pragma mark - Notification
-void AbstractHandle::setNotificationWhenSQLTraced(const String &name,
+void AbstractHandle::setNotificationWhenSQLTraced(const UnsafeStringView &name,
                                                   const SQLNotification &onTraced)
 {
     WCTInnerAssert(isOpened());
     m_notification.setNotificationWhenSQLTraced(name, onTraced);
 }
 
-void AbstractHandle::setNotificationWhenPerformanceTraced(const String &name,
+void AbstractHandle::setNotificationWhenPerformanceTraced(const UnsafeStringView &name,
                                                           const PerformanceNotification &onTraced)
 {
     WCTInnerAssert(isOpened());
@@ -501,20 +503,20 @@ void AbstractHandle::setNotificationWhenPerformanceTraced(const String &name,
 }
 
 void AbstractHandle::setNotificationWhenCommitted(int order,
-                                                  const String &name,
+                                                  const UnsafeStringView &name,
                                                   const CommittedNotification &onCommitted)
 {
     WCTInnerAssert(isOpened());
     m_notification.setNotificationWhenCommitted(order, name, onCommitted);
 }
 
-void AbstractHandle::unsetNotificationWhenCommitted(const String &name)
+void AbstractHandle::unsetNotificationWhenCommitted(const UnsafeStringView &name)
 {
     WCTInnerAssert(isOpened());
     m_notification.unsetNotificationWhenCommitted(name);
 }
 
-void AbstractHandle::setNotificationWhenCheckpointed(const String &name,
+void AbstractHandle::setNotificationWhenCheckpointed(const UnsafeStringView &name,
                                                      const CheckpointedNotification &checkpointed)
 {
     WCTInnerAssert(isOpened());
@@ -533,9 +535,9 @@ bool AbstractHandle::APIExit(int rc)
     return APIExit(rc, nullptr);
 }
 
-bool AbstractHandle::APIExit(int rc, const String &sql)
+bool AbstractHandle::APIExit(int rc, const UnsafeStringView &sql)
 {
-    return APIExit(rc, sql.c_str());
+    return APIExit(rc, sql.data());
 }
 
 bool AbstractHandle::APIExit(int rc, const char *sql)

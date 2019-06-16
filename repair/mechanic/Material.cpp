@@ -66,7 +66,7 @@ bool Material::serializeData(Serialization &serialization, const Data &data)
     return serialization.put4BytesUInt(checksum) && serialization.putSizedData(data);
 }
 
-void Material::markAsEmpty(const String &element)
+void Material::markAsEmpty(const UnsafeStringView &element)
 {
     Error error(Error::Code::Empty, Error::Level::Ignore, "Element of material is empty.");
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
@@ -109,7 +109,7 @@ bool Material::deserialize(Deserialization &deserialization)
     Deserialization decoder(decompressed);
     while (!decoder.ended()) {
         size_t lengthOfSizedString;
-        String tableName;
+        StringView tableName;
         std::tie(lengthOfSizedString, tableName) = decoder.advanceSizedString();
         if (lengthOfSizedString == 0 || tableName.empty()) {
             markAsCorrupt("TableName");
@@ -155,7 +155,7 @@ std::pair<bool, Data> Material::deserializeData(Deserialization &deserialization
     return { succeed, succeed ? data : Data::null() };
 }
 
-void Material::markAsCorrupt(const String &element)
+void Material::markAsCorrupt(const UnsafeStringView &element)
 {
     Error error(Error::Code::Corrupt, Error::Level::Ignore, "Material is corrupted");
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
@@ -259,7 +259,7 @@ bool Material::Content::deserialize(Deserialization &deserialization)
     }
     int numberOfAssociatedSQLs = (int) varint;
     associatedSQLs.clear();
-    String buffer;
+    StringView buffer;
     for (int i = 0; i < numberOfAssociatedSQLs; ++i) {
         std::tie(lengthOfSizedString, buffer) = deserialization.advanceSizedString();
         if (lengthOfSizedString == 0 || buffer.empty()) {

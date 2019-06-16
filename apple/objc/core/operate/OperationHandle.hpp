@@ -45,8 +45,8 @@ protected:
 
 #pragma mark - Backup
 public:
-    void setPath(const String &path) override final;
-    const String &getPath() const override final;
+    void setPath(const UnsafeStringView &path) override final;
+    const StringView &getPath() const override final;
     const Error &getError() const override final;
 
     bool acquireReadLock() override final;

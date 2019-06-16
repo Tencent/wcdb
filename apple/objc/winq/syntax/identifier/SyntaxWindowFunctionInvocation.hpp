@@ -29,11 +29,11 @@ namespace Syntax {
 class WindowFunctionInvocation final : public Identifier {
 #pragma mark - Lang
 public:
-    String name;
+    StringView name;
     std::list<Expression> expressions;
     bool wildcard = false;
     Filter filter;
-    String window;
+    StringView window;
     WindowDef windowDef;
 
     bool isValid() const override final;
@@ -42,7 +42,7 @@ public:
 public:
     static constexpr const Type type = Type::WindowFunctionInvocation;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    StringView getValidDescription() const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

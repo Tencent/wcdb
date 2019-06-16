@@ -20,11 +20,10 @@
 
 #pragma once
 
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <WCDB/Syntax.h>
 #include <WCDB/SyntaxForwardDeclaration.h>
 #include <WCDB/UnsafeData.hpp>
-#include <WCDB/UnsafeStringView.hpp>
 #include <cstdint>
 #include <type_traits>
 #include <vector>
@@ -282,10 +281,10 @@ public:
 };
 
 template<>
-struct ColumnIsTextType<String> : public std::true_type {
+struct ColumnIsTextType<StringView> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
-    asUnderlyingType(const String &text);
+    asUnderlyingType(const UnsafeStringView &text);
 };
 
 //BLOB
@@ -307,7 +306,7 @@ template<typename T>
 struct UnsafeStringView::Convertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type>
 : public std::true_type {
 public:
-    static UnsafeStringView asUnsafeString(const T &t)
+    static UnsafeStringView asUnsafeStringView(const T &t)
     {
         return ColumnIsTextType<T>::asUnderlyingType(t);
     }

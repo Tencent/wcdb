@@ -37,12 +37,12 @@ public:
     TableOrSubquery(const UnsafeStringView& table);
     TableOrSubquery& schema(const Schema& schema);
 
-    TableOrSubquery& as(const String& alias);
+    TableOrSubquery& as(const UnsafeStringView& alias);
 
     TableOrSubquery& notIndexed();
-    TableOrSubquery& indexed(const String& index);
+    TableOrSubquery& indexed(const UnsafeStringView& index);
 
-    static TableOrSubquery function(const String& function);
+    static TableOrSubquery function(const UnsafeStringView& function);
     TableOrSubquery& invoke();
     TableOrSubquery& argument(const Expression& expression);
     TableOrSubquery& arguments(const Expressions& expressions);

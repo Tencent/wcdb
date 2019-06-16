@@ -36,7 +36,7 @@ Identifier::Type DropIndexSTMT::getType() const
     return type;
 }
 
-String DropIndexSTMT::getValidDescription() const
+StringView DropIndexSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "DROP INDEX ";
@@ -47,7 +47,7 @@ String DropIndexSTMT::getValidDescription() const
         stream << schema << ".";
     }
     stream << index;
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void DropIndexSTMT::iterate(const Iterator& iterator, bool& stop)

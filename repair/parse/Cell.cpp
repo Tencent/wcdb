@@ -23,7 +23,7 @@
 #include <WCDB/Page.hpp>
 #include <WCDB/Pager.hpp>
 #include <WCDB/Serialization.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <set>
 
 namespace WCDB {
@@ -162,11 +162,12 @@ UnsafeStringView Cell::textValue(int index) const
     WCTInnerAssert(index < m_columns.size());
     WCTInnerAssert(getValueType(index) == Type::Text);
     const auto &cell = m_columns[index];
-    return UnsafeStringView(reinterpret_cast<const char *>(m_payload.buffer() + cell.second),
-                        getLengthOfSerialType(cell.first));
+    return UnsafeStringView(
+    reinterpret_cast<const char *>(m_payload.buffer() + cell.second),
+    getLengthOfSerialType(cell.first));
 }
 
-String Cell::stringValue(int index) const
+StringView Cell::stringValue(int index) const
 {
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(index < m_columns.size());
@@ -244,15 +245,15 @@ bool Cell::doInitialize()
             if (overflowPagenos.find(overflowPageno) != overflowPagenos.end()) {
                 m_pager->markAsCorrupted(
                 m_page->number,
-                String::formatted("Overflow page: %d is redundant.", overflowPageno));
+                StringView::formatted("Overflow page: %d is redundant.", overflowPageno));
                 return false;
             }
             if (overflowPageno > m_pager->getNumberOfPages()) {
                 m_pager->markAsCorrupted(
                 m_page->number,
-                String::formatted("Overflow page number: %d exceeds the page count: %d.",
-                                  overflowPageno,
-                                  m_pager->getNumberOfPages()));
+                StringView::formatted("Overflow page number: %d exceeds the page count: %d.",
+                                      overflowPageno,
+                                      m_pager->getNumberOfPages()));
                 return false;
             }
             overflowPagenos.emplace(overflowPageno);
@@ -309,7 +310,7 @@ bool Cell::doInitialize()
         }
         if (!isSerialTypeSanity(serialType)) {
             markPagerAsCorrupted(
-            m_page->number, String::formatted("Serial type: %d is illegal.", serialType));
+            m_page->number, StringView::formatted("Serial type: %d is illegal.", serialType));
             return false;
         }
         cursorOfSerialTypes += lengthOfSerialType;

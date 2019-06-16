@@ -32,7 +32,7 @@ Identifier::Type ColumnConstraint::getType() const
     return type;
 }
 
-String ColumnConstraint::getValidDescription() const
+StringView ColumnConstraint::getValidDescription() const
 {
     std::ostringstream stream;
     if (!name.empty()) {
@@ -76,7 +76,7 @@ String ColumnConstraint::getValidDescription() const
         stream << foreignKeyClause;
         break;
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void ColumnConstraint::iterate(const Iterator& iterator, bool& stop)

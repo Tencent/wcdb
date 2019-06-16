@@ -32,7 +32,7 @@ OperationEvent::~OperationEvent()
 {
 }
 
-OperationQueue::OperationQueue(const String& name, OperationEvent* event)
+OperationQueue::OperationQueue(const UnsafeStringView& name, OperationEvent* event)
 : AsyncQueue(name)
 , m_event(event)
 , m_observerForMemoryWarning(registerNotificationWhenMemoryWarning())
@@ -73,13 +73,13 @@ void OperationQueue::handleError(const Error& error)
 
     const auto& infos = error.infos;
 
-    auto iter = infos.find(ErrorStringKeyPath);
-    if (iter == infos.end() || iter->second.valueType() != Error::InfoValue::Type::String) {
+    auto iter = infos.find(UnsafeStringView(ErrorStringKeyPath));
+    if (iter == infos.end() || iter->second.valueType() != Error::InfoValue::Type::StringView) {
         // make sure no empty path will be added into queue
         return;
     }
 
-    const String& path = iter->second.stringValue();
+    const UnsafeStringView& path = iter->second.stringValue();
     if (path.empty()) {
         return;
     }
@@ -92,9 +92,9 @@ void OperationQueue::handleError(const Error& error)
     }
 
     bool fromIntegrity = false;
-    auto actionIter = infos.find(ErrorStringKeyAction);
+    auto actionIter = infos.find(UnsafeStringView(ErrorStringKeyAction));
     if (actionIter != infos.end()
-        && actionIter->second.valueType() == Error::InfoValue::Type::String
+        && actionIter->second.valueType() == Error::InfoValue::Type::StringView
         && actionIter->second.stringValue() == ErrorActionIntegrity) {
         fromIntegrity = true;
     }
@@ -140,7 +140,7 @@ OperationQueue::Operation::Operation(Type type_) : type(type_)
 {
 }
 
-OperationQueue::Operation::Operation(Type type_, const String& path_)
+OperationQueue::Operation::Operation(Type type_, const UnsafeStringView& path_)
 : type(type_), path(path_)
 {
 }
@@ -201,7 +201,7 @@ OperationQueue::Record::Record()
 }
 
 #pragma mark - Migrate
-void OperationQueue::registerAsRequiredMigration(const String& path)
+void OperationQueue::registerAsRequiredMigration(const UnsafeStringView& path)
 {
     WCTInnerAssert(!path.empty());
 
@@ -209,7 +209,7 @@ void OperationQueue::registerAsRequiredMigration(const String& path)
     m_records[path].registeredForMigration = true;
 }
 
-void OperationQueue::registerAsNoMigrationRequired(const String& path)
+void OperationQueue::registerAsNoMigrationRequired(const UnsafeStringView& path)
 {
     WCTInnerAssert(!path.empty());
 
@@ -219,19 +219,19 @@ void OperationQueue::registerAsNoMigrationRequired(const String& path)
     m_timedQueue.remove(operation);
 }
 
-void OperationQueue::asyncMigrate(const String& path)
+void OperationQueue::asyncMigrate(const UnsafeStringView& path)
 {
     asyncMigrate(path, OperationQueueTimeIntervalForMigration, 0);
 }
 
-void OperationQueue::stopMigrate(const String& path)
+void OperationQueue::stopMigrate(const UnsafeStringView& path)
 {
     LockGuard lockGuard(m_lock);
     Operation operation(Operation::Type::Migrate, path);
     m_timedQueue.remove(operation);
 }
 
-void OperationQueue::asyncMigrate(const String& path, double delay, int numberOfFailures)
+void OperationQueue::asyncMigrate(const UnsafeStringView& path, double delay, int numberOfFailures)
 {
     WCTInnerAssert(!path.empty());
     WCTInnerAssert(numberOfFailures >= 0
@@ -246,7 +246,7 @@ void OperationQueue::asyncMigrate(const String& path, double delay, int numberOf
     }
 }
 
-void OperationQueue::doMigrate(const String& path, int numberOfFailures)
+void OperationQueue::doMigrate(const UnsafeStringView& path, int numberOfFailures)
 {
     WCTInnerAssert(!path.empty());
     WCTInnerAssert(numberOfFailures >= 0
@@ -273,7 +273,7 @@ void OperationQueue::doMigrate(const String& path, int numberOfFailures)
 }
 
 #pragma mark - Backup
-void OperationQueue::registerAsRequiredBackup(const String& path)
+void OperationQueue::registerAsRequiredBackup(const UnsafeStringView& path)
 {
     WCTInnerAssert(!path.empty());
 
@@ -281,7 +281,7 @@ void OperationQueue::registerAsRequiredBackup(const String& path)
     m_records[path].registeredForBackup = true;
 }
 
-void OperationQueue::registerAsNoBackupRequired(const String& path)
+void OperationQueue::registerAsNoBackupRequired(const UnsafeStringView& path)
 {
     WCTInnerAssert(!path.empty());
 
@@ -291,7 +291,7 @@ void OperationQueue::registerAsNoBackupRequired(const String& path)
     m_timedQueue.remove(operation);
 }
 
-void OperationQueue::asyncBackup(const String& path)
+void OperationQueue::asyncBackup(const UnsafeStringView& path)
 {
     WCTInnerAssert(!path.empty());
 
@@ -302,7 +302,7 @@ void OperationQueue::asyncBackup(const String& path)
     }
 }
 
-void OperationQueue::asyncBackup(const String& path, double delay)
+void OperationQueue::asyncBackup(const UnsafeStringView& path, double delay)
 {
     WCTInnerAssert(!path.empty());
 
@@ -311,7 +311,7 @@ void OperationQueue::asyncBackup(const String& path, double delay)
     async(operation, delay, parameter);
 }
 
-void OperationQueue::doBackup(const String& path)
+void OperationQueue::doBackup(const UnsafeStringView& path)
 {
     WCTInnerAssert(!path.empty());
 
@@ -319,7 +319,7 @@ void OperationQueue::doBackup(const String& path)
 }
 
 #pragma mark - Checkpoint
-void OperationQueue::registerAsRequiredCheckpoint(const String& path)
+void OperationQueue::registerAsRequiredCheckpoint(const UnsafeStringView& path)
 {
     WCTInnerAssert(!path.empty());
 
@@ -327,7 +327,7 @@ void OperationQueue::registerAsRequiredCheckpoint(const String& path)
     m_records[path].registeredForCheckpoint = true;
 }
 
-void OperationQueue::registerAsNoCheckpointRequired(const String& path)
+void OperationQueue::registerAsNoCheckpointRequired(const UnsafeStringView& path)
 {
     WCTInnerAssert(!path.empty());
 
@@ -338,7 +338,7 @@ void OperationQueue::registerAsNoCheckpointRequired(const String& path)
     m_timedQueue.remove(operation);
 }
 
-void OperationQueue::asyncCheckpoint(const String& path)
+void OperationQueue::asyncCheckpoint(const UnsafeStringView& path)
 {
     WCTInnerAssert(!path.empty());
 
@@ -351,7 +351,7 @@ void OperationQueue::asyncCheckpoint(const String& path)
     }
 }
 
-void OperationQueue::doCheckpoint(const String& path)
+void OperationQueue::doCheckpoint(const UnsafeStringView& path)
 {
     WCTInnerAssert(!path.empty());
 
@@ -410,7 +410,7 @@ void OperationQueue::doPurge(const Parameter& parameter)
 }
 
 #pragma mark - Check Integrity
-void OperationQueue::asyncCheckIntegrity(const String& path, uint32_t identifier)
+void OperationQueue::asyncCheckIntegrity(const UnsafeStringView& path, uint32_t identifier)
 {
     WCTInnerAssert(!path.empty());
     WCTInnerAssert(identifier != 0);
@@ -423,7 +423,7 @@ void OperationQueue::asyncCheckIntegrity(const String& path, uint32_t identifier
     }
 }
 
-void OperationQueue::doCheckIntegrity(const String& path)
+void OperationQueue::doCheckIntegrity(const UnsafeStringView& path)
 {
     WCTInnerAssert(!path.empty());
 
@@ -431,7 +431,7 @@ void OperationQueue::doCheckIntegrity(const String& path)
 }
 
 #pragma mark - Corrupted
-void OperationQueue::setNotificationWhenCorrupted(const String& path,
+void OperationQueue::setNotificationWhenCorrupted(const UnsafeStringView& path,
                                                   const CorruptionNotification& notification)
 {
     WCTInnerAssert(!path.empty());
@@ -444,7 +444,7 @@ void OperationQueue::setNotificationWhenCorrupted(const String& path,
     }
 }
 
-bool OperationQueue::isFileObservedCorrupted(const String& path) const
+bool OperationQueue::isFileObservedCorrupted(const UnsafeStringView& path) const
 {
     WCTInnerAssert(!path.empty());
 
@@ -459,7 +459,7 @@ bool OperationQueue::isFileObservedCorrupted(const String& path) const
     return corrupted;
 }
 
-void OperationQueue::asyncNotifyCorruption(const String& path, uint32_t identifier)
+void OperationQueue::asyncNotifyCorruption(const UnsafeStringView& path, uint32_t identifier)
 {
     WCTInnerAssert(!path.empty());
     WCTInnerAssert(identifier != 0);
@@ -470,7 +470,7 @@ void OperationQueue::asyncNotifyCorruption(const String& path, uint32_t identifi
     async(operation, 0, parameter);
 }
 
-void OperationQueue::doNotifyCorruption(const String& path, uint32_t identifier)
+void OperationQueue::doNotifyCorruption(const UnsafeStringView& path, uint32_t identifier)
 {
     WCTInnerAssert(!path.empty());
     WCTInnerAssert(identifier != 0);

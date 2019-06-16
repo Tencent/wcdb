@@ -32,7 +32,7 @@ Identifier::Type IndexedColumn::getType() const
     return type;
 }
 
-String IndexedColumn::getValidDescription() const
+StringView IndexedColumn::getValidDescription() const
 {
     std::ostringstream stream;
     switch (switcher) {
@@ -49,7 +49,7 @@ String IndexedColumn::getValidDescription() const
     if (orderValid()) {
         stream << space << order;
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void IndexedColumn::iterate(const Iterator& iterator, bool& stop)

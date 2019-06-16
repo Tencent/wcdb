@@ -31,7 +31,7 @@ Identifier::Type AnalyzeSTMT::getType() const
     return type;
 }
 
-String AnalyzeSTMT::getValidDescription() const
+StringView AnalyzeSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "ANALYZE";
@@ -49,7 +49,7 @@ String AnalyzeSTMT::getValidDescription() const
         WCTInnerAssert(switcher == Switch::All);
         break;
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void AnalyzeSTMT::iterate(const Iterator& iterator, bool& stop)

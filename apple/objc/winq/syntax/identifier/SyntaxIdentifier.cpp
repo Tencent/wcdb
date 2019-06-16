@@ -29,12 +29,12 @@ Identifier::~Identifier()
 {
 }
 
-String Identifier::getDescription() const
+StringView Identifier::getDescription() const
 {
     if (isValid()) {
         return getValidDescription();
     }
-    return String::null();
+    return StringView();
 }
 
 void Identifier::iterate(const Iterator &iterator)

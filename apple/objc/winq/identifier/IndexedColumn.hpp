@@ -37,7 +37,7 @@ public:
     IndexedColumn(const Column& column);
     IndexedColumn(const Expression& expression);
 
-    IndexedColumn& collate(const String& collation);
+    IndexedColumn& collate(const UnsafeStringView& collation);
     IndexedColumn& order(const Order& order);
 };
 

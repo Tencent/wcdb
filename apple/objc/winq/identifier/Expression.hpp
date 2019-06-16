@@ -50,13 +50,13 @@ public:
     Expression(const Column& column);
     Expression(const StatementSelect& select);
 
-    Expression& table(const String& table);
+    Expression& table(const UnsafeStringView& table);
     Expression& schema(const Schema& schema);
 
     explicit Expression(const Expressions& expressions);
     Expression(const RaiseFunction& raiseFunction);
 
-    static Expression function(const String& function);
+    static Expression function(const UnsafeStringView& function);
     Expression& invoke();
     Expression& argument(const Expression& parameter);
     Expression& arguments(const Expressions& parameters);
@@ -78,10 +78,10 @@ public:
 
     Expression& escape(const Expression& operand);
 
-    static Expression windowFunction(const String& function);
+    static Expression windowFunction(const UnsafeStringView& function);
     Expression& filter(const Filter& filter);
     Expression& over(const WindowDef& windowDef);
-    Expression& over(const String& window);
+    Expression& over(const UnsafeStringView& window);
 
 protected:
     Expression asExpressionOperand() const override final;

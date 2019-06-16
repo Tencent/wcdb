@@ -99,7 +99,7 @@ void Console::breakpoint()
 
 #if WCDB_DEBUG
 
-void Console::fatal(const String& message, const char* file, int line, const char* function)
+void Console::fatal(const UnsafeStringView& message, const char* file, int line, const char* function)
 {
     Error error(Error::Code::Misuse, Error::Level::Fatal, message);
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceAssertion);
@@ -114,7 +114,7 @@ void Console::fatal(const String& message, const char* file, int line, const cha
 
 #else // WCDB_DEBUG
 
-void Console::fatal(const String& message)
+void Console::fatal(const UnsafeStringView& message)
 {
     Error error(Error::Code::Misuse, Error::Level::Fatal, message);
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceAssertion);

@@ -31,7 +31,7 @@ Identifier::Type RollbackSTMT::getType() const
     return type;
 }
 
-String RollbackSTMT::getValidDescription() const
+StringView RollbackSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "ROLLBACK";
@@ -42,7 +42,7 @@ String RollbackSTMT::getValidDescription() const
         stream << " TO " << savepoint;
         break;
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 } // namespace Syntax

@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-StatementSavepoint& StatementSavepoint::savepoint(const String& savepoint)
+StatementSavepoint& StatementSavepoint::savepoint(const UnsafeStringView& savepoint)
 {
     syntax().savepoint = savepoint;
     return *this;

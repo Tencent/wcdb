@@ -36,7 +36,7 @@ Identifier::Type Column::getType() const
     return type;
 }
 
-String Column::getValidDescription() const
+StringView Column::getValidDescription() const
 {
     return name;
 }

@@ -36,11 +36,11 @@ Identifier::Type Filter::getType() const
     return type;
 }
 
-String Filter::getValidDescription() const
+StringView Filter::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "FILTER(WHERE " << *expression << ")";
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void Filter::iterate(const Iterator& iterator, bool& stop)

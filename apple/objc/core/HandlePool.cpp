@@ -31,7 +31,7 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-HandlePool::HandlePool(const String &thePath) : path(thePath)
+HandlePool::HandlePool(const UnsafeStringView &thePath) : path(thePath)
 {
 }
 
@@ -168,8 +168,9 @@ RecyclableHandle HandlePool::flowOut(HandleType type)
                 Error error(Error::Code::Exceed,
                             Error::Level::Error,
                             "The operating count of database exceeds the maximum allowed.");
-                error.infos.insert_or_assign("MaxAllowed", HandlePoolMaxAllowedNumberOfHandles);
-                error.infos.insert_or_assign(ErrorStringKeyPath, path);
+                error.infos.insert_or_assign(
+                StringView("MaxAllowed"), HandlePoolMaxAllowedNumberOfHandles);
+                error.infos.insert_or_assign(StringView(ErrorStringKeyPath), path);
                 Notifier::shared().notify(error);
                 setThreadedError(std::move(error));
                 return nullptr;
@@ -192,8 +193,9 @@ RecyclableHandle HandlePool::flowOut(HandleType type)
                 Error error(Error::Code::Exceed,
                             Error::Level::Error,
                             "The operating count of database exceeds the maximum allowed.");
-                error.infos.insert_or_assign("MaxAllowed", HandlePoolMaxAllowedNumberOfHandles);
-                error.infos.insert_or_assign(ErrorStringKeyPath, path);
+                error.infos.insert_or_assign(
+                StringView("MaxAllowed"), HandlePoolMaxAllowedNumberOfHandles);
+                error.infos.insert_or_assign(StringView(ErrorStringKeyPath), path);
                 Notifier::shared().notify(error);
                 setThreadedError(std::move(error));
                 return nullptr;

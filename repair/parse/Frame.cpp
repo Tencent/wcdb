@@ -21,7 +21,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Frame.hpp>
 #include <WCDB/Serialization.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <WCDB/Wal.hpp>
 
 namespace WCDB {
@@ -94,11 +94,11 @@ bool Frame::doInitialize()
     salt.second = deserialization.advance4BytesUInt();
     if (salt != m_wal->getSalt()) {
         markWalAsCorrupted(frameno,
-                           String::formatted("Mismatched frame salt: %u, %u to %u, %u.",
-                                             salt.first,
-                                             salt.second,
-                                             m_wal->getSalt().first,
-                                             m_wal->getSalt().second));
+                           StringView::formatted("Mismatched frame salt: %u, %u to %u, %u.",
+                                                 salt.first,
+                                                 salt.second,
+                                                 m_wal->getSalt().first,
+                                                 m_wal->getSalt().second));
         return false;
     }
 

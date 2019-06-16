@@ -38,7 +38,7 @@ protected:
     void setNotification(const Notification &notification);
 
 private:
-    const String m_identifier;
+    const StringView m_identifier;
     Notification m_notification;
 };
 

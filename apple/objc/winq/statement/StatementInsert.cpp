@@ -28,7 +28,7 @@ StatementInsert& StatementInsert::with(const With& with)
     return *this;
 }
 
-StatementInsert& StatementInsert::insertIntoTable(const String& table)
+StatementInsert& StatementInsert::insertIntoTable(const UnsafeStringView& table)
 {
     syntax().table = table;
     return *this;
@@ -70,7 +70,7 @@ StatementInsert& StatementInsert::orIgnore()
     return *this;
 }
 
-StatementInsert& StatementInsert::as(const String& alias)
+StatementInsert& StatementInsert::as(const UnsafeStringView& alias)
 {
     syntax().alias = alias;
     return *this;

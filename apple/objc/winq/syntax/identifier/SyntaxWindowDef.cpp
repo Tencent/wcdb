@@ -36,7 +36,7 @@ Identifier::Type WindowDef::getType() const
     return type;
 }
 
-String WindowDef::getValidDescription() const
+StringView WindowDef::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "(";
@@ -58,7 +58,7 @@ String WindowDef::getValidDescription() const
         stream << frameSpec;
     }
     stream << ")";
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void WindowDef::iterate(const Iterator& iterator, bool& stop)

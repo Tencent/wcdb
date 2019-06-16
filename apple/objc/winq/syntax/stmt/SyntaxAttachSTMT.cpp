@@ -36,11 +36,11 @@ Identifier::Type AttachSTMT::getType() const
     return type;
 }
 
-String AttachSTMT::getValidDescription() const
+StringView AttachSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "ATTACH " << expression << " AS " << schema;
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void AttachSTMT::iterate(const Iterator& iterator, bool& stop)

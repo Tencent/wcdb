@@ -18,20 +18,20 @@
  * limitations under the License.
  */
 
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <WCDB/SyntaxCommonConst.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
 
-bool isIntegerColumnType(const String& type)
+bool isIntegerColumnType(const UnsafeStringView& type)
 {
-    return type.isCaseInsensiveEqual("INTEGER") || type.isCaseInsensiveEqual("INT")
-           || type.isCaseInsensiveEqual("TINYINT") || type.isCaseInsensiveEqual("SMALLINT")
-           || type.isCaseInsensiveEqual("MEDIUMINT") || type.isCaseInsensiveEqual("BIGINT")
-           || type.isCaseInsensiveEqual("UNSIGNED BIG INT")
-           || type.isCaseInsensiveEqual("INT2") || type.isCaseInsensiveEqual("INT8");
+    return type.caseInsensiveEqual("INTEGER") || type.caseInsensiveEqual("INT")
+           || type.caseInsensiveEqual("TINYINT") || type.caseInsensiveEqual("SMALLINT")
+           || type.caseInsensiveEqual("MEDIUMINT") || type.caseInsensiveEqual("BIGINT")
+           || type.caseInsensiveEqual("UNSIGNED BIG INT")
+           || type.caseInsensiveEqual("INT2") || type.caseInsensiveEqual("INT8");
 }
 
 } // namespace Syntax

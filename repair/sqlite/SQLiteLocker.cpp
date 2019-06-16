@@ -34,13 +34,13 @@ const Error &SQLiteReadLocker::getError() const
     return ErrorProne::getError();
 }
 
-void SQLiteReadLocker::setPath(const String &path)
+void SQLiteReadLocker::setPath(const UnsafeStringView &path)
 {
     WCTInnerAssert(m_path.empty());
     SQLiteBase::setPath(path);
 }
 
-const String &SQLiteReadLocker::getPath() const
+const StringView &SQLiteReadLocker::getPath() const
 {
     return SQLiteBase::getPath();
 }
@@ -70,13 +70,13 @@ const Error &SQLiteWriteLocker::getError() const
     return ErrorProne::getError();
 }
 
-void SQLiteWriteLocker::setPath(const String &path)
+void SQLiteWriteLocker::setPath(const UnsafeStringView &path)
 {
     WCTInnerAssert(m_path.empty());
     SQLiteBase::setPath(path);
 }
 
-const String &SQLiteWriteLocker::getPath() const
+const StringView &SQLiteWriteLocker::getPath() const
 {
     return SQLiteBase::getPath();
 }

@@ -29,7 +29,7 @@ namespace Syntax {
 class ForeignKeyClause final : public Identifier {
 #pragma mark - Lang
 public:
-    String foreignTable;
+    StringView foreignTable;
     std::list<Column> columns;
     enum class Switch {
         OnDeleteSetNull = 1,
@@ -45,7 +45,7 @@ public:
         Match,
     };
     std::list<Switch> switchers;
-    std::list<String> matchings;
+    std::list<StringView> matchings;
 
     WCDB_SYNTAX_UNION_ENUM(Deferrable,
                            deferrable,
@@ -62,7 +62,7 @@ public:
 public:
     static constexpr const Type type = Type::ForeignKeyClause;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    StringView getValidDescription() const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

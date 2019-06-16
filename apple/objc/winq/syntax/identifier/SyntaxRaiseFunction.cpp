@@ -47,7 +47,7 @@ Identifier::Type RaiseFunction::getType() const
     return type;
 }
 
-String RaiseFunction::getValidDescription() const
+StringView RaiseFunction::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "RAISE(" << switcher;
@@ -61,7 +61,7 @@ String RaiseFunction::getValidDescription() const
         break;
     }
     stream << ")";
-    return stream.str();
+    return StringView(stream.str());
 }
 
 } // namespace Syntax

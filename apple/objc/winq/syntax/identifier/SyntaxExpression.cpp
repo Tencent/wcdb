@@ -139,7 +139,7 @@ streamAutoParenthesesExpression(std::ostringstream& stream, const Expression& ex
     }
 }
 
-String Expression::getValidDescription() const
+StringView Expression::getValidDescription() const
 {
     std::ostringstream stream;
     switch (switcher) {
@@ -389,7 +389,7 @@ String Expression::getValidDescription() const
         }
         break;
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void Expression::iterate(const Iterator& iterator, bool& stop)

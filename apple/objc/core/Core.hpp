@@ -48,8 +48,8 @@ protected:
 
 #pragma mark - Database
 public:
-    RecyclableDatabase getOrCreateDatabase(const String& path);
-    RecyclableDatabase getAlivingDatabase(const String& path);
+    RecyclableDatabase getOrCreateDatabase(const UnsafeStringView& path);
+    RecyclableDatabase getAlivingDatabase(const UnsafeStringView& path);
 
     void purgeDatabasePool();
 
@@ -60,9 +60,9 @@ protected:
 
 #pragma mark - Tokenizer
 public:
-    void registerTokenizer(const String& name, const TokenizerModule& module);
-    std::shared_ptr<Config> tokenizerConfig(const String& tokenizeName);
-    bool tokenizerExists(const String& name) const;
+    void registerTokenizer(const UnsafeStringView& name, const TokenizerModule& module);
+    std::shared_ptr<Config> tokenizerConfig(const UnsafeStringView& tokenizeName);
+    bool tokenizerExists(const UnsafeStringView& name) const;
 
 protected:
     std::shared_ptr<TokenizerModules> m_modules;
@@ -70,15 +70,16 @@ protected:
 #pragma mark - Operation
 public:
     typedef std::function<void(Database*)> CorruptedNotification;
-    bool isFileObservedCorrupted(const String& path);
-    void setNotificationWhenDatabaseCorrupted(const String& path,
+    bool isFileObservedCorrupted(const UnsafeStringView& path);
+    void setNotificationWhenDatabaseCorrupted(const UnsafeStringView& path,
                                               const CorruptedNotification& notification);
 
 protected:
-    std::pair<bool, bool> migrationShouldBeOperated(const String& path) override final;
-    bool backupShouldBeOperated(const String& path) override final;
-    bool checkpointShouldBeOperated(const String& path) override final;
-    void integrityShouldBeChecked(const String& path) override final;
+    std::pair<bool, bool>
+    migrationShouldBeOperated(const UnsafeStringView& path) override final;
+    bool backupShouldBeOperated(const UnsafeStringView& path) override final;
+    bool checkpointShouldBeOperated(const UnsafeStringView& path) override final;
+    void integrityShouldBeChecked(const UnsafeStringView& path) override final;
     void purgeShouldBeOperated() override final;
 
     std::shared_ptr<OperationQueue> m_operationQueue;

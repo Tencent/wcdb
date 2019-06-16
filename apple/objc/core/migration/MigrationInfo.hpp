@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <WCDB/WINQ.h>
 #include <set>
 
@@ -30,13 +30,13 @@ namespace WCDB {
 class MigrationBaseInfo {
 public:
     MigrationBaseInfo();
-    MigrationBaseInfo(const String& database, const String& table);
+    MigrationBaseInfo(const UnsafeStringView& database, const UnsafeStringView& table);
     virtual ~MigrationBaseInfo() = 0;
 
-    const String& getTable() const;
-    const String& getDatabase() const;
-    const String& getSourceTable() const;
-    const String& getSourceDatabase() const;
+    const StringView& getTable() const;
+    const StringView& getDatabase() const;
+    const StringView& getSourceTable() const;
+    const StringView& getSourceDatabase() const;
 
     bool shouldMigrate() const;
     bool isCrossDatabase() const;
@@ -45,14 +45,14 @@ public:
     static const char* getSchemaPrefix();
 
 protected:
-    static Schema getSchemaForDatabase(const String& database);
-    void setSource(const String& table, const String& database = "");
+    static Schema getSchemaForDatabase(const UnsafeStringView& database);
+    void setSource(const UnsafeStringView& table, const UnsafeStringView& database = "");
 
 private:
-    String m_table;
-    String m_database;
-    String m_sourceTable;
-    String m_sourceDatabase;
+    StringView m_table;
+    StringView m_database;
+    StringView m_sourceTable;
+    StringView m_sourceDatabase;
 };
 
 #pragma mark - MigrationUserInfo
@@ -75,7 +75,7 @@ public:
 class MigrationInfo final : public MigrationBaseInfo {
 public:
     MigrationInfo(const MigrationUserInfo& userInfo,
-                  const std::set<String>& columns,
+                  const std::set<StringView>& columns,
                   bool integerPrimaryKey);
 
 protected:
@@ -110,9 +110,9 @@ protected:
 #pragma mark - View
 public:
     // WCDBUnioned_
-    static const String& getUnionedViewPrefix();
+    static const char* getUnionedViewPrefix();
 
-    const String& getUnionedView() const;
+    const StringView& getUnionedView() const;
 
     /*
      CREATE TEMP VIEW IF NOT EXISTS [unionedView] AS
@@ -129,7 +129,7 @@ public:
      DROP VIEW IF EXISTS temp.[unionedView]
      */
     static const StatementDropView
-    getStatementForDroppingUnionedView(const String& unionedView);
+    getStatementForDroppingUnionedView(const UnsafeStringView& unionedView);
 
     /*
      SELECT name
@@ -140,7 +140,7 @@ public:
 
 protected:
     // WCDBUnioned_ + [table]
-    String m_unionedView;
+    StringView m_unionedView;
     StatementCreateView m_statementForCreatingUnionedView;
 
 #pragma mark - Compatible

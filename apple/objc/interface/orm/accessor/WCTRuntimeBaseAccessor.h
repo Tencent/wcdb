@@ -24,7 +24,7 @@
 
 class WCTRuntimeBaseAccessor {
 public:
-    WCTRuntimeBaseAccessor(Class cls, const WCDB::String &propertyName);
+    WCTRuntimeBaseAccessor(Class cls, const WCDB::UnsafeStringView &propertyName);
 
     virtual ~WCTRuntimeBaseAccessor();
 
@@ -36,15 +36,19 @@ protected:
 
     using InstanceType = id;
 
-    static Class getPropertyClass(Class cls, const WCDB::String &propertyName);
+    static Class getPropertyClass(Class cls, const WCDB::UnsafeStringView &propertyName);
 
-    static SEL getGetterSelector(objc_property_t property, const WCDB::String &propertyName);
-    static SEL getSetterSelector(objc_property_t property, const WCDB::String &propertyName);
+    static SEL getGetterSelector(objc_property_t property,
+                                 const WCDB::UnsafeStringView &propertyName);
+    static SEL getSetterSelector(objc_property_t property,
+                                 const WCDB::UnsafeStringView &propertyName);
     static IMP getClassMethodImplementation(Class cls, SEL selector);
     static IMP getInstanceMethodImplementation(Class cls, SEL selector);
 
 private:
-    WCTRuntimeBaseAccessor(Class cls, const WCDB::String &propertyName, objc_property_t property);
+    WCTRuntimeBaseAccessor(Class cls,
+                           const WCDB::UnsafeStringView &propertyName,
+                           objc_property_t property);
 };
 
 template<typename PropertyType>

@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-ForeignKey& ForeignKey::references(const String& table)
+ForeignKey& ForeignKey::references(const UnsafeStringView& table)
 {
     syntax().foreignTable = table;
     return *this;
@@ -94,7 +94,7 @@ ForeignKey& ForeignKey::onUpdateNoAction()
     return *this;
 }
 
-ForeignKey& ForeignKey::match(const String& name)
+ForeignKey& ForeignKey::match(const UnsafeStringView& name)
 {
     syntax().switchers.push_back(SyntaxType::Switch::Match);
     syntax().matchings.push_back(name);

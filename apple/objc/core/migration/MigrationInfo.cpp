@@ -20,7 +20,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/MigrationInfo.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 
 namespace WCDB {
 
@@ -29,7 +29,8 @@ MigrationBaseInfo::MigrationBaseInfo()
 {
 }
 
-MigrationBaseInfo::MigrationBaseInfo(const String& database, const String& table)
+MigrationBaseInfo::MigrationBaseInfo(const UnsafeStringView& database,
+                                     const UnsafeStringView& table)
 : m_database(database), m_table(table)
 {
     WCTInnerAssert(!m_database.empty());
@@ -50,22 +51,22 @@ bool MigrationBaseInfo::isCrossDatabase() const
     return m_sourceDatabase != m_database;
 }
 
-const String& MigrationBaseInfo::getTable() const
+const StringView& MigrationBaseInfo::getTable() const
 {
     return m_table;
 }
 
-const String& MigrationBaseInfo::getDatabase() const
+const StringView& MigrationBaseInfo::getDatabase() const
 {
     return m_database;
 }
 
-const String& MigrationBaseInfo::getSourceTable() const
+const StringView& MigrationBaseInfo::getSourceTable() const
 {
     return m_sourceTable;
 }
 
-const String& MigrationBaseInfo::getSourceDatabase() const
+const StringView& MigrationBaseInfo::getSourceDatabase() const
 {
     return m_sourceDatabase;
 }
@@ -76,12 +77,12 @@ const char* MigrationBaseInfo::getSchemaPrefix()
     return s_schemaPrefix;
 }
 
-Schema MigrationBaseInfo::getSchemaForDatabase(const String& database)
+Schema MigrationBaseInfo::getSchemaForDatabase(const UnsafeStringView& database)
 {
     return getSchemaPrefix() + std::to_string(database.hash());
 }
 
-void MigrationBaseInfo::setSource(const String& table, const String& database)
+void MigrationBaseInfo::setSource(const UnsafeStringView& table, const UnsafeStringView& database)
 {
     WCTRemedialAssert(!table.empty() && (table != m_table || database != m_database),
                       "Invalid migration source.",
@@ -111,7 +112,7 @@ Schema MigrationUserInfo::getSchemaForSourceDatabase() const
 
 #pragma mark - MigrationInfo
 MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
-                             const std::set<String>& uniqueColumns,
+                             const std::set<StringView>& uniqueColumns,
                              bool integerPrimaryKey)
 : MigrationBaseInfo(userInfo), m_integerPrimaryKey(integerPrimaryKey)
 {
@@ -137,7 +138,9 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
 
     // View
     {
-        m_unionedView = getUnionedViewPrefix() + getTable();
+        std::ostringstream stream;
+        stream << getUnionedViewPrefix() << getTable();
+        m_unionedView = StringView(stream.str());
 
         StatementSelect select
         = StatementSelect()
@@ -237,7 +240,7 @@ const Schema& MigrationInfo::getSchemaForSourceDatabase() const
     return m_schemaForSourceDatabase;
 }
 
-const String& MigrationInfo::getUnionedView() const
+const StringView& MigrationInfo::getUnionedView() const
 {
     return m_unionedView;
 }
@@ -260,10 +263,9 @@ StatementPragma MigrationInfo::getStatementForSelectingDatabaseList()
 }
 
 #pragma mark - View
-const String& MigrationInfo::getUnionedViewPrefix()
+const char* MigrationInfo::getUnionedViewPrefix()
 {
-    static const String* s_viewPrefix = new String("WCDBUnioned_");
-    return *s_viewPrefix;
+    return "WCDBUnioned_";
 }
 
 const StatementCreateView& MigrationInfo::getStatementForCreatingUnionedView() const
@@ -272,7 +274,7 @@ const StatementCreateView& MigrationInfo::getStatementForCreatingUnionedView() c
 }
 
 const StatementDropView
-MigrationInfo::getStatementForDroppingUnionedView(const String& unionedView)
+MigrationInfo::getStatementForDroppingUnionedView(const UnsafeStringView& unionedView)
 {
     WCTInnerAssert(unionedView.hasPrefix(getUnionedViewPrefix()));
     return StatementDropView().dropView(unionedView).schema(Schema::temp()).ifExists();
@@ -282,7 +284,7 @@ StatementSelect MigrationInfo::getStatementForSelectingUnionedView()
 {
     Column name("name");
     Column type("type");
-    String pattern = String::formatted("%s%%", getUnionedViewPrefix().c_str());
+    StringView pattern = StringView::formatted("%s%%", getUnionedViewPrefix());
     return StatementSelect()
     .select(name)
     .from(TableOrSubquery::master().schema(Schema::temp()))

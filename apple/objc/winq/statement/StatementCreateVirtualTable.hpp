@@ -29,17 +29,17 @@ class StatementCreateVirtualTable
 public:
     using TypedSyntax<Syntax::CreateVirtualTableSTMT, Statement>::TypedSyntax;
 
-    StatementCreateVirtualTable& createVirtualTable(const String& table);
+    StatementCreateVirtualTable& createVirtualTable(const UnsafeStringView& table);
     StatementCreateVirtualTable& schema(const Schema& schema);
 
     StatementCreateVirtualTable& ifNotExists();
 
-    StatementCreateVirtualTable& usingModule(const String& module);
+    StatementCreateVirtualTable& usingModule(const UnsafeStringView& module);
 
-    StatementCreateVirtualTable& argument(const String& argument);
+    StatementCreateVirtualTable& argument(const UnsafeStringView& argument);
     StatementCreateVirtualTable& argument(const SQL& argument);
 
-    static String tokenize(const String& name);
+    static StringView tokenize(const UnsafeStringView& name);
 };
 
 } // namespace WCDB

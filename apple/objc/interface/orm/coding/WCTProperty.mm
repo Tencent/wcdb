@@ -37,7 +37,7 @@ WCTProperty::WCTProperty(const WCTColumnBinding& columnBinding)
 {
 }
 
-WCTProperty::WCTProperty(const WCDB::String& name, const WCTColumnBinding& columnBinding)
+WCTProperty::WCTProperty(const WCDB::UnsafeStringView& name, const WCTColumnBinding& columnBinding)
 : WCDB::Column(name)
 , WCTColumnBindingHolder(columnBinding)
 {
@@ -63,7 +63,7 @@ WCDB::OrderingTerm WCTProperty::asOrder(const WCTOrder& order) const
     return WCDB::OrderingTerm(*this).order(order);
 }
 
-WCDB::Expression WCTProperty::table(const WCDB::String& table) const
+WCDB::Expression WCTProperty::table(const WCDB::UnsafeStringView& table) const
 {
     return WCDB::Expression((const WCDB::Column&) *this).table(table);
 }

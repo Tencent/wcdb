@@ -24,7 +24,7 @@
 #include <WCDB/MasterCrawler.hpp>
 #include <WCDB/Material.hpp>
 #include <WCDB/SequenceCrawler.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <vector>
 
 namespace WCDB {
@@ -38,7 +38,7 @@ class Backup final : public Crawlable,
                      public ErrorProne {
 #pragma mark - Initialize
 public:
-    Backup(const String &path);
+    Backup(const UnsafeStringView &path);
 
 protected:
     Pager m_pager;
@@ -51,16 +51,16 @@ public:
 
 protected:
     Material m_material;
-    Material::Content &getOrCreateContent(const String &tableName);
+    Material::Content &getOrCreateContent(const UnsafeStringView &tableName);
     std::map<uint32_t, uint32_t> m_verifiedPagenos;
 
 #pragma mark - Filter
 public:
-    typedef std::function<bool(const String &table)> Filter;
+    typedef std::function<bool(const UnsafeStringView &table)> Filter;
     void filter(const Filter &tableShouldBeBackedUp);
 
 protected:
-    bool filter(const String &tableName);
+    bool filter(const UnsafeStringView &tableName);
     Filter m_filter;
 
 #pragma mark - Crawlable

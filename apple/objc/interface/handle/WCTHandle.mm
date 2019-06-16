@@ -22,10 +22,10 @@
 #import <WCDB/Notifier.hpp>
 #import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTError+Private.h>
+#import <WCDB/WCTFoundation.h>
 #import <WCDB/WCTHandle+Private.h>
 #import <WCDB/WCTHandle+Transaction.h>
 #import <WCDB/WCTORM.h>
-#import <WCDB/WCTFoundation.h>
 
 @implementation WCTHandle
 
@@ -188,7 +188,7 @@
 - (void)bindString:(NSString *)string toIndex:(int)index
 {
     WCTHandleAssert(return;);
-    _handle->bindText(string ? string.UTF8String : WCDB::String::null().c_str(), index);
+    _handle->bindText(WCDB::UnsafeStringView(string), index);
 }
 
 - (void)bindData:(NSData *)data toIndex:(int)index
@@ -221,16 +221,16 @@
         _handle->bindNull(index);
         break;
     case WCTColumnTypeInteger32:
-        _handle->bindInteger32(((NSNumber *) archivedValue).intValue, index);
+        _handle->bindInteger32(archivedValue.numberValue.intValue, index);
         break;
     case WCTColumnTypeInteger64:
-        _handle->bindInteger64(((NSNumber *) archivedValue).longLongValue, index);
+        _handle->bindInteger64(archivedValue.numberValue.longLongValue, index);
         break;
     case WCTColumnTypeDouble:
-        _handle->bindDouble(((NSNumber *) archivedValue).doubleValue, index);
+        _handle->bindDouble(archivedValue.numberValue.doubleValue, index);
         break;
     case WCTColumnTypeString:
-        _handle->bindText(archivedValue ? ((NSString *) archivedValue).UTF8String : WCDB::String::null().c_str(), index);
+        _handle->bindText(WCDB::UnsafeStringView(archivedValue.stringValue), index);
         break;
     case WCTColumnTypeData:
         _handle->bindBLOB((NSData *) archivedValue, index);
@@ -345,7 +345,7 @@
 - (NSString *)extractStringAtIndex:(int)index
 {
     WCTHandleAssert(return nil;);
-    return [NSString stringWithUnsafeStringView:_handle->getText(index)];
+    return [NSString stringWithView:_handle->getText(index)];
 }
 
 - (NSNumber *)extractNumberAtIndex:(int)index
@@ -402,19 +402,19 @@
 - (NSString *)extractOriginColumnNameAtIndex:(int)index
 {
     WCTHandleAssert(return nil;);
-    return [NSString stringWithUnsafeStringView:_handle->getOriginColumnName(index)];
+    return [NSString stringWithView:_handle->getOriginColumnName(index)];
 }
 
 - (NSString *)extractColumnNameAtIndex:(int)index
 {
     WCTHandleAssert(return nil;);
-    return [NSString stringWithUnsafeStringView:_handle->getColumnName(index)];
+    return [NSString stringWithView:_handle->getColumnName(index)];
 }
 
 - (NSString *)extractTableNameAtIndex:(int)index
 {
     WCTHandleAssert(return nil;);
-    return [NSString stringWithUnsafeStringView:_handle->getColumnTableName(index)];
+    return [NSString stringWithView:_handle->getColumnTableName(index)];
 }
 
 - (WCTOneRow *)extractRow
@@ -447,7 +447,7 @@
     NSMutableDictionary *multiObject = [NSMutableDictionary dictionary];
     int index = 0;
     for (const WCTResultColumn &resultColumn : resultColumns) {
-        NSString *tableName = [NSString stringWithUnsafeStringView:_handle->getColumnTableName(index)];
+        NSString *tableName = [NSString stringWithView:_handle->getColumnTableName(index)];
         WCTObject *object = [multiObject objectForKey:tableName];
         if (object == nil) {
             object = [[resultColumn.getColumnBinding().getClass() alloc] init];
@@ -514,7 +514,7 @@
                 value = [NSNumber numberWithDouble:_handle->getDouble(index)];
                 break;
             case WCDB::ColumnType::Text:
-                value = [NSString stringWithUnsafeStringView:_handle->getText(index)];
+                value = [NSString stringWithView:_handle->getText(index)];
                 break;
             case WCDB::ColumnType::BLOB: {
                 const WCDB::UnsafeData data = _handle->getBLOB(index);

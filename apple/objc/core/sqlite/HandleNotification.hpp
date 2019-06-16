@@ -43,44 +43,47 @@ private:
 
 #pragma mark - SQL
 public:
-    typedef std::function<void(const String &sql)> SQLNotification;
-    void setNotificationWhenSQLTraced(const String &name, const SQLNotification &onTraced);
+    typedef std::function<void(const UnsafeStringView &sql)> SQLNotification;
+    void setNotificationWhenSQLTraced(const UnsafeStringView &name,
+                                      const SQLNotification &onTraced);
 
 private:
     bool areSQLTraceNotificationsSet() const;
-    void postSQLTraceNotification(const String &sql);
-    std::map<String, SQLNotification> m_sqlNotifications;
+    void postSQLTraceNotification(const UnsafeStringView &sql);
+    StringViewMap<SQLNotification> m_sqlNotifications;
 
 #pragma mark - Performance
 public:
     struct Footprint {
-        String sql;
+        StringView sql;
         unsigned int frequency;
-        Footprint(const String &sql);
+        Footprint(const UnsafeStringView &sql);
     };
     typedef struct Footprint Footprint;
 
     using Footprints = std::list<Footprint>;
     typedef std::function<void(const Footprints &, double cost)> PerformanceNotification;
-    void setNotificationWhenPerformanceTraced(const String &name,
+    void setNotificationWhenPerformanceTraced(const UnsafeStringView &name,
                                               const PerformanceNotification &onTraced);
 
 private:
     bool arePerformanceTraceNotificationsSet() const;
-    void postPerformanceTraceNotification(const String &sql, const int64_t &cost, bool isInTransaction);
+    void postPerformanceTraceNotification(const UnsafeStringView &sql,
+                                          const int64_t &cost,
+                                          bool isInTransaction);
 
     Footprints m_footprints;
     int64_t m_cost = 0;
-    std::map<String, PerformanceNotification> m_performanceNotifications;
+    StringViewMap<PerformanceNotification> m_performanceNotifications;
 
 #pragma mark - Committed
 public:
     //committed dispatch will abort if any notification return false
-    typedef std::function<bool(const String &path, int numberOfFrames)> CommittedNotification;
+    typedef std::function<bool(const UnsafeStringView &path, int numberOfFrames)> CommittedNotification;
     void setNotificationWhenCommitted(int order,
-                                      const String &name,
+                                      const UnsafeStringView &name,
                                       const CommittedNotification &onCommitted);
-    void unsetNotificationWhenCommitted(const String &name);
+    void unsetNotificationWhenCommitted(const UnsafeStringView &name);
 
 private:
     static int committed(void *p, sqlite3 *, const char *, int numberOfFrames);
@@ -88,13 +91,13 @@ private:
     bool isCommittedNotificationSet() const;
     void setupCommittedNotification();
 
-    void postCommittedNotification(const String &path, int numberOfFrames);
-    UniqueList<String, CommittedNotification> m_committedNotifications;
+    void postCommittedNotification(const UnsafeStringView &path, int numberOfFrames);
+    UniqueList<StringView, CommittedNotification> m_committedNotifications;
 
 #pragma mark - Checkpoint
 public:
-    typedef std::function<void(const String &path)> CheckpointedNotification;
-    void setNotificationWhenCheckpointed(const String &name,
+    typedef std::function<void(const UnsafeStringView &path)> CheckpointedNotification;
+    void setNotificationWhenCheckpointed(const UnsafeStringView &name,
                                          const CheckpointedNotification &checkpointed);
 
 private:
@@ -102,12 +105,12 @@ private:
 
     bool areCheckpointNotificationsSet() const;
     void setupCheckpointNotifications();
-    void postCheckpointNotification(const String &path);
-    std::map<String, CheckpointedNotification> m_checkpointedNotifications;
+    void postCheckpointNotification(const UnsafeStringView &path);
+    StringViewMap<CheckpointedNotification> m_checkpointedNotifications;
 
 #pragma mark - Busy
 public:
-    typedef std::function<bool(const String &path, int numberOfTimes)> BusyNotification;
+    typedef std::function<bool(const UnsafeStringView &path, int numberOfTimes)> BusyNotification;
     void setNotificationWhenBusy(const BusyNotification &busyNotification);
 
 private:

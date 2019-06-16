@@ -46,7 +46,7 @@ Expression::Expression(const StatementSelect& select)
     syntax().select = select;
 }
 
-Expression& Expression::table(const String& table)
+Expression& Expression::table(const UnsafeStringView& table)
 {
     syntax().table = table;
     return *this;
@@ -70,7 +70,7 @@ Expression::Expression(const RaiseFunction& raiseFunction)
     syntax().raiseFunction = raiseFunction;
 }
 
-Expression Expression::function(const String& function)
+Expression Expression::function(const UnsafeStringView& function)
 {
     Expression expression;
     expression.syntax().switcher = SyntaxType::Switch::Function;
@@ -188,7 +188,7 @@ Expression& Expression::escape(const Expression& operand)
     return *this;
 }
 
-Expression Expression::windowFunction(const String& function)
+Expression Expression::windowFunction(const UnsafeStringView& function)
 {
     Expression expression;
     expression.syntax().switcher = SyntaxType::Switch::Window;
@@ -208,7 +208,7 @@ Expression& Expression::over(const WindowDef& windowDef)
     return *this;
 }
 
-Expression& Expression::over(const String& window)
+Expression& Expression::over(const UnsafeStringView& window)
 {
     syntax().windowName = window;
     return *this;

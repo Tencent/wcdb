@@ -29,9 +29,9 @@ public:
     using TypedSyntax<Syntax::ReindexSTMT, Statement>::TypedSyntax;
 
     StatementReindex& reindex();
-    StatementReindex& collation(const String& collation);
-    StatementReindex& table(const String& table);
-    StatementReindex& index(const String& index);
+    StatementReindex& collation(const UnsafeStringView& collation);
+    StatementReindex& table(const UnsafeStringView& table);
+    StatementReindex& index(const UnsafeStringView& index);
     StatementReindex& schema(const Schema& schema);
 };
 

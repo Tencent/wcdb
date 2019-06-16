@@ -32,7 +32,7 @@ MigrateHandle::MigrateHandle()
 , m_removeMigratedStatement(getStatement())
 , m_samplePointing(0)
 {
-    m_error.infos.insert_or_assign(ErrorStringKeyAction, ErrorActionMigrate);
+    m_error.infos.insert_or_assign(StringView(ErrorStringKeyAction), ErrorActionMigrate);
 }
 
 MigrateHandle::~MigrateHandle()
@@ -42,7 +42,7 @@ MigrateHandle::~MigrateHandle()
     returnStatement(m_removeMigratedStatement);
 }
 
-bool MigrateHandle::reAttach(const String& newPath, const Schema& newSchema)
+bool MigrateHandle::reAttach(const UnsafeStringView& newPath, const Schema& newSchema)
 {
     WCTInnerAssert(!isInTransaction());
     WCTInnerAssert(!isPrepared());
@@ -56,7 +56,7 @@ bool MigrateHandle::reAttach(const String& newPath, const Schema& newSchema)
     return succeed;
 }
 
-bool MigrateHandle::attach(const String& newPath, const Schema& newSchema)
+bool MigrateHandle::attach(const UnsafeStringView& newPath, const Schema& newSchema)
 {
     WCTInnerAssert(!isInTransaction());
     WCTInnerAssert(!isPrepared());
@@ -88,11 +88,11 @@ bool MigrateHandle::detach()
 }
 
 #pragma mark - Stepper
-std::pair<bool, std::set<String>> MigrateHandle::getAllTables()
+std::pair<bool, std::set<StringView>> MigrateHandle::getAllTables()
 {
     Column name("name");
     Column type("type");
-    String pattern = String::formatted("%s%%", Syntax::builtinTablePrefix);
+    StringView pattern = StringView::formatted("%s%%", Syntax::builtinTablePrefix);
     return getValues(StatementSelect()
                      .select(name)
                      .from(TableOrSubquery::master())
@@ -255,12 +255,12 @@ std::pair<bool, bool> MigrateHandle::sourceTableExists(const MigrationUserInfo& 
     return { succeed, exists };
 }
 
-std::tuple<bool, bool, std::set<String>>
+std::tuple<bool, bool, std::set<StringView>>
 MigrateHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
 {
     bool succeed = true;
     bool integerPrimary = false;
-    std::set<String> columns;
+    std::set<StringView> columns;
     do {
         bool exists;
         std::tie(succeed, exists) = tableExists(Schema::main(), userInfo.getTable());
@@ -282,7 +282,7 @@ MigrateHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
     return { succeed, integerPrimary, columns };
 }
 
-String MigrateHandle::getDatabasePath() const
+StringView MigrateHandle::getDatabasePath() const
 {
     return getPath();
 }

@@ -33,15 +33,15 @@ public:
     WCDB_SYNTAX_MAIN_UNION_ENUM(Table, Function, TableOrSubqueries, JoinClause, Select, );
 
     Schema schema;
-    String tableOrFunction;
-    String alias;
+    StringView tableOrFunction;
+    StringView alias;
     enum class IndexType {
         NotSet = 0,
         Indexed,
         NotIndexed,
     } indexType
     = IndexType::NotSet;
-    String index;
+    StringView index;
     std::list<Expression> expressions;
     std::list<TableOrSubquery> tableOrSubqueries;
     JoinClause joinClause;
@@ -51,7 +51,7 @@ public:
 public:
     static constexpr const Type type = Type::TableOrSubquery;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    StringView getValidDescription() const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

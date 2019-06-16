@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <any>
 #include <map>
 
@@ -32,7 +32,7 @@ public:
     enum class Level;
     enum class Code;
     Error();
-    Error(Code code, Level level, const String &message = String::null());
+    Error(Code code, Level level, const UnsafeStringView &message = UnsafeStringView());
 
     //    void clear();
 
@@ -177,9 +177,9 @@ public:
 
     void setSystemCode(int systemCode,
                        Code codeIfUnresolved,
-                       const String &message = String::null());
-    void setSQLiteCode(int code, const String &message = String::null());
-    void setCode(Code code, const String &message = String::null());
+                       const UnsafeStringView &message = UnsafeStringView());
+    void setSQLiteCode(int code, const UnsafeStringView &message = UnsafeStringView());
+    void setCode(Code code, const UnsafeStringView &message = UnsafeStringView());
 
 protected:
     Code m_code;
@@ -260,10 +260,10 @@ public:
 
 #pragma mark - Message
 public:
-    const String &getMessage() const;
+    const StringView &getMessage() const;
 
 protected:
-    String m_message;
+    StringView m_message;
 
 #pragma mark - Info
 public:
@@ -272,7 +272,7 @@ public:
         enum class Type {
             Integer,
             Float,
-            String,
+            StringView,
         };
         Type valueType() const;
 
@@ -292,18 +292,18 @@ public:
         }
 
         InfoValue(const char *string);
-        InfoValue(const String &string);
-        InfoValue(String &&string);
+        InfoValue(const UnsafeStringView &string);
+        InfoValue(StringView &&string);
 
-        const String &stringValue() const;
+        const StringView &stringValue() const;
         const int64_t &integerValue() const;
         const double &floatValue() const;
     };
-    std::map<String, InfoValue> infos;
+    StringViewMap<InfoValue> infos;
 
 #pragma mark - Descritpion
 public:
-    String getDescription() const;
+    StringView getDescription() const;
 };
 
 } //namespace WCDB

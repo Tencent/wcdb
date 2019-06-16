@@ -25,7 +25,7 @@
 #include <WCDB/Path.hpp>
 #include <WCDB/Serialization.hpp>
 #include <WCDB/Shm.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <WCDB/Wal.hpp>
 
 namespace WCDB {
@@ -40,7 +40,7 @@ Shm::Shm(Wal *wal)
     memset(&m_checkpointInfo, 0, sizeof(m_checkpointInfo));
 }
 
-const String &Shm::getPath() const
+const StringView &Shm::getPath() const
 {
     return m_fileHandle.path;
 }
@@ -57,11 +57,11 @@ uint32_t Shm::getBackfill() const
     return m_checkpointInfo.backfill;
 }
 
-void Shm::markAsCorrupted(const String &message)
+void Shm::markAsCorrupted(const UnsafeStringView &message)
 {
     Error error(Error::Code::Corrupt, Error::Level::Ignore, message);
-    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
+    error.infos.insert_or_assign(StringView(ErrorStringKeySource), ErrorSourceRepair);
+    error.infos.insert_or_assign(StringView(ErrorStringKeyPath), getPath());
     Notifier::shared().notify(error);
     setError(std::move(error));
 }
@@ -87,7 +87,8 @@ bool Shm::doInitialize()
     FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(getPath());
 
     if (fileSize < sizeof(Header)) {
-        markAsCorrupted(String::formatted("File size: %lu is not enough for header.", fileSize));
+        markAsCorrupted(StringView::formatted(
+        "File size: %lu is not enough for header.", fileSize));
         return false;
     }
 
@@ -95,9 +96,9 @@ bool Shm::doInitialize()
     MappedData data = m_fileHandle.map(0, size);
     if (data.size() != size) {
         if (data.size() > 0) {
-            markAsCorrupted(String::formatted("Acquired shm data with size: %d is less than the expected size: %d.",
-                                              data.size(),
-                                              size));
+            markAsCorrupted(StringView::formatted("Acquired shm data with size: %d is less than the expected size: %d.",
+                                                  data.size(),
+                                                  size));
         } else {
             assignWithSharedThreadedError();
         }
@@ -107,7 +108,7 @@ bool Shm::doInitialize()
     memcpy(&m_header, data.buffer(), sizeof(Header));
     if (m_header.version != 3007000) {
         markAsCorrupted(
-        String::formatted("Shm version: %u is illegal.", m_header.version));
+        StringView::formatted("Shm version: %u is illegal.", m_header.version));
         return false;
     }
     memcpy(&m_checkpointInfo, data.buffer() + sizeof(Header) * 2, sizeof(CheckpointInfo));

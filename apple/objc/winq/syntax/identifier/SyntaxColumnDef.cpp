@@ -37,7 +37,7 @@ Identifier::Type ColumnDef::getType() const
     return type;
 }
 
-String ColumnDef::getValidDescription() const
+StringView ColumnDef::getValidDescription() const
 {
     std::ostringstream stream;
     stream << column;
@@ -47,7 +47,7 @@ String ColumnDef::getValidDescription() const
     for (const auto& constraint : constraints) {
         stream << space << constraint;
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void ColumnDef::iterate(const Iterator& iterator, bool& stop)

@@ -30,7 +30,7 @@ namespace Repair {
 class FactoryBackup final : public FactoryRelated, public ErrorProne, public LockerHolder {
 public:
     using FactoryRelated::FactoryRelated;
-    bool work(const String &database);
+    bool work(const UnsafeStringView &database);
 };
 
 } //namespace Repair

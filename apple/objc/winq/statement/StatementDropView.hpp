@@ -28,7 +28,7 @@ class StatementDropView final : public TypedSyntax<Syntax::DropViewSTMT, Stateme
 public:
     using TypedSyntax<Syntax::DropViewSTMT, Statement>::TypedSyntax;
 
-    StatementDropView& dropView(const String& view);
+    StatementDropView& dropView(const UnsafeStringView& view);
     StatementDropView& schema(const Schema& schema);
     StatementDropView& ifExists();
 };

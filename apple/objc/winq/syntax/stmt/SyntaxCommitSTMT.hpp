@@ -36,7 +36,7 @@ public:
 public:
     static constexpr const Type type = Type::CommitSTMT;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    StringView getValidDescription() const override final;
 };
 
 } // namespace Syntax

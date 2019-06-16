@@ -24,6 +24,7 @@
 #import <WCDB/WCTDatabase+Memory.h>
 #import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTError+Private.h>
+#import <WCDB/WCTFoundation.h>
 #import <WCDB/WCTHandle+Private.h>
 #import <WCDB/WCTOneOrBinaryTokenizer.h>
 
@@ -85,7 +86,7 @@
 
 - (NSString *)path
 {
-    return [NSString stringWithUTF8String:_database->getPath().c_str()];
+    return [NSString stringWithView:_database->getPath()];
 }
 
 - (BOOL)canOpen

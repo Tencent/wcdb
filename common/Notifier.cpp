@@ -33,27 +33,27 @@ Notifier::Notifier()
 {
 }
 
-void Notifier::setNotification(int order, const String &key, const Callback &callback)
+void Notifier::setNotification(int order, const UnsafeStringView &key, const Callback &callback)
 {
     WCTInnerAssert(callback != nullptr);
     LockGuard lockGuard(m_lock);
-    m_notifications.insert(key, callback, order);
+    m_notifications.insert(StringView(key), callback, order);
 }
 
-void Notifier::unsetNotification(const String &key)
+void Notifier::unsetNotification(const UnsafeStringView &key)
 {
     LockGuard lockGuard(m_lock);
-    m_notifications.erase(key);
+    m_notifications.erase(StringView(key));
 }
 
-void Notifier::setNotificationForPreprocessing(const String &key,
+void Notifier::setNotificationForPreprocessing(const UnsafeStringView &key,
                                                const PreprocessCallback &callback)
 {
     LockGuard lockGuard(m_lock);
     if (callback != nullptr) {
-        m_preprocessNotifications[key] = callback;
+        m_preprocessNotifications[StringView(key)] = callback;
     } else {
-        m_preprocessNotifications.erase(key);
+        m_preprocessNotifications.erase(StringView(key));
     }
 }
 

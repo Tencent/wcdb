@@ -24,7 +24,7 @@
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Pager.hpp>
 #include <WCDB/Serialization.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <WCDB/ThreadedErrors.hpp>
 
 #warning TODO - support cipher database
@@ -33,7 +33,7 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Initialize
-Pager::Pager(const String &path)
+Pager::Pager(const UnsafeStringView &path)
 : m_fileHandle(path)
 , m_pageSize(-1)
 , m_reservedBytes(-1)
@@ -56,7 +56,7 @@ void Pager::setReservedBytes(int reservedBytes)
     m_reservedBytes = reservedBytes;
 }
 
-const String &Pager::getPath() const
+const StringView &Pager::getPath() const
 {
     return m_fileHandle.path;
 }
@@ -102,7 +102,7 @@ MappedData Pager::acquirePageData(int number, off_t offset, size_t size)
     } else if (number > m_numberOfPages) {
         markAsCorrupted(
         number,
-        String::formatted(
+        StringView::formatted(
         "Acquired page number: %d exceeds the page count: %d.", number, m_numberOfPages));
         return MappedData::null();
     } else {
@@ -112,9 +112,9 @@ MappedData Pager::acquirePageData(int number, off_t offset, size_t size)
         if (data.size() > 0) {
             //short read
             markAsCorrupted((int) (offset / m_pageSize + 1),
-                            String::formatted("Acquired page data with size: %d is less than the expected size: %d.",
-                                              data.size(),
-                                              size));
+                            StringView::formatted("Acquired page data with size: %d is less than the expected size: %d.",
+                                                  data.size(),
+                                                  size));
         } else {
             assignWithSharedThreadedError();
         }
@@ -130,9 +130,9 @@ MappedData Pager::acquireData(off_t offset, size_t size)
     if (data.size() != size) {
         if (data.size() > 0) {
             markAsCorrupted((int) (offset / m_pageSize + 1),
-                            String::formatted("Acquired data with size: %d is less than the expected size: %d.",
-                                              data.size(),
-                                              size));
+                            StringView::formatted("Acquired data with size: %d is less than the expected size: %d.",
+                                                  data.size(),
+                                                  size));
         } else {
             assignWithSharedThreadedError();
         }
@@ -174,11 +174,11 @@ int Pager::getNumberOfWalFrames() const
 }
 
 #pragma mark - Error
-void Pager::markAsCorrupted(int page, const String &message)
+void Pager::markAsCorrupted(int page, const UnsafeStringView &message)
 {
     Error error(Error::Code::Corrupt, Error::Level::Ignore, message);
-    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
+    error.infos.insert_or_assign(StringView(ErrorStringKeySource), ErrorSourceRepair);
+    error.infos.insert_or_assign(StringView(ErrorStringKeyPath), getPath());
     error.infos.insert_or_assign("Page", page);
     Notifier::shared().notify(error);
     setError(std::move(error));
@@ -187,8 +187,8 @@ void Pager::markAsCorrupted(int page, const String &message)
 void Pager::markAsError(Error::Code code)
 {
     Error error(code, Error::Level::Ignore);
-    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
+    error.infos.insert_or_assign(StringView(ErrorStringKeySource), ErrorSourceRepair);
+    error.infos.insert_or_assign(StringView(ErrorStringKeyPath), getPath());
     Notifier::shared().notify(error);
     setError(std::move(error));
 }
@@ -238,12 +238,12 @@ bool Pager::doInitialize()
     }
     if (((m_pageSize - 1) & m_pageSize) != 0 || m_pageSize < 512 || m_pageSize > 65536) {
         markAsCorrupted(
-        1, String::formatted("Page size: %d is not aligned or not too small.", m_pageSize));
+        1, StringView::formatted("Page size: %d is not aligned or not too small.", m_pageSize));
         return false;
     }
     if (m_reservedBytes < 0 || m_reservedBytes > 255) {
         markAsCorrupted(
-        1, String::formatted("Reversed bytes: %d is illegal.", m_reservedBytes));
+        1, StringView::formatted("Reversed bytes: %d is illegal.", m_reservedBytes));
         return false;
     }
 

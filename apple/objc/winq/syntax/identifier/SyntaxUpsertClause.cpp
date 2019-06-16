@@ -31,7 +31,7 @@ Identifier::Type UpsertClause::getType() const
     return type;
 }
 
-String UpsertClause::getValidDescription() const
+StringView UpsertClause::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "ON CONFLICT";
@@ -72,7 +72,7 @@ String UpsertClause::getValidDescription() const
         }
     } break;
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void UpsertClause::iterate(const Iterator& iterator, bool& stop)

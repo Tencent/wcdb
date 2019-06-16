@@ -32,13 +32,13 @@ class AnalyzeSTMT final : public Identifier {
 public:
     WCDB_SYNTAX_MAIN_UNION_ENUM(All, SchemaOrTableOrIndex);
     Schema schema;
-    String tableOrIndex;
+    StringView tableOrIndex;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::AnalyzeSTMT;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    StringView getValidDescription() const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

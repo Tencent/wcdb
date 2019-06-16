@@ -32,7 +32,7 @@
 
     __block BOOL tested = NO;
     [self.database traceSQL:^(NSString* sql) {
-        if ([sql isEqualToString:@(statement.getDescription().c_str())]) {
+        if ([sql isEqualToString:@(statement.getDescription().data())]) {
             tested = YES;
         }
     }];
@@ -104,7 +104,7 @@
 
     __block BOOL tested = NO;
     [WCTDatabase globalTraceSQL:^(NSString* sql) {
-        if ([sql isEqualToString:@(statement.getDescription().c_str())]) {
+        if ([sql isEqualToString:@(statement.getDescription().data())]) {
             tested = YES;
         }
     }];

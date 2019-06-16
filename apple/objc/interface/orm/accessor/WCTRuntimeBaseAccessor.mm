@@ -21,16 +21,16 @@
 #import <WCDB/Assertion.hpp>
 #import <WCDB/Console.hpp>
 #import <WCDB/Core.h>
-#import <WCDB/String.hpp>
+#import <WCDB/StringView.hpp>
 #import <WCDB/WCTRuntimeBaseAccessor.h>
 #import <objc/runtime.h>
 
-WCTRuntimeBaseAccessor::WCTRuntimeBaseAccessor(Class cls, const WCDB::String &propertyName)
-: WCTRuntimeBaseAccessor(cls, propertyName, class_getProperty(cls, propertyName.c_str()))
+WCTRuntimeBaseAccessor::WCTRuntimeBaseAccessor(Class cls, const WCDB::UnsafeStringView &propertyName)
+: WCTRuntimeBaseAccessor(cls, propertyName, class_getProperty(cls, propertyName.data()))
 {
 }
 
-WCTRuntimeBaseAccessor::WCTRuntimeBaseAccessor(Class cls, const WCDB::String &propertyName, objc_property_t property)
+WCTRuntimeBaseAccessor::WCTRuntimeBaseAccessor(Class cls, const WCDB::UnsafeStringView &propertyName, objc_property_t property)
 : m_selForGetter(getGetterSelector(property, propertyName))
 , m_selForSetter(getSetterSelector(property, propertyName))
 , m_impForGetter(getInstanceMethodImplementation(cls, m_selForGetter))
@@ -42,7 +42,7 @@ WCTRuntimeBaseAccessor::~WCTRuntimeBaseAccessor()
 {
 }
 
-SEL WCTRuntimeBaseAccessor::getGetterSelector(objc_property_t property, const WCDB::String &propertyName)
+SEL WCTRuntimeBaseAccessor::getGetterSelector(objc_property_t property, const WCDB::UnsafeStringView &propertyName)
 {
     WCTInnerAssert(property != nil);
     WCTInnerAssert(!propertyName.empty());
@@ -53,13 +53,13 @@ SEL WCTRuntimeBaseAccessor::getGetterSelector(objc_property_t property, const WC
         selector = sel_registerName(getter);
         free(getter);
     } else {
-        selector = sel_registerName(propertyName.c_str());
+        selector = sel_registerName(propertyName.data());
     }
     WCTInnerAssert(selector != nil);
     return selector;
 }
 
-SEL WCTRuntimeBaseAccessor::getSetterSelector(objc_property_t property, const WCDB::String &propertyName)
+SEL WCTRuntimeBaseAccessor::getSetterSelector(objc_property_t property, const WCDB::UnsafeStringView &propertyName)
 {
     WCTInnerAssert(property != nil);
     WCTInnerAssert(!propertyName.empty());
@@ -70,9 +70,11 @@ SEL WCTRuntimeBaseAccessor::getSetterSelector(objc_property_t property, const WC
         selector = sel_registerName(setter);
         free(setter);
     } else {
-        WCDB::String defaultSetter = "set" + propertyName + ":";
+        std::ostringstream stream;
+        stream << "set" << propertyName << ":";
+        std::string defaultSetter = stream.str();
         defaultSetter[3] = (char) std::toupper(defaultSetter[3]);
-        selector = sel_registerName(defaultSetter.c_str());
+        selector = sel_registerName(defaultSetter.data());
     }
     WCTInnerAssert(selector != nil);
     return selector;
@@ -92,19 +94,19 @@ IMP WCTRuntimeBaseAccessor::getInstanceMethodImplementation(Class cls, SEL selec
     return [cls instanceMethodForSelector:selector];
 }
 
-Class WCTRuntimeBaseAccessor::getPropertyClass(Class cls, const WCDB::String &propertyName)
+Class WCTRuntimeBaseAccessor::getPropertyClass(Class cls, const WCDB::UnsafeStringView &propertyName)
 {
     WCTInnerAssert(cls != nil);
     WCTInnerAssert(!propertyName.empty());
 
-    objc_property_t property = class_getProperty(cls, propertyName.c_str());
+    objc_property_t property = class_getProperty(cls, propertyName.data());
     NSString *attributes = [NSString stringWithUTF8String:property_getAttributes(property)];
     NSArray *splitAttributes = [attributes componentsSeparatedByString:@","];
     if (splitAttributes.count > 0) {
         NSString *encodeType = splitAttributes[0];
         NSArray *splitEncodeTypes = [encodeType componentsSeparatedByString:@"\""];
         if (WCDB::Console::debuggable()) {
-            WCTRemedialAssert(splitEncodeTypes.count > 1, WCDB::String::formatted("Failed to parse the type of [%s].", propertyName.c_str()), return nil;);
+            WCTRemedialAssert(splitEncodeTypes.count > 1, WCDB::StringView::formatted("Failed to parse the type of [%s].", propertyName.data()), return nil;);
         }
         NSString *className = splitEncodeTypes[1];
         return NSClassFromString(className);

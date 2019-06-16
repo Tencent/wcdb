@@ -36,7 +36,7 @@ Identifier::Type WithClause::getType() const
     return type;
 }
 
-String WithClause::getValidDescription() const
+StringView WithClause::getValidDescription() const
 {
     std::ostringstream stream;
     WCTSyntaxRemedialAssert(tables.size() == selects.size());
@@ -57,7 +57,7 @@ String WithClause::getValidDescription() const
         ++table;
         ++select;
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void WithClause::iterate(const Iterator& iterator, bool& stop)

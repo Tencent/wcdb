@@ -35,12 +35,12 @@ namespace Repair {
 class Pager final : public ErrorProne, public Initializeable {
 #pragma mark - Initialize
 public:
-    Pager(const String &path);
+    Pager(const UnsafeStringView &path);
 
     void setPageSize(int pageSize);
     void setReservedBytes(int reservedBytes);
 
-    const String &getPath() const;
+    const StringView &getPath() const;
 
 protected:
     PageBasedFileHandle m_fileHandle;
@@ -78,7 +78,7 @@ protected:
 
 #pragma mark - Error
 public:
-    void markAsCorrupted(int page, const String &message);
+    void markAsCorrupted(int page, const UnsafeStringView &message);
 
 protected:
     void markAsError(Error::Code code);

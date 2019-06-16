@@ -36,12 +36,12 @@ Identifier::Type DeleteSTMT::getType() const
     return type;
 }
 
-String DeleteSTMT::getValidDescription() const
+StringView DeleteSTMT::getValidDescription() const
 {
     return getValidDescription(false);
 }
 
-String DeleteSTMT::getValidDescription(bool skipSchema) const
+StringView DeleteSTMT::getValidDescription(bool skipSchema) const
 {
     std::ostringstream stream;
     if (withClause.isValid()) {
@@ -67,7 +67,7 @@ String DeleteSTMT::getValidDescription(bool skipSchema) const
             break;
         }
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void DeleteSTMT::iterate(const Iterator& iterator, bool& stop)

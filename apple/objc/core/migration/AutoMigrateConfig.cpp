@@ -40,7 +40,7 @@ AutoMigrateConfig::~AutoMigrateConfig()
 
 bool AutoMigrateConfig::invoke(Handle* handle)
 {
-    const String& path = handle->getPath();
+    const UnsafeStringView& path = handle->getPath();
     if (++getOrCreateRegister(path) == 1) {
         m_operator->asyncMigrate(path);
     }
@@ -49,14 +49,14 @@ bool AutoMigrateConfig::invoke(Handle* handle)
 
 bool AutoMigrateConfig::uninvoke(Handle* handle)
 {
-    const String& path = handle->getPath();
+    const UnsafeStringView& path = handle->getPath();
     if (--getOrCreateRegister(path) == 0) {
         m_operator->stopMigrate(path);
     }
     return true;
 }
 
-std::atomic<int>& AutoMigrateConfig::getOrCreateRegister(const String& path)
+std::atomic<int>& AutoMigrateConfig::getOrCreateRegister(const UnsafeStringView& path)
 {
     {
         SharedLockGuard lockGuard(m_lock);

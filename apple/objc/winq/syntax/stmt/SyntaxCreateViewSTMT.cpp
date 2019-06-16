@@ -36,7 +36,7 @@ Identifier::Type CreateViewSTMT::getType() const
     return type;
 }
 
-String CreateViewSTMT::getValidDescription() const
+StringView CreateViewSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "CREATE ";
@@ -55,7 +55,7 @@ String CreateViewSTMT::getValidDescription() const
         stream << "(" << columns << ")";
     }
     stream << " AS " << select;
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void CreateViewSTMT::iterate(const Iterator& iterator, bool& stop)

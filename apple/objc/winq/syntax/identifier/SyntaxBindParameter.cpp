@@ -47,7 +47,7 @@ Identifier::Type BindParameter::getType() const
     return type;
 }
 
-String BindParameter::getValidDescription() const
+StringView BindParameter::getValidDescription() const
 {
     std::ostringstream stream;
     stream << switcher;
@@ -61,7 +61,7 @@ String BindParameter::getValidDescription() const
         stream << name;
         break;
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 } // namespace Syntax

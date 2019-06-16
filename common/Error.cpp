@@ -22,7 +22,7 @@
 #include <WCDB/CoreConst.h>
 #include <WCDB/Error.hpp>
 #include <WCDB/SQLite.h>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <sstream>
 
 namespace WCDB {
@@ -135,7 +135,8 @@ Error::Error() : level(Level::Ignore), m_code(Code::OK)
 {
 }
 
-Error::Error(Code code, Level level_, const String& message) : level(level_)
+Error::Error(Code code, Level level_, const UnsafeStringView& message)
+: level(level_)
 {
     setCode(code, message);
 }
@@ -164,17 +165,17 @@ int Error::c2rc(Error::Code code)
     return (int) code;
 }
 
-void Error::setCode(Code code, const String& message)
+void Error::setCode(Code code, const UnsafeStringView& message)
 {
     m_code = code;
     if (message.empty()) {
-        m_message = codeName(code);
+        m_message = UnsafeStringView(codeName(code));
     } else {
         m_message = message;
     }
 }
 
-void Error::setSystemCode(int systemCode, Code codeIfUnresolved, const String& message)
+void Error::setSystemCode(int systemCode, Code codeIfUnresolved, const UnsafeStringView& message)
 {
     Code code;
     switch (systemCode) {
@@ -208,7 +209,7 @@ void Error::setSystemCode(int systemCode, Code codeIfUnresolved, const String& m
     infos.insert_or_assign(ErrorIntKeyExtCode, systemCode);
 }
 
-void Error::setSQLiteCode(int rc, const String& message)
+void Error::setSQLiteCode(int rc, const UnsafeStringView& message)
 {
     Code code = rc2c(rc);
     setCode(code, message.empty() ? sqlite3_errstr(rc) : message);
@@ -241,30 +242,31 @@ Error::ExtCode Error::rc2ec(int rc)
     return (Error::ExtCode) rc;
 }
 
-const String& Error::getMessage() const
+const StringView& Error::getMessage() const
 {
     WCTInnerAssert(!m_message.empty());
     return m_message;
 }
 
 #pragma mark - Info
-Error::InfoValue::InfoValue(const char* string) : std::any(String(string))
+Error::InfoValue::InfoValue(const char* string) : std::any(StringView(string))
 {
 }
 
-Error::InfoValue::InfoValue(const String& string) : std::any(string)
+Error::InfoValue::InfoValue(const UnsafeStringView& string)
+: std::any(StringView(string))
 {
 }
 
-Error::InfoValue::InfoValue(String&& string) : std::any(std::move(string))
+Error::InfoValue::InfoValue(StringView&& string) : std::any(std::move(string))
 {
 }
 
 Error::InfoValue::Type Error::InfoValue::valueType() const
 {
     auto hash = type().hash_code();
-    if (hash == typeid(String).hash_code()) {
-        return Type::String;
+    if (hash == typeid(StringView).hash_code()) {
+        return Type::StringView;
     } else if (hash == typeid(double).hash_code()) {
         return Type::Float;
     } else {
@@ -273,11 +275,11 @@ Error::InfoValue::Type Error::InfoValue::valueType() const
     }
 }
 
-const String& Error::InfoValue::stringValue() const
+const StringView& Error::InfoValue::stringValue() const
 {
     WCTInnerAssert(has_value());
-    WCTInnerAssert(valueType() == Type::String);
-    const String* value = std::any_cast<String>(this);
+    WCTInnerAssert(valueType() == Type::StringView);
+    const StringView* value = std::any_cast<StringView>(this);
     WCTInnerAssert(value != nullptr);
     return *value;
 }
@@ -301,7 +303,7 @@ const double& Error::InfoValue::floatValue() const
 }
 
 #pragma mark - Description
-String Error::getDescription() const
+StringView Error::getDescription() const
 {
     WCTInnerAssert(isError((int) code()));
     WCTInnerAssert(!m_message.empty());
@@ -311,7 +313,7 @@ String Error::getDescription() const
     for (const auto& info : infos) {
         stream << ", " << info.first << ": ";
         switch (info.second.valueType()) {
-        case InfoValue::Type::String:
+        case InfoValue::Type::StringView:
             stream << info.second.stringValue();
             break;
         case InfoValue::Type::Float:
@@ -323,7 +325,7 @@ String Error::getDescription() const
             break;
         }
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 } //namespace WCDB

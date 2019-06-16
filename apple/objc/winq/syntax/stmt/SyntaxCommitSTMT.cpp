@@ -36,9 +36,9 @@ Identifier::Type CommitSTMT::getType() const
     return type;
 }
 
-String CommitSTMT::getValidDescription() const
+StringView CommitSTMT::getValidDescription() const
 {
-    return "COMMIT";
+    return StringView("COMMIT");
 }
 
 } // namespace Syntax

@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-FunctionInvocation::FunctionInvocation(const String& name)
+FunctionInvocation::FunctionInvocation(const UnsafeStringView& name)
 {
     syntax().name = name;
 }

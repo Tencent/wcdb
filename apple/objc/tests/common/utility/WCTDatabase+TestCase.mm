@@ -25,7 +25,7 @@
 @interface WCTDatabase (TestCase1)
 
 + (void)globalTraceError:(WCTErrorTraceBlock)block
-          withIdentifier:(const WCDB::String &)identifier;
+          withIdentifier:(const WCDB::UnsafeStringView &)identifier;
 
 @end
 

@@ -30,7 +30,7 @@ class Schema final : public Identifier {
 #pragma mark - Syntax
 public:
     Schema();
-    String name;
+    StringView name;
 
     bool isValid() const override final;
 
@@ -38,7 +38,7 @@ public:
 public:
     static constexpr const Type type = Type::Schema;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    StringView getValidDescription() const override final;
 
 #pragma mark - Utility
 public:

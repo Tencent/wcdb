@@ -28,17 +28,17 @@ class BindParameter final : public TypedSyntax<Syntax::BindParameter, SQL> {
 public:
     using TypedSyntax<Syntax::BindParameter, SQL>::TypedSyntax;
     BindParameter(int n);
-    explicit BindParameter(const String& name);
+    explicit BindParameter(const UnsafeStringView& name);
 
     static BindParameters bindParameters(size_t count);
 
-    static BindParameter at(const String& name);
-    static BindParameter colon(const String& name);
-    static BindParameter dollar(const String& name);
+    static BindParameter at(const UnsafeStringView& name);
+    static BindParameter colon(const UnsafeStringView& name);
+    static BindParameter dollar(const UnsafeStringView& name);
 
 private:
     static BindParameter
-    bindParameter(const String& name, const SyntaxType::Switch& switcher);
+    bindParameter(const UnsafeStringView& name, const SyntaxType::Switch& switcher);
 };
 
 } // namespace WCDB

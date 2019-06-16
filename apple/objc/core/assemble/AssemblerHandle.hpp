@@ -34,8 +34,8 @@ public:
     ~AssemblerHandle();
 
 #pragma mark - Common
-    void setPath(const String &path) override final;
-    const String &getPath() const override final;
+    void setPath(const UnsafeStringView &path) override final;
+    const StringView &getPath() const override final;
     const Error &getError() const override final;
 
 #pragma mark - Assembler
@@ -45,7 +45,7 @@ public:
 
     bool markAsMilestone() override final;
 
-    bool assembleSQL(const String &sql) override final;
+    bool assembleSQL(const UnsafeStringView &sql) override final;
 
 protected:
     StatementPragma m_statementForDisableJounral;
@@ -53,22 +53,24 @@ protected:
 
 #pragma mark - Assembler - Table
 public:
-    bool assembleTable(const String &tableName, const String &sql) override final;
+    bool assembleTable(const UnsafeStringView &tableName,
+                       const UnsafeStringView &sql) override final;
     bool assembleCell(const Repair::Cell &cell) override final;
 
 protected:
     bool lazyPrepareCell();
     int m_integerPrimary;
-    String m_table;
+    StringView m_table;
     HandleStatement *m_cellStatement;
 
 #pragma mark - Assembler - Sequence
 public:
-    bool assembleSequence(const String &tableName, int64_t sequence) override final;
+    bool assembleSequence(const UnsafeStringView &tableName, int64_t sequence) override final;
 
 protected:
-    std::pair<bool, bool> updateSequence(const String &tableName, int64_t sequence);
-    bool insertSequence(const String &tableName, int64_t sequence);
+    std::pair<bool, bool>
+    updateSequence(const UnsafeStringView &tableName, int64_t sequence);
+    bool insertSequence(const UnsafeStringView &tableName, int64_t sequence);
     static constexpr const char *s_dummySequence = "wcdb_dummy_sqlite_sequence";
     bool markSequenceAsAssembling();
     bool markSequenceAsAssembled();

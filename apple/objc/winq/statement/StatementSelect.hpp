@@ -41,7 +41,7 @@ public:
     StatementSelect& groups(const Expressions& groups);
     StatementSelect& having(const Expression& having);
 
-    StatementSelect& window(const String& window);
+    StatementSelect& window(const UnsafeStringView& window);
     StatementSelect& as(const WindowDef& windowDef);
 
     StatementSelect& value(const Expression& expression);

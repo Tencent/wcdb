@@ -30,7 +30,7 @@ protected:
 
 public:
     WCTRuntimeObjCAccessor(Class instanceClass,
-                           const WCDB::String &propertyName);
+                           const WCDB::UnsafeStringView &propertyName);
 
     ~WCTRuntimeObjCAccessor();
 

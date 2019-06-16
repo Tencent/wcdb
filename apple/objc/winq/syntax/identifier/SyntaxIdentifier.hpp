@@ -22,7 +22,7 @@
 
 #include <WCDB/Macro.hpp>
 #include <WCDB/Shadow.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <WCDB/SyntaxCommonConst.hpp>
 #include <functional>
 #include <list>
@@ -95,7 +95,7 @@ public:
     };
     virtual Type getType() const = 0;
 
-    String getDescription() const;
+    StringView getDescription() const;
 
     std::unique_ptr<Identifier> clone() const override final;
 
@@ -105,7 +105,7 @@ public:
     virtual bool isValid() const = 0;
 
 protected:
-    virtual String getValidDescription() const = 0;
+    virtual StringView getValidDescription() const = 0;
 
 #pragma mark - Iterable
 public:

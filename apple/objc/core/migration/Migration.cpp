@@ -21,7 +21,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Error.hpp>
 #include <WCDB/Migration.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 
 namespace WCDB {
 
@@ -61,9 +61,9 @@ bool Migration::shouldMigrate() const
     return m_filter != nullptr;
 }
 
-std::set<String> Migration::getPathsOfSourceDatabases() const
+std::set<StringView> Migration::getPathsOfSourceDatabases() const
 {
-    std::set<String> paths;
+    std::set<StringView> paths;
     {
         SharedLockGuard lockGuard(m_lock);
         for (const auto& info : m_holder) {
@@ -84,7 +84,7 @@ Migration::InfoInitializer::~InfoInitializer()
 {
 }
 
-bool Migration::initInfo(InfoInitializer& initializer, const String& table)
+bool Migration::initInfo(InfoInitializer& initializer, const UnsafeStringView& table)
 {
     // do not migrate sqlite builtin table
     if (table.hasPrefix(Syntax::builtinTablePrefix)) {
@@ -115,7 +115,7 @@ bool Migration::initInfo(InfoInitializer& initializer, const String& table)
     }
 
     bool containsPrimaryKey = false;
-    std::set<String> columns;
+    std::set<StringView> columns;
     std::tie(succeed, containsPrimaryKey, columns)
     = initializer.getColumnsOfUserInfo(userInfo);
     if (!succeed) {
@@ -134,22 +134,23 @@ bool Migration::initInfo(InfoInitializer& initializer, const String& table)
             m_migratings.emplace(hold);
             m_referenceds.emplace(hold, 0);
             m_filted.emplace(table, hold);
-            m_hints.erase(table);
+            m_hints.erase(StringView(table));
         }
     }
     return true;
 }
 
-void Migration::markAsNoNeedToMigrate(const String& table)
+void Migration::markAsNoNeedToMigrate(const UnsafeStringView& table)
 {
     LockGuard lockGuard(m_lock);
     if (m_filted.find(table) == m_filted.end()) {
         m_filted.emplace(table, nullptr);
     }
-    m_hints.erase(table);
+    m_hints.erase(StringView(table));
 }
 
-bool Migration::hintThatTableWillBeCreated(InfoInitializer& initializer, const String& table)
+bool Migration::hintThatTableWillBeCreated(InfoInitializer& initializer,
+                                           const UnsafeStringView& table)
 {
     return initInfo(initializer, table);
 }
@@ -223,7 +224,7 @@ void Migration::releaseInfo(const MigrationInfo* info)
     }
 }
 
-std::pair<bool, RecyclableMigrationInfo> Migration::getInfo(const String& table)
+std::pair<bool, RecyclableMigrationInfo> Migration::getInfo(const UnsafeStringView& table)
 {
     LockGuard lockGuard(m_lock);
     bool filted = false;
@@ -290,7 +291,8 @@ void Migration::Binder::stopReferenced()
     m_referenceds.clear();
 }
 
-std::pair<bool, const MigrationInfo*> Migration::Binder::bindTable(const String& table)
+std::pair<bool, const MigrationInfo*>
+Migration::Binder::bindTable(const UnsafeStringView& table)
 {
     WCTInnerAssert(m_binding);
     bool succeed = true;
@@ -304,12 +306,12 @@ std::pair<bool, const MigrationInfo*> Migration::Binder::bindTable(const String&
     return { succeed, info.get() };
 }
 
-bool Migration::Binder::hintThatTableWillBeCreated(const String& table)
+bool Migration::Binder::hintThatTableWillBeCreated(const UnsafeStringView& table)
 {
     return m_migration.hintThatTableWillBeCreated(*this, table);
 }
 
-const MigrationInfo* Migration::Binder::getBoundInfo(const String& table)
+const MigrationInfo* Migration::Binder::getBoundInfo(const UnsafeStringView& table)
 {
     WCTInnerAssert(m_binding == false);
     const MigrationInfo* info = nullptr;
@@ -320,7 +322,7 @@ const MigrationInfo* Migration::Binder::getBoundInfo(const String& table)
     return info;
 }
 
-void Migration::tryReduceBounds(std::map<String, const MigrationInfo*>& bounds)
+void Migration::tryReduceBounds(StringViewMap<const MigrationInfo*>& bounds)
 {
     bool reduce = false;
     {
@@ -346,7 +348,7 @@ void Migration::tryReduceBounds(std::map<String, const MigrationInfo*>& bounds)
 }
 
 std::pair<bool, RecyclableMigrationInfo>
-Migration::getOrInitInfo(InfoInitializer& initializer, const String& table)
+Migration::getOrInitInfo(InfoInitializer& initializer, const UnsafeStringView& table)
 {
     bool get = false; // succeed
     RecyclableMigrationInfo info = nullptr;
@@ -478,7 +480,7 @@ std::pair<bool, bool> Migration::tryAcquireTables(Migration::Stepper& stepper)
         }
     }
     bool succeed;
-    std::set<String> tables;
+    std::set<StringView> tables;
     std::tie(succeed, tables) = stepper.getAllTables();
     if (succeed) {
         tables.insert(m_hints.begin(), m_hints.end());

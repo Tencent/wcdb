@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-StatementCreateTrigger& StatementCreateTrigger::createTrigger(const String& trigger)
+StatementCreateTrigger& StatementCreateTrigger::createTrigger(const UnsafeStringView& trigger)
 {
     syntax().trigger = trigger;
     return *this;
@@ -91,7 +91,7 @@ StatementCreateTrigger& StatementCreateTrigger::column(const Column& column)
     return *this;
 }
 
-StatementCreateTrigger& StatementCreateTrigger::on(const String& table)
+StatementCreateTrigger& StatementCreateTrigger::on(const UnsafeStringView& table)
 {
     syntax().table = table;
     return *this;

@@ -20,16 +20,16 @@
 
 #pragma once
 
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <functional>
 #include <list>
 
 namespace WCDB {
 
 template<typename T>
-class CaseInsensiveList : public std::list<std::pair<String, T>> {
+class CaseInsensiveList : public std::list<std::pair<StringView, T>> {
 public:
-    auto caseInsensiveFind(const String& key)
+    auto caseInsensiveFind(const UnsafeStringView& key)
     {
         return std::find_if(
         this->begin(),
@@ -37,7 +37,7 @@ public:
         std::bind(&CaseInsensiveList::caseInsensiveEqual, key, std::placeholders::_1));
     }
 
-    const auto caseInsensiveFind(const String& key) const
+    const auto caseInsensiveFind(const UnsafeStringView& key) const
     {
         return std::find_if(
         this->begin(),
@@ -48,13 +48,14 @@ public:
     void alphabeticallyCaseInsensiveSort() { this->sort(caseInsensiveLess); }
 
 protected:
-    static bool caseInsensiveEqual(const String& key, const std::pair<String, T>& element)
+    static bool caseInsensiveEqual(const UnsafeStringView& key,
+                                   const std::pair<StringView, T>& element)
     {
-        return key.isCaseInsensiveEqual(element.first);
+        return key.caseInsensiveEqual(element.first);
     }
 
-    static bool caseInsensiveLess(const std::pair<String, T>& left,
-                                  const std::pair<String, T>& right)
+    static bool caseInsensiveLess(const std::pair<StringView, T>& left,
+                                  const std::pair<StringView, T>& right)
     {
         return left.first.caseInsensiveCompare(right.first) < 0;
     }

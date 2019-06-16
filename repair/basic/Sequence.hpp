@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 
 namespace WCDB {
 
@@ -28,9 +28,9 @@ namespace Repair {
 
 struct Sequence {
     Sequence();
-    static String tableName();
+    static StringView tableName();
 
-    String name;
+    StringView name;
     int64_t seq;
 };
 

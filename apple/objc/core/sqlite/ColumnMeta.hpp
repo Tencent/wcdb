@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <WCDB/WINQ.h>
 #include <vector>
 
@@ -28,11 +28,11 @@ namespace WCDB {
 
 class ColumnMeta {
 public:
-    ColumnMeta(int id_, String name_, String type_, bool notnull_, int primary_);
+    ColumnMeta(int id_, StringView name_, StringView type_, bool notnull_, int primary_);
 
     int id;
-    String name;
-    String type;
+    StringView name;
+    StringView type;
     bool notnull;
     int primary;
 

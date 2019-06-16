@@ -29,7 +29,7 @@ public:
     using TypedSyntax<Syntax::RollbackSTMT, Statement>::TypedSyntax;
 
     StatementRollback& rollback();
-    StatementRollback& rollbackToSavepoint(const String& savepoint);
+    StatementRollback& rollbackToSavepoint(const UnsafeStringView& savepoint);
 };
 
 } // namespace WCDB

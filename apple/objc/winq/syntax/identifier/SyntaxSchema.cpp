@@ -41,7 +41,7 @@ Identifier::Type Schema::getType() const
     return type;
 }
 
-String Schema::getValidDescription() const
+StringView Schema::getValidDescription() const
 {
     return name;
 }

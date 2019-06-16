@@ -71,11 +71,11 @@ bool Thread::pthreadEqual(pthread_t left, pthread_t right)
 }
 
 #pragma mark - Name
-    constexpr const int Thread::maxLengthOfAllowedThreadName()
-    {
-        return 256;
-    }
-    
+constexpr const int Thread::maxLengthOfAllowedThreadName()
+{
+    return 256;
+}
+
 void Thread::setName(const UnsafeStringView& name)
 {
     char buffer[maxLengthOfAllowedThreadName()];
@@ -86,14 +86,14 @@ void Thread::setName(const UnsafeStringView& name)
     }
 }
 
-String Thread::getName()
+StringView Thread::getName()
 {
     char buffer[maxLengthOfAllowedThreadName()];
     memset(buffer, 0, maxLengthOfAllowedThreadName());
     if (pthread_getname_np(m_id, buffer, maxLengthOfAllowedThreadName()) != 0) {
         setThreadedError();
     }
-    return buffer;
+    return StringView(buffer);
 }
 
 uint64_t Thread::getIdentifier()

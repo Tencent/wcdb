@@ -36,7 +36,7 @@ Identifier::Type DropTriggerSTMT::getType() const
     return type;
 }
 
-String DropTriggerSTMT::getValidDescription() const
+StringView DropTriggerSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "DROP TRIGGER ";
@@ -47,7 +47,7 @@ String DropTriggerSTMT::getValidDescription() const
         stream << schema << ".";
     }
     stream << trigger;
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void DropTriggerSTMT::iterate(const Iterator& iterator, bool& stop)

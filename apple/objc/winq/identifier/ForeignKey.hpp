@@ -26,7 +26,7 @@ namespace WCDB {
 
 class ForeignKey final : public TypedSyntax<Syntax::ForeignKeyClause, SQL> {
 public:
-    ForeignKey& references(const String& table);
+    ForeignKey& references(const UnsafeStringView& table);
     ForeignKey& column(const Column& column);
 
     ForeignKey& onDeleteSetNull();
@@ -41,7 +41,7 @@ public:
     ForeignKey& onUpdateRestrict();
     ForeignKey& onUpdateNoAction();
 
-    ForeignKey& match(const String& name);
+    ForeignKey& match(const UnsafeStringView& name);
 
     ForeignKey& deferrable();
     ForeignKey& deferrableInitiallyDeferred();

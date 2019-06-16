@@ -28,7 +28,7 @@ class StatementCreateTable final : public TypedSyntax<Syntax::CreateTableSTMT, S
 public:
     using TypedSyntax<Syntax::CreateTableSTMT, Statement>::TypedSyntax;
 
-    StatementCreateTable& createTable(const String& table);
+    StatementCreateTable& createTable(const UnsafeStringView& table);
     StatementCreateTable& schema(const Schema& schema);
     StatementCreateTable& temp();
 

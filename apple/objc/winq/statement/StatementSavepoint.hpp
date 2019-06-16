@@ -28,7 +28,7 @@ class StatementSavepoint final : public TypedSyntax<Syntax::SavepointSTMT, State
 public:
     using TypedSyntax<Syntax::SavepointSTMT, Statement>::TypedSyntax;
 
-    StatementSavepoint& savepoint(const String& savepoint);
+    StatementSavepoint& savepoint(const UnsafeStringView& savepoint);
 };
 
 } // namespace WCDB

@@ -28,7 +28,7 @@ class StatementDropIndex final : public TypedSyntax<Syntax::DropIndexSTMT, State
 public:
     using TypedSyntax<Syntax::DropIndexSTMT, Statement>::TypedSyntax;
 
-    StatementDropIndex& dropIndex(const String& index);
+    StatementDropIndex& dropIndex(const UnsafeStringView& index);
     StatementDropIndex& schema(const Schema& schema);
     StatementDropIndex& ifExists();
 };

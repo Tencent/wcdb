@@ -23,7 +23,7 @@
 #include <WCDB/Config.hpp>
 #include <WCDB/Global.hpp>
 #include <WCDB/Lock.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <WCDB/ThreadLocal.hpp>
 #include <WCDB/UniqueList.hpp>
 
@@ -38,18 +38,18 @@ public:
     bool uninvoke(Handle* handle) override final;
 
 protected:
-    bool onBusy(const String& path, int numberOfTimes);
+    bool onBusy(const UnsafeStringView& path, int numberOfTimes);
 
-    const String m_identifier;
+    const StringView m_identifier;
 
 #pragma mark - Lock Event
 protected:
     typedef Global::PagerLock PagerLockType;
     typedef Global::ShmLock ShmLockType;
-    void willLock(const String& path, PagerLockType type);
-    void lockDidChange(const String& path, PagerLockType type);
-    void willShmLock(const String& path, ShmLockType type, int mask);
-    void shmLockDidChange(const String& path, void* identifier, int sharedMask, int exclusiveMask);
+    void willLock(const UnsafeStringView& path, PagerLockType type);
+    void lockDidChange(const UnsafeStringView& path, PagerLockType type);
+    void willShmLock(const UnsafeStringView& path, ShmLockType type, int mask);
+    void shmLockDidChange(const UnsafeStringView& path, void* identifier, int sharedMask, int exclusiveMask);
 
 #pragma mark - State
 protected:
@@ -105,11 +105,11 @@ protected:
         UniqueList<Thread, Expecting> m_waitings;
     };
 
-    State& getOrCreateState(const String& path);
+    State& getOrCreateState(const UnsafeStringView& path);
 
 private:
     SharedLock m_statesLock;
-    std::map<String, State> m_states;
+    StringViewMap<State> m_states;
 
 #pragma mark - Trying
 protected:
@@ -117,18 +117,18 @@ protected:
     public:
         Trying();
 
-        void expecting(const String& path, ShmLockType type, int mask);
-        void expecting(const String& path, PagerLockType type);
+        void expecting(const UnsafeStringView& path, ShmLockType type, int mask);
+        void expecting(const UnsafeStringView& path, PagerLockType type);
 
         void retrying(double timeout);
         void retried(double cost);
         double remainingTimeForRetring() const;
-        const String& getPath() const;
+        const StringView& getPath() const;
 
         bool valid() const;
 
     private:
-        String m_path;
+        StringView m_path;
         double m_elapsedTime;
         double m_timeout;
     };

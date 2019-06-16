@@ -47,8 +47,8 @@ public:
     HandlePool(const HandlePool &) = delete;
     HandlePool &operator=(const HandlePool &) = delete;
 
-    HandlePool(const String &path);
-    const String path;
+    HandlePool(const UnsafeStringView &path);
+    const StringView path;
 
     virtual ~HandlePool();
 

@@ -31,7 +31,7 @@ Identifier::Type ReindexSTMT::getType() const
     return type;
 }
 
-String ReindexSTMT::getValidDescription() const
+StringView ReindexSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "REINDEX";
@@ -49,7 +49,7 @@ String ReindexSTMT::getValidDescription() const
         stream << collationOrTableOrIndex;
         break;
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void ReindexSTMT::iterate(const Iterator& iterator, bool& stop)

@@ -24,7 +24,7 @@
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/RepairKit.h>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 
 #include <WCDB/AssemblerHandle.hpp>
 #include <WCDB/ConfiguredHandle.hpp>
@@ -35,7 +35,7 @@
 namespace WCDB {
 
 #pragma mark - Initializer
-Database::Database(const String &path)
+Database::Database(const UnsafeStringView &path)
 : HandlePool(path)
 , m_factory(path)
 , m_tag(Tag::invalid())
@@ -138,13 +138,15 @@ void Database::setConfigs(const Configs &configs)
     m_configs = configs;
 }
 
-void Database::setConfig(const String &name, const std::shared_ptr<Config> &config, int priority)
+void Database::setConfig(const UnsafeStringView &name,
+                         const std::shared_ptr<Config> &config,
+                         int priority)
 {
     LockGuard memoryGuard(m_memory);
     m_configs.insert(name, config, priority);
 }
 
-void Database::removeConfig(const String &name)
+void Database::removeConfig(const UnsafeStringView &name)
 {
     LockGuard memoryGuard(m_memory);
     m_configs.erase(name);
@@ -179,7 +181,7 @@ bool Database::execute(const Statement &statement)
     return false;
 }
 
-std::pair<bool, bool> Database::tableExists(const String &table)
+std::pair<bool, bool> Database::tableExists(const UnsafeStringView &table)
 {
     bool succeed = false;
     bool exists = false;
@@ -418,7 +420,7 @@ bool Database::removeFiles()
 {
     bool result = false;
     close([&result, this]() {
-        std::list<String> paths = getPaths();
+        std::list<StringView> paths = getPaths();
         paths.reverse(); // reverse to remove the non-critical paths first avoiding app stopped between the removing
         result = FileManager::removeItems(paths);
         if (!result) {
@@ -437,11 +439,11 @@ std::pair<bool, size_t> Database::getFilesSize()
     return pair;
 }
 
-bool Database::moveFiles(const String &directory)
+bool Database::moveFiles(const UnsafeStringView &directory)
 {
     bool result = false;
     close([&result, &directory, this]() {
-        std::list<String> paths = getPaths();
+        std::list<StringView> paths = getPaths();
         paths.reverse();
         result = FileManager::moveItems(paths, directory);
         if (!result) {
@@ -451,27 +453,27 @@ bool Database::moveFiles(const String &directory)
     return result;
 }
 
-const String &Database::getPath() const
+const StringView &Database::getPath() const
 {
     return path;
 }
 
-String Database::getSHMPath() const
+StringView Database::getSHMPath() const
 {
     return Path::addExtention(getPath(), Handle::getSHMSuffix());
 }
 
-String Database::getWALPath() const
+StringView Database::getWALPath() const
 {
     return Path::addExtention(getPath(), Handle::getWALSuffix());
 }
 
-String Database::getJournalPath() const
+StringView Database::getJournalPath() const
 {
     return Path::addExtention(getPath(), Handle::getJournalSuffix());
 }
 
-std::list<String> Database::getPaths() const
+std::list<StringView> Database::getPaths() const
 {
     return {
         getPath(),
@@ -485,17 +487,17 @@ std::list<String> Database::getPaths() const
 }
 
 #pragma mark - Repair
-String Database::getFirstMaterialPath() const
+StringView Database::getFirstMaterialPath() const
 {
     return Repair::Factory::firstMaterialPathForDatabase(getPath());
 }
 
-String Database::getLastMaterialPath() const
+StringView Database::getLastMaterialPath() const
 {
     return Repair::Factory::lastMaterialPathForDatabase(getPath());
 }
 
-const String &Database::getFactoryDirectory() const
+const StringView &Database::getFactoryDirectory() const
 {
     return m_factory.directory;
 }
@@ -796,7 +798,7 @@ bool Database::isMigrated() const
     return m_migration.isMigrated();
 }
 
-std::set<String> Database::getPathsOfSourceDatabases() const
+std::set<StringView> Database::getPathsOfSourceDatabases() const
 {
     return m_migration.getPathsOfSourceDatabases();
 }

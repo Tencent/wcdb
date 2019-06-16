@@ -19,13 +19,13 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/UnsafeStringView.hpp>
+#import <WCDB/StringView.hpp>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface NSString (WCDB)
 
-+ (NSString*)stringWithUnsafeStringView:(const WCDB::UnsafeStringView&)string;
++ (NSString*)stringWithView:(const WCDB::UnsafeStringView&)string;
 
 @end
 

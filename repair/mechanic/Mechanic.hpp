@@ -34,7 +34,7 @@ class Material;
 class Mechanic final : public Repairman {
 #pragma mark - Initialize
 public:
-    Mechanic(const String &path);
+    Mechanic(const UnsafeStringView &path);
 
 #pragma mark - Mechanic
 public:

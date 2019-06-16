@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-class String;
+class UnsafeStringView;
 
 namespace Syntax {
 
@@ -35,7 +35,7 @@ enum class ColumnType {
     BLOB,
 };
 
-bool isIntegerColumnType(const String& type);
+bool isIntegerColumnType(const UnsafeStringView& type);
 
 enum class CompoundOperator : int {
     Union = 1,

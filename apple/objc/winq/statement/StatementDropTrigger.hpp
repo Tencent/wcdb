@@ -28,7 +28,7 @@ class StatementDropTrigger final : public TypedSyntax<Syntax::DropTriggerSTMT, S
 public:
     using TypedSyntax<Syntax::DropTriggerSTMT, Statement>::TypedSyntax;
 
-    StatementDropTrigger& dropTrigger(const String& trigger);
+    StatementDropTrigger& dropTrigger(const UnsafeStringView& trigger);
     StatementDropTrigger& schema(const Schema& schema);
     StatementDropTrigger& ifExists();
 };

@@ -21,7 +21,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/MigratingHandle.hpp>
 #include <WCDB/MigrationInfo.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 
 namespace WCDB {
 
@@ -46,12 +46,12 @@ MigratingHandle::~MigratingHandle()
 }
 
 #pragma mark - Info Initializer
-std::tuple<bool, bool, std::set<String>>
+std::tuple<bool, bool, std::set<StringView>>
 MigratingHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
 {
     bool succeed = true;
     bool integerPrimary = false;
-    std::set<String> columns;
+    std::set<StringView> columns;
     do {
         bool exists;
         std::tie(succeed, exists) = tableExists(Schema::main(), userInfo.getTable());
@@ -80,7 +80,7 @@ std::pair<bool, bool> MigratingHandle::sourceTableExists(const MigrationUserInfo
     do {
         Schema schema = userInfo.getSchemaForSourceDatabase();
         if (!schema.syntax().isMain()) {
-            std::set<String> attacheds;
+            std::set<StringView> attacheds;
             std::tie(succeed, attacheds)
             = getValues(MigrationInfo::getStatementForSelectingDatabaseList(), 1);
             if (succeed) {
@@ -101,22 +101,22 @@ std::pair<bool, bool> MigratingHandle::sourceTableExists(const MigrationUserInfo
     return { succeed, exists };
 }
 
-String MigratingHandle::getDatabasePath() const
+StringView MigratingHandle::getDatabasePath() const
 {
     return getPath();
 }
 
 #pragma mark - Binder
-bool MigratingHandle::rebindViews(const std::map<String, const MigrationInfo*>& migratings)
+bool MigratingHandle::rebindViews(const StringViewMap<const MigrationInfo*>& migratings)
 {
-    std::map<String, const MigrationInfo*> views2MigratingInfos;
+    StringViewMap<const MigrationInfo*> views2MigratingInfos;
     for (const auto& iter : migratings) {
         const MigrationInfo* info = iter.second;
         WCTInnerAssert(info != nullptr);
         views2MigratingInfos.emplace(info->getUnionedView(), info);
     }
 
-    std::set<String> existingViews;
+    std::set<StringView> existingViews;
 
     // get existing unioned views
     bool succeed;
@@ -155,9 +155,9 @@ bool MigratingHandle::rebindViews(const std::map<String, const MigrationInfo*>& 
     return true;
 }
 
-bool MigratingHandle::rebindSchemas(const std::map<String, const MigrationInfo*>& migratings)
+bool MigratingHandle::rebindSchemas(const StringViewMap<const MigrationInfo*>& migratings)
 {
-    std::map<String, const MigrationInfo*> schemas2MigratingInfos;
+    StringViewMap<const MigrationInfo*> schemas2MigratingInfos;
     for (const auto& iter : migratings) {
         const MigrationInfo* info = iter.second;
         WCTInnerAssert(info != nullptr);
@@ -168,7 +168,7 @@ bool MigratingHandle::rebindSchemas(const std::map<String, const MigrationInfo*>
     }
 
     bool succeed;
-    std::set<String> existingSchemas;
+    std::set<StringView> existingSchemas;
     std::tie(succeed, existingSchemas)
     = getValues(MigrationInfo::getStatementForSelectingDatabaseList(), 1);
     if (!succeed) {
@@ -206,7 +206,7 @@ bool MigratingHandle::rebindSchemas(const std::map<String, const MigrationInfo*>
     return true;
 }
 
-bool MigratingHandle::bindInfos(const std::map<String, const MigrationInfo*>& migratings)
+bool MigratingHandle::bindInfos(const StringViewMap<const MigrationInfo*>& migratings)
 {
     return rebindViews(migratings) && rebindSchemas(migratings);
 }
@@ -216,8 +216,8 @@ bool MigratingHandle::trySynchronousTransactionAfterAttached()
     bool succeed = true;
     if (isInTransaction()) {
         markErrorAsIgnorable(Error::Code::Error);
-        static const String *s_synchronousTransaction
-        = new String(StatementBegin().beginImmediate().getDescription());
+        static const StringView* s_synchronousTransaction
+        = new StringView(StatementBegin().beginImmediate().getDescription());
         succeed = executeSQL(*s_synchronousTransaction);
         WCTInnerAssert(!succeed);
         if (!succeed && isErrorIgnorable()) {
@@ -325,7 +325,7 @@ std::pair<bool, std::list<Statement>> MigratingHandle::process(const Statement& 
             if (migratedTable.isTargetingToSameTable(falledBackTable)) {
                 statements.push_back(falledBackStatement);
             } else {
-                const String& migratedTableName = migratedTable.table;
+                const UnsafeStringView& migratedTableName = migratedTable.table;
                 const MigrationInfo* info = getBoundInfo(migratedTableName);
                 WCTInnerAssert(info != nullptr);
                 // statement for source table
@@ -349,7 +349,7 @@ std::pair<bool, std::list<Statement>> MigratingHandle::process(const Statement& 
             if (migratedTable.isTargetingToSameTable(falledBackTable)) {
                 statements.push_back(falledBackStatement);
             } else {
-                const String& migratedTableName = migratedTable.table;
+                const UnsafeStringView& migratedTableName = migratedTable.table;
                 const MigrationInfo* info = getBoundInfo(migratedTableName);
                 WCTInnerAssert(info != nullptr);
                 // statement for source table
@@ -391,7 +391,7 @@ std::pair<bool, std::list<Statement>> MigratingHandle::process(const Statement& 
     return { succeed, std::move(statements) };
 }
 
-bool MigratingHandle::tryFallbackToUnionedView(Syntax::Schema& schema, String& table)
+bool MigratingHandle::tryFallbackToUnionedView(Syntax::Schema& schema, StringView& table)
 {
     bool succeed = true;
     if (schema.isMain()) {
@@ -405,7 +405,7 @@ bool MigratingHandle::tryFallbackToUnionedView(Syntax::Schema& schema, String& t
     return succeed;
 }
 
-bool MigratingHandle::tryFallbackToSourceTable(Syntax::Schema& schema, String& table)
+bool MigratingHandle::tryFallbackToSourceTable(Syntax::Schema& schema, StringView& table)
 {
     bool succeed = true;
     if (schema.isMain()) {
@@ -629,7 +629,8 @@ void MigratingHandle::resetMigrate()
     m_removeMigratedStatement->reset();
 }
 
-bool MigratingHandle::prepareMigrate(const String& table, Syntax::ConflictAction conflictAction)
+bool MigratingHandle::prepareMigrate(const UnsafeStringView& table,
+                                     Syntax::ConflictAction conflictAction)
 {
     WCTInnerAssert(!isMigratedPrepared());
     const MigrationInfo* info = getBoundInfo(table);

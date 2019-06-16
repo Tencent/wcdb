@@ -30,7 +30,7 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-FileHandle::FileHandle(const String &path_)
+FileHandle::FileHandle(const UnsafeStringView &path_)
 : path(path_), m_fd(-1), m_mode(Mode::None), m_errorIgnorable(false)
 {
 }
@@ -65,12 +65,12 @@ bool FileHandle::open(Mode mode)
     case Mode::OverWrite: {
         constexpr const int mask = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
         static_assert(mask == 0644, "");
-        m_fd = ::open(path.c_str(), O_CREAT | O_WRONLY | O_TRUNC, mask);
+        m_fd = ::open(path.data(), O_CREAT | O_WRONLY | O_TRUNC, mask);
         break;
     }
     default:
         WCTInnerAssert(mode == Mode::ReadOnly);
-        m_fd = ::open(path.c_str(), O_RDONLY);
+        m_fd = ::open(path.data(), O_RDONLY);
         break;
     }
     if (m_fd == -1) {

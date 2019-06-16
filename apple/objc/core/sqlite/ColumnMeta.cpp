@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-ColumnMeta::ColumnMeta(int id_, String name_, String type_, bool notnull_, int primary_)
+ColumnMeta::ColumnMeta(int id_, StringView name_, StringView type_, bool notnull_, int primary_)
 : id(id_), name(name_), type(type_), notnull(notnull_), primary(primary_)
 {
 }

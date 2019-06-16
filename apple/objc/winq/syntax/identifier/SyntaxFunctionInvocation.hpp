@@ -29,7 +29,7 @@ namespace Syntax {
 class FunctionInvocation final : public Identifier {
 #pragma mark - Lang
 public:
-    String name;
+    StringView name;
     bool distinct = false;
     bool wildcard = false;
     std::list<Expression> expressions;
@@ -40,7 +40,7 @@ public:
 public:
     static constexpr const Type type = Type::FunctionInvocation;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    StringView getValidDescription() const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

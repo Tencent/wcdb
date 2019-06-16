@@ -43,8 +43,8 @@ public:
 public:
     static constexpr const Type type = Type::DeleteSTMT;
     Type getType() const override final;
-    String getValidDescription() const override final;
-    String getValidDescription(bool skipSchema) const;
+    StringView getValidDescription() const override final;
+    StringView getValidDescription(bool skipSchema) const;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

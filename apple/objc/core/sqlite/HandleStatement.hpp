@@ -79,7 +79,7 @@ protected:
     HandleStatement(AbstractHandle *handle);
 
 private:
-    bool prepare(const String &sql);
+    bool prepare(const UnsafeStringView &sql);
     sqlite3_stmt *m_stmt;
     bool m_done;
 };

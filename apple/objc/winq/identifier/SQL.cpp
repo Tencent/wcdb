@@ -30,7 +30,7 @@ SQL::SQL()
 SQL::SQL(Type type, const SQL& sql)
 {
     WCTRemedialAssert(
-    type == sql.getType(), String::formatted("Invalid WINQ assignment."), return;);
+    type == sql.getType(), StringView::formatted("Invalid WINQ assignment."), return;);
     m_syntax = sql.m_syntax;
 }
 
@@ -44,7 +44,7 @@ void SQL::iterate(const Iterator& iterator)
     return m_syntax->iterate(iterator);
 }
 
-String SQL::getDescription() const
+StringView SQL::getDescription() const
 {
     return m_syntax->getDescription();
 }

@@ -35,7 +35,7 @@ namespace WCDB {
 class Database final : private HandlePool, public MigrationEvent {
 #pragma mark - Initializer
 public:
-    Database(const String &path);
+    Database(const UnsafeStringView &path);
     Database() = delete;
     Database(const Database &) = delete;
     Database &operator=(const Database &) = delete;
@@ -69,7 +69,7 @@ protected:
 public:
     RecyclableHandle getHandle();
     bool execute(const Statement &statement);
-    std::pair<bool, bool> tableExists(const String &table);
+    std::pair<bool, bool> tableExists(const UnsafeStringView &table);
 
 protected:
     std::shared_ptr<Handle> generateSlotedHandle(HandleType type) override final;
@@ -81,10 +81,10 @@ private:
 #pragma mark - Config
 public:
     void setConfigs(const Configs &configs);
-    void setConfig(const String &name,
+    void setConfig(const UnsafeStringView &name,
                    const std::shared_ptr<Config> &config,
                    int priority = Configs::Priority::Default);
-    void removeConfig(const String &name);
+    void removeConfig(const UnsafeStringView &name);
 
 private:
     Configs m_configs;
@@ -125,21 +125,21 @@ public:
 
 #pragma mark - File
 public:
-    const String &getPath() const;
-    String getSHMPath() const;
-    String getWALPath() const;
-    String getJournalPath() const;
-    std::list<String> getPaths() const;
+    const StringView &getPath() const;
+    StringView getSHMPath() const;
+    StringView getWALPath() const;
+    StringView getJournalPath() const;
+    std::list<StringView> getPaths() const;
 
-    bool moveFiles(const String &directory);
+    bool moveFiles(const UnsafeStringView &directory);
     bool removeFiles();
     std::pair<bool, size_t> getFilesSize();
 
 #pragma mark - Repair
 public:
-    String getFirstMaterialPath() const;
-    String getLastMaterialPath() const;
-    const String &getFactoryDirectory() const;
+    StringView getFirstMaterialPath() const;
+    StringView getLastMaterialPath() const;
+    const StringView &getFactoryDirectory() const;
 
     typedef Repair::Factory::Filter BackupFilter;
     void filterBackup(const BackupFilter &tableShouldBeBackedup);
@@ -176,7 +176,7 @@ public:
 
     bool isMigrated() const;
 
-    std::set<String> getPathsOfSourceDatabases() const;
+    std::set<StringView> getPathsOfSourceDatabases() const;
 
 protected:
     std::pair<bool, bool> doStepMigration();

@@ -86,7 +86,7 @@ Identifier::Type ForeignKeyClause::getType() const
     return type;
 }
 
-String ForeignKeyClause::getValidDescription() const
+StringView ForeignKeyClause::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "REFERENCES " << foreignTable;
@@ -105,7 +105,7 @@ String ForeignKeyClause::getValidDescription() const
     if (deferrableValid()) {
         stream << space << deferrable;
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void ForeignKeyClause::iterate(const Iterator& iterator, bool& stop)

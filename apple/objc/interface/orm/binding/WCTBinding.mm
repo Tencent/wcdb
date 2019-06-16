@@ -69,7 +69,7 @@ WCTBinding::WCTBinding(Class cls)
         IMP imp = [m_cls methodForSelector:selector];
         const WCTProperty &property = ((const WCTProperty &(*) (Class, SEL)) imp)(m_cls, selector);
         if (WCDB::Console::debuggable()) {
-            WCTRemedialAssert(getColumnDef(property) == nullptr, WCDB::String::formatted("Duplicated property [%s] found", property.getDescription().c_str()), continue;);
+            WCTRemedialAssert(getColumnDef(property) == nullptr, WCDB::StringView::formatted("Duplicated property [%s] found", property.getDescription().data()), continue;);
         }
         m_properties.push_back(property);
         m_columnDefs.push_back({ property.getDescription(), WCDB::ColumnDef(property, property.getColumnBinding().getAccessor()->getColumnType()) });
@@ -105,7 +105,7 @@ const WCDB::CaseInsensiveList<WCDB::ColumnDef> &WCTBinding::getColumnDefs() cons
 
 WCDB::ColumnDef *WCTBinding::getColumnDef(const WCTProperty &property)
 {
-    WCDB::String name = property.getDescription();
+    WCDB::StringView name = property.getDescription();
     WCDB::ColumnDef *columnDef = nullptr;
     auto iter = m_columnDefs.caseInsensiveFind(name);
     if (iter != m_columnDefs.end()) {
@@ -115,7 +115,7 @@ WCDB::ColumnDef *WCTBinding::getColumnDef(const WCTProperty &property)
 }
 
 #pragma mark - Table
-WCDB::StatementCreateTable WCTBinding::generateCreateTableStatement(const WCDB::String &tableName) const
+WCDB::StatementCreateTable WCTBinding::generateCreateTableStatement(const WCDB::UnsafeStringView &tableName) const
 {
     WCDB::StatementCreateTable statement = WCDB::StatementCreateTable().createTable(tableName).ifNotExists();
     for (const auto &iter : m_columnDefs) {
@@ -128,12 +128,12 @@ WCDB::StatementCreateTable WCTBinding::generateCreateTableStatement(const WCDB::
 }
 
 WCDB::StatementCreateVirtualTable
-WCTBinding::generateCreateVirtualTableStatement(const WCDB::String &tableName) const
+WCTBinding::generateCreateVirtualTableStatement(const WCDB::UnsafeStringView &tableName) const
 {
     WCDB::StatementCreateVirtualTable statement = statementVirtualTable;
     statement.createVirtualTable(tableName).ifNotExists();
-    std::list<WCDB::String> &arguments = statement.syntax().arguments;
-    bool isFTS5 = statement.syntax().module.isCaseInsensiveEqual("fts5");
+    std::list<WCDB::StringView> &arguments = statement.syntax().arguments;
+    bool isFTS5 = statement.syntax().module.caseInsensiveEqual("fts5");
     for (const auto &iter : m_columnDefs) {
         if (isFTS5) {
             // FTS5 does not need type
@@ -146,7 +146,7 @@ WCTBinding::generateCreateVirtualTableStatement(const WCDB::String &tableName) c
 }
 
 #pragma mark - Table Constraint
-WCDB::TableConstraint &WCTBinding::getOrCreateTableConstraint(const WCDB::String &name)
+WCDB::TableConstraint &WCTBinding::getOrCreateTableConstraint(const WCDB::UnsafeStringView &name)
 {
     auto iter = m_constraints.find(name);
     if (iter == m_constraints.end()) {
@@ -157,13 +157,13 @@ WCDB::TableConstraint &WCTBinding::getOrCreateTableConstraint(const WCDB::String
 
 #pragma mark - Index
 
-WCTBinding::Index::Index(const WCDB::String &suffix_)
+WCTBinding::Index::Index(const WCDB::UnsafeStringView &suffix_)
 : suffix(suffix_)
 , action(Action::Create)
 {
 }
 
-WCTBinding::Index &WCTBinding::getOrCreateIndex(const WCDB::String &suffix)
+WCTBinding::Index &WCTBinding::getOrCreateIndex(const WCDB::UnsafeStringView &suffix)
 {
     auto iter = m_indexes.find(suffix);
     if (iter == m_indexes.end()) {
@@ -174,7 +174,7 @@ WCTBinding::Index &WCTBinding::getOrCreateIndex(const WCDB::String &suffix)
 }
 
 std::pair<std::list<WCDB::StatementCreateIndex>, std::list<WCDB::StatementDropIndex>>
-WCTBinding::generateIndexStatements(const WCDB::String &tableName, bool isTableNewlyCreated) const
+WCTBinding::generateIndexStatements(const WCDB::UnsafeStringView &tableName, bool isTableNewlyCreated) const
 {
     std::pair<std::list<WCDB::StatementCreateIndex>, std::list<WCDB::StatementDropIndex>> pairs;
     for (const auto &iter : m_indexes) {
@@ -188,12 +188,16 @@ WCTBinding::generateIndexStatements(const WCDB::String &tableName, bool isTableN
             // fallthrough
         case Index::Action::Create: {
             WCDB::StatementCreateIndex statement = index.statement;
-            statement.createIndex(tableName + index.suffix).ifNotExists().table(tableName);
+            std::ostringstream stream;
+            stream << tableName << index.suffix;
+            statement.createIndex(WCDB::StringView(stream.str())).ifNotExists().table(tableName);
             pairs.first.push_back(statement);
         } break;
         default:
             WCTInnerAssert(index.action == Index::Action::Drop);
-            WCDB::StatementDropIndex statement = WCDB::StatementDropIndex().dropIndex(tableName + index.suffix).ifExists();
+            std::ostringstream stream;
+            stream << tableName << index.suffix;
+            WCDB::StatementDropIndex statement = WCDB::StatementDropIndex().dropIndex(WCDB::StringView(stream.str())).ifExists();
             pairs.second.push_back(statement);
             break;
         }

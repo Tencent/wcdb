@@ -30,7 +30,7 @@ namespace Repair {
 bool FactoryDepositor::work()
 {
     bool succeed;
-    String workshopDirectory;
+    StringView workshopDirectory;
     std::tie(succeed, workshopDirectory) = factory.getUniqueWorkshopDiectory();
     if (!succeed) {
         assignWithSharedThreadedError();
@@ -39,7 +39,7 @@ bool FactoryDepositor::work()
 
     if (!FileManager::createDirectoryWithIntermediateDirectories(workshopDirectory)
         || !FileManager::moveItems(
-        Factory::associatedPathsForDatabase(factory.database), workshopDirectory)) {
+           Factory::associatedPathsForDatabase(factory.database), workshopDirectory)) {
         assignWithSharedThreadedError();
         return false;
     }

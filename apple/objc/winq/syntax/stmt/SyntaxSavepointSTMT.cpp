@@ -36,11 +36,11 @@ Identifier::Type SavepointSTMT::getType() const
     return type;
 }
 
-String SavepointSTMT::getValidDescription() const
+StringView SavepointSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "SAVEPOINT " << savepoint;
-    return stream.str();
+    return StringView(stream.str());
 }
 
 } // namespace Syntax

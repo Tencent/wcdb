@@ -31,7 +31,7 @@ Identifier::Type CreateTableSTMT::getType() const
     return type;
 }
 
-String CreateTableSTMT::getValidDescription() const
+StringView CreateTableSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "CREATE ";
@@ -61,7 +61,7 @@ String CreateTableSTMT::getValidDescription() const
         stream << " AS " << select;
         break;
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void CreateTableSTMT::iterate(const Iterator& iterator, bool& stop)

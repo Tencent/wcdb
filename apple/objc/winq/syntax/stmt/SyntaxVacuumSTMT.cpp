@@ -31,7 +31,7 @@ Identifier::Type VacuumSTMT::getType() const
     return type;
 }
 
-String VacuumSTMT::getValidDescription() const
+StringView VacuumSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "VACUUM";
@@ -42,7 +42,7 @@ String VacuumSTMT::getValidDescription() const
         stream << space << schema;
         break;
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void VacuumSTMT::iterate(const Iterator& iterator, bool& stop)

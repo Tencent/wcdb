@@ -29,7 +29,7 @@ class StatementCreateTrigger final
 public:
     using TypedSyntax<Syntax::CreateTriggerSTMT, Statement>::TypedSyntax;
 
-    StatementCreateTrigger& createTrigger(const String& trigger);
+    StatementCreateTrigger& createTrigger(const UnsafeStringView& trigger);
     StatementCreateTrigger& schema(const Schema& schema);
     StatementCreateTrigger& temp();
     StatementCreateTrigger& ifNotExists();
@@ -43,7 +43,7 @@ public:
     StatementCreateTrigger& update();
     StatementCreateTrigger& column(const Column& column);
 
-    StatementCreateTrigger& on(const String& table);
+    StatementCreateTrigger& on(const UnsafeStringView& table);
 
     StatementCreateTrigger& forEachRow();
 

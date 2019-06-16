@@ -31,9 +31,9 @@ class LiteralValue final : public Identifier {
 #pragma mark - Lang
 public:
     WCDB_SYNTAX_MAIN_UNION_ENUM(
-    String, Null, Float, Integer, UnsignedInteger, Bool, CurrentTime, CurrentDate, CurrentTimestamp);
+    StringView, Null, Float, Integer, UnsignedInteger, Bool, CurrentTime, CurrentDate, CurrentTimestamp);
 
-    String stringValue;
+    StringView stringValue;
     union {
         double floatValue;
         int64_t integerValue;
@@ -45,7 +45,7 @@ public:
 public:
     static constexpr const Type type = Type::LiteralValue;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    StringView getValidDescription() const override final;
 };
 
 } // namespace Syntax

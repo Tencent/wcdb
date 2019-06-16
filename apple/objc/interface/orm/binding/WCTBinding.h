@@ -19,7 +19,7 @@
  */
 
 #import <WCDB/CaseInsensiveList.hpp>
-#import <WCDB/String.hpp>
+#import <WCDB/StringView.hpp>
 #import <WCDB/WCTCoding.h>
 #import <WCDB/WCTCommon.h>
 #import <WCDB/WCTProperty.h>
@@ -52,25 +52,26 @@ private:
 #pragma mark - Table
 public:
     WCDB::StatementCreateTable
-    generateCreateTableStatement(const WCDB::String &tableName) const;
+    generateCreateTableStatement(const WCDB::UnsafeStringView &tableName) const;
 
     WCDB::StatementCreateVirtualTable
-    generateCreateVirtualTableStatement(const WCDB::String &tableName) const;
+    generateCreateVirtualTableStatement(const WCDB::UnsafeStringView &tableName) const;
 
     WCDB::StatementCreateVirtualTable statementVirtualTable;
 
 #pragma mark - Table Constraint
 public:
-    WCDB::TableConstraint &getOrCreateTableConstraint(const WCDB::String &name);
+    WCDB::TableConstraint &getOrCreateTableConstraint(const WCDB::UnsafeStringView &name);
 
 private:
-    std::map<WCDB::String /* constraint name */, WCDB::TableConstraint> m_constraints;
+    /* constraint name */
+    WCDB::StringViewMap<WCDB::TableConstraint> m_constraints;
 
 #pragma mark - Index
 public:
     struct Index {
-        Index(const WCDB::String &suffix);
-        const WCDB::String suffix;
+        Index(const WCDB::UnsafeStringView &suffix);
+        const WCDB::StringView suffix;
         enum class Action {
             Create,
             CreateForNewlyCreatedTableOnly, // create if and only if the table is newly created by createTable:withClass:
@@ -79,11 +80,12 @@ public:
         WCDB::StatementCreateIndex statement;
     };
     typedef struct Index Index;
-    Index &getOrCreateIndex(const WCDB::String &suffix);
+    Index &getOrCreateIndex(const WCDB::UnsafeStringView &suffix);
 
     std::pair<std::list<WCDB::StatementCreateIndex>, std::list<WCDB::StatementDropIndex>>
-    generateIndexStatements(const WCDB::String &tableName, bool isTableNewlyCreated) const;
+    generateIndexStatements(const WCDB::UnsafeStringView &tableName,
+                            bool isTableNewlyCreated) const;
 
 private:
-    std::map<WCDB::String /* index suffix */, Index> m_indexes;
+    std::map<WCDB::StringView /* index suffix */, Index> m_indexes;
 };

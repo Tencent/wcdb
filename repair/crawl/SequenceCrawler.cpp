@@ -23,7 +23,7 @@
 #include <WCDB/Page.hpp>
 #include <WCDB/Sequence.hpp>
 #include <WCDB/SequenceCrawler.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 
 namespace WCDB {
 
@@ -59,17 +59,17 @@ void SequenceCrawler::onCellCrawled(const Cell &cell)
 {
     if (cell.getValueType(0) != Cell::Type::Text) {
         markAsCorrupted(cell.getPage().number,
-                        String::formatted("Name with type: %d in Sequence is Text.",
-                                          cell.getValueType(0)));
+                        StringView::formatted("Name with type: %d in Sequence is Text.",
+                                              cell.getValueType(0)));
         return;
     }
     if (cell.getValueType(1) != Cell::Type::Integer) {
         markAsCorrupted(cell.getPage().number,
-                        String::formatted("Seq with type: %d in Sequence is Integer.",
-                                          cell.getValueType(1)));
+                        StringView::formatted("Seq with type: %d in Sequence is Integer.",
+                                              cell.getValueType(1)));
         return;
     }
-    String name = cell.stringValue(0);
+    StringView name = cell.stringValue(0);
     if (name.empty()) {
         markAsCorrupted(cell.getPage().number, "Name in Sequence is empty.");
         return;

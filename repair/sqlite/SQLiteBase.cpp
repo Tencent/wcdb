@@ -24,7 +24,7 @@
 #include <WCDB/Notifier.hpp>
 #include <WCDB/SQLite.h>
 #include <WCDB/SQLiteBase.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <sstream>
 
 namespace WCDB {
@@ -39,12 +39,12 @@ SQLiteBase::~SQLiteBase()
 {
 }
 
-void SQLiteBase::setPath(const String &path)
+void SQLiteBase::setPath(const UnsafeStringView &path)
 {
     m_path = path;
 }
 
-const String &SQLiteBase::getPath() const
+const StringView &SQLiteBase::getPath() const
 {
     return m_path;
 }

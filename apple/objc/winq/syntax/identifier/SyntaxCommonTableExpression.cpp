@@ -36,7 +36,7 @@ Identifier::Type CommonTableExpression::getType() const
     return type;
 }
 
-String CommonTableExpression::getValidDescription() const
+StringView CommonTableExpression::getValidDescription() const
 {
     std::ostringstream stream;
     stream << table;
@@ -46,7 +46,7 @@ String CommonTableExpression::getValidDescription() const
     if (select != nullptr) {
         stream << " AS(" << *select.get() << ")";
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void CommonTableExpression::iterate(const Iterator& iterator, bool& stop)

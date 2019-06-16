@@ -20,11 +20,12 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/SQLTraceConfig.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 
 namespace WCDB {
 
-SQLTracer::SQLTracer() : m_identifier(String::formatted("SQLTrace-%p", this))
+SQLTracer::SQLTracer()
+: m_identifier(StringView::formatted("SQLTrace-%p", this))
 {
 }
 

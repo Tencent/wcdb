@@ -28,7 +28,7 @@ class StatementDropTable final : public TypedSyntax<Syntax::DropTableSTMT, State
 public:
     using TypedSyntax<Syntax::DropTableSTMT, Statement>::TypedSyntax;
 
-    StatementDropTable& dropTable(const String& table);
+    StatementDropTable& dropTable(const UnsafeStringView& table);
     StatementDropTable& schema(const Schema& schema);
     StatementDropTable& ifExists();
 };

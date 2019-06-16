@@ -33,7 +33,7 @@ namespace Syntax {
 class TableConstraint final : public Identifier {
 #pragma mark - Lang
 public:
-    String name;
+    StringView name;
     WCDB_SYNTAX_MAIN_UNION_ENUM(PrimaryKey, Unique, Check, ForeignKey, );
 
     std::list<IndexedColumn> indexedColumns;
@@ -48,7 +48,7 @@ public:
 public:
     static constexpr const Type type = Type::TableConstraint;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    StringView getValidDescription() const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

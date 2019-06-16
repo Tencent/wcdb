@@ -82,10 +82,10 @@ bool BasicConfig::lazySetJournalModeWAL(Handle* handle)
     handle->markErrorAsIgnorable(Error::Code::Busy);
     int remainingNumberOfBusyRetryTimes = BasicConfigBusyRetryMaxAllowedNumberOfTimes;
     do {
-        succeed
-        = getOrSetPragmaBegin(handle, m_getJournalMode)
-          && getOrSetPragmaEnd(
-          handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("WAL"));
+        succeed = getOrSetPragmaBegin(handle, m_getJournalMode)
+                  && getOrSetPragmaEnd(handle,
+                                       m_setJournalModeWAL,
+                                       !handle->getText(0).caseInsensiveEqual("WAL"));
     } while (--remainingNumberOfBusyRetryTimes > 0 && !succeed && handle->isErrorIgnorable());
     handle->markErrorAsUnignorable();
     return succeed;

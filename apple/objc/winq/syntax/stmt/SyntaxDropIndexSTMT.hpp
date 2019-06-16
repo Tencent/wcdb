@@ -31,7 +31,7 @@ class DropIndexSTMT final : public Identifier {
 public:
     bool ifExists = false;
     Schema schema;
-    String index;
+    StringView index;
 
     bool isValid() const override final;
 
@@ -39,7 +39,7 @@ public:
 public:
     static constexpr const Type type = Type::DropIndexSTMT;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    StringView getValidDescription() const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

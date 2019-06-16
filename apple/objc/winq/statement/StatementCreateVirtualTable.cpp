@@ -23,7 +23,7 @@
 namespace WCDB {
 
 StatementCreateVirtualTable&
-StatementCreateVirtualTable::createVirtualTable(const String& table)
+StatementCreateVirtualTable::createVirtualTable(const UnsafeStringView& table)
 {
     syntax().table = table;
     return *this;
@@ -41,15 +41,17 @@ StatementCreateVirtualTable& StatementCreateVirtualTable::ifNotExists()
     return *this;
 }
 
-StatementCreateVirtualTable& StatementCreateVirtualTable::usingModule(const String& module)
+StatementCreateVirtualTable&
+StatementCreateVirtualTable::usingModule(const UnsafeStringView& module)
 {
     syntax().module = module;
     return *this;
 }
 
-StatementCreateVirtualTable& StatementCreateVirtualTable::argument(const String& argument)
+StatementCreateVirtualTable&
+StatementCreateVirtualTable::argument(const UnsafeStringView& argument)
 {
-    syntax().arguments.push_back(argument);
+    syntax().arguments.push_back(StringView(argument));
     return *this;
 }
 
@@ -59,9 +61,9 @@ StatementCreateVirtualTable& StatementCreateVirtualTable::argument(const SQL& ar
     return *this;
 }
 
-String StatementCreateVirtualTable::tokenize(const String& name)
+StringView StatementCreateVirtualTable::tokenize(const UnsafeStringView& name)
 {
-    return String::formatted("tokenize = %s", name.c_str());
+    return StringView::formatted("tokenize = %s", name.data());
 }
 
 } // namespace WCDB

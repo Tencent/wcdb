@@ -21,7 +21,7 @@
 #pragma once
 
 #include <WCDB/Serialization.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <list>
 #include <map>
 #include <stdlib.h>
@@ -43,7 +43,7 @@ public:
 
 protected:
     static bool serializeData(Serialization &serialization, const Data &data);
-    static void markAsEmpty(const String &element);
+    static void markAsEmpty(const UnsafeStringView &element);
 
 #pragma mark - Deserializable
 public:
@@ -52,7 +52,7 @@ public:
 
 protected:
     static std::pair<bool, Data> deserializeData(Deserialization &deserialization);
-    static void markAsCorrupt(const String &element);
+    static void markAsCorrupt(const UnsafeStringView &element);
 
 #pragma mark - Header
 protected:
@@ -85,8 +85,8 @@ public:
     class Content final : public Serializable, public Deserializable {
     public:
         Content();
-        String sql;
-        std::list<String> associatedSQLs;
+        StringView sql;
+        std::list<StringView> associatedSQLs;
         int64_t sequence;
         std::map<uint32_t, uint32_t> verifiedPagenos;
 #pragma mark - Serializable
@@ -97,7 +97,7 @@ public:
         bool deserialize(Deserialization &deserialization) override final;
     };
 
-    std::map<String, Content> contents;
+    StringViewMap<Content> contents;
 };
 
 } //namespace Repair

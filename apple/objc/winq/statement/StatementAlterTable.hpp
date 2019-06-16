@@ -28,10 +28,10 @@ class StatementAlterTable final : public TypedSyntax<Syntax::AlterTableSTMT, Sta
 public:
     using TypedSyntax<Syntax::AlterTableSTMT, Statement>::TypedSyntax;
 
-    StatementAlterTable& alterTable(const String& table);
+    StatementAlterTable& alterTable(const UnsafeStringView& table);
     StatementAlterTable& schema(const Schema& schema);
 
-    StatementAlterTable& renameToTable(const String& newTable);
+    StatementAlterTable& renameToTable(const UnsafeStringView& newTable);
     StatementAlterTable& renameColumn(const Column& oldColumn);
     StatementAlterTable& toColumn(const Column& newColumn);
     StatementAlterTable& addColumn(const ColumnDef& columnDef);

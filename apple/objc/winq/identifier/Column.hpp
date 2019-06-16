@@ -38,7 +38,7 @@ class Column : public TypedSyntax<Syntax::Column, SQL>,
                public FTS3FunctionOperable {
 public:
     Column();
-    explicit Column(const String& name);
+    explicit Column(const UnsafeStringView& name);
     virtual ~Column();
 
     static Column rowid();

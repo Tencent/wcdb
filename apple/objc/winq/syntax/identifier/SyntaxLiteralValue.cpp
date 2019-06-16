@@ -31,31 +31,47 @@ Identifier::Type LiteralValue::getType() const
     return type;
 }
 
-String LiteralValue::getValidDescription() const
+StringView LiteralValue::getValidDescription() const
 {
+    std::ostringstream stream;
     switch (switcher) {
-    case Switch::String:
-        return "'" + String(stringValue).replacingOccurrencesOfString("'", "''") + "'";
+    case Switch::StringView: {
+        stream << "'";
+        for (const auto character : stringValue) {
+            if (character != '\'') {
+                stream << character;
+            } else {
+                stream << "''";
+            }
+        }
+        stream << "'";
+    } break;
     case Switch::Null:
-        return "NULL";
-    case Switch::Float: {
-        std::ostringstream stream;
+        stream << "NULL";
+        break;
+    case Switch::Float:
         stream << floatValue;
-        return stream.str();
-    }
+        break;
     case Switch::Integer:
-        return std::to_string(integerValue);
+        stream << integerValue;
+        break;
     case Switch::UnsignedInteger:
-        return std::to_string(unsignedIntegerValue);
+        stream << unsignedIntegerValue;
+        break;
     case Switch::Bool:
-        return boolValue ? "TRUE" : "FALSE";
+        stream << (boolValue ? "TRUE" : "FALSE");
+        break;
     case Switch::CurrentTime:
-        return "CURRENT_TIME";
+        stream << "CURRENT_TIME";
+        break;
     case Switch::CurrentDate:
-        return "CURRENT_DATE";
+        stream << "CURRENT_DATE";
+        break;
     case Switch::CurrentTimestamp:
-        return "CURRENT_TIMESTAMP";
+        stream << "CURRENT_TIMESTAMP";
+        break;
     }
+    return StringView(stream.str());
 }
 
 } // namespace Syntax

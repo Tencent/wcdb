@@ -35,20 +35,20 @@ public:
 
 #pragma mark - Binder
 protected:
-    bool bindInfos(const std::map<String, const MigrationInfo *> &migratings) override final;
+    bool bindInfos(const StringViewMap<const MigrationInfo *> &migratings) override final;
 
 private:
-    bool rebindViews(const std::map<String, const MigrationInfo *> &migratings);
-    bool rebindSchemas(const std::map<String, const MigrationInfo *> &migratings);
+    bool rebindViews(const StringViewMap<const MigrationInfo *> &migratings);
+    bool rebindSchemas(const StringViewMap<const MigrationInfo *> &migratings);
 
     bool trySynchronousTransactionAfterAttached();
 
 #pragma mark - Info Initializer
 protected:
-    std::tuple<bool, bool, std::set<String>>
+    std::tuple<bool, bool, std::set<StringView>>
     getColumnsOfUserInfo(const MigrationUserInfo &userInfo) override final;
     std::pair<bool, bool> sourceTableExists(const MigrationUserInfo &userInfo) override final;
-    String getDatabasePath() const override final;
+    StringView getDatabasePath() const override final;
 
 #pragma mark - Migration
 public:
@@ -85,8 +85,8 @@ protected:
     bool realExecute(const std::list<Statement> &statements);
     bool realStep();
     std::pair<bool, std::list<Statement>> process(const Statement &statement);
-    bool tryFallbackToUnionedView(Syntax::Schema &schema, String &table);
-    bool tryFallbackToSourceTable(Syntax::Schema &schema, String &table);
+    bool tryFallbackToUnionedView(Syntax::Schema &schema, StringView &table);
+    bool tryFallbackToSourceTable(Syntax::Schema &schema, StringView &table);
 
 #ifdef WCDB_DEBUG
     bool m_processing;
@@ -98,7 +98,7 @@ protected:
     // For Insert Statement Only
     bool isMigratedPrepared();
     // only conflict clause will be used
-    bool prepareMigrate(const String &table, Syntax::ConflictAction conflictAction);
+    bool prepareMigrate(const UnsafeStringView &table, Syntax::ConflictAction conflictAction);
     bool stepMigration(const int64_t &rowid);
     void finalizeMigrate();
     void resetMigrate();

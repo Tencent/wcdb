@@ -28,21 +28,21 @@ RaiseFunction& RaiseFunction::ignore()
     return *this;
 }
 
-RaiseFunction& RaiseFunction::rollback(const String& errorMessage)
+RaiseFunction& RaiseFunction::rollback(const UnsafeStringView& errorMessage)
 {
     syntax().switcher = SyntaxType::Switch::Rollback;
     syntax().errorMessage = errorMessage;
     return *this;
 }
 
-RaiseFunction& RaiseFunction::abort(const String& errorMessage)
+RaiseFunction& RaiseFunction::abort(const UnsafeStringView& errorMessage)
 {
     syntax().switcher = SyntaxType::Switch::Abort;
     syntax().errorMessage = errorMessage;
     return *this;
 }
 
-RaiseFunction& RaiseFunction::fail(const String& errorMessage)
+RaiseFunction& RaiseFunction::fail(const UnsafeStringView& errorMessage)
 {
     syntax().switcher = SyntaxType::Switch::Fail;
     syntax().errorMessage = errorMessage;

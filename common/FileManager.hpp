@@ -22,7 +22,7 @@
 
 #include <WCDB/Error.hpp>
 #include <WCDB/SharedThreadedErrorProne.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <WCDB/Time.hpp>
 #include <functional>
 #include <list>
@@ -44,46 +44,52 @@ public:
 
 #pragma mark - Basic
 public:
-    static std::tuple<bool, bool, bool> itemExists(const String &path);
-    static std::pair<bool, size_t> getDirectorySize(const String &directory);
-    static std::pair<bool, size_t> getFileSize(const String &file);
-    static bool createFileHardLink(const String &from, const String &to);
-    static bool removeFileHardLink(const String &path);
-    static bool createDirectory(const String &path);
-    static std::pair<bool, Time> getFileModifiedTime(const String &path);
-    static std::pair<bool, Time> getFileCreatedTime(const String &path);
-    static std::pair<bool, uint32_t> getFileIdentifier(const String &path);
-    static bool createFile(const String &path);
+    static std::tuple<bool, bool, bool> itemExists(const UnsafeStringView &path);
+    static std::pair<bool, size_t> getDirectorySize(const UnsafeStringView &directory);
+    static std::pair<bool, size_t> getFileSize(const UnsafeStringView &file);
+    static bool
+    createFileHardLink(const UnsafeStringView &from, const UnsafeStringView &to);
+    static bool removeFileHardLink(const UnsafeStringView &path);
+    static bool createDirectory(const UnsafeStringView &path);
+    static std::pair<bool, Time> getFileModifiedTime(const UnsafeStringView &path);
+    static std::pair<bool, Time> getFileCreatedTime(const UnsafeStringView &path);
+    static std::pair<bool, uint32_t> getFileIdentifier(const UnsafeStringView &path);
+    static bool createFile(const UnsafeStringView &path);
 
     static bool enumerateDirectory(
-    const String &directory,
-    const std::function<bool /* stop */ (const String &directory, const String &subpath, bool isDirectory)> &enumeration);
+    const UnsafeStringView &directory,
+    const std::function<bool /* stop */ (const UnsafeStringView &directory, const UnsafeStringView &subpath, bool isDirectory)>
+    &enumeration);
 
-    static bool setFileProtection(const String &path, FileProtection fileProtection);
-    static std::pair<bool, FileProtection> getFileProtection(const String &path);
+    static bool setFileProtection(const UnsafeStringView &path, FileProtection fileProtection);
+    static std::pair<bool, FileProtection>
+    getFileProtection(const UnsafeStringView &path);
 
 protected:
-    static bool removeFile(const String &file);
-    static bool removeDirectory(const String &directory);
+    static bool removeFile(const UnsafeStringView &file);
+    static bool removeDirectory(const UnsafeStringView &directory);
 
 #pragma mark - Combination
 public:
-    static std::pair<bool, bool> fileExists(const String &file);
-    static std::pair<bool, bool> directoryExists(const String &directory);
-    static std::pair<bool, size_t> getItemSize(const String &path);
-    static std::pair<bool, size_t> getItemsSize(const std::list<String> &paths);
-    static bool removeItem(const String &path);
-    static bool removeItems(const std::list<String> &paths);
-    static bool moveItems(const std::list<String> &paths, const String &directory);
-    static bool moveItems(const std::list<std::pair<String, String>> &pairedPaths);
-    static bool createDirectoryWithIntermediateDirectories(const String &directory);
+    static std::pair<bool, bool> fileExists(const UnsafeStringView &file);
+    static std::pair<bool, bool> directoryExists(const UnsafeStringView &directory);
+    static std::pair<bool, size_t> getItemSize(const UnsafeStringView &path);
+    static std::pair<bool, size_t> getItemsSize(const std::list<StringView> &paths);
+    static bool removeItem(const UnsafeStringView &path);
+    static bool removeItems(const std::list<StringView> &paths);
     static bool
-    setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(const String &path);
-    static bool createDirectoryHardLink(const String &from, const String &to);
+    moveItems(const std::list<StringView> &paths, const UnsafeStringView &directory);
+    static bool moveItems(const std::list<std::pair<StringView, StringView>> &pairedPaths);
+    static bool
+    createDirectoryWithIntermediateDirectories(const UnsafeStringView &directory);
+    static bool
+    setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(const UnsafeStringView &path);
+    static bool
+    createDirectoryHardLink(const UnsafeStringView &from, const UnsafeStringView &to);
 
 #pragma mark - Error
 protected:
-    static void setThreadedError(const String &path);
+    static void setThreadedError(const UnsafeStringView &path);
     static void setThreadedError(Error::Code codeIfUnresolved);
 };
 

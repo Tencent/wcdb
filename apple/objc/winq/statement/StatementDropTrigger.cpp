@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-StatementDropTrigger& StatementDropTrigger::dropTrigger(const String& trigger)
+StatementDropTrigger& StatementDropTrigger::dropTrigger(const UnsafeStringView& trigger)
 {
     syntax().trigger = trigger;
     return *this;

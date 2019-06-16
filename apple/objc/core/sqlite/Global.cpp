@@ -103,13 +103,13 @@ void Global::staticAPIExit(int rc)
 //}
 
 #pragma mark - Log
-void Global::setNotificationForLog(const String &name, const LogNotification &notification)
+void Global::setNotificationForLog(const UnsafeStringView &name, const LogNotification &notification)
 {
     LockGuard lockGuard(m_lock);
     if (notification != nullptr) {
-        m_logNotifications[name] = notification;
+        m_logNotifications[StringView(name)] = notification;
     } else {
-        m_logNotifications.erase(name);
+        m_logNotifications.erase(StringView(name));
     }
 }
 
@@ -129,14 +129,14 @@ void Global::log(void *parameter, int rc, const char *message)
 }
 
 #pragma mark - File Opened
-void Global::setNotificationWhenFileOpened(const String &name,
+void Global::setNotificationWhenFileOpened(const UnsafeStringView &name,
                                            const FileOpenedNotification &notification)
 {
     LockGuard lockGuard(m_lock);
     if (notification != nullptr) {
-        m_fileOpenedNotifications[name] = notification;
+        m_fileOpenedNotifications[StringView(name)] = notification;
     } else {
-        m_fileOpenedNotifications.erase(name);
+        m_fileOpenedNotifications.erase(StringView(name));
     }
 }
 
@@ -157,7 +157,7 @@ void Global::postFileOpenedNotification(int fd, const char *path, int flags, int
 }
 
 #pragma mark - Lock
-void Global::setNotificationForLockEvent(const String &name,
+void Global::setNotificationForLockEvent(const UnsafeStringView &name,
                                          const WillLockNotification &willLock,
                                          const LockDidChangeNotification &lockDidChange,
                                          const WillShmLockNotification &willShmLock,
@@ -169,7 +169,7 @@ void Global::setNotificationForLockEvent(const String &name,
     event.lockDidChange = lockDidChange;
     event.willShmLock = willShmLock;
     event.shmLockDidChange = shmLockDidChange;
-    m_lockEventNotifications[name] = event;
+    m_lockEventNotifications[StringView(name)] = event;
 }
 
 void Global::willLock(void *parameter, const char *path, int type)
@@ -179,7 +179,7 @@ void Global::willLock(void *parameter, const char *path, int type)
 
 void Global::postWillLockNotification(const char *path_, int type_)
 {
-    String path = path_;
+    UnsafeStringView path = path_;
     WCTInnerAssert(!path.empty());
 
     PagerLock type = (PagerLock) type_;
@@ -201,7 +201,7 @@ void Global::lockDidChange(void *parameter, const char *path, int type)
 
 void Global::postLockDidChangeNotification(const char *path_, int type_)
 {
-    String path = path_;
+    UnsafeStringView path = path_;
     WCTInnerAssert(!path.empty());
 
     PagerLock type = (PagerLock) type_;
@@ -224,7 +224,7 @@ void Global::willShmLock(void *parameter, const char *path, int flags, int mask)
 
 void Global::postWillShmLockNotification(const char *path_, int flags, int mask)
 {
-    String path = path_;
+    UnsafeStringView path = path_;
     WCTInnerAssert(!path.empty());
 
     ShmLock type;
@@ -257,7 +257,7 @@ void Global::postShmLockDidChangeNotification(const char *path_,
 {
     WCTInnerAssert(identifier != nullptr);
 
-    String path = path_;
+    UnsafeStringView path = path_;
     WCTInnerAssert(!path.empty());
 
     SharedLockGuard lockGuard(m_lock);

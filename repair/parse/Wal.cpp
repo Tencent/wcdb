@@ -26,7 +26,7 @@
 #include <WCDB/Pager.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/Serialization.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <WCDB/Wal.hpp>
 
 namespace WCDB {
@@ -48,7 +48,7 @@ Wal::Wal(Pager *pager)
 {
 }
 
-const String &Wal::getPath() const
+const StringView &Wal::getPath() const
 {
     return m_fileHandle.path;
 }
@@ -60,9 +60,9 @@ MappedData Wal::acquireData(off_t offset, size_t size)
     if (data.size() != size) {
         if (data.size() > 0) {
             markAsCorrupted((int) ((offset - headerSize) / getFrameSize() + 1),
-                            String::formatted("Acquired wal data with size: %d is less than the expected size: %d.",
-                                              data.size(),
-                                              size));
+                            StringView::formatted("Acquired wal data with size: %d is less than the expected size: %d.",
+                                                  data.size(),
+                                                  size));
         } else {
             assignWithSharedThreadedError();
         }
@@ -221,7 +221,7 @@ bool Wal::doInitialize()
     uint32_t magic = deserialization.advance4BytesUInt();
     if ((magic & 0xFFFFFFFE) != 0x377F0682) {
         // ignore wal
-        markAsCorrupted(0, String::formatted("Incorrect wal magic: 0x%x.", magic));
+        markAsCorrupted(0, StringView::formatted("Incorrect wal magic: 0x%x.", magic));
         return false;
     }
     m_isNativeChecksum = (magic & 0x00000001) == isBigEndian();
@@ -242,11 +242,11 @@ bool Wal::doInitialize()
 
     if (checksum != deserializedChecksum) {
         markAsCorrupted(0,
-                        String::formatted("Mismatched wal checksum: %u, %u to %u, %u.",
-                                          checksum.first,
-                                          checksum.second,
-                                          deserializedChecksum.first,
-                                          deserializedChecksum.second));
+                        StringView::formatted("Mismatched wal checksum: %u, %u to %u, %u.",
+                                              checksum.first,
+                                              checksum.second,
+                                              deserializedChecksum.first,
+                                              deserializedChecksum.second));
         return false;
     }
 
@@ -262,11 +262,11 @@ bool Wal::doInitialize()
             if (m_shmLegality) {
                 //If the frame checksum is mismatched and shm is legal, it mean to be corrupted.
                 markAsCorrupted(frameno,
-                                String::formatted("Mismatched frame checksum: %u, %u to %u, %u.",
-                                                  frame.getChecksum().first,
-                                                  frame.getChecksum().second,
-                                                  checksum.first,
-                                                  checksum.second));
+                                StringView::formatted("Mismatched frame checksum: %u, %u to %u, %u.",
+                                                      frame.getChecksum().first,
+                                                      frame.getChecksum().second,
+                                                      checksum.first,
+                                                      checksum.second));
                 return false;
             } else {
                 //If the frame checksum is mismatched and shm is not legal, it mean to be disposed.
@@ -294,12 +294,12 @@ bool Wal::doInitialize()
 }
 
 #pragma mark - Error
-void Wal::markAsCorrupted(int frame, const String &message)
+void Wal::markAsCorrupted(int frame, const UnsafeStringView &message)
 {
     Error error(Error::Code::Corrupt, Error::Level::Ignore, message);
-    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
-    error.infos.insert_or_assign("Frame", frame);
+    error.infos.insert_or_assign(StringView(ErrorStringKeySource), ErrorSourceRepair);
+    error.infos.insert_or_assign(StringView(ErrorStringKeyPath), getPath());
+    error.infos.insert_or_assign(StringView("Frame"), frame);
     Notifier::shared().notify(error);
     setError(std::move(error));
 }

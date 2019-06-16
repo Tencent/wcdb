@@ -23,7 +23,7 @@
 #include <WCDB/Page.hpp>
 #include <WCDB/Pager.hpp>
 #include <WCDB/Serialization.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 
 namespace WCDB {
 
@@ -169,7 +169,7 @@ bool Page::doInitialize()
     int numberOfCells = m_deserialization.advance2BytesInt();
     if (numberOfCells < 0) {
         markPagerAsCorrupted(
-        number, String::formatted("Unexpected CellCount: %d.", numberOfCells));
+        number, StringView::formatted("Unexpected CellCount: %d.", numberOfCells));
         return false;
     }
     m_cellPointers.reserve(numberOfCells);
@@ -194,15 +194,16 @@ bool Page::doInitialize()
             }
             int pageno = m_deserialization.get4BytesInt(offset);
             if (pageno > m_pager->getNumberOfPages()) {
-                markPagerAsCorrupted(number,
-                                     String::formatted("Page number: %d exceeds the page count: %d.",
-                                                       pageno,
-                                                       m_pager->getNumberOfPages()));
+                markPagerAsCorrupted(
+                number,
+                StringView::formatted("Page number: %d exceeds the page count: %d.",
+                                      pageno,
+                                      m_pager->getNumberOfPages()));
                 return false;
             }
             if (pageno <= 0) {
                 markPagerAsCorrupted(
-                number, String::formatted("Pageno: %d is less than or equal to 0.", pageno));
+                number, StringView::formatted("Pageno: %d is less than or equal to 0.", pageno));
                 return false;
             }
             m_subpagenos.push_back(pageno);

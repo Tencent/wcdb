@@ -31,7 +31,7 @@ Identifier::Type TableOrSubquery::getType() const
     return type;
 }
 
-String TableOrSubquery::getValidDescription() const
+StringView TableOrSubquery::getValidDescription() const
 {
     std::ostringstream stream;
     switch (switcher) {
@@ -76,7 +76,7 @@ String TableOrSubquery::getValidDescription() const
         }
         break;
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void TableOrSubquery::iterate(const Iterator& iterator, bool& stop)

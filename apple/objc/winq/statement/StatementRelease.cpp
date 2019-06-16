@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-StatementRelease& StatementRelease::release(const String& savepoint)
+StatementRelease& StatementRelease::release(const UnsafeStringView& savepoint)
 {
     syntax().savepoint = savepoint;
     return *this;

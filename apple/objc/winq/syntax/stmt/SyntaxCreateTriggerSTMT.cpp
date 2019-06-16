@@ -63,7 +63,7 @@ Identifier::Type CreateTriggerSTMT::getType() const
     return type;
 }
 
-String CreateTriggerSTMT::getValidDescription() const
+StringView CreateTriggerSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "CREATE ";
@@ -122,7 +122,7 @@ String CreateTriggerSTMT::getValidDescription() const
         }
     }
     stream << "END";
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void CreateTriggerSTMT::iterate(const Iterator& iterator, bool& stop)

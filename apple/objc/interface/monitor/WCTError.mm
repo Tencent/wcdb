@@ -23,6 +23,7 @@
 #import <WCDB/WCTDatabase+Monitor.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTError.h>
+#import <WCDB/WCTFoundation.h>
 
 NSErrorDomain const WCTErrorDomain = @"WCDB";
 
@@ -54,20 +55,20 @@ NSErrorUserInfoKey const WCTErrorKeySource = @WCDB_ERROR_STRING_KEY_SOURCE;
     NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
     for (const auto &info : error.infos) {
         switch (info.second.valueType()) {
-        case WCDB::Error::InfoValue::Type::String:
-            [userInfo setObject:[NSString stringWithUTF8String:info.second.stringValue().c_str()]
-                         forKey:[NSString stringWithUTF8String:info.first.c_str()]];
+        case WCDB::Error::InfoValue::Type::StringView:
+            [userInfo setObject:[NSString stringWithView:info.second.stringValue()]
+                         forKey:[NSString stringWithView:info.first]];
             break;
         case WCDB::Error::InfoValue::Type::Float:
-            [userInfo setObject:[NSNumber numberWithDouble:info.second.floatValue()] forKey:[NSString stringWithUTF8String:info.first.c_str()]];
+            [userInfo setObject:[NSNumber numberWithDouble:info.second.floatValue()] forKey:[NSString stringWithView:info.first]];
             break;
         default:
             WCTInnerAssert(info.second.valueType() == WCDB::Error::InfoValue::Type::Integer);
-            [userInfo setObject:[NSNumber numberWithLongLong:info.second.integerValue()] forKey:[NSString stringWithUTF8String:info.first.c_str()]];
+            [userInfo setObject:[NSNumber numberWithLongLong:info.second.integerValue()] forKey:[NSString stringWithView:info.first]];
             break;
         }
     }
-    return [self initWithCode:(WCTErrorCode) error.code() level:(WCTErrorLevel) error.level message:[NSString stringWithUTF8String:error.getMessage().c_str()] userInfo:userInfo];
+    return [self initWithCode:(WCTErrorCode) error.code() level:(WCTErrorLevel) error.level message:[NSString stringWithView:error.getMessage()] userInfo:userInfo];
 }
 
 - (BOOL)isOK

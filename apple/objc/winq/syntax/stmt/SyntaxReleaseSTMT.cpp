@@ -36,11 +36,11 @@ Identifier::Type ReleaseSTMT::getType() const
     return type;
 }
 
-String ReleaseSTMT::getValidDescription() const
+StringView ReleaseSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "RELEASE " << savepoint;
-    return stream.str();
+    return StringView(stream.str());
 }
 
 } // namespace Syntax

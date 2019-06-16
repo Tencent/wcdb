@@ -21,7 +21,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/AutoBackupConfig.hpp>
 #include <WCDB/Handle.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 
 namespace WCDB {
 
@@ -30,7 +30,7 @@ AutoBackupOperator::~AutoBackupOperator()
 }
 
 AutoBackupConfig::AutoBackupConfig(const std::shared_ptr<AutoBackupOperator> &operator_)
-: Config(), m_identifier(String::formatted("Backup-%p", this)), m_operator(operator_)
+: Config(), m_identifier(StringView::formatted("Backup-%p", this)), m_operator(operator_)
 {
     WCTInnerAssert(m_operator != nullptr);
 }
@@ -51,7 +51,7 @@ bool AutoBackupConfig::uninvoke(Handle *handle)
     return true;
 }
 
-void AutoBackupConfig::onCheckpointed(const String &path)
+void AutoBackupConfig::onCheckpointed(const UnsafeStringView &path)
 {
     m_operator->asyncBackup(path);
 }

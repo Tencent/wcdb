@@ -25,14 +25,14 @@
 class WCTColumnBinding final {
 public:
     template<typename T>
-    static WCTColumnBinding generate(Class cls, const WCDB::String& propertyName)
+    static WCTColumnBinding generate(Class cls, const WCDB::UnsafeStringView& propertyName)
     {
         return WCTColumnBinding(cls, propertyName, (T*) nullptr);
     }
 
     template<typename T>
     WCTColumnBinding(Class cls,
-                     const WCDB::String& propertyName,
+                     const WCDB::UnsafeStringView& propertyName,
                      T* = nullptr,
                      typename std::enable_if<!WCDB::IsObjCType<T>::value>::type* = nullptr)
     : WCTColumnBinding(cls,
@@ -44,7 +44,7 @@ public:
 
     template<typename T>
     WCTColumnBinding(Class cls,
-                     const WCDB::String& propertyName,
+                     const WCDB::UnsafeStringView& propertyName,
                      T* = nullptr,
                      typename std::enable_if<WCDB::IsObjCType<T>::value>::type* = nullptr)
     : WCTColumnBinding(cls,
@@ -57,7 +57,7 @@ public:
     WCTColumnBinding();
 
     Class getClass() const;
-    const WCDB::String& getPropertyName() const;
+    const WCDB::UnsafeStringView& getPropertyName() const;
     const std::shared_ptr<WCTBaseAccessor>& getAccessor() const;
 
     bool operator==(const WCTColumnBinding& other) const;
@@ -65,10 +65,10 @@ public:
 protected:
     WCTColumnBinding(Class cls,
                      const std::shared_ptr<WCTBaseAccessor> accessor,
-                     const WCDB::String& propertyName);
+                     const WCDB::UnsafeStringView& propertyName);
 
     std::shared_ptr<WCTBaseAccessor> m_accessor;
-    WCDB::String m_propertyName;
+    WCDB::StringView m_propertyName;
     Class m_class;
 };
 

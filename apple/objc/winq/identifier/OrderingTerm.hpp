@@ -35,7 +35,7 @@ public:
     }
 
     OrderingTerm(const Expression& expression);
-    OrderingTerm& collate(const String& collation);
+    OrderingTerm& collate(const UnsafeStringView& collation);
     OrderingTerm& order(const Order& order);
 };
 

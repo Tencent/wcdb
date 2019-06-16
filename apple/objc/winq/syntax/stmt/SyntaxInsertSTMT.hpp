@@ -32,8 +32,8 @@ public:
     WithClause withClause;
     WCDB_SYNTAX_ENUM_UNION(ConflictAction, conflictAction);
     Schema schema;
-    String table;
-    String alias;
+    StringView table;
+    StringView alias;
     std::list<Column> columns;
 
     WCDB_SYNTAX_MAIN_UNION_ENUM(Values, Select, Default, );
@@ -46,8 +46,8 @@ public:
 public:
     static constexpr const Type type = Type::InsertSTMT;
     Type getType() const override final;
-    String getValidDescription() const override final;
-    String getValidDescription(bool skipSchema) const;
+    StringView getValidDescription() const override final;
+    StringView getValidDescription(bool skipSchema) const;
     void iterate(const Iterator& iterator, bool& stop) override final;
 
 #pragma mark - Utility

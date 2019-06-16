@@ -37,7 +37,7 @@ Identifier::Type UpdateSTMT::getType() const
     return type;
 }
 
-String UpdateSTMT::getValidDescription(bool skipSchema) const
+StringView UpdateSTMT::getValidDescription(bool skipSchema) const
 {
     std::ostringstream stream;
     if (withClause.isValid()) {
@@ -88,10 +88,10 @@ String UpdateSTMT::getValidDescription(bool skipSchema) const
             }
         }
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
-String UpdateSTMT::getValidDescription() const
+StringView UpdateSTMT::getValidDescription() const
 {
     return getValidDescription(false);
 }

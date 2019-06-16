@@ -47,12 +47,12 @@ bool HandleStatement::prepare(const Statement &statement)
     return prepare(statement.getDescription());
 }
 
-bool HandleStatement::prepare(const String &sql)
+bool HandleStatement::prepare(const UnsafeStringView &sql)
 {
     WCTRemedialAssert(!isPrepared(), "Last statement is not finalized.", finalize(););
 
     bool result = APIExit(
-    sqlite3_prepare_v2(getRawHandle(), sql.c_str(), -1, &m_stmt, nullptr), sql);
+    sqlite3_prepare_v2(getRawHandle(), sql.data(), -1, &m_stmt, nullptr), sql);
     m_done = false;
     if (!result) {
         m_stmt = nullptr;
@@ -161,8 +161,7 @@ void HandleStatement::bindText(const Text &value, int index)
     WCTInnerAssert(isPrepared());
     WCTInnerAssert(!isBusy());
     // use SQLITE_STATIC if auto_commit?
-    APIExit(sqlite3_bind_text(
-    m_stmt, index, value.data(), (int) value.length(), SQLITE_TRANSIENT));
+    APIExit(sqlite3_bind_text(m_stmt, index, value.data(), (int) value.length(), SQLITE_TRANSIENT));
 }
 
 void HandleStatement::bindBLOB(const BLOB &value, int index)
@@ -205,8 +204,9 @@ HandleStatement::Text HandleStatement::getText(int index)
 {
     WCTInnerAssert(isPrepared());
     WCTInnerAssert(isBusy());
-    return UnsafeStringView(reinterpret_cast<const char *>(sqlite3_column_text(m_stmt, index)),
-                        sqlite3_column_bytes(m_stmt, index));
+    return UnsafeStringView(
+    reinterpret_cast<const char *>(sqlite3_column_text(m_stmt, index)),
+    sqlite3_column_bytes(m_stmt, index));
 }
 
 const HandleStatement::BLOB HandleStatement::getBLOB(int index)

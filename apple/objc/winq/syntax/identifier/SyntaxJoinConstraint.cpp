@@ -36,7 +36,7 @@ Identifier::Type JoinConstraint::getType() const
     return type;
 }
 
-String JoinConstraint::getValidDescription() const
+StringView JoinConstraint::getValidDescription() const
 {
     std::ostringstream stream;
     if (!columns.empty()) {
@@ -44,7 +44,7 @@ String JoinConstraint::getValidDescription() const
     } else {
         stream << "ON " << expression;
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void JoinConstraint::iterate(const Iterator& iterator, bool& stop)

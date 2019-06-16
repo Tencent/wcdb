@@ -27,7 +27,7 @@
 namespace WCDB {
 
 BusyRetryConfig::BusyRetryConfig()
-: Config(), m_identifier(String::formatted("Busy-%p", this))
+: Config(), m_identifier(StringView::formatted("Busy-%p", this))
 {
     Global::shared().setNotificationForLockEvent(
     m_identifier,
@@ -62,7 +62,7 @@ bool BusyRetryConfig::uninvoke(Handle* handle)
     return true;
 }
 
-bool BusyRetryConfig::onBusy(const String& path, int numberOfTimes)
+bool BusyRetryConfig::onBusy(const UnsafeStringView& path, int numberOfTimes)
 {
     WCDB_UNUSED(path);
 
@@ -146,7 +146,7 @@ BusyRetryConfig::State::ShmMask::ShmMask() : shared(0), exclusive(0)
 {
 }
 
-BusyRetryConfig::State& BusyRetryConfig::getOrCreateState(const String& path)
+BusyRetryConfig::State& BusyRetryConfig::getOrCreateState(const UnsafeStringView& path)
 {
     WCTInnerAssert(!path.empty());
     {
@@ -270,14 +270,14 @@ double BusyRetryConfig::Trying::remainingTimeForRetring() const
     return m_timeout - m_elapsedTime;
 }
 
-void BusyRetryConfig::Trying::expecting(const String& path, ShmLockType type, int mask)
+void BusyRetryConfig::Trying::expecting(const UnsafeStringView& path, ShmLockType type, int mask)
 {
     WCTInnerAssert(!path.empty());
     m_path = path;
     Expecting::expecting(type, mask);
 }
 
-void BusyRetryConfig::Trying::expecting(const String& path, PagerLockType type)
+void BusyRetryConfig::Trying::expecting(const UnsafeStringView& path, PagerLockType type)
 {
     WCTInnerAssert(!path.empty());
     m_path = path;
@@ -289,28 +289,31 @@ bool BusyRetryConfig::Trying::valid() const
     return !m_path.empty() && Expecting::valid();
 }
 
-const String& BusyRetryConfig::Trying::getPath() const
+const StringView& BusyRetryConfig::Trying::getPath() const
 {
     return m_path;
 }
 
 #pragma mark - Lock Event
-void BusyRetryConfig::willLock(const String& path, PagerLockType type)
+void BusyRetryConfig::willLock(const UnsafeStringView& path, PagerLockType type)
 {
     m_tryings.getOrCreate()->expecting(path, type);
 }
 
-void BusyRetryConfig::lockDidChange(const String& path, PagerLockType type)
+void BusyRetryConfig::lockDidChange(const UnsafeStringView& path, PagerLockType type)
 {
     getOrCreateState(path).updatePagerLock(type);
 }
 
-void BusyRetryConfig::willShmLock(const String& path, ShmLockType type, int mask)
+void BusyRetryConfig::willShmLock(const UnsafeStringView& path, ShmLockType type, int mask)
 {
     m_tryings.getOrCreate()->expecting(path, type, mask);
 }
 
-void BusyRetryConfig::shmLockDidChange(const String& path, void* identifier, int sharedMask, int exclusiveMask)
+void BusyRetryConfig::shmLockDidChange(const UnsafeStringView& path,
+                                       void* identifier,
+                                       int sharedMask,
+                                       int exclusiveMask)
 {
     getOrCreateState(path).updateShmLock(identifier, sharedMask, exclusiveMask);
 }

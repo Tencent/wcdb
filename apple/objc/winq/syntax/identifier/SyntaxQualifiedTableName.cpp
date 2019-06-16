@@ -36,12 +36,12 @@ Identifier::Type QualifiedTableName::getType() const
     return type;
 }
 
-String QualifiedTableName::getValidDescription() const
+StringView QualifiedTableName::getValidDescription() const
 {
     return getValidDescription(false);
 }
 
-String QualifiedTableName::getValidDescription(bool skipSchema) const
+StringView QualifiedTableName::getValidDescription(bool skipSchema) const
 {
     std::ostringstream stream;
     if (!skipSchema && !schema.empty()) {
@@ -61,7 +61,7 @@ String QualifiedTableName::getValidDescription(bool skipSchema) const
         stream << " NOT INDEXED";
         break;
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void QualifiedTableName::iterate(const Iterator& iterator, bool& stop)

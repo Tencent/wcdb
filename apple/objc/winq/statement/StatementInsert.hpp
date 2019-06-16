@@ -29,7 +29,7 @@ public:
     using TypedSyntax<Syntax::InsertSTMT, Statement>::TypedSyntax;
 
     StatementInsert& with(const With& with);
-    StatementInsert& insertIntoTable(const String& table);
+    StatementInsert& insertIntoTable(const UnsafeStringView& table);
     StatementInsert& schema(const Schema& schema);
 
     StatementInsert& orReplace();
@@ -38,7 +38,7 @@ public:
     StatementInsert& orFail();
     StatementInsert& orIgnore();
 
-    StatementInsert& as(const String& alias);
+    StatementInsert& as(const UnsafeStringView& alias);
 
     StatementInsert& column(const Column& column);
     StatementInsert& columns(const Columns& columns);

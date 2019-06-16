@@ -22,7 +22,7 @@
 
 @implementation NSString (WCDB)
 
-+ (NSString*)stringWithUnsafeStringView:(const WCDB::UnsafeStringView&)string
++ (NSString*)stringWithView:(const WCDB::UnsafeStringView&)string
 {
     return [[NSString alloc] initWithBytes:string.data() length:string.length() encoding:NSUTF8StringEncoding];
 }

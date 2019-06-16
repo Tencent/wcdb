@@ -20,6 +20,7 @@
 
 #import <WCDB/WCTDatabase+File.h>
 #import <WCDB/WCTDatabase+Private.h>
+#import <WCDB/WCTFoundation.h>
 
 @implementation WCTDatabase (File)
 
@@ -37,7 +38,7 @@
 {
     NSMutableArray *paths = [NSMutableArray array];
     for (const auto &path : _database->getPaths()) {
-        [paths addObject:[NSString stringWithUTF8String:path.c_str()]];
+        [paths addObject:[NSString stringWithView:path]];
     }
     return paths;
 }

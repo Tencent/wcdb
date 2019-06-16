@@ -23,7 +23,7 @@
 #include <WCDB/Assertion.hpp>
 
 #define WCTSyntaxRemedialAssert(cond)                                          \
-    WCTRemedialAssert(cond, "Invalid syntax detected.", return stream.str();)
+    WCTRemedialAssert(cond, "Invalid syntax detected.", return StringView(stream.str());)
 
 #define WCTIterateRemedialAssert(cond)                                         \
     WCTRemedialAssert(cond, "Invalid types detected.", return;)

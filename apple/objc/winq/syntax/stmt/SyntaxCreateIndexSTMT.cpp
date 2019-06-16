@@ -36,7 +36,7 @@ Identifier::Type CreateIndexSTMT::getType() const
     return type;
 }
 
-String CreateIndexSTMT::getValidDescription() const
+StringView CreateIndexSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "CREATE ";
@@ -54,7 +54,7 @@ String CreateIndexSTMT::getValidDescription() const
     if (condition.isValid()) {
         stream << " WHERE " << condition;
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void CreateIndexSTMT::iterate(const Iterator& iterator, bool& stop)

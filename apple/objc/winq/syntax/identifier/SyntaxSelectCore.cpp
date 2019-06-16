@@ -31,7 +31,7 @@ Identifier::Type SelectCore::getType() const
     return type;
 }
 
-String SelectCore::getValidDescription() const
+StringView SelectCore::getValidDescription() const
 {
     std::ostringstream stream;
     switch (switcher) {
@@ -89,7 +89,7 @@ String SelectCore::getValidDescription() const
         }
         break;
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void SelectCore::iterate(const Iterator& iterator, bool& stop)

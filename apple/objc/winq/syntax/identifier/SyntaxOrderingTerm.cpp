@@ -37,7 +37,7 @@ Identifier::Type OrderingTerm::getType() const
     return type;
 }
 
-String OrderingTerm::getValidDescription() const
+StringView OrderingTerm::getValidDescription() const
 {
     std::ostringstream stream;
     stream << expression;
@@ -47,7 +47,7 @@ String OrderingTerm::getValidDescription() const
     if (orderValid()) {
         stream << space << order;
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void OrderingTerm::iterate(const Iterator& iterator, bool& stop)

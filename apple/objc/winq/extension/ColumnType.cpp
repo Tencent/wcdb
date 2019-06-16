@@ -56,7 +56,7 @@ ColumnIsTextType<UnsafeStringView>::asUnderlyingType(const UnsafeStringView &tex
 }
 
 ColumnTypeInfo<ColumnType::Text>::UnderlyingType
-ColumnIsTextType<String>::asUnderlyingType(const String &text)
+ColumnIsTextType<StringView>::asUnderlyingType(const UnsafeStringView &text)
 {
     return text;
 }

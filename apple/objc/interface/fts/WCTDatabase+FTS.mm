@@ -46,7 +46,7 @@ static std::nullptr_t initialize()
     static auto _ = initialize();
     WCDB_UNUSED(_);
 
-    WCDB::String configName = WCDB::String(WCDB::TokenizeConfigPrefix) + tokenizerName.UTF8String;
+    WCDB::StringView configName = WCDB::StringView::formatted("%s%s", WCDB::TokenizeConfigPrefix, tokenizerName.UTF8String);
     _database->setConfig(configName, WCDB::Core::shared().tokenizerConfig(tokenizerName), WCDB::Configs::Priority::Higher);
 }
 

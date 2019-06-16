@@ -36,7 +36,7 @@ Identifier::Type ResultColumn::getType() const
     return type;
 }
 
-String ResultColumn::getValidDescription() const
+StringView ResultColumn::getValidDescription() const
 {
     std::ostringstream stream;
     if (wildcard) {
@@ -50,7 +50,7 @@ String ResultColumn::getValidDescription() const
             stream << " AS " << alias;
         }
     }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 void ResultColumn::iterate(const Iterator& iterator, bool& stop)

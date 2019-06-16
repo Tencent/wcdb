@@ -30,8 +30,8 @@ public:
 
     StatementAnalyze& analyze();
     StatementAnalyze& schema(const Schema& schema);
-    StatementAnalyze& table(const String& table);
-    StatementAnalyze& index(const String& index);
+    StatementAnalyze& table(const UnsafeStringView& table);
+    StatementAnalyze& index(const UnsafeStringView& index);
 };
 
 } // namespace WCDB

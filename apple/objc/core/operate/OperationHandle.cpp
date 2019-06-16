@@ -56,9 +56,10 @@ void OperationHandle::setType(HandleType type)
 #pragma mark - Checkpoint
 bool OperationHandle::checkpoint()
 {
-    WCTInnerAssert(m_error.infos.find(ErrorStringKeyAction) != m_error.infos.end());
+    WCTInnerAssert(m_error.infos.find(UnsafeStringView(ErrorStringKeyAction))
+                   != m_error.infos.end());
     WCTInnerAssert(m_error.infos.at(ErrorStringKeyAction).valueType()
-                   == Error::InfoValue::Type::String);
+                   == Error::InfoValue::Type::StringView);
     WCTInnerAssert(m_error.infos.at(ErrorStringKeyAction).stringValue() == ErrorActionCheckpoint);
     return Handle::checkpoint(CheckpointMode::Passive);
 }
@@ -66,20 +67,21 @@ bool OperationHandle::checkpoint()
 #pragma mark - Integrity
 void OperationHandle::checkIntegrity()
 {
-    WCTInnerAssert(m_error.infos.find(ErrorStringKeyAction) != m_error.infos.end());
+    WCTInnerAssert(m_error.infos.find(UnsafeStringView(ErrorStringKeyAction))
+                   != m_error.infos.end());
     WCTInnerAssert(m_error.infos.at(ErrorStringKeyAction).valueType()
-                   == Error::InfoValue::Type::String);
+                   == Error::InfoValue::Type::StringView);
     WCTInnerAssert(m_error.infos.at(ErrorStringKeyAction).stringValue() == ErrorActionIntegrity);
     execute(m_statementForIntegrityCheck);
 }
 
 #pragma mark - Backup
-void OperationHandle::setPath(const String &path)
+void OperationHandle::setPath(const UnsafeStringView &path)
 {
     Handle::setPath(path);
 }
 
-const String &OperationHandle::getPath() const
+const StringView &OperationHandle::getPath() const
 {
     return Handle::getPath();
 }
@@ -91,9 +93,10 @@ const Error &OperationHandle::getError() const
 
 bool OperationHandle::acquireReadLock()
 {
-    WCTInnerAssert(m_error.infos.find(ErrorStringKeyAction) != m_error.infos.end());
+    WCTInnerAssert(m_error.infos.find(UnsafeStringView(ErrorStringKeyAction))
+                   != m_error.infos.end());
     WCTInnerAssert(m_error.infos.at(ErrorStringKeyAction).valueType()
-                   == Error::InfoValue::Type::String);
+                   == Error::InfoValue::Type::StringView);
     WCTInnerAssert(m_error.infos.at(ErrorStringKeyAction).stringValue() == ErrorActionBackup);
 
     return execute(m_statementForReadTransaction) && execute(m_statementForAcquireReadLock);
@@ -107,9 +110,10 @@ bool OperationHandle::releaseReadLock()
 
 bool OperationHandle::acquireWriteLock()
 {
-    WCTInnerAssert(m_error.infos.find(ErrorStringKeyAction) != m_error.infos.end());
+    WCTInnerAssert(m_error.infos.find(UnsafeStringView(ErrorStringKeyAction))
+                   != m_error.infos.end());
     WCTInnerAssert(m_error.infos.at(ErrorStringKeyAction).valueType()
-                   == Error::InfoValue::Type::String);
+                   == Error::InfoValue::Type::StringView);
     WCTInnerAssert(m_error.infos.at(ErrorStringKeyAction).stringValue() == ErrorActionBackup);
 
     return beginTransaction();

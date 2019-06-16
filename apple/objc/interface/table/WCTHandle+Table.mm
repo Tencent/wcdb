@@ -92,7 +92,7 @@
         }
         const WCTBinding &binding = [cls objectRelationalMapping];
         if (exists) {
-            std::set<WCDB::String> columnNames;
+            std::set<WCDB::StringView> columnNames;
             std::tie(succeed, columnNames) = handle->getColumns(tableName);
             if (!succeed) {
                 return NO;
@@ -112,9 +112,9 @@
             }
             for (const auto &columnName : columnNames) {
                 WCDB::Error error(WCDB::Error::Code::Mismatch, WCDB::Error::Level::Notice, "Skip column");
-                error.infos.insert_or_assign("Table", WCDB::String(tableName));
-                error.infos.insert_or_assign("Column", WCDB::String(columnName));
-                error.infos.insert_or_assign(WCDB::ErrorStringKeyPath, handle->getPath());
+                error.infos.insert_or_assign(WCDB::StringView("Table"), WCDB::StringView(tableName));
+                error.infos.insert_or_assign(WCDB::StringView("Column"), WCDB::StringView(columnName));
+                error.infos.insert_or_assign(WCDB::StringView(WCDB::ErrorStringKeyPath), handle->getPath());
                 WCDB::Notifier::shared().notify(error);
             }
         } else {

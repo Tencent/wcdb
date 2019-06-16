@@ -38,7 +38,7 @@ public:
     }
 
     ResultColumn(const Expression& expression);
-    ResultColumn& as(const String& alias);
+    ResultColumn& as(const UnsafeStringView& alias);
 
     static ResultColumnAll all();
 };
@@ -48,7 +48,7 @@ public:
     ResultColumnAll();
 
     Expression count() const;
-    ResultColumnAll& inTable(const String& table);
+    ResultColumnAll& inTable(const UnsafeStringView& table);
 
 protected:
     using ResultColumn::as;

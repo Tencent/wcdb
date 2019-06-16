@@ -53,7 +53,7 @@ LiteralValue::LiteralValue(std::nullptr_t)
 
 LiteralValue::LiteralValue(const UnsafeStringView& value)
 {
-    syntax().switcher = SyntaxType::Switch::String;
+    syntax().switcher = SyntaxType::Switch::StringView;
     syntax().stringValue = value;
 }
 

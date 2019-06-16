@@ -24,7 +24,7 @@
 #include <WCDB/ErrorProne.hpp>
 #include <WCDB/HandleNotification.hpp>
 #include <WCDB/HandleStatement.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <WCDB/WINQ.h>
 #include <set>
 #include <vector>
@@ -47,16 +47,16 @@ private:
 
 #pragma mark - Path
 public:
-    void setPath(const String &path);
+    void setPath(const UnsafeStringView &path);
     void clearPath();
-    const String &getPath() const;
+    const StringView &getPath() const;
 
-    static String getSHMSuffix();
-    static String getWALSuffix();
-    static String getJournalSuffix();
+    static StringView getSHMSuffix();
+    static StringView getWALSuffix();
+    static StringView getJournalSuffix();
 
 private:
-    String m_path;
+    StringView m_path;
 
 #pragma mark - Basic
 public:
@@ -73,7 +73,7 @@ public:
     bool isInTransaction();
 
 protected:
-    bool executeSQL(const String &sql);
+    bool executeSQL(const UnsafeStringView &sql);
     bool executeStatement(const Statement &statement);
 
 #pragma mark - Statement
@@ -87,20 +87,20 @@ private:
 
 #pragma mark - Meta
 public:
-    std::pair<bool, bool> ft3TokenizerExists(const String &tokenizer);
+    std::pair<bool, bool> ft3TokenizerExists(const UnsafeStringView &tokenizer);
 
-    std::pair<bool, bool> tableExists(const String &table);
-    std::pair<bool, bool> tableExists(const Schema &schema, const String &table);
+    std::pair<bool, bool> tableExists(const UnsafeStringView &table);
+    std::pair<bool, bool> tableExists(const Schema &schema, const UnsafeStringView &table);
 
-    std::pair<bool, std::set<String>>
-    getColumns(const Schema &schema, const String &table);
-    std::pair<bool, std::set<String>> getColumns(const String &table);
+    std::pair<bool, std::set<StringView>>
+    getColumns(const Schema &schema, const UnsafeStringView &table);
+    std::pair<bool, std::set<StringView>> getColumns(const UnsafeStringView &table);
 
     std::pair<bool, std::vector<ColumnMeta>>
-    getTableMeta(const Schema &schema, const String &table);
+    getTableMeta(const Schema &schema, const UnsafeStringView &table);
 
 protected:
-    std::pair<bool, std::set<String>> getValues(const Statement &statement, int index);
+    std::pair<bool, std::set<StringView>> getValues(const Statement &statement, int index);
 
 #pragma mark - Transaction
 public:
@@ -113,7 +113,7 @@ public:
     void rollbackNestedTransaction();
 
 private:
-    static String getSavepointName(int nestedLevel);
+    static StringView getSavepointName(int nestedLevel);
     int m_nestedLevel;
 
 #pragma mark - Interface
@@ -135,21 +135,22 @@ public:
 #pragma mark - Notification
 public:
     typedef HandleNotification::PerformanceNotification PerformanceNotification;
-    void setNotificationWhenPerformanceTraced(const String &name,
+    void setNotificationWhenPerformanceTraced(const UnsafeStringView &name,
                                               const PerformanceNotification &onTraced);
 
     typedef HandleNotification::SQLNotification SQLNotification;
-    void setNotificationWhenSQLTraced(const String &name, const SQLNotification &onTraced);
+    void setNotificationWhenSQLTraced(const UnsafeStringView &name,
+                                      const SQLNotification &onTraced);
 
     typedef HandleNotification::CommittedNotification CommittedNotification;
     void setNotificationWhenCommitted(int order,
-                                      const String &name,
+                                      const UnsafeStringView &name,
                                       const CommittedNotification &onCommitted);
 
     typedef HandleNotification::CheckpointedNotification CheckpointedNotification;
-    void setNotificationWhenCheckpointed(const String &name,
+    void setNotificationWhenCheckpointed(const UnsafeStringView &name,
                                          const CheckpointedNotification &checkpointed);
-    void unsetNotificationWhenCommitted(const String &name);
+    void unsetNotificationWhenCommitted(const UnsafeStringView &name);
 
     typedef HandleNotification::BusyNotification BusyNotification;
     void setNotificationWhenBusy(const BusyNotification &busyNotification);
@@ -169,7 +170,7 @@ private:
     // The level of error will be "Ignore" if it's marked as ignorable.
     // But the return value will be still false.
     bool APIExit(int rc);
-    bool APIExit(int rc, const String &sql);
+    bool APIExit(int rc, const UnsafeStringView &sql);
     bool APIExit(int rc, const char *sql);
 
     void notifyError(int rc, const char *sql);

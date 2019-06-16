@@ -28,7 +28,7 @@
     WCDB::Schema schema;
     NSString* table;
     NSString* module;
-    WCDB::String argument1;
+    WCDB::StringView argument1;
     WCDB::ColumnDef argument2;
 }
 

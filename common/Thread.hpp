@@ -21,7 +21,7 @@
 #pragma once
 
 #include <WCDB/SharedThreadedErrorProne.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <cstddef>
 #include <pthread.h>
 
@@ -53,9 +53,9 @@ private:
 #pragma mark - Name
 public:
     static void setName(const UnsafeStringView& name);
-    String getName();
+    StringView getName();
     uint64_t getIdentifier();
-    
+
 private:
     static constexpr const int maxLengthOfAllowedThreadName();
 

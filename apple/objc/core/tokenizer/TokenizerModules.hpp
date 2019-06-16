@@ -21,7 +21,7 @@
 #pragma once
 
 #include <WCDB/Lock.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <WCDB/TokenizerModule.hpp>
 #include <WCDB/TokenizerModuleTemplate.hpp>
 #include <WCDB/UnsafeData.hpp>
@@ -31,12 +31,12 @@ namespace WCDB {
 
 class TokenizerModules final {
 public:
-    void add(const String& name, const TokenizerModule& module);
-    const TokenizerModule* get(const String& name) const;
+    void add(const UnsafeStringView& name, const TokenizerModule& module);
+    const TokenizerModule* get(const UnsafeStringView& name) const;
 
 protected:
-    std::map<String, const TokenizerModule> m_modules;
-    std::map<String, const TokenizerModule*> m_pointers;
+    StringViewMap<const TokenizerModule> m_modules;
+    StringViewMap<const TokenizerModule*> m_pointers;
     mutable SharedLock m_lock;
 };
 

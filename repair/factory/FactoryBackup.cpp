@@ -26,7 +26,7 @@ namespace WCDB {
 
 namespace Repair {
 
-bool FactoryBackup::work(const String &database)
+bool FactoryBackup::work(const UnsafeStringView &database)
 {
     Backup backup(database);
     backup.setReadLocker(m_readLocker);
@@ -42,7 +42,7 @@ bool FactoryBackup::work(const String &database)
     }
 
     bool succeed;
-    String materialPath;
+    StringView materialPath;
     std::tie(succeed, materialPath) = Factory::materialForSerializingForDatabase(database);
     if (succeed && backup.getMaterial().serialize(materialPath)) {
         return true;

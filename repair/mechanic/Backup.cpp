@@ -27,14 +27,14 @@
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Page.hpp>
 #include <WCDB/Sequence.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
 #pragma mark - Initialize
-Backup::Backup(const String &path)
+Backup::Backup(const UnsafeStringView &path)
 : m_pager(path), Crawlable(m_pager), m_masterCrawler(m_pager)
 {
 }
@@ -103,7 +103,7 @@ const Material &Backup::getMaterial() const
     return m_material;
 }
 
-Material::Content &Backup::getOrCreateContent(const String &tableName)
+Material::Content &Backup::getOrCreateContent(const UnsafeStringView &tableName)
 {
     auto &contents = m_material.contents;
     auto iter = contents.find(tableName);
@@ -119,7 +119,7 @@ void Backup::filter(const Filter &tableShouldBeBackedUp)
     m_filter = tableShouldBeBackedUp;
 }
 
-bool Backup::filter(const String &tableName)
+bool Backup::filter(const UnsafeStringView &tableName)
 {
     bool result = true;
     if (m_filter != nullptr) {
@@ -151,7 +151,7 @@ bool Backup::willCrawlPage(const Page &page, int height)
     }
     default:
         markAsCorrupted(
-        page.number, String::formatted("Unexpected page type: %d", page.getType()));
+        page.number, StringView::formatted("Unexpected page type: %d", page.getType()));
         return false;
     }
 }
@@ -170,8 +170,8 @@ void Backup::onMasterCellCrawled(const Cell &cell, const Master &master)
     } else if (filter(master.tableName) && !Master::isReservedTableName(master.tableName)
                && !Master::isReservedTableName(master.name)) {
         Material::Content &content = getOrCreateContent(master.tableName);
-        if (master.type.isCaseInsensiveEqual("table")
-            && master.name.isCaseInsensiveEqual(master.tableName)) {
+        if (master.type.caseInsensiveEqual("table")
+            && master.name.caseInsensiveEqual(master.tableName)) {
             if (!crawl(master.rootpage)) {
                 return;
             }

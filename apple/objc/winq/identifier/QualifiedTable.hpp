@@ -37,9 +37,9 @@ public:
     QualifiedTable(const UnsafeStringView& table);
 
     QualifiedTable& schema(const Schema& schema);
-    QualifiedTable& as(const String& alias);
+    QualifiedTable& as(const UnsafeStringView& alias);
 
-    QualifiedTable& indexed(const String& index);
+    QualifiedTable& indexed(const UnsafeStringView& index);
     QualifiedTable& notIndexed();
 };
 
