@@ -420,18 +420,20 @@ std::pair<bool, bool> Migration::tryDropUnreferencedTable(Migration::Stepper& st
             WCTInnerAssert(info != nullptr);
         }
     }
-    if (info) {
+    if (info != nullptr) {
         succeed = stepper.dropSourceTable(info);
-        worked = succeed;
-        markAsDropped(info);
+        if (succeed) {
+            worked = true;
+            markAsDropped(info);
 
-        // table migrated
-        SharedLockGuard lockGuard(m_lock);
-        WCTInnerAssert(m_migratings.find(info) == m_migratings.end());
-        WCTInnerAssert(m_referenceds.find(info) == m_referenceds.end());
-        WCTInnerAssert(m_dumpster.find(info) == m_dumpster.end());
-        if (m_event != nullptr) {
-            m_event->didMigrate(info);
+            // table migrated
+            SharedLockGuard lockGuard(m_lock);
+            WCTInnerAssert(m_migratings.find(info) == m_migratings.end());
+            WCTInnerAssert(m_referenceds.find(info) == m_referenceds.end());
+            WCTInnerAssert(m_dumpster.find(info) == m_dumpster.end());
+            if (m_event != nullptr) {
+                m_event->didMigrate(info);
+            }
         }
     }
     return { succeed, worked };
