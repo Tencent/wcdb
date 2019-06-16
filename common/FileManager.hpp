@@ -55,9 +55,9 @@ public:
     static std::pair<bool, uint32_t> getFileIdentifier(const String &path);
     static bool createFile(const String &path);
 
-    static bool
-    enumerateDirectory(const String &directory,
-                       const std::function<bool(const String &, const String &, bool)> &enumeration);
+    static bool enumerateDirectory(
+    const String &directory,
+    const std::function<bool /* stop */ (const String &directory, const String &subpath, bool isDirectory)> &enumeration);
 
     static bool setFileProtection(const String &path, FileProtection fileProtection);
     static std::pair<bool, FileProtection> getFileProtection(const String &path);

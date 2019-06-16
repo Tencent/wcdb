@@ -130,13 +130,15 @@ FactoryRenewer Factory::renewer() const
 bool Factory::removeDeposited() const
 {
     std::list<String> depositedPath;
-    FileManager::enumerateDirectory(
-    directory, [&depositedPath](const String &root, const String &subpath, bool isDirectory) -> bool {
-        if (isDirectory && subpath != renewDirectoryName && subpath != restoreDirectoryName) {
-            depositedPath.push_back(Path::addComponent(root, subpath));
-        }
-        return true;
-    });
+    if (!FileManager::enumerateDirectory(
+        directory, [&depositedPath](const String &root, const String &subpath, bool isDirectory) -> bool {
+            if (isDirectory && subpath != renewDirectoryName && subpath != restoreDirectoryName) {
+                depositedPath.push_back(Path::addComponent(root, subpath));
+            }
+            return true;
+        })) {
+        return false;
+    }
     if (FileManager::removeItems(depositedPath)) {
         removeDirectoryIfEmpty();
         return true;

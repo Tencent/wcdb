@@ -64,14 +64,21 @@ std::pair<bool, size_t> FileManager::getFileSize(const String &file)
 
 std::pair<bool, size_t> FileManager::getDirectorySize(const String &directory)
 {
+    bool succeed = true;
     size_t totalSize = 0;
     if (enumerateDirectory(
-        directory, [&totalSize](const String &directory, const String &subpath, bool isDirectory) {
+        directory,
+        [&succeed, &totalSize](const String &directory, const String &subpath, bool isDirectory) {
             String path = Path::addComponent(directory, subpath);
             auto intermediate = isDirectory ? getDirectorySize(path) : getFileSize(path);
+            if (!intermediate.first) {
+                succeed = false;
+                return false;
+            }
             totalSize += intermediate.second;
-            return intermediate.first;
-        })) {
+            return true;
+        })
+        && succeed) {
         return { true, totalSize };
     };
     return { false, 0 };
@@ -384,16 +391,20 @@ bool FileManager::createDirectoryHardLink(const String &from, const String &to)
     if (!createDirectory(to)) {
         return false;
     }
+    bool succeed = true;
     if (enumerateDirectory(
-        from, [&to](const String &directory, const String &subpath, bool isDirectory) -> bool {
+        from,
+        [&succeed, &to](const String &directory, const String &subpath, bool isDirectory) -> bool {
             String oldPath = Path::addComponent(directory, subpath);
             String newPath = Path::addComponent(to, subpath);
             if (isDirectory) {
-                return createDirectoryHardLink(oldPath, newPath);
+                succeed = createDirectoryHardLink(oldPath, newPath);
             } else {
-                return createFileHardLink(oldPath, newPath);
+                succeed = createFileHardLink(oldPath, newPath);
             }
-        })) {
+            return succeed;
+        })
+        && succeed) {
         return true;
     }
     removeItem(to);
