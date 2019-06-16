@@ -37,9 +37,8 @@ Identifier::Type JoinClause::getType() const
     return type;
 }
 
-StringView JoinClause::getValidDescription() const
+bool JoinClause::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     auto tableOrSubquery = tableOrSubqueries.begin();
     stream << *tableOrSubquery;
     if (++tableOrSubquery != tableOrSubqueries.end()) {
@@ -62,7 +61,7 @@ StringView JoinClause::getValidDescription() const
             ++joinConstraint;
         }
     }
-    return StringView(stream.str());
+    return true;
 }
 
 void JoinClause::iterate(const Iterator& iterator, bool& stop)

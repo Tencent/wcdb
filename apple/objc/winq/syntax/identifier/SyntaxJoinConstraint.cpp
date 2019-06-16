@@ -36,15 +36,14 @@ Identifier::Type JoinConstraint::getType() const
     return type;
 }
 
-StringView JoinConstraint::getValidDescription() const
+bool JoinConstraint::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     if (!columns.empty()) {
         stream << "USING(" << columns << ")";
     } else {
         stream << "ON " << expression;
     }
-    return StringView(stream.str());
+    return true;
 }
 
 void JoinConstraint::iterate(const Iterator& iterator, bool& stop)

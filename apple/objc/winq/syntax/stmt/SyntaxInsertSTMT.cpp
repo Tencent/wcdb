@@ -32,9 +32,8 @@ Identifier::Type InsertSTMT::getType() const
     return type;
 }
 
-StringView InsertSTMT::getValidDescription(bool skipSchema) const
+bool InsertSTMT::describle(std::ostringstream& stream, bool skipSchema) const
 {
-    std::ostringstream stream;
     if (withClause.isValid()) {
         stream << withClause << space;
     }
@@ -78,12 +77,12 @@ StringView InsertSTMT::getValidDescription(bool skipSchema) const
     if (upsertClause.isValid()) {
         stream << space << upsertClause;
     }
-    return StringView(stream.str());
+    return true;
 }
 
-StringView InsertSTMT::getValidDescription() const
+bool InsertSTMT::describle(std::ostringstream& stream) const
 {
-    return getValidDescription(false);
+    return describle(stream, false);
 }
 
 void InsertSTMT::iterate(const Iterator& iterator, bool& stop)

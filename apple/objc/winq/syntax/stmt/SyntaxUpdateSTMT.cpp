@@ -37,9 +37,8 @@ Identifier::Type UpdateSTMT::getType() const
     return type;
 }
 
-StringView UpdateSTMT::getValidDescription(bool skipSchema) const
+bool UpdateSTMT::describle(std::ostringstream& stream, bool skipSchema) const
 {
-    std::ostringstream stream;
     if (withClause.isValid()) {
         stream << withClause << space;
     }
@@ -47,7 +46,10 @@ StringView UpdateSTMT::getValidDescription(bool skipSchema) const
     if (conflictActionValid()) {
         stream << conflictAction << space;
     }
-    stream << table.getValidDescription(skipSchema) << " SET ";
+    if (!table.describle(stream, skipSchema)) {
+        return false;
+    }
+    stream << " SET ";
     if (!columnsList.empty()) {
         WCTSyntaxRemedialAssert(columnsList.size() == expressions.size());
         auto columns = columnsList.begin();
@@ -88,12 +90,12 @@ StringView UpdateSTMT::getValidDescription(bool skipSchema) const
             }
         }
     }
-    return StringView(stream.str());
+    return true;
 }
 
-StringView UpdateSTMT::getValidDescription() const
+bool UpdateSTMT::describle(std::ostringstream& stream) const
 {
-    return getValidDescription(false);
+    return describle(stream, false);
 }
 
 void UpdateSTMT::iterate(const Iterator& iterator, bool& stop)

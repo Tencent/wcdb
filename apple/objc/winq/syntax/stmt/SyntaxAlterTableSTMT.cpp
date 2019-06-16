@@ -31,9 +31,8 @@ Identifier::Type AlterTableSTMT::getType() const
     return type;
 }
 
-StringView AlterTableSTMT::getValidDescription() const
+bool AlterTableSTMT::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << "ALTER TABLE ";
     if (!schema.empty()) {
         stream << schema << ".";
@@ -50,7 +49,7 @@ StringView AlterTableSTMT::getValidDescription() const
         stream << " RENAME COLUMN " << column << " TO " << newColumn;
         break;
     }
-    return StringView(stream.str());
+    return true;
 }
 
 void AlterTableSTMT::iterate(const Iterator& iterator, bool& stop)

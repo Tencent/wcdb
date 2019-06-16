@@ -36,7 +36,7 @@ public:
 public:
     static constexpr const Type type = Type::RollbackSTMT;
     Type getType() const override final;
-    StringView getValidDescription() const override final;
+    bool describle(std::ostringstream& stream) const override final;
 };
 
 } // namespace Syntax

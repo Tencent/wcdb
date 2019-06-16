@@ -31,9 +31,8 @@ Identifier::Type LiteralValue::getType() const
     return type;
 }
 
-StringView LiteralValue::getValidDescription() const
+bool LiteralValue::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     switch (switcher) {
     case Switch::StringView: {
         stream << "'";
@@ -71,7 +70,7 @@ StringView LiteralValue::getValidDescription() const
         stream << "CURRENT_TIMESTAMP";
         break;
     }
-    return StringView(stream.str());
+    return true;
 }
 
 } // namespace Syntax

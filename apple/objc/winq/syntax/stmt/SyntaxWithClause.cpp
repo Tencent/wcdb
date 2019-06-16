@@ -36,9 +36,8 @@ Identifier::Type WithClause::getType() const
     return type;
 }
 
-StringView WithClause::getValidDescription() const
+bool WithClause::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     WCTSyntaxRemedialAssert(tables.size() == selects.size());
     stream << "WITH ";
     if (recursive) {
@@ -57,7 +56,7 @@ StringView WithClause::getValidDescription() const
         ++table;
         ++select;
     }
-    return StringView(stream.str());
+    return true;
 }
 
 void WithClause::iterate(const Iterator& iterator, bool& stop)

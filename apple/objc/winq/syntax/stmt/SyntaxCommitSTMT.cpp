@@ -36,9 +36,10 @@ Identifier::Type CommitSTMT::getType() const
     return type;
 }
 
-StringView CommitSTMT::getValidDescription() const
+bool CommitSTMT::describle(std::ostringstream& stream) const
 {
-    return StringView("COMMIT");
+    stream << "COMMIT";
+    return true;
 }
 
 } // namespace Syntax

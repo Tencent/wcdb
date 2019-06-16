@@ -36,9 +36,8 @@ Identifier::Type FunctionInvocation::getType() const
     return type;
 }
 
-StringView FunctionInvocation::getValidDescription() const
+bool FunctionInvocation::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << name << "(";
     if (!expressions.empty()) {
         if (distinct) {
@@ -49,7 +48,7 @@ StringView FunctionInvocation::getValidDescription() const
         stream << "*";
     }
     stream << ")";
-    return StringView(stream.str());
+    return true;
 }
 
 void FunctionInvocation::iterate(const Iterator& iterator, bool& stop)

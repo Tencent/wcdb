@@ -36,14 +36,13 @@ Identifier::Type CTETableName::getType() const
     return type;
 }
 
-StringView CTETableName::getValidDescription() const
+bool CTETableName::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << name;
     if (!columns.empty()) {
         stream << "(" << columns << ")";
     }
-    return StringView(stream.str());
+    return true;
 }
 
 void CTETableName::iterate(const Iterator& iterator, bool& stop)

@@ -36,9 +36,8 @@ Identifier::Type PragmaSTMT::getType() const
     return type;
 }
 
-StringView PragmaSTMT::getValidDescription() const
+bool PragmaSTMT::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << "PRAGMA ";
     if (!schema.empty()) {
         stream << schema << ".";
@@ -54,7 +53,7 @@ StringView PragmaSTMT::getValidDescription() const
         stream << "(" << value << ")";
         break;
     }
-    return StringView(stream.str());
+    return true;
 }
 
 void PragmaSTMT::iterate(const Iterator& iterator, bool& stop)

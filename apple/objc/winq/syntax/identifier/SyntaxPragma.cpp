@@ -36,9 +36,10 @@ Identifier::Type Pragma::getType() const
     return type;
 }
 
-StringView Pragma::getValidDescription() const
+bool Pragma::describle(std::ostringstream& stream) const
 {
-    return name;
+    stream << name;
+    return true;
 }
 
 } // namespace Syntax

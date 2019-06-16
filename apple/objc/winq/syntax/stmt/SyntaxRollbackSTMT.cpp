@@ -31,9 +31,8 @@ Identifier::Type RollbackSTMT::getType() const
     return type;
 }
 
-StringView RollbackSTMT::getValidDescription() const
+bool RollbackSTMT::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << "ROLLBACK";
     switch (switcher) {
     case Switch::Transaction:
@@ -42,7 +41,7 @@ StringView RollbackSTMT::getValidDescription() const
         stream << " TO " << savepoint;
         break;
     }
-    return StringView(stream.str());
+    return true;
 }
 
 } // namespace Syntax

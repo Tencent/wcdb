@@ -36,14 +36,13 @@ Identifier::Type QualifiedTableName::getType() const
     return type;
 }
 
-StringView QualifiedTableName::getValidDescription() const
+bool QualifiedTableName::describle(std::ostringstream& stream) const
 {
-    return getValidDescription(false);
+    return describle(stream, false);
 }
 
-StringView QualifiedTableName::getValidDescription(bool skipSchema) const
+bool QualifiedTableName::describle(std::ostringstream& stream, bool skipSchema) const
 {
-    std::ostringstream stream;
     if (!skipSchema && !schema.empty()) {
         stream << schema << ".";
     }
@@ -61,7 +60,7 @@ StringView QualifiedTableName::getValidDescription(bool skipSchema) const
         stream << " NOT INDEXED";
         break;
     }
-    return StringView(stream.str());
+    return true;
 }
 
 void QualifiedTableName::iterate(const Iterator& iterator, bool& stop)

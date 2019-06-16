@@ -32,7 +32,11 @@ Identifier::~Identifier()
 StringView Identifier::getDescription() const
 {
     if (isValid()) {
-        return getValidDescription();
+        std::ostringstream stream;
+        if (describle(stream)) {
+            return stream.str();
+        }
+        WCTInnerAssert(false);
     }
     return StringView();
 }

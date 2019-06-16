@@ -31,9 +31,8 @@ Identifier::Type ReindexSTMT::getType() const
     return type;
 }
 
-StringView ReindexSTMT::getValidDescription() const
+bool ReindexSTMT::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << "REINDEX";
     switch (switcher) {
     case Switch::NotSet:
@@ -49,7 +48,7 @@ StringView ReindexSTMT::getValidDescription() const
         stream << collationOrTableOrIndex;
         break;
     }
-    return StringView(stream.str());
+    return true;
 }
 
 void ReindexSTMT::iterate(const Iterator& iterator, bool& stop)

@@ -63,9 +63,8 @@ Identifier::Type CreateTriggerSTMT::getType() const
     return type;
 }
 
-StringView CreateTriggerSTMT::getValidDescription() const
+bool CreateTriggerSTMT::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << "CREATE ";
     if (temp) {
         stream << "TEMP ";
@@ -101,28 +100,35 @@ StringView CreateTriggerSTMT::getValidDescription() const
         switch (stmt) {
         case STMT::Insert:
             WCTSyntaxRemedialAssert(insert != inserts.end());
-            stream << insert->getValidDescription(true) << "; ";
+            if (!insert->describle(stream, true)) {
+                return false;
+            }
             ++insert;
             break;
         case STMT::Update:
             WCTSyntaxRemedialAssert(update != updates.end());
-            stream << update->getValidDescription(true) << "; ";
+            if (!update->describle(stream, true)) {
+                return false;
+            }
             ++update;
             break;
         case STMT::Delete:
             WCTSyntaxRemedialAssert(delete_ != deletes.end());
-            stream << delete_->getValidDescription(true) << "; ";
+            if (!delete_->describle(stream, true)) {
+                return false;
+            }
             ++delete_;
             break;
         case STMT::Select:
             WCTSyntaxRemedialAssert(select != selects.end());
-            stream << *select << "; ";
+            stream << *select;
             ++select;
             break;
         }
+        stream << "; ";
     }
     stream << "END";
-    return StringView(stream.str());
+    return true;
 }
 
 void CreateTriggerSTMT::iterate(const Iterator& iterator, bool& stop)

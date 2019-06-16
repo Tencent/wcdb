@@ -31,9 +31,8 @@ Identifier::Type AnalyzeSTMT::getType() const
     return type;
 }
 
-StringView AnalyzeSTMT::getValidDescription() const
+bool AnalyzeSTMT::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << "ANALYZE";
     switch (switcher) {
     case Switch::SchemaOrTableOrIndex:
@@ -49,7 +48,7 @@ StringView AnalyzeSTMT::getValidDescription() const
         WCTInnerAssert(switcher == Switch::All);
         break;
     }
-    return StringView(stream.str());
+    return true;
 }
 
 void AnalyzeSTMT::iterate(const Iterator& iterator, bool& stop)

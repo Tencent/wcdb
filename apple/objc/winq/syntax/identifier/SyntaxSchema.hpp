@@ -38,7 +38,7 @@ public:
 public:
     static constexpr const Type type = Type::Schema;
     Type getType() const override final;
-    StringView getValidDescription() const override final;
+    bool describle(std::ostringstream& stream) const override final;
 
 #pragma mark - Utility
 public:

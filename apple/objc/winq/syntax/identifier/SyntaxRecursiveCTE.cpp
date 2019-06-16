@@ -49,12 +49,11 @@ Identifier::Type RecursiveCTE::getType() const
     return type;
 }
 
-StringView RecursiveCTE::getValidDescription() const
+bool RecursiveCTE::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << table << " AS(" << initialSelect << space << combination << space
            << recursiveSelect << ")";
-    return StringView(stream.str());
+    return true;
 }
 
 void RecursiveCTE::iterate(const Iterator& iterator, bool& stop)

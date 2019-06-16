@@ -36,9 +36,8 @@ Identifier::Type WindowDef::getType() const
     return type;
 }
 
-StringView WindowDef::getValidDescription() const
+bool WindowDef::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << "(";
     bool extraSpace = false;
     if (!expressions.empty()) {
@@ -58,7 +57,7 @@ StringView WindowDef::getValidDescription() const
         stream << frameSpec;
     }
     stream << ")";
-    return StringView(stream.str());
+    return true;
 }
 
 void WindowDef::iterate(const Iterator& iterator, bool& stop)

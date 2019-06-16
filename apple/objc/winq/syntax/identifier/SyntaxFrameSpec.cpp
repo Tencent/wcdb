@@ -73,9 +73,8 @@ Identifier::Type FrameSpec::getType() const
     return type;
 }
 
-StringView FrameSpec::getValidDescription() const
+bool FrameSpec::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << switcher << space;
     if (between) {
         stream << "BETWEEN ";
@@ -103,7 +102,7 @@ StringView FrameSpec::getValidDescription() const
             break;
         }
     }
-    return StringView(stream.str());
+    return true;
 }
 
 void FrameSpec::iterate(const Iterator& iterator, bool& stop)

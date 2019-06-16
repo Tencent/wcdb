@@ -37,9 +37,8 @@ Identifier::Type SelectSTMT::getType() const
     return type;
 }
 
-StringView SelectSTMT::getValidDescription() const
+bool SelectSTMT::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     if (!commonTableExpressions.empty()) {
         stream << "WITH ";
         if (recursive) {
@@ -74,7 +73,7 @@ StringView SelectSTMT::getValidDescription() const
             break;
         }
     }
-    return StringView(stream.str());
+    return true;
 }
 
 void SelectSTMT::iterate(const Iterator& iterator, bool& stop)

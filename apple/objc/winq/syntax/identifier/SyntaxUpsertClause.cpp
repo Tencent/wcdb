@@ -31,9 +31,8 @@ Identifier::Type UpsertClause::getType() const
     return type;
 }
 
-StringView UpsertClause::getValidDescription() const
+bool UpsertClause::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << "ON CONFLICT";
     if (!indexedColumns.empty()) {
         stream << "(" << indexedColumns << ")";
@@ -72,7 +71,7 @@ StringView UpsertClause::getValidDescription() const
         }
     } break;
     }
-    return StringView(stream.str());
+    return true;
 }
 
 void UpsertClause::iterate(const Iterator& iterator, bool& stop)

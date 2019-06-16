@@ -32,9 +32,8 @@ Identifier::Type TableConstraint::getType() const
     return type;
 }
 
-StringView TableConstraint::getValidDescription() const
+bool TableConstraint::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     if (!name.empty()) {
         stream << "CONSTRAINT " << name << space;
     }
@@ -58,7 +57,7 @@ StringView TableConstraint::getValidDescription() const
         stream << "FOREIGN KEY(" << columns << ") " << foreignKeyClause;
         break;
     }
-    return StringView(stream.str());
+    return true;
 }
 
 void TableConstraint::iterate(const Iterator& iterator, bool& stop)

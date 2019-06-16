@@ -139,9 +139,8 @@ streamAutoParenthesesExpression(std::ostringstream& stream, const Expression& ex
     }
 }
 
-StringView Expression::getValidDescription() const
+bool Expression::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     switch (switcher) {
     case Switch::LiteralValue:
         stream << literalValue;
@@ -389,7 +388,7 @@ StringView Expression::getValidDescription() const
         }
         break;
     }
-    return StringView(stream.str());
+    return true;
 }
 
 void Expression::iterate(const Iterator& iterator, bool& stop)

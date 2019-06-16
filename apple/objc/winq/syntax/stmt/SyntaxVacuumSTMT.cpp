@@ -31,9 +31,8 @@ Identifier::Type VacuumSTMT::getType() const
     return type;
 }
 
-StringView VacuumSTMT::getValidDescription() const
+bool VacuumSTMT::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << "VACUUM";
     switch (switcher) {
     case Switch::All:
@@ -42,7 +41,7 @@ StringView VacuumSTMT::getValidDescription() const
         stream << space << schema;
         break;
     }
-    return StringView(stream.str());
+    return true;
 }
 
 void VacuumSTMT::iterate(const Iterator& iterator, bool& stop)

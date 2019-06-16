@@ -36,9 +36,8 @@ Identifier::Type CreateVirtualTableSTMT::getType() const
     return type;
 }
 
-StringView CreateVirtualTableSTMT::getValidDescription() const
+bool CreateVirtualTableSTMT::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << "CREATE VIRTUAL TABLE ";
     if (ifNotExists) {
         stream << "IF NOT EXISTS ";
@@ -60,7 +59,7 @@ StringView CreateVirtualTableSTMT::getValidDescription() const
         }
         stream << ")";
     }
-    return StringView(stream.str());
+    return true;
 }
 
 void CreateVirtualTableSTMT::iterate(const Iterator& iterator, bool& stop)

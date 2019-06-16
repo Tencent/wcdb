@@ -36,9 +36,8 @@ Identifier::Type DropViewSTMT::getType() const
     return type;
 }
 
-StringView DropViewSTMT::getValidDescription() const
+bool DropViewSTMT::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << "DROP VIEW ";
     if (ifExists) {
         stream << "IF EXISTS ";
@@ -47,7 +46,7 @@ StringView DropViewSTMT::getValidDescription() const
         stream << schema << ".";
     }
     stream << view;
-    return StringView(stream.str());
+    return true;
 }
 
 void DropViewSTMT::iterate(const Iterator& iterator, bool& stop)
