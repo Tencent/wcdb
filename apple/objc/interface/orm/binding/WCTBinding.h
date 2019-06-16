@@ -87,5 +87,6 @@ public:
                             bool isTableNewlyCreated) const;
 
 private:
-    std::map<WCDB::StringView /* index suffix */, Index> m_indexes;
+    /* index suffix */
+    WCDB::StringViewMap<Index> m_indexes;
 };

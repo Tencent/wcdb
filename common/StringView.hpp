@@ -93,10 +93,10 @@ public:
 class StringView : public UnsafeStringView {
 #pragma mark - StringView - Constructor
 public:
-    StringView();
-    StringView(const char* string);
-    StringView(const char* string, size_t length);
-    StringView(const UnsafeStringView& other);
+    explicit StringView();
+    explicit StringView(const char* string);
+    explicit StringView(const char* string, size_t length);
+    explicit StringView(const UnsafeStringView& other);
     StringView(UnsafeStringView&& other);
     StringView(std::string&& string);
 
@@ -117,7 +117,37 @@ struct StringViewComparator {
 };
 
 template<typename T>
-using StringViewMap = std::map<StringView, T, StringViewComparator>;
+class StringViewMap : public std::map<StringView, T, StringViewComparator> {
+private:
+    using Super = std::map<StringView, T, StringViewComparator>;
+
+public:
+    using std::map<StringView, T, StringViewComparator>::map;
+
+    using Super::erase;
+    void erase(const UnsafeStringView& key)
+    {
+        auto iter = this->find(key);
+        this->Super::erase(iter);
+    }
+
+    using Super::at;
+    T& at(const UnsafeStringView& key) { return this->find(key)->second; }
+    const T& at(const UnsafeStringView& key) const
+    {
+        return this->find(key)->second;
+    }
+
+    using Super::insert_or_assign;
+    void insert_or_assign(const UnsafeStringView& key, const T& value)
+    {
+        this->Super::insert_or_assign(StringView(key), value);
+    }
+    void insert_or_assign(const UnsafeStringView& key, T&& value)
+    {
+        this->Super::insert_or_assign(StringView(key), std::move(value));
+    }
+};
 
 } // namespace WCDB
 
