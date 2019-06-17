@@ -201,7 +201,7 @@ StringView Factory::getDatabaseName() const
 std::list<StringView> Factory::associatedPathsForDatabase(const UnsafeStringView &database)
 {
     return {
-        database,
+        StringView(database),
         Path::addExtention(database, "-journal"),
         Path::addExtention(database, "-wal"),
         Path::addExtention(database, "-shm"),
@@ -213,7 +213,7 @@ std::list<StringView> Factory::associatedPathsForDatabase(const UnsafeStringView
 std::list<StringView> Factory::databasePathsForDatabase(const UnsafeStringView &database)
 {
     return {
-        database,
+        StringView(database),
         Path::addExtention(database, "-journal"),
         Path::addExtention(database, "-wal"),
         Path::addExtention(database, "-shm"),

@@ -24,6 +24,7 @@
 #include <sstream>
 #include <string>
 #include <string_view>
+#include <set>
 
 namespace WCDB {
 
@@ -128,7 +129,9 @@ public:
     void erase(const UnsafeStringView& key)
     {
         auto iter = this->find(key);
-        this->Super::erase(iter);
+        if (iter != this->end()) {
+            this->Super::erase(iter);
+        }
     }
 
     using Super::at;
@@ -147,7 +150,27 @@ public:
     {
         this->Super::insert_or_assign(StringView(key), std::move(value));
     }
+    
+    using Super::operator[];
+    T& operator[](const UnsafeStringView& key) {
+        auto iter = this->find(key);
+        if (iter != this->end()) {
+            return iter->second;
+        }
+        return Super::operator[](StringView(key));
+    }
 };
+    
+    class StringViewSet : public std::set<StringView, StringViewComparator>
+    {
+    private:
+        using Super = std::set<StringView, StringViewComparator>;
+    public:
+        using Super::set;
+        
+        using Super::erase;
+        void erase(const UnsafeStringView& value);
+    };
 
 } // namespace WCDB
 

@@ -39,8 +39,8 @@ AsyncQueue::~AsyncQueue()
            std::chrono::nanoseconds((long long) (AsyncQueueTimeOutForExiting * 1E9)))
            == std::future_status::timeout) {
         Error error(Error::Code::Warning, Error::Level::Warning, "Queue does not exit on time.");
-        error.infos.insert_or_assign(StringView("Timeout"), AsyncQueueTimeOutForExiting);
-        error.infos.insert_or_assign(StringView("Name"), name);
+        error.infos.insert_or_assign("Timeout", AsyncQueueTimeOutForExiting);
+        error.infos.insert_or_assign("Name", name);
         Notifier::shared().notify(error);
     }
 }

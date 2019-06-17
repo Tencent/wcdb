@@ -24,6 +24,7 @@
 #import <WCDB/Notifier.hpp>
 #import <WCDB/ThreadedErrors.hpp>
 #import <WCDB/WCTCommon.h>
+#import <WCDB/WCTFoundation.h>
 
 namespace WCDB {
 
@@ -59,7 +60,7 @@ bool FileManager::setFileProtection(const WCDB::UnsafeStringView &path, WCDB::Fi
 {
     NSError *nsError = nil;
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *nsPath = [NSString stringWithUTF8String:path.c_str()];
+    NSString *nsPath = [NSString stringWithView:path];
     if ([fileManager setAttributes:@{NSFileProtectionKey : @(WCDB::Enum::description(fileProtection))}
                       ofItemAtPath:nsPath
                              error:&nsError]) {
@@ -78,7 +79,7 @@ std::pair<bool, WCDB::FileProtection> FileManager::getFileProtection(const WCDB:
 {
     NSError *nsError = nil;
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *nsPath = [NSString stringWithUTF8String:path.c_str()];
+    NSString *nsPath = [NSString stringWithView:path];
     NSDictionary *attributes = [fileManager attributesOfItemAtPath:nsPath error:&nsError];
     if (attributes != nil) {
         return { true, fileProtectionForAttribute(attributes[NSFileProtectionKey]) };

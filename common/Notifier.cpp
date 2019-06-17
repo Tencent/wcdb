@@ -51,9 +51,9 @@ void Notifier::setNotificationForPreprocessing(const UnsafeStringView &key,
 {
     LockGuard lockGuard(m_lock);
     if (callback != nullptr) {
-        m_preprocessNotifications[StringView(key)] = callback;
+        m_preprocessNotifications[key] = callback;
     } else {
-        m_preprocessNotifications.erase(StringView(key));
+        m_preprocessNotifications.erase(key);
     }
 }
 

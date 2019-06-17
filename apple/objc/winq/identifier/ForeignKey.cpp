@@ -97,7 +97,7 @@ ForeignKey& ForeignKey::onUpdateNoAction()
 ForeignKey& ForeignKey::match(const UnsafeStringView& name)
 {
     syntax().switchers.push_back(SyntaxType::Switch::Match);
-    syntax().matchings.push_back(name);
+    syntax().matchings.push_back(StringView(name));
     return *this;
 }
 

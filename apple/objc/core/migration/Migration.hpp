@@ -103,7 +103,7 @@ private:
     std::map<const MigrationInfo*, int> m_referenceds;
     std::list<MigrationInfo> m_holder;
     StringViewMap<const MigrationInfo*> m_filted;
-    std::set<StringView> m_hints;
+    StringViewSet m_hints;
 
     void retainInfo(const MigrationInfo* info);
     void releaseInfo(const MigrationInfo* info);

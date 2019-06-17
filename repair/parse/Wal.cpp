@@ -297,9 +297,9 @@ bool Wal::doInitialize()
 void Wal::markAsCorrupted(int frame, const UnsafeStringView &message)
 {
     Error error(Error::Code::Corrupt, Error::Level::Ignore, message);
-    error.infos.insert_or_assign(StringView(ErrorStringKeySource), ErrorSourceRepair);
-    error.infos.insert_or_assign(StringView(ErrorStringKeyPath), getPath());
-    error.infos.insert_or_assign(StringView("Frame"), frame);
+    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
+    error.infos.insert_or_assign("Frame", frame);
     Notifier::shared().notify(error);
     setError(std::move(error));
 }

@@ -32,7 +32,7 @@ MigrateHandle::MigrateHandle()
 , m_removeMigratedStatement(getStatement())
 , m_samplePointing(0)
 {
-    m_error.infos.insert_or_assign(StringView(ErrorStringKeyAction), ErrorActionMigrate);
+    m_error.infos.insert_or_assign(ErrorStringKeyAction, ErrorActionMigrate);
 }
 
 MigrateHandle::~MigrateHandle()

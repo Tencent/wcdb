@@ -42,7 +42,7 @@
     @synchronized(self) {
         if (_schemaName == nil) {
             if (self.isCrossDatabaseMigration) {
-                _schemaName = [NSString stringWithFormat:@"WCDBMigration_%u", WCDB::StringView(self.sourcePath).hash()];
+                _schemaName = [NSString stringWithFormat:@"WCDBMigration_%u", WCDB::UnsafeStringView(self.sourcePath).hash()];
             } else {
                 _schemaName = @"main";
             }

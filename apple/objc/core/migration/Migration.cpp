@@ -134,7 +134,7 @@ bool Migration::initInfo(InfoInitializer& initializer, const UnsafeStringView& t
             m_migratings.emplace(hold);
             m_referenceds.emplace(hold, 0);
             m_filted.emplace(table, hold);
-            m_hints.erase(StringView(table));
+            m_hints.erase(table);
         }
     }
     return true;
@@ -146,7 +146,7 @@ void Migration::markAsNoNeedToMigrate(const UnsafeStringView& table)
     if (m_filted.find(table) == m_filted.end()) {
         m_filted.emplace(table, nullptr);
     }
-    m_hints.erase(StringView(table));
+    m_hints.erase(table);
 }
 
 bool Migration::hintThatTableWillBeCreated(InfoInitializer& initializer,

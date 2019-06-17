@@ -109,9 +109,9 @@ void HandleNotification::setNotificationWhenSQLTraced(const UnsafeStringView &na
 {
     bool stateBefore = areSQLTraceNotificationsSet();
     if (onTraced != nullptr) {
-        m_sqlNotifications[StringView(name)] = onTraced;
+        m_sqlNotifications[name] = onTraced;
     } else {
-        m_sqlNotifications.erase(StringView(name));
+        m_sqlNotifications.erase(name);
     }
     bool stateAfter = areSQLTraceNotificationsSet();
     if (stateBefore != stateAfter) {
@@ -143,9 +143,9 @@ void HandleNotification::setNotificationWhenPerformanceTraced(const UnsafeString
 {
     bool stateBefore = arePerformanceTraceNotificationsSet();
     if (onTraced != nullptr) {
-        m_performanceNotifications[StringView(name)] = onTraced;
+        m_performanceNotifications[name] = onTraced;
     } else {
-        m_performanceNotifications.erase(StringView(name));
+        m_performanceNotifications.erase(name);
     }
     bool stateAfter = arePerformanceTraceNotificationsSet();
     if (stateAfter != stateBefore) {
@@ -261,9 +261,9 @@ void HandleNotification::setNotificationWhenCheckpointed(const UnsafeStringView 
 {
     bool stateBefore = areCheckpointNotificationsSet();
     if (checkpointed != nullptr) {
-        m_checkpointedNotifications[StringView(name)] = checkpointed;
+        m_checkpointedNotifications[name] = checkpointed;
     } else {
-        m_checkpointedNotifications.erase(StringView(name));
+        m_checkpointedNotifications.erase(name);
     }
     bool stateAfter = areCheckpointNotificationsSet();
     if (stateBefore != stateAfter) {

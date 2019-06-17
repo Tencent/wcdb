@@ -28,7 +28,7 @@ namespace Repair {
 
 struct Sequence {
     Sequence();
-    static StringView tableName();
+    static const char* tableName();
 
     StringView name;
     int64_t seq;

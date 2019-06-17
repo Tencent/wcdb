@@ -189,8 +189,8 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
         }
     } else {
         Error warning(Error::Code::NotFound, Error::Level::Warning, "Material is not found");
-        warning.infos.insert_or_assign(StringView(ErrorStringKeySource), ErrorSourceRepair);
-        warning.infos.insert_or_assign(StringView(ErrorStringKeyPath), databasePath);
+        warning.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+        warning.infos.insert_or_assign(ErrorStringKeyPath, databasePath);
         Notifier::shared().notify(warning);
     }
 
@@ -227,13 +227,12 @@ void FactoryRetriever::reportMechanic(const Fraction &score,
                                       const Time &material)
 {
     Error error(Error::Code::Notice, Error::Level::Notice, "Mechanic Retrieve Report.");
-    error.infos.insert_or_assign(StringView(ErrorStringKeySource), ErrorSourceRepair);
-    error.infos.insert_or_assign(StringView(ErrorStringKeyPath), path);
-    error.infos.insert_or_assign(StringView("Score"), score.value());
-    error.infos.insert_or_assign(StringView("Material"), material.stringify());
+    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.insert_or_assign(ErrorStringKeyPath, path);
+    error.infos.insert_or_assign("Score", score.value());
+    error.infos.insert_or_assign("Material", material.stringify());
     finishReportOfPerformance(error, path, cost);
-    error.infos.insert_or_assign(
-    StringView("Weight"), StringView::formatted("%f%%", getWeight(path).value() * 100.0f));
+    error.infos.insert_or_assign("Weight", StringView::formatted("%f%%", getWeight(path).value() * 100.0f));
     Notifier::shared().notify(error);
 }
 
@@ -242,22 +241,21 @@ void FactoryRetriever::reportFullCrawler(const Fraction &score,
                                          double cost)
 {
     Error error(Error::Code::Notice, Error::Level::Notice, "Crawler Retrieve Report.");
-    error.infos.insert_or_assign(StringView(ErrorStringKeySource), ErrorSourceRepair);
-    error.infos.insert_or_assign(StringView(ErrorStringKeyPath), path);
-    error.infos.insert_or_assign(StringView("Score"), score.value());
+    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.insert_or_assign(ErrorStringKeyPath, path);
+    error.infos.insert_or_assign("Score", score.value());
     finishReportOfPerformance(error, path, cost);
-    error.infos.insert_or_assign(
-    StringView("Weight"), StringView::formatted("%f%%", getWeight(path).value() * 100.0f));
+    error.infos.insert_or_assign("Weight", StringView::formatted("%f%%", getWeight(path).value() * 100.0f));
     Notifier::shared().notify(error);
 }
 
 void FactoryRetriever::reportSummary(double cost)
 {
     Error error(Error::Code::Notice, Error::Level::Notice, "Summary Retrieve Report.");
-    error.infos.insert_or_assign(StringView(ErrorStringKeySource), ErrorSourceRepair);
-    error.infos.insert_or_assign(StringView(ErrorStringKeyPath), database);
-    error.infos.insert_or_assign(StringView("Cost"), StringView::formatted("%f%%", cost));
-    error.infos.insert_or_assign(StringView("Score"), getScore().value());
+    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.insert_or_assign(ErrorStringKeyPath, database);
+    error.infos.insert_or_assign("Cost", StringView::formatted("%f%%", cost));
+    error.infos.insert_or_assign("Score", getScore().value());
     Notifier::shared().notify(error);
 }
 
@@ -266,14 +264,12 @@ void FactoryRetriever::finishReportOfPerformance(Error &error,
                                                  double cost)
 {
     assert(m_sizes.find(databasePath) != m_sizes.end());
-    size_t size = m_sizes[StringView(databasePath)];
+    size_t size = m_sizes[databasePath];
     double sizeInMB = (double) size / 1024 / 1024;
     double speed = cost > 0 ? sizeInMB / cost : 0;
-    error.infos.insert_or_assign(StringView("Cost"), StringView::formatted("%f s", cost));
-    error.infos.insert_or_assign(StringView("Size"),
-                                 StringView::formatted("%f MB", sizeInMB));
-    error.infos.insert_or_assign(StringView("Speed"),
-                                 StringView::formatted("%f MB/s", speed));
+    error.infos.insert_or_assign("Cost", StringView::formatted("%f s", cost));
+    error.infos.insert_or_assign("Size", StringView::formatted("%f MB", sizeInMB));
+    error.infos.insert_or_assign("Speed", StringView::formatted("%f MB/s", speed));
 }
 
 #pragma mark - Score and Progress
@@ -320,7 +316,7 @@ bool FactoryRetriever::calculateSize(const UnsafeStringView &databasePath)
 Fraction FactoryRetriever::getWeight(const UnsafeStringView &databasePath)
 {
     assert(m_sizes.find(databasePath) != m_sizes.end());
-    return Fraction(m_sizes[StringView(databasePath)], m_totalSize > 0 ? m_totalSize : 1);
+    return Fraction(m_sizes[databasePath], m_totalSize > 0 ? m_totalSize : 1);
 }
 
 void FactoryRetriever::increaseProgress(const UnsafeStringView &databasePath,

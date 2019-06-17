@@ -28,9 +28,9 @@ Sequence::Sequence() : seq(0)
 {
 }
 
-StringView Sequence::tableName()
+const char* Sequence::tableName()
 {
-    return StringView("sqlite_sequence");
+    return "sqlite_sequence";
 }
 
 } //namespace Repair

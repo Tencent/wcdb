@@ -65,17 +65,17 @@ const StringView &AbstractHandle::getPath() const
     return m_path;
 }
 
-StringView AbstractHandle::getSHMSuffix()
+const char* AbstractHandle::getSHMSuffix()
 {
     return "-shm";
 }
 
-StringView AbstractHandle::getWALSuffix()
+const char* AbstractHandle::getWALSuffix()
 {
     return "-wal";
 }
 
-StringView AbstractHandle::getJournalSuffix()
+const char* AbstractHandle::getJournalSuffix()
 {
     return "-journal";
 }

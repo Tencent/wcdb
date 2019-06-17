@@ -107,9 +107,9 @@ void Global::setNotificationForLog(const UnsafeStringView &name, const LogNotifi
 {
     LockGuard lockGuard(m_lock);
     if (notification != nullptr) {
-        m_logNotifications[StringView(name)] = notification;
+        m_logNotifications[name] = notification;
     } else {
-        m_logNotifications.erase(StringView(name));
+        m_logNotifications.erase(name);
     }
 }
 
@@ -134,9 +134,9 @@ void Global::setNotificationWhenFileOpened(const UnsafeStringView &name,
 {
     LockGuard lockGuard(m_lock);
     if (notification != nullptr) {
-        m_fileOpenedNotifications[StringView(name)] = notification;
+        m_fileOpenedNotifications[name] = notification;
     } else {
-        m_fileOpenedNotifications.erase(StringView(name));
+        m_fileOpenedNotifications.erase(name);
     }
 }
 
@@ -169,7 +169,7 @@ void Global::setNotificationForLockEvent(const UnsafeStringView &name,
     event.lockDidChange = lockDidChange;
     event.willShmLock = willShmLock;
     event.shmLockDidChange = shmLockDidChange;
-    m_lockEventNotifications[StringView(name)] = event;
+    m_lockEventNotifications[name] = event;
 }
 
 void Global::willLock(void *parameter, const char *path, int type)

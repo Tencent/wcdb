@@ -230,7 +230,15 @@ operator()(const UnsafeStringView& lhs, const StringView& rhs) const
 {
     return lhs < rhs;
 }
+    
+    void StringViewSet::erase(const UnsafeStringView& value) {
+        auto iter = this->find(value);
+        if (iter != this->end()) {
+            this->Super::erase(iter);
+        }
+    }
 
+    
 } // namespace WCDB
 
 std::ostream& operator<<(std::ostream& stream, const WCDB::UnsafeStringView& string)

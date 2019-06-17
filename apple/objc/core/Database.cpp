@@ -143,13 +143,13 @@ void Database::setConfig(const UnsafeStringView &name,
                          int priority)
 {
     LockGuard memoryGuard(m_memory);
-    m_configs.insert(name, config, priority);
+    m_configs.insert(StringView(name), config, priority);
 }
 
 void Database::removeConfig(const UnsafeStringView &name)
 {
     LockGuard memoryGuard(m_memory);
-    m_configs.erase(name);
+    m_configs.erase(StringView(name));
 }
 
 #pragma mark - Handle
