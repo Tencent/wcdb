@@ -263,13 +263,13 @@ bool Migration::Binder::stopBinding(bool succeed)
 {
     WCTInnerAssert(m_binding);
     if (succeed) {
-        m_migration.tryReduceBounds(m_bindings);
+        m_bindings.clear();
         for (const auto& iter : m_referenceds) {
             if (iter.second != nullptr) {
                 m_bindings.emplace(iter.first, iter.second.get());
             }
         }
-
+        
         if (m_rebind || m_bounds != m_bindings) {
             succeed = bindInfos(m_bindings);
             if (succeed) {
