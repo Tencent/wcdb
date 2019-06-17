@@ -139,21 +139,27 @@ void HandleStatement::bindInteger32(const Integer32 &value, int index)
 {
     WCTInnerAssert(isPrepared());
     WCTInnerAssert(!isBusy());
-    APIExit(sqlite3_bind_int(m_stmt, index, value));
+    bool succeed = APIExit(sqlite3_bind_int(m_stmt, index, value));
+    WCTInnerAssert(succeed);
+    WCDB_UNUSED(succeed);
 }
 
 void HandleStatement::bindInteger64(const Integer64 &value, int index)
 {
     WCTInnerAssert(isPrepared());
     WCTInnerAssert(!isBusy());
-    APIExit(sqlite3_bind_int64(m_stmt, index, value));
+    bool succeed = APIExit(sqlite3_bind_int64(m_stmt, index, value));
+    WCTInnerAssert(succeed);
+    WCDB_UNUSED(succeed);
 }
 
 void HandleStatement::bindDouble(const Float &value, int index)
 {
     WCTInnerAssert(isPrepared());
     WCTInnerAssert(!isBusy());
-    APIExit(sqlite3_bind_double(m_stmt, index, value));
+    bool succeed = APIExit(sqlite3_bind_double(m_stmt, index, value));
+    WCTInnerAssert(succeed);
+    WCDB_UNUSED(succeed);
 }
 
 void HandleStatement::bindText(const Text &value, int index)
@@ -161,22 +167,28 @@ void HandleStatement::bindText(const Text &value, int index)
     WCTInnerAssert(isPrepared());
     WCTInnerAssert(!isBusy());
     // use SQLITE_STATIC if auto_commit?
-    APIExit(sqlite3_bind_text(m_stmt, index, value.data(), (int) value.length(), SQLITE_TRANSIENT));
+    bool succeed = APIExit(sqlite3_bind_text(m_stmt, index, value.data(), (int) value.length(), SQLITE_TRANSIENT));
+    WCTInnerAssert(succeed);
+    WCDB_UNUSED(succeed);
 }
 
 void HandleStatement::bindBLOB(const BLOB &value, int index)
 {
     WCTInnerAssert(isPrepared());
     WCTInnerAssert(!isBusy());
-    // use SQLITE_STATIC if auto_commit?
-    APIExit(sqlite3_bind_blob(m_stmt, index, value.buffer(), (int) value.size(), SQLITE_TRANSIENT));
+    // TODO: use SQLITE_STATIC to get better performance?
+    bool succeed = APIExit(sqlite3_bind_blob(m_stmt, index, value.buffer(), (int) value.size(), SQLITE_TRANSIENT));
+    WCTInnerAssert(succeed);
+    WCDB_UNUSED(succeed);
 }
 
 void HandleStatement::bindNull(int index)
 {
     WCTInnerAssert(isPrepared());
     WCTInnerAssert(!isBusy());
-    APIExit(sqlite3_bind_null(m_stmt, index));
+    bool succeed = APIExit(sqlite3_bind_null(m_stmt, index));
+    WCTInnerAssert(succeed);
+    WCDB_UNUSED(succeed);
 }
 
 HandleStatement::Integer32 HandleStatement::getInteger32(int index)
