@@ -44,11 +44,9 @@ void OperationHandle::setType(HandleType type)
     case HandleType::OperationBackup:
         m_error.infos.insert_or_assign(ErrorStringKeyAction, ErrorActionBackup);
         break;
-    case HandleType::OperationCheckpoint:
-        m_error.infos.insert_or_assign(ErrorStringKeyAction, ErrorActionCheckpoint);
-        break;
     default:
-        WCTInnerAssert(false);
+        WCTInnerAssert(type == HandleType::OperationCheckpoint);
+        m_error.infos.insert_or_assign(ErrorStringKeyAction, ErrorActionCheckpoint);
         break;
     }
 }
