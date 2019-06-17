@@ -88,7 +88,7 @@ void AutoCheckpointConfig::log(int rc, const char* message)
         if (frames > 0) {
             // hint checkpoint
             if (frames > 0) {
-                UnsafeStringView path = match[2].str();
+                StringView path(match[2].str());
                 m_operator->asyncCheckpoint(path);
             }
         }
