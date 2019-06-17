@@ -41,9 +41,10 @@ public:
     typedef Syntax::Identifier::Iterator Iterator;
     void iterate(const Iterator& iterator);
 
-    StringView getDescription() const;
+    const StringView& getDescription() const;
 
-    Syntax::Identifier* getSyntaxIdentifier() const;
+    Syntax::Identifier* getSyntaxIdentifier();
+    const Syntax::Identifier* getSyntaxIdentifier() const;
 
 protected:
     template<typename T, typename Enable = typename std::enable_if<std::is_base_of<Syntax::Identifier, T>::value>::type>
@@ -58,8 +59,11 @@ protected:
 
     Shadow<Syntax::Identifier> m_syntax;
 
+    void markAsDirty() const;
+
 private:
     SQL(Type type, const SQL& sql);
+    mutable std::optional<StringView> m_description;
 };
 
 template<typename T, typename U>
@@ -77,7 +81,11 @@ public:
 
     virtual ~TypedSyntax() {}
 
-    inline T& syntax() const { return *static_cast<T*>(U::m_syntax.get()); }
+    T& syntax() const
+    {
+        U::markAsDirty();
+        return *static_cast<T*>(U::m_syntax.get());
+    }
 
     // Convert SQL to Syntax implicitly
     operator const T&() const { return *static_cast<T*>(U::m_syntax.get()); }

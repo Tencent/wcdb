@@ -44,14 +44,30 @@ void SQL::iterate(const Iterator& iterator)
     return m_syntax->iterate(iterator);
 }
 
-StringView SQL::getDescription() const
+const StringView& SQL::getDescription() const
 {
-    return m_syntax->getDescription();
+    if (!m_description.has_value()) {
+        m_description = m_syntax->getDescription();
+    }
+    return m_description.value();
 }
 
-Syntax::Identifier* SQL::getSyntaxIdentifier() const
+Syntax::Identifier* SQL::getSyntaxIdentifier()
+{
+    markAsDirty();
+    return m_syntax.get();
+}
+
+const Syntax::Identifier* SQL::getSyntaxIdentifier() const
 {
     return m_syntax.get();
+}
+
+void SQL::markAsDirty() const
+{
+    if (m_description.has_value()) {
+        m_description = std::nullopt;
+    }
 }
 
 SQL::~SQL()
