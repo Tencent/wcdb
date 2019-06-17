@@ -152,18 +152,18 @@ public:
 
     /*
      INSERT rowid, [columns]
-     INTO main.[table]
-     [OR ONCONFLICT ACTION]
-     SELECT newRowid, [columns]
-     FROM [schemaForSourceDatabase].[sourceTable]
-     WHERE rowid == ?1
+     ...
+     VALUES (?rowidIndex, ...)
      
      Note that newRowid is
      1. rowid in source table when it's an integer primary key table
      2. SELECT max(rowid)+1 FROM temp.[unionedView] when the table does not contain an integer primary key
      */
     StatementInsert
-    getStatementForMigratingSpecifiedRow(Syntax::ConflictAction conflictAction) const;
+    getStatementForMigrating(const Syntax::InsertSTMT& stmt) const;
+    
+    static int getRowIDIndexOfMigratingStatement();
+    
     /*
      UPDATE ...
      SET ...
@@ -186,7 +186,6 @@ public:
     StatementDelete getStatementForDeletingFromTable(const Statement& sourceStatement) const;
 
 protected:
-    StatementInsert m_statementForMigratingSpecifiedRowTemplate;
     StatementDelete m_statementForDeletingSpecifiedRow;
 
 #pragma mark - Migrate

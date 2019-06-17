@@ -112,6 +112,12 @@ void InsertSTMT::iterate(const Iterator& iterator, bool& stop)
 }
 
 #pragma mark - Utility
+    bool InsertSTMT::isMultiWrite() const
+    {
+        return (switcher == Switch::Values && expressionsValues.size() > 1)
+        || switcher == Switch::Select;
+    }
+    
 bool InsertSTMT::isTargetingSameTable(const InsertSTMT& other) const
 {
     return table == other.table && schema.isTargetingSameSchema(other.schema);

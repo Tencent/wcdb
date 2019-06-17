@@ -97,8 +97,7 @@ protected:
 protected:
     // For Insert Statement Only
     bool isMigratedPrepared();
-    // only conflict clause will be used
-    bool prepareMigrate(const UnsafeStringView &table, Syntax::ConflictAction conflictAction);
+    bool prepareMigrate(const Syntax::InsertSTMT& migrated, const Syntax::InsertSTMT& falledBack);
     bool stepMigration(const int64_t &rowid);
     void finalizeMigrate();
     void resetMigrate();

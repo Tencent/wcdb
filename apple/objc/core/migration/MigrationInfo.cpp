@@ -212,16 +212,6 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
                     .from(TableOrSubquery(getTable()).schema(Schema::main())));
         }
 
-        m_statementForMigratingSpecifiedRowTemplate
-        = StatementInsert()
-          .insertIntoTable(getTable())
-          .schema(Schema::main())
-          .columns(columns)
-          .values(StatementSelect()
-                  .select(resultColumnsForRowIDCompatible)
-                  .from(TableOrSubquery(getSourceTable()).schema(m_schemaForSourceDatabase))
-                  .where(Column::rowid() == BindParameter(1)));
-
         m_statementForDeletingSpecifiedRow
         = StatementDelete()
           .deleteFrom(QualifiedTable(getSourceTable()).schema(m_schemaForSourceDatabase))
@@ -308,12 +298,33 @@ const StatementDelete& MigrationInfo::getStatementForDeletingSpecifiedRow() cons
 }
 
 StatementInsert
-MigrationInfo::getStatementForMigratingSpecifiedRow(Syntax::ConflictAction conflictAction) const
+MigrationInfo::getStatementForMigrating(const Syntax::InsertSTMT& stmt) const
 {
-    StatementInsert statement = m_statementForMigratingSpecifiedRowTemplate;
-    statement.syntax().conflictAction = conflictAction;
+    StatementInsert statement;
+    statement.syntax() = stmt;
+    
+    auto& syntax = statement.syntax();
+    syntax.schema = Schema::main();
+    syntax.table = getTable();
+    WCTInnerAssert(!syntax.isMultiWrite());
+    
+    auto& columns = syntax.columns;
+    WCTInnerAssert(!columns.empty());
+    columns.insert(columns.begin(), Column("rowid"));
+    
+    if (!syntax.expressionsValues.empty()) {
+        auto& expressions = syntax.expressionsValues;
+        WCTInnerAssert(expressions.size() == 1);
+        auto& values = *expressions.begin();
+        values.insert(values.begin(), Expression(BindParameter(getRowIDIndexOfMigratingStatement())));
+    }
     return statement;
 }
+    
+    int MigrationInfo::getRowIDIndexOfMigratingStatement()
+    {
+        return SQLITE_MAX_VARIABLE_NUMBER;
+    }
 
 StatementUpdate
 MigrationInfo::getStatementForLimitedUpdatingTable(const Statement& sourceStatement) const
@@ -376,7 +387,7 @@ MigrationInfo::getStatementForLimitedDeletingFromTable(const Statement& sourceSt
 
     return statementDelete;
 }
-
+    
 StatementDelete
 MigrationInfo::getStatementForDeletingFromTable(const Statement& sourceStatement) const
 {

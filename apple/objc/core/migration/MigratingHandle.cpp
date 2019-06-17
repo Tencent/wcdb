@@ -309,10 +309,11 @@ std::pair<bool, std::list<Statement>> MigratingHandle::process(const Statement& 
             = static_cast<const Syntax::InsertSTMT*>(originStatement.getSyntaxIdentifier());
             const Syntax::InsertSTMT* falledBackSTMT
             = static_cast<const Syntax::InsertSTMT*>(falledBackStatement.getSyntaxIdentifier());
+            WCTRemedialAssert(!migratedInsertSTMT->columns.empty(), "Insert statement that does not explicitly indicate columns is not supported while using migration feature.", succeed = false; break;);
+            WCTRemedialAssert(!migratedInsertSTMT->isMultiWrite(), "Insert statement that contains multiple values is not supported while using migration feature.", succeed = false; break;);
             if (!migratedInsertSTMT->isTargetingSameTable(*falledBackSTMT)) {
                 // it's safe to use origin statement since Conflict Action will not be changed during tampering.
-                succeed = prepareMigrate(migratedInsertSTMT->table,
-                                         migratedInsertSTMT->conflictAction);
+                succeed = prepareMigrate(*migratedInsertSTMT, *falledBackSTMT);
             }
         } break;
         case Syntax::Identifier::Type::UpdateSTMT: {
@@ -492,6 +493,10 @@ void MigratingHandle::bindInteger32(const Integer32& value, int index)
     if (m_additionalStatement->isPrepared()) {
         m_additionalStatement->bindInteger32(value, index);
     }
+    if (m_migrateStatement->isPrepared()) {
+        WCTRemedialAssert(index != MigrationInfo::getRowIDIndexOfMigratingStatement(), "Binding index is out of range", return;);
+        m_migrateStatement->bindInteger32(value, MigrationInfo::getRowIDIndexOfMigratingStatement());
+    }
 }
 
 void MigratingHandle::bindInteger64(const Integer64& value, int index)
@@ -499,6 +504,10 @@ void MigratingHandle::bindInteger64(const Integer64& value, int index)
     m_mainStatement->bindInteger64(value, index);
     if (m_additionalStatement->isPrepared()) {
         m_additionalStatement->bindInteger64(value, index);
+    }
+    if (m_migrateStatement->isPrepared()) {
+        WCTRemedialAssert(index != MigrationInfo::getRowIDIndexOfMigratingStatement(), "Binding index is out of range", return;);
+        m_migrateStatement->bindInteger64(value, MigrationInfo::getRowIDIndexOfMigratingStatement());
     }
 }
 
@@ -508,6 +517,10 @@ void MigratingHandle::bindDouble(const Float& value, int index)
     if (m_additionalStatement->isPrepared()) {
         m_additionalStatement->bindDouble(value, index);
     }
+    if (m_migrateStatement->isPrepared()) {
+        WCTRemedialAssert(index != MigrationInfo::getRowIDIndexOfMigratingStatement(), "Binding index is out of range", return;);
+        m_migrateStatement->bindDouble(value, MigrationInfo::getRowIDIndexOfMigratingStatement());
+    }
 }
 
 void MigratingHandle::bindText(const Text& value, int index)
@@ -515,6 +528,10 @@ void MigratingHandle::bindText(const Text& value, int index)
     m_mainStatement->bindText(value, index);
     if (m_additionalStatement->isPrepared()) {
         m_additionalStatement->bindText(value, index);
+    }
+    if (m_migrateStatement->isPrepared()) {
+        WCTRemedialAssert(index != MigrationInfo::getRowIDIndexOfMigratingStatement(), "Binding index is out of range", return;);
+        m_migrateStatement->bindText(value, MigrationInfo::getRowIDIndexOfMigratingStatement());
     }
 }
 
@@ -524,6 +541,10 @@ void MigratingHandle::bindBLOB(const BLOB& value, int index)
     if (m_additionalStatement->isPrepared()) {
         m_additionalStatement->bindBLOB(value, index);
     }
+    if (m_migrateStatement->isPrepared()) {
+        WCTRemedialAssert(index != MigrationInfo::getRowIDIndexOfMigratingStatement(), "Binding index is out of range", return;);
+        m_migrateStatement->bindBLOB(value, MigrationInfo::getRowIDIndexOfMigratingStatement());
+    }
 }
 
 void MigratingHandle::bindNull(int index)
@@ -531,6 +552,10 @@ void MigratingHandle::bindNull(int index)
     m_mainStatement->bindNull(index);
     if (m_additionalStatement->isPrepared()) {
         m_additionalStatement->bindNull(index);
+    }
+    if (m_migrateStatement->isPrepared()) {
+        WCTRemedialAssert(index != MigrationInfo::getRowIDIndexOfMigratingStatement(), "Binding index is out of range", return;);
+        m_migrateStatement->bindNull(index + 1);
     }
 }
 
@@ -611,32 +636,31 @@ bool MigratingHandle::isMigratedPrepared()
 bool MigratingHandle::stepMigration(const int64_t& rowid)
 {
     WCTInnerAssert(isMigratedPrepared());
-    m_migrateStatement->bindInteger64(rowid, 1);
     m_removeMigratedStatement->bindInteger64(rowid, 1);
-    return m_migrateStatement->step() && m_removeMigratedStatement->step();
+    m_migrateStatement->bindInteger64(rowid, 1);
+    return m_removeMigratedStatement->step() && m_migrateStatement->step();
 }
 
 void MigratingHandle::finalizeMigrate()
 {
-    m_migrateStatement->finalize();
     m_removeMigratedStatement->finalize();
+    m_migrateStatement->finalize();
 }
 
 void MigratingHandle::resetMigrate()
 {
     WCTInnerAssert(isMigratedPrepared());
-    m_migrateStatement->reset();
     m_removeMigratedStatement->reset();
+    m_migrateStatement->reset();
 }
 
-bool MigratingHandle::prepareMigrate(const UnsafeStringView& table,
-                                     Syntax::ConflictAction conflictAction)
+bool MigratingHandle::prepareMigrate(const Syntax::InsertSTMT& migrated, const Syntax::InsertSTMT& falledBack)
 {
     WCTInnerAssert(!isMigratedPrepared());
-    const MigrationInfo* info = getBoundInfo(table);
+    const MigrationInfo* info = getBoundInfo(migrated.table);
     WCTInnerAssert(info != nullptr);
-    return m_migrateStatement->prepare(info->getStatementForMigratingSpecifiedRow(conflictAction))
-           && m_removeMigratedStatement->prepare(info->getStatementForDeletingSpecifiedRow());
+    return m_removeMigratedStatement->prepare(info->getStatementForDeletingSpecifiedRow())
+    && m_migrateStatement->prepare(info->getStatementForMigrating(falledBack));
 }
 
 } //namespace WCDB

@@ -36,7 +36,7 @@ public:
     StringView alias;
     std::list<Column> columns;
 
-    WCDB_SYNTAX_MAIN_UNION_ENUM(Values, Select, Default, );
+    WCDB_SYNTAX_MAIN_UNION_ENUM(Values, Select, Default);
     std::list<std::list<Expression>> expressionsValues;
     SelectSTMT select;
 
@@ -52,6 +52,7 @@ public:
 
 #pragma mark - Utility
 public:
+    bool isMultiWrite() const;
     bool isTargetingSameTable(const InsertSTMT& other) const;
 };
 
