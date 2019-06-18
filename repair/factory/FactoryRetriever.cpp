@@ -232,7 +232,8 @@ void FactoryRetriever::reportMechanic(const Fraction &score,
     error.infos.insert_or_assign("Score", score.value());
     error.infos.insert_or_assign("Material", material.stringify());
     finishReportOfPerformance(error, path, cost);
-    error.infos.insert_or_assign("Weight", StringView::formatted("%f%%", getWeight(path).value() * 100.0f));
+    error.infos.insert_or_assign(
+    "Weight", StringView::formatted("%f%%", getWeight(path).value() * 100.0f));
     Notifier::shared().notify(error);
 }
 
@@ -245,7 +246,8 @@ void FactoryRetriever::reportFullCrawler(const Fraction &score,
     error.infos.insert_or_assign(ErrorStringKeyPath, path);
     error.infos.insert_or_assign("Score", score.value());
     finishReportOfPerformance(error, path, cost);
-    error.infos.insert_or_assign("Weight", StringView::formatted("%f%%", getWeight(path).value() * 100.0f));
+    error.infos.insert_or_assign(
+    "Weight", StringView::formatted("%f%%", getWeight(path).value() * 100.0f));
     Notifier::shared().notify(error);
 }
 

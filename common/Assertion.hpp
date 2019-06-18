@@ -50,7 +50,9 @@
 #endif // WCDB_DEBUG
 
 #define WCTRemedialAssert(cond, message, remedial)                             \
-    __WCTAssert(cond, message, if (WCDB::Console::debuggable()) { abort(); } else { remedial })
+    __WCTAssert(                                                               \
+    cond, message, if (WCDB::Console::debuggable()) { abort(); } else { remedial })
 
 #define WCTAssert(cond, message)                                               \
-    __WCTAssert(cond, message, if (WCDB::Console::debuggable()) { abort(); })
+    __WCTAssert(                                                               \
+    cond, message, if (WCDB::Console::debuggable()) { abort(); })

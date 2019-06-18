@@ -297,34 +297,34 @@ const StatementDelete& MigrationInfo::getStatementForDeletingSpecifiedRow() cons
     return m_statementForDeletingSpecifiedRow;
 }
 
-StatementInsert
-MigrationInfo::getStatementForMigrating(const Syntax::InsertSTMT& stmt) const
+StatementInsert MigrationInfo::getStatementForMigrating(const Syntax::InsertSTMT& stmt) const
 {
     StatementInsert statement;
     statement.syntax() = stmt;
-    
+
     auto& syntax = statement.syntax();
     syntax.schema = Schema::main();
     syntax.table = getTable();
     WCTInnerAssert(!syntax.isMultiWrite());
-    
+
     auto& columns = syntax.columns;
     WCTInnerAssert(!columns.empty());
     columns.insert(columns.begin(), Column("rowid"));
-    
+
     if (!syntax.expressionsValues.empty()) {
         auto& expressions = syntax.expressionsValues;
         WCTInnerAssert(expressions.size() == 1);
         auto& values = *expressions.begin();
-        values.insert(values.begin(), Expression(BindParameter(getRowIDIndexOfMigratingStatement())));
+        values.insert(values.begin(),
+                      Expression(BindParameter(getRowIDIndexOfMigratingStatement())));
     }
     return statement;
 }
-    
-    int MigrationInfo::getRowIDIndexOfMigratingStatement()
-    {
-        return SQLITE_MAX_VARIABLE_NUMBER;
-    }
+
+int MigrationInfo::getRowIDIndexOfMigratingStatement()
+{
+    return SQLITE_MAX_VARIABLE_NUMBER;
+}
 
 StatementUpdate
 MigrationInfo::getStatementForLimitedUpdatingTable(const Statement& sourceStatement) const
@@ -387,7 +387,7 @@ MigrationInfo::getStatementForLimitedDeletingFromTable(const Statement& sourceSt
 
     return statementDelete;
 }
-    
+
 StatementDelete
 MigrationInfo::getStatementForDeletingFromTable(const Statement& sourceStatement) const
 {
