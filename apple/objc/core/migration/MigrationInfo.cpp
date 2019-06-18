@@ -192,23 +192,8 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
     // Compatible
     {
         if (!m_integerPrimaryKey) {
-            Column maxRowIDColumn("maxRowID");
-
-            ResultColumn maxRowIDResultColumn = Column::rowid().max();
-            maxRowIDResultColumn.as(maxRowIDColumn.getDescription());
-
-            ResultColumn expectingRowID = maxRowIDColumn.max() + 1;
-            expectingRowID.as(Column::rowid().getDescription());
-
             m_statementForSelectingMaxRowID
-            = StatementSelect()
-              .select(expectingRowID)
-              .from(StatementSelect()
-                    .select(maxRowIDResultColumn)
-                    .from(TableOrSubquery(getSourceTable()).schema(m_schemaForSourceDatabase))
-                    .unionAll()
-                    .select(maxRowIDResultColumn)
-                    .from(TableOrSubquery(getTable()).schema(Schema::main())));
+            = StatementSelect().select(Column::rowid().max() + 1).from(m_unionedView);
         }
 
         m_statementForDeletingSpecifiedRow
