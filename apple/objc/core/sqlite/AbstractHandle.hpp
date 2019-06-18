@@ -51,9 +51,9 @@ public:
     void clearPath();
     const StringView &getPath() const;
 
-    static const char* getSHMSuffix();
-    static const char* getWALSuffix();
-    static const char* getJournalSuffix();
+    static const char *getSHMSuffix();
+    static const char *getWALSuffix();
+    static const char *getJournalSuffix();
 
 private:
     StringView m_path;
@@ -113,8 +113,8 @@ public:
     void rollbackNestedTransaction();
 
 private:
-    static StringView getSavepointName(int nestedLevel);
-    int m_nestedLevel;
+    static StringView getSavepointName(int transactionLevel);
+    int m_transactionLevel;
 
 #pragma mark - Interface
 public:

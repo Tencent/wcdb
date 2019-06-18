@@ -29,7 +29,7 @@ namespace WCDB {
 
 #pragma mark - Initialize
 AbstractHandle::AbstractHandle()
-: m_handle(nullptr), m_notification(this), m_nestedLevel(0)
+: m_handle(nullptr), m_notification(this), m_transactionLevel(0)
 {
 }
 
@@ -65,17 +65,17 @@ const StringView &AbstractHandle::getPath() const
     return m_path;
 }
 
-const char* AbstractHandle::getSHMSuffix()
+const char *AbstractHandle::getSHMSuffix()
 {
     return "-shm";
 }
 
-const char* AbstractHandle::getWALSuffix()
+const char *AbstractHandle::getWALSuffix()
 {
     return "-wal";
 }
 
-const char* AbstractHandle::getJournalSuffix()
+const char *AbstractHandle::getJournalSuffix()
 {
     return "-journal";
 }
@@ -102,7 +102,7 @@ void AbstractHandle::close()
 {
     if (isOpened()) {
         finalizeStatements();
-        WCTRemedialAssert(m_nestedLevel == 0 && !isInTransaction(),
+        WCTRemedialAssert(m_transactionLevel == 0 && !isInTransaction(),
                           "Unpaired transaction.",
                           rollbackTransaction(););
         m_notification.purge();
@@ -298,38 +298,23 @@ AbstractHandle::getValues(const Statement &statement, int index)
 }
 
 #pragma mark - Transaction
-StringView AbstractHandle::getSavepointName(int nestedLevel)
+StringView AbstractHandle::getSavepointName(int transactionLevel)
 {
-    return StringView::formatted("WCDBSavepoint_%d", nestedLevel);
+    return StringView::formatted("wcdb_lv_%d", transactionLevel);
 }
 
 bool AbstractHandle::beginNestedTransaction()
 {
     bool succeed = true;
     if (isInTransaction()) {
-        ++m_nestedLevel;
+        if (m_transactionLevel == 0) {
+            m_transactionLevel = 1;
+        }
 
-        static const StringView *s_savepoint_1 = new StringView(
-        StatementSavepoint().savepoint(getSavepointName(1)).getDescription());
-        static const StringView *s_savepoint_2 = new StringView(
-        StatementSavepoint().savepoint(getSavepointName(2)).getDescription());
-        static const StringView *s_savepoint_3 = new StringView(
-        StatementSavepoint().savepoint(getSavepointName(3)).getDescription());
-
-        switch (m_nestedLevel) {
-        case 1:
-            succeed = executeSQL(*s_savepoint_1);
-            break;
-        case 2:
-            succeed = executeSQL(*s_savepoint_2);
-            break;
-        case 3:
-            succeed = executeSQL(*s_savepoint_3);
-            break;
-        default:
-            succeed = executeStatement(
-            StatementSavepoint().savepoint(getSavepointName(m_nestedLevel)));
-            break;
+        succeed = executeStatement(
+        StatementSavepoint().savepoint(getSavepointName(m_transactionLevel + 1)));
+        if (succeed) {
+            ++m_transactionLevel;
         }
     } else {
         succeed = beginTransaction();
@@ -340,35 +325,17 @@ bool AbstractHandle::beginNestedTransaction()
 bool AbstractHandle::commitOrRollbackNestedTransaction()
 {
     bool succeed = true;
-    if (m_nestedLevel == 0) {
-        succeed = commitOrRollbackTransaction();
-    } else {
-        static const StringView *s_savepoint_1 = new StringView(
-        StatementRelease().release(getSavepointName(1)).getDescription());
-        static const StringView *s_savepoint_2 = new StringView(
-        StatementRelease().release(getSavepointName(2)).getDescription());
-        static const StringView *s_savepoint_3 = new StringView(
-        StatementRelease().release(getSavepointName(3)).getDescription());
-
-        switch (m_nestedLevel) {
-        case 1:
-            succeed = executeSQL(*s_savepoint_1);
-            break;
-        case 2:
-            succeed = executeSQL(*s_savepoint_2);
-            break;
-        case 3:
-            succeed = executeSQL(*s_savepoint_3);
-            break;
-        default:
-            succeed = executeStatement(
-            StatementRelease().release(getSavepointName(m_nestedLevel)));
-            break;
-        }
-        if (succeed) {
-            --m_nestedLevel;
+    if (isInTransaction()) {
+        if (m_transactionLevel == 1) {
+            succeed = commitOrRollbackTransaction();
         } else {
-            rollbackNestedTransaction();
+            succeed = executeStatement(
+            StatementRelease().release(getSavepointName(m_transactionLevel)));
+            if (succeed) {
+                --m_transactionLevel;
+            } else {
+                rollbackNestedTransaction();
+            }
         }
     }
     return succeed;
@@ -376,34 +343,15 @@ bool AbstractHandle::commitOrRollbackNestedTransaction()
 
 void AbstractHandle::rollbackNestedTransaction()
 {
-    if (m_nestedLevel == 0) {
-        rollbackTransaction();
-    } else {
-        static const StringView *s_savepoint_1 = new StringView(
-        StatementRollback().rollbackToSavepoint(getSavepointName(1)).getDescription());
-        static const StringView *s_savepoint_2 = new StringView(
-        StatementRollback().rollbackToSavepoint(getSavepointName(2)).getDescription());
-        static const StringView *s_savepoint_3 = new StringView(
-        StatementRollback().rollbackToSavepoint(getSavepointName(3)).getDescription());
-
-        bool succeed = false;
-        switch (m_nestedLevel) {
-        case 1:
-            succeed = executeSQL(*s_savepoint_1);
-            break;
-        case 2:
-            succeed = executeSQL(*s_savepoint_2);
-            break;
-        case 3:
-            succeed = executeSQL(*s_savepoint_3);
-            break;
-        default:
-            succeed = executeStatement(
-            StatementRollback().rollbackToSavepoint(getSavepointName(m_nestedLevel)));
-            break;
-        }
-        if (succeed) {
-            --m_nestedLevel;
+    if (isInTransaction()) {
+        if (m_transactionLevel == 1) {
+            rollbackTransaction();
+        } else {
+            bool succeed = executeStatement(StatementRollback().rollbackToSavepoint(
+            getSavepointName(m_transactionLevel)));
+            if (succeed) {
+                --m_transactionLevel;
+            }
         }
     }
 }
@@ -418,7 +366,7 @@ bool AbstractHandle::beginTransaction()
     = new StringView(StatementBegin().beginImmediate().getDescription());
     bool succeed = executeSQL(*s_beginImmediate);
     if (succeed) {
-        m_nestedLevel = 0;
+        m_transactionLevel = 1;
     }
     return succeed;
 }
@@ -429,7 +377,7 @@ bool AbstractHandle::commitOrRollbackTransaction()
     = new StringView(StatementCommit().commit().getDescription());
     bool succeed = executeSQL(*s_commit);
     if (succeed) {
-        m_nestedLevel = 0;
+        m_transactionLevel = 0;
     } else {
         // If certain kinds of errors occur within a transaction, the transaction may or may not be rolled back automatically: https://sqlite.org/lang_transaction.html
         rollbackTransaction();
@@ -444,7 +392,7 @@ void AbstractHandle::rollbackTransaction()
     = new StringView(StatementRollback().rollback().getDescription());
     if (isInTransaction()) {
         if (executeSQL(*s_rollback)) {
-            m_nestedLevel = 0;
+            m_transactionLevel = 0;
         }
     }
 }
