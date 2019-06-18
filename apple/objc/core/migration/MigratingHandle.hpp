@@ -97,7 +97,8 @@ protected:
 protected:
     // For Insert Statement Only
     bool isMigratedPrepared();
-    bool prepareMigrate(const Syntax::InsertSTMT& migrated, const Syntax::InsertSTMT& falledBack);
+    bool prepareMigrate(const Syntax::InsertSTMT &migrated,
+                        const Syntax::InsertSTMT &falledBack);
     bool stepMigration(const int64_t &rowid);
     void finalizeMigrate();
     void resetMigrate();
@@ -105,6 +106,7 @@ protected:
 private:
     HandleStatement *m_migrateStatement;
     HandleStatement *m_removeMigratedStatement;
+    int m_rowidIndexOfMigratingStatement;
 };
 
 } //namespace WCDB

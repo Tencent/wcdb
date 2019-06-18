@@ -191,7 +191,6 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
 
     // Compatible
     {
-        ResultColumns resultColumnsForRowIDCompatible = resultColumns;
         if (!m_integerPrimaryKey) {
             Column maxRowIDColumn("maxRowID");
 
@@ -201,7 +200,7 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
             ResultColumn expectingRowID = maxRowIDColumn.max() + 1;
             expectingRowID.as(Column::rowid().getDescription());
 
-            resultColumnsForRowIDCompatible.front()
+            m_statementForSelectingMaxRowID
             = StatementSelect()
               .select(expectingRowID)
               .from(StatementSelect()
@@ -314,15 +313,24 @@ StatementInsert MigrationInfo::getStatementForMigrating(const Syntax::InsertSTMT
         auto& expressions = syntax.expressionsValues;
         WCTInnerAssert(expressions.size() == 1);
         auto& values = *expressions.begin();
-        values.insert(values.begin(),
-                      Expression(BindParameter(getRowIDIndexOfMigratingStatement())));
+        int rowidIndexOfMigratingStatement = getRowIDIndexOfMigratingStatement();
+        Expression rowid;
+        if (rowidIndexOfMigratingStatement > 0) {
+            rowid = BindParameter(rowidIndexOfMigratingStatement);
+        } else {
+            rowid = m_statementForSelectingMaxRowID;
+        }
+        values.insert(values.begin(), rowid);
     }
     return statement;
 }
 
-int MigrationInfo::getRowIDIndexOfMigratingStatement()
+int MigrationInfo::getRowIDIndexOfMigratingStatement() const
 {
-    return SQLITE_MAX_VARIABLE_NUMBER;
+    if (m_integerPrimaryKey) {
+        return SQLITE_MAX_VARIABLE_NUMBER;
+    }
+    return 0;
 }
 
 StatementUpdate

@@ -159,11 +159,10 @@ public:
      1. rowid in source table when it's an integer primary key table
      2. SELECT max(rowid)+1 FROM temp.[unionedView] when the table does not contain an integer primary key
      */
-    StatementInsert
-    getStatementForMigrating(const Syntax::InsertSTMT& stmt) const;
-    
-    static int getRowIDIndexOfMigratingStatement();
-    
+    StatementInsert getStatementForMigrating(const Syntax::InsertSTMT& stmt) const;
+
+    int getRowIDIndexOfMigratingStatement() const;
+
     /*
      UPDATE ...
      SET ...
@@ -187,6 +186,7 @@ public:
 
 protected:
     StatementDelete m_statementForDeletingSpecifiedRow;
+    StatementSelect m_statementForSelectingMaxRowID;
 
 #pragma mark - Migrate
 public:

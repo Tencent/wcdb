@@ -309,8 +309,14 @@ std::pair<bool, std::list<Statement>> MigratingHandle::process(const Statement& 
             = static_cast<const Syntax::InsertSTMT&>(originStatement.syntax());
             const Syntax::InsertSTMT& falledBackSTMT
             = static_cast<const Syntax::InsertSTMT&>(falledBackStatement.syntax());
-            WCTRemedialAssert(!migratedInsertSTMT.columns.empty(), "Insert statement that does not explicitly indicate columns is not supported while using migration feature.", succeed = false; break;);
-            WCTRemedialAssert(!migratedInsertSTMT.isMultiWrite(), "Insert statement that contains multiple values is not supported while using migration feature.", succeed = false; break;);
+            WCTRemedialAssert(!migratedInsertSTMT.columns.empty(),
+                              "Insert statement that does not explicitly indicate columns is not supported while using migration feature.",
+                              succeed = false;
+                              break;);
+            WCTRemedialAssert(!migratedInsertSTMT.isMultiWrite(),
+                              "Insert statement that contains multiple values is not supported while using migration feature.",
+                              succeed = false;
+                              break;);
             if (!migratedInsertSTMT.isTargetingSameTable(falledBackSTMT)) {
                 // it's safe to use origin statement since Conflict Action will not be changed during tampering.
                 succeed = prepareMigrate(migratedInsertSTMT, falledBackSTMT);
@@ -320,7 +326,8 @@ std::pair<bool, std::list<Statement>> MigratingHandle::process(const Statement& 
             const Syntax::QualifiedTableName& migratedTable
             = static_cast<const Syntax::UpdateSTMT&>(originStatement.syntax()).table;
             const Syntax::QualifiedTableName& falledBackTable
-            = static_cast<const Syntax::UpdateSTMT&>(falledBackStatement.syntax()).table;
+            = static_cast<const Syntax::UpdateSTMT&>(falledBackStatement.syntax())
+              .table;
             if (migratedTable.isTargetingToSameTable(falledBackTable)) {
                 statements.push_back(falledBackStatement);
             } else {
@@ -332,8 +339,8 @@ std::pair<bool, std::list<Statement>> MigratingHandle::process(const Statement& 
                 info->getStatementForLimitedUpdatingTable(falledBackStatement));
                 // statement for migrated table
                 statements.push_back(statements.back());
-                Syntax::UpdateSTMT& stmt = static_cast<Syntax::UpdateSTMT&>(
-                statements.back().syntax());
+                Syntax::UpdateSTMT& stmt
+                = static_cast<Syntax::UpdateSTMT&>(statements.back().syntax());
                 stmt.table.table = migratedTableName;
                 stmt.table.schema = Schema::main();
             }
@@ -342,7 +349,8 @@ std::pair<bool, std::list<Statement>> MigratingHandle::process(const Statement& 
             const Syntax::QualifiedTableName& migratedTable
             = static_cast<const Syntax::DeleteSTMT&>(originStatement.syntax()).table;
             const Syntax::QualifiedTableName& falledBackTable
-            = static_cast<const Syntax::DeleteSTMT&>(falledBackStatement.syntax()).table;
+            = static_cast<const Syntax::DeleteSTMT&>(falledBackStatement.syntax())
+              .table;
             if (migratedTable.isTargetingToSameTable(falledBackTable)) {
                 statements.push_back(falledBackStatement);
             } else {
@@ -354,8 +362,8 @@ std::pair<bool, std::list<Statement>> MigratingHandle::process(const Statement& 
                 info->getStatementForLimitedDeletingFromTable(falledBackStatement));
                 // statement for migrated table
                 statements.push_back(statements.back());
-                Syntax::DeleteSTMT& stmt = static_cast<Syntax::DeleteSTMT&>(
-                statements.back().syntax());
+                Syntax::DeleteSTMT& stmt
+                = static_cast<Syntax::DeleteSTMT&>(statements.back().syntax());
                 stmt.table.table = migratedTableName;
                 stmt.table.schema = Schema::main();
             }
@@ -364,8 +372,7 @@ std::pair<bool, std::list<Statement>> MigratingHandle::process(const Statement& 
             const Syntax::DropTableSTMT& migratedSTMT
             = static_cast<const Syntax::DropTableSTMT&>(originStatement.syntax());
             const Syntax::DropTableSTMT& falledBackSTMT
-            = static_cast<const Syntax::DropTableSTMT&>(
-            falledBackStatement.syntax());
+            = static_cast<const Syntax::DropTableSTMT&>(falledBackStatement.syntax());
             statements.push_back(originStatement);
             if (!migratedSTMT.isTargetingSameTable(falledBackSTMT)) {
                 // Don't drop source table. Instead, delete all contents from source table and wait the stepper do the dropping work.
@@ -490,8 +497,10 @@ void MigratingHandle::bindInteger32(const Integer32& value, int index)
         m_additionalStatement->bindInteger32(value, index);
     }
     if (m_migrateStatement->isPrepared()) {
-        WCTRemedialAssert(index != MigrationInfo::getRowIDIndexOfMigratingStatement(), "Binding index is out of range", return;);
-        m_migrateStatement->bindInteger32(value, MigrationInfo::getRowIDIndexOfMigratingStatement());
+        WCTRemedialAssert(m_rowidIndexOfMigratingStatement == 0 || index != m_rowidIndexOfMigratingStatement,
+                          "Binding index is out of range",
+                          return;);
+        m_migrateStatement->bindInteger32(value, index);
     }
 }
 
@@ -502,8 +511,10 @@ void MigratingHandle::bindInteger64(const Integer64& value, int index)
         m_additionalStatement->bindInteger64(value, index);
     }
     if (m_migrateStatement->isPrepared()) {
-        WCTRemedialAssert(index != MigrationInfo::getRowIDIndexOfMigratingStatement(), "Binding index is out of range", return;);
-        m_migrateStatement->bindInteger64(value, MigrationInfo::getRowIDIndexOfMigratingStatement());
+        WCTRemedialAssert(m_rowidIndexOfMigratingStatement == 0 || index != m_rowidIndexOfMigratingStatement,
+                          "Binding index is out of range",
+                          return;);
+        m_migrateStatement->bindInteger64(value, index);
     }
 }
 
@@ -514,8 +525,10 @@ void MigratingHandle::bindDouble(const Float& value, int index)
         m_additionalStatement->bindDouble(value, index);
     }
     if (m_migrateStatement->isPrepared()) {
-        WCTRemedialAssert(index != MigrationInfo::getRowIDIndexOfMigratingStatement(), "Binding index is out of range", return;);
-        m_migrateStatement->bindDouble(value, MigrationInfo::getRowIDIndexOfMigratingStatement());
+        WCTRemedialAssert(m_rowidIndexOfMigratingStatement == 0 || index != m_rowidIndexOfMigratingStatement,
+                          "Binding index is out of range",
+                          return;);
+        m_migrateStatement->bindDouble(value, index);
     }
 }
 
@@ -526,8 +539,10 @@ void MigratingHandle::bindText(const Text& value, int index)
         m_additionalStatement->bindText(value, index);
     }
     if (m_migrateStatement->isPrepared()) {
-        WCTRemedialAssert(index != MigrationInfo::getRowIDIndexOfMigratingStatement(), "Binding index is out of range", return;);
-        m_migrateStatement->bindText(value, MigrationInfo::getRowIDIndexOfMigratingStatement());
+        WCTRemedialAssert(m_rowidIndexOfMigratingStatement == 0 || index != m_rowidIndexOfMigratingStatement,
+                          "Binding index is out of range",
+                          return;);
+        m_migrateStatement->bindText(value, index);
     }
 }
 
@@ -538,8 +553,10 @@ void MigratingHandle::bindBLOB(const BLOB& value, int index)
         m_additionalStatement->bindBLOB(value, index);
     }
     if (m_migrateStatement->isPrepared()) {
-        WCTRemedialAssert(index != MigrationInfo::getRowIDIndexOfMigratingStatement(), "Binding index is out of range", return;);
-        m_migrateStatement->bindBLOB(value, MigrationInfo::getRowIDIndexOfMigratingStatement());
+        WCTRemedialAssert(m_rowidIndexOfMigratingStatement == 0 || index != m_rowidIndexOfMigratingStatement,
+                          "Binding index is out of range",
+                          return;);
+        m_migrateStatement->bindBLOB(value, index);
     }
 }
 
@@ -550,8 +567,10 @@ void MigratingHandle::bindNull(int index)
         m_additionalStatement->bindNull(index);
     }
     if (m_migrateStatement->isPrepared()) {
-        WCTRemedialAssert(index != MigrationInfo::getRowIDIndexOfMigratingStatement(), "Binding index is out of range", return;);
-        m_migrateStatement->bindNull(index + 1);
+        WCTRemedialAssert(m_rowidIndexOfMigratingStatement == 0 || index != m_rowidIndexOfMigratingStatement,
+                          "Binding index is out of range",
+                          return;);
+        m_migrateStatement->bindNull(index);
     }
 }
 
@@ -633,7 +652,9 @@ bool MigratingHandle::stepMigration(const int64_t& rowid)
 {
     WCTInnerAssert(isMigratedPrepared());
     m_removeMigratedStatement->bindInteger64(rowid, 1);
-    m_migrateStatement->bindInteger64(rowid, 1);
+    if (m_rowidIndexOfMigratingStatement > 0) {
+        m_migrateStatement->bindInteger64(rowid, m_rowidIndexOfMigratingStatement);
+    }
     return m_removeMigratedStatement->step() && m_migrateStatement->step();
 }
 
@@ -650,13 +671,15 @@ void MigratingHandle::resetMigrate()
     m_migrateStatement->reset();
 }
 
-bool MigratingHandle::prepareMigrate(const Syntax::InsertSTMT& migrated, const Syntax::InsertSTMT& falledBack)
+bool MigratingHandle::prepareMigrate(const Syntax::InsertSTMT& migrated,
+                                     const Syntax::InsertSTMT& falledBack)
 {
     WCTInnerAssert(!isMigratedPrepared());
     const MigrationInfo* info = getBoundInfo(migrated.table);
     WCTInnerAssert(info != nullptr);
+    m_rowidIndexOfMigratingStatement = info->getRowIDIndexOfMigratingStatement();
     return m_removeMigratedStatement->prepare(info->getStatementForDeletingSpecifiedRow())
-    && m_migrateStatement->prepare(info->getStatementForMigrating(falledBack));
+           && m_migrateStatement->prepare(info->getStatementForMigrating(falledBack));
 }
 
 } //namespace WCDB
