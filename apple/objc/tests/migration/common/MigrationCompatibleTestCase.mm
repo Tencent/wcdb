@@ -34,6 +34,8 @@
 {
     [super setUp];
 
+    self.expectMode = DatabaseTestCaseExpectSomeSQLs;
+
     TestCaseAssertTrue([[self.table getObjectsOrders:MigrationObject.identifier.asOrder(WCTOrderedAscending)] isEqualToArray:self.objects]);
 }
 
@@ -57,18 +59,16 @@
     NSMutableArray<MigrationObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
     [expectedObjects addObject:newObject];
 
-    NSMutableArray<NSString*>* sqls = [NSMutableArray arrayWithArray:
-                                                      @[ @"BEGIN IMMEDIATE",
-                                                         [NSString stringWithFormat:@"INSERT INTO %@.%@(identifier, content) VALUES(?1, ?2)", self.schemaName, self.sourceTable] ]];
-
+    NSMutableArray<NSString*>* sqls = [NSMutableArray array];
+    [sqls addObject:@"BEGIN IMMEDIATE"];
+    [sqls addObject:[NSString stringWithFormat:@"INSERT INTO %@.%@(identifier, content) VALUES(?1, ?2)", self.schemaName, self.sourceTable]];
+    [sqls addObject:[NSString stringWithFormat:@"DELETE FROM %@.%@ WHERE rowid == ?1", self.schemaName, self.sourceTable]];
     if (self.mode == MigrationObjectORMModeNormal) {
-        [sqls addObject:[NSString stringWithFormat:@"INSERT INTO main.testTable(rowid, content, identifier) SELECT (SELECT max(maxRowID) + 1 AS rowid FROM (SELECT max(rowid) AS maxRowID FROM %@.%@ UNION ALL SELECT max(rowid) AS maxRowID FROM main.testTable)), content, identifier FROM %@.%@ WHERE rowid == ?1", self.schemaName, self.sourceTable, self.schemaName, self.sourceTable]];
+        [sqls addObject:@"INSERT INTO main.testTable(rowid, identifier, content) VALUES((SELECT max(rowid) + 1 FROM temp.WCDBUnioned_testTable), ?1, ?2)"];
     } else {
-        [sqls addObject:[NSString stringWithFormat:@"INSERT INTO main.testTable(rowid, content, identifier) SELECT rowid, content, identifier FROM %@.%@ WHERE rowid == ?1", self.schemaName, self.sourceTable]];
+        [sqls addObject:[NSString stringWithFormat:@"INSERT INTO main.testTable(rowid, identifier, content) VALUES(?%d, ?1, ?2)", SQLITE_MAX_VARIABLE_NUMBER]];
     }
-
-    [sqls addObjectsFromArray:@[ [NSString stringWithFormat:@"DELETE FROM %@.%@ WHERE rowid == ?1", self.schemaName, self.sourceTable],
-                                 @"COMMIT" ]];
+    [sqls addObject:@"COMMIT"];
 
     [self doTestObjects:expectedObjects
                 andSQLs:sqls
@@ -83,13 +83,12 @@
     NSMutableArray<MigrationObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
     [expectedObjects addObject:newObject];
 
-    NSArray<NSString*>* sqls = @[
-        @"BEGIN IMMEDIATE",
-        [NSString stringWithFormat:@"INSERT INTO %@.%@(identifier, content) VALUES(?1, ?2)", self.schemaName, self.sourceTable],
-        [NSString stringWithFormat:@"INSERT INTO main.testTable(rowid, content, identifier) SELECT rowid, content, identifier FROM %@.%@ WHERE rowid == ?1", self.schemaName, self.sourceTable],
-        [NSString stringWithFormat:@"DELETE FROM %@.%@ WHERE rowid == ?1", self.schemaName, self.sourceTable],
-        @"COMMIT"
-    ];
+    NSMutableArray<NSString*>* sqls = [NSMutableArray array];
+    [sqls addObject:@"BEGIN IMMEDIATE"];
+    [sqls addObject:[NSString stringWithFormat:@"INSERT INTO %@.%@(identifier, content) VALUES(?1, ?2)", self.schemaName, self.sourceTable]];
+    [sqls addObject:[NSString stringWithFormat:@"DELETE FROM %@.%@ WHERE rowid == ?1", self.schemaName, self.sourceTable]];
+    [sqls addObject:[NSString stringWithFormat:@"INSERT INTO main.testTable(rowid, identifier, content) VALUES(?%d, ?1, ?2)", SQLITE_MAX_VARIABLE_NUMBER]];
+    [sqls addObject:@"COMMIT"];
 
     [self doTestObjects:expectedObjects
                 andSQLs:sqls
@@ -105,13 +104,12 @@
     [expectedObjects removeLastObject];
     [expectedObjects addObject:newObject];
 
-    NSArray<NSString*>* sqls = @[
-        @"BEGIN IMMEDIATE",
-        [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@.%@(identifier, content) VALUES(?1, ?2)", self.schemaName, self.sourceTable],
-        [NSString stringWithFormat:@"INSERT OR REPLACE INTO main.testTable(rowid, content, identifier) SELECT rowid, content, identifier FROM %@.%@ WHERE rowid == ?1", self.schemaName, self.sourceTable],
-        [NSString stringWithFormat:@"DELETE FROM %@.%@ WHERE rowid == ?1", self.schemaName, self.sourceTable],
-        @"COMMIT"
-    ];
+    NSMutableArray<NSString*>* sqls = [NSMutableArray array];
+    [sqls addObject:@"BEGIN IMMEDIATE"];
+    [sqls addObject:[NSString stringWithFormat:@"INSERT OR REPLACE INTO %@.%@(identifier, content) VALUES(?1, ?2)", self.schemaName, self.sourceTable]];
+    [sqls addObject:[NSString stringWithFormat:@"DELETE FROM %@.%@ WHERE rowid == ?1", self.schemaName, self.sourceTable]];
+    [sqls addObject:[NSString stringWithFormat:@"INSERT OR REPLACE INTO main.testTable(rowid, identifier, content) VALUES(?%d, ?1, ?2)", SQLITE_MAX_VARIABLE_NUMBER]];
+    [sqls addObject:@"COMMIT"];
 
     [self doTestObjects:expectedObjects
                 andSQLs:sqls
