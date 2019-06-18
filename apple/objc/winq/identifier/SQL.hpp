@@ -43,8 +43,8 @@ public:
 
     const StringView& getDescription() const;
 
-    Syntax::Identifier* getSyntaxIdentifier();
-    const Syntax::Identifier* getSyntaxIdentifier() const;
+    Syntax::Identifier& syntax();
+    const Syntax::Identifier& syntax() const;
 
 protected:
     template<typename T, typename Enable = typename std::enable_if<std::is_base_of<Syntax::Identifier, T>::value>::type>
@@ -81,10 +81,15 @@ public:
 
     virtual ~TypedSyntax() {}
 
-    T& syntax() const
+    T& syntax()
     {
         U::markAsDirty();
         return *static_cast<T*>(U::m_syntax.get());
+    }
+    
+    const T& syntax() const
+    {
+        return *static_cast<const T*>(U::m_syntax.get());
     }
 
     // Convert SQL to Syntax implicitly

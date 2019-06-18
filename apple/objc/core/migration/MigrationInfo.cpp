@@ -393,7 +393,7 @@ MigrationInfo::getStatementForDeletingFromTable(const Statement& sourceStatement
 {
     WCTInnerAssert(sourceStatement.getType() == Syntax::Identifier::Type::DropTableSTMT);
 
-    Syntax::DropTableSTMT& dropTableSyntax
+    const Syntax::DropTableSTMT& dropTableSyntax
     = ((const StatementDropTable&) sourceStatement).syntax();
     WCDB::QualifiedTable table(dropTableSyntax.table);
     table.syntax().schema = dropTableSyntax.schema;

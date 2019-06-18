@@ -52,15 +52,15 @@ const StringView& SQL::getDescription() const
     return m_description.value();
 }
 
-Syntax::Identifier* SQL::getSyntaxIdentifier()
+Syntax::Identifier& SQL::syntax()
 {
     markAsDirty();
-    return m_syntax.get();
+    return *m_syntax.get();
 }
 
-const Syntax::Identifier* SQL::getSyntaxIdentifier() const
+const Syntax::Identifier& SQL::syntax() const
 {
-    return m_syntax.get();
+    return *m_syntax.get();
 }
 
 void SQL::markAsDirty() const
