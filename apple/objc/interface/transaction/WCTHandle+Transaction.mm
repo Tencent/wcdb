@@ -25,6 +25,13 @@
 
 @implementation WCTHandle (Transaction)
 
+- (void)markErrorNotAllowedWithinTransaction
+{
+    WCTHandleAssert(return;);
+    WCDB::Handle *handle = [self getOrGenerateHandle];
+    handle->markErrorNotAllowedWithinTransaction();
+}
+
 - (BOOL)isInTransaction
 {
     BOOL isInTransaction = NO;

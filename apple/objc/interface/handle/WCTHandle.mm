@@ -602,6 +602,7 @@
     if (handle->isInTransaction()) {
         return transaction(self);
     } else {
+        handle->markErrorNotAllowedWithinTransaction();
         return [self runTransaction:transaction];
     }
 }

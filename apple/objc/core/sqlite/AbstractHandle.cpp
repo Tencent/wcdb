@@ -29,12 +29,16 @@ namespace WCDB {
 
 #pragma mark - Initialize
 AbstractHandle::AbstractHandle()
-: m_handle(nullptr), m_notification(this), m_transactionLevel(0)
+: m_handle(nullptr)
+, m_notification(this)
+, m_transactionLevel(0)
+, m_transactionError(TransactionError::Allowed)
 {
 }
 
 AbstractHandle::~AbstractHandle()
 {
+    WCTInnerAssert(m_transactionError == TransactionError::Allowed);
     close();
 }
 
@@ -298,6 +302,21 @@ AbstractHandle::getValues(const Statement &statement, int index)
 }
 
 #pragma mark - Transaction
+void AbstractHandle::markErrorNotAllowedWithinTransaction()
+{
+    WCTRemedialAssert(m_transactionLevel == 0,
+                      "Transaction error state should be changed outside transaction.",
+                      return;);
+    if (m_transactionError == TransactionError::Allowed) {
+        m_transactionError = TransactionError::NotAllowed;
+    }
+}
+
+bool AbstractHandle::isErrorAllowedWithinTransaction() const
+{
+    return m_transactionError == TransactionError::NotAllowed;
+}
+
 StringView AbstractHandle::getSavepointName(int transactionLevel)
 {
     return StringView::formatted("wcdb_lv_%d", transactionLevel);
@@ -311,8 +330,10 @@ bool AbstractHandle::beginNestedTransaction()
             m_transactionLevel = 1;
         }
 
-        succeed = executeStatement(
-        StatementSavepoint().savepoint(getSavepointName(m_transactionLevel + 1)));
+        if (m_transactionError == TransactionError::Allowed) {
+            succeed = executeStatement(
+            StatementSavepoint().savepoint(getSavepointName(m_transactionLevel + 1)));
+        }
         if (succeed) {
             ++m_transactionLevel;
         }
@@ -329,8 +350,10 @@ bool AbstractHandle::commitOrRollbackNestedTransaction()
         if (m_transactionLevel == 1) {
             succeed = commitOrRollbackTransaction();
         } else {
-            succeed = executeStatement(
-            StatementRelease().release(getSavepointName(m_transactionLevel)));
+            if (m_transactionError == TransactionError::Allowed) {
+                succeed = executeStatement(
+                StatementRelease().release(getSavepointName(m_transactionLevel)));
+            }
             if (succeed) {
                 --m_transactionLevel;
             } else {
@@ -347,8 +370,11 @@ void AbstractHandle::rollbackNestedTransaction()
         if (m_transactionLevel == 1) {
             rollbackTransaction();
         } else {
-            bool succeed = executeStatement(StatementRollback().rollbackToSavepoint(
-            getSavepointName(m_transactionLevel)));
+            bool succeed = true;
+            if (m_transactionError == TransactionError::Allowed) {
+                succeed = executeStatement(StatementRollback().rollbackToSavepoint(
+                getSavepointName(m_transactionLevel)));
+            }
             if (succeed) {
                 --m_transactionLevel;
             }
@@ -373,14 +399,24 @@ bool AbstractHandle::beginTransaction()
 
 bool AbstractHandle::commitOrRollbackTransaction()
 {
-    static const StringView *s_commit
-    = new StringView(StatementCommit().commit().getDescription());
-    bool succeed = executeSQL(*s_commit);
-    if (succeed) {
-        m_transactionLevel = 0;
-    } else {
-        // If certain kinds of errors occur within a transaction, the transaction may or may not be rolled back automatically: https://sqlite.org/lang_transaction.html
-        rollbackTransaction();
+    bool succeed = true;
+    if (isInTransaction()) {
+        if (m_transactionError != TransactionError::Fatal) {
+            static const StringView *s_commit
+            = new StringView(StatementCommit().commit().getDescription());
+
+            succeed = executeSQL(*s_commit);
+            if (succeed) {
+                m_transactionLevel = 0;
+                m_transactionError = TransactionError::Allowed;
+            } else {
+                // If certain kinds of errors occur within a transaction, the transaction may or may not be rolled back automatically: https://sqlite.org/lang_transaction.html
+                rollbackTransaction();
+            }
+        } else {
+            rollbackTransaction();
+            succeed = false;
+        }
     }
     return succeed;
 }
@@ -388,11 +424,12 @@ bool AbstractHandle::commitOrRollbackTransaction()
 void AbstractHandle::rollbackTransaction()
 {
     // Transaction can be removed automatically in some case. e.g. interrupt step
-    static const StringView *s_rollback
-    = new StringView(StatementRollback().rollback().getDescription());
     if (isInTransaction()) {
+        static const StringView *s_rollback
+        = new StringView(StatementRollback().rollback().getDescription());
         if (executeSQL(*s_rollback)) {
             m_transactionLevel = 0;
+            m_transactionError = TransactionError::Allowed;
         }
     }
 }
@@ -510,6 +547,9 @@ void AbstractHandle::notifyError(int rc, const char *sql)
     if (std::find(m_ignorableCodes.begin(), m_ignorableCodes.end(), rc)
         == m_ignorableCodes.end()) {
         m_error.level = Error::Level::Error;
+        if (m_transactionError != TransactionError::Allowed) {
+            m_transactionError = TransactionError::Fatal;
+        }
     } else {
         m_error.level = Error::Level::Ignore;
     }

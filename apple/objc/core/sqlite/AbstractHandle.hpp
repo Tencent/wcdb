@@ -112,7 +112,15 @@ public:
     bool commitOrRollbackNestedTransaction();
     void rollbackNestedTransaction();
 
+    void markErrorNotAllowedWithinTransaction();
+    bool isErrorAllowedWithinTransaction() const;
+
 private:
+    enum class TransactionError {
+        Allowed,
+        NotAllowed,
+        Fatal,
+    } m_transactionError;
     static StringView getSavepointName(int transactionLevel);
     int m_transactionLevel;
 
