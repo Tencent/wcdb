@@ -41,7 +41,7 @@ public:
     bool shouldMigrate() const;
     bool isCrossDatabase() const;
 
-    // WCDBMigration_
+    // wcdb_migration_
     static const char* getSchemaPrefix();
 
 protected:
@@ -103,13 +103,13 @@ public:
     static StatementPragma getStatementForSelectingDatabaseList();
 
 protected:
-    // WCDBMigration_ + hash([sourceDatabase])
+    // wcdb_migration_ + hash([sourceDatabase])
     Schema m_schemaForSourceDatabase;
     StatementAttach m_statementForAttachingSchema;
 
 #pragma mark - View
 public:
-    // WCDBUnioned_
+    // wcdb_union_
     static const char* getUnionedViewPrefix();
 
     const StringView& getUnionedView() const;
@@ -139,7 +139,7 @@ public:
     static StatementSelect getStatementForSelectingUnionedView();
 
 protected:
-    // WCDBUnioned_ + [table]
+    // wcdb_union_ + [table]
     StringView m_unionedView;
     StatementCreateView m_statementForCreatingUnionedView;
 
