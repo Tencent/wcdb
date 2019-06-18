@@ -435,7 +435,7 @@ bool MigratingHandle::prepare(const Statement& statement)
         return false;
     }
     WCTInnerAssert(statements.size() <= 2);
-    if (m_mainStatement->prepare(statements.front())
+    if (Super::prepare(statements.front())
         && (statements.size() == 1 || m_additionalStatement->prepare(statements.back()))) {
         return true;
     }
@@ -443,14 +443,9 @@ bool MigratingHandle::prepare(const Statement& statement)
     return false;
 }
 
-bool MigratingHandle::isPrepared()
-{
-    return m_mainStatement->isPrepared();
-}
-
 void MigratingHandle::finalize()
 {
-    m_mainStatement->finalize();
+    Super::finalize();
     m_additionalStatement->finalize();
     finalizeMigrate();
     stopReferenced();
@@ -468,19 +463,14 @@ bool MigratingHandle::step()
 bool MigratingHandle::realStep()
 {
     WCTInnerAssert(!(m_additionalStatement->isPrepared() && isMigratedPrepared()));
-    return m_mainStatement->step()
+    return Super::step()
            && (!m_additionalStatement->isPrepared() || m_additionalStatement->step())
            && (!isMigratedPrepared() || stepMigration(getLastInsertedRowID()));
 }
 
-bool MigratingHandle::done()
-{
-    return m_mainStatement->done();
-}
-
 void MigratingHandle::reset()
 {
-    m_mainStatement->reset();
+    Super::reset();
     WCTInnerAssert(!(m_additionalStatement->isPrepared() && isMigratedPrepared()));
     if (m_additionalStatement->isPrepared()) {
         m_additionalStatement->reset();
@@ -492,7 +482,7 @@ void MigratingHandle::reset()
 
 void MigratingHandle::bindInteger32(const Integer32& value, int index)
 {
-    m_mainStatement->bindInteger32(value, index);
+    Super::bindInteger32(value, index);
     if (m_additionalStatement->isPrepared()) {
         m_additionalStatement->bindInteger32(value, index);
     }
@@ -506,7 +496,7 @@ void MigratingHandle::bindInteger32(const Integer32& value, int index)
 
 void MigratingHandle::bindInteger64(const Integer64& value, int index)
 {
-    m_mainStatement->bindInteger64(value, index);
+    Super::bindInteger64(value, index);
     if (m_additionalStatement->isPrepared()) {
         m_additionalStatement->bindInteger64(value, index);
     }
@@ -520,7 +510,7 @@ void MigratingHandle::bindInteger64(const Integer64& value, int index)
 
 void MigratingHandle::bindDouble(const Float& value, int index)
 {
-    m_mainStatement->bindDouble(value, index);
+    Super::bindDouble(value, index);
     if (m_additionalStatement->isPrepared()) {
         m_additionalStatement->bindDouble(value, index);
     }
@@ -534,7 +524,7 @@ void MigratingHandle::bindDouble(const Float& value, int index)
 
 void MigratingHandle::bindText(const Text& value, int index)
 {
-    m_mainStatement->bindText(value, index);
+    Super::bindText(value, index);
     if (m_additionalStatement->isPrepared()) {
         m_additionalStatement->bindText(value, index);
     }
@@ -548,7 +538,7 @@ void MigratingHandle::bindText(const Text& value, int index)
 
 void MigratingHandle::bindBLOB(const BLOB& value, int index)
 {
-    m_mainStatement->bindBLOB(value, index);
+    Super::bindBLOB(value, index);
     if (m_additionalStatement->isPrepared()) {
         m_additionalStatement->bindBLOB(value, index);
     }
@@ -562,7 +552,7 @@ void MigratingHandle::bindBLOB(const BLOB& value, int index)
 
 void MigratingHandle::bindNull(int index)
 {
-    m_mainStatement->bindNull(index);
+    Super::bindNull(index);
     if (m_additionalStatement->isPrepared()) {
         m_additionalStatement->bindNull(index);
     }
@@ -572,72 +562,6 @@ void MigratingHandle::bindNull(int index)
                           return;);
         m_migrateStatement->bindNull(index);
     }
-}
-
-MigratingHandle::Integer32 MigratingHandle::getInteger32(int index)
-{
-    WCTInnerAssert(!m_additionalStatement->isPrepared());
-    return m_mainStatement->getInteger32(index);
-}
-
-MigratingHandle::Integer64 MigratingHandle::getInteger64(int index)
-{
-    WCTInnerAssert(!m_additionalStatement->isPrepared());
-    return m_mainStatement->getInteger64(index);
-}
-
-MigratingHandle::Float MigratingHandle::getDouble(int index)
-{
-    WCTInnerAssert(!m_additionalStatement->isPrepared());
-    return m_mainStatement->getDouble(index);
-}
-
-MigratingHandle::Text MigratingHandle::getText(int index)
-{
-    WCTInnerAssert(!m_additionalStatement->isPrepared());
-    return m_mainStatement->getText(index);
-}
-
-MigratingHandle::BLOB MigratingHandle::getBLOB(int index)
-{
-    WCTInnerAssert(!m_additionalStatement->isPrepared());
-    return m_mainStatement->getBLOB(index);
-}
-
-ColumnType MigratingHandle::getType(int index)
-{
-    WCTInnerAssert(!m_additionalStatement->isPrepared());
-    return m_mainStatement->getType(index);
-}
-
-const UnsafeStringView MigratingHandle::getOriginColumnName(int index)
-{
-    WCTInnerAssert(!m_additionalStatement->isPrepared());
-    return m_mainStatement->getOriginColumnName(index);
-}
-
-const UnsafeStringView MigratingHandle::getColumnName(int index)
-{
-    WCTInnerAssert(!m_additionalStatement->isPrepared());
-    return m_mainStatement->getColumnName(index);
-}
-
-const UnsafeStringView MigratingHandle::getColumnTableName(int index)
-{
-    WCTInnerAssert(!m_additionalStatement->isPrepared());
-    return m_mainStatement->getColumnTableName(index);
-}
-
-bool MigratingHandle::isStatementReadonly()
-{
-    WCTInnerAssert(!m_additionalStatement->isPrepared());
-    return m_mainStatement->isReadonly();
-}
-
-int MigratingHandle::getNumberOfColumns()
-{
-    WCTInnerAssert(!m_additionalStatement->isPrepared());
-    return m_mainStatement->getNumberOfColumns();
 }
 
 #pragma mark - Migrate

@@ -28,6 +28,8 @@ namespace WCDB {
 class MigrationInfo;
 
 class MigratingHandle final : public Handle, public Migration::Binder {
+private:
+    using Super = Handle;
 #pragma mark - Initialize
 public:
     MigratingHandle(Migration &migration);
@@ -53,10 +55,10 @@ protected:
 #pragma mark - Migration
 public:
     bool prepare(const Statement &statement) override final;
-    bool isPrepared() override final;
+    using Super::isPrepared;
     void finalize() override final;
 
-    bool done() override final;
+    using Super::done;
     bool step() override final;
     void reset() override final;
 
@@ -67,19 +69,19 @@ public:
     void bindBLOB(const BLOB &value, int index) override final;
     void bindNull(int index) override final;
 
-    Integer32 getInteger32(int index) override final;
-    Integer64 getInteger64(int index) override final;
-    Float getDouble(int index) override final;
-    Text getText(int index) override final;
-    BLOB getBLOB(int index) override final;
+    using Super::getInteger32;
+    using Super::getInteger64;
+    using Super::getDouble;
+    using Super::getText;
+    using Super::getBLOB;
 
-    ColumnType getType(int index) override final;
-    const UnsafeStringView getOriginColumnName(int index) override final;
-    const UnsafeStringView getColumnName(int index) override final;
-    const UnsafeStringView getColumnTableName(int index) override final;
+    using Super::getType;
+    using Super::getOriginColumnName;
+    using Super::getColumnName;
+    using Super::getColumnTableName;
 
-    bool isStatementReadonly() override final;
-    int getNumberOfColumns() override final;
+    using Super::isStatementReadonly;
+    using Super::getNumberOfColumns;
 
 protected:
     bool realExecute(const std::list<Statement> &statements);
