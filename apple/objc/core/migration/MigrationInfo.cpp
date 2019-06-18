@@ -193,7 +193,9 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
     {
         if (!m_integerPrimaryKey) {
             m_statementForSelectingMaxRowID
-            = StatementSelect().select(Column::rowid().max() + 1).from(m_unionedView);
+            = StatementSelect()
+              .select(Column::rowid().max() + 1)
+              .from(TableOrSubquery(m_unionedView).schema(Schema::temp()));
         }
 
         m_statementForDeletingSpecifiedRow
