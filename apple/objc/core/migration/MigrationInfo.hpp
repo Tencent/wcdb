@@ -134,7 +134,7 @@ public:
     /*
      SELECT name
      FROM temp.sqlite_master
-     WHERE type == "view" AND name LIKE "WCDBUnioned_%"
+     WHERE type == "view" AND name LIKE "wcdb_union_%"
      */
     static StatementSelect getStatementForSelectingUnionedView();
 

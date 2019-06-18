@@ -73,7 +73,7 @@ const StringView& MigrationBaseInfo::getSourceDatabase() const
 
 const char* MigrationBaseInfo::getSchemaPrefix()
 {
-    static const char* s_schemaPrefix = "WCDBMigration_";
+    static const char* s_schemaPrefix = "wcdb_migration_";
     return s_schemaPrefix;
 }
 
@@ -254,7 +254,7 @@ StatementPragma MigrationInfo::getStatementForSelectingDatabaseList()
 #pragma mark - View
 const char* MigrationInfo::getUnionedViewPrefix()
 {
-    return "WCDBUnioned_";
+    return "wcdb_union_";
 }
 
 const StatementCreateView& MigrationInfo::getStatementForCreatingUnionedView() const
