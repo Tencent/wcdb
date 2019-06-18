@@ -24,7 +24,7 @@
 
 namespace WCDB {
 
-class RaiseFunction final : public TypedSyntax<Syntax::RaiseFunction, SQL> {
+class RaiseFunction final : public SpecifiedSyntax<Syntax::RaiseFunction, SQL> {
 public:
     RaiseFunction& ignore();
     RaiseFunction& rollback(const UnsafeStringView& errorMessage);

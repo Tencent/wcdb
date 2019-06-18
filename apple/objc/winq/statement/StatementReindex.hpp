@@ -24,9 +24,9 @@
 
 namespace WCDB {
 
-class StatementReindex final : public TypedSyntax<Syntax::ReindexSTMT, Statement> {
+class StatementReindex final : public SpecifiedSyntax<Syntax::ReindexSTMT, Statement> {
 public:
-    using TypedSyntax<Syntax::ReindexSTMT, Statement>::TypedSyntax;
+    using SpecifiedSyntax<Syntax::ReindexSTMT, Statement>::SpecifiedSyntax;
 
     StatementReindex& reindex();
     StatementReindex& collation(const UnsafeStringView& collation);

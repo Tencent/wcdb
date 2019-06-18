@@ -24,9 +24,9 @@
 
 namespace WCDB {
 
-class Join final : public TypedSyntax<Syntax::JoinClause, SQL> {
+class Join final : public SpecifiedSyntax<Syntax::JoinClause, SQL> {
 public:
-    using TypedSyntax<Syntax::JoinClause, SQL>::TypedSyntax;
+    using SpecifiedSyntax<Syntax::JoinClause, SQL>::SpecifiedSyntax;
 
     Join& table(const TableOrSubquery& tableOrSubquery);
 

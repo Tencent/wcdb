@@ -24,9 +24,9 @@
 
 namespace WCDB {
 
-class IndexedColumn final : public TypedSyntax<Syntax::IndexedColumn, SQL> {
+class IndexedColumn final : public SpecifiedSyntax<Syntax::IndexedColumn, SQL> {
 public:
-    using TypedSyntax<Syntax::IndexedColumn, SQL>::TypedSyntax;
+    using SpecifiedSyntax<Syntax::IndexedColumn, SQL>::SpecifiedSyntax;
 
     template<typename T, typename Enable = typename std::enable_if<IndexedColumnConvertible<T>::value>::type>
     IndexedColumn(const T& t)

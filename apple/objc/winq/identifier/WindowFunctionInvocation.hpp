@@ -25,9 +25,9 @@
 namespace WCDB {
 
 class WindowFunctionInvocation
-: public TypedSyntax<Syntax::WindowFunctionInvocation, SQL> {
+: public SpecifiedSyntax<Syntax::WindowFunctionInvocation, SQL> {
 public:
-    using TypedSyntax<Syntax::WindowFunctionInvocation, SQL>::TypedSyntax;
+    using SpecifiedSyntax<Syntax::WindowFunctionInvocation, SQL>::SpecifiedSyntax;
     explicit WindowFunctionInvocation(const UnsafeStringView& name);
 
     WindowFunctionInvocation& invoke();

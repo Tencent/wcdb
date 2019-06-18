@@ -24,7 +24,7 @@
 
 namespace WCDB {
 
-class ForeignKey final : public TypedSyntax<Syntax::ForeignKeyClause, SQL> {
+class ForeignKey final : public SpecifiedSyntax<Syntax::ForeignKeyClause, SQL> {
 public:
     ForeignKey& references(const UnsafeStringView& table);
     ForeignKey& column(const Column& column);

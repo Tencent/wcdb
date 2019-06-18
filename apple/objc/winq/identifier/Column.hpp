@@ -27,7 +27,7 @@
 
 namespace WCDB {
 
-class Column : public TypedSyntax<Syntax::Column, SQL>,
+class Column : public SpecifiedSyntax<Syntax::Column, SQL>,
                public ExpressionUnaryOperable,
                public ExpressionBinaryOperable,
                public ExpressionInOperable,

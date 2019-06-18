@@ -299,8 +299,7 @@ const StatementDelete& MigrationInfo::getStatementForDeletingSpecifiedRow() cons
 
 StatementInsert MigrationInfo::getStatementForMigrating(const Syntax::InsertSTMT& stmt) const
 {
-    StatementInsert statement;
-    statement.syntax() = stmt;
+    StatementInsert statement(stmt);
 
     auto& syntax = statement.syntax();
     syntax.schema = Schema::main();
@@ -330,7 +329,7 @@ StatementUpdate
 MigrationInfo::getStatementForLimitedUpdatingTable(const Statement& sourceStatement) const
 {
     WCTInnerAssert(sourceStatement.getType() == Syntax::Identifier::Type::UpdateSTMT);
-    StatementUpdate statementUpdate(sourceStatement);
+    StatementUpdate statementUpdate((const StatementUpdate&) sourceStatement);
 
     Syntax::UpdateSTMT& updateSyntax = statementUpdate.syntax();
     StatementSelect select
@@ -361,7 +360,7 @@ StatementDelete
 MigrationInfo::getStatementForLimitedDeletingFromTable(const Statement& sourceStatement) const
 {
     WCTInnerAssert(sourceStatement.getType() == Syntax::Identifier::Type::DeleteSTMT);
-    StatementDelete statementDelete(sourceStatement);
+    StatementDelete statementDelete((const StatementDelete&) sourceStatement);
 
     Syntax::DeleteSTMT& deleteSyntax = statementDelete.syntax();
     StatementSelect select

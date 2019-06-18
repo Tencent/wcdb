@@ -26,10 +26,10 @@ namespace WCDB {
 
 class ResultColumnAll;
 
-class ResultColumn : public TypedSyntax<Syntax::ResultColumn, SQL> {
+class ResultColumn : public SpecifiedSyntax<Syntax::ResultColumn, SQL> {
 public:
     virtual ~ResultColumn();
-    using TypedSyntax<Syntax::ResultColumn, SQL>::TypedSyntax;
+    using SpecifiedSyntax<Syntax::ResultColumn, SQL>::SpecifiedSyntax;
 
     template<typename T, typename Enable = typename std::enable_if<ResultColumnConvertible<T>::value>::type>
     ResultColumn(const T& t)

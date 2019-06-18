@@ -24,7 +24,7 @@
 
 namespace WCDB {
 
-class Upsert final : public TypedSyntax<Syntax::UpsertClause, SQL> {
+class Upsert final : public SpecifiedSyntax<Syntax::UpsertClause, SQL> {
 public:
     Upsert& conflict();
     Upsert& indexed(const IndexedColumn& indexedColumn);

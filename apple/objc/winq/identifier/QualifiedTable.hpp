@@ -24,9 +24,9 @@
 
 namespace WCDB {
 
-class QualifiedTable final : public TypedSyntax<Syntax::QualifiedTableName, SQL> {
+class QualifiedTable final : public SpecifiedSyntax<Syntax::QualifiedTableName, SQL> {
 public:
-    using TypedSyntax<Syntax::QualifiedTableName, SQL>::TypedSyntax;
+    using SpecifiedSyntax<Syntax::QualifiedTableName, SQL>::SpecifiedSyntax;
 
     template<typename T, typename Enable = typename std::enable_if<QualifiedTableConvertible<T>::value>::type>
     QualifiedTable(const T& t)

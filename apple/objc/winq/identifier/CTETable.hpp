@@ -24,9 +24,9 @@
 
 namespace WCDB {
 
-class CTETable final : public TypedSyntax<Syntax::CTETableName, SQL> {
+class CTETable final : public SpecifiedSyntax<Syntax::CTETableName, SQL> {
 public:
-    using TypedSyntax<Syntax::CTETableName, SQL>::TypedSyntax;
+    using SpecifiedSyntax<Syntax::CTETableName, SQL>::SpecifiedSyntax;
 
     template<typename T, typename Enable = typename std::enable_if<CTETableConvertible<T>::value>::type>
     CTETable(const T& t) : CTETable(CTETableConvertible<T>::asCTETable(t))

@@ -25,9 +25,9 @@
 namespace WCDB {
 
 class StatementCreateTrigger final
-: public TypedSyntax<Syntax::CreateTriggerSTMT, Statement> {
+: public SpecifiedSyntax<Syntax::CreateTriggerSTMT, Statement> {
 public:
-    using TypedSyntax<Syntax::CreateTriggerSTMT, Statement>::TypedSyntax;
+    using SpecifiedSyntax<Syntax::CreateTriggerSTMT, Statement>::SpecifiedSyntax;
 
     StatementCreateTrigger& createTrigger(const UnsafeStringView& trigger);
     StatementCreateTrigger& schema(const Schema& schema);

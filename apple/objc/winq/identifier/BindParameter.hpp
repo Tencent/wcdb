@@ -24,9 +24,9 @@
 
 namespace WCDB {
 
-class BindParameter final : public TypedSyntax<Syntax::BindParameter, SQL> {
+class BindParameter final : public SpecifiedSyntax<Syntax::BindParameter, SQL> {
 public:
-    using TypedSyntax<Syntax::BindParameter, SQL>::TypedSyntax;
+    using SpecifiedSyntax<Syntax::BindParameter, SQL>::SpecifiedSyntax;
     BindParameter(int n);
     explicit BindParameter(const UnsafeStringView& name);
 

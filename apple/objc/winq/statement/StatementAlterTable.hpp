@@ -24,9 +24,9 @@
 
 namespace WCDB {
 
-class StatementAlterTable final : public TypedSyntax<Syntax::AlterTableSTMT, Statement> {
+class StatementAlterTable final : public SpecifiedSyntax<Syntax::AlterTableSTMT, Statement> {
 public:
-    using TypedSyntax<Syntax::AlterTableSTMT, Statement>::TypedSyntax;
+    using SpecifiedSyntax<Syntax::AlterTableSTMT, Statement>::SpecifiedSyntax;
 
     StatementAlterTable& alterTable(const UnsafeStringView& table);
     StatementAlterTable& schema(const Schema& schema);
