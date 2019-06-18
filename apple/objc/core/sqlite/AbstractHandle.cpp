@@ -423,14 +423,16 @@ bool AbstractHandle::commitOrRollbackTransaction()
 
 void AbstractHandle::rollbackTransaction()
 {
+    bool succeed = true;
     // Transaction can be removed automatically in some case. e.g. interrupt step
     if (isInTransaction()) {
         static const StringView *s_rollback
         = new StringView(StatementRollback().rollback().getDescription());
-        if (executeSQL(*s_rollback)) {
-            m_transactionLevel = 0;
-            m_transactionError = TransactionError::Allowed;
-        }
+        succeed = executeSQL(*s_rollback);
+    }
+    if (succeed) {
+        m_transactionLevel = 0;
+        m_transactionError = TransactionError::Allowed;
     }
 }
 
