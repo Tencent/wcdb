@@ -30,14 +30,6 @@
 
 @implementation WCTDatabase
 
-+ (void)initialize
-{
-    if (self.class == WCTDatabase.class) {
-        WCDB::Console::initialize();
-        WCDB::Global::initialize();
-    }
-}
-
 - (instancetype)initWithUnsafeDatabase:(WCDB::Database *)database
 {
     WCTInnerAssert(database != nullptr);

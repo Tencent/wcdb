@@ -20,7 +20,7 @@
 
 #import <WCDB/Assertion.hpp>
 #import <WCDB/Console.hpp>
-#import <WCDB/Notifier.hpp>
+#import <WCDB/Core.hpp>
 #import <WCDB/WCTDatabase+Monitor.h>
 #import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTError+Private.h>
@@ -29,7 +29,7 @@
 
 namespace WCDB {
 
-void Console::print(const UnsafeStringView &message)
+void Core::print(const UnsafeStringView &message)
 {
     NSLog(@"%s", message.data());
 }
@@ -54,20 +54,10 @@ void Console::print(const UnsafeStringView &message)
 
 + (void)globalTraceError:(WCTErrorTraceBlock)block
 {
-    [self globalTraceError:block withIdentifier:WCDB::NotifierLoggerName];
-}
-
-+ (void)globalTraceError:(WCTErrorTraceBlock)block
-          withIdentifier:(const WCDB::UnsafeStringView &)identifier
-{
-    if (block != nil) {
-        WCDB::Notifier::shared().setNotification(std::numeric_limits<int>::min(), identifier, [block](const WCDB::Error &error) {
-            WCTError *nsError = [[WCTError alloc] initWithError:error];
-            block(nsError);
-        });
-    } else {
-        WCDB::Notifier::shared().unsetNotification(identifier);
-    }
+    WCDB::Core::shared().setNotificationWhenErrorTraced([block](const WCDB::Error &error) {
+        WCTError *nsError = [[WCTError alloc] initWithError:error];
+        block(nsError);
+    });
 }
 
 + (void)globalTracePerformance:(WCTPerformanceTraceBlock)trace

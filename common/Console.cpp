@@ -27,18 +27,6 @@
 
 namespace WCDB {
 
-std::nullptr_t Console::_initialize()
-{
-    Console::errored(Console::report);
-    return nullptr;
-}
-
-void Console::initialize()
-{
-    static std::nullptr_t _ = _initialize();
-    WCDB_UNUSED(_);
-}
-
 std::atomic<bool>& Console::debuggableValue()
 {
 #if WCDB_DEBUG
@@ -62,39 +50,6 @@ void Console::release()
 bool Console::debuggable()
 {
     return debuggableValue().load();
-}
-
-void Console::errored(const Notifier::Callback& callback)
-{
-    if (callback != nullptr) {
-        Notifier::shared().setNotification(
-        std::numeric_limits<int>::min(), NotifierLoggerName, callback);
-    } else {
-        Notifier::shared().unsetNotification(NotifierLoggerName);
-    }
-}
-
-void Console::report(const Error& error)
-{
-    switch (error.level) {
-    case Error::Level::Ignore:
-        break;
-    case Error::Level::Debug:
-        if (!WCDB::Console::debuggable()) {
-            break;
-        }
-        // fallthrough
-    default:
-        print(error.getDescription());
-        break;
-    }
-    if (error.level == Error::Level::Fatal) {
-        breakpoint();
-    }
-}
-
-void Console::breakpoint()
-{
 }
 
 #if WCDB_DEBUG

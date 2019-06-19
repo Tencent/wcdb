@@ -36,13 +36,9 @@ public:
     Console(const Console&) = delete;
     Console& operator=(const Console&) = delete;
 
-    static void initialize();
-
     static void debug();
     static void release();
     static bool debuggable();
-
-    static void errored(const Notifier::Callback& callback);
 
 #if WCDB_DEBUG
     static void
@@ -56,7 +52,6 @@ private:
 
     static void report(const Error& error);
     static void print(const UnsafeStringView& message);
-    static void breakpoint() WCDB_USED WCDB_NO_INLINE;
     static std::atomic<bool>& debuggableValue();
 };
 

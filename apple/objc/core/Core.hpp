@@ -110,12 +110,17 @@ public:
     void setNotificationForSQLGLobalTraced(const ShareableSQLTraceConfig::Notification& notification);
     void setNotificationWhenPerformanceGlobalTraced(
     const ShareablePerformanceTraceConfig::Notification& notification);
+    void setNotificationWhenErrorTraced(const Notifier::Callback& notification);
 
 protected:
     std::shared_ptr<Config> m_globalSQLTraceConfig;
     std::shared_ptr<Config> m_globalPerformanceTraceConfig;
 
     void globalLog(int rc, const char* message);
+
+    static void breakpoint() WCDB_USED WCDB_NO_INLINE;
+    static void onErrorTraced(const Error& error);
+    static void print(const UnsafeStringView& message);
 
 #pragma mark - Config
 protected:

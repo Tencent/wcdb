@@ -57,6 +57,8 @@ Core::Core()
   { StringView(BasicConfigName), std::make_shared<BasicConfig>(), Configs::Priority::Higher },
   })
 {
+    Global::initialize();
+
     Global::shared().setNotificationForLog(
     NotifierLoggerName,
     std::bind(&Core::globalLog, this, std::placeholders::_1, std::placeholders::_2));
@@ -64,6 +66,8 @@ Core::Core()
     Notifier::shared().setNotificationForPreprocessing(
     NotifierPreprocessorName,
     std::bind(&Core::preprocessError, this, std::placeholders::_1));
+
+    setNotificationWhenErrorTraced(Core::onErrorTraced);
 
     m_operationQueue->run();
 }
@@ -293,6 +297,39 @@ void Core::setNotificationWhenPerformanceGlobalTraced(const ShareablePerformance
 {
     static_cast<ShareablePerformanceTraceConfig*>(m_globalPerformanceTraceConfig.get())
     ->setNotification(notification);
+}
+
+void Core::setNotificationWhenErrorTraced(const Notifier::Callback& notification)
+{
+    if (notification != nullptr) {
+        Notifier::shared().setNotification(
+        std::numeric_limits<int>::min(), WCDB::NotifierLoggerName, notification);
+    } else {
+        Notifier::shared().unsetNotification(WCDB::NotifierLoggerName);
+    }
+}
+
+void Core::onErrorTraced(const Error& error)
+{
+    switch (error.level) {
+    case Error::Level::Ignore:
+        break;
+    case Error::Level::Debug:
+        if (!Console::debuggable()) {
+            break;
+        }
+        // fallthrough
+    default:
+        print(error.getDescription());
+        break;
+    }
+    if (error.level == Error::Level::Fatal) {
+        breakpoint();
+    }
+}
+
+void Core::breakpoint()
+{
 }
 
 } // namespace WCDB
