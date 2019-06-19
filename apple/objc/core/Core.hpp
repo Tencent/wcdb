@@ -32,6 +32,8 @@
 
 #include <WCDB/TokenizerModules.hpp>
 
+#include <WCDB/Notifier.hpp>
+
 namespace WCDB {
 
 // The order of member variables here is important.

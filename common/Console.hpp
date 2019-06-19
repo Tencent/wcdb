@@ -21,10 +21,9 @@
 #pragma once
 
 #include <WCDB/Macro.hpp>
-#include <WCDB/Notifier.hpp>
 #include <WCDB/StringView.hpp>
 #include <atomic>
-#include <functional>
+#include <list>
 
 namespace WCDB {
 
@@ -48,6 +47,7 @@ public:
 #endif // WCDB_DEBUG
 
 private:
+    static std::optional<StringView> callstacks();
     static std::atomic<bool>& debuggableValue();
 };
 

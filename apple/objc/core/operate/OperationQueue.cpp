@@ -22,6 +22,7 @@
 #include <WCDB/CoreConst.h>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Global.hpp>
+#include <WCDB/Notifier.hpp>
 #include <WCDB/OperationQueue.hpp>
 #include <fcntl.h>
 #include <unistd.h>

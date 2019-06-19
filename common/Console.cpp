@@ -23,7 +23,7 @@
 #include <WCDB/Error.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Version.h>
-#include <iostream>
+#include <execinfo.h>
 
 namespace WCDB {
 
@@ -64,6 +64,10 @@ void Console::fatal(const UnsafeStringView& message, const char* file, int line,
     error.infos.insert_or_assign("Version", WCDB_VERSION_STRING);
     error.infos.insert_or_assign("Timestamp", WCDB_TIMESTAMP_STRING);
     error.infos.insert_or_assign("Build", WCDB_BUILD_STRING);
+    auto callstacks = Console::callstacks();
+    if (callstacks.has_value()) {
+        error.infos.insert_or_assign("Callstacks", callstacks.value());
+    }
     Notifier::shared().notify(error);
 }
 
@@ -76,9 +80,35 @@ void Console::fatal(const UnsafeStringView& message)
     error.infos.insert_or_assign("Version", WCDB_VERSION_STRING);
     error.infos.insert_or_assign("Timestamp", WCDB_TIMESTAMP_STRING);
     error.infos.insert_or_assign("Build", WCDB_BUILD_STRING);
+    auto callstacks = Console::callstacks();
+    if (callstacks.has_value()) {
+        error.infos.insert_or_assign("Callstacks", callstacks.value());
+    }
     Notifier::shared().notify(error);
 }
 
 #endif // WCDB_DEBUG
+
+std::optional<StringView> Console::callstacks()
+{
+    constexpr const int size = 100;
+    void* buffer[size];
+    int depth = backtrace(buffer, size);
+    char** symbols = backtrace_symbols(buffer, depth);
+    if (symbols == nullptr) {
+        return std::nullopt;
+    }
+
+    std::ostringstream stream;
+    std::string string;
+    for (int i = 0; i < depth; ++i) {
+        if (i != 0) {
+            stream << std::endl;
+        }
+        stream << symbols[i];
+    }
+    free(symbols);
+    return StringView(stream.str());
+}
 
 } // namespace WCDB

@@ -21,7 +21,9 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/AsyncQueue.hpp>
 #include <WCDB/CoreConst.h>
+#include <WCDB/Error.hpp>
 #include <WCDB/Exiting.hpp>
+#include <WCDB/Notifier.hpp>
 #include <WCDB/StringView.hpp>
 #include <atomic>
 #include <thread>
