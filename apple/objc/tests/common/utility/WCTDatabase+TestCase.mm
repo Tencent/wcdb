@@ -87,13 +87,17 @@
 - (WCTOptionalSize)getNumberOfPages
 {
     WCTOptionalSize result = nullptr;
-    NSError *error;
-    size_t size = (size_t)((NSNumber *) [[NSFileManager defaultManager] attributesOfItemAtPath:self.path error:&error][NSFileSize]).unsignedLongLongValue;
-    if (error == nil) {
-        int numberOfPages = (int) (size / self.pageSize);
-        result.reset(numberOfPages > 0 ? numberOfPages : 0);
+    if ([[NSFileManager defaultManager] fileExistsAtPath:self.path]) {
+        NSError *error;
+        size_t size = (size_t)((NSNumber *) [[NSFileManager defaultManager] attributesOfItemAtPath:self.path error:&error][NSFileSize]).unsignedLongLongValue;
+        if (error == nil) {
+            int numberOfPages = (int) (size / self.pageSize);
+            result.reset(numberOfPages > 0 ? numberOfPages : 0);
+        } else {
+            TestCaseLog(@"%@", error);
+        }
     } else {
-        TestCaseLog(@"%@", error);
+        result.reset(0);
     }
     return result;
 }
@@ -102,19 +106,23 @@
 {
     WCTOptionalSize result = nullptr;
     NSError *error;
-    size_t size = (size_t)((NSNumber *) [[NSFileManager defaultManager] attributesOfItemAtPath:self.walPath error:&error][NSFileSize]).unsignedLongLongValue;
-    if (error == nil) {
-        if (size == 0) {
-            result.reset(0);
-        } else if (size > self.walHeaderSize) {
-            if ((size - self.walHeaderSize) % self.walFrameSize != 0) {
-                result.unset();
-            } else {
-                result.reset((size - self.walHeaderSize) / self.walFrameSize);
+    if ([[NSFileManager defaultManager] fileExistsAtPath:self.walPath]) {
+        size_t size = (size_t)((NSNumber *) [[NSFileManager defaultManager] attributesOfItemAtPath:self.walPath error:&error][NSFileSize]).unsignedLongLongValue;
+        if (error == nil) {
+            if (size == 0) {
+                result.reset(0);
+            } else if (size > self.walHeaderSize) {
+                if ((size - self.walHeaderSize) % self.walFrameSize != 0) {
+                    result.unset();
+                } else {
+                    result.reset((size - self.walHeaderSize) / self.walFrameSize);
+                }
             }
+        } else {
+            TestCaseLog(@"%@", error);
         }
     } else {
-        TestCaseLog(@"%@", error);
+        result.reset(0);
     }
     return result;
 }
