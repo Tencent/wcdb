@@ -60,10 +60,9 @@
     WCTDatabase.debug = NO;
 #endif
 
-    [WCTDatabase globalTraceError:nil];
     [WCTDatabase globalTracePerformance:nil];
     [WCTDatabase globalTraceSQL:nil];
-    [WCTDatabase additionalGlobalTraceError:^(WCTError *error) {
+    [WCTDatabase globalTraceError:^(WCTError *error) {
         NSThread *currentThread = [NSThread currentThread];
         NSString *threadName = currentThread.name;
         if (threadName.length == 0) {

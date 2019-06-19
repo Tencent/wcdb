@@ -22,13 +22,6 @@
 #import "TestCaseLog.h"
 #import "WCTDatabase+TestCase.h"
 
-@interface WCTDatabase (TestCase1)
-
-+ (void)globalTraceError:(WCTErrorTraceBlock)block
-          withIdentifier:(const WCDB::UnsafeStringView &)identifier;
-
-@end
-
 @implementation WCTDatabase (TestCase)
 
 - (NSString *)walPath
@@ -124,11 +117,6 @@
         TestCaseLog(@"%@", error);
     }
     return result;
-}
-
-+ (void)additionalGlobalTraceError:(WCTErrorTraceBlock)block
-{
-    [self globalTraceError:block withIdentifier:"com.Tencent.WCDB.Notifier.AdditionalLog"];
 }
 
 - (BOOL)passiveCheckpoint

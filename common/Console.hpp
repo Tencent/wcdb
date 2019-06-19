@@ -48,10 +48,6 @@ public:
 #endif // WCDB_DEBUG
 
 private:
-    static std::nullptr_t _initialize();
-
-    static void report(const Error& error);
-    static void print(const UnsafeStringView& message);
     static std::atomic<bool>& debuggableValue();
 };
 
