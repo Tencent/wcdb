@@ -31,14 +31,23 @@
     return tag;
 }
 
-- (NSString*)tableName
+- (NSString *)tableName
 {
     return [self tableNameWithPrefix:@"t_"];
 }
 
-- (NSString*)tableNameWithPrefix:(NSString*)prefix
+- (NSString *)tableNameWithPrefix:(NSString *)prefix
 {
     return [NSString stringWithFormat:@"%@%@", prefix, self.string];
+}
+
+- (NSArray<NSString *> *)tableNamesWithCount:(int)count
+{
+    NSMutableArray<NSString *> *tableNames = [NSMutableArray array];
+    for (int i = 0; i < count; ++i) {
+        [tableNames addObject:self.tableName];
+    }
+    return tableNames;
 }
 
 @end

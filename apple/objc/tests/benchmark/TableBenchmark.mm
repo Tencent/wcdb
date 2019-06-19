@@ -183,6 +183,37 @@
     }];
 }
 
+- (void)test_create_tables
+{
+    int numberOfTables = 100;
+    __block NSArray* tableNames = nil;
+    __block BOOL result;
+    [self
+    doMeasure:^{
+        for (NSString* tableName in tableNames) {
+            if (![self.database createTable:tableName withClass:BenchmarkObject.class]) {
+                result = NO;
+                return;
+            }
+        }
+        result = YES;
+    }
+    setUp:^{
+        [self setUpDatabase];
+
+        if (tableNames == nil) {
+            tableNames = [NSArray arrayWithArray:[self.random tableNamesWithCount:numberOfTables]];
+        }
+    }
+    tearDown:^{
+        [self tearDownDatabase];
+        result = NO;
+    }
+    checkCorrectness:^{
+        TestCaseAssertTrue(result);
+    }];
+}
+
 #pragma mark - ReusableFactoryPreparation
 - (BOOL)stepPreparePrototype:(NSString*)path
 {
