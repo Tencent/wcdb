@@ -21,14 +21,14 @@
 #pragma once
 
 #include <WCDB/Lock.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <future>
 
 namespace WCDB {
 
 class AsyncQueue {
 public:
-    AsyncQueue(const String &name);
+    AsyncQueue(const UnsafeStringView &name);
     virtual ~AsyncQueue() = 0;
 
     AsyncQueue() = delete;
@@ -37,7 +37,7 @@ public:
 
     void run();
 
-    const String name;
+    const StringView name;
 
 protected:
     virtual void main() = 0;

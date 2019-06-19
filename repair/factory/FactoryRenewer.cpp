@@ -57,8 +57,8 @@ bool FactoryRenewer::work()
     }
     if (exists) {
         Error error(Error::Code::Misuse, Error::Level::Warning, "Database already exists when renewing.");
-        error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-        error.infos.set(ErrorStringKeyPath, database);
+        error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+        error.infos.insert_or_assign(ErrorStringKeyPath, database);
         Notifier::shared().notify(error);
         FileManager::removeItem(directory);
         factory.removeDirectoryIfEmpty();
@@ -69,7 +69,7 @@ bool FactoryRenewer::work()
         return false;
     }
 
-    std::list<String> toMove = Factory::associatedPathsForDatabase(database);
+    std::list<StringView> toMove = Factory::associatedPathsForDatabase(database);
     toMove.reverse();
     if (!FileManager::moveItems(toMove, Path::getDirectoryName(factory.database))) {
         assignWithSharedThreadedError();
@@ -86,8 +86,9 @@ bool FactoryRenewer::prepare()
     WCTRemedialAssert(m_assembler != nullptr, "Assembler is not available.", return false;);
 
     // 1. create temp directory for acquisition
-    String tempDirectory = Path::addComponent(directory, "temp");
-    String tempDatabase = Path::addComponent(tempDirectory, factory.getDatabaseName());
+    StringView tempDirectory = Path::addComponent(directory, "temp");
+    StringView tempDatabase
+    = Path::addComponent(tempDirectory, factory.getDatabaseName());
     m_assembler->setPath(tempDatabase);
 
     if (!FileManager::removeItem(tempDirectory)
@@ -98,7 +99,7 @@ bool FactoryRenewer::prepare()
 
     // 2. get deposited directories for acquisition
     bool succeed;
-    std::list<String> workshopDirectories;
+    std::list<StringView> workshopDirectories;
     std::tie(succeed, workshopDirectories) = factory.getWorkshopDirectories();
     if (!succeed) {
         assignWithSharedThreadedError();
@@ -106,13 +107,14 @@ bool FactoryRenewer::prepare()
     }
 
     // 3. resolve infos
-    std::map<String, Info> infos;
+    StringViewMap<Info> infos;
     if (!resolveInfosForDatabase(infos, factory.database)) {
         return false;
     }
-    const String databaseName = Path::getFileName(factory.database);
+    const StringView databaseName = Path::getFileName(factory.database);
     for (const auto &workshopDirectory : workshopDirectories) {
-        String databaseForAcquisition = Path::addComponent(workshopDirectory, databaseName);
+        StringView databaseForAcquisition
+        = Path::addComponent(workshopDirectory, databaseName);
         if (!resolveInfosForDatabase(infos, databaseForAcquisition)) {
             return false;
         }
@@ -156,13 +158,13 @@ bool FactoryRenewer::prepare()
     }
 
     // 6. move the assembled database to renew directory and wait for renew.
-    std::list<String> toRemove = Factory::associatedPathsForDatabase(database);
+    std::list<StringView> toRemove = Factory::associatedPathsForDatabase(database);
     toRemove.reverse(); // move from end to start, which can avoid issues that unexpected crash happens before all files moved.
     if (!FileManager::removeItems(toRemove)) {
         assignWithSharedThreadedError();
         return false;
     }
-    std::list<String> toMove = Factory::associatedPathsForDatabase(tempDatabase);
+    std::list<StringView> toMove = Factory::associatedPathsForDatabase(tempDatabase);
     toMove.reverse();
     if (!FileManager::moveItems(toMove, directory)) {
         assignWithSharedThreadedError();
@@ -172,11 +174,11 @@ bool FactoryRenewer::prepare()
     return true;
 }
 
-bool FactoryRenewer::resolveInfosForDatabase(std::map<String, Info> &infos,
-                                             const String &databaseForAcquisition)
+bool FactoryRenewer::resolveInfosForDatabase(StringViewMap<Info> &infos,
+                                             const UnsafeStringView &databaseForAcquisition)
 {
     bool succeed;
-    std::list<String> materialPaths;
+    std::list<StringView> materialPaths;
     std::tie(succeed, materialPaths)
     = Factory::materialsForDeserializingForDatabase(databaseForAcquisition);
     if (!succeed) {
@@ -185,8 +187,8 @@ bool FactoryRenewer::resolveInfosForDatabase(std::map<String, Info> &infos,
     }
     if (materialPaths.empty()) {
         Error error(Error::Code::NotFound, Error::Level::Warning, "Material is not found when renewing.");
-        error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-        error.infos.set(ErrorStringKeyPath, databaseForAcquisition);
+        error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+        error.infos.insert_or_assign(ErrorStringKeyPath, databaseForAcquisition);
         Notifier::shared().notify(error);
         return true;
     }
@@ -209,10 +211,10 @@ bool FactoryRenewer::resolveInfosForDatabase(std::map<String, Info> &infos,
                     Error error(Error::Code::Mismatch,
                                 Error::Level::Notice,
                                 "Different sqls is found in materials.");
-                    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-                    error.infos.set(ErrorStringKeyPath, materialPath);
-                    error.infos.set("SQL1", element.second.sql);
-                    error.infos.set("SQL2", iter->second.sql);
+                    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+                    error.infos.insert_or_assign(ErrorStringKeyPath, materialPath);
+                    error.infos.insert_or_assign("SQL1", element.second.sql);
+                    error.infos.insert_or_assign("SQL2", iter->second.sql);
                     Notifier::shared().notify(error);
                 }
             }
@@ -223,8 +225,8 @@ bool FactoryRenewer::resolveInfosForDatabase(std::map<String, Info> &infos,
         return true;
     }
     Error error(Error::Code::Notice, Error::Level::Notice, "All materials are corrupted when renewing.");
-    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.set(ErrorStringKeyPath, databaseForAcquisition);
+    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.insert_or_assign(ErrorStringKeyPath, databaseForAcquisition);
     Notifier::shared().notify(error);
     return true;
 }

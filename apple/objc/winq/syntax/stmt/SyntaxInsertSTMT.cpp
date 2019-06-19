@@ -32,9 +32,8 @@ Identifier::Type InsertSTMT::getType() const
     return type;
 }
 
-String InsertSTMT::getValidDescription(bool skipSchema) const
+bool InsertSTMT::describle(std::ostringstream& stream, bool skipSchema) const
 {
-    std::ostringstream stream;
     if (withClause.isValid()) {
         stream << withClause << space;
     }
@@ -78,12 +77,12 @@ String InsertSTMT::getValidDescription(bool skipSchema) const
     if (upsertClause.isValid()) {
         stream << space << upsertClause;
     }
-    return stream.str();
+    return true;
 }
 
-String InsertSTMT::getValidDescription() const
+bool InsertSTMT::describle(std::ostringstream& stream) const
 {
-    return getValidDescription(false);
+    return describle(stream, false);
 }
 
 void InsertSTMT::iterate(const Iterator& iterator, bool& stop)
@@ -113,6 +112,12 @@ void InsertSTMT::iterate(const Iterator& iterator, bool& stop)
 }
 
 #pragma mark - Utility
+    bool InsertSTMT::isMultiWrite() const
+    {
+        return (switcher == Switch::Values && expressionsValues.size() > 1)
+        || switcher == Switch::Select;
+    }
+    
 bool InsertSTMT::isTargetingSameTable(const InsertSTMT& other) const
 {
     return table == other.table && schema.isTargetingSameSchema(other.schema);

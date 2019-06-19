@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#import <WCDB/WCTFoundation.h>
 #import <WCDB/WCTMigrationInfo+Private.h>
 #import <WCDB/WCTMigrationInfo.h>
 
@@ -26,10 +27,10 @@
 - (instancetype)initWithBaseInfo:(const WCDB::MigrationBaseInfo &)info
 {
     if (self = [super init]) {
-        _table = [NSString stringWithUTF8String:info.getTable().c_str()];
-        _database = [NSString stringWithUTF8String:info.getDatabase().c_str()];
-        _sourceTable = [NSString stringWithUTF8String:info.getSourceTable().c_str()];
-        _sourceDatabase = [NSString stringWithUTF8String:info.getSourceDatabase().c_str()];
+        _table = [NSString stringWithView:info.getTable()];
+        _database = [NSString stringWithView:info.getDatabase()];
+        _sourceTable = [NSString stringWithView:info.getSourceTable()];
+        _sourceDatabase = [NSString stringWithView:info.getSourceDatabase()];
     }
     return self;
 }

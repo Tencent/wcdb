@@ -30,12 +30,12 @@ DatabasePoolEvent::~DatabasePoolEvent()
 #pragma mark - DatabasePool
 DatabasePool::DatabasePool(DatabasePoolEvent *event) : m_event(event)
 {
-    WCTInnerAssert(m_event != nullptr);
+    WCTAssert(m_event != nullptr);
 }
 
-RecyclableDatabase DatabasePool::getOrCreate(const String &path)
+RecyclableDatabase DatabasePool::getOrCreate(const UnsafeStringView &path)
 {
-    String normalized = Path::normalize(path);
+    StringView normalized = Path::normalize(path);
     {
         SharedLockGuard lockGuard(m_lock);
         auto iter = m_databases.find(normalized);
@@ -50,14 +50,14 @@ RecyclableDatabase DatabasePool::getOrCreate(const String &path)
     }
     ReferencedDatabase referencedDatabase(std::make_shared<Database>(normalized));
     auto result = m_databases.emplace(normalized, std::move(referencedDatabase));
-    WCTInnerAssert(result.second);
+    WCTAssert(result.second);
     m_event->databaseDidCreate(result.first->second.database.get());
     return get(result.first);
 }
 
-RecyclableDatabase DatabasePool::get(const String &path)
+RecyclableDatabase DatabasePool::get(const UnsafeStringView &path)
 {
-    String normalized = Path::normalize(path);
+    StringView normalized = Path::normalize(path);
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_databases.find(normalized);
     // get referenced database only
@@ -79,10 +79,10 @@ DatabasePool::ReferencedDatabase::ReferencedDatabase(ReferencedDatabase &&other)
 }
 
 RecyclableDatabase
-DatabasePool::get(const std::map<String, ReferencedDatabase>::iterator &iter)
+DatabasePool::get(const StringViewMap<ReferencedDatabase>::iterator &iter)
 {
-    WCTInnerAssert(m_lock.readSafety());
-    WCTInnerAssert(iter != m_databases.end());
+    WCTAssert(m_lock.readSafety());
+    WCTAssert(iter != m_databases.end());
     ++iter->second.reference;
     return RecyclableDatabase(
     iter->second.database.get(),
@@ -94,8 +94,8 @@ void DatabasePool::flowBack(Database *database)
     // shared lock is enough.
     SharedLockGuard lockGuard(m_lock);
     const auto &iter = m_databases.find(database->getPath());
-    WCTInnerAssert(iter != m_databases.end());
-    WCTInnerAssert(iter->second.database.get() == database);
+    WCTAssert(iter != m_databases.end());
+    WCTAssert(iter->second.database.get() == database);
     if (--iter->second.reference == 0) {
         // A created database will never be erased. Instead, it will be empty so that the memory used will be very low.
         iter->second.database->close(nullptr);

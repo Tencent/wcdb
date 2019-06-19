@@ -23,14 +23,15 @@
 #include <WCDB/Mechanic.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Page.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
 #pragma mark - Initialize
-Mechanic::Mechanic(const String &path) : Repairman(path), m_checksum(0)
+Mechanic::Mechanic(const UnsafeStringView &path)
+: Repairman(path), m_checksum(0)
 {
 }
 
@@ -43,7 +44,7 @@ void Mechanic::setMaterial(const Material *material)
 #pragma mark - Mechanic
 bool Mechanic::work()
 {
-    WCTInnerAssert(m_material != nullptr);
+    WCTAssert(m_material != nullptr);
 
     if (isEmptyDatabase()) {
         return exit(true);
@@ -69,12 +70,14 @@ bool Mechanic::work()
         if (m_pager.getWalSalt() != m_material->info.walSalt) {
             m_pager.disposeWal();
             Error error(Error::Code::Notice, Error::Level::Notice, "Dispose WAL of non-match salt.");
-            error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-            error.infos.set(ErrorStringKeyPath, m_pager.getPath());
-            error.infos.set("WalSalt1", m_pager.getWalSalt().first);
-            error.infos.set("WalSalt2", m_pager.getWalSalt().second);
-            error.infos.set("MaterialSalt1", m_material->info.walSalt.first);
-            error.infos.set("MaterialSalt2", m_material->info.walSalt.second);
+            error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+            error.infos.insert_or_assign(ErrorStringKeyPath, m_pager.getPath());
+            error.infos.insert_or_assign("WalSalt1", m_pager.getWalSalt().first);
+            error.infos.insert_or_assign("WalSalt2", m_pager.getWalSalt().second);
+            error.infos.insert_or_assign("MaterialSalt1",
+                                         m_material->info.walSalt.first);
+            error.infos.insert_or_assign("MaterialSalt2",
+                                         m_material->info.walSalt.second);
             Notifier::shared().notify(error);
         }
     }
@@ -130,15 +133,15 @@ bool Mechanic::willCrawlPage(const Page &page, int)
         return false;
     }
     if (page.getType() != Page::Type::LeafTable) {
-        markAsCorrupted(
-        page.number,
-        String::formatted("Unexpected page type: %d.", page.getType(), page.getType()));
+        markAsCorrupted(page.number,
+                        StringView::formatted(
+                        "Unexpected page type: %d.", page.getType(), page.getType()));
         return false;
     }
     if (page.getData().hash() != m_checksum) {
-        markAsCorrupted(
-        page.number,
-        String::formatted("Mismatched hash: %u for %u.", page.getData().hash(), m_checksum));
+        markAsCorrupted(page.number,
+                        StringView::formatted(
+                        "Mismatched hash: %u for %u.", page.getData().hash(), m_checksum));
         return false;
     }
     markPageAsCounted(page);

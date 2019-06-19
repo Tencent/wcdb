@@ -50,8 +50,8 @@ public:
 
     int64_t integerValue(int index) const;
     double doubleValue(int index) const;
-    UnsafeString textValue(int index) const;
-    String stringValue(int index) const;
+    UnsafeStringView textValue(int index) const;
+    StringView stringValue(int index) const;
     const UnsafeData blobValue(int index) const;
 
 protected:

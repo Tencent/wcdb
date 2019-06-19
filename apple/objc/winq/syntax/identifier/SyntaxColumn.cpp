@@ -36,9 +36,10 @@ Identifier::Type Column::getType() const
     return type;
 }
 
-String Column::getValidDescription() const
+bool Column::describle(std::ostringstream& stream) const
 {
-    return name;
+    stream << name;
+    return true;
 }
 
 } // namespace Syntax

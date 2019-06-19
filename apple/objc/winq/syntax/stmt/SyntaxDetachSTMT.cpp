@@ -36,11 +36,10 @@ Identifier::Type DetachSTMT::getType() const
     return type;
 }
 
-String DetachSTMT::getValidDescription() const
+bool DetachSTMT::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << "DETACH " << schema;
-    return stream.str();
+    return true;
 }
 
 void DetachSTMT::iterate(const Iterator& iterator, bool& stop)

@@ -79,7 +79,7 @@ bool Handle::configure()
             }
             m_invokeds.pop_back();
         }
-        WCTInnerAssert(m_invokeds.empty());
+        WCTAssert(m_invokeds.empty());
         for (const auto &element : m_pendings) {
             if (!element.value()->invoke(this)) {
                 return false;
@@ -132,17 +132,17 @@ int Handle::getNumberOfColumns()
     return m_mainStatement->getNumberOfColumns();
 }
 
-const UnsafeString Handle::getOriginColumnName(int index)
+const UnsafeStringView Handle::getOriginColumnName(int index)
 {
     return m_mainStatement->getOriginColumnName(index);
 }
 
-const UnsafeString Handle::getColumnName(int index)
+const UnsafeStringView Handle::getColumnName(int index)
 {
     return m_mainStatement->getColumnName(index);
 }
 
-const UnsafeString Handle::getColumnTableName(int index)
+const UnsafeStringView Handle::getColumnTableName(int index)
 {
     return m_mainStatement->getColumnTableName(index);
 }

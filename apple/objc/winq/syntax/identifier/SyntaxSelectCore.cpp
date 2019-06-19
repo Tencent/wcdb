@@ -31,9 +31,8 @@ Identifier::Type SelectCore::getType() const
     return type;
 }
 
-String SelectCore::getValidDescription() const
+bool SelectCore::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     switch (switcher) {
     case Switch::Select:
         stream << "SELECT ";
@@ -89,7 +88,7 @@ String SelectCore::getValidDescription() const
         }
         break;
     }
-    return stream.str();
+    return true;
 }
 
 void SelectCore::iterate(const Iterator& iterator, bool& stop)

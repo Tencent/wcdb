@@ -37,38 +37,41 @@ public:
 
 #pragma mark - Assembler
 public:
-    void setPath(const String &path) override final;
-    const String &getPath() const override final;
+    void setPath(const UnsafeStringView &path) override final;
+    const StringView &getPath() const override final;
 
     bool markAsAssembling() override final;
     bool markAsAssembled() override final;
 
     bool markAsMilestone() override final;
 
-    bool assembleTable(const String &tableName, const String &sql) override final;
+    bool assembleTable(const UnsafeStringView &tableName,
+                       const UnsafeStringView &sql) override final;
     bool assembleCell(const Cell &cell) override final;
-    bool assembleSQL(const String &sql) override final;
+    bool assembleSQL(const UnsafeStringView &sql) override final;
 
     const Error &getError() const override final;
 
 #pragma mark - Cell
 protected:
     bool lazyPrepareCell();
-    std::pair<bool, String> getAssembleSQL(const String &tableName);
-    std::pair<bool, std::list<String>> getColumnNames(const String &tableName);
+    std::pair<bool, StringView> getAssembleSQL(const UnsafeStringView &tableName);
+    std::pair<bool, std::list<StringView>>
+    getColumnNames(const UnsafeStringView &tableName);
 
-    String m_table;
+    StringView m_table;
     int m_primary;
     void *m_cellSTMT;
 
 #pragma mark - Sequence
 protected:
     bool markSequenceAsAssembling();
-    bool assembleSequence(const String &tableName, int64_t sequence) override final;
+    bool assembleSequence(const UnsafeStringView &tableName, int64_t sequence) override final;
     bool markSequenceAsAssembled();
 
-    std::pair<bool, bool> updateSequence(const String &tableName, int64_t sequence);
-    bool insertSequence(const String &tableName, int64_t sequence);
+    std::pair<bool, bool>
+    updateSequence(const UnsafeStringView &tableName, int64_t sequence);
+    bool insertSequence(const UnsafeStringView &tableName, int64_t sequence);
 
 #pragma mark - SQLite Base
 protected:

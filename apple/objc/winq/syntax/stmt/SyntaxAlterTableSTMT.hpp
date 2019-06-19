@@ -30,10 +30,10 @@ class AlterTableSTMT final : public Identifier {
 #pragma mark - Syntax
 public:
     Schema schema;
-    String table;
+    StringView table;
 
     WCDB_SYNTAX_MAIN_UNION_ENUM(RenameTable, RenameColumn, AddColumn, );
-    String newTable;
+    StringView newTable;
     Column column;
     Column newColumn;
     ColumnDef columnDef;
@@ -42,7 +42,7 @@ public:
 public:
     static constexpr const Type type = Type::AlterTableSTMT;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    bool describle(std::ostringstream& stream) const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

@@ -32,7 +32,7 @@ public:
     bool temp = false;
     bool ifNotExists = false;
     Schema schema;
-    String view;
+    StringView view;
     std::list<Column> columns;
     SelectSTMT select;
 
@@ -42,7 +42,7 @@ public:
 public:
     static constexpr const Type type = Type::CreateViewSTMT;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    bool describle(std::ostringstream& stream) const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

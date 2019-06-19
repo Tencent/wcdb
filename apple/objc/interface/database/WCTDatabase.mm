@@ -24,22 +24,15 @@
 #import <WCDB/WCTDatabase+Memory.h>
 #import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTError+Private.h>
+#import <WCDB/WCTFoundation.h>
 #import <WCDB/WCTHandle+Private.h>
 #import <WCDB/WCTOneOrBinaryTokenizer.h>
 
 @implementation WCTDatabase
 
-+ (void)initialize
-{
-    if (self.class == WCTDatabase.class) {
-        WCDB::Console::initialize();
-        WCDB::Global::initialize();
-    }
-}
-
 - (instancetype)initWithUnsafeDatabase:(WCDB::Database *)database
 {
-    WCTInnerAssert(database != nullptr);
+    WCTAssert(database != nullptr);
     if (self = [super init]) {
         _databaseHolder = nullptr;
         _database = database;
@@ -52,9 +45,9 @@
     if (self = [super init]) {
         path = [path stringByStandardizingPath];
         _databaseHolder = WCDB::Core::shared().getOrCreateDatabase(path);
-        WCTInnerAssert(_databaseHolder != nullptr);
+        WCTAssert(_databaseHolder != nullptr);
         _database = _databaseHolder.get();
-        WCTInnerAssert(_database != nullptr);
+        WCTAssert(_database != nullptr);
     }
     return self;
 }
@@ -68,7 +61,7 @@
             return nil;
         }
         _database = _databaseHolder.get();
-        WCTInnerAssert(_database != nullptr);
+        WCTAssert(_database != nullptr);
     }
     return self;
 }
@@ -85,7 +78,7 @@
 
 - (NSString *)path
 {
-    return [NSString stringWithUTF8String:_database->getPath().c_str()];
+    return [NSString stringWithView:_database->getPath()];
 }
 
 - (BOOL)canOpen

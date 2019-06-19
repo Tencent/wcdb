@@ -24,9 +24,9 @@
 
 namespace WCDB {
 
-class TableOrSubquery final : public TypedSyntax<Syntax::TableOrSubquery, SQL> {
+class TableOrSubquery final : public SpecifiedSyntax<Syntax::TableOrSubquery, SQL> {
 public:
-    using TypedSyntax<Syntax::TableOrSubquery, SQL>::TypedSyntax;
+    using SpecifiedSyntax<Syntax::TableOrSubquery, SQL>::SpecifiedSyntax;
 
     template<typename T, typename Enable = typename std::enable_if<TableOrSubqueryConvertible<T>::value>::type>
     TableOrSubquery(const T& t)
@@ -34,15 +34,15 @@ public:
     {
     }
 
-    TableOrSubquery(const UnsafeString& table);
+    TableOrSubquery(const UnsafeStringView& table);
     TableOrSubquery& schema(const Schema& schema);
 
-    TableOrSubquery& as(const String& alias);
+    TableOrSubquery& as(const UnsafeStringView& alias);
 
     TableOrSubquery& notIndexed();
-    TableOrSubquery& indexed(const String& index);
+    TableOrSubquery& indexed(const UnsafeStringView& index);
 
-    static TableOrSubquery function(const String& function);
+    static TableOrSubquery function(const UnsafeStringView& function);
     TableOrSubquery& invoke();
     TableOrSubquery& argument(const Expression& expression);
     TableOrSubquery& arguments(const Expressions& expressions);

@@ -36,9 +36,8 @@ Identifier::Type WindowFunctionInvocation::getType() const
     return type;
 }
 
-String WindowFunctionInvocation::getValidDescription() const
+bool WindowFunctionInvocation::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << name << "(";
     if (!expressions.empty()) {
         stream << expressions;
@@ -55,7 +54,7 @@ String WindowFunctionInvocation::getValidDescription() const
     } else {
         stream << windowDef;
     }
-    return stream.str();
+    return true;
 }
 
 void WindowFunctionInvocation::iterate(const Iterator& iterator, bool& stop)

@@ -30,7 +30,7 @@ namespace WCDB {
 class PageBasedFileHandle final : public FileHandle {
 #pragma mark - PageBasedFileHandle
 public:
-    PageBasedFileHandle(const String& path);
+    PageBasedFileHandle(const UnsafeStringView& path);
 
     MappedData mapPage(int pageno, off_t offset, size_t size);
     MappedData mapPage(int pageno);

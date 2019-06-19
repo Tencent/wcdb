@@ -24,9 +24,9 @@
 
 namespace WCDB {
 
-class StatementUpdate final : public TypedSyntax<Syntax::UpdateSTMT, Statement> {
+class StatementUpdate final : public SpecifiedSyntax<Syntax::UpdateSTMT, Statement> {
 public:
-    using TypedSyntax<Syntax::UpdateSTMT, Statement>::TypedSyntax;
+    using SpecifiedSyntax<Syntax::UpdateSTMT, Statement>::SpecifiedSyntax;
 
     StatementUpdate& with(const With& with);
 

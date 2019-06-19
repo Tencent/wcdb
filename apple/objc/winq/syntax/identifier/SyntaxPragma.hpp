@@ -29,7 +29,7 @@ namespace Syntax {
 class Pragma final : public Identifier {
 #pragma mark - Lang
 public:
-    String name;
+    StringView name;
 
     bool isValid() const override final;
 
@@ -37,7 +37,7 @@ public:
 public:
     static constexpr const Type type = Type::Pragma;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    bool describle(std::ostringstream& stream) const override final;
 };
 
 } // namespace Syntax

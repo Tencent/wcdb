@@ -36,11 +36,10 @@ Identifier::Type SavepointSTMT::getType() const
     return type;
 }
 
-String SavepointSTMT::getValidDescription() const
+bool SavepointSTMT::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << "SAVEPOINT " << savepoint;
-    return stream.str();
+    return true;
 }
 
 } // namespace Syntax

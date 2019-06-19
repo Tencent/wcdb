@@ -22,7 +22,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/HandleNotification.hpp>
 #include <WCDB/SQLite.h>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 
 namespace WCDB {
 
@@ -104,7 +104,7 @@ bool HandleNotification::areSQLTraceNotificationsSet() const
     return !m_sqlNotifications.empty();
 }
 
-void HandleNotification::setNotificationWhenSQLTraced(const String &name,
+void HandleNotification::setNotificationWhenSQLTraced(const UnsafeStringView &name,
                                                       const SQLNotification &onTraced)
 {
     bool stateBefore = areSQLTraceNotificationsSet();
@@ -119,16 +119,16 @@ void HandleNotification::setNotificationWhenSQLTraced(const String &name,
     }
 }
 
-void HandleNotification::postSQLTraceNotification(const String &sql)
+void HandleNotification::postSQLTraceNotification(const UnsafeStringView &sql)
 {
-    WCTInnerAssert(!m_sqlNotifications.empty());
+    WCTAssert(!m_sqlNotifications.empty());
     for (const auto &element : m_sqlNotifications) {
         element.second(sql);
     }
 }
 
 #pragma mark - Performance
-HandleNotification::Footprint::Footprint(const String &sql_)
+HandleNotification::Footprint::Footprint(const UnsafeStringView &sql_)
 : sql(sql_), frequency(1)
 {
 }
@@ -138,7 +138,7 @@ bool HandleNotification::arePerformanceTraceNotificationsSet() const
     return !m_performanceNotifications.empty();
 }
 
-void HandleNotification::setNotificationWhenPerformanceTraced(const String &name,
+void HandleNotification::setNotificationWhenPerformanceTraced(const UnsafeStringView &name,
                                                               const PerformanceNotification &onTraced)
 {
     bool stateBefore = arePerformanceTraceNotificationsSet();
@@ -153,7 +153,7 @@ void HandleNotification::setNotificationWhenPerformanceTraced(const String &name
     }
 }
 
-void HandleNotification::postPerformanceTraceNotification(const String &sql,
+void HandleNotification::postPerformanceTraceNotification(const UnsafeStringView &sql,
                                                           const int64_t &cost,
                                                           bool isInTransaction)
 {
@@ -168,7 +168,7 @@ void HandleNotification::postPerformanceTraceNotification(const String &sql,
     m_cost += cost;
 
     if (!isInTransaction) {
-        WCTInnerAssert(!m_performanceNotifications.empty());
+        WCTAssert(!m_performanceNotifications.empty());
         for (const auto &element : m_performanceNotifications) {
             element.second(m_footprints, (double) m_cost / (int) 1E9);
         }
@@ -180,29 +180,29 @@ void HandleNotification::postPerformanceTraceNotification(const String &sql,
 #pragma mark - Committed
 int HandleNotification::committed(void *p, sqlite3 *handle, const char *name, int numberOfFrames)
 {
-    WCTInnerAssert(p != nullptr);
+    WCTAssert(p != nullptr);
     HandleNotification *notification = reinterpret_cast<HandleNotification *>(p);
     notification->postCommittedNotification(sqlite3_db_filename(handle, name), numberOfFrames);
     return SQLITE_OK;
 }
 
 void HandleNotification::setNotificationWhenCommitted(int order,
-                                                      const String &name,
+                                                      const UnsafeStringView &name,
                                                       const CommittedNotification &onCommitted)
 {
-    WCTInnerAssert(onCommitted);
+    WCTAssert(onCommitted);
     bool stateBefore = isCommittedNotificationSet();
-    m_committedNotifications.insert(name, onCommitted, order);
+    m_committedNotifications.insert(StringView(name), onCommitted, order);
     bool stateAfter = isCommittedNotificationSet();
     if (stateBefore != stateAfter) {
         setupCommittedNotification();
     }
 }
 
-void HandleNotification::unsetNotificationWhenCommitted(const String &name)
+void HandleNotification::unsetNotificationWhenCommitted(const UnsafeStringView &name)
 {
     bool stateBefore = isCommittedNotificationSet();
-    m_committedNotifications.erase(name);
+    m_committedNotifications.erase(StringView(name));
     bool stateAfter = isCommittedNotificationSet();
     if (stateBefore != stateAfter) {
         setupCommittedNotification();
@@ -223,9 +223,9 @@ bool HandleNotification::isCommittedNotificationSet() const
     return !m_committedNotifications.empty();
 }
 
-void HandleNotification::postCommittedNotification(const String &path, int numberOfFrames)
+void HandleNotification::postCommittedNotification(const UnsafeStringView &path, int numberOfFrames)
 {
-    WCTInnerAssert(!m_committedNotifications.empty());
+    WCTAssert(!m_committedNotifications.empty());
     for (const auto &element : m_committedNotifications) {
         if (!element.value()(path, numberOfFrames)) {
             break;
@@ -236,7 +236,7 @@ void HandleNotification::postCommittedNotification(const String &path, int numbe
 #pragma mark - Checkpoint
 void HandleNotification::checkpointed(void *p, sqlite3 *handle, const char *name)
 {
-    WCTInnerAssert(p != nullptr);
+    WCTAssert(p != nullptr);
     HandleNotification *notification = reinterpret_cast<HandleNotification *>(p);
     notification->postCheckpointNotification(sqlite3_db_filename(handle, name));
 }
@@ -256,7 +256,7 @@ void HandleNotification::setupCheckpointNotifications()
     }
 }
 
-void HandleNotification::setNotificationWhenCheckpointed(const String &name,
+void HandleNotification::setNotificationWhenCheckpointed(const UnsafeStringView &name,
                                                          const CheckpointedNotification &checkpointed)
 {
     bool stateBefore = areCheckpointNotificationsSet();
@@ -271,9 +271,9 @@ void HandleNotification::setNotificationWhenCheckpointed(const String &name,
     }
 }
 
-void HandleNotification::postCheckpointNotification(const String &path)
+void HandleNotification::postCheckpointNotification(const UnsafeStringView &path)
 {
-    WCTInnerAssert(areCheckpointNotificationsSet());
+    WCTAssert(areCheckpointNotificationsSet());
     for (const auto &element : m_checkpointedNotifications) {
         element.second(path);
     }
@@ -303,7 +303,7 @@ void HandleNotification::setNotificationWhenBusy(const BusyNotification &busyNot
 
 bool HandleNotification::postBusyNotification(int numberOfTimes)
 {
-    WCTInnerAssert(m_busyNotification != nullptr);
+    WCTAssert(m_busyNotification != nullptr);
     bool retry = false;
     if (m_busyNotification != nullptr) {
         retry = m_busyNotification(getHandle()->getPath(), numberOfTimes);

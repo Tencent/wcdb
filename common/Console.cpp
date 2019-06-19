@@ -23,21 +23,9 @@
 #include <WCDB/Error.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Version.h>
-#include <iostream>
+#include <execinfo.h>
 
 namespace WCDB {
-
-std::nullptr_t Console::_initialize()
-{
-    Console::errored(Console::report);
-    return nullptr;
-}
-
-void Console::initialize()
-{
-    static std::nullptr_t _ = _initialize();
-    WCDB_UNUSED(_);
-}
 
 std::atomic<bool>& Console::debuggableValue()
 {
@@ -64,66 +52,63 @@ bool Console::debuggable()
     return debuggableValue().load();
 }
 
-void Console::errored(const Notifier::Callback& callback)
-{
-    if (callback != nullptr) {
-        Notifier::shared().setNotification(
-        std::numeric_limits<int>::min(), NotifierLoggerName, callback);
-    } else {
-        Notifier::shared().unsetNotification(NotifierLoggerName);
-    }
-}
-
-void Console::report(const Error& error)
-{
-    switch (error.level) {
-    case Error::Level::Ignore:
-        break;
-    case Error::Level::Debug:
-        if (!WCDB::Console::debuggable()) {
-            break;
-        }
-        // fallthrough
-    default:
-        print(error.getDescription());
-        break;
-    }
-    if (error.level == Error::Level::Fatal) {
-        breakpoint();
-    }
-}
-
-void Console::breakpoint()
-{
-}
-
 #if WCDB_DEBUG
 
-void Console::fatal(const String& message, const char* file, int line, const char* function)
+void Console::fatal(const UnsafeStringView& message, const char* file, int line, const char* function)
 {
     Error error(Error::Code::Misuse, Error::Level::Fatal, message);
-    error.infos.set(ErrorStringKeySource, ErrorSourceAssertion);
-    error.infos.set("File", file);
-    error.infos.set("Line", line);
-    error.infos.set("Func", function);
-    error.infos.set("Version", WCDB_VERSION_STRING);
-    error.infos.set("Timestamp", WCDB_TIMESTAMP_STRING);
-    error.infos.set("Build", WCDB_BUILD_STRING);
+    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceAssertion);
+    error.infos.insert_or_assign("File", file);
+    error.infos.insert_or_assign("Line", line);
+    error.infos.insert_or_assign("Func", function);
+    error.infos.insert_or_assign("Version", WCDB_VERSION_STRING);
+    error.infos.insert_or_assign("Timestamp", WCDB_TIMESTAMP_STRING);
+    error.infos.insert_or_assign("Build", WCDB_BUILD_STRING);
+    auto callstacks = Console::callstacks();
+    if (callstacks.has_value()) {
+        error.infos.insert_or_assign("Callstacks", callstacks.value());
+    }
     Notifier::shared().notify(error);
 }
 
 #else // WCDB_DEBUG
 
-void Console::fatal(const String& message)
+void Console::fatal(const UnsafeStringView& message)
 {
     Error error(Error::Code::Misuse, Error::Level::Fatal, message);
-    error.infos.set(ErrorStringKeySource, ErrorSourceAssertion);
-    error.infos.set("Version", WCDB_VERSION_STRING);
-    error.infos.set("Timestamp", WCDB_TIMESTAMP_STRING);
-    error.infos.set("Build", WCDB_BUILD_STRING);
+    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceAssertion);
+    error.infos.insert_or_assign("Version", WCDB_VERSION_STRING);
+    error.infos.insert_or_assign("Timestamp", WCDB_TIMESTAMP_STRING);
+    error.infos.insert_or_assign("Build", WCDB_BUILD_STRING);
+    auto callstacks = Console::callstacks();
+    if (callstacks.has_value()) {
+        error.infos.insert_or_assign("Callstacks", callstacks.value());
+    }
     Notifier::shared().notify(error);
 }
 
 #endif // WCDB_DEBUG
+
+std::optional<StringView> Console::callstacks()
+{
+    constexpr const int size = 100;
+    void* buffer[size];
+    int depth = backtrace(buffer, size);
+    char** symbols = backtrace_symbols(buffer, depth);
+    if (symbols == nullptr) {
+        return std::nullopt;
+    }
+
+    std::ostringstream stream;
+    std::string string;
+    for (int i = 0; i < depth; ++i) {
+        if (i != 0) {
+            stream << std::endl;
+        }
+        stream << symbols[i];
+    }
+    free(symbols);
+    return StringView(stream.str());
+}
 
 } // namespace WCDB

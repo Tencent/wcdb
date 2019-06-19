@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class Schema final : public TypedSyntax<Syntax::Schema, SQL> {
+class Schema final : public SpecifiedSyntax<Syntax::Schema, SQL> {
 public:
     Schema();
 
@@ -34,7 +34,7 @@ public:
     {
     }
 
-    Schema(const UnsafeString& name);
+    Schema(const UnsafeStringView& name);
 
     static Schema main();
     static Schema temp();

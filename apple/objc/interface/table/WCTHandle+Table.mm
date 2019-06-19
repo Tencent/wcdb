@@ -80,11 +80,11 @@
 
 - (BOOL)remapTable:(NSString *)tableName toClass:(Class<WCTTableCoding>)cls
 {
-    WCTInnerAssert(tableName != nil && cls != nil);
+    WCTAssert(tableName != nil && cls != nil);
     // TODO: check the constraints are as expected here.
     return [self lazyRunTransaction:^BOOL(WCTHandle *nsHandle) {
         WCDB::Handle *handle = [nsHandle getOrGenerateHandle];
-        WCTInnerAssert(handle != nullptr);
+        WCTAssert(handle != nullptr);
         bool succeed, exists;
         std::tie(succeed, exists) = handle->tableExists(tableName);
         if (!succeed) {
@@ -92,7 +92,7 @@
         }
         const WCTBinding &binding = [cls objectRelationalMapping];
         if (exists) {
-            std::set<WCDB::String> columnNames;
+            std::set<WCDB::StringView> columnNames;
             std::tie(succeed, columnNames) = handle->getColumns(tableName);
             if (!succeed) {
                 return NO;
@@ -112,9 +112,9 @@
             }
             for (const auto &columnName : columnNames) {
                 WCDB::Error error(WCDB::Error::Code::Mismatch, WCDB::Error::Level::Notice, "Skip column");
-                error.infos.set("Table", tableName);
-                error.infos.set("Column", columnName);
-                error.infos.set(WCDB::ErrorStringKeyPath, handle->getPath());
+                error.infos.insert_or_assign("Table", WCDB::StringView(tableName));
+                error.infos.insert_or_assign("Column", WCDB::StringView(columnName));
+                error.infos.insert_or_assign(WCDB::ErrorStringKeyPath, handle->getPath());
                 WCDB::Notifier::shared().notify(error);
             }
         } else {

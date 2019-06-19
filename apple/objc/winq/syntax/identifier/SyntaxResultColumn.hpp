@@ -30,9 +30,9 @@ class ResultColumn final : public Identifier {
 #pragma mark - Lang
 public:
     Expression expression;
-    String alias;
+    StringView alias;
     bool wildcard = false;
-    String table;
+    StringView table;
 
     bool isValid() const override final;
 
@@ -40,7 +40,7 @@ public:
 public:
     static constexpr const Type type = Type::ResultColumn;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    bool describle(std::ostringstream& stream) const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

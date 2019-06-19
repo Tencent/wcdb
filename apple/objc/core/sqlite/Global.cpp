@@ -51,33 +51,33 @@ Global::Global()
     {
         int rc = sqlite3_lock_hook(
         Global::willLock, Global::lockDidChange, Global::willShmLock, Global::shmLockDidChange, this);
-        WCTInnerAssert(rc == SQLITE_OK);
+        WCTAssert(rc == SQLITE_OK);
         staticAPIExit(rc);
     }
 
     {
         int rc = sqlite3_config(SQLITE_CONFIG_LOG, Global::log, this);
-        WCTInnerAssert(rc == SQLITE_OK);
+        WCTAssert(rc == SQLITE_OK);
         staticAPIExit(rc);
     }
 
     {
         int rc = sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
-        WCTInnerAssert(rc == SQLITE_OK);
+        WCTAssert(rc == SQLITE_OK);
         staticAPIExit(rc);
     }
 
     {
         int rc = sqlite3_config(SQLITE_CONFIG_MEMSTATUS, 0);
-        WCTInnerAssert(rc == SQLITE_OK);
+        WCTAssert(rc == SQLITE_OK);
         staticAPIExit(rc);
     }
 
     {
         sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
-        WCTInnerAssert(vfs != nullptr);
+        WCTAssert(vfs != nullptr);
         int rc = vfs->xSetSystemCall(vfs, "open", (sqlite3_syscall_ptr) Global::open);
-        WCTInnerAssert(rc == SQLITE_OK);
+        WCTAssert(rc == SQLITE_OK);
         staticAPIExit(rc);
     }
 }
@@ -98,12 +98,12 @@ void Global::staticAPIExit(int rc)
 //    int rc = sqlite3_config(SQLITE_CONFIG_MMAP_SIZE,
 //                   (sqlite3_int64) defaultSizeLimit,
 //                   (sqlite3_int64) maximumAllowedSizeLimit);
-//    WCTInnerAssert(rc == SQLITE_OK);
+//    WCTAssert(rc == SQLITE_OK);
 //    staticAPIExit(rc);
 //}
 
 #pragma mark - Log
-void Global::setNotificationForLog(const String &name, const LogNotification &notification)
+void Global::setNotificationForLog(const UnsafeStringView &name, const LogNotification &notification)
 {
     LockGuard lockGuard(m_lock);
     if (notification != nullptr) {
@@ -117,7 +117,7 @@ void Global::postLogNotification(int rc, const char *message)
 {
     SharedLockGuard lockGuard(m_lock);
     for (const auto &iter : m_logNotifications) {
-        WCTInnerAssert(iter.second != nullptr);
+        WCTAssert(iter.second != nullptr);
         iter.second(rc, message);
     }
 }
@@ -129,7 +129,7 @@ void Global::log(void *parameter, int rc, const char *message)
 }
 
 #pragma mark - File Opened
-void Global::setNotificationWhenFileOpened(const String &name,
+void Global::setNotificationWhenFileOpened(const UnsafeStringView &name,
                                            const FileOpenedNotification &notification)
 {
     LockGuard lockGuard(m_lock);
@@ -151,13 +151,13 @@ void Global::postFileOpenedNotification(int fd, const char *path, int flags, int
 {
     SharedLockGuard lockGuard(m_lock);
     for (const auto &iter : m_fileOpenedNotifications) {
-        WCTInnerAssert(iter.second != nullptr);
+        WCTAssert(iter.second != nullptr);
         iter.second(fd, path, flags, mode);
     }
 }
 
 #pragma mark - Lock
-void Global::setNotificationForLockEvent(const String &name,
+void Global::setNotificationForLockEvent(const UnsafeStringView &name,
                                          const WillLockNotification &willLock,
                                          const LockDidChangeNotification &lockDidChange,
                                          const WillShmLockNotification &willShmLock,
@@ -179,12 +179,12 @@ void Global::willLock(void *parameter, const char *path, int type)
 
 void Global::postWillLockNotification(const char *path_, int type_)
 {
-    String path = path_;
-    WCTInnerAssert(!path.empty());
+    UnsafeStringView path = path_;
+    WCTAssert(!path.empty());
 
     PagerLock type = (PagerLock) type_;
-    WCTInnerAssert(type == PagerLock::Shared || type == PagerLock::Reserved
-                   || type == PagerLock::Exclusive);
+    WCTAssert(type == PagerLock::Shared || type == PagerLock::Reserved
+              || type == PagerLock::Exclusive);
 
     SharedLockGuard lockGuard(m_lock);
     for (const auto &iter : m_lockEventNotifications) {
@@ -201,13 +201,12 @@ void Global::lockDidChange(void *parameter, const char *path, int type)
 
 void Global::postLockDidChangeNotification(const char *path_, int type_)
 {
-    String path = path_;
-    WCTInnerAssert(!path.empty());
+    UnsafeStringView path = path_;
+    WCTAssert(!path.empty());
 
     PagerLock type = (PagerLock) type_;
-    WCTInnerAssert(type == PagerLock::None || type == PagerLock::Shared
-                   || type == PagerLock::Reserved || type == PagerLock::Pending
-                   || type == PagerLock::Exclusive);
+    WCTAssert(type == PagerLock::None || type == PagerLock::Shared || type == PagerLock::Reserved
+              || type == PagerLock::Pending || type == PagerLock::Exclusive);
 
     SharedLockGuard lockGuard(m_lock);
     for (const auto &iter : m_lockEventNotifications) {
@@ -224,15 +223,15 @@ void Global::willShmLock(void *parameter, const char *path, int flags, int mask)
 
 void Global::postWillShmLockNotification(const char *path_, int flags, int mask)
 {
-    String path = path_;
-    WCTInnerAssert(!path.empty());
+    UnsafeStringView path = path_;
+    WCTAssert(!path.empty());
 
     ShmLock type;
     if ((flags & SQLITE_SHM_SHARED) != 0) {
-        WCTInnerAssert((flags & SQLITE_SHM_EXCLUSIVE) == 0);
+        WCTAssert((flags & SQLITE_SHM_EXCLUSIVE) == 0);
         type = ShmLock::Shared;
     } else {
-        WCTInnerAssert((flags & SQLITE_SHM_EXCLUSIVE) != 0);
+        WCTAssert((flags & SQLITE_SHM_EXCLUSIVE) != 0);
         type = ShmLock::Exclusive;
     }
 
@@ -255,10 +254,10 @@ void Global::postShmLockDidChangeNotification(const char *path_,
                                               int sharedMask,
                                               int exclusiveMask)
 {
-    WCTInnerAssert(identifier != nullptr);
+    WCTAssert(identifier != nullptr);
 
-    String path = path_;
-    WCTInnerAssert(!path.empty());
+    UnsafeStringView path = path_;
+    WCTAssert(!path.empty());
 
     SharedLockGuard lockGuard(m_lock);
     for (const auto &iter : m_lockEventNotifications) {

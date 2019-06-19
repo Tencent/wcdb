@@ -47,12 +47,12 @@ bool HandleStatement::prepare(const Statement &statement)
     return prepare(statement.getDescription());
 }
 
-bool HandleStatement::prepare(const String &sql)
+bool HandleStatement::prepare(const UnsafeStringView &sql)
 {
     WCTRemedialAssert(!isPrepared(), "Last statement is not finalized.", finalize(););
 
     bool result = APIExit(
-    sqlite3_prepare_v2(getRawHandle(), sql.c_str(), -1, &m_stmt, nullptr), sql);
+    sqlite3_prepare_v2(getRawHandle(), sql.data(), -1, &m_stmt, nullptr), sql);
     m_done = false;
     if (!result) {
         m_stmt = nullptr;
@@ -62,7 +62,7 @@ bool HandleStatement::prepare(const String &sql)
 
 void HandleStatement::reset()
 {
-    WCTInnerAssert(isPrepared());
+    WCTAssert(isPrepared());
     APIExit(sqlite3_reset(m_stmt));
 }
 
@@ -73,7 +73,7 @@ bool HandleStatement::done()
 
 bool HandleStatement::step()
 {
-    WCTInnerAssert(isPrepared());
+    WCTAssert(isPrepared());
 
     int rc = sqlite3_step(m_stmt);
     m_done = rc == SQLITE_DONE;
@@ -96,31 +96,31 @@ void HandleStatement::finalize()
 
 int HandleStatement::getNumberOfColumns()
 {
-    WCTInnerAssert(isPrepared());
+    WCTAssert(isPrepared());
     return sqlite3_column_count(m_stmt);
 }
 
-const UnsafeString HandleStatement::getOriginColumnName(int index)
+const UnsafeStringView HandleStatement::getOriginColumnName(int index)
 {
-    WCTInnerAssert(isPrepared());
+    WCTAssert(isPrepared());
     return sqlite3_column_origin_name(m_stmt, index);
 }
 
-const UnsafeString HandleStatement::getColumnName(int index)
+const UnsafeStringView HandleStatement::getColumnName(int index)
 {
-    WCTInnerAssert(isPrepared());
+    WCTAssert(isPrepared());
     return sqlite3_column_name(m_stmt, index);
 }
 
-const UnsafeString HandleStatement::getColumnTableName(int index)
+const UnsafeStringView HandleStatement::getColumnTableName(int index)
 {
-    WCTInnerAssert(isPrepared());
+    WCTAssert(isPrepared());
     return sqlite3_column_table_name(m_stmt, index);
 }
 
 ColumnType HandleStatement::getType(int index)
 {
-    WCTInnerAssert(isPrepared());
+    WCTAssert(isPrepared());
     switch (sqlite3_column_type(m_stmt, index)) {
     case SQLITE_INTEGER:
         return ColumnType::Integer64;
@@ -137,82 +137,96 @@ ColumnType HandleStatement::getType(int index)
 
 void HandleStatement::bindInteger32(const Integer32 &value, int index)
 {
-    WCTInnerAssert(isPrepared());
-    WCTInnerAssert(!isBusy());
-    APIExit(sqlite3_bind_int(m_stmt, index, value));
+    WCTAssert(isPrepared());
+    WCTAssert(!isBusy());
+    bool succeed = APIExit(sqlite3_bind_int(m_stmt, index, value));
+    WCTAssert(succeed);
+    WCDB_UNUSED(succeed);
 }
 
 void HandleStatement::bindInteger64(const Integer64 &value, int index)
 {
-    WCTInnerAssert(isPrepared());
-    WCTInnerAssert(!isBusy());
-    APIExit(sqlite3_bind_int64(m_stmt, index, value));
+    WCTAssert(isPrepared());
+    WCTAssert(!isBusy());
+    bool succeed = APIExit(sqlite3_bind_int64(m_stmt, index, value));
+    WCTAssert(succeed);
+    WCDB_UNUSED(succeed);
 }
 
 void HandleStatement::bindDouble(const Float &value, int index)
 {
-    WCTInnerAssert(isPrepared());
-    WCTInnerAssert(!isBusy());
-    APIExit(sqlite3_bind_double(m_stmt, index, value));
+    WCTAssert(isPrepared());
+    WCTAssert(!isBusy());
+    bool succeed = APIExit(sqlite3_bind_double(m_stmt, index, value));
+    WCTAssert(succeed);
+    WCDB_UNUSED(succeed);
 }
 
 void HandleStatement::bindText(const Text &value, int index)
 {
-    WCTInnerAssert(isPrepared());
-    WCTInnerAssert(!isBusy());
+    WCTAssert(isPrepared());
+    WCTAssert(!isBusy());
     // use SQLITE_STATIC if auto_commit?
-    APIExit(sqlite3_bind_text(
-    m_stmt, index, value.cstring(), (int) value.length(), SQLITE_TRANSIENT));
+    bool succeed = APIExit(sqlite3_bind_text(
+    m_stmt, index, value.data(), (int) value.length(), SQLITE_TRANSIENT));
+    WCTAssert(succeed);
+    WCDB_UNUSED(succeed);
 }
 
 void HandleStatement::bindBLOB(const BLOB &value, int index)
 {
-    WCTInnerAssert(isPrepared());
-    WCTInnerAssert(!isBusy());
-    // use SQLITE_STATIC if auto_commit?
-    APIExit(sqlite3_bind_blob(m_stmt, index, value.buffer(), (int) value.size(), SQLITE_TRANSIENT));
+    WCTAssert(isPrepared());
+    WCTAssert(!isBusy());
+    // TODO: use SQLITE_STATIC to get better performance?
+    bool succeed = APIExit(sqlite3_bind_blob(
+    m_stmt, index, value.buffer(), (int) value.size(), SQLITE_TRANSIENT));
+    WCTAssert(succeed);
+    WCDB_UNUSED(succeed);
 }
 
 void HandleStatement::bindNull(int index)
 {
-    WCTInnerAssert(isPrepared());
-    WCTInnerAssert(!isBusy());
-    APIExit(sqlite3_bind_null(m_stmt, index));
+    WCTAssert(isPrepared());
+    WCTAssert(!isBusy());
+    bool succeed = APIExit(sqlite3_bind_null(m_stmt, index));
+    WCTAssert(succeed);
+    WCDB_UNUSED(succeed);
 }
 
 HandleStatement::Integer32 HandleStatement::getInteger32(int index)
 {
-    WCTInnerAssert(isPrepared());
-    WCTInnerAssert(isBusy());
+    WCTAssert(isPrepared());
+    WCTAssert(isBusy());
     return static_cast<Integer32>(sqlite3_column_int(m_stmt, index));
 }
 
 HandleStatement::Integer64 HandleStatement::getInteger64(int index)
 {
-    WCTInnerAssert(isPrepared());
-    WCTInnerAssert(isBusy());
+    WCTAssert(isPrepared());
+    WCTAssert(isBusy());
     return static_cast<Integer64>(sqlite3_column_int64(m_stmt, index));
 }
 
 HandleStatement::Float HandleStatement::getDouble(int index)
 {
-    WCTInnerAssert(isPrepared());
-    WCTInnerAssert(isBusy());
+    WCTAssert(isPrepared());
+    WCTAssert(isBusy());
     return static_cast<Float>(sqlite3_column_double(m_stmt, index));
 }
 
 HandleStatement::Text HandleStatement::getText(int index)
 {
-    WCTInnerAssert(isPrepared());
-    WCTInnerAssert(isBusy());
-    return UnsafeString(reinterpret_cast<const char *>(sqlite3_column_text(m_stmt, index)),
-                        sqlite3_column_bytes(m_stmt, index));
+    WCTAssert(isPrepared());
+    WCTAssert(isBusy());
+    return UnsafeStringView(
+    reinterpret_cast<const char *>(sqlite3_column_text(m_stmt, index)),
+    sqlite3_column_bytes(m_stmt, index));
 }
 
 const HandleStatement::BLOB HandleStatement::getBLOB(int index)
 {
-    WCTInnerAssert(isPrepared());
-    WCTInnerAssert(isBusy());
+    WCTAssert(isPrepared());
+    WCTAssert(isBusy());
     return BLOB::immutable(
     reinterpret_cast<const unsigned char *>(sqlite3_column_blob(m_stmt, index)),
     sqlite3_column_bytes(m_stmt, index));
@@ -220,13 +234,13 @@ const HandleStatement::BLOB HandleStatement::getBLOB(int index)
 
 bool HandleStatement::isBusy()
 {
-    WCTInnerAssert(isPrepared());
+    WCTAssert(isPrepared());
     return sqlite3_stmt_busy(m_stmt) != 0;
 }
 
 bool HandleStatement::isReadonly()
 {
-    WCTInnerAssert(isPrepared());
+    WCTAssert(isPrepared());
     return sqlite3_stmt_readonly(m_stmt) != 0;
 }
 

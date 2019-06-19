@@ -21,7 +21,7 @@
 #pragma once
 
 #include <WCDB/Lock.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <map>
 
 namespace WCDB {
@@ -45,23 +45,23 @@ private:
 public:
     // rc, message
     typedef std::function<void(int, const char*)> LogNotification;
-    void setNotificationForLog(const String& name, const LogNotification& notification);
+    void setNotificationForLog(const UnsafeStringView& name, const LogNotification& notification);
 
 private:
     static void log(void* parameter, int rc, const char* message);
     void postLogNotification(int rc, const char* message);
-    std::map<String, LogNotification> m_logNotifications;
+    StringViewMap<LogNotification> m_logNotifications;
 
 #pragma mark - File Opened
 public:
     typedef std::function<void(int /* fd */, const char* /* path */, int /* flags */, int /* mode */)> FileOpenedNotification;
-    void setNotificationWhenFileOpened(const String& name,
+    void setNotificationWhenFileOpened(const UnsafeStringView& name,
                                        const FileOpenedNotification& notification);
 
 private:
     static int open(const char* path, int flags, int mode);
     void postFileOpenedNotification(int fd, const char* path, int flags, int mode);
-    std::map<String, FileOpenedNotification> m_fileOpenedNotifications;
+    StringViewMap<FileOpenedNotification> m_fileOpenedNotifications;
 
 #pragma mark - Lock
 public:
@@ -76,11 +76,11 @@ public:
         Shared = 4,
         Exclusive = 8,
     };
-    typedef std::function<void(const String& /* path */, PagerLock)> WillLockNotification;
-    typedef std::function<void(const String& /* path */, PagerLock)> LockDidChangeNotification;
-    typedef std::function<void(const String& /* path */, ShmLock, int /* mask */)> WillShmLockNotification;
-    typedef std::function<void(const String& /* path */, void* /* identifier */, int /* sharedMask */, int /* exclMask */)> ShmLockDidChangeNotification;
-    void setNotificationForLockEvent(const String& name,
+    typedef std::function<void(const UnsafeStringView& /* path */, PagerLock)> WillLockNotification;
+    typedef std::function<void(const UnsafeStringView& /* path */, PagerLock)> LockDidChangeNotification;
+    typedef std::function<void(const UnsafeStringView& /* path */, ShmLock, int /* mask */)> WillShmLockNotification;
+    typedef std::function<void(const UnsafeStringView& /* path */, void* /* identifier */, int /* sharedMask */, int /* exclMask */)> ShmLockDidChangeNotification;
+    void setNotificationForLockEvent(const UnsafeStringView& name,
                                      const WillLockNotification& willLock,
                                      const LockDidChangeNotification& lockDidChange,
                                      const WillShmLockNotification& willShmLock,
@@ -110,7 +110,7 @@ private:
         ShmLockDidChangeNotification shmLockDidChange;
     };
     typedef struct LockEvent LockEvent;
-    std::map<String, LockEvent> m_lockEventNotifications;
+    StringViewMap<LockEvent> m_lockEventNotifications;
 };
 
 }; // namespace WCDB

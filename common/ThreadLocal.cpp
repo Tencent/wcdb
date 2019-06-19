@@ -28,7 +28,7 @@ UntypedThreadLocal::Info::Info(const Recyclable<pthread_key_t>& key,
                                std::shared_ptr<void>&& value)
 : m_key(key), m_value(std::move(value))
 {
-    WCTInnerAssert(m_value != nullptr);
+    WCTAssert(m_value != nullptr);
 }
 
 UntypedThreadLocal::~UntypedThreadLocal()
@@ -77,7 +77,7 @@ const Recyclable<pthread_key_t>& UntypedThreadLocal::sharedKey()
 #pragma mark - Helper
 void UntypedThreadLocal::threadDeconstructor(void* p)
 {
-    WCTInnerAssert(p != nullptr);
+    WCTAssert(p != nullptr);
     Infos* infos = (Infos*) p;
     delete infos;
 }

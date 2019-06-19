@@ -42,7 +42,7 @@ class FactoryRetriever final : public FactoryRelated,
 public:
     FactoryRetriever(const Factory &factory);
 
-    const String database;
+    const StringView database;
 
 public:
     bool work();
@@ -51,30 +51,36 @@ protected:
     bool exit(bool result);
 
 protected:
-    bool restore(const String &database);
-    const String databaseFileName;
+    bool restore(const UnsafeStringView &database);
+    const StringView databaseFileName;
 
 #pragma mark - Report
 protected:
-    void reportMechanic(const Fraction &score, const String &path, double cost, const Time &material);
-    void reportFullCrawler(const Fraction &score, const String &path, double cost);
+    void reportMechanic(const Fraction &score,
+                        const UnsafeStringView &path,
+                        double cost,
+                        const Time &material);
+    void reportFullCrawler(const Fraction &score, const UnsafeStringView &path, double cost);
     void reportSummary(double cost);
 
-    void finishReportOfPerformance(Error &error, const String &database, double cost);
+    void finishReportOfPerformance(Error &error, const UnsafeStringView &database, double cost);
 
 #pragma mark - Evaluation and Progress
 protected:
-    bool calculateSizes(const std::list<String> &workshopDirectories);
-    bool calculateSize(const String &database);
-    void increaseProgress(const String &database, bool useMaterial, double progress, double increment);
+    bool calculateSizes(const std::list<StringView> &workshopDirectories);
+    bool calculateSize(const UnsafeStringView &database);
+    void increaseProgress(const UnsafeStringView &database,
+                          bool useMaterial,
+                          double progress,
+                          double increment);
     static size_t
-    iterateSize(const size_t previous, const std::pair<String, size_t> &element);
+    iterateSize(const size_t previous, const std::pair<StringView, size_t> &element);
 
-    Fraction getWeight(const String &database);
+    Fraction getWeight(const UnsafeStringView &database);
 
-    std::map<String, size_t> m_sizes;
+    StringViewMap<size_t> m_sizes;
     size_t m_totalSize;
-    void increaseScore(const String &database, const Fraction &increment);
+    void increaseScore(const UnsafeStringView &database, const Fraction &increment);
 };
 
 } //namespace Repair

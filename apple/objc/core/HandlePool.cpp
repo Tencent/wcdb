@@ -31,7 +31,7 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-HandlePool::HandlePool(const String &thePath) : path(thePath)
+HandlePool::HandlePool(const UnsafeStringView &thePath) : path(thePath)
 {
 }
 
@@ -44,8 +44,8 @@ HandlePool::~HandlePool()
 #pragma mark - Concurrency
 bool HandlePool::isNumberOfHandlesAllowed() const
 {
-    WCTInnerAssert(m_concurrency.readSafety());
-    WCTInnerAssert(m_memory.readSafety());
+    WCTAssert(m_concurrency.readSafety());
+    WCTAssert(m_memory.readSafety());
     return numberOfAliveHandles() < HandlePoolMaxAllowedNumberOfHandles;
 }
 
@@ -89,8 +89,8 @@ void HandlePool::drain(const HandlePool::DrainedCallback &onDrained)
 
 void HandlePool::clearAllHandles()
 {
-    WCTInnerAssert(m_concurrency.writeSafety());
-    WCTInnerAssert(m_memory.writeSafety());
+    WCTAssert(m_concurrency.writeSafety());
+    WCTAssert(m_memory.writeSafety());
     for (unsigned int i = 0; i < HandleSlotCount; ++i) {
         m_frees[i].clear();
         auto &handles = m_handles[i];
@@ -149,7 +149,7 @@ bool HandlePool::isAliving() const
 RecyclableHandle HandlePool::flowOut(HandleType type)
 {
     unsigned int slot = slotOfHandleType(type);
-    WCTInnerAssert(slot < HandleSlotCount);
+    WCTAssert(slot < HandleSlotCount);
 
     SharedLockGuard concurrencyGuard(m_concurrency);
     std::shared_ptr<Handle> handle;
@@ -158,7 +158,7 @@ RecyclableHandle HandlePool::flowOut(HandleType type)
         auto &freeSlot = m_frees[slot];
         if (!freeSlot.empty()) {
             handle = freeSlot.back();
-            WCTInnerAssert(handle != nullptr);
+            WCTAssert(handle != nullptr);
             freeSlot.pop_back();
         } else if (!isNumberOfHandlesAllowed()) {
             // auto purge to remove unused handles
@@ -168,8 +168,8 @@ RecyclableHandle HandlePool::flowOut(HandleType type)
                 Error error(Error::Code::Exceed,
                             Error::Level::Error,
                             "The operating count of database exceeds the maximum allowed.");
-                error.infos.set("MaxAllowed", HandlePoolMaxAllowedNumberOfHandles);
-                error.infos.set(ErrorStringKeyPath, path);
+                error.infos.insert_or_assign("MaxAllowed", HandlePoolMaxAllowedNumberOfHandles);
+                error.infos.insert_or_assign(ErrorStringKeyPath, path);
                 Notifier::shared().notify(error);
                 setThreadedError(std::move(error));
                 return nullptr;
@@ -192,14 +192,14 @@ RecyclableHandle HandlePool::flowOut(HandleType type)
                 Error error(Error::Code::Exceed,
                             Error::Level::Error,
                             "The operating count of database exceeds the maximum allowed.");
-                error.infos.set("MaxAllowed", HandlePoolMaxAllowedNumberOfHandles);
-                error.infos.set(ErrorStringKeyPath, path);
+                error.infos.insert_or_assign("MaxAllowed", HandlePoolMaxAllowedNumberOfHandles);
+                error.infos.insert_or_assign(ErrorStringKeyPath, path);
                 Notifier::shared().notify(error);
                 setThreadedError(std::move(error));
                 return nullptr;
             }
         }
-        WCTInnerAssert(m_handles[slot].find(handle) == m_handles[slot].end());
+        WCTAssert(m_handles[slot].find(handle) == m_handles[slot].end());
         m_handles[slot].emplace(handle);
     } else {
         if (!willReuseSlotedHandle(type, handle.get())) {
@@ -211,7 +211,7 @@ RecyclableHandle HandlePool::flowOut(HandleType type)
         }
     }
 
-    WCTInnerAssert(handle != nullptr);
+    WCTAssert(handle != nullptr);
 
     m_concurrency.lockShared();
     return RecyclableHandle(
@@ -220,14 +220,14 @@ RecyclableHandle HandlePool::flowOut(HandleType type)
 
 void HandlePool::flowBack(HandleType type, const std::shared_ptr<Handle> &handle)
 {
-    WCTInnerAssert(handle != nullptr);
-    WCTInnerAssert(m_concurrency.readSafety());
+    WCTAssert(handle != nullptr);
+    WCTAssert(m_concurrency.readSafety());
 
     WCTRemedialAssert(
     !handle->isPrepared(), "Statement is not finalized.", handle->finalize(););
     {
         unsigned int slot = slotOfHandleType(type);
-        WCTInnerAssert(slot < HandleSlotCount);
+        WCTAssert(slot < HandleSlotCount);
 
         LockGuard memoryGuard(m_memory);
         m_frees[slot].push_back(handle);

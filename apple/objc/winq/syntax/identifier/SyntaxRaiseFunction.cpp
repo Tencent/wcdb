@@ -47,9 +47,8 @@ Identifier::Type RaiseFunction::getType() const
     return type;
 }
 
-String RaiseFunction::getValidDescription() const
+bool RaiseFunction::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << "RAISE(" << switcher;
     switch (switcher) {
     case Switch::Ignore:
@@ -61,7 +60,7 @@ String RaiseFunction::getValidDescription() const
         break;
     }
     stream << ")";
-    return stream.str();
+    return true;
 }
 
 } // namespace Syntax

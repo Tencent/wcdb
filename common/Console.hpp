@@ -21,10 +21,9 @@
 #pragma once
 
 #include <WCDB/Macro.hpp>
-#include <WCDB/Notifier.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <atomic>
-#include <functional>
+#include <list>
 
 namespace WCDB {
 
@@ -36,27 +35,19 @@ public:
     Console(const Console&) = delete;
     Console& operator=(const Console&) = delete;
 
-    static void initialize();
-
     static void debug();
     static void release();
     static bool debuggable();
 
-    static void errored(const Notifier::Callback& callback);
-
 #if WCDB_DEBUG
     static void
-    fatal(const String& message, const char* file, int line, const char* function);
+    fatal(const UnsafeStringView& message, const char* file, int line, const char* function);
 #else  // WCDB_DEBUG
-    static void fatal(const String& message);
+    static void fatal(const UnsafeStringView& message);
 #endif // WCDB_DEBUG
 
 private:
-    static std::nullptr_t _initialize();
-
-    static void report(const Error& error);
-    static void print(const String& message);
-    static void breakpoint() WCDB_USED WCDB_NO_INLINE;
+    static std::optional<StringView> callstacks();
     static std::atomic<bool>& debuggableValue();
 };
 

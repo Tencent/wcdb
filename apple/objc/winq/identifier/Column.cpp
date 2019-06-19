@@ -26,7 +26,7 @@ Column::Column()
 {
 }
 
-Column::Column(const String& name)
+Column::Column(const UnsafeStringView& name)
 {
     syntax().name = name;
 }

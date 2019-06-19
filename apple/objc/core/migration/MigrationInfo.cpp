@@ -20,7 +20,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/MigrationInfo.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 
 namespace WCDB {
 
@@ -29,11 +29,12 @@ MigrationBaseInfo::MigrationBaseInfo()
 {
 }
 
-MigrationBaseInfo::MigrationBaseInfo(const String& database, const String& table)
+MigrationBaseInfo::MigrationBaseInfo(const UnsafeStringView& database,
+                                     const UnsafeStringView& table)
 : m_database(database), m_table(table)
 {
-    WCTInnerAssert(!m_database.empty());
-    WCTInnerAssert(!m_table.empty());
+    WCTAssert(!m_database.empty());
+    WCTAssert(!m_table.empty());
 }
 
 MigrationBaseInfo::~MigrationBaseInfo()
@@ -50,38 +51,38 @@ bool MigrationBaseInfo::isCrossDatabase() const
     return m_sourceDatabase != m_database;
 }
 
-const String& MigrationBaseInfo::getTable() const
+const StringView& MigrationBaseInfo::getTable() const
 {
     return m_table;
 }
 
-const String& MigrationBaseInfo::getDatabase() const
+const StringView& MigrationBaseInfo::getDatabase() const
 {
     return m_database;
 }
 
-const String& MigrationBaseInfo::getSourceTable() const
+const StringView& MigrationBaseInfo::getSourceTable() const
 {
     return m_sourceTable;
 }
 
-const String& MigrationBaseInfo::getSourceDatabase() const
+const StringView& MigrationBaseInfo::getSourceDatabase() const
 {
     return m_sourceDatabase;
 }
 
 const char* MigrationBaseInfo::getSchemaPrefix()
 {
-    static const char* s_schemaPrefix = "WCDBMigration_";
+    static const char* s_schemaPrefix = "wcdb_migration_";
     return s_schemaPrefix;
 }
 
-Schema MigrationBaseInfo::getSchemaForDatabase(const String& database)
+Schema MigrationBaseInfo::getSchemaForDatabase(const UnsafeStringView& database)
 {
     return getSchemaPrefix() + std::to_string(database.hash());
 }
 
-void MigrationBaseInfo::setSource(const String& table, const String& database)
+void MigrationBaseInfo::setSource(const UnsafeStringView& table, const UnsafeStringView& database)
 {
     WCTRemedialAssert(!table.empty() && (table != m_table || database != m_database),
                       "Invalid migration source.",
@@ -97,7 +98,7 @@ void MigrationBaseInfo::setSource(const String& table, const String& database)
 #pragma mark - MigrationUserInfo
 StatementAttach MigrationUserInfo::getStatementForAttachingSchema() const
 {
-    WCTInnerAssert(isCrossDatabase());
+    WCTAssert(isCrossDatabase());
     return StatementAttach().attach(getSourceDatabase()).as(getSchemaForDatabase(getSourceDatabase()));
 }
 
@@ -111,12 +112,12 @@ Schema MigrationUserInfo::getSchemaForSourceDatabase() const
 
 #pragma mark - MigrationInfo
 MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
-                             const std::set<String>& uniqueColumns,
+                             const std::set<StringView>& uniqueColumns,
                              bool integerPrimaryKey)
 : MigrationBaseInfo(userInfo), m_integerPrimaryKey(integerPrimaryKey)
 {
-    WCTInnerAssert(shouldMigrate());
-    WCTInnerAssert(!uniqueColumns.empty());
+    WCTAssert(shouldMigrate());
+    WCTAssert(!uniqueColumns.empty());
 
     // Schema
     if (isCrossDatabase()) {
@@ -137,7 +138,9 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
 
     // View
     {
-        m_unionedView = getUnionedViewPrefix() + getTable();
+        std::ostringstream stream;
+        stream << getUnionedViewPrefix() << getTable();
+        m_unionedView = StringView(stream.str());
 
         StatementSelect select
         = StatementSelect()
@@ -188,36 +191,12 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
 
     // Compatible
     {
-        ResultColumns resultColumnsForRowIDCompatible = resultColumns;
         if (!m_integerPrimaryKey) {
-            Column maxRowIDColumn("maxRowID");
-
-            ResultColumn maxRowIDResultColumn = Column::rowid().max();
-            maxRowIDResultColumn.as(maxRowIDColumn.getDescription());
-
-            ResultColumn expectingRowID = maxRowIDColumn.max() + 1;
-            expectingRowID.as(Column::rowid().getDescription());
-
-            resultColumnsForRowIDCompatible.front()
+            m_statementForSelectingMaxRowID
             = StatementSelect()
-              .select(expectingRowID)
-              .from(StatementSelect()
-                    .select(maxRowIDResultColumn)
-                    .from(TableOrSubquery(getSourceTable()).schema(m_schemaForSourceDatabase))
-                    .unionAll()
-                    .select(maxRowIDResultColumn)
-                    .from(TableOrSubquery(getTable()).schema(Schema::main())));
+              .select(Column::rowid().max() + 1)
+              .from(TableOrSubquery(m_unionedView).schema(Schema::temp()));
         }
-
-        m_statementForMigratingSpecifiedRowTemplate
-        = StatementInsert()
-          .insertIntoTable(getTable())
-          .schema(Schema::main())
-          .columns(columns)
-          .values(StatementSelect()
-                  .select(resultColumnsForRowIDCompatible)
-                  .from(TableOrSubquery(getSourceTable()).schema(m_schemaForSourceDatabase))
-                  .where(Column::rowid() == BindParameter(1)));
 
         m_statementForDeletingSpecifiedRow
         = StatementDelete()
@@ -237,20 +216,20 @@ const Schema& MigrationInfo::getSchemaForSourceDatabase() const
     return m_schemaForSourceDatabase;
 }
 
-const String& MigrationInfo::getUnionedView() const
+const StringView& MigrationInfo::getUnionedView() const
 {
     return m_unionedView;
 }
 
 const StatementAttach& MigrationInfo::getStatementForAttachingSchema() const
 {
-    WCTInnerAssert(isCrossDatabase());
+    WCTAssert(isCrossDatabase());
     return m_statementForAttachingSchema;
 }
 
 StatementDetach MigrationInfo::getStatementForDetachingSchema(const Schema& schema)
 {
-    WCTInnerAssert(schema.getDescription().hasPrefix(getSchemaPrefix()));
+    WCTAssert(schema.getDescription().hasPrefix(getSchemaPrefix()));
     return StatementDetach().detach(schema);
 }
 
@@ -260,10 +239,9 @@ StatementPragma MigrationInfo::getStatementForSelectingDatabaseList()
 }
 
 #pragma mark - View
-const String& MigrationInfo::getUnionedViewPrefix()
+const char* MigrationInfo::getUnionedViewPrefix()
 {
-    static const String* s_viewPrefix = new String("WCDBUnioned_");
-    return *s_viewPrefix;
+    return "wcdb_union_";
 }
 
 const StatementCreateView& MigrationInfo::getStatementForCreatingUnionedView() const
@@ -272,9 +250,9 @@ const StatementCreateView& MigrationInfo::getStatementForCreatingUnionedView() c
 }
 
 const StatementDropView
-MigrationInfo::getStatementForDroppingUnionedView(const String& unionedView)
+MigrationInfo::getStatementForDroppingUnionedView(const UnsafeStringView& unionedView)
 {
-    WCTInnerAssert(unionedView.hasPrefix(getUnionedViewPrefix()));
+    WCTAssert(unionedView.hasPrefix(getUnionedViewPrefix()));
     return StatementDropView().dropView(unionedView).schema(Schema::temp()).ifExists();
 }
 
@@ -282,7 +260,7 @@ StatementSelect MigrationInfo::getStatementForSelectingUnionedView()
 {
     Column name("name");
     Column type("type");
-    String pattern = String::formatted("%s%%", getUnionedViewPrefix().c_str());
+    StringView pattern = StringView::formatted("%s%%", getUnionedViewPrefix());
     return StatementSelect()
     .select(name)
     .from(TableOrSubquery::master().schema(Schema::temp()))
@@ -305,19 +283,48 @@ const StatementDelete& MigrationInfo::getStatementForDeletingSpecifiedRow() cons
     return m_statementForDeletingSpecifiedRow;
 }
 
-StatementInsert
-MigrationInfo::getStatementForMigratingSpecifiedRow(Syntax::ConflictAction conflictAction) const
+StatementInsert MigrationInfo::getStatementForMigrating(const Syntax::InsertSTMT& stmt) const
 {
-    StatementInsert statement = m_statementForMigratingSpecifiedRowTemplate;
-    statement.syntax().conflictAction = conflictAction;
+    StatementInsert statement(stmt);
+
+    auto& syntax = statement.syntax();
+    syntax.schema = Schema::main();
+    syntax.table = getTable();
+    WCTAssert(!syntax.isMultiWrite());
+
+    auto& columns = syntax.columns;
+    WCTAssert(!columns.empty());
+    columns.insert(columns.begin(), Column("rowid"));
+
+    if (!syntax.expressionsValues.empty()) {
+        auto& expressions = syntax.expressionsValues;
+        WCTAssert(expressions.size() == 1);
+        auto& values = *expressions.begin();
+        int rowidIndexOfMigratingStatement = getRowIDIndexOfMigratingStatement();
+        Expression rowid;
+        if (rowidIndexOfMigratingStatement > 0) {
+            rowid = BindParameter(rowidIndexOfMigratingStatement);
+        } else {
+            rowid = m_statementForSelectingMaxRowID;
+        }
+        values.insert(values.begin(), rowid);
+    }
     return statement;
+}
+
+int MigrationInfo::getRowIDIndexOfMigratingStatement() const
+{
+    if (m_integerPrimaryKey) {
+        return SQLITE_MAX_VARIABLE_NUMBER;
+    }
+    return 0;
 }
 
 StatementUpdate
 MigrationInfo::getStatementForLimitedUpdatingTable(const Statement& sourceStatement) const
 {
-    WCTInnerAssert(sourceStatement.getType() == Syntax::Identifier::Type::UpdateSTMT);
-    StatementUpdate statementUpdate(sourceStatement);
+    WCTAssert(sourceStatement.getType() == Syntax::Identifier::Type::UpdateSTMT);
+    StatementUpdate statementUpdate((const StatementUpdate&) sourceStatement);
 
     Syntax::UpdateSTMT& updateSyntax = statementUpdate.syntax();
     StatementSelect select
@@ -347,8 +354,8 @@ MigrationInfo::getStatementForLimitedUpdatingTable(const Statement& sourceStatem
 StatementDelete
 MigrationInfo::getStatementForLimitedDeletingFromTable(const Statement& sourceStatement) const
 {
-    WCTInnerAssert(sourceStatement.getType() == Syntax::Identifier::Type::DeleteSTMT);
-    StatementDelete statementDelete(sourceStatement);
+    WCTAssert(sourceStatement.getType() == Syntax::Identifier::Type::DeleteSTMT);
+    StatementDelete statementDelete((const StatementDelete&) sourceStatement);
 
     Syntax::DeleteSTMT& deleteSyntax = statementDelete.syntax();
     StatementSelect select
@@ -378,9 +385,9 @@ MigrationInfo::getStatementForLimitedDeletingFromTable(const Statement& sourceSt
 StatementDelete
 MigrationInfo::getStatementForDeletingFromTable(const Statement& sourceStatement) const
 {
-    WCTInnerAssert(sourceStatement.getType() == Syntax::Identifier::Type::DropTableSTMT);
+    WCTAssert(sourceStatement.getType() == Syntax::Identifier::Type::DropTableSTMT);
 
-    Syntax::DropTableSTMT& dropTableSyntax
+    const Syntax::DropTableSTMT& dropTableSyntax
     = ((const StatementDropTable&) sourceStatement).syntax();
     WCDB::QualifiedTable table(dropTableSyntax.table);
     table.syntax().schema = dropTableSyntax.schema;

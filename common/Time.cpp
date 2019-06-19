@@ -19,7 +19,7 @@
  */
 
 #include <WCDB/Notifier.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <WCDB/ThreadedErrors.hpp>
 #include <WCDB/Time.hpp>
 #include <iomanip>
@@ -64,7 +64,7 @@ bool Time::empty() const
     return time_since_epoch().count() == 0;
 }
 
-String Time::stringify() const
+StringView Time::stringify() const
 {
     std::time_t nanoseconds
     = (std::time_t) std::chrono::duration_cast<std::chrono::nanoseconds>(time_since_epoch())
@@ -77,12 +77,12 @@ String Time::stringify() const
         error.setSystemCode(errno, Error::Code::Error);
         Notifier::shared().notify(error);
         setThreadedError(std::move(error));
-        return String::null();
+        return StringView();
     }
     std::time_t nanosecondsPart = nanoseconds % (int) 1E9;
     std::ostringstream stream;
     stream << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S") << "." << nanosecondsPart;
-    return stream.str();
+    return StringView(stream.str());
 }
 
 SteadyClock::SteadyClock(const Super &super) : Super(super)

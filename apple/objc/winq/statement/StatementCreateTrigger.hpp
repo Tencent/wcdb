@@ -25,11 +25,11 @@
 namespace WCDB {
 
 class StatementCreateTrigger final
-: public TypedSyntax<Syntax::CreateTriggerSTMT, Statement> {
+: public SpecifiedSyntax<Syntax::CreateTriggerSTMT, Statement> {
 public:
-    using TypedSyntax<Syntax::CreateTriggerSTMT, Statement>::TypedSyntax;
+    using SpecifiedSyntax<Syntax::CreateTriggerSTMT, Statement>::SpecifiedSyntax;
 
-    StatementCreateTrigger& createTrigger(const String& trigger);
+    StatementCreateTrigger& createTrigger(const UnsafeStringView& trigger);
     StatementCreateTrigger& schema(const Schema& schema);
     StatementCreateTrigger& temp();
     StatementCreateTrigger& ifNotExists();
@@ -43,7 +43,7 @@ public:
     StatementCreateTrigger& update();
     StatementCreateTrigger& column(const Column& column);
 
-    StatementCreateTrigger& on(const String& table);
+    StatementCreateTrigger& on(const UnsafeStringView& table);
 
     StatementCreateTrigger& forEachRow();
 

@@ -22,7 +22,7 @@
 #include <WCDB/FileHandle.hpp>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Serialization.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 
 namespace WCDB {
 
@@ -109,7 +109,7 @@ unsigned char *Serialization::base()
 }
 
 #pragma mark - Put
-bool Serialization::putSizedString(const String &string)
+bool Serialization::putSizedString(const UnsafeStringView &string)
 {
     off_t cursor = m_cursor;
     bool succeed = false;
@@ -179,7 +179,7 @@ bool Serialization::put8BytesUInt(uint64_t value)
     return true;
 }
 
-bool Serialization::putString(const String &string)
+bool Serialization::putString(const UnsafeStringView &string)
 {
     if (!expand(string.size() + 1)) {
         return false;
@@ -221,7 +221,7 @@ size_t Serialization::putVarint(uint64_t value)
                 value >>= 7;
             } while (value != 0);
             buf[0] &= 0x7f;
-            WCTInnerAssert(n <= 9);
+            WCTAssert(n <= 9);
             for (i = 0, j = n - 1; j >= 0; j--, i++) {
                 p[i] = buf[j];
             }
@@ -256,7 +256,7 @@ void Deserialization::reset(const UnsafeData &data)
 }
 
 #pragma mark - Advance
-std::pair<size_t, String> Deserialization::advanceSizedString()
+std::pair<size_t, StringView> Deserialization::advanceSizedString()
 {
     auto pair = getSizedString(m_cursor);
     if (pair.first > 0) {
@@ -339,13 +339,13 @@ uint32_t Deserialization::advance4BytesUInt()
     return value;
 }
 
-std::pair<size_t, String> Deserialization::getSizedString(off_t offset) const
+std::pair<size_t, StringView> Deserialization::getSizedString(off_t offset) const
 {
     size_t lengthOfSize;
     uint64_t size;
     std::tie(lengthOfSize, size) = getVarint(offset);
     if (lengthOfSize == 0 || !isEnough((size_t) offset + lengthOfSize + (size_t) size)) {
-        return { 0, String::null() };
+        return { 0, StringView() };
     }
     return { lengthOfSize + size, getString((size_t) offset + lengthOfSize, (size_t) size) };
 }
@@ -531,22 +531,22 @@ std::pair<size_t, uint64_t> Deserialization::getVarint(off_t offset) const
     return { 9, ((uint64_t) s) << 32 | a };
 }
 
-String Deserialization::getString(off_t offset, size_t size) const
+StringView Deserialization::getString(off_t offset, size_t size) const
 {
-    WCTInnerAssert(size > 0);
-    WCTInnerAssert(isEnough((size_t) offset + size));
-    return String(reinterpret_cast<const char *>(base() + offset), size);
+    WCTAssert(size > 0);
+    WCTAssert(isEnough((size_t) offset + size));
+    return StringView(reinterpret_cast<const char *>(base() + offset), size);
 }
 
 const UnsafeData Deserialization::getData(off_t offset, size_t size) const
 {
-    WCTInnerAssert(isEnough((size_t) offset + size));
+    WCTAssert(isEnough((size_t) offset + size));
     return UnsafeData::immutable(base() + offset, size);
 }
 
 int64_t Deserialization::get8BytesInt(off_t offset) const
 {
-    WCTInnerAssert(isEnough((size_t) offset + 8));
+    WCTAssert(isEnough((size_t) offset + 8));
     uint64_t x = get4BytesUInt(offset);
     uint32_t y = get4BytesUInt(offset + 4);
     x = (x << 32) + y;
@@ -555,40 +555,40 @@ int64_t Deserialization::get8BytesInt(off_t offset) const
 
 int64_t Deserialization::get6BytesInt(off_t offset) const
 {
-    WCTInnerAssert(isEnough((size_t) offset + 6));
+    WCTAssert(isEnough((size_t) offset + 6));
     return get4BytesInt(offset + 2) + (((int64_t) 1) << 32) * get2BytesInt(offset);
 }
 
 int32_t Deserialization::get4BytesInt(off_t offset) const
 {
-    WCTInnerAssert(isEnough((size_t) offset + 4));
+    WCTAssert(isEnough((size_t) offset + 4));
     const unsigned char *p = base() + offset;
     return (16777216 * (int8_t)(p[0]) | (p[1] << 16) | (p[2] << 8) | p[3]);
 }
 
 int32_t Deserialization::get3BytesInt(off_t offset) const
 {
-    WCTInnerAssert(isEnough((size_t) offset + 3));
+    WCTAssert(isEnough((size_t) offset + 3));
     const unsigned char *p = base() + offset;
     return (65536 * (int8_t)(p[0]) | (p[1] << 8) | p[2]);
 }
 
 int32_t Deserialization::get2BytesInt(off_t offset) const
 {
-    WCTInnerAssert(isEnough((size_t) offset + 2));
+    WCTAssert(isEnough((size_t) offset + 2));
     const unsigned char *p = base() + offset;
     return (256 * (int8_t)(p[0]) | p[1]);
 }
 
 int32_t Deserialization::get1ByteInt(off_t offset) const
 {
-    WCTInnerAssert(isEnough((size_t) offset + 1));
+    WCTAssert(isEnough((size_t) offset + 1));
     return (int8_t)(base() + offset)[0];
 }
 
 double Deserialization::get8BytesDouble(off_t offset) const
 {
-    WCTInnerAssert(isEnough((size_t) offset + 8));
+    WCTAssert(isEnough((size_t) offset + 8));
     uint64_t x = get4BytesUInt(offset);
     uint32_t y = get4BytesUInt(offset + 4);
     x = (x << 32) + y;
@@ -599,7 +599,7 @@ double Deserialization::get8BytesDouble(off_t offset) const
 
 uint32_t Deserialization::get4BytesUInt(off_t offset) const
 {
-    WCTInnerAssert(isEnough((size_t) offset + 4));
+    WCTAssert(isEnough((size_t) offset + 4));
     const unsigned char *p = base() + offset;
     return (((uint32_t) p[0] << 24) | (p[1] << 16) | (p[2] << 8) | p[3]);
 }
@@ -618,7 +618,7 @@ Data Serializable::serialize() const
     return Data::null();
 }
 
-bool Serializable::serialize(const String &path) const
+bool Serializable::serialize(const UnsafeStringView &path) const
 {
     Data data = serialize();
     if (data.empty()) {
@@ -645,7 +645,7 @@ bool Deserializable::deserialize(const Data &data)
     return deserialize(deserialization);
 }
 
-bool Deserializable::deserialize(const String &path)
+bool Deserializable::deserialize(const UnsafeStringView &path)
 {
     FileHandle fileHandle(path);
     if (!fileHandle.open(FileHandle::Mode::ReadOnly)) {

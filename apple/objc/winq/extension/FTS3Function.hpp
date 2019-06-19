@@ -33,9 +33,9 @@ public:
 
     static Expression offsets(const Expression &expression);
     static Expression snippet(const Expression &expression,
-                              const String &startMatchText = "<b>",
-                              const String &endMatchText = "</b>",
-                              const String &ellipses = "<b>...</b>",
+                              const UnsafeStringView &startMatchText = "<b>",
+                              const UnsafeStringView &endMatchText = "</b>",
+                              const UnsafeStringView &ellipses = "<b>...</b>",
                               int columnNumber = -1,
                               int approximateNumberOfTokens = -15);
     static Expression matchinfo(const Expression &expression);
@@ -45,9 +45,9 @@ class FTS3FunctionOperable : virtual public ExpressionOperable {
 public:
     virtual ~FTS3FunctionOperable() = 0;
     Expression offsets() const;
-    Expression snippet(const String &startMatchText = "<b>",
-                       const String &endMatchText = "</b>",
-                       const String &ellipses = "<b>...</b>",
+    Expression snippet(const UnsafeStringView &startMatchText = "<b>",
+                       const UnsafeStringView &endMatchText = "</b>",
+                       const UnsafeStringView &ellipses = "<b>...</b>",
                        int columnNumber = -1,
                        int approximateNumberOfTokens = -15) const;
     Expression matchinfo() const;

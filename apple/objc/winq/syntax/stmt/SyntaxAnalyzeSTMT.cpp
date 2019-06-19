@@ -31,9 +31,8 @@ Identifier::Type AnalyzeSTMT::getType() const
     return type;
 }
 
-String AnalyzeSTMT::getValidDescription() const
+bool AnalyzeSTMT::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << "ANALYZE";
     switch (switcher) {
     case Switch::SchemaOrTableOrIndex:
@@ -46,10 +45,10 @@ String AnalyzeSTMT::getValidDescription() const
         }
         break;
     default:
-        WCTInnerAssert(switcher == Switch::All);
+        WCTAssert(switcher == Switch::All);
         break;
     }
-    return stream.str();
+    return true;
 }
 
 void AnalyzeSTMT::iterate(const Iterator& iterator, bool& stop)
@@ -60,7 +59,7 @@ void AnalyzeSTMT::iterate(const Iterator& iterator, bool& stop)
         recursiveIterate(schema, iterator, stop);
         break;
     default:
-        WCTInnerAssert(switcher == Switch::All);
+        WCTAssert(switcher == Switch::All);
         break;
     }
 }

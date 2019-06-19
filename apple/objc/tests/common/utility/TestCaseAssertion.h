@@ -57,11 +57,11 @@
 #define TestCaseAssertObjectEqual(left, right) \
     TestCaseAssertTrue([(left) isEqual:(right)])
 
-#define TestCaseAssertSQLEqual(_sql, _expected)               \
-    {                                                         \
-        NSString* __sql = @((_sql).getDescription().c_str()); \
-        NSString* __expected = (_expected);                   \
-        TestCaseAssertStringEqual(__sql, __expected);         \
+#define TestCaseAssertSQLEqual(_sql, _expected)              \
+    {                                                        \
+        NSString* __sql = @((_sql).getDescription().data()); \
+        NSString* __expected = (_expected);                  \
+        TestCaseAssertStringEqual(__sql, __expected);        \
     }
 
 #define TestCaseAssertStringEqual(left, right)                                                    \

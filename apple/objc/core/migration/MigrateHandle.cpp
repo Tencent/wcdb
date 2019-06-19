@@ -32,7 +32,7 @@ MigrateHandle::MigrateHandle()
 , m_removeMigratedStatement(getStatement())
 , m_samplePointing(0)
 {
-    m_error.infos.set(ErrorStringKeyAction, ErrorActionMigrate);
+    m_error.infos.insert_or_assign(ErrorStringKeyAction, ErrorActionMigrate);
 }
 
 MigrateHandle::~MigrateHandle()
@@ -42,10 +42,10 @@ MigrateHandle::~MigrateHandle()
     returnStatement(m_removeMigratedStatement);
 }
 
-bool MigrateHandle::reAttach(const String& newPath, const Schema& newSchema)
+bool MigrateHandle::reAttach(const UnsafeStringView& newPath, const Schema& newSchema)
 {
-    WCTInnerAssert(!isInTransaction());
-    WCTInnerAssert(!isPrepared());
+    WCTAssert(!isInTransaction());
+    WCTAssert(!isPrepared());
 
     bool succeed = true;
     if (!m_attached.syntax().isTargetingSameSchema(newSchema.syntax())) {
@@ -56,11 +56,11 @@ bool MigrateHandle::reAttach(const String& newPath, const Schema& newSchema)
     return succeed;
 }
 
-bool MigrateHandle::attach(const String& newPath, const Schema& newSchema)
+bool MigrateHandle::attach(const UnsafeStringView& newPath, const Schema& newSchema)
 {
-    WCTInnerAssert(!isInTransaction());
-    WCTInnerAssert(!isPrepared());
-    WCTInnerAssert(m_attached.syntax().isMain());
+    WCTAssert(!isInTransaction());
+    WCTAssert(!isPrepared());
+    WCTAssert(m_attached.syntax().isMain());
 
     bool succeed = true;
     if (!newSchema.syntax().isMain()) {
@@ -74,8 +74,8 @@ bool MigrateHandle::attach(const String& newPath, const Schema& newSchema)
 
 bool MigrateHandle::detach()
 {
-    WCTInnerAssert(!isInTransaction());
-    WCTInnerAssert(!isPrepared());
+    WCTAssert(!isInTransaction());
+    WCTAssert(!isPrepared());
 
     bool succeed = true;
     if (!m_attached.syntax().isMain()) {
@@ -88,11 +88,11 @@ bool MigrateHandle::detach()
 }
 
 #pragma mark - Stepper
-std::pair<bool, std::set<String>> MigrateHandle::getAllTables()
+std::pair<bool, std::set<StringView>> MigrateHandle::getAllTables()
 {
     Column name("name");
     Column type("type");
-    String pattern = String::formatted("%s%%", Syntax::builtinTablePrefix);
+    StringView pattern = StringView::formatted("%s%%", Syntax::builtinTablePrefix);
     return getValues(StatementSelect()
                      .select(name)
                      .from(TableOrSubquery::master())
@@ -102,7 +102,7 @@ std::pair<bool, std::set<String>> MigrateHandle::getAllTables()
 
 bool MigrateHandle::dropSourceTable(const MigrationInfo* info)
 {
-    WCTInnerAssert(info != nullptr);
+    WCTAssert(info != nullptr);
     bool succeed = false;
     if (reAttach(info->getSourceDatabase(), info->getSchemaForSourceDatabase())) {
         m_migratingInfo = info;
@@ -113,7 +113,7 @@ bool MigrateHandle::dropSourceTable(const MigrationInfo* info)
 
 bool MigrateHandle::migrateRows(const MigrationInfo* info, bool& done)
 {
-    WCTInnerAssert(info != nullptr);
+    WCTAssert(info != nullptr);
     done = false;
 
     bool succeed, exists;
@@ -174,9 +174,8 @@ bool MigrateHandle::migrateRows(const MigrationInfo* info, bool& done)
 
 std::pair<bool, bool> MigrateHandle::migrateRow()
 {
-    WCTInnerAssert(m_migrateStatement->isPrepared()
-                   && m_removeMigratedStatement->isPrepared());
-    WCTInnerAssert(isInTransaction());
+    WCTAssert(m_migrateStatement->isPrepared() && m_removeMigratedStatement->isPrepared());
+    WCTAssert(isInTransaction());
     bool succeed = false;
     bool migrated = false;
     m_migrateStatement->reset();
@@ -206,10 +205,10 @@ MigrateHandle::Sample::Sample()
 
 void MigrateHandle::addSample(double timeIntervalWithinTransaction, double timeIntervalForWholeTransaction)
 {
-    WCTInnerAssert(timeIntervalWithinTransaction > 0);
-    WCTInnerAssert(timeIntervalForWholeTransaction > 0);
-    WCTInnerAssert(m_samplePointing < numberOfSamples);
-    WCTInnerAssert(timeIntervalForWholeTransaction > timeIntervalWithinTransaction);
+    WCTAssert(timeIntervalWithinTransaction > 0);
+    WCTAssert(timeIntervalForWholeTransaction > 0);
+    WCTAssert(m_samplePointing < numberOfSamples);
+    WCTAssert(timeIntervalForWholeTransaction > timeIntervalWithinTransaction);
 
     Sample& sample = m_samples[m_samplePointing];
     sample.timeIntervalWithinTransaction = timeIntervalWithinTransaction;
@@ -255,12 +254,12 @@ std::pair<bool, bool> MigrateHandle::sourceTableExists(const MigrationUserInfo& 
     return { succeed, exists };
 }
 
-std::tuple<bool, bool, std::set<String>>
+std::tuple<bool, bool, std::set<StringView>>
 MigrateHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
 {
     bool succeed = true;
     bool integerPrimary = false;
-    std::set<String> columns;
+    std::set<StringView> columns;
     do {
         bool exists;
         std::tie(succeed, exists) = tableExists(Schema::main(), userInfo.getTable());
@@ -282,7 +281,7 @@ MigrateHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
     return { succeed, integerPrimary, columns };
 }
 
-String MigrateHandle::getDatabasePath() const
+StringView MigrateHandle::getDatabasePath() const
 {
     return getPath();
 }

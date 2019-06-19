@@ -32,21 +32,21 @@ namespace Syntax {
 class ColumnConstraint final : public Identifier {
 #pragma mark - Lang
 public:
-    String name;
+    StringView name;
     WCDB_SYNTAX_MAIN_UNION_ENUM(PrimaryKey, NotNull, Unique, Check, Default, Collate, ForeignKey, );
 
     WCDB_SYNTAX_ENUM_UNION(Order, order);
     WCDB_SYNTAX_ENUM_UNION(Conflict, conflict);
     bool autoIncrement = false;
     Expression expression;
-    String collation;
+    StringView collation;
     ForeignKeyClause foreignKeyClause;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::ColumnConstraint;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    bool describle(std::ostringstream& stream) const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 
 #pragma mark - Utility

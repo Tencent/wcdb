@@ -27,7 +27,7 @@ OrderingTerm::OrderingTerm(const Expression& expression)
     syntax().expression = expression;
 }
 
-OrderingTerm& OrderingTerm::collate(const String& collation)
+OrderingTerm& OrderingTerm::collate(const UnsafeStringView& collation)
 {
     syntax().collation = collation;
     return *this;

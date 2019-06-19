@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-QualifiedTable::QualifiedTable(const UnsafeString& table)
+QualifiedTable::QualifiedTable(const UnsafeStringView& table)
 {
     syntax().table = table;
 }
@@ -33,13 +33,13 @@ QualifiedTable& QualifiedTable::schema(const Schema& schema)
     return *this;
 }
 
-QualifiedTable& QualifiedTable::as(const String& alias)
+QualifiedTable& QualifiedTable::as(const UnsafeStringView& alias)
 {
     syntax().alias = alias;
     return *this;
 }
 
-QualifiedTable& QualifiedTable::indexed(const String& index)
+QualifiedTable& QualifiedTable::indexed(const UnsafeStringView& index)
 {
     syntax().switcher = SyntaxType::Switch::Indexed;
     syntax().index = index;

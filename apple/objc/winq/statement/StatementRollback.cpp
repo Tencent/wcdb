@@ -29,7 +29,7 @@ StatementRollback& StatementRollback::rollback()
     return *this;
 }
 
-StatementRollback& StatementRollback::rollbackToSavepoint(const String& savepoint)
+StatementRollback& StatementRollback::rollbackToSavepoint(const UnsafeStringView& savepoint)
 {
     syntax().switcher = Syntax::RollbackSTMT::Switch::Savepoint;
     syntax().savepoint = savepoint;

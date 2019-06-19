@@ -31,9 +31,8 @@ Identifier::Type CreateTableSTMT::getType() const
     return type;
 }
 
-String CreateTableSTMT::getValidDescription() const
+bool CreateTableSTMT::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << "CREATE ";
     if (temp) {
         stream << "TEMP ";
@@ -61,7 +60,7 @@ String CreateTableSTMT::getValidDescription() const
         stream << " AS " << select;
         break;
     }
-    return stream.str();
+    return true;
 }
 
 void CreateTableSTMT::iterate(const Iterator& iterator, bool& stop)

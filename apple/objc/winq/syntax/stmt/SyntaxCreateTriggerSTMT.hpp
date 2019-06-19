@@ -37,7 +37,7 @@ public:
     bool temp = false;
     bool ifNotExists = false;
     Schema schema;
-    String trigger;
+    StringView trigger;
     enum class Timing {
         Before = 1,
         After,
@@ -50,7 +50,7 @@ public:
         Update,
     } event;
     std::list<Column> columns;
-    String table;
+    StringView table;
     bool forEachFow = false;
     Expression condition;
 
@@ -72,7 +72,7 @@ public:
 public:
     static constexpr const Type type = Type::CreateTriggerSTMT;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    bool describle(std::ostringstream& stream) const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

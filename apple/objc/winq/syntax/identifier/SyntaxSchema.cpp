@@ -41,9 +41,10 @@ Identifier::Type Schema::getType() const
     return type;
 }
 
-String Schema::getValidDescription() const
+bool Schema::describle(std::ostringstream& stream) const
 {
-    return name;
+    stream << name;
+    return true;
 }
 
 bool Schema::isMain() const

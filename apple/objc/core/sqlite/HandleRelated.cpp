@@ -26,7 +26,7 @@ namespace WCDB {
 
 HandleRelated::HandleRelated(AbstractHandle *handle) : m_handle(handle)
 {
-    WCTInnerAssert(m_handle != nullptr);
+    WCTAssert(m_handle != nullptr);
 }
 
 HandleRelated::~HandleRelated()
@@ -38,7 +38,7 @@ bool HandleRelated::APIExit(int rc)
     return m_handle->APIExit(rc);
 }
 
-bool HandleRelated::APIExit(int rc, const String &sql)
+bool HandleRelated::APIExit(int rc, const UnsafeStringView &sql)
 {
     return m_handle->APIExit(rc, sql);
 }

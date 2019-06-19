@@ -33,8 +33,8 @@ public:
     bool unique = false;
     bool ifNotExists = false;
     Schema schema;
-    String index;
-    String table;
+    StringView index;
+    StringView table;
     std::list<IndexedColumn> indexedColumns;
     Expression condition;
 
@@ -44,7 +44,7 @@ public:
 public:
     static constexpr const Type type = Type::CreateIndexSTMT;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    bool describle(std::ostringstream& stream) const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

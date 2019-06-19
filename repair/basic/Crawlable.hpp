@@ -52,7 +52,7 @@ public:
     const Error &getCrawlError() const;
 
 protected:
-    void markAsCorrupted(int page, const String &message);
+    void markAsCorrupted(int page, const UnsafeStringView &message);
     void markAsError();
 
 #pragma mark - Crawlable

@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <WCDB/WINQ.h>
 #include <set>
 
@@ -30,29 +30,29 @@ namespace WCDB {
 class MigrationBaseInfo {
 public:
     MigrationBaseInfo();
-    MigrationBaseInfo(const String& database, const String& table);
+    MigrationBaseInfo(const UnsafeStringView& database, const UnsafeStringView& table);
     virtual ~MigrationBaseInfo() = 0;
 
-    const String& getTable() const;
-    const String& getDatabase() const;
-    const String& getSourceTable() const;
-    const String& getSourceDatabase() const;
+    const StringView& getTable() const;
+    const StringView& getDatabase() const;
+    const StringView& getSourceTable() const;
+    const StringView& getSourceDatabase() const;
 
     bool shouldMigrate() const;
     bool isCrossDatabase() const;
 
-    // WCDBMigration_
+    // wcdb_migration_
     static const char* getSchemaPrefix();
 
 protected:
-    static Schema getSchemaForDatabase(const String& database);
-    void setSource(const String& table, const String& database = "");
+    static Schema getSchemaForDatabase(const UnsafeStringView& database);
+    void setSource(const UnsafeStringView& table, const UnsafeStringView& database = "");
 
 private:
-    String m_table;
-    String m_database;
-    String m_sourceTable;
-    String m_sourceDatabase;
+    StringView m_table;
+    StringView m_database;
+    StringView m_sourceTable;
+    StringView m_sourceDatabase;
 };
 
 #pragma mark - MigrationUserInfo
@@ -75,7 +75,7 @@ public:
 class MigrationInfo final : public MigrationBaseInfo {
 public:
     MigrationInfo(const MigrationUserInfo& userInfo,
-                  const std::set<String>& columns,
+                  const std::set<StringView>& columns,
                   bool integerPrimaryKey);
 
 protected:
@@ -103,16 +103,16 @@ public:
     static StatementPragma getStatementForSelectingDatabaseList();
 
 protected:
-    // WCDBMigration_ + hash([sourceDatabase])
+    // wcdb_migration_ + hash([sourceDatabase])
     Schema m_schemaForSourceDatabase;
     StatementAttach m_statementForAttachingSchema;
 
 #pragma mark - View
 public:
-    // WCDBUnioned_
-    static const String& getUnionedViewPrefix();
+    // wcdb_union_
+    static const char* getUnionedViewPrefix();
 
-    const String& getUnionedView() const;
+    const StringView& getUnionedView() const;
 
     /*
      CREATE TEMP VIEW IF NOT EXISTS [unionedView] AS
@@ -129,18 +129,18 @@ public:
      DROP VIEW IF EXISTS temp.[unionedView]
      */
     static const StatementDropView
-    getStatementForDroppingUnionedView(const String& unionedView);
+    getStatementForDroppingUnionedView(const UnsafeStringView& unionedView);
 
     /*
      SELECT name
      FROM temp.sqlite_master
-     WHERE type == "view" AND name LIKE "WCDBUnioned_%"
+     WHERE type == "view" AND name LIKE "wcdb_union_%"
      */
     static StatementSelect getStatementForSelectingUnionedView();
 
 protected:
-    // WCDBUnioned_ + [table]
-    String m_unionedView;
+    // wcdb_union_ + [table]
+    StringView m_unionedView;
     StatementCreateView m_statementForCreatingUnionedView;
 
 #pragma mark - Compatible
@@ -152,18 +152,17 @@ public:
 
     /*
      INSERT rowid, [columns]
-     INTO main.[table]
-     [OR ONCONFLICT ACTION]
-     SELECT newRowid, [columns]
-     FROM [schemaForSourceDatabase].[sourceTable]
-     WHERE rowid == ?1
+     ...
+     VALUES (?rowidIndex, ...)
      
      Note that newRowid is
      1. rowid in source table when it's an integer primary key table
      2. SELECT max(rowid)+1 FROM temp.[unionedView] when the table does not contain an integer primary key
      */
-    StatementInsert
-    getStatementForMigratingSpecifiedRow(Syntax::ConflictAction conflictAction) const;
+    StatementInsert getStatementForMigrating(const Syntax::InsertSTMT& stmt) const;
+
+    int getRowIDIndexOfMigratingStatement() const;
+
     /*
      UPDATE ...
      SET ...
@@ -186,8 +185,8 @@ public:
     StatementDelete getStatementForDeletingFromTable(const Statement& sourceStatement) const;
 
 protected:
-    StatementInsert m_statementForMigratingSpecifiedRowTemplate;
     StatementDelete m_statementForDeletingSpecifiedRow;
+    StatementSelect m_statementForSelectingMaxRowID;
 
 #pragma mark - Migrate
 public:

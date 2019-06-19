@@ -45,11 +45,10 @@ Identifier::Type BeginSTMT::getType() const
     return type;
 }
 
-String BeginSTMT::getValidDescription() const
+bool BeginSTMT::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << "BEGIN " << switcher;
-    return stream.str();
+    return true;
 }
 
 } // namespace Syntax

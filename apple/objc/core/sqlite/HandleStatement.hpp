@@ -68,9 +68,9 @@ public:
     ColumnType getType(int index);
 
     int getNumberOfColumns();
-    const UnsafeString getOriginColumnName(int index);
-    const UnsafeString getColumnName(int index);
-    const UnsafeString getColumnTableName(int index);
+    const UnsafeStringView getOriginColumnName(int index);
+    const UnsafeStringView getColumnName(int index);
+    const UnsafeStringView getColumnTableName(int index);
 
     bool isReadonly();
 
@@ -79,7 +79,7 @@ protected:
     HandleStatement(AbstractHandle *handle);
 
 private:
-    bool prepare(const String &sql);
+    bool prepare(const UnsafeStringView &sql);
     sqlite3_stmt *m_stmt;
     bool m_done;
 };

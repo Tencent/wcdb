@@ -35,14 +35,14 @@ StatementAnalyze& StatementAnalyze::schema(const Schema& schema)
     return *this;
 }
 
-StatementAnalyze& StatementAnalyze::table(const String& table)
+StatementAnalyze& StatementAnalyze::table(const UnsafeStringView& table)
 {
     syntax().switcher = Syntax::AnalyzeSTMT::Switch::SchemaOrTableOrIndex;
     syntax().tableOrIndex = table;
     return *this;
 }
 
-StatementAnalyze& StatementAnalyze::index(const String& index)
+StatementAnalyze& StatementAnalyze::index(const UnsafeStringView& index)
 {
     syntax().switcher = Syntax::AnalyzeSTMT::Switch::SchemaOrTableOrIndex;
     syntax().tableOrIndex = index;

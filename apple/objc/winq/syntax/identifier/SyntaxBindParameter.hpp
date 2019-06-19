@@ -31,13 +31,13 @@ class BindParameter final : public Identifier {
 public:
     WCDB_SYNTAX_MAIN_UNION_ENUM(QuestionSign, ColonSign, DollarSign, AtSign, );
     int n;
-    String name;
+    StringView name;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::BindParameter;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    bool describle(std::ostringstream& stream) const override final;
 };
 
 } // namespace Syntax

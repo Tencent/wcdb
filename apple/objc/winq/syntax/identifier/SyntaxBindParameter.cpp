@@ -47,9 +47,8 @@ Identifier::Type BindParameter::getType() const
     return type;
 }
 
-String BindParameter::getValidDescription() const
+bool BindParameter::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << switcher;
     switch (switcher) {
     case Switch::QuestionSign:
@@ -61,7 +60,7 @@ String BindParameter::getValidDescription() const
         stream << name;
         break;
     }
-    return stream.str();
+    return true;
 }
 
 } // namespace Syntax

@@ -32,7 +32,7 @@ PagerRelated::~PagerRelated()
 
 PagerRelated::PagerRelated(Pager *pager) : m_pager(pager)
 {
-    WCTInnerAssert(m_pager != nullptr);
+    WCTAssert(m_pager != nullptr);
 }
 
 PagerRelated::PagerRelated(PagerRelated &&other) : m_pager(other.m_pager)
@@ -45,7 +45,7 @@ PagerRelated &PagerRelated::operator=(PagerRelated &&other)
     return *this;
 }
 
-const String &PagerRelated::getPagerPath() const
+const StringView &PagerRelated::getPagerPath() const
 {
     return m_pager->getPath();
 }
@@ -60,7 +60,7 @@ void PagerRelated::assignWithSharedThreadedError()
     m_pager->assignWithSharedThreadedError();
 }
 
-void PagerRelated::markPagerAsCorrupted(int page, const String &message)
+void PagerRelated::markPagerAsCorrupted(int page, const UnsafeStringView &message)
 {
     m_pager->markAsCorrupted(page, message);
 }

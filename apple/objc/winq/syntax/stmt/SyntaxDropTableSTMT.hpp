@@ -31,7 +31,7 @@ class DropTableSTMT final : public Identifier {
 public:
     bool ifExists = false;
     Schema schema;
-    String table;
+    StringView table;
 
     bool isValid() const override final;
 
@@ -39,7 +39,7 @@ public:
 public:
     static constexpr const Type type = Type::DropTableSTMT;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    bool describle(std::ostringstream& stream) const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 
 #pragma mark - Utility

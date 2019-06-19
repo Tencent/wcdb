@@ -23,7 +23,7 @@
 #if WCDB_USE_BUILTIN_SQLITE_REPAIR
 
 #include <WCDB/ErrorProne.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 
 // repair/sqlite are optional. Ones can implement their own tools.
 
@@ -36,11 +36,11 @@ public:
     SQLiteBase();
     virtual ~SQLiteBase() = 0;
 
-    void setPath(const String &path);
-    const String &getPath() const;
+    void setPath(const UnsafeStringView &path);
+    const StringView &getPath() const;
 
 protected:
-    String m_path;
+    StringView m_path;
 
 #pragma mark - Error
 protected:

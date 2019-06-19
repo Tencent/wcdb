@@ -26,7 +26,7 @@ TableConstraint::TableConstraint()
 {
 }
 
-TableConstraint::TableConstraint(const String& name)
+TableConstraint::TableConstraint(const UnsafeStringView& name)
 {
     syntax().name = name;
 }

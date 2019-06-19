@@ -24,7 +24,7 @@
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Material.hpp>
 #include <WCDB/Path.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <WCDB/Time.hpp>
 
 namespace WCDB {
@@ -32,16 +32,18 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Factory
-Factory::Factory(const String &database_)
+Factory::Factory(const UnsafeStringView &database_)
 : database(database_), directory(Path::addExtention(database_, ".factory"))
 {
 }
 
-std::pair<bool, std::list<String>> Factory::getWorkshopDirectories() const
+std::pair<bool, std::list<StringView>> Factory::getWorkshopDirectories() const
 {
-    std::list<String> workshopDirectories;
+    std::list<StringView> workshopDirectories;
     if (FileManager::enumerateDirectory(
-        directory, [&workshopDirectories](const String &root, const String &subpath, bool isDirectory) -> bool {
+        directory,
+        [&workshopDirectories](
+        const UnsafeStringView &root, const UnsafeStringView &subpath, bool isDirectory) -> bool {
             if (isDirectory && subpath != restoreDirectoryName && subpath != renewDirectoryName) {
                 workshopDirectories.push_back(Path::addComponent(root, subpath));
             }
@@ -52,13 +54,13 @@ std::pair<bool, std::list<String>> Factory::getWorkshopDirectories() const
     return { false, {} };
 }
 
-std::pair<bool, String> Factory::getUniqueWorkshopDiectory() const
+std::pair<bool, StringView> Factory::getUniqueWorkshopDiectory() const
 {
     bool succeed = false;
-    String path;
+    StringView path;
     do {
         Time time = Time::now();
-        String fileName = time.stringify();
+        StringView fileName = time.stringify();
         if (fileName.empty()) {
             break;
         }
@@ -70,18 +72,19 @@ std::pair<bool, String> Factory::getUniqueWorkshopDiectory() const
             succeed = false;
         }
     } while (false); //try repeatly
-    return { succeed, succeed ? path : String::null() };
+    return { succeed, succeed ? path : StringView() };
 }
 
 bool Factory::containsDeposited() const
 {
     bool result = false;
-    String databaseName = getDatabaseName();
+    StringView databaseName = getDatabaseName();
     FileManager::enumerateDirectory(
     directory,
-    [&result, &databaseName](const String &root, const String &subpath, bool isDirectory) -> bool {
+    [&result, &databaseName](
+    const UnsafeStringView &root, const UnsafeStringView &subpath, bool isDirectory) -> bool {
         if (isDirectory && subpath != restoreDirectoryName && subpath != renewDirectoryName) {
-            String databasePath
+            StringView databasePath
             = Path::addComponent(Path::addComponent(root, subpath), databaseName);
             bool succeed, exists;
             std::tie(succeed, exists) = FileManager::fileExists(databasePath);
@@ -129,14 +132,18 @@ FactoryRenewer Factory::renewer() const
 #pragma mark - Helper
 bool Factory::removeDeposited() const
 {
-    std::list<String> depositedPath;
-    FileManager::enumerateDirectory(
-    directory, [&depositedPath](const String &root, const String &subpath, bool isDirectory) -> bool {
-        if (isDirectory && subpath != renewDirectoryName && subpath != restoreDirectoryName) {
-            depositedPath.push_back(Path::addComponent(root, subpath));
-        }
-        return true;
-    });
+    std::list<StringView> depositedPath;
+    if (!FileManager::enumerateDirectory(
+        directory,
+        [&depositedPath](
+        const UnsafeStringView &root, const UnsafeStringView &subpath, bool isDirectory) -> bool {
+            if (isDirectory && subpath != renewDirectoryName && subpath != restoreDirectoryName) {
+                depositedPath.push_back(Path::addComponent(root, subpath));
+            }
+            return true;
+        })) {
+        return false;
+    }
     if (FileManager::removeItems(depositedPath)) {
         removeDirectoryIfEmpty();
         return true;
@@ -148,7 +155,8 @@ bool Factory::removeDirectoryIfEmpty() const
 {
     bool canRemove = true;
     bool succeed = FileManager::enumerateDirectory(
-    directory, [&canRemove](const String &root, const String &subpath, bool isDirectory) -> bool {
+    directory,
+    [&canRemove](const UnsafeStringView &root, const UnsafeStringView &subpath, bool isDirectory) -> bool {
         WCDB_UNUSED(root)
         if (subpath == restoreDirectoryName || !isDirectory) {
             return true;
@@ -165,35 +173,35 @@ bool Factory::removeDirectoryIfEmpty() const
     return true;
 }
 
-String Factory::firstMaterialPathForDatabase(const String &database)
+StringView Factory::firstMaterialPathForDatabase(const UnsafeStringView &database)
 {
     return Path::addExtention(database, "-first.material");
 }
 
-String Factory::lastMaterialPathForDatabase(const String &database)
+StringView Factory::lastMaterialPathForDatabase(const UnsafeStringView &database)
 {
     return Path::addExtention(database, "-last.material");
 }
 
-String Factory::getRestoreDirectory() const
+StringView Factory::getRestoreDirectory() const
 {
     return Path::addComponent(directory, restoreDirectoryName);
 }
 
-String Factory::getRenewDirectory() const
+StringView Factory::getRenewDirectory() const
 {
     return Path::addComponent(directory, renewDirectoryName);
 }
 
-String Factory::getDatabaseName() const
+StringView Factory::getDatabaseName() const
 {
     return Path::getFileName(database);
 }
 
-std::list<String> Factory::associatedPathsForDatabase(const String &database)
+std::list<StringView> Factory::associatedPathsForDatabase(const UnsafeStringView &database)
 {
     return {
-        database,
+        StringView(database),
         Path::addExtention(database, "-journal"),
         Path::addExtention(database, "-wal"),
         Path::addExtention(database, "-shm"),
@@ -202,27 +210,28 @@ std::list<String> Factory::associatedPathsForDatabase(const String &database)
     };
 }
 
-std::list<String> Factory::databasePathsForDatabase(const String &database)
+std::list<StringView> Factory::databasePathsForDatabase(const UnsafeStringView &database)
 {
     return {
-        database,
+        StringView(database),
         Path::addExtention(database, "-journal"),
         Path::addExtention(database, "-wal"),
         Path::addExtention(database, "-shm"),
     };
 }
 
-std::pair<bool, String> Factory::materialForSerializingForDatabase(const String &database)
+std::pair<bool, StringView>
+Factory::materialForSerializingForDatabase(const UnsafeStringView &database)
 {
     //If all materials exist, return the old one.
     //Otherwise, return the one that does not exist.
     bool succeed;
-    String materialPath;
+    StringView materialPath;
 
     do {
         Time time = Time::now();
 
-        String firstMaterialPath = Factory::firstMaterialPathForDatabase(database);
+        StringView firstMaterialPath = Factory::firstMaterialPathForDatabase(database);
         Time firstMaterialModifiedTime, lastMaterialModifiedTime;
         std::tie(succeed, firstMaterialModifiedTime)
         = getModifiedTimeOr0IfNotExists(firstMaterialPath);
@@ -235,7 +244,7 @@ std::pair<bool, String> Factory::materialForSerializingForDatabase(const String 
             break;
         }
 
-        String lastMaterialPath = Factory::lastMaterialPathForDatabase(database);
+        StringView lastMaterialPath = Factory::lastMaterialPathForDatabase(database);
         std::tie(succeed, lastMaterialModifiedTime)
         = getModifiedTimeOr0IfNotExists(lastMaterialPath);
         if (!succeed) {
@@ -256,18 +265,18 @@ std::pair<bool, String> Factory::materialForSerializingForDatabase(const String 
     return { succeed, std::move(materialPath) };
 }
 
-std::pair<bool, std::list<String>>
-Factory::materialsForDeserializingForDatabase(const String &database)
+std::pair<bool, std::list<StringView>>
+Factory::materialsForDeserializingForDatabase(const UnsafeStringView &database)
 {
     //If all materials exist, return the new one.
     //If all materials do not exist, return empty.
     //Otherwise, return the existing one.
     bool succeed;
-    std::list<String> materialPaths;
+    std::list<StringView> materialPaths;
 
     do {
-        String firstMaterialPath = Factory::firstMaterialPathForDatabase(database);
-        String lastMaterialPath = Factory::lastMaterialPathForDatabase(database);
+        StringView firstMaterialPath = Factory::firstMaterialPathForDatabase(database);
+        StringView lastMaterialPath = Factory::lastMaterialPathForDatabase(database);
         Time firstMaterialModifiedTime, lastMaterialModifiedTime;
 
         std::tie(succeed, firstMaterialModifiedTime)
@@ -299,7 +308,7 @@ Factory::materialsForDeserializingForDatabase(const String &database)
     return { succeed, std::move(materialPaths) };
 }
 
-std::pair<bool, Time> Factory::getModifiedTimeOr0IfNotExists(const String &path)
+std::pair<bool, Time> Factory::getModifiedTimeOr0IfNotExists(const UnsafeStringView &path)
 {
     bool succeed, exists;
     Time modifiedTime;

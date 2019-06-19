@@ -32,11 +32,11 @@ class Shm final : public WalRelated, public Initializeable {
 public:
     Shm(Wal *wal);
 
-    const String &getPath() const;
+    const StringView &getPath() const;
 
 protected:
     bool doInitialize() override final;
-    void markAsCorrupted(const String &message);
+    void markAsCorrupted(const UnsafeStringView &message);
     FileHandle m_fileHandle;
 
 public:
@@ -71,9 +71,6 @@ protected:
 
     Header m_header;
     CheckpointInfo m_checkpointInfo;
-
-public:
-    void hint() const;
 };
 
 } // namespace Repair

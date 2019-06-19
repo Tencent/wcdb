@@ -37,9 +37,8 @@ Identifier::Type OrderingTerm::getType() const
     return type;
 }
 
-String OrderingTerm::getValidDescription() const
+bool OrderingTerm::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << expression;
     if (!collation.empty()) {
         stream << " COLLATE " << collation;
@@ -47,7 +46,7 @@ String OrderingTerm::getValidDescription() const
     if (orderValid()) {
         stream << space << order;
     }
-    return stream.str();
+    return true;
 }
 
 void OrderingTerm::iterate(const Iterator& iterator, bool& stop)

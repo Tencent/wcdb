@@ -22,7 +22,7 @@
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Path.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <WCDB/UnsafeData.hpp>
 #include <dirent.h>
 #include <errno.h>
@@ -34,10 +34,10 @@
 namespace WCDB {
 
 #pragma mark - Basic
-std::tuple<bool, bool, bool> FileManager::itemExists(const String &path)
+std::tuple<bool, bool, bool> FileManager::itemExists(const UnsafeStringView &path)
 {
     struct stat s;
-    if (stat(path.c_str(), &s) == 0) {
+    if (stat(path.data(), &s) == 0) {
         if ((s.st_mode & S_IFMT) == S_IFDIR) {
             return { true, true, true };
         } else {
@@ -50,10 +50,10 @@ std::tuple<bool, bool, bool> FileManager::itemExists(const String &path)
     return { false, false, false };
 }
 
-std::pair<bool, size_t> FileManager::getFileSize(const String &file)
+std::pair<bool, size_t> FileManager::getFileSize(const UnsafeStringView &file)
 {
     struct stat temp;
-    if (stat(file.c_str(), &temp) == 0) {
+    if (stat(file.data(), &temp) == 0) {
         return { true, (size_t) temp.st_size };
     } else if (errno == ENOENT) {
         return { true, 0 };
@@ -62,26 +62,34 @@ std::pair<bool, size_t> FileManager::getFileSize(const String &file)
     return { false, 0 };
 }
 
-std::pair<bool, size_t> FileManager::getDirectorySize(const String &directory)
+std::pair<bool, size_t> FileManager::getDirectorySize(const UnsafeStringView &directory)
 {
+    bool succeed = true;
     size_t totalSize = 0;
     if (enumerateDirectory(
-        directory, [&totalSize](const String &directory, const String &subpath, bool isDirectory) {
-            String path = Path::addComponent(directory, subpath);
+        directory,
+        [&succeed, &totalSize](
+        const UnsafeStringView &directory, const UnsafeStringView &subpath, bool isDirectory) {
+            StringView path = Path::addComponent(directory, subpath);
             auto intermediate = isDirectory ? getDirectorySize(path) : getFileSize(path);
+            if (!intermediate.first) {
+                succeed = false;
+                return false;
+            }
             totalSize += intermediate.second;
-            return intermediate.first;
-        })) {
+            return true;
+        })
+        && succeed) {
         return { true, totalSize };
     };
     return { false, 0 };
 }
 
 bool FileManager::enumerateDirectory(
-const String &directory,
-const std::function<bool(const String &, const String &, bool)> &enumeration)
+const UnsafeStringView &directory,
+const std::function<bool(const UnsafeStringView &, const UnsafeStringView &, bool)> &enumeration)
 {
-    DIR *dir = opendir(directory.c_str());
+    DIR *dir = opendir(directory.data());
     if (dir == NULL) {
         if (errno == ENOENT) {
             return true;
@@ -103,36 +111,36 @@ const std::function<bool(const String &, const String &, bool)> &enumeration)
     return true;
 }
 
-bool FileManager::createFileHardLink(const String &from, const String &to)
+bool FileManager::createFileHardLink(const UnsafeStringView &from, const UnsafeStringView &to)
 {
-    if (link(from.c_str(), to.c_str()) == 0) {
+    if (link(from.data(), to.data()) == 0) {
         return true;
     }
     setThreadedError(to);
     return false;
 }
 
-bool FileManager::removeFileHardLink(const String &path)
+bool FileManager::removeFileHardLink(const UnsafeStringView &path)
 {
-    if (unlink(path.c_str()) == 0 || errno == ENOENT) {
+    if (unlink(path.data()) == 0 || errno == ENOENT) {
         return true;
     }
     setThreadedError(path);
     return false;
 }
 
-bool FileManager::removeFile(const String &file)
+bool FileManager::removeFile(const UnsafeStringView &file)
 {
-    if (remove(file.c_str()) == 0 || errno == ENOENT) {
+    if (remove(file.data()) == 0 || errno == ENOENT) {
         return true;
     }
     setThreadedError(file);
     return false;
 }
 
-bool FileManager::removeDirectory(const String &directory)
+bool FileManager::removeDirectory(const UnsafeStringView &directory)
 {
-    DIR *dir = opendir(directory.c_str());
+    DIR *dir = opendir(directory.data());
     if (dir == NULL) {
         if (errno == ENOENT) {
             return true;
@@ -141,7 +149,7 @@ bool FileManager::removeDirectory(const String &directory)
         return false;
     }
 
-    String path;
+    StringView path;
     struct dirent *entry;
     bool result;
     while ((entry = readdir(dir)) != NULL) {
@@ -160,48 +168,48 @@ bool FileManager::removeDirectory(const String &directory)
     }
     closedir(dir);
 
-    if (remove(directory.c_str()) != 0) {
+    if (remove(directory.data()) != 0) {
         setThreadedError(directory);
         return false;
     }
     return true;
 }
 
-bool FileManager::createDirectory(const String &path)
+bool FileManager::createDirectory(const UnsafeStringView &path)
 {
     constexpr const int mask = S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH;
     static_assert(mask == 0755, "");
-    if (mkdir(path.c_str(), mask) == 0) {
+    if (mkdir(path.data(), mask) == 0) {
         return true;
     }
     setThreadedError(path);
     return false;
 }
 
-std::pair<bool, Time> FileManager::getFileModifiedTime(const String &path)
+std::pair<bool, Time> FileManager::getFileModifiedTime(const UnsafeStringView &path)
 {
     struct stat result;
-    if (stat(path.c_str(), &result) == 0) {
+    if (stat(path.data(), &result) == 0) {
         return { true, Time(result.st_mtimespec) };
     }
     setThreadedError(path);
     return { false, {} };
 }
 
-std::pair<bool, Time> FileManager::getFileCreatedTime(const String &path)
+std::pair<bool, Time> FileManager::getFileCreatedTime(const UnsafeStringView &path)
 {
     struct stat result;
-    if (stat(path.c_str(), &result) == 0) {
+    if (stat(path.data(), &result) == 0) {
         return { true, Time(result.st_ctimespec) };
     }
     setThreadedError(path);
     return { false, Time() };
 }
 
-std::pair<bool, uint32_t> FileManager::getFileIdentifier(const String &path)
+std::pair<bool, uint32_t> FileManager::getFileIdentifier(const UnsafeStringView &path)
 {
     struct stat result;
-    if (stat(path.c_str(), &result) == 0) {
+    if (stat(path.data(), &result) == 0) {
         int size = sizeof(result.st_dev) + sizeof(result.st_ino);
         unsigned char buffer[size];
         memcpy(buffer, &result.st_dev, sizeof(result.st_dev));
@@ -211,11 +219,11 @@ std::pair<bool, uint32_t> FileManager::getFileIdentifier(const String &path)
     return { false, 0 };
 }
 
-bool FileManager::createFile(const String &path)
+bool FileManager::createFile(const UnsafeStringView &path)
 {
     constexpr const int mask = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
     static_assert(mask == 0644, "");
-    int fd = open(path.c_str(), O_CREAT | O_RDWR, mask);
+    int fd = open(path.data(), O_CREAT | O_RDWR, mask);
     if (fd != -1) {
         close(fd);
         return true;
@@ -225,10 +233,10 @@ bool FileManager::createFile(const String &path)
 }
 
 #pragma mark - Combination
-std::pair<bool, size_t> FileManager::getItemSize(const String &path)
+std::pair<bool, size_t> FileManager::getItemSize(const UnsafeStringView &path)
 {
     struct stat temp;
-    if (stat(path.c_str(), &temp) == 0) {
+    if (stat(path.data(), &temp) == 0) {
         if ((temp.st_mode & S_IFMT) == S_IFDIR) {
             return getDirectorySize(path);
         }
@@ -240,21 +248,21 @@ std::pair<bool, size_t> FileManager::getItemSize(const String &path)
     return { false, 0 };
 }
 
-std::pair<bool, bool> FileManager::fileExists(const String &file)
+std::pair<bool, bool> FileManager::fileExists(const UnsafeStringView &file)
 {
     bool succeed, exists, isDirectory;
     std::tie(succeed, exists, isDirectory) = itemExists(file);
     return { succeed, exists && !isDirectory };
 }
 
-std::pair<bool, bool> FileManager::directoryExists(const String &directory)
+std::pair<bool, bool> FileManager::directoryExists(const UnsafeStringView &directory)
 {
     bool succeed, exists, isDirectory;
     std::tie(succeed, exists, isDirectory) = itemExists(directory);
     return { succeed, exists && isDirectory };
 }
 
-std::pair<bool, size_t> FileManager::getItemsSize(const std::list<String> &paths)
+std::pair<bool, size_t> FileManager::getItemsSize(const std::list<StringView> &paths)
 {
     size_t size = 0;
     std::pair<bool, size_t> temp;
@@ -268,10 +276,10 @@ std::pair<bool, size_t> FileManager::getItemsSize(const std::list<String> &paths
     return { true, size };
 }
 
-bool FileManager::removeItem(const String &path)
+bool FileManager::removeItem(const UnsafeStringView &path)
 {
     struct stat temp;
-    if (stat(path.c_str(), &temp) == 0) {
+    if (stat(path.data(), &temp) == 0) {
         if ((temp.st_mode & S_IFMT) == S_IFDIR) {
             return removeDirectory(path);
         }
@@ -283,7 +291,7 @@ bool FileManager::removeItem(const String &path)
     return false;
 }
 
-bool FileManager::removeItems(const std::list<String> &items)
+bool FileManager::removeItems(const std::list<StringView> &items)
 {
     for (const auto &item : items) {
         if (!removeItem(item)) {
@@ -293,24 +301,24 @@ bool FileManager::removeItems(const std::list<String> &items)
     return true;
 }
 
-bool FileManager::moveItems(const std::list<String> &paths, const String &directory)
+bool FileManager::moveItems(const std::list<StringView> &paths, const UnsafeStringView &directory)
 {
     if (!createDirectoryWithIntermediateDirectories(directory)) {
         return false;
     }
-    std::list<std::pair<String, String>> pairedPaths;
+    std::list<std::pair<StringView, StringView>> pairedPaths;
     for (const auto &path : paths) {
-        const String fileName = Path::getFileName(path);
-        String newPath = Path::addComponent(directory, fileName);
+        const StringView fileName = Path::getFileName(path);
+        StringView newPath = Path::addComponent(directory, fileName);
         pairedPaths.push_back({ path, newPath });
     }
     return moveItems(pairedPaths);
 }
 
-bool FileManager::moveItems(const std::list<std::pair<String, String>> &pairedPaths)
+bool FileManager::moveItems(const std::list<std::pair<StringView, StringView>> &pairedPaths)
 {
     bool result = true;
-    std::list<String> recovers;
+    std::list<StringView> recovers;
     for (const auto &pairedPath : pairedPaths) {
         bool succeed, exists, isDirectory;
         std::tie(succeed, exists, isDirectory) = itemExists(pairedPath.first);
@@ -318,7 +326,7 @@ bool FileManager::moveItems(const std::list<std::pair<String, String>> &pairedPa
             break;
         }
         if (exists) {
-            const String &newPath = pairedPath.second;
+            const StringView &newPath = pairedPath.second;
             if (!removeItem(newPath)) {
                 result = false;
                 break;
@@ -345,13 +353,13 @@ bool FileManager::moveItems(const std::list<std::pair<String, String>> &pairedPa
         }
     } else {
         for (const auto &recover : recovers) {
-            removeItem(recover.c_str());
+            removeItem(recover.data());
         }
     }
     return result;
 }
 
-bool FileManager::createDirectoryWithIntermediateDirectories(const String &directory)
+bool FileManager::createDirectoryWithIntermediateDirectories(const UnsafeStringView &directory)
 {
     auto ret = directoryExists(directory);
     if (!ret.first) {
@@ -364,7 +372,7 @@ bool FileManager::createDirectoryWithIntermediateDirectories(const String &direc
     return true;
 }
 
-bool FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(const String &path)
+bool FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(const UnsafeStringView &path)
 {
     bool succeed;
     FileProtection fileProtection;
@@ -379,21 +387,27 @@ bool FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(
     return true;
 }
 
-bool FileManager::createDirectoryHardLink(const String &from, const String &to)
+bool FileManager::createDirectoryHardLink(const UnsafeStringView &from,
+                                          const UnsafeStringView &to)
 {
     if (!createDirectory(to)) {
         return false;
     }
-    if (enumerateDirectory(
-        from, [&to](const String &directory, const String &subpath, bool isDirectory) -> bool {
-            String oldPath = Path::addComponent(directory, subpath);
-            String newPath = Path::addComponent(to, subpath);
-            if (isDirectory) {
-                return createDirectoryHardLink(oldPath, newPath);
-            } else {
-                return createFileHardLink(oldPath, newPath);
-            }
-        })) {
+    bool succeed = true;
+    if (enumerateDirectory(from,
+                           [&succeed, &to](const UnsafeStringView &directory,
+                                           const UnsafeStringView &subpath,
+                                           bool isDirectory) -> bool {
+                               StringView oldPath = Path::addComponent(directory, subpath);
+                               StringView newPath = Path::addComponent(to, subpath);
+                               if (isDirectory) {
+                                   succeed = createDirectoryHardLink(oldPath, newPath);
+                               } else {
+                                   succeed = createFileHardLink(oldPath, newPath);
+                               }
+                               return succeed;
+                           })
+        && succeed) {
         return true;
     }
     removeItem(to);
@@ -401,12 +415,12 @@ bool FileManager::createDirectoryHardLink(const String &from, const String &to)
 }
 
 #pragma mark - Error
-void FileManager::setThreadedError(const String &path)
+void FileManager::setThreadedError(const UnsafeStringView &path)
 {
     Error error;
     error.level = Error::Level::Error;
     error.setSystemCode(errno, Error::Code::IOError);
-    error.infos.set(ErrorStringKeyPath, path);
+    error.infos.insert_or_assign(ErrorStringKeyPath, path);
     Notifier::shared().notify(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
 }

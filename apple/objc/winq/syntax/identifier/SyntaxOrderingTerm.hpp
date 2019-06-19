@@ -30,7 +30,7 @@ class OrderingTerm final : public Identifier {
 #pragma mark - Lang
 public:
     Expression expression;
-    String collation;
+    StringView collation;
     WCDB_SYNTAX_ENUM_UNION(Order, order);
 
     bool isValid() const override final;
@@ -39,7 +39,7 @@ public:
 public:
     static constexpr const Type type = Type::OrderingTerm;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    bool describle(std::ostringstream& stream) const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

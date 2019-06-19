@@ -144,7 +144,7 @@ public:
                 m_list.erase(shortest);
             }
             if (!isExiting()) {
-                WCTInnerAssert(expireds.size() == 1);
+                WCTAssert(expireds.size() == 1);
                 onElementExpired(expireds.begin()->first, expireds.begin()->second);
             }
         }

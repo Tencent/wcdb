@@ -27,11 +27,45 @@ SQL::SQL()
 {
 }
 
-SQL::SQL(Type type, const SQL& sql)
+SQL::SQL(const SQL& sql)
+: m_syntax(sql.m_syntax), m_description(sql.m_description)
 {
-    WCTRemedialAssert(
-    type == sql.getType(), String::formatted("Invalid WINQ assignment."), return;);
-    m_syntax = sql.m_syntax;
+}
+
+SQL::SQL(SQL&& sql)
+: m_syntax(std::move(sql.m_syntax)), m_description(std::move(sql.m_description))
+{
+}
+
+SQL::SQL(const Shadow<Syntax::Identifier>& syntax) : m_syntax(syntax)
+{
+}
+
+SQL::SQL(Shadow<Syntax::Identifier>&& syntax) : m_syntax(std::move(syntax))
+{
+}
+
+SQL::SQL(std::unique_ptr<Syntax::Identifier>&& underlying)
+: m_syntax(std::move(underlying))
+{
+}
+
+SQL& SQL::operator=(const SQL& other)
+{
+    m_syntax = other.m_syntax;
+    m_description = other.m_description;
+    return *this;
+}
+
+SQL& SQL::operator=(SQL&& other)
+{
+    m_syntax = std::move(other.m_syntax);
+    m_description = std::move(other.m_description);
+    return *this;
+}
+
+SQL::~SQL()
+{
 }
 
 SQL::Type SQL::getType() const
@@ -44,18 +78,29 @@ void SQL::iterate(const Iterator& iterator)
     return m_syntax->iterate(iterator);
 }
 
-String SQL::getDescription() const
+const StringView& SQL::getDescription() const
 {
-    return m_syntax->getDescription();
+    if (!m_description.has_value()) {
+        if (m_syntax != nullptr) {
+            m_description = m_syntax->getDescription();
+        } else {
+            m_description = StringView();
+        }
+    }
+    return m_description.value();
 }
 
-Syntax::Identifier* SQL::getSyntaxIdentifier() const
+Syntax::Identifier& SQL::syntax()
 {
-    return m_syntax.get();
+    if (m_description.has_value()) {
+        m_description = std::nullopt;
+    }
+    return *m_syntax.get();
 }
 
-SQL::~SQL()
+const Syntax::Identifier& SQL::syntax() const
 {
+    return *m_syntax.get();
 }
 
 } // namespace WCDB

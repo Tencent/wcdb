@@ -37,8 +37,8 @@ public:
 
 #pragma mark - Schema
 protected:
-    bool reAttach(const String& newPath, const Schema& newSchema);
-    bool attach(const String& newPath, const Schema& newSchema);
+    bool reAttach(const UnsafeStringView& newPath, const Schema& newSchema);
+    bool attach(const UnsafeStringView& newPath, const Schema& newSchema);
     bool detach();
 
 private:
@@ -46,7 +46,7 @@ private:
 
 #pragma mark - Stepper
 protected:
-    std::pair<bool, std::set<String>> getAllTables() override final;
+    std::pair<bool, std::set<StringView>> getAllTables() override final;
     bool dropSourceTable(const MigrationInfo* info) override final;
     bool migrateRows(const MigrationInfo* info, bool& done) override final;
     std::pair<bool, bool> migrateRow();
@@ -78,9 +78,9 @@ private:
 #pragma mark - Info Initializer
 protected:
     std::pair<bool, bool> sourceTableExists(const MigrationUserInfo& userInfo) override final;
-    std::tuple<bool, bool, std::set<String>>
+    std::tuple<bool, bool, std::set<StringView>>
     getColumnsOfUserInfo(const MigrationUserInfo& userInfo) override final;
-    String getDatabasePath() const override final;
+    StringView getDatabasePath() const override final;
 };
 
 } // namespace WCDB

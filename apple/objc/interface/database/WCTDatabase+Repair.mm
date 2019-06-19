@@ -22,6 +22,7 @@
 #import <WCDB/Core.h>
 #import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTDatabase+Repair.h>
+#import <WCDB/WCTFoundation.h>
 
 @implementation WCTDatabase (Repair)
 
@@ -51,8 +52,8 @@
 {
     WCDB::Database::BackupFilter filter = nullptr;
     if (tableShouldBeBackedUp != nil) {
-        filter = [tableShouldBeBackedUp](const WCDB::String &tableName) -> bool {
-            return tableShouldBeBackedUp([NSString stringWithUTF8String:tableName.c_str()]);
+        filter = [tableShouldBeBackedUp](const WCDB::UnsafeStringView &tableName) -> bool {
+            return tableShouldBeBackedUp([NSString stringWithView:tableName]);
         };
     }
     _database->filterBackup(filter);

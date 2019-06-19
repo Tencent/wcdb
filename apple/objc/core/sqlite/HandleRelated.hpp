@@ -21,7 +21,7 @@
 #pragma once
 
 #include <WCDB/SQLiteDeclaration.h>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 
 namespace WCDB {
 
@@ -37,7 +37,7 @@ public:
 protected:
     sqlite3 *getRawHandle();
     bool APIExit(int rc);
-    bool APIExit(int rc, const String &sql);
+    bool APIExit(int rc, const UnsafeStringView &sql);
     bool APIExit(int rc, const char *sql);
 
 private:

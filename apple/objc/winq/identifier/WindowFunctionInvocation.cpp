@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-WindowFunctionInvocation::WindowFunctionInvocation(const String& name)
+WindowFunctionInvocation::WindowFunctionInvocation(const UnsafeStringView& name)
 {
     syntax().name = name;
 }
@@ -67,7 +67,7 @@ WindowFunctionInvocation& WindowFunctionInvocation::over(const WindowDef& window
     return *this;
 }
 
-WindowFunctionInvocation& WindowFunctionInvocation::over(const String& window)
+WindowFunctionInvocation& WindowFunctionInvocation::over(const UnsafeStringView& window)
 {
     syntax().window = window;
     return *this;

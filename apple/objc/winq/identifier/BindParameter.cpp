@@ -28,7 +28,7 @@ BindParameter::BindParameter(int n)
     syntax().n = n;
 }
 
-BindParameter::BindParameter(const String& name)
+BindParameter::BindParameter(const UnsafeStringView& name)
 {
     syntax().switcher = SyntaxType::Switch::ColonSign;
     syntax().name = name;
@@ -43,23 +43,23 @@ BindParameters BindParameter::bindParameters(size_t count)
     return result;
 }
 
-BindParameter BindParameter::at(const String& name)
+BindParameter BindParameter::at(const UnsafeStringView& name)
 {
     return bindParameter(name, SyntaxType::Switch::AtSign);
 }
 
-BindParameter BindParameter::colon(const String& name)
+BindParameter BindParameter::colon(const UnsafeStringView& name)
 {
     return bindParameter(name, SyntaxType::Switch::ColonSign);
 }
 
-BindParameter BindParameter::dollar(const String& name)
+BindParameter BindParameter::dollar(const UnsafeStringView& name)
 {
     return bindParameter(name, SyntaxType::Switch::DollarSign);
 }
 
-BindParameter
-BindParameter::bindParameter(const String& name, const SyntaxType::Switch& switcher)
+BindParameter BindParameter::bindParameter(const UnsafeStringView& name,
+                                           const SyntaxType::Switch& switcher)
 {
     BindParameter bindParameter;
     bindParameter.syntax().switcher = switcher;

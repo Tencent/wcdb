@@ -66,7 +66,7 @@ bool BasicConfig::getOrSetPragmaBegin(Handle* handle, const StatementPragma& get
 
 bool BasicConfig::getOrSetPragmaEnd(Handle* handle, const StatementPragma& set, bool conditionToSet)
 {
-    WCTInnerAssert(handle->isPrepared());
+    WCTAssert(handle->isPrepared());
     handle->finalize();
     bool succeed = true;
     if (conditionToSet) {
@@ -85,7 +85,7 @@ bool BasicConfig::lazySetJournalModeWAL(Handle* handle)
         succeed
         = getOrSetPragmaBegin(handle, m_getJournalMode)
           && getOrSetPragmaEnd(
-          handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("WAL"));
+          handle, m_setJournalModeWAL, !handle->getText(0).caseInsensiveEqual("WAL"));
     } while (--remainingNumberOfBusyRetryTimes > 0 && !succeed && handle->isErrorIgnorable());
     handle->markErrorAsUnignorable();
     return succeed;

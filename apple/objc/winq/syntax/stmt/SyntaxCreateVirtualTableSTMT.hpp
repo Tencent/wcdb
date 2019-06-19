@@ -31,9 +31,9 @@ class CreateVirtualTableSTMT final : public Identifier {
 public:
     bool ifNotExists = false;
     Schema schema;
-    String table;
-    String module;
-    std::list<String> arguments;
+    StringView table;
+    StringView module;
+    std::list<StringView> arguments;
 
     bool isValid() const override final;
 
@@ -41,7 +41,7 @@ public:
 public:
     static constexpr const Type type = Type::CreateVirtualTableSTMT;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    bool describle(std::ostringstream& stream) const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

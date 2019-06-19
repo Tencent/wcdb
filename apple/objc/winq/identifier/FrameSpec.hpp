@@ -24,7 +24,7 @@
 
 namespace WCDB {
 
-class FrameSpec final : public TypedSyntax<Syntax::FrameSpec, SQL> {
+class FrameSpec final : public SpecifiedSyntax<Syntax::FrameSpec, SQL> {
 public:
     FrameSpec& range();
     FrameSpec& rows();

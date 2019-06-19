@@ -32,7 +32,7 @@ ResultColumn::ResultColumn(const Expression& expression)
     syntax().expression = expression;
 }
 
-ResultColumn& ResultColumn::as(const String& alias)
+ResultColumn& ResultColumn::as(const UnsafeStringView& alias)
 {
     syntax().alias = alias;
     return *this;
@@ -48,7 +48,7 @@ ResultColumnAll::ResultColumnAll()
     syntax().wildcard = true;
 }
 
-ResultColumnAll& ResultColumnAll::inTable(const String& table)
+ResultColumnAll& ResultColumnAll::inTable(const UnsafeStringView& table)
 {
     syntax().table = table;
     return *this;

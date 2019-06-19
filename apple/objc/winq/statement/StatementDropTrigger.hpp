@@ -24,11 +24,12 @@
 
 namespace WCDB {
 
-class StatementDropTrigger final : public TypedSyntax<Syntax::DropTriggerSTMT, Statement> {
+class StatementDropTrigger final
+: public SpecifiedSyntax<Syntax::DropTriggerSTMT, Statement> {
 public:
-    using TypedSyntax<Syntax::DropTriggerSTMT, Statement>::TypedSyntax;
+    using SpecifiedSyntax<Syntax::DropTriggerSTMT, Statement>::SpecifiedSyntax;
 
-    StatementDropTrigger& dropTrigger(const String& trigger);
+    StatementDropTrigger& dropTrigger(const UnsafeStringView& trigger);
     StatementDropTrigger& schema(const Schema& schema);
     StatementDropTrigger& ifExists();
 };

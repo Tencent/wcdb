@@ -30,13 +30,13 @@ class RaiseFunction final : public Identifier {
 #pragma mark - Lang
 public:
     WCDB_SYNTAX_MAIN_UNION_ENUM(Ignore, Rollback, Abort, Fail, );
-    String errorMessage;
+    StringView errorMessage;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::RaiseFunction;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    bool describle(std::ostringstream& stream) const override final;
 };
 
 } // namespace Syntax

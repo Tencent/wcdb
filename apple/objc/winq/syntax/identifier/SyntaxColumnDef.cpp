@@ -37,9 +37,8 @@ Identifier::Type ColumnDef::getType() const
     return type;
 }
 
-String ColumnDef::getValidDescription() const
+bool ColumnDef::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << column;
     if (columnTypeValid()) {
         stream << space << columnType;
@@ -47,7 +46,7 @@ String ColumnDef::getValidDescription() const
     for (const auto& constraint : constraints) {
         stream << space << constraint;
     }
-    return stream.str();
+    return true;
 }
 
 void ColumnDef::iterate(const Iterator& iterator, bool& stop)

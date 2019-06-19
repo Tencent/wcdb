@@ -36,7 +36,7 @@ class Wal final : public PagerRelated, public Initializeable {
 public:
     Wal(Pager *pager);
 
-    const String &getPath() const;
+    const StringView &getPath() const;
     static constexpr const int headerSize = 32;
 
 protected:
@@ -88,11 +88,8 @@ protected:
     static bool isBigEndian();
 
 #pragma mark - Error
-public:
-    void hint() const;
-
 protected:
-    void markAsCorrupted(int frame, const String &message);
+    void markAsCorrupted(int frame, const UnsafeStringView &message);
     //    void markAsError(Error::Code code);
 
 #pragma mark - Dispose

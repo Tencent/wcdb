@@ -24,7 +24,7 @@
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Global.hpp>
 #include <WCDB/Notifier.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 
 namespace WCDB {
 
@@ -51,12 +51,14 @@ Core::Core()
 , m_globalPerformanceTraceConfig(std::make_shared<ShareablePerformanceTraceConfig>())
 // Config
 , m_configs({
-  { GlobalSQLTraceConfigName, m_globalSQLTraceConfig, Configs::Priority::Highest },
-  { GlobalPerformanceTraceConfigName, m_globalPerformanceTraceConfig, Configs::Priority::Highest },
-  { BusyRetryConfigName, std::make_shared<BusyRetryConfig>(), Configs::Priority::Highest },
-  { BasicConfigName, std::make_shared<BasicConfig>(), Configs::Priority::Higher },
+  { StringView(GlobalSQLTraceConfigName), m_globalSQLTraceConfig, Configs::Priority::Highest },
+  { StringView(GlobalPerformanceTraceConfigName), m_globalPerformanceTraceConfig, Configs::Priority::Highest },
+  { StringView(BusyRetryConfigName), std::make_shared<BusyRetryConfig>(), Configs::Priority::Highest },
+  { StringView(BasicConfigName), std::make_shared<BasicConfig>(), Configs::Priority::Higher },
   })
 {
+    Global::initialize();
+
     Global::shared().setNotificationForLog(
     NotifierLoggerName,
     std::bind(&Core::globalLog, this, std::placeholders::_1, std::placeholders::_2));
@@ -64,6 +66,8 @@ Core::Core()
     Notifier::shared().setNotificationForPreprocessing(
     NotifierPreprocessorName,
     std::bind(&Core::preprocessError, this, std::placeholders::_1));
+
+    setNotificationWhenErrorTraced(Core::onErrorTraced);
 
     m_operationQueue->run();
 }
@@ -75,12 +79,12 @@ Core::~Core()
 }
 
 #pragma mark - Database
-RecyclableDatabase Core::getOrCreateDatabase(const String& path)
+RecyclableDatabase Core::getOrCreateDatabase(const UnsafeStringView& path)
 {
     return m_databasePool.getOrCreate(path);
 }
 
-RecyclableDatabase Core::getAlivingDatabase(const String& path)
+RecyclableDatabase Core::getAlivingDatabase(const UnsafeStringView& path)
 {
     return m_databasePool.get(path);
 }
@@ -92,7 +96,7 @@ void Core::purgeDatabasePool()
 
 void Core::databaseDidCreate(Database* database)
 {
-    WCTInnerAssert(database != nullptr);
+    WCTAssert(database != nullptr);
 
     database->setConfigs(m_configs);
 
@@ -101,38 +105,38 @@ void Core::databaseDidCreate(Database* database)
 
 void Core::preprocessError(Error& error)
 {
-    const auto& strings = error.infos.getStrings();
+    auto& infos = error.infos;
 
-    auto iter = strings.find(ErrorStringKeyPath);
-    if (iter != strings.end()) {
-        auto database = m_databasePool.get(iter->second);
+    auto iter = infos.find(UnsafeStringView(ErrorStringKeyPath));
+    if (iter != infos.end() && iter->second.valueType() == Error::InfoValue::Type::StringView) {
+        auto database = m_databasePool.get(iter->second.stringValue());
         if (database != nullptr) {
             auto tag = database->getTag();
             if (tag.isValid()) {
-                error.infos.set(ErrorIntKeyTag, tag);
+                error.infos.insert_or_assign(ErrorIntKeyTag, tag);
             }
         }
     }
 }
 
 #pragma mark - Tokenizer
-void Core::registerTokenizer(const String& name, const TokenizerModule& module)
+void Core::registerTokenizer(const UnsafeStringView& name, const TokenizerModule& module)
 {
     m_modules->add(name, module);
 }
 
-bool Core::tokenizerExists(const String& name) const
+bool Core::tokenizerExists(const UnsafeStringView& name) const
 {
     return m_modules->get(name) != nullptr;
 }
 
-std::shared_ptr<Config> Core::tokenizerConfig(const String& tokenizeName)
+std::shared_ptr<Config> Core::tokenizerConfig(const UnsafeStringView& tokenizeName)
 {
     return std::make_shared<TokenizerConfig>(tokenizeName, m_modules);
 }
 
 #pragma mark - Operation
-std::pair<bool, bool> Core::migrationShouldBeOperated(const String& path)
+std::pair<bool, bool> Core::migrationShouldBeOperated(const UnsafeStringView& path)
 {
     RecyclableDatabase database = m_databasePool.get(path);
     bool succeed = true; // mark as no error if database is not referenced.
@@ -143,7 +147,7 @@ std::pair<bool, bool> Core::migrationShouldBeOperated(const String& path)
     return { succeed, done };
 }
 
-bool Core::backupShouldBeOperated(const String& path)
+bool Core::backupShouldBeOperated(const UnsafeStringView& path)
 {
     RecyclableDatabase database = m_databasePool.get(path);
     bool succeed = true; // mark as no error if database is not referenced.
@@ -153,7 +157,7 @@ bool Core::backupShouldBeOperated(const String& path)
     return succeed;
 }
 
-bool Core::checkpointShouldBeOperated(const String& path)
+bool Core::checkpointShouldBeOperated(const UnsafeStringView& path)
 {
     RecyclableDatabase database = m_databasePool.get(path);
     bool succeed = true; // mark as no error if database is not referenced.
@@ -163,14 +167,14 @@ bool Core::checkpointShouldBeOperated(const String& path)
     return succeed;
 }
 
-void Core::integrityShouldBeChecked(const String& path)
+void Core::integrityShouldBeChecked(const UnsafeStringView& path)
 {
     RecyclableDatabase database = m_databasePool.get(path);
     if (database != nullptr) {
         database->checkIntegrityIfAlreadyInitialized();
 
-        std::set<String> sourcePaths = database->getPathsOfSourceDatabases();
-        for (const String& sourcePath : sourcePaths) {
+        std::set<StringView> sourcePaths = database->getPathsOfSourceDatabases();
+        for (const UnsafeStringView& sourcePath : sourcePaths) {
             RecyclableDatabase sourceDatabase = m_databasePool.get(sourcePath);
             if (sourceDatabase != nullptr) {
                 sourceDatabase->checkIntegrityIfAlreadyInitialized();
@@ -184,49 +188,49 @@ void Core::purgeShouldBeOperated()
     purgeDatabasePool();
 }
 
-bool Core::isFileObservedCorrupted(const String& path)
+bool Core::isFileObservedCorrupted(const UnsafeStringView& path)
 {
     return m_operationQueue->isFileObservedCorrupted(path);
 }
 
-void Core::setNotificationWhenDatabaseCorrupted(const String& path,
+void Core::setNotificationWhenDatabaseCorrupted(const UnsafeStringView& path,
                                                 const CorruptedNotification& notification)
 {
     OperationQueue::CorruptionNotification underlyingNotification = nullptr;
     if (notification != nullptr) {
-        underlyingNotification
-        = [this, notification](const String& path, uint32_t corruptedIdentifier) {
-              RecyclableDatabase database = m_databasePool.get(path);
-              if (database == nullptr) {
-                  return;
-              }
-              database->blockade();
-              do {
-                  bool succeed;
-                  bool exists;
-                  std::tie(succeed, exists) = FileManager::fileExists(path);
-                  if (!succeed) {
-                      // I/O error
-                      break;
-                  }
-                  if (!exists) {
-                      // it's already not existing
-                      break;
-                  }
-                  uint32_t identifier;
-                  std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
-                  if (!succeed) {
-                      // I/O error
-                      break;
-                  }
-                  if (identifier != corruptedIdentifier) {
-                      // file is changed.
-                      break;
-                  }
-                  notification(database.get());
-              } while (false);
-              database->unblockade();
-          };
+        underlyingNotification = [this, notification](const UnsafeStringView& path,
+                                                      uint32_t corruptedIdentifier) {
+            RecyclableDatabase database = m_databasePool.get(path);
+            if (database == nullptr) {
+                return;
+            }
+            database->blockade();
+            do {
+                bool succeed;
+                bool exists;
+                std::tie(succeed, exists) = FileManager::fileExists(path);
+                if (!succeed) {
+                    // I/O error
+                    break;
+                }
+                if (!exists) {
+                    // it's already not existing
+                    break;
+                }
+                uint32_t identifier;
+                std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
+                if (!succeed) {
+                    // I/O error
+                    break;
+                }
+                if (identifier != corruptedIdentifier) {
+                    // file is changed.
+                    break;
+                }
+                notification(database.get());
+            } while (false);
+            database->unblockade();
+        };
     }
     m_operationQueue->setNotificationWhenCorrupted(path, underlyingNotification);
 }
@@ -247,7 +251,7 @@ void Core::enableAutoCheckpoint(Database* database, bool enable)
 #pragma mark - Backup
 void Core::enableAutoBackup(Database* database, bool enable)
 {
-    WCTInnerAssert(database != nullptr);
+    WCTAssert(database != nullptr);
     if (enable) {
         database->setConfig(
         AutoBackupConfigName, m_autoBackupConfig, WCDB::Configs::Priority::Highest);
@@ -261,7 +265,7 @@ void Core::enableAutoBackup(Database* database, bool enable)
 #pragma mark - Migration
 void Core::enableAutoMigration(Database* database, bool enable)
 {
-    WCTInnerAssert(database != nullptr);
+    WCTAssert(database != nullptr);
     if (enable) {
         database->setConfig(
         AutoMigrateConfigName, m_autoMigrateConfig, WCDB::Configs::Priority::Highest);
@@ -293,6 +297,39 @@ void Core::setNotificationWhenPerformanceGlobalTraced(const ShareablePerformance
 {
     static_cast<ShareablePerformanceTraceConfig*>(m_globalPerformanceTraceConfig.get())
     ->setNotification(notification);
+}
+
+void Core::setNotificationWhenErrorTraced(const Notifier::Callback& notification)
+{
+    if (notification != nullptr) {
+        Notifier::shared().setNotification(
+        std::numeric_limits<int>::min(), WCDB::NotifierLoggerName, notification);
+    } else {
+        Notifier::shared().unsetNotification(WCDB::NotifierLoggerName);
+    }
+}
+
+void Core::onErrorTraced(const Error& error)
+{
+    switch (error.level) {
+    case Error::Level::Ignore:
+        break;
+    case Error::Level::Debug:
+        if (!Console::debuggable()) {
+            break;
+        }
+        // fallthrough
+    default:
+        print(error.getDescription());
+        break;
+    }
+    if (error.level == Error::Level::Fatal) {
+        breakpoint();
+    }
+}
+
+void Core::breakpoint()
+{
 }
 
 } // namespace WCDB

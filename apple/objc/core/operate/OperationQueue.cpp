@@ -22,6 +22,7 @@
 #include <WCDB/CoreConst.h>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Global.hpp>
+#include <WCDB/Notifier.hpp>
 #include <WCDB/OperationQueue.hpp>
 #include <fcntl.h>
 #include <unistd.h>
@@ -32,7 +33,7 @@ OperationEvent::~OperationEvent()
 {
 }
 
-OperationQueue::OperationQueue(const String& name, OperationEvent* event)
+OperationQueue::OperationQueue(const UnsafeStringView& name, OperationEvent* event)
 : AsyncQueue(name)
 , m_event(event)
 , m_observerForMemoryWarning(registerNotificationWhenMemoryWarning())
@@ -71,14 +72,18 @@ void OperationQueue::handleError(const Error& error)
         return;
     }
 
-    const auto& infos = error.infos.getStrings();
+    const auto& infos = error.infos;
 
-    auto iter = infos.find(ErrorStringKeyPath);
-    if (iter == infos.end() || iter->second.empty()) {
+    auto iter = infos.find(UnsafeStringView(ErrorStringKeyPath));
+    if (iter == infos.end() || iter->second.valueType() != Error::InfoValue::Type::StringView) {
         // make sure no empty path will be added into queue
         return;
     }
-    const String& path = iter->second;
+
+    const UnsafeStringView& path = iter->second.stringValue();
+    if (path.empty()) {
+        return;
+    }
 
     bool succeed;
     uint32_t identifier;
@@ -88,9 +93,10 @@ void OperationQueue::handleError(const Error& error)
     }
 
     bool fromIntegrity = false;
-    const auto& stringInfos = error.infos.getStrings();
-    auto actionIter = stringInfos.find(ErrorStringKeyAction);
-    if (actionIter != stringInfos.end() && actionIter->second == ErrorActionIntegrity) {
+    auto actionIter = infos.find(UnsafeStringView(ErrorStringKeyAction));
+    if (actionIter != infos.end()
+        && actionIter->second.valueType() == Error::InfoValue::Type::StringView
+        && actionIter->second.stringValue() == ErrorActionIntegrity) {
         fromIntegrity = true;
     }
 
@@ -135,7 +141,7 @@ OperationQueue::Operation::Operation(Type type_) : type(type_)
 {
 }
 
-OperationQueue::Operation::Operation(Type type_, const String& path_)
+OperationQueue::Operation::Operation(Type type_, const UnsafeStringView& path_)
 : type(type_), path(path_)
 {
 }
@@ -168,7 +174,7 @@ void OperationQueue::onTimed(const Operation& operation, const Parameter& parame
         doCheckpoint(operation.path);
         break;
     case Operation::Type::Purge:
-        WCTInnerAssert(operation.path.empty());
+        WCTAssert(operation.path.empty());
         doPurge(parameter);
         break;
     case Operation::Type::Integrity:
@@ -178,7 +184,7 @@ void OperationQueue::onTimed(const Operation& operation, const Parameter& parame
         doNotifyCorruption(operation.path, parameter.identifier);
         break;
     default:
-        WCTInnerAssert(operation.type == Operation::Type::Backup);
+        WCTAssert(operation.type == Operation::Type::Backup);
         doBackup(operation.path);
         break;
     }
@@ -196,17 +202,17 @@ OperationQueue::Record::Record()
 }
 
 #pragma mark - Migrate
-void OperationQueue::registerAsRequiredMigration(const String& path)
+void OperationQueue::registerAsRequiredMigration(const UnsafeStringView& path)
 {
-    WCTInnerAssert(!path.empty());
+    WCTAssert(!path.empty());
 
     LockGuard lockGuard(m_lock);
     m_records[path].registeredForMigration = true;
 }
 
-void OperationQueue::registerAsNoMigrationRequired(const String& path)
+void OperationQueue::registerAsNoMigrationRequired(const UnsafeStringView& path)
 {
-    WCTInnerAssert(!path.empty());
+    WCTAssert(!path.empty());
 
     LockGuard lockGuard(m_lock);
     m_records[path].registeredForMigration = false;
@@ -214,23 +220,23 @@ void OperationQueue::registerAsNoMigrationRequired(const String& path)
     m_timedQueue.remove(operation);
 }
 
-void OperationQueue::asyncMigrate(const String& path)
+void OperationQueue::asyncMigrate(const UnsafeStringView& path)
 {
     asyncMigrate(path, OperationQueueTimeIntervalForMigration, 0);
 }
 
-void OperationQueue::stopMigrate(const String& path)
+void OperationQueue::stopMigrate(const UnsafeStringView& path)
 {
     LockGuard lockGuard(m_lock);
     Operation operation(Operation::Type::Migrate, path);
     m_timedQueue.remove(operation);
 }
 
-void OperationQueue::asyncMigrate(const String& path, double delay, int numberOfFailures)
+void OperationQueue::asyncMigrate(const UnsafeStringView& path, double delay, int numberOfFailures)
 {
-    WCTInnerAssert(!path.empty());
-    WCTInnerAssert(numberOfFailures >= 0
-                   && numberOfFailures < OperationQueueTolerableFailuresForMigration);
+    WCTAssert(!path.empty());
+    WCTAssert(numberOfFailures >= 0
+              && numberOfFailures < OperationQueueTolerableFailuresForMigration);
 
     SharedLockGuard lockGuard(m_lock);
     if (m_records[path].registeredForMigration) {
@@ -241,11 +247,11 @@ void OperationQueue::asyncMigrate(const String& path, double delay, int numberOf
     }
 }
 
-void OperationQueue::doMigrate(const String& path, int numberOfFailures)
+void OperationQueue::doMigrate(const UnsafeStringView& path, int numberOfFailures)
 {
-    WCTInnerAssert(!path.empty());
-    WCTInnerAssert(numberOfFailures >= 0
-                   && numberOfFailures < OperationQueueTolerableFailuresForMigration);
+    WCTAssert(!path.empty());
+    WCTAssert(numberOfFailures >= 0
+              && numberOfFailures < OperationQueueTolerableFailuresForMigration);
 
     bool succeed, done;
     std::tie(succeed, done) = m_event->migrationShouldBeOperated(path);
@@ -261,24 +267,24 @@ void OperationQueue::doMigrate(const String& path, int numberOfFailures)
             Error error(Error::Code::Notice,
                         Error::Level::Notice,
                         "Auto migration is stopped due to too many errors.");
-            error.infos.set(ErrorStringKeyPath, path);
+            error.infos.insert_or_assign(ErrorStringKeyPath, path);
             Notifier::shared().notify(error);
         }
     }
 }
 
 #pragma mark - Backup
-void OperationQueue::registerAsRequiredBackup(const String& path)
+void OperationQueue::registerAsRequiredBackup(const UnsafeStringView& path)
 {
-    WCTInnerAssert(!path.empty());
+    WCTAssert(!path.empty());
 
     LockGuard lockGuard(m_lock);
     m_records[path].registeredForBackup = true;
 }
 
-void OperationQueue::registerAsNoBackupRequired(const String& path)
+void OperationQueue::registerAsNoBackupRequired(const UnsafeStringView& path)
 {
-    WCTInnerAssert(!path.empty());
+    WCTAssert(!path.empty());
 
     LockGuard lockGuard(m_lock);
     m_records[path].registeredForBackup = false;
@@ -286,9 +292,9 @@ void OperationQueue::registerAsNoBackupRequired(const String& path)
     m_timedQueue.remove(operation);
 }
 
-void OperationQueue::asyncBackup(const String& path)
+void OperationQueue::asyncBackup(const UnsafeStringView& path)
 {
-    WCTInnerAssert(!path.empty());
+    WCTAssert(!path.empty());
 
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_records.find(path);
@@ -297,34 +303,34 @@ void OperationQueue::asyncBackup(const String& path)
     }
 }
 
-void OperationQueue::asyncBackup(const String& path, double delay)
+void OperationQueue::asyncBackup(const UnsafeStringView& path, double delay)
 {
-    WCTInnerAssert(!path.empty());
+    WCTAssert(!path.empty());
 
     Operation operation(Operation::Type::Backup, path);
     Parameter parameter; // no use
     async(operation, delay, parameter);
 }
 
-void OperationQueue::doBackup(const String& path)
+void OperationQueue::doBackup(const UnsafeStringView& path)
 {
-    WCTInnerAssert(!path.empty());
+    WCTAssert(!path.empty());
 
     m_event->backupShouldBeOperated(path);
 }
 
 #pragma mark - Checkpoint
-void OperationQueue::registerAsRequiredCheckpoint(const String& path)
+void OperationQueue::registerAsRequiredCheckpoint(const UnsafeStringView& path)
 {
-    WCTInnerAssert(!path.empty());
+    WCTAssert(!path.empty());
 
     LockGuard lockGuard(m_lock);
     m_records[path].registeredForCheckpoint = true;
 }
 
-void OperationQueue::registerAsNoCheckpointRequired(const String& path)
+void OperationQueue::registerAsNoCheckpointRequired(const UnsafeStringView& path)
 {
-    WCTInnerAssert(!path.empty());
+    WCTAssert(!path.empty());
 
     LockGuard lockGuard(m_lock);
     m_records[path].registeredForCheckpoint = false;
@@ -333,9 +339,9 @@ void OperationQueue::registerAsNoCheckpointRequired(const String& path)
     m_timedQueue.remove(operation);
 }
 
-void OperationQueue::asyncCheckpoint(const String& path)
+void OperationQueue::asyncCheckpoint(const UnsafeStringView& path)
 {
-    WCTInnerAssert(!path.empty());
+    WCTAssert(!path.empty());
 
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_records.find(path);
@@ -346,9 +352,9 @@ void OperationQueue::asyncCheckpoint(const String& path)
     }
 }
 
-void OperationQueue::doCheckpoint(const String& path)
+void OperationQueue::doCheckpoint(const UnsafeStringView& path)
 {
-    WCTInnerAssert(!path.empty());
+    WCTAssert(!path.empty());
 
     m_event->checkpointShouldBeOperated(path);
 }
@@ -362,7 +368,7 @@ int OperationQueue::maxAllowedNumberOfFileDescriptors()
 
 void OperationQueue::asyncPurge(const Parameter& parameter)
 {
-    WCTInnerAssert(parameter.source != Parameter::Source::Other);
+    WCTAssert(parameter.source != Parameter::Source::Other);
 
     SharedLockGuard lockGuard(m_lock);
     if (SteadyClock::timeIntervalSinceSteadyClockToNow(m_lastPurge)
@@ -381,16 +387,18 @@ void OperationQueue::doPurge(const Parameter& parameter)
     } break;
     case Parameter::Source::FileDescriptorsWarning: {
         Error error(Error::Code::Warning, Error::Level::Warning, "Purge due to file descriptors warning.");
-        error.infos.set("MaxAllowedFileDescriptors", maxAllowedNumberOfFileDescriptors());
-        error.infos.set("FileDescriptor", parameter.numberOfFileDescriptors);
+        error.infos.insert_or_assign("MaxAllowedFileDescriptors",
+                                     maxAllowedNumberOfFileDescriptors());
+        error.infos.insert_or_assign("FileDescriptor", parameter.numberOfFileDescriptors);
         Notifier::shared().notify(error);
     } break;
     default: {
-        WCTInnerAssert(parameter.source == Parameter::Source::OutOfMaxAllowedFileDescriptors);
+        WCTAssert(parameter.source == Parameter::Source::OutOfMaxAllowedFileDescriptors);
         Error error(Error::Code::Warning,
                     Error::Level::Warning,
                     "Purge due to out of max allowed file descriptors.");
-        error.infos.set("MaxAllowedFileDescriptors", maxAllowedNumberOfFileDescriptors());
+        error.infos.insert_or_assign("MaxAllowedFileDescriptors",
+                                     maxAllowedNumberOfFileDescriptors());
         Notifier::shared().notify(error);
     } break;
     }
@@ -398,15 +406,15 @@ void OperationQueue::doPurge(const Parameter& parameter)
     m_event->purgeShouldBeOperated();
 
     LockGuard lockGuard(m_lock);
-    WCTInnerAssert(SteadyClock::now() > m_lastPurge);
+    WCTAssert(SteadyClock::now() > m_lastPurge);
     m_lastPurge = SteadyClock::now();
 }
 
 #pragma mark - Check Integrity
-void OperationQueue::asyncCheckIntegrity(const String& path, uint32_t identifier)
+void OperationQueue::asyncCheckIntegrity(const UnsafeStringView& path, uint32_t identifier)
 {
-    WCTInnerAssert(!path.empty());
-    WCTInnerAssert(identifier != 0);
+    WCTAssert(!path.empty());
+    WCTAssert(identifier != 0);
 
     SharedLockGuard lockGuard(m_lock);
     if (m_corrupteds.find(identifier) == m_corrupteds.end()) {
@@ -416,18 +424,18 @@ void OperationQueue::asyncCheckIntegrity(const String& path, uint32_t identifier
     }
 }
 
-void OperationQueue::doCheckIntegrity(const String& path)
+void OperationQueue::doCheckIntegrity(const UnsafeStringView& path)
 {
-    WCTInnerAssert(!path.empty());
+    WCTAssert(!path.empty());
 
     m_event->integrityShouldBeChecked(path);
 }
 
 #pragma mark - Corrupted
-void OperationQueue::setNotificationWhenCorrupted(const String& path,
+void OperationQueue::setNotificationWhenCorrupted(const UnsafeStringView& path,
                                                   const CorruptionNotification& notification)
 {
-    WCTInnerAssert(!path.empty());
+    WCTAssert(!path.empty());
 
     LockGuard lockGuard(m_lock);
     if (notification != nullptr) {
@@ -437,9 +445,9 @@ void OperationQueue::setNotificationWhenCorrupted(const String& path,
     }
 }
 
-bool OperationQueue::isFileObservedCorrupted(const String& path) const
+bool OperationQueue::isFileObservedCorrupted(const UnsafeStringView& path) const
 {
-    WCTInnerAssert(!path.empty());
+    WCTAssert(!path.empty());
 
     bool corrupted = false;
     bool succeed;
@@ -452,10 +460,10 @@ bool OperationQueue::isFileObservedCorrupted(const String& path) const
     return corrupted;
 }
 
-void OperationQueue::asyncNotifyCorruption(const String& path, uint32_t identifier)
+void OperationQueue::asyncNotifyCorruption(const UnsafeStringView& path, uint32_t identifier)
 {
-    WCTInnerAssert(!path.empty());
-    WCTInnerAssert(identifier != 0);
+    WCTAssert(!path.empty());
+    WCTAssert(identifier != 0);
 
     Operation operation(Operation::Type::NotifyCorruption, path);
     Parameter parameter;
@@ -463,17 +471,17 @@ void OperationQueue::asyncNotifyCorruption(const String& path, uint32_t identifi
     async(operation, 0, parameter);
 }
 
-void OperationQueue::doNotifyCorruption(const String& path, uint32_t identifier)
+void OperationQueue::doNotifyCorruption(const UnsafeStringView& path, uint32_t identifier)
 {
-    WCTInnerAssert(!path.empty());
-    WCTInnerAssert(identifier != 0);
+    WCTAssert(!path.empty());
+    WCTAssert(identifier != 0);
 
     CorruptionNotification notification;
     {
         SharedLockGuard lockGuard(m_lock);
         auto iter = m_corruptionNotifications.find(path);
         if (iter != m_corruptionNotifications.end()) {
-            WCTInnerAssert(iter->second != nullptr);
+            WCTAssert(iter->second != nullptr);
             notification = iter->second;
         }
     }

@@ -24,17 +24,17 @@
 
 namespace WCDB {
 
-class Pragma final : public TypedSyntax<Syntax::Pragma, SQL> {
+class Pragma final : public SpecifiedSyntax<Syntax::Pragma, SQL> {
 #pragma mark - Initializer
 public:
-    using TypedSyntax<Syntax::Pragma, SQL>::TypedSyntax;
+    using SpecifiedSyntax<Syntax::Pragma, SQL>::SpecifiedSyntax;
 
     template<typename T, typename Enable = typename std::enable_if<ColumnIsTextType<T>::value>::type>
     Pragma(const T& t) : Pragma(ColumnIsTextType<T>::asUnderlyingType(t))
     {
     }
 
-    Pragma(const UnsafeString& name);
+    Pragma(const UnsafeStringView& name);
 
 #pragma mark - SQLite
 public:

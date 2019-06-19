@@ -36,9 +36,8 @@ Identifier::Type DropIndexSTMT::getType() const
     return type;
 }
 
-String DropIndexSTMT::getValidDescription() const
+bool DropIndexSTMT::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << "DROP INDEX ";
     if (ifExists) {
         stream << "IF EXISTS ";
@@ -47,7 +46,7 @@ String DropIndexSTMT::getValidDescription() const
         stream << schema << ".";
     }
     stream << index;
-    return stream.str();
+    return true;
 }
 
 void DropIndexSTMT::iterate(const Iterator& iterator, bool& stop)

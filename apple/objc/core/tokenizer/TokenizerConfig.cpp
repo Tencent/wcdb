@@ -24,7 +24,7 @@
 
 namespace WCDB {
 
-TokenizerConfig::TokenizerConfig(const String& name_,
+TokenizerConfig::TokenizerConfig(const UnsafeStringView& name_,
                                  const std::shared_ptr<TokenizerModules>& modules)
 : Config(), name(name_), m_modules(modules)
 {
@@ -41,7 +41,7 @@ bool TokenizerConfig::invoke(Handle* handle)
             StatementSelect statement = StatementSelect().select(
             Expression::function("fts3_tokenizer").invoke().arguments(BindParameter::bindParameters(2)));
             if (handle->prepare(statement)) {
-                handle->bindText(name.c_str(), 1);
+                handle->bindText(name, 1);
                 UnsafeData address((unsigned char*) &module, sizeof(unsigned char*));
                 handle->bindBLOB(address, 2);
                 succeed = handle->step();

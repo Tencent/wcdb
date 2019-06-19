@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-StatementCreateTable& StatementCreateTable::createTable(const String& table)
+StatementCreateTable& StatementCreateTable::createTable(const UnsafeStringView& table)
 {
     syntax().table = table;
     return *this;

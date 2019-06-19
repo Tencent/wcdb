@@ -28,7 +28,7 @@ class AutoCheckpointOperator {
 public:
     virtual ~AutoCheckpointOperator() = 0;
 
-    virtual void asyncCheckpoint(const String &path) = 0;
+    virtual void asyncCheckpoint(const UnsafeStringView &path) = 0;
 };
 
 class AutoCheckpointConfig final : public Config {
@@ -40,8 +40,8 @@ public:
     bool uninvoke(Handle *handle) override final;
 
 protected:
-    const String m_identifier;
-    bool onCommitted(const String &path, int pages);
+    const StringView m_identifier;
+    bool onCommitted(const UnsafeStringView &path, int pages);
     void log(int rc, const char *message);
 
     std::shared_ptr<AutoCheckpointOperator> m_operator;

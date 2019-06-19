@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 
 namespace WCDB {
 
@@ -30,12 +30,12 @@ struct Master {
 public:
     Master();
 
-    static bool isReservedTableName(const String &tableName);
+    static bool isReservedTableName(const UnsafeStringView &tableName);
 
-    String type;
-    String name;
-    String tableName;
-    String sql;
+    StringView type;
+    StringView name;
+    StringView tableName;
+    StringView sql;
     int rootpage;
 };
 

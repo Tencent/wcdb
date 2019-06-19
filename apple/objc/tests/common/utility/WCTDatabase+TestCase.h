@@ -44,8 +44,6 @@ typedef NSData* _Nonnull (^WCTCorruptDataBlock)(int size);
 
 - (WCTOptionalSize)getNumberOfWalFrames;
 
-+ (void)additionalGlobalTraceError:(WCTErrorTraceBlock)block;
-
 - (BOOL)corruptHeaderWithinCloseAfterTruncatedCheckpoint;
 
 - (void)corruptPage:(int)i;

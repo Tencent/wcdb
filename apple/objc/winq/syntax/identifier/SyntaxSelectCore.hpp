@@ -41,7 +41,7 @@ public:
     Expression condition;
     std::list<Expression> groups;
     Expression having;
-    std::list<String> windows;
+    std::list<StringView> windows;
     std::list<WindowDef> windowDefs;
 
     std::list<std::list<Expression>> valuesList;
@@ -50,7 +50,7 @@ public:
 public:
     static constexpr const Type type = Type::SelectCore;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    bool describle(std::ostringstream& stream) const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

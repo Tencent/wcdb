@@ -22,10 +22,10 @@
 
 #include <WCDB/ColumnType.hpp>
 #include <WCDB/Convertible.hpp>
+#include <WCDB/StringView.hpp>
 #include <WCDB/Syntax.h>
 #include <WCDB/SyntaxForwardDeclaration.h>
 #include <WCDB/SyntaxList.hpp>
-#include <WCDB/UnsafeString.hpp>
 #include <memory>
 
 namespace WCDB {
@@ -41,46 +41,76 @@ public:
     typedef Syntax::Identifier::Iterator Iterator;
     void iterate(const Iterator& iterator);
 
-    String getDescription() const;
+    const StringView& getDescription() const;
 
-    Syntax::Identifier* getSyntaxIdentifier() const;
+    Syntax::Identifier& syntax();
+    const Syntax::Identifier& syntax() const;
 
 protected:
-    template<typename T, typename Enable = typename std::enable_if<std::is_base_of<Syntax::Identifier, T>::value>::type>
-    SQL(T* _) : m_syntax(std::make_unique<T>())
-    {
-        WCDB_UNUSED(_)
-    }
+    SQL(const SQL& sql);
+    SQL(SQL&& sql);
+    SQL(const Shadow<Syntax::Identifier>& syntax);
+    SQL(Shadow<Syntax::Identifier>&& syntax);
+    SQL(std::unique_ptr<Syntax::Identifier>&& underlying);
 
-    template<typename T, typename Enable = typename std::enable_if<std::is_base_of<Syntax::Identifier, T>::value>::type>
-    SQL(T* _, const SQL& sql)
-    : SQL(T::type, sql){ WCDB_UNUSED(_) }
-
-    Shadow<Syntax::Identifier> m_syntax;
+    SQL& operator=(const SQL& other);
+    SQL& operator=(SQL&& other);
 
 private:
-    SQL(Type type, const SQL& sql);
+    Shadow<Syntax::Identifier> m_syntax;
+    mutable std::optional<StringView> m_description;
 };
 
-template<typename T, typename U>
-class TypedSyntax : public U {
-    static_assert(std::is_base_of<Syntax::Identifier, T>::value, "");
-    static_assert(std::is_base_of<SQL, U>::value, "");
-
+template<typename __SyntaxType, typename __SQLType>
+class SpecifiedSyntax : public __SQLType {
 public:
-    typedef T SyntaxType;
+    using SyntaxType = __SyntaxType;
     static constexpr const SQL::Type type = SyntaxType::type;
 
-    TypedSyntax() : U((T*) nullptr) {}
+private:
+    using SQLType = __SQLType;
+    using Self = SpecifiedSyntax<SyntaxType, SQLType>;
+    using Super = SQLType;
+    static_assert(std::is_base_of<Syntax::Identifier, SyntaxType>::value, "");
+    static_assert(std::is_base_of<SQL, SQLType>::value, "");
 
-    explicit TypedSyntax(const U& other) : U((T*) nullptr, other) {}
+public:
+    SpecifiedSyntax() : Super(std::make_unique<SyntaxType>()) {}
 
-    virtual ~TypedSyntax() {}
+    explicit SpecifiedSyntax(const Self& other) : Super(other) {}
 
-    inline T& syntax() const { return *static_cast<T*>(U::m_syntax.get()); }
+    explicit SpecifiedSyntax(const SyntaxType& syntax) : Super(syntax) {}
+
+    SpecifiedSyntax(SyntaxType&& syntax) : Super(std::move(syntax)) {}
+
+    SpecifiedSyntax(Self&& other) : Super(std::move(other)) {}
+
+    Self& operator=(const Self& other)
+    {
+        Super::operator=(other);
+        return *this;
+    }
+
+    SQL& operator=(SQL&& other)
+    {
+        Super::operator=(std::move(other));
+        return *this;
+    }
+
+    virtual ~SpecifiedSyntax() {}
+
+    SyntaxType& syntax() { return static_cast<SyntaxType&>(Super::syntax()); }
+
+    const SyntaxType& syntax() const
+    {
+        return static_cast<const SyntaxType&>(Super::syntax());
+    }
 
     // Convert SQL to Syntax implicitly
-    operator const T&() const { return *static_cast<T*>(U::m_syntax.get()); }
+    operator const SyntaxType&() const
+    {
+        return static_cast<const SyntaxType&>(Super::syntax());
+    }
 };
 
 } // namespace WCDB

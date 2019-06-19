@@ -39,16 +39,14 @@ void OperationHandle::setType(HandleType type)
 {
     switch (type) {
     case HandleType::OperationIntegrity:
-        m_error.infos.set(ErrorStringKeyAction, ErrorActionIntegrity);
+        m_error.infos.insert_or_assign(ErrorStringKeyAction, ErrorActionIntegrity);
         break;
     case HandleType::OperationBackup:
-        m_error.infos.set(ErrorStringKeyAction, ErrorActionBackup);
-        break;
-    case HandleType::OperationCheckpoint:
-        m_error.infos.set(ErrorStringKeyAction, ErrorActionCheckpoint);
+        m_error.infos.insert_or_assign(ErrorStringKeyAction, ErrorActionBackup);
         break;
     default:
-        WCTInnerAssert(false);
+        WCTAssert(type == HandleType::OperationCheckpoint);
+        m_error.infos.insert_or_assign(ErrorStringKeyAction, ErrorActionCheckpoint);
         break;
     }
 }
@@ -56,28 +54,32 @@ void OperationHandle::setType(HandleType type)
 #pragma mark - Checkpoint
 bool OperationHandle::checkpoint()
 {
-    WCTInnerAssert(m_error.infos.getStrings().find(ErrorStringKeyAction)
-                   != m_error.infos.getStrings().end());
-    WCTInnerAssert(m_error.infos.getStrings().at(ErrorStringKeyAction) == ErrorActionCheckpoint);
+    WCTAssert(m_error.infos.find(UnsafeStringView(ErrorStringKeyAction))
+              != m_error.infos.end());
+    WCTAssert(m_error.infos.at(ErrorStringKeyAction).valueType()
+              == Error::InfoValue::Type::StringView);
+    WCTAssert(m_error.infos.at(ErrorStringKeyAction).stringValue() == ErrorActionCheckpoint);
     return Handle::checkpoint(CheckpointMode::Passive);
 }
 
 #pragma mark - Integrity
 void OperationHandle::checkIntegrity()
 {
-    WCTInnerAssert(m_error.infos.getStrings().find(ErrorStringKeyAction)
-                   != m_error.infos.getStrings().end());
-    WCTInnerAssert(m_error.infos.getStrings().at(ErrorStringKeyAction) == ErrorActionIntegrity);
+    WCTAssert(m_error.infos.find(UnsafeStringView(ErrorStringKeyAction))
+              != m_error.infos.end());
+    WCTAssert(m_error.infos.at(ErrorStringKeyAction).valueType()
+              == Error::InfoValue::Type::StringView);
+    WCTAssert(m_error.infos.at(ErrorStringKeyAction).stringValue() == ErrorActionIntegrity);
     execute(m_statementForIntegrityCheck);
 }
 
 #pragma mark - Backup
-void OperationHandle::setPath(const String &path)
+void OperationHandle::setPath(const UnsafeStringView &path)
 {
     Handle::setPath(path);
 }
 
-const String &OperationHandle::getPath() const
+const StringView &OperationHandle::getPath() const
 {
     return Handle::getPath();
 }
@@ -89,9 +91,11 @@ const Error &OperationHandle::getError() const
 
 bool OperationHandle::acquireReadLock()
 {
-    WCTInnerAssert(m_error.infos.getStrings().find(ErrorStringKeyAction)
-                   != m_error.infos.getStrings().end());
-    WCTInnerAssert(m_error.infos.getStrings().at(ErrorStringKeyAction) == ErrorActionBackup);
+    WCTAssert(m_error.infos.find(UnsafeStringView(ErrorStringKeyAction))
+              != m_error.infos.end());
+    WCTAssert(m_error.infos.at(ErrorStringKeyAction).valueType()
+              == Error::InfoValue::Type::StringView);
+    WCTAssert(m_error.infos.at(ErrorStringKeyAction).stringValue() == ErrorActionBackup);
 
     return execute(m_statementForReadTransaction) && execute(m_statementForAcquireReadLock);
 }
@@ -104,9 +108,11 @@ bool OperationHandle::releaseReadLock()
 
 bool OperationHandle::acquireWriteLock()
 {
-    WCTInnerAssert(m_error.infos.getStrings().find(ErrorStringKeyAction)
-                   != m_error.infos.getStrings().end());
-    WCTInnerAssert(m_error.infos.getStrings().at(ErrorStringKeyAction) == ErrorActionBackup);
+    WCTAssert(m_error.infos.find(UnsafeStringView(ErrorStringKeyAction))
+              != m_error.infos.end());
+    WCTAssert(m_error.infos.at(ErrorStringKeyAction).valueType()
+              == Error::InfoValue::Type::StringView);
+    WCTAssert(m_error.infos.at(ErrorStringKeyAction).stringValue() == ErrorActionBackup);
 
     return beginTransaction();
 }

@@ -43,7 +43,7 @@ AssemblerHandle::AssemblerHandle()
   StatementSelect().select(1).from(Syntax::masterTable).limit(0))
 , m_statementForReadTransaction(StatementBegin().beginDeferred())
 {
-    m_error.infos.set(ErrorStringKeyAction, ErrorActionAssembler);
+    m_error.infos.insert_or_assign(ErrorStringKeyAction, ErrorActionAssembler);
 }
 
 AssemblerHandle::~AssemblerHandle()
@@ -52,12 +52,12 @@ AssemblerHandle::~AssemblerHandle()
 }
 
 #pragma mark - Common
-void AssemblerHandle::setPath(const String &path)
+void AssemblerHandle::setPath(const UnsafeStringView &path)
 {
     Handle::setPath(path);
 }
 
-const String &AssemblerHandle::getPath() const
+const StringView &AssemblerHandle::getPath() const
 {
     return Handle::getPath();
 }
@@ -104,7 +104,7 @@ bool AssemblerHandle::markAsMilestone()
     return beginTransaction();
 }
 
-bool AssemblerHandle::assembleSQL(const String &sql)
+bool AssemblerHandle::assembleSQL(const UnsafeStringView &sql)
 {
     markErrorAsIgnorable(Error::Code::Error);
     bool succeed = executeSQL(sql);
@@ -116,7 +116,8 @@ bool AssemblerHandle::assembleSQL(const String &sql)
 }
 
 #pragma mark - Assembler - Table
-bool AssemblerHandle::assembleTable(const String &tableName, const String &sql)
+bool AssemblerHandle::assembleTable(const UnsafeStringView &tableName,
+                                    const UnsafeStringView &sql)
 {
     m_cellStatement->finalize();
     m_table.clear();
@@ -134,11 +135,11 @@ bool AssemblerHandle::assembleTable(const String &tableName, const String &sql)
 
 bool AssemblerHandle::assembleCell(const Repair::Cell &cell)
 {
-    WCTInnerAssert(!m_table.empty());
+    WCTAssert(!m_table.empty());
     if (!lazyPrepareCell()) {
         return false;
     }
-    WCTInnerAssert(m_cellStatement->isPrepared());
+    WCTAssert(m_cellStatement->isPrepared());
     m_cellStatement->reset();
     m_cellStatement->bindInteger64(cell.getRowID(), 1);
     for (int i = 0; i < cell.getCount(); ++i) {
@@ -199,7 +200,7 @@ bool AssemblerHandle::lazyPrepareCell()
 }
 
 #pragma mark - Assembler - Sequence
-bool AssemblerHandle::assembleSequence(const String &tableName, int64_t sequence)
+bool AssemblerHandle::assembleSequence(const UnsafeStringView &tableName, int64_t sequence)
 {
     bool succeed, updated;
     std::tie(succeed, updated) = updateSequence(tableName, sequence);
@@ -213,7 +214,7 @@ bool AssemblerHandle::assembleSequence(const String &tableName, int64_t sequence
 }
 
 std::pair<bool, bool>
-AssemblerHandle::updateSequence(const String &tableName, int64_t sequence)
+AssemblerHandle::updateSequence(const UnsafeStringView &tableName, int64_t sequence)
 {
     bool succeed = false;
     bool worked = false;
@@ -229,7 +230,7 @@ AssemblerHandle::updateSequence(const String &tableName, int64_t sequence)
     return { succeed, worked };
 }
 
-bool AssemblerHandle::insertSequence(const String &tableName, int64_t sequence)
+bool AssemblerHandle::insertSequence(const UnsafeStringView &tableName, int64_t sequence)
 {
     bool succeed = false;
     if (prepare(m_statementForInsertSequence)) {

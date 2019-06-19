@@ -531,7 +531,7 @@
 - (void)test_commit_and_commit_nested
 {
     [self doTestObjects:@[]
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"SAVEPOINT WCDBSavepoint_1", @"DELETE FROM main.testTable WHERE identifier == 2", @"RELEASE WCDBSavepoint_1", @"COMMIT" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"SAVEPOINT wcdb_lv_2", @"DELETE FROM main.testTable WHERE identifier == 2", @"RELEASE wcdb_lv_2", @"COMMIT" ]
       afterModification:^BOOL {
           return [self.database runTransaction:^BOOL(WCTHandle* handle) {
               return [handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]
@@ -545,7 +545,7 @@
 - (void)test_commit_and_rollback_nested
 {
     [self doTestObjects:@[ self.object2 ]
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"SAVEPOINT WCDBSavepoint_1", @"DELETE FROM main.testTable WHERE identifier == 2", @"ROLLBACK TO WCDBSavepoint_1", @"COMMIT" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"SAVEPOINT wcdb_lv_2", @"DELETE FROM main.testTable WHERE identifier == 2", @"ROLLBACK TO wcdb_lv_2", @"COMMIT" ]
       afterModification:^BOOL {
           __block BOOL unexpected = NO;
           __block BOOL tested = NO;
@@ -576,7 +576,7 @@
 - (void)test_rollback_and_commit_nested
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"SAVEPOINT WCDBSavepoint_1", @"DELETE FROM main.testTable WHERE identifier == 2", @"RELEASE WCDBSavepoint_1", @"ROLLBACK" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"SAVEPOINT wcdb_lv_2", @"DELETE FROM main.testTable WHERE identifier == 2", @"RELEASE wcdb_lv_2", @"ROLLBACK" ]
       afterModification:^BOOL {
           __block BOOL unexpected = NO;
           __block BOOL tested = NO;
@@ -604,7 +604,7 @@
 - (void)test_rollback_and_rollback_nested
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"SAVEPOINT WCDBSavepoint_1", @"DELETE FROM main.testTable WHERE identifier == 2", @"ROLLBACK TO WCDBSavepoint_1", @"ROLLBACK" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"SAVEPOINT wcdb_lv_2", @"DELETE FROM main.testTable WHERE identifier == 2", @"ROLLBACK TO wcdb_lv_2", @"ROLLBACK" ]
       afterModification:^BOOL {
           __block BOOL unexpected = NO;
           __block BOOL tested = NO;

@@ -25,18 +25,18 @@
 
 namespace WCDB {
 
-void TokenizerModules::add(const String& name, const TokenizerModule& module)
+void TokenizerModules::add(const UnsafeStringView& name, const TokenizerModule& module)
 {
     WCTRemedialAssert(!name.empty(), "Name of module can't be null.", return;);
     LockGuard lockGuard(m_lock);
     WCTRemedialAssert(
     m_modules.find(name) == m_modules.end(), "Module already exists.", return;);
     auto iter = m_modules.emplace(name, module).first;
-    WCTInnerAssert(m_pointers.find(name) == m_pointers.end());
+    WCTAssert(m_pointers.find(name) == m_pointers.end());
     m_pointers.emplace(name, &iter->second);
 }
 
-const TokenizerModule* TokenizerModules::get(const String& name) const
+const TokenizerModule* TokenizerModules::get(const UnsafeStringView& name) const
 {
     SharedLockGuard lockGuard(m_lock);
     const TokenizerModule* module = nullptr;

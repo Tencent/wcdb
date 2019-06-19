@@ -30,15 +30,15 @@ class QualifiedTableName final : public Identifier {
 #pragma mark - Lang
 public:
     Schema schema;
-    String table;
-    String alias;
+    StringView table;
+    StringView alias;
     enum class Switch {
         NotSet = 0,
         Indexed,
         NotIndexed,
     } switcher
     = Switch::NotSet;
-    String index;
+    StringView index;
 
     bool isValid() const override final;
 
@@ -46,8 +46,8 @@ public:
 public:
     static constexpr const Type type = Type::QualifiedTableName;
     Type getType() const override final;
-    String getValidDescription() const override final;
-    String getValidDescription(bool skipSchema) const;
+    bool describle(std::ostringstream& stream) const override final;
+    bool describle(std::ostringstream& stream, bool skipSchema) const;
     void iterate(const Iterator& iterator, bool& stop) override final;
 
 #pragma mark - Utility

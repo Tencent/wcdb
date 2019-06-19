@@ -23,4 +23,6 @@
 
 @interface WCTHandle (Transaction) <WCTTransaction>
 
+- (void)markErrorNotAllowedWithinTransaction;
+
 @end

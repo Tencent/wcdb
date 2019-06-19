@@ -21,14 +21,16 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/AsyncQueue.hpp>
 #include <WCDB/CoreConst.h>
+#include <WCDB/Error.hpp>
 #include <WCDB/Exiting.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/Notifier.hpp>
+#include <WCDB/StringView.hpp>
 #include <atomic>
 #include <thread>
 
 namespace WCDB {
 
-AsyncQueue::AsyncQueue(const String& name_) : name(name_)
+AsyncQueue::AsyncQueue(const UnsafeStringView& name_) : name(name_)
 {
 }
 
@@ -39,8 +41,8 @@ AsyncQueue::~AsyncQueue()
            std::chrono::nanoseconds((long long) (AsyncQueueTimeOutForExiting * 1E9)))
            == std::future_status::timeout) {
         Error error(Error::Code::Warning, Error::Level::Warning, "Queue does not exit on time.");
-        error.infos.set("Timeout", AsyncQueueTimeOutForExiting);
-        error.infos.set("Name", name);
+        error.infos.insert_or_assign("Timeout", AsyncQueueTimeOutForExiting);
+        error.infos.insert_or_assign("Name", name);
         Notifier::shared().notify(error);
     }
 }

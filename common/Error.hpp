@@ -20,10 +20,9 @@
 
 #pragma once
 
-#include <WCDB/String.hpp>
-#include <functional>
+#include <WCDB/StringView.hpp>
+#include <any>
 #include <map>
-#include <sstream>
 
 namespace WCDB {
 
@@ -33,7 +32,7 @@ public:
     enum class Level;
     enum class Code;
     Error();
-    Error(Code code, Level level, const String &message = String::null());
+    Error(Code code, Level level, const UnsafeStringView &message = UnsafeStringView());
 
     //    void clear();
 
@@ -178,9 +177,9 @@ public:
 
     void setSystemCode(int systemCode,
                        Code codeIfUnresolved,
-                       const String &message = String::null());
-    void setSQLiteCode(int code, const String &message = String::null());
-    void setCode(Code code, const String &message = String::null());
+                       const UnsafeStringView &message = UnsafeStringView());
+    void setSQLiteCode(int code, const UnsafeStringView &message = UnsafeStringView());
+    void setCode(Code code, const UnsafeStringView &message = UnsafeStringView());
 
 protected:
     Code m_code;
@@ -261,51 +260,50 @@ public:
 
 #pragma mark - Message
 public:
-    const String &getMessage() const;
+    const StringView &getMessage() const;
 
 protected:
-    String m_message;
+    StringView m_message;
 
 #pragma mark - Info
 public:
-    class Infos final {
+    class InfoValue : public std::any {
     public:
-#if __cplusplus > 201402L
-#warning TODO \
-std::any is available since C++17.
-#endif
+        enum class Type {
+            Integer,
+            Float,
+            StringView,
+        };
+        Type valueType() const;
+
+    public:
         template<typename T>
-        typename std::enable_if<std::is_integral<T>::value, void>::type
-        set(const String &key, const T &value)
+        InfoValue(const T &value,
+                  typename std::enable_if<std::is_floating_point<T>::value>::type * = nullptr)
+        : std::any((double) value)
         {
-            m_integers[key] = (int64_t) value;
         }
+
         template<typename T>
-        typename std::enable_if<std::is_floating_point<T>::value, void>::type
-        set(const String &key, const T &value)
+        InfoValue(const T &value,
+                  typename std::enable_if<std::is_integral<T>::value>::type * = nullptr)
+        : std::any((int64_t) value)
         {
-            m_doubles[key] = (double) value;
         }
-        void set(const String &key, const String &value);
-        void unset(const String &key);
 
-        const std::map<String, int64_t> &getIntegers() const;
-        const std::map<String, String> &getStrings() const;
-        const std::map<String, double> &getDoubles() const;
+        InfoValue(const char *string);
+        InfoValue(const UnsafeStringView &string);
+        InfoValue(StringView &&string);
 
-        void clear();
-        bool empty() const;
-
-    protected:
-        std::map<String, int64_t> m_integers;
-        std::map<String, double> m_doubles;
-        std::map<String, String> m_strings;
+        const StringView &stringValue() const;
+        const int64_t &integerValue() const;
+        const double &floatValue() const;
     };
-    Infos infos;
+    StringViewMap<InfoValue> infos;
 
 #pragma mark - Descritpion
 public:
-    String getDescription() const;
+    StringView getDescription() const;
 };
 
 } //namespace WCDB

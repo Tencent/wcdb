@@ -24,9 +24,9 @@
 
 namespace WCDB {
 
-class StatementSelect final : public TypedSyntax<Syntax::SelectSTMT, Statement> {
+class StatementSelect final : public SpecifiedSyntax<Syntax::SelectSTMT, Statement> {
 public:
-    using TypedSyntax<Syntax::SelectSTMT, Statement>::TypedSyntax;
+    using SpecifiedSyntax<Syntax::SelectSTMT, Statement>::SpecifiedSyntax;
 
     StatementSelect& with(const CommonTableExpressions& commonTableExpressions);
     StatementSelect& recursive();
@@ -41,7 +41,7 @@ public:
     StatementSelect& groups(const Expressions& groups);
     StatementSelect& having(const Expression& having);
 
-    StatementSelect& window(const String& window);
+    StatementSelect& window(const UnsafeStringView& window);
     StatementSelect& as(const WindowDef& windowDef);
 
     StatementSelect& value(const Expression& expression);

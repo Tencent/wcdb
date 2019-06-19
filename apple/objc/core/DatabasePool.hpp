@@ -42,8 +42,8 @@ class DatabasePool final {
 public:
     DatabasePool(DatabasePoolEvent* event);
 
-    RecyclableDatabase getOrCreate(const String& path);
-    RecyclableDatabase get(const String& path);
+    RecyclableDatabase getOrCreate(const UnsafeStringView& path);
+    RecyclableDatabase get(const UnsafeStringView& path);
 
     void purge();
 
@@ -56,10 +56,10 @@ protected:
     };
     typedef struct ReferencedDatabase ReferencedDatabase;
 
-    RecyclableDatabase get(const std::map<String, ReferencedDatabase>::iterator& iter);
+    RecyclableDatabase get(const StringViewMap<ReferencedDatabase>::iterator& iter);
     void flowBack(Database* database);
 
-    std::map<String, ReferencedDatabase> m_databases; //path->{database, reference}
+    StringViewMap<ReferencedDatabase> m_databases; //path->{database, reference}
     SharedLock m_lock;
 
     DatabasePoolEvent* m_event;

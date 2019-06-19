@@ -28,7 +28,7 @@ class AutoBackupOperator {
 public:
     virtual ~AutoBackupOperator() = 0;
 
-    virtual void asyncBackup(const String& path) = 0;
+    virtual void asyncBackup(const UnsafeStringView& path) = 0;
 };
 
 class AutoBackupConfig final : public Config {
@@ -39,8 +39,8 @@ public:
     bool uninvoke(Handle* handle) override final;
 
 protected:
-    const String m_identifier;
-    void onCheckpointed(const String& path);
+    const StringView m_identifier;
+    void onCheckpointed(const UnsafeStringView& path);
 
     std::shared_ptr<AutoBackupOperator> m_operator;
 };

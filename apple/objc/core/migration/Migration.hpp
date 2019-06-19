@@ -55,7 +55,7 @@ public:
 
     void purge();
 
-    std::set<String> getPathsOfSourceDatabases() const;
+    std::set<StringView> getPathsOfSourceDatabases() const;
 
 protected:
     class InfoInitializer {
@@ -69,19 +69,20 @@ protected:
         sourceTableExists(const MigrationUserInfo& userInfo) = 0;
         // When succeed, empty column indicates that table does not exist.
         // succeed, contains integer primary key, columns
-        virtual std::tuple<bool, bool, std::set<String>>
+        virtual std::tuple<bool, bool, std::set<StringView>>
         getColumnsOfUserInfo(const MigrationUserInfo& userInfo) = 0;
-        virtual String getDatabasePath() const = 0;
+        virtual StringView getDatabasePath() const = 0;
     };
 
-    bool initInfo(InfoInitializer& initializer, const String& table);
-    bool hintThatTableWillBeCreated(InfoInitializer& initializer, const String& table);
-    void markAsNoNeedToMigrate(const String& table);
+    bool initInfo(InfoInitializer& initializer, const UnsafeStringView& table);
+    bool hintThatTableWillBeCreated(InfoInitializer& initializer,
+                                    const UnsafeStringView& table);
+    void markAsNoNeedToMigrate(const UnsafeStringView& table);
 
     void markAsUnreferenced(const MigrationInfo* info);
     void markAsDropped(const MigrationInfo* info);
     void markAsMigrated(const MigrationInfo* info);
-    std::pair<bool, RecyclableMigrationInfo> getInfo(const String& table);
+    std::pair<bool, RecyclableMigrationInfo> getInfo(const UnsafeStringView& table);
 
 private:
     // Those infos needed to be migrate will be held by m_migrating after initialized. (Other infos that already migrated or have no need to migrate will be dropped when initializing.)
@@ -101,8 +102,8 @@ private:
 
     std::map<const MigrationInfo*, int> m_referenceds;
     std::list<MigrationInfo> m_holder;
-    std::map<String, const MigrationInfo*> m_filted;
-    std::set<String> m_hints;
+    StringViewMap<const MigrationInfo*> m_filted;
+    StringViewSet m_hints;
 
     void retainInfo(const MigrationInfo* info);
     void releaseInfo(const MigrationInfo* info);
@@ -125,25 +126,25 @@ public:
         bool stopBinding(bool succeed);
         void stopReferenced();
 
-        std::pair<bool, const MigrationInfo*> bindTable(const String& table);
-        bool hintThatTableWillBeCreated(const String& table);
-        const MigrationInfo* getBoundInfo(const String& table);
+        std::pair<bool, const MigrationInfo*> bindTable(const UnsafeStringView& table);
+        bool hintThatTableWillBeCreated(const UnsafeStringView& table);
+        const MigrationInfo* getBoundInfo(const UnsafeStringView& table);
 
-        virtual bool bindInfos(const std::map<String, const MigrationInfo*>& infos) = 0;
+        virtual bool bindInfos(const StringViewMap<const MigrationInfo*>& infos) = 0;
 
     private:
         bool m_binding;
         Migration& m_migration;
-        std::map<String, RecyclableMigrationInfo> m_referenceds; // all infos need to be bound during this cycle
-        std::map<String, const MigrationInfo*> m_bindings;
-        std::map<String, const MigrationInfo*> m_bounds;
+        StringViewMap<RecyclableMigrationInfo> m_referenceds; // all infos need to be bound during this cycle
+        StringViewMap<const MigrationInfo*> m_bindings;
+        StringViewMap<const MigrationInfo*> m_bounds;
         bool m_rebind;
     };
 
 protected:
     std::pair<bool, RecyclableMigrationInfo>
-    getOrInitInfo(InfoInitializer& initializer, const String& table);
-    void tryReduceBounds(std::map<String, const MigrationInfo*>& bounds);
+    getOrInitInfo(InfoInitializer& initializer, const UnsafeStringView& table);
+    void tryReduceBounds(StringViewMap<const MigrationInfo*>& bounds);
 
 private:
 #pragma mark - Step
@@ -155,7 +156,7 @@ public:
         virtual ~Stepper() = 0;
 
     protected:
-        virtual std::pair<bool, std::set<String>> getAllTables() = 0;
+        virtual std::pair<bool, std::set<StringView>> getAllTables() = 0;
         virtual bool dropSourceTable(const MigrationInfo* info) = 0;
         virtual bool migrateRows(const MigrationInfo* info, bool& done) = 0;
     };

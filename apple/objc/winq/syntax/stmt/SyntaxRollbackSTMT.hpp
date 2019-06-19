@@ -30,13 +30,13 @@ class RollbackSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     WCDB_SYNTAX_MAIN_UNION_ENUM(Transaction, Savepoint);
-    String savepoint;
+    StringView savepoint;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::RollbackSTMT;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    bool describle(std::ostringstream& stream) const override final;
 };
 
 } // namespace Syntax

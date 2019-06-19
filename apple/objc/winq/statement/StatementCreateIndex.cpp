@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-StatementCreateIndex& StatementCreateIndex::createIndex(const String& index)
+StatementCreateIndex& StatementCreateIndex::createIndex(const UnsafeStringView& index)
 {
     syntax().index = index;
     return *this;
@@ -46,7 +46,7 @@ StatementCreateIndex& StatementCreateIndex::ifNotExists()
     return *this;
 }
 
-StatementCreateIndex& StatementCreateIndex::table(const String& table)
+StatementCreateIndex& StatementCreateIndex::table(const UnsafeStringView& table)
 {
     syntax().table = table;
     return *this;

@@ -23,6 +23,7 @@
 #import <WCDB/WCTDatabase+Monitor.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTError.h>
+#import <WCDB/WCTFoundation.h>
 
 NSErrorDomain const WCTErrorDomain = @"WCDB";
 
@@ -42,7 +43,7 @@ NSErrorUserInfoKey const WCTErrorKeySource = @WCDB_ERROR_STRING_KEY_SOURCE;
     if (self = [super initWithDomain:WCTErrorDomain
                                 code:(NSInteger) code
                             userInfo:userInfo]) {
-        WCTInnerAssert(message.length > 0);
+        WCTAssert(message.length > 0);
         _message = message;
         _level = (WCTErrorLevel) level;
     }
@@ -52,17 +53,22 @@ NSErrorUserInfoKey const WCTErrorKeySource = @WCDB_ERROR_STRING_KEY_SOURCE;
 - (instancetype)initWithError:(const WCDB::Error &)error
 {
     NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
-    for (const auto &info : error.infos.getIntegers()) {
-        [userInfo setObject:[NSNumber numberWithLongLong:info.second] forKey:[NSString stringWithUTF8String:info.first.c_str()]];
+    for (const auto &info : error.infos) {
+        switch (info.second.valueType()) {
+        case WCDB::Error::InfoValue::Type::StringView:
+            [userInfo setObject:[NSString stringWithView:info.second.stringValue()]
+                         forKey:[NSString stringWithView:info.first]];
+            break;
+        case WCDB::Error::InfoValue::Type::Float:
+            [userInfo setObject:[NSNumber numberWithDouble:info.second.floatValue()] forKey:[NSString stringWithView:info.first]];
+            break;
+        default:
+            WCTAssert(info.second.valueType() == WCDB::Error::InfoValue::Type::Integer);
+            [userInfo setObject:[NSNumber numberWithLongLong:info.second.integerValue()] forKey:[NSString stringWithView:info.first]];
+            break;
+        }
     }
-    for (const auto &info : error.infos.getStrings()) {
-        [userInfo setObject:[NSString stringWithUTF8String:info.second.c_str()]
-                     forKey:[NSString stringWithUTF8String:info.first.c_str()]];
-    }
-    for (const auto &info : error.infos.getDoubles()) {
-        [userInfo setObject:[NSNumber numberWithDouble:info.second] forKey:[NSString stringWithUTF8String:info.first.c_str()]];
-    }
-    return [self initWithCode:(WCTErrorCode) error.code() level:(WCTErrorLevel) error.level message:[NSString stringWithUTF8String:error.getMessage().c_str()] userInfo:userInfo];
+    return [self initWithCode:(WCTErrorCode) error.code() level:(WCTErrorLevel) error.level message:[NSString stringWithView:error.getMessage()] userInfo:userInfo];
 }
 
 - (BOOL)isOK

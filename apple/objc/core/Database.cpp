@@ -24,7 +24,7 @@
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/RepairKit.h>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 
 #include <WCDB/AssemblerHandle.hpp>
 #include <WCDB/ConfiguredHandle.hpp>
@@ -35,7 +35,7 @@
 namespace WCDB {
 
 #pragma mark - Initializer
-Database::Database(const String &path)
+Database::Database(const UnsafeStringView &path)
 : HandlePool(path)
 , m_factory(path)
 , m_tag(Tag::invalid())
@@ -65,8 +65,8 @@ bool Database::canOpen()
 
 void Database::didDrain()
 {
-    WCTInnerAssert(m_memory.writeSafety());
-    WCTInnerAssert(!isOpened());
+    WCTAssert(m_memory.writeSafety());
+    WCTAssert(!isOpened());
     m_initialized = false;
 }
 
@@ -138,16 +138,18 @@ void Database::setConfigs(const Configs &configs)
     m_configs = configs;
 }
 
-void Database::setConfig(const String &name, const std::shared_ptr<Config> &config, int priority)
+void Database::setConfig(const UnsafeStringView &name,
+                         const std::shared_ptr<Config> &config,
+                         int priority)
 {
     LockGuard memoryGuard(m_memory);
-    m_configs.insert(name, config, priority);
+    m_configs.insert(StringView(name), config, priority);
 }
 
-void Database::removeConfig(const String &name)
+void Database::removeConfig(const UnsafeStringView &name)
 {
     LockGuard memoryGuard(m_memory);
-    m_configs.erase(name);
+    m_configs.erase(StringView(name));
 }
 
 #pragma mark - Handle
@@ -156,7 +158,7 @@ RecyclableHandle Database::getHandle()
     // Additional shared lock is not needed because the threadedHandles is always empty when it's blocked. So threaded handles is thread safe.
     auto handle = m_transactionedHandles.getOrCreate();
     if (handle->get() != nullptr) {
-        WCTInnerAssert(m_concurrency.readSafety());
+        WCTAssert(m_concurrency.readSafety());
         return *handle;
     }
     InitializedGuard initializedGuard = initialize();
@@ -179,7 +181,7 @@ bool Database::execute(const Statement &statement)
     return false;
 }
 
-std::pair<bool, bool> Database::tableExists(const String &table)
+std::pair<bool, bool> Database::tableExists(const UnsafeStringView &table)
 {
     bool succeed = false;
     bool exists = false;
@@ -196,7 +198,7 @@ std::pair<bool, bool> Database::tableExists(const String &table)
 
 std::shared_ptr<Handle> Database::generateSlotedHandle(HandleType type)
 {
-    WCTInnerAssert(m_concurrency.readSafety());
+    WCTAssert(m_concurrency.readSafety());
     std::shared_ptr<Handle> handle;
     switch (type) {
     case HandleType::Migrating:
@@ -214,7 +216,7 @@ std::shared_ptr<Handle> Database::generateSlotedHandle(HandleType type)
         handle = std::make_shared<OperationHandle>();
         break;
     default:
-        WCTInnerAssert(type == HandleType::Normal);
+        WCTAssert(type == HandleType::Normal);
         handle = std::make_shared<ConfiguredHandle>();
         break;
     }
@@ -237,10 +239,10 @@ bool Database::willReuseSlotedHandle(HandleType type, Handle *handle)
 
 bool Database::setupHandle(HandleType type, Handle *handle)
 {
-    WCTInnerAssert(handle != nullptr);
+    WCTAssert(handle != nullptr);
 
     if (((unsigned int) type & HandleSlotMask) == (unsigned int) HandleType::Operation) {
-        WCTInnerAssert(dynamic_cast<OperationHandle *>(handle) != nullptr);
+        WCTAssert(dynamic_cast<OperationHandle *>(handle) != nullptr);
         static_cast<OperationHandle *>(handle)->setType(type);
     }
 
@@ -271,23 +273,23 @@ bool Database::setupHandle(HandleType type, Handle *handle)
 #pragma mark - Threaded
 void Database::markHandleAsTransactioned(const RecyclableHandle &handle)
 {
-    WCTInnerAssert(m_transactionedHandles.getOrCreate()->get() == nullptr);
+    WCTAssert(m_transactionedHandles.getOrCreate()->get() == nullptr);
     *m_transactionedHandles.getOrCreate() = handle;
-    WCTInnerAssert(m_transactionedHandles.getOrCreate()->get() != nullptr);
+    WCTAssert(m_transactionedHandles.getOrCreate()->get() != nullptr);
 }
 
 void Database::markHandleAsUntransactioned()
 {
-    WCTInnerAssert(m_transactionedHandles.getOrCreate()->get() != nullptr);
+    WCTAssert(m_transactionedHandles.getOrCreate()->get() != nullptr);
     *m_transactionedHandles.getOrCreate() = nullptr;
-    WCTInnerAssert(m_transactionedHandles.getOrCreate()->get() == nullptr);
+    WCTAssert(m_transactionedHandles.getOrCreate()->get() == nullptr);
 }
 
 Database::TransactionGuard::TransactionGuard(Database *database, const RecyclableHandle &handle)
 : m_database(database), m_handle(handle), m_isInTransactionBefore(handle->isInTransaction())
 {
-    WCTInnerAssert(m_database != nullptr);
-    WCTInnerAssert(m_handle != nullptr);
+    WCTAssert(m_database != nullptr);
+    WCTAssert(m_handle != nullptr);
 }
 
 Database::TransactionGuard::~TransactionGuard()
@@ -303,8 +305,8 @@ Database::TransactionGuard::~TransactionGuard()
 #pragma mark - Transaction
 bool Database::isInTransaction()
 {
-    WCTInnerAssert(m_transactionedHandles.getOrCreate()->get() == nullptr
-                   || m_transactionedHandles.getOrCreate()->get()->isInTransaction());
+    WCTAssert(m_transactionedHandles.getOrCreate()->get() == nullptr
+              || m_transactionedHandles.getOrCreate()->get()->isInTransaction());
     return m_transactionedHandles.getOrCreate()->get() != nullptr;
 }
 
@@ -353,7 +355,7 @@ bool Database::runTransaction(const TransactionCallback &transaction)
     }
     // get threaded handle
     RecyclableHandle handle = getHandle();
-    WCTInnerAssert(handle != nullptr);
+    WCTAssert(handle != nullptr);
     if (transaction(handle.get())) {
         return commitOrRollbackTransaction();
     }
@@ -405,7 +407,7 @@ bool Database::runNestedTransaction(const TransactionCallback &transaction)
     }
     // get threaded handle
     RecyclableHandle handle = getHandle();
-    WCTInnerAssert(handle != nullptr);
+    WCTAssert(handle != nullptr);
     if (transaction(handle.get())) {
         return commitOrRollbackNestedTransaction();
     }
@@ -418,7 +420,7 @@ bool Database::removeFiles()
 {
     bool result = false;
     close([&result, this]() {
-        std::list<String> paths = getPaths();
+        std::list<StringView> paths = getPaths();
         paths.reverse(); // reverse to remove the non-critical paths first avoiding app stopped between the removing
         result = FileManager::removeItems(paths);
         if (!result) {
@@ -437,11 +439,11 @@ std::pair<bool, size_t> Database::getFilesSize()
     return pair;
 }
 
-bool Database::moveFiles(const String &directory)
+bool Database::moveFiles(const UnsafeStringView &directory)
 {
     bool result = false;
     close([&result, &directory, this]() {
-        std::list<String> paths = getPaths();
+        std::list<StringView> paths = getPaths();
         paths.reverse();
         result = FileManager::moveItems(paths, directory);
         if (!result) {
@@ -451,27 +453,27 @@ bool Database::moveFiles(const String &directory)
     return result;
 }
 
-const String &Database::getPath() const
+const StringView &Database::getPath() const
 {
     return path;
 }
 
-String Database::getSHMPath() const
+StringView Database::getSHMPath() const
 {
     return Path::addExtention(getPath(), Handle::getSHMSuffix());
 }
 
-String Database::getWALPath() const
+StringView Database::getWALPath() const
 {
     return Path::addExtention(getPath(), Handle::getWALSuffix());
 }
 
-String Database::getJournalPath() const
+StringView Database::getJournalPath() const
 {
     return Path::addExtention(getPath(), Handle::getJournalSuffix());
 }
 
-std::list<String> Database::getPaths() const
+std::list<StringView> Database::getPaths() const
 {
     return {
         getPath(),
@@ -485,17 +487,17 @@ std::list<String> Database::getPaths() const
 }
 
 #pragma mark - Repair
-String Database::getFirstMaterialPath() const
+StringView Database::getFirstMaterialPath() const
 {
     return Repair::Factory::firstMaterialPathForDatabase(getPath());
 }
 
-String Database::getLastMaterialPath() const
+StringView Database::getLastMaterialPath() const
 {
     return Repair::Factory::lastMaterialPathForDatabase(getPath());
 }
 
-const String &Database::getFactoryDirectory() const
+const StringView &Database::getFactoryDirectory() const
 {
     return m_factory.directory;
 }
@@ -530,8 +532,8 @@ bool Database::doBackup()
 {
     WCTRemedialAssert(
     !isInTransaction(), "Backup can't be run in transaction.", return false;);
-    WCTInnerAssert(m_concurrency.readSafety());
-    WCTInnerAssert(m_initialized);
+    WCTAssert(m_concurrency.readSafety());
+    WCTAssert(m_initialized);
     RecyclableHandle backupReadHandle = flowOut(HandleType::OperationBackup);
     if (backupReadHandle == nullptr) {
         return false;
@@ -542,7 +544,7 @@ bool Database::doBackup()
         return false;
     }
 
-    WCTInnerAssert(backupReadHandle.get() != backupWriteHandle.get());
+    WCTAssert(backupReadHandle.get() != backupWriteHandle.get());
 
     Repair::FactoryBackup backup = m_factory.backup();
     backup.setReadLocker(static_cast<OperationHandle *>(backupReadHandle.get()));
@@ -575,13 +577,13 @@ bool Database::deposit()
         if (assemblerHandle == nullptr) {
             return;
         }
-        WCTInnerAssert(backupReadHandle.get() != backupWriteHandle.get());
-        WCTInnerAssert(backupReadHandle.get() != assemblerHandle.get());
-        WCTInnerAssert(backupWriteHandle.get() != assemblerHandle.get());
+        WCTAssert(backupReadHandle.get() != backupWriteHandle.get());
+        WCTAssert(backupReadHandle.get() != assemblerHandle.get());
+        WCTAssert(backupWriteHandle.get() != assemblerHandle.get());
 
-        WCTInnerAssert(!backupReadHandle->isOpened());
-        WCTInnerAssert(!backupWriteHandle->isOpened());
-        WCTInnerAssert(!assemblerHandle->isOpened());
+        WCTAssert(!backupReadHandle->isOpened());
+        WCTAssert(!backupWriteHandle->isOpened());
+        WCTAssert(!assemblerHandle->isOpened());
 
         Repair::FactoryRenewer renewer = m_factory.renewer();
         renewer.setReadLocker(static_cast<AssemblerHandle *>(backupReadHandle.get()));
@@ -629,13 +631,13 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
         if (assemblerHandle == nullptr) {
             return;
         }
-        WCTInnerAssert(backupReadHandle.get() != backupWriteHandle.get());
-        WCTInnerAssert(backupReadHandle.get() != assemblerHandle.get());
-        WCTInnerAssert(backupWriteHandle.get() != assemblerHandle.get());
+        WCTAssert(backupReadHandle.get() != backupWriteHandle.get());
+        WCTAssert(backupReadHandle.get() != assemblerHandle.get());
+        WCTAssert(backupWriteHandle.get() != assemblerHandle.get());
 
-        WCTInnerAssert(!backupReadHandle->isOpened());
-        WCTInnerAssert(!backupWriteHandle->isOpened());
-        WCTInnerAssert(!assemblerHandle->isOpened());
+        WCTAssert(!backupReadHandle->isOpened());
+        WCTAssert(!backupWriteHandle->isOpened());
+        WCTAssert(!assemblerHandle->isOpened());
 
         Repair::FactoryRetriever retriever = m_factory.retriever();
         retriever.setReadLocker(static_cast<AssemblerHandle *>(backupReadHandle.get()));
@@ -684,8 +686,8 @@ bool Database::removeMaterials()
 
 bool Database::retrieveRenewed()
 {
-    WCTInnerAssert(isBlockaded());
-    WCTInnerAssert(!m_initialized);
+    WCTAssert(isBlockaded());
+    WCTAssert(!m_initialized);
 
     Repair::FactoryRenewer renewer = m_factory.renewer();
     if (renewer.work()) {
@@ -713,11 +715,11 @@ void Database::checkIntegrityIfAlreadyInitialized()
 
 void Database::doCheckIntegrity()
 {
-    WCTInnerAssert(m_concurrency.readSafety());
-    WCTInnerAssert(m_initialized);
+    WCTAssert(m_concurrency.readSafety());
+    WCTAssert(m_initialized);
     RecyclableHandle handle = flowOut(HandleType::OperationIntegrity);
     if (handle != nullptr) {
-        WCTInnerAssert(dynamic_cast<OperationHandle *>(handle.get()) != nullptr);
+        WCTAssert(dynamic_cast<OperationHandle *>(handle.get()) != nullptr);
         static_cast<OperationHandle *>(handle.get())->checkIntegrity();
     }
 }
@@ -749,17 +751,17 @@ std::pair<bool, bool> Database::doStepMigration()
     WCTRemedialAssert(!isInTransaction(),
                       "Migrating can't be run in transaction.",
                       return std::make_pair(false, false););
-    WCTInnerAssert(m_concurrency.readSafety());
+    WCTAssert(m_concurrency.readSafety());
     WCTRemedialAssert(m_migration.shouldMigrate(),
                       "It's not configured for migration.",
                       return std::make_pair(false, false););
-    WCTInnerAssert(m_initialized);
+    WCTAssert(m_initialized);
     bool succeed = false;
     bool done = false;
 
     RecyclableHandle handle = flowOut(HandleType::Migrate);
     if (handle != nullptr) {
-        WCTInnerAssert(dynamic_cast<MigrateHandle *>(handle.get()) != nullptr);
+        WCTAssert(dynamic_cast<MigrateHandle *>(handle.get()) != nullptr);
         MigrateHandle *migrateHandle = static_cast<MigrateHandle *>(handle.get());
 
         migrateHandle->markErrorAsIgnorable(Error::Code::Busy);
@@ -796,7 +798,7 @@ bool Database::isMigrated() const
     return m_migration.isMigrated();
 }
 
-std::set<String> Database::getPathsOfSourceDatabases() const
+std::set<StringView> Database::getPathsOfSourceDatabases() const
 {
     return m_migration.getPathsOfSourceDatabases();
 }
@@ -809,7 +811,7 @@ bool Database::checkpointIfAlreadyInitialized()
     if (initializedGuard.valid()) {
         RecyclableHandle handle = flowOut(HandleType::OperationCheckpoint);
         if (handle != nullptr) {
-            WCTInnerAssert(dynamic_cast<OperationHandle *>(handle.get()) != nullptr);
+            WCTAssert(dynamic_cast<OperationHandle *>(handle.get()) != nullptr);
             OperationHandle *operationHandle
             = static_cast<OperationHandle *>(handle.get());
 

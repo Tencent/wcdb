@@ -22,7 +22,7 @@
 
 #include <WCDB/Config.hpp>
 #include <WCDB/Lock.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <map>
 #include <memory>
 
@@ -31,8 +31,8 @@ namespace WCDB {
 class AutoMigrateOperator {
 public:
     virtual ~AutoMigrateOperator() = 0;
-    virtual void asyncMigrate(const String &path) = 0;
-    virtual void stopMigrate(const String &path) = 0;
+    virtual void asyncMigrate(const UnsafeStringView &path) = 0;
+    virtual void stopMigrate(const UnsafeStringView &path) = 0;
 };
 
 class AutoMigrateConfig final : public Config {
@@ -46,11 +46,11 @@ public:
 protected:
     std::shared_ptr<AutoMigrateOperator> m_operator;
 
-    std::atomic<int> &getOrCreateRegister(const String &path);
+    std::atomic<int> &getOrCreateRegister(const UnsafeStringView &path);
 
 private:
     SharedLock m_lock;
-    std::map<String, std::atomic<int>> m_registers;
+    StringViewMap<std::atomic<int>> m_registers;
 };
 
 } //namespace WCDB

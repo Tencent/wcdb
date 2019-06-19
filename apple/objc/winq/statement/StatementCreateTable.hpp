@@ -24,11 +24,12 @@
 
 namespace WCDB {
 
-class StatementCreateTable final : public TypedSyntax<Syntax::CreateTableSTMT, Statement> {
+class StatementCreateTable final
+: public SpecifiedSyntax<Syntax::CreateTableSTMT, Statement> {
 public:
-    using TypedSyntax<Syntax::CreateTableSTMT, Statement>::TypedSyntax;
+    using SpecifiedSyntax<Syntax::CreateTableSTMT, Statement>::SpecifiedSyntax;
 
-    StatementCreateTable& createTable(const String& table);
+    StatementCreateTable& createTable(const UnsafeStringView& table);
     StatementCreateTable& schema(const Schema& schema);
     StatementCreateTable& temp();
 

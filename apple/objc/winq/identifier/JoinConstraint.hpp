@@ -24,7 +24,7 @@
 
 namespace WCDB {
 
-class JoinConstraint final : public TypedSyntax<Syntax::JoinConstraint, SQL> {
+class JoinConstraint final : public SpecifiedSyntax<Syntax::JoinConstraint, SQL> {
 public:
     JoinConstraint& on(const Expression& expression);
     JoinConstraint& using_();

@@ -101,21 +101,21 @@ public:
 
     Expression in() const;
     Expression notIn() const;
-    Expression inTable(const String &table) const;
-    Expression notInTable(const String &table) const;
+    Expression inTable(const UnsafeStringView &table) const;
+    Expression notInTable(const UnsafeStringView &table) const;
     Expression in(const StatementSelect &select) const;
     Expression notIn(const StatementSelect &select) const;
     // in(arguments) usually accept multiple arguments, so the seperated method is not provided.
     Expression in(const Expressions &expressions) const;
     Expression notIn(const Expressions &expressions) const;
-    Expression inFunction(const String &tableFunction) const;
-    Expression notInFunction(const String &tableFunction) const;
+    Expression inFunction(const UnsafeStringView &tableFunction) const;
+    Expression notInFunction(const UnsafeStringView &tableFunction) const;
 };
 
 class ExpressionCollateOperable : virtual public ExpressionOperable {
 public:
     virtual ~ExpressionCollateOperable() = 0;
-    Expression collate(const String &collation) const;
+    Expression collate(const UnsafeStringView &collation) const;
 };
 
 } // namespace WCDB

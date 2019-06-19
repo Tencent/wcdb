@@ -22,7 +22,8 @@
 #include <WCDB/CoreConst.h>
 #include <WCDB/Error.hpp>
 #include <WCDB/SQLite.h>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
+#include <sstream>
 
 namespace WCDB {
 
@@ -134,7 +135,8 @@ Error::Error() : level(Level::Ignore), m_code(Code::OK)
 {
 }
 
-Error::Error(Code code, Level level_, const String &message) : level(level_)
+Error::Error(Code code, Level level_, const UnsafeStringView& message)
+: level(level_)
 {
     setCode(code, message);
 }
@@ -163,17 +165,17 @@ int Error::c2rc(Error::Code code)
     return (int) code;
 }
 
-void Error::setCode(Code code, const String &message)
+void Error::setCode(Code code, const UnsafeStringView& message)
 {
     m_code = code;
     if (message.empty()) {
-        m_message = codeName(code);
+        m_message = UnsafeStringView(codeName(code));
     } else {
         m_message = message;
     }
 }
 
-void Error::setSystemCode(int systemCode, Code codeIfUnresolved, const String &message)
+void Error::setSystemCode(int systemCode, Code codeIfUnresolved, const UnsafeStringView& message)
 {
     Code code;
     switch (systemCode) {
@@ -203,20 +205,20 @@ void Error::setSystemCode(int systemCode, Code codeIfUnresolved, const String &m
         break;
     }
     setCode(code, message.empty() ? strerror(systemCode) : message);
-    infos.set(ErrorStringKeySource, ErrorSourceSystem);
-    infos.set(ErrorIntKeyExtCode, systemCode);
+    infos.insert_or_assign(ErrorStringKeySource, ErrorSourceSystem);
+    infos.insert_or_assign(ErrorIntKeyExtCode, systemCode);
 }
 
-void Error::setSQLiteCode(int rc, const String &message)
+void Error::setSQLiteCode(int rc, const UnsafeStringView& message)
 {
     Code code = rc2c(rc);
     setCode(code, message.empty() ? sqlite3_errstr(rc) : message);
     if (c2rc(code) == rc) {
-        infos.unset(ErrorIntKeyExtCode);
+        infos.erase(ErrorIntKeyExtCode);
     } else {
-        infos.set(ErrorIntKeyExtCode, rc);
+        infos.insert_or_assign(ErrorIntKeyExtCode, rc);
     }
-    infos.set(ErrorStringKeySource, ErrorSourceSQLite);
+    infos.insert_or_assign(ErrorStringKeySource, ErrorSourceSQLite);
 }
 
 Error::Code Error::code() const
@@ -240,76 +242,90 @@ Error::ExtCode Error::rc2ec(int rc)
     return (Error::ExtCode) rc;
 }
 
-const String &Error::getMessage() const
+const StringView& Error::getMessage() const
 {
-    WCTInnerAssert(!m_message.empty());
+    WCTAssert(!m_message.empty());
     return m_message;
 }
 
 #pragma mark - Info
-void Error::Infos::set(const String &key, const String &value)
+Error::InfoValue::InfoValue(const char* string) : std::any(StringView(string))
 {
-    if (value.empty()) {
-        m_strings.erase(key);
+}
+
+Error::InfoValue::InfoValue(const UnsafeStringView& string)
+: std::any(StringView(string))
+{
+}
+
+Error::InfoValue::InfoValue(StringView&& string) : std::any(std::move(string))
+{
+}
+
+Error::InfoValue::Type Error::InfoValue::valueType() const
+{
+    auto hash = type().hash_code();
+    if (hash == typeid(StringView).hash_code()) {
+        return Type::StringView;
+    } else if (hash == typeid(double).hash_code()) {
+        return Type::Float;
     } else {
-        m_strings[key] = value;
+        WCTAssert(hash == typeid(int64_t).hash_code());
+        return Type::Integer;
     }
 }
 
-void Error::Infos::unset(const String &key)
+const StringView& Error::InfoValue::stringValue() const
 {
-    m_strings.erase(key);
-    m_integers.erase(key);
-    m_doubles.erase(key);
+    WCTAssert(has_value());
+    WCTAssert(valueType() == Type::StringView);
+    const StringView* value = std::any_cast<StringView>(this);
+    WCTAssert(value != nullptr);
+    return *value;
 }
 
-const std::map<String, int64_t> &Error::Infos::getIntegers() const
+const int64_t& Error::InfoValue::integerValue() const
 {
-    return m_integers;
+    WCTAssert(has_value());
+    WCTAssert(valueType() == Type::Integer);
+    const int64_t* value = std::any_cast<int64_t>(this);
+    WCTAssert(value != nullptr);
+    return *value;
 }
 
-const std::map<String, String> &Error::Infos::getStrings() const
+const double& Error::InfoValue::floatValue() const
 {
-    return m_strings;
-}
-
-const std::map<String, double> &Error::Infos::getDoubles() const
-{
-    return m_doubles;
-}
-
-void Error::Infos::clear()
-{
-    m_integers.clear();
-    m_doubles.clear();
-    m_strings.clear();
-}
-
-bool Error::Infos::empty() const
-{
-    return m_integers.empty() && m_doubles.empty() && m_strings.empty();
+    WCTAssert(has_value());
+    WCTAssert(valueType() == Type::Float);
+    const double* value = std::any_cast<double>(this);
+    WCTAssert(value != nullptr);
+    return *value;
 }
 
 #pragma mark - Description
-String Error::getDescription() const
+StringView Error::getDescription() const
 {
-    WCTInnerAssert(isError((int) code()));
-    WCTInnerAssert(!m_message.empty());
+    WCTAssert(isError((int) code()));
+    WCTAssert(!m_message.empty());
     std::ostringstream stream;
     stream << "[" << levelName(level) << ": " << (int) code() << ", " << m_message << "]";
 
-    for (const auto &info : infos.getIntegers()) {
-        stream << ", " << info.first << ": " << info.second;
-    }
-    for (const auto &info : infos.getStrings()) {
-        if (!info.second.empty()) {
-            stream << ", " << info.first << ": " << info.second;
+    for (const auto& info : infos) {
+        stream << ", " << info.first << ": ";
+        switch (info.second.valueType()) {
+        case InfoValue::Type::StringView:
+            stream << info.second.stringValue();
+            break;
+        case InfoValue::Type::Float:
+            stream << info.second.floatValue();
+            break;
+        default:
+            WCTAssert(info.second.valueType() == InfoValue::Type::Integer);
+            stream << info.second.integerValue();
+            break;
         }
     }
-    for (const auto &info : infos.getDoubles()) {
-        stream << ", " << info.first << ": " << info.second;
-    }
-    return stream.str();
+    return StringView(stream.str());
 }
 
 } //namespace WCDB

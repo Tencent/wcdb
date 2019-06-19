@@ -36,7 +36,7 @@ public:
     bool temp = false;
     bool ifNotExists = false;
     Schema schema;
-    String table;
+    StringView table;
     WCDB_SYNTAX_MAIN_UNION_ENUM(ColumnDefs, Select, );
     std::list<ColumnDef> columnDefs;
     std::list<TableConstraint> tableConstraints;
@@ -48,7 +48,7 @@ public:
 public:
     static constexpr const Type type = Type::CreateTableSTMT;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    bool describle(std::ostringstream& stream) const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

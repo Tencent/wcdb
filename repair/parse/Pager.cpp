@@ -24,7 +24,7 @@
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Pager.hpp>
 #include <WCDB/Serialization.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <WCDB/ThreadedErrors.hpp>
 
 #warning TODO - support cipher database
@@ -33,7 +33,7 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Initialize
-Pager::Pager(const String &path)
+Pager::Pager(const UnsafeStringView &path)
 : m_fileHandle(path)
 , m_pageSize(-1)
 , m_reservedBytes(-1)
@@ -46,17 +46,17 @@ Pager::Pager(const String &path)
 
 void Pager::setPageSize(int pageSize)
 {
-    WCTInnerAssert(!isInitialized());
+    WCTAssert(!isInitialized());
     m_pageSize = pageSize;
 }
 
 void Pager::setReservedBytes(int reservedBytes)
 {
-    WCTInnerAssert(!isInitialized());
+    WCTAssert(!isInitialized());
     m_reservedBytes = reservedBytes;
 }
 
-const String &Pager::getPath() const
+const StringView &Pager::getPath() const
 {
     return m_fileHandle.path;
 }
@@ -64,25 +64,25 @@ const String &Pager::getPath() const
 #pragma mark - Page
 int Pager::getNumberOfPages() const
 {
-    WCTInnerAssert(isInitialized());
+    WCTAssert(isInitialized());
     return std::max(m_wal.getMaxPageno(), m_numberOfPages);
 }
 
 int Pager::getUsableSize() const
 {
-    WCTInnerAssert(isInitialized() || isInitializing());
+    WCTAssert(isInitialized() || isInitializing());
     return m_pageSize - m_reservedBytes;
 }
 
 int Pager::getPageSize() const
 {
-    WCTInnerAssert(isInitialized() || isInitializing());
+    WCTAssert(isInitialized() || isInitializing());
     return m_pageSize;
 }
 
 int Pager::getReservedBytes() const
 {
-    WCTInnerAssert(isInitialized());
+    WCTAssert(isInitialized());
     return m_reservedBytes;
 }
 
@@ -93,16 +93,16 @@ MappedData Pager::acquirePageData(int number)
 
 MappedData Pager::acquirePageData(int number, off_t offset, size_t size)
 {
-    WCTInnerAssert(isInitialized());
-    WCTInnerAssert(number > 0);
-    WCTInnerAssert(offset + size <= m_pageSize);
+    WCTAssert(isInitialized());
+    WCTAssert(number > 0);
+    WCTAssert(offset + size <= m_pageSize);
     MappedData data;
     if (m_wal.containsPage(number)) {
         data = m_wal.acquirePageData(number, offset, size);
     } else if (number > m_numberOfPages) {
         markAsCorrupted(
         number,
-        String::formatted(
+        StringView::formatted(
         "Acquired page number: %d exceeds the page count: %d.", number, m_numberOfPages));
         return MappedData::null();
     } else {
@@ -112,9 +112,9 @@ MappedData Pager::acquirePageData(int number, off_t offset, size_t size)
         if (data.size() > 0) {
             //short read
             markAsCorrupted((int) (offset / m_pageSize + 1),
-                            String::formatted("Acquired page data with size: %d is less than the expected size: %d.",
-                                              data.size(),
-                                              size));
+                            StringView::formatted("Acquired page data with size: %d is less than the expected size: %d.",
+                                                  data.size(),
+                                                  size));
         } else {
             assignWithSharedThreadedError();
         }
@@ -125,14 +125,14 @@ MappedData Pager::acquirePageData(int number, off_t offset, size_t size)
 
 MappedData Pager::acquireData(off_t offset, size_t size)
 {
-    WCTInnerAssert(m_fileHandle.isOpened());
+    WCTAssert(m_fileHandle.isOpened());
     MappedData data = m_fileHandle.map(offset, size);
     if (data.size() != size) {
         if (data.size() > 0) {
             markAsCorrupted((int) (offset / m_pageSize + 1),
-                            String::formatted("Acquired data with size: %d is less than the expected size: %d.",
-                                              data.size(),
-                                              size));
+                            StringView::formatted("Acquired data with size: %d is less than the expected size: %d.",
+                                                  data.size(),
+                                                  size));
         } else {
             assignWithSharedThreadedError();
         }
@@ -174,12 +174,12 @@ int Pager::getNumberOfWalFrames() const
 }
 
 #pragma mark - Error
-void Pager::markAsCorrupted(int page, const String &message)
+void Pager::markAsCorrupted(int page, const UnsafeStringView &message)
 {
     Error error(Error::Code::Corrupt, Error::Level::Ignore, message);
-    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.set(ErrorStringKeyPath, getPath());
-    error.infos.set("Page", page);
+    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
+    error.infos.insert_or_assign("Page", page);
     Notifier::shared().notify(error);
     setError(std::move(error));
 }
@@ -187,8 +187,8 @@ void Pager::markAsCorrupted(int page, const String &message)
 void Pager::markAsError(Error::Code code)
 {
     Error error(code, Error::Level::Ignore);
-    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.set(ErrorStringKeyPath, getPath());
+    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
     Notifier::shared().notify(error);
     setError(std::move(error));
 }
@@ -226,24 +226,24 @@ bool Pager::doInitialize()
         //parse page size
         if (m_pageSize == -1) {
             deserialization.seek(16);
-            WCTInnerAssert(deserialization.canAdvance(2));
+            WCTAssert(deserialization.canAdvance(2));
             m_pageSize = deserialization.advance2BytesInt();
         }
         //parse reserved bytes
         if (m_reservedBytes == -1) {
             deserialization.seek(20);
-            WCTInnerAssert(deserialization.canAdvance(1));
+            WCTAssert(deserialization.canAdvance(1));
             m_reservedBytes = deserialization.advance1ByteInt();
         }
     }
     if (((m_pageSize - 1) & m_pageSize) != 0 || m_pageSize < 512 || m_pageSize > 65536) {
         markAsCorrupted(
-        1, String::formatted("Page size: %d is not aligned or not too small.", m_pageSize));
+        1, StringView::formatted("Page size: %d is not aligned or not too small.", m_pageSize));
         return false;
     }
     if (m_reservedBytes < 0 || m_reservedBytes > 255) {
         markAsCorrupted(
-        1, String::formatted("Reversed bytes: %d is illegal.", m_reservedBytes));
+        1, StringView::formatted("Reversed bytes: %d is illegal.", m_reservedBytes));
         return false;
     }
 
@@ -259,25 +259,6 @@ bool Pager::doInitialize()
     }
     disposeWal();
     return true;
-}
-
-void Pager::hint() const
-{
-    if (!isInitialized()) {
-        return;
-    }
-    Error error(Error::Code::Notice, Error::Level::Notice, "Pager hint.");
-    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.set("NumberOfPages", m_numberOfPages);
-    error.infos.set("OriginFileSize", m_fileSize);
-    bool succeed;
-    size_t fileSize;
-    std::tie(succeed, fileSize) = FileManager::getFileSize(getPath());
-    if (succeed) {
-        error.infos.set("CurrentFileSize", fileSize);
-    }
-    Notifier::shared().notify(error);
-    m_wal.hint();
 }
 
 } //namespace Repair

@@ -19,13 +19,14 @@
  */
 
 #include <WCDB/PerformanceTraceConfig.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 
 namespace WCDB {
 
 #pragma mark - PerformanceTracer
 PerformanceTracer::PerformanceTracer()
-: m_identifier(String::formatted("PerformanceTrace-%p", this)), m_notification(nullptr)
+: m_identifier(StringView::formatted("PerformanceTrace-%p", this))
+, m_notification(nullptr)
 {
 }
 

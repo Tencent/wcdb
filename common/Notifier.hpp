@@ -33,11 +33,12 @@ public:
     void notify(Error &error) const;
 
     typedef std::function<void(const Error &)> Callback;
-    void setNotification(int order, const String &key, const Callback &callback);
-    void unsetNotification(const String &key);
+    void setNotification(int order, const UnsafeStringView &key, const Callback &callback);
+    void unsetNotification(const UnsafeStringView &key);
 
     typedef std::function<void(Error &error)> PreprocessCallback;
-    void setNotificationForPreprocessing(const String &key, const PreprocessCallback &callback);
+    void setNotificationForPreprocessing(const UnsafeStringView &key,
+                                         const PreprocessCallback &callback);
 
 protected:
     Notifier();
@@ -46,8 +47,8 @@ protected:
 
     mutable SharedLock m_lock;
 
-    UniqueList<String, Callback> m_notifications;
-    std::map<String, PreprocessCallback> m_preprocessNotifications;
+    UniqueList<StringView, Callback> m_notifications;
+    StringViewMap<PreprocessCallback> m_preprocessNotifications;
 };
 
 } //namespace WCDB

@@ -22,7 +22,7 @@
 #include <WCDB/AutoCheckpointConfig.hpp>
 #include <WCDB/Global.hpp>
 #include <WCDB/Handle.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <regex>
 
 namespace WCDB {
@@ -32,9 +32,9 @@ AutoCheckpointOperator::~AutoCheckpointOperator()
 }
 
 AutoCheckpointConfig::AutoCheckpointConfig(const std::shared_ptr<AutoCheckpointOperator>& operator_)
-: Config(), m_identifier(String::formatted("Checkpoint-%p", this)), m_operator(operator_)
+: Config(), m_identifier(StringView::formatted("Checkpoint-%p", this)), m_operator(operator_)
 {
-    WCTInnerAssert(m_operator != nullptr);
+    WCTAssert(m_operator != nullptr);
 
     Global::shared().setNotificationForLog(
     m_identifier,
@@ -65,7 +65,7 @@ bool AutoCheckpointConfig::uninvoke(Handle* handle)
     return true;
 }
 
-bool AutoCheckpointConfig::onCommitted(const String& path, int frames)
+bool AutoCheckpointConfig::onCommitted(const UnsafeStringView& path, int frames)
 {
     WCDB_UNUSED(frames);
     if (frames > 0) {
@@ -81,19 +81,19 @@ void AutoCheckpointConfig::log(int rc, const char* message)
         return;
     }
     std::regex pattern("recovered (\\w+) frames from WAL file (.+)\\-wal");
-    const String source = message;
+    const std::string source = message;
     std::smatch match;
     if (std::regex_search(source.begin(), source.end(), match, pattern)) {
         int frames = atoi(match[1].str().c_str());
         if (frames > 0) {
             // hint checkpoint
             if (frames > 0) {
-                String path = match[2].str();
+                StringView path(match[2].str());
                 m_operator->asyncCheckpoint(path);
             }
         }
     }
-    WCTInnerAssert(match.size() == 3); // assert match and match 3.
+    WCTAssert(match.size() == 3); // assert match and match 3.
 }
 
 } //namespace WCDB

@@ -25,10 +25,10 @@
 namespace WCDB {
 
 class CommonTableExpression final
-: public TypedSyntax<Syntax::CommonTableExpression, SQL> {
+: public SpecifiedSyntax<Syntax::CommonTableExpression, SQL> {
 public:
-    using TypedSyntax<Syntax::CommonTableExpression, SQL>::TypedSyntax;
-    explicit CommonTableExpression(const String& table);
+    using SpecifiedSyntax<Syntax::CommonTableExpression, SQL>::SpecifiedSyntax;
+    explicit CommonTableExpression(const UnsafeStringView& table);
     CommonTableExpression& column(const Column& column);
     CommonTableExpression& as(const StatementSelect& select);
 };

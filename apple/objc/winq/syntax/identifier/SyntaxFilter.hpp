@@ -38,7 +38,7 @@ public:
 public:
     static constexpr const Type type = Type::Filter;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    bool describle(std::ostringstream& stream) const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

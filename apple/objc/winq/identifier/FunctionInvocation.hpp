@@ -24,10 +24,10 @@
 
 namespace WCDB {
 
-class FunctionInvocation final : public TypedSyntax<Syntax::FunctionInvocation, SQL> {
+class FunctionInvocation final : public SpecifiedSyntax<Syntax::FunctionInvocation, SQL> {
 public:
-    using TypedSyntax<Syntax::FunctionInvocation, SQL>::TypedSyntax;
-    explicit FunctionInvocation(const String& name);
+    using SpecifiedSyntax<Syntax::FunctionInvocation, SQL>::SpecifiedSyntax;
+    explicit FunctionInvocation(const UnsafeStringView& name);
 
     FunctionInvocation& distinct();
 

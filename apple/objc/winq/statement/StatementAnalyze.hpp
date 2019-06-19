@@ -24,14 +24,14 @@
 
 namespace WCDB {
 
-class StatementAnalyze final : public TypedSyntax<Syntax::AnalyzeSTMT, Statement> {
+class StatementAnalyze final : public SpecifiedSyntax<Syntax::AnalyzeSTMT, Statement> {
 public:
-    using TypedSyntax<Syntax::AnalyzeSTMT, Statement>::TypedSyntax;
+    using SpecifiedSyntax<Syntax::AnalyzeSTMT, Statement>::SpecifiedSyntax;
 
     StatementAnalyze& analyze();
     StatementAnalyze& schema(const Schema& schema);
-    StatementAnalyze& table(const String& table);
-    StatementAnalyze& index(const String& index);
+    StatementAnalyze& table(const UnsafeStringView& table);
+    StatementAnalyze& index(const UnsafeStringView& index);
 };
 
 } // namespace WCDB

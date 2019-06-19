@@ -31,9 +31,8 @@ Identifier::Type TableOrSubquery::getType() const
     return type;
 }
 
-String TableOrSubquery::getValidDescription() const
+bool TableOrSubquery::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     switch (switcher) {
     case Switch::Table:
         if (!schema.empty()) {
@@ -76,7 +75,7 @@ String TableOrSubquery::getValidDescription() const
         }
         break;
     }
-    return stream.str();
+    return true;
 }
 
 void TableOrSubquery::iterate(const Iterator& iterator, bool& stop)

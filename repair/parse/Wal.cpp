@@ -26,7 +26,7 @@
 #include <WCDB/Pager.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/Serialization.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <WCDB/Wal.hpp>
 
 namespace WCDB {
@@ -48,21 +48,21 @@ Wal::Wal(Pager *pager)
 {
 }
 
-const String &Wal::getPath() const
+const StringView &Wal::getPath() const
 {
     return m_fileHandle.path;
 }
 
 MappedData Wal::acquireData(off_t offset, size_t size)
 {
-    WCTInnerAssert(m_fileHandle.isOpened());
+    WCTAssert(m_fileHandle.isOpened());
     MappedData data = m_fileHandle.map(offset, size);
     if (data.size() != size) {
         if (data.size() > 0) {
             markAsCorrupted((int) ((offset - headerSize) / getFrameSize() + 1),
-                            String::formatted("Acquired wal data with size: %d is less than the expected size: %d.",
-                                              data.size(),
-                                              size));
+                            StringView::formatted("Acquired wal data with size: %d is less than the expected size: %d.",
+                                                  data.size(),
+                                                  size));
         } else {
             assignWithSharedThreadedError();
         }
@@ -84,9 +84,9 @@ MappedData Wal::acquirePageData(int pageno)
 
 MappedData Wal::acquirePageData(int pageno, off_t offset, size_t size)
 {
-    WCTInnerAssert(isInitialized());
-    WCTInnerAssert(containsPage(pageno));
-    WCTInnerAssert(offset + size <= getPageSize());
+    WCTAssert(isInitialized());
+    WCTAssert(containsPage(pageno));
+    WCTAssert(offset + size <= getPageSize());
     return acquireData(headerSize + getFrameSize() * (m_pages2Frames[pageno] - 1)
                        + Frame::headerSize + offset,
                        size);
@@ -103,19 +103,19 @@ int Wal::getMaxPageno() const
 #pragma mark - Wal
 void Wal::setShmLegality(bool flag)
 {
-    WCTInnerAssert(!isInitialized());
+    WCTAssert(!isInitialized());
     m_shmLegality = flag;
 }
 
 MappedData Wal::acquireFrameData(int frameno)
 {
-    WCTInnerAssert(isInitializing());
+    WCTAssert(isInitializing());
     return acquireData(headerSize + getFrameSize() * (frameno - 1), getFrameSize());
 }
 
 void Wal::setMaxAllowedFrame(int maxAllowedFrame)
 {
-    WCTInnerAssert(!isInitialized());
+    WCTAssert(!isInitialized());
     m_maxAllowedFrame = maxAllowedFrame;
 }
 
@@ -152,8 +152,8 @@ bool Wal::isBigEndian()
 std::pair<uint32_t, uint32_t>
 Wal::calculateChecksum(const MappedData &data, const std::pair<uint32_t, uint32_t> &checksum) const
 {
-    WCTInnerAssert(data.size() >= 8);
-    WCTInnerAssert((data.size() & 0x00000007) == 0);
+    WCTAssert(data.size() >= 8);
+    WCTAssert((data.size() & 0x00000007) == 0);
 
     const uint32_t *iter = reinterpret_cast<const uint32_t *>(data.buffer());
     const uint32_t *end
@@ -182,7 +182,7 @@ Wal::calculateChecksum(const MappedData &data, const std::pair<uint32_t, uint32_
 
 bool Wal::doInitialize()
 {
-    WCTInnerAssert(m_pager->isInitialized() || m_pager->isInitializing());
+    WCTAssert(m_pager->isInitialized() || m_pager->isInitializing());
 
     int maxWalFrame = m_maxAllowedFrame;
     if (m_shmLegality) {
@@ -221,32 +221,32 @@ bool Wal::doInitialize()
     uint32_t magic = deserialization.advance4BytesUInt();
     if ((magic & 0xFFFFFFFE) != 0x377F0682) {
         // ignore wal
-        markAsCorrupted(0, String::formatted("Incorrect wal magic: 0x%x.", magic));
+        markAsCorrupted(0, StringView::formatted("Incorrect wal magic: 0x%x.", magic));
         return false;
     }
     m_isNativeChecksum = (magic & 0x00000001) == isBigEndian();
     deserialization.seek(16);
-    WCTInnerAssert(deserialization.canAdvance(4));
+    WCTAssert(deserialization.canAdvance(4));
     m_salt.first = deserialization.advance4BytesUInt();
-    WCTInnerAssert(deserialization.canAdvance(4));
+    WCTAssert(deserialization.canAdvance(4));
     m_salt.second = deserialization.advance4BytesUInt();
 
     std::pair<uint32_t, uint32_t> checksum = { 0, 0 };
     checksum = calculateChecksum(data.subdata(headerSize - 2 * sizeof(uint32_t)), checksum);
 
     std::pair<uint32_t, uint32_t> deserializedChecksum;
-    WCTInnerAssert(deserialization.canAdvance(4));
+    WCTAssert(deserialization.canAdvance(4));
     deserializedChecksum.first = deserialization.advance4BytesUInt();
-    WCTInnerAssert(deserialization.canAdvance(4));
+    WCTAssert(deserialization.canAdvance(4));
     deserializedChecksum.second = deserialization.advance4BytesUInt();
 
     if (checksum != deserializedChecksum) {
         markAsCorrupted(0,
-                        String::formatted("Mismatched wal checksum: %u, %u to %u, %u.",
-                                          checksum.first,
-                                          checksum.second,
-                                          deserializedChecksum.first,
-                                          deserializedChecksum.second));
+                        StringView::formatted("Mismatched wal checksum: %u, %u to %u, %u.",
+                                              checksum.first,
+                                              checksum.second,
+                                              deserializedChecksum.first,
+                                              deserializedChecksum.second));
         return false;
     }
 
@@ -262,11 +262,11 @@ bool Wal::doInitialize()
             if (m_shmLegality) {
                 //If the frame checksum is mismatched and shm is legal, it mean to be corrupted.
                 markAsCorrupted(frameno,
-                                String::formatted("Mismatched frame checksum: %u, %u to %u, %u.",
-                                                  frame.getChecksum().first,
-                                                  frame.getChecksum().second,
-                                                  checksum.first,
-                                                  checksum.second));
+                                StringView::formatted("Mismatched frame checksum: %u, %u to %u, %u.",
+                                                      frame.getChecksum().first,
+                                                      frame.getChecksum().second,
+                                                      checksum.first,
+                                                      checksum.second));
                 return false;
             } else {
                 //If the frame checksum is mismatched and shm is not legal, it mean to be disposed.
@@ -294,87 +294,12 @@ bool Wal::doInitialize()
 }
 
 #pragma mark - Error
-void Wal::hint() const
-{
-    if (!isInitialized()) {
-        return;
-    }
-    {
-        Error error(Error::Code::Notice, Error::Level::Notice, "Wal hint.");
-        error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-        error.infos.set("Truncate", m_truncate);
-        error.infos.set("MaxFrame", m_maxFrame);
-        error.infos.set("OriginFileSize", m_fileSize);
-        bool succeed;
-        size_t fileSize;
-        std::tie(succeed, fileSize) = FileManager::getFileSize(getPath());
-        if (succeed) {
-            error.infos.set("CurrentFileSize", fileSize);
-        }
-        Notifier::shared().notify(error);
-    }
-
-    //Pages to frames
-    if (!m_pages2Frames.empty()) {
-        std::ostringstream stream;
-        int i = 0;
-        auto iter = m_pages2Frames.begin();
-        while (iter != m_pages2Frames.end()) {
-            while (iter != m_pages2Frames.end() && i % 20 != 0) {
-                if (!stream.str().empty()) {
-                    stream << "; ";
-                }
-                stream << iter->first << ", " << iter->second;
-                ++i;
-                ++iter;
-            }
-            Error error(Error::Code::Notice,
-                        Error::Level::Notice,
-                        "Wal pages hint " + std::to_string(i / 20));
-            error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-            error.infos.set("Pages2Frames", stream.str());
-            Notifier::shared().notify(error);
-            stream.str("");
-            stream.clear();
-        }
-        WCTInnerAssert(stream.str().empty());
-    }
-
-    //Disposed
-    if (!m_disposedPages.empty()) {
-        std::ostringstream stream;
-        int i = 0;
-        auto iter = m_disposedPages.begin();
-        while (iter != m_disposedPages.end()) {
-            while (iter != m_disposedPages.end() && i % 20 != 0) {
-                if (!stream.str().empty()) {
-                    stream << ", ";
-                }
-                stream << *iter;
-                ++i;
-                ++iter;
-            }
-            Error error(Error::Code::Notice,
-                        Error::Level::Notice,
-                        "Wal disposed hint " + std::to_string(i / 20));
-            error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-            error.infos.set("Disposed", stream.str());
-            Notifier::shared().notify(error);
-            stream.str("");
-            stream.clear();
-        }
-        WCTInnerAssert(stream.str().empty());
-    }
-
-    m_shm.hint();
-}
-
-void Wal::markAsCorrupted(int frame, const String &message)
+void Wal::markAsCorrupted(int frame, const UnsafeStringView &message)
 {
     Error error(Error::Code::Corrupt, Error::Level::Ignore, message);
-    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.set(ErrorStringKeyPath, getPath());
-    error.infos.set("Frame", frame);
+    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
+    error.infos.insert_or_assign("Frame", frame);
     Notifier::shared().notify(error);
     setError(std::move(error));
 }
@@ -382,8 +307,8 @@ void Wal::markAsCorrupted(int frame, const String &message)
 //void Wal::markAsError(Error::Code code)
 //{
 //    Error error(code, Error::Level::Ignore);
-//    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-//    error.infos.set(ErrorStringKeyPath, getPath());
+//    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+//    error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
 //    Notifier::shared().notify(error);
 //    setError(std::move(error));
 //}

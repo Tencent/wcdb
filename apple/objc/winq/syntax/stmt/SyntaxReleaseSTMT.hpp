@@ -29,7 +29,7 @@ namespace Syntax {
 class ReleaseSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    String savepoint;
+    StringView savepoint;
 
     bool isValid() const override final;
 
@@ -37,7 +37,7 @@ public:
 public:
     static constexpr const Type type = Type::ReleaseSTMT;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    bool describle(std::ostringstream& stream) const override final;
 };
 
 } // namespace Syntax

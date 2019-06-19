@@ -26,7 +26,7 @@ ColumnConstraint::ColumnConstraint()
 {
 }
 
-ColumnConstraint::ColumnConstraint(const String& name)
+ColumnConstraint::ColumnConstraint(const UnsafeStringView& name)
 {
     syntax().name = name;
 }
@@ -81,7 +81,7 @@ ColumnConstraint& ColumnConstraint::default_(const Expression& defaultValue)
     return *this;
 }
 
-ColumnConstraint& ColumnConstraint::collate(const String& collation)
+ColumnConstraint& ColumnConstraint::collate(const UnsafeStringView& collation)
 {
     syntax().switcher = SyntaxType::Switch::Collate;
     syntax().collation = collation;

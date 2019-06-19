@@ -112,8 +112,8 @@ void UpgradeableErrorProne::setCriticalErrorWithSharedThreadedError()
 
 void UpgradeableErrorProne::setSeverity(int severity)
 {
-    WCTInnerAssert(severity > m_severity);
-    WCTInnerAssert(m_severity < Severity::Critical);
+    WCTAssert(severity > m_severity);
+    WCTAssert(m_severity < Severity::Critical);
     if (severity > m_severity) {
         m_severity = severity;
         if (m_severity >= Severity::Critical) {

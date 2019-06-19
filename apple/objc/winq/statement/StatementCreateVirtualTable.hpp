@@ -25,21 +25,21 @@
 namespace WCDB {
 
 class StatementCreateVirtualTable
-: public TypedSyntax<Syntax::CreateVirtualTableSTMT, Statement> {
+: public SpecifiedSyntax<Syntax::CreateVirtualTableSTMT, Statement> {
 public:
-    using TypedSyntax<Syntax::CreateVirtualTableSTMT, Statement>::TypedSyntax;
+    using SpecifiedSyntax<Syntax::CreateVirtualTableSTMT, Statement>::SpecifiedSyntax;
 
-    StatementCreateVirtualTable& createVirtualTable(const String& table);
+    StatementCreateVirtualTable& createVirtualTable(const UnsafeStringView& table);
     StatementCreateVirtualTable& schema(const Schema& schema);
 
     StatementCreateVirtualTable& ifNotExists();
 
-    StatementCreateVirtualTable& usingModule(const String& module);
+    StatementCreateVirtualTable& usingModule(const UnsafeStringView& module);
 
-    StatementCreateVirtualTable& argument(const String& argument);
+    StatementCreateVirtualTable& argument(const UnsafeStringView& argument);
     StatementCreateVirtualTable& argument(const SQL& argument);
 
-    static String tokenize(const String& name);
+    static StringView tokenize(const UnsafeStringView& name);
 };
 
 } // namespace WCDB

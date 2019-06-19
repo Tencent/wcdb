@@ -23,7 +23,7 @@
 #include <WCDB/Master.hpp>
 #include <WCDB/MasterCrawler.hpp>
 #include <WCDB/Page.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 
 namespace WCDB {
 
@@ -42,7 +42,7 @@ MasterCrawler::MasterCrawler(Pager &pager)
 
 bool MasterCrawler::work(MasterCrawlerDelegate *delegate)
 {
-    WCTInnerAssert(delegate != nullptr);
+    WCTAssert(delegate != nullptr);
     m_delegate = delegate;
     bool result = crawl(1);
     m_delegate = nullptr;
@@ -65,8 +65,8 @@ void MasterCrawler::onCellCrawled(const Cell &cell)
         master.rootpage = (int) cell.integerValue(3);
         if (master.rootpage <= 0) {
             markAsCorrupted(cell.getPage().number,
-                            String::formatted("Root page: %d in Master is less than or equal to 0.",
-                                              master.rootpage));
+                            StringView::formatted("Root page: %d in Master is less than or equal to 0.",
+                                                  master.rootpage));
             return;
         }
     }

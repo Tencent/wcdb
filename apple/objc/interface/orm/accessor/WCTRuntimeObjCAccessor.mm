@@ -22,10 +22,10 @@
 #import <WCDB/Core.h>
 #import <WCDB/Error.hpp>
 #import <WCDB/Notifier.hpp>
-#import <WCDB/String.hpp>
+#import <WCDB/StringView.hpp>
 #import <WCDB/WCTRuntimeObjCAccessor.h>
 
-WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, const WCDB::String &propertyName)
+WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, const WCDB::UnsafeStringView &propertyName)
 : WCTRuntimeAccessor<id>(instanceClass, propertyName)
 , WCTObjCAccessor()
 , m_propertyClass(getPropertyClass(instanceClass, propertyName))
@@ -34,8 +34,8 @@ WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, const WCDB::
 , m_columnType(GetColumnType(m_propertyClass))
 {
     if (WCDB::Console::debuggable()) {
-        WCTAssert(m_propertyClass != nil, WCDB::String::formatted("Unable to find out the %s.%s.", NSStringFromClass(instanceClass), propertyName.c_str()));
-        WCTAssert([m_propertyClass conformsToProtocol:@protocol(WCTColumnCoding)], WCDB::String::formatted("%s should conform to protocol WCTColumnCoding.", propertyName.c_str()));
+        WCTRemedialAssert(m_propertyClass != nil, WCDB::StringView::formatted("Unable to find out the %s.%s.", NSStringFromClass(instanceClass).UTF8String, propertyName.data()), ;);
+        WCTRemedialAssert([m_propertyClass conformsToProtocol:@protocol(WCTColumnCoding)], WCDB::StringView::formatted("%s should conform to protocol WCTColumnCoding.", propertyName.data()), ;);
     }
 }
 

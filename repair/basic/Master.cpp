@@ -19,7 +19,7 @@
  */
 
 #include <WCDB/Master.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 
 namespace WCDB {
 
@@ -29,9 +29,9 @@ Master::Master() : rootpage(0)
 {
 }
 
-bool Master::isReservedTableName(const String &tableName)
+bool Master::isReservedTableName(const UnsafeStringView &tableName)
 {
-    return tableName.isCaseInsensiveEqual("sqlite_");
+    return tableName.caseInsensiveEqual("sqlite_");
 }
 
 } //namespace Repair

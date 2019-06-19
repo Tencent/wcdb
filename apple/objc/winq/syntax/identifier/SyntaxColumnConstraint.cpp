@@ -32,9 +32,8 @@ Identifier::Type ColumnConstraint::getType() const
     return type;
 }
 
-String ColumnConstraint::getValidDescription() const
+bool ColumnConstraint::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     if (!name.empty()) {
         stream << "CONSTRAINT " << name << space;
     }
@@ -76,7 +75,7 @@ String ColumnConstraint::getValidDescription() const
         stream << foreignKeyClause;
         break;
     }
-    return stream.str();
+    return true;
 }
 
 void ColumnConstraint::iterate(const Iterator& iterator, bool& stop)

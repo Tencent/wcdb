@@ -24,11 +24,11 @@
 
 namespace WCDB {
 
-class StatementRelease final : public TypedSyntax<Syntax::ReleaseSTMT, Statement> {
+class StatementRelease final : public SpecifiedSyntax<Syntax::ReleaseSTMT, Statement> {
 public:
-    using TypedSyntax<Syntax::ReleaseSTMT, Statement>::TypedSyntax;
+    using SpecifiedSyntax<Syntax::ReleaseSTMT, Statement>::SpecifiedSyntax;
 
-    StatementRelease& release(const String& savepoint);
+    StatementRelease& release(const UnsafeStringView& savepoint);
 };
 
 } // namespace WCDB

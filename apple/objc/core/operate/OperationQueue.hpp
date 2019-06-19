@@ -22,7 +22,7 @@
 
 #include <WCDB/AsyncQueue.hpp>
 #include <WCDB/Lock.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <WCDB/Time.hpp>
 #include <WCDB/TimedQueue.hpp>
 #include <map>
@@ -39,10 +39,11 @@ public:
     virtual ~OperationEvent() = 0;
 
 protected:
-    virtual std::pair<bool, bool> migrationShouldBeOperated(const String& path) = 0;
-    virtual bool backupShouldBeOperated(const String& path) = 0;
-    virtual bool checkpointShouldBeOperated(const String& path) = 0;
-    virtual void integrityShouldBeChecked(const String& path) = 0;
+    virtual std::pair<bool, bool>
+    migrationShouldBeOperated(const UnsafeStringView& path) = 0;
+    virtual bool backupShouldBeOperated(const UnsafeStringView& path) = 0;
+    virtual bool checkpointShouldBeOperated(const UnsafeStringView& path) = 0;
+    virtual void integrityShouldBeChecked(const UnsafeStringView& path) = 0;
     virtual void purgeShouldBeOperated() = 0;
 
     friend class OperationQueue;
@@ -53,7 +54,7 @@ class OperationQueue final : public AsyncQueue,
                              public AutoBackupOperator,
                              public AutoCheckpointOperator {
 public:
-    OperationQueue(const String& name, OperationEvent* event);
+    OperationQueue(const UnsafeStringView& name, OperationEvent* event);
     ~OperationQueue();
 
 protected:
@@ -79,10 +80,10 @@ protected:
         };
 
         const Type type;
-        const String path;
+        const StringView path;
 
         Operation(Type type);
-        Operation(Type type, const String& path);
+        Operation(Type type, const UnsafeStringView& path);
 
         bool operator==(const Operation& other) const;
     };
@@ -122,39 +123,39 @@ protected:
         bool registeredForCheckpoint;
     };
     typedef struct Record Record;
-    std::map<String, Record> m_records;
+    StringViewMap<Record> m_records;
 
 #pragma mark - Migrate
 public:
-    void registerAsRequiredMigration(const String& path);
-    void registerAsNoMigrationRequired(const String& path);
-    void asyncMigrate(const String& path) override final;
-    void stopMigrate(const String& path) override final;
+    void registerAsRequiredMigration(const UnsafeStringView& path);
+    void registerAsNoMigrationRequired(const UnsafeStringView& path);
+    void asyncMigrate(const UnsafeStringView& path) override final;
+    void stopMigrate(const UnsafeStringView& path) override final;
 
 protected:
-    void asyncMigrate(const String& path, double delay, int numberOfFailures);
-    void doMigrate(const String& path, int numberOfFailures);
+    void asyncMigrate(const UnsafeStringView& path, double delay, int numberOfFailures);
+    void doMigrate(const UnsafeStringView& path, int numberOfFailures);
 
 #pragma mark - Backup
 public:
-    void registerAsRequiredBackup(const String& path);
-    void registerAsNoBackupRequired(const String& path);
+    void registerAsRequiredBackup(const UnsafeStringView& path);
+    void registerAsNoBackupRequired(const UnsafeStringView& path);
 
-    void asyncBackup(const String& path) override final;
+    void asyncBackup(const UnsafeStringView& path) override final;
 
 protected:
-    void asyncBackup(const String& path, double delay);
-    void doBackup(const String& path);
+    void asyncBackup(const UnsafeStringView& path, double delay);
+    void doBackup(const UnsafeStringView& path);
 
 #pragma mark - Checkpoint
 public:
-    void registerAsRequiredCheckpoint(const String& path);
-    void registerAsNoCheckpointRequired(const String& path);
+    void registerAsRequiredCheckpoint(const UnsafeStringView& path);
+    void registerAsNoCheckpointRequired(const UnsafeStringView& path);
 
-    void asyncCheckpoint(const String& path) override final;
+    void asyncCheckpoint(const UnsafeStringView& path) override final;
 
 protected:
-    void doCheckpoint(const String& path);
+    void doCheckpoint(const UnsafeStringView& path);
 
 #pragma mark - Purge
 protected:
@@ -172,9 +173,9 @@ protected:
 
 #pragma mark - Integrity
 protected:
-    void asyncCheckIntegrity(const String& path, uint32_t identifier);
+    void asyncCheckIntegrity(const UnsafeStringView& path, uint32_t identifier);
 
-    void doCheckIntegrity(const String& path);
+    void doCheckIntegrity(const UnsafeStringView& path);
 
     // identifier of the corrupted database file -> the times of ignored corruption
     // it will be kept forever in memory since the identifier will be changed after removed/recovered
@@ -182,18 +183,18 @@ protected:
 
 #pragma mark - Corrupted
 public:
-    typedef std::function<void(const String& path, uint32_t identifier)> CorruptionNotification;
-    void setNotificationWhenCorrupted(const String& path,
+    typedef std::function<void(const UnsafeStringView& path, uint32_t identifier)> CorruptionNotification;
+    void setNotificationWhenCorrupted(const UnsafeStringView& path,
                                       const CorruptionNotification& notification);
 
-    bool isFileObservedCorrupted(const String& path) const;
+    bool isFileObservedCorrupted(const UnsafeStringView& path) const;
 
 protected:
-    void asyncNotifyCorruption(const String& path, uint32_t identifier);
+    void asyncNotifyCorruption(const UnsafeStringView& path, uint32_t identifier);
 
-    void doNotifyCorruption(const String& path, uint32_t identifier);
+    void doNotifyCorruption(const UnsafeStringView& path, uint32_t identifier);
 
-    std::map<String, CorruptionNotification> m_corruptionNotifications;
+    StringViewMap<CorruptionNotification> m_corruptionNotifications;
 };
 
 } // namespace WCDB

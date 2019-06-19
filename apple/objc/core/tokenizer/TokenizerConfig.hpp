@@ -29,9 +29,10 @@ class TokenizerModules;
 
 class TokenizerConfig final : public Config {
 public:
-    TokenizerConfig(const String& name, const std::shared_ptr<TokenizerModules>& modules);
+    TokenizerConfig(const UnsafeStringView& name,
+                    const std::shared_ptr<TokenizerModules>& modules);
 
-    const String name;
+    const StringView name;
 
     bool invoke(Handle* handle) override final;
 

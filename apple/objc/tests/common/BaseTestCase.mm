@@ -54,16 +54,15 @@
 
     self.continueAfterFailure = YES;
 
-#if WCDB_DEBUG
+    //#if WCDB_DEBUG
     WCTDatabase.debug = YES;
-#else
-    WCTDatabase.debug = NO;
-#endif
+    //#else
+    //    WCTDatabase.debug = NO;
+    //#endif
 
-    [WCTDatabase globalTraceError:nil];
     [WCTDatabase globalTracePerformance:nil];
     [WCTDatabase globalTraceSQL:nil];
-    [WCTDatabase additionalGlobalTraceError:^(WCTError *error) {
+    [WCTDatabase globalTraceError:^(WCTError *error) {
         NSThread *currentThread = [NSThread currentThread];
         NSString *threadName = currentThread.name;
         if (threadName.length == 0) {

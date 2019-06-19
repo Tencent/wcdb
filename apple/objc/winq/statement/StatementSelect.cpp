@@ -89,9 +89,9 @@ StatementSelect& StatementSelect::having(const Expression& having)
     return *this;
 }
 
-StatementSelect& StatementSelect::window(const String& window)
+StatementSelect& StatementSelect::window(const UnsafeStringView& window)
 {
-    currentCore().windows.push_back(window);
+    currentCore().windows.push_back(StringView(window));
     return *this;
 }
 

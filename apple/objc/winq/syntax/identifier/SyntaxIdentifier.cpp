@@ -29,12 +29,16 @@ Identifier::~Identifier()
 {
 }
 
-String Identifier::getDescription() const
+StringView Identifier::getDescription() const
 {
     if (isValid()) {
-        return getValidDescription();
+        std::ostringstream stream;
+        if (describle(stream)) {
+            return stream.str();
+        }
+        WCTAssert(false);
     }
-    return String::null();
+    return StringView();
 }
 
 void Identifier::iterate(const Iterator &iterator)

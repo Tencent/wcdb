@@ -58,7 +58,7 @@ void MappedData::unmapBuffer(unsigned char* buffer, size_t size)
         Error error;
         error.level = Error::Level::Error;
         error.setSystemCode(errno, Error::Code::IOError);
-        error.infos.set("MunmapSize", size);
+        error.infos.insert_or_assign("MunmapSize", size);
         Notifier::shared().notify(error);
         SharedThreadedErrorProne::setThreadedError(std::move(error));
     }

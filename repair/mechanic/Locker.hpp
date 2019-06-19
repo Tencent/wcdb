@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 
 namespace WCDB {
 
@@ -31,8 +31,8 @@ namespace Repair {
 class Locker {
 public:
     virtual ~Locker() = 0;
-    virtual void setPath(const String &path) = 0;
-    virtual const String &getPath() const = 0;
+    virtual void setPath(const UnsafeStringView &path) = 0;
+    virtual const StringView &getPath() const = 0;
     virtual const Error &getError() const = 0;
 };
 

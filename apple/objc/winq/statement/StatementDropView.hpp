@@ -24,11 +24,11 @@
 
 namespace WCDB {
 
-class StatementDropView final : public TypedSyntax<Syntax::DropViewSTMT, Statement> {
+class StatementDropView final : public SpecifiedSyntax<Syntax::DropViewSTMT, Statement> {
 public:
-    using TypedSyntax<Syntax::DropViewSTMT, Statement>::TypedSyntax;
+    using SpecifiedSyntax<Syntax::DropViewSTMT, Statement>::SpecifiedSyntax;
 
-    StatementDropView& dropView(const String& view);
+    StatementDropView& dropView(const UnsafeStringView& view);
     StatementDropView& schema(const Schema& schema);
     StatementDropView& ifExists();
 };

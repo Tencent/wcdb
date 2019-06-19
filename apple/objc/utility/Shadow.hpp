@@ -77,10 +77,12 @@ public:
 public:
     Shadow(const Shadow<T>& other)
     : m_payload(other.get() != nullptr ? std::unique_ptr<T>{ static_cast<T*>(
-                                         other.m_payload.get()->clone().release()) } :
+                other.m_payload.get()->clone().release()) } :
                                          nullptr)
     {
     }
+
+    Shadow(Shadow<T>&& other) : m_payload(std::move(other.m_payload)) {}
 
     Shadow& operator=(const Shadow<T>& other)
     {
@@ -90,6 +92,12 @@ public:
         } else {
             m_payload = nullptr;
         }
+        return *this;
+    }
+
+    Shadow& operator=(Shadow<T>&& other)
+    {
+        m_payload = std::move(other.m_payload);
         return *this;
     }
 

@@ -32,11 +32,11 @@ public:
     WithClause withClause;
     WCDB_SYNTAX_ENUM_UNION(ConflictAction, conflictAction);
     Schema schema;
-    String table;
-    String alias;
+    StringView table;
+    StringView alias;
     std::list<Column> columns;
 
-    WCDB_SYNTAX_MAIN_UNION_ENUM(Values, Select, Default, );
+    WCDB_SYNTAX_MAIN_UNION_ENUM(Values, Select, Default);
     std::list<std::list<Expression>> expressionsValues;
     SelectSTMT select;
 
@@ -46,12 +46,13 @@ public:
 public:
     static constexpr const Type type = Type::InsertSTMT;
     Type getType() const override final;
-    String getValidDescription() const override final;
-    String getValidDescription(bool skipSchema) const;
+    bool describle(std::ostringstream& stream) const override final;
+    bool describle(std::ostringstream& stream, bool skipSchema) const;
     void iterate(const Iterator& iterator, bool& stop) override final;
 
 #pragma mark - Utility
 public:
+    bool isMultiWrite() const;
     bool isTargetingSameTable(const InsertSTMT& other) const;
 };
 

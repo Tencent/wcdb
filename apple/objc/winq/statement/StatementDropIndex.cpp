@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-StatementDropIndex& StatementDropIndex::dropIndex(const String& index)
+StatementDropIndex& StatementDropIndex::dropIndex(const UnsafeStringView& index)
 {
     syntax().index = index;
     return *this;

@@ -24,11 +24,11 @@
 
 namespace WCDB {
 
-class StatementDropIndex final : public TypedSyntax<Syntax::DropIndexSTMT, Statement> {
+class StatementDropIndex final : public SpecifiedSyntax<Syntax::DropIndexSTMT, Statement> {
 public:
-    using TypedSyntax<Syntax::DropIndexSTMT, Statement>::TypedSyntax;
+    using SpecifiedSyntax<Syntax::DropIndexSTMT, Statement>::SpecifiedSyntax;
 
-    StatementDropIndex& dropIndex(const String& index);
+    StatementDropIndex& dropIndex(const UnsafeStringView& index);
     StatementDropIndex& schema(const Schema& schema);
     StatementDropIndex& ifExists();
 };

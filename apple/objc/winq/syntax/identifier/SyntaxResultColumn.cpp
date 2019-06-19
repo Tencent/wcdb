@@ -36,9 +36,8 @@ Identifier::Type ResultColumn::getType() const
     return type;
 }
 
-String ResultColumn::getValidDescription() const
+bool ResultColumn::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     if (wildcard) {
         if (!table.empty()) {
             stream << table << ".";
@@ -50,7 +49,7 @@ String ResultColumn::getValidDescription() const
             stream << " AS " << alias;
         }
     }
-    return stream.str();
+    return true;
 }
 
 void ResultColumn::iterate(const Iterator& iterator, bool& stop)

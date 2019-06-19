@@ -20,17 +20,18 @@
 
 #import <WCDB/Assertion.hpp>
 #import <WCDB/Console.hpp>
-#import <WCDB/Notifier.hpp>
+#import <WCDB/Core.hpp>
 #import <WCDB/WCTDatabase+Monitor.h>
 #import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTError+Private.h>
+#import <WCDB/WCTFoundation.h>
 #import <WCDB/WCTPerformanceFootprint.h>
 
 namespace WCDB {
 
-void Console::print(const String &message)
+void Core::print(const UnsafeStringView &message)
 {
-    NSLog(@"%s", message.c_str());
+    NSLog(@"%s", message.data());
 }
 
 }
@@ -53,20 +54,10 @@ void Console::print(const String &message)
 
 + (void)globalTraceError:(WCTErrorTraceBlock)block
 {
-    [self globalTraceError:block withIdentifier:WCDB::NotifierLoggerName];
-}
-
-+ (void)globalTraceError:(WCTErrorTraceBlock)block
-          withIdentifier:(const WCDB::String &)identifier
-{
-    if (block != nil) {
-        WCDB::Notifier::shared().setNotification(std::numeric_limits<int>::min(), identifier, [block](const WCDB::Error &error) {
-            WCTError *nsError = [[WCTError alloc] initWithError:error];
-            block(nsError);
-        });
-    } else {
-        WCDB::Notifier::shared().unsetNotification(identifier);
-    }
+    WCDB::Core::shared().setNotificationWhenErrorTraced([block](const WCDB::Error &error) {
+        WCTError *nsError = [[WCTError alloc] initWithError:error];
+        block(nsError);
+    });
 }
 
 + (void)globalTracePerformance:(WCTPerformanceTraceBlock)trace
@@ -76,7 +67,7 @@ void Console::print(const String &message)
         callback = [trace](const WCDB::HandleNotification::Footprints &footprints, double cost) {
             NSMutableArray<WCTPerformanceFootprint *> *array = [[NSMutableArray<WCTPerformanceFootprint *> alloc] init];
             for (const auto &footprint : footprints) {
-                NSString *sql = [NSString stringWithUTF8String:footprint.sql.c_str()];
+                NSString *sql = [NSString stringWithView:footprint.sql];
                 [array addObject:[[WCTPerformanceFootprint alloc] initWithSQL:sql andFrequency:footprint.frequency]];
             }
             trace(array, cost);
@@ -89,8 +80,8 @@ void Console::print(const String &message)
 {
     WCDB::Handle::SQLNotification callback = nullptr;
     if (trace != nil) {
-        callback = [trace](const WCDB::String &sql) {
-            trace([NSString stringWithUTF8String:sql.c_str()]);
+        callback = [trace](const WCDB::UnsafeStringView &sql) {
+            trace([NSString stringWithView:sql]);
         };
     }
     WCDB::Core::shared().setNotificationForSQLGLobalTraced(callback);
@@ -103,7 +94,7 @@ void Console::print(const String &message)
         callback = [trace](const WCDB::HandleNotification::Footprints &footprints, double cost) {
             NSMutableArray<WCTPerformanceFootprint *> *array = [[NSMutableArray<WCTPerformanceFootprint *> alloc] init];
             for (const auto &footprint : footprints) {
-                NSString *sql = [NSString stringWithUTF8String:footprint.sql.c_str()];
+                NSString *sql = [NSString stringWithView:footprint.sql];
                 [array addObject:[[WCTPerformanceFootprint alloc] initWithSQL:sql andFrequency:footprint.frequency]];
             }
             trace(array, cost);
@@ -120,8 +111,8 @@ void Console::print(const String &message)
 {
     WCDB::Handle::SQLNotification callback = nullptr;
     if (trace != nil) {
-        callback = [trace](const WCDB::String &sql) {
-            trace([NSString stringWithUTF8String:sql.c_str()]);
+        callback = [trace](const WCDB::UnsafeStringView &sql) {
+            trace([NSString stringWithView:sql]);
         };
         _database->setConfig(WCDB::SQLTraceConfigName,
                              std::static_pointer_cast<WCDB::Config>(std::make_shared<WCDB::SQLTraceConfig>(callback)),

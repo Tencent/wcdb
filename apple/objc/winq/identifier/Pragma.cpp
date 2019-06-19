@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-Pragma::Pragma(const UnsafeString& name)
+Pragma::Pragma(const UnsafeStringView& name)
 {
     syntax().name = name;
 }

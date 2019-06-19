@@ -32,9 +32,8 @@ Identifier::Type IndexedColumn::getType() const
     return type;
 }
 
-String IndexedColumn::getValidDescription() const
+bool IndexedColumn::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     switch (switcher) {
     case Switch::Column:
         stream << column;
@@ -49,7 +48,7 @@ String IndexedColumn::getValidDescription() const
     if (orderValid()) {
         stream << space << order;
     }
-    return stream.str();
+    return true;
 }
 
 void IndexedColumn::iterate(const Iterator& iterator, bool& stop)

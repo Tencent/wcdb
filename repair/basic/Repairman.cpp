@@ -32,7 +32,7 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Initialize
-Repairman::Repairman(const String &path)
+Repairman::Repairman(const UnsafeStringView &path)
 : m_pager(path), Crawlable(m_pager), Progress(), m_milestone(1000), m_mile(0)
 {
 }
@@ -41,7 +41,7 @@ Repairman::~Repairman()
 {
 }
 
-const String &Repairman::getPath() const
+const StringView &Repairman::getPath() const
 {
     return m_pager.getPath();
 }
@@ -66,8 +66,8 @@ bool Repairman::isEmptyDatabase()
     if (fileSize == 0) {
         if (succeed) {
             Error error(Error::Code::Empty, Error::Level::Warning, "Database is not found or empty.");
-            error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-            error.infos.set(ErrorStringKeyPath, getPath());
+            error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+            error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
             Notifier::shared().notify(error);
         } else {
             setCriticalErrorWithSharedThreadedError();
@@ -115,7 +115,7 @@ bool Repairman::towardMilestone(int mile)
     return true;
 }
 
-bool Repairman::assembleTable(const String &tableName, const String &sql)
+bool Repairman::assembleTable(const UnsafeStringView &tableName, const UnsafeStringView &sql)
 {
     if (m_assembler->assembleTable(tableName, sql)) {
         if (markAsMilestone()) {
@@ -138,7 +138,7 @@ bool Repairman::assembleCell(const Cell &cell)
     return false;
 }
 
-bool Repairman::assembleSequence(const String &tableName, int64_t sequence)
+bool Repairman::assembleSequence(const UnsafeStringView &tableName, int64_t sequence)
 {
     if (m_assembler->assembleSequence(tableName, sequence)) {
         towardMilestone(1);
@@ -148,7 +148,7 @@ bool Repairman::assembleSequence(const String &tableName, int64_t sequence)
     return false;
 }
 
-void Repairman::assembleAssociatedSQLs(const std::list<String> &sqls)
+void Repairman::assembleAssociatedSQLs(const std::list<StringView> &sqls)
 {
     for (const auto &sql : sqls) {
         //ignore its errors
@@ -190,7 +190,7 @@ void Repairman::onErrorCritical()
 void Repairman::markCellAsCounted(const Cell &cell)
 {
     int numberOfCells = cell.getPage().getNumberOfCells();
-    WCTInnerAssert(numberOfCells != 0);
+    WCTAssert(numberOfCells != 0);
     if (numberOfCells > 0) {
         Fraction cellWeight(1, numberOfCells);
         increaseScore(m_pageWeight * cellWeight);
@@ -206,7 +206,7 @@ void Repairman::markPageAsCounted(const Page &page)
 
 void Repairman::setPageWeight(const Fraction &pageWeight)
 {
-    WCTInnerAssert(m_pageWeight.value() == 0);
+    WCTAssert(m_pageWeight.value() == 0);
     m_pageWeight = pageWeight;
 }
 

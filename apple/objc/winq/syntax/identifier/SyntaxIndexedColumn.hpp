@@ -35,7 +35,7 @@ public:
 
     Column column;
     Expression expression;
-    String collation;
+    StringView collation;
 
     WCDB_SYNTAX_ENUM_UNION(Order, order);
 
@@ -43,7 +43,7 @@ public:
 public:
     static constexpr const Type type = Type::IndexedColumn;
     Type getType() const override final;
-    String getValidDescription() const override final;
+    bool describle(std::ostringstream& stream) const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

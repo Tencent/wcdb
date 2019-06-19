@@ -316,7 +316,7 @@ Expression ExpressionInOperable::notIn() const
     return expression;
 }
 
-Expression ExpressionInOperable::inTable(const String &table) const
+Expression ExpressionInOperable::inTable(const UnsafeStringView &table) const
 {
     Expression expression;
     expression.syntax().switcher = Expression::SyntaxType::Switch::In;
@@ -327,7 +327,7 @@ Expression ExpressionInOperable::inTable(const String &table) const
     return expression;
 }
 
-Expression ExpressionInOperable::notInTable(const String &table) const
+Expression ExpressionInOperable::notInTable(const UnsafeStringView &table) const
 {
     Expression expression = inTable(table);
     expression.syntax().isNot = true;
@@ -371,7 +371,7 @@ Expression ExpressionInOperable::notIn(const Expressions &expressions) const
     return expression;
 }
 
-Expression ExpressionInOperable::inFunction(const String &tableFunction) const
+Expression ExpressionInOperable::inFunction(const UnsafeStringView &tableFunction) const
 {
     Expression expression;
     expression.syntax().switcher = Expression::SyntaxType::Switch::In;
@@ -382,7 +382,7 @@ Expression ExpressionInOperable::inFunction(const String &tableFunction) const
     return expression;
 }
 
-Expression ExpressionInOperable::notInFunction(const String &tableFunction) const
+Expression ExpressionInOperable::notInFunction(const UnsafeStringView &tableFunction) const
 {
     Expression expression = inFunction(tableFunction);
     expression.syntax().isNot = true;
@@ -394,7 +394,7 @@ ExpressionCollateOperable::~ExpressionCollateOperable()
 {
 }
 
-Expression ExpressionCollateOperable::collate(const String &collation) const
+Expression ExpressionCollateOperable::collate(const UnsafeStringView &collation) const
 {
     Expression expression;
     expression.syntax().switcher = Expression::SyntaxType::Switch::Collate;

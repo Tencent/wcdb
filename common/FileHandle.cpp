@@ -30,7 +30,7 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-FileHandle::FileHandle(const String &path_)
+FileHandle::FileHandle(const UnsafeStringView &path_)
 : path(path_), m_fd(-1), m_mode(Mode::None), m_errorIgnorable(false)
 {
 }
@@ -44,13 +44,13 @@ FileHandle::FileHandle(FileHandle &&other)
 
 FileHandle::~FileHandle()
 {
-    WCTInnerAssert(!isOpened() || m_mode != Mode::OverWrite);
+    WCTAssert(!isOpened() || m_mode != Mode::OverWrite);
     close();
 }
 
 FileHandle &FileHandle::operator=(FileHandle &&other)
 {
-    WCTInnerAssert(path == other.path);
+    WCTAssert(path == other.path);
     m_fd = std::move(other.m_fd);
     other.m_fd = -1;
     other.m_mode = Mode::None;
@@ -60,17 +60,17 @@ FileHandle &FileHandle::operator=(FileHandle &&other)
 #pragma mark - Basic
 bool FileHandle::open(Mode mode)
 {
-    WCTInnerAssert(!isOpened());
+    WCTAssert(!isOpened());
     switch (mode) {
     case Mode::OverWrite: {
         constexpr const int mask = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
         static_assert(mask == 0644, "");
-        m_fd = ::open(path.c_str(), O_CREAT | O_WRONLY | O_TRUNC, mask);
+        m_fd = ::open(path.data(), O_CREAT | O_WRONLY | O_TRUNC, mask);
         break;
     }
     default:
-        WCTInnerAssert(mode == Mode::ReadOnly);
-        m_fd = ::open(path.c_str(), O_RDONLY);
+        WCTAssert(mode == Mode::ReadOnly);
+        m_fd = ::open(path.data(), O_RDONLY);
         break;
     }
     if (m_fd == -1) {
@@ -96,13 +96,13 @@ void FileHandle::close()
 
 ssize_t FileHandle::size()
 {
-    WCTInnerAssert(isOpened());
+    WCTAssert(isOpened());
     return (ssize_t) lseek(m_fd, 0, SEEK_END);
 }
 
 Data FileHandle::read(off_t offset, size_t size)
 {
-    WCTInnerAssert(isOpened());
+    WCTAssert(isOpened());
     Data data(size);
     if (data.empty()) {
         return Data::null();
@@ -136,7 +136,7 @@ Data FileHandle::read(off_t offset, size_t size)
     Error error;
     error.level = m_errorIgnorable ? Error::Level::Warning : Error::Level::Error;
     error.setSystemCode(EIO, Error::Code::IOError, "Short read.");
-    error.infos.set(ErrorStringKeyPath, path);
+    error.infos.insert_or_assign(ErrorStringKeyPath, path);
     Notifier::shared().notify(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
     return data.subdata(got + prior);
@@ -144,7 +144,7 @@ Data FileHandle::read(off_t offset, size_t size)
 
 bool FileHandle::write(off_t offset, const UnsafeData &unsafeData)
 {
-    WCTInnerAssert(isOpened());
+    WCTAssert(isOpened());
     ssize_t wrote;
     ssize_t prior = 0;
     size_t size = unsafeData.size();
@@ -174,7 +174,7 @@ bool FileHandle::write(off_t offset, const UnsafeData &unsafeData)
     Error error;
     error.level = m_errorIgnorable ? Error::Level::Warning : Error::Level::Error;
     error.setSystemCode(EIO, Error::Code::IOError, "Short write.");
-    error.infos.set(ErrorStringKeyPath, path);
+    error.infos.insert_or_assign(ErrorStringKeyPath, path);
     Notifier::shared().notify(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
     return false;
@@ -186,7 +186,7 @@ MappedData FileHandle::map(off_t offset, size_t size)
     WCTRemedialAssert(m_mode == Mode::ReadOnly,
                       "Map is only supported in Readonly mode.",
                       return MappedData::null(););
-    WCTInnerAssert(size > 0);
+    WCTAssert(size > 0);
     static int s_pagesize = getpagesize();
     int alignment = offset % s_pagesize;
     off_t roundedOffset = offset - alignment;
@@ -197,8 +197,8 @@ MappedData FileHandle::map(off_t offset, size_t size)
         Error error;
         error.level = m_errorIgnorable ? Error::Level::Warning : Error::Level::Error;
         error.setSystemCode(errno, Error::Code::IOError);
-        error.infos.set(ErrorStringKeyPath, path);
-        error.infos.set("MmapSize", roundedSize);
+        error.infos.insert_or_assign(ErrorStringKeyPath, path);
+        error.infos.insert_or_assign("MmapSize", roundedSize);
         Notifier::shared().notify(error);
         SharedThreadedErrorProne::setThreadedError(std::move(error));
         return MappedData::null();
@@ -217,7 +217,7 @@ void FileHandle::setThreadedError()
     Error error;
     error.level = m_errorIgnorable ? Error::Level::Warning : Error::Level::Error;
     error.setSystemCode(errno, Error::Code::IOError);
-    error.infos.set(ErrorStringKeyPath, path);
+    error.infos.insert_or_assign(ErrorStringKeyPath, path);
     Notifier::shared().notify(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
 }
@@ -227,7 +227,7 @@ void FileHandle::setThreadedError()
 //    Error error(Error::Code::Misuse,
 //                m_errorIgnorable ? Error::Level::Warning : Error::Level::Error);
 //    error.message = message;
-//    error.infos.set(ErrorStringKeyPath, path);
+//    error.infos.insert_or_assign(ErrorStringKeyPath, path);
 //    Notifier::shared().notify(error);
 //    SharedThreadedErrorProne::setThreadedError(std::move(error));
 //}

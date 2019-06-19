@@ -35,10 +35,10 @@ public:
     virtual ~PagerRelated() = 0;
     PagerRelated &operator=(PagerRelated &&);
 
-    const String &getPagerPath() const;
+    const StringView &getPagerPath() const;
 
 protected:
-    void markPagerAsCorrupted(int page, const String &message);
+    void markPagerAsCorrupted(int page, const UnsafeStringView &message);
     void setError(Error &&error);
     void assignWithSharedThreadedError();
 

@@ -23,52 +23,53 @@
 #include <pwd.h>
 #include <unistd.h>
 
-#if __cplusplus > 201402L
-#warning TODO std::filesystem is supported since C++17
-#endif
+// TODO std::filesystem is supported since C++17 and Clang with Xcode 11
 
 namespace WCDB {
 
 namespace Path {
 
-String addExtention(const String &base, const String &extention)
+StringView addExtention(const UnsafeStringView &base, const UnsafeStringView &extention)
 {
-    return base + extention;
+    std::ostringstream stream;
+    stream << base << extention;
+    return StringView(stream.str());
 }
 
-String addComponent(const String &base, const String &component)
+StringView addComponent(const UnsafeStringView &base, const UnsafeStringView &component)
 {
-    String newPath = base;
-    if (newPath.empty() || newPath[newPath.size() - 1] != '/') {
-        newPath.append("/");
+    std::ostringstream stream;
+    stream << base;
+    if (base.empty() || base[base.length() - 1] != '/') {
+        stream << "/";
     }
-    newPath.append(component);
-    return newPath;
+    stream << component;
+    return StringView(stream.str());
 }
 
-String getFileName(const String &base)
+StringView getFileName(const UnsafeStringView &base)
 {
-    String file = base;
+    std::string file = base.data();
     file = basename(&(*file.begin()));
-    return file;
+    return StringView(std::move(file));
 }
 
-String getDirectoryName(const String &base)
+StringView getDirectoryName(const UnsafeStringView &base)
 {
-    String dir = base;
+    std::string dir = base.data();
     dir = dirname(&(*dir.begin()));
-    return dir;
+    return StringView(std::move(dir));
 }
 
-String normalize(const String &path)
+StringView normalize(const UnsafeStringView &path)
 {
-    String normalized = path;
+    std::string normalized = path.data();
     // replace '//' with '/'
     std::size_t found;
-    while ((found = normalized.find("//")) != String::npos) {
+    while ((found = normalized.find("//")) != std::string::npos) {
         normalized.replace(found, 2, "/");
     }
-    return normalized;
+    return StringView(std::move(normalized));
 }
 
 } //namespace Path

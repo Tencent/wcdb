@@ -25,7 +25,7 @@ namespace WCDB {
 ColumnTypeInfo<ColumnType::Text>::UnderlyingType
 ColumnIsTextType<NSString*>::asUnderlyingType(NSString* text)
 {
-    return WCDB::UnsafeString(text.UTF8String, [text lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+    return WCDB::UnsafeStringView(text.UTF8String, [text lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
 }
 
 const UnsafeData UnsafeData::Convertible<NSData*>::asUnsafeData(NSData* data)
@@ -45,7 +45,7 @@ IndexedColumn IndexedColumnConvertible<WCTProperty>::asIndexedColumn(const WCTPr
 
 LiteralValue LiteralValueConvertible<NSString*>::asLiteralValue(NSString* string)
 {
-    return WCDB::UnsafeString(string.UTF8String, [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+    return WCDB::UnsafeStringView(string.UTF8String, [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
 }
 
 LiteralValue LiteralValueConvertible<NSNumber*>::asLiteralValue(NSNumber* number)

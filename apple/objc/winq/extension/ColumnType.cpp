@@ -34,29 +34,29 @@ ColumnIsNullType<std::nullptr_t>::asUnderlyingType(const std::nullptr_t &)
 ColumnTypeInfo<ColumnType::Text>::UnderlyingType
 ColumnIsTextType<const char *>::asUnderlyingType(const char *text)
 {
-    return UnsafeString(text, -1);
+    return UnsafeStringView(text);
 }
 
 ColumnTypeInfo<ColumnType::Text>::UnderlyingType
 ColumnIsTextType<char *>::asUnderlyingType(const char *text)
 {
-    return UnsafeString(text, -1);
+    return UnsafeStringView(text);
 }
 
 ColumnTypeInfo<ColumnType::Text>::UnderlyingType
 ColumnIsTextType<std::string>::asUnderlyingType(const std::string &text)
 {
-    return UnsafeString(text.c_str(), text.length());
+    return UnsafeStringView(text.c_str(), text.length());
 }
 
 ColumnTypeInfo<ColumnType::Text>::UnderlyingType
-ColumnIsTextType<UnsafeString>::asUnderlyingType(const UnsafeString &text)
+ColumnIsTextType<UnsafeStringView>::asUnderlyingType(const UnsafeStringView &text)
 {
     return text;
 }
 
 ColumnTypeInfo<ColumnType::Text>::UnderlyingType
-ColumnIsTextType<String>::asUnderlyingType(const String &text)
+ColumnIsTextType<StringView>::asUnderlyingType(const UnsafeStringView &text)
 {
     return text;
 }

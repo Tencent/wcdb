@@ -36,18 +36,20 @@ Identifier::Type DeleteSTMT::getType() const
     return type;
 }
 
-String DeleteSTMT::getValidDescription() const
+bool DeleteSTMT::describle(std::ostringstream& stream) const
 {
-    return getValidDescription(false);
+    return describle(stream, false);
 }
 
-String DeleteSTMT::getValidDescription(bool skipSchema) const
+bool DeleteSTMT::describle(std::ostringstream& stream, bool skipSchema) const
 {
-    std::ostringstream stream;
     if (withClause.isValid()) {
         stream << withClause << space;
     }
-    stream << "DELETE FROM " << table.getValidDescription(skipSchema);
+    stream << "DELETE FROM ";
+    if (!table.describle(stream, skipSchema)) {
+        return false;
+    }
     if (condition.isValid()) {
         stream << " WHERE " << condition;
     }
@@ -67,7 +69,7 @@ String DeleteSTMT::getValidDescription(bool skipSchema) const
             break;
         }
     }
-    return stream.str();
+    return true;
 }
 
 void DeleteSTMT::iterate(const Iterator& iterator, bool& stop)

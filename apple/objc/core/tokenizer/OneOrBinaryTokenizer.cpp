@@ -208,7 +208,7 @@ int OneOrBinaryTokenizerCursorInfo::cursorSetup()
         }
         for (int i = m_cursor + 1; i < m_cursor + m_cursorTokenLength; ++i) {
             if (i < m_inputLength) {
-                WCTInnerAssert(((unicode << 6) >> 6) == unicode);
+                WCTAssert(((unicode << 6) >> 6) == unicode);
                 unicode = (UnicodeChar)(((int) unicode << 6) | (m_input[i] & 0x3F));
             } else {
                 m_cursorTokenType = TokenType::None;

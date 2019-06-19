@@ -20,11 +20,10 @@
 
 #pragma once
 
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <WCDB/Syntax.h>
 #include <WCDB/SyntaxForwardDeclaration.h>
 #include <WCDB/UnsafeData.hpp>
-#include <WCDB/UnsafeString.hpp>
 #include <cstdint>
 #include <type_traits>
 #include <vector>
@@ -96,7 +95,7 @@ struct ColumnTypeInfo<ColumnType::Text> {
     static constexpr const bool isText = true;
     static constexpr const bool isBLOB = false;
     static constexpr const bool isBaseType = true;
-    using UnderlyingType = UnsafeString;
+    using UnderlyingType = UnsafeStringView;
     static constexpr const ColumnType type = ColumnType::Text;
 };
 //BLOB
@@ -275,17 +274,17 @@ public:
 };
 
 template<>
-struct ColumnIsTextType<UnsafeString> : public std::true_type {
+struct ColumnIsTextType<UnsafeStringView> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
-    asUnderlyingType(const UnsafeString &text);
+    asUnderlyingType(const UnsafeStringView &text);
 };
 
 template<>
-struct ColumnIsTextType<String> : public std::true_type {
+struct ColumnIsTextType<StringView> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
-    asUnderlyingType(const String &text);
+    asUnderlyingType(const UnsafeStringView &text);
 };
 
 //BLOB
@@ -304,10 +303,10 @@ public:
 };
 
 template<typename T>
-struct UnsafeString::Convertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type>
+struct UnsafeStringView::Convertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type>
 : public std::true_type {
 public:
-    static UnsafeString asUnsafeString(const T &t)
+    static UnsafeStringView asUnsafeStringView(const T &t)
     {
         return ColumnIsTextType<T>::asUnderlyingType(t);
     }

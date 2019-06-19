@@ -36,9 +36,8 @@ Identifier::Type DropTableSTMT::getType() const
     return type;
 }
 
-String DropTableSTMT::getValidDescription() const
+bool DropTableSTMT::describle(std::ostringstream& stream) const
 {
-    std::ostringstream stream;
     stream << "DROP TABLE ";
     if (ifExists) {
         stream << "IF EXISTS ";
@@ -47,7 +46,7 @@ String DropTableSTMT::getValidDescription() const
         stream << schema << ".";
     }
     stream << table;
-    return stream.str();
+    return true;
 }
 
 void DropTableSTMT::iterate(const Iterator& iterator, bool& stop)

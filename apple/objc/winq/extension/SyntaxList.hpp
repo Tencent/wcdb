@@ -107,7 +107,7 @@ public:
         return *iter;
     }
 
-    String getDescription() const
+    StringView getDescription() const
     {
         std::ostringstream stream;
         bool comma = false;
@@ -119,7 +119,7 @@ public:
             }
             stream << sql.getDescription();
         }
-        return stream.str();
+        return StringView(stream.str());
     }
 };
 

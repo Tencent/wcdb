@@ -24,15 +24,16 @@
 
 namespace WCDB {
 
-class StatementCreateIndex final : public TypedSyntax<Syntax::CreateIndexSTMT, Statement> {
+class StatementCreateIndex final
+: public SpecifiedSyntax<Syntax::CreateIndexSTMT, Statement> {
 public:
-    using TypedSyntax<Syntax::CreateIndexSTMT, Statement>::TypedSyntax;
+    using SpecifiedSyntax<Syntax::CreateIndexSTMT, Statement>::SpecifiedSyntax;
 
-    StatementCreateIndex& createIndex(const String& index);
+    StatementCreateIndex& createIndex(const UnsafeStringView& index);
     StatementCreateIndex& schema(const Schema& schema);
     StatementCreateIndex& unique();
     StatementCreateIndex& ifNotExists();
-    StatementCreateIndex& table(const String& table);
+    StatementCreateIndex& table(const UnsafeStringView& table);
 
     StatementCreateIndex& indexed(const IndexedColumn& indexedColumn);
     StatementCreateIndex& where(const Expression& condition);

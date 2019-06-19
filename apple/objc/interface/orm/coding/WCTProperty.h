@@ -25,7 +25,7 @@ class WCTProperty final : public WCDB::Column, public WCTColumnBindingHolder {
 public:
     WCTProperty();
     WCTProperty(const WCTColumnBinding& columnBinding);
-    WCTProperty(const WCDB::String& name, const WCTColumnBinding& columnBinding);
+    WCTProperty(const WCDB::UnsafeStringView& name, const WCTColumnBinding& columnBinding);
 
     WCDB::IndexedColumn asIndex() const;
     WCDB::IndexedColumn asIndex(const WCTOrder& order) const;
@@ -33,7 +33,7 @@ public:
     WCDB::OrderingTerm asOrder() const;
     WCDB::OrderingTerm asOrder(const WCTOrder& order) const;
 
-    WCDB::Expression table(const WCDB::String& table) const;
+    WCDB::Expression table(const WCDB::UnsafeStringView& table) const;
 };
 
 namespace WCDB {

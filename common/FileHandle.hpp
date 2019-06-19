@@ -23,7 +23,7 @@
 #include <WCDB/Data.hpp>
 #include <WCDB/MappedData.hpp>
 #include <WCDB/SharedThreadedErrorProne.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/StringView.hpp>
 #include <stdio.h>
 
 namespace WCDB {
@@ -31,7 +31,7 @@ namespace WCDB {
 class FileHandle : public SharedThreadedErrorProne {
 #pragma mark - Initialize
 public:
-    FileHandle(const String &path);
+    FileHandle(const UnsafeStringView &path);
     FileHandle(FileHandle &&);
     virtual ~FileHandle();
     FileHandle &operator=(FileHandle &&);
@@ -39,7 +39,7 @@ public:
     FileHandle(const FileHandle &) = delete;
     FileHandle &operator=(const FileHandle &) = delete;
 
-    const String path;
+    const StringView path;
 
 protected:
     int m_fd;
