@@ -24,8 +24,9 @@
 extern "C" {
 #endif
 
-#if WCDB_BUILTIN_SQLCIPHER
+#if SQLITE_WCDB
 #include <sqlcipher/sqlite3.h>
+#include <sqlcipher/sqlite3_wcdb.h>
 #else
 #include <sqlite3.h>
 #endif
