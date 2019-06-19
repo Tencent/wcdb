@@ -31,7 +31,7 @@ AutoMigrateOperator::~AutoMigrateOperator()
 AutoMigrateConfig::AutoMigrateConfig(const std::shared_ptr<AutoMigrateOperator>& operator_)
 : Config(), m_operator(operator_)
 {
-    WCTInnerAssert(m_operator != nullptr);
+    WCTAssert(m_operator != nullptr);
 }
 
 AutoMigrateConfig::~AutoMigrateConfig()
@@ -62,7 +62,7 @@ std::atomic<int>& AutoMigrateConfig::getOrCreateRegister(const UnsafeStringView&
         SharedLockGuard lockGuard(m_lock);
         auto iter = m_registers.find(path);
         if (iter != m_registers.end()) {
-            WCTInnerAssert(iter->second.load() >= 0);
+            WCTAssert(iter->second.load() >= 0);
             return iter->second;
         }
     }
@@ -72,7 +72,7 @@ std::atomic<int>& AutoMigrateConfig::getOrCreateRegister(const UnsafeStringView&
         if (iter == m_registers.end()) {
             iter = m_registers.emplace(path, 0).first;
         }
-        WCTInnerAssert(iter->second.load() >= 0);
+        WCTAssert(iter->second.load() >= 0);
         return iter->second;
     }
 }

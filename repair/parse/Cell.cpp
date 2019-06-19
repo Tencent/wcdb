@@ -33,7 +33,7 @@ namespace Repair {
 Cell::Cell(int pointer, Page *page, Pager *pager)
 : PagerRelated(pager), m_pointer(pointer), m_rowid(0), m_page(page)
 {
-    WCTInnerAssert(m_page != nullptr);
+    WCTAssert(m_page != nullptr);
 }
 
 const Page &Cell::getPage() const
@@ -43,7 +43,7 @@ const Page &Cell::getPage() const
 
 int Cell::getLengthOfSerialType(int serialType)
 {
-    WCTInnerAssert(isSerialTypeSanity(serialType));
+    WCTAssert(isSerialTypeSanity(serialType));
     static int s_lengthsOfSerialType[10] = {
         0, //Null
         1, //8-bit integer
@@ -69,20 +69,20 @@ int Cell::isSerialTypeSanity(int serialType)
 
 int64_t Cell::getRowID() const
 {
-    WCTInnerAssert(isInitialized());
+    WCTAssert(isInitialized());
     return m_rowid;
 }
 
 int Cell::getCount() const
 {
-    WCTInnerAssert(isInitialized());
+    WCTAssert(isInitialized());
     return (int) m_columns.size();
 }
 
 Cell::Type Cell::getValueType(int index) const
 {
-    WCTInnerAssert(isInitialized());
-    WCTInnerAssert(index < m_columns.size());
+    WCTAssert(isInitialized());
+    WCTAssert(index < m_columns.size());
     int serialType = m_columns[index].first;
     if (serialType == 0) {
         return Type::Null;
@@ -106,9 +106,9 @@ Cell::Type Cell::getValueType(int index) const
 
 int64_t Cell::integerValue(int index) const
 {
-    WCTInnerAssert(isInitialized());
-    WCTInnerAssert(index < m_columns.size());
-    WCTInnerAssert(getValueType(index) == Type::Integer);
+    WCTAssert(isInitialized());
+    WCTAssert(index < m_columns.size());
+    WCTAssert(getValueType(index) == Type::Integer);
     const auto &cell = m_columns[index];
     int serialType = cell.first;
     int64_t value = 0;
@@ -118,7 +118,7 @@ int64_t Cell::integerValue(int index) const
         return true;
     } else {
         int length = getLengthOfSerialType(serialType);
-        WCTInnerAssert(m_deserialization.isEnough(cell.second + length));
+        WCTAssert(m_deserialization.isEnough(cell.second + length));
         switch (length) {
         case 1:
             value = m_deserialization.get1ByteInt(cell.second);
@@ -139,7 +139,7 @@ int64_t Cell::integerValue(int index) const
             value = m_deserialization.get8BytesInt(cell.second);
             break;
         default:
-            WCTInnerAssert(false);
+            WCTAssert(false);
             break;
         }
     }
@@ -148,19 +148,19 @@ int64_t Cell::integerValue(int index) const
 
 double Cell::doubleValue(int index) const
 {
-    WCTInnerAssert(isInitialized());
-    WCTInnerAssert(index < m_columns.size());
-    WCTInnerAssert(getValueType(index) == Type::Real);
+    WCTAssert(isInitialized());
+    WCTAssert(index < m_columns.size());
+    WCTAssert(getValueType(index) == Type::Real);
     const auto &cell = m_columns[index];
-    WCTInnerAssert(m_deserialization.isEnough(cell.second + 8));
+    WCTAssert(m_deserialization.isEnough(cell.second + 8));
     return m_deserialization.get8BytesDouble(cell.second);
 }
 
 UnsafeStringView Cell::textValue(int index) const
 {
-    WCTInnerAssert(isInitialized());
-    WCTInnerAssert(index < m_columns.size());
-    WCTInnerAssert(getValueType(index) == Type::Text);
+    WCTAssert(isInitialized());
+    WCTAssert(index < m_columns.size());
+    WCTAssert(getValueType(index) == Type::Text);
     const auto &cell = m_columns[index];
     return UnsafeStringView(
     reinterpret_cast<const char *>(m_payload.buffer() + cell.second),
@@ -169,23 +169,23 @@ UnsafeStringView Cell::textValue(int index) const
 
 StringView Cell::stringValue(int index) const
 {
-    WCTInnerAssert(isInitialized());
-    WCTInnerAssert(index < m_columns.size());
-    WCTInnerAssert(getValueType(index) == Type::Text);
+    WCTAssert(isInitialized());
+    WCTAssert(index < m_columns.size());
+    WCTAssert(getValueType(index) == Type::Text);
     const auto &cell = m_columns[index];
     int length = getLengthOfSerialType(cell.first);
-    WCTInnerAssert(m_deserialization.isEnough(cell.second + length));
+    WCTAssert(m_deserialization.isEnough(cell.second + length));
     return m_deserialization.getString(cell.second, length);
 }
 
 const UnsafeData Cell::blobValue(int index) const
 {
-    WCTInnerAssert(isInitialized());
-    WCTInnerAssert(index < m_columns.size());
-    WCTInnerAssert(getValueType(index) == Type::BLOB);
+    WCTAssert(isInitialized());
+    WCTAssert(index < m_columns.size());
+    WCTAssert(getValueType(index) == Type::BLOB);
     const auto &cell = m_columns[index];
     int size = getLengthOfSerialType(cell.first);
-    WCTInnerAssert(m_deserialization.isEnough(cell.second + size));
+    WCTAssert(m_deserialization.isEnough(cell.second + size));
     return m_deserialization.getData(cell.second, size);
 }
 
@@ -264,15 +264,15 @@ bool Cell::doInitialize()
             }
             int overflowSize
             = std::min(payloadSize - cursorOfPayload, m_pager->getUsableSize() - 4);
-            WCTInnerAssert(cursorOfPayload + overflowSize
-                           <= m_overflowedPayloadHolder.size());
+            WCTAssert(cursorOfPayload + overflowSize
+                      <= m_overflowedPayloadHolder.size());
             memcpy(m_overflowedPayloadHolder.buffer() + cursorOfPayload,
                    overflow.buffer() + 4,
                    overflowSize);
             cursorOfPayload += overflowSize;
             //next overflow page
             Deserialization overflowDeserialization(overflow);
-            WCTInnerAssert(overflowDeserialization.canAdvance(4));
+            WCTAssert(overflowDeserialization.canAdvance(4));
             overflowPageno = overflowDeserialization.advance4BytesInt();
         }
         if (overflowPageno != 0 || cursorOfPayload != payloadSize) {

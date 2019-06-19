@@ -67,7 +67,7 @@ public:
     const Value& get(const Key& key)
     {
         auto it = m_map.find(key);
-        WCTInnerAssert(exists(key));
+        WCTAssert(exists(key));
         retain(it);
         return it->second->second;
     }

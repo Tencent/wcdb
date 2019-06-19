@@ -42,7 +42,7 @@ MasterCrawler::MasterCrawler(Pager &pager)
 
 bool MasterCrawler::work(MasterCrawlerDelegate *delegate)
 {
-    WCTInnerAssert(delegate != nullptr);
+    WCTAssert(delegate != nullptr);
     m_delegate = delegate;
     bool result = crawl(1);
     m_delegate = nullptr;

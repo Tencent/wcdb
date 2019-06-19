@@ -48,10 +48,10 @@ std::pair<bool, Page::Type> Page::acquireType()
             return { false, Type::Unknown };
         }
         Deserialization deserialization(data);
-        WCTInnerAssert(deserialization.canAdvance(1));
+        WCTAssert(deserialization.canAdvance(1));
         type = deserialization.advance1ByteInt();
     } else {
-        WCTInnerAssert(m_deserialization.isEnough(1));
+        WCTAssert(m_deserialization.isEnough(1));
         m_deserialization.seek(getOffsetOfHeader());
         type = m_deserialization.get1ByteInt(0);
     }
@@ -68,70 +68,70 @@ std::pair<bool, Page::Type> Page::acquireType()
 
 const MappedData &Page::getData() const
 {
-    WCTInnerAssert(isInitialized());
+    WCTAssert(isInitialized());
     return m_data;
 }
 
 Page::Type Page::getType() const
 {
-    WCTInnerAssert(isInitialized());
+    WCTAssert(isInitialized());
     return m_type;
 }
 
 #pragma mark - Interior Table
 int Page::getSubpageno(int index) const
 {
-    WCTInnerAssert(isInitialized());
-    WCTInnerAssert(index < getNumberOfSubpages());
-    WCTInnerAssert(m_type == Type::InteriorTable);
+    WCTAssert(isInitialized());
+    WCTAssert(index < getNumberOfSubpages());
+    WCTAssert(m_type == Type::InteriorTable);
     return m_subpagenos[index];
 }
 
 int Page::getNumberOfSubpages() const
 {
-    WCTInnerAssert(isInitialized());
-    WCTInnerAssert(m_type == Type::InteriorTable);
+    WCTAssert(isInitialized());
+    WCTAssert(m_type == Type::InteriorTable);
     return (int) m_subpagenos.size();
 }
 
 #pragma mark - Leaf Table
 Cell Page::getCell(int index)
 {
-    WCTInnerAssert(isInitialized());
-    WCTInnerAssert(index < getNumberOfCells());
-    WCTInnerAssert(m_type == Type::LeafTable);
+    WCTAssert(isInitialized());
+    WCTAssert(index < getNumberOfCells());
+    WCTAssert(m_type == Type::LeafTable);
     return Cell(m_cellPointers[index], this, m_pager);
 }
 
 int Page::getNumberOfCells() const
 {
-    WCTInnerAssert(isInitialized());
-    WCTInnerAssert(m_type == Type::LeafTable);
+    WCTAssert(isInitialized());
+    WCTAssert(m_type == Type::LeafTable);
     return (int) m_cellPointers.size();
 }
 
 int Page::getMaxLocal() const
 {
-    WCTInnerAssert(m_type == Type::LeafTable);
+    WCTAssert(m_type == Type::LeafTable);
     return m_pager->getUsableSize() - 35;
 }
 
 int Page::getMinLocal() const
 {
-    WCTInnerAssert(m_type == Type::LeafTable);
+    WCTAssert(m_type == Type::LeafTable);
     return (m_pager->getUsableSize() - 12) * 32 / 255 - 23;
 }
 
 #pragma mark - Common
 int Page::getOffsetOfCellPointer() const
 {
-    WCTInnerAssert(m_type != Type::Unknown);
+    WCTAssert(m_type != Type::Unknown);
     return m_type == Type::InteriorTable ? 12 : 8;
 }
 
 bool Page::hasRightMostPageNo() const
 {
-    WCTInnerAssert(m_type != Type::Unknown);
+    WCTAssert(m_type != Type::Unknown);
     return m_type == Type::InteriorTable;
 }
 
@@ -151,7 +151,7 @@ bool Page::doInitialize()
         m_deserialization.reset(m_data);
     }
     m_deserialization.seek(getOffsetOfHeader());
-    WCTInnerAssert(m_deserialization.canAdvance(1));
+    WCTAssert(m_deserialization.canAdvance(1));
     int type = m_deserialization.advance1ByteInt();
     switch (type) {
     case (int) Type::InteriorIndex:
@@ -164,7 +164,7 @@ bool Page::doInitialize()
         m_type = Type::Unknown;
         return true;
     }
-    WCTInnerAssert(m_deserialization.canAdvance(4));
+    WCTAssert(m_deserialization.canAdvance(4));
     m_deserialization.advance(2);
     int numberOfCells = m_deserialization.advance2BytesInt();
     if (numberOfCells < 0) {

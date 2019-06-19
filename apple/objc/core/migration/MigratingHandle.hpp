@@ -90,9 +90,7 @@ protected:
     bool tryFallbackToUnionedView(Syntax::Schema &schema, StringView &table);
     bool tryFallbackToSourceTable(Syntax::Schema &schema, StringView &table);
 
-#ifdef WCDB_DEBUG
     bool m_processing;
-#endif
     HandleStatement *m_additionalStatement;
 
 #pragma mark - Migrate

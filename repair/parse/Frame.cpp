@@ -30,24 +30,24 @@ namespace Repair {
 
 Frame::Frame(int frameno_, Wal *wal) : WalRelated(wal), frameno(frameno_)
 {
-    WCTInnerAssert(m_wal != nullptr);
+    WCTAssert(m_wal != nullptr);
 }
 
 int Frame::getPageNumber() const
 {
-    WCTInnerAssert(isInitialized());
+    WCTAssert(isInitialized());
     return m_pageno;
 }
 
 const std::pair<uint32_t, uint32_t> &Frame::getChecksum() const
 {
-    WCTInnerAssert(isInitialized());
+    WCTAssert(isInitialized());
     return m_checksum;
 }
 
 std::pair<bool, Page::Type> Frame::getPageType() const
 {
-    WCTInnerAssert(isInitialized());
+    WCTAssert(isInitialized());
     MappedData pageData = m_data.subdata(headerSize, m_wal->getPageSize());
     Page page = Page(getPageNumber(), m_pager, pageData);
     return page.acquireType();
@@ -55,14 +55,14 @@ std::pair<bool, Page::Type> Frame::getPageType() const
 
 uint32_t Frame::getTruncate() const
 {
-    WCTInnerAssert(isInitialized());
+    WCTAssert(isInitialized());
     return m_truncate;
 }
 
 std::pair<uint32_t, uint32_t>
 Frame::calculateChecksum(const std::pair<uint32_t, uint32_t> &source) const
 {
-    WCTInnerAssert(isInitialized());
+    WCTAssert(isInitialized());
     std::pair<uint32_t, uint32_t> checksum = source;
     checksum = WalRelated::calculateChecksum(m_data.subdata(0, 8), checksum);
     checksum = WalRelated::calculateChecksum(
@@ -81,16 +81,16 @@ bool Frame::doInitialize()
     }
     Deserialization deserialization(m_data);
 
-    WCTInnerAssert(deserialization.canAdvance(4));
+    WCTAssert(deserialization.canAdvance(4));
     m_pageno = (int) deserialization.advance4BytesUInt();
 
-    WCTInnerAssert(deserialization.canAdvance(4));
+    WCTAssert(deserialization.canAdvance(4));
     m_truncate = deserialization.advance4BytesUInt();
 
     std::pair<uint32_t, uint32_t> salt;
-    WCTInnerAssert(deserialization.canAdvance(4));
+    WCTAssert(deserialization.canAdvance(4));
     salt.first = deserialization.advance4BytesUInt();
-    WCTInnerAssert(deserialization.canAdvance(4));
+    WCTAssert(deserialization.canAdvance(4));
     salt.second = deserialization.advance4BytesUInt();
     if (salt != m_wal->getSalt()) {
         markWalAsCorrupted(frameno,

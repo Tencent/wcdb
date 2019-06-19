@@ -44,7 +44,7 @@ void Mechanic::setMaterial(const Material *material)
 #pragma mark - Mechanic
 bool Mechanic::work()
 {
-    WCTInnerAssert(m_material != nullptr);
+    WCTAssert(m_material != nullptr);
 
     if (isEmptyDatabase()) {
         return exit(true);

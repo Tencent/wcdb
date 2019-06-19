@@ -44,13 +44,13 @@ FileHandle::FileHandle(FileHandle &&other)
 
 FileHandle::~FileHandle()
 {
-    WCTInnerAssert(!isOpened() || m_mode != Mode::OverWrite);
+    WCTAssert(!isOpened() || m_mode != Mode::OverWrite);
     close();
 }
 
 FileHandle &FileHandle::operator=(FileHandle &&other)
 {
-    WCTInnerAssert(path == other.path);
+    WCTAssert(path == other.path);
     m_fd = std::move(other.m_fd);
     other.m_fd = -1;
     other.m_mode = Mode::None;
@@ -60,7 +60,7 @@ FileHandle &FileHandle::operator=(FileHandle &&other)
 #pragma mark - Basic
 bool FileHandle::open(Mode mode)
 {
-    WCTInnerAssert(!isOpened());
+    WCTAssert(!isOpened());
     switch (mode) {
     case Mode::OverWrite: {
         constexpr const int mask = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
@@ -69,7 +69,7 @@ bool FileHandle::open(Mode mode)
         break;
     }
     default:
-        WCTInnerAssert(mode == Mode::ReadOnly);
+        WCTAssert(mode == Mode::ReadOnly);
         m_fd = ::open(path.data(), O_RDONLY);
         break;
     }
@@ -96,13 +96,13 @@ void FileHandle::close()
 
 ssize_t FileHandle::size()
 {
-    WCTInnerAssert(isOpened());
+    WCTAssert(isOpened());
     return (ssize_t) lseek(m_fd, 0, SEEK_END);
 }
 
 Data FileHandle::read(off_t offset, size_t size)
 {
-    WCTInnerAssert(isOpened());
+    WCTAssert(isOpened());
     Data data(size);
     if (data.empty()) {
         return Data::null();
@@ -144,7 +144,7 @@ Data FileHandle::read(off_t offset, size_t size)
 
 bool FileHandle::write(off_t offset, const UnsafeData &unsafeData)
 {
-    WCTInnerAssert(isOpened());
+    WCTAssert(isOpened());
     ssize_t wrote;
     ssize_t prior = 0;
     size_t size = unsafeData.size();
@@ -186,7 +186,7 @@ MappedData FileHandle::map(off_t offset, size_t size)
     WCTRemedialAssert(m_mode == Mode::ReadOnly,
                       "Map is only supported in Readonly mode.",
                       return MappedData::null(););
-    WCTInnerAssert(size > 0);
+    WCTAssert(size > 0);
     static int s_pagesize = getpagesize();
     int alignment = offset % s_pagesize;
     off_t roundedOffset = offset - alignment;

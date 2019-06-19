@@ -32,8 +32,9 @@
 
 - (instancetype)initWithDatabase:(WCTDatabase *)database
                             name:(NSString *)name
-                           class:(Class<WCTTableCoding>)cls {
-    WCTInnerAssert(database != nil && cls != nil && name != nil);
+                           class:(Class<WCTTableCoding>)cls
+{
+    WCTAssert(database != nil && cls != nil && name != nil);
     if (self = [super init]) {
         _database = database;
         _name = name;
@@ -42,7 +43,7 @@
     return self;
 }
 
-- (NSString *) indexWithSuffix : (NSString *) indexSuffix
+- (NSString *)indexWithSuffix:(NSString *)indexSuffix
 {
     return [self.name stringByAppendingString:indexSuffix];
 }

@@ -122,7 +122,7 @@
             int index = 1;
             [_handle reset];
             for (const WCTProperty &property : _properties) {
-                WCTInnerAssert(_autoIncrements.empty() || _autoIncrements.size() == _properties.size());
+                WCTAssert(_autoIncrements.empty() || _autoIncrements.size() == _properties.size());
                 if (_autoIncrements.empty() || !_autoIncrements[index - 1]) {
                     [_handle bindProperty:property
                                  ofObject:value
@@ -131,7 +131,7 @@
                     if (isAutoIncrement.failed()) {
                         isAutoIncrement.reset(value.isAutoIncrement);
                     }
-                    WCTInnerAssert(!isAutoIncrement.failed());
+                    WCTAssert(!isAutoIncrement.failed());
                     if (isAutoIncrement) {
                         [_handle bindNullToIndex:index];
                     } else {
@@ -150,12 +150,12 @@
                 if (_canFillLastInsertedRowID.failed()) {
                     _canFillLastInsertedRowID.reset([_values.firstObject respondsToSelector:@selector(lastInsertedRowID)]);
                 }
-                WCTInnerAssert(!_canFillLastInsertedRowID.failed());
+                WCTAssert(!_canFillLastInsertedRowID.failed());
                 if (_canFillLastInsertedRowID) {
                     if (isAutoIncrement.failed()) {
                         isAutoIncrement.reset(value.isAutoIncrement);
                     }
-                    WCTInnerAssert(!isAutoIncrement.failed());
+                    WCTAssert(!isAutoIncrement.failed());
                     if (isAutoIncrement) {
                         value.lastInsertedRowID = [_handle getLastInsertedRowID];
                     }

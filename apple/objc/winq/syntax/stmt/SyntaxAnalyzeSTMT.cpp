@@ -45,7 +45,7 @@ bool AnalyzeSTMT::describle(std::ostringstream& stream) const
         }
         break;
     default:
-        WCTInnerAssert(switcher == Switch::All);
+        WCTAssert(switcher == Switch::All);
         break;
     }
     return true;
@@ -59,7 +59,7 @@ void AnalyzeSTMT::iterate(const Iterator& iterator, bool& stop)
         recursiveIterate(schema, iterator, stop);
         break;
     default:
-        WCTInnerAssert(switcher == Switch::All);
+        WCTAssert(switcher == Switch::All);
         break;
     }
 }

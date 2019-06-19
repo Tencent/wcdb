@@ -39,7 +39,7 @@ const Fraction &Scoreable::getScore() const
 void Scoreable::increaseScore(const Fraction &increment)
 {
     m_score += increment;
-    WCTInnerAssert(m_score.value() <= 1.0);
+    WCTAssert(m_score.value() <= 1.0);
     if (m_score.value() > 1.0) {
         m_score = 1;
     }
@@ -51,7 +51,7 @@ SegmentedScoreable::~SegmentedScoreable()
 
 const Fraction &SegmentedScoreable::getScore() const
 {
-    WCTInnerAssert(m_segmentedScore.value() == 0);
+    WCTAssert(m_segmentedScore.value() == 0);
     return Scoreable::getScore();
 }
 
@@ -69,7 +69,7 @@ void SegmentedScoreable::markSegmentedScoreDropped()
 void SegmentedScoreable::increaseScore(const Fraction &increment)
 {
     m_segmentedScore += increment;
-    WCTInnerAssert((Scoreable::getScore() + m_segmentedScore).value() <= 1.0);
+    WCTAssert((Scoreable::getScore() + m_segmentedScore).value() <= 1.0);
 }
 
 } //namespace Repair

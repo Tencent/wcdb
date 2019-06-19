@@ -80,11 +80,11 @@
 
 - (BOOL)remapTable:(NSString *)tableName toClass:(Class<WCTTableCoding>)cls
 {
-    WCTInnerAssert(tableName != nil && cls != nil);
+    WCTAssert(tableName != nil && cls != nil);
     // TODO: check the constraints are as expected here.
     return [self lazyRunTransaction:^BOOL(WCTHandle *nsHandle) {
         WCDB::Handle *handle = [nsHandle getOrGenerateHandle];
-        WCTInnerAssert(handle != nullptr);
+        WCTAssert(handle != nullptr);
         bool succeed, exists;
         std::tie(succeed, exists) = handle->tableExists(tableName);
         if (!succeed) {

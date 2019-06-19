@@ -42,7 +42,7 @@ WCTBinding::WCTBinding(Class cls)
 
     unsigned int numberOfMethods = 0;
     Method *methods = class_copyMethodList(object_getClass(m_cls), &numberOfMethods);
-    WCTInnerAssert(methods != nullptr && numberOfMethods > 0);
+    WCTAssert(methods != nullptr && numberOfMethods > 0);
     for (unsigned int i = 0; i < numberOfMethods; i++) {
         Method method = methods[i];
         NSString *selName = NSStringFromSelector(method_getName(method));
@@ -88,7 +88,7 @@ WCTBinding::WCTBinding(Class cls)
 
 void WCTBinding::assertNoInheritance(const WCTProperty &property, Class cls)
 {
-    WCTAssert(property.getColumnBinding().getClass() == cls, "Inheritance is not supported for ORM.");
+    WCTRemedialAssert(property.getColumnBinding().getClass() == cls, "Inheritance is not supported for ORM.", ;);
 }
 
 #pragma mark - Property
@@ -169,7 +169,7 @@ WCTBinding::Index &WCTBinding::getOrCreateIndex(const WCDB::UnsafeStringView &su
     if (iter == m_indexes.end()) {
         iter = m_indexes.emplace(suffix, Index(suffix)).first;
     }
-    WCTInnerAssert(iter->first == iter->second.suffix);
+    WCTAssert(iter->first == iter->second.suffix);
     return iter->second;
 }
 
@@ -178,7 +178,7 @@ WCTBinding::generateIndexStatements(const WCDB::UnsafeStringView &tableName, boo
 {
     std::pair<std::list<WCDB::StatementCreateIndex>, std::list<WCDB::StatementDropIndex>> pairs;
     for (const auto &iter : m_indexes) {
-        WCTInnerAssert(iter.first == iter.second.suffix);
+        WCTAssert(iter.first == iter.second.suffix);
         Index index = iter.second;
         switch (index.action) {
         case Index::Action::CreateForNewlyCreatedTableOnly:
@@ -194,7 +194,7 @@ WCTBinding::generateIndexStatements(const WCDB::UnsafeStringView &tableName, boo
             pairs.first.push_back(statement);
         } break;
         default:
-            WCTInnerAssert(index.action == Index::Action::Drop);
+            WCTAssert(index.action == Index::Action::Drop);
             std::ostringstream stream;
             stream << tableName << index.suffix;
             WCDB::StatementDropIndex statement = WCDB::StatementDropIndex().dropIndex(WCDB::StringView(stream.str())).ifExists();

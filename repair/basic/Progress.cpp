@@ -47,7 +47,7 @@ void Progress::finishProgress()
 void Progress::updateProgress(double progress)
 {
     double increment = progress - m_progress;
-    WCTInnerAssert(increment >= 0);
+    WCTAssert(increment >= 0);
     if (increment > 0) {
         m_progress = progress;
         if (m_onProgressUpdate != nullptr) {

@@ -32,9 +32,7 @@ MigratingHandle::MigratingHandle(Migration& migration)
 , m_additionalStatement(getStatement())
 , m_migrateStatement(getStatement())
 , m_removeMigratedStatement(getStatement())
-#ifdef WCDB_DEBUG
 , m_processing(false)
-#endif
 {
 }
 
@@ -112,7 +110,7 @@ bool MigratingHandle::rebindViews(const StringViewMap<const MigrationInfo*>& mig
     StringViewMap<const MigrationInfo*> views2MigratingInfos;
     for (const auto& iter : migratings) {
         const MigrationInfo* info = iter.second;
-        WCTInnerAssert(info != nullptr);
+        WCTAssert(info != nullptr);
         views2MigratingInfos.emplace(info->getUnionedView(), info);
     }
 
@@ -134,7 +132,7 @@ bool MigratingHandle::rebindViews(const StringViewMap<const MigrationInfo*>& mig
     }
 
     for (const auto& existingView : existingViews) {
-        WCTInnerAssert(existingView.hasPrefix(MigrationInfo::getUnionedViewPrefix()));
+        WCTAssert(existingView.hasPrefix(MigrationInfo::getUnionedViewPrefix()));
         auto iter = views2MigratingInfos.find(existingView);
         if (iter != views2MigratingInfos.end()) {
             // it is already created
@@ -160,7 +158,7 @@ bool MigratingHandle::rebindSchemas(const StringViewMap<const MigrationInfo*>& m
     StringViewMap<const MigrationInfo*> schemas2MigratingInfos;
     for (const auto& iter : migratings) {
         const MigrationInfo* info = iter.second;
-        WCTInnerAssert(info != nullptr);
+        WCTAssert(info != nullptr);
         if (info->isCrossDatabase()) {
             schemas2MigratingInfos.emplace(
             info->getSchemaForSourceDatabase().getDescription(), info);
@@ -219,7 +217,7 @@ bool MigratingHandle::trySynchronousTransactionAfterAttached()
         static const StringView* s_synchronousTransaction
         = new StringView(StatementBegin().beginImmediate().getDescription());
         succeed = executeSQL(*s_synchronousTransaction);
-        WCTInnerAssert(!succeed);
+        WCTAssert(!succeed);
         if (!succeed && isErrorIgnorable()) {
             succeed = true;
         }
@@ -231,9 +229,7 @@ bool MigratingHandle::trySynchronousTransactionAfterAttached()
 #pragma mark - Migration
 std::pair<bool, std::list<Statement>> MigratingHandle::process(const Statement& originStatement)
 {
-#ifdef WCDB_DEBUG
     m_processing = true;
-#endif
 
     bool succeed = true;
     std::list<Statement> statements;
@@ -333,7 +329,7 @@ std::pair<bool, std::list<Statement>> MigratingHandle::process(const Statement& 
             } else {
                 const UnsafeStringView& migratedTableName = migratedTable.table;
                 const MigrationInfo* info = getBoundInfo(migratedTableName);
-                WCTInnerAssert(info != nullptr);
+                WCTAssert(info != nullptr);
                 // statement for source table
                 statements.push_back(
                 info->getStatementForLimitedUpdatingTable(falledBackStatement));
@@ -356,7 +352,7 @@ std::pair<bool, std::list<Statement>> MigratingHandle::process(const Statement& 
             } else {
                 const UnsafeStringView& migratedTableName = migratedTable.table;
                 const MigrationInfo* info = getBoundInfo(migratedTableName);
-                WCTInnerAssert(info != nullptr);
+                WCTAssert(info != nullptr);
                 // statement for source table
                 statements.push_back(
                 info->getStatementForLimitedDeletingFromTable(falledBackStatement));
@@ -377,7 +373,7 @@ std::pair<bool, std::list<Statement>> MigratingHandle::process(const Statement& 
             if (!migratedSTMT.isTargetingSameTable(falledBackSTMT)) {
                 // Don't drop source table. Instead, delete all contents from source table and wait the stepper do the dropping work.
                 const MigrationInfo* info = getBoundInfo(migratedSTMT.table);
-                WCTInnerAssert(info != nullptr);
+                WCTAssert(info != nullptr);
                 statements.push_back(info->getStatementForDeletingFromTable(falledBackStatement));
             }
         } break;
@@ -389,9 +385,7 @@ std::pair<bool, std::list<Statement>> MigratingHandle::process(const Statement& 
     if (!succeed) {
         statements.clear();
     }
-#ifdef WCDB_DEBUG
     m_processing = false;
-#endif
     return { succeed, std::move(statements) };
 }
 
@@ -426,7 +420,7 @@ bool MigratingHandle::tryFallbackToSourceTable(Syntax::Schema& schema, StringVie
 #pragma mark - Override
 bool MigratingHandle::prepare(const Statement& statement)
 {
-    WCTInnerAssert(!m_processing);
+    WCTAssert(!m_processing);
     WCTRemedialAssert(!isPrepared(), "Last statement is not finalized.", finalize(););
     bool succeed;
     std::list<Statement> statements;
@@ -434,7 +428,7 @@ bool MigratingHandle::prepare(const Statement& statement)
     if (!succeed) {
         return false;
     }
-    WCTInnerAssert(statements.size() <= 2);
+    WCTAssert(statements.size() <= 2);
     if (Super::prepare(statements.front())
         && (statements.size() == 1 || m_additionalStatement->prepare(statements.back()))) {
         return true;
@@ -462,7 +456,7 @@ bool MigratingHandle::step()
 
 bool MigratingHandle::realStep()
 {
-    WCTInnerAssert(!(m_additionalStatement->isPrepared() && isMigratedPrepared()));
+    WCTAssert(!(m_additionalStatement->isPrepared() && isMigratedPrepared()));
     return Super::step()
            && (!m_additionalStatement->isPrepared() || m_additionalStatement->step())
            && (!isMigratedPrepared() || stepMigration(getLastInsertedRowID()));
@@ -471,7 +465,7 @@ bool MigratingHandle::realStep()
 void MigratingHandle::reset()
 {
     Super::reset();
-    WCTInnerAssert(!(m_additionalStatement->isPrepared() && isMigratedPrepared()));
+    WCTAssert(!(m_additionalStatement->isPrepared() && isMigratedPrepared()));
     if (m_additionalStatement->isPrepared()) {
         m_additionalStatement->reset();
     }
@@ -567,14 +561,13 @@ void MigratingHandle::bindNull(int index)
 #pragma mark - Migrate
 bool MigratingHandle::isMigratedPrepared()
 {
-    WCTInnerAssert(m_migrateStatement->isPrepared()
-                   == m_removeMigratedStatement->isPrepared());
+    WCTAssert(m_migrateStatement->isPrepared() == m_removeMigratedStatement->isPrepared());
     return m_migrateStatement->isPrepared() /* || m_removeMigratedStatement->isPrepared() */;
 }
 
 bool MigratingHandle::stepMigration(const int64_t& rowid)
 {
-    WCTInnerAssert(isMigratedPrepared());
+    WCTAssert(isMigratedPrepared());
     m_removeMigratedStatement->bindInteger64(rowid, 1);
     if (m_rowidIndexOfMigratingStatement > 0) {
         m_migrateStatement->bindInteger64(rowid, m_rowidIndexOfMigratingStatement);
@@ -590,7 +583,7 @@ void MigratingHandle::finalizeMigrate()
 
 void MigratingHandle::resetMigrate()
 {
-    WCTInnerAssert(isMigratedPrepared());
+    WCTAssert(isMigratedPrepared());
     m_removeMigratedStatement->reset();
     m_migrateStatement->reset();
 }
@@ -598,9 +591,9 @@ void MigratingHandle::resetMigrate()
 bool MigratingHandle::prepareMigrate(const Syntax::InsertSTMT& migrated,
                                      const Syntax::InsertSTMT& falledBack)
 {
-    WCTInnerAssert(!isMigratedPrepared());
+    WCTAssert(!isMigratedPrepared());
     const MigrationInfo* info = getBoundInfo(migrated.table);
-    WCTInnerAssert(info != nullptr);
+    WCTAssert(info != nullptr);
     m_rowidIndexOfMigratingStatement = info->getRowIDIndexOfMigratingStatement();
     return m_removeMigratedStatement->prepare(info->getStatementForDeletingSpecifiedRow())
            && m_migrateStatement->prepare(info->getStatementForMigrating(falledBack));

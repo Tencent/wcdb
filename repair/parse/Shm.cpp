@@ -47,13 +47,13 @@ const StringView &Shm::getPath() const
 
 uint32_t Shm::getMaxFrame() const
 {
-    WCTInnerAssert(isInitialized());
+    WCTAssert(isInitialized());
     return m_header.maxFrame;
 }
 
 uint32_t Shm::getBackfill() const
 {
-    WCTInnerAssert(isInitialized());
+    WCTAssert(isInitialized());
     return m_checkpointInfo.backfill;
 }
 
@@ -68,7 +68,7 @@ void Shm::markAsCorrupted(const UnsafeStringView &message)
 
 bool Shm::doInitialize()
 {
-    WCTInnerAssert(m_wal->isInitialized() || m_wal->isInitializing());
+    WCTAssert(m_wal->isInitialized() || m_wal->isInitializing());
 
     bool succeed;
     size_t fileSize;

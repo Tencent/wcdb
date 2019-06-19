@@ -32,8 +32,8 @@
 #pragma mark - LifeCycle
 - (instancetype)initWithDatabase:(WCTDatabase *)database andUnsafeHandle:(WCDB::Handle *)handle
 {
-    WCTInnerAssert(database != nil);
-    WCTInnerAssert(handle != nil);
+    WCTAssert(database != nil);
+    WCTAssert(handle != nil);
     if (self = [super init]) {
         _database = database;
         _handle = handle;
@@ -44,7 +44,7 @@
 
 - (instancetype)initWithDatabase:(WCTDatabase *)database
 {
-    WCTInnerAssert(database != nil);
+    WCTAssert(database != nil);
     if (self = [super init]) {
         _database = database;
     }

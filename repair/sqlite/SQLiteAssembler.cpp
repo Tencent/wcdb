@@ -147,7 +147,7 @@ const Error &SQLiteAssembler::getError() const
 #pragma mark - Cell
 bool SQLiteAssembler::lazyPrepareCell()
 {
-    WCTInnerAssert(!m_table.empty());
+    WCTAssert(!m_table.empty());
     if (m_cellSTMT == nullptr) {
         bool succeed;
         StringView sql;
@@ -245,7 +245,7 @@ SQLiteAssembler::updateSequence(const UnsafeStringView &tableName, int64_t seque
         return { false, false };
     }
     int changes = sqlite3_changes((sqlite3 *) m_handle);
-    WCTInnerAssert(changes <= 1);
+    WCTAssert(changes <= 1);
     return { true, changes > 0 };
 }
 
@@ -290,7 +290,7 @@ bool SQLiteAssembler::open()
 
 void SQLiteAssembler::close()
 {
-    WCTInnerAssert(m_cellSTMT == nullptr);
+    WCTAssert(m_cellSTMT == nullptr);
     SQLiteBase::close();
 }
 

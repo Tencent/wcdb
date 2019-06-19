@@ -35,7 +35,7 @@ Notifier::Notifier()
 
 void Notifier::setNotification(int order, const UnsafeStringView &key, const Callback &callback)
 {
-    WCTInnerAssert(callback != nullptr);
+    WCTAssert(callback != nullptr);
     LockGuard lockGuard(m_lock);
     m_notifications.insert(StringView(key), callback, order);
 }
@@ -59,12 +59,6 @@ void Notifier::setNotificationForPreprocessing(const UnsafeStringView &key,
 
 void Notifier::notify(Error &error) const
 {
-    WCTInnerAssert(m_lock.level() == SharedLock::Level::None);
-    if (m_lock.level() != SharedLock::Level::None) {
-        // avoid recursion errors
-        return;
-    }
-
     SharedLockGuard lockGuard(m_lock);
     for (const auto &element : m_preprocessNotifications) {
         element.second(error);

@@ -44,8 +44,8 @@ MigrateHandle::~MigrateHandle()
 
 bool MigrateHandle::reAttach(const UnsafeStringView& newPath, const Schema& newSchema)
 {
-    WCTInnerAssert(!isInTransaction());
-    WCTInnerAssert(!isPrepared());
+    WCTAssert(!isInTransaction());
+    WCTAssert(!isPrepared());
 
     bool succeed = true;
     if (!m_attached.syntax().isTargetingSameSchema(newSchema.syntax())) {
@@ -58,9 +58,9 @@ bool MigrateHandle::reAttach(const UnsafeStringView& newPath, const Schema& newS
 
 bool MigrateHandle::attach(const UnsafeStringView& newPath, const Schema& newSchema)
 {
-    WCTInnerAssert(!isInTransaction());
-    WCTInnerAssert(!isPrepared());
-    WCTInnerAssert(m_attached.syntax().isMain());
+    WCTAssert(!isInTransaction());
+    WCTAssert(!isPrepared());
+    WCTAssert(m_attached.syntax().isMain());
 
     bool succeed = true;
     if (!newSchema.syntax().isMain()) {
@@ -74,8 +74,8 @@ bool MigrateHandle::attach(const UnsafeStringView& newPath, const Schema& newSch
 
 bool MigrateHandle::detach()
 {
-    WCTInnerAssert(!isInTransaction());
-    WCTInnerAssert(!isPrepared());
+    WCTAssert(!isInTransaction());
+    WCTAssert(!isPrepared());
 
     bool succeed = true;
     if (!m_attached.syntax().isMain()) {
@@ -102,7 +102,7 @@ std::pair<bool, std::set<StringView>> MigrateHandle::getAllTables()
 
 bool MigrateHandle::dropSourceTable(const MigrationInfo* info)
 {
-    WCTInnerAssert(info != nullptr);
+    WCTAssert(info != nullptr);
     bool succeed = false;
     if (reAttach(info->getSourceDatabase(), info->getSchemaForSourceDatabase())) {
         m_migratingInfo = info;
@@ -113,7 +113,7 @@ bool MigrateHandle::dropSourceTable(const MigrationInfo* info)
 
 bool MigrateHandle::migrateRows(const MigrationInfo* info, bool& done)
 {
-    WCTInnerAssert(info != nullptr);
+    WCTAssert(info != nullptr);
     done = false;
 
     bool succeed, exists;
@@ -141,7 +141,7 @@ bool MigrateHandle::migrateRows(const MigrationInfo* info, bool& done)
 
     if (!m_removeMigratedStatement->isPrepared()
         && !m_removeMigratedStatement->prepare(
-           m_migratingInfo->getStatementForDeletingMigratedOneRow())) {
+        m_migratingInfo->getStatementForDeletingMigratedOneRow())) {
         return false;
     }
 
@@ -174,9 +174,8 @@ bool MigrateHandle::migrateRows(const MigrationInfo* info, bool& done)
 
 std::pair<bool, bool> MigrateHandle::migrateRow()
 {
-    WCTInnerAssert(m_migrateStatement->isPrepared()
-                   && m_removeMigratedStatement->isPrepared());
-    WCTInnerAssert(isInTransaction());
+    WCTAssert(m_migrateStatement->isPrepared() && m_removeMigratedStatement->isPrepared());
+    WCTAssert(isInTransaction());
     bool succeed = false;
     bool migrated = false;
     m_migrateStatement->reset();
@@ -206,10 +205,10 @@ MigrateHandle::Sample::Sample()
 
 void MigrateHandle::addSample(double timeIntervalWithinTransaction, double timeIntervalForWholeTransaction)
 {
-    WCTInnerAssert(timeIntervalWithinTransaction > 0);
-    WCTInnerAssert(timeIntervalForWholeTransaction > 0);
-    WCTInnerAssert(m_samplePointing < numberOfSamples);
-    WCTInnerAssert(timeIntervalForWholeTransaction > timeIntervalWithinTransaction);
+    WCTAssert(timeIntervalWithinTransaction > 0);
+    WCTAssert(timeIntervalForWholeTransaction > 0);
+    WCTAssert(m_samplePointing < numberOfSamples);
+    WCTAssert(timeIntervalForWholeTransaction > timeIntervalWithinTransaction);
 
     Sample& sample = m_samples[m_samplePointing];
     sample.timeIntervalWithinTransaction = timeIntervalWithinTransaction;

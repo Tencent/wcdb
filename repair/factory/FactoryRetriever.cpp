@@ -175,7 +175,7 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
             SteadyClock before = SteadyClock::now();
             bool result = mechanic.work();
             if (!result) {
-                WCTInnerAssert(isErrorCritial());
+                WCTAssert(isErrorCritial());
                 setCriticalError(mechanic.getError());
                 return false;
             } else {
@@ -210,7 +210,7 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
                           SteadyClock::timeIntervalSinceSteadyClockToNow(before));
         score = std::max(score, fullCrawler.getScore());
     } else if (!useMaterial) {
-        WCTInnerAssert(isErrorCritial());
+        WCTAssert(isErrorCritial());
         setCriticalError(fullCrawler.getError());
         return false;
     }

@@ -32,7 +32,7 @@ WalRelated::~WalRelated()
 
 WalRelated::WalRelated(Wal *wal) : m_wal(wal), m_pager(m_wal->m_pager)
 {
-    WCTInnerAssert(m_wal != nullptr);
+    WCTAssert(m_wal != nullptr);
 }
 
 WalRelated::WalRelated(WalRelated &&other) : m_wal(other.m_wal)

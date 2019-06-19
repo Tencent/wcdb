@@ -38,13 +38,13 @@ AbstractHandle::AbstractHandle()
 
 AbstractHandle::~AbstractHandle()
 {
-    WCTInnerAssert(m_transactionError == TransactionError::Allowed);
+    WCTAssert(m_transactionError == TransactionError::Allowed);
     close();
 }
 
 sqlite3 *AbstractHandle::getRawHandle()
 {
-    WCTInnerAssert(isOpened());
+    WCTAssert(isOpened());
     return m_handle;
 }
 
@@ -118,7 +118,7 @@ void AbstractHandle::close()
 bool AbstractHandle::executeSQL(const UnsafeStringView &sql)
 {
     // use seperated sqlite3_exec to get more information
-    WCTInnerAssert(isOpened());
+    WCTAssert(isOpened());
     HandleStatement handleStatement(this);
     bool succeed = handleStatement.prepare(sql);
     if (succeed) {
@@ -135,42 +135,42 @@ bool AbstractHandle::executeStatement(const Statement &statement)
 
 long long AbstractHandle::getLastInsertedRowID()
 {
-    WCTInnerAssert(isOpened());
+    WCTAssert(isOpened());
     return sqlite3_last_insert_rowid(m_handle);
 }
 
 //Error::Code AbstractHandle::getResultCode()
 //{
-//    WCTInnerAssert(isOpened());
+//    WCTAssert(isOpened());
 //    return (Error::Code) sqlite3_errcode(m_handle);
 //}
 //
 //const char *AbstractHandle::getErrorMessage()
 //{
-//    WCTInnerAssert(isOpened());
+//    WCTAssert(isOpened());
 //    return sqlite3_errmsg(m_handle);
 //}
 //int AbstractHandle::getExtendedErrorCode()
 //{
-//    WCTInnerAssert(isOpened());
+//    WCTAssert(isOpened());
 //    return sqlite3_extended_errcode(m_handle);
 //}
 
 int AbstractHandle::getChanges()
 {
-    WCTInnerAssert(isOpened());
+    WCTAssert(isOpened());
     return sqlite3_changes(m_handle);
 }
 
 bool AbstractHandle::isReadonly()
 {
-    WCTInnerAssert(isOpened());
+    WCTAssert(isOpened());
     return sqlite3_db_readonly(m_handle, NULL) == 1;
 }
 
 bool AbstractHandle::isInTransaction()
 {
-    WCTInnerAssert(isOpened());
+    WCTAssert(isOpened());
     return sqlite3_get_autocommit(m_handle) == 0;
 }
 
@@ -190,7 +190,7 @@ void AbstractHandle::returnStatement(HandleStatement *handleStatement)
                 return;
             }
         }
-        WCTInnerAssert(false);
+        WCTAssert(false);
     }
 }
 
@@ -439,19 +439,19 @@ void AbstractHandle::rollbackTransaction()
 #pragma mark - Interface
 void AbstractHandle::setCipherKey(const UnsafeData &data)
 {
-    WCTInnerAssert(isOpened());
+    WCTAssert(isOpened());
     APIExit(sqlite3_key(m_handle, data.buffer(), (int) data.size()));
 }
 
 int AbstractHandle::getNumberOfDirtyPages()
 {
-    WCTInnerAssert(isOpened());
+    WCTAssert(isOpened());
     return sqlite3_dirty_page_count(m_handle);
 }
 
 void AbstractHandle::enableExtendedResultCodes(bool enable)
 {
-    WCTInnerAssert(isOpened());
+    WCTAssert(isOpened());
     APIExit(sqlite3_extended_result_codes(m_handle, (int) enable));
 }
 
@@ -461,7 +461,7 @@ bool AbstractHandle::checkpoint(CheckpointMode mode)
     static_assert((int) CheckpointMode::Full == SQLITE_CHECKPOINT_FULL, "");
     static_assert((int) CheckpointMode::Restart == SQLITE_CHECKPOINT_RESTART, "");
     static_assert((int) CheckpointMode::Truncate == SQLITE_CHECKPOINT_TRUNCATE, "");
-    WCTInnerAssert(isOpened());
+    WCTAssert(isOpened());
 
     return APIExit(sqlite3_wal_checkpoint_v2(
     m_handle, Syntax::mainSchema, (int) mode, nullptr, nullptr));
@@ -469,7 +469,7 @@ bool AbstractHandle::checkpoint(CheckpointMode mode)
 
 void AbstractHandle::disableCheckpointWhenClosing(bool disable)
 {
-    WCTInnerAssert(isOpened());
+    WCTAssert(isOpened());
     APIExit(sqlite3_db_config(
     m_handle, SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE, (int) disable, nullptr));
 }
@@ -478,14 +478,14 @@ void AbstractHandle::disableCheckpointWhenClosing(bool disable)
 void AbstractHandle::setNotificationWhenSQLTraced(const UnsafeStringView &name,
                                                   const SQLNotification &onTraced)
 {
-    WCTInnerAssert(isOpened());
+    WCTAssert(isOpened());
     m_notification.setNotificationWhenSQLTraced(name, onTraced);
 }
 
 void AbstractHandle::setNotificationWhenPerformanceTraced(const UnsafeStringView &name,
                                                           const PerformanceNotification &onTraced)
 {
-    WCTInnerAssert(isOpened());
+    WCTAssert(isOpened());
     m_notification.setNotificationWhenPerformanceTraced(name, onTraced);
 }
 
@@ -493,26 +493,26 @@ void AbstractHandle::setNotificationWhenCommitted(int order,
                                                   const UnsafeStringView &name,
                                                   const CommittedNotification &onCommitted)
 {
-    WCTInnerAssert(isOpened());
+    WCTAssert(isOpened());
     m_notification.setNotificationWhenCommitted(order, name, onCommitted);
 }
 
 void AbstractHandle::unsetNotificationWhenCommitted(const UnsafeStringView &name)
 {
-    WCTInnerAssert(isOpened());
+    WCTAssert(isOpened());
     m_notification.unsetNotificationWhenCommitted(name);
 }
 
 void AbstractHandle::setNotificationWhenCheckpointed(const UnsafeStringView &name,
                                                      const CheckpointedNotification &checkpointed)
 {
-    WCTInnerAssert(isOpened());
+    WCTAssert(isOpened());
     m_notification.setNotificationWhenCheckpointed(name, checkpointed);
 }
 
 void AbstractHandle::setNotificationWhenBusy(const BusyNotification &busyNotification)
 {
-    WCTInnerAssert(isOpened());
+    WCTAssert(isOpened());
     m_notification.setNotificationWhenBusy(busyNotification);
 }
 
@@ -539,7 +539,7 @@ bool AbstractHandle::APIExit(int rc, const char *sql)
 
 void AbstractHandle::notifyError(int rc, const char *sql)
 {
-    WCTInnerAssert(Error::isError(rc));
+    WCTAssert(Error::isError(rc));
     if (Error::rc2c(rc) != Error::Code::Misuse && sqlite3_errcode(m_handle) == rc) {
         m_error.setSQLiteCode(rc, sqlite3_errmsg(m_handle));
     } else {

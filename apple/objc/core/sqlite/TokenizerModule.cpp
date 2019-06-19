@@ -59,7 +59,7 @@ AbstractTokenizerCursorInfo::~AbstractTokenizerCursorInfo()
 int AbstractTokenizerModuleTemplate::newTokenizer(Tokenizer **ppTokenizer,
                                                   AbstractTokenizerInfo *info)
 {
-    WCTInnerAssert(ppTokenizer != nullptr);
+    WCTAssert(ppTokenizer != nullptr);
     *ppTokenizer = nullptr;
     if (info == nullptr) {
         return SQLITE_NOMEM;
@@ -76,20 +76,20 @@ int AbstractTokenizerModuleTemplate::newTokenizer(Tokenizer **ppTokenizer,
 
 AbstractTokenizerInfo *AbstractTokenizerModuleTemplate::getTokenizerInfo(Tokenizer *pTokenizer)
 {
-    WCTInnerAssert(pTokenizer != nullptr);
+    WCTAssert(pTokenizer != nullptr);
     return pTokenizer->info;
 }
 
 void AbstractTokenizerModuleTemplate::deleteTokenizer(Tokenizer *pTokenizer)
 {
-    WCTInnerAssert(pTokenizer != nullptr);
+    WCTAssert(pTokenizer != nullptr);
     sqlite3_free(pTokenizer);
 }
 
 int AbstractTokenizerModuleTemplate::newCursor(TokenizerCursor **ppCursor,
                                                AbstractTokenizerCursorInfo *info)
 {
-    WCTInnerAssert(ppCursor != nullptr);
+    WCTAssert(ppCursor != nullptr);
     *ppCursor = nullptr;
     if (info == nullptr) {
         return SQLITE_NOMEM;
@@ -107,13 +107,13 @@ int AbstractTokenizerModuleTemplate::newCursor(TokenizerCursor **ppCursor,
 AbstractTokenizerCursorInfo *
 AbstractTokenizerModuleTemplate::getCursorInfo(TokenizerCursor *pCursor)
 {
-    WCTInnerAssert(pCursor != nullptr);
+    WCTAssert(pCursor != nullptr);
     return pCursor->info;
 }
 
 void AbstractTokenizerModuleTemplate::deleteCursor(TokenizerCursor *pCursor)
 {
-    WCTInnerAssert(pCursor != nullptr);
+    WCTAssert(pCursor != nullptr);
     sqlite3_free(pCursor);
 }
 

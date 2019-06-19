@@ -33,8 +33,8 @@ MigrationBaseInfo::MigrationBaseInfo(const UnsafeStringView& database,
                                      const UnsafeStringView& table)
 : m_database(database), m_table(table)
 {
-    WCTInnerAssert(!m_database.empty());
-    WCTInnerAssert(!m_table.empty());
+    WCTAssert(!m_database.empty());
+    WCTAssert(!m_table.empty());
 }
 
 MigrationBaseInfo::~MigrationBaseInfo()
@@ -98,7 +98,7 @@ void MigrationBaseInfo::setSource(const UnsafeStringView& table, const UnsafeStr
 #pragma mark - MigrationUserInfo
 StatementAttach MigrationUserInfo::getStatementForAttachingSchema() const
 {
-    WCTInnerAssert(isCrossDatabase());
+    WCTAssert(isCrossDatabase());
     return StatementAttach().attach(getSourceDatabase()).as(getSchemaForDatabase(getSourceDatabase()));
 }
 
@@ -116,8 +116,8 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
                              bool integerPrimaryKey)
 : MigrationBaseInfo(userInfo), m_integerPrimaryKey(integerPrimaryKey)
 {
-    WCTInnerAssert(shouldMigrate());
-    WCTInnerAssert(!uniqueColumns.empty());
+    WCTAssert(shouldMigrate());
+    WCTAssert(!uniqueColumns.empty());
 
     // Schema
     if (isCrossDatabase()) {
@@ -223,13 +223,13 @@ const StringView& MigrationInfo::getUnionedView() const
 
 const StatementAttach& MigrationInfo::getStatementForAttachingSchema() const
 {
-    WCTInnerAssert(isCrossDatabase());
+    WCTAssert(isCrossDatabase());
     return m_statementForAttachingSchema;
 }
 
 StatementDetach MigrationInfo::getStatementForDetachingSchema(const Schema& schema)
 {
-    WCTInnerAssert(schema.getDescription().hasPrefix(getSchemaPrefix()));
+    WCTAssert(schema.getDescription().hasPrefix(getSchemaPrefix()));
     return StatementDetach().detach(schema);
 }
 
@@ -252,7 +252,7 @@ const StatementCreateView& MigrationInfo::getStatementForCreatingUnionedView() c
 const StatementDropView
 MigrationInfo::getStatementForDroppingUnionedView(const UnsafeStringView& unionedView)
 {
-    WCTInnerAssert(unionedView.hasPrefix(getUnionedViewPrefix()));
+    WCTAssert(unionedView.hasPrefix(getUnionedViewPrefix()));
     return StatementDropView().dropView(unionedView).schema(Schema::temp()).ifExists();
 }
 
@@ -290,15 +290,15 @@ StatementInsert MigrationInfo::getStatementForMigrating(const Syntax::InsertSTMT
     auto& syntax = statement.syntax();
     syntax.schema = Schema::main();
     syntax.table = getTable();
-    WCTInnerAssert(!syntax.isMultiWrite());
+    WCTAssert(!syntax.isMultiWrite());
 
     auto& columns = syntax.columns;
-    WCTInnerAssert(!columns.empty());
+    WCTAssert(!columns.empty());
     columns.insert(columns.begin(), Column("rowid"));
 
     if (!syntax.expressionsValues.empty()) {
         auto& expressions = syntax.expressionsValues;
-        WCTInnerAssert(expressions.size() == 1);
+        WCTAssert(expressions.size() == 1);
         auto& values = *expressions.begin();
         int rowidIndexOfMigratingStatement = getRowIDIndexOfMigratingStatement();
         Expression rowid;
@@ -323,7 +323,7 @@ int MigrationInfo::getRowIDIndexOfMigratingStatement() const
 StatementUpdate
 MigrationInfo::getStatementForLimitedUpdatingTable(const Statement& sourceStatement) const
 {
-    WCTInnerAssert(sourceStatement.getType() == Syntax::Identifier::Type::UpdateSTMT);
+    WCTAssert(sourceStatement.getType() == Syntax::Identifier::Type::UpdateSTMT);
     StatementUpdate statementUpdate((const StatementUpdate&) sourceStatement);
 
     Syntax::UpdateSTMT& updateSyntax = statementUpdate.syntax();
@@ -354,7 +354,7 @@ MigrationInfo::getStatementForLimitedUpdatingTable(const Statement& sourceStatem
 StatementDelete
 MigrationInfo::getStatementForLimitedDeletingFromTable(const Statement& sourceStatement) const
 {
-    WCTInnerAssert(sourceStatement.getType() == Syntax::Identifier::Type::DeleteSTMT);
+    WCTAssert(sourceStatement.getType() == Syntax::Identifier::Type::DeleteSTMT);
     StatementDelete statementDelete((const StatementDelete&) sourceStatement);
 
     Syntax::DeleteSTMT& deleteSyntax = statementDelete.syntax();
@@ -385,7 +385,7 @@ MigrationInfo::getStatementForLimitedDeletingFromTable(const Statement& sourceSt
 StatementDelete
 MigrationInfo::getStatementForDeletingFromTable(const Statement& sourceStatement) const
 {
-    WCTInnerAssert(sourceStatement.getType() == Syntax::Identifier::Type::DropTableSTMT);
+    WCTAssert(sourceStatement.getType() == Syntax::Identifier::Type::DropTableSTMT);
 
     const Syntax::DropTableSTMT& dropTableSyntax
     = ((const StatementDropTable&) sourceStatement).syntax();

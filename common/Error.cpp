@@ -244,7 +244,7 @@ Error::ExtCode Error::rc2ec(int rc)
 
 const StringView& Error::getMessage() const
 {
-    WCTInnerAssert(!m_message.empty());
+    WCTAssert(!m_message.empty());
     return m_message;
 }
 
@@ -270,43 +270,43 @@ Error::InfoValue::Type Error::InfoValue::valueType() const
     } else if (hash == typeid(double).hash_code()) {
         return Type::Float;
     } else {
-        WCTInnerAssert(hash == typeid(int64_t).hash_code());
+        WCTAssert(hash == typeid(int64_t).hash_code());
         return Type::Integer;
     }
 }
 
 const StringView& Error::InfoValue::stringValue() const
 {
-    WCTInnerAssert(has_value());
-    WCTInnerAssert(valueType() == Type::StringView);
+    WCTAssert(has_value());
+    WCTAssert(valueType() == Type::StringView);
     const StringView* value = std::any_cast<StringView>(this);
-    WCTInnerAssert(value != nullptr);
+    WCTAssert(value != nullptr);
     return *value;
 }
 
 const int64_t& Error::InfoValue::integerValue() const
 {
-    WCTInnerAssert(has_value());
-    WCTInnerAssert(valueType() == Type::Integer);
+    WCTAssert(has_value());
+    WCTAssert(valueType() == Type::Integer);
     const int64_t* value = std::any_cast<int64_t>(this);
-    WCTInnerAssert(value != nullptr);
+    WCTAssert(value != nullptr);
     return *value;
 }
 
 const double& Error::InfoValue::floatValue() const
 {
-    WCTInnerAssert(has_value());
-    WCTInnerAssert(valueType() == Type::Float);
+    WCTAssert(has_value());
+    WCTAssert(valueType() == Type::Float);
     const double* value = std::any_cast<double>(this);
-    WCTInnerAssert(value != nullptr);
+    WCTAssert(value != nullptr);
     return *value;
 }
 
 #pragma mark - Description
 StringView Error::getDescription() const
 {
-    WCTInnerAssert(isError((int) code()));
-    WCTInnerAssert(!m_message.empty());
+    WCTAssert(isError((int) code()));
+    WCTAssert(!m_message.empty());
     std::ostringstream stream;
     stream << "[" << levelName(level) << ": " << (int) code() << ", " << m_message << "]";
 
@@ -320,7 +320,7 @@ StringView Error::getDescription() const
             stream << info.second.floatValue();
             break;
         default:
-            WCTInnerAssert(info.second.valueType() == InfoValue::Type::Integer);
+            WCTAssert(info.second.valueType() == InfoValue::Type::Integer);
             stream << info.second.integerValue();
             break;
         }

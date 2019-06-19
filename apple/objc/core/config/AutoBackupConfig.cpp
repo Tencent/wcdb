@@ -32,7 +32,7 @@ AutoBackupOperator::~AutoBackupOperator()
 AutoBackupConfig::AutoBackupConfig(const std::shared_ptr<AutoBackupOperator> &operator_)
 : Config(), m_identifier(StringView::formatted("Backup-%p", this)), m_operator(operator_)
 {
-    WCTInnerAssert(m_operator != nullptr);
+    WCTAssert(m_operator != nullptr);
 }
 
 bool AutoBackupConfig::invoke(Handle *handle)

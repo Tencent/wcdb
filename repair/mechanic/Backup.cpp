@@ -132,7 +132,7 @@ bool Backup::filter(const UnsafeStringView &tableName)
 void Backup::onCellCrawled(const Cell &cell)
 {
     WCDB_UNUSED(cell)
-    WCTInnerAssert(false);
+    WCTAssert(false);
 }
 
 bool Backup::willCrawlPage(const Page &page, int height)

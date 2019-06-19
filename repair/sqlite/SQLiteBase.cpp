@@ -123,7 +123,7 @@ bool SQLiteBase::error(int rc, const char *sql)
 #pragma mark - SQLite Handle
 bool SQLiteBase::open()
 {
-    WCTInnerAssert(!m_path.empty());
+    WCTAssert(!m_path.empty());
     if (m_handle == nullptr) {
         int rc = sqlite3_open(m_path.c_str(), (sqlite3 **) &m_handle);
         if (rc != SQLITE_OK) {
@@ -148,8 +148,8 @@ void SQLiteBase::close()
 
 bool SQLiteBase::execute(const char *sql)
 {
-    WCTInnerAssert(isOpened());
-    WCTInnerAssert(sql != nullptr);
+    WCTAssert(isOpened());
+    WCTAssert(sql != nullptr);
     int rc = sqlite3_exec((sqlite3 *) m_handle, sql, nullptr, nullptr, nullptr);
     if (rc != SQLITE_OK) {
         return error(rc, sql);
@@ -160,8 +160,8 @@ bool SQLiteBase::execute(const char *sql)
 #pragma mark - SQLite STMT
 void *SQLiteBase::prepare(const char *sql)
 {
-    WCTInnerAssert(isOpened());
-    WCTInnerAssert(sql != nullptr);
+    WCTAssert(isOpened());
+    WCTAssert(sql != nullptr);
     sqlite3_stmt *stmt;
     int rc = sqlite3_prepare_v2((sqlite3 *) m_handle, sql, -1, &stmt, nullptr);
     if (rc == SQLITE_OK) {
@@ -179,8 +179,8 @@ bool SQLiteBase::step(void *stmt)
 
 bool SQLiteBase::step(void *stmt, bool &done)
 {
-    WCTInnerAssert(isOpened());
-    WCTInnerAssert(stmt != nullptr);
+    WCTAssert(isOpened());
+    WCTAssert(stmt != nullptr);
     int rc = sqlite3_step((sqlite3_stmt *) stmt);
     done = rc == SQLITE_DONE;
     if (rc == SQLITE_OK || rc == SQLITE_DONE || rc == SQLITE_ROW) {

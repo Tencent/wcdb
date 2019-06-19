@@ -54,11 +54,11 @@
 
     self.continueAfterFailure = YES;
 
-#if WCDB_DEBUG
+    //#if WCDB_DEBUG
     WCTDatabase.debug = YES;
-#else
-    WCTDatabase.debug = NO;
-#endif
+    //#else
+    //    WCTDatabase.debug = NO;
+    //#endif
 
     [WCTDatabase globalTracePerformance:nil];
     [WCTDatabase globalTraceSQL:nil];

@@ -123,8 +123,8 @@ void FullCrawler::onMasterCellCrawled(const Cell &cell, const Master &master)
     }
     markCellAsCounted(cell);
     if (master.name == Sequence::tableName()) {
-        WCTInnerAssert(master.type.caseInsensiveEqual("table"));
-        WCTInnerAssert(master.tableName.caseInsensiveEqual(master.name));
+        WCTAssert(master.type.caseInsensiveEqual("table"));
+        WCTAssert(master.tableName.caseInsensiveEqual(master.name));
         m_sequenceCrawler.work(master.rootpage, this);
     } else if (Master::isReservedTableName(master.name)
                || Master::isReservedTableName(master.tableName)) {
@@ -132,7 +132,7 @@ void FullCrawler::onMasterCellCrawled(const Cell &cell, const Master &master)
         return;
     } else {
         if (master.type.caseInsensiveEqual("table")) {
-            WCTInnerAssert(master.tableName.caseInsensiveEqual(master.name));
+            WCTAssert(master.tableName.caseInsensiveEqual(master.name));
             if (assembleTable(master.name, master.sql)) {
                 crawl(master.rootpage);
             }

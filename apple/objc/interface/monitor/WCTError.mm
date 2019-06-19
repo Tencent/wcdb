@@ -43,7 +43,7 @@ NSErrorUserInfoKey const WCTErrorKeySource = @WCDB_ERROR_STRING_KEY_SOURCE;
     if (self = [super initWithDomain:WCTErrorDomain
                                 code:(NSInteger) code
                             userInfo:userInfo]) {
-        WCTInnerAssert(message.length > 0);
+        WCTAssert(message.length > 0);
         _message = message;
         _level = (WCTErrorLevel) level;
     }
@@ -63,7 +63,7 @@ NSErrorUserInfoKey const WCTErrorKeySource = @WCDB_ERROR_STRING_KEY_SOURCE;
             [userInfo setObject:[NSNumber numberWithDouble:info.second.floatValue()] forKey:[NSString stringWithView:info.first]];
             break;
         default:
-            WCTInnerAssert(info.second.valueType() == WCDB::Error::InfoValue::Type::Integer);
+            WCTAssert(info.second.valueType() == WCDB::Error::InfoValue::Type::Integer);
             [userInfo setObject:[NSNumber numberWithLongLong:info.second.integerValue()] forKey:[NSString stringWithView:info.first]];
             break;
         }

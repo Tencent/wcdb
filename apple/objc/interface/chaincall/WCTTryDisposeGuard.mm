@@ -25,7 +25,7 @@
 WCTTryDisposeGuard::WCTTryDisposeGuard(WCTChainCall* chaincall)
 : m_chaincall(chaincall)
 {
-    WCTInnerAssert(m_chaincall != nil);
+    WCTAssert(m_chaincall != nil);
 }
 
 WCTTryDisposeGuard::~WCTTryDisposeGuard()

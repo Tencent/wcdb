@@ -27,7 +27,7 @@
 
 - (instancetype)initWithHandle:(WCTHandle*)handle
 {
-    WCTInnerAssert(handle != nil);
+    WCTAssert(handle != nil);
     if (self = [super init]) {
         _disposeAction = WCTChainCallDisposeNoAction;
         _handle = handle;

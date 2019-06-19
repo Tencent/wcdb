@@ -26,7 +26,7 @@ namespace WCDB {
 
 HandleRelated::HandleRelated(AbstractHandle *handle) : m_handle(handle)
 {
-    WCTInnerAssert(m_handle != nullptr);
+    WCTAssert(m_handle != nullptr);
 }
 
 HandleRelated::~HandleRelated()

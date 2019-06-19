@@ -55,7 +55,7 @@ const StringView &Wal::getPath() const
 
 MappedData Wal::acquireData(off_t offset, size_t size)
 {
-    WCTInnerAssert(m_fileHandle.isOpened());
+    WCTAssert(m_fileHandle.isOpened());
     MappedData data = m_fileHandle.map(offset, size);
     if (data.size() != size) {
         if (data.size() > 0) {
@@ -84,9 +84,9 @@ MappedData Wal::acquirePageData(int pageno)
 
 MappedData Wal::acquirePageData(int pageno, off_t offset, size_t size)
 {
-    WCTInnerAssert(isInitialized());
-    WCTInnerAssert(containsPage(pageno));
-    WCTInnerAssert(offset + size <= getPageSize());
+    WCTAssert(isInitialized());
+    WCTAssert(containsPage(pageno));
+    WCTAssert(offset + size <= getPageSize());
     return acquireData(headerSize + getFrameSize() * (m_pages2Frames[pageno] - 1)
                        + Frame::headerSize + offset,
                        size);
@@ -103,19 +103,19 @@ int Wal::getMaxPageno() const
 #pragma mark - Wal
 void Wal::setShmLegality(bool flag)
 {
-    WCTInnerAssert(!isInitialized());
+    WCTAssert(!isInitialized());
     m_shmLegality = flag;
 }
 
 MappedData Wal::acquireFrameData(int frameno)
 {
-    WCTInnerAssert(isInitializing());
+    WCTAssert(isInitializing());
     return acquireData(headerSize + getFrameSize() * (frameno - 1), getFrameSize());
 }
 
 void Wal::setMaxAllowedFrame(int maxAllowedFrame)
 {
-    WCTInnerAssert(!isInitialized());
+    WCTAssert(!isInitialized());
     m_maxAllowedFrame = maxAllowedFrame;
 }
 
@@ -152,8 +152,8 @@ bool Wal::isBigEndian()
 std::pair<uint32_t, uint32_t>
 Wal::calculateChecksum(const MappedData &data, const std::pair<uint32_t, uint32_t> &checksum) const
 {
-    WCTInnerAssert(data.size() >= 8);
-    WCTInnerAssert((data.size() & 0x00000007) == 0);
+    WCTAssert(data.size() >= 8);
+    WCTAssert((data.size() & 0x00000007) == 0);
 
     const uint32_t *iter = reinterpret_cast<const uint32_t *>(data.buffer());
     const uint32_t *end
@@ -182,7 +182,7 @@ Wal::calculateChecksum(const MappedData &data, const std::pair<uint32_t, uint32_
 
 bool Wal::doInitialize()
 {
-    WCTInnerAssert(m_pager->isInitialized() || m_pager->isInitializing());
+    WCTAssert(m_pager->isInitialized() || m_pager->isInitializing());
 
     int maxWalFrame = m_maxAllowedFrame;
     if (m_shmLegality) {
@@ -226,18 +226,18 @@ bool Wal::doInitialize()
     }
     m_isNativeChecksum = (magic & 0x00000001) == isBigEndian();
     deserialization.seek(16);
-    WCTInnerAssert(deserialization.canAdvance(4));
+    WCTAssert(deserialization.canAdvance(4));
     m_salt.first = deserialization.advance4BytesUInt();
-    WCTInnerAssert(deserialization.canAdvance(4));
+    WCTAssert(deserialization.canAdvance(4));
     m_salt.second = deserialization.advance4BytesUInt();
 
     std::pair<uint32_t, uint32_t> checksum = { 0, 0 };
     checksum = calculateChecksum(data.subdata(headerSize - 2 * sizeof(uint32_t)), checksum);
 
     std::pair<uint32_t, uint32_t> deserializedChecksum;
-    WCTInnerAssert(deserialization.canAdvance(4));
+    WCTAssert(deserialization.canAdvance(4));
     deserializedChecksum.first = deserialization.advance4BytesUInt();
-    WCTInnerAssert(deserialization.canAdvance(4));
+    WCTAssert(deserialization.canAdvance(4));
     deserializedChecksum.second = deserialization.advance4BytesUInt();
 
     if (checksum != deserializedChecksum) {

@@ -121,7 +121,7 @@ void HandleNotification::setNotificationWhenSQLTraced(const UnsafeStringView &na
 
 void HandleNotification::postSQLTraceNotification(const UnsafeStringView &sql)
 {
-    WCTInnerAssert(!m_sqlNotifications.empty());
+    WCTAssert(!m_sqlNotifications.empty());
     for (const auto &element : m_sqlNotifications) {
         element.second(sql);
     }
@@ -168,7 +168,7 @@ void HandleNotification::postPerformanceTraceNotification(const UnsafeStringView
     m_cost += cost;
 
     if (!isInTransaction) {
-        WCTInnerAssert(!m_performanceNotifications.empty());
+        WCTAssert(!m_performanceNotifications.empty());
         for (const auto &element : m_performanceNotifications) {
             element.second(m_footprints, (double) m_cost / (int) 1E9);
         }
@@ -180,7 +180,7 @@ void HandleNotification::postPerformanceTraceNotification(const UnsafeStringView
 #pragma mark - Committed
 int HandleNotification::committed(void *p, sqlite3 *handle, const char *name, int numberOfFrames)
 {
-    WCTInnerAssert(p != nullptr);
+    WCTAssert(p != nullptr);
     HandleNotification *notification = reinterpret_cast<HandleNotification *>(p);
     notification->postCommittedNotification(sqlite3_db_filename(handle, name), numberOfFrames);
     return SQLITE_OK;
@@ -190,7 +190,7 @@ void HandleNotification::setNotificationWhenCommitted(int order,
                                                       const UnsafeStringView &name,
                                                       const CommittedNotification &onCommitted)
 {
-    WCTInnerAssert(onCommitted);
+    WCTAssert(onCommitted);
     bool stateBefore = isCommittedNotificationSet();
     m_committedNotifications.insert(StringView(name), onCommitted, order);
     bool stateAfter = isCommittedNotificationSet();
@@ -225,7 +225,7 @@ bool HandleNotification::isCommittedNotificationSet() const
 
 void HandleNotification::postCommittedNotification(const UnsafeStringView &path, int numberOfFrames)
 {
-    WCTInnerAssert(!m_committedNotifications.empty());
+    WCTAssert(!m_committedNotifications.empty());
     for (const auto &element : m_committedNotifications) {
         if (!element.value()(path, numberOfFrames)) {
             break;
@@ -236,7 +236,7 @@ void HandleNotification::postCommittedNotification(const UnsafeStringView &path,
 #pragma mark - Checkpoint
 void HandleNotification::checkpointed(void *p, sqlite3 *handle, const char *name)
 {
-    WCTInnerAssert(p != nullptr);
+    WCTAssert(p != nullptr);
     HandleNotification *notification = reinterpret_cast<HandleNotification *>(p);
     notification->postCheckpointNotification(sqlite3_db_filename(handle, name));
 }
@@ -273,7 +273,7 @@ void HandleNotification::setNotificationWhenCheckpointed(const UnsafeStringView 
 
 void HandleNotification::postCheckpointNotification(const UnsafeStringView &path)
 {
-    WCTInnerAssert(areCheckpointNotificationsSet());
+    WCTAssert(areCheckpointNotificationsSet());
     for (const auto &element : m_checkpointedNotifications) {
         element.second(path);
     }
@@ -303,7 +303,7 @@ void HandleNotification::setNotificationWhenBusy(const BusyNotification &busyNot
 
 bool HandleNotification::postBusyNotification(int numberOfTimes)
 {
-    WCTInnerAssert(m_busyNotification != nullptr);
+    WCTAssert(m_busyNotification != nullptr);
     bool retry = false;
     if (m_busyNotification != nullptr) {
         retry = m_busyNotification(getHandle()->getPath(), numberOfTimes);

@@ -58,7 +58,7 @@ void Referenced::retain() const
 void Referenced::release()
 {
     if (m_reference != nullptr) {
-        WCTInnerAssert((*m_reference) > 0);
+        WCTAssert((*m_reference) > 0);
         if (--(*m_reference) == 0) {
             onUnreferenced();
         }

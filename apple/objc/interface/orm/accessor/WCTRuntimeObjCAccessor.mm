@@ -34,8 +34,8 @@ WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, const WCDB::
 , m_columnType(GetColumnType(m_propertyClass))
 {
     if (WCDB::Console::debuggable()) {
-        WCTAssert(m_propertyClass != nil, WCDB::StringView::formatted("Unable to find out the %s.%s.", NSStringFromClass(instanceClass).UTF8String, propertyName.data()));
-        WCTAssert([m_propertyClass conformsToProtocol:@protocol(WCTColumnCoding)], WCDB::StringView::formatted("%s should conform to protocol WCTColumnCoding.", propertyName.data()));
+        WCTRemedialAssert(m_propertyClass != nil, WCDB::StringView::formatted("Unable to find out the %s.%s.", NSStringFromClass(instanceClass).UTF8String, propertyName.data()), ;);
+        WCTRemedialAssert([m_propertyClass conformsToProtocol:@protocol(WCTColumnCoding)], WCDB::StringView::formatted("%s should conform to protocol WCTColumnCoding.", propertyName.data()), ;);
     }
 }
 

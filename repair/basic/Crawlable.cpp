@@ -64,7 +64,7 @@ void Crawlable::markAsError()
 
 bool Crawlable::crawl(int rootpageno)
 {
-    WCTInnerAssert(!m_isCrawling);
+    WCTAssert(!m_isCrawling);
     m_isCrawling = true;
     m_stop = false;
     std::set<int> crawledInteriorPages;

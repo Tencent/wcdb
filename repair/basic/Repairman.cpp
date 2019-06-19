@@ -190,7 +190,7 @@ void Repairman::onErrorCritical()
 void Repairman::markCellAsCounted(const Cell &cell)
 {
     int numberOfCells = cell.getPage().getNumberOfCells();
-    WCTInnerAssert(numberOfCells != 0);
+    WCTAssert(numberOfCells != 0);
     if (numberOfCells > 0) {
         Fraction cellWeight(1, numberOfCells);
         increaseScore(m_pageWeight * cellWeight);
@@ -206,7 +206,7 @@ void Repairman::markPageAsCounted(const Page &page)
 
 void Repairman::setPageWeight(const Fraction &pageWeight)
 {
-    WCTInnerAssert(m_pageWeight.value() == 0);
+    WCTAssert(m_pageWeight.value() == 0);
     m_pageWeight = pageWeight;
 }
 

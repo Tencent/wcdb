@@ -46,13 +46,13 @@ Pager::Pager(const UnsafeStringView &path)
 
 void Pager::setPageSize(int pageSize)
 {
-    WCTInnerAssert(!isInitialized());
+    WCTAssert(!isInitialized());
     m_pageSize = pageSize;
 }
 
 void Pager::setReservedBytes(int reservedBytes)
 {
-    WCTInnerAssert(!isInitialized());
+    WCTAssert(!isInitialized());
     m_reservedBytes = reservedBytes;
 }
 
@@ -64,25 +64,25 @@ const StringView &Pager::getPath() const
 #pragma mark - Page
 int Pager::getNumberOfPages() const
 {
-    WCTInnerAssert(isInitialized());
+    WCTAssert(isInitialized());
     return std::max(m_wal.getMaxPageno(), m_numberOfPages);
 }
 
 int Pager::getUsableSize() const
 {
-    WCTInnerAssert(isInitialized() || isInitializing());
+    WCTAssert(isInitialized() || isInitializing());
     return m_pageSize - m_reservedBytes;
 }
 
 int Pager::getPageSize() const
 {
-    WCTInnerAssert(isInitialized() || isInitializing());
+    WCTAssert(isInitialized() || isInitializing());
     return m_pageSize;
 }
 
 int Pager::getReservedBytes() const
 {
-    WCTInnerAssert(isInitialized());
+    WCTAssert(isInitialized());
     return m_reservedBytes;
 }
 
@@ -93,9 +93,9 @@ MappedData Pager::acquirePageData(int number)
 
 MappedData Pager::acquirePageData(int number, off_t offset, size_t size)
 {
-    WCTInnerAssert(isInitialized());
-    WCTInnerAssert(number > 0);
-    WCTInnerAssert(offset + size <= m_pageSize);
+    WCTAssert(isInitialized());
+    WCTAssert(number > 0);
+    WCTAssert(offset + size <= m_pageSize);
     MappedData data;
     if (m_wal.containsPage(number)) {
         data = m_wal.acquirePageData(number, offset, size);
@@ -125,7 +125,7 @@ MappedData Pager::acquirePageData(int number, off_t offset, size_t size)
 
 MappedData Pager::acquireData(off_t offset, size_t size)
 {
-    WCTInnerAssert(m_fileHandle.isOpened());
+    WCTAssert(m_fileHandle.isOpened());
     MappedData data = m_fileHandle.map(offset, size);
     if (data.size() != size) {
         if (data.size() > 0) {
@@ -226,13 +226,13 @@ bool Pager::doInitialize()
         //parse page size
         if (m_pageSize == -1) {
             deserialization.seek(16);
-            WCTInnerAssert(deserialization.canAdvance(2));
+            WCTAssert(deserialization.canAdvance(2));
             m_pageSize = deserialization.advance2BytesInt();
         }
         //parse reserved bytes
         if (m_reservedBytes == -1) {
             deserialization.seek(20);
-            WCTInnerAssert(deserialization.canAdvance(1));
+            WCTAssert(deserialization.canAdvance(1));
             m_reservedBytes = deserialization.advance1ByteInt();
         }
     }

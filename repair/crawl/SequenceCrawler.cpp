@@ -47,7 +47,7 @@ SequenceCrawler::SequenceCrawler(Pager &pager)
 #pragma mark - Sequence
 bool SequenceCrawler::work(int rootpage, SequenceCrawlerDelegate *delegate)
 {
-    WCTInnerAssert(delegate != nullptr);
+    WCTAssert(delegate != nullptr);
     m_delegate = delegate;
     bool result = crawl(rootpage);
     m_delegate = nullptr;

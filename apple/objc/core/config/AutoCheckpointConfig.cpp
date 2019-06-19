@@ -34,7 +34,7 @@ AutoCheckpointOperator::~AutoCheckpointOperator()
 AutoCheckpointConfig::AutoCheckpointConfig(const std::shared_ptr<AutoCheckpointOperator>& operator_)
 : Config(), m_identifier(StringView::formatted("Checkpoint-%p", this)), m_operator(operator_)
 {
-    WCTInnerAssert(m_operator != nullptr);
+    WCTAssert(m_operator != nullptr);
 
     Global::shared().setNotificationForLog(
     m_identifier,
@@ -93,7 +93,7 @@ void AutoCheckpointConfig::log(int rc, const char* message)
             }
         }
     }
-    WCTInnerAssert(match.size() == 3); // assert match and match 3.
+    WCTAssert(match.size() == 3); // assert match and match 3.
 }
 
 } //namespace WCDB

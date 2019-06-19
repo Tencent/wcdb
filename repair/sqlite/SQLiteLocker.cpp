@@ -36,7 +36,7 @@ const Error &SQLiteReadLocker::getError() const
 
 void SQLiteReadLocker::setPath(const UnsafeStringView &path)
 {
-    WCTInnerAssert(m_path.empty());
+    WCTAssert(m_path.empty());
     SQLiteBase::setPath(path);
 }
 
@@ -72,7 +72,7 @@ const Error &SQLiteWriteLocker::getError() const
 
 void SQLiteWriteLocker::setPath(const UnsafeStringView &path)
 {
-    WCTInnerAssert(m_path.empty());
+    WCTAssert(m_path.empty());
     SQLiteBase::setPath(path);
 }
 

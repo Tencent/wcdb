@@ -135,11 +135,11 @@ bool AssemblerHandle::assembleTable(const UnsafeStringView &tableName,
 
 bool AssemblerHandle::assembleCell(const Repair::Cell &cell)
 {
-    WCTInnerAssert(!m_table.empty());
+    WCTAssert(!m_table.empty());
     if (!lazyPrepareCell()) {
         return false;
     }
-    WCTInnerAssert(m_cellStatement->isPrepared());
+    WCTAssert(m_cellStatement->isPrepared());
     m_cellStatement->reset();
     m_cellStatement->bindInteger64(cell.getRowID(), 1);
     for (int i = 0; i < cell.getCount(); ++i) {

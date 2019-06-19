@@ -53,25 +53,25 @@ Range PageBasedFileHandle::restrictedRange(Range::Location base,
 
 MappedData PageBasedFileHandle::mapPage(int pageno, off_t offsetWithinPage, size_t sizeWithinPage)
 {
-    WCTInnerAssert(m_cachePageSize > 0);
-    WCTInnerAssert(pageno > 0);
-    WCTInnerAssert(offsetWithinPage < m_pageSize);
-    WCTInnerAssert(sizeWithinPage <= m_pageSize && sizeWithinPage > 0);
-    WCTInnerAssert(m_cachePageSize >= m_pageSize);
+    WCTAssert(m_cachePageSize > 0);
+    WCTAssert(pageno > 0);
+    WCTAssert(offsetWithinPage < m_pageSize);
+    WCTAssert(sizeWithinPage <= m_pageSize && sizeWithinPage > 0);
+    WCTAssert(m_cachePageSize >= m_pageSize);
 
     off_t offset = (pageno - 1) * m_pageSize + offsetWithinPage;
     off_t cachePageno = offset / m_cachePageSize;
 
     // assert same cache page
-    WCTInnerAssert(cachePageno == (offset + sizeWithinPage - 1) / m_cachePageSize);
+    WCTAssert(cachePageno == (offset + sizeWithinPage - 1) / m_cachePageSize);
 
     Range gap;
     const MappedData* cachedData;
     std::tie(gap, cachedData) = m_cache.find(cachePageno);
     if (cachedData != nullptr) {
-        WCTInnerAssert(gap.contains(cachePageno));
+        WCTAssert(gap.contains(cachePageno));
         off_t offsetWithinCache = offset - gap.location * m_cachePageSize;
-        WCTInnerAssert(offsetWithinCache < gap.length * m_cachePageSize);
+        WCTAssert(offsetWithinCache < gap.length * m_cachePageSize);
         return cachedData->subdata(offsetWithinCache, sizeWithinPage);
     }
 
@@ -79,8 +79,8 @@ MappedData PageBasedFileHandle::mapPage(int pageno, off_t offsetWithinPage, size
     do {
         Range range = restrictedRange(cachePageno, maxLength, gap);
 
-        WCTInnerAssert(gap.contains(range));
-        WCTInnerAssert(range.contains(cachePageno));
+        WCTAssert(gap.contains(range));
+        WCTAssert(range.contains(cachePageno));
 
         bool cuttable = range.length > 1;
         bool purgeable = !m_cache.empty();
@@ -109,16 +109,16 @@ MappedData PageBasedFileHandle::mapPage(int pageno, off_t offsetWithinPage, size
 
             m_cache.insert(range, mappedData);
             off_t offsetWithinCache = offset - range.location * m_cachePageSize;
-            WCTInnerAssert(offsetWithinCache < range.length * m_cachePageSize);
+            WCTAssert(offsetWithinCache < range.length * m_cachePageSize);
             return mappedData.subdata(offsetWithinCache, sizeWithinPage);
         } else if (cuttable) {
             maxLength = (range.length + 1) / 2;
-            WCTInnerAssert(maxLength >= 1);
+            WCTAssert(maxLength >= 1);
         } else if (purgeable) {
             m_cache.purge();
             std::tie(gap, cachedData) = m_cache.find(cachePageno);
             maxLength = cachePagePerRange();
-            WCTInnerAssert(cachedData == nullptr);
+            WCTAssert(cachedData == nullptr);
         } else {
             break;
         }
@@ -129,7 +129,7 @@ MappedData PageBasedFileHandle::mapPage(int pageno, off_t offsetWithinPage, size
 #pragma mark - PageSize
 MappedData PageBasedFileHandle::mapPage(int pageno)
 {
-    WCTInnerAssert(pageno > 0);
+    WCTAssert(pageno > 0);
     return mapPage(pageno, 0, m_pageSize);
 }
 
@@ -141,22 +141,22 @@ const size_t& PageBasedFileHandle::memoryPageSize()
 
 size_t PageBasedFileHandle::cachePagePerRange() const
 {
-    WCTInnerAssert(m_cachePageSize != 0);
+    WCTAssert(m_cachePageSize != 0);
     return cacheMemoryPerRange / m_cachePageSize;
 }
 
 void PageBasedFileHandle::setPageSize(size_t pageSize)
 {
-    WCTInnerAssert(m_cachePageSize == 0);
+    WCTAssert(m_cachePageSize == 0);
     m_pageSize = pageSize;
     m_cachePageSize = pageSize;
     size_t alignment = m_cachePageSize % memoryPageSize();
     if (alignment > 0) {
         m_cachePageSize = m_cachePageSize - alignment + memoryPageSize();
     }
-    WCTInnerAssert(m_cachePageSize > 0 && m_cachePageSize % memoryPageSize() == 0);
+    WCTAssert(m_cachePageSize > 0 && m_cachePageSize % memoryPageSize() == 0);
     m_cachePageSize = std::max(memoryPageSize(), m_cachePageSize);
-    WCTInnerAssert(m_cachePageSize > 0 && cacheMemoryPerRange % m_cachePageSize == 0);
+    WCTAssert(m_cachePageSize > 0 && cacheMemoryPerRange % m_cachePageSize == 0);
 
     size_t fileSize = FileHandle::size();
     Range::Length restrictCachePageno
@@ -175,14 +175,14 @@ PageBasedFileHandle::Cache::Cache(size_t maxAllowedMemory)
 
 void PageBasedFileHandle::Cache::setRange(const WCDB::Range& range)
 {
-    WCTInnerAssert(range != Range::notFound());
+    WCTAssert(range != Range::notFound());
     m_range = range;
 }
 
 std::pair<Range, const MappedData*> PageBasedFileHandle::Cache::find(Location location)
 {
-    WCTInnerAssert(m_range != Range::notFound());
-    WCTInnerAssert(m_range.contains(location));
+    WCTAssert(m_range != Range::notFound());
+    WCTAssert(m_range.contains(location));
 
     Range range;
     const MappedData* data = nullptr;
@@ -227,10 +227,10 @@ std::pair<Range, const MappedData*> PageBasedFileHandle::Cache::find(Location lo
 
 void PageBasedFileHandle::Cache::insert(const Range& range, const MappedData& data)
 {
-    WCTInnerAssert(range.length > 0);
-    WCTInnerAssert(m_range.contains(range));
-    WCTInnerAssert(find(range.location).second == nullptr);
-    WCTInnerAssert(find(range.edge() - 1).second == nullptr);
+    WCTAssert(range.length > 0);
+    WCTAssert(m_range.contains(range));
+    WCTAssert(find(range.location).second == nullptr);
+    WCTAssert(find(range.edge() - 1).second == nullptr);
     m_currentUsedMemery += data.size();
     put(range, data);
 }

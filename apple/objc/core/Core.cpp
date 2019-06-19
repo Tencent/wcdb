@@ -96,7 +96,7 @@ void Core::purgeDatabasePool()
 
 void Core::databaseDidCreate(Database* database)
 {
-    WCTInnerAssert(database != nullptr);
+    WCTAssert(database != nullptr);
 
     database->setConfigs(m_configs);
 
@@ -251,7 +251,7 @@ void Core::enableAutoCheckpoint(Database* database, bool enable)
 #pragma mark - Backup
 void Core::enableAutoBackup(Database* database, bool enable)
 {
-    WCTInnerAssert(database != nullptr);
+    WCTAssert(database != nullptr);
     if (enable) {
         database->setConfig(
         AutoBackupConfigName, m_autoBackupConfig, WCDB::Configs::Priority::Highest);
@@ -265,7 +265,7 @@ void Core::enableAutoBackup(Database* database, bool enable)
 #pragma mark - Migration
 void Core::enableAutoMigration(Database* database, bool enable)
 {
-    WCTInnerAssert(database != nullptr);
+    WCTAssert(database != nullptr);
     if (enable) {
         database->setConfig(
         AutoMigrateConfigName, m_autoMigrateConfig, WCDB::Configs::Priority::Highest);

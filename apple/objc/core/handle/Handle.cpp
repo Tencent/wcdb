@@ -79,7 +79,7 @@ bool Handle::configure()
             }
             m_invokeds.pop_back();
         }
-        WCTInnerAssert(m_invokeds.empty());
+        WCTAssert(m_invokeds.empty());
         for (const auto &element : m_pendings) {
             if (!element.value()->invoke(this)) {
                 return false;

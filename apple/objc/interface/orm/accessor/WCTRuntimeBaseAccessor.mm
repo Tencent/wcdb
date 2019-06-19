@@ -44,8 +44,8 @@ WCTRuntimeBaseAccessor::~WCTRuntimeBaseAccessor()
 
 SEL WCTRuntimeBaseAccessor::getGetterSelector(objc_property_t property, const WCDB::UnsafeStringView &propertyName)
 {
-    WCTInnerAssert(property != nil);
-    WCTInnerAssert(!propertyName.empty());
+    WCTAssert(property != nil);
+    WCTAssert(!propertyName.empty());
 
     SEL selector = nil;
     char *getter = property_copyAttributeValue(property, "G");
@@ -55,14 +55,14 @@ SEL WCTRuntimeBaseAccessor::getGetterSelector(objc_property_t property, const WC
     } else {
         selector = sel_registerName(propertyName.data());
     }
-    WCTInnerAssert(selector != nil);
+    WCTAssert(selector != nil);
     return selector;
 }
 
 SEL WCTRuntimeBaseAccessor::getSetterSelector(objc_property_t property, const WCDB::UnsafeStringView &propertyName)
 {
-    WCTInnerAssert(property != nil);
-    WCTInnerAssert(!propertyName.empty());
+    WCTAssert(property != nil);
+    WCTAssert(!propertyName.empty());
 
     SEL selector = nil;
     char *setter = property_copyAttributeValue(property, "S");
@@ -76,28 +76,28 @@ SEL WCTRuntimeBaseAccessor::getSetterSelector(objc_property_t property, const WC
         defaultSetter[3] = (char) std::toupper(defaultSetter[3]);
         selector = sel_registerName(defaultSetter.data());
     }
-    WCTInnerAssert(selector != nil);
+    WCTAssert(selector != nil);
     return selector;
 }
 
 IMP WCTRuntimeBaseAccessor::getClassMethodImplementation(Class cls, SEL selector)
 {
-    WCTInnerAssert(cls != nil);
-    WCTInnerAssert(selector != nil);
+    WCTAssert(cls != nil);
+    WCTAssert(selector != nil);
     return [cls methodForSelector:selector];
 }
 
 IMP WCTRuntimeBaseAccessor::getInstanceMethodImplementation(Class cls, SEL selector)
 {
-    WCTInnerAssert(cls != nil);
-    WCTInnerAssert(selector != nil);
+    WCTAssert(cls != nil);
+    WCTAssert(selector != nil);
     return [cls instanceMethodForSelector:selector];
 }
 
 Class WCTRuntimeBaseAccessor::getPropertyClass(Class cls, const WCDB::UnsafeStringView &propertyName)
 {
-    WCTInnerAssert(cls != nil);
-    WCTInnerAssert(!propertyName.empty());
+    WCTAssert(cls != nil);
+    WCTAssert(!propertyName.empty());
 
     objc_property_t property = class_getProperty(cls, propertyName.data());
     NSString *attributes = [NSString stringWithUTF8String:property_getAttributes(property)];

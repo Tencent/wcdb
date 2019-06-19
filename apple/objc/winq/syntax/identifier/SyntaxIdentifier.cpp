@@ -36,7 +36,7 @@ StringView Identifier::getDescription() const
         if (describle(stream)) {
             return stream.str();
         }
-        WCTInnerAssert(false);
+        WCTAssert(false);
     }
     return StringView();
 }
