@@ -43,7 +43,8 @@
     TestCaseAssertTrue(path != nil);
     self.path = path;
 
-    [self.database close]; // reset cache
+    [self.database close];
+    TestCaseAssertTrue([self.database canOpen]);
 }
 
 - (void)tearDownDatabase
@@ -60,6 +61,7 @@
     }
     setUp:^{
         [self setUpDatabase];
+        [self.database close]; // reset cache
     }
     tearDown:^{
         [self tearDownDatabase];
