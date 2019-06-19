@@ -68,9 +68,7 @@ WCTBinding::WCTBinding(Class cls)
         SEL selector = NSSelectorFromString(selName);
         IMP imp = [m_cls methodForSelector:selector];
         const WCTProperty &property = ((const WCTProperty &(*) (Class, SEL)) imp)(m_cls, selector);
-        if (WCDB::Console::debuggable()) {
-            WCTRemedialAssert(getColumnDef(property) == nullptr, WCDB::StringView::formatted("Duplicated property [%s] found", property.getDescription().data()), continue;);
-        }
+        WCTRemedialAssert(getColumnDef(property) == nullptr, WCDB::StringView::formatted("Duplicated property [%s] found", property.getDescription().data()), continue;);
         m_properties.push_back(property);
         m_columnDefs.push_back({ property.getDescription(), WCDB::ColumnDef(property, property.getColumnBinding().getAccessor()->getColumnType()) });
     }

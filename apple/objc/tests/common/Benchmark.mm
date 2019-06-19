@@ -82,13 +82,9 @@
                            ++i;
                        }];
 
-    BOOL untrusted = WCTDatabase.debug;
 #if DEBUG || TARGET_IPHONE_SIMULATOR
-    untrusted = YES;
+    TestCaseLog(@"Benchmark is run in debug mode or simulator. The result may be untrusted.");
 #endif
-    if (untrusted) {
-        TestCaseLog(@"Benchmark is run in debug mode or simulator. The result may be untrusted.");
-    }
 }
 
 - (Signpost *)signpost

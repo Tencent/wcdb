@@ -54,12 +54,6 @@
 
     self.continueAfterFailure = YES;
 
-    //#if WCDB_DEBUG
-    WCTDatabase.debug = YES;
-    //#else
-    //    WCTDatabase.debug = NO;
-    //#endif
-
     [WCTDatabase globalTracePerformance:nil];
     [WCTDatabase globalTraceSQL:nil];
     [WCTDatabase globalTraceError:^(WCTError *error) {
@@ -71,9 +65,9 @@
         switch (error.level) {
         case WCTErrorLevelIgnore:
         case WCTErrorLevelDebug:
-            if (!WCTDatabase.debug) {
-                break;
-            }
+#ifndef DEBUG
+            break;
+#endif
             // passthrough
         default:
             TestCaseLog(@"%@ Thread %@: %@", currentThread.isMainThread ? @"*" : @"-", threadName, error);
@@ -93,9 +87,9 @@
     }];
     [WCTDatabase simulateIOError:WCTSimulateNoneIOError];
 
-    if (WCTDatabase.debug) {
-        [self log:@"debuggable."];
-    }
+#if DEBUG
+    [self log:@"debuggable."];
+#endif
 
     NSString *directory = self.directory;
     NSString *abbreviatedPath = directory.stringByAbbreviatingWithTildeInPath;

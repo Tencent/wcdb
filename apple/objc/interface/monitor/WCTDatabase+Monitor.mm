@@ -38,20 +38,6 @@ void Core::print(const UnsafeStringView &message)
 
 @implementation WCTDatabase (Monitor)
 
-+ (BOOL)debug
-{
-    return WCDB::Console::debuggable();
-}
-
-+ (void)setDebug:(BOOL)debug
-{
-    if (debug) {
-        WCDB::Console::debug();
-    } else {
-        WCDB::Console::release();
-    }
-}
-
 + (void)globalTraceError:(WCTErrorTraceBlock)block
 {
     WCDB::Core::shared().setNotificationWhenErrorTraced([block](const WCDB::Error &error) {
