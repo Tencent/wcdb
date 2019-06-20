@@ -633,4 +633,25 @@
       }];
 }
 
+- (void)test_transaction_handle
+{
+    BOOL succeed = [self.database runTransaction:^BOOL(WCTHandle* _) {
+        WCDB_UNUSED(_);
+        WCTHandle* handle = [self.database getHandle];
+        TestCaseAssertTrue([handle isInTransaction]);
+        return YES;
+    }];
+    TestCaseAssertTrue(succeed);
+}
+
+- (void)test_feature_error_not_allowed_in_transaction
+{
+    BOOL succeed = [[self.database getHandle] runTransaction:^BOOL(WCTHandle* handle) {
+        [handle markErrorNotAllowedWithinTransaction];
+        [handle getObjectOfClass:TestCaseObject.class fromTable:@"non-existent"];
+        return YES;
+    }];
+    TestCaseAssertFalse(succeed);
+}
+
 @end

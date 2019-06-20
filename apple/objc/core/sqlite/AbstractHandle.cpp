@@ -304,8 +304,8 @@ AbstractHandle::getValues(const Statement &statement, int index)
 #pragma mark - Transaction
 void AbstractHandle::markErrorNotAllowedWithinTransaction()
 {
-    WCTRemedialAssert(m_transactionLevel == 0,
-                      "Transaction error state should be changed outside transaction.",
+    WCTRemedialAssert(m_transactionLevel == 0 || m_transactionLevel == 1,
+                      "Transaction error state should be changed without nested.",
                       return;);
     if (m_transactionError == TransactionError::Allowed) {
         m_transactionError = TransactionError::NotAllowed;
