@@ -54,16 +54,16 @@ NSErrorUserInfoKey const WCTErrorKeySource = @WCDB_ERROR_STRING_KEY_SOURCE;
 {
     NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
     for (const auto &info : error.infos) {
-        switch (info.second.valueType()) {
-        case WCDB::Error::InfoValue::Type::StringView:
+        switch (info.second.underlyingType()) {
+        case WCDB::Error::InfoValue::UnderlyingType::String:
             [userInfo setObject:[NSString stringWithView:info.second.stringValue()]
                          forKey:[NSString stringWithView:info.first]];
             break;
-        case WCDB::Error::InfoValue::Type::Float:
+        case WCDB::Error::InfoValue::UnderlyingType::Float:
             [userInfo setObject:[NSNumber numberWithDouble:info.second.floatValue()] forKey:[NSString stringWithView:info.first]];
             break;
         default:
-            WCTAssert(info.second.valueType() == WCDB::Error::InfoValue::Type::Integer);
+            WCTAssert(info.second.underlyingType() == WCDB::Error::InfoValue::UnderlyingType::Integer);
             [userInfo setObject:[NSNumber numberWithLongLong:info.second.integerValue()] forKey:[NSString stringWithView:info.first]];
             break;
         }

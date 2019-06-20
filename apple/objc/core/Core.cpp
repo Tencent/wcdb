@@ -108,7 +108,8 @@ void Core::preprocessError(Error& error)
     auto& infos = error.infos;
 
     auto iter = infos.find(UnsafeStringView(ErrorStringKeyPath));
-    if (iter != infos.end() && iter->second.valueType() == Error::InfoValue::Type::StringView) {
+    if (iter != infos.end()
+        && iter->second.underlyingType() == Error::InfoValue::UnderlyingType::String) {
         auto database = m_databasePool.get(iter->second.stringValue());
         if (database != nullptr) {
             auto tag = database->getTag();

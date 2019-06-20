@@ -58,8 +58,8 @@ bool OperationHandle::checkpoint()
 {
     WCTAssert(m_error.infos.find(UnsafeStringView(ErrorStringKeyAction))
               != m_error.infos.end());
-    WCTAssert(m_error.infos.at(ErrorStringKeyAction).valueType()
-              == Error::InfoValue::Type::StringView);
+    WCTAssert(m_error.infos.at(ErrorStringKeyAction).underlyingType()
+              == Error::InfoValue::UnderlyingType::String);
     WCTAssert(m_error.infos.at(ErrorStringKeyAction).stringValue() == ErrorActionCheckpoint);
     return Handle::checkpoint(CheckpointMode::Passive);
 }
@@ -69,8 +69,8 @@ void OperationHandle::checkIntegrity()
 {
     WCTAssert(m_error.infos.find(UnsafeStringView(ErrorStringKeyAction))
               != m_error.infos.end());
-    WCTAssert(m_error.infos.at(ErrorStringKeyAction).valueType()
-              == Error::InfoValue::Type::StringView);
+    WCTAssert(m_error.infos.at(ErrorStringKeyAction).underlyingType()
+              == Error::InfoValue::UnderlyingType::String);
     WCTAssert(m_error.infos.at(ErrorStringKeyAction).stringValue() == ErrorActionIntegrity);
     execute(m_statementForIntegrityCheck);
 }
@@ -95,8 +95,8 @@ bool OperationHandle::acquireReadLock()
 {
     WCTAssert(m_error.infos.find(UnsafeStringView(ErrorStringKeyAction))
               != m_error.infos.end());
-    WCTAssert(m_error.infos.at(ErrorStringKeyAction).valueType()
-              == Error::InfoValue::Type::StringView);
+    WCTAssert(m_error.infos.at(ErrorStringKeyAction).underlyingType()
+              == Error::InfoValue::UnderlyingType::String);
     WCTAssert(m_error.infos.at(ErrorStringKeyAction).stringValue() == ErrorActionBackup);
 
     return execute(m_statementForReadTransaction) && execute(m_statementForAcquireReadLock);
@@ -112,8 +112,8 @@ bool OperationHandle::acquireWriteLock()
 {
     WCTAssert(m_error.infos.find(UnsafeStringView(ErrorStringKeyAction))
               != m_error.infos.end());
-    WCTAssert(m_error.infos.at(ErrorStringKeyAction).valueType()
-              == Error::InfoValue::Type::StringView);
+    WCTAssert(m_error.infos.at(ErrorStringKeyAction).underlyingType()
+              == Error::InfoValue::UnderlyingType::String);
     WCTAssert(m_error.infos.at(ErrorStringKeyAction).stringValue() == ErrorActionBackup);
 
     return beginTransaction();

@@ -54,7 +54,7 @@ void AbstractHandle::setPath(const UnsafeStringView &path)
     if (m_path != path) {
         close();
         m_path = path;
-        m_error.infos.insert_or_assign(ErrorStringKeyPath, path);
+        m_error.infos.insert_or_assign(ErrorStringKeyPath, m_path);
     }
 }
 
