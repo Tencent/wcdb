@@ -199,24 +199,23 @@ std::pair<bool, bool> Database::tableExists(const UnsafeStringView &table)
 std::shared_ptr<Handle> Database::generateSlotedHandle(HandleType type)
 {
     WCTAssert(m_concurrency.readSafety());
+    HandleSlot slot = slotOfHandleType(type);
     std::shared_ptr<Handle> handle;
-    switch (type) {
-    case HandleType::Migrating:
+    switch (slot) {
+    case HandleSlotMigrating:
         handle = std::make_shared<MigratingHandle>(m_migration);
         break;
-    case HandleType::Migrate:
+    case HandleSlotMigrate:
         handle = std::make_shared<MigrateHandle>();
         break;
-    case HandleType::Assemble:
+    case HandleSlotAssemble:
         handle = std::make_shared<AssemblerHandle>();
         break;
-    case HandleType::OperationBackup:
-    case HandleType::OperationIntegrity:
-    case HandleType::OperationCheckpoint:
+    case HandleSlotOperation:
         handle = std::make_shared<OperationHandle>();
         break;
     default:
-        WCTAssert(type == HandleType::Normal);
+        WCTAssert(slot == HandleSlotNormal);
         handle = std::make_shared<ConfiguredHandle>();
         break;
     }
@@ -241,7 +240,9 @@ bool Database::setupHandle(HandleType type, Handle *handle)
 {
     WCTAssert(handle != nullptr);
 
-    if (((unsigned int) type & HandleSlotMask) == (unsigned int) HandleType::Operation) {
+    HandleSlot slot = slotOfHandleType(type);
+
+    if (slot == HandleSlotOperation) {
         WCTAssert(dynamic_cast<OperationHandle *>(handle) != nullptr);
         static_cast<OperationHandle *>(handle)->setType(type);
     }
@@ -257,7 +258,7 @@ bool Database::setupHandle(HandleType type, Handle *handle)
         return false;
     }
 
-    if (type != HandleType::Assemble) {
+    if (slot != HandleSlotAssemble) {
         handle->setPath(path);
         if (!handle->open()) {
             setThreadedError(handle->getError());
@@ -534,12 +535,12 @@ bool Database::doBackup()
     !isInTransaction(), "Backup can't be run in transaction.", return false;);
     WCTAssert(m_concurrency.readSafety());
     WCTAssert(m_initialized);
-    RecyclableHandle backupReadHandle = flowOut(HandleType::OperationBackup);
+    RecyclableHandle backupReadHandle = flowOut(HandleType::BackupRead);
     if (backupReadHandle == nullptr) {
         return false;
     }
 
-    RecyclableHandle backupWriteHandle = flowOut(HandleType::OperationBackup);
+    RecyclableHandle backupWriteHandle = flowOut(HandleType::BackupWrite);
     if (backupWriteHandle == nullptr) {
         return false;
     }
@@ -565,15 +566,15 @@ bool Database::deposit()
             return;
         }
 
-        RecyclableHandle backupReadHandle = flowOut(HandleType::Assemble);
+        RecyclableHandle backupReadHandle = flowOut(HandleType::AssembleBackupRead);
         if (backupReadHandle == nullptr) {
             return;
         }
-        RecyclableHandle backupWriteHandle = flowOut(HandleType::Assemble);
+        RecyclableHandle backupWriteHandle = flowOut(HandleType::AssembleBackupWrite);
         if (backupWriteHandle == nullptr) {
             return;
         }
-        RecyclableHandle assemblerHandle = flowOut(HandleType::Assemble);
+        RecyclableHandle assemblerHandle = flowOut(HandleType::Assembler);
         if (assemblerHandle == nullptr) {
             return;
         }
@@ -619,15 +620,15 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
             return;
         }
 
-        RecyclableHandle backupReadHandle = flowOut(HandleType::Assemble);
+        RecyclableHandle backupReadHandle = flowOut(HandleType::AssembleBackupRead);
         if (backupReadHandle == nullptr) {
             return;
         }
-        RecyclableHandle backupWriteHandle = flowOut(HandleType::Assemble);
+        RecyclableHandle backupWriteHandle = flowOut(HandleType::AssembleBackupWrite);
         if (backupWriteHandle == nullptr) {
             return;
         }
-        RecyclableHandle assemblerHandle = flowOut(HandleType::Assemble);
+        RecyclableHandle assemblerHandle = flowOut(HandleType::Assembler);
         if (assemblerHandle == nullptr) {
             return;
         }
@@ -717,7 +718,7 @@ void Database::doCheckIntegrity()
 {
     WCTAssert(m_concurrency.readSafety());
     WCTAssert(m_initialized);
-    RecyclableHandle handle = flowOut(HandleType::OperationIntegrity);
+    RecyclableHandle handle = flowOut(HandleType::Integrity);
     if (handle != nullptr) {
         WCTAssert(dynamic_cast<OperationHandle *>(handle.get()) != nullptr);
         static_cast<OperationHandle *>(handle.get())->checkIntegrity();
@@ -809,7 +810,7 @@ bool Database::checkpointIfAlreadyInitialized()
     InitializedGuard initializedGuard = isInitialized();
     bool succeed = false;
     if (initializedGuard.valid()) {
-        RecyclableHandle handle = flowOut(HandleType::OperationCheckpoint);
+        RecyclableHandle handle = flowOut(HandleType::Checkpoint);
         if (handle != nullptr) {
             WCTAssert(dynamic_cast<OperationHandle *>(handle.get()) != nullptr);
             OperationHandle *operationHandle
