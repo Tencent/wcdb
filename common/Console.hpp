@@ -22,8 +22,6 @@
 
 #include <WCDB/Macro.hpp>
 #include <WCDB/StringView.hpp>
-#include <atomic>
-#include <list>
 
 namespace WCDB {
 
@@ -35,10 +33,6 @@ public:
     Console(const Console&) = delete;
     Console& operator=(const Console&) = delete;
 
-    static void debug();
-    static void release();
-    static bool debuggable();
-
 #if WCDB_DEBUG
     static void
     fatal(const UnsafeStringView& message, const char* file, int line, const char* function);
@@ -48,7 +42,6 @@ public:
 
 private:
     static std::optional<StringView> callstacks();
-    static std::atomic<bool>& debuggableValue();
 };
 
 } // namespace WCDB

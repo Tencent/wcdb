@@ -27,31 +27,6 @@
 
 namespace WCDB {
 
-std::atomic<bool>& Console::debuggableValue()
-{
-#if WCDB_DEBUG
-    std::atomic<bool>* s_debuggable = new std::atomic<bool>(true);
-#else  // WCDB_DEBUG
-    std::atomic<bool>* s_debuggable = new std::atomic<bool>(false);
-#endif // WCDB_DEBUG
-    return *s_debuggable;
-}
-
-void Console::debug()
-{
-    debuggableValue().store(true);
-}
-
-void Console::release()
-{
-    debuggableValue().store(false);
-}
-
-bool Console::debuggable()
-{
-    return debuggableValue().load();
-}
-
 #if WCDB_DEBUG
 
 void Console::fatal(const UnsafeStringView& message, const char* file, int line, const char* function)

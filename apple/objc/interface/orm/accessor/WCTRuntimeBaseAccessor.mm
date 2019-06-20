@@ -105,9 +105,7 @@ Class WCTRuntimeBaseAccessor::getPropertyClass(Class cls, const WCDB::UnsafeStri
     if (splitAttributes.count > 0) {
         NSString *encodeType = splitAttributes[0];
         NSArray *splitEncodeTypes = [encodeType componentsSeparatedByString:@"\""];
-        if (WCDB::Console::debuggable()) {
-            WCTRemedialAssert(splitEncodeTypes.count > 1, WCDB::StringView::formatted("Failed to parse the type of [%s].", propertyName.data()), return nil;);
-        }
+        WCTRemedialAssert(splitEncodeTypes.count > 1, WCDB::StringView::formatted("Failed to parse the type of [%s].", propertyName.data()), return nil;);
         NSString *className = splitEncodeTypes[1];
         return NSClassFromString(className);
     }

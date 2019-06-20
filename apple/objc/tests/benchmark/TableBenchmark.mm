@@ -43,7 +43,8 @@
     TestCaseAssertTrue(path != nil);
     self.path = path;
 
-    [self.database close]; // reset cache
+    [self.database close];
+    TestCaseAssertTrue([self.database canOpen]);
 }
 
 - (void)tearDownDatabase
@@ -60,6 +61,7 @@
     }
     setUp:^{
         [self setUpDatabase];
+        [self.database close]; // reset cache
     }
     tearDown:^{
         [self tearDownDatabase];
@@ -172,6 +174,37 @@
 
         if (objects == nil) {
             objects = [self.random benchmarkObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.expectedQuality];
+        }
+    }
+    tearDown:^{
+        [self tearDownDatabase];
+        result = NO;
+    }
+    checkCorrectness:^{
+        TestCaseAssertTrue(result);
+    }];
+}
+
+- (void)test_create_tables
+{
+    int numberOfTables = 100;
+    __block NSArray* tableNames = nil;
+    __block BOOL result;
+    [self
+    doMeasure:^{
+        for (NSString* tableName in tableNames) {
+            if (![self.database createTable:tableName withClass:BenchmarkObject.class]) {
+                result = NO;
+                return;
+            }
+        }
+        result = YES;
+    }
+    setUp:^{
+        [self setUpDatabase];
+
+        if (tableNames == nil) {
+            tableNames = [NSArray arrayWithArray:[self.random tableNamesWithCount:numberOfTables]];
         }
     }
     tearDown:^{

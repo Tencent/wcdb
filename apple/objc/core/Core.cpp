@@ -313,12 +313,8 @@ void Core::onErrorTraced(const Error& error)
 {
     switch (error.level) {
     case Error::Level::Ignore:
-        break;
     case Error::Level::Debug:
-        if (!Console::debuggable()) {
-            break;
-        }
-        // fallthrough
+        break;
     default:
         print(error.getDescription());
         break;

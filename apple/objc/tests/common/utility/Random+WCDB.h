@@ -29,4 +29,6 @@
 
 - (NSString*)tableNameWithPrefix:(NSString*)prefix;
 
+- (NSArray<NSString*>*)tableNamesWithCount:(int)count;
+
 @end

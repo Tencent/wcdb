@@ -22,8 +22,8 @@
 
 #include <WCDB/Console.hpp>
 
-// Inner assert is for WCDB debugging only, which will be removed when released. It ensures that the correctness of WCDB's code.
-// Remedial assertion will abort or result in error when it's Console::debuggable() accoding to the configuration. It is used to ensure that the app does not crash due to incorrect usage by developers.
+// Assert is for WCDB debugging only, which will be removed when released. It ensures that the correctness of WCDB's code.
+// Remedial assertion is used to ensure that the app does not crash due to incorrect usage by developers.
 
 #if WCDB_DEBUG
 
@@ -33,6 +33,10 @@
         action                                                                  \
     }
 
+#define WCTAssert(cond)                                                        \
+    __WCTAssert(                                                               \
+    cond, "If you think it's a bug caused by WCDB, please report to us.", abort();)
+
 #else // WCDB_DEBUG
 
 #define __WCTAssert(cond, message, action)                                     \
@@ -41,14 +45,9 @@
         action                                                                 \
     }
 
+#define WCTAssert(cond)
+
 #endif // WCDB_DEBUG
 
 #define WCTRemedialAssert(cond, message, remedial)                             \
-    __WCTAssert(                                                               \
-    cond, message, if (WCDB::Console::debuggable()) { abort(); } else { remedial })
-
-#define WCTAssert(cond)                                                        \
-    __WCTAssert(                                                               \
-    !WCDB::Console::debuggable() || cond,                                      \
-    "If you think it's a bug caused by WCDB, please report to us.",            \
-    if (WCDB::Console::debuggable()) { abort(); })
+    __WCTAssert(cond, message, remedial)
