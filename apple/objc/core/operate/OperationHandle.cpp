@@ -37,15 +37,17 @@ StatementSelect().select(1).from(Syntax::masterTable).limit(0))
 
 void OperationHandle::setType(HandleType type)
 {
-    switch (type) {
-    case HandleType::OperationIntegrity:
+    HandleCategory category = categoryOfHandleType(type);
+    switch (category) {
+    case HandleCategoryIntegrity:
         m_error.infos.insert_or_assign(ErrorStringKeyAction, ErrorActionIntegrity);
         break;
-    case HandleType::OperationBackup:
+    case HandleCategoryBackupRead:
+    case HandleCategoryBackupWrite:
         m_error.infos.insert_or_assign(ErrorStringKeyAction, ErrorActionBackup);
         break;
     default:
-        WCTAssert(type == HandleType::OperationCheckpoint);
+        WCTAssert(category == HandleCategoryCheckpoint);
         m_error.infos.insert_or_assign(ErrorStringKeyAction, ErrorActionCheckpoint);
         break;
     }

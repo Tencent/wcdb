@@ -84,7 +84,6 @@ protected:
     mutable SharedLock m_memory;
 
 private:
-    static unsigned int slotOfHandleType(HandleType type);
     void flowBack(HandleType type, const std::shared_ptr<Handle> &handle);
 
     std::array<std::set<std::shared_ptr<Handle>>, HandleSlotCount> m_handles;
@@ -99,6 +98,8 @@ private:
         int reference;
     };
     typedef struct ReferencedHandle ReferencedHandle;
+
+    ThreadLocal<std::array<ReferencedHandle, HandleCategoryCount>> m_threadedHandles;
 };
 
 } //namespace WCDB

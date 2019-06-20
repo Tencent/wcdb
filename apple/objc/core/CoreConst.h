@@ -74,21 +74,45 @@ static constexpr const char* NotifierLoggerName = "com.Tencent.WCDB.Notifier.Log
 
 #pragma mark - Handle Pool
 static constexpr const int HandlePoolMaxAllowedNumberOfHandles = 32;
-enum class HandleType : unsigned int {
-    Normal = 0,
-    Migrating = 1,
-
-    Migrate = 2,
-    Operation = 3,
-    OperationBackup = (1 << 8) | Operation,
-    OperationCheckpoint = (2 << 8) | Operation,
-    OperationIntegrity = (3 << 8) | Operation,
-    Assemble = 4,
-
-    Max,
+enum HandleSlot : unsigned int {
+    HandleSlotNormal = 0,
+    HandleSlotMigrating,
+    HandleSlotMigrate,
+    HandleSlotOperation,
+    HandleSlotAssemble,
+    HandleSlotCount,
 };
-static constexpr const unsigned int HandleSlotMask = 0xff;
-static constexpr const unsigned int HandleSlotCount = (unsigned int) HandleType::Max;
+enum HandleCategory : unsigned int {
+    HandleCategoryNormal = 0,
+    HandleCategoryMigrating,
+    HandleCategoryMigrate,
+    HandleCategoryBackupRead,
+    HandleCategoryBackupWrite,
+    HandleCategoryCheckpoint,
+    HandleCategoryIntegrity,
+    HandleCategoryAssemble,
+    HandleCategoryCount,
+};
+enum class HandleType : unsigned int {
+    Normal = (HandleCategoryNormal << 8) | HandleSlotNormal,
+    Migrating = (HandleCategoryMigrating << 8) | HandleSlotMigrating,
+    Migrate = (HandleCategoryMigrate << 8) | HandleSlotMigrate,
+    BackupRead = (HandleCategoryBackupRead << 8) | HandleSlotOperation,
+    BackupWrite = (HandleCategoryBackupWrite << 8) | HandleSlotOperation,
+    Checkpoint = (HandleCategoryCheckpoint << 8) | HandleSlotOperation,
+    Integrity = (HandleCategoryIntegrity << 8) | HandleSlotOperation,
+    Assembler = (HandleCategoryAssemble << 8) | HandleSlotAssemble,
+    AssembleBackupRead = (HandleCategoryBackupRead << 8) | HandleSlotAssemble,
+    AssembleBackupWrite = (HandleCategoryBackupWrite << 8) | HandleSlotAssemble,
+};
+static constexpr HandleSlot slotOfHandleType(HandleType type)
+{
+    return HandleSlot(((unsigned int) type) & 0xff);
+}
+static constexpr HandleCategory categoryOfHandleType(HandleType type)
+{
+    return HandleCategory(((unsigned int) type >> 8) & 0xff);
+}
 
 #pragma mark - Migrate
 static constexpr const double MigrateMaxExpectingDuration = 0.01;

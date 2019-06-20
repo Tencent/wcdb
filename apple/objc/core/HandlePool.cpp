@@ -148,8 +148,23 @@ bool HandlePool::isAliving() const
 
 RecyclableHandle HandlePool::flowOut(HandleType type)
 {
-    unsigned int slot = slotOfHandleType(type);
+    HandleSlot slot = slotOfHandleType(type);
     WCTAssert(slot < HandleSlotCount);
+    HandleCategory category = categoryOfHandleType(type);
+    WCTAssert(category < HandleCategoryCount);
+
+    ReferencedHandle &referencedHandle = m_threadedHandles.getOrCreate()->at(category);
+    {
+        // threaded handles is thread safe.
+        if (referencedHandle.handle != nullptr) {
+            WCTAssert(m_concurrency.readSafety());
+            WCTAssert(referencedHandle.reference > 0);
+            ++referencedHandle.reference;
+            return RecyclableHandle(
+            referencedHandle.handle,
+            std::bind(&HandlePool::flowBack, this, type, std::placeholders::_1));
+        }
+    }
 
     SharedLockGuard concurrencyGuard(m_concurrency);
     std::shared_ptr<Handle> handle;
@@ -214,6 +229,9 @@ RecyclableHandle HandlePool::flowOut(HandleType type)
     WCTAssert(handle != nullptr);
 
     m_concurrency.lockShared();
+    WCTAssert(referencedHandle.handle == nullptr && referencedHandle.reference == 0);
+    referencedHandle.handle = handle;
+    referencedHandle.reference = 1;
     return RecyclableHandle(
     handle, std::bind(&HandlePool::flowBack, this, type, std::placeholders::_1));
 }
@@ -223,21 +241,24 @@ void HandlePool::flowBack(HandleType type, const std::shared_ptr<Handle> &handle
     WCTAssert(handle != nullptr);
     WCTAssert(m_concurrency.readSafety());
 
-    WCTRemedialAssert(
-    !handle->isPrepared(), "Statement is not finalized.", handle->finalize(););
-    {
-        unsigned int slot = slotOfHandleType(type);
-        WCTAssert(slot < HandleSlotCount);
+    HandleSlot slot = slotOfHandleType(type);
+    WCTAssert(slot < HandleSlotCount);
+    HandleCategory category = categoryOfHandleType(type);
+    WCTAssert(category < HandleCategoryCount);
 
-        LockGuard memoryGuard(m_memory);
-        m_frees[slot].push_back(handle);
+    ReferencedHandle &referencedHandle = m_threadedHandles.getOrCreate()->at(category);
+    WCTAssert(referencedHandle.handle == handle);
+    WCTAssert(referencedHandle.reference > 0);
+    if (--referencedHandle.reference == 0) {
+        referencedHandle.handle = nullptr;
+        WCTRemedialAssert(
+        !handle->isPrepared(), "Statement is not finalized.", handle->finalize(););
+        {
+            LockGuard memoryGuard(m_memory);
+            m_frees[slot].push_back(handle);
+        }
+        m_concurrency.unlockShared();
     }
-    m_concurrency.unlockShared();
-}
-
-unsigned int HandlePool::slotOfHandleType(HandleType type)
-{
-    return (unsigned int) type & HandleSlotMask;
 }
 
 HandlePool::ReferencedHandle::ReferencedHandle() : handle(nullptr), reference(0)
