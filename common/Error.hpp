@@ -269,25 +269,29 @@ protected:
 public:
     class InfoValue : public std::any {
     public:
-        enum class Type {
+        enum class UnderlyingType {
             Integer,
             Float,
-            StringView,
+            String,
         };
-        Type valueType() const;
+        UnderlyingType underlyingType() const;
+
+    private:
+        // type().hash_code() may be changed in some cases.
+        UnderlyingType m_underlyingType;
 
     public:
         template<typename T>
         InfoValue(const T &value,
                   typename std::enable_if<std::is_floating_point<T>::value>::type * = nullptr)
-        : std::any((double) value)
+        : std::any((double) value), m_underlyingType(UnderlyingType::Float)
         {
         }
 
         template<typename T>
         InfoValue(const T &value,
                   typename std::enable_if<std::is_integral<T>::value>::type * = nullptr)
-        : std::any((int64_t) value)
+        : std::any((int64_t) value), m_underlyingType(UnderlyingType::Integer)
         {
         }
 

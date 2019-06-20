@@ -75,7 +75,8 @@ void OperationQueue::handleError(const Error& error)
     const auto& infos = error.infos;
 
     auto iter = infos.find(UnsafeStringView(ErrorStringKeyPath));
-    if (iter == infos.end() || iter->second.valueType() != Error::InfoValue::Type::StringView) {
+    if (iter == infos.end()
+        || iter->second.underlyingType() != Error::InfoValue::UnderlyingType::String) {
         // make sure no empty path will be added into queue
         return;
     }
@@ -95,7 +96,7 @@ void OperationQueue::handleError(const Error& error)
     bool fromIntegrity = false;
     auto actionIter = infos.find(UnsafeStringView(ErrorStringKeyAction));
     if (actionIter != infos.end()
-        && actionIter->second.valueType() == Error::InfoValue::Type::StringView
+        && actionIter->second.underlyingType() == Error::InfoValue::UnderlyingType::String
         && actionIter->second.stringValue() == ErrorActionIntegrity) {
         fromIntegrity = true;
     }

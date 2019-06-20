@@ -241,36 +241,30 @@ const StringView& Error::getMessage() const
 }
 
 #pragma mark - Info
-Error::InfoValue::InfoValue(const char* string) : std::any(StringView(string))
+Error::InfoValue::InfoValue(const char* string)
+: std::any(StringView(string)), m_underlyingType(UnderlyingType::String)
 {
 }
 
 Error::InfoValue::InfoValue(const UnsafeStringView& string)
-: std::any(StringView(string))
+: std::any(StringView(string)), m_underlyingType(UnderlyingType::String)
 {
 }
 
-Error::InfoValue::InfoValue(StringView&& string) : std::any(std::move(string))
+Error::InfoValue::InfoValue(StringView&& string)
+: std::any(std::move(string)), m_underlyingType(UnderlyingType::String)
 {
 }
 
-Error::InfoValue::Type Error::InfoValue::valueType() const
+Error::InfoValue::UnderlyingType Error::InfoValue::underlyingType() const
 {
-    auto hash = type().hash_code();
-    if (hash == typeid(StringView).hash_code()) {
-        return Type::StringView;
-    } else if (hash == typeid(double).hash_code()) {
-        return Type::Float;
-    } else {
-        WCTAssert(hash == typeid(int64_t).hash_code());
-        return Type::Integer;
-    }
+    return m_underlyingType;
 }
 
 const StringView& Error::InfoValue::stringValue() const
 {
     WCTAssert(has_value());
-    WCTAssert(valueType() == Type::StringView);
+    WCTAssert(underlyingType() == UnderlyingType::String);
     const StringView* value = std::any_cast<StringView>(this);
     WCTAssert(value != nullptr);
     return *value;
@@ -279,7 +273,7 @@ const StringView& Error::InfoValue::stringValue() const
 const int64_t& Error::InfoValue::integerValue() const
 {
     WCTAssert(has_value());
-    WCTAssert(valueType() == Type::Integer);
+    WCTAssert(underlyingType() == UnderlyingType::Integer);
     const int64_t* value = std::any_cast<int64_t>(this);
     WCTAssert(value != nullptr);
     return *value;
@@ -288,7 +282,7 @@ const int64_t& Error::InfoValue::integerValue() const
 const double& Error::InfoValue::floatValue() const
 {
     WCTAssert(has_value());
-    WCTAssert(valueType() == Type::Float);
+    WCTAssert(underlyingType() == UnderlyingType::Float);
     const double* value = std::any_cast<double>(this);
     WCTAssert(value != nullptr);
     return *value;
@@ -304,15 +298,15 @@ StringView Error::getDescription() const
 
     for (const auto& info : infos) {
         stream << ", " << info.first << ": ";
-        switch (info.second.valueType()) {
-        case InfoValue::Type::StringView:
+        switch (info.second.underlyingType()) {
+        case InfoValue::UnderlyingType::String:
             stream << info.second.stringValue();
             break;
-        case InfoValue::Type::Float:
+        case InfoValue::UnderlyingType::Float:
             stream << info.second.floatValue();
             break;
         default:
-            WCTAssert(info.second.valueType() == InfoValue::Type::Integer);
+            WCTAssert(info.second.underlyingType() == InfoValue::UnderlyingType::Integer);
             stream << info.second.integerValue();
             break;
         }
