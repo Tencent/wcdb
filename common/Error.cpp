@@ -141,14 +141,6 @@ Error::Error(Code code, Level level_, const UnsafeStringView& message)
     setCode(code, message);
 }
 
-//void Error::clear()
-//{
-//    m_code = Code::OK;
-//    level = Level::Ignore;
-//    message.clear();
-//    infos.clear();
-//}
-
 #pragma mark - Code
 bool Error::isError(int rc)
 {
