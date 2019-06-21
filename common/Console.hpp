@@ -22,6 +22,7 @@
 
 #include <WCDB/Macro.hpp>
 #include <WCDB/StringView.hpp>
+#include <optional>
 
 namespace WCDB {
 
