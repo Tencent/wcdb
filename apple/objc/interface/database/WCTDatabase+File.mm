@@ -45,12 +45,12 @@
 
 - (WCTOptionalSize)getFilesSize
 {
-    WCTOptionalSize result = nullptr;
+    WCTOptionalSize result;
     bool succeed;
     size_t size;
     std::tie(succeed, size) = _database->getFilesSize();
     if (succeed) {
-        result.reset(size);
+        result = size;
     }
     return result;
 }

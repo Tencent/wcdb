@@ -86,43 +86,41 @@
 
 - (WCTOptionalSize)getNumberOfPages
 {
-    WCTOptionalSize result = nullptr;
+    WCTOptionalSize result;
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.path]) {
         NSError *error;
         size_t size = (size_t)((NSNumber *) [[NSFileManager defaultManager] attributesOfItemAtPath:self.path error:&error][NSFileSize]).unsignedLongLongValue;
         if (error == nil) {
             int numberOfPages = (int) (size / self.pageSize);
-            result.reset(numberOfPages > 0 ? numberOfPages : 0);
+            result = numberOfPages > 0 ? numberOfPages : 0;
         } else {
             TestCaseLog(@"%@", error);
         }
     } else {
-        result.reset(0);
+        result = 0;
     }
     return result;
 }
 
 - (WCTOptionalSize)getNumberOfWalFrames
 {
-    WCTOptionalSize result = nullptr;
+    WCTOptionalSize result;
     NSError *error;
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.walPath]) {
         size_t size = (size_t)((NSNumber *) [[NSFileManager defaultManager] attributesOfItemAtPath:self.walPath error:&error][NSFileSize]).unsignedLongLongValue;
         if (error == nil) {
             if (size == 0) {
-                result.reset(0);
+                result = 0;
             } else if (size > self.walHeaderSize) {
-                if ((size - self.walHeaderSize) % self.walFrameSize != 0) {
-                    result.unset();
-                } else {
-                    result.reset((size - self.walHeaderSize) / self.walFrameSize);
+                if ((size - self.walHeaderSize) % self.walFrameSize == 0) {
+                    result = (size - self.walHeaderSize) / self.walFrameSize;
                 }
             }
         } else {
             TestCaseLog(@"%@", error);
         }
     } else {
-        result.reset(0);
+        result = 0;
     }
     return result;
 }
@@ -201,7 +199,7 @@
 {
     WCTOptionalSize frames = [self getNumberOfWalFrames];
     if (frames.failed()) {
-        return nullptr;
+        return std::nullopt;
     }
     if (frames.value() == 0) {
         return YES;
@@ -209,7 +207,7 @@
 
     BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:self.shmPath];
     if (!exists) {
-        return nullptr;
+        return std::nullopt;
     }
 
     NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:self.shmPath];
@@ -217,14 +215,14 @@
     [fileHandle seekToFileOffset:16];
     NSData *data = [fileHandle readDataOfLength:4];
     if (data == nil) {
-        return nullptr;
+        return std::nullopt;
     }
     uint32_t maxFrame = *(uint32_t *) data.bytes;
 
     [fileHandle seekToFileOffset:96];
     data = [fileHandle readDataOfLength:4];
     if (data == nil) {
-        return nullptr;
+        return std::nullopt;
     }
     uint32_t backfill = *(uint32_t *) data.bytes;
 
@@ -237,7 +235,7 @@
 {
     WCTOptionalSize frames = [self getNumberOfWalFrames];
     if (frames.failed()) {
-        return nullptr;
+        return std::nullopt;
     }
     return frames.value() == 0;
 }

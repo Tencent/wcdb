@@ -31,11 +31,11 @@
 
 - (WCTOptionalBool)tableExists:(NSString *)tableName
 {
-    WCTOptionalBool result = nullptr;
+    WCTOptionalBool result;
     bool succeed, exists;
     std::tie(succeed, exists) = _database->tableExists(tableName);
     if (succeed) {
-        result.reset(exists);
+        result = exists;
     }
     return result;
 }

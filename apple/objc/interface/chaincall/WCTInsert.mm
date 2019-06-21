@@ -33,7 +33,7 @@
     WCDB::StatementInsert _statement;
     NSArray<WCTObject *> *_values;
     std::vector<bool> _autoIncrements;
-    WCTOptionalBool _canFillLastInsertedRowID;
+    std::optional<BOOL> _canFillLastInsertedRowID;
 }
 
 - (WCDB::StatementInsert &)statement
@@ -99,7 +99,7 @@
             }
         }
 
-        _canFillLastInsertedRowID.unset();
+        _canFillLastInsertedRowID.reset();
         if (_values.count > 1) {
             succeed = [_handle lazyRunTransaction:^BOOL(WCTHandle *handle) {
                 WCDB_UNUSED(handle)
@@ -116,7 +116,7 @@
 {
     BOOL succeed = NO;
     if ([_handle prepare:_statement]) {
-        WCTOptionalBool isAutoIncrement = nullptr;
+        std::optional<BOOL> isAutoIncrement;
         succeed = YES;
         for (WCTObject *value in _values) {
             int index = 1;
@@ -128,11 +128,11 @@
                                  ofObject:value
                                   toIndex:index];
                 } else {
-                    if (isAutoIncrement.failed()) {
-                        isAutoIncrement.reset(value.isAutoIncrement);
+                    if (!isAutoIncrement.has_value()) {
+                        isAutoIncrement = value.isAutoIncrement;
                     }
-                    WCTAssert(!isAutoIncrement.failed());
-                    if (isAutoIncrement) {
+                    WCTAssert(isAutoIncrement.has_value());
+                    if (isAutoIncrement.value_or(NO)) {
                         [_handle bindNullToIndex:index];
                     } else {
                         [_handle bindProperty:property
@@ -147,16 +147,16 @@
                 break;
             }
             if (!_autoIncrements.empty()) {
-                if (_canFillLastInsertedRowID.failed()) {
-                    _canFillLastInsertedRowID.reset([_values.firstObject respondsToSelector:@selector(lastInsertedRowID)]);
+                if (!_canFillLastInsertedRowID.has_value()) {
+                    _canFillLastInsertedRowID = [_values.firstObject respondsToSelector:@selector(lastInsertedRowID)];
                 }
-                WCTAssert(!_canFillLastInsertedRowID.failed());
-                if (_canFillLastInsertedRowID) {
-                    if (isAutoIncrement.failed()) {
-                        isAutoIncrement.reset(value.isAutoIncrement);
+                WCTAssert(_canFillLastInsertedRowID.has_value());
+                if (_canFillLastInsertedRowID.value_or(NO)) {
+                    if (!isAutoIncrement.has_value()) {
+                        isAutoIncrement = value.isAutoIncrement;
                     }
-                    WCTAssert(!isAutoIncrement.failed());
-                    if (isAutoIncrement) {
+                    WCTAssert(isAutoIncrement.has_value());
+                    if (isAutoIncrement.value_or(NO)) {
                         value.lastInsertedRowID = [_handle getLastInsertedRowID];
                     }
                 }

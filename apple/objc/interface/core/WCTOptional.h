@@ -20,73 +20,63 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTConvertible.h>
+#import <optional>
 #import <type_traits>
 
 template<typename T>
 class WCTIncompleteOptional {
-public:
-    WCTIncompleteOptional(const T& value, BOOL isOK)
-    : m_value(value), m_isOK(isOK)
-    {
-    }
+    using Super = std::optional<T>;
+    static_assert(!std::is_same<std::nullptr_t, T>::value, "");
 
+public:
     virtual ~WCTIncompleteOptional() {}
 
-    void reset(const T& value)
+    operator const T&() const { return value(); }
+
+    const T& value() const
     {
-        m_isOK = YES;
-        m_value = value;
+        if (m_real.has_value()) {
+            return m_real.value();
+        }
+        return m_default;
     }
 
-    operator const T&() const { return m_value; }
+    BOOL succeed() const { return m_real.has_value(); }
+    BOOL failed() const { return !succeed(); }
 
-    const T& value() const { return m_value; }
-
-    BOOL failed() const { return !m_isOK; }
-
-    //    WCTIncompleteOptional& operator=(const T& value)
-    //    {
-    //        reset(value);
-    //        return *this;
-    //    }
+    WCTIncompleteOptional& operator=(const T& value)
+    {
+        m_real = value;
+        return *this;
+    }
 
 protected:
-    void unset(const T& value)
+    WCTIncompleteOptional(const T& defaultValue)
+    : m_real(std::nullopt), m_default(defaultValue)
     {
-        m_isOK = NO;
-        m_value = value;
+    }
+
+    WCTIncompleteOptional(const T& value, const T& defaultValue)
+    : m_real(value), m_default(defaultValue)
+    {
     }
 
 private:
-    T m_value;
-    BOOL m_isOK;
+    std::optional<T> m_real;
+    T m_default;
 };
 
 template<typename T, T defaultValue>
 class WCTFundamentalOptional final : public WCTIncompleteOptional<T> {
+    using Super = WCTIncompleteOptional<T>;
     static_assert(std::is_fundamental<T>::value || std::is_enum<T>::value, "");
-    static_assert(!std::is_same<std::nullptr_t, T>::value, "");
 
 public:
-    WCTFundamentalOptional() : WCTIncompleteOptional<T>(defaultValue, NO) {}
+    WCTFundamentalOptional() : Super(defaultValue) {}
 
-    WCTFundamentalOptional(const T& value)
-    : WCTIncompleteOptional<T>(value, YES)
-    {
-    }
+    WCTFundamentalOptional(const std::nullopt_t&) : Super(defaultValue) {}
 
-    WCTFundamentalOptional(const std::nullptr_t&)
-    : WCTIncompleteOptional<T>(defaultValue, NO)
-    {
-    }
-
-    //    WCTFundamentalOptional& operator=(const T& value)
-    //    {
-    //        WCTIncompleteOptional<T>::operator=(value);
-    //        return *this;
-    //    }
-
-    void unset() { WCTIncompleteOptional<T>::unset(defaultValue); }
+    WCTFundamentalOptional(const T& value) : Super(value, defaultValue) {}
 };
 
 //template<typename T>
