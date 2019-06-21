@@ -40,8 +40,13 @@ FullCrawler::FullCrawler(const UnsafeStringView &source)
 #pragma mark - Repair
 bool FullCrawler::work()
 {
-    if (isEmptyDatabase()) {
-        return exit(true);
+    auto isEmpty = isEmptyDatabase();
+    if (isEmpty.has_value()) {
+        if (isEmpty.value()) {
+            return exit(true);
+        }
+    } else {
+        return exit(false);
     }
 
     if (!m_pager.initialize()) {

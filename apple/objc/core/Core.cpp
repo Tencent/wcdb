@@ -199,39 +199,36 @@ void Core::setNotificationWhenDatabaseCorrupted(const UnsafeStringView& path,
 {
     OperationQueue::CorruptionNotification underlyingNotification = nullptr;
     if (notification != nullptr) {
-        underlyingNotification = [this, notification](const UnsafeStringView& path,
-                                                      uint32_t corruptedIdentifier) {
-            RecyclableDatabase database = m_databasePool.get(path);
-            if (database == nullptr) {
-                return;
-            }
-            database->blockade();
-            do {
-                bool succeed;
-                bool exists;
-                std::tie(succeed, exists) = FileManager::fileExists(path);
-                if (!succeed) {
-                    // I/O error
-                    break;
-                }
-                if (!exists) {
-                    // it's already not existing
-                    break;
-                }
-                uint32_t identifier;
-                std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
-                if (!succeed) {
-                    // I/O error
-                    break;
-                }
-                if (identifier != corruptedIdentifier) {
-                    // file is changed.
-                    break;
-                }
-                notification(database.get());
-            } while (false);
-            database->unblockade();
-        };
+        underlyingNotification
+        = [this, notification](const UnsafeStringView& path, uint32_t corruptedIdentifier) {
+              RecyclableDatabase database = m_databasePool.get(path);
+              if (database == nullptr) {
+                  return;
+              }
+              database->blockade();
+              do {
+                  auto exists = FileManager::fileExists(path);
+                  if (!exists.has_value()) {
+                      // I/O error
+                      break;
+                  }
+                  if (!exists.value()) {
+                      // it's already not existing
+                      break;
+                  }
+                  auto identifier = FileManager::getFileIdentifier(path);
+                  if (!identifier.has_value()) {
+                      // I/O error
+                      break;
+                  }
+                  if (identifier.value() != corruptedIdentifier) {
+                      // file is changed.
+                      break;
+                  }
+                  notification(database.get());
+              } while (false);
+              database->unblockade();
+          };
     }
     m_operationQueue->setNotificationWhenCorrupted(path, underlyingNotification);
 }

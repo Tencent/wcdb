@@ -130,15 +130,13 @@ bool FactoryRetriever::exit(bool result)
 
 bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
 {
-    std::list<StringView> materialPaths;
-    bool succeed;
-    std::tie(succeed, materialPaths)
-    = Factory::materialsForDeserializingForDatabase(databasePath);
-    if (!succeed) {
+    auto optionalMaterialPaths = Factory::materialsForDeserializingForDatabase(databasePath);
+    if (!optionalMaterialPaths.has_value()) {
         setCriticalErrorWithSharedThreadedError();
         return false;
     }
 
+    std::list<StringView> materialPaths = optionalMaterialPaths.value();
     bool useMaterial = false;
     Fraction score;
     if (!materialPaths.empty()) {
@@ -148,12 +146,13 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
         for (const auto &materialPath : materialPaths) {
             useMaterial = material.deserialize(materialPath);
             if (useMaterial) {
-                std::tie(succeed, materialTime)
-                = FileManager::getFileModifiedTime(materialPath);
-                if (!succeed) {
+                auto optionalMaterialTime = FileManager::getFileModifiedTime(materialPath);
+                if (!optionalMaterialTime.has_value()) {
                     setCriticalErrorWithSharedThreadedError();
                     return false;
                 }
+#warning - TODO: check material time?
+                materialTime = optionalMaterialTime.value();
                 break;
             }
             if (!ThreadedErrors::shared().getThreadedError().isCorruption()) {
@@ -230,7 +229,10 @@ void FactoryRetriever::reportMechanic(const Fraction &score,
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.insert_or_assign(ErrorStringKeyPath, path);
     error.infos.insert_or_assign("Score", score.value());
-    error.infos.insert_or_assign("Material", material.stringify());
+    auto optionalMaterial = material.stringify();
+    if (optionalMaterial.has_value()) {
+        error.infos.insert_or_assign("Material", optionalMaterial.value());
+    }
     finishReportOfPerformance(error, path, cost);
     error.infos.insert_or_assign(
     "Weight", StringView::formatted("%f%%", getWeight(path).value() * 100.0f));
@@ -303,15 +305,13 @@ size_t FactoryRetriever::iterateSize(const size_t previous,
 
 bool FactoryRetriever::calculateSize(const UnsafeStringView &databasePath)
 {
-    bool succeed;
-    size_t fileSize;
-    std::tie(succeed, fileSize)
+    auto fileSize
     = FileManager::getItemsSize(Factory::databasePathsForDatabase(databasePath));
-    if (!succeed) {
+    if (!fileSize.has_value()) {
         setCriticalErrorWithSharedThreadedError();
         return false;
     }
-    m_sizes[databasePath] = fileSize;
+    m_sizes[databasePath] = fileSize.value();
     return true;
 }
 

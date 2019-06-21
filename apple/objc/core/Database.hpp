@@ -133,7 +133,7 @@ public:
 
     bool moveFiles(const UnsafeStringView &directory);
     bool removeFiles();
-    std::pair<bool, size_t> getFilesSize();
+    std::optional<size_t> getFilesSize();
 
 #pragma mark - Repair
 public:

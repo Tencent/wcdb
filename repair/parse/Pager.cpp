@@ -196,14 +196,15 @@ void Pager::markAsError(Error::Code code)
 #pragma mark - Initializeable
 bool Pager::doInitialize()
 {
-    bool succeed;
-    std::tie(succeed, m_fileSize) = FileManager::getFileSize(getPath());
+    auto fileSize = FileManager::getFileSize(getPath());
+    ;
+    if (!fileSize.has_value()) {
+        assignWithSharedThreadedError();
+        return false;
+    }
+    m_fileSize = fileSize.value();
     if (m_fileSize == 0) {
-        if (succeed) {
-            markAsError(Error::Code::Empty);
-        } else {
-            assignWithSharedThreadedError();
-        }
+        markAsError(Error::Code::Empty);
         return false;
     }
 

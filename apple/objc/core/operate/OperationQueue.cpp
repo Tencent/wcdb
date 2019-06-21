@@ -86,12 +86,11 @@ void OperationQueue::handleError(const Error& error)
         return;
     }
 
-    bool succeed;
-    uint32_t identifier;
-    std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
-    if (!succeed) {
+    auto optionalIdentifier = FileManager::getFileIdentifier(path);
+    if (!optionalIdentifier.has_value()) {
         return;
     }
+    auto identifier = optionalIdentifier.value();
 
     bool fromIntegrity = false;
     auto actionIter = infos.find(UnsafeStringView(ErrorStringKeyAction));
@@ -451,12 +450,10 @@ bool OperationQueue::isFileObservedCorrupted(const UnsafeStringView& path) const
     WCTAssert(!path.empty());
 
     bool corrupted = false;
-    bool succeed;
-    uint32_t identifier;
-    std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
-    if (succeed) {
+    auto identifier = FileManager::getFileIdentifier(path);
+    if (identifier.has_value()) {
         SharedLockGuard lockGuard(m_lock);
-        corrupted = m_corrupteds.find(identifier) != m_corrupteds.end();
+        corrupted = m_corrupteds.find(identifier.value()) != m_corrupteds.end();
     }
     return corrupted;
 }

@@ -26,6 +26,7 @@
 #include <WCDB/Time.hpp>
 #include <functional>
 #include <list>
+#include <optional>
 
 namespace WCDB {
 
@@ -44,16 +45,17 @@ public:
 
 #pragma mark - Basic
 public:
-    static std::tuple<bool, bool, bool> itemExists(const UnsafeStringView &path);
-    static std::pair<bool, size_t> getDirectorySize(const UnsafeStringView &directory);
-    static std::pair<bool, size_t> getFileSize(const UnsafeStringView &file);
+    // exists, directory?
+    static std::optional<std::pair<bool, bool>> itemExists(const UnsafeStringView &path);
+    static std::optional<size_t> getDirectorySize(const UnsafeStringView &directory);
+    static std::optional<size_t> getFileSize(const UnsafeStringView &file);
     static bool
     createFileHardLink(const UnsafeStringView &from, const UnsafeStringView &to);
     static bool removeFileHardLink(const UnsafeStringView &path);
     static bool createDirectory(const UnsafeStringView &path);
-    static std::pair<bool, Time> getFileModifiedTime(const UnsafeStringView &path);
-    static std::pair<bool, Time> getFileCreatedTime(const UnsafeStringView &path);
-    static std::pair<bool, uint32_t> getFileIdentifier(const UnsafeStringView &path);
+    static std::optional<Time> getFileModifiedTime(const UnsafeStringView &path);
+    static std::optional<Time> getFileCreatedTime(const UnsafeStringView &path);
+    static std::optional<uint32_t> getFileIdentifier(const UnsafeStringView &path);
     static bool createFile(const UnsafeStringView &path);
 
     static bool enumerateDirectory(
@@ -62,8 +64,7 @@ public:
     &enumeration);
 
     static bool setFileProtection(const UnsafeStringView &path, FileProtection fileProtection);
-    static std::pair<bool, FileProtection>
-    getFileProtection(const UnsafeStringView &path);
+    static std::optional<FileProtection> getFileProtection(const UnsafeStringView &path);
 
 protected:
     static bool removeFile(const UnsafeStringView &file);
@@ -71,10 +72,10 @@ protected:
 
 #pragma mark - Combination
 public:
-    static std::pair<bool, bool> fileExists(const UnsafeStringView &file);
-    static std::pair<bool, bool> directoryExists(const UnsafeStringView &directory);
-    static std::pair<bool, size_t> getItemSize(const UnsafeStringView &path);
-    static std::pair<bool, size_t> getItemsSize(const std::list<StringView> &paths);
+    static std::optional<bool> fileExists(const UnsafeStringView &file);
+    static std::optional<bool> directoryExists(const UnsafeStringView &directory);
+    static std::optional<size_t> getItemSize(const UnsafeStringView &path);
+    static std::optional<size_t> getItemsSize(const std::list<StringView> &paths);
     static bool removeItem(const UnsafeStringView &path);
     static bool removeItems(const std::list<StringView> &paths);
     static bool

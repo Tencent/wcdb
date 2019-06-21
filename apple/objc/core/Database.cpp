@@ -106,13 +106,12 @@ Database::InitializedGuard Database::initialize()
         if (!retrieveRenewed()) {
             break;
         }
-        bool succeed, exists;
-        std::tie(succeed, exists) = FileManager::fileExists(path);
-        if (!succeed) {
+        auto exists = FileManager::fileExists(path);
+        if (!exists.has_value()) {
             assignWithSharedThreadedError();
             break;
         }
-        if (!exists && !FileManager::createFile(path)) {
+        if (!exists.value() && !FileManager::createFile(path)) {
             assignWithSharedThreadedError();
             break;
         }
@@ -431,13 +430,13 @@ bool Database::removeFiles()
     return result;
 }
 
-std::pair<bool, size_t> Database::getFilesSize()
+std::optional<size_t> Database::getFilesSize()
 {
-    auto pair = FileManager::getItemsSize(getPaths());
-    if (!pair.first) {
+    auto size = FileManager::getItemsSize(getPaths());
+    if (!size.has_value()) {
         assignWithSharedThreadedError();
     }
-    return pair;
+    return size;
 }
 
 bool Database::moveFiles(const UnsafeStringView &directory)

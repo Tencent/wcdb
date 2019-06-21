@@ -34,55 +34,52 @@
 namespace WCDB {
 
 #pragma mark - Basic
-std::tuple<bool, bool, bool> FileManager::itemExists(const UnsafeStringView &path)
+std::optional<std::pair<bool, bool>> FileManager::itemExists(const UnsafeStringView &path)
 {
     struct stat s;
     if (stat(path.data(), &s) == 0) {
         if ((s.st_mode & S_IFMT) == S_IFDIR) {
-            return { true, true, true };
+            return std::make_pair(true, true);
         } else {
-            return { true, true, false };
+            return std::make_pair(true, false);
         }
     } else if (errno == ENOENT) {
-        return { true, false, false };
+        return std::make_pair(false, false);
     }
     setThreadedError(path);
-    return { false, false, false };
+    return std::nullopt;
 }
 
-std::pair<bool, size_t> FileManager::getFileSize(const UnsafeStringView &file)
+std::optional<size_t> FileManager::getFileSize(const UnsafeStringView &file)
 {
     struct stat temp;
     if (stat(file.data(), &temp) == 0) {
-        return { true, (size_t) temp.st_size };
+        return (size_t) temp.st_size;
     } else if (errno == ENOENT) {
-        return { true, 0 };
+        return 0;
     }
     setThreadedError(file);
-    return { false, 0 };
+    return std::nullopt;
 }
 
-std::pair<bool, size_t> FileManager::getDirectorySize(const UnsafeStringView &directory)
+std::optional<size_t> FileManager::getDirectorySize(const UnsafeStringView &directory)
 {
-    bool succeed = true;
-    size_t totalSize = 0;
-    if (enumerateDirectory(
+    std::optional<size_t> totalSize = 0;
+    if (!enumerateDirectory(
         directory,
-        [&succeed, &totalSize](
-        const UnsafeStringView &directory, const UnsafeStringView &subpath, bool isDirectory) {
+        [&totalSize](const UnsafeStringView &directory, const UnsafeStringView &subpath, bool isDirectory) {
             StringView path = Path::addComponent(directory, subpath);
-            auto intermediate = isDirectory ? getDirectorySize(path) : getFileSize(path);
-            if (!intermediate.first) {
-                succeed = false;
+            auto size = isDirectory ? getDirectorySize(path) : getFileSize(path);
+            if (!size.has_value()) {
+                totalSize = std::nullopt;
                 return false;
             }
-            totalSize += intermediate.second;
+            totalSize.value() += size.value();
             return true;
-        })
-        && succeed) {
-        return { true, totalSize };
+        })) {
+        totalSize = std::nullopt;
     };
-    return { false, 0 };
+    return totalSize;
 }
 
 bool FileManager::enumerateDirectory(
@@ -186,27 +183,27 @@ bool FileManager::createDirectory(const UnsafeStringView &path)
     return false;
 }
 
-std::pair<bool, Time> FileManager::getFileModifiedTime(const UnsafeStringView &path)
+std::optional<Time> FileManager::getFileModifiedTime(const UnsafeStringView &path)
 {
     struct stat result;
     if (stat(path.data(), &result) == 0) {
-        return { true, Time(result.st_mtimespec) };
+        return Time(result.st_mtimespec);
     }
     setThreadedError(path);
-    return { false, {} };
+    return std::nullopt;
 }
 
-std::pair<bool, Time> FileManager::getFileCreatedTime(const UnsafeStringView &path)
+std::optional<Time> FileManager::getFileCreatedTime(const UnsafeStringView &path)
 {
     struct stat result;
     if (stat(path.data(), &result) == 0) {
-        return { true, Time(result.st_ctimespec) };
+        return Time(result.st_ctimespec);
     }
     setThreadedError(path);
-    return { false, Time() };
+    return std::nullopt;
 }
 
-std::pair<bool, uint32_t> FileManager::getFileIdentifier(const UnsafeStringView &path)
+std::optional<uint32_t> FileManager::getFileIdentifier(const UnsafeStringView &path)
 {
     struct stat result;
     if (stat(path.data(), &result) == 0) {
@@ -214,9 +211,9 @@ std::pair<bool, uint32_t> FileManager::getFileIdentifier(const UnsafeStringView 
         unsigned char buffer[size];
         memcpy(buffer, &result.st_dev, sizeof(result.st_dev));
         memcpy(buffer + sizeof(result.st_dev), &result.st_ino, sizeof(result.st_ino));
-        return { true, UnsafeData(buffer, size).hash() };
+        return UnsafeData(buffer, size).hash();
     }
-    return { false, 0 };
+    return std::nullopt;
 }
 
 bool FileManager::createFile(const UnsafeStringView &path)
@@ -233,7 +230,7 @@ bool FileManager::createFile(const UnsafeStringView &path)
 }
 
 #pragma mark - Combination
-std::pair<bool, size_t> FileManager::getItemSize(const UnsafeStringView &path)
+std::optional<size_t> FileManager::getItemSize(const UnsafeStringView &path)
 {
     struct stat temp;
     if (stat(path.data(), &temp) == 0) {
@@ -242,38 +239,46 @@ std::pair<bool, size_t> FileManager::getItemSize(const UnsafeStringView &path)
         }
         return getFileSize(path);
     } else if (errno == ENOENT) {
-        return { true, 0 };
+        return 0;
     }
     setThreadedError(path);
-    return { false, 0 };
+    return std::nullopt;
 }
 
-std::pair<bool, bool> FileManager::fileExists(const UnsafeStringView &file)
+std::optional<bool> FileManager::fileExists(const UnsafeStringView &file)
 {
-    bool succeed, exists, isDirectory;
-    std::tie(succeed, exists, isDirectory) = itemExists(file);
-    return { succeed, exists && !isDirectory };
+    auto result = itemExists(file);
+    if (result.has_value()) {
+        bool exists, isDirectory;
+        std::tie(exists, isDirectory) = result.value();
+        return exists && !isDirectory;
+    }
+    return std::nullopt;
 }
 
-std::pair<bool, bool> FileManager::directoryExists(const UnsafeStringView &directory)
+std::optional<bool> FileManager::directoryExists(const UnsafeStringView &directory)
 {
-    bool succeed, exists, isDirectory;
-    std::tie(succeed, exists, isDirectory) = itemExists(directory);
-    return { succeed, exists && isDirectory };
+    auto result = itemExists(directory);
+    if (result.has_value()) {
+        bool exists, isDirectory;
+        std::tie(exists, isDirectory) = result.value();
+        return exists && isDirectory;
+    }
+    return std::nullopt;
 }
 
-std::pair<bool, size_t> FileManager::getItemsSize(const std::list<StringView> &paths)
+std::optional<size_t> FileManager::getItemsSize(const std::list<StringView> &paths)
 {
     size_t size = 0;
-    std::pair<bool, size_t> temp;
+    std::optional<size_t> temp;
     for (const auto &path : paths) {
         temp = getItemSize(path);
-        if (!temp.first) {
-            return { false, 0 };
+        if (!temp.has_value()) {
+            return std::nullopt;
         }
-        size += temp.second;
+        size += temp.value();
     }
-    return { true, size };
+    return size;
 }
 
 bool FileManager::removeItem(const UnsafeStringView &path)
@@ -320,11 +325,12 @@ bool FileManager::moveItems(const std::list<std::pair<StringView, StringView>> &
     bool result = true;
     std::list<StringView> recovers;
     for (const auto &pairedPath : pairedPaths) {
-        bool succeed, exists, isDirectory;
-        std::tie(succeed, exists, isDirectory) = itemExists(pairedPath.first);
-        if (!succeed) {
+        auto optionalExists = itemExists(pairedPath.first);
+        if (!optionalExists.has_value()) {
             break;
         }
+        bool exists, isDirectory;
+        std::tie(exists, isDirectory) = optionalExists.value();
         if (exists) {
             const StringView &newPath = pairedPath.second;
             if (!removeItem(newPath)) {
@@ -361,11 +367,11 @@ bool FileManager::moveItems(const std::list<std::pair<StringView, StringView>> &
 
 bool FileManager::createDirectoryWithIntermediateDirectories(const UnsafeStringView &directory)
 {
-    auto ret = directoryExists(directory);
-    if (!ret.first) {
+    auto exists = directoryExists(directory);
+    if (!exists.has_value()) {
         return false;
     }
-    if (!ret.second) {
+    if (!exists.value()) {
         return createDirectoryWithIntermediateDirectories(Path::getDirectoryName(directory))
                && createDirectory(directory);
     }
@@ -374,12 +380,11 @@ bool FileManager::createDirectoryWithIntermediateDirectories(const UnsafeStringV
 
 bool FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(const UnsafeStringView &path)
 {
-    bool succeed;
-    FileProtection fileProtection;
-    std::tie(succeed, fileProtection) = getFileProtection(path);
-    if (!succeed) {
+    auto optionalFileProtection = getFileProtection(path);
+    if (!optionalFileProtection.has_value()) {
         return false;
     }
+    FileProtection fileProtection = optionalFileProtection.value();
     if (fileProtection != FileProtection::None
         && fileProtection != FileProtection::CompleteUntilFirstUserAuthentication) {
         return setFileProtection(path, FileProtection::CompleteUntilFirstUserAuthentication);

@@ -46,8 +46,13 @@ bool Mechanic::work()
 {
     WCTAssert(m_material != nullptr);
 
-    if (isEmptyDatabase()) {
-        return exit(true);
+    auto isEmpty = isEmptyDatabase();
+    if (isEmpty.has_value()) {
+        if (isEmpty.value()) {
+            return exit(true);
+        }
+    } else {
+        return exit(false);
     }
 
     m_pager.setWalImportance(false);

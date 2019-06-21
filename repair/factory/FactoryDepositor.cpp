@@ -29,14 +29,13 @@ namespace Repair {
 
 bool FactoryDepositor::work()
 {
-    bool succeed;
-    StringView workshopDirectory;
-    std::tie(succeed, workshopDirectory) = factory.getUniqueWorkshopDiectory();
-    if (!succeed) {
+    auto optionalWorkshopDirectory = factory.getUniqueWorkshopDiectory();
+    if (!optionalWorkshopDirectory.has_value()) {
         assignWithSharedThreadedError();
         return false;
     }
 
+    StringView workshopDirectory = optionalWorkshopDirectory.value();
     if (!FileManager::createDirectoryWithIntermediateDirectories(workshopDirectory)
         || !FileManager::moveItems(
         Factory::associatedPathsForDatabase(factory.database), workshopDirectory)) {

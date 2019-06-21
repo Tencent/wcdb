@@ -75,14 +75,14 @@ bool FileManager::setFileProtection(const WCDB::UnsafeStringView &path, WCDB::Fi
     return false;
 }
 
-std::pair<bool, WCDB::FileProtection> FileManager::getFileProtection(const WCDB::UnsafeStringView &path)
+std::optional<WCDB::FileProtection> FileManager::getFileProtection(const WCDB::UnsafeStringView &path)
 {
     NSError *nsError = nil;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *nsPath = [NSString stringWithView:path];
     NSDictionary *attributes = [fileManager attributesOfItemAtPath:nsPath error:&nsError];
     if (attributes != nil) {
-        return { true, fileProtectionForAttribute(attributes[NSFileProtectionKey]) };
+        return fileProtectionForAttribute(attributes[NSFileProtectionKey]);
     }
     WCDB::Error error(WCDB::Error::Code::IOError, WCDB::Error::Level::Error, nsError.description);
     error.infos.insert_or_assign(WCDB::ErrorStringKeySource, WCDB::ErrorSourceNative);
@@ -90,7 +90,7 @@ std::pair<bool, WCDB::FileProtection> FileManager::getFileProtection(const WCDB:
     error.infos.insert_or_assign(WCDB::ErrorIntKeyExtCode, nsError.code);
     WCDB::Notifier::shared().notify(error);
     WCDB::ThreadedErrors::shared().setThreadedError(std::move(error));
-    return { false, WCDB::FileProtection::None };
+    return std::nullopt;
 }
 #else
 bool FileManager::setFileProtection(const WCDB::UnsafeStringView &path, WCDB::FileProtection fileProtection)
@@ -100,10 +100,10 @@ bool FileManager::setFileProtection(const WCDB::UnsafeStringView &path, WCDB::Fi
     return true;
 }
 
-std::pair<bool, WCDB::FileProtection> FileManager::getFileProtection(const WCDB::UnsafeStringView &path)
+std::optional<WCDB::FileProtection> FileManager::getFileProtection(const WCDB::UnsafeStringView &path)
 {
     WCDB_UNUSED(path)
-    return { true, WCDB::FileProtection::None };
+    return WCDB::FileProtection::None;
 }
 #endif
 

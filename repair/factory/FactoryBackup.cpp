@@ -41,10 +41,8 @@ bool FactoryBackup::work(const UnsafeStringView &database)
         return false;
     }
 
-    bool succeed;
-    StringView materialPath;
-    std::tie(succeed, materialPath) = Factory::materialForSerializingForDatabase(database);
-    if (succeed && backup.getMaterial().serialize(materialPath)) {
+    auto materialPath = Factory::materialForSerializingForDatabase(database);
+    if (materialPath.has_value() && backup.getMaterial().serialize(materialPath.value())) {
         return true;
     }
 

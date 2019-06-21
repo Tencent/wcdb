@@ -25,9 +25,6 @@
 
 template<typename T>
 class WCTIncompleteOptional {
-    using Super = std::optional<T>;
-    static_assert(!std::is_same<std::nullptr_t, T>::value, "");
-
 public:
     virtual ~WCTIncompleteOptional() {}
 
@@ -61,6 +58,11 @@ protected:
     {
     }
 
+    WCTIncompleteOptional(std::optional<T>&& optional, const T& defaultValue)
+    : m_real(std::move(optional)), m_default(defaultValue)
+    {
+    }
+
 private:
     std::optional<T> m_real;
     T m_default;
@@ -77,17 +79,9 @@ public:
     WCTFundamentalOptional(const std::nullopt_t&) : Super(defaultValue) {}
 
     WCTFundamentalOptional(const T& value) : Super(value, defaultValue) {}
-};
 
-//template<typename T>
-//class WCTObjCOptional : public WCTIncompleteOptional<T> {
-//    static_assert(WCDB::IsObjCType<T>::value, "");
-//public:
-//    WCTObjCOptional() : WCTIncompleteOptional<T>(nil, YES) {}
-//
-//    WCTObjCOptional(T value) : WCTIncompleteOptional<T>(value, YES) {}
-//
-//    WCTObjCOptional(const std::nullptr_t&) : WCTIncompleteOptional<T>(nil, NO)
-//    {
-//    }
-//};
+    WCTFundamentalOptional(std::optional<T>&& optional)
+    : Super(std::move(optional), defaultValue)
+    {
+    }
+};
