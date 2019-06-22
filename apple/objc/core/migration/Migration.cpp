@@ -458,14 +458,11 @@ std::optional<bool> Migration::tryMigrateRows(Migration::Stepper& stepper)
         }
     }
     WCTAssert(info != nullptr);
-    bool done = false;
-    if (!stepper.migrateRows(info, done)) {
-        return std::nullopt;
-    }
-    if (done) {
+    auto migrated = stepper.migrateRows(info);
+    if (migrated.value_or(false)) {
         markAsMigrated(info);
     }
-    return true;
+    return migrated;
 }
 
 std::optional<bool> Migration::tryAcquireTables(Migration::Stepper& stepper)

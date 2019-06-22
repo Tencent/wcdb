@@ -158,7 +158,7 @@ public:
     protected:
         virtual std::optional<std::set<StringView>> getAllTables() = 0;
         virtual bool dropSourceTable(const MigrationInfo* info) = 0;
-        virtual bool migrateRows(const MigrationInfo* info, bool& done) = 0;
+        virtual std::optional<bool> migrateRows(const MigrationInfo* info) = 0;
     };
 
     // done

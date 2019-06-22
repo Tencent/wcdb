@@ -213,7 +213,7 @@ bool MigratingHandle::trySynchronousTransactionAfterAttached()
 }
 
 #pragma mark - Migration
-std::pair<bool, std::list<Statement>> MigratingHandle::process(const Statement& originStatement)
+std::optional<std::list<Statement>> MigratingHandle::process(const Statement& originStatement)
 {
     m_processing = true;
 
@@ -368,11 +368,12 @@ std::pair<bool, std::list<Statement>> MigratingHandle::process(const Statement& 
             break;
         }
     } while (false);
-    if (!succeed) {
-        statements.clear();
-    }
     m_processing = false;
-    return { succeed, std::move(statements) };
+    if (succeed) {
+        return std::move(statements);
+    } else {
+        return std::nullopt;
+    }
 }
 
 bool MigratingHandle::tryFallbackToUnionedView(Syntax::Schema& schema, StringView& table)
@@ -412,12 +413,11 @@ bool MigratingHandle::prepare(const Statement& statement)
 {
     WCTAssert(!m_processing);
     WCTRemedialAssert(!isPrepared(), "Last statement is not finalized.", finalize(););
-    bool succeed;
-    std::list<Statement> statements;
-    std::tie(succeed, statements) = process(statement);
-    if (!succeed) {
+    auto optionalStatements = process(statement);
+    if (!optionalStatements.has_value()) {
         return false;
     }
+    auto& statements = optionalStatements.value();
     WCTAssert(statements.size() <= 2);
     if (Super::prepare(statements.front())
         && (statements.size() == 1 || m_additionalStatement->prepare(statements.back()))) {

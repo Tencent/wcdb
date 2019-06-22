@@ -111,67 +111,59 @@ bool MigrateHandle::dropSourceTable(const MigrationInfo* info)
     return succeed;
 }
 
-#warning TODO - refactor
-bool MigrateHandle::migrateRows(const MigrationInfo* info, bool& done)
+std::optional<bool> MigrateHandle::migrateRows(const MigrationInfo* info)
 {
     WCTAssert(info != nullptr);
-    done = false;
-
     auto exists = tableExists(info->getTable());
     if (!exists.has_value()) {
-        return false;
+        return std::nullopt;
     }
 
     if (!exists.value()) {
-        done = true;
         return true;
     }
 
     if (m_migratingInfo != info) {
         if (!reAttach(info->getSourceDatabase(), info->getSchemaForSourceDatabase())) {
-            return false;
+            return std::nullopt;
         }
         m_migratingInfo = info;
     }
 
     if (!m_migrateStatement->isPrepared()
         && !m_migrateStatement->prepare(m_migratingInfo->getStatementForMigratingOneRow())) {
-        return false;
+        return std::nullopt;
     }
 
     if (!m_removeMigratedStatement->isPrepared()
         && !m_removeMigratedStatement->prepare(
            m_migratingInfo->getStatementForDeletingMigratedOneRow())) {
-        return false;
+        return std::nullopt;
     }
 
     double timeIntervalWithinTransaction = calculateTimeIntervalWithinTransaction();
     SteadyClock beforeTransaction = SteadyClock::now();
-    bool migrated = false;
-    bool succeed = runTransaction(
-    [&migrated, &beforeTransaction, &timeIntervalWithinTransaction, this](Handle*) -> bool {
-        std::optional<bool> optionalMigrated;
-        double cost = 0;
-        do {
-            optionalMigrated = migrateRow();
-            cost = SteadyClock::timeIntervalSinceSteadyClockToNow(beforeTransaction);
-        } while (optionalMigrated.has_value() && !optionalMigrated.value()
-                 && cost < timeIntervalWithinTransaction);
-        timeIntervalWithinTransaction = cost;
-        migrated = optionalMigrated.value_or(false);
-        return optionalMigrated.has_value();
-    });
-    if (succeed) {
+    std::optional<bool> migrated;
+    if (runTransaction(
+        [&migrated, &beforeTransaction, &timeIntervalWithinTransaction, this](Handle*) -> bool {
+            double cost = 0;
+            do {
+                migrated = migrateRow();
+                cost = SteadyClock::timeIntervalSinceSteadyClockToNow(beforeTransaction);
+            } while (migrated.has_value() && !migrated.value()
+                     && cost < timeIntervalWithinTransaction);
+            timeIntervalWithinTransaction = cost;
+            return migrated.has_value();
+        })) {
         // update only if succeed
         double timeIntervalWholeTranscation
         = SteadyClock::timeIntervalSinceSteadyClockToNow(beforeTransaction);
         addSample(timeIntervalWithinTransaction, timeIntervalWholeTranscation);
 
-        if (migrated) {
-            done = true;
-        }
+        WCTAssert(migrated.has_value());
+        return migrated;
     }
-    return succeed;
+    return std::nullopt;
 }
 
 std::optional<bool> MigrateHandle::migrateRow()

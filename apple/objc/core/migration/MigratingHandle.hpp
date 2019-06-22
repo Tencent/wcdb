@@ -87,7 +87,7 @@ public:
 protected:
     bool realExecute(const std::list<Statement> &statements);
     bool realStep();
-    std::pair<bool, std::list<Statement>> process(const Statement &statement);
+    std::optional<std::list<Statement>> process(const Statement &statement);
     bool tryFallbackToUnionedView(Syntax::Schema &schema, StringView &table);
     bool tryFallbackToSourceTable(Syntax::Schema &schema, StringView &table);
 
