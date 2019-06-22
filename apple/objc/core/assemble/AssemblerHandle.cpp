@@ -201,32 +201,31 @@ bool AssemblerHandle::lazyPrepareCell()
 #pragma mark - Assembler - Sequence
 bool AssemblerHandle::assembleSequence(const UnsafeStringView &tableName, int64_t sequence)
 {
-    bool succeed, updated;
-    std::tie(succeed, updated) = updateSequence(tableName, sequence);
-    if (!succeed) {
-        return false;
+    bool succeed = false;
+    auto worked = updateSequence(tableName, sequence);
+    if (worked.has_value()) {
+        if (worked.value()) {
+            succeed = true;
+        } else {
+            succeed = insertSequence(tableName, sequence);
+        }
     }
-    if (updated) {
-        return true;
-    }
-    return insertSequence(tableName, sequence);
+    return succeed;
 }
 
-std::pair<bool, bool>
+std::optional<bool>
 AssemblerHandle::updateSequence(const UnsafeStringView &tableName, int64_t sequence)
 {
-    bool succeed = false;
-    bool worked = false;
+    std::optional<bool> worked;
     if (prepare(m_statementForUpdateSequence)) {
         bindInteger64(sequence, 1);
         bindText(tableName, 2);
-        succeed = step();
-        finalize();
-        if (succeed) {
+        if (step()) {
             worked = getChanges() > 0;
         }
+        finalize();
     }
-    return { succeed, worked };
+    return worked;
 }
 
 bool AssemblerHandle::insertSequence(const UnsafeStringView &tableName, int64_t sequence)
