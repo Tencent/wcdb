@@ -37,8 +37,9 @@ Factory::Factory(const UnsafeStringView &database_)
 {
 }
 
-std::pair<bool, std::list<StringView>> Factory::getWorkshopDirectories() const
+std::optional<std::list<StringView>> Factory::getWorkshopDirectories() const
 {
+    std::optional<std::list<StringView>> result;
     std::list<StringView> workshopDirectories;
     if (FileManager::enumerateDirectory(
         directory,
@@ -49,9 +50,9 @@ std::pair<bool, std::list<StringView>> Factory::getWorkshopDirectories() const
             }
             return true;
         })) {
-        return { true, workshopDirectories };
+        result = std::move(workshopDirectories);
     }
-    return { false, {} };
+    return result;
 }
 
 std::optional<StringView> Factory::getUniqueWorkshopDiectory() const
@@ -232,7 +233,7 @@ Factory::materialForSerializingForDatabase(const UnsafeStringView &database)
     if (!optionalFirstMaterialModifiedTime.has_value()) {
         return std::nullopt;
     }
-    auto firstMaterialModifiedTime = optionalFirstMaterialModifiedTime.value();
+    auto &firstMaterialModifiedTime = optionalFirstMaterialModifiedTime.value();
     if (firstMaterialModifiedTime.empty()
         || firstMaterialModifiedTime.seconds() == now.seconds()) {
         return firstMaterialPath;
@@ -243,7 +244,7 @@ Factory::materialForSerializingForDatabase(const UnsafeStringView &database)
     if (!optionalLastMaterialModifiedTime.has_value()) {
         return std::nullopt;
     }
-    auto lastMaterialModifiedTime = optionalLastMaterialModifiedTime.value();
+    auto &lastMaterialModifiedTime = optionalLastMaterialModifiedTime.value();
     if (lastMaterialModifiedTime.empty()
         || lastMaterialModifiedTime.seconds() == now.seconds()) {
         return lastMaterialPath;
@@ -267,7 +268,7 @@ Factory::materialsForDeserializingForDatabase(const UnsafeStringView &database)
     if (!optionalFirstMaterialModifiedTime.has_value()) {
         return std::nullopt;
     }
-    Time firstMaterialModifiedTime = optionalFirstMaterialModifiedTime.value();
+    Time &firstMaterialModifiedTime = optionalFirstMaterialModifiedTime.value();
     if (!firstMaterialModifiedTime.empty()) {
         materialPaths.push_back(firstMaterialPath);
     }
@@ -277,7 +278,7 @@ Factory::materialsForDeserializingForDatabase(const UnsafeStringView &database)
     if (!optionalLastMaterialModifiedTime.has_value()) {
         return std::nullopt;
     }
-    Time lastMaterialModifiedTime = optionalLastMaterialModifiedTime.value();
+    Time &lastMaterialModifiedTime = optionalLastMaterialModifiedTime.value();
     if (!lastMaterialModifiedTime.empty()) {
         materialPaths.push_back(lastMaterialPath);
     }

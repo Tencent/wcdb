@@ -35,10 +35,10 @@ bool FactoryDepositor::work()
         return false;
     }
 
-    StringView workshopDirectory = optionalWorkshopDirectory.value();
+    StringView& workshopDirectory = optionalWorkshopDirectory.value();
     if (!FileManager::createDirectoryWithIntermediateDirectories(workshopDirectory)
         || !FileManager::moveItems(
-        Factory::associatedPathsForDatabase(factory.database), workshopDirectory)) {
+           Factory::associatedPathsForDatabase(factory.database), workshopDirectory)) {
         assignWithSharedThreadedError();
         return false;
     }

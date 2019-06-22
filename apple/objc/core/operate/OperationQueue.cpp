@@ -90,7 +90,7 @@ void OperationQueue::handleError(const Error& error)
     if (!optionalIdentifier.has_value()) {
         return;
     }
-    auto identifier = optionalIdentifier.value();
+    uint32_t identifier = optionalIdentifier.value();
 
     bool fromIntegrity = false;
     auto actionIter = infos.find(UnsafeStringView(ErrorStringKeyAction));

@@ -91,7 +91,7 @@
             if (!optionalColumnNames.has_value()) {
                 return NO;
             }
-            std::set<WCDB::StringView> columnNames = std::move(optionalColumnNames.value());
+            std::set<WCDB::StringView> &columnNames = optionalColumnNames.value();
             //Check whether the column names exists
             const auto &columnDefs = binding.getColumnDefs();
             for (const auto &columnDef : columnDefs) {

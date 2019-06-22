@@ -477,7 +477,7 @@ std::optional<bool> Migration::tryAcquireTables(Migration::Stepper& stepper)
     if (!optionalTables.has_value()) {
         return std::nullopt;
     }
-    std::set<StringView> tables = std::move(optionalTables.value());
+    std::set<StringView>& tables = optionalTables.value();
     tables.insert(m_hints.begin(), m_hints.end());
     for (const auto& table : tables) {
         WCTAssert(!table.hasPrefix(Syntax::builtinTablePrefix));

@@ -383,7 +383,7 @@ bool MigratingHandle::tryFallbackToUnionedView(Syntax::Schema& schema, StringVie
         if (!optionalInfo.has_value()) {
             return false;
         }
-        auto info = optionalInfo.value();
+        const MigrationInfo* info = optionalInfo.value();
         if (info != nullptr) {
             schema = Schema::temp();
             table = info->getUnionedView();
@@ -399,7 +399,7 @@ bool MigratingHandle::tryFallbackToSourceTable(Syntax::Schema& schema, StringVie
         if (!optionalInfo.has_value()) {
             return false;
         }
-        auto info = optionalInfo.value();
+        const MigrationInfo* info = optionalInfo.value();
         if (info != nullptr) {
             schema = info->getSchemaForSourceDatabase();
             table = info->getSourceTable();

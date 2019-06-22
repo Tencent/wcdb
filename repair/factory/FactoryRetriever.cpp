@@ -64,12 +64,12 @@ bool FactoryRetriever::work()
     }
 
     //1.5 calculate weights to deal with the progress and score
-    std::list<StringView> workshopDirectories;
-    std::tie(succeed, workshopDirectories) = factory.getWorkshopDirectories();
-    if (!succeed) {
+    auto optionalWorkshopDirectories = factory.getWorkshopDirectories();
+    if (!optionalWorkshopDirectories.has_value()) {
         setCriticalErrorWithSharedThreadedError();
         return exit(false);
     }
+    std::list<StringView> &workshopDirectories = optionalWorkshopDirectories.value();
 
     if (!calculateSizes(workshopDirectories)) {
         return exit(false);
@@ -136,7 +136,7 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
         return false;
     }
 
-    std::list<StringView> materialPaths = optionalMaterialPaths.value();
+    std::list<StringView> &materialPaths = optionalMaterialPaths.value();
     bool useMaterial = false;
     Fraction score;
     if (!materialPaths.empty()) {
@@ -152,7 +152,7 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
                     return false;
                 }
 #warning - TODO: check material time?
-                materialTime = optionalMaterialTime.value();
+                materialTime = std::move(optionalMaterialTime.value());
                 break;
             }
             if (!ThreadedErrors::shared().getThreadedError().isCorruption()) {

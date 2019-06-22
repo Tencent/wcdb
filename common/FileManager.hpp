@@ -30,7 +30,7 @@
 
 namespace WCDB {
 
-enum FileProtection {
+enum class FileProtection {
     None = 0,
     Complete,
     CompleteUnlessOpen,

@@ -98,13 +98,12 @@ bool FactoryRenewer::prepare()
     }
 
     // 2. get deposited directories for acquisition
-    bool succeed;
-    std::list<StringView> workshopDirectories;
-    std::tie(succeed, workshopDirectories) = factory.getWorkshopDirectories();
-    if (!succeed) {
+    auto optionalWorkshopDirectories = factory.getWorkshopDirectories();
+    if (!optionalWorkshopDirectories.has_value()) {
         assignWithSharedThreadedError();
         return false;
     }
+    std::list<StringView> &workshopDirectories = optionalWorkshopDirectories.value();
 
     // 3. resolve infos
     StringViewMap<Info> infos;
@@ -125,6 +124,7 @@ bool FactoryRenewer::prepare()
         setError(m_assembler->getError());
         return false;
     }
+    bool succeed = true;
     for (const auto &element : infos) {
         if (!m_assembler->assembleTable(element.first, element.second.sql)
             || !m_assembler->assembleSequence(element.first, element.second.sequence)) {
@@ -182,7 +182,7 @@ bool FactoryRenewer::resolveInfosForDatabase(StringViewMap<Info> &infos,
         assignWithSharedThreadedError();
         return false;
     }
-    std::list<StringView> materialPaths = optionalMaterialPaths.value();
+    std::list<StringView> &materialPaths = optionalMaterialPaths.value();
 
     if (materialPaths.empty()) {
         Error error(Error::Code::NotFound, Error::Level::Warning, "Material is not found when renewing.");

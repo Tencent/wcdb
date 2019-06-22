@@ -51,7 +51,7 @@ public:
     StringView getDatabaseName() const;
     bool removeDirectoryIfEmpty() const;
     bool removeDeposited() const;
-    std::pair<bool, std::list<StringView>> getWorkshopDirectories() const;
+    std::optional<std::list<StringView>> getWorkshopDirectories() const;
     std::optional<StringView> getUniqueWorkshopDiectory() const;
     bool containsDeposited() const;
 
