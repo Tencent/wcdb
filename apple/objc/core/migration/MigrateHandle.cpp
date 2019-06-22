@@ -111,6 +111,7 @@ bool MigrateHandle::dropSourceTable(const MigrationInfo* info)
     return succeed;
 }
 
+#warning TODO - refactor
 bool MigrateHandle::migrateRows(const MigrationInfo* info, bool& done)
 {
     WCTAssert(info != nullptr);
@@ -149,14 +150,16 @@ bool MigrateHandle::migrateRows(const MigrationInfo* info, bool& done)
     bool migrated = false;
     bool succeed = runTransaction(
     [&migrated, &beforeTransaction, &timeIntervalWithinTransaction, this](Handle*) -> bool {
-        bool succeed = false;
+        std::optional<bool> optionalMigrated;
         double cost = 0;
         do {
-            std::tie(succeed, migrated) = migrateRow();
+            optionalMigrated = migrateRow();
             cost = SteadyClock::timeIntervalSinceSteadyClockToNow(beforeTransaction);
-        } while (succeed && !migrated && cost < timeIntervalWithinTransaction);
+        } while (optionalMigrated.has_value() && !optionalMigrated.value()
+                 && cost < timeIntervalWithinTransaction);
         timeIntervalWithinTransaction = cost;
-        return succeed;
+        migrated = optionalMigrated.value_or(false);
+        return optionalMigrated.has_value();
     });
     if (succeed) {
         // update only if succeed
@@ -171,23 +174,23 @@ bool MigrateHandle::migrateRows(const MigrationInfo* info, bool& done)
     return succeed;
 }
 
-std::pair<bool, bool> MigrateHandle::migrateRow()
+std::optional<bool> MigrateHandle::migrateRow()
 {
     WCTAssert(m_migrateStatement->isPrepared() && m_removeMigratedStatement->isPrepared());
     WCTAssert(isInTransaction());
-    bool succeed = false;
-    bool migrated = false;
+    std::optional<bool> migrated;
     m_migrateStatement->reset();
     m_removeMigratedStatement->reset();
     if (m_migrateStatement->step()) {
         if (getChanges() != 0) {
-            succeed = m_removeMigratedStatement->step();
+            if (m_removeMigratedStatement->step()) {
+                migrated = false;
+            }
         } else {
-            succeed = true;
             migrated = true;
         }
     }
-    return { succeed, migrated };
+    return migrated;
 }
 
 void MigrateHandle::finalizeMigrationStatement()

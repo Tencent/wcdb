@@ -49,7 +49,7 @@ protected:
     std::optional<std::set<StringView>> getAllTables() override final;
     bool dropSourceTable(const MigrationInfo* info) override final;
     bool migrateRows(const MigrationInfo* info, bool& done) override final;
-    std::pair<bool, bool> migrateRow();
+    std::optional<bool> migrateRow();
 
     bool reAttachMigrationInfo(const MigrationInfo* info);
     void finalizeMigrationStatement();

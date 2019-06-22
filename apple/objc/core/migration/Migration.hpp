@@ -82,7 +82,7 @@ protected:
     void markAsUnreferenced(const MigrationInfo* info);
     void markAsDropped(const MigrationInfo* info);
     void markAsMigrated(const MigrationInfo* info);
-    std::pair<bool, RecyclableMigrationInfo> getInfo(const UnsafeStringView& table);
+    std::optional<RecyclableMigrationInfo> getInfo(const UnsafeStringView& table);
 
 private:
     // Those infos needed to be migrate will be held by m_migrating after initialized. (Other infos that already migrated or have no need to migrate will be dropped when initializing.)
@@ -126,7 +126,7 @@ public:
         bool stopBinding(bool succeed);
         void stopReferenced();
 
-        std::pair<bool, const MigrationInfo*> bindTable(const UnsafeStringView& table);
+        std::optional<const MigrationInfo*> bindTable(const UnsafeStringView& table);
         bool hintThatTableWillBeCreated(const UnsafeStringView& table);
         const MigrationInfo* getBoundInfo(const UnsafeStringView& table);
 
@@ -142,7 +142,7 @@ public:
     };
 
 protected:
-    std::pair<bool, RecyclableMigrationInfo>
+    std::optional<RecyclableMigrationInfo>
     getOrInitInfo(InfoInitializer& initializer, const UnsafeStringView& table);
     void tryReduceBounds(StringViewMap<const MigrationInfo*>& bounds);
 
@@ -161,14 +161,14 @@ public:
         virtual bool migrateRows(const MigrationInfo* info, bool& done) = 0;
     };
 
-    // succeed, done
-    std::pair<bool, bool> step(Migration::Stepper& stepper);
+    // done
+    std::optional<bool> step(Migration::Stepper& stepper);
 
 protected:
-    // succeed, worked
-    std::pair<bool, bool> tryDropUnreferencedTable(Migration::Stepper& stepper);
-    std::pair<bool, bool> tryMigrateRows(Migration::Stepper& stepper);
-    std::pair<bool, bool> tryAcquireTables(Migration::Stepper& stepper);
+    // worked
+    std::optional<bool> tryDropUnreferencedTable(Migration::Stepper& stepper);
+    std::optional<bool> tryMigrateRows(Migration::Stepper& stepper);
+    std::optional<bool> tryAcquireTables(Migration::Stepper& stepper);
 
 private:
     bool m_tableAcquired;

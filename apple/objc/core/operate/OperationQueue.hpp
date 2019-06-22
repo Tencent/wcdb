@@ -39,7 +39,7 @@ public:
     virtual ~OperationEvent() = 0;
 
 protected:
-    virtual std::pair<bool, bool>
+    virtual std::optional<bool>
     migrationShouldBeOperated(const UnsafeStringView& path) = 0;
     virtual bool backupShouldBeOperated(const UnsafeStringView& path) = 0;
     virtual bool checkpointShouldBeOperated(const UnsafeStringView& path) = 0;

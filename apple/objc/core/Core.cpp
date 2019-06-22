@@ -137,15 +137,14 @@ std::shared_ptr<Config> Core::tokenizerConfig(const UnsafeStringView& tokenizeNa
 }
 
 #pragma mark - Operation
-std::pair<bool, bool> Core::migrationShouldBeOperated(const UnsafeStringView& path)
+std::optional<bool> Core::migrationShouldBeOperated(const UnsafeStringView& path)
 {
     RecyclableDatabase database = m_databasePool.get(path);
-    bool succeed = true; // mark as no error if database is not referenced.
-    bool done = false;
+    std::optional<bool> done = false; // mark as no error if database is not referenced.
     if (database != nullptr) {
-        std::tie(succeed, done) = database->stepMigrationIfAlreadyInitialized();
+        done = database->stepMigrationIfAlreadyInitialized();
     }
-    return { succeed, done };
+    return done;
 }
 
 bool Core::backupShouldBeOperated(const UnsafeStringView& path)

@@ -377,30 +377,34 @@ std::pair<bool, std::list<Statement>> MigratingHandle::process(const Statement& 
 
 bool MigratingHandle::tryFallbackToUnionedView(Syntax::Schema& schema, StringView& table)
 {
-    bool succeed = true;
     if (schema.isMain()) {
-        const MigrationInfo* info;
-        std::tie(succeed, info) = bindTable(table);
-        if (succeed && info != nullptr) {
+        auto optionalInfo = bindTable(table);
+        if (!optionalInfo.has_value()) {
+            return false;
+        }
+        auto info = optionalInfo.value();
+        if (info != nullptr) {
             schema = Schema::temp();
             table = info->getUnionedView();
         }
     }
-    return succeed;
+    return true;
 }
 
 bool MigratingHandle::tryFallbackToSourceTable(Syntax::Schema& schema, StringView& table)
 {
-    bool succeed = true;
     if (schema.isMain()) {
-        const MigrationInfo* info;
-        std::tie(succeed, info) = bindTable(table);
-        if (succeed && info != nullptr) {
+        auto optionalInfo = bindTable(table);
+        if (!optionalInfo.has_value()) {
+            return false;
+        }
+        auto info = optionalInfo.value();
+        if (info != nullptr) {
             schema = info->getSchemaForSourceDatabase();
             table = info->getSourceTable();
         }
     }
-    return succeed;
+    return true;
 }
 
 #pragma mark - Override

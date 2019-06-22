@@ -171,15 +171,15 @@ public:
     typedef std::function<void(Database *, const MigrationBaseInfo *)> MigratedCallback;
     void setNotificationWhenMigrated(const MigratedCallback &callback);
 
-    std::pair<bool, bool> stepMigration();
-    std::pair<bool, bool> stepMigrationIfAlreadyInitialized();
+    std::optional<bool> stepMigration();
+    std::optional<bool> stepMigrationIfAlreadyInitialized();
 
     bool isMigrated() const;
 
     std::set<StringView> getPathsOfSourceDatabases() const;
 
 protected:
-    std::pair<bool, bool> doStepMigration();
+    std::optional<bool> doStepMigration();
     void didMigrate(const MigrationBaseInfo *info) override final;
     MigratedCallback m_migratedCallback;
     Migration m_migration; // thread-safe

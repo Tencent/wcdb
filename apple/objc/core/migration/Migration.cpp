@@ -221,22 +221,20 @@ void Migration::releaseInfo(const MigrationInfo* info)
     }
 }
 
-std::pair<bool, RecyclableMigrationInfo> Migration::getInfo(const UnsafeStringView& table)
+std::optional<RecyclableMigrationInfo> Migration::getInfo(const UnsafeStringView& table)
 {
     LockGuard lockGuard(m_lock);
-    bool filted = false;
     auto iter = m_filted.find(table);
     if (iter != m_filted.end()) {
-        filted = true;
         const MigrationInfo* info = iter->second;
         if (m_migratings.find(info) != m_migratings.end()) {
             retainInfo(info);
-            return { true,
-                     RecyclableMigrationInfo(
-                     info, std::bind(&Migration::releaseInfo, this, std::placeholders::_1)) };
+            return RecyclableMigrationInfo(
+            info, std::bind(&Migration::releaseInfo, this, std::placeholders::_1));
         }
+        return nullptr;
     }
-    return { filted, nullptr };
+    return std::nullopt;
 }
 
 #pragma mark - Bind
@@ -288,19 +286,20 @@ void Migration::Binder::stopReferenced()
     m_referenceds.clear();
 }
 
-std::pair<bool, const MigrationInfo*>
+std::optional<const MigrationInfo*>
 Migration::Binder::bindTable(const UnsafeStringView& table)
 {
     WCTAssert(m_binding);
-    bool succeed = true;
-    RecyclableMigrationInfo info = nullptr;
+    std::optional<const MigrationInfo*> info = nullptr;
     if (!table.empty()) {
-        std::tie(succeed, info) = m_migration.getOrInitInfo(*this, table);
-        if (succeed) {
-            m_referenceds.emplace(table, info);
+        auto optionalReferencedInfo = m_migration.getOrInitInfo(*this, table);
+        if (optionalReferencedInfo.has_value()) {
+            auto& referencedInfo = optionalReferencedInfo.value();
+            m_referenceds.emplace(table, referencedInfo);
+            info = referencedInfo.get();
         }
     }
-    return { succeed, info.get() };
+    return info;
 }
 
 bool Migration::Binder::hintThatTableWillBeCreated(const UnsafeStringView& table)
@@ -344,16 +343,14 @@ void Migration::tryReduceBounds(StringViewMap<const MigrationInfo*>& bounds)
     }
 }
 
-std::pair<bool, RecyclableMigrationInfo>
+std::optional<RecyclableMigrationInfo>
 Migration::getOrInitInfo(InfoInitializer& initializer, const UnsafeStringView& table)
 {
-    bool get = false; // succeed
-    RecyclableMigrationInfo info = nullptr;
-    std::tie(get, info) = getInfo(table);
-    if (!get && initInfo(initializer, table)) {
-        std::tie(get, info) = getInfo(table);
+    auto info = getInfo(table);
+    if (!info.has_value() && initInfo(initializer, table)) {
+        info = getInfo(table);
     }
-    return { get, info };
+    return info;
 }
 
 #pragma mark - Step
@@ -361,37 +358,40 @@ Migration::Stepper::~Stepper()
 {
 }
 
-std::pair<bool, bool> Migration::step(Migration::Stepper& stepper)
+std::optional<bool> Migration::step(Migration::Stepper& stepper)
 {
-    bool succeed = true;
-    bool worked = false;
-    bool retry = false;
-    do {
-        retry = false;
-        std::tie(succeed, worked) = tryDropUnreferencedTable(stepper);
-        if (!succeed || worked) {
-            return { succeed, false };
-        }
-        std::tie(succeed, worked) = tryMigrateRows(stepper);
-        if (!succeed || worked) {
-            return { succeed, false };
-        }
-        // acquire table is a readonly operation.
-        // retry if and only if it works.
-        std::tie(succeed, retry) = tryAcquireTables(stepper);
-        if (!succeed) {
-            return { succeed, false };
-        }
-    } while (retry);
-    WCTAssert(succeed);
-    WCTAssert(!worked);
+    auto worked = tryDropUnreferencedTable(stepper);
+    if (!worked.has_value()) {
+        return std::nullopt;
+    }
+    if (worked.value()) {
+        return false;
+    }
+    worked = tryMigrateRows(stepper);
+    if (!worked.has_value()) {
+        return std::nullopt;
+    }
+    if (worked.value()) {
+        return false;
+    }
+    // acquire table is a readonly operation.
+    // retry if and only if it works.
+    worked = tryAcquireTables(stepper);
+    if (!worked.has_value()) {
+        return std::nullopt;
+    }
+    if (worked.value()) {
+        return step(stepper);
+    }
+    WCTAssert(worked.has_value());
+    WCTAssert(!worked.value());
 
     {
         SharedLockGuard lockGuard(m_lock);
         WCTAssert(m_tableAcquired);
         if (!m_dumpster.empty() || !m_migratings.empty() || !m_referenceds.empty()) {
             // wait until all tables unreferenced
-            return { true, false };
+            return false;
         }
     }
     LockGuard lockGuard(m_lock);
@@ -404,13 +404,11 @@ std::pair<bool, bool> Migration::step(Migration::Stepper& stepper)
     if (m_event != nullptr) {
         m_event->didMigrate(nullptr);
     }
-    return { true, true };
+    return true;
 }
 
-std::pair<bool, bool> Migration::tryDropUnreferencedTable(Migration::Stepper& stepper)
+std::optional<bool> Migration::tryDropUnreferencedTable(Migration::Stepper& stepper)
 {
-    bool succeed = true;
-    bool worked = false;
     const MigrationInfo* info = nullptr;
     {
         SharedLockGuard lockGuard(m_lock);
@@ -419,9 +417,9 @@ std::pair<bool, bool> Migration::tryDropUnreferencedTable(Migration::Stepper& st
             WCTAssert(info != nullptr);
         }
     }
+    std::optional<bool> worked = false;
     if (info != nullptr) {
-        succeed = stepper.dropSourceTable(info);
-        if (succeed) {
+        if (stepper.dropSourceTable(info)) {
             worked = true;
             markAsDropped(info);
 
@@ -433,18 +431,20 @@ std::pair<bool, bool> Migration::tryDropUnreferencedTable(Migration::Stepper& st
             if (m_event != nullptr) {
                 m_event->didMigrate(info);
             }
+        } else {
+            worked = std::nullopt;
         }
     }
-    return { succeed, worked };
+    return worked;
 }
 
-std::pair<bool, bool> Migration::tryMigrateRows(Migration::Stepper& stepper)
+std::optional<bool> Migration::tryMigrateRows(Migration::Stepper& stepper)
 {
     const MigrationInfo* info = nullptr;
     {
         SharedLockGuard lockGuard(m_lock);
         if (m_migratings.empty()) {
-            return { true, false };
+            return false;
         }
         for (const auto& migrating : m_migratings) {
             if (migrating->isCrossDatabase()) {
@@ -460,37 +460,37 @@ std::pair<bool, bool> Migration::tryMigrateRows(Migration::Stepper& stepper)
     WCTAssert(info != nullptr);
     bool done = false;
     if (!stepper.migrateRows(info, done)) {
-        return { false, false };
+        return std::nullopt;
     }
     if (done) {
         markAsMigrated(info);
     }
-    return { true, true };
+    return true;
 }
 
-std::pair<bool, bool> Migration::tryAcquireTables(Migration::Stepper& stepper)
+std::optional<bool> Migration::tryAcquireTables(Migration::Stepper& stepper)
 {
     {
         SharedLockGuard lockGuard(m_lock);
         if (m_tableAcquired) {
-            return { true, false };
+            return false;
         }
     }
     auto optionalTables = stepper.getAllTables();
     if (!optionalTables.has_value()) {
-        return { false, false };
+        return std::nullopt;
     }
     std::set<StringView> tables = std::move(optionalTables.value());
     tables.insert(m_hints.begin(), m_hints.end());
     for (const auto& table : tables) {
         WCTAssert(!table.hasPrefix(Syntax::builtinTablePrefix));
         if (!initInfo(stepper, table)) {
-            return { false, false };
+            return std::nullopt;
         }
     }
     LockGuard lockGuard(m_lock);
     m_tableAcquired = true;
-    return { true, true };
+    return true;
 }
 
 #pragma mark - Event

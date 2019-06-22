@@ -724,53 +724,49 @@ void Database::doCheckIntegrity()
 }
 
 #pragma mark - Migration
-std::pair<bool, bool> Database::stepMigration()
+std::optional<bool> Database::stepMigration()
 {
     InitializedGuard initializedGuard = initialize();
-    std::pair<bool, bool> result = { false, false };
+    std::optional<bool> done;
     if (initializedGuard.valid()) {
-        result = doStepMigration();
+        done = doStepMigration();
     }
-    return result;
+    return done;
 }
 
-std::pair<bool, bool> Database::stepMigrationIfAlreadyInitialized()
+std::optional<bool> Database::stepMigrationIfAlreadyInitialized()
 {
     InitializedGuard initializedGuard = isInitialized();
-    bool succeed = true;
-    bool done = false;
+    std::optional<bool> done = false;
     if (initializedGuard.valid()) {
-        std::tie(succeed, done) = doStepMigration();
+        done = doStepMigration();
     }
-    return { succeed, done };
+    return done;
 }
 
-std::pair<bool, bool> Database::doStepMigration()
+std::optional<bool> Database::doStepMigration()
 {
-    WCTRemedialAssert(!isInTransaction(),
-                      "Migrating can't be run in transaction.",
-                      return std::make_pair(false, false););
+    WCTRemedialAssert(
+    !isInTransaction(), "Migrating can't be run in transaction.", return std::nullopt;);
     WCTAssert(m_concurrency.readSafety());
     WCTRemedialAssert(m_migration.shouldMigrate(),
                       "It's not configured for migration.",
-                      return std::make_pair(false, false););
+                      return std::nullopt;);
     WCTAssert(m_initialized);
-    bool succeed = false;
-    bool done = false;
-
+    std::optional<bool> done;
     RecyclableHandle handle = flowOut(HandleType::Migrate);
     if (handle != nullptr) {
         WCTAssert(dynamic_cast<MigrateHandle *>(handle.get()) != nullptr);
         MigrateHandle *migrateHandle = static_cast<MigrateHandle *>(handle.get());
 
         migrateHandle->markErrorAsIgnorable(Error::Code::Busy);
-        std::tie(succeed, done) = m_migration.step(*migrateHandle);
-        if (!succeed && handle->isErrorIgnorable()) {
-            succeed = true;
+        done = m_migration.step(*migrateHandle);
+        if (!done.has_value() && handle->isErrorIgnorable()) {
+            done = false;
         }
         migrateHandle->markErrorAsUnignorable();
     }
-    return { succeed, done };
+    return done;
 }
 
 void Database::didMigrate(const MigrationBaseInfo *info)

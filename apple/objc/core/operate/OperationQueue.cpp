@@ -253,10 +253,9 @@ void OperationQueue::doMigrate(const UnsafeStringView& path, int numberOfFailure
     WCTAssert(numberOfFailures >= 0
               && numberOfFailures < OperationQueueTolerableFailuresForMigration);
 
-    bool succeed, done;
-    std::tie(succeed, done) = m_event->migrationShouldBeOperated(path);
-    if (succeed) {
-        if (!done) {
+    auto done = m_event->migrationShouldBeOperated(path);
+    if (done.has_value()) {
+        if (!done.value()) {
             asyncMigrate(path, OperationQueueTimeIntervalForMigration, numberOfFailures);
         }
     } else {

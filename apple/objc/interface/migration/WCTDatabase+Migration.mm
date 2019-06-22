@@ -42,10 +42,8 @@
 
 - (BOOL)stepMigration
 {
-    bool _;
-    bool succeed;
-    std::tie(succeed, _) = _database->stepMigration();
-    return succeed;
+    auto done = _database->stepMigration();
+    return done.has_value();
 }
 
 - (void)enableAutoMigration:(BOOL)flag
