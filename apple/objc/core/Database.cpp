@@ -180,19 +180,18 @@ bool Database::execute(const Statement &statement)
     return false;
 }
 
-std::pair<bool, bool> Database::tableExists(const UnsafeStringView &table)
+std::optional<bool> Database::tableExists(const UnsafeStringView &table)
 {
-    bool succeed = false;
-    bool exists = false;
+    std::optional<bool> exists;
     RecyclableHandle handle = getHandle();
     if (handle != nullptr) {
         TransactionGuard transactionedGuard(this, handle);
-        std::tie(succeed, exists) = handle->tableExists(table);
-        if (!succeed) {
+        exists = handle->tableExists(table);
+        if (!exists.has_value()) {
             setThreadedError(handle->getError());
         }
     }
-    return { succeed, exists };
+    return exists;
 }
 
 std::shared_ptr<Handle> Database::generateSlotedHandle(HandleType type)

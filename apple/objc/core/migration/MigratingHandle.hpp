@@ -47,9 +47,10 @@ private:
 
 #pragma mark - Info Initializer
 protected:
-    std::tuple<bool, bool, std::set<StringView>>
+    // integer primary, columns
+    std::optional<std::pair<bool, std::set<StringView>>>
     getColumnsOfUserInfo(const MigrationUserInfo &userInfo) override final;
-    std::pair<bool, bool> sourceTableExists(const MigrationUserInfo &userInfo) override final;
+    std::optional<bool> sourceTableExists(const MigrationUserInfo &userInfo) override final;
     StringView getDatabasePath() const override final;
 
 #pragma mark - Migration

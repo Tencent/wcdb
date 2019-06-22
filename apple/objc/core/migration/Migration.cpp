@@ -103,24 +103,21 @@ bool Migration::initInfo(InfoInitializer& initializer, const UnsafeStringView& t
         return true;
     }
 
-    bool succeed = false;
-    bool exists = false;
-    std::tie(succeed, exists) = initializer.sourceTableExists(userInfo);
-    if (!succeed) {
+    auto exists = initializer.sourceTableExists(userInfo);
+    if (!exists.has_value()) {
         return false;
     }
-    if (!exists) {
+    if (!exists.value()) {
         markAsNoNeedToMigrate(table);
         return true;
     }
 
-    bool containsPrimaryKey = false;
-    std::set<StringView> columns;
-    std::tie(succeed, containsPrimaryKey, columns)
-    = initializer.getColumnsOfUserInfo(userInfo);
-    if (!succeed) {
+    auto optionalColumns = initializer.getColumnsOfUserInfo(userInfo);
+    if (!optionalColumns.has_value()) {
         return false;
     }
+    bool containsPrimaryKey = optionalColumns.value().first;
+    std::set<StringView> columns = std::move(optionalColumns.value().second);
     LockGuard lockGuard(m_lock);
     if (m_filted.find(table) == m_filted.end()) {
         m_migrated = false;
@@ -479,21 +476,21 @@ std::pair<bool, bool> Migration::tryAcquireTables(Migration::Stepper& stepper)
             return { true, false };
         }
     }
-    bool succeed;
-    std::set<StringView> tables;
-    std::tie(succeed, tables) = stepper.getAllTables();
-    if (succeed) {
-        tables.insert(m_hints.begin(), m_hints.end());
-        for (const auto& table : tables) {
-            WCTAssert(!table.hasPrefix(Syntax::builtinTablePrefix));
-            if (!initInfo(stepper, table)) {
-                return { false, false };
-            }
-        }
-        LockGuard lockGuard(m_lock);
-        m_tableAcquired = true;
+    auto optionalTables = stepper.getAllTables();
+    if (!optionalTables.has_value()) {
+        return { false, false };
     }
-    return { succeed, succeed };
+    std::set<StringView> tables = std::move(optionalTables.value());
+    tables.insert(m_hints.begin(), m_hints.end());
+    for (const auto& table : tables) {
+        WCTAssert(!table.hasPrefix(Syntax::builtinTablePrefix));
+        if (!initInfo(stepper, table)) {
+            return { false, false };
+        }
+    }
+    LockGuard lockGuard(m_lock);
+    m_tableAcquired = true;
+    return { true, true };
 }
 
 #pragma mark - Event

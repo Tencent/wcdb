@@ -44,59 +44,49 @@ MigratingHandle::~MigratingHandle()
 }
 
 #pragma mark - Info Initializer
-std::tuple<bool, bool, std::set<StringView>>
+std::optional<std::pair<bool, std::set<StringView>>>
 MigratingHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
 {
-    bool succeed = true;
+    auto exists = tableExists(Schema::main(), userInfo.getTable());
+    if (!exists.has_value()) {
+        return std::nullopt;
+    }
+
     bool integerPrimary = false;
-    std::set<StringView> columns;
-    do {
-        bool exists;
-        std::tie(succeed, exists) = tableExists(Schema::main(), userInfo.getTable());
-        if (!succeed) {
-            break;
+    std::set<StringView> names;
+    if (exists.value()) {
+        auto optionalMetas = getTableMeta(Schema::main(), userInfo.getTable());
+        if (!optionalMetas.has_value()) {
+            return std::nullopt;
         }
-        if (exists) {
-            std::vector<ColumnMeta> columnMetas;
-            std::tie(succeed, columnMetas)
-            = getTableMeta(Schema::main(), userInfo.getTable());
-            if (succeed) {
-                integerPrimary = ColumnMeta::getIndexOfIntegerPrimary(columnMetas) >= 0;
-                for (const auto& columnMeta : columnMetas) {
-                    columns.emplace(columnMeta.name);
-                }
-            }
+        auto& metas = optionalMetas.value();
+        integerPrimary = ColumnMeta::getIndexOfIntegerPrimary(metas) >= 0;
+        for (const auto& meta : metas) {
+            names.emplace(meta.name);
         }
-    } while (false);
-    return { succeed, integerPrimary, columns };
+    }
+    return std::make_pair(integerPrimary, names);
 }
 
-std::pair<bool, bool> MigratingHandle::sourceTableExists(const MigrationUserInfo& userInfo)
+std::optional<bool> MigratingHandle::sourceTableExists(const MigrationUserInfo& userInfo)
 {
-    bool succeed = true;
-    bool exists = false;
-    do {
-        Schema schema = userInfo.getSchemaForSourceDatabase();
-        if (!schema.syntax().isMain()) {
-            std::set<StringView> attacheds;
-            std::tie(succeed, attacheds)
-            = getValues(MigrationInfo::getStatementForSelectingDatabaseList(), 1);
-            if (succeed) {
-                if (attacheds.find(schema.getDescription()) == attacheds.end()) {
-                    succeed
-                    = executeStatement(userInfo.getStatementForAttachingSchema());
-                    if (succeed) {
-                        succeed = trySynchronousTransactionAfterAttached();
-                    }
-                }
-            }
-            if (!succeed) {
-                break;
+    Schema schema = userInfo.getSchemaForSourceDatabase();
+    if (!schema.syntax().isMain()) {
+        auto optionalAttacheds
+        = getValues(MigrationInfo::getStatementForSelectingDatabaseList(), 1);
+        if (!optionalAttacheds.has_value()) {
+            return std::nullopt;
+        }
+        std::set<StringView>& attacheds = optionalAttacheds.value();
+        if (attacheds.find(schema.getDescription()) == attacheds.end()) {
+            if (!executeStatement(userInfo.getStatementForAttachingSchema())
+                || !trySynchronousTransactionAfterAttached()) {
+                return std::nullopt;
             }
         }
-        std::tie(succeed, exists) = tableExists(schema, userInfo.getSourceTable());
-    } while (false);
-    return { succeed, exists };
+    }
+    return tableExists(schema, userInfo.getSourceTable());
+    ;
 }
 
 StringView MigratingHandle::getDatabasePath() const
@@ -114,36 +104,34 @@ bool MigratingHandle::rebindViews(const StringViewMap<const MigrationInfo*>& mig
         views2MigratingInfos.emplace(info->getUnionedView(), info);
     }
 
-    std::set<StringView> existingViews;
-
     // get existing unioned views
-    bool succeed;
-    bool exists;
-    std::tie(succeed, exists) = tableExists(Schema::temp(), Syntax::masterTable);
-    if (!succeed) {
+    auto exists = tableExists(Schema::temp(), Syntax::masterTable);
+    if (!exists.has_value()) {
         return false;
     }
-    if (exists) {
-        std::tie(succeed, existingViews)
+    if (exists.value()) {
+        auto existingViews
         = getValues(MigrationInfo::getStatementForSelectingUnionedView(), 0);
-        if (!succeed) {
+        if (!existingViews.has_value()) {
             return false;
         }
-    }
 
-    for (const auto& existingView : existingViews) {
-        WCTAssert(existingView.hasPrefix(MigrationInfo::getUnionedViewPrefix()));
-        auto iter = views2MigratingInfos.find(existingView);
-        if (iter != views2MigratingInfos.end()) {
-            // it is already created
-            views2MigratingInfos.erase(iter);
-        } else {
-            // it is no longer needed
-            if (!executeStatement(MigrationInfo::getStatementForDroppingUnionedView(existingView))) {
-                return false;
+        for (const auto& existingView : existingViews.value()) {
+            WCTAssert(existingView.hasPrefix(MigrationInfo::getUnionedViewPrefix()));
+            auto iter = views2MigratingInfos.find(existingView);
+            if (iter != views2MigratingInfos.end()) {
+                // it is already created
+                views2MigratingInfos.erase(iter);
+            } else {
+                // it is no longer needed
+                if (!executeStatement(
+                    MigrationInfo::getStatementForDroppingUnionedView(existingView))) {
+                    return false;
+                }
             }
         }
     }
+
     // create all needed views
     for (const auto& iter : views2MigratingInfos) {
         if (!executeStatement(iter.second->getStatementForCreatingUnionedView())) {
@@ -165,15 +153,13 @@ bool MigratingHandle::rebindSchemas(const StringViewMap<const MigrationInfo*>& m
         }
     }
 
-    bool succeed;
-    std::set<StringView> existingSchemas;
-    std::tie(succeed, existingSchemas)
+    auto existingSchemas
     = getValues(MigrationInfo::getStatementForSelectingDatabaseList(), 1);
-    if (!succeed) {
+    if (!existingSchemas.has_value()) {
         return false;
     }
 
-    for (const auto& existingSchema : existingSchemas) {
+    for (const auto& existingSchema : existingSchemas.value()) {
         if (existingSchema.hasPrefix(MigrationInfo::getSchemaPrefix())) {
             auto iter = schemas2MigratingInfos.find(existingSchema);
             if (iter != schemas2MigratingInfos.end()) {

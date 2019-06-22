@@ -178,17 +178,16 @@ bool AssemblerHandle::lazyPrepareCell()
         return true;
     }
 
-    bool succeed = false;
-    std::vector<ColumnMeta> columnMetas;
-    std::tie(succeed, columnMetas) = getTableMeta(Schema::main(), m_table);
-    if (!succeed) {
+    auto optionalMetas = getTableMeta(Schema::main(), m_table);
+    if (!optionalMetas.has_value()) {
         return false;
     }
-    m_integerPrimary = ColumnMeta::getIndexOfIntegerPrimary(columnMetas);
+    auto &metas = optionalMetas.value();
+    m_integerPrimary = ColumnMeta::getIndexOfIntegerPrimary(metas);
 
     Columns columns = { Column::rowid() };
-    for (const auto &columnMeta : columnMetas) {
-        columns.push_back(Column(columnMeta.name));
+    for (const auto &meta : metas) {
+        columns.push_back(Column(meta.name));
     }
     StatementInsert statement = StatementInsert().insertIntoTable(m_table);
     if (isDuplicatedIgnorable()) {

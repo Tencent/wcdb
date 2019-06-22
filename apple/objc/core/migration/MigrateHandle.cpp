@@ -88,7 +88,7 @@ bool MigrateHandle::detach()
 }
 
 #pragma mark - Stepper
-std::pair<bool, std::set<StringView>> MigrateHandle::getAllTables()
+std::optional<std::set<StringView>> MigrateHandle::getAllTables()
 {
     Column name("name");
     Column type("type");
@@ -116,13 +116,12 @@ bool MigrateHandle::migrateRows(const MigrationInfo* info, bool& done)
     WCTAssert(info != nullptr);
     done = false;
 
-    bool succeed, exists;
-    std::tie(succeed, exists) = tableExists(info->getTable());
-    if (!succeed) {
+    auto exists = tableExists(info->getTable());
+    if (!exists.has_value()) {
         return false;
     }
 
-    if (!exists) {
+    if (!exists.value()) {
         done = true;
         return true;
     }
@@ -141,14 +140,14 @@ bool MigrateHandle::migrateRows(const MigrationInfo* info, bool& done)
 
     if (!m_removeMigratedStatement->isPrepared()
         && !m_removeMigratedStatement->prepare(
-        m_migratingInfo->getStatementForDeletingMigratedOneRow())) {
+           m_migratingInfo->getStatementForDeletingMigratedOneRow())) {
         return false;
     }
 
     double timeIntervalWithinTransaction = calculateTimeIntervalWithinTransaction();
     SteadyClock beforeTransaction = SteadyClock::now();
     bool migrated = false;
-    succeed = runTransaction(
+    bool succeed = runTransaction(
     [&migrated, &beforeTransaction, &timeIntervalWithinTransaction, this](Handle*) -> bool {
         bool succeed = false;
         double cost = 0;
@@ -240,45 +239,37 @@ double MigrateHandle::calculateTimeIntervalWithinTransaction() const
 }
 
 #pragma mark - Info Initializer
-std::pair<bool, bool> MigrateHandle::sourceTableExists(const MigrationUserInfo& userInfo)
+std::optional<bool> MigrateHandle::sourceTableExists(const MigrationUserInfo& userInfo)
 {
-    bool succeed = false;
-    bool exists = false;
-    do {
-        Schema schema = userInfo.getSchemaForSourceDatabase();
-        if (!reAttach(userInfo.getSourceDatabase(), schema)) {
-            break;
-        }
-        std::tie(succeed, exists) = tableExists(schema, userInfo.getSourceTable());
-    } while (false);
-    return { succeed, exists };
+    Schema schema = userInfo.getSchemaForSourceDatabase();
+    if (!reAttach(userInfo.getSourceDatabase(), schema)) {
+        return std::nullopt;
+    }
+    return tableExists(schema, userInfo.getSourceTable());
 }
 
-std::tuple<bool, bool, std::set<StringView>>
+std::optional<std::pair<bool, std::set<StringView>>>
 MigrateHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
 {
-    bool succeed = true;
+    auto exists = tableExists(Schema::main(), userInfo.getTable());
+    ;
+    if (!exists.has_value()) {
+        return std::nullopt;
+    }
     bool integerPrimary = false;
-    std::set<StringView> columns;
-    do {
-        bool exists;
-        std::tie(succeed, exists) = tableExists(Schema::main(), userInfo.getTable());
-        if (!succeed) {
-            break;
+    std::set<StringView> names;
+    if (exists.value()) {
+        auto optionalMetas = getTableMeta(Schema::main(), userInfo.getTable());
+        if (!optionalMetas.has_value()) {
+            return std::nullopt;
         }
-        if (exists) {
-            std::vector<ColumnMeta> columnMetas;
-            std::tie(succeed, columnMetas)
-            = getTableMeta(Schema::main(), userInfo.getTable());
-            if (succeed) {
-                integerPrimary = ColumnMeta::getIndexOfIntegerPrimary(columnMetas) >= 0;
-                for (const auto& columnMeta : columnMetas) {
-                    columns.emplace(columnMeta.name);
-                }
-            }
+        auto& metas = optionalMetas.value();
+        integerPrimary = ColumnMeta::getIndexOfIntegerPrimary(metas) >= 0;
+        for (const auto& meta : metas) {
+            names.emplace(meta.name);
         }
-    } while (false);
-    return { succeed, integerPrimary, columns };
+    }
+    return std::make_pair(integerPrimary, names);
 }
 
 StringView MigrateHandle::getDatabasePath() const

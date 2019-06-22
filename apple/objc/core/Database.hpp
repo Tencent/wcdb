@@ -69,7 +69,7 @@ protected:
 public:
     RecyclableHandle getHandle();
     bool execute(const Statement &statement);
-    std::pair<bool, bool> tableExists(const UnsafeStringView &table);
+    std::optional<bool> tableExists(const UnsafeStringView &table);
 
 protected:
     std::shared_ptr<Handle> generateSlotedHandle(HandleType type) override final;

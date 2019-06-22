@@ -87,20 +87,20 @@ private:
 
 #pragma mark - Meta
 public:
-    std::pair<bool, bool> ft3TokenizerExists(const UnsafeStringView &tokenizer);
+    std::optional<bool> ft3TokenizerExists(const UnsafeStringView &tokenizer);
 
-    std::pair<bool, bool> tableExists(const UnsafeStringView &table);
-    std::pair<bool, bool> tableExists(const Schema &schema, const UnsafeStringView &table);
+    std::optional<bool> tableExists(const UnsafeStringView &table);
+    std::optional<bool> tableExists(const Schema &schema, const UnsafeStringView &table);
 
-    std::pair<bool, std::set<StringView>>
+    std::optional<std::set<StringView>>
     getColumns(const Schema &schema, const UnsafeStringView &table);
-    std::pair<bool, std::set<StringView>> getColumns(const UnsafeStringView &table);
+    std::optional<std::set<StringView>> getColumns(const UnsafeStringView &table);
 
-    std::pair<bool, std::vector<ColumnMeta>>
+    std::optional<std::vector<ColumnMeta>>
     getTableMeta(const Schema &schema, const UnsafeStringView &table);
 
 protected:
-    std::pair<bool, std::set<StringView>> getValues(const Statement &statement, int index);
+    std::optional<std::set<StringView>> getValues(const Statement &statement, int index);
 
 #pragma mark - Transaction
 public:

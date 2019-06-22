@@ -65,11 +65,11 @@ protected:
         virtual ~InfoInitializer() = 0;
 
     protected:
-        virtual std::pair<bool, bool>
+        virtual std::optional<bool>
         sourceTableExists(const MigrationUserInfo& userInfo) = 0;
         // When succeed, empty column indicates that table does not exist.
         // succeed, contains integer primary key, columns
-        virtual std::tuple<bool, bool, std::set<StringView>>
+        virtual std::optional<std::pair<bool, std::set<StringView>>>
         getColumnsOfUserInfo(const MigrationUserInfo& userInfo) = 0;
         virtual StringView getDatabasePath() const = 0;
     };
@@ -156,7 +156,7 @@ public:
         virtual ~Stepper() = 0;
 
     protected:
-        virtual std::pair<bool, std::set<StringView>> getAllTables() = 0;
+        virtual std::optional<std::set<StringView>> getAllTables() = 0;
         virtual bool dropSourceTable(const MigrationInfo* info) = 0;
         virtual bool migrateRows(const MigrationInfo* info, bool& done) = 0;
     };

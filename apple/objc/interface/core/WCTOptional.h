@@ -69,7 +69,7 @@ private:
 };
 
 template<typename T, T defaultValue>
-class WCTFundamentalOptional final : public WCTIncompleteOptional<T> {
+class WCTFundamentalOptional : public WCTIncompleteOptional<T> {
     using Super = WCTIncompleteOptional<T>;
     static_assert(std::is_fundamental<T>::value || std::is_enum<T>::value, "");
 
@@ -82,6 +82,19 @@ public:
 
     WCTFundamentalOptional(std::optional<T>&& optional)
     : Super(std::move(optional), defaultValue)
+    {
+    }
+};
+
+class WCTOptionalBool final : public WCTFundamentalOptional<BOOL, NO> {
+    using Super = WCTFundamentalOptional<BOOL, NO>;
+
+public:
+    using Super::WCTFundamentalOptional;
+
+    WCTOptionalBool(std::optional<bool>&& optional)
+    : Super(optional.has_value() ? std::optional<BOOL>(optional.value()) :
+                                   std::optional<BOOL>(std::nullopt))
     {
     }
 };

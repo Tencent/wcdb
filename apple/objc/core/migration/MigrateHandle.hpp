@@ -46,7 +46,7 @@ private:
 
 #pragma mark - Stepper
 protected:
-    std::pair<bool, std::set<StringView>> getAllTables() override final;
+    std::optional<std::set<StringView>> getAllTables() override final;
     bool dropSourceTable(const MigrationInfo* info) override final;
     bool migrateRows(const MigrationInfo* info, bool& done) override final;
     std::pair<bool, bool> migrateRow();
@@ -77,8 +77,8 @@ private:
 
 #pragma mark - Info Initializer
 protected:
-    std::pair<bool, bool> sourceTableExists(const MigrationUserInfo& userInfo) override final;
-    std::tuple<bool, bool, std::set<StringView>>
+    std::optional<bool> sourceTableExists(const MigrationUserInfo& userInfo) override final;
+    std::optional<std::pair<bool, std::set<StringView>>>
     getColumnsOfUserInfo(const MigrationUserInfo& userInfo) override final;
     StringView getDatabasePath() const override final;
 };
