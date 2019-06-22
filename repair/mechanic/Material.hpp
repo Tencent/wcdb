@@ -51,7 +51,7 @@ public:
     using Deserializable::deserialize;
 
 protected:
-    static std::pair<bool, Data> deserializeData(Deserialization &deserialization);
+    static std::optional<Data> deserializeData(Deserialization &deserialization);
     static void markAsCorrupt(const UnsafeStringView &element);
 
 #pragma mark - Header

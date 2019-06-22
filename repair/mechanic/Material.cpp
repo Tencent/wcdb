@@ -99,14 +99,12 @@ bool Material::deserialize(Deserialization &deserialization)
         return false;
     }
 
-    bool succeed;
-    Data decompressed;
-    std::tie(succeed, decompressed) = deserializeData(deserialization);
-    if (!succeed) {
+    auto decompressed = deserializeData(deserialization);
+    if (!decompressed.has_value()) {
         return false;
     }
 
-    Deserialization decoder(decompressed);
+    Deserialization decoder(decompressed.value());
     while (!decoder.ended()) {
         size_t lengthOfSizedString;
         StringView tableName;
@@ -125,34 +123,30 @@ bool Material::deserialize(Deserialization &deserialization)
     return true;
 }
 
-std::pair<bool, Data> Material::deserializeData(Deserialization &deserialization)
+std::optional<Data> Material::deserializeData(Deserialization &deserialization)
 {
-    bool succeed = false;
+    if (!deserialization.canAdvance(sizeof(uint32_t))) {
+        markAsCorrupt("Checksum");
+        return std::nullopt;
+    }
+    uint32_t checksum = deserialization.advance4BytesUInt();
+    auto intermediate = deserialization.advanceSizedData();
+    if (intermediate.first == 0) {
+        markAsCorrupt("Content");
+        return std::nullopt;
+    }
     Data data;
-    do {
-        if (!deserialization.canAdvance(sizeof(uint32_t))) {
+    if (!intermediate.second.empty()) {
+        data = intermediate.second;
+        if (checksum != data.hash()) {
             markAsCorrupt("Checksum");
-            break;
+            return std::nullopt;
         }
-        uint32_t checksum = deserialization.advance4BytesUInt();
-        auto intermediate = deserialization.advanceSizedData();
-        if (intermediate.first == 0) {
-            markAsCorrupt("Content");
-            break;
-        }
-        if (!intermediate.second.empty()) {
-            data = intermediate.second;
-            if (checksum != data.hash()) {
-                markAsCorrupt("Checksum");
-                break;
-            }
-        } else if (checksum != 0) {
-            markAsCorrupt("Checksum");
-            break;
-        }
-        succeed = true;
-    } while (false);
-    return { succeed, succeed ? data : Data::null() };
+    } else if (checksum != 0) {
+        markAsCorrupt("Checksum");
+        return std::nullopt;
+    }
+    return data;
 }
 
 void Material::markAsCorrupt(const UnsafeStringView &element)

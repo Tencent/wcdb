@@ -55,9 +55,8 @@ public:
 #pragma mark - Cell
 protected:
     bool lazyPrepareCell();
-    std::pair<bool, StringView> getAssembleSQL(const UnsafeStringView &tableName);
-    std::pair<bool, std::list<StringView>>
-    getColumnNames(const UnsafeStringView &tableName);
+    std::optional<StringView> getAssembleSQL(const UnsafeStringView &tableName);
+    std::optional<std::list<StringView>> getColumnNames(const UnsafeStringView &tableName);
 
     StringView m_table;
     int m_primary;
@@ -69,8 +68,7 @@ protected:
     bool assembleSequence(const UnsafeStringView &tableName, int64_t sequence) override final;
     bool markSequenceAsAssembled();
 
-    std::pair<bool, bool>
-    updateSequence(const UnsafeStringView &tableName, int64_t sequence);
+    std::optional<bool> updateSequence(const UnsafeStringView &tableName, int64_t sequence);
     bool insertSequence(const UnsafeStringView &tableName, int64_t sequence);
 
 #pragma mark - SQLite Base
