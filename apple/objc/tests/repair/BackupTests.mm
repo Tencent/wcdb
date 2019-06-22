@@ -138,36 +138,12 @@
     TestCaseAssertTrue([self checkAutoBackedup]);
 }
 
-- (void)test_cancel_auto_backup
-{
-    [self.database enableAutoBackup:YES];
-    TestCaseAssertTrue([self checkAutoBackedup]);
-
-    TestCaseAssertTrue([self.fileManager removeItemAtPath:self.database.firstMaterialPath error:nil]);
-    [self.database enableAutoBackup:NO];
-    TestCaseAssertFalse([self checkAutoBackedup]);
-}
-
 - (int)getInteriorTablePage
 {
     WCDB::Column pagetype("pagetype");
     WCDB::Column pageno("pageno");
     WCTValue *value = [self.database getValueOnResultColumn:pageno fromTable:@"dbStat" where:pagetype == "internal"];
     return value.numberValue.intValue;
-}
-
-- (void)test_feature_closed_database_will_not_perform_auto_backup
-{
-    [self.database enableAutoCheckpoint:NO];
-    [self.database enableAutoBackup:YES];
-
-    TestCaseAssertTrue([self.database passiveCheckpoint]);
-
-    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
-    [self.database close];
-
-    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForBackup + self.delayForTolerance];
-    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
 }
 
 @end
