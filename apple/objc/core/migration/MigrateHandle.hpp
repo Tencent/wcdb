@@ -80,7 +80,7 @@ protected:
     std::optional<bool> sourceTableExists(const MigrationUserInfo& userInfo) override final;
     std::optional<std::pair<bool, std::set<StringView>>>
     getColumnsOfUserInfo(const MigrationUserInfo& userInfo) override final;
-    StringView getDatabasePath() const override final;
+    const StringView& getDatabasePath() const override final;
 };
 
 } // namespace WCDB

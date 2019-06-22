@@ -71,7 +71,7 @@ protected:
         // succeed, contains integer primary key, columns
         virtual std::optional<std::pair<bool, std::set<StringView>>>
         getColumnsOfUserInfo(const MigrationUserInfo& userInfo) = 0;
-        virtual StringView getDatabasePath() const = 0;
+        virtual const StringView& getDatabasePath() const = 0;
     };
 
     bool initInfo(InfoInitializer& initializer, const UnsafeStringView& table);

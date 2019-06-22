@@ -267,7 +267,7 @@ MigrateHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
     return std::make_pair(integerPrimary, names);
 }
 
-StringView MigrateHandle::getDatabasePath() const
+const StringView& MigrateHandle::getDatabasePath() const
 {
     return getPath();
 }
