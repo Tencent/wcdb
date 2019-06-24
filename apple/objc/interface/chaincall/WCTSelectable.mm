@@ -32,9 +32,14 @@
 - (BOOL)lazyPrepare
 {
     if (![_handle isPrepared]) {
+        [self willPrepare:_statement];
         return [_handle prepare:_statement];
     }
     return YES;
+}
+
+- (void)willPrepare:(WCDB::StatementSelect &)statement
+{
 }
 
 - (instancetype)where:(const WCDB::Expression &)condition

@@ -163,7 +163,7 @@
 
 - (void)doTestSelect
 {
-    NSString* sql = @"SELECT identifier, content FROM temp.wcdb_union_testTable WHERE identifier == 1";
+    NSString* sql = @"SELECT identifier, content FROM temp.wcdb_union_testTable WHERE identifier == 1 ORDER BY rowid ASC";
 
     [self doTestObjects:@[ self.objects.firstObject ]
                  andSQL:sql

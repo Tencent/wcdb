@@ -37,6 +37,8 @@ public:
     OrderingTerm(const Expression& expression);
     OrderingTerm& collate(const UnsafeStringView& collation);
     OrderingTerm& order(const Order& order);
+
+    static const OrderingTerm& ascendingRowid();
 };
 
 } // namespace WCDB

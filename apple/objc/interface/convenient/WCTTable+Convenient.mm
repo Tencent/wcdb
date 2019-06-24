@@ -659,13 +659,13 @@
 #pragma mark - Get Value
 - (WCTValue *)getValueOnResultColumn:(const WCDB::ResultColumn &)resultColumn
 {
-    return [self.database getValueFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).limit(1)];
+    return [self.database getValueFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).order(WCDB::OrderingTerm::ascendingRowid()).limit(1)];
 }
 
 - (WCTValue *)getValueOnResultColumn:(const WCDB::ResultColumn &)resultColumn
                                where:(const WCDB::Expression &)condition
 {
-    return [self.database getValueFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).where(condition).limit(1)];
+    return [self.database getValueFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).where(condition).order(WCDB::OrderingTerm::ascendingRowid()).limit(1)];
 }
 
 - (WCTValue *)getValueOnResultColumn:(const WCDB::ResultColumn &)resultColumn
@@ -677,7 +677,7 @@
 - (WCTValue *)getValueOnResultColumn:(const WCDB::ResultColumn &)resultColumn
                               offset:(const WCDB::Expression &)offset
 {
-    return [self.database getValueFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).limit(1).offset(offset)];
+    return [self.database getValueFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).order(WCDB::OrderingTerm::ascendingRowid()).limit(1).offset(offset)];
 }
 
 - (WCTValue *)getValueOnResultColumn:(const WCDB::ResultColumn &)resultColumn
@@ -691,7 +691,7 @@
                                where:(const WCDB::Expression &)condition
                               offset:(const WCDB::Expression &)offset
 {
-    return [self.database getValueFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).where(condition).limit(1).offset(offset)];
+    return [self.database getValueFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).where(condition).order(WCDB::OrderingTerm::ascendingRowid()).limit(1).offset(offset)];
 }
 
 - (WCTValue *)getValueOnResultColumn:(const WCDB::ResultColumn &)resultColumn
@@ -712,13 +712,13 @@
 #pragma mark - Get Row
 - (WCTOneRow *)getRowOnResultColumns:(const WCDB::ResultColumns &)resultColumns
 {
-    return [self.database getRowFromStatement:WCDB::StatementSelect().select(resultColumns).from(self.name).limit(1)];
+    return [self.database getRowFromStatement:WCDB::StatementSelect().select(resultColumns).from(self.name).order(WCDB::OrderingTerm::ascendingRowid()).limit(1)];
 }
 
 - (WCTOneRow *)getRowOnResultColumns:(const WCDB::ResultColumns &)resultColumns
                                where:(const WCDB::Expression &)condition
 {
-    return [self.database getRowFromStatement:WCDB::StatementSelect().select(resultColumns).from(self.name).where(condition).limit(1)];
+    return [self.database getRowFromStatement:WCDB::StatementSelect().select(resultColumns).from(self.name).where(condition).order(WCDB::OrderingTerm::ascendingRowid()).limit(1)];
 }
 
 - (WCTOneRow *)getRowOnResultColumns:(const WCDB::ResultColumns &)resultColumns
@@ -730,7 +730,7 @@
 - (WCTOneRow *)getRowOnResultColumns:(const WCDB::ResultColumns &)resultColumns
                               offset:(const WCDB::Expression &)offset
 {
-    return [self.database getRowFromStatement:WCDB::StatementSelect().select(resultColumns).from(self.name).limit(1).offset(offset)];
+    return [self.database getRowFromStatement:WCDB::StatementSelect().select(resultColumns).from(self.name).order(WCDB::OrderingTerm::ascendingRowid()).limit(1).offset(offset)];
 }
 
 - (WCTOneRow *)getRowOnResultColumns:(const WCDB::ResultColumns &)resultColumns
@@ -744,7 +744,7 @@
                                where:(const WCDB::Expression &)condition
                               offset:(const WCDB::Expression &)offset
 {
-    return [self.database getRowFromStatement:WCDB::StatementSelect().select(resultColumns).from(self.name).where(condition).limit(1).offset(offset)];
+    return [self.database getRowFromStatement:WCDB::StatementSelect().select(resultColumns).from(self.name).where(condition).order(WCDB::OrderingTerm::ascendingRowid()).limit(1).offset(offset)];
 }
 
 - (WCTOneRow *)getRowOnResultColumns:(const WCDB::ResultColumns &)resultColumns
@@ -765,13 +765,13 @@
 #pragma mark - Get Column
 - (WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn &)resultColumn
 {
-    return [self.database getColumnFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name)];
+    return [self.database getColumnFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).order(WCDB::OrderingTerm::ascendingRowid())];
 }
 
 - (WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn &)resultColumn
                                     where:(const WCDB::Expression &)condition
 {
-    return [self.database getColumnFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).where(condition)];
+    return [self.database getColumnFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).where(condition).order(WCDB::OrderingTerm::ascendingRowid())];
 }
 
 - (WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn &)resultColumn
@@ -783,7 +783,7 @@
 - (WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn &)resultColumn
                                     limit:(const WCDB::Expression &)limit
 {
-    return [self.database getColumnFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).limit(limit)];
+    return [self.database getColumnFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).order(WCDB::OrderingTerm::ascendingRowid()).limit(limit)];
 }
 
 - (WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn &)resultColumn
@@ -797,7 +797,7 @@
                                     where:(const WCDB::Expression &)condition
                                     limit:(const WCDB::Expression &)limit
 {
-    return [self.database getColumnFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).where(condition).limit(limit)];
+    return [self.database getColumnFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).where(condition).order(WCDB::OrderingTerm::ascendingRowid()).limit(limit)];
 }
 
 - (WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn &)resultColumn
@@ -811,7 +811,7 @@
                                     limit:(const WCDB::Expression &)limit
                                    offset:(const WCDB::Expression &)offset
 {
-    return [self.database getColumnFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).limit(limit).offset(offset)];
+    return [self.database getColumnFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).order(WCDB::OrderingTerm::ascendingRowid()).limit(limit).offset(offset)];
 }
 
 - (WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn &)resultColumn
@@ -835,7 +835,7 @@
                                     limit:(const WCDB::Expression &)limit
                                    offset:(const WCDB::Expression &)offset
 {
-    return [self.database getColumnFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).where(condition).limit(limit).offset(offset)];
+    return [self.database getColumnFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).where(condition).order(WCDB::OrderingTerm::ascendingRowid()).limit(limit).offset(offset)];
 }
 
 - (WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn &)resultColumn
@@ -850,13 +850,13 @@
 #pragma mark - Get Rows
 - (WCTColumnsXRows *)getRowsOnResultColumns:(const WCDB::ResultColumns &)resultColumns
 {
-    return [self.database getRowsFromStatement:WCDB::StatementSelect().select(resultColumns).from(self.name)];
+    return [self.database getRowsFromStatement:WCDB::StatementSelect().select(resultColumns).from(self.name).order(WCDB::OrderingTerm::ascendingRowid())];
 }
 
 - (WCTColumnsXRows *)getRowsOnResultColumns:(const WCDB::ResultColumns &)resultColumns
                                       where:(const WCDB::Expression &)condition
 {
-    return [self.database getRowsFromStatement:WCDB::StatementSelect().select(resultColumns).from(self.name).where(condition)];
+    return [self.database getRowsFromStatement:WCDB::StatementSelect().select(resultColumns).from(self.name).where(condition).order(WCDB::OrderingTerm::ascendingRowid())];
 }
 
 - (WCTColumnsXRows *)getRowsOnResultColumns:(const WCDB::ResultColumns &)resultColumns
@@ -868,7 +868,7 @@
 - (WCTColumnsXRows *)getRowsOnResultColumns:(const WCDB::ResultColumns &)resultColumns
                                       limit:(const WCDB::Expression &)limit
 {
-    return [self.database getRowsFromStatement:WCDB::StatementSelect().select(resultColumns).from(self.name).limit(limit)];
+    return [self.database getRowsFromStatement:WCDB::StatementSelect().select(resultColumns).from(self.name).order(WCDB::OrderingTerm::ascendingRowid()).limit(limit)];
 }
 
 - (WCTColumnsXRows *)getRowsOnResultColumns:(const WCDB::ResultColumns &)resultColumns
@@ -882,7 +882,7 @@
                                       where:(const WCDB::Expression &)condition
                                       limit:(const WCDB::Expression &)limit
 {
-    return [self.database getRowsFromStatement:WCDB::StatementSelect().select(resultColumns).from(self.name).where(condition).limit(limit)];
+    return [self.database getRowsFromStatement:WCDB::StatementSelect().select(resultColumns).from(self.name).where(condition).order(WCDB::OrderingTerm::ascendingRowid()).limit(limit)];
 }
 
 - (WCTColumnsXRows *)getRowsOnResultColumns:(const WCDB::ResultColumns &)resultColumns
@@ -896,7 +896,7 @@
                                       limit:(const WCDB::Expression &)limit
                                      offset:(const WCDB::Expression &)offset
 {
-    return [self.database getRowsFromStatement:WCDB::StatementSelect().select(resultColumns).from(self.name).limit(limit).offset(offset)];
+    return [self.database getRowsFromStatement:WCDB::StatementSelect().select(resultColumns).from(self.name).order(WCDB::OrderingTerm::ascendingRowid()).limit(limit).offset(offset)];
 }
 
 - (WCTColumnsXRows *)getRowsOnResultColumns:(const WCDB::ResultColumns &)resultColumns
@@ -920,7 +920,7 @@
                                       limit:(const WCDB::Expression &)limit
                                      offset:(const WCDB::Expression &)offset
 {
-    return [self.database getRowsFromStatement:WCDB::StatementSelect().select(resultColumns).from(self.name).where(condition).limit(limit).offset(offset)];
+    return [self.database getRowsFromStatement:WCDB::StatementSelect().select(resultColumns).from(self.name).where(condition).order(WCDB::OrderingTerm::ascendingRowid()).limit(limit).offset(offset)];
 }
 
 - (WCTColumnsXRows *)getRowsOnResultColumns:(const WCDB::ResultColumns &)resultColumns

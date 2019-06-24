@@ -154,9 +154,7 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
             select.unionAll();
         }
 
-        select.select(resultColumns)
-        .from(TableOrSubquery(getSourceTable()).schema(m_schemaForSourceDatabase))
-        .order(OrderingTerm(Column::rowid()).order(Order::ASC));
+        select.select(resultColumns).from(TableOrSubquery(getSourceTable()).schema(m_schemaForSourceDatabase));
 
         m_statementForCreatingUnionedView = StatementCreateView()
                                             .createView(m_unionedView)

@@ -27,4 +27,6 @@
 
 - (BOOL)lazyPrepare;
 
+- (void)willPrepare:(WCDB::StatementSelect&)statement;
+
 @end
