@@ -39,7 +39,7 @@ public:
     const int frameno;
 
     int getPageNumber() const;
-    std::pair<bool, Page::Type> getPageType() const;
+    std::optional<Page::Type> getPageType() const;
     const std::pair<uint32_t, uint32_t> &getChecksum() const;
     std::pair<uint32_t, uint32_t>
     calculateChecksum(const std::pair<uint32_t, uint32_t> &checksum) const;

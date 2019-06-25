@@ -47,10 +47,11 @@ private:
 
 #pragma mark - Info Initializer
 protected:
-    std::tuple<bool, bool, std::set<StringView>>
+    // integer primary, columns
+    std::optional<std::pair<bool, std::set<StringView>>>
     getColumnsOfUserInfo(const MigrationUserInfo &userInfo) override final;
-    std::pair<bool, bool> sourceTableExists(const MigrationUserInfo &userInfo) override final;
-    StringView getDatabasePath() const override final;
+    std::optional<bool> sourceTableExists(const MigrationUserInfo &userInfo) override final;
+    const StringView &getDatabasePath() const override final;
 
 #pragma mark - Migration
 public:
@@ -86,7 +87,7 @@ public:
 protected:
     bool realExecute(const std::list<Statement> &statements);
     bool realStep();
-    std::pair<bool, std::list<Statement>> process(const Statement &statement);
+    std::optional<std::list<Statement>> process(const Statement &statement);
     bool tryFallbackToUnionedView(Syntax::Schema &schema, StringView &table);
     bool tryFallbackToSourceTable(Syntax::Schema &schema, StringView &table);
 

@@ -78,15 +78,6 @@
     TestCaseAssertFalse([self.database isOpened]);
 }
 
-- (void)test_feature_close_will_not_checkpoint
-{
-    TestCaseAssertTrue([self.database canOpen]);
-    TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion()).to(1)]);
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.walPath]);
-    [self.database close];
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.walPath]);
-}
-
 - (void)test_blockade
 {
     [self.database blockade];

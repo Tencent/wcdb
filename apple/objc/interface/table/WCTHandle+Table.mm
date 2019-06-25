@@ -33,16 +33,12 @@
 
 - (WCTOptionalBool)tableExists:(NSString *)tableName
 {
-    WCTOptionalBool result = nullptr;
+    WCTOptionalBool exists;
     WCDB::Handle *handle = [self getOrGenerateHandle];
     if (handle != nullptr) {
-        bool succeed, exists;
-        std::tie(succeed, exists) = handle->tableExists(tableName);
-        if (succeed) {
-            result.reset(exists);
-        }
+        exists = handle->tableExists(tableName);
     }
-    return result;
+    return exists;
 }
 
 - (BOOL)createTable:(NSString *)tableName
@@ -85,18 +81,17 @@
     return [self lazyRunTransaction:^BOOL(WCTHandle *nsHandle) {
         WCDB::Handle *handle = [nsHandle getOrGenerateHandle];
         WCTAssert(handle != nullptr);
-        bool succeed, exists;
-        std::tie(succeed, exists) = handle->tableExists(tableName);
-        if (!succeed) {
+        auto exists = handle->tableExists(tableName);
+        if (!exists.has_value()) {
             return NO;
         }
         const WCTBinding &binding = [cls objectRelationalMapping];
-        if (exists) {
-            std::set<WCDB::StringView> columnNames;
-            std::tie(succeed, columnNames) = handle->getColumns(tableName);
-            if (!succeed) {
+        if (exists.value()) {
+            auto optionalColumnNames = handle->getColumns(tableName);
+            if (!optionalColumnNames.has_value()) {
                 return NO;
             }
+            std::set<WCDB::StringView> &columnNames = optionalColumnNames.value();
             //Check whether the column names exists
             const auto &columnDefs = binding.getColumnDefs();
             for (const auto &columnDef : columnDefs) {
@@ -124,7 +119,7 @@
         }
         std::list<WCDB::StatementCreateIndex> createIndexStatements;
         std::list<WCDB::StatementDropIndex> dropIndexStatements;
-        std::tie(createIndexStatements, dropIndexStatements) = binding.generateIndexStatements(tableName, !exists);
+        std::tie(createIndexStatements, dropIndexStatements) = binding.generateIndexStatements(tableName, !exists.value());
         for (const WCDB::StatementCreateIndex &statement : createIndexStatements) {
             if (!handle->execute(statement)) {
                 return NO;

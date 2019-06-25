@@ -31,13 +31,7 @@
 
 - (WCTOptionalBool)tableExists:(NSString *)tableName
 {
-    WCTOptionalBool result = nullptr;
-    bool succeed, exists;
-    std::tie(succeed, exists) = _database->tableExists(tableName);
-    if (succeed) {
-        result.reset(exists);
-    }
-    return result;
+    return _database->tableExists(tableName);
 }
 
 - (BOOL)createTable:(NSString *)tableName

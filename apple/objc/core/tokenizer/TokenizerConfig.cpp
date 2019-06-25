@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/Handle.hpp>
 #include <WCDB/TokenizerConfig.hpp>
 #include <WCDB/TokenizerModules.hpp>
@@ -26,28 +27,32 @@ namespace WCDB {
 
 TokenizerConfig::TokenizerConfig(const UnsafeStringView& name_,
                                  const std::shared_ptr<TokenizerModules>& modules)
-: Config(), name(name_), m_modules(modules)
+: Config()
+, name(name_)
+, m_modules(modules)
+, m_statement(StatementSelect().select(
+  Expression::function("fts3_tokenizer").invoke().arguments(BindParameter::bindParameters(2))))
 {
 }
 
 bool TokenizerConfig::invoke(Handle* handle)
 {
-    bool succeed = true;
     const TokenizerModule* module = m_modules->get(name);
-    if (module != nullptr) {
-        bool exists = false;
-        std::tie(succeed, exists) = handle->ft3TokenizerExists(name);
-        if (succeed && !exists) {
-            StatementSelect statement = StatementSelect().select(
-            Expression::function("fts3_tokenizer").invoke().arguments(BindParameter::bindParameters(2)));
-            if (handle->prepare(statement)) {
-                handle->bindText(name, 1);
-                UnsafeData address((unsigned char*) &module, sizeof(unsigned char*));
-                handle->bindBLOB(address, 2);
-                succeed = handle->step();
-                handle->finalize();
-            }
-        }
+    WCTRemedialAssert(module != nullptr, "Module does not exist.", return true;);
+    auto exists = handle->ft3TokenizerExists(name);
+    if (!exists.has_value()) {
+        return false;
+    }
+    if (exists.value()) {
+        return true;
+    }
+    bool succeed = false;
+    if (handle->prepare(m_statement)) {
+        handle->bindText(name, 1);
+        UnsafeData address((unsigned char*) &module, sizeof(unsigned char*));
+        handle->bindBLOB(address, 2);
+        succeed = handle->step();
+        handle->finalize();
     }
     return succeed;
 }

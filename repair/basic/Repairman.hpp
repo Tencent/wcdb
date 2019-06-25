@@ -27,6 +27,7 @@
 #include <WCDB/Scoreable.hpp>
 #include <WCDB/UpgradeableErrorProne.hpp>
 #include <list>
+#include <optional>
 
 namespace WCDB {
 
@@ -45,7 +46,7 @@ public:
     const StringView &getPath() const;
 
 protected:
-    bool isEmptyDatabase();
+    std::optional<bool> isEmptyDatabase();
     bool exit();
     bool exit(bool result);
 

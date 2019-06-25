@@ -41,16 +41,17 @@
     TestCaseAssertTrue(self.database.isMigrated);
 
     // It's not a good practice to retain self in this escapable block.
-    weakify(self);
-    NSString* sourcePath = self.sourcePath;
-    [self.database filterMigration:^(WCTMigrationUserInfo* userInfo) {
-        strongify_or_return(self);
-        NSString* sourceTable = [self.toMigrate objectForKey:userInfo.table];
-        if (sourceTable != nil) {
-            userInfo.sourceTable = sourceTable;
-            userInfo.sourceDatabase = sourcePath;
-        }
-    }];
+    {
+        weakify(self);
+        [self.database filterMigration:^(WCTMigrationUserInfo* userInfo) {
+            strongify_or_return(self);
+            NSString* sourceTable = [self.toMigrate objectForKey:userInfo.table];
+            if (sourceTable != nil) {
+                userInfo.sourceTable = sourceTable;
+                userInfo.sourceDatabase = self.sourcePath;
+            }
+        }];
+    }
 
     TestCaseAssertFalse(self.database.isMigrated);
     self.tableClass = MigrationObject.class;

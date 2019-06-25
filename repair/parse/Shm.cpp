@@ -70,14 +70,14 @@ bool Shm::doInitialize()
 {
     WCTAssert(m_wal->isInitialized() || m_wal->isInitializing());
 
-    bool succeed;
-    size_t fileSize;
-    std::tie(succeed, fileSize) = FileManager::getFileSize(getPath());
+    auto optionalFileSize = FileManager::getFileSize(getPath());
+    if (!optionalFileSize.has_value()) {
+        assignWithSharedThreadedError();
+        return false;
+    }
+    size_t fileSize = optionalFileSize.value();
     if (fileSize == 0) {
-        if (!succeed) {
-            assignWithSharedThreadedError();
-        }
-        return succeed;
+        return true;
     }
 
     if (!m_fileHandle.open(FileHandle::Mode::ReadOnly)) {

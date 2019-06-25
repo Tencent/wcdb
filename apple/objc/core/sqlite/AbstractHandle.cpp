@@ -202,29 +202,27 @@ void AbstractHandle::finalizeStatements()
 }
 
 #pragma mark - Meta
-std::pair<bool, bool> AbstractHandle::ft3TokenizerExists(const UnsafeStringView &tokenizer)
+std::optional<bool> AbstractHandle::ft3TokenizerExists(const UnsafeStringView &tokenizer)
 {
-    bool exists = false;
     markErrorAsIgnorable(Error::Code::Error);
     bool succeed = executeStatement(StatementSelect().select(
     Expression::function("fts3_tokenizer").invoke().arguments(tokenizer)));
-    markErrorAsUnignorable();
+    std::optional<bool> exists;
     if (succeed) {
         exists = true;
-    } else {
-        if (m_error.code() == Error::Code::Error) {
-            succeed = true;
-        }
+    } else if (isErrorIgnorable()) {
+        exists = false;
     }
-    return { succeed, exists };
+    markErrorAsUnignorable();
+    return exists;
 }
 
-std::pair<bool, bool> AbstractHandle::tableExists(const UnsafeStringView &table)
+std::optional<bool> AbstractHandle::tableExists(const UnsafeStringView &table)
 {
     return tableExists(Schema::main(), table);
 }
 
-std::pair<bool, bool>
+std::optional<bool>
 AbstractHandle::tableExists(const Schema &schema, const UnsafeStringView &table)
 {
     StatementSelect statement
@@ -233,23 +231,24 @@ AbstractHandle::tableExists(const Schema &schema, const UnsafeStringView &table)
     HandleStatement handleStatement(this);
     markErrorAsIgnorable(Error::Code::Error);
     bool succeed = handleStatement.prepare(statement);
-    bool exists = succeed;
+    std::optional<bool> exists;
     if (succeed) {
         handleStatement.finalize();
+        exists = true;
     } else if (isErrorIgnorable()) {
-        succeed = true;
+        exists = false;
     }
     markErrorAsUnignorable();
-    return { succeed, exists };
+    return exists;
 }
 
-std::pair<bool, std::set<StringView>>
+std::optional<std::set<StringView>>
 AbstractHandle::getColumns(const UnsafeStringView &table)
 {
     return getColumns(Schema::main(), table);
 }
 
-std::pair<bool, std::set<StringView>>
+std::optional<std::set<StringView>>
 AbstractHandle::getColumns(const Schema &schema, const UnsafeStringView &table)
 {
     WCDB::StatementPragma statement
@@ -257,48 +256,48 @@ AbstractHandle::getColumns(const Schema &schema, const UnsafeStringView &table)
     return getValues(statement, 1);
 }
 
-std::pair<bool, std::vector<ColumnMeta>>
+std::optional<std::vector<ColumnMeta>>
 AbstractHandle::getTableMeta(const Schema &schema, const UnsafeStringView &table)
 {
-    std::vector<ColumnMeta> columnMetas;
+    std::optional<std::vector<ColumnMeta>> metas;
     HandleStatement handleStatement(this);
-    bool succeed = false;
-    do {
-        if (handleStatement.prepare(
-            StatementPragma().pragma(Pragma::tableInfo()).schema(schema).with(table))) {
-            while ((succeed = handleStatement.step()) && !handleStatement.done()) {
-                columnMetas.push_back(ColumnMeta(handleStatement.getInteger32(0), // cid
-                                                 handleStatement.getText(1), // name
-                                                 handleStatement.getText(2), // type
-                                                 handleStatement.getInteger32(3), // notnull
-                                                 handleStatement.getInteger32(5)) // pk
-                );
-            }
-            handleStatement.finalize();
-        }
-    } while (false);
-    if (!succeed) {
-        columnMetas.clear();
-    }
-    return { succeed, std::move(columnMetas) };
-}
-
-std::pair<bool, std::set<StringView>>
-AbstractHandle::getValues(const Statement &statement, int index)
-{
-    HandleStatement handleStatement(this);
-    bool succeed = false;
-    std::set<StringView> values;
-    if (handleStatement.prepare(statement)) {
+    if (handleStatement.prepare(
+        StatementPragma().pragma(Pragma::tableInfo()).schema(schema).with(table))) {
+        bool succeed = false;
+        std::vector<ColumnMeta> rows;
         while ((succeed = handleStatement.step()) && !handleStatement.done()) {
-            values.emplace(handleStatement.getText(index));
+            rows.push_back(ColumnMeta(handleStatement.getInteger32(0), // cid
+                                      handleStatement.getText(1),      // name
+                                      handleStatement.getText(2),      // type
+                                      handleStatement.getInteger32(3), // notnull
+                                      handleStatement.getInteger32(5)) // pk
+            );
         }
         handleStatement.finalize();
+        if (succeed) {
+            metas = rows;
+        }
     }
-    if (!succeed) {
-        values.clear();
+    return metas;
+}
+
+std::optional<std::set<StringView>>
+AbstractHandle::getValues(const Statement &statement, int index)
+{
+    std::optional<std::set<StringView>> values;
+    HandleStatement handleStatement(this);
+    if (handleStatement.prepare(statement)) {
+        std::set<StringView> rows;
+        bool succeed = false;
+        while ((succeed = handleStatement.step()) && !handleStatement.done()) {
+            rows.emplace(handleStatement.getText(index));
+        }
+        handleStatement.finalize();
+        if (succeed) {
+            values = std::move(rows);
+        }
     }
-    return { succeed, std::move(values) };
+    return values;
 }
 
 #pragma mark - Transaction

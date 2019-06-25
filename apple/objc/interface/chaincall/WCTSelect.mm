@@ -30,6 +30,13 @@
     WCTResultColumns _resultColumns;
 }
 
+- (void)willPrepare:(WCDB::StatementSelect &)statement
+{
+    if (statement.syntax().orderingTerms.empty()) {
+        statement.order(WCDB::OrderingTerm::ascendingRowid());
+    }
+}
+
 - (instancetype)fromTable:(NSString *)tableName
 {
     _statement.from(tableName);

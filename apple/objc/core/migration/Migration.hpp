@@ -65,13 +65,13 @@ protected:
         virtual ~InfoInitializer() = 0;
 
     protected:
-        virtual std::pair<bool, bool>
+        virtual std::optional<bool>
         sourceTableExists(const MigrationUserInfo& userInfo) = 0;
         // When succeed, empty column indicates that table does not exist.
         // succeed, contains integer primary key, columns
-        virtual std::tuple<bool, bool, std::set<StringView>>
+        virtual std::optional<std::pair<bool, std::set<StringView>>>
         getColumnsOfUserInfo(const MigrationUserInfo& userInfo) = 0;
-        virtual StringView getDatabasePath() const = 0;
+        virtual const StringView& getDatabasePath() const = 0;
     };
 
     bool initInfo(InfoInitializer& initializer, const UnsafeStringView& table);
@@ -82,7 +82,7 @@ protected:
     void markAsUnreferenced(const MigrationInfo* info);
     void markAsDropped(const MigrationInfo* info);
     void markAsMigrated(const MigrationInfo* info);
-    std::pair<bool, RecyclableMigrationInfo> getInfo(const UnsafeStringView& table);
+    std::optional<RecyclableMigrationInfo> getInfo(const UnsafeStringView& table);
 
 private:
     // Those infos needed to be migrate will be held by m_migrating after initialized. (Other infos that already migrated or have no need to migrate will be dropped when initializing.)
@@ -126,7 +126,7 @@ public:
         bool stopBinding(bool succeed);
         void stopReferenced();
 
-        std::pair<bool, const MigrationInfo*> bindTable(const UnsafeStringView& table);
+        std::optional<const MigrationInfo*> bindTable(const UnsafeStringView& table);
         bool hintThatTableWillBeCreated(const UnsafeStringView& table);
         const MigrationInfo* getBoundInfo(const UnsafeStringView& table);
 
@@ -142,9 +142,8 @@ public:
     };
 
 protected:
-    std::pair<bool, RecyclableMigrationInfo>
+    std::optional<RecyclableMigrationInfo>
     getOrInitInfo(InfoInitializer& initializer, const UnsafeStringView& table);
-    void tryReduceBounds(StringViewMap<const MigrationInfo*>& bounds);
 
 private:
 #pragma mark - Step
@@ -156,19 +155,19 @@ public:
         virtual ~Stepper() = 0;
 
     protected:
-        virtual std::pair<bool, std::set<StringView>> getAllTables() = 0;
+        virtual std::optional<std::set<StringView>> getAllTables() = 0;
         virtual bool dropSourceTable(const MigrationInfo* info) = 0;
-        virtual bool migrateRows(const MigrationInfo* info, bool& done) = 0;
+        virtual std::optional<bool> migrateRows(const MigrationInfo* info) = 0;
     };
 
-    // succeed, done
-    std::pair<bool, bool> step(Migration::Stepper& stepper);
+    // done
+    std::optional<bool> step(Migration::Stepper& stepper);
 
 protected:
-    // succeed, worked
-    std::pair<bool, bool> tryDropUnreferencedTable(Migration::Stepper& stepper);
-    std::pair<bool, bool> tryMigrateRows(Migration::Stepper& stepper);
-    std::pair<bool, bool> tryAcquireTables(Migration::Stepper& stepper);
+    // worked
+    std::optional<bool> tryDropUnreferencedTable(Migration::Stepper& stepper);
+    std::optional<bool> tryMigrateRows(Migration::Stepper& stepper);
+    std::optional<bool> tryAcquireTables(Migration::Stepper& stepper);
 
 private:
     bool m_tableAcquired;

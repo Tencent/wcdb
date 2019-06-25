@@ -28,6 +28,7 @@
 #include <WCDB/Time.hpp>
 #include <future>
 #include <list>
+#include <optional>
 
 namespace WCDB {
 
@@ -50,8 +51,8 @@ public:
     StringView getDatabaseName() const;
     bool removeDirectoryIfEmpty() const;
     bool removeDeposited() const;
-    std::pair<bool, std::list<StringView>> getWorkshopDirectories() const;
-    std::pair<bool, StringView> getUniqueWorkshopDiectory() const;
+    std::optional<std::list<StringView>> getWorkshopDirectories() const;
+    std::optional<StringView> getUniqueWorkshopDiectory() const;
     bool containsDeposited() const;
 
 #pragma mark - Factory Related
@@ -78,13 +79,13 @@ public:
     static StringView firstMaterialPathForDatabase(const UnsafeStringView &database);
     static StringView lastMaterialPathForDatabase(const UnsafeStringView &database);
 
-    static std::pair<bool, StringView>
+    static std::optional<StringView>
     materialForSerializingForDatabase(const UnsafeStringView &database);
-    static std::pair<bool, std::list<StringView>>
+    static std::optional<std::list<StringView>>
     materialsForDeserializingForDatabase(const UnsafeStringView &database);
 
 protected:
-    static std::pair<bool, Time>
+    static std::optional<Time>
     getModifiedTimeOr0IfNotExists(const UnsafeStringView &path);
 };
 

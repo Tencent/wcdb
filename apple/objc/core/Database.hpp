@@ -69,7 +69,7 @@ protected:
 public:
     RecyclableHandle getHandle();
     bool execute(const Statement &statement);
-    std::pair<bool, bool> tableExists(const UnsafeStringView &table);
+    std::optional<bool> tableExists(const UnsafeStringView &table);
 
 protected:
     std::shared_ptr<Handle> generateSlotedHandle(HandleType type) override final;
@@ -133,7 +133,7 @@ public:
 
     bool moveFiles(const UnsafeStringView &directory);
     bool removeFiles();
-    std::pair<bool, size_t> getFilesSize();
+    std::optional<size_t> getFilesSize();
 
 #pragma mark - Repair
 public:
@@ -171,15 +171,15 @@ public:
     typedef std::function<void(Database *, const MigrationBaseInfo *)> MigratedCallback;
     void setNotificationWhenMigrated(const MigratedCallback &callback);
 
-    std::pair<bool, bool> stepMigration();
-    std::pair<bool, bool> stepMigrationIfAlreadyInitialized();
+    std::optional<bool> stepMigration();
+    std::optional<bool> stepMigrationIfAlreadyInitialized();
 
     bool isMigrated() const;
 
     std::set<StringView> getPathsOfSourceDatabases() const;
 
 protected:
-    std::pair<bool, bool> doStepMigration();
+    std::optional<bool> doStepMigration();
     void didMigrate(const MigrationBaseInfo *info) override final;
     MigratedCallback m_migratedCallback;
     Migration m_migration; // thread-safe

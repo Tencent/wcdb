@@ -40,22 +40,22 @@ FactoryRenewer::FactoryRenewer(const Factory &factory_)
 
 bool FactoryRenewer::work()
 {
-    bool succeed, exists;
-    std::tie(succeed, exists) = FileManager::fileExists(database);
-    if (!exists) {
-        if (!succeed) {
-            assignWithSharedThreadedError();
-        }
-        factory.removeDirectoryIfEmpty();
-        return succeed;
-    }
-
-    std::tie(succeed, exists) = FileManager::fileExists(factory.database);
-    if (!succeed) {
+    auto exists = FileManager::fileExists(database);
+    if (!exists.has_value()) {
         assignWithSharedThreadedError();
         return false;
     }
-    if (exists) {
+    if (!exists.value()) {
+        factory.removeDirectoryIfEmpty();
+        return true;
+    }
+
+    exists = FileManager::fileExists(factory.database);
+    if (!exists.has_value()) {
+        assignWithSharedThreadedError();
+        return false;
+    }
+    if (exists.value()) {
         Error error(Error::Code::Misuse, Error::Level::Warning, "Database already exists when renewing.");
         error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
         error.infos.insert_or_assign(ErrorStringKeyPath, database);
@@ -98,13 +98,12 @@ bool FactoryRenewer::prepare()
     }
 
     // 2. get deposited directories for acquisition
-    bool succeed;
-    std::list<StringView> workshopDirectories;
-    std::tie(succeed, workshopDirectories) = factory.getWorkshopDirectories();
-    if (!succeed) {
+    auto optionalWorkshopDirectories = factory.getWorkshopDirectories();
+    if (!optionalWorkshopDirectories.has_value()) {
         assignWithSharedThreadedError();
         return false;
     }
+    std::list<StringView> &workshopDirectories = optionalWorkshopDirectories.value();
 
     // 3. resolve infos
     StringViewMap<Info> infos;
@@ -125,6 +124,7 @@ bool FactoryRenewer::prepare()
         setError(m_assembler->getError());
         return false;
     }
+    bool succeed = true;
     for (const auto &element : infos) {
         if (!m_assembler->assembleTable(element.first, element.second.sql)
             || !m_assembler->assembleSequence(element.first, element.second.sequence)) {
@@ -141,13 +141,12 @@ bool FactoryRenewer::prepare()
     }
 
     // 5. force backup assembled database if exists
-    size_t fileSize;
-    std::tie(succeed, fileSize) = FileManager::getFileSize(tempDatabase);
-    if (!succeed) {
+    auto fileSize = FileManager::getFileSize(tempDatabase);
+    if (!fileSize.has_value()) {
         assignWithSharedThreadedError();
         return false;
     }
-    if (fileSize > 0) {
+    if (fileSize.value() > 0) {
         FactoryBackup backup(factory);
         backup.setWriteLocker(m_writeLocker);
         backup.setReadLocker(m_readLocker);
@@ -177,14 +176,14 @@ bool FactoryRenewer::prepare()
 bool FactoryRenewer::resolveInfosForDatabase(StringViewMap<Info> &infos,
                                              const UnsafeStringView &databaseForAcquisition)
 {
-    bool succeed;
-    std::list<StringView> materialPaths;
-    std::tie(succeed, materialPaths)
+    auto optionalMaterialPaths
     = Factory::materialsForDeserializingForDatabase(databaseForAcquisition);
-    if (!succeed) {
+    if (!optionalMaterialPaths.has_value()) {
         assignWithSharedThreadedError();
         return false;
     }
+    std::list<StringView> &materialPaths = optionalMaterialPaths.value();
+
     if (materialPaths.empty()) {
         Error error(Error::Code::NotFound, Error::Level::Warning, "Material is not found when renewing.");
         error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
@@ -192,10 +191,9 @@ bool FactoryRenewer::resolveInfosForDatabase(StringViewMap<Info> &infos,
         Notifier::shared().notify(error);
         return true;
     }
-    Material material;
     for (const auto &materialPath : materialPaths) {
-        succeed = material.deserialize(materialPath);
-        if (!succeed) {
+        Material material;
+        if (!material.deserialize(materialPath)) {
             if (ThreadedErrors::shared().getThreadedError().isCorruption()) {
                 continue;
             }
@@ -228,6 +226,7 @@ bool FactoryRenewer::resolveInfosForDatabase(StringViewMap<Info> &infos,
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.insert_or_assign(ErrorStringKeyPath, databaseForAcquisition);
     Notifier::shared().notify(error);
+#warning - TODO: return true?
     return true;
 }
 

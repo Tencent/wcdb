@@ -196,13 +196,14 @@ bool Wal::doInitialize()
         maxWalFrame = std::min(maxWalFrame, (int) m_shm.getMaxFrame());
     }
 
-    bool succeed;
-    std::tie(succeed, m_fileSize) = FileManager::getFileSize(getPath());
+    auto fileSize = FileManager::getFileSize(getPath());
+    if (!fileSize.has_value()) {
+        assignWithSharedThreadedError();
+        return false;
+    }
+    m_fileSize = fileSize.value();
     if (m_fileSize == 0) {
-        if (!succeed) {
-            assignWithSharedThreadedError();
-        }
-        return succeed;
+        return true;
     }
     const int numberOfFramesInFile = ((int) m_fileSize - headerSize) / getFrameSize();
     maxWalFrame = std::min(numberOfFramesInFile, maxWalFrame);

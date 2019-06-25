@@ -58,23 +58,23 @@ bool Repairman::exit(bool result)
     return result;
 }
 
-bool Repairman::isEmptyDatabase()
+std::optional<bool> Repairman::isEmptyDatabase()
 {
-    bool succeed;
-    size_t fileSize;
-    std::tie(succeed, fileSize) = FileManager::getFileSize(getPath());
-    if (fileSize == 0) {
-        if (succeed) {
+    auto fileSize = FileManager::getFileSize(getPath());
+    if (fileSize.has_value()) {
+        if (fileSize.value() == 0) {
             Error error(Error::Code::Empty, Error::Level::Warning, "Database is not found or empty.");
             error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
             error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
             Notifier::shared().notify(error);
+            return true;
         } else {
-            setCriticalErrorWithSharedThreadedError();
+            return false;
         }
-        return true;
+    } else {
+        setCriticalErrorWithSharedThreadedError();
+        return std::nullopt;
     }
-    return false;
 }
 
 bool Repairman::markAsAssembling()

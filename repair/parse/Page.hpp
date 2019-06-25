@@ -47,7 +47,7 @@ public:
         LeafTable = 13,
     };
 
-    std::pair<bool, Type> acquireType();
+    std::optional<Type> acquireType();
     Type getType() const;
 
     const MappedData &getData() const;

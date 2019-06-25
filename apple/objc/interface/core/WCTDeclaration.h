@@ -76,7 +76,7 @@ typedef NSArray<NSObject<WCTColumnCoding> *> WCTColumnCodingRow;
 #pragma mark - Error
 @class WCTError;
 @class WCTPerformanceFootprint;
-typedef WCTFundamentalOptional<BOOL, NO> WCTOptionalBool;
+class WCTOptionalBool;
 typedef WCTFundamentalOptional<NSUInteger, 0> WCTOptionalSize;
 
 typedef int32_t WCTTag;

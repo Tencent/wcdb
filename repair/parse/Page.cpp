@@ -39,13 +39,13 @@ Page::Page(int number_, Pager *pager, const MappedData &data)
 {
 }
 
-std::pair<bool, Page::Type> Page::acquireType()
+std::optional<Page::Type> Page::acquireType()
 {
     int type = 0;
     if (m_deserialization.data().empty()) {
         MappedData data = m_pager->acquirePageData(number, getOffsetOfHeader(), 1);
         if (data.empty()) {
-            return { false, Type::Unknown };
+            return std::nullopt;
         }
         Deserialization deserialization(data);
         WCTAssert(deserialization.canAdvance(1));
@@ -60,9 +60,9 @@ std::pair<bool, Page::Type> Page::acquireType()
     case (int) Type::InteriorTable:
     case (int) Type::LeafIndex:
     case (int) Type::LeafTable:
-        return { true, (Type) type };
+        return (Type) type;
     default:
-        return { true, Type::Unknown };
+        return Type::Unknown;
     }
 }
 

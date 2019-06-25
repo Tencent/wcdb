@@ -37,8 +37,9 @@ Factory::Factory(const UnsafeStringView &database_)
 {
 }
 
-std::pair<bool, std::list<StringView>> Factory::getWorkshopDirectories() const
+std::optional<std::list<StringView>> Factory::getWorkshopDirectories() const
 {
+    std::optional<std::list<StringView>> result;
     std::list<StringView> workshopDirectories;
     if (FileManager::enumerateDirectory(
         directory,
@@ -49,53 +50,52 @@ std::pair<bool, std::list<StringView>> Factory::getWorkshopDirectories() const
             }
             return true;
         })) {
-        return { true, workshopDirectories };
+        result = std::move(workshopDirectories);
     }
-    return { false, {} };
+    return result;
 }
 
-std::pair<bool, StringView> Factory::getUniqueWorkshopDiectory() const
+std::optional<StringView> Factory::getUniqueWorkshopDiectory() const
 {
-    bool succeed = false;
     StringView path;
     do {
         Time time = Time::now();
-        StringView fileName = time.stringify();
-        if (fileName.empty()) {
+        auto fileName = time.stringify();
+        if (!fileName.has_value()) {
+            return std::nullopt;
+        }
+        path = Path::addComponent(directory, fileName.value());
+
+        auto exists = FileManager::directoryExists(path);
+        if (!exists.has_value()) {
+            return std::nullopt;
+        }
+        if (!exists.value()) {
             break;
         }
-        path = Path::addComponent(directory, fileName);
-
-        bool exists = false;
-        std::tie(succeed, exists) = FileManager::directoryExists(path);
-        if (exists) {
-            succeed = false;
-        }
-    } while (false); //try repeatly
-    return { succeed, succeed ? path : StringView() };
+    } while (true); //try repeatly
+    return path;
 }
 
 bool Factory::containsDeposited() const
 {
-    bool result = false;
+    bool contains = false;
     StringView databaseName = getDatabaseName();
     FileManager::enumerateDirectory(
     directory,
-    [&result, &databaseName](
+    [&contains, &databaseName](
     const UnsafeStringView &root, const UnsafeStringView &subpath, bool isDirectory) -> bool {
         if (isDirectory && subpath != restoreDirectoryName && subpath != renewDirectoryName) {
             StringView databasePath
             = Path::addComponent(Path::addComponent(root, subpath), databaseName);
-            bool succeed, exists;
-            std::tie(succeed, exists) = FileManager::fileExists(databasePath);
-            if (exists) {
-                result = true;
+            if (FileManager::fileExists(databasePath).value_or(false)) {
+                contains = true;
                 return false;
             }
         }
         return true;
     });
-    return result;
+    return contains;
 }
 
 #pragma mark - Factory Related
@@ -220,106 +220,87 @@ std::list<StringView> Factory::databasePathsForDatabase(const UnsafeStringView &
     };
 }
 
-std::pair<bool, StringView>
+std::optional<StringView>
 Factory::materialForSerializingForDatabase(const UnsafeStringView &database)
 {
     //If all materials exist, return the old one.
     //Otherwise, return the one that does not exist.
-    bool succeed;
-    StringView materialPath;
+    Time now = Time::now();
 
-    do {
-        Time time = Time::now();
+    StringView firstMaterialPath = Factory::firstMaterialPathForDatabase(database);
+    auto optionalFirstMaterialModifiedTime
+    = getModifiedTimeOr0IfNotExists(firstMaterialPath);
+    if (!optionalFirstMaterialModifiedTime.has_value()) {
+        return std::nullopt;
+    }
+    auto &firstMaterialModifiedTime = optionalFirstMaterialModifiedTime.value();
+    if (firstMaterialModifiedTime.empty()
+        || firstMaterialModifiedTime.seconds() == now.seconds()) {
+        return firstMaterialPath;
+    }
 
-        StringView firstMaterialPath = Factory::firstMaterialPathForDatabase(database);
-        Time firstMaterialModifiedTime, lastMaterialModifiedTime;
-        std::tie(succeed, firstMaterialModifiedTime)
-        = getModifiedTimeOr0IfNotExists(firstMaterialPath);
-        if (!succeed) {
-            break;
-        }
-        if (firstMaterialModifiedTime.empty()
-            || firstMaterialModifiedTime.seconds() == time.seconds()) {
-            materialPath = std::move(firstMaterialPath);
-            break;
-        }
+    StringView lastMaterialPath = Factory::lastMaterialPathForDatabase(database);
+    auto optionalLastMaterialModifiedTime = getModifiedTimeOr0IfNotExists(lastMaterialPath);
+    if (!optionalLastMaterialModifiedTime.has_value()) {
+        return std::nullopt;
+    }
+    auto &lastMaterialModifiedTime = optionalLastMaterialModifiedTime.value();
+    if (lastMaterialModifiedTime.empty()
+        || lastMaterialModifiedTime.seconds() == now.seconds()) {
+        return lastMaterialPath;
+    }
 
-        StringView lastMaterialPath = Factory::lastMaterialPathForDatabase(database);
-        std::tie(succeed, lastMaterialModifiedTime)
-        = getModifiedTimeOr0IfNotExists(lastMaterialPath);
-        if (!succeed) {
-            break;
-        }
-        if (lastMaterialModifiedTime.empty()
-            || lastMaterialModifiedTime.seconds() == time.seconds()) {
-            materialPath = std::move(lastMaterialPath);
-            break;
-        }
-
-        if (firstMaterialModifiedTime > lastMaterialModifiedTime) {
-            materialPath = std::move(lastMaterialPath);
-        } else {
-            materialPath = std::move(firstMaterialPath);
-        }
-    } while (false);
-    return { succeed, std::move(materialPath) };
+    return firstMaterialModifiedTime > lastMaterialModifiedTime ? lastMaterialPath : firstMaterialPath;
 }
 
-std::pair<bool, std::list<StringView>>
+std::optional<std::list<StringView>>
 Factory::materialsForDeserializingForDatabase(const UnsafeStringView &database)
 {
     //If all materials exist, return the new one.
     //If all materials do not exist, return empty.
     //Otherwise, return the existing one.
-    bool succeed;
     std::list<StringView> materialPaths;
 
-    do {
-        StringView firstMaterialPath = Factory::firstMaterialPathForDatabase(database);
-        StringView lastMaterialPath = Factory::lastMaterialPathForDatabase(database);
-        Time firstMaterialModifiedTime, lastMaterialModifiedTime;
-
-        std::tie(succeed, firstMaterialModifiedTime)
-        = getModifiedTimeOr0IfNotExists(firstMaterialPath);
-        if (!succeed) {
-            break;
-        }
-        std::tie(succeed, lastMaterialModifiedTime)
-        = getModifiedTimeOr0IfNotExists(lastMaterialPath);
-        if (!succeed) {
-            break;
-        }
-
-        if (!firstMaterialModifiedTime.empty()) {
-            materialPaths.push_back(firstMaterialPath);
-        }
-
-        if (!lastMaterialModifiedTime.empty()) {
-            materialPaths.push_back(lastMaterialPath);
-        }
-
-        if (firstMaterialModifiedTime < lastMaterialModifiedTime) {
-            materialPaths.reverse();
-        }
-    } while (false);
-    if (!succeed) {
-        materialPaths.clear();
+    StringView firstMaterialPath = Factory::firstMaterialPathForDatabase(database);
+    auto optionalFirstMaterialModifiedTime
+    = getModifiedTimeOr0IfNotExists(firstMaterialPath);
+    ;
+    if (!optionalFirstMaterialModifiedTime.has_value()) {
+        return std::nullopt;
     }
-    return { succeed, std::move(materialPaths) };
+    Time &firstMaterialModifiedTime = optionalFirstMaterialModifiedTime.value();
+    if (!firstMaterialModifiedTime.empty()) {
+        materialPaths.push_back(firstMaterialPath);
+    }
+
+    StringView lastMaterialPath = Factory::lastMaterialPathForDatabase(database);
+    auto optionalLastMaterialModifiedTime = getModifiedTimeOr0IfNotExists(lastMaterialPath);
+    if (!optionalLastMaterialModifiedTime.has_value()) {
+        return std::nullopt;
+    }
+    Time &lastMaterialModifiedTime = optionalLastMaterialModifiedTime.value();
+    if (!lastMaterialModifiedTime.empty()) {
+        materialPaths.push_back(lastMaterialPath);
+    }
+
+    if (firstMaterialModifiedTime < lastMaterialModifiedTime) {
+        materialPaths.reverse();
+    }
+    return materialPaths;
 }
 
-std::pair<bool, Time> Factory::getModifiedTimeOr0IfNotExists(const UnsafeStringView &path)
+std::optional<Time> Factory::getModifiedTimeOr0IfNotExists(const UnsafeStringView &path)
 {
-    bool succeed, exists;
-    Time modifiedTime;
-    do {
-        std::tie(succeed, exists) = FileManager::fileExists(path);
-        if (!succeed || !exists) {
-            break;
+    std::optional<Time> modifiedTime;
+    auto exists = FileManager::fileExists(path);
+    if (exists.has_value()) {
+        if (exists.value()) {
+            modifiedTime = FileManager::getFileModifiedTime(path);
+        } else {
+            modifiedTime = Time();
         }
-        std::tie(succeed, modifiedTime) = FileManager::getFileModifiedTime(path);
-    } while (false);
-    return { succeed, modifiedTime };
+    }
+    return modifiedTime;
 }
 
 } //namespace Repair

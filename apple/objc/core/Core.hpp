@@ -77,7 +77,7 @@ public:
                                               const CorruptedNotification& notification);
 
 protected:
-    std::pair<bool, bool>
+    std::optional<bool>
     migrationShouldBeOperated(const UnsafeStringView& path) override final;
     bool backupShouldBeOperated(const UnsafeStringView& path) override final;
     bool checkpointShouldBeOperated(const UnsafeStringView& path) override final;
