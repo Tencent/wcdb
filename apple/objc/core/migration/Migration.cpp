@@ -318,31 +318,6 @@ const MigrationInfo* Migration::Binder::getBoundInfo(const UnsafeStringView& tab
     return info;
 }
 
-void Migration::tryReduceBounds(StringViewMap<const MigrationInfo*>& bounds)
-{
-    bool reduce = false;
-    {
-        SharedLockGuard lockGuard(m_lock);
-        for (const auto& iter : bounds) {
-            if (m_migratings.find(iter.second) == m_migratings.end()) {
-                reduce = true;
-                break;
-            }
-        }
-    }
-    if (reduce) {
-        LockGuard lockGuard(m_lock);
-        for (auto iter = bounds.begin(); iter != bounds.end();) {
-            const MigrationInfo* info = iter->second;
-            if (m_migratings.find(info) == m_migratings.end()) {
-                iter = bounds.erase(iter);
-            } else {
-                ++iter;
-            }
-        }
-    }
-}
-
 std::optional<RecyclableMigrationInfo>
 Migration::getOrInitInfo(InfoInitializer& initializer, const UnsafeStringView& table)
 {
