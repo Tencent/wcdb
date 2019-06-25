@@ -380,14 +380,16 @@ bool FileManager::createDirectoryWithIntermediateDirectories(const UnsafeStringV
 
 bool FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(const UnsafeStringView &path)
 {
-    auto optionalFileProtection = getFileProtection(path);
-    if (!optionalFileProtection.has_value()) {
-        return false;
-    }
-    FileProtection fileProtection = optionalFileProtection.value();
-    if (fileProtection != FileProtection::None
-        && fileProtection != FileProtection::CompleteUntilFirstUserAuthentication) {
-        return setFileProtection(path, FileProtection::CompleteUntilFirstUserAuthentication);
+    if (!path.empty()) {
+        auto optionalFileProtection = getFileProtection(path);
+        if (!optionalFileProtection.has_value()) {
+            return false;
+        }
+        FileProtection fileProtection = optionalFileProtection.value();
+        if (fileProtection != FileProtection::None
+            && fileProtection != FileProtection::CompleteUntilFirstUserAuthentication) {
+            return setFileProtection(path, FileProtection::CompleteUntilFirstUserAuthentication);
+        }
     }
     return true;
 }

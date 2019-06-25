@@ -42,7 +42,7 @@ public:
     typedef Syntax::Identifier::Iterator Iterator;
     void iterate(const Iterator& iterator);
 
-    const StringView& getDescription() const;
+    StringView getDescription() const;
 
     Syntax::Identifier& syntax();
     const Syntax::Identifier& syntax() const;
@@ -59,7 +59,6 @@ protected:
 
 private:
     Shadow<Syntax::Identifier> m_syntax;
-    mutable std::optional<StringView> m_description;
 };
 
 template<typename __SyntaxType, typename __SQLType>
