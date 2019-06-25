@@ -40,6 +40,7 @@
 
 - (void)willPrepare:(WCDB::StatementSelect &)statement
 {
+    WCDB_UNUSED(statement);
 }
 
 - (instancetype)where:(const WCDB::Expression &)condition
