@@ -222,11 +222,11 @@ bool FactoryRenewer::resolveInfosForDatabase(StringViewMap<Info> &infos,
         }
         return true;
     }
+    // Regard it as no error
     Error error(Error::Code::Notice, Error::Level::Notice, "All materials are corrupted when renewing.");
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.insert_or_assign(ErrorStringKeyPath, databaseForAcquisition);
     Notifier::shared().notify(error);
-#warning - TODO: return true?
     return true;
 }
 
