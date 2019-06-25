@@ -1570,6 +1570,8 @@
 		3957985D227FD2370069F985 /* Syntax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3957985C227FD2370069F985 /* Syntax.swift */; };
 		3957985F227FD4F20069F985 /* Expression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3957985E227FD4F20069F985 /* Expression.swift */; };
 		39579861227FD5770069F985 /* ForeignKeyClause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39579860227FD5770069F985 /* ForeignKeyClause.swift */; };
+		3995150722C2095B008394CC /* WCTOptional.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3995150622C2095B008394CC /* WCTOptional.mm */; };
+		3995150822C2095B008394CC /* WCTOptional.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3995150622C2095B008394CC /* WCTOptional.mm */; };
 		39A3341922B0DD9F008EA5D5 /* WCTFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 39A3341722B0DD9F008EA5D5 /* WCTFoundation.h */; };
 		39A3341A22B0DD9F008EA5D5 /* WCTFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 39A3341722B0DD9F008EA5D5 /* WCTFoundation.h */; };
 		39A3341B22B0DD9F008EA5D5 /* WCTFoundation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39A3341822B0DD9F008EA5D5 /* WCTFoundation.mm */; };
@@ -2547,6 +2549,7 @@
 		3957985C227FD2370069F985 /* Syntax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Syntax.swift; sourceTree = "<group>"; };
 		3957985E227FD4F20069F985 /* Expression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expression.swift; sourceTree = "<group>"; };
 		39579860227FD5770069F985 /* ForeignKeyClause.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForeignKeyClause.swift; sourceTree = "<group>"; };
+		3995150622C2095B008394CC /* WCTOptional.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTOptional.mm; sourceTree = "<group>"; };
 		39A3341722B0DD9F008EA5D5 /* WCTFoundation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTFoundation.h; sourceTree = "<group>"; };
 		39A3341822B0DD9F008EA5D5 /* WCTFoundation.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTFoundation.mm; sourceTree = "<group>"; };
 		39D3C74622A8B8C600C93DC0 /* OperationHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OperationHandle.cpp; sourceTree = "<group>"; };
@@ -2806,6 +2809,7 @@
 				2316D93521058B5500707AFC /* WCTFileManager.mm */,
 				232C6F00229C0A280046742F /* WCTOperationQueue.mm */,
 				2370B1302191533C00D3227C /* WCTOptional.h */,
+				3995150622C2095B008394CC /* WCTOptional.mm */,
 				23F70F79209FF0EC00CCE3CD /* WCTValue.h */,
 				23F70F7A209FF0EC00CCE3CD /* WCTValue.mm */,
 				23176A9921BA7D460051ACF9 /* WCTDatabase+Version.h */,
@@ -5531,6 +5535,7 @@
 				2367BAFF2215004300380122 /* Expression.cpp in Sources */,
 				2367BB002215004300380122 /* SyntaxPragmaSTMT.cpp in Sources */,
 				39A3341C22B0DD9F008EA5D5 /* WCTFoundation.mm in Sources */,
+				3995150822C2095B008394CC /* WCTOptional.mm in Sources */,
 				2367BB012215004300380122 /* JoinConstraint.cpp in Sources */,
 				2367BB022215004300380122 /* WCTRuntimeObjCAccessor.mm in Sources */,
 				23301BF62298FE9A00A8AB5A /* AutoMigrateConfig.cpp in Sources */,
@@ -5805,6 +5810,7 @@
 				23EEDC83217DFADC006E9E73 /* Expression.cpp in Sources */,
 				23EEDD4B217DFADC006E9E73 /* SyntaxPragmaSTMT.cpp in Sources */,
 				39A3341B22B0DD9F008EA5D5 /* WCTFoundation.mm in Sources */,
+				3995150722C2095B008394CC /* WCTOptional.mm in Sources */,
 				23EEDC91217DFADC006E9E73 /* JoinConstraint.cpp in Sources */,
 				2349F75C1EA0D6680021EFA7 /* WCTRuntimeObjCAccessor.mm in Sources */,
 				23301BF52298FE9A00A8AB5A /* AutoMigrateConfig.cpp in Sources */,

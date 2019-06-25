@@ -92,9 +92,5 @@ class WCTOptionalBool final : public WCTFundamentalOptional<BOOL, NO> {
 public:
     using Super::WCTFundamentalOptional;
 
-    WCTOptionalBool(std::optional<bool>&& optional)
-    : Super(optional.has_value() ? std::optional<BOOL>((BOOL) optional.value()) :
-                                   std::optional<BOOL>(std::nullopt))
-    {
-    }
+    WCTOptionalBool(std::optional<bool>&& optional);
 };
