@@ -117,7 +117,7 @@ bool Migration::initInfo(InfoInitializer& initializer, const UnsafeStringView& t
         return false;
     }
     bool containsPrimaryKey = optionalColumns.value().first;
-    std::set<StringView> columns = std::move(optionalColumns.value().second);
+    std::set<StringView>& columns = optionalColumns.value().second;
     LockGuard lockGuard(m_lock);
     if (m_filted.find(table) == m_filted.end()) {
         m_migrated = false;
