@@ -130,6 +130,7 @@ bool FactoryRetriever::exit(bool result)
 
 bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
 {
+    // material paths is already ordered by modified time
     auto optionalMaterialPaths = Factory::materialsForDeserializingForDatabase(databasePath);
     if (!optionalMaterialPaths.has_value()) {
         setCriticalErrorWithSharedThreadedError();
@@ -151,7 +152,6 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
                     setCriticalErrorWithSharedThreadedError();
                     return false;
                 }
-#warning - TODO: check material time?
                 materialTime = std::move(optionalMaterialTime.value());
                 break;
             }
