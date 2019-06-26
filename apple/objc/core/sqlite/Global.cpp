@@ -62,18 +62,6 @@ Global::Global()
     }
 
     {
-        int rc = sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
-        WCTAssert(rc == SQLITE_OK);
-        staticAPIExit(rc);
-    }
-
-    {
-        int rc = sqlite3_config(SQLITE_CONFIG_MEMSTATUS, 0);
-        WCTAssert(rc == SQLITE_OK);
-        staticAPIExit(rc);
-    }
-
-    {
         sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
         WCTAssert(vfs != nullptr);
         int rc = vfs->xSetSystemCall(vfs, "open", (sqlite3_syscall_ptr) Global::open);
@@ -91,16 +79,6 @@ void Global::staticAPIExit(int rc)
         Notifier::shared().notify(error);
     }
 }
-
-//    Global::shared().setMemoryMapSize(0x7fff0000, 0x7fff0000);
-//void Global::setMemoryMapSize(int64_t defaultSizeLimit, int64_t maximumAllowedSizeLimit)
-//{
-//    int rc = sqlite3_config(SQLITE_CONFIG_MMAP_SIZE,
-//                   (sqlite3_int64) defaultSizeLimit,
-//                   (sqlite3_int64) maximumAllowedSizeLimit);
-//    WCTAssert(rc == SQLITE_OK);
-//    staticAPIExit(rc);
-//}
 
 #pragma mark - Log
 void Global::setNotificationForLog(const UnsafeStringView &name, const LogNotification &notification)
