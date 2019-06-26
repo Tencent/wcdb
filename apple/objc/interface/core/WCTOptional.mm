@@ -25,3 +25,9 @@ WCTOptionalBool::WCTOptionalBool(std::optional<bool>&& optional)
                                std::optional<BOOL>(std::nullopt))
 {
 }
+
+WCTOptionalSize::WCTOptionalSize(std::optional<size_t>&& optional)
+: Super(optional.has_value() ? std::optional<NSUInteger>((NSUInteger) optional.value()) :
+                               std::optional<NSUInteger>(std::nullopt))
+{
+}
