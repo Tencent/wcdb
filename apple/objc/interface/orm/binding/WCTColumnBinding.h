@@ -58,16 +58,16 @@ public:
 
     Class getClass() const;
     const WCDB::UnsafeStringView& getPropertyName() const;
-    const std::shared_ptr<WCTBaseAccessor>& getAccessor() const;
+    const std::shared_ptr<const WCTBaseAccessor>& getAccessor() const;
 
     bool operator==(const WCTColumnBinding& other) const;
 
 protected:
     WCTColumnBinding(Class cls,
-                     const std::shared_ptr<WCTBaseAccessor> accessor,
+                     const std::shared_ptr<const WCTBaseAccessor> accessor,
                      const WCDB::UnsafeStringView& propertyName);
 
-    std::shared_ptr<WCTBaseAccessor> m_accessor;
+    std::shared_ptr<const WCTBaseAccessor> m_accessor;
     WCDB::StringView m_propertyName;
     Class m_class;
 };

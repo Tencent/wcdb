@@ -22,7 +22,7 @@
 #import <WCDB/WCTResultColumn.h>
 
 WCTColumnBinding::WCTColumnBinding(Class cls,
-                                   const std::shared_ptr<WCTBaseAccessor> accessor,
+                                   const std::shared_ptr<const WCTBaseAccessor> accessor,
                                    const WCDB::UnsafeStringView& propertyName)
 : m_class(cls)
 , m_propertyName(propertyName)
@@ -46,7 +46,7 @@ const WCDB::UnsafeStringView& WCTColumnBinding::getPropertyName() const
     return m_propertyName;
 }
 
-const std::shared_ptr<WCTBaseAccessor>& WCTColumnBinding::getAccessor() const
+const std::shared_ptr<const WCTBaseAccessor>& WCTColumnBinding::getAccessor() const
 {
     return m_accessor;
 }
