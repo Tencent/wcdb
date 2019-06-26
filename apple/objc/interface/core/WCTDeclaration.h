@@ -77,7 +77,7 @@ typedef NSArray<NSObject<WCTColumnCoding> *> WCTColumnCodingRow;
 @class WCTError;
 @class WCTPerformanceFootprint;
 class WCTOptionalBool;
-typedef WCTFundamentalOptional<NSUInteger, 0> WCTOptionalSize;
+class WCTOptionalSize;
 
 typedef int32_t WCTTag;
 static constexpr WCTTag const WCTInvalidTag = 0;

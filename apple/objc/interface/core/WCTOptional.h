@@ -74,12 +74,16 @@ class WCTFundamentalOptional : public WCTIncompleteOptional<T> {
     static_assert(std::is_fundamental<T>::value || std::is_enum<T>::value, "");
 
 public:
-    WCTFundamentalOptional() : Super(defaultValue) {}
+    WCTFundamentalOptional()
+    : Super(defaultValue) {}
 
-    WCTFundamentalOptional(const std::nullopt_t&) : Super(defaultValue) {}
+    WCTFundamentalOptional(const std::nullopt_t&)
+    : Super(defaultValue) {}
 
-    WCTFundamentalOptional(const T& value) : Super(value, defaultValue) {}
+    WCTFundamentalOptional(const T& value)
+    : Super(value, defaultValue) {}
 
+protected:
     WCTFundamentalOptional(std::optional<T>&& optional)
     : Super(std::move(optional), defaultValue)
     {
@@ -93,4 +97,13 @@ public:
     using Super::WCTFundamentalOptional;
 
     WCTOptionalBool(std::optional<bool>&& optional);
+};
+
+class WCTOptionalSize final : public WCTFundamentalOptional<NSUInteger, 0> {
+    using Super = WCTFundamentalOptional<NSUInteger, 0>;
+
+public:
+    using Super::WCTFundamentalOptional;
+
+    WCTOptionalSize(std::optional<size_t>&& optional);
 };
