@@ -20,6 +20,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/SQL.hpp>
+#include <atomic>
 
 namespace WCDB {
 
@@ -27,36 +28,45 @@ SQL::SQL()
 {
 }
 
-SQL::SQL(const SQL& sql) : m_syntax(sql.m_syntax)
+SQL::SQL(const SQL& other)
+: m_syntax(other.m_syntax), m_description(std::atomic_load(&other.m_description))
 {
 }
 
-SQL::SQL(SQL&& sql) : m_syntax(std::move(sql.m_syntax))
+SQL::SQL(SQL&& other)
+: m_syntax(std::move(other.m_syntax))
+, m_description(std::atomic_load(&other.m_description))
+{
+    std::atomic_store(&other.m_description, std::shared_ptr<StringView>(nullptr));
+}
+
+SQL::SQL(const Shadow<Syntax::Identifier>& syntax)
+: m_syntax(syntax), m_description(nullptr)
 {
 }
 
-SQL::SQL(const Shadow<Syntax::Identifier>& syntax) : m_syntax(syntax)
-{
-}
-
-SQL::SQL(Shadow<Syntax::Identifier>&& syntax) : m_syntax(std::move(syntax))
+SQL::SQL(Shadow<Syntax::Identifier>&& syntax)
+: m_syntax(std::move(syntax)), m_description(nullptr)
 {
 }
 
 SQL::SQL(std::unique_ptr<Syntax::Identifier>&& underlying)
-: m_syntax(std::move(underlying))
+: m_syntax(std::move(underlying)), m_description(nullptr)
 {
 }
 
 SQL& SQL::operator=(const SQL& other)
 {
     m_syntax = other.m_syntax;
+    m_description = std::atomic_load(&other.m_description);
     return *this;
 }
 
 SQL& SQL::operator=(SQL&& other)
 {
     m_syntax = std::move(other.m_syntax);
+    m_description = std::atomic_load(&other.m_description);
+    std::atomic_store(&other.m_description, std::shared_ptr<StringView>(nullptr));
     return *this;
 }
 
@@ -76,14 +86,26 @@ void SQL::iterate(const Iterator& iterator)
 
 StringView SQL::getDescription() const
 {
-    if (m_syntax != nullptr) {
-        return m_syntax->getDescription();
+    // class SQL is not designed for thread-safe.
+    // But here, the cache of `m_description` may be accessed/modified in different threads.
+    // So we must make this const function thread-safe.
+    std::shared_ptr<StringView> description = std::atomic_load(&m_description);
+    while (description == nullptr) {
+        if (m_syntax != nullptr) {
+            std::atomic_store(
+            &m_description, std::make_shared<StringView>(m_syntax->getDescription()));
+            description = std::atomic_load(&m_description);
+        } else {
+            return StringView();
+        }
     }
-    return StringView();
+    return *description.get();
 }
 
 Syntax::Identifier& SQL::syntax()
 {
+    // Note that `syntax()` is not designed for thread-safe.
+    std::atomic_store(&m_description, std::shared_ptr<StringView>(nullptr));
     return *m_syntax.get();
 }
 

@@ -58,6 +58,7 @@ protected:
     SQL& operator=(SQL&& other);
 
 private:
+    mutable std::shared_ptr<StringView> m_description;
     Shadow<Syntax::Identifier> m_syntax;
 };
 

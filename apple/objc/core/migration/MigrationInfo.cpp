@@ -79,7 +79,9 @@ const char* MigrationBaseInfo::getSchemaPrefix()
 
 Schema MigrationBaseInfo::getSchemaForDatabase(const UnsafeStringView& database)
 {
-    return getSchemaPrefix() + std::to_string(database.hash());
+    std::ostringstream stream;
+    stream << getSchemaPrefix() << database.hash();
+    return stream.str();
 }
 
 void MigrationBaseInfo::setSource(const UnsafeStringView& table, const UnsafeStringView& database)
