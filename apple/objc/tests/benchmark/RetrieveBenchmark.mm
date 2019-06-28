@@ -40,7 +40,7 @@
     __block NSString* path;
     [self.database close:^{
         TestCaseAssertTrue([self.database removeFiles]);
-        path = [self.factory production:self.directory];
+        path = [self.factory produce:self.directory];
     }];
     TestCaseAssertTrue(path != nil);
     self.path = path;

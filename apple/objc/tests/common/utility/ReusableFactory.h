@@ -42,7 +42,7 @@
 
 @property (nonatomic, assign) double expectedQuality;
 
-- (NSString*)production:(NSString*)destination;
+- (NSString*)produce:(NSString*)destination;
 
 - (BOOL)removePrototypes;
 

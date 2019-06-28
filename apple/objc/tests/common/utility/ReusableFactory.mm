@@ -103,7 +103,7 @@
     return expired;
 }
 
-- (NSString*)production:(NSString*)destination
+- (NSString*)produce:(NSString*)destination
 {
     if ([self isPrototypeExpired]) {
         // remove old prototypes

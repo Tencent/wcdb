@@ -33,7 +33,7 @@
 
 - (void)setUpDatabase
 {
-    self.path = [self.factory production:self.directory];
+    self.path = [self.factory produce:self.directory];
 
     [self doSetUpDatabase];
 
