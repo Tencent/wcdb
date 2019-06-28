@@ -131,8 +131,9 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
         m_schemaForSourceDatabase = Schema::main();
     }
 
+    Column rowid = Column::rowid();
     Columns columns;
-    columns.push_back(Column::rowid());
+    columns.push_back(rowid);
     columns.insert(columns.end(), uniqueColumns.begin(), uniqueColumns.end());
 
     ResultColumns resultColumns;
@@ -165,7 +166,7 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
 
     // Migrate
     {
-        OrderingTerm descendingRowid = OrderingTerm(Column::rowid()).order(Order::DESC);
+        OrderingTerm descendingRowid = OrderingTerm(rowid).order(Order::DESC);
 
         m_statementForMigratingOneRow = StatementInsert()
                                         .insertIntoTable(getTable())
@@ -189,12 +190,12 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
         if (!m_integerPrimaryKey) {
             m_statementForSelectingMaxRowID
             = StatementSelect()
-              .select(Column::rowid().max() + 1)
+              .select(rowid.max() + 1)
               .from(TableOrSubquery(m_unionedView).schema(Schema::temp()));
         }
 
         m_statementForDeletingSpecifiedRow
-        = StatementDelete().deleteFrom(qualifiedSourceTable).where(Column::rowid() == BindParameter(1));
+        = StatementDelete().deleteFrom(qualifiedSourceTable).where(rowid == BindParameter(1));
 
         m_statementForDroppingSourceTable = StatementDropTable()
                                             .dropTable(getSourceTable())
