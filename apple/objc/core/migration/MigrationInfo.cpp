@@ -138,55 +138,50 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
     ResultColumns resultColumns;
     resultColumns.insert(resultColumns.begin(), columns.begin(), columns.end());
 
+    TableOrSubquery sourceTableQuery
+    = TableOrSubquery(getSourceTable()).schema(m_schemaForSourceDatabase);
+    QualifiedTable qualifiedSourceTable
+    = QualifiedTable(getSourceTable()).schema(m_schemaForSourceDatabase);
+
     // View
     {
         std::ostringstream stream;
         stream << getUnionedViewPrefix() << getTable();
         m_unionedView = StringView(stream.str());
 
-        StatementSelect select
-        = StatementSelect()
-          .select(resultColumns)
-          .from(TableOrSubquery(getTable()).schema(Schema::main()));
-
-        if (isCrossDatabase()) {
-            // UNION ALL has better performance, but it will trigger a bug of SQLite. See https://github.com/RingoD/SQLiteBugOfUnionAll for further information.
-            select.union_();
-        } else {
-            select.unionAll();
-        }
-
-        select.select(resultColumns).from(TableOrSubquery(getSourceTable()).schema(m_schemaForSourceDatabase));
-
-        m_statementForCreatingUnionedView = StatementCreateView()
-                                            .createView(m_unionedView)
-                                            .temp()
-                                            .ifNotExists()
-                                            .columns(columns)
-                                            .as(select);
+        m_statementForCreatingUnionedView
+        = StatementCreateView()
+          .createView(m_unionedView)
+          .temp()
+          .ifNotExists()
+          .columns(columns)
+          .as(StatementSelect()
+              .select(resultColumns)
+              .from(TableOrSubquery(getTable()).schema(Schema::main()))
+              .unionAll()
+              .select(resultColumns)
+              .from(sourceTableQuery));
     }
 
     // Migrate
     {
         OrderingTerm descendingRowid = OrderingTerm(Column::rowid()).order(Order::DESC);
 
-        m_statementForMigratingOneRow
-        = StatementInsert()
-          .insertIntoTable(getTable())
-          .orReplace()
-          .schema(Schema::main())
-          .columns(columns)
-          .values(StatementSelect()
-                  .select(resultColumns)
-                  .from(TableOrSubquery(getSourceTable()).schema(m_schemaForSourceDatabase))
-                  .order(descendingRowid)
-                  .limit(1));
+        m_statementForMigratingOneRow = StatementInsert()
+                                        .insertIntoTable(getTable())
+                                        .orReplace()
+                                        .schema(Schema::main())
+                                        .columns(columns)
+                                        .values(StatementSelect()
+                                                .select(resultColumns)
+                                                .from(sourceTableQuery)
+                                                .order(descendingRowid)
+                                                .limit(1));
 
-        m_statementForDeletingMigratedOneRow
-        = StatementDelete()
-          .deleteFrom(QualifiedTable(getSourceTable()).schema(m_schemaForSourceDatabase))
-          .order(descendingRowid)
-          .limit(1);
+        m_statementForDeletingMigratedOneRow = StatementDelete()
+                                               .deleteFrom(qualifiedSourceTable)
+                                               .order(descendingRowid)
+                                               .limit(1);
     }
 
     // Compatible
@@ -199,9 +194,7 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
         }
 
         m_statementForDeletingSpecifiedRow
-        = StatementDelete()
-          .deleteFrom(QualifiedTable(getSourceTable()).schema(m_schemaForSourceDatabase))
-          .where(Column::rowid() == BindParameter(1));
+        = StatementDelete().deleteFrom(qualifiedSourceTable).where(Column::rowid() == BindParameter(1));
 
         m_statementForDroppingSourceTable = StatementDropTable()
                                             .dropTable(getSourceTable())
