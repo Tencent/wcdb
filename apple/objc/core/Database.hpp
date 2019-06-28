@@ -126,10 +126,8 @@ public:
 #pragma mark - File
 public:
     const StringView &getPath() const;
-    StringView getSHMPath() const;
-    StringView getWALPath() const;
-    StringView getJournalPath() const;
     std::list<StringView> getPaths() const;
+    static std::list<StringView> pathsOfDatabase(const UnsafeStringView &database);
 
     bool moveFiles(const UnsafeStringView &directory);
     bool removeFiles();
@@ -137,10 +135,6 @@ public:
 
 #pragma mark - Repair
 public:
-    StringView getFirstMaterialPath() const;
-    StringView getLastMaterialPath() const;
-    const StringView &getFactoryDirectory() const;
-
     typedef Repair::Factory::Filter BackupFilter;
     void filterBackup(const BackupFilter &tableShouldBeBackedup);
     bool backup();

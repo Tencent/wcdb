@@ -33,7 +33,7 @@ namespace Repair {
 
 #pragma mark - Factory
 Factory::Factory(const UnsafeStringView &database_)
-: database(database_), directory(Path::addExtention(database_, ".factory"))
+: database(database_), directory(factoryPathForDatabase(database_))
 {
 }
 
@@ -181,6 +181,11 @@ StringView Factory::firstMaterialPathForDatabase(const UnsafeStringView &databas
 StringView Factory::lastMaterialPathForDatabase(const UnsafeStringView &database)
 {
     return Path::addExtention(database, "-last.material");
+}
+
+StringView Factory::factoryPathForDatabase(const UnsafeStringView &database)
+{
+    return Path::addExtention(database, ".factory");
 }
 
 StringView Factory::getRestoreDirectory() const

@@ -78,6 +78,7 @@ public:
 
     static StringView firstMaterialPathForDatabase(const UnsafeStringView &database);
     static StringView lastMaterialPathForDatabase(const UnsafeStringView &database);
+    static StringView factoryPathForDatabase(const UnsafeStringView &database);
 
     static std::optional<StringView>
     materialForSerializingForDatabase(const UnsafeStringView &database);

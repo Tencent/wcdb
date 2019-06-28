@@ -51,9 +51,9 @@ public:
     void clearPath();
     const StringView &getPath() const;
 
-    static const char *getSHMSuffix();
-    static const char *getWALSuffix();
-    static const char *getJournalSuffix();
+    static StringView shmPathOfDatabase(const UnsafeStringView &database);
+    static StringView walPathOfDatabase(const UnsafeStringView &database);
+    static StringView journalPathOfDatabase(const UnsafeStringView &database);
 
 private:
     StringView m_path;

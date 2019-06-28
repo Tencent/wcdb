@@ -457,50 +457,25 @@ const StringView &Database::getPath() const
     return path;
 }
 
-StringView Database::getSHMPath() const
-{
-    return Path::addExtention(getPath(), Handle::getSHMSuffix());
-}
-
-StringView Database::getWALPath() const
-{
-    return Path::addExtention(getPath(), Handle::getWALSuffix());
-}
-
-StringView Database::getJournalPath() const
-{
-    return Path::addExtention(getPath(), Handle::getJournalSuffix());
-}
-
 std::list<StringView> Database::getPaths() const
 {
+    return pathsOfDatabase(path);
+}
+
+std::list<StringView> Database::pathsOfDatabase(const UnsafeStringView &database)
+{
     return {
-        getPath(),
-        getWALPath(),
-        getFirstMaterialPath(),
-        getLastMaterialPath(),
-        getFactoryDirectory(),
-        getJournalPath(),
-        getSHMPath(),
+        StringView(database),
+        Handle::walPathOfDatabase(database),
+        Repair::Factory::firstMaterialPathForDatabase(database),
+        Repair::Factory::lastMaterialPathForDatabase(database),
+        Repair::Factory::factoryPathForDatabase(database),
+        Handle::journalPathOfDatabase(database),
+        Handle::shmPathOfDatabase(database),
     };
 }
 
 #pragma mark - Repair
-StringView Database::getFirstMaterialPath() const
-{
-    return Repair::Factory::firstMaterialPathForDatabase(getPath());
-}
-
-StringView Database::getLastMaterialPath() const
-{
-    return Repair::Factory::lastMaterialPathForDatabase(getPath());
-}
-
-const StringView &Database::getFactoryDirectory() const
-{
-    return m_factory.directory;
-}
-
 void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
 {
     LockGuard memoryGuard(m_memory);
@@ -674,8 +649,9 @@ bool Database::removeMaterials()
 {
     bool result = false;
     close([&result, this]() {
-        result
-        = FileManager::removeItems({ getFirstMaterialPath(), getLastMaterialPath() });
+        result = FileManager::removeItems(
+        { Repair::Factory::firstMaterialPathForDatabase(path),
+          Repair::Factory::lastMaterialPathForDatabase(path) });
         if (!result) {
             assignWithSharedThreadedError();
         }
