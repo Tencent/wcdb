@@ -147,16 +147,10 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
         StatementSelect select
         = StatementSelect()
           .select(resultColumns)
-          .from(TableOrSubquery(getTable()).schema(Schema::main()));
-
-        if (isCrossDatabase()) {
-            // UNION ALL has better performance, but it will trigger a bug of SQLite. See https://github.com/RingoD/SQLiteBugOfUnionAll for further information.
-            select.union_();
-        } else {
-            select.unionAll();
-        }
-
-        select.select(resultColumns).from(TableOrSubquery(getSourceTable()).schema(m_schemaForSourceDatabase));
+          .from(TableOrSubquery(getTable()).schema(Schema::main()))
+          .unionAll()
+          .select(resultColumns)
+          .from(TableOrSubquery(getSourceTable()).schema(m_schemaForSourceDatabase));
 
         m_statementForCreatingUnionedView = StatementCreateView()
                                             .createView(m_unionedView)
