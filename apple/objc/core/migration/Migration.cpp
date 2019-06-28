@@ -258,7 +258,7 @@ bool Migration::Binder::stopBinding(bool succeed)
 {
     WCTAssert(m_binding);
     if (succeed) {
-        m_bindings.clear();
+        m_migration.tryReduceBounds(m_bindings);
         for (const auto& iter : m_referenceds) {
             if (iter.second != nullptr) {
                 m_bindings.emplace(iter.first, iter.second.get());
@@ -326,6 +326,31 @@ Migration::getOrInitInfo(InfoInitializer& initializer, const UnsafeStringView& t
         info = getInfo(table);
     }
     return info;
+}
+
+void Migration::tryReduceBounds(StringViewMap<const MigrationInfo*>& bounds)
+{
+    bool reduce = false;
+    {
+        SharedLockGuard lockGuard(m_lock);
+        for (const auto& iter : bounds) {
+            if (m_migratings.find(iter.second) == m_migratings.end()) {
+                reduce = true;
+                break;
+            }
+        }
+    }
+    if (reduce) {
+        LockGuard lockGuard(m_lock);
+        for (auto iter = bounds.begin(); iter != bounds.end();) {
+            const MigrationInfo* info = iter->second;
+            if (m_migratings.find(info) == m_migratings.end()) {
+                iter = bounds.erase(iter);
+            } else {
+                ++iter;
+            }
+        }
+    }
 }
 
 #pragma mark - Step

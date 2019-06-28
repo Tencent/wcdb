@@ -144,6 +144,7 @@ public:
 protected:
     std::optional<RecyclableMigrationInfo>
     getOrInitInfo(InfoInitializer& initializer, const UnsafeStringView& table);
+    void tryReduceBounds(StringViewMap<const MigrationInfo*>& bounds);
 
 private:
 #pragma mark - Step
