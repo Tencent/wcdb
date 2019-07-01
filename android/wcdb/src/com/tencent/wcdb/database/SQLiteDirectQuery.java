@@ -68,7 +68,7 @@ public class SQLiteDirectQuery extends SQLiteProgram {
 
     public int step(int count) {
         try {
-            if (acquirePreparedStatement()) {
+            if (acquirePreparedStatement(false)) {
                 mPreparedStatement.beginOperation("directQuery", getBindArgs());
                 mPreparedStatement.attachCancellationSignal(mCancellationSignal);
             }

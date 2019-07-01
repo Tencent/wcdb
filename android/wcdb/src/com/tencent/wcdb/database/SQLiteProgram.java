@@ -249,7 +249,7 @@ public abstract class SQLiteProgram extends SQLiteClosable {
         mBindArgs[index - 1] = value;
     }
 
-    protected synchronized boolean acquirePreparedStatement() {
+    protected synchronized boolean acquirePreparedStatement(boolean persist) {
         SQLiteSession session = mDatabase.getThreadSession();
         if (session == mBoundSession)
             return false;
@@ -259,7 +259,7 @@ public abstract class SQLiteProgram extends SQLiteClosable {
         }
 
         mPreparedStatement = session.acquirePreparedStatement(mSql,
-                mDatabase.getThreadDefaultConnectionFlags(mReadOnly));
+                mDatabase.getThreadDefaultConnectionFlags(mReadOnly), persist);
         mPreparedStatement.bindArguments(mBindArgs);
         mBoundSession = session;
         return true;

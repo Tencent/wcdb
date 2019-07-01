@@ -45,7 +45,7 @@ public class SQLiteAsyncQuery extends SQLiteProgram {
 
     void acquire() {
         if (mPreparedStatement == null) {
-            acquirePreparedStatement();
+            acquirePreparedStatement(true);
             mPreparedStatement.bindArguments(getBindArgs());
         }
     }
