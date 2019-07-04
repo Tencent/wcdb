@@ -54,9 +54,9 @@
     [self reset];
 }
 
-- (void)setExpectedQuality:(double)expectedQuality
+- (void)setQuality:(double)expectedQuality
 {
-    _expectedQuality = expectedQuality;
+    _quality = expectedQuality;
     [self reset];
 }
 
@@ -64,7 +64,7 @@
 {
     @synchronized(self) {
         if (_prototype == nil) {
-            NSString* fileName = [NSString stringWithFormat:@"%@_%@", self.delegate.category, [NSNumber numberWithDouble:self.expectedQuality]];
+            NSString* fileName = [NSString stringWithFormat:@"%@_%@", self.delegate.category, [NSNumber numberWithDouble:self.quality]];
             _prototype = [self.directory stringByAppendingPathComponent:fileName];
         }
         return _prototype;
@@ -95,9 +95,9 @@
     BOOL expired = ![self.fileManager isFileImmutableOfItemAtPath:self.prototype error:nil];
     if (!expired) {
         double quality = [self.delegate getQuality:self.prototype];
-        expired = quality > self.expectedQuality * (1.0f + self.tolerance) || quality < self.expectedQuality * (1.0f - self.tolerance);
+        expired = quality > self.quality * (1.0f + self.tolerance) || quality < self.quality * (1.0f - self.tolerance);
         if (expired) {
-            TestCaseLog(@"Prototype is expired: %f/%f", quality, self.expectedQuality);
+            TestCaseLog(@"Prototype is expired: %f/%f", quality, self.quality);
         }
     }
     return expired;
@@ -156,7 +156,7 @@
             quality = [self.delegate getQuality:self.prototype];
 
             // progress
-            double newProgress = quality / self.expectedQuality;
+            double newProgress = quality / self.quality;
             if (newProgress - progress > 0.05f) {
                 if (newProgress > 1.0f) {
                     newProgress = 1.0f;
@@ -164,11 +164,11 @@
                 progress = newProgress;
                 TestCaseLog(@"Preparing %.2f%%", progress * 100.0f);
             }
-        } while (quality < self.expectedQuality * (1.0f - self.tolerance));
+        } while (quality < self.quality * (1.0f - self.tolerance));
         if (![self willEndPreparing]) {
             return NO;
         }
-    } while (quality > self.expectedQuality * (1.0f + self.tolerance));
+    } while (quality > self.quality * (1.0f + self.tolerance));
     return YES;
 }
 

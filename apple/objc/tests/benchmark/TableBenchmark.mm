@@ -30,7 +30,7 @@
 {
     [super setUp];
     self.factory.tolerance = 0.0f;
-    self.factory.expectedQuality = 100000;
+    self.factory.quality = 100000;
 }
 
 - (void)setUpDatabase
@@ -91,13 +91,13 @@
         if (tableNames == nil) {
             NSString* pattern = [NSString stringWithFormat:@"%s%%", WCDB::Syntax::builtinTablePrefix];
 
-            NSMutableArray<NSString*>* names = [NSMutableArray arrayWithCapacity:(NSUInteger) self.factory.expectedQuality];
+            NSMutableArray<NSString*>* names = [NSMutableArray arrayWithCapacity:(NSUInteger) self.factory.quality];
             for (WCTValue* value in [self.database getColumnFromStatement:WCDB::StatementSelect().select(WCTMaster.name).from(WCTMaster.tableName).where(WCTMaster.name.notLike(pattern))]) {
                 [names addObject:value.stringValue];
             }
             tableNames = [NSArray arrayWithArray:names];
         }
-        TestCaseAssertTrue(tableNames.count == self.factory.expectedQuality);
+        TestCaseAssertTrue(tableNames.count == self.factory.quality);
     }
     tearDown:^{
         [self tearDownDatabase];
@@ -135,7 +135,7 @@
         TestCaseAssertEqual(tableNames.count, numberOfTables);
 
         if (objects == nil) {
-            objects = [self.random testCaseObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.expectedQuality];
+            objects = [self.random testCaseObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.quality];
         }
     }
     tearDown:^{
@@ -173,7 +173,7 @@
         TestCaseAssertEqual(tableNames.count, numberOfTables);
 
         if (objects == nil) {
-            objects = [self.random testCaseObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.expectedQuality];
+            objects = [self.random testCaseObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.quality];
         }
     }
     tearDown:^{
@@ -220,7 +220,7 @@
 - (BOOL)stepPreparePrototype:(NSString*)path
 {
     int numberOfTables = (int) [self getQuality:path];
-    int maxNumberOfTables = (int) self.factory.expectedQuality;
+    int maxNumberOfTables = (int) self.factory.quality;
     int step = maxNumberOfTables / 100;
     if (step > maxNumberOfTables - numberOfTables) {
         step = maxNumberOfTables - numberOfTables;

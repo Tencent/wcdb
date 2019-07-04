@@ -77,7 +77,7 @@
 
 - (void)doTestMigrate
 {
-    self.factory.expectedQuality = 100000;
+    self.factory.quality = 100000;
     [self
     doMeasure:^{
         while ([self.database stepMigration] && ![self.database isMigrated])

@@ -30,8 +30,8 @@
 {
     [super setUp];
 
-    self.factory.expectedQuality = 100.0; // file size in MB
-    _step = (int) self.factory.expectedQuality * 100;
+    self.factory.quality = 100.0; // file size in MB
+    _step = (int) self.factory.quality * 100;
     self.factory.tolerance = 0.02;
 }
 

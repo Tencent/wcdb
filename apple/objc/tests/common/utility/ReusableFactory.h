@@ -40,7 +40,7 @@
 
 @property (nonatomic, assign) double tolerance;
 
-@property (nonatomic, assign) double expectedQuality;
+@property (nonatomic, assign) double quality;
 
 - (NSString*)produce:(NSString*)destination;
 

@@ -28,7 +28,7 @@
 {
     [super setUp];
     self.factory.tolerance = 0.0f;
-    self.factory.expectedQuality = 1000000;
+    self.factory.quality = 1000000;
 }
 
 - (void)setUpDatabase
@@ -85,7 +85,7 @@
         [self setUpDatabase];
 
         if (objects == nil) {
-            objects = [self.random testCaseObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.expectedQuality];
+            objects = [self.random testCaseObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.quality];
         }
 
         TestCaseAssertOptionalEqual([self.database getNumberOfWalFrames], 0);
@@ -116,7 +116,7 @@
         result = nil;
     }
     checkCorrectness:^{
-        TestCaseAssertEqual(result.count, self.factory.expectedQuality);
+        TestCaseAssertEqual(result.count, self.factory.quality);
     }];
 }
 
@@ -134,7 +134,7 @@
         [self setUpDatabase];
 
         if (objects == nil) {
-            objects = [self.random testCaseObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.expectedQuality];
+            objects = [self.random testCaseObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.quality];
         }
 
         TestCaseAssertOptionalEqual([self.database getNumberOfWalFrames], 0);
@@ -157,7 +157,7 @@
 - (BOOL)stepPreparePrototype:(NSString*)path
 {
     int numberOfObjects = (int) [self getQuality:path];
-    int maxNumberOfObjects = (int) self.factory.expectedQuality;
+    int maxNumberOfObjects = (int) self.factory.quality;
     int step = maxNumberOfObjects / 100;
     if (step > maxNumberOfObjects - numberOfObjects) {
         step = maxNumberOfObjects - numberOfObjects;
