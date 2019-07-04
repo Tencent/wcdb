@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#import "ReusableFactory.h"
+#import "Factory.h"
 #import "NSObject+TestCase.h"
 #import "TestCaseLog.h"
 
-@interface ReusableFactory ()
+@interface Factory ()
 @property (nonatomic, readonly) NSFileManager* fileManager;
 @property (nonatomic, readonly) NSString* prototype;
 @property (nonatomic, readonly) NSArray<NSString*>* prototypes;
 @end
 
-@implementation ReusableFactory {
+@implementation Factory {
     NSString* _prototype;
     NSArray<NSString*>* _prototypes;
 }
@@ -48,7 +48,7 @@
     _prototypes = nil;
 }
 
-- (void)setDelegate:(id<ReusableFactoryPreparation>)delegate
+- (void)setDelegate:(id<FactoryPreparation>)delegate
 {
     _delegate = delegate;
     [self reset];

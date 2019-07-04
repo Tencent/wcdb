@@ -261,8 +261,8 @@
 		234F0698227AA54600DD65A2 /* TestCaseCounter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0684227AA54400DD65A2 /* TestCaseCounter.mm */; };
 		234F0699227AA54600DD65A2 /* TestCaseResult.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0687227AA54400DD65A2 /* TestCaseResult.mm */; };
 		234F069A227AA54600DD65A2 /* TestCaseResult.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0687227AA54400DD65A2 /* TestCaseResult.mm */; };
-		234F069B227AA54600DD65A2 /* ReusableFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0688227AA54500DD65A2 /* ReusableFactory.mm */; };
-		234F069C227AA54600DD65A2 /* ReusableFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0688227AA54500DD65A2 /* ReusableFactory.mm */; };
+		234F069B227AA54600DD65A2 /* Factory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0688227AA54500DD65A2 /* Factory.mm */; };
+		234F069C227AA54600DD65A2 /* Factory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0688227AA54500DD65A2 /* Factory.mm */; };
 		234F069D227AA54600DD65A2 /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0689227AA54500DD65A2 /* Random.mm */; settings = {COMPILER_FLAGS = "-fno-sanitize=signed-integer-overflow -fno-sanitize=unsigned-integer-overflow "; }; };
 		234F069E227AA54600DD65A2 /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0689227AA54500DD65A2 /* Random.mm */; settings = {COMPILER_FLAGS = "-fno-sanitize=signed-integer-overflow -fno-sanitize=unsigned-integer-overflow "; }; };
 		234F069F227AA54600DD65A2 /* Dispatch.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F068D227AA54600DD65A2 /* Dispatch.mm */; };
@@ -1370,7 +1370,7 @@
 		3934958E228265C900E43964 /* CoreFunctionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F05A3227AA4EE00DD65A2 /* CoreFunctionTests.mm */; };
 		3934958F228265C900E43964 /* StatementDropViewTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F05C1227AA4F200DD65A2 /* StatementDropViewTests.mm */; };
 		39349590228265C900E43964 /* StatementCreateIndexTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F05C6227AA4F300DD65A2 /* StatementCreateIndexTests.mm */; };
-		39349591228265C900E43964 /* ReusableFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0688227AA54500DD65A2 /* ReusableFactory.mm */; };
+		39349591228265C900E43964 /* Factory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0688227AA54500DD65A2 /* Factory.mm */; };
 		39349592228265C900E43964 /* StatementAttachTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F05C5227AA4F300DD65A2 /* StatementAttachTests.mm */; };
 		39349593228265C900E43964 /* Benchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F064F227AA52C00DD65A2 /* Benchmark.mm */; };
 		39349594228265C900E43964 /* ColumnCodingObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0625227AA50500DD65A2 /* ColumnCodingObject.mm */; };
@@ -1540,7 +1540,7 @@
 		393496522282733700E43964 /* TableMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0581227AA4CC00DD65A2 /* TableMigrationBenchmark.mm */; };
 		393496532282733700E43964 /* TestCaseResult.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0687227AA54400DD65A2 /* TestCaseResult.mm */; };
 		393496542282733700E43964 /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F067A227AA54300DD65A2 /* NSObject+TestCase.mm */; };
-		393496552282733700E43964 /* ReusableFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0688227AA54500DD65A2 /* ReusableFactory.mm */; };
+		393496552282733700E43964 /* Factory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0688227AA54500DD65A2 /* Factory.mm */; };
 		393496562282733700E43964 /* Dispatch.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F068D227AA54600DD65A2 /* Dispatch.mm */; };
 		39349662228274C300E43964 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2367BD0C2215004300380122 /* WCDB.framework */; };
 		39349663228274C700E43964 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 23C43BCC2087435800AB186D /* libz.tbd */; };
@@ -1943,9 +1943,9 @@
 		234F0685227AA54400DD65A2 /* TestCaseLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCaseLog.h; sourceTree = "<group>"; };
 		234F0686227AA54400DD65A2 /* TestCaseMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCaseMacro.h; sourceTree = "<group>"; };
 		234F0687227AA54400DD65A2 /* TestCaseResult.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCaseResult.mm; sourceTree = "<group>"; };
-		234F0688227AA54500DD65A2 /* ReusableFactory.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ReusableFactory.mm; sourceTree = "<group>"; };
+		234F0688227AA54500DD65A2 /* Factory.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Factory.mm; sourceTree = "<group>"; };
 		234F0689227AA54500DD65A2 /* Random.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Random.mm; sourceTree = "<group>"; };
-		234F068A227AA54500DD65A2 /* ReusableFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReusableFactory.h; sourceTree = "<group>"; };
+		234F068A227AA54500DD65A2 /* Factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Factory.h; sourceTree = "<group>"; };
 		234F068B227AA54500DD65A2 /* TestCaseAssertion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCaseAssertion.h; sourceTree = "<group>"; };
 		234F068C227AA54500DD65A2 /* Random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Random.h; sourceTree = "<group>"; };
 		234F068D227AA54600DD65A2 /* Dispatch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Dispatch.mm; sourceTree = "<group>"; };
@@ -3218,8 +3218,8 @@
 				234F0689227AA54500DD65A2 /* Random.mm */,
 				234F067D227AA54300DD65A2 /* Random+WCDB.h */,
 				234F068E227AA54600DD65A2 /* Random+WCDB.mm */,
-				234F068A227AA54500DD65A2 /* ReusableFactory.h */,
-				234F0688227AA54500DD65A2 /* ReusableFactory.mm */,
+				234F068A227AA54500DD65A2 /* Factory.h */,
+				234F0688227AA54500DD65A2 /* Factory.mm */,
 				234F0679227AA54300DD65A2 /* Signpost.h */,
 				234F0683227AA54400DD65A2 /* Signpost.mm */,
 				234F068B227AA54500DD65A2 /* TestCaseAssertion.h */,
@@ -5234,7 +5234,7 @@
 				234F05E7227AA4F600DD65A2 /* CoreFunctionTests.mm in Sources */,
 				234F0604227AA4F600DD65A2 /* StatementDropViewTests.mm in Sources */,
 				234F0609227AA4F600DD65A2 /* StatementCreateIndexTests.mm in Sources */,
-				234F069B227AA54600DD65A2 /* ReusableFactory.mm in Sources */,
+				234F069B227AA54600DD65A2 /* Factory.mm in Sources */,
 				234F0608227AA4F600DD65A2 /* StatementAttachTests.mm in Sources */,
 				234F065A227AA52E00DD65A2 /* Benchmark.mm in Sources */,
 				234F063D227AA50800DD65A2 /* ColumnCodingObject.mm in Sources */,
@@ -5407,7 +5407,7 @@
 				234F0589227AA4CC00DD65A2 /* TableMigrationBenchmark.mm in Sources */,
 				234F069A227AA54600DD65A2 /* TestCaseResult.mm in Sources */,
 				234F0690227AA54600DD65A2 /* NSObject+TestCase.mm in Sources */,
-				234F069C227AA54600DD65A2 /* ReusableFactory.mm in Sources */,
+				234F069C227AA54600DD65A2 /* Factory.mm in Sources */,
 				234F06A0227AA54600DD65A2 /* Dispatch.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -6018,7 +6018,7 @@
 				3934958E228265C900E43964 /* CoreFunctionTests.mm in Sources */,
 				3934958F228265C900E43964 /* StatementDropViewTests.mm in Sources */,
 				39349590228265C900E43964 /* StatementCreateIndexTests.mm in Sources */,
-				39349591228265C900E43964 /* ReusableFactory.mm in Sources */,
+				39349591228265C900E43964 /* Factory.mm in Sources */,
 				39349592228265C900E43964 /* StatementAttachTests.mm in Sources */,
 				39349593228265C900E43964 /* Benchmark.mm in Sources */,
 				39349594228265C900E43964 /* ColumnCodingObject.mm in Sources */,
@@ -6191,7 +6191,7 @@
 				393496522282733700E43964 /* TableMigrationBenchmark.mm in Sources */,
 				393496532282733700E43964 /* TestCaseResult.mm in Sources */,
 				393496542282733700E43964 /* NSObject+TestCase.mm in Sources */,
-				393496552282733700E43964 /* ReusableFactory.mm in Sources */,
+				393496552282733700E43964 /* Factory.mm in Sources */,
 				393496562282733700E43964 /* Dispatch.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -19,7 +19,7 @@
  */
 
 #import "BaseTestCase.h"
-#import "ReusableFactory.h"
+#import "Factory.h"
 #import <WCDB/WCDB.h>
 
 typedef NS_ENUM(NSUInteger, DatabaseTestCaseExpect) {
@@ -28,7 +28,7 @@ typedef NS_ENUM(NSUInteger, DatabaseTestCaseExpect) {
     DatabaseTestCaseExpectSomeSQLs,
 };
 
-@interface DatabaseTestCase : BaseTestCase <ReusableFactoryPreparation>
+@interface DatabaseTestCase : BaseTestCase <FactoryPreparation>
 
 #pragma mark - Path
 @property (nonatomic, retain) NSString* path;
@@ -37,7 +37,7 @@ typedef NS_ENUM(NSUInteger, DatabaseTestCaseExpect) {
 @property (readonly, nonatomic) WCTDatabase* database;
 
 #pragma mark - Factory
-@property (nonatomic, readonly) ReusableFactory* factory;
+@property (nonatomic, readonly) Factory* factory;
 
 #pragma mark - SQL
 + (void)enableSQLTrace;

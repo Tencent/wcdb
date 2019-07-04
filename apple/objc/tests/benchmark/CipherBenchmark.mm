@@ -58,7 +58,7 @@
     [self doTestBatchWrite];
 }
 
-#pragma mark - ReusableFactoryPreparation
+#pragma mark - FactoryPreparation
 - (BOOL)willStartPreparing:(NSString *)path
 {
     [[[WCTDatabase alloc] initWithPath:path] setCipherKey:self.password];

@@ -29,7 +29,7 @@
 @implementation DatabaseTestCase {
     WCTDatabase* _database;
     NSString* _path;
-    ReusableFactory* _factory;
+    Factory* _factory;
 }
 
 - (void)setUp
@@ -79,11 +79,11 @@
 }
 
 #pragma mark - Factory
-- (ReusableFactory*)factory
+- (Factory*)factory
 {
     @synchronized(self) {
         if (_factory == nil) {
-            _factory = [[ReusableFactory alloc] initWithDirectory:self.class.cacheRoot];
+            _factory = [[Factory alloc] initWithDirectory:self.class.cacheRoot];
             _factory.delegate = self;
             [self log:@"cache at %@", self.class.cacheRoot];
         }

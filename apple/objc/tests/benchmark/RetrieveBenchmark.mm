@@ -110,7 +110,7 @@
     }];
 }
 
-#pragma mark - ReusableFactoryPreparation
+#pragma mark - FactoryPreparation
 - (BOOL)stepPreparePrototype:(NSString*)path
 {
     NSArray* objects = [self.random testCaseObjectsWithCount:self.step startingFromIdentifier:0];

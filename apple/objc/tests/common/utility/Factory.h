@@ -20,7 +20,7 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol ReusableFactoryPreparation <NSObject>
+@protocol FactoryPreparation <NSObject>
 @required
 - (BOOL)stepPreparePrototype:(NSString*)path;
 - (double)getQuality:(NSString*)path;
@@ -31,12 +31,12 @@
 - (NSArray<NSString*>*)additionalPrototypes:(NSString*)prototype;
 @end
 
-@interface ReusableFactory : NSObject
+@interface Factory : NSObject
 
 - (instancetype)initWithDirectory:(NSString*)directory;
 @property (nonatomic, readonly) NSString* directory;
 
-@property (nonatomic, assign) id<ReusableFactoryPreparation> delegate;
+@property (nonatomic, weak) id<FactoryPreparation> delegate;
 
 @property (nonatomic, assign) double tolerance;
 

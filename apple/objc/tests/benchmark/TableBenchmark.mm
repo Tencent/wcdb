@@ -216,7 +216,7 @@
     }];
 }
 
-#pragma mark - ReusableFactoryPreparation
+#pragma mark - FactoryPreparation
 - (BOOL)stepPreparePrototype:(NSString*)path
 {
     int numberOfTables = (int) [self getQuality:path];

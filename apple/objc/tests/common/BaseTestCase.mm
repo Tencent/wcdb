@@ -20,8 +20,8 @@
 
 #import "BaseTestCase.h"
 #import "Dispatch.h"
+#import "Factory.h"
 #import "Random.h"
-#import "ReusableFactory.h"
 #import "TestCaseAssertion.h"
 #import "TestCaseLog.h"
 #import "WCTDatabase+TestCase.h"

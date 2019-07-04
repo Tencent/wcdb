@@ -148,7 +148,7 @@
     }];
 }
 
-#pragma mark - ReusableFactoryPreparation
+#pragma mark - FactoryPreparation
 - (BOOL)willEndPreparing:(NSString*)path
 {
     return [[[WCTDatabase alloc] initWithPath:path] truncateCheckpoint];
