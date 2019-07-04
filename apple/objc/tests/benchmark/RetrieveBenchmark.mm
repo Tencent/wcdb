@@ -113,12 +113,12 @@
 #pragma mark - ReusableFactoryPreparation
 - (BOOL)stepPreparePrototype:(NSString*)path
 {
-    NSArray* objects = [self.random benchmarkObjectsWithCount:self.step];
+    NSArray* objects = [self.random testCaseObjectsWithCount:self.step startingFromIdentifier:0];
 
     WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
     return [database runTransaction:^BOOL(WCTHandle* handle) {
                NSString* tableName = self.random.tableName;
-               return [database createTable:tableName withClass:BenchmarkObject.class]
+               return [database createTable:tableName withClass:TestCaseObject.class]
                       && [handle insertObjects:objects intoTable:tableName];
            }]
            && [database truncateCheckpoint];

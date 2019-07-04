@@ -54,7 +54,7 @@
         }
     }];
 
-    TestCaseAssertTrue([self.database createTable:self.tableName withClass:BenchmarkObject.class]);
+    TestCaseAssertTrue([self.database createTable:self.tableName withClass:TestCaseObject.class]);
 
     TestCaseAssertTrue([self.database stepMigration]);
     TestCaseAssertFalse([self.database isMigrated]);

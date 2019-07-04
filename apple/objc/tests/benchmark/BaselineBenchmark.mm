@@ -44,7 +44,7 @@
 - (void)test_create_index
 {
     NSString* indexName = [NSString stringWithFormat:@"%@_index", self.tableName];
-    WCDB::StatementCreateIndex statement = WCDB::StatementCreateIndex().createIndex(indexName).table(self.tableName).indexed(BenchmarkObject.identifier);
+    WCDB::StatementCreateIndex statement = WCDB::StatementCreateIndex().createIndex(indexName).table(self.tableName).indexed(TestCaseObject.identifier);
 
     __block BOOL result;
     [self

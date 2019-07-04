@@ -135,7 +135,7 @@
         TestCaseAssertEqual(tableNames.count, numberOfTables);
 
         if (objects == nil) {
-            objects = [self.random benchmarkObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.expectedQuality];
+            objects = [self.random testCaseObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.expectedQuality];
         }
     }
     tearDown:^{
@@ -173,7 +173,7 @@
         TestCaseAssertEqual(tableNames.count, numberOfTables);
 
         if (objects == nil) {
-            objects = [self.random benchmarkObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.expectedQuality];
+            objects = [self.random testCaseObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.expectedQuality];
         }
     }
     tearDown:^{
@@ -193,7 +193,7 @@
     [self
     doMeasure:^{
         for (NSString* tableName in tableNames) {
-            if (![self.database createTable:tableName withClass:BenchmarkObject.class]) {
+            if (![self.database createTable:tableName withClass:TestCaseObject.class]) {
                 result = NO;
                 return;
             }
@@ -233,7 +233,7 @@
     return [database runTransaction:^BOOL(WCTHandle* handle) {
                WCDB_UNUSED(handle)
                for (int i = 0; i < step; ++i) {
-                   if (![database createTable:self.random.tableName withClass:BenchmarkObject.class]) {
+                   if (![database createTable:self.random.tableName withClass:TestCaseObject.class]) {
                        return NO;
                    }
                }

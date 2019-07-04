@@ -73,7 +73,7 @@
     __block BOOL result;
     [self
     doMeasure:^{
-        for (BenchmarkObject* object in objects) {
+        for (TestCaseObject* object in objects) {
             if (![self.database insertObject:object intoTable:self.tableName]) {
                 result = NO;
                 return;
@@ -85,7 +85,7 @@
         [self setUpDatabase];
 
         if (objects == nil) {
-            objects = [self.random benchmarkObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.expectedQuality];
+            objects = [self.random testCaseObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.expectedQuality];
         }
 
         TestCaseAssertOptionalEqual([self.database getNumberOfWalFrames], 0);
@@ -101,10 +101,10 @@
 
 - (void)doTestRead
 {
-    __block NSArray<BenchmarkObject*>* result;
+    __block NSArray<TestCaseObject*>* result;
     [self
     doMeasure:^{
-        result = [self.database getObjectsOfClass:BenchmarkObject.class fromTable:self.tableName];
+        result = [self.database getObjectsOfClass:TestCaseObject.class fromTable:self.tableName];
     }
     setUp:^{
         [self setUpDatabase];
@@ -134,7 +134,7 @@
         [self setUpDatabase];
 
         if (objects == nil) {
-            objects = [self.random benchmarkObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.expectedQuality];
+            objects = [self.random testCaseObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.expectedQuality];
         }
 
         TestCaseAssertOptionalEqual([self.database getNumberOfWalFrames], 0);
@@ -170,15 +170,15 @@
     auto optionalExists = [database tableExists:self.tableName];
     TestCaseAssertFalse(optionalExists.failed());
     if (optionalExists.value()) {
-        start = [database getValueFromStatement:WCDB::StatementSelect().select(BenchmarkObject.identifier.count()).from(self.tableName)].numberValue.intValue;
+        start = [database getValueFromStatement:WCDB::StatementSelect().select(TestCaseObject.identifier.count()).from(self.tableName)].numberValue.intValue;
     } else {
         create = YES;
     }
-    NSArray* objects = [self.random benchmarkObjectsWithCount:step startingFromIdentifier:start];
+    NSArray* objects = [self.random testCaseObjectsWithCount:step startingFromIdentifier:start];
 
     BOOL committed = [database runTransaction:^BOOL(WCTHandle* handle) {
         if (create) {
-            TestCaseAssertTrue([database createTable:self.tableName withClass:BenchmarkObject.class]);
+            TestCaseAssertTrue([database createTable:self.tableName withClass:TestCaseObject.class]);
         }
         TestCaseAssertTrue([handle insertObjects:objects intoTable:self.tableName]);
         return YES;
@@ -195,7 +195,7 @@
     TestCaseAssertFalse(exists.failed());
     double quality = 0;
     if (exists) {
-        NSNumber* nsQuality = [database getValueFromStatement:WCDB::StatementSelect().select(BenchmarkObject.allProperties.count()).from(self.tableName)].numberValue;
+        NSNumber* nsQuality = [database getValueFromStatement:WCDB::StatementSelect().select(TestCaseObject.allProperties.count()).from(self.tableName)].numberValue;
         TestCaseAssertTrue(nsQuality != nil);
         quality = nsQuality.doubleValue;
     }
