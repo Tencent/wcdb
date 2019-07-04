@@ -36,17 +36,13 @@
         }                                           \
     }
 
-#ifdef WCDB_DEBUG
 #define TestCaseFailure() abort()
-#else
-#define TestCaseFailure()
-#endif
 
-#define TestCaseAssertTrue(cond, ...) \
-    {                                 \
-        if (!(cond)) {                \
-            TestCaseFailure();        \
-        }                             \
+#define TestCaseAssertTrue(cond) \
+    {                            \
+        if (!(cond)) {           \
+            TestCaseFailure();   \
+        }                        \
     }
 
 #define TestCaseAssertFalse(cond) \
@@ -94,3 +90,9 @@
 
 #define TestCaseAssertOptionalFalse(optional) \
     TestCaseAssertOptionalEqual(optional, NO)
+
+#define TestCaseAssertNil(object) \
+    TestCaseAssertTrue(object == nil)
+
+#define TestCaseAssertNotNil(object) \
+    TestCaseAssertTrue(object != nil)
