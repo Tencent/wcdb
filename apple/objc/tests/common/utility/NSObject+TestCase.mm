@@ -97,77 +97,84 @@
 
 - (unsigned long long)getFileSizeIfExists:(NSString *)path
 {
+    unsigned long long size = 0;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if ([fileManager fileExistsAtPath:path]) {
-        return [[fileManager attributesOfItemAtPath:path error:nil] fileSize];
+        NSError *error;
+        size = [[fileManager attributesOfItemAtPath:path error:&error] fileSize];
+        TestCaseAssertNil(error);
     }
-    return 0;
+    return size;
 }
 
-- (BOOL)copyItemsIfExistsAtPaths:(NSArray<NSString *> *)paths toDirectory:(NSString *)directory error:(NSError **)error
+- (void)copyItemsIfExistsAtPaths:(NSArray<NSString *> *)paths toDirectory:(NSString *)directory
 {
     for (NSString *path in paths.reversedArray) {
         NSString *newPath = [NSString pathByReplacingPath:path withDirectory:directory];
         // remove existing file
-        if (![self removeItemIfExistsAtPath:newPath error:error]) {
-            return NO;
-        }
+        [self removeItemIfExistsAtPath:newPath];
         if ([self fileExistsAtPath:path]) {
-            if (![self copyItemAtPath:path toPath:newPath error:error]) {
-                return NO;
-            }
+            NSError *error;
+            [self copyItemAtPath:path toPath:newPath error:&error];
+            TestCaseAssertNil(error);
         }
     }
-    return YES;
 }
 
-- (BOOL)removeItemIfExistsAtPath:(NSString *)path error:(NSError **)error
+- (void)removeItemIfExistsAtPath:(NSString *)path
 {
     if ([self fileExistsAtPath:path]) {
-        return [self removeItemAtPath:path error:error];
+        NSError *error;
+        [self removeItemAtPath:path error:&error];
+        TestCaseAssertNil(error);
     }
-    return YES;
 }
 
-- (BOOL)removeItemsIfExistsAtPaths:(NSArray<NSString *> *)paths error:(NSError **)error
+- (void)removeItemsIfExistsAtPaths:(NSArray<NSString *> *)paths
 {
     for (NSString *path in paths.reversedArray) {
-        if (![self removeItemIfExistsAtPath:path error:error]) {
-            return NO;
-        }
+        [self removeItemIfExistsAtPath:path];
     }
-    return YES;
 }
 
-- (BOOL)setFileImmutable:(BOOL)immutable ofItemsIfExistsAtPaths:(NSArray<NSString *> *)paths error:(NSError **)error
+- (void)setFileImmutable:(BOOL)immutable ofItemsIfExistsAtPaths:(NSArray<NSString *> *)paths
 {
     for (NSString *path in paths.reversedArray) {
         if ([self fileExistsAtPath:path]) {
-            if (![self setAttributes:@{NSFileImmutable : @(immutable)} ofItemAtPath:path error:error]) {
-                return NO;
-            }
+            NSError *error;
+            TestCaseAssertTrue([self setAttributes:@{ NSFileImmutable : @(immutable) } ofItemAtPath:path error:&error]);
+            TestCaseAssertNil(error);
         }
     }
-    return YES;
 }
 
-- (BOOL)isFileImmutableOfItemAtPath:(NSString *)path error:(NSError **)error
+- (BOOL)isFileImmutableOfItemAtPath:(NSString *)path
 {
+    BOOL immutable = NO;
     if ([self fileExistsAtPath:path]) {
-        return [self attributesOfItemAtPath:path error:error].fileIsImmutable;
+        NSError *error;
+        immutable = [self attributesOfItemAtPath:path error:&error].fileIsImmutable;
+        TestCaseAssertNil(error);
     }
-    return NO;
+    return immutable;
 }
 
 #if TARGET_OS_IPHONE && !TARGET_IPHONE_SIMULATOR
-- (BOOL)setFileProtectionOfPath:(NSString *)path to:(NSFileProtectionType)type error:(NSError **)error
+- (void)setFileProtectionOfItemIfExistsAtPath:(NSString *)path to:(NSFileProtectionType)type
 {
-    return [self setAttributes:@{ NSFileProtectionKey : type } ofItemAtPath:path error:error];
+    if ([self fileExistsAtPath:path]) {
+        NSError *error;
+        TestCaseAssertTrue([self setAttributes:@{ NSFileProtectionKey : type } ofItemAtPath:path error:&error]);
+        TestCaseAssertNil(error);
+    }
 }
 
-- (NSFileProtectionType)getFileProtection:(NSString *)path error:(NSError **)error
+- (NSFileProtectionType)getFileProtection:(NSString *)path
 {
-    return [self attributesOfItemAtPath:path error:error][NSFileProtectionKey];
+    NSError *error;
+    NSFileProtectionType type = [self attributesOfItemAtPath:path error:&error][NSFileProtectionKey];
+    TestCaseAssertNil(error);
+    return type;
 }
 #endif
 

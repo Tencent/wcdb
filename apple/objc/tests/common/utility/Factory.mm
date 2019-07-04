@@ -87,12 +87,14 @@
 
 - (BOOL)removePrototypes
 {
-    return [self.fileManager setFileImmutable:NO ofItemsIfExistsAtPaths:self.prototypes error:nil] && [self.fileManager removeItemsIfExistsAtPaths:self.prototypes error:nil];
+    [self.fileManager setFileImmutable:NO ofItemsIfExistsAtPaths:self.prototypes];
+    [self.fileManager removeItemsIfExistsAtPaths:self.prototypes];
+    return YES;
 }
 
 - (BOOL)isPrototypeExpired
 {
-    BOOL expired = ![self.fileManager isFileImmutableOfItemAtPath:self.prototype error:nil];
+    BOOL expired = ![self.fileManager isFileImmutableOfItemAtPath:self.prototype];
     if (!expired) {
         double quality = [self.delegate getQuality:self.prototype];
         expired = quality > self.quality * (1.0f + self.tolerance) || quality < self.quality * (1.0f - self.tolerance);
@@ -107,31 +109,23 @@
 {
     if ([self isPrototypeExpired]) {
         // remove old prototypes
-        if (![self.fileManager setFileImmutable:NO ofItemsIfExistsAtPaths:self.prototypes error:nil]) {
-            return nil;
-        }
+        [self.fileManager setFileImmutable:NO ofItemsIfExistsAtPaths:self.prototypes];
 
         if (![self prepare]) {
             return nil;
         }
 
         // prepare and set immutable
-        if (![self.fileManager setFileImmutable:YES ofItemsIfExistsAtPaths:self.prototypes error:nil]) {
-            return nil;
-        }
+        [self.fileManager setFileImmutable:YES ofItemsIfExistsAtPaths:self.prototypes];
     }
 
     TestCaseLog(@"Prototype at %@", self.prototype);
 
     NSArray<NSString*>* products = [NSString pathsByReplacingPaths:self.prototypes withDirectory:destination];
     // reset immutable for dirty files
-    if (![self.fileManager setFileImmutable:NO ofItemsIfExistsAtPaths:products error:nil]) {
-        return nil;
-    }
-    if (![self.fileManager copyItemsIfExistsAtPaths:self.prototypes toDirectory:destination error:nil]
-        || ![self.fileManager setFileImmutable:NO ofItemsIfExistsAtPaths:products error:nil]) {
-        return nil;
-    }
+    [self.fileManager setFileImmutable:NO ofItemsIfExistsAtPaths:products];
+    [self.fileManager copyItemsIfExistsAtPaths:self.prototypes toDirectory:destination];
+    [self.fileManager setFileImmutable:NO ofItemsIfExistsAtPaths:products];
 
     NSString* product = [NSString pathByReplacingPath:self.prototype withDirectory:destination];
     TestCaseLog(@"Production at %@", product);
@@ -143,9 +137,7 @@
     double progress = 0;
     double quality = 0;
     do {
-        if (![self.fileManager removeItemsIfExistsAtPaths:self.prototypes error:nil]) {
-            return NO;
-        }
+        [self.fileManager removeItemsIfExistsAtPaths:self.prototypes];
         if (![self willStartPreparing]) {
             return NO;
         }
