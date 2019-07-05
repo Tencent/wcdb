@@ -37,12 +37,7 @@
 
 - (NSData *)cipher
 {
-    @synchronized(self) {
-        if (_cipher == nil) {
-            _cipher = Random.shared.data;
-        }
-        return _cipher;
-    }
+    return [@"cipher" dataUsingEncoding:NSASCIIStringEncoding];
 }
 
 - (void)doSetUpDatabase
