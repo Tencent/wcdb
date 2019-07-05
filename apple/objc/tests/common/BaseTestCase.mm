@@ -20,7 +20,7 @@
 
 #import "BaseTestCase.h"
 #import "Dispatch.h"
-#import "Factory.h"
+#import "PrototypeFactory.h"
 #import "Random.h"
 #import "TestCaseAssertion.h"
 #import "TestCaseLog.h"
@@ -118,12 +118,7 @@
 
 - (Random *)random
 {
-    @synchronized(self) {
-        if (_random == nil) {
-            _random = [[Random alloc] init];
-        }
-        return _random;
-    }
+    return [Random shared];
 }
 
 - (NSString *)testName

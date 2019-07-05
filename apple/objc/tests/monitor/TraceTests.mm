@@ -46,7 +46,7 @@
 {
     TestCaseAssertTrue([self createTable]);
 
-    NSArray<TestCaseObject*>* objects = [self.random autoIncrementTestCaseObjectsWithCount:10000];
+    NSArray<TestCaseObject*>* objects = [Random.shared autoIncrementTestCaseObjectsWithCount:10000];
 
     NSArray<WCTPerformanceFootprint*>* expectedFootprints = @[
         [[WCTPerformanceFootprint alloc] initWithSQL:@"BEGIN IMMEDIATE"
@@ -116,7 +116,7 @@
 
 - (void)test_global_trace_performance
 {
-    NSArray<TestCaseObject*>* objects = [self.random autoIncrementTestCaseObjectsWithCount:10000];
+    NSArray<TestCaseObject*>* objects = [Random.shared autoIncrementTestCaseObjectsWithCount:10000];
 
     NSArray<WCTPerformanceFootprint*>* expectedFootprints = @[
         [[WCTPerformanceFootprint alloc] initWithSQL:@"BEGIN IMMEDIATE"

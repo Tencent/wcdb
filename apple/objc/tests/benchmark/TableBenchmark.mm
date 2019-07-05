@@ -18,30 +18,39 @@
  * limitations under the License.
  */
 
+#import "TablesBasedFactory.h"
 #import "TestCase.h"
 
 @interface TableBenchmark : Benchmark
-
+@property (nonatomic, readonly) TablesBasedFactory* factory;
 @end
 
-@implementation TableBenchmark
+@implementation TableBenchmark {
+    TablesBasedFactory* _factory;
+}
+
+- (TablesBasedFactory*)factory
+{
+    @synchronized(self) {
+        if (_factory == nil) {
+            _factory = [[TablesBasedFactory alloc] initWithDirectory:self.class.cacheRoot];
+        }
+        return _factory;
+    }
+}
 
 - (void)setUp
 {
     [super setUp];
+
     self.factory.tolerance = 0.0f;
     self.factory.quality = 100000;
 }
 
 - (void)setUpDatabase
 {
-    __block NSString* path;
-    [self.database close:^{
-        TestCaseAssertTrue([self.database removeFiles]);
-        path = [self.factory produce:self.directory];
-    }];
-    TestCaseAssertTrue(path != nil);
-    self.path = path;
+    TestCaseAssertTrue([self.database removeFiles]);
+    [self.factory produce:self.path];
 
     [self.database close];
     TestCaseAssertTrue([self.database canOpen]);
@@ -135,7 +144,7 @@
         TestCaseAssertEqual(tableNames.count, numberOfTables);
 
         if (objects == nil) {
-            objects = [self.random testCaseObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.quality];
+            objects = [Random.shared testCaseObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.quality];
         }
     }
     tearDown:^{
@@ -173,7 +182,7 @@
         TestCaseAssertEqual(tableNames.count, numberOfTables);
 
         if (objects == nil) {
-            objects = [self.random testCaseObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.quality];
+            objects = [Random.shared testCaseObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.quality];
         }
     }
     tearDown:^{
@@ -204,7 +213,7 @@
         [self setUpDatabase];
 
         if (tableNames == nil) {
-            tableNames = [NSArray arrayWithArray:[self.random tableNamesWithCount:numberOfTables]];
+            tableNames = [NSArray arrayWithArray:[Random.shared tableNamesWithCount:numberOfTables]];
         }
     }
     tearDown:^{
@@ -214,45 +223,6 @@
     checkCorrectness:^{
         TestCaseAssertTrue(result);
     }];
-}
-
-#pragma mark - FactoryPreparation
-- (BOOL)stepPreparePrototype:(NSString*)path
-{
-    int numberOfTables = (int) [self getQuality:path];
-    int maxNumberOfTables = (int) self.factory.quality;
-    int step = maxNumberOfTables / 100;
-    if (step > maxNumberOfTables - numberOfTables) {
-        step = maxNumberOfTables - numberOfTables;
-    }
-    if (step < 1) {
-        step = 1;
-    }
-
-    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
-    return [database runTransaction:^BOOL(WCTHandle* handle) {
-               WCDB_UNUSED(handle)
-               for (int i = 0; i < step; ++i) {
-                   if (![database createTable:self.random.tableName withClass:TestCaseObject.class]) {
-                       return NO;
-                   }
-               }
-               return YES;
-           }]
-           && [database truncateCheckpoint];
-}
-
-- (double)getQuality:(NSString*)path
-{
-    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
-    NSNumber* quality = [database getValueFromStatement:WCDB::StatementSelect().select(WCTMaster.allProperties.count()).from(WCTMaster.tableName).where(WCTMaster.type == @"table")].numberValue;
-    TestCaseAssertTrue(quality != nil);
-    return quality.doubleValue;
-}
-
-- (NSString*)category
-{
-    return @"Tables";
 }
 
 @end

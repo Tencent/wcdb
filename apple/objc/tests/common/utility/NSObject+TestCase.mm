@@ -107,6 +107,16 @@
     return size;
 }
 
+- (void)copyItemsIfExistsAtPath:(NSString *)path toPath:(NSString *)destination
+{
+    [self removeItemIfExistsAtPath:destination];
+    if ([self fileExistsAtPath:path]) {
+        NSError *error;
+        [self copyItemAtPath:path toPath:destination error:&error];
+        TestCaseAssertNil(error);
+    }
+}
+
 - (void)copyItemsIfExistsAtPaths:(NSArray<NSString *> *)paths toDirectory:(NSString *)directory
 {
     for (NSString *path in paths.reversedArray) {
@@ -137,14 +147,19 @@
     }
 }
 
+- (void)setFileImmutable:(BOOL)immutable ofItemsIfExistsAtPath:(NSString *)path
+{
+    if ([self fileExistsAtPath:path]) {
+        NSError *error;
+        TestCaseAssertTrue([self setAttributes:@{ NSFileImmutable : @(immutable) } ofItemAtPath:path error:&error]);
+        TestCaseAssertNil(error);
+    }
+}
+
 - (void)setFileImmutable:(BOOL)immutable ofItemsIfExistsAtPaths:(NSArray<NSString *> *)paths
 {
     for (NSString *path in paths.reversedArray) {
-        if ([self fileExistsAtPath:path]) {
-            NSError *error;
-            TestCaseAssertTrue([self setAttributes:@{ NSFileImmutable : @(immutable) } ofItemAtPath:path error:&error]);
-            TestCaseAssertNil(error);
-        }
+        [self setFileImmutable:immutable ofItemsIfExistsAtPath:path];
     }
 }
 

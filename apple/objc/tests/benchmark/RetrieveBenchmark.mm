@@ -18,32 +18,39 @@
  * limitations under the License.
  */
 
+#import "SizeBasedFactory.h"
 #import "TestCase.h"
 
 @interface RetrieveBenchmark : Benchmark
-@property (nonatomic, readonly) int step;
+
 @end
 
-@implementation RetrieveBenchmark
+@implementation RetrieveBenchmark {
+    SizeBasedFactory* _factory;
+}
+
+- (SizeBasedFactory*)factory
+{
+    @synchronized(self) {
+        if (_factory == nil) {
+            _factory = [[SizeBasedFactory alloc] initWithDirectory:self.class.cacheRoot];
+        }
+        return _factory;
+    }
+}
 
 - (void)setUp
 {
     [super setUp];
 
-    self.factory.quality = 100.0; // file size in MB
-    _step = (int) self.factory.quality * 100;
+    self.factory.quality = 100 * 1024 * 1024;
     self.factory.tolerance = 0.02;
 }
 
 - (void)setUpDatabase
 {
-    __block NSString* path;
-    [self.database close:^{
-        TestCaseAssertTrue([self.database removeFiles]);
-        path = [self.factory produce:self.directory];
-    }];
-    TestCaseAssertTrue(path != nil);
-    self.path = path;
+    TestCaseAssertTrue([self.database removeFiles]);
+    [self.factory produce:self.path];
 }
 
 - (void)tearDownDatabase
@@ -108,31 +115,6 @@
     checkCorrectness:^{
         TestCaseAssertEqual(score, 1.0f);
     }];
-}
-
-#pragma mark - FactoryPreparation
-- (BOOL)stepPreparePrototype:(NSString*)path
-{
-    NSArray* objects = [self.random testCaseObjectsWithCount:self.step startingFromIdentifier:0];
-
-    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
-    return [database runTransaction:^BOOL(WCTHandle* handle) {
-               NSString* tableName = self.random.tableName;
-               return [database createTable:tableName withClass:TestCaseObject.class]
-                      && [handle insertObjects:objects intoTable:tableName];
-           }]
-           && [database truncateCheckpoint];
-}
-
-- (double)getQuality:(NSString*)path
-{
-    NSUInteger fileSize = [[[WCTDatabase alloc] initWithPath:path] getFilesSize].value();
-    return (double) fileSize / 1024 / 1024;
-}
-
-- (NSString*)category
-{
-    return @"Repair";
 }
 
 @end

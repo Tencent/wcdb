@@ -233,7 +233,7 @@
 - (void)test_retrieve_all_types
 {
     self.tableClass = AllTypesObject.class;
-    self.tableName = self.random.tableName;
+    self.tableName = Random.shared.tableName;
     TestCaseAssertTrue([self createTable]);
 
     AllTypesObject* maxObject = [AllTypesObject maxObject];

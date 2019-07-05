@@ -21,26 +21,33 @@
 #import "ObjectsBasedBenchmark.h"
 
 @interface CipherBenchmark : ObjectsBasedBenchmark
-@property (nonatomic, readonly) NSData *password;
+@property (nonatomic, readonly) NSData *cipher;
 @end
 
 @implementation CipherBenchmark {
-    NSData *_password;
+    NSData *_cipher;
 }
 
-- (NSData *)password
+- (void)setUp
+{
+    [super setUp];
+
+    self.factory.cipher = self.cipher;
+}
+
+- (NSData *)cipher
 {
     @synchronized(self) {
-        if (_password == nil) {
-            _password = self.random.data;
+        if (_cipher == nil) {
+            _cipher = Random.shared.data;
         }
-        return _password;
+        return _cipher;
     }
 }
 
 - (void)doSetUpDatabase
 {
-    [self.database setCipherKey:self.password];
+    [self.database setCipherKey:self.cipher];
 }
 
 - (void)test_write
@@ -56,24 +63,6 @@
 - (void)test_batch_write
 {
     [self doTestBatchWrite];
-}
-
-#pragma mark - FactoryPreparation
-- (BOOL)willStartPreparing:(NSString *)path
-{
-    [[[WCTDatabase alloc] initWithPath:path] setCipherKey:self.password];
-    return YES;
-}
-
-- (NSString *)category
-{
-    return @"Cipher";
-}
-
-- (double)getQuality:(NSString *)path
-{
-    [[[WCTDatabase alloc] initWithPath:path] setCipherKey:self.password];
-    return [super getQuality:path];
 }
 
 @end

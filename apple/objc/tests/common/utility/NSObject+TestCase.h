@@ -56,9 +56,10 @@
 @interface NSFileManager (TestCase)
 
 - (unsigned long long)getFileSizeIfExists:(NSString*)path;
-- (void)copyItemsIfExistsAtPaths:(NSArray<NSString*>*)paths toDirectory:(NSString*)directory;
+- (void)copyItemsIfExistsAtPath:(NSString*)path toPath:(NSString*)destination;
 - (void)removeItemIfExistsAtPath:(NSString*)path;
 - (void)removeItemsIfExistsAtPaths:(NSArray<NSString*>*)paths;
+- (void)setFileImmutable:(BOOL)immutable ofItemsIfExistsAtPath:(NSString*)path;
 - (void)setFileImmutable:(BOOL)immutable ofItemsIfExistsAtPaths:(NSArray<NSString*>*)paths;
 - (BOOL)isFileImmutableOfItemAtPath:(NSString*)path;
 

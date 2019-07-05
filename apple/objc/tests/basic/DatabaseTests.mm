@@ -113,7 +113,7 @@
 {
     NSString* tableName = @"testTable";
 
-    TestCaseObject* object = [self.random autoIncrementTestCaseObject];
+    TestCaseObject* object = [Random.shared autoIncrementTestCaseObject];
 
     TestCaseAssertTrue([self.database createTable:tableName withClass:TestCaseObject.class]);
     TestCaseAssertTrue([self.database insertObject:object intoTable:tableName]);
@@ -133,7 +133,7 @@
     // reset attribute
     for (NSString* path in self.database.paths) {
         if ([self.fileManager fileExistsAtPath:path]) {
-            TestCaseAssertTrue([self.fileManager setAttributes:@{NSFileImmutable : @(NO)} ofItemAtPath:path error:nil]);
+            TestCaseAssertTrue([self.fileManager setAttributes:@{ NSFileImmutable : @(NO) } ofItemAtPath:path error:nil]);
         }
     }
 }

@@ -33,7 +33,7 @@
 {
     @synchronized(self) {
         if (_object1 == nil) {
-            _object1 = [self.random testCaseObjectWithIdentifier:1];
+            _object1 = [Random.shared testCaseObjectWithIdentifier:1];
         }
         return _object1;
     }
@@ -43,7 +43,7 @@
 {
     @synchronized(self) {
         if (_object2 == nil) {
-            _object2 = [self.random testCaseObjectWithIdentifier:2];
+            _object2 = [Random.shared testCaseObjectWithIdentifier:2];
         }
         return _object2;
     }

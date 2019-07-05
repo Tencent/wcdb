@@ -75,12 +75,12 @@
 
 - (int)getRealStep
 {
-    return self.step + (self.random.uint32 % self.shuffle) * self.random.boolean ? 1 : -1;
+    return self.step + (Random.shared.uint32 % self.shuffle) * Random.shared.boolean ? 1 : -1;
 }
 
 - (BOOL)shouldAttack
 {
-    return self.random.float_0_1 < self.expectedAttackRadio;
+    return Random.shared.float_0_1 < self.expectedAttackRadio;
 }
 
 - (BOOL)isToleranceForRetrieveScore:(double)retrieveScore
@@ -119,8 +119,8 @@
     NSString* currentTable = nil;
     BOOL checkpointed = NO; // leave wal exists
     while (checkpointed || [self.database getFilesSize] < self.expectedDatabaseSize) {
-        if (currentTable == nil || self.random.uint8 % 10 == 0) {
-            currentTable = [self.random tableNameWithPrefix:self.tablePrefix];
+        if (currentTable == nil || Random.shared.uint8 % 10 == 0) {
+            currentTable = [Random.shared tableNameWithPrefix:self.tablePrefix];
             if (![self.database createTable:currentTable withClass:TestCaseObject.class]) {
                 TestCaseFailure();
                 return NO;
@@ -129,14 +129,14 @@
 
         int count = 0;
         do {
-            count = self.random.uint8;
+            count = Random.shared.uint8;
         } while (count == 0);
-        NSArray<TestCaseObject*>* objects = [self.random autoIncrementTestCaseObjectsWithCount:count];
+        NSArray<TestCaseObject*>* objects = [Random.shared autoIncrementTestCaseObjectsWithCount:count];
         if (![self.database insertObjects:objects intoTable:currentTable]) {
             TestCaseFailure();
             return NO;
         }
-        if (self.random.uint8 % 10 == 0) {
+        if (Random.shared.uint8 % 10 == 0) {
             if (![self.database truncateCheckpoint]) {
                 TestCaseFailure();
                 return NO;

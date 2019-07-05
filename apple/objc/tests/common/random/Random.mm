@@ -34,12 +34,21 @@
     std::shared_ptr<std::uniform_real_distribution<float>> _uniformFloat_0_1;
     std::shared_ptr<std::uniform_int_distribution<unsigned char>> _uniformUChar;
     std::shared_ptr<std::uniform_int_distribution<int>> _uniformLength;
+    BOOL _stable;
 }
 
-- (void)enableStable
++ (instancetype)shared
+{
+    static Random *s_random = [[Random alloc] init];
+    return s_random;
+}
+
+- (void)setStable:(BOOL)stable
 {
     @synchronized(self) {
-        _engine = std::make_shared<std::default_random_engine>(0);
+        _stable = stable;
+
+        _engine = nullptr;
         _uniformUInt64 = nullptr;
         _uniformUInt32 = nullptr;
         _uniformUInt8 = nullptr;
@@ -50,7 +59,7 @@
         _uniformFloat = nullptr;
         _uniformFloat_0_1 = nullptr;
         _uniformUChar = nullptr;
-        _uniformLength = std::make_shared<std::uniform_int_distribution<int>>(100, 100);
+        _uniformLength = nullptr;
     }
 }
 
@@ -58,8 +67,12 @@
 {
     @synchronized(self) {
         if (_engine == nullptr) {
-            std::random_device rd;
-            _engine = std::make_shared<std::default_random_engine>(rd());
+            if (_stable) {
+                _engine = std::make_shared<std::default_random_engine>(0);
+            } else {
+                std::random_device rd;
+                _engine = std::make_shared<std::default_random_engine>(rd());
+            }
         }
         return _engine;
     }
@@ -159,7 +172,11 @@
 {
     @synchronized(self) {
         if (_uniformLength == nullptr) {
-            _uniformLength = std::make_shared<std::uniform_int_distribution<int>>(1, 100);
+            if (_stable) {
+                _uniformLength = std::make_shared<std::uniform_int_distribution<int>>(100, 100);
+            } else {
+                _uniformLength = std::make_shared<std::uniform_int_distribution<int>>(1, 100);
+            }
         }
         return _uniformLength;
     }

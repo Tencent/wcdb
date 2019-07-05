@@ -18,32 +18,13 @@
  * limitations under the License.
  */
 
+#import "PrototypeFactory.h"
 #import <Foundation/Foundation.h>
 
-@protocol FactoryPreparation <NSObject>
-@required
-- (BOOL)stepPreparePrototype:(NSString*)path;
-- (double)getQuality:(NSString*)path;
-- (NSString*)category;
-@optional
-- (BOOL)willStartPreparing:(NSString*)path;
-- (BOOL)willEndPreparing:(NSString*)path;
-- (NSArray<NSString*>*)additionalPrototypes:(NSString*)prototype;
-@end
+@interface ObjectsBasedFactory : PrototypeFactory <PrototypePreparation>
 
-@interface Factory : NSObject
+@property (nonatomic, readonly) NSString* tableName;
 
-- (instancetype)initWithDirectory:(NSString*)directory;
-@property (nonatomic, readonly) NSString* directory;
-
-@property (nonatomic, weak) id<FactoryPreparation> delegate;
-
-@property (nonatomic, assign) double tolerance;
-
-@property (nonatomic, assign) double quality;
-
-- (NSString*)produce:(NSString*)destination;
-
-- (BOOL)removePrototypes;
+@property (nonatomic, retain) NSData* cipher;
 
 @end

@@ -18,34 +18,33 @@
  * limitations under the License.
  */
 
-#import "TestCaseAssertion.h"
-#import "TestCaseLog.h"
-#import "TestCaseMacro.h"
+#import <Foundation/Foundation.h>
 
-#import "BaseTestCase.h"
-#import "Benchmark.h"
-#import "CRUDTestCase.h"
-#import "DatabaseTestCase.h"
-#import "TableTestCase.h"
+@interface Random : NSObject
 
-#import "Dispatch.h"
-#import "Random.h"
-#import "Signpost.h"
-#import "TestCaseCounter.h"
-#import "TestCaseResult.h"
++ (instancetype)shared;
 
-#import "Random+TestCaseObject.h"
-#import "Random+WCDB.h"
+- (void)setStable:(BOOL)stable;
 
-#import "TestCaseObject+WCTTableCoding.h"
-#import "TestCaseObject.h"
+- (uint64_t)uint64;
+- (uint32_t)uint32;
+- (uint8_t)uint8;
 
-#import "AllTypesObject+WCTTableCoding.h"
-#import "AllTypesObject.h"
+- (int64_t)int64;
+- (int32_t)int32;
 
-#import "NSObject+TestCase.h"
+- (double)double_;
+- (float)float_;
+- (float)float_0_1;
 
-#import "ObjectsBasedFactory.h"
-#import "TablesBasedFactory.h"
+- (BOOL)boolean;
 
-#import <WCDB/WCTDatabase+Test.h>
+- (NSNumber*)number;
+
+- (NSString*)string;
+
+- (NSData*)data;
+- (NSData*)dataWithLength:(NSInteger)length;
+- (NSData*)dataOtherThan:(NSData*)other;
+
+@end

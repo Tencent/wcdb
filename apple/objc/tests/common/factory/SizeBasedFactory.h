@@ -18,34 +18,9 @@
  * limitations under the License.
  */
 
-#import "TestCaseAssertion.h"
-#import "TestCaseLog.h"
-#import "TestCaseMacro.h"
+#import "PrototypeFactory.h"
+#import <Foundation/Foundation.h>
 
-#import "BaseTestCase.h"
-#import "Benchmark.h"
-#import "CRUDTestCase.h"
-#import "DatabaseTestCase.h"
-#import "TableTestCase.h"
+@interface SizeBasedFactory : PrototypeFactory <PrototypePreparation>
 
-#import "Dispatch.h"
-#import "Random.h"
-#import "Signpost.h"
-#import "TestCaseCounter.h"
-#import "TestCaseResult.h"
-
-#import "Random+TestCaseObject.h"
-#import "Random+WCDB.h"
-
-#import "TestCaseObject+WCTTableCoding.h"
-#import "TestCaseObject.h"
-
-#import "AllTypesObject+WCTTableCoding.h"
-#import "AllTypesObject.h"
-
-#import "NSObject+TestCase.h"
-
-#import "ObjectsBasedFactory.h"
-#import "TablesBasedFactory.h"
-
-#import <WCDB/WCTDatabase+Test.h>
+@end

@@ -18,11 +18,14 @@
  * limitations under the License.
  */
 
+#import "ObjectsBasedFactory.h"
 #import "TestCase.h"
 
 @interface ObjectsBasedBenchmark : Benchmark
 
 @property (nonatomic, retain) NSString* tableName;
+
+@property (nonatomic, readonly) ObjectsBasedFactory* factory;
 
 - (void)setUpDatabase;
 - (void)tearDownDatabase;

@@ -31,7 +31,8 @@
 - (void)setUp
 {
     [super setUp];
-    [self.random enableStable];
+
+    [Random shared].stable = YES;
 }
 
 - (void)doMeasure:(void (^)(void))block

@@ -40,7 +40,7 @@
 
 - (void)test
 {
-    ColumnCodingObject* object = [self.random columnCodingObject];
+    ColumnCodingObject* object = [Random.shared columnCodingObject];
 
     [self doTestObjects:@[ object ]
               andNumber:1
