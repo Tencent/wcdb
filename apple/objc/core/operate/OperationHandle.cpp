@@ -125,4 +125,9 @@ bool OperationHandle::releaseWriteLock()
     return true;
 }
 
+void OperationHandle::finish()
+{
+    Handle::close();
+}
+
 } // namespace WCDB

@@ -99,6 +99,10 @@ bool FactoryRetriever::work()
         return exit(false);
     }
 
+    m_writeLocker->finish();
+    m_readLocker->finish();
+    m_assembler->finish();
+
     //5. Archive current db and use restore db
     FactoryDepositor depositor(factory);
     if (!depositor.work()) {
