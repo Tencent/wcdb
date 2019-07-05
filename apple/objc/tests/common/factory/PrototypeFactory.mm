@@ -85,6 +85,7 @@
     @synchronized(self) {
         if (_database == nil) {
             _database = [[WCTDatabase alloc] initWithPath:self.path];
+            [self configurePrototype];
         }
         return _database;
     }
@@ -144,8 +145,6 @@
     double progress = 0;
     double quality = 0;
 
-    [self willStartPreparing];
-
     id<PrototypePreparation> delegate = self.delegate;
     TestCaseAssertNotNil(delegate);
     while ((quality = [delegate qualityOfPrototype:self.database]) < self.lowerQuality) {
@@ -170,17 +169,15 @@
     [fileManager removeItemIfExistsAtPath:self.database.walPath];
 
     [[NSFileManager defaultManager] setFileImmutable:YES ofItemsIfExistsAtPath:self.path];
-
-    //    [self willEndPreparing];
 }
 
-- (void)willStartPreparing
+- (void)configurePrototype
 {
     id<PrototypePreparation> delegate = self.delegate;
     TestCaseAssertNotNil(delegate);
 
-    if ([delegate respondsToSelector:@selector(prototypeWillStartPreparing:)]) {
-        [delegate prototypeWillStartPreparing:self.database];
+    if ([delegate respondsToSelector:@selector(configurePrototype:)]) {
+        [delegate configurePrototype:self.database];
     }
 }
 

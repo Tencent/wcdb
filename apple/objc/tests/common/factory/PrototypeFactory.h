@@ -28,7 +28,7 @@
 - (double)qualityOfPrototype:(WCTDatabase*)prototype;
 - (NSString*)categoryOfPrototype;
 @optional
-- (void)prototypeWillStartPreparing:(WCTDatabase*)prototype;
+- (void)configurePrototype:(WCTDatabase*)prototype;
 //- (void)prototypeWillFinishPreparing:(WCTDatabase*)prototype;
 @end
 

@@ -42,7 +42,7 @@
     return @"benchmark";
 }
 
-- (void)prototypeWillStartPreparing:(WCTDatabase*)prototype
+- (void)configurePrototype:(WCTDatabase*)prototype
 {
     if (self.cipher.length > 0) {
         [prototype setCipherKey:self.cipher];
