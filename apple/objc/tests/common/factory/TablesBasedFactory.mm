@@ -53,7 +53,9 @@
 - (double)qualityOfPrototype:(WCTDatabase*)prototype
 {
     if ([[NSFileManager defaultManager] fileExistsAtPath:prototype.path]) {
-        WCTValue* count = [prototype getValueOnResultColumn:WCTMaster.allProperties.count() fromTable:WCTMaster.tableName];
+        NSString* pattern = [NSString stringWithFormat:@"%s%%", WCDB::Syntax::builtinTablePrefix];
+
+        WCTValue* count = [prototype getValueOnResultColumn:WCTMaster.allProperties.count() fromTable:WCTMaster.tableName where:WCTMaster.name.notLike(pattern)];
         TestCaseAssertNotNil(count);
         return count.numberValue.intValue;
     }
