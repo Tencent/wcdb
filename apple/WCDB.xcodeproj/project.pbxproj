@@ -137,10 +137,6 @@
 		234F0509227A9EFA00DD65A2 /* ChainCallTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F03F7227A9EFA00DD65A2 /* ChainCallTests.mm */; };
 		234F0527227A9EFA00DD65A2 /* ORMTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0445227A9EFA00DD65A2 /* ORMTests.mm */; };
 		234F0558227A9F0900DD65A2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 234F0388227A9EFA00DD65A2 /* main.m */; };
-		234F056A227AA42500DD65A2 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
-		234F0584227AA4CC00DD65A2 /* BaselineBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F057A227AA4CB00DD65A2 /* BaselineBenchmark.mm */; };
-		234F0587227AA4CC00DD65A2 /* ObjectsBasedBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F057F227AA4CC00DD65A2 /* ObjectsBasedBenchmark.mm */; };
-		234F0588227AA4CC00DD65A2 /* CipherBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0580227AA4CC00DD65A2 /* CipherBenchmark.mm */; };
 		234F058D227AA4D700DD65A2 /* VersionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F058B227AA4D700DD65A2 /* VersionTests.mm */; };
 		234F058E227AA4D700DD65A2 /* TraceTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F058C227AA4D700DD65A2 /* TraceTests.mm */; };
 		234F0594227AA4E200DD65A2 /* DatabaseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F058F227AA4E100DD65A2 /* DatabaseTests.mm */; };
@@ -1312,100 +1308,48 @@
 		390E1C5F2296414C00C24598 /* Thread.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 390E1C5B2296414C00C24598 /* Thread.hpp */; };
 		391F7C84225DE8FD0095E82D /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 391F7C83225DE8FD0095E82D /* Core.h */; };
 		391F7C85225DE8FD0095E82D /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 391F7C83225DE8FD0095E82D /* Core.h */; };
-		39327AB022CEFD0F00AABD4B /* TableBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AAA22CEFD0F00AABD4B /* TableBenchmark.mm */; };
-		39327AB222CEFD0F00AABD4B /* TableBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AAA22CEFD0F00AABD4B /* TableBenchmark.mm */; };
-		39327AC122CF265600AABD4B /* RetrieveBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327ABF22CF265600AABD4B /* RetrieveBenchmark.mm */; };
-		39327AC322CF265600AABD4B /* RetrieveBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327ABF22CF265600AABD4B /* RetrieveBenchmark.mm */; };
 		39327B1322CF271F00AABD4B /* Benchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AD522CF271D00AABD4B /* Benchmark.mm */; };
-		39327B1422CF271F00AABD4B /* Benchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AD522CF271D00AABD4B /* Benchmark.mm */; };
 		39327B1522CF271F00AABD4B /* Benchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AD522CF271D00AABD4B /* Benchmark.mm */; };
-		39327B1622CF271F00AABD4B /* Benchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AD522CF271D00AABD4B /* Benchmark.mm */; };
 		39327B1F22CF271F00AABD4B /* BaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AE222CF271E00AABD4B /* BaseTestCase.mm */; };
-		39327B2022CF271F00AABD4B /* BaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AE222CF271E00AABD4B /* BaseTestCase.mm */; };
 		39327B2122CF271F00AABD4B /* BaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AE222CF271E00AABD4B /* BaseTestCase.mm */; };
-		39327B2222CF271F00AABD4B /* BaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AE222CF271E00AABD4B /* BaseTestCase.mm */; };
 		39327B2322CF271F00AABD4B /* DatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AE322CF271E00AABD4B /* DatabaseTestCase.mm */; };
-		39327B2422CF271F00AABD4B /* DatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AE322CF271E00AABD4B /* DatabaseTestCase.mm */; };
 		39327B2522CF271F00AABD4B /* DatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AE322CF271E00AABD4B /* DatabaseTestCase.mm */; };
-		39327B2622CF271F00AABD4B /* DatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AE322CF271E00AABD4B /* DatabaseTestCase.mm */; };
 		39327B2722CF271F00AABD4B /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AE422CF271E00AABD4B /* CRUDTestCase.mm */; };
-		39327B2822CF271F00AABD4B /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AE422CF271E00AABD4B /* CRUDTestCase.mm */; };
 		39327B2922CF271F00AABD4B /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AE422CF271E00AABD4B /* CRUDTestCase.mm */; };
-		39327B2A22CF271F00AABD4B /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AE422CF271E00AABD4B /* CRUDTestCase.mm */; };
 		39327B2B22CF271F00AABD4B /* TableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AE522CF271E00AABD4B /* TableTestCase.mm */; };
-		39327B2C22CF271F00AABD4B /* TableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AE522CF271E00AABD4B /* TableTestCase.mm */; };
 		39327B2D22CF271F00AABD4B /* TableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AE522CF271E00AABD4B /* TableTestCase.mm */; };
-		39327B2E22CF271F00AABD4B /* TableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AE522CF271E00AABD4B /* TableTestCase.mm */; };
 		39327B5B22CF275200AABD4B /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B4B22CF275000AABD4B /* NSObject+TestCase.mm */; };
-		39327B5C22CF275200AABD4B /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B4B22CF275000AABD4B /* NSObject+TestCase.mm */; };
 		39327B5D22CF275200AABD4B /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B4B22CF275000AABD4B /* NSObject+TestCase.mm */; };
-		39327B5E22CF275200AABD4B /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B4B22CF275000AABD4B /* NSObject+TestCase.mm */; };
 		39327B5F22CF275200AABD4B /* Signpost.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B4E22CF275000AABD4B /* Signpost.mm */; };
-		39327B6022CF275200AABD4B /* Signpost.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B4E22CF275000AABD4B /* Signpost.mm */; };
 		39327B6122CF275200AABD4B /* Signpost.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B4E22CF275000AABD4B /* Signpost.mm */; };
-		39327B6222CF275200AABD4B /* Signpost.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B4E22CF275000AABD4B /* Signpost.mm */; };
 		39327B6322CF275200AABD4B /* Dispatch.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B4F22CF275000AABD4B /* Dispatch.mm */; };
-		39327B6422CF275200AABD4B /* Dispatch.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B4F22CF275000AABD4B /* Dispatch.mm */; };
 		39327B6522CF275200AABD4B /* Dispatch.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B4F22CF275000AABD4B /* Dispatch.mm */; };
-		39327B6622CF275200AABD4B /* Dispatch.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B4F22CF275000AABD4B /* Dispatch.mm */; };
 		39327B6722CF275200AABD4B /* TestCaseResult.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B5222CF275100AABD4B /* TestCaseResult.mm */; };
-		39327B6822CF275200AABD4B /* TestCaseResult.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B5222CF275100AABD4B /* TestCaseResult.mm */; };
 		39327B6922CF275200AABD4B /* TestCaseResult.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B5222CF275100AABD4B /* TestCaseResult.mm */; };
-		39327B6A22CF275200AABD4B /* TestCaseResult.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B5222CF275100AABD4B /* TestCaseResult.mm */; };
 		39327B6B22CF275200AABD4B /* TestCaseCounter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B5322CF275100AABD4B /* TestCaseCounter.mm */; };
-		39327B6C22CF275200AABD4B /* TestCaseCounter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B5322CF275100AABD4B /* TestCaseCounter.mm */; };
 		39327B6D22CF275200AABD4B /* TestCaseCounter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B5322CF275100AABD4B /* TestCaseCounter.mm */; };
-		39327B6E22CF275200AABD4B /* TestCaseCounter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B5322CF275100AABD4B /* TestCaseCounter.mm */; };
 		39327B6F22CF275200AABD4B /* TestCaseLog.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B5422CF275100AABD4B /* TestCaseLog.mm */; };
-		39327B7022CF275200AABD4B /* TestCaseLog.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B5422CF275100AABD4B /* TestCaseLog.mm */; };
 		39327B7122CF275200AABD4B /* TestCaseLog.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B5422CF275100AABD4B /* TestCaseLog.mm */; };
-		39327B7222CF275200AABD4B /* TestCaseLog.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B5422CF275100AABD4B /* TestCaseLog.mm */; };
 		39327B7322CF275200AABD4B /* WCTDatabase+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B5522CF275100AABD4B /* WCTDatabase+TestCase.mm */; };
-		39327B7422CF275200AABD4B /* WCTDatabase+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B5522CF275100AABD4B /* WCTDatabase+TestCase.mm */; };
 		39327B7522CF275200AABD4B /* WCTDatabase+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B5522CF275100AABD4B /* WCTDatabase+TestCase.mm */; };
-		39327B7622CF275200AABD4B /* WCTDatabase+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B5522CF275100AABD4B /* WCTDatabase+TestCase.mm */; };
 		39327B7D22CF275900AABD4B /* Random+TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B7722CF275800AABD4B /* Random+TestCaseObject.mm */; };
-		39327B7E22CF275900AABD4B /* Random+TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B7722CF275800AABD4B /* Random+TestCaseObject.mm */; };
 		39327B7F22CF275900AABD4B /* Random+TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B7722CF275800AABD4B /* Random+TestCaseObject.mm */; };
-		39327B8022CF275900AABD4B /* Random+TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B7722CF275800AABD4B /* Random+TestCaseObject.mm */; };
 		39327B8122CF275900AABD4B /* Random+WCDB.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B7922CF275800AABD4B /* Random+WCDB.mm */; };
-		39327B8222CF275900AABD4B /* Random+WCDB.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B7922CF275800AABD4B /* Random+WCDB.mm */; };
 		39327B8322CF275900AABD4B /* Random+WCDB.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B7922CF275800AABD4B /* Random+WCDB.mm */; };
-		39327B8422CF275900AABD4B /* Random+WCDB.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B7922CF275800AABD4B /* Random+WCDB.mm */; };
 		39327B8522CF275900AABD4B /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B7A22CF275800AABD4B /* Random.mm */; };
-		39327B8622CF275900AABD4B /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B7A22CF275800AABD4B /* Random.mm */; };
 		39327B8722CF275900AABD4B /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B7A22CF275800AABD4B /* Random.mm */; };
-		39327B8822CF275900AABD4B /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B7A22CF275800AABD4B /* Random.mm */; };
 		39327B8F22CF276000AABD4B /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B8922CF275F00AABD4B /* TestCaseObject.mm */; };
-		39327B9022CF276000AABD4B /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B8922CF275F00AABD4B /* TestCaseObject.mm */; };
 		39327B9122CF276000AABD4B /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B8922CF275F00AABD4B /* TestCaseObject.mm */; };
-		39327B9222CF276000AABD4B /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B8922CF275F00AABD4B /* TestCaseObject.mm */; };
 		39327B9322CF276000AABD4B /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B8D22CF275F00AABD4B /* AllTypesObject.mm */; };
-		39327B9422CF276000AABD4B /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B8D22CF275F00AABD4B /* AllTypesObject.mm */; };
 		39327B9522CF276000AABD4B /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B8D22CF275F00AABD4B /* AllTypesObject.mm */; };
-		39327B9622CF276000AABD4B /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B8D22CF275F00AABD4B /* AllTypesObject.mm */; };
 		39327B9F22CF276600AABD4B /* ObjectsBasedFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B9722CF276600AABD4B /* ObjectsBasedFactory.mm */; };
-		39327BA022CF276600AABD4B /* ObjectsBasedFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B9722CF276600AABD4B /* ObjectsBasedFactory.mm */; };
 		39327BA122CF276600AABD4B /* ObjectsBasedFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B9722CF276600AABD4B /* ObjectsBasedFactory.mm */; };
-		39327BA222CF276600AABD4B /* ObjectsBasedFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B9722CF276600AABD4B /* ObjectsBasedFactory.mm */; };
 		39327BA322CF276600AABD4B /* PrototypeFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B9922CF276600AABD4B /* PrototypeFactory.mm */; };
-		39327BA422CF276600AABD4B /* PrototypeFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B9922CF276600AABD4B /* PrototypeFactory.mm */; };
 		39327BA522CF276600AABD4B /* PrototypeFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B9922CF276600AABD4B /* PrototypeFactory.mm */; };
-		39327BA622CF276600AABD4B /* PrototypeFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B9922CF276600AABD4B /* PrototypeFactory.mm */; };
 		39327BA722CF276600AABD4B /* SizeBasedFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B9B22CF276600AABD4B /* SizeBasedFactory.mm */; };
-		39327BA822CF276600AABD4B /* SizeBasedFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B9B22CF276600AABD4B /* SizeBasedFactory.mm */; };
 		39327BA922CF276600AABD4B /* SizeBasedFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B9B22CF276600AABD4B /* SizeBasedFactory.mm */; };
-		39327BAA22CF276600AABD4B /* SizeBasedFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B9B22CF276600AABD4B /* SizeBasedFactory.mm */; };
 		39327BAB22CF276600AABD4B /* TablesBasedFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B9E22CF276600AABD4B /* TablesBasedFactory.mm */; };
-		39327BAC22CF276600AABD4B /* TablesBasedFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B9E22CF276600AABD4B /* TablesBasedFactory.mm */; };
 		39327BAD22CF276600AABD4B /* TablesBasedFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B9E22CF276600AABD4B /* TablesBasedFactory.mm */; };
-		39327BAE22CF276600AABD4B /* TablesBasedFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B9E22CF276600AABD4B /* TablesBasedFactory.mm */; };
-		39327BB422CF2C5400AABD4B /* MigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327BB022CF2C5400AABD4B /* MigrationBenchmark.mm */; };
-		39327BB622CF2C5400AABD4B /* MigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327BB022CF2C5400AABD4B /* MigrationBenchmark.mm */; };
-		39327BB822CF2C5400AABD4B /* TableMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327BB122CF2C5400AABD4B /* TableMigrationBenchmark.mm */; };
-		39327BBA22CF2C5400AABD4B /* TableMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327BB122CF2C5400AABD4B /* TableMigrationBenchmark.mm */; };
-		39327BBC22CF2C5400AABD4B /* DatabaseMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327BB222CF2C5400AABD4B /* DatabaseMigrationBenchmark.mm */; };
-		39327BBE22CF2C5400AABD4B /* DatabaseMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327BB222CF2C5400AABD4B /* DatabaseMigrationBenchmark.mm */; };
 		3934957C228265C900E43964 /* ColumnConstraintNotNull.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F06BA227AA57A00DD65A2 /* ColumnConstraintNotNull.mm */; };
 		3934957D228265C900E43964 /* StatementCreateTriggerTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F05B2227AA4F000DD65A2 /* StatementCreateTriggerTests.mm */; };
 		3934957E228265C900E43964 /* PrimaryKeyDatabaseMigrationCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0727227AA5BF00DD65A2 /* PrimaryKeyDatabaseMigrationCompatibleTests.mm */; };
@@ -1553,12 +1497,6 @@
 		3934962F2282665700E43964 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F0FD7C215F1C92008399FB /* Security.framework */; };
 		393496302282665B00E43964 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 23C43BCC2087435800AB186D /* libz.tbd */; };
 		3934963422826D6600E43964 /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F5BE0620887FD4000CCD37 /* sqlcipher.framework */; };
-		3934963E2282733700E43964 /* BaselineBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F057A227AA4CB00DD65A2 /* BaselineBenchmark.mm */; };
-		393496412282733700E43964 /* CipherBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0580227AA4CC00DD65A2 /* CipherBenchmark.mm */; };
-		3934964D2282733700E43964 /* ObjectsBasedBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F057F227AA4CC00DD65A2 /* ObjectsBasedBenchmark.mm */; };
-		39349662228274C300E43964 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2367BD0C2215004300380122 /* WCDB.framework */; };
-		39349663228274C700E43964 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 23C43BCC2087435800AB186D /* libz.tbd */; };
-		39349664228274CD00E43964 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F0FD7C215F1C92008399FB /* Security.framework */; };
 		3934DAEB229B6659008A6AEC /* OperationQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3934DAE9229B6659008A6AEC /* OperationQueue.cpp */; };
 		3934DAEC229B6659008A6AEC /* OperationQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3934DAE9229B6659008A6AEC /* OperationQueue.cpp */; };
 		3934DAED229B6659008A6AEC /* OperationQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 3934DAEA229B6659008A6AEC /* OperationQueue.hpp */; };
@@ -1574,6 +1512,22 @@
 		3957985D227FD2370069F985 /* Syntax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3957985C227FD2370069F985 /* Syntax.swift */; };
 		3957985F227FD4F20069F985 /* Expression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3957985E227FD4F20069F985 /* Expression.swift */; };
 		39579861227FD5770069F985 /* ForeignKeyClause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39579860227FD5770069F985 /* ForeignKeyClause.swift */; };
+		3980ABAD22D44F4B00047AA9 /* ObjectsBasedBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F057F227AA4CC00DD65A2 /* ObjectsBasedBenchmark.mm */; };
+		3980ABAE22D44F4C00047AA9 /* ObjectsBasedBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F057F227AA4CC00DD65A2 /* ObjectsBasedBenchmark.mm */; };
+		3980ABAF22D44F5200047AA9 /* BaselineBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F057A227AA4CB00DD65A2 /* BaselineBenchmark.mm */; };
+		3980ABB022D44F5200047AA9 /* CipherBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0580227AA4CC00DD65A2 /* CipherBenchmark.mm */; };
+		3980ABB122D44F5200047AA9 /* RetrieveBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327ABF22CF265600AABD4B /* RetrieveBenchmark.mm */; };
+		3980ABB222D44F5200047AA9 /* TableBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AAA22CEFD0F00AABD4B /* TableBenchmark.mm */; };
+		3980ABB322D44F5200047AA9 /* MigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327BB022CF2C5400AABD4B /* MigrationBenchmark.mm */; };
+		3980ABB422D44F5200047AA9 /* TableMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327BB122CF2C5400AABD4B /* TableMigrationBenchmark.mm */; };
+		3980ABB522D44F5200047AA9 /* DatabaseMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327BB222CF2C5400AABD4B /* DatabaseMigrationBenchmark.mm */; };
+		3980ABB622D44F5300047AA9 /* BaselineBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F057A227AA4CB00DD65A2 /* BaselineBenchmark.mm */; };
+		3980ABB722D44F5300047AA9 /* CipherBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0580227AA4CC00DD65A2 /* CipherBenchmark.mm */; };
+		3980ABB822D44F5300047AA9 /* RetrieveBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327ABF22CF265600AABD4B /* RetrieveBenchmark.mm */; };
+		3980ABB922D44F5300047AA9 /* TableBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AAA22CEFD0F00AABD4B /* TableBenchmark.mm */; };
+		3980ABBA22D44F5300047AA9 /* MigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327BB022CF2C5400AABD4B /* MigrationBenchmark.mm */; };
+		3980ABBB22D44F5300047AA9 /* TableMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327BB122CF2C5400AABD4B /* TableMigrationBenchmark.mm */; };
+		3980ABBC22D44F5300047AA9 /* DatabaseMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327BB222CF2C5400AABD4B /* DatabaseMigrationBenchmark.mm */; };
 		3995150722C2095B008394CC /* WCTOptional.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3995150622C2095B008394CC /* WCTOptional.mm */; };
 		3995150822C2095B008394CC /* WCTOptional.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3995150622C2095B008394CC /* WCTOptional.mm */; };
 		39A3341922B0DD9F008EA5D5 /* WCTFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 39A3341722B0DD9F008EA5D5 /* WCTFoundation.h */; };
@@ -1603,13 +1557,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 239E8A6F2160A5B100BCB308;
 			remoteInfo = Host;
-		};
-		234F056B227AA42500DD65A2 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 239326601E836D7300D677CC;
-			remoteInfo = WCDB;
 		};
 		234F8ADA227B0B5400791E45 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1652,27 +1599,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 2367BAB52215004300380122;
 			remoteInfo = "WCDB iOS static";
-		};
-		39349660228274B900E43964 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2367BAB52215004300380122;
-			remoteInfo = "WCDB iOS static";
-		};
-		39349665228274E800E43964 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 239E8A6F2160A5B100BCB308;
-			remoteInfo = Host;
-		};
-		39349667228274EC00E43964 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 239E8A6F2160A5B100BCB308;
-			remoteInfo = Host;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -1805,7 +1731,6 @@
 		234F042F227A9EFA00DD65A2 /* Tests.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Tests.xcconfig; sourceTree = "<group>"; };
 		234F0430227A9EFA00DD65A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = Info.plist; sourceTree = "<group>"; };
 		234F0445227A9EFA00DD65A2 /* ORMTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ORMTests.mm; sourceTree = "<group>"; };
-		234F0565227AA42500DD65A2 /* Benchmark.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Benchmark.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		234F057A227AA4CB00DD65A2 /* BaselineBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BaselineBenchmark.mm; sourceTree = "<group>"; };
 		234F057B227AA4CB00DD65A2 /* ObjectsBasedBenchmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectsBasedBenchmark.h; sourceTree = "<group>"; };
 		234F057F227AA4CC00DD65A2 /* ObjectsBasedBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ObjectsBasedBenchmark.mm; sourceTree = "<group>"; };
@@ -2543,7 +2468,6 @@
 		39327BB222CF2C5400AABD4B /* DatabaseMigrationBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DatabaseMigrationBenchmark.mm; sourceTree = "<group>"; };
 		3934962A228265C900E43964 /* Tests iOS static.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests iOS static.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		393496312282667100E43964 /* Tests iOS static.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Tests iOS static.xcconfig"; sourceTree = "<group>"; };
-		3934965E2282733700E43964 /* Benchmark iOS static.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Benchmark iOS static.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3934DAE9229B6659008A6AEC /* OperationQueue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OperationQueue.cpp; sourceTree = "<group>"; };
 		3934DAEA229B6659008A6AEC /* OperationQueue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OperationQueue.hpp; sourceTree = "<group>"; };
 		3934DB25229B951C008A6AEC /* AutoCheckpointConfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AutoCheckpointConfig.hpp; sourceTree = "<group>"; };
@@ -2570,14 +2494,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				234F0361227A9CFE00DD65A2 /* WCDB.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		234F0562227AA42500DD65A2 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				234F056A227AA42500DD65A2 /* WCDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2629,16 +2545,6 @@
 				393496302282665B00E43964 /* libz.tbd in Frameworks */,
 				3934962F2282665700E43964 /* Security.framework in Frameworks */,
 				3934962E2282663000E43964 /* WCDB.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		393496572282733700E43964 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				39349664228274CD00E43964 /* Security.framework in Frameworks */,
-				39349663228274C700E43964 /* libz.tbd in Frameworks */,
-				39349662228274C300E43964 /* WCDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3769,11 +3675,9 @@
 				239E8A702160A5B100BCB308 /* Host.app */,
 				2367BD0C2215004300380122 /* WCDB.framework */,
 				234F035C227A9CFE00DD65A2 /* Tests.xctest */,
-				234F0565227AA42500DD65A2 /* Benchmark.xctest */,
 				234F0745227AAE4B00DD65A2 /* WCDBSwift.framework */,
 				234F8AD4227B0B5400791E45 /* TestsSwift.xctest */,
 				3934962A228265C900E43964 /* Tests iOS static.xctest */,
-				3934965E2282733700E43964 /* Benchmark iOS static.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -4912,25 +4816,6 @@
 			productReference = 234F035C227A9CFE00DD65A2 /* Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		234F0564227AA42500DD65A2 /* Benchmark */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 234F056D227AA42500DD65A2 /* Build configuration list for PBXNativeTarget "Benchmark" */;
-			buildPhases = (
-				234F0561227AA42500DD65A2 /* Sources */,
-				234F0562227AA42500DD65A2 /* Frameworks */,
-				234F0563227AA42500DD65A2 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				39349666228274E800E43964 /* PBXTargetDependency */,
-				234F056C227AA42500DD65A2 /* PBXTargetDependency */,
-			);
-			name = Benchmark;
-			productName = Benchmark;
-			productReference = 234F0565227AA42500DD65A2 /* Benchmark.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		234F0744227AAE4B00DD65A2 /* WCDBSwift */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 234F074A227AAE4B00DD65A2 /* Build configuration list for PBXNativeTarget "WCDBSwift" */;
@@ -5043,25 +4928,6 @@
 			productReference = 3934962A228265C900E43964 /* Tests iOS static.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		393496372282733700E43964 /* Benchmark iOS static */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 3934965A2282733700E43964 /* Build configuration list for PBXNativeTarget "Benchmark iOS static" */;
-			buildPhases = (
-				3934963A2282733700E43964 /* Sources */,
-				393496572282733700E43964 /* Frameworks */,
-				393496592282733700E43964 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				39349668228274EC00E43964 /* PBXTargetDependency */,
-				39349661228274B900E43964 /* PBXTargetDependency */,
-			);
-			name = "Benchmark iOS static";
-			productName = Benchmark;
-			productReference = 3934965E2282733700E43964 /* Benchmark iOS static.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -5073,9 +4939,6 @@
 				ORGANIZATIONNAME = sanhuazhang;
 				TargetAttributes = {
 					234F035B227A9CFE00DD65A2 = {
-						CreatedOnToolsVersion = 10.2.1;
-					};
-					234F0564227AA42500DD65A2 = {
 						CreatedOnToolsVersion = 10.2.1;
 					};
 					234F0744227AAE4B00DD65A2 = {
@@ -5124,10 +4987,8 @@
 			targets = (
 				239326601E836D7300D677CC /* WCDB */,
 				234F035B227A9CFE00DD65A2 /* Tests */,
-				234F0564227AA42500DD65A2 /* Benchmark */,
 				2367BAB52215004300380122 /* WCDB iOS static */,
 				39349576228265C900E43964 /* Tests iOS static */,
-				393496372282733700E43964 /* Benchmark iOS static */,
 				234F0744227AAE4B00DD65A2 /* WCDBSwift */,
 				234F8AD3227B0B5400791E45 /* TestsSwift */,
 				239E8A6F2160A5B100BCB308 /* Host */,
@@ -5147,13 +5008,6 @@
 
 /* Begin PBXResourcesBuildPhase section */
 		234F035A227A9CFE00DD65A2 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		234F0563227AA42500DD65A2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -5196,13 +5050,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		39349625228265C900E43964 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		393496592282733700E43964 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -5262,6 +5109,7 @@
 				234F0615227AA4F600DD65A2 /* ColumnTests.mm in Sources */,
 				234F0720227AA5B700DD65A2 /* TableMigrationCompatibleTests.mm in Sources */,
 				234F0610227AA4F600DD65A2 /* SyntaxListTests.mm in Sources */,
+				3980ABBC22D44F5300047AA9 /* DatabaseMigrationBenchmark.mm in Sources */,
 				234F04B1227A9EFA00DD65A2 /* ConfigTests.mm in Sources */,
 				234F06F9227AA59E00DD65A2 /* ThreadTests.mm in Sources */,
 				234F0737227AA5C700DD65A2 /* BackupTestCase.mm in Sources */,
@@ -5297,9 +5145,11 @@
 				234F072B227AA5BF00DD65A2 /* PrimaryKeyDatabaseMigratingCompatibleTests.mm in Sources */,
 				234F05EC227AA4F600DD65A2 /* ConflictTests.mm in Sources */,
 				234F05FC227AA4F600DD65A2 /* RaiseFunctionTests.mm in Sources */,
+				3980ABBA22D44F5300047AA9 /* MigrationBenchmark.mm in Sources */,
 				234F05ED227AA4F600DD65A2 /* WCTResultColumnTests.mm in Sources */,
 				39327B9F22CF276600AABD4B /* ObjectsBasedFactory.mm in Sources */,
 				234F05EF227AA4F600DD65A2 /* JoinConstraintTests.mm in Sources */,
+				3980ABB822D44F5300047AA9 /* RetrieveBenchmark.mm in Sources */,
 				234F0607227AA4F600DD65A2 /* StatementDropIndexTests.mm in Sources */,
 				234F06B6227AA57100DD65A2 /* PropertyObject.mm in Sources */,
 				234F05F9227AA4F600DD65A2 /* StatementDetachTests.mm in Sources */,
@@ -5307,6 +5157,7 @@
 				234F05EB227AA4F600DD65A2 /* BindParameterTests.mm in Sources */,
 				234F070A227AA5A700DD65A2 /* MigrateTestCase.mm in Sources */,
 				234F05DF227AA4F600DD65A2 /* FTS3FunctionTests.mm in Sources */,
+				3980ABB622D44F5300047AA9 /* BaselineBenchmark.mm in Sources */,
 				39327BA322CF276600AABD4B /* PrototypeFactory.mm in Sources */,
 				234F06DA227AA57D00DD65A2 /* ColumnConstraintUnique.mm in Sources */,
 				39327B5F22CF275200AABD4B /* Signpost.mm in Sources */,
@@ -5327,6 +5178,7 @@
 				234F0646227AA50800DD65A2 /* Random+ColumnCodingObject.mm in Sources */,
 				234F0595227AA4E200DD65A2 /* ObservationTests.mm in Sources */,
 				234F063F227AA50800DD65A2 /* StringCodingObject.m in Sources */,
+				3980ABB722D44F5300047AA9 /* CipherBenchmark.mm in Sources */,
 				39327B8522CF275900AABD4B /* Random.mm in Sources */,
 				234F0644227AA50800DD65A2 /* Integer32CodingObject+WCTColumnCoding.mm in Sources */,
 				39327BAB22CF276600AABD4B /* TablesBasedFactory.mm in Sources */,
@@ -5383,8 +5235,11 @@
 				234F061F227AA4F600DD65A2 /* PragmaTests.mm in Sources */,
 				234F06D5227AA57D00DD65A2 /* ColumnConstraintAutoIncrementAsc.mm in Sources */,
 				234F0738227AA5C700DD65A2 /* RetrieveRobustyTests.mm in Sources */,
+				3980ABBB22D44F5300047AA9 /* TableMigrationBenchmark.mm in Sources */,
+				3980ABB922D44F5300047AA9 /* TableBenchmark.mm in Sources */,
 				234F063C227AA50800DD65A2 /* Integer64CodingObject+WCTColumnCoding.mm in Sources */,
 				234F060D227AA4F600DD65A2 /* WindowDefTests.mm in Sources */,
+				3980ABAD22D44F4B00047AA9 /* ObjectsBasedBenchmark.mm in Sources */,
 				234F0645227AA50800DD65A2 /* DataCodingObject+WCTColumnCoding.mm in Sources */,
 				234F05E1227AA4F600DD65A2 /* StatementPragmaTests.mm in Sources */,
 				234F05E2227AA4F600DD65A2 /* ColumnConstraintTests.mm in Sources */,
@@ -5419,42 +5274,6 @@
 				234F06ED227AA58E00DD65A2 /* NewlyCreatedTableIndexObject.mm in Sources */,
 				234F05FD227AA4F600DD65A2 /* ForeignKeyTests.mm in Sources */,
 				234F0721227AA5B700DD65A2 /* DatabaseMigratingCompatibleTests.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		234F0561227AA42500DD65A2 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				39327B7022CF275200AABD4B /* TestCaseLog.mm in Sources */,
-				234F0584227AA4CC00DD65A2 /* BaselineBenchmark.mm in Sources */,
-				234F0588227AA4CC00DD65A2 /* CipherBenchmark.mm in Sources */,
-				39327B2822CF271F00AABD4B /* CRUDTestCase.mm in Sources */,
-				39327B8222CF275900AABD4B /* Random+WCDB.mm in Sources */,
-				39327AC122CF265600AABD4B /* RetrieveBenchmark.mm in Sources */,
-				39327B2422CF271F00AABD4B /* DatabaseTestCase.mm in Sources */,
-				39327BAC22CF276600AABD4B /* TablesBasedFactory.mm in Sources */,
-				39327B6822CF275200AABD4B /* TestCaseResult.mm in Sources */,
-				39327B1422CF271F00AABD4B /* Benchmark.mm in Sources */,
-				39327BA422CF276600AABD4B /* PrototypeFactory.mm in Sources */,
-				39327BB822CF2C5400AABD4B /* TableMigrationBenchmark.mm in Sources */,
-				234F0587227AA4CC00DD65A2 /* ObjectsBasedBenchmark.mm in Sources */,
-				39327B6C22CF275200AABD4B /* TestCaseCounter.mm in Sources */,
-				39327B2022CF271F00AABD4B /* BaseTestCase.mm in Sources */,
-				39327B6422CF275200AABD4B /* Dispatch.mm in Sources */,
-				39327BA022CF276600AABD4B /* ObjectsBasedFactory.mm in Sources */,
-				39327AB022CEFD0F00AABD4B /* TableBenchmark.mm in Sources */,
-				39327BB422CF2C5400AABD4B /* MigrationBenchmark.mm in Sources */,
-				39327B2C22CF271F00AABD4B /* TableTestCase.mm in Sources */,
-				39327B7422CF275200AABD4B /* WCTDatabase+TestCase.mm in Sources */,
-				39327B8622CF275900AABD4B /* Random.mm in Sources */,
-				39327B5C22CF275200AABD4B /* NSObject+TestCase.mm in Sources */,
-				39327BA822CF276600AABD4B /* SizeBasedFactory.mm in Sources */,
-				39327B6022CF275200AABD4B /* Signpost.mm in Sources */,
-				39327B9022CF276000AABD4B /* TestCaseObject.mm in Sources */,
-				39327B9422CF276000AABD4B /* AllTypesObject.mm in Sources */,
-				39327B7E22CF275900AABD4B /* Random+TestCaseObject.mm in Sources */,
-				39327BBC22CF2C5400AABD4B /* DatabaseMigrationBenchmark.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6052,6 +5871,7 @@
 				39349582228265C900E43964 /* ColumnTests.mm in Sources */,
 				39349583228265C900E43964 /* TableMigrationCompatibleTests.mm in Sources */,
 				39349584228265C900E43964 /* SyntaxListTests.mm in Sources */,
+				3980ABB522D44F5200047AA9 /* DatabaseMigrationBenchmark.mm in Sources */,
 				39349586228265C900E43964 /* ConfigTests.mm in Sources */,
 				39349587228265C900E43964 /* ThreadTests.mm in Sources */,
 				39349589228265C900E43964 /* BackupTestCase.mm in Sources */,
@@ -6087,9 +5907,11 @@
 				393495AA228265C900E43964 /* PrimaryKeyDatabaseMigratingCompatibleTests.mm in Sources */,
 				393495AB228265C900E43964 /* ConflictTests.mm in Sources */,
 				393495AC228265C900E43964 /* RaiseFunctionTests.mm in Sources */,
+				3980ABB322D44F5200047AA9 /* MigrationBenchmark.mm in Sources */,
 				393495AD228265C900E43964 /* WCTResultColumnTests.mm in Sources */,
 				39327BA122CF276600AABD4B /* ObjectsBasedFactory.mm in Sources */,
 				393495AE228265C900E43964 /* JoinConstraintTests.mm in Sources */,
+				3980ABB122D44F5200047AA9 /* RetrieveBenchmark.mm in Sources */,
 				393495AF228265C900E43964 /* StatementDropIndexTests.mm in Sources */,
 				393495B1228265C900E43964 /* PropertyObject.mm in Sources */,
 				393495B2228265C900E43964 /* StatementDetachTests.mm in Sources */,
@@ -6097,6 +5919,7 @@
 				393495B5228265C900E43964 /* BindParameterTests.mm in Sources */,
 				393495B6228265C900E43964 /* MigrateTestCase.mm in Sources */,
 				393495B7228265C900E43964 /* FTS3FunctionTests.mm in Sources */,
+				3980ABAF22D44F5200047AA9 /* BaselineBenchmark.mm in Sources */,
 				39327BA522CF276600AABD4B /* PrototypeFactory.mm in Sources */,
 				393495B8228265C900E43964 /* ColumnConstraintUnique.mm in Sources */,
 				39327B6122CF275200AABD4B /* Signpost.mm in Sources */,
@@ -6117,6 +5940,7 @@
 				393495C4228265C900E43964 /* Random+ColumnCodingObject.mm in Sources */,
 				393495C5228265C900E43964 /* ObservationTests.mm in Sources */,
 				393495C6228265C900E43964 /* StringCodingObject.m in Sources */,
+				3980ABB022D44F5200047AA9 /* CipherBenchmark.mm in Sources */,
 				39327B8722CF275900AABD4B /* Random.mm in Sources */,
 				393495C7228265C900E43964 /* Integer32CodingObject+WCTColumnCoding.mm in Sources */,
 				39327BAD22CF276600AABD4B /* TablesBasedFactory.mm in Sources */,
@@ -6173,8 +5997,11 @@
 				393495FE228265C900E43964 /* PragmaTests.mm in Sources */,
 				393495FF228265C900E43964 /* ColumnConstraintAutoIncrementAsc.mm in Sources */,
 				39349600228265C900E43964 /* RetrieveRobustyTests.mm in Sources */,
+				3980ABB422D44F5200047AA9 /* TableMigrationBenchmark.mm in Sources */,
+				3980ABB222D44F5200047AA9 /* TableBenchmark.mm in Sources */,
 				39349602228265C900E43964 /* Integer64CodingObject+WCTColumnCoding.mm in Sources */,
 				39349603228265C900E43964 /* WindowDefTests.mm in Sources */,
+				3980ABAE22D44F4C00047AA9 /* ObjectsBasedBenchmark.mm in Sources */,
 				39349604228265C900E43964 /* DataCodingObject+WCTColumnCoding.mm in Sources */,
 				39349605228265C900E43964 /* StatementPragmaTests.mm in Sources */,
 				39349606228265C900E43964 /* ColumnConstraintTests.mm in Sources */,
@@ -6212,42 +6039,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3934963A2282733700E43964 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				39327B7222CF275200AABD4B /* TestCaseLog.mm in Sources */,
-				3934963E2282733700E43964 /* BaselineBenchmark.mm in Sources */,
-				393496412282733700E43964 /* CipherBenchmark.mm in Sources */,
-				39327B2A22CF271F00AABD4B /* CRUDTestCase.mm in Sources */,
-				39327B8422CF275900AABD4B /* Random+WCDB.mm in Sources */,
-				39327AC322CF265600AABD4B /* RetrieveBenchmark.mm in Sources */,
-				39327B2622CF271F00AABD4B /* DatabaseTestCase.mm in Sources */,
-				39327BAE22CF276600AABD4B /* TablesBasedFactory.mm in Sources */,
-				39327B6A22CF275200AABD4B /* TestCaseResult.mm in Sources */,
-				39327B1622CF271F00AABD4B /* Benchmark.mm in Sources */,
-				39327BA622CF276600AABD4B /* PrototypeFactory.mm in Sources */,
-				39327BBA22CF2C5400AABD4B /* TableMigrationBenchmark.mm in Sources */,
-				3934964D2282733700E43964 /* ObjectsBasedBenchmark.mm in Sources */,
-				39327B6E22CF275200AABD4B /* TestCaseCounter.mm in Sources */,
-				39327B2222CF271F00AABD4B /* BaseTestCase.mm in Sources */,
-				39327B6622CF275200AABD4B /* Dispatch.mm in Sources */,
-				39327BA222CF276600AABD4B /* ObjectsBasedFactory.mm in Sources */,
-				39327AB222CEFD0F00AABD4B /* TableBenchmark.mm in Sources */,
-				39327BB622CF2C5400AABD4B /* MigrationBenchmark.mm in Sources */,
-				39327B2E22CF271F00AABD4B /* TableTestCase.mm in Sources */,
-				39327B7622CF275200AABD4B /* WCTDatabase+TestCase.mm in Sources */,
-				39327B8822CF275900AABD4B /* Random.mm in Sources */,
-				39327B5E22CF275200AABD4B /* NSObject+TestCase.mm in Sources */,
-				39327BAA22CF276600AABD4B /* SizeBasedFactory.mm in Sources */,
-				39327B6222CF275200AABD4B /* Signpost.mm in Sources */,
-				39327B9222CF276000AABD4B /* TestCaseObject.mm in Sources */,
-				39327B9622CF276000AABD4B /* AllTypesObject.mm in Sources */,
-				39327B8022CF275900AABD4B /* Random+TestCaseObject.mm in Sources */,
-				39327BBE22CF2C5400AABD4B /* DatabaseMigrationBenchmark.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -6260,11 +6051,6 @@
 			isa = PBXTargetDependency;
 			target = 239E8A6F2160A5B100BCB308 /* Host */;
 			targetProxy = 234F0559227A9F5C00DD65A2 /* PBXContainerItemProxy */;
-		};
-		234F056C227AA42500DD65A2 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 239326601E836D7300D677CC /* WCDB */;
-			targetProxy = 234F056B227AA42500DD65A2 /* PBXContainerItemProxy */;
 		};
 		234F8ADB227B0B5400791E45 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -6291,21 +6077,6 @@
 			target = 2367BAB52215004300380122 /* WCDB iOS static */;
 			targetProxy = 3934962C2282661A00E43964 /* PBXContainerItemProxy */;
 		};
-		39349661228274B900E43964 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2367BAB52215004300380122 /* WCDB iOS static */;
-			targetProxy = 39349660228274B900E43964 /* PBXContainerItemProxy */;
-		};
-		39349666228274E800E43964 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 239E8A6F2160A5B100BCB308 /* Host */;
-			targetProxy = 39349665228274E800E43964 /* PBXContainerItemProxy */;
-		};
-		39349668228274EC00E43964 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 239E8A6F2160A5B100BCB308 /* Host */;
-			targetProxy = 39349667228274EC00E43964 /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -6317,20 +6088,6 @@
 			name = Debug;
 		};
 		234F0366227A9CFE00DD65A2 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 234F042F227A9EFA00DD65A2 /* Tests.xcconfig */;
-			buildSettings = {
-			};
-			name = Release;
-		};
-		234F056E227AA42500DD65A2 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 234F042F227A9EFA00DD65A2 /* Tests.xcconfig */;
-			buildSettings = {
-			};
-			name = Debug;
-		};
-		234F056F227AA42500DD65A2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 234F042F227A9EFA00DD65A2 /* Tests.xcconfig */;
 			buildSettings = {
@@ -6451,20 +6208,6 @@
 			};
 			name = Release;
 		};
-		3934965B2282733700E43964 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 393496312282667100E43964 /* Tests iOS static.xcconfig */;
-			buildSettings = {
-			};
-			name = Debug;
-		};
-		3934965C2282733700E43964 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 393496312282667100E43964 /* Tests iOS static.xcconfig */;
-			buildSettings = {
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -6473,15 +6216,6 @@
 			buildConfigurations = (
 				234F0365227A9CFE00DD65A2 /* Debug */,
 				234F0366227A9CFE00DD65A2 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		234F056D227AA42500DD65A2 /* Build configuration list for PBXNativeTarget "Benchmark" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				234F056E227AA42500DD65A2 /* Debug */,
-				234F056F227AA42500DD65A2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -6545,15 +6279,6 @@
 			buildConfigurations = (
 				39349627228265C900E43964 /* Debug */,
 				39349628228265C900E43964 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		3934965A2282733700E43964 /* Build configuration list for PBXNativeTarget "Benchmark iOS static" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3934965B2282733700E43964 /* Debug */,
-				3934965C2282733700E43964 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

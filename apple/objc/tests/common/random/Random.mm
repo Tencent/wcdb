@@ -22,7 +22,8 @@
 #import <random>
 
 @implementation Random {
-    std::shared_ptr<std::default_random_engine> _engine;
+    std::shared_ptr<std::default_random_engine> _unstableEngine;
+    std::shared_ptr<std::default_random_engine> _stableEngine;
     std::shared_ptr<std::uniform_int_distribution<uint64_t>> _uniformUInt64;
     std::shared_ptr<std::uniform_int_distribution<uint32_t>> _uniformUInt32;
     std::shared_ptr<std::uniform_int_distribution<uint8_t>> _uniformUInt8;
@@ -47,34 +48,24 @@
 {
     @synchronized(self) {
         _stable = stable;
-
-        _engine = nullptr;
-        _uniformUInt64 = nullptr;
-        _uniformUInt32 = nullptr;
-        _uniformUInt8 = nullptr;
-        _uniformInt64 = nullptr;
-        _uniformInt32 = nullptr;
-        _uniformBool = nullptr;
-        _uniformDouble = nullptr;
-        _uniformFloat = nullptr;
-        _uniformFloat_0_1 = nullptr;
-        _uniformUChar = nullptr;
-        _uniformLength = nullptr;
     }
 }
 
 - (std::shared_ptr<std::default_random_engine> &)engine
 {
     @synchronized(self) {
-        if (_engine == nullptr) {
-            if (_stable) {
-                _engine = std::make_shared<std::default_random_engine>(0);
-            } else {
-                std::random_device rd;
-                _engine = std::make_shared<std::default_random_engine>(rd());
+        if (_stable) {
+            if (_stableEngine == nullptr) {
+                _stableEngine = std::make_shared<std::default_random_engine>(0);
             }
+            return _stableEngine;
+        } else {
+            if (_unstableEngine == nullptr) {
+                std::random_device rd;
+                _unstableEngine = std::make_shared<std::default_random_engine>(rd());
+            }
+            return _unstableEngine;
         }
-        return _engine;
     }
 }
 - (std::shared_ptr<std::uniform_int_distribution<uint64_t>> &)uniformUInt64

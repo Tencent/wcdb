@@ -26,6 +26,7 @@
 
 @implementation BaselineBenchmark
 
+#ifndef WCDB_QUICK_TESTS
 - (void)test_write
 {
     [self doTestWrite];
@@ -62,5 +63,6 @@
         TestCaseAssertTrue(result);
     }];
 }
+#endif
 
 @end

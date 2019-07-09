@@ -31,6 +31,7 @@
     [super setUp];
 }
 
+#ifndef WCDB_QUICK_TESTS
 - (void)test_read
 {
     [self doTestRead];
@@ -50,5 +51,6 @@
 {
     [self doTestMigrate];
 }
+#endif
 
 @end

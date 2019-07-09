@@ -54,6 +54,8 @@
 
     self.continueAfterFailure = YES;
 
+    [Random shared].stable = NO;
+
     [WCTDatabase globalTracePerformance:nil];
     [WCTDatabase globalTraceSQL:nil];
     [WCTDatabase globalTraceError:^(WCTError *error) {
@@ -103,11 +105,10 @@
 
 - (void)tearDown
 {
-    @synchronized(self) {
-        if (_dispatch != nil) {
-            [_dispatch waitUntilDone];
-        }
-    }
+    [Random shared].stable = NO;
+
+    [self.dispatch waitUntilDone];
+
     [WCTDatabase globalTraceError:nil];
     [WCTDatabase globalTraceSQL:nil];
     [WCTDatabase globalTracePerformance:nil];
@@ -192,8 +193,8 @@
         if (_dispatch == nil) {
             _dispatch = [[Dispatch alloc] init];
         }
+        return _dispatch;
     }
-    return _dispatch;
 }
 
 - (void)log:(NSString *)format, ...

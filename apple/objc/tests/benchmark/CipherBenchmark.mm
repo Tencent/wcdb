@@ -45,6 +45,7 @@
     [self.database setCipherKey:self.cipher];
 }
 
+#ifndef WCDB_QUICK_TESTS
 - (void)test_write
 {
     [self doTestWrite];
@@ -59,5 +60,6 @@
 {
     [self doTestBatchWrite];
 }
+#endif
 
 @end
