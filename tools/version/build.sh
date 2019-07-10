@@ -1,9 +1,13 @@
 #!/bin/bash
 
+usage() {
+    echo "Usage: sh $0 -t/--target WCDB/WCDB iOS static/WCDBSwift [-c/--configuration Debug/Release] [-d/--destination destination]"
+}
+
 root=`git rev-parse --show-toplevel`
 
 target="" # WCDB, WCDB iOS static, WCDBSwift
-configuration="Release" # Release, Debug, Bitcode
+configuration="Release" # Release, Debug
 destination="./"
 
 while [[ $# -gt 0 ]]
@@ -26,7 +30,7 @@ case "$key" in
     shift
     ;;
     *)
-    echo "Unknown option: $1"
+    usage
     exit 1
     ;;
 esac
@@ -36,16 +40,16 @@ case "$target" in
     WCDB|WCDB\ iOS\ static|WCDBSwift)
     ;;
     *)
-    echo "Unknown target: $target"
+    usage
     exit 1
     ;;
 esac
 
 case "$configuration" in
-    Debug|Release|Bitcode)
+    Debug|Release)
     ;;
     *)
-    echo "Unknown configuration: $configuration"
+    usage
     exit 1
     ;;
 esac

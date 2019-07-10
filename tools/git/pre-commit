@@ -2,13 +2,15 @@
   
 root=`git rev-parse --show-toplevel`
 
-licenseChecker=$root/tools/formatting/check_license.sh
-format=$root/tools/formatting/format.sh
+format=$root/tools/format
+
 for file in `git diff-index --cached --diff-filter=ACMRT --name-only HEAD` ; do  
-    fullpath=$root/$file
-    sh "$format" --add --path $fullpath
-    if [ ! $licenseChecker $file ]; 
-    then
+    fullpath="$root/$file"
+    if ! sh "$format/license.sh" --path "$fullpath"; then
         exit 1
     fi
+    if ! sh "$format/code.sh" --path "$fullpath"; then
+        exit 1
+    fi
+    git add "$fullpath"
 done  

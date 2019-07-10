@@ -1,16 +1,32 @@
 #!/bin/bash
 
 usage() {    
-    echo "Usage: sh $0 [path]"
+    echo "Usage: sh $0 -p/--path path"
 }
 
+path=""
+while [[ $# -gt 0 ]]
+do
+key="$1"
+case "$key" in
+    -p|--path)
+    path="$2"
+    shift
+    shift
+    ;;
+    *)
+    usage
+    exit 1
+    ;;
+esac
+done
+
 # check parameters
-file=${1}
-if [[ ! -a $file ]]; then
+if [[ ! -a "$path" ]]; then
     usage
     exit 1    
 fi
-extension=${file##*.}
+extension=${path##*.}
 
 license='''/*
  * Tencent is pleased to support the open source community by making
@@ -32,13 +48,12 @@ license='''/*
  * limitations under the License.
  */'''
 
-extension=${file##*.}
-if [ $extension = "h" ] || [ $extension = "hpp" ] || [ $extension = "c" ] || [ $extension = "cpp" ] || [ $extension = "m" ] || [ $extension = "mm" ]; then
-    fullpath=$root/$file
-    content=`cat $file`
+if [ $extension = "h" ] || [ $extension = "hpp" ] || [ $extension = "c" ] || [ $extension = "cpp" ] || [ $extension = "m" ] || [ $extension = "mm" ] || [ $extension = "swift" ]; then
+    fullpath="$root/$path"
+    content=`cat $path`
     if [[ $content != "$license"* ]];
     then
-        echo "Error: License declaretion in ${file} is not correct."
+        echo "Error: License declaretion in $path is not correct."
         exit 1
     fi
 fi
