@@ -18,31 +18,13 @@
  * limitations under the License.
  */
 
+#import "PrototypeFactory.h"
 #import <Foundation/Foundation.h>
 
-@interface Random : NSObject
+@interface ObjectsBasedFactory : PrototypeFactory <PrototypePreparation>
 
-- (void)enableStable;
+@property (nonatomic, readonly) NSString* tableName;
 
-- (uint64_t)uint64;
-- (uint32_t)uint32;
-- (uint8_t)uint8;
-
-- (int64_t)int64;
-- (int32_t)int32;
-
-- (double)double_;
-- (float)float_;
-- (float)float_0_1;
-
-- (BOOL)boolean;
-
-- (NSNumber*)number;
-
-- (NSString*)string;
-
-- (NSData*)data;
-- (NSData*)dataWithLength:(NSInteger)length;
-- (NSData*)dataOtherThan:(NSData*)other;
+@property (nonatomic, retain) NSData* cipher;
 
 @end

@@ -38,7 +38,7 @@ bool FactoryDepositor::work()
     StringView& workshopDirectory = optionalWorkshopDirectory.value();
     if (!FileManager::createDirectoryWithIntermediateDirectories(workshopDirectory)
         || !FileManager::moveItems(
-           Factory::associatedPathsForDatabase(factory.database), workshopDirectory)) {
+        Factory::associatedPathsForDatabase(factory.database), workshopDirectory)) {
         assignWithSharedThreadedError();
         return false;
     }

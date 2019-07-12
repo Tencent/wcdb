@@ -18,11 +18,9 @@
  * limitations under the License.
  */
 
+#import "PrototypeFactory.h"
 #import <Foundation/Foundation.h>
 
-@interface BenchmarkObject : NSObject
-
-@property (nonatomic, assign) int identifier;
-@property (nonatomic, retain) NSData *content;
+@interface TablesBasedFactory : PrototypeFactory <PrototypePreparation>
 
 @end

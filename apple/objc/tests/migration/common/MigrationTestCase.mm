@@ -102,7 +102,7 @@
 {
     @synchronized(self) {
         if (_objects == nil) {
-            _objects = [self.random migrationObjectsWithCount:10000 startingFromIdentifier:1];
+            _objects = [Random.shared migrationObjectsWithCount:10000 startingFromIdentifier:1];
         }
         return _objects;
     }

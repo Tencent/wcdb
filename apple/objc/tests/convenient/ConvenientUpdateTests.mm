@@ -55,7 +55,7 @@
 {
     @synchronized(self) {
         if (_renewedContent == nil) {
-            _renewedContent = self.random.string;
+            _renewedContent = Random.shared.string;
         }
         return _renewedContent;
     }

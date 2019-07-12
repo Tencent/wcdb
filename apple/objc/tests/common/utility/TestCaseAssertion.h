@@ -18,31 +18,31 @@
  * limitations under the License.
  */
 
+#import "TestCaseLog.h"
 #import <Foundation/Foundation.h>
 
-#define __TestCaseHint(expect, but)              \
-    [NSString stringWithFormat:                  \
-              @"\nexpect: [%@]"                  \
-               "\n___but: [%@]"                  \
-               "\ncommon: [%@]",                 \
-              expect,                            \
-              but,                               \
-              [expect commonPrefixWithString:but \
-                                     options:0]]
+#define TestCaseHintStringEqual(expect, but)        \
+    {                                               \
+        BOOL _equal = [expect isEqualToString:but]; \
+        if (!_equal) {                              \
+            TestCaseLog(                            \
+            @"\nept: [%@]"                          \
+             "\nbut: [%@]"                          \
+             "\ncom: [%@]",                         \
+            expect,                                 \
+            but,                                    \
+            [expect commonPrefixWithString:but      \
+                                   options:0]);     \
+        }                                           \
+    }
 
-#ifdef WCDB_DEBUG
 #define TestCaseFailure() abort()
-#else
-#define TestCaseFailure()
-#endif
 
-#define TestCaseAssertTrue(cond, ...)     \
-    {                                     \
-        BOOL test = (cond);               \
-        XCTAssertTrue(test, __VA_ARGS__); \
-        if (!(test)) {                    \
-            TestCaseFailure();            \
-        }                                 \
+#define TestCaseAssertTrue(cond) \
+    {                            \
+        if (!(cond)) {           \
+            TestCaseFailure();   \
+        }                        \
     }
 
 #define TestCaseAssertFalse(cond) \
@@ -64,11 +64,12 @@
         TestCaseAssertStringEqual(__sql, __expected);        \
     }
 
-#define TestCaseAssertStringEqual(left, right)                                                    \
-    {                                                                                             \
-        NSString* _left = (left);                                                                 \
-        NSString* _right = (right);                                                               \
-        TestCaseAssertTrue([_left isEqualToString:_right], @"%@", __TestCaseHint(_left, _right)); \
+#define TestCaseAssertStringEqual(left, right)              \
+    {                                                       \
+        NSString* _left = (left);                           \
+        NSString* _right = (right);                         \
+        TestCaseHintStringEqual(_left, _right);             \
+        TestCaseAssertTrue([_left isEqualToString:_right]); \
     }
 
 #define TestCaseAssertResultYES(result) \
@@ -89,3 +90,9 @@
 
 #define TestCaseAssertOptionalFalse(optional) \
     TestCaseAssertOptionalEqual(optional, NO)
+
+#define TestCaseAssertNil(object) \
+    TestCaseAssertTrue(object == nil)
+
+#define TestCaseAssertNotNil(object) \
+    TestCaseAssertTrue(object != nil)

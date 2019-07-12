@@ -22,6 +22,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/CoreConst.h>
 #include <WCDB/Notifier.hpp>
+#include <WCDB/Path.hpp>
 #include <WCDB/SQLite.h>
 #include <WCDB/StringView.hpp>
 
@@ -69,19 +70,19 @@ const StringView &AbstractHandle::getPath() const
     return m_path;
 }
 
-const char *AbstractHandle::getSHMSuffix()
+StringView AbstractHandle::shmPathOfDatabase(const UnsafeStringView &database)
 {
-    return "-shm";
+    return Path::addExtention(database, "-shm");
 }
 
-const char *AbstractHandle::getWALSuffix()
+StringView AbstractHandle::walPathOfDatabase(const UnsafeStringView &database)
 {
-    return "-wal";
+    return Path::addExtention(database, "-wal");
 }
 
-const char *AbstractHandle::getJournalSuffix()
+StringView AbstractHandle::journalPathOfDatabase(const UnsafeStringView &database)
 {
-    return "-journal";
+    return Path::addExtention(database, "-journal");
 }
 
 #pragma mark - Basic

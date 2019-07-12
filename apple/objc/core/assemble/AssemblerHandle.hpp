@@ -38,6 +38,8 @@ public:
     const StringView &getPath() const override final;
     const Error &getError() const override final;
 
+    void finish() override final;
+
 #pragma mark - Assembler
 public:
     bool markAsAssembling() override final;

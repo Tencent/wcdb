@@ -26,6 +26,7 @@
 
 @implementation BaselineBenchmark
 
+#ifndef WCDB_QUICK_TESTS
 - (void)test_write
 {
     [self doTestWrite];
@@ -44,7 +45,7 @@
 - (void)test_create_index
 {
     NSString* indexName = [NSString stringWithFormat:@"%@_index", self.tableName];
-    WCDB::StatementCreateIndex statement = WCDB::StatementCreateIndex().createIndex(indexName).table(self.tableName).indexed(BenchmarkObject.identifier);
+    WCDB::StatementCreateIndex statement = WCDB::StatementCreateIndex().createIndex(indexName).table(self.tableName).indexed(TestCaseObject.identifier);
 
     __block BOOL result;
     [self
@@ -62,5 +63,6 @@
         TestCaseAssertTrue(result);
     }];
 }
+#endif
 
 @end

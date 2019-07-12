@@ -55,7 +55,7 @@
 
 - (void)doTestInsert
 {
-    MigrationObject* newObject = [self.random migrationObjectWithIdentifier:self.objects.lastObject.identifier + 1];
+    MigrationObject* newObject = [Random.shared migrationObjectWithIdentifier:self.objects.lastObject.identifier + 1];
     NSMutableArray<MigrationObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
     [expectedObjects addObject:newObject];
 
@@ -79,7 +79,7 @@
 
 - (void)doTestInsertAutoIncrement
 {
-    MigrationObject* newObject = [self.random autoIncrementMigrationObjectWithIdentifier:self.objects.lastObject.identifier + 1];
+    MigrationObject* newObject = [Random.shared autoIncrementMigrationObjectWithIdentifier:self.objects.lastObject.identifier + 1];
     NSMutableArray<MigrationObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
     [expectedObjects addObject:newObject];
 
@@ -99,7 +99,7 @@
 
 - (void)doTestInsertOrReplace
 {
-    MigrationObject* newObject = [self.random migrationObjectWithIdentifier:self.objects.lastObject.identifier];
+    MigrationObject* newObject = [Random.shared migrationObjectWithIdentifier:self.objects.lastObject.identifier];
     NSMutableArray<MigrationObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
     [expectedObjects removeLastObject];
     [expectedObjects addObject:newObject];
@@ -120,7 +120,7 @@
 
 - (void)doTestInsertFailedWithConflict
 {
-    MigrationObject* newObject = [self.random migrationObjectWithIdentifier:self.objects.lastObject.identifier];
+    MigrationObject* newObject = [Random.shared migrationObjectWithIdentifier:self.objects.lastObject.identifier];
 
     TestCaseAssertFalse([self.table insertObject:newObject]);
 }
@@ -146,7 +146,7 @@
 {
     NSMutableArray<MigrationObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
     MigrationObject* secondObject = [expectedObjects objectAtIndex:2];
-    MigrationObject* newSecondObject = [self.random migrationObjectWithIdentifier:secondObject.identifier];
+    MigrationObject* newSecondObject = [Random.shared migrationObjectWithIdentifier:secondObject.identifier];
     [expectedObjects setObject:newSecondObject atIndexedSubscript:2];
 
     NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE",
@@ -207,7 +207,7 @@
 - (void)doTestSubqueryWithinUpdate
 {
     NSMutableArray<MigrationObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
-    MigrationObject* newObject = [self.random migrationObjectWithIdentifier:expectedObjects.lastObject.identifier];
+    MigrationObject* newObject = [Random.shared migrationObjectWithIdentifier:expectedObjects.lastObject.identifier];
     [expectedObjects removeLastObject];
     [expectedObjects addObject:newObject];
 

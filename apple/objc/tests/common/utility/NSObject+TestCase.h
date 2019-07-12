@@ -56,15 +56,16 @@
 @interface NSFileManager (TestCase)
 
 - (unsigned long long)getFileSizeIfExists:(NSString*)path;
-- (BOOL)copyItemsIfExistsAtPaths:(NSArray<NSString*>*)paths toDirectory:(NSString*)directory error:(NSError**)error;
-- (BOOL)removeItemIfExistsAtPath:(NSString*)path error:(NSError**)error;
-- (BOOL)removeItemsIfExistsAtPaths:(NSArray<NSString*>*)paths error:(NSError**)error;
-- (BOOL)setFileImmutable:(BOOL)immutable ofItemsIfExistsAtPaths:(NSArray<NSString*>*)paths error:(NSError**)error;
-- (BOOL)isFileImmutableOfItemAtPath:(NSString*)path error:(NSError**)error;
+- (void)copyItemsIfExistsAtPath:(NSString*)path toPath:(NSString*)destination;
+- (void)removeItemIfExistsAtPath:(NSString*)path;
+- (void)removeItemsIfExistsAtPaths:(NSArray<NSString*>*)paths;
+- (void)setFileImmutable:(BOOL)immutable ofItemsIfExistsAtPath:(NSString*)path;
+- (void)setFileImmutable:(BOOL)immutable ofItemsIfExistsAtPaths:(NSArray<NSString*>*)paths;
+- (BOOL)isFileImmutableOfItemAtPath:(NSString*)path;
 
 #if TARGET_OS_IPHONE && !TARGET_IPHONE_SIMULATOR
-- (BOOL)setFileProtectionOfPath:(NSString*)path to:(NSFileProtectionType)type error:(NSError**)error;
-- (NSFileProtectionType)getFileProtection:(NSString*)path error:(NSError**)error;
+- (void)setFileProtectionOfPath:(NSString*)path to:(NSFileProtectionType)type;
+- (NSFileProtectionType)getFileProtection:(NSString*)path;
 #endif
 
 @end

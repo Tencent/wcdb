@@ -115,6 +115,11 @@ bool AssemblerHandle::assembleSQL(const UnsafeStringView &sql)
     return succeed;
 }
 
+void AssemblerHandle::finish()
+{
+    Handle::close();
+}
+
 #pragma mark - Assembler - Table
 bool AssemblerHandle::assembleTable(const UnsafeStringView &tableName,
                                     const UnsafeStringView &sql)

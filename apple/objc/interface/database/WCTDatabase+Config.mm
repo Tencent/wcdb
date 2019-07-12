@@ -33,17 +33,25 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
 
 - (void)setCipherKey:(NSData*)cipherKey
 {
-    _database->setConfig(WCDB::CipherConfigName,
-                         std::static_pointer_cast<WCDB::Config>(std::make_shared<WCDB::CipherConfig>(WCDB::UnsafeData::immutable((const unsigned char*) cipherKey.bytes, (size_t) cipherKey.length), WCDB::CipherConfigDefaultPageSize)),
-                         WCDB::Configs::Priority::Highest);
+    if (cipherKey != nil) {
+        _database->setConfig(WCDB::CipherConfigName,
+                             std::static_pointer_cast<WCDB::Config>(std::make_shared<WCDB::CipherConfig>(WCDB::UnsafeData::immutable((const unsigned char*) cipherKey.bytes, (size_t) cipherKey.length), WCDB::CipherConfigDefaultPageSize)),
+                             WCDB::Configs::Priority::Highest);
+    } else {
+        _database->removeConfig(WCDB::CipherConfigName);
+    }
 }
 
 - (void)setCipherKey:(NSData*)cipherKey
    andCipherPageSize:(int)cipherPageSize
 {
-    _database->setConfig(WCDB::CipherConfigName,
-                         std::static_pointer_cast<WCDB::Config>(std::make_shared<WCDB::CipherConfig>(WCDB::UnsafeData::immutable((const unsigned char*) cipherKey.bytes, (size_t) cipherKey.length), cipherPageSize)),
-                         WCDB::Configs::Priority::Highest);
+    if (cipherKey != nil) {
+        _database->setConfig(WCDB::CipherConfigName,
+                             std::static_pointer_cast<WCDB::Config>(std::make_shared<WCDB::CipherConfig>(WCDB::UnsafeData::immutable((const unsigned char*) cipherKey.bytes, (size_t) cipherKey.length), cipherPageSize)),
+                             WCDB::Configs::Priority::Highest);
+    } else {
+        _database->removeConfig(WCDB::CipherConfigName);
+    }
 }
 
 - (void)setConfig:(WCTConfigBlock)nsInvocation

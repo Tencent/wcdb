@@ -60,7 +60,7 @@
 {
     @synchronized(self) {
         if (_renewedObject1 == nil) {
-            _renewedObject1 = [self.random testCaseObjectWithIdentifier:1];
+            _renewedObject1 = [Random.shared testCaseObjectWithIdentifier:1];
         }
         return _renewedObject1;
     }
@@ -70,7 +70,7 @@
 {
     @synchronized(self) {
         if (_renewedObject2 == nil) {
-            _renewedObject2 = [self.random testCaseObjectWithIdentifier:2];
+            _renewedObject2 = [Random.shared testCaseObjectWithIdentifier:2];
         }
         return _renewedObject2;
     }
@@ -100,7 +100,7 @@
 {
     @synchronized(self) {
         if (_object3 == nil) {
-            _object3 = [self.random testCaseObjectWithIdentifier:3];
+            _object3 = [Random.shared testCaseObjectWithIdentifier:3];
         }
         return _object3;
     }
@@ -110,7 +110,7 @@
 {
     @synchronized(self) {
         if (_object4 == nil) {
-            _object4 = [self.random testCaseObjectWithIdentifier:4];
+            _object4 = [Random.shared testCaseObjectWithIdentifier:4];
         }
         return _object4;
     }

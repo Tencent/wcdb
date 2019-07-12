@@ -18,30 +18,39 @@
  * limitations under the License.
  */
 
+#import "TablesBasedFactory.h"
 #import "TestCase.h"
 
 @interface TableBenchmark : Benchmark
-
+@property (nonatomic, readonly) TablesBasedFactory* factory;
 @end
 
-@implementation TableBenchmark
+@implementation TableBenchmark {
+    TablesBasedFactory* _factory;
+}
+
+- (TablesBasedFactory*)factory
+{
+    @synchronized(self) {
+        if (_factory == nil) {
+            _factory = [[TablesBasedFactory alloc] initWithDirectory:self.class.cacheRoot];
+        }
+        return _factory;
+    }
+}
 
 - (void)setUp
 {
     [super setUp];
+
     self.factory.tolerance = 0.0f;
-    self.factory.expectedQuality = 100000;
+    self.factory.quality = 100000;
 }
 
 - (void)setUpDatabase
 {
-    __block NSString* path;
-    [self.database close:^{
-        TestCaseAssertTrue([self.database removeFiles]);
-        path = [self.factory production:self.directory];
-    }];
-    TestCaseAssertTrue(path != nil);
-    self.path = path;
+    TestCaseAssertTrue([self.database removeFiles]);
+    [self.factory produce:self.path];
 
     [self.database close];
     TestCaseAssertTrue([self.database canOpen]);
@@ -52,6 +61,7 @@
     [self.database removeFiles];
 }
 
+#ifndef WCDB_QUICK_TESTS
 - (void)test_initialization
 {
     __block BOOL result;
@@ -91,90 +101,13 @@
         if (tableNames == nil) {
             NSString* pattern = [NSString stringWithFormat:@"%s%%", WCDB::Syntax::builtinTablePrefix];
 
-            NSMutableArray<NSString*>* names = [NSMutableArray arrayWithCapacity:(NSUInteger) self.factory.expectedQuality];
+            NSMutableArray<NSString*>* names = [NSMutableArray arrayWithCapacity:(NSUInteger) self.factory.quality];
             for (WCTValue* value in [self.database getColumnFromStatement:WCDB::StatementSelect().select(WCTMaster.name).from(WCTMaster.tableName).where(WCTMaster.name.notLike(pattern))]) {
                 [names addObject:value.stringValue];
             }
             tableNames = [NSArray arrayWithArray:names];
         }
-        TestCaseAssertTrue(tableNames.count == self.factory.expectedQuality);
-    }
-    tearDown:^{
-        [self tearDownDatabase];
-        result = NO;
-    }
-    checkCorrectness:^{
-        TestCaseAssertTrue(result);
-    }];
-}
-
-- (void)test_insert_into_multiple_tables_within_one_transaction
-{
-    int numberOfObjects = 10000;
-    int numberOfTables = 100;
-    NSString* pattern = [NSString stringWithFormat:@"%s%%", WCDB::Syntax::builtinTablePrefix];
-    __block NSArray<NSString*>* tableNames = nil;
-
-    __block NSArray* objects = nil;
-    __block BOOL result;
-    [self
-    doMeasure:^{
-        result = [self.database runTransaction:^BOOL(WCTHandle* handle) {
-            for (NSString* tableName in tableNames) {
-                if (![handle insertObjects:objects intoTable:tableName]) {
-                    return NO;
-                }
-            }
-            return YES;
-        }];
-    }
-    setUp:^{
-        [self setUpDatabase];
-
-        tableNames = (NSArray<NSString*>*) [self.database getColumnFromStatement:WCDB::StatementSelect().select(WCTMaster.name).from(WCTMaster.tableName).where(WCTMaster.name.notLike(pattern)).limit(numberOfTables)];
-        TestCaseAssertEqual(tableNames.count, numberOfTables);
-
-        if (objects == nil) {
-            objects = [self.random benchmarkObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.expectedQuality];
-        }
-    }
-    tearDown:^{
-        [self tearDownDatabase];
-        result = NO;
-    }
-    checkCorrectness:^{
-        TestCaseAssertTrue(result);
-    }];
-}
-
-- (void)test_insert_into_multiple_tables_within_seperated_transaction
-{
-    int numberOfObjects = 10000;
-    int numberOfTables = 100;
-    NSString* pattern = [NSString stringWithFormat:@"%s%%", WCDB::Syntax::builtinTablePrefix];
-    __block NSArray<NSString*>* tableNames = nil;
-
-    __block NSArray* objects = nil;
-    __block BOOL result;
-    [self
-    doMeasure:^{
-        for (NSString* tableName in tableNames) {
-            if (![self.database insertObjects:objects intoTable:tableName]) {
-                result = NO;
-                return;
-            }
-        }
-        result = YES;
-    }
-    setUp:^{
-        [self setUpDatabase];
-
-        tableNames = (NSArray<NSString*>*) [self.database getColumnFromStatement:WCDB::StatementSelect().select(WCTMaster.name).from(WCTMaster.tableName).where(WCTMaster.name.notLike(pattern)).limit(numberOfTables)];
-        TestCaseAssertEqual(tableNames.count, numberOfTables);
-
-        if (objects == nil) {
-            objects = [self.random benchmarkObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.expectedQuality];
-        }
+        TestCaseAssertTrue(tableNames.count == self.factory.quality);
     }
     tearDown:^{
         [self tearDownDatabase];
@@ -193,7 +126,7 @@
     [self
     doMeasure:^{
         for (NSString* tableName in tableNames) {
-            if (![self.database createTable:tableName withClass:BenchmarkObject.class]) {
+            if (![self.database createTable:tableName withClass:TestCaseObject.class]) {
                 result = NO;
                 return;
             }
@@ -204,7 +137,7 @@
         [self setUpDatabase];
 
         if (tableNames == nil) {
-            tableNames = [NSArray arrayWithArray:[self.random tableNamesWithCount:numberOfTables]];
+            tableNames = [NSArray arrayWithArray:[Random.shared tableNamesWithCount:numberOfTables]];
         }
     }
     tearDown:^{
@@ -215,44 +148,6 @@
         TestCaseAssertTrue(result);
     }];
 }
-
-#pragma mark - ReusableFactoryPreparation
-- (BOOL)stepPreparePrototype:(NSString*)path
-{
-    int numberOfTables = (int) [self getQuality:path];
-    int maxNumberOfTables = (int) self.factory.expectedQuality;
-    int step = maxNumberOfTables / 100;
-    if (step > maxNumberOfTables - numberOfTables) {
-        step = maxNumberOfTables - numberOfTables;
-    }
-    if (step < 1) {
-        step = 1;
-    }
-
-    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
-    return [database runTransaction:^BOOL(WCTHandle* handle) {
-               WCDB_UNUSED(handle)
-               for (int i = 0; i < step; ++i) {
-                   if (![database createTable:self.random.tableName withClass:BenchmarkObject.class]) {
-                       return NO;
-                   }
-               }
-               return YES;
-           }]
-           && [database truncateCheckpoint];
-}
-
-- (double)getQuality:(NSString*)path
-{
-    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
-    NSNumber* quality = [database getValueFromStatement:WCDB::StatementSelect().select(WCTMaster.allProperties.count()).from(WCTMaster.tableName).where(WCTMaster.type == @"table")].numberValue;
-    TestCaseAssertTrue(quality != nil);
-    return quality.doubleValue;
-}
-
-- (NSString*)category
-{
-    return @"Tables";
-}
+#endif
 
 @end

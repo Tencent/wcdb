@@ -34,7 +34,6 @@
 #import "TestCaseCounter.h"
 #import "TestCaseResult.h"
 
-#import "Random+BenchmarkObject.h"
 #import "Random+TestCaseObject.h"
 #import "Random+WCDB.h"
 
@@ -44,9 +43,9 @@
 #import "AllTypesObject+WCTTableCoding.h"
 #import "AllTypesObject.h"
 
-#import "BenchmarkObject+WCTTableCoding.h"
-#import "BenchmarkObject.h"
-
 #import "NSObject+TestCase.h"
+
+#import "ObjectsBasedFactory.h"
+#import "TablesBasedFactory.h"
 
 #import <WCDB/WCTDatabase+Test.h>

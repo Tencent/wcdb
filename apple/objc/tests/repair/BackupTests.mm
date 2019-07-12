@@ -121,7 +121,7 @@
 
 - (BOOL)checkAutoBackedup
 {
-    TestCaseObject *object = [self.random autoIncrementTestCaseObject];
+    TestCaseObject *object = [Random.shared autoIncrementTestCaseObject];
     TestCaseAssertTrue([self.table insertObject:object]);
 
     TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);

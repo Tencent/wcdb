@@ -18,25 +18,33 @@
  * limitations under the License.
  */
 
-#import "Random+BenchmarkObject.h"
+#import <Foundation/Foundation.h>
 
-@implementation Random (BenchmarkObject)
+@interface Random : NSObject
 
-- (NSArray<BenchmarkObject*>*)benchmarkObjectsWithCount:(NSUInteger)count
-{
-    return [self benchmarkObjectsWithCount:count startingFromIdentifier:0];
-}
++ (instancetype)shared;
 
-- (NSArray<BenchmarkObject*>*)benchmarkObjectsWithCount:(NSUInteger)count startingFromIdentifier:(int)identifier
-{
-    NSMutableArray* objects = [NSMutableArray arrayWithCapacity:count];
-    for (NSUInteger i = identifier; i < identifier + count; ++i) {
-        BenchmarkObject* object = [[BenchmarkObject alloc] init];
-        object.identifier = (int) i;
-        object.content = self.data;
-        [objects addObject:object];
-    }
-    return objects;
-}
+- (void)setStable:(BOOL)stable;
+
+- (uint64_t)uint64;
+- (uint32_t)uint32;
+- (uint8_t)uint8;
+
+- (int64_t)int64;
+- (int32_t)int32;
+
+- (double)double_;
+- (float)float_;
+- (float)float_0_1;
+
+- (BOOL)boolean;
+
+- (NSNumber*)number;
+
+- (NSString*)string;
+
+- (NSData*)data;
+- (NSData*)dataWithLength:(NSInteger)length;
+- (NSData*)dataOtherThan:(NSData*)other;
 
 @end

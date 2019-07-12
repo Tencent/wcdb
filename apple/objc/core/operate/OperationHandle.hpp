@@ -55,6 +55,8 @@ public:
     bool acquireWriteLock() override final;
     bool releaseWriteLock() override final;
 
+    void finish() override final;
+
 protected:
     StatementBegin m_statementForReadTransaction;
     StatementSelect m_statementForAcquireReadLock;

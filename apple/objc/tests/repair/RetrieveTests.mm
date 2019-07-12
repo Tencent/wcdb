@@ -21,6 +21,7 @@
 #import "AllTypesObject+WCTTableCoding.h"
 #import "AllTypesObject.h"
 #import "BackupTestCase.h"
+#import "SizeBasedFactory.h"
 
 @interface RetrieveTests : BackupTestCase
 
@@ -233,7 +234,7 @@
 - (void)test_retrieve_all_types
 {
     self.tableClass = AllTypesObject.class;
-    self.tableName = self.random.tableName;
+    self.tableName = Random.shared.tableName;
     TestCaseAssertTrue([self createTable]);
 
     AllTypesObject* maxObject = [AllTypesObject maxObject];
@@ -248,7 +249,7 @@
     AllTypesObject* nilObject = [AllTypesObject nilObject];
     TestCaseAssertTrue([self.table insertObject:nilObject]);
 
-    TestCaseAssertTrue([self.database retrieve:nullptr] == 1.0f);
+    TestCaseAssertTrue([self.database retrieve:nil] == 1.0f);
 
     AllTypesObject* selectedMaxObject = [self.table getObjectWhere:AllTypesObject.type == maxObject.type];
     TestCaseAssertTrue([selectedMaxObject isEqual:maxObject]);
@@ -262,5 +263,52 @@
     AllTypesObject* selectedNilObject = [self.table getObjectWhere:AllTypesObject.type == nilObject.type];
     TestCaseAssertTrue([selectedNilObject isEqual:nilObject]);
 }
+
+// TODO: check correctness of retrieved objects
+#ifndef WCDB_QUICK_TESTS
+- (void)test_backup_huge_database
+{
+    SizeBasedFactory* factory = [[SizeBasedFactory alloc] initWithDirectory:self.class.cacheRoot];
+    factory.quality = 6LL * 1024 * 1024 * 1024; // 6GB > 4GB
+    factory.tolerance = 0.02;
+
+    [factory produce:self.path];
+
+    TestCaseAssertTrue([self.database backup]);
+
+    TestCaseAssertTrue([self.database corruptHeaderWithinCloseAfterTruncatedCheckpoint]);
+
+    __block double percentage = 0;
+    TestCaseAssertEqual([self.database retrieve:^(double progress, double increment) {
+                            WCDB_UNUSED(increment);
+                            double newPercentage = progress * 100.0;
+                            if (newPercentage - percentage >= 1.0) {
+                                TestCaseLog(@"Retrieving %.2f%%", newPercentage);
+                                percentage = newPercentage;
+                            }
+                        }],
+                        1.0);
+}
+
+- (void)test_retrieve_huge_database
+{
+    SizeBasedFactory* factory = [[SizeBasedFactory alloc] initWithDirectory:self.class.cacheRoot];
+    factory.quality = 6LL * 1024 * 1024 * 1024; // 6GB > 4GB
+    factory.tolerance = 0.02;
+
+    [factory produce:self.path];
+
+    __block double percentage = 0;
+    TestCaseAssertEqual([self.database retrieve:^(double progress, double increment) {
+                            WCDB_UNUSED(increment);
+                            double newPercentage = progress * 100.0;
+                            if (newPercentage - percentage >= 1.0) {
+                                TestCaseLog(@"Retrieving %.2f%%", newPercentage);
+                                percentage = newPercentage;
+                            }
+                        }],
+                        1.0);
+}
+#endif
 
 @end

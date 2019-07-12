@@ -29,7 +29,6 @@
 @implementation DatabaseTestCase {
     WCTDatabase* _database;
     NSString* _path;
-    ReusableFactory* _factory;
 }
 
 - (void)setUp
@@ -72,56 +71,10 @@
     @synchronized(self) {
         if (_database == nil) {
             _database = [[WCTDatabase alloc] initWithPath:self.path];
-            _database.tag = self.random.tag;
+            _database.tag = Random.shared.tag;
         }
         return _database;
     }
-}
-
-#pragma mark - Factory
-- (ReusableFactory*)factory
-{
-    @synchronized(self) {
-        if (_factory == nil) {
-            _factory = [[ReusableFactory alloc] initWithDirectory:self.class.cacheRoot];
-            _factory.delegate = self;
-            [self log:@"cache at %@", self.class.cacheRoot];
-        }
-        return _factory;
-    }
-}
-
-- (BOOL)stepPreparePrototype:(NSString*)path
-{
-    WCDB_UNUSED(path)
-    TestCaseFailure();
-    return NO;
-}
-
-- (double)getQuality:(NSString*)path
-{
-    WCDB_UNUSED(path)
-    TestCaseFailure();
-    return 0;
-}
-
-- (NSString*)category
-{
-    TestCaseFailure();
-    return nil;
-}
-
-- (NSArray<NSString*>*)additionalPrototypes:(NSString*)prototype
-{
-    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:prototype];
-    return @[
-        database.walPath,
-        database.firstMaterialPath,
-        database.lastMaterialPath,
-        database.factoryPath,
-        database.journalPath,
-        database.shmPath,
-    ];
 }
 
 #pragma mark - SQL

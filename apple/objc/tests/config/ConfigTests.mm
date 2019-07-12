@@ -34,7 +34,7 @@
 {
     @synchronized(self) {
         if (_configName == nil) {
-            _configName = self.random.string;
+            _configName = Random.shared.string;
         }
         return _configName;
     }
@@ -160,8 +160,8 @@
 
 - (void)test_cipher
 {
-    NSData* cipher = self.random.data;
-    NSData* wrongCipher = [self.random dataOtherThan:cipher];
+    NSData* cipher = Random.shared.data;
+    NSData* wrongCipher = [Random.shared dataOtherThan:cipher];
 
     [self.database setCipherKey:cipher];
     TestCaseAssertTrue([self.database canOpen]);
@@ -173,7 +173,7 @@
 
 - (void)test_cipher_with_page_size
 {
-    NSData* cipher = self.random.data;
+    NSData* cipher = Random.shared.data;
     int pageSize = 8 * 1024;
     int wrongPageSize = 16 * 1024;
 

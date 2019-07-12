@@ -20,30 +20,34 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol ReusableFactoryPreparation <NSObject>
+@class WCTDatabase;
+
+@protocol PrototypePreparation <NSObject>
 @required
-- (BOOL)stepPreparePrototype:(NSString*)path;
-- (double)getQuality:(NSString*)path;
-- (NSString*)category;
+- (void)preparePrototype:(WCTDatabase*)prototype currentQuality:(double)quality;
+- (double)qualityOfPrototype:(WCTDatabase*)prototype;
+- (NSString*)categoryOfPrototype;
 @optional
-- (BOOL)willStartPreparing:(NSString*)path;
-- (BOOL)willEndPreparing:(NSString*)path;
-- (NSArray<NSString*>*)additionalPrototypes:(NSString*)prototype;
+- (void)configurePrototype:(WCTDatabase*)prototype;
+//- (void)prototypeWillFinishPreparing:(WCTDatabase*)prototype;
 @end
 
-@interface ReusableFactory : NSObject
+@interface PrototypeFactory : NSObject
+
+- (instancetype)init UNAVAILABLE_ATTRIBUTE;
 
 - (instancetype)initWithDirectory:(NSString*)directory;
+
 @property (nonatomic, readonly) NSString* directory;
 
-@property (nonatomic, assign) id<ReusableFactoryPreparation> delegate;
+@property (nonatomic, weak) id<PrototypePreparation> delegate;
 
 @property (nonatomic, assign) double tolerance;
 
-@property (nonatomic, assign) double expectedQuality;
+@property (nonatomic, assign) double quality;
 
-- (NSString*)production:(NSString*)destination;
+- (void)produce:(NSString*)destination;
 
-- (BOOL)removePrototypes;
+- (void)removePrototype;
 
 @end

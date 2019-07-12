@@ -42,6 +42,8 @@ public:
 
     virtual bool acquireReadLock() = 0;
     virtual bool releaseReadLock() = 0;
+
+    virtual void finish() = 0;
 };
 class WriteLocker : public Locker {
 public:
@@ -49,6 +51,8 @@ public:
 
     virtual bool acquireWriteLock() = 0;
     virtual bool releaseWriteLock() = 0;
+
+    virtual void finish() = 0;
 };
 
 class LockerHolder {

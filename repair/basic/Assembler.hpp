@@ -54,6 +54,8 @@ public:
 
     virtual const Error &getError() const = 0;
 
+    virtual void finish() = 0;
+
 protected:
     bool isDuplicatedIgnorable() const;
 

@@ -107,14 +107,14 @@
              }
 
              [self.handle bindInteger32:3 toIndex:1];
-             [self.handle bindString:self.random.string toIndex:2];
+             [self.handle bindString:Random.shared.string toIndex:2];
              if (![self.handle step]) {
                  return NO;
              }
 
              [self.handle reset];
              [self.handle bindInteger32:4 toIndex:1];
-             [self.handle bindString:self.random.string toIndex:2];
+             [self.handle bindString:Random.shared.string toIndex:2];
              BOOL succeed = [self.handle step] && [self.handle done];
              [self.handle finalizeStatement];
              return succeed;
@@ -146,7 +146,7 @@
 
 - (void)test_get_last_inserted
 {
-    WCDB::StatementInsert statement = WCDB::StatementInsert().insertIntoTable(self.tableName).column(WCDB::Column(@"identifier")).column(WCDB::Column(@"content")).value(nullptr).value(self.random.string);
+    WCDB::StatementInsert statement = WCDB::StatementInsert().insertIntoTable(self.tableName).column(WCDB::Column(@"identifier")).column(WCDB::Column(@"content")).value(nullptr).value(Random.shared.string);
     TestCaseAssertTrue([self.handle execute:statement]);
     TestCaseAssertEqual([self.handle getLastInsertedRowID], 3);
 }
@@ -154,7 +154,7 @@
 #pragma mark - Bind && Get
 - (void)test_integer32
 {
-    int32_t value = self.random.int32;
+    int32_t value = Random.shared.int32;
     {
         TestCaseAssertTrue([self.handle prepare:self.statementInsert]);
         [self.handle bindInteger32:value toIndex:1];
@@ -172,7 +172,7 @@
 
 - (void)test_integer64
 {
-    int64_t value = self.random.int64;
+    int64_t value = Random.shared.int64;
     {
         TestCaseAssertTrue([self.handle prepare:self.statementInsert]);
         [self.handle bindInteger64:value toIndex:1];
@@ -190,7 +190,7 @@
 
 - (void)test_double
 {
-    double value = self.random.double_;
+    double value = Random.shared.double_;
     {
         TestCaseAssertTrue([self.handle prepare:self.statementInsert]);
         [self.handle bindDouble:value toIndex:1];
@@ -227,7 +227,7 @@
 
 - (void)test_string
 {
-    NSString* value = self.random.string;
+    NSString* value = Random.shared.string;
     TestCaseAssertTrue(value != nil);
     {
         TestCaseAssertTrue([self.handle prepare:self.statementInsert]);
@@ -246,7 +246,7 @@
 
 - (void)test_number
 {
-    NSNumber* value = self.random.number;
+    NSNumber* value = Random.shared.number;
     TestCaseAssertTrue(value != nil);
     {
         TestCaseAssertTrue([self.handle prepare:self.statementInsert]);
@@ -267,7 +267,7 @@
 
 - (void)test_data
 {
-    NSData* value = self.random.data;
+    NSData* value = Random.shared.data;
     TestCaseAssertTrue(value != nil);
     {
         TestCaseAssertTrue([self.handle prepare:self.statementInsert]);
@@ -286,7 +286,7 @@
 
 - (void)test_meta
 {
-    NSData* value = self.random.data;
+    NSData* value = Random.shared.data;
     {
         TestCaseAssertTrue([self.handle prepare:self.statementInsert]);
         [self.handle bindData:value toIndex:1];

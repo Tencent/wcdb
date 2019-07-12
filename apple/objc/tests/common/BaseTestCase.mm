@@ -20,8 +20,8 @@
 
 #import "BaseTestCase.h"
 #import "Dispatch.h"
+#import "PrototypeFactory.h"
 #import "Random.h"
-#import "ReusableFactory.h"
 #import "TestCaseAssertion.h"
 #import "TestCaseLog.h"
 #import "WCTDatabase+TestCase.h"
@@ -53,6 +53,8 @@
     [super setUp];
 
     self.continueAfterFailure = YES;
+
+    [Random shared].stable = NO;
 
     [WCTDatabase globalTracePerformance:nil];
     [WCTDatabase globalTraceSQL:nil];
@@ -103,11 +105,10 @@
 
 - (void)tearDown
 {
-    @synchronized(self) {
-        if (_dispatch != nil) {
-            [_dispatch waitUntilDone];
-        }
-    }
+    [Random shared].stable = NO;
+
+    [self.dispatch waitUntilDone];
+
     [WCTDatabase globalTraceError:nil];
     [WCTDatabase globalTraceSQL:nil];
     [WCTDatabase globalTracePerformance:nil];
@@ -118,12 +119,7 @@
 
 - (Random *)random
 {
-    @synchronized(self) {
-        if (_random == nil) {
-            _random = [[Random alloc] init];
-        }
-        return _random;
-    }
+    return [Random shared];
 }
 
 - (NSString *)testName
@@ -197,8 +193,8 @@
         if (_dispatch == nil) {
             _dispatch = [[Dispatch alloc] init];
         }
+        return _dispatch;
     }
-    return _dispatch;
 }
 
 - (void)log:(NSString *)format, ...

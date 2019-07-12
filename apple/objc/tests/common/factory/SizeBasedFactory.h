@@ -18,16 +18,9 @@
  * limitations under the License.
  */
 
-#import "BenchmarkObject.h"
-#import "BenchmarkObject+WCTTableCoding.h"
-#import <WCDB/WCDB.h>
+#import "PrototypeFactory.h"
+#import <Foundation/Foundation.h>
 
-@implementation BenchmarkObject
-
-WCDB_IMPLEMENTATION(BenchmarkObject)
-WCDB_SYNTHESIZE(identifier)
-WCDB_SYNTHESIZE(content)
-
-WCDB_PRIMARY_ASC(identifier)
+@interface SizeBasedFactory : PrototypeFactory <PrototypePreparation>
 
 @end

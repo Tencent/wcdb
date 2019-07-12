@@ -1,5 +1,9 @@
 #!/bin/bash
 
+usage() {
+    echo "Usage: sh $0 -v/--version version"
+}
+
 if [ ! -z "$(git status --porcelain)" ]; then 
     echo "Git working directory is not clean."
     exit 1
@@ -17,7 +21,7 @@ case "$key" in
     shift
     ;;
     *)
-    echo "Unknown option: $1"
+    usage
     exit 1
     ;;
 esac
@@ -27,6 +31,7 @@ root=`git rev-parse --show-toplevel`
 
 if [ -z "$version" -a "$version" != " " ]; then
     echo "Version is not specified."
+    usage
     exit 1
 fi
 
