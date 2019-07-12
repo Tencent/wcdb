@@ -1,7 +1,13 @@
 #!/bin/bash
 
 usage() {
-    echo "Usage: sh $0 -t/--target WCDB/WCDB iOS static/WCDBSwift [-c/--configuration Debug/Release] [-d/--destination destination]"
+    echo """USAGE
+  sh $0 
+       -t/--target WCDB/WCDB iOS static/WCDBSwift 
+       [-c/--configuration Debug/Release] 
+       [-d/--destination destination]
+       [--disable-bitcode]
+"""
 }
 
 root=`git rev-parse --show-toplevel`
@@ -9,6 +15,7 @@ root=`git rev-parse --show-toplevel`
 target="" # WCDB, WCDB iOS static, WCDBSwift
 configuration="Release" # Release, Debug
 destination="./"
+disable_bitcode=false
 
 while [[ $# -gt 0 ]]
 do
@@ -27,6 +34,10 @@ case "$key" in
     -d|--destination)
     destination="$2"
     shift
+    shift
+    ;;
+    --disable-bitcode)
+    disable_bitcode=true
     shift
     ;;
     *)
@@ -62,7 +73,10 @@ deviceFramework="$products"/"$configuration"-iphoneos/WCDB.framework
 simulatorFramework="$products"/"$configuration"-iphonesimulator/WCDB.framework
 destination="$destination"/WCDB.framework
 
-parameters=ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= SKIP_INSTALL=YES GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=NO CLANG_ENABLE_CODE_COVERAGE=NO STRIP_INSTALLED_PRODUCT=NO ENABLE_TESTABILITY=NO ENABLE_BITCODE=NO
+parameters=(ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= SKIP_INSTALL=YES GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=NO CLANG_ENABLE_CODE_COVERAGE=NO ENABLE_TESTABILITY=NO)
+if [ "$disable_bitcode" = true ] ; then
+    parameters+=(ENABLE_BITCODE=NO)
+fi
 
 echo "Build $target with $configuration to $destination"
 
@@ -77,13 +91,13 @@ then
 fi
 
 # build device
-if ! xcrun xcodebuild -arch arm64 -scheme "$target" -project "$project" -configuration "$configuration" -derivedDataPath "$derivedData" -sdk iphoneos "$parameters" build; then
+if ! xcrun xcodebuild -arch arm64 -scheme "$target" -project "$project" -configuration "$configuration" -derivedDataPath "$derivedData" -sdk iphoneos ${parameters[@]} build; then
     echo "Build failed for device."
     exit 1
 fi
 
 # build simulator
-if ! xcrun xcodebuild -arch x86_64 -scheme "$target" -project "$project" -configuration "$configuration" -derivedDataPath "$derivedData" -sdk iphonesimulator "$parameters" build; then
+if ! xcrun xcodebuild -arch x86_64 -scheme "$target" -project "$project" -configuration "$configuration" -derivedDataPath "$derivedData" -sdk iphonesimulator ${parameters[@]} build; then
     echo "Build failed for simulator."
     exit 1
 fi
