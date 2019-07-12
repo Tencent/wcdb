@@ -3,9 +3,6 @@
 // Architectures
 SUPPORTED_PLATFORMS = iphonesimulator iphoneos
 
-// Build Options
-ENABLE_TESTABILITY = NO
-
 // Deployment
 TARGETED_DEVICE_FAMILY = 1,2
 STRIP_INSTALLED_PRODUCT = NO

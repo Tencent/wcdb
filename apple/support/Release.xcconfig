@@ -30,5 +30,5 @@ SWIFT_COMPILATION_MODE = wholemodule
 SWIFT_OPTIMIZATION_LEVEL = -Owholemodule;
 
 // User-Defined
-BITCODE_GENERATION_MODE = bitcode;
+BITCODE_GENERATION_MODE = bitcode
 

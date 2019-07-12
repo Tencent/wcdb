@@ -54,8 +54,6 @@ case "$configuration" in
     ;;
 esac
 
-destination="$destination"/
-
 project="$root"/apple/WCDB.xcodeproj
 derivedData="$root"/apple/derivedData
 products="$derivedData"/Build/Products
@@ -64,7 +62,7 @@ deviceFramework="$products"/"$configuration"-iphoneos/WCDB.framework
 simulatorFramework="$products"/"$configuration"-iphonesimulator/WCDB.framework
 destination="$destination"/WCDB.framework
 
-parameters=ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= SKIP_INSTALL=YES GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=NO CLANG_ENABLE_CODE_COVERAGE=NO STRIP_INSTALLED_PRODUCT=NO
+parameters=ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= SKIP_INSTALL=YES GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=NO CLANG_ENABLE_CODE_COVERAGE=NO STRIP_INSTALLED_PRODUCT=NO ENABLE_TESTABILITY=NO ENABLE_BITCODE=NO
 
 echo "Build $target with $configuration to $destination"
 
@@ -72,6 +70,10 @@ echo "Build $target with $configuration to $destination"
 if [ -d "$derivedData" ]
 then
     rm -r "$derivedData"
+fi
+if [ -d "$destination" ]
+then
+    rm -r "$destination"
 fi
 
 # build device
@@ -86,17 +88,13 @@ if ! xcrun xcodebuild -arch x86_64 -scheme "$target" -project "$project" -config
     exit 1
 fi
 
-# copy a template(headers) to the destination
-if [ -d "$destination" ]
-then
-    rm -r "$destination"
-fi
+# copy template headers to the destination
 if ! cp -R "$deviceFramework" "$destination"; then
     echo "Copy header failed."
     exit 1
 fi
 
-# combine both two binaries
+# combine binaries
 if ! xcrun lipo -create "$deviceFramework"/WCDB "$simulatorFramework"/WCDB -output "$destination"/WCDB; then
     echo "Lipo failed."
     exit 1
