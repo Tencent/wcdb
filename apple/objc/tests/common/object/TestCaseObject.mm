@@ -30,6 +30,7 @@ WCDB_SYNTHESIZE(identifier)
 WCDB_SYNTHESIZE(content)
 
 WCDB_PRIMARY_ASC_AUTO_INCREMENT(identifier)
+@synthesize lastInsertedRowID;
 
 - (BOOL)isEqual:(NSObject*)object
 {

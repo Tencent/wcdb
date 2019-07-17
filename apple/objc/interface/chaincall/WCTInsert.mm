@@ -100,38 +100,47 @@
         .values(WCDB::BindParameter::bindParameters(_properties.size()));
     }
 
-    std::vector<BOOL> autoIncrements;
+    std::vector<BOOL> autoIncrementsOfDefinitions;
     if (_statement.syntax().conflictAction != WCDB::Syntax::ConflictAction::Replace) {
         const auto &columnDefs = [cls objectRelationalMapping].getColumnDefs();
         for (const WCTProperty &property : _properties) {
             // auto increment?
             auto iter = columnDefs.caseInsensiveFind(property.getDescription());
             WCTRemedialAssert(iter != columnDefs.end(), "Related property is not found.", return NO;);
-            autoIncrements.push_back(iter->second.syntax().isAutoIncrement());
+            autoIncrementsOfDefinitions.push_back(iter->second.syntax().isAutoIncrement());
         }
     }
 
-    std::optional<BOOL> canFillLastInsertedRowID;
+    std::optional<BOOL> respondsToSetLastInsertedRowID;
+    std::optional<BOOL> respondsToIsAutoIncrement;
 
     BOOL succeed = NO;
     if ([_handle prepare:_statement]) {
-        std::optional<BOOL> isAutoIncrement;
         succeed = YES;
+
         for (WCTObject *value in _values) {
-            int index = 1;
             [_handle reset];
+            int index = 1;
+
             for (const WCTProperty &property : _properties) {
-                WCTAssert(autoIncrements.empty() || autoIncrements.size() == _properties.size());
-                if (autoIncrements.empty() || !autoIncrements[index - 1]) {
+                WCTAssert(autoIncrementsOfDefinitions.empty()
+                          || autoIncrementsOfDefinitions.size() == _properties.size());
+                if (autoIncrementsOfDefinitions.empty() || !autoIncrementsOfDefinitions[index - 1]) {
                     [_handle bindProperty:property
                                  ofObject:value
                                   toIndex:index];
                 } else {
-                    if (!isAutoIncrement.has_value()) {
+                    if (!respondsToIsAutoIncrement.has_value()) {
+                        respondsToIsAutoIncrement = [value respondsToSelector:@selector(isAutoIncrement)];
+                    }
+                    WCTAssert(respondsToIsAutoIncrement.has_value());
+
+                    BOOL isAutoIncrement = NO;
+                    if (respondsToIsAutoIncrement.value()) {
                         isAutoIncrement = value.isAutoIncrement;
                     }
-                    WCTAssert(isAutoIncrement.has_value());
-                    if (isAutoIncrement.value_or(NO)) {
+
+                    if (isAutoIncrement) {
                         [_handle bindNullToIndex:index];
                     } else {
                         [_handle bindProperty:property
@@ -145,20 +154,14 @@
                 succeed = NO;
                 break;
             }
-            if (!autoIncrements.empty()) {
-                if (!canFillLastInsertedRowID.has_value()) {
-                    canFillLastInsertedRowID = [_values.firstObject respondsToSelector:@selector(lastInsertedRowID)];
-                }
-                WCTAssert(canFillLastInsertedRowID.has_value());
-                if (canFillLastInsertedRowID.value_or(NO)) {
-                    if (!isAutoIncrement.has_value()) {
-                        isAutoIncrement = value.isAutoIncrement;
-                    }
-                    WCTAssert(isAutoIncrement.has_value());
-                    if (isAutoIncrement.value_or(NO)) {
-                        value.lastInsertedRowID = [_handle getLastInsertedRowID];
-                    }
-                }
+
+            // setup last inserted rowid
+            if (!respondsToSetLastInsertedRowID.has_value()) {
+                respondsToSetLastInsertedRowID = [value respondsToSelector:@selector(setLastInsertedRowID:)];
+            }
+            WCTAssert(respondsToSetLastInsertedRowID.has_value());
+            if (respondsToSetLastInsertedRowID.value()) {
+                [value setLastInsertedRowID:[_handle getLastInsertedRowID]];
             }
         }
         [_handle finalizeStatement];
