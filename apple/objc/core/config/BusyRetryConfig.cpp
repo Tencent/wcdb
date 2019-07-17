@@ -65,12 +65,10 @@ bool BusyRetryConfig::uninvoke(Handle* handle)
 bool BusyRetryConfig::onBusy(const UnsafeStringView& path, int numberOfTimes)
 {
     WCDB_UNUSED(path);
+    WCDB_UNUSED(numberOfTimes);
 
     Trying& trying = *m_tryings.getOrCreate();
     WCTAssert(trying.valid());
-    if (numberOfTimes == 0) {
-        trying.retrying(BusyRetryTimeOut);
-    }
     return getOrCreateState(trying.getPath()).wait(trying);
 }
 
@@ -214,34 +212,20 @@ bool BusyRetryConfig::State::shouldWait(const Expecting& expecting) const
 
 bool BusyRetryConfig::State::wait(Trying& trying)
 {
-    // retry unless the remaining time is less that 0 at the beginning.
-    bool retry = false;
-    if (trying.remainingTimeForRetring() > 0) {
-        retry = true;
+    std::unique_lock<std::mutex> lockGuard(m_lock);
+    while (shouldWait(trying)) {
+        Thread currentThread = Thread::current();
+        // main thread first
+        static_assert(Exclusivity::Must < Exclusivity::NoMatter, "");
+        m_waitings.insert(
+        currentThread, trying, Thread::isMain() ? Exclusivity::Must : Exclusivity::NoMatter);
 
-        std::unique_lock<std::mutex> lockGuard(m_lock);
-        while (shouldWait(trying)) {
-            double remainingTimeForRetring = trying.remainingTimeForRetring();
-            if (remainingTimeForRetring > 0) {
-                Thread currentThread = Thread::current();
-                // main thread first
-                static_assert(Exclusivity::Must < Exclusivity::NoMatter, "");
-                m_waitings.insert(
-                currentThread, trying, Thread::isMain() ? Exclusivity::Must : Exclusivity::NoMatter);
+        m_conditional.wait_for(lockGuard, BusyRetryTimeOut);
 
-                SteadyClock before = SteadyClock::now();
-                m_conditional.wait_for(lockGuard, remainingTimeForRetring);
-
-                double cost = SteadyClock::timeIntervalSinceSteadyClockToNow(before);
-                trying.retried(cost);
-
-                m_waitings.erase(currentThread);
-            } else {
-                break;
-            }
-        }
+        m_waitings.erase(currentThread);
     }
-    return retry;
+    // never timeout
+    return true;
 }
 
 void BusyRetryConfig::State::tryNotify()
@@ -261,27 +245,6 @@ void BusyRetryConfig::State::tryNotify()
 }
 
 #pragma mark - Trying
-BusyRetryConfig::Trying::Trying()
-: Expecting(), m_elapsedTime(0), m_timeout(std::numeric_limits<int>::max())
-{
-}
-
-void BusyRetryConfig::Trying::retrying(double timeout)
-{
-    m_timeout = timeout;
-    m_elapsedTime = 0;
-}
-
-void BusyRetryConfig::Trying::retried(double cost)
-{
-    m_elapsedTime += cost;
-}
-
-double BusyRetryConfig::Trying::remainingTimeForRetring() const
-{
-    return m_timeout - m_elapsedTime;
-}
-
 void BusyRetryConfig::Trying::expecting(const UnsafeStringView& path, ShmLockType type, int mask)
 {
     WCTAssert(!path.empty());

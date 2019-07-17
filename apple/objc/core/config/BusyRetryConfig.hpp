@@ -119,22 +119,17 @@ private:
 protected:
     class Trying : public Expecting {
     public:
-        Trying();
+        using Expecting::Expecting;
 
         void expecting(const UnsafeStringView& path, ShmLockType type, int mask);
         void expecting(const UnsafeStringView& path, PagerLockType type);
 
-        void retrying(double timeout);
-        void retried(double cost);
-        double remainingTimeForRetring() const;
         const StringView& getPath() const;
 
         bool valid() const;
 
     private:
         StringView m_path;
-        double m_elapsedTime;
-        double m_timeout;
     };
     ThreadLocal<Trying> m_tryings;
 };
