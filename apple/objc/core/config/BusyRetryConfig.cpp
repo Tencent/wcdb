@@ -214,26 +214,32 @@ bool BusyRetryConfig::State::shouldWait(const Expecting& expecting) const
 
 bool BusyRetryConfig::State::wait(Trying& trying)
 {
-    std::unique_lock<std::mutex> lockGuard(m_lock);
-    while (shouldWait(trying)) {
-        double remainingTimeForRetring = trying.remainingTimeForRetring();
-        if (remainingTimeForRetring > 0) {
-            Thread currentThread = Thread::current();
-            // main thread first
-            m_waitings.insert(currentThread, trying, Thread::isMain() ? 0 : 1);
+    // retry unless the remaining time is less that 0 at the beginning.
+    bool retry = false;
+    if (trying.remainingTimeForRetring() > 0) {
+        retry = true;
 
-            SteadyClock before = SteadyClock::now();
-            m_conditional.wait_for(lockGuard, remainingTimeForRetring);
+        std::unique_lock<std::mutex> lockGuard(m_lock);
+        while (shouldWait(trying)) {
+            double remainingTimeForRetring = trying.remainingTimeForRetring();
+            if (remainingTimeForRetring > 0) {
+                Thread currentThread = Thread::current();
+                // main thread first
+                m_waitings.insert(currentThread, trying, Thread::isMain() ? 0 : 1);
 
-            double cost = SteadyClock::timeIntervalSinceSteadyClockToNow(before);
-            trying.retried(cost);
+                SteadyClock before = SteadyClock::now();
+                m_conditional.wait_for(lockGuard, remainingTimeForRetring);
 
-            m_waitings.erase(currentThread);
-        } else {
-            return false;
+                double cost = SteadyClock::timeIntervalSinceSteadyClockToNow(before);
+                trying.retried(cost);
+
+                m_waitings.erase(currentThread);
+            } else {
+                break;
+            }
         }
     }
-    return true;
+    return retry;
 }
 
 void BusyRetryConfig::State::tryNotify()
