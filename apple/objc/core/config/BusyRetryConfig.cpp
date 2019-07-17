@@ -225,7 +225,9 @@ bool BusyRetryConfig::State::wait(Trying& trying)
             if (remainingTimeForRetring > 0) {
                 Thread currentThread = Thread::current();
                 // main thread first
-                m_waitings.insert(currentThread, trying, Thread::isMain() ? 0 : 1);
+                static_assert(Exclusivity::Must < Exclusivity::NoMatter, "");
+                m_waitings.insert(
+                currentThread, trying, Thread::isMain() ? Exclusivity::Must : Exclusivity::NoMatter);
 
                 SteadyClock before = SteadyClock::now();
                 m_conditional.wait_for(lockGuard, remainingTimeForRetring);
@@ -246,6 +248,10 @@ void BusyRetryConfig::State::tryNotify()
 {
     for (auto iter = m_waitings.begin(); iter != m_waitings.end();) {
         if (shouldWait(iter->value())) {
+            if (iter->order() == Exclusivity::Must) {
+                // stop so that the main thread can hold the mutex first.
+                return;
+            }
             ++iter;
         } else {
             m_conditional.notify(iter->key());
