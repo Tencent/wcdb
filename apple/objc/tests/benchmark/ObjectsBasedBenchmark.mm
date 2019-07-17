@@ -68,7 +68,12 @@
 
 - (NSString*)tableName
 {
-    return self.factory.tableName;
+    @synchronized(self) {
+        if (_tableName == nil) {
+            _tableName = self.factory.tableName;
+        }
+        return _tableName;
+    }
 }
 
 - (void)doTestWrite

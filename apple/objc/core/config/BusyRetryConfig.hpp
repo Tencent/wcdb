@@ -102,7 +102,11 @@ protected:
         std::mutex m_lock;
         Conditional m_conditional;
 
-        UniqueList<Thread, Expecting> m_waitings;
+        enum class Exclusivity {
+            Must = 0,
+            NoMatter = 1,
+        };
+        UniqueList<Thread, Expecting, Exclusivity> m_waitings;
     };
 
     State& getOrCreateState(const UnsafeStringView& path);

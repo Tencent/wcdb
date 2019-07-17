@@ -33,7 +33,6 @@
 // primary
 #define __WCDB_ORDERED_PRIMARY_IMP(propertyName, order_, autoIncrement_) \
     WCDB_IF(autoIncrement_, @synthesize isAutoIncrement;)                \
-    WCDB_IF(autoIncrement_, @synthesize lastInsertedRowID;)              \
     __WCDB_COLUMN_CONSTRAINT_BEGIN(propertyName)                         \
     columnConstraint.primaryKey().order(order_);                         \
     WCDB_IF(autoIncrement_, columnConstraint.autoIncrement());           \
@@ -41,7 +40,6 @@
 
 #define __WCDB_PRIMARY_IMP(propertyName, autoIncrement_)       \
     WCDB_IF(autoIncrement_, @synthesize isAutoIncrement;)      \
-    WCDB_IF(autoIncrement_, @synthesize lastInsertedRowID;)    \
     __WCDB_COLUMN_CONSTRAINT_BEGIN(propertyName)               \
     columnConstraint.primaryKey();                             \
     WCDB_IF(autoIncrement_, columnConstraint.autoIncrement()); \

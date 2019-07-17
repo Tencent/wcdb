@@ -32,8 +32,6 @@
     WCTProperties _properties;
     WCDB::StatementInsert _statement;
     NSArray<WCTObject *> *_values;
-    std::vector<bool> _autoIncrements;
-    std::optional<BOOL> _canFillLastInsertedRowID;
 }
 
 - (WCDB::StatementInsert &)statement
@@ -77,29 +75,6 @@
     WCTTryDisposeGuard tryDisposeGuard(self);
     BOOL succeed = YES;
     if (_values.count > 0) {
-        Class cls = _values.firstObject.class;
-        if (_properties.empty()) {
-            _properties = [cls allProperties];
-        }
-
-        if (_statement.syntax().columns.empty()) {
-            _statement
-            .columns(_properties)
-            .values(WCDB::BindParameter::bindParameters(_properties.size()));
-        }
-
-        _autoIncrements.clear();
-        if (_statement.syntax().conflictAction != WCDB::Syntax::ConflictAction::Replace) {
-            const auto &columnDefs = [cls objectRelationalMapping].getColumnDefs();
-            for (const WCTProperty &property : _properties) {
-                // auto increment?
-                auto iter = columnDefs.caseInsensiveFind(property.getDescription());
-                WCTRemedialAssert(iter != columnDefs.end(), "Unrelated property is found.", return NO;);
-                _autoIncrements.push_back(iter->second.syntax().isAutoIncrement());
-            }
-        }
-
-        _canFillLastInsertedRowID.reset();
         if (_values.count > 1) {
             succeed = [_handle lazyRunTransaction:^BOOL(WCTHandle *handle) {
                 WCDB_UNUSED(handle)
@@ -114,25 +89,58 @@
 
 - (BOOL)realExecute
 {
+    Class cls = _values.firstObject.class;
+    if (_properties.empty()) {
+        _properties = [cls allProperties];
+    }
+
+    if (_statement.syntax().columns.empty()) {
+        _statement
+        .columns(_properties)
+        .values(WCDB::BindParameter::bindParameters(_properties.size()));
+    }
+
+    std::vector<BOOL> autoIncrementsOfDefinitions;
+    if (_statement.syntax().conflictAction != WCDB::Syntax::ConflictAction::Replace) {
+        const auto &columnDefs = [cls objectRelationalMapping].getColumnDefs();
+        for (const WCTProperty &property : _properties) {
+            // auto increment?
+            auto iter = columnDefs.caseInsensiveFind(property.getDescription());
+            WCTRemedialAssert(iter != columnDefs.end(), "Related property is not found.", return NO;);
+            autoIncrementsOfDefinitions.push_back(iter->second.syntax().isAutoIncrement());
+        }
+    }
+
+    std::optional<BOOL> respondsToSetLastInsertedRowID;
+    std::optional<BOOL> respondsToIsAutoIncrement;
+
     BOOL succeed = NO;
     if ([_handle prepare:_statement]) {
-        std::optional<BOOL> isAutoIncrement;
         succeed = YES;
+
         for (WCTObject *value in _values) {
-            int index = 1;
             [_handle reset];
+            int index = 1;
+
             for (const WCTProperty &property : _properties) {
-                WCTAssert(_autoIncrements.empty() || _autoIncrements.size() == _properties.size());
-                if (_autoIncrements.empty() || !_autoIncrements[index - 1]) {
+                WCTAssert(autoIncrementsOfDefinitions.empty()
+                          || autoIncrementsOfDefinitions.size() == _properties.size());
+                if (autoIncrementsOfDefinitions.empty() || !autoIncrementsOfDefinitions[index - 1]) {
                     [_handle bindProperty:property
                                  ofObject:value
                                   toIndex:index];
                 } else {
-                    if (!isAutoIncrement.has_value()) {
+                    if (!respondsToIsAutoIncrement.has_value()) {
+                        respondsToIsAutoIncrement = [value respondsToSelector:@selector(isAutoIncrement)];
+                    }
+                    WCTAssert(respondsToIsAutoIncrement.has_value());
+
+                    BOOL isAutoIncrement = NO;
+                    if (respondsToIsAutoIncrement.value()) {
                         isAutoIncrement = value.isAutoIncrement;
                     }
-                    WCTAssert(isAutoIncrement.has_value());
-                    if (isAutoIncrement.value_or(NO)) {
+
+                    if (isAutoIncrement) {
                         [_handle bindNullToIndex:index];
                     } else {
                         [_handle bindProperty:property
@@ -146,24 +154,19 @@
                 succeed = NO;
                 break;
             }
-            if (!_autoIncrements.empty()) {
-                if (!_canFillLastInsertedRowID.has_value()) {
-                    _canFillLastInsertedRowID = [_values.firstObject respondsToSelector:@selector(lastInsertedRowID)];
-                }
-                WCTAssert(_canFillLastInsertedRowID.has_value());
-                if (_canFillLastInsertedRowID.value_or(NO)) {
-                    if (!isAutoIncrement.has_value()) {
-                        isAutoIncrement = value.isAutoIncrement;
-                    }
-                    WCTAssert(isAutoIncrement.has_value());
-                    if (isAutoIncrement.value_or(NO)) {
-                        value.lastInsertedRowID = [_handle getLastInsertedRowID];
-                    }
-                }
+
+            // setup last inserted rowid
+            if (!respondsToSetLastInsertedRowID.has_value()) {
+                respondsToSetLastInsertedRowID = [value respondsToSelector:@selector(setLastInsertedRowID:)];
+            }
+            WCTAssert(respondsToSetLastInsertedRowID.has_value());
+            if (respondsToSetLastInsertedRowID.value()) {
+                [value setLastInsertedRowID:[_handle getLastInsertedRowID]];
             }
         }
         [_handle finalizeStatement];
     }
+    WCTAssert(![_handle isPrepared]);
     return succeed;
 }
 

@@ -214,32 +214,44 @@ bool BusyRetryConfig::State::shouldWait(const Expecting& expecting) const
 
 bool BusyRetryConfig::State::wait(Trying& trying)
 {
-    std::unique_lock<std::mutex> lockGuard(m_lock);
-    while (shouldWait(trying)) {
-        double remainingTimeForRetring = trying.remainingTimeForRetring();
-        if (remainingTimeForRetring > 0) {
-            Thread currentThread = Thread::current();
-            // main thread first
-            m_waitings.insert(currentThread, trying, Thread::isMain() ? 0 : 1);
+    // retry unless the remaining time is less that 0 at the beginning.
+    bool retry = false;
+    if (trying.remainingTimeForRetring() > 0) {
+        retry = true;
 
-            SteadyClock before = SteadyClock::now();
-            m_conditional.wait_for(lockGuard, remainingTimeForRetring);
+        std::unique_lock<std::mutex> lockGuard(m_lock);
+        while (shouldWait(trying)) {
+            double remainingTimeForRetring = trying.remainingTimeForRetring();
+            if (remainingTimeForRetring > 0) {
+                Thread currentThread = Thread::current();
+                // main thread first
+                static_assert(Exclusivity::Must < Exclusivity::NoMatter, "");
+                m_waitings.insert(
+                currentThread, trying, Thread::isMain() ? Exclusivity::Must : Exclusivity::NoMatter);
 
-            double cost = SteadyClock::timeIntervalSinceSteadyClockToNow(before);
-            trying.retried(cost);
+                SteadyClock before = SteadyClock::now();
+                m_conditional.wait_for(lockGuard, remainingTimeForRetring);
 
-            m_waitings.erase(currentThread);
-        } else {
-            return false;
+                double cost = SteadyClock::timeIntervalSinceSteadyClockToNow(before);
+                trying.retried(cost);
+
+                m_waitings.erase(currentThread);
+            } else {
+                break;
+            }
         }
     }
-    return true;
+    return retry;
 }
 
 void BusyRetryConfig::State::tryNotify()
 {
     for (auto iter = m_waitings.begin(); iter != m_waitings.end();) {
         if (shouldWait(iter->value())) {
+            if (iter->order() == Exclusivity::Must) {
+                // stop so that the main thread can hold the mutex first.
+                return;
+            }
             ++iter;
         } else {
             m_conditional.notify(iter->key());

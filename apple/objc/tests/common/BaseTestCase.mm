@@ -52,7 +52,7 @@
 {
     [super setUp];
 
-    self.continueAfterFailure = YES;
+    self.continueAfterFailure = NO;
 
     [Random shared].stable = NO;
 
