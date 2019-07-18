@@ -40,8 +40,10 @@
     return [@"cipher" dataUsingEncoding:NSASCIIStringEncoding];
 }
 
-- (void)doSetUpDatabase
+- (void)setUpDatabase
 {
+    [super setUpDatabase];
+
     [self.database setCipherKey:self.cipher];
 }
 

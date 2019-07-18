@@ -164,6 +164,8 @@
     TestCaseAssertTrue(self.quality <= self.upperQuality);
 
     TestCaseAssertTrue([self.database truncateCheckpoint]);
+    TestCaseAssertOptionalEqual([self.database getNumberOfWalFrames], 0);
+
     NSFileManager* fileManager = [NSFileManager defaultManager];
     [fileManager removeItemIfExistsAtPath:self.database.shmPath];
     [fileManager removeItemIfExistsAtPath:self.database.walPath];

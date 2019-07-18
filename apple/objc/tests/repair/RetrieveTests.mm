@@ -264,51 +264,51 @@
     TestCaseAssertTrue([selectedNilObject isEqual:nilObject]);
 }
 
-// TODO: check correctness of retrieved objects
+#warning - TODO: check correctness of retrieved objects
 #ifndef WCDB_QUICK_TESTS
-- (void)test_backup_huge_database
-{
-    SizeBasedFactory* factory = [[SizeBasedFactory alloc] initWithDirectory:self.class.cacheRoot];
-    factory.quality = 6LL * 1024 * 1024 * 1024; // 6GB > 4GB
-    factory.tolerance = 0.02;
-
-    [factory produce:self.path];
-
-    TestCaseAssertTrue([self.database backup]);
-
-    TestCaseAssertTrue([self.database corruptHeaderWithinCloseAfterTruncatedCheckpoint]);
-
-    __block double percentage = 0;
-    TestCaseAssertEqual([self.database retrieve:^(double progress, double increment) {
-                            WCDB_UNUSED(increment);
-                            double newPercentage = progress * 100.0;
-                            if (newPercentage - percentage >= 1.0) {
-                                TestCaseLog(@"Retrieving %.2f%%", newPercentage);
-                                percentage = newPercentage;
-                            }
-                        }],
-                        1.0);
-}
-
-- (void)test_retrieve_huge_database
-{
-    SizeBasedFactory* factory = [[SizeBasedFactory alloc] initWithDirectory:self.class.cacheRoot];
-    factory.quality = 6LL * 1024 * 1024 * 1024; // 6GB > 4GB
-    factory.tolerance = 0.02;
-
-    [factory produce:self.path];
-
-    __block double percentage = 0;
-    TestCaseAssertEqual([self.database retrieve:^(double progress, double increment) {
-                            WCDB_UNUSED(increment);
-                            double newPercentage = progress * 100.0;
-                            if (newPercentage - percentage >= 1.0) {
-                                TestCaseLog(@"Retrieving %.2f%%", newPercentage);
-                                percentage = newPercentage;
-                            }
-                        }],
-                        1.0);
-}
+//- (void)test_backup_huge_database
+//{
+//    SizeBasedFactory* factory = [[SizeBasedFactory alloc] initWithDirectory:self.class.cacheRoot];
+//    factory.quality = 6LL * 1024 * 1024 * 1024; // 6GB > 4GB
+//    factory.tolerance = 0.02;
+//
+//    [factory produce:self.path];
+//
+//    TestCaseAssertTrue([self.database backup]);
+//
+//    TestCaseAssertTrue([self.database corruptHeaderWithinCloseAfterTruncatedCheckpoint]);
+//
+//    __block double percentage = 0;
+//    TestCaseAssertEqual([self.database retrieve:^(double progress, double increment) {
+//                            WCDB_UNUSED(increment);
+//                            double newPercentage = progress * 100.0;
+//                            if (newPercentage - percentage >= 1.0) {
+//                                TestCaseLog(@"Retrieving %.2f%%", newPercentage);
+//                                percentage = newPercentage;
+//                            }
+//                        }],
+//                        1.0);
+//}
+//
+//- (void)test_retrieve_huge_database
+//{
+//    SizeBasedFactory* factory = [[SizeBasedFactory alloc] initWithDirectory:self.class.cacheRoot];
+//    factory.quality = 6LL * 1024 * 1024 * 1024; // 6GB > 4GB
+//    factory.tolerance = 0.02;
+//
+//    [factory produce:self.path];
+//
+//    __block double percentage = 0;
+//    TestCaseAssertEqual([self.database retrieve:^(double progress, double increment) {
+//                            WCDB_UNUSED(increment);
+//                            double newPercentage = progress * 100.0;
+//                            if (newPercentage - percentage >= 1.0) {
+//                                TestCaseLog(@"Retrieving %.2f%%", newPercentage);
+//                                percentage = newPercentage;
+//                            }
+//                        }],
+//                        1.0);
+//}
 #endif
 
 @end

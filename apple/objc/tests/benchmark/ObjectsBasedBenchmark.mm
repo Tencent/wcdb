@@ -45,42 +45,22 @@
 - (void)setUpDatabase
 {
     [self.factory produce:self.path];
+    self.tableName = self.factory.tableName;
 
-    [self doSetUpDatabase];
-
-    [self.database close]; // reset cache
-    TestCaseAssertTrue([self.database canOpen]);
+    TestCaseAssertOptionalEqual([self.database getNumberOfWalFrames], 0);
+    TestCaseAssertFalse([self.database isOpened]);
 }
 
 - (void)tearDownDatabase
 {
     [self.database removeFiles];
-    [self doTearDownDatabase];
-}
-
-- (void)doSetUpDatabase
-{
-}
-
-- (void)doTearDownDatabase
-{
-}
-
-- (NSString*)tableName
-{
-    @synchronized(self) {
-        if (_tableName == nil) {
-            _tableName = self.factory.tableName;
-        }
-        return _tableName;
-    }
 }
 
 - (void)doTestWrite
 {
     int numberOfObjects = 10000;
 
-    __block NSArray* objects = nil;
+    NSArray* objects = [Random.shared testCaseObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.quality];
     __block BOOL result;
     [self
     doMeasure:^{
@@ -94,12 +74,6 @@
     }
     setUp:^{
         [self setUpDatabase];
-
-        if (objects == nil) {
-            objects = [Random.shared testCaseObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.quality];
-        }
-
-        TestCaseAssertOptionalEqual([self.database getNumberOfWalFrames], 0);
     }
     tearDown:^{
         [self tearDownDatabase];
@@ -119,8 +93,6 @@
     }
     setUp:^{
         [self setUpDatabase];
-
-        TestCaseAssertOptionalEqual([self.database getNumberOfWalFrames], 0);
     }
     tearDown:^{
         [self tearDownDatabase];
@@ -135,7 +107,7 @@
 {
     int numberOfObjects = 1000000;
 
-    __block NSArray* objects = nil;
+    NSArray* objects = [Random.shared testCaseObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.quality];
     __block BOOL result;
     [self
     doMeasure:^{
@@ -143,12 +115,6 @@
     }
     setUp:^{
         [self setUpDatabase];
-
-        if (objects == nil) {
-            objects = [Random.shared testCaseObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.quality];
-        }
-
-        TestCaseAssertOptionalEqual([self.database getNumberOfWalFrames], 0);
     }
     tearDown:^{
         [self tearDownDatabase];
