@@ -212,17 +212,25 @@ bool BusyRetryConfig::State::shouldWait(const Expecting& expecting) const
 
 bool BusyRetryConfig::State::wait(Trying& trying)
 {
+    static_assert(Exclusivity::Must < Exclusivity::NoMatter, "");
+
     std::unique_lock<std::mutex> lockGuard(m_lock);
     while (shouldWait(trying)) {
         Thread currentThread = Thread::current();
         // main thread first
-        static_assert(Exclusivity::Must < Exclusivity::NoMatter, "");
-        m_waitings.insert(
-        currentThread, trying, Thread::isMain() ? Exclusivity::Must : Exclusivity::NoMatter);
+        Exclusivity exclusivity
+        = Thread::isMain() ? Exclusivity::Must : Exclusivity::NoMatter;
 
-        m_conditional.wait_for(lockGuard, BusyRetryTimeOut);
+        m_waitings.insert(currentThread, trying, exclusivity);
+
+        bool notified = m_conditional.wait_for(lockGuard, BusyRetryTimeOut);
 
         m_waitings.erase(currentThread);
+
+        if (!notified) {
+            // retry anyway if timeout
+            break;
+        }
     }
     // never timeout
     return true;
