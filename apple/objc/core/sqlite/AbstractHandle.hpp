@@ -138,7 +138,6 @@ public:
     };
     bool checkpoint(CheckpointMode mode);
     void disableCheckpointWhenClosing(bool disable);
-    int getNumberOfDirtyPages();
 
 #pragma mark - Notification
 public:
