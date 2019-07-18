@@ -443,12 +443,6 @@ void AbstractHandle::setCipherKey(const UnsafeData &data)
     APIExit(sqlite3_key(m_handle, data.buffer(), (int) data.size()));
 }
 
-int AbstractHandle::getNumberOfDirtyPages()
-{
-    WCTAssert(isOpened());
-    return sqlite3_dirty_page_count(m_handle);
-}
-
 void AbstractHandle::enableExtendedResultCodes(bool enable)
 {
     WCTAssert(isOpened());
