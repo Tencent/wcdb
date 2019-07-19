@@ -53,16 +53,6 @@
                ReferencedContainer = "container:WCDB.xcodeproj">
             </BuildableReference>
          </TestableReference>
-         <TestableReference
-            skipped = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "234F0564227AA42500DD65A2"
-               BuildableName = "Benchmark.xctest"
-               BlueprintName = "Benchmark"
-               ReferencedContainer = "container:WCDB.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
