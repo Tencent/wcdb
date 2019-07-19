@@ -22,57 +22,76 @@
 
 @interface MigrationBenchmark ()
 @property (nonatomic, retain) WCTDatabase* sourceDatabase;
-@property (nonatomic, retain) NSString* sourceTable;
 @property (nonatomic, retain) NSString* sourcePath;
 @end
 
-@implementation MigrationBenchmark
+@implementation MigrationBenchmark {
+    WCTDatabase* _sourceDatabase;
+    NSString* _sourcePath;
+}
 
-- (void)doSetUpDatabase
+- (void)setSourcePath:(NSString*)sourcePath
 {
-    self.sourcePath = self.path;
-    self.sourceTable = self.tableName;
-    self.sourceDatabase = self.database;
+    _sourcePath = sourcePath;
+    _sourceDatabase = nil;
+}
 
-    // pointing migrated
-    if (self.isCrossDatabase) {
-        self.path = [self.sourcePath stringByAppendingString:@"_migrated"];
-    } else {
-        self.path = self.sourcePath;
+- (NSString*)sourcePath
+{
+    @synchronized(self) {
+        if (_sourcePath == nil) {
+            if (self.isCrossDatabase) {
+                _sourcePath = [self.path stringByAppendingString:@"_source"];
+            } else {
+                _sourcePath = self.path;
+            }
+        }
+        return _sourcePath;
     }
-    self.tableName = [self.sourceTable stringByAppendingString:@"_migrated"];
+}
 
-    NSString* table = self.tableName;
+- (WCTDatabase*)sourceDatabase
+{
+    @synchronized(self) {
+        if (_sourceDatabase == nil) {
+            _sourceDatabase = [[WCTDatabase alloc] initWithPath:self.sourcePath];
+        }
+        return _sourceDatabase;
+    }
+}
+
+- (void)setUpDatabase
+{
+    [self.factory produce:self.sourcePath];
+    self.tableName = [self.factory.tableName stringByAppendingString:@"_migrated"];
+
+    NSString* tableName = self.tableName;
     NSString* path = self.path;
-    NSString* sourceTable = self.sourceTable;
+    NSString* sourceTableName = self.factory.tableName;
     NSString* sourcePath = self.sourcePath;
     [self.database filterMigration:^(WCTMigrationUserInfo* info) {
-        if ([info.table isEqualToString:table]
+        if ([info.table isEqualToString:tableName]
             && [info.database isEqualToString:path]) {
-            info.sourceTable = sourceTable;
+            info.sourceTable = sourceTableName;
             info.sourceDatabase = sourcePath;
         }
     }];
-
     TestCaseAssertTrue([self.database createTable:self.tableName withClass:TestCaseObject.class]);
-
     TestCaseAssertTrue([self.database stepMigration]);
     TestCaseAssertFalse([self.database isMigrated]);
     TestCaseAssertTrue([self.database truncateCheckpoint]);
     TestCaseAssertTrue([self.sourceDatabase truncateCheckpoint]);
+    [self.database close];
 
-    [self.sourceDatabase close];
-    TestCaseAssertTrue([self.sourceDatabase canOpen]);
+    TestCaseAssertOptionalEqual([self.database getNumberOfWalFrames], 0);
+    TestCaseAssertOptionalEqual([self.sourceDatabase getNumberOfWalFrames], 0);
+    TestCaseAssertFalse([self.database isOpened]);
 }
 
-- (void)doTearDownDatabase
+- (void)tearDownDatabase
 {
     TestCaseAssertTrue([self.database removeFiles]);
-    if (self.sourceDatabase != nil) {
-        TestCaseAssertTrue([self.sourceDatabase removeFiles]);
-    }
-    self.path = self.sourcePath;
-    self.tableName = self.sourceTable;
+    TestCaseAssertTrue([self.sourceDatabase removeFiles]);
 }
 
 - (void)doTestMigrate

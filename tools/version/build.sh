@@ -1,33 +1,36 @@
 #!/bin/bash
 
-usage() {
+showUsage() {
     echo """USAGE
   sh $0 
-       -t/--target WCDB/WCDB iOS static/WCDBSwift 
-       [-c/--configuration Debug/Release] 
+       -p/--platform iOS/macOS
+       -l/--language ObjC/Swift
        [-d/--destination destination]
-       [--disable-bitcode]
+       [--disable-bitcode] 
+       [--static-framework]
 """
 }
 
 root=`git rev-parse --show-toplevel`
 
-target="" # WCDB, WCDB iOS static, WCDBSwift
-configuration="Release" # Release, Debug
-destination="./"
+declare platform
+declare language
+destination="."
+contains_32bit=false
 disable_bitcode=false
+static_framework=false
 
 while [[ $# -gt 0 ]]
 do
 key="$1"
 case "$key" in
-    -t|--target)
-    target="$2"
+    -l|--language)
+    language="$2"
     shift
     shift
     ;;
-    -c|--configuration)
-    configuration="$2"
+    -p|--platform)
+    platform="$2"
     shift
     shift
     ;;
@@ -40,76 +43,106 @@ case "$key" in
     disable_bitcode=true
     shift
     ;;
+    --static-framework)
+    static_framework=true
+    shift
+    ;;
+    -h|--help)
+    showUsage
+    exit 0
+    ;;
     *)
-    usage
+    showUsage
     exit 1
     ;;
 esac
 done
 
-case "$target" in
-    WCDB|WCDB\ iOS\ static|WCDBSwift)
-    ;;
-    *)
-    usage
-    exit 1
-    ;;
-esac
-
-case "$configuration" in
-    Debug|Release)
-    ;;
-    *)
-    usage
-    exit 1
-    ;;
-esac
-
 project="$root"/apple/WCDB.xcodeproj
-derivedData="$root"/apple/derivedData
+derivedData="$destination"/derivedData
 products="$derivedData"/Build/Products
+configuration=Release
+settings=(ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= SKIP_INSTALL=YES GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=NO CLANG_ENABLE_CODE_COVERAGE=NO ENABLE_TESTABILITY=NO)
 
-deviceFramework="$products"/"$configuration"-iphoneos/WCDB.framework
-simulatorFramework="$products"/"$configuration"-iphonesimulator/WCDB.framework
-destination="$destination"/WCDB.framework
-
-parameters=(ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= SKIP_INSTALL=YES GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=NO CLANG_ENABLE_CODE_COVERAGE=NO ENABLE_TESTABILITY=NO)
-if [ "$disable_bitcode" = true ] ; then
-    parameters+=(ENABLE_BITCODE=NO)
+if $static_framework; then
+    if [ "$language" != "ObjC" ] || [ "$platform" != "iOS" ]; then
+        echo 'Static library is only support iOS + ObjC.'
+        exit 1
+    fi
+    settings+=(MACH_O_TYPE=staticlib STRIP_STYLE=debugging)
+fi
+if $disable_bitcode; then
+    settings+=(ENABLE_BITCODE=NO)
 fi
 
-echo "Build $target with $configuration to $destination"
+declare target
+case "$language" in
+    ObjC)
+        target=WCDB
+    ;;
+    Swift)
+        target=WCDBSwift
+    ;;
+    *)
+        echo 'Language should be either ObjC or Swift.'
+        showUsage
+        exit 1
+    ;;
+esac
+platformBasedParameters=()
+case "$platform" in
+    iOS)
+        platformBasedParameters+=('product="$products/$configuration-iphoneos/$productName" sdk=iphoneos arch=arm64')
+        platformBasedParameters+=('product="$products/$configuration-iphonesimulator/$productName" sdk=iphonesimulator arch=x86_64')
+    ;;
+    macOS)
+        platformBasedParameters+=('product="$products/$configuration/$productName" sdk=macosx arch=x86_64')
+    ;;
+    *)
+        echo 'Platform should be either iOS or macOS.'
+        showUsage
+        exit 1
+    ;;
+esac
 
-# remove cache
+# build
 if [ -d "$derivedData" ]
 then
     rm -r "$derivedData"
 fi
-if [ -d "$destination" ]
+declare template
+machos=()
+for platformBasedParameter in "${platformBasedParameters[@]}"; do
+    eval "$platformBasedParameter"
+    framework="$product/$target.framework"
+    machos+=( "$framework/$target" )
+    if [ -z "$template" ]; then
+        template="$framework"
+    fi
+    build="xcrun xcodebuild -arch "$arch" -scheme "$target" -project "$project" -configuration "$configuration" -derivedDataPath "$derivedData" -sdk "$sdk" ${settings[@]} build"
+    if type xcpretty > /dev/null; then
+        build+=" | xcpretty"
+    fi
+    if ! eval $build; then
+        echo "Build failed."
+        exit 1
+    fi
+done
+
+# copy to destination
+output="$destination"/"$target.framework"
+if [ -d "$output" ]
 then
-    rm -r "$destination"
+    rm -r "$output"
 fi
-
-# build device
-if ! xcrun xcodebuild -arch arm64 -scheme "$target" -project "$project" -configuration "$configuration" -derivedDataPath "$derivedData" -sdk iphoneos ${parameters[@]} build; then
-    echo "Build failed for device."
+if ! cp -R "$template" "$destination"; then
+    echo "Copy frameworks failed."
     exit 1
 fi
-
-# build simulator
-if ! xcrun xcodebuild -arch x86_64 -scheme "$target" -project "$project" -configuration "$configuration" -derivedDataPath "$derivedData" -sdk iphonesimulator ${parameters[@]} build; then
-    echo "Build failed for simulator."
-    exit 1
+if (( ${#machos[@]} > 1 )); then
+    if ! xcrun lipo -create "${machos[@]}" -output "$output/$target"; then
+        echo "Lipo mach-o failed."
+        exit 1
+    fi
 fi
-
-# copy template headers to the destination
-if ! cp -R "$deviceFramework" "$destination"; then
-    echo "Copy header failed."
-    exit 1
-fi
-
-# combine binaries
-if ! xcrun lipo -create "$deviceFramework"/WCDB "$simulatorFramework"/WCDB -output "$destination"/WCDB; then
-    echo "Lipo failed."
-    exit 1
-fi
+echo "Output at $output"

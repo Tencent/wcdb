@@ -126,6 +126,14 @@
 - (void)shipping:(NSString*)destination
 {
     NSFileManager* fileManager = [NSFileManager defaultManager];
+
+    TestCaseAssertOptionalEqual([self.database getNumberOfWalFrames], 0);
+
+    NSFileManager* fileManager = [NSFileManager defaultManager];
+    [fileManager removeItemIfExistsAtPath:self.database.shmPath];
+    [fileManager removeItemIfExistsAtPath:self.database.walPath];
+
+    // move to temp to avoid the production is immutable while test stops unexpectly.
     NSString* tempPath = [[[fileManager temporaryDirectory] path] stringByAppendingPathComponent:@"prototype.temp"];
     [fileManager setFileImmutable:NO ofItemsIfExistsAtPath:tempPath];
     [fileManager removeItemIfExistsAtPath:tempPath];
@@ -164,9 +172,6 @@
     TestCaseAssertTrue(self.quality <= self.upperQuality);
 
     TestCaseAssertTrue([self.database truncateCheckpoint]);
-    NSFileManager* fileManager = [NSFileManager defaultManager];
-    [fileManager removeItemIfExistsAtPath:self.database.shmPath];
-    [fileManager removeItemIfExistsAtPath:self.database.walPath];
 
     [[NSFileManager defaultManager] setFileImmutable:YES ofItemsIfExistsAtPath:self.path];
 }

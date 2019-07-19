@@ -44,12 +44,12 @@
 
 - (void)test_create_index
 {
-    NSString* indexName = [NSString stringWithFormat:@"%@_index", self.tableName];
-    WCDB::StatementCreateIndex statement = WCDB::StatementCreateIndex().createIndex(indexName).table(self.tableName).indexed(TestCaseObject.identifier);
-
     __block BOOL result;
     [self
     doMeasure:^{
+        NSString* indexName = [NSString stringWithFormat:@"%@_index", self.tableName];
+        WCDB::StatementCreateIndex statement = WCDB::StatementCreateIndex().createIndex(indexName).table(self.tableName).indexed(TestCaseObject.identifier);
+
         result = [self.database execute:statement];
     }
     setUp:^{
