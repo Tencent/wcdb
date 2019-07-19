@@ -15,7 +15,7 @@ root=`git rev-parse --show-toplevel`
 
 declare platform
 declare language
-destination="./"
+destination="."
 contains_32bit=false
 disable_bitcode=false
 static_framework=false
@@ -62,34 +62,44 @@ project="$root"/apple/WCDB.xcodeproj
 derivedData="$destination"/derivedData
 products="$derivedData"/Build/Products
 configuration=Release
-parameters=(ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= SKIP_INSTALL=YES GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=NO CLANG_ENABLE_CODE_COVERAGE=NO ENABLE_TESTABILITY=NO)
-target=""
-productName=""
-product=""
+settings=(ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= SKIP_INSTALL=YES GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=NO CLANG_ENABLE_CODE_COVERAGE=NO ENABLE_TESTABILITY=NO)
 
 if $static_framework; then
-    if [ "$language" != "ObjC" || "$platform" != "iOS" ]; then
+    if [ "$language" != "ObjC" ] || [ "$platform" != "iOS" ]; then
         echo 'Static library is only support iOS + ObjC.'
         exit 1
     fi
+    settings+=(MACH_O_TYPE=staticlib STRIP_STYLE=debugging)
 fi
 if $disable_bitcode; then
-    parameters+=(ENABLE_BITCODE=NO)
+    settings+=(ENABLE_BITCODE=NO)
 fi
+
+declare target
 case "$language" in
     ObjC)
-        target="WCDB"
-        productName="WCDB.framework"
-        if $static_framework; then
-            parameters+=(MACH_O_TYPE=staticlib STRIP_STYLE=debugging)
-        fi
+        target=WCDB
     ;;
     Swift)
-        target="WCDBSwift"
-        productName="WCDBSwift.framework"
+        target=WCDBSwift
     ;;
     *)
         echo 'Language should be either ObjC or Swift.'
+        showUsage
+        exit 1
+    ;;
+esac
+platformBasedParameters=()
+case "$platform" in
+    iOS)
+        platformBasedParameters+=('product="$products/$configuration-iphoneos/$productName" sdk=iphoneos arch=arm64')
+        platformBasedParameters+=('product="$products/$configuration-iphonesimulator/$productName" sdk=iphonesimulator arch=x86_64')
+    ;;
+    macOS)
+        platformBasedParameters+=('product="$products/$configuration/$productName" sdk=macosx arch=x86_64')
+    ;;
+    *)
+        echo 'Platform should be either iOS or macOS.'
         showUsage
         exit 1
     ;;
@@ -100,40 +110,39 @@ if [ -d "$derivedData" ]
 then
     rm -r "$derivedData"
 fi
-case "$platform" in
-    iOS)
-        product="$products"/"$configuration"-iphoneos/"$productName"
-        productSimulator="$products"/"$configuration"-iphonesimulator/"$productName"
-        if ! xcrun xcodebuild -arch arm64 -scheme "$target" -project "$project" -configuration "$configuration" -derivedDataPath "$derivedData" -sdk iphoneos ${parameters[@]} build; then
-            exit 1
-        fi
-        if ! xcrun xcodebuild -arch x86_64 -scheme "$target" -project "$project" -configuration "$configuration" -derivedDataPath "$derivedData" -sdk iphonesimulator ${parameters[@]} build; then
-            exit 1
-        fi
-        if ! xcrun lipo -create "$product"/WCDB "$productSimulator"/WCDB -output "$product"/WCDB; then
-            exit 1
-        fi
-    ;;
-    macOS)
-        product="$products"/"$configuration"/"$productName"
-        if ! xcrun xcodebuild -arch x86_64 -scheme "$target" -project "$project" -configuration "$configuration" -derivedDataPath "$derivedData" -sdk macosx ${parameters[@]} build; then
-            exit 1
-        fi
-    ;;
-    *)
-        echo 'Platform should be either iOS or macOS.'
-        showUsage
+declare template
+machos=()
+for platformBasedParameter in "${platformBasedParameters[@]}"; do
+    eval "$platformBasedParameter"
+    framework="$product/$target.framework"
+    machos+=( "$framework/$target" )
+    if [ -z "$template" ]; then
+        template="$framework"
+    fi
+    build="xcrun xcodebuild -arch "$arch" -scheme "$target" -project "$project" -configuration "$configuration" -derivedDataPath "$derivedData" -sdk "$sdk" ${settings[@]} build"
+    if type xcpretty > /dev/null; then
+        build+=" | xcpretty"
+    fi
+    if ! eval $build; then
+        echo "Build failed."
         exit 1
-    ;;
-esac
+    fi
+done
 
 # copy to destination
-output="$destination"/"$productName"
+output="$destination"/"$target.framework"
 if [ -d "$output" ]
 then
     rm -r "$output"
 fi
-if ! cp -R "$product" "$destination"; then
-    echo "Copy header failed."
+if ! cp -R "$template" "$destination"; then
+    echo "Copy frameworks failed."
     exit 1
 fi
+if (( ${#machos[@]} > 1 )); then
+    if ! xcrun lipo -create "${machos[@]}" -output "$output/$target"; then
+        echo "Lipo mach-o failed."
+        exit 1
+    fi
+fi
+echo "Output at $output"
