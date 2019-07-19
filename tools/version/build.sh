@@ -13,8 +13,8 @@ showUsage() {
 
 root=`git rev-parse --show-toplevel`
 
-platform=""
-language=""
+declare platform
+declare language
 destination="./"
 contains_32bit=false
 disable_bitcode=false
@@ -63,29 +63,29 @@ derivedData="$destination"/derivedData
 products="$derivedData"/Build/Products
 configuration=Release
 parameters=(ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= SKIP_INSTALL=YES GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=NO CLANG_ENABLE_CODE_COVERAGE=NO ENABLE_TESTABILITY=NO)
-if $disable_bitcode; then
-    parameters+=(ENABLE_BITCODE=NO)
-fi
 target=""
 productName=""
 product=""
 
+if $static_framework; then
+    if [ "$language" != "ObjC" || "$platform" != "iOS" ]; then
+        echo 'Static library is only support iOS + ObjC.'
+        exit 1
+    fi
+fi
+if $disable_bitcode; then
+    parameters+=(ENABLE_BITCODE=NO)
+fi
 case "$language" in
     ObjC)
-        if $static_framework; then
-            target="WCDB iOS static"
-        else
-            target="WCDB"
-        fi
+        target="WCDB"
         productName="WCDB.framework"
+        if $static_framework; then
+            parameters+=(MACH_O_TYPE=staticlib STRIP_STYLE=debugging)
+        fi
     ;;
     Swift)
-        if $static_framework; then
-            echo 'Static library is only support iOS + ObjC.'
-            exit 1
-        else
-            target="WCDBSwift"
-        fi
+        target="WCDBSwift"
         productName="WCDBSwift.framework"
     ;;
     *)
