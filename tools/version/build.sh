@@ -92,11 +92,11 @@ esac
 platformBasedParameters=()
 case "$platform" in
     iOS)
-        platformBasedParameters+=('product="$products/$configuration-iphoneos/$productName" sdk=iphoneos arch=arm64')
-        platformBasedParameters+=('product="$products/$configuration-iphonesimulator/$productName" sdk=iphonesimulator arch=x86_64')
+        platformBasedParameters+=('product="$products/$configuration-iphoneos/$target.framework" sdk=iphoneos arch=arm64')
+        platformBasedParameters+=('product="$products/$configuration-iphonesimulator/$target.framework" sdk=iphonesimulator arch=x86_64')
     ;;
     macOS)
-        platformBasedParameters+=('product="$products/$configuration/$productName" sdk=macosx arch=x86_64')
+        platformBasedParameters+=('product="$products/$configuration/$target.framework" sdk=macosx arch=x86_64')
     ;;
     *)
         echo 'Platform should be either iOS or macOS.'
@@ -114,10 +114,9 @@ declare template
 machos=()
 for platformBasedParameter in "${platformBasedParameters[@]}"; do
     eval "$platformBasedParameter"
-    framework="$product/$target.framework"
-    machos+=( "$framework/$target" )
+    machos+=( "$product/$target" )
     if [ -z "$template" ]; then
-        template="$framework"
+        template="$product"
     fi
     build="xcrun xcodebuild -arch "$arch" -scheme "$target" -project "$project" -configuration "$configuration" -derivedDataPath "$derivedData" -sdk "$sdk" ${settings[@]} build"
     if type xcpretty > /dev/null; then

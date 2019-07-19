@@ -128,8 +128,6 @@
     NSFileManager* fileManager = [NSFileManager defaultManager];
 
     TestCaseAssertOptionalEqual([self.database getNumberOfWalFrames], 0);
-
-    NSFileManager* fileManager = [NSFileManager defaultManager];
     [fileManager removeItemIfExistsAtPath:self.database.shmPath];
     [fileManager removeItemIfExistsAtPath:self.database.walPath];
 
