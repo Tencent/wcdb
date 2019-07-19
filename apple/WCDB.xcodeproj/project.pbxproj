@@ -3696,6 +3696,7 @@
 				234F0741227AAE4B00DD65A2 /* Sources */,
 				234F0742227AAE4B00DD65A2 /* Frameworks */,
 				234F0743227AAE4B00DD65A2 /* Resources */,
+				39A6DC6F22E1BD0D00A84D39 /* Install Templates */,
 			);
 			buildRules = (
 			);
@@ -3888,7 +3889,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "(cd ${SRCROOT}/../tools/templates && sh install.sh) || true\n";
+			shellScript = "if [ \"$ACTION\" = \"build\" ]; then \n    (cd ${SRCROOT}/../tools/templates && sh install.sh) || true\nfi\n";
+		};
+		39A6DC6F22E1BD0D00A84D39 /* Install Templates */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Install Templates";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"$ACTION\" = \"build\" ]; then \n    (cd ${SRCROOT}/../tools/templates && sh install.sh) || true\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
