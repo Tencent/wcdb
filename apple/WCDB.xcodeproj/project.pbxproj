@@ -130,7 +130,6 @@
 		234F0594227AA4E200DD65A2 /* DatabaseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F058F227AA4E100DD65A2 /* DatabaseTests.mm */; };
 		234F0595227AA4E200DD65A2 /* ObservationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0590227AA4E100DD65A2 /* ObservationTests.mm */; };
 		234F0596227AA4E200DD65A2 /* FileTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0591227AA4E200DD65A2 /* FileTests.mm */; };
-		234F0597227AA4E200DD65A2 /* ValueTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0592227AA4E200DD65A2 /* ValueTests.mm */; };
 		234F0598227AA4E200DD65A2 /* TableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0593227AA4E200DD65A2 /* TableTests.mm */; };
 		234F05DD227AA4F600DD65A2 /* StatementAlterTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0599227AA4EC00DD65A2 /* StatementAlterTableTests.mm */; };
 		234F05DE227AA4F600DD65A2 /* FrameSpecTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F059A227AA4ED00DD65A2 /* FrameSpecTests.mm */; };
@@ -958,7 +957,6 @@
 		234F058F227AA4E100DD65A2 /* DatabaseTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DatabaseTests.mm; sourceTree = "<group>"; };
 		234F0590227AA4E100DD65A2 /* ObservationTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ObservationTests.mm; sourceTree = "<group>"; };
 		234F0591227AA4E200DD65A2 /* FileTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FileTests.mm; sourceTree = "<group>"; };
-		234F0592227AA4E200DD65A2 /* ValueTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ValueTests.mm; sourceTree = "<group>"; };
 		234F0593227AA4E200DD65A2 /* TableTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableTests.mm; sourceTree = "<group>"; };
 		234F0599227AA4EC00DD65A2 /* StatementAlterTableTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementAlterTableTests.mm; sourceTree = "<group>"; };
 		234F059A227AA4ED00DD65A2 /* FrameSpecTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FrameSpecTests.mm; sourceTree = "<group>"; };
@@ -2143,7 +2141,6 @@
 				234F0591227AA4E200DD65A2 /* FileTests.mm */,
 				234F0590227AA4E100DD65A2 /* ObservationTests.mm */,
 				234F0593227AA4E200DD65A2 /* TableTests.mm */,
-				234F0592227AA4E200DD65A2 /* ValueTests.mm */,
 			);
 			path = basic;
 			sourceTree = "<group>";
@@ -4021,7 +4018,6 @@
 				234F064C227AA51500DD65A2 /* FTS3Object.mm in Sources */,
 				234F063B227AA50800DD65A2 /* Integer64CodingObject.m in Sources */,
 				234F0598227AA4E200DD65A2 /* TableTests.mm in Sources */,
-				234F0597227AA4E200DD65A2 /* ValueTests.mm in Sources */,
 				234F0606227AA4F600DD65A2 /* ColumnDefTests.mm in Sources */,
 				234F0707227AA5A700DD65A2 /* MigrationObject.mm in Sources */,
 				234F060A227AA4F600DD65A2 /* StatementUpdateTests.mm in Sources */,
