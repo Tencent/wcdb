@@ -19,7 +19,7 @@ fi
 mkdir "$conan"
 
 # build
-if ! sh "$build_tool" --target WCDB\ iOS\ static --destination "$conan" --configuration Release; then
+if ! sh "$build_tool" --platform iOS --language ObjC --disable-bitcode --static-framework --destination "$conan"; then
     exit 1
 fi
 
