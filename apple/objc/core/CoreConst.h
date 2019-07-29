@@ -35,7 +35,6 @@ static constexpr const int OperationQueueTolerableFailuresForMigration = 5;
 static constexpr const double OperationQueueTimeIntervalForPurgingAgain = 30.0;
 static constexpr const double OperationQueueRateForTooManyFileDescriptors = 0.7;
 #pragma mark - Operation Queue - Checkpoint
-static constexpr const int OperationQueueFramesThresholdForCheckpoint = 1024;
 static constexpr const double OperationQueueTimeIntervalForCheckpoint = 10.0;
 #pragma mark - Operation Queue - Backup
 static constexpr const double OperationQueueTimeIntervalForBackup = 60.0;
