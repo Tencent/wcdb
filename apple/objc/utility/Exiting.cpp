@@ -30,7 +30,7 @@ static void exiting();
 static std::atomic<bool>& exitingValue()
 {
     WCDB_STATIC_VARIABLE std::atomic<bool> s_exitingValue(false);
-    static auto _ WCDB_USED = atexit(exiting);
+    WCDB_ONCE(atexit(exiting));
     return s_exitingValue;
 }
 

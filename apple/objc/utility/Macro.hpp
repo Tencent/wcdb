@@ -58,6 +58,8 @@
 #define WCDB_CONCAT(a, b) _WCDB_CONCAT(a, b)
 
 #define WCDB_UNIQUE_ID __COUNTER__
+#define WCDB_ONCE(task)                                                        \
+    static auto WCDB_CONCAT(__once_, WCDB_UNIQUE_ID) WCDB_USED = task;
 
 #define WCDB_STATIC_ASSERT_EXISTS(type_or_expression)                          \
     static_assert(sizeof(type_or_expression) > 0,                              \
