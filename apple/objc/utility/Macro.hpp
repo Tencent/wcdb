@@ -79,3 +79,6 @@
 #define WCDB_NON_FIRST_ARGS(N, ...) __VA_ARGS__
 
 #define WCDB_UNUSED(variable) _Pragma(WCDB_STRINGIFY(unused(variable)))
+
+#define WCDB_NO_DESTROY [[clang::no_destroy]]
+#define WCDB_STATIC_VARIABLE WCDB_NO_DESTROY static

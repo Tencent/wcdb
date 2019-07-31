@@ -200,9 +200,9 @@ bool MigratingHandle::trySynchronousTransactionAfterAttached()
     bool succeed = true;
     if (isInTransaction()) {
         markErrorAsIgnorable(Error::Code::Error);
-        static const StringView* s_synchronousTransaction
-        = new StringView(StatementBegin().beginImmediate().getDescription());
-        succeed = executeSQL(*s_synchronousTransaction);
+        WCDB_STATIC_VARIABLE const StringView s_synchronousTransaction(
+        StatementBegin().beginImmediate().getDescription());
+        succeed = executeSQL(s_synchronousTransaction);
         WCTAssert(!succeed);
         if (!succeed && isErrorIgnorable()) {
             succeed = true;

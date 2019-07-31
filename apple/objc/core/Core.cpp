@@ -31,8 +31,8 @@ namespace WCDB {
 #pragma mark - Core
 Core& Core::shared()
 {
-    static Core* s_shared = new Core;
-    return *s_shared;
+    WCDB_STATIC_VARIABLE Core s_core;
+    return s_core;
 }
 
 Core::Core()

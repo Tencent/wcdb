@@ -42,8 +42,8 @@ void Global::initialize()
 
 Global &Global::shared()
 {
-    static Global *s_shared = new Global;
-    return *s_shared;
+    WCDB_STATIC_VARIABLE Global s_global;
+    return s_global;
 }
 
 Global::Global()

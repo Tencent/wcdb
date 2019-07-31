@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/Macro.hpp>
 #include <WCDB/StringView.hpp>
 #include <zlib.h>
 
@@ -52,7 +53,7 @@ UnsafeStringView::UnsafeStringView(UnsafeStringView&& other)
 
 UnsafeStringView::UnsafeStringView(std::shared_ptr<const std::string>&& buffer)
 : std::string_view(
-buffer != nullptr ? std::string_view(buffer->data(), buffer->length()) : emptyView())
+  buffer != nullptr ? std::string_view(buffer->data(), buffer->length()) : emptyView())
 , m_buffer(std::move(buffer))
 {
 }
@@ -88,8 +89,8 @@ UnsafeStringView::~UnsafeStringView()
 
 const std::string_view& UnsafeStringView::emptyView()
 {
-    static const std::string_view* s_emptyView = new std::string_view("", 0);
-    return *s_emptyView;
+    WCDB_STATIC_VARIABLE const std::string_view s_emptyView("", 0);
+    return s_emptyView;
 }
 
 //#pragma mark - UnsafeStringView - Ownership
@@ -152,17 +153,17 @@ StringView::StringView(std::string&& string)
 
 StringView::StringView(const UnsafeStringView& other)
 : UnsafeStringView(
-other.m_buffer != nullptr ?
-std::shared_ptr<const std::string>(other.m_buffer) :
-(other.empty() ? nullptr : std::make_shared<std::string>(other.data(), other.length())))
+  other.m_buffer != nullptr ?
+  std::shared_ptr<const std::string>(other.m_buffer) :
+  (other.empty() ? nullptr : std::make_shared<std::string>(other.data(), other.length())))
 {
 }
 
 StringView::StringView(UnsafeStringView&& other)
 : UnsafeStringView(
-other.m_buffer != nullptr ?
-std::move(other.m_buffer) :
-(other.empty() ? nullptr : std::make_shared<std::string>(other.data(), other.length())))
+  other.m_buffer != nullptr ?
+  std::move(other.m_buffer) :
+  (other.empty() ? nullptr : std::make_shared<std::string>(other.data(), other.length())))
 {
 }
 

@@ -29,9 +29,9 @@ static void exiting();
 
 static std::atomic<bool>& exitingValue()
 {
-    static std::atomic<bool>* s_exitingValue = new std::atomic<bool>(false);
+    WCDB_STATIC_VARIABLE std::atomic<bool> s_exitingValue(false);
     static auto _ WCDB_USED = atexit(exiting);
-    return *s_exitingValue;
+    return s_exitingValue;
 }
 
 static void exiting()
