@@ -43,8 +43,7 @@ static std::nullptr_t initialize()
 
 - (void)addTokenizer:(NSString*)tokenizerName
 {
-    static auto _ = initialize();
-    WCDB_UNUSED(_);
+    WCDB_ONCE(initialize());
 
     WCDB::StringView configName = WCDB::StringView::formatted("%s%s", WCDB::TokenizeConfigPrefix, tokenizerName.UTF8String);
     _database->setConfig(configName, WCDB::Core::shared().tokenizerConfig(tokenizerName), WCDB::Configs::Priority::Higher);
