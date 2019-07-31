@@ -63,15 +63,15 @@ void* UntypedThreadLocal::getOrCreate()
 #pragma mark - Shared
 UntypedThreadLocal::Identifier UntypedThreadLocal::nextIdentifier()
 {
-    static std::atomic<Identifier>* s_identifier = new std::atomic<Identifier>(0);
-    return ++(*s_identifier);
+    WCDB_STATIC_VARIABLE std::atomic<Identifier> s_identifier(0);
+    return ++s_identifier;
 }
 
 const Recyclable<pthread_key_t>& UntypedThreadLocal::sharedKey()
 {
-    static Recyclable<pthread_key_t>* s_key = new Recyclable<pthread_key_t>(
+    WCDB_STATIC_VARIABLE Recyclable<pthread_key_t> s_key(
     constructKey(), UntypedThreadLocal::deconstructKey);
-    return *s_key;
+    return s_key;
 }
 
 #pragma mark - Helper

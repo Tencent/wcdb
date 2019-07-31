@@ -388,9 +388,9 @@ bool AbstractHandle::beginTransaction()
                       "Last transaction is not committed or rollbacked.",
                       rollbackTransaction(););
 
-    static const StringView *s_beginImmediate
-    = new StringView(StatementBegin().beginImmediate().getDescription());
-    bool succeed = executeSQL(*s_beginImmediate);
+    WCDB_STATIC_VARIABLE const StringView s_beginImmediate(
+    StatementBegin().beginImmediate().getDescription());
+    bool succeed = executeSQL(s_beginImmediate);
     if (succeed) {
         m_transactionLevel = 1;
     }
@@ -402,10 +402,10 @@ bool AbstractHandle::commitOrRollbackTransaction()
     bool succeed = true;
     if (isInTransaction()) {
         if (m_transactionError != TransactionError::Fatal) {
-            static const StringView *s_commit
-            = new StringView(StatementCommit().commit().getDescription());
+            WCDB_STATIC_VARIABLE const StringView s_commit(
+            StatementCommit().commit().getDescription());
 
-            succeed = executeSQL(*s_commit);
+            succeed = executeSQL(s_commit);
             if (succeed) {
                 m_transactionLevel = 0;
                 m_transactionError = TransactionError::Allowed;
@@ -426,9 +426,9 @@ void AbstractHandle::rollbackTransaction()
     bool succeed = true;
     // Transaction can be removed automatically in some case. e.g. interrupt step
     if (isInTransaction()) {
-        static const StringView *s_rollback
-        = new StringView(StatementRollback().rollback().getDescription());
-        succeed = executeSQL(*s_rollback);
+        WCDB_STATIC_VARIABLE const StringView s_rollback(
+        StatementRollback().rollback().getDescription());
+        succeed = executeSQL(s_rollback);
     }
     if (succeed) {
         m_transactionLevel = 0;

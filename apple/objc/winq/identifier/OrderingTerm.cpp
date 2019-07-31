@@ -41,9 +41,9 @@ OrderingTerm& OrderingTerm::order(const Order& order)
 
 const OrderingTerm& OrderingTerm::ascendingRowid()
 {
-    static const OrderingTerm* s_ascendingRowid
-    = new OrderingTerm(OrderingTerm(Column::rowid()).order(WCDB::Order::ASC));
-    return *s_ascendingRowid;
+    WCDB_STATIC_VARIABLE const OrderingTerm s_ascendingRowid(
+    OrderingTerm(Column::rowid()).order(WCDB::Order::ASC));
+    return s_ascendingRowid;
 }
 
 } // namespace WCDB

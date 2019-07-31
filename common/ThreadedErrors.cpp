@@ -18,14 +18,15 @@
  * limitations under the License.
  */
 
+#include <WCDB/Macro.hpp>
 #include <WCDB/ThreadedErrors.hpp>
 
 namespace WCDB {
 
 ThreadedErrors &ThreadedErrors::shared()
 {
-    static ThreadedErrors *s_shared = new ThreadedErrors;
-    return *s_shared;
+    WCDB_STATIC_VARIABLE ThreadedErrors s_threadedErrors;
+    return s_threadedErrors;
 }
 
 const Error &ThreadedErrors::getThreadedError()
