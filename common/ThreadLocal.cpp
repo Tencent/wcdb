@@ -18,80 +18,21 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
+#include <WCDB/Macro.hpp>
 #include <WCDB/ThreadLocal.hpp>
 
 namespace WCDB {
 
-#pragma mark - Threaded Info
-UntypedThreadLocal::Info::Info(const Recyclable<pthread_key_t>& key,
-                               std::shared_ptr<void>&& value)
-: m_key(key), m_value(std::move(value))
-{
-    WCTAssert(m_value != nullptr);
-}
-
-UntypedThreadLocal::~UntypedThreadLocal()
-{
-}
-
-void* UntypedThreadLocal::Info::get()
-{
-    return m_value.get();
-}
-
-#pragma mark - UntypedThreadLocal
-UntypedThreadLocal::UntypedThreadLocal()
-: m_identifier(nextIdentifier()), m_key(sharedKey())
-{
-}
-
-void* UntypedThreadLocal::getOrCreate()
-{
-    Infos* infos = (Infos*) pthread_getspecific(m_key.get());
-    if (infos == nullptr) {
-        infos = new Infos;
-        pthread_setspecific(m_key.get(), infos);
-    }
-    auto iter = infos->find(m_identifier);
-    if (iter == infos->end()) {
-        iter = infos->emplace(m_identifier, Info(m_key, constructor())).first;
-    }
-    return iter->second.get();
-}
-
-#pragma mark - Shared
 UntypedThreadLocal::Identifier UntypedThreadLocal::nextIdentifier()
 {
     WCDB_STATIC_VARIABLE std::atomic<Identifier> s_identifier(0);
     return ++s_identifier;
 }
 
-const Recyclable<pthread_key_t>& UntypedThreadLocal::sharedKey()
+std::map<UntypedThreadLocal::Identifier, std::any>& UntypedThreadLocal::threadedStorage()
 {
-    WCDB_STATIC_VARIABLE Recyclable<pthread_key_t> s_key(
-    constructKey(), UntypedThreadLocal::deconstructKey);
-    return s_key;
+    WCDB_STATIC_VARIABLE thread_local std::map<Identifier, std::any> s_storage;
+    return s_storage;
 }
 
-#pragma mark - Helper
-void UntypedThreadLocal::threadDeconstructor(void* p)
-{
-    WCTAssert(p != nullptr);
-    Infos* infos = (Infos*) p;
-    delete infos;
-}
-
-pthread_key_t UntypedThreadLocal::constructKey()
-{
-    pthread_key_t key;
-    pthread_key_create(&key, UntypedThreadLocal::threadDeconstructor);
-    return key;
-}
-
-void UntypedThreadLocal::deconstructKey(pthread_key_t& key)
-{
-    pthread_key_delete(key);
-}
-
-} // namespace WCDB
+} //namespace WCDB
