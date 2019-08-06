@@ -58,7 +58,7 @@ void SharedLock::lockShared()
 {
     std::unique_lock<std::mutex> lockGuard(m_lock);
     if (m_writers > 0 ? !m_locking.isCurrentThread() :
-                        (m_pendingWriters > 0 && *m_threadedReaders.getOrCreate() == 0)) {
+                        (m_pendingWriters > 0 && m_threadedReaders.getOrCreate() == 0)) {
         // If it is locked but not current thread, it should wait for the write lock.
         // If it is not locked but there is someone pending to lock and current thread is not already shared locked, it should wait for the pending lock to avoid the pending lock starve.
         ++m_pendingReaders;
@@ -70,24 +70,24 @@ void SharedLock::lockShared()
     // it's already locked by current thread
     // or it's already shared locked by current thread
     // or it's not locked
-    WCTAssert(m_locking.isCurrentThread()
-              || *m_threadedReaders.getOrCreate() > 0 || m_writers == 0);
+    WCTAssert(m_locking.isCurrentThread() || m_threadedReaders.getOrCreate() > 0
+              || m_writers == 0);
     ++m_readers;
-    ++*m_threadedReaders.getOrCreate();
+    ++m_threadedReaders.getOrCreate();
 }
 
 void SharedLock::unlockShared()
 {
-    int *threadedReader = m_threadedReaders.getOrCreate();
-    WCTRemedialAssert(*threadedReader > 0, "Unpaired unlock shared.", return;);
-    WCTAssert(*threadedReader > 0);
+    int &threadedReader = m_threadedReaders.getOrCreate();
+    WCTRemedialAssert(threadedReader > 0, "Unpaired unlock shared.", return;);
+    WCTAssert(threadedReader > 0);
 
     std::unique_lock<std::mutex> lockGuard(m_lock);
     WCTAssert(m_readers > 0);
-    --*threadedReader;
+    --threadedReader;
     --m_readers;
     if (m_readers == 0) {
-        WCTAssert(*m_threadedReaders.getOrCreate() == 0);
+        WCTAssert(m_threadedReaders.getOrCreate() == 0);
         if (m_writers == 0 && m_pendingWriters > 0) {
             m_conditionalWriters.notify_all();
         }
@@ -97,7 +97,7 @@ void SharedLock::unlockShared()
 void SharedLock::lock()
 {
     WCTRemedialAssert(
-    *m_threadedReaders.getOrCreate() == 0, "Upgrade lock is not supported.", return;);
+    m_threadedReaders.getOrCreate() == 0, "Upgrade lock is not supported.", return;);
 
     std::unique_lock<std::mutex> lockGuard(m_lock);
     if ((m_readers > 0 || m_writers > 0) && !m_locking.isCurrentThread()) {
@@ -120,7 +120,7 @@ void SharedLock::lock()
 void SharedLock::unlock()
 {
     WCTRemedialAssert(
-    *m_threadedReaders.getOrCreate() == 0, "Downgrade lock is not supported.", return;);
+    m_threadedReaders.getOrCreate() == 0, "Downgrade lock is not supported.", return;);
 
     std::unique_lock<std::mutex> lockGuard(m_lock);
     WCTRemedialAssert(m_locking.isCurrentThread(), "Unpaired unlock.", return;);
@@ -142,7 +142,7 @@ SharedLock::Level SharedLock::level() const
     std::unique_lock<std::mutex> lockGuard(m_lock);
     if (m_locking.isCurrentThread()) {
         return Level::Write;
-    } else if ((*m_threadedReaders.getOrCreate()) > 0) {
+    } else if ((m_threadedReaders.getOrCreate()) > 0) {
         return Level::Read;
     }
     return Level::None;

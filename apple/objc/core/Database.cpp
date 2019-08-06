@@ -156,9 +156,9 @@ RecyclableHandle Database::getHandle()
 {
     // Additional shared lock is not needed because the threadedHandles is always empty when it's blocked. So threaded handles is thread safe.
     auto handle = m_transactionedHandles.getOrCreate();
-    if (handle->get() != nullptr) {
+    if (handle.get() != nullptr) {
         WCTAssert(m_concurrency.readSafety());
-        return *handle;
+        return handle;
     }
     InitializedGuard initializedGuard = initialize();
     if (!initializedGuard.valid()) {
@@ -272,16 +272,16 @@ bool Database::setupHandle(HandleType type, Handle *handle)
 #pragma mark - Threaded
 void Database::markHandleAsTransactioned(const RecyclableHandle &handle)
 {
-    WCTAssert(m_transactionedHandles.getOrCreate()->get() == nullptr);
-    *m_transactionedHandles.getOrCreate() = handle;
-    WCTAssert(m_transactionedHandles.getOrCreate()->get() != nullptr);
+    WCTAssert(m_transactionedHandles.getOrCreate().get() == nullptr);
+    m_transactionedHandles.getOrCreate() = handle;
+    WCTAssert(m_transactionedHandles.getOrCreate().get() != nullptr);
 }
 
 void Database::markHandleAsUntransactioned()
 {
-    WCTAssert(m_transactionedHandles.getOrCreate()->get() != nullptr);
-    *m_transactionedHandles.getOrCreate() = nullptr;
-    WCTAssert(m_transactionedHandles.getOrCreate()->get() == nullptr);
+    WCTAssert(m_transactionedHandles.getOrCreate().get() != nullptr);
+    m_transactionedHandles.getOrCreate() = nullptr;
+    WCTAssert(m_transactionedHandles.getOrCreate().get() == nullptr);
 }
 
 Database::TransactionGuard::TransactionGuard(Database *database, const RecyclableHandle &handle)
@@ -304,9 +304,9 @@ Database::TransactionGuard::~TransactionGuard()
 #pragma mark - Transaction
 bool Database::isInTransaction()
 {
-    WCTAssert(m_transactionedHandles.getOrCreate()->get() == nullptr
-              || m_transactionedHandles.getOrCreate()->get()->isInTransaction());
-    return m_transactionedHandles.getOrCreate()->get() != nullptr;
+    WCTAssert(m_transactionedHandles.getOrCreate().get() == nullptr
+              || m_transactionedHandles.getOrCreate().get()->isInTransaction());
+    return m_transactionedHandles.getOrCreate().get() != nullptr;
 }
 
 bool Database::beginTransaction()
