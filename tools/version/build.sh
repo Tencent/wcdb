@@ -5,6 +5,7 @@ showUsage() {
   sh $0 
        -p/--platform iOS/macOS
        -l/--language ObjC/Swift
+       [-c/--configuration Debug/Release]
        [-d/--destination destination]
        [--disable-bitcode] 
        [--static-framework]
@@ -19,6 +20,7 @@ destination="."
 contains_32bit=false
 disable_bitcode=false
 static_framework=false
+configuration=Release
 
 while [[ $# -gt 0 ]]
 do
@@ -51,6 +53,11 @@ case "$key" in
     showUsage
     exit 0
     ;;
+    -c|--configuration)
+    configuration="$2"
+    shift
+    shift
+    ;;    
     *)
     showUsage
     exit 1
@@ -61,7 +68,6 @@ done
 project="$root"/apple/WCDB.xcodeproj
 derivedData="$destination"/derivedData
 products="$derivedData"/Build/Products
-configuration=Release
 settings=(ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= SKIP_INSTALL=YES GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=NO CLANG_ENABLE_CODE_COVERAGE=NO ENABLE_TESTABILITY=NO)
 
 if $static_framework; then
