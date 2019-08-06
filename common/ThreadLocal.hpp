@@ -20,88 +20,50 @@
 
 #pragma once
 
-/*
- * Thread-local storage
- *
- * Since Apple clang support C++11 thread_local from arm64+iOS 8 and armv7+iOS 9, this class can be a replacement.
- *
- * See also: http://stackoverflow.com/questions/28094794/why-does-apple-clang-disallow-c11-thread-local-when-official-clang-supports
- */
-
-#include <WCDB/Recyclable.hpp>
-#include <map>
-#include <memory>
-#include <pthread.h>
+#import <any>
+#import <atomic>
+#import <map>
 
 namespace WCDB {
 
 class UntypedThreadLocal {
-#pragma mark - Declare
-private:
-    class Info;
-    typedef unsigned int Identifier;
-    typedef std::map<Identifier, Info> Infos;
-    typedef std::function<std::shared_ptr<void>(void)> Constructor;
-#pragma mark - Threaded Info
-private:
-    class Info final {
-    public:
-        Info(const Recyclable<pthread_key_t> &key, std::shared_ptr<void> &&value);
-
-        void *get();
-
-    protected:
-        Recyclable<pthread_key_t> m_key;
-        std::shared_ptr<void> m_value;
-    };
-#pragma mark - UntypedThreadLocal
-public:
-    UntypedThreadLocal();
-    virtual ~UntypedThreadLocal() = 0;
-    void *getOrCreate();
-
 protected:
-    virtual std::shared_ptr<void> constructor() = 0;
-
-private:
-    Recyclable<pthread_key_t> m_key;
-    Identifier m_identifier;
-#pragma mark - Shared
-private:
+    typedef unsigned int Identifier;
     static Identifier nextIdentifier();
-    static const Recyclable<pthread_key_t> &sharedKey();
-#pragma mark - Helper
-private:
-    static void threadDeconstructor(void *p);
-    static pthread_key_t constructKey();
-    static void deconstructKey(pthread_key_t &key);
+    static std::map<Identifier, std::any>& threadedStorage();
 };
 
 template<typename T>
-class ThreadLocal final : public UntypedThreadLocal {
+class ThreadLocal : public UntypedThreadLocal {
 public:
-    ThreadLocal(const typename std::enable_if<std::is_default_constructible<T>::value>::type * = nullptr)
-    : UntypedThreadLocal()
+    ThreadLocal(const typename std::enable_if<std::is_default_constructible<T>::value>::type* = nullptr)
+    : m_identifier(nextIdentifier()), m_default()
     {
     }
 
-    ThreadLocal(const T &defaultValue)
-    : UntypedThreadLocal(), m_defaultValue(defaultValue)
+    ThreadLocal(const T& defaultValue)
+    : m_identifier(nextIdentifier()), m_default(defaultValue)
     {
     }
 
-    T &getOrCreate()
+    ThreadLocal(T&& defaultValue)
+    : m_identifier(nextIdentifier()), m_default(std::move(defaultValue))
     {
-        return *(static_cast<T *>(UntypedThreadLocal::getOrCreate()));
     }
 
-    std::shared_ptr<void> constructor() override final
+    T& getOrCreate()
     {
-        return std::static_pointer_cast<void>(std::make_shared<T>(m_defaultValue));
+        auto& storage = threadedStorage();
+        auto iter = storage.find(m_identifier);
+        if (iter == storage.end()) {
+            iter = storage.emplace(m_identifier, m_default).first;
+        }
+        return *std::any_cast<T>(&iter->second);
     }
 
-protected:
-    T m_defaultValue;
+private:
+    const Identifier m_identifier;
+    const T m_default;
 };
 
 } //namespace WCDB
