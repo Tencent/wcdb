@@ -67,7 +67,7 @@ bool BusyRetryConfig::onBusy(const UnsafeStringView& path, int numberOfTimes)
     WCDB_UNUSED(path);
     WCDB_UNUSED(numberOfTimes);
 
-    Trying& trying = *m_tryings.getOrCreate();
+    Trying& trying = m_tryings.getOrCreate();
     WCTAssert(trying.valid());
     return getOrCreateState(trying.getPath()).wait(trying);
 }
@@ -280,7 +280,7 @@ const StringView& BusyRetryConfig::Trying::getPath() const
 #pragma mark - Lock Event
 void BusyRetryConfig::willLock(const UnsafeStringView& path, PagerLockType type)
 {
-    m_tryings.getOrCreate()->expecting(path, type);
+    m_tryings.getOrCreate().expecting(path, type);
 }
 
 void BusyRetryConfig::lockDidChange(const UnsafeStringView& path, PagerLockType type)
@@ -290,7 +290,7 @@ void BusyRetryConfig::lockDidChange(const UnsafeStringView& path, PagerLockType 
 
 void BusyRetryConfig::willShmLock(const UnsafeStringView& path, ShmLockType type, int mask)
 {
-    m_tryings.getOrCreate()->expecting(path, type, mask);
+    m_tryings.getOrCreate().expecting(path, type, mask);
 }
 
 void BusyRetryConfig::shmLockDidChange(const UnsafeStringView& path,

@@ -153,7 +153,7 @@ RecyclableHandle HandlePool::flowOut(HandleType type)
     HandleCategory category = categoryOfHandleType(type);
     WCTAssert(category < HandleCategoryCount);
 
-    ReferencedHandle &referencedHandle = m_threadedHandles.getOrCreate()->at(category);
+    ReferencedHandle &referencedHandle = m_threadedHandles.getOrCreate().at(category);
     {
         // threaded handles is thread safe.
         if (referencedHandle.handle != nullptr) {
@@ -246,7 +246,7 @@ void HandlePool::flowBack(HandleType type, const std::shared_ptr<Handle> &handle
     HandleCategory category = categoryOfHandleType(type);
     WCTAssert(category < HandleCategoryCount);
 
-    ReferencedHandle &referencedHandle = m_threadedHandles.getOrCreate()->at(category);
+    ReferencedHandle &referencedHandle = m_threadedHandles.getOrCreate().at(category);
     WCTAssert(referencedHandle.handle == handle);
     WCTAssert(referencedHandle.reference > 0);
     if (--referencedHandle.reference == 0) {

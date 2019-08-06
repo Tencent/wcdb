@@ -90,7 +90,10 @@ public:
     {
     }
 
-    T *getOrCreate() { return (T *) UntypedThreadLocal::getOrCreate(); }
+    T &getOrCreate()
+    {
+        return *(static_cast<T *>(UntypedThreadLocal::getOrCreate()));
+    }
 
     std::shared_ptr<void> constructor() override final
     {
