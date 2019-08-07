@@ -59,8 +59,7 @@ static std::nullptr_t initialize()
 
 + (void)simulateIOError:(WCTSimulateIOErrorOptions)options
 {
-    static std::nullptr_t _ = initialize();
-    WCDB_UNUSED(_)
+    WCDB_ONCE(initialize());
 
     simulateIOErrorOptions().store(options);
 }
