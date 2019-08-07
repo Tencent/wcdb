@@ -76,6 +76,26 @@ public final class HandleStatement {
         return Int(sqlite3_changes(sqlite3_db_handle(stmt)))
     }
 
+    public func bind(_ value: FundamentalValue, toIndex index: Int) {
+        switch value.type {
+        case .integer32:
+            sqlite3_bind_int(stmt, Int32(index), value.int32Value)
+        case .integer64:
+            sqlite3_bind_int64(stmt, Int32(index), value.int64Value)
+        case .float:
+            sqlite3_bind_double(stmt, Int32(index), value.doubleValue)
+        case .text:
+            sqlite3_bind_text_transient(stmt, Int32(index), value.stringValue, -1)
+        case .BLOB:
+            let data = value.dataValue
+            data.withUnsafeBytes ({ (bytes: UnsafePointer<Int8>) -> Void in
+                sqlite3_bind_blob_transient(stmt, Int32(index), bytes, Int32(data.count))
+            })
+        case .null:
+            sqlite3_bind_null(stmt, Int32(index))
+        }
+    }
+
     public func bind(_ value: Int32, toIndex index: Int) {
         sqlite3_bind_int(stmt, Int32(index), value)
     }
@@ -98,27 +118,24 @@ public final class HandleStatement {
         })
     }
 
-    public func bind(_ value: FundamentalColumnType?, toIndex index: Int) {
-        if let wrapped = value {
-            switch wrapped.columnType {
-            case .integer32:
-                sqlite3_bind_int(stmt, Int32(index), wrapped as! Int32)
-            case .integer64:
-                sqlite3_bind_int64(stmt, Int32(index), wrapped as! Int64)
-            case .float:
-                sqlite3_bind_double(stmt, Int32(index), wrapped as! Double)
-            case .text:
-                sqlite3_bind_text_transient(stmt, Int32(index), wrapped as! String, -1)
-            case .BLOB:
-                let data = wrapped as! Data
-                data.withUnsafeBytes ({ (bytes: UnsafePointer<Int8>) -> Void in
-                    sqlite3_bind_blob_transient(stmt, Int32(index), bytes, Int32(data.count))
-                })
-            case .null:
-                sqlite3_bind_null(stmt, Int32(index))
-            }
-        } else {
-            sqlite3_bind_null(stmt, Int32(index))
+    public func bind(_ _: Void?, toIndex index: Int) {
+        sqlite3_bind_null(stmt, Int32(index))
+    }
+
+    public func columnValue(atIndex index: Int) -> FundamentalValue {
+        switch columnType(atIndex: index) {
+        case .integer32:
+            return FundamentalValue(columnValue(atIndex: index, of: Int32.self))
+        case .integer64:
+            return FundamentalValue(columnValue(atIndex: index, of: Int64.self))
+        case .float:
+            return FundamentalValue(columnValue(atIndex: index, of: Double.self))
+        case .text:
+            return FundamentalValue(columnValue(atIndex: index, of: String.self))
+        case .BLOB:
+            return FundamentalValue(columnValue(atIndex: index, of: Data.self))
+        case .null:
+            return FundamentalValue(nil)
         }
     }
 

@@ -65,6 +65,7 @@ public abstract class SQLiteOpenHelper {
     private SQLiteDatabase mDatabase;
     private boolean mIsInitializing;
     private boolean mEnableWriteAheadLogging;
+    private boolean mForcedSingleConnection;
     private final DatabaseErrorHandler mErrorHandler;
 
     private byte[] mPassword;
@@ -201,6 +202,12 @@ public abstract class SQLiteOpenHelper {
         }
     }
 
+    public void setForcedSingleConnection(boolean enabled) {
+        synchronized (this) {
+            mForcedSingleConnection = enabled;
+        }
+    }
+
     /**
      * Create and/or open a database that will be used for reading and writing.
      * The first time this is called, the database will be opened and
@@ -277,16 +284,17 @@ public abstract class SQLiteOpenHelper {
             } else if (mName == null) {
                 db = SQLiteDatabase.create(null);
             } else {
+                int connectionPoolSize = mForcedSingleConnection ? 1 : 0;
                 try {
                     if (DEBUG_STRICT_READONLY && !writable) {
                         final String path = mContext.getDatabasePath(mName).getPath();
                         db = SQLiteDatabase.openDatabase(path, mPassword, mCipher, mFactory,
-                                SQLiteDatabase.OPEN_READONLY, mErrorHandler);
+                                SQLiteDatabase.OPEN_READONLY, mErrorHandler, connectionPoolSize);
                     } else {
                         mNeedMode = true;
                         mMode = mEnableWriteAheadLogging ? Context.MODE_ENABLE_WRITE_AHEAD_LOGGING : 0;
                         db = Context.openOrCreateDatabase(mContext, mName, mPassword, mCipher,
-                                mMode, mFactory, mErrorHandler);
+                                mMode, mFactory, mErrorHandler, connectionPoolSize);
                     }
                 } catch (SQLiteException ex) {
                     if (writable) {

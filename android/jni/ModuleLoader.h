@@ -28,7 +28,6 @@ typedef enum wcdb_inittag_t {
 
     WCDB_INITTAG_JNI_INIT,
     WCDB_INITTAG_JNI_FINI,
-    WCDB_INITTAG_DBCONN_INIT,
 
     WCDB_INITTAG_COUNT
 } wcdb_inittag_t;
@@ -46,8 +45,6 @@ typedef enum wcdb_inittag_t {
     WCDB_INITTAG_DEFINE(name, func, WCDB_INITTAG_JNI_INIT)
 #define WCDB_JNI_FINI(name, func)                                              \
     WCDB_INITTAG_DEFINE(name, func, WCDB_INITTAG_JNI_FINI)
-#define WCDB_DBCONN_INIT(name, func)                                           \
-    WCDB_INITTAG_DEFINE(name, func, WCDB_INITTAG_DBCONN_INIT)
 
 #ifdef __cplusplus
 #define WECHAT_EXPORT extern "C"
@@ -57,6 +54,5 @@ typedef enum wcdb_inittag_t {
 
 WECHAT_EXPORT void
 register_module_func(const char *name, void *func, unsigned tag);
-WECHAT_EXPORT int run_dbconn_initializers(sqlite3 *db, char **errmsg);
 
 #endif

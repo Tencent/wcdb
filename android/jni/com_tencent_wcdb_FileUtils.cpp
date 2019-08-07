@@ -34,7 +34,7 @@ jint android_os_FileUtils_setPermissions(
     if (!file)
         return ENOENT;
 
-    const char *path = env->GetStringUTFChars(file, NULL);
+    const char *path = env->GetStringUTFChars(file, nullptr);
     if (uid >= 0 || gid >= 0) {
         int res = chown(path, uid, gid);
         if (res != 0) {

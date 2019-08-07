@@ -29,12 +29,12 @@
 
 namespace wcdb {
 
-static JavaVM *g_jvm = NULL;
-static jobject g_callbackObj = NULL;
-static jmethodID g_callbackPrintLnMethod = NULL;
+static JavaVM *g_jvm = nullptr;
+static jobject g_callbackObj = nullptr;
+static jmethodID g_callbackPrintLnMethod = nullptr;
 
 const static wcdb_logfunc_t LOGGERS[] = {
-    NULL,                // LOGGER_NONE
+    nullptr,             // LOGGER_NONE
     __android_log_write, // LOGGER_DEFAULT
 };
 
@@ -42,11 +42,11 @@ static int jniCallbackLogger(int priority, const char *tag, const char *msg)
 {
     assert(g_callbackObj && g_callbackPrintLnMethod && g_jvm);
 
-    JNIEnv *env = NULL;
+    JNIEnv *env = nullptr;
     bool attached = false;
     jint ret = g_jvm->GetEnv((void **) &env, JNI_VERSION_1_6);
     if (ret == JNI_EDETACHED) {
-        jint ret = g_jvm->AttachCurrentThread(&env, NULL);
+        jint ret = g_jvm->AttachCurrentThread(&env, nullptr);
         assert(ret == JNI_OK);
         (void) ret;
         attached = true;
@@ -81,7 +81,7 @@ nativeSetLogger(JNIEnv *env, jclass cls, jint logger, jobject callback)
             return;
         }
 
-        g_callbackObj = NULL;
+        g_callbackObj = nullptr;
         wcdb_set_log_function(LOGGERS[logger]);
     }
 }
@@ -92,8 +92,8 @@ static void nativePrintLn(
     if (!tagStr || !msgStr)
         return;
 
-    const char *tag = env->GetStringUTFChars(tagStr, NULL);
-    const char *msg = env->GetStringUTFChars(msgStr, NULL);
+    const char *tag = env->GetStringUTFChars(tagStr, nullptr);
+    const char *msg = env->GetStringUTFChars(msgStr, nullptr);
     wcdb_log_write(priority, tag, msg);
     env->ReleaseStringUTFChars(tagStr, tag);
     env->ReleaseStringUTFChars(msgStr, msg);

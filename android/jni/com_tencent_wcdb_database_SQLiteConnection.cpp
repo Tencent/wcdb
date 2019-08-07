@@ -23,13 +23,16 @@
 #include <string.h>
 #include <unistd.h>
 
+#include <algorithm>
+#include <map>
+#include <vector>
+
 #include "CursorWindow.h"
 #include "Errors.h"
 #include "JNIHelp.h"
 #include "Logger.h"
 #include "ModuleLoader.h"
 #include "SQLiteCommon.h"
-//#include <sqlite3_android.h>
 
 // Set to 1 to use UTF16 storage for localized indexes.
 #define UTF16_STORAGE 0
@@ -65,6 +68,7 @@ static struct {
 
 static struct {
     jmethodID notifyCheckpoint;
+    jmethodID notifyChange;
 } gSQLiteConnectionClassInfo;
 
 struct SQLiteConnection {
@@ -84,11 +88,244 @@ struct SQLiteConnection {
 
     volatile bool canceled;
 
+    // Update notification stuff
+    struct NotificationKey {
+        std::string table;
+        std::string db;
+
+        NotificationKey(const char *d_, const char *t_) : table(t_), db(d_) {}
+
+        friend bool operator<(const NotificationKey &lhs,
+                              const NotificationKey &rhs)
+        {
+            int cmp = lhs.table.compare(rhs.table);
+            if (!cmp)
+                cmp = lhs.db.compare(rhs.db);
+            return cmp < 0;
+        }
+    };
+
+    struct NotificationItem {
+        sqlite_int64 rowid;
+        int op;
+
+        enum { OP_NOOP = 0, OP_INSERT = 1, OP_UPDATE = 2, OP_DELETE = 3 };
+
+        NotificationItem(sqlite_int64 r_, int op_) : rowid(r_), op(op_) {}
+
+        friend bool operator<(const NotificationItem &lhs,
+                              const NotificationItem &rhs)
+        {
+            return lhs.rowid < rhs.rowid;
+        }
+    };
+
+    struct NotificationItems {
+        int numNotify[3];
+        std::vector<NotificationItem> items;
+
+        NotificationItems() : numNotify{0, 0, 0} {}
+    };
+
+    typedef std::map<NotificationKey, NotificationItems> NotificationMap;
+
+    bool notifyEnabled;          // whether notification is enabled
+    bool notifyRowId;            // whether rowid is requested on notification
+    bool notifyCommited;         // whether transaction has been commited
+    NotificationMap notifyMap;   // notification operations
+    const char *lastNotifyDb;    // cached DB name of the last operation
+    const char *lastNotifyTable; // cached table name of the last operation
+    NotificationMap::iterator lastNotifyIterator; // cached iterator
+
     SQLiteConnection(jobject dbObj, sqlite3 *db, int openFlags)
-        : dbObj(dbObj), db(db), openFlags(openFlags), canceled(false)
+        : dbObj(dbObj)
+        , db(db)
+        , openFlags(openFlags)
+        , canceled(false)
+        , notifyEnabled(false)
+        , notifyRowId(false)
+        , notifyCommited(false)
+        , lastNotifyDb(nullptr)
+        , lastNotifyTable(nullptr)
     {
     }
 };
+
+// Notification implementation
+static inline int toNotifyOp(int op)
+{
+    switch (op) {
+        case SQLITE_INSERT:
+            return SQLiteConnection::NotificationItem::OP_INSERT;
+        case SQLITE_UPDATE:
+            return SQLiteConnection::NotificationItem::OP_UPDATE;
+        case SQLITE_DELETE:
+            return SQLiteConnection::NotificationItem::OP_DELETE;
+        default:
+            return 0;
+    }
+}
+
+static void sqliteUpdateHookCallback(void *ud,
+                                     int op,
+                                     const char *dbName,
+                                     const char *tableName,
+                                     sqlite3_int64 rowid)
+{
+    SQLiteConnection *conn = (SQLiteConnection *) ud;
+    assert(conn->notifyEnabled && !conn->notifyCommited);
+
+    // Find or create the table entry.
+    SQLiteConnection::NotificationMap::iterator it;
+
+    // XXX: SQLite passes pointer to internal table description structure, which
+    // doesn't change during VDBE execution. Thus it's safe to compare the pointer
+    // value instead for the fast path.
+    if (dbName == conn->lastNotifyDb && tableName == conn->lastNotifyTable) {
+        it = conn->lastNotifyIterator;
+    } else {
+        it = conn->notifyMap
+                 .emplace(
+                     SQLiteConnection::NotificationKey(dbName, tableName),
+                     SQLiteConnection::NotificationItems())
+                 .first;
+
+        conn->lastNotifyDb = dbName;
+        conn->lastNotifyTable = tableName;
+        conn->lastNotifyIterator = it;
+    }
+
+    if (conn->notifyRowId) {
+        it->second.items.emplace_back(rowid, toNotifyOp(op));
+    }
+}
+
+static const int NOTIFY_OP_MERGE[] = {
+    /*           N/A  INSERT UPDATE DELETE */
+    /* N/A    */ 0x00, 0x01, 0x02, 0x03,
+    /* INSERT */ 0x01, 0x81, 0x01, 0x00,
+    /* UPDATE */ 0x02, 0x81, 0x02, 0x03,
+    /* DELETE */ 0x03, 0x02, 0x82, 0x83,
+};
+static inline int mergeOp(int op1, int op2)
+{
+    int outOp = NOTIFY_OP_MERGE[((op1 & 0x03) << 2) | (op2 & 0x03)];
+
+    // TODO: warn unexpected operation pair?
+    return (outOp & 0x03);
+}
+
+static int sqliteCommitHookCallback(void *ud)
+{
+    SQLiteConnection *conn = (SQLiteConnection *) ud;
+    assert(conn->notifyEnabled && !conn->notifyCommited);
+
+    for (auto it = conn->notifyMap.begin(); it != conn->notifyMap.end(); ++it) {
+
+        memset(it->second.numNotify, 0, sizeof(it->second.numNotify));
+        if (conn->notifyRowId && !it->second.items.empty()) {
+            // Sort IDs.
+            auto &opList = it->second.items;
+            std::stable_sort(opList.begin(), opList.end());
+
+            // Merge operations of the same ID.
+            sqlite_int64 rowid = opList[0].rowid;
+            int op = opList[0].op;
+            int startIdx = 0;
+            it->second.numNotify[op - 1]++;
+            for (size_t i = 1; i < opList.size(); i++) {
+                if (opList[i].rowid == rowid) {
+                    // found the same rowId, merge with the previous ones.
+                    op = opList[startIdx].op = mergeOp(op, opList[i].op);
+                    opList[i].op = SQLiteConnection::NotificationItem::OP_NOOP;
+                } else {
+                    if (op > 0 && op < 4) // INSERT, UPDATE or DELETE
+                        it->second.numNotify[op - 1]++;
+
+                    rowid = opList[i].rowid;
+                    op = opList[i].op;
+                    startIdx = i;
+                }
+            }
+        }
+    }
+
+    conn->lastNotifyDb = nullptr;
+    conn->lastNotifyTable = nullptr;
+    conn->lastNotifyIterator = conn->notifyMap.end();
+    conn->notifyCommited = true;
+
+    return 0;
+}
+
+static void sqliteRollbackHookCallback(void *ud)
+{
+    SQLiteConnection *conn = (SQLiteConnection *) ud;
+    assert(conn->notifyEnabled && !conn->notifyCommited);
+
+    // Clear notification records.
+    conn->notifyMap.clear();
+    conn->lastNotifyDb = nullptr;
+    conn->lastNotifyTable = nullptr;
+    conn->lastNotifyIterator = conn->notifyMap.end();
+}
+
+static void emitUpdateNotifications(JNIEnv *env, SQLiteConnection *conn)
+{
+
+    if (!conn->notifyEnabled || !conn->notifyCommited) {
+        conn->notifyCommited = false;
+        return;
+    }
+
+    for (auto it = conn->notifyMap.begin(); it != conn->notifyMap.end(); ++it) {
+        jstring dbNameStr = env->NewStringUTF(it->first.db.c_str());
+        jstring tableNameStr = env->NewStringUTF(it->first.table.c_str());
+
+        jlongArray idsArr[3] = {nullptr};
+
+        if (conn->notifyRowId) {
+            int *numNotify = it->second.numNotify;
+            for (int i = 0; i < 3; i++)
+                idsArr[i] = env->NewLongArray(numNotify[i]);
+
+            jlong *ids[3];
+            int idsIdx[3] = {0};
+            for (int i = 0; i < 3; i++)
+                ids[i] =
+                    (jlong *) env->GetPrimitiveArrayCritical(idsArr[i], nullptr);
+
+            auto &opList = it->second.items;
+            for (size_t i = 0; i < opList.size(); i++) {
+                int op = opList[i].op - 1;
+                assert(op >= 0 && op < 3);
+                assert(idsIdx[op] < numNotify[op]);
+
+                ids[op][idsIdx[op]++] = opList[i].rowid;
+            }
+
+            for (int i = 2; i >= 0; i--)
+                env->ReleasePrimitiveArrayCritical(idsArr[i], ids[i], 0);
+        }
+
+        env->CallVoidMethod(conn->dbObj,
+                            gSQLiteConnectionClassInfo.notifyChange, dbNameStr,
+                            tableNameStr, idsArr[0], idsArr[1], idsArr[2]);
+        if (env->ExceptionCheck()) {
+            jniLogException(env, ANDROID_LOG_ERROR, LOG_TAG);
+            return;
+        }
+
+        env->DeleteLocalRef(dbNameStr);
+        env->DeleteLocalRef(tableNameStr);
+        for (int i = 0; i < 3; i++)
+            if (idsArr[i])
+                env->DeleteLocalRef(idsArr[i]);
+    }
+
+    conn->notifyCommited = false;
+    conn->notifyMap.clear();
+}
 
 // Called after each SQLite VM instruction when cancelation is enabled.
 static int sqliteProgressHandlerCallback(void *data)
@@ -103,11 +340,11 @@ sqliteWalHookCallback(void *data, sqlite3 *db, const char *dbName, int pages)
 {
     SQLiteConnection *connection = static_cast<SQLiteConnection *>(data);
 
-    JNIEnv *env = NULL;
+    JNIEnv *env = nullptr;
     bool attached = false;
     jint ret = gVM->GetEnv((void **) &env, JNI_VERSION_1_6);
     if (ret == JNI_EDETACHED) {
-        jint ret = gVM->AttachCurrentThread(&env, NULL);
+        jint ret = gVM->AttachCurrentThread(&env, nullptr);
         assert(ret == JNI_OK);
         (void) ret;
         attached = true;
@@ -139,7 +376,7 @@ nativeSetKey(JNIEnv *env, jclass clazz, jlong connectionPtr, jbyteArray keyArr)
     if (!connection)
         return;
 
-    jbyte *key = NULL;
+    jbyte *key = nullptr;
     int keyLen = 0;
     if (keyArr) {
         keyLen = env->GetArrayLength(keyArr);
@@ -175,13 +412,13 @@ static jlong nativeOpen(JNIEnv *env,
         sqliteFlags = SQLITE_OPEN_READWRITE;
     }
 
-    const char *pathChars = env->GetStringUTFChars(pathStr, NULL);
+    const char *pathChars = env->GetStringUTFChars(pathStr, nullptr);
     std::string path(pathChars);
     env->ReleaseStringUTFChars(pathStr, pathChars);
 
-    const char *vfsNameChars = NULL;
+    const char *vfsNameChars = nullptr;
     if (vfsNameStr)
-        vfsNameChars = env->GetStringUTFChars(vfsNameStr, NULL);
+        vfsNameChars = env->GetStringUTFChars(vfsNameStr, nullptr);
 
     sqlite3 *db;
     int err = sqlite3_open_v2(path.c_str(), &db, sqliteFlags, vfsNameChars);
@@ -195,28 +432,20 @@ static jlong nativeOpen(JNIEnv *env,
     }
     // Check that the database is really read/write when that is what we asked for.
     if (!(openFlags & SQLiteConnection::OPEN_READONLY) &&
-        sqlite3_db_readonly(db, NULL)) {
+        sqlite3_db_readonly(db, nullptr)) {
         throw_sqlite3_exception(
             env, db, "Could not open the database in read/write mode.");
         sqlite3_close(db);
         return 0;
     }
 
+    // Reset the API stealer auto extension, it is only needed to be called once.
+    sqlite3_reset_auto_extension();
+
     // Set the default busy handler to retry automatically before returning SQLITE_BUSY.
     err = sqlite3_busy_timeout(db, BUSY_TIMEOUT_MS);
     if (err != SQLITE_OK) {
         throw_sqlite3_exception(env, db, "Could not set busy timeout");
-        sqlite3_close(db);
-        return 0;
-    }
-
-    // Call connection initializers, which register custom SQLite functions.
-    char *errmsg = NULL;
-    err = run_dbconn_initializers(db, &errmsg);
-    if (err != SQLITE_OK) {
-        throw_sqlite3_exception(env, err, errmsg ? errmsg : "Unknown error",
-                                "Database connection initializer failed.");
-        sqlite3_free(errmsg);
         sqlite3_close(db);
         return 0;
     }
@@ -243,7 +472,7 @@ static void nativeClose(JNIEnv *env, jclass clazz, jlong connectionPtr)
         (SQLiteConnection *) (intptr_t) connectionPtr;
 
     if (connection) {
-        LOGV(LOG_TAG, "Closing connection %p", connection->db);
+        LOGI(LOG_TAG, "Closing connection %p", connection->db);
         int err = sqlite3_close(connection->db);
         if (err != SQLITE_OK) {
             throw_sqlite3_exception(env, connection->db,
@@ -271,7 +500,7 @@ static void sqliteCustomFunctionCallback(sqlite3_context *context,
     jobject functionObj = env->NewLocalRef(functionObjGlobal);
 
     jobjectArray argsArray =
-        env->NewObjectArray(argc, gStringClassInfo.clazz, NULL);
+        env->NewObjectArray(argc, gStringClassInfo.clazz, nullptr);
     if (argsArray) {
         for (int i = 0; i < argc; i++) {
             const jchar *arg =
@@ -332,11 +561,11 @@ static void nativeRegisterCustomFunction(JNIEnv *env,
 
     jobject functionObjGlobal = env->NewGlobalRef(functionObj);
 
-    const char *name = env->GetStringUTFChars(nameStr, NULL);
+    const char *name = env->GetStringUTFChars(nameStr, nullptr);
     int err =
         sqlite3_create_function_v2(connection->db, name, numArgs, SQLITE_UTF16,
                                    reinterpret_cast<void *>(functionObjGlobal),
-                                   &sqliteCustomFunctionCallback, NULL, NULL,
+                                   &sqliteCustomFunctionCallback, nullptr, nullptr,
                                    &sqliteCustomFunctionDestructor);
     env->ReleaseStringUTFChars(nameStr, name);
 
@@ -356,7 +585,7 @@ static void nativeRegisterLocalizedCollators(JNIEnv *env,
     SQLiteConnection *connection =
         (SQLiteConnection *) (intptr_t) connectionPtr;
 
-    const char *locale = env->GetStringUTFChars(localeStr, NULL);
+    const char *locale = env->GetStringUTFChars(localeStr, nullptr);
     int err = SQLITE_OK; //(connection->db, locale, UTF16_STORAGE);
     env->ReleaseStringUTFChars(localeStr, locale);
 
@@ -374,11 +603,11 @@ static jlong nativePrepareStatement(JNIEnv *env,
         (SQLiteConnection *) (intptr_t) connectionPtr;
 
     jsize sqlLength = env->GetStringLength(sqlString);
-    const jchar *sql = env->GetStringChars(sqlString, NULL);
+    const jchar *sql = env->GetStringChars(sqlString, nullptr);
     sqlite3_stmt *statement;
 
     int err = sqlite3_prepare16_v2(connection->db, sql,
-                                   sqlLength * sizeof(jchar), &statement, NULL);
+                                   sqlLength * sizeof(jchar), &statement, nullptr);
 
     env->ReleaseStringChars(sqlString, sql);
 
@@ -386,7 +615,7 @@ static jlong nativePrepareStatement(JNIEnv *env,
         // Error messages like 'near ")": syntax error' are not
         // always helpful enough, so construct an error string that
         // includes the query itself.
-        const char *query = env->GetStringUTFChars(sqlString, NULL);
+        const char *query = env->GetStringUTFChars(sqlString, nullptr);
         size_t message_len = strlen(query) + 50;
         char *message = (char *) malloc(message_len);
         if (message) {
@@ -408,7 +637,6 @@ static void nativeFinalizeStatement(JNIEnv *env,
                                     jlong connectionPtr,
                                     jlong statementPtr)
 {
-    //SQLiteConnection* connection = reinterpret_cast<SQLiteConnection*>(connectionPtr);
     sqlite3_stmt *statement = (sqlite3_stmt *) (intptr_t) statementPtr;
 
     // We ignore the result of sqlite3_finalize because it is really telling us about
@@ -423,7 +651,6 @@ static jint nativeGetParameterCount(JNIEnv *env,
                                     jlong connectionPtr,
                                     jlong statementPtr)
 {
-    //SQLiteConnection* connection = reinterpret_cast<SQLiteConnection*>(connectionPtr);
     sqlite3_stmt *statement = (sqlite3_stmt *) (intptr_t) statementPtr;
 
     return sqlite3_bind_parameter_count(statement);
@@ -434,10 +661,9 @@ static jboolean nativeIsReadOnly(JNIEnv *env,
                                  jlong connectionPtr,
                                  jlong statementPtr)
 {
-    //SQLiteConnection* connection = reinterpret_cast<SQLiteConnection*>(connectionPtr);
     sqlite3_stmt *statement = (sqlite3_stmt *) (intptr_t) statementPtr;
 
-    return sqlite3_stmt_readonly(statement) != 0;
+    return static_cast<jboolean>(sqlite3_stmt_readonly(statement) ? 1 : 0);
 }
 
 static jint nativeGetColumnCount(JNIEnv *env,
@@ -445,7 +671,6 @@ static jint nativeGetColumnCount(JNIEnv *env,
                                  jlong connectionPtr,
                                  jlong statementPtr)
 {
-    //SQLiteConnection* connection = reinterpret_cast<SQLiteConnection*>(connectionPtr);
     sqlite3_stmt *statement = (sqlite3_stmt *) (intptr_t) statementPtr;
 
     return sqlite3_column_count(statement);
@@ -457,7 +682,6 @@ static jstring nativeGetColumnName(JNIEnv *env,
                                    jlong statementPtr,
                                    jint index)
 {
-    //SQLiteConnection* connection = reinterpret_cast<SQLiteConnection*>(connectionPtr);
     sqlite3_stmt *statement = (sqlite3_stmt *) (intptr_t) statementPtr;
 
     const jchar *name =
@@ -469,7 +693,7 @@ static jstring nativeGetColumnName(JNIEnv *env,
         }
         return env->NewString(name, length);
     }
-    return NULL;
+    return nullptr;
 }
 
 static void nativeBindNull(JNIEnv *env,
@@ -484,7 +708,7 @@ static void nativeBindNull(JNIEnv *env,
     if (err != SQLITE_OK) {
         SQLiteConnection *connection =
             (SQLiteConnection *) (intptr_t) connectionPtr;
-        throw_sqlite3_exception(env, connection->db, NULL);
+        throw_sqlite3_exception(env, connection->db, nullptr);
     }
 }
 
@@ -501,7 +725,7 @@ static void nativeBindLong(JNIEnv *env,
     if (err != SQLITE_OK) {
         SQLiteConnection *connection =
             (SQLiteConnection *) (intptr_t) connectionPtr;
-        throw_sqlite3_exception(env, connection->db, NULL);
+        throw_sqlite3_exception(env, connection->db, nullptr);
     }
 }
 
@@ -518,7 +742,7 @@ static void nativeBindDouble(JNIEnv *env,
     if (err != SQLITE_OK) {
         SQLiteConnection *connection =
             (SQLiteConnection *) (intptr_t) connectionPtr;
-        throw_sqlite3_exception(env, connection->db, NULL);
+        throw_sqlite3_exception(env, connection->db, nullptr);
     }
 }
 
@@ -532,14 +756,14 @@ static void nativeBindString(JNIEnv *env,
     sqlite3_stmt *statement = (sqlite3_stmt *) (intptr_t) statementPtr;
 
     jsize valueLength = env->GetStringLength(valueString);
-    const jchar *value = env->GetStringCritical(valueString, NULL);
+    const jchar *value = env->GetStringCritical(valueString, nullptr);
     int err = sqlite3_bind_text16(
         statement, index, value, valueLength * sizeof(jchar), SQLITE_TRANSIENT);
     env->ReleaseStringCritical(valueString, value);
     if (err != SQLITE_OK) {
         SQLiteConnection *connection =
             (SQLiteConnection *) (intptr_t) connectionPtr;
-        throw_sqlite3_exception(env, connection->db, NULL);
+        throw_sqlite3_exception(env, connection->db, nullptr);
     }
 }
 
@@ -554,14 +778,14 @@ static void nativeBindBlob(JNIEnv *env,
 
     jsize valueLength = env->GetArrayLength(valueArray);
     jbyte *value =
-        static_cast<jbyte *>(env->GetPrimitiveArrayCritical(valueArray, NULL));
+        static_cast<jbyte *>(env->GetPrimitiveArrayCritical(valueArray, nullptr));
     int err = sqlite3_bind_blob(statement, index, value, valueLength,
                                 SQLITE_TRANSIENT);
     env->ReleasePrimitiveArrayCritical(valueArray, value, JNI_ABORT);
     if (err != SQLITE_OK) {
         SQLiteConnection *connection =
             (SQLiteConnection *) (intptr_t) connectionPtr;
-        throw_sqlite3_exception(env, connection->db, NULL);
+        throw_sqlite3_exception(env, connection->db, nullptr);
     }
 }
 
@@ -580,7 +804,7 @@ static void nativeResetStatement(JNIEnv *env,
     if (err != SQLITE_OK) {
         SQLiteConnection *connection =
             (SQLiteConnection *) (intptr_t) connectionPtr;
-        throw_sqlite3_exception(env, connection->db, NULL);
+        throw_sqlite3_exception(env, connection->db, nullptr);
     }
 }
 
@@ -592,9 +816,13 @@ static int executeNonQuery(JNIEnv *env,
     do {
         err = sqlite3_step(statement);
     } while (err == SQLITE_ROW);
+
     if (err != SQLITE_DONE) {
         throw_sqlite3_exception(env, connection->db);
+    } else {
+        emitUpdateNotifications(env, connection);
     }
+
     return err;
 }
 
@@ -603,11 +831,10 @@ static void nativeExecute(JNIEnv *env,
                           jlong connectionPtr,
                           jlong statementPtr)
 {
-    SQLiteConnection *connection =
-        (SQLiteConnection *) (intptr_t) connectionPtr;
-    sqlite3_stmt *statement = (sqlite3_stmt *) (intptr_t) statementPtr;
+    SQLiteConnection *conn = (SQLiteConnection *) (intptr_t) connectionPtr;
+    sqlite3_stmt *stmt = (sqlite3_stmt *) (intptr_t) statementPtr;
 
-    executeNonQuery(env, connection, statement);
+    executeNonQuery(env, conn, stmt);
 }
 
 static jint nativeExecuteForChangedRowCount(JNIEnv *env,
@@ -615,12 +842,11 @@ static jint nativeExecuteForChangedRowCount(JNIEnv *env,
                                             jlong connectionPtr,
                                             jlong statementPtr)
 {
-    SQLiteConnection *connection =
-        (SQLiteConnection *) (intptr_t) connectionPtr;
-    sqlite3_stmt *statement = (sqlite3_stmt *) (intptr_t) statementPtr;
+    SQLiteConnection *conn = (SQLiteConnection *) (intptr_t) connectionPtr;
+    sqlite3_stmt *stmt = (sqlite3_stmt *) (intptr_t) statementPtr;
 
-    int err = executeNonQuery(env, connection, statement);
-    return err == SQLITE_DONE ? sqlite3_changes(connection->db) : -1;
+    int err = executeNonQuery(env, conn, stmt);
+    return err == SQLITE_DONE ? sqlite3_changes(conn->db) : -1;
 }
 
 static jlong nativeExecuteForLastInsertedRowId(JNIEnv *env,
@@ -628,13 +854,12 @@ static jlong nativeExecuteForLastInsertedRowId(JNIEnv *env,
                                                jlong connectionPtr,
                                                jlong statementPtr)
 {
-    SQLiteConnection *connection =
-        (SQLiteConnection *) (intptr_t) connectionPtr;
-    sqlite3_stmt *statement = (sqlite3_stmt *) (intptr_t) statementPtr;
+    SQLiteConnection *conn = (SQLiteConnection *) (intptr_t) connectionPtr;
+    sqlite3_stmt *stmt = (sqlite3_stmt *) (intptr_t) statementPtr;
 
-    int err = executeNonQuery(env, connection, statement);
-    return err == SQLITE_DONE && sqlite3_changes(connection->db) > 0
-               ? sqlite3_last_insert_rowid(connection->db)
+    int err = executeNonQuery(env, conn, stmt);
+    return err == SQLITE_DONE && sqlite3_changes(conn->db) > 0
+               ? sqlite3_last_insert_rowid(conn->db)
                : -1;
 }
 
@@ -642,10 +867,11 @@ static int executeOneRowQuery(JNIEnv *env,
                               SQLiteConnection *connection,
                               sqlite3_stmt *statement)
 {
-    //reset_pagecount(connection);
     int err = sqlite3_step(statement);
     if (err != SQLITE_ROW) {
         throw_sqlite3_exception(env, connection->db);
+    } else {
+        emitUpdateNotifications(env, connection);
     }
     return err;
 }
@@ -671,21 +897,18 @@ static jstring nativeExecuteForString(JNIEnv *env,
                                       jlong connectionPtr,
                                       jlong statementPtr)
 {
-    SQLiteConnection *connection =
-        (SQLiteConnection *) (intptr_t) connectionPtr;
-    sqlite3_stmt *statement = (sqlite3_stmt *) (intptr_t) statementPtr;
+    SQLiteConnection *conn = (SQLiteConnection *) (intptr_t) connectionPtr;
+    sqlite3_stmt *stmt = (sqlite3_stmt *) (intptr_t) statementPtr;
 
-    int err = executeOneRowQuery(env, connection, statement);
-    if (err == SQLITE_ROW && sqlite3_column_count(statement) >= 1) {
-        const jchar *text =
-            static_cast<const jchar *>(sqlite3_column_text16(statement, 0));
+    int err = executeOneRowQuery(env, conn, stmt);
+    if (err == SQLITE_ROW && sqlite3_column_count(stmt) >= 1) {
+        const jchar *text = (const jchar *) (sqlite3_column_text16(stmt, 0));
         if (text) {
-            size_t length =
-                sqlite3_column_bytes16(statement, 0) / sizeof(jchar);
+            size_t length = sqlite3_column_bytes16(stmt, 0) / sizeof(jchar);
             return env->NewString(text, length);
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 enum CopyRowResult {
@@ -804,15 +1027,14 @@ static jlong nativeExecuteForCursorWindow(JNIEnv *env,
                                           jint requiredPos,
                                           jboolean countAllRows)
 {
-    SQLiteConnection *connection =
-        (SQLiteConnection *) (intptr_t) connectionPtr;
-    sqlite3_stmt *statement = (sqlite3_stmt *) (intptr_t) statementPtr;
+    SQLiteConnection *conn = (SQLiteConnection *) (intptr_t) connectionPtr;
+    sqlite3_stmt *stmt = (sqlite3_stmt *) (intptr_t) statementPtr;
     CursorWindow *window = (CursorWindow *) (intptr_t) windowPtr;
 
     status_t status = window->clear();
     if (status) {
         throw_sqlite3_exception_format(
-            env, connection->db, "Failed to clear the cursor window, status=%d",
+            env, conn->db, "Failed to clear the cursor window, status=%d",
             status);
         return 0;
     }
@@ -824,17 +1046,17 @@ static jlong nativeExecuteForCursorWindow(JNIEnv *env,
     bool windowFull = false;
     bool gotException = false;
     while (!gotException && (!windowFull || countAllRows)) {
-        int err = sqlite3_step(statement);
+        int err = sqlite3_step(stmt);
         if (err == SQLITE_ROW) {
 
             // Delay column count determination to the first time we got a row.
             // This is because schema can be changed by other connection but we
             // cannot notice before statement was actually executed by sqlite3_step().
             if (numColumns < 0) {
-                numColumns = sqlite3_column_count(statement);
+                numColumns = sqlite3_column_count(stmt);
                 status = window->setNumColumns(numColumns);
                 if (status) {
-                    throw_sqlite3_exception_format(env, connection->db,
+                    throw_sqlite3_exception_format(env, conn->db,
                                                    "Failed to set the cursor "
                                                    "window column count to %d, "
                                                    "status=%d",
@@ -852,8 +1074,8 @@ static jlong nativeExecuteForCursorWindow(JNIEnv *env,
                 continue;
             }
 
-            CopyRowResult cpr = copyRow(env, window, statement, numColumns,
-                                        startPos, addedRows);
+            CopyRowResult cpr =
+                copyRow(env, window, stmt, numColumns, startPos, addedRows);
             if (cpr == CPR_FULL && addedRows &&
                 startPos + addedRows <= requiredPos) {
                 // We filled the window before we got to the one row that we really wanted.
@@ -863,8 +1085,8 @@ static jlong nativeExecuteForCursorWindow(JNIEnv *env,
                 window->setNumColumns(numColumns);
                 startPos += addedRows;
                 addedRows = 0;
-                cpr = copyRow(env, window, statement, numColumns, startPos,
-                              addedRows);
+                cpr =
+                    copyRow(env, window, stmt, numColumns, startPos, addedRows);
             }
 
             if (cpr == CPR_OK) {
@@ -876,15 +1098,13 @@ static jlong nativeExecuteForCursorWindow(JNIEnv *env,
             }
         } else if (err == SQLITE_DONE) {
             // All rows processed, bail
-            //            LOGV(LOG_TAG,"Processed all rows");
             break;
         } else if (err == SQLITE_LOCKED || err == SQLITE_BUSY) {
             // The table is locked, retry
             LOGI(LOG_TAG, "Database locked, retrying error code is %d", err);
             if (retryCount > 5) {
                 LOGE(LOG_TAG, "Bailing on database busy retry");
-                throw_sqlite3_exception(env, connection->db,
-                                        "retrycount exceeded");
+                throw_sqlite3_exception(env, conn->db, "retrycount exceeded");
                 gotException = true;
             } else {
                 // Sleep to give the thread holding the lock a chance to finish
@@ -892,7 +1112,7 @@ static jlong nativeExecuteForCursorWindow(JNIEnv *env,
                 retryCount++;
             }
         } else {
-            throw_sqlite3_exception(env, connection->db);
+            throw_sqlite3_exception(env, conn->db);
             gotException = true;
         }
     }
@@ -900,12 +1120,16 @@ static jlong nativeExecuteForCursorWindow(JNIEnv *env,
     //    LOGV(LOG_TAG,"Resetting statement %p after fetching %d rows and adding %d rows"
     //            "to the window in %d bytes",
     //            statement, totalRows, addedRows, window->size() - window->freeSpace());
-    sqlite3_reset(statement);
+    sqlite3_reset(stmt);
 
     // Report the total number of rows on request.
     if (startPos > totalRows) {
         LOGE(LOG_TAG, "startPos %d > actual rows %d", startPos, totalRows);
     }
+
+    if (!gotException)
+        emitUpdateNotifications(env, conn);
+
     jlong result = jlong(startPos) << 32 | jlong(totalRows);
     return result;
 }
@@ -943,7 +1167,7 @@ static void nativeResetCancel(JNIEnv *env,
         sqlite3_progress_handler(connection->db, 4,
                                  sqliteProgressHandlerCallback, connection);
     } else {
-        sqlite3_progress_handler(connection->db, 0, NULL, NULL);
+        sqlite3_progress_handler(connection->db, 0, nullptr, nullptr);
     }
 }
 
@@ -964,7 +1188,7 @@ static jlong nativeWalCheckpoint(JNIEnv *env,
         (SQLiteConnection *) (intptr_t) connectionPtr;
 
     int nLog = 0, nCkpt = 0;
-    const char *dbName = env->GetStringUTFChars(dbNameStr, NULL);
+    const char *dbName = env->GetStringUTFChars(dbNameStr, nullptr);
     int ret = sqlite3_wal_checkpoint_v2(
         connection->db, dbName, SQLITE_CHECKPOINT_PASSIVE, &nLog, &nCkpt);
     env->ReleaseStringUTFChars(dbNameStr, dbName);
@@ -980,12 +1204,60 @@ static jlong nativeWalCheckpoint(JNIEnv *env,
     return jlong(nLog) << 32 | jlong(nCkpt);
 }
 
-static jlong
-nativeGetSQLiteHandle(JNIEnv *env, jobject clazz, jlong connectionPtr)
+static jlong nativeSQLiteHandle(JNIEnv *env,
+                                jobject clazz,
+                                jlong connectionPtr,
+                                jboolean acquire)
 {
-    SQLiteConnection *connection =
-        (SQLiteConnection *) (intptr_t) connectionPtr;
-    return (jlong)(intptr_t)(connection->db);
+    SQLiteConnection *conn = (SQLiteConnection *) (intptr_t) connectionPtr;
+    sqlite3 *db = conn->db;
+
+    if (acquire) {
+        if (conn->notifyEnabled) {
+            // temporarily disable update hooks.
+            sqlite3_update_hook(db, nullptr, nullptr);
+            sqlite3_commit_hook(db, nullptr, nullptr);
+            sqlite3_rollback_hook(db, nullptr, nullptr);
+        }
+
+        return (jlong)(intptr_t) db;
+    } else {
+        if (conn->notifyEnabled) {
+            // reenable update hooks.
+            sqlite3_update_hook(db, sqliteUpdateHookCallback, conn);
+            sqlite3_commit_hook(db, sqliteCommitHookCallback, conn);
+            sqlite3_rollback_hook(db, sqliteRollbackHookCallback, conn);
+        }
+
+        return 0;
+    }
+}
+
+static void nativeSetUpdateNotification(JNIEnv *env,
+                                        jclass cls,
+                                        jlong connectionPtr,
+                                        jboolean enabled,
+                                        jboolean notifyRowId)
+{
+
+    SQLiteConnection *conn = (SQLiteConnection *) (intptr_t) connectionPtr;
+    assert(!conn->notifyCommited);
+    assert(!conn->lastNotifyDb && !conn->lastNotifyTable);
+
+    sqlite3 *db = conn->db;
+
+    if (enabled) {
+        sqlite3_update_hook(db, sqliteUpdateHookCallback, conn);
+        sqlite3_commit_hook(db, sqliteCommitHookCallback, conn);
+        sqlite3_rollback_hook(db, sqliteRollbackHookCallback, conn);
+    } else {
+        sqlite3_update_hook(db, nullptr, nullptr);
+        sqlite3_commit_hook(db, nullptr, nullptr);
+        sqlite3_rollback_hook(db, nullptr, nullptr);
+    }
+
+    conn->notifyEnabled = enabled;
+    conn->notifyRowId = notifyRowId;
 }
 
 static JNINativeMethod sMethods[] = {
@@ -1028,7 +1300,9 @@ static JNINativeMethod sMethods[] = {
     {"nativeSetWalHook", "(J)V", (void *) nativeSetWalHook},
     {"nativeWalCheckpoint", "(JLjava/lang/String;)J",
      (void *) nativeWalCheckpoint},
-    {"nativeGetSQLiteHandle", "(J)J", (void *) nativeGetSQLiteHandle},
+    {"nativeSQLiteHandle", "(JZ)J", (void *) nativeSQLiteHandle},
+    {"nativeSetUpdateNotification", "(JZZ)V",
+     (void *) nativeSetUpdateNotification},
 };
 
 static int register_wcdb_SQLiteConnection(JavaVM *vm, JNIEnv *env)
@@ -1052,6 +1326,9 @@ static int register_wcdb_SQLiteConnection(JavaVM *vm, JNIEnv *env)
     FIND_CLASS(clazz, "com/tencent/wcdb/database/SQLiteConnection");
     GET_METHOD_ID(gSQLiteConnectionClassInfo.notifyCheckpoint, clazz,
                   "notifyCheckpoint", "(Ljava/lang/String;I)V");
+    GET_METHOD_ID(gSQLiteConnectionClassInfo.notifyChange, clazz,
+                  "notifyChange",
+                  "(Ljava/lang/String;Ljava/lang/String;[J[J[J)V");
 
     if (env->RegisterNatives(clazz, sMethods, NELEM(sMethods)) < 0) {
         char msg[256];

@@ -158,23 +158,8 @@ internal final class TableDecoder: Decoder {
         internal func decode<Object>(_ type: Object.Type, forKey key: Key) throws -> Object where Object: Decodable {
             let index: Int = columnIndex(by: key)
             //`key` must conform to ColumnDecodable protocol.
-            let decodableType = Object.self as! ColumnDecodableBase.Type
-            var decoded: ColumnDecodableBase? = nil
-            switch decodableType.columnType {
-            case .integer32:
-                decoded = decodableType.init(with: handleStatement.columnValue(atIndex: index, of: Int32.self))
-            case .integer64:
-                decoded = decodableType.init(with: handleStatement.columnValue(atIndex: index, of: Int64.self))
-            case .float:
-                decoded = decodableType.init(with: handleStatement.columnValue(atIndex: index, of: Double.self))
-            case .text:
-                decoded = decodableType.init(with: handleStatement.columnValue(atIndex: index, of: String.self))
-            case .BLOB:
-                decoded = decodableType.init(with: handleStatement.columnValue(atIndex: index, of: Data.self))
-            default:
-                fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
-            }
-            guard let wrappedDecoded = decoded else {
+            let decodableType = Object.self as! ColumnDecodable.Type
+            guard let wrappedDecoded = decodableType.init(with: handleStatement.columnValue(atIndex: index)) else {
                 throw Error.reportCore(tag: handleStatement.tag,
                                        path: handleStatement.path,
                                        operation: .encode,
@@ -290,23 +275,8 @@ internal final class TableDecoder: Decoder {
                     return nil
             }
             //`key` must conform to ColumnDecodable protocol.
-            let decodableType = Object.self as! ColumnDecodableBase.Type
-            var decoded: ColumnDecodableBase? = nil
-            switch decodableType.columnType {
-            case .integer32:
-                decoded = decodableType.init(with: handleStatement.columnValue(atIndex: index, of: Int32.self))
-            case .integer64:
-                decoded = decodableType.init(with: handleStatement.columnValue(atIndex: index, of: Int64.self))
-            case .float:
-                decoded = decodableType.init(with: handleStatement.columnValue(atIndex: index, of: Double.self))
-            case .text:
-                decoded = decodableType.init(with: handleStatement.columnValue(atIndex: index, of: String.self))
-            case .BLOB:
-                decoded = decodableType.init(with: handleStatement.columnValue(atIndex: index, of: Data.self))
-            default:
-                fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
-            }
-            guard let wrappedDecoded = decoded else {
+            let decodableType = Object.self as! ColumnDecodable.Type
+            guard let wrappedDecoded = decodableType.init(with: handleStatement.columnValue(atIndex: index)) else {
                 return nil
             }
             //It should not be failed. If you think it's a bug, please report an issue to us.

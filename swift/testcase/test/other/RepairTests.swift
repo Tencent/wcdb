@@ -64,8 +64,7 @@ class RepairTests: BaseTestCase {
         database = Database(withFileURL: self.recommendedPath)
 
         let optionalCoreStatement = WCDBAssertNoThrowReturned(
-            try database.prepare(StatementPragma().pragma(.pageSize)),
-            whenFailed: nil
+            try database.prepare(StatementPragma().pragma(.pageSize))
         )
         XCTAssertNotNil(optionalCoreStatement)
         let coreStatement = optionalCoreStatement!
@@ -170,8 +169,7 @@ class RepairTests: BaseTestCase {
 
         do {
             let optionalCoreStatement = WCDBAssertNoThrowReturned(
-                try database.prepare(StatementPragma().pragma(.pageSize)),
-                whenFailed: nil
+                try database.prepare(StatementPragma().pragma(.pageSize))
             )
             XCTAssertNotNil(optionalCoreStatement)
             let coreStatement = optionalCoreStatement!

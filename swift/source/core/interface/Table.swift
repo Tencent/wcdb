@@ -185,7 +185,7 @@ extension Table: UpdateTableInterface {
     ///   - offset: Expression convertible
     /// - Throws: `Error`
     public func update(on propertyConvertibleList: PropertyConvertible...,
-                       with row: [ColumnEncodableBase],
+                       with row: [ColumnEncodable],
                        where condition: Condition? = nil,
                        orderBy orderList: [OrderBy]? = nil,
                        limit: Limit? = nil,
@@ -209,7 +209,7 @@ extension Table: UpdateTableInterface {
     ///   - offset: Expression convertible
     /// - Throws: `Error`
     public func update(on propertyConvertibleList: [PropertyConvertible],
-                       with row: [ColumnEncodableBase],
+                       with row: [ColumnEncodable],
                        where condition: Condition? = nil,
                        orderBy orderList: [OrderBy]? = nil,
                        limit: Limit? = nil,

@@ -1,0 +1,46 @@
+apply plugin: 'com.android.library'
+apply from: rootProject.file('gradle/WeChatPublish.gradle')
+
+artifactId = 'room'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 28
+        versionCode 1
+        versionName version
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    api project(':wcdb')
+
+    api 'android.arch.persistence.room:runtime:1.1.1'
+    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
+}
+
+wechatPublish {
+    publishAllVariants true
+
+    publishToBintray {
+        repo = 'wcdb'
+        name = 'room'
+        desc = ''
+        websiteUrl = 'https://github.com/Tencent/wcdb'
+        issueTrackerUrl = 'https://github.com/Tencent/wcdb/issues'
+        vcsUrl = 'https://github.com/Tencent/wcdb.git'
+        licenses = ['BSD 3-Clause']
+    }
+}

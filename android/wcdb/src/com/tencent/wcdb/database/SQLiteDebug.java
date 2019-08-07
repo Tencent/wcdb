@@ -38,12 +38,11 @@ public final class SQLiteDebug {
     private static native void nativeGetIOTraceStats(long connectionPtr, ArrayList<IOTraceStats> statsList);
 
     static {
-        // Ensure libmmdb.so is loaded.
+        // Ensure libwcdb.so is loaded.
         SQLiteGlobal.loadLib();
     }
 
-    private SQLiteDebug() {
-    }
+    private SQLiteDebug() {}
 
     /**
      * Determines whether a query should be logged.

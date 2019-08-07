@@ -63,7 +63,14 @@ public abstract class SQLiteProgram extends SQLiteClosable {
                 db.getThreadSession().prepare(mSql,
                         db.getThreadDefaultConnectionFlags(assumeReadOnly),
                         cancellationSignalForPrepare, info);
-                mReadOnly = info.readOnly;
+
+                // Always treat CREATE/DROP/ALTER statements as read-write.
+                // This fixes read-only exceptions while running CREATE xxx IF NOT EXISTS statements
+                // because we assume these statements to be read-write and prepare them using the
+                // primary connection but the results are read-only and run on non-primary connections.
+                // The non-primary connections may be using outdated cache and treat the statement as
+                // read-write.
+                mReadOnly = (n != DatabaseUtils.STATEMENT_DDL) && info.readOnly;
                 mColumnNames = info.columnNames;
                 mNumParameters = info.numParameters;
                 break;
@@ -115,9 +122,25 @@ public abstract class SQLiteProgram extends SQLiteClosable {
     }
 
     /** @hide */
-    protected final void onCorruption() {
-        SQLiteDebug.collectLastIOTraceStats(mDatabase);
-        mDatabase.onCorruption();
+    protected final void checkCorruption(SQLiteException e) {
+        boolean isCorruption = false;
+        if (e instanceof SQLiteDatabaseCorruptException) {
+            isCorruption = true;
+        } else if (e instanceof SQLiteFullException) {
+            // When SQLite executing OP_Column opcode during SELECT or UPDATE statements,
+            // it may return SQLITE_FULL when trying to access unreachable pages.
+            // It's considered corruption on this scenario. We cannot distinguish such
+            // situation here, so we treat all SQLiteFullException thrown by a SELECT
+            // statement a signal on corruption.
+            if (mReadOnly) {
+                isCorruption = true;
+            }
+        }
+
+        if (isCorruption) {
+            SQLiteDebug.collectLastIOTraceStats(mDatabase);
+            mDatabase.onCorruption();
+        }
     }
 
     /**
@@ -226,7 +249,7 @@ public abstract class SQLiteProgram extends SQLiteClosable {
         mBindArgs[index - 1] = value;
     }
 
-    protected synchronized boolean acquirePreparedStatement() {
+    protected synchronized boolean acquirePreparedStatement(boolean persist) {
         SQLiteSession session = mDatabase.getThreadSession();
         if (session == mBoundSession)
             return false;
@@ -235,10 +258,10 @@ public abstract class SQLiteProgram extends SQLiteClosable {
             throw new IllegalStateException("SQLiteProgram has bound to another thread.");
         }
 
-        mBoundSession = session;
         mPreparedStatement = session.acquirePreparedStatement(mSql,
-                mDatabase.getThreadDefaultConnectionFlags(mReadOnly));
+                mDatabase.getThreadDefaultConnectionFlags(mReadOnly), persist);
         mPreparedStatement.bindArguments(mBindArgs);
+        mBoundSession = session;
         return true;
     }
 

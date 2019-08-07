@@ -20,15 +20,15 @@
 
 package com.tencent.wcdb.sample.repairdb;
 
+import android.app.Activity;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.widget.SimpleCursorAdapter;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import com.tencent.wcdb.database.SQLiteDatabase;
@@ -45,7 +45,7 @@ import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     private static final String TAG = "WCDB.RepairDBSample";
 

@@ -87,8 +87,12 @@ public final class CoreStatement {
     /// - Parameters:
     ///   - value: Column encodable object
     ///   - index: Begin with 1
-    public func bind(_ value: ColumnEncodableBase?, toIndex index: Int) {
-        handleStatement.bind(value?.archivedFundamentalValue(), toIndex: index)
+    public func bind(_ value: ColumnEncodable?, toIndex index: Int) {
+        guard let bindingValue = value?.archivedValue() else {
+            handleStatement.bind(nil, toIndex: index)
+            return
+        }
+        handleStatement.bind(bindingValue, toIndex: index)
     }
 
     /// The wrapper of `sqlite3_column_*` for getting column decodable value.
@@ -97,24 +101,11 @@ public final class CoreStatement {
     ///   - index: Begin with 0
     ///   - type: Type of column codable object
     /// - Returns: Same as type
-    public func value(atIndex index: Int, of type: ColumnDecodableBase.Type) -> ColumnDecodableBase? {
+    public func value(atIndex index: Int, of type: ColumnDecodable.Type) -> ColumnDecodable? {
         guard handleStatement.columnType(atIndex: index) != .null else {
             return nil
         }
-        switch type.columnType {
-        case .integer32:
-            return type.init(with: handleStatement.columnValue(atIndex: index, of: Int32.self))
-        case .integer64:
-            return type.init(with: handleStatement.columnValue(atIndex: index, of: Int64.self))
-        case .float:
-            return type.init(with: handleStatement.columnValue(atIndex: index, of: Double.self))
-        case .text:
-            return type.init(with: handleStatement.columnValue(atIndex: index, of: String.self))
-        case .BLOB:
-            return type.init(with: handleStatement.columnValue(atIndex: index, of: Data.self))
-        default: break
-        }
-        return nil
+        return type.init(with: handleStatement.columnValue(atIndex: index))
     }
 
     /// The wrapper of `sqlite3_column_*` for getting column decodable value.
@@ -129,21 +120,7 @@ public final class CoreStatement {
         guard handleStatement.columnType(atIndex: index) != .null else {
             return nil
         }
-        var result: ColumnDecodableType? = nil
-        switch ColumnDecodableType.columnType {
-        case .integer32:
-            result = ColumnDecodableType.init(with: handleStatement.columnValue(atIndex: index, of: Int32.self))
-        case .integer64:
-            result = ColumnDecodableType.init(with: handleStatement.columnValue(atIndex: index, of: Int64.self))
-        case .float:
-            result = ColumnDecodableType.init(with: handleStatement.columnValue(atIndex: index, of: Double.self))
-        case .text:
-            result = ColumnDecodableType.init(with: handleStatement.columnValue(atIndex: index, of: String.self))
-        case .BLOB:
-            result = ColumnDecodableType.init(with: handleStatement.columnValue(atIndex: index, of: Data.self))
-        default: break
-        }
-        return result
+        return type.init(with: handleStatement.columnValue(atIndex: index))
     }
 
     /// The wrapper of `sqlite3_column_*` for getting fundamentable value.

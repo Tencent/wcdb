@@ -25,7 +25,7 @@ class TransactionTests: CRUDTestCase {
 
     func testBase() {
         //When
-        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction(), whenFailed: nil)
+        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction())
         XCTAssertNotNil(optionalTransaction)
         let transaction = optionalTransaction!
         //Then
@@ -172,7 +172,7 @@ class TransactionTests: CRUDTestCase {
         let object = CRUDObject()
         object.variable1 = 3
         object.variable2 = self.name
-        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction(), whenFailed: nil)
+        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction())
         XCTAssertNotNil(optionalTransaction)
         let transaction = optionalTransaction!
         //When
@@ -194,7 +194,7 @@ class TransactionTests: CRUDTestCase {
         let object = CRUDObject()
         object.variable1 = 3
         object.variable2 = self.name
-        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction(), whenFailed: nil)
+        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction())
         XCTAssertNotNil(optionalTransaction)
         let transaction = optionalTransaction!
         //When
@@ -216,7 +216,7 @@ class TransactionTests: CRUDTestCase {
         let object = CRUDObject()
         object.variable1 = 3
         object.variable2 = self.name
-        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction(), whenFailed: nil)
+        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction())
         XCTAssertNotNil(optionalTransaction)
         let transaction = optionalTransaction!
         //When
@@ -236,7 +236,7 @@ class TransactionTests: CRUDTestCase {
         let object = CRUDObject()
         object.variable1 = 3
         object.variable2 = self.name
-        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction(), whenFailed: nil)
+        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction())
         XCTAssertNotNil(optionalTransaction)
         let transaction = optionalTransaction!
         //When
@@ -257,7 +257,7 @@ class TransactionTests: CRUDTestCase {
         let object = CRUDObject()
         object.variable1 = 3
         object.variable2 = self.name
-        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction(), whenFailed: nil)
+        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction())
         XCTAssertNotNil(optionalTransaction)
         let transaction = optionalTransaction!
         //When
@@ -271,7 +271,7 @@ class TransactionTests: CRUDTestCase {
         let object = CRUDObject()
         object.variable1 = 3
         object.variable2 = self.name
-        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction(), whenFailed: nil)
+        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction())
         XCTAssertNotNil(optionalTransaction)
         let transaction = optionalTransaction!
         //When
@@ -292,7 +292,7 @@ class TransactionTests: CRUDTestCase {
         let object = CRUDObject()
         object.variable1 = 3
         object.variable2 = self.name
-        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction(), whenFailed: nil)
+        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction())
         XCTAssertNotNil(optionalTransaction)
         let transaction = optionalTransaction!
         //When
@@ -307,7 +307,7 @@ class TransactionTests: CRUDTestCase {
         let object = CRUDObject()
         object.variable1 = 3
         object.variable2 = self.name
-        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction(), whenFailed: nil)
+        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction())
         XCTAssertNotNil(optionalTransaction)
         let transaction = optionalTransaction!
         //When
@@ -329,7 +329,7 @@ class TransactionTests: CRUDTestCase {
         let object = CRUDObject()
         object.variable1 = 3
         object.variable2 = self.name
-        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction(), whenFailed: nil)
+        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction())
         XCTAssertNotNil(optionalTransaction)
         let transaction = optionalTransaction!
         //When
@@ -349,13 +349,12 @@ class TransactionTests: CRUDTestCase {
 
     func testPrepareWithTransaction() {
         //Give
-        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction(), whenFailed: nil)
+        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction())
         XCTAssertNotNil(optionalTransaction)
         let transaction = optionalTransaction!
         //When
         let optionalCoreStatement = WCDBAssertNoThrowReturned(
-            try transaction.prepare(StatementPragma().pragma(.journalMode)),
-            whenFailed: nil
+            try transaction.prepare(StatementPragma().pragma(.journalMode))
         )
         XCTAssertNotNil(optionalCoreStatement)
         let coreStatement = optionalCoreStatement!
@@ -367,7 +366,7 @@ class TransactionTests: CRUDTestCase {
 
     func testExecWithTransaction() {
         //Give
-        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction(), whenFailed: nil)
+        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction())
         XCTAssertNotNil(optionalTransaction)
         let transaction = optionalTransaction!
         //When
@@ -382,20 +381,18 @@ class TransactionTests: CRUDTestCase {
 
     func testIsTableExistsWithTransaction() {
         //Give
-        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction(), whenFailed: nil)
+        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction())
         XCTAssertNotNil(optionalTransaction)
         let transaction = optionalTransaction!
         //Then
         let randomTableExists = WCDBAssertNoThrowReturned(
-            try transaction.isTableExists("randomTable"),
-            whenFailed: nil
+            try transaction.isTableExists("randomTable")
         )
         XCTAssertNotNil(randomTableExists)
         XCTAssertFalse(randomTableExists!)
 
         let crudTableExists = WCDBAssertNoThrowReturned(
-            try transaction.isTableExists(CRUDObject.name),
-            whenFailed: nil
+            try transaction.isTableExists(CRUDObject.name)
         )
         XCTAssertNotNil(crudTableExists)
         XCTAssertTrue(crudTableExists!)
@@ -406,7 +403,7 @@ class TransactionTests: CRUDTestCase {
         let object = CRUDObject()
         object.variable1 = 3
         object.variable2 = self.name
-        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction(), whenFailed: nil)
+        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction())
         XCTAssertNotNil(optionalTransaction)
         let transaction = optionalTransaction!
         //When
@@ -429,7 +426,7 @@ class TransactionTests: CRUDTestCase {
         object.variable1 = 3
         object.variable2 = self.name
         do {
-            let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction(), whenFailed: nil)
+            let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction())
             XCTAssertNotNil(optionalTransaction)
             let transaction = optionalTransaction!
             //When

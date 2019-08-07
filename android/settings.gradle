@@ -1,4 +1,9 @@
-include ':wcdb', ':sample-encryptdb', ':sample-repairdb', ':benchmark'
-project(':sample-encryptdb').projectDir = new File('samples/sample-encryptdb')
-project(':sample-repairdb').projectDir = new File('samples/sample-repairdb')
-project(':benchmark').projectDir = new File('samples/benchmark')
+rootProject.name = 'wcdb-android'
+include ':wcdb', ':room'
+
+file('samples').eachDir { dir ->
+    if (new File(dir, 'build.gradle').exists()) {
+        include dir.name
+        project(":${dir.name}").projectDir = dir
+    }
+}

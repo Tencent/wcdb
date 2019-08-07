@@ -16,6 +16,7 @@
 
 package com.tencent.wcdb.database;
 
+import android.database.sqlite.SQLiteTransactionListener;
 import android.os.Process;
 import android.util.Pair;
 
@@ -23,6 +24,7 @@ import com.tencent.wcdb.BuildConfig;
 import com.tencent.wcdb.CursorWindow;
 import com.tencent.wcdb.DatabaseUtils;
 import com.tencent.wcdb.support.CancellationSignal;
+import com.tencent.wcdb.support.OperationCanceledException;
 
 /**
  * Provides a single client the ability to use a database.
@@ -300,14 +302,14 @@ public final class SQLiteSession {
     }
 
     private void beginTransactionUnchecked(int transactionMode,
-            SQLiteTransactionListener transactionListener, int connectionFlags,
-            CancellationSignal cancellationSignal) {
+                                           SQLiteTransactionListener transactionListener, int connectionFlags,
+                                           CancellationSignal cancellationSignal) {
         if (cancellationSignal != null) {
             cancellationSignal.throwIfCanceled();
         }
 
         if (mTransactionStack == null) {
-            acquireConnection(null, connectionFlags, cancellationSignal); // might throw
+            acquireConnection(null, connectionFlags, true, cancellationSignal); // might throw
         }
         try {
             // Set up the transaction such that we can back out safely
@@ -577,7 +579,7 @@ public final class SQLiteSession {
             cancellationSignal.throwIfCanceled();
         }
 
-        acquireConnection(sql, connectionFlags, cancellationSignal); // might throw
+        acquireConnection(sql, connectionFlags, false, cancellationSignal); // might throw
         try {
             mConnection.prepare(sql, outStatementInfo); // might throw
         } finally {
@@ -608,7 +610,7 @@ public final class SQLiteSession {
             return;
         }
 
-        acquireConnection(sql, connectionFlags, cancellationSignal); // might throw
+        acquireConnection(sql, connectionFlags, false, cancellationSignal); // might throw
         try {
             mConnection.execute(sql, bindArgs, cancellationSignal); // might throw
         } finally {
@@ -640,7 +642,7 @@ public final class SQLiteSession {
             return 0;
         }
 
-        acquireConnection(sql, connectionFlags, cancellationSignal); // might throw
+        acquireConnection(sql, connectionFlags, false, cancellationSignal); // might throw
         try {
             return mConnection.executeForLong(sql, bindArgs, cancellationSignal); // might throw
         } finally {
@@ -672,7 +674,7 @@ public final class SQLiteSession {
             return null;
         }
 
-        acquireConnection(sql, connectionFlags, cancellationSignal); // might throw
+        acquireConnection(sql, connectionFlags, false, cancellationSignal); // might throw
         try {
             return mConnection.executeForString(sql, bindArgs, cancellationSignal); // might throw
         } finally {
@@ -704,7 +706,7 @@ public final class SQLiteSession {
             return 0;
         }
 
-        acquireConnection(sql, connectionFlags, cancellationSignal); // might throw
+        acquireConnection(sql, connectionFlags, false, cancellationSignal); // might throw
         try {
             return mConnection.executeForChangedRowCount(sql, bindArgs,
                     cancellationSignal); // might throw
@@ -737,7 +739,7 @@ public final class SQLiteSession {
             return 0;
         }
 
-        acquireConnection(sql, connectionFlags, cancellationSignal); // might throw
+        acquireConnection(sql, connectionFlags, false, cancellationSignal); // might throw
         try {
             return mConnection.executeForLastInsertedRowId(sql, bindArgs,
                     cancellationSignal); // might throw
@@ -784,7 +786,7 @@ public final class SQLiteSession {
             return 0;
         }
 
-        acquireConnection(sql, connectionFlags, cancellationSignal); // might throw
+        acquireConnection(sql, connectionFlags, false, cancellationSignal); // might throw
         try {
             return mConnection.executeForCursorWindow(sql, bindArgs,
                     window, startPos, requiredPos, countAllRows,
@@ -795,7 +797,7 @@ public final class SQLiteSession {
     }
 
     public Pair<Integer, Integer> walCheckpoint(String dbName, int connectionFlags) {
-        acquireConnection(null, connectionFlags, null);
+        acquireConnection(null, connectionFlags, false, null);
         try {
             return mConnection.walCheckpoint(dbName);
         } finally {
@@ -849,7 +851,7 @@ public final class SQLiteSession {
         return false;
     }
 
-    private void acquireConnection(String sql, int connectionFlags,
+    private void acquireConnection(String sql, int connectionFlags, boolean persist,
             CancellationSignal cancellationSignal) {
         if (mConnection == null) {
             if (BuildConfig.DEBUG && !(mConnectionUseCount == 0))
@@ -857,7 +859,7 @@ public final class SQLiteSession {
             mConnection = mConnectionPool.acquireConnection(sql, connectionFlags,
                     cancellationSignal); // might throw
             mConnectionFlags = connectionFlags;
-            mConnection.setAcquisitionState(Thread.currentThread(), Process.myTid());
+            mConnection.setAcquisitionState(true, persist);
         }
         mConnectionUseCount += 1;
     }
@@ -867,7 +869,7 @@ public final class SQLiteSession {
             throw new AssertionError("mConnection != null && mConnectionUseCount > 0");
         if (--mConnectionUseCount == 0) {
             try {
-                mConnection.setAcquisitionState(null, 0);
+                mConnection.setAcquisitionState(false, false);
                 mConnectionPool.releaseConnection(mConnection); // might throw
             } finally {
                 mConnection = null;
@@ -876,7 +878,7 @@ public final class SQLiteSession {
     }
 
     /*package*/ SQLiteConnection acquireConnectionForNativeHandle(int connectionFlags) {
-        acquireConnection(null, connectionFlags, null);
+        acquireConnection(null, connectionFlags, true, null);
         return mConnection;
     }
 
@@ -887,10 +889,12 @@ public final class SQLiteSession {
         releaseConnection();
     }
 
-    /*package*/ SQLiteConnection.PreparedStatement acquirePreparedStatement(String sql, int connectionFlags) {
+    /*package*/ SQLiteConnection.PreparedStatement acquirePreparedStatement(String sql,
+                                                                            int connectionFlags,
+                                                                            boolean persist) {
         // When we're holding a prepared statement, we're also holding its connection.
         // This prevents database connections from being used by two or more threads.
-        acquireConnection(sql, connectionFlags, null);
+        acquireConnection(sql, connectionFlags, persist, null);
 
         return mConnection.acquirePreparedStatement(sql);
     }

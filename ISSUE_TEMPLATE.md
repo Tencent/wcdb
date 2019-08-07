@@ -1,13 +1,6 @@
-> Please fill out this template when filing an issue.
->
-> Please **remove all grey hint text before submitting**.
->
-
 ### The language of WCDB
 
 > e.g. Objective-C, Swift or Java 
-
-
 
 
 
@@ -17,13 +10,9 @@
 
 
 
-
-
 ### The platform of WCDB
 
 > e.g. iOS, macOS or Android
-
-
 
 
 
@@ -33,13 +22,11 @@
 
 
 
-
-
 ### What's the issue?
 
-> Please post the outputs or screenshots for an error.
->
-> Please explain what you want by example or code.
+> Post the outputs or screenshots for errors.
+> 
+> Explain what you want by example or code **in English**.
 
 
 
@@ -47,15 +34,3 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-- [ ]  I've read and understood the [wiki](https://github.com/Tencent/wcdb/wiki).

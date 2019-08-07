@@ -64,6 +64,23 @@ class CRUDObject: CRUDObjectBase, TableCodable {
         }
     }
 
+    static func == (lhs: CRUDObject, rhs: CRUDObject) -> Bool {
+        return lhs.variable1 == rhs.variable1 && lhs.variable2 == rhs.variable2
+    }
+
+    static func < (lhs: CRUDObject, rhs: CRUDObject) -> Bool {
+        if lhs.variable1 == rhs.variable1 {
+            if let lhsv2 = lhs.variable2, let rhsv2 = rhs.variable2 {
+                return lhsv2 < rhsv2
+            }
+            return lhs.variable2 == nil
+        }
+        if let lhsv1 = lhs.variable1, let rhsv1 = rhs.variable1 {
+            return lhsv1 < rhsv1
+        }
+        return lhs.variable1 == nil
+    }
+
     override var hashValue: Int {
         return (String(variable1 ?? 0)+(variable2 ?? "")).hashValue
     }

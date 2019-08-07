@@ -21,7 +21,7 @@
 #include "JNIHelp.h"
 #include "Logger.h"
 #include "ModuleLoader.h"
-#include <backup/mm_backup.h>
+#include <mm_backup.h>
 #include <jni.h>
 #include <stdlib.h>
 #include <sys/time.h>
@@ -44,16 +44,16 @@ static void print_xlog(int prio, const char *msg)
 static jlong JNICALL BackupKit_nativeInit(
     JNIEnv *env, jclass cls, jstring outPath, jbyteArray key, jint flags)
 {
-    const char *path_ = env->GetStringUTFChars(outPath, NULL);
+    const char *path_ = env->GetStringUTFChars(outPath, nullptr);
     const unsigned char *key_;
     int key_len_;
 
     if (key) {
         key_len_ = env->GetArrayLength(key);
-        key_ = (unsigned char *) env->GetByteArrayElements(key, NULL);
+        key_ = (unsigned char *) env->GetByteArrayElements(key, nullptr);
     } else {
         key_len_ = 0;
-        key_ = NULL;
+        key_ = nullptr;
     }
 
     mm_backup_ctx *ctx =
@@ -94,15 +94,15 @@ static jint JNICALL BackupKit_nativeRun(JNIEnv *env,
             strarr[ii + 1] =
                 (jstring) env->GetObjectArrayElement(tableDesc, ii + 1);
             tabdesc[i].table =
-                strarr[ii] ? env->GetStringUTFChars(strarr[ii], NULL) : NULL;
+                strarr[ii] ? env->GetStringUTFChars(strarr[ii], nullptr) : nullptr;
             tabdesc[i].condition =
-                strarr[ii + 1] ? env->GetStringUTFChars(strarr[ii + 1], NULL)
-                               : NULL;
+                strarr[ii + 1] ? env->GetStringUTFChars(strarr[ii + 1], nullptr)
+                               : nullptr;
         }
     } else {
-        tabdesc = NULL;
+        tabdesc = nullptr;
         num_tabdesc = 0;
-        strarr = NULL;
+        strarr = nullptr;
     }
 
     int ret = mm_backup_run(ctx, db, tabdesc, num_tabdesc);
@@ -128,14 +128,14 @@ static void JNICALL BackupKit_nativeCancel(JNIEnv *env,
 
 static void JNICALL BackupKit_nativeFinish(JNIEnv *env,
                                            jclass cls,
-                                           jint ctxHandle)
+                                           jlong ctxHandle)
 {
     mm_backup_ctx *ctx = (mm_backup_ctx *) (intptr_t) ctxHandle;
     mm_backup_finish(ctx);
 }
 
-static jint
-BackupKit_nativeStatementCount(JNIEnv *env, jclass cls, jint ctxHandle)
+static jint JNICALL
+BackupKit_nativeStatementCount(JNIEnv *env, jclass cls, jlong ctxHandle)
 {
     unsigned int stmt_count;
     mm_backup_ctx *ctx = (mm_backup_ctx *) (intptr_t) ctxHandle;
@@ -144,11 +144,11 @@ BackupKit_nativeStatementCount(JNIEnv *env, jclass cls, jint ctxHandle)
 }
 
 static jstring
-BackupKit_nativeLastError(JNIEnv *env, jclass cls, jint ctxHandle)
+BackupKit_nativeLastError(JNIEnv *env, jclass cls, jlong ctxHandle)
 {
     mm_backup_ctx *ctx = (mm_backup_ctx *) (intptr_t) ctxHandle;
     const char *errmsg = mm_backup_last_error(ctx);
-    return errmsg ? env->NewStringUTF(errmsg) : NULL;
+    return errmsg ? env->NewStringUTF(errmsg) : nullptr;
 }
 
 static jlong JNICALL RecoverKit_nativeInit(JNIEnv *env,
@@ -156,16 +156,16 @@ static jlong JNICALL RecoverKit_nativeInit(JNIEnv *env,
                                            jstring inPath,
                                            jbyteArray key)
 {
-    const char *path_ = env->GetStringUTFChars(inPath, NULL);
+    const char *path_ = env->GetStringUTFChars(inPath, nullptr);
     const unsigned char *key_;
     int key_len_;
 
     if (key) {
         key_len_ = env->GetArrayLength(key);
-        key_ = (unsigned char *) env->GetByteArrayElements(key, NULL);
+        key_ = (unsigned char *) env->GetByteArrayElements(key, nullptr);
     } else {
         key_len_ = 0;
-        key_ = NULL;
+        key_ = nullptr;
     }
 
     mm_recover_ctx *ctx = mm_recover_init(path_, key_, key_len_, print_xlog);
@@ -207,7 +207,7 @@ static jint JNICALL RecoverKit_nativeSuccessCount(JNIEnv *env,
 {
     unsigned int succ = 0;
     mm_recover_ctx *ctx = (mm_recover_ctx *) (intptr_t) ctxHandle;
-    mm_recover_statistics(ctx, &succ, NULL);
+    mm_recover_statistics(ctx, &succ, nullptr);
     return succ;
 }
 
@@ -217,16 +217,16 @@ static jint JNICALL RecoverKit_nativeFailureCount(JNIEnv *env,
 {
     unsigned int fail = 0;
     mm_recover_ctx *ctx = (mm_recover_ctx *) (intptr_t) ctxHandle;
-    mm_recover_statistics(ctx, NULL, &fail);
+    mm_recover_statistics(ctx, nullptr, &fail);
     return fail;
 }
 
 static jstring
-RecoverKit_nativeLastError(JNIEnv *env, jclass cls, jint ctxHandle)
+RecoverKit_nativeLastError(JNIEnv *env, jclass cls, jlong ctxHandle)
 {
     mm_recover_ctx *ctx = (mm_recover_ctx *) (intptr_t) ctxHandle;
     const char *errmsg = mm_recover_last_error(ctx);
-    return errmsg ? env->NewStringUTF(errmsg) : NULL;
+    return errmsg ? env->NewStringUTF(errmsg) : nullptr;
 }
 
 static const JNINativeMethod BackupKit_methods[] = {

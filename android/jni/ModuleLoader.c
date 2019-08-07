@@ -27,7 +27,6 @@
 #define LOG_TAG "WCDB"
 
 typedef int (*jni_init_func_t)(JavaVM *vm, JNIEnv *env);
-typedef int (*dbconn_init_func_t)(sqlite3 *db, char **errmsg, const void *);
 
 typedef struct wcdb_moddef_t {
     const char *name;
@@ -54,21 +53,6 @@ void register_module_func(const char *name, void *func, unsigned tag)
     wcdb_moddef_t *mod = g_moddef[tag] + (g_moddef_num[tag]++);
     mod->name = name;
     mod->func = func;
-}
-
-int run_dbconn_initializers(sqlite3 *db, char **errmsg)
-{
-    wcdb_moddef_t *mod = g_moddef[WCDB_INITTAG_DBCONN_INIT];
-    size_t num_mod = g_moddef_num[WCDB_INITTAG_DBCONN_INIT];
-    while (num_mod--) {
-        LOGI(LOG_TAG, "Initialize SQLite connection module '%s'...", mod->name);
-        int ret = ((dbconn_init_func_t)(mod->func))(db, errmsg, NULL);
-        if (ret != 0)
-            return ret;
-        mod++;
-    }
-
-    return 0; // SQLITE_OK
 }
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved)

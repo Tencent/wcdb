@@ -24,6 +24,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.tencent.wcdb.DatabaseUtils;
+import com.tencent.wcdb.database.SQLiteChangeListener;
 import com.tencent.wcdb.database.SQLiteDatabase;
 import com.tencent.wcdb.database.SQLiteOpenHelper;
 import com.tencent.wcdb.repair.RepairKit;
@@ -118,5 +119,31 @@ public class EncryptedDBHelper extends SQLiteOpenHelper {
 
         // OPTIONAL: backup master info for corruption recovery.
         RepairKit.MasterInfo.save(db, db.getPath() + "-mbak", mPassphrase.getBytes());
+    }
+
+    @Override
+    public void onConfigure(SQLiteDatabase db) {
+        db.setAsyncCheckpointEnabled(true);
+        db.setChangeListener(new SQLiteChangeListener() {
+
+            private StringBuilder mSB = new StringBuilder();
+            private void printIds(String prefix, long[] ids) {
+                mSB.append(prefix).append(": ");
+                for (long id : ids) {
+                    mSB.append(id).append(", ");
+                }
+                Log.i(TAG, mSB.toString());
+                mSB.setLength(0);
+            }
+
+            @Override
+            public void onChange(SQLiteDatabase db, String dbName, String table,
+                    long[] insertIds, long[] updateIds, long[] deleteIds) {
+                Log.i(TAG, "onChange called: dbName = " + dbName + ", table = " + table);
+                printIds("INSERT", insertIds);
+                printIds("UPDATE", updateIds);
+                printIds("DELETE", deleteIds);
+            }
+        }, true);
     }
 }

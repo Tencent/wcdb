@@ -29,26 +29,10 @@ import com.tencent.wcdb.DatabaseErrorHandler;
  */
 public class SQLiteCipherSpec {
 
-    /** 256-bit AES encryption, CBC mode. */
-    public static final String CIPHER_AES256CBC = "aes-256-cbc";
-
-    /**
-     * XXTEA encryption, under development.
-     * @hide
-     */
-    public static final String CIPHER_XXTEA = "xxtea";
-
-    /**
-     * Default encryption (AES-256-CBC) with device lock, under development.
-     * @hide
-     */
-    public static final String CIPHER_DEVLOCK = "devlock";
-
-
-    /**
-     * Encryption method used, null for default method, which is 256-bit AES in CBC mode.
-     */
-    public String cipher;
+    public static final int HMAC_DEFAULT = -1;
+    public static final int HMAC_SHA1 = 0;
+    public static final int HMAC_SHA256 = 1;
+    public static final int HMAC_SHA512 = 2;
 
     /**
      * KDF iteration times to generate encryption keys, 0 for default value.
@@ -66,6 +50,24 @@ public class SQLiteCipherSpec {
      * cannot be opened and {@link SQLiteException} is thrown.</p>
      */
     public boolean hmacEnabled = true;
+
+    /**
+     * Which algorithm should be used in HMAC.
+     *
+     * <p>Defaulted to {@code HMAC_SHA1} for SQLCipher 3.x and below, {@code HMAC_SHA512}
+     * for 4.x. Must be set to the same value as when the database is created, or the database
+     * cannot be opened and {@link SQLiteException} is thrown.</p>
+     */
+    public int hmacAlgorithm = HMAC_DEFAULT;
+
+    /**
+     * Which algorithm should be used in key derivation.
+     *
+     * <p>Defaulted to {@code HMAC_SHA1} for SQLCipher 3.x and below, {@code HMAC_SHA512}
+     * for 4.x. Must be set to the same value as when the database is created, or the database
+     * cannot be opened and {@link SQLiteException} is thrown.</p>
+     */
+    public int kdfAlgorithm = HMAC_DEFAULT;
 
     /**
      * Page size to use.
@@ -90,21 +92,9 @@ public class SQLiteCipherSpec {
      * @param rhs   The object to be copied
      */
     public SQLiteCipherSpec(SQLiteCipherSpec rhs) {
-        cipher = rhs.cipher;
         kdfIteration = rhs.kdfIteration;
         hmacEnabled = rhs.hmacEnabled;
         pageSize = rhs.pageSize;
-    }
-
-    /**
-     * Set encryption method to be used.
-     *
-     * @param c The method name to be used
-     * @return  This object to allow for chaining of calls to set methods
-     * @see #cipher
-     */
-    public SQLiteCipherSpec setCipher(String c) {
-        cipher = c; return this;
     }
 
     /**
@@ -130,6 +120,26 @@ public class SQLiteCipherSpec {
     }
 
     /**
+     * Set algorithm to be used in HMAC.
+     * @param algo Algorithm defined by {@code HMAC_*}
+     * @return This object to allow for chaining of calls to set methods
+     * @see #hmacAlgorithm
+     */
+    public SQLiteCipherSpec setHmacAlgorithm(int algo) {
+        hmacAlgorithm = algo; return this;
+    }
+
+    /**
+     * Set algorithm to be used in PBKDF.
+     * @param algo Algorithm defined by {@code HMAC_*}
+     * @return This object to allow for chaining of calls to set methods
+     * @see #kdfAlgorithm
+     */
+    public SQLiteCipherSpec setKdfAlgorithm(int algo) {
+        kdfAlgorithm = algo; return this;
+    }
+
+    /**
      * Set the page size to use. The page size should be a power of two.
      *
      * @param size  Page size in byte
@@ -141,21 +151,45 @@ public class SQLiteCipherSpec {
     }
 
     /**
-     * Set SQLCipher version compatibility. The version should be 1, 2 or 3 which
-     * represent SQLCipher 1.x, 2.x or 3.x. This method overwrites HMAC and KDF
+     * Set SQLCipher version compatibility. The version should be 1-4 which
+     * represent SQLCipher 1.x to 4.x. This method overwrites HMAC and KDF
      * iteration settings.
      *
-     * @param version   SQLCipher version, should be 1, 2 or 3
+     * @param version   SQLCipher version, should be within 1 to 4
      * @return          This object to allow for chaining of calls to set methods
      * @see #kdfIteration
      * @see #hmacEnabled
+     * @see #hmacAlgorithm
+     * @see #kdfAlgorithm
      */
     public SQLiteCipherSpec setSQLCipherVersion(int version) {
         switch (version) {
-            case 1: hmacEnabled = false; kdfIteration = 4000;  break;
-            case 2: hmacEnabled = true;  kdfIteration = 4000;  break;
-            case 3: hmacEnabled = true;  kdfIteration = 64000; break;
-            default: throw new IllegalArgumentException("Unsupported SQLCipher version: " + version);
+            case 1:
+                hmacEnabled = false;
+                kdfIteration = 4000;
+                hmacAlgorithm = HMAC_SHA1;
+                kdfAlgorithm = HMAC_SHA1;
+                break;
+            case 2:
+                hmacEnabled = true;
+                kdfIteration = 4000;
+                hmacAlgorithm = HMAC_SHA1;
+                kdfAlgorithm = HMAC_SHA1;
+                break;
+            case 3:
+                hmacEnabled = true;
+                kdfIteration = 64000;
+                hmacAlgorithm = HMAC_SHA1;
+                kdfAlgorithm = HMAC_SHA1;
+                break;
+            case 4:
+                hmacEnabled = true;
+                kdfIteration = 256000;
+                hmacAlgorithm = HMAC_SHA512;
+                kdfAlgorithm = HMAC_SHA512;
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported SQLCipher version: " + version);
         }
         return this;
     }

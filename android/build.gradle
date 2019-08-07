@@ -1,31 +1,13 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    // Load local.properties and merge with gradle.properties.
-    def propsFile = project.file('local.properties')
-    if (propsFile.exists()) {
-        def localProps = new Properties()
-        localProps.load(project.file('local.properties').newDataInputStream())
-        localProps.each { prop ->
-            project.ext.set(prop.key, prop.value)
-        }
-    }
-
-    // Read additional repositories from properties.
     repositories {
-        if (project.hasProperty('ADDITIONAL_REPOSITORIES')) {
-            for (def repo : project.getProperty('ADDITIONAL_REPOSITORIES').split(';')) {
-                maven {
-                    url repo
-                }
-            }
-        }
         jcenter()
         google()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.2.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -33,32 +15,13 @@ buildscript {
     }
 }
 
+def myVersion = file('../VERSION').text
 allprojects {
-    // Read additional repositories from properties.
+    group 'com.tencent.wcdb'
+    version myVersion
+
     repositories {
-        if (project.hasProperty('ADDITIONAL_REPOSITORIES')) {
-            for (def repo : project.getProperty('ADDITIONAL_REPOSITORIES').split(';')) {
-                maven {
-                    url repo
-                }
-            }
-        }
         jcenter()
         google()
     }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
-
-def propertyWithDefault(name, defVal) {
-    return hasProperty(name) ? getProperty(name) : defVal;
-}
-
-ext {
-    def versionSuffix = propertyWithDefault('VERSION_NAME_SUFFIX', '')
-
-    VERSION = project.file('../VERSION').text
-    VERSION_NAME = "${VERSION}${versionSuffix}"
 }

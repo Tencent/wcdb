@@ -1,16 +1,66 @@
+## v1.0.8.2
+
+#### iOS/macOS
+* Support Swift 4.2 for Xcode 10.2
+
+## v1.0.8.1
+
+#### iOS/macOS
+* Fix a bug that archive failed with Xcode new build system.
+
+## v1.0.8
+
+#### Android
+
+* Support for [Room library](https://developer.android.com/topic/libraries/architecture/room) from Android Jetpack. See README and [Wiki](https://github.com/Tencent/wcdb/wiki/Android-WCDB-%E4%BD%BF%E7%94%A8-Room-ORM-%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A) for details.
+
+## v1.0.7.5
+
+#### iOS/macOS
+
+* Compatible with Swift 4.2.
+* Enable FTS5 macro for sqlcipher.
+
+## v1.0.7
+
+#### iOS/macOS
+
+* Fix nil string bug while inserting empty string.
+* Code template is not installed automatically now.
+* Reduce size of binary and provide a non-bitcode scheme for Carthage.
+* Avoid conflict between builtin SQLCipher and other SQLite based library(including system library).
+
+## v1.0.6.2
+
+#### iOS/macOS
+
+It's a bug fixed version. Since Swift 4.1.x contains [bugs](https://github.com/Tencent/wcdb/issues/283) that make WCDB fails to compile, developers should use Xcode 10(with Swift 4.2).
+
+##### Swift
+* Compatible with Swift 4.2. The `ColumnEncodable` and `ColumnDecodable` is now changed. Check the code snippet, file template or wiki for the new usage.
+* Use `Double` column type for `Date`.
+
+FYI, a refactor is needed to fit the new conditional conformance design of Swift 4.2. We will finish it in next version.
+
+#### Android
+
+* Use C++14 and libc++_static runtime on JNI routines.
+* Fix "no implementation found" log on libwcdb.so initialization.
+* Fix ProGuard rules when importing from AAR package.
+
 ## v1.0.6
 
 #### iOS/macOS
 
 It's the first release for WCDB Swift, which contains exactly the same features as the ObjC version, including:
 
-* Object-Relational-Mapping based on Swift 4.0 `Codable` protocol
-* WCDB Integrated Language Query
-* Multithreading safety and concurrency
-* Encryption based on SQLCipher
-* Protection for SQL injection
-* Full text search
-* Corruption recovery
+* Object-Relational-Mapping based on Swift 4.0 `Codable` protocol.
+* WCDB Integrated Language Query.
+* Multithreading safety and concurrency.
+* Encryption based on SQLCipher.
+* Protection for SQL injection.
+* Full text search.
+* Corruption recovery.
 * ...
 
 For further information, please check tutorial on wiki.
@@ -42,7 +92,7 @@ SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabaseInWalMode(...);
 db.setAsyncCheckpointEnabled(true);
 ```
 * Add benchmark for asynchronous checkpointer.
-* Add connection pooling friendly interface `SQLiteDatabase.setSynchronousMode()` to set database synchronization mode.
+* Add connection pooling friendly interface. `SQLiteDatabase.setSynchronousMode()` to set database synchronization mode.
 * Enable `dbstat` virtual table while compiling.
 
 ## v1.0.4
@@ -167,7 +217,7 @@ NSDate *now = [NSDate date];
 #### Android
 
 * Add `x86_64` ABI support.
-* Publish debug version of AAR and native symbols. To reference debug version of WCDB library, modify your `build.gradle`
+* Publish debug version of AAR and native symbols. To reference debug version of WCDB library, modify your `build.gradle`.
 
 ```gradle
 dependencies {

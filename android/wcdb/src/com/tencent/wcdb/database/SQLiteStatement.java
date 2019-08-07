@@ -56,8 +56,8 @@ public final class SQLiteStatement extends SQLiteProgram {
         acquireReference();
         try {
             getSession().execute(getSql(), getBindArgs(), getConnectionFlags(), cancellationSignal);
-        } catch (SQLiteDatabaseCorruptException ex) {
-            onCorruption();
+        } catch (SQLiteException ex) {
+            checkCorruption(ex);
             throw ex;
         } finally {
             releaseReference();
@@ -91,7 +91,7 @@ public final class SQLiteStatement extends SQLiteProgram {
             return getSession().executeForChangedRowCount(
                     getSql(), getBindArgs(), getConnectionFlags(), cancellationSignal);
         } catch (SQLiteDatabaseCorruptException ex) {
-            onCorruption();
+            checkCorruption(ex);
             throw ex;
         } finally {
             releaseReference();
@@ -127,7 +127,7 @@ public final class SQLiteStatement extends SQLiteProgram {
             return getSession().executeForLastInsertedRowId(
                     getSql(), getBindArgs(), getConnectionFlags(), cancellationSignal);
         } catch (SQLiteDatabaseCorruptException ex) {
-            onCorruption();
+            checkCorruption(ex);
             throw ex;
         } finally {
             releaseReference();
@@ -163,7 +163,7 @@ public final class SQLiteStatement extends SQLiteProgram {
             return getSession().executeForLong(
                     getSql(), getBindArgs(), getConnectionFlags(), cancellationSignal);
         } catch (SQLiteDatabaseCorruptException ex) {
-            onCorruption();
+            checkCorruption(ex);
             throw ex;
         } finally {
             releaseReference();
@@ -199,7 +199,7 @@ public final class SQLiteStatement extends SQLiteProgram {
             return getSession().executeForString(
                     getSql(), getBindArgs(), getConnectionFlags(), cancellationSignal);
         } catch (SQLiteDatabaseCorruptException ex) {
-            onCorruption();
+            checkCorruption(ex);
             throw ex;
         } finally {
             releaseReference();
