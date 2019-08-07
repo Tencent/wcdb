@@ -145,7 +145,7 @@ public:
     bool removeDeposited();
 
     typedef Repair::FactoryRetriever::ProgressUpdateCallback RetrieveProgressCallback;
-    double retrieve(const RetrieveProgressCallback &onProgressUpdate);
+    double retrieve(const RetrieveProgressCallback &onProgressUpdated);
     bool containsDeposited() const;
 
     void checkIntegrity();

@@ -40,7 +40,7 @@ protected:
 
 private:
     void updateProgress(double progress);
-    ProgressUpdateCallback m_onProgressUpdate;
+    ProgressUpdateCallback m_onProgressUpdated;
     double m_progress;
 };
 

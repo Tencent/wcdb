@@ -584,10 +584,10 @@ bool Database::deposit()
     return result;
 }
 
-double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
+double Database::retrieve(const RetrieveProgressCallback &onProgressUpdated)
 {
     double result = -1;
-    close([&result, &onProgressUpdate, this]() {
+    close([&result, &onProgressUpdated, this]() {
         InitializedGuard initializedGuard = initialize();
         if (!initializedGuard.valid()) {
             return;
@@ -618,7 +618,7 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
         retriever.setWriteLocker(
         static_cast<AssemblerHandle *>(backupWriteHandle.get()));
         retriever.setAssembler(static_cast<AssemblerHandle *>(assemblerHandle.get()));
-        retriever.setProgressCallback(onProgressUpdate);
+        retriever.setProgressCallback(onProgressUpdated);
         if (retriever.work()) {
             result = retriever.getScore().value();
         }
