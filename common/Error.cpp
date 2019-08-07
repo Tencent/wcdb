@@ -241,51 +241,58 @@ const StringView& Error::getMessage() const
 }
 
 #pragma mark - Info
-Error::InfoValue::InfoValue(const char* string)
-: std::any(StringView(string)), m_underlyingType(UnderlyingType::String)
+Error::InfoValue::InfoValue(const char* string) : m_underlying(String(string))
 {
 }
 
 Error::InfoValue::InfoValue(const UnsafeStringView& string)
-: std::any(StringView(string)), m_underlyingType(UnderlyingType::String)
+: m_underlying(String(string))
 {
 }
 
-Error::InfoValue::InfoValue(StringView&& string)
-: std::any(std::move(string)), m_underlyingType(UnderlyingType::String)
+Error::InfoValue::InfoValue(String&& string) : m_underlying(std::move(string))
 {
+}
+
+Error::InfoValue::String Error::InfoValue::stringValue() const
+{
+    WCTAssert(m_underlying.has_value());
+    if (underlyingType() == UnderlyingType::String) {
+        return std::any_cast<String>(m_underlying);
+    }
+    return String();
+}
+
+Error::InfoValue::Integer Error::InfoValue::integerValue() const
+{
+    WCTAssert(m_underlying.has_value());
+    if (underlyingType() == UnderlyingType::Integer) {
+        return std::any_cast<Integer>(m_underlying);
+    }
+    return 0;
+}
+
+Error::InfoValue::Float Error::InfoValue::floatValue() const
+{
+    WCTAssert(m_underlying.has_value());
+    if (underlyingType() == UnderlyingType::Float) {
+        return std::any_cast<Float>(m_underlying);
+    }
+    return 0;
 }
 
 Error::InfoValue::UnderlyingType Error::InfoValue::underlyingType() const
 {
-    return m_underlyingType;
-}
-
-const StringView& Error::InfoValue::stringValue() const
-{
-    WCTAssert(has_value());
-    WCTAssert(underlyingType() == UnderlyingType::String);
-    const StringView* value = std::any_cast<StringView>(this);
-    WCTAssert(value != nullptr);
-    return *value;
-}
-
-const int64_t& Error::InfoValue::integerValue() const
-{
-    WCTAssert(has_value());
-    WCTAssert(underlyingType() == UnderlyingType::Integer);
-    const int64_t* value = std::any_cast<int64_t>(this);
-    WCTAssert(value != nullptr);
-    return *value;
-}
-
-const double& Error::InfoValue::floatValue() const
-{
-    WCTAssert(has_value());
-    WCTAssert(underlyingType() == UnderlyingType::Float);
-    const double* value = std::any_cast<double>(this);
-    WCTAssert(value != nullptr);
-    return *value;
+    const auto& type = m_underlying.type();
+    if (type == typeid(Integer)) {
+        return UnderlyingType::Integer;
+    } else if (type == typeid(Float)) {
+        return UnderlyingType::Float;
+    } else if (type == typeid(String)) {
+        return UnderlyingType::String;
+    } else {
+        return UnderlyingType::None;
+    }
 }
 
 #pragma mark - Description
@@ -297,17 +304,18 @@ StringView Error::getDescription() const
     stream << "[" << levelName(level) << ": " << (int) code() << ", " << m_message << "]";
 
     for (const auto& info : infos) {
-        stream << ", " << info.first << ": ";
+        stream << ", " << info.first;
         switch (info.second.underlyingType()) {
         case InfoValue::UnderlyingType::String:
-            stream << info.second.stringValue();
+            stream << ":" << info.second.stringValue();
+            break;
+        case InfoValue::UnderlyingType::Integer:
+            stream << ":" << info.second.integerValue();
             break;
         case InfoValue::UnderlyingType::Float:
-            stream << info.second.floatValue();
+            stream << ":" << info.second.floatValue();
             break;
         default:
-            WCTAssert(info.second.underlyingType() == InfoValue::UnderlyingType::Integer);
-            stream << info.second.integerValue();
             break;
         }
     }
