@@ -1,8 +1,5 @@
 #include "Base.xcconfig"
 
-// Architectures
-ONLY_ACTIVE_ARCH = YES
-
 // Build Options
 DEBUG_INFORMATION_FORMAT = dwarf
 ENABLE_TESTABILITY = YES

@@ -267,41 +267,43 @@ protected:
 
 #pragma mark - Info
 public:
-    class InfoValue : public std::any {
+    class InfoValue {
     public:
-        enum class UnderlyingType {
-            Integer,
-            Float,
-            String,
-        };
-        UnderlyingType underlyingType() const;
+        typedef int64_t Integer;
+        typedef double Float;
+        typedef StringView String;
 
-    private:
-        // type().hash_code() may be changed in some cases.
-        UnderlyingType m_underlyingType;
-
-    public:
         template<typename T>
         InfoValue(const T &value,
                   typename std::enable_if<std::is_floating_point<T>::value>::type * = nullptr)
-        : std::any((double) value), m_underlyingType(UnderlyingType::Float)
+        : m_underlying((Float) value)
         {
         }
 
         template<typename T>
         InfoValue(const T &value,
                   typename std::enable_if<std::is_integral<T>::value>::type * = nullptr)
-        : std::any((int64_t) value), m_underlyingType(UnderlyingType::Integer)
+        : m_underlying((Integer) value)
         {
         }
 
         InfoValue(const char *string);
         InfoValue(const UnsafeStringView &string);
-        InfoValue(StringView &&string);
+        InfoValue(String &&string);
 
-        const StringView &stringValue() const;
-        const int64_t &integerValue() const;
-        const double &floatValue() const;
+        String stringValue() const;
+        Integer integerValue() const;
+        Float floatValue() const;
+        enum class UnderlyingType {
+            None,
+            String,
+            Integer,
+            Float,
+        };
+        UnderlyingType underlyingType() const;
+
+    private:
+        std::any m_underlying;
     };
     StringViewMap<InfoValue> infos;
 

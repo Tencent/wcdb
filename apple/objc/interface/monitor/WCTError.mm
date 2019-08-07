@@ -62,9 +62,11 @@ NSErrorUserInfoKey const WCTErrorKeySource = @WCDB_ERROR_STRING_KEY_SOURCE;
         case WCDB::Error::InfoValue::UnderlyingType::Float:
             [userInfo setObject:[NSNumber numberWithDouble:info.second.floatValue()] forKey:[NSString stringWithView:info.first]];
             break;
-        default:
-            WCTAssert(info.second.underlyingType() == WCDB::Error::InfoValue::UnderlyingType::Integer);
+        case WCDB::Error::InfoValue::UnderlyingType::Integer:
             [userInfo setObject:[NSNumber numberWithLongLong:info.second.integerValue()] forKey:[NSString stringWithView:info.first]];
+            break;
+        default:
+            [userInfo setObject:[NSNull null] forKey:[NSString stringWithView:info.first]];
             break;
         }
     }
@@ -106,8 +108,12 @@ NSErrorUserInfoKey const WCTErrorKeySource = @WCDB_ERROR_STRING_KEY_SOURCE;
         && self.code != WCTErrorCodeRow
         && self.code != WCTErrorCodeDone) {
         description = [[NSMutableString alloc] initWithFormat:@"[%s: %ld, %@]", WCDB::Error::levelName((WCDB::Error::Level) self.level), (long) self.code, self.message];
-        [self.userInfo enumerateKeysAndObjectsUsingBlock:^(NSErrorUserInfoKey key, id obj, BOOL *) {
-            [description appendFormat:@", %@: %@", key, obj];
+        [self.userInfo enumerateKeysAndObjectsUsingBlock:^(NSErrorUserInfoKey key, id value, BOOL *) {
+            if ([value isKindOfClass:NSNull.class]) {
+                [description appendFormat:@", %@", key];
+            } else {
+                [description appendFormat:@", %@: %@", key, value];
+            }
         }];
     }
     return description;

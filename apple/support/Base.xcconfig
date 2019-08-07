@@ -1,6 +1,7 @@
 // Architectures
 SUPPORTED_PLATFORMS = macosx iphonesimulator iphoneos watchos watchsimulator appletvos appletvsimulator
 VALID_ARCHS = $(ARCHS_STANDARD)
+ONLY_ACTIVE_ARCH = YES
 
 // Build Options
 ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO
