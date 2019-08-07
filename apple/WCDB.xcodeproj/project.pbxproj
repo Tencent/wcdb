@@ -1151,7 +1151,6 @@
 		234F0733227AA5C700DD65A2 /* BackupTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackupTestCase.h; sourceTree = "<group>"; };
 		234F0734227AA5C700DD65A2 /* RetrieveTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RetrieveTests.mm; sourceTree = "<group>"; };
 		234F0745227AAE4B00DD65A2 /* WCDBSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDBSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		234F074F227AAEA200DD65A2 /* WCDBSwift.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = WCDBSwift.xcconfig; sourceTree = "<group>"; };
 		234F0753227AB18B00DD65A2 /* host.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = host.xcconfig; sourceTree = "<group>"; };
 		234F8AB3227AF5A900791E45 /* Column.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Column.swift; sourceTree = "<group>"; };
 		234F8AB7227AF78C00791E45 /* SQL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQL.swift; sourceTree = "<group>"; };
@@ -3235,7 +3234,6 @@
 				234F036E227A9E3D00DD65A2 /* WCDB.modulemap */,
 				3949CC2622977428007F4C94 /* Version.xcconfig */,
 				234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */,
-				234F074F227AAEA200DD65A2 /* WCDBSwift.xcconfig */,
 			);
 			path = support;
 			sourceTree = "<group>";
@@ -4437,7 +4435,7 @@
 		};
 		234F074B227AAE4B00DD65A2 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 234F074F227AAEA200DD65A2 /* WCDBSwift.xcconfig */;
+			baseConfigurationReference = 234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
@@ -4449,7 +4447,7 @@
 		};
 		234F074C227AAE4B00DD65A2 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 234F074F227AAEA200DD65A2 /* WCDBSwift.xcconfig */;
+			baseConfigurationReference = 234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
