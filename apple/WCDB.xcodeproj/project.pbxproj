@@ -1680,7 +1680,6 @@
 		39327BB022CF2C5400AABD4B /* MigrationBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MigrationBenchmark.mm; sourceTree = "<group>"; };
 		39327BB122CF2C5400AABD4B /* TableMigrationBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableMigrationBenchmark.mm; sourceTree = "<group>"; };
 		39327BB222CF2C5400AABD4B /* DatabaseMigrationBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DatabaseMigrationBenchmark.mm; sourceTree = "<group>"; };
-		393496312282667100E43964 /* Tests iOS static.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Tests iOS static.xcconfig"; sourceTree = "<group>"; };
 		3934DAE9229B6659008A6AEC /* OperationQueue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OperationQueue.cpp; sourceTree = "<group>"; };
 		3934DAEA229B6659008A6AEC /* OperationQueue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OperationQueue.hpp; sourceTree = "<group>"; };
 		3934DB25229B951C008A6AEC /* AutoCheckpointConfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AutoCheckpointConfig.hpp; sourceTree = "<group>"; };
@@ -2316,7 +2315,6 @@
 			isa = PBXGroup;
 			children = (
 				234F042F227A9EFA00DD65A2 /* Tests.xcconfig */,
-				393496312282667100E43964 /* Tests iOS static.xcconfig */,
 				234F0430227A9EFA00DD65A2 /* Info.plist */,
 			);
 			path = support;
