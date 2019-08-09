@@ -45,7 +45,7 @@ public class SQLiteAsyncQuery extends SQLiteProgram {
 
     void acquire() {
         if (mPreparedStatement == null) {
-            acquirePreparedStatement();
+            acquirePreparedStatement(true);
             mPreparedStatement.bindArguments(getBindArgs());
         }
     }
@@ -66,11 +66,9 @@ public class SQLiteAsyncQuery extends SQLiteProgram {
 
         try {
             return nativeFillRows(mPreparedStatement.getPtr(), window.mWindowPtr, startPos, count);
-        } catch (SQLiteDatabaseCorruptException e) {
-            onCorruption();
-            throw e;
         } catch (SQLiteException e) {
             Log.e(TAG, "Got exception on fillRows: " + e.getMessage() + ", SQL: " + getSql());
+            checkCorruption(e);
             throw e;
         }
     }
@@ -81,11 +79,9 @@ public class SQLiteAsyncQuery extends SQLiteProgram {
 
         try {
             return nativeCount(mPreparedStatement.getPtr());
-        } catch (SQLiteDatabaseCorruptException e) {
-            onCorruption();
-            throw e;
         } catch (SQLiteException e) {
             Log.e(TAG, "Got exception on getCount: " + e.getMessage() + ", SQL: " + getSql());
+            checkCorruption(e);
             throw e;
         }
     }

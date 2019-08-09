@@ -46,7 +46,7 @@ typedef void (^WCTCorruptedNotificationBlock)(WCTDatabase *);
 
 - (BOOL)containsDeposited;
 
-- (double)retrieve:(nullable WCDB_NO_ESCAPE WCTRetrieveProgressUpdateBlock)onProgressUpdate;
+- (double)retrieve:(nullable WCDB_NO_ESCAPE WCTRetrieveProgressUpdateBlock)onProgressUpdated;
 
 @end
 

@@ -22,7 +22,7 @@
 #include "Logger.h"
 #include "ModuleLoader.h"
 #include <jni.h>
-#include <repair/SQLiteRepairKit.h>
+#include <SQLiteRepairKit.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -32,21 +32,18 @@ static char g_error_msg[2048] = {0};
 
 namespace wcdb {
 
-static jmethodID sMID_onProgress = NULL;
+static jmethodID sMID_onProgress = nullptr;
 
 static sqliterk_cipher_conf *parseCipherSpec(JNIEnv *env, jobject cipherSpec)
 {
-    sqliterk_cipher_conf *result = NULL;
-    jfieldID fidCipher;
+    sqliterk_cipher_conf *result = nullptr;
     jfieldID fidKdfIteration;
     jfieldID fidHmacEnabled;
     jfieldID fidPageSize;
-    jstring cipherStr;
-    int cipher_len;
 
     if (!cipherSpec) {
         result = (sqliterk_cipher_conf *) malloc(sizeof(sqliterk_cipher_conf));
-        if (!result) return NULL;
+        if (!result) return nullptr;
 
         memset(result, 0, sizeof(sqliterk_cipher_conf));
         result->use_hmac = -1;
@@ -58,9 +55,6 @@ static sqliterk_cipher_conf *parseCipherSpec(JNIEnv *env, jobject cipherSpec)
     if (!clsCipherSpec)
         goto bail;
 
-    fidCipher = env->GetFieldID(clsCipherSpec, "cipher", "Ljava/lang/String;");
-    if (!fidCipher)
-        goto bail;
     fidKdfIteration = env->GetFieldID(clsCipherSpec, "kdfIteration", "I");
     if (!fidKdfIteration)
         goto bail;
@@ -71,26 +65,9 @@ static sqliterk_cipher_conf *parseCipherSpec(JNIEnv *env, jobject cipherSpec)
     if (!fidPageSize)
         goto bail;
 
-    cipher_len = 0;
-    cipherStr = (jstring) env->GetObjectField(cipherSpec, fidCipher);
-    if (cipherStr) {
-        cipher_len = env->GetStringUTFLength(cipherStr) + 1;
-    }
-    result = (sqliterk_cipher_conf *) malloc(sizeof(sqliterk_cipher_conf) +
-                                             cipher_len);
-    if (!result) return NULL;
-    memset(result, 0, sizeof(sqliterk_cipher_conf) + cipher_len);
-
-    if (cipherStr) {
-        const char *cipher = env->GetStringUTFChars(cipherStr, NULL);
-        if (!cipher) goto bail;
-
-        result->cipher_name = (const char *) &result[1];
-        strlcpy((char *) result->cipher_name, cipher, cipher_len + 1);
-        env->ReleaseStringUTFChars(cipherStr, cipher);
-    } else {
-        result->cipher_name = NULL;
-    }
+    result = (sqliterk_cipher_conf *) malloc(sizeof(sqliterk_cipher_conf));
+    if (!result) return nullptr;
+    memset(result, 0, sizeof(sqliterk_cipher_conf));
 
     result->page_size = env->GetIntField(cipherSpec, fidPageSize);
     result->kdf_iter = env->GetIntField(cipherSpec, fidKdfIteration);
@@ -100,7 +77,7 @@ static sqliterk_cipher_conf *parseCipherSpec(JNIEnv *env, jobject cipherSpec)
 
 bail:
     free(result);
-    return NULL;
+    return nullptr;
 }
 
 static JNICALL jlong nativeInit(JNIEnv *env,
@@ -111,7 +88,7 @@ static JNICALL jlong nativeInit(JNIEnv *env,
                                 jbyteArray saltArr)
 {
 
-    sqliterk *rk = NULL;
+    sqliterk *rk = nullptr;
     sqliterk_cipher_conf *conf = parseCipherSpec(env, cipherSpec);
     if (!conf)
         return 0;
@@ -135,10 +112,10 @@ static JNICALL jlong nativeInit(JNIEnv *env,
         conf->kdf_salt = (unsigned char *) alloca(16);
         env->GetByteArrayRegion(saltArr, 0, 16, (jbyte *) conf->kdf_salt);
     } else {
-        conf->kdf_salt = NULL;
+        conf->kdf_salt = nullptr;
     }
 
-    const char *path = env->GetStringUTFChars(pathStr, NULL);
+    const char *path = env->GetStringUTFChars(pathStr, nullptr);
     int rc = sqliterk_open(path, conf, &rk);
     env->ReleaseStringUTFChars(pathStr, path);
 
@@ -202,7 +179,7 @@ static JNICALL jint nativeOutput(JNIEnv *env,
     callback_data data;
     data.env = env;
     data.obj = obj;
-    data.last_table = NULL;
+    data.last_table = nullptr;
     data.last_root = 0;
     
     int rc = sqliterk_output_cb(rk, db, master, flags, output_callback, &data);
@@ -238,11 +215,11 @@ static JNICALL jlong nativeMakeMaster(JNIEnv *env,
 
     for (int i = 0; i < num_tables; i++) {
         jstring str = (jstring) env->GetObjectArrayElement(tableArr, i);
-        tables[i] = env->GetStringUTFChars(str, NULL);
+        tables[i] = env->GetStringUTFChars(str, nullptr);
         env->DeleteLocalRef(str);
     }
 
-    sqliterk_master_info *master = NULL;
+    sqliterk_master_info *master = nullptr;
     int rc = sqliterk_make_master(tables, num_tables, &master);
 
     for (int i = 0; i < num_tables; i++) {
@@ -261,7 +238,7 @@ static JNICALL jboolean nativeSaveMaster(
     sqlite3 *db = (sqlite3 *) (intptr_t) dbPtr;
 
     int key_len = 0;
-    jbyte *key = NULL;
+    jbyte *key = nullptr;
     if (keyArr) {
         key_len = env->GetArrayLength(keyArr);
         if (key_len > 4096)
@@ -271,7 +248,7 @@ static JNICALL jboolean nativeSaveMaster(
         env->GetByteArrayRegion(keyArr, 0, key_len, key);
     }
 
-    const char *path = env->GetStringUTFChars(pathStr, NULL);
+    const char *path = env->GetStringUTFChars(pathStr, nullptr);
     int rc = sqliterk_save_master(db, path, key, key_len);
     env->ReleaseStringUTFChars(pathStr, path);
 
@@ -286,30 +263,30 @@ static JNICALL jlong nativeLoadMaster(JNIEnv *env,
                                       jbyteArray outSaltArr)
 {
     // Path is guaranteed to be non-null by the Java part.
-    const char *path = env->GetStringUTFChars(pathStr, NULL);
+    const char *path = env->GetStringUTFChars(pathStr, nullptr);
 
     int key_len = 0;
-    jbyte *key = NULL;
+    jbyte *key = nullptr;
     if (keyArr) {
         key_len = env->GetArrayLength(keyArr);
-        key = env->GetByteArrayElements(keyArr, NULL);
+        key = env->GetByteArrayElements(keyArr, nullptr);
     }
 
     int num_tables = 0;
-    const char **tables = NULL;
+    const char **tables = nullptr;
     if (tableArr) {
         num_tables = env->GetArrayLength(tableArr);
         tables = (const char **) malloc(sizeof(const char *) * num_tables);
 
         for (int i = 0; i < num_tables; i++) {
             jstring str = (jstring) env->GetObjectArrayElement(tableArr, i);
-            tables[i] = env->GetStringUTFChars(str, NULL);
+            tables[i] = env->GetStringUTFChars(str, nullptr);
             env->DeleteLocalRef(str);
         }
     }
 
     unsigned char salt[16];
-    sqliterk_master_info *master = NULL;
+    sqliterk_master_info *master = nullptr;
     int rc = sqliterk_load_master(path, key, key_len, tables, num_tables,
                                   &master, salt);
 

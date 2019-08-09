@@ -17,6 +17,7 @@
 package com.tencent.wcdb.database;
 
 import android.content.ContentValues;
+import android.database.sqlite.SQLiteTransactionListener;
 import android.os.Build;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -29,9 +30,14 @@ import com.tencent.wcdb.DatabaseUtils;
 import com.tencent.wcdb.DefaultDatabaseErrorHandler;
 import com.tencent.wcdb.SQLException;
 import com.tencent.wcdb.database.SQLiteDebug.DbStats;
+import com.tencent.wcdb.extension.SQLiteExtension;
 import com.tencent.wcdb.support.CancellationSignal;
 import com.tencent.wcdb.support.Log;
 import com.tencent.wcdb.support.OperationCanceledException;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -69,7 +75,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
     private static final String TAG = "WCDB.SQLiteDatabase";
 
     static {
-        // Ensure libmmdb.so is loaded.
+        // Ensure libwcdb.so is loaded.
         SQLiteGlobal.loadLib();
     }
 
@@ -1019,28 +1025,17 @@ public final class SQLiteDatabase extends SQLiteClosable {
                 factory, CREATE_IF_NECESSARY);
     }
 
-    /**
-     * Registers a CustomFunction callback as a function that can be called from
-     * SQLite database triggers.
-     *
-     * @param name     the name of the sqlite3 function
-     * @param numArgs  the number of arguments for the function
-     * @param function callback to call when the function is executed
-     * @hide
-     */
-    public void addCustomFunction(String name, int numArgs, CustomFunction function) {
-        // Create wrapper (also validates arguments).
-        SQLiteCustomFunction wrapper = new SQLiteCustomFunction(name, numArgs, function);
-
+    public void addExtension(SQLiteExtension extension) {
         synchronized (mLock) {
             throwIfNotOpenLocked();
 
-            mConfigurationLocked.customFunctions.add(wrapper);
-            try {
-                mConnectionPoolLocked.reconfigure(mConfigurationLocked);
-            } catch (RuntimeException ex) {
-                mConfigurationLocked.customFunctions.remove(wrapper);
-                throw ex;
+            if (mConfigurationLocked.extensions.add(extension)) {
+                try {
+                    mConnectionPoolLocked.reconfigure(mConfigurationLocked);
+                } catch (RuntimeException ex) {
+                    mConfigurationLocked.extensions.remove(extension);
+                    throw ex;
+                }
             }
         }
     }
@@ -1218,8 +1213,10 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * {@link Cursor}s are not synchronized, see the documentation for more details.
      * @see Cursor
      */
-    public Cursor query(boolean distinct, String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, String limit) {
-        return queryWithFactory(null, distinct, table, columns, selection, selectionArgs, groupBy, having, orderBy, limit, null);
+    public Cursor query(boolean distinct, String table, String[] columns, String selection,
+            Object[] selectionArgs, String groupBy, String having, String orderBy, String limit) {
+        return queryWithFactory(null, distinct, table, columns, selection, selectionArgs,
+                groupBy, having, orderBy, limit, null);
     }
 
     /**
@@ -1257,7 +1254,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * @see Cursor
      */
     public Cursor query(boolean distinct, String table, String[] columns,
-            String selection, String[] selectionArgs, String groupBy,
+            String selection, Object[] selectionArgs, String groupBy,
             String having, String orderBy, String limit, CancellationSignal cancellationSignal) {
         return queryWithFactory(null, distinct, table, columns, selection, selectionArgs, groupBy, having, orderBy, limit, cancellationSignal);
     }
@@ -1296,7 +1293,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      */
     public Cursor queryWithFactory(CursorFactory cursorFactory,
             boolean distinct, String table, String[] columns,
-            String selection, String[] selectionArgs, String groupBy,
+            String selection, Object[] selectionArgs, String groupBy,
             String having, String orderBy, String limit) {
         return queryWithFactory(cursorFactory, distinct, table, columns, selection,
                 selectionArgs, groupBy, having, orderBy, limit, null);
@@ -1339,7 +1336,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      */
     public Cursor queryWithFactory(CursorFactory cursorFactory,
             boolean distinct, String table, String[] columns,
-            String selection, String[] selectionArgs, String groupBy,
+            String selection, Object[] selectionArgs, String groupBy,
             String having, String orderBy, String limit, CancellationSignal cancellationSignal) {
         acquireReference();
         try {
@@ -1382,7 +1379,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * @see Cursor
      */
     public Cursor query(String table, String[] columns, String selection,
-            String[] selectionArgs, String groupBy, String having,
+            Object[] selectionArgs, String groupBy, String having,
             String orderBy) {
 
         return query(false, table, columns, selection, selectionArgs, groupBy,
@@ -1421,7 +1418,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * @see Cursor
      */
     public Cursor query(String table, String[] columns, String selection,
-            String[] selectionArgs, String groupBy, String having,
+            Object[] selectionArgs, String groupBy, String having,
             String orderBy, String limit) {
 
         return query(false, table, columns, selection, selectionArgs, groupBy,
@@ -1438,7 +1435,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * @return A {@link Cursor} object, which is positioned before the first entry. Note that
      * {@link Cursor}s are not synchronized, see the documentation for more details.
      */
-    public Cursor rawQuery(String sql, String[] selectionArgs) {
+    public Cursor rawQuery(String sql, Object[] selectionArgs) {
         return rawQueryWithFactory(null, sql, selectionArgs, null, null);
     }
 
@@ -1455,7 +1452,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * @return A {@link Cursor} object, which is positioned before the first entry. Note that
      * {@link Cursor}s are not synchronized, see the documentation for more details.
      */
-    public Cursor rawQuery(String sql, String[] selectionArgs,
+    public Cursor rawQuery(String sql, Object[] selectionArgs,
             CancellationSignal cancellationSignal) {
         return rawQueryWithFactory(null, sql, selectionArgs, null, cancellationSignal);
     }
@@ -1473,7 +1470,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * {@link Cursor}s are not synchronized, see the documentation for more details.
      */
     public Cursor rawQueryWithFactory(
-            CursorFactory cursorFactory, String sql, String[] selectionArgs,
+            CursorFactory cursorFactory, String sql, Object[] selectionArgs,
             String editTable) {
         return rawQueryWithFactory(cursorFactory, sql, selectionArgs, editTable, null);
     }
@@ -1494,7 +1491,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * {@link Cursor}s are not synchronized, see the documentation for more details.
      */
     public Cursor rawQueryWithFactory(
-            CursorFactory cursorFactory, String sql, String[] selectionArgs,
+            CursorFactory cursorFactory, String sql, Object[] selectionArgs,
             String editTable, CancellationSignal cancellationSignal) {
         acquireReference();
         try {
@@ -2337,6 +2334,32 @@ public final class SQLiteDatabase extends SQLiteClosable {
         }
     }
 
+    /** Returns the {@link SQLiteChangeListener} object bound to this database.
+     *
+     * @return {@link SQLiteChangeListener} object bound to this database.
+     * @see SQLiteChangeListener
+     * @see #setChangeListener(SQLiteChangeListener, boolean)
+     */
+    public SQLiteChangeListener getChangeListener() {
+        synchronized (mLock) {
+            throwIfNotOpenLocked();
+            return mConnectionPoolLocked.getChangeListener();
+        }
+    }
+
+    /**
+     * Bind a {@link SQLiteChangeListener} object for database change notifications.
+     *
+     * @param listener      listener to be set
+     * @param notifyRowId   whether RowIDs of each modified row should be reported
+     */
+    public void setChangeListener(SQLiteChangeListener listener, boolean notifyRowId) {
+        synchronized (mLock) {
+            throwIfNotOpenLocked();
+            mConnectionPoolLocked.setChangeListener(listener, notifyRowId);
+        }
+    }
+
     /**
      * Returns the {@link SQLiteTrace} object bound to this database.
      *
@@ -2406,6 +2429,14 @@ public final class SQLiteDatabase extends SQLiteClosable {
         }
     }
 
+    public static JSONArray dumpAllJSON(boolean verbose) throws JSONException {
+        JSONArray arr = new JSONArray();
+        for (SQLiteDatabase db : getActiveDatabases()) {
+            arr.put(db.dumpJSON(verbose));
+        }
+        return arr;
+    }
+
     /**
      * Dump detailed information about this database.
      *
@@ -2416,6 +2447,16 @@ public final class SQLiteDatabase extends SQLiteClosable {
         synchronized (mLock) {
             if (mConnectionPoolLocked != null) {
                 mConnectionPoolLocked.dump(printer, verbose);
+            }
+        }
+    }
+
+    public JSONObject dumpJSON(boolean verbose) throws JSONException {
+        synchronized (mLock) {
+            if (mConnectionPoolLocked != null) {
+                return mConnectionPoolLocked.dumpJSON(verbose);
+            } else {
+                return new JSONObject();
             }
         }
     }

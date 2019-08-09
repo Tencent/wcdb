@@ -16,9 +16,10 @@
 
 package com.tencent.wcdb.database;
 
-import java.util.ArrayList;
+import com.tencent.wcdb.extension.SQLiteExtension;
+
+import java.util.LinkedHashSet;
 import java.util.Locale;
-import java.util.regex.Pattern;
 
 /**
  * Describes how to configure a database.
@@ -74,32 +75,41 @@ public final class SQLiteDatabaseConfiguration {
 
     /**
      * The database locale.
-     *
      * Default is the value returned by {@link Locale#getDefault()}.
      */
     public Locale locale;
 
     /**
      * True if foreign key constraints are enabled.
-     *
      * Default is false.
      */
     public boolean foreignKeyConstraintsEnabled;
 
     /**
      * True if custom WAL hook, including async-checkpoint, is enabled.
-     *
      * Default is false.
      */
     public boolean customWALHookEnabled;
 
+    /**
+     * Synchronize mode to be used.
+     */
     public int synchronousMode;
 
     /**
-     * The custom functions to register.
+     * True if SQLite should call registered callback when database is updated.
      */
-    public final ArrayList<SQLiteCustomFunction> customFunctions =
-            new ArrayList<SQLiteCustomFunction>();
+    public boolean updateNotificationEnabled;
+
+    /**
+     * True if update notifications should contain information about modified RowID.
+     */
+    public boolean updateNotificationRowID;
+
+    /**
+     * Extensions to register.
+     */
+    public final LinkedHashSet<SQLiteExtension> extensions = new LinkedHashSet<>();
 
     /**
      * Creates a database configuration with the required parameters for opening a
@@ -159,10 +169,13 @@ public final class SQLiteDatabaseConfiguration {
         locale = other.locale;
         foreignKeyConstraintsEnabled = other.foreignKeyConstraintsEnabled;
         customWALHookEnabled = other.customWALHookEnabled;
+        updateNotificationEnabled = other.updateNotificationEnabled;
+        updateNotificationRowID = other.updateNotificationRowID;
         synchronousMode = other.synchronousMode;
         vfsName = other.vfsName;
-        customFunctions.clear();
-        customFunctions.addAll(other.customFunctions);
+
+        extensions.clear();
+        extensions.addAll(other.extensions);
     }
 
     /**

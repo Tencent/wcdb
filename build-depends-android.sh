@@ -15,16 +15,16 @@ SQLCIPHER_CFLAGS="-DSQLITE_DEFAULT_WORKER_THREADS=2 \
   -DSQLITE_ENABLE_FTS3_TOKENIZER \
   -DSQLITE_ENABLE_STAT4 \
   -DSQLITE_ENABLE_EXPLAIN_COMMENTS \
-  -DSQLITE_HAS_CODEC -DOMIT_MEMLOCK -DOMIT_CONSTTIME_MEM \
-  -DSQLCIPHER_CRYPTO_CUSTOM -DSQLCIPHER_CRYPTO_XXTEA -DSQLCIPHER_CRYPTO_DEVLOCK"
+  -DSQLITE_ENABLE_DBSTAT_VTAB \
+  -DSQLITE_HAS_CODEC -DOMIT_MEMLOCK -DOMIT_MEM_SECURITY"
 
 SQLCIPHER_CONFIG="--disable-shared --enable-static \
   --enable-fts3 --enable-fts4 --enable-fts5 --enable-json1 --enable-session \
   --enable-tempstore=always --enable-threadsafe=multi --disable-tcl"
 
-USE_CLANG=0
+USE_CLANG=1
 BUILD_ARCHS="arm,arm64,x86,x86_64"
-BUILD_API=12
+BUILD_API=16
 BUILD_PIE=1
 BUILD_CRYPTO=1
 BUILD_SQLCIPHER=0
@@ -38,39 +38,38 @@ show_help()
 Usage: build-depends-android.sh [OPTIONS]
 
 OPTIONS:
-    -h,--help           Show this help message.
-    --ndk=<path>        Specify Android NDK installation path.
-                        If this option is omitted, use ANDROID_NDK_ROOT environment variable.
-    --arch=<archs>      Comma separated architectures to build. Default to "arm,arm64,x86"
-    --api=<number>      API level to build. Default to 12.
-    --no-pie            Do not build position-independent executables.
-    --gcc               Uses GCC toolchains. This is the default.
-    --clang             Uses clang toolchains.
-    --no-crypto         Do not build libcrypto.
-    --build-sqlcipher   Build SQLCipher library and executables.
+    -h            Show this help message.
+    -n <path>     Specify Android NDK installation path.
+                  If this option is omitted, use ANDROID_NDK_ROOT environment variable.
+    -a <archs>    Comma separated architectures to build. Default to "arm,arm64,x86,x86_64"
+    -i <number>   API level to build. Default to 14.
+    -e            Do not build position-independent executables.
+    -g            Uses GCC toolchains.
+    -G            Uses clang toolchains. This is the default.
+    -c            Do not build libcrypto.
+    -s            Build SQLCipher library and executables.
 
 _EOF
 }
 
 # Parse arguments.
-argv=`getopt -o 'h' -l 'help,ndk:,arch:,api:,clang,gcc,no-pie,no-crypto,build-sqlcipher' -- "$@"`
-[ $? != 0 ] && exit 1
+#argv=`getopt -o 'h' -l 'help,ndk:,arch:,api:,clang,gcc,no-pie,no-crypto,build-sqlcipher' -- "$@"`
+#[ $? != 0 ] && exit 1
 
-eval set -- "$argv"
+#eval set -- "$argv"
 
-while true; do
-  case "$1" in
-    -h|--help) show_help; exit 1 ;;
-    --ndk) ANDROID_NDK_ROOT="$2"; shift 2 ;;
-    --arch) BUILD_ARCHS="$2"; shift 2 ;;
-    --api) BUILD_API="$2"; shift 2 ;;
-    --clang) USE_CLANG=1; shift ;;
-    --gcc) USE_CLANG=0; shift ;;
-    --no-pie) BUILD_PIE=0; shift ;;
-    --no-crypto) BUILD_CRYPTO=0; shift ;;
-    --build-sqlcipher) BUILD_SQLCIPHER=1; shift ;;
-    --) shift; break ;;
-    *) echo "Unreconized option: $1"; exit 1 ;;
+while getopts ':hn:a:i:egGcs' arg; do
+  case "$arg" in
+    h) show_help; exit 1 ;;
+    n) ANDROID_NDK_ROOT="$OPTARG";;
+    a) BUILD_ARCHS="$OPTARG";;
+    i) BUILD_API="$OPTARG";;
+    G) USE_CLANG=1;;
+    g) USE_CLANG=0;;
+    e) BUILD_PIE=0;;
+    c) BUILD_CRYPTO=0;;
+    s) BUILD_SQLCIPHER=1;;
+    *) echo "Unreconized option: $arg"; exit 1 ;;
   esac
 done
 
@@ -104,13 +103,14 @@ done
 
 # Fix API level and architectures
 case "$BUILD_API" in
-  [0-9]|1[0-1]) BUILD_API=9 ;;
+  [0-9]|1[0-5]) BUILD_API=16 ;;
   20) BUILD_API=19 ;;
   22) BUILD_API=21 ;;
+  25) BUILD_API=24 ;;
   [0-9][0-9]) ;;
-  *) BUILD_API=12 ;;
+  *) BUILD_API=16 ;;
 esac
-[ "$BUILD_API" -gt 24 ] && BUILD_API=24
+[ "$BUILD_API" -gt 28 ] && BUILD_API=28
 BUILD_ARCHS=${BUILD_ARCHS//,/ }
 
 # Check dependency sources
@@ -142,14 +142,7 @@ if [ $? != 0 ]; then
   cat patch/openssl/*.patch | patch -p1 -N -dopenssl || exit 1
 fi
 
-# Generate sqlite3.c/.h
-cd sqlcipher
-if [ 'Makefile' -ot 'Makefile.in' ] || [ 'Makefile' -ot 'configure' ]; then
-  ./configure $SQLCIPHER_CONFIG || exit 1
-fi
-make sqlite3.h sqlite3.c || exit 1
-cp sqlite3.h sqlite3.c sqlite3ext.h sqlite3session.h src/sqlcipher.h ../android/sqlcipher/ || exit 1
-cd ..
+sqlite3_headers_generated=0
 
 for android_arch in $BUILD_ARCHS; do
   echo "###########################################"
@@ -162,7 +155,7 @@ for android_arch in $BUILD_ARCHS; do
       android_eabi=arm-linux-androideabi
       gcc_prefix=arm-linux-androideabi
       clang_target=arm-none-linux-androideabi
-      android_api=9
+      android_api=16
       android_cflags="-Os -fpic -mthumb -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16"
       openssl_conf="linux-armv4"
       ;;
@@ -178,14 +171,14 @@ for android_arch in $BUILD_ARCHS; do
       android_eabi=x86
       gcc_prefix=i686-linux-android
       clang_target=i686-none-linux-android
-      android_api=9
+      android_api=16
       android_cflags="-O2 -fPIC"
       openssl_conf="linux-elf"
       ;;
     x86_64)
       android_eabi=x86_64
       gcc_prefix=x86_64-linux-android
-      clang-target=x86_64-none-linux-android
+      clang_target=x86_64-none-linux-android
       android_api=21
       android_cflags="-O2 -fPIC"
       openssl_conf="linux-x86_64"
@@ -198,8 +191,14 @@ for android_arch in $BUILD_ARCHS; do
 
   [ "$BUILD_API" -gt "$android_api" ] && android_api="$BUILD_API"
   android_sysroot="$ANDROID_NDK_ROOT/platforms/android-$android_api/arch-$android_arch"
+  # If deprecated headers don't exist, uses unified headers
+  if [ ! -d "$android_sysroot/usr/include" ]; then
+    android_sysroot="$android_sysroot -isystem $ANDROID_NDK_ROOT/sysroot/usr/include"
+    android_sysroot="$android_sysroot -isystem $ANDROID_NDK_ROOT/sysroot/usr/include/$gcc_prefix"
+  fi
+
   android_cc="$gcc_prefix-gcc --sysroot=$android_sysroot"
-  android_cflags="$android_cflags -g -Wall -funwind-tables -fstack-protector -fomit-frame-pointer -DNDEBUG -DANDROID"
+  android_cflags="$android_cflags -g -Wall -funwind-tables -fstack-protector -fomit-frame-pointer -DNDEBUG -DANDROID -D__ANDROID_API__=$android_api"
   android_path="$ANDROID_NDK_ROOT/toolchains/$android_eabi-4.9/prebuilt/$ndk_host/bin"
   android_prefix="$(pwd)/android/prebuilt/$android_arch"
   
@@ -223,9 +222,8 @@ for android_arch in $BUILD_ARCHS; do
     ./Configure $openssl_conf $android_cflags $OPENSSL_CONFIG \
       --openssldir="$android_prefix" || exit 1
     # Edit generated Makefile
-    sed -i -e '/^CFLAG=/ s/ \+-O[0-3s] \+/ /2g' \
-      -e '/^MAKEDEPPROG=/ s/^MAKEDEPPROG=.*$/MAKEDEPPROG=$(CC)/' \
-      -e '/^DIRS=/ s/^DIRS=.*$/DIRS= crypto/' \
+    sed -i -e \
+      '/^CFLAG=/ s/ \+-O[0-3s] \+/ /2; /^MAKEDEPPROG=/ s/^MAKEDEPPROG=.*$/MAKEDEPPROG=$(CC)/; /^DIRS=/ s/^DIRS=.*$/DIRS= crypto/' \
       Makefile
     make depend -j2 || exit 1
     make build_crypto libcrypto.pc libssl.pc openssl.pc -j2 || exit 1
@@ -235,14 +233,25 @@ for android_arch in $BUILD_ARCHS; do
   fi
 
   # Build and install sqlcipher
-  if [ "$BUILD_SQLCIPHER" == 1 ]; then
+  if [ "$BUILD_SQLCIPHER" == 1 -o "$sqlite3_headers_generated" == 0 ]; then
     cd sqlcipher
     [ -f 'Makefile' ] && make distclean
     CC="$android_cc" \
     CFLAGS="-I$android_prefix/include $android_cflags $SQLCIPHER_CFLAGS" \
     LDFLAGS="-L$android_prefix/lib $SQLCIPHER_LDFLAGS $android_pie" \
     ./configure --host="$gcc_prefix" --prefix="$android_prefix" $SQLCIPHER_CONFIG || exit 1
-    make all install || exit 1
+    
+    # Generate sqlite3.c/.h
+    if [ "$sqlite3_headers_generated" == 0 ]; then
+      make sqlite3.h sqlite3.c || exit 1
+      cp sqlite3.h sqlite3.c sqlite3ext.h sqlite3session.h src/sqlcipher.h ../android/sqlcipher/ || exit 1
+      sqlite3_headers_generated=1
+    fi
+
+    if [ "$BUILD_SQLCIPHER" == 1 ]; then
+      make all install || exit 1
+    fi
+
     make distclean || exit 1
     cd ..
   fi

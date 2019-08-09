@@ -74,12 +74,12 @@
     return _database->backup();
 }
 
-- (double)retrieve:(WCDB_NO_ESCAPE WCTRetrieveProgressUpdateBlock)onProgressUpdate
+- (double)retrieve:(WCDB_NO_ESCAPE WCTRetrieveProgressUpdateBlock)onProgressUpdated
 {
     WCDB::Database::RetrieveProgressCallback callback = nullptr;
-    if (onProgressUpdate != nil) {
-        callback = [onProgressUpdate](double percentage, double increment) {
-            onProgressUpdate(percentage, increment);
+    if (onProgressUpdated != nil) {
+        callback = [onProgressUpdated](double percentage, double increment) {
+            onProgressUpdated(percentage, increment);
         };
     }
     return _database->retrieve(callback);

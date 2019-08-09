@@ -27,6 +27,10 @@ import com.tencent.wcdb.support.Log;
 import com.tencent.wcdb.support.OperationCanceledException;
 import com.tencent.wcdb.support.PrefixPrinter;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Closeable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -80,6 +84,7 @@ public final class SQLiteConnectionPool implements Closeable {
 
     // Keep reference to SQLiteDatabase which owns this connection pool.
     private final WeakReference<SQLiteDatabase> mDB;
+    private volatile SQLiteChangeListener mChangeListener;
     private volatile SQLiteTrace mTraceCallback;
     private volatile SQLiteCheckpointListener mCheckpointListener;
 
@@ -315,7 +320,8 @@ public final class SQLiteConnectionPool implements Closeable {
             }
 
             if (((mConfiguration.openFlags ^ configuration.openFlags) & OPEN_FLAG_REOPEN_MASK) != 0 ||
-                    !DatabaseUtils.objectEquals(mConfiguration.vfsName, configuration.vfsName)) {
+                    !DatabaseUtils.objectEquals(mConfiguration.vfsName, configuration.vfsName) ||
+                    !configuration.extensions.containsAll(mConfiguration.extensions)) {
                 // If we are changing open flags and WAL mode at the same time, then
                 // we have no choice but to close the primary connection beforehand
                 // because there can only be one connection open when we change WAL mode.
@@ -373,13 +379,14 @@ public final class SQLiteConnectionPool implements Closeable {
 
         SQLiteConnection connection = waitForConnection(sql, connectionFlags, cancellationSignal);
 
-        if (mTraceCallback != null) {
+        SQLiteTrace callback = mTraceCallback;
+        if (callback != null) {
             long waitTime = SystemClock.uptimeMillis() - startTime;
             SQLiteDatabase db = mDB.get();
             if (db != null) {
                 final boolean isPrimary =
                         (connectionFlags & CONNECTION_FLAG_PRIMARY_CONNECTION_AFFINITY) != 0;
-                mTraceCallback.onConnectionObtained(db, sql, waitTime, isPrimary);
+                callback.onConnectionObtained(db, sql, waitTime, isPrimary);
             }
         }
 
@@ -712,6 +719,8 @@ public final class SQLiteConnectionPool implements Closeable {
                 Thread.interrupted();
 
                 // Check whether we are done waiting yet.
+                ConnectionPoolBusyInfo busyInfo = null;
+                final long now;
                 synchronized (mLock) {
                     throwIfClosedLocked();
 
@@ -725,13 +734,25 @@ public final class SQLiteConnectionPool implements Closeable {
                         throw ex; // rethrow!
                     }
 
-                    final long now = SystemClock.uptimeMillis();
+                    now = SystemClock.uptimeMillis();
                     if (now < nextBusyTimeoutTime) {
                         busyTimeoutMillis = now - nextBusyTimeoutTime;
                     } else {
-                        logConnectionPoolBusyLocked(sql, now - waiter.mStartTime, connectionFlags);
+                        busyInfo = gatherConnectionPoolBusyInfoLocked();
                         busyTimeoutMillis = CONNECTION_POOL_BUSY_MILLIS;
                         nextBusyTimeoutTime = now + busyTimeoutMillis;
+                    }
+                }
+
+                if (busyInfo != null) {
+                    long waitMillis = now - waiter.mStartTime;
+                    logConnectionPoolBusy(busyInfo, waitMillis, connectionFlags);
+
+                    SQLiteDatabase db = mDB.get();
+                    SQLiteTrace callback = mTraceCallback;
+                    if (db != null && callback != null) {
+                        callback.onConnectionPoolBusy(db, sql, waitMillis, wantPrimaryConnection,
+                                busyInfo.activeSql, busyInfo.activeTransactions);
                     }
                 }
             }
@@ -772,60 +793,78 @@ public final class SQLiteConnectionPool implements Closeable {
         wakeConnectionWaitersLocked();
     }
 
-    
-    public void logConnectionPoolBusy(String sql){
-    	synchronized (mLock) {
-    		logConnectionPoolBusyLocked(sql, 0,0);
-		}
+    private static class ConnectionPoolBusyInfo {
+        String label;
+        ArrayList<String> activeOperationDescriptions = new ArrayList<>();
+        int activeConnections;
+        int idleConnections;
+        int availableConnections;
+
+        ArrayList<SQLiteTrace.TraceInfo<String>> activeSql = new ArrayList<>();
+        ArrayList<SQLiteTrace.TraceInfo<StackTraceElement[]>> activeTransactions = new ArrayList<>();
     }
-    
-    // Can't throw.
-    private void logConnectionPoolBusyLocked(String sql, long waitMillis, int connectionFlags) {
+
+    private void logConnectionPoolBusy(ConnectionPoolBusyInfo info, long waitMillis,
+                                       int connectionFlags) {
         StringBuilder msg = new StringBuilder();
-        if(waitMillis != 0){
+        if (waitMillis != 0) {
             final Thread thread = Thread.currentThread();
-            msg.append("The connection pool for database '").append(mConfiguration.label);
+            msg.append("The connection pool for database '").append(info.label);
             msg.append("' has been unable to grant a connection to thread ");
             msg.append(thread.getId()).append(" (").append(thread.getName()).append(") ");
             msg.append("with flags 0x").append(Integer.toHexString(connectionFlags));
             msg.append(" for ").append(waitMillis * 0.001f).append(" seconds.\n");
         }
-        ArrayList<String> requests = new ArrayList<String>();
-        int activeConnections = 0;
-        int idleConnections = 0;
-        if (!mAcquiredConnections.isEmpty()) {
-            for (SQLiteConnection connection : mAcquiredConnections.keySet()) {
-                String description = connection.describeCurrentOperationUnsafe();
-                if (description != null) {
-                    requests.add(description);
-                    activeConnections += 1;
-                } else {
-                    idleConnections += 1;
-                }
-            }
-        }
-        int availableConnections = mAvailableNonPrimaryConnections.size();
-        if (mAvailablePrimaryConnection != null) {
-            availableConnections += 1;
-        }
-        msg.append("Connections: ").append(activeConnections).append(" active, ");
-        msg.append(idleConnections).append(" idle, ");
-        msg.append(availableConnections).append(" available.\n");
 
-        if (!requests.isEmpty()) {
+        msg.append("Connections: ").append(info.activeConnections).append(" active, ");
+        msg.append(info.idleConnections).append(" idle, ");
+        msg.append(info.availableConnections).append(" available.\n");
+
+        if (!info.activeOperationDescriptions.isEmpty()) {
             msg.append("\nRequests in progress:\n");
-            for (String request : requests) {
+            for (String request : info.activeOperationDescriptions) {
                 msg.append("  ").append(request).append("\n");
             }
         }
 
         String message = msg.toString();
         Log.w(TAG, message);
+    }
 
-        SQLiteDatabase db = mDB.get();
-        if (db != null && mTraceCallback != null) {
-            mTraceCallback.onConnectionPoolBusy(db, sql, requests, message);
+    // Can't throw.
+    private ConnectionPoolBusyInfo gatherConnectionPoolBusyInfoLocked() {
+        ConnectionPoolBusyInfo info = new ConnectionPoolBusyInfo();
+
+        info.activeConnections = 0;
+        info.idleConnections = 0;
+        if (!mAcquiredConnections.isEmpty()) {
+            for (SQLiteConnection connection : mAcquiredConnections.keySet()) {
+                SQLiteTrace.TraceInfo<StackTraceElement[]> persistTrace =
+                        connection.tracePersistAcquisitionUnsafe();
+                if (persistTrace != null) {
+                    info.activeTransactions.add(persistTrace);
+                }
+
+                SQLiteTrace.TraceInfo<String> opTrace = connection.traceCurrentOperationUnsafe();
+                if (opTrace != null) {
+                    info.activeSql.add(opTrace);
+                    String description = connection.describeCurrentOperationUnsafe();
+                    if (description != null) {
+                        info.activeOperationDescriptions.add(description);
+                    }
+                    info.activeConnections += 1;
+                } else {
+                    info.idleConnections += 1;
+                }
+            }
         }
+
+        info.availableConnections = mAvailableNonPrimaryConnections.size();
+        if (mAvailablePrimaryConnection != null) {
+            info.availableConnections += 1;
+        }
+
+        return info;
     }
 
     // Can't throw.
@@ -1049,15 +1088,48 @@ public final class SQLiteConnectionPool implements Closeable {
         mConnectionWaiterPool = waiter;
     }
 
-    /*package*/ SQLiteTrace getTraceCallback() {
+    SQLiteChangeListener getChangeListener() {
+        return mChangeListener;
+    }
+
+    void setChangeListener(SQLiteChangeListener listener, boolean notifyRowId) {
+        boolean notifyEnabled = (listener != null);
+        if (!notifyEnabled)
+            notifyRowId = false;
+
+        synchronized (mLock) {
+            if (mConfiguration.updateNotificationEnabled != notifyEnabled ||
+                    mConfiguration.updateNotificationRowID != notifyRowId) {
+                mConfiguration.updateNotificationEnabled = notifyEnabled;
+                mConfiguration.updateNotificationRowID = notifyRowId;
+
+                closeExcessConnectionsAndLogExceptionsLocked();
+                reconfigureAllConnectionsLocked();
+            }
+
+            mChangeListener = listener;
+        }
+    }
+
+    void notifyChanges(String dbName, String table,
+            long[] insertIds, long[] updateIds, long[] deleteIds) {
+        SQLiteDatabase db = mDB.get();
+        SQLiteChangeListener listener = mChangeListener;
+
+        if (listener == null || db == null)
+            return;
+        listener.onChange(db, dbName, table, insertIds, updateIds, deleteIds);
+    }
+
+    SQLiteTrace getTraceCallback() {
         return mTraceCallback;
     }
 
-    /*package*/ void setTraceCallback(SQLiteTrace callback) {
+    void setTraceCallback(SQLiteTrace callback) {
         mTraceCallback = callback;
     }
 
-    /*package*/ void traceExecute(String sql, int type, long time) {
+    void traceExecute(String sql, int type, long time) {
         SQLiteDatabase db = mDB.get();
         SQLiteTrace trace = mTraceCallback;
 
@@ -1066,11 +1138,11 @@ public final class SQLiteConnectionPool implements Closeable {
         trace.onSQLExecuted(db, sql, type, time);
     }
 
-    /*package*/ SQLiteCheckpointListener getCheckpointListener() {
+    SQLiteCheckpointListener getCheckpointListener() {
         return mCheckpointListener;
     }
 
-    /*package*/ void setCheckpointListener(SQLiteCheckpointListener listener) {
+    void setCheckpointListener(SQLiteCheckpointListener listener) {
         SQLiteDatabase db = mDB.get();
 
         if (mCheckpointListener != null)
@@ -1097,7 +1169,7 @@ public final class SQLiteConnectionPool implements Closeable {
      * @param printer The printer to receive the dump, not null.
      * @param verbose True to dump more verbose information.
      */
-    public void dump(Printer printer, boolean verbose) {
+    void dump(Printer printer, boolean verbose) {
         Printer indentedPrinter = PrefixPrinter.create(printer, "    ");
         synchronized (mLock) {
             printer.println("Connection pool for " + mConfiguration.path + ":");
@@ -1126,7 +1198,7 @@ public final class SQLiteConnectionPool implements Closeable {
                 for (Map.Entry<SQLiteConnection, AcquiredConnectionStatus> entry :
                         mAcquiredConnections.entrySet()) {
                     final SQLiteConnection connection = entry.getKey();
-                    connection.dumpUnsafe(indentedPrinter, verbose);
+                    connection.dump(indentedPrinter, verbose);
                     indentedPrinter.println("  Status: " + entry.getValue());
                 }
             } else {
@@ -1148,6 +1220,45 @@ public final class SQLiteConnectionPool implements Closeable {
             } else {
                 indentedPrinter.println("<none>");
             }
+        }
+    }
+
+    JSONObject dumpJSON(boolean verbose) throws JSONException {
+        synchronized (mLock) {
+            JSONArray nonPrimaryList = new JSONArray();
+            JSONArray acquiredList = new JSONArray();
+            JSONArray waiters = new JSONArray();
+            JSONObject o = new JSONObject()
+                    .put("path", mConfiguration.path)
+                    .put("open", mIsOpen)
+                    .put("maxConn", mMaxConnectionPoolSize)
+                    .put("availablePrimary", mAvailablePrimaryConnection == null ?
+                            null : null/*FIXME*/)
+                    .put("availableNonPrimary", nonPrimaryList)
+                    .put("acquired", acquiredList)
+                    .put("waiters", waiters);
+
+            for (SQLiteConnection conn : mAvailableNonPrimaryConnections) {
+                nonPrimaryList.put(conn.dumpJSON(verbose));
+            }
+
+            for (Map.Entry<SQLiteConnection, AcquiredConnectionStatus> entry :
+                    mAcquiredConnections.entrySet()) {
+                acquiredList.put(entry.getKey().dumpJSON(verbose)
+                        .put("status", entry.getValue().toString()));
+            }
+
+            for (ConnectionWaiter w = mConnectionWaiterQueue; w != null; w = w.mNext) {
+                final long now = SystemClock.uptimeMillis();
+                waiters.put(new JSONObject()
+                        .put("duration", now - w.mStartTime)
+                        .put("thread", w.mThread.toString())
+                        .put("priority", w.mPriority)
+                        .put("sql", w.mSql)
+                );
+            }
+
+            return o;
         }
     }
 

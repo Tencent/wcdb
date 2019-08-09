@@ -119,23 +119,29 @@ public final class Context {
 	 */
 	public static SQLiteDatabase openOrCreateDatabase(android.content.Context context, String name, int mode,
 			CursorFactory factory) {
-		return openOrCreateDatabase(context, name, null, null, mode, factory, null);
+		return openOrCreateDatabase(context, name, null, null, mode, factory, null, 0);
 	}
 
 	public static SQLiteDatabase openOrCreateDatabase(android.content.Context context, String name, int mode,
 			CursorFactory factory, DatabaseErrorHandler errorHandler) {
-		return openOrCreateDatabase(context, name, null, null, mode, factory, errorHandler);
+		return openOrCreateDatabase(context, name, null, null, mode, factory, errorHandler, 0);
 	}
 
 	public static SQLiteDatabase openOrCreateDatabase(android.content.Context context, String name,
 			byte[] password, SQLiteCipherSpec cipher, int mode, CursorFactory factory) {
 		return openOrCreateDatabase(context, name, password, cipher, mode,
-				factory, null);
+				factory, null, 0);
 	}
 
-	static public SQLiteDatabase openOrCreateDatabase(android.content.Context context, String name,
+	public static SQLiteDatabase openOrCreateDatabase(android.content.Context context, String name,
 			byte[] password, SQLiteCipherSpec cipher, int mode, CursorFactory factory,
 			DatabaseErrorHandler errorHandler) {
+		return openOrCreateDatabase(context, name, password, cipher, mode, factory, errorHandler, 0);
+	}
+
+	public static SQLiteDatabase openOrCreateDatabase(android.content.Context context, String name,
+			byte[] password, SQLiteCipherSpec cipher, int mode, CursorFactory factory,
+			DatabaseErrorHandler errorHandler, int poolSize) {
 		File f = validateFilePath(context, name, true);
 		int flags = SQLiteDatabase.CREATE_IF_NECESSARY;
 		if ((mode & MODE_ENABLE_WRITE_AHEAD_LOGGING) != 0) {
@@ -143,7 +149,7 @@ public final class Context {
 		}
 
 		SQLiteDatabase db = SQLiteDatabase.openDatabase(f.getPath(), password, cipher, factory, flags,
-				errorHandler, 0);
+				errorHandler, poolSize);
 
 		setFilePermissionsFromMode(f.getPath(), mode, 0);
 		return db;

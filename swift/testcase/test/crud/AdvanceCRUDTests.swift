@@ -55,23 +55,27 @@ class AdvanceCRUDTests: CRUDTestCase {
     }
 
     struct EncodableColumn: ColumnEncodable {
-        func archivedValue() -> Int64? {
-            return Int64(variable1)
+        static var columnType: ColumnType {
+            return .integer64
         }
 
-        typealias FundamentalType = Int64
+        func archivedValue() -> FundamentalValue {
+            return FundamentalValue(Int64(variable1))
+        }
 
         var variable1: Int = 0
     }
 
     struct DecodableColumn: ColumnDecodable {
-        init?(with value: Int64) {
-            variable1 = Int(truncatingIfNeeded: value)
+        static var columnType: ColumnType {
+            return .integer64
+        }
+
+        init?(with value: FundamentalValue) {
+            variable1 = Int(truncatingIfNeeded: value.int64Value)
         }
 
         init() {}
-
-        typealias FundamentalType = Int64
 
         var variable1: Int = 0
     }

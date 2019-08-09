@@ -45,15 +45,15 @@ public final class Database: Core {
     ///
     /// - Parameter url: File url to your database
     public init(withFileURL url: URL) {
-        #if swift(>=4.0)
+        #if swift(>=4.2)
         #else
-            Error.fatalError("Swift 4.0 is required.")
+            Error.fatalError("Swift 4.2 is required.")
         #endif
         #if WCDB_IOS
             DispatchQueue.once(name: "com.Tencent.WCDB.swift.purge", {
                 let purgeFreeHandleQueue: DispatchQueue = DispatchQueue(label: "com.Tencent.WCDB.swift.purge")
                 _ = NotificationCenter.default.addObserver(
-                    forName: .UIApplicationDidReceiveMemoryWarning,
+                    forName: UIApplication.didReceiveMemoryWarningNotification,
                     object: nil,
                     queue: nil,
                     using: { (_) in

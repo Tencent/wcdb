@@ -9,15 +9,17 @@
 		<string>All</string>
 	</array>
 	<key>IDECodeSnippetContents</key>
-	<string>class &lt;#Class name#&gt;: WCDBSwift.ColumnCodable {
-    typealias FundamentalType = String
+	<string>class &lt;#Class name#&gt;: WCDBSwift.ColumnCodable, WCDBSwift.LiteralValueConvertible, WCDBSwift.ExpressionCanBeOperated {
+	static var columnType: ColumnType {
+		return .text
+	}
     
-    required init?(with value: String) {
-        
+    required init?(with value: FundamentalValue) {
+    	&lt;#init with value.stringValue#&gt;
     }
     
-    func archivedValue() -&gt; String? {
-        
+    func archivedValue() -&gt; FundamentalValue {
+        return FundamentalValue(&lt;#String#&gt;)
     }
 }
 </string>

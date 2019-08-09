@@ -178,7 +178,7 @@ public protocol UpdateInterface: class {
     /// - Throws: `Error`
     func update(table: String,
                 on propertyConvertibleList: PropertyConvertible...,
-                with row: [ColumnEncodableBase],
+                with row: [ColumnEncodable],
                 where condition: Condition?,
                 orderBy orderList: [OrderBy]?,
                 limit: Limit?,
@@ -197,7 +197,7 @@ public protocol UpdateInterface: class {
     /// - Throws: `Error`
     func update(table: String,
                 on propertyConvertibleList: [PropertyConvertible],
-                with row: [ColumnEncodableBase],
+                with row: [ColumnEncodable],
                 where condition: Condition?,
                 orderBy orderList: [OrderBy]?,
                 limit: Limit?,
@@ -249,7 +249,7 @@ public extension UpdateInterface where Self: Core {
 
     public func update(table: String,
                        on propertyConvertibleList: PropertyConvertible...,
-                       with row: [ColumnEncodableBase],
+                       with row: [ColumnEncodable],
                        where condition: Condition? = nil,
                        orderBy orderList: [OrderBy]? = nil,
                        limit: Limit? = nil,
@@ -265,7 +265,7 @@ public extension UpdateInterface where Self: Core {
 
     public func update(table: String,
                        on propertyConvertibleList: [PropertyConvertible],
-                       with row: [ColumnEncodableBase],
+                       with row: [ColumnEncodable],
                        where condition: Condition? = nil,
                        orderBy orderList: [OrderBy]? = nil,
                        limit: Limit? = nil,

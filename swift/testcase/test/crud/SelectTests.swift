@@ -29,8 +29,7 @@ class SelectTests: CRUDTestCase {
         super.setUp()
 
         let optionalSelect = WCDBAssertNoThrowReturned(
-            try database.prepareSelect(of: CRUDObject.self, fromTable: CRUDObject.name),
-            whenFailed: nil
+            try database.prepareSelect(of: CRUDObject.self, fromTable: CRUDObject.name)
         )
         XCTAssertNotNil(optionalSelect)
         select = optionalSelect!
@@ -62,7 +61,7 @@ class SelectTests: CRUDTestCase {
             try select.order(by: order).allObjects(),
             whenFailed: [CRUDObject]()
         )
-        XCTAssertEqual(results, preInsertedObjects.sorted().reversed())
+        XCTAssertEqual(results, preInsertedObjects.reversed())
     }
 
     func testLimitedSelect() {
@@ -71,7 +70,7 @@ class SelectTests: CRUDTestCase {
             whenFailed: [CRUDObject]()
         )
         XCTAssertEqual(results.count, 1)
-        XCTAssertEqual(results[0], preInsertedObjects.sorted()[0])
+        XCTAssertEqual(results[0], preInsertedObjects[0])
     }
 
     func testOffsetSelect() {
@@ -80,13 +79,12 @@ class SelectTests: CRUDTestCase {
             whenFailed: [CRUDObject]()
         )
         XCTAssertEqual(results.count, 1)
-        XCTAssertEqual(results[0], preInsertedObjects.sorted()[1])
+        XCTAssertEqual(results[0], preInsertedObjects[1])
     }
 
     func testPartialSelect() {
         let optionalSelect = WCDBAssertNoThrowReturned(
-            try database.prepareSelect(on: CRUDObject.Properties.variable2.asProperty(), fromTable: CRUDObject.name),
-            whenFailed: nil
+            try database.prepareSelect(on: CRUDObject.Properties.variable2.asProperty(), fromTable: CRUDObject.name)
         )
         XCTAssertNotNil(optionalSelect)
         let select = optionalSelect!
@@ -106,7 +104,7 @@ class SelectTests: CRUDTestCase {
 
     func testSelectIteration() {
         var results: [CRUDObject] = []
-        while let result: CRUDObject = WCDBAssertNoThrowReturned(try select.nextObject(), whenFailed: nil) {
+        while let result: CRUDObject = WCDBAssertNoThrowReturned(try select.nextObject()) {
             results.append(result)
         }
         XCTAssertEqual(results.sorted(), preInsertedObjects.sorted())
@@ -121,7 +119,7 @@ class SelectTests: CRUDTestCase {
 
     func testUnspecificSelectIteration() {
         var results: [CRUDObject] = []
-        while let result = WCDBAssertNoThrowReturned(try select.nextObject(), whenFailed: nil) {
+        while let result = WCDBAssertNoThrowReturned(try select.nextObject()) {
             let crudObject = result as? CRUDObject
             XCTAssertNotNil(crudObject)
             results.append(crudObject!)
@@ -142,8 +140,7 @@ class SelectTests: CRUDTestCase {
 
     func testSelectFailed() {
         let optionalSelect = WCDBAssertNoThrowReturned(
-            try database.prepareSelect(of: CRUDObject.self, fromTable: "nonexistentTable"),
-            whenFailed: nil
+            try database.prepareSelect(of: CRUDObject.self, fromTable: "nonexistentTable")
         )
         XCTAssertNotNil(optionalSelect)
         select = optionalSelect!

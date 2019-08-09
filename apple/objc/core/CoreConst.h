@@ -147,7 +147,6 @@ static constexpr const char* ErrorSourceSQLite = "SQLite";
 static constexpr const char* ErrorSourceRepair = "Repair";
 static constexpr const char* ErrorSourceSystem = "System";
 static constexpr const char* ErrorSourceAssertion = "Assertion";
-static constexpr const char* ErrorSourceTrace = "Trace";
 static constexpr const char* ErrorSourceNative = "Native";
 
 #pragma mark - Tag

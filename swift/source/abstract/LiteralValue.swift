@@ -51,25 +51,25 @@ public struct LiteralValue: Describable {
         description = "NULL"
     }
 
-    public init<ColumnEncodableType: ColumnEncodableBase>(_ columnEncodableValue: ColumnEncodableType) {
-        if let value = columnEncodableValue.archivedFundamentalValue() {
-            switch ColumnEncodableType.columnType {
-            case .integer32:
-                self.init(value as! Int32)
-            case .integer64:
-                self.init(value as! Int64)
-            case .float:
-                self.init(value as! Double)
-            case .text:
-                self.init(value as! String)
-            case .BLOB:
-                self.init(value as! Data)
-            case .null:
-                self.init(nil)
-            }
-        } else {
+    public init(_ value: FundamentalValue) {
+        switch value.type {
+        case .integer32:
+            self.init(value.int32Value)
+        case .integer64:
+            self.init(value.int64Value)
+        case .float:
+            self.init(value.doubleValue)
+        case .text:
+            self.init(value.stringValue)
+        case .BLOB:
+            self.init(value.dataValue)
+        case .null:
             self.init(nil)
         }
+    }
+
+    public init<T: ColumnEncodable>(_ encodedValue: T) {
+        self.init(encodedValue.archivedValue())
     }
 }
 

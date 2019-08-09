@@ -29,8 +29,7 @@ class InsertTests: CRUDTestCase {
         super.setUp()
 
         let optionalInsert = WCDBAssertNoThrowReturned(
-            try database.prepareInsert(of: CRUDObject.self, intoTable: CRUDObject.name),
-            whenFailed: nil
+            try database.prepareInsert(of: CRUDObject.self, intoTable: CRUDObject.name)
         )
         XCTAssertNotNil(optionalInsert)
         insert = optionalInsert!
@@ -84,8 +83,7 @@ class InsertTests: CRUDTestCase {
         object.variable1 = expectedReplacedRowID
         object.variable2 = self.name
         let optionalInsert = WCDBAssertNoThrowReturned(
-            try database.prepareInsertOrReplace(of: CRUDObject.self, intoTable: CRUDObject.name),
-            whenFailed: nil
+            try database.prepareInsertOrReplace(of: CRUDObject.self, intoTable: CRUDObject.name)
         )
         XCTAssertNotNil(optionalInsert)
         insert = optionalInsert!
@@ -106,8 +104,7 @@ class InsertTests: CRUDTestCase {
         object.variable1 = preInsertedObjects.count + 1
         object.variable2 = self.name
         let optionalInsert = WCDBAssertNoThrowReturned(
-            try database.prepareInsert(on: CRUDObject.Properties.variable1, intoTable: CRUDObject.name),
-            whenFailed: nil
+            try database.prepareInsert(on: CRUDObject.Properties.variable1, intoTable: CRUDObject.name)
         )
         XCTAssertNotNil(optionalInsert)
         let insert = optionalInsert!
@@ -132,8 +129,7 @@ class InsertTests: CRUDTestCase {
             try database.prepareInsertOrReplace(on:
                 CRUDObject.Properties.variable1,
                 CRUDObject.Properties.variable2,
-                                                intoTable: CRUDObject.name),
-            whenFailed: nil
+                                                intoTable: CRUDObject.name)
         )
         XCTAssertNotNil(optionalInsert)
         insert = optionalInsert!

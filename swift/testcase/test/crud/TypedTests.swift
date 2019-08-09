@@ -38,14 +38,16 @@ class TypedTests: CRUDTestCase {
     enum TypedCodableObject: Int, ColumnCodable, Equatable, CustomDebugStringConvertible {
         case variable = 0
 
-        typealias FundamentalType = Int64
-
-        func archivedValue() -> Int64? {
-            return Int64(self.rawValue)
+        static var columnType: ColumnType {
+            return .integer64
         }
 
-        init?(with value: Int64) {
-            guard let object = TypedCodableObject(rawValue: Int(truncatingIfNeeded: value)) else {
+        func archivedValue() -> FundamentalValue {
+            return FundamentalValue(Int64(self.rawValue))
+        }
+
+        init?(with value: FundamentalValue) {
+            guard let object = TypedCodableObject(rawValue: Int(truncatingIfNeeded: value.int64Value)) else {
                 return nil
             }
             self = object

@@ -438,11 +438,11 @@ static jboolean JNICALL nativeDumpDB(JNIEnv *env,
                                      jstring keyStr,
                                      jstring outPathStr)
 {
-    const char *dbPath = env->GetStringUTFChars(dbPathStr, NULL);
-    const char *key = NULL;
+    const char *dbPath = env->GetStringUTFChars(dbPathStr, nullptr);
+    const char *key = nullptr;
     if (keyStr)
-        key = env->GetStringUTFChars(keyStr, NULL);
-    const char *outPath = (env)->GetStringUTFChars(outPathStr, NULL);
+        key = env->GetStringUTFChars(keyStr, nullptr);
+    const char *outPath = (env)->GetStringUTFChars(outPathStr, nullptr);
 
     int rc = run_command_db_dump(dbPath, key, outPath);
 
@@ -456,7 +456,7 @@ static jboolean JNICALL nativeDumpDB(JNIEnv *env,
 
 static jboolean nativeIsSqlComplete(JNIEnv *env, jclass clazz, jstring sqlStr)
 {
-    const char *sql = env->GetStringUTFChars(sqlStr, NULL);
+    const char *sql = env->GetStringUTFChars(sqlStr, nullptr);
     int rc = sqlite3_complete(sql);
     env->ReleaseStringUTFChars(sqlStr, sql);
 

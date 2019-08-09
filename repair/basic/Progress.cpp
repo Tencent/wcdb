@@ -25,7 +25,7 @@ namespace WCDB {
 
 namespace Repair {
 
-Progress::Progress() : m_progress(0), m_onProgressUpdate(nullptr)
+Progress::Progress() : m_progress(0), m_onProgressUpdated(nullptr)
 {
 }
 
@@ -50,15 +50,15 @@ void Progress::updateProgress(double progress)
     WCTAssert(increment >= 0);
     if (increment > 0) {
         m_progress = progress;
-        if (m_onProgressUpdate != nullptr) {
-            m_onProgressUpdate(m_progress, increment);
+        if (m_onProgressUpdated != nullptr) {
+            m_onProgressUpdated(m_progress, increment);
         }
     }
 }
 
 void Progress::setProgressCallback(const ProgressUpdateCallback &onProgressUpdated)
 {
-    m_onProgressUpdate = onProgressUpdated;
+    m_onProgressUpdated = onProgressUpdated;
 }
 
 } //namespace Repair

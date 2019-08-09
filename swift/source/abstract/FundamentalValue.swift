@@ -22,21 +22,41 @@ import Foundation
 
 // nullable, Int32, Int64, Double, String, Data
 public struct FundamentalValue {
-    private let base: FundamentalColumnType?
+    private let base: Any?
+    public let type: ColumnType
 
     public init(_ _: Void? = nil) {
         base = nil
+        type = .null
     }
 
-    public init<ColumnEncodableType: ColumnEncodableBase>(_ columnEncodableValue: ColumnEncodableType) {
-        base = columnEncodableValue.archivedFundamentalValue()
+    public init(_ value: Int32) {
+        base = value
+        type = .integer32
     }
 
-    public var type: ColumnType {
-        guard let base = self.base else {
-            return .null
-        }
-        return Swift.type(of: base).columnType
+    public init(_ value: Int64) {
+        base = value
+        type = .integer64
+    }
+
+    public init(_ value: Double) {
+        base = value
+        type = .float
+    }
+
+    public init(_ value: String) {
+        base = value
+        type = .text
+    }
+
+    public init(_ value: Data) {
+        base = value
+        type = .BLOB
+    }
+
+    public init<T: ColumnEncodable>(_ encodedValue: T) {
+        self = encodedValue.archivedValue()
     }
 
     public var int32Value: Int32 {

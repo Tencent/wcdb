@@ -27,7 +27,7 @@
 #include "Logger.h"
 #include "ModuleLoader.h"
 #include "SQLiteCommon.h"
-#include <vfslog/vfslog.h>
+#include <vfslog.h>
 
 namespace wcdb {
 
@@ -134,7 +134,7 @@ static void nativeGetIOTraceStats(JNIEnv *env,
     // List all attached databases.
     sqlite3 *db = (sqlite3 *) (intptr_t) connectionPtr;
     sqlite3_stmt *stmt;
-    int rc = sqlite3_prepare_v2(db, "PRAGMA database_list;", -1, &stmt, NULL);
+    int rc = sqlite3_prepare_v2(db, "PRAGMA database_list;", -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
         // Failed to compile PRAGMA database_list; probably caused by database corruption.
         // Use hardcoded name and path for main database.
@@ -145,7 +145,7 @@ static void nativeGetIOTraceStats(JNIEnv *env,
         char sql[256];
         sqlite3_snprintf(sizeof(sql), sql,
                          "SELECT 0 as seq, 'main' as name, %Q as file;", path);
-        rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+        rc = sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr);
         if (rc != SQLITE_OK) {
             // Still failed, throw exception.
             throw_sqlite3_exception(env, db, "Cannot get I/O trace stats.");
@@ -177,7 +177,7 @@ static void nativeGetIOTraceStats(JNIEnv *env,
 
         // pageSize
         snprintf(sql, sizeof(sql), "PRAGMA %s.page_size;", dbName);
-        if (sqlite3_prepare_v2(db, sql, -1, &stmt2, NULL) == SQLITE_OK) {
+        if (sqlite3_prepare_v2(db, sql, -1, &stmt2, nullptr) == SQLITE_OK) {
             if (sqlite3_step(stmt2) == SQLITE_ROW) {
                 pageSize = sqlite3_column_int(stmt2, 0);
                 env->SetLongField(statsObj, fieldsStats.pageSize, pageSize);
@@ -187,7 +187,7 @@ static void nativeGetIOTraceStats(JNIEnv *env,
 
         // pageCount
         snprintf(sql, sizeof(sql), "PRAGMA %s.page_count;", dbName);
-        if (sqlite3_prepare_v2(db, sql, -1, &stmt2, NULL) == SQLITE_OK) {
+        if (sqlite3_prepare_v2(db, sql, -1, &stmt2, nullptr) == SQLITE_OK) {
             if (sqlite3_step(stmt2) == SQLITE_ROW) {
                 int64_t pageCount = sqlite3_column_int64(stmt2, 0);
                 env->SetLongField(statsObj, fieldsStats.pageCount, pageCount);
@@ -197,7 +197,7 @@ static void nativeGetIOTraceStats(JNIEnv *env,
 
         // journalMode
         snprintf(sql, sizeof(sql), "PRAGMA %s.journal_mode;", dbName);
-        if (sqlite3_prepare_v2(db, sql, -1, &stmt2, NULL) == SQLITE_OK) {
+        if (sqlite3_prepare_v2(db, sql, -1, &stmt2, nullptr) == SQLITE_OK) {
             if (sqlite3_step(stmt2) == SQLITE_ROW) {
                 const char *journalMode =
                     (const char *) sqlite3_column_text(stmt2, 0);
@@ -213,7 +213,7 @@ static void nativeGetIOTraceStats(JNIEnv *env,
         VLogStat stats;
         rc = vlogGetStats(db, dbName, &stats);
         if (rc == SQLITE_OK) {
-            sqlite3_file *f = NULL;
+            sqlite3_file *f = nullptr;
             sqlite3_file_control(db, dbName, SQLITE_FCNTL_FILE_POINTER, &f);
             if (f) {
                 jbyteArray pageArr;
@@ -225,7 +225,7 @@ static void nativeGetIOTraceStats(JNIEnv *env,
                         sqlite3_finalize(stmt);
                         return;
                     }
-                    jbyte *page = env->GetByteArrayElements(pageArr, NULL);
+                    jbyte *page = env->GetByteArrayElements(pageArr, nullptr);
                     f->pMethods->xRead(f, page, pageSize,
                                        stats.lastMainReadOffset);
                     env->ReleaseByteArrayElements(pageArr, page, 0);
@@ -234,7 +234,7 @@ static void nativeGetIOTraceStats(JNIEnv *env,
                     env->DeleteLocalRef(pageArr);
                 } else {
                     env->SetObjectField(statsObj, fieldsStats.lastReadPage,
-                                        NULL);
+                                        nullptr);
                 }
 
                 if (stats.lastMainWriteOffset >= 0) {
@@ -243,7 +243,7 @@ static void nativeGetIOTraceStats(JNIEnv *env,
                         sqlite3_finalize(stmt);
                         return;
                     }
-                    page = env->GetByteArrayElements(pageArr, NULL);
+                    page = env->GetByteArrayElements(pageArr, nullptr);
                     f->pMethods->xRead(f, page, pageSize,
                                        stats.lastMainWriteOffset);
                     env->ReleaseByteArrayElements(pageArr, page, 0);
@@ -252,11 +252,11 @@ static void nativeGetIOTraceStats(JNIEnv *env,
                     env->DeleteLocalRef(pageArr);
                 } else {
                     env->SetObjectField(statsObj, fieldsStats.lastWritePage,
-                                        NULL);
+                                        nullptr);
                 }
             }
 
-            f = NULL;
+            f = nullptr;
             sqlite3_file_control(db, dbName, SQLITE_FCNTL_JOURNAL_POINTER, &f);
             if (f) {
                 jbyteArray pageArr;
@@ -268,7 +268,7 @@ static void nativeGetIOTraceStats(JNIEnv *env,
                         sqlite3_finalize(stmt);
                         return;
                     }
-                    jbyte *page = env->GetByteArrayElements(pageArr, NULL);
+                    jbyte *page = env->GetByteArrayElements(pageArr, nullptr);
                     f->pMethods->xRead(f, page, pageSize,
                                        stats.lastJournalReadOffset);
                     env->ReleaseByteArrayElements(pageArr, page, 0);
@@ -277,7 +277,7 @@ static void nativeGetIOTraceStats(JNIEnv *env,
                     env->DeleteLocalRef(pageArr);
                 } else {
                     env->SetObjectField(statsObj,
-                                        fieldsStats.lastJournalReadPage, NULL);
+                                        fieldsStats.lastJournalReadPage, nullptr);
                 }
 
                 if (stats.lastJournalWriteOffset >= 0) {
@@ -286,7 +286,7 @@ static void nativeGetIOTraceStats(JNIEnv *env,
                         sqlite3_finalize(stmt);
                         return;
                     }
-                    page = env->GetByteArrayElements(pageArr, NULL);
+                    page = env->GetByteArrayElements(pageArr, nullptr);
                     f->pMethods->xRead(f, page, pageSize,
                                        stats.lastJournalWriteOffset);
                     env->ReleaseByteArrayElements(pageArr, page, 0);
@@ -295,7 +295,7 @@ static void nativeGetIOTraceStats(JNIEnv *env,
                     env->DeleteLocalRef(pageArr);
                 } else {
                     env->SetObjectField(statsObj,
-                                        fieldsStats.lastJournalWritePage, NULL);
+                                        fieldsStats.lastJournalWritePage, nullptr);
                 }
             }
 
@@ -328,14 +328,6 @@ static JNINativeMethod gMethods[] = {
     {"nativeGetIOTraceStats", "(JLjava/util/ArrayList;)V",
      (void *) nativeGetIOTraceStats},
 };
-
-#define FIND_CLASS(var, className)                                             \
-    var = env->FindClass(className);                                           \
-    LOG_FATAL_IF(!var, "Unable to find class " className);
-
-#define GET_FIELD_ID(var, clazz, fieldName, fieldDescriptor)                   \
-    var = env->GetFieldID(clazz, fieldName, fieldDescriptor);                  \
-    LOG_FATAL_IF(!var, "Unable to find field " fieldName);
 
 static int register_wcdb_SQLiteDebug(JavaVM *vm, JNIEnv *env)
 {

@@ -68,17 +68,16 @@ public class SQLiteDirectQuery extends SQLiteProgram {
 
     public int step(int count) {
         try {
-            if (acquirePreparedStatement()) {
+            if (acquirePreparedStatement(false)) {
                 mPreparedStatement.beginOperation("directQuery", getBindArgs());
                 mPreparedStatement.attachCancellationSignal(mCancellationSignal);
             }
 
             return nativeStep(mPreparedStatement.getPtr(), count);
         } catch (RuntimeException e) {
-            if (e instanceof SQLiteDatabaseCorruptException) {
-                onCorruption();
-            } else if (e instanceof  SQLiteException) {
+            if (e instanceof SQLiteException) {
                 Log.e(TAG, "Got exception on stepping: " + e.getMessage() + ", SQL: " + getSql());
+                checkCorruption((SQLiteException) e);
             }
 
             // Mark operation failed and release prepared statement.

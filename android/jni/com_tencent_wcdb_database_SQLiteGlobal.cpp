@@ -17,18 +17,28 @@
 #include <jni.h>
 #include <sqlite3.h>
 #include <stdio.h>
+#include <assert.h>
 
 #include "JNIHelp.h"
 #include "Logger.h"
 #include "ModuleLoader.h"
-#include "fts/mm_fts.h"
+#include "SQLiteCommon.h"
 
 // Forward declarations
-extern "C" void sqlcipher_set_default_pagesize(int);
-extern "C" int sqlite3_register_vfslog(const char *);
+extern "C" {
+    void sqlcipher_set_default_pagesize(int page_size);
+    void sqlcipher_set_default_kdf_iter(int iter);
+    void sqlcipher_set_default_use_hmac(int use);
+    int sqlcipher_set_default_hmac_algorithm(int algorithm);
+    int sqlcipher_set_default_kdf_algorithm(int algorithm);
+    void sqlcipher_set_mem_security(int);
+    int sqlite3_register_vfslog(const char *);
+}
 extern volatile uint32_t vlogDefaultLogFlags;
 
 namespace wcdb {
+
+static JavaVM *gVM = nullptr;
 
 // Limit heap to 8MB for now.  This is 4 times the maximum cursor window
 // size, as has been used by the original code in SQLiteDatabase for
@@ -41,7 +51,7 @@ extern volatile int sLastErrorLine;
 static void sqliteLogCallback(void *data, int iErrCode, const char *zMsg)
 {
     // Extract line number for specific error codes.
-    const char *pattern = NULL;
+    const char *pattern = nullptr;
     int priority = ANDROID_LOG_WARN;
     switch (iErrCode & 0xFF) {
         case SQLITE_NOTICE:
@@ -77,6 +87,35 @@ static void sqliteLogCallback(void *data, int iErrCode, const char *zMsg)
                    iErrCode, zMsg);
 }
 
+static int sqliteExtensionApiStealer(sqlite3 *db, const char **pzErrMsg,
+                                     const sqlite3_api_routines *pThunk)
+{
+    // Set the global API environment pointer then exit.
+    // XXX: Currently SQLite calls extension entry point with a static global sqlite3_api_routines
+    // structure that never change. We can safely store and reuse this structure.
+    JNIEnv *env = nullptr;
+    bool attached = false;
+    jint ret = gVM->GetEnv((void **) &env, JNI_VERSION_1_6);
+    if (ret == JNI_EDETACHED) {
+        jint ret = gVM->AttachCurrentThread(&env, nullptr);
+        assert(ret == JNI_OK);
+        (void) ret;
+        attached = true;
+    }
+
+    jclass clazz;
+    FIND_CLASS(clazz, "com/tencent/wcdb/database/WCDBInitializationProbe");
+
+    jfieldID fidApiEnv = env->GetStaticFieldID(clazz, "apiEnv", "J");
+    env->SetStaticLongField(clazz, fidApiEnv, (jlong)(intptr_t) pThunk);
+    env->DeleteLocalRef(clazz);
+
+    if (attached) {
+        gVM->DetachCurrentThread();
+    }
+    return SQLITE_OK;
+}
+
 // Sets the global SQLite configuration.
 // This must be called before any other SQLite functions are called.
 static void sqliteInitialize()
@@ -95,10 +134,13 @@ static void sqliteInitialize()
     sqlite3_soft_heap_limit(SOFT_HEAP_LIMIT);
 
     // Register vfslog VFS.
-    sqlite3_register_vfslog(NULL);
+    sqlite3_register_vfslog(nullptr);
 
     // Initialize SQLite.
     sqlite3_initialize();
+
+    // Register the API environment stealer as the auto-loaded extension.
+    sqlite3_auto_extension((void (*)(void)) sqliteExtensionApiStealer);
 }
 
 static jint nativeReleaseMemory(JNIEnv *env, jclass clazz)
@@ -106,26 +148,40 @@ static jint nativeReleaseMemory(JNIEnv *env, jclass clazz)
     return sqlite3_release_memory(SOFT_HEAP_LIMIT);
 }
 
-static void nativeSetDefaultPageSize(JNIEnv *env, jclass clazz, jint pageSize)
+static void nativeSetDefaultCipherSettings(JNIEnv *env, jclass clazz, jint pageSize)
 {
     sqlcipher_set_default_pagesize(pageSize);
+
+    // Keep compatibility to WCDB version 1.0, mainly the same as SQLCipher 3.
+    sqlcipher_set_default_kdf_iter(64000);
+    sqlcipher_set_default_use_hmac(1);
+    sqlcipher_set_default_hmac_algorithm(0);    // SHA1
+    sqlcipher_set_default_kdf_algorithm(0);     // SHA1
+    sqlcipher_set_mem_security(0);
 }
 
 static JNINativeMethod sMethods[] = {
     /* name, signature, funcPtr */
     {"nativeReleaseMemory", "()I", (void *) nativeReleaseMemory},
-    {"nativeSetDefaultPageSize", "(I)V", (void *) nativeSetDefaultPageSize},
+    {"nativeSetDefaultCipherSettings", "(I)V", (void *) nativeSetDefaultCipherSettings},
 };
 
 static int register_wcdb_SQLiteGlobal(JavaVM *vm, JNIEnv *env)
 {
+    gVM = vm;
     sqliteInitialize();
+
+    jclass clazz;
+    FIND_CLASS(clazz, "com/tencent/wcdb/database/WCDBInitializationProbe");
+
+    jfieldID fidLibLoaded = env->GetStaticFieldID(clazz, "libLoaded", "Z");
+    env->SetStaticBooleanField(clazz, fidLibLoaded, JNI_TRUE);
+    env->DeleteLocalRef(clazz);
 
     return jniRegisterNativeMethods(env,
                                     "com/tencent/wcdb/database/SQLiteGlobal",
                                     sMethods, NELEM(sMethods));
 }
 WCDB_JNI_INIT(SQLiteGlobal, register_wcdb_SQLiteGlobal)
-WCDB_DBCONN_INIT(MMFTS, sqlite3_mmftsext_init)
 
 } // namespace wcdb

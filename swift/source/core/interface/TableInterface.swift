@@ -45,13 +45,13 @@ public protocol UpdateTableInterface: class {
                 limit: Limit?,
                 offset: Offset?) throws
     func update(on propertyConvertibleList: PropertyConvertible...,
-                with row: [ColumnEncodableBase],
+                with row: [ColumnEncodable],
                 where condition: Condition?,
                 orderBy orderList: [OrderBy]?,
                 limit: Limit?,
                 offset: Offset?) throws
     func update(on propertyConvertibleList: [PropertyConvertible],
-                with row: [ColumnEncodableBase],
+                with row: [ColumnEncodable],
                 where condition: Condition?,
                 orderBy orderList: [OrderBy]?,
                 limit: Limit?,
