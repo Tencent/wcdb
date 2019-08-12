@@ -91,7 +91,7 @@ public:
     }
 };
 
-class StringView : public UnsafeStringView {
+class StringView final : public UnsafeStringView {
 #pragma mark - StringView - Constructor
 public:
     explicit StringView();
@@ -118,7 +118,7 @@ struct StringViewComparator {
 };
 
 template<typename T>
-class StringViewMap : public std::map<StringView, T, StringViewComparator> {
+class StringViewMap final : public std::map<StringView, T, StringViewComparator> {
 private:
     using Super = std::map<StringView, T, StringViewComparator>;
 
@@ -162,7 +162,7 @@ public:
     }
 };
 
-class StringViewSet : public std::set<StringView, StringViewComparator> {
+class StringViewSet final : public std::set<StringView, StringViewComparator> {
 private:
     using Super = std::set<StringView, StringViewComparator>;
 
