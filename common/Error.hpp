@@ -269,6 +269,13 @@ protected:
 public:
     class InfoValue {
     public:
+        enum class UnderlyingType {
+            None,
+            String,
+            Integer,
+            Float,
+        };
+
         typedef int64_t Integer;
         typedef double Float;
         typedef StringView String;
@@ -276,14 +283,14 @@ public:
         template<typename T>
         InfoValue(const T &value,
                   typename std::enable_if<std::is_floating_point<T>::value>::type * = nullptr)
-        : m_underlying((Float) value)
+        : m_underlying((Float) value), m_type(UnderlyingType::Float)
         {
         }
 
         template<typename T>
         InfoValue(const T &value,
                   typename std::enable_if<std::is_integral<T>::value>::type * = nullptr)
-        : m_underlying((Integer) value)
+        : m_underlying((Integer) value), m_type(UnderlyingType::Integer)
         {
         }
 
@@ -294,16 +301,11 @@ public:
         String stringValue() const;
         Integer integerValue() const;
         Float floatValue() const;
-        enum class UnderlyingType {
-            None,
-            String,
-            Integer,
-            Float,
-        };
         UnderlyingType underlyingType() const;
 
     private:
         std::any m_underlying;
+        UnderlyingType m_type;
     };
     StringViewMap<InfoValue> infos;
 

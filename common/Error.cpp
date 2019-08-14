@@ -241,16 +241,16 @@ const StringView& Error::getMessage() const
 }
 
 #pragma mark - Info
-Error::InfoValue::InfoValue(const char* string) : m_underlying(String(string))
+Error::InfoValue::InfoValue(const char* string) : m_underlying(String(string)), m_type(UnderlyingType::String)
 {
 }
 
 Error::InfoValue::InfoValue(const UnsafeStringView& string)
-: m_underlying(String(string))
+: m_underlying(String(string)), m_type(UnderlyingType::String)
 {
 }
 
-Error::InfoValue::InfoValue(String&& string) : m_underlying(std::move(string))
+Error::InfoValue::InfoValue(String&& string) : m_underlying(std::move(string)), m_type(UnderlyingType::String)
 {
 }
 
@@ -283,16 +283,7 @@ Error::InfoValue::Float Error::InfoValue::floatValue() const
 
 Error::InfoValue::UnderlyingType Error::InfoValue::underlyingType() const
 {
-    const auto& type = m_underlying.type();
-    if (type == typeid(Integer)) {
-        return UnderlyingType::Integer;
-    } else if (type == typeid(Float)) {
-        return UnderlyingType::Float;
-    } else if (type == typeid(String)) {
-        return UnderlyingType::String;
-    } else {
-        return UnderlyingType::None;
-    }
+    return m_type;
 }
 
 #pragma mark - Description
