@@ -44,7 +44,7 @@ public:
     UnsafeData();
     UnsafeData(UnsafeData &&other);
     UnsafeData(const UnsafeData &other);
-    virtual ~UnsafeData();
+    virtual ~UnsafeData() = default;
 
     UnsafeData &operator=(const UnsafeData &other);
     UnsafeData &operator=(UnsafeData &&other);

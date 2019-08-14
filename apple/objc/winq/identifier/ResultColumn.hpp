@@ -28,7 +28,7 @@ class ResultColumnAll;
 
 class ResultColumn : public SpecifiedSyntax<Syntax::ResultColumn, SQL> {
 public:
-    virtual ~ResultColumn();
+    virtual ~ResultColumn() = default;
     using SpecifiedSyntax<Syntax::ResultColumn, SQL>::SpecifiedSyntax;
 
     template<typename T, typename Enable = typename std::enable_if<ResultColumnConvertible<T>::value>::type>

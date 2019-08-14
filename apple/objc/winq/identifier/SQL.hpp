@@ -33,8 +33,8 @@ namespace WCDB {
 
 class SQL {
 public:
-    SQL();
-    virtual ~SQL();
+    SQL() = default;
+    virtual ~SQL() = default;
 
     typedef Syntax::Identifier::Type Type;
     Type getType() const;

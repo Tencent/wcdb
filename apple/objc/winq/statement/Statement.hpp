@@ -27,7 +27,7 @@ namespace WCDB {
 class Statement : public SQL {
 public:
     using SQL::SQL;
-    virtual ~Statement();
+    virtual ~Statement() = default;
 };
 
 } // namespace WCDB

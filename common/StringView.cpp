@@ -83,10 +83,6 @@ void UnsafeStringView::assign(std::shared_ptr<const std::string>&& buffer)
     }
 }
 
-UnsafeStringView::~UnsafeStringView()
-{
-}
-
 const std::string_view& UnsafeStringView::emptyView()
 {
     WCDB_STATIC_VARIABLE const std::string_view s_emptyView("", 0);
@@ -132,10 +128,6 @@ void UnsafeStringView::clear()
 }
 
 #pragma mark - StringView - Constructor
-StringView::StringView()
-{
-}
-
 StringView::StringView(const char* string)
 : UnsafeStringView(string != nullptr ? std::make_shared<const std::string>(string) : nullptr)
 {

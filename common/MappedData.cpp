@@ -98,10 +98,6 @@ MappedData& MappedData::operator=(MappedData&& other)
     return *this;
 }
 
-MappedData::~MappedData()
-{
-}
-
 MappedData MappedData::subdata(size_t size) const
 {
     return MappedData(UnsafeData::subdata(size), m_mapped);

@@ -57,10 +57,6 @@ bool WCTColumnBinding::operator==(const WCTColumnBinding& other) const
     return m_class == other.m_class && m_propertyName == other.m_propertyName;
 }
 
-WCTColumnBindingHolder::WCTColumnBindingHolder()
-{
-}
-
 WCTColumnBindingHolder::WCTColumnBindingHolder(const WCTColumnBinding& columnBinding)
 : m_columnBinding(columnBinding)
 {

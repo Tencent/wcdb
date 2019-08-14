@@ -20,10 +20,6 @@
 
 #import <WCDB/WCTObjCAccessor.h>
 
-WCTObjCAccessor::~WCTObjCAccessor()
-{
-}
-
 WCTAccessorType WCTObjCAccessor::getAccessorType() const
 {
     return WCTAccessorObjC;

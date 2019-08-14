@@ -24,10 +24,6 @@
 
 namespace WCDB {
 
-SQL::SQL()
-{
-}
-
 SQL::SQL(const SQL& other)
 : m_syntax(other.m_syntax), m_description(std::atomic_load(&other.m_description))
 {
@@ -68,10 +64,6 @@ SQL& SQL::operator=(SQL&& other)
     m_description = std::atomic_load(&other.m_description);
     std::atomic_store(&other.m_description, std::shared_ptr<StringView>(nullptr));
     return *this;
-}
-
-SQL::~SQL()
-{
 }
 
 SQL::Type SQL::getType() const

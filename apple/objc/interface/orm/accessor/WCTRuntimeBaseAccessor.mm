@@ -38,10 +38,6 @@ WCTRuntimeBaseAccessor::WCTRuntimeBaseAccessor(Class cls, const WCDB::UnsafeStri
 {
 }
 
-WCTRuntimeBaseAccessor::~WCTRuntimeBaseAccessor()
-{
-}
-
 SEL WCTRuntimeBaseAccessor::getGetterSelector(objc_property_t property, const WCDB::UnsafeStringView &propertyName)
 {
     WCTAssert(property != nil);

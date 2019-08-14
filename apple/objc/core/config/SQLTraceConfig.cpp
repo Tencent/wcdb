@@ -65,10 +65,6 @@ bool SQLTraceConfig::uninvoke(Handle *handle)
     return SQLTracer::uninvoke(handle);
 }
 
-ShareableSQLTraceConfig::ShareableSQLTraceConfig()
-{
-}
-
 void ShareableSQLTraceConfig::setNotification(const Notification &notification)
 {
     LockGuard lockGuard(m_lock);
