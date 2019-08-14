@@ -34,10 +34,6 @@ OneOrBinaryTokenizerInfo::OneOrBinaryTokenizerInfo(int argc, const char *const *
 {
 }
 
-OneOrBinaryTokenizerInfo::~OneOrBinaryTokenizerInfo()
-{
-}
-
 #pragma mark - Tokenizer Cursor Info
 OneOrBinaryTokenizerCursorInfo::OneOrBinaryTokenizerCursorInfo(const char *input,
                                                                int inputLength,
@@ -67,9 +63,7 @@ OneOrBinaryTokenizerCursorInfo::OneOrBinaryTokenizerCursorInfo(const char *input
     }
 }
 
-OneOrBinaryTokenizerCursorInfo::~OneOrBinaryTokenizerCursorInfo()
-{
-}
+OneOrBinaryTokenizerCursorInfo::~OneOrBinaryTokenizerCursorInfo() = default;
 
 //Inspired by zorrozhang
 int OneOrBinaryTokenizerCursorInfo::step(

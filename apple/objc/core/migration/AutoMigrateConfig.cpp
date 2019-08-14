@@ -24,9 +24,7 @@
 
 namespace WCDB {
 
-AutoMigrateOperator::~AutoMigrateOperator()
-{
-}
+AutoMigrateOperator::~AutoMigrateOperator() = default;
 
 AutoMigrateConfig::AutoMigrateConfig(const std::shared_ptr<AutoMigrateOperator>& operator_)
 : Config(), m_operator(operator_)
@@ -34,9 +32,7 @@ AutoMigrateConfig::AutoMigrateConfig(const std::shared_ptr<AutoMigrateOperator>&
     WCTAssert(m_operator != nullptr);
 }
 
-AutoMigrateConfig::~AutoMigrateConfig()
-{
-}
+AutoMigrateConfig::~AutoMigrateConfig() = default;
 
 bool AutoMigrateConfig::invoke(Handle* handle)
 {

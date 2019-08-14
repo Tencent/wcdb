@@ -23,7 +23,7 @@
 
 class WCTResultColumn final : public WCDB::ResultColumn, public WCTColumnBindingHolder {
 public:
-    WCTResultColumn();
+    WCTResultColumn() = default;
     WCTResultColumn(const WCTProperty& property);
     WCTResultColumn(const WCDB::ResultColumn& resultColumn,
                     const WCTColumnBinding& columnBinding);

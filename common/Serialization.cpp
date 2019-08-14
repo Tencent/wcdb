@@ -31,9 +31,7 @@ SerializeIteration::SerializeIteration() : m_cursor(0)
 {
 }
 
-SerializeIteration::~SerializeIteration()
-{
-}
+SerializeIteration::~SerializeIteration() = default;
 
 void SerializeIteration::seek(off_t position)
 {
@@ -605,9 +603,7 @@ uint32_t Deserialization::get4BytesUInt(off_t offset) const
 }
 
 #pragma mark - Serializable
-Serializable::~Serializable()
-{
-}
+Serializable::~Serializable() = default;
 
 Data Serializable::serialize() const
 {
@@ -635,9 +631,7 @@ bool Serializable::serialize(const UnsafeStringView &path) const
 }
 
 #pragma mark - Deserializable
-Deserializable::~Deserializable()
-{
-}
+Deserializable::~Deserializable() = default;
 
 bool Deserializable::deserialize(const Data &data)
 {

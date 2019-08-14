@@ -23,9 +23,7 @@
 
 namespace WCDB {
 
-SharedThreadedErrorProne::~SharedThreadedErrorProne()
-{
-}
+SharedThreadedErrorProne::~SharedThreadedErrorProne() = default;
 
 void SharedThreadedErrorProne::setThreadedError(const Error &error)
 {

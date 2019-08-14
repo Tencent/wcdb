@@ -29,9 +29,7 @@ SQLTracer::SQLTracer()
 {
 }
 
-SQLTracer::~SQLTracer()
-{
-}
+SQLTracer::~SQLTracer() = default;
 
 bool SQLTracer::invoke(Handle *handle)
 {

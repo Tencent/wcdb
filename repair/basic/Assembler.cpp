@@ -30,9 +30,7 @@ Assembler::Assembler() : m_duplicatedIgnorable(false)
 {
 }
 
-Assembler::~Assembler()
-{
-}
+Assembler::~Assembler() = default;
 
 void Assembler::markDuplicatedAsIgnorable(bool ignorable)
 {
@@ -53,9 +51,7 @@ void AssemblerHolder::setAssembler(Assembler* assembler)
     m_assembler = assembler;
 }
 
-AssemblerHolder::~AssemblerHolder()
-{
-}
+AssemblerHolder::~AssemblerHolder() = default;
 
 } //namespace Repair
 

@@ -27,9 +27,7 @@ AbstractHighWater::AbstractHighWater(ssize_t init)
 {
 }
 
-AbstractHighWater::~AbstractHighWater()
-{
-}
+    AbstractHighWater::~AbstractHighWater() = default;
 
 void AbstractHighWater::increase(size_t size)
 {

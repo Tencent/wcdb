@@ -23,9 +23,7 @@
 
 namespace WCDB {
 
-Config::~Config()
-{
-}
+Config::~Config() = default;
 
 bool Config::uninvoke(Handle *handle)
 {

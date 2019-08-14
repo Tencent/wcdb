@@ -29,9 +29,7 @@ FactoryRelated::FactoryRelated(const Factory &factory_) : factory(factory_)
 {
 }
 
-FactoryRelated::~FactoryRelated()
-{
-}
+FactoryRelated::~FactoryRelated() = default;
 
 } //namespace Repair
 

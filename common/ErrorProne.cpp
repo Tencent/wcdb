@@ -23,9 +23,7 @@
 namespace WCDB {
 
 #pragma mark - ErrorProne
-ErrorProne::~ErrorProne()
-{
-}
+    ErrorProne::~ErrorProne() = default;
 
 const Error &ErrorProne::getError() const
 {
@@ -48,9 +46,7 @@ void ErrorProne::setError(Error &&error)
 }
 
 #pragma mark - ThreadedErrorProne
-ThreadedErrorProne::~ThreadedErrorProne()
-{
-}
+    ThreadedErrorProne::~ThreadedErrorProne() = default;
 
 void ThreadedErrorProne::setThreadedError(const Error &error)
 {

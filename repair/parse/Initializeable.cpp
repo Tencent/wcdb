@@ -28,9 +28,7 @@ Initializeable::Initializeable() : m_state(State::None)
 {
 }
 
-Initializeable::~Initializeable()
-{
-}
+Initializeable::~Initializeable() = default;
 
 bool Initializeable::isInitialized() const
 {

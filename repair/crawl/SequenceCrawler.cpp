@@ -29,9 +29,7 @@ namespace WCDB {
 
 namespace Repair {
 
-SequenceCrawlerDelegate::~SequenceCrawlerDelegate()
-{
-}
+SequenceCrawlerDelegate::~SequenceCrawlerDelegate() = default;
 
 void SequenceCrawlerDelegate::onSequencePageCrawled(const Page &page)
 {

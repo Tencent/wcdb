@@ -33,9 +33,7 @@ MigrationBaseInfo::MigrationBaseInfo(const UnsafeStringView& database,
     WCTAssert(!m_table.empty());
 }
 
-MigrationBaseInfo::~MigrationBaseInfo()
-{
-}
+MigrationBaseInfo::~MigrationBaseInfo() = default;
 
 bool MigrationBaseInfo::shouldMigrate() const
 {

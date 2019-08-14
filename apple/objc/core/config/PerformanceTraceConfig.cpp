@@ -30,9 +30,7 @@ PerformanceTracer::PerformanceTracer()
 {
 }
 
-PerformanceTracer::~PerformanceTracer()
-{
-}
+PerformanceTracer::~PerformanceTracer() = default;
 
 void PerformanceTracer::setNotification(const Notification &notification)
 {

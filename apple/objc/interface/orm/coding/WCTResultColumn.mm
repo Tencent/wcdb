@@ -23,12 +23,6 @@
 #import <WCDB/WCTProperty.h>
 #import <WCDB/WCTResultColumn.h>
 
-WCTResultColumn::WCTResultColumn()
-: WCDB::ResultColumn()
-, WCTColumnBindingHolder()
-{
-}
-
 WCTResultColumn::WCTResultColumn(const WCTProperty& property)
 : WCDB::ResultColumn(property)
 , WCTColumnBindingHolder(property.getColumnBinding())

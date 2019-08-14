@@ -30,9 +30,7 @@ UpgradeableErrorProne::UpgradeableErrorProne() : m_severity(Severity::None)
 {
 }
 
-UpgradeableErrorProne::~UpgradeableErrorProne()
-{
-}
+UpgradeableErrorProne::~UpgradeableErrorProne() = default;
 
 int UpgradeableErrorProne::getErrorSeverity() const
 {

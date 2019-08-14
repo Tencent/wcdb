@@ -23,9 +23,7 @@
 
 namespace WCDB {
 
-DatabasePoolEvent::~DatabasePoolEvent()
-{
-}
+DatabasePoolEvent::~DatabasePoolEvent() = default;
 
 #pragma mark - DatabasePool
 DatabasePool::DatabasePool(DatabasePoolEvent *event) : m_event(event)

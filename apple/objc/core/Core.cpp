@@ -321,7 +321,7 @@ void Core::onErrorTraced(const Error& error)
     }
 }
 
-void Core::breakpoint()
+void Core::breakpoint() 
 {
 }
 

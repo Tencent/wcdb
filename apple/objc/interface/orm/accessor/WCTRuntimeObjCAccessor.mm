@@ -37,10 +37,6 @@ WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, const WCDB::
     WCTRemedialAssert([m_propertyClass conformsToProtocol:@protocol(WCTColumnCoding)], WCDB::StringView::formatted("%s should conform to protocol WCTColumnCoding.", propertyName.data()), ;);
 }
 
-WCTRuntimeObjCAccessor::~WCTRuntimeObjCAccessor()
-{
-}
-
 void WCTRuntimeObjCAccessor::setObject(InstanceType instance, OCType value)
 {
     using Unarchiver = PropertyType (*)(Class, SEL, OCType);

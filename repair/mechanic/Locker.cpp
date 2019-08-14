@@ -24,17 +24,13 @@ namespace WCDB {
 
 namespace Repair {
 
-Locker::~Locker()
-{
-}
+    Locker::~Locker() = default;
 
 LockerHolder::LockerHolder() : m_readLocker(nullptr), m_writeLocker(nullptr)
 {
 }
 
-LockerHolder::~LockerHolder()
-{
-}
+LockerHolder::~LockerHolder() = default;
 
 void LockerHolder::setReadLocker(ReadLocker* readLocker)
 {
@@ -46,13 +42,9 @@ void LockerHolder::setWriteLocker(WriteLocker* writeLocker)
     m_writeLocker = writeLocker;
 }
 
-ReadLocker::~ReadLocker()
-{
-}
+ReadLocker::~ReadLocker() = default;
 
-WriteLocker::~WriteLocker()
-{
-}
+WriteLocker::~WriteLocker() = default;
 
 } //namespace Repair
 

@@ -34,7 +34,7 @@ namespace Repair {
 class SQLiteBase : public ErrorProne {
 public:
     SQLiteBase();
-    virtual ~SQLiteBase() = 0;
+    virtual ~SQLiteBase() default = 0;
 
     void setPath(const UnsafeStringView &path);
     const StringView &getPath() const;

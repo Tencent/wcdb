@@ -62,9 +62,7 @@ WCTColumnBindingHolder::WCTColumnBindingHolder(const WCTColumnBinding& columnBin
 {
 }
 
-WCTColumnBindingHolder::~WCTColumnBindingHolder()
-{
-}
+WCTColumnBindingHolder::~WCTColumnBindingHolder() = default;
 
 const WCTColumnBinding& WCTColumnBindingHolder::getColumnBinding() const
 {

@@ -28,7 +28,6 @@ namespace WCDB {
 class OneOrBinaryTokenizerInfo final : public AbstractTokenizerInfo {
 public:
     OneOrBinaryTokenizerInfo(int argc, const char *const *argv);
-    ~OneOrBinaryTokenizerInfo();
 };
 
 class OneOrBinaryTokenizerCursorInfo : public AbstractTokenizerCursorInfo {

@@ -29,9 +29,7 @@
 
 namespace WCDB {
 
-OperationEvent::~OperationEvent()
-{
-}
+OperationEvent::~OperationEvent() = default;
 
 OperationQueue::OperationQueue(const UnsafeStringView& name, OperationEvent* event)
 : AsyncQueue(name)

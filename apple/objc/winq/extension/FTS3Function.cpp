@@ -43,9 +43,7 @@ Expression FTS3Function::matchinfo(const Expression &expression)
     return Expression::function("matchinfo").invoke().arguments(expression);
 }
 
-FTS3FunctionOperable::~FTS3FunctionOperable()
-{
-}
+FTS3FunctionOperable::~FTS3FunctionOperable() = default;
 
 Expression FTS3FunctionOperable::offsets() const
 {

@@ -37,9 +37,7 @@ Repairman::Repairman(const UnsafeStringView &path)
 {
 }
 
-Repairman::~Repairman()
-{
-}
+Repairman::~Repairman() = default;
 
 const StringView &Repairman::getPath() const
 {

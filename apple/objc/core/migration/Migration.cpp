@@ -25,9 +25,7 @@
 
 namespace WCDB {
 
-MigrationEvent::~MigrationEvent()
-{
-}
+MigrationEvent::~MigrationEvent() = default;
 
 #pragma mark - Initialize
 Migration::Migration(MigrationEvent* event)
@@ -80,9 +78,7 @@ std::set<StringView> Migration::getPathsOfSourceDatabases() const
     return paths;
 }
 
-Migration::InfoInitializer::~InfoInitializer()
-{
-}
+Migration::InfoInitializer::~InfoInitializer() = default;
 
 bool Migration::initInfo(InfoInitializer& initializer, const UnsafeStringView& table)
 {
@@ -243,9 +239,7 @@ Migration::Binder::Binder(Migration& migration)
 {
 }
 
-Migration::Binder::~Binder()
-{
-}
+Migration::Binder::~Binder() = default;
 
 void Migration::Binder::startBinding()
 {
@@ -354,9 +348,7 @@ void Migration::tryReduceBounds(StringViewMap<const MigrationInfo*>& bounds)
 }
 
 #pragma mark - Step
-Migration::Stepper::~Stepper()
-{
-}
+    Migration::Stepper::~Stepper() = default;
 
 std::optional<bool> Migration::step(Migration::Stepper& stepper)
 {

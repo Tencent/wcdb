@@ -23,7 +23,7 @@
 
 class WCTProperty final : public WCDB::Column, public WCTColumnBindingHolder {
 public:
-    WCTProperty();
+    WCTProperty() = default;
     WCTProperty(const WCTColumnBinding& columnBinding);
     WCTProperty(const WCDB::UnsafeStringView& name, const WCTColumnBinding& columnBinding);
 

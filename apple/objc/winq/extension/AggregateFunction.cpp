@@ -63,9 +63,7 @@ Expression AggregateFunction::total(const Expression& expression)
     return Expression::function("total").invoke().arguments(expression);
 }
 
-AggregateFunctionOperable::~AggregateFunctionOperable()
-{
-}
+AggregateFunctionOperable::~AggregateFunctionOperable() = default;
 
 Expression AggregateFunctionOperable::avg() const
 {

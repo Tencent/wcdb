@@ -25,12 +25,6 @@
 
 #pragma mark - WCTProperty
 
-WCTProperty::WCTProperty()
-: WCDB::Column()
-, WCTColumnBindingHolder()
-{
-}
-
 WCTProperty::WCTProperty(const WCTColumnBinding& columnBinding)
 : WCDB::Column(columnBinding.getPropertyName())
 , WCTColumnBindingHolder(columnBinding)
