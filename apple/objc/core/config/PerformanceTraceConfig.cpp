@@ -68,10 +68,6 @@ bool PerformanceTraceConfig::uninvoke(Handle *handle)
 }
 
 #pragma mark - ShareablePerformanceTraceConfig
-ShareablePerformanceTraceConfig::ShareablePerformanceTraceConfig()
-{
-}
-
 void ShareablePerformanceTraceConfig::setNotification(const Notification &notification)
 {
     LockGuard lockGuard(m_lock);

@@ -46,10 +46,6 @@ UnsafeData::UnsafeData(UnsafeData &&other)
     other.m_size = 0;
 }
 
-UnsafeData::~UnsafeData()
-{
-}
-
 UnsafeData &UnsafeData::operator=(const UnsafeData &other)
 {
     m_buffer = other.m_buffer;

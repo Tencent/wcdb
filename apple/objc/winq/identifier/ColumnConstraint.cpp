@@ -22,10 +22,6 @@
 
 namespace WCDB {
 
-ColumnConstraint::ColumnConstraint()
-{
-}
-
 ColumnConstraint::ColumnConstraint(const UnsafeStringView& name)
 {
     syntax().name = name;

@@ -22,10 +22,6 @@
 
 namespace WCDB {
 
-ResultColumn::~ResultColumn()
-{
-}
-
 ResultColumn::ResultColumn(const Expression& expression)
 {
     syntax().wildcard = false;

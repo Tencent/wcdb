@@ -25,10 +25,6 @@
 namespace WCDB {
 
 #pragma mark - MigrationBaseInfo
-MigrationBaseInfo::MigrationBaseInfo()
-{
-}
-
 MigrationBaseInfo::MigrationBaseInfo(const UnsafeStringView& database,
                                      const UnsafeStringView& table)
 : m_database(database), m_table(table)

@@ -29,7 +29,7 @@ namespace WCDB {
 #pragma mark - MigrationBaseInfo
 class MigrationBaseInfo {
 public:
-    MigrationBaseInfo();
+    MigrationBaseInfo() = default;
     MigrationBaseInfo(const UnsafeStringView& database, const UnsafeStringView& table);
     virtual ~MigrationBaseInfo() = 0;
 

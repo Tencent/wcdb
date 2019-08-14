@@ -56,7 +56,7 @@ private:
 
 class ShareablePerformanceTraceConfig final : public Config, public PerformanceTracer {
 public:
-    ShareablePerformanceTraceConfig();
+    ShareablePerformanceTraceConfig() = default;
 
     bool invoke(Handle *handle) override final;
     bool uninvoke(Handle *handle) override final;

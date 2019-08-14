@@ -52,7 +52,7 @@ public:
 
 class ShareableSQLTraceConfig final : public Config, public SQLTracer {
 public:
-    ShareableSQLTraceConfig();
+    ShareableSQLTraceConfig() = default;
 
     bool invoke(Handle *handle) override final;
     bool uninvoke(Handle *handle) override final;

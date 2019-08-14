@@ -22,17 +22,9 @@
 
 namespace WCDB {
 
-Column::Column()
-{
-}
-
 Column::Column(const UnsafeStringView& name)
 {
     syntax().name = name;
-}
-
-Column::~Column()
-{
 }
 
 Column Column::rowid()

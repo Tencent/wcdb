@@ -538,7 +538,6 @@
 		23EEDCB0217DFADC006E9E73 /* WindowFunctionInvocation.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBB3217DFADC006E9E73 /* WindowFunctionInvocation.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23EEDCB1217DFADC006E9E73 /* With.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBB4217DFADC006E9E73 /* With.cpp */; };
 		23EEDCB2217DFADC006E9E73 /* With.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBB5217DFADC006E9E73 /* With.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		23EEDCB3217DFADC006E9E73 /* Statement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBB7217DFADC006E9E73 /* Statement.cpp */; };
 		23EEDCB4217DFADC006E9E73 /* Statement.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBB8217DFADC006E9E73 /* Statement.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23EEDCB5217DFADC006E9E73 /* StatementAlterTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBB9217DFADC006E9E73 /* StatementAlterTable.cpp */; };
 		23EEDCB6217DFADC006E9E73 /* StatementAlterTable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBBA217DFADC006E9E73 /* StatementAlterTable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1432,7 +1431,6 @@
 		23EEDBB3217DFADC006E9E73 /* WindowFunctionInvocation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WindowFunctionInvocation.hpp; sourceTree = "<group>"; };
 		23EEDBB4217DFADC006E9E73 /* With.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = With.cpp; sourceTree = "<group>"; };
 		23EEDBB5217DFADC006E9E73 /* With.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = With.hpp; sourceTree = "<group>"; };
-		23EEDBB7217DFADC006E9E73 /* Statement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Statement.cpp; sourceTree = "<group>"; };
 		23EEDBB8217DFADC006E9E73 /* Statement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Statement.hpp; sourceTree = "<group>"; };
 		23EEDBB9217DFADC006E9E73 /* StatementAlterTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StatementAlterTable.cpp; sourceTree = "<group>"; };
 		23EEDBBA217DFADC006E9E73 /* StatementAlterTable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StatementAlterTable.hpp; sourceTree = "<group>"; };
@@ -3020,7 +3018,6 @@
 		23EEDBB6217DFADC006E9E73 /* statement */ = {
 			isa = PBXGroup;
 			children = (
-				23EEDBB7217DFADC006E9E73 /* Statement.cpp */,
 				23EEDBB8217DFADC006E9E73 /* Statement.hpp */,
 				23EEDBB9217DFADC006E9E73 /* StatementAlterTable.cpp */,
 				23EEDBBA217DFADC006E9E73 /* StatementAlterTable.hpp */,
@@ -4170,7 +4167,6 @@
 				23EEDCC1217DFADC006E9E73 /* StatementCreateTable.cpp in Sources */,
 				2360A5F920D78F1B00E4A311 /* HandleNotification.cpp in Sources */,
 				23AD52DD20DB56D200664B62 /* Sequence.cpp in Sources */,
-				23EEDCB3217DFADC006E9E73 /* Statement.cpp in Sources */,
 				234EF46F2015CFDE00B81929 /* WCTConvertible.mm in Sources */,
 				23EEDCB5217DFADC006E9E73 /* StatementAlterTable.cpp in Sources */,
 				23F70FAC20A055C300CCE3CD /* CipherConfig.cpp in Sources */,
