@@ -36,6 +36,7 @@ class FullCrawler final : public Repairman, public MasterCrawlerDelegate, public
 #pragma mark - Initialize
 public:
     FullCrawler(const UnsafeStringView &source);
+    ~FullCrawler() override final;
 
 #pragma mark - Repair
 public:

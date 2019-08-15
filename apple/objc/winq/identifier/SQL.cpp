@@ -24,6 +24,8 @@
 
 namespace WCDB {
 
+SQL::SQL() = default;
+
 SQL::SQL(const SQL& other)
 : m_syntax(other.m_syntax), m_description(std::atomic_load(&other.m_description))
 {
@@ -50,6 +52,8 @@ SQL::SQL(std::unique_ptr<Syntax::Identifier>&& underlying)
 : m_syntax(std::move(underlying)), m_description(nullptr)
 {
 }
+
+SQL::~SQL() = default;
 
 SQL& SQL::operator=(const SQL& other)
 {

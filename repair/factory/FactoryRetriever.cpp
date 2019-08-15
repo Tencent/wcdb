@@ -45,6 +45,8 @@ FactoryRetriever::FactoryRetriever(const Factory &factory_)
 {
 }
 
+FactoryRetriever::~FactoryRetriever() = default;
+
 #pragma mark - Retriever
 bool FactoryRetriever::work()
 {

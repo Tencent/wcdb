@@ -39,6 +39,8 @@ Thread& Thread::operator=(const std::nullptr_t&)
     return *this;
 }
 
+Thread::~Thread() = default;
+
 #pragma mark - Which
 Thread Thread::current()
 {

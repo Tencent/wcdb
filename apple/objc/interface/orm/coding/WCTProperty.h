@@ -23,9 +23,10 @@
 
 class WCTProperty final : public WCDB::Column, public WCTColumnBindingHolder {
 public:
-    WCTProperty() = default;
+    WCTProperty();
     WCTProperty(const WCTColumnBinding& columnBinding);
     WCTProperty(const WCDB::UnsafeStringView& name, const WCTColumnBinding& columnBinding);
+    ~WCTProperty() override final;
 
     WCDB::IndexedColumn asIndex() const;
     WCDB::IndexedColumn asIndex(const WCTOrder& order) const;
@@ -39,9 +40,10 @@ public:
 namespace WCDB {
 
 template<>
-class SyntaxList<WCTProperty> : public _SyntaxList<WCTProperty> {
+class SyntaxList<WCTProperty> final : public _SyntaxList<WCTProperty> {
 public:
     using _SyntaxList<WCTProperty>::_SyntaxList;
+    ~SyntaxList() override final;
 
     WCTResultColumns redirect(const WCDB::ResultColumns& resultColumns) const;
 

@@ -40,7 +40,7 @@ private:
 
 class SegmentedScoreable : public Scoreable {
 public:
-    virtual ~SegmentedScoreable() = 0;
+    virtual ~SegmentedScoreable() override = 0;
     const Fraction &getScore() const;
 
 protected:

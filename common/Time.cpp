@@ -27,6 +27,8 @@
 
 namespace WCDB {
 
+Time::Time() = default;
+
 Time::Time(const Super &super) : Super(super)
 {
 }
@@ -41,6 +43,8 @@ std::chrono::duration_cast<std::chrono::system_clock::duration>(
 std::chrono::seconds{ ts.tv_sec } + std::chrono::nanoseconds{ ts.tv_nsec }) })
 {
 }
+
+Time::~Time() = default;
 
 Time Time::now()
 {
@@ -84,6 +88,8 @@ std::optional<StringView> Time::stringify() const
     stream << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S") << "." << nanosecondsPart;
     return StringView(stream.str());
 }
+
+SteadyClock::SteadyClock() = default;
 
 SteadyClock::SteadyClock(const Super &super) : Super(super)
 {

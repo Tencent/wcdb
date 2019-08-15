@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+HandleNotification::~HandleNotification() = default;
+
 void HandleNotification::purge()
 {
     bool isOpened = getHandle()->isOpened();

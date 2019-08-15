@@ -40,6 +40,8 @@ Shm::Shm(Wal *wal)
     memset(&m_checkpointInfo, 0, sizeof(m_checkpointInfo));
 }
 
+Shm::~Shm() = default;
+
 const StringView &Shm::getPath() const
 {
     return m_fileHandle.path;

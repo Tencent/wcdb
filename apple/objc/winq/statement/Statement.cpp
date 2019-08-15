@@ -18,16 +18,10 @@
  * limitations under the License.
  */
 
-#pragma once
-
-#include <WCDB/Configs.hpp>
-#include <WCDB/Handle.hpp>
+#include <WCDB/Statement.hpp>
 
 namespace WCDB {
 
-class ConfiguredHandle final : public Handle {
-public:
-    using Handle::Handle;
-};
+Statement::~Statement() = default;
 
-} //namespace WCDB
+}

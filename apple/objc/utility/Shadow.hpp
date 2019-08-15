@@ -30,7 +30,7 @@ class Shadow;
 template<typename T>
 class Cloneable {
 public:
-    virtual ~Cloneable() {}
+    virtual ~Cloneable() = default;
     virtual std::unique_ptr<T> clone() const = 0;
 };
 

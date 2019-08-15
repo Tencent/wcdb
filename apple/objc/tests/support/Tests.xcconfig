@@ -9,6 +9,9 @@ INFOPLIST_FILE = $(SRCROOT)/objc/tests/support/Info.plist
 // Preprocessing
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) $(SQLITE_PREPROCESSOR_DEFINITIONS)
 
+// Apple Clang - Language - C++
+GCC_ENABLE_CPP_RTTI = YES // Enable this to make sure that WCDB works well in RTTI.
+
 // Apple Clang - Language - Objective-C
 GCC_ENABLE_OBJC_EXCEPTIONS = YES
 

@@ -33,7 +33,7 @@ private:
 #pragma mark - Initialize
 public:
     MigratingHandle(Migration &migration);
-    ~MigratingHandle();
+    ~MigratingHandle() override final;
 
 #pragma mark - Binder
 protected:

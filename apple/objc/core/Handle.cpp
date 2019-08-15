@@ -242,4 +242,6 @@ bool Handle::runTransaction(const TransactionCallback &transaction)
     return false;
 }
 
+ConfiguredHandle::~ConfiguredHandle() = default;
+
 } //namespace WCDB

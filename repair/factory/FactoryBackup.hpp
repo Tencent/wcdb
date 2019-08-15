@@ -30,6 +30,7 @@ namespace Repair {
 class FactoryBackup final : public FactoryRelated, public ErrorProne, public LockerHolder {
 public:
     using FactoryRelated::FactoryRelated;
+    ~FactoryBackup() override final;
     bool work(const UnsafeStringView &database);
 };
 

@@ -37,4 +37,6 @@ Expression Column::asExpressionOperand() const
     return Expression(*this);
 }
 
+Column::Column() = default;
+
 } // namespace WCDB

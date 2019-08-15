@@ -33,6 +33,8 @@ AutoBackupConfig::AutoBackupConfig(const std::shared_ptr<AutoBackupOperator> &op
     WCTAssert(m_operator != nullptr);
 }
 
+AutoBackupConfig::~AutoBackupConfig() = default;
+
 bool AutoBackupConfig::invoke(Handle *handle)
 {
     handle->setNotificationWhenCheckpointed(

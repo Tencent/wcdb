@@ -45,6 +45,7 @@ class MasterCrawler final : public Crawlable {
 #pragma mark - Initialize
 public:
     MasterCrawler(Pager &pager);
+    ~MasterCrawler() override final;
 
 #pragma mark - Master
 public:

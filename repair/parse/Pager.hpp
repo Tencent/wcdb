@@ -36,6 +36,7 @@ class Pager final : public ErrorProne, public Initializeable {
 #pragma mark - Initialize
 public:
     Pager(const UnsafeStringView &path);
+    ~Pager() override final;
 
     void setPageSize(int pageSize);
     void setReservedBytes(int reservedBytes);

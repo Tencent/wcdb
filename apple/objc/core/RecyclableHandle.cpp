@@ -38,6 +38,8 @@ RecyclableHandle::RecyclableHandle(const std::shared_ptr<Handle> &value,
 {
 }
 
+RecyclableHandle::~RecyclableHandle() = default;
+
 RecyclableHandle &RecyclableHandle::operator=(const std::nullptr_t &)
 {
     Super::operator=(nullptr);

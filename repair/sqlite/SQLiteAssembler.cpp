@@ -36,6 +36,8 @@ SQLiteAssembler::SQLiteAssembler() : m_cellSTMT(nullptr), m_primary(-1)
 {
 }
 
+SQLiteAssembler::~SQLiteAssembler() = default;
+
 #pragma mark - Assemble
 void SQLiteAssembler::setPath(const UnsafeStringView &path)
 {

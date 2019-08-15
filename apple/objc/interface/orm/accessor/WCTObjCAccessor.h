@@ -26,7 +26,7 @@
 class WCTObjCAccessor : public WCTBaseAccessor {
 public:
     using OCType = id; //NSData*, NSString*, NSNumber*
-    virtual ~WCTObjCAccessor() = default;
+    virtual ~WCTObjCAccessor() override;
     WCTAccessorType getAccessorType() const override final;
 
     virtual void setObject(InstanceType instance, OCType value) = 0;

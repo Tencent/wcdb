@@ -29,7 +29,7 @@ namespace WCDB {
 #pragma mark - MigrationBaseInfo
 class MigrationBaseInfo {
 public:
-    MigrationBaseInfo() = default;
+    MigrationBaseInfo();
     MigrationBaseInfo(const UnsafeStringView& database, const UnsafeStringView& table);
     virtual ~MigrationBaseInfo() = 0;
 
@@ -59,6 +59,7 @@ private:
 class MigrationUserInfo final : public MigrationBaseInfo {
 public:
     using MigrationBaseInfo::MigrationBaseInfo;
+    ~MigrationUserInfo() override final;
 
     using MigrationBaseInfo::setSource;
 
@@ -77,6 +78,7 @@ public:
     MigrationInfo(const MigrationUserInfo& userInfo,
                   const std::set<StringView>& columns,
                   bool integerPrimaryKey);
+    ~MigrationInfo() override final;
 
 protected:
     bool m_integerPrimaryKey;

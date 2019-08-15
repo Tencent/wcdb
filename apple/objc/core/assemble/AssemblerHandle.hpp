@@ -31,7 +31,7 @@ class AssemblerHandle final : public Handle,
                               public Repair::WriteLocker {
 public:
     AssemblerHandle();
-    ~AssemblerHandle();
+    ~AssemblerHandle() override final;
 
 #pragma mark - Common
     void setPath(const UnsafeStringView &path) override final;

@@ -29,6 +29,8 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - SQLiteReadLocker
+SQLiteReadLocker::~SQLiteReadLocker() = default;
+
 const Error &SQLiteReadLocker::getError() const
 {
     return ErrorProne::getError();
@@ -65,6 +67,8 @@ bool SQLiteReadLocker::releaseLock()
 }
 
 #pragma mark - SQLiteWriteLocker
+SQLiteWriteLocker::~SQLiteWriteLocker() = default;
+
 const Error &SQLiteWriteLocker::getError() const
 {
     return ErrorProne::getError();

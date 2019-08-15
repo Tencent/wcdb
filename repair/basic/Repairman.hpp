@@ -41,7 +41,7 @@ class Repairman : public Crawlable,
 #pragma mark - Initialize
 public:
     Repairman(const UnsafeStringView &path);
-    virtual ~Repairman() = 0;
+    virtual ~Repairman() override = 0;
 
     const StringView &getPath() const;
 

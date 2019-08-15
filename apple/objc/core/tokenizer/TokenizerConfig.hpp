@@ -31,6 +31,7 @@ class TokenizerConfig final : public Config {
 public:
     TokenizerConfig(const UnsafeStringView& name,
                     const std::shared_ptr<TokenizerModules>& modules);
+    ~TokenizerConfig() override final;
 
     const StringView name;
 

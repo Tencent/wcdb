@@ -27,7 +27,6 @@
 #include <WCDB/StringView.hpp>
 
 #include <WCDB/AssemblerHandle.hpp>
-#include <WCDB/ConfiguredHandle.hpp>
 #include <WCDB/MigrateHandle.hpp>
 #include <WCDB/MigratingHandle.hpp>
 #include <WCDB/OperationHandle.hpp>
@@ -44,6 +43,8 @@ Database::Database(const UnsafeStringView &path)
 , m_migration(this)
 {
 }
+
+Database::~Database() = default;
 
 #pragma mark - Basic
 void Database::setTag(const Tag &tag)

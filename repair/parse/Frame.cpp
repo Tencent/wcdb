@@ -33,6 +33,8 @@ Frame::Frame(int frameno_, Wal *wal) : WalRelated(wal), frameno(frameno_)
     WCTAssert(m_wal != nullptr);
 }
 
+Frame::~Frame() = default;
+
 int Frame::getPageNumber() const
 {
     WCTAssert(isInitialized());

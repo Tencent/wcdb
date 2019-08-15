@@ -48,7 +48,7 @@ protected:
 class Serialization final : public SerializeIteration {
 #pragma mark - Serialization
 public:
-    using SerializeIteration::SerializeIteration;
+    ~Serialization() override final;
 
     Data finalize();
     bool resize(size_t size);
@@ -73,8 +73,9 @@ public:
 class Deserialization final : public SerializeIteration {
 #pragma mark - Deserialization
 public:
-    using SerializeIteration::SerializeIteration;
+    Deserialization();
     Deserialization(const UnsafeData &data);
+    ~Deserialization() override final;
 
     void reset(const UnsafeData &data);
 
@@ -126,7 +127,7 @@ public:
 #pragma mark - Serializable
 class Serializable : protected SharedThreadedErrorProne {
 public:
-    virtual ~Serializable() = 0;
+    virtual ~Serializable() override = 0;
     Data serialize() const;
     bool serialize(const UnsafeStringView &path) const;
     virtual bool serialize(Serialization &serialization) const = 0;
@@ -135,7 +136,7 @@ public:
 #pragma mark - Deserializable
 class Deserializable : protected SharedThreadedErrorProne {
 public:
-    virtual ~Deserializable() = 0;
+    virtual ~Deserializable() override = 0;
     bool deserialize(const Data &data);
     bool deserialize(const UnsafeStringView &path);
     virtual bool deserialize(Deserialization &deserialization) = 0;

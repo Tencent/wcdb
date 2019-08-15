@@ -30,10 +30,11 @@ namespace WCDB {
 class Time final : public std::chrono::system_clock::time_point, public SharedThreadedErrorProne {
 public:
     using Super = std::chrono::system_clock::time_point;
-    using Super::time_point;
+    Time();
     Time(const Super &super);
     Time(Super &&super);
     Time(const struct timespec &ts);
+    ~Time() override final;
 
     static Time now();
 
@@ -46,7 +47,7 @@ public:
 class SteadyClock final : public std::chrono::steady_clock::time_point {
 public:
     using Super = std::chrono::steady_clock::time_point;
-    using Super::time_point;
+    SteadyClock();
     SteadyClock(const Super &super);
     SteadyClock(Super &&super);
 

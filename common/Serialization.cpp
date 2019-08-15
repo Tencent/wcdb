@@ -78,6 +78,8 @@ size_t SerializeIteration::capacity() const
 }
 
 #pragma mark - Serialization
+Serialization::~Serialization() = default;
+
 bool Serialization::resize(size_t size)
 {
     if (size < m_data.size()) {
@@ -236,6 +238,9 @@ Data Serialization::finalize()
 }
 
 #pragma mark - Deserialization
+Deserialization::Deserialization() = default;
+Deserialization::~Deserialization() = default;
+
 Deserialization::Deserialization(const UnsafeData &data) : m_data(data)
 {
     static_assert(slot_2_0 == ((0x7f << 14) | (0x7f)), "");

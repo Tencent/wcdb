@@ -41,7 +41,7 @@ class Core final : public DatabasePoolEvent, public OperationEvent {
 #pragma mark - Core
 public:
     static Core& shared();
-    ~Core();
+    ~Core() override final;
 
 protected:
     Core();

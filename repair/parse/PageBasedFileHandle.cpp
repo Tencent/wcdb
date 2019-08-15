@@ -36,6 +36,8 @@ PageBasedFileHandle::PageBasedFileHandle(const UnsafeStringView& path)
     static_assert((cacheMemoryPerRange & cacheMemoryPerRange - 1) == 0, "");
 }
 
+PageBasedFileHandle::~PageBasedFileHandle() = default;
+
 Range PageBasedFileHandle::restrictedRange(Range::Location base,
                                            Range::Length maxLength,
                                            const Range& restrictor)
@@ -172,6 +174,8 @@ PageBasedFileHandle::Cache::Cache(size_t maxAllowedMemory)
 , m_currentUsedMemery(0)
 {
 }
+
+PageBasedFileHandle::Cache::~Cache() = default;
 
 void PageBasedFileHandle::Cache::setRange(const WCDB::Range& range)
 {

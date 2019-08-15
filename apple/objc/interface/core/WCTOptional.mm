@@ -26,8 +26,12 @@ WCTOptionalBool::WCTOptionalBool(std::optional<bool>&& optional)
 {
 }
 
+WCTOptionalBool::~WCTOptionalBool() = default;
+
 WCTOptionalSize::WCTOptionalSize(std::optional<size_t>&& optional)
 : Super(optional.has_value() ? std::optional<NSUInteger>((NSUInteger) optional.value()) :
                                std::optional<NSUInteger>(std::nullopt))
 {
 }
+
+WCTOptionalSize::~WCTOptionalSize() = default;

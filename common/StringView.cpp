@@ -53,10 +53,12 @@ UnsafeStringView::UnsafeStringView(UnsafeStringView&& other)
 
 UnsafeStringView::UnsafeStringView(std::shared_ptr<const std::string>&& buffer)
 : std::string_view(
-  buffer != nullptr ? std::string_view(buffer->data(), buffer->length()) : emptyView())
+buffer != nullptr ? std::string_view(buffer->data(), buffer->length()) : emptyView())
 , m_buffer(std::move(buffer))
 {
 }
+
+UnsafeStringView::~UnsafeStringView() = default;
 
 UnsafeStringView& UnsafeStringView::operator=(const UnsafeStringView& other)
 {
@@ -128,6 +130,9 @@ void UnsafeStringView::clear()
 }
 
 #pragma mark - StringView - Constructor
+StringView::StringView() = default;
+StringView::~StringView() = default;
+
 StringView::StringView(const char* string)
 : UnsafeStringView(string != nullptr ? std::make_shared<const std::string>(string) : nullptr)
 {
@@ -145,17 +150,17 @@ StringView::StringView(std::string&& string)
 
 StringView::StringView(const UnsafeStringView& other)
 : UnsafeStringView(
-  other.m_buffer != nullptr ?
-  std::shared_ptr<const std::string>(other.m_buffer) :
-  (other.empty() ? nullptr : std::make_shared<std::string>(other.data(), other.length())))
+other.m_buffer != nullptr ?
+std::shared_ptr<const std::string>(other.m_buffer) :
+(other.empty() ? nullptr : std::make_shared<std::string>(other.data(), other.length())))
 {
 }
 
 StringView::StringView(UnsafeStringView&& other)
 : UnsafeStringView(
-  other.m_buffer != nullptr ?
-  std::move(other.m_buffer) :
-  (other.empty() ? nullptr : std::make_shared<std::string>(other.data(), other.length())))
+other.m_buffer != nullptr ?
+std::move(other.m_buffer) :
+(other.empty() ? nullptr : std::make_shared<std::string>(other.data(), other.length())))
 {
 }
 

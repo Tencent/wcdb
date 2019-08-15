@@ -34,7 +34,7 @@ namespace Syntax {
 
 class Identifier : public Cloneable<Identifier> {
 public:
-    virtual ~Identifier() = 0;
+    virtual ~Identifier() override = 0;
 
     enum class Type {
         Column = 0x00000001,

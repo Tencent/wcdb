@@ -45,6 +45,7 @@ private:
 class SQLTraceConfig final : public Config, public SQLTracer {
 public:
     SQLTraceConfig(const Notification &notification);
+    ~SQLTraceConfig() override final;
 
     bool invoke(Handle *handle) override final;
     bool uninvoke(Handle *handle) override final;
@@ -52,7 +53,8 @@ public:
 
 class ShareableSQLTraceConfig final : public Config, public SQLTracer {
 public:
-    ShareableSQLTraceConfig() = default;
+    ShareableSQLTraceConfig();
+    ~ShareableSQLTraceConfig() override final;
 
     bool invoke(Handle *handle) override final;
     bool uninvoke(Handle *handle) override final;

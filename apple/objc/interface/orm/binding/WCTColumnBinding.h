@@ -74,7 +74,7 @@ protected:
 
 class WCTColumnBindingHolder {
 public:
-    WCTColumnBindingHolder() = default;
+    WCTColumnBindingHolder();
     WCTColumnBindingHolder(const WCTColumnBinding& columnBinding);
     virtual ~WCTColumnBindingHolder() = 0;
 

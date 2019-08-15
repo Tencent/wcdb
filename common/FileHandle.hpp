@@ -33,7 +33,7 @@ class FileHandle : public SharedThreadedErrorProne {
 public:
     FileHandle(const UnsafeStringView &path);
     FileHandle(FileHandle &&);
-    virtual ~FileHandle();
+    virtual ~FileHandle() override;
     FileHandle &operator=(FileHandle &&);
     FileHandle() = delete;
     FileHandle(const FileHandle &) = delete;

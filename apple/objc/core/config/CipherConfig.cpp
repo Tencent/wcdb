@@ -31,6 +31,8 @@ CipherConfig::CipherConfig(const UnsafeData &cipher, int pageSize)
 {
 }
 
+CipherConfig::~CipherConfig() = default;
+
 bool CipherConfig::invoke(Handle *handle)
 {
     handle->setCipherKey(m_key);

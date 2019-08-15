@@ -30,6 +30,7 @@ namespace Repair {
 class FactoryDepositor final : public FactoryRelated, public ErrorProne {
 public:
     using FactoryRelated::FactoryRelated;
+    ~FactoryDepositor() override final;
     bool work();
 };
 

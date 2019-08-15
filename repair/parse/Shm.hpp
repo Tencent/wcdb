@@ -31,6 +31,7 @@ namespace Repair {
 class Shm final : public WalRelated, public Initializeable {
 public:
     Shm(Wal *wal);
+    ~Shm() override final;
 
     const StringView &getPath() const;
 

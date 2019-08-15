@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+ResultColumn::~ResultColumn() = default;
+
 ResultColumn::ResultColumn(const Expression& expression)
 {
     syntax().wildcard = false;
@@ -43,6 +45,8 @@ ResultColumnAll::ResultColumnAll()
 {
     syntax().wildcard = true;
 }
+
+ResultColumnAll::~ResultColumnAll() = default;
 
 ResultColumnAll& ResultColumnAll::inTable(const UnsafeStringView& table)
 {

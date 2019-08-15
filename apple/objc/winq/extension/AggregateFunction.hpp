@@ -44,7 +44,7 @@ public:
 
 class AggregateFunctionOperable : virtual public ExpressionOperable {
 public:
-    virtual ~AggregateFunctionOperable() = 0;
+    virtual ~AggregateFunctionOperable() override = 0;
     Expression avg() const;
     Expression count() const;
     Expression groupConcat() const;

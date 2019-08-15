@@ -18,25 +18,10 @@
  * limitations under the License.
  */
 
-#pragma once
-
-#include <Config.hpp>
+#include <WCDB/Configs.hpp>
 
 namespace WCDB {
 
-class CustomConfig final : public Config {
-public:
-    using Invocation = std::function<bool(Handle *)>;
+Configs::~Configs() = default;
 
-    CustomConfig(const Invocation &invocation, const Invocation &uninvocation);
-    ~CustomConfig() override final;
-
-    bool invoke(Handle *handle) override final;
-    bool uninvoke(Handle *handle) override final;
-
-protected:
-    const Invocation m_invocation;
-    const Invocation m_uninvocation;
-};
-
-} //namespace WCDB
+}

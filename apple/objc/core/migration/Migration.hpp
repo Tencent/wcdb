@@ -119,7 +119,7 @@ public:
 
     public:
         Binder(Migration& migration);
-        virtual ~Binder() = 0;
+        virtual ~Binder() override = 0;
 
     protected:
         void startBinding();
@@ -153,7 +153,7 @@ public:
         friend class Migration;
 
     public:
-        virtual ~Stepper() = 0;
+        virtual ~Stepper() override = 0;
 
     protected:
         virtual std::optional<std::set<StringView>> getAllTables() = 0;

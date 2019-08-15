@@ -48,6 +48,8 @@ Wal::Wal(Pager *pager)
 {
 }
 
+Wal::~Wal() = default;
+
 const StringView &Wal::getPath() const
 {
     return m_fileHandle.path;

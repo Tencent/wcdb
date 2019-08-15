@@ -39,6 +39,8 @@ Page::Page(int number_, Pager *pager, const MappedData &data)
 {
 }
 
+Page::~Page() = default;
+
 std::optional<Page::Type> Page::acquireType()
 {
     int type = 0;

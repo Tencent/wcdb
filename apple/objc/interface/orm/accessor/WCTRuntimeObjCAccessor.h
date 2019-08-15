@@ -32,7 +32,7 @@ public:
     WCTRuntimeObjCAccessor(Class instanceClass,
                            const WCDB::UnsafeStringView &propertyName);
 
-    ~WCTRuntimeObjCAccessor() = default;
+    ~WCTRuntimeObjCAccessor() override final;
 
     void setObject(InstanceType instance, OCType value) override final;
     OCType getObject(InstanceType instance) override final;

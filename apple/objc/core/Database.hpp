@@ -39,6 +39,7 @@ public:
     Database() = delete;
     Database(const Database &) = delete;
     Database &operator=(const Database &) = delete;
+    ~Database() override final;
 
 protected:
     // All public interfaces that are related with concurrency should make sure the initialization.

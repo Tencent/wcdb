@@ -29,6 +29,8 @@ Notifier &Notifier::shared()
     return s_notifier;
 }
 
+Notifier::Notifier() = default;
+
 void Notifier::setNotification(int order, const UnsafeStringView &key, const Callback &callback)
 {
     WCTAssert(callback != nullptr);

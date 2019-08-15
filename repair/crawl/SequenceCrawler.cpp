@@ -42,6 +42,8 @@ SequenceCrawler::SequenceCrawler(Pager &pager)
 {
 }
 
+SequenceCrawler::~SequenceCrawler() = default;
+
 #pragma mark - Sequence
 bool SequenceCrawler::work(int rootpage, SequenceCrawlerDelegate *delegate)
 {

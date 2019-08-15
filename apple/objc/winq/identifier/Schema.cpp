@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+Schema::Schema() = default;
+
 Schema::Schema(const UnsafeStringView& name)
 {
     syntax().name = name;
