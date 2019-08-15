@@ -26,8 +26,9 @@ namespace WCDB {
 
 class ColumnConstraint final : public SpecifiedSyntax<Syntax::ColumnConstraint, SQL> {
 public:
-    ColumnConstraint() = default;
+    ColumnConstraint();
     explicit ColumnConstraint(const UnsafeStringView& name);
+    ~ColumnConstraint() override final;
 
     ColumnConstraint& primaryKey();
     ColumnConstraint& order(const Order& order);

@@ -29,6 +29,7 @@ namespace WCDB {
 class OperationHandle final : public Handle, public Repair::ReadLocker, public Repair::WriteLocker {
 public:
     OperationHandle();
+    ~OperationHandle() override final;
 
     void setType(HandleType type);
 

@@ -34,6 +34,8 @@ BindParameter::BindParameter(const UnsafeStringView& name)
     syntax().name = name;
 }
 
+BindParameter::~BindParameter() = default;
+
 BindParameters BindParameter::bindParameters(size_t count)
 {
     BindParameters result;

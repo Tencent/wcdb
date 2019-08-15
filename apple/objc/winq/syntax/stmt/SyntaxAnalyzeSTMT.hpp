@@ -30,6 +30,8 @@ namespace Syntax {
 class AnalyzeSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    ~AnalyzeSTMT() override final;
+
     WCDB_SYNTAX_MAIN_UNION_ENUM(All, SchemaOrTableOrIndex);
     Schema schema;
     StringView tableOrIndex;

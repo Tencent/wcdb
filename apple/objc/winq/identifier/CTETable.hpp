@@ -34,6 +34,7 @@ public:
     }
 
     CTETable(const UnsafeStringView& name);
+    ~CTETable() override final;
     CTETable& column(const Column& column);
 };
 

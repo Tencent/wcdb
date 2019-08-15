@@ -30,9 +30,7 @@ PerformanceTracer::PerformanceTracer()
 {
 }
 
-PerformanceTracer::~PerformanceTracer()
-{
-}
+PerformanceTracer::~PerformanceTracer() = default;
 
 void PerformanceTracer::setNotification(const Notification &notification)
 {
@@ -57,6 +55,8 @@ PerformanceTraceConfig::PerformanceTraceConfig(const Notification &notification)
     setNotification(notification);
 }
 
+PerformanceTraceConfig::~PerformanceTraceConfig() = default;
+
 bool PerformanceTraceConfig::invoke(Handle *handle)
 {
     return PerformanceTracer::invoke(handle);
@@ -68,6 +68,10 @@ bool PerformanceTraceConfig::uninvoke(Handle *handle)
 }
 
 #pragma mark - ShareablePerformanceTraceConfig
+ShareablePerformanceTraceConfig::ShareablePerformanceTraceConfig() = default;
+
+ShareablePerformanceTraceConfig::~ShareablePerformanceTraceConfig() = default;
+
 void ShareablePerformanceTraceConfig::setNotification(const Notification &notification)
 {
     LockGuard lockGuard(m_lock);

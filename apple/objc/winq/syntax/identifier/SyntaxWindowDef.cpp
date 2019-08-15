@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+WindowDef::~WindowDef() = default;
+
 bool WindowDef::isValid() const
 {
     return true;

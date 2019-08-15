@@ -32,6 +32,7 @@ public:
     RecyclableHandle();
     RecyclableHandle(const std::nullptr_t &);
     RecyclableHandle(const std::shared_ptr<Handle> &value, const Super::OnRecycled &onRecycled);
+    ~RecyclableHandle() override final;
 
     RecyclableHandle &operator=(const std::nullptr_t &);
     RecyclableHandle &operator=(const RecyclableHandle &other);

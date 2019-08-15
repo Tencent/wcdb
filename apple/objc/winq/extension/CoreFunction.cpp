@@ -251,9 +251,7 @@ Expression CoreFunction::zeroBLOB(const Expression& expression)
     return Expression::function("zeroblob").invoke().arguments(expression);
 }
 
-CoreFunctionOperable::~CoreFunctionOperable()
-{
-}
+CoreFunctionOperable::~CoreFunctionOperable() = default;
 
 Expression CoreFunctionOperable::abs() const
 {

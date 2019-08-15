@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+Pragma::~Pragma() = default;
+
 bool Pragma::isValid() const
 {
     return !name.empty();

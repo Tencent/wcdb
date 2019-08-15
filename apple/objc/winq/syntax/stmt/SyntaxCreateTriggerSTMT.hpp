@@ -34,6 +34,8 @@ class SelectSTMT;
 class CreateTriggerSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    ~CreateTriggerSTMT() override final;
+
     bool temp = false;
     bool ifNotExists = false;
     Schema schema;

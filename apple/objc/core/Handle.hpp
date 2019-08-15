@@ -29,7 +29,7 @@ class Handle : public AbstractHandle {
 #pragma mark - Initialize
 public:
     Handle();
-    virtual ~Handle() = 0;
+    virtual ~Handle() override = 0;
 
 #pragma mark - Config
 public:
@@ -91,6 +91,11 @@ public:
     typedef std::function<bool(Handle *)> TransactionCallback;
     bool runTransaction(const TransactionCallback &transaction);
     bool runNestedTransaction(const TransactionCallback &transaction);
+};
+
+class ConfiguredHandle final : public Handle {
+public:
+    ~ConfiguredHandle() override final;
 };
 
 } //namespace WCDB

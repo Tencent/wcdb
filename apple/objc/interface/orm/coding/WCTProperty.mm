@@ -25,11 +25,8 @@
 
 #pragma mark - WCTProperty
 
-WCTProperty::WCTProperty()
-: WCDB::Column()
-, WCTColumnBindingHolder()
-{
-}
+WCTProperty::WCTProperty() = default;
+WCTProperty::~WCTProperty() = default;
 
 WCTProperty::WCTProperty(const WCTColumnBinding& columnBinding)
 : WCDB::Column(columnBinding.getPropertyName())
@@ -69,6 +66,8 @@ WCDB::Expression WCTProperty::table(const WCDB::UnsafeStringView& table) const
 }
 
 #pragma mark - WCTProperties
+WCTProperties::~SyntaxList() = default;
+
 WCDB::Expression WCTProperties::count() const
 {
     return WCDB::ResultColumnAll().count();

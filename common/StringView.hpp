@@ -41,7 +41,7 @@ public:
     UnsafeStringView& operator=(const UnsafeStringView& other);
     UnsafeStringView& operator=(UnsafeStringView&& other);
 
-    virtual ~UnsafeStringView() = default;
+    virtual ~UnsafeStringView();
 
 protected:
     UnsafeStringView(std::shared_ptr<const std::string>&& buffer);
@@ -94,12 +94,13 @@ public:
 class StringView final : public UnsafeStringView {
 #pragma mark - StringView - Constructor
 public:
-    explicit StringView() = default;
+    explicit StringView();
     explicit StringView(const char* string);
     explicit StringView(const char* string, size_t length);
     explicit StringView(const UnsafeStringView& other);
     StringView(UnsafeStringView&& other);
     StringView(std::string&& string);
+    ~StringView() override final;
 
     StringView& operator=(const UnsafeStringView& other);
     StringView& operator=(UnsafeStringView&& other);

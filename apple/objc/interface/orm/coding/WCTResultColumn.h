@@ -27,14 +27,16 @@ public:
     WCTResultColumn(const WCTProperty& property);
     WCTResultColumn(const WCDB::ResultColumn& resultColumn,
                     const WCTColumnBinding& columnBinding);
+    ~WCTResultColumn() override final;
 };
 
 namespace WCDB {
 
 template<>
-class SyntaxList<WCTResultColumn> : public _SyntaxList<WCTResultColumn> {
+class SyntaxList<WCTResultColumn> final : public _SyntaxList<WCTResultColumn> {
 public:
     using _SyntaxList<WCTResultColumn>::_SyntaxList;
+    ~SyntaxList() override final;
 
     WCTResultColumns
     resultColumnsByAddingNewResultColumns(const WCTResultColumns& resultColumns) const;

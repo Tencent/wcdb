@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+StatementDropView::~StatementDropView() = default;
+
 StatementDropView& StatementDropView::dropView(const UnsafeStringView& view)
 {
     syntax().view = view;

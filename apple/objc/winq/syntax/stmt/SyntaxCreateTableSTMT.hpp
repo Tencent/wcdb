@@ -33,6 +33,8 @@ namespace Syntax {
 class CreateTableSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    ~CreateTableSTMT() override final;
+
     bool temp = false;
     bool ifNotExists = false;
     Schema schema;

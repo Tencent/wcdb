@@ -46,6 +46,7 @@ private:
 class PerformanceTraceConfig final : public Config, public PerformanceTracer {
 public:
     PerformanceTraceConfig(const Notification &notification);
+    ~PerformanceTraceConfig() override final;
 
     bool invoke(Handle *handle) override final;
     bool uninvoke(Handle *handle) override final;
@@ -56,7 +57,8 @@ private:
 
 class ShareablePerformanceTraceConfig final : public Config, public PerformanceTracer {
 public:
-    ShareablePerformanceTraceConfig() = default;
+    ShareablePerformanceTraceConfig();
+    ~ShareablePerformanceTraceConfig() override final;
 
     bool invoke(Handle *handle) override final;
     bool uninvoke(Handle *handle) override final;

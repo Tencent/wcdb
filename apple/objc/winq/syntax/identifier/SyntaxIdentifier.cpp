@@ -25,9 +25,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-Identifier::~Identifier()
-{
-}
+Identifier::~Identifier() = default;
 
 StringView Identifier::getDescription() const
 {

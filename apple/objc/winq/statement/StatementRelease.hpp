@@ -27,6 +27,7 @@ namespace WCDB {
 class StatementRelease final : public SpecifiedSyntax<Syntax::ReleaseSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::ReleaseSTMT, Statement>::SpecifiedSyntax;
+    ~StatementRelease() override final;
 
     StatementRelease& release(const UnsafeStringView& savepoint);
 };

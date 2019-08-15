@@ -28,6 +28,7 @@ class StatementCreateTable final
 : public SpecifiedSyntax<Syntax::CreateTableSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::CreateTableSTMT, Statement>::SpecifiedSyntax;
+    ~StatementCreateTable() override final;
 
     StatementCreateTable& createTable(const UnsafeStringView& table);
     StatementCreateTable& schema(const Schema& schema);

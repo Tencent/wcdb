@@ -27,6 +27,7 @@ namespace WCDB {
 class TableOrSubquery final : public SpecifiedSyntax<Syntax::TableOrSubquery, SQL> {
 public:
     using SpecifiedSyntax<Syntax::TableOrSubquery, SQL>::SpecifiedSyntax;
+    ~TableOrSubquery() override final;
 
     template<typename T, typename Enable = typename std::enable_if<TableOrSubqueryConvertible<T>::value>::type>
     TableOrSubquery(const T& t)

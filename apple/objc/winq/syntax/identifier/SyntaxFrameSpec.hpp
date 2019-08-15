@@ -31,6 +31,8 @@ class Expression;
 class FrameSpec final : public Identifier {
 #pragma mark - Lang
 public:
+    ~FrameSpec() override final;
+
     WCDB_SYNTAX_MAIN_UNION_ENUM(Range, Rows, );
 
     enum class Event {

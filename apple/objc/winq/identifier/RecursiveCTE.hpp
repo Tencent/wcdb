@@ -27,6 +27,8 @@ namespace WCDB {
 class RecursiveCTE final : public SpecifiedSyntax<Syntax::RecursiveCTE, SQL> {
 public:
     using SpecifiedSyntax<Syntax::RecursiveCTE, SQL>::SpecifiedSyntax;
+    ~RecursiveCTE() override final;
+
     RecursiveCTE(const CTETable& table);
     RecursiveCTE& as(const StatementSelect& initialSelect);
     RecursiveCTE& union_(const StatementSelect& recursiveSelect);

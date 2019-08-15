@@ -43,11 +43,13 @@ protected:
 class HighWater final : public AbstractHighWater {
 public:
     using AbstractHighWater::AbstractHighWater;
+    ~HighWater() override final;
 };
 
 class ShareableHighWater final : public AbstractHighWater {
 public:
     using AbstractHighWater::AbstractHighWater;
+    ~ShareableHighWater() override final;
 
     void increase(size_t size) override final;
     void decrease(size_t size) override final;

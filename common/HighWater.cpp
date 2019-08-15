@@ -27,9 +27,7 @@ AbstractHighWater::AbstractHighWater(ssize_t init)
 {
 }
 
-AbstractHighWater::~AbstractHighWater()
-{
-}
+AbstractHighWater::~AbstractHighWater() = default;
 
 void AbstractHighWater::increase(size_t size)
 {
@@ -53,6 +51,8 @@ ssize_t AbstractHighWater::getHighWater() const
 {
     return m_highWater;
 }
+
+ShareableHighWater::~ShareableHighWater() = default;
 
 void ShareableHighWater::increase(size_t size)
 {

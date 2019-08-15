@@ -41,7 +41,7 @@ public:
                                          const PreprocessCallback &callback);
 
 protected:
-    Notifier() = default;
+    Notifier();
     Notifier(const Notifier &) = delete;
     Notifier &operator=(const Notifier &) = delete;
 

@@ -29,6 +29,8 @@ namespace Syntax {
 class InsertSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    ~InsertSTMT() override final;
+
     WithClause withClause;
     WCDB_SYNTAX_ENUM_UNION(ConflictAction, conflictAction);
     Schema schema;

@@ -38,7 +38,7 @@ public:
 
 class ReadLocker : public Locker {
 public:
-    virtual ~ReadLocker() = 0;
+    virtual ~ReadLocker() override = 0;
 
     virtual bool acquireReadLock() = 0;
     virtual bool releaseReadLock() = 0;
@@ -47,7 +47,7 @@ public:
 };
 class WriteLocker : public Locker {
 public:
-    virtual ~WriteLocker() = 0;
+    virtual ~WriteLocker() override = 0;
 
     virtual bool acquireWriteLock() = 0;
     virtual bool releaseWriteLock() = 0;

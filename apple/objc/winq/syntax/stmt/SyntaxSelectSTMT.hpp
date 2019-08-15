@@ -34,6 +34,8 @@ class OrderingTerm;
 class SelectSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    ~SelectSTMT() override final;
+
     bool recursive = false;
     std::list<CommonTableExpression> commonTableExpressions;
 

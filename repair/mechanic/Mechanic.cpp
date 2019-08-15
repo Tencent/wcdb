@@ -35,6 +35,8 @@ Mechanic::Mechanic(const UnsafeStringView &path)
 {
 }
 
+Mechanic::~Mechanic() = default;
+
 #pragma mark - Material
 void Mechanic::setMaterial(const Material *material)
 {

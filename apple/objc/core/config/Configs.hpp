@@ -29,6 +29,7 @@ namespace WCDB {
 class Configs final : public UniqueList<StringView, std::shared_ptr<Config>> {
 public:
     using UniqueList<StringView, std::shared_ptr<Config>>::UniqueList;
+    ~Configs() override final;
 
     enum Priority : int {
         Highest = std::numeric_limits<int>::min(),

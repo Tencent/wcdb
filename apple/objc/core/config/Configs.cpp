@@ -18,33 +18,10 @@
  * limitations under the License.
  */
 
-#pragma once
-
-#include <WCDB/SyntaxIdentifier.hpp>
+#include <WCDB/Configs.hpp>
 
 namespace WCDB {
 
-namespace Syntax {
+Configs::~Configs() = default;
 
-class WithClause final : public Identifier {
-#pragma mark - Lang
-public:
-    ~WithClause() override final;
-
-    bool recursive = false;
-    std::list<CTETableName> tables;
-    std::list<SelectSTMT> selects;
-
-    bool isValid() const override final;
-
-#pragma mark - Identifier
-public:
-    static constexpr const Type type = Type::WithClause;
-    Type getType() const override final;
-    bool describle(std::ostringstream& stream) const override final;
-    void iterate(const Iterator& iterator, bool& stop) override final;
-};
-
-} // namespace Syntax
-
-} // namespace WCDB
+}

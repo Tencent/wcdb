@@ -22,10 +22,14 @@
 
 namespace WCDB {
 
+ColumnConstraint::ColumnConstraint() = default;
+
 ColumnConstraint::ColumnConstraint(const UnsafeStringView& name)
 {
     syntax().name = name;
 }
+
+ColumnConstraint::~ColumnConstraint() = default;
 
 ColumnConstraint& ColumnConstraint::primaryKey()
 {

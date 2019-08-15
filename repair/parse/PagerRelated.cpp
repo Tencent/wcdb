@@ -26,9 +26,7 @@ namespace WCDB {
 
 namespace Repair {
 
-PagerRelated::~PagerRelated()
-{
-}
+PagerRelated::~PagerRelated() = default;
 
 PagerRelated::PagerRelated(Pager *pager) : m_pager(pager)
 {

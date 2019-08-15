@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+ReindexSTMT::~ReindexSTMT() = default;
+
 #pragma mark - Identifier
 Identifier::Type ReindexSTMT::getType() const
 {

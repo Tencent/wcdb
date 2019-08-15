@@ -28,10 +28,11 @@
 
 namespace WCDB {
 
-class Thread : public SharedThreadedErrorProne {
+class Thread final : public SharedThreadedErrorProne {
 #pragma mark - Initialize
 public:
     Thread();
+    ~Thread() override final;
     Thread& operator=(const std::nullptr_t&);
 
 private:

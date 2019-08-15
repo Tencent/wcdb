@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+CreateVirtualTableSTMT::~CreateVirtualTableSTMT() = default;
+
 bool CreateVirtualTableSTMT::isValid() const
 {
     return !table.empty();

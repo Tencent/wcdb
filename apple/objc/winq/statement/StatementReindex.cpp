@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+StatementReindex::~StatementReindex() = default;
+
 StatementReindex& StatementReindex::reindex()
 {
     syntax().switcher = SyntaxType::Switch::NotSet;

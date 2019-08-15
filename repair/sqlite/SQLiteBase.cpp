@@ -35,10 +35,6 @@ SQLiteBase::SQLiteBase() : m_handle(nullptr), m_codeToBeIgnored(SQLITE_OK)
 {
 }
 
-SQLiteBase::~SQLiteBase()
-{
-}
-
 void SQLiteBase::setPath(const UnsafeStringView &path)
 {
     m_path = path;

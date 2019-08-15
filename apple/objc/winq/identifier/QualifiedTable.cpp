@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+QualifiedTable::~QualifiedTable() = default;
+
 QualifiedTable::QualifiedTable(const UnsafeStringView& table)
 {
     syntax().table = table;

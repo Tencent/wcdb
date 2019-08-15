@@ -28,8 +28,8 @@ class ResultColumnAll;
 
 class ResultColumn : public SpecifiedSyntax<Syntax::ResultColumn, SQL> {
 public:
-    virtual ~ResultColumn() = default;
     using SpecifiedSyntax<Syntax::ResultColumn, SQL>::SpecifiedSyntax;
+    virtual ~ResultColumn() override;
 
     template<typename T, typename Enable = typename std::enable_if<ResultColumnConvertible<T>::value>::type>
     ResultColumn(const T& t)
@@ -46,6 +46,7 @@ public:
 class ResultColumnAll final : public ResultColumn {
 public:
     ResultColumnAll();
+    ~ResultColumnAll() override final;
 
     Expression count() const;
     ResultColumnAll& inTable(const UnsafeStringView& table);

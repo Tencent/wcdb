@@ -29,9 +29,7 @@ namespace WCDB {
 
 namespace Repair {
 
-MasterCrawlerDelegate::~MasterCrawlerDelegate()
-{
-}
+MasterCrawlerDelegate::~MasterCrawlerDelegate() = default;
 
 void MasterCrawlerDelegate::onMasterPageCrawled(const Page &page){ WCDB_UNUSED(page) }
 
@@ -39,6 +37,8 @@ MasterCrawler::MasterCrawler(Pager &pager)
 : Crawlable(pager), m_delegate(nullptr)
 {
 }
+
+MasterCrawler::~MasterCrawler() = default;
 
 bool MasterCrawler::work(MasterCrawlerDelegate *delegate)
 {

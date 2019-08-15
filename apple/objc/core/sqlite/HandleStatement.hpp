@@ -36,7 +36,7 @@ public:
 
     HandleStatement(HandleStatement &&other);
 
-    ~HandleStatement();
+    ~HandleStatement() override final;
 
     bool prepare(const Statement &statement);
     bool isPrepared();

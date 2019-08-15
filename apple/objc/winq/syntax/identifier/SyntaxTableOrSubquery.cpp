@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+TableOrSubquery::~TableOrSubquery() = default;
+
 #pragma mark - Identifier
 Identifier::Type TableOrSubquery::getType() const
 {

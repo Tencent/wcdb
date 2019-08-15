@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+StatementVacuum::~StatementVacuum() = default;
+
 StatementVacuum& StatementVacuum::vacuum()
 {
     syntax().switcher = Syntax::VacuumSTMT::Switch::All;

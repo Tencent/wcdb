@@ -79,7 +79,7 @@ private:
 
 #pragma mark - Initializer
 public:
-    UniqueList() {}
+    UniqueList() = default;
 
     UniqueList(const std::initializer_list<Element>& elements)
     {
@@ -94,6 +94,8 @@ public:
             insert(element.key(), element.value(), element.order());
         }
     }
+
+    virtual ~UniqueList() = default;
 
 #pragma mark - Element Access
 public:

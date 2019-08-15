@@ -29,6 +29,8 @@ namespace Syntax {
 class SavepointSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    ~SavepointSTMT() override final;
+
     StringView savepoint;
 
     bool isValid() const override final;

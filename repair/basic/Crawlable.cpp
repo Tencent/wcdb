@@ -36,9 +36,7 @@ Crawlable::Crawlable(Pager &pager)
 {
 }
 
-Crawlable::~Crawlable()
-{
-}
+Crawlable::~Crawlable() = default;
 
 void Crawlable::stop()
 {

@@ -34,7 +34,7 @@ protected:
 
 class ExpressionUnaryOperable : virtual public ExpressionOperable {
 public:
-    virtual ~ExpressionUnaryOperable() = 0;
+    virtual ~ExpressionUnaryOperable() override = 0;
     Expression operator-() const;
     Expression operator+() const;
     Expression operator!() const;
@@ -48,7 +48,7 @@ private:
 
 class ExpressionBinaryOperable : virtual public ExpressionOperable {
 public:
-    virtual ~ExpressionBinaryOperable() = 0;
+    virtual ~ExpressionBinaryOperable() override = 0;
 
     Expression concat(const Expression &operand) const;
     Expression operator*(const Expression &operand) const;
@@ -87,7 +87,7 @@ private:
 
 class ExpressionBetweenOperable : virtual public ExpressionOperable {
 public:
-    virtual ~ExpressionBetweenOperable() = 0;
+    virtual ~ExpressionBetweenOperable() override = 0;
     Expression between(const Expression &left, const Expression &right) const;
     Expression notBetween(const Expression &left, const Expression &right) const;
 
@@ -97,7 +97,7 @@ private:
 
 class ExpressionInOperable : virtual public ExpressionOperable {
 public:
-    virtual ~ExpressionInOperable() = 0;
+    virtual ~ExpressionInOperable() override = 0;
 
     Expression in() const;
     Expression notIn() const;
@@ -114,7 +114,7 @@ public:
 
 class ExpressionCollateOperable : virtual public ExpressionOperable {
 public:
-    virtual ~ExpressionCollateOperable() = 0;
+    virtual ~ExpressionCollateOperable() override = 0;
     Expression collate(const UnsafeStringView &collation) const;
 };
 

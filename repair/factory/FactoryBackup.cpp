@@ -26,6 +26,8 @@ namespace WCDB {
 
 namespace Repair {
 
+FactoryBackup::~FactoryBackup() = default;
+
 bool FactoryBackup::work(const UnsafeStringView &database)
 {
     Backup backup(database);

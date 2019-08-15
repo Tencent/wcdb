@@ -26,6 +26,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+SelectSTMT::~SelectSTMT() = default;
+
 bool SelectSTMT::isValid() const
 {
     return select.isValid();

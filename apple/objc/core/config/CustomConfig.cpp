@@ -28,6 +28,8 @@ CustomConfig::CustomConfig(const Invocation &invocation, const Invocation &uninv
 {
 }
 
+CustomConfig::~CustomConfig() = default;
+
 bool CustomConfig::invoke(Handle *handle)
 {
     WCTRemedialAssert(

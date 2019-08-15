@@ -25,15 +25,15 @@
 
 namespace WCDB {
 
-AutoBackupOperator::~AutoBackupOperator()
-{
-}
+AutoBackupOperator::~AutoBackupOperator() = default;
 
 AutoBackupConfig::AutoBackupConfig(const std::shared_ptr<AutoBackupOperator> &operator_)
 : Config(), m_identifier(StringView::formatted("Backup-%p", this)), m_operator(operator_)
 {
     WCTAssert(m_operator != nullptr);
 }
+
+AutoBackupConfig::~AutoBackupConfig() = default;
 
 bool AutoBackupConfig::invoke(Handle *handle)
 {

@@ -50,7 +50,7 @@ public:
     HandlePool(const UnsafeStringView &path);
     const StringView path;
 
-    virtual ~HandlePool();
+    virtual ~HandlePool() override;
 
 #pragma mark - Concurrency
 public:

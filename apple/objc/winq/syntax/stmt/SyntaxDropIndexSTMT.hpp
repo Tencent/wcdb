@@ -29,6 +29,8 @@ namespace Syntax {
 class DropIndexSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    ~DropIndexSTMT() override final;
+
     bool ifExists = false;
     Schema schema;
     StringView index;

@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+StatementDropTable::~StatementDropTable() = default;
+
 StatementDropTable& StatementDropTable::dropTable(const UnsafeStringView& table)
 {
     syntax().table = table;

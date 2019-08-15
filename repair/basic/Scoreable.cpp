@@ -27,9 +27,7 @@ namespace WCDB {
 
 namespace Repair {
 
-Scoreable::~Scoreable()
-{
-}
+Scoreable::~Scoreable() = default;
 
 const Fraction &Scoreable::getScore() const
 {
@@ -45,9 +43,7 @@ void Scoreable::increaseScore(const Fraction &increment)
     }
 }
 
-SegmentedScoreable::~SegmentedScoreable()
-{
-}
+SegmentedScoreable::~SegmentedScoreable() = default;
 
 const Fraction &SegmentedScoreable::getScore() const
 {

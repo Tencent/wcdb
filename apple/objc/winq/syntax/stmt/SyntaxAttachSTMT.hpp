@@ -31,6 +31,8 @@ namespace Syntax {
 class AttachSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    ~AttachSTMT() override final;
+
     Expression expression;
     Schema schema;
 

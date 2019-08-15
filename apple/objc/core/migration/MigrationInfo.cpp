@@ -25,6 +25,8 @@
 namespace WCDB {
 
 #pragma mark - MigrationBaseInfo
+MigrationBaseInfo::MigrationBaseInfo() = default;
+
 MigrationBaseInfo::MigrationBaseInfo(const UnsafeStringView& database,
                                      const UnsafeStringView& table)
 : m_database(database), m_table(table)
@@ -33,9 +35,7 @@ MigrationBaseInfo::MigrationBaseInfo(const UnsafeStringView& database,
     WCTAssert(!m_table.empty());
 }
 
-MigrationBaseInfo::~MigrationBaseInfo()
-{
-}
+MigrationBaseInfo::~MigrationBaseInfo() = default;
 
 bool MigrationBaseInfo::shouldMigrate() const
 {
@@ -94,6 +94,8 @@ void MigrationBaseInfo::setSource(const UnsafeStringView& table, const UnsafeStr
 }
 
 #pragma mark - MigrationUserInfo
+MigrationUserInfo::~MigrationUserInfo() = default;
+
 StatementAttach MigrationUserInfo::getStatementForAttachingSchema() const
 {
     WCTAssert(isCrossDatabase());
@@ -199,6 +201,8 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
                                             .ifExists();
     }
 }
+
+MigrationInfo::~MigrationInfo() = default;
 
 #pragma mark - Schema
 const Schema& MigrationInfo::getSchemaForSourceDatabase() const

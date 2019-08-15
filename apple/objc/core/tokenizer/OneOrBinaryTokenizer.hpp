@@ -28,7 +28,7 @@ namespace WCDB {
 class OneOrBinaryTokenizerInfo final : public AbstractTokenizerInfo {
 public:
     OneOrBinaryTokenizerInfo(int argc, const char *const *argv);
-    ~OneOrBinaryTokenizerInfo();
+    ~OneOrBinaryTokenizerInfo() override final;
 };
 
 class OneOrBinaryTokenizerCursorInfo : public AbstractTokenizerCursorInfo {
@@ -36,7 +36,7 @@ public:
     OneOrBinaryTokenizerCursorInfo(const char *input,
                                    int inputLength,
                                    AbstractTokenizerInfo *tokenizerInfo);
-    virtual ~OneOrBinaryTokenizerCursorInfo() = 0;
+    virtual ~OneOrBinaryTokenizerCursorInfo() override = 0;
 
     int step(const char **ppToken,
              int *pnBytes,

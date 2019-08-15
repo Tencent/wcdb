@@ -29,6 +29,8 @@ namespace Syntax {
 class CreateVirtualTableSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    ~CreateVirtualTableSTMT() override final;
+
     bool ifNotExists = false;
     Schema schema;
     StringView table;

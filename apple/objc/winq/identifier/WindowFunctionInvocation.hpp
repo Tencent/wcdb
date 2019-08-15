@@ -29,6 +29,7 @@ class WindowFunctionInvocation
 public:
     using SpecifiedSyntax<Syntax::WindowFunctionInvocation, SQL>::SpecifiedSyntax;
     explicit WindowFunctionInvocation(const UnsafeStringView& name);
+    ~WindowFunctionInvocation() override final;
 
     WindowFunctionInvocation& invoke();
     WindowFunctionInvocation& invokeAll();

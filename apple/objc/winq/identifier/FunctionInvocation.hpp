@@ -28,6 +28,7 @@ class FunctionInvocation final : public SpecifiedSyntax<Syntax::FunctionInvocati
 public:
     using SpecifiedSyntax<Syntax::FunctionInvocation, SQL>::SpecifiedSyntax;
     explicit FunctionInvocation(const UnsafeStringView& name);
+    ~FunctionInvocation() override final;
 
     FunctionInvocation& distinct();
 

@@ -29,6 +29,8 @@ namespace Syntax {
 class DeleteSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    ~DeleteSTMT() override final;
+
     WithClause withClause;
     QualifiedTableName table;
     Expression condition;

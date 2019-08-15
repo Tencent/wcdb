@@ -22,14 +22,10 @@
 
 namespace WCDB {
 
-ExpressionOperable::~ExpressionOperable()
-{
-}
+ExpressionOperable::~ExpressionOperable() = default;
 
 #pragma mark - Unary
-ExpressionUnaryOperable::~ExpressionUnaryOperable()
-{
-}
+ExpressionUnaryOperable::~ExpressionUnaryOperable() = default;
 
 Expression ExpressionUnaryOperable::operator-() const
 {
@@ -76,9 +72,7 @@ ExpressionUnaryOperable::unaryOperate(const Syntax::Expression::UnaryOperator &o
 }
 
 #pragma mark - Binary
-ExpressionBinaryOperable::~ExpressionBinaryOperable()
-{
-}
+ExpressionBinaryOperable::~ExpressionBinaryOperable() = default;
 
 Expression ExpressionBinaryOperable::concat(const Expression &operand) const
 {
@@ -263,9 +257,7 @@ ExpressionBinaryOperable::binaryOperate(const Expression &operand,
 }
 
 #pragma mark - Between
-ExpressionBetweenOperable::~ExpressionBetweenOperable()
-{
-}
+ExpressionBetweenOperable::~ExpressionBetweenOperable() = default;
 
 Expression
 ExpressionBetweenOperable::between(const Expression &left, const Expression &right) const
@@ -295,9 +287,7 @@ Expression ExpressionBetweenOperable::betweenOperate(const Expression &left,
 }
 
 #pragma mark - In
-ExpressionInOperable::~ExpressionInOperable()
-{
-}
+ExpressionInOperable::~ExpressionInOperable() = default;
 
 Expression ExpressionInOperable::in() const
 {
@@ -390,9 +380,7 @@ Expression ExpressionInOperable::notInFunction(const UnsafeStringView &tableFunc
 }
 
 #pragma mark - Collate
-ExpressionCollateOperable::~ExpressionCollateOperable()
-{
-}
+ExpressionCollateOperable::~ExpressionCollateOperable() = default;
 
 Expression ExpressionCollateOperable::collate(const UnsafeStringView &collation) const
 {

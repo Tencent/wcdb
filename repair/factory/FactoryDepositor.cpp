@@ -27,6 +27,8 @@ namespace WCDB {
 
 namespace Repair {
 
+FactoryDepositor::~FactoryDepositor() = default;
+
 bool FactoryDepositor::work()
 {
     auto optionalWorkshopDirectory = factory.getUniqueWorkshopDiectory();

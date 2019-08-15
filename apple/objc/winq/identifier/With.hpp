@@ -26,6 +26,8 @@ namespace WCDB {
 
 class With final : public SpecifiedSyntax<Syntax::WithClause, SQL> {
 public:
+    ~With() override final;
+
     With& table(const CTETable& table);
     With& as(const StatementSelect& select);
     With& recursive();

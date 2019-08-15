@@ -35,6 +35,8 @@ StatementSelect().select(1).from(Syntax::masterTable).limit(0))
 {
 }
 
+OperationHandle::~OperationHandle() = default;
+
 void OperationHandle::setType(HandleType type)
 {
     HandleCategory category = categoryOfHandleType(type);

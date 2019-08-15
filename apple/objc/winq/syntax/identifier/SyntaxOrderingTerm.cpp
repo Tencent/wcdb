@@ -26,6 +26,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+OrderingTerm::~OrderingTerm() = default;
+
 bool OrderingTerm::isValid() const
 {
     return expression.isValid();

@@ -28,6 +28,8 @@ TableOrSubquery::TableOrSubquery(const UnsafeStringView& table)
     syntax().tableOrFunction = table;
 }
 
+TableOrSubquery::~TableOrSubquery() = default;
+
 TableOrSubquery& TableOrSubquery::schema(const Schema& schema)
 {
     syntax().schema = schema;

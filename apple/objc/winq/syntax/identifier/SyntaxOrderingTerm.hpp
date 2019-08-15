@@ -29,6 +29,8 @@ namespace Syntax {
 class OrderingTerm final : public Identifier {
 #pragma mark - Lang
 public:
+    ~OrderingTerm() override final;
+
     Expression expression;
     StringView collation;
     WCDB_SYNTAX_ENUM_UNION(Order, order);

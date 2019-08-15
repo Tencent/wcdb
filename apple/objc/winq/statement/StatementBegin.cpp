@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+StatementBegin::~StatementBegin() = default;
+
 StatementBegin& StatementBegin::beginDeferred()
 {
     syntax().switcher = Syntax::BeginSTMT::Switch::Deferred;

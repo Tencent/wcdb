@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+StatementDropTrigger::~StatementDropTrigger() = default;
+
 StatementDropTrigger& StatementDropTrigger::dropTrigger(const UnsafeStringView& trigger)
 {
     syntax().trigger = trigger;

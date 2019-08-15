@@ -39,6 +39,8 @@ Backup::Backup(const UnsafeStringView &path)
 {
 }
 
+Backup::~Backup() = default;
+
 #pragma mark - Backup
 bool Backup::work()
 {

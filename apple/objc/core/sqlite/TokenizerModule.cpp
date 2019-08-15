@@ -40,9 +40,7 @@ AbstractTokenizerInfo::AbstractTokenizerInfo(int argc, const char *const *argv){
     WCDB_UNUSED(argc) WCDB_UNUSED(argv)
 }
 
-AbstractTokenizerInfo::~AbstractTokenizerInfo()
-{
-}
+AbstractTokenizerInfo::~AbstractTokenizerInfo() = default;
 
 #pragma mark - AbstractTokenizerCursorInfo
 AbstractTokenizerCursorInfo::AbstractTokenizerCursorInfo(const char *input,
@@ -51,9 +49,7 @@ AbstractTokenizerCursorInfo::AbstractTokenizerCursorInfo(const char *input,
     WCDB_UNUSED(input) WCDB_UNUSED(inputLength) WCDB_UNUSED(tokenizerInfo)
 }
 
-AbstractTokenizerCursorInfo::~AbstractTokenizerCursorInfo()
-{
-}
+AbstractTokenizerCursorInfo::~AbstractTokenizerCursorInfo() = default;
 
 #pragma mark - AbstractTokenizerModuleTemplate
 int AbstractTokenizerModuleTemplate::newTokenizer(Tokenizer **ppTokenizer,

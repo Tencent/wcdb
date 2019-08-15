@@ -89,7 +89,7 @@ public:
     bool operator==(const std::nullptr_t &) const { return m_value == nullptr; }
     bool operator!=(const std::nullptr_t &) const { return m_value != nullptr; }
 
-    virtual ~Recyclable() { release(); }
+    ~Recyclable() override { release(); }
 
     constexpr const T &operator->() const { return m_value; }
     constexpr T &operator->() { return m_value; }

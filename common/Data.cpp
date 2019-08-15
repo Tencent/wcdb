@@ -56,6 +56,8 @@ Data::Data(Data&& data)
 {
 }
 
+Data::~Data() = default;
+
 Data& Data::operator=(const Data& other)
 {
     UnsafeData::operator=(other);

@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+DropTableSTMT::~DropTableSTMT() = default;
+
 bool DropTableSTMT::isValid() const
 {
     return !table.empty();

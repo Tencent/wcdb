@@ -26,6 +26,8 @@ namespace WCDB {
 
 class FrameSpec final : public SpecifiedSyntax<Syntax::FrameSpec, SQL> {
 public:
+    ~FrameSpec() override final;
+
     FrameSpec& range();
     FrameSpec& rows();
 

@@ -32,6 +32,7 @@ namespace WCDB {
 class HandleNotification final : public HandleRelated {
 public:
     using HandleRelated::HandleRelated;
+    ~HandleNotification() override final;
 
     void purge();
 

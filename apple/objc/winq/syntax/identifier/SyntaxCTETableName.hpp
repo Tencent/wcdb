@@ -31,6 +31,8 @@ class Column;
 class CTETableName final : public Identifier {
 #pragma mark - Lang
 public:
+    ~CTETableName() override final;
+
     StringView name;
     std::list<Column> columns;
     bool isValid() const override final;

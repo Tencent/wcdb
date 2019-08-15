@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+QualifiedTableName::~QualifiedTableName() = default;
+
 bool QualifiedTableName::isValid() const
 {
     return !table.empty();

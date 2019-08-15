@@ -35,6 +35,8 @@ TokenizerConfig::TokenizerConfig(const UnsafeStringView& name_,
 {
 }
 
+TokenizerConfig::~TokenizerConfig() = default;
+
 bool TokenizerConfig::invoke(Handle* handle)
 {
     const TokenizerModule* module = m_modules->get(name);

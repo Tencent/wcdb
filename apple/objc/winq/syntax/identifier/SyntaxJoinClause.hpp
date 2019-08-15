@@ -32,6 +32,8 @@ class JoinConstraint;
 class JoinClause final : public Identifier {
 #pragma mark - Lang
 public:
+    ~JoinClause() override final;
+
     std::list<JoinOperator> joinOperators;
     std::list<TableOrSubquery> tableOrSubqueries;
     std::list<Shadow<JoinConstraint>> joinConstraints; // nullable

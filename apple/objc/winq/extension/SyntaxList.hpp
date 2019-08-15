@@ -74,7 +74,7 @@ public:
         }
     }
 
-    virtual ~_SyntaxList() {}
+    virtual ~_SyntaxList() = default;
 
     operator std::list<SyntaxType>() const
     {
@@ -127,6 +127,7 @@ template<typename T>
 class SyntaxList final : public _SyntaxList<T> {
 public:
     using _SyntaxList<T>::_SyntaxList;
+    ~SyntaxList() override final = default;
 };
 
 } // namespace WCDB

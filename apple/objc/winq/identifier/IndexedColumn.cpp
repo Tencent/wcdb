@@ -34,6 +34,8 @@ IndexedColumn::IndexedColumn(const Expression& expression)
     syntax().expression = expression;
 }
 
+IndexedColumn::~IndexedColumn() = default;
+
 IndexedColumn& IndexedColumn::collate(const UnsafeStringView& collation)
 {
     syntax().collation = collation;

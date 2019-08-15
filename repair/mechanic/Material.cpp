@@ -30,6 +30,8 @@ namespace WCDB {
 
 namespace Repair {
 
+Material::~Material() = default;
+
 #pragma mark - Serialization
 bool Material::serialize(Serialization &serialization) const
 {
@@ -165,6 +167,8 @@ Material::Info::Info()
     static_assert(size == 20, "");
 }
 
+Material::Info::~Info() = default;
+
 #pragma mark - Serialization
 bool Material::Info::serialize(Serialization &serialization) const
 {
@@ -198,6 +202,8 @@ bool Material::Info::deserialize(Deserialization &deserialization)
 Material::Content::Content() : sequence(0)
 {
 }
+
+Material::Content::~Content() = default;
 
 #pragma mark - Serialization
 bool Material::Content::serialize(Serialization &serialization) const

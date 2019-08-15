@@ -44,7 +44,7 @@ public:
     {
     }
 
-    ~WCTRuntimeCppAccessor() {}
+    ~WCTRuntimeCppAccessor() override final = default;
 
     void setValue(InstanceType instance, UnderlyingType value) override final
     {

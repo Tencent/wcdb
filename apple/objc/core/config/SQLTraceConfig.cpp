@@ -29,9 +29,7 @@ SQLTracer::SQLTracer()
 {
 }
 
-SQLTracer::~SQLTracer()
-{
-}
+SQLTracer::~SQLTracer() = default;
 
 bool SQLTracer::invoke(Handle *handle)
 {
@@ -55,6 +53,8 @@ SQLTraceConfig::SQLTraceConfig(const Notification &notification)
     setNotification(notification);
 }
 
+SQLTraceConfig::~SQLTraceConfig() = default;
+
 bool SQLTraceConfig::invoke(Handle *handle)
 {
     return SQLTracer::invoke(handle);
@@ -64,6 +64,10 @@ bool SQLTraceConfig::uninvoke(Handle *handle)
 {
     return SQLTracer::uninvoke(handle);
 }
+
+ShareableSQLTraceConfig::ShareableSQLTraceConfig() = default;
+
+ShareableSQLTraceConfig::~ShareableSQLTraceConfig() = default;
 
 void ShareableSQLTraceConfig::setNotification(const Notification &notification)
 {

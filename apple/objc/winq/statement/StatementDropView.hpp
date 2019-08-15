@@ -27,6 +27,7 @@ namespace WCDB {
 class StatementDropView final : public SpecifiedSyntax<Syntax::DropViewSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::DropViewSTMT, Statement>::SpecifiedSyntax;
+    ~StatementDropView() override final;
 
     StatementDropView& dropView(const UnsafeStringView& view);
     StatementDropView& schema(const Schema& schema);

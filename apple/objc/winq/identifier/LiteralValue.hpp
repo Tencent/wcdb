@@ -28,6 +28,7 @@ namespace WCDB {
 class LiteralValue final : public SpecifiedSyntax<Syntax::LiteralValue, SQL> {
 public:
     using SpecifiedSyntax<Syntax::LiteralValue, SQL>::SpecifiedSyntax;
+    ~LiteralValue() override final;
 
     LiteralValue(int64_t value);
     LiteralValue(uint64_t value);

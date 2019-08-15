@@ -41,6 +41,8 @@ constexpr const char* Enum::description(const Syntax::BindParameter::Switch& swi
 
 namespace Syntax {
 
+BindParameter::~BindParameter() = default;
+
 #pragma mark - Identifier
 Identifier::Type BindParameter::getType() const
 {

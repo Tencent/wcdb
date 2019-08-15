@@ -36,8 +36,8 @@ protected:
     using MapIterator = typename Map::iterator;
 
 public:
-    LRUCache() {}
-    virtual ~LRUCache() {}
+    LRUCache() = default;
+    virtual ~LRUCache() = default;
 
     void put(const Key& key, const Value& value)
     {

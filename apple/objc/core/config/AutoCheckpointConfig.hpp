@@ -34,7 +34,7 @@ public:
 class AutoCheckpointConfig final : public Config {
 public:
     AutoCheckpointConfig(const std::shared_ptr<AutoCheckpointOperator> &operator_);
-    ~AutoCheckpointConfig();
+    ~AutoCheckpointConfig() override final;
 
     bool invoke(Handle *handle) override final;
     bool uninvoke(Handle *handle) override final;

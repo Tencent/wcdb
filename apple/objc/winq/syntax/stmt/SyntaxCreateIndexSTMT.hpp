@@ -30,6 +30,8 @@ namespace Syntax {
 class CreateIndexSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    ~CreateIndexSTMT() override final;
+
     bool unique = false;
     bool ifNotExists = false;
     Schema schema;

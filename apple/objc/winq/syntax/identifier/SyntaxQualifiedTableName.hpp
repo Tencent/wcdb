@@ -29,6 +29,8 @@ namespace Syntax {
 class QualifiedTableName final : public Identifier {
 #pragma mark - Lang
 public:
+    ~QualifiedTableName() override final;
+
     Schema schema;
     StringView table;
     StringView alias;

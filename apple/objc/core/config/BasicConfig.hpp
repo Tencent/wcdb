@@ -28,6 +28,7 @@ namespace WCDB {
 class BasicConfig final : public Config {
 public:
     BasicConfig();
+    ~BasicConfig() override final;
 
     bool invoke(Handle* handle) override final;
 

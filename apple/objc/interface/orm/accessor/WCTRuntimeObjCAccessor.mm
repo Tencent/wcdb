@@ -37,9 +37,7 @@ WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, const WCDB::
     WCTRemedialAssert([m_propertyClass conformsToProtocol:@protocol(WCTColumnCoding)], WCDB::StringView::formatted("%s should conform to protocol WCTColumnCoding.", propertyName.data()), ;);
 }
 
-WCTRuntimeObjCAccessor::~WCTRuntimeObjCAccessor()
-{
-}
+WCTRuntimeObjCAccessor::~WCTRuntimeObjCAccessor() = default;
 
 void WCTRuntimeObjCAccessor::setObject(InstanceType instance, OCType value)
 {

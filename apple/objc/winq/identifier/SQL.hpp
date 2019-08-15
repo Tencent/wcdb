@@ -33,8 +33,8 @@ namespace WCDB {
 
 class SQL {
 public:
-    SQL() = default;
-    virtual ~SQL() = default;
+    SQL();
+    virtual ~SQL();
 
     typedef Syntax::Identifier::Type Type;
     Type getType() const;
@@ -86,6 +86,8 @@ public:
 
     SpecifiedSyntax(Self&& other) : Super(std::move(other)) {}
 
+    ~SpecifiedSyntax() override = default;
+
     Self& operator=(const Self& other)
     {
         Super::operator=(other);
@@ -97,8 +99,6 @@ public:
         Super::operator=(std::move(other));
         return *this;
     }
-
-    virtual ~SpecifiedSyntax() {}
 
     SyntaxType& syntax() { return static_cast<SyntaxType&>(Super::syntax()); }
 

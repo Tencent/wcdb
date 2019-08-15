@@ -27,7 +27,6 @@
 #include <WCDB/StringView.hpp>
 
 #include <WCDB/AssemblerHandle.hpp>
-#include <WCDB/ConfiguredHandle.hpp>
 #include <WCDB/MigrateHandle.hpp>
 #include <WCDB/MigratingHandle.hpp>
 #include <WCDB/OperationHandle.hpp>
@@ -44,6 +43,8 @@ Database::Database(const UnsafeStringView &path)
 , m_migration(this)
 {
 }
+
+Database::~Database() = default;
 
 #pragma mark - Basic
 void Database::setTag(const Tag &tag)
@@ -241,6 +242,7 @@ bool Database::setupHandle(HandleType type, Handle *handle)
     HandleSlot slot = slotOfHandleType(type);
 
     if (slot == HandleSlotOperation) {
+        WCTAssert(dynamic_cast<OperationHandle *>(handle) != nullptr);
         static_cast<OperationHandle *>(handle)->setType(type);
     }
 
@@ -693,6 +695,7 @@ void Database::doCheckIntegrity()
     WCTAssert(m_initialized);
     RecyclableHandle handle = flowOut(HandleType::Integrity);
     if (handle != nullptr) {
+        WCTAssert(dynamic_cast<OperationHandle *>(handle.get()) != nullptr);
         static_cast<OperationHandle *>(handle.get())->checkIntegrity();
     }
 }
@@ -730,6 +733,7 @@ std::optional<bool> Database::doStepMigration()
     std::optional<bool> done;
     RecyclableHandle handle = flowOut(HandleType::Migrate);
     if (handle != nullptr) {
+        WCTAssert(dynamic_cast<MigrateHandle *>(handle.get()) != nullptr);
         MigrateHandle *migrateHandle = static_cast<MigrateHandle *>(handle.get());
 
         migrateHandle->markErrorAsIgnorable(Error::Code::Busy);
@@ -779,6 +783,7 @@ bool Database::checkpointIfAlreadyInitialized()
     if (initializedGuard.valid()) {
         RecyclableHandle handle = flowOut(HandleType::Checkpoint);
         if (handle != nullptr) {
+            WCTAssert(dynamic_cast<OperationHandle *>(handle.get()) != nullptr);
             OperationHandle *operationHandle
             = static_cast<OperationHandle *>(handle.get());
 

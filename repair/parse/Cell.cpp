@@ -36,6 +36,8 @@ Cell::Cell(int pointer, Page *page, Pager *pager)
     WCTAssert(m_page != nullptr);
 }
 
+Cell::~Cell() = default;
+
 const Page &Cell::getPage() const
 {
     return *m_page;

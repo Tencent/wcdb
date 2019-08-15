@@ -38,6 +38,8 @@ FactoryRenewer::FactoryRenewer(const Factory &factory_)
 {
 }
 
+FactoryRenewer::~FactoryRenewer() = default;
+
 bool FactoryRenewer::work()
 {
     auto exists = FileManager::fileExists(database);

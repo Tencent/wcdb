@@ -41,6 +41,8 @@ public:
     bool serialize(Serialization &serialization) const override final;
     using Serializable::serialize;
 
+    ~Material() override final;
+
 protected:
     static bool serializeData(Serialization &serialization, const Data &data);
     static void markAsEmpty(const UnsafeStringView &element);
@@ -66,6 +68,8 @@ public:
     public:
         static constexpr const int size = sizeof(uint32_t) * 5;
         Info();
+        ~Info() override final;
+
         uint32_t pageSize;
         uint32_t reservedBytes;
         std::pair<uint32_t, uint32_t> walSalt;
@@ -85,6 +89,8 @@ public:
     class Content final : public Serializable, public Deserializable {
     public:
         Content();
+        ~Content() override final;
+
         StringView sql;
         std::list<StringView> associatedSQLs;
         int64_t sequence;

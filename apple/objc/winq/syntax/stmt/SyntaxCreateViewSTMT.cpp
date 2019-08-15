@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+CreateViewSTMT::~CreateViewSTMT() = default;
+
 bool CreateViewSTMT::isValid() const
 {
     return !view.empty();

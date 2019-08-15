@@ -25,7 +25,7 @@ class WCTCppAccessor : public WCTBaseAccessor {
 public:
     using UnderlyingType = typename WCDB::ColumnTypeInfo<t>::UnderlyingType;
 
-    virtual ~WCTCppAccessor(){};
+    virtual ~WCTCppAccessor() override = default;
 
     WCDB::ColumnType getColumnType() const override final { return t; };
     WCTAccessorType getAccessorType() const override final

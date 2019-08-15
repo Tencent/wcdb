@@ -26,6 +26,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+TableConstraint::~TableConstraint() = default;
+
 #pragma mark - Identifier
 Identifier::Type TableConstraint::getType() const
 {

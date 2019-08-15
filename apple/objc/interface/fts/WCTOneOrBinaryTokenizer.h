@@ -28,7 +28,7 @@ public:
                                       int inputLength,
                                       WCDB::AbstractTokenizerInfo *tokenizerInfo);
 
-    ~WCTOneOrBinaryTokenizerCursorInfo();
+    ~WCTOneOrBinaryTokenizerCursorInfo() override final;
 
 protected:
     CFCharacterSetRef m_symbolCharacterSet;

@@ -27,6 +27,7 @@ namespace WCDB {
 class StatementCommit final : public SpecifiedSyntax<Syntax::CommitSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::CommitSTMT, Statement>::SpecifiedSyntax;
+    ~StatementCommit() override final;
 
     StatementCommit& commit();
 };

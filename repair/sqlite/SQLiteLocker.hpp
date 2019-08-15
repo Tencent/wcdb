@@ -31,6 +31,8 @@ namespace Repair {
 
 class SQLiteReadLocker final : public ReadLocker, public SQLiteBase {
 public:
+    ~SQLiteReadLocker() override final;
+
     void setPath(const UnsafeStringView &path) override final;
     const StringView &getPath() const override final;
 
@@ -41,6 +43,7 @@ public:
 
 class SQLiteWriteLocker final : public WriteLocker, public SQLiteBase {
 public:
+    ~SQLiteWriteLocker() override final;
     void setPath(const UnsafeStringView &path) override final;
     const StringView &getPath() const override final;
 

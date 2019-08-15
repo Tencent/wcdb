@@ -36,6 +36,8 @@ BasicConfig::BasicConfig()
 {
 }
 
+BasicConfig::~BasicConfig() = default;
+
 bool BasicConfig::invoke(Handle* handle)
 {
     static_assert(SQLITE_DEFAULT_SYNCHRONOUS == 1, "");

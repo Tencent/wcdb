@@ -29,6 +29,8 @@ namespace WCDB {
 class CipherConfig final : public Config {
 public:
     CipherConfig(const UnsafeData &cipher, int pageSize);
+    ~CipherConfig() override final;
+
     bool invoke(Handle *handle) override final;
 
 protected:

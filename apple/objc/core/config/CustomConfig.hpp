@@ -29,6 +29,7 @@ public:
     using Invocation = std::function<bool(Handle *)>;
 
     CustomConfig(const Invocation &invocation, const Invocation &uninvocation);
+    ~CustomConfig() override final;
 
     bool invoke(Handle *handle) override final;
     bool uninvoke(Handle *handle) override final;

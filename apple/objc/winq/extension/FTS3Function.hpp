@@ -43,7 +43,7 @@ public:
 
 class FTS3FunctionOperable : virtual public ExpressionOperable {
 public:
-    virtual ~FTS3FunctionOperable() = 0;
+    virtual ~FTS3FunctionOperable() override = 0;
     Expression offsets() const;
     Expression snippet(const UnsafeStringView &startMatchText = "<b>",
                        const UnsafeStringView &endMatchText = "</b>",

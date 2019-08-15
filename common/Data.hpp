@@ -35,6 +35,7 @@ public:
     Data(Data&& data);
     Data(size_t size);
     Data(const unsigned char* buffer, size_t size);
+    ~Data() override final;
 
     Data& operator=(const Data& other);
     Data& operator=(Data&& other);

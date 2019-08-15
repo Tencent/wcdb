@@ -37,6 +37,8 @@ FullCrawler::FullCrawler(const UnsafeStringView &source)
 {
 }
 
+FullCrawler::~FullCrawler() = default;
+
 #pragma mark - Repair
 bool FullCrawler::work()
 {

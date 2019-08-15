@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+Filter::~Filter() = default;
+
 Filter& Filter::where(const Expression& expression)
 {
     syntax().expression = expression;

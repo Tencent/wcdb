@@ -26,7 +26,7 @@
 template<typename T>
 class WCTIncompleteOptional {
 public:
-    virtual ~WCTIncompleteOptional() {}
+    virtual ~WCTIncompleteOptional() = default;
 
     operator const T&() const { return value(); }
 
@@ -83,6 +83,8 @@ public:
     WCTFundamentalOptional(const T& value)
     : Super(value, defaultValue) {}
 
+    ~WCTFundamentalOptional() override = default;
+
 protected:
     WCTFundamentalOptional(std::optional<T>&& optional)
     : Super(std::move(optional), defaultValue)
@@ -97,6 +99,7 @@ public:
     using Super::WCTFundamentalOptional;
 
     WCTOptionalBool(std::optional<bool>&& optional);
+    ~WCTOptionalBool() override final;
 };
 
 class WCTOptionalSize final : public WCTFundamentalOptional<NSUInteger, 0> {
@@ -104,6 +107,7 @@ class WCTOptionalSize final : public WCTFundamentalOptional<NSUInteger, 0> {
 
 public:
     using Super::WCTFundamentalOptional;
+    ~WCTOptionalSize() override final;
 
     WCTOptionalSize(std::optional<size_t>&& optional);
 };

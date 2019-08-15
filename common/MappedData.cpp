@@ -24,6 +24,18 @@
 
 namespace WCDB {
 
+MappedData::MappedData() : UnsafeData(), m_mapped(UnsafeData::null(), nullptr)
+{
+}
+
+MappedData::MappedData(unsigned char* mapped, size_t size)
+: UnsafeData(mapped, size), m_mapped(UnsafeData(mapped, size), MappedData::unmapData)
+{
+    sharedHighWater().increase(size);
+}
+
+MappedData::~MappedData() = default;
+
 ssize_t MappedData::getMappedHighWater()
 {
     return sharedHighWater().getHighWater();
@@ -33,16 +45,6 @@ ShareableHighWater& MappedData::sharedHighWater()
 {
     WCDB_STATIC_VARIABLE ShareableHighWater s_highWater(0);
     return s_highWater;
-}
-
-MappedData::MappedData() : UnsafeData(), m_mapped(UnsafeData::null(), nullptr)
-{
-}
-
-MappedData::MappedData(unsigned char* mapped, size_t size)
-: UnsafeData(mapped, size), m_mapped(UnsafeData(mapped, size), MappedData::unmapData)
-{
-    sharedHighWater().increase(size);
 }
 
 void MappedData::unmap()

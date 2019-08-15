@@ -29,6 +29,7 @@ public:
     using SpecifiedSyntax<Syntax::ColumnDef, SQL>::SpecifiedSyntax;
     ColumnDef(const Column& column);
     ColumnDef(const Column& column, const ColumnType& type);
+    ~ColumnDef() override final;
 
     ColumnDef& constraint(const ColumnConstraint& constraint);
 };

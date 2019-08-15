@@ -26,7 +26,7 @@ class WCTRuntimeBaseAccessor {
 public:
     WCTRuntimeBaseAccessor(Class cls, const WCDB::UnsafeStringView &propertyName);
 
-    virtual ~WCTRuntimeBaseAccessor() = default;
+    virtual ~WCTRuntimeBaseAccessor();
 
 protected:
     SEL m_selForGetter;
@@ -56,7 +56,7 @@ class WCTRuntimeAccessor : public WCTRuntimeBaseAccessor {
 public:
     using WCTRuntimeBaseAccessor::WCTRuntimeBaseAccessor;
 
-    virtual ~WCTRuntimeAccessor(){};
+    virtual ~WCTRuntimeAccessor() override = default;
 
     void setProperty(InstanceType instance, PropertyType value)
     {

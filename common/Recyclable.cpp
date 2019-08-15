@@ -31,9 +31,7 @@ Referenced::Referenced(const std::nullptr_t&) : m_reference(nullptr)
 {
 }
 
-Referenced::~Referenced()
-{
-}
+    Referenced::~Referenced() = default;
 
 void Referenced::reset(const Referenced& other)
 {

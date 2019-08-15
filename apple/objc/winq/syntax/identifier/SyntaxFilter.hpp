@@ -31,6 +31,8 @@ class Expression;
 class Filter final : public Identifier {
 #pragma mark - Lang
 public:
+    ~Filter() override final;
+
     Shadow<Expression> expression;
     bool isValid() const override final;
 

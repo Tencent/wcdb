@@ -29,7 +29,7 @@ namespace Repair {
 class UpgradeableErrorProne : private ErrorProne {
 public:
     UpgradeableErrorProne();
-    virtual ~UpgradeableErrorProne() = 0;
+    virtual ~UpgradeableErrorProne() override = 0;
     enum Severity {
         MostCritical = std::numeric_limits<int>::max(),
         Critical = 1,

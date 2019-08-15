@@ -33,7 +33,7 @@ namespace WCDB {
 class MigrateHandle final : public Handle, public Migration::Stepper {
 public:
     MigrateHandle();
-    ~MigrateHandle();
+    ~MigrateHandle() override final;
 
 #pragma mark - Schema
 protected:

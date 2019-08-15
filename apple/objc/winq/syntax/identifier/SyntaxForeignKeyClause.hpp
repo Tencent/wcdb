@@ -29,6 +29,8 @@ namespace Syntax {
 class ForeignKeyClause final : public Identifier {
 #pragma mark - Lang
 public:
+    ~ForeignKeyClause() override final;
+
     StringView foreignTable;
     std::list<Column> columns;
     enum class Switch {

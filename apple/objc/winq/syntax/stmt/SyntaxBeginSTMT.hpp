@@ -29,6 +29,8 @@ namespace Syntax {
 class BeginSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    ~BeginSTMT() override final;
+
     WCDB_SYNTAX_MAIN_UNION_ENUM(Deferred, Immediate, Exclusive, );
 
 #pragma mark - Identifier

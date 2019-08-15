@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+StatementDetach::~StatementDetach() = default;
+
 StatementDetach& StatementDetach::detach(const Schema& schema)
 {
     syntax().schema = schema;

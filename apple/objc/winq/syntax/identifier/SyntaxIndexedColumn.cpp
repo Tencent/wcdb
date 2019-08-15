@@ -26,6 +26,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+IndexedColumn::~IndexedColumn() = default;
+
 #pragma mark - Identifier
 Identifier::Type IndexedColumn::getType() const
 {

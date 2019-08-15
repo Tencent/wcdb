@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+ResultColumn::~ResultColumn() = default;
+
 bool ResultColumn::isValid() const
 {
     return wildcard || expression.isValid();

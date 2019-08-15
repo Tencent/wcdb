@@ -23,11 +23,7 @@
 #import <WCDB/WCTProperty.h>
 #import <WCDB/WCTResultColumn.h>
 
-WCTResultColumn::WCTResultColumn()
-: WCDB::ResultColumn()
-, WCTColumnBindingHolder()
-{
-}
+WCTResultColumn::WCTResultColumn() = default;
 
 WCTResultColumn::WCTResultColumn(const WCTProperty& property)
 : WCDB::ResultColumn(property)
@@ -40,6 +36,10 @@ WCTResultColumn::WCTResultColumn(const WCDB::ResultColumn& resultColumn, const W
 , WCTColumnBindingHolder(columnBinding)
 {
 }
+
+WCTResultColumn::~WCTResultColumn() = default;
+
+WCTResultColumns::~SyntaxList() = default;
 
 WCTResultColumns WCTResultColumns::resultColumnsByAddingNewResultColumns(const WCTResultColumns& resultColumns) const
 {

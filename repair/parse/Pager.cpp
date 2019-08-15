@@ -44,6 +44,8 @@ Pager::Pager(const UnsafeStringView &path)
 {
 }
 
+Pager::~Pager() = default;
+
 void Pager::setPageSize(int pageSize)
 {
     WCTAssert(!isInitialized());

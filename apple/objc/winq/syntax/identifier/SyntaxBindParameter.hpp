@@ -29,6 +29,8 @@ namespace Syntax {
 class BindParameter final : public Identifier {
 #pragma mark - Lang
 public:
+    ~BindParameter() override final;
+
     WCDB_SYNTAX_MAIN_UNION_ENUM(QuestionSign, ColonSign, DollarSign, AtSign, );
     int n;
     StringView name;

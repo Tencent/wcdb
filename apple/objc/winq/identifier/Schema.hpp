@@ -27,7 +27,8 @@ namespace WCDB {
 
 class Schema final : public SpecifiedSyntax<Syntax::Schema, SQL> {
 public:
-    Schema() = default;
+    Schema();
+    ~Schema() override final;
 
     template<typename T, typename Enable = typename std::enable_if<ColumnIsTextType<T>::value>::type>
     Schema(const T& t) : Schema(ColumnIsTextType<T>::asUnderlyingType(t))

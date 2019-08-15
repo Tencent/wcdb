@@ -27,6 +27,8 @@ FunctionInvocation::FunctionInvocation(const UnsafeStringView& name)
     syntax().name = name;
 }
 
+FunctionInvocation::~FunctionInvocation() = default;
+
 FunctionInvocation& FunctionInvocation::distinct()
 {
     syntax().distinct = true;

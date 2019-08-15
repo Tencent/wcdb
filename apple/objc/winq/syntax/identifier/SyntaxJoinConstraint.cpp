@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+JoinConstraint::~JoinConstraint() = default;
+
 bool JoinConstraint::isValid() const
 {
     return !columns.empty() || expression.isValid();

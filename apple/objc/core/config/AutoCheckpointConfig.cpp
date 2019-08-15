@@ -27,9 +27,7 @@
 
 namespace WCDB {
 
-AutoCheckpointOperator::~AutoCheckpointOperator()
-{
-}
+AutoCheckpointOperator::~AutoCheckpointOperator() = default;
 
 AutoCheckpointConfig::AutoCheckpointConfig(const std::shared_ptr<AutoCheckpointOperator>& operator_)
 : Config(), m_identifier(StringView::formatted("Checkpoint-%p", this)), m_operator(operator_)

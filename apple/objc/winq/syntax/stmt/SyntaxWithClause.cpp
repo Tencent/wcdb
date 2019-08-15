@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+WithClause::~WithClause() = default;
+
 bool WithClause::isValid() const
 {
     return !tables.empty() && tables.begin()->isValid();

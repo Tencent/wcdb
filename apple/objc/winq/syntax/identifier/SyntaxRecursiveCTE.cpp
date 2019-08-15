@@ -38,6 +38,8 @@ Enum::description(const Syntax::RecursiveCTE::Combination& combination)
 
 namespace Syntax {
 
+RecursiveCTE::~RecursiveCTE() = default;
+
 bool RecursiveCTE::isValid() const
 {
     return table.isValid();

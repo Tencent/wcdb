@@ -29,9 +29,7 @@ HandleRelated::HandleRelated(AbstractHandle *handle) : m_handle(handle)
     WCTAssert(m_handle != nullptr);
 }
 
-HandleRelated::~HandleRelated()
-{
-}
+HandleRelated::~HandleRelated() = default;
 
 bool HandleRelated::APIExit(int rc)
 {

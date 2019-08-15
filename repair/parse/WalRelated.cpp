@@ -26,9 +26,7 @@ namespace WCDB {
 
 namespace Repair {
 
-WalRelated::~WalRelated()
-{
-}
+WalRelated::~WalRelated() = default;
 
 WalRelated::WalRelated(Wal *wal) : m_wal(wal), m_pager(m_wal->m_pager)
 {

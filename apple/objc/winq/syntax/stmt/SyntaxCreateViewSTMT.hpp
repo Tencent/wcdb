@@ -29,6 +29,8 @@ namespace Syntax {
 class CreateViewSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    ~CreateViewSTMT() override final;
+
     bool temp = false;
     bool ifNotExists = false;
     Schema schema;

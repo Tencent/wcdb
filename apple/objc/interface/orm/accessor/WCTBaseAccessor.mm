@@ -18,8 +18,6 @@
  * limitations under the License.
  */
 
-#include <WCDB/ConfiguredHandle.hpp>
+#include <WCDB/WCTBaseAccessor.h>
 
-namespace WCDB {
-
-}
+WCTBaseAccessor::~WCTBaseAccessor() = default;

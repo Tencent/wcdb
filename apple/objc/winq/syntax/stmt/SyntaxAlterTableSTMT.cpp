@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+AlterTableSTMT::~AlterTableSTMT() = default;
+
 #pragma mark - Identifier
 Identifier::Type AlterTableSTMT::getType() const
 {

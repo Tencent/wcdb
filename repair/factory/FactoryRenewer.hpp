@@ -34,6 +34,8 @@ class FactoryRenewer final : public FactoryRelated,
                              public LockerHolder {
 public:
     FactoryRenewer(const Factory &factory);
+    ~FactoryRenewer() override final;
+
     const StringView directory;
     const StringView database;
 

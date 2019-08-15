@@ -45,6 +45,7 @@ class SequenceCrawler final : public Crawlable {
 #pragma mark - Initialize
 public:
     SequenceCrawler(Pager &pager);
+    ~SequenceCrawler() override final;
 
 #pragma mark - Sequence
 public:

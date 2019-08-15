@@ -29,6 +29,8 @@ namespace Syntax {
 class VacuumSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    ~VacuumSTMT() override final;
+
     WCDB_SYNTAX_MAIN_UNION_ENUM(All, Schema);
     Schema schema;
 

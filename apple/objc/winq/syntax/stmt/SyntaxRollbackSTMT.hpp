@@ -29,6 +29,8 @@ namespace Syntax {
 class RollbackSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    ~RollbackSTMT() override final;
+
     WCDB_SYNTAX_MAIN_UNION_ENUM(Transaction, Savepoint);
     StringView savepoint;
 

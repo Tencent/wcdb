@@ -36,6 +36,7 @@ class Page final : public PagerRelated, public Initializeable {
 public:
     Page(int number, Pager *pager);
     Page(int number, Pager *pager, const MappedData &data);
+    ~Page() override final;
 
     const int number;
 

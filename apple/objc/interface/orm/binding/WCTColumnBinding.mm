@@ -57,14 +57,14 @@ bool WCTColumnBinding::operator==(const WCTColumnBinding& other) const
     return m_class == other.m_class && m_propertyName == other.m_propertyName;
 }
 
+WCTColumnBindingHolder::WCTColumnBindingHolder() = default;
+
 WCTColumnBindingHolder::WCTColumnBindingHolder(const WCTColumnBinding& columnBinding)
 : m_columnBinding(columnBinding)
 {
 }
 
-WCTColumnBindingHolder::~WCTColumnBindingHolder()
-{
-}
+WCTColumnBindingHolder::~WCTColumnBindingHolder() = default;
 
 const WCTColumnBinding& WCTColumnBindingHolder::getColumnBinding() const
 {

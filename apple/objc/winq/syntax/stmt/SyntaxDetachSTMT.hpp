@@ -29,6 +29,8 @@ namespace Syntax {
 class DetachSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    ~DetachSTMT() override final;
+
     Schema schema;
 
     bool isValid() const override final;

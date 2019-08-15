@@ -29,6 +29,8 @@ namespace Syntax {
 class ReleaseSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    ~ReleaseSTMT() override final;
+
     StringView savepoint;
 
     bool isValid() const override final;

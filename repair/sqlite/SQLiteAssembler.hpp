@@ -34,6 +34,7 @@ class SQLiteAssembler final : public Assembler, public SQLiteBase {
 #pragma mark - Initialize
 public:
     SQLiteAssembler();
+    ~SQLiteAssembler() override final;
 
 #pragma mark - Assembler
 public:

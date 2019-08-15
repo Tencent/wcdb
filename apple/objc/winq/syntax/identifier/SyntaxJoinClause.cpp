@@ -26,6 +26,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+JoinClause::~JoinClause() = default;
+
 bool JoinClause::isValid() const
 {
     return !tableOrSubqueries.empty();

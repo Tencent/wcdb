@@ -38,7 +38,7 @@ public:
 
     AbstractHandle(const AbstractHandle &) = delete;
     AbstractHandle &operator=(const AbstractHandle &) = delete;
-    virtual ~AbstractHandle() = 0;
+    virtual ~AbstractHandle() override = 0;
 
 private:
     friend class HandleRelated;
