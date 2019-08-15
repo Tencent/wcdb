@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+StatementAnalyze::~StatementAnalyze() = default;
+
 StatementAnalyze& StatementAnalyze::analyze()
 {
     syntax().switcher = Syntax::AnalyzeSTMT::Switch::All;

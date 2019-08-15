@@ -98,6 +98,8 @@ Enum::description(const Syntax::Expression::BinaryOperator& binaryOperator)
 
 namespace Syntax {
 
+Expression::~Expression() = default;
+
 #pragma mark - Identifier
 Identifier::Type Expression::getType() const
 {

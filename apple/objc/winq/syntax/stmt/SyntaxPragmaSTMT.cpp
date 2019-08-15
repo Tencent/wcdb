@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+PragmaSTMT::~PragmaSTMT() = default;
+
 bool PragmaSTMT::isValid() const
 {
     return pragma.isValid();

@@ -26,6 +26,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+InsertSTMT::~InsertSTMT() = default;
+
 #pragma mark - Identifier
 Identifier::Type InsertSTMT::getType() const
 {
@@ -112,12 +114,12 @@ void InsertSTMT::iterate(const Iterator& iterator, bool& stop)
 }
 
 #pragma mark - Utility
-    bool InsertSTMT::isMultiWrite() const
-    {
-        return (switcher == Switch::Values && expressionsValues.size() > 1)
-        || switcher == Switch::Select;
-    }
-    
+bool InsertSTMT::isMultiWrite() const
+{
+    return (switcher == Switch::Values && expressionsValues.size() > 1)
+           || switcher == Switch::Select;
+}
+
 bool InsertSTMT::isTargetingSameTable(const InsertSTMT& other) const
 {
     return table == other.table && schema.isTargetingSameSchema(other.schema);

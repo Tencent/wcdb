@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+WindowFunctionInvocation::~WindowFunctionInvocation() = default;
+
 bool WindowFunctionInvocation::isValid() const
 {
     return !name.empty();

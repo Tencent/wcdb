@@ -29,6 +29,8 @@ namespace Syntax {
 class AlterTableSTMT final : public Identifier {
 #pragma mark - Syntax
 public:
+    ~AlterTableSTMT() override final;
+
     Schema schema;
     StringView table;
 

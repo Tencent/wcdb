@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+Pragma::~Pragma() = default;
+
 Pragma::Pragma(const UnsafeStringView& name)
 {
     syntax().name = name;

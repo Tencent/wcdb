@@ -30,6 +30,8 @@ namespace Syntax {
 class RecursiveCTE final : public Identifier {
 #pragma mark - Lang
 public:
+    ~RecursiveCTE() override final;
+
     CTETableName table;
     SelectSTMT initialSelect;
     enum class Combination {

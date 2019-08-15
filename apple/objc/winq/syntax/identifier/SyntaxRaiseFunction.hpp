@@ -29,6 +29,8 @@ namespace Syntax {
 class RaiseFunction final : public Identifier {
 #pragma mark - Lang
 public:
+    ~RaiseFunction() override final;
+
     WCDB_SYNTAX_MAIN_UNION_ENUM(Ignore, Rollback, Abort, Fail, );
     StringView errorMessage;
 

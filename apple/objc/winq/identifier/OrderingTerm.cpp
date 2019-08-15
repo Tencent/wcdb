@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+OrderingTerm::~OrderingTerm() = default;
+
 OrderingTerm::OrderingTerm(const Expression& expression)
 {
     syntax().expression = expression;

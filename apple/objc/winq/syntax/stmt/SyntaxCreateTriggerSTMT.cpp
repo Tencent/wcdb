@@ -52,6 +52,8 @@ constexpr const char* Enum::description(const Syntax::CreateTriggerSTMT::Event& 
 
 namespace Syntax {
 
+CreateTriggerSTMT::~CreateTriggerSTMT() = default;
+
 bool CreateTriggerSTMT::isValid() const
 {
     return !trigger.empty();

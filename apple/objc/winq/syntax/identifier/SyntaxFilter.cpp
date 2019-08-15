@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+Filter::~Filter() = default;
+
 bool Filter::isValid() const
 {
     return expression != nullptr;

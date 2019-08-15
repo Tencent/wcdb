@@ -41,6 +41,8 @@ constexpr const char* Enum::description(const Syntax::RaiseFunction::Switch& swi
 
 namespace Syntax {
 
+RaiseFunction::~RaiseFunction() = default;
+
 #pragma mark - Identifier
 Identifier::Type RaiseFunction::getType() const
 {

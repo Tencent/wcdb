@@ -27,6 +27,7 @@ namespace WCDB {
 class StatementInsert final : public SpecifiedSyntax<Syntax::InsertSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::InsertSTMT, Statement>::SpecifiedSyntax;
+    ~StatementInsert() override final;
 
     StatementInsert& with(const With& with);
     StatementInsert& insertIntoTable(const UnsafeStringView& table);

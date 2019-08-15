@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+DropTriggerSTMT::~DropTriggerSTMT() = default;
+
 bool DropTriggerSTMT::isValid() const
 {
     return !trigger.empty();

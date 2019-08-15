@@ -27,6 +27,7 @@ namespace WCDB {
 class StatementRollback final : public SpecifiedSyntax<Syntax::RollbackSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::RollbackSTMT, Statement>::SpecifiedSyntax;
+    ~StatementRollback() override final;
 
     StatementRollback& rollback();
     StatementRollback& rollbackToSavepoint(const UnsafeStringView& savepoint);

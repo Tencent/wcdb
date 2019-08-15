@@ -29,6 +29,8 @@ namespace Syntax {
 class ResultColumn final : public Identifier {
 #pragma mark - Lang
 public:
+    ~ResultColumn() override final;
+
     Expression expression;
     StringView alias;
     bool wildcard = false;

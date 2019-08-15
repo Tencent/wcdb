@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+StatementCreateVirtualTable::~StatementCreateVirtualTable() = default;
+
 StatementCreateVirtualTable&
 StatementCreateVirtualTable::createVirtualTable(const UnsafeStringView& table)
 {

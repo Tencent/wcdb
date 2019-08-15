@@ -29,6 +29,8 @@ namespace Syntax {
 class ReindexSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    ~ReindexSTMT() override final;
+
     WCDB_SYNTAX_MAIN_UNION_ENUM(NotSet, Collation, TableOrIndex, );
     StringView collationOrTableOrIndex;
     Schema schema;

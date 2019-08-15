@@ -29,6 +29,8 @@ namespace Syntax {
 class Column final : public Identifier {
 #pragma mark - Syntax
 public:
+    ~Column() override final;
+
     StringView name;
 
     bool isValid() const override final;

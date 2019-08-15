@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+CreateIndexSTMT::~CreateIndexSTMT() = default;
+
 bool CreateIndexSTMT::isValid() const
 {
     return !index.empty();

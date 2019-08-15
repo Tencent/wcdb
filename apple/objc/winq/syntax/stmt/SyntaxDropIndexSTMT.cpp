@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+DropIndexSTMT::~DropIndexSTMT() = default;
+
 bool DropIndexSTMT::isValid() const
 {
     return !index.empty();

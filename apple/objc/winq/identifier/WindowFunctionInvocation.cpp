@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+WindowFunctionInvocation::~WindowFunctionInvocation() = default;
+
 WindowFunctionInvocation::WindowFunctionInvocation(const UnsafeStringView& name)
 {
     syntax().name = name;

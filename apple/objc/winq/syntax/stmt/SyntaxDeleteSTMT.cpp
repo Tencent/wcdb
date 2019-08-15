@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+DeleteSTMT::~DeleteSTMT() = default;
+
 bool DeleteSTMT::isValid() const
 {
     return table.isValid();

@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+StatementCreateTrigger::~StatementCreateTrigger() = default;
+
 StatementCreateTrigger& StatementCreateTrigger::createTrigger(const UnsafeStringView& trigger)
 {
     syntax().trigger = trigger;

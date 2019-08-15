@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+With::~With() = default;
+
 With& With::table(const CTETable& table)
 {
     syntax().tables.push_back(table);

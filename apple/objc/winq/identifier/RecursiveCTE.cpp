@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+RecursiveCTE::~RecursiveCTE() = default;
+
 RecursiveCTE::RecursiveCTE(const CTETable& table)
 {
     syntax().table = table;

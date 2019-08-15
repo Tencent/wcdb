@@ -29,6 +29,8 @@ namespace Syntax {
 class WithClause final : public Identifier {
 #pragma mark - Lang
 public:
+    ~WithClause() override final;
+
     bool recursive = false;
     std::list<CTETableName> tables;
     std::list<SelectSTMT> selects;

@@ -67,6 +67,8 @@ constexpr const char* Enum::description(const Syntax::FrameSpec::SecondEvent& se
 
 namespace Syntax {
 
+FrameSpec::~FrameSpec() = default;
+
 #pragma mark - Identifier
 Identifier::Type FrameSpec::getType() const
 {

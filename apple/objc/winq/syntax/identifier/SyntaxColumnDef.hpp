@@ -30,6 +30,8 @@ namespace Syntax {
 class ColumnDef final : public Identifier {
 #pragma mark - Syntax
 public:
+    ~ColumnDef() override final;
+
     Column column;
     WCDB_SYNTAX_ENUM_UNION(ColumnType, columnType);
     std::list<ColumnConstraint> constraints;

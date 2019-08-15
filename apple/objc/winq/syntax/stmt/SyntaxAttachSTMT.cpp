@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+AttachSTMT::~AttachSTMT() = default;
+
 bool AttachSTMT::isValid() const
 {
     return expression.isValid();

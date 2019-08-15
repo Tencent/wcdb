@@ -29,6 +29,8 @@ namespace Syntax {
 class UpsertClause final : public Identifier {
 #pragma mark - Lang
 public:
+    ~UpsertClause() override final;
+
     std::list<IndexedColumn> indexedColumns;
     Expression condition;
     WCDB_SYNTAX_MAIN_UNION_ENUM(Nothing, Update);

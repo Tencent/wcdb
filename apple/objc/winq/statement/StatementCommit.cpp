@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+StatementCommit::~StatementCommit() = default;
+
 StatementCommit& StatementCommit::commit()
 {
     syntax().inited = true;

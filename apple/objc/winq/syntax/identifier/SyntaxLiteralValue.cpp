@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+LiteralValue::~LiteralValue() = default;
+
 #pragma mark - Identifier
 Identifier::Type LiteralValue::getType() const
 {

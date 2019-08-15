@@ -33,6 +33,8 @@ ColumnDef::ColumnDef(const Column& column, const ColumnType& type)
     syntax().columnType = type;
 }
 
+ColumnDef::~ColumnDef() = default;
+
 ColumnDef& ColumnDef::constraint(const ColumnConstraint& constraint)
 {
     syntax().constraints.push_back(constraint);

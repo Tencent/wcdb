@@ -28,6 +28,7 @@ class TableConstraint final : public SpecifiedSyntax<Syntax::TableConstraint, SQ
 public:
     TableConstraint();
     explicit TableConstraint(const UnsafeStringView& name);
+    ~TableConstraint() override final;
 
     TableConstraint& primaryKey();
     TableConstraint& unique();

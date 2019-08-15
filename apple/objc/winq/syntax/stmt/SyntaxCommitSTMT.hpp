@@ -29,6 +29,8 @@ namespace Syntax {
 class CommitSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    ~CommitSTMT() override final;
+
     bool inited = false;
     bool isValid() const override final;
 

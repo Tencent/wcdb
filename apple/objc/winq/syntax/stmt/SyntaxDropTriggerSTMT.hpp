@@ -29,6 +29,8 @@ namespace Syntax {
 class DropTriggerSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    ~DropTriggerSTMT() override final;
+
     bool ifExists = false;
     Schema schema;
     StringView trigger;

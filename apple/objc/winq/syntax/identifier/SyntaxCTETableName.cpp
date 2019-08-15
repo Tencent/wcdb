@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+CTETableName::~CTETableName() = default;
+
 bool CTETableName::isValid() const
 {
     return !name.empty();

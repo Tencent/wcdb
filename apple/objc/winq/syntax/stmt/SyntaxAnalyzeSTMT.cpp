@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+AnalyzeSTMT::~AnalyzeSTMT() = default;
+
 #pragma mark - Identifier
 Identifier::Type AnalyzeSTMT::getType() const
 {

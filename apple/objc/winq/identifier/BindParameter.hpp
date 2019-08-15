@@ -29,6 +29,7 @@ public:
     using SpecifiedSyntax<Syntax::BindParameter, SQL>::SpecifiedSyntax;
     BindParameter(int n);
     explicit BindParameter(const UnsafeStringView& name);
+    ~BindParameter() override final;
 
     static BindParameters bindParameters(size_t count);
 

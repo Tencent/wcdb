@@ -27,6 +27,8 @@ CommonTableExpression::CommonTableExpression(const UnsafeStringView& table)
     syntax().table = table;
 }
 
+CommonTableExpression::~CommonTableExpression() = default;
+
 CommonTableExpression& CommonTableExpression::column(const Column& column)
 {
     syntax().columns.push_back(column);

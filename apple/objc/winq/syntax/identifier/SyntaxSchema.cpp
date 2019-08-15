@@ -35,6 +35,8 @@ Schema::Schema() : name(mainSchema)
 {
 }
 
+Schema::~Schema() = default;
+
 #pragma mark - Identifier
 Identifier::Type Schema::getType() const
 {

@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+SelectCore::~SelectCore() = default;
+
 #pragma mark - Identifier
 Identifier::Type SelectCore::getType() const
 {

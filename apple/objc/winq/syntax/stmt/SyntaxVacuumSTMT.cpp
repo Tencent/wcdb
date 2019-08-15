@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+VacuumSTMT::~VacuumSTMT() = default;
+
 #pragma mark - Identifier
 Identifier::Type VacuumSTMT::getType() const
 {

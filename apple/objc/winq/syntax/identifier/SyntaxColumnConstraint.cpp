@@ -26,6 +26,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+ColumnConstraint::~ColumnConstraint() = default;
+
 #pragma mark - Identifier
 Identifier::Type ColumnConstraint::getType() const
 {

@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+CommonTableExpression::~CommonTableExpression() = default;
+
 bool CommonTableExpression::isValid() const
 {
     return !table.empty();

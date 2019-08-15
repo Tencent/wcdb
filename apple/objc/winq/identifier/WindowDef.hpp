@@ -26,6 +26,8 @@ namespace WCDB {
 
 class WindowDef final : public SpecifiedSyntax<Syntax::WindowDef, SQL> {
 public:
+    ~WindowDef() override final;
+
     WindowDef& partition(const Expressions& expressions);
     WindowDef& order(const OrderingTerms& orders);
     WindowDef& framespec(const FrameSpec& framespec);

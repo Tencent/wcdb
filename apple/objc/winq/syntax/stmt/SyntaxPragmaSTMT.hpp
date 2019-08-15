@@ -29,6 +29,8 @@ namespace Syntax {
 class PragmaSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    ~PragmaSTMT() override final;
+
     Schema schema;
     Pragma pragma;
     enum class Switch {

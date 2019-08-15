@@ -33,6 +33,8 @@ class OrderingTerm;
 class WindowDef final : public Identifier {
 #pragma mark - Lang
 public:
+    ~WindowDef() override final;
+
     std::list<Expression> expressions;
     std::list<OrderingTerm> orderingTerms;
     FrameSpec frameSpec;

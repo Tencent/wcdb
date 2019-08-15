@@ -30,6 +30,8 @@ class Schema final : public Identifier {
 #pragma mark - Syntax
 public:
     Schema();
+    ~Schema() override final;
+
     StringView name;
 
     bool isValid() const override final;

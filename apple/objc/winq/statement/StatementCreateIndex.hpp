@@ -28,6 +28,7 @@ class StatementCreateIndex final
 : public SpecifiedSyntax<Syntax::CreateIndexSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::CreateIndexSTMT, Statement>::SpecifiedSyntax;
+    ~StatementCreateIndex() override final;
 
     StatementCreateIndex& createIndex(const UnsafeStringView& index);
     StatementCreateIndex& schema(const Schema& schema);

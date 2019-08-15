@@ -26,6 +26,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+ColumnDef::~ColumnDef() = default;
+
 bool ColumnDef::isValid() const
 {
     return column.isValid();

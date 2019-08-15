@@ -24,6 +24,8 @@ namespace WCDB {
 
 TableConstraint::TableConstraint() = default;
 
+TableConstraint::~TableConstraint() = default;
+
 TableConstraint::TableConstraint(const UnsafeStringView& name)
 {
     syntax().name = name;

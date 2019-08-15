@@ -31,6 +31,8 @@ namespace Syntax {
 class IndexedColumn final : public Identifier {
 #pragma mark - Lang
 public:
+    ~IndexedColumn() override final;
+
     WCDB_SYNTAX_MAIN_UNION_ENUM(Column, Expression);
 
     Column column;

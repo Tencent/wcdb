@@ -28,6 +28,7 @@ class ColumnConstraint final : public SpecifiedSyntax<Syntax::ColumnConstraint, 
 public:
     ColumnConstraint();
     explicit ColumnConstraint(const UnsafeStringView& name);
+    ~ColumnConstraint() override final;
 
     ColumnConstraint& primaryKey();
     ColumnConstraint& order(const Order& order);

@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+StatementDelete::~StatementDelete() = default;
+
 StatementDelete& StatementDelete::with(const With& with)
 {
     syntax().withClause = with;

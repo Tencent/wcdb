@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+DropViewSTMT::~DropViewSTMT() = default;
+
 bool DropViewSTMT::isValid() const
 {
     return !view.empty();

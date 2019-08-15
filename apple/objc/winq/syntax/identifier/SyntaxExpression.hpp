@@ -37,6 +37,8 @@ class SelectSTMT;
 class Expression final : public Identifier {
 #pragma mark - Lang
 public:
+    ~Expression() override final;
+
     WCDB_SYNTAX_MAIN_UNION_ENUM(LiteralValue,
                                 BindParameter,
                                 Column,

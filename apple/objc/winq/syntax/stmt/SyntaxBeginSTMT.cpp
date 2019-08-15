@@ -39,6 +39,8 @@ constexpr const char* Enum::description(const Syntax::BeginSTMT::Switch& switche
 
 namespace Syntax {
 
+BeginSTMT::~BeginSTMT() = default;
+
 #pragma mark - Identifier
 Identifier::Type BeginSTMT::getType() const
 {

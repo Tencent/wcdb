@@ -29,6 +29,8 @@ namespace Syntax {
 class UpdateSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    ~UpdateSTMT() override final;
+
     WithClause withClause;
     WCDB_SYNTAX_ENUM_UNION(ConflictAction, conflictAction);
     QualifiedTableName table;

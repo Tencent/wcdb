@@ -27,6 +27,8 @@ CTETable::CTETable(const UnsafeStringView& name)
     syntax().name = name;
 }
 
+CTETable::~CTETable() = default;
+
 CTETable& CTETable::column(const Column& column)
 {
     syntax().columns.push_back(column);

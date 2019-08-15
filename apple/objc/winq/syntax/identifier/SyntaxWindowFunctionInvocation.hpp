@@ -29,6 +29,8 @@ namespace Syntax {
 class WindowFunctionInvocation final : public Identifier {
 #pragma mark - Lang
 public:
+    ~WindowFunctionInvocation() override final;
+
     StringView name;
     std::list<Expression> expressions;
     bool wildcard = false;

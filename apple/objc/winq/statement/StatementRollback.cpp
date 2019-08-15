@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+StatementRollback::~StatementRollback() = default;
+
 StatementRollback& StatementRollback::rollback()
 {
     syntax().switcher = Syntax::RollbackSTMT::Switch::Transaction;

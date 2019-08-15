@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+Expression::~Expression() = default;
+
 Expression::Expression(const LiteralValue& literalValue)
 {
     syntax().switcher = SyntaxType::Switch::LiteralValue;

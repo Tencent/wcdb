@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+ReleaseSTMT::~ReleaseSTMT() = default;
+
 bool ReleaseSTMT::isValid() const
 {
     return !savepoint.empty();

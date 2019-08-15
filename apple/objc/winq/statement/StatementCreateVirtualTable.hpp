@@ -28,6 +28,7 @@ class StatementCreateVirtualTable
 : public SpecifiedSyntax<Syntax::CreateVirtualTableSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::CreateVirtualTableSTMT, Statement>::SpecifiedSyntax;
+    ~StatementCreateVirtualTable() override final;
 
     StatementCreateVirtualTable& createVirtualTable(const UnsafeStringView& table);
     StatementCreateVirtualTable& schema(const Schema& schema);

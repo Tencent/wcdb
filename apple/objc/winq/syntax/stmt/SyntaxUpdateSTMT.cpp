@@ -26,6 +26,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+UpdateSTMT::~UpdateSTMT() = default;
+
 bool UpdateSTMT::isValid() const
 {
     return table.isValid();

@@ -29,6 +29,8 @@ namespace Syntax {
 class JoinConstraint final : public Identifier {
 #pragma mark - Lang
 public:
+    ~JoinConstraint() override final;
+
     Expression expression;
     std::list<Column> columns;
     bool isValid() const override final;

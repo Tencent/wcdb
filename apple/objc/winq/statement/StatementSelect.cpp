@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+StatementSelect::~StatementSelect() = default;
+
 StatementSelect& StatementSelect::with(const CommonTableExpressions& commonTableExpressions)
 {
     syntax().commonTableExpressions = commonTableExpressions;

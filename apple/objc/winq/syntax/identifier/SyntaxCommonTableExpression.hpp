@@ -29,6 +29,8 @@ namespace Syntax {
 class CommonTableExpression final : public Identifier {
 #pragma mark - Lang
 public:
+    ~CommonTableExpression() override final;
+
     StringView table;
     std::list<Column> columns;
     Shadow<SelectSTMT> select;

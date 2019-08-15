@@ -29,6 +29,8 @@ namespace Syntax {
 class FunctionInvocation final : public Identifier {
 #pragma mark - Lang
 public:
+    ~FunctionInvocation() override final;
+
     StringView name;
     bool distinct = false;
     bool wildcard = false;

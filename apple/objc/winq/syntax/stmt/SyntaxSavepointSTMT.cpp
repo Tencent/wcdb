@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+SavepointSTMT::~SavepointSTMT() = default;
+
 bool SavepointSTMT::isValid() const
 {
     return !savepoint.empty();

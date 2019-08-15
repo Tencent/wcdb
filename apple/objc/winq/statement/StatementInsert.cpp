@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+StatementInsert::~StatementInsert() = default;
+
 StatementInsert& StatementInsert::with(const With& with)
 {
     syntax().withClause = with;

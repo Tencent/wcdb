@@ -29,6 +29,8 @@ namespace Syntax {
 class Pragma final : public Identifier {
 #pragma mark - Lang
 public:
+    ~Pragma() override final;
+
     StringView name;
 
     bool isValid() const override final;

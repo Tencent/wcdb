@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+StatementAttach::~StatementAttach() = default;
+
 StatementAttach& StatementAttach::attach(const Expression& expression)
 {
     syntax().expression = expression;

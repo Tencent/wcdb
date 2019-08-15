@@ -30,6 +30,8 @@ namespace Syntax {
 class LiteralValue final : public Identifier {
 #pragma mark - Lang
 public:
+    ~LiteralValue() override final;
+
     WCDB_SYNTAX_MAIN_UNION_ENUM(
     StringView, Null, Float, Integer, UnsignedInteger, Bool, CurrentTime, CurrentDate, CurrentTimestamp);
 

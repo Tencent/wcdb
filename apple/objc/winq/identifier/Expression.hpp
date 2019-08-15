@@ -38,6 +38,7 @@ class Expression final : public SpecifiedSyntax<Syntax::Expression, SQL>,
                          public FTS3FunctionOperable {
 public:
     using SpecifiedSyntax<Syntax::Expression, SQL>::SpecifiedSyntax;
+    ~Expression() override final;
 
     template<typename T, typename Enable = typename std::enable_if<ExpressionConvertible<T>::value>::type>
     Expression(const T& t)

@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+StatementUpdate::~StatementUpdate() = default;
+
 StatementUpdate& StatementUpdate::with(const With& with)
 {
     syntax().withClause = with;

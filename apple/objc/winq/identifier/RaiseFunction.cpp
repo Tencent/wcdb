@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+RaiseFunction::~RaiseFunction() = default;
+
 RaiseFunction& RaiseFunction::ignore()
 {
     syntax().switcher = SyntaxType::Switch::Ignore;

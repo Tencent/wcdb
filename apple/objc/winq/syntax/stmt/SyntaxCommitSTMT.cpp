@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+CommitSTMT::~CommitSTMT() = default;
+
 bool CommitSTMT::isValid() const
 {
     return inited;

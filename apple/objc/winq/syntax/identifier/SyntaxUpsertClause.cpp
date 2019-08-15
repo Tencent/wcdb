@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+UpsertClause::~UpsertClause() = default;
+
 #pragma mark - Identifier
 Identifier::Type UpsertClause::getType() const
 {

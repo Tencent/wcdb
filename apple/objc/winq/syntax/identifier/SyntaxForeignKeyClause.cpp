@@ -75,6 +75,8 @@ Enum::description(const Syntax::ForeignKeyClause::Deferrable& deferrable)
 
 namespace Syntax {
 
+ForeignKeyClause::~ForeignKeyClause() = default;
+
 bool ForeignKeyClause::isValid() const
 {
     return !foreignTable.empty();

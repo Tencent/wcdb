@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+DetachSTMT::~DetachSTMT() = default;
+
 bool DetachSTMT::isValid() const
 {
     return schema.isValid() && !schema.isMain();

@@ -28,6 +28,7 @@ class StatementCreateTrigger final
 : public SpecifiedSyntax<Syntax::CreateTriggerSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::CreateTriggerSTMT, Statement>::SpecifiedSyntax;
+    ~StatementCreateTrigger() override final;
 
     StatementCreateTrigger& createTrigger(const UnsafeStringView& trigger);
     StatementCreateTrigger& schema(const Schema& schema);

@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+CreateTableSTMT::~CreateTableSTMT() = default;
+
 #pragma mark - Identifier
 Identifier::Type CreateTableSTMT::getType() const
 {

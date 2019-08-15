@@ -29,6 +29,8 @@ namespace Syntax {
 class DropTableSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    ~DropTableSTMT() override final;
+
     bool ifExists = false;
     Schema schema;
     StringView table;

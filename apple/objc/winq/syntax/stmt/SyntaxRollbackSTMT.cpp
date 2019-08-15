@@ -25,6 +25,8 @@ namespace WCDB {
 
 namespace Syntax {
 
+RollbackSTMT::~RollbackSTMT() = default;
+
 #pragma mark - Identifier
 Identifier::Type RollbackSTMT::getType() const
 {

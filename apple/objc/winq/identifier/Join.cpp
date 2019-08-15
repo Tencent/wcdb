@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+Join::~Join() = default;
+
 Join& Join::table(const TableOrSubquery& tableOrSubquery)
 {
     syntax().tableOrSubqueries.push_back(tableOrSubquery);

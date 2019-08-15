@@ -39,6 +39,7 @@ class Column : public SpecifiedSyntax<Syntax::Column, SQL>,
 public:
     Column();
     explicit Column(const UnsafeStringView& name);
+    virtual ~Column() override;
 
     static Column rowid();
 
