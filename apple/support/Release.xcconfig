@@ -1,8 +1,10 @@
 #include "Base.xcconfig"
 
+// Architectures
+ONLY_ACTIVE_ARCH = YES
+
 // Build Options
 DEBUG_INFORMATION_FORMAT = dwarf-with-dsym
-ENABLE_TESTABILITY = NO
 VALIDATE_PRODUCT = YES
 
 // Deployment
@@ -15,7 +17,6 @@ DEAD_CODE_STRIPPING = YES
 
 // Code Generation
 LLVM_LTO = YES
-CLANG_ENABLE_CODE_COVERAGE = NO
 GCC_OPTIMIZATION_LEVEL = s
 
 // Preprocessing

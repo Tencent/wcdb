@@ -75,7 +75,7 @@ if $static_framework; then
         echo 'Static library is only support iOS + ObjC.'
         exit 1
     fi
-    settings+=(MACH_O_TYPE=staticlib STRIP_STYLE=debugging)
+    settings+=(MACH_O_TYPE=staticlib STRIP_STYLE=debugging LLVM_LTO=NO)
 fi
 if $disable_bitcode; then
     settings+=(ENABLE_BITCODE=NO)
