@@ -19,7 +19,7 @@ then
     rm -r "$build"
 fi
 mkdir "$build"
-if ! sh "$build_tool" --platform iOS --language ObjC --disable-bitcode --static-framework --destination "$build"; then
+if ! bash "$build_tool" --platform iOS --language ObjC --disable-bitcode --static-framework --destination "$build"; then
     exit 1
 fi
 
