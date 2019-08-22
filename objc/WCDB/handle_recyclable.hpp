@@ -32,7 +32,7 @@ class HandleWrap {
 public:
     HandleWrap(const std::shared_ptr<Handle> &handle, const Configs &configs);
 
-    constexpr Handle *operator->() const { return handle.get(); }
+    Handle *operator->() const { return handle.get(); }
 
     std::shared_ptr<Handle> handle;
     Configs configs;
@@ -43,7 +43,7 @@ public:
     RecyclableHandle(
         const std::shared_ptr<HandleWrap> &value,
         const Recyclable<std::shared_ptr<HandleWrap>>::OnRecycled &onRecycled);
-    constexpr Handle *operator->() const { return m_value->operator->(); }
+    Handle *operator->() const { return m_value->operator->(); }
     operator bool() const;
     bool operator!=(const std::nullptr_t &) const;
     bool operator==(const std::nullptr_t &) const;

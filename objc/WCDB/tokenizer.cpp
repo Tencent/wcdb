@@ -116,7 +116,7 @@ int WCDBCursorInfo::step(const char **ppToken,
                     return rc;
                 }
             } else {
-                if (m_bufferLength > m_buffer.capacity()) {
+                if ((unsigned int) m_bufferLength > m_buffer.capacity()) {
                     m_buffer.resize(m_bufferLength);
                 }
                 memcpy(m_buffer.data(), m_input + m_startOffset,
@@ -124,7 +124,7 @@ int WCDBCursorInfo::step(const char **ppToken,
             }
         } else {
             subTokensStep();
-            if (m_bufferLength > m_buffer.capacity()) {
+            if ((unsigned int) m_bufferLength > m_buffer.capacity()) {
                 m_buffer.resize(m_bufferLength);
             }
             memcpy(m_buffer.data(), m_input + m_startOffset, m_bufferLength);
@@ -226,7 +226,7 @@ int WCDBCursorInfo::cursorSetup()
 int WCDBCursorInfo::lemmatization(const char *input, int inputLength)
 {
     //tolower only. You can implement your own lemmatization.
-    if (inputLength > m_buffer.capacity()) {
+    if ((unsigned int) inputLength > m_buffer.capacity()) {
         m_buffer.resize(inputLength);
     }
     for (int i = 0; i < inputLength; ++i) {

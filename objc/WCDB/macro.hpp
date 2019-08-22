@@ -21,7 +21,10 @@
 #ifndef macro_hpp
 #define macro_hpp
 
+#ifndef _CONCAT
 #define _CONCAT(a, b) a##b
+#endif // !_CONCAT(a,b)
+
 #define CONCAT(a, b) _CONCAT(a, b)
 #define UNUSED_UNIQUE_ID CONCAT(_unused, __COUNTER__)
 

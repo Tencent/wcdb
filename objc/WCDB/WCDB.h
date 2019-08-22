@@ -25,6 +25,24 @@
 #error Since WCDB is an Objective-C++ framework, for those files in your project that includes WCDB, you should rename their extension .m to .mm.
 #endif
 
+#ifdef _WIN32
+#pragma once
+#include "WCDB/abstract.h"
+#include "WCDB/config.hpp"
+#include "WCDB/core_base.hpp"
+#include "WCDB/database.hpp"
+#include "WCDB/error.hpp"
+#include "WCDB/fts_module.hpp"
+#include "WCDB/handle_statement.hpp"
+#include "WCDB/macro.hpp"
+#include "WCDB/statement_recyclable.hpp"
+#include "WCDB/ticker.hpp"
+#include "WCDB/tokenizer.hpp"
+#include "WCDB/transaction.hpp"
+#include "WCDB/utility.hpp"
+
+#else
+
 #import <WCDB/abstract.h>
 
 #import <WCDB/WCTMaster+WCTTableCoding.h>
@@ -86,5 +104,7 @@
 #import <WCDB/WCTTransaction+Compatible.h>
 
 #endif //WCDB_OMIT_DEPRECATED
+
+#endif
 
 #endif /* WCDB_h */

@@ -30,6 +30,32 @@ std::string addExtention(const std::string &base, const std::string &extention);
 std::string addComponent(const std::string &base, const std::string &component);
 std::string getFileName(const std::string &base);
 std::string getBaseName(const std::string &base);
+
+#ifdef _WIN32
+
+#define STRING
+
+#ifndef STRING
+#define WSTRING
+#endif // !STRING
+
+#ifdef STRING
+using string_type = std::string;
+using char_type = char;
+#elif defined(WSTRING)
+using string_type = std::wstring;
+using char_type = wchar_t;
+#endif
+
+bool is_separator(char_type c);
+string_type::size_type root_directory_start(const string_type &path,
+                                            string_type::size_type size);
+string_type::size_type filename_pos(const string_type &str,
+                                    string_type::size_type end_pos);
+string_type::size_type m_parent_path_end(string_type path);
+string_type parent_path(string_type path);
+
+#endif 
 } //namespace Path
 
 } //namespace WCDB

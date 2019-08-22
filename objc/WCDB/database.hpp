@@ -113,6 +113,9 @@ public:
                          const unsigned int &databaseKeyLength,
                          Error &error);
 
+	static std::shared_ptr<PerformanceTrace> s_globalPerformanceTrace;
+    static std::shared_ptr<SQLTrace> s_globalSQLTrace;
+
 protected:
     static const std::array<std::string, 5> &subfixs();
 
@@ -120,8 +123,6 @@ protected:
     static ThreadLocal<std::unordered_map<std::string, RecyclableHandle>>
         s_threadedHandle;
 
-    static std::shared_ptr<PerformanceTrace> s_globalPerformanceTrace;
-    static std::shared_ptr<SQLTrace> s_globalSQLTrace;
 };
 
 } //namespace WCDB

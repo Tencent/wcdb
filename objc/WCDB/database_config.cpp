@@ -30,6 +30,35 @@
 
 namespace WCDB {
 
+#ifdef _WIN32
+#include <windows.h>
+const DWORD MS_VC_EXCEPTION = 0x406D1388;
+#pragma pack(push, 8)
+typedef struct tagTHREADNAME_INFO {
+    DWORD dwType;     // Must be 0x1000.
+    LPCSTR szName;    // Pointer to name (in user addr space).
+    DWORD dwThreadID; // Thread ID (-1=caller thread).
+    DWORD dwFlags;    // Reserved for future use, must be zero.
+} THREADNAME_INFO;
+#pragma pack(pop)
+void SetThreadName(DWORD dwThreadID, const char *threadName)
+{
+    THREADNAME_INFO info;
+    info.dwType = 0x1000;
+    info.szName = threadName;
+    info.dwThreadID = dwThreadID;
+    info.dwFlags = 0;
+#pragma warning(push)
+#pragma warning(disable : 6320 6322)
+    __try {
+        RaiseException(MS_VC_EXCEPTION, 0, sizeof(info) / sizeof(ULONG_PTR),
+                       (ULONG_PTR *) &info);
+    } __except (EXCEPTION_EXECUTE_HANDLER) {
+    }
+#pragma warning(pop)
+}
+#endif
+
 const std::string Database::defaultBasicConfigName = "basic";
 const std::string Database::defaultCipherConfigName = "cipher";
 const std::string Database::defaultTraceConfigName = "trace";
@@ -38,6 +67,39 @@ const std::string Database::defaultSynchronousConfigName = "synchronous";
 const std::string Database::defaultTokenizeConfigName = "tokenize";
 std::shared_ptr<PerformanceTrace> Database::s_globalPerformanceTrace = nullptr;
 std::shared_ptr<SQLTrace> Database::s_globalSQLTrace = nullptr;
+
+inline void thdDetach(std::thread thd){
+    thd.detach();
+}
+
+inline void onExpired(const std::string &path){
+    Database database(path);
+    WCDB::Error innerError;
+    database.exec(StatementPragma().pragma(Pragma::WalCheckpoint), innerError);
+}
+
+inline void checkPoint(TimedQueue<std::string> &s_timedQueue){
+
+#ifdef _WIN32
+    SetThreadName(-1, ("WCDB-" + Database::defaultCheckpointConfigName).c_str());
+#else
+    pthread_setname_np(("WCDB-" + Database::defaultCheckpointConfigName).c_str());
+#endif
+
+    while (true) {
+        s_timedQueue.waitUntilExpired(onExpired);
+    }
+}
+
+inline void onCommitted(Handle *handle, int pages, void *){
+    static TimedQueue<std::string> s_timedQueue(2);
+    if (pages > 1000) {
+        s_timedQueue.reQueue(handle->path);
+    }
+    static std::thread s_checkpointThread(checkPoint, std::ref(s_timedQueue));
+    static std::once_flag s_flag;
+    std::call_once(s_flag, thdDetach, std::move(s_checkpointThread));
+}
 
 const Configs Database::defaultConfigs(
     {{
@@ -200,32 +262,7 @@ const Configs Database::defaultConfigs(
      {
          Database::defaultCheckpointConfigName,
          [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
-             handle->registerCommittedHook(
-                 [](Handle *handle, int pages, void *) {
-                     static TimedQueue<std::string> s_timedQueue(2);
-                     if (pages > 1000) {
-                         s_timedQueue.reQueue(handle->path);
-                     }
-                     static std::thread s_checkpointThread([]() {
-                         pthread_setname_np(
-                             ("WCDB-" + Database::defaultCheckpointConfigName)
-                                 .c_str());
-                         while (true) {
-                             s_timedQueue.waitUntilExpired(
-                                 [](const std::string &path) {
-                                     Database database(path);
-                                     WCDB::Error innerError;
-                                     database.exec(StatementPragma().pragma(
-                                                       Pragma::WalCheckpoint),
-                                                   innerError);
-                                 });
-                         }
-                     });
-                     static std::once_flag s_flag;
-                     std::call_once(s_flag,
-                                    []() { s_checkpointThread.detach(); });
-                 },
-                 nullptr);
+             handle->registerCommittedHook(onCommitted, nullptr);
              return true;
          },
          (Configs::Order) Database::ConfigOrder::Checkpoint,

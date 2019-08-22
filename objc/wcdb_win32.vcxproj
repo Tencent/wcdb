@@ -18,18 +18,255 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="openssl\include\openssl\aes.h" />
+    <ClInclude Include="openssl\include\openssl\asn1.h" />
+    <ClInclude Include="openssl\include\openssl\asn1t.h" />
+    <ClInclude Include="openssl\include\openssl\asn1_mac.h" />
+    <ClInclude Include="openssl\include\openssl\bio.h" />
+    <ClInclude Include="openssl\include\openssl\blowfish.h" />
+    <ClInclude Include="openssl\include\openssl\bn.h" />
+    <ClInclude Include="openssl\include\openssl\buffer.h" />
+    <ClInclude Include="openssl\include\openssl\camellia.h" />
+    <ClInclude Include="openssl\include\openssl\cast.h" />
+    <ClInclude Include="openssl\include\openssl\cmac.h" />
+    <ClInclude Include="openssl\include\openssl\cms.h" />
+    <ClInclude Include="openssl\include\openssl\comp.h" />
+    <ClInclude Include="openssl\include\openssl\conf.h" />
+    <ClInclude Include="openssl\include\openssl\conf_api.h" />
+    <ClInclude Include="openssl\include\openssl\crypto.h" />
+    <ClInclude Include="openssl\include\openssl\des.h" />
+    <ClInclude Include="openssl\include\openssl\des_old.h" />
+    <ClInclude Include="openssl\include\openssl\dh.h" />
+    <ClInclude Include="openssl\include\openssl\dsa.h" />
+    <ClInclude Include="openssl\include\openssl\dso.h" />
+    <ClInclude Include="openssl\include\openssl\dtls1.h" />
+    <ClInclude Include="openssl\include\openssl\ebcdic.h" />
+    <ClInclude Include="openssl\include\openssl\ec.h" />
+    <ClInclude Include="openssl\include\openssl\ecdh.h" />
+    <ClInclude Include="openssl\include\openssl\ecdsa.h" />
+    <ClInclude Include="openssl\include\openssl\engine.h" />
+    <ClInclude Include="openssl\include\openssl\err.h" />
+    <ClInclude Include="openssl\include\openssl\evp.h" />
+    <ClInclude Include="openssl\include\openssl\e_os2.h" />
+    <ClInclude Include="openssl\include\openssl\hmac.h" />
+    <ClInclude Include="openssl\include\openssl\idea.h" />
+    <ClInclude Include="openssl\include\openssl\krb5_asn.h" />
+    <ClInclude Include="openssl\include\openssl\kssl.h" />
+    <ClInclude Include="openssl\include\openssl\lhash.h" />
+    <ClInclude Include="openssl\include\openssl\md4.h" />
+    <ClInclude Include="openssl\include\openssl\md5.h" />
+    <ClInclude Include="openssl\include\openssl\mdc2.h" />
+    <ClInclude Include="openssl\include\openssl\modes.h" />
+    <ClInclude Include="openssl\include\openssl\objects.h" />
+    <ClInclude Include="openssl\include\openssl\obj_mac.h" />
+    <ClInclude Include="openssl\include\openssl\ocsp.h" />
+    <ClInclude Include="openssl\include\openssl\opensslconf.h" />
+    <ClInclude Include="openssl\include\openssl\opensslv.h" />
+    <ClInclude Include="openssl\include\openssl\ossl_typ.h" />
+    <ClInclude Include="openssl\include\openssl\pem.h" />
+    <ClInclude Include="openssl\include\openssl\pem2.h" />
+    <ClInclude Include="openssl\include\openssl\pkcs12.h" />
+    <ClInclude Include="openssl\include\openssl\pkcs7.h" />
+    <ClInclude Include="openssl\include\openssl\pqueue.h" />
+    <ClInclude Include="openssl\include\openssl\rand.h" />
+    <ClInclude Include="openssl\include\openssl\rc2.h" />
+    <ClInclude Include="openssl\include\openssl\rc4.h" />
+    <ClInclude Include="openssl\include\openssl\ripemd.h" />
+    <ClInclude Include="openssl\include\openssl\rsa.h" />
+    <ClInclude Include="openssl\include\openssl\safestack.h" />
+    <ClInclude Include="openssl\include\openssl\seed.h" />
+    <ClInclude Include="openssl\include\openssl\sha.h" />
+    <ClInclude Include="openssl\include\openssl\srp.h" />
+    <ClInclude Include="openssl\include\openssl\srtp.h" />
+    <ClInclude Include="openssl\include\openssl\ssl.h" />
+    <ClInclude Include="openssl\include\openssl\ssl2.h" />
+    <ClInclude Include="openssl\include\openssl\ssl23.h" />
+    <ClInclude Include="openssl\include\openssl\ssl3.h" />
+    <ClInclude Include="openssl\include\openssl\stack.h" />
+    <ClInclude Include="openssl\include\openssl\symhacks.h" />
+    <ClInclude Include="openssl\include\openssl\tls1.h" />
+    <ClInclude Include="openssl\include\openssl\ts.h" />
+    <ClInclude Include="openssl\include\openssl\txt_db.h" />
+    <ClInclude Include="openssl\include\openssl\ui.h" />
+    <ClInclude Include="openssl\include\openssl\ui_compat.h" />
+    <ClInclude Include="openssl\include\openssl\whrlpool.h" />
+    <ClInclude Include="openssl\include\openssl\x509.h" />
+    <ClInclude Include="openssl\include\openssl\x509v3.h" />
+    <ClInclude Include="openssl\include\openssl\x509_vfy.h" />
+    <ClInclude Include="pthread\include\pthread.h" />
+    <ClInclude Include="pthread\include\sched.h" />
+    <ClInclude Include="pthread\include\semaphore.h" />
+    <ClInclude Include="sqlcipher\fts3_tokenizer.h" />
+    <ClInclude Include="sqlcipher\sqlcipher.h" />
+    <ClInclude Include="sqlcipher\sqlite3.h" />
+    <ClInclude Include="sqlcipher\sqlite3ext.h" />
+    <ClInclude Include="sqlcipher\sqlite3session.h" />
+    <ClInclude Include="WCDB\abstract.h" />
+    <ClInclude Include="WCDB\clause_join.hpp" />
+    <ClInclude Include="WCDB\column.hpp" />
+    <ClInclude Include="WCDB\column_def.hpp" />
+    <ClInclude Include="WCDB\column_index.hpp" />
+    <ClInclude Include="WCDB\column_result.hpp" />
+    <ClInclude Include="WCDB\column_type.hpp" />
+    <ClInclude Include="WCDB\concurrent_list.hpp" />
+    <ClInclude Include="WCDB\config.hpp" />
+    <ClInclude Include="WCDB\conflict.hpp" />
+    <ClInclude Include="WCDB\constraint_table.hpp" />
+    <ClInclude Include="WCDB\core_base.hpp" />
+    <ClInclude Include="WCDB\database.hpp" />
+    <ClInclude Include="WCDB\declare.hpp" />
+    <ClInclude Include="WCDB\describable.hpp" />
+    <ClInclude Include="WCDB\error.hpp" />
+    <ClInclude Include="WCDB\expr.hpp" />
+    <ClInclude Include="WCDB\file.hpp" />
+    <ClInclude Include="WCDB\foreign_key.hpp" />
+    <ClInclude Include="WCDB\fts_module.hpp" />
+    <ClInclude Include="WCDB\fts_modules.hpp" />
+    <ClInclude Include="WCDB\handle.hpp" />
+    <ClInclude Include="WCDB\handle_pool.hpp" />
+    <ClInclude Include="WCDB\handle_recyclable.hpp" />
+    <ClInclude Include="WCDB\handle_statement.hpp" />
+    <ClInclude Include="WCDB\literal_value.hpp" />
+    <ClInclude Include="WCDB\macro.hpp" />
+    <ClInclude Include="WCDB\module_argument.hpp" />
+    <ClInclude Include="WCDB\order.hpp" />
+    <ClInclude Include="WCDB\order_term.hpp" />
+    <ClInclude Include="WCDB\path.hpp" />
+    <ClInclude Include="WCDB\pragma.hpp" />
+    <ClInclude Include="WCDB\recyclable.hpp" />
+    <ClInclude Include="WCDB\rwlock.hpp" />
+    <ClInclude Include="WCDB\spin.hpp" />
+    <ClInclude Include="WCDB\SQLiteRepairKit.h" />
+    <ClInclude Include="WCDB\sqliterk.h" />
+    <ClInclude Include="WCDB\sqliterk_btree.h" />
+    <ClInclude Include="WCDB\sqliterk_column.h" />
+    <ClInclude Include="WCDB\sqliterk_crypto.h" />
+    <ClInclude Include="WCDB\sqliterk_os.h" />
+    <ClInclude Include="WCDB\sqliterk_pager.h" />
+    <ClInclude Include="WCDB\sqliterk_util.h" />
+    <ClInclude Include="WCDB\sqliterk_values.h" />
+    <ClInclude Include="WCDB\statement.hpp" />
+    <ClInclude Include="WCDB\statement_alter_table.hpp" />
+    <ClInclude Include="WCDB\statement_attach.hpp" />
+    <ClInclude Include="WCDB\statement_create_index.hpp" />
+    <ClInclude Include="WCDB\statement_create_table.hpp" />
+    <ClInclude Include="WCDB\statement_create_virtual_table.hpp" />
+    <ClInclude Include="WCDB\statement_delete.hpp" />
+    <ClInclude Include="WCDB\statement_detach.hpp" />
+    <ClInclude Include="WCDB\statement_drop_index.hpp" />
+    <ClInclude Include="WCDB\statement_drop_table.hpp" />
+    <ClInclude Include="WCDB\statement_explain.hpp" />
+    <ClInclude Include="WCDB\statement_insert.hpp" />
+    <ClInclude Include="WCDB\statement_pragma.hpp" />
+    <ClInclude Include="WCDB\statement_recyclable.hpp" />
+    <ClInclude Include="WCDB\statement_reindex.hpp" />
+    <ClInclude Include="WCDB\statement_release.hpp" />
+    <ClInclude Include="WCDB\statement_rollback.hpp" />
+    <ClInclude Include="WCDB\statement_savepoint.hpp" />
+    <ClInclude Include="WCDB\statement_select.hpp" />
+    <ClInclude Include="WCDB\statement_transaction.hpp" />
+    <ClInclude Include="WCDB\statement_update.hpp" />
+    <ClInclude Include="WCDB\statement_vacuum.hpp" />
+    <ClInclude Include="WCDB\subquery.hpp" />
+    <ClInclude Include="WCDB\thread_local.hpp" />
+    <ClInclude Include="WCDB\ticker.hpp" />
+    <ClInclude Include="WCDB\timed_queue.hpp" />
+    <ClInclude Include="WCDB\tokenizer.hpp" />
+    <ClInclude Include="WCDB\transaction.hpp" />
+    <ClInclude Include="WCDB\utility.hpp" />
+    <ClInclude Include="WCDB\WCDB.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="openssl\include\openssl\applink.c" />
+    <ClCompile Include="sqlcipher\sqlite3.c" />
+    <ClCompile Include="WCDB\clause_join.cpp" />
+    <ClCompile Include="WCDB\column.cpp" />
+    <ClCompile Include="WCDB\column_def.cpp" />
+    <ClCompile Include="WCDB\column_index.cpp" />
+    <ClCompile Include="WCDB\column_result.cpp" />
+    <ClCompile Include="WCDB\column_type.cpp" />
+    <ClCompile Include="WCDB\config.cpp" />
+    <ClCompile Include="WCDB\conflict.cpp" />
+    <ClCompile Include="WCDB\constraint_table.cpp" />
+    <ClCompile Include="WCDB\core_base.cpp" />
+    <ClCompile Include="WCDB\database.cpp" />
+    <ClCompile Include="WCDB\database_config.cpp" />
+    <ClCompile Include="WCDB\database_file.cpp" />
+    <ClCompile Include="WCDB\database_repair_kit.cpp" />
+    <ClCompile Include="WCDB\database_sql.cpp" />
+    <ClCompile Include="WCDB\database_transaction.cpp" />
+    <ClCompile Include="WCDB\describable.cpp" />
+    <ClCompile Include="WCDB\error.cpp" />
+    <ClCompile Include="WCDB\expr.cpp" />
+    <ClCompile Include="WCDB\file.cpp" />
+    <ClCompile Include="WCDB\foreign_key.cpp" />
+    <ClCompile Include="WCDB\fts_module.cpp" />
+    <ClCompile Include="WCDB\fts_modules.cpp" />
+    <ClCompile Include="WCDB\handle.cpp" />
+    <ClCompile Include="WCDB\handle_pool.cpp" />
+    <ClCompile Include="WCDB\handle_recyclable.cpp" />
+    <ClCompile Include="WCDB\handle_statement.cpp" />
+    <ClCompile Include="WCDB\literal_value.cpp" />
+    <ClCompile Include="WCDB\module_argument.cpp" />
+    <ClCompile Include="WCDB\order.cpp" />
+    <ClCompile Include="WCDB\order_term.cpp" />
+    <ClCompile Include="WCDB\path.cpp" />
+    <ClCompile Include="WCDB\pragma.cpp" />
+    <ClCompile Include="WCDB\rwlock.cpp" />
+    <ClCompile Include="WCDB\spin.cpp" />
+    <ClCompile Include="WCDB\sqliterk.cpp" />
+    <ClCompile Include="WCDB\sqliterk_api.cpp" />
+    <ClCompile Include="WCDB\sqliterk_btree.cpp" />
+    <ClCompile Include="WCDB\sqliterk_column.cpp" />
+    <ClCompile Include="WCDB\sqliterk_crypto.cpp" />
+    <ClCompile Include="WCDB\sqliterk_os.cpp" />
+    <ClCompile Include="WCDB\sqliterk_output.cpp" />
+    <ClCompile Include="WCDB\sqliterk_pager.cpp" />
+    <ClCompile Include="WCDB\sqliterk_util.cpp" />
+    <ClCompile Include="WCDB\sqliterk_values.cpp" />
+    <ClCompile Include="WCDB\statement.cpp" />
+    <ClCompile Include="WCDB\statement_alter_table.cpp" />
+    <ClCompile Include="WCDB\statement_attach.cpp" />
+    <ClCompile Include="WCDB\statement_create_index.cpp" />
+    <ClCompile Include="WCDB\statement_create_table.cpp" />
+    <ClCompile Include="WCDB\statement_create_virtual_table.cpp" />
+    <ClCompile Include="WCDB\statement_delete.cpp" />
+    <ClCompile Include="WCDB\statement_detach.cpp" />
+    <ClCompile Include="WCDB\statement_drop_index.cpp" />
+    <ClCompile Include="WCDB\statement_drop_table.cpp" />
+    <ClCompile Include="WCDB\statement_explain.cpp" />
+    <ClCompile Include="WCDB\statement_insert.cpp" />
+    <ClCompile Include="WCDB\statement_pragma.cpp" />
+    <ClCompile Include="WCDB\statement_recyclable.cpp" />
+    <ClCompile Include="WCDB\statement_reindex.cpp" />
+    <ClCompile Include="WCDB\statement_release.cpp" />
+    <ClCompile Include="WCDB\statement_rollback.cpp" />
+    <ClCompile Include="WCDB\statement_savepoint.cpp" />
+    <ClCompile Include="WCDB\statement_select.cpp" />
+    <ClCompile Include="WCDB\statement_transaction.cpp" />
+    <ClCompile Include="WCDB\statement_update.cpp" />
+    <ClCompile Include="WCDB\statement_vacuum.cpp" />
+    <ClCompile Include="WCDB\subquery.cpp" />
+    <ClCompile Include="WCDB\ticker.cpp" />
+    <ClCompile Include="WCDB\tokenizer.cpp" />
+    <ClCompile Include="WCDB\transaction.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="WCDB\SQLiteRepairKit.modulemap" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{D1D63A34-BF08-4E2E-B157-8658E19EA496}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>objc</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -72,6 +309,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IncludePath>$(ProjectDir);$(ProjectDir)zlib\include;$(ProjectDir)pthread\include;$(ProjectDir)openssl\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -84,12 +323,14 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;SQLITE_ENABLE_COLUMN_METADATA;HAVE_STRUCT_TIMESPEC;SQLITE_HAS_CODEC;WCDB_BUILTIN_SQLCIPHER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <DisableSpecificWarnings>4996;4068;4200</DisableSpecificWarnings>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

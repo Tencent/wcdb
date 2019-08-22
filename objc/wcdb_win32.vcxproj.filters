@@ -13,5 +13,714 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="源文件\abstract">
+      <UniqueIdentifier>{1989b08b-e9fa-4e05-8f86-d57d4e0879e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\core">
+      <UniqueIdentifier>{428266c5-6c8a-4385-bbb6-eee0b5e70007}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\util">
+      <UniqueIdentifier>{3a0fc7cb-b361-4d95-99de-aabb0ca6f649}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\repair">
+      <UniqueIdentifier>{0e9a8965-cf1e-4f94-9a32-a8209cfb5a68}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="openssl\include\openssl\aes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\asn1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\asn1_mac.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\asn1t.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\bio.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\blowfish.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\bn.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\buffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\camellia.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\cast.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\cmac.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\cms.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\comp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\conf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\conf_api.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\crypto.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\des.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\des_old.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\dh.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\dsa.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\dso.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\dtls1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\e_os2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\ebcdic.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\ec.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\ecdh.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\ecdsa.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\engine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\err.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\evp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\hmac.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\idea.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\krb5_asn.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\kssl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\lhash.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\md4.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\md5.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\mdc2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\modes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\obj_mac.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\objects.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\ocsp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\opensslconf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\opensslv.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\ossl_typ.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\pem.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\pem2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\pkcs7.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\pkcs12.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\pqueue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\rand.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\rc2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\rc4.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\ripemd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\rsa.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\safestack.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\seed.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\sha.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\srp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\srtp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\ssl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\ssl2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\ssl3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\ssl23.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\stack.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\symhacks.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\tls1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\ts.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\txt_db.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\ui.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\ui_compat.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\whrlpool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\x509.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\x509_vfy.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="openssl\include\openssl\x509v3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="pthread\include\pthread.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="pthread\include\sched.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="pthread\include\semaphore.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlcipher\fts3_tokenizer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlcipher\sqlcipher.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlcipher\sqlite3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlcipher\sqlite3ext.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlcipher\sqlite3session.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\abstract.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\clause_join.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\column.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\column_def.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\column_index.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\column_result.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\column_type.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\concurrent_list.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\config.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\conflict.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\constraint_table.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\core_base.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\database.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\declare.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\describable.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\error.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\expr.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\file.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\foreign_key.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\fts_module.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\fts_modules.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\handle.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\handle_pool.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\handle_recyclable.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\handle_statement.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\literal_value.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\macro.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\module_argument.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\order.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\order_term.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\path.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\pragma.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\recyclable.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\rwlock.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\spin.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\statement.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\statement_alter_table.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\statement_attach.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\statement_create_index.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\statement_create_table.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\statement_create_virtual_table.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\statement_delete.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\statement_detach.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\statement_drop_index.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\statement_drop_table.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\statement_explain.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\statement_insert.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\statement_pragma.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\statement_recyclable.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\statement_reindex.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\statement_release.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\statement_rollback.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\statement_savepoint.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\statement_select.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\statement_transaction.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\statement_update.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\statement_vacuum.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\subquery.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\thread_local.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\ticker.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\timed_queue.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\tokenizer.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\transaction.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\utility.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\WCDB.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\SQLiteRepairKit.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\sqliterk.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\sqliterk_btree.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\sqliterk_column.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\sqliterk_crypto.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\sqliterk_os.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\sqliterk_pager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\sqliterk_values.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WCDB\sqliterk_util.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="openssl\include\openssl\applink.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="sqlcipher\sqlite3.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\error.cpp">
+      <Filter>源文件\util</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\file.cpp">
+      <Filter>源文件\util</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\path.cpp">
+      <Filter>源文件\util</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\rwlock.cpp">
+      <Filter>源文件\util</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\spin.cpp">
+      <Filter>源文件\util</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\ticker.cpp">
+      <Filter>源文件\util</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\config.cpp">
+      <Filter>源文件\core</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\core_base.cpp">
+      <Filter>源文件\core</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\database.cpp">
+      <Filter>源文件\core</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\database_config.cpp">
+      <Filter>源文件\core</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\database_file.cpp">
+      <Filter>源文件\core</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\database_repair_kit.cpp">
+      <Filter>源文件\core</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\database_sql.cpp">
+      <Filter>源文件\core</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\database_transaction.cpp">
+      <Filter>源文件\core</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\handle_pool.cpp">
+      <Filter>源文件\core</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\handle_recyclable.cpp">
+      <Filter>源文件\core</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\statement_recyclable.cpp">
+      <Filter>源文件\core</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\tokenizer.cpp">
+      <Filter>源文件\core</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\transaction.cpp">
+      <Filter>源文件\core</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\clause_join.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\column.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\column_def.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\column_index.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\column_result.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\column_type.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\conflict.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\constraint_table.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\describable.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\expr.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\foreign_key.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\fts_module.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\fts_modules.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\handle.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\handle_statement.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\literal_value.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\module_argument.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\order.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\order_term.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\pragma.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\statement.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\statement_alter_table.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\statement_attach.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\statement_create_index.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\statement_create_table.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\statement_create_virtual_table.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\statement_delete.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\statement_detach.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\statement_drop_index.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\statement_drop_table.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\statement_explain.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\statement_insert.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\statement_pragma.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\statement_reindex.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\statement_release.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\statement_rollback.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\statement_savepoint.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\statement_select.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\statement_transaction.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\statement_update.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\statement_vacuum.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\subquery.cpp">
+      <Filter>源文件\abstract</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\sqliterk.cpp">
+      <Filter>源文件\repair</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\sqliterk_api.cpp">
+      <Filter>源文件\repair</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\sqliterk_btree.cpp">
+      <Filter>源文件\repair</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\sqliterk_column.cpp">
+      <Filter>源文件\repair</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\sqliterk_crypto.cpp">
+      <Filter>源文件\repair</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\sqliterk_output.cpp">
+      <Filter>源文件\repair</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\sqliterk_os.cpp">
+      <Filter>源文件\repair</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\sqliterk_pager.cpp">
+      <Filter>源文件\repair</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\sqliterk_util.cpp">
+      <Filter>源文件\repair</Filter>
+    </ClCompile>
+    <ClCompile Include="WCDB\sqliterk_values.cpp">
+      <Filter>源文件\repair</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="WCDB\SQLiteRepairKit.modulemap" />
   </ItemGroup>
 </Project>

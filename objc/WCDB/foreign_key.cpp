@@ -23,7 +23,7 @@
 namespace WCDB {
 
 ForeignKey::ForeignKey(const std::string &foreignTableName,
-                       const std::list<const std::string> &columnNames)
+                       const std::list<std::string> &columnNames)
     : Describable("REFERENCES " + foreignTableName)
 {
     if (!columnNames.empty()) {
@@ -51,6 +51,8 @@ std::string ForeignKey::actionName(Action action)
         case Action::NoAction:
             return "NO ACTION";
             break;
+        default:
+            return "";
     }
 }
 
@@ -84,6 +86,8 @@ std::string ForeignKey::deferrableName(Deferrable deferrable)
         case Deferrable::None:
             return "";
             break;
+        default:
+            return "";
     }
 }
 

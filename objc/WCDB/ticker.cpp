@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Tencent is pleased to support the open source community by making
  * WCDB available.
  *
@@ -19,8 +19,12 @@
  */
 
 #include <WCDB/ticker.hpp>
-#include <mach/mach_time.h>
 #include <mutex>
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <mach/mach_time.h>
+#endif
 
 namespace WCDB {
 
@@ -30,7 +34,19 @@ Ticker::Ticker() : m_base(0)
 
 void Ticker::tick()
 {
+#ifdef _WIN32
+#define EPOCHFILETIME (116444736000000000UL)
+    FILETIME ft;
+    LARGE_INTEGER li;
+    int64_t now = 0;
+    GetSystemTimeAsFileTime(&ft);
+    li.LowPart = ft.dwLowDateTime;
+    li.HighPart = ft.dwHighDateTime;
+    // 从1970年1月1日0:0:0:000到现在的微秒数(UTC时间)
+    now = (li.QuadPart - EPOCHFILETIME) / 10;
+#else
     uint64_t now = mach_absolute_time();
+#endif
     if (m_base != 0) {
         m_elapses.push_back(now - m_base);
     }
@@ -74,6 +90,9 @@ std::string Ticker::log() const
 
 inline double Ticker::secondsFromElapse(const uint64_t &elapse)
 {
+#ifdef _WIN32
+    return (double) elapse / 1000 / 1000;
+#else
     static double s_numer = 0;
     static double s_denom = 0;
     static std::once_flag s_once;
@@ -85,6 +104,7 @@ inline double Ticker::secondsFromElapse(const uint64_t &elapse)
     });
 
     return (double) elapse * s_numer / s_denom / 1000 / 1000 / 1000;
+#endif
 }
 
 ScopedTicker::ScopedTicker(std::shared_ptr<Ticker> &ticker) : m_ticker(ticker)

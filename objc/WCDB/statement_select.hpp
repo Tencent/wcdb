@@ -30,7 +30,7 @@ public:
     template <typename T = ColumnResult>
     typename std::enable_if<std::is_base_of<ColumnResult, T>::value,
                             StatementSelect &>::type
-    select(const std::list<const T> &columnResultList, bool distinct = false)
+    select(const std::list<T> &columnResultList, bool distinct = false)
     {
         m_description.append("SELECT ");
         if (distinct) {
@@ -43,7 +43,7 @@ public:
     template <typename T = Subquery>
     typename std::enable_if<std::is_base_of<Subquery, T>::value,
                             StatementSelect &>::type
-    from(const std::list<const T> &subqueryList)
+    from(const std::list<T> &subqueryList)
     {
         m_description.append(" FROM ");
         joinDescribableList(subqueryList);

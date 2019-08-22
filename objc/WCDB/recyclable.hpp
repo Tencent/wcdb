@@ -28,10 +28,10 @@ namespace WCDB {
 template <typename T>
 class Recyclable {
 public:
-    typedef std::function<void(T &)> OnRecycled;
+    typedef typename std::function<void(T &)> OnRecycled;
     static const Recyclable inValid;
 
-    Recyclable(const T &value, const Recyclable::OnRecycled &onRecycled)
+    Recyclable(const T &value, const typename Recyclable::OnRecycled &onRecycled)
         : m_value(value)
         , m_onRecycled(onRecycled)
         , m_reference(new std::atomic<int>(0))
@@ -114,7 +114,7 @@ protected:
 
     T m_value;
     mutable std::atomic<int> *m_reference;
-    Recyclable::OnRecycled m_onRecycled;
+    typename Recyclable::OnRecycled m_onRecycled;
 };
 
 } //namespace WCDB

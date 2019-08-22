@@ -24,6 +24,10 @@
 #include <string>
 #include <vector>
 
+#ifdef _WIN32
+#include <memory>
+#endif
+
 namespace WCDB {
 
 class Ticker {

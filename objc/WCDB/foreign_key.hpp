@@ -29,7 +29,7 @@ namespace WCDB {
 class ForeignKey : public Describable {
 public:
     ForeignKey(const std::string &foreignTableName,
-               const std::list<const std::string> &columnNames = {});
+               const std::list<std::string> &columnNames = {});
 
     enum class Action {
         SetNull,

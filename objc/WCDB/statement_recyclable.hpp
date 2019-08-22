@@ -32,7 +32,7 @@ public:
     RecyclableStatement(
         const RecyclableHandle &handle,
         const std::shared_ptr<StatementHandle> &statementHandle);
-    constexpr StatementHandle *operator->() const
+    StatementHandle *operator->() const
     {
         return m_statementHandle.get();
     }

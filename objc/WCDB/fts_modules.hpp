@@ -25,6 +25,10 @@
 #include <string>
 #include <unordered_map>
 
+#ifdef _WIN32
+#include <memory>
+#endif
+
 namespace WCDB {
 
 namespace FTS {

@@ -23,7 +23,15 @@
 #include <WCDB/utility.hpp>
 #include <errno.h>
 #include <sys/stat.h>
-#include <unistd.h>
+#ifdef _WIN32
+	#include <windows.h>
+	#include <direct.h>
+	#include <io.h>
+	#include <process.h>
+#else
+	#include <unistd.h>
+#endif
+
 
 namespace WCDB {
 
@@ -33,7 +41,11 @@ namespace File {
 size_t getFileSize(const std::string &path, Error &error)
 {
     struct stat temp;
+#ifdef _WIN32
+    if (stat(path.c_str(), &temp) == 0) {
+#else 
     if (lstat(path.c_str(), &temp) == 0) {
+#endif
         error.reset();
         return (size_t) temp.st_size;
     } else if (errno == ENOENT) {
@@ -45,9 +57,27 @@ size_t getFileSize(const std::string &path, Error &error)
     return 0;
 }
 
+//string to wstring; char to wchar
+std::wstring stringTowstring(const std::string &src)
+{
+    std::string tmp = src;
+    int len =
+        MultiByteToWideChar(CP_ACP, 0, (LPCSTR) tmp.c_str(), -1, nullptr, 0);
+    wchar_t *des = new wchar_t[len + 1];
+    memset(des, 0, len * 2 + 2);
+    MultiByteToWideChar(CP_ACP, 0, (LPCSTR) tmp.c_str(), -1, (LPWSTR) des, len);
+    std::wstring ret = des;
+    delete[] des;
+    return ret;
+}
+
 bool isExists(const std::string &path, Error &error)
 {
+#ifdef _WIN32
+    if (_access(path.c_str(), 0) == 0) {
+#else
     if (access(path.c_str(), F_OK) == 0) {
+#endif
         error.reset();
         return true;
     } else if (errno == ENOENT) {
@@ -63,7 +93,12 @@ bool createHardLink(const std::string &from,
                     const std::string &to,
                     Error &error)
 {
+#ifdef _WIN32
+    if (CreateHardLinkW(stringTowstring(from).c_str(),stringTowstring(to).c_str(), NULL) == 0) {
+
+#else
     if (link(from.c_str(), to.c_str()) == 0) {
+#endif
         error.reset();
         return true;
     }
@@ -94,7 +129,11 @@ bool removeFile(const std::string &path, Error &error)
 
 bool createDirectory(const std::string &path, Error &error)
 {
+#ifdef _WIN32
+    if (mkdir(path.c_str()) == 0) {
+#else
     if (mkdir(path.c_str(), 0755) == 0) {
+#endif
         return true;
     }
     Error::ReportSystemCall(WCDB::Error::SystemCallOperation::Mkdir, path,

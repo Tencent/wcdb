@@ -34,7 +34,7 @@ public:
     template <typename T = ColumnIndex>
     typename std::enable_if<std::is_base_of<ColumnIndex, T>::value,
                             StatementCreateIndex &>::type
-    on(const std::string &table, const std::list<const T> &indexList)
+    on(const std::string &table, const std::list<T> &indexList)
     {
         m_description.append(" ON " + table + "(");
         joinDescribableList(indexList);

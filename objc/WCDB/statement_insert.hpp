@@ -35,7 +35,7 @@ public:
     typename std::enable_if<std::is_base_of<Column, T>::value,
                             StatementInsert &>::type
     insert(const std::string &table,
-           const std::list<const T> &columnList,
+           const std::list<T> &columnList,
            Conflict conflict = Conflict::Replace)
     {
         m_description.append("INSERT");
@@ -55,7 +55,7 @@ public:
     template <typename T = Expr>
     typename std::enable_if<std::is_base_of<Expr, T>::value,
                             StatementInsert &>::type
-    values(const std::list<const T> &exprList)
+    values(const std::list<T> &exprList)
     {
         if (!exprList.empty()) {
             m_description.append(" VALUES(");

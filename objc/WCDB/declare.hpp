@@ -59,18 +59,18 @@ class StatementCreateVirtualTable;
 class Subquery;
 class TableConstraint;
 
-typedef std::list<const Column> ColumnList;
-typedef std::list<const ColumnDef> ColumnDefList;
-typedef std::list<const ColumnIndex> ColumnIndexList;
-typedef std::list<const ColumnResult> ColumnResultList;
-typedef std::list<const Expr> ExprList;
-typedef std::list<const Order> OrderList;
-typedef std::list<const StatementSelect> StatementSelectList;
-typedef std::list<const Subquery> SubqueryList;
-typedef std::list<const TableConstraint> TableConstraintList;
+typedef std::list<Column> ColumnList;
+typedef std::list<ColumnDef> ColumnDefList;
+typedef std::list<ColumnIndex> ColumnIndexList;
+typedef std::list<ColumnResult> ColumnResultList;
+typedef std::list<Expr> ExprList;
+typedef std::list<Order> OrderList;
+typedef std::list<StatementSelect> StatementSelectList;
+typedef std::list<Subquery> SubqueryList;
+typedef std::list<TableConstraint> TableConstraintList;
 typedef std::pair<const Column, const Expr> UpdateValue;
-typedef std::list<const UpdateValue> UpdateValueList;
-typedef std::list<const ModuleArgument> ModuleArgumentList;
+typedef std::list<UpdateValue> UpdateValueList;
+typedef std::list<ModuleArgument> ModuleArgumentList;
 
 }; //namespace WCDB
 

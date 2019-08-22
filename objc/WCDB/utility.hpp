@@ -21,6 +21,12 @@
 #ifndef utility_hpp
 #define utility_hpp
 
+#ifdef _WIN32
+#if defined(_MSC_VER)
+#define strcasecmp _stricmp
+#endif
+#endif
+
 #include <WCDB/describable.hpp>
 #include <string.h>
 

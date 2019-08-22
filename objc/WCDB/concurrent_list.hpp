@@ -24,6 +24,10 @@
 #include <WCDB/spin.hpp>
 #include <list>
 
+#ifdef _WIN32
+#include <memory>
+#endif
+
 namespace WCDB {
 
 template <typename T>

@@ -34,7 +34,7 @@ public:
     typename std::enable_if<std::is_base_of<Column, T>::value &&
                                 std::is_base_of<Expr, U>::value,
                             StatementUpdate &>::type
-    set(const std::list<const std::pair<const T, const U>> &valueList)
+    set(const std::list<std::pair<const T, const U>> &valueList)
     {
         m_description.append(" SET ");
         bool flag = false;

@@ -37,7 +37,7 @@ public:
     typename std::enable_if<std::is_base_of<ColumnDef, T>::value,
                             StatementCreateTable &>::type
     create(const std::string &table,
-           const std::list<const T> &columnDefList,
+           const std::list<T> &columnDefList,
            bool ifNotExists = true)
     {
         m_description.append("CREATE TABLE ");
@@ -55,8 +55,8 @@ public:
                                 std::is_base_of<TableConstraint, U>::value,
                             StatementCreateTable &>::type
     create(const std::string &table,
-           const std::list<const T> &columnDefList,
-           const std::list<const U> &tableConstraintList,
+           const std::list<T> &columnDefList,
+           const std::list<U> &tableConstraintList,
            bool ifNotExists = true)
     {
         m_description.append("CREATE TABLE ");

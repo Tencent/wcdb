@@ -84,7 +84,7 @@ public:
 
     template <typename T = Expr>
     typename std::enable_if<std::is_base_of<Expr, T>::value, Expr>::type
-    in(const std::list<const T> &exprList) const
+    in(const std::list<T> &exprList) const
     {
         Expr expr;
         expr.m_description.append(m_description + " IN(");
@@ -95,7 +95,7 @@ public:
 
     template <typename T = Expr>
     typename std::enable_if<std::is_base_of<Expr, T>::value, Expr>::type
-    notIn(const std::list<const T> &exprList) const
+    notIn(const std::list<T> &exprList) const
     {
         Expr expr;
         expr.m_description.append(m_description + " NOT IN(");
@@ -107,7 +107,7 @@ public:
     template <typename T = StatementSelect>
     typename std::enable_if<std::is_base_of<StatementSelect, T>::value,
                             Expr>::type
-    in(const std::list<const T> &statementSelectList) const
+    in(const std::list<T> &statementSelectList) const
     {
         Expr expr;
         expr.m_description.append(m_description + " IN(");
@@ -119,7 +119,7 @@ public:
     template <typename T = StatementSelect>
     typename std::enable_if<std::is_base_of<StatementSelect, T>::value,
                             Expr>::type
-    notIn(const std::list<const T> &statementSelectList) const
+    notIn(const std::list<T> &statementSelectList) const
     {
         Expr expr;
         expr.m_description.append(m_description + " NOT IN(");
@@ -161,7 +161,7 @@ public:
 
     template <typename T = Expr>
     static typename std::enable_if<std::is_base_of<Expr, T>::value, Expr>::type
-    Combine(const std::list<const T> &exprList)
+    Combine(const std::list<T> &exprList)
     {
         Expr expr;
         expr.m_description.append("(");
@@ -191,7 +191,7 @@ public:
     template <typename T = Expr>
     static typename std::enable_if<std::is_base_of<Expr, T>::value, Expr>::type
     Function(const std::string &function,
-             const std::list<const T> &exprList,
+             const std::list<T> &exprList,
              bool distinct = false)
     {
         Expr expr;

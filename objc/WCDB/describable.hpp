@@ -30,7 +30,7 @@ namespace WCDB {
 class Describable {
 public:
     template <typename T>
-    static std::string GetListDescription(const std::list<const T> &t)
+    static std::string GetListDescription(const std::list<T> &t)
     {
         std::string s;
         GetDescription(t, s);
@@ -40,7 +40,7 @@ public:
     const std::string &getDescription() const;
 
     template <typename T>
-    void joinDescribableList(const std::list<const T> &list)
+    void joinDescribableList(const std::list<T> &list)
     {
         GetDescription<T>(list, m_description);
     }
@@ -51,7 +51,7 @@ public:
 
 protected:
     template <typename T>
-    static void GetDescription(const std::list<const T> &list,
+    static void GetDescription(const std::list<T> &list,
                                std::string &output)
     {
         bool flag = false;

@@ -28,6 +28,10 @@
 #include <map>
 #include <string>
 
+#ifdef _WIN32
+#include <memory>
+#endif
+
 namespace WCDB {
 
 typedef int Tag;
