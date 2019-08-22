@@ -17,3 +17,6 @@ xcuserdata
 xcuserdata/*
 *.xcworkspace/*
 *.xcworkspace
+
+# Visual Studio
+.vs
