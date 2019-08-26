@@ -94,7 +94,7 @@ void SharedLock::unlockShared()
     }
 }
 
-void SharedLock::lock()
+void SharedLock::lock(const PendingCallback &pending)
 {
     WCTRemedialAssert(
     m_threadedReaders.getOrCreate() == 0, "Upgrade lock is not supported.", return;);
@@ -105,6 +105,9 @@ void SharedLock::lock()
         // If it is shared locked but not current thread, it should wait for the read lock
         // Note that it can't be called when it is shared locked by current thread, no matter the write lock is hold or not.
         ++m_pendingWriters;
+        if (pending != nullptr) {
+            pending();
+        }
         do {
             m_conditionalWriters.wait(lockGuard);
         } while (m_readers > 0 || m_writers > 0);
@@ -115,6 +118,11 @@ void SharedLock::lock()
     WCTAssert(m_locking.isCurrentThread() || (m_writers == 0 && m_readers == 0));
     ++m_writers;
     m_locking = Thread::current();
+}
+
+void SharedLock::lock()
+{
+    lock(nullptr);
 }
 
 void SharedLock::unlock()
@@ -159,6 +167,12 @@ bool SharedLock::writeSafety() const
 }
 
 #pragma mark - Lock Guard
+LockGuard::LockGuard(SharedLock &lock, const SharedLock::PendingCallback &pending)
+: m_lock(&lock)
+{
+    m_lock->lock(pending);
+}
+
 LockGuard::LockGuard(const std::nullptr_t &) : m_lock(nullptr)
 {
 }
