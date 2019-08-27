@@ -37,6 +37,12 @@ StatementSelect().select(1).from(Syntax::masterTable).limit(0))
 
 OperationHandle::~OperationHandle() = default;
 
+void OperationHandle::doSuspend(bool suspend)
+{
+    AbstractHandle::doSuspend(suspend);
+    BackupExclusiveDelegate::suspendBackup(suspend);
+}
+
 #pragma mark - Checkpoint
 bool OperationHandle::checkpoint()
 {

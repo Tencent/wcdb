@@ -183,6 +183,16 @@ private:
     void notifyError(int rc, const char *sql);
 
     std::vector<int> m_ignorableCodes;
+
+#pragma mark - Suspend
+public:
+    void suspend(bool suspend);                     // thread-safe
+    void markAsCanBeSuspended(bool canBeSuspended); // thread-safe, default to false
+protected:
+    virtual void doSuspend(bool suspend);
+
+private:
+    std::atomic<bool> m_canBeSuspended;
 };
 
 } //namespace WCDB

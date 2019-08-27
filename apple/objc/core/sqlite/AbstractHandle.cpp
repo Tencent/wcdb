@@ -34,6 +34,7 @@ AbstractHandle::AbstractHandle()
 , m_notification(this)
 , m_transactionLevel(0)
 , m_transactionError(TransactionError::Allowed)
+, m_canBeSuspended(false)
 {
 }
 
@@ -582,6 +583,26 @@ bool AbstractHandle::isErrorIgnorable() const
         }
     }
     return ignorable;
+}
+
+#pragma mark - Suspend
+void AbstractHandle::suspend(bool suspend)
+{
+    doSuspend(suspend && m_canBeSuspended);
+}
+
+void AbstractHandle::markAsCanBeSuspended(bool canBeSuspended)
+{
+    if (!(m_canBeSuspended = canBeSuspended)) {
+        doSuspend(false);
+    }
+}
+
+void AbstractHandle::doSuspend(bool suspend)
+{
+    if (isOpened()) {
+        sqlite3_suspend(m_handle, suspend);
+    }
 }
 
 } //namespace WCDB

@@ -33,6 +33,9 @@ public:
     OperationHandle();
     ~OperationHandle() override final;
 
+protected:
+    void doSuspend(bool suspend) override final;
+
 #pragma mark - Checkpoint
 public:
     bool checkpoint();

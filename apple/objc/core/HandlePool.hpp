@@ -80,6 +80,7 @@ public:
 protected:
     virtual std::shared_ptr<Handle> generateSlotedHandle(HandleType type) = 0;
     virtual bool willReuseSlotedHandle(HandleType type, Handle *handle) = 0;
+    const std::set<std::shared_ptr<Handle>> &getHandlesOfSlot(HandleSlot slot);
 
     mutable SharedLock m_memory;
 
