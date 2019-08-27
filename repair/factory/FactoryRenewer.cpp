@@ -85,13 +85,14 @@ bool FactoryRenewer::work()
 
 bool FactoryRenewer::prepare()
 {
-    WCTRemedialAssert(m_assembler != nullptr, "Assembler is not available.", return false;);
+    WCTRemedialAssert(
+    m_assembleDelegate != nullptr, "Assemble is not available.", return false;);
 
     // 1. create temp directory for acquisition
     StringView tempDirectory = Path::addComponent(directory, "temp");
     StringView tempDatabase
     = Path::addComponent(tempDirectory, factory.getDatabaseName());
-    m_assembler->setPath(tempDatabase);
+    m_assembleDelegate->setAssemblePath(tempDatabase);
 
     if (!FileManager::removeItem(tempDirectory)
         || !FileManager::createDirectoryWithIntermediateDirectories(tempDirectory)) {
@@ -122,27 +123,28 @@ bool FactoryRenewer::prepare()
     }
 
     // 4. assemble infos
-    if (!m_assembler->markAsAssembling()) {
-        setError(m_assembler->getError());
+    if (!m_assembleDelegate->markAsAssembling()) {
+        setError(m_assembleDelegate->getAssembleError());
         return false;
     }
     bool succeed = true;
     for (const auto &element : infos) {
-        if (!m_assembler->assembleTable(element.first, element.second.sql)
-            || !m_assembler->assembleSequence(element.first, element.second.sequence)) {
+        if (!m_assembleDelegate->assembleTable(element.first, element.second.sql)
+            || !m_assembleDelegate->assembleSequence(element.first,
+                                                     element.second.sequence)) {
             succeed = false;
-            setError(m_assembler->getError());
+            setError(m_assembleDelegate->getAssembleError());
             break;
         }
     }
-    if (!m_assembler->markAsAssembled()) {
+    if (!m_assembleDelegate->markAsAssembled()) {
         if (!succeed) {
-            setError(m_assembler->getError());
+            setError(m_assembleDelegate->getAssembleError());
         }
         return false;
     }
 
-    m_assembler->finish();
+    m_assembleDelegate->finishAssemble();
 
     // 5. force backup assembled database if exists
     auto fileSize = FileManager::getFileSize(tempDatabase);
@@ -152,16 +154,16 @@ bool FactoryRenewer::prepare()
     }
     if (fileSize.value() > 0) {
         FactoryBackup backup(factory);
-        backup.setWriteLocker(m_writeLocker);
-        backup.setReadLocker(m_readLocker);
+        backup.setBackupExclusiveDelegate(m_exclusiveDelegate);
+        backup.setBackupSharedDelegate(m_sharedDelegate);
         if (!backup.work(tempDatabase)) {
             setError(backup.getError());
             return false;
         }
     }
 
-    m_writeLocker->finish();
-    m_readLocker->finish();
+    m_exclusiveDelegate->finishBackup();
+    m_sharedDelegate->finishBackup();
 
     // 6. move the assembled database to renew directory and wait for renew.
     std::list<StringView> toRemove = Factory::associatedPathsForDatabase(database);

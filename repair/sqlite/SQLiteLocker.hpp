@@ -22,7 +22,6 @@
 
 #if WCDB_USE_BUILTIN_SQLITE_REPAIR
 
-#include <WCDB/Locker.hpp>
 #include <WCDB/SQLiteBase.hpp>
 
 namespace WCDB {

@@ -47,6 +47,7 @@ protected:
     InitializedGuard initialize();
     InitializedGuard isInitialized() const;
     bool m_initialized;
+    std::atomic<int> m_closing;
 
 #pragma mark - Basic
 public:
@@ -138,8 +139,7 @@ public:
 public:
     typedef Repair::Factory::Filter BackupFilter;
     void filterBackup(const BackupFilter &tableShouldBeBackedup);
-    bool backup();
-    bool backupIfAlreadyInitialized();
+    bool backup(bool autoInitialize);
     bool removeMaterials();
 
     bool deposit();
@@ -149,13 +149,9 @@ public:
     double retrieve(const RetrieveProgressCallback &onProgressUpdated);
     bool containsDeposited() const;
 
-    void checkIntegrity();
-    void checkIntegrityIfAlreadyInitialized();
+    void checkIntegrity(bool autoInitialize);
 
 private:
-    void doCheckIntegrity();
-    bool doBackup();
-    bool retrieveRenewed();
     Repair::Factory m_factory;
 
 #pragma mark - Migration
@@ -166,15 +162,13 @@ public:
     typedef std::function<void(Database *, const MigrationBaseInfo *)> MigratedCallback;
     void setNotificationWhenMigrated(const MigratedCallback &callback);
 
-    std::optional<bool> stepMigration();
-    std::optional<bool> stepMigrationIfAlreadyInitialized();
+    std::optional<bool> stepMigration(bool autoInitialize);
 
     bool isMigrated() const;
 
     std::set<StringView> getPathsOfSourceDatabases() const;
 
 protected:
-    std::optional<bool> doStepMigration();
     void didMigrate(const MigrationBaseInfo *info) override final;
     MigratedCallback m_migratedCallback;
     Migration m_migration; // thread-safe

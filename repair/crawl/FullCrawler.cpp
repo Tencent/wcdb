@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assembler.hpp>
+#include <WCDB/Assemble.hpp>
 #include <WCDB/Assertion.hpp>
 #include <WCDB/FullCrawler.hpp>
 #include <WCDB/Master.hpp>
@@ -109,8 +109,8 @@ bool FullCrawler::willCrawlPage(const Page &page, int)
 #pragma mark - Error
 void FullCrawler::onErrorCritical()
 {
-    m_masterCrawler.stop();
-    m_sequenceCrawler.stop();
+    m_masterCrawler.suspend();
+    m_sequenceCrawler.suspend();
     Repairman::onErrorCritical();
 }
 

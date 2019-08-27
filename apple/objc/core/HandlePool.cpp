@@ -146,6 +146,14 @@ bool HandlePool::isAliving() const
     return aliving;
 }
 
+const std::set<std::shared_ptr<Handle>> &HandlePool::getHandlesOfSlot(HandleSlot slot)
+{
+    WCTAssert(m_concurrency.readSafety());
+    WCTAssert(m_memory.readSafety());
+    WCTAssert(slot < HandleSlotCount);
+    return m_handles[slot];
+}
+
 RecyclableHandle HandlePool::flowOut(HandleType type)
 {
     HandleSlot slot = slotOfHandleType(type);

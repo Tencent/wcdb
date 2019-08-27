@@ -34,7 +34,7 @@ namespace WCDB {
 
 namespace Repair {
 
-class Assembler;
+class AssembleDelegate;
 
 class Factory final {
 #pragma mark - Factory

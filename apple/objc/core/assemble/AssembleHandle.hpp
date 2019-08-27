@@ -25,23 +25,22 @@
 
 namespace WCDB {
 
-class AssemblerHandle final : public Handle,
-                              public Repair::Assembler,
-                              public Repair::ReadLocker,
-                              public Repair::WriteLocker {
+class AssembleHandle final : public Handle,
+                             public Repair::AssembleDelegate,
+                             public Repair::BackupSharedDelegate,
+                             public Repair::BackupExclusiveDelegate {
 public:
-    AssemblerHandle();
-    ~AssemblerHandle() override final;
+    AssembleHandle();
+    ~AssembleHandle() override final;
 
-#pragma mark - Common
-    void setPath(const UnsafeStringView &path) override final;
-    const StringView &getPath() const override final;
-    const Error &getError() const override final;
-
-    void finish() override final;
-
-#pragma mark - Assembler
+#pragma mark - Assemble
 public:
+    void setAssemblePath(const UnsafeStringView &path) override final;
+    const StringView &getAssemblePath() const override final;
+    const Error &getAssembleError() const override final;
+
+    void finishAssemble() override final;
+
     bool markAsAssembling() override final;
     bool markAsAssembled() override final;
 
@@ -53,7 +52,7 @@ protected:
     StatementPragma m_statementForDisableJounral;
     StatementPragma m_statementForEnableMMap;
 
-#pragma mark - Assembler - Table
+#pragma mark - Assemble - Table
 public:
     bool assembleTable(const UnsafeStringView &tableName,
                        const UnsafeStringView &sql) override final;
@@ -65,7 +64,7 @@ protected:
     StringView m_table;
     HandleStatement *m_cellStatement;
 
-#pragma mark - Assembler - Sequence
+#pragma mark - Assemble - Sequence
 public:
     bool assembleSequence(const UnsafeStringView &tableName, int64_t sequence) override final;
 
@@ -81,11 +80,17 @@ protected:
 
 #pragma mark - Backup
 public:
-    bool acquireReadLock() override final;
-    bool releaseReadLock() override final;
+    void setBackupPath(const UnsafeStringView &path) override final;
+    const StringView &getBackupPath() const override final;
+    const Error &getBackupError() const override final;
 
-    bool acquireWriteLock() override final;
-    bool releaseWriteLock() override final;
+    void finishBackup() override final;
+
+    bool acquireBackupSharedLock() override final;
+    bool releaseBackupSharedLock() override final;
+
+    bool acquireBackupExclusiveLock() override final;
+    bool releaseBackupExclusiveLock() override final;
 
 protected:
     StatementBegin m_statementForReadTransaction;

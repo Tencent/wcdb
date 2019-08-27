@@ -142,7 +142,7 @@ std::optional<bool> Core::migrationShouldBeOperated(const UnsafeStringView& path
     RecyclableDatabase database = m_databasePool.get(path);
     std::optional<bool> done = false; // mark as no error if database is not referenced.
     if (database != nullptr) {
-        done = database->stepMigrationIfAlreadyInitialized();
+        done = database->stepMigration(false);
     }
     return done;
 }
@@ -152,7 +152,7 @@ bool Core::backupShouldBeOperated(const UnsafeStringView& path)
     RecyclableDatabase database = m_databasePool.get(path);
     bool succeed = true; // mark as no error if database is not referenced.
     if (database != nullptr) {
-        succeed = database->backupIfAlreadyInitialized();
+        succeed = database->backup(false);
     }
     return succeed;
 }
@@ -171,13 +171,13 @@ void Core::integrityShouldBeChecked(const UnsafeStringView& path)
 {
     RecyclableDatabase database = m_databasePool.get(path);
     if (database != nullptr) {
-        database->checkIntegrityIfAlreadyInitialized();
+        database->checkIntegrity(false);
 
         std::set<StringView> sourcePaths = database->getPathsOfSourceDatabases();
         for (const UnsafeStringView& sourcePath : sourcePaths) {
             RecyclableDatabase sourceDatabase = m_databasePool.get(sourcePath);
             if (sourceDatabase != nullptr) {
-                sourceDatabase->checkIntegrityIfAlreadyInitialized();
+                sourceDatabase->checkIntegrity(false);
             }
         }
     }
@@ -321,7 +321,7 @@ void Core::onErrorTraced(const Error& error)
     }
 }
 
-void Core::breakpoint() 
+void Core::breakpoint()
 {
 }
 

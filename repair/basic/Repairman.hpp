@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <WCDB/Assembler.hpp>
+#include <WCDB/Assemble.hpp>
 #include <WCDB/Crawlable.hpp>
 #include <WCDB/ErrorProne.hpp>
 #include <WCDB/Progress.hpp>
@@ -37,7 +37,7 @@ class Repairman : public Crawlable,
                   public UpgradeableErrorProne,
                   public Progress,
                   public SegmentedScoreable,
-                  public AssemblerHolder {
+                  public AssembleDelegateHolder {
 #pragma mark - Initialize
 public:
     Repairman(const UnsafeStringView &path);
@@ -57,12 +57,12 @@ protected:
 
 #pragma mark - Error
 protected:
-    int tryUpgrateAssemblerError();
+    int tryUpgrateAssembleError();
     int tryUpgradeCrawlerError();
 
     virtual void onErrorCritical() override;
 
-#pragma mark - Assembler
+#pragma mark - Assemble
 protected:
     bool markAsAssembling();
     void markAsAssembled();

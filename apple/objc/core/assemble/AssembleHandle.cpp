@@ -18,14 +18,14 @@
  * limitations under the License.
  */
 
-#include <WCDB/AssemblerHandle.hpp>
+#include <WCDB/AssembleHandle.hpp>
 #include <WCDB/CoreConst.h>
 
 namespace WCDB {
 
-AssemblerHandle::AssemblerHandle()
+AssembleHandle::AssembleHandle()
 : Handle()
-, Repair::Assembler()
+, Repair::AssembleDelegate()
 , m_integerPrimary(-1)
 , m_statementForDisableJounral(StatementPragma().pragma(Pragma::journalMode()).to("OFF"))
 , m_statementForEnableMMap(StatementPragma().pragma(Pragma::mmapSize()).to(2147418112))
@@ -43,32 +43,35 @@ AssemblerHandle::AssemblerHandle()
   StatementSelect().select(1).from(Syntax::masterTable).limit(0))
 , m_statementForReadTransaction(StatementBegin().beginDeferred())
 {
-    m_error.infos.insert_or_assign(ErrorStringKeyAction, ErrorActionAssembler);
 }
 
-AssemblerHandle::~AssemblerHandle()
+AssembleHandle::~AssembleHandle()
 {
     returnStatement(m_cellStatement);
 }
 
-#pragma mark - Common
-void AssemblerHandle::setPath(const UnsafeStringView &path)
+#pragma mark - Assemble
+void AssembleHandle::setAssemblePath(const UnsafeStringView &path)
 {
     Handle::setPath(path);
 }
 
-const StringView &AssemblerHandle::getPath() const
+const StringView &AssembleHandle::getAssemblePath() const
 {
     return Handle::getPath();
 }
 
-const Error &AssemblerHandle::getError() const
+const Error &AssembleHandle::getAssembleError() const
 {
     return Handle::getError();
 }
 
-#pragma mark - Assembler
-bool AssemblerHandle::markAsAssembling()
+void AssembleHandle::finishAssemble()
+{
+    Handle::close();
+}
+
+bool AssembleHandle::markAsAssembling()
 {
     bool succeed = open();
     if (succeed) {
@@ -81,7 +84,7 @@ bool AssemblerHandle::markAsAssembling()
     return succeed;
 }
 
-bool AssemblerHandle::markAsAssembled()
+bool AssembleHandle::markAsAssembled()
 {
     m_table.clear();
     m_cellStatement->finalize();
@@ -94,7 +97,7 @@ bool AssemblerHandle::markAsAssembled()
     return succeed;
 }
 
-bool AssemblerHandle::markAsMilestone()
+bool AssembleHandle::markAsMilestone()
 {
     if (isInTransaction()) {
         if (!commitOrRollbackTransaction()) {
@@ -104,7 +107,7 @@ bool AssemblerHandle::markAsMilestone()
     return beginTransaction();
 }
 
-bool AssemblerHandle::assembleSQL(const UnsafeStringView &sql)
+bool AssembleHandle::assembleSQL(const UnsafeStringView &sql)
 {
     markErrorAsIgnorable(Error::Code::Error);
     bool succeed = executeSQL(sql);
@@ -115,14 +118,9 @@ bool AssemblerHandle::assembleSQL(const UnsafeStringView &sql)
     return succeed;
 }
 
-void AssemblerHandle::finish()
-{
-    Handle::close();
-}
-
-#pragma mark - Assembler - Table
-bool AssemblerHandle::assembleTable(const UnsafeStringView &tableName,
-                                    const UnsafeStringView &sql)
+#pragma mark - Assemble - Table
+bool AssembleHandle::assembleTable(const UnsafeStringView &tableName,
+                                   const UnsafeStringView &sql)
 {
     m_cellStatement->finalize();
     m_table.clear();
@@ -138,7 +136,7 @@ bool AssemblerHandle::assembleTable(const UnsafeStringView &tableName,
     return succeed;
 }
 
-bool AssemblerHandle::assembleCell(const Repair::Cell &cell)
+bool AssembleHandle::assembleCell(const Repair::Cell &cell)
 {
     WCTAssert(!m_table.empty());
     if (!lazyPrepareCell()) {
@@ -177,7 +175,7 @@ bool AssemblerHandle::assembleCell(const Repair::Cell &cell)
     return succeed;
 }
 
-bool AssemblerHandle::lazyPrepareCell()
+bool AssembleHandle::lazyPrepareCell()
 {
     if (m_cellStatement->isPrepared()) {
         return true;
@@ -203,8 +201,8 @@ bool AssemblerHandle::lazyPrepareCell()
     return m_cellStatement->prepare(statement);
 }
 
-#pragma mark - Assembler - Sequence
-bool AssemblerHandle::assembleSequence(const UnsafeStringView &tableName, int64_t sequence)
+#pragma mark - Assemble - Sequence
+bool AssembleHandle::assembleSequence(const UnsafeStringView &tableName, int64_t sequence)
 {
     bool succeed = false;
     auto worked = updateSequence(tableName, sequence);
@@ -219,7 +217,7 @@ bool AssemblerHandle::assembleSequence(const UnsafeStringView &tableName, int64_
 }
 
 std::optional<bool>
-AssemblerHandle::updateSequence(const UnsafeStringView &tableName, int64_t sequence)
+AssembleHandle::updateSequence(const UnsafeStringView &tableName, int64_t sequence)
 {
     std::optional<bool> worked;
     if (prepare(m_statementForUpdateSequence)) {
@@ -233,7 +231,7 @@ AssemblerHandle::updateSequence(const UnsafeStringView &tableName, int64_t seque
     return worked;
 }
 
-bool AssemblerHandle::insertSequence(const UnsafeStringView &tableName, int64_t sequence)
+bool AssembleHandle::insertSequence(const UnsafeStringView &tableName, int64_t sequence)
 {
     bool succeed = false;
     if (prepare(m_statementForInsertSequence)) {
@@ -245,7 +243,7 @@ bool AssemblerHandle::insertSequence(const UnsafeStringView &tableName, int64_t 
     return succeed;
 }
 
-bool AssemblerHandle::markSequenceAsAssembling()
+bool AssembleHandle::markSequenceAsAssembling()
 {
     return executeStatement(
     StatementCreateTable()
@@ -255,30 +253,50 @@ bool AssemblerHandle::markSequenceAsAssembling()
             .constraint(ColumnConstraint().primaryKey().autoIncrement())));
 }
 
-bool AssemblerHandle::markSequenceAsAssembled()
+bool AssembleHandle::markSequenceAsAssembled()
 {
     return executeStatement(StatementDropTable().dropTable(s_dummySequence).ifExists());
 }
 
 #pragma mark - Backup
-bool AssemblerHandle::acquireReadLock()
+void AssembleHandle::setBackupPath(const UnsafeStringView &path)
+{
+    Handle::setPath(path);
+}
+
+const StringView &AssembleHandle::getBackupPath() const
+{
+    return Handle::getPath();
+}
+
+const Error &AssembleHandle::getBackupError() const
+{
+    return Handle::getError();
+}
+
+void AssembleHandle::finishBackup()
+{
+    Handle::close();
+}
+
+bool AssembleHandle::acquireBackupSharedLock()
 {
     return open() && execute(m_statementForReadTransaction)
            && execute(m_statementForAcquireReadLock);
 }
 
-bool AssemblerHandle::releaseReadLock()
+bool AssembleHandle::releaseBackupSharedLock()
 {
     rollbackTransaction();
     return true;
 }
 
-bool AssemblerHandle::acquireWriteLock()
+bool AssembleHandle::acquireBackupExclusiveLock()
 {
     return open() && beginTransaction();
 }
 
-bool AssemblerHandle::releaseWriteLock()
+bool AssembleHandle::releaseBackupExclusiveLock()
 {
     rollbackTransaction();
     return true;

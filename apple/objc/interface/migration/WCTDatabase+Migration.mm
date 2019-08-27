@@ -42,7 +42,7 @@
 
 - (BOOL)stepMigration
 {
-    auto done = _database->stepMigration();
+    auto done = _database->stepMigration(true);
     return done.has_value();
 }
 

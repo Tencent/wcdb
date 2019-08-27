@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <WCDB/Assembler.hpp>
+#include <WCDB/Assemble.hpp>
 #include <WCDB/FactoryBackup.hpp>
 #include <WCDB/FactoryRelated.hpp>
 #include <WCDB/Progress.hpp>
@@ -36,8 +36,8 @@ class FactoryRetriever final : public FactoryRelated,
                                public UpgradeableErrorProne,
                                public Progress,
                                public Scoreable,
-                               public AssemblerHolder,
-                               public LockerHolder {
+                               public AssembleDelegateHolder,
+                               public BackupDelegateHolder {
 #pragma mark - Retriever
 public:
     FactoryRetriever(const Factory &factory);

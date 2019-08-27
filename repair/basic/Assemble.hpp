@@ -31,13 +31,13 @@ namespace Repair {
 
 class Cell;
 
-class Assembler {
+class AssembleDelegate {
 public:
-    Assembler();
-    virtual ~Assembler() = 0;
+    AssembleDelegate();
+    virtual ~AssembleDelegate() = 0;
 
-    virtual void setPath(const UnsafeStringView &path) = 0;
-    virtual const StringView &getPath() const = 0;
+    virtual void setAssemblePath(const UnsafeStringView &path) = 0;
+    virtual const StringView &getAssemblePath() const = 0;
 
     virtual bool markAsAssembling() = 0;
     virtual bool markAsAssembled() = 0;
@@ -52,9 +52,9 @@ public:
 
     virtual bool assembleSQL(const UnsafeStringView &sql) = 0;
 
-    virtual const Error &getError() const = 0;
+    virtual const Error &getAssembleError() const = 0;
 
-    virtual void finish() = 0;
+    virtual void finishAssemble() = 0;
 
 protected:
     bool isDuplicatedIgnorable() const;
@@ -63,14 +63,14 @@ private:
     bool m_duplicatedIgnorable;
 };
 
-class AssemblerHolder {
+class AssembleDelegateHolder {
 public:
-    AssemblerHolder();
-    virtual ~AssemblerHolder() = 0;
-    void setAssembler(Assembler *assembler);
+    AssembleDelegateHolder();
+    virtual ~AssembleDelegateHolder() = 0;
+    void setAssembleDelegate(AssembleDelegate *delegate);
 
 protected:
-    Assembler *m_assembler;
+    AssembleDelegate *m_assembleDelegate;
 };
 
 } //namespace Repair

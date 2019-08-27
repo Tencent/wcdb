@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Repair {
 
-class FactoryBackup final : public FactoryRelated, public ErrorProne, public LockerHolder {
+class FactoryBackup final : public FactoryRelated, public ErrorProne, public BackupDelegateHolder {
 public:
     using FactoryRelated::FactoryRelated;
     ~FactoryBackup() override final;

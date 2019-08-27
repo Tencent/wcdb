@@ -26,7 +26,7 @@
 #include <WCDB/RepairKit.h>
 #include <WCDB/StringView.hpp>
 
-#include <WCDB/AssemblerHandle.hpp>
+#include <WCDB/AssembleHandle.hpp>
 #include <WCDB/MigrateHandle.hpp>
 #include <WCDB/MigratingHandle.hpp>
 #include <WCDB/OperationHandle.hpp>
@@ -41,6 +41,7 @@ Database::Database(const UnsafeStringView &path)
 , m_initialized(false)
 , m_migratedCallback(nullptr)
 , m_migration(this)
+, m_closing(0)
 {
 }
 
@@ -66,6 +67,7 @@ bool Database::canOpen()
 
 void Database::didDrain()
 {
+    WCTAssert(m_concurrency.writeSafety());
     WCTAssert(m_memory.writeSafety());
     WCTAssert(!isOpened());
     m_initialized = false;
@@ -73,7 +75,20 @@ void Database::didDrain()
 
 void Database::close(const ClosedCallback &onClosed)
 {
+    ++m_closing;
+    {
+        SharedLockGuard concurrencyGuard(m_concurrency);
+        SharedLockGuard memoryGuard(m_memory);
+        // suspend auto checkpoint/backup/integrity check/migrate
+        for (auto &handle : getHandlesOfSlot(HandleSlot::HandleSlotOperation)) {
+            handle->suspend(true);
+        }
+        for (auto &handle : getHandlesOfSlot(HandleSlot::HandleSlotMigrate)) {
+            handle->suspend(true);
+        }
+    }
     drain(onClosed);
+    --m_closing;
 }
 
 bool Database::isOpened() const
@@ -104,14 +119,20 @@ Database::InitializedGuard Database::initialize()
             assignWithSharedThreadedError();
             break;
         }
-        if (!retrieveRenewed()) {
-            break;
+        // retrieveRenewed
+        {
+            Repair::FactoryRenewer renewer = m_factory.renewer();
+            if (!renewer.work()) {
+                setThreadedError(renewer.getError());
+                break;
+            }
         }
         auto exists = FileManager::fileExists(path);
         if (!exists.has_value()) {
             assignWithSharedThreadedError();
             break;
         }
+        // create file to make file identifier stable
         if (!exists.value() && !FileManager::createFile(path)) {
             assignWithSharedThreadedError();
             break;
@@ -125,7 +146,7 @@ Database::InitializedGuard Database::isInitialized() const
 {
     SharedLockGuard concurrencyGuard(m_concurrency);
     SharedLockGuard memoryGuard(m_memory);
-    if (m_initialized) {
+    if (m_initialized && m_closing == 0) {
         return concurrencyGuard;
     }
     return nullptr;
@@ -208,7 +229,7 @@ std::shared_ptr<Handle> Database::generateSlotedHandle(HandleType type)
         handle = std::make_shared<MigrateHandle>();
         break;
     case HandleSlotAssemble:
-        handle = std::make_shared<AssemblerHandle>();
+        handle = std::make_shared<AssembleHandle>();
         break;
     case HandleSlotOperation:
         handle = std::make_shared<OperationHandle>();
@@ -240,11 +261,6 @@ bool Database::setupHandle(HandleType type, Handle *handle)
     WCTAssert(handle != nullptr);
 
     HandleSlot slot = slotOfHandleType(type);
-
-    if (slot == HandleSlotOperation) {
-        WCTAssert(dynamic_cast<OperationHandle *>(handle) != nullptr);
-        static_cast<OperationHandle *>(handle)->setType(type);
-    }
 
     Configs configs;
     {
@@ -483,52 +499,49 @@ void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
     m_factory.filter(tableShouldBeBackedup);
 }
 
-bool Database::backup()
+bool Database::backup(bool autoInitialize)
 {
-    InitializedGuard initializedGuard = initialize();
-    bool result = false;
+    InitializedGuard initializedGuard = autoInitialize ? initialize() : isInitialized();
+    bool succeed = false;
     if (initializedGuard.valid()) {
-        result = doBackup();
-    }
-    return result;
-}
+        WCTRemedialAssert(
+        !isInTransaction(), "Backup can't be run in transaction.", return false;);
+        RecyclableHandle backupReadHandle = flowOut(HandleType::BackupRead);
+        RecyclableHandle backupWriteHandle = flowOut(HandleType::BackupWrite);
+        if (backupReadHandle == nullptr || backupWriteHandle == nullptr || m_closing != 0) {
+            return false;
+        }
 
-bool Database::backupIfAlreadyInitialized()
-{
-    InitializedGuard initializedGuard = isInitialized();
-    bool succeed = true;
-    if (initializedGuard.valid()) {
-        succeed = doBackup();
+        WCTAssert(backupReadHandle.get() != backupWriteHandle.get());
+
+        OperationHandle *operationBackupReadHandle
+        = static_cast<OperationHandle *>(backupReadHandle.get());
+        OperationHandle *operationBackupWriteHandle
+        = static_cast<OperationHandle *>(backupWriteHandle.get());
+        if (!autoInitialize) {
+            operationBackupReadHandle->markErrorAsIgnorable(Error::Code::Interrupt);
+            operationBackupWriteHandle->markErrorAsIgnorable(Error::Code::Interrupt);
+            operationBackupReadHandle->markAsCanBeSuspended(true);
+            operationBackupWriteHandle->markAsCanBeSuspended(true);
+        }
+        Repair::FactoryBackup backup = m_factory.backup();
+        backup.setBackupSharedDelegate(
+        static_cast<OperationHandle *>(backupReadHandle.get()));
+        backup.setBackupExclusiveDelegate(
+        static_cast<OperationHandle *>(backupWriteHandle.get()));
+        if (backup.work(getPath())) {
+            succeed = true;
+        } else {
+            setThreadedError(backup.getError());
+        }
+        if (!autoInitialize) {
+            operationBackupWriteHandle->markAsCanBeSuspended(false);
+            operationBackupReadHandle->markAsCanBeSuspended(false);
+            operationBackupWriteHandle->markErrorAsUnignorable();
+            operationBackupReadHandle->markErrorAsUnignorable();
+        }
     }
     return succeed;
-}
-
-bool Database::doBackup()
-{
-    WCTRemedialAssert(
-    !isInTransaction(), "Backup can't be run in transaction.", return false;);
-    WCTAssert(m_concurrency.readSafety());
-    WCTAssert(m_initialized);
-    RecyclableHandle backupReadHandle = flowOut(HandleType::BackupRead);
-    if (backupReadHandle == nullptr) {
-        return false;
-    }
-
-    RecyclableHandle backupWriteHandle = flowOut(HandleType::BackupWrite);
-    if (backupWriteHandle == nullptr) {
-        return false;
-    }
-
-    WCTAssert(backupReadHandle.get() != backupWriteHandle.get());
-
-    Repair::FactoryBackup backup = m_factory.backup();
-    backup.setReadLocker(static_cast<OperationHandle *>(backupReadHandle.get()));
-    backup.setWriteLocker(static_cast<OperationHandle *>(backupWriteHandle.get()));
-    if (!backup.work(getPath())) {
-        setThreadedError(backup.getError());
-        return false;
-    }
-    return true;
 }
 
 bool Database::deposit()
@@ -548,7 +561,7 @@ bool Database::deposit()
         if (backupWriteHandle == nullptr) {
             return;
         }
-        RecyclableHandle assemblerHandle = flowOut(HandleType::Assembler);
+        RecyclableHandle assemblerHandle = flowOut(HandleType::Assemble);
         if (assemblerHandle == nullptr) {
             return;
         }
@@ -561,9 +574,12 @@ bool Database::deposit()
         WCTAssert(!assemblerHandle->isOpened());
 
         Repair::FactoryRenewer renewer = m_factory.renewer();
-        renewer.setReadLocker(static_cast<AssemblerHandle *>(backupReadHandle.get()));
-        renewer.setWriteLocker(static_cast<AssemblerHandle *>(backupWriteHandle.get()));
-        renewer.setAssembler(static_cast<AssemblerHandle *>(assemblerHandle.get()));
+        renewer.setBackupSharedDelegate(
+        static_cast<AssembleHandle *>(backupReadHandle.get()));
+        renewer.setBackupExclusiveDelegate(
+        static_cast<AssembleHandle *>(backupWriteHandle.get()));
+        renewer.setAssembleDelegate(
+        static_cast<AssembleHandle *>(assemblerHandle.get()));
         // Prepare a new database from material at renew directory and wait for moving
         if (!renewer.prepare()) {
             setThreadedError(renewer.getError());
@@ -602,7 +618,7 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdated)
         if (backupWriteHandle == nullptr) {
             return;
         }
-        RecyclableHandle assemblerHandle = flowOut(HandleType::Assembler);
+        RecyclableHandle assemblerHandle = flowOut(HandleType::Assemble);
         if (assemblerHandle == nullptr) {
             return;
         }
@@ -615,10 +631,12 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdated)
         WCTAssert(!assemblerHandle->isOpened());
 
         Repair::FactoryRetriever retriever = m_factory.retriever();
-        retriever.setReadLocker(static_cast<AssemblerHandle *>(backupReadHandle.get()));
-        retriever.setWriteLocker(
-        static_cast<AssemblerHandle *>(backupWriteHandle.get()));
-        retriever.setAssembler(static_cast<AssemblerHandle *>(assemblerHandle.get()));
+        retriever.setBackupSharedDelegate(
+        static_cast<AssembleHandle *>(backupReadHandle.get()));
+        retriever.setBackupExclusiveDelegate(
+        static_cast<AssembleHandle *>(backupWriteHandle.get()));
+        retriever.setAssembleDelegate(
+        static_cast<AssembleHandle *>(assemblerHandle.get()));
         retriever.setProgressCallback(onProgressUpdated);
         if (retriever.work()) {
             result = retriever.getScore().value();
@@ -660,88 +678,60 @@ bool Database::removeMaterials()
     return result;
 }
 
-bool Database::retrieveRenewed()
+void Database::checkIntegrity(bool autoInitialize)
 {
-    WCTAssert(isBlockaded());
-    WCTAssert(!m_initialized);
-
-    Repair::FactoryRenewer renewer = m_factory.renewer();
-    if (renewer.work()) {
-        return true;
-    }
-    setThreadedError(renewer.getError());
-    return false;
-}
-
-void Database::checkIntegrity()
-{
-    InitializedGuard initializedGuard = initialize();
+    InitializedGuard initializedGuard = autoInitialize ? initialize() : isInitialized();
     if (initializedGuard.valid()) {
-        doCheckIntegrity();
-    }
-}
-
-void Database::checkIntegrityIfAlreadyInitialized()
-{
-    InitializedGuard initializedGuard = isInitialized();
-    if (initializedGuard.valid()) {
-        doCheckIntegrity();
-    }
-}
-
-void Database::doCheckIntegrity()
-{
-    WCTAssert(m_concurrency.readSafety());
-    WCTAssert(m_initialized);
-    RecyclableHandle handle = flowOut(HandleType::Integrity);
-    if (handle != nullptr) {
-        WCTAssert(dynamic_cast<OperationHandle *>(handle.get()) != nullptr);
-        static_cast<OperationHandle *>(handle.get())->checkIntegrity();
+        RecyclableHandle handle = flowOut(HandleType::Integrity);
+        if (handle != nullptr && m_closing == 0) {
+            WCTAssert(dynamic_cast<OperationHandle *>(handle.get()) != nullptr);
+            OperationHandle *operationHandle
+            = static_cast<OperationHandle *>(handle.get());
+            if (!autoInitialize) {
+                operationHandle->markErrorAsIgnorable(Error::Code::Interrupt);
+                operationHandle->markAsCanBeSuspended(true);
+            }
+            operationHandle->checkIntegrity();
+            if (!autoInitialize) {
+                operationHandle->markAsCanBeSuspended(false);
+                operationHandle->markErrorAsUnignorable();
+            }
+        }
     }
 }
 
 #pragma mark - Migration
-std::optional<bool> Database::stepMigration()
+std::optional<bool> Database::stepMigration(bool autoInitialize)
 {
-    InitializedGuard initializedGuard = initialize();
+    InitializedGuard initializedGuard = autoInitialize ? initialize() : isInitialized();
     std::optional<bool> done;
     if (initializedGuard.valid()) {
-        done = doStepMigration();
-    }
-    return done;
-}
+        WCTRemedialAssert(!isInTransaction(),
+                          "Migrating can't be run in transaction.",
+                          return std::nullopt;);
+        WCTRemedialAssert(m_migration.shouldMigrate(),
+                          "It's not configured for migration.",
+                          return std::nullopt;);
+        RecyclableHandle handle = flowOut(HandleType::Migrate);
+        if (handle != nullptr && m_closing == 0) {
+            WCTAssert(dynamic_cast<MigrateHandle *>(handle.get()) != nullptr);
+            MigrateHandle *migrateHandle = static_cast<MigrateHandle *>(handle.get());
 
-std::optional<bool> Database::stepMigrationIfAlreadyInitialized()
-{
-    InitializedGuard initializedGuard = isInitialized();
-    std::optional<bool> done = false;
-    if (initializedGuard.valid()) {
-        done = doStepMigration();
-    }
-    return done;
-}
-
-std::optional<bool> Database::doStepMigration()
-{
-    WCTRemedialAssert(
-    !isInTransaction(), "Migrating can't be run in transaction.", return std::nullopt;);
-    WCTAssert(m_concurrency.readSafety());
-    WCTRemedialAssert(m_migration.shouldMigrate(),
-                      "It's not configured for migration.",
-                      return std::nullopt;);
-    WCTAssert(m_initialized);
-    std::optional<bool> done;
-    RecyclableHandle handle = flowOut(HandleType::Migrate);
-    if (handle != nullptr) {
-        WCTAssert(dynamic_cast<MigrateHandle *>(handle.get()) != nullptr);
-        MigrateHandle *migrateHandle = static_cast<MigrateHandle *>(handle.get());
-
-        migrateHandle->markErrorAsIgnorable(Error::Code::Busy);
-        done = m_migration.step(*migrateHandle);
-        if (!done.has_value() && handle->isErrorIgnorable()) {
-            done = false;
+            if (!autoInitialize) {
+                migrateHandle->markErrorAsIgnorable(Error::Code::Interrupt);
+                migrateHandle->markAsCanBeSuspended(true);
+            }
+            migrateHandle->markErrorAsIgnorable(Error::Code::Busy);
+            done = m_migration.step(*migrateHandle);
+            if (!done.has_value() && handle->isErrorIgnorable()) {
+                done = false;
+            }
+            migrateHandle->markErrorAsUnignorable();
+            if (!autoInitialize) {
+                migrateHandle->markAsCanBeSuspended(false);
+                migrateHandle->markErrorAsUnignorable();
+            }
         }
-        migrateHandle->markErrorAsUnignorable();
     }
     return done;
 }
@@ -782,16 +772,20 @@ bool Database::checkpointIfAlreadyInitialized()
     bool succeed = false;
     if (initializedGuard.valid()) {
         RecyclableHandle handle = flowOut(HandleType::Checkpoint);
-        if (handle != nullptr) {
+        if (handle != nullptr && m_closing == 0) {
             WCTAssert(dynamic_cast<OperationHandle *>(handle.get()) != nullptr);
             OperationHandle *operationHandle
             = static_cast<OperationHandle *>(handle.get());
 
+            operationHandle->markErrorAsIgnorable(Error::Code::Interrupt);
+            operationHandle->markAsCanBeSuspended(true);
             operationHandle->markErrorAsIgnorable(Error::Code::Busy);
             succeed = operationHandle->checkpoint();
             if (!succeed && operationHandle->isErrorIgnorable()) {
                 succeed = true;
             }
+            operationHandle->markErrorAsUnignorable();
+            operationHandle->markAsCanBeSuspended(false);
             operationHandle->markErrorAsUnignorable();
         }
     }

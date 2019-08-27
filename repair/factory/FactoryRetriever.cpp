@@ -50,8 +50,9 @@ FactoryRetriever::~FactoryRetriever() = default;
 #pragma mark - Retriever
 bool FactoryRetriever::work()
 {
-    WCTRemedialAssert(m_assembler != nullptr, "Assembler is not available.", return false;);
-    m_assembler->setPath(database);
+    WCTRemedialAssert(
+    m_assembleDelegate != nullptr, "Assemble is not available.", return false;);
+    m_assembleDelegate->setAssemblePath(database);
 
     bool succeed;
     //1. Remove the old restore db
@@ -94,16 +95,16 @@ bool FactoryRetriever::work()
 
     //4. Do a backup on restore db.
     FactoryBackup backup(factory);
-    backup.setWriteLocker(m_writeLocker);
-    backup.setReadLocker(m_readLocker);
+    backup.setBackupExclusiveDelegate(m_exclusiveDelegate);
+    backup.setBackupSharedDelegate(m_sharedDelegate);
     if (!backup.work(database)) {
         setCriticalError(backup.getError());
         return exit(false);
     }
 
-    m_writeLocker->finish();
-    m_readLocker->finish();
-    m_assembler->finish();
+    m_exclusiveDelegate->finishBackup();
+    m_sharedDelegate->finishBackup();
+    m_assembleDelegate->finishAssemble();
 
     //5. Archive current db and use restore db
     FactoryDepositor depositor(factory);
@@ -168,8 +169,8 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
         }
         if (useMaterial) {
             Mechanic mechanic(databasePath);
-            m_assembler->markDuplicatedAsIgnorable(false);
-            mechanic.setAssembler(m_assembler);
+            m_assembleDelegate->markDuplicatedAsIgnorable(false);
+            mechanic.setAssembleDelegate(m_assembleDelegate);
             mechanic.setMaterial(&material);
             mechanic.setProgressCallback(std::bind(&FactoryRetriever::increaseProgress,
                                                    this,
@@ -200,8 +201,8 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
     }
 
     FullCrawler fullCrawler(databasePath);
-    m_assembler->markDuplicatedAsIgnorable(useMaterial);
-    fullCrawler.setAssembler(m_assembler);
+    m_assembleDelegate->markDuplicatedAsIgnorable(useMaterial);
+    fullCrawler.setAssembleDelegate(m_assembleDelegate);
     fullCrawler.setProgressCallback(std::bind(&FactoryRetriever::increaseProgress,
                                               this,
                                               databasePath,

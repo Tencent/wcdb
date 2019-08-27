@@ -32,15 +32,15 @@ namespace Repair {
 
 #pragma mark - Initialize
 Crawlable::Crawlable(Pager &pager)
-: m_associatedPager(pager), m_stop(false), m_isCrawling(false)
+: m_associatedPager(pager), m_suspend(false), m_isCrawling(false)
 {
 }
 
 Crawlable::~Crawlable() = default;
 
-void Crawlable::stop()
+void Crawlable::suspend()
 {
-    m_stop = true;
+    m_suspend = true;
 }
 
 #pragma mark - Error
@@ -55,6 +55,12 @@ void Crawlable::markAsCorrupted(int page, const UnsafeStringView &message)
     markAsError();
 }
 
+void Crawlable::markAsInterrupted()
+{
+    m_associatedPager.markAsError(Error::Code::Interrupt);
+    markAsError();
+}
+
 void Crawlable::markAsError()
 {
     onCrawlerError();
@@ -64,7 +70,6 @@ bool Crawlable::crawl(int rootpageno)
 {
     WCTAssert(!m_isCrawling);
     m_isCrawling = true;
-    m_stop = false;
     std::set<int> crawledInteriorPages;
     safeCrawl(rootpageno, crawledInteriorPages, 1);
     m_isCrawling = false;
@@ -73,6 +78,9 @@ bool Crawlable::crawl(int rootpageno)
 
 void Crawlable::safeCrawl(int rootpageno, std::set<int> &crawledInteriorPages, int height)
 {
+    if (m_suspend) {
+        return;
+    }
     Page rootpage(rootpageno, &m_associatedPager);
     if (!rootpage.initialize()) {
         markAsError();
@@ -90,18 +98,12 @@ void Crawlable::safeCrawl(int rootpageno, std::set<int> &crawledInteriorPages, i
         }
         crawledInteriorPages.emplace(rootpageno);
         for (int i = 0; i < rootpage.getNumberOfSubpages(); ++i) {
-            if (m_stop) {
-                break;
-            }
             int pageno = rootpage.getSubpageno(i);
             safeCrawl(pageno, crawledInteriorPages, height + 1);
         }
         break;
     case Page::Type::LeafTable:
         for (int i = 0; i < rootpage.getNumberOfCells(); ++i) {
-            if (m_stop) {
-                break;
-            }
             Cell cell = rootpage.getCell(i);
             if (cell.initialize()) {
                 onCellCrawled(cell);
