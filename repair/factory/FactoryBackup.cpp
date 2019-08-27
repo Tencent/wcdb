@@ -31,8 +31,8 @@ FactoryBackup::~FactoryBackup() = default;
 bool FactoryBackup::work(const UnsafeStringView &database)
 {
     Backup backup(database);
-    backup.setReadLocker(m_readLocker);
-    backup.setWriteLocker(m_writeLocker);
+    backup.setBackupSharedDelegate(m_sharedDelegate);
+    backup.setBackupExclusiveDelegate(m_exclusiveDelegate);
     backup.filter(factory.getFilter());
     if (!backup.work()) {
         // Treat database empty error as succeed

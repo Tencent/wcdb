@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include <WCDB/Locker.hpp>
 #include <WCDB/MasterCrawler.hpp>
 #include <WCDB/Material.hpp>
 #include <WCDB/SequenceCrawler.hpp>
@@ -31,10 +30,58 @@ namespace WCDB {
 
 namespace Repair {
 
+class BackupBaseDelegate {
+public:
+    virtual ~BackupBaseDelegate() = 0;
+
+    virtual void setBackupPath(const UnsafeStringView &path) = 0;
+    virtual const StringView &getBackupPath() const = 0;
+
+    virtual const Error &getBackupError() const = 0;
+
+    virtual void finishBackup() = 0;
+};
+
+class BackupSharedDelegate : public BackupBaseDelegate {
+public:
+    virtual ~BackupSharedDelegate() = 0;
+
+    virtual bool acquireBackupSharedLock() = 0;
+    virtual bool releaseBackupSharedLock() = 0;
+};
+
+class BackupExclusiveDelegate : public BackupBaseDelegate {
+public:
+    BackupExclusiveDelegate();
+    virtual ~BackupExclusiveDelegate() = 0;
+
+    virtual bool acquireBackupExclusiveLock() = 0;
+    virtual bool releaseBackupExclusiveLock() = 0;
+
+    void suspendBackup(bool suspend);
+    bool backupSuspended() const;
+
+private:
+    std::atomic<bool> m_suspend;
+};
+
+class BackupDelegateHolder {
+public:
+    BackupDelegateHolder();
+    virtual ~BackupDelegateHolder() = 0;
+    void setBackupSharedDelegate(BackupSharedDelegate *delegate);
+    void setBackupExclusiveDelegate(BackupExclusiveDelegate *delegate);
+
+protected:
+    bool isDelegateValid() const;
+    BackupSharedDelegate *m_sharedDelegate;
+    BackupExclusiveDelegate *m_exclusiveDelegate;
+};
+
 class Backup final : public Crawlable,
                      public MasterCrawlerDelegate,
                      public SequenceCrawlerDelegate,
-                     public LockerHolder,
+                     public BackupDelegateHolder,
                      public ErrorProne {
 #pragma mark - Initialize
 public:

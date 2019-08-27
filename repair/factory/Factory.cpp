@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assembler.hpp>
+#include <WCDB/Assemble.hpp>
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Factory.hpp>
 #include <WCDB/FileManager.hpp>

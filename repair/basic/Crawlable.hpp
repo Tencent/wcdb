@@ -40,12 +40,12 @@ public:
 private:
     Pager &m_associatedPager;
 
-#pragma mark - Stoppable
+#pragma mark - Suspend
 public:
-    void stop();
+    void suspend(); // thread-safe
 
 protected:
-    bool m_stop;
+    std::atomic<bool> m_suspend;
 
 #pragma mark - Error
 public:
@@ -53,6 +53,7 @@ public:
 
 protected:
     void markAsCorrupted(int page, const UnsafeStringView &message);
+    void markAsInterrupted();
     void markAsError();
 
 #pragma mark - Crawlable

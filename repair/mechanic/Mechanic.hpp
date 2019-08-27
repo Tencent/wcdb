@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <WCDB/Assembler.hpp>
+#include <WCDB/Assemble.hpp>
 #include <WCDB/Crawlable.hpp>
 #include <WCDB/Material.hpp>
 #include <WCDB/Repairman.hpp>

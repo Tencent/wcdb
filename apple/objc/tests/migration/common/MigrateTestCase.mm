@@ -151,8 +151,7 @@
         if (error.code == WCTErrorCodeIOError
             && error.level == WCTErrorLevelError
             && error.tag == self.database.tag
-            && [error.path isEqualToString:self.database.path]
-            && [[error.userInfo objectForKey:@(WCDB::ErrorStringKeyAction)] isEqualToString:@(WCDB::ErrorActionMigrate)]) {
+            && [error.path isEqualToString:self.database.path]) {
             [numberOfFailures increment];
         }
     }];

@@ -26,12 +26,12 @@
 
 namespace WCDB {
 
-class OperationHandle final : public Handle, public Repair::ReadLocker, public Repair::WriteLocker {
+class OperationHandle final : public Handle,
+                              public Repair::BackupSharedDelegate,
+                              public Repair::BackupExclusiveDelegate {
 public:
     OperationHandle();
     ~OperationHandle() override final;
-
-    void setType(HandleType type);
 
 #pragma mark - Checkpoint
 public:
@@ -46,17 +46,17 @@ protected:
 
 #pragma mark - Backup
 public:
-    void setPath(const UnsafeStringView &path) override final;
-    const StringView &getPath() const override final;
-    const Error &getError() const override final;
+    void setBackupPath(const UnsafeStringView &path) override final;
+    const StringView &getBackupPath() const override final;
+    const Error &getBackupError() const override final;
 
-    bool acquireReadLock() override final;
-    bool releaseReadLock() override final;
+    bool acquireBackupSharedLock() override final;
+    bool releaseBackupSharedLock() override final;
 
-    bool acquireWriteLock() override final;
-    bool releaseWriteLock() override final;
+    bool acquireBackupExclusiveLock() override final;
+    bool releaseBackupExclusiveLock() override final;
 
-    void finish() override final;
+    void finishBackup() override final;
 
 protected:
     StatementBegin m_statementForReadTransaction;

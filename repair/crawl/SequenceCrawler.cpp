@@ -84,7 +84,7 @@ void SequenceCrawler::onCellCrawled(const Cell &cell)
 void SequenceCrawler::onCrawlerError()
 {
     m_delegate->onSequenceCrawlerError();
-    stop();
+    suspend();
 }
 
 bool SequenceCrawler::willCrawlPage(const Page &page, int height)

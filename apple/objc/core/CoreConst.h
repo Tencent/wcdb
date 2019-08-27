@@ -100,7 +100,7 @@ enum class HandleType : unsigned int {
     BackupWrite = (HandleCategoryBackupWrite << 8) | HandleSlotOperation,
     Checkpoint = (HandleCategoryCheckpoint << 8) | HandleSlotOperation,
     Integrity = (HandleCategoryIntegrity << 8) | HandleSlotOperation,
-    Assembler = (HandleCategoryAssemble << 8) | HandleSlotAssemble,
+    Assemble = (HandleCategoryAssemble << 8) | HandleSlotAssemble,
     AssembleBackupRead = (HandleCategoryBackupRead << 8) | HandleSlotAssemble,
     AssembleBackupWrite = (HandleCategoryBackupWrite << 8) | HandleSlotAssemble,
 };
@@ -117,9 +117,6 @@ static constexpr HandleCategory categoryOfHandleType(HandleType type)
 static constexpr const double MigrateMaxExpectingDuration = 0.01;
 static constexpr const double MigrateMaxInitializeDuration = 0.005;
 
-#pragma mark - Error - Key
-static constexpr const char* ErrorStringKeyAction = "Action";
-
 #define WCDB_ERROR_STRING_KEY_SOURCE "Source";
 static constexpr const char* ErrorStringKeySource = WCDB_ERROR_STRING_KEY_SOURCE;
 
@@ -134,13 +131,6 @@ static constexpr const char* ErrorIntKeyTag = WCDB_ERROR_INT_KEY_TAG;
 
 #define WCDB_ERROR_INT_KEY_EXTCODE "ExtCode"
 static constexpr const char* ErrorIntKeyExtCode = WCDB_ERROR_INT_KEY_EXTCODE;
-
-#pragma mark - Error - Action
-static constexpr const char* ErrorActionMigrate = "Migrate";
-static constexpr const char* ErrorActionBackup = "Backup";
-static constexpr const char* ErrorActionCheckpoint = "Checkpoint";
-static constexpr const char* ErrorActionIntegrity = "Integrity";
-static constexpr const char* ErrorActionAssembler = "Assembler";
 
 #pragma mark - Error - Source
 static constexpr const char* ErrorSourceSQLite = "SQLite";

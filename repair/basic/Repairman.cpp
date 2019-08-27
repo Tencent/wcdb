@@ -77,30 +77,30 @@ std::optional<bool> Repairman::isEmptyDatabase()
 
 bool Repairman::markAsAssembling()
 {
-    if (m_assembler->markAsAssembling()) {
+    if (m_assembleDelegate->markAsAssembling()) {
         return true;
     }
-    setCriticalError(m_assembler->getError());
+    setCriticalError(m_assembleDelegate->getAssembleError());
     return false;
 }
 
 void Repairman::markAsAssembled()
 {
     markAsMilestone();
-    if (!m_assembler->markAsAssembled()) {
-        setCriticalError(m_assembler->getError());
+    if (!m_assembleDelegate->markAsAssembled()) {
+        setCriticalError(m_assembleDelegate->getAssembleError());
     }
 }
 
 bool Repairman::markAsMilestone()
 {
     m_mile = 0;
-    if (m_assembler->markAsMilestone()) {
+    if (m_assembleDelegate->markAsMilestone()) {
         markSegmentedScoreCounted();
         return true;
     }
     markSegmentedScoreDropped();
-    tryUpgrateAssemblerError();
+    tryUpgrateAssembleError();
     return false;
 }
 
@@ -115,34 +115,34 @@ bool Repairman::towardMilestone(int mile)
 
 bool Repairman::assembleTable(const UnsafeStringView &tableName, const UnsafeStringView &sql)
 {
-    if (m_assembler->assembleTable(tableName, sql)) {
+    if (m_assembleDelegate->assembleTable(tableName, sql)) {
         if (markAsMilestone()) {
             return true;
         }
     } else {
-        tryUpgrateAssemblerError();
+        tryUpgrateAssembleError();
     }
     return false;
 }
 
 bool Repairman::assembleCell(const Cell &cell)
 {
-    if (m_assembler->assembleCell(cell)) {
+    if (m_assembleDelegate->assembleCell(cell)) {
         markCellAsCounted(cell);
         towardMilestone(1);
         return true;
     }
-    tryUpgrateAssemblerError();
+    tryUpgrateAssembleError();
     return false;
 }
 
 bool Repairman::assembleSequence(const UnsafeStringView &tableName, int64_t sequence)
 {
-    if (m_assembler->assembleSequence(tableName, sequence)) {
+    if (m_assembleDelegate->assembleSequence(tableName, sequence)) {
         towardMilestone(1);
         return true;
     }
-    tryUpgrateAssemblerError();
+    tryUpgrateAssembleError();
     return false;
 }
 
@@ -150,7 +150,7 @@ void Repairman::assembleAssociatedSQLs(const std::list<StringView> &sqls)
 {
     for (const auto &sql : sqls) {
         //ignore its errors
-        m_assembler->assembleSQL(sql);
+        m_assembleDelegate->assembleSQL(sql);
     }
 }
 
@@ -170,9 +170,9 @@ int Repairman::tryUpgradeCrawlerError()
     return tryUpgradeError(std::move(error));
 }
 
-int Repairman::tryUpgrateAssemblerError()
+int Repairman::tryUpgrateAssembleError()
 {
-    Error error = m_assembler->getError();
+    Error error = m_assembleDelegate->getAssembleError();
     if (error.code() == Error::Code::Constraint) {
         error.level = Error::Level::Notice;
     }
@@ -181,7 +181,7 @@ int Repairman::tryUpgrateAssemblerError()
 
 void Repairman::onErrorCritical()
 {
-    stop();
+    suspend();
 }
 
 #pragma mark - Evaluation

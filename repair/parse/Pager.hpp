@@ -81,7 +81,6 @@ protected:
 public:
     void markAsCorrupted(int page, const UnsafeStringView &message);
 
-protected:
     void markAsError(Error::Code code);
 
 #pragma mark - Initializeable

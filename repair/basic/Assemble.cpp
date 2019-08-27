@@ -18,33 +18,40 @@
  * limitations under the License.
  */
 
-#include <WCDB/Locker.hpp>
+#include <WCDB/Assemble.hpp>
+#include <WCDB/Assertion.hpp>
+#include <WCDB/Cell.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-    Locker::~Locker() = default;
-
-LockerHolder::LockerHolder() : m_readLocker(nullptr), m_writeLocker(nullptr)
+AssembleDelegate::AssembleDelegate() : m_duplicatedIgnorable(false)
 {
 }
 
-LockerHolder::~LockerHolder() = default;
+AssembleDelegate::~AssembleDelegate() = default;
 
-void LockerHolder::setReadLocker(ReadLocker* readLocker)
+void AssembleDelegate::markDuplicatedAsIgnorable(bool ignorable)
 {
-    m_readLocker = readLocker;
+    m_duplicatedIgnorable = ignorable;
 }
 
-void LockerHolder::setWriteLocker(WriteLocker* writeLocker)
+bool AssembleDelegate::isDuplicatedIgnorable() const
 {
-    m_writeLocker = writeLocker;
+    return m_duplicatedIgnorable;
 }
 
-ReadLocker::~ReadLocker() = default;
+AssembleDelegateHolder::AssembleDelegateHolder() : m_assembleDelegate(nullptr)
+{
+}
 
-WriteLocker::~WriteLocker() = default;
+void AssembleDelegateHolder::setAssembleDelegate(AssembleDelegate* delegate)
+{
+    m_assembleDelegate = delegate;
+}
+
+AssembleDelegateHolder::~AssembleDelegateHolder() = default;
 
 } //namespace Repair
 

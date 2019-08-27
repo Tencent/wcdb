@@ -107,9 +107,7 @@ void AbstractHandle::close()
 {
     if (isOpened()) {
         finalizeStatements();
-        WCTRemedialAssert(m_transactionLevel == 0 && !isInTransaction(),
-                          "Unpaired transaction.",
-                          rollbackTransaction(););
+        m_transactionLevel = 0;
         m_notification.purge();
         APIExit(sqlite3_close_v2(m_handle));
         m_handle = nullptr;
@@ -372,8 +370,10 @@ void AbstractHandle::rollbackNestedTransaction()
         } else {
             bool succeed = true;
             if (m_transactionError == TransactionError::Allowed) {
+                sqlite3_unimpeded(m_handle, true);
                 succeed = executeStatement(StatementRollback().rollbackToSavepoint(
                 getSavepointName(m_transactionLevel)));
+                sqlite3_unimpeded(m_handle, false);
             }
             if (succeed) {
                 --m_transactionLevel;
@@ -428,7 +428,9 @@ void AbstractHandle::rollbackTransaction()
     if (isInTransaction()) {
         WCDB_STATIC_VARIABLE const StringView s_rollback(
         StatementRollback().rollback().getDescription());
+        sqlite3_unimpeded(m_handle, true);
         succeed = executeSQL(s_rollback);
+        sqlite3_unimpeded(m_handle, false);
     }
     if (succeed) {
         m_transactionLevel = 0;

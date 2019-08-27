@@ -24,6 +24,7 @@
 #include <WCDB/ThreadLocal.hpp>
 #include <atomic>
 #include <mutex>
+#include <queue>
 
 namespace WCDB {
 
@@ -70,7 +71,7 @@ protected:
     int m_readers;
     int m_writers;
     int m_pendingReaders;
-    int m_pendingWriters;
+    std::queue<Thread> m_pendingWriters;
     Thread m_locking;
     // mutable since it can be only modified threaded
     mutable ThreadLocal<int> m_threadedReaders;

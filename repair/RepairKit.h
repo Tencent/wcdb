@@ -26,9 +26,8 @@
 #include <WCDB/FactoryRenewer.hpp>
 #include <WCDB/FactoryRetriever.hpp>
 
-#include <WCDB/Assembler.hpp>
+#include <WCDB/Assemble.hpp>
 #include <WCDB/Cell.hpp>
-#include <WCDB/Locker.hpp>
 
 #if WCDB_USE_BUILTIN_SQLITE_REPAIR
 #include <WCDB/SQLiteAssembler.hpp>

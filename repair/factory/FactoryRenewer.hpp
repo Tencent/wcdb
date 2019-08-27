@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <WCDB/Assembler.hpp>
+#include <WCDB/Assemble.hpp>
 #include <WCDB/ErrorProne.hpp>
 #include <WCDB/FactoryRelated.hpp>
 
@@ -30,8 +30,8 @@ namespace Repair {
 
 class FactoryRenewer final : public FactoryRelated,
                              public ErrorProne,
-                             public AssemblerHolder,
-                             public LockerHolder {
+                             public AssembleDelegateHolder,
+                             public BackupDelegateHolder {
 public:
     FactoryRenewer(const Factory &factory);
     ~FactoryRenewer() override final;

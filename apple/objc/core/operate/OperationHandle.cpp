@@ -37,97 +37,57 @@ StatementSelect().select(1).from(Syntax::masterTable).limit(0))
 
 OperationHandle::~OperationHandle() = default;
 
-void OperationHandle::setType(HandleType type)
-{
-    HandleCategory category = categoryOfHandleType(type);
-    switch (category) {
-    case HandleCategoryIntegrity:
-        m_error.infos.insert_or_assign(ErrorStringKeyAction, ErrorActionIntegrity);
-        break;
-    case HandleCategoryBackupRead:
-    case HandleCategoryBackupWrite:
-        m_error.infos.insert_or_assign(ErrorStringKeyAction, ErrorActionBackup);
-        break;
-    default:
-        WCTAssert(category == HandleCategoryCheckpoint);
-        m_error.infos.insert_or_assign(ErrorStringKeyAction, ErrorActionCheckpoint);
-        break;
-    }
-}
-
 #pragma mark - Checkpoint
 bool OperationHandle::checkpoint()
 {
-    WCTAssert(m_error.infos.find(UnsafeStringView(ErrorStringKeyAction))
-              != m_error.infos.end());
-    WCTAssert(m_error.infos.at(ErrorStringKeyAction).underlyingType()
-              == Error::InfoValue::UnderlyingType::String);
-    WCTAssert(m_error.infos.at(ErrorStringKeyAction).stringValue() == ErrorActionCheckpoint);
     return Handle::checkpoint(CheckpointMode::Passive);
 }
 
 #pragma mark - Integrity
 void OperationHandle::checkIntegrity()
 {
-    WCTAssert(m_error.infos.find(UnsafeStringView(ErrorStringKeyAction))
-              != m_error.infos.end());
-    WCTAssert(m_error.infos.at(ErrorStringKeyAction).underlyingType()
-              == Error::InfoValue::UnderlyingType::String);
-    WCTAssert(m_error.infos.at(ErrorStringKeyAction).stringValue() == ErrorActionIntegrity);
     execute(m_statementForIntegrityCheck);
 }
 
 #pragma mark - Backup
-void OperationHandle::setPath(const UnsafeStringView &path)
+void OperationHandle::setBackupPath(const UnsafeStringView &path)
 {
     Handle::setPath(path);
 }
 
-const StringView &OperationHandle::getPath() const
+const StringView &OperationHandle::getBackupPath() const
 {
     return Handle::getPath();
 }
 
-const Error &OperationHandle::getError() const
+const Error &OperationHandle::getBackupError() const
 {
     return Handle::getError();
 }
 
-bool OperationHandle::acquireReadLock()
+bool OperationHandle::acquireBackupSharedLock()
 {
-    WCTAssert(m_error.infos.find(UnsafeStringView(ErrorStringKeyAction))
-              != m_error.infos.end());
-    WCTAssert(m_error.infos.at(ErrorStringKeyAction).underlyingType()
-              == Error::InfoValue::UnderlyingType::String);
-    WCTAssert(m_error.infos.at(ErrorStringKeyAction).stringValue() == ErrorActionBackup);
-
     return execute(m_statementForReadTransaction) && execute(m_statementForAcquireReadLock);
 }
 
-bool OperationHandle::releaseReadLock()
+bool OperationHandle::releaseBackupSharedLock()
 {
     rollbackTransaction();
     return true;
 }
 
-bool OperationHandle::acquireWriteLock()
+bool OperationHandle::acquireBackupExclusiveLock()
 {
-    WCTAssert(m_error.infos.find(UnsafeStringView(ErrorStringKeyAction))
-              != m_error.infos.end());
-    WCTAssert(m_error.infos.at(ErrorStringKeyAction).underlyingType()
-              == Error::InfoValue::UnderlyingType::String);
-    WCTAssert(m_error.infos.at(ErrorStringKeyAction).stringValue() == ErrorActionBackup);
-
     return beginTransaction();
 }
 
-bool OperationHandle::releaseWriteLock()
+bool OperationHandle::releaseBackupExclusiveLock()
 {
     rollbackTransaction();
     return true;
 }
 
-void OperationHandle::finish()
+void OperationHandle::finishBackup()
 {
     Handle::close();
 }

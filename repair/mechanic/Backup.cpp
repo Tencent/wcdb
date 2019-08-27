@@ -33,6 +33,48 @@ namespace WCDB {
 
 namespace Repair {
 
+BackupBaseDelegate::~BackupBaseDelegate() = default;
+
+BackupSharedDelegate::~BackupSharedDelegate() = default;
+
+BackupExclusiveDelegate::BackupExclusiveDelegate() : m_suspend(false)
+{
+}
+
+BackupExclusiveDelegate::~BackupExclusiveDelegate() = default;
+
+void BackupExclusiveDelegate::suspendBackup(bool suspend)
+{
+    m_suspend = suspend;
+}
+
+bool BackupExclusiveDelegate::backupSuspended() const
+{
+    return m_suspend;
+}
+
+BackupDelegateHolder::BackupDelegateHolder() = default;
+
+BackupDelegateHolder::~BackupDelegateHolder() = default;
+
+void BackupDelegateHolder::setBackupSharedDelegate(BackupSharedDelegate *delegate)
+{
+    WCTAssert(delegate != nullptr);
+    m_sharedDelegate = delegate;
+}
+
+void BackupDelegateHolder::setBackupExclusiveDelegate(BackupExclusiveDelegate *delegate)
+{
+    WCTAssert(delegate != nullptr);
+    m_exclusiveDelegate = delegate;
+}
+
+bool BackupDelegateHolder::isDelegateValid() const
+{
+    return m_sharedDelegate != nullptr && m_exclusiveDelegate != nullptr
+           && (uintptr_t) m_sharedDelegate != (uintptr_t) m_exclusiveDelegate;
+}
+
 #pragma mark - Initialize
 Backup::Backup(const UnsafeStringView &path)
 : m_pager(path), Crawlable(m_pager), m_masterCrawler(m_pager)
@@ -44,39 +86,38 @@ Backup::~Backup() = default;
 #pragma mark - Backup
 bool Backup::work()
 {
-    WCTRemedialAssert(m_readLocker != nullptr && m_writeLocker != nullptr,
-                      "Read/Write locker is not avaiable.",
-                      return false;);
-    m_readLocker->setPath(m_pager.getPath());
-    m_writeLocker->setPath(m_pager.getPath());
+    WCTRemedialAssert(isDelegateValid(), "Read/Write locker is not avaiable.", return false;);
 
-    bool readLocked = false;
-    bool writeLocked = false;
+    m_sharedDelegate->setBackupPath(m_pager.getPath());
+    m_exclusiveDelegate->setBackupPath(m_pager.getPath());
+
+    bool shared = false;
+    bool exclusive = false;
     bool succeed = false;
     do {
         //acquire read lock to avoid shm changed during initialize
-        if (!m_writeLocker->acquireWriteLock()) {
-            setError(m_writeLocker->getError());
+        if (!m_exclusiveDelegate->acquireBackupExclusiveLock()) {
+            setError(m_exclusiveDelegate->getBackupError());
             break;
         }
-        writeLocked = true;
+        exclusive = true;
 
         //acquire read lock to avoid wal truncated/restarted during whole iteration of pager
-        if (!m_readLocker->acquireReadLock()) {
-            setError(m_readLocker->getError());
+        if (!m_sharedDelegate->acquireBackupSharedLock()) {
+            setError(m_sharedDelegate->getBackupError());
             break;
         }
-        readLocked = true;
+        shared = true;
 
         if (!m_pager.initialize()) {
             break;
         }
 
-        if (!m_writeLocker->releaseWriteLock()) {
-            setError(m_writeLocker->getError());
+        if (!m_exclusiveDelegate->releaseBackupExclusiveLock()) {
+            setError(m_exclusiveDelegate->getBackupError());
             break;
         }
-        writeLocked = false;
+        exclusive = false;
 
         m_material.info.pageSize = m_pager.getPageSize();
         m_material.info.reservedBytes = m_pager.getReservedBytes();
@@ -87,13 +128,13 @@ bool Backup::work()
         succeed = m_masterCrawler.work(this);
     } while (false);
 
-    if (writeLocked && !m_writeLocker->releaseWriteLock() && succeed) {
-        setError(m_writeLocker->getError());
+    if (exclusive && !m_exclusiveDelegate->releaseBackupExclusiveLock() && succeed) {
+        setError(m_exclusiveDelegate->getBackupError());
         succeed = false;
     }
 
-    if (readLocked && !m_readLocker->releaseReadLock() && succeed) {
-        setError(m_readLocker->getError());
+    if (shared && !m_sharedDelegate->releaseBackupSharedLock() && succeed) {
+        setError(m_sharedDelegate->getBackupError());
         succeed = false;
     }
 
@@ -139,6 +180,10 @@ void Backup::onCellCrawled(const Cell &cell)
 
 bool Backup::willCrawlPage(const Page &page, int height)
 {
+    if (m_exclusiveDelegate->backupSuspended()) {
+        markAsInterrupted();
+        return false;
+    }
     WCDB_UNUSED(height)
     switch (page.getType()) {
     case Page::Type::InteriorTable:
@@ -160,7 +205,7 @@ bool Backup::willCrawlPage(const Page &page, int height)
 
 void Backup::onCrawlerError()
 {
-    m_masterCrawler.stop();
+    m_masterCrawler.suspend();
 }
 
 #pragma mark - MasterCrawlerDelegate

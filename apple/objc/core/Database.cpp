@@ -26,7 +26,7 @@
 #include <WCDB/RepairKit.h>
 #include <WCDB/StringView.hpp>
 
-#include <WCDB/AssemblerHandle.hpp>
+#include <WCDB/AssembleHandle.hpp>
 #include <WCDB/MigrateHandle.hpp>
 #include <WCDB/MigratingHandle.hpp>
 #include <WCDB/OperationHandle.hpp>
@@ -208,7 +208,7 @@ std::shared_ptr<Handle> Database::generateSlotedHandle(HandleType type)
         handle = std::make_shared<MigrateHandle>();
         break;
     case HandleSlotAssemble:
-        handle = std::make_shared<AssemblerHandle>();
+        handle = std::make_shared<AssembleHandle>();
         break;
     case HandleSlotOperation:
         handle = std::make_shared<OperationHandle>();
@@ -240,11 +240,6 @@ bool Database::setupHandle(HandleType type, Handle *handle)
     WCTAssert(handle != nullptr);
 
     HandleSlot slot = slotOfHandleType(type);
-
-    if (slot == HandleSlotOperation) {
-        WCTAssert(dynamic_cast<OperationHandle *>(handle) != nullptr);
-        static_cast<OperationHandle *>(handle)->setType(type);
-    }
 
     Configs configs;
     {
@@ -522,8 +517,10 @@ bool Database::doBackup()
     WCTAssert(backupReadHandle.get() != backupWriteHandle.get());
 
     Repair::FactoryBackup backup = m_factory.backup();
-    backup.setReadLocker(static_cast<OperationHandle *>(backupReadHandle.get()));
-    backup.setWriteLocker(static_cast<OperationHandle *>(backupWriteHandle.get()));
+    backup.setBackupSharedDelegate(
+    static_cast<OperationHandle *>(backupReadHandle.get()));
+    backup.setBackupExclusiveDelegate(
+    static_cast<OperationHandle *>(backupWriteHandle.get()));
     if (!backup.work(getPath())) {
         setThreadedError(backup.getError());
         return false;
@@ -548,7 +545,7 @@ bool Database::deposit()
         if (backupWriteHandle == nullptr) {
             return;
         }
-        RecyclableHandle assemblerHandle = flowOut(HandleType::Assembler);
+        RecyclableHandle assemblerHandle = flowOut(HandleType::Assemble);
         if (assemblerHandle == nullptr) {
             return;
         }
@@ -561,9 +558,12 @@ bool Database::deposit()
         WCTAssert(!assemblerHandle->isOpened());
 
         Repair::FactoryRenewer renewer = m_factory.renewer();
-        renewer.setReadLocker(static_cast<AssemblerHandle *>(backupReadHandle.get()));
-        renewer.setWriteLocker(static_cast<AssemblerHandle *>(backupWriteHandle.get()));
-        renewer.setAssembler(static_cast<AssemblerHandle *>(assemblerHandle.get()));
+        renewer.setBackupSharedDelegate(
+        static_cast<AssembleHandle *>(backupReadHandle.get()));
+        renewer.setBackupExclusiveDelegate(
+        static_cast<AssembleHandle *>(backupWriteHandle.get()));
+        renewer.setAssembleDelegate(
+        static_cast<AssembleHandle *>(assemblerHandle.get()));
         // Prepare a new database from material at renew directory and wait for moving
         if (!renewer.prepare()) {
             setThreadedError(renewer.getError());
@@ -602,7 +602,7 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdated)
         if (backupWriteHandle == nullptr) {
             return;
         }
-        RecyclableHandle assemblerHandle = flowOut(HandleType::Assembler);
+        RecyclableHandle assemblerHandle = flowOut(HandleType::Assemble);
         if (assemblerHandle == nullptr) {
             return;
         }
@@ -615,10 +615,12 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdated)
         WCTAssert(!assemblerHandle->isOpened());
 
         Repair::FactoryRetriever retriever = m_factory.retriever();
-        retriever.setReadLocker(static_cast<AssemblerHandle *>(backupReadHandle.get()));
-        retriever.setWriteLocker(
-        static_cast<AssemblerHandle *>(backupWriteHandle.get()));
-        retriever.setAssembler(static_cast<AssemblerHandle *>(assemblerHandle.get()));
+        retriever.setBackupSharedDelegate(
+        static_cast<AssembleHandle *>(backupReadHandle.get()));
+        retriever.setBackupExclusiveDelegate(
+        static_cast<AssembleHandle *>(backupWriteHandle.get()));
+        retriever.setAssembleDelegate(
+        static_cast<AssembleHandle *>(assemblerHandle.get()));
         retriever.setProgressCallback(onProgressUpdated);
         if (retriever.work()) {
             result = retriever.getScore().value();
