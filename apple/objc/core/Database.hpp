@@ -155,7 +155,6 @@ public:
 private:
     void doCheckIntegrity();
     bool doBackup();
-    bool retrieveRenewed();
     Repair::Factory m_factory;
 
 #pragma mark - Migration

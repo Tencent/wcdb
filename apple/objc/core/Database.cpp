@@ -66,6 +66,7 @@ bool Database::canOpen()
 
 void Database::didDrain()
 {
+    WCTAssert(m_concurrency.writeSafety());
     WCTAssert(m_memory.writeSafety());
     WCTAssert(!isOpened());
     m_initialized = false;
@@ -104,14 +105,20 @@ Database::InitializedGuard Database::initialize()
             assignWithSharedThreadedError();
             break;
         }
-        if (!retrieveRenewed()) {
-            break;
+        // retrieveRenewed
+        {
+            Repair::FactoryRenewer renewer = m_factory.renewer();
+            if (!renewer.work()) {
+                setThreadedError(renewer.getError());
+                break;
+            }
         }
         auto exists = FileManager::fileExists(path);
         if (!exists.has_value()) {
             assignWithSharedThreadedError();
             break;
         }
+        // create file to make file identifier stable
         if (!exists.value() && !FileManager::createFile(path)) {
             assignWithSharedThreadedError();
             break;
@@ -660,19 +667,6 @@ bool Database::removeMaterials()
         }
     });
     return result;
-}
-
-bool Database::retrieveRenewed()
-{
-    WCTAssert(isBlockaded());
-    WCTAssert(!m_initialized);
-
-    Repair::FactoryRenewer renewer = m_factory.renewer();
-    if (renewer.work()) {
-        return true;
-    }
-    setThreadedError(renewer.getError());
-    return false;
 }
 
 void Database::checkIntegrity()
