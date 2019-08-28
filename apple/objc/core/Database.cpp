@@ -518,9 +518,9 @@ bool Database::backup(bool interruptible)
     = static_cast<OperationHandle *>(backupWriteHandle.get());
     if (interruptible) {
         if (m_closing != 0) {
-            Error error;
-            error.level = Error::Level::Ignore;
-            error.setCode(Error::Code::Interrupt);
+            Error error(Error::Code::Interrupt, Error::Level::Ignore, "Interrupt due to it's closing");
+            error.infos.insert_or_assign(ErrorStringKeyPath, path);
+            error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeBackup);
             Notifier::shared().notify(error);
             setThreadedError(std::move(error));
             return false;
@@ -698,9 +698,9 @@ void Database::checkIntegrity(bool interruptible)
         OperationHandle *operationHandle = static_cast<OperationHandle *>(handle.get());
         if (interruptible) {
             if (m_closing != 0) {
-                Error error;
-                error.level = Error::Level::Ignore;
-                error.setCode(Error::Code::Interrupt);
+                Error error(Error::Code::Interrupt, Error::Level::Ignore, "Interrupt due to it's closing");
+                error.infos.insert_or_assign(ErrorStringKeyPath, path);
+                error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeIntegrity);
                 Notifier::shared().notify(error);
                 setThreadedError(std::move(error));
                 return;
@@ -737,9 +737,8 @@ std::optional<bool> Database::stepMigration(bool interruptible)
 
         if (interruptible) {
             if (m_closing != 0) {
-                Error error;
-                error.level = Error::Level::Ignore;
-                error.setCode(Error::Code::Interrupt);
+                Error error(Error::Code::Interrupt, Error::Level::Ignore, "Interrupt due to it's closing");
+                error.infos.insert_or_assign(ErrorStringKeyPath, path);
                 Notifier::shared().notify(error);
                 setThreadedError(std::move(error));
                 return false;
@@ -801,9 +800,9 @@ bool Database::checkpoint(bool interruptible)
     RecyclableHandle handle = flowOut(HandleType::Checkpoint);
     if (handle != nullptr) {
         if (m_closing != 0) {
-            Error error;
-            error.level = Error::Level::Ignore;
-            error.setCode(Error::Code::Interrupt);
+            Error error(Error::Code::Interrupt, Error::Level::Ignore, "Interrupt due to it's closing");
+            error.infos.insert_or_assign(ErrorStringKeyPath, path);
+            error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeCheckpoint);
             Notifier::shared().notify(error);
             setThreadedError(std::move(error));
             return false;
