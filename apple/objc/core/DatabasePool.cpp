@@ -53,18 +53,6 @@ RecyclableDatabase DatabasePool::getOrCreate(const UnsafeStringView &path)
     return get(result.first);
 }
 
-RecyclableDatabase DatabasePool::get(const UnsafeStringView &path)
-{
-    StringView normalized = Path::normalize(path);
-    SharedLockGuard lockGuard(m_lock);
-    auto iter = m_databases.find(normalized);
-    // get referenced database only
-    if (iter != m_databases.end() && iter->second.reference != 0) {
-        return get(iter);
-    }
-    return nullptr;
-}
-
 DatabasePool::ReferencedDatabase::ReferencedDatabase(std::shared_ptr<Database> &&database_)
 : database(std::move(database_)), reference(0)
 {

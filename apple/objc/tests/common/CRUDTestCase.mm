@@ -22,6 +22,7 @@
 #import "Random+TestCaseObject.h"
 #import "Random.h"
 #import "TestCaseAssertion.h"
+#import <WCDB/WCTDatabase+Test.h>
 
 @implementation CRUDTestCase {
     TestCaseObject* _object1;

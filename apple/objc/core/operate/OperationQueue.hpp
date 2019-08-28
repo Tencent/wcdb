@@ -41,8 +41,8 @@ public:
 protected:
     virtual std::optional<bool>
     migrationShouldBeOperated(const UnsafeStringView& path) = 0;
-    virtual bool backupShouldBeOperated(const UnsafeStringView& path) = 0;
-    virtual bool checkpointShouldBeOperated(const UnsafeStringView& path) = 0;
+    virtual void backupShouldBeOperated(const UnsafeStringView& path) = 0;
+    virtual void checkpointShouldBeOperated(const UnsafeStringView& path) = 0;
     virtual void integrityShouldBeChecked(const UnsafeStringView& path) = 0;
     virtual void purgeShouldBeOperated() = 0;
 

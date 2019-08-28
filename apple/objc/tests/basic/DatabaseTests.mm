@@ -38,37 +38,6 @@
     TestCaseAssertTrue([self.database.path isEqualToString:self.path]);
 }
 
-- (void)test_existing
-{
-    NSString* path = [self.path stringByAppendingString:@"_existing"];
-    WCTTag tag = self.database.tag;
-
-    @autoreleasepool {
-        // non-exists
-        {
-            WCTDatabase* existing = [[WCTDatabase alloc] initWithPathOfAlivingDatabase:path];
-            TestCaseAssertTrue(existing == nil);
-        }
-
-        WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
-        database.tag = tag;
-        TestCaseAssertTrue(database != nil);
-
-        // exists
-        {
-            WCTDatabase* existing = [[WCTDatabase alloc] initWithPathOfAlivingDatabase:path];
-            TestCaseAssertTrue(existing != nil);
-            TestCaseAssertEqual(tag, existing.tag);
-        }
-    }
-
-    // non-exists
-    {
-        WCTDatabase* existing = [[WCTDatabase alloc] initWithPathOfAlivingDatabase:path];
-        TestCaseAssertTrue(existing == nil);
-    }
-}
-
 - (void)test_open_and_close
 {
     TestCaseAssertFalse([self.database isOpened]);

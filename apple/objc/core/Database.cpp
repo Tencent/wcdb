@@ -22,6 +22,7 @@
 #include <WCDB/Database.hpp>
 #include <WCDB/Error.hpp>
 #include <WCDB/FileManager.hpp>
+#include <WCDB/Notifier.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/RepairKit.h>
 #include <WCDB/StringView.hpp>
@@ -142,16 +143,6 @@ Database::InitializedGuard Database::initialize()
     return nullptr;
 }
 
-Database::InitializedGuard Database::isInitialized() const
-{
-    SharedLockGuard concurrencyGuard(m_concurrency);
-    SharedLockGuard memoryGuard(m_memory);
-    if (m_initialized && m_closing == 0) {
-        return concurrencyGuard;
-    }
-    return nullptr;
-}
-
 #pragma mark - Config
 void Database::setConfigs(const Configs &configs)
 {
@@ -260,6 +251,7 @@ bool Database::setupHandle(HandleType type, Handle *handle)
 {
     WCTAssert(handle != nullptr);
 
+    handle->setType(type);
     HandleSlot slot = slotOfHandleType(type);
 
     Configs configs;
@@ -499,47 +491,63 @@ void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
     m_factory.filter(tableShouldBeBackedup);
 }
 
-bool Database::backup(bool autoInitialize)
+bool Database::backup(bool interruptible)
 {
-    InitializedGuard initializedGuard = autoInitialize ? initialize() : isInitialized();
-    bool succeed = false;
-    if (initializedGuard.valid()) {
-        WCTRemedialAssert(
-        !isInTransaction(), "Backup can't be run in transaction.", return false;);
-        RecyclableHandle backupReadHandle = flowOut(HandleType::BackupRead);
-        RecyclableHandle backupWriteHandle = flowOut(HandleType::BackupWrite);
-        if (backupReadHandle == nullptr || backupWriteHandle == nullptr || m_closing != 0) {
+    InitializedGuard initializedGuard = initialize();
+    if (!initializedGuard.valid()) {
+        return false; // mark as succeed if it's not an auto initialize action.
+    }
+    WCTRemedialAssert(
+    !isInTransaction(), "Backup can't be run in transaction.", return false;);
+
+    RecyclableHandle backupReadHandle = flowOut(HandleType::BackupRead);
+    if (backupReadHandle == nullptr) {
+        return false;
+    }
+
+    RecyclableHandle backupWriteHandle = flowOut(HandleType::BackupWrite);
+    if (backupWriteHandle == nullptr) {
+        return false;
+    }
+
+    WCTAssert(backupReadHandle.get() != backupWriteHandle.get());
+
+    OperationHandle *operationBackupReadHandle
+    = static_cast<OperationHandle *>(backupReadHandle.get());
+    OperationHandle *operationBackupWriteHandle
+    = static_cast<OperationHandle *>(backupWriteHandle.get());
+    if (interruptible) {
+        if (m_closing != 0) {
+            Error error(Error::Code::Interrupt, Error::Level::Ignore, "Interrupt due to it's closing");
+            error.infos.insert_or_assign(ErrorStringKeyPath, path);
+            error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeBackup);
+            Notifier::shared().notify(error);
+            setThreadedError(std::move(error));
             return false;
         }
-
-        WCTAssert(backupReadHandle.get() != backupWriteHandle.get());
-
-        OperationHandle *operationBackupReadHandle
-        = static_cast<OperationHandle *>(backupReadHandle.get());
-        OperationHandle *operationBackupWriteHandle
-        = static_cast<OperationHandle *>(backupWriteHandle.get());
-        if (!autoInitialize) {
-            operationBackupReadHandle->markErrorAsIgnorable(Error::Code::Interrupt);
-            operationBackupWriteHandle->markErrorAsIgnorable(Error::Code::Interrupt);
-            operationBackupReadHandle->markAsCanBeSuspended(true);
-            operationBackupWriteHandle->markAsCanBeSuspended(true);
-        }
-        Repair::FactoryBackup backup = m_factory.backup();
-        backup.setBackupSharedDelegate(
-        static_cast<OperationHandle *>(backupReadHandle.get()));
-        backup.setBackupExclusiveDelegate(
-        static_cast<OperationHandle *>(backupWriteHandle.get()));
-        if (backup.work(getPath())) {
+        operationBackupReadHandle->markErrorAsIgnorable(Error::Code::Interrupt);
+        operationBackupWriteHandle->markErrorAsIgnorable(Error::Code::Interrupt);
+        operationBackupReadHandle->markAsCanBeSuspended(true);
+        operationBackupWriteHandle->markAsCanBeSuspended(true);
+    }
+    Repair::FactoryBackup backup = m_factory.backup();
+    backup.setBackupSharedDelegate(
+    static_cast<OperationHandle *>(backupReadHandle.get()));
+    backup.setBackupExclusiveDelegate(
+    static_cast<OperationHandle *>(backupWriteHandle.get()));
+    bool succeed = backup.work(getPath());
+    if (!succeed) {
+        if (backup.getError().level == Error::Level::Ignore) {
             succeed = true;
         } else {
             setThreadedError(backup.getError());
         }
-        if (!autoInitialize) {
-            operationBackupWriteHandle->markAsCanBeSuspended(false);
-            operationBackupReadHandle->markAsCanBeSuspended(false);
-            operationBackupWriteHandle->markErrorAsUnignorable();
-            operationBackupReadHandle->markErrorAsUnignorable();
-        }
+    }
+    if (interruptible) {
+        operationBackupWriteHandle->markAsCanBeSuspended(false);
+        operationBackupReadHandle->markAsCanBeSuspended(false);
+        operationBackupWriteHandle->markErrorAsUnignorable();
+        operationBackupReadHandle->markErrorAsUnignorable();
     }
     return succeed;
 }
@@ -678,59 +686,75 @@ bool Database::removeMaterials()
     return result;
 }
 
-void Database::checkIntegrity(bool autoInitialize)
+void Database::checkIntegrity(bool interruptible)
 {
-    InitializedGuard initializedGuard = autoInitialize ? initialize() : isInitialized();
-    if (initializedGuard.valid()) {
-        RecyclableHandle handle = flowOut(HandleType::Integrity);
-        if (handle != nullptr && m_closing == 0) {
-            WCTAssert(dynamic_cast<OperationHandle *>(handle.get()) != nullptr);
-            OperationHandle *operationHandle
-            = static_cast<OperationHandle *>(handle.get());
-            if (!autoInitialize) {
-                operationHandle->markErrorAsIgnorable(Error::Code::Interrupt);
-                operationHandle->markAsCanBeSuspended(true);
+    InitializedGuard initializedGuard = initialize();
+    if (!initializedGuard.valid()) {
+        return; // mark as succeed if it's not an auto initialize action.
+    }
+    RecyclableHandle handle = flowOut(HandleType::Integrity);
+    if (handle != nullptr) {
+        WCTAssert(dynamic_cast<OperationHandle *>(handle.get()) != nullptr);
+        OperationHandle *operationHandle = static_cast<OperationHandle *>(handle.get());
+        if (interruptible) {
+            if (m_closing != 0) {
+                Error error(Error::Code::Interrupt, Error::Level::Ignore, "Interrupt due to it's closing");
+                error.infos.insert_or_assign(ErrorStringKeyPath, path);
+                error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeIntegrity);
+                Notifier::shared().notify(error);
+                setThreadedError(std::move(error));
+                return;
             }
-            operationHandle->checkIntegrity();
-            if (!autoInitialize) {
-                operationHandle->markAsCanBeSuspended(false);
-                operationHandle->markErrorAsUnignorable();
-            }
+
+            operationHandle->markErrorAsIgnorable(Error::Code::Interrupt);
+            operationHandle->markAsCanBeSuspended(true);
+        }
+        operationHandle->checkIntegrity();
+        if (interruptible) {
+            operationHandle->markAsCanBeSuspended(false);
+            operationHandle->markErrorAsUnignorable();
         }
     }
 }
 
 #pragma mark - Migration
-std::optional<bool> Database::stepMigration(bool autoInitialize)
+std::optional<bool> Database::stepMigration(bool interruptible)
 {
-    InitializedGuard initializedGuard = autoInitialize ? initialize() : isInitialized();
+    InitializedGuard initializedGuard = initialize();
+    if (!initializedGuard.valid()) {
+        return nullptr;
+    }
+    WCTRemedialAssert(
+    !isInTransaction(), "Migrating can't be run in transaction.", return std::nullopt;);
+    WCTRemedialAssert(m_migration.shouldMigrate(),
+                      "It's not configured for migration.",
+                      return std::nullopt;);
     std::optional<bool> done;
-    if (initializedGuard.valid()) {
-        WCTRemedialAssert(!isInTransaction(),
-                          "Migrating can't be run in transaction.",
-                          return std::nullopt;);
-        WCTRemedialAssert(m_migration.shouldMigrate(),
-                          "It's not configured for migration.",
-                          return std::nullopt;);
-        RecyclableHandle handle = flowOut(HandleType::Migrate);
-        if (handle != nullptr && m_closing == 0) {
-            WCTAssert(dynamic_cast<MigrateHandle *>(handle.get()) != nullptr);
-            MigrateHandle *migrateHandle = static_cast<MigrateHandle *>(handle.get());
+    RecyclableHandle handle = flowOut(HandleType::Migrate);
+    if (handle != nullptr) {
+        WCTAssert(dynamic_cast<MigrateHandle *>(handle.get()) != nullptr);
+        MigrateHandle *migrateHandle = static_cast<MigrateHandle *>(handle.get());
 
-            if (!autoInitialize) {
-                migrateHandle->markErrorAsIgnorable(Error::Code::Interrupt);
-                migrateHandle->markAsCanBeSuspended(true);
+        if (interruptible) {
+            if (m_closing != 0) {
+                Error error(Error::Code::Interrupt, Error::Level::Ignore, "Interrupt due to it's closing");
+                error.infos.insert_or_assign(ErrorStringKeyPath, path);
+                Notifier::shared().notify(error);
+                setThreadedError(std::move(error));
+                return false;
             }
-            migrateHandle->markErrorAsIgnorable(Error::Code::Busy);
-            done = m_migration.step(*migrateHandle);
-            if (!done.has_value() && handle->isErrorIgnorable()) {
-                done = false;
-            }
+            migrateHandle->markErrorAsIgnorable(Error::Code::Interrupt);
+            migrateHandle->markAsCanBeSuspended(true);
+        }
+        migrateHandle->markErrorAsIgnorable(Error::Code::Busy);
+        done = m_migration.step(*migrateHandle);
+        if (!done.has_value() && handle->getError().isIgnorable()) {
+            done = false;
+        }
+        migrateHandle->markErrorAsUnignorable();
+        if (interruptible) {
+            migrateHandle->markAsCanBeSuspended(false);
             migrateHandle->markErrorAsUnignorable();
-            if (!autoInitialize) {
-                migrateHandle->markAsCanBeSuspended(false);
-                migrateHandle->markErrorAsUnignorable();
-            }
         }
     }
     return done;
@@ -766,25 +790,38 @@ std::set<StringView> Database::getPathsOfSourceDatabases() const
 }
 
 #pragma mark - Checkpoint
-bool Database::checkpointIfAlreadyInitialized()
+bool Database::checkpoint(bool interruptible)
 {
-    InitializedGuard initializedGuard = isInitialized();
+    InitializedGuard initializedGuard = initialize();
+    if (!initializedGuard.valid()) {
+        return false; // mark as succeed if it's not an auto initialize action.
+    }
     bool succeed = false;
-    if (initializedGuard.valid()) {
-        RecyclableHandle handle = flowOut(HandleType::Checkpoint);
-        if (handle != nullptr && m_closing == 0) {
-            WCTAssert(dynamic_cast<OperationHandle *>(handle.get()) != nullptr);
-            OperationHandle *operationHandle
-            = static_cast<OperationHandle *>(handle.get());
+    RecyclableHandle handle = flowOut(HandleType::Checkpoint);
+    if (handle != nullptr) {
+        if (m_closing != 0) {
+            Error error(Error::Code::Interrupt, Error::Level::Ignore, "Interrupt due to it's closing");
+            error.infos.insert_or_assign(ErrorStringKeyPath, path);
+            error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeCheckpoint);
+            Notifier::shared().notify(error);
+            setThreadedError(std::move(error));
+            return false;
+        }
 
+        WCTAssert(dynamic_cast<OperationHandle *>(handle.get()) != nullptr);
+        OperationHandle *operationHandle = static_cast<OperationHandle *>(handle.get());
+
+        if (interruptible) {
             operationHandle->markErrorAsIgnorable(Error::Code::Interrupt);
             operationHandle->markAsCanBeSuspended(true);
-            operationHandle->markErrorAsIgnorable(Error::Code::Busy);
-            succeed = operationHandle->checkpoint();
-            if (!succeed && operationHandle->isErrorIgnorable()) {
-                succeed = true;
-            }
-            operationHandle->markErrorAsUnignorable();
+        }
+        operationHandle->markErrorAsIgnorable(Error::Code::Busy);
+        succeed = operationHandle->checkpoint();
+        if (!succeed && operationHandle->getError().isIgnorable()) {
+            succeed = true;
+        }
+        operationHandle->markErrorAsUnignorable();
+        if (interruptible) {
             operationHandle->markAsCanBeSuspended(false);
             operationHandle->markErrorAsUnignorable();
         }

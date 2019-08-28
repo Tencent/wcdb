@@ -7,7 +7,7 @@ SUPPORTED_PLATFORMS = macosx iphonesimulator iphoneos appletvos appletvsimulator
 INFOPLIST_FILE = $(SRCROOT)/objc/tests/support/Info.plist
 
 // Preprocessing
-GCC_PREPROCESSOR_DEFINITIONS = $(inherited) $(SQLITE_PREPROCESSOR_DEFINITIONS)
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) $(SQLITE_PREPROCESSOR_DEFINITIONS) WCDB_TESTS=1
 
 // Apple Clang - Language - Objective-C
 GCC_ENABLE_OBJC_EXCEPTIONS = YES

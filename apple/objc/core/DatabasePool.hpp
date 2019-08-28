@@ -43,7 +43,6 @@ public:
     DatabasePool(DatabasePoolEvent* event);
 
     RecyclableDatabase getOrCreate(const UnsafeStringView& path);
-    RecyclableDatabase get(const UnsafeStringView& path);
 
     void purge();
 

@@ -52,20 +52,6 @@
     return self;
 }
 
-- (instancetype)initWithPathOfAlivingDatabase:(NSString *)path
-{
-    if (self = [super init]) {
-        path = [path stringByStandardizingPath];
-        _databaseHolder = WCDB::Core::shared().getAlivingDatabase(path);
-        if (_databaseHolder == nullptr) {
-            return nil;
-        }
-        _database = _databaseHolder.get();
-        WCTAssert(_database != nullptr);
-    }
-    return self;
-}
-
 - (void)setTag:(WCTTag)tag
 {
     _database->setTag(tag);
@@ -81,21 +67,6 @@
     return [NSString stringWithView:_database->getPath()];
 }
 
-- (BOOL)canOpen
-{
-    return _database->canOpen();
-}
-
-- (BOOL)isOpened
-{
-    return _database->isOpened();
-}
-
-- (void)close
-{
-    _database->close(nullptr);
-}
-
 - (void)close:(WCDB_NO_ESCAPE WCTCloseBlock)onClosed
 {
     std::function<void(void)> callback = nullptr;
@@ -105,21 +76,6 @@
         };
     }
     _database->close(callback);
-}
-
-- (BOOL)isBlockaded
-{
-    return _database->isBlockaded();
-}
-
-- (void)blockade
-{
-    _database->blockade();
-}
-
-- (void)unblockade
-{
-    _database->unblockade();
 }
 
 - (WCTError *)error

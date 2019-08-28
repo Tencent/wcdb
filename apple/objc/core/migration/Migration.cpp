@@ -66,12 +66,7 @@ std::set<StringView> Migration::getPathsOfSourceDatabases() const
         SharedLockGuard lockGuard(m_lock);
         for (const auto& info : m_holder) {
             if (info.isCrossDatabase()) {
-                if (m_migratings.find(&info) != m_migratings.end()
-                    || m_dumpster.find(&info) != m_dumpster.end()
-                    || m_referenceds.find(&info) != m_referenceds.end()) {
-                    // it's an active info
-                    paths.emplace(info.getSourceDatabase());
-                }
+                paths.emplace(info.getSourceDatabase());
             }
         }
     }
@@ -348,7 +343,7 @@ void Migration::tryReduceBounds(StringViewMap<const MigrationInfo*>& bounds)
 }
 
 #pragma mark - Step
-    Migration::Stepper::~Stepper() = default;
+Migration::Stepper::~Stepper() = default;
 
 std::optional<bool> Migration::step(Migration::Stepper& stepper)
 {

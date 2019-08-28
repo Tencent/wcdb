@@ -117,8 +117,8 @@ static constexpr HandleCategory categoryOfHandleType(HandleType type)
 static constexpr const double MigrateMaxExpectingDuration = 0.01;
 static constexpr const double MigrateMaxInitializeDuration = 0.005;
 
-#define WCDB_ERROR_STRING_KEY_SOURCE "Source";
-static constexpr const char* ErrorStringKeySource = WCDB_ERROR_STRING_KEY_SOURCE;
+static constexpr const char* ErrorStringKeyType = "Type";
+static constexpr const char* ErrorStringKeySource = "Source";
 
 #define WCDB_ERROR_STRING_KEY_PATH "Path"
 static constexpr const char* ErrorStringKeyPath = WCDB_ERROR_STRING_KEY_PATH;
@@ -138,6 +138,13 @@ static constexpr const char* ErrorSourceRepair = "Repair";
 static constexpr const char* ErrorSourceSystem = "System";
 static constexpr const char* ErrorSourceAssertion = "Assertion";
 static constexpr const char* ErrorSourceNative = "Native";
+
+#pragma mark - Error - Type
+static constexpr const char* ErrorTypeMigrate = "Migrate";
+static constexpr const char* ErrorTypeCheckpoint = "Checkpoint";
+static constexpr const char* ErrorTypeIntegrity = "Integrity";
+static constexpr const char* ErrorTypeBackup = "Backup";
+static constexpr const char* ErrorTypeAssemble = "Assemble";
 
 #pragma mark - Tag
 static constexpr const int TagInvalidValue = 0;

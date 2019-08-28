@@ -25,6 +25,7 @@
 #import "TestCaseAssertion.h"
 #import "TestCaseLog.h"
 #import "TestCaseResult.h"
+#import <WCDB/WCTDatabase+Test.h>
 
 @implementation DatabaseTestCase {
     WCTDatabase* _database;
