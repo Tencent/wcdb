@@ -90,24 +90,24 @@ void OperationQueue::handleError(const Error& error)
     }
     uint32_t identifier = optionalIdentifier.value();
 
-    bool checkIntegrity = false;
-    auto actionIter = infos.find(UnsafeStringView(ErrorStringKeySource));
-    if (actionIter != infos.end()
-        && actionIter->second.underlyingType() == Error::InfoValue::UnderlyingType::String
-        && actionIter->second.stringValue() != ErrorSourceSQLite) {
-        // check integrity again if it's not reported by SQLite
-        checkIntegrity = true;
+    bool fromIntegrity = false;
+    auto actionIter = infos.find(UnsafeStringView(ErrorStringKeyType));
+    if (actionIter != infos.end() && actionIter->second.stringValue() == ErrorTypeIntegrity) {
+        fromIntegrity = true;
     }
 
-    if (checkIntegrity) {
-        asyncCheckIntegrity(path, identifier);
-    } else {
+    if (fromIntegrity) {
         LockGuard lockGuard(m_lock);
         bool emplaced = m_corrupteds.emplace(identifier).second;
         if (emplaced
             && m_corruptionNotifications.find(path) != m_corruptionNotifications.end()) {
             asyncNotifyCorruption(path, identifier);
         }
+    } else {
+        // check integrity to
+        // 1. find out the real corrupted database for multi-schemas
+        // 2. avoid wrongly report by backup
+        asyncCheckIntegrity(path, identifier);
     }
 }
 

@@ -32,6 +32,33 @@ Handle::~Handle()
     returnStatement(m_mainStatement);
 }
 
+void Handle::setType(HandleType type)
+{
+    switch (type) {
+    case HandleType::Migrate:
+        m_error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeMigrate);
+        break;
+    case HandleType::BackupRead:
+    case HandleType::BackupWrite:
+        m_error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeMigrate);
+        break;
+    case HandleType::Checkpoint:
+        m_error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeCheckpoint);
+        break;
+    case HandleType::Integrity:
+        m_error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeIntegrity);
+        break;
+    case HandleType::Assemble:
+    case HandleType::AssembleBackupRead:
+    case HandleType::AssembleBackupWrite:
+        m_error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeAssemble);
+        break;
+    default:
+        m_error.infos.erase(ErrorStringKeyType);
+        break;
+    }
+}
+
 #pragma mark - Config
 bool Handle::open()
 {

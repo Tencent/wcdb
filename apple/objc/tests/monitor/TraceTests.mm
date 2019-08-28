@@ -82,7 +82,6 @@
         if (error.level == WCTErrorLevelError
             && [error.path isEqualToString:self.path]
             && error.tag == self.database.tag
-            && [error.source isEqualToString:@"SQLite"]
             && error.code == WCTErrorCodeError
             && [error.sql isEqualToString:@"SELECT 1 FROM main.dummy"]) {
             tested = YES;

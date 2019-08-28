@@ -31,7 +31,6 @@ NSErrorUserInfoKey const WCTErrorKeyPath = @WCDB_ERROR_STRING_KEY_PATH;
 NSErrorUserInfoKey const WCTErrorKeySQL = @WCDB_ERROR_STRING_KEY_SQL;
 NSErrorUserInfoKey const WCTErrorKeyTag = @WCDB_ERROR_INT_KEY_TAG;
 NSErrorUserInfoKey const WCTErrorKeyExtendedCode = @WCDB_ERROR_INT_KEY_EXTCODE;
-NSErrorUserInfoKey const WCTErrorKeySource = @WCDB_ERROR_STRING_KEY_SOURCE;
 
 @implementation WCTError
 
@@ -154,15 +153,6 @@ NSErrorUserInfoKey const WCTErrorKeySource = @WCDB_ERROR_STRING_KEY_SOURCE;
 - (WCTErrorExtendedCode)extendedCode
 {
     return (WCTErrorExtendedCode) [self numberForKey:WCTErrorKeyExtendedCode].intValue;
-}
-
-@end
-
-@implementation WCTError (Source)
-
-- (NSString *)source
-{
-    return [self stringForKey:WCTErrorKeySource];
 }
 
 @end

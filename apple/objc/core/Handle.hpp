@@ -22,6 +22,7 @@
 
 #include <WCDB/AbstractHandle.hpp>
 #include <WCDB/Configs.hpp>
+#include <WCDB/CoreConst.h>
 
 namespace WCDB {
 
@@ -30,6 +31,8 @@ class Handle : public AbstractHandle {
 public:
     Handle();
     virtual ~Handle() override = 0;
+
+    void setType(HandleType type);
 
 #pragma mark - Config
 public:

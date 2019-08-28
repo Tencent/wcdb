@@ -261,6 +261,7 @@ bool Database::setupHandle(HandleType type, Handle *handle)
 {
     WCTAssert(handle != nullptr);
 
+    handle->setType(type);
     HandleSlot slot = slotOfHandleType(type);
 
     Configs configs;

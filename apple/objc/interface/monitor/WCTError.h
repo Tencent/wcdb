@@ -28,7 +28,6 @@ WCDB_EXTERN NSErrorUserInfoKey const WCTErrorKeyPath;
 WCDB_EXTERN NSErrorUserInfoKey const WCTErrorKeySQL;
 WCDB_EXTERN NSErrorUserInfoKey const WCTErrorKeyTag;
 WCDB_EXTERN NSErrorUserInfoKey const WCTErrorKeyExtendedCode;
-WCDB_EXTERN NSErrorUserInfoKey const WCTErrorKeySource;
 
 typedef NS_ENUM(NSUInteger, WCTErrorLevel) {
     WCTErrorLevelIgnore = 1,
@@ -185,12 +184,6 @@ typedef NS_ENUM(NSUInteger, WCTErrorExtendedCode) {
 @interface WCTError (ExtendedCode)
 
 - (WCTErrorExtendedCode)extendedCode;
-
-@end
-
-@interface WCTError (Source)
-
-- (nullable NSString *)source;
 
 @end
 
