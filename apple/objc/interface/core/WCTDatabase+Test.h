@@ -18,15 +18,13 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCDB.h>
+#import <WCDB/WCTDatabase.h>
 
 typedef NS_OPTIONS(NSUInteger, WCTSimulateIOErrorOptions) {
     WCTSimulateNoneIOError = 0,
     WCTSimulateReadIOError = 1 << 0,
     WCTSimulateWriteIOError = 1 << 1,
 };
-
-#ifdef WCDB_TESTS
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -51,5 +49,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-
-#endif

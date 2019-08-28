@@ -34,3 +34,5 @@
 #import <WCDB/Interface.h>
 #import <WCDB/WCTBuiltin.h>
 #import <WCDB/WINQ.h>
+
+#import <WCDB/WCTDatabase+Test.h>
