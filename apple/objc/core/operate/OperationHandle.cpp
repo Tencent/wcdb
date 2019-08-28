@@ -21,6 +21,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/CoreConst.h>
 #include <WCDB/Handle.hpp>
+#include <WCDB/Notifier.hpp>
 #include <WCDB/OperationHandle.hpp>
 #include <WCDB/RepairKit.h>
 
@@ -31,7 +32,7 @@ OperationHandle::OperationHandle()
 StatementSelect().select(1).from(Syntax::masterTable).limit(0))
 , m_statementForReadTransaction(StatementBegin().beginDeferred())
 , m_statementForIntegrityCheck(
-  StatementPragma().pragma(Pragma::integrityCheck()).schema(Schema::main()))
+  StatementPragma().pragma(Pragma::integrityCheck()).with(1).schema(Schema::main()))
 {
 }
 
@@ -52,7 +53,20 @@ bool OperationHandle::checkpoint()
 #pragma mark - Integrity
 void OperationHandle::checkIntegrity()
 {
-    execute(m_statementForIntegrityCheck);
+    auto optionalIntegrityMessages = getValues(m_statementForIntegrityCheck, 0);
+    if (optionalIntegrityMessages.has_value()) {
+        auto &integrityMessages = optionalIntegrityMessages.value();
+        WCTAssert(integrityMessages.size() == 1);
+        if (integrityMessages.size() > 0) {
+            auto integrityMessage = *integrityMessages.begin();
+            if (!integrityMessage.caseInsensiveEqual("ok")) {
+                Error error(Error::Code::Corrupt, Error::Level::Error, integrityMessage);
+                error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
+                error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeIntegrity);
+                Notifier::shared().notify(error);
+            }
+        }
+    }
 }
 
 #pragma mark - Backup

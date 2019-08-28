@@ -66,7 +66,7 @@ void OperationQueue::main()
 
 void OperationQueue::handleError(const Error& error)
 {
-    if (!error.isCorruption() || isExiting()) {
+    if (error.level < Error::Level::Error || !error.isCorruption() || isExiting()) {
         return;
     }
 
