@@ -171,8 +171,6 @@ public:
     void markErrorAsIgnorable(Error::Code ignorableCode);
     void markErrorAsUnignorable(int count = 1);
 
-    bool isErrorIgnorable() const;
-
 private:
     // The level of error will be "Ignore" if it's marked as ignorable.
     // But the return value will be still false.

@@ -141,6 +141,12 @@ Error::Error(Code code, Level level_, const UnsafeStringView& message)
     setCode(code, message);
 }
 
+#pragma mark - Level
+bool Error::isIgnorable() const
+{
+    return level == Level::Ignore;
+}
+
 #pragma mark - Code
 bool Error::isError(int rc)
 {

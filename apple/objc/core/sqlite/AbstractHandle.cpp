@@ -210,7 +210,7 @@ std::optional<bool> AbstractHandle::ft3TokenizerExists(const UnsafeStringView &t
     std::optional<bool> exists;
     if (succeed) {
         exists = true;
-    } else if (isErrorIgnorable()) {
+    } else if (m_error.isIgnorable()) {
         exists = false;
     }
     markErrorAsUnignorable();
@@ -235,7 +235,7 @@ AbstractHandle::tableExists(const Schema &schema, const UnsafeStringView &table)
     if (succeed) {
         handleStatement.finalize();
         exists = true;
-    } else if (isErrorIgnorable()) {
+    } else if (m_error.isIgnorable()) {
         exists = false;
     }
     markErrorAsUnignorable();
@@ -567,22 +567,6 @@ void AbstractHandle::markErrorAsUnignorable(int count)
         m_ignorableCodes.pop_back();
         --count;
     }
-}
-
-bool AbstractHandle::isErrorIgnorable() const
-{
-    bool ignorable = true;
-    int rc = Error::c2rc(m_error.code());
-    if (Error::isError(rc)) {
-        ignorable = false;
-        for (const auto &code : m_ignorableCodes) {
-            if (code == rc) {
-                ignorable = true;
-                break;
-            }
-        }
-    }
-    return ignorable;
 }
 
 #pragma mark - Suspend

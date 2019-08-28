@@ -64,6 +64,7 @@ public:
             return "FATAL";
         }
     }
+    bool isIgnorable() const;
 
 #pragma mark - Code
 public:

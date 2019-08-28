@@ -22,6 +22,7 @@
 #include <WCDB/Database.hpp>
 #include <WCDB/Error.hpp>
 #include <WCDB/FileManager.hpp>
+#include <WCDB/Notifier.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/RepairKit.h>
 #include <WCDB/StringView.hpp>
@@ -146,7 +147,7 @@ Database::InitializedGuard Database::isInitialized() const
 {
     SharedLockGuard concurrencyGuard(m_concurrency);
     SharedLockGuard memoryGuard(m_memory);
-    if (m_initialized && m_closing == 0) {
+    if (m_initialized) {
         return concurrencyGuard;
     }
     return nullptr;
@@ -502,44 +503,60 @@ void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
 bool Database::backup(bool autoInitialize)
 {
     InitializedGuard initializedGuard = autoInitialize ? initialize() : isInitialized();
-    bool succeed = false;
-    if (initializedGuard.valid()) {
-        WCTRemedialAssert(
-        !isInTransaction(), "Backup can't be run in transaction.", return false;);
-        RecyclableHandle backupReadHandle = flowOut(HandleType::BackupRead);
-        RecyclableHandle backupWriteHandle = flowOut(HandleType::BackupWrite);
-        if (backupReadHandle == nullptr || backupWriteHandle == nullptr || m_closing != 0) {
+    if (!initializedGuard.valid()) {
+        return autoInitialize ? false : true; // mark as succeed if it's not an auto initialize action.
+    }
+    WCTRemedialAssert(
+    !isInTransaction(), "Backup can't be run in transaction.", return false;);
+
+    RecyclableHandle backupReadHandle = flowOut(HandleType::BackupRead);
+    if (backupReadHandle == nullptr) {
+        return false;
+    }
+
+    RecyclableHandle backupWriteHandle = flowOut(HandleType::BackupWrite);
+    if (backupWriteHandle == nullptr) {
+        return false;
+    }
+
+    WCTAssert(backupReadHandle.get() != backupWriteHandle.get());
+
+    OperationHandle *operationBackupReadHandle
+    = static_cast<OperationHandle *>(backupReadHandle.get());
+    OperationHandle *operationBackupWriteHandle
+    = static_cast<OperationHandle *>(backupWriteHandle.get());
+    if (!autoInitialize) {
+        if (m_closing != 0) {
+            Error error;
+            error.level = Error::Level::Ignore;
+            error.setSystemCode(errno, Error::Code::Interrupt);
+            Notifier::shared().notify(error);
+            setThreadedError(std::move(error));
             return false;
         }
-
-        WCTAssert(backupReadHandle.get() != backupWriteHandle.get());
-
-        OperationHandle *operationBackupReadHandle
-        = static_cast<OperationHandle *>(backupReadHandle.get());
-        OperationHandle *operationBackupWriteHandle
-        = static_cast<OperationHandle *>(backupWriteHandle.get());
-        if (!autoInitialize) {
-            operationBackupReadHandle->markErrorAsIgnorable(Error::Code::Interrupt);
-            operationBackupWriteHandle->markErrorAsIgnorable(Error::Code::Interrupt);
-            operationBackupReadHandle->markAsCanBeSuspended(true);
-            operationBackupWriteHandle->markAsCanBeSuspended(true);
-        }
-        Repair::FactoryBackup backup = m_factory.backup();
-        backup.setBackupSharedDelegate(
-        static_cast<OperationHandle *>(backupReadHandle.get()));
-        backup.setBackupExclusiveDelegate(
-        static_cast<OperationHandle *>(backupWriteHandle.get()));
-        if (backup.work(getPath())) {
+        operationBackupReadHandle->markErrorAsIgnorable(Error::Code::Interrupt);
+        operationBackupWriteHandle->markErrorAsIgnorable(Error::Code::Interrupt);
+        operationBackupReadHandle->markAsCanBeSuspended(true);
+        operationBackupWriteHandle->markAsCanBeSuspended(true);
+    }
+    Repair::FactoryBackup backup = m_factory.backup();
+    backup.setBackupSharedDelegate(
+    static_cast<OperationHandle *>(backupReadHandle.get()));
+    backup.setBackupExclusiveDelegate(
+    static_cast<OperationHandle *>(backupWriteHandle.get()));
+    bool succeed = backup.work(getPath());
+    if (!succeed) {
+        if (backup.getError().level == Error::Level::Ignore) {
             succeed = true;
         } else {
             setThreadedError(backup.getError());
         }
-        if (!autoInitialize) {
-            operationBackupWriteHandle->markAsCanBeSuspended(false);
-            operationBackupReadHandle->markAsCanBeSuspended(false);
-            operationBackupWriteHandle->markErrorAsUnignorable();
-            operationBackupReadHandle->markErrorAsUnignorable();
-        }
+    }
+    if (!autoInitialize) {
+        operationBackupWriteHandle->markAsCanBeSuspended(false);
+        operationBackupReadHandle->markAsCanBeSuspended(false);
+        operationBackupWriteHandle->markErrorAsUnignorable();
+        operationBackupReadHandle->markErrorAsUnignorable();
     }
     return succeed;
 }
@@ -681,21 +698,30 @@ bool Database::removeMaterials()
 void Database::checkIntegrity(bool autoInitialize)
 {
     InitializedGuard initializedGuard = autoInitialize ? initialize() : isInitialized();
-    if (initializedGuard.valid()) {
-        RecyclableHandle handle = flowOut(HandleType::Integrity);
-        if (handle != nullptr && m_closing == 0) {
-            WCTAssert(dynamic_cast<OperationHandle *>(handle.get()) != nullptr);
-            OperationHandle *operationHandle
-            = static_cast<OperationHandle *>(handle.get());
-            if (!autoInitialize) {
-                operationHandle->markErrorAsIgnorable(Error::Code::Interrupt);
-                operationHandle->markAsCanBeSuspended(true);
+    if (!initializedGuard.valid()) {
+        return; // mark as succeed if it's not an auto initialize action.
+    }
+    RecyclableHandle handle = flowOut(HandleType::Integrity);
+    if (handle != nullptr) {
+        WCTAssert(dynamic_cast<OperationHandle *>(handle.get()) != nullptr);
+        OperationHandle *operationHandle = static_cast<OperationHandle *>(handle.get());
+        if (!autoInitialize) {
+            if (m_closing != 0) {
+                Error error;
+                error.level = Error::Level::Ignore;
+                error.setSystemCode(errno, Error::Code::Interrupt);
+                Notifier::shared().notify(error);
+                setThreadedError(std::move(error));
+                return;
             }
-            operationHandle->checkIntegrity();
-            if (!autoInitialize) {
-                operationHandle->markAsCanBeSuspended(false);
-                operationHandle->markErrorAsUnignorable();
-            }
+
+            operationHandle->markErrorAsIgnorable(Error::Code::Interrupt);
+            operationHandle->markAsCanBeSuspended(true);
+        }
+        operationHandle->checkIntegrity();
+        if (!autoInitialize) {
+            operationHandle->markAsCanBeSuspended(false);
+            operationHandle->markErrorAsUnignorable();
         }
     }
 }
@@ -704,33 +730,42 @@ void Database::checkIntegrity(bool autoInitialize)
 std::optional<bool> Database::stepMigration(bool autoInitialize)
 {
     InitializedGuard initializedGuard = autoInitialize ? initialize() : isInitialized();
+    if (!initializedGuard.valid()) {
+        return autoInitialize ? std::optional<bool>(nullptr) :
+                                std::optional<bool>(false); // mark as succeed if it's not an auto initialize action.
+    }
+    WCTRemedialAssert(
+    !isInTransaction(), "Migrating can't be run in transaction.", return std::nullopt;);
+    WCTRemedialAssert(m_migration.shouldMigrate(),
+                      "It's not configured for migration.",
+                      return std::nullopt;);
     std::optional<bool> done;
-    if (initializedGuard.valid()) {
-        WCTRemedialAssert(!isInTransaction(),
-                          "Migrating can't be run in transaction.",
-                          return std::nullopt;);
-        WCTRemedialAssert(m_migration.shouldMigrate(),
-                          "It's not configured for migration.",
-                          return std::nullopt;);
-        RecyclableHandle handle = flowOut(HandleType::Migrate);
-        if (handle != nullptr && m_closing == 0) {
-            WCTAssert(dynamic_cast<MigrateHandle *>(handle.get()) != nullptr);
-            MigrateHandle *migrateHandle = static_cast<MigrateHandle *>(handle.get());
+    RecyclableHandle handle = flowOut(HandleType::Migrate);
+    if (handle != nullptr) {
+        WCTAssert(dynamic_cast<MigrateHandle *>(handle.get()) != nullptr);
+        MigrateHandle *migrateHandle = static_cast<MigrateHandle *>(handle.get());
 
-            if (!autoInitialize) {
-                migrateHandle->markErrorAsIgnorable(Error::Code::Interrupt);
-                migrateHandle->markAsCanBeSuspended(true);
+        if (!autoInitialize) {
+            if (m_closing != 0) {
+                Error error;
+                error.level = Error::Level::Ignore;
+                error.setSystemCode(errno, Error::Code::Interrupt);
+                Notifier::shared().notify(error);
+                setThreadedError(std::move(error));
+                return nullptr;
             }
-            migrateHandle->markErrorAsIgnorable(Error::Code::Busy);
-            done = m_migration.step(*migrateHandle);
-            if (!done.has_value() && handle->isErrorIgnorable()) {
-                done = false;
-            }
+            migrateHandle->markErrorAsIgnorable(Error::Code::Interrupt);
+            migrateHandle->markAsCanBeSuspended(true);
+        }
+        migrateHandle->markErrorAsIgnorable(Error::Code::Busy);
+        done = m_migration.step(*migrateHandle);
+        if (!done.has_value() && handle->getError().isIgnorable()) {
+            done = false;
+        }
+        migrateHandle->markErrorAsUnignorable();
+        if (!autoInitialize) {
+            migrateHandle->markAsCanBeSuspended(false);
             migrateHandle->markErrorAsUnignorable();
-            if (!autoInitialize) {
-                migrateHandle->markAsCanBeSuspended(false);
-                migrateHandle->markErrorAsUnignorable();
-            }
         }
     }
     return done;
@@ -766,25 +801,38 @@ std::set<StringView> Database::getPathsOfSourceDatabases() const
 }
 
 #pragma mark - Checkpoint
-bool Database::checkpointIfAlreadyInitialized()
+bool Database::checkpoint(bool autoInitialize)
 {
-    InitializedGuard initializedGuard = isInitialized();
+    InitializedGuard initializedGuard = autoInitialize ? initialize() : isInitialized();
+    if (!initializedGuard.valid()) {
+        return autoInitialize ? false : true; // mark as succeed if it's not an auto initialize action.
+    }
     bool succeed = false;
-    if (initializedGuard.valid()) {
-        RecyclableHandle handle = flowOut(HandleType::Checkpoint);
-        if (handle != nullptr && m_closing == 0) {
-            WCTAssert(dynamic_cast<OperationHandle *>(handle.get()) != nullptr);
-            OperationHandle *operationHandle
-            = static_cast<OperationHandle *>(handle.get());
+    RecyclableHandle handle = flowOut(HandleType::Checkpoint);
+    if (handle != nullptr) {
+        if (m_closing != 0) {
+            Error error;
+            error.level = Error::Level::Ignore;
+            error.setSystemCode(errno, Error::Code::Interrupt);
+            Notifier::shared().notify(error);
+            setThreadedError(std::move(error));
+            return false;
+        }
 
+        WCTAssert(dynamic_cast<OperationHandle *>(handle.get()) != nullptr);
+        OperationHandle *operationHandle = static_cast<OperationHandle *>(handle.get());
+
+        if (!autoInitialize) {
             operationHandle->markErrorAsIgnorable(Error::Code::Interrupt);
             operationHandle->markAsCanBeSuspended(true);
-            operationHandle->markErrorAsIgnorable(Error::Code::Busy);
-            succeed = operationHandle->checkpoint();
-            if (!succeed && operationHandle->isErrorIgnorable()) {
-                succeed = true;
-            }
-            operationHandle->markErrorAsUnignorable();
+        }
+        operationHandle->markErrorAsIgnorable(Error::Code::Busy);
+        succeed = operationHandle->checkpoint();
+        if (!succeed && operationHandle->getError().isIgnorable()) {
+            succeed = true;
+        }
+        operationHandle->markErrorAsUnignorable();
+        if (!autoInitialize) {
             operationHandle->markAsCanBeSuspended(false);
             operationHandle->markErrorAsUnignorable();
         }

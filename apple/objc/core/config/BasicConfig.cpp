@@ -88,7 +88,8 @@ bool BasicConfig::lazySetJournalModeWAL(Handle* handle)
         = getOrSetPragmaBegin(handle, m_getJournalMode)
           && getOrSetPragmaEnd(
           handle, m_setJournalModeWAL, !handle->getText(0).caseInsensiveEqual("WAL"));
-    } while (--remainingNumberOfBusyRetryTimes > 0 && !succeed && handle->isErrorIgnorable());
+    } while (--remainingNumberOfBusyRetryTimes > 0 && !succeed
+             && handle->getError().isIgnorable());
     handle->markErrorAsUnignorable();
     return succeed;
 }

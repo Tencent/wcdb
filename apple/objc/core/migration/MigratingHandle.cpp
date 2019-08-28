@@ -204,7 +204,7 @@ bool MigratingHandle::trySynchronousTransactionAfterAttached()
         StatementBegin().beginImmediate().getDescription());
         succeed = executeSQL(s_synchronousTransaction);
         WCTAssert(!succeed);
-        if (!succeed && isErrorIgnorable()) {
+        if (!succeed && getError().isIgnorable()) {
             succeed = true;
         }
         markErrorAsUnignorable();

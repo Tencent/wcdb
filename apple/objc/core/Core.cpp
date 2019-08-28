@@ -147,24 +147,20 @@ std::optional<bool> Core::migrationShouldBeOperated(const UnsafeStringView& path
     return done;
 }
 
-bool Core::backupShouldBeOperated(const UnsafeStringView& path)
+void Core::backupShouldBeOperated(const UnsafeStringView& path)
 {
     RecyclableDatabase database = m_databasePool.get(path);
-    bool succeed = true; // mark as no error if database is not referenced.
     if (database != nullptr) {
-        succeed = database->backup(false);
+        database->backup(false);
     }
-    return succeed;
 }
 
-bool Core::checkpointShouldBeOperated(const UnsafeStringView& path)
+void Core::checkpointShouldBeOperated(const UnsafeStringView& path)
 {
     RecyclableDatabase database = m_databasePool.get(path);
-    bool succeed = true; // mark as no error if database is not referenced.
     if (database != nullptr) {
-        succeed = database->checkpointIfAlreadyInitialized();
+        database->checkpoint(false);
     }
-    return succeed;
 }
 
 void Core::integrityShouldBeChecked(const UnsafeStringView& path)

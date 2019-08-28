@@ -79,8 +79,8 @@ public:
 protected:
     std::optional<bool>
     migrationShouldBeOperated(const UnsafeStringView& path) override final;
-    bool backupShouldBeOperated(const UnsafeStringView& path) override final;
-    bool checkpointShouldBeOperated(const UnsafeStringView& path) override final;
+    void backupShouldBeOperated(const UnsafeStringView& path) override final;
+    void checkpointShouldBeOperated(const UnsafeStringView& path) override final;
     void integrityShouldBeChecked(const UnsafeStringView& path) override final;
     void purgeShouldBeOperated() override final;
 

@@ -175,7 +175,7 @@ protected:
 
 #pragma mark - Checkpoint
 public:
-    bool checkpointIfAlreadyInitialized();
+    bool checkpoint(bool autoInitialize);
 
 #pragma mark - Memory
 public:
