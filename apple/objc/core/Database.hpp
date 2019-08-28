@@ -45,7 +45,6 @@ protected:
     // All public interfaces that are related with concurrency should make sure the initialization.
     typedef SharedLockGuard InitializedGuard;
     InitializedGuard initialize();
-    InitializedGuard isInitialized() const;
     bool m_initialized;
     std::atomic<int> m_closing;
 
@@ -139,7 +138,7 @@ public:
 public:
     typedef Repair::Factory::Filter BackupFilter;
     void filterBackup(const BackupFilter &tableShouldBeBackedup);
-    bool backup(bool autoInitialize);
+    bool backup(bool interruptible);
     bool removeMaterials();
 
     bool deposit();
@@ -149,7 +148,7 @@ public:
     double retrieve(const RetrieveProgressCallback &onProgressUpdated);
     bool containsDeposited() const;
 
-    void checkIntegrity(bool autoInitialize);
+    void checkIntegrity(bool interruptible);
 
 private:
     Repair::Factory m_factory;
@@ -162,7 +161,7 @@ public:
     typedef std::function<void(Database *, const MigrationBaseInfo *)> MigratedCallback;
     void setNotificationWhenMigrated(const MigratedCallback &callback);
 
-    std::optional<bool> stepMigration(bool autoInitialize);
+    std::optional<bool> stepMigration(bool interruptible);
 
     bool isMigrated() const;
 
@@ -175,7 +174,7 @@ protected:
 
 #pragma mark - Checkpoint
 public:
-    bool checkpoint(bool autoInitialize);
+    bool checkpoint(bool interruptible);
 
 #pragma mark - Memory
 public:

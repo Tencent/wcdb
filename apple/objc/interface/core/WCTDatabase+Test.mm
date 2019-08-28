@@ -69,4 +69,34 @@ static std::nullptr_t initialize()
     WCDB::Core::shared().enableAutoCheckpoint(_database, flag);
 }
 
+- (BOOL)isOpened
+{
+    return _database->isOpened();
+}
+
+- (BOOL)canOpen
+{
+    return _database->canOpen();
+}
+
+- (void)close
+{
+    _database->close(nullptr);
+}
+
+- (BOOL)isBlockaded
+{
+    return _database->isBlockaded();
+}
+
+- (void)blockade
+{
+    _database->blockade();
+}
+
+- (void)unblockade
+{
+    _database->unblockade();
+}
+
 @end

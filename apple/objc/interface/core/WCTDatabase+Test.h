@@ -34,6 +34,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)enableAutoCheckpoint:(BOOL)flag;
 
+- (BOOL)isOpened;
+
+- (BOOL)canOpen;
+
+- (void)close;
+
+- (BOOL)isBlockaded;
+
+- (void)blockade;
+
+- (void)unblockade;
+
 @end
 
 NS_ASSUME_NONNULL_END

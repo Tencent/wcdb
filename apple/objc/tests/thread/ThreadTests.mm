@@ -139,20 +139,6 @@
     TestCaseAssertOptionalTrue([self.database isAlreadyCheckpointed]);
 }
 
-- (void)test_feature_closed_database_will_not_perform_subthread_checkpoint
-{
-    // trigger subthread checkpoint
-    TestCaseAssertTrue([self createTable]);
-
-    TestCaseAssertOptionalFalse([self.database isAlreadyCheckpointed]);
-
-    [self.database close];
-
-    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForCheckpoint + self.delayForTolerance];
-
-    TestCaseAssertOptionalFalse([self.database isAlreadyCheckpointed]);
-}
-
 - (void)test_feature_threaded_handle
 {
     __block int handleCount = 0;

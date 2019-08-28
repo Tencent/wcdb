@@ -39,7 +39,7 @@
 
 - (BOOL)checkIfCorrupted
 {
-    _database->checkIntegrity(true);
+    _database->checkIntegrity(false);
     return self.isAlreadyCorrupted;
 }
 
@@ -71,7 +71,7 @@
 
 - (BOOL)backup
 {
-    return _database->backup(true);
+    return _database->backup(false);
 }
 
 - (double)retrieve:(WCDB_NO_ESCAPE WCTRetrieveProgressUpdateBlock)onProgressUpdated

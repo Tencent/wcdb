@@ -58,11 +58,6 @@
     [self doTestAutoMigrate];
 }
 
-- (void)test_feature_closed_database_will_not_perform_auto_migrate
-{
-    [self doTestFeatureClosedDatabaseWillNotPerformAutoMigrate];
-}
-
 - (void)test_feature_auto_migrate_will_stop_due_to_error
 {
     [self doTestFeatureAutoMigrateWillStopDueToError];

@@ -51,7 +51,6 @@ protected:
 #pragma mark - Database
 public:
     RecyclableDatabase getOrCreateDatabase(const UnsafeStringView& path);
-    RecyclableDatabase getAlivingDatabase(const UnsafeStringView& path);
 
     void purgeDatabasePool();
 

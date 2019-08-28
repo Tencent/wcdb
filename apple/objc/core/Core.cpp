@@ -84,11 +84,6 @@ RecyclableDatabase Core::getOrCreateDatabase(const UnsafeStringView& path)
     return m_databasePool.getOrCreate(path);
 }
 
-RecyclableDatabase Core::getAlivingDatabase(const UnsafeStringView& path)
-{
-    return m_databasePool.get(path);
-}
-
 void Core::purgeDatabasePool()
 {
     m_databasePool.purge();
@@ -110,7 +105,7 @@ void Core::preprocessError(Error& error)
     auto iter = infos.find(UnsafeStringView(ErrorStringKeyPath));
     if (iter != infos.end()
         && iter->second.underlyingType() == Error::InfoValue::UnderlyingType::String) {
-        auto database = m_databasePool.get(iter->second.stringValue());
+        auto database = m_databasePool.getOrCreate(iter->second.stringValue());
         if (database != nullptr) {
             auto tag = database->getTag();
             if (tag.isValid()) {
@@ -139,17 +134,17 @@ std::shared_ptr<Config> Core::tokenizerConfig(const UnsafeStringView& tokenizeNa
 #pragma mark - Operation
 std::optional<bool> Core::migrationShouldBeOperated(const UnsafeStringView& path)
 {
-    RecyclableDatabase database = m_databasePool.get(path);
+    RecyclableDatabase database = m_databasePool.getOrCreate(path);
     std::optional<bool> done = false; // mark as no error if database is not referenced.
     if (database != nullptr) {
-        done = database->stepMigration(false);
+        done = database->stepMigration(true);
     }
     return done;
 }
 
 void Core::backupShouldBeOperated(const UnsafeStringView& path)
 {
-    RecyclableDatabase database = m_databasePool.get(path);
+    RecyclableDatabase database = m_databasePool.getOrCreate(path);
     if (database != nullptr) {
         database->backup(false);
     }
@@ -157,23 +152,23 @@ void Core::backupShouldBeOperated(const UnsafeStringView& path)
 
 void Core::checkpointShouldBeOperated(const UnsafeStringView& path)
 {
-    RecyclableDatabase database = m_databasePool.get(path);
+    RecyclableDatabase database = m_databasePool.getOrCreate(path);
     if (database != nullptr) {
-        database->checkpoint(false);
+        database->checkpoint(true);
     }
 }
 
 void Core::integrityShouldBeChecked(const UnsafeStringView& path)
 {
-    RecyclableDatabase database = m_databasePool.get(path);
+    RecyclableDatabase database = m_databasePool.getOrCreate(path);
     if (database != nullptr) {
-        database->checkIntegrity(false);
+        database->checkIntegrity(true);
 
         std::set<StringView> sourcePaths = database->getPathsOfSourceDatabases();
         for (const UnsafeStringView& sourcePath : sourcePaths) {
-            RecyclableDatabase sourceDatabase = m_databasePool.get(sourcePath);
+            RecyclableDatabase sourceDatabase = m_databasePool.getOrCreate(sourcePath);
             if (sourceDatabase != nullptr) {
-                sourceDatabase->checkIntegrity(false);
+                sourceDatabase->checkIntegrity(true);
             }
         }
     }
@@ -196,7 +191,7 @@ void Core::setNotificationWhenDatabaseCorrupted(const UnsafeStringView& path,
     if (notification != nullptr) {
         underlyingNotification
         = [this, notification](const UnsafeStringView& path, uint32_t corruptedIdentifier) {
-              RecyclableDatabase database = m_databasePool.get(path);
+              RecyclableDatabase database = m_databasePool.getOrCreate(path);
               if (database == nullptr) {
                   return;
               }
