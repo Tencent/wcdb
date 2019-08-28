@@ -48,8 +48,6 @@ public:
     ~SharedLock();
 
     void lock();
-    // Ones can interrupt other threads within callback so that it can hold the lock sooner.
-    void lock(const PendingCallback &pending);
     void unlock();
 
     void lockShared();
@@ -81,7 +79,6 @@ protected:
 class LockGuard final {
 public:
     LockGuard(SharedLock &lock);
-    LockGuard(SharedLock &lock, const SharedLock::PendingCallback &pending);
     LockGuard(LockGuard &&movable);
     LockGuard(const std::nullptr_t &);
     ~LockGuard();
