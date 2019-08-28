@@ -3673,7 +3673,7 @@
 				234F0741227AAE4B00DD65A2 /* Sources */,
 				234F0742227AAE4B00DD65A2 /* Frameworks */,
 				234F0743227AAE4B00DD65A2 /* Resources */,
-				39A6DC6F22E1BD0D00A84D39 /* Install Templates */,
+				39A6DC6F22E1BD0D00A84D39 /* Install Code Snippets and File Templates */,
 			);
 			buildRules = (
 			);
@@ -3710,7 +3710,7 @@
 				2393265D1E836D7300D677CC /* Frameworks */,
 				2393265E1E836D7300D677CC /* Headers */,
 				2393265F1E836D7300D677CC /* Resources */,
-				23467D0B2230ED8F00A77DF1 /* Install Templates */,
+				23467D0B2230ED8F00A77DF1 /* Install Code Snippets and File Templates */,
 			);
 			buildRules = (
 			);
@@ -3850,7 +3850,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		23467D0B2230ED8F00A77DF1 /* Install Templates */ = {
+		23467D0B2230ED8F00A77DF1 /* Install Code Snippets and File Templates */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3859,7 +3859,7 @@
 			);
 			inputPaths = (
 			);
-			name = "Install Templates";
+			name = "Install Code Snippets and File Templates";
 			outputFileListPaths = (
 			);
 			outputPaths = (
@@ -3868,7 +3868,7 @@
 			shellPath = /bin/sh;
 			shellScript = "if [ \"$ACTION\" = \"build\" ]; then \n    (cd ${SRCROOT}/../tools/templates && sh install.sh) || true\nfi\n";
 		};
-		39A6DC6F22E1BD0D00A84D39 /* Install Templates */ = {
+		39A6DC6F22E1BD0D00A84D39 /* Install Code Snippets and File Templates */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3877,7 +3877,7 @@
 			);
 			inputPaths = (
 			);
-			name = "Install Templates";
+			name = "Install Code Snippets and File Templates";
 			outputFileListPaths = (
 			);
 			outputPaths = (
