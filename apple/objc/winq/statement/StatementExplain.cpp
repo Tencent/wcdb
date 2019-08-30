@@ -18,36 +18,28 @@
  * limitations under the License.
  */
 
-#pragma once
-
-#include <WCDB/SyntaxIdentifier.hpp>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
-namespace Syntax {
+StatementExplain::~StatementExplain() = default;
 
-class AlterTableSTMT final : public STMT {
-#pragma mark - Syntax
-public:
-    ~AlterTableSTMT() override final;
+StatementExplain& StatementExplain::explain(const Statement& statement)
+{
+    explain(statement, false);
+    return *this;
+}
 
-    Schema schema;
-    StringView table;
+StatementExplain& StatementExplain::explainQueryPlan(const Statement& statement)
+{
+    explain(statement, true);
+    return *this;
+}
 
-    WCDB_SYNTAX_MAIN_UNION_ENUM(RenameTable, RenameColumn, AddColumn, );
-    StringView newTable;
-    Column column;
-    Column newColumn;
-    ColumnDef columnDef;
-
-#pragma mark - Identifier
-public:
-    static constexpr const Type type = Type::AlterTableSTMT;
-    Type getType() const override final;
-    bool describle(std::ostringstream& stream) const override final;
-    void iterate(const Iterator& iterator, bool& stop) override final;
-};
-
-} // namespace Syntax
+void StatementExplain::explain(const Statement& statement, bool queryPlan)
+{
+    syntax().queryPlan = queryPlan;
+    syntax().stmt = (const Syntax::STMT&) statement.syntax();
+}
 
 } // namespace WCDB

@@ -26,23 +26,19 @@ namespace WCDB {
 
 namespace Syntax {
 
-class AlterTableSTMT final : public STMT {
-#pragma mark - Syntax
+class ExplainSTMT final : public Identifier {
+#pragma mark - Lang
 public:
-    ~AlterTableSTMT() override final;
+    ~ExplainSTMT() override final;
 
-    Schema schema;
-    StringView table;
+    bool queryPlan = false;
+    Shadow<STMT> stmt;
 
-    WCDB_SYNTAX_MAIN_UNION_ENUM(RenameTable, RenameColumn, AddColumn, );
-    StringView newTable;
-    Column column;
-    Column newColumn;
-    ColumnDef columnDef;
+    bool isValid() const override final;
 
 #pragma mark - Identifier
 public:
-    static constexpr const Type type = Type::AlterTableSTMT;
+    static constexpr const Type type = Type::ExplainSTMT;
     Type getType() const override final;
     bool describle(std::ostringstream& stream) const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;

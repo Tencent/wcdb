@@ -20,34 +20,20 @@
 
 #pragma once
 
-#include <WCDB/SyntaxIdentifier.hpp>
+#include <WCDB/Statement.hpp>
 
 namespace WCDB {
 
-namespace Syntax {
-
-class AlterTableSTMT final : public STMT {
-#pragma mark - Syntax
+class StatementExplain final : public SpecifiedSyntax<Syntax::ExplainSTMT, Statement> {
 public:
-    ~AlterTableSTMT() override final;
+    using SpecifiedSyntax<Syntax::ExplainSTMT, Statement>::SpecifiedSyntax;
+    ~StatementExplain() override final;
 
-    Schema schema;
-    StringView table;
+    StatementExplain& explain(const Statement& statement);
+    StatementExplain& explainQueryPlan(const Statement& statement);
 
-    WCDB_SYNTAX_MAIN_UNION_ENUM(RenameTable, RenameColumn, AddColumn, );
-    StringView newTable;
-    Column column;
-    Column newColumn;
-    ColumnDef columnDef;
-
-#pragma mark - Identifier
-public:
-    static constexpr const Type type = Type::AlterTableSTMT;
-    Type getType() const override final;
-    bool describle(std::ostringstream& stream) const override final;
-    void iterate(const Iterator& iterator, bool& stop) override final;
+private:
+    void explain(const Statement& statement, bool queryPlan);
 };
-
-} // namespace Syntax
 
 } // namespace WCDB

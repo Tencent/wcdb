@@ -37,7 +37,7 @@ public:
     virtual ~Identifier() override = 0;
 
     enum class Type {
-        Column = 0x00000001,
+        Column,
         Schema,
         ColumnDef,
         ColumnConstraint,
@@ -67,7 +67,7 @@ public:
         FunctionInvocation,
         WindowFunctionInvocation,
 
-        AlterTableSTMT = 0x00000101,
+        AlterTableSTMT,
         AnalyzeSTMT,
         AttachSTMT,
         BeginSTMT,
@@ -92,6 +92,7 @@ public:
         PragmaSTMT,
         ReindexSTMT,
         VacuumSTMT,
+        ExplainSTMT,
     };
     virtual Type getType() const = 0;
 
@@ -128,6 +129,11 @@ protected:
         }
     }
     static constexpr const char* space = " ";
+};
+
+class STMT : public Identifier {
+public:
+    virtual ~STMT() = 0;
 };
 
 } // namespace Syntax

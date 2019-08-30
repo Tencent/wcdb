@@ -114,8 +114,8 @@ std::unique_ptr<Identifier> Identifier::clone() const
         return std::make_unique<TableOrSubquery>(*static_cast<const TableOrSubquery *>(this));
     case Type::JoinConstraint:
         return std::make_unique<JoinConstraint>(*static_cast<const JoinConstraint *>(this));
-    case Type::SelectCore:
-        return std::make_unique<SelectCore>(*static_cast<const SelectCore *>(this));
+        //    case Type::SelectCore:
+        //        return std::make_unique<SelectCore>(*static_cast<const SelectCore *>(this));
     case Type::ResultColumn:
         return std::make_unique<ResultColumn>(*static_cast<const ResultColumn *>(this));
     case Type::FrameSpec:
@@ -178,8 +178,15 @@ std::unique_ptr<Identifier> Identifier::clone() const
         return std::make_unique<ReindexSTMT>(*static_cast<const ReindexSTMT *>(this));
     case Type::VacuumSTMT:
         return std::make_unique<VacuumSTMT>(*static_cast<const VacuumSTMT *>(this));
+    case Type::ExplainSTMT:
+        return std::make_unique<ExplainSTMT>(*static_cast<const ExplainSTMT *>(this));
+    default:
+        WCTAssert(false);
+        return nullptr;
     }
 }
+
+STMT::~STMT() = default;
 
 } // namespace Syntax
 

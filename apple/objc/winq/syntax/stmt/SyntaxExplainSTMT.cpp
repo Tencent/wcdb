@@ -18,35 +18,41 @@
  * limitations under the License.
  */
 
-#pragma once
-
-#include <WCDB/SyntaxIdentifier.hpp>
+#include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
 
-class AlterTableSTMT final : public STMT {
-#pragma mark - Syntax
-public:
-    ~AlterTableSTMT() override final;
+ExplainSTMT::~ExplainSTMT() = default;
 
-    Schema schema;
-    StringView table;
-
-    WCDB_SYNTAX_MAIN_UNION_ENUM(RenameTable, RenameColumn, AddColumn, );
-    StringView newTable;
-    Column column;
-    Column newColumn;
-    ColumnDef columnDef;
+bool ExplainSTMT::isValid() const
+{
+    return stmt != nullptr;
+}
 
 #pragma mark - Identifier
-public:
-    static constexpr const Type type = Type::AlterTableSTMT;
-    Type getType() const override final;
-    bool describle(std::ostringstream& stream) const override final;
-    void iterate(const Iterator& iterator, bool& stop) override final;
-};
+Identifier::Type ExplainSTMT::getType() const
+{
+    return type;
+}
+
+bool ExplainSTMT::describle(std::ostringstream& stream) const
+{
+    stream << "EXPLAIN ";
+    if (queryPlan) {
+        stream << "QUERY PLAN ";
+    }
+    stream << *stmt.get();
+    return true;
+}
+
+void ExplainSTMT::iterate(const Iterator& iterator, bool& stop)
+{
+    Identifier::iterate(iterator, stop);
+    recursiveIterate(*stmt.get(), iterator, stop);
+}
 
 } // namespace Syntax
 
