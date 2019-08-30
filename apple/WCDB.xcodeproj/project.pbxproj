@@ -739,7 +739,7 @@
 		39327B7322CF275200AABD4B /* WCTDatabase+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B5522CF275100AABD4B /* WCTDatabase+TestCase.mm */; };
 		39327B7D22CF275900AABD4B /* Random+TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B7722CF275800AABD4B /* Random+TestCaseObject.mm */; };
 		39327B8122CF275900AABD4B /* Random+WCDB.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B7922CF275800AABD4B /* Random+WCDB.mm */; };
-		39327B8522CF275900AABD4B /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B7A22CF275800AABD4B /* Random.mm */; };
+		39327B8522CF275900AABD4B /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B7A22CF275800AABD4B /* Random.mm */; settings = {COMPILER_FLAGS = "-fno-sanitize=signed-integer-overflow -fno-sanitize=unsigned-integer-overflow"; }; };
 		39327B8F22CF276000AABD4B /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B8922CF275F00AABD4B /* TestCaseObject.mm */; };
 		39327B9322CF276000AABD4B /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B8D22CF275F00AABD4B /* AllTypesObject.mm */; };
 		39327B9F22CF276600AABD4B /* ObjectsBasedFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B9722CF276600AABD4B /* ObjectsBasedFactory.mm */; };
