@@ -27,31 +27,32 @@
 
 @implementation WCTTable
 
-@synthesize name = _name;
-@synthesize cls = _class;
+@synthesize tableName = _tableName;
+@synthesize tableClass = _tableClass;
+@synthesize database = _database;
 
 - (instancetype)initWithDatabase:(WCTDatabase *)database
-                            name:(NSString *)name
-                           class:(Class<WCTTableCoding>)cls
+                       tableName:(NSString *)tableName
+                      tableClass:(Class<WCTTableCoding>)tableClass
 {
-    WCTAssert(database != nil && cls != nil && name != nil);
+    WCTAssert(database != nil && tableClass != nil && tableName != nil);
     if (self = [super init]) {
         _database = database;
-        _name = name;
-        _class = cls;
+        _tableName = tableName;
+        _tableClass = tableClass;
     }
     return self;
 }
 
 - (NSString *)indexWithSuffix:(NSString *)indexSuffix
 {
-    return [self.name stringByAppendingString:indexSuffix];
+    return [_tableName stringByAppendingString:indexSuffix];
 }
 
 - (BOOL)dropIndexWithSuffix:(NSString *)indexSuffix
 {
     WCTRemedialAssert(indexSuffix != nil, "Index suffix can't be null.", return NO;);
-    return [_database dropIndex:[_name stringByAppendingString:indexSuffix]];
+    return [_database dropIndex:[_tableName stringByAppendingString:indexSuffix]];
 }
 
 - (WCTDatabase *)database

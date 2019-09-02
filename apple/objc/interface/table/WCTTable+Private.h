@@ -23,12 +23,12 @@
 @interface WCTTable () {
 @protected
     WCTDatabase *_database;
-    Class _class;
-    NSString *_name;
+    Class _tableClass;
+    NSString *_tableName;
 }
 
 - (instancetype)initWithDatabase:(WCTDatabase *)database
-                            name:(NSString *)tableName
-                           class:(Class<WCTTableCoding>)cls;
+                       tableName:(NSString *)tableName
+                      tableClass:(Class<WCTTableCoding>)tableClass;
 
 @end

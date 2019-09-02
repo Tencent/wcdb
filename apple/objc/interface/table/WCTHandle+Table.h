@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WCTHandle (Table) <WCTTable>
 
-- (BOOL)remapTable:(NSString *)tableName toClass:(Class<WCTTableCoding>)cls;
+- (BOOL)remapTable:(NSString *)tableName toClass:(Class<WCTTableCoding>)tableClass;
 
 @end
 
