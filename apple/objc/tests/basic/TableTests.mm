@@ -41,7 +41,7 @@
 {
     TestCaseAssertTrue([self createTable]);
 
-    TestCaseAssertTrue([[self.table indexWithSuffix:@"_index"] isEqualToString:[self.table.name stringByAppendingString:@"_index"]]);
+    TestCaseAssertTrue([[self.table indexWithSuffix:@"_index"] isEqualToString:[self.table.tableName stringByAppendingString:@"_index"]]);
 }
 
 #pragma mark - Database

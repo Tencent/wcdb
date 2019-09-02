@@ -18,17 +18,42 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTTable.h>
+#include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 
-@interface WCTTable () {
-@protected
-    WCTDatabase *_database;
-    Class _tableClass;
-    NSString *_tableName;
+namespace WCDB {
+
+namespace Syntax {
+
+ExplainSTMT::~ExplainSTMT() = default;
+
+bool ExplainSTMT::isValid() const
+{
+    return stmt != nullptr;
 }
 
-- (instancetype)initWithDatabase:(WCTDatabase *)database
-                       tableName:(NSString *)tableName
-                      tableClass:(Class<WCTTableCoding>)tableClass;
+#pragma mark - Identifier
+Identifier::Type ExplainSTMT::getType() const
+{
+    return type;
+}
 
-@end
+bool ExplainSTMT::describle(std::ostringstream& stream) const
+{
+    stream << "EXPLAIN ";
+    if (queryPlan) {
+        stream << "QUERY PLAN ";
+    }
+    stream << *stmt.get();
+    return true;
+}
+
+void ExplainSTMT::iterate(const Iterator& iterator, bool& stop)
+{
+    Identifier::iterate(iterator, stop);
+    recursiveIterate(*stmt.get(), iterator, stop);
+}
+
+} // namespace Syntax
+
+} // namespace WCDB

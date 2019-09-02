@@ -42,19 +42,19 @@
 }
 
 - (BOOL)createTable:(NSString *)tableName
-          withClass:(Class<WCTTableCoding>)cls
+          withClass:(Class<WCTTableCoding>)tableClass
 {
-    WCTRemedialAssert(tableName != nil && cls != nil, "Class or table name can't be null.", return NO;);
-    return [self remapTable:tableName toClass:cls];
+    WCTRemedialAssert(tableName != nil && tableClass != nil, "Class or table name can't be null.", return NO;);
+    return [self remapTable:tableName toClass:tableClass];
 }
 
 - (WCTTable *)getTable:(NSString *)tableName
-             withClass:(Class<WCTTableCoding>)cls
+             withClass:(Class<WCTTableCoding>)tableClass
 {
-    WCTRemedialAssert(tableName != nil && cls != nil, "Class or table name can't be null.", return nil;);
-    return [[WCTTable alloc] initWithDatabase:self.database
-                                         name:tableName
-                                        class:cls];
+    WCTRemedialAssert(tableName != nil && tableClass != nil, "Class or table name can't be null.", return nil;);
+    return [[WCTTable alloc] initWithDatabase:_database
+                                    tableName:tableName
+                                   tableClass:tableClass];
 }
 
 - (BOOL)createVirtualTable:(NSString *)tableName
@@ -74,9 +74,9 @@
     return [self execute:WCDB::StatementDropIndex().dropIndex(indexName).ifExists()];
 }
 
-- (BOOL)remapTable:(NSString *)tableName toClass:(Class<WCTTableCoding>)cls
+- (BOOL)remapTable:(NSString *)tableName toClass:(Class<WCTTableCoding>)tableClass
 {
-    WCTAssert(tableName != nil && cls != nil);
+    WCTAssert(tableName != nil && tableClass != nil);
     // TODO: check the constraints are as expected here.
     return [self lazyRunTransaction:^BOOL(WCTHandle *nsHandle) {
         WCDB::Handle *handle = [nsHandle getOrGenerateHandle];
@@ -85,7 +85,7 @@
         if (!exists.has_value()) {
             return NO;
         }
-        const WCTBinding &binding = [cls objectRelationalMapping];
+        const WCTBinding &binding = [tableClass objectRelationalMapping];
         if (exists.value()) {
             auto optionalColumnNames = handle->getColumns(tableName);
             if (!optionalColumnNames.has_value()) {

@@ -45,17 +45,17 @@
 }
 
 - (WCTTable *)getTable:(NSString *)tableName
-             withClass:(Class<WCTTableCoding>)cls
+             withClass:(Class<WCTTableCoding>)tableClass
 {
-    WCTRemedialAssert(tableName != nil && cls != nil, "Class or table name can't be null.", return nil;);
-    return [[WCTTable alloc] initWithDatabase:self name:tableName class:cls];
+    WCTRemedialAssert(tableName != nil && tableClass != nil, "Class or table name can't be null.", return nil;);
+    return [[WCTTable alloc] initWithDatabase:self tableName:tableName tableClass:tableClass];
 }
 
 - (BOOL)createVirtualTable:(NSString *)tableName
-                 withClass:(Class<WCTTableCoding>)cls
+                 withClass:(Class<WCTTableCoding>)tableClass
 {
-    WCTRemedialAssert(tableName != nil && cls != nil, "Class or table name can't be null.", return NO;);
-    return _database->execute([cls objectRelationalMapping].generateCreateVirtualTableStatement(tableName));
+    WCTRemedialAssert(tableName != nil && tableClass != nil, "Class or table name can't be null.", return NO;);
+    return _database->execute([tableClass objectRelationalMapping].generateCreateVirtualTableStatement(tableName));
 }
 
 - (BOOL)dropTable:(NSString *)tableName

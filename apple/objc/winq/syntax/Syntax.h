@@ -78,3 +78,5 @@
 #include <WCDB/SyntaxSavepointSTMT.hpp>
 #include <WCDB/SyntaxUpdateSTMT.hpp>
 #include <WCDB/SyntaxVacuumSTMT.hpp>
+
+#include <WCDB/SyntaxExplainSTMT.hpp>

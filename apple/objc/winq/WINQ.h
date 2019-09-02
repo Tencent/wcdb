@@ -87,4 +87,6 @@
 #include <WCDB/StatementUpdate.hpp>
 #include <WCDB/StatementVacuum.hpp>
 
+#include <WCDB/StatementExplain.hpp>
+
 #include <WCDB/ConvertibleImplementation.hpp>

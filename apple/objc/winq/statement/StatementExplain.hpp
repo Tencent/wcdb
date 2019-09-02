@@ -18,17 +18,22 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTTable.h>
+#pragma once
 
-@interface WCTTable () {
-@protected
-    WCTDatabase *_database;
-    Class _tableClass;
-    NSString *_tableName;
-}
+#include <WCDB/Statement.hpp>
 
-- (instancetype)initWithDatabase:(WCTDatabase *)database
-                       tableName:(NSString *)tableName
-                      tableClass:(Class<WCTTableCoding>)tableClass;
+namespace WCDB {
 
-@end
+class StatementExplain final : public SpecifiedSyntax<Syntax::ExplainSTMT, Statement> {
+public:
+    using SpecifiedSyntax<Syntax::ExplainSTMT, Statement>::SpecifiedSyntax;
+    ~StatementExplain() override final;
+
+    StatementExplain& explain(const Statement& statement);
+    StatementExplain& explainQueryPlan(const Statement& statement);
+
+private:
+    void explain(const Statement& statement, bool queryPlan);
+};
+
+} // namespace WCDB

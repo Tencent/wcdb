@@ -18,17 +18,28 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTTable.h>
+#include <WCDB/WINQ.h>
 
-@interface WCTTable () {
-@protected
-    WCTDatabase *_database;
-    Class _tableClass;
-    NSString *_tableName;
+namespace WCDB {
+
+StatementExplain::~StatementExplain() = default;
+
+StatementExplain& StatementExplain::explain(const Statement& statement)
+{
+    explain(statement, false);
+    return *this;
 }
 
-- (instancetype)initWithDatabase:(WCTDatabase *)database
-                       tableName:(NSString *)tableName
-                      tableClass:(Class<WCTTableCoding>)tableClass;
+StatementExplain& StatementExplain::explainQueryPlan(const Statement& statement)
+{
+    explain(statement, true);
+    return *this;
+}
 
-@end
+void StatementExplain::explain(const Statement& statement, bool queryPlan)
+{
+    syntax().queryPlan = queryPlan;
+    syntax().stmt = (const Syntax::STMT&) statement.syntax();
+}
+
+} // namespace WCDB

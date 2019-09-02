@@ -33,22 +33,22 @@
 
 - (WCTInsert *)prepareInsert
 {
-    return [[[WCTInsert alloc] initWithHandle:[self.database getHandle]] intoTable:_name];
+    return [[[WCTInsert alloc] initWithHandle:[_database getHandle]] intoTable:_tableName];
 }
 
 - (WCTDelete *)prepareDelete
 {
-    return [[[WCTDelete alloc] initWithHandle:[self.database getHandle]] fromTable:_name];
+    return [[[WCTDelete alloc] initWithHandle:[_database getHandle]] fromTable:_tableName];
 }
 
 - (WCTUpdate *)prepareUpdate
 {
-    return [[[WCTUpdate alloc] initWithHandle:[self.database getHandle]] table:_name];
+    return [[[WCTUpdate alloc] initWithHandle:[_database getHandle]] table:_tableName];
 }
 
 - (WCTSelect *)prepareSelect
 {
-    return [[[[WCTSelect alloc] initWithHandle:[self.database getHandle]] fromTable:_name] ofClass:_class];
+    return [[[[WCTSelect alloc] initWithHandle:[_database getHandle]] fromTable:_tableName] ofClass:_tableClass];
 }
 
 @end

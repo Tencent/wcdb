@@ -133,6 +133,8 @@ NSString* getDescriptionOfType(WCDB::Syntax::Identifier::Type type)
         return @"ReindexSTMT";
     case Syntax::Identifier::Type::VacuumSTMT:
         return @"VacuumSTMT";
+    case Syntax::Identifier::Type::ExplainSTMT:
+        return @"ExplainSTMT";
     }
 }
 

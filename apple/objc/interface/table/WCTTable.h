@@ -28,13 +28,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (WCTOptionalBool)tableExists:(NSString *)tableName;
 
 - (BOOL)createTable:(NSString *)tableName
-          withClass:(Class<WCTTableCoding>)cls;
+          withClass:(Class<WCTTableCoding>)tableClass;
 
 - (WCTTable *)getTable:(NSString *)tableName
-             withClass:(Class<WCTTableCoding>)cls;
+             withClass:(Class<WCTTableCoding>)tableClass;
 
 - (BOOL)createVirtualTable:(NSString *)tableName
-                 withClass:(Class<WCTTableCoding>)cls;
+                 withClass:(Class<WCTTableCoding>)tableClass;
 
 - (BOOL)dropTable:(NSString *)tableName;
 
@@ -49,12 +49,12 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  The name of the table.
  */
-@property (nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly) NSString *tableName;
 
 /**
  The class binding to this table.
  */
-@property (nonatomic, readonly) Class cls;
+@property (nonatomic, readonly) Class tableClass;
 
 @property (nonatomic, readonly) WCTDatabase *database;
 
