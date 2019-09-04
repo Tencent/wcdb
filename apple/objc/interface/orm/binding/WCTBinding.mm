@@ -37,12 +37,11 @@ WCTBinding::WCTBinding(Class cls)
     NSString *synthesize = @WCDB_STRINGIFY(WCDB_ORM_TYPE_SYNTHESIZE) "_";
     NSRange synthesizeRange = NSMakeRange(prefix.length, synthesize.length);
 
-    NSMutableArray<NSString *> *synthesizations = [NSMutableArray<NSString *> array];
-    NSMutableArray<NSString *> *others = [NSMutableArray<NSString *> array];
-
     unsigned int numberOfMethods = 0;
     Method *methods = class_copyMethodList(object_getClass(m_cls), &numberOfMethods);
     WCTAssert(methods != nullptr && numberOfMethods > 0);
+    NSMutableArray<NSString *> *synthesizations = [NSMutableArray<NSString *> arrayWithCapacity:numberOfMethods];
+    NSMutableArray<NSString *> *others = [NSMutableArray<NSString *> arrayWithCapacity:numberOfMethods];
     for (unsigned int i = 0; i < numberOfMethods; i++) {
         Method method = methods[i];
         NSString *selName = NSStringFromSelector(method_getName(method));

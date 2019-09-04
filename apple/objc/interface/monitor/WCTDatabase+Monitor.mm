@@ -51,7 +51,7 @@ void Core::print(const UnsafeStringView &message)
     WCDB::Handle::PerformanceNotification callback = nullptr;
     if (trace != nil) {
         callback = [trace](const WCDB::HandleNotification::Footprints &footprints, double cost) {
-            NSMutableArray<WCTPerformanceFootprint *> *array = [[NSMutableArray<WCTPerformanceFootprint *> alloc] init];
+            NSMutableArray<WCTPerformanceFootprint *> *array = [NSMutableArray<WCTPerformanceFootprint *> arrayWithCapacity:footprints.size()];
             for (const auto &footprint : footprints) {
                 NSString *sql = [NSString stringWithView:footprint.sql];
                 [array addObject:[[WCTPerformanceFootprint alloc] initWithSQL:sql andFrequency:footprint.frequency]];
@@ -75,10 +75,9 @@ void Core::print(const UnsafeStringView &message)
 
 - (void)tracePerformance:(WCTPerformanceTraceBlock)trace
 {
-    WCDB::Handle::PerformanceNotification callback = nullptr;
     if (trace != nil) {
-        callback = [trace](const WCDB::HandleNotification::Footprints &footprints, double cost) {
-            NSMutableArray<WCTPerformanceFootprint *> *array = [[NSMutableArray<WCTPerformanceFootprint *> alloc] init];
+        WCDB::Handle::PerformanceNotification callback = [trace](const WCDB::HandleNotification::Footprints &footprints, double cost) {
+            NSMutableArray<WCTPerformanceFootprint *> *array = [NSMutableArray<WCTPerformanceFootprint *> arrayWithCapacity:footprints.size()];
             for (const auto &footprint : footprints) {
                 NSString *sql = [NSString stringWithView:footprint.sql];
                 [array addObject:[[WCTPerformanceFootprint alloc] initWithSQL:sql andFrequency:footprint.frequency]];
@@ -95,9 +94,8 @@ void Core::print(const UnsafeStringView &message)
 
 - (void)traceSQL:(WCTSQLTraceBlock)trace
 {
-    WCDB::Handle::SQLNotification callback = nullptr;
     if (trace != nil) {
-        callback = [trace](const WCDB::UnsafeStringView &sql) {
+        WCDB::Handle::SQLNotification callback = [trace](const WCDB::UnsafeStringView &sql) {
             trace([NSString stringWithView:sql]);
         };
         _database->setConfig(WCDB::SQLTraceConfigName,
