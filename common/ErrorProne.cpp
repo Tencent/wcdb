@@ -1,3 +1,7 @@
+//
+// Created by sanhuazhang on 2018/06/08
+//
+
 /*
  * Tencent is pleased to support the open source community by making
  * WCDB available.
@@ -23,7 +27,7 @@
 namespace WCDB {
 
 #pragma mark - ErrorProne
-    ErrorProne::~ErrorProne() = default;
+ErrorProne::~ErrorProne() = default;
 
 const Error &ErrorProne::getError() const
 {
@@ -46,7 +50,7 @@ void ErrorProne::setError(Error &&error)
 }
 
 #pragma mark - ThreadedErrorProne
-    ThreadedErrorProne::~ThreadedErrorProne() = default;
+ThreadedErrorProne::~ThreadedErrorProne() = default;
 
 void ThreadedErrorProne::setThreadedError(const Error &error)
 {

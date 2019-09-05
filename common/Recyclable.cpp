@@ -1,3 +1,7 @@
+//
+// Created by sanhuazhang on 2018/12/28
+//
+
 /*
  * Tencent is pleased to support the open source community by making
  * WCDB available.
@@ -31,7 +35,7 @@ Referenced::Referenced(const std::nullptr_t&) : m_reference(nullptr)
 {
 }
 
-    Referenced::~Referenced() = default;
+Referenced::~Referenced() = default;
 
 void Referenced::reset(const Referenced& other)
 {

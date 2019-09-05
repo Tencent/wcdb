@@ -1,3 +1,7 @@
+//
+// Created by sanhuazhang on 2018/09/26
+//
+
 /*
  * Tencent is pleased to support the open source community by making
  * WCDB available.
