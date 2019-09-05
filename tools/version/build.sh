@@ -2,7 +2,7 @@
 
 showUsage() {
     echo """USAGE
-  sh $0 
+  bash $0 
        -p/--platform iOS/macOS
        -l/--language ObjC/Swift
        [-c/--configuration Debug/Release]

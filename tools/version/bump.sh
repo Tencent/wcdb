@@ -1,7 +1,7 @@
 #!/bin/bash
 
 usage() {
-    echo "Usage: sh $0 -v/--version version"
+    echo "Usage: bash $0 -v/--version version"
 }
 
 if [ ! -z "$(git status --porcelain)" ]; then 
