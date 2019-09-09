@@ -28,9 +28,13 @@
 
 class WCTOneOrBinaryTokenizerCursorInfo final : public WCDB::OneOrBinaryTokenizerCursorInfo {
 public:
-    WCTOneOrBinaryTokenizerCursorInfo(const char *input,
+    WCTOneOrBinaryTokenizerCursorInfo(const char* input,
                                       int inputLength,
-                                      WCDB::AbstractTokenizerInfo *tokenizerInfo);
+                                      WCDB::AbstractTokenizerInfo* tokenizerInfo);
+    WCTOneOrBinaryTokenizerCursorInfo(const WCTOneOrBinaryTokenizerCursorInfo& other);
+
+    WCTOneOrBinaryTokenizerCursorInfo&
+    operator=(const WCTOneOrBinaryTokenizerCursorInfo& other);
 
     ~WCTOneOrBinaryTokenizerCursorInfo() override final;
 

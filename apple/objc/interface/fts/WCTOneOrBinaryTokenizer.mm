@@ -26,12 +26,31 @@
 #import <WCDB/Error.hpp>
 #import <WCDB/WCTOneOrBinaryTokenizer.h>
 
-WCTOneOrBinaryTokenizerCursorInfo::WCTOneOrBinaryTokenizerCursorInfo(const char *input,
+WCTOneOrBinaryTokenizerCursorInfo::WCTOneOrBinaryTokenizerCursorInfo(const char* input,
                                                                      int inputLength,
-                                                                     WCDB::AbstractTokenizerInfo *tokenizerInfo)
+                                                                     WCDB::AbstractTokenizerInfo* tokenizerInfo)
 : WCDB::OneOrBinaryTokenizerCursorInfo(input, inputLength, tokenizerInfo)
 , m_symbolCharacterSet(generateSymbolCharacterSet())
 {
+}
+
+WCTOneOrBinaryTokenizerCursorInfo::WCTOneOrBinaryTokenizerCursorInfo(const WCTOneOrBinaryTokenizerCursorInfo& other)
+: WCDB::OneOrBinaryTokenizerCursorInfo(other)
+, m_symbolCharacterSet(other.m_symbolCharacterSet)
+{
+    if (m_symbolCharacterSet != nil) {
+        CFRetain(m_symbolCharacterSet);
+    }
+}
+
+WCTOneOrBinaryTokenizerCursorInfo& WCTOneOrBinaryTokenizerCursorInfo::operator=(const WCTOneOrBinaryTokenizerCursorInfo& other)
+{
+    WCDB::OneOrBinaryTokenizerCursorInfo::operator=(other);
+    m_symbolCharacterSet = other.m_symbolCharacterSet;
+    if (m_symbolCharacterSet != nil) {
+        CFRetain(m_symbolCharacterSet);
+    }
+    return *this;
 }
 
 WCTOneOrBinaryTokenizerCursorInfo::~WCTOneOrBinaryTokenizerCursorInfo()
