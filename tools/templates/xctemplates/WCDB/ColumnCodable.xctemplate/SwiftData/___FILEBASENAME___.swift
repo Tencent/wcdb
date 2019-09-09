@@ -7,7 +7,7 @@ class ___VARIABLE_productName___: WCDBSwift.ColumnCodable, WCDBSwift.LiteralValu
     static var columnType: ColumnType {
         return .BLOB
     }
-    
+
     required init?(with value: FundamentalValue) {
 		/* <#Init ___VARIABLE_productName___ From value.dataValue#> */
     }

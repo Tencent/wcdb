@@ -2,7 +2,7 @@
 
 showUsage() {
     echo """USAGE
-  sh $0 
+  bash $0 
        -p/--platform iOS/macOS
        -l/--language ObjC/Swift
        [-c/--configuration Debug/Release]
@@ -75,7 +75,7 @@ if $static_framework; then
         echo 'Static library is only support iOS + ObjC.'
         exit 1
     fi
-    settings+=(MACH_O_TYPE=staticlib STRIP_STYLE=debugging LLVM_LTO=NO)
+    settings+=(MACH_O_TYPE=staticlib STRIP_STYLE=debugging LLVM_LTO=NO STRIP_INSTALLED_PRODUCT=NO DEPLOYMENT_POSTPROCESSING=NO)
 fi
 if $disable_bitcode; then
     settings+=(ENABLE_BITCODE=NO)

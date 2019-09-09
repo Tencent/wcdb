@@ -1,3 +1,7 @@
+//
+// Created by sanhuazhang on 2019/05/02
+//
+
 /*
  * Tencent is pleased to support the open source community by making
  * WCDB available.
@@ -36,11 +40,12 @@
 
 - (NSArray<NSString *> *)paths
 {
-    NSMutableArray *paths = [NSMutableArray array];
-    for (const auto &path : _database->getPaths()) {
-        [paths addObject:[NSString stringWithView:path]];
+    const auto &paths = _database->getPaths();
+    NSMutableArray *nsPaths = [NSMutableArray arrayWithCapacity:paths.size()];
+    for (const auto &path : paths) {
+        [nsPaths addObject:[NSString stringWithView:path]];
     }
-    return paths;
+    return nsPaths;
 }
 
 - (WCTOptionalSize)getFilesSize

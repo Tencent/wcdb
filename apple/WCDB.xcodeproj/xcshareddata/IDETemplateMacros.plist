@@ -1,5 +1,10 @@
-//
-// Created by sanhuazhang on 2019/05/02
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>FILEHEADER</key>
+	<string>
+// Created by ___FULLUSERNAME___ on ___DATE___.
 //
 
 /*
@@ -9,32 +14,17 @@
  * Copyright (C) 2017 THL A29 Limited, a Tencent company.
  * All rights reserved.
  *
- * Licensed under the BSD 3-Clause License (the "License"); you may not use
+ * Licensed under the BSD 3-Clause License (the &quot;License&quot;); you may not use
  * this file except in compliance with the License. You may obtain a copy of
  * the License at
  *
  *       https://opensource.org/licenses/BSD-3-Clause
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
-
-#pragma once
-
-#include <WCDB/SQL.hpp>
-
-namespace WCDB {
-
-class With final : public SpecifiedSyntax<Syntax::WithClause, SQL> {
-public:
-    ~With() override final;
-
-    With& table(const CTETable& table);
-    With& as(const StatementSelect& select);
-    With& recursive();
-};
-
-} // namespace WCDB
+ */</string>
+</dict>
+</plist>

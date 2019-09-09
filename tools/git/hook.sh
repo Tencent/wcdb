@@ -1,7 +1,7 @@
 #!/bin/bash
 
 usage() {
-    echo "Usage: sh $0 [--uninstall]"
+    echo "Usage: bash $0 [--uninstall]"
 }
 
 if ! git rev-parse --is-inside-work-tree | true; then

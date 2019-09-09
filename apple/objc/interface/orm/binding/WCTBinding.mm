@@ -1,3 +1,7 @@
+//
+// Created by sanhuazhang on 2019/05/02
+//
+
 /*
  * Tencent is pleased to support the open source community by making
  * WCDB available.
@@ -37,12 +41,11 @@ WCTBinding::WCTBinding(Class cls)
     NSString *synthesize = @WCDB_STRINGIFY(WCDB_ORM_TYPE_SYNTHESIZE) "_";
     NSRange synthesizeRange = NSMakeRange(prefix.length, synthesize.length);
 
-    NSMutableArray<NSString *> *synthesizations = [NSMutableArray<NSString *> array];
-    NSMutableArray<NSString *> *others = [NSMutableArray<NSString *> array];
-
     unsigned int numberOfMethods = 0;
     Method *methods = class_copyMethodList(object_getClass(m_cls), &numberOfMethods);
     WCTAssert(methods != nullptr && numberOfMethods > 0);
+    NSMutableArray<NSString *> *synthesizations = [NSMutableArray<NSString *> arrayWithCapacity:numberOfMethods];
+    NSMutableArray<NSString *> *others = [NSMutableArray<NSString *> arrayWithCapacity:numberOfMethods];
     for (unsigned int i = 0; i < numberOfMethods; i++) {
         Method method = methods[i];
         NSString *selName = NSStringFromSelector(method_getName(method));
@@ -58,7 +61,7 @@ WCTBinding::WCTBinding(Class cls)
         free(methods);
     }
 
-    static auto s_numbericComparator = ^NSComparisonResult(NSString *str1, NSString *str2) {
+    WCDB_STATIC_VARIABLE auto s_numbericComparator = ^NSComparisonResult(NSString *str1, NSString *str2) {
         return [str1 compare:str2 options:NSNumericSearch];
     };
     [synthesizations sortUsingComparator:s_numbericComparator];

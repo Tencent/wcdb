@@ -1,3 +1,7 @@
+//
+// Created by sanhuazhang on 2019/05/19
+//
+
 /*
  * Tencent is pleased to support the open source community by making
  * WCDB available.
@@ -40,7 +44,8 @@ AbstractTokenizerInfo::AbstractTokenizerInfo(int argc, const char *const *argv){
     WCDB_UNUSED(argc) WCDB_UNUSED(argv)
 }
 
-AbstractTokenizerInfo::~AbstractTokenizerInfo() = default;
+AbstractTokenizerInfo::~AbstractTokenizerInfo()
+= default;
 
 #pragma mark - AbstractTokenizerCursorInfo
 AbstractTokenizerCursorInfo::AbstractTokenizerCursorInfo(const char *input,
@@ -49,7 +54,8 @@ AbstractTokenizerCursorInfo::AbstractTokenizerCursorInfo(const char *input,
     WCDB_UNUSED(input) WCDB_UNUSED(inputLength) WCDB_UNUSED(tokenizerInfo)
 }
 
-AbstractTokenizerCursorInfo::~AbstractTokenizerCursorInfo() = default;
+AbstractTokenizerCursorInfo::~AbstractTokenizerCursorInfo()
+= default;
 
 #pragma mark - AbstractTokenizerModuleTemplate
 int AbstractTokenizerModuleTemplate::newTokenizer(Tokenizer **ppTokenizer,

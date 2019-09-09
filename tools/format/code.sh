@@ -1,7 +1,7 @@
 #!/bin/bash
 
 usage() {    
-    echo "Usage: sh $0 -p/--path path"
+    echo "Usage: bash $0 -p/--path path"
 }
 
 path=""

@@ -7,9 +7,6 @@ format=$root/tools/format
 diffs=`git diff-index --cached --diff-filter=ACMRT --name-only HEAD`
 while read -r file; do
     fullpath="$root/$file"
-    if ! sh "$format/license.sh" --path "$fullpath"; then
-        exit 1
-    fi
     if ! sh "$format/code.sh" --path "$fullpath"; then
         exit 1
     fi
