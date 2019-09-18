@@ -150,7 +150,7 @@ void Core::backupShouldBeOperated(const UnsafeStringView& path)
 {
     RecyclableDatabase database = m_databasePool.getOrCreate(path);
     if (database != nullptr) {
-        database->backup(false);
+        database->backup(true);
     }
 }
 
