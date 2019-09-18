@@ -521,18 +521,18 @@ bool Database::backup(bool interruptible)
     OperationHandle *operationBackupWriteHandle
     = static_cast<OperationHandle *>(backupWriteHandle.get());
     if (interruptible) {
+        operationBackupReadHandle->markErrorAsIgnorable(Error::Code::Interrupt);
+        operationBackupWriteHandle->markErrorAsIgnorable(Error::Code::Interrupt);
+        operationBackupReadHandle->markAsCanBeSuspended(true);
+        operationBackupWriteHandle->markAsCanBeSuspended(true);
         if (m_closing != 0) {
-            Error error(Error::Code::Interrupt, Error::Level::Ignore, "Interrupt due to it's closing");
+            Error error(Error::Code::Interrupt, Error::Level::Ignore, "Interrupt due to it's closing.");
             error.infos.insert_or_assign(ErrorStringKeyPath, path);
             error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeBackup);
             Notifier::shared().notify(error);
             setThreadedError(std::move(error));
             return false;
         }
-        operationBackupReadHandle->markErrorAsIgnorable(Error::Code::Interrupt);
-        operationBackupWriteHandle->markErrorAsIgnorable(Error::Code::Interrupt);
-        operationBackupReadHandle->markAsCanBeSuspended(true);
-        operationBackupWriteHandle->markAsCanBeSuspended(true);
     }
     Repair::FactoryBackup backup = m_factory.backup();
     backup.setBackupSharedDelegate(
