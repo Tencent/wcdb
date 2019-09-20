@@ -47,8 +47,8 @@ ssize_t MappedData::getMappedHighWater()
 
 ShareableHighWater& MappedData::sharedHighWater()
 {
-    WCDB_STATIC_VARIABLE ShareableHighWater s_highWater(0);
-    return s_highWater;
+    static ShareableHighWater* s_highWater = new ShareableHighWater(0);
+    return *s_highWater;
 }
 
 void MappedData::unmap()
@@ -116,8 +116,8 @@ MappedData MappedData::subdata(off_t offset, size_t size) const
 
 const MappedData& MappedData::null()
 {
-    WCDB_STATIC_VARIABLE const MappedData s_null;
-    return s_null;
+    static const MappedData* s_null = new MappedData;
+    return *s_null;
 }
 
 } // namespace WCDB

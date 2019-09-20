@@ -246,7 +246,7 @@ void FactoryRetriever::reportMechanic(const Fraction &score,
     }
     finishReportOfPerformance(error, path, cost);
     error.infos.insert_or_assign(
-    "Weight", StringView::formatted("%.2f%%", getWeight(path).value() * 100.0f));
+    "Weight", StringView::formatted("%f%%", getWeight(path).value() * 100.0f));
     Notifier::shared().notify(error);
 }
 
@@ -260,7 +260,7 @@ void FactoryRetriever::reportFullCrawler(const Fraction &score,
     error.infos.insert_or_assign("Score", score.value());
     finishReportOfPerformance(error, path, cost);
     error.infos.insert_or_assign(
-    "Weight", StringView::formatted("%.2f%%", getWeight(path).value() * 100.0f));
+    "Weight", StringView::formatted("%f%%", getWeight(path).value() * 100.0f));
     Notifier::shared().notify(error);
 }
 
@@ -269,7 +269,7 @@ void FactoryRetriever::reportSummary(double cost)
     Error error(Error::Code::Notice, Error::Level::Notice, "Summary Retrieve Report.");
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.insert_or_assign(ErrorStringKeyPath, database);
-    error.infos.insert_or_assign("Cost", StringView::formatted("%.2f sec", cost));
+    error.infos.insert_or_assign("Cost", StringView::formatted("%f sec", cost));
     error.infos.insert_or_assign("Score", getScore().value());
     Notifier::shared().notify(error);
 }
@@ -282,9 +282,9 @@ void FactoryRetriever::finishReportOfPerformance(Error &error,
     size_t size = m_sizes[databasePath];
     double sizeInMB = (double) size / 1024 / 1024;
     double speed = cost > 0 ? sizeInMB / cost : 0;
-    error.infos.insert_or_assign("Cost", StringView::formatted("%.2f sec", cost));
-    error.infos.insert_or_assign("Size", StringView::formatted("%.2f MB", sizeInMB));
-    error.infos.insert_or_assign("Speed", StringView::formatted("%.2f MB/s", speed));
+    error.infos.insert_or_assign("Cost", StringView::formatted("%f sec", cost));
+    error.infos.insert_or_assign("Size", StringView::formatted("%f MB", sizeInMB));
+    error.infos.insert_or_assign("Speed", StringView::formatted("%f MB/s", speed));
 }
 
 #pragma mark - Score and Progress

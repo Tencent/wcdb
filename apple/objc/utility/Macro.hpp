@@ -86,5 +86,6 @@
 
 #define WCDB_UNUSED(variable) _Pragma(WCDB_STRINGIFY(unused(variable)))
 
-#define WCDB_NO_DESTROY [[clang::no_destroy]]
-#define WCDB_STATIC_VARIABLE WCDB_NO_DESTROY static
+// It doesn't seems to work as expected.
+// #define WCDB_NO_DESTROY [[clang::no_destroy]]
+// #define WCDB_STATIC_VARIABLE WCDB_NO_DESTROY static

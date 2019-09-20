@@ -162,8 +162,8 @@ Data Data::subdata(off_t offset, size_t size) const
 
 const Data& Data::null()
 {
-    WCDB_STATIC_VARIABLE const Data s_null;
-    return s_null;
+    static const Data* s_null = new Data;
+    return *s_null;
 }
 
 } //namespace WCDB

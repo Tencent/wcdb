@@ -61,7 +61,7 @@ WCTBinding::WCTBinding(Class cls)
         free(methods);
     }
 
-    WCDB_STATIC_VARIABLE auto s_numbericComparator = ^NSComparisonResult(NSString *str1, NSString *str2) {
+    static auto s_numbericComparator = ^NSComparisonResult(NSString *str1, NSString *str2) {
         return [str1 compare:str2 options:NSNumericSearch];
     };
     [synthesizations sortUsingComparator:s_numbericComparator];

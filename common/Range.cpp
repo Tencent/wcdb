@@ -30,8 +30,8 @@ namespace WCDB {
 
 const Range& Range::notFound()
 {
-    WCDB_STATIC_VARIABLE const Range s_notFound(0, -1);
-    return s_notFound;
+    static const Range* s_notFound = new Range(0, -1);
+    return *s_notFound;
 }
 
 Range::Range() : location(0), length(0)

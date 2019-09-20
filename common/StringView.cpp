@@ -91,8 +91,8 @@ void UnsafeStringView::assign(std::shared_ptr<const std::string>&& buffer)
 
 const std::string_view& UnsafeStringView::emptyView()
 {
-    WCDB_STATIC_VARIABLE const std::string_view s_emptyView("", 0);
-    return s_emptyView;
+    static const std::string_view* s_emptyView = new std::string_view("", 0);
+    return *s_emptyView;
 }
 
 //#pragma mark - UnsafeStringView - Ownership
