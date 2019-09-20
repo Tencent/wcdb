@@ -67,19 +67,19 @@ WCDB::ColumnType WCTRuntimeObjCAccessor::getColumnType() const
 
 SEL WCTRuntimeObjCAccessor::archiveSelector()
 {
-    WCDB_STATIC_VARIABLE SEL s_archiveSelector = NSSelectorFromString(@"archivedWCTValue");
+    static SEL s_archiveSelector = NSSelectorFromString(@"archivedWCTValue");
     return s_archiveSelector;
 }
 
 SEL WCTRuntimeObjCAccessor::unarchiveSelector()
 {
-    WCDB_STATIC_VARIABLE SEL s_unarchiveSelector = NSSelectorFromString(@"unarchiveWithWCTValue:");
+    static SEL s_unarchiveSelector = NSSelectorFromString(@"unarchiveWithWCTValue:");
     return s_unarchiveSelector;
 }
 
 WCDB::ColumnType WCTRuntimeObjCAccessor::GetColumnType(Class propertyClass)
 {
-    WCDB_STATIC_VARIABLE const SEL s_columnTypeSelector = NSSelectorFromString(@"columnType");
+    static SEL s_columnTypeSelector = NSSelectorFromString(@"columnType");
     IMP implementation = getClassMethodImplementation(propertyClass, s_columnTypeSelector);
     using GetColumnTyper = WCDB::ColumnType (*)(Class, SEL);
     return ((GetColumnTyper) implementation)(propertyClass, s_columnTypeSelector);

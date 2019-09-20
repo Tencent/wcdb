@@ -29,8 +29,8 @@ namespace WCDB {
 
 Notifier &Notifier::shared()
 {
-    WCDB_STATIC_VARIABLE Notifier s_notifier;
-    return s_notifier;
+    static Notifier *s_notifier = new Notifier;
+    return *s_notifier;
 }
 
 Notifier::Notifier() = default;

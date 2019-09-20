@@ -90,8 +90,8 @@ UnsafeData UnsafeData::subdata(off_t offset, size_t size) const
 #pragma mark - Empty
 const UnsafeData &UnsafeData::null()
 {
-    WCDB_STATIC_VARIABLE const UnsafeData s_null;
-    return s_null;
+    static const UnsafeData *s_null = new UnsafeData;
+    return *s_null;
 }
 
 bool UnsafeData::empty() const

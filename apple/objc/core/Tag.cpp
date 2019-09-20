@@ -30,8 +30,8 @@ namespace WCDB {
 
 const Tag& Tag::invalid()
 {
-    WCDB_STATIC_VARIABLE const Tag s_invalid(nullptr);
-    return s_invalid;
+    static const Tag* s_invalid = new Tag(nullptr);
+    return *s_invalid;
 }
 
 Tag::Tag(int32_t tag) : m_value(tag)

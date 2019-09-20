@@ -29,14 +29,15 @@ namespace WCDB {
 
 UntypedThreadLocal::Identifier UntypedThreadLocal::nextIdentifier()
 {
-    WCDB_STATIC_VARIABLE std::atomic<Identifier> s_identifier(0);
-    return ++s_identifier;
+    static std::atomic<Identifier>* s_identifier = new std::atomic<Identifier>(0);
+    return ++(*s_identifier);
 }
 
 std::map<UntypedThreadLocal::Identifier, std::any>& UntypedThreadLocal::threadedStorage()
 {
-    WCDB_STATIC_VARIABLE thread_local std::map<Identifier, std::any> s_storage;
-    return s_storage;
+    static thread_local std::map<Identifier, std::any>* s_storage
+    = new std::map<Identifier, std::any>();
+    return *s_storage;
 }
 
 } //namespace WCDB

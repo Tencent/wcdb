@@ -393,9 +393,9 @@ bool AbstractHandle::beginTransaction()
                       "Last transaction is not committed or rollbacked.",
                       rollbackTransaction(););
 
-    WCDB_STATIC_VARIABLE const StatementBegin s_beginImmediate(
-    StatementBegin().beginImmediate());
-    bool succeed = executeStatement(s_beginImmediate);
+    static const StatementBegin *s_beginImmediate
+    = new StatementBegin(StatementBegin().beginImmediate());
+    bool succeed = executeStatement(*s_beginImmediate);
     if (succeed) {
         m_transactionLevel = 1;
     }
@@ -407,10 +407,10 @@ bool AbstractHandle::commitOrRollbackTransaction()
     bool succeed = true;
     if (isInTransaction()) {
         if (m_transactionError != TransactionError::Fatal) {
-            WCDB_STATIC_VARIABLE const StatementCommit s_commit(
-            StatementCommit().commit());
+            static const StatementCommit *s_commit
+            = new StatementCommit(StatementCommit().commit());
 
-            succeed = executeStatement(s_commit);
+            succeed = executeStatement(*s_commit);
             if (succeed) {
                 m_transactionLevel = 0;
                 m_transactionError = TransactionError::Allowed;
@@ -431,10 +431,10 @@ void AbstractHandle::rollbackTransaction()
     bool succeed = true;
     // Transaction can be removed automatically in some case. e.g. interrupt step
     if (isInTransaction()) {
-        WCDB_STATIC_VARIABLE const StatementRollback s_rollback(
-        StatementRollback().rollback());
+        static const StatementRollback *s_rollback
+        = new StatementRollback(StatementRollback().rollback());
         sqlite3_unimpeded(m_handle, true);
-        succeed = executeStatement(s_rollback);
+        succeed = executeStatement(*s_rollback);
         sqlite3_unimpeded(m_handle, false);
     }
     if (succeed) {

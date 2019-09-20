@@ -31,8 +31,8 @@
 
 static std::atomic<WCTSimulateIOErrorOptions> &simulateIOErrorOptions()
 {
-    WCDB_STATIC_VARIABLE std::atomic<WCTSimulateIOErrorOptions> s_simulateIOErrorOptions(WCTSimulateNoneIOError);
-    return s_simulateIOErrorOptions;
+    static std::atomic<WCTSimulateIOErrorOptions> *s_simulateIOErrorOptions = new std::atomic<WCTSimulateIOErrorOptions>(WCTSimulateNoneIOError);
+    return *s_simulateIOErrorOptions;
 }
 
 static ssize_t controllableWrite(int fd, const void *buf, size_t byte, off_t offset)
