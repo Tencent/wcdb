@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by sanhuazhang on 2019/9/25.
 //
 
 /*
@@ -22,16 +22,21 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTHandle.h>
-#import <WCDB/WCTTable.h>
-#import <WCDB/WCTTableProtocol.h>
+#import <WCDB/Assertion.hpp>
+#import <WCDB/WCTDatabase+Table.h>
+#import <WCDB/WCTTable+Table.h>
 
-NS_ASSUME_NONNULL_BEGIN
+@implementation WCTTable (Table)
 
-@interface WCTHandle (Table) <WCTTableProtocol>
+- (NSString *)indexWithSuffix:(NSString *)indexSuffix
+{
+    return [self.tableName stringByAppendingString:indexSuffix];
+}
 
-- (BOOL)remapTable:(NSString *)tableName toClass:(Class<WCTTableCoding>)tableClass;
+- (BOOL)dropIndexWithSuffix:(NSString *)indexSuffix
+{
+    WCTRemedialAssert(indexSuffix != nil, "Index suffix can't be null.", return NO;);
+    return [self.database dropIndex:[self.tableName stringByAppendingString:indexSuffix]];
+}
 
 @end
-
-NS_ASSUME_NONNULL_END

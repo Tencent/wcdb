@@ -22,14 +22,14 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
 #import <WCDB/Macro.hpp>
-#import <WCDB/WCTCommon.h>
+#import <WCDB/WCTTag.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-/**
- Close block
- */
+@class WCTError;
+
 typedef void (^WCTCloseBlock)(void);
 
 @interface WCTDatabase : NSObject

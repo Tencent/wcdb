@@ -22,11 +22,12 @@
  * limitations under the License.
  */
 
+#import <WCDB/WCTCommon.h>
 #import <WCDB/WCTDatabase.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSInteger, WCTConfigPriority) {
+typedef NS_ENUM(int, WCTConfigPriority) {
     WCTConfigPriorityHigh = -100,
     WCTConfigPriorityDefault = 0,
     WCTConfigPriorityLow = 100,

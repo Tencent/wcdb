@@ -24,6 +24,7 @@
 
 #import <WCDB/Assertion.hpp>
 #import <WCDB/Core.h>
+#import <WCDB/WCTCommon.h>
 #import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTDatabase+Repair.h>
 #import <WCDB/WCTFoundation.h>

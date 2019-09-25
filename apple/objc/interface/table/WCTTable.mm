@@ -24,7 +24,6 @@
 
 #import <WCDB/Assertion.hpp>
 #import <WCDB/Core.h>
-#import <WCDB/WCTDatabase+Table.h>
 #import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTTable+Private.h>
@@ -46,17 +45,6 @@
         _tableClass = tableClass;
     }
     return self;
-}
-
-- (NSString *)indexWithSuffix:(NSString *)indexSuffix
-{
-    return [_tableName stringByAppendingString:indexSuffix];
-}
-
-- (BOOL)dropIndexWithSuffix:(NSString *)indexSuffix
-{
-    WCTRemedialAssert(indexSuffix != nil, "Index suffix can't be null.", return NO;);
-    return [_database dropIndex:[_tableName stringByAppendingString:indexSuffix]];
 }
 
 - (WCTDatabase *)database

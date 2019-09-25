@@ -22,29 +22,12 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTCommon.h>
-#import <WCDB/WCTOptional.h>
+#import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol WCTTable
-
-- (WCTOptionalBool)tableExists:(NSString *)tableName;
-
-- (BOOL)createTable:(NSString *)tableName
-          withClass:(Class<WCTTableCoding>)tableClass;
-
-- (WCTTable *)getTable:(NSString *)tableName
-             withClass:(Class<WCTTableCoding>)tableClass;
-
-- (BOOL)createVirtualTable:(NSString *)tableName
-                 withClass:(Class<WCTTableCoding>)tableClass;
-
-- (BOOL)dropTable:(NSString *)tableName;
-
-- (BOOL)dropIndex:(NSString *)indexName;
-
-@end
+@class WCTDatabase;
+@class WCTError;
 
 @interface WCTTable<ObjectType> : NSObject
 
@@ -61,10 +44,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) Class tableClass;
 
 @property (nonatomic, readonly) WCTDatabase *database;
-
-- (NSString *)indexWithSuffix:(NSString *)indexSuffix;
-
-- (BOOL)dropIndexWithSuffix:(NSString *)indexSuffix;
 
 - (WCTError *)error;
 

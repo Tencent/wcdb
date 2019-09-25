@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by sanhuazhang on 2019/9/25.
 //
 
 /*
@@ -22,15 +22,27 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTHandle.h>
-#import <WCDB/WCTTable.h>
-#import <WCDB/WCTTableProtocol.h>
+#import <WCDB/WCTCommon.h>
+#import <WCDB/WCTOptional.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCTHandle (Table) <WCTTableProtocol>
+@protocol WCTTableProtocol
 
-- (BOOL)remapTable:(NSString *)tableName toClass:(Class<WCTTableCoding>)tableClass;
+- (WCTOptionalBool)tableExists:(NSString *)tableName;
+
+- (WCTTable *)getTable:(NSString *)tableName
+             withClass:(Class<WCTTableCoding>)tableClass;
+
+- (BOOL)createTable:(NSString *)tableName
+          withClass:(Class<WCTTableCoding>)tableClass;
+
+- (BOOL)createVirtualTable:(NSString *)tableName
+                 withClass:(Class<WCTTableCoding>)tableClass;
+
+- (BOOL)dropTable:(NSString *)tableName;
+
+- (BOOL)dropIndex:(NSString *)indexName;
 
 @end
 

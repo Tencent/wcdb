@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef BOOL (^WCTTransactionBlock)(WCTHandle *);
 
-@protocol WCTTransaction
+@protocol WCTTransactionProtocol
 @required
 - (BOOL)isInTransaction;
 

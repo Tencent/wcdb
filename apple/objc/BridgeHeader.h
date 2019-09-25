@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by sanhuazhang on 2019/9/25.
 //
 
 /*
@@ -22,16 +22,9 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTHandle.h>
+#ifdef __cplusplus
+#error Bridge header should not be compiled as cpp header.
+#endif
+
+#import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTTable.h>
-#import <WCDB/WCTTableProtocol.h>
-
-NS_ASSUME_NONNULL_BEGIN
-
-@interface WCTHandle (Table) <WCTTableProtocol>
-
-- (BOOL)remapTable:(NSString *)tableName toClass:(Class<WCTTableCoding>)tableClass;
-
-@end
-
-NS_ASSUME_NONNULL_END
