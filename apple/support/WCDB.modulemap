@@ -1,6 +1,21 @@
 framework module WCDB {
-    umbrella header "WCDB.h"
 
-    export *
-    module * { export * }
+    requires gnu11
+    requires objc
+    requires objc_arc
+
+    framework module All {
+        umbrella header "WCDB.h"
+        
+        export *
+        
+        requires cplusplus17
+    }
+
+    framework module Bridge [extern_c] {
+        umbrella header "BridgeHeader.h"
+        
+        export *
+    }
+    
 }

@@ -25,6 +25,6 @@
 #import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTTransaction.h>
 
-@interface WCTDatabase (Transaction) <WCTTransaction>
+@interface WCTDatabase (Transaction) <WCTTransactionProtocol>
 
 @end

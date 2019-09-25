@@ -55,8 +55,11 @@
 
 #import <WCDB/WCTDatabase+Table.h>
 #import <WCDB/WCTHandle+Table.h>
+#import <WCDB/WCTTable+Table.h>
 #import <WCDB/WCTTable.h>
+#import <WCDB/WCTTableProtocol.h>
 
 #import <WCDB/WCTDatabase+Monitor.h>
 #import <WCDB/WCTError.h>
 #import <WCDB/WCTPerformanceFootprint.h>
+#import <WCDB/WCTTag.h>

@@ -26,7 +26,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol WCTChainCall
+@protocol WCTChainCallProtocol
 @required
 - (WCTInsert *)prepareInsert;
 - (WCTDelete *)prepareDelete;
@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (WCTUpdate *)prepareUpdate;
 @end
 
-@protocol WCTCrossTableChainCall
+@protocol WCTCrossTableChainCallProtocol
 @required
 - (WCTInsert *)prepareInsert;
 - (WCTDelete *)prepareDelete;

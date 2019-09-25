@@ -25,7 +25,7 @@
 #import <WCDB/WCTHandle.h>
 #import <WCDB/WCTTransaction.h>
 
-@interface WCTHandle (Transaction) <WCTTransaction>
+@interface WCTHandle (Transaction) <WCTTransactionProtocol>
 
 - (void)markErrorNotAllowedWithinTransaction;
 

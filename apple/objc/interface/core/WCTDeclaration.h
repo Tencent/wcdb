@@ -25,6 +25,7 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/Macro.hpp>
 #import <WCDB/WCTOptional.h>
+#import <WCDB/WCTTag.h>
 #import <WCDB/WINQ.h>
 
 #pragma mark - Chain Call
@@ -82,9 +83,6 @@ typedef NSArray<NSObject<WCTColumnCoding> *> WCTColumnCodingRow;
 @class WCTPerformanceFootprint;
 class WCTOptionalBool;
 class WCTOptionalSize;
-
-typedef int32_t WCTTag;
-static constexpr WCTTag const WCTInvalidTag = 0;
 
 #pragma mark - Migration
 @class WCTMigrationBaseInfo;

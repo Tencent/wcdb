@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by sanhuazhang on 2019/9/25.
 //
 
 /*
@@ -22,15 +22,15 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTHandle.h>
 #import <WCDB/WCTTable.h>
-#import <WCDB/WCTTableProtocol.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCTHandle (Table) <WCTTableProtocol>
+@interface WCTTable (Table)
 
-- (BOOL)remapTable:(NSString *)tableName toClass:(Class<WCTTableCoding>)tableClass;
+- (NSString *)indexWithSuffix:(NSString *)indexSuffix;
+
+- (BOOL)dropIndexWithSuffix:(NSString *)indexSuffix;
 
 @end
 

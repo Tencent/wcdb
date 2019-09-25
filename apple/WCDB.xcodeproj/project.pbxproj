@@ -763,6 +763,12 @@
 		3962FFC82305142A008934D4 /* Statement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3962FFC723051429008934D4 /* Statement.cpp */; };
 		3962FFCB230514CD008934D4 /* WCTBaseAccessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3962FFC9230514CD008934D4 /* WCTBaseAccessor.mm */; };
 		3962FFCF23051F71008934D4 /* Configs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3962FFCE23051F71008934D4 /* Configs.cpp */; };
+		39690184233B1945006EEFD4 /* BridgeHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 39690182233B1945006EEFD4 /* BridgeHeader.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3969018C233B1B2F006EEFD4 /* WCTTag.h in Headers */ = {isa = PBXBuildFile; fileRef = 3969018A233B1B2F006EEFD4 /* WCTTag.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		39690190233B20BC006EEFD4 /* WCTTableProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 3969018E233B20BC006EEFD4 /* WCTTableProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		39690194233B2235006EEFD4 /* WCTTable+Table.h in Headers */ = {isa = PBXBuildFile; fileRef = 39690192233B2235006EEFD4 /* WCTTable+Table.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		39690195233B2235006EEFD4 /* WCTTable+Table.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39690193233B2235006EEFD4 /* WCTTable+Table.mm */; };
+		39690199233B252C006EEFD4 /* A.m in Sources */ = {isa = PBXBuildFile; fileRef = 39690197233B252C006EEFD4 /* A.m */; };
 		3980ABAD22D44F4B00047AA9 /* ObjectsBasedBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F057F227AA4CC00DD65A2 /* ObjectsBasedBenchmark.mm */; };
 		3980ABB622D44F5300047AA9 /* BaselineBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F057A227AA4CB00DD65A2 /* BaselineBenchmark.mm */; };
 		3980ABB722D44F5300047AA9 /* CipherBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0580227AA4CC00DD65A2 /* CipherBenchmark.mm */; };
@@ -1692,6 +1698,12 @@
 		3962FFC723051429008934D4 /* Statement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Statement.cpp; sourceTree = "<group>"; };
 		3962FFC9230514CD008934D4 /* WCTBaseAccessor.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTBaseAccessor.mm; sourceTree = "<group>"; };
 		3962FFCE23051F71008934D4 /* Configs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Configs.cpp; sourceTree = "<group>"; };
+		39690182233B1945006EEFD4 /* BridgeHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgeHeader.h; sourceTree = "<group>"; };
+		3969018A233B1B2F006EEFD4 /* WCTTag.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTTag.h; sourceTree = "<group>"; };
+		3969018E233B20BC006EEFD4 /* WCTTableProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTTableProtocol.h; sourceTree = "<group>"; };
+		39690192233B2235006EEFD4 /* WCTTable+Table.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTTable+Table.h"; sourceTree = "<group>"; };
+		39690193233B2235006EEFD4 /* WCTTable+Table.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTTable+Table.mm"; sourceTree = "<group>"; };
+		39690197233B252C006EEFD4 /* A.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = A.m; sourceTree = "<group>"; };
 		3995150622C2095B008394CC /* WCTOptional.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTOptional.mm; sourceTree = "<group>"; };
 		39A3341722B0DD9F008EA5D5 /* WCTFoundation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTFoundation.h; sourceTree = "<group>"; };
 		39A3341822B0DD9F008EA5D5 /* WCTFoundation.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTFoundation.mm; sourceTree = "<group>"; };
@@ -1791,6 +1803,7 @@
 				2349F62A1EA0D6680021EFA7 /* interface */,
 				2349F6A71EA0D6680021EFA7 /* utility */,
 				2349F6BA1EA0D6680021EFA7 /* WCDB.h */,
+				39690182233B1945006EEFD4 /* BridgeHeader.h */,
 			);
 			path = objc;
 			sourceTree = "<group>";
@@ -1919,6 +1932,7 @@
 				39579857227FBC8A0069F985 /* WCTDatabase+Test.mm */,
 				39A3341722B0DD9F008EA5D5 /* WCTFoundation.h */,
 				39A3341822B0DD9F008EA5D5 /* WCTFoundation.mm */,
+				3969018A233B1B2F006EEFD4 /* WCTTag.h */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -2013,6 +2027,9 @@
 				23F340D8204D32C2007DB8AB /* WCTTable.h */,
 				23F340D9204D32C2007DB8AB /* WCTTable.mm */,
 				2349F69E1EA0D6680021EFA7 /* WCTTable+Private.h */,
+				3969018E233B20BC006EEFD4 /* WCTTableProtocol.h */,
+				39690192233B2235006EEFD4 /* WCTTable+Table.h */,
+				39690193233B2235006EEFD4 /* WCTTable+Table.mm */,
 				2349F69A1EA0D6680021EFA7 /* WCTDatabase+Table.h */,
 				2349F69B1EA0D6680021EFA7 /* WCTDatabase+Table.mm */,
 				23EABBE4206D08EC00241F3B /* WCTHandle+Table.h */,
@@ -2191,6 +2208,7 @@
 				234F05C1227AA4F200DD65A2 /* StatementDropViewTests.mm */,
 				3960D8A123192A9D00EF05D1 /* StatementExplainTests.mm */,
 				234F05D5227AA4F500DD65A2 /* StatementInsertTests.mm */,
+				39690197233B252C006EEFD4 /* A.m */,
 				234F059D227AA4ED00DD65A2 /* StatementPragmaTests.mm */,
 				234F05BE227AA4F200DD65A2 /* StatementReindexTests.mm */,
 				234F05A4227AA4EE00DD65A2 /* StatementReleaseTests.mm */,
@@ -3356,6 +3374,7 @@
 				23EEDD5D217DFADC006E9E73 /* Syntax.h in Headers */,
 				23EEDD2E217DFADC006E9E73 /* SyntaxAttachSTMT.hpp in Headers */,
 				23EEDC80217DFADC006E9E73 /* CommonTableExpression.hpp in Headers */,
+				39690194233B2235006EEFD4 /* WCTTable+Table.h in Headers */,
 				233A8534215E7CFE00BB8D4F /* Console.hpp in Headers */,
 				2370B11F21914ED500D3227C /* NSObject+WCTColumnCoding.h in Headers */,
 				39579858227FBC8A0069F985 /* WCTDatabase+Test.h in Headers */,
@@ -3507,6 +3526,7 @@
 				39A3341922B0DD9F008EA5D5 /* WCTFoundation.h in Headers */,
 				23EEDCF0217DFADC006E9E73 /* SyntaxColumn.hpp in Headers */,
 				2349F6FF1EA0D6680021EFA7 /* Database.hpp in Headers */,
+				3969018C233B1B2F006EEFD4 /* WCTTag.h in Headers */,
 				23EEDD2C217DFADC006E9E73 /* SyntaxAnalyzeSTMT.hpp in Headers */,
 				23EEDCF2217DFADC006E9E73 /* SyntaxColumnConstraint.hpp in Headers */,
 				23790A80219315E50098797F /* WCTVirtualTableMacro.h in Headers */,
@@ -3515,6 +3535,7 @@
 				23EEDCF6217DFADC006E9E73 /* SyntaxCommonTableExpression.hpp in Headers */,
 				23AD52F420DBAC4C00664B62 /* UpgradeableErrorProne.hpp in Headers */,
 				2349F7201EA0D6680021EFA7 /* WCTDelete.h in Headers */,
+				39690184233B1945006EEFD4 /* BridgeHeader.h in Headers */,
 				23567D5B20CA823C005F1C35 /* PagerRelated.hpp in Headers */,
 				2349F75F1EA0D6680021EFA7 /* WCTColumnBinding.h in Headers */,
 				23B4DC802111B39200954D71 /* Tag.hpp in Headers */,
@@ -3551,6 +3572,7 @@
 				23EEDCBA217DFADC006E9E73 /* StatementAttach.hpp in Headers */,
 				23EEDC7E217DFADC006E9E73 /* ColumnDef.hpp in Headers */,
 				2349F75A1EA0D6680021EFA7 /* WCTRuntimeCppAccessor.h in Headers */,
+				39690190233B20BC006EEFD4 /* WCTTableProtocol.h in Headers */,
 				23EB91E020CA1EBE00ECF668 /* Wal.hpp in Headers */,
 				23EEDD54217DFADC006E9E73 /* SyntaxSavepointSTMT.hpp in Headers */,
 				23301BF72298FE9A00A8AB5A /* AutoMigrateConfig.hpp in Headers */,
@@ -4182,6 +4204,7 @@
 				23EEDD45217DFADC006E9E73 /* SyntaxDropTriggerSTMT.cpp in Sources */,
 				23B4DCE12112B03C00954D71 /* AsyncQueue.cpp in Sources */,
 				23EEDD23217DFADC006E9E73 /* SyntaxUpsertClause.cpp in Sources */,
+				39690195233B2235006EEFD4 /* WCTTable+Table.mm in Sources */,
 				23EEDC83217DFADC006E9E73 /* Expression.cpp in Sources */,
 				23EEDD4B217DFADC006E9E73 /* SyntaxPragmaSTMT.cpp in Sources */,
 				39A3341B22B0DD9F008EA5D5 /* WCTFoundation.mm in Sources */,
@@ -4296,6 +4319,7 @@
 				23776CA4218C41DD00E985DC /* WCTChainCall.mm in Sources */,
 				23EABBE7206D08EC00241F3B /* WCTHandle+Table.mm in Sources */,
 				2349F7351EA0D6680021EFA7 /* WCTUpdate.mm in Sources */,
+				39690199233B252C006EEFD4 /* A.m in Sources */,
 				23F0FEB4215F5E9A008399FB /* ThreadLocal.cpp in Sources */,
 				3960D89F2319288C00EF05D1 /* StatementExplain.cpp in Sources */,
 				23EEDC9F217DFADC006E9E73 /* RecursiveCTE.cpp in Sources */,
