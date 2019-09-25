@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/Macro.hpp>
+#import <WCDB/Macro.h>
 
 #import <WCDB/WCTMacroUtility.h>
 

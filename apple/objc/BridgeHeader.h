@@ -22,8 +22,11 @@
  * limitations under the License.
  */
 
-extern "C" {
+#import <WCDB/Macro.h>
+
+WCDB_EXTERN_C_BEGIN
 
 #import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTTable.h>
-}
+
+WCDB_EXTERN_C_END

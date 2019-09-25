@@ -23,7 +23,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/Macro.hpp>
+#import <WCDB/Macro.h>
 #import <WCDB/WCTTag.h>
 
 NS_ASSUME_NONNULL_BEGIN

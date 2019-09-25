@@ -23,7 +23,7 @@
  */
 
 #include <WCDB/Config.hpp>
-#include <WCDB/Macro.hpp>
+#include <WCDB/Macro.h>
 
 namespace WCDB {
 

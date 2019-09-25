@@ -23,7 +23,7 @@
  */
 
 #import <WCDB/Assertion.hpp>
-#import <WCDB/Macro.hpp>
+#import <WCDB/Macro.h>
 #import <WCDB/WCTHandle+Private.h>
 #import <WCDB/WCTHandle+Transaction.h>
 

@@ -26,7 +26,7 @@
 #include <WCDB/BasicConfig.hpp>
 #include <WCDB/CoreConst.h>
 #include <WCDB/Handle.hpp>
-#include <WCDB/Macro.hpp>
+#include <WCDB/Macro.h>
 
 namespace WCDB {
 

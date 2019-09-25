@@ -23,7 +23,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/Macro.hpp>
+#import <WCDB/Macro.h>
 #import <WCDB/OperationQueue.hpp>
 
 #if TARGET_OS_IPHONE && !TARGET_OS_WATCH
