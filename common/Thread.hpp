@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/Macro.hpp>
+#include <WCDB/Macro.h>
 #include <WCDB/SharedThreadedErrorProne.hpp>
 #include <WCDB/StringView.hpp>
 #include <cstddef>

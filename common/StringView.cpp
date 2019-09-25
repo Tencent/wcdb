@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/Macro.hpp>
+#include <WCDB/Macro.h>
 #include <WCDB/StringView.hpp>
 #include <zlib.h>
 

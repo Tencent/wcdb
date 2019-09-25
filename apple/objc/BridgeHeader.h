@@ -22,9 +22,11 @@
  * limitations under the License.
  */
 
-#ifdef __cplusplus
-#error Bridge header should not be compiled as cpp header.
-#endif
+#import <WCDB/Macro.h>
+
+WCDB_EXTERN_C_BEGIN
 
 #import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTTable.h>
+
+WCDB_EXTERN_C_END

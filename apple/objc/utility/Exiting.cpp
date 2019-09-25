@@ -23,7 +23,7 @@
  */
 
 #include <WCDB/Exiting.hpp>
-#include <WCDB/Macro.hpp>
+#include <WCDB/Macro.h>
 #include <atomic>
 #include <stdlib.h>
 

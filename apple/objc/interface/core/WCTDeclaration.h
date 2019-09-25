@@ -23,7 +23,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/Macro.hpp>
+#import <WCDB/Macro.h>
 #import <WCDB/WCTOptional.h>
 #import <WCDB/WCTTag.h>
 #import <WCDB/WINQ.h>
