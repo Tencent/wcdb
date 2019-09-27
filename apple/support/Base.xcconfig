@@ -47,7 +47,7 @@ GCC_THREADSAFE_STATICS = YES
 GCC_SYMBOLS_PRIVATE_EXTERN = NO
 
 // Apple Clang - Custom Compiler Flags
-OTHER_CFLAGS = -Wglobal-constructors -fno-aligned-allocation
+OTHER_CFLAGS = -Wglobal-constructors -fno-aligned-allocation -Wreorder
 
 // Apple Clang - Language
 GCC_C_LANGUAGE_STANDARD = gnu11
