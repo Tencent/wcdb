@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Repair {
 
-class Sequence;
+struct Sequence;
 class SequenceCrawler;
 
 class SequenceCrawlerDelegate {

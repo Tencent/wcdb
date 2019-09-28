@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Repair {
 
-class Master;
+struct Master;
 class MasterCrawler;
 
 class MasterCrawlerDelegate {

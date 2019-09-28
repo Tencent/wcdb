@@ -43,8 +43,8 @@ namespace Repair {
 
 FactoryRetriever::FactoryRetriever(const Factory &factory_)
 : FactoryRelated(factory_)
-, databaseFileName(factory.getDatabaseName())
 , database(Path::addComponent(factory.getRestoreDirectory(), factory.getDatabaseName()))
+, databaseFileName(factory.getDatabaseName())
 , m_totalSize(0)
 {
 }

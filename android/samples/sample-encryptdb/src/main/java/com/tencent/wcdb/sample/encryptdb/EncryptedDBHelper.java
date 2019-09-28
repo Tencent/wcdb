@@ -27,6 +27,7 @@ import com.tencent.wcdb.DatabaseUtils;
 import com.tencent.wcdb.database.SQLiteChangeListener;
 import com.tencent.wcdb.database.SQLiteDatabase;
 import com.tencent.wcdb.database.SQLiteOpenHelper;
+import com.tencent.wcdb.extension.fts.MMFtsTokenizer;
 import com.tencent.wcdb.repair.RepairKit;
 
 import java.io.File;
@@ -123,6 +124,7 @@ public class EncryptedDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onConfigure(SQLiteDatabase db) {
+        db.addExtension(MMFtsTokenizer.EXTENSION);
         db.setAsyncCheckpointEnabled(true);
         db.setChangeListener(new SQLiteChangeListener() {
 

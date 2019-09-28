@@ -29,22 +29,22 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-UnsafeData::UnsafeData() : m_buffer(nullptr), m_size(0)
+UnsafeData::UnsafeData() : m_size(0), m_buffer(nullptr)
 {
 }
 
 UnsafeData::UnsafeData(unsigned char *buffer, size_t size)
-: m_buffer(buffer), m_size(size)
+: m_size(size), m_buffer(buffer)
 {
 }
 
 UnsafeData::UnsafeData(const UnsafeData &other)
-: m_buffer(other.m_buffer), m_size(other.m_size)
+: m_size(other.m_size), m_buffer(other.m_buffer)
 {
 }
 
 UnsafeData::UnsafeData(UnsafeData &&other)
-: m_buffer(other.m_buffer), m_size(other.m_size)
+: m_size(other.m_size), m_buffer(other.m_buffer)
 {
     other.m_buffer = nullptr;
     other.m_size = 0;

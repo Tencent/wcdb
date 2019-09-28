@@ -196,9 +196,11 @@ void Error::setSystemCode(int systemCode, Code codeIfUnresolved, const UnsafeStr
     case ENOSPC:
         code = Code::Full;
         break;
+#ifdef EAUTH
     case EAUTH:
         code = Code::Authorization;
         break;
+#endif
     case ENOENT:
         code = Code::NotFound;
         break;

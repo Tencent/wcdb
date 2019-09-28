@@ -35,7 +35,7 @@ namespace WCDB {
 
 #pragma mark - Initialize
 FileHandle::FileHandle(const UnsafeStringView &path_)
-: path(path_), m_fd(-1), m_mode(Mode::None), m_errorIgnorable(false)
+: path(path_), m_fd(-1), m_errorIgnorable(false), m_mode(Mode::None)
 {
 }
 
@@ -195,8 +195,11 @@ MappedData FileHandle::map(off_t offset, size_t size)
     int alignment = offset % s_pagesize;
     off_t roundedOffset = offset - alignment;
     size_t roundedSize = size + alignment;
-    void *mapped = mmap(
-    nullptr, roundedSize, PROT_READ, MAP_SHARED | MAP_NOEXTEND | MAP_NORESERVE, m_fd, roundedOffset);
+    int flags = MAP_SHARED | MAP_NORESERVE;
+#ifdef MAP_NOEXTEND
+    flags |= MAP_NOEXTEND;
+#endif
+    void *mapped = mmap(nullptr, roundedSize, PROT_READ, flags, m_fd, roundedOffset);
     if (mapped == MAP_FAILED) {
         Error error;
         error.level = m_errorIgnorable ? Error::Level::Warning : Error::Level::Error;

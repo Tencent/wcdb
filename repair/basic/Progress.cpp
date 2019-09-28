@@ -29,7 +29,7 @@ namespace WCDB {
 
 namespace Repair {
 
-Progress::Progress() : m_progress(0), m_onProgressUpdated(nullptr)
+Progress::Progress() : m_onProgressUpdated(nullptr), m_progress(0)
 {
 }
 

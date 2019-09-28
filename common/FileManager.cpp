@@ -22,6 +22,10 @@
  * limitations under the License.
  */
 
+#ifdef __APPLE__
+#define _POSIX_C_SOURCE
+#endif
+
 #include <WCDB/CoreConst.h>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Notifier.hpp>
@@ -191,7 +195,7 @@ std::optional<Time> FileManager::getFileModifiedTime(const UnsafeStringView &pat
 {
     struct stat result;
     if (stat(path.data(), &result) == 0) {
-        return Time(result.st_mtimespec);
+        return Time(result.st_mtime, result.st_mtimensec);
     }
     setThreadedError(path);
     return std::nullopt;
@@ -201,7 +205,7 @@ std::optional<Time> FileManager::getFileCreatedTime(const UnsafeStringView &path
 {
     struct stat result;
     if (stat(path.data(), &result) == 0) {
-        return Time(result.st_ctimespec);
+        return Time(result.st_ctime, result.st_ctimensec);
     }
     setThreadedError(path);
     return std::nullopt;

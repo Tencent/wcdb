@@ -38,6 +38,7 @@ public:
     Time(const Super &super);
     Time(Super &&super);
     Time(const struct timespec &ts);
+    Time(std::time_t sec, std::time_t nsec);
     ~Time() override final;
 
     static Time now();

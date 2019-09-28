@@ -23,7 +23,6 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/Console.hpp>
 #include <WCDB/Scoreable.hpp>
 #include <cmath>
 

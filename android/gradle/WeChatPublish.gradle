@@ -21,7 +21,7 @@ class WeChatPublishExtension {
 
     boolean isSnapshot = true
     private String versionSuffix = ''
-    private boolean printModules = false
+    protected boolean printModules = false
 
     boolean withJavadoc = true
     boolean withSources = true
@@ -56,16 +56,14 @@ class WeChatPublishExtension {
         // Verify configuration values
         verifyPublishConfiguration()
 
-        // Print module description if needed
-        if (printModules) {
-            println "@@@WeChatPublish@@@ ${artifactId}: ${fullVersion}"
-        }
-
         // Emit Maven and/or bintray DSL
         // Apply plugins if not done already
         if (!project.plugins.hasPlugin('maven-publish')) {
             project.plugins.apply('maven-publish')
         }
+
+        mountAdditionalLogic(project)
+
         emitPublicationDSL(project)
         emitRepositoryDSL(project)
     }
@@ -160,6 +158,8 @@ class WeChatPublishExtension {
         artifactId.split("[-_]").each { result += it.capitalize() }
         return result.uncapitalize()
     }
+
+    protected void mountAdditionalLogic(project) {}
 
     protected void emitPublicationDSL(Project project) {}
 
@@ -257,6 +257,18 @@ class WeChatJavaLibraryPublishExtension extends WeChatPublishExtension {
     }
 
     @Override
+    protected void mountAdditionalLogic(project) {
+        // Print module description if needed
+        if (printModules) {
+            def anchorTask = project.tasks.findByName('compileJava')
+            def printTask = project.task('printPublishArtifactInfo').doFirst {
+                println "@@@WeChatPublish@@@ ${artifactId}: ${fullVersion}"
+            }
+            anchorTask.dependsOn printTask
+        }
+    }
+
+    @Override
     protected void emitPublicationDSL(Project project) {
 
         def sourcesJarTask = project.task('sourcesJar', type: Jar) {
@@ -276,7 +288,7 @@ class WeChatJavaLibraryPublishExtension extends WeChatPublishExtension {
             title = null
             options {
                 memberLevel = JavadocMemberLevel.PUBLIC
-                
+
                 def doclavaJar = project.rootProject.file('gradle/doclava-1.0.6.jar')
                 if (doclavaJar.exists()) {
                     doclet = 'com.google.doclava.Doclava'
@@ -296,7 +308,6 @@ class WeChatJavaLibraryPublishExtension extends WeChatPublishExtension {
         project.publishing.publications {
             "${publicationName}" (MavenPublication) {
                 from project.components.java
-                //publishDepends << project.tasks.findByName('jar')
 
                 groupId this.groupId
                 artifactId this.artifactId
@@ -323,6 +334,18 @@ class WeChatAndroidLibraryPublishExtension extends WeChatPublishExtension {
     }
 
     @Override
+    protected void mountAdditionalLogic(project) {
+        // Print module description if needed
+        if (printModules) {
+            def anchorTask = project.tasks.findByName('preBuild')
+            def printTask = project.task('printPublishArtifactInfo').doFirst {
+                println "@@@WeChatPublish@@@ ${artifactId}: ${fullVersion}"
+            }
+            anchorTask.dependsOn printTask
+        }
+    }
+
+    @Override
     protected void emitPublicationDSL(Project project) {
         HashSet<String> emittedFlavors = new HashSet<>()
         def android = project.android
@@ -335,6 +358,7 @@ class WeChatAndroidLibraryPublishExtension extends WeChatPublishExtension {
             def flavorName = variant.flavorName
             def variantOnlyName = variantName.substring(flavorName.length(), variantName.length())
                     .uncapitalize()
+            def hasFlavor = variant.flavorName != null && !variant.flavorName.isEmpty()
 
             if (flavorName == defaultFlavor)
                 flavorName = ''
@@ -395,13 +419,25 @@ class WeChatAndroidLibraryPublishExtension extends WeChatPublishExtension {
 
             def externalNativeBuildTask = project.tasks.findByName(
                     "externalNativeBuild${cVariantName}")
-            def nativeSymbolZipTask = null
+            Zip nativeSymbolZipTask = null
             if (externalNativeBuildTask != null) {
                 nativeSymbolZipTask = project.task("nativeSymbolZip${cVariantName}", type: Zip) {
                     classifier = "${variantOnlyName}Symbols"
                     from externalNativeBuildTask.objFolder
                     include '*/*.so'
                     dependsOn externalNativeBuildTask
+                }
+
+                externalNativeBuildTask.doLast {
+                    // If externalNativeBuild generates no shared library files,
+                    // remove symbols artifact from the publication.
+                    if (nativeSymbolZipTask.inputs.sourceFiles.empty) {
+                        def publication = project.publishing.publications
+                                .getByName("${publicationName}${cFlavorName}")
+                        publication.artifacts.removeIf {
+                            it.file == nativeSymbolZipTask.archivePath
+                        }
+                    }
                 }
             }
 
@@ -438,8 +474,26 @@ class WeChatAndroidLibraryPublishExtension extends WeChatPublishExtension {
 
                         groupId this.groupId
                         version this.fullVersion
-                        artifactId flavorName.empty ?
-                                this.artifactId : "${this.artifactId}-${flavorName}"
+
+                        if (hasFlavor) {
+                            def currFlavor = variant.productFlavors.get(0)
+                            def actualArtifactIdSuffix = ''
+                            if (currFlavor.ext.has('artifactIdSuffix')) {
+                                actualArtifactIdSuffix = currFlavor.ext.artifactIdSuffix
+                                int firstNotBarPos = 0
+                                while (firstNotBarPos < actualArtifactIdSuffix.length()
+                                        && actualArtifactIdSuffix.charAt(firstNotBarPos) == '-') {
+                                    ++firstNotBarPos
+                                }
+                                actualArtifactIdSuffix = actualArtifactIdSuffix.substring(firstNotBarPos)
+                            } else {
+                                actualArtifactIdSuffix = flavorName
+                            }
+                            artifactId actualArtifactIdSuffix.empty ?
+                                    this.artifactId : "${this.artifactId}-${actualArtifactIdSuffix}"
+                        } else {
+                            artifactId this.artifactId
+                        }
 
                         pom {
                             packaging 'aar'

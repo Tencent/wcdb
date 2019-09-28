@@ -3,10 +3,10 @@ root_path := $(call parent-dir, $(real_local_path))
 prebuilt_path := $(root_path)/android/prebuilt/$(TARGET_ARCH)
 build_info_path := $(NDK_OUT)
 
-common_cflags := -Wall -Werror -Wno-unused-const-variable \
+common_cflags := -Wall -Werror -Wno-unused-const-variable -Wno-error=\#warnings \
 	-ffunction-sections -fdata-sections \
 	-DSQLITE_HAS_CODEC -DSQLITE_CORE -DSQLITE_OS_UNIX
-common_cppflags := -std=c++14 -fno-exception -fno-rtti
+common_cppflags := -std=c++17 -fno-exceptions -frtti
 common_c_includes := \
 	$(prebuilt_path)/include \
 	$(root_path)/android/sqlcipher \
@@ -27,6 +27,7 @@ LOCAL_LDLIBS := -llog -lz -ldl -latomic
 LOCAL_LDFLAGS := -Wl,--gc-sections -Wl,--version-script=$(root_path)/android/wcdb.map
 
 LOCAL_STATIC_LIBRARIES := \
+    wcdb-common \
 	wcdb-repair \
 	wcdb-backup \
 	wcdb-vfslog \
@@ -37,17 +38,42 @@ LOCAL_STATIC_LIBRARIES := \
 
 include $(BUILD_SHARED_LIBRARY)
 
+# Common
+LOCAL_PATH := $(root_path)/common
+include $(CLEAR_VARS)
+LOCAL_MODULE := wcdb-common
+LOCAL_CFLAGS := $(common_cflags)
+LOCAL_CPPFLAGS := $(common_cppflags)
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/include
+LOCAL_C_INCLUDES := $(common_c_includes) $(LOCAL_EXPORT_C_INCLUDES)
+LOCAL_SRC_FILES := \
+	Data.cpp \
+	Error.cpp \
+	ErrorProne.cpp \
+	FileHandle.cpp \
+	FileManager.cpp \
+	MappedData.cpp \
+	Notifier.cpp \
+	Path.cpp \
+	Range.cpp \
+	Serialization.cpp \
+	StringView.cpp \
+	ThreadedErrors.cpp \
+	Time.cpp
+include $(BUILD_STATIC_LIBRARY)
+
 # Repair
 LOCAL_PATH := $(root_path)/repair
 include $(CLEAR_VARS)
 LOCAL_MODULE := wcdb-repair
 LOCAL_CFLAGS := $(common_cflags)
-LOCAL_CPPFLAGS := $(commom_cppflags)
-LOCAL_C_INCLUDES := $(common_c_includes)
-LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
+LOCAL_CPPFLAGS := $(common_cppflags)
+LOCAL_EXPORT_C_INCLUDES := $(wildcard $(LOCAL_PATH)/*/include)
+LOCAL_C_INCLUDES := $(common_c_includes) $(LOCAL_EXPORT_C_INCLUDES)
 LOCAL_SRC_FILES := \
-	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*.c)) \
-	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*.cpp))
+	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*/*.c)) \
+	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*/*.cpp))
+LOCAL_STATIC_LIBRARIES := wcdb-common
 include $(BUILD_STATIC_LIBRARY)
 
 # Backup
@@ -55,7 +81,7 @@ LOCAL_PATH := $(root_path)/backup
 include $(CLEAR_VARS)
 LOCAL_MODULE := wcdb-backup
 LOCAL_CFLAGS := $(common_cflags)
-LOCAL_CPPFLAGS := $(commom_cppflags)
+LOCAL_CPPFLAGS := $(common_cppflags)
 LOCAL_C_INCLUDES := $(common_c_includes)
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_SRC_FILES := \
@@ -68,7 +94,7 @@ LOCAL_PATH := $(root_path)/icucompat
 include $(CLEAR_VARS)
 LOCAL_MODULE := wcdb-icucompat
 LOCAL_CFLAGS := $(common_cflags)
-LOCAL_CPPFLAGS := $(commom_cppflags)
+LOCAL_CPPFLAGS := $(common_cppflags)
 LOCAL_C_INCLUDES := $(common_c_includes)
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_SRC_FILES := \
@@ -81,7 +107,7 @@ LOCAL_PATH := $(root_path)/fts
 include $(CLEAR_VARS)
 LOCAL_MODULE := wcdb-fts
 LOCAL_CFLAGS := $(common_cflags)
-LOCAL_CPPFLAGS := $(commom_cppflags)
+LOCAL_CPPFLAGS := $(common_cppflags)
 LOCAL_C_INCLUDES := $(common_c_includes)
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_SRC_FILES := \
@@ -94,7 +120,7 @@ LOCAL_PATH := $(root_path)/vfslog
 include $(CLEAR_VARS)
 LOCAL_MODULE := wcdb-vfslog
 LOCAL_CFLAGS := $(common_cflags)
-LOCAL_CPPFLAGS := $(commom_cppflags)
+LOCAL_CPPFLAGS := $(common_cppflags)
 LOCAL_C_INCLUDES := $(common_c_includes)
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_SRC_FILES := \

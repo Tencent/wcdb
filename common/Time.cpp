@@ -48,6 +48,13 @@ std::chrono::seconds{ ts.tv_sec } + std::chrono::nanoseconds{ ts.tv_nsec }) })
 {
 }
 
+Time::Time(std::time_t sec, std::time_t nsec)
+: Super(std::chrono::system_clock::time_point{
+std::chrono::duration_cast<std::chrono::system_clock::duration>(
+std::chrono::seconds{ sec } + std::chrono::nanoseconds{ nsec }) })
+{
+}
+
 Time::~Time() = default;
 
 Time Time::now()

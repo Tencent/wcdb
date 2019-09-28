@@ -35,7 +35,7 @@ namespace WCDB {
 namespace Repair {
 
 Cell::Cell(int pointer, Page *page, Pager *pager)
-: PagerRelated(pager), m_pointer(pointer), m_rowid(0), m_page(page)
+: PagerRelated(pager), m_page(page), m_rowid(0), m_pointer(pointer)
 {
     WCTAssert(m_page != nullptr);
 }

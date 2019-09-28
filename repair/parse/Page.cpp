@@ -39,7 +39,7 @@ Page::Page(int number_, Pager *pager) : PagerRelated(pager), number(number_)
 }
 
 Page::Page(int number_, Pager *pager, const MappedData &data)
-: PagerRelated(pager), number(number_), m_data(data), m_deserialization(data)
+: PagerRelated(pager), number(number_), m_deserialization(data), m_data(data)
 {
 }
 

@@ -81,7 +81,7 @@ bool BackupDelegateHolder::isDelegateValid() const
 
 #pragma mark - Initialize
 Backup::Backup(const UnsafeStringView &path)
-: m_pager(path), Crawlable(m_pager), m_masterCrawler(m_pager)
+: Crawlable(m_pager), m_pager(path), m_masterCrawler(m_pager)
 {
 }
 
