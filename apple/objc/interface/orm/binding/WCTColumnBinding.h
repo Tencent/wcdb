@@ -71,9 +71,9 @@ protected:
                      const std::shared_ptr<const WCTBaseAccessor> accessor,
                      const WCDB::UnsafeStringView& propertyName);
 
-    std::shared_ptr<const WCTBaseAccessor> m_accessor;
-    WCDB::StringView m_propertyName;
     Class m_class;
+    WCDB::StringView m_propertyName;
+    std::shared_ptr<const WCTBaseAccessor> m_accessor;
 };
 
 class WCTColumnBindingHolder {

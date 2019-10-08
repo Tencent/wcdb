@@ -37,8 +37,10 @@ namespace Repair {
 
 #pragma mark - Initialize
 FullCrawler::FullCrawler(const UnsafeStringView &source)
-: Repairman(source), m_sequenceCrawler(m_pager), m_masterCrawler(m_pager)
+: Repairman(source), m_masterCrawler(), m_sequenceCrawler()
 {
+    m_sequenceCrawler.setAssociatedPager(&m_pager);
+    m_masterCrawler.setAssociatedPager(&m_pager);
 }
 
 FullCrawler::~FullCrawler() = default;

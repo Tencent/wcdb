@@ -41,8 +41,7 @@ void SequenceCrawlerDelegate::onSequencePageCrawled(const Page &page)
 }
 
 #pragma mark - Initialize
-SequenceCrawler::SequenceCrawler(Pager &pager)
-: Crawlable(pager), m_delegate(nullptr)
+SequenceCrawler::SequenceCrawler() : Crawlable(), m_delegate(nullptr)
 {
 }
 

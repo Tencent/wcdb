@@ -58,8 +58,8 @@ public:
     static const UnsafeData immutable(const unsigned char *buffer, size_t size);
 
 protected:
-    size_t m_size;
     unsigned char *m_buffer;
+    size_t m_size;
 
 #pragma mark - Subdata
 public:

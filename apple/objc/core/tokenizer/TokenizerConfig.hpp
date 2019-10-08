@@ -42,8 +42,8 @@ public:
     bool invoke(Handle* handle) override final;
 
 protected:
-    StatementSelect m_statement;
     std::shared_ptr<TokenizerModules> m_modules;
+    StatementSelect m_statement;
 };
 
 } //namespace WCDB

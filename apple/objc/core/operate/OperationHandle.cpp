@@ -32,11 +32,11 @@
 namespace WCDB {
 
 OperationHandle::OperationHandle()
-: m_statementForAcquireReadLock(
-StatementSelect().select(1).from(Syntax::masterTable).limit(0))
+: m_statementForIntegrityCheck(
+StatementPragma().pragma(Pragma::integrityCheck()).with(1).schema(Schema::main()))
 , m_statementForReadTransaction(StatementBegin().beginDeferred())
-, m_statementForIntegrityCheck(
-  StatementPragma().pragma(Pragma::integrityCheck()).with(1).schema(Schema::main()))
+, m_statementForAcquireReadLock(
+  StatementSelect().select(1).from(Syntax::masterTable).limit(0))
 {
 }
 

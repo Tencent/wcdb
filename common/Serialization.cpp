@@ -63,7 +63,7 @@ bool SerializeIteration::canAdvance(size_t size) const
 
 bool SerializeIteration::ended() const
 {
-    return m_cursor == capacity();
+    return m_cursor == (off_t) capacity();
 }
 
 const unsigned char *SerializeIteration::pointee() const

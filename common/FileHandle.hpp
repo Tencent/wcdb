@@ -64,8 +64,8 @@ public:
     void markErrorAsIgnorable(bool flag = true);
 
 protected:
-    bool m_errorIgnorable;
     int m_mode;
+    bool m_errorIgnorable;
 
 #pragma mark - Memory map
 public:

@@ -41,7 +41,7 @@ public:
         std::bind(&CaseInsensiveList::caseInsensiveEqual, key, std::placeholders::_1));
     }
 
-    const auto caseInsensiveFind(const UnsafeStringView& key) const
+    auto caseInsensiveFind(const UnsafeStringView& key) const
     {
         return std::find_if(
         this->begin(),

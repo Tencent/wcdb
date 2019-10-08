@@ -37,8 +37,9 @@ namespace Repair {
 
 #pragma mark - Initialize
 Repairman::Repairman(const UnsafeStringView &path)
-: m_pager(path), Crawlable(m_pager), Progress(), m_milestone(1000), m_mile(0)
+: Crawlable(), Progress(), m_pager(path), m_milestone(1000), m_mile(0)
 {
+    setAssociatedPager(&m_pager);
 }
 
 Repairman::~Repairman() = default;

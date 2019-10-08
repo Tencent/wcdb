@@ -137,8 +137,8 @@ public:
         virtual bool bindInfos(const StringViewMap<const MigrationInfo*>& infos) = 0;
 
     private:
-        bool m_binding;
         Migration& m_migration;
+        bool m_binding;
         StringViewMap<RecyclableMigrationInfo> m_referenceds; // all infos need to be bound during this cycle
         StringViewMap<const MigrationInfo*> m_bindings;
         StringViewMap<const MigrationInfo*> m_bounds;

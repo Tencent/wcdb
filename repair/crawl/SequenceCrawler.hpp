@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Repair {
 
-class Sequence;
+struct Sequence;
 class SequenceCrawler;
 
 class SequenceCrawlerDelegate {
@@ -48,7 +48,7 @@ protected:
 class SequenceCrawler final : public Crawlable {
 #pragma mark - Initialize
 public:
-    SequenceCrawler(Pager &pager);
+    SequenceCrawler();
     ~SequenceCrawler() override final;
 
 #pragma mark - Sequence

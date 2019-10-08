@@ -44,12 +44,12 @@ Core::Core()
 : m_databasePool(this)
 , m_modules(std::make_shared<TokenizerModules>())
 , m_operationQueue(std::make_shared<OperationQueue>(OperationQueueName, this))
+// Checkpoint
+, m_autoCheckpointConfig(std::make_shared<AutoCheckpointConfig>(m_operationQueue))
 // Backup
 , m_autoBackupConfig(std::make_shared<AutoBackupConfig>(m_operationQueue))
 // Migration
 , m_autoMigrateConfig(std::make_shared<AutoMigrateConfig>(m_operationQueue))
-// Checkpoint
-, m_autoCheckpointConfig(std::make_shared<AutoCheckpointConfig>(m_operationQueue))
 // Trace
 , m_globalSQLTraceConfig(std::make_shared<ShareableSQLTraceConfig>())
 , m_globalPerformanceTraceConfig(std::make_shared<ShareablePerformanceTraceConfig>())

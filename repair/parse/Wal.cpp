@@ -41,14 +41,14 @@ namespace Repair {
 Wal::Wal(Pager *pager)
 : PagerRelated(pager)
 , m_fileHandle(Path::addExtention(m_pager->getPath(), "-wal"))
-, m_salt({ 0, 0 })
-, m_isNativeChecksum(false)
-, m_maxAllowedFrame(std::numeric_limits<int>::max())
-, m_maxFrame(0)
-, m_shm(this)
-, m_shmLegality(true)
 , m_fileSize(0)
 , m_truncate(std::numeric_limits<uint32_t>::max())
+, m_maxAllowedFrame(std::numeric_limits<int>::max())
+, m_maxFrame(0)
+, m_isNativeChecksum(false)
+, m_salt({ 0, 0 })
+, m_shmLegality(true)
+, m_shm(this)
 {
 }
 

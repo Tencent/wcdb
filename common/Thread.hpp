@@ -63,7 +63,7 @@ public:
     uint64_t getIdentifier();
 
 private:
-    static constexpr const int maxLengthOfAllowedThreadName();
+    static constexpr int maxLengthOfAllowedThreadName();
 
 #pragma mark - Error
 private:

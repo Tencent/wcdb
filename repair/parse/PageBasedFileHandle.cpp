@@ -33,7 +33,7 @@ namespace WCDB {
 
 #pragma mark - PageBasedFileHandle
 PageBasedFileHandle::PageBasedFileHandle(const UnsafeStringView& path)
-: FileHandle(path), m_pageSize(0), m_cachePageSize(0), m_cache(maxAllowedCacheMemory)
+: FileHandle(path), m_pageSize(0), m_cache(maxAllowedCacheMemory), m_cachePageSize(0)
 {
     static_assert(maxAllowedCacheMemory % cacheMemoryPerRange == 0, "");
     static_assert((maxAllowedCacheMemory & maxAllowedCacheMemory - 1) == 0, "");

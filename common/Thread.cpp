@@ -77,7 +77,7 @@ bool Thread::pthreadEqual(pthread_t left, pthread_t right)
 }
 
 #pragma mark - Name
-constexpr const int Thread::maxLengthOfAllowedThreadName()
+constexpr int Thread::maxLengthOfAllowedThreadName()
 {
     return 256;
 }

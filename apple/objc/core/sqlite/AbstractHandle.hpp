@@ -120,13 +120,13 @@ public:
     bool isErrorAllowedWithinTransaction() const;
 
 private:
+    int m_transactionLevel;
     enum class TransactionError {
         Allowed,
         NotAllowed,
         Fatal,
     } m_transactionError;
     static StringView getSavepointName(int transactionLevel);
-    int m_transactionLevel;
 
 #pragma mark - Interface
 public:

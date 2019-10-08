@@ -41,12 +41,12 @@ namespace WCDB {
 #pragma mark - Initializer
 Database::Database(const UnsafeStringView &path)
 : HandlePool(path)
-, m_factory(path)
-, m_tag(Tag::invalid())
 , m_initialized(false)
-, m_migratedCallback(nullptr)
-, m_migration(this)
 , m_closing(0)
+, m_tag(Tag::invalid())
+, m_factory(path)
+, m_migration(this)
+, m_migratedCallback(nullptr)
 {
 }
 

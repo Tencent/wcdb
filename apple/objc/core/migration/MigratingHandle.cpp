@@ -33,10 +33,10 @@ namespace WCDB {
 MigratingHandle::MigratingHandle(Migration& migration)
 : Handle()
 , Migration::Binder(migration)
+, m_processing(false)
 , m_additionalStatement(getStatement())
 , m_migrateStatement(getStatement())
 , m_removeMigratedStatement(getStatement())
-, m_processing(false)
 {
 }
 

@@ -81,8 +81,10 @@ bool BackupDelegateHolder::isDelegateValid() const
 
 #pragma mark - Initialize
 Backup::Backup(const UnsafeStringView &path)
-: m_pager(path), Crawlable(m_pager), m_masterCrawler(m_pager)
+: Crawlable(), m_pager(path), m_masterCrawler()
 {
+    setAssociatedPager(&m_pager);
+    m_masterCrawler.setAssociatedPager(&m_pager);
 }
 
 Backup::~Backup() = default;
@@ -217,7 +219,9 @@ void Backup::onMasterCellCrawled(const Cell &cell, const Master &master)
 {
     WCDB_UNUSED(cell)
     if (master.name == Sequence::tableName()) {
-        SequenceCrawler(m_pager).work(master.rootpage, this);
+        SequenceCrawler crawler;
+        crawler.setAssociatedPager(&m_pager);
+        crawler.work(master.rootpage, this);
     } else if (filter(master.tableName) && !Master::isReservedTableName(master.tableName)
                && !Master::isReservedTableName(master.name)) {
         Material::Content &content = getOrCreateContent(master.tableName);
