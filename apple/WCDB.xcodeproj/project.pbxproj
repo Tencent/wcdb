@@ -3810,10 +3810,9 @@
 			};
 			buildConfigurationList = 23B5F75E1E1111C100E58396 /* Build configuration list for PBXProject "WCDB" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 			);
