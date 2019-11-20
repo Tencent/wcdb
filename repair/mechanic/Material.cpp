@@ -166,7 +166,7 @@ void Material::markAsCorrupt(const UnsafeStringView &element)
 
 #pragma mark - Info
 Material::Info::Info()
-: pageSize(0), numberOfWalFrames(0), walSalt({ 0, 0 }), reservedBytes(0)
+: pageSize(0), reservedBytes(0), walSalt({ 0, 0 }), numberOfWalFrames(0)
 {
     static_assert(size == 20, "");
 }

@@ -35,12 +35,17 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Initialize
-Crawlable::Crawlable(Pager &pager)
-: m_associatedPager(pager), m_suspend(false), m_isCrawling(false)
+Crawlable::Crawlable()
+: m_associatedPager(nullptr), m_suspend(false), m_isCrawling(false)
 {
 }
 
 Crawlable::~Crawlable() = default;
+
+void Crawlable::setAssociatedPager(Pager *pager)
+{
+    m_associatedPager = pager;
+}
 
 void Crawlable::suspend()
 {
@@ -50,18 +55,18 @@ void Crawlable::suspend()
 #pragma mark - Error
 const Error &Crawlable::getCrawlError() const
 {
-    return m_associatedPager.getError();
+    return m_associatedPager->getError();
 }
 
 void Crawlable::markAsCorrupted(int page, const UnsafeStringView &message)
 {
-    m_associatedPager.markAsCorrupted(page, message);
+    m_associatedPager->markAsCorrupted(page, message);
     markAsError();
 }
 
 void Crawlable::markAsInterrupted()
 {
-    m_associatedPager.markAsError(Error::Code::Interrupt);
+    m_associatedPager->markAsError(Error::Code::Interrupt);
     markAsError();
 }
 
@@ -72,12 +77,13 @@ void Crawlable::markAsError()
 
 bool Crawlable::crawl(int rootpageno)
 {
+    WCTAssert(m_associatedPager != nullptr);
     WCTAssert(!m_isCrawling);
     m_isCrawling = true;
     std::set<int> crawledInteriorPages;
     safeCrawl(rootpageno, crawledInteriorPages, 1);
     m_isCrawling = false;
-    return m_associatedPager.getError().isOK();
+    return m_associatedPager->getError().isOK();
 }
 
 void Crawlable::safeCrawl(int rootpageno, std::set<int> &crawledInteriorPages, int height)
@@ -85,7 +91,7 @@ void Crawlable::safeCrawl(int rootpageno, std::set<int> &crawledInteriorPages, i
     if (m_suspend) {
         return;
     }
-    Page rootpage(rootpageno, &m_associatedPager);
+    Page rootpage(rootpageno, m_associatedPager);
     if (!rootpage.initialize()) {
         markAsError();
         return;

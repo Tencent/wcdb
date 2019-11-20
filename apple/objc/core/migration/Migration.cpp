@@ -33,7 +33,7 @@ MigrationEvent::~MigrationEvent() = default;
 
 #pragma mark - Initialize
 Migration::Migration(MigrationEvent* event)
-: m_filter(nullptr), m_event(event), m_tableAcquired(false), m_migrated(true)
+: m_filter(nullptr), m_tableAcquired(false), m_migrated(true), m_event(event)
 {
 }
 

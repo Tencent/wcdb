@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Repair {
 
-class Master;
+struct Master;
 class MasterCrawler;
 
 class MasterCrawlerDelegate {
@@ -48,7 +48,7 @@ protected:
 class MasterCrawler final : public Crawlable {
 #pragma mark - Initialize
 public:
-    MasterCrawler(Pager &pager);
+    MasterCrawler();
     ~MasterCrawler() override final;
 
 #pragma mark - Master

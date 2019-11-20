@@ -53,10 +53,10 @@ protected:
     void setSource(const UnsafeStringView& table, const UnsafeStringView& database = "");
 
 private:
-    StringView m_table;
     StringView m_database;
-    StringView m_sourceTable;
+    StringView m_table;
     StringView m_sourceDatabase;
+    StringView m_sourceTable;
 };
 
 #pragma mark - MigrationUserInfo

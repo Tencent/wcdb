@@ -42,8 +42,8 @@ Pager::Pager(const UnsafeStringView &path)
 , m_pageSize(-1)
 , m_reservedBytes(-1)
 , m_numberOfPages(0)
-, m_wal(this)
 , m_fileSize(0)
+, m_wal(this)
 , m_walImportance(true)
 {
 }

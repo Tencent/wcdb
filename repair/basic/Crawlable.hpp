@@ -38,11 +38,13 @@ class Pager;
 class Crawlable {
 #pragma mark - Initialize
 public:
-    Crawlable(Pager &pager);
+    Crawlable();
     virtual ~Crawlable() = 0;
 
+    void setAssociatedPager(Pager *pager);
+
 private:
-    Pager &m_associatedPager;
+    Pager *m_associatedPager;
 
 #pragma mark - Suspend
 public:

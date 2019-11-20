@@ -106,8 +106,8 @@ private:
 
     private:
         Database *m_database;
-        bool m_isInTransactionBefore;
         RecyclableHandle m_handle;
+        bool m_isInTransactionBefore;
     };
 
     ThreadLocal<RecyclableHandle> m_transactionedHandles;
@@ -173,8 +173,8 @@ public:
 
 protected:
     void didMigrate(const MigrationBaseInfo *info) override final;
-    MigratedCallback m_migratedCallback;
     Migration m_migration; // thread-safe
+    MigratedCallback m_migratedCallback;
 
 #pragma mark - Checkpoint
 public:

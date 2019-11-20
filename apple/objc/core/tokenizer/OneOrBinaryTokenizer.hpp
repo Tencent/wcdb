@@ -87,8 +87,6 @@ private:
 
     std::vector<char> m_buffer;
     int m_bufferLength;
-
-    OneOrBinaryTokenizerInfo *m_tokenizerInfo;
 };
 
 } // namespace WCDB

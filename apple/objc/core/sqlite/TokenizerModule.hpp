@@ -89,6 +89,8 @@ public:
                     const Close &close,
                     const Next &next);
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-private-field"
 private:
     int m_version;
     Create m_create;
@@ -97,6 +99,7 @@ private:
     Close m_close;
     Next m_next;
     Languageid m_languageid;
+#pragma GCC diagnostic pop
 };
 
 } // namespace WCDB

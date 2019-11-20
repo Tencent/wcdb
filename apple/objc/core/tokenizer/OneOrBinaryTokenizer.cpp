@@ -45,7 +45,6 @@ OneOrBinaryTokenizerCursorInfo::OneOrBinaryTokenizerCursorInfo(const char *input
                                                                int inputLength,
                                                                AbstractTokenizerInfo *tokenizerInfo)
 : AbstractTokenizerCursorInfo(input, inputLength, tokenizerInfo)
-, m_tokenizerInfo(static_cast<OneOrBinaryTokenizerInfo *>(tokenizerInfo))
 , m_input(input)
 , m_inputLength(inputLength)
 , m_position(0)

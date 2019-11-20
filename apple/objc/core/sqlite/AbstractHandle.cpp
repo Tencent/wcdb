@@ -35,9 +35,9 @@ namespace WCDB {
 #pragma mark - Initialize
 AbstractHandle::AbstractHandle()
 : m_handle(nullptr)
-, m_notification(this)
 , m_transactionLevel(0)
 , m_transactionError(TransactionError::Allowed)
+, m_notification(this)
 , m_canBeSuspended(false)
 {
 }

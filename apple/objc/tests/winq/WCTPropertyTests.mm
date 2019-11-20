@@ -151,7 +151,7 @@
         WCTProperty(columnBinding1),
         WCTProperty(columnBinding2),
     };
-    WCTResultColumns resultColumns = properties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
+    WCTResultColumns resultColumns = properties.redirect([](const WCTProperty& property) -> WCDB::ResultColumn {
         return property.table(@"testTable");
     });
     TestCaseAssertSQLEqual(resultColumns[0], @"main.testTable.identifier");

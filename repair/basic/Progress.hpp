@@ -44,8 +44,8 @@ protected:
 
 private:
     void updateProgress(double progress);
-    ProgressUpdateCallback m_onProgressUpdated;
     double m_progress;
+    ProgressUpdateCallback m_onProgressUpdated;
 };
 
 } //namespace Repair

@@ -1,3 +1,6 @@
+// Signing
+CODE_SIGN_IDENTITY = -
+
 // Packaging
 INFOPLIST_FILE = $(SRCROOT)/objc/tests/host/Info.plist
 

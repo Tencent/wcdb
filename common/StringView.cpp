@@ -203,7 +203,7 @@ StringView StringView::formatted(const char* format, ...)
         va_start(ap, format);
         int n = vsnprintf((char*) result.data(), size, format, ap);
         va_end(ap);
-        if (n > -1 && n < size) {
+        if (n > -1 && n < (int) size) {
             result.resize(n);
             return StringView(std::move(result));
         }

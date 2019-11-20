@@ -110,7 +110,7 @@ SteadyClock SteadyClock::now()
 
 double SteadyClock::timeIntervalSinceSteadyClock(const SteadyClock &other) const
 {
-    return (double) (*this - other).count() / 1E9;
+    return std::chrono::duration_cast<std::chrono::nanoseconds>((*this - other)).count() * 1E9;
 }
 
 double SteadyClock::timeIntervalSinceNow() const
