@@ -110,7 +110,7 @@ SteadyClock SteadyClock::now()
 
 double SteadyClock::timeIntervalSinceSteadyClock(const SteadyClock &other) const
 {
-    return (double) (*this - other).count() / 1E9;
+    return (double) (*this - other).count() / 1E6;
 }
 
 double SteadyClock::timeIntervalSinceNow() const
