@@ -1,8 +1,8 @@
 #!/bin/bash
 
 showUsage() {
-    echo """USAGE
-  bash $0 
+    echo """\
+  USAGE: bash $0 
        -p/--platform iOS/macOS
        -l/--language ObjC/Swift
        [-c/--configuration Debug/Release]
