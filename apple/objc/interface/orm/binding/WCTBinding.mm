@@ -85,9 +85,11 @@ WCTBinding::WCTBinding(Class cls)
     if ([m_cls respondsToSelector:@selector(additionalObjectRelationalMapping:)]) {
         [m_cls additionalObjectRelationalMapping:*this];
     }
-    
+
+#if WCDB_WECHAT
     // 兼容微信
     m_columnDefs.alphabeticallyCaseInsensiveSort();
+#endif
 }
 
 void WCTBinding::assertNoInheritance(const WCTProperty &property, Class cls)
