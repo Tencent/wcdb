@@ -125,30 +125,18 @@
             && error.code == WCTErrorCodeNotice) {
             NSDictionary* userInfo = error.userInfo;
             if ([error.message isEqualToString:@"Mechanic Retrieve Report."]) {
-                TestCaseAssertEqual(mechanicCost, 0);
-                TestCaseAssertEqual(mechanicSize, 0);
-                TestCaseAssertEqual(mechanicSpeed, 0);
-                TestCaseAssertEqual(mechanicWeight, 0);
-                TestCaseAssertEqual(mechanicScore, 0);
                 mechanicCost = ((NSString*) [userInfo objectForKey:@"Cost"]).doubleValue;
                 mechanicSize = ((NSString*) [userInfo objectForKey:@"Size"]).doubleValue;
                 mechanicSpeed = ((NSString*) [userInfo objectForKey:@"Speed"]).doubleValue;
                 mechanicWeight = ((NSString*) [userInfo objectForKey:@"Weight"]).doubleValue;
                 mechanicScore = ((NSString*) [userInfo objectForKey:@"Score"]).doubleValue;
             } else if ([error.message isEqualToString:@"Crawler Retrieve Report."]) {
-                TestCaseAssertEqual(crawlerCost, 0);
-                TestCaseAssertEqual(crawlerSize, 0);
-                TestCaseAssertEqual(crawlerSpeed, 0);
-                TestCaseAssertEqual(crawlerWeight, 0);
-                TestCaseAssertEqual(crawlerScore, 0);
                 crawlerCost = ((NSString*) [userInfo objectForKey:@"Cost"]).doubleValue;
                 crawlerSize = ((NSString*) [userInfo objectForKey:@"Size"]).doubleValue;
                 crawlerSpeed = ((NSString*) [userInfo objectForKey:@"Speed"]).doubleValue;
                 crawlerWeight = ((NSString*) [userInfo objectForKey:@"Weight"]).doubleValue;
                 crawlerScore = ((NSString*) [userInfo objectForKey:@"Score"]).doubleValue;
             } else if ([error.message isEqualToString:@"Summary Retrieve Report."]) {
-                TestCaseAssertEqual(summaryCost, 0);
-                TestCaseAssertEqual(summaryScore, 0);
                 summaryCost = ((NSString*) [userInfo objectForKey:@"Cost"]).doubleValue;
                 summaryScore = ((NSString*) [userInfo objectForKey:@"Score"]).doubleValue;
             }
