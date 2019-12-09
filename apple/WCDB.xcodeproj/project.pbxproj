@@ -776,6 +776,28 @@
 		3980ABBA22D44F5300047AA9 /* MigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327BB022CF2C5400AABD4B /* MigrationBenchmark.mm */; };
 		3980ABBB22D44F5300047AA9 /* TableMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327BB122CF2C5400AABD4B /* TableMigrationBenchmark.mm */; };
 		3980ABBC22D44F5300047AA9 /* DatabaseMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327BB222CF2C5400AABD4B /* DatabaseMigrationBenchmark.mm */; };
+		398B46BC239E22F4008CF7C5 /* Dispatch.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B4F22CF275000AABD4B /* Dispatch.mm */; };
+		398B46DE239E22F4008CF7C5 /* ObjectsBasedFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B9722CF276600AABD4B /* ObjectsBasedFactory.mm */; };
+		398B46E9239E22F4008CF7C5 /* PrototypeFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B9922CF276600AABD4B /* PrototypeFactory.mm */; };
+		398B46EB239E22F4008CF7C5 /* Signpost.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B4E22CF275000AABD4B /* Signpost.mm */; };
+		398B46ED239E22F4008CF7C5 /* WCTDatabase+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B5522CF275100AABD4B /* WCTDatabase+TestCase.mm */; };
+		398B46F2239E22F4008CF7C5 /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B4B22CF275000AABD4B /* NSObject+TestCase.mm */; };
+		398B46F3239E22F4008CF7C5 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AE422CF271E00AABD4B /* CRUDTestCase.mm */; };
+		398B46FF239E22F4008CF7C5 /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B7A22CF275800AABD4B /* Random.mm */; settings = {COMPILER_FLAGS = "-fno-sanitize=signed-integer-overflow -fno-sanitize=unsigned-integer-overflow"; }; };
+		398B4701239E22F4008CF7C5 /* TablesBasedFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B9E22CF276600AABD4B /* TablesBasedFactory.mm */; };
+		398B4707239E22F4008CF7C5 /* TestCaseLog.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B5422CF275100AABD4B /* TestCaseLog.mm */; };
+		398B470A239E22F4008CF7C5 /* BaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AE222CF271E00AABD4B /* BaseTestCase.mm */; };
+		398B470C239E22F4008CF7C5 /* Benchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AD522CF271D00AABD4B /* Benchmark.mm */; };
+		398B4711239E22F4008CF7C5 /* SizeBasedFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B9B22CF276600AABD4B /* SizeBasedFactory.mm */; };
+		398B4729239E22F4008CF7C5 /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B8D22CF275F00AABD4B /* AllTypesObject.mm */; };
+		398B4746239E22F4008CF7C5 /* Random+TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B7722CF275800AABD4B /* Random+TestCaseObject.mm */; };
+		398B474A239E22F4008CF7C5 /* TableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AE522CF271E00AABD4B /* TableTestCase.mm */; };
+		398B474C239E22F4008CF7C5 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B8922CF275F00AABD4B /* TestCaseObject.mm */; };
+		398B474E239E22F4008CF7C5 /* Random+WCDB.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B7922CF275800AABD4B /* Random+WCDB.mm */; };
+		398B474F239E22F4008CF7C5 /* TestCaseCounter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B5322CF275100AABD4B /* TestCaseCounter.mm */; };
+		398B4757239E22F4008CF7C5 /* TestCaseResult.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B5222CF275100AABD4B /* TestCaseResult.mm */; };
+		398B4758239E22F4008CF7C5 /* DatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AE322CF271E00AABD4B /* DatabaseTestCase.mm */; };
+		398B475E239E22F4008CF7C5 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		3995150722C2095B008394CC /* WCTOptional.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3995150622C2095B008394CC /* WCTOptional.mm */; };
 		39A3341922B0DD9F008EA5D5 /* WCTFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 39A3341722B0DD9F008EA5D5 /* WCTFoundation.h */; };
 		39A3341B22B0DD9F008EA5D5 /* WCTFoundation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39A3341822B0DD9F008EA5D5 /* WCTFoundation.mm */; };
@@ -825,6 +847,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 23F5BBCF20887FAB000CCD37;
 			remoteInfo = "sqlcipher static";
+		};
+		398B46AD239E22F4008CF7C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239E8A6F2160A5B100BCB308;
+			remoteInfo = Host;
+		};
+		398B46AF239E22F4008CF7C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239326601E836D7300D677CC;
+			remoteInfo = WCDB;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -1702,6 +1738,7 @@
 		3969018E233B20BC006EEFD4 /* WCTTableProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTTableProtocol.h; sourceTree = "<group>"; };
 		39690192233B2235006EEFD4 /* WCTTable+Table.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTTable+Table.h"; sourceTree = "<group>"; };
 		39690193233B2235006EEFD4 /* WCTTable+Table.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTTable+Table.mm"; sourceTree = "<group>"; };
+		398B4763239E22F4008CF7C5 /* WeChatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeChatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3995150622C2095B008394CC /* WCTOptional.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTOptional.mm; sourceTree = "<group>"; };
 		39A3341722B0DD9F008EA5D5 /* WCTFoundation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTFoundation.h; sourceTree = "<group>"; };
 		39A3341822B0DD9F008EA5D5 /* WCTFoundation.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTFoundation.mm; sourceTree = "<group>"; };
@@ -1755,6 +1792,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		398B475D239E22F4008CF7C5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				398B475E239E22F4008CF7C5 /* WCDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2879,6 +2924,7 @@
 				234F035C227A9CFE00DD65A2 /* Tests.xctest */,
 				234F0745227AAE4B00DD65A2 /* WCDBSwift.framework */,
 				234F8AD4227B0B5400791E45 /* SwiftTests.xctest */,
+				398B4763239E22F4008CF7C5 /* WeChatTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3775,6 +3821,25 @@
 			productReference = 239E8A702160A5B100BCB308 /* Host.app */;
 			productType = "com.apple.product-type.application";
 		};
+		398B46AB239E22F4008CF7C5 /* WeChatTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 398B4760239E22F4008CF7C5 /* Build configuration list for PBXNativeTarget "WeChatTests" */;
+			buildPhases = (
+				398B46B0239E22F4008CF7C5 /* Sources */,
+				398B475D239E22F4008CF7C5 /* Frameworks */,
+				398B475F239E22F4008CF7C5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				398B46AC239E22F4008CF7C5 /* PBXTargetDependency */,
+				398B46AE239E22F4008CF7C5 /* PBXTargetDependency */,
+			);
+			name = WeChatTests;
+			productName = TestCase;
+			productReference = 398B4763239E22F4008CF7C5 /* WeChatTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -3832,6 +3897,7 @@
 				234F0744227AAE4B00DD65A2 /* WCDBSwift */,
 				234F8AD3227B0B5400791E45 /* SwiftTests */,
 				239E8A6F2160A5B100BCB308 /* Host */,
+				398B46AB239E22F4008CF7C5 /* WeChatTests */,
 			);
 		};
 /* End PBXProject section */
@@ -3876,6 +3942,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		239E8A6E2160A5B100BCB308 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		398B475F239E22F4008CF7C5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -4414,6 +4487,34 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		398B46B0239E22F4008CF7C5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				398B46BC239E22F4008CF7C5 /* Dispatch.mm in Sources */,
+				398B46DE239E22F4008CF7C5 /* ObjectsBasedFactory.mm in Sources */,
+				398B46E9239E22F4008CF7C5 /* PrototypeFactory.mm in Sources */,
+				398B46EB239E22F4008CF7C5 /* Signpost.mm in Sources */,
+				398B46ED239E22F4008CF7C5 /* WCTDatabase+TestCase.mm in Sources */,
+				398B46F2239E22F4008CF7C5 /* NSObject+TestCase.mm in Sources */,
+				398B46F3239E22F4008CF7C5 /* CRUDTestCase.mm in Sources */,
+				398B46FF239E22F4008CF7C5 /* Random.mm in Sources */,
+				398B4701239E22F4008CF7C5 /* TablesBasedFactory.mm in Sources */,
+				398B4707239E22F4008CF7C5 /* TestCaseLog.mm in Sources */,
+				398B470A239E22F4008CF7C5 /* BaseTestCase.mm in Sources */,
+				398B470C239E22F4008CF7C5 /* Benchmark.mm in Sources */,
+				398B4711239E22F4008CF7C5 /* SizeBasedFactory.mm in Sources */,
+				398B4729239E22F4008CF7C5 /* AllTypesObject.mm in Sources */,
+				398B4746239E22F4008CF7C5 /* Random+TestCaseObject.mm in Sources */,
+				398B474A239E22F4008CF7C5 /* TableTestCase.mm in Sources */,
+				398B474C239E22F4008CF7C5 /* TestCaseObject.mm in Sources */,
+				398B474E239E22F4008CF7C5 /* Random+WCDB.mm in Sources */,
+				398B474F239E22F4008CF7C5 /* TestCaseCounter.mm in Sources */,
+				398B4757239E22F4008CF7C5 /* TestCaseResult.mm in Sources */,
+				398B4758239E22F4008CF7C5 /* DatabaseTestCase.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -4436,6 +4537,16 @@
 			isa = PBXTargetDependency;
 			name = "sqlcipher static";
 			targetProxy = 23F5BE0D20887FFF000CCD37 /* PBXContainerItemProxy */;
+		};
+		398B46AC239E22F4008CF7C5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239E8A6F2160A5B100BCB308 /* Host */;
+			targetProxy = 398B46AD239E22F4008CF7C5 /* PBXContainerItemProxy */;
+		};
+		398B46AE239E22F4008CF7C5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239326601E836D7300D677CC /* WCDB */;
+			targetProxy = 398B46AF239E22F4008CF7C5 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -4540,6 +4651,20 @@
 			};
 			name = Release;
 		};
+		398B4761239E22F4008CF7C5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 234F042F227A9EFA00DD65A2 /* Tests.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		398B4762239E22F4008CF7C5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 234F042F227A9EFA00DD65A2 /* Tests.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -4593,6 +4718,15 @@
 			buildConfigurations = (
 				23B5F7681E1111C100E58396 /* Debug */,
 				23B5F7691E1111C100E58396 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		398B4760239E22F4008CF7C5 /* Build configuration list for PBXNativeTarget "WeChatTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				398B4761239E22F4008CF7C5 /* Debug */,
+				398B4762239E22F4008CF7C5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
