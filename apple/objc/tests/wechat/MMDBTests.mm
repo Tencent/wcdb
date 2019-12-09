@@ -22,13 +22,7 @@
  * limitations under the License.
  */
 
-#import "TestCase.h"
-#import "MMDBMainData.h"
-#import "MMDBFactory.h"
-
-@interface MMDBTests : Benchmark
-@property(nonatomic, retain) NSString* tableName;
-@end
+#import "MMDBTests.h"
 
 @implementation MMDBTests {
     MMDBFactory* _factory;
@@ -66,14 +60,19 @@
     [self.database removeFiles];
 }
 
-- (void)test_get_max_time {
+- (void)doTestGetMaxTime {
     [self doMeasure:^{
         [self.database getValueOnResultColumn:DBMessage.createTime.max() fromTable:self.tableName];
     } setUp:^{
         [self setUpDatabase];
     } tearDown:^{
         [self tearDownDatabase];
-    } checkCorrectness: nil];
+    } checkCorrectness:nil];
+}
+
+#pragma mark - Tests
+- (void)test_get_max_time {
+    [self doTestGetMaxTime];
 }
 
 @end

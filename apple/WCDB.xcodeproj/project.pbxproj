@@ -802,6 +802,7 @@
 		398B47A2239E248D008CF7C5 /* MMDBTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 398B47A1239E248D008CF7C5 /* MMDBTests.mm */; };
 		398B47A5239E2540008CF7C5 /* MMDBFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 398B47A4239E2540008CF7C5 /* MMDBFactory.mm */; };
 		398B47A8239E2E89008CF7C5 /* Random+MMDBMainData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 398B47A7239E2E89008CF7C5 /* Random+MMDBMainData.mm */; };
+		398B47B0239E34E6008CF7C5 /* MMDBMigrationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 398B47AF239E34E6008CF7C5 /* MMDBMigrationTests.mm */; };
 		3995150722C2095B008394CC /* WCTOptional.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3995150622C2095B008394CC /* WCTOptional.mm */; };
 		39A3341922B0DD9F008EA5D5 /* WCTFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 39A3341722B0DD9F008EA5D5 /* WCTFoundation.h */; };
 		39A3341B22B0DD9F008EA5D5 /* WCTFoundation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39A3341822B0DD9F008EA5D5 /* WCTFoundation.mm */; };
@@ -1750,6 +1751,8 @@
 		398B47A4239E2540008CF7C5 /* MMDBFactory.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MMDBFactory.mm; sourceTree = "<group>"; };
 		398B47A6239E2E89008CF7C5 /* Random+MMDBMainData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Random+MMDBMainData.h"; sourceTree = "<group>"; };
 		398B47A7239E2E89008CF7C5 /* Random+MMDBMainData.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "Random+MMDBMainData.mm"; sourceTree = "<group>"; };
+		398B47AF239E34E6008CF7C5 /* MMDBMigrationTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MMDBMigrationTests.mm; sourceTree = "<group>"; };
+		398B47B1239E3525008CF7C5 /* MMDBTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMDBTests.h; sourceTree = "<group>"; };
 		3995150622C2095B008394CC /* WCTOptional.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTOptional.mm; sourceTree = "<group>"; };
 		39A3341722B0DD9F008EA5D5 /* WCTFoundation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTFoundation.h; sourceTree = "<group>"; };
 		39A3341822B0DD9F008EA5D5 /* WCTFoundation.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTFoundation.mm; sourceTree = "<group>"; };
@@ -3407,7 +3410,9 @@
 				398B479D239E246D008CF7C5 /* MMDBMainData.mm */,
 				398B47A6239E2E89008CF7C5 /* Random+MMDBMainData.h */,
 				398B47A7239E2E89008CF7C5 /* Random+MMDBMainData.mm */,
+				398B47B1239E3525008CF7C5 /* MMDBTests.h */,
 				398B47A1239E248D008CF7C5 /* MMDBTests.mm */,
+				398B47AF239E34E6008CF7C5 /* MMDBMigrationTests.mm */,
 				398B47A3239E2540008CF7C5 /* MMDBFactory.h */,
 				398B47A4239E2540008CF7C5 /* MMDBFactory.mm */,
 			);
@@ -4521,6 +4526,7 @@
 				398B46DE239E22F4008CF7C5 /* ObjectsBasedFactory.mm in Sources */,
 				398B46E9239E22F4008CF7C5 /* PrototypeFactory.mm in Sources */,
 				398B46EB239E22F4008CF7C5 /* Signpost.mm in Sources */,
+				398B47B0239E34E6008CF7C5 /* MMDBMigrationTests.mm in Sources */,
 				398B46ED239E22F4008CF7C5 /* WCTDatabase+TestCase.mm in Sources */,
 				398B46F2239E22F4008CF7C5 /* NSObject+TestCase.mm in Sources */,
 				398B46F3239E22F4008CF7C5 /* CRUDTestCase.mm in Sources */,
