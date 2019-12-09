@@ -798,6 +798,10 @@
 		398B4757239E22F4008CF7C5 /* TestCaseResult.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B5222CF275100AABD4B /* TestCaseResult.mm */; };
 		398B4758239E22F4008CF7C5 /* DatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AE322CF271E00AABD4B /* DatabaseTestCase.mm */; };
 		398B475E239E22F4008CF7C5 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
+		398B47A0239E2470008CF7C5 /* MMDBMainData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 398B479D239E246D008CF7C5 /* MMDBMainData.mm */; };
+		398B47A2239E248D008CF7C5 /* MMDBTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 398B47A1239E248D008CF7C5 /* MMDBTests.mm */; };
+		398B47A5239E2540008CF7C5 /* MMDBFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 398B47A4239E2540008CF7C5 /* MMDBFactory.mm */; };
+		398B47A8239E2E89008CF7C5 /* Random+MMDBMainData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 398B47A7239E2E89008CF7C5 /* Random+MMDBMainData.mm */; };
 		3995150722C2095B008394CC /* WCTOptional.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3995150622C2095B008394CC /* WCTOptional.mm */; };
 		39A3341922B0DD9F008EA5D5 /* WCTFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 39A3341722B0DD9F008EA5D5 /* WCTFoundation.h */; };
 		39A3341B22B0DD9F008EA5D5 /* WCTFoundation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39A3341822B0DD9F008EA5D5 /* WCTFoundation.mm */; };
@@ -1739,6 +1743,13 @@
 		39690192233B2235006EEFD4 /* WCTTable+Table.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTTable+Table.h"; sourceTree = "<group>"; };
 		39690193233B2235006EEFD4 /* WCTTable+Table.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTTable+Table.mm"; sourceTree = "<group>"; };
 		398B4763239E22F4008CF7C5 /* WeChatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeChatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		398B479C239E246D008CF7C5 /* MMDBMainData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDBMainData.h; sourceTree = "<group>"; };
+		398B479D239E246D008CF7C5 /* MMDBMainData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MMDBMainData.mm; sourceTree = "<group>"; };
+		398B47A1239E248D008CF7C5 /* MMDBTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MMDBTests.mm; sourceTree = "<group>"; };
+		398B47A3239E2540008CF7C5 /* MMDBFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMDBFactory.h; sourceTree = "<group>"; };
+		398B47A4239E2540008CF7C5 /* MMDBFactory.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MMDBFactory.mm; sourceTree = "<group>"; };
+		398B47A6239E2E89008CF7C5 /* Random+MMDBMainData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Random+MMDBMainData.h"; sourceTree = "<group>"; };
+		398B47A7239E2E89008CF7C5 /* Random+MMDBMainData.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "Random+MMDBMainData.mm"; sourceTree = "<group>"; };
 		3995150622C2095B008394CC /* WCTOptional.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTOptional.mm; sourceTree = "<group>"; };
 		39A3341722B0DD9F008EA5D5 /* WCTFoundation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTFoundation.h; sourceTree = "<group>"; };
 		39A3341822B0DD9F008EA5D5 /* WCTFoundation.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTFoundation.mm; sourceTree = "<group>"; };
@@ -2126,6 +2137,7 @@
 		234F0376227A9EFA00DD65A2 /* tests */ = {
 			isa = PBXGroup;
 			children = (
+				398B4765239E2426008CF7C5 /* wechat */,
 				234F0377227A9EFA00DD65A2 /* benchmark */,
 				234F0383227A9EFA00DD65A2 /* monitor */,
 				234F0386227A9EFA00DD65A2 /* host */,
@@ -3388,6 +3400,20 @@
 			path = factory;
 			sourceTree = "<group>";
 		};
+		398B4765239E2426008CF7C5 /* wechat */ = {
+			isa = PBXGroup;
+			children = (
+				398B479C239E246D008CF7C5 /* MMDBMainData.h */,
+				398B479D239E246D008CF7C5 /* MMDBMainData.mm */,
+				398B47A6239E2E89008CF7C5 /* Random+MMDBMainData.h */,
+				398B47A7239E2E89008CF7C5 /* Random+MMDBMainData.mm */,
+				398B47A1239E248D008CF7C5 /* MMDBTests.mm */,
+				398B47A3239E2540008CF7C5 /* MMDBFactory.h */,
+				398B47A4239E2540008CF7C5 /* MMDBFactory.mm */,
+			);
+			path = wechat;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -4499,12 +4525,16 @@
 				398B46F2239E22F4008CF7C5 /* NSObject+TestCase.mm in Sources */,
 				398B46F3239E22F4008CF7C5 /* CRUDTestCase.mm in Sources */,
 				398B46FF239E22F4008CF7C5 /* Random.mm in Sources */,
+				398B47A2239E248D008CF7C5 /* MMDBTests.mm in Sources */,
 				398B4701239E22F4008CF7C5 /* TablesBasedFactory.mm in Sources */,
 				398B4707239E22F4008CF7C5 /* TestCaseLog.mm in Sources */,
 				398B470A239E22F4008CF7C5 /* BaseTestCase.mm in Sources */,
 				398B470C239E22F4008CF7C5 /* Benchmark.mm in Sources */,
+				398B47A8239E2E89008CF7C5 /* Random+MMDBMainData.mm in Sources */,
+				398B47A0239E2470008CF7C5 /* MMDBMainData.mm in Sources */,
 				398B4711239E22F4008CF7C5 /* SizeBasedFactory.mm in Sources */,
 				398B4729239E22F4008CF7C5 /* AllTypesObject.mm in Sources */,
+				398B47A5239E2540008CF7C5 /* MMDBFactory.mm in Sources */,
 				398B4746239E22F4008CF7C5 /* Random+TestCaseObject.mm in Sources */,
 				398B474A239E22F4008CF7C5 /* TableTestCase.mm in Sources */,
 				398B474C239E22F4008CF7C5 /* TestCaseObject.mm in Sources */,

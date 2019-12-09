@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/07/05
+// Created by sanhuazhang on 2019/12/9.
 //
 
 /*
@@ -22,35 +22,15 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "Random.h"
+#import "MMDBMainData.h"
 
-@interface Random : NSObject
+NS_ASSUME_NONNULL_BEGIN
 
-+ (instancetype)shared;
+@interface Random (MMDBMainData)
 
-- (void)setStable:(BOOL)stable;
-
-- (uint64_t)uint64;
-- (uint32_t)uint32;
-- (uint8_t)uint8;
-
-- (int64_t)int64;
-- (int32_t)int32;
-
-- (double)double_;
-- (float)float_;
-- (float)float_0_1;
-
-- (BOOL)boolean;
-
-- (NSNumber*)number;
-
-- (NSString*)string;
-
-- (NSData*)data;
-- (NSData*)dataWithLength:(NSInteger)length;
-- (NSData*)dataOtherThan:(NSData*)other;
-
-- (NSDate*)date;
+- (NSArray<DBMessage*>*)autoIncrementDBMessages:(NSInteger)count;
 
 @end
+
+NS_ASSUME_NONNULL_END
