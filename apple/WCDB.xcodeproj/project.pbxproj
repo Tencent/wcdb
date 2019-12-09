@@ -1163,7 +1163,7 @@
 		234F8AB3227AF5A900791E45 /* Column.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Column.swift; sourceTree = "<group>"; };
 		234F8AB7227AF78C00791E45 /* SQL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQL.swift; sourceTree = "<group>"; };
 		234F8AB9227AF9D000791E45 /* BindParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindParameter.swift; sourceTree = "<group>"; };
-		234F8AD4227B0B5400791E45 /* TestsSwift.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestsSwift.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		234F8AD4227B0B5400791E45 /* SwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		234F8AE0227B0BF300791E45 /* ColumnTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnTests.swift; sourceTree = "<group>"; };
 		234F8AE2227B292900791E45 /* WINQAssertion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WINQAssertion.swift; sourceTree = "<group>"; };
 		23545B962224E8270091C981 /* SyntaxAssertion.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SyntaxAssertion.hpp; sourceTree = "<group>"; };
@@ -2878,7 +2878,7 @@
 				239E8A702160A5B100BCB308 /* Host.app */,
 				234F035C227A9CFE00DD65A2 /* Tests.xctest */,
 				234F0745227AAE4B00DD65A2 /* WCDBSwift.framework */,
-				234F8AD4227B0B5400791E45 /* TestsSwift.xctest */,
+				234F8AD4227B0B5400791E45 /* SwiftTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3720,9 +3720,9 @@
 			productReference = 234F0745227AAE4B00DD65A2 /* WCDBSwift.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		234F8AD3227B0B5400791E45 /* TestsSwift */ = {
+		234F8AD3227B0B5400791E45 /* SwiftTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 234F8ADC227B0B5400791E45 /* Build configuration list for PBXNativeTarget "TestsSwift" */;
+			buildConfigurationList = 234F8ADC227B0B5400791E45 /* Build configuration list for PBXNativeTarget "SwiftTests" */;
 			buildPhases = (
 				234F8AD0227B0B5400791E45 /* Sources */,
 				234F8AD1227B0B5400791E45 /* Frameworks */,
@@ -3733,9 +3733,9 @@
 			dependencies = (
 				234F8ADB227B0B5400791E45 /* PBXTargetDependency */,
 			);
-			name = TestsSwift;
+			name = SwiftTests;
 			productName = TestsSwift;
-			productReference = 234F8AD4227B0B5400791E45 /* TestsSwift.xctest */;
+			productReference = 234F8AD4227B0B5400791E45 /* SwiftTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		239326601E836D7300D677CC /* WCDB */ = {
@@ -3830,7 +3830,7 @@
 				239326601E836D7300D677CC /* WCDB */,
 				234F035B227A9CFE00DD65A2 /* Tests */,
 				234F0744227AAE4B00DD65A2 /* WCDBSwift */,
-				234F8AD3227B0B5400791E45 /* TestsSwift */,
+				234F8AD3227B0B5400791E45 /* SwiftTests */,
 				239E8A6F2160A5B100BCB308 /* Host */,
 			);
 		};
@@ -4561,7 +4561,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		234F8ADC227B0B5400791E45 /* Build configuration list for PBXNativeTarget "TestsSwift" */ = {
+		234F8ADC227B0B5400791E45 /* Build configuration list for PBXNativeTarget "SwiftTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				234F8ADD227B0B5400791E45 /* Debug */,
