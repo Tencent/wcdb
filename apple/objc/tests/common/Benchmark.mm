@@ -78,7 +78,9 @@
 
                            [self log:@"%d passed.", i];
 
-                           correctnessBlock();
+                           if (correctnessBlock != nil) {
+                               correctnessBlock()
+                           }
 
                            if (tearDownBlock != nil) {
                                tearDownBlock();
