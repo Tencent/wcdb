@@ -35,7 +35,7 @@
         message.isAutoIncrement = YES;
         message.version = random.uint32;
         message.msgServerId = random.int64;
-        message.createTime = (UInt32)random.date.timeIntervalSince1970;
+        message.createTime = random.uint32;
         message.message = random.string;
         message.status = random.uint32;
         message.imageStatus = random.uint32;
