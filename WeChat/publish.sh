@@ -4,7 +4,9 @@ root=`git rev-parse --show-toplevel`
 
 # Bump
 version=`cat "$root"/VERSION`
-sh "$root"/tools/version/bump.sh -v "$version"
+if ! bash "$root"/tools/version/bump.sh -v "$version"; then
+    exit 1
+fi
 git push origin WeChat/iOS:WeChat/iOS
 
 wechat="$root"/WeChat
@@ -42,6 +44,6 @@ echo $version.$build.$gitHash > "$conan"/WCDB_COMMIT_ID
 version=1.0.$build
 
 # publish to conan
-sh "$wechat"/publish_to_conan.sh -p ios -d "$conan" -n "WCDB" -v "$version"
+bash "$wechat"/publish_to_conan.sh -p ios -d "$conan" -n "WCDB" -v "$version"
 
 echo "WCDB is up to ${version}"
