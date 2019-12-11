@@ -48,19 +48,7 @@ echo "Bumping $version.$build"
 echo "$version" > "$root"/VERSION
 echo "$build" > "$root"/BUILD
 
-# ObjC Version
-template="$root"/tools/version/template.xcconfig
-xcconfig="$root"/apple/support/Version.xcconfig
-time=`date +"%Y-%m-%d %H:%M:%S UTC%z"`
-echo $time
-sed -e "s/WCDB_VERSION_PLACEHOLDER/""$version""/g" \
-    -e "s/WCDB_BUILD_PLACEHOLDER/""$build""/g" \
-    -e "s/WCDB_TIMESTAMP_PLACEHOLDER/""$time""/g" \
-    "$template" > "$xcconfig"
-git add "$xcconfig"
-
 git add "$root"/VERSION
 git add "$root"/BUILD
 
-gitMessage="Bump $version.$build"
-git commit -m "$gitMessage"
+git commit -m "Bump $version.$build"

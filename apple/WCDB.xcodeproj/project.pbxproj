@@ -1724,7 +1724,6 @@
 		3934DAEA229B6659008A6AEC /* OperationQueue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OperationQueue.hpp; sourceTree = "<group>"; };
 		3934DB25229B951C008A6AEC /* AutoCheckpointConfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AutoCheckpointConfig.hpp; sourceTree = "<group>"; };
 		39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CaseInsensiveList.hpp; sourceTree = "<group>"; };
-		3949CC2622977428007F4C94 /* Version.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Version.xcconfig; sourceTree = "<group>"; };
 		39579856227FBC8A0069F985 /* WCTDatabase+Test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Test.h"; sourceTree = "<group>"; };
 		39579857227FBC8A0069F985 /* WCTDatabase+Test.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Test.mm"; sourceTree = "<group>"; };
 		3957985C227FD2370069F985 /* Syntax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Syntax.swift; sourceTree = "<group>"; };
@@ -3306,7 +3305,6 @@
 				234F036C227A9E3D00DD65A2 /* Release.xcconfig */,
 				234F0369227A9E3C00DD65A2 /* Info.plist */,
 				234F036E227A9E3D00DD65A2 /* WCDB.modulemap */,
-				3949CC2622977428007F4C94 /* Version.xcconfig */,
 				234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */,
 			);
 			path = support;

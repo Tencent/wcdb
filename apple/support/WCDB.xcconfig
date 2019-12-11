@@ -1,4 +1,3 @@
-#include "Version.xcconfig"
 #include "../../sqlcipher/macosx/SQLite.xcconfig"
 
 // Linking

@@ -65,10 +65,17 @@ case "$key" in
 esac
 done
 
+# version
+time=`date +"%Y-%m-%d %H:%M:%S UTC%z"`
+version=`cat $root/VERSION`
+build=`cat $root/BUILD`
+echo "Building $version/$build"
+
 project="$root"/apple/WCDB.xcodeproj
 derivedData="$destination"/derivedData
 products="$derivedData"/Build/Products
-settings=(ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= SKIP_INSTALL=YES GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=NO CLANG_ENABLE_CODE_COVERAGE=NO ENABLE_TESTABILITY=NO GCC_PREPROCESSOR_DEFINITIONS="\$\(inherited\)\ WCDB_WECHAT=1" DEPLOYMENT_POSTPROCESSING=NO)
+
+settings=(ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= SKIP_INSTALL=YES GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=NO CLANG_ENABLE_CODE_COVERAGE=NO ENABLE_TESTABILITY=NO GCC_PREPROCESSOR_DEFINITIONS="\$\(inherited\)\ WCDB_TIMESTAMP=$time WCDB_VERSION=$version WCDB_BUILD=$build")
 
 if $static_framework; then
     if [ "$language" != "ObjC" ] || [ "$platform" != "iOS" ]; then
@@ -124,11 +131,11 @@ for platformBasedParameter in "${platformBasedParameters[@]}"; do
     if [ -z "$template" ]; then
         template="$product"
     fi
-    build="xcrun xcodebuild -arch "$arch" -scheme "$target" -project "$project" -configuration "$configuration" -derivedDataPath "$derivedData" -sdk "$sdk" ${settings[@]} build"
+    builder="xcrun xcodebuild -arch "$arch" -scheme "$target" -project "$project" -configuration "$configuration" -derivedDataPath "$derivedData" -sdk "$sdk" ${settings[@]} build"
     if type xcpretty > /dev/null; then
-        build+=" | xcpretty"
+        builder+=" | xcpretty"
     fi
-    if ! eval $build; then
+    if ! eval "$builder"; then
         echo "Build failed."
         exit 1
     fi

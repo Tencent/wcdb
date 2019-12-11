@@ -24,26 +24,24 @@
 
 #pragma once
 
-/* This file is generated automatically by `tools/version/bump.sh`. */
-
 #define WCDB_IDENTIFIER "bfd56a1a2d98b0b21babd84fcf6db4ac"
 
 #ifdef WCDB_TIMESTAMP
 #define WCDB_TIMESTAMP_STRING WCDB_STRINGIFY(WCDB_TIMESTAMP)
 #else
-#define WCDB_TIMESTAMP_STRING "Undefine Timestamp"
+#define WCDB_TIMESTAMP_STRING "Custom build"
 #endif
 
 #ifdef WCDB_VERSION
 #define WCDB_VERSION_STRING WCDB_STRINGIFY(WCDB_VERSION)
 #else
-#define WCDB_VERSION_STRING "Undefined Version"
+#define WCDB_VERSION_STRING "Custom build"
 #endif
 
 #ifdef WCDB_BUILD
 #define WCDB_BUILD_STRING WCDB_STRINGIFY(WCDB_BUILD)
 #else
-#define WCDB_BUILD_STRING "Undefined Build"
+#define WCDB_BUILD_STRING "Custom Build"
 #endif
 
 #define WCDB_SOURCE_ID                                                         \
