@@ -29,7 +29,7 @@ mv "$build"/WCDB.framework "$conan"/WCDB.framework
 
 # generate WCDB_COMMIT_ID file for recording the commit hash
 time=`date +"%Y%m%d.%H%M%S"`
-gitHash=`git rev-parse HEAD`
+gitHash=`git rev-parse --short HEAD`
 version="$time.$gitHash"
 echo $version > "$conan"/WCDB_COMMIT_ID
 
