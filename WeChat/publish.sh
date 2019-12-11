@@ -2,13 +2,6 @@
 
 root=`git rev-parse --show-toplevel`
 
-# Bump
-version=`cat "$root"/VERSION`
-if ! bash "$root"/tools/version/bump.sh -v "$version"; then
-    exit 1
-fi
-git push origin WeChat/iOS:WeChat/iOS
-
 wechat="$root"/WeChat
 build="$wechat"/build
 conan="$wechat"/conan
@@ -35,13 +28,10 @@ mkdir "$conan"
 mv "$build"/WCDB.framework "$conan"/WCDB.framework
 
 # generate WCDB_COMMIT_ID file for recording the commit hash
-version=`cat "$root"/VERSION`
-build=`cat "$root"/BUILD`
+time=`date +"%Y%m%d.%H%M%S"`
 gitHash=`git rev-parse HEAD`
-echo $version.$build.$gitHash > "$conan"/WCDB_COMMIT_ID
-
-# 1.0.build for current WCDB version 1.1.0.build (skipping first major version number)
-version=1.0.$build
+version="$time.$gitHash"
+echo $version > "$conan"/WCDB_COMMIT_ID
 
 # publish to conan
 bash "$wechat"/publish_to_conan.sh -p ios -d "$conan" -n "WCDB" -v "$version"
