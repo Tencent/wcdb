@@ -14,7 +14,7 @@ then
     rm -r "$build"
 fi
 mkdir "$build"
-if ! bash "$build_tool" --platform iOS --language ObjC --disable-bitcode --static-framework --destination "$build"; then
+if ! bash "$build_tool" --platform iOS --language ObjC --configuration Release --destination "$build" --disable-bitcode --static-framework --wechat; then
     exit 1
 fi
 

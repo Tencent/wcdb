@@ -11,6 +11,7 @@ showUsage() {
        [--disable-bitcode]: Use bitcode if not specified.
        [--static-framework]: Produce dynamic framework if not specified.
        [--pretty]: Use \`xcpretty\` if available.
+       [--wechat]: For WeChat.
 """
 }
 
@@ -25,6 +26,7 @@ static_framework=false
 configuration=Release
 pretty=false
 action=build
+wechat=false
 
 while [[ $# -gt 0 ]]
 do
@@ -67,6 +69,10 @@ case "$key" in
     pretty=true
     shift
     ;;
+    --wechat)
+    wechat=true
+    shift
+    ;;
     -h|--help)
     showUsage
     exit 0
@@ -91,8 +97,13 @@ preprocessor="\$\(inherited\)"
 preprocessor+="\ WCDB_TIMESTAMP=\\\"\"${timestamp}\\\"\""
 preprocessor+="\ WCDB_VERSION=\\\"\"${version}\\\"\""
 preprocessor+="\ WCDB_BUILD=\\\"\"${build}\\\"\""
+if ${wechat}; then
+    preprocessor+="\ WCDB_WECHAT=1"
+fi
 settings=(ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= SKIP_INSTALL=YES GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=NO CLANG_ENABLE_CODE_COVERAGE=NO ENABLE_TESTABILITY=NO GCC_PREPROCESSOR_DEFINITIONS=${preprocessor})
-settings+=(DEPLOYMENT_POSTPROCESSING=NO)
+if ${wechat}; then
+    settings+=(DEPLOYMENT_POSTPROCESSING=NO)
+fi
 
 if $static_framework; then
     if [ "$language" != "ObjC" ] || [ "$platform" != "iOS" ]; then
