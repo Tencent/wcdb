@@ -87,8 +87,12 @@ project="$root"/apple/WCDB.xcodeproj
 derivedData="$destination"/derivedData
 products="$derivedData"/Build/Products
 
-preprocessor="\$\(inherited\) WCDB_TIMESTAMP=\"$timestamp\" WCDB_VERSION=\"$version\" WCDB_BUILD=\"$build\" WCDB_WECHAT=1"
-settings=(ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= SKIP_INSTALL=YES GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=NO CLANG_ENABLE_CODE_COVERAGE=NO ENABLE_TESTABILITY=NO GCC_PREPROCESSOR_DEFINITIONS=${preprocessor} DEPLOYMENT_POSTPROCESSING=NO)
+preprocessor="\$\(inherited\)"
+preprocessor+="\ WCDB_TIMESTAMP=\\\"\"${timestamp}\\\"\""
+preprocessor+="\ WCDB_VERSION=\\\"\"${version}\\\"\""
+preprocessor+="\ WCDB_BUILD=\\\"\"${build}\\\"\""
+settings=(ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= SKIP_INSTALL=YES GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=NO CLANG_ENABLE_CODE_COVERAGE=NO ENABLE_TESTABILITY=NO GCC_PREPROCESSOR_DEFINITIONS=${preprocessor})
+settings+=(DEPLOYMENT_POSTPROCESSING=NO)
 
 if $static_framework; then
     if [ "$language" != "ObjC" ] || [ "$platform" != "iOS" ]; then
