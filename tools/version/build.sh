@@ -5,11 +5,11 @@ showUsage() {
   USAGE: bash $0 
        -p/--platform iOS/macOS
        -l/--language ObjC/Swift
-       [-c/--configuration Debug/Release]
-       [-d/--destination destination]
-       [--disable-bitcode] 
-       [--static-framework]
-       [--pretty]
+       [-c/--configuration Debug/Release]: Default to Release.
+       [-d/--destination destination]: Default to current directory.
+       [--disable-bitcode]: Use bitcode if not specified.
+       [--static-framework]: Produce dynamic framework if not specified.
+       [--pretty]: Use \`xcpretty\` if available.
 """
 }
 
