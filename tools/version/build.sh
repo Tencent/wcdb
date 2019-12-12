@@ -7,6 +7,7 @@ showUsage() {
        -l/--language ObjC/Swift
        [-c/--configuration Debug/Release]: Default to Release.
        [-d/--destination destination]: Default to current directory.
+       [--test]: Enable test.
        [--disable-bitcode]: Use bitcode if not specified.
        [--static-framework]: Produce dynamic framework if not specified.
        [--pretty]: Use \`xcpretty\` if available.
@@ -19,10 +20,11 @@ declare platform
 declare language
 destination="."
 contains_32bit=false
-disable_bitcode=false
+enable_bitcode=true
 static_framework=false
 configuration=Release
 pretty=false
+action=build
 
 while [[ $# -gt 0 ]]
 do
@@ -43,26 +45,31 @@ case "$key" in
     shift
     shift
     ;;
-    --disable-bitcode)
-    disable_bitcode=true
+    --test)
+    action=test
     shift
-    ;;
-    --static-framework)
-    static_framework=true
     shift
-    ;;
-    -h|--help)
-    showUsage
-    exit 0
     ;;
     -c|--configuration)
     configuration="$2"
     shift
     shift
     ;;
+    --disable-bitcode)
+    enable_bitcode=false
+    shift
+    ;;
+    --static-framework)
+    static_framework=true
+    shift
+    ;;
     --pretty)
     pretty=true
     shift
+    ;;
+    -h|--help)
+    showUsage
+    exit 0
     ;;
     *)
     showUsage
@@ -75,7 +82,6 @@ done
 timestamp=`date +"%Y-%m-%d %H:%M:%S UTC%z"`
 version=`cat $root/VERSION`
 build=`cat $root/BUILD`
-echo "Building $version/$build"
 
 project="$root"/apple/WCDB.xcodeproj
 derivedData="$destination"/derivedData
@@ -90,7 +96,7 @@ if $static_framework; then
     fi
     settings+=(MACH_O_TYPE=staticlib STRIP_STYLE=debugging LLVM_LTO=NO STRIP_INSTALLED_PRODUCT=NO DEPLOYMENT_POSTPROCESSING=NO)
 fi
-if $disable_bitcode; then
+if ! $enable_bitcode; then
     settings+=(ENABLE_BITCODE=NO)
 fi
 
@@ -125,6 +131,19 @@ case "$platform" in
 esac
 
 # build
+log="Building $version/$build ..."
+
+echo "Building $version/$build ..."
+echo "    Action: ${action}"
+echo "    Language: ${language}"
+echo "    Platform: ${platform}"
+echo "    Configuration: ${configuration}"
+echo "    Destination: ${destination}"
+echo "    Bitcode: ${enable_bitcode}"
+echo "    Static: ${static_framework}"
+echo "    Pretty: ${pretty}"
+echo ""
+
 if [ -d "$derivedData" ]
 then
     rm -r "$derivedData"
@@ -137,7 +156,7 @@ for platformBasedParameter in "${platformBasedParameters[@]}"; do
     if [ -z "$template" ]; then
         template="$product"
     fi
-    builder="xcrun xcodebuild -arch "$arch" -scheme "$target" -project "$project" -configuration "$configuration" -derivedDataPath "$derivedData" -sdk "$sdk" ${settings[@]} build"
+    builder="xcrun xcodebuild -arch "$arch" -scheme "$target" -project "$project" -configuration "$configuration" -derivedDataPath "$derivedData" -sdk "$sdk" ${settings[@]} ${action}"
     if $pretty; then
         if type xcpretty > /dev/null; then
             builder+=" | xcpretty"
