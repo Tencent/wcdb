@@ -9,6 +9,7 @@ showUsage() {
        [-d/--destination destination]
        [--disable-bitcode] 
        [--static-framework]
+       [--pretty]
 """
 }
 
@@ -21,6 +22,7 @@ contains_32bit=false
 disable_bitcode=false
 static_framework=false
 configuration=Release
+pretty=false
 
 while [[ $# -gt 0 ]]
 do
@@ -57,7 +59,11 @@ case "$key" in
     configuration="$2"
     shift
     shift
-    ;;    
+    ;;
+    --pretty)
+    pretty=true
+    shift
+    ;;
     *)
     showUsage
     exit 1
@@ -132,8 +138,10 @@ for platformBasedParameter in "${platformBasedParameters[@]}"; do
         template="$product"
     fi
     builder="xcrun xcodebuild -arch "$arch" -scheme "$target" -project "$project" -configuration "$configuration" -derivedDataPath "$derivedData" -sdk "$sdk" ${settings[@]} build"
-    if type xcpretty > /dev/null; then
-        builder+=" | xcpretty"
+    if $pretty; then
+        if type xcpretty > /dev/null; then
+            builder+=" | xcpretty"
+        fi
     fi
     if ! eval "$builder"; then
         echo "Build failed."
