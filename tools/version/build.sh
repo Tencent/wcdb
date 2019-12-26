@@ -19,7 +19,6 @@ root=`git rev-parse --show-toplevel`
 declare platform
 declare language
 destination="."
-contains_32bit=false
 enable_bitcode=true
 static_framework=false
 configuration=Release
@@ -133,9 +132,7 @@ case "$platform" in
 esac
 
 # build
-log="Building $version/$build ..."
-
-echo "Building $version/$build ..."
+echo "Building $version ..."
 echo "    Action: ${action}"
 echo "    Language: ${language}"
 echo "    Platform: ${platform}"
