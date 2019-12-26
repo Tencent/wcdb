@@ -24,13 +24,7 @@
 
 #pragma once
 
-#define WCDB_IDENTIFIER "bfd56a1a2d98b0b21babd84fcf6db4ac"
-
-#ifdef WCDB_TIMESTAMP
-#define WCDB_TIMESTAMP_STRING WCDB_STRINGIFY(WCDB_TIMESTAMP)
-#else
-#define WCDB_TIMESTAMP_STRING "Custom build"
-#endif
+#define WCDB_IDENTIFIER "8e3f0e2f9c9b06619b166bf3e2897b46"
 
 #ifdef WCDB_VERSION
 #define WCDB_VERSION_STRING WCDB_STRINGIFY(WCDB_VERSION)
@@ -45,4 +39,4 @@
 #endif
 
 #define WCDB_SOURCE_ID                                                         \
-    WCDB_IDENTIFIER ", " WCDB_VERSION_STRING "." WCDB_BUILD_STRING ", " WCDB_TIMESTAMP_STRING
+    WCDB_IDENTIFIER ", " WCDB_VERSION_STRING "." WCDB_BUILD_STRING

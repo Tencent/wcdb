@@ -41,7 +41,6 @@ void Console::fatal(const UnsafeStringView& message, const char* file, int line,
     error.infos.insert_or_assign("Line", line);
     error.infos.insert_or_assign("Func", function);
     error.infos.insert_or_assign("Version", WCDB_VERSION_STRING);
-    error.infos.insert_or_assign("Timestamp", WCDB_TIMESTAMP_STRING);
     error.infos.insert_or_assign("Build", WCDB_BUILD_STRING);
     auto callstacks = Console::callstacks();
     if (callstacks.has_value()) {
@@ -57,7 +56,6 @@ void Console::fatal(const UnsafeStringView& message)
     Error error(Error::Code::Misuse, Error::Level::Fatal, message);
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceAssertion);
     error.infos.insert_or_assign("Version", WCDB_VERSION_STRING);
-    error.infos.insert_or_assign("Timestamp", WCDB_TIMESTAMP_STRING);
     error.infos.insert_or_assign("Build", WCDB_BUILD_STRING);
     auto callstacks = Console::callstacks();
     if (callstacks.has_value()) {

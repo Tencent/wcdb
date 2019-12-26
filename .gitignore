@@ -19,4 +19,8 @@ xcuserdata/*
 *.xcworkspace
 DerivedData
 
+# WCDB
+WCDB.framework
+
+# WeChat
 WeChat/conan/*
