@@ -92,6 +92,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)bindProperties:(const WCTProperties &)properties
               ofObject:(WCTObject *)object;
 
+- (int)bindParameterIndex:(const WCDB::BindParameter &)parameter;
+
 #pragma mark - Extract Row Data
 - (int)extractNumberOfColumns;
 

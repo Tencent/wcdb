@@ -385,6 +385,12 @@
     }
 }
 
+- (int)bindParameterIndex:(const WCDB::BindParameter &)parameter
+{
+    WCTHandleAssert(return 0;);
+    return _handle->bindParameterIndex(parameter.getDescription());
+}
+
 #pragma mark - Get
 - (int32_t)extractInteger32AtIndex:(int)index
 {

@@ -215,6 +215,11 @@ void Handle::bindNull(int index)
     m_mainStatement->bindNull(index);
 }
 
+int Handle::bindParameterIndex(const Text &parameterName)
+{
+    return m_mainStatement->bindParameterIndex(parameterName);
+}
+
 Handle::Integer32 Handle::getInteger32(int index)
 {
     return m_mainStatement->getInteger32(index);

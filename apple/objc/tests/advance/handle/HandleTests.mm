@@ -313,4 +313,28 @@
     }
 }
 
+- (void)test_bind_index
+{
+    NSString* value = Random.shared.string;
+    TestCaseAssertTrue(value != nil);
+    {
+        WCDB::BindParameter parameter = WCDB::BindParameter::colon("data");
+        WCDB::Statement insert = WCDB::StatementInsert()
+        .insertIntoTable(self.tableName)
+        .columns({ TestCaseObject.identifier, TestCaseObject.content })
+        .values({ 3, parameter});
+        TestCaseAssertTrue([self.handle prepare:insert]);
+        [self.handle bindString:value toIndex:[self.handle bindParameterIndex:parameter]];
+
+        TestCaseAssertTrue([self.handle step]);
+        [self.handle finalizeStatement];
+    }
+    {
+        TestCaseAssertTrue([self.handle prepare:self.statementSelect]);
+        TestCaseAssertTrue([self.handle step]);
+        TestCaseAssertTrue([[self.handle extractStringAtIndex:0] isEqualToString:value]);
+        [self.handle finalizeStatement];
+    }
+}
+
 @end
