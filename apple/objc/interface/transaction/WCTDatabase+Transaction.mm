@@ -61,6 +61,27 @@
     });
 }
 
+- (BOOL)runPauseableTransactionWithOneLoop:(WCDB_NO_ESCAPE WCTTransactionBlockForOneLoop)inTransaction
+{
+    WCTRemedialAssert(inTransaction, "Transaction block can't be null.", return NO;);
+    WCTHandle *transactionHandle = nil;
+    BOOL ocStop = NO;
+    bool ret = _database->runPauseableTransactionWithOneLoop([&inTransaction, self, transactionHandle, ocStop](WCDB::Handle *handle, bool &stop, bool isNewTransaction) mutable -> bool {
+        @autoreleasepool {
+            if(!transactionHandle){
+                transactionHandle = [[WCTHandle alloc] initWithDatabase:self andUnsafeHandle:handle];
+            }
+            BOOL result = inTransaction(transactionHandle, &ocStop, isNewTransaction);
+            stop = ocStop;
+            return result;
+        }
+    });
+    if(transactionHandle){
+        [transactionHandle invalidate];
+    }
+    return ret;
+}
+
 - (BOOL)beginNestedTransaction
 {
     return _database->beginNestedTransaction();

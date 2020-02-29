@@ -118,6 +118,7 @@ public:
 
     void markErrorNotAllowedWithinTransaction();
     bool isErrorAllowedWithinTransaction() const;
+    bool checkMainThreadBusyRetry() const;
 
 private:
     int m_transactionLevel;

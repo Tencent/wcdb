@@ -90,7 +90,6 @@ std::optional<bool> MigratingHandle::sourceTableExists(const MigrationUserInfo& 
         }
     }
     return tableExists(schema, userInfo.getSourceTable());
-    ;
 }
 
 const StringView& MigratingHandle::getDatabasePath() const

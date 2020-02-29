@@ -24,6 +24,8 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Handle.hpp>
+#include <WCDB/BusyRetryConfig.hpp>
+#include <unistd.h>
 
 namespace WCDB {
 
@@ -249,6 +251,19 @@ bool Handle::isStatementReadonly()
 }
 
 #pragma mark - Transaction
+bool Handle::checkMainThreadBusyRetry()
+{
+    const auto & element = m_pendings.find(StringView(BusyRetryConfigName));
+    if(element == m_pendings.end()){
+        return false;
+    }
+    std::shared_ptr<BusyRetryConfig> config = std::dynamic_pointer_cast<BusyRetryConfig>(element->value());
+    if(config == nullptr){
+        return false;
+    }
+    return config->checkMainThreadBusyRetry(getPath());
+}
+
 bool Handle::runNestedTransaction(const TransactionCallback &transaction)
 {
     if (beginNestedTransaction()) {
@@ -271,6 +286,34 @@ bool Handle::runTransaction(const TransactionCallback &transaction)
         }
     }
     return false;
+}
+
+bool Handle::runPauseableTransactionWithOneLoop(const TransactionCallbackForOneLoop &transaction)
+{
+    bool stop = false;
+    bool needBegin = true;
+    bool isNewTransaction;
+    do{
+        isNewTransaction = needBegin;
+        if (needBegin && !beginTransaction()) {
+            return false;
+        }
+        needBegin = false;
+        if(!transaction(this, stop, isNewTransaction)){
+            rollbackTransaction();
+            return false;
+        }
+        if(checkMainThreadBusyRetry() || stop){
+            if(!commitOrRollbackTransaction()){
+                return false;
+            }
+            if(!stop){
+                needBegin = true;
+                usleep(100);
+            }
+        }
+    }while(!stop);
+    return true;
 }
 
 ConfiguredHandle::~ConfiguredHandle() = default;
