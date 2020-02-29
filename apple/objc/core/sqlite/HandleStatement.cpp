@@ -197,6 +197,14 @@ void HandleStatement::bindNull(int index)
     WCDB_UNUSED(succeed);
 }
 
+int HandleStatement::bindParameterIndex(const Text &parameterName)
+{
+    WCTAssert(isPrepared());
+    WCTAssert(!isBusy());
+    int index = sqlite3_bind_parameter_index(m_stmt, parameterName.data());
+    return index;
+}
+
 HandleStatement::Integer32 HandleStatement::getInteger32(int index)
 {
     WCTAssert(isPrepared());

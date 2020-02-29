@@ -62,6 +62,8 @@ public:
     void bindText(const Text &value, int index);
     void bindBLOB(const BLOB &value, int index);
     void bindNull(int index);
+    
+    int bindParameterIndex(const Text &parameterName);
 
     Integer32 getInteger32(int index);
     Integer64 getInteger64(int index);
