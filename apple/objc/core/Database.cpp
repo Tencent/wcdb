@@ -375,6 +375,37 @@ bool Database::runTransaction(const TransactionCallback &transaction)
     return false;
 }
 
+bool Database::runPauseableTransactionWithOneLoop(const TransactionCallbackForOneLoop &transaction)
+{
+    // get threaded handle
+    RecyclableHandle handle = getHandle();
+    WCTAssert(handle != nullptr);
+    bool stop = false;
+    bool needBegin = true;
+    bool isNewTransaction;
+    do{
+        isNewTransaction = needBegin;
+        if (needBegin && !beginTransaction()) {
+            return false;
+        }
+        needBegin = false;
+        if(!transaction(handle.get(), stop, isNewTransaction)){
+            rollbackTransaction();
+            return false;
+        }
+        if(handle.get()->checkMainThreadBusyRetry() || stop){
+            if(!commitOrRollbackTransaction()){
+                return false;
+            }
+            if(!stop){
+                needBegin = true;
+                usleep(100);
+            }
+        }
+    }while(!stop);
+    return true;
+}
+
 bool Database::beginNestedTransaction()
 {
     RecyclableHandle handle = getHandle();

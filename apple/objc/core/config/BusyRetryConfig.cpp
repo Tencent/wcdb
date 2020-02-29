@@ -66,6 +66,11 @@ bool BusyRetryConfig::uninvoke(Handle* handle)
     return true;
 }
 
+bool BusyRetryConfig::checkMainThreadBusyRetry(const UnsafeStringView& path)
+{
+    return getOrCreateState(path).checkMainThreadBusyRetry();
+}
+
 bool BusyRetryConfig::onBusy(const UnsafeStringView& path, int numberOfTimes)
 {
     WCDB_UNUSED(path);
@@ -151,20 +156,31 @@ BusyRetryConfig::State::ShmMask::ShmMask() : shared(0), exclusive(0)
 BusyRetryConfig::State& BusyRetryConfig::getOrCreateState(const UnsafeStringView& path)
 {
     WCTAssert(!path.empty());
+    StateHolder& stateHoder = m_localState.getOrCreate();
+    if(stateHoder.state != nullptr){
+        State& localState = *stateHoder.state;
+        if(localState.m_path == path){
+            return localState;
+        }
+    }
     {
         SharedLockGuard lockGuard(m_statesLock);
         auto iter = m_states.find(path);
         if (iter != m_states.end()) {
-            return iter->second;
+            stateHoder.state = &iter->second;
+            return *stateHoder.state;
         }
     }
     {
         LockGuard lockGuard(m_statesLock);
-        return m_states[path];
+        State& state = m_states[path];
+        state.m_path = path;
+        stateHoder.state = &state;
+        return state;
     }
 }
 
-BusyRetryConfig::State::State() : m_pagerType(PagerLockType::None)
+BusyRetryConfig::State::State() : m_pagerType(PagerLockType::None), m_localPagerType(PagerLockType::None)
 {
 }
 
@@ -174,6 +190,8 @@ void BusyRetryConfig::State::updatePagerLock(PagerLockType type)
     if (m_pagerType != type) {
         bool notify = type < m_pagerType;
         m_pagerType = type;
+        PagerLockType& localPageType = m_localPagerType.getOrCreate();
+        localPageType = type;
         if (notify) {
             tryNotify();
         }
@@ -186,12 +204,16 @@ void BusyRetryConfig::State::updateShmLock(void* identifier, int sharedMask, int
     bool notify = false;
     if (sharedMask == 0 && exclusiveMask == 0) {
         m_shmMasks.erase(identifier);
+        m_localShmMask.getOrCreate().erase(identifier);
         notify = true;
     } else {
         State::ShmMask& mask = m_shmMasks[identifier];
         notify = sharedMask < mask.shared || exclusiveMask < mask.exclusive;
         mask.shared = sharedMask;
         mask.exclusive = exclusiveMask;
+        State::ShmMask& localMask = m_localShmMask.getOrCreate()[identifier];
+        localMask.shared = sharedMask;
+        localMask.exclusive = exclusiveMask;
     }
     if (notify) {
         tryNotify();
@@ -214,6 +236,22 @@ bool BusyRetryConfig::State::shouldWait(const Expecting& expecting) const
     return wait;
 }
 
+bool BusyRetryConfig::State::localShouldWait(const Expecting& expecting) const
+{
+    bool wait = false;
+    if (!expecting.satisfied(m_localPagerType.getOrCreate())) {
+        wait = true;
+    } else {
+        for (const auto& iter : m_localShmMask.getOrCreate()) {
+            if (!expecting.satisfied(iter.second.shared, iter.second.exclusive)) {
+                wait = true;
+                break;
+            }
+        }
+    }
+    return wait;
+}
+
 bool BusyRetryConfig::State::wait(Trying& trying)
 {
     static_assert(Exclusivity::Must < Exclusivity::NoMatter, "");
@@ -226,8 +264,16 @@ bool BusyRetryConfig::State::wait(Trying& trying)
         = Thread::isMain() ? Exclusivity::Must : Exclusivity::NoMatter;
 
         m_waitings.insert(currentThread, trying, exclusivity);
-
+        
+        if(exclusivity == Exclusivity::Must){
+            m_mainThreadBusyTrying = &trying;
+        }
+        
         bool notified = m_conditional.wait_for(lockGuard, BusyRetryTimeOut);
+        
+        if(exclusivity == Exclusivity::Must){
+            m_mainThreadBusyTrying = nullptr;
+        }
 
         m_waitings.erase(currentThread);
 
@@ -238,6 +284,18 @@ bool BusyRetryConfig::State::wait(Trying& trying)
     }
     // never timeout
     return true;
+}
+
+bool BusyRetryConfig::State::checkMainThreadBusyRetry()
+{
+    if(m_mainThreadBusyTrying == nullptr){
+        return false;
+    }
+    std::unique_lock<std::mutex> lockGuard(m_lock);
+    if(m_mainThreadBusyTrying == nullptr){
+        return false;
+    }
+    return localShouldWait(*m_mainThreadBusyTrying);
 }
 
 void BusyRetryConfig::State::tryNotify()

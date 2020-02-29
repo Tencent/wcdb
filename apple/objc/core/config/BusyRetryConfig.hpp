@@ -40,6 +40,7 @@ public:
 
     bool invoke(Handle* handle) override final;
     bool uninvoke(Handle* handle) override final;
+    bool checkMainThreadBusyRetry(const UnsafeStringView& path);
 
 protected:
     bool onBusy(const UnsafeStringView& path, int numberOfTimes);
@@ -90,10 +91,13 @@ protected:
         void updateShmLock(void* identifier, int sharedMask, int exclusiveMask);
 
         bool wait(Trying& trying);
-
+        StringView m_path;
+        bool checkMainThreadBusyRetry();
     protected:
         bool shouldWait(const Expecting& expecting) const;
+        bool localShouldWait(const Expecting& expecting) const;
         PagerLockType m_pagerType;
+        mutable ThreadLocal<PagerLockType> m_localPagerType;
         struct ShmMask {
             ShmMask();
             int shared;
@@ -101,6 +105,7 @@ protected:
         };
         typedef struct ShmMask ShmMask;
         std::map<void* /* identifier */, ShmMask> m_shmMasks;
+        mutable ThreadLocal<std::map<void* /* identifier */, ShmMask>> m_localShmMask;
 
         void tryNotify();
         std::mutex m_lock;
@@ -110,6 +115,7 @@ protected:
             Must = 0,
             NoMatter = 1,
         };
+        Trying* m_mainThreadBusyTrying;
         UniqueList<Thread, Expecting, Exclusivity> m_waitings;
     };
 
@@ -135,7 +141,11 @@ protected:
     private:
         StringView m_path;
     };
+    typedef struct StateHolder{
+        State* state;
+    } StateHolder;
     ThreadLocal<Trying> m_tryings;
+    ThreadLocal<StateHolder> m_localState;
 };
 
 } //namespace WCDB

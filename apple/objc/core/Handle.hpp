@@ -96,8 +96,11 @@ protected:
 #pragma mark - Transaction
 public:
     typedef std::function<bool(Handle *)> TransactionCallback;
+    typedef std::function<bool(Handle *, bool&, bool)> TransactionCallbackForOneLoop;
+    bool checkMainThreadBusyRetry();
     bool runTransaction(const TransactionCallback &transaction);
     bool runNestedTransaction(const TransactionCallback &transaction);
+    bool runPauseableTransactionWithOneLoop(const TransactionCallbackForOneLoop &transaction);
 };
 
 class ConfiguredHandle final : public Handle {

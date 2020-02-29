@@ -115,6 +115,7 @@ private:
 #pragma mark - Transaction
 public:
     using TransactionCallback = Handle::TransactionCallback;
+    using TransactionCallbackForOneLoop = Handle::TransactionCallbackForOneLoop;
 
     bool isInTransaction();
 
@@ -122,6 +123,7 @@ public:
     bool commitOrRollbackTransaction();
     void rollbackTransaction();
     bool runTransaction(const TransactionCallback &transaction);
+    bool runPauseableTransactionWithOneLoop(const TransactionCallbackForOneLoop &transaction);
 
     bool beginNestedTransaction();
     bool commitOrRollbackNestedTransaction();

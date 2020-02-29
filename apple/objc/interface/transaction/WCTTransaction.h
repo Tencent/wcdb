@@ -28,6 +28,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef BOOL (^WCTTransactionBlock)(WCTHandle *);
+typedef BOOL (^WCTTransactionBlockForOneLoop)(WCTHandle *handle, BOOL*stop, BOOL isNewTransaction);
 
 @protocol WCTTransactionProtocol
 @required
@@ -37,6 +38,7 @@ typedef BOOL (^WCTTransactionBlock)(WCTHandle *);
 - (BOOL)commitOrRollbackTransaction;
 - (void)rollbackTransaction;
 - (BOOL)runTransaction:(WCDB_NO_ESCAPE WCTTransactionBlock)inTransaction;
+- (BOOL)runPauseableTransactionWithOneLoop:(WCDB_NO_ESCAPE WCTTransactionBlockForOneLoop)inTransaction;
 
 - (BOOL)beginNestedTransaction;
 - (BOOL)commitOrRollbackNestedTransaction;
