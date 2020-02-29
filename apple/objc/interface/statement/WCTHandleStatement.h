@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by qiuwenchen on 2020/2/23.
 //
 
 /*
@@ -21,27 +21,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 #import <WCDB/WCTCommon.h>
-
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCTHandle : NSObject
+@interface WCTHandleStatement : NSObject
+
+@property(nonatomic, strong)NSString* tag;
 
 - (instancetype)init UNAVAILABLE_ATTRIBUTE;
-
-#pragma mark - Handle
-@property (nonatomic, readonly) WCTDatabase *database;
-
-- (void)invalidate;
-
-- (BOOL)isValidated;
-
-- (BOOL)validate;
-
-#pragma mark - HandleStatement
-
-- (WCTHandleStatement*)getOrCreateHandleStatementByTag:(NSString*)tag;
 
 #pragma mark - Execute
 - (BOOL)execute:(const WCDB::Statement &)statement;
@@ -51,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)isPrepared;
 
-- (void)finalizeStatement;
+- (void)finalize;
 
 #pragma mark - Step
 - (BOOL)step;
@@ -61,9 +48,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)done;
 
 #pragma mark - State
-- (long long)getLastInsertedRowID;
-
-- (int)getChanges;
 
 - (BOOL)isStatementReadonly;
 
@@ -91,6 +75,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)bindProperties:(const WCTProperties &)properties
               ofObject:(WCTObject *)object;
+
+- (int)bindParameterIndex:(const WCDB::BindParameter &)parameter;
 
 #pragma mark - Extract Row Data
 - (int)extractNumberOfColumns;
@@ -138,9 +124,5 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSArray<WCTMultiObject *> *)allMultiObjectsOnResultColumns:(const WCTResultColumns &)resultColumns;
 
-#pragma mark - Error
-- (WCTError *)error;
-
 @end
-
 NS_ASSUME_NONNULL_END

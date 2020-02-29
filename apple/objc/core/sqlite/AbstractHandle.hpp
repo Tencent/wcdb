@@ -81,7 +81,7 @@ protected:
     bool executeStatement(const Statement &statement);
 
 #pragma mark - Statement
-protected:
+public:
     HandleStatement *getStatement();
     void returnStatement(HandleStatement *handleStatement);
 

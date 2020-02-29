@@ -43,6 +43,7 @@
 #import <WCDB/WCTDatabase+Handle.h>
 #import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTHandle.h>
+#import <WCDB/WCTHandleStatement.h>
 
 #import <WCDB/WCTORM.h>
 
