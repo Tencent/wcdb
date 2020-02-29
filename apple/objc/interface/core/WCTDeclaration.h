@@ -44,7 +44,9 @@
 
 #pragma mark - Handle
 @class WCTHandle;
-@class WCTHandle;
+
+#pragma mark - HandleStatement
+@class WCTHandleStatement;
 
 #pragma mark - ORM
 class WCTBinding;

@@ -788,6 +788,9 @@
 		39D81662227EC1D9009EC067 /* ColumnDef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D81661227EC1D9009EC067 /* ColumnDef.swift */; };
 		39D81664227EC1F7009EC067 /* ColumnType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D81663227EC1F7009EC067 /* ColumnType.swift */; };
 		39D81666227EC25E009EC067 /* ColumnConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D81665227EC25E009EC067 /* ColumnConstraint.swift */; };
+		755391D62403B3DB00036918 /* WCTHandleStatement.mm in Sources */ = {isa = PBXBuildFile; fileRef = 755391D52403B3DB00036918 /* WCTHandleStatement.mm */; };
+		755391E12403CB9E00036918 /* WCTHandleStatement+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 755391E02403CB9700036918 /* WCTHandleStatement+Private.h */; };
+		757457042402D614005E3682 /* WCTHandleStatement.h in Headers */ = {isa = PBXBuildFile; fileRef = 757457032402D614005E3682 /* WCTHandleStatement.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1713,6 +1716,9 @@
 		39D81661227EC1D9009EC067 /* ColumnDef.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnDef.swift; sourceTree = "<group>"; };
 		39D81663227EC1F7009EC067 /* ColumnType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnType.swift; sourceTree = "<group>"; };
 		39D81665227EC25E009EC067 /* ColumnConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnConstraint.swift; sourceTree = "<group>"; };
+		755391D52403B3DB00036918 /* WCTHandleStatement.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTHandleStatement.mm; sourceTree = "<group>"; };
+		755391E02403CB9700036918 /* WCTHandleStatement+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTHandleStatement+Private.h"; sourceTree = "<group>"; };
+		757457032402D614005E3682 /* WCTHandleStatement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTHandleStatement.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1849,6 +1855,7 @@
 		2349F62A1EA0D6680021EFA7 /* interface */ = {
 			isa = PBXGroup;
 			children = (
+				757457022402D571005E3682 /* statement */,
 				236BACDF21BF9F5900C8B4D9 /* migration */,
 				234DBCFE2064DE04000E31E8 /* transaction */,
 				234DBCEB2064DD0B000E31E8 /* handle */,
@@ -3340,6 +3347,16 @@
 			path = factory;
 			sourceTree = "<group>";
 		};
+		757457022402D571005E3682 /* statement */ = {
+			isa = PBXGroup;
+			children = (
+				757457032402D614005E3682 /* WCTHandleStatement.h */,
+				755391D52403B3DB00036918 /* WCTHandleStatement.mm */,
+				755391E02403CB9700036918 /* WCTHandleStatement+Private.h */,
+			);
+			path = statement;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -3405,6 +3422,7 @@
 				23593B7F20D3ADF80058B416 /* WalRelated.hpp in Headers */,
 				23D0C36520C14ACC0001BFAE /* FactoryRelated.hpp in Headers */,
 				23EEDD56217DFADC006E9E73 /* SyntaxSelectSTMT.hpp in Headers */,
+				755391E12403CB9E00036918 /* WCTHandleStatement+Private.h in Headers */,
 				2360A60920D78F2C00E4A311 /* PerformanceTraceConfig.hpp in Headers */,
 				237B47B121FEEA200059227A /* ColumnMeta.hpp in Headers */,
 				23EABBE6206D08EC00241F3B /* WCTHandle+Table.h in Headers */,
@@ -3628,6 +3646,7 @@
 				23775B8020AD666900E21AB0 /* Mechanic.hpp in Headers */,
 				2370B12321914ED500D3227C /* WCTMaster+WCTTableCoding.h in Headers */,
 				23EEDD18217DFADC006E9E73 /* SyntaxRecursiveCTE.hpp in Headers */,
+				757457042402D614005E3682 /* WCTHandleStatement.h in Headers */,
 				23EEDD0A217DFADC006E9E73 /* SyntaxJoinConstraint.hpp in Headers */,
 				23567D4720CA7DBC005F1C35 /* ErrorProne.hpp in Headers */,
 				2349F7581EA0D6680021EFA7 /* WCTRuntimeBaseAccessor.h in Headers */,
@@ -4238,6 +4257,7 @@
 				23A3CFB6205FB1A800692F94 /* WCTHandle+Convenient.mm in Sources */,
 				23F70FBE20A055D400CCE3CD /* TokenizerConfig.cpp in Sources */,
 				23D0C35D20C149D80001BFAE /* FactoryRetriever.cpp in Sources */,
+				755391D62403B3DB00036918 /* WCTHandleStatement.mm in Sources */,
 				23EEDCDD217DFADC006E9E73 /* StatementRollback.cpp in Sources */,
 				231C35EE21DE09E800B5D3D2 /* Exiting.cpp in Sources */,
 				2370B12921914ED500D3227C /* NSNull+WCTColumnCoding.mm in Sources */,
