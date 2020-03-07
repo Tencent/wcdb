@@ -30,7 +30,7 @@
 
 namespace WCDB {
 
-class HandleStatement final : public HandleRelated {
+class HandleStatement : public HandleRelated {
     friend class AbstractHandle;
 
 public:
@@ -39,16 +39,17 @@ public:
     HandleStatement &operator=(const HandleStatement &) = delete;
 
     HandleStatement(HandleStatement &&other);
+    HandleStatement(AbstractHandle *handle);
 
-    ~HandleStatement() override final;
+    virtual ~HandleStatement() override;
 
-    bool prepare(const Statement &statement);
-    bool isPrepared();
-    void finalize();
+    virtual bool prepare(const Statement &statement);
+    virtual bool isPrepared();
+    virtual void finalize();
 
-    bool step();
-    bool done();
-    void reset();
+    virtual bool step();
+    virtual bool done();
+    virtual void reset();
 
     using Integer32 = ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType;
     using Integer64 = ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType;
@@ -56,33 +57,32 @@ public:
     using Float = ColumnTypeInfo<ColumnType::Float>::UnderlyingType;
     using BLOB = ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType;
 
-    void bindInteger32(const Integer32 &value, int index);
-    void bindInteger64(const Integer64 &value, int index);
-    void bindDouble(const Float &value, int index);
-    void bindText(const Text &value, int index);
-    void bindBLOB(const BLOB &value, int index);
-    void bindNull(int index);
+    virtual void bindInteger32(const Integer32 &value, int index);
+    virtual void bindInteger64(const Integer64 &value, int index);
+    virtual void bindDouble(const Float &value, int index);
+    virtual void bindText(const Text &value, int index);
+    virtual void bindBLOB(const BLOB &value, int index);
+    virtual void bindNull(int index);
     
     int bindParameterIndex(const Text &parameterName);
 
-    Integer32 getInteger32(int index);
-    Integer64 getInteger64(int index);
-    Float getDouble(int index);
-    Text getText(int index);
-    const BLOB getBLOB(int index);
+    virtual Integer32 getInteger32(int index);
+    virtual Integer64 getInteger64(int index);
+    virtual Float getDouble(int index);
+    virtual Text getText(int index);
+    virtual const BLOB getBLOB(int index);
 
-    ColumnType getType(int index);
+    virtual ColumnType getType(int index);
 
-    int getNumberOfColumns();
-    const UnsafeStringView getOriginColumnName(int index);
-    const UnsafeStringView getColumnName(int index);
-    const UnsafeStringView getColumnTableName(int index);
+    virtual int getNumberOfColumns();
+    virtual const UnsafeStringView getOriginColumnName(int index);
+    virtual const UnsafeStringView getColumnName(int index);
+    virtual const UnsafeStringView getColumnTableName(int index);
 
-    bool isReadonly();
+    virtual bool isReadonly();
 
 protected:
-    bool isBusy();
-    HandleStatement(AbstractHandle *handle);
+    virtual bool isBusy();
 
 private:
     bool prepare(const UnsafeStringView &sql);

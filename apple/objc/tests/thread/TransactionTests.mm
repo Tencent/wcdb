@@ -719,7 +719,6 @@
         __block NSDate* write1Begin = [NSDate date];
         WCTHandle* handle = self.database.getHandle;
         [handle runPauseableTransactionWithOneLoop:^BOOL(WCTHandle * _Nonnull, BOOL * _Nonnull stop, BOOL isNewTransaction) {
-            TestCaseAssertTrue(isNewTransaction);
             TestCaseAssertTrue(handle.isInTransaction);
             
             double beginInterval = [[NSDate date] timeIntervalSinceDate:write1Begin];

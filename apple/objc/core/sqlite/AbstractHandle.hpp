@@ -82,11 +82,13 @@ protected:
 
 #pragma mark - Statement
 public:
-    HandleStatement *getStatement();
-    void returnStatement(HandleStatement *handleStatement);
+    virtual HandleStatement *getStatement();
+    virtual void returnStatement(HandleStatement *handleStatement);
 
+protected:
+    virtual void finalizeStatements();
+    
 private:
-    void finalizeStatements();
     std::list<HandleStatement> m_handleStatements;
 
 #pragma mark - Meta

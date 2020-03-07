@@ -26,6 +26,7 @@
 
 #include <WCDB/Handle.hpp>
 #include <WCDB/Migration.hpp>
+#include <WCDB/MigratingHandleStatement.hpp>
 
 namespace WCDB {
 
@@ -57,61 +58,16 @@ protected:
     std::optional<bool> sourceTableExists(const MigrationUserInfo &userInfo) override final;
     const StringView &getDatabasePath() const override final;
 
-#pragma mark - Migration
+#pragma mark - Statement
 public:
-    bool prepare(const Statement &statement) override final;
-    using Super::isPrepared;
-    void finalize() override final;
-
-    using Super::done;
-    bool step() override final;
-    void reset() override final;
-
-    void bindInteger32(const Integer32 &value, int index) override final;
-    void bindInteger64(const Integer64 &value, int index) override final;
-    void bindDouble(const Float &value, int index) override final;
-    void bindText(const Text &value, int index) override final;
-    void bindBLOB(const BLOB &value, int index) override final;
-    void bindNull(int index) override final;
-
-    using Super::getInteger32;
-    using Super::getInteger64;
-    using Super::getDouble;
-    using Super::getText;
-    using Super::getBLOB;
-
-    using Super::getType;
-    using Super::getOriginColumnName;
-    using Super::getColumnName;
-    using Super::getColumnTableName;
-
-    using Super::isStatementReadonly;
-    using Super::getNumberOfColumns;
+    virtual HandleStatement *getStatement() override final;
+    virtual void returnStatement(HandleStatement *handleStatement) override final;
 
 protected:
-    bool realExecute(const std::list<Statement> &statements);
-    bool realStep();
-    std::optional<std::list<Statement>> process(const Statement &statement);
-    bool tryFallbackToUnionedView(Syntax::Schema &schema, StringView &table);
-    bool tryFallbackToSourceTable(Syntax::Schema &schema, StringView &table);
-
-    bool m_processing;
-    HandleStatement *m_additionalStatement;
-
-#pragma mark - Migrate
-protected:
-    // For Insert Statement Only
-    bool isMigratedPrepared();
-    bool prepareMigrate(const Syntax::InsertSTMT &migrated,
-                        const Syntax::InsertSTMT &falledBack);
-    bool stepMigration(const int64_t &rowid);
-    void finalizeMigrate();
-    void resetMigrate();
-
+    virtual void finalizeStatements() override final;
+    
 private:
-    HandleStatement *m_migrateStatement;
-    HandleStatement *m_removeMigratedStatement;
-    int m_rowidIndexOfMigratingStatement;
+    std::list<MigratingHandleStatement> m_migratingHandleStatements;
 };
 
 } //namespace WCDB
