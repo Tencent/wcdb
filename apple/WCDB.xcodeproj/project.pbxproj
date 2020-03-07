@@ -818,6 +818,8 @@
 		755391D62403B3DB00036918 /* WCTHandleStatement.mm in Sources */ = {isa = PBXBuildFile; fileRef = 755391D52403B3DB00036918 /* WCTHandleStatement.mm */; };
 		755391E12403CB9E00036918 /* WCTHandleStatement+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 755391E02403CB9700036918 /* WCTHandleStatement+Private.h */; };
 		757457042402D614005E3682 /* WCTHandleStatement.h in Headers */ = {isa = PBXBuildFile; fileRef = 757457032402D614005E3682 /* WCTHandleStatement.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75751ED82412AD11006CBFFD /* MigratingHandleStatement.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75751ED62412AD10006CBFFD /* MigratingHandleStatement.hpp */; };
+		75751ED92412AD11006CBFFD /* MigratingHandleStatement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75751ED72412AD11006CBFFD /* MigratingHandleStatement.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1770,6 +1772,8 @@
 		755391D52403B3DB00036918 /* WCTHandleStatement.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTHandleStatement.mm; sourceTree = "<group>"; };
 		755391E02403CB9700036918 /* WCTHandleStatement+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTHandleStatement+Private.h"; sourceTree = "<group>"; };
 		757457032402D614005E3682 /* WCTHandleStatement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTHandleStatement.h; sourceTree = "<group>"; };
+		75751ED62412AD10006CBFFD /* MigratingHandleStatement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MigratingHandleStatement.hpp; sourceTree = "<group>"; };
+		75751ED72412AD11006CBFFD /* MigratingHandleStatement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MigratingHandleStatement.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2900,6 +2904,8 @@
 		23A09D632146204300F62EE8 /* migration */ = {
 			isa = PBXGroup;
 			children = (
+				75751ED72412AD11006CBFFD /* MigratingHandleStatement.cpp */,
+				75751ED62412AD10006CBFFD /* MigratingHandleStatement.hpp */,
 				23A09D692146204300F62EE8 /* MigratingHandle.cpp */,
 				23A09D6A2146204300F62EE8 /* MigratingHandle.hpp */,
 				23A64D07214A458A00ED28BB /* MigrationInfo.cpp */,
@@ -3619,6 +3625,7 @@
 				3969018C233B1B2F006EEFD4 /* WCTTag.h in Headers */,
 				23EEDD2C217DFADC006E9E73 /* SyntaxAnalyzeSTMT.hpp in Headers */,
 				23EEDCF2217DFADC006E9E73 /* SyntaxColumnConstraint.hpp in Headers */,
+				75751ED82412AD11006CBFFD /* MigratingHandleStatement.hpp in Headers */,
 				23790A80219315E50098797F /* WCTVirtualTableMacro.h in Headers */,
 				2386B3C71ED442FE000B72F6 /* WCTError+Private.h in Headers */,
 				23EEDD4E217DFADC006E9E73 /* SyntaxReindexSTMT.hpp in Headers */,
@@ -4335,6 +4342,7 @@
 				23EEDD2F217DFADC006E9E73 /* SyntaxBeginSTMT.cpp in Sources */,
 				23EEDCF5217DFADC006E9E73 /* SyntaxCommonTableExpression.cpp in Sources */,
 				23EEDCCF217DFADC006E9E73 /* StatementDropTable.cpp in Sources */,
+				75751ED92412AD11006CBFFD /* MigratingHandleStatement.cpp in Sources */,
 				23EEDCF9217DFADC006E9E73 /* SyntaxExpression.cpp in Sources */,
 				23EEDCC7217DFADC006E9E73 /* StatementCreateVirtualTable.cpp in Sources */,
 				23EEDC81217DFADC006E9E73 /* CTETable.cpp in Sources */,

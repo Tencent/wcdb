@@ -124,8 +124,7 @@ public:
     public:
         Binder(Migration& migration);
         virtual ~Binder() override = 0;
-
-    protected:
+        
         void startBinding();
         bool stopBinding(bool succeed);
         void stopReferenced();
