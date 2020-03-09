@@ -176,6 +176,9 @@ static int master_onParseColumn(sqliterk *rk,
     const char *sql = sqliterk_column_text(column, 4);
     sqliterk_type type;
 
+    if (!typestr || !name || !sql)
+        return SQLITERK_OK;
+        
     if (strcmp(typestr, "table") == 0)
         type = sqliterk_type_table;
     else if (strcmp(typestr, "index") == 0)
