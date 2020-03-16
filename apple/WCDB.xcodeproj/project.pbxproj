@@ -3918,8 +3918,7 @@
 					};
 					239326601E836D7300D677CC = {
 						CreatedOnToolsVersion = 8.2;
-						DevelopmentTeam = TCFDHFMX6R;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					239E8A6F2160A5B100BCB308 = {
 						CreatedOnToolsVersion = 10.0;
@@ -4675,6 +4674,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -4682,6 +4684,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};
