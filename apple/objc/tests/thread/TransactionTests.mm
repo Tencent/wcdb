@@ -690,7 +690,7 @@
         }];
         TestCaseAssertTrue(ret);
     }];
-    [NSThread sleepForTimeInterval:0.5];
+    [NSThread sleepForTimeInterval:0.4];
     int i = 0;
     NSDate* write2Begin;
     do{
@@ -734,7 +734,7 @@
             [handleStament bindProperties:properties ofObject:[Random.shared testCaseObjectWithIdentifier:identifier++]];
             TestCaseAssertTrue([handleStament step]);
             
-            [NSThread sleepForTimeInterval:0.5];
+            [NSThread sleepForTimeInterval:0.4];
             *stop = ++i > 5;
             write1Begin = [NSDate date];
             return YES;
