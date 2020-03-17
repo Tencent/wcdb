@@ -180,7 +180,7 @@ BusyRetryConfig::State& BusyRetryConfig::getOrCreateState(const UnsafeStringView
     }
 }
 
-BusyRetryConfig::State::State() : m_pagerType(PagerLockType::None), m_localPagerType(PagerLockType::None)
+BusyRetryConfig::State::State() : m_pagerType(PagerLockType::None), m_localPagerType(PagerLockType::None), m_mainThreadBusyTrying(nullptr)
 {
 }
 
