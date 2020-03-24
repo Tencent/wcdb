@@ -37,6 +37,7 @@ BasicConfig::BasicConfig()
 , m_setJournalModeWAL(StatementPragma().pragma(Pragma::journalMode()).to("WAL"))
 // Fullfsync
 , m_enableFullfsync(StatementPragma().pragma(Pragma::checkpointFullfsync()).to(true))
+, m_setTempStore(StatementPragma().pragma(Pragma::tempStore()).to(1))
 {
 }
 
@@ -52,7 +53,7 @@ bool BasicConfig::invoke(Handle* handle)
     handle->disableCheckpointWhenClosing(true);
     bool succeed = true;
     if (!handle->isReadonly()) {
-        succeed = lazySetJournalModeWAL(handle) && handle->execute(m_enableFullfsync);
+        succeed = lazySetJournalModeWAL(handle) && handle->execute(m_enableFullfsync) && handle->execute(m_setTempStore);
     }
     return succeed;
 }
