@@ -798,7 +798,7 @@
         TestCaseAssertTrue([self.database execute:WCDB::StatementBegin().beginImmediate()]);
         TestCaseAssertTrue(self.database.isInTransaction);
         TestCaseAssertTrue(identifier < 25);
-        TestCaseAssertTrue((lastIdentifier ==0 && identifier< 10) || identifier - lastIdentifier < 10);
+        TestCaseAssertTrue((lastIdentifier ==0 && identifier< 20) || identifier - lastIdentifier < 20);
         lastIdentifier = identifier;
         [self.table insertObject:[Random.shared testCaseObjectWithIdentifier:identifier++]];
         [NSThread sleepForTimeInterval:0.5];
