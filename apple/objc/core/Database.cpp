@@ -379,30 +379,56 @@ bool Database::runPauseableTransactionWithOneLoop(const TransactionCallbackForOn
 {
     // get threaded handle
     RecyclableHandle handle = getHandle();
+    if(handle == nullptr) return false;
     WCTAssert(handle != nullptr);
     bool stop = false;
     bool needBegin = true;
     bool isNewTransaction;
     do{
         isNewTransaction = needBegin;
-        if (needBegin && !beginTransaction()) {
-            return false;
+        if (needBegin) {
+            if(isInTransaction()){
+                Error error(Error::Code::Error,
+                            Error::Level::Error,
+                            "DB is already in transaction!");
+                error.infos.insert_or_assign(ErrorStringKeyPath, path);
+                Notifier::shared().notify(error);
+                return false;
+            }
+            if (!handle->beginTransaction()) {
+                setThreadedError(handle->getError());
+                return false;
+            }
+            markHandleAsTransactioned(handle);
         }
         needBegin = false;
         if(!transaction(handle.get(), stop, isNewTransaction)){
-            rollbackTransaction();
+            /*
+             All statements must be reset before commit or rollback,
+             because sqlite will downgrade handle to a read-only transaction state
+             if there are other active statements that belong to this handle.
+             Please see the comment of btreeEndTransaction for more information.
+             */
+            handle->resetAllStatements();
+            handle->rollbackTransaction();
+            markHandleAsUntransactioned();
             return false;
         }
         if(handle.get()->checkMainThreadBusyRetry() || stop){
-            if(!commitOrRollbackTransaction()){
+            handle->resetAllStatements();
+            if (!handle->commitOrRollbackTransaction()) {
+                setThreadedError(handle->getError());
+                markHandleAsUntransactioned();
                 return false;
             }
+            markHandleAsUntransactioned();
             if(!stop){
                 needBegin = true;
                 usleep(100);
             }
         }
     }while(!stop);
+    handle->finalizeStatements();
     return true;
 }
 

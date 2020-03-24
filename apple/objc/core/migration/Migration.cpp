@@ -244,7 +244,6 @@ void Migration::Binder::startBinding()
 {
     WCTAssert(m_binding == false);
     m_binding = true;
-    WCTAssert(m_referenceds.empty());
 }
 
 bool Migration::Binder::stopBinding(bool succeed)

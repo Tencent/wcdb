@@ -663,15 +663,16 @@
     TestCaseAssertTrue([self dropTable]);
     TestCaseAssertTrue([self createTable]);
     __block int identifier = 0;
+    __block int pauseTimes = -1;
     [self.dispatch async:^{
         __block int i = 0;
         __block NSDate* write1Begin = [NSDate date];
         BOOL ret = [self.database runPauseableTransactionWithOneLoop:^BOOL(WCTHandle * _Nonnull handle, BOOL * _Nonnull stop, BOOL isNewTransaction) {
-            TestCaseAssertTrue(isNewTransaction);
             TestCaseAssertTrue(handle.isInTransaction);
+            if(isNewTransaction)pauseTimes++;
             
             double beginInterval = [[NSDate date] timeIntervalSinceDate:write1Begin];
-            TestCaseAssertTrue(beginInterval < 0.6);
+            TestCaseAssertTrue(beginInterval < 1);
             
             WCTHandleStatement* handleStament = [handle getOrCreateHandleStatementByTag:@"test"];
             WCTProperties properties = [self.tableClass allProperties];
@@ -683,14 +684,14 @@
             [handleStament bindProperties:properties ofObject:[Random.shared testCaseObjectWithIdentifier:identifier++]];
             TestCaseAssertTrue([handleStament step]);
             
-            [NSThread sleepForTimeInterval:0.5];
-            *stop = ++i > 5;
+            [NSThread sleepForTimeInterval:0.1];
+            *stop = ++i > 30;
             write1Begin = [NSDate date];
             return YES;
         }];
         TestCaseAssertTrue(ret);
     }];
-    [NSThread sleepForTimeInterval:0.4];
+    [NSThread sleepForTimeInterval:0.5];
     int i = 0;
     NSDate* write2Begin;
     do{
@@ -698,15 +699,16 @@
         TestCaseAssertTrue([self.database execute:WCDB::StatementBegin().beginImmediate()]);
         TestCaseAssertTrue(self.database.isInTransaction);
         double beginInterval = [[NSDate date] timeIntervalSinceDate:write2Begin];
-        TestCaseAssertTrue(beginInterval < 0.6);
+        TestCaseAssertTrue(beginInterval < 1);
         [self.table insertObject:[Random.shared testCaseObjectWithIdentifier:identifier++]];
         write2Begin = [NSDate date];
-        [NSThread sleepForTimeInterval:0.5];
+        [NSThread sleepForTimeInterval:0.1];
         TestCaseAssertTrue([self.database commitOrRollbackTransaction]);
     }while(++i<5);
     [self.dispatch waitUntilDone];
     int count = [self.table getValueOnResultColumn:TestCaseObject.allProperties.count()].numberValue.intValue;
     TestCaseAssertTrue(count == identifier);
+    TestCaseAssertTrue(pauseTimes == 5);
 }
 
 - (void)test_pauseable_transaction2
@@ -714,15 +716,16 @@
     TestCaseAssertTrue([self dropTable]);
     TestCaseAssertTrue([self createTable]);
     __block int identifier = 0;
+    __block int pauseTime = -1;
     [self.dispatch async:^{
         __block int i = 0;
         __block NSDate* write1Begin = [NSDate date];
         WCTHandle* handle = self.database.getHandle;
         [handle runPauseableTransactionWithOneLoop:^BOOL(WCTHandle * _Nonnull, BOOL * _Nonnull stop, BOOL isNewTransaction) {
             TestCaseAssertTrue(handle.isInTransaction);
-            
+            if(isNewTransaction)pauseTime++;
             double beginInterval = [[NSDate date] timeIntervalSinceDate:write1Begin];
-            TestCaseAssertTrue(beginInterval < 0.6);
+            TestCaseAssertTrue(beginInterval < 1);
             
             WCTHandleStatement* handleStament = [handle getOrCreateHandleStatementByTag:@"test"];
             WCTProperties properties = [self.tableClass allProperties];
@@ -734,8 +737,8 @@
             [handleStament bindProperties:properties ofObject:[Random.shared testCaseObjectWithIdentifier:identifier++]];
             TestCaseAssertTrue([handleStament step]);
             
-            [NSThread sleepForTimeInterval:0.4];
-            *stop = ++i > 5;
+            [NSThread sleepForTimeInterval:0.1];
+            *stop = ++i > 30;
             write1Begin = [NSDate date];
             return YES;
         }];
@@ -749,16 +752,61 @@
         TestCaseAssertTrue([self.database execute:WCDB::StatementBegin().beginImmediate()]);
         TestCaseAssertTrue(self.database.isInTransaction);
         double beginInterval = [[NSDate date] timeIntervalSinceDate:write2Begin];
-        TestCaseAssertTrue(beginInterval < 0.6);
+        TestCaseAssertTrue(beginInterval < 1);
         [self.table insertObject:[Random.shared testCaseObjectWithIdentifier:identifier++]];
         write2Begin = [NSDate date];
+        [NSThread sleepForTimeInterval:0.1];
+        TestCaseAssertTrue([self.database commitOrRollbackTransaction]);
+    }while(++i<5);
+    [self.dispatch waitUntilDone];
+    int count = [self.table getValueOnResultColumn:TestCaseObject.allProperties.count()].numberValue.intValue;
+    TestCaseAssertTrue(count == identifier);
+    TestCaseAssertTrue(pauseTime == 5);
+}
+
+- (void)test_pauseable_transaction3
+{
+    TestCaseAssertTrue([self dropTable]);
+    TestCaseAssertTrue([self createTable]);
+    __block int identifier = 0;
+    for(int loopCount = 0; loopCount < 5; loopCount++){
+        [self.dispatch async:^{
+            __block int i = 0;
+            BOOL ret = [self.database runPauseableTransactionWithOneLoop:^BOOL(WCTHandle * _Nonnull handle, BOOL * _Nonnull stop, BOOL) {
+                TestCaseAssertTrue(handle.isInTransaction);
+                WCTHandleStatement* handleStament = [handle getOrCreateHandleStatementByTag:@"test"];
+                WCTProperties properties = [self.tableClass allProperties];
+                if(![handleStament isPrepared]){
+                    [self.tableClass allProperties];
+                    TestCaseAssertTrue([handleStament prepare: WCDB::StatementInsert().insertIntoTable(self.tableName).columns(properties).values(WCDB::BindParameter::bindParameters(properties.size()))]);
+                }
+                [handleStament reset];
+                [handleStament bindProperties:properties ofObject:[Random.shared testCaseObjectWithIdentifier:identifier++]];
+                TestCaseAssertTrue([handleStament step]);
+                
+                [NSThread sleepForTimeInterval:0.1];
+                *stop = ++i > 5;
+                return YES;
+            }];
+            TestCaseAssertTrue(ret);
+        }];
+    }
+    [NSThread sleepForTimeInterval:0.4];
+    int i = 0;
+    int lastIdentifier = 0;
+    do{
+        TestCaseAssertTrue([self.database execute:WCDB::StatementBegin().beginImmediate()]);
+        TestCaseAssertTrue(self.database.isInTransaction);
+        TestCaseAssertTrue(identifier < 25);
+        TestCaseAssertTrue((lastIdentifier ==0 && identifier< 10) || identifier - lastIdentifier < 10);
+        lastIdentifier = identifier;
+        [self.table insertObject:[Random.shared testCaseObjectWithIdentifier:identifier++]];
         [NSThread sleepForTimeInterval:0.5];
         TestCaseAssertTrue([self.database commitOrRollbackTransaction]);
     }while(++i<5);
     [self.dispatch waitUntilDone];
     int count = [self.table getValueOnResultColumn:TestCaseObject.allProperties.count()].numberValue.intValue;
     TestCaseAssertTrue(count == identifier);
-    
 }
 
 @end

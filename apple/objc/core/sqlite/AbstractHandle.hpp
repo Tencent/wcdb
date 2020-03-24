@@ -84,8 +84,7 @@ protected:
 public:
     virtual HandleStatement *getStatement();
     virtual void returnStatement(HandleStatement *handleStatement);
-
-protected:
+    virtual void resetAllStatements();
     virtual void finalizeStatements();
     
 private:

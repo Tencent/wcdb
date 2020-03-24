@@ -62,6 +62,8 @@ protected:
 public:
     virtual HandleStatement *getStatement() override final;
     virtual void returnStatement(HandleStatement *handleStatement) override final;
+    void finalize() override final;
+    void resetAllStatements() override final;
 
 protected:
     virtual void finalizeStatements() override final;
