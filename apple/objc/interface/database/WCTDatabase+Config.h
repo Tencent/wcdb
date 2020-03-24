@@ -78,6 +78,16 @@ typedef BOOL (^WCTConfigBlock)(WCTHandle* _Nonnull);
 
 - (void)removeConfigForName:(NSString*)name;
 
+/**
+  @brief These three interfaces are used to access and modify the global ABtest configuration of WCDB.
+ */
++ (void)setABTestConfigWithName:(NSString*)name
+                       andValue:(NSString*)value;
+
++ (void)removeABTestConfigWithName:(NSString*)name;
+
++ (NSString*)getABTestConfigWithName:(NSString*)name;
+
 @end
 
 NS_ASSUME_NONNULL_END
