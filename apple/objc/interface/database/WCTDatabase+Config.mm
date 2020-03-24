@@ -88,4 +88,25 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
     _database->removeConfig(name);
 }
 
++ (void)setABTestConfigWithName:(NSString*)name
+                       andValue:(NSString*)value
+{
+    WCDB::Core::shared().setABTestConfig(name, value);
+}
+
++ (void)removeABTestConfigWithName:(NSString*)name
+{
+    WCDB::Core::shared().removeABTestConfig(name);
+}
+
++ (NSString*)getABTestConfigWithName:(NSString*)name
+{
+    std::optional<WCDB::StringView> value = WCDB::Core::shared().getABTestConfig(name);
+    if(value.has_value()){
+        return [NSString stringWithUTF8String:value->data()];
+    }else{
+        return nil;
+    }
+}
+
 @end

@@ -128,8 +128,14 @@ protected:
     static void print(const UnsafeStringView& message);
 
 #pragma mark - Config
+public:
+    void setABTestConfig(const UnsafeStringView configName, const UnsafeStringView configValue);
+    void removeABTestConfig(const UnsafeStringView configName);
+    std::optional<UnsafeStringView> getABTestConfig(UnsafeStringView configName);
 protected:
     Configs m_configs;
+    mutable SharedLock m_memory;
+    StringViewMap<StringView> m_abtestConfig;
 };
 
 } // namespace WCDB

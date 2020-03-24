@@ -189,4 +189,27 @@
     TestCaseAssertFalse([self.database canOpen]);
 }
 
+- (void)test_abtest_config
+{
+    NSMutableDictionary* abtestDic = [[NSMutableDictionary alloc] init];
+    for(int i = 0; i < 100; i++){
+        abtestDic[Random.shared.string] = Random.shared.string;
+    }
+    [abtestDic enumerateKeysAndObjectsUsingBlock:^(NSString* name, NSString* value, BOOL *) {
+        [WCTDatabase setABTestConfigWithName:name andValue:value];
+    }];
+    
+    [abtestDic enumerateKeysAndObjectsUsingBlock:^(NSString* name, NSString* value, BOOL *) {
+        TestCaseAssertTrue([[WCTDatabase getABTestConfigWithName:name] isEqualToString:value]);
+    }];
+    
+    [abtestDic enumerateKeysAndObjectsUsingBlock:^(NSString* name, NSString*, BOOL *) {
+        [WCTDatabase removeABTestConfigWithName:name];
+    }];
+    
+    [abtestDic enumerateKeysAndObjectsUsingBlock:^(NSString* name, NSString*, BOOL *) {
+        TestCaseAssertTrue([WCTDatabase getABTestConfigWithName:name] == nil);
+    }];
+}
+
 @end

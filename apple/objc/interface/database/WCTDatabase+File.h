@@ -56,6 +56,16 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (WCTOptionalSize)getFilesSize;
 
+/**
+@brief Set the default directory for temporary database files. If not set, an existing directory will be selected as the temporary database files directory in the following order:
+    1. TMPDIR environment value;
+    2. /Var/tmp;
+    3. /usr/tmp;
+    4. /tmp;
+    5. the current directory;
+*/
++ (BOOL)setDefaultTemporaryDatabaseFileDirectory:(NSString*)dir;
+
 @end
 
 NS_ASSUME_NONNULL_END

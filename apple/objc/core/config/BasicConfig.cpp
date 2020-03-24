@@ -27,6 +27,7 @@
 #include <WCDB/CoreConst.h>
 #include <WCDB/Handle.hpp>
 #include <WCDB/Macro.h>
+#include <WCDB/Core.hpp>
 
 namespace WCDB {
 
@@ -53,7 +54,10 @@ bool BasicConfig::invoke(Handle* handle)
     handle->disableCheckpointWhenClosing(true);
     bool succeed = true;
     if (!handle->isReadonly()) {
-        succeed = lazySetJournalModeWAL(handle) && handle->execute(m_enableFullfsync) && handle->execute(m_setTempStore);
+        succeed = lazySetJournalModeWAL(handle) && handle->execute(m_enableFullfsync);
+        if(Core::shared().getABTestConfig("clicfg_temp_db_write_file").has_value()){
+            succeed &= handle->execute(m_setTempStore);
+        }
     }
     return succeed;
 }

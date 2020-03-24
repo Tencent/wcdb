@@ -320,4 +320,27 @@ void Core::breakpoint()
 {
 }
 
+#pragma mark - Config
+void Core::setABTestConfig(const UnsafeStringView configName, const UnsafeStringView configValue)
+{
+    LockGuard memoryGuard(m_memory);
+    m_abtestConfig[configName] = configValue;
+}
+
+void Core::removeABTestConfig(const UnsafeStringView configName)
+{
+    LockGuard memoryGuard(m_memory);
+    m_abtestConfig.erase(configName);
+}
+
+std::optional<UnsafeStringView> Core::getABTestConfig(UnsafeStringView configName)
+{
+    SharedLockGuard memoryGuard(m_memory);
+    if(m_abtestConfig.find(configName) != m_abtestConfig.end()){
+        return m_abtestConfig[configName];
+    }
+    return std::nullopt;
+}
+
+
 } // namespace WCDB
