@@ -213,6 +213,12 @@ bool MigratingHandle::trySynchronousTransactionAfterAttached()
 }
 
 #pragma mark - Statement
+void MigratingHandle::finalize()
+{
+    Super::finalize();
+    stopReferenced();
+}
+
 HandleStatement *MigratingHandle::getStatement()
 {
     m_migratingHandleStatements.push_back(MigratingHandleStatement(this));
@@ -236,6 +242,14 @@ void MigratingHandle::finalizeStatements()
 {
     for (auto &handleStatement : m_migratingHandleStatements) {
         handleStatement.finalize();
+    }
+}
+
+void MigratingHandle::resetAllStatements()
+{
+    for (auto &handleStatement : m_migratingHandleStatements) {
+        if(!handleStatement.isPrepared())continue;
+        handleStatement.reset();
     }
 }
 

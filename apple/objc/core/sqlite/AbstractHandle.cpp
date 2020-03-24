@@ -198,6 +198,14 @@ void AbstractHandle::returnStatement(HandleStatement *handleStatement)
     }
 }
 
+void AbstractHandle::resetAllStatements()
+{
+    for (auto &handleStatement : m_handleStatements) {
+        if(!handleStatement.isPrepared())continue;
+        handleStatement.reset();
+    }
+}
+
 void AbstractHandle::finalizeStatements()
 {
     for (auto &handleStatement : m_handleStatements) {

@@ -288,9 +288,6 @@ void MigratingHandleStatement::finalize()
         m_additionalStatement->finalize();
     }
     finalizeMigrate();
-    MigratingHandle* migratingHandle = dynamic_cast<MigratingHandle*>(getHandle());
-    WCTAssert(migratingHandle != nullptr);
-    migratingHandle->stopReferenced();
 }
 
 bool MigratingHandleStatement::step()
