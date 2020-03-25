@@ -43,6 +43,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (WCTHandleStatement*)getOrCreateHandleStatementByTag:(NSString*)tag;
 
+- (void)finalizeAllStatements;
+
 #pragma mark - Execute
 - (BOOL)execute:(const WCDB::Statement &)statement;
 
