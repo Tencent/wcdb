@@ -82,6 +82,25 @@
     return handleStatement;
 }
 
+- (void)finalizeAllStatements
+{
+    if(_handleStatementDic != nil){
+        [_handleStatementDic enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, WCTHandleStatement * _Nonnull obj, BOOL * _Nonnull stop) {
+            WCDB_UNUSED(key);
+            WCDB_UNUSED(stop);
+            WCDB::HandleStatement* handleStatement = [obj getRawHandleStatement];
+            if(handleStatement != nullptr){
+                handleStatement->finalize();
+                [self returnRawStatement:handleStatement];
+            }
+        }];
+        [_handleStatementDic removeAllObjects];
+    }
+    if (_handle != nullptr) {
+        _handle->finalize();
+    }
+}
+
 - (WCDB::HandleStatement*)getRawHandleStatement
 {
     WCDB::Handle* dbHandle = [self getOrGenerateHandle];
