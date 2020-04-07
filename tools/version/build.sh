@@ -15,7 +15,8 @@ showUsage() {
 """
 }
 
-root=`git rev-parse --show-toplevel`
+ScriptDir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+root="$ScriptDir"/../../
 
 declare platform
 declare language
@@ -83,35 +84,29 @@ case "$key" in
 esac
 done
 
-# version
-timestamp=`date +"%Y-%m-%d %H:%M:%S UTC%z"`
-version=`cat $root/VERSION`
-
 project="$root"/apple/WCDB.xcodeproj
 derivedData="$destination"/derivedData
 products="$derivedData"/Build/Products
-
-preprocessor="\$\(inherited\)"
-preprocessor+="\ WCDB_VERSION=\\\"\"${version}\\\"\""
-if ${wechat}; then
-    preprocessor+="\ WCDB_WECHAT=1"
-fi
-preprocessor+="\ WCDB_BUILD=\\\"\"${timestamp}\\\"\""
-settings=(ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= SKIP_INSTALL=YES GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=NO CLANG_ENABLE_CODE_COVERAGE=NO ENABLE_TESTABILITY=NO GCC_PREPROCESSOR_DEFINITIONS=${preprocessor})
-if ${wechat}; then
-    settings+=(DEPLOYMENT_POSTPROCESSING=NO)
-fi
 
 if $static_framework; then
     if [ "$language" != "ObjC" ] || [ "$platform" != "iOS" ]; then
         echo 'Static library is only support iOS + ObjC.'
         exit 1
     fi
-    settings+=(MACH_O_TYPE=staticlib STRIP_STYLE=debugging LLVM_LTO=NO STRIP_INSTALLED_PRODUCT=NO DEPLOYMENT_POSTPROCESSING=NO)
 fi
-if ! $enable_bitcode; then
-    settings+=(ENABLE_BITCODE=NO)
+
+declare settingsPrameter
+if $static_framework; then
+    settingsPrameter+="--static-framework "
 fi
+if $enable_bitcode; then
+	settingsPrameter+="--enable-bitcode "
+fi
+if $wechat; then
+	settingsPrameter+="--wechat "
+fi
+
+settings=`bash $ScriptDir/settings.sh $settingsPrameter`
 
 declare target
 case "$language" in
@@ -167,7 +162,7 @@ for platformBasedParameter in "${platformBasedParameters[@]}"; do
     if [ -z "$template" ]; then
         template="$product"
     fi
-    builder="xcrun xcodebuild -arch "$arch" -scheme "$target" -project "$project" -configuration "$configuration" -derivedDataPath "$derivedData" -sdk "$sdk" ${settings[@]} ${action}"
+    builder="xcrun xcodebuild -arch $arch -scheme $target -project $project -configuration $configuration -derivedDataPath $derivedData -sdk $sdk $settings $action"
     if $pretty; then
         if type xcpretty > /dev/null; then
             builder+=" | xcpretty"

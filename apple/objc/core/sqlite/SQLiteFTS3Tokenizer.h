@@ -30,6 +30,7 @@ extern "C" {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wquoted-include-in-framework-header"
+#pragma GCC diagnostic ignored "-Wmodule-import-in-extern-c"
 #include <sqlcipher/fts3_tokenizer.h>
 #pragma GCC diagnostic pop
 
