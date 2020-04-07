@@ -24,17 +24,9 @@
 
 #pragma once
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #if SQLITE_WCDB
 #include <sqlcipher/sqlite3.h>
 #include <sqlcipher/sqlite3_wcdb.h>
 #else
 #include <sqlite3.h>
-#endif
-
-#ifdef __cplusplus
-}
 #endif
