@@ -82,6 +82,24 @@
     return newPaths;
 }
 
+- (NSString*)test_stringByStandardizingPath
+{
+    NSString* path = [self stringByStandardizingPath];
+#if TARGET_OS_IPHONE && !TARGET_IPHONE_SIMULATOR
+    /*
+     /var is the symlink to /private/var.
+     In most cases, -[NSString stringByStandardizingPath] will return the path with the /var prefix,
+     while in a small number of cases it will return the path with the /private/var prefix.
+     In order to avoid the inconsistency of the path of the same file, remove the /private prefix of path here
+     */
+    NSRange match = [path rangeOfString:@"/private"];
+    if(match.location == 0){
+        path = [path stringByReplacingCharactersInRange:match withString:@""];
+    }
+#endif
+    return path;
+}
+
 @end
 
 @implementation WCTPerformanceFootprint (TestCase)

@@ -31,6 +31,7 @@
 #import "WCTDatabase+TestCase.h"
 #import <WCDB/WCDB.h>
 #import <WCDB/WCTDatabase+Test.h>
+#import "NSObject+TestCase.h"
 
 @implementation BaseTestCase {
     Random *_random;
@@ -168,12 +169,12 @@
 
 + (NSString *)root
 {
-    return [[NSTemporaryDirectory() stringByAppendingPathComponent:@"WCDB"] stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier];
+    return [[[NSTemporaryDirectory() stringByAppendingPathComponent:@"WCDB"] stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier] test_stringByStandardizingPath];
 }
 
 + (NSString *)cacheRoot
 {
-    return [[NSTemporaryDirectory() stringByAppendingPathComponent:@"WCDB"] stringByAppendingPathComponent:[[NSBundle mainBundle].bundleIdentifier stringByAppendingString:@".Cache"]];
+    return [[[NSTemporaryDirectory() stringByAppendingPathComponent:@"WCDB"] stringByAppendingPathComponent:[[NSBundle mainBundle].bundleIdentifier stringByAppendingString:@".Cache"]] test_stringByStandardizingPath];
 }
 
 - (NSString *)directory
