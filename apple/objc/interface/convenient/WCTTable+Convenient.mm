@@ -127,8 +127,8 @@
     return [[[[[self prepareSelect] orders:orders] limit:limit] invalidateWhenDispose] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsLimit:(const WCDB::Expression &)offset
-                                         offset:(const WCDB::Expression &)limit
+- (NSArray /* <WCTObject*> */ *)getObjectsOffset:(const WCDB::Expression &)offset
+                                           limit:(const WCDB::Expression &)limit
 {
     return [[[[[self prepareSelect] limit:limit] offset:offset] invalidateWhenDispose] allObjects];
 }
