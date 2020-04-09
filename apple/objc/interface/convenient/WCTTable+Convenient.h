@@ -68,8 +68,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSArray<ObjectType> *)getObjectsOrders:(const WCDB::OrderingTerms &)orders
                                              limit:(const WCDB::Expression &)limit;
 
-- (nullable NSArray<ObjectType> *)getObjectsLimit:(const WCDB::Expression &)limit
-                                           offset:(const WCDB::Expression &)offset;
+- (NSArray /* <WCTObject*> */ *)getObjectsOffset:(const WCDB::Expression &)offset
+                                           limit:(const WCDB::Expression &)limit;
 
 - (nullable NSArray<ObjectType> *)getObjectsWhere:(const WCDB::Expression &)condition
                                            orders:(const WCDB::OrderingTerms &)orders

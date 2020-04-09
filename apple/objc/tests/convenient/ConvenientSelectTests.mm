@@ -1060,7 +1060,7 @@
     [self doTestObject:self.object2
                 andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY rowid ASC LIMIT 1 OFFSET 1"
            bySelecting:^NSArray<TestCaseObject *> * {
-               return [self.table getObjectsLimit:1 offset:1];
+               return [self.table getObjectsOffset:1 limit:2];
            }];
 }
 
