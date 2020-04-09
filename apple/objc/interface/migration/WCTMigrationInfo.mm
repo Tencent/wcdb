@@ -50,7 +50,7 @@
 
 - (void)setSourceDatabase:(NSString *)database
 {
-    _sourceDatabase = [database stringByStandardizingPath];
+    _sourceDatabase = [database wcdb_stringByStandardizingPath];
 }
 
 @end
