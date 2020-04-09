@@ -81,6 +81,7 @@
 - (BOOL)remapTable:(NSString *)tableName toClass:(Class<WCTTableCoding>)tableClass
 {
     WCTAssert(tableName != nil && tableClass != nil);
+    WCTAssert([(id)tableClass respondsToSelector:@selector(objectRelationalMapping)] && [(id)tableClass respondsToSelector:@selector(allProperties)]);
     // TODO: check the constraints are as expected here.
     return [self lazyRunTransaction:^BOOL(WCTHandle *nsHandle) {
         WCDB::Handle *handle = [nsHandle getOrGenerateHandle];
