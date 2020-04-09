@@ -104,14 +104,22 @@
 - (void)test_property
 {
     self.tableClass = PropertyObject.class;
+#ifndef WCDB_WECHAT
     NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(property INTEGER, differentName INTEGER)" ];
+#else
+    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(differentName INTEGER, property INTEGER)" ];
+#endif
     [self doTestCreateTableAndIndexSQLsAsExpected:expected];
 }
 
 - (void)test_all_types
 {
     self.tableClass = AllTypesObject.class;
+#ifndef WCDB_WECHAT
     NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(type TEXT PRIMARY KEY, enumNSValue INTEGER, optionNSValue INTEGER, enumValue INTEGER, enumClassValue INTEGER, literalEnumValue INTEGER, trueOrFalseValue INTEGER, yesOrNoValue INTEGER, intValue INTEGER, unsignedIntValue INTEGER, int32Value INTEGER, int64Value INTEGER, uint32Value INTEGER, uint64Value INTEGER, integerValue INTEGER, uintegerValue INTEGER, floatValue REAL, doubleValue REAL, numberValue REAL, dateValue REAL, stringValue TEXT, dataValue BLOB, codingValue BLOB, renamedGSValue INTEGER)" ];
+#else
+    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(codingValue BLOB, dataValue BLOB, dateValue REAL, doubleValue REAL, enumClassValue INTEGER, enumNSValue INTEGER, enumValue INTEGER, floatValue REAL, int32Value INTEGER, int64Value INTEGER, integerValue INTEGER, intValue INTEGER, literalEnumValue INTEGER, numberValue REAL, optionNSValue INTEGER, renamedGSValue INTEGER, stringValue TEXT, trueOrFalseValue INTEGER, type TEXT PRIMARY KEY, uint32Value INTEGER, uint64Value INTEGER, uintegerValue INTEGER, unsignedIntValue INTEGER, yesOrNoValue INTEGER)" ];
+#endif
     [self doTestCreateTableAndIndexSQLsAsExpected:expected];
 
     AllTypesObject* maxObject = [AllTypesObject maxObject];
@@ -223,7 +231,11 @@
 {
     self.tableClass = IndexObject.class;
     NSArray<NSString*>* expected = @[
+#ifndef WCDB_WECHAT
         @"CREATE TABLE IF NOT EXISTS main.testTable(index_ INTEGER, indexAsc INTEGER, indexDesc INTEGER, uniqueIndex INTEGER, uniqueIndexAsc INTEGER, uniqueIndexDesc INTEGER, multiIndex INTEGER, multiIndexAsc INTEGER, multiIndexDesc INTEGER)",
+#else
+        @"CREATE TABLE IF NOT EXISTS main.testTable(index_ INTEGER, indexAsc INTEGER, indexDesc INTEGER, multiIndex INTEGER, multiIndexAsc INTEGER, multiIndexDesc INTEGER, uniqueIndex INTEGER, uniqueIndexAsc INTEGER, uniqueIndexDesc INTEGER)",
+#endif
         @"CREATE INDEX IF NOT EXISTS main.testTable_index ON testTable(index_)",
         @"CREATE INDEX IF NOT EXISTS main.testTable_index_asc ON testTable(indexAsc)",
         @"CREATE INDEX IF NOT EXISTS main.testTable_index_desc ON testTable(indexDesc)",
@@ -300,7 +312,11 @@
     TestCaseAssertTrue([self dropTable]);
     // newly create
     {
+#ifndef WCDB_WECHAT
         NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER, newValue INTEGER)", @"CREATE INDEX IF NOT EXISTS main.testTable_index ON testTable(value)" ];
+#else
+        NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(newValue INTEGER, value INTEGER)", @"CREATE INDEX IF NOT EXISTS main.testTable_index ON testTable(value)" ];
+#endif
         [self doTestCreateTableAndIndexSQLsAsExpected:expected];
     }
     // drop index

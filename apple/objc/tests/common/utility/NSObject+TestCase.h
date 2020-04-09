@@ -50,6 +50,7 @@
 
 + (NSArray<NSString*>*)pathsByReplacingPaths:(NSArray<NSString*>*)paths withDirectory:(NSString*)directory;
 + (NSString*)pathByReplacingPath:(NSString*)path withDirectory:(NSString*)directory;
+- (NSString*)test_stringByStandardizingPath;
 
 @end
 

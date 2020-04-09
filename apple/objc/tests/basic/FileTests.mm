@@ -197,19 +197,19 @@
     [self.database close];
 
     NSError* error;
-    NSFileProtectionType fileProtectionTypeBefore = [self.fileManager getFileProtection:self.database.path error:&error];
+    NSFileProtectionType fileProtectionTypeBefore = [self.fileManager getFileProtection:self.database.path];
     TestCaseAssertTrue(fileProtectionTypeBefore == nil
                        || [fileProtectionTypeBefore isEqualToString:NSFileProtectionNone]
                        || [fileProtectionTypeBefore isEqualToString:NSFileProtectionCompleteUntilFirstUserAuthentication]);
     TestCaseAssertTrue(error == nil);
 
-    TestCaseAssertTrue([self.fileManager setFileProtectionOfPath:self.database.path to:NSFileProtectionComplete error:&error]);
+    [self.fileManager setFileProtectionOfPath:self.database.path to:NSFileProtectionComplete];
     TestCaseAssertTrue(error == nil);
 
     // trigger
     TestCaseAssertTrue([self.database canOpen]);
 
-    NSFileProtectionType fileProtectionTypeAfter = [self.fileManager getFileProtection:self.database.path error:&error];
+    NSFileProtectionType fileProtectionTypeAfter = [self.fileManager getFileProtection:self.database.path];
     TestCaseAssertTrue([fileProtectionTypeAfter isEqualToString:NSFileProtectionCompleteUntilFirstUserAuthentication]);
     TestCaseAssertTrue(error == nil);
 }

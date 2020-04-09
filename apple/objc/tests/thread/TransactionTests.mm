@@ -704,11 +704,11 @@
         write2Begin = [NSDate date];
         [NSThread sleepForTimeInterval:0.1];
         TestCaseAssertTrue([self.database commitOrRollbackTransaction]);
-    }while(++i<5);
+    }while(++i<10);
     [self.dispatch waitUntilDone];
     int count = [self.table getValueOnResultColumn:TestCaseObject.allProperties.count()].numberValue.intValue;
     TestCaseAssertTrue(count == identifier);
-    TestCaseAssertTrue(pauseTimes == 5);
+    TestCaseAssertTrue(pauseTimes > 1);
 }
 
 - (void)test_pauseable_transaction2
@@ -757,11 +757,11 @@
         write2Begin = [NSDate date];
         [NSThread sleepForTimeInterval:0.1];
         TestCaseAssertTrue([self.database commitOrRollbackTransaction]);
-    }while(++i<5);
+    }while(++i<10);
     [self.dispatch waitUntilDone];
     int count = [self.table getValueOnResultColumn:TestCaseObject.allProperties.count()].numberValue.intValue;
     TestCaseAssertTrue(count == identifier);
-    TestCaseAssertTrue(pauseTime == 5);
+    TestCaseAssertTrue(pauseTime > 1);
 }
 
 - (void)test_pauseable_transaction3
