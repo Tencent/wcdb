@@ -56,23 +56,26 @@ NSErrorUserInfoKey const WCTErrorKeyExtendedCode = @WCDB_ERROR_INT_KEY_EXTCODE;
 - (instancetype)initWithError:(const WCDB::Error &)error
 {
     NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
-    for (const auto &info : error.infos) {
-        switch (info.second.underlyingType()) {
-        case WCDB::Error::InfoValue::UnderlyingType::String:
-            [userInfo setObject:[NSString stringWithView:info.second.stringValue()]
-                         forKey:[NSString stringWithView:info.first]];
-            break;
-        case WCDB::Error::InfoValue::UnderlyingType::Float:
-            [userInfo setObject:[NSNumber numberWithDouble:info.second.floatValue()] forKey:[NSString stringWithView:info.first]];
-            break;
-        case WCDB::Error::InfoValue::UnderlyingType::Integer:
-            [userInfo setObject:[NSNumber numberWithLongLong:info.second.integerValue()] forKey:[NSString stringWithView:info.first]];
-            break;
-        default:
-            [userInfo setObject:[NSNull null] forKey:[NSString stringWithView:info.first]];
-            break;
+    if(error.infos.size()>0){
+        for (const auto &info : error.infos) {
+            switch (info.second.underlyingType()) {
+            case WCDB::Error::InfoValue::UnderlyingType::String:
+                [userInfo setObject:[NSString stringWithView:info.second.stringValue()]
+                             forKey:[NSString stringWithView:info.first]];
+                break;
+            case WCDB::Error::InfoValue::UnderlyingType::Float:
+                [userInfo setObject:[NSNumber numberWithDouble:info.second.floatValue()] forKey:[NSString stringWithView:info.first]];
+                break;
+            case WCDB::Error::InfoValue::UnderlyingType::Integer:
+                [userInfo setObject:[NSNumber numberWithLongLong:info.second.integerValue()] forKey:[NSString stringWithView:info.first]];
+                break;
+            default:
+                [userInfo setObject:[NSNull null] forKey:[NSString stringWithView:info.first]];
+                break;
+            }
         }
     }
+    
     return [self initWithCode:(WCTErrorCode) error.code() level:(WCTErrorLevel) error.level message:[NSString stringWithView:error.getMessage()] userInfo:userInfo];
 }
 
