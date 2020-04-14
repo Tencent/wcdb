@@ -23,6 +23,7 @@
  */
 
 #import <WCDB/WCTTable.h>
+#import <WCDB/WCTDeclaration.h>
 
 @interface WCTTable () {
 @protected
