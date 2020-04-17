@@ -281,14 +281,14 @@ public:
         template<typename T>
         InfoValue(const T &value,
                   typename std::enable_if<std::is_floating_point<T>::value>::type * = nullptr)
-        : m_underlying((Float) value)
+        : m_floatValue((Float) value), m_intValue(0), m_stringValue(), m_underlyingType(UnderlyingType::Float)
         {
         }
 
         template<typename T>
         InfoValue(const T &value,
                   typename std::enable_if<std::is_integral<T>::value>::type * = nullptr)
-        : m_underlying((Integer) value)
+        : m_floatValue(0), m_intValue((Integer)value), m_stringValue(), m_underlyingType(UnderlyingType::Integer)
         {
         }
 
@@ -308,7 +308,10 @@ public:
         UnderlyingType underlyingType() const;
 
     private:
-        std::any m_underlying;
+        Float m_floatValue;
+        Integer m_intValue;
+        String m_stringValue;
+        UnderlyingType m_underlyingType;
     };
     StringViewMap<InfoValue> infos;
 

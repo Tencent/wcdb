@@ -251,65 +251,55 @@ const StringView& Error::getMessage() const
 }
 
 #pragma mark - Info
-Error::InfoValue::InfoValue(const char* string) : m_underlying(String(string))
+Error::InfoValue::InfoValue(const char* string)
+: m_floatValue(0), m_intValue(0), m_stringValue(String(string)), m_underlyingType(UnderlyingType::String)
 {
 }
 
 Error::InfoValue::InfoValue(const UnsafeStringView& string)
-: m_underlying(String(string))
+: m_floatValue(0), m_intValue(0), m_stringValue(String(string)), m_underlyingType(UnderlyingType::String)
 {
 }
 
-Error::InfoValue::InfoValue(String&& string) : m_underlying(std::move(string))
+Error::InfoValue::InfoValue(String&& string)
+: m_floatValue(0), m_intValue(0), m_stringValue(std::move(string)), m_underlyingType(UnderlyingType::String)
 {
 }
 
 Error::InfoValue::String Error::InfoValue::stringValue() const
 {
-    WCTAssert(m_underlying.has_value());
     if (underlyingType() == UnderlyingType::String) {
-        return std::any_cast<String>(m_underlying);
+        return m_stringValue;
     }
     return String();
 }
 
 Error::InfoValue::Integer Error::InfoValue::integerValue() const
 {
-    WCTAssert(m_underlying.has_value());
     if (underlyingType() == UnderlyingType::Integer) {
-        return std::any_cast<Integer>(m_underlying);
+        return m_intValue;
     }
     return 0;
 }
 
 Error::InfoValue::Float Error::InfoValue::floatValue() const
 {
-    WCTAssert(m_underlying.has_value());
     if (underlyingType() == UnderlyingType::Float) {
-        return std::any_cast<Float>(m_underlying);
+        return m_floatValue;
     }
     return 0;
 }
 
 Error::InfoValue::UnderlyingType Error::InfoValue::underlyingType() const
 {
-    const auto& type = m_underlying.type();
-    if (type == typeid(Integer)) {
-        return UnderlyingType::Integer;
-    } else if (type == typeid(Float)) {
-        return UnderlyingType::Float;
-    } else if (type == typeid(String)) {
-        return UnderlyingType::String;
-    } else {
-        return UnderlyingType::None;
-    }
+    return m_underlyingType;
 }
 
 #pragma mark - Description
 StringView Error::getDescription() const
 {
     WCTAssert(isError((int) code()));
-    WCTAssert(!m_message.empty());
+//    WCTAssert(!m_message.empty());
     std::ostringstream stream;
     stream << "[" << levelName(level) << ": " << (int) code() << ", " << m_message << "]";
 

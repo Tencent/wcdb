@@ -696,7 +696,6 @@
 		23EEDD5D217DFADC006E9E73 /* Syntax.h in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDC65217DFADC006E9E73 /* Syntax.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23EEDD60217DFB17006E9E73 /* Enum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDD5E217DFB16006E9E73 /* Enum.hpp */; };
 		23EEDD61217DFB17006E9E73 /* Shadow.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDD5F217DFB17006E9E73 /* Shadow.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		23F0FEB4215F5E9A008399FB /* ThreadLocal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F0FEB0215F5E99008399FB /* ThreadLocal.cpp */; };
 		23F0FEB5215F5E9A008399FB /* Lock.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F0FEB1215F5E9A008399FB /* Lock.hpp */; };
 		23F0FEB6215F5E9A008399FB /* ThreadLocal.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F0FEB2215F5E9A008399FB /* ThreadLocal.hpp */; };
 		23F0FEB7215F5E9A008399FB /* Lock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F0FEB3215F5E9A008399FB /* Lock.cpp */; };
@@ -4340,7 +4339,6 @@
 				23776CA4218C41DD00E985DC /* WCTChainCall.mm in Sources */,
 				23EABBE7206D08EC00241F3B /* WCTHandle+Table.mm in Sources */,
 				2349F7351EA0D6680021EFA7 /* WCTUpdate.mm in Sources */,
-				23F0FEB4215F5E9A008399FB /* ThreadLocal.cpp in Sources */,
 				3960D89F2319288C00EF05D1 /* StatementExplain.cpp in Sources */,
 				23EEDC9F217DFADC006E9E73 /* RecursiveCTE.cpp in Sources */,
 				23B4DCBD2112A9C800954D71 /* Core.cpp in Sources */,

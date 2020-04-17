@@ -30,16 +30,27 @@
 
 namespace WCDB {
 
+template<typename T>
 class UntypedThreadLocal {
 protected:
     typedef unsigned int Identifier;
-    static Identifier nextIdentifier();
-    static std::map<Identifier, std::any>& threadedStorage();
+    static Identifier nextIdentifier(){
+        static std::atomic<Identifier>* s_identifier = new std::atomic<Identifier>(0);
+        return ++(*s_identifier);
+    }
+    static std::map<Identifier, T>& threadedStorage(){
+        static thread_local std::map<Identifier, T>* s_storage
+        = new std::map<Identifier, T>();
+        return *s_storage;
+    }
 };
 
 template<typename T>
-class ThreadLocal : public UntypedThreadLocal {
+class ThreadLocal : public UntypedThreadLocal<T> {
 public:
+    using UntypedThreadLocal<T>::nextIdentifier;
+    using UntypedThreadLocal<T>::threadedStorage;
+    using Identifier = typename UntypedThreadLocal<T>::Identifier;
     ThreadLocal(const typename std::enable_if<std::is_default_constructible<T>::value>::type* = nullptr)
     : m_identifier(nextIdentifier()), m_default()
     {
@@ -62,7 +73,7 @@ public:
         if (iter == storage.end()) {
             iter = storage.emplace(m_identifier, m_default).first;
         }
-        return *std::any_cast<T>(&iter->second);
+        return *(&iter->second);
     }
 
 private:
