@@ -197,7 +197,7 @@
 }
 
 #if TARGET_OS_IPHONE && !TARGET_IPHONE_SIMULATOR
-- (void)setFileProtectionOfItemIfExistsAtPath:(NSString *)path to:(NSFileProtectionType)type
+- (void)setFileProtectionOfPath:(NSString *)path to:(NSFileProtectionType)type
 {
     if ([self fileExistsAtPath:path]) {
         NSError *error;
