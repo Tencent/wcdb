@@ -38,10 +38,6 @@ public class SQLiteCursor extends AbstractWindowedCursor {
     static final String TAG = "WCDB.SQLiteCursor";
     static final int NO_COUNT = -1;
 
-    /** The name of the table to edit */
-    @SuppressWarnings("unused")
-	private final String mEditTable;
-
     /** The names of the columns in the rows */
     private final String[] mColumns;
 
@@ -59,10 +55,6 @@ public class SQLiteCursor extends AbstractWindowedCursor {
 
     /** A mapping of column names to column indices, to speed up lookups */
     private Map<String, Integer> mColumnNameMap;
-
-    /** Used to find out where a cursor was allocated in case it never got released. */
-    @SuppressWarnings("unused")
-	private final Throwable mStackTrace;
 
     /**
      * Execute a query and provide access to its result set through a Cursor
@@ -99,10 +91,8 @@ public class SQLiteCursor extends AbstractWindowedCursor {
         if (query == null) {
             throw new IllegalArgumentException("query object cannot be null");
         }
-        
-        mStackTrace = null;
+
         mDriver = driver;
-        mEditTable = editTable;
         mColumnNameMap = null;
         mQuery = query;
 
@@ -124,6 +114,9 @@ public class SQLiteCursor extends AbstractWindowedCursor {
         if (mWindow == null || newPosition < mWindow.getStartPosition() ||
                 newPosition >= (mWindow.getStartPosition() + mWindow.getNumRows())) {
             fillWindow(newPosition);
+
+            return (newPosition >= mWindow.getStartPosition()) &&
+                    (newPosition < mWindow.getStartPosition() + mWindow.getNumRows());
         }
 
         return true;
