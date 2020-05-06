@@ -30,6 +30,7 @@
 #include <WCDB/OperationQueue.hpp>
 #include <fcntl.h>
 #include <unistd.h>
+#include <WCDB/Core.hpp>
 
 namespace WCDB {
 
@@ -301,7 +302,12 @@ void OperationQueue::asyncBackup(const UnsafeStringView& path)
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_records.find(path);
     if (iter != m_records.end() && iter->second.registeredForBackup) {
-        asyncBackup(path, OperationQueueTimeIntervalForBackup);
+        std::optional<UnsafeStringView> config =  Core::shared().getABTestConfig("clicfg_wcdb_backup_time_interval");
+        if(config.has_value()){
+            asyncBackup(path, atoi(config.value().data()));
+        }else{
+            asyncBackup(path, OperationQueueTimeIntervalForBackup);
+        }
     }
 }
 
