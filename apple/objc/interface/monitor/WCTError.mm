@@ -46,7 +46,6 @@ NSErrorUserInfoKey const WCTErrorKeyExtendedCode = @WCDB_ERROR_INT_KEY_EXTCODE;
     if (self = [super initWithDomain:WCTErrorDomain
                                 code:(NSInteger) code
                             userInfo:userInfo]) {
-        WCTAssert(message.length > 0);
         _message = message;
         _level = (WCTErrorLevel) level;
     }

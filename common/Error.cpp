@@ -246,7 +246,6 @@ Error::ExtCode Error::rc2ec(int rc)
 
 const StringView& Error::getMessage() const
 {
-    WCTAssert(!m_message.empty());
     return m_message;
 }
 
