@@ -55,6 +55,7 @@ bool LiteralValue::describle(std::ostringstream& stream) const
         stream << "NULL";
         break;
     case Switch::Float:
+        stream.setf(std::ios::fixed);
         stream << floatValue;
         break;
     case Switch::Integer:

@@ -361,6 +361,12 @@
     TestCaseAssertWINQConvertible(WCDB::OrderingTerms, sql, expected);
 }
 
+- (void)test_float_precision
+{
+    auto expr = WCDB::Column(@"testColumn") > 123456789.123456;
+    TestCaseAssertSQLEqual(expr, @"testColumn > 123456789.123456");
+}
+
 - (void)test_expressions_convertible
 {
     WCDB::Expressions sqls = {
