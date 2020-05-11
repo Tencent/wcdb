@@ -37,6 +37,14 @@ bool isIntegerColumnType(const UnsafeStringView& type)
            || type.caseInsensiveEqual("UNSIGNED BIG INT")
            || type.caseInsensiveEqual("INT2") || type.caseInsensiveEqual("INT8");
 }
+const StringView* masterTablePtr = new StringView("sqlite_master");
+const StringView* mainSchemaPtr = new StringView("main");
+const StringView* tempSchemaPtr = new StringView("temp");
+const StringView* builtinTablePrefixPtr = new StringView("sqlite_");
+const StringView& masterTable = *masterTablePtr;
+const StringView& mainSchema = *mainSchemaPtr;
+const StringView& tempSchema = *tempSchemaPtr;
+const StringView& builtinTablePrefix = *builtinTablePrefixPtr;
 
 } // namespace Syntax
 
