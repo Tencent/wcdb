@@ -473,7 +473,7 @@ bool AbstractHandle::checkpoint(CheckpointMode mode)
     WCTAssert(isOpened());
 
     return APIExit(sqlite3_wal_checkpoint_v2(
-    m_handle, Syntax::mainSchema, (int) mode, nullptr, nullptr));
+                                             m_handle, Syntax::mainSchema.data(), (int) mode, nullptr, nullptr));
 }
 
 void AbstractHandle::disableCheckpointWhenClosing(bool disable)

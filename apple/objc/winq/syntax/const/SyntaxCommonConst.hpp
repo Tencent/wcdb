@@ -27,6 +27,7 @@
 namespace WCDB {
 
 class UnsafeStringView;
+class StringView;
 
 namespace Syntax {
 
@@ -88,11 +89,10 @@ enum class ConflictAction {
     Fail,
     Ignore,
 };
-
-static const char* masterTable = "sqlite_master";
-static const char* mainSchema = "main";
-static const char* tempSchema = "temp";
-static const char* builtinTablePrefix = "sqlite_";
+extern const StringView& masterTable;
+extern const StringView& mainSchema;
+extern const StringView& tempSchema;
+extern const StringView& builtinTablePrefix;
 
 } // namespace Syntax
 

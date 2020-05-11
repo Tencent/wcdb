@@ -36,7 +36,7 @@ WCDB_SYNTHESIZE(sql)
 
 + (NSString *)tableName
 {
-    return [NSString stringWithUTF8String:WCDB::Syntax::masterTable];
+    return [NSString stringWithUTF8String:WCDB::Syntax::masterTable.data()];
 }
 
 @end
