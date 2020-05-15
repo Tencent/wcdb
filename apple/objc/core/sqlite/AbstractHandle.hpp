@@ -144,6 +144,7 @@ public:
     };
     bool checkpoint(CheckpointMode mode);
     void disableCheckpointWhenClosing(bool disable);
+    void setWALFilePersist(int persist);
 
 #pragma mark - Notification
 public:

@@ -483,6 +483,12 @@ void AbstractHandle::disableCheckpointWhenClosing(bool disable)
     m_handle, SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE, (int) disable, nullptr));
 }
 
+void AbstractHandle::setWALFilePersist(int persist)
+{
+    WCTAssert(isOpened());
+  APIExit(sqlite3_file_control(m_handle, Syntax::mainSchema.data(), SQLITE_FCNTL_PERSIST_WAL, &persist));
+}
+
 #pragma mark - Notification
 void AbstractHandle::setNotificationWhenSQLTraced(const UnsafeStringView &name,
                                                   const SQLNotification &onTraced)
