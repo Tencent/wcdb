@@ -168,6 +168,17 @@
     return succeed;
 }
 
+//rawExecute should no be used to access or modify the data in a migrating table.
+- (BOOL)rawExecute:(NSString *)sql
+{
+    BOOL succeed = NO;
+    WCDB::Handle *handle = [self getOrGenerateHandle];
+    if (handle != nullptr) {
+        succeed = handle->execute(sql);
+    }
+    return succeed;
+}
+
 #pragma mark - Prepare
 - (BOOL)prepare:(const WCDB::Statement &)statement
 {
@@ -175,6 +186,17 @@
     WCDB::Handle *handle = [self getOrGenerateHandle];
     if (handle != nullptr) {
         succeed = handle->prepare(statement);
+    }
+    return succeed;
+}
+
+//rawPrepare should no be used to access or modify the data in a migrating table.
+- (BOOL)rawPrepare:(NSString *)sql
+{
+    BOOL succeed = NO;
+    WCDB::Handle *handle = [self getOrGenerateHandle];
+    if (handle != nullptr) {
+        succeed = handle->prepare(sql);
     }
     return succeed;
 }

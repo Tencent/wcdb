@@ -74,6 +74,7 @@ protected:
 public:
     RecyclableHandle getHandle();
     bool execute(const Statement &statement);
+    bool execute(const UnsafeStringView &sql);
     std::optional<bool> tableExists(const UnsafeStringView &table);
 
 protected:

@@ -32,9 +32,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Execute
 - (BOOL)execute:(const WCDB::Statement &)statement;
+//rawExecute should no be used to access or modify the data in a migrating table.
+- (BOOL)rawExecute:(NSString *)sql;
 
 #pragma mark - Prepare
 - (BOOL)prepare:(const WCDB::Statement &)statement;
+//rawPrepare should no be used to access or modify the data in a migrating table.
+- (BOOL)rawPrepare:(NSString* )sql;
 
 - (BOOL)isPrepared;
 

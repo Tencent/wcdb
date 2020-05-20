@@ -38,4 +38,10 @@
     return _database->execute(statement);
 }
 
+//rawExecute should no be used to access or modify the data in a migrating table.
+- (BOOL)rawExecute:(NSString *)sql
+{
+    return _database->execute(sql);
+}
+
 @end

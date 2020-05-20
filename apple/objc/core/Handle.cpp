@@ -135,9 +135,24 @@ bool Handle::execute(const Statement &statement)
     return succeed;
 }
 
+bool Handle::execute(const UnsafeStringView &sql)
+{
+    bool succeed = false;
+    if (prepare(sql)) {
+        succeed = step();
+        finalize();
+    }
+    return succeed;
+}
+
 bool Handle::prepare(const Statement &statement)
 {
     return m_mainStatement->prepare(statement);
+}
+
+bool Handle::prepare(const UnsafeStringView &sql)
+{
+    return m_mainStatement->prepare(sql);
 }
 
 bool Handle::isPrepared()

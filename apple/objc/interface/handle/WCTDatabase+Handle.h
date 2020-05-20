@@ -32,6 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (WCTHandle *)getHandle;
 
 - (BOOL)execute:(const WCDB::Statement &)statement;
+//rawExecute should no be used to access or modify the data in a migrating table.
+- (BOOL)rawExecute:(NSString*)sql;
 
 @end
 
