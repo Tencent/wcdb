@@ -44,6 +44,7 @@ public:
     virtual ~HandleStatement() override;
 
     virtual bool prepare(const Statement &statement);
+    virtual bool prepare(const UnsafeStringView &sql);
     virtual bool isPrepared();
     virtual void finalize();
 
@@ -85,7 +86,6 @@ protected:
     virtual bool isBusy();
 
 private:
-    bool prepare(const UnsafeStringView &sql);
     sqlite3_stmt *m_stmt;
     bool m_done;
 };

@@ -59,11 +59,30 @@
     return succeed;
 }
 
+//rawExecute should no be used to access or modify the data in a migrating table.
+- (BOOL)rawExecute:(NSString *)sql
+{
+    WCTHandleStatementAssert(return NO);
+    bool succeed = false;
+    if(_handleStatement->prepare(sql)){
+        succeed = _handleStatement->step();
+        _handleStatement->finalize();
+    }
+    return succeed;
+}
+
 #pragma mark - Prepare
 - (BOOL)prepare:(const WCDB::Statement &)statement
 {
     WCTHandleStatementAssert(return NO);
     return _handleStatement->prepare(statement);
+}
+
+//rawPrepare should no be used to access or modify the data in a migrating table.
+- (BOOL)rawPrepare:(NSString* )sql
+{
+    WCTHandleStatementAssert(return NO);
+    return _handleStatement->prepare(sql);
 }
 
 - (BOOL)isPrepared

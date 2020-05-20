@@ -197,6 +197,19 @@ bool Database::execute(const Statement &statement)
     return false;
 }
 
+bool Database::execute(const UnsafeStringView &sql)
+{
+    RecyclableHandle handle = getHandle();
+    if (handle != nullptr) {
+        TransactionGuard transactionedGuard(this, handle);
+        if (handle->execute(sql)) {
+            return true;
+        }
+        setThreadedError(handle->getError());
+    }
+    return false;
+}
+
 std::optional<bool> Database::tableExists(const UnsafeStringView &table)
 {
     std::optional<bool> exists;

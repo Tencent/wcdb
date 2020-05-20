@@ -54,8 +54,10 @@ private:
 #pragma mark - Statement
 public:
     bool execute(const Statement &statement);
+    bool execute(const UnsafeStringView &sql);
 
     virtual bool prepare(const Statement &statement);
+    virtual bool prepare(const UnsafeStringView &sql);
     virtual bool isPrepared();
     virtual void finalize();
 
