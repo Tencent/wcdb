@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <limits.h>
 
 #include <algorithm>
 #include <map>
@@ -860,7 +861,7 @@ static jlong nativeExecuteForLastInsertedRowId(JNIEnv *env,
     int err = executeNonQuery(env, conn, stmt);
     return err == SQLITE_DONE && sqlite3_changes(conn->db) > 0
                ? sqlite3_last_insert_rowid(conn->db)
-               : -1;
+               : LONG_MIN;
 }
 
 static int executeOneRowQuery(JNIEnv *env,
