@@ -42,6 +42,8 @@ typedef void (^WCTCloseBlock)(void);
 
 - (instancetype)initWithPath:(NSString *)path NS_DESIGNATED_INITIALIZER;
 
+- (instancetype)initInMemoryDatabase NS_DESIGNATED_INITIALIZER;
+
 - (void)close:(WCDB_NO_ESCAPE WCTCloseBlock)onClosed;
 
 - (WCTError *)error;

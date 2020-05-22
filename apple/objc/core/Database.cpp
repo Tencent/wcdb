@@ -35,6 +35,7 @@
 #include <WCDB/MigrateHandle.hpp>
 #include <WCDB/MigratingHandle.hpp>
 #include <WCDB/OperationHandle.hpp>
+#include <WCDB/SQLite.h>
 
 namespace WCDB {
 
@@ -47,6 +48,8 @@ Database::Database(const UnsafeStringView &path)
 , m_factory(path)
 , m_migration(this)
 , m_migratedCallback(nullptr)
+, m_isInMemory(false)
+, m_sharedInMemoryHandle(nullptr)
 {
 }
 
@@ -80,6 +83,17 @@ void Database::didDrain()
 
 void Database::close(const ClosedCallback &onClosed)
 {
+    if(m_isInMemory){
+        if(m_sharedInMemoryHandle != nullptr){
+            m_sharedInMemoryHandle->close();
+        }
+        m_sharedInMemoryHandle = nullptr;
+        if (onClosed != nullptr) {
+            onClosed();
+            didDrain();
+        }
+        return;
+    }
     ++m_closing;
     {
         SharedLockGuard concurrencyGuard(m_concurrency);
@@ -117,6 +131,10 @@ Database::InitializedGuard Database::initialize()
         LockGuard memoryGuard(m_memory);
         if (m_initialized) {
             // retry
+            continue;
+        }
+        if(m_isInMemory){
+            m_initialized = true;
             continue;
         }
         if (!FileManager::createDirectoryWithIntermediateDirectories(
@@ -171,6 +189,13 @@ void Database::removeConfig(const UnsafeStringView &name)
 #pragma mark - Handle
 RecyclableHandle Database::getHandle()
 {
+    if(m_isInMemory){
+        InitializedGuard initializedGuard = initialize();
+        if(m_sharedInMemoryHandle == nullptr){
+            m_sharedInMemoryHandle = generateSlotedHandle(m_migration.shouldMigrate() ? HandleType::Migrating : HandleType::Normal);
+        }
+        return RecyclableHandle(m_sharedInMemoryHandle, nullptr);
+    }
     // Additional shared lock is not needed because the threadedHandles is always empty when it's blocked. So threaded handles is thread safe.
     auto handle = m_transactionedHandles.getOrCreate();
     if (handle.get() != nullptr) {
@@ -500,6 +525,9 @@ bool Database::runNestedTransaction(const TransactionCallback &transaction)
 #pragma mark - File
 bool Database::removeFiles()
 {
+    if(m_isInMemory){
+        return false;
+    }
     bool result = false;
     close([&result, this]() {
         std::list<StringView> paths = getPaths();
@@ -514,6 +542,9 @@ bool Database::removeFiles()
 
 std::optional<size_t> Database::getFilesSize()
 {
+    if(m_isInMemory){
+        return 0;
+    }
     auto size = FileManager::getItemsSize(getPaths());
     if (!size.has_value()) {
         assignWithSharedThreadedError();
@@ -523,6 +554,9 @@ std::optional<size_t> Database::getFilesSize()
 
 bool Database::moveFiles(const UnsafeStringView &directory)
 {
+    if(m_isInMemory){
+        return false;
+    }
     bool result = false;
     close([&result, &directory, this]() {
         std::list<StringView> paths = getPaths();
@@ -542,6 +576,9 @@ const StringView &Database::getPath() const
 
 std::list<StringView> Database::getPaths() const
 {
+    if(m_isInMemory){
+        return {path};
+    }
     return pathsOfDatabase(path);
 }
 
@@ -558,6 +595,12 @@ std::list<StringView> Database::pathsOfDatabase(const UnsafeStringView &database
     };
 }
 
+void Database::setInMemory()
+{
+    WCTAssert(!m_initialized);
+    m_isInMemory = true;
+}
+
 #pragma mark - Repair
 void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
 {
@@ -567,6 +610,9 @@ void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
 
 bool Database::backup(bool interruptible)
 {
+    if(m_isInMemory){
+        return false;
+    }
     InitializedGuard initializedGuard = initialize();
     if (!initializedGuard.valid()) {
         return false; // mark as succeed if it's not an auto initialize action.
@@ -628,6 +674,9 @@ bool Database::backup(bool interruptible)
 
 bool Database::deposit()
 {
+    if(m_isInMemory){
+        return false;
+    }
     bool result = false;
     close([&result, this]() {
         InitializedGuard initializedGuard = initialize();
@@ -685,6 +734,9 @@ bool Database::deposit()
 
 double Database::retrieve(const RetrieveProgressCallback &onProgressUpdated)
 {
+    if(m_isInMemory){
+        return 0;
+    }
     double result = -1;
     close([&result, &onProgressUpdated, this]() {
         InitializedGuard initializedGuard = initialize();

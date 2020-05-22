@@ -173,4 +173,21 @@
     }
 }
 
+- (void)test_in_memory_db
+{
+    WCTDatabase* db = [[WCTDatabase alloc] initInMemoryDatabase];
+    TestCaseObject* object = [Random.shared autoIncrementTestCaseObject];
+    NSString* tableName = @"testTable";
+    TestCaseAssertTrue([db createTable:tableName withClass:TestCaseObject.class]);
+    for(int i = 0; i < 100; i++){
+        TestCaseAssertTrue([db insertObject:object intoTable:tableName]);
+    }
+    TestCaseAssertTrue([[db getRowFromStatement:WCDB::StatementSelect().select(WCDB::Expression::function("count").invokeAll()).from(tableName)].firstObject numberValue].unsignedIntValue == 100);
+    TestCaseAssertTrue([db passiveCheckpoint]);
+    [db close];
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:db.path]);
+    db = [[WCTDatabase alloc] initInMemoryDatabase];
+    TestCaseAssertTrue([[db getRowFromStatement:WCDB::StatementSelect().select(WCDB::Expression::function("count").invokeAll()).from(tableName)].firstObject numberValue].unsignedIntValue == 0);
+}
+
 @end

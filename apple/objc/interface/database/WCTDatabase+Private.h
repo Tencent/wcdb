@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 @private
     // Holder can be null in some case using temporary database object. e.g. inside the non-escape block
     WCDB::RecyclableDatabase _databaseHolder;
+    BOOL m_isInMemory;
 @protected
     WCDB::Database *_database;
 }

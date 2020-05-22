@@ -56,6 +56,24 @@
     return self;
 }
 
+- (instancetype)initInMemoryDatabase
+{
+    if (self = [super init]) {
+        m_isInMemory = YES;
+        _database = new WCDB::Database(":memory:");
+        _database->setInMemory();
+        WCTAssert(_database != nullptr);
+    }
+    return self;
+}
+
+- (void)dealloc
+{
+    if(m_isInMemory){
+        delete _database;
+    }
+}
+
 - (void)setTag:(WCTTag)tag
 {
     _database->setTag(tag);
