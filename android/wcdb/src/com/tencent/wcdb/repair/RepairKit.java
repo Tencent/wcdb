@@ -64,6 +64,12 @@ public class RepairKit implements CancellationSignal.OnCancelListener {
      */
     public static final int FLAG_ALL_TABLES = 0x0002;
 
+    /**
+     * Flag indicates {@code CREATE TABLE} statements recovered from corrupted
+     * databases should be check against those in backup files.
+     */
+    public static final int FLAG_CHECK_TABLE_COLUMNS = 0x0004;
+
 
     private static final int INTEGRITY_HEADER = 0x0001;
     private static final int INTEGRITY_DATA = 0x0002;

@@ -62,6 +62,7 @@ typedef struct sqliterk_master_info sqliterk_master_info;
 
 #define SQLITERK_OUTPUT_NO_CREATE_TABLES 0x0001
 #define SQLITERK_OUTPUT_ALL_TABLES 0x0002
+#define SQLITERK_OUTPUT_CHECK_TABLE_COLUMNS 0x0004
 
 int sqliterk_open(const char *path,
                   const sqliterk_cipher_conf *cipher,

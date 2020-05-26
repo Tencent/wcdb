@@ -176,7 +176,7 @@ static int master_onParseColumn(sqliterk *rk,
     const char *sql = sqliterk_column_text(column, 4);
     sqliterk_type type;
 
-    if (!typestr || !name || !sql)
+    if (!typestr || !name || !sql || root_page <= 0)
         return SQLITERK_OK;
         
     if (strcmp(typestr, "table") == 0)
@@ -190,16 +190,31 @@ static int master_onParseColumn(sqliterk *rk,
     if (strncmp(name, "sqlite_", 7) == 0)
         return SQLITERK_OK;
 
-    if (ctx->flags & SQLITERK_OUTPUT_ALL_TABLES) {
-        // Recover ALL: add table to the list.
-        ctx->tables[name] = sqliterk_master_entity(type, sql, root_page);
-    } else {
-        // PARTIAL Recover: check whether we are interested, update info.
+    // Skip table if we are not interested.
+    if (!(ctx->flags & SQLITERK_OUTPUT_ALL_TABLES)) {
         sqliterk_master_map::iterator it = ctx->tables.find(tbl_name);
-        if (it != ctx->tables.end())
-            ctx->tables[name] = sqliterk_master_entity(type, sql, root_page);
+        if (it == ctx->tables.end())
+            return SQLITERK_OK;
     }
 
+    // Check CREATE statement if requested.
+    if (ctx->flags & SQLITERK_OUTPUT_CHECK_TABLE_COLUMNS) {
+        sqliterk_master_map::iterator it = ctx->tables.find(name);
+        if (it != ctx->tables.end()) {
+            const sqliterk_master_entity &e = it->second;
+            if (e.root_page > 0 && !e.sql.empty() &&
+                    (e.type == sqliterk_type_table || e.type == sqliterk_type_index)) {
+                if (e.sql != sql) {
+                    sqliterkOSWarning(SQLITERK_DAMAGED, "SQL mismatch: '%s' <-> '%s'", sql, e.sql.c_str());
+                    if (strlen(sql) < e.sql.size()) {
+                        return SQLITERK_OK;
+                    }
+                }
+            }
+        }
+    }
+
+    ctx->tables[name] = sqliterk_master_entity(type, sql, root_page);
     return SQLITERK_OK;
 }
 
@@ -488,7 +503,7 @@ int sqliterk_output_cb(sqliterk *rk,
         // Run CREATE TABLE statements if necessary.
         if (!(ctx.flags & SQLITERK_OUTPUT_NO_CREATE_TABLES) &&
             !it->second.sql.empty()) {
-            sqliterkOSDebug(SQLITERK_OK, ">>> %s", it->second.sql.c_str());
+            sqliterkOSInfo(SQLITERK_OK, ">>> %s", it->second.sql.c_str());
             char *errmsg = NULL;
             const char *sql = it->second.sql.c_str();
             rc = sqlite3_exec(ctx.db, sql, NULL, NULL, &errmsg);
