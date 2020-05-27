@@ -234,6 +234,12 @@ public abstract class SQLiteProgram extends SQLiteClosable {
         }
     }
 
+    public void bindAllArgs(Object[] bindArgs) {
+        for (int i = bindArgs.length; i != 0; i--) {
+            bind(i, bindArgs[i - 1]);
+        }
+    }
+
     @Override
     protected void onAllReferencesReleased() {
         releasePreparedStatement();
