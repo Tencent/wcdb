@@ -35,7 +35,7 @@ typedef void (^WCTErrorTraceBlock)(WCTError *);
 /**
  Trigger when a transaction or a normal sql ends.
  */
-typedef void (^WCTPerformanceTraceBlock)(NSArray<WCTPerformanceFootprint *> *, double /* cost */);
+typedef void (^WCTPerformanceTraceBlock)(NSString * /* sql */, double /* cost */);
 
 /**
  Trigger when a SQL is executed.

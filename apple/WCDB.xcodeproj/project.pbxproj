@@ -370,8 +370,6 @@
 		2386B3C51ED442FE000B72F6 /* WCTError.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C21ED442FE000B72F6 /* WCTError.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2386B3C61ED442FE000B72F6 /* WCTError.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386B3C31ED442FE000B72F6 /* WCTError.mm */; };
 		2386B3C71ED442FE000B72F6 /* WCTError+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C41ED442FE000B72F6 /* WCTError+Private.h */; };
-		238845F02063912B006EAEC8 /* WCTPerformanceFootprint.h in Headers */ = {isa = PBXBuildFile; fileRef = 238845EE2063912B006EAEC8 /* WCTPerformanceFootprint.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		238845F12063912B006EAEC8 /* WCTPerformanceFootprint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238845EF2063912B006EAEC8 /* WCTPerformanceFootprint.mm */; };
 		238C177E21CA2190003B6D26 /* SyntaxCommonConst.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 238C177C21CA2190003B6D26 /* SyntaxCommonConst.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23906AB9215E500100C2B717 /* WCTDatabase+Monitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 23906AB7215E500100C2B717 /* WCTDatabase+Monitor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23906ABB215E500100C2B717 /* WCTDatabase+Monitor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23906AB8215E500100C2B717 /* WCTDatabase+Monitor.mm */; };
@@ -1271,8 +1269,6 @@
 		2386B3C31ED442FE000B72F6 /* WCTError.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTError.mm; sourceTree = "<group>"; };
 		2386B3C41ED442FE000B72F6 /* WCTError+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTError+Private.h"; sourceTree = "<group>"; };
 		2387D8A621DF0B190028ADB9 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/MacOSX.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		238845EE2063912B006EAEC8 /* WCTPerformanceFootprint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTPerformanceFootprint.h; sourceTree = "<group>"; };
-		238845EF2063912B006EAEC8 /* WCTPerformanceFootprint.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTPerformanceFootprint.mm; sourceTree = "<group>"; };
 		238C177C21CA2190003B6D26 /* SyntaxCommonConst.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SyntaxCommonConst.hpp; sourceTree = "<group>"; };
 		23906AB7215E500100C2B717 /* WCTDatabase+Monitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Monitor.h"; sourceTree = "<group>"; };
 		23906AB8215E500100C2B717 /* WCTDatabase+Monitor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Monitor.mm"; sourceTree = "<group>"; };
@@ -2834,8 +2830,6 @@
 				2386B3C21ED442FE000B72F6 /* WCTError.h */,
 				2386B3C31ED442FE000B72F6 /* WCTError.mm */,
 				2386B3C41ED442FE000B72F6 /* WCTError+Private.h */,
-				238845EE2063912B006EAEC8 /* WCTPerformanceFootprint.h */,
-				238845EF2063912B006EAEC8 /* WCTPerformanceFootprint.mm */,
 			);
 			path = monitor;
 			sourceTree = "<group>";
@@ -3695,7 +3689,6 @@
 				23DD76BF20CF78C800E9B451 /* FactoryRenewer.hpp in Headers */,
 				23EEDCB8217DFADC006E9E73 /* StatementAnalyze.hpp in Headers */,
 				23D0C38F20C17CAE0001BFAE /* FactoryBackup.hpp in Headers */,
-				238845F02063912B006EAEC8 /* WCTPerformanceFootprint.h in Headers */,
 				23F70FAE20A055C300CCE3CD /* CipherConfig.hpp in Headers */,
 				23EEDD52217DFADC006E9E73 /* SyntaxRollbackSTMT.hpp in Headers */,
 				23A09D7F2146204400F62EE8 /* MigratingHandle.hpp in Headers */,
@@ -4308,7 +4301,6 @@
 				2349F7601EA0D6680021EFA7 /* WCTColumnBinding.mm in Sources */,
 				2349F72D1EA0D6680021EFA7 /* WCTSelect.mm in Sources */,
 				23EEDD29217DFADC006E9E73 /* SyntaxAlterTableSTMT.cpp in Sources */,
-				238845F12063912B006EAEC8 /* WCTPerformanceFootprint.mm in Sources */,
 				23EEDD3B217DFADC006E9E73 /* SyntaxCreateVirtualTableSTMT.cpp in Sources */,
 				23EEDD2D217DFADC006E9E73 /* SyntaxAttachSTMT.cpp in Sources */,
 				23A09D7D2146204400F62EE8 /* MigratingHandle.cpp in Sources */,

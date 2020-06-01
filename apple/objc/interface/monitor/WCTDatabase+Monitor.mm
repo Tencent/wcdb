@@ -29,7 +29,6 @@
 #import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTFoundation.h>
-#import <WCDB/WCTPerformanceFootprint.h>
 
 namespace WCDB {
 
@@ -54,13 +53,8 @@ void Core::print(const UnsafeStringView &message)
 {
     WCDB::Handle::PerformanceNotification callback = nullptr;
     if (trace != nil) {
-        callback = [trace](const WCDB::HandleNotification::Footprints &footprints, double cost) {
-            NSMutableArray<WCTPerformanceFootprint *> *array = [NSMutableArray<WCTPerformanceFootprint *> arrayWithCapacity:footprints.size()];
-            for (const auto &footprint : footprints) {
-                NSString *sql = [NSString stringWithView:footprint.sql];
-                [array addObject:[[WCTPerformanceFootprint alloc] initWithSQL:sql andFrequency:footprint.frequency]];
-            }
-            trace(array, cost);
+        callback = [trace](const WCDB::UnsafeStringView& sql, double cost) {
+            trace([NSString stringWithUTF8String:sql.data()], cost);
         };
     }
     WCDB::Core::shared().setNotificationWhenPerformanceGlobalTraced(callback);
@@ -80,13 +74,8 @@ void Core::print(const UnsafeStringView &message)
 - (void)tracePerformance:(WCTPerformanceTraceBlock)trace
 {
     if (trace != nil) {
-        WCDB::Handle::PerformanceNotification callback = [trace](const WCDB::HandleNotification::Footprints &footprints, double cost) {
-            NSMutableArray<WCTPerformanceFootprint *> *array = [NSMutableArray<WCTPerformanceFootprint *> arrayWithCapacity:footprints.size()];
-            for (const auto &footprint : footprints) {
-                NSString *sql = [NSString stringWithView:footprint.sql];
-                [array addObject:[[WCTPerformanceFootprint alloc] initWithSQL:sql andFrequency:footprint.frequency]];
-            }
-            trace(array, cost);
+        WCDB::Handle::PerformanceNotification callback = [trace](const WCDB::UnsafeStringView& sql, double cost) {
+            trace([NSString stringWithUTF8String:sql.data()], cost);
         };
         _database->setConfig(WCDB::PerformanceTraceConfigName,
                              std::static_pointer_cast<WCDB::Config>(std::make_shared<WCDB::PerformanceTraceConfig>(callback)),

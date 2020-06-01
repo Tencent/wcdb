@@ -82,7 +82,6 @@ typedef NSArray<NSObject<WCTColumnCoding> *> WCTColumnCodingRow;
 
 #pragma mark - Error
 @class WCTError;
-@class WCTPerformanceFootprint;
 class WCTOptionalBool;
 class WCTOptionalSize;
 

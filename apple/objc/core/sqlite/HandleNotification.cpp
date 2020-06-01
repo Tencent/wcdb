@@ -81,7 +81,7 @@ void HandleNotification::postTraceNotification(unsigned int flag, void *P, void 
         const char *sql = sqlite3_sql(stmt);
         sqlite3_int64 *cost = (sqlite3_int64 *) X;
         sqlite3 *db = sqlite3_db_handle(stmt);
-        postPerformanceTraceNotification(sql, *cost, !sqlite3_get_autocommit(db));
+        postPerformanceTraceNotification(sql, *cost);
     } break;
     default:
         break;
@@ -134,10 +134,6 @@ void HandleNotification::postSQLTraceNotification(const UnsafeStringView &sql)
 }
 
 #pragma mark - Performance
-HandleNotification::Footprint::Footprint(const UnsafeStringView &sql_)
-: sql(sql_), frequency(1)
-{
-}
 
 bool HandleNotification::arePerformanceTraceNotificationsSet() const
 {
@@ -160,26 +156,11 @@ void HandleNotification::setNotificationWhenPerformanceTraced(const UnsafeString
 }
 
 void HandleNotification::postPerformanceTraceNotification(const UnsafeStringView &sql,
-                                                          const int64_t &cost,
-                                                          bool isInTransaction)
+                                                          const int64_t &cost)
 {
-    if (!m_footprints.empty()) {
-        auto &footprint = m_footprints.back();
-        if (footprint.sql == sql) {
-            ++footprint.frequency;
-            return;
-        }
-    }
-    m_footprints.push_back(Footprint(sql));
-    m_cost += cost;
-
-    if (!isInTransaction) {
-        WCTAssert(!m_performanceNotifications.empty());
-        for (const auto &element : m_performanceNotifications) {
-            element.second(m_footprints, (double) m_cost / (int) 1E9);
-        }
-        m_footprints.clear();
-        m_cost = 0;
+    WCTAssert(!m_performanceNotifications.empty());
+    for (const auto &element : m_performanceNotifications) {
+        element.second(sql, (double) cost / (int) 1E9);
     }
 }
 
