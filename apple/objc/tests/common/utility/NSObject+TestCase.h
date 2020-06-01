@@ -54,10 +54,6 @@
 
 @end
 
-@interface WCTPerformanceFootprint (TestCase)
-
-@end
-
 @interface NSFileManager (TestCase)
 
 - (unsigned long long)getFileSizeIfExists:(NSString*)path;

@@ -23,6 +23,7 @@
  */
 
 #import "TestCase.h"
+#import <WCDB/WCTDatabase+Monitor.h>
 
 @interface DatabaseTests : DatabaseTestCase
 

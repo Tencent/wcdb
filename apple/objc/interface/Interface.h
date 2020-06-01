@@ -62,5 +62,4 @@
 
 #import <WCDB/WCTDatabase+Monitor.h>
 #import <WCDB/WCTError.h>
-#import <WCDB/WCTPerformanceFootprint.h>
 #import <WCDB/WCTTag.h>

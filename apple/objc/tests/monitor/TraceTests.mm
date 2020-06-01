@@ -51,25 +51,18 @@
     TestCaseAssertTrue([self createTable]);
 
     NSArray<TestCaseObject*>* objects = [Random.shared autoIncrementTestCaseObjectsWithCount:10000];
-
-    NSArray<WCTPerformanceFootprint*>* expectedFootprints = @[
-        [[WCTPerformanceFootprint alloc] initWithSQL:@"BEGIN IMMEDIATE"
-                                        andFrequency:1],
-        [[WCTPerformanceFootprint alloc] initWithSQL:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
-                                        andFrequency:(unsigned int) objects.count],
-        [[WCTPerformanceFootprint alloc] initWithSQL:@"COMMIT"
-                                        andFrequency:1],
-    ];
-
-    __block BOOL tested = NO;
-    [self.database tracePerformance:^(NSArray<WCTPerformanceFootprint*>* footprints, double cost) {
-        if ([expectedFootprints isEqualToArray:footprints]
-            && cost > 0) {
-            tested = YES;
+    
+    __block NSMutableArray* expectedFootprints = [[NSMutableArray alloc] initWithObjects:
+                                                  @"BEGIN IMMEDIATE",
+                                                  @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)",
+                                                  @"COMMIT", nil];
+    [self.database tracePerformance:^(NSString *sql, double) {
+        if([sql isEqualToString:expectedFootprints.firstObject]){
+            [expectedFootprints removeObjectAtIndex:0];
         }
     }];
     TestCaseAssertTrue([self.database insertObjects:objects intoTable:self.tableName]);
-    TestCaseAssertTrue(tested);
+    TestCaseAssertTrue(expectedFootprints.count == 0);
 
     [self.database tracePerformance:nil];
 }
@@ -120,27 +113,20 @@
 - (void)test_global_trace_performance
 {
     NSArray<TestCaseObject*>* objects = [Random.shared autoIncrementTestCaseObjectsWithCount:10000];
-
-    NSArray<WCTPerformanceFootprint*>* expectedFootprints = @[
-        [[WCTPerformanceFootprint alloc] initWithSQL:@"BEGIN IMMEDIATE"
-                                        andFrequency:1],
-        [[WCTPerformanceFootprint alloc] initWithSQL:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
-                                        andFrequency:(unsigned int) objects.count],
-        [[WCTPerformanceFootprint alloc] initWithSQL:@"COMMIT"
-                                        andFrequency:1],
-    ];
-
-    __block BOOL tested = NO;
-    [WCTDatabase globalTracePerformance:^(NSArray<WCTPerformanceFootprint*>* footprints, double cost) {
-        if ([expectedFootprints isEqualToArray:footprints]
-            && cost > 0) {
-            tested = YES;
+    
+    __block NSMutableArray* expectedFootprints = [[NSMutableArray alloc] initWithObjects:
+                                                  @"BEGIN IMMEDIATE",
+                                                  @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)",
+                                                  @"COMMIT", nil];
+    [WCTDatabase globalTracePerformance:^(NSString* sql, double) {
+        if([sql isEqualToString:expectedFootprints.firstObject]){
+            [expectedFootprints removeObjectAtIndex:0];
         }
     }];
 
     TestCaseAssertTrue([self createTable]);
     TestCaseAssertTrue([self.database insertObjects:objects intoTable:self.tableName]);
-    TestCaseAssertTrue(tested);
+    TestCaseAssertTrue(expectedFootprints.count == 0);
 
     [WCTDatabase globalTracePerformance:nil];
 }

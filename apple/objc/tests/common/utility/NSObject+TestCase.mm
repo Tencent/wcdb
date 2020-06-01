@@ -102,19 +102,6 @@
 
 @end
 
-@implementation WCTPerformanceFootprint (TestCase)
-
-- (BOOL)isEqual:(NSObject *)object
-{
-    if (object.class != self.class) {
-        return NO;
-    }
-    WCTPerformanceFootprint *other = (WCTPerformanceFootprint *) object;
-    return self.frequency == other.frequency && [NSObject isObject:self.sql nilEqualToObject:other.sql];
-}
-
-@end
-
 @implementation NSFileManager (TestCase)
 
 - (unsigned long long)getFileSizeIfExists:(NSString *)path

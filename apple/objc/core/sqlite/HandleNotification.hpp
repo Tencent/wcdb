@@ -59,26 +59,14 @@ private:
 
 #pragma mark - Performance
 public:
-    struct Footprint {
-        StringView sql;
-        unsigned int frequency;
-        Footprint(const UnsafeStringView &sql);
-    };
-    typedef struct Footprint Footprint;
-
-    using Footprints = std::list<Footprint>;
-    typedef std::function<void(const Footprints &, double cost)> PerformanceNotification;
+    typedef std::function<void(const UnsafeStringView &sql, double cost)> PerformanceNotification;
     void setNotificationWhenPerformanceTraced(const UnsafeStringView &name,
                                               const PerformanceNotification &onTraced);
 
 private:
     bool arePerformanceTraceNotificationsSet() const;
     void postPerformanceTraceNotification(const UnsafeStringView &sql,
-                                          const int64_t &cost,
-                                          bool isInTransaction);
-
-    Footprints m_footprints;
-    int64_t m_cost = 0;
+                                          const int64_t &cost);
     StringViewMap<PerformanceNotification> m_performanceNotifications;
 
 #pragma mark - Committed

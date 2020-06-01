@@ -23,11 +23,15 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <WCDB/WCTCoding.h>
+#import <WCDB/WCTMacro.h>
 
 @interface TestCaseObject : NSObject
 
 @property (nonatomic, assign) int identifier;
 @property (nonatomic, retain) NSString *content;
+WCDB_PROPERTY(identifier);
+WCDB_PROPERTY(content);
 
 + (instancetype)objectWithIdentifier:(int)identifier andContent:(NSString *)content;
 + (instancetype)partialObjectWithIdentifier:(int)identifier;
