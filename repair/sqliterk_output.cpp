@@ -55,7 +55,7 @@ public:
     };
     CipherContext(Op op)
 #if defined(__APPLE__)
-        : m_op(op), m_key(nullptr), m_keyLength(0), m_cryptor(nullptr)
+    : m_op(op), m_key(nullptr), m_keyLength(0), m_cryptor(nullptr)
 #endif
     {
     }
@@ -120,7 +120,7 @@ struct sqliterk_master_entity {
     sqliterk_master_entity(sqliterk_type type_,
                            const char *sql_,
                            int root_page_)
-        : type(type_), sql(sql_), root_page(root_page_)
+            : type(type_), sql(sql_), root_page(root_page_)
     {
     }
 };
@@ -128,11 +128,31 @@ typedef std::map<std::string, sqliterk_master_entity> sqliterk_master_map;
 struct sqliterk_master_info : public sqliterk_master_map {
 };
 
+struct sqliterk_output_column_info {
+    char affinity;
+    bool not_null;
+    sqlite3_value *default_value = NULL;
+
+    sqliterk_output_column_info(char aff, bool nn, sqlite3_value *dflt) :
+            affinity(aff), not_null(nn), default_value(dflt) {}
+
+    sqliterk_output_column_info(sqliterk_output_column_info&& other) :
+            affinity(other.affinity), not_null(other.not_null), default_value(other.default_value) {
+        other.default_value = NULL;
+    }
+
+    ~sqliterk_output_column_info() {
+        if (default_value) {
+            sqlite3_value_free(default_value);
+        }
+    }
+};
+
 struct sqliterk_output_ctx {
     sqlite3 *db;
     sqlite3_stmt *stmt;
     int real_columns;
-    std::vector<sqlite3_value *> dflt_values;
+    std::vector<sqliterk_output_column_info> column_info;
     int ipk_column;
 
     sqliterk_master_map tables;
@@ -159,7 +179,7 @@ static int master_onParseColumn(sqliterk *rk,
                                 sqliterk_column *column)
 {
     sqliterk_output_ctx *ctx =
-        (sqliterk_output_ctx *) sqliterk_get_user_info(rk);
+            (sqliterk_output_ctx *) sqliterk_get_user_info(rk);
 
     if (ctx->cancelled)
         return SQLITERK_CANCELLED;
@@ -178,7 +198,7 @@ static int master_onParseColumn(sqliterk *rk,
 
     if (!typestr || !name || !sql || root_page <= 0)
         return SQLITERK_OK;
-        
+
     if (strcmp(typestr, "table") == 0)
         type = sqliterk_type_table;
     else if (strcmp(typestr, "index") == 0)
@@ -203,7 +223,7 @@ static int master_onParseColumn(sqliterk *rk,
         if (it != ctx->tables.end()) {
             const sqliterk_master_entity &e = it->second;
             if (e.root_page > 0 && !e.sql.empty() &&
-                    (e.type == sqliterk_type_table || e.type == sqliterk_type_index)) {
+                (e.type == sqliterk_type_table || e.type == sqliterk_type_index)) {
                 if (e.sql != sql) {
                     sqliterkOSWarning(SQLITERK_DAMAGED, "SQL mismatch: '%s' <-> '%s'", sql, e.sql.c_str());
                     if (strlen(sql) < e.sql.size()) {
@@ -225,12 +245,85 @@ static void fini_insert(sqliterk_output_ctx *ctx)
         ctx->stmt = NULL;
     }
 
-    int n = (int) ctx->dflt_values.size();
-    for (int i = 0; i < n; i++)
-        sqlite3_value_free(ctx->dflt_values[i]);
-    ctx->dflt_values.clear();
+    ctx->column_info.clear();
     ctx->real_columns = 0;
     ctx->ipk_column = 0;
+}
+
+static sqlite3_value *eval_value(sqlite3 *db, const char *value)
+{
+    if (!value || !*value)
+        return NULL;
+
+    std::string sql("SELECT ");
+    sql += value;
+    sql += ';';
+    sqlite3_stmt *stmt = NULL;
+    int rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, NULL);
+    if (rc != SQLITE_OK || !stmt) {
+        return NULL;
+    }
+    rc = sqlite3_step(stmt);
+    sqlite3_value *result = NULL;
+    if (rc == SQLITE_ROW) {
+        result = sqlite3_column_value(stmt, 0);
+        result = sqlite3_value_dup(result);
+    }
+    sqlite3_finalize(stmt);
+    return result;
+}
+
+static constexpr char SQLITE_AFF_BLOB = 'A';
+static constexpr char SQLITE_AFF_TEXT = 'B';
+static constexpr char SQLITE_AFF_NUMERIC = 'C';
+static constexpr char SQLITE_AFF_INTEGER = 'D';
+static constexpr char SQLITE_AFF_REAL = 'E';
+static constexpr uint32_t string_digits(const char *s)
+{
+    uint32_t h = 0;
+    if (s[0] == '\0') return h;
+    h = s[0] << 24;
+    if (s[1] == '\0') return h;
+    h |= s[1] << 16;
+    if (s[2] == '\0') return h;
+    h |= s[2] << 8;
+    h |= s[3];
+    return h;
+}
+
+static char parse_affinity(const char *type)
+{
+    if (!type || !*type) {
+        return SQLITE_AFF_BLOB;
+    }
+
+    uint32_t h = 0;
+    char aff = SQLITE_AFF_NUMERIC;
+    do {
+        h = (h << 8) + toupper((*type++) & 0xFF);
+        if ((h << 8) == string_digits("INT")) {
+            aff = SQLITE_AFF_INTEGER;
+        } else {
+            switch (h) {
+                case string_digits("CHAR"):
+                case string_digits("CLOB"):
+                case string_digits("TEXT"):
+                    aff = SQLITE_AFF_TEXT;
+                    break;
+                case string_digits("BLOB"):
+                    if (aff == SQLITE_AFF_NUMERIC || aff == SQLITE_AFF_REAL)
+                        aff = SQLITE_AFF_BLOB;
+                    break;
+                case string_digits("REAL"):
+                case string_digits("FLOA"):
+                case string_digits("DOUB"):
+                    if (aff == SQLITE_AFF_NUMERIC)
+                        aff = SQLITE_AFF_REAL;
+                    break;
+            }
+        }
+    } while (*type);
+    return aff;
 }
 
 static int init_insert(sqliterk_output_ctx *ctx, const std::string &table)
@@ -238,14 +331,14 @@ static int init_insert(sqliterk_output_ctx *ctx, const std::string &table)
     std::string sql;
     sqlite3_stmt *table_info_stmt;
 
-    assert(ctx->stmt == NULL && ctx->dflt_values.empty());
+    assert(ctx->stmt == NULL && ctx->column_info.empty());
 
     sql.reserve(512);
     sql = "PRAGMA table_info(";
     sql += table;
     sql += ");";
     int rc =
-        sqlite3_prepare_v2(ctx->db, sql.c_str(), -1, &table_info_stmt, NULL);
+            sqlite3_prepare_v2(ctx->db, sql.c_str(), -1, &table_info_stmt, NULL);
     if (rc != SQLITE_OK) {
         sqliterkOSWarning(rc, "Failed to prepare SQL: %s [SQL: %s]",
                           sqlite3_errmsg(ctx->db), sql.c_str());
@@ -259,17 +352,26 @@ static int init_insert(sqliterk_output_ctx *ctx, const std::string &table)
     ctx->real_columns = 0;
     int ipk_column = 0;
     while (sqlite3_step(table_info_stmt) == SQLITE_ROW) {
+        // Record the real column count defined by the SQL.
         ctx->real_columns++;
 
-        sqlite3_value *value = sqlite3_column_value(table_info_stmt, 4);
-        ctx->dflt_values.push_back(sqlite3_value_dup(value));
+        // Evaluate the default value for the rows missing some columns in B-tree.
+        const char *expr = (const char *) sqlite3_column_text(table_info_stmt, 4);
+        sqlite3_value *default_value = eval_value(ctx->db, expr);
+
+        // Evaluate column affinity for dirty detection.
+        expr = (const char *) sqlite3_column_text(table_info_stmt, 2);
+        char aff = parse_affinity(expr);
+
+        bool not_null = sqlite3_column_int(table_info_stmt, 3) != 0;
+        ctx->column_info.emplace_back(aff, not_null, default_value);
 
         // determine INTEGER PRIMARY KEY
         if (ipk_column >= 0) {
             int pk_idx = sqlite3_column_int(table_info_stmt, 5);
             if (pk_idx == 1) {
                 const char *column_type =
-                    (const char *) sqlite3_column_text(table_info_stmt, 2);
+                        (const char *) sqlite3_column_text(table_info_stmt, 2);
                 if (strcasecmp(column_type, "INTEGER") == 0)
                     ipk_column = ctx->real_columns;
             } else if (pk_idx != 0) {
@@ -282,8 +384,8 @@ static int init_insert(sqliterk_output_ctx *ctx, const std::string &table)
     rc = sqlite3_finalize(table_info_stmt);
     if (rc != SQLITE_OK || ctx->real_columns == 0) {
         sqliterkOSWarning(
-            rc, "Failed to execute SQL: %s [SQL: PRAGMA table_info(%s);]",
-            sqlite3_errmsg(ctx->db), table.c_str());
+                rc, "Failed to execute SQL: %s [SQL: PRAGMA table_info(%s);]",
+                sqlite3_errmsg(ctx->db), table.c_str());
         fini_insert(ctx);
         return -1;
     }
@@ -308,7 +410,7 @@ static int init_insert(sqliterk_output_ctx *ctx, const std::string &table)
 static void table_onBeginParseTable(sqliterk *rk, sqliterk_table *table)
 {
     sqliterk_output_ctx *ctx =
-        (sqliterk_output_ctx *) sqliterk_get_user_info(rk);
+            (sqliterk_output_ctx *) sqliterk_get_user_info(rk);
 
     sqliterkBtreeSetMeta((sqliterk_btree *) table,
                          ctx->table_cursor->first.c_str(),
@@ -320,7 +422,7 @@ static int table_onParseColumn(sqliterk *rk,
                                sqliterk_column *column)
 {
     sqliterk_output_ctx *ctx =
-        (sqliterk_output_ctx *) sqliterk_get_user_info(rk);
+            (sqliterk_output_ctx *) sqliterk_get_user_info(rk);
 
     if (ctx->cancelled)
         return SQLITERK_CANCELLED;
@@ -365,7 +467,16 @@ static int table_onParseColumn(sqliterk *rk,
 
     int i;
 
+    // Check column count: if row has more columns in B-tree than in SQL statement, it's probably
+    // come from wrong table and should consider corrupted.
+    if (columns > ctx->real_columns || columns > ctx->column_info.size()) {
+        sqliterkOSWarning(SQLITERK_DAMAGED, "Column count mismatch: %d vs %d", columns, ctx->real_columns);
+        ctx->fail_count++;
+        return SQLITERK_OK;
+    }
+
     // Bind values provided by the repair kit.
+    sqlite3_clear_bindings(stmt);
     for (i = 0; i < columns; i++) {
         sqliterk_value_type type = sqliterk_column_type(column, i);
         switch (type) {
@@ -375,10 +486,24 @@ static int table_onParseColumn(sqliterk *rk,
                                   sqliterk_column_bytes(column, i), NULL);
                 break;
             case sqliterk_value_type_integer:
+                // INTEGER value should not be stored in columns with TEXT affinity.
+                if (ctx->column_info[i].affinity == SQLITE_AFF_TEXT) {
+                    sqliterkOSWarning(SQLITERK_DAMAGED, "INTEGER value detected in column with TEXT affinity.");
+                    ctx->fail_count++;
+                    return SQLITERK_OK;
+                }
+
                 sqlite3_bind_int64(stmt, i + 1,
                                    sqliterk_column_integer64(column, i));
                 break;
             case sqliterk_value_type_null:
+                // If NOT NULL is defined in this column, the recovered row is considered corrupted.
+                if (ctx->column_info[i].not_null) {
+                    sqliterkOSWarning(SQLITERK_DAMAGED, "NULL value detected in NOT NULL column.");
+                    ctx->fail_count++;
+                    return SQLITERK_OK;
+                }
+
                 // If it's INTEGER PRIMARY KEY column, bind rowid instead.
                 if (ctx->ipk_column == i + 1)
                     sqlite3_bind_int64(stmt, i + 1,
@@ -387,6 +512,13 @@ static int table_onParseColumn(sqliterk *rk,
                     sqlite3_bind_null(stmt, i + 1);
                 break;
             case sqliterk_value_type_number:
+                // REAL value should not be stored in columns with TEXT affinity.
+                if (ctx->column_info[i].affinity == SQLITE_AFF_TEXT) {
+                    sqliterkOSWarning(SQLITERK_DAMAGED, "REAL value detected in column with TEXT affinity.");
+                    ctx->fail_count++;
+                    return SQLITERK_OK;
+                }
+
                 sqlite3_bind_double(stmt, i + 1,
                                     sqliterk_column_number(column, i));
                 break;
@@ -399,7 +531,10 @@ static int table_onParseColumn(sqliterk *rk,
 
     // Use defaults for remaining values.
     for (; i < ctx->real_columns; i++) {
-        sqlite3_bind_value(stmt, i, ctx->dflt_values[i]);
+        sqlite3_value *v = ctx->column_info[i].default_value;
+        if (v) {
+            sqlite3_bind_value(stmt, i, v);
+        }
     }
 
     while (sqlite3_step(stmt) == SQLITE_ROW) {
@@ -523,7 +658,7 @@ int sqliterk_output_cb(sqliterk *rk,
             rc = sqliterk_parse_page(rk, root_page);
             if (ctx.stmt) {
                 const char *sql =
-                    (rc == SQLITERK_CANCELLED) ? "ROLLBACK;" : "COMMIT;";
+                        (rc == SQLITERK_CANCELLED) ? "ROLLBACK;" : "COMMIT;";
 
                 // Commit transaction and free statement.
                 char *errmsg;
@@ -587,7 +722,7 @@ int sqliterk_output_cb(sqliterk *rk,
         return SQLITERK_OK;
     }
 
-cancelled:
+    cancelled:
     sqliterkOSInfo(SQLITERK_CANCELLED,
                    "Recovery cancelled. [succeeded: %u, failed: %u]",
                    ctx.success_count, ctx.fail_count);
@@ -597,7 +732,7 @@ cancelled:
 void sqliterk_cancel(sqliterk *rk)
 {
     sqliterk_output_ctx *ctx =
-        (sqliterk_output_ctx *) sqliterk_get_user_info(rk);
+            (sqliterk_output_ctx *) sqliterk_get_user_info(rk);
     if (ctx) {
         ctx->cancelled = 1;
     }
@@ -615,7 +750,7 @@ int sqliterk_make_master(const char **tables,
     sqliterk_master_map *master = new sqliterk_master_map();
     for (int i = 0; i < num_tables; i++)
         (*master)[tables[i]] =
-            sqliterk_master_entity(sqliterk_type_unknown, "", 0);
+                sqliterk_master_entity(sqliterk_type_unknown, "", 0);
 
     *out_master = static_cast<sqliterk_master_info *>(master);
     return SQLITERK_OK;
@@ -682,7 +817,7 @@ int sqliterk_save_master(sqlite3 *db,
 
     // Prepare SQL statement.
     rc =
-        sqlite3_prepare_v2(db, "SELECT * FROM sqlite_master;", -1, &stmt, NULL);
+            sqlite3_prepare_v2(db, "SELECT * FROM sqlite_master;", -1, &stmt, NULL);
     if (rc != SQLITE_OK)
         goto bail_sqlite;
 
@@ -829,18 +964,18 @@ int sqliterk_save_master(sqlite3 *db,
     sqliterkOSInfo(SQLITERK_OK, "Saved master info with %u entries.", entities);
     return SQLITERK_OK;
 
-bail_zlib:
+    bail_zlib:
     sqliterkOSError(SQLITERK_CANTOPEN, "Failed to backup master table: %s",
                     zstrm.msg);
     goto bail;
-bail_errno:
+    bail_errno:
     sqliterkOSError(rc, "Failed to backup master table: %s", strerror(errno));
     goto bail;
-bail_sqlite:
+    bail_sqlite:
     sqliterkOSError(rc, "Failed to backup master table: %s",
                     sqlite3_errmsg(db));
 
-bail:
+    bail:
     if (fp)
         fclose(fp);
     if (stmt)
@@ -974,7 +1109,7 @@ int sqliterk_load_master(const char *path,
         // Read names and SQL.
         rc = inflate_read(fp, &zstrm, str_buf,
                           entity.name_len + entity.tbl_name_len +
-                              entity.sql_len + 3,
+                          entity.sql_len + 3,
                           key ? &cipherContext : NULL);
         if (rc == SQLITERK_IOERR)
             goto bail_errno;
@@ -1018,14 +1153,14 @@ int sqliterk_load_master(const char *path,
                    master->size());
     return SQLITERK_OK;
 
-bail_errno:
+    bail_errno:
     sqliterkOSError(SQLITERK_IOERR, "Cannot load master table: %s",
                     strerror(errno));
     goto bail;
-bail_zlib:
+    bail_zlib:
     sqliterkOSError(SQLITERK_DAMAGED, "Cannot load master table: %s",
                     zstrm.msg);
-bail:
+    bail:
     if (master)
         delete master;
     free(str_buf);
