@@ -35,10 +35,25 @@ WCDB_SYNTHESIZE(content)
 @synthesize isAutoIncrement;
 @synthesize lastInsertedRowID;
 
-+ (WCDB::StatementCreateTable)statementForCreatingTable:(NSString*)tableName withMode:(MigrationObjectORMMode)mode
++ (WCDB::StatementCreateTable)statementForCreatingSourceTable:(NSString*)tableName withMode:(MigrationObjectORMMode)mode
 {
     switch (mode) {
     case MigrationObjectORMModeNormal:
+        return [MigrationObject statementForCreatingNormalTable:tableName];
+    case MigrationObjectORMModePrimaryKey:
+        return [MigrationObject statementForCreatingPrimaryKeyTable:tableName];
+    case MigrationObjectORMModeAutoIncrement:
+        return [MigrationObject statementForCreatingAutoIncrementTable:tableName];
+    case MigrationObjectORMModeMissColumn:
+        return [MigrationObject statementForCreatingMissColumnTable:tableName];
+    }
+}
+
++ (WCDB::StatementCreateTable)statementForCreatingTargetTable:(NSString *)tableName withMode:(MigrationObjectORMMode)mode
+{
+    switch (mode) {
+    case MigrationObjectORMModeNormal:
+    case MigrationObjectORMModeMissColumn:
         return [MigrationObject statementForCreatingNormalTable:tableName];
     case MigrationObjectORMModePrimaryKey:
         return [MigrationObject statementForCreatingPrimaryKeyTable:tableName];
@@ -76,6 +91,20 @@ WCDB_SYNTHESIZE(content)
             columnDef.constraints.push_back(constraint.syntax());
             break;
         }
+    }
+    return statement;
+}
+
++ (WCDB::StatementCreateTable)statementForCreatingMissColumnTable:(NSString*)tableName
+{
+    WCDB::StatementCreateTable statement = MigrationObject.objectRelationalMapping.generateCreateTableStatement(tableName);
+    auto iterater = statement.syntax().columnDefs.begin();
+    while (iterater != statement.syntax().columnDefs.end()) {
+        if (iterater->column.name == MigrationObject.content.getDescription()) {
+            statement.syntax().columnDefs.erase(iterater);
+            break;
+        }
+        iterater++;
     }
     return statement;
 }

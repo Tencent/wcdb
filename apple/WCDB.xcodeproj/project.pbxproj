@@ -817,6 +817,10 @@
 		757457042402D614005E3682 /* WCTHandleStatement.h in Headers */ = {isa = PBXBuildFile; fileRef = 757457032402D614005E3682 /* WCTHandleStatement.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75751ED82412AD11006CBFFD /* MigratingHandleStatement.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75751ED62412AD10006CBFFD /* MigratingHandleStatement.hpp */; };
 		75751ED92412AD11006CBFFD /* MigratingHandleStatement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75751ED72412AD11006CBFFD /* MigratingHandleStatement.cpp */; };
+		75C1374224BAF7C5001C0D5E /* MissColumnTableMigratingCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75C1373A24BAF7B2001C0D5E /* MissColumnTableMigratingCompatibleTests.mm */; };
+		75C1374324BAF7C5001C0D5E /* MissColumnTableMigrationCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75C1373B24BAF7B2001C0D5E /* MissColumnTableMigrationCompatibleTests.mm */; };
+		75C1374424BAF7C5001C0D5E /* MissColumnDatabaseMigrationCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75C1373C24BAF7B2001C0D5E /* MissColumnDatabaseMigrationCompatibleTests.mm */; };
+		75C1374524BAF7C5001C0D5E /* MissColumnDatabaseMigratingCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75C1373D24BAF7B2001C0D5E /* MissColumnDatabaseMigratingCompatibleTests.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1769,6 +1773,10 @@
 		757457032402D614005E3682 /* WCTHandleStatement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTHandleStatement.h; sourceTree = "<group>"; };
 		75751ED62412AD10006CBFFD /* MigratingHandleStatement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MigratingHandleStatement.hpp; sourceTree = "<group>"; };
 		75751ED72412AD11006CBFFD /* MigratingHandleStatement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MigratingHandleStatement.cpp; sourceTree = "<group>"; };
+		75C1373A24BAF7B2001C0D5E /* MissColumnTableMigratingCompatibleTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MissColumnTableMigratingCompatibleTests.mm; sourceTree = "<group>"; };
+		75C1373B24BAF7B2001C0D5E /* MissColumnTableMigrationCompatibleTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MissColumnTableMigrationCompatibleTests.mm; sourceTree = "<group>"; };
+		75C1373C24BAF7B2001C0D5E /* MissColumnDatabaseMigrationCompatibleTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MissColumnDatabaseMigrationCompatibleTests.mm; sourceTree = "<group>"; };
+		75C1373D24BAF7B2001C0D5E /* MissColumnDatabaseMigratingCompatibleTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MissColumnDatabaseMigratingCompatibleTests.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2546,6 +2554,7 @@
 				234F0488227A9EFA00DD65A2 /* increment */,
 				234F048F227A9EFA00DD65A2 /* normal */,
 				234F0496227A9EFA00DD65A2 /* primary */,
+				75C1373924BAF7B2001C0D5E /* misscolumn */,
 			);
 			path = migration;
 			sourceTree = "<group>";
@@ -3433,6 +3442,17 @@
 			path = statement;
 			sourceTree = "<group>";
 		};
+		75C1373924BAF7B2001C0D5E /* misscolumn */ = {
+			isa = PBXGroup;
+			children = (
+				75C1373A24BAF7B2001C0D5E /* MissColumnTableMigratingCompatibleTests.mm */,
+				75C1373B24BAF7B2001C0D5E /* MissColumnTableMigrationCompatibleTests.mm */,
+				75C1373C24BAF7B2001C0D5E /* MissColumnDatabaseMigrationCompatibleTests.mm */,
+				75C1373D24BAF7B2001C0D5E /* MissColumnDatabaseMigratingCompatibleTests.mm */,
+			);
+			path = misscolumn;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -4075,6 +4095,7 @@
 				234F06FA227AA59E00DD65A2 /* TransactionTests.mm in Sources */,
 				234F063E227AA50800DD65A2 /* StringCodingObject+WCTColumnCoding.mm in Sources */,
 				234F05DE227AA4F600DD65A2 /* FrameSpecTests.mm in Sources */,
+				75C1374424BAF7C5001C0D5E /* MissColumnDatabaseMigrationCompatibleTests.mm in Sources */,
 				234F05E6227AA4F600DD65A2 /* RecursiveCTETests.mm in Sources */,
 				234F0603227AA4F600DD65A2 /* StatementSelectTests.mm in Sources */,
 				234F06D2227AA57D00DD65A2 /* ColumnConstraintAutoIncrement.mm in Sources */,
@@ -4087,6 +4108,7 @@
 				234F058D227AA4D700DD65A2 /* VersionTests.mm in Sources */,
 				234F0601227AA4F600DD65A2 /* StatementReindexTests.mm in Sources */,
 				234F05FF227AA4F600DD65A2 /* StatementBeginTests.mm in Sources */,
+				75C1374524BAF7C5001C0D5E /* MissColumnDatabaseMigratingCompatibleTests.mm in Sources */,
 				234F072B227AA5BF00DD65A2 /* PrimaryKeyDatabaseMigratingCompatibleTests.mm in Sources */,
 				234F05EC227AA4F600DD65A2 /* ConflictTests.mm in Sources */,
 				234F05FC227AA4F600DD65A2 /* RaiseFunctionTests.mm in Sources */,
@@ -4132,6 +4154,7 @@
 				234F06EB227AA58E00DD65A2 /* OldRemapObject.mm in Sources */,
 				234F0602227AA4F600DD65A2 /* FilterTests.mm in Sources */,
 				234F061E227AA4F600DD65A2 /* TableConstraintTests.mm in Sources */,
+				75C1374324BAF7C5001C0D5E /* MissColumnTableMigrationCompatibleTests.mm in Sources */,
 				234F06D8227AA57D00DD65A2 /* ColumnConstraintPrimary.mm in Sources */,
 				39327B6F22CF275200AABD4B /* TestCaseLog.mm in Sources */,
 				234F061C227AA4F600DD65A2 /* ResultColumnTests.mm in Sources */,
@@ -4200,6 +4223,7 @@
 				234F0612227AA4F600DD65A2 /* StatementDropTableTests.mm in Sources */,
 				234F061A227AA4F600DD65A2 /* QualifiedTableTests.mm in Sources */,
 				234F05F1227AA4F600DD65A2 /* StatementCreateVirtualTableTests.mm in Sources */,
+				75C1374224BAF7C5001C0D5E /* MissColumnTableMigratingCompatibleTests.mm in Sources */,
 				39327B2B22CF271F00AABD4B /* TableTestCase.mm in Sources */,
 				234F05EA227AA4F600DD65A2 /* OrderingTermTests.mm in Sources */,
 				39327B8F22CF276000AABD4B /* TestCaseObject.mm in Sources */,
