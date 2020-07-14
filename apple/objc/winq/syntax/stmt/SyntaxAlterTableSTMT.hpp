@@ -50,6 +50,10 @@ public:
     Type getType() const override final;
     bool describle(std::ostringstream& stream) const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
+#pragma mark - Utility
+public:
+    bool isTargetingSameTable(const AlterTableSTMT& other) const;
+
 };
 
 } // namespace Syntax

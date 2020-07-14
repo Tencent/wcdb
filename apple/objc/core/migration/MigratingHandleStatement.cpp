@@ -100,6 +100,11 @@ std::optional<std::list<Statement>> MigratingHandleStatement::process(const Stat
                 Syntax::DropTableSTMT& syntax = (Syntax::DropTableSTMT&) identifier;
                 succeed = tryFallbackToSourceTable(syntax.schema, syntax.table);
             } break;
+            case Syntax::Identifier::Type::AlterTableSTMT: {
+                // main.table -> schemaForSourceDatabase.sourceTable
+                Syntax::AlterTableSTMT& syntax = (Syntax::AlterTableSTMT&) identifier;
+                succeed = tryFallbackToSourceTable(syntax.schema, syntax.table);
+            } break;
             case Syntax::Identifier::Type::Expression: {
                 // main.table -> temp.unionedView
                 Syntax::Expression& syntax = (Syntax::Expression&) identifier;
@@ -214,6 +219,25 @@ std::optional<std::list<Statement>> MigratingHandleStatement::process(const Stat
                 const MigrationInfo* info = migratingHandle->getBoundInfo(migratedSTMT.table);
                 WCTAssert(info != nullptr);
                 statements.push_back(info->getStatementForDeletingFromTable(falledBackStatement));
+            }
+        } break;
+        case Syntax::Identifier::Type::AlterTableSTMT: {
+            statements.push_back(falledBackStatement);
+            const Syntax::AlterTableSTMT& migratedSTMT
+            = static_cast<const Syntax::AlterTableSTMT&>(originStatement.syntax());
+            const Syntax::AlterTableSTMT& falledBackSTMT
+            = static_cast<const Syntax::AlterTableSTMT&>(falledBackStatement.syntax());
+            if(!migratedSTMT.isTargetingSameTable(falledBackSTMT)){
+                if(migratedSTMT.switcher == Syntax::AlterTableSTMT::Switch::AddColumn){
+                    WCDB::StatementPragma getColumnsStatement
+                    = StatementPragma().pragma(Pragma::tableInfo()).schema(migratedSTMT.schema.name).with(migratedSTMT.table);
+                    auto columns = this->getHandle()->getValues(getColumnsStatement, 1);
+                    if(!columns.has_value() || columns->find(migratedSTMT.columnDef.column.name) == columns->end()){
+                        statements.push_back(originStatement);
+                    }
+                }else{
+                    statements.push_back(originStatement);
+                }
             }
         } break;
         default:

@@ -28,6 +28,7 @@ typedef NS_ENUM(NSUInteger, MigrationObjectORMMode) {
     MigrationObjectORMModeNormal = 0,
     MigrationObjectORMModePrimaryKey,
     MigrationObjectORMModeAutoIncrement,
+    MigrationObjectORMModeMissColumn,
 };
 
 @interface MigrationObject : NSObject
@@ -35,7 +36,9 @@ typedef NS_ENUM(NSUInteger, MigrationObjectORMMode) {
 @property (nonatomic, assign) int identifier;
 @property (nonatomic, retain) NSString *content;
 
-+ (WCDB::StatementCreateTable)statementForCreatingTable:(NSString *)tableName withMode:(MigrationObjectORMMode)mode;
++ (WCDB::StatementCreateTable)statementForCreatingTargetTable:(NSString *)tableName withMode:(MigrationObjectORMMode)mode;
+
++ (WCDB::StatementCreateTable)statementForCreatingSourceTable:(NSString *)tableName withMode:(MigrationObjectORMMode)mode;
 
 + (instancetype)objectWithIdentifier:(int)identifier andContent:(NSString *)content;
 

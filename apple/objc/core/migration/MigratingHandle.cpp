@@ -44,6 +44,49 @@ MigratingHandle::~MigratingHandle()
     m_mainStatement = nullptr;
 }
 
+#pragma mark - Meta
+
+std::optional<std::set<StringView>>
+MigratingHandle::getColumns(const Schema &schema, const UnsafeStringView &table)
+{
+    auto ret = Super::getColumns(schema, table);
+    if(!ret.has_value()){
+        return ret;
+    }
+    if(!schema.syntax().isMain()){
+        return ret;
+    }
+    const MigrationInfo* info = nullptr;
+    
+    startBinding();
+    
+    auto optionalInfo = bindTable(table);
+    if(optionalInfo.has_value()){
+        info = optionalInfo.value();
+    }
+    bool success = stopBinding(true);
+    
+    if(info == nullptr || !success){
+        return ret;
+    }
+    
+    WCDB::StatementPragma statement
+    = StatementPragma().pragma(Pragma::tableInfo()).schema(info->getSchemaForSourceDatabase()).with(info->getSourceTable());
+    auto sourceColumns = getValues(statement, 1);
+    if(!sourceColumns.has_value()){
+        return std::nullopt;
+    }
+    auto iterator = ret->begin();
+    while(iterator != ret->end()){
+        if(sourceColumns->find(*iterator) == sourceColumns->end()){
+            iterator = ret->erase(iterator);
+        }else{
+            iterator++;
+        }
+    }
+    return ret;
+}
+
 #pragma mark - Info Initializer
 std::optional<std::pair<bool, std::set<StringView>>>
 MigratingHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)

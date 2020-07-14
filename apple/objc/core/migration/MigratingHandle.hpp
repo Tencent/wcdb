@@ -39,6 +39,10 @@ private:
 public:
     MigratingHandle(Migration &migration);
     ~MigratingHandle() override final;
+    
+#pragma mark - Meta
+    virtual std::optional<std::set<StringView>>
+    getColumns(const Schema &schema, const UnsafeStringView &table) override final;
 
 #pragma mark - Binder
 protected:

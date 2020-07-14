@@ -97,14 +97,12 @@ public:
     std::optional<bool> tableExists(const UnsafeStringView &table);
     std::optional<bool> tableExists(const Schema &schema, const UnsafeStringView &table);
 
-    std::optional<std::set<StringView>>
+    virtual std::optional<std::set<StringView>>
     getColumns(const Schema &schema, const UnsafeStringView &table);
     std::optional<std::set<StringView>> getColumns(const UnsafeStringView &table);
 
     std::optional<std::vector<ColumnMeta>>
     getTableMeta(const Schema &schema, const UnsafeStringView &table);
-
-protected:
     std::optional<std::set<StringView>> getValues(const Statement &statement, int index);
 
 #pragma mark - Transaction

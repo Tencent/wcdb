@@ -75,6 +75,11 @@ void AlterTableSTMT::iterate(const Iterator& iterator, bool& stop)
     }
 }
 
+bool AlterTableSTMT::isTargetingSameTable(const AlterTableSTMT& other) const
+{
+    return table == other.table && schema.isTargetingSameSchema(other.schema);
+}
+
 } // namespace Syntax
 
 } // namespace WCDB

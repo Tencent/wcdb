@@ -32,6 +32,6 @@
 
 - (MigrationObject*)migrationObjectWithIdentifier:(int)identifier;
 
-- (NSArray<MigrationObject*>*)migrationObjectsWithCount:(NSUInteger)count startingFromIdentifier:(int)identifier;
+- (NSArray<MigrationObject*>*)migrationObjectsWithCount:(NSUInteger)count startingFromIdentifier:(int)identifier withoutContent:(bool)noContent;
 
 @end

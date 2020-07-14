@@ -35,14 +35,23 @@
 
 - (MigrationObject*)migrationObjectWithIdentifier:(int)identifier
 {
-    return [MigrationObject objectWithIdentifier:identifier andContent:self.string];
+    return [self migrationObjectWithIdentifier:identifier withoutContent:NO];
 }
 
-- (NSArray<MigrationObject*>*)migrationObjectsWithCount:(NSUInteger)count startingFromIdentifier:(int)identifier
+- (MigrationObject*)migrationObjectWithIdentifier:(int)identifier withoutContent:(bool)noContent
+{
+    if(!noContent){
+        return [MigrationObject objectWithIdentifier:identifier andContent:self.string];
+    }else{
+        return [MigrationObject objectWithIdentifier:identifier andContent:nil];
+    }
+}
+
+- (NSArray<MigrationObject*>*)migrationObjectsWithCount:(NSUInteger)count startingFromIdentifier:(int)identifier withoutContent:(bool)noContent;
 {
     NSMutableArray<MigrationObject*>* objects = [NSMutableArray arrayWithCapacity:count];
     for (NSUInteger i = identifier; i < identifier + count; ++i) {
-        [objects addObject:[self migrationObjectWithIdentifier:(int) i]];
+        [objects addObject:[self migrationObjectWithIdentifier:(int) i withoutContent:noContent]];
     }
     return objects;
 }
