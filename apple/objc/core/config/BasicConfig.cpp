@@ -58,9 +58,7 @@ bool BasicConfig::invoke(Handle* handle)
             handle->setWALFilePersist(true);
         }
         succeed = lazySetJournalModeWAL(handle) && handle->execute(m_enableFullfsync);
-        if(Core::shared().getABTestConfig("clicfg_temp_db_write_file").has_value()){
-            succeed &= handle->execute(m_setTempStore);
-        }
+        succeed &= handle->execute(m_setTempStore);
     }
     return succeed;
 }

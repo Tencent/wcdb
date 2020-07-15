@@ -157,9 +157,7 @@ std::optional<std::list<Statement>> MigratingHandleStatement::process(const Stat
             if (!migratedInsertSTMT.isTargetingSameTable(falledBackSTMT)) {
                 // it's safe to use origin statement since Conflict Action will not be changed during tampering.
                 succeed = prepareMigrate(migratedInsertSTMT, falledBackSTMT);
-                if(Core::shared().getABTestConfig("clicfg_revert_commit_for_migrating_db").has_value()){
-                    sqlite3_revertCommitOrder(getRawHandle());
-                }
+                sqlite3_revertCommitOrder(getRawHandle());
             }
         } break;
         case Syntax::Identifier::Type::UpdateSTMT: {
