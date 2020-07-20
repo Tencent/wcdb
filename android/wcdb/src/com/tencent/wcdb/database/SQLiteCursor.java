@@ -115,10 +115,28 @@ public class SQLiteCursor extends AbstractWindowedCursor {
                 newPosition >= (mWindow.getStartPosition() + mWindow.getNumRows())) {
             fillWindow(newPosition);
 
-            return (newPosition >= mWindow.getStartPosition()) &&
-                    (newPosition < mWindow.getStartPosition() + mWindow.getNumRows());
+            // Update count if we are running out of rows.
+            int bound = mWindow.getStartPosition() + mWindow.getNumRows();
+            if (newPosition >= bound) {
+                mCount = bound;
+            }
         }
 
+        return true;
+    }
+
+    @Override
+    public boolean moveToPosition(int position) {
+        if (!super.moveToPosition(position)) {
+            return false;
+        }
+
+        // Double check the case that the result set changes.
+        final int count = getCount();
+        if (position >= count) {
+            mPos = count;
+            return false;
+        }
         return true;
     }
 
