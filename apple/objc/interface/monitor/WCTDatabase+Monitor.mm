@@ -53,8 +53,8 @@ void Core::print(const UnsafeStringView &message)
 {
     WCDB::Handle::PerformanceNotification callback = nullptr;
     if (trace != nil) {
-        callback = [trace](const WCDB::UnsafeStringView& sql, double cost) {
-            trace([NSString stringWithUTF8String:sql.data()], cost);
+        callback = [trace](const WCDB::UnsafeStringView& sql, double cost, const void* handle) {
+            trace([NSString stringWithUTF8String:sql.data()], cost, handle);
         };
     }
     WCDB::Core::shared().setNotificationWhenPerformanceGlobalTraced(callback);
@@ -64,8 +64,8 @@ void Core::print(const UnsafeStringView &message)
 {
     WCDB::Handle::SQLNotification callback = nullptr;
     if (trace != nil) {
-        callback = [trace](const WCDB::UnsafeStringView &sql) {
-            trace([NSString stringWithView:sql]);
+        callback = [trace](const WCDB::UnsafeStringView &sql, const void* handle) {
+            trace([NSString stringWithView:sql], handle);
         };
     }
     WCDB::Core::shared().setNotificationForSQLGLobalTraced(callback);
@@ -74,8 +74,8 @@ void Core::print(const UnsafeStringView &message)
 - (void)tracePerformance:(WCTPerformanceTraceBlock)trace
 {
     if (trace != nil) {
-        WCDB::Handle::PerformanceNotification callback = [trace](const WCDB::UnsafeStringView& sql, double cost) {
-            trace([NSString stringWithUTF8String:sql.data()], cost);
+        WCDB::Handle::PerformanceNotification callback = [trace](const WCDB::UnsafeStringView& sql, double cost, const void* handle) {
+            trace([NSString stringWithUTF8String:sql.data()], cost, handle);
         };
         _database->setConfig(WCDB::PerformanceTraceConfigName,
                              std::static_pointer_cast<WCDB::Config>(std::make_shared<WCDB::PerformanceTraceConfig>(callback)),
@@ -88,8 +88,8 @@ void Core::print(const UnsafeStringView &message)
 - (void)traceSQL:(WCTSQLTraceBlock)trace
 {
     if (trace != nil) {
-        WCDB::Handle::SQLNotification callback = [trace](const WCDB::UnsafeStringView &sql) {
-            trace([NSString stringWithView:sql]);
+        WCDB::Handle::SQLNotification callback = [trace](const WCDB::UnsafeStringView &sql, const void* handle) {
+            trace([NSString stringWithView:sql], handle);
         };
         _database->setConfig(WCDB::SQLTraceConfigName,
                              std::static_pointer_cast<WCDB::Config>(std::make_shared<WCDB::SQLTraceConfig>(callback)),

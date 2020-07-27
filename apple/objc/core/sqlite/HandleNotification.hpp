@@ -48,25 +48,26 @@ private:
 
 #pragma mark - SQL
 public:
-    typedef std::function<void(const UnsafeStringView &sql)> SQLNotification;
+    typedef std::function<void(const UnsafeStringView &sql, const void* handle)> SQLNotification;
     void setNotificationWhenSQLTraced(const UnsafeStringView &name,
                                       const SQLNotification &onTraced);
 
 private:
     bool areSQLTraceNotificationsSet() const;
-    void postSQLTraceNotification(const UnsafeStringView &sql);
+    void postSQLTraceNotification(const UnsafeStringView &sql, const void* handle);
     StringViewMap<SQLNotification> m_sqlNotifications;
 
 #pragma mark - Performance
 public:
-    typedef std::function<void(const UnsafeStringView &sql, double cost)> PerformanceNotification;
+    typedef std::function<void(const UnsafeStringView &sql, double cost, const void* handle)> PerformanceNotification;
     void setNotificationWhenPerformanceTraced(const UnsafeStringView &name,
                                               const PerformanceNotification &onTraced);
 
 private:
     bool arePerformanceTraceNotificationsSet() const;
     void postPerformanceTraceNotification(const UnsafeStringView &sql,
-                                          const int64_t &cost);
+                                          const int64_t &cost,
+                                          const void* handle);
     StringViewMap<PerformanceNotification> m_performanceNotifications;
 
 #pragma mark - Committed
