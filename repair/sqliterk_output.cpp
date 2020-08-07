@@ -837,6 +837,10 @@ int sqliterk_save_master(sqlite3 *db,
         int sql_len = sqlite3_column_bytes(stmt, 4);
         const char *sql = (const char *) sqlite3_column_text(stmt, 4);
 
+        // Skip invalid rows.
+        if (!typestr || !name || !tbl_name || !sql)
+            continue;
+
         // Skip system tables and indices.
         if (strncmp(name, "sqlite_", 7) == 0)
             continue;
