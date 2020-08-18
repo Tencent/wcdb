@@ -35,7 +35,7 @@
     WCDB::StatementPragma statement = WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion());
 
     __block BOOL tested = NO;
-    [self.database traceSQL:^(NSString* sql) {
+    [self.database traceSQL:^(NSString* sql, const void*) {
         if ([sql isEqualToString:@(statement.getDescription().data())]) {
             tested = YES;
         }
@@ -56,7 +56,7 @@
                                                   @"BEGIN IMMEDIATE",
                                                   @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)",
                                                   @"COMMIT", nil];
-    [self.database tracePerformance:^(NSString *sql, double) {
+    [self.database tracePerformance:^(NSString *sql, double, const void*) {
         if([sql isEqualToString:expectedFootprints.firstObject]){
             [expectedFootprints removeObjectAtIndex:0];
         }
@@ -99,7 +99,7 @@
     WCDB::StatementPragma statement = WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion());
 
     __block BOOL tested = NO;
-    [WCTDatabase globalTraceSQL:^(NSString* sql) {
+    [WCTDatabase globalTraceSQL:^(NSString* sql, const void*) {
         if ([sql isEqualToString:@(statement.getDescription().data())]) {
             tested = YES;
         }
@@ -118,7 +118,7 @@
                                                   @"BEGIN IMMEDIATE",
                                                   @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)",
                                                   @"COMMIT", nil];
-    [WCTDatabase globalTracePerformance:^(NSString* sql, double) {
+    [WCTDatabase globalTracePerformance:^(NSString* sql, double, const void*) {
         if([sql isEqualToString:expectedFootprints.firstObject]){
             [expectedFootprints removeObjectAtIndex:0];
         }
