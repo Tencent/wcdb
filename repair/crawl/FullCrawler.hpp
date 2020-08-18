@@ -29,6 +29,7 @@
 #include <WCDB/MasterCrawler.hpp>
 #include <WCDB/Repairman.hpp>
 #include <WCDB/SequenceCrawler.hpp>
+#include <WCDB/Backup.hpp>
 #include <list>
 #include <map>
 
@@ -53,6 +54,14 @@ protected:
 protected:
     void onCellCrawled(const Cell &cell) override final;
     bool willCrawlPage(const Page &, int) override final;
+
+public:
+    typedef Backup::Filter Filter;
+    void filter(const Filter &tableShouldBeCrawled);
+
+protected:
+    bool filter(const UnsafeStringView &tableName);
+    Filter m_filter;
 
 #pragma mark - Error
 protected:

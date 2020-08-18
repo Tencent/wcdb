@@ -213,6 +213,7 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
                                               useMaterial,
                                               std::placeholders::_1,
                                               std::placeholders::_2));
+    fullCrawler.filter(factory.getFilter());
     SteadyClock before = SteadyClock::now();
     if (fullCrawler.work()) {
         reportFullCrawler(fullCrawler.getScore(),

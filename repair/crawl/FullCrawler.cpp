@@ -112,6 +112,21 @@ bool FullCrawler::willCrawlPage(const Page &page, int)
     return true;
 }
 
+#pragma mark - Filter
+void FullCrawler::filter(const Filter &tableShouldBeCrawled)
+{
+    m_filter = tableShouldBeCrawled;
+}
+
+bool FullCrawler::filter(const UnsafeStringView &tableName)
+{
+    bool result = true;
+    if (m_filter != nullptr) {
+        result = m_filter(tableName);
+    }
+    return result;
+}
+
 #pragma mark - Error
 void FullCrawler::onErrorCritical()
 {
@@ -137,9 +152,10 @@ void FullCrawler::onMasterCellCrawled(const Cell &cell, const Master &master)
         WCTAssert(master.type.caseInsensiveEqual("table"));
         WCTAssert(master.tableName.caseInsensiveEqual(master.name));
         m_sequenceCrawler.work(master.rootpage, this);
-    } else if (Master::isReservedTableName(master.name)
+    } else if (!filter(master.tableName)
+               || Master::isReservedTableName(master.name)
                || Master::isReservedTableName(master.tableName)) {
-        //Skip sqlite reserved table
+        //Skip no backup table and sqlite reserved table
         return;
     } else {
         if (master.type.caseInsensiveEqual("table")) {
