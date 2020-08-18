@@ -125,7 +125,7 @@ esac
 platformBasedParameters=()
 case "$platform" in
     iOS)
-        platformBasedParameters+=('product="$products/$configuration-iphoneos/$target.framework" sdk=iphoneos arch=arm64')
+        platformBasedParameters+=('product="$products/$configuration-iphoneos/$target.framework" sdk=iphoneos arch="arm64 -arch arm64e"')
         platformBasedParameters+=('product="$products/$configuration-iphonesimulator/$target.framework" sdk=iphonesimulator arch=x86_64')
     ;;
     macOS)
