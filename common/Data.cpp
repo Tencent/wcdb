@@ -79,7 +79,7 @@ Data& Data::operator=(Data&& other)
 off_t Data::getCurrentOffset() const
 {
     WCTAssert(m_sharedBuffer != nullptr);
-    return m_sharedBuffer->data() - m_buffer;
+    return m_buffer - m_sharedBuffer->data();
 }
 
 size_t Data::getSharedSize() const
