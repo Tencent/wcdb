@@ -25,6 +25,9 @@
 #include <WCDB/Data.hpp>
 #include <WCDB/Factory.hpp>
 #include <WCDB/FactoryBackup.hpp>
+#include <WCDB/CoreConst.h>
+#include <WCDB/FileManager.hpp>
+#include <WCDB/Notifier.hpp>
 
 namespace WCDB {
 
@@ -49,6 +52,13 @@ bool FactoryBackup::work(const UnsafeStringView &database)
 
     auto materialPath = Factory::materialForSerializingForDatabase(database);
     if (materialPath.has_value() && backup.getMaterial().serialize(materialPath.value())) {
+        auto fileSize = FileManager::getFileSize(materialPath.value());
+        if(fileSize.has_value()){
+            Error error(Error::Code::Notice, Error::Level::Notice, "Backup Info.");
+            error.infos.insert_or_assign("Size", fileSize.value());
+            error.infos.insert_or_assign(ErrorStringKeyPath, materialPath.value());
+            Notifier::shared().notify(error);
+        }
         return true;
     }
 
