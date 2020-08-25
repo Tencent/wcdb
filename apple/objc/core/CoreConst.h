@@ -41,7 +41,7 @@ static constexpr const double OperationQueueRateForTooManyFileDescriptors = 0.7;
 #pragma mark - Operation Queue - Checkpoint
 static constexpr const double OperationQueueTimeIntervalForCheckpoint = 10.0;
 #pragma mark - Operation Queue - Backup
-static constexpr const double OperationQueueTimeIntervalForBackup = 60.0;
+static constexpr const double OperationQueueTimeIntervalForBackup = 600.0;
 
 #pragma mark - Config - Auto Checkpoint
 static constexpr const char* AutoCheckpointConfigName = "com.Tencent.WCDB.Config.AutoCheckpoint";

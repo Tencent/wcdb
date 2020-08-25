@@ -302,12 +302,7 @@ void OperationQueue::asyncBackup(const UnsafeStringView& path)
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_records.find(path);
     if (iter != m_records.end() && iter->second.registeredForBackup) {
-        std::optional<UnsafeStringView> config =  Core::shared().getABTestConfig("clicfg_wcdb_backup_time_interval");
-        if(config.has_value()){
-            asyncBackup(path, atoi(config.value().data()));
-        }else{
-            asyncBackup(path, OperationQueueTimeIntervalForBackup);
-        }
+        asyncBackup(path, OperationQueueTimeIntervalForBackup);
     }
 }
 
