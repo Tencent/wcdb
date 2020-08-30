@@ -124,7 +124,8 @@ void HandleNotification::setNotificationWhenSQLTraced(const UnsafeStringView &na
     }
 }
 
-void HandleNotification::postSQLTraceNotification(const UnsafeStringView &sql, const void* handle)
+void HandleNotification::postSQLTraceNotification(const UnsafeStringView &sql,
+                                                  const void *handle)
 {
     WCTAssert(!m_sqlNotifications.empty());
     for (const auto &element : m_sqlNotifications) {
@@ -156,7 +157,7 @@ void HandleNotification::setNotificationWhenPerformanceTraced(const UnsafeString
 
 void HandleNotification::postPerformanceTraceNotification(const UnsafeStringView &sql,
                                                           const int64_t &cost,
-                                                          const void* handle)
+                                                          const void *handle)
 {
     WCTAssert(!m_performanceNotifications.empty());
     for (const auto &element : m_performanceNotifications) {

@@ -30,10 +30,12 @@ namespace WCDB {
 
 class MigratingHandle;
 
-class MigratingHandleStatement final : public HandleStatement{
+class MigratingHandleStatement final : public HandleStatement {
     friend class MigratingHandle;
+
 private:
     using Super = HandleStatement;
+
 public:
     MigratingHandleStatement() = delete;
     MigratingHandleStatement(const MigratingHandleStatement &) = delete;
@@ -79,7 +81,7 @@ protected:
     bool tryFallbackToSourceTable(Syntax::Schema &schema, StringView &table);
     bool m_processing;
     std::shared_ptr<HandleStatement> m_additionalStatement;
-    
+
 protected:
     using Super::isBusy;
     MigratingHandleStatement(MigratingHandle *handle);
@@ -98,7 +100,6 @@ private:
     std::shared_ptr<HandleStatement> m_migrateStatement;
     std::shared_ptr<HandleStatement> m_removeMigratedStatement;
     int m_rowidIndexOfMigratingStatement;
-
 };
 
 } //namespace WCDB

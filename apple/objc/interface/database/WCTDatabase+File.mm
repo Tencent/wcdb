@@ -55,7 +55,7 @@
 
 + (BOOL)setDefaultTemporaryDatabaseFileDirectory:(NSString *)dir
 {
-    if(dir.length == 0){
+    if (dir.length == 0) {
         WCDB::Error error(WCDB::Error::Code::Error,
                           WCDB::Error::Level::Error,
                           "Set nil temporary database files directory!");
@@ -66,13 +66,12 @@
     BOOL isDir = FALSE;
     BOOL isDirExist = [fileManager fileExistsAtPath:dir
                                         isDirectory:&isDir];
-    if(!isDirExist)
-    {
+    if (!isDirExist) {
         BOOL bCreateDir = [fileManager createDirectoryAtPath:dir
                                  withIntermediateDirectories:YES
                                                   attributes:nil
                                                        error:nil];
-        if(!bCreateDir){
+        if (!bCreateDir) {
             WCDB::Error error(WCDB::Error::Code::Error,
                               WCDB::Error::Level::Error,
                               "Fail to create temporary database files directory");
@@ -80,7 +79,7 @@
             WCDB::Notifier::shared().notify(error);
             return NO;
         }
-    }else if(!isDir){
+    } else if (!isDir) {
         WCDB::Error error(WCDB::Error::Code::Error,
                           WCDB::Error::Level::Error,
                           "Invalid directory");
@@ -88,7 +87,7 @@
         WCDB::Notifier::shared().notify(error);
         return NO;
     }
-    
+
     setenv("SQLITE_TMPDIR", dir.UTF8String, 1);
     return YES;
 }

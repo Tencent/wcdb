@@ -24,10 +24,10 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/BasicConfig.hpp>
+#include <WCDB/Core.hpp>
 #include <WCDB/CoreConst.h>
 #include <WCDB/Handle.hpp>
 #include <WCDB/Macro.h>
-#include <WCDB/Core.hpp>
 
 namespace WCDB {
 

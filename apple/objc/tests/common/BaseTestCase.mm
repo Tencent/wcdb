@@ -24,6 +24,7 @@
 
 #import "BaseTestCase.h"
 #import "Dispatch.h"
+#import "NSObject+TestCase.h"
 #import "PrototypeFactory.h"
 #import "Random.h"
 #import "TestCaseAssertion.h"
@@ -31,7 +32,6 @@
 #import "WCTDatabase+TestCase.h"
 #import <WCDB/WCDB.h>
 #import <WCDB/WCTDatabase+Test.h>
-#import "NSObject+TestCase.h"
 
 @implementation BaseTestCase {
     Random *_random;

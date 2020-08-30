@@ -52,7 +52,7 @@ private:
 #pragma mark - Pragma - FullFsync
 protected:
     const StatementPragma m_enableFullfsync;
-    
+
 #pragma mark - Pragma - FullFsync
 protected:
     const StatementPragma m_setTempStore;

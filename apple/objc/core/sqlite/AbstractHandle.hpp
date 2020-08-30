@@ -86,7 +86,7 @@ public:
     virtual void returnStatement(HandleStatement *handleStatement);
     virtual void resetAllStatements();
     virtual void finalizeStatements();
-    
+
 private:
     std::list<HandleStatement> m_handleStatements;
 

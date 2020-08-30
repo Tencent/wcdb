@@ -40,9 +40,9 @@
 
 - (MigrationObject*)migrationObjectWithIdentifier:(int)identifier withoutContent:(bool)noContent
 {
-    if(!noContent){
+    if (!noContent) {
         return [MigrationObject objectWithIdentifier:identifier andContent:self.string];
-    }else{
+    } else {
         return [MigrationObject objectWithIdentifier:identifier andContent:nil];
     }
 }

@@ -89,11 +89,11 @@
 {
     WCTRemedialAssert(inTransaction, "Transaction block can't be null.", return NO;);
     WCDB::Handle *handle = [self getOrGenerateHandle];
-    if(handle == nullptr){
+    if (handle == nullptr) {
         return NO;
     }
     BOOL ocStop = NO;
-    bool ret = handle->runPauseableTransactionWithOneLoop([&inTransaction, self, ocStop](WCDB::Handle *, bool &stop, bool isNewTransaction) mutable->bool{
+    bool ret = handle->runPauseableTransactionWithOneLoop([&inTransaction, self, ocStop](WCDB::Handle *, bool &stop, bool isNewTransaction) mutable -> bool {
         @autoreleasepool {
             BOOL result = inTransaction(self, &ocStop, isNewTransaction);
             stop = ocStop;

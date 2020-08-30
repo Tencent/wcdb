@@ -23,6 +23,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/Core.hpp>
 #include <WCDB/CoreConst.h>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Global.hpp>
@@ -30,7 +31,6 @@
 #include <WCDB/OperationQueue.hpp>
 #include <fcntl.h>
 #include <unistd.h>
-#include <WCDB/Core.hpp>
 
 namespace WCDB {
 

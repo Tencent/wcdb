@@ -93,6 +93,7 @@ protected:
         bool wait(Trying& trying);
         StringView m_path;
         bool checkMainThreadBusyRetry();
+
     protected:
         bool shouldWait(const Expecting& expecting) const;
         bool localShouldWait(const Expecting& expecting) const;
@@ -141,7 +142,7 @@ protected:
     private:
         StringView m_path;
     };
-    typedef struct StateHolder{
+    typedef struct StateHolder {
         State* state;
     } StateHolder;
     ThreadLocal<Trying> m_tryings;

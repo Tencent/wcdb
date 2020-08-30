@@ -23,19 +23,19 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTHandleStatement.h>
-#import <WCDB/WCTHandleStatement+Private.h>
-#import <WCDB/WCTHandle+Private.h>
-#import <WCDB/WCTORM.h>
 #import <WCDB/WCTFoundation.h>
+#import <WCDB/WCTHandle+Private.h>
+#import <WCDB/WCTHandleStatement+Private.h>
+#import <WCDB/WCTHandleStatement.h>
+#import <WCDB/WCTORM.h>
 
 #define WCTHandleStatementAssert(remedial) WCTRemedialAssert(_handleStatement != nullptr, "handleStatement is null", remedial;)
 
 @implementation WCTHandleStatement
 
--(instancetype)initWithHandle:(WCDB::HandleStatement*)handlesStatement andTag:(NSString*)tag
+- (instancetype)initWithHandle:(WCDB::HandleStatement *)handlesStatement andTag:(NSString *)tag
 {
-    if(self = [super init]){
+    if (self = [super init]) {
         _handleStatement = handlesStatement;
         _tag = tag;
     }
@@ -52,7 +52,7 @@
 {
     WCTHandleStatementAssert(return NO);
     bool succeed = false;
-    if(_handleStatement->prepare(statement)){
+    if (_handleStatement->prepare(statement)) {
         succeed = _handleStatement->step();
         _handleStatement->finalize();
     }
@@ -64,7 +64,7 @@
 {
     WCTHandleStatementAssert(return NO);
     bool succeed = false;
-    if(_handleStatement->prepare(sql)){
+    if (_handleStatement->prepare(sql)) {
         succeed = _handleStatement->step();
         _handleStatement->finalize();
     }
@@ -79,7 +79,7 @@
 }
 
 //rawPrepare should no be used to access or modify the data in a migrating table.
-- (BOOL)rawPrepare:(NSString* )sql
+- (BOOL)rawPrepare:(NSString *)sql
 {
     WCTHandleStatementAssert(return NO);
     return _handleStatement->prepare(sql);
@@ -93,7 +93,7 @@
 
 - (void)finalize
 {
-    WCTHandleStatementAssert(return);
+    WCTHandleStatementAssert(return );
     _handleStatement->finalize();
 }
 
@@ -106,7 +106,7 @@
 
 - (void)reset
 {
-    WCTHandleStatementAssert(return);
+    WCTHandleStatementAssert(return );
     _handleStatement->reset();
 }
 
@@ -126,43 +126,43 @@
 #pragma mark - Bind
 - (void)bindInteger32:(const int32_t &)value toIndex:(int)index
 {
-    WCTHandleStatementAssert(return);
+    WCTHandleStatementAssert(return );
     _handleStatement->bindInteger32(value, index);
 }
 
 - (void)bindInteger64:(const int64_t &)value toIndex:(int)index
 {
-    WCTHandleStatementAssert(return);
+    WCTHandleStatementAssert(return );
     _handleStatement->bindInteger64(value, index);
 }
 
 - (void)bindDouble:(const double &)value toIndex:(int)index
 {
-    WCTHandleStatementAssert(return);
+    WCTHandleStatementAssert(return );
     _handleStatement->bindDouble(value, index);
 }
 
 - (void)bindNullToIndex:(int)index
 {
-    WCTHandleStatementAssert(return);
+    WCTHandleStatementAssert(return );
     _handleStatement->bindNull(index);
 }
 
 - (void)bindString:(NSString *)string toIndex:(int)index
 {
-    WCTHandleStatementAssert(return);
+    WCTHandleStatementAssert(return );
     _handleStatement->bindText(WCDB::UnsafeStringView(string), index);
 }
 
 - (void)bindData:(NSData *)data toIndex:(int)index
 {
-    WCTHandleStatementAssert(return);
+    WCTHandleStatementAssert(return );
     _handleStatement->bindBLOB(data, index);
 }
 
 - (void)bindNumber:(NSNumber *)number toIndex:(int)index
 {
-    WCTHandleStatementAssert(return);
+    WCTHandleStatementAssert(return );
     if (number == nil || CFNumberIsFloatType((CFNumberRef) number)) {
         _handleStatement->bindDouble(number.doubleValue, index);
     } else {
@@ -177,7 +177,7 @@
 - (void)bindValue:(WCTColumnCodingValue *)value
           toIndex:(int)index
 {
-    WCTHandleStatementAssert(return);
+    WCTHandleStatementAssert(return );
     WCTValue *archivedValue = [value archivedWCTValue];
     switch ([value.class columnType]) {
     case WCTColumnTypeNil:
@@ -205,7 +205,7 @@
             ofObject:(WCTObject *)object
              toIndex:(int)index
 {
-    WCTHandleStatementAssert(return);
+    WCTHandleStatementAssert(return );
     const std::shared_ptr<const WCTBaseAccessor> &accessor = property.getColumnBinding().getAccessor();
     switch (accessor->getAccessorType()) {
     case WCTAccessorCpp: {
@@ -213,22 +213,22 @@
         case WCDB::ColumnType::Integer32: {
             WCTCppAccessor<WCDB::ColumnType::Integer32> *i32Accessor = (WCTCppAccessor<WCDB::ColumnType::Integer32> *) accessor.get();
             _handleStatement->bindInteger32(i32Accessor->getValue(object),
-                                   index);
+                                            index);
         } break;
         case WCDB::ColumnType::Integer64: {
             WCTCppAccessor<WCDB::ColumnType::Integer64> *i64Accessor = (WCTCppAccessor<WCDB::ColumnType::Integer64> *) accessor.get();
             _handleStatement->bindInteger64(i64Accessor->getValue(object),
-                                   index);
+                                            index);
         } break;
         case WCDB::ColumnType::Float: {
             WCTCppAccessor<WCDB::ColumnType::Float> *floatAccessor = (WCTCppAccessor<WCDB::ColumnType::Float> *) accessor.get();
             _handleStatement->bindDouble(floatAccessor->getValue(object),
-                                index);
+                                         index);
         } break;
         case WCDB::ColumnType::Text: {
             WCTCppAccessor<WCDB::ColumnType::Text> *textAccessor = (WCTCppAccessor<WCDB::ColumnType::Text> *) accessor.get();
             _handleStatement->bindText(textAccessor->getValue(object),
-                              index);
+                                       index);
         } break;
         case WCDB::ColumnType::BLOB: {
             WCTCppAccessor<WCDB::ColumnType::BLOB> *blobAccessor = (WCTCppAccessor<WCDB::ColumnType::BLOB> *) accessor.get();
@@ -278,7 +278,7 @@
 - (void)bindProperties:(const WCTProperties &)properties
               ofObject:(WCTObject *)object
 {
-    WCTHandleStatementAssert(return);
+    WCTHandleStatementAssert(return );
     int index = 1;
     for (const auto &property : properties) {
         [self bindProperty:property ofObject:object toIndex:index];
@@ -437,7 +437,7 @@
       toColumnBindingHolder:(const WCTColumnBindingHolder &)columnBindingHolder
                    ofObject:(WCTObject *)object
 {
-    WCTHandleStatementAssert(return);
+    WCTHandleStatementAssert(return );
     const std::shared_ptr<const WCTBaseAccessor> &accessor = columnBindingHolder.getColumnBinding().getAccessor();
     switch (accessor->getAccessorType()) {
     case WCTAccessorCpp: {
@@ -550,6 +550,5 @@
     }
     return succeed ? multiObjects : nil;
 }
-
 
 @end

@@ -22,21 +22,21 @@
  * limitations under the License.
  */
 
-#include <WCDB/MigratingHandleStatement.hpp>
 #include <WCDB/Assertion.hpp>
-#include <WCDB/StringView.hpp>
-#include <WCDB/MigratingHandle.hpp>
-#include <WCDB/SQLite.h>
 #include <WCDB/Core.hpp>
+#include <WCDB/MigratingHandle.hpp>
+#include <WCDB/MigratingHandleStatement.hpp>
+#include <WCDB/SQLite.h>
+#include <WCDB/StringView.hpp>
 
-namespace WCDB{
-MigratingHandleStatement::MigratingHandleStatement(MigratingHandleStatement && other):
-HandleStatement(std::move(other)),
-m_processing(other.m_processing),
-m_additionalStatement(other.m_additionalStatement),
-m_migrateStatement(other.m_migrateStatement),
-m_removeMigratedStatement(other.m_removeMigratedStatement),
-m_rowidIndexOfMigratingStatement(other.m_rowidIndexOfMigratingStatement)
+namespace WCDB {
+MigratingHandleStatement::MigratingHandleStatement(MigratingHandleStatement&& other)
+: HandleStatement(std::move(other))
+, m_processing(other.m_processing)
+, m_additionalStatement(other.m_additionalStatement)
+, m_migrateStatement(other.m_migrateStatement)
+, m_removeMigratedStatement(other.m_removeMigratedStatement)
+, m_rowidIndexOfMigratingStatement(other.m_rowidIndexOfMigratingStatement)
 {
     other.m_processing = false;
     other.m_additionalStatement = nullptr;
@@ -45,24 +45,24 @@ m_rowidIndexOfMigratingStatement(other.m_rowidIndexOfMigratingStatement)
     other.m_rowidIndexOfMigratingStatement = 0;
 }
 
-MigratingHandleStatement::MigratingHandleStatement(MigratingHandle* handle):
-HandleStatement(handle),
-m_processing(false),
-    m_additionalStatement(std::make_shared<HandleStatement>(handle)),
-m_migrateStatement(std::make_shared<HandleStatement>(handle)),
-m_removeMigratedStatement(std::make_shared<HandleStatement>(handle)),
-m_rowidIndexOfMigratingStatement(0)
+MigratingHandleStatement::MigratingHandleStatement(MigratingHandle* handle)
+: HandleStatement(handle)
+, m_processing(false)
+, m_additionalStatement(std::make_shared<HandleStatement>(handle))
+, m_migrateStatement(std::make_shared<HandleStatement>(handle))
+, m_removeMigratedStatement(std::make_shared<HandleStatement>(handle))
+, m_rowidIndexOfMigratingStatement(0)
 {
-    
 }
-    
+
 MigratingHandleStatement::~MigratingHandleStatement()
 {
     finalize();
 }
-    
+
 #pragma mark - Migration
-std::optional<std::list<Statement>> MigratingHandleStatement::process(const Statement& originStatement)
+std::optional<std::list<Statement>>
+MigratingHandleStatement::process(const Statement& originStatement)
 {
     m_processing = true;
     bool succeed = true;
@@ -75,8 +75,8 @@ std::optional<std::list<Statement>> MigratingHandleStatement::process(const Stat
         // It's dangerous to use origin statement after tampering since all the tokens are not fit.
         Statement falledBackStatement = originStatement;
         // fallback
-        falledBackStatement.iterate(
-        [&succeed, this, migratingHandle](Syntax::Identifier& identifier, bool& stop) {
+        falledBackStatement.iterate([&succeed, this, migratingHandle](
+                                    Syntax::Identifier& identifier, bool& stop) {
             switch (identifier.getType()) {
             case Syntax::Identifier::Type::TableOrSubquery: {
                 // main.table -> temp.unionedView
@@ -214,7 +214,8 @@ std::optional<std::list<Statement>> MigratingHandleStatement::process(const Stat
             statements.push_back(originStatement);
             if (!migratedSTMT.isTargetingSameTable(falledBackSTMT)) {
                 // Don't drop source table. Instead, delete all contents from source table and wait the stepper do the dropping work.
-                const MigrationInfo* info = migratingHandle->getBoundInfo(migratedSTMT.table);
+                const MigrationInfo* info
+                = migratingHandle->getBoundInfo(migratedSTMT.table);
                 WCTAssert(info != nullptr);
                 statements.push_back(info->getStatementForDeletingFromTable(falledBackStatement));
             }
@@ -225,15 +226,20 @@ std::optional<std::list<Statement>> MigratingHandleStatement::process(const Stat
             = static_cast<const Syntax::AlterTableSTMT&>(originStatement.syntax());
             const Syntax::AlterTableSTMT& falledBackSTMT
             = static_cast<const Syntax::AlterTableSTMT&>(falledBackStatement.syntax());
-            if(!migratedSTMT.isTargetingSameTable(falledBackSTMT)){
-                if(migratedSTMT.switcher == Syntax::AlterTableSTMT::Switch::AddColumn){
+            if (!migratedSTMT.isTargetingSameTable(falledBackSTMT)) {
+                if (migratedSTMT.switcher == Syntax::AlterTableSTMT::Switch::AddColumn) {
                     WCDB::StatementPragma getColumnsStatement
-                    = StatementPragma().pragma(Pragma::tableInfo()).schema(migratedSTMT.schema.name).with(migratedSTMT.table);
+                    = StatementPragma()
+                      .pragma(Pragma::tableInfo())
+                      .schema(migratedSTMT.schema.name)
+                      .with(migratedSTMT.table);
                     auto columns = this->getHandle()->getValues(getColumnsStatement, 1);
-                    if(!columns.has_value() || columns->find(migratedSTMT.columnDef.column.name) == columns->end()){
+                    if (!columns.has_value()
+                        || columns->find(migratedSTMT.columnDef.column.name)
+                           == columns->end()) {
                         statements.push_back(originStatement);
                     }
-                }else{
+                } else {
                     statements.push_back(originStatement);
                 }
             }
@@ -288,7 +294,7 @@ bool MigratingHandleStatement::tryFallbackToSourceTable(Syntax::Schema& schema, 
 }
 
 #pragma mark - Override
-bool MigratingHandleStatement::prepare(const Statement &statement)
+bool MigratingHandleStatement::prepare(const Statement& statement)
 {
     WCTAssert(!m_processing);
     WCTRemedialAssert(!isPrepared(), "Last statement is not finalized.", finalize(););
@@ -309,7 +315,7 @@ bool MigratingHandleStatement::prepare(const Statement &statement)
 void MigratingHandleStatement::finalize()
 {
     Super::finalize();
-    if(m_additionalStatement != nullptr){
+    if (m_additionalStatement != nullptr) {
         m_additionalStatement->finalize();
     }
     finalizeMigrate();
@@ -449,10 +455,10 @@ bool MigratingHandleStatement::stepMigration(const int64_t& rowid)
 
 void MigratingHandleStatement::finalizeMigrate()
 {
-    if(m_removeMigratedStatement != nullptr){
+    if (m_removeMigratedStatement != nullptr) {
         m_removeMigratedStatement->finalize();
     }
-    if(m_migrateStatement != nullptr){
+    if (m_migrateStatement != nullptr) {
         m_migrateStatement->finalize();
     }
 }
@@ -465,7 +471,7 @@ void MigratingHandleStatement::resetMigrate()
 }
 
 bool MigratingHandleStatement::prepareMigrate(const Syntax::InsertSTMT& migrated,
-                                     const Syntax::InsertSTMT& falledBack)
+                                              const Syntax::InsertSTMT& falledBack)
 {
     WCTAssert(!isMigratedPrepared());
     MigratingHandle* migratingHandle = dynamic_cast<MigratingHandle*>(getHandle());
@@ -476,5 +482,5 @@ bool MigratingHandleStatement::prepareMigrate(const Syntax::InsertSTMT& migrated
     return m_removeMigratedStatement->prepare(info->getStatementForDeletingSpecifiedRow())
            && m_migrateStatement->prepare(info->getStatementForMigrating(falledBack));
 }
-    
-}//namespace WCDB
+
+} //namespace WCDB

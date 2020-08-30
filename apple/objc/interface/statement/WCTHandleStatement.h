@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WCTHandleStatement : NSObject
 
-@property(nonatomic, strong)NSString* tag;
+@property (nonatomic, strong) NSString *tag;
 
 - (instancetype)init UNAVAILABLE_ATTRIBUTE;
 
@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Prepare
 - (BOOL)prepare:(const WCDB::Statement &)statement;
 //rawPrepare should no be used to access or modify the data in a migrating table.
-- (BOOL)rawPrepare:(NSString* )sql;
+- (BOOL)rawPrepare:(NSString *)sql;
 
 - (BOOL)isPrepared;
 

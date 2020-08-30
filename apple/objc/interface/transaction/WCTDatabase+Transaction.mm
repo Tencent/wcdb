@@ -68,7 +68,7 @@
     BOOL ocStop = NO;
     bool ret = _database->runPauseableTransactionWithOneLoop([&inTransaction, self, transactionHandle, ocStop](WCDB::Handle *handle, bool &stop, bool isNewTransaction) mutable -> bool {
         @autoreleasepool {
-            if(!transactionHandle){
+            if (!transactionHandle) {
                 transactionHandle = [[WCTHandle alloc] initWithDatabase:self andUnsafeHandle:handle];
             }
             BOOL result = inTransaction(transactionHandle, &ocStop, isNewTransaction);
@@ -76,7 +76,7 @@
             return result;
         }
     });
-    if(transactionHandle){
+    if (transactionHandle) {
         [transactionHandle invalidate];
     }
     return ret;

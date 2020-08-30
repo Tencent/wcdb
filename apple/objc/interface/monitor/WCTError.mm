@@ -55,7 +55,7 @@ NSErrorUserInfoKey const WCTErrorKeyExtendedCode = @WCDB_ERROR_INT_KEY_EXTCODE;
 - (instancetype)initWithError:(const WCDB::Error &)error
 {
     NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
-    if(error.infos.size()>0){
+    if (error.infos.size() > 0) {
         for (const auto &info : error.infos) {
             switch (info.second.underlyingType()) {
             case WCDB::Error::InfoValue::UnderlyingType::String:
@@ -74,7 +74,7 @@ NSErrorUserInfoKey const WCTErrorKeyExtendedCode = @WCDB_ERROR_INT_KEY_EXTCODE;
             }
         }
     }
-    
+
     return [self initWithCode:(WCTErrorCode) error.code() level:(WCTErrorLevel) error.level message:[NSString stringWithView:error.getMessage()] userInfo:userInfo];
 }
 

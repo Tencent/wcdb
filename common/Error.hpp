@@ -281,14 +281,20 @@ public:
         template<typename T>
         InfoValue(const T &value,
                   typename std::enable_if<std::is_floating_point<T>::value>::type * = nullptr)
-        : m_floatValue((Float) value), m_intValue(0), m_stringValue(), m_underlyingType(UnderlyingType::Float)
+        : m_floatValue((Float) value)
+        , m_intValue(0)
+        , m_stringValue()
+        , m_underlyingType(UnderlyingType::Float)
         {
         }
 
         template<typename T>
         InfoValue(const T &value,
                   typename std::enable_if<std::is_integral<T>::value>::type * = nullptr)
-        : m_floatValue(0), m_intValue((Integer)value), m_stringValue(), m_underlyingType(UnderlyingType::Integer)
+        : m_floatValue(0)
+        , m_intValue((Integer) value)
+        , m_stringValue()
+        , m_underlyingType(UnderlyingType::Integer)
         {
         }
 

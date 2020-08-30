@@ -187,7 +187,7 @@ public:
 public:
     using HandlePool::purge;
     void setInMemory();
-    
+
 private:
     bool m_isInMemory;
     std::shared_ptr<Handle> m_sharedInMemoryHandle;

@@ -49,7 +49,7 @@ WCDB_SYNTHESIZE(content)
     }
 }
 
-+ (WCDB::StatementCreateTable)statementForCreatingTargetTable:(NSString *)tableName withMode:(MigrationObjectORMMode)mode
++ (WCDB::StatementCreateTable)statementForCreatingTargetTable:(NSString*)tableName withMode:(MigrationObjectORMMode)mode
 {
     switch (mode) {
     case MigrationObjectORMModeNormal:

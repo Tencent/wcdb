@@ -83,8 +83,8 @@ void Database::didDrain()
 
 void Database::close(const ClosedCallback &onClosed)
 {
-    if(m_isInMemory){
-        if(m_sharedInMemoryHandle != nullptr){
+    if (m_isInMemory) {
+        if (m_sharedInMemoryHandle != nullptr) {
             m_sharedInMemoryHandle->close();
         }
         m_sharedInMemoryHandle = nullptr;
@@ -133,7 +133,7 @@ Database::InitializedGuard Database::initialize()
             // retry
             continue;
         }
-        if(m_isInMemory){
+        if (m_isInMemory) {
             m_initialized = true;
             continue;
         }
@@ -189,10 +189,11 @@ void Database::removeConfig(const UnsafeStringView &name)
 #pragma mark - Handle
 RecyclableHandle Database::getHandle()
 {
-    if(m_isInMemory){
+    if (m_isInMemory) {
         InitializedGuard initializedGuard = initialize();
-        if(m_sharedInMemoryHandle == nullptr){
-            m_sharedInMemoryHandle = generateSlotedHandle(m_migration.shouldMigrate() ? HandleType::Migrating : HandleType::Normal);
+        if (m_sharedInMemoryHandle == nullptr) {
+            m_sharedInMemoryHandle = generateSlotedHandle(
+            m_migration.shouldMigrate() ? HandleType::Migrating : HandleType::Normal);
         }
         return RecyclableHandle(m_sharedInMemoryHandle, nullptr);
     }
@@ -417,18 +418,16 @@ bool Database::runPauseableTransactionWithOneLoop(const TransactionCallbackForOn
 {
     // get threaded handle
     RecyclableHandle handle = getHandle();
-    if(handle == nullptr) return false;
+    if (handle == nullptr) return false;
     WCTAssert(handle != nullptr);
     bool stop = false;
     bool needBegin = true;
     bool isNewTransaction;
-    do{
+    do {
         isNewTransaction = needBegin;
         if (needBegin) {
-            if(isInTransaction()){
-                Error error(Error::Code::Error,
-                            Error::Level::Error,
-                            "DB is already in transaction!");
+            if (isInTransaction()) {
+                Error error(Error::Code::Error, Error::Level::Error, "DB is already in transaction!");
                 error.infos.insert_or_assign(ErrorStringKeyPath, path);
                 Notifier::shared().notify(error);
                 return false;
@@ -440,7 +439,7 @@ bool Database::runPauseableTransactionWithOneLoop(const TransactionCallbackForOn
             markHandleAsTransactioned(handle);
         }
         needBegin = false;
-        if(!transaction(handle.get(), stop, isNewTransaction)){
+        if (!transaction(handle.get(), stop, isNewTransaction)) {
             /*
              All statements must be reset before commit or rollback,
              because sqlite will downgrade handle to a read-only transaction state
@@ -452,7 +451,7 @@ bool Database::runPauseableTransactionWithOneLoop(const TransactionCallbackForOn
             markHandleAsUntransactioned();
             return false;
         }
-        if(handle.get()->checkMainThreadBusyRetry() || stop){
+        if (handle.get()->checkMainThreadBusyRetry() || stop) {
             handle->resetAllStatements();
             if (!handle->commitOrRollbackTransaction()) {
                 setThreadedError(handle->getError());
@@ -460,12 +459,12 @@ bool Database::runPauseableTransactionWithOneLoop(const TransactionCallbackForOn
                 return false;
             }
             markHandleAsUntransactioned();
-            if(!stop){
+            if (!stop) {
                 needBegin = true;
                 usleep(100);
             }
         }
-    }while(!stop);
+    } while (!stop);
     handle->finalizeStatements();
     return true;
 }
@@ -525,7 +524,7 @@ bool Database::runNestedTransaction(const TransactionCallback &transaction)
 #pragma mark - File
 bool Database::removeFiles()
 {
-    if(m_isInMemory){
+    if (m_isInMemory) {
         return false;
     }
     bool result = false;
@@ -542,7 +541,7 @@ bool Database::removeFiles()
 
 std::optional<size_t> Database::getFilesSize()
 {
-    if(m_isInMemory){
+    if (m_isInMemory) {
         return 0;
     }
     auto size = FileManager::getItemsSize(getPaths());
@@ -554,7 +553,7 @@ std::optional<size_t> Database::getFilesSize()
 
 bool Database::moveFiles(const UnsafeStringView &directory)
 {
-    if(m_isInMemory){
+    if (m_isInMemory) {
         return false;
     }
     bool result = false;
@@ -576,8 +575,8 @@ const StringView &Database::getPath() const
 
 std::list<StringView> Database::getPaths() const
 {
-    if(m_isInMemory){
-        return {path};
+    if (m_isInMemory) {
+        return { path };
     }
     return pathsOfDatabase(path);
 }
@@ -610,7 +609,7 @@ void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
 
 bool Database::backup(bool interruptible)
 {
-    if(m_isInMemory){
+    if (m_isInMemory) {
         return false;
     }
     InitializedGuard initializedGuard = initialize();
@@ -674,7 +673,7 @@ bool Database::backup(bool interruptible)
 
 bool Database::deposit()
 {
-    if(m_isInMemory){
+    if (m_isInMemory) {
         return false;
     }
     bool result = false;
@@ -734,7 +733,7 @@ bool Database::deposit()
 
 double Database::retrieve(const RetrieveProgressCallback &onProgressUpdated)
 {
-    if(m_isInMemory){
+    if (m_isInMemory) {
         return 0;
     }
     double result = -1;

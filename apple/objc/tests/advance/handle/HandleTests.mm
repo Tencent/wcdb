@@ -320,9 +320,9 @@
     {
         WCDB::BindParameter parameter = WCDB::BindParameter::colon("data");
         WCDB::Statement insert = WCDB::StatementInsert()
-        .insertIntoTable(self.tableName)
-        .columns({ TestCaseObject.identifier, TestCaseObject.content })
-        .values({ 3, parameter});
+                                 .insertIntoTable(self.tableName)
+                                 .columns({ TestCaseObject.identifier, TestCaseObject.content })
+                                 .values({ 3, parameter });
         TestCaseAssertTrue([self.handle prepare:insert]);
         [self.handle bindString:value toIndex:[self.handle bindParameterIndex:parameter]];
 

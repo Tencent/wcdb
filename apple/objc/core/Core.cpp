@@ -336,11 +336,10 @@ void Core::removeABTestConfig(const UnsafeStringView configName)
 std::optional<UnsafeStringView> Core::getABTestConfig(UnsafeStringView configName)
 {
     SharedLockGuard memoryGuard(m_memory);
-    if(m_abtestConfig.find(configName) != m_abtestConfig.end()){
+    if (m_abtestConfig.find(configName) != m_abtestConfig.end()) {
         return m_abtestConfig[configName];
     }
     return std::nullopt;
 }
-
 
 } // namespace WCDB

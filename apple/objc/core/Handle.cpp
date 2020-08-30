@@ -23,8 +23,8 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/Handle.hpp>
 #include <WCDB/BusyRetryConfig.hpp>
+#include <WCDB/Handle.hpp>
 #include <unistd.h>
 
 namespace WCDB {
@@ -273,12 +273,13 @@ bool Handle::isStatementReadonly()
 #pragma mark - Transaction
 bool Handle::checkMainThreadBusyRetry()
 {
-    const auto & element = m_pendings.find(StringView(BusyRetryConfigName));
-    if(element == m_pendings.end()){
+    const auto &element = m_pendings.find(StringView(BusyRetryConfigName));
+    if (element == m_pendings.end()) {
         return false;
     }
-    std::shared_ptr<BusyRetryConfig> config = std::dynamic_pointer_cast<BusyRetryConfig>(element->value());
-    if(config == nullptr){
+    std::shared_ptr<BusyRetryConfig> config
+    = std::dynamic_pointer_cast<BusyRetryConfig>(element->value());
+    if (config == nullptr) {
         return false;
     }
     return config->checkMainThreadBusyRetry(getPath());
@@ -313,13 +314,13 @@ bool Handle::runPauseableTransactionWithOneLoop(const TransactionCallbackForOneL
     bool stop = false;
     bool needBegin = true;
     bool isNewTransaction;
-    do{
+    do {
         isNewTransaction = needBegin;
         if (needBegin && !beginTransaction()) {
             return false;
         }
         needBegin = false;
-        if(!transaction(this, stop, isNewTransaction)){
+        if (!transaction(this, stop, isNewTransaction)) {
             /*
             All statements must be reset before commit or rollback,
             because sqlite will downgrade handle to a read-only transaction state
@@ -330,17 +331,17 @@ bool Handle::runPauseableTransactionWithOneLoop(const TransactionCallbackForOneL
             rollbackTransaction();
             return false;
         }
-        if(checkMainThreadBusyRetry() || stop){
+        if (checkMainThreadBusyRetry() || stop) {
             resetAllStatements();
-            if(!commitOrRollbackTransaction()){
+            if (!commitOrRollbackTransaction()) {
                 return false;
             }
-            if(!stop){
+            if (!stop) {
                 needBegin = true;
                 usleep(100);
             }
         }
-    }while(!stop);
+    } while (!stop);
     return true;
 }
 

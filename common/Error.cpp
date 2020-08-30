@@ -251,17 +251,26 @@ const StringView& Error::getMessage() const
 
 #pragma mark - Info
 Error::InfoValue::InfoValue(const char* string)
-: m_floatValue(0), m_intValue(0), m_stringValue(String(string)), m_underlyingType(UnderlyingType::String)
+: m_floatValue(0)
+, m_intValue(0)
+, m_stringValue(String(string))
+, m_underlyingType(UnderlyingType::String)
 {
 }
 
 Error::InfoValue::InfoValue(const UnsafeStringView& string)
-: m_floatValue(0), m_intValue(0), m_stringValue(String(string)), m_underlyingType(UnderlyingType::String)
+: m_floatValue(0)
+, m_intValue(0)
+, m_stringValue(String(string))
+, m_underlyingType(UnderlyingType::String)
 {
 }
 
 Error::InfoValue::InfoValue(String&& string)
-: m_floatValue(0), m_intValue(0), m_stringValue(std::move(string)), m_underlyingType(UnderlyingType::String)
+: m_floatValue(0)
+, m_intValue(0)
+, m_stringValue(std::move(string))
+, m_underlyingType(UnderlyingType::String)
 {
 }
 
@@ -298,7 +307,7 @@ Error::InfoValue::UnderlyingType Error::InfoValue::underlyingType() const
 StringView Error::getDescription() const
 {
     WCTAssert(isError((int) code()));
-//    WCTAssert(!m_message.empty());
+    //    WCTAssert(!m_message.empty());
     std::ostringstream stream;
     stream << "[" << levelName(level) << ": " << (int) code() << ", " << m_message << "]";
 

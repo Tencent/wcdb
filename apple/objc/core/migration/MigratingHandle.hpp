@@ -25,8 +25,8 @@
 #pragma once
 
 #include <WCDB/Handle.hpp>
-#include <WCDB/Migration.hpp>
 #include <WCDB/MigratingHandleStatement.hpp>
+#include <WCDB/Migration.hpp>
 
 namespace WCDB {
 
@@ -39,7 +39,7 @@ private:
 public:
     MigratingHandle(Migration &migration);
     ~MigratingHandle() override final;
-    
+
 #pragma mark - Meta
     virtual std::optional<std::set<StringView>>
     getColumns(const Schema &schema, const UnsafeStringView &table) override final;
@@ -71,7 +71,7 @@ public:
 
 protected:
     virtual void finalizeStatements() override final;
-    
+
 private:
     std::list<MigratingHandleStatement> m_migratingHandleStatements;
 };

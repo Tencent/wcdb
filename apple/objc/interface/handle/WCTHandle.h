@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - HandleStatement
 
-- (WCTHandleStatement*)getOrCreateHandleStatementByTag:(NSString*)tag;
+- (WCTHandleStatement *)getOrCreateHandleStatementByTag:(NSString *)tag;
 
 - (void)finalizeAllStatements;
 
@@ -53,7 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Prepare
 - (BOOL)prepare:(const WCDB::Statement &)statement;
 //rawPrepare statement should no be used to access or modify the data in a migrating table.
-- (BOOL)rawPrepare:(NSString* )sql;
+- (BOOL)rawPrepare:(NSString *)sql;
 
 - (BOOL)isPrepared;
 

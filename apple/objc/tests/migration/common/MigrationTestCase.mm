@@ -38,14 +38,13 @@
     _toMigrate = [NSMutableDictionary<NSString*, NSString*> dictionaryWithObject:self.sourceTable forKey:self.tableName];
 
     TestCaseAssertTrue([self.sourceDatabase execute:[MigrationObject statementForCreatingSourceTable:self.sourceTable withMode:self.mode]]);
-    if(self.mode != MigrationObjectORMModeMissColumn){
+    if (self.mode != MigrationObjectORMModeMissColumn) {
         TestCaseAssertTrue([self.sourceDatabase insertObjects:self.objects intoTable:self.sourceTable]);
-    }else{
+    } else {
         WCTProperties properties;
         properties.push_back(MigrationObject.identifier);
         TestCaseAssertTrue([self.sourceDatabase insertObjects:self.objects onProperties:properties intoTable:self.sourceTable]);
     }
-    
 
     [self.sourceDatabase close];
 

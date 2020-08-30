@@ -51,13 +51,14 @@
     TestCaseAssertTrue([self createTable]);
 
     NSArray<TestCaseObject*>* objects = [Random.shared autoIncrementTestCaseObjectsWithCount:10000];
-    
+
     __block NSMutableArray* expectedFootprints = [[NSMutableArray alloc] initWithObjects:
-                                                  @"BEGIN IMMEDIATE",
-                                                  @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)",
-                                                  @"COMMIT", nil];
-    [self.database tracePerformance:^(NSString *sql, double, const void*) {
-        if([sql isEqualToString:expectedFootprints.firstObject]){
+                                                                         @"BEGIN IMMEDIATE",
+                                                                         @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)",
+                                                                         @"COMMIT",
+                                                                         nil];
+    [self.database tracePerformance:^(NSString* sql, double, const void*) {
+        if ([sql isEqualToString:expectedFootprints.firstObject]) {
             [expectedFootprints removeObjectAtIndex:0];
         }
     }];
@@ -113,13 +114,14 @@
 - (void)test_global_trace_performance
 {
     NSArray<TestCaseObject*>* objects = [Random.shared autoIncrementTestCaseObjectsWithCount:10000];
-    
+
     __block NSMutableArray* expectedFootprints = [[NSMutableArray alloc] initWithObjects:
-                                                  @"BEGIN IMMEDIATE",
-                                                  @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)",
-                                                  @"COMMIT", nil];
+                                                                         @"BEGIN IMMEDIATE",
+                                                                         @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)",
+                                                                         @"COMMIT",
+                                                                         nil];
     [WCTDatabase globalTracePerformance:^(NSString* sql, double, const void*) {
-        if([sql isEqualToString:expectedFootprints.firstObject]){
+        if ([sql isEqualToString:expectedFootprints.firstObject]) {
             [expectedFootprints removeObjectAtIndex:0];
         }
     }];

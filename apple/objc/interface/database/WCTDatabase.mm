@@ -69,7 +69,7 @@
 
 - (void)dealloc
 {
-    if(m_isInMemory){
+    if (m_isInMemory) {
         delete _database;
     }
 }

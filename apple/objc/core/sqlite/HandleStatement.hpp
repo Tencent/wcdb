@@ -64,7 +64,7 @@ public:
     virtual void bindText(const Text &value, int index);
     virtual void bindBLOB(const BLOB &value, int index);
     virtual void bindNull(int index);
-    
+
     int bindParameterIndex(const Text &parameterName);
 
     virtual Integer32 getInteger32(int index);
