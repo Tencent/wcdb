@@ -55,6 +55,8 @@ class WCTColumnBinding;
 @protocol WCTTableCoding;
 @protocol WCTColumnCoding;
 
+#ifdef __cplusplus
+
 #pragma mark - WINQ
 class WCTProperty;
 typedef WCDB::SyntaxList<WCTProperty> WCTProperties;
@@ -72,6 +74,8 @@ static constexpr const WCDB::ColumnType WCTColumnTypeDouble = WCDB::ColumnType::
 static constexpr const WCDB::ColumnType WCTColumnTypeString = WCDB::ColumnType::Text;
 static constexpr const WCDB::ColumnType WCTColumnTypeData = WCDB::ColumnType::BLOB;
 static constexpr const WCDB::ColumnType WCTColumnTypeNil = WCDB::ColumnType::Null;
+
+#endif // __cplusplus
 
 #pragma mark - Object
 typedef NSObject<WCTTableCoding> WCTObject;
