@@ -34,14 +34,16 @@
     WCTDatabase* _sourceDatabase;
 }
 
-- (NSString*)sourcePath {
+- (NSString*)sourcePath
+{
     if (_sourcePath == nil) {
         _sourcePath = [self.path stringByAppendingString:@"_source"];
     }
     return _sourcePath;
 }
 
-- (WCTDatabase*)sourceDatabase {
+- (WCTDatabase*)sourceDatabase
+{
     if (_sourceDatabase == nil) {
         _sourceDatabase = [[WCTDatabase alloc] initWithPath:self.sourcePath];
     }

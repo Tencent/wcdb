@@ -28,7 +28,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef BOOL (^WCTTransactionBlock)(WCTHandle *);
-typedef BOOL (^WCTTransactionBlockForOneLoop)(WCTHandle *handle, BOOL*stop, BOOL isNewTransaction);
+typedef BOOL (^WCTTransactionBlockForOneLoop)(WCTHandle *handle, BOOL *stop, BOOL isNewTransaction);
 
 @protocol WCTTransactionProtocol
 @required

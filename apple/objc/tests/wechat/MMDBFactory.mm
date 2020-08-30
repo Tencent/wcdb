@@ -24,9 +24,9 @@
 
 #import "MMDBFactory.h"
 #import "MMDBMainData.h"
-#import <WCDB/WCDB.h>
-#import "TestCaseAssertion.h"
 #import "Random+MMDBMainData.h"
+#import "TestCaseAssertion.h"
+#import <WCDB/WCDB.h>
 
 @implementation MMDBFactory {
     NSString* _tableName;

@@ -32,7 +32,7 @@
 
 namespace WCDB {
 
-void Core::print(const UnsafeStringView &message)
+void Core::print(const UnsafeStringView& message)
 {
     NSLog(@"%s", message.data());
 }
@@ -43,8 +43,8 @@ void Core::print(const UnsafeStringView &message)
 
 + (void)globalTraceError:(WCTErrorTraceBlock)block
 {
-    WCDB::Core::shared().setNotificationWhenErrorTraced([block](const WCDB::Error &error) {
-        WCTError *nsError = [[WCTError alloc] initWithError:error];
+    WCDB::Core::shared().setNotificationWhenErrorTraced([block](const WCDB::Error& error) {
+        WCTError* nsError = [[WCTError alloc] initWithError:error];
         block(nsError);
     });
 }
@@ -64,7 +64,7 @@ void Core::print(const UnsafeStringView &message)
 {
     WCDB::Handle::SQLNotification callback = nullptr;
     if (trace != nil) {
-        callback = [trace](const WCDB::UnsafeStringView &sql, const void* handle) {
+        callback = [trace](const WCDB::UnsafeStringView& sql, const void* handle) {
             trace([NSString stringWithView:sql], handle);
         };
     }
@@ -88,7 +88,7 @@ void Core::print(const UnsafeStringView &message)
 - (void)traceSQL:(WCTSQLTraceBlock)trace
 {
     if (trace != nil) {
-        WCDB::Handle::SQLNotification callback = [trace](const WCDB::UnsafeStringView &sql, const void* handle) {
+        WCDB::Handle::SQLNotification callback = [trace](const WCDB::UnsafeStringView& sql, const void* handle) {
             trace([NSString stringWithView:sql], handle);
         };
         _database->setConfig(WCDB::SQLTraceConfigName,

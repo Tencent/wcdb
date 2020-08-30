@@ -53,7 +53,6 @@ public:
 #pragma mark - Utility
 public:
     bool isTargetingSameTable(const AlterTableSTMT& other) const;
-
 };
 
 } // namespace Syntax

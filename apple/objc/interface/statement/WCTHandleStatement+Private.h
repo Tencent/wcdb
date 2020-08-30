@@ -21,11 +21,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#import <WCDB/Core.h>
 #import <WCDB/WCTHandle.h>
 #import <WCDB/WCTHandleStatement.h>
-#import <WCDB/Core.h>
 
-@interface WCTHandleStatement(){
+@interface WCTHandleStatement () {
 @private
     WCDB::HandleStatement* _handleStatement;
 }

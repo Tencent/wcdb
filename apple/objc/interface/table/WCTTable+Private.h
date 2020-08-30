@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTTable.h>
 #import <WCDB/WCTDeclaration.h>
+#import <WCDB/WCTTable.h>
 
 @interface WCTTable () {
 @protected

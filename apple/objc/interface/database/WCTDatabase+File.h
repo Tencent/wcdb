@@ -64,7 +64,7 @@ NS_ASSUME_NONNULL_BEGIN
     4. /tmp;
     5. the current directory;
 */
-+ (BOOL)setDefaultTemporaryDatabaseFileDirectory:(NSString*)dir;
++ (BOOL)setDefaultTemporaryDatabaseFileDirectory:(NSString *)dir;
 
 @end
 

@@ -95,7 +95,8 @@ std::optional<std::set<StringView>> MigrateHandle::getAllTables()
 {
     Column name("name");
     Column type("type");
-    StringView pattern = StringView::formatted("%s%%", Syntax::builtinTablePrefix.data());
+    StringView pattern
+    = StringView::formatted("%s%%", Syntax::builtinTablePrefix.data());
     return getValues(StatementSelect()
                      .select(name)
                      .from(TableOrSubquery::master())

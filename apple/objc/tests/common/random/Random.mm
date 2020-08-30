@@ -280,7 +280,7 @@
     return data;
 }
 
-- (NSDate*)date
+- (NSDate *)date
 {
     return [NSDate dateWithTimeIntervalSince1970:self.double_];
 }

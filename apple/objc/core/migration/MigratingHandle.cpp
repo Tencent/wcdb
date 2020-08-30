@@ -31,8 +31,7 @@ namespace WCDB {
 
 #pragma mark - Initialize
 MigratingHandle::MigratingHandle(Migration& migration)
-: Handle()
-, Migration::Binder(migration)
+: Handle(), Migration::Binder(migration)
 {
     Super::returnStatement(m_mainStatement);
     m_mainStatement = getStatement();
@@ -47,40 +46,42 @@ MigratingHandle::~MigratingHandle()
 #pragma mark - Meta
 
 std::optional<std::set<StringView>>
-MigratingHandle::getColumns(const Schema &schema, const UnsafeStringView &table)
+MigratingHandle::getColumns(const Schema& schema, const UnsafeStringView& table)
 {
     auto ret = Super::getColumns(schema, table);
-    if(!ret.has_value()){
+    if (!ret.has_value()) {
         return ret;
     }
-    if(!schema.syntax().isMain()){
+    if (!schema.syntax().isMain()) {
         return ret;
     }
     const MigrationInfo* info = nullptr;
-    
+
     startBinding();
-    
+
     auto optionalInfo = bindTable(table);
-    if(optionalInfo.has_value()){
+    if (optionalInfo.has_value()) {
         info = optionalInfo.value();
     }
     bool success = stopBinding(true);
-    
-    if(info == nullptr || !success){
+
+    if (info == nullptr || !success) {
         return ret;
     }
-    
-    WCDB::StatementPragma statement
-    = StatementPragma().pragma(Pragma::tableInfo()).schema(info->getSchemaForSourceDatabase()).with(info->getSourceTable());
+
+    WCDB::StatementPragma statement = StatementPragma()
+                                      .pragma(Pragma::tableInfo())
+                                      .schema(info->getSchemaForSourceDatabase())
+                                      .with(info->getSourceTable());
     auto sourceColumns = getValues(statement, 1);
-    if(!sourceColumns.has_value()){
+    if (!sourceColumns.has_value()) {
         return std::nullopt;
     }
     auto iterator = ret->begin();
-    while(iterator != ret->end()){
-        if(sourceColumns->find(*iterator) == sourceColumns->end()){
+    while (iterator != ret->end()) {
+        if (sourceColumns->find(*iterator) == sourceColumns->end()) {
             iterator = ret->erase(iterator);
-        }else{
+        } else {
             iterator++;
         }
     }
@@ -262,16 +263,18 @@ void MigratingHandle::finalize()
     stopReferenced();
 }
 
-HandleStatement *MigratingHandle::getStatement()
+HandleStatement* MigratingHandle::getStatement()
 {
     m_migratingHandleStatements.push_back(MigratingHandleStatement(this));
     return &m_migratingHandleStatements.back();
 }
 
-void MigratingHandle::returnStatement(HandleStatement *handleStatement)
+void MigratingHandle::returnStatement(HandleStatement* handleStatement)
 {
     if (handleStatement != nullptr) {
-        for (auto iter = m_migratingHandleStatements.begin(); iter != m_migratingHandleStatements.end(); ++iter) {
+        for (auto iter = m_migratingHandleStatements.begin();
+             iter != m_migratingHandleStatements.end();
+             ++iter) {
             if (&(*iter) == handleStatement) {
                 m_migratingHandleStatements.erase(iter);
                 return;
@@ -283,15 +286,15 @@ void MigratingHandle::returnStatement(HandleStatement *handleStatement)
 
 void MigratingHandle::finalizeStatements()
 {
-    for (auto &handleStatement : m_migratingHandleStatements) {
+    for (auto& handleStatement : m_migratingHandleStatements) {
         handleStatement.finalize();
     }
 }
 
 void MigratingHandle::resetAllStatements()
 {
-    for (auto &handleStatement : m_migratingHandleStatements) {
-        if(!handleStatement.isPrepared())continue;
+    for (auto& handleStatement : m_migratingHandleStatements) {
+        if (!handleStatement.isPrepared()) continue;
         handleStatement.reset();
     }
 }

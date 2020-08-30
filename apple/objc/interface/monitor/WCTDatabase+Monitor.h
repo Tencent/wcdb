@@ -30,17 +30,17 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Trigger when error occurs
  */
-typedef void (^WCTErrorTraceBlock)(WCTError *);
+typedef void (^WCTErrorTraceBlock)(WCTError*);
 
 /**
  Trigger when a transaction or a normal sql ends.
  */
-typedef void (^WCTPerformanceTraceBlock)(NSString * /* sql */, double /* cost */, const void* /*handle*/);
+typedef void (^WCTPerformanceTraceBlock)(NSString* /* sql */, double /* cost */, const void* /*handle*/);
 
 /**
  Trigger when a SQL is executed.
  */
-typedef void (^WCTSQLTraceBlock)(NSString * /* sql */, const void* /*handle*/);
+typedef void (^WCTSQLTraceBlock)(NSString* /* sql */, const void* /*handle*/);
 
 @interface WCTDatabase (Monitor)
 

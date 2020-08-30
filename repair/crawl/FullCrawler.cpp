@@ -152,8 +152,7 @@ void FullCrawler::onMasterCellCrawled(const Cell &cell, const Master &master)
         WCTAssert(master.type.caseInsensiveEqual("table"));
         WCTAssert(master.tableName.caseInsensiveEqual(master.name));
         m_sequenceCrawler.work(master.rootpage, this);
-    } else if (!filter(master.tableName)
-               || Master::isReservedTableName(master.name)
+    } else if (!filter(master.tableName) || Master::isReservedTableName(master.name)
                || Master::isReservedTableName(master.tableName)) {
         //Skip no backup table and sqlite reserved table
         return;

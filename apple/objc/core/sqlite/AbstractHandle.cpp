@@ -201,7 +201,7 @@ void AbstractHandle::returnStatement(HandleStatement *handleStatement)
 void AbstractHandle::resetAllStatements()
 {
     for (auto &handleStatement : m_handleStatements) {
-        if(!handleStatement.isPrepared())continue;
+        if (!handleStatement.isPrepared()) continue;
         handleStatement.reset();
     }
 }
@@ -473,7 +473,7 @@ bool AbstractHandle::checkpoint(CheckpointMode mode)
     WCTAssert(isOpened());
 
     return APIExit(sqlite3_wal_checkpoint_v2(
-                                             m_handle, Syntax::mainSchema.data(), (int) mode, nullptr, nullptr));
+    m_handle, Syntax::mainSchema.data(), (int) mode, nullptr, nullptr));
 }
 
 void AbstractHandle::disableCheckpointWhenClosing(bool disable)
@@ -486,7 +486,8 @@ void AbstractHandle::disableCheckpointWhenClosing(bool disable)
 void AbstractHandle::setWALFilePersist(int persist)
 {
     WCTAssert(isOpened());
-  APIExit(sqlite3_file_control(m_handle, Syntax::mainSchema.data(), SQLITE_FCNTL_PERSIST_WAL, &persist));
+    APIExit(sqlite3_file_control(
+    m_handle, Syntax::mainSchema.data(), SQLITE_FCNTL_PERSIST_WAL, &persist));
 }
 
 #pragma mark - Notification

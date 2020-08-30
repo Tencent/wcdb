@@ -66,8 +66,8 @@ public extension BindParameter {
         self.init(syntax: .ColonSign(name: name))
     }
 
-    static func bindParameters(_ count: Int) -> Array<BindParameter> {
-        var bps = Array<BindParameter>()
+    static func bindParameters(_ count: Int) -> [BindParameter] {
+        var bps = [BindParameter]()
         for i in 0..<count {
             bps.append(BindParameter(i))
         }

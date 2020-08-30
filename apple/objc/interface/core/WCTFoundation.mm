@@ -42,7 +42,7 @@
      In order to avoid the inconsistency of the path of the same file, remove the /private prefix of path here
      */
     NSRange match = [path rangeOfString:@"/private"];
-    if(match.location == 0){
+    if (match.location == 0) {
         path = [path stringByReplacingCharactersInRange:match withString:@""];
     }
 #endif

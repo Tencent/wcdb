@@ -29,8 +29,8 @@
 #import <WCDB/WCTFoundation.h>
 #import <WCDB/WCTHandle+Private.h>
 #import <WCDB/WCTHandle+Transaction.h>
-#import <WCDB/WCTORM.h>
 #import <WCDB/WCTHandleStatement+Private.h>
+#import <WCDB/WCTORM.h>
 
 @implementation WCTHandle
 
@@ -71,11 +71,11 @@
 
 - (WCTHandleStatement *)getOrCreateHandleStatementByTag:(NSString *)tag
 {
-    if(!_handleStatementDic){
+    if (!_handleStatementDic) {
         _handleStatementDic = [[NSMutableDictionary alloc] init];
     }
-    WCTHandleStatement* handleStatement = [_handleStatementDic objectForKey:tag];
-    if(!handleStatement){
+    WCTHandleStatement *handleStatement = [_handleStatementDic objectForKey:tag];
+    if (!handleStatement) {
         handleStatement = [[WCTHandleStatement alloc] initWithHandle:[self getRawHandleStatement] andTag:tag];
         _handleStatementDic[tag] = handleStatement;
     }
@@ -84,12 +84,12 @@
 
 - (void)finalizeAllStatements
 {
-    if(_handleStatementDic != nil){
-        [_handleStatementDic enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, WCTHandleStatement * _Nonnull obj, BOOL * _Nonnull stop) {
+    if (_handleStatementDic != nil) {
+        [_handleStatementDic enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, WCTHandleStatement *_Nonnull obj, BOOL *_Nonnull stop) {
             WCDB_UNUSED(key);
             WCDB_UNUSED(stop);
-            WCDB::HandleStatement* handleStatement = [obj getRawHandleStatement];
-            if(handleStatement != nullptr){
+            WCDB::HandleStatement *handleStatement = [obj getRawHandleStatement];
+            if (handleStatement != nullptr) {
                 handleStatement->finalize();
                 [self returnRawStatement:handleStatement];
             }
@@ -101,20 +101,20 @@
     }
 }
 
-- (WCDB::HandleStatement*)getRawHandleStatement
+- (WCDB::HandleStatement *)getRawHandleStatement
 {
-    WCDB::Handle* dbHandle = [self getOrGenerateHandle];
-    if(dbHandle != nullptr){
+    WCDB::Handle *dbHandle = [self getOrGenerateHandle];
+    if (dbHandle != nullptr) {
         return dbHandle->getStatement();
     }
     return nullptr;
 }
 
-- (void)returnRawStatement:(WCDB::HandleStatement*)handleStatement
+- (void)returnRawStatement:(WCDB::HandleStatement *)handleStatement
 {
-    WCDB::Handle* dbHandle = [self getOrGenerateHandle];
+    WCDB::Handle *dbHandle = [self getOrGenerateHandle];
     WCTAssert(handleStatement != nullptr);
-    if(dbHandle != nullptr && handleStatement != nullptr){
+    if (dbHandle != nullptr && handleStatement != nullptr) {
         dbHandle->returnStatement(handleStatement);
     }
 }
@@ -127,12 +127,12 @@
 
 - (void)invalidate
 {
-    if(_handleStatementDic != nil){
-        [_handleStatementDic enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, WCTHandleStatement * _Nonnull obj, BOOL * _Nonnull stop) {
+    if (_handleStatementDic != nil) {
+        [_handleStatementDic enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, WCTHandleStatement *_Nonnull obj, BOOL *_Nonnull stop) {
             WCDB_UNUSED(key);
             WCDB_UNUSED(stop);
-            WCDB::HandleStatement* handleStatement = [obj getRawHandleStatement];
-            if(handleStatement != nullptr){
+            WCDB::HandleStatement *handleStatement = [obj getRawHandleStatement];
+            if (handleStatement != nullptr) {
                 handleStatement->finalize();
                 [self returnRawStatement:handleStatement];
             }

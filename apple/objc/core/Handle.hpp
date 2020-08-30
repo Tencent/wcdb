@@ -77,7 +77,7 @@ public:
     virtual void bindText(const Text &value, int index);
     virtual void bindBLOB(const BLOB &value, int index);
     virtual void bindNull(int index);
-    
+
     virtual int bindParameterIndex(const Text &parameterName);
 
     virtual Integer32 getInteger32(int index);
@@ -100,7 +100,7 @@ protected:
 #pragma mark - Transaction
 public:
     typedef std::function<bool(Handle *)> TransactionCallback;
-    typedef std::function<bool(Handle *, bool&, bool)> TransactionCallbackForOneLoop;
+    typedef std::function<bool(Handle *, bool &, bool)> TransactionCallbackForOneLoop;
     bool checkMainThreadBusyRetry();
     bool runTransaction(const TransactionCallback &transaction);
     bool runNestedTransaction(const TransactionCallback &transaction);

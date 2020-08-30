@@ -157,9 +157,9 @@ BusyRetryConfig::State& BusyRetryConfig::getOrCreateState(const UnsafeStringView
 {
     WCTAssert(!path.empty());
     StateHolder& stateHoder = m_localState.getOrCreate();
-    if(stateHoder.state != nullptr){
+    if (stateHoder.state != nullptr) {
         State& localState = *stateHoder.state;
-        if(localState.m_path == path){
+        if (localState.m_path == path) {
             return localState;
         }
     }
@@ -180,7 +180,10 @@ BusyRetryConfig::State& BusyRetryConfig::getOrCreateState(const UnsafeStringView
     }
 }
 
-BusyRetryConfig::State::State() : m_pagerType(PagerLockType::None), m_localPagerType(PagerLockType::None), m_mainThreadBusyTrying(nullptr)
+BusyRetryConfig::State::State()
+: m_pagerType(PagerLockType::None)
+, m_localPagerType(PagerLockType::None)
+, m_mainThreadBusyTrying(nullptr)
 {
 }
 
@@ -264,14 +267,14 @@ bool BusyRetryConfig::State::wait(Trying& trying)
         = Thread::isMain() ? Exclusivity::Must : Exclusivity::NoMatter;
 
         m_waitings.insert(currentThread, trying, exclusivity);
-        
-        if(exclusivity == Exclusivity::Must){
+
+        if (exclusivity == Exclusivity::Must) {
             m_mainThreadBusyTrying = &trying;
         }
-        
+
         bool notified = m_conditional.wait_for(lockGuard, BusyRetryTimeOut);
-        
-        if(exclusivity == Exclusivity::Must){
+
+        if (exclusivity == Exclusivity::Must) {
             m_mainThreadBusyTrying = nullptr;
         }
 
@@ -288,11 +291,11 @@ bool BusyRetryConfig::State::wait(Trying& trying)
 
 bool BusyRetryConfig::State::checkMainThreadBusyRetry()
 {
-    if(m_mainThreadBusyTrying == nullptr){
+    if (m_mainThreadBusyTrying == nullptr) {
         return false;
     }
     std::unique_lock<std::mutex> lockGuard(m_lock);
-    if(m_mainThreadBusyTrying == nullptr){
+    if (m_mainThreadBusyTrying == nullptr) {
         return false;
     }
     return localShouldWait(*m_mainThreadBusyTrying);

@@ -102,9 +102,9 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
 + (NSString*)getABTestConfigWithName:(NSString*)name
 {
     std::optional<WCDB::StringView> value = WCDB::Core::shared().getABTestConfig(name);
-    if(value.has_value()){
+    if (value.has_value()) {
         return [NSString stringWithUTF8String:value->data()];
-    }else{
+    } else {
         return nil;
     }
 }

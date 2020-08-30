@@ -8,11 +8,9 @@
 
 #import "MMDBMainData.h"
 
-
 #pragma mark -
 #pragma mark # Contact #
 #pragma mark -
-
 
 #pragma mark - Contact
 
@@ -64,7 +62,6 @@ WCDB_DEFAULT(sex, 0)
 WCDB_DEFAULT(type, 0)
 
 @end
-
 
 #pragma mark - ContactExt
 
@@ -119,7 +116,6 @@ WCDB_DEFAULT(type, 0)
 WCDB_DEFAULT(chatStatus, 0)
 
 @end
-
 
 #pragma mark - DBContactMeta
 
@@ -203,7 +199,6 @@ WCDB_DEFAULT(imageStatus, 0)
 
 @end
 
-
 #pragma mark - DBMessageExt
 
 #define MSG_EXT_COL_MES_LOCAL_ID MesLocalID
@@ -219,12 +214,12 @@ WCDB_DEFAULT(imageStatus, 0)
 
 @interface DBMessageExt ()
 
-@property(nonatomic, assign) UInt32 MSG_EXT_COL_INTRES1;
-@property(nonatomic, assign) UInt32 MSG_EXT_COL_INTRES2;
-@property(nonatomic, assign) UInt32 MSG_EXT_COL_INTRES3;
-@property(nonatomic, retain) NSString* MSG_EXT_COL_STRRES1;
-@property(nonatomic, retain) NSString* MSG_EXT_COL_STRRES2;
-@property(nonatomic, retain) NSString* MSG_EXT_COL_STRRES3;
+@property (nonatomic, assign) UInt32 MSG_EXT_COL_INTRES1;
+@property (nonatomic, assign) UInt32 MSG_EXT_COL_INTRES2;
+@property (nonatomic, assign) UInt32 MSG_EXT_COL_INTRES3;
+@property (nonatomic, retain) NSString* MSG_EXT_COL_STRRES1;
+@property (nonatomic, retain) NSString* MSG_EXT_COL_STRRES2;
+@property (nonatomic, retain) NSString* MSG_EXT_COL_STRRES3;
 
 WCDB_PROPERTY(MSG_EXT_COL_INTRES1)
 WCDB_PROPERTY(MSG_EXT_COL_INTRES2)
@@ -258,13 +253,12 @@ WCDB_DEFAULT(MSG_EXT_COL_INTRES1, 0)
 
 @end
 
-
 @interface DBMessageBizExt ()
 
-@property(nonatomic, assign) UInt32 msgExtColInt1;
-@property(nonatomic, assign) UInt32 msgExtColInt2;
-@property(nonatomic, retain) NSString* msgExtColString1;
-@property(nonatomic, retain) NSString* msgExtColString2;
+@property (nonatomic, assign) UInt32 msgExtColInt1;
+@property (nonatomic, assign) UInt32 msgExtColInt2;
+@property (nonatomic, retain) NSString* msgExtColString1;
+@property (nonatomic, retain) NSString* msgExtColString2;
 
 WCDB_PROPERTY(msgExtColInt1)
 WCDB_PROPERTY(msgExtColInt2)
@@ -290,10 +284,10 @@ WCDB_SYNTHESIZE(msgExtColString2)
 
 @interface DBMessageNewBizExt ()
 
-@property(nonatomic, assign) UInt32 msgExtColInt1;
-@property(nonatomic, assign) UInt32 msgExtColInt2;
-@property(nonatomic, retain) NSString* msgExtColString1;
-@property(nonatomic, retain) NSString* msgExtColString2;
+@property (nonatomic, assign) UInt32 msgExtColInt1;
+@property (nonatomic, assign) UInt32 msgExtColInt2;
+@property (nonatomic, retain) NSString* msgExtColString1;
+@property (nonatomic, retain) NSString* msgExtColString2;
 
 WCDB_PROPERTY(msgExtColInt1)
 WCDB_PROPERTY(msgExtColInt2)
@@ -403,14 +397,13 @@ WCDB_DEFAULT(DUPLICATE_MSG_COL_INTRES3, 0)
 #define HELLO_COL_STRRES2 ConStrRes2
 #define HELLO_COL_STRRES3 ConStrRes3
 
-
 @interface DBHello ()
 
-@property(nonatomic, assign) UInt32 HELLO_COL_INTRES2;
-@property(nonatomic, assign) UInt32 HELLO_COL_INTRES3;
-@property(nonatomic, retain) NSString* HELLO_COL_STRRES1;
-@property(nonatomic, retain) NSString* HELLO_COL_STRRES2;
-@property(nonatomic, retain) NSString* HELLO_COL_STRRES3;
+@property (nonatomic, assign) UInt32 HELLO_COL_INTRES2;
+@property (nonatomic, assign) UInt32 HELLO_COL_INTRES3;
+@property (nonatomic, retain) NSString* HELLO_COL_STRRES1;
+@property (nonatomic, retain) NSString* HELLO_COL_STRRES2;
+@property (nonatomic, retain) NSString* HELLO_COL_STRRES3;
 
 WCDB_PROPERTY(HELLO_COL_INTRES2)
 WCDB_PROPERTY(HELLO_COL_INTRES3)
@@ -483,7 +476,7 @@ WCDB_DEFAULT(HELLO_COL_INTRES3, 0)
 
 @interface DBEmoticon ()
 
-@property(nonatomic, retain) NSString* EMOTICON_COL_STRRES3;
+@property (nonatomic, retain) NSString* EMOTICON_COL_STRRES3;
 
 WCDB_PROPERTY(EMOTICON_COL_STRRES3);
 @end
@@ -521,7 +514,6 @@ WCDB_INDEX("_Index", packageId)
 
 @end
 
-
 #pragma mark - EmoticonUpload
 
 #define EMOTICON_UPLOAD_COL_USR_NAME UsrName
@@ -548,7 +540,6 @@ WCDB_INDEX("_Index", packageId)
 #pragma mark # Bottle #
 #pragma mark -
 
-
 #pragma mark - Bottle
 
 #define BOTTLE_COL_LOCAL_ID BottleLocalID
@@ -573,35 +564,34 @@ WCDB_DEFAULT(serverId, 0)
 
 @end
 
-
 #pragma mark - BottleContact
 
-#define BOTTLE_CONTACT_COL_USRNAME			BottleContactUsrName
-#define BOTTLE_CONTACT_COL_NICKNAME			BottleContactNickName
-#define BOTTLE_CONTACT_COL_SEX				BottleContactSex
-#define BOTTLE_CONTACT_COL_IMGSTATUS        BottleContactImgStatus
-#define BOTTLE_CONTACT_COL_HD_IMGSTATUS     BottleContactHDImgStatus
-#define BOTTLE_CONTACT_COL_PROVINCE			BottleContactProvince
-#define BOTTLE_CONTACT_COL_CITY				BottleContactCity
-#define BOTTLE_CONTACT_COL_SIGN				BottleContactSign
-#define BOTTLE_CONTACT_COL_IMGKEY           BottleContactImgKey
-#define BOTTLE_CONTACT_COL_IMGKEY_LAST      BottleContactImgKeyLast
-#define BOTTLE_CONTACT_COL_EXTKEY           BottleContactExtKey
-#define BOTTLE_CONTACT_COL_EXTKEY_LAST		BottleContactExtKeyLast
-#define BOTTLE_CONTACT_COL_INTRES1			BottleContactINTRES1
-#define BOTTLE_CONTACT_COL_INTRES2			BottleContactINTRES2
-#define BOTTLE_CONTACT_COL_INTRES3			BottleContactINTRES3
-#define BOTTLE_CONTACT_COL_TEXTRES1         BottleContactTEXTRES1
-#define BOTTLE_CONTACT_COL_TEXTRES2         BottleContactTEXTRES2
-#define BOTTLE_CONTACT_COL_TEXTRES3         BottleContactTEXTRES3
+#define BOTTLE_CONTACT_COL_USRNAME BottleContactUsrName
+#define BOTTLE_CONTACT_COL_NICKNAME BottleContactNickName
+#define BOTTLE_CONTACT_COL_SEX BottleContactSex
+#define BOTTLE_CONTACT_COL_IMGSTATUS BottleContactImgStatus
+#define BOTTLE_CONTACT_COL_HD_IMGSTATUS BottleContactHDImgStatus
+#define BOTTLE_CONTACT_COL_PROVINCE BottleContactProvince
+#define BOTTLE_CONTACT_COL_CITY BottleContactCity
+#define BOTTLE_CONTACT_COL_SIGN BottleContactSign
+#define BOTTLE_CONTACT_COL_IMGKEY BottleContactImgKey
+#define BOTTLE_CONTACT_COL_IMGKEY_LAST BottleContactImgKeyLast
+#define BOTTLE_CONTACT_COL_EXTKEY BottleContactExtKey
+#define BOTTLE_CONTACT_COL_EXTKEY_LAST BottleContactExtKeyLast
+#define BOTTLE_CONTACT_COL_INTRES1 BottleContactINTRES1
+#define BOTTLE_CONTACT_COL_INTRES2 BottleContactINTRES2
+#define BOTTLE_CONTACT_COL_INTRES3 BottleContactINTRES3
+#define BOTTLE_CONTACT_COL_TEXTRES1 BottleContactTEXTRES1
+#define BOTTLE_CONTACT_COL_TEXTRES2 BottleContactTEXTRES2
+#define BOTTLE_CONTACT_COL_TEXTRES3 BottleContactTEXTRES3
 
 @interface DBBottleContact ()
 
-@property(nonatomic, assign) UInt32 BOTTLE_CONTACT_COL_INTRES1;
-@property(nonatomic, assign) UInt32 BOTTLE_CONTACT_COL_INTRES2;
-@property(nonatomic, assign) UInt32 BOTTLE_CONTACT_COL_INTRES3;
-@property(nonatomic, retain) NSString* BOTTLE_CONTACT_COL_TEXTRES2;
-@property(nonatomic, retain) NSString* BOTTLE_CONTACT_COL_TEXTRES3;
+@property (nonatomic, assign) UInt32 BOTTLE_CONTACT_COL_INTRES1;
+@property (nonatomic, assign) UInt32 BOTTLE_CONTACT_COL_INTRES2;
+@property (nonatomic, assign) UInt32 BOTTLE_CONTACT_COL_INTRES3;
+@property (nonatomic, retain) NSString* BOTTLE_CONTACT_COL_TEXTRES2;
+@property (nonatomic, retain) NSString* BOTTLE_CONTACT_COL_TEXTRES3;
 
 WCDB_PROPERTY(BOTTLE_CONTACT_COL_INTRES1)
 WCDB_PROPERTY(BOTTLE_CONTACT_COL_INTRES2)
@@ -645,11 +635,10 @@ WCDB_DEFAULT(BOTTLE_CONTACT_COL_INTRES1, 0)
 WCDB_DEFAULT(BOTTLE_CONTACT_COL_INTRES2, 0)
 WCDB_DEFAULT(BOTTLE_CONTACT_COL_INTRES3, 0)
 
-+ (void)additionalObjectRelationalMapping:(WCTBinding &)binding
++ (void)additionalObjectRelationalMapping:(WCTBinding&)binding
 {
     WCDB::ColumnConstraint columnConstraint = WCDB::ColumnConstraint().primaryKey().conflict(WCDB::Conflict::Replace);
     binding.getColumnDef(self.userName)->constraint(columnConstraint);
 }
 
 @end
-

@@ -60,18 +60,24 @@
     [self.database removeFiles];
 }
 
-- (void)doTestGetMaxTime {
-    [self doMeasure:^{
+- (void)doTestGetMaxTime
+{
+    [self
+    doMeasure:^{
         [self.database getValueOnResultColumn:DBMessage.createTime.max() fromTable:self.tableName];
-    } setUp:^{
+    }
+    setUp:^{
         [self setUpDatabase];
-    } tearDown:^{
+    }
+    tearDown:^{
         [self tearDownDatabase];
-    } checkCorrectness:nil];
+    }
+    checkCorrectness:nil];
 }
 
 #pragma mark - Tests
-- (void)test_get_max_time {
+- (void)test_get_max_time
+{
     [self doTestGetMaxTime];
 }
 

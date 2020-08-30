@@ -34,11 +34,13 @@ template<typename T>
 class UntypedThreadLocal {
 protected:
     typedef unsigned int Identifier;
-    static Identifier nextIdentifier(){
+    static Identifier nextIdentifier()
+    {
         static std::atomic<Identifier>* s_identifier = new std::atomic<Identifier>(0);
         return ++(*s_identifier);
     }
-    static std::map<Identifier, T>& threadedStorage(){
+    static std::map<Identifier, T>& threadedStorage()
+    {
         static thread_local std::map<Identifier, T>* s_storage
         = new std::map<Identifier, T>();
         return *s_storage;
