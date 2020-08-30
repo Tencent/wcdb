@@ -24,9 +24,14 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/Macro.h>
+
+#ifdef __cplusplus
+
 #import <WCDB/WCTOptional.h>
 #import <WCDB/WCTTag.h>
 #import <WCDB/WINQ.h>
+
+#endif // __cplusplus
 
 #pragma mark - Chain Call
 @class WCTInsert;
@@ -49,8 +54,13 @@
 @class WCTHandleStatement;
 
 #pragma mark - ORM
+
+#ifdef __cplusplus
+
 class WCTBinding;
 class WCTColumnBinding;
+
+#endif // __cplusplus
 
 @protocol WCTTableCoding;
 @protocol WCTColumnCoding;
@@ -86,8 +96,13 @@ typedef NSArray<NSObject<WCTColumnCoding> *> WCTColumnCodingRow;
 
 #pragma mark - Error
 @class WCTError;
+
+#ifdef __cplusplus
+
 class WCTOptionalBool;
 class WCTOptionalSize;
+
+#endif // __cplusplus
 
 #pragma mark - Migration
 @class WCTMigrationBaseInfo;
