@@ -23,7 +23,7 @@
  */
 
 #import <WCDB/Macro.h>
-#import <WCDB/WCTCommon.h>
+#import <WCDB/WCTDeclaration.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

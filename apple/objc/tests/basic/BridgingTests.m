@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/9/25.
+// Created by sanhuazhang on 2020/8/30.
 //
 
 /*
@@ -22,13 +22,4 @@
  * limitations under the License.
  */
 
-#import <WCDB/Macro.h>
-
-WCDB_EXTERN_C_BEGIN
-
-#import <WCDB/WCTDatabase.h>
-#import <WCDB/WCTTable.h>
-#import <WCDB/WCTTransaction.h>
-#import <WCDB/WCTError.h>
-
-WCDB_EXTERN_C_END
+#import <WCDB/BridgeHeader.h>

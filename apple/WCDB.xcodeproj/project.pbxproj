@@ -378,6 +378,7 @@
 		2396EB0E21801BD60079066C /* WCTResultColumn.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2396EB0C21801BD60079066C /* WCTResultColumn.mm */; };
 		239776FA202AF2E3000A681C /* TimedQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776CE202AF2E2000A681C /* TimedQueue.hpp */; };
 		239776FE202AF2E3000A681C /* Macro.h in Headers */ = {isa = PBXBuildFile; fileRef = 239776D0202AF2E2000A681C /* Macro.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		239DA9D824FBFEB800F369A8 /* BridgingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 239DA9D724FBFEB800F369A8 /* BridgingTests.m */; };
 		23A09D7D2146204400F62EE8 /* MigratingHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A09D692146204300F62EE8 /* MigratingHandle.cpp */; };
 		23A09D7F2146204400F62EE8 /* MigratingHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A09D6A2146204300F62EE8 /* MigratingHandle.hpp */; };
 		23A3CFB5205FB1A800692F94 /* WCTHandle+Convenient.h in Headers */ = {isa = PBXBuildFile; fileRef = 23A3CFB3205FB1A800692F94 /* WCTHandle+Convenient.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1282,6 +1283,7 @@
 		2396EB0C21801BD60079066C /* WCTResultColumn.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTResultColumn.mm; sourceTree = "<group>"; };
 		239776CE202AF2E2000A681C /* TimedQueue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TimedQueue.hpp; sourceTree = "<group>"; };
 		239776D0202AF2E2000A681C /* Macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macro.h; sourceTree = "<group>"; };
+		239DA9D724FBFEB800F369A8 /* BridgingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BridgingTests.m; sourceTree = "<group>"; };
 		239E8A702160A5B100BCB308 /* Host.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Host.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		239E8A922160A81600BCB308 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		23A09D692146204300F62EE8 /* MigratingHandle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MigratingHandle.cpp; sourceTree = "<group>"; };
@@ -2164,6 +2166,7 @@
 				234F0591227AA4E200DD65A2 /* FileTests.mm */,
 				234F0590227AA4E100DD65A2 /* ObservationTests.mm */,
 				234F0593227AA4E200DD65A2 /* TableTests.mm */,
+				239DA9D724FBFEB800F369A8 /* BridgingTests.m */,
 			);
 			path = basic;
 			sourceTree = "<group>";
@@ -3988,6 +3991,7 @@
 				234F06A6227AA55400DD65A2 /* AdditionalORMObject.mm in Sources */,
 				234F05F3227AA4F600DD65A2 /* ExpressionTests.mm in Sources */,
 				234F04FA227A9EFA00DD65A2 /* HandleTests.mm in Sources */,
+				239DA9D824FBFEB800F369A8 /* BridgingTests.m in Sources */,
 				234F06FA227AA59E00DD65A2 /* TransactionTests.mm in Sources */,
 				234F063E227AA50800DD65A2 /* StringCodingObject+WCTColumnCoding.mm in Sources */,
 				234F05DE227AA4F600DD65A2 /* FrameSpecTests.mm in Sources */,
