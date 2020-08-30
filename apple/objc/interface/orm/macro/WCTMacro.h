@@ -52,10 +52,13 @@
 
 // Synthesize - implement column
 #define WCDB_SYNTHESIZE(propertyName) \
-    __WCDB_SYNTHESIZE_IMP(propertyName, WCDB_STRINGIFY(propertyName))
+    __WCDB_SYNTHESIZE_IMP(propertyName, propertyName, WCDB_STRINGIFY(propertyName))
 
 #define WCDB_SYNTHESIZE_COLUMN(propertyName, columnName) \
-    __WCDB_SYNTHESIZE_IMP(propertyName, columnName)
+    __WCDB_SYNTHESIZE_IMP(propertyName, propertyName, columnName)
+
+#define WCDB_SYNTHESIZE_CUSTOM(WINQName, propertyName, columnName) \
+    __WCDB_SYNTHESIZE_IMP(WINQName, propertyName, columnName)
 
 // Column Constraint
 #define WCDB_PRIMARY(propertyName) \
