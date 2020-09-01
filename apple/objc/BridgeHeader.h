@@ -27,6 +27,7 @@
 WCDB_EXTERN_C_BEGIN
 
 #import <WCDB/WCTDatabase.h>
+#import <WCDB/WCTDatabase+Transaction.h>
 #import <WCDB/WCTError.h>
 #import <WCDB/WCTTable.h>
 #import <WCDB/WCTTransaction.h>
