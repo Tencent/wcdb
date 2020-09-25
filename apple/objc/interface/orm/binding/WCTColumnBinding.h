@@ -53,7 +53,7 @@ public:
                      typename std::enable_if<WCDB::IsObjCType<T>::value>::type* = nullptr)
     : WCTColumnBinding(cls,
                        std::static_pointer_cast<WCTBaseAccessor>(
-                       std::make_shared<WCTRuntimeObjCAccessor>(cls, propertyName)),
+                       std::make_shared<WCTRuntimeObjCAccessor>(cls, propertyName, [std::remove_pointer_t<WCDB::remove_ownership_t<T>> class])),
                        propertyName)
     {
     }

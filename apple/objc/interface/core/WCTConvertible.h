@@ -85,4 +85,25 @@ public:
     static IndexedColumn asIndexedColumn(const WCTProperty &property);
 };
 
+template<typename T>
+struct remove_ownership {
+    typedef T type;
+};
+#if __has_feature(objc_arc)
+template<typename T>
+struct remove_ownership<__unsafe_unretained T> {
+    typedef T type;
+};
+template<typename T>
+struct remove_ownership<__strong T> {
+    typedef T type;
+};
+template<typename T>
+struct remove_ownership<__weak T> {
+    typedef T type;
+};
+#endif
+template<typename T>
+using remove_ownership_t = typename remove_ownership<T>::type;
+
 } //namespace WCDB
