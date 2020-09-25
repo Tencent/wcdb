@@ -46,11 +46,11 @@ WCTRuntimeBaseAccessor::~WCTRuntimeBaseAccessor() = default;
 
 SEL WCTRuntimeBaseAccessor::getGetterSelector(objc_property_t property, const WCDB::UnsafeStringView &propertyName)
 {
-    WCTAssert(property != nil);
+    // WCTAssert(property != nil);
     WCTAssert(!propertyName.empty());
 
     SEL selector = nil;
-    char *getter = property_copyAttributeValue(property, "G");
+    char *getter = property ? property_copyAttributeValue(property, "G") : nullptr;
     if (getter != nullptr) {
         selector = sel_registerName(getter);
         free(getter);
@@ -63,11 +63,11 @@ SEL WCTRuntimeBaseAccessor::getGetterSelector(objc_property_t property, const WC
 
 SEL WCTRuntimeBaseAccessor::getSetterSelector(objc_property_t property, const WCDB::UnsafeStringView &propertyName)
 {
-    WCTAssert(property != nil);
+    // WCTAssert(property != nil);
     WCTAssert(!propertyName.empty());
 
     SEL selector = nil;
-    char *setter = property_copyAttributeValue(property, "S");
+    char *setter = property ? property_copyAttributeValue(property, "S") : nullptr;
     if (setter != nullptr) {
         selector = sel_registerName(setter);
         free(setter);

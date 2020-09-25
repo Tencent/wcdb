@@ -29,10 +29,10 @@
 #import <WCDB/StringView.hpp>
 #import <WCDB/WCTRuntimeObjCAccessor.h>
 
-WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, const WCDB::UnsafeStringView &propertyName)
+WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, const WCDB::UnsafeStringView &propertyName, Class propCls)
 : WCTRuntimeAccessor<id>(instanceClass, propertyName)
 , WCTObjCAccessor()
-, m_propertyClass(getPropertyClass(instanceClass, propertyName))
+, m_propertyClass(propCls ? propCls : getPropertyClass(instanceClass, propertyName))
 , m_impForArchiveSelector(getInstanceMethodImplementation(m_propertyClass, archiveSelector()))
 , m_impForUnarchiveSelector(getClassMethodImplementation(m_propertyClass, unarchiveSelector()))
 , m_columnType(GetColumnType(m_propertyClass))
