@@ -23,8 +23,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTCoding.h>
-#import <WCDB/WCTMacro.h>
+#import <WCDB/WCDB.h>
 
 @interface TestCaseObject : NSObject
 

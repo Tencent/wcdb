@@ -22,23 +22,19 @@
  * limitations under the License.
  */
 
-#import "Integer32CodingObject+WCTColumnCoding.h"
+#import <WCDB/WCTCommon.h>
+#import <WCDB/WCTProperty.h>
 
-@implementation Integer32CodingObject (WCTColumnCoding)
+NS_ASSUME_NONNULL_BEGIN
 
-+ (instancetype)unarchiveWithWCTValue:(NSNumber *)value
-{
-    return [[Integer32CodingObject alloc] initWithValue:value.intValue];
-}
-
-- (NSNumber *)archivedWCTValue
-{
-    return [NSNumber numberWithInt:self.value];
-}
-
-+ (WCTColumnType)columnType
-{
-    return WCTColumnTypeInteger32;
-}
-
+@protocol WCTTableCoding
+@required
++ (const WCTBinding &)objectRelationalMapping;
++ (const WCTProperties &)allProperties;
+@optional
+@property (nonatomic, assign) long long lastInsertedRowID;
+@property (nonatomic, assign) BOOL isAutoIncrement;
++ (void)additionalObjectRelationalMapping:(WCTBinding &)binding;
 @end
+
+NS_ASSUME_NONNULL_END

@@ -278,11 +278,11 @@ AbstractHandle::getTableMeta(const Schema &schema, const UnsafeStringView &table
         bool succeed = false;
         std::vector<ColumnMeta> rows;
         while ((succeed = handleStatement.step()) && !handleStatement.done()) {
-            rows.push_back(ColumnMeta(handleStatement.getInteger32(0), // cid
-                                      handleStatement.getText(1),      // name
-                                      handleStatement.getText(2),      // type
-                                      handleStatement.getInteger32(3), // notnull
-                                      handleStatement.getInteger32(5)) // pk
+            rows.push_back(ColumnMeta(handleStatement.getInteger(0), // cid
+                                      handleStatement.getText(1),    // name
+                                      handleStatement.getText(2),    // type
+                                      handleStatement.getInteger(3), // notnull
+                                      handleStatement.getInteger(5)) // pk
             );
         }
         handleStatement.finalize();

@@ -52,14 +52,12 @@ public:
     virtual bool done();
     virtual void reset();
 
-    using Integer32 = ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType;
-    using Integer64 = ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType;
+    using Integer = ColumnTypeInfo<ColumnType::Integer>::UnderlyingType;
     using Text = ColumnTypeInfo<ColumnType::Text>::UnderlyingType;
     using Float = ColumnTypeInfo<ColumnType::Float>::UnderlyingType;
     using BLOB = ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType;
 
-    virtual void bindInteger32(const Integer32 &value, int index);
-    virtual void bindInteger64(const Integer64 &value, int index);
+    virtual void bindInteger(const Integer &value, int index);
     virtual void bindDouble(const Float &value, int index);
     virtual void bindText(const Text &value, int index);
     virtual void bindBLOB(const BLOB &value, int index);
@@ -67,8 +65,7 @@ public:
 
     int bindParameterIndex(const Text &parameterName);
 
-    virtual Integer32 getInteger32(int index);
-    virtual Integer64 getInteger64(int index);
+    virtual Integer getInteger(int index);
     virtual Float getDouble(int index);
     virtual Text getText(int index);
     virtual const BLOB getBLOB(int index);

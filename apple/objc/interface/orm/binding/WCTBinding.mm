@@ -25,10 +25,11 @@
 #import <WCDB/Assertion.hpp>
 #import <WCDB/Error.hpp>
 #import <WCDB/WCTBinding.h>
-#import <WCDB/WCTCoding.h>
 #import <WCDB/WCTColumnBinding.h>
+#import <WCDB/WCTColumnCoding.h>
 #import <WCDB/WCTMacro.h>
 #import <WCDB/WCTProperty.h>
+#import <WCDB/WCTTableCoding.h>
 #import <objc/runtime.h>
 
 #pragma mark - Binding

@@ -53,15 +53,13 @@ public:
     bool step() override final;
     void reset() override final;
 
-    void bindInteger32(const Integer32 &value, int index) override final;
-    void bindInteger64(const Integer64 &value, int index) override final;
+    void bindInteger(const Integer &value, int index) override final;
     void bindDouble(const Float &value, int index) override final;
     void bindText(const Text &value, int index) override final;
     void bindBLOB(const BLOB &value, int index) override final;
     void bindNull(int index) override final;
 
-    using Super::getInteger32;
-    using Super::getInteger64;
+    using Super::getInteger;
     using Super::getDouble;
     using Super::getText;
     using Super::getBLOB;

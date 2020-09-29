@@ -24,15 +24,13 @@
 
 #import "DataCodingObject.h"
 #import "DoubleCodingObject.h"
-#import "Integer32CodingObject.h"
-#import "Integer64CodingObject.h"
+#import "IntegerCodingObject.h"
 #import "StringCodingObject.h"
 #import <Foundation/Foundation.h>
 
 @interface ColumnCodingObject : NSObject
 
-@property (nonatomic, retain) Integer32CodingObject* int32Object;
-@property (nonatomic, retain) Integer64CodingObject* int64Object;
+@property (nonatomic, retain) IntegerCodingObject* integerObject;
 @property (nonatomic, retain) DoubleCodingObject* doubleObject;
 @property (nonatomic, retain) StringCodingObject* stringObject;
 @property (nonatomic, retain) DataCodingObject* dataObject;

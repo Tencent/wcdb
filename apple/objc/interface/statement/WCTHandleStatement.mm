@@ -124,16 +124,10 @@
 }
 
 #pragma mark - Bind
-- (void)bindInteger32:(const int32_t &)value toIndex:(int)index
+- (void)bindInteger:(const int64_t &)value toIndex:(int)index
 {
     WCTHandleStatementAssert(return );
-    _handleStatement->bindInteger32(value, index);
-}
-
-- (void)bindInteger64:(const int64_t &)value toIndex:(int)index
-{
-    WCTHandleStatementAssert(return );
-    _handleStatement->bindInteger64(value, index);
+    _handleStatement->bindInteger(value, index);
 }
 
 - (void)bindDouble:(const double &)value toIndex:(int)index
@@ -166,11 +160,7 @@
     if (number == nil || CFNumberIsFloatType((CFNumberRef) number)) {
         _handleStatement->bindDouble(number.doubleValue, index);
     } else {
-        if (CFNumberGetByteSize((CFNumberRef) number) <= 4) {
-            _handleStatement->bindInteger32(number.intValue, index);
-        } else {
-            _handleStatement->bindInteger64(number.integerValue, index);
-        }
+        _handleStatement->bindInteger(number.integerValue, index);
     }
 }
 
@@ -183,13 +173,10 @@
     case WCTColumnTypeNil:
         _handleStatement->bindNull(index);
         break;
-    case WCTColumnTypeInteger32:
-        _handleStatement->bindInteger32(archivedValue.numberValue.intValue, index);
+    case WCTColumnTypeInteger:
+        _handleStatement->bindInteger(archivedValue.numberValue.longLongValue, index);
         break;
-    case WCTColumnTypeInteger64:
-        _handleStatement->bindInteger64(archivedValue.numberValue.longLongValue, index);
-        break;
-    case WCTColumnTypeDouble:
+    case WCTColumnTypeFloat:
         _handleStatement->bindDouble(archivedValue.numberValue.doubleValue, index);
         break;
     case WCTColumnTypeString:
@@ -210,15 +197,10 @@
     switch (accessor->getAccessorType()) {
     case WCTAccessorCpp: {
         switch (accessor->getColumnType()) {
-        case WCDB::ColumnType::Integer32: {
-            WCTCppAccessor<WCDB::ColumnType::Integer32> *i32Accessor = (WCTCppAccessor<WCDB::ColumnType::Integer32> *) accessor.get();
-            _handleStatement->bindInteger32(i32Accessor->getValue(object),
-                                            index);
-        } break;
-        case WCDB::ColumnType::Integer64: {
-            WCTCppAccessor<WCDB::ColumnType::Integer64> *i64Accessor = (WCTCppAccessor<WCDB::ColumnType::Integer64> *) accessor.get();
-            _handleStatement->bindInteger64(i64Accessor->getValue(object),
-                                            index);
+        case WCDB::ColumnType::Integer: {
+            WCTCppAccessor<WCDB::ColumnType::Integer> *integerAccessor = (WCTCppAccessor<WCDB::ColumnType::Integer> *) accessor.get();
+            _handleStatement->bindInteger(integerAccessor->getValue(object),
+                                          index);
         } break;
         case WCDB::ColumnType::Float: {
             WCTCppAccessor<WCDB::ColumnType::Float> *floatAccessor = (WCTCppAccessor<WCDB::ColumnType::Float> *) accessor.get();
@@ -244,12 +226,8 @@
         NSObject *value = objcAccessor->getObject(object);
         if (value != nil) {
             switch (accessor->getColumnType()) {
-            case WCDB::ColumnType::Integer32: {
-                _handleStatement->bindInteger32(((NSNumber *) value).intValue, index);
-                break;
-            }
-            case WCDB::ColumnType::Integer64: {
-                _handleStatement->bindInteger64(((NSNumber *) value).longLongValue, index);
+            case WCDB::ColumnType::Integer: {
+                _handleStatement->bindInteger(((NSNumber *) value).longLongValue, index);
                 break;
             }
             case WCDB::ColumnType::Float: {
@@ -293,16 +271,10 @@
 }
 
 #pragma mark - Get
-- (int32_t)extractInteger32AtIndex:(int)index
+- (int64_t)extractIntegerAtIndex:(int)index
 {
     WCTHandleStatementAssert(return 0);
-    return _handleStatement->getInteger32(index);
-}
-
-- (int64_t)extractInteger64AtIndex:(int)index
-{
-    WCTHandleStatementAssert(return 0);
-    return _handleStatement->getInteger64(index);
+    return _handleStatement->getInteger(index);
 }
 
 - (double)extractDoubleAtIndex:(int)index
@@ -321,10 +293,8 @@
 {
     WCTHandleStatementAssert(return nil);
     switch (_handleStatement->getType(index)) {
-    case WCDB::ColumnType::Integer32:
-        return [NSNumber numberWithInt:_handleStatement->getInteger32(index)];
-    case WCDB::ColumnType::Integer64:
-        return [NSNumber numberWithLongLong:_handleStatement->getInteger64(index)];
+    case WCDB::ColumnType::Integer:
+        return [NSNumber numberWithLongLong:_handleStatement->getInteger(index)];
     default:
         return [NSNumber numberWithDouble:_handleStatement->getDouble(index)];
     }
@@ -341,11 +311,9 @@
 {
     WCTHandleStatementAssert(return nil);
     switch ([self extractTypeAtIndex:index]) {
-    case WCTColumnTypeInteger32:
-        return [NSNumber numberWithInt:[self extractInteger32AtIndex:index]];
-    case WCTColumnTypeInteger64:
-        return [NSNumber numberWithLongLong:[self extractInteger64AtIndex:index]];
-    case WCTColumnTypeDouble:
+    case WCTColumnTypeInteger:
+        return [NSNumber numberWithLongLong:[self extractIntegerAtIndex:index]];
+    case WCTColumnTypeFloat:
         return [NSNumber numberWithDouble:[self extractDoubleAtIndex:index]];
     case WCTColumnTypeString:
         return [self extractStringAtIndex:index];
@@ -359,7 +327,7 @@
 - (WCTColumnType)extractTypeAtIndex:(int)index
 {
     WCTHandleStatementAssert(return WCTColumnTypeNil);
-    return _handleStatement->getType(index);
+    return (WCTColumnType) _handleStatement->getType(index);
 }
 
 - (int)extractNumberOfColumns
@@ -442,13 +410,9 @@
     switch (accessor->getAccessorType()) {
     case WCTAccessorCpp: {
         switch (accessor->getColumnType()) {
-        case WCDB::ColumnType::Integer32: {
-            WCTCppAccessor<WCDB::ColumnType::Integer32> *i32Accessor = (WCTCppAccessor<WCDB::ColumnType::Integer32> *) accessor.get();
-            i32Accessor->setValue(object, _handleStatement->getInteger32(index));
-        } break;
-        case WCDB::ColumnType::Integer64: {
-            WCTCppAccessor<WCDB::ColumnType::Integer64> *i64Accessor = (WCTCppAccessor<WCDB::ColumnType::Integer64> *) accessor.get();
-            i64Accessor->setValue(object, _handleStatement->getInteger64(index));
+        case WCDB::ColumnType::Integer: {
+            WCTCppAccessor<WCDB::ColumnType::Integer> *integerAccessor = (WCTCppAccessor<WCDB::ColumnType::Integer> *) accessor.get();
+            integerAccessor->setValue(object, _handleStatement->getInteger(index));
         } break;
         case WCDB::ColumnType::Float: {
             WCTCppAccessor<WCDB::ColumnType::Float> *floatAccessor = (WCTCppAccessor<WCDB::ColumnType::Float> *) accessor.get();
@@ -473,11 +437,8 @@
         id value = nil;
         if (_handleStatement->getType(index) != WCDB::ColumnType::Null) {
             switch (accessor->getColumnType()) {
-            case WCDB::ColumnType::Integer32:
-                value = [NSNumber numberWithInt:_handleStatement->getInteger32(index)];
-                break;
-            case WCDB::ColumnType::Integer64:
-                value = [NSNumber numberWithLongLong:_handleStatement->getInteger64(index)];
+            case WCDB::ColumnType::Integer:
+                value = [NSNumber numberWithLongLong:_handleStatement->getInteger(index)];
                 break;
             case WCDB::ColumnType::Float:
                 value = [NSNumber numberWithDouble:_handleStatement->getDouble(index)];

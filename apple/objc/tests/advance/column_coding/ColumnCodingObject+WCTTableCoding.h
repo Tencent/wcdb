@@ -27,8 +27,7 @@
 
 @interface ColumnCodingObject (WCTTableCoding) <WCTTableCoding>
 
-WCDB_PROPERTY(int32Object)
-WCDB_PROPERTY(int64Object)
+WCDB_PROPERTY(integerObject)
 WCDB_PROPERTY(doubleObject)
 WCDB_PROPERTY(dataObject)
 WCDB_PROPERTY(stringObject)

@@ -43,7 +43,7 @@
     [super setUp];
     schema = @"testSchema";
     table = @"testTable";
-    columnDef1 = WCDB::ColumnDef(WCDB::Column(@"testColumn1"), WCDB::ColumnType::Integer32);
+    columnDef1 = WCDB::ColumnDef(WCDB::Column(@"testColumn1"), WCDB::ColumnType::Integer);
     columnDef2 = WCDB::ColumnDef(WCDB::Column(@"testColumn2"), WCDB::ColumnType::Text);
     tableConstraint1 = WCDB::TableConstraint().check(1);
     tableConstraint2 = WCDB::TableConstraint().check(2);

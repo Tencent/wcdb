@@ -33,8 +33,7 @@ namespace Syntax {
 
 enum class ColumnType {
     Null = 0,
-    Integer32,
-    Integer64,
+    Integer,
     Float,
     Text,
     BLOB,

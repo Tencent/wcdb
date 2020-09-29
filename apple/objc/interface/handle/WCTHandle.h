@@ -74,9 +74,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)isStatementReadonly;
 
 #pragma mark - Bind
-- (void)bindInteger32:(const int32_t &)value toIndex:(int)index;
-
-- (void)bindInteger64:(const int64_t &)value toIndex:(int)index;
+- (void)bindInteger:(const int64_t &)value toIndex:(int)index;
 
 - (void)bindDouble:(const double &)value toIndex:(int)index;
 
@@ -109,9 +107,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *)extractTableNameAtIndex:(int)index;
 
-- (int32_t)extractInteger32AtIndex:(int)index;
-
-- (int64_t)extractInteger64AtIndex:(int)index;
+- (int64_t)extractIntegerAtIndex:(int)index;
 
 - (double)extractDoubleAtIndex:(int)index;
 

@@ -38,7 +38,7 @@
 
 + (WCTColumnType)columnType
 {
-    return WCTColumnTypeDouble;
+    return WCTColumnTypeFloat;
 }
 
 @end

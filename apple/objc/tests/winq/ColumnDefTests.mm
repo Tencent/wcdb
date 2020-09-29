@@ -39,7 +39,7 @@
 {
     [super setUp];
     column = WCDB::Column(@"testColumn");
-    columnType = WCDB::ColumnType::Integer32;
+    columnType = WCDB::ColumnType::Integer;
     columnConstraint1 = WCDB::ColumnConstraint().check(1);
     columnConstraint2 = WCDB::ColumnConstraint().check(2);
 }

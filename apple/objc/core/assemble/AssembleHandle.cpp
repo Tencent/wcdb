@@ -148,12 +148,12 @@ bool AssembleHandle::assembleCell(const Repair::Cell &cell)
     }
     WCTAssert(m_cellStatement->isPrepared());
     m_cellStatement->reset();
-    m_cellStatement->bindInteger64(cell.getRowID(), 1);
+    m_cellStatement->bindInteger(cell.getRowID(), 1);
     for (int i = 0; i < cell.getCount(); ++i) {
         int bindIndex = i + 2;
         switch (cell.getValueType(i)) {
         case Repair::Cell::Integer:
-            m_cellStatement->bindInteger64(cell.integerValue(i), bindIndex);
+            m_cellStatement->bindInteger(cell.integerValue(i), bindIndex);
             break;
         case Repair::Cell::Text: {
             m_cellStatement->bindText(cell.textValue(i), bindIndex);
@@ -168,7 +168,7 @@ bool AssembleHandle::assembleCell(const Repair::Cell &cell)
             break;
         case Repair::Cell::Null:
             if (i == m_integerPrimary) {
-                m_cellStatement->bindInteger64(cell.getRowID(), bindIndex);
+                m_cellStatement->bindInteger(cell.getRowID(), bindIndex);
             } else {
                 m_cellStatement->bindNull(bindIndex);
             }
@@ -225,7 +225,7 @@ AssembleHandle::updateSequence(const UnsafeStringView &tableName, int64_t sequen
 {
     std::optional<bool> worked;
     if (prepare(m_statementForUpdateSequence)) {
-        bindInteger64(sequence, 1);
+        bindInteger(sequence, 1);
         bindText(tableName, 2);
         if (step()) {
             worked = getChanges() > 0;
@@ -240,7 +240,7 @@ bool AssembleHandle::insertSequence(const UnsafeStringView &tableName, int64_t s
     bool succeed = false;
     if (prepare(m_statementForInsertSequence)) {
         bindText(tableName, 1);
-        bindInteger64(sequence, 2);
+        bindInteger(sequence, 2);
         succeed = step();
         finalize();
     }
@@ -253,7 +253,7 @@ bool AssembleHandle::markSequenceAsAssembling()
     StatementCreateTable()
     .createTable(s_dummySequence)
     .ifNotExists()
-    .define(ColumnDef(Column("i"), ColumnType::Integer32)
+    .define(ColumnDef(Column("i"), ColumnType::Integer)
             .constraint(ColumnConstraint().primaryKey().autoIncrement())));
 }
 

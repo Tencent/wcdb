@@ -200,14 +200,9 @@ ColumnType Handle::getType(int index)
     return m_mainStatement->getType(index);
 }
 
-void Handle::bindInteger32(const Integer32 &value, int index)
+void Handle::bindInteger(const Integer &value, int index)
 {
-    m_mainStatement->bindInteger32(value, index);
-}
-
-void Handle::bindInteger64(const Integer64 &value, int index)
-{
-    m_mainStatement->bindInteger64(value, index);
+    m_mainStatement->bindInteger(value, index);
 }
 
 void Handle::bindDouble(const Float &value, int index)
@@ -235,14 +230,9 @@ int Handle::bindParameterIndex(const Text &parameterName)
     return m_mainStatement->bindParameterIndex(parameterName);
 }
 
-Handle::Integer32 Handle::getInteger32(int index)
+Handle::Integer Handle::getInteger(int index)
 {
-    return m_mainStatement->getInteger32(index);
-}
-
-Handle::Integer64 Handle::getInteger64(int index)
-{
-    return m_mainStatement->getInteger64(index);
+    return m_mainStatement->getInteger(index);
 }
 
 Handle::Float Handle::getDouble(int index)

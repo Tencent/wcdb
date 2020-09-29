@@ -22,9 +22,16 @@
  * limitations under the License.
  */
 
-#import "Integer32CodingObject.h"
-#import <WCDB/WCDB.h>
+#import <WCDB/WCTDeclaration.h>
+#import <WCDB/WCTValue.h>
 
-@interface Integer32CodingObject (WCTColumnCoding) <WCTColumnCoding>
+NS_ASSUME_NONNULL_BEGIN
 
+@protocol WCTColumnCoding
+@required
++ (nullable instancetype)unarchiveWithWCTValue:(nullable WCTValue *)value;
+- (nullable WCTValue *)archivedWCTValue;
++ (WCTColumnType)columnType;
 @end
+
+NS_ASSUME_NONNULL_END

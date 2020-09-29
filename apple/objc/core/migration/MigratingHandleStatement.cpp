@@ -352,31 +352,17 @@ void MigratingHandleStatement::reset()
     }
 }
 
-void MigratingHandleStatement::bindInteger32(const Integer32& value, int index)
+void MigratingHandleStatement::bindInteger(const Integer& value, int index)
 {
-    Super::bindInteger32(value, index);
+    Super::bindInteger(value, index);
     if (m_additionalStatement->isPrepared()) {
-        m_additionalStatement->bindInteger32(value, index);
+        m_additionalStatement->bindInteger(value, index);
     }
     if (m_migrateStatement->isPrepared()) {
         WCTRemedialAssert(m_rowidIndexOfMigratingStatement == 0 || index != m_rowidIndexOfMigratingStatement,
                           "Binding index is out of range",
                           return;);
-        m_migrateStatement->bindInteger32(value, index);
-    }
-}
-
-void MigratingHandleStatement::bindInteger64(const Integer64& value, int index)
-{
-    Super::bindInteger64(value, index);
-    if (m_additionalStatement->isPrepared()) {
-        m_additionalStatement->bindInteger64(value, index);
-    }
-    if (m_migrateStatement->isPrepared()) {
-        WCTRemedialAssert(m_rowidIndexOfMigratingStatement == 0 || index != m_rowidIndexOfMigratingStatement,
-                          "Binding index is out of range",
-                          return;);
-        m_migrateStatement->bindInteger64(value, index);
+        m_migrateStatement->bindInteger(value, index);
     }
 }
 
@@ -446,9 +432,9 @@ bool MigratingHandleStatement::isMigratedPrepared()
 bool MigratingHandleStatement::stepMigration(const int64_t& rowid)
 {
     WCTAssert(isMigratedPrepared());
-    m_removeMigratedStatement->bindInteger64(rowid, 1);
+    m_removeMigratedStatement->bindInteger(rowid, 1);
     if (m_rowidIndexOfMigratingStatement > 0) {
-        m_migrateStatement->bindInteger64(rowid, m_rowidIndexOfMigratingStatement);
+        m_migrateStatement->bindInteger(rowid, m_rowidIndexOfMigratingStatement);
     }
     return m_removeMigratedStatement->step() && m_migrateStatement->step();
 }

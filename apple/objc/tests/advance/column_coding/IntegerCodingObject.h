@@ -22,25 +22,12 @@
  * limitations under the License.
  */
 
-#import "Integer32CodingObject.h"
+#import <Foundation/Foundation.h>
 
-@implementation Integer32CodingObject
+@interface IntegerCodingObject : NSObject
 
-- (instancetype)initWithValue:(int32_t)value
-{
-    if (self = [super init]) {
-        _value = value;
-    }
-    return self;
-}
+- (instancetype)initWithValue:(int64_t)value;
 
-- (BOOL)isEqual:(NSObject*)object
-{
-    if (object.class != self.class) {
-        return NO;
-    }
-    Integer32CodingObject* other = (Integer32CodingObject*) object;
-    return other.value == self.value;
-}
+@property (nonatomic, assign) int64_t value;
 
 @end

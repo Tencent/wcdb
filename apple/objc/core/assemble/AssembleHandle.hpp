@@ -64,7 +64,7 @@ public:
 
 protected:
     bool lazyPrepareCell();
-    int m_integerPrimary;
+    int64_t m_integerPrimary;
     StringView m_table;
     HandleStatement *m_cellStatement;
 
