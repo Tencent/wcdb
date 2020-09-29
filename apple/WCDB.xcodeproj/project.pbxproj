@@ -4726,6 +4726,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 234F036A227A9E3C00DD65A2 /* Debug.xcconfig */;
 			buildSettings = {
+                VALID_ARCHS = "arm64e arm64 x86_64";
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					arm64e,
+				);
 			};
 			name = Debug;
 		};
@@ -4733,6 +4738,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 234F036C227A9E3D00DD65A2 /* Release.xcconfig */;
 			buildSettings = {
+                VALID_ARCHS = "arm64e arm64 x86_64";
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					arm64e,
+				);
 			};
 			name = Release;
 		};
