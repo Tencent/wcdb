@@ -39,9 +39,9 @@
     return [NSNumber numberWithDouble:self.timeIntervalSince1970];
 }
 
-+ (WCDB::ColumnType)columnType
++ (WCTColumnType)columnType
 {
-    return WCTColumnTypeDouble;
+    return WCTColumnTypeFloat;
 }
 
 @end

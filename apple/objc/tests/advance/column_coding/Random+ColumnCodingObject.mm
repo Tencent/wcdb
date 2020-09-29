@@ -29,8 +29,7 @@
 - (ColumnCodingObject*)columnCodingObject
 {
     ColumnCodingObject* object = [[ColumnCodingObject alloc] init];
-    object.int32Object = [[Integer32CodingObject alloc] initWithValue:self.int32];
-    object.int64Object = [[Integer64CodingObject alloc] initWithValue:self.int64];
+    object.integerObject = [[IntegerCodingObject alloc] initWithValue:self.int64];
     object.doubleObject = [[DoubleCodingObject alloc] initWithValue:self.double_];
     object.stringObject = [[StringCodingObject alloc] initWithValue:self.string];
     object.dataObject = [[DataCodingObject alloc] initWithValue:self.data];

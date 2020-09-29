@@ -30,8 +30,7 @@
 @implementation ColumnCodingObject
 
 WCDB_IMPLEMENTATION(ColumnCodingObject)
-WCDB_SYNTHESIZE(int32Object)
-WCDB_SYNTHESIZE(int64Object)
+WCDB_SYNTHESIZE(integerObject)
 WCDB_SYNTHESIZE(doubleObject)
 WCDB_SYNTHESIZE(stringObject)
 WCDB_SYNTHESIZE(dataObject)
@@ -43,8 +42,7 @@ WCDB_SYNTHESIZE(dataObject)
     }
     ColumnCodingObject* other = (ColumnCodingObject*) object;
 
-    return [NSObject isObject:self.int32Object nilEqualToObject:other.int32Object]
-           && [NSObject isObject:self.int64Object nilEqualToObject:other.int64Object]
+    return [NSObject isObject:self.integerObject nilEqualToObject:other.integerObject]
            && [NSObject isObject:self.doubleObject nilEqualToObject:other.doubleObject]
            && [NSObject isObject:self.stringObject nilEqualToObject:other.stringObject]
            && [NSObject isObject:self.dataObject nilEqualToObject:other.dataObject];

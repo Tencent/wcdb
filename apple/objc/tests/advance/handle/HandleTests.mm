@@ -110,14 +110,14 @@
                  return NO;
              }
 
-             [self.handle bindInteger32:3 toIndex:1];
+             [self.handle bindInteger:3 toIndex:1];
              [self.handle bindString:Random.shared.string toIndex:2];
              if (![self.handle step]) {
                  return NO;
              }
 
              [self.handle reset];
-             [self.handle bindInteger32:4 toIndex:1];
+             [self.handle bindInteger:4 toIndex:1];
              [self.handle bindString:Random.shared.string toIndex:2];
              BOOL succeed = [self.handle step] && [self.handle done];
              [self.handle finalizeStatement];
@@ -156,30 +156,12 @@
 }
 
 #pragma mark - Bind && Get
-- (void)test_integer32
-{
-    int32_t value = Random.shared.int32;
-    {
-        TestCaseAssertTrue([self.handle prepare:self.statementInsert]);
-        [self.handle bindInteger32:value toIndex:1];
-
-        TestCaseAssertTrue([self.handle step]);
-        [self.handle finalizeStatement];
-    }
-    {
-        TestCaseAssertTrue([self.handle prepare:self.statementSelect]);
-        TestCaseAssertTrue([self.handle step]);
-        TestCaseAssertEqual([self.handle extractInteger32AtIndex:0], value);
-        [self.handle finalizeStatement];
-    }
-}
-
-- (void)test_integer64
+- (void)test_integer
 {
     int64_t value = Random.shared.int64;
     {
         TestCaseAssertTrue([self.handle prepare:self.statementInsert]);
-        [self.handle bindInteger64:value toIndex:1];
+        [self.handle bindInteger:value toIndex:1];
 
         TestCaseAssertTrue([self.handle step]);
         [self.handle finalizeStatement];
@@ -187,7 +169,7 @@
     {
         TestCaseAssertTrue([self.handle prepare:self.statementSelect]);
         TestCaseAssertTrue([self.handle step]);
-        TestCaseAssertEqual([self.handle extractInteger64AtIndex:0], value);
+        TestCaseAssertEqual([self.handle extractIntegerAtIndex:0], value);
         [self.handle finalizeStatement];
     }
 }

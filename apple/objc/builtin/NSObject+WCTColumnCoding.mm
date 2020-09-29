@@ -41,7 +41,7 @@
     return [NSKeyedArchiver archivedDataWithRootObject:self];
 }
 
-+ (WCDB::ColumnType)columnType
++ (WCTColumnType)columnType
 {
     return WCTColumnTypeData;
 }

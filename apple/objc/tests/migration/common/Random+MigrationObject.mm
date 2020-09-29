@@ -47,7 +47,7 @@
     }
 }
 
-- (NSArray<MigrationObject*>*)migrationObjectsWithCount:(NSUInteger)count startingFromIdentifier:(int)identifier withoutContent:(bool)noContent;
+- (NSArray<MigrationObject*>*)migrationObjectsWithCount:(NSUInteger)count startingFromIdentifier:(int)identifier withoutContent:(bool)noContent
 {
     NSMutableArray<MigrationObject*>* objects = [NSMutableArray arrayWithCapacity:count];
     for (NSUInteger i = identifier; i < identifier + count; ++i) {

@@ -221,12 +221,14 @@ bool StringViewComparator::operator()(const StringView& lhs, const StringView& r
     return lhs < rhs;
 }
 
-bool StringViewComparator::operator()(const StringView& lhs, const UnsafeStringView& rhs) const
+bool StringViewComparator::
+operator()(const StringView& lhs, const UnsafeStringView& rhs) const
 {
     return lhs < rhs;
 }
 
-bool StringViewComparator::operator()(const UnsafeStringView& lhs, const StringView& rhs) const
+bool StringViewComparator::
+operator()(const UnsafeStringView& lhs, const StringView& rhs) const
 {
     return lhs < rhs;
 }

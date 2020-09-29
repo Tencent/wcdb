@@ -22,13 +22,13 @@
  * limitations under the License.
  */
 
-#import "Integer64CodingObject+WCTColumnCoding.h"
+#import "IntegerCodingObject+WCTColumnCoding.h"
 
-@implementation Integer64CodingObject (WCTColumnCoding)
+@implementation IntegerCodingObject (WCTColumnCoding)
 
 + (instancetype)unarchiveWithWCTValue:(NSNumber *)value
 {
-    return [[Integer64CodingObject alloc] initWithValue:value.integerValue];
+    return [[IntegerCodingObject alloc] initWithValue:value.integerValue];
 }
 
 - (NSNumber *)archivedWCTValue
@@ -38,7 +38,7 @@
 
 + (WCTColumnType)columnType
 {
-    return WCTColumnTypeInteger64;
+    return WCTColumnTypeInteger;
 }
 
 @end

@@ -26,23 +26,23 @@
 
 namespace WCDB {
 
-ColumnMeta::ColumnMeta(int id_, StringView name_, StringView type_, bool notnull_, int primary_)
+ColumnMeta::ColumnMeta(int64_t id_, StringView name_, StringView type_, bool notnull_, int64_t primary_)
 : id(id_), name(name_), type(type_), notnull(notnull_), primary(primary_)
 {
 }
 
-int ColumnMeta::getIndexOfIntegerPrimary(const std::vector<ColumnMeta>& columnMetas)
+int64_t ColumnMeta::getIndexOfIntegerPrimary(const std::vector<ColumnMeta>& columnMetas)
 {
-    int indexOfIntegerPrimary = -1;
+    int64_t indexOfIntegerPrimary = -1;
     size_t size = columnMetas.size();
     for (size_t i = 0; i < size; ++i) {
-        int pk = columnMetas[i].primary;
+        int64_t pk = columnMetas[i].primary;
         if (pk > 0) {
             if (pk > 1) {
                 // multi-primary is existsing
                 return -1;
             } else if (Syntax::isIntegerColumnType(columnMetas[i].type)) {
-                indexOfIntegerPrimary = (int) i;
+                indexOfIntegerPrimary = (int64_t) i;
             }
         }
     }

@@ -22,26 +22,25 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTCommon.h>
-#import <WCDB/WCTProperty.h>
+#import "IntegerCodingObject.h"
 
-NS_ASSUME_NONNULL_BEGIN
+@implementation IntegerCodingObject
 
-@protocol WCTTableCoding
-@required
-+ (const WCTBinding &)objectRelationalMapping;
-+ (const WCTProperties &)allProperties;
-@optional
-@property (nonatomic, assign) long long lastInsertedRowID;
-@property (nonatomic, assign) BOOL isAutoIncrement;
-+ (void)additionalObjectRelationalMapping:(WCTBinding &)binding;
+- (instancetype)initWithValue:(int64_t)value
+{
+    if (self = [super init]) {
+        _value = value;
+    }
+    return self;
+}
+
+- (BOOL)isEqual:(NSObject*)object
+{
+    if (object.class != self.class) {
+        return NO;
+    }
+    IntegerCodingObject* other = (IntegerCodingObject*) object;
+    return other.value == self.value;
+}
+
 @end
-
-@protocol WCTColumnCoding
-@required
-+ (nullable instancetype)unarchiveWithWCTValue:(nullable id /* NSData*, NSString*, NSNumber*, nil */)value;
-- (nullable id /* NSData*, NSString*, NSNumber*, nil */)archivedWCTValue;
-+ (WCDB::ColumnType)columnType;
-@end
-
-NS_ASSUME_NONNULL_END

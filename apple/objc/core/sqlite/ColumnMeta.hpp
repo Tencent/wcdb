@@ -32,15 +32,15 @@ namespace WCDB {
 
 class ColumnMeta {
 public:
-    ColumnMeta(int id_, StringView name_, StringView type_, bool notnull_, int primary_);
+    ColumnMeta(int64_t id_, StringView name_, StringView type_, bool notnull_, int64_t primary_);
 
-    int id;
+    int64_t id;
     StringView name;
     StringView type;
     bool notnull;
-    int primary;
+    int64_t primary;
 
-    static int getIndexOfIntegerPrimary(const std::vector<ColumnMeta>& columnMetas);
+    static int64_t getIndexOfIntegerPrimary(const std::vector<ColumnMeta>& columnMetas);
 };
 
 } // namespace WCDB

@@ -22,25 +22,9 @@
  * limitations under the License.
  */
 
-#import "Integer64CodingObject.h"
+#import "IntegerCodingObject.h"
+#import <WCDB/WCDB.h>
 
-@implementation Integer64CodingObject
-
-- (instancetype)initWithValue:(int64_t)value
-{
-    if (self = [super init]) {
-        _value = value;
-    }
-    return self;
-}
-
-- (BOOL)isEqual:(NSObject*)object
-{
-    if (object.class != self.class) {
-        return NO;
-    }
-    Integer64CodingObject* other = (Integer64CodingObject*) object;
-    return other.value == self.value;
-}
+@interface IntegerCodingObject (WCTColumnCoding) <WCTColumnCoding>
 
 @end

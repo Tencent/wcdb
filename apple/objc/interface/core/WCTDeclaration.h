@@ -77,14 +77,22 @@ using WCTOrder = WCDB::Order;
 static constexpr const WCDB::Order WCTOrderedAscending = WCDB::Order::ASC;
 static constexpr const WCDB::Order WCTOrderedDescending = WCDB::Order::DESC;
 
-using WCTColumnType = WCDB::ColumnType;
-static constexpr const WCDB::ColumnType WCTColumnTypeInteger32 = WCDB::ColumnType::Integer32;
-static constexpr const WCDB::ColumnType WCTColumnTypeInteger64 = WCDB::ColumnType::Integer64;
-static constexpr const WCDB::ColumnType WCTColumnTypeDouble = WCDB::ColumnType::Float;
-static constexpr const WCDB::ColumnType WCTColumnTypeString = WCDB::ColumnType::Text;
-static constexpr const WCDB::ColumnType WCTColumnTypeData = WCDB::ColumnType::BLOB;
-static constexpr const WCDB::ColumnType WCTColumnTypeNil = WCDB::ColumnType::Null;
+#endif // __cplusplus
 
+typedef enum : NSUInteger {
+    WCTColumnTypeNil = 0,
+    WCTColumnTypeInteger,
+    WCTColumnTypeFloat,
+    WCTColumnTypeString,
+    WCTColumnTypeData,
+} WCTColumnType;
+
+#ifdef __cplusplus
+static_assert((NSUInteger) WCDB::ColumnType::Null == (NSUInteger) WCTColumnTypeNil, "");
+static_assert((NSUInteger) WCDB::ColumnType::Integer == (NSUInteger) WCTColumnTypeInteger, "");
+static_assert((NSUInteger) WCDB::ColumnType::Float == (NSUInteger) WCTColumnTypeFloat, "");
+static_assert((NSUInteger) WCDB::ColumnType::Text == (NSUInteger) WCTColumnTypeString, "");
+static_assert((NSUInteger) WCDB::ColumnType::BLOB == (NSUInteger) WCTColumnTypeData, "");
 #endif // __cplusplus
 
 #pragma mark - Object

@@ -127,7 +127,7 @@ ColumnType HandleStatement::getType(int index)
     WCTAssert(isPrepared());
     switch (sqlite3_column_type(m_stmt, index)) {
     case SQLITE_INTEGER:
-        return ColumnType::Integer64;
+        return ColumnType::Integer;
     case SQLITE_FLOAT:
         return ColumnType::Float;
     case SQLITE_BLOB:
@@ -139,16 +139,7 @@ ColumnType HandleStatement::getType(int index)
     }
 }
 
-void HandleStatement::bindInteger32(const Integer32 &value, int index)
-{
-    WCTAssert(isPrepared());
-    WCTAssert(!isBusy());
-    bool succeed = APIExit(sqlite3_bind_int(m_stmt, index, value));
-    WCTAssert(succeed);
-    WCDB_UNUSED(succeed);
-}
-
-void HandleStatement::bindInteger64(const Integer64 &value, int index)
+void HandleStatement::bindInteger(const Integer &value, int index)
 {
     WCTAssert(isPrepared());
     WCTAssert(!isBusy());
@@ -205,18 +196,11 @@ int HandleStatement::bindParameterIndex(const Text &parameterName)
     return index;
 }
 
-HandleStatement::Integer32 HandleStatement::getInteger32(int index)
+HandleStatement::Integer HandleStatement::getInteger(int index)
 {
     WCTAssert(isPrepared());
     WCTAssert(isBusy());
-    return static_cast<Integer32>(sqlite3_column_int(m_stmt, index));
-}
-
-HandleStatement::Integer64 HandleStatement::getInteger64(int index)
-{
-    WCTAssert(isPrepared());
-    WCTAssert(isBusy());
-    return static_cast<Integer64>(sqlite3_column_int64(m_stmt, index));
+    return static_cast<Integer>(sqlite3_column_int64(m_stmt, index));
 }
 
 HandleStatement::Float HandleStatement::getDouble(int index)

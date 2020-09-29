@@ -44,15 +44,9 @@
     WCDB_UNUSED(constructible);
 }
 
-- (void)test_type_integer32
+- (void)test_type_integer
 {
-    auto testingSQL = WCDB::ColumnDef(column, WCDB::ColumnType::Integer32);
-    TestCaseAssertSQLEqual(testingSQL, @"testColumn INTEGER");
-}
-
-- (void)test_type_integer64
-{
-    auto testingSQL = WCDB::ColumnDef(column, WCDB::ColumnType::Integer64);
+    auto testingSQL = WCDB::ColumnDef(column, WCDB::ColumnType::Integer);
     TestCaseAssertSQLEqual(testingSQL, @"testColumn INTEGER");
 }
 

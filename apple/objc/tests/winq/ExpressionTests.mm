@@ -66,7 +66,7 @@
     expression5 = 5;
     expression6 = 6;
     function = @"testFunction";
-    columnType = WCDB::ColumnType::Integer32;
+    columnType = WCDB::ColumnType::Integer;
     select = WCDB::StatementSelect().select(1);
     expressions = {
         1,

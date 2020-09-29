@@ -24,9 +24,10 @@
 
 #import <WCDB/CaseInsensiveList.hpp>
 #import <WCDB/StringView.hpp>
-#import <WCDB/WCTCoding.h>
+#import <WCDB/WCTColumnCoding.h>
 #import <WCDB/WCTCommon.h>
 #import <WCDB/WCTProperty.h>
+#import <WCDB/WCTTableCoding.h>
 #import <map>
 
 class WCTBinding final {

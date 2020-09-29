@@ -107,17 +107,14 @@ public class Syntax {
 public extension Syntax {
     enum ColumnType: Int {
         case Null = 0
-        case Integer32
-        case Integer64
+        case Integer
         case Float
         case Text
         case BLOB
 
         var description: String {
             switch self {
-            case .Integer32:
-                fallthrough
-            case .Integer64:
+            case .Integer:
                 return "INTEGER"
             case .Float:
                 return "FLOAT"

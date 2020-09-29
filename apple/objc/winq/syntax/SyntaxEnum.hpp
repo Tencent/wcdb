@@ -35,8 +35,7 @@ constexpr const char* Enum::description(const Syntax::ColumnType& columnType)
     switch (columnType) {
     case Syntax::ColumnType::Null:
         return "NULL";
-    case Syntax::ColumnType::Integer32:
-    case Syntax::ColumnType::Integer64:
+    case Syntax::ColumnType::Integer:
         return "INTEGER";
     case Syntax::ColumnType::Float:
         return "REAL";

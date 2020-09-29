@@ -28,7 +28,8 @@
 #import <WCDB/WCTBinding.h>
 #import <WCDB/WCTColumnBinding.h>
 
-#import <WCDB/WCTCoding.h>
+#import <WCDB/WCTColumnCoding.h>
+#import <WCDB/WCTTableCoding.h>
 
 #import <WCDB/WCTProperty.h>
 #import <WCDB/WCTResultColumn.h>

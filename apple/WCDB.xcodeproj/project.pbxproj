@@ -92,7 +92,7 @@
 		2349F75E1EA0D6680021EFA7 /* WCTBinding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6851EA0D6680021EFA7 /* WCTBinding.mm */; };
 		2349F75F1EA0D6680021EFA7 /* WCTColumnBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6861EA0D6680021EFA7 /* WCTColumnBinding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F7601EA0D6680021EFA7 /* WCTColumnBinding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6871EA0D6680021EFA7 /* WCTColumnBinding.mm */; };
-		2349F7651EA0D6680021EFA7 /* WCTCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F68D1EA0D6680021EFA7 /* WCTCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2349F7651EA0D6680021EFA7 /* WCTTableCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F68D1EA0D6680021EFA7 /* WCTTableCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F7681EA0D6680021EFA7 /* WCTProperty.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6901EA0D6680021EFA7 /* WCTProperty.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F7691EA0D6680021EFA7 /* WCTProperty.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6911EA0D6680021EFA7 /* WCTProperty.mm */; };
 		2349F76A1EA0D6680021EFA7 /* WCTMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6931EA0D6680021EFA7 /* WCTMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -198,9 +198,8 @@
 		234F061D227AA4F600DD65A2 /* StatementDropTriggerTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F05DA227AA4F600DD65A2 /* StatementDropTriggerTests.mm */; };
 		234F061E227AA4F600DD65A2 /* TableConstraintTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F05DB227AA4F600DD65A2 /* TableConstraintTests.mm */; };
 		234F061F227AA4F600DD65A2 /* PragmaTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F05DC227AA4F600DD65A2 /* PragmaTests.mm */; };
-		234F063A227AA50800DD65A2 /* Integer32CodingObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 234F0620227AA50400DD65A2 /* Integer32CodingObject.m */; };
-		234F063B227AA50800DD65A2 /* Integer64CodingObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 234F0621227AA50400DD65A2 /* Integer64CodingObject.m */; };
-		234F063C227AA50800DD65A2 /* Integer64CodingObject+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0623227AA50500DD65A2 /* Integer64CodingObject+WCTColumnCoding.mm */; };
+		234F063B227AA50800DD65A2 /* IntegerCodingObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 234F0621227AA50400DD65A2 /* IntegerCodingObject.m */; };
+		234F063C227AA50800DD65A2 /* IntegerCodingObject+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0623227AA50500DD65A2 /* IntegerCodingObject+WCTColumnCoding.mm */; };
 		234F063D227AA50800DD65A2 /* ColumnCodingObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0625227AA50500DD65A2 /* ColumnCodingObject.mm */; };
 		234F063E227AA50800DD65A2 /* StringCodingObject+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0626227AA50500DD65A2 /* StringCodingObject+WCTColumnCoding.mm */; };
 		234F063F227AA50800DD65A2 /* StringCodingObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 234F062C227AA50600DD65A2 /* StringCodingObject.m */; };
@@ -208,7 +207,6 @@
 		234F0641227AA50800DD65A2 /* DoubleCodingObject+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0630227AA50600DD65A2 /* DoubleCodingObject+WCTColumnCoding.mm */; };
 		234F0642227AA50800DD65A2 /* DoubleCodingObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 234F0631227AA50700DD65A2 /* DoubleCodingObject.m */; };
 		234F0643227AA50800DD65A2 /* DataCodingObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 234F0632227AA50700DD65A2 /* DataCodingObject.m */; };
-		234F0644227AA50800DD65A2 /* Integer32CodingObject+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0633227AA50700DD65A2 /* Integer32CodingObject+WCTColumnCoding.mm */; };
 		234F0645227AA50800DD65A2 /* DataCodingObject+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0638227AA50800DD65A2 /* DataCodingObject+WCTColumnCoding.mm */; };
 		234F0646227AA50800DD65A2 /* Random+ColumnCodingObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0639227AA50800DD65A2 /* Random+ColumnCodingObject.mm */; };
 		234F064B227AA51500DD65A2 /* FTS3Tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0649227AA51500DD65A2 /* FTS3Tests.mm */; };
@@ -744,6 +742,7 @@
 		39327BA322CF276600AABD4B /* PrototypeFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B9922CF276600AABD4B /* PrototypeFactory.mm */; };
 		39327BA722CF276600AABD4B /* SizeBasedFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B9B22CF276600AABD4B /* SizeBasedFactory.mm */; };
 		39327BAB22CF276600AABD4B /* TablesBasedFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327B9E22CF276600AABD4B /* TablesBasedFactory.mm */; };
+		3932B9FD25232E490094F3F8 /* WCTColumnCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 3932B9FC25232D9F0094F3F8 /* WCTColumnCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3934DAEB229B6659008A6AEC /* OperationQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3934DAE9229B6659008A6AEC /* OperationQueue.cpp */; };
 		3934DAED229B6659008A6AEC /* OperationQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 3934DAEA229B6659008A6AEC /* OperationQueue.hpp */; };
 		3934DB26229B951C008A6AEC /* AutoCheckpointConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 3934DB25229B951C008A6AEC /* AutoCheckpointConfig.hpp */; };
@@ -921,7 +920,7 @@
 		2349F6851EA0D6680021EFA7 /* WCTBinding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTBinding.mm; sourceTree = "<group>"; };
 		2349F6861EA0D6680021EFA7 /* WCTColumnBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTColumnBinding.h; sourceTree = "<group>"; };
 		2349F6871EA0D6680021EFA7 /* WCTColumnBinding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTColumnBinding.mm; sourceTree = "<group>"; };
-		2349F68D1EA0D6680021EFA7 /* WCTCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTCoding.h; sourceTree = "<group>"; };
+		2349F68D1EA0D6680021EFA7 /* WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTTableCoding.h; sourceTree = "<group>"; };
 		2349F6901EA0D6680021EFA7 /* WCTProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTProperty.h; sourceTree = "<group>"; };
 		2349F6911EA0D6680021EFA7 /* WCTProperty.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTProperty.mm; sourceTree = "<group>"; };
 		2349F6931EA0D6680021EFA7 /* WCTMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTMacro.h; sourceTree = "<group>"; };
@@ -1041,11 +1040,9 @@
 		234F05DA227AA4F600DD65A2 /* StatementDropTriggerTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementDropTriggerTests.mm; sourceTree = "<group>"; };
 		234F05DB227AA4F600DD65A2 /* TableConstraintTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableConstraintTests.mm; sourceTree = "<group>"; };
 		234F05DC227AA4F600DD65A2 /* PragmaTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PragmaTests.mm; sourceTree = "<group>"; };
-		234F0620227AA50400DD65A2 /* Integer32CodingObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Integer32CodingObject.m; sourceTree = "<group>"; };
-		234F0621227AA50400DD65A2 /* Integer64CodingObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Integer64CodingObject.m; sourceTree = "<group>"; };
+		234F0621227AA50400DD65A2 /* IntegerCodingObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntegerCodingObject.m; sourceTree = "<group>"; };
 		234F0622227AA50400DD65A2 /* ColumnCodingObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColumnCodingObject.h; sourceTree = "<group>"; };
-		234F0623227AA50500DD65A2 /* Integer64CodingObject+WCTColumnCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "Integer64CodingObject+WCTColumnCoding.mm"; sourceTree = "<group>"; };
-		234F0624227AA50500DD65A2 /* Integer32CodingObject+WCTColumnCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Integer32CodingObject+WCTColumnCoding.h"; sourceTree = "<group>"; };
+		234F0623227AA50500DD65A2 /* IntegerCodingObject+WCTColumnCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "IntegerCodingObject+WCTColumnCoding.mm"; sourceTree = "<group>"; };
 		234F0625227AA50500DD65A2 /* ColumnCodingObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ColumnCodingObject.mm; sourceTree = "<group>"; };
 		234F0626227AA50500DD65A2 /* StringCodingObject+WCTColumnCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "StringCodingObject+WCTColumnCoding.mm"; sourceTree = "<group>"; };
 		234F0627227AA50500DD65A2 /* ColumnCodingObject+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ColumnCodingObject+WCTTableCoding.h"; sourceTree = "<group>"; };
@@ -1054,17 +1051,15 @@
 		234F062A227AA50500DD65A2 /* Random+ColumnCodingObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Random+ColumnCodingObject.h"; sourceTree = "<group>"; };
 		234F062B227AA50600DD65A2 /* StringCodingObject+WCTColumnCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "StringCodingObject+WCTColumnCoding.h"; sourceTree = "<group>"; };
 		234F062C227AA50600DD65A2 /* StringCodingObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StringCodingObject.m; sourceTree = "<group>"; };
-		234F062D227AA50600DD65A2 /* Integer64CodingObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Integer64CodingObject.h; sourceTree = "<group>"; };
+		234F062D227AA50600DD65A2 /* IntegerCodingObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntegerCodingObject.h; sourceTree = "<group>"; };
 		234F062E227AA50600DD65A2 /* ColumnCodingTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ColumnCodingTests.mm; sourceTree = "<group>"; };
 		234F062F227AA50600DD65A2 /* DoubleCodingObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoubleCodingObject.h; sourceTree = "<group>"; };
 		234F0630227AA50600DD65A2 /* DoubleCodingObject+WCTColumnCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DoubleCodingObject+WCTColumnCoding.mm"; sourceTree = "<group>"; };
 		234F0631227AA50700DD65A2 /* DoubleCodingObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DoubleCodingObject.m; sourceTree = "<group>"; };
 		234F0632227AA50700DD65A2 /* DataCodingObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataCodingObject.m; sourceTree = "<group>"; };
-		234F0633227AA50700DD65A2 /* Integer32CodingObject+WCTColumnCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "Integer32CodingObject+WCTColumnCoding.mm"; sourceTree = "<group>"; };
 		234F0634227AA50700DD65A2 /* DataCodingObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataCodingObject.h; sourceTree = "<group>"; };
 		234F0635227AA50700DD65A2 /* StringCodingObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringCodingObject.h; sourceTree = "<group>"; };
-		234F0636227AA50700DD65A2 /* Integer32CodingObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Integer32CodingObject.h; sourceTree = "<group>"; };
-		234F0637227AA50700DD65A2 /* Integer64CodingObject+WCTColumnCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Integer64CodingObject+WCTColumnCoding.h"; sourceTree = "<group>"; };
+		234F0637227AA50700DD65A2 /* IntegerCodingObject+WCTColumnCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IntegerCodingObject+WCTColumnCoding.h"; sourceTree = "<group>"; };
 		234F0638227AA50800DD65A2 /* DataCodingObject+WCTColumnCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DataCodingObject+WCTColumnCoding.mm"; sourceTree = "<group>"; };
 		234F0639227AA50800DD65A2 /* Random+ColumnCodingObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "Random+ColumnCodingObject.mm"; sourceTree = "<group>"; };
 		234F0647227AA51400DD65A2 /* FTS3Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTS3Object.h; sourceTree = "<group>"; };
@@ -1685,6 +1680,7 @@
 		39327BB022CF2C5400AABD4B /* MigrationBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MigrationBenchmark.mm; sourceTree = "<group>"; };
 		39327BB122CF2C5400AABD4B /* TableMigrationBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableMigrationBenchmark.mm; sourceTree = "<group>"; };
 		39327BB222CF2C5400AABD4B /* DatabaseMigrationBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DatabaseMigrationBenchmark.mm; sourceTree = "<group>"; };
+		3932B9FC25232D9F0094F3F8 /* WCTColumnCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTColumnCoding.h; sourceTree = "<group>"; };
 		3934DAE9229B6659008A6AEC /* OperationQueue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OperationQueue.cpp; sourceTree = "<group>"; };
 		3934DAEA229B6659008A6AEC /* OperationQueue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OperationQueue.hpp; sourceTree = "<group>"; };
 		3934DB25229B951C008A6AEC /* AutoCheckpointConfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AutoCheckpointConfig.hpp; sourceTree = "<group>"; };
@@ -2011,7 +2007,8 @@
 		2349F68C1EA0D6680021EFA7 /* coding */ = {
 			isa = PBXGroup;
 			children = (
-				2349F68D1EA0D6680021EFA7 /* WCTCoding.h */,
+				2349F68D1EA0D6680021EFA7 /* WCTTableCoding.h */,
+				3932B9FC25232D9F0094F3F8 /* WCTColumnCoding.h */,
 				2349F6901EA0D6680021EFA7 /* WCTProperty.h */,
 				2349F6911EA0D6680021EFA7 /* WCTProperty.mm */,
 				2396EB0B21801BD60079066C /* WCTResultColumn.h */,
@@ -2280,14 +2277,10 @@
 				234F0631227AA50700DD65A2 /* DoubleCodingObject.m */,
 				234F0629227AA50500DD65A2 /* DoubleCodingObject+WCTColumnCoding.h */,
 				234F0630227AA50600DD65A2 /* DoubleCodingObject+WCTColumnCoding.mm */,
-				234F0636227AA50700DD65A2 /* Integer32CodingObject.h */,
-				234F0620227AA50400DD65A2 /* Integer32CodingObject.m */,
-				234F0624227AA50500DD65A2 /* Integer32CodingObject+WCTColumnCoding.h */,
-				234F0633227AA50700DD65A2 /* Integer32CodingObject+WCTColumnCoding.mm */,
-				234F062D227AA50600DD65A2 /* Integer64CodingObject.h */,
-				234F0621227AA50400DD65A2 /* Integer64CodingObject.m */,
-				234F0637227AA50700DD65A2 /* Integer64CodingObject+WCTColumnCoding.h */,
-				234F0623227AA50500DD65A2 /* Integer64CodingObject+WCTColumnCoding.mm */,
+				234F062D227AA50600DD65A2 /* IntegerCodingObject.h */,
+				234F0621227AA50400DD65A2 /* IntegerCodingObject.m */,
+				234F0637227AA50700DD65A2 /* IntegerCodingObject+WCTColumnCoding.h */,
+				234F0623227AA50500DD65A2 /* IntegerCodingObject+WCTColumnCoding.mm */,
 				234F062A227AA50500DD65A2 /* Random+ColumnCodingObject.h */,
 				234F0639227AA50800DD65A2 /* Random+ColumnCodingObject.mm */,
 				234F0635227AA50700DD65A2 /* StringCodingObject.h */,
@@ -3552,7 +3545,7 @@
 				23EEDCC6217DFADC006E9E73 /* StatementCreateView.hpp in Headers */,
 				23EEDD3C217DFADC006E9E73 /* SyntaxCreateVirtualTableSTMT.hpp in Headers */,
 				23EEDD61217DFB17006E9E73 /* Shadow.hpp in Headers */,
-				2349F7651EA0D6680021EFA7 /* WCTCoding.h in Headers */,
+				2349F7651EA0D6680021EFA7 /* WCTTableCoding.h in Headers */,
 				2349F7231EA0D6680021EFA7 /* WCTInsert.h in Headers */,
 				23EEDC92217DFADC006E9E73 /* JoinConstraint.hpp in Headers */,
 				23EEDD50217DFADC006E9E73 /* SyntaxReleaseSTMT.hpp in Headers */,
@@ -3703,6 +3696,7 @@
 				2396EB0D21801BD60079066C /* WCTResultColumn.h in Headers */,
 				234DBD052064DE04000E31E8 /* WCTHandle+Transaction.h in Headers */,
 				3934DB26229B951C008A6AEC /* AutoCheckpointConfig.hpp in Headers */,
+				3932B9FD25232E490094F3F8 /* WCTColumnCoding.h in Headers */,
 				23EEDD5A217DFADC006E9E73 /* SyntaxVacuumSTMT.hpp in Headers */,
 				23775B7C20AD666900E21AB0 /* Material.hpp in Headers */,
 				23EEDD4A217DFADC006E9E73 /* SyntaxInsertSTMT.hpp in Headers */,
@@ -3986,7 +3980,6 @@
 				234F0609227AA4F600DD65A2 /* StatementCreateIndexTests.mm in Sources */,
 				234F0608227AA4F600DD65A2 /* StatementAttachTests.mm in Sources */,
 				234F063D227AA50800DD65A2 /* ColumnCodingObject.mm in Sources */,
-				234F063A227AA50800DD65A2 /* Integer32CodingObject.m in Sources */,
 				234F0709227AA5A700DD65A2 /* MigrationCompatibleTestCase.mm in Sources */,
 				234F06A6227AA55400DD65A2 /* AdditionalORMObject.mm in Sources */,
 				234F05F3227AA4F600DD65A2 /* ExpressionTests.mm in Sources */,
@@ -4048,7 +4041,6 @@
 				234F063F227AA50800DD65A2 /* StringCodingObject.m in Sources */,
 				3980ABB722D44F5300047AA9 /* CipherBenchmark.mm in Sources */,
 				39327B8522CF275900AABD4B /* Random.mm in Sources */,
-				234F0644227AA50800DD65A2 /* Integer32CodingObject+WCTColumnCoding.mm in Sources */,
 				39327BAB22CF276600AABD4B /* TablesBasedFactory.mm in Sources */,
 				234F05E0227AA4F600DD65A2 /* StatementTests.mm in Sources */,
 				234F06EB227AA58E00DD65A2 /* OldRemapObject.mm in Sources */,
@@ -4074,7 +4066,7 @@
 				234F058E227AA4D700DD65A2 /* TraceTests.mm in Sources */,
 				234F05E5227AA4F600DD65A2 /* StatementDeleteTests.mm in Sources */,
 				234F064C227AA51500DD65A2 /* FTS3Object.mm in Sources */,
-				234F063B227AA50800DD65A2 /* Integer64CodingObject.m in Sources */,
+				234F063B227AA50800DD65A2 /* IntegerCodingObject.m in Sources */,
 				234F0598227AA4E200DD65A2 /* TableTests.mm in Sources */,
 				234F0606227AA4F600DD65A2 /* ColumnDefTests.mm in Sources */,
 				234F0707227AA5A700DD65A2 /* MigrationObject.mm in Sources */,
@@ -4105,7 +4097,7 @@
 				234F0738227AA5C700DD65A2 /* RetrieveRobustyTests.mm in Sources */,
 				3980ABBB22D44F5300047AA9 /* TableMigrationBenchmark.mm in Sources */,
 				3980ABB922D44F5300047AA9 /* TableBenchmark.mm in Sources */,
-				234F063C227AA50800DD65A2 /* Integer64CodingObject+WCTColumnCoding.mm in Sources */,
+				234F063C227AA50800DD65A2 /* IntegerCodingObject+WCTColumnCoding.mm in Sources */,
 				234F060D227AA4F600DD65A2 /* WindowDefTests.mm in Sources */,
 				3980ABAD22D44F4B00047AA9 /* ObjectsBasedBenchmark.mm in Sources */,
 				234F0645227AA50800DD65A2 /* DataCodingObject+WCTColumnCoding.mm in Sources */,
@@ -4579,11 +4571,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 234F036A227A9E3C00DD65A2 /* Debug.xcconfig */;
 			buildSettings = {
-                VALID_ARCHS = "arm64e arm64 x86_64";
 				ARCHS = (
 					"$(ARCHS_STANDARD)",
 					arm64e,
 				);
+				VALID_ARCHS = "arm64e arm64 x86_64";
 			};
 			name = Debug;
 		};
@@ -4591,11 +4583,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 234F036C227A9E3D00DD65A2 /* Release.xcconfig */;
 			buildSettings = {
-                VALID_ARCHS = "arm64e arm64 x86_64";
 				ARCHS = (
 					"$(ARCHS_STANDARD)",
 					arm64e,
 				);
+				VALID_ARCHS = "arm64e arm64 x86_64";
 			};
 			name = Release;
 		};
