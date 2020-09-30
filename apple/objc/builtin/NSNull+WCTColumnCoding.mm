@@ -39,7 +39,7 @@
 
 + (WCTColumnType)columnType
 {
-    return WCTColumnTypeNil;
+    return WCTColumnTypeNull;
 }
 
 @end

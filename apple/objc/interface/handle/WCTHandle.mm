@@ -298,7 +298,7 @@
     WCTHandleAssert(return;);
     WCTValue *archivedValue = [value archivedWCTValue];
     switch ([value.class columnType]) {
-    case WCTColumnTypeNil:
+    case WCTColumnTypeNull:
         _handle->bindNull(index);
         break;
     case WCTColumnTypeInteger:
@@ -447,14 +447,14 @@
         return [self extractStringAtIndex:index];
     case WCTColumnTypeData:
         return [self extractDataAtIndex:index];
-    case WCTColumnTypeNil:
+    case WCTColumnTypeNull:
         return nil;
     }
 }
 
 - (WCTColumnType)extractTypeAtIndex:(int)index
 {
-    WCTHandleAssert(return WCTColumnTypeNil;);
+    WCTHandleAssert(return WCTColumnTypeNull;);
     return (WCTColumnType) _handle->getType(index);
 }
 
