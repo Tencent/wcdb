@@ -79,16 +79,16 @@ static constexpr const WCDB::Order WCTOrderedDescending = WCDB::Order::DESC;
 
 #endif // __cplusplus
 
-typedef enum : NSUInteger {
-    WCTColumnTypeNil = 0,
+typedef NS_ENUM(NSUInteger, WCTColumnType) {
+    WCTColumnTypeNull = 0,
     WCTColumnTypeInteger,
     WCTColumnTypeFloat,
     WCTColumnTypeString,
     WCTColumnTypeData,
-} WCTColumnType;
+};
 
 #ifdef __cplusplus
-static_assert((NSUInteger) WCDB::ColumnType::Null == (NSUInteger) WCTColumnTypeNil, "");
+static_assert((NSUInteger) WCDB::ColumnType::Null == (NSUInteger) WCTColumnTypeNull, "");
 static_assert((NSUInteger) WCDB::ColumnType::Integer == (NSUInteger) WCTColumnTypeInteger, "");
 static_assert((NSUInteger) WCDB::ColumnType::Float == (NSUInteger) WCTColumnTypeFloat, "");
 static_assert((NSUInteger) WCDB::ColumnType::Text == (NSUInteger) WCTColumnTypeString, "");

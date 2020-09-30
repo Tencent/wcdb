@@ -206,7 +206,7 @@
     {
         TestCaseAssertTrue([self.handle prepare:self.statementSelect]);
         TestCaseAssertTrue([self.handle step]);
-        TestCaseAssertEqual([self.handle extractTypeAtIndex:0], WCTColumnTypeNil);
+        TestCaseAssertEqual([self.handle extractTypeAtIndex:0], WCTColumnTypeNull);
         [self.handle finalizeStatement];
     }
 }
