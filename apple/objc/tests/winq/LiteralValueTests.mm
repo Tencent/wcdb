@@ -147,7 +147,7 @@
 
 - (void)test_double
 {
-    auto testingSQL = WCDB::LiteralValue((float) 0.1);
+    auto testingSQL = WCDB::LiteralValue((double) 0.1);
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"0.1");
@@ -383,6 +383,19 @@
 {
     double sql = 1.1;
     NSString* expected = @"1.1";
+    TestCaseAssertWINQConvertible(WCDB::LiteralValue, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::LiteralValues, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::Expression, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::Expressions, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::IndexedColumn, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::IndexedColumns, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::ResultColumn, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::ResultColumns, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::OrderingTerm, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::OrderingTerms, sql, expected);
+    
+    sql = [[NSDate date] timeIntervalSince1970];
+    expected = [NSString stringWithFormat:@"%.5f", sql];
     TestCaseAssertWINQConvertible(WCDB::LiteralValue, sql, expected);
     TestCaseAssertWINQConvertible(WCDB::LiteralValues, sql, expected);
     TestCaseAssertWINQConvertible(WCDB::Expression, sql, expected);
