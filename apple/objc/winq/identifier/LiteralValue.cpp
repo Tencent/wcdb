@@ -48,6 +48,12 @@ LiteralValue::LiteralValue(bool value)
 
 LiteralValue::LiteralValue(double value)
 {
+    syntax().switcher = SyntaxType::Switch::Double;
+    syntax().doubleValue = value;
+}
+
+LiteralValue::LiteralValue(float value)
+{
     syntax().switcher = SyntaxType::Switch::Float;
     syntax().floatValue = value;
 }
