@@ -33,7 +33,7 @@ protected:
     using PropertyType = NSObject *; //NSObject<WCTColumnCoding>*
 
 public:
-    WCTRuntimeObjCAccessor(Class instanceClass, const WCDB::UnsafeStringView &propertyName, Class propCls = nil);
+    WCTRuntimeObjCAccessor(Class instanceClass, const WCDB::UnsafeStringView &propertyName, Class propCls = nil) __attribute__((always_inline));
 
     ~WCTRuntimeObjCAccessor() override final;
 
