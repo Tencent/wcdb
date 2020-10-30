@@ -52,6 +52,7 @@ bool CreateVirtualTableSTMT::describle(std::ostringstream& stream) const
         stream << schema << ".";
     }
     stream << table << " USING " << module;
+    bool isFTS5 = module.caseInsensiveEqual("fts5");
     if (!arguments.empty()) {
         stream << "(";
         bool comma = false;
@@ -61,7 +62,13 @@ bool CreateVirtualTableSTMT::describle(std::ostringstream& stream) const
             } else {
                 comma = true;
             }
-            stream << argument;
+            if(isFTS5 && argument.find("tokenize = ") == 0){
+                stream << "tokenize = '";
+                stream << UnsafeStringView(argument.data() + 11, argument.length() - 11);
+                stream << "'";
+            }else{
+                stream << argument;
+            }
         }
         stream << ")";
     }

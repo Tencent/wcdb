@@ -188,6 +188,15 @@ void HandleStatement::bindNull(int index)
     WCDB_UNUSED(succeed);
 }
 
+void HandleStatement::bindPointer(void *ptr, int index, const Text &type, void(*destructor)(void*))
+{
+    WCTAssert(isPrepared());
+    WCTAssert(!isBusy());
+    bool succeed = APIExit(sqlite3_bind_pointer(m_stmt, index, ptr, type.data(), destructor));
+    WCTAssert(succeed);
+    WCDB_UNUSED(succeed);
+}
+
 int HandleStatement::bindParameterIndex(const Text &parameterName)
 {
     WCTAssert(isPrepared());

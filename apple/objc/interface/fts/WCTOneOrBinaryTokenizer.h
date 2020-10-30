@@ -26,17 +26,18 @@
 #import <WCDB/OneOrBinaryTokenizer.hpp>
 #import <WCDB/WCTCommon.h>
 
-class WCTOneOrBinaryTokenizerCursorInfo final : public WCDB::OneOrBinaryTokenizerCursorInfo {
+class WCTOneOrBinaryTokenizer final : public WCDB::OneOrBinaryTokenizer {
 public:
-    WCTOneOrBinaryTokenizerCursorInfo(const char* input,
+    WCTOneOrBinaryTokenizer(const char* input,
                                       int inputLength,
-                                      WCDB::AbstractTokenizerInfo* tokenizerInfo);
-    WCTOneOrBinaryTokenizerCursorInfo(const WCTOneOrBinaryTokenizerCursorInfo& other);
+                                      WCDB::AbstractFTS3TokenizerInfo* tokenizerInfo);
+    WCTOneOrBinaryTokenizer(void *pCtx, const char **azArg, int nArg);
+    WCTOneOrBinaryTokenizer(const WCTOneOrBinaryTokenizer& other);
 
-    WCTOneOrBinaryTokenizerCursorInfo&
-    operator=(const WCTOneOrBinaryTokenizerCursorInfo& other);
+    WCTOneOrBinaryTokenizer&
+    operator=(const WCTOneOrBinaryTokenizer& other);
 
-    ~WCTOneOrBinaryTokenizerCursorInfo() override final;
+    ~WCTOneOrBinaryTokenizer() override final;
 
 protected:
     CFCharacterSetRef m_symbolCharacterSet;

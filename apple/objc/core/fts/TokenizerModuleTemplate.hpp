@@ -30,14 +30,14 @@
 namespace WCDB {
 
 template<typename TokenizerInfo, typename TokenizerCursorInfo>
-class TokenizerModuleTemplate final : protected AbstractTokenizerModuleTemplate {
+class FTS3TokenizerModuleTemplate final : protected AbstractFTS3TokenizerModuleTemplate {
 public:
-    static_assert(std::is_base_of<AbstractTokenizerInfo, TokenizerInfo>::value, "");
-    static_assert(std::is_base_of<AbstractTokenizerCursorInfo, TokenizerCursorInfo>::value, "");
+    static_assert(std::is_base_of<AbstractFTS3TokenizerInfo, TokenizerInfo>::value, "");
+    static_assert(std::is_base_of<AbstractFTS3TokenizerCursorInfo, TokenizerCursorInfo>::value, "");
 
     static TokenizerModule specialize()
     {
-        return TokenizerModule(create, destroy, open, close, next);
+        return TokenizerModule(std::make_shared<FTS3TokenizerModule>(create, destroy, open, close, next));
     }
 
     static int create(int argc, const char *const *argv, Tokenizer **ppTokenizer)
@@ -54,7 +54,7 @@ public:
     static int destroy(Tokenizer *pTokenizer)
     {
         if (pTokenizer != nullptr) {
-            AbstractTokenizerInfo *info = getTokenizerInfo(pTokenizer);
+            AbstractFTS3TokenizerInfo *info = getTokenizerInfo(pTokenizer);
             deleteTokenizerInfo(static_cast<TokenizerInfo *>(info));
             deleteTokenizer(pTokenizer);
         }
@@ -84,7 +84,7 @@ public:
     static int close(TokenizerCursor *pCursor)
     {
         if (pCursor != nullptr) {
-            AbstractTokenizerCursorInfo *info = getCursorInfo(pCursor);
+            AbstractFTS3TokenizerCursorInfo *info = getCursorInfo(pCursor);
             deleteCursorInfo(static_cast<TokenizerCursorInfo *>(info));
             deleteCursor(pCursor);
         }
@@ -105,8 +105,63 @@ public:
                     int *piEndOffset,
                     int *piPosition)
     {
-        AbstractTokenizerCursorInfo *info = getCursorInfo(pCursor);
+        AbstractFTS3TokenizerCursorInfo *info = getCursorInfo(pCursor);
         return info->step(ppToken, pnBytes, piStartOffset, piEndOffset, piPosition);
+    }
+};
+
+template<typename Fts5Tokenizer>
+class FTS5TokenizerModuleTemplate final : protected AbstractFTS5TokenizerModuleTemplate {
+public:
+    static_assert(std::is_base_of<AbstractFTS5Tokenizer, Fts5Tokenizer>::value, "");
+
+    static TokenizerModule specializeWithContext(void* pCtx)
+    {
+        return TokenizerModule(std::make_shared<FTS5TokenizerModule>(create, destroy, tokenize, pCtx));
+    }
+
+    static int create(void* pCtx, const char **azArg, int nArg, AbstractFTS5Tokenizer **ppTokenizer)
+    {
+        *ppTokenizer = static_cast<AbstractFTS5Tokenizer*>(new Fts5Tokenizer(pCtx, azArg, nArg)) ;
+        return OK();
+    }
+
+    static int destroy(AbstractFTS5Tokenizer *pTokenizer)
+    {
+        delete pTokenizer;
+        return OK();
+    }
+
+    static int tokenize(AbstractFTS5Tokenizer *pTokenizer,
+                         void *pCtx,
+                         int flags,
+                         const char *pText, int nText,
+                         int (*xToken)(
+                           void *pCtx,
+                           int tflags,
+                           const char *pToken,
+                           int nToken,
+                           int iStart,
+                           int iEnd
+                         ))
+    {
+        int rc;
+        const char *pToken;
+        int nToken;
+        int iStart;
+        int iEnd;
+        int tflags;
+        pTokenizer->loadInput(flags, pText, nText);
+        while((rc = pTokenizer->nextToken(&tflags, &pToken, &nToken, &iStart, &iEnd)) == OK()){
+            rc = xToken(pCtx, tflags, pToken, nToken, iStart, iEnd);
+            if(!isOK(rc)){
+                break;
+            }
+        }
+        if(isDone(rc)){
+            return OK();
+        }
+        return rc;
     }
 };
 

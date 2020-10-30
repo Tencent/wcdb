@@ -37,13 +37,14 @@ public:
                     const std::shared_ptr<TokenizerModules>& modules);
     ~TokenizerConfig() override final;
 
-    const StringView name;
+    StringView name;
 
     bool invoke(Handle* handle) override final;
 
 protected:
     std::shared_ptr<TokenizerModules> m_modules;
-    StatementSelect m_statement;
+    StatementSelect m_fts3Statement;
+    StatementSelect m_fts5Statement;
 };
 
 } //namespace WCDB

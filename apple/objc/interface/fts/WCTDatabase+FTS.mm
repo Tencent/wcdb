@@ -31,15 +31,19 @@ NSString* const WCTTokenizerPorter = @"porter";
 NSString* const WCTTokenizerICU = @"icu";
 NSString* const WCTTokenizerUnicode61 = @"unicode61";
 NSString* const WCTTokenizerOneOrBinary = @"wcdb_one_or_binary";
+NSString* const WCTTokenizerOneOrBinary_FTS5 = @"wcdb_one_or_binary_fts5";
 NSString* const WCTTokenizerLegacyOneOrBinary = @"WCDB";
+NSString* const WCTTokenizerOneWord = @"wcdb_one_or_binary just_one";
+NSString* const WCTTokenizerOneWord_FTS5 = @"wcdb_one_or_binary_fts5 just_one";
 
 NSString* const WCTModuleFTS3 = @"fts3";
 NSString* const WCTModuleFTS5 = @"fts5";
 
 static std::nullptr_t initialize()
 {
-    WCDB::Core::shared().registerTokenizer(WCTTokenizerOneOrBinary, WCDB::TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizerCursorInfo>::specialize());
-    WCDB::Core::shared().registerTokenizer(WCTTokenizerLegacyOneOrBinary, WCDB::TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizerCursorInfo>::specialize());
+    WCDB::Core::shared().registerTokenizer(WCTTokenizerOneOrBinary, WCDB::FTS3TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizer>::specialize());
+    WCDB::Core::shared().registerTokenizer(WCTTokenizerLegacyOneOrBinary, WCDB::FTS3TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizer>::specialize());
+    [WCTDatabase registerTokenizer:WCDB::FTS5TokenizerModuleTemplate<WCTOneOrBinaryTokenizer>::specializeWithContext(nullptr) named:WCTTokenizerOneOrBinary_FTS5];
     return nullptr;
 }
 

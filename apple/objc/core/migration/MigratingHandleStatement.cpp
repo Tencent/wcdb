@@ -422,6 +422,20 @@ void MigratingHandleStatement::bindNull(int index)
     }
 }
 
+void MigratingHandleStatement::bindPointer(void *ptr, int index, const Text &type, void(*destructor)(void*))
+{
+    Super::bindPointer(ptr, index, type, destructor);
+    if (m_additionalStatement->isPrepared()) {
+        m_additionalStatement->bindPointer(ptr, index, type, destructor);
+    }
+    if (m_migrateStatement->isPrepared()) {
+        WCTRemedialAssert(m_rowidIndexOfMigratingStatement == 0 || index != m_rowidIndexOfMigratingStatement,
+                          "Binding index is out of range",
+                          return;);
+        m_migrateStatement->bindPointer(ptr, index, type, destructor);
+    }
+}
+
 #pragma mark - Migrate
 bool MigratingHandleStatement::isMigratedPrepared()
 {
