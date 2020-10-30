@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D0D56C1254ABEAA000F16A6 /* FTS5Object.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D0D56C0254ABEAA000F16A6 /* FTS5Object.mm */; };
+		0D0D56CA254AC0F0000F16A6 /* FTS5Test.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D0D56C9254AC0F0000F16A6 /* FTS5Test.mm */; };
 		0D249BC12542B8E900B43BD9 /* MergeFTSIndexLogic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D249BC02542B8E900B43BD9 /* MergeFTSIndexLogic.hpp */; };
 		0D249BC92542B90600B43BD9 /* MergeFTSIndexLogic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D249BC82542B90600B43BD9 /* MergeFTSIndexLogic.cpp */; };
 		0D3AE53825416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D3AE53725416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp */; };
@@ -839,6 +841,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0D0D56BF254ABE9B000F16A6 /* FTS5Object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FTS5Object.h; sourceTree = "<group>"; };
+		0D0D56C0254ABEAA000F16A6 /* FTS5Object.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FTS5Object.mm; sourceTree = "<group>"; };
+		0D0D56C9254AC0F0000F16A6 /* FTS5Test.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FTS5Test.mm; sourceTree = "<group>"; };
 		0D249BC02542B8E900B43BD9 /* MergeFTSIndexLogic.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MergeFTSIndexLogic.hpp; sourceTree = "<group>"; };
 		0D249BC82542B90600B43BD9 /* MergeFTSIndexLogic.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MergeFTSIndexLogic.cpp; sourceTree = "<group>"; };
 		0D3AE53725416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AutoMergeFTSIndexConfig.hpp; sourceTree = "<group>"; };
@@ -1608,7 +1613,6 @@
 		23EEDD5E217DFB16006E9E73 /* Enum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Enum.hpp; sourceTree = "<group>"; };
 		23EEDD5F217DFB17006E9E73 /* Shadow.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Shadow.hpp; sourceTree = "<group>"; };
 		23F0FD7C215F1C92008399FB /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		23F0FEB0215F5E99008399FB /* ThreadLocal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadLocal.cpp; sourceTree = "<group>"; };
 		23F0FEB1215F5E9A008399FB /* Lock.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Lock.hpp; sourceTree = "<group>"; };
 		23F0FEB2215F5E9A008399FB /* ThreadLocal.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ThreadLocal.hpp; sourceTree = "<group>"; };
 		23F0FEB3215F5E9A008399FB /* Lock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Lock.cpp; sourceTree = "<group>"; };
@@ -2315,6 +2319,9 @@
 				234F064A227AA51500DD65A2 /* FTS3Object.mm */,
 				234F0648227AA51500DD65A2 /* FTS3Object+WCTTableCoding.h */,
 				234F0649227AA51500DD65A2 /* FTS3Tests.mm */,
+				0D0D56BF254ABE9B000F16A6 /* FTS5Object.h */,
+				0D0D56C0254ABEAA000F16A6 /* FTS5Object.mm */,
+				0D0D56C9254AC0F0000F16A6 /* FTS5Test.mm */,
 			);
 			path = fts;
 			sourceTree = "<group>";
@@ -2672,7 +2679,6 @@
 				23F0FEB1215F5E9A008399FB /* Lock.hpp */,
 				390E1C5A2296414C00C24598 /* Thread.cpp */,
 				390E1C5B2296414C00C24598 /* Thread.hpp */,
-				23F0FEB0215F5E99008399FB /* ThreadLocal.cpp */,
 				23F0FEB2215F5E9A008399FB /* ThreadLocal.hpp */,
 				2316D92E21057CA700707AFC /* MappedData.cpp */,
 				2316D92B21057CA600707AFC /* MappedData.hpp */,
@@ -4000,6 +4006,7 @@
 				234F04FA227A9EFA00DD65A2 /* HandleTests.mm in Sources */,
 				239DA9D824FBFEB800F369A8 /* BridgingTests.m in Sources */,
 				234F06FA227AA59E00DD65A2 /* TransactionTests.mm in Sources */,
+				0D0D56C1254ABEAA000F16A6 /* FTS5Object.mm in Sources */,
 				234F063E227AA50800DD65A2 /* StringCodingObject+WCTColumnCoding.mm in Sources */,
 				234F05DE227AA4F600DD65A2 /* FrameSpecTests.mm in Sources */,
 				75C1374424BAF7C5001C0D5E /* MissColumnDatabaseMigrationCompatibleTests.mm in Sources */,
@@ -4147,6 +4154,7 @@
 				39327B2322CF271F00AABD4B /* DatabaseTestCase.mm in Sources */,
 				234F06D4227AA57D00DD65A2 /* ColumnConstraintPrimaryAsc.mm in Sources */,
 				234F06ED227AA58E00DD65A2 /* NewlyCreatedTableIndexObject.mm in Sources */,
+				0D0D56CA254AC0F0000F16A6 /* FTS5Test.mm in Sources */,
 				234F05FD227AA4F600DD65A2 /* ForeignKeyTests.mm in Sources */,
 				234F0721227AA5B700DD65A2 /* DatabaseMigratingCompatibleTests.mm in Sources */,
 			);

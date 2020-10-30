@@ -33,7 +33,7 @@
 - (NSString*)categoryOfPrototype;
 @optional
 - (void)configurePrototype:(WCTDatabase*)prototype;
-//- (void)prototypeWillFinishPreparing:(WCTDatabase*)prototype;
+
 @end
 
 @interface PrototypeFactory : NSObject
@@ -41,6 +41,8 @@
 - (instancetype)init UNAVAILABLE_ATTRIBUTE;
 
 - (instancetype)initWithDirectory:(NSString*)directory;
+
+@property (nonatomic, readonly) WCTDatabase* database;
 
 @property (nonatomic, readonly) NSString* directory;
 

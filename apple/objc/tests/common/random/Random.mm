@@ -55,6 +55,24 @@
     }
 }
 
+- (void)reset
+{
+    _stableEngine.reset();
+    _unstableEngine.reset();
+    _uniformUInt64.reset();
+    _uniformUInt32.reset();
+    _uniformUInt8.reset();
+    _uniformInt64.reset();
+    _uniformInt32.reset();
+    _uniformBool.reset();
+    _uniformDouble.reset();
+    _uniformFloat.reset();
+    _uniformFloat_0_1.reset();
+    _uniformUChar.reset();
+    _uniformUChar.reset();
+    _uniformLength.reset();
+}
+
 - (std::shared_ptr<std::default_random_engine> &)engine
 {
     @synchronized(self) {
@@ -253,6 +271,20 @@
     }
     result[length] = '\0';
     return [NSString stringWithUTF8String:result];
+}
+
+-(NSString*)chineseString
+{
+    NSStringEncoding gbkEncoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
+    NSMutableString *string = [NSMutableString string];
+    for (int i = 0; i < self.length; i ++) {
+        UInt8 randomH = 0xA1 + self.uint8 % (0xFE - 0xA1 + 1);
+        UInt8 randomL = 0xB0 + self.uint8 % (0xF7 - 0xB0 + 1);
+        UInt32 number = (randomH<<8)+randomL;
+        NSData *data = [NSData dataWithBytes:&number length:2];
+        [string appendString:[[NSString alloc] initWithData:data encoding:gbkEncoding]];
+    }
+    return string;
 }
 
 - (NSData *)data

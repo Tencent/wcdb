@@ -29,7 +29,6 @@
 
 @interface PrototypeFactory ()
 @property (nonatomic, retain) NSString* path;
-@property (nonatomic, retain) WCTDatabase* database;
 @end
 
 @implementation PrototypeFactory {
@@ -157,8 +156,10 @@
 
     id<PrototypePreparation> delegate = self.delegate;
     TestCaseAssertNotNil(delegate);
-    while ((quality = [delegate qualityOfPrototype:self.database]) < self.lowerQuality) {
+    quality = [delegate qualityOfPrototype:self.database];
+    while (quality < self.lowerQuality) {
         [delegate preparePrototype:self.database currentQuality:quality];
+        quality = [delegate qualityOfPrototype:self.database];
 
         // progress
         double newProgress = quality / self.quality;
