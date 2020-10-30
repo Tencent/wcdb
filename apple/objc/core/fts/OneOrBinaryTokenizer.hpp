@@ -29,24 +29,30 @@
 
 namespace WCDB {
 
-class OneOrBinaryTokenizerInfo final : public AbstractTokenizerInfo {
+class OneOrBinaryTokenizerInfo final : public AbstractFTS3TokenizerInfo {
 public:
     OneOrBinaryTokenizerInfo(int argc, const char *const *argv);
     ~OneOrBinaryTokenizerInfo() override final;
+    bool m_needBinary;
 };
 
-class OneOrBinaryTokenizerCursorInfo : public AbstractTokenizerCursorInfo {
+class OneOrBinaryTokenizer : public AbstractFTS3TokenizerCursorInfo, public AbstractFTS5Tokenizer {
 public:
-    OneOrBinaryTokenizerCursorInfo(const char *input,
+    //for fts3
+    OneOrBinaryTokenizer(const char *input,
                                    int inputLength,
-                                   AbstractTokenizerInfo *tokenizerInfo);
-    virtual ~OneOrBinaryTokenizerCursorInfo() override = 0;
-
+                                   AbstractFTS3TokenizerInfo *tokenizerInfo);
+    virtual ~OneOrBinaryTokenizer() override = 0;
     int step(const char **ppToken,
              int *pnBytes,
              int *piStartOffset,
              int *piEndOffset,
              int *piPosition) override final;
+    
+    //for fts5
+    OneOrBinaryTokenizer(void *pCtx, const char **azArg, int nArg);
+    virtual void loadInput(int flags, const char *pText, int nText) override;
+    virtual int nextToken(int *tflags, const char **ppToken, int *nToken, int *iStart, int *iEnd) override;
 
 protected:
     //You must figure out the unicode character set of [symbol] on current platform or implement it refer to http://www.fileformat.info/info/unicode/category/index.htm
@@ -87,6 +93,8 @@ private:
 
     std::vector<char> m_buffer;
     int m_bufferLength;
+    
+    bool m_needBinary;
 };
 
 } // namespace WCDB

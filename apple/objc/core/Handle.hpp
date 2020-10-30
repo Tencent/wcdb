@@ -75,7 +75,7 @@ public:
     virtual void bindText(const Text &value, int index);
     virtual void bindBLOB(const BLOB &value, int index);
     virtual void bindNull(int index);
-
+    virtual void bindPointer(void *ptr, int index, const Text &type, void(*destructor)(void*));
     virtual int bindParameterIndex(const Text &parameterName);
 
     virtual Integer getInteger(int index);

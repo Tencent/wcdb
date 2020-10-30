@@ -26,16 +26,23 @@
 #import <WCDB/Error.hpp>
 #import <WCDB/WCTOneOrBinaryTokenizer.h>
 
-WCTOneOrBinaryTokenizerCursorInfo::WCTOneOrBinaryTokenizerCursorInfo(const char* input,
+WCTOneOrBinaryTokenizer::WCTOneOrBinaryTokenizer(const char* input,
                                                                      int inputLength,
-                                                                     WCDB::AbstractTokenizerInfo* tokenizerInfo)
-: WCDB::OneOrBinaryTokenizerCursorInfo(input, inputLength, tokenizerInfo)
+                                                                     WCDB::AbstractFTS3TokenizerInfo* tokenizerInfo)
+: WCDB::OneOrBinaryTokenizer(input, inputLength, tokenizerInfo)
 , m_symbolCharacterSet(generateSymbolCharacterSet())
 {
 }
 
-WCTOneOrBinaryTokenizerCursorInfo::WCTOneOrBinaryTokenizerCursorInfo(const WCTOneOrBinaryTokenizerCursorInfo& other)
-: WCDB::OneOrBinaryTokenizerCursorInfo(other)
+WCTOneOrBinaryTokenizer::WCTOneOrBinaryTokenizer(void *pCtx, const char **azArg, int nArg)
+: WCDB::OneOrBinaryTokenizer(pCtx, azArg, nArg)
+, m_symbolCharacterSet(generateSymbolCharacterSet())
+{
+}
+
+
+WCTOneOrBinaryTokenizer::WCTOneOrBinaryTokenizer(const WCTOneOrBinaryTokenizer& other)
+: WCDB::OneOrBinaryTokenizer(other)
 , m_symbolCharacterSet(other.m_symbolCharacterSet)
 {
     if (m_symbolCharacterSet != nil) {
@@ -43,9 +50,9 @@ WCTOneOrBinaryTokenizerCursorInfo::WCTOneOrBinaryTokenizerCursorInfo(const WCTOn
     }
 }
 
-WCTOneOrBinaryTokenizerCursorInfo& WCTOneOrBinaryTokenizerCursorInfo::operator=(const WCTOneOrBinaryTokenizerCursorInfo& other)
+WCTOneOrBinaryTokenizer& WCTOneOrBinaryTokenizer::operator=(const WCTOneOrBinaryTokenizer& other)
 {
-    WCDB::OneOrBinaryTokenizerCursorInfo::operator=(other);
+    WCDB::OneOrBinaryTokenizer::operator=(other);
     m_symbolCharacterSet = other.m_symbolCharacterSet;
     if (m_symbolCharacterSet != nil) {
         CFRetain(m_symbolCharacterSet);
@@ -53,7 +60,7 @@ WCTOneOrBinaryTokenizerCursorInfo& WCTOneOrBinaryTokenizerCursorInfo::operator=(
     return *this;
 }
 
-WCTOneOrBinaryTokenizerCursorInfo::~WCTOneOrBinaryTokenizerCursorInfo()
+WCTOneOrBinaryTokenizer::~WCTOneOrBinaryTokenizer()
 {
     if (m_symbolCharacterSet != nil) {
         CFRelease(m_symbolCharacterSet);
@@ -61,7 +68,7 @@ WCTOneOrBinaryTokenizerCursorInfo::~WCTOneOrBinaryTokenizerCursorInfo()
     }
 }
 
-CFCharacterSetRef WCTOneOrBinaryTokenizerCursorInfo::generateSymbolCharacterSet()
+CFCharacterSetRef WCTOneOrBinaryTokenizer::generateSymbolCharacterSet()
 {
     //Code: Cc, Cf, Z*, U000A ~ U000D, U0085, M*, P*, S* and illegal character set
     CFMutableCharacterSetRef characterSetRef = CFCharacterSetCreateMutable(CFAllocatorGetDefault());
@@ -74,7 +81,7 @@ CFCharacterSetRef WCTOneOrBinaryTokenizerCursorInfo::generateSymbolCharacterSet(
     return characterSetRef;
 }
 
-std::pair<int, bool> WCTOneOrBinaryTokenizerCursorInfo::isSymbol(UnicodeChar theChar) const
+std::pair<int, bool> WCTOneOrBinaryTokenizer::isSymbol(UnicodeChar theChar) const
 {
     bool symbol = false;
     WCDB::Error::Code code = WCDB::Error::Code::NoMemory;

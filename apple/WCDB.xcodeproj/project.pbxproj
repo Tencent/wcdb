@@ -1894,7 +1894,7 @@
 				233B097A21BE50C0005AD534 /* assemble */,
 				23A09D632146204300F62EE8 /* migration */,
 				23B4DCDE2112B03200954D71 /* operate */,
-				23E163CA20FDDD6900C3F910 /* tokenizer */,
+				23E163CA20FDDD6900C3F910 /* fts */,
 				23F70F9D20A055A400CCE3CD /* config */,
 				2349F61B1EA0D6680021EFA7 /* Database.cpp */,
 				2349F61C1EA0D6680021EFA7 /* Database.hpp */,
@@ -2666,9 +2666,6 @@
 		235FBE92229145FC005C7723 /* sqlite */ = {
 			isa = PBXGroup;
 			children = (
-				234F0337227A950900DD65A2 /* SQLiteFTS3Tokenizer.h */,
-				2304B42622156CD700901953 /* TokenizerModule.cpp */,
-				2304B42722156CD700901953 /* TokenizerModule.hpp */,
 				2360A5F420D78F1B00E4A311 /* HandleNotification.cpp */,
 				2360A5F520D78F1B00E4A311 /* HandleNotification.hpp */,
 				2360A5F320D78F1B00E4A311 /* HandleRelated.cpp */,
@@ -2997,9 +2994,12 @@
 			path = factory;
 			sourceTree = "<group>";
 		};
-		23E163CA20FDDD6900C3F910 /* tokenizer */ = {
+		23E163CA20FDDD6900C3F910 /* fts */ = {
 			isa = PBXGroup;
 			children = (
+				234F0337227A950900DD65A2 /* SQLiteFTS3Tokenizer.h */,
+				2304B42722156CD700901953 /* TokenizerModule.hpp */,
+				2304B42622156CD700901953 /* TokenizerModule.cpp */,
 				23E163D120FDDD8500C3F910 /* PorterStemming.c */,
 				23B4DCD92112AC5600954D71 /* TokenizerModuleTemplate.hpp */,
 				2304B42C22156E1500901953 /* TokenizerModules.cpp */,
@@ -3009,7 +3009,7 @@
 				23F70FBC20A055D400CCE3CD /* TokenizerConfig.cpp */,
 				23F70FBD20A055D400CCE3CD /* TokenizerConfig.hpp */,
 			);
-			path = tokenizer;
+			path = fts;
 			sourceTree = "<group>";
 		};
 		23EEDB67217DFADC006E9E73 /* extension */ = {

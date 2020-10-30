@@ -225,6 +225,11 @@ void Handle::bindNull(int index)
     m_mainStatement->bindNull(index);
 }
 
+void Handle::bindPointer(void *ptr, int index, const Text &type, void(*destructor)(void*))
+{
+    m_mainStatement->bindPointer(ptr, index, type, destructor);
+}
+
 int Handle::bindParameterIndex(const Text &parameterName)
 {
     return m_mainStatement->bindParameterIndex(parameterName);

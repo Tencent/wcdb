@@ -34,17 +34,24 @@ namespace WCDB {
 
 #pragma mark - Tokenizer Info
 OneOrBinaryTokenizerInfo::OneOrBinaryTokenizerInfo(int argc, const char *const *argv)
-: AbstractTokenizerInfo(argc, argv)
+: AbstractFTS3TokenizerInfo(argc, argv)
+, m_needBinary(true)
 {
+    for(int i = 0; i < argc; i++){
+        if(strcmp(argv[i], "just_one") == 0){
+            m_needBinary = false;
+        }
+    }
 }
 
 OneOrBinaryTokenizerInfo::~OneOrBinaryTokenizerInfo() = default;
 
-#pragma mark - Tokenizer Cursor Info
-OneOrBinaryTokenizerCursorInfo::OneOrBinaryTokenizerCursorInfo(const char *input,
+#pragma mark - Tokenizer
+OneOrBinaryTokenizer::OneOrBinaryTokenizer(const char *input,
                                                                int inputLength,
-                                                               AbstractTokenizerInfo *tokenizerInfo)
-: AbstractTokenizerCursorInfo(input, inputLength, tokenizerInfo)
+                                                               AbstractFTS3TokenizerInfo *tokenizerInfo)
+: AbstractFTS3TokenizerCursorInfo(input, inputLength, tokenizerInfo)
+, AbstractFTS5Tokenizer(nullptr, nullptr, 0)
 , m_input(input)
 , m_inputLength(inputLength)
 , m_position(0)
@@ -57,6 +64,7 @@ OneOrBinaryTokenizerCursorInfo::OneOrBinaryTokenizerCursorInfo(const char *input
 , m_subTokensCursor(0)
 , m_subTokensDoubleChar(true)
 , m_bufferLength(0)
+, m_needBinary(true)
 {
     static_assert(sizeof(UnicodeChar) == 2, "UnicodeChar must be 2 byte length.");
 
@@ -66,12 +74,71 @@ OneOrBinaryTokenizerCursorInfo::OneOrBinaryTokenizerCursorInfo(const char *input
     if (m_inputLength < 0) {
         m_inputLength = (int) strlen(m_input);
     }
+    OneOrBinaryTokenizerInfo* oneOrBinaryInfo = dynamic_cast<OneOrBinaryTokenizerInfo*>(tokenizerInfo);
+    if(oneOrBinaryInfo != nullptr){
+        m_needBinary = oneOrBinaryInfo->m_needBinary;
+    }
 }
 
-OneOrBinaryTokenizerCursorInfo::~OneOrBinaryTokenizerCursorInfo() = default;
+OneOrBinaryTokenizer::OneOrBinaryTokenizer(void *pCtx, const char **azArg, int nArg)
+: AbstractFTS3TokenizerCursorInfo(nullptr, 0, nullptr)
+, AbstractFTS5Tokenizer(pCtx, azArg, nArg)
+, m_input(nullptr)
+, m_inputLength(0)
+, m_position(0)
+, m_startOffset(0)
+, m_endOffset(0)
+, m_cursor(0)
+, m_cursorTokenType(TokenType::None)
+, m_cursorTokenLength(0)
+, m_lemmaBufferLength(0)
+, m_subTokensCursor(0)
+, m_subTokensDoubleChar(true)
+, m_bufferLength(0)
+, m_needBinary(true)
+{
+    for(int i = 0; i < nArg; i++){
+        if(strcmp(azArg[i], "just_one") == 0){
+            m_needBinary = false;
+        }
+    }
+    static_assert(sizeof(UnicodeChar) == 2, "UnicodeChar must be 2 byte length.");
+}
+
+OneOrBinaryTokenizer::~OneOrBinaryTokenizer() = default;
+
+void OneOrBinaryTokenizer::loadInput(int flags, const char *pText, int nText)
+{
+    WCDB_UNUSED(flags)
+    m_input = pText;
+    m_inputLength = nText;
+    if (m_input == nullptr) {
+        m_inputLength = 0;
+    }
+    if (m_inputLength < 0) {
+        m_inputLength = (int) strlen(m_input);
+    }
+    m_position = 0;
+    m_startOffset = 0;
+    m_endOffset = 0;
+    m_cursor = 0;
+    m_cursorTokenType = TokenType::None;
+    m_cursorTokenLength = 0;
+    m_lemmaBufferLength = 0;
+    m_subTokensCursor = 0;
+    m_subTokensDoubleChar = true;
+    m_bufferLength = true;
+}
+
+int OneOrBinaryTokenizer::nextToken(int *tflags, const char **ppToken, int *nToken, int *iStart, int *iEnd)
+{
+    *tflags = 0;
+    int position = 0;
+    return step(ppToken, nToken, iStart, iEnd, &position);
+}
 
 //Inspired by zorrozhang
-int OneOrBinaryTokenizerCursorInfo::step(
+int OneOrBinaryTokenizer::step(
 const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *piPosition)
 {
     Error::Code code = Error::Code::OK;
@@ -117,7 +184,7 @@ const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *p
         case TokenType::AuxiliaryPlaneOther:
             m_subTokensLengthArray.push_back(m_cursorTokenLength);
             m_subTokensCursor = m_cursor;
-            m_subTokensDoubleChar = true;
+            m_subTokensDoubleChar = m_needBinary;
             while (((code = Error::rc2c(cursorStep())) == Error::Code::OK)
                    && m_cursorTokenType == type) {
                 m_subTokensLengthArray.push_back(m_cursorTokenLength);
@@ -159,7 +226,7 @@ const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *p
     return Error::c2rc(Error::Code::OK);
 }
 
-int OneOrBinaryTokenizerCursorInfo::cursorStep()
+int OneOrBinaryTokenizer::cursorStep()
 {
     if (m_cursor + m_cursorTokenLength < m_inputLength) {
         m_cursor += m_cursorTokenLength;
@@ -171,7 +238,7 @@ int OneOrBinaryTokenizerCursorInfo::cursorStep()
     return Error::c2rc(Error::Code::OK);
 }
 
-int OneOrBinaryTokenizerCursorInfo::cursorSetup()
+int OneOrBinaryTokenizer::cursorSetup()
 {
     Error::Code code;
     const unsigned char &first = m_input[m_cursor];
@@ -241,7 +308,7 @@ int OneOrBinaryTokenizerCursorInfo::cursorSetup()
     return Error::c2rc(Error::Code::OK);
 }
 
-int OneOrBinaryTokenizerCursorInfo::lemmatization(const char *input, int inputLength)
+int OneOrBinaryTokenizer::lemmatization(const char *input, int inputLength)
 {
     // tolower only. You can implement your own lemmatization.
     m_buffer.assign(input, input + inputLength);
@@ -250,21 +317,25 @@ int OneOrBinaryTokenizerCursorInfo::lemmatization(const char *input, int inputLe
     return Error::c2rc(Error::Code::OK);
 }
 
-void OneOrBinaryTokenizerCursorInfo::subTokensStep()
+void OneOrBinaryTokenizer::subTokensStep()
 {
     m_startOffset = m_subTokensCursor;
     m_bufferLength = m_subTokensLengthArray[0];
     if (m_subTokensDoubleChar) {
         if (m_subTokensLengthArray.size() > 1) {
             m_bufferLength += m_subTokensLengthArray[1];
-            m_subTokensDoubleChar = false;
+            if(m_needBinary){
+                m_subTokensDoubleChar = false;
+            }
         } else {
             m_subTokensLengthArray.clear();
         }
     } else {
         m_subTokensCursor += m_subTokensLengthArray[0];
         m_subTokensLengthArray.erase(m_subTokensLengthArray.begin());
-        m_subTokensDoubleChar = true;
+        if(m_needBinary){
+            m_subTokensDoubleChar = true;
+        }
     }
     m_endOffset = m_startOffset + m_bufferLength;
 }
