@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/07/05
+// Created by 陈秋文 on 2020/8/30.
 //
 
 /*
@@ -22,38 +22,18 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
 
-@interface Random : NSObject
+#import "TestCase.h"
+#import "FTSData.h"
+#import "FTSFactory.h"
 
-+ (instancetype)shared;
+NS_ASSUME_NONNULL_BEGIN
 
-- (void)setStable:(BOOL)stable;
-
-- (void)reset;
-
-- (uint64_t)uint64;
-- (uint32_t)uint32;
-- (uint8_t)uint8;
-
-- (int64_t)int64;
-- (int32_t)int32;
-
-- (double)double_;
-- (float)float_;
-- (float)float_0_1;
-
-- (BOOL)boolean;
-
-- (NSNumber*)number;
-
-- (NSString*)string;
-- (NSString*)chineseString;
-
-- (NSData*)data;
-- (NSData*)dataWithLength:(NSInteger)length;
-- (NSData*)dataOtherThan:(NSData*)other;
-
-- (NSDate*)date;
+@interface FTSTests : Benchmark
+@property(nonatomic, retain) NSString* tableName;
+@property(nonatomic, readonly) FTSFactory* factory;
+@property(nonatomic, readonly) WCTTable* table;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/07/05
+// Created by qiuwenchen(陈秋文) on 2020/10/29.
 //
 
 /*
@@ -22,38 +22,13 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import <WCDB/WCDB.h>
 
-@interface Random : NSObject
+@interface FTS5Object : NSObject<WCTTableCoding>
 
-+ (instancetype)shared;
-
-- (void)setStable:(BOOL)stable;
-
-- (void)reset;
-
-- (uint64_t)uint64;
-- (uint32_t)uint32;
-- (uint8_t)uint8;
-
-- (int64_t)int64;
-- (int32_t)int32;
-
-- (double)double_;
-- (float)float_;
-- (float)float_0_1;
-
-- (BOOL)boolean;
-
-- (NSNumber*)number;
-
-- (NSString*)string;
-- (NSString*)chineseString;
-
-- (NSData*)data;
-- (NSData*)dataWithLength:(NSInteger)length;
-- (NSData*)dataOtherThan:(NSData*)other;
-
-- (NSDate*)date;
+@property (nonatomic, retain) NSString *content;
+@property (nonatomic, retain) NSString *extension;
+WCDB_PROPERTY(content)
+WCDB_PROPERTY(extension)
 
 @end

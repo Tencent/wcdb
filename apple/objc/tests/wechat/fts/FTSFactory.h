@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/07/05
+// Created by 陈秋文 on 2020/8/30.
 //
 
 /*
@@ -22,38 +22,19 @@
  * limitations under the License.
  */
 
+#import "PrototypeFactory.h"
 #import <Foundation/Foundation.h>
 
-@interface Random : NSObject
+NS_ASSUME_NONNULL_BEGIN
 
-+ (instancetype)shared;
+@interface FTSFactory : PrototypeFactory <PrototypePreparation>
 
-- (void)setStable:(BOOL)stable;
-
-- (void)reset;
-
-- (uint64_t)uint64;
-- (uint32_t)uint32;
-- (uint8_t)uint8;
-
-- (int64_t)int64;
-- (int32_t)int32;
-
-- (double)double_;
-- (float)float_;
-- (float)float_0_1;
-
-- (BOOL)boolean;
-
-- (NSNumber*)number;
-
-- (NSString*)string;
-- (NSString*)chineseString;
-
-- (NSData*)data;
-- (NSData*)dataWithLength:(NSInteger)length;
-- (NSData*)dataOtherThan:(NSData*)other;
-
-- (NSDate*)date;
+@property (nonatomic, readonly) NSString* tableName;
+@property (nonatomic, assign) BOOL needOptimize;
+@property (nonatomic, assign) BOOL isFTS5;
+@property (nonatomic, assign) int autoMergeCount;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

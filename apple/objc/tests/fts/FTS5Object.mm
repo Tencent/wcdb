@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/07/05
+// Created by qiuwenchen(陈秋文) on 2020/10/29.
 //
 
 /*
@@ -23,37 +23,25 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "FTS5Object.h"
+#import "TestCase.h"
 
-@interface Random : NSObject
+@implementation FTS5Object
 
-+ (instancetype)shared;
+WCDB_IMPLEMENTATION(FTS5Object)
+WCDB_SYNTHESIZE(content)
+WCDB_SYNTHESIZE(extension)
 
-- (void)setStable:(BOOL)stable;
+WCDB_VIRTUAL_TABLE_MODULE(WCTModuleFTS5)
+WCDB_VIRTUAL_TABLE_TOKENIZE(WCTTokenizerOneWord_FTS5)
 
-- (void)reset;
-
-- (uint64_t)uint64;
-- (uint32_t)uint32;
-- (uint8_t)uint8;
-
-- (int64_t)int64;
-- (int32_t)int32;
-
-- (double)double_;
-- (float)float_;
-- (float)float_0_1;
-
-- (BOOL)boolean;
-
-- (NSNumber*)number;
-
-- (NSString*)string;
-- (NSString*)chineseString;
-
-- (NSData*)data;
-- (NSData*)dataWithLength:(NSInteger)length;
-- (NSData*)dataOtherThan:(NSData*)other;
-
-- (NSDate*)date;
+- (BOOL)isEqual:(NSObject*)object
+{
+    if (object.class != self.class) {
+        return NO;
+    }
+    FTS5Object* other = (FTS5Object*) object;
+    return [NSObject isObject:self.content nilEqualToObject:other.content] && [NSObject isObject:self.extension nilEqualToObject:other.extension];
+}
 
 @end
