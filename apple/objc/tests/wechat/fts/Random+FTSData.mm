@@ -37,7 +37,15 @@
         item.msgLocalId = ++g_localId;
         item.createTime = (UInt32)[random.date timeIntervalSince1970];
         item.userNameId = random.uint8 % 10;
-        item.msg = random.chineseString;
+        if(i % 3 == 0){
+            item.msg = [random.chineseString stringByReplacingCharactersInRange:NSMakeRange(40, 8) withString:@"我们批量测试内容"];
+        }else{
+            item.msg = random.chineseString;
+        }
+        if(g_localId % 1000 == 0){
+            item.msg = [item.msg stringByReplacingCharactersInRange:NSMakeRange(60, 8) withString:@"中等规模随机命中"];
+        }
+        
         [itemList addObject:item];
     }
     return itemList;
@@ -45,7 +53,7 @@
 
 - (NSArray<FTS5MsgContentItem*>*)randomFTS5Items:(NSInteger)count
 {
-    static int g_localId = 0;
+    static int g_localId = 900000;
     NSMutableArray<FTS5MsgContentItem*>* itemList = [NSMutableArray arrayWithCapacity:count];
     Random* random = [Random shared];
     for (NSInteger i = 0; i < count; ++i) {
@@ -53,7 +61,14 @@
         item.msgLocalId = ++g_localId;
         item.createTime = (UInt32)[random.date timeIntervalSince1970];
         item.userNameId = random.uint8 % 10;
-        item.msg = random.chineseString;
+        if(i % 3 == 0){
+            item.msg = [random.chineseString stringByReplacingCharactersInRange:NSMakeRange(40, 8) withString:@"我们批量测试内容"];
+        }else{
+            item.msg = random.chineseString;
+        }
+        if(g_localId % 1000 == 0){
+            item.msg = [item.msg stringByReplacingCharactersInRange:NSMakeRange(60, 8) withString:@"中等规模随机命中"];
+        }
         [itemList addObject:item];
     }
     return itemList;

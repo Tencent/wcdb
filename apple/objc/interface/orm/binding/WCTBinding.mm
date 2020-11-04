@@ -124,7 +124,8 @@ WCDB::ColumnDef *WCTBinding::getColumnDef(const WCTProperty &property)
 #pragma mark - Table
 WCDB::StatementCreateTable WCTBinding::generateCreateTableStatement(const WCDB::UnsafeStringView &tableName) const
 {
-    WCDB::StatementCreateTable statement = WCDB::StatementCreateTable().createTable(tableName).ifNotExists();
+    WCDB::StatementCreateTable statement = statementTable;
+    statement.createTable(tableName).ifNotExists();
     for (const auto &iter : m_columnDefs) {
         statement.define(iter.second);
     }
@@ -143,8 +144,18 @@ WCTBinding::generateCreateVirtualTableStatement(const WCDB::UnsafeStringView &ta
     bool isFTS5 = statement.syntax().module.caseInsensiveEqual("fts5");
     for (const auto &iter : m_columnDefs) {
         if (isFTS5) {
+            bool added = false;
+            for(auto constrain : iter.second.syntax().constraints){
+                if(constrain.getDescription().find("UNINDEXED") == 0){
+                    arguments.push_back(WCDB::StringView().formatted("%s %s", iter.second.syntax().column.getDescription().data(), constrain.getDescription().data()));
+                    added = YES;
+                    break;
+                }
+            }
             // FTS5 does not need type
-            arguments.push_back(iter.second.syntax().column.getDescription());
+            if(!added){
+                arguments.push_back(iter.second.syntax().column.getDescription());
+            }
         } else {
             arguments.push_back(iter.second.getDescription());
         }

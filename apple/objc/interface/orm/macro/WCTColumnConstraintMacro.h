@@ -72,3 +72,9 @@
     __WCDB_COLUMN_CONSTRAINT_BEGIN(propertyName)  \
     columnConstraint.check(condition);            \
     __WCDB_COLUMN_CONSTRAINT_END(propertyName)
+
+// unindexed for fts
+#define __WCDB_NOTINDEXED_IMP(propertyName) \
+    __WCDB_COLUMN_CONSTRAINT_BEGIN(propertyName)  \
+    columnConstraint.notIndexed();            \
+    __WCDB_COLUMN_CONSTRAINT_END(propertyName)

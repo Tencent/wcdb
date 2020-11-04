@@ -88,7 +88,14 @@
 #define WCDB_CHECK(propertyName, condition) \
     __WCDB_CHECK_IMP(propertyName, condition)
 
+//For FTS
+#define WCDB_NOTINDEXED(propertyName) \
+    __WCDB_NOTINDEXED_IMP(propertyName)
+
 // Table Constraint
+#define WCDB_WITHOUT_ROWID \
+    __WCDB_WITHOUT_ROWID
+
 #define WCDB_MULTI_PRIMARY(constraintName, propertyName) \
     __WCDB_MULTI_PRIMARY_IMP(constraintName, propertyName)
 

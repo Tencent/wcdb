@@ -61,7 +61,8 @@ public:
 
     WCDB::StatementCreateVirtualTable
     generateCreateVirtualTableStatement(const WCDB::UnsafeStringView &tableName) const;
-
+    
+    WCDB::StatementCreateTable statementTable;
     WCDB::StatementCreateVirtualTable statementVirtualTable;
 
 #pragma mark - Table Constraint

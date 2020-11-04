@@ -56,18 +56,31 @@ bool CreateVirtualTableSTMT::describle(std::ostringstream& stream) const
     if (!arguments.empty()) {
         stream << "(";
         bool comma = false;
+        std::list<StringView> notIndexedColumn;
         for (const auto& argument : arguments) {
             if (comma) {
                 stream << ", ";
             } else {
                 comma = true;
             }
-            if(isFTS5 && argument.find("tokenize = ") == 0){
+            off_t loc = std::string_view::npos;
+            if(isFTS5 && (loc = argument.find("tokenize = ")) == 0){
                 stream << "tokenize = '";
                 stream << UnsafeStringView(argument.data() + 11, argument.length() - 11);
                 stream << "'";
+            }else if (!isFTS5 && (loc = argument.find("UNINDEXED")) != std::string_view::npos){
+                std::string columnDef = std::string(argument.data()).erase(loc-1, 10);
+                off_t spaceLoc = argument.find(" ");
+                notIndexedColumn.push_back(std::string(argument.data(), spaceLoc));
+                stream << columnDef;
             }else{
                 stream << argument;
+            }
+        }
+        if(!notIndexedColumn.empty()){
+            stream << ", notindexed =";
+            for (const auto& column : notIndexedColumn){
+                stream << " " << column;
             }
         }
         stream << ")";

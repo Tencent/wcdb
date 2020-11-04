@@ -99,4 +99,10 @@ ColumnConstraint& ColumnConstraint::foreignKey(const ForeignKey& foreignKey)
     return *this;
 }
 
+ColumnConstraint& ColumnConstraint::notIndexed()
+{
+    syntax().switcher = SyntaxType::Switch::NotIndexed;
+    return *this;
+}
+
 } // namespace WCDB
