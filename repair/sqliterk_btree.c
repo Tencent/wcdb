@@ -26,6 +26,7 @@
 #include "sqliterk_util.h"
 #include "sqliterk_values.h"
 #include <string.h>
+#include <inttypes.h>
 
 // Declarations
 static int sqliterkBtreeParsePage(sqliterk_btree *btree, int pageno);
@@ -293,10 +294,15 @@ static int sqliterkBtreeParseCell(sqliterk_btree *btree,
         int offset = cellPointerArray[i];
         // Find payload
         int payloadSizeLength;
-        int payloadSize;
-        rc = sqliterkParseVarint(pagedata, offset, &payloadSizeLength,
+        int64_t payloadSize;
+        rc = sqliterkParseVarint64(pagedata, offset, &payloadSizeLength,
                                  &payloadSize);
         if (rc != SQLITERK_OK) {
+            goto sqliterkBtreeParsePayload_End;
+        } else if (payloadSize > 64 * 1024 * 1024) {
+            // We assume that payload is at most 64MB.
+            rc = SQLITERK_DAMAGED;
+            sqliterkOSDebug(rc, "Invalid payload size: %" PRId64 ".", payloadSize);
             goto sqliterkBtreeParsePayload_End;
         }
         offset += payloadSizeLength;
