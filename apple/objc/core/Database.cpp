@@ -847,7 +847,7 @@ std::optional<bool> Database::stepMigration(bool interruptible)
 {
     InitializedGuard initializedGuard = initialize();
     if (!initializedGuard.valid()) {
-        return nullptr;
+        return std::nullopt;
     }
     WCTRemedialAssert(
     !isInTransaction(), "Migrating can't be run in transaction.", return std::nullopt;);
