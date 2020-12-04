@@ -127,11 +127,14 @@ static int sqliterkValuesAutoGrow(sqliterk_values *values)
     }
     if (values->count >= values->capacity) {
         int oldCapacity = values->capacity;
+        int newCapacity;
         if (oldCapacity <= 0) {
             //init for 4
-            values->capacity = 4;
+            newCapacity = 4;
+        } else if (oldCapacity > 8 * 1024 * 1024) {
+            newCapacity = oldCapacity + 8 * 1024 * 1024;
         } else {
-            values->capacity = oldCapacity * 2;
+            newCapacity = oldCapacity * 2;
         }
         sqliterk_value *newValues =
             sqliterkOSMalloc(sizeof(sqliterk_value) * (values->capacity + 1));
@@ -144,6 +147,7 @@ static int sqliterkValuesAutoGrow(sqliterk_values *values)
             sqliterkOSFree(values->values);
         }
         values->values = newValues;
+        values->capacity = newCapacity;
     }
     return SQLITERK_OK;
 }
