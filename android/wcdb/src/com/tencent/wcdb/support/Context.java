@@ -37,7 +37,7 @@ public final class Context {
 
 	static {
 		// Ensure libwcdb.so is loaded.
-		SQLiteGlobal.loadLib();
+		SQLiteGlobal.initialize();
 	}
 
 	private static File getDataDirFile(android.content.Context context) {

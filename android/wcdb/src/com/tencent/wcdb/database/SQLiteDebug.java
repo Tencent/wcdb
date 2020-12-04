@@ -39,7 +39,7 @@ public final class SQLiteDebug {
 
     static {
         // Ensure libwcdb.so is loaded.
-        SQLiteGlobal.loadLib();
+        SQLiteGlobal.initialize();
     }
 
     private SQLiteDebug() {}
