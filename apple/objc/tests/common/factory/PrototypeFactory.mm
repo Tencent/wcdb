@@ -28,7 +28,6 @@
 #import "TestCaseLog.h"
 
 @interface PrototypeFactory ()
-@property (nonatomic, retain) NSString* path;
 @end
 
 @implementation PrototypeFactory {
