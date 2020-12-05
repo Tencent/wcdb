@@ -24,8 +24,14 @@
 
 #import <WCDB/WCDB.h>
 
-#define OneOrBinaryTokenizer_FTS3  @"one_or_binary_fts3"
-#define OneOrBinaryTokenizer_FTS5  @"one_or_binary_fts5"
+@interface FTS5RowidIndexItem : NSObject <WCTTableCoding>
+@property (nonatomic, assign) UInt32 userNameId;
+@property (nonatomic, assign) UInt32 msgLocalId;
+@property (nonatomic, assign) SInt64 indexRowid;
+WCDB_PROPERTY(userNameId);
+WCDB_PROPERTY(msgLocalId);
+WCDB_PROPERTY(indexRowid);
+@end
 
 @interface FTS3MsgContentItem : NSObject <WCTTableCoding>
 @property (nonatomic, assign) UInt32 userNameId;

@@ -27,12 +27,22 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, FTSDataType) {
+    FTSDataType_FTS3 = 0,
+    FTSDataType_FTS5,
+    FTSDataType_FTS5_RowidIndex,
+};
+
 @interface FTSFactory : PrototypeFactory <PrototypePreparation>
 
-@property (nonatomic, readonly) NSString* tableName;
+@property (nonatomic, readonly) NSString* assistTableName;
 @property (nonatomic, assign) BOOL needOptimize;
-@property (nonatomic, assign) BOOL isFTS5;
+@property (nonatomic, assign) int tableCount;
+@property (nonatomic, assign) FTSDataType dataType;
 @property (nonatomic, assign) int autoMergeCount;
+@property (nonatomic, assign) BOOL needBinary;
+
+-(NSString*)indexTableNameOf:(int)tableId;
 
 @end
 

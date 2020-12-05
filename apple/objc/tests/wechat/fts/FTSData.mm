@@ -24,6 +24,20 @@
 
 #import <Foundation/Foundation.h>
 #import "FTSData.h"
+#import <WCDB/WCTDatabase+FTS.h>
+
+@implementation FTS5RowidIndexItem
+
+WCDB_IMPLEMENTATION(FTS5RowidIndexItem)
+WCDB_SYNTHESIZE_COLUMN(userNameId, WCDB_STRINGIFY(userNameId))
+WCDB_SYNTHESIZE_COLUMN(msgLocalId, WCDB_STRINGIFY(msgLocalId))
+WCDB_SYNTHESIZE_COLUMN(indexRowid, WCDB_STRINGIFY(indexRowid))
+
+WCDB_MULTI_PRIMARY("userNameId_msgLocalId", userNameId)
+WCDB_MULTI_PRIMARY("userNameId_msgLocalId", msgLocalId)
+WCDB_WITHOUT_ROWID
+
+@end
 
 @interface FTS3MsgContentItem ()
 @property (nonatomic, assign) UInt32 reservedInt;
@@ -49,7 +63,12 @@ WCDB_SYNTHESIZE(reservedInt)
 WCDB_SYNTHESIZE(reservedText)
 
 WCDB_VIRTUAL_TABLE_MODULE(WCTModuleFTS3)
-WCDB_VIRTUAL_TABLE_TOKENIZE(OneOrBinaryTokenizer_FTS3)
+//WCDB_VIRTUAL_TABLE_TOKENIZE(WCTTokenizerOneWord)
+WCDB_NOTINDEXED(userNameId)
+WCDB_NOTINDEXED(msgLocalId)
+WCDB_NOTINDEXED(createTime)
+WCDB_NOTINDEXED(reservedInt)
+WCDB_NOTINDEXED(reservedText)
 
 WCDB_MULTI_PRIMARY("userNameId_msgLocalId_createTime", userNameId)
 WCDB_MULTI_PRIMARY("userNameId_msgLocalId_createTime", msgLocalId)
@@ -87,16 +106,15 @@ WCDB_PROPERTY(reservedText);
 @synthesize msg = msg;
 
 WCDB_IMPLEMENTATION(FTS5MsgContentItem)
+WCDB_SYNTHESIZE_COLUMN(msg, WCDB_STRINGIFY(COL_FTS_MSG_MESSAGE))
 WCDB_SYNTHESIZE_COLUMN(userNameId, WCDB_STRINGIFY(COL_FTS_MSG_USERNAME_ID))
 WCDB_SYNTHESIZE_COLUMN(msgLocalId, WCDB_STRINGIFY(COL_FTS_MSG_MES_LOCAL_ID))
 WCDB_SYNTHESIZE_COLUMN(createTime, WCDB_STRINGIFY(COL_FTS_MSG_CREATE_TIME))
-WCDB_SYNTHESIZE_COLUMN(msg, WCDB_STRINGIFY(COL_FTS_MSG_MESSAGE))
-
 WCDB_SYNTHESIZE(reservedInt)
 WCDB_SYNTHESIZE(reservedText)
 
 WCDB_VIRTUAL_TABLE_MODULE(WCTModuleFTS5)
-WCDB_VIRTUAL_TABLE_TOKENIZE(OneOrBinaryTokenizer_FTS5)
+//WCDB_VIRTUAL_TABLE_TOKENIZE(WCTTokenizerOneWord_FTS5)
 
 WCDB_MULTI_PRIMARY("userNameId_msgLocalId_createTime", userNameId)
 WCDB_MULTI_PRIMARY("userNameId_msgLocalId_createTime", msgLocalId)
@@ -105,6 +123,12 @@ WCDB_MULTI_PRIMARY("userNameId_msgLocalId_createTime", createTime)
 WCDB_DEFAULT(reservedInt, 0)
 WCDB_DEFAULT(userNameId, 0)
 WCDB_DEFAULT(createTime, 0)
+
+WCDB_NOTINDEXED(userNameId)
+WCDB_NOTINDEXED(msgLocalId)
+WCDB_NOTINDEXED(createTime)
+WCDB_NOTINDEXED(reservedInt)
+WCDB_NOTINDEXED(reservedText)
 
 - (id)init {
     if (self = [super init]) {

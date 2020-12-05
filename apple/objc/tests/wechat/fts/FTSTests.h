@@ -30,9 +30,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface FTSTests : Benchmark
-@property(nonatomic, retain) NSString* tableName;
+@property(nonatomic, retain) NSString* assistTableName;
 @property(nonatomic, readonly) FTSFactory* factory;
-@property(nonatomic, readonly) WCTTable* table;
 
 @end
 

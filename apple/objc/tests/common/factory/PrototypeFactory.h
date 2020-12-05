@@ -42,6 +42,8 @@
 
 - (instancetype)initWithDirectory:(NSString*)directory;
 
+@property (nonatomic, retain) NSString* path;
+
 @property (nonatomic, readonly) WCTDatabase* database;
 
 @property (nonatomic, readonly) NSString* directory;

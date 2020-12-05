@@ -36,7 +36,7 @@
         FTS3MsgContentItem* item = [[FTS3MsgContentItem alloc] init];
         item.msgLocalId = ++g_localId;
         item.createTime = (UInt32)[random.date timeIntervalSince1970];
-        item.userNameId = random.uint8 % 10;
+        item.userNameId = random.uint8 % 100;
         if(i % 3 == 0){
             item.msg = [random.chineseString stringByReplacingCharactersInRange:NSMakeRange(40, 8) withString:@"我们批量测试内容"];
         }else{
@@ -60,7 +60,7 @@
         FTS5MsgContentItem* item = [[FTS5MsgContentItem alloc] init];
         item.msgLocalId = ++g_localId;
         item.createTime = (UInt32)[random.date timeIntervalSince1970];
-        item.userNameId = random.uint8 % 10;
+        item.userNameId = random.uint8 % 100;
         if(i % 3 == 0){
             item.msg = [random.chineseString stringByReplacingCharactersInRange:NSMakeRange(40, 8) withString:@"我们批量测试内容"];
         }else{
