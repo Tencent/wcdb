@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D249BC12542B8E900B43BD9 /* MergeFTSIndexLogic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D249BC02542B8E900B43BD9 /* MergeFTSIndexLogic.hpp */; };
+		0D249BC92542B90600B43BD9 /* MergeFTSIndexLogic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D249BC82542B90600B43BD9 /* MergeFTSIndexLogic.cpp */; };
+		0D3AE53825416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D3AE53725416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp */; };
+		0D3AE54025416DB4007B9D0E /* AutoMergeFTSIndexConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D3AE53F25416DB4007B9D0E /* AutoMergeFTSIndexConfig.cpp */; };
 		2304B42822156CD700901953 /* TokenizerModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2304B42622156CD700901953 /* TokenizerModule.cpp */; };
 		2304B42A22156CD700901953 /* TokenizerModule.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2304B42722156CD700901953 /* TokenizerModule.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2304B42E22156E1500901953 /* TokenizerModules.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2304B42C22156E1500901953 /* TokenizerModules.cpp */; };
@@ -835,6 +839,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0D249BC02542B8E900B43BD9 /* MergeFTSIndexLogic.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MergeFTSIndexLogic.hpp; sourceTree = "<group>"; };
+		0D249BC82542B90600B43BD9 /* MergeFTSIndexLogic.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MergeFTSIndexLogic.cpp; sourceTree = "<group>"; };
+		0D3AE53725416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AutoMergeFTSIndexConfig.hpp; sourceTree = "<group>"; };
+		0D3AE53F25416DB4007B9D0E /* AutoMergeFTSIndexConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AutoMergeFTSIndexConfig.cpp; sourceTree = "<group>"; };
 		2304B42622156CD700901953 /* TokenizerModule.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TokenizerModule.cpp; sourceTree = "<group>"; };
 		2304B42722156CD700901953 /* TokenizerModule.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TokenizerModule.hpp; sourceTree = "<group>"; };
 		2304B42C22156E1500901953 /* TokenizerModules.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TokenizerModules.cpp; sourceTree = "<group>"; };
@@ -2936,6 +2944,10 @@
 		23E163CA20FDDD6900C3F910 /* fts */ = {
 			isa = PBXGroup;
 			children = (
+				0D3AE53725416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp */,
+				0D3AE53F25416DB4007B9D0E /* AutoMergeFTSIndexConfig.cpp */,
+				0D249BC02542B8E900B43BD9 /* MergeFTSIndexLogic.hpp */,
+				0D249BC82542B90600B43BD9 /* MergeFTSIndexLogic.cpp */,
 				234F0337227A950900DD65A2 /* SQLiteFTS3Tokenizer.h */,
 				2304B42722156CD700901953 /* TokenizerModule.hpp */,
 				2304B42622156CD700901953 /* TokenizerModule.cpp */,
@@ -3522,6 +3534,7 @@
 				23790A7F219315E50098797F /* WCTColumnConstraintMacro.h in Headers */,
 				2304B43022156E1500901953 /* TokenizerModules.hpp in Headers */,
 				23EEDC9C217DFADC006E9E73 /* QualifiedTable.hpp in Headers */,
+				0D3AE53825416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp in Headers */,
 				23EEDCA0217DFADC006E9E73 /* RecursiveCTE.hpp in Headers */,
 				231C35EF21DE09EC00B5D3D2 /* Exiting.hpp in Headers */,
 				23F70FA220A055B400CCE3CD /* Config.hpp in Headers */,
@@ -3555,6 +3568,7 @@
 				23EEDCF0217DFADC006E9E73 /* SyntaxColumn.hpp in Headers */,
 				2349F6FF1EA0D6680021EFA7 /* Database.hpp in Headers */,
 				3969018C233B1B2F006EEFD4 /* WCTTag.h in Headers */,
+				0D249BC12542B8E900B43BD9 /* MergeFTSIndexLogic.hpp in Headers */,
 				23EEDD2C217DFADC006E9E73 /* SyntaxAnalyzeSTMT.hpp in Headers */,
 				23EEDCF2217DFADC006E9E73 /* SyntaxColumnConstraint.hpp in Headers */,
 				75751ED82412AD11006CBFFD /* MigratingHandleStatement.hpp in Headers */,
@@ -4378,9 +4392,11 @@
 				23EEDC85217DFADC006E9E73 /* Filter.cpp in Sources */,
 				390E1C5C2296414C00C24598 /* Thread.cpp in Sources */,
 				3934DAEB229B6659008A6AEC /* OperationQueue.cpp in Sources */,
+				0D3AE54025416DB4007B9D0E /* AutoMergeFTSIndexConfig.cpp in Sources */,
 				23EEDC9B217DFADC006E9E73 /* QualifiedTable.cpp in Sources */,
 				23F70FA620A055BE00CCE3CD /* BasicConfig.cpp in Sources */,
 				23EEDCD7217DFADC006E9E73 /* StatementPragma.cpp in Sources */,
+				0D249BC92542B90600B43BD9 /* MergeFTSIndexLogic.cpp in Sources */,
 				23EEDD2B217DFADC006E9E73 /* SyntaxAnalyzeSTMT.cpp in Sources */,
 				23EEDD13217DFADC006E9E73 /* SyntaxQualifiedTableName.cpp in Sources */,
 				23EEDD1B217DFADC006E9E73 /* SyntaxSchema.cpp in Sources */,

@@ -111,6 +111,17 @@ private:
     static int onBusy(void *p, int numberOfTimes);
     bool postBusyNotification(int numberOfTimes);
     BusyNotification m_busyNotification;
+
+#pragma mark - Table Modification
+public:
+    typedef std::function<void(const UnsafeStringView &path, const UnsafeStringView &newTable, const UnsafeStringView &modifiedTable)> TableModifiedNotification;
+    void setNotificationWhenTableModified(const UnsafeStringView &name,
+                                          const TableModifiedNotification &tableModified);
+    void postTableModifiedNotification(const UnsafeStringView &newTable, const UnsafeStringView &modifiedTable);
+    bool needMonitorTable();
+
+private:
+    StringViewMap<TableModifiedNotification> m_tableModifiedNotifications;
 };
 
 } //namespace WCDB

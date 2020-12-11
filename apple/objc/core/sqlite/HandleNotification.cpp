@@ -299,4 +299,28 @@ bool HandleNotification::postBusyNotification(int numberOfTimes)
     return retry;
 }
 
+#pragma mark - Table Modification
+void HandleNotification::setNotificationWhenTableModified(const UnsafeStringView &name,
+                                      const TableModifiedNotification &tableModified)
+{
+    if(tableModified != nullptr){
+        m_tableModifiedNotifications[name] = tableModified;
+    }else{
+        m_tableModifiedNotifications.erase(name);
+    }
+}
+
+void HandleNotification::postTableModifiedNotification(const UnsafeStringView &newTable, const UnsafeStringView &modifiedTable)
+{
+    WCTAssert(!m_tableModifiedNotifications.empty());
+    for (const auto &element : m_tableModifiedNotifications) {
+        element.second(getHandle()->getPath(), newTable, modifiedTable);
+    }
+}
+
+bool HandleNotification::needMonitorTable()
+{
+    return !m_tableModifiedNotifications.empty();
+}
+
 } //namespace WCDB

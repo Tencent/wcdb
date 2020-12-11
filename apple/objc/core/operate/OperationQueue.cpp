@@ -187,6 +187,9 @@ void OperationQueue::onTimed(const Operation& operation, const Parameter& parame
     case Operation::Type::NotifyCorruption:
         doNotifyCorruption(operation.path, parameter.identifier);
         break;
+    case Operation::Type::MergeIndex:
+        doMergeFTSIndex(operation.path, parameter.newTables, parameter.modifiedTables);
+        break;
     default:
         WCTAssert(operation.type == Operation::Type::Backup);
         doBackup(operation.path);
@@ -274,6 +277,44 @@ void OperationQueue::doMigrate(const UnsafeStringView& path, int numberOfFailure
             Notifier::shared().notify(error);
         }
     }
+}
+
+#pragma mark - Merge FTS Index
+void OperationQueue::registerAsRequiredMergeFTSIndex(const UnsafeStringView& path)
+{
+    WCTAssert(!path.empty());
+
+    LockGuard lockGuard(m_lock);
+    m_records[path].registeredForMergeFTSIndex = true;
+}
+
+void OperationQueue::registerAsNoMergeFTSIndexRequired(const UnsafeStringView& path)
+{
+    WCTAssert(!path.empty());
+
+    LockGuard lockGuard(m_lock);
+    m_records[path].registeredForMergeFTSIndex = false;
+    Operation operation(Operation::Type::MergeIndex, path);
+    m_timedQueue.remove(operation);
+}
+
+void OperationQueue::asyncMergeFTSIndex(const UnsafeStringView& path, TableArray newTables, TableArray modifiedTables)
+{
+    SharedLockGuard lockGuard(m_lock);
+    if (m_records[path].registeredForMergeFTSIndex){
+        Operation operation(Operation::Type::MergeIndex, path);
+        Parameter parameter;
+        parameter.newTables = newTables;
+        parameter.modifiedTables = modifiedTables;
+        async(operation, OperationQueueTimeIntervalForMergeFTSIndex, parameter);
+    }
+}
+
+void OperationQueue::doMergeFTSIndex(const UnsafeStringView& path, TableArray newTables, TableArray modifiedTables)
+{
+    WCTAssert(!path.empty());
+
+    m_event->mergeFTSIndexShouldBeOperated(path, newTables, modifiedTables);
 }
 
 #pragma mark - Backup

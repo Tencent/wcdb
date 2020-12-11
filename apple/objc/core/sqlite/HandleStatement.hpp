@@ -40,6 +40,8 @@ public:
 
     HandleStatement(HandleStatement &&other);
     HandleStatement(AbstractHandle *handle);
+    
+    void enableTableMonitor();
 
     virtual ~HandleStatement() override;
 
@@ -83,8 +85,11 @@ protected:
     virtual bool isBusy();
 
 private:
+    void analysisStatement(const Statement &statement);
     sqlite3_stmt *m_stmt;
     bool m_done;
+    StringView m_newTable;
+    StringView m_modifiedTable;
 };
 
 } //namespace WCDB

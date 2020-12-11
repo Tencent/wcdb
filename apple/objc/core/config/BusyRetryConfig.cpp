@@ -71,6 +71,11 @@ bool BusyRetryConfig::checkMainThreadBusyRetry(const UnsafeStringView& path)
     return getOrCreateState(path).checkMainThreadBusyRetry();
 }
 
+bool BusyRetryConfig::checkHasBusyRetry(const UnsafeStringView& path)
+{
+    return getOrCreateState(path).checkHasBusyRetry();
+}
+
 bool BusyRetryConfig::onBusy(const UnsafeStringView& path, int numberOfTimes)
 {
     WCDB_UNUSED(path);
@@ -299,6 +304,12 @@ bool BusyRetryConfig::State::checkMainThreadBusyRetry()
         return false;
     }
     return localShouldWait(*m_mainThreadBusyTrying);
+}
+
+bool BusyRetryConfig::State::checkHasBusyRetry()
+{
+    std::unique_lock<std::mutex> lockGuard(m_lock);
+    return m_waitings.size() > 0;
 }
 
 void BusyRetryConfig::State::tryNotify()

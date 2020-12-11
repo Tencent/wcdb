@@ -143,6 +143,12 @@ long long AbstractHandle::getLastInsertedRowID()
     return sqlite3_last_insert_rowid(m_handle);
 }
 
+int AbstractHandle::getTotalChange()
+{
+    WCTAssert(isOpened());
+    return sqlite3_total_changes(m_handle);
+}
+
 //Error::Code AbstractHandle::getResultCode()
 //{
 //    WCTAssert(isOpened());
@@ -530,6 +536,21 @@ void AbstractHandle::setNotificationWhenBusy(const BusyNotification &busyNotific
 {
     WCTAssert(isOpened());
     m_notification.setNotificationWhenBusy(busyNotification);
+}
+
+void AbstractHandle::setNotificationWhenTableModified(const UnsafeStringView &name, const TableModifiedNotification &tableModifiedNotification)
+{
+    m_notification.setNotificationWhenTableModified(name, tableModifiedNotification);
+}
+
+void AbstractHandle::postTableNotification(const UnsafeStringView &newTable, const UnsafeStringView &modifiedTable)
+{
+    m_notification.postTableModifiedNotification(newTable, modifiedTable);
+}
+
+bool AbstractHandle::needMonitorTable()
+{
+    return m_notification.needMonitorTable();
 }
 
 #pragma mark - Error

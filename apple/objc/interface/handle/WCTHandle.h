@@ -71,6 +71,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (int)getChanges;
 
+- (int)getTotalChanges;
+
 - (BOOL)isStatementReadonly;
 
 #pragma mark - Bind

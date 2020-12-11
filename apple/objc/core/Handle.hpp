@@ -37,6 +37,7 @@ public:
     virtual ~Handle() override = 0;
 
     void setType(HandleType type);
+    void setErrorType(const UnsafeStringView& type);
 
 #pragma mark - Config
 public:
@@ -99,6 +100,7 @@ public:
     typedef std::function<bool(Handle *)> TransactionCallback;
     typedef std::function<bool(Handle *, bool &, bool)> TransactionCallbackForOneLoop;
     bool checkMainThreadBusyRetry();
+    bool checkHasBusyRetry();
     bool runTransaction(const TransactionCallback &transaction);
     bool runNestedTransaction(const TransactionCallback &transaction);
     bool runPauseableTransactionWithOneLoop(const TransactionCallbackForOneLoop &transaction);

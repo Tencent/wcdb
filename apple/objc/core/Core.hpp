@@ -126,6 +126,15 @@ protected:
     static void breakpoint() WCDB_USED WCDB_NO_INLINE;
     static void onErrorTraced(const Error& error);
     static void print(const UnsafeStringView& message);
+    
+#pragma mark - Merge FTS Index
+public:
+    using TableArray = OperationQueue::TableArray;
+    void enableAutoMergeFTSIndex(Database* database, bool enable);
+    std::optional<bool> mergeFTSIndexShouldBeOperated(const UnsafeStringView &path, TableArray newTables, TableArray modifiedTables) override final;
+
+protected:
+    std::shared_ptr<Config> m_AutoMergeFTSConfig;
 
 #pragma mark - Config
 public:

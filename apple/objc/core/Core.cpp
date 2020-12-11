@@ -53,6 +53,8 @@ Core::Core()
 // Trace
 , m_globalSQLTraceConfig(std::make_shared<ShareableSQLTraceConfig>())
 , m_globalPerformanceTraceConfig(std::make_shared<ShareablePerformanceTraceConfig>())
+//Merge
+, m_AutoMergeFTSConfig(std::make_shared<AutoMergeFTSIndexConfig>(m_operationQueue))
 // Config
 , m_configs({
   { StringView(GlobalSQLTraceConfigName), m_globalSQLTraceConfig, Configs::Priority::Highest },
@@ -267,6 +269,31 @@ void Core::enableAutoMigration(Database* database, bool enable)
         database->removeConfig(AutoMigrateConfigName);
         m_operationQueue->registerAsNoMigrationRequired(database->getPath());
     }
+}
+
+#pragma mark - Merge FTS Index
+void Core::enableAutoMergeFTSIndex(Database *database, bool enable)
+{
+    WCTAssert(database != nullptr);
+    if (enable) {
+        database->setConfig(
+        AutoMergeFTSIndexConfigName, m_AutoMergeFTSConfig, WCDB::Configs::Priority::Highest);
+        m_operationQueue->registerAsRequiredMergeFTSIndex(database->getPath());
+        m_operationQueue->asyncMergeFTSIndex(database->getPath(), nullptr, nullptr);
+    } else {
+        database->removeConfig(AutoMergeFTSIndexConfigName);
+        m_operationQueue->registerAsNoMergeFTSIndexRequired(database->getPath());
+    }
+}
+
+std::optional<bool> Core::mergeFTSIndexShouldBeOperated(const UnsafeStringView &path, TableArray newTables,TableArray modifiedTables)
+{
+    RecyclableDatabase database = m_databasePool.getOrCreate(path);
+    std::optional<bool> done = false; // mark as no error if database is not referenced.
+    if (database != nullptr) {
+        done = database->mergeFTSIndex(newTables, modifiedTables);
+    }
+    return done;
 }
 
 #pragma mark - Trace
