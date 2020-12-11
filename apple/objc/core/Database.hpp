@@ -31,12 +31,13 @@
 #include <WCDB/Tag.hpp>
 #include <WCDB/ThreadLocal.hpp>
 #include <WCDB/WINQ.h>
+#include <WCDB/MergeFTSIndexLogic.hpp>
 
 namespace WCDB {
 
 // TODO: readonly manually - by removing basic config and adding query_only config?
 // TODO: support authorize
-class Database final : private HandlePool, public MigrationEvent {
+class Database final : private HandlePool, public MigrationEvent, public MergeFTSIndexHandleProvider {
 #pragma mark - Initializer
 public:
     Database(const UnsafeStringView &path);
@@ -195,6 +196,13 @@ private:
 #pragma mark - Error
 public:
     using HandlePool::getThreadedError;
+    
+#pragma mark - Merge FTS Index
+public:
+    using TableArray = std::shared_ptr<std::vector<StringView>>;
+    std::optional<bool> mergeFTSIndex(TableArray newTables, TableArray modifiedTables);
+private:
+    MergeFTSIndexLogic m_mergeLogic;
 };
 
 } //namespace WCDB

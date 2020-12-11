@@ -30,7 +30,11 @@
 namespace WCDB {
 
 HandleStatement::HandleStatement(HandleStatement &&other)
-: HandleRelated(other.getHandle()), m_stmt(other.m_stmt), m_done(other.m_done)
+: HandleRelated(other.getHandle())
+, m_stmt(other.m_stmt)
+, m_done(other.m_done)
+, m_newTable(other.m_newTable)
+, m_modifiedTable(other.m_modifiedTable)
 {
     other.m_done = false;
     other.m_stmt = nullptr;
@@ -48,7 +52,46 @@ HandleStatement::~HandleStatement()
 
 bool HandleStatement::prepare(const Statement &statement)
 {
+    if(getHandle()->needMonitorTable()){
+        analysisStatement(statement);
+    }
     return prepare(statement.getDescription());
+}
+
+void HandleStatement::analysisStatement(const Statement &statement)
+{
+    m_modifiedTable.clear();
+    m_newTable.clear();
+    switch (statement.getType()) {
+        case Syntax::Identifier::Type::InsertSTMT: {
+            const Syntax::InsertSTMT& insertSTMT = static_cast<const Syntax::InsertSTMT&>(statement.syntax());
+            m_modifiedTable = insertSTMT.table;
+        } break;
+        case Syntax::Identifier::Type::UpdateSTMT: {
+            const Syntax::UpdateSTMT& updateSTMT = static_cast<const Syntax::UpdateSTMT&>(statement.syntax());
+            m_modifiedTable = updateSTMT.table.table;
+        } break;
+        case Syntax::Identifier::Type::DeleteSTMT: {
+            const Syntax::DeleteSTMT& deleteSTMT = static_cast<const Syntax::DeleteSTMT&>(statement.syntax());
+            m_modifiedTable = deleteSTMT.table.table;
+        } break;
+        case Syntax::Identifier::Type::AlterTableSTMT: {
+            const Syntax::AlterTableSTMT& alterSTMT = static_cast<const Syntax::AlterTableSTMT&>(statement.syntax());
+            if(alterSTMT.switcher == Syntax::AlterTableSTMT::Switch::RenameTable){
+                m_modifiedTable = alterSTMT.newTable;
+            }
+        } break;
+        case Syntax::Identifier::Type::CreateTableSTMT: {
+            const Syntax::CreateTableSTMT& createSTMT = static_cast<const Syntax::CreateTableSTMT&>(statement.syntax());
+            m_newTable = createSTMT.table;
+        } break;
+        case Syntax::Identifier::Type::CreateVirtualTableSTMT: {
+            const Syntax::CreateVirtualTableSTMT& createSTMT = static_cast<const Syntax::CreateVirtualTableSTMT&>(statement.syntax());
+            m_newTable = createSTMT.table;
+        } break;
+        default:
+            break;
+    }
 }
 
 bool HandleStatement::prepare(const UnsafeStringView &sql)
@@ -81,6 +124,13 @@ bool HandleStatement::step()
 
     int rc = sqlite3_step(m_stmt);
     m_done = rc == SQLITE_DONE;
+    
+    if(done() &&
+       getHandle()->needMonitorTable() &&
+       (!m_newTable.empty() || !m_modifiedTable.empty())){
+        getHandle()->postTableNotification(m_newTable, m_modifiedTable);
+    }
+    
     const char *sql = nullptr;
     if (isPrepared()) {
         // There will be privacy issues if use sqlite3_expanded_sql

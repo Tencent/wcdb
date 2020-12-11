@@ -73,6 +73,7 @@ public:
     //    Error::ExtCode getExtendedErrorCode();
     //    Error::Code getResultCode();
     int getChanges();
+    int getTotalChange();
     bool isReadonly();
     bool isInTransaction();
 
@@ -166,6 +167,12 @@ public:
 
     typedef HandleNotification::BusyNotification BusyNotification;
     void setNotificationWhenBusy(const BusyNotification &busyNotification);
+    
+    typedef HandleNotification::TableModifiedNotification TableModifiedNotification;
+    void setNotificationWhenTableModified(const UnsafeStringView &name, const TableModifiedNotification &tableModifiedNotification);
+    
+    void postTableNotification(const UnsafeStringView &newTable, const UnsafeStringView &modifiedTable);
+    bool needMonitorTable();
 
 private:
     HandleNotification m_notification;

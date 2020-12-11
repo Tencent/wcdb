@@ -65,6 +65,15 @@ void Handle::setType(HandleType type)
     }
 }
 
+void Handle::setErrorType(const UnsafeStringView& type)
+{
+    if(!type.empty()){
+        m_error.infos.insert_or_assign(ErrorStringKeyType, type);
+    }else{
+        m_error.infos.erase(ErrorStringKeyType);
+    }
+}
+
 #pragma mark - Config
 bool Handle::open()
 {
@@ -278,6 +287,19 @@ bool Handle::checkMainThreadBusyRetry()
         return false;
     }
     return config->checkMainThreadBusyRetry(getPath());
+}
+
+bool Handle::checkHasBusyRetry()
+{
+    const auto & element = m_pendings.find(StringView(BusyRetryConfigName));
+    if(element == m_pendings.end()){
+        return false;
+    }
+    std::shared_ptr<BusyRetryConfig> config = std::dynamic_pointer_cast<BusyRetryConfig>(element->value());
+    if(config == nullptr){
+        return false;
+    }
+    return config->checkHasBusyRetry(getPath());
 }
 
 bool Handle::runNestedTransaction(const TransactionCallback &transaction)

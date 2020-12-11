@@ -41,6 +41,7 @@ public:
     bool invoke(Handle* handle) override final;
     bool uninvoke(Handle* handle) override final;
     bool checkMainThreadBusyRetry(const UnsafeStringView& path);
+    bool checkHasBusyRetry(const UnsafeStringView& path);
 
 protected:
     bool onBusy(const UnsafeStringView& path, int numberOfTimes);
@@ -93,7 +94,7 @@ protected:
         bool wait(Trying& trying);
         StringView m_path;
         bool checkMainThreadBusyRetry();
-
+        bool checkHasBusyRetry();
     protected:
         bool shouldWait(const Expecting& expecting) const;
         bool localShouldWait(const Expecting& expecting) const;

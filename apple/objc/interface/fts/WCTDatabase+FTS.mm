@@ -49,6 +49,11 @@ static std::nullptr_t initialize()
 
 @implementation WCTDatabase (FTS)
 
+- (void)enableAutoMergeFTS5Index:(BOOL)enable
+{
+    WCDB::Core::shared().enableAutoMergeFTSIndex(_database, enable);
+}
+
 - (void)addTokenizer:(NSString*)tokenizerName
 {
     WCDB_ONCE(initialize());

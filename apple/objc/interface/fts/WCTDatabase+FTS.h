@@ -44,6 +44,8 @@ WCDB_EXTERN NSString* const WCTTokenizerOneWord_FTS5;
 
 @interface WCTDatabase (FTS)
 
+- (void)enableAutoMergeFTS5Index:(BOOL)enable;
+
 - (void)addTokenizer:(NSString*)tokenizerName;
 
 + (void)registerTokenizer:(const WCDB::TokenizerModule&)module named:(NSString*)name;

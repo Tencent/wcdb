@@ -42,6 +42,8 @@ static constexpr const double OperationQueueRateForTooManyFileDescriptors = 0.7;
 static constexpr const double OperationQueueTimeIntervalForCheckpoint = 10.0;
 #pragma mark - Operation Queue - Backup
 static constexpr const double OperationQueueTimeIntervalForBackup = 600.0;
+#pragma mark - Operation Queue - Merge FTS Index
+static constexpr const double OperationQueueTimeIntervalForMergeFTSIndex = 2.0;
 
 #pragma mark - Config - Auto Checkpoint
 static constexpr const char* AutoCheckpointConfigName = "com.Tencent.WCDB.Config.AutoCheckpoint";
@@ -49,6 +51,12 @@ static constexpr const char* AutoCheckpointConfigName = "com.Tencent.WCDB.Config
 static constexpr const char* AutoBackupConfigName = "com.Tencent.WCDB.Config.AutoBackup";
 #pragma mark - Config - Auto Migrate
 static constexpr const char* AutoMigrateConfigName = "com.Tencent.WCDB.Config.AutoMigrate";
+#pragma mark - Config - Auto Merge
+static constexpr const char* AutoMergeFTSIndexConfigName = "com.Tencent.WCDB.Config.AutoMergeFTSIndex";
+static constexpr const char* AutoMergeFTSIndexQueueName = "com.Tencent.WCDB.Queue.MergeIndex";
+static constexpr const int AutoMergeFTS5IndexMinSegmentCount = 4;
+static constexpr const double AutoMergeFTSIndexMaxExpectingDuration = 0.02;
+static constexpr const double AutoMergeFTSIndexMaxInitializeDuration = 0.005;
 #pragma mark - Config - Basic
 static constexpr const char* BasicConfigName = "com.Tencent.WCDB.Config.Basic";
 static constexpr const int BasicConfigBusyRetryMaxAllowedNumberOfTimes = 3;
@@ -149,6 +157,7 @@ static constexpr const char* ErrorTypeCheckpoint = "Checkpoint";
 static constexpr const char* ErrorTypeIntegrity = "Integrity";
 static constexpr const char* ErrorTypeBackup = "Backup";
 static constexpr const char* ErrorTypeAssemble = "Assemble";
+static constexpr const char* ErrorTypeMergeIndex = "MergeIndex";
 
 #pragma mark - Tag
 static constexpr const int TagInvalidValue = 0;

@@ -245,6 +245,12 @@
     return _handle->getChanges();
 }
 
+- (int)getTotalChanges
+{
+    WCTHandleAssert(return 0;);
+    return _handle->getTotalChange();
+}
+
 - (BOOL)isStatementReadonly
 {
     WCTHandleAssert(return NO;);

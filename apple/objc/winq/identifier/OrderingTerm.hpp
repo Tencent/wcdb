@@ -44,6 +44,7 @@ public:
     OrderingTerm& order(const Order& order);
 
     static const OrderingTerm& ascendingRowid();
+    static const OrderingTerm& descendingRowid();
 };
 
 } // namespace WCDB

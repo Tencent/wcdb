@@ -52,4 +52,11 @@ const OrderingTerm& OrderingTerm::ascendingRowid()
     return *s_ascendingRowid;
 }
 
+const OrderingTerm& OrderingTerm::descendingRowid()
+{
+    static const OrderingTerm* s_descendingRowid
+    = new OrderingTerm(OrderingTerm(Column::rowid()).order(WCDB::Order::DESC));
+    return *s_descendingRowid;
+}
+
 } // namespace WCDB

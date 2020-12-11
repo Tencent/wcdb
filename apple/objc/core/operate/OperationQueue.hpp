@@ -35,6 +35,7 @@
 #include <WCDB/AutoBackupConfig.hpp>
 #include <WCDB/AutoCheckpointConfig.hpp>
 #include <WCDB/AutoMigrateConfig.hpp>
+#include <WCDB/AutoMergeFTSIndexConfig.hpp>
 
 namespace WCDB {
 
@@ -49,6 +50,10 @@ protected:
     virtual void checkpointShouldBeOperated(const UnsafeStringView& path) = 0;
     virtual void integrityShouldBeChecked(const UnsafeStringView& path) = 0;
     virtual void purgeShouldBeOperated() = 0;
+    
+    using TableArray = AutoMergeFTSIndexOperator::TableArray;
+    virtual std::optional<bool>
+    mergeFTSIndexShouldBeOperated(const UnsafeStringView& path, TableArray newTables, TableArray modifiedTables) = 0;
 
     friend class OperationQueue;
 };
@@ -56,6 +61,7 @@ protected:
 class OperationQueue final : public AsyncQueue,
                              public AutoMigrateOperator,
                              public AutoBackupOperator,
+                             public AutoMergeFTSIndexOperator,
                              public AutoCheckpointOperator {
 public:
     OperationQueue(const UnsafeStringView& name, OperationEvent* event);
@@ -81,6 +87,7 @@ protected:
             Checkpoint,
             Backup,
             Migrate,
+            MergeIndex,
         };
 
         const Type type;
@@ -106,6 +113,8 @@ protected:
         int numberOfFailures;
         uint32_t identifier;
         uint32_t numberOfFileDescriptors;
+        TableArray newTables;
+        TableArray modifiedTables;
     };
     typedef struct Parameter Parameter;
 
@@ -125,6 +134,7 @@ protected:
         bool registeredForMigration;
         bool registeredForBackup;
         bool registeredForCheckpoint;
+        bool registeredForMergeFTSIndex;
     };
     typedef struct Record Record;
     StringViewMap<Record> m_records;
@@ -139,6 +149,16 @@ public:
 protected:
     void asyncMigrate(const UnsafeStringView& path, double delay, int numberOfFailures);
     void doMigrate(const UnsafeStringView& path, int numberOfFailures);
+
+#pragma mark - Merge FTS Index
+public:
+    using TableArray = AutoMergeFTSIndexOperator::TableArray;
+    void registerAsRequiredMergeFTSIndex(const UnsafeStringView& path);
+    void registerAsNoMergeFTSIndexRequired(const UnsafeStringView& path);
+    void asyncMergeFTSIndex(const UnsafeStringView& path, TableArray newTables, TableArray modifiedTables) override final;
+
+protected:
+    void doMergeFTSIndex(const UnsafeStringView& path, TableArray newTables, TableArray modifiedTables);
 
 #pragma mark - Backup
 public:
