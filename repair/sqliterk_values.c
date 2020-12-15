@@ -137,7 +137,7 @@ static int sqliterkValuesAutoGrow(sqliterk_values *values)
             newCapacity = oldCapacity * 2;
         }
         sqliterk_value *newValues =
-            sqliterkOSMalloc(sizeof(sqliterk_value) * (values->capacity + 1));
+            sqliterkOSMalloc(sizeof(sqliterk_value) * (newCapacity + 1));
         if (!newValues) {
             return SQLITERK_NOMEM;
         }
