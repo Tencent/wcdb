@@ -23,6 +23,7 @@
 
 #import <sqlcipher/sqlite3.h>
 #import <sqlcipher/fts3_tokenizer.h>
+#import <sqliterk/SQLiteRepairKit.h>
 
 struct Tokenizer {
     sqlite3_tokenizer base;
@@ -49,5 +50,7 @@ int sqlite3_config_memstatus(int);
 typedef void (*sqlite3_global_log)(void *, int, const char *);
 
 int sqlite3_config_log(sqlite3_global_log, void *);
+
+void sqliterk_cipher_conf_set_key(sqliterk_cipher_conf *conf, const void* key, int key_len);
 
 #endif /* SQLite_Bridging_h */

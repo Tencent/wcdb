@@ -19,4 +19,3 @@
  */
 
 #import <WCDBSwift/SQLite-Bridging.h>
-#import <sqliterk/SQLiteRepairKit.h>
