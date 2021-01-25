@@ -32,6 +32,7 @@ LOCAL_STATIC_LIBRARIES := \
 	wcdb-vfslog \
 	wcdb-fts \
 	wcdb-icucompat \
+	wcdb-safe-pcache \
 	sqlcipher \
 	crypto-static
 
@@ -102,11 +103,28 @@ LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*.cpp))
 include $(BUILD_STATIC_LIBRARY)
 
+# Safe PCache
+LOCAL_PATH := $(root_path)/android/jni/safe-pcache
+include $(CLEAR_VARS)
+LOCAL_MODULE := wcdb-safe-pcache
+LOCAL_CFLAGS := $(common_cflags) \
+	-DSQLITE_ENABLE_MEMORY_MANAGEMENT=1 \
+	-DSQLITE_THREADSAFE=2
+
+LOCAL_CPPFLAGS := $(common_cppflags)
+LOCAL_C_INCLUDES := $(common_c_includes) $(root_path)/sqlcipher/src
+LOCAL_SRC_FILES := \
+	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*.c)) \
+	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*.cpp))
+LOCAL_STATIC_LIBRARIES := sqlcipher
+include $(BUILD_STATIC_LIBRARY)
+
 # SQLCipher
 LOCAL_PATH := $(root_path)/android/sqlcipher
 include $(CLEAR_VARS)
 LOCAL_MODULE := sqlcipher
 LOCAL_CFLAGS := $(common_cflags) -Wno-unused -Wno-missing-braces \
+	-DSQLITE_PRIVATE= \
 	-DSQLITE_ENABLE_MEMORY_MANAGEMENT=1 \
 	-DHAVE_USLEEP=1 \
 	-DHAVE_FDATASYNC=1 \
@@ -132,6 +150,7 @@ LOCAL_CFLAGS := $(common_cflags) -Wno-unused -Wno-missing-braces \
 
 LOCAL_C_INCLUDES := $(common_c_includes)
 LOCAL_SRC_FILES := sqlite3.c
+LOCAL_STATIC_LIBRARIES := crypto-static
 include $(BUILD_STATIC_LIBRARY)
 
 # Prebuilt libcrypto

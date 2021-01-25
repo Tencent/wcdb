@@ -21,8 +21,8 @@
 #include "ModuleLoader.h"
 #include "Logger.h"
 #include <jni.h>
-#include <stdint.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 #define LOG_TAG "WCDB"
 

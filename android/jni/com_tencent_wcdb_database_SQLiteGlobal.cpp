@@ -33,6 +33,7 @@ extern "C" {
     int sqlcipher_set_default_kdf_algorithm(int algorithm);
     void sqlcipher_set_mem_security(int);
     int sqlite3_register_vfslog(const char *);
+    void sqlite3_register_safe_pcache();
 }
 extern volatile uint32_t vlogDefaultLogFlags;
 
@@ -127,6 +128,9 @@ static void sqliteInitialize()
 
     // Redirect SQLite log messages to the Android log.
     sqlite3_config(SQLITE_CONFIG_LOG, &sqliteLogCallback, (void *) 1);
+
+    // Use safe page cache.
+    sqlite3_register_safe_pcache();
 
     // The soft heap limit prevents the page cache allocations from growing
     // beyond the given limit, no matter what the max page cache sizes are
