@@ -869,7 +869,7 @@ extension TableInterface where Self: Core {
                 }
                 var keys = orm.allKeys
                 for columnName in columnNames {
-                    if let index = keys.index(where: { (key) -> Bool in
+                    if let index = keys.firstIndex(where: { (key) -> Bool in
                         return key.stringValue.caseInsensitiveCompare(columnName) == ComparisonResult.orderedSame
                     }) {
                         keys.remove(at: index)
