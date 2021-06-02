@@ -403,6 +403,8 @@ static int sqliterkBtreeParsePayload(sqliterk_btree *btree,
             }
             // Read data
             int overflowSize = payloadSize - payloadPointer;
+            if (overflowSize <= 0) break;
+
             int maxSize = sqliterkPagerGetUsableSize(btree->pager) - 4;
             if (overflowSize > maxSize) {
                 overflowSize = maxSize;

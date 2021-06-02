@@ -42,11 +42,10 @@ struct sqliterk_binary {
 };
 typedef union sqliterk_any sqliterk_any;
 union sqliterk_any {
-    sqliterk_integer *integer;
-    sqliterk_number *number;
-    sqliterk_text *text;
-    sqliterk_binary *binary;
-    void *memory;
+    sqliterk_integer integer;
+    sqliterk_number number;
+    sqliterk_text text;
+    sqliterk_binary binary;
 };
 
 struct sqliterk_value {
@@ -175,13 +174,13 @@ int64_t sqliterkValuesGetInteger64(sqliterk_values *values, int index)
         sqliterk_value *value = &values->values[index];
         switch (sqliterkValuesGetType(values, index)) {
             case sqliterk_value_type_integer:
-                out = (int64_t)(*value->any.integer);
+                out = (int64_t)(value->any.integer);
                 break;
             case sqliterk_value_type_number:
-                out = (int64_t)(*value->any.number);
+                out = (int64_t)(value->any.number);
                 break;
             case sqliterk_value_type_text:
-                out = atol(value->any.text->t);
+                out = atol(value->any.text.t);
                 break;
             default:
                 break;
@@ -202,13 +201,13 @@ double sqliterkValuesGetNumber(sqliterk_values *values, int index)
         sqliterk_value *value = &values->values[index];
         switch (sqliterkValuesGetType(values, index)) {
             case sqliterk_value_type_integer:
-                out = (double) (*value->any.integer);
+                out = (double) (value->any.integer);
                 break;
             case sqliterk_value_type_number:
-                out = (double) (*value->any.number);
+                out = (double) (value->any.number);
                 break;
             case sqliterk_value_type_text:
-                out = atof(value->any.text->t);
+                out = atof(value->any.text.t);
                 break;
             default:
                 break;
@@ -224,7 +223,7 @@ const char *sqliterkValuesGetText(sqliterk_values *values, int index)
         sqliterk_value *value = &values->values[index];
         switch (value->type) {
             case sqliterk_value_type_text:
-                out = value->any.text->t;
+                out = value->any.text.t;
                 break;
             default:
                 break;
@@ -240,7 +239,7 @@ const void *sqliterkValuesGetBinary(sqliterk_values *values, int index)
         sqliterk_value *value = &values->values[index];
         switch (value->type) {
             case sqliterk_value_type_binary:
-                out = value->any.binary->b;
+                out = value->any.binary.b;
                 break;
             default:
                 break;
@@ -256,10 +255,10 @@ int sqliterkValuesGetBytes(sqliterk_values *values, int index)
         sqliterk_value *value = &values->values[index];
         switch (value->type) {
             case sqliterk_value_type_binary:
-                out = value->any.binary->s;
+                out = value->any.binary.s;
                 break;
             case sqliterk_value_type_text:
-                out = value->any.text->s;
+                out = value->any.text.s;
                 break;
             default:
                 break;
@@ -279,18 +278,9 @@ int sqliterkValuesAddInteger64(sqliterk_values *values, int64_t i)
     }
     sqliterk_value *value = &values->values[values->count];
     value->type = sqliterk_value_type_integer;
-    value->any.integer = sqliterkOSMalloc(sizeof(sqliterk_integer));
-    if (!value->any.integer) {
-        rc = SQLITERK_NOMEM;
-        goto sqliterkValuesAddInteger64_Failed;
-    }
-    *value->any.integer = i;
+    value->any.integer = i;
     values->count++;
     return SQLITERK_OK;
-
-sqliterkValuesAddInteger64_Failed:
-    sqliterkValueClear(value);
-    return rc;
 }
 
 int sqliterkValuesAddInteger(sqliterk_values *values, int i)
@@ -309,18 +299,9 @@ int sqliterkValuesAddNumber(sqliterk_values *values, double d)
     }
     sqliterk_value *value = &values->values[values->count];
     value->type = sqliterk_value_type_number;
-    value->any.number = sqliterkOSMalloc(sizeof(sqliterk_number));
-    if (!value->any.number) {
-        rc = SQLITERK_NOMEM;
-        goto sqliterkValuesAddNumber_Failed;
-    }
-    *value->any.number = d;
+    value->any.number = d;
     values->count++;
     return SQLITERK_OK;
-
-sqliterkValuesAddNumber_Failed:
-    sqliterkValueClear(value);
-    return rc;
 }
 
 int sqliterkValuesAddText(sqliterk_values *values, const char *t)
@@ -341,19 +322,14 @@ int sqliterkValuesAddNoTerminatorText(sqliterk_values *values,
     }
     sqliterk_value *value = &values->values[values->count];
     value->type = sqliterk_value_type_text;
-    value->any.text = sqliterkOSMalloc(sizeof(sqliterk_text));
-    if (!value->any.text) {
+    value->any.text.s = s;
+    value->any.text.t = sqliterkOSMalloc(sizeof(char) * (s + 1));
+    if (!value->any.text.t) {
         rc = SQLITERK_NOMEM;
         goto sqliterkValuesAddNoTerminatorText_Failed;
     }
-    value->any.text->s = s;
-    value->any.text->t = sqliterkOSMalloc(sizeof(char) * (s + 1));
-    if (!value->any.text->t) {
-        rc = SQLITERK_NOMEM;
-        goto sqliterkValuesAddNoTerminatorText_Failed;
-    }
-    memcpy(value->any.text->t, t, s);
-    value->any.text->t[s] = '\0';
+    memcpy(value->any.text.t, t, s);
+    value->any.text.t[s] = '\0';
     values->count++;
     return SQLITERK_OK;
 
@@ -373,23 +349,14 @@ int sqliterkValuesAddBinary(sqliterk_values *values, const void *b, const int s)
     }
     sqliterk_value *value = &values->values[values->count];
     value->type = sqliterk_value_type_binary;
-    value->any.binary = sqliterkOSMalloc(sizeof(sqliterk_binary));
-    if (!value->any.binary) {
-        rc = SQLITERK_NOMEM;
-        goto sqliterkValuesAddBinary_Failed;
-    }
-    value->any.binary->s = s;
-    value->any.binary->b = sqliterkOSMalloc(sizeof(void *) * s);
-    if (!value->any.binary->b) {
+    value->any.binary.s = s;
+    value->any.binary.b = sqliterkOSMalloc(s);
+    if (!value->any.binary.b) {
         return SQLITERK_NOMEM;
     }
-    memcpy(value->any.binary->b, b, s);
+    memcpy(value->any.binary.b, b, s);
     values->count++;
     return SQLITERK_OK;
-
-sqliterkValuesAddBinary_Failed:
-    sqliterkValueClear(value);
-    return rc;
 }
 
 int sqliterkValuesAddNull(sqliterk_values *values)
@@ -403,7 +370,6 @@ int sqliterkValuesAddNull(sqliterk_values *values)
     }
     sqliterk_value *value = &values->values[values->count];
     value->type = sqliterk_value_type_null;
-    value->any.memory = NULL;
     values->count++;
     return SQLITERK_OK;
 }
@@ -413,26 +379,24 @@ int sqliterkValueClear(sqliterk_value *value)
     if (!value) {
         return SQLITERK_MISUSE;
     }
-    if (value->any.memory) {
-        switch (value->type) {
-            case sqliterk_value_type_text:
-                if (value->any.text->t) {
-                    sqliterkOSFree(value->any.text->t);
-                    value->any.text->t = NULL;
-                }
-                break;
-            case sqliterk_value_type_binary:
-                if (value->any.binary->b) {
-                    sqliterkOSFree(value->any.binary->b);
-                    value->any.binary->b = NULL;
-                }
-                break;
-            default:
-                break;
-        }
-        sqliterkOSFree(value->any.memory);
-        value->any.memory = NULL;
+
+    switch (value->type) {
+        case sqliterk_value_type_text:
+            if (value->any.text.t) {
+                sqliterkOSFree(value->any.text.t);
+                value->any.text.t = NULL;
+            }
+            break;
+        case sqliterk_value_type_binary:
+            if (value->any.binary.b) {
+                sqliterkOSFree(value->any.binary.b);
+                value->any.binary.b = NULL;
+            }
+            break;
+        default:
+            break;
     }
+
     value->type = sqliterk_value_type_null;
     return SQLITERK_OK;
 }
