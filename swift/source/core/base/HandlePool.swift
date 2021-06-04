@@ -45,7 +45,7 @@ public final class HandlePool {
 
     static func getExistingPool(with tag: Tag) throws -> RecyclableHandlePool {
         spin.lock(); defer { spin.unlock() }
-        guard let index = pools.index(where: { (arg) -> Bool in
+        guard let index = pools.firstIndex(where: { (arg) -> Bool in
             return arg.value.handlePool.tag == tag
         }) else {
             throw Error.reportCore(tag: tag,
@@ -72,7 +72,7 @@ public final class HandlePool {
     private static func getExistingPool(atIndex index: Dictionary<String, Wrap>.Index) -> RecyclableHandlePool {
         let node = pools[index]
         let path = node.key
-        var wrap = node.value
+        let wrap = node.value
         wrap.reference += 1
         return Recyclable(wrap.handlePool, onRecycled: {
             spin.lock(); defer { spin.unlock() }

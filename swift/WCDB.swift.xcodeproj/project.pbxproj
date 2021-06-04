@@ -534,7 +534,7 @@
 				TargetAttributes = {
 					238D0B021FAB1F4300BC2659 = {
 						CreatedOnToolsVersion = 9.0;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1220;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -899,6 +899,7 @@
 				STRIP_STYLE = debugging;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/source/util/WCDB-Bridging.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -924,6 +925,7 @@
 				SKIP_INSTALL = YES;
 				STRIP_STYLE = "non-global";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/source/util/WCDB-Bridging.h";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -1027,6 +1029,7 @@
 				SKIP_INSTALL = YES;
 				STRIP_STYLE = "non-global";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/source/util/WCDB-Bridging.h";
+				SWIFT_VERSION = 5.0;
 			};
 			name = WithoutBitcode;
 		};

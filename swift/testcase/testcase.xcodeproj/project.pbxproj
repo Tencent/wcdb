@@ -480,6 +480,7 @@
 				ORGANIZATIONNAME = tencent;
 				TargetAttributes = {
 					23516BB01FD033A900B465DD = {
+						LastSwiftMigration = 1220;
 						ProvisioningStyle = Automatic;
 					};
 					23516BE21FD033B700B465DD = {
@@ -658,6 +659,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = Info.plist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -668,6 +670,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = Info.plist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

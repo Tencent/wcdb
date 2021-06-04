@@ -88,8 +88,8 @@ public final class HandleStatement {
             sqlite3_bind_text_transient(stmt, Int32(index), value.stringValue, -1)
         case .BLOB:
             let data = value.dataValue
-            data.withUnsafeBytes ({ (bytes: UnsafePointer<Int8>) -> Void in
-                sqlite3_bind_blob_transient(stmt, Int32(index), bytes, Int32(data.count))
+            data.withUnsafeBytes ({ (bytes: UnsafeRawBufferPointer) -> Void in
+                sqlite3_bind_blob_transient(stmt, Int32(index), bytes.baseAddress, Int32(data.count))
             })
         case .null:
             sqlite3_bind_null(stmt, Int32(index))
@@ -113,8 +113,8 @@ public final class HandleStatement {
     }
 
     public func bind(_ value: Data, toIndex index: Int) {
-        value.withUnsafeBytes ({ (bytes: UnsafePointer<Int8>) -> Void in
-            sqlite3_bind_blob_transient(stmt, Int32(index), bytes, Int32(value.count))
+        value.withUnsafeBytes ({ (bytes: UnsafeRawBufferPointer) -> Void in
+            sqlite3_bind_blob_transient(stmt, Int32(index), bytes.baseAddress, Int32(value.count))
         })
     }
 
