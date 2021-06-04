@@ -45,3 +45,11 @@ int sqlite3_config_log(sqlite3_global_log a, void *b)
 {
     return sqlite3_config(SQLITE_CONFIG_LOG, a, b);
 }
+
+void sqliterk_cipher_conf_set_key(sqliterk_cipher_conf *conf, const void* key, int key_len)
+{
+    if (conf != NULL) {
+        conf->key = key;
+        conf->key_len = key_len;
+    }
+}
