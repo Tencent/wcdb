@@ -267,7 +267,7 @@
 - (void)test_virtual_table_fts5
 {
     self.tableClass = VirtualTableFTS5Object.class;
-    NSString* expected = @"CREATE VIRTUAL TABLE IF NOT EXISTS main.testTable USING fts5(tokenize = porter, value)";
+    NSString* expected = @"CREATE VIRTUAL TABLE IF NOT EXISTS main.testTable USING fts5(tokenize = 'porter', value)";
     [self doTestCreateVirtualTableSQLAsExpected:expected];
 }
 

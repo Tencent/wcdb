@@ -170,6 +170,7 @@ OperationQueue::Parameter::Parameter()
 
 void OperationQueue::onTimed(const Operation& operation, const Parameter& parameter)
 {
+    void* context = operationStart();
     switch (operation.type) {
     case Operation::Type::Migrate:
         doMigrate(operation.path, parameter.numberOfFailures);
@@ -195,6 +196,7 @@ void OperationQueue::onTimed(const Operation& operation, const Parameter& parame
         doBackup(operation.path);
         break;
     }
+    operationEnd(context);
 }
 
 void OperationQueue::async(const Operation& operation, double delay, const Parameter& parameter, AsyncMode mode)
