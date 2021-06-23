@@ -191,6 +191,9 @@ protected:
 
     void* registerNotificationWhenMemoryWarning();
     void unregisterNotificationWhenMemoryWarning(void* observer);
+                                 
+    void* operationStart();
+    void operationEnd(void* context);
 
     void* m_observerForMemoryWarning;
     SteadyClock m_lastPurge;

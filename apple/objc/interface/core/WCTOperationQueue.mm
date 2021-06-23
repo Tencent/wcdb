@@ -70,3 +70,19 @@ void OperationQueue::unregisterNotificationWhenMemoryWarning(void* observer)
 }
 
 #endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH
+
+namespace WCDB {
+
+void* OperationQueue::operationStart()
+{
+    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    return (void *) pool;
+}
+
+void OperationQueue::operationEnd(void *context)
+{
+    NSAutoreleasePool *pool = (__bridge NSAutoreleasePool *) context;
+    [pool drain];
+}
+
+}

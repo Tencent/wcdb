@@ -39,7 +39,7 @@
 		232741501F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		232741521F6FBD50004E96F7 /* WCTDatabase+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */; };
 		2327BC22220944D80078A85B /* Config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2327BC21220944D80078A85B /* Config.cpp */; };
-		232C6F03229C0A280046742F /* WCTOperationQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 232C6F00229C0A280046742F /* WCTOperationQueue.mm */; };
+		232C6F03229C0A280046742F /* WCTOperationQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 232C6F00229C0A280046742F /* WCTOperationQueue.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		23301BF52298FE9A00A8AB5A /* AutoMigrateConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23301BF32298FE9A00A8AB5A /* AutoMigrateConfig.cpp */; };
 		23301BF72298FE9A00A8AB5A /* AutoMigrateConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23301BF42298FE9A00A8AB5A /* AutoMigrateConfig.hpp */; };
 		23301BFB229A851800A8AB5A /* AutoBackupConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23301BF9229A851800A8AB5A /* AutoBackupConfig.hpp */; };
