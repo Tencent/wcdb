@@ -43,7 +43,8 @@ static constexpr const double OperationQueueTimeIntervalForCheckpoint = 10.0;
 #pragma mark - Operation Queue - Backup
 static constexpr const double OperationQueueTimeIntervalForBackup = 600.0;
 #pragma mark - Operation Queue - Merge FTS Index
-static constexpr const double OperationQueueTimeIntervalForMergeFTSIndex = 2.0;
+static constexpr const double OperationQueueTimeIntervalForMergeFTSIndex
+= 1.871; //Use prime numbers to reduce the probability of collision with external logic
 
 #pragma mark - Config - Auto Checkpoint
 static constexpr const char* AutoCheckpointConfigName = "com.Tencent.WCDB.Config.AutoCheckpoint";

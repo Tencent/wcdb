@@ -38,6 +38,7 @@ AbstractHandle::AbstractHandle()
 , m_transactionLevel(0)
 , m_transactionError(TransactionError::Allowed)
 , m_notification(this)
+, m_tableMonitorForbidden(false)
 , m_canBeSuspended(false)
 {
 }
@@ -550,7 +551,12 @@ void AbstractHandle::postTableNotification(const UnsafeStringView &newTable, con
 
 bool AbstractHandle::needMonitorTable()
 {
-    return m_notification.needMonitorTable();
+    return !m_tableMonitorForbidden && m_notification.needMonitorTable();
+}
+
+void AbstractHandle::setTableMonitorEnable(bool enable)
+{
+    m_tableMonitorForbidden = !enable;
 }
 
 #pragma mark - Error

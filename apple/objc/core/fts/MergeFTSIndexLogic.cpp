@@ -115,6 +115,7 @@ MergeFTSIndexLogic::triggerMerge(TableArray newTables, TableArray modifiedTables
     handle->markAsCanBeSuspended(true);
     handle->markErrorAsIgnorable(Error::Code::Busy);
     handle->setErrorType(ErrorTypeMergeIndex);
+    handle->setTableMonitorEnable(false);
     
     std::optional<bool> done = triggerMerge(*handle, newTables, modifiedTables);
     if (!done.has_value() && handle->getError().isIgnorable()) {
@@ -125,6 +126,7 @@ MergeFTSIndexLogic::triggerMerge(TableArray newTables, TableArray modifiedTables
     handle->markErrorAsUnignorable();
     handle->markAsCanBeSuspended(false);
     handle->markErrorAsUnignorable();
+    handle->setTableMonitorEnable(true);
     return done;
 }
 
@@ -178,6 +180,7 @@ void MergeFTSIndexLogic::proccessMerge()
     handle->markAsCanBeSuspended(true);
     handle->markErrorAsIgnorable(Error::Code::Busy);
     handle->setErrorType(ErrorTypeMergeIndex);
+    handle->setTableMonitorEnable(false);
     
     while(!table.empty()){
         
@@ -200,6 +203,7 @@ void MergeFTSIndexLogic::proccessMerge()
     handle->markErrorAsUnignorable();
     handle->markAsCanBeSuspended(false);
     handle->markErrorAsUnignorable();
+    handle->setTableMonitorEnable(true);
 }
 
 bool MergeFTSIndexLogic::mergeTable(Handle &handle, const StringView &table)
@@ -222,9 +226,9 @@ bool MergeFTSIndexLogic::mergeTable(Handle &handle, const StringView &table)
         }else{
             handle.reset();
         }
-        usleep(1000);
-    }while(handle.getTotalChange() - preChangeCount > 1);
-    
+        usleep(1229); //Use prime numbers to reduce the probability of collision with external logic
+    } while (handle.getTotalChange() - preChangeCount > 1);
+
     handle.finalize();
     delete [] callbackPointer;
     return true;
