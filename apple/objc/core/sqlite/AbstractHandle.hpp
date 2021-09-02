@@ -173,9 +173,11 @@ public:
     
     void postTableNotification(const UnsafeStringView &newTable, const UnsafeStringView &modifiedTable);
     bool needMonitorTable();
+    void setTableMonitorEnable(bool enable);
 
 private:
     HandleNotification m_notification;
+    bool m_tableMonitorForbidden;
 
 #pragma mark - Error
 public:
