@@ -357,3 +357,58 @@
 }
 
 @end
+
+@interface FTS3SymbolTests : TableTestCase
+
+@end
+
+@implementation FTS3SymbolTests
+
+- (void)setUp
+{
+    [super setUp];
+    self.expectMode = DatabaseTestCaseExpectFirstFewSQLs;
+    self.tableClass = FTS3SymbolObject.class;
+    self.isVirtualTable = YES;
+    [self.database addTokenizer:WCTTokenizerOneOrBinary];
+    TestCaseAssertTrue([self createTable]);
+
+    FTS3SymbolObject *dummy = [[FTS3SymbolObject alloc] init];
+    dummy.content = @"!@#$%^&*(()))_+";
+    TestCaseAssertTrue([self.table insertObject:dummy]);
+}
+
+- (void)test_symbol
+{
+    FTS3SymbolObject *content = [[FTS3SymbolObject alloc] init];
+    content.content = @"\"#￥%…'  '！@…&*";
+    TestCaseAssertTrue([self.table insertObject:content]);
+    content = [[FTS3SymbolObject alloc] init];
+    content.content = @"！@…&*'  '\"#￥%…";
+    TestCaseAssertTrue([self.table insertObject:content]);
+    NSArray *querys = @[ @"\"！@…&*'  '\"\"#￥%…\"", @"\"！@…&*'  '\"\"*\"" ];
+    for (NSString *query in querys) {
+        [self doTestObject:content
+                    andSQL:[NSString stringWithFormat:@"SELECT content FROM main.testTable WHERE content MATCH '%@' ORDER BY rowid ASC", [query stringByReplacingOccurrencesOfString:@"'" withString:@"''"]]
+               bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
+                   return [self.table getObjectsWhere:FTS3SymbolObject.content.match(query)];
+               }];
+    }
+
+    content = [[FTS3SymbolObject alloc] init];
+    content.content = @"abc*123_def@567";
+    TestCaseAssertTrue([self.table insertObject:content]);
+    content = [[FTS3SymbolObject alloc] init];
+    content.content = @"abc@123*def_567";
+    TestCaseAssertTrue([self.table insertObject:content]);
+    querys = @[ @"\"abc@123*def_567\"", @"\"abc@123*def\"*" ];
+    for (NSString *query in querys) {
+        [self doTestObject:content
+                    andSQL:[NSString stringWithFormat:@"SELECT content FROM main.testTable WHERE content MATCH '%@' ORDER BY rowid ASC", query]
+               bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
+                   return [self.table getObjectsWhere:FTS3SymbolObject.content.match(query)];
+               }];
+    }
+}
+
+@end

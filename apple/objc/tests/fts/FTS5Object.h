@@ -39,3 +39,10 @@ WCDB_PROPERTY(extension)
 WCDB_PROPERTY(content)
 
 @end
+
+@interface FTS5SymbolObject : NSObject <WCTTableCoding>
+
+@property (nonatomic, retain) NSString *content;
+WCDB_PROPERTY(content)
+
+@end

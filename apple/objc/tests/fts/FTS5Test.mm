@@ -332,3 +332,58 @@
 }
 
 @end
+
+@interface FTS5SymbolTests : TableTestCase
+
+@end
+
+@implementation FTS5SymbolTests
+
+- (void)setUp
+{
+    [super setUp];
+    self.expectMode = DatabaseTestCaseExpectFirstFewSQLs;
+    self.tableClass = FTS5SymbolObject.class;
+    self.isVirtualTable = YES;
+    [self.database addTokenizer:WCTTokenizerOneOrBinary_FTS5];
+    TestCaseAssertTrue([self createTable]);
+
+    FTS5SymbolObject *dummy = [[FTS5SymbolObject alloc] init];
+    dummy.content = @"!@#$%^&*(()))_+";
+    TestCaseAssertTrue([self.table insertObject:dummy]);
+}
+
+- (void)test_symbol
+{
+    FTS5SymbolObject *content = [[FTS5SymbolObject alloc] init];
+    content.content = @"\"#￥%…'  '！@…&*";
+    TestCaseAssertTrue([self.table insertObject:content]);
+    content = [[FTS5SymbolObject alloc] init];
+    content.content = @"！@…&*'  '\"#￥%…";
+    TestCaseAssertTrue([self.table insertObject:content]);
+    NSArray *querys = @[ @"\"！@…&*'  '\"\"#￥%…\"", @"\"！@…&*'  '\"\"\"*" ];
+    for (NSString *query in querys) {
+        [self doTestObject:content
+                    andSQL:[NSString stringWithFormat:@"SELECT content FROM main.testTable WHERE content MATCH '%@' ORDER BY rowid ASC", [query stringByReplacingOccurrencesOfString:@"'" withString:@"''"]]
+               bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
+                   return [self.table getObjectsWhere:FTS5SymbolObject.content.match(query)];
+               }];
+    }
+
+    content = [[FTS5SymbolObject alloc] init];
+    content.content = @"abc*123_def@567";
+    TestCaseAssertTrue([self.table insertObject:content]);
+    content = [[FTS5SymbolObject alloc] init];
+    content.content = @"abc@123*def_567";
+    TestCaseAssertTrue([self.table insertObject:content]);
+    querys = @[ @"\"abc@123*def_567\"", @"\"abc@123*def\"*" ];
+    for (NSString *query in querys) {
+        [self doTestObject:content
+                    andSQL:[NSString stringWithFormat:@"SELECT content FROM main.testTable WHERE content MATCH '%@' ORDER BY rowid ASC", query]
+               bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
+                   return [self.table getObjectsWhere:FTS5SymbolObject.content.match(query)];
+               }];
+    }
+}
+
+@end
