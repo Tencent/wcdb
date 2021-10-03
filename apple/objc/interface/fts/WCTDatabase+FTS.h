@@ -29,6 +29,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 WCDB_EXTERN NSString* const WCTModuleFTS3;
+WCDB_EXTERN NSString* const WCTModuleFTS4;
 WCDB_EXTERN NSString* const WCTModuleFTS5;
 
 WCDB_EXTERN NSString* const WCTTokenizerSimple;

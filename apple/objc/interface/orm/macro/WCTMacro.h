@@ -154,5 +154,7 @@
 #define WCDB_VIRTUAL_TABLE_TOKENIZE_WITH_PARAMETERS(tokenizeName, ...) \
     __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(WCTFTSTokenizerUtil::tokenize(tokenizeName, __VA_ARGS__, nullptr))
 
+#define WCDB_VIRTUAL_TABLE_EXTERNAL_CONTENT(tableName) __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(WCDB::StatementCreateVirtualTable::externalContent(tableName))
+
 #define WCDB_VIRTUAL_TABLE_MODULE(moduleName) \
     __WCDB_VIRTUAL_TABLE_MODULE_IMP(moduleName)

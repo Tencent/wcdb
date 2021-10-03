@@ -39,6 +39,7 @@ NSString* const WCTTokenizerParameter_PinYin = @"pin_yin";
 NSString* const WCTTokenizerParameter_NeedSymbol = @"need_symbol";
 
 NSString* const WCTModuleFTS3 = @"fts3";
+NSString* const WCTModuleFTS4 = @"fts4";
 NSString* const WCTModuleFTS5 = @"fts5";
 
 static NSDictionary* g_pinyinDict = nil;

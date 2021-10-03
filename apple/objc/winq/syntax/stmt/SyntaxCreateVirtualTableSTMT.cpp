@@ -79,9 +79,9 @@ bool CreateVirtualTableSTMT::describle(std::ostringstream& stream) const
             }
         }
         if (!notIndexedColumn.empty()) {
-            stream << ", notindexed =";
             for (const auto& column : notIndexedColumn) {
-                stream << " " << column;
+                stream << ", notindexed=";
+                stream << column;
             }
         }
         stream << ")";

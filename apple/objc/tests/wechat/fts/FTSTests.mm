@@ -160,7 +160,14 @@
 
     WCDB::StatementCreateVirtualTable& statement = const_cast<WCTBinding&>([[self getIndexORMClass] objectRelationalMapping]).statementVirtualTable;
     WCDB::Syntax::CreateVirtualTableSTMT& statementSyntax = statement.syntax();
-    statementSyntax.arguments.clear();
+    auto iter = statementSyntax.arguments.begin();
+    while (iter != statementSyntax.arguments.end()) {
+        if (iter->find(WCDB::Syntax::CreateVirtualTableSTMT::tokenizerPreFix()) == 0) {
+            iter = statementSyntax.arguments.erase(iter);
+        } else {
+            ++iter;
+        }
+    }
     statementSyntax.arguments.push_back(WCDB::StringView(m_tokenizer.UTF8String));
 
     [self.factory.database addTokenizer:[self tokenizerName]];
@@ -262,11 +269,11 @@
     NSArray<NSNumber*>* testCase;
 
     int tkId = [self getTokenizerIdWithNeedBinary:YES needPinyin:NO needSymbol:NO];
-    testCase = [self genTestCaseConfigDataType:FTSDataType_FTS5 tableCount:4 tokenizerId:tkId quality:10000 optimizeLevel:2 querylevel:3 queryTimes:10 queryType:0 needMultiThread:NO];
+    testCase = [self genTestCaseConfigDataType:FTSDataType_FTS5 tableCount:4 tokenizerId:tkId quality:1000 optimizeLevel:2 querylevel:3 queryTimes:10 queryType:0 needMultiThread:NO];
     [testCases addObject:testCase];
 
     tkId = [self getTokenizerIdWithNeedBinary:YES needPinyin:NO needSymbol:NO];
-    testCase = [self genTestCaseConfigDataType:FTSDataType_FTS3 tableCount:4 tokenizerId:tkId quality:10000 optimizeLevel:-1 querylevel:3 queryTimes:10 queryType:0 needMultiThread:NO];
+    testCase = [self genTestCaseConfigDataType:FTSDataType_FTS3 tableCount:4 tokenizerId:tkId quality:1000 optimizeLevel:-1 querylevel:3 queryTimes:10 queryType:0 needMultiThread:NO];
     [testCases addObject:testCase];
 
     for (NSArray<NSNumber*>* config in testCases) {
