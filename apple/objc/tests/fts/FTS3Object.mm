@@ -46,3 +46,22 @@ WCDB_VIRTUAL_TABLE_TOKENIZE(WCTTokenizerOneOrBinary)
 }
 
 @end
+
+@implementation FTS3SymbolObject
+
+WCDB_IMPLEMENTATION(FTS3SymbolObject)
+WCDB_SYNTHESIZE(content)
+
+WCDB_VIRTUAL_TABLE_MODULE(WCTModuleFTS3)
+WCDB_VIRTUAL_TABLE_TOKENIZE_WITH_PARAMETERS(WCTTokenizerOneOrBinary, WCTTokenizerParameter_NeedSymbol, WCTTokenizerParameter_OneWord)
+
+- (BOOL)isEqual:(NSObject*)object
+{
+    if (object.class != self.class) {
+        return NO;
+    }
+    FTS3SymbolObject* other = (FTS3SymbolObject*) object;
+    return [NSObject isObject:self.content nilEqualToObject:other.content];
+}
+
+@end

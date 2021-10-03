@@ -23,10 +23,18 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <WCDB/WCDB.h>
 
 @interface FTS3Object : NSObject
 
 @property (nonatomic, retain) NSString *content;
 @property (nonatomic, retain) NSString *extension;
+
+@end
+
+@interface FTS3SymbolObject : NSObject <WCTTableCoding>
+
+@property (nonatomic, retain) NSString *content;
+WCDB_PROPERTY(content)
 
 @end

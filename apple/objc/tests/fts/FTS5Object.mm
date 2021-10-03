@@ -64,3 +64,22 @@ WCDB_VIRTUAL_TABLE_TOKENIZE_WITH_PARAMETERS(WCTTokenizerOneOrBinary_FTS5, WCTTok
 }
 
 @end
+
+@implementation FTS5SymbolObject
+
+WCDB_IMPLEMENTATION(FTS5SymbolObject)
+WCDB_SYNTHESIZE(content)
+
+WCDB_VIRTUAL_TABLE_MODULE(WCTModuleFTS5)
+WCDB_VIRTUAL_TABLE_TOKENIZE_WITH_PARAMETERS(WCTTokenizerOneOrBinary_FTS5, WCTTokenizerParameter_OneWord, WCTTokenizerParameter_NeedSymbol)
+
+- (BOOL)isEqual:(NSObject*)object
+{
+    if (object.class != self.class) {
+        return NO;
+    }
+    FTS5SymbolObject* other = (FTS5SymbolObject*) object;
+    return [NSObject isObject:self.content nilEqualToObject:other.content];
+}
+
+@end
