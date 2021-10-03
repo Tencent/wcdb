@@ -67,4 +67,9 @@ StatementCreateVirtualTable& StatementCreateVirtualTable::argument(const SQL& ar
     return *this;
 }
 
+StringView StatementCreateVirtualTable::externalContent(const UnsafeStringView& tableName)
+{
+    return StringView::formatted("content='%s'", tableName.data());
+}
+
 } // namespace WCDB
