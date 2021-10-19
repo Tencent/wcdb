@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
 #import "FTS5Object.h"
 #import "TestCase.h"
+#import <Foundation/Foundation.h>
 
 @implementation FTS5Object
 

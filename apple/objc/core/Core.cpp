@@ -272,12 +272,13 @@ void Core::enableAutoMigration(Database* database, bool enable)
 }
 
 #pragma mark - Merge FTS Index
-void Core::enableAutoMergeFTSIndex(Database *database, bool enable)
+void Core::enableAutoMergeFTSIndex(Database* database, bool enable)
 {
     WCTAssert(database != nullptr);
     if (enable) {
-        database->setConfig(
-        AutoMergeFTSIndexConfigName, m_AutoMergeFTSConfig, WCDB::Configs::Priority::Highest);
+        database->setConfig(AutoMergeFTSIndexConfigName,
+                            m_AutoMergeFTSConfig,
+                            WCDB::Configs::Priority::Highest);
         m_operationQueue->registerAsRequiredMergeFTSIndex(database->getPath());
         m_operationQueue->asyncMergeFTSIndex(database->getPath(), nullptr, nullptr);
     } else {
@@ -286,7 +287,9 @@ void Core::enableAutoMergeFTSIndex(Database *database, bool enable)
     }
 }
 
-std::optional<bool> Core::mergeFTSIndexShouldBeOperated(const UnsafeStringView &path, TableArray newTables,TableArray modifiedTables)
+std::optional<bool> Core::mergeFTSIndexShouldBeOperated(const UnsafeStringView& path,
+                                                        TableArray newTables,
+                                                        TableArray modifiedTables)
 {
     RecyclableDatabase database = m_databasePool.getOrCreate(path);
     std::optional<bool> done = false; // mark as no error if database is not referenced.

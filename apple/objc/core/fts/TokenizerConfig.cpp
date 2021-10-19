@@ -24,9 +24,9 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Handle.hpp>
+#include <WCDB/SQLite.h>
 #include <WCDB/TokenizerConfig.hpp>
 #include <WCDB/TokenizerModules.hpp>
-#include <WCDB/SQLite.h>
 
 namespace WCDB {
 
@@ -41,7 +41,7 @@ TokenizerConfig::TokenizerConfig(const UnsafeStringView& name_,
   Expression::function("fts5").invoke().arguments(BindParameter::bindParameters(1))))
 {
     size_t pos = name.find(" ");
-    if(pos != std::string::npos){
+    if (pos != std::string::npos) {
         name = StringView(name.data(), pos);
     }
 }
@@ -52,7 +52,7 @@ bool TokenizerConfig::invoke(Handle* handle)
 {
     const TokenizerModule* module = m_modules->get(name);
     WCTRemedialAssert(module != nullptr, "Module does not exist.", return true;);
-    if(module->getFts3Module() != nullptr){
+    if (module->getFts3Module() != nullptr) {
         auto exists = handle->ft3TokenizerExists(name);
         if (!exists.has_value()) {
             return false;
@@ -64,31 +64,36 @@ bool TokenizerConfig::invoke(Handle* handle)
         if (handle->prepare(m_fts3Statement)) {
             handle->bindText(name, 1);
             FTS3TokenizerModule* fts3Module = module->getFts3Module().get();
-            UnsafeData address((unsigned char*)&fts3Module, sizeof(unsigned char*));
+            UnsafeData address((unsigned char*) &fts3Module, sizeof(unsigned char*));
             handle->bindBLOB(address, 2);
             succeed = handle->step();
             handle->finalize();
         }
         return succeed;
-    }else{
-        fts5_api *api = nullptr;
-        if(handle->prepare(m_fts5Statement)){
+    } else {
+        fts5_api* api = nullptr;
+        if (handle->prepare(m_fts5Statement)) {
             const UnsafeStringView type = "fts5_api_ptr";
-            handle->bindPointer((void*)&api, 1, type, nullptr);
-            if(!handle->step() || api == nullptr){
+            handle->bindPointer((void*) &api, 1, type, nullptr);
+            if (!handle->step() || api == nullptr) {
                 handle->finalize();
                 return false;
             }
             handle->finalize();
         }
         void* pCtx = nullptr;
-        fts5_tokenizer *pTokenizer = new fts5_tokenizer();
-        if(api->xFindTokenizer(api, name.data(), &pCtx, pTokenizer) == SQLITE_OK){
+        fts5_tokenizer* pTokenizer = new fts5_tokenizer();
+        if (api->xFindTokenizer(api, name.data(), &pCtx, pTokenizer) == SQLITE_OK) {
             delete pTokenizer;
             return true;
         }
         delete pTokenizer;
-        if(api->xCreateTokenizer(api, name.data(), module->getFts5Module()->getContext(), (fts5_tokenizer*)module->getFts5Module().get(), nullptr) != SQLITE_OK){
+        if (api->xCreateTokenizer(api,
+                                  name.data(),
+                                  module->getFts5Module()->getContext(),
+                                  (fts5_tokenizer*) module->getFts5Module().get(),
+                                  nullptr)
+            != SQLITE_OK) {
             return false;
         }
         return true;

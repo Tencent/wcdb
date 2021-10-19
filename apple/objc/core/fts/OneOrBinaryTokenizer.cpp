@@ -34,11 +34,10 @@ namespace WCDB {
 
 #pragma mark - Tokenizer Info
 OneOrBinaryTokenizerInfo::OneOrBinaryTokenizerInfo(int argc, const char *const *argv)
-: AbstractFTS3TokenizerInfo(argc, argv)
-, m_needBinary(true)
+: AbstractFTS3TokenizerInfo(argc, argv), m_needBinary(true)
 {
-    for(int i = 0; i < argc; i++){
-        if(strcmp(argv[i], "just_one") == 0){
+    for (int i = 0; i < argc; i++) {
+        if (strcmp(argv[i], "just_one") == 0) {
             m_needBinary = false;
         }
     }
@@ -48,8 +47,8 @@ OneOrBinaryTokenizerInfo::~OneOrBinaryTokenizerInfo() = default;
 
 #pragma mark - Tokenizer
 OneOrBinaryTokenizer::OneOrBinaryTokenizer(const char *input,
-                                                               int inputLength,
-                                                               AbstractFTS3TokenizerInfo *tokenizerInfo)
+                                           int inputLength,
+                                           AbstractFTS3TokenizerInfo *tokenizerInfo)
 : AbstractFTS3TokenizerCursorInfo(input, inputLength, tokenizerInfo)
 , AbstractFTS5Tokenizer(nullptr, nullptr, 0)
 , m_input(input)
@@ -74,8 +73,9 @@ OneOrBinaryTokenizer::OneOrBinaryTokenizer(const char *input,
     if (m_inputLength < 0) {
         m_inputLength = (int) strlen(m_input);
     }
-    OneOrBinaryTokenizerInfo* oneOrBinaryInfo = dynamic_cast<OneOrBinaryTokenizerInfo*>(tokenizerInfo);
-    if(oneOrBinaryInfo != nullptr){
+    OneOrBinaryTokenizerInfo *oneOrBinaryInfo
+    = dynamic_cast<OneOrBinaryTokenizerInfo *>(tokenizerInfo);
+    if (oneOrBinaryInfo != nullptr) {
         m_needBinary = oneOrBinaryInfo->m_needBinary;
     }
 }
@@ -97,8 +97,8 @@ OneOrBinaryTokenizer::OneOrBinaryTokenizer(void *pCtx, const char **azArg, int n
 , m_bufferLength(0)
 , m_needBinary(true)
 {
-    for(int i = 0; i < nArg; i++){
-        if(strcmp(azArg[i], "just_one") == 0){
+    for (int i = 0; i < nArg; i++) {
+        if (strcmp(azArg[i], "just_one") == 0) {
             m_needBinary = false;
         }
     }
@@ -275,7 +275,7 @@ int OneOrBinaryTokenizer::cursorSetup()
         for (int i = m_cursor + 1; i < m_cursor + m_cursorTokenLength; ++i) {
             if (i < m_inputLength) {
                 WCTAssert(((unicode << 6) >> 6) == unicode);
-                unicode = (UnicodeChar)(((int) unicode << 6) | (m_input[i] & 0x3F));
+                unicode = (UnicodeChar) (((int) unicode << 6) | (m_input[i] & 0x3F));
             } else {
                 m_cursorTokenType = TokenType::None;
                 m_cursorTokenLength = m_inputLength - i;
@@ -324,7 +324,7 @@ void OneOrBinaryTokenizer::subTokensStep()
     if (m_subTokensDoubleChar) {
         if (m_subTokensLengthArray.size() > 1) {
             m_bufferLength += m_subTokensLengthArray[1];
-            if(m_needBinary){
+            if (m_needBinary) {
                 m_subTokensDoubleChar = false;
             }
         } else {
@@ -333,7 +333,7 @@ void OneOrBinaryTokenizer::subTokensStep()
     } else {
         m_subTokensCursor += m_subTokensLengthArray[0];
         m_subTokensLengthArray.erase(m_subTokensLengthArray.begin());
-        if(m_needBinary){
+        if (m_needBinary) {
             m_subTokensDoubleChar = true;
         }
     }

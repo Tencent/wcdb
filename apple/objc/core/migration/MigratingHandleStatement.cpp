@@ -422,7 +422,10 @@ void MigratingHandleStatement::bindNull(int index)
     }
 }
 
-void MigratingHandleStatement::bindPointer(void *ptr, int index, const Text &type, void(*destructor)(void*))
+void MigratingHandleStatement::bindPointer(void* ptr,
+                                           int index,
+                                           const Text& type,
+                                           void (*destructor)(void*))
 {
     Super::bindPointer(ptr, index, type, destructor);
     if (m_additionalStatement->isPrepared()) {

@@ -42,9 +42,8 @@ typedef NS_ENUM(NSUInteger, FTSDataType) {
 @property (nonatomic, assign) int autoMergeCount;
 @property (nonatomic, assign) BOOL needBinary;
 
--(NSString*)indexTableNameOf:(int)tableId;
+- (NSString*)indexTableNameOf:(int)tableId;
 
 @end
 
 NS_ASSUME_NONNULL_END
-

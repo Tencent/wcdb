@@ -34,8 +34,8 @@
 
 #include <WCDB/AutoBackupConfig.hpp>
 #include <WCDB/AutoCheckpointConfig.hpp>
-#include <WCDB/AutoMigrateConfig.hpp>
 #include <WCDB/AutoMergeFTSIndexConfig.hpp>
+#include <WCDB/AutoMigrateConfig.hpp>
 
 namespace WCDB {
 
@@ -50,10 +50,11 @@ protected:
     virtual void checkpointShouldBeOperated(const UnsafeStringView& path) = 0;
     virtual void integrityShouldBeChecked(const UnsafeStringView& path) = 0;
     virtual void purgeShouldBeOperated() = 0;
-    
+
     using TableArray = AutoMergeFTSIndexOperator::TableArray;
     virtual std::optional<bool>
-    mergeFTSIndexShouldBeOperated(const UnsafeStringView& path, TableArray newTables, TableArray modifiedTables) = 0;
+    mergeFTSIndexShouldBeOperated(const UnsafeStringView& path, TableArray newTables, TableArray modifiedTables)
+    = 0;
 
     friend class OperationQueue;
 };
@@ -155,7 +156,9 @@ public:
     using TableArray = AutoMergeFTSIndexOperator::TableArray;
     void registerAsRequiredMergeFTSIndex(const UnsafeStringView& path);
     void registerAsNoMergeFTSIndexRequired(const UnsafeStringView& path);
-    void asyncMergeFTSIndex(const UnsafeStringView& path, TableArray newTables, TableArray modifiedTables) override final;
+    void asyncMergeFTSIndex(const UnsafeStringView& path,
+                            TableArray newTables,
+                            TableArray modifiedTables) override final;
 
 protected:
     void doMergeFTSIndex(const UnsafeStringView& path, TableArray newTables, TableArray modifiedTables);
@@ -191,7 +194,7 @@ protected:
 
     void* registerNotificationWhenMemoryWarning();
     void unregisterNotificationWhenMemoryWarning(void* observer);
-                                 
+
     void* operationStart();
     void operationEnd(void* context);
 

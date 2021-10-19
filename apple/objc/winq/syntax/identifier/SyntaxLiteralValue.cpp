@@ -58,7 +58,7 @@ bool LiteralValue::describle(std::ostringstream& stream) const
         //The precision of float is 6
         stream.precision(6);
         stream << floatValue;
-            break;
+        break;
     case Switch::Double:
         //The precision of double is 15
         stream.precision(15);

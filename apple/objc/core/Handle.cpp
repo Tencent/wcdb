@@ -65,11 +65,11 @@ void Handle::setType(HandleType type)
     }
 }
 
-void Handle::setErrorType(const UnsafeStringView& type)
+void Handle::setErrorType(const UnsafeStringView &type)
 {
-    if(!type.empty()){
+    if (!type.empty()) {
         m_error.infos.insert_or_assign(ErrorStringKeyType, type);
-    }else{
+    } else {
         m_error.infos.erase(ErrorStringKeyType);
     }
 }
@@ -234,7 +234,7 @@ void Handle::bindNull(int index)
     m_mainStatement->bindNull(index);
 }
 
-void Handle::bindPointer(void *ptr, int index, const Text &type, void(*destructor)(void*))
+void Handle::bindPointer(void *ptr, int index, const Text &type, void (*destructor)(void *))
 {
     m_mainStatement->bindPointer(ptr, index, type, destructor);
 }
@@ -291,12 +291,13 @@ bool Handle::checkMainThreadBusyRetry()
 
 bool Handle::checkHasBusyRetry()
 {
-    const auto & element = m_pendings.find(StringView(BusyRetryConfigName));
-    if(element == m_pendings.end()){
+    const auto &element = m_pendings.find(StringView(BusyRetryConfigName));
+    if (element == m_pendings.end()) {
         return false;
     }
-    std::shared_ptr<BusyRetryConfig> config = std::dynamic_pointer_cast<BusyRetryConfig>(element->value());
-    if(config == nullptr){
+    std::shared_ptr<BusyRetryConfig> config
+    = std::dynamic_pointer_cast<BusyRetryConfig>(element->value());
+    if (config == nullptr) {
         return false;
     }
     return config->checkHasBusyRetry(getPath());

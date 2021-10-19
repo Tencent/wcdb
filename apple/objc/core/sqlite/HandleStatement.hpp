@@ -40,7 +40,7 @@ public:
 
     HandleStatement(HandleStatement &&other);
     HandleStatement(AbstractHandle *handle);
-    
+
     void enableTableMonitor();
 
     virtual ~HandleStatement() override;
@@ -64,7 +64,8 @@ public:
     virtual void bindText(const Text &value, int index);
     virtual void bindBLOB(const BLOB &value, int index);
     virtual void bindNull(int index);
-    virtual void bindPointer(void *ptr, int index, const Text &type, void(*destructor)(void*));
+    virtual void
+    bindPointer(void *ptr, int index, const Text &type, void (*destructor)(void *));
     int bindParameterIndex(const Text &parameterName);
 
     virtual Integer getInteger(int index);

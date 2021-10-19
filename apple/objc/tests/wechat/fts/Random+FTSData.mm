@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
 #import "Random+FTSData.h"
+#import <Foundation/Foundation.h>
 
 @implementation Random (FTSData)
 
@@ -37,15 +37,15 @@
         item.msgLocalId = ++g_localId;
         item.createTime = (UInt32)[random.date timeIntervalSince1970];
         item.userNameId = random.uint8 % 100;
-        if(i % 3 == 0){
+        if (i % 3 == 0) {
             item.msg = [random.chineseString stringByReplacingCharactersInRange:NSMakeRange(40, 8) withString:@"我们批量测试内容"];
-        }else{
+        } else {
             item.msg = random.chineseString;
         }
-        if(g_localId % 1000 == 0){
+        if (g_localId % 1000 == 0) {
             item.msg = [item.msg stringByReplacingCharactersInRange:NSMakeRange(60, 8) withString:@"中等规模随机命中"];
         }
-        
+
         [itemList addObject:item];
     }
     return itemList;
@@ -61,12 +61,12 @@
         item.msgLocalId = ++g_localId;
         item.createTime = (UInt32)[random.date timeIntervalSince1970];
         item.userNameId = random.uint8 % 100;
-        if(i % 3 == 0){
+        if (i % 3 == 0) {
             item.msg = [random.chineseString stringByReplacingCharactersInRange:NSMakeRange(40, 8) withString:@"我们批量测试内容"];
-        }else{
+        } else {
             item.msg = random.chineseString;
         }
-        if(g_localId % 1000 == 0){
+        if (g_localId % 1000 == 0) {
             item.msg = [item.msg stringByReplacingCharactersInRange:NSMakeRange(60, 8) withString:@"中等规模随机命中"];
         }
         [itemList addObject:item];

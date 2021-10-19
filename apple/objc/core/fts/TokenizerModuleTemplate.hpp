@@ -33,11 +33,13 @@ template<typename TokenizerInfo, typename TokenizerCursorInfo>
 class FTS3TokenizerModuleTemplate final : protected AbstractFTS3TokenizerModuleTemplate {
 public:
     static_assert(std::is_base_of<AbstractFTS3TokenizerInfo, TokenizerInfo>::value, "");
-    static_assert(std::is_base_of<AbstractFTS3TokenizerCursorInfo, TokenizerCursorInfo>::value, "");
+    static_assert(std::is_base_of<AbstractFTS3TokenizerCursorInfo, TokenizerCursorInfo>::value,
+                  "");
 
     static TokenizerModule specialize()
     {
-        return TokenizerModule(std::make_shared<FTS3TokenizerModule>(create, destroy, open, close, next));
+        return TokenizerModule(std::make_shared<FTS3TokenizerModule>(
+        create, destroy, open, close, next));
     }
 
     static int create(int argc, const char *const *argv, Tokenizer **ppTokenizer)
@@ -115,14 +117,17 @@ class FTS5TokenizerModuleTemplate final : protected AbstractFTS5TokenizerModuleT
 public:
     static_assert(std::is_base_of<AbstractFTS5Tokenizer, Fts5Tokenizer>::value, "");
 
-    static TokenizerModule specializeWithContext(void* pCtx)
+    static TokenizerModule specializeWithContext(void *pCtx)
     {
-        return TokenizerModule(std::make_shared<FTS5TokenizerModule>(create, destroy, tokenize, pCtx));
+        return TokenizerModule(
+        std::make_shared<FTS5TokenizerModule>(create, destroy, tokenize, pCtx));
     }
 
-    static int create(void* pCtx, const char **azArg, int nArg, AbstractFTS5Tokenizer **ppTokenizer)
+    static int
+    create(void *pCtx, const char **azArg, int nArg, AbstractFTS5Tokenizer **ppTokenizer)
     {
-        *ppTokenizer = static_cast<AbstractFTS5Tokenizer*>(new Fts5Tokenizer(pCtx, azArg, nArg)) ;
+        *ppTokenizer
+        = static_cast<AbstractFTS5Tokenizer *>(new Fts5Tokenizer(pCtx, azArg, nArg));
         return OK();
     }
 
@@ -132,18 +137,13 @@ public:
         return OK();
     }
 
-    static int tokenize(AbstractFTS5Tokenizer *pTokenizer,
-                         void *pCtx,
-                         int flags,
-                         const char *pText, int nText,
-                         int (*xToken)(
-                           void *pCtx,
-                           int tflags,
-                           const char *pToken,
-                           int nToken,
-                           int iStart,
-                           int iEnd
-                         ))
+    static int
+    tokenize(AbstractFTS5Tokenizer *pTokenizer,
+             void *pCtx,
+             int flags,
+             const char *pText,
+             int nText,
+             int (*xToken)(void *pCtx, int tflags, const char *pToken, int nToken, int iStart, int iEnd))
     {
         int rc;
         const char *pToken;
@@ -152,13 +152,14 @@ public:
         int iEnd;
         int tflags;
         pTokenizer->loadInput(flags, pText, nText);
-        while((rc = pTokenizer->nextToken(&tflags, &pToken, &nToken, &iStart, &iEnd)) == OK()){
+        while ((rc = pTokenizer->nextToken(&tflags, &pToken, &nToken, &iStart, &iEnd))
+               == OK()) {
             rc = xToken(pCtx, tflags, pToken, nToken, iStart, iEnd);
-            if(!isOK(rc)){
+            if (!isOK(rc)) {
                 break;
             }
         }
-        if(isDone(rc)){
+        if (isDone(rc)) {
             return OK();
         }
         return rc;

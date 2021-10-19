@@ -22,16 +22,15 @@
  * limitations under the License.
  */
 
-
-#import "TestCase.h"
 #import "FTSData.h"
 #import "FTSFactory.h"
+#import "TestCase.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface FTSTests : Benchmark
-@property(nonatomic, retain) NSString* assistTableName;
-@property(nonatomic, readonly) FTSFactory* factory;
+@property (nonatomic, retain) NSString* assistTableName;
+@property (nonatomic, readonly) FTSFactory* factory;
 
 @end
 

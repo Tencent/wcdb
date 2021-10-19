@@ -55,7 +55,7 @@
     tableConstraint.unique().indexed(self.propertyName.asIndex().order(order_)); \
     __WCDB_TABLE_CONSTRAINT_END(constraintName, propertyName)
 
-#define __WCDB_WITHOUT_ROWID \
+#define __WCDB_WITHOUT_ROWID                                                   \
     +(void) WCDB_ORM_UNIQUE(WCDB_ORM_TYPE_TABLE_CONSTRAINT)                    \
     {                                                                          \
         WCDB::StatementCreateTable& statement = binding.statementTable;        \

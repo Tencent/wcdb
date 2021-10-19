@@ -273,14 +273,14 @@
     return [NSString stringWithUTF8String:result];
 }
 
--(NSString*)chineseString
+- (NSString *)chineseString
 {
     NSStringEncoding gbkEncoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
     NSMutableString *string = [NSMutableString string];
-    for (int i = 0; i < self.length; i ++) {
+    for (int i = 0; i < self.length; i++) {
         UInt8 randomH = 0xA1 + self.uint8 % (0xFE - 0xA1 + 1);
         UInt8 randomL = 0xB0 + self.uint8 % (0xF7 - 0xB0 + 1);
-        UInt32 number = (randomH<<8)+randomL;
+        UInt32 number = (randomH << 8) + randomL;
         NSData *data = [NSData dataWithBytes:&number length:2];
         [string appendString:[[NSString alloc] initWithData:data encoding:gbkEncoding]];
     }

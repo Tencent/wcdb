@@ -524,7 +524,9 @@
             object = [[resultColumn.getColumnBinding().getClass() alloc] init];
             [multiObject setObject:object forKey:tableName];
         }
-        [self extractValueAtIndex:index toColumnBindingHolder:resultColumn ofObject:object];
+        [self extractValueAtIndex:index
+            toColumnBindingHolder:resultColumn
+                         ofObject:object];
         ++index;
     }
     return multiObject;

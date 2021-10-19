@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
 #import "FTSData.h"
+#import <Foundation/Foundation.h>
 #import <WCDB/WCTDatabase+FTS.h>
 
 @implementation FTS5RowidIndexItem
@@ -78,7 +78,8 @@ WCDB_DEFAULT(reservedInt, 0)
 WCDB_DEFAULT(userNameId, 0)
 WCDB_DEFAULT(createTime, 0)
 
-- (id)init {
+- (id)init
+{
     if (self = [super init]) {
     }
     return self;
@@ -130,7 +131,8 @@ WCDB_NOTINDEXED(createTime)
 WCDB_NOTINDEXED(reservedInt)
 WCDB_NOTINDEXED(reservedText)
 
-- (id)init {
+- (id)init
+{
     if (self = [super init]) {
     }
     return self;

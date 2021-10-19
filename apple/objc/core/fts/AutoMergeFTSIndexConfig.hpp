@@ -30,11 +30,12 @@ namespace WCDB {
 class AutoMergeFTSIndexOperator {
 public:
     using TableArray = std::shared_ptr<std::vector<StringView>>;
-    
+
     virtual ~AutoMergeFTSIndexOperator() = 0;
 
-    virtual void asyncMergeFTSIndex(const UnsafeStringView& path, TableArray newTables, TableArray modifiedTables) = 0;
-    
+    virtual void
+    asyncMergeFTSIndex(const UnsafeStringView& path, TableArray newTables, TableArray modifiedTables)
+    = 0;
 };
 
 class AutoMergeFTSIndexConfig final : public Config {
@@ -44,20 +45,21 @@ public:
 
     bool invoke(Handle* handle) override final;
     bool uninvoke(Handle* handle) override final;
-    
+
     using TableArray = AutoMergeFTSIndexOperator::TableArray;
- 
+
 protected:
     const StringView m_identifier;
-    
-    void onTableModified(const UnsafeStringView &path, const UnsafeStringView &newTable, const UnsafeStringView &modifiedTable);
-    bool onCommitted(const UnsafeStringView &path, int pages);
+
+    void onTableModified(const UnsafeStringView& path,
+                         const UnsafeStringView& newTable,
+                         const UnsafeStringView& modifiedTable);
+    bool onCommitted(const UnsafeStringView& path, int pages);
 
     std::shared_ptr<AutoMergeFTSIndexOperator> m_operator;
     StringViewMap<std::set<StringView>> m_newTables;
     StringViewMap<std::set<StringView>> m_modifiedTables;
     mutable SharedLock m_lock;
-    
 };
 
 } //namespace WCDB

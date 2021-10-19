@@ -39,20 +39,19 @@ public:
 class OneOrBinaryTokenizer : public AbstractFTS3TokenizerCursorInfo, public AbstractFTS5Tokenizer {
 public:
     //for fts3
-    OneOrBinaryTokenizer(const char *input,
-                                   int inputLength,
-                                   AbstractFTS3TokenizerInfo *tokenizerInfo);
+    OneOrBinaryTokenizer(const char *input, int inputLength, AbstractFTS3TokenizerInfo *tokenizerInfo);
     virtual ~OneOrBinaryTokenizer() override = 0;
     int step(const char **ppToken,
              int *pnBytes,
              int *piStartOffset,
              int *piEndOffset,
              int *piPosition) override final;
-    
+
     //for fts5
     OneOrBinaryTokenizer(void *pCtx, const char **azArg, int nArg);
     virtual void loadInput(int flags, const char *pText, int nText) override;
-    virtual int nextToken(int *tflags, const char **ppToken, int *nToken, int *iStart, int *iEnd) override;
+    virtual int
+    nextToken(int *tflags, const char **ppToken, int *nToken, int *iStart, int *iEnd) override;
 
 protected:
     //You must figure out the unicode character set of [symbol] on current platform or implement it refer to http://www.fileformat.info/info/unicode/category/index.htm
@@ -93,7 +92,7 @@ private:
 
     std::vector<char> m_buffer;
     int m_bufferLength;
-    
+
     bool m_needBinary;
 };
 

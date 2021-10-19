@@ -24,7 +24,7 @@
 
 #import <WCDB/WCDB.h>
 
-@interface FTS5Object : NSObject<WCTTableCoding>
+@interface FTS5Object : NSObject <WCTTableCoding>
 
 @property (nonatomic, retain) NSString *content;
 @property (nonatomic, retain) NSString *extension;

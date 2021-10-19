@@ -56,4 +56,3 @@ WCDB_PROPERTY(msgLocalId);
 WCDB_PROPERTY(createTime);
 WCDB_PROPERTY(msg);
 @end
-

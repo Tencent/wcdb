@@ -165,9 +165,9 @@ bool Serialization::put4BytesUInt(uint32_t value)
         return false;
     }
     unsigned char *p = pointee();
-    p[0] = (uint8_t)(value >> 24);
-    p[1] = (uint8_t)(value >> 16);
-    p[2] = (uint8_t)(value >> 8);
+    p[0] = (uint8_t) (value >> 24);
+    p[1] = (uint8_t) (value >> 16);
+    p[2] = (uint8_t) (value >> 8);
     p[3] = (uint8_t) value;
     advance(sizeof(uint32_t));
     return true;
@@ -176,7 +176,7 @@ bool Serialization::put4BytesUInt(uint32_t value)
 bool Serialization::put8BytesUInt(uint64_t value)
 {
     off_t cursor = m_cursor;
-    if (!put4BytesUInt((uint32_t)(value >> 32)) || !put4BytesUInt((uint32_t) value)) {
+    if (!put4BytesUInt((uint32_t) (value >> 32)) || !put4BytesUInt((uint32_t) value)) {
         seek(cursor);
         return false;
     }
@@ -214,14 +214,14 @@ size_t Serialization::putVarint(uint64_t value)
             p[8] = (uint8_t) value;
             value >>= 8;
             for (i = 7; i >= 0; i--) {
-                p[i] = (uint8_t)((value & 0x7f) | 0x80);
+                p[i] = (uint8_t) ((value & 0x7f) | 0x80);
                 value >>= 7;
             }
             length = 9;
         } else {
             n = 0;
             do {
-                buf[n++] = (uint8_t)((value & 0x7f) | 0x80);
+                buf[n++] = (uint8_t) ((value & 0x7f) | 0x80);
                 value >>= 7;
             } while (value != 0);
             buf[0] &= 0x7f;
@@ -570,27 +570,27 @@ int32_t Deserialization::get4BytesInt(off_t offset) const
 {
     WCTAssert(isEnough((size_t) offset + 4));
     const unsigned char *p = base() + offset;
-    return (16777216 * (int8_t)(p[0]) | (p[1] << 16) | (p[2] << 8) | p[3]);
+    return (16777216 * (int8_t) (p[0]) | (p[1] << 16) | (p[2] << 8) | p[3]);
 }
 
 int32_t Deserialization::get3BytesInt(off_t offset) const
 {
     WCTAssert(isEnough((size_t) offset + 3));
     const unsigned char *p = base() + offset;
-    return (65536 * (int8_t)(p[0]) | (p[1] << 8) | p[2]);
+    return (65536 * (int8_t) (p[0]) | (p[1] << 8) | p[2]);
 }
 
 int32_t Deserialization::get2BytesInt(off_t offset) const
 {
     WCTAssert(isEnough((size_t) offset + 2));
     const unsigned char *p = base() + offset;
-    return (256 * (int8_t)(p[0]) | p[1]);
+    return (256 * (int8_t) (p[0]) | p[1]);
 }
 
 int32_t Deserialization::get1ByteInt(off_t offset) const
 {
     WCTAssert(isEnough((size_t) offset + 1));
-    return (int8_t)(base() + offset)[0];
+    return (int8_t) (base() + offset)[0];
 }
 
 double Deserialization::get8BytesDouble(off_t offset) const

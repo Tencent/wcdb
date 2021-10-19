@@ -539,12 +539,14 @@ void AbstractHandle::setNotificationWhenBusy(const BusyNotification &busyNotific
     m_notification.setNotificationWhenBusy(busyNotification);
 }
 
-void AbstractHandle::setNotificationWhenTableModified(const UnsafeStringView &name, const TableModifiedNotification &tableModifiedNotification)
+void AbstractHandle::setNotificationWhenTableModified(const UnsafeStringView &name,
+                                                      const TableModifiedNotification &tableModifiedNotification)
 {
     m_notification.setNotificationWhenTableModified(name, tableModifiedNotification);
 }
 
-void AbstractHandle::postTableNotification(const UnsafeStringView &newTable, const UnsafeStringView &modifiedTable)
+void AbstractHandle::postTableNotification(const UnsafeStringView &newTable,
+                                           const UnsafeStringView &modifiedTable)
 {
     m_notification.postTableModifiedNotification(newTable, modifiedTable);
 }

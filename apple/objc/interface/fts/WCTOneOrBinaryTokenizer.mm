@@ -27,19 +27,18 @@
 #import <WCDB/WCTOneOrBinaryTokenizer.h>
 
 WCTOneOrBinaryTokenizer::WCTOneOrBinaryTokenizer(const char* input,
-                                                                     int inputLength,
-                                                                     WCDB::AbstractFTS3TokenizerInfo* tokenizerInfo)
+                                                 int inputLength,
+                                                 WCDB::AbstractFTS3TokenizerInfo* tokenizerInfo)
 : WCDB::OneOrBinaryTokenizer(input, inputLength, tokenizerInfo)
 , m_symbolCharacterSet(generateSymbolCharacterSet())
 {
 }
 
-WCTOneOrBinaryTokenizer::WCTOneOrBinaryTokenizer(void *pCtx, const char **azArg, int nArg)
+WCTOneOrBinaryTokenizer::WCTOneOrBinaryTokenizer(void* pCtx, const char** azArg, int nArg)
 : WCDB::OneOrBinaryTokenizer(pCtx, azArg, nArg)
 , m_symbolCharacterSet(generateSymbolCharacterSet())
 {
 }
-
 
 WCTOneOrBinaryTokenizer::WCTOneOrBinaryTokenizer(const WCTOneOrBinaryTokenizer& other)
 : WCDB::OneOrBinaryTokenizer(other)

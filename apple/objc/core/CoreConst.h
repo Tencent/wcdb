@@ -53,7 +53,8 @@ static constexpr const char* AutoBackupConfigName = "com.Tencent.WCDB.Config.Aut
 #pragma mark - Config - Auto Migrate
 static constexpr const char* AutoMigrateConfigName = "com.Tencent.WCDB.Config.AutoMigrate";
 #pragma mark - Config - Auto Merge
-static constexpr const char* AutoMergeFTSIndexConfigName = "com.Tencent.WCDB.Config.AutoMergeFTSIndex";
+static constexpr const char* AutoMergeFTSIndexConfigName
+= "com.Tencent.WCDB.Config.AutoMergeFTSIndex";
 static constexpr const char* AutoMergeFTSIndexQueueName = "com.Tencent.WCDB.Queue.MergeIndex";
 static constexpr const int AutoMergeFTS5IndexMinSegmentCount = 4;
 static constexpr const double AutoMergeFTSIndexMaxExpectingDuration = 0.02;

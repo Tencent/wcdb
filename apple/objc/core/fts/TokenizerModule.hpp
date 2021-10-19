@@ -38,7 +38,9 @@ public:
 
 class AbstractFTS3TokenizerCursorInfo {
 public:
-    AbstractFTS3TokenizerCursorInfo(const char *input, int inputLength, AbstractFTS3TokenizerInfo *tokenizerInfo);
+    AbstractFTS3TokenizerCursorInfo(const char *input,
+                                    int inputLength,
+                                    AbstractFTS3TokenizerInfo *tokenizerInfo);
     virtual ~AbstractFTS3TokenizerCursorInfo() = 0;
 
     virtual int
@@ -53,7 +55,8 @@ class AbstractFTS3TokenizerModuleTemplate {
 public:
     AbstractFTS3TokenizerModuleTemplate() = delete;
     AbstractFTS3TokenizerModuleTemplate(const AbstractFTS3TokenizerModuleTemplate &) = delete;
-    AbstractFTS3TokenizerModuleTemplate &operator=(const AbstractFTS3TokenizerModuleTemplate &)
+    AbstractFTS3TokenizerModuleTemplate &
+    operator=(const AbstractFTS3TokenizerModuleTemplate &)
     = delete;
 
 protected:
@@ -61,7 +64,8 @@ protected:
     static AbstractFTS3TokenizerInfo *getTokenizerInfo(Tokenizer *pTokenizer);
     static void deleteTokenizer(Tokenizer *pTokenizer);
 
-    static int newCursor(TokenizerCursor **ppCursor, AbstractFTS3TokenizerCursorInfo *info);
+    static int
+    newCursor(TokenizerCursor **ppCursor, AbstractFTS3TokenizerCursorInfo *info);
     static AbstractFTS3TokenizerCursorInfo *getCursorInfo(TokenizerCursor *pCursor);
     static void deleteCursor(TokenizerCursor *pCursor);
 
@@ -85,10 +89,10 @@ public:
 
     FTS3TokenizerModule();
     FTS3TokenizerModule(const Create &create,
-                    const Destroy &destroy,
-                    const Open &open,
-                    const Close &close,
-                    const Next &next);
+                        const Destroy &destroy,
+                        const Open &open,
+                        const Close &close,
+                        const Next &next);
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-private-field"
@@ -109,7 +113,8 @@ class AbstractFTS5TokenizerModuleTemplate {
 public:
     AbstractFTS5TokenizerModuleTemplate() = delete;
     AbstractFTS5TokenizerModuleTemplate(const AbstractFTS5TokenizerModuleTemplate &) = delete;
-    AbstractFTS5TokenizerModuleTemplate &operator=(const AbstractFTS5TokenizerModuleTemplate &)
+    AbstractFTS5TokenizerModuleTemplate &
+    operator=(const AbstractFTS5TokenizerModuleTemplate &)
     = delete;
 
 protected:
@@ -123,33 +128,29 @@ public:
     AbstractFTS5Tokenizer(void *pCtx, const char **azArg, int nArg);
     virtual ~AbstractFTS5Tokenizer() = 0;
     virtual void loadInput(int flags, const char *pText, int nText) = 0;
-    virtual int nextToken(int *tflags, const char **ppToken, int *nToken, int *iStart, int *iEnd) = 0;
+    virtual int
+    nextToken(int *tflags, const char **ppToken, int *nToken, int *iStart, int *iEnd)
+    = 0;
 };
 
 class FTS5TokenizerModule final {
 public:
-    typedef int (*Create)(void*, const char **azArg, int nArg, AbstractFTS5Tokenizer **ppTokenizer);
+    typedef int (*Create)(void *, const char **azArg, int nArg, AbstractFTS5Tokenizer **ppTokenizer);
     typedef int (*Destroy)(AbstractFTS5Tokenizer *pTokenizer);
-    typedef int (*Tokenize)(AbstractFTS5Tokenizer *pTokenizer,
-                            void *pCtx,
-                            int flags,
-                            const char *pText, int nText,
-                            int (*xToken)(
-                              void *pCtx,
-                              int tflags,
-                              const char *pToken,
-                              int nToken,
-                              int iStart,
-                              int iEnd
-                            ));
+    typedef int (*Tokenize)(
+    AbstractFTS5Tokenizer *pTokenizer,
+    void *pCtx,
+    int flags,
+    const char *pText,
+    int nText,
+    int (*xToken)(void *pCtx, int tflags, const char *pToken, int nToken, int iStart, int iEnd));
 
     FTS5TokenizerModule();
     FTS5TokenizerModule(const Create &create,
                         const Destroy &destroy,
                         const Tokenize &tokenize,
-                        void* pCtx
-                        );
-    void* getContext();
+                        void *pCtx);
+    void *getContext();
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-private-field"
@@ -157,20 +158,20 @@ private:
     Create m_create;
     Destroy m_destroy;
     Tokenize m_tokenize;
-    void* m_pCtx;
+    void *m_pCtx;
 #pragma GCC diagnostic pop
 };
 
 #pragma mark - fts module wrapper
 
-class TokenizerModule
-{
+class TokenizerModule {
 public:
     TokenizerModule(std::shared_ptr<FTS3TokenizerModule> fts3Module);
     TokenizerModule(std::shared_ptr<FTS5TokenizerModule> fts3Module);
     TokenizerModule() = delete;
     std::shared_ptr<FTS3TokenizerModule> getFts3Module() const;
     std::shared_ptr<FTS5TokenizerModule> getFts5Module() const;
+
 private:
     std::shared_ptr<FTS3TokenizerModule> m_fts3Module;
     std::shared_ptr<FTS5TokenizerModule> m_fts5Module;

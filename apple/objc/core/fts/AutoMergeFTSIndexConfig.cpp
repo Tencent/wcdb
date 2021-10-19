@@ -41,8 +41,16 @@ AutoMergeFTSIndexConfig::~AutoMergeFTSIndexConfig() = default;
 
 bool AutoMergeFTSIndexConfig::invoke(Handle *handle)
 {
-    handle->setNotificationWhenTableModified(m_identifier, std::bind(&AutoMergeFTSIndexConfig::onTableModified, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-    handle->setNotificationWhenCommitted(1, m_identifier, std::bind(&AutoMergeFTSIndexConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
+    handle->setNotificationWhenTableModified(m_identifier,
+                                             std::bind(&AutoMergeFTSIndexConfig::onTableModified,
+                                                       this,
+                                                       std::placeholders::_1,
+                                                       std::placeholders::_2,
+                                                       std::placeholders::_3));
+    handle->setNotificationWhenCommitted(
+    1,
+    m_identifier,
+    std::bind(&AutoMergeFTSIndexConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
 
     return true;
 }
@@ -55,14 +63,16 @@ bool AutoMergeFTSIndexConfig::uninvoke(Handle *handle)
     return true;
 }
 
-void AutoMergeFTSIndexConfig::onTableModified(const UnsafeStringView &path, const UnsafeStringView &newTable, const UnsafeStringView &modifiedTable)
+void AutoMergeFTSIndexConfig::onTableModified(const UnsafeStringView &path,
+                                              const UnsafeStringView &newTable,
+                                              const UnsafeStringView &modifiedTable)
 {
     WCTAssert(!path.empty());
     LockGuard lockGuard(m_lock);
-    if(!newTable.empty()){
+    if (!newTable.empty()) {
         m_newTables[path].emplace(StringView(newTable));
     }
-    if(!modifiedTable.empty()){
+    if (!modifiedTable.empty()) {
         m_modifiedTables[path].emplace(StringView(modifiedTable));
     }
 }
@@ -71,32 +81,32 @@ bool AutoMergeFTSIndexConfig::onCommitted(const UnsafeStringView &path, int page
 {
     WCTAssert(!path.empty());
     LockGuard lockGuard(m_lock);
-    if(pages == 0){
+    if (pages == 0) {
         m_newTables.erase(path);
         m_modifiedTables.erase(path);
         return true;
     }
     auto newTablesIter = m_newTables.find(path);
     TableArray newTables = nullptr;
-    if(newTablesIter != m_newTables.end()){
+    if (newTablesIter != m_newTables.end()) {
         newTables = TableArray(new std::vector<StringView>());
         newTables->assign(newTablesIter->second.begin(), newTablesIter->second.end());
         m_newTables.erase(path);
     }
-    
+
     auto modifiedTablesIter = m_modifiedTables.find(path);
     TableArray modifiedTables = nullptr;
-    if(modifiedTablesIter != m_modifiedTables.end()){
+    if (modifiedTablesIter != m_modifiedTables.end()) {
         modifiedTables = TableArray(new std::vector<StringView>());
-        modifiedTables->assign(modifiedTablesIter->second.begin(), modifiedTablesIter->second.end());
+        modifiedTables->assign(modifiedTablesIter->second.begin(),
+                               modifiedTablesIter->second.end());
         m_modifiedTables.erase(path);
     }
-    
-    if(newTables != nullptr || modifiedTables != nullptr){
+
+    if (newTables != nullptr || modifiedTables != nullptr) {
         m_operator->asyncMergeFTSIndex(path, newTables, modifiedTables);
     }
     return true;
 }
 
 } //namespace WCDB
-
