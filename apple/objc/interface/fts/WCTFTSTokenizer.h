@@ -24,7 +24,15 @@
 
 #import <CoreFoundation/CoreFoundation.h>
 #import <WCDB/OneOrBinaryTokenizer.hpp>
+#import <WCDB/StringView.hpp>
 #import <WCDB/WCTCommon.h>
+#include <vector>
+
+class WCTFTSTokenizerUtil {
+public:
+    //Parameters should end with nullptr
+    static WCDB::StringView tokenize(NSString* name, ...);
+};
 
 class WCTOneOrBinaryTokenizer final : public WCDB::OneOrBinaryTokenizer {
 public:
@@ -36,11 +44,15 @@ public:
 
     WCTOneOrBinaryTokenizer& operator=(const WCTOneOrBinaryTokenizer& other);
 
+    static void configPinyinDict(NSDictionary<NSString*, NSArray<NSString*>*>* pinyinDict);
+
     ~WCTOneOrBinaryTokenizer() override final;
 
 protected:
     CFCharacterSetRef m_symbolCharacterSet;
+    static WCDB::StringViewMap<std::vector<WCDB::StringView>>* m_pinyinDict;
     static CFCharacterSetRef generateSymbolCharacterSet();
 
     std::pair<int, bool> isSymbol(UnicodeChar theChar) const override final;
+    const std::vector<WCDB::StringView>* getPinYin(const WCDB::UnsafeStringView chineseCharacter) const override final;
 };

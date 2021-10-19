@@ -34,6 +34,7 @@ public:
     OneOrBinaryTokenizerInfo(int argc, const char *const *argv);
     ~OneOrBinaryTokenizerInfo() override final;
     bool m_needBinary;
+    bool m_needSymbol;
 };
 
 class OneOrBinaryTokenizer : public AbstractFTS3TokenizerCursorInfo, public AbstractFTS5Tokenizer {
@@ -53,10 +54,14 @@ public:
     virtual int
     nextToken(int *tflags, const char **ppToken, int *nToken, int *iStart, int *iEnd) override;
 
+    int stepNextToken();
+
 protected:
     //You must figure out the unicode character set of [symbol] on current platform or implement it refer to http://www.fileformat.info/info/unicode/category/index.htm
     typedef unsigned short UnicodeChar;
     virtual std::pair<int, bool> isSymbol(UnicodeChar theChar) const = 0;
+    virtual const std::vector<WCDB::StringView> *
+    getPinYin(const WCDB::UnsafeStringView chineseCharacter) const = 0;
 
 private:
     const char *m_input;
@@ -76,24 +81,31 @@ private:
     };
 
     int m_cursor;
-    TokenType m_cursorTokenType;
     int m_cursorTokenLength;
-    int cursorStep();
-    int cursorSetup();
-
-    int lemmatization(const char *input, int inputLength);
-    std::vector<char> m_lemmaBuffer;
-    int m_lemmaBufferLength; //>0 lemma is not empty
+    TokenType m_cursorTokenType;
+    TokenType m_preTokenType;
 
     std::vector<int> m_subTokensLengthArray;
     int m_subTokensCursor;
     bool m_subTokensDoubleChar;
+
+    std::vector<char> m_normalToken;
+    int m_normalTokenLength;
+    std::set<StringView> m_pinyinTokens;
+    int m_pinyinTokenIndex;
+
+    // Can be configed by tokenizer parameters
+    bool m_needBinary;
+    bool m_ispinyin; //only for fts5
+    bool m_needSymbol;
+
+    int cursorStep();
+    int cursorSetup();
     void subTokensStep();
 
-    std::vector<char> m_buffer;
-    int m_bufferLength;
-
-    bool m_needBinary;
+    int lemmatization(const char *input, int inputLength);
+    int genNormalToken();
+    void genPinyinToken();
 };
 
 } // namespace WCDB

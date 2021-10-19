@@ -24,7 +24,7 @@
 
 #import <WCDB/WCTCommon.h>
 #import <WCDB/WCTDatabase.h>
-#import <WCDB/WCTOneOrBinaryTokenizer.h>
+#import <WCDB/WCTFTSTokenizer.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -35,12 +35,16 @@ WCDB_EXTERN NSString* const WCTTokenizerSimple;
 WCDB_EXTERN NSString* const WCTTokenizerPorter;
 WCDB_EXTERN NSString* const WCTTokenizerICU;
 WCDB_EXTERN NSString* const WCTTokenizerUnicode61;
+
 // WCDB implemented tokenizer
 WCDB_EXTERN NSString* const WCTTokenizerOneOrBinary;
 WCDB_EXTERN NSString* const WCTTokenizerOneOrBinary_FTS5;
 WCDB_EXTERN NSString* const WCTTokenizerLegacyOneOrBinary; // compatible for WCTTokenizerNameWCDB before v1.1.0
-WCDB_EXTERN NSString* const WCTTokenizerOneWord;
-WCDB_EXTERN NSString* const WCTTokenizerOneWord_FTS5;
+
+// Configurable parameters for WCDB implemented tokenizers
+WCDB_EXTERN NSString* const WCTTokenizerParameter_OneWord;
+WCDB_EXTERN NSString* const WCTTokenizerParameter_PinYin;
+WCDB_EXTERN NSString* const WCTTokenizerParameter_NeedSymbol;
 
 @interface WCTDatabase (FTS)
 
@@ -49,6 +53,9 @@ WCDB_EXTERN NSString* const WCTTokenizerOneWord_FTS5;
 - (void)addTokenizer:(NSString*)tokenizerName;
 
 + (void)registerTokenizer:(const WCDB::TokenizerModule&)module named:(NSString*)name;
+
+// No thread safe
++ (void)configPinYinDict:(NSDictionary<NSString*, NSArray<NSString*>*>*)pinyinDict;
 
 @end
 

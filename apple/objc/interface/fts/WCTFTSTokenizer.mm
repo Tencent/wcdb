@@ -24,7 +24,21 @@
 
 #import <WCDB/Assertion.hpp>
 #import <WCDB/Error.hpp>
-#import <WCDB/WCTOneOrBinaryTokenizer.h>
+#import <WCDB/WCTFTSTokenizer.h>
+
+WCDB::StringView WCTFTSTokenizerUtil::tokenize(NSString* name, ...)
+{
+    WCDB::StringView tokenizerPrefix = WCDB::Syntax::CreateVirtualTableSTMT::tokenizerPreFix();
+    std::ostringstream stream;
+    stream << tokenizerPrefix.data() << name.UTF8String;
+    va_list pArgs;
+    va_start(pArgs, name);
+    NSString* parameter = nullptr;
+    while ((parameter = va_arg(pArgs, NSString*)) != nullptr) {
+        stream << ' ' << parameter.UTF8String;
+    }
+    return WCDB::StringView(stream.str());
+}
 
 WCTOneOrBinaryTokenizer::WCTOneOrBinaryTokenizer(const char* input,
                                                  int inputLength,
@@ -89,4 +103,36 @@ std::pair<int, bool> WCTOneOrBinaryTokenizer::isSymbol(UnicodeChar theChar) cons
         code = WCDB::Error::Code::OK;
     }
     return { WCDB::Error::c2rc(code), symbol };
+}
+
+WCDB::StringViewMap<std::vector<WCDB::StringView>>* WCTOneOrBinaryTokenizer::m_pinyinDict = new WCDB::StringViewMap<std::vector<WCDB::StringView>>();
+
+void WCTOneOrBinaryTokenizer::configPinyinDict(NSDictionary<NSString*, NSArray<NSString*>*>* pinyinDict)
+{
+    m_pinyinDict->clear();
+    for (NSString* character in pinyinDict.allKeys) {
+        if (character.UTF8String == nil) {
+            continue;
+        }
+        WCDB::StringView key = WCDB::StringView(character.UTF8String);
+        std::vector<WCDB::StringView> value;
+        for (NSString* piniyn in pinyinDict[character]) {
+            if (piniyn.UTF8String == nil) {
+                continue;
+            }
+            value.push_back(WCDB::StringView(piniyn.UTF8String));
+        }
+        if (value.size() > 0) {
+            m_pinyinDict->insert_or_assign(key, value);
+        }
+    }
+}
+
+const std::vector<WCDB::StringView>* WCTOneOrBinaryTokenizer::getPinYin(const WCDB::UnsafeStringView chineseCharacter) const
+{
+    auto iter = m_pinyinDict->find(chineseCharacter);
+    if (iter != m_pinyinDict->end()) {
+        return &iter->second;
+    }
+    return nullptr;
 }

@@ -24,8 +24,6 @@
 
 #pragma once
 
-#include <memory>
-
 namespace WCDB {
 
 #pragma mark - fts3
@@ -137,13 +135,14 @@ class FTS5TokenizerModule final {
 public:
     typedef int (*Create)(void *, const char **azArg, int nArg, AbstractFTS5Tokenizer **ppTokenizer);
     typedef int (*Destroy)(AbstractFTS5Tokenizer *pTokenizer);
-    typedef int (*Tokenize)(
-    AbstractFTS5Tokenizer *pTokenizer,
-    void *pCtx,
-    int flags,
-    const char *pText,
-    int nText,
-    int (*xToken)(void *pCtx, int tflags, const char *pToken, int nToken, int iStart, int iEnd));
+    typedef int (*TokenCallback)(
+    void *pCtx, int tflags, const char *pToken, int nToken, int iStart, int iEnd);
+    typedef int (*Tokenize)(AbstractFTS5Tokenizer *pTokenizer,
+                            void *pCtx,
+                            int flags,
+                            const char *pText,
+                            int nText,
+                            TokenCallback callback);
 
     FTS5TokenizerModule();
     FTS5TokenizerModule(const Create &create,

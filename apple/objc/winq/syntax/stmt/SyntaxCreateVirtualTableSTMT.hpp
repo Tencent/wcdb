@@ -49,6 +49,7 @@ public:
     Type getType() const override final;
     bool describle(std::ostringstream& stream) const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
+    static StringView tokenizerPreFix();
 };
 
 } // namespace Syntax
