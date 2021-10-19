@@ -32,6 +32,7 @@ typedef NS_ENUM(NSUInteger, FTSDataType) {
     FTSDataType_FTS5,
     FTSDataType_FTS5_RowidIndex,
     FTSDataType_Fav,
+    FTSDataType_Contact,
 };
 
 @interface FTSFactory : PrototypeFactory <PrototypePreparation>

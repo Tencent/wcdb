@@ -112,4 +112,73 @@
     return itemList;
 }
 
+- (NSArray<FTS5ContactSearchItem*>*)randomContactFTSItem:(NSInteger)count
+{
+    static int g_localId = 0;
+    static NSMutableArray* g_singleContactArr = nil;
+    static NSMutableDictionary* g_associateChatRoomDic = nil;
+    static NSMutableArray* g_chatroomContactArr = nil;
+    static NSMutableDictionary* g_associateMemberDic = nil;
+
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Random* random = [Random shared];
+        g_singleContactArr = [[NSMutableArray alloc] init];
+        for (int i = 0; i < 1000000; i++) {
+            [g_singleContactArr addObject:[@"wxid_" stringByAppendingString:[random stringWithLength:15]]];
+        }
+        g_chatroomContactArr = [[NSMutableArray alloc] init];
+        for (int i = 0; i < 10000; i++) {
+            [g_chatroomContactArr addObject:[[random stringWithLength:15] stringByAppendingString:@"@chatroom"]];
+        }
+        g_associateChatRoomDic = [[NSMutableDictionary alloc] init];
+        g_associateMemberDic = [[NSMutableDictionary alloc] init];
+        for (NSString* chatroom in g_chatroomContactArr) {
+            int memberStart = random.uint32 % 1000000;
+            int memberLength = random.uint8;
+            NSMutableArray* members = [[NSMutableArray alloc] initWithArray:[g_singleContactArr subarrayWithRange:NSMakeRange(memberStart, MIN(1000000, memberStart + memberLength) - memberStart)]];
+            g_associateMemberDic[chatroom] = members;
+            for (NSString* member in members) {
+                NSMutableArray* associateChatRoom = g_associateChatRoomDic[member];
+                if (associateChatRoom == nil) {
+                    associateChatRoom = [[NSMutableArray alloc] init];
+                    g_associateChatRoomDic[member] = associateChatRoom;
+                }
+                [associateChatRoom addObject:chatroom];
+            }
+        }
+    });
+
+    NSMutableArray<FTS5ContactSearchItem*>* itemList = [NSMutableArray arrayWithCapacity:count];
+    Random* random = [Random shared];
+
+    for (NSInteger i = 0; i < count; ++i) {
+        FTS5ContactSearchItem* item = [[FTS5ContactSearchItem alloc] init];
+        item.listType = random.uint32;
+        item.mainSearchContent = [random chineseStringWithLength:100];
+        item.zone = [random stringWithLength:7];
+        if (i % 3 == 0) {
+            item.mainSearchContent = [item.mainSearchContent stringByReplacingCharactersInRange:NSMakeRange(0, 8) withString:@"大规模批量测试内容"];
+        }
+        if (g_localId % 1000 == random.uint32 % 1000) {
+            item.mainSearchContent = [item.mainSearchContent stringByReplacingCharactersInRange:NSMakeRange(0, 8) withString:@"中等规模随机命中"];
+        }
+        if (g_localId % 2000 == 0) {
+            item.mainSearchContent = [item.mainSearchContent stringByReplacingCharactersInRange:NSMakeRange(0, 7) withString:@"单于骑模具单车"];
+        }
+        if (g_localId % 100 == 0) {
+            item.userName = g_chatroomContactArr[g_localId / 100 % 10000];
+            item.groupMembers = [g_associateMemberDic[item.userName] componentsJoinedByString:@";"];
+            item.contactType = FTSContactType_Chatroom;
+        } else {
+            item.userName = g_singleContactArr[g_localId];
+            item.associateChatRooms = [g_associateChatRoomDic[item.userName] componentsJoinedByString:@"j"];
+            item.contactType = FTSContactType_Normal;
+        }
+        [itemList addObject:item];
+        g_localId++;
+    }
+    return itemList;
+}
+
 @end

@@ -64,6 +64,8 @@
         return FTS5MsgContentItem.class;
     case FTSDataType_Fav:
         return FTS5NewFavSearchItem.class;
+    case FTSDataType_Contact:
+        return FTS5ContactSearchItem.class;
     }
 }
 
@@ -147,6 +149,12 @@
         } break;
         case FTSDataType_Fav: {
             NSArray* objects = [[Random shared] randomFavFTSItem:MIN(needInsert, m_batchInsertCount)];
+            for (int i = 0; i < self.tableCount; i++) {
+                TestCaseAssertTrue([prototype insertObjects:[objects subarrayWithRange:NSMakeRange(m_batchInsertCount * i / self.tableCount, m_batchInsertCount * (i + 1) / self.tableCount - m_batchInsertCount * i / self.tableCount)] intoTable:[self indexTableNameOf:i]]);
+            }
+        } break;
+        case FTSDataType_Contact: {
+            NSArray* objects = [[Random shared] randomContactFTSItem:MIN(needInsert, m_batchInsertCount)];
             for (int i = 0; i < self.tableCount; i++) {
                 TestCaseAssertTrue([prototype insertObjects:[objects subarrayWithRange:NSMakeRange(m_batchInsertCount * i / self.tableCount, m_batchInsertCount * (i + 1) / self.tableCount - m_batchInsertCount * i / self.tableCount)] intoTable:[self indexTableNameOf:i]]);
             }
@@ -236,6 +244,13 @@
                 totalCount += count.numberValue.intValue;
             }
         } break;
+        case FTSDataType_Contact: {
+            for (int i = 0; i < self.tableCount; i++) {
+                count = [prototype getValueOnResultColumn:FTS5ContactSearchItem.allProperties.count() fromTable:[self indexTableNameOf:i]];
+                TestCaseAssertNotNil(count);
+                totalCount += count.numberValue.intValue;
+            }
+        } break;
         }
         TestCaseLog(@"get quality cost time %.2f", [[NSDate date] timeIntervalSinceDate:start]);
         return totalCount;
@@ -258,6 +273,9 @@
         break;
     case FTSDataType_Fav:
         category = @"FTS5_Fav";
+        break;
+    case FTSDataType_Contact:
+        category = @"FTS5_Contact";
         break;
     }
     if (self.tokenizerName.length > 0) {

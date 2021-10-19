@@ -260,12 +260,16 @@
 
 - (NSString *)string
 {
+    return [self stringWithLength:self.length];
+}
+
+- (NSString *)stringWithLength:(UInt32)length
+{
     static const char alphanum[] =
     "0123456789"
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "abcdefghijklmnopqrstuvwxyz";
     char result[std::numeric_limits<uint8_t>::max() + 1];
-    int length = self.length;
     for (int i = 0; i < length; ++i) {
         result[i] = alphanum[self.uint8 % (sizeof(alphanum) - 1)];
     }
@@ -275,9 +279,14 @@
 
 - (NSString *)chineseString
 {
+    return [self chineseStringWithLength:self.length];
+}
+
+- (NSString *)chineseStringWithLength:(UInt32)length
+{
     NSStringEncoding gbkEncoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
     NSMutableString *string = [NSMutableString string];
-    for (int i = 0; i < self.length; i++) {
+    for (int i = 0; i < length; i++) {
         UInt8 randomH = 0xA1 + self.uint8 % (0xFE - 0xA1 + 1);
         UInt8 randomL = 0xB0 + self.uint8 % (0xF7 - 0xB0 + 1);
         UInt32 number = (randomH << 8) + randomL;

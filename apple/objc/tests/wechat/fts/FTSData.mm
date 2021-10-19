@@ -177,7 +177,6 @@ WCDB_SYNTHESIZE(FavItemReservedText)
 
 WCDB_VIRTUAL_TABLE_MODULE(WCTModuleFTS5)
 WCDB_VIRTUAL_TABLE_TOKENIZE_WITH_PARAMETERS(WCTTokenizerOneOrBinary_FTS5, WCTTokenizerParameter_OneWord)
-WCDB_VIRTUAL_TABLE_EXTERNAL_CONTENT("")
 
 WCDB_DEFAULT(localId, 0)
 WCDB_DEFAULT(updateTime, 0)
@@ -205,5 +204,40 @@ WCDB_NOTINDEXED(FavItemReservedText)
 {
     return [NSString stringWithFormat:@"localId=%u, title=%@", (unsigned int) localId, searchTitle];
 }
+
+@end
+
+@interface FTS5ContactSearchItem ()
+
+@property (nonatomic, retain) NSString *reservedText1;
+@property (nonatomic, retain) NSString *reservedText2;
+
+WCDB_PROPERTY(reservedText1);
+WCDB_PROPERTY(reservedText2);
+@end
+
+@implementation FTS5ContactSearchItem
+
+WCDB_IMPLEMENTATION(FTS5ContactSearchItem)
+//mainSearchContent的内容比较多，放在前面可以节省空间
+WCDB_SYNTHESIZE_COLUMN(mainSearchContent, "AMainSearchContent")
+WCDB_SYNTHESIZE_COLUMN(groupMembers, "BGroupMembers")
+WCDB_SYNTHESIZE_COLUMN(userName, WCDB_STRINGIFY(userName))
+WCDB_SYNTHESIZE_COLUMN(zone, WCDB_STRINGIFY(zone))
+WCDB_SYNTHESIZE_COLUMN(reservedText1, "zzreservedText1")
+WCDB_SYNTHESIZE_COLUMN(reservedText2, "zzreservedText2")
+//以下内容不需要建索引，放到最后，可以减少存储空间
+WCDB_SYNTHESIZE_COLUMN(associateChatRooms, "zzAssociateChatRooms")
+WCDB_SYNTHESIZE_COLUMN(listType, "zzlistType")
+WCDB_SYNTHESIZE_COLUMN(contactType, "zzContactType")
+
+WCDB_VIRTUAL_TABLE_MODULE(WCTModuleFTS5)
+WCDB_VIRTUAL_TABLE_TOKENIZE_WITH_PARAMETERS(WCTTokenizerOneOrBinary_FTS5, WCTTokenizerParameter_OneWord, WCTTokenizerParameter_NeedSymbol)
+
+WCDB_DEFAULT(listType, 0)
+WCDB_DEFAULT(contactType, 0)
+WCDB_NOTINDEXED(listType)
+WCDB_NOTINDEXED(contactType)
+WCDB_NOTINDEXED(associateChatRooms)
 
 @end

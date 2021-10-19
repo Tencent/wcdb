@@ -37,7 +37,7 @@ WCDB_PROPERTY(indexRowid);
 @property (nonatomic, assign) UInt32 userNameId;
 @property (nonatomic, assign) UInt32 msgLocalId;
 @property (nonatomic, assign) UInt32 createTime;
-@property (nonatomic, retain) NSString *msg;
+@property (nonatomic, retain) NSString* msg;
 
 WCDB_PROPERTY(userNameId);
 WCDB_PROPERTY(msgLocalId);
@@ -49,7 +49,7 @@ WCDB_PROPERTY(msg);
 @property (nonatomic, assign) UInt32 userNameId;
 @property (nonatomic, assign) UInt32 msgLocalId;
 @property (nonatomic, assign) UInt32 createTime;
-@property (nonatomic, retain) NSString *msg;
+@property (nonatomic, retain) NSString* msg;
 
 WCDB_PROPERTY(userNameId);
 WCDB_PROPERTY(msgLocalId);
@@ -59,9 +59,9 @@ WCDB_PROPERTY(msg);
 
 @interface FTS5NewFavSearchItem : NSObject <WCTTableCoding>
 
-@property (nonatomic, strong) NSString *searchTitle;
-@property (nonatomic, strong) NSString *searchDesc;
-@property (nonatomic, strong) NSString *searchSource;
+@property (nonatomic, strong) NSString* searchTitle;
+@property (nonatomic, strong) NSString* searchDesc;
+@property (nonatomic, strong) NSString* searchSource;
 @property (nonatomic, assign) UInt32 localId;
 @property (nonatomic, assign) UInt32 updateTime;
 
@@ -70,5 +70,33 @@ WCDB_PROPERTY(searchDesc);
 WCDB_PROPERTY(searchSource);
 WCDB_PROPERTY(localId);
 WCDB_PROPERTY(updateTime);
+
+@end
+
+typedef enum : NSUInteger {
+    FTSContactType_Normal = 0,
+    FTSContactType_Chatroom,
+    FTSContactType_Brand,
+    FTSContactType_OpenIm,
+} FTSContactType;
+
+@interface FTS5ContactSearchItem : NSObject <WCTTableCoding>
+
+@property (nonatomic, assign) UInt32 listType;
+@property (nonatomic, assign) FTSContactType contactType;
+@property (nonatomic, strong) NSString* userName;
+@property (nonatomic, strong) NSString* mainSearchContent;
+@property (nonatomic, strong) NSString* zone;
+//利用fts的分词特性，支持在一串username组成的字符串中搜索某个username，实现搜索一个set的效果。
+@property (nonatomic, strong) NSString* groupMembers;       //以;为分割符。
+@property (nonatomic, strong) NSString* associateChatRooms; //以;为分割符。
+
+WCDB_PROPERTY(listType);
+WCDB_PROPERTY(contactType);
+WCDB_PROPERTY(userName);
+WCDB_PROPERTY(mainSearchContent);
+WCDB_PROPERTY(zone);
+WCDB_PROPERTY(groupMembers)
+WCDB_PROPERTY(associateChatRooms)
 
 @end

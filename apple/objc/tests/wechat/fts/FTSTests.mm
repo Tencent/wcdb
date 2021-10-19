@@ -85,6 +85,8 @@
         return FTS5MsgContentItem.class;
     case FTSDataType_Fav:
         return FTS5NewFavSearchItem.class;
+    case FTSDataType_Contact:
+        return FTS5ContactSearchItem.class;
     }
 }
 
@@ -268,12 +270,8 @@
     NSMutableArray<NSArray<NSNumber*>*>* testCases = [[NSMutableArray alloc] init];
     NSArray<NSNumber*>* testCase;
 
-    int tkId = [self getTokenizerIdWithNeedBinary:YES needPinyin:NO needSymbol:NO];
-    testCase = [self genTestCaseConfigDataType:FTSDataType_FTS5 tableCount:4 tokenizerId:tkId quality:1000 optimizeLevel:2 querylevel:3 queryTimes:10 queryType:0 needMultiThread:NO];
-    [testCases addObject:testCase];
-
-    tkId = [self getTokenizerIdWithNeedBinary:YES needPinyin:NO needSymbol:NO];
-    testCase = [self genTestCaseConfigDataType:FTSDataType_FTS3 tableCount:4 tokenizerId:tkId quality:1000 optimizeLevel:-1 querylevel:3 queryTimes:10 queryType:0 needMultiThread:NO];
+    int tkId = [self getTokenizerIdWithNeedBinary:NO needPinyin:NO needSymbol:NO];
+    testCase = [self genTestCaseConfigDataType:FTSDataType_Contact tableCount:1 tokenizerId:tkId quality:1000000 optimizeLevel:2 querylevel:2 queryTimes:10 queryType:6 needMultiThread:NO];
     [testCases addObject:testCase];
 
     for (NSArray<NSNumber*>* config in testCases) {
@@ -341,6 +339,53 @@
                     self->m_resultCount += count.numberValue.unsignedIntValue;
                 }];
             } break;
+            case 5: {
+                [self queryInAllTable:^(NSString* tableName) {
+                    const WCDB::ResultColumn highlightColumn = WCDB::ResultColumn(WCDB::Expression::function("highlight").invoke().arguments({ WCDB::Column(tableName), 1, "<b>", "</b>" }));
+                    WCDB::ResultColumns resultColumns;
+                    resultColumns.push_back(FTS5ContactSearchItem.listType);
+                    resultColumns.push_back(FTS5ContactSearchItem.contactType);
+                    resultColumns.push_back(FTS5ContactSearchItem.userName);
+                    resultColumns.push_back(FTS5ContactSearchItem.associateChatRooms);
+                    //                    resultColumns.push_back(highlightColumn);
+                    NSArray* result = [self.database getRowsFromStatement:WCDB::StatementSelect().select(resultColumns).from(tableName).where(FTS5ContactSearchItem.mainSearchContent.match([self query]))];
+                    self->m_resultCount += result.count;
+                }];
+            } break;
+            case 6: {
+                [self queryInAllTable:^(NSString* tableName) {
+                    const WCDB::ResultColumn highlightColumn = WCDB::ResultColumn(WCDB::Expression::function("highlight").invoke().arguments({ WCDB::Column(tableName), 1, "<b>", "</b>" }));
+                    WCDB::ResultColumns resultColumns;
+                    resultColumns.push_back(FTS5ContactSearchItem.listType);
+                    resultColumns.push_back(FTS5ContactSearchItem.contactType);
+                    resultColumns.push_back(FTS5ContactSearchItem.userName);
+                    //                        resultColumns.push_back(highlightColumn);
+                    WCTColumnsXRows* result = [self.database getRowsFromStatement:WCDB::StatementSelect().select(resultColumns).from(tableName).where(FTS5ContactSearchItem.mainSearchContent.match([self query]))];
+                    self->m_resultCount += result.count;
+                    WCTHandle* handle = [self.database getHandle];
+                    TestCaseAssertTrue([handle prepare:WCDB::StatementSelect().select({ FTS5ContactSearchItem.userName, FTS5ContactSearchItem.groupMembers }).from(tableName).where(FTS5ContactSearchItem.groupMembers.match(WCDB::BindParameter(1)))]);
+                    NSMutableSet* matchGroups = [[NSMutableSet alloc] init];
+                    int normalContactCount = 0;
+                    for (WCTOneRow* oneRow in result) {
+                        if (oneRow[1].numberValue.intValue != FTSContactType_Normal) {
+                            continue;
+                        }
+                        normalContactCount++;
+                        TestCaseAssertTrue(oneRow[2].stringValue.length > 0);
+                        [handle reset];
+                        [handle bindString:oneRow[2].stringValue toIndex:1];
+                        NSString* matchContent = [@";" stringByAppendingString:oneRow[2].stringValue];
+                        while ([handle step] && ![handle done]) {
+                            WCTOneRow* oneGroup = [handle extractRow];
+                            if ([oneGroup[1].stringValue hasPrefix:oneRow[2].stringValue] || [oneGroup[1].stringValue containsString:matchContent]) {
+                                [matchGroups addObject:oneGroup[0].stringValue];
+                            }
+                        }
+                    }
+                    NSLog(@"normal count %d", normalContactCount);
+                    [handle invalidate];
+                }];
+            }
             default:
                 break;
             }
