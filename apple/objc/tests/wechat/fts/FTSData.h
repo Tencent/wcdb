@@ -56,3 +56,19 @@ WCDB_PROPERTY(msgLocalId);
 WCDB_PROPERTY(createTime);
 WCDB_PROPERTY(msg);
 @end
+
+@interface FTS5NewFavSearchItem : NSObject <WCTTableCoding>
+
+@property (nonatomic, strong) NSString *searchTitle;
+@property (nonatomic, strong) NSString *searchDesc;
+@property (nonatomic, strong) NSString *searchSource;
+@property (nonatomic, assign) UInt32 localId;
+@property (nonatomic, assign) UInt32 updateTime;
+
+WCDB_PROPERTY(searchTitle);
+WCDB_PROPERTY(searchDesc);
+WCDB_PROPERTY(searchSource);
+WCDB_PROPERTY(localId);
+WCDB_PROPERTY(updateTime);
+
+@end

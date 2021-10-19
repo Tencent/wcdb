@@ -33,7 +33,7 @@ WCDB_SYNTHESIZE(content)
 WCDB_SYNTHESIZE(extension)
 
 WCDB_VIRTUAL_TABLE_MODULE(WCTModuleFTS5)
-WCDB_VIRTUAL_TABLE_TOKENIZE(WCTTokenizerOneWord_FTS5)
+WCDB_VIRTUAL_TABLE_TOKENIZE_WITH_PARAMETERS(WCTTokenizerOneOrBinary_FTS5, WCTTokenizerParameter_OneWord)
 
 - (BOOL)isEqual:(NSObject*)object
 {
@@ -42,6 +42,25 @@ WCDB_VIRTUAL_TABLE_TOKENIZE(WCTTokenizerOneWord_FTS5)
     }
     FTS5Object* other = (FTS5Object*) object;
     return [NSObject isObject:self.content nilEqualToObject:other.content] && [NSObject isObject:self.extension nilEqualToObject:other.extension];
+}
+
+@end
+
+@implementation FTS5PinyinObject
+
+WCDB_IMPLEMENTATION(FTS5PinyinObject)
+WCDB_SYNTHESIZE(content)
+
+WCDB_VIRTUAL_TABLE_MODULE(WCTModuleFTS5)
+WCDB_VIRTUAL_TABLE_TOKENIZE_WITH_PARAMETERS(WCTTokenizerOneOrBinary_FTS5, WCTTokenizerParameter_OneWord, WCTTokenizerParameter_PinYin)
+
+- (BOOL)isEqual:(NSObject*)object
+{
+    if (object.class != self.class) {
+        return NO;
+    }
+    FTS5PinyinObject* other = (FTS5PinyinObject*) object;
+    return [NSObject isObject:self.content nilEqualToObject:other.content];
 }
 
 @end

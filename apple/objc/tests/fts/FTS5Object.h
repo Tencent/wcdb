@@ -32,3 +32,10 @@ WCDB_PROPERTY(content)
 WCDB_PROPERTY(extension)
 
 @end
+
+@interface FTS5PinyinObject : NSObject <WCTTableCoding>
+
+@property (nonatomic, retain) NSString *content;
+WCDB_PROPERTY(content)
+
+@end

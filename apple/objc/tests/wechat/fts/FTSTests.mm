@@ -29,7 +29,7 @@
     FTSFactory* m_factory;
     FTSDataType m_dataType;
     int m_tableCount;
-    bool m_needBinary;
+    NSString* m_tokenizer;
     int m_quality;
     int m_optimizeLevel;
     int m_querylevel;
@@ -51,14 +51,14 @@
 
 - (NSString*)query
 {
-    if (m_dataType == FTSDataType_FTS3) {
+    if (m_dataType == FTSDataType_FTS5) {
         switch (m_querylevel) {
         case 1:
             return @"狱咋射石";
         case 2:
             return @"中等规模随机命中";
         case 3:
-            return @"我们批量测试内容";
+            return @"大规模批量测试内容";
         }
     } else {
         switch (m_querylevel) {
@@ -67,7 +67,7 @@
         case 2:
             return @"\"中等\" \"规模\" \"随机\" \"命中\"";
         case 3:
-            return @"\"我们\" \"批量\" \"测试\" \"内容\"";
+            return @"\"大\" \"规模\" \"批量\" \"测试\" \"内容\"";
         }
     }
     assert(0);
@@ -83,24 +83,57 @@
         return FTS5MsgContentItem.class;
     case FTSDataType_FTS5_RowidIndex:
         return FTS5MsgContentItem.class;
+    case FTSDataType_Fav:
+        return FTS5NewFavSearchItem.class;
     }
 }
 
 - (NSString*)tokenizerName
 {
     if (m_dataType == FTSDataType_FTS3) {
-        if (m_needBinary) {
-            return WCTTokenizerOneOrBinary;
+        return WCTTokenizerOneOrBinary;
+    } else {
+        return WCTTokenizerOneOrBinary_FTS5;
+    }
+}
+
+- (int)getTokenizerIdWithNeedBinary:(BOOL)needBinary needPinyin:(BOOL)needPinyin needSymbol:(BOOL)needSymbol
+{
+    if (needBinary) {
+        if (needPinyin) {
+            return 0;
         } else {
-            return WCTTokenizerOneWord;
+            if (needSymbol) {
+                return 1;
+            } else {
+                return 2;
+            }
         }
     } else {
-        if (m_needBinary) {
-            return WCTTokenizerOneOrBinary_FTS5;
+        if (needPinyin) {
+            return 3;
         } else {
-            return WCTTokenizerOneWord_FTS5;
+            if (needSymbol) {
+                return 4;
+            } else {
+                return 5;
+            }
         }
     }
+}
+
+- (NSString*)getTokenizerWithId:(int)tkId
+{
+    NSString* name = [self tokenizerName];
+    NSArray* tokenizers = @[
+        [NSString stringWithUTF8String:WCTFTSTokenizerUtil::tokenize(name, WCTTokenizerParameter_PinYin, nil).data()],
+        [NSString stringWithUTF8String:WCTFTSTokenizerUtil::tokenize(name, WCTTokenizerParameter_NeedSymbol, nil).data()],
+        [NSString stringWithUTF8String:WCTFTSTokenizerUtil::tokenize(name, nil).data()],
+        [NSString stringWithUTF8String:WCTFTSTokenizerUtil::tokenize(name, WCTTokenizerParameter_OneWord, WCTTokenizerParameter_PinYin, nil).data()],
+        [NSString stringWithUTF8String:WCTFTSTokenizerUtil::tokenize(name, WCTTokenizerParameter_OneWord, WCTTokenizerParameter_NeedSymbol, nil).data()],
+        [NSString stringWithUTF8String:WCTFTSTokenizerUtil::tokenize(name, WCTTokenizerParameter_OneWord, nil).data()]
+    ];
+    return tokenizers[tkId];
 }
 
 - (void)setUp
@@ -117,7 +150,7 @@
 - (void)setUpDatabase
 {
     [[Random shared] reset];
-    self.factory.needBinary = m_needBinary;
+    self.factory.tokenizerName = m_tokenizer;
     self.factory.quality = m_quality;
     self.factory.tableCount = m_tableCount;
     self.factory.tolerance = (double) 100 / self.factory.quality;
@@ -128,10 +161,19 @@
     WCDB::StatementCreateVirtualTable& statement = const_cast<WCTBinding&>([[self getIndexORMClass] objectRelationalMapping]).statementVirtualTable;
     WCDB::Syntax::CreateVirtualTableSTMT& statementSyntax = statement.syntax();
     statementSyntax.arguments.clear();
-    statementSyntax.arguments.push_back(WCDB::StatementCreateVirtualTable::tokenize([self tokenizerName]));
+    statementSyntax.arguments.push_back(WCDB::StringView(m_tokenizer.UTF8String));
 
     [self.factory.database addTokenizer:[self tokenizerName]];
     [self.database addTokenizer:[self tokenizerName]];
+    [WCTDatabase configPinYinDict:@{
+        @"单" : @[ @"shan", @"dan", @"chan" ],
+        @"于" : @[ @"yu" ],
+        @"骑" : @[ @"qi" ],
+        @"模" : @[ @"mo", @"mu" ],
+        @"具" : @[ @"ju" ],
+        @"车" : @[ @"che" ],
+    }];
+
     [self.factory produce:self.path];
     self.assistTableName = self.factory.assistTableName;
 
@@ -155,10 +197,28 @@
         [timeString appendFormat:@"%.6f, ", costTime];
     }
     TestCaseLog(@"Query type %d result count %d", m_queryType, m_resultCount);
-    TestCaseLog(@"Time cost for dataType %d, needBinary %d, quality %d, optimizeLevel %d, querylevel %d, queryTimes %d, queryType %d :", m_dataType, m_needBinary, m_quality, m_optimizeLevel, m_querylevel, m_queryTimes, m_queryType);
+    TestCaseLog(@"Time cost for dataType %d, %@, quality %d, optimizeLevel %d, querylevel %d, queryTimes %d, queryType %d :", m_dataType, m_tokenizer, m_quality, m_optimizeLevel, m_querylevel, m_queryTimes, m_queryType);
     TestCaseLog(@"Avergae time %0.6f, all time %@", totalTime / 10, timeString);
 
     [self tearDownDatabase];
+}
+
+- (void)queryInAllTable:(void (^)(NSString* tableName))block
+{
+    if (self->m_needMultiThread) {
+        dispatch_group_t group = dispatch_group_create();
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        for (int i = 0; i < self->m_tableCount; i++) {
+            dispatch_group_async(group, queue, ^() {
+                block([self indexTableNameOfId:i]);
+            });
+        }
+        dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+    } else {
+        for (int i = 0; i < self->m_tableCount; i++) {
+            block([self indexTableNameOfId:i]);
+        }
+    }
 }
 
 - (void)tearDownDatabase
@@ -170,7 +230,7 @@
 
 - (NSArray<NSNumber*>*)genTestCaseConfigDataType:(FTSDataType)dataType
                                       tableCount:(int)tableCount
-                                      needBinary:(BOOL)needBinary
+                                     tokenizerId:(int)tokenizerId
                                          quality:(int)quality
                                    optimizeLevel:(int)optimizeLevel
                                       querylevel:(int)querylevel
@@ -178,14 +238,14 @@
                                        queryType:(int)queryType
                                  needMultiThread:(bool)needMultiThread
 {
-    return @[ @(dataType), @(tableCount), @(needBinary), @(quality), @(optimizeLevel), @(querylevel), @(queryTimes), @(queryType), @(needMultiThread) ];
+    return @[ @(dataType), @(tableCount), @(tokenizerId), @(quality), @(optimizeLevel), @(querylevel), @(queryTimes), @(queryType), @(needMultiThread) ];
 }
 
 - (void)applyConfig:(NSArray<NSNumber*>*)configs
 {
     m_dataType = (FTSDataType) configs[0].intValue;
     m_tableCount = configs[1].intValue;
-    m_needBinary = (BOOL) configs[2].boolValue;
+    m_tokenizer = [self getTokenizerWithId:configs[2].intValue];
     m_quality = configs[3].intValue;
     m_optimizeLevel = configs[4].intValue;
     m_querylevel = configs[5].intValue;
@@ -201,16 +261,12 @@
     NSMutableArray<NSArray<NSNumber*>*>* testCases = [[NSMutableArray alloc] init];
     NSArray<NSNumber*>* testCase;
 
-    testCase = [self genTestCaseConfigDataType:FTSDataType_FTS5_RowidIndex tableCount:4 needBinary:NO quality:1000000 optimizeLevel:2 querylevel:2 queryTimes:10 queryType:0 needMultiThread:NO];
+    int tkId = [self getTokenizerIdWithNeedBinary:YES needPinyin:NO needSymbol:NO];
+    testCase = [self genTestCaseConfigDataType:FTSDataType_FTS5 tableCount:4 tokenizerId:tkId quality:10000 optimizeLevel:2 querylevel:3 queryTimes:10 queryType:0 needMultiThread:NO];
     [testCases addObject:testCase];
 
-    testCase = [self genTestCaseConfigDataType:FTSDataType_FTS5_RowidIndex tableCount:4 needBinary:NO quality:1000000 optimizeLevel:2 querylevel:3 queryTimes:10 queryType:0 needMultiThread:NO];
-    [testCases addObject:testCase];
-
-    testCase = [self genTestCaseConfigDataType:FTSDataType_FTS3 tableCount:10 needBinary:YES quality:1000000 optimizeLevel:-1 querylevel:2 queryTimes:10 queryType:0 needMultiThread:NO];
-    [testCases addObject:testCase];
-
-    testCase = [self genTestCaseConfigDataType:FTSDataType_FTS3 tableCount:10 needBinary:YES quality:1000000 optimizeLevel:-1 querylevel:3 queryTimes:10 queryType:0 needMultiThread:NO];
+    tkId = [self getTokenizerIdWithNeedBinary:YES needPinyin:NO needSymbol:NO];
+    testCase = [self genTestCaseConfigDataType:FTSDataType_FTS3 tableCount:4 tokenizerId:tkId quality:10000 optimizeLevel:-1 querylevel:3 queryTimes:10 queryType:0 needMultiThread:NO];
     [testCases addObject:testCase];
 
     for (NSArray<NSNumber*>* config in testCases) {
@@ -218,25 +274,23 @@
         [self measureTest:^{
             switch (self->m_queryType) {
             case 0: {
-                WCTValue* count;
-                for (int i = 0; i < self->m_tableCount; i++) {
-                    count = [self.database getValueOnResultColumn:FTS3MsgContentItem.allProperties.count() fromTable:[self indexTableNameOfId:i] where:FTS3MsgContentItem.msg.match([self query])];
+                [self queryInAllTable:^(NSString* tableName) {
+                    WCTValue* count = [self.database getValueOnResultColumn:FTS3MsgContentItem.allProperties.count() fromTable:tableName where:FTS3MsgContentItem.msg.match([self query])];
                     self->m_resultCount += count.numberValue.intValue;
-                }
+                }];
             } break;
             case 1: {
                 WCTProperties vecProperty;
                 vecProperty.push_back(FTS3MsgContentItem.userNameId);
                 vecProperty.push_back(FTS3MsgContentItem.msgLocalId);
                 vecProperty.push_back(FTS3MsgContentItem.createTime);
-                vecProperty.push_back(FTS3MsgContentItem.msg);
-                NSArray* result;
-                for (int i = 0; i < self->m_tableCount; i++) {
-                    result = [self.database getObjectsOnResultColumns:vecProperty
-                                                            fromTable:[self indexTableNameOfId:i]
-                                                                where:FTS3MsgContentItem.msg.match([self query])
-                                                               orders:FTS5MsgContentItem.createTime];
-                }
+                [self queryInAllTable:^(NSString* tableName) {
+                    NSArray* result = [self.database getObjectsOnResultColumns:vecProperty
+                                                                     fromTable:tableName
+                                                                         where:FTS3MsgContentItem.msg.match([self query])
+                                                                        orders:FTS5MsgContentItem.createTime];
+                    self->m_resultCount += result.count;
+                }];
             } break;
             case 2: {
                 WCTProperties vecProperty;
@@ -247,15 +301,39 @@
                 expectedUserNameIds.push_back(@1);
                 expectedUserNameIds.push_back(@2);
                 expectedUserNameIds.push_back(@3);
-                NSArray* result;
-                for (int i = 0; i < self->m_tableCount; i++) {
-                    result = [self.database getObjectsOnResultColumns:vecProperty
-                                                            fromTable:[self indexTableNameOfId:i]
-                                                                where:FTS3MsgContentItem.userNameId.in(expectedUserNameIds) && FTS3MsgContentItem.createTime < std::numeric_limits<double>::max() / 2 && FTS3MsgContentItem.msg.match([self query])
-                                                               orders:{ FTS3MsgContentItem.createTime.asOrder(WCTOrderedDescending) }];
-                }
+                [self queryInAllTable:^(NSString* tableName) {
+                    NSArray* result = [self.database getObjectsOnResultColumns:vecProperty
+                                                                     fromTable:tableName
+                                                                         where:FTS3MsgContentItem.userNameId.in(expectedUserNameIds) && FTS3MsgContentItem.msgLocalId < 1000000 && FTS3MsgContentItem.msg.match([self query])
+                                                                        orders:{ FTS3MsgContentItem.createTime.asOrder(WCTOrderedDescending) }];
+                    self->m_resultCount += result.count;
+                }];
             } break;
-
+            case 3: {
+                [self queryInAllTable:^(NSString* tableName) {
+                    WCTValue* count = [self.database getValueOnResultColumn:FTS5NewFavSearchItem.allProperties.count()
+                                                                  fromTable:tableName
+                                                                      where:FTS5NewFavSearchItem.searchTitle.match([self query]) || FTS5NewFavSearchItem.searchDesc.match([self query])
+                                                                            || FTS5NewFavSearchItem.searchSource.match([self query])];
+                    self->m_resultCount += count.numberValue.unsignedIntValue;
+                }];
+            } break;
+            case 4: {
+                [self queryInAllTable:^(NSString* tableName) {
+                    WCTValue* count = [self.database getValueOnResultColumn:FTS5NewFavSearchItem.allProperties.count()
+                                                                  fromTable:tableName
+                                                                      where:FTS5NewFavSearchItem.searchTitle.match([self query])];
+                    self->m_resultCount += count.numberValue.unsignedIntValue;
+                    count = [self.database getValueOnResultColumn:FTS5NewFavSearchItem.allProperties.count()
+                                                        fromTable:tableName
+                                                            where:FTS5NewFavSearchItem.searchDesc.match([self query])];
+                    self->m_resultCount += count.numberValue.unsignedIntValue;
+                    count = [self.database getValueOnResultColumn:FTS5NewFavSearchItem.allProperties.count()
+                                                        fromTable:tableName
+                                                            where:FTS5NewFavSearchItem.searchSource.match([self query])];
+                    self->m_resultCount += count.numberValue.unsignedIntValue;
+                }];
+            } break;
             default:
                 break;
             }
@@ -263,9 +341,54 @@
     }
 }
 
+- (void)test_pinyin_quary
+{
+    NSMutableArray<NSArray<NSNumber*>*>* testCases = [[NSMutableArray alloc] init];
+    NSArray<NSNumber*>* testCase;
+
+    int tkId = [self getTokenizerIdWithNeedBinary:NO needPinyin:YES needSymbol:NO];
+    testCase = [self genTestCaseConfigDataType:FTSDataType_FTS5 tableCount:4 tokenizerId:tkId quality:10000 optimizeLevel:2 querylevel:3 queryTimes:10 queryType:0 needMultiThread:NO];
+    [testCases addObject:testCase];
+
+    NSArray* querys = @[
+        @"\"shan yu qi mu ju dan che\"",
+        @"\"chan yu qi mo ju shan che\"",
+        @"\"dan yu qi mo ju chan che\"",
+        @"\"dan yu qi mu ju ch\"*",
+        @"\"dan yu qi mo ju d\"*",
+        @"\"s y q m j d c\"",
+        @"\"c y q m j s c\"",
+        @"\"c y q m j\"",
+    ];
+
+    for (NSArray<NSNumber*>* config in testCases) {
+        [self applyConfig:config];
+        [self measureTest:^{
+            switch (self->m_queryType) {
+            case 0: {
+                int preresultCount = 0;
+                for (NSString* query in querys) {
+                    self->m_resultCount = 0;
+                    [self queryInAllTable:^(NSString* tableName) {
+                        NSArray* allObj = [self.database getObjectsOfClass:FTS3MsgContentItem.class fromTable:tableName where:FTS3MsgContentItem.msg.match(query)];
+                        self->m_resultCount += allObj.count;
+                    }];
+                    if (preresultCount == 0) {
+                        preresultCount = self->m_resultCount;
+                    } else {
+                        TestCaseAssertTrue(preresultCount == self->m_resultCount);
+                    }
+                }
+            } break;
+            }
+        }];
+    }
+}
+
 - (void)test_fts5_index_view
 {
-    [self applyConfig:[self genTestCaseConfigDataType:FTSDataType_FTS5_RowidIndex tableCount:0 needBinary:NO quality:1000000 optimizeLevel:0 querylevel:1 queryTimes:100 queryType:0 needMultiThread:NO]];
+    int tkId = [self getTokenizerIdWithNeedBinary:NO needPinyin:NO needSymbol:NO];
+    [self applyConfig:[self genTestCaseConfigDataType:FTSDataType_FTS5_RowidIndex tableCount:0 tokenizerId:tkId quality:1000000 optimizeLevel:0 querylevel:1 queryTimes:100 queryType:0 needMultiThread:NO]];
     [self setUpDatabase];
 
     [self.database execute:WCDB::StatementCreateVirtualTable().createVirtualTable(@"indexView").usingModule(@"fts5vocab").argument([self indexTableNameOfId:0]).argument(@"instance")];
@@ -279,7 +402,8 @@
 
 - (void)test_delete_rowid
 {
-    [self applyConfig:[self genTestCaseConfigDataType:FTSDataType_FTS5_RowidIndex tableCount:0 needBinary:NO quality:1000000 optimizeLevel:0 querylevel:1 queryTimes:100 queryType:0 needMultiThread:NO]];
+    int tkId = [self getTokenizerIdWithNeedBinary:NO needPinyin:NO needSymbol:NO];
+    [self applyConfig:[self genTestCaseConfigDataType:FTSDataType_FTS5_RowidIndex tableCount:0 tokenizerId:tkId quality:1000000 optimizeLevel:0 querylevel:1 queryTimes:100 queryType:0 needMultiThread:NO]];
 
     [self measureTest:^() {
         [self.database runTransaction:^BOOL(WCTHandle* _Nonnull) {

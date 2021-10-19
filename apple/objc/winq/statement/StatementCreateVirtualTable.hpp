@@ -43,8 +43,6 @@ public:
 
     StatementCreateVirtualTable& argument(const UnsafeStringView& argument);
     StatementCreateVirtualTable& argument(const SQL& argument);
-
-    static StringView tokenize(const UnsafeStringView& name);
 };
 
 } // namespace WCDB

@@ -67,9 +67,4 @@ StatementCreateVirtualTable& StatementCreateVirtualTable::argument(const SQL& ar
     return *this;
 }
 
-StringView StatementCreateVirtualTable::tokenize(const UnsafeStringView& name)
-{
-    return StringView::formatted("tokenize = %s", name.data());
-}
-
 } // namespace WCDB

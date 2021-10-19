@@ -63,7 +63,7 @@ WCDB_SYNTHESIZE(reservedInt)
 WCDB_SYNTHESIZE(reservedText)
 
 WCDB_VIRTUAL_TABLE_MODULE(WCTModuleFTS3)
-//WCDB_VIRTUAL_TABLE_TOKENIZE(WCTTokenizerOneWord)
+WCDB_VIRTUAL_TABLE_TOKENIZE(WCTTokenizerOneOrBinary)
 WCDB_NOTINDEXED(userNameId)
 WCDB_NOTINDEXED(msgLocalId)
 WCDB_NOTINDEXED(createTime)
@@ -115,7 +115,7 @@ WCDB_SYNTHESIZE(reservedInt)
 WCDB_SYNTHESIZE(reservedText)
 
 WCDB_VIRTUAL_TABLE_MODULE(WCTModuleFTS5)
-//WCDB_VIRTUAL_TABLE_TOKENIZE(WCTTokenizerOneWord_FTS5)
+WCDB_VIRTUAL_TABLE_TOKENIZE_WITH_PARAMETERS(WCTTokenizerOneOrBinary_FTS5, WCTTokenizerParameter_OneWord)
 
 WCDB_MULTI_PRIMARY("userNameId_msgLocalId_createTime", userNameId)
 WCDB_MULTI_PRIMARY("userNameId_msgLocalId_createTime", msgLocalId)
@@ -141,6 +141,66 @@ WCDB_NOTINDEXED(reservedText)
 - (NSString *)description
 {
     return [NSString stringWithFormat:@"%d %d %d %@", self.userNameId, self.msgLocalId, self.createTime, self.msg];
+}
+
+@end
+
+@interface FTS5NewFavSearchItem ()
+@property (nonatomic, assign) UInt32 FavItemReservedInt;
+@property (nonatomic, retain) NSString *FavItemReservedText;
+
+WCDB_PROPERTY(FavItemReservedInt);
+WCDB_PROPERTY(FavItemReservedText);
+@end
+
+@implementation FTS5NewFavSearchItem
+
+@synthesize localId = localId;
+@synthesize updateTime = updateTime;
+@synthesize searchTitle = searchTitle;
+@synthesize searchDesc = searchDesc;
+@synthesize searchSource = searchSource;
+
+WCDB_IMPLEMENTATION(FTS5NewFavSearchItem)
+//参与建索引的列放在前面，并且按照该列的内容长度从大到小排列，有利于减小索引占用空间。
+//因为WCDB还是会强制将列按照属性名的字母序排序，列名前面放个A、B、C可以保证列的顺序。
+WCDB_SYNTHESIZE_COLUMN(searchTitle, "AFavItemSearchTitle")
+WCDB_SYNTHESIZE_COLUMN(searchDesc, "BFavItemSearchDesc")
+WCDB_SYNTHESIZE_COLUMN(searchSource, "CFavItemSearchSource")
+WCDB_SYNTHESIZE_COLUMN(localId, WCDB_STRINGIFY(COL_FTS_FAV_ITEM_LOCAL_ID))
+WCDB_SYNTHESIZE_COLUMN(updateTime, WCDB_STRINGIFY(COL_FTS_FAV_ITEM_UPDATE_TIME))
+
+WCDB_SYNTHESIZE(FavItemReservedInt)
+WCDB_SYNTHESIZE(FavItemReservedText)
+
+WCDB_VIRTUAL_TABLE_MODULE(WCTModuleFTS5)
+WCDB_VIRTUAL_TABLE_TOKENIZE_WITH_PARAMETERS(WCTTokenizerOneOrBinary_FTS5, WCTTokenizerParameter_OneWord)
+
+WCDB_DEFAULT(localId, 0)
+WCDB_DEFAULT(updateTime, 0)
+WCDB_DEFAULT(FavItemReservedInt, 0)
+
+WCDB_NOTINDEXED(localId)
+WCDB_NOTINDEXED(updateTime)
+WCDB_NOTINDEXED(FavItemReservedInt)
+WCDB_NOTINDEXED(FavItemReservedText)
+
+- (id)init
+{
+    if (self = [super init]) {
+        self.localId = 0;
+        self.updateTime = 0;
+        self.searchTitle = nil;
+        self.searchDesc = nil;
+        self.searchSource = nil;
+    }
+
+    return self;
+}
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"localId=%u, title=%@", (unsigned int) localId, searchTitle];
 }
 
 @end

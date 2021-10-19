@@ -62,6 +62,8 @@
         return FTS5MsgContentItem.class;
     case FTSDataType_FTS5_RowidIndex:
         return FTS5MsgContentItem.class;
+    case FTSDataType_Fav:
+        return FTS5NewFavSearchItem.class;
     }
 }
 
@@ -143,6 +145,12 @@
                 return YES;
             }];
         } break;
+        case FTSDataType_Fav: {
+            NSArray* objects = [[Random shared] randomFavFTSItem:MIN(needInsert, m_batchInsertCount)];
+            for (int i = 0; i < self.tableCount; i++) {
+                TestCaseAssertTrue([prototype insertObjects:[objects subarrayWithRange:NSMakeRange(m_batchInsertCount * i / self.tableCount, m_batchInsertCount * (i + 1) / self.tableCount - m_batchInsertCount * i / self.tableCount)] intoTable:[self indexTableNameOf:i]]);
+            }
+        } break;
         }
     }
 
@@ -221,6 +229,13 @@
             TestCaseAssertNotNil(count);
             totalCount = count.numberValue.intValue;
             break;
+        case FTSDataType_Fav: {
+            for (int i = 0; i < self.tableCount; i++) {
+                count = [prototype getValueOnResultColumn:FTS5NewFavSearchItem.allProperties.count() fromTable:[self indexTableNameOf:i]];
+                TestCaseAssertNotNil(count);
+                totalCount += count.numberValue.intValue;
+            }
+        } break;
         }
         TestCaseLog(@"get quality cost time %.2f", [[NSDate date] timeIntervalSinceDate:start]);
         return totalCount;
@@ -241,9 +256,14 @@
     case FTSDataType_FTS5_RowidIndex:
         category = @"FTS5_Rowid";
         break;
+    case FTSDataType_Fav:
+        category = @"FTS5_Fav";
+        break;
     }
-    if (self.needBinary) {
-        category = [category stringByAppendingString:@"_Binary"];
+    if (self.tokenizerName.length > 0) {
+        NSRange range = [self.tokenizerName rangeOfString:WCTTokenizerOneOrBinary];
+        NSString* tokenizerParameter = [[self.tokenizerName substringFromIndex:NSMaxRange(range)] stringByReplacingOccurrencesOfString:@" " withString:@"-"];
+        category = [category stringByAppendingString:tokenizerParameter];
     }
     if (self.tableCount > 0) {
         category = [category stringByAppendingFormat:@"_Table%d", self.tableCount];

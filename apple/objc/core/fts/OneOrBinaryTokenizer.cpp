@@ -25,6 +25,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Error.hpp>
 #include <WCDB/OneOrBinaryTokenizer.hpp>
+#include <WCDB/SQLite.h>
 
 extern "C" {
 extern int porterStem(char *p, int i, int j);
@@ -34,11 +35,13 @@ namespace WCDB {
 
 #pragma mark - Tokenizer Info
 OneOrBinaryTokenizerInfo::OneOrBinaryTokenizerInfo(int argc, const char *const *argv)
-: AbstractFTS3TokenizerInfo(argc, argv), m_needBinary(true)
+: AbstractFTS3TokenizerInfo(argc, argv), m_needBinary(true), m_needSymbol(false)
 {
     for (int i = 0; i < argc; i++) {
         if (strcmp(argv[i], "just_one") == 0) {
             m_needBinary = false;
+        } else if (strcmp(argv[i], "need_symbol") == 0) {
+            m_needSymbol = true;
         }
     }
 }
@@ -57,26 +60,29 @@ OneOrBinaryTokenizer::OneOrBinaryTokenizer(const char *input,
 , m_startOffset(0)
 , m_endOffset(0)
 , m_cursor(0)
-, m_cursorTokenType(TokenType::None)
 , m_cursorTokenLength(0)
-, m_lemmaBufferLength(0)
+, m_cursorTokenType(TokenType::None)
+, m_preTokenType(TokenType::None)
 , m_subTokensCursor(0)
 , m_subTokensDoubleChar(true)
-, m_bufferLength(0)
+, m_normalTokenLength(0)
+, m_pinyinTokenIndex(0)
 , m_needBinary(true)
+, m_ispinyin(false)
+, m_needSymbol(false)
 {
     static_assert(sizeof(UnicodeChar) == 2, "UnicodeChar must be 2 byte length.");
 
     if (m_input == nullptr) {
         m_inputLength = 0;
-    }
-    if (m_inputLength < 0) {
+    } else if (m_inputLength <= 0) {
         m_inputLength = (int) strlen(m_input);
     }
     OneOrBinaryTokenizerInfo *oneOrBinaryInfo
     = dynamic_cast<OneOrBinaryTokenizerInfo *>(tokenizerInfo);
     if (oneOrBinaryInfo != nullptr) {
         m_needBinary = oneOrBinaryInfo->m_needBinary;
+        m_needSymbol = oneOrBinaryInfo->m_needSymbol;
     }
 }
 
@@ -89,18 +95,32 @@ OneOrBinaryTokenizer::OneOrBinaryTokenizer(void *pCtx, const char **azArg, int n
 , m_startOffset(0)
 , m_endOffset(0)
 , m_cursor(0)
-, m_cursorTokenType(TokenType::None)
 , m_cursorTokenLength(0)
-, m_lemmaBufferLength(0)
+, m_cursorTokenType(TokenType::None)
+, m_preTokenType(TokenType::None)
 , m_subTokensCursor(0)
 , m_subTokensDoubleChar(true)
-, m_bufferLength(0)
+, m_normalTokenLength(0)
+, m_pinyinTokenIndex(0)
 , m_needBinary(true)
+, m_ispinyin(false)
+, m_needSymbol(false)
 {
     for (int i = 0; i < nArg; i++) {
         if (strcmp(azArg[i], "just_one") == 0) {
             m_needBinary = false;
+        } else if (strcmp(azArg[i], "pin_yin") == 0) {
+            // Pin yin parameter only for fts5 tokenizer
+            m_ispinyin = true;
+        } else if (strcmp(azArg[i], "need_symbol") == 0) {
+            //symbol is ignored in pinyin tokenizer
+            m_needSymbol = true;
         }
+    }
+    if (m_ispinyin) {
+        //The pinyin parameter is incompatible with other parameters.
+        m_needSymbol = false;
+        m_needBinary = false;
     }
     static_assert(sizeof(UnicodeChar) == 2, "UnicodeChar must be 2 byte length.");
 }
@@ -109,37 +129,99 @@ OneOrBinaryTokenizer::~OneOrBinaryTokenizer() = default;
 
 void OneOrBinaryTokenizer::loadInput(int flags, const char *pText, int nText)
 {
-    WCDB_UNUSED(flags)
     m_input = pText;
     m_inputLength = nText;
     if (m_input == nullptr) {
         m_inputLength = 0;
-    }
-    if (m_inputLength < 0) {
+    } else if (m_inputLength <= 0) {
         m_inputLength = (int) strlen(m_input);
+    }
+    if (flags & FTS5_TOKENIZE_QUERY) {
+        m_ispinyin = false;
     }
     m_position = 0;
     m_startOffset = 0;
     m_endOffset = 0;
     m_cursor = 0;
-    m_cursorTokenType = TokenType::None;
     m_cursorTokenLength = 0;
-    m_lemmaBufferLength = 0;
+    m_cursorTokenType = TokenType::None;
+    m_preTokenType = TokenType::None;
+    m_subTokensLengthArray.clear();
     m_subTokensCursor = 0;
     m_subTokensDoubleChar = true;
-    m_bufferLength = true;
+    m_normalToken.clear();
+    m_normalTokenLength = 0;
+    m_pinyinTokens.clear();
+    m_pinyinTokenIndex = 0;
 }
 
+// for fts5
 int OneOrBinaryTokenizer::nextToken(int *tflags, const char **ppToken, int *nToken, int *iStart, int *iEnd)
 {
+    if (!m_ispinyin || m_pinyinTokens.size() == 0) {
+        while (true) {
+            int ret = stepNextToken();
+            if (Error::rc2c(ret) != Error::Code::OK) {
+                return ret;
+            }
+            if (!m_ispinyin) {
+                ret = genNormalToken();
+                if (Error::rc2c(ret) != Error::Code::OK) {
+                    return ret;
+                }
+                break;
+            } else {
+                genPinyinToken();
+                if (m_pinyinTokens.size() > 0) {
+                    break;
+                }
+            }
+        }
+    }
     *tflags = 0;
-    int position = 0;
-    return step(ppToken, nToken, iStart, iEnd, &position);
+    if (!m_ispinyin) {
+        *ppToken = m_normalToken.data();
+        *nToken = m_normalTokenLength;
+        *iStart = m_startOffset;
+        *iEnd = m_endOffset;
+        return Error::c2rc(Error::Code::OK);
+    } else {
+        if (m_pinyinTokenIndex > 0) {
+            *tflags = FTS5_TOKEN_COLOCATED;
+        }
+        const auto pinyinToken = m_pinyinTokens.begin();
+        *ppToken = pinyinToken->data();
+        *nToken = (int) pinyinToken->length();
+        *iStart = m_startOffset;
+        *iEnd = m_endOffset;
+        m_pinyinTokenIndex++;
+        m_pinyinTokens.erase(pinyinToken);
+        return Error::c2rc(Error::Code::OK);
+    }
+}
+
+// for fts3
+int OneOrBinaryTokenizer::step(
+const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *piPosition)
+{
+    int ret = stepNextToken();
+    if (Error::rc2c(ret) != Error::Code::OK) {
+        return ret;
+    }
+    ret = genNormalToken();
+    if (Error::rc2c(ret) != Error::Code::OK) {
+        return ret;
+    }
+    *ppToken = m_normalToken.data();
+    *pnBytes = m_normalTokenLength;
+    *piStartOffset = m_startOffset;
+    *piEndOffset = m_endOffset;
+    *piPosition = m_position;
+    return Error::c2rc(Error::Code::OK);
 }
 
 //Inspired by zorrozhang
-int OneOrBinaryTokenizer::step(
-const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *piPosition)
+int OneOrBinaryTokenizer::stepNextToken()
 {
     Error::Code code = Error::Code::OK;
     if (m_position == 0) {
@@ -155,38 +237,45 @@ const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *p
         }
 
         //Skip symbol
-        while (m_cursorTokenType == TokenType::BasicMultilingualPlaneSymbol) {
-            code = Error::rc2c(cursorStep());
-            if (code != Error::Code::OK) {
-                return Error::c2rc(code);
+        if (!m_needSymbol) {
+            while (m_cursorTokenType == TokenType::BasicMultilingualPlaneSymbol) {
+                code = Error::rc2c(cursorStep());
+                if (code != Error::Code::OK) {
+                    return Error::c2rc(code);
+                }
+            }
+        } else if (m_ispinyin) {
+            while (m_cursorTokenType != TokenType::BasicMultilingualPlaneOther
+                   && m_cursorTokenType != TokenType::None) {
+                code = Error::rc2c(cursorStep());
+                if (code != Error::Code::OK) {
+                    return Error::c2rc(code);
+                }
             }
         }
 
-        if (m_cursorTokenType == TokenType::None) {
-            return Error::c2rc(Error::Code::Done);
-        }
-
-        TokenType type = m_cursorTokenType;
-        switch (type) {
+        m_preTokenType = m_cursorTokenType;
+        switch (m_preTokenType) {
         case TokenType::BasicMultilingualPlaneLetter:
         case TokenType::BasicMultilingualPlaneDigit:
             m_startOffset = m_cursor;
             while (((code = Error::rc2c(cursorStep())) == Error::Code::OK)
-                   && m_cursorTokenType == type)
+                   && m_cursorTokenType == m_preTokenType)
                 ;
             if (code != Error::Code::OK) {
                 return Error::c2rc(code);
             }
             m_endOffset = m_cursor;
-            m_bufferLength = m_endOffset - m_startOffset;
+            m_normalTokenLength = m_endOffset - m_startOffset;
             break;
+        case TokenType::BasicMultilingualPlaneSymbol:
         case TokenType::BasicMultilingualPlaneOther:
         case TokenType::AuxiliaryPlaneOther:
             m_subTokensLengthArray.push_back(m_cursorTokenLength);
             m_subTokensCursor = m_cursor;
             m_subTokensDoubleChar = m_needBinary;
             while (((code = Error::rc2c(cursorStep())) == Error::Code::OK)
-                   && m_cursorTokenType == type) {
+                   && m_cursorTokenType == m_preTokenType) {
                 m_subTokensLengthArray.push_back(m_cursorTokenLength);
             }
             if (code != Error::Code::OK) {
@@ -194,35 +283,12 @@ const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *p
             }
             subTokensStep();
             break;
-        default:
-            break;
-        }
-        if (type == TokenType::BasicMultilingualPlaneLetter) {
-            code = Error::rc2c(lemmatization(m_input + m_startOffset, m_bufferLength));
-            if (code != Error::Code::OK) {
-                return Error::c2rc(code);
-            }
-        } else {
-            m_buffer.assign(m_input + m_startOffset, m_input + m_startOffset + m_bufferLength);
+        case TokenType::None:
+            return Error::c2rc(Error::Code::Done);
         }
     } else {
         subTokensStep();
-        m_buffer.assign(m_input + m_startOffset, m_input + m_startOffset + m_bufferLength);
     }
-
-    if (m_lemmaBufferLength == 0) {
-        *ppToken = m_buffer.data();
-        *pnBytes = m_bufferLength;
-    } else {
-        *ppToken = m_lemmaBuffer.data();
-        *pnBytes = m_lemmaBufferLength;
-        m_lemmaBufferLength = 0;
-    }
-
-    *piStartOffset = m_startOffset;
-    *piEndOffset = m_endOffset;
-    *piPosition = m_position++;
-
     return Error::c2rc(Error::Code::OK);
 }
 
@@ -311,19 +377,21 @@ int OneOrBinaryTokenizer::cursorSetup()
 int OneOrBinaryTokenizer::lemmatization(const char *input, int inputLength)
 {
     // tolower only. You can implement your own lemmatization.
-    m_buffer.assign(input, input + inputLength);
-    std::transform(m_buffer.begin(), m_buffer.end(), m_buffer.begin(), ::tolower);
-    m_bufferLength = porterStem(m_buffer.data(), 0, m_bufferLength - 1) + 1;
+    m_normalToken.assign(input, input + inputLength);
+    std::transform(
+    m_normalToken.begin(), m_normalToken.end(), m_normalToken.begin(), ::tolower);
+    m_normalTokenLength
+    = porterStem(m_normalToken.data(), 0, m_normalTokenLength - 1) + 1;
     return Error::c2rc(Error::Code::OK);
 }
 
 void OneOrBinaryTokenizer::subTokensStep()
 {
     m_startOffset = m_subTokensCursor;
-    m_bufferLength = m_subTokensLengthArray[0];
+    m_normalTokenLength = m_subTokensLengthArray[0];
     if (m_subTokensDoubleChar) {
         if (m_subTokensLengthArray.size() > 1) {
-            m_bufferLength += m_subTokensLengthArray[1];
+            m_normalTokenLength += m_subTokensLengthArray[1];
             if (m_needBinary) {
                 m_subTokensDoubleChar = false;
             }
@@ -337,7 +405,46 @@ void OneOrBinaryTokenizer::subTokensStep()
             m_subTokensDoubleChar = true;
         }
     }
-    m_endOffset = m_startOffset + m_bufferLength;
+    m_endOffset = m_startOffset + m_normalTokenLength;
+}
+
+int OneOrBinaryTokenizer::genNormalToken()
+{
+    if (m_preTokenType == TokenType::BasicMultilingualPlaneLetter) {
+        Error::Code code
+        = Error::rc2c(lemmatization(m_input + m_startOffset, m_normalTokenLength));
+        if (code != Error::Code::OK) {
+            return Error::c2rc(code);
+        }
+    } else {
+        m_normalToken.assign(m_input + m_startOffset,
+                             m_input + m_startOffset + m_normalTokenLength);
+    }
+    m_position++;
+    return Error::c2rc(Error::Code::OK);
+}
+
+void OneOrBinaryTokenizer::genPinyinToken()
+{
+    m_pinyinTokens.clear();
+    m_pinyinTokenIndex = 0;
+    m_position++;
+    UnsafeStringView token = UnsafeStringView(m_input + m_startOffset, m_normalTokenLength);
+    const std::vector<StringView> *pinyinPtr = getPinYin(token);
+    if (pinyinPtr == nullptr) {
+        return;
+    }
+    for (const StringView &pinyin : *pinyinPtr) {
+        if (pinyin.length() == 0) {
+            continue;
+        }
+        //full pinyin
+        m_pinyinTokens.emplace(pinyin);
+        if (pinyin.length() > 1) {
+            //short pinyin
+            m_pinyinTokens.emplace(pinyin.data(), 1);
+        }
+    }
 }
 
 } // namespace WCDB

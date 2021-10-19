@@ -31,6 +31,7 @@ typedef NS_ENUM(NSUInteger, FTSDataType) {
     FTSDataType_FTS3 = 0,
     FTSDataType_FTS5,
     FTSDataType_FTS5_RowidIndex,
+    FTSDataType_Fav,
 };
 
 @interface FTSFactory : PrototypeFactory <PrototypePreparation>
@@ -40,7 +41,7 @@ typedef NS_ENUM(NSUInteger, FTSDataType) {
 @property (nonatomic, assign) int tableCount;
 @property (nonatomic, assign) FTSDataType dataType;
 @property (nonatomic, assign) int autoMergeCount;
-@property (nonatomic, assign) BOOL needBinary;
+@property (nonatomic, assign) NSString* tokenizerName;
 
 - (NSString*)indexTableNameOf:(int)tableId;
 

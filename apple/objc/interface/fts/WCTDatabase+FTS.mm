@@ -33,11 +33,15 @@ NSString* const WCTTokenizerUnicode61 = @"unicode61";
 NSString* const WCTTokenizerOneOrBinary = @"wcdb_one_or_binary";
 NSString* const WCTTokenizerOneOrBinary_FTS5 = @"wcdb_one_or_binary_fts5";
 NSString* const WCTTokenizerLegacyOneOrBinary = @"WCDB";
-NSString* const WCTTokenizerOneWord = @"wcdb_one_or_binary just_one";
-NSString* const WCTTokenizerOneWord_FTS5 = @"wcdb_one_or_binary_fts5 just_one";
+
+NSString* const WCTTokenizerParameter_OneWord = @"just_one";
+NSString* const WCTTokenizerParameter_PinYin = @"pin_yin";
+NSString* const WCTTokenizerParameter_NeedSymbol = @"need_symbol";
 
 NSString* const WCTModuleFTS3 = @"fts3";
 NSString* const WCTModuleFTS5 = @"fts5";
+
+static NSDictionary* g_pinyinDict = nil;
 
 static std::nullptr_t initialize()
 {
@@ -66,6 +70,11 @@ static std::nullptr_t initialize()
 {
     WCTRemedialAssert(name.length > 0, "Module name can't be nil.", return;);
     WCDB::Core::shared().registerTokenizer(name, module);
+}
+
++ (void)configPinYinDict:(NSDictionary<NSString*, NSArray<NSString*>*>*)pinyinDict
+{
+    WCTOneOrBinaryTokenizer::configPinyinDict(pinyinDict);
 }
 
 @end

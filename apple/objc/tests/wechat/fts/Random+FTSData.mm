@@ -38,12 +38,15 @@
         item.createTime = (UInt32)[random.date timeIntervalSince1970];
         item.userNameId = random.uint8 % 100;
         if (i % 3 == 0) {
-            item.msg = [random.chineseString stringByReplacingCharactersInRange:NSMakeRange(40, 8) withString:@"我们批量测试内容"];
+            item.msg = [random.chineseString stringByReplacingCharactersInRange:NSMakeRange(40, 8) withString:@"大规模批量测试内容"];
         } else {
             item.msg = random.chineseString;
         }
         if (g_localId % 1000 == 0) {
             item.msg = [item.msg stringByReplacingCharactersInRange:NSMakeRange(60, 8) withString:@"中等规模随机命中"];
+        }
+        if (g_localId % 2000 == 0) {
+            item.msg = [item.msg stringByReplacingCharactersInRange:NSMakeRange(0, 7) withString:@"单于骑模具单车"];
         }
 
         [itemList addObject:item];
@@ -62,12 +65,47 @@
         item.createTime = (UInt32)[random.date timeIntervalSince1970];
         item.userNameId = random.uint8 % 100;
         if (i % 3 == 0) {
-            item.msg = [random.chineseString stringByReplacingCharactersInRange:NSMakeRange(40, 8) withString:@"我们批量测试内容"];
+            item.msg = [random.chineseString stringByReplacingCharactersInRange:NSMakeRange(40, 8) withString:@"大规模批量测试内容"];
         } else {
             item.msg = random.chineseString;
         }
         if (g_localId % 1000 == 0) {
             item.msg = [item.msg stringByReplacingCharactersInRange:NSMakeRange(60, 8) withString:@"中等规模随机命中"];
+        }
+        if (g_localId % 2000 == 0) {
+            item.msg = [item.msg stringByReplacingCharactersInRange:NSMakeRange(0, 7) withString:@"单于骑模具单车"];
+        }
+        [itemList addObject:item];
+    }
+    return itemList;
+}
+
+- (NSArray<FTS5NewFavSearchItem*>*)randomFavFTSItem:(NSInteger)count
+{
+    static int g_localId = 0;
+    NSMutableArray<FTS5NewFavSearchItem*>* itemList = [NSMutableArray arrayWithCapacity:count];
+    Random* random = [Random shared];
+    for (NSInteger i = 0; i < count; ++i) {
+        FTS5NewFavSearchItem* item = [[FTS5NewFavSearchItem alloc] init];
+        item.localId = ++g_localId;
+        item.updateTime = (UInt32)[random.date timeIntervalSince1970];
+        item.searchTitle = random.chineseString;
+        item.searchDesc = random.chineseString;
+        item.searchSource = random.chineseString;
+        if (i % 3 == 0) {
+            item.searchTitle = [item.searchTitle stringByReplacingCharactersInRange:NSMakeRange(40, 8) withString:@"大规模批量测试内容"];
+            item.searchDesc = [item.searchDesc stringByReplacingCharactersInRange:NSMakeRange(40, 8) withString:@"大规模批量测试内容"];
+            item.searchSource = [item.searchSource stringByReplacingCharactersInRange:NSMakeRange(40, 8) withString:@"大规模批量测试内容"];
+        }
+        if (g_localId % 1000 == 0) {
+            item.searchTitle = [item.searchTitle stringByReplacingCharactersInRange:NSMakeRange(60, 8) withString:@"中等规模随机命中"];
+            item.searchDesc = [item.searchDesc stringByReplacingCharactersInRange:NSMakeRange(60, 8) withString:@"中等规模随机命中"];
+            item.searchSource = [item.searchSource stringByReplacingCharactersInRange:NSMakeRange(60, 8) withString:@"中等规模随机命中"];
+        }
+        if (g_localId % 2000 == 0) {
+            item.searchTitle = [item.searchTitle stringByReplacingCharactersInRange:NSMakeRange(30, 7) withString:@"单于骑模具单车"];
+            item.searchDesc = [item.searchDesc stringByReplacingCharactersInRange:NSMakeRange(30, 7) withString:@"单于骑模具单车"];
+            item.searchSource = [item.searchSource stringByReplacingCharactersInRange:NSMakeRange(30, 7) withString:@"单于骑模具单车"];
         }
         [itemList addObject:item];
     }

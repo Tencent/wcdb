@@ -38,7 +38,7 @@
     self.expectMode = DatabaseTestCaseExpectFirstFewSQLs;
     self.tableClass = FTS5Object.class;
     self.isVirtualTable = YES;
-    [self.database addTokenizer:WCTTokenizerOneWord_FTS5];
+    [self.database addTokenizer:WCTTokenizerOneOrBinary_FTS5];
     TestCaseAssertTrue([self createTable]);
 
     FTS5Object *dummy = [[FTS5Object alloc] init];
@@ -274,6 +274,61 @@
     WCTValue *count = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column("segid").count().distinct()).from([NSString stringWithFormat:@"%@_idx", self.tableName])];
     TestCaseAssertTrue(count.numberValue.intValue < 8);
     TestCaseAssertTrue(maxCost < 0.02);
+}
+
+@end
+
+@interface FTS5PinyinTests : TableTestCase
+
+@end
+
+@implementation FTS5PinyinTests
+
+- (void)setUp
+{
+    [WCTDatabase configPinYinDict:@{
+        @"单" : @[ @"shan", @"dan", @"chan" ],
+        @"于" : @[ @"yu" ],
+        @"骑" : @[ @"qi" ],
+        @"模" : @[ @"mo", @"mu" ],
+        @"具" : @[ @"ju" ],
+        @"车" : @[ @"che" ],
+    }];
+    [super setUp];
+    self.expectMode = DatabaseTestCaseExpectFirstFewSQLs;
+    self.tableClass = FTS5PinyinObject.class;
+    self.isVirtualTable = YES;
+    [self.database addTokenizer:WCTTokenizerOneOrBinary_FTS5];
+    TestCaseAssertTrue([self createTable]);
+
+    FTS5PinyinObject *dummy = [[FTS5PinyinObject alloc] init];
+    dummy.content = @"测试内容";
+    TestCaseAssertTrue([self.table insertObject:dummy]);
+}
+
+- (void)test_pinyin
+{
+    FTS5PinyinObject *content = [[FTS5PinyinObject alloc] init];
+    content.content = @"单于骑模具单车";
+    TestCaseAssertTrue([self.table insertObject:content]);
+
+    NSArray *querys = @[
+        @"\"shan yu qi mu ju dan che\"",
+        @"\"chan yu qi mo ju shan che\"",
+        @"\"dan yu qi mo ju chan che\"",
+        @"\"dan yu qi mu ju ch\"*",
+        @"\"dan yu qi mo ju d\"*",
+        @"\"s y q m j d c\"",
+        @"\"c y q m j s c\"",
+        @"\"c y q m j\"",
+    ];
+    for (NSString *query in querys) {
+        [self doTestObject:content
+                    andSQL:[NSString stringWithFormat:@"SELECT content FROM main.testTable WHERE content MATCH '%@' ORDER BY rowid ASC", query]
+               bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
+                   return [self.table getObjectsWhere:FTS5PinyinObject.content.match(query)];
+               }];
+    }
 }
 
 @end

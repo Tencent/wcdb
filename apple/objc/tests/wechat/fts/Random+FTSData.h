@@ -33,6 +33,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSArray<FTS5MsgContentItem*>*)randomFTS5Items:(NSInteger)count;
 
+- (NSArray<FTS5NewFavSearchItem*>*)randomFavFTSItem:(NSInteger)count;
+
 @end
 
 NS_ASSUME_NONNULL_END

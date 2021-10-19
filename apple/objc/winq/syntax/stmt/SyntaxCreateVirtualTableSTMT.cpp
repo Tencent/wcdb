@@ -53,6 +53,7 @@ bool CreateVirtualTableSTMT::describle(std::ostringstream& stream) const
     }
     stream << table << " USING " << module;
     bool isFTS5 = module.caseInsensiveEqual("fts5");
+    StringView tokenizerPrefix = tokenizerPreFix();
     if (!arguments.empty()) {
         stream << "(";
         bool comma = false;
@@ -64,8 +65,8 @@ bool CreateVirtualTableSTMT::describle(std::ostringstream& stream) const
                 comma = true;
             }
             off_t loc = std::string_view::npos;
-            if (isFTS5 && (loc = argument.find("tokenize = ")) == 0) {
-                stream << "tokenize = '";
+            if (isFTS5 && (loc = argument.find(tokenizerPrefix)) == 0) {
+                stream << tokenizerPrefix << "'";
                 stream << UnsafeStringView(argument.data() + 11, argument.length() - 11);
                 stream << "'";
             } else if (!isFTS5 && (loc = argument.find("UNINDEXED")) != std::string_view::npos) {
@@ -92,6 +93,11 @@ void CreateVirtualTableSTMT::iterate(const Iterator& iterator, bool& stop)
 {
     Identifier::iterate(iterator, stop);
     recursiveIterate(schema, iterator, stop);
+}
+
+StringView CreateVirtualTableSTMT::tokenizerPreFix()
+{
+    return StringView("tokenize = ");
 }
 
 } // namespace Syntax
