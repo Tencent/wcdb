@@ -301,16 +301,17 @@ bool HandleNotification::postBusyNotification(int numberOfTimes)
 
 #pragma mark - Table Modification
 void HandleNotification::setNotificationWhenTableModified(const UnsafeStringView &name,
-                                      const TableModifiedNotification &tableModified)
+                                                          const TableModifiedNotification &tableModified)
 {
-    if(tableModified != nullptr){
+    if (tableModified != nullptr) {
         m_tableModifiedNotifications[name] = tableModified;
-    }else{
+    } else {
         m_tableModifiedNotifications.erase(name);
     }
 }
 
-void HandleNotification::postTableModifiedNotification(const UnsafeStringView &newTable, const UnsafeStringView &modifiedTable)
+void HandleNotification::postTableModifiedNotification(const UnsafeStringView &newTable,
+                                                       const UnsafeStringView &modifiedTable)
 {
     WCTAssert(!m_tableModifiedNotifications.empty());
     for (const auto &element : m_tableModifiedNotifications) {

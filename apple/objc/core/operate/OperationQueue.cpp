@@ -300,10 +300,12 @@ void OperationQueue::registerAsNoMergeFTSIndexRequired(const UnsafeStringView& p
     m_timedQueue.remove(operation);
 }
 
-void OperationQueue::asyncMergeFTSIndex(const UnsafeStringView& path, TableArray newTables, TableArray modifiedTables)
+void OperationQueue::asyncMergeFTSIndex(const UnsafeStringView& path,
+                                        TableArray newTables,
+                                        TableArray modifiedTables)
 {
     SharedLockGuard lockGuard(m_lock);
-    if (m_records[path].registeredForMergeFTSIndex){
+    if (m_records[path].registeredForMergeFTSIndex) {
         Operation operation(Operation::Type::MergeIndex, path);
         Parameter parameter;
         parameter.newTables = newTables;
@@ -312,7 +314,9 @@ void OperationQueue::asyncMergeFTSIndex(const UnsafeStringView& path, TableArray
     }
 }
 
-void OperationQueue::doMergeFTSIndex(const UnsafeStringView& path, TableArray newTables, TableArray modifiedTables)
+void OperationQueue::doMergeFTSIndex(const UnsafeStringView& path,
+                                     TableArray newTables,
+                                     TableArray modifiedTables)
 {
     WCTAssert(!path.empty());
 

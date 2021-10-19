@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
-#include <WCDB/Handle.hpp>
-#include <WCDB/StringView.hpp>
-#include <WCDB/Lock.hpp>
 #include <WCDB/AsyncQueue.hpp>
-#include <WCDB/TimedQueue.hpp>
+#include <WCDB/Handle.hpp>
+#include <WCDB/Lock.hpp>
 #include <WCDB/RecyclableHandle.hpp>
+#include <WCDB/StringView.hpp>
+#include <WCDB/TimedQueue.hpp>
 #include <array>
 
 namespace WCDB {
@@ -35,10 +35,11 @@ namespace WCDB {
 class MergeFTSIndexHandleProvider {
 public:
     virtual ~MergeFTSIndexHandleProvider() = 0;
+
 protected:
     friend class MergeFTSIndexLogic;
     virtual RecyclableHandle getHandle() = 0;
-    virtual const StringView &getPath() const = 0;
+    virtual const StringView& getPath() const = 0;
 };
 
 class MergeFTSIndexLogic {
@@ -46,9 +47,8 @@ public:
     MergeFTSIndexLogic() = delete;
     MergeFTSIndexLogic(MergeFTSIndexHandleProvider* provider);
     using TableArray = std::shared_ptr<std::vector<StringView>>;
-    std::optional<bool>
-    triggerMerge(TableArray newTables, TableArray modifiedTables);
-    
+    std::optional<bool> triggerMerge(TableArray newTables, TableArray modifiedTables);
+
 private:
     bool tryInit(Handle& handle);
     std::optional<bool>
@@ -58,36 +58,38 @@ private:
     void proccessMerge();
     bool mergeTable(Handle& handle, const StringView& table);
     void increaseErrorCount();
-    
-    static void userMergeCallback(Handle *handle, int *remainPages, int totalPagesWriten, int* lastCheckPages);
-    
+
+    static void
+    userMergeCallback(Handle* handle, int* remainPages, int totalPagesWriten, int* lastCheckPages);
+
     MergeFTSIndexHandleProvider* m_handleProvider;
-    
+
     bool m_hasInit;
     std::atomic<bool> m_processing;
     std::atomic<int> m_errorCount;
-    
+
     SharedLock m_lock;
-    
+
     Statement m_getTableStatement;
     std::set<StringView> m_mergingTables;
     std::set<StringView> m_mergedTables;
-    
+
 private:
     class OperationQueue : public AsyncQueue {
     public:
         OperationQueue() = delete;
-        OperationQueue(const UnsafeStringView &name);
+        OperationQueue(const UnsafeStringView& name);
         static OperationQueue& shared();
-        
+
         using OperationCallBack = std::function<void(void)>;
         void async(const UnsafeStringView& path, const OperationCallBack& callback);
         void cancelOperation(const UnsafeStringView& path);
+
     private:
         using AsyncMode = TimedQueue<StringView, OperationCallBack>::Mode;
         void main() override final;
         TimedQueue<StringView, OperationCallBack> m_timedQueue;
-        void onTimed(const StringView &path, const OperationCallBack& callback);
+        void onTimed(const StringView& path, const OperationCallBack& callback);
     };
 };
 

@@ -100,7 +100,9 @@
     if (numberOfInsertSQLs > 1) {
         [sqls addObject:@"COMMIT"];
     }
-    [self doTestObjects:objects andSQLs:sqls afterModification:block];
+    [self doTestObjects:objects
+                  andSQLs:sqls
+        afterModification:block];
 }
 
 - (void)doTestObject:(NSObject<WCTTableCoding>*)object

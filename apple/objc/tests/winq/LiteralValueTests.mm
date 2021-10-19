@@ -393,7 +393,7 @@
     TestCaseAssertWINQConvertible(WCDB::ResultColumns, sql, expected);
     TestCaseAssertWINQConvertible(WCDB::OrderingTerm, sql, expected);
     TestCaseAssertWINQConvertible(WCDB::OrderingTerms, sql, expected);
-    
+
     sql = [[NSDate date] timeIntervalSince1970];
     expected = [NSString stringWithFormat:@"%.5f", sql];
     TestCaseAssertWINQConvertible(WCDB::LiteralValue, sql, expected);

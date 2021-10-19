@@ -175,15 +175,9 @@ template<typename T>
 struct ColumnIsFloatType<T, typename std::enable_if<std::is_floating_point<T>::value>::type>
 : public std::true_type {
 public:
-    static float asUnderlyingType(const float &t)
-    {
-        return t;
-    }
-    
-    static double asUnderlyingType(const double &t)
-    {
-        return t;
-    }
+    static float asUnderlyingType(const float &t) { return t; }
+
+    static double asUnderlyingType(const double &t) { return t; }
 };
 
 //Integer

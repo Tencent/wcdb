@@ -27,11 +27,11 @@
 #include <WCDB/Configs.hpp>
 #include <WCDB/Factory.hpp>
 #include <WCDB/HandlePool.hpp>
+#include <WCDB/MergeFTSIndexLogic.hpp>
 #include <WCDB/Migration.hpp>
 #include <WCDB/Tag.hpp>
 #include <WCDB/ThreadLocal.hpp>
 #include <WCDB/WINQ.h>
-#include <WCDB/MergeFTSIndexLogic.hpp>
 
 namespace WCDB {
 
@@ -196,11 +196,12 @@ private:
 #pragma mark - Error
 public:
     using HandlePool::getThreadedError;
-    
+
 #pragma mark - Merge FTS Index
 public:
     using TableArray = std::shared_ptr<std::vector<StringView>>;
     std::optional<bool> mergeFTSIndex(TableArray newTables, TableArray modifiedTables);
+
 private:
     MergeFTSIndexLogic m_mergeLogic;
 };

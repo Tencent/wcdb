@@ -32,10 +32,10 @@
 #include <WCDB/StringView.hpp>
 
 #include <WCDB/AssembleHandle.hpp>
+#include <WCDB/BusyRetryConfig.hpp>
 #include <WCDB/MigrateHandle.hpp>
 #include <WCDB/MigratingHandle.hpp>
 #include <WCDB/OperationHandle.hpp>
-#include <WCDB/BusyRetryConfig.hpp>
 #include <WCDB/SQLite.h>
 
 namespace WCDB {
@@ -965,7 +965,9 @@ std::optional<bool> Database::mergeFTSIndex(TableArray newTables, TableArray mod
         return false; // mark as succeed if it's not an auto initialize action.
     }
     if (m_closing != 0) {
-        Error error(Error::Code::Interrupt, Error::Level::Ignore, "Interrupt merge fts index due to it's closing.");
+        Error error(Error::Code::Interrupt,
+                    Error::Level::Ignore,
+                    "Interrupt merge fts index due to it's closing.");
         error.infos.insert_or_assign(ErrorStringKeyPath, path);
         error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeBackup);
         Notifier::shared().notify(error);

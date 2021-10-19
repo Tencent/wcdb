@@ -110,7 +110,8 @@
                  return NO;
              }
 
-             [self.handle bindInteger:3 toIndex:1];
+             [self.handle bindInteger:3
+                              toIndex:1];
              [self.handle bindString:Random.shared.string toIndex:2];
              if (![self.handle step]) {
                  return NO;

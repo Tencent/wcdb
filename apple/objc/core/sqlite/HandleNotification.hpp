@@ -117,7 +117,8 @@ public:
     typedef std::function<void(const UnsafeStringView &path, const UnsafeStringView &newTable, const UnsafeStringView &modifiedTable)> TableModifiedNotification;
     void setNotificationWhenTableModified(const UnsafeStringView &name,
                                           const TableModifiedNotification &tableModified);
-    void postTableModifiedNotification(const UnsafeStringView &newTable, const UnsafeStringView &modifiedTable);
+    void postTableModifiedNotification(const UnsafeStringView &newTable,
+                                       const UnsafeStringView &modifiedTable);
     bool needMonitorTable();
 
 private:

@@ -93,7 +93,7 @@
     WCTOptionalSize result;
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.path]) {
         NSError *error;
-        size_t size = (size_t)((NSNumber *) [[NSFileManager defaultManager] attributesOfItemAtPath:self.path error:&error][NSFileSize]).unsignedLongLongValue;
+        size_t size = (size_t) ((NSNumber *) [[NSFileManager defaultManager] attributesOfItemAtPath:self.path error:&error][NSFileSize]).unsignedLongLongValue;
         if (error == nil) {
             int numberOfPages = (int) (size / self.pageSize);
             result = numberOfPages > 0 ? numberOfPages : 0;
@@ -111,7 +111,7 @@
     WCTOptionalSize result;
     NSError *error;
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.walPath]) {
-        size_t size = (size_t)((NSNumber *) [[NSFileManager defaultManager] attributesOfItemAtPath:self.walPath error:&error][NSFileSize]).unsignedLongLongValue;
+        size_t size = (size_t) ((NSNumber *) [[NSFileManager defaultManager] attributesOfItemAtPath:self.walPath error:&error][NSFileSize]).unsignedLongLongValue;
         if (error == nil) {
             if (size == 0) {
                 result = 0;

@@ -95,6 +95,7 @@ protected:
         StringView m_path;
         bool checkMainThreadBusyRetry();
         bool checkHasBusyRetry();
+
     protected:
         bool shouldWait(const Expecting& expecting) const;
         bool localShouldWait(const Expecting& expecting) const;

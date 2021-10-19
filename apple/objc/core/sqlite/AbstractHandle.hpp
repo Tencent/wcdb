@@ -167,11 +167,13 @@ public:
 
     typedef HandleNotification::BusyNotification BusyNotification;
     void setNotificationWhenBusy(const BusyNotification &busyNotification);
-    
+
     typedef HandleNotification::TableModifiedNotification TableModifiedNotification;
-    void setNotificationWhenTableModified(const UnsafeStringView &name, const TableModifiedNotification &tableModifiedNotification);
-    
-    void postTableNotification(const UnsafeStringView &newTable, const UnsafeStringView &modifiedTable);
+    void setNotificationWhenTableModified(const UnsafeStringView &name,
+                                          const TableModifiedNotification &tableModifiedNotification);
+
+    void postTableNotification(const UnsafeStringView &newTable,
+                               const UnsafeStringView &modifiedTable);
     bool needMonitorTable();
     void setTableMonitorEnable(bool enable);
 

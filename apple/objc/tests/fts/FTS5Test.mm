@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
 #import "FTS5Object.h"
 #import "TestCase.h"
+#import <Foundation/Foundation.h>
 
 @interface FTS5Tests : TableTestCase
 
@@ -231,24 +231,24 @@
 - (void)test_auto_merge
 {
     [self.database enableAutoMergeFTS5Index:YES];
-    for(int i = 0; i < 14; i++){
+    for (int i = 0; i < 14; i++) {
         FTS5Object *object = [[FTS5Object alloc] init];
         object.content = Random.shared.chineseString;
         TestCaseAssertTrue([self.table insertObject:object]);
-        WCTValue* count = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column("segid").count().distinct()).from([NSString stringWithFormat:@"%@_idx", self.tableName])];
-        TestCaseAssertTrue(count.numberValue.intValue == i+2);
+        WCTValue *count = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column("segid").count().distinct()).from([NSString stringWithFormat:@"%@_idx", self.tableName])];
+        TestCaseAssertTrue(count.numberValue.intValue == i + 2);
     }
-    
+
     [NSThread sleepForTimeInterval:2.5];
-    
-    WCTValue* count = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column("segid").count().distinct()).from([NSString stringWithFormat:@"%@_idx", self.tableName])];
+
+    WCTValue *count = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column("segid").count().distinct()).from([NSString stringWithFormat:@"%@_idx", self.tableName])];
     TestCaseAssertTrue(count.numberValue.intValue == 1);
 }
 
 - (void)test_thread_conflict
 {
     [self.database enableAutoMergeFTS5Index:YES];
-    for(int i = 0; i < 1000; i++){
+    for (int i = 0; i < 1000; i++) {
         FTS5Object *object = [[FTS5Object alloc] init];
         object.content = Random.shared.chineseString;
         TestCaseAssertTrue([self.table insertObject:object]);
@@ -256,14 +256,14 @@
     [NSThread sleepForTimeInterval:1.8];
     int totalCount = 10000;
     __block double maxCost = 0;
-    for(int i = 0; i < totalCount; i++){
+    for (int i = 0; i < totalCount; i++) {
         FTS5Object *object = [[FTS5Object alloc] init];
         object.content = Random.shared.chineseString;
-        if(i > 0 && i % (totalCount / 10) == 0 ){
+        if (i > 0 && i % (totalCount / 10) == 0) {
             TestCaseLog(@"insert progress %d%%", i * 100 / totalCount);
         }
-        NSDate* start = [NSDate date];
-        [self.database runTransaction:^BOOL(WCTHandle * _Nonnull) {
+        NSDate *start = [NSDate date];
+        [self.database runTransaction:^BOOL(WCTHandle *_Nonnull) {
             maxCost = MAX([[NSDate date] timeIntervalSinceDate:start], maxCost);
             TestCaseAssertTrue([self.table insertObject:object]);
             return YES;
@@ -271,12 +271,9 @@
         [NSThread sleepForTimeInterval:0.0001];
     }
     [NSThread sleepForTimeInterval:10];
-    WCTValue* count = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column("segid").count().distinct()).from([NSString stringWithFormat:@"%@_idx", self.tableName])];
+    WCTValue *count = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column("segid").count().distinct()).from([NSString stringWithFormat:@"%@_idx", self.tableName])];
     TestCaseAssertTrue(count.numberValue.intValue < 8);
     TestCaseAssertTrue(maxCost < 0.02);
 }
 
-
-
 @end
-

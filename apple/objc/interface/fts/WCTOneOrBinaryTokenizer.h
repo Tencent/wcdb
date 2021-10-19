@@ -29,13 +29,12 @@
 class WCTOneOrBinaryTokenizer final : public WCDB::OneOrBinaryTokenizer {
 public:
     WCTOneOrBinaryTokenizer(const char* input,
-                                      int inputLength,
-                                      WCDB::AbstractFTS3TokenizerInfo* tokenizerInfo);
-    WCTOneOrBinaryTokenizer(void *pCtx, const char **azArg, int nArg);
+                            int inputLength,
+                            WCDB::AbstractFTS3TokenizerInfo* tokenizerInfo);
+    WCTOneOrBinaryTokenizer(void* pCtx, const char** azArg, int nArg);
     WCTOneOrBinaryTokenizer(const WCTOneOrBinaryTokenizer& other);
 
-    WCTOneOrBinaryTokenizer&
-    operator=(const WCTOneOrBinaryTokenizer& other);
+    WCTOneOrBinaryTokenizer& operator=(const WCTOneOrBinaryTokenizer& other);
 
     ~WCTOneOrBinaryTokenizer() override final;
 

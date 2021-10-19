@@ -22,9 +22,8 @@
  * limitations under the License.
  */
 
-#define weakify(variable)                                                      \
-    __attribute__((objc_ownership(weak))) __typeof__(variable)                 \
-    WCDB_CONCAT(weak_, variable)                                               \
+#define weakify(variable)                                                                   \
+    __attribute__((objc_ownership(weak))) __typeof__(variable) WCDB_CONCAT(weak_, variable) \
     = (variable);
 
 #define strongify(variable)                                                           \

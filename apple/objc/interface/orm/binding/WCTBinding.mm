@@ -140,15 +140,15 @@ WCTBinding::generateCreateVirtualTableStatement(const WCDB::UnsafeStringView &ta
     for (const auto &iter : m_columnDefs) {
         if (isFTS5) {
             bool added = false;
-            for(auto constrain : iter.second.syntax().constraints){
-                if(constrain.getDescription().find("UNINDEXED") == 0){
+            for (auto constrain : iter.second.syntax().constraints) {
+                if (constrain.getDescription().find("UNINDEXED") == 0) {
                     arguments.push_back(WCDB::StringView().formatted("%s %s", iter.second.syntax().column.getDescription().data(), constrain.getDescription().data()));
                     added = YES;
                     break;
                 }
             }
             // FTS5 does not need type
-            if(!added){
+            if (!added) {
                 arguments.push_back(iter.second.syntax().column.getDescription());
             }
         } else {

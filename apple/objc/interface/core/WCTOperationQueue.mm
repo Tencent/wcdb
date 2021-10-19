@@ -57,12 +57,12 @@ void OperationQueue::unregisterNotificationWhenMemoryWarning(void *observer)
 
 namespace WCDB {
 
-void* OperationQueue::registerNotificationWhenMemoryWarning()
+void *OperationQueue::registerNotificationWhenMemoryWarning()
 {
     return nullptr;
 }
 
-void OperationQueue::unregisterNotificationWhenMemoryWarning(void* observer)
+void OperationQueue::unregisterNotificationWhenMemoryWarning(void *observer)
 {
     WCDB_UNUSED(observer)
 }
@@ -73,9 +73,9 @@ void OperationQueue::unregisterNotificationWhenMemoryWarning(void* observer)
 
 namespace WCDB {
 
-void* OperationQueue::operationStart()
+void *OperationQueue::operationStart()
 {
-    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     return (void *) pool;
 }
 

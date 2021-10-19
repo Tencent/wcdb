@@ -48,9 +48,8 @@ AbstractFTS3TokenizerInfo::~AbstractFTS3TokenizerInfo()
 = default;
 
 #pragma mark - AbstractFTS3TokenizerCursorInfo
-AbstractFTS3TokenizerCursorInfo::AbstractFTS3TokenizerCursorInfo(const char *input,
-                                                         int inputLength,
-                                                         AbstractFTS3TokenizerInfo *tokenizerInfo){
+AbstractFTS3TokenizerCursorInfo::AbstractFTS3TokenizerCursorInfo(
+const char *input, int inputLength, AbstractFTS3TokenizerInfo *tokenizerInfo){
     WCDB_UNUSED(input) WCDB_UNUSED(inputLength) WCDB_UNUSED(tokenizerInfo)
 }
 
@@ -59,7 +58,7 @@ AbstractFTS3TokenizerCursorInfo::~AbstractFTS3TokenizerCursorInfo()
 
 #pragma mark - AbstractFTS3TokenizerModuleTemplate
 int AbstractFTS3TokenizerModuleTemplate::newTokenizer(Tokenizer **ppTokenizer,
-                                                  AbstractFTS3TokenizerInfo *info)
+                                                      AbstractFTS3TokenizerInfo *info)
 {
     WCTAssert(ppTokenizer != nullptr);
     *ppTokenizer = nullptr;
@@ -76,7 +75,8 @@ int AbstractFTS3TokenizerModuleTemplate::newTokenizer(Tokenizer **ppTokenizer,
     return SQLITE_OK;
 }
 
-AbstractFTS3TokenizerInfo *AbstractFTS3TokenizerModuleTemplate::getTokenizerInfo(Tokenizer *pTokenizer)
+AbstractFTS3TokenizerInfo *
+AbstractFTS3TokenizerModuleTemplate::getTokenizerInfo(Tokenizer *pTokenizer)
 {
     WCTAssert(pTokenizer != nullptr);
     return pTokenizer->info;
@@ -89,7 +89,7 @@ void AbstractFTS3TokenizerModuleTemplate::deleteTokenizer(Tokenizer *pTokenizer)
 }
 
 int AbstractFTS3TokenizerModuleTemplate::newCursor(TokenizerCursor **ppCursor,
-                                               AbstractFTS3TokenizerCursorInfo *info)
+                                                   AbstractFTS3TokenizerCursorInfo *info)
 {
     WCTAssert(ppCursor != nullptr);
     *ppCursor = nullptr;
@@ -142,10 +142,10 @@ FTS3TokenizerModule::FTS3TokenizerModule()
 }
 
 FTS3TokenizerModule::FTS3TokenizerModule(const FTS3TokenizerModule::Create &create,
-                                 const FTS3TokenizerModule::Destroy &destroy,
-                                 const FTS3TokenizerModule::Open &open,
-                                 const FTS3TokenizerModule::Close &close,
-                                 const FTS3TokenizerModule::Next &next)
+                                         const FTS3TokenizerModule::Destroy &destroy,
+                                         const FTS3TokenizerModule::Open &open,
+                                         const FTS3TokenizerModule::Close &close,
+                                         const FTS3TokenizerModule::Next &next)
 : m_version(0)
 , m_create(create)
 , m_destroy(destroy)
@@ -155,12 +155,15 @@ FTS3TokenizerModule::FTS3TokenizerModule(const FTS3TokenizerModule::Create &crea
 , m_languageid(nullptr)
 {
     static_assert(sizeof(FTS3TokenizerModule) == sizeof(sqlite3_tokenizer_module), "");
-    static_assert(
-    offsetof(FTS3TokenizerModule, m_version) == offsetof(sqlite3_tokenizer_module, iVersion), "");
-    static_assert(
-    offsetof(FTS3TokenizerModule, m_create) == offsetof(sqlite3_tokenizer_module, xCreate), "");
-    static_assert(
-    offsetof(FTS3TokenizerModule, m_destroy) == offsetof(sqlite3_tokenizer_module, xDestroy), "");
+    static_assert(offsetof(FTS3TokenizerModule, m_version)
+                  == offsetof(sqlite3_tokenizer_module, iVersion),
+                  "");
+    static_assert(offsetof(FTS3TokenizerModule, m_create)
+                  == offsetof(sqlite3_tokenizer_module, xCreate),
+                  "");
+    static_assert(offsetof(FTS3TokenizerModule, m_destroy)
+                  == offsetof(sqlite3_tokenizer_module, xDestroy),
+                  "");
     static_assert(
     offsetof(FTS3TokenizerModule, m_open) == offsetof(sqlite3_tokenizer_module, xOpen), "");
     static_assert(
@@ -199,23 +202,18 @@ AbstractFTS5Tokenizer::~AbstractFTS5Tokenizer()
 
 #pragma mark - FTS5TokenizerModule
 FTS5TokenizerModule::FTS5TokenizerModule()
-: m_create(nullptr)
-, m_destroy(nullptr)
-, m_tokenize(nullptr)
-, m_pCtx(nullptr)
+: m_create(nullptr), m_destroy(nullptr), m_tokenize(nullptr), m_pCtx(nullptr)
 {
 }
 
 FTS5TokenizerModule::FTS5TokenizerModule(const Create &create,
                                          const Destroy &destroy,
                                          const Tokenize &tokenize,
-                                         void* pCtx)
-: m_create(create)
-, m_destroy(destroy)
-, m_tokenize(tokenize)
-, m_pCtx(pCtx)
+                                         void *pCtx)
+: m_create(create), m_destroy(destroy), m_tokenize(tokenize), m_pCtx(pCtx)
 {
-    static_assert(sizeof(FTS5TokenizerModule) == sizeof(fts5_tokenizer) + sizeof(m_pCtx), "");
+    static_assert(
+    sizeof(FTS5TokenizerModule) == sizeof(fts5_tokenizer) + sizeof(m_pCtx), "");
     static_assert(
     offsetof(FTS5TokenizerModule, m_create) == offsetof(fts5_tokenizer, xCreate), "");
     static_assert(
@@ -224,22 +222,20 @@ FTS5TokenizerModule::FTS5TokenizerModule(const Create &create,
     offsetof(FTS5TokenizerModule, m_tokenize) == offsetof(fts5_tokenizer, xTokenize), "");
 }
 
-void* FTS5TokenizerModule::getContext()
+void *FTS5TokenizerModule::getContext()
 {
     return m_pCtx;
 }
 
 #pragma mark - TokenizerModule
 
-TokenizerModule::TokenizerModule(std::shared_ptr<FTS3TokenizerModule> fts3Module):
-m_fts3Module(fts3Module),
-m_fts5Module(nullptr)
+TokenizerModule::TokenizerModule(std::shared_ptr<FTS3TokenizerModule> fts3Module)
+: m_fts3Module(fts3Module), m_fts5Module(nullptr)
 {
 }
 
-TokenizerModule::TokenizerModule(std::shared_ptr<FTS5TokenizerModule> fts5Module):
-m_fts3Module(nullptr),
-m_fts5Module(fts5Module)
+TokenizerModule::TokenizerModule(std::shared_ptr<FTS5TokenizerModule> fts5Module)
+: m_fts3Module(nullptr), m_fts5Module(fts5Module)
 {
 }
 

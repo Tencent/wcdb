@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/MergeFTSIndexLogic.hpp>
 #include <WCDB/Assertion.hpp>
 #include <WCDB/CoreConst.h>
 #include <WCDB/Error.hpp>
+#include <WCDB/MergeFTSIndexLogic.hpp>
 #include <WCDB/Notifier.hpp>
 #include <cmath>
 #include <unistd.h>
@@ -39,38 +39,41 @@ MergeFTSIndexLogic::MergeFTSIndexLogic(MergeFTSIndexHandleProvider *handleProvid
 , m_hasInit(false)
 , m_processing(false)
 , m_errorCount(0)
-, m_getTableStatement(StatementSelect().select(Column("name")).from("sqlite_master").where(Column("type") == "table" && Column("sql").like("CREATE VIRTUAL TABLE % USING fts5(%")))
+, m_getTableStatement(StatementSelect()
+                      .select(Column("name"))
+                      .from("sqlite_master")
+                      .where(Column("type") == "table"
+                             && Column("sql").like("CREATE VIRTUAL TABLE % USING fts5(%")))
 {
 }
 
-bool MergeFTSIndexLogic::tryInit(Handle& handle)
+bool MergeFTSIndexLogic::tryInit(Handle &handle)
 {
-    if(m_hasInit){
+    if (m_hasInit) {
         return true;
     }
     m_mergedTables.clear();
     m_mergingTables.clear();
-    
-    if(!handle.prepare(m_getTableStatement)){
+
+    if (!handle.prepare(m_getTableStatement)) {
         return false;
     }
     bool success = false;
-    while((success = handle.step()) && !handle.done())
-    {
+    while ((success = handle.step()) && !handle.done()) {
         UnsafeStringView table = handle.getText(0);
         WCTAssert(!table.empty());
         m_mergingTables.emplace(table);
     }
     handle.finalize();
-    if(!success){
+    if (!success) {
         return false;
     }
-    for(const StringView &element : m_mergingTables){
-        if(!tryConfigUserMerge(handle, element, false)){
+    for (const StringView &element : m_mergingTables) {
+        if (!tryConfigUserMerge(handle, element, false)) {
             return false;
         }
     }
-    
+
     m_hasInit = true;
     return true;
 }
@@ -78,22 +81,28 @@ bool MergeFTSIndexLogic::tryInit(Handle& handle)
 bool MergeFTSIndexLogic::tryConfigUserMerge(Handle &handle, const UnsafeStringView &table, bool isNew)
 {
     bool needConfig = isNew;
-    if(!isNew){
-        Statement selectConfig = StatementSelect().select(Column("v")).from(StringView().formatted("%s_config", table.data())).where(Column("k") == "usermerge");
-        if(!handle.prepare(selectConfig)){
+    if (!isNew) {
+        Statement selectConfig = StatementSelect()
+                                 .select(Column("v"))
+                                 .from(StringView().formatted("%s_config", table.data()))
+                                 .where(Column("k") == "usermerge");
+        if (!handle.prepare(selectConfig)) {
             return false;
         }
-        if(!handle.step()){
+        if (!handle.step()) {
             handle.finalize();
             return false;
         }
-        if(handle.done() || handle.getInteger(0) != 2){
+        if (handle.done() || handle.getInteger(0) != 2) {
             needConfig = true;
         }
         handle.finalize();
     }
-    if(needConfig){
-        if(!handle.execute(StatementInsert().insertIntoTable(table).columns({Column(table), Column("rank")}).values({"usermerge", 2}))){
+    if (needConfig) {
+        if (!handle.execute(StatementInsert()
+                            .insertIntoTable(table)
+                            .columns({ Column(table), Column("rank") })
+                            .values({ "usermerge", 2 }))) {
             return false;
         }
     }
@@ -104,24 +113,25 @@ std::optional<bool>
 MergeFTSIndexLogic::triggerMerge(TableArray newTables, TableArray modifiedTables)
 {
     RecyclableHandle recyclableHandle = m_handleProvider->getHandle();
-    if(recyclableHandle == nullptr){
+    if (recyclableHandle == nullptr) {
         return false;
     }
-    WCTRemedialAssert(
-    !recyclableHandle->isInTransaction(), "Merge Index can't be run in transaction.", return std::nullopt;);
-    
-    Handle *handle = recyclableHandle.get() ;
+    WCTRemedialAssert(!recyclableHandle->isInTransaction(),
+                      "Merge Index can't be run in transaction.",
+                      return std::nullopt;);
+
+    Handle *handle = recyclableHandle.get();
     handle->markErrorAsIgnorable(Error::Code::Interrupt);
     handle->markAsCanBeSuspended(true);
     handle->markErrorAsIgnorable(Error::Code::Busy);
     handle->setErrorType(ErrorTypeMergeIndex);
     handle->setTableMonitorEnable(false);
-    
+
     std::optional<bool> done = triggerMerge(*handle, newTables, modifiedTables);
     if (!done.has_value() && handle->getError().isIgnorable()) {
         done = false;
     }
-    
+
     handle->setErrorType(UnsafeStringView());
     handle->markErrorAsUnignorable();
     handle->markAsCanBeSuspended(false);
@@ -131,27 +141,28 @@ MergeFTSIndexLogic::triggerMerge(TableArray newTables, TableArray modifiedTables
 }
 
 std::optional<bool>
-MergeFTSIndexLogic::triggerMerge(Handle& handle, TableArray newTables, TableArray modifiedTables)
+MergeFTSIndexLogic::triggerMerge(Handle &handle, TableArray newTables, TableArray modifiedTables)
 {
     LockGuard lockGuard(m_lock);
-    if(m_errorCount.load() > 5){
+    if (m_errorCount.load() > 5) {
         return std::nullopt;
     }
-    if(!tryInit(handle)){
+    if (!tryInit(handle)) {
         increaseErrorCount();
         return std::nullopt;
     }
-    if(!checkModifiedTables(handle, newTables, modifiedTables)){
+    if (!checkModifiedTables(handle, newTables, modifiedTables)) {
         increaseErrorCount();
         return std::nullopt;
     }
-    if(m_mergingTables.size() == 0){
+    if (m_mergingTables.size() == 0) {
         return true;
     }
-    if(m_processing){
+    if (m_processing) {
         return false;
     }
-    OperationQueue::shared().async(handle.getPath(), std::bind(&MergeFTSIndexLogic::proccessMerge, this));
+    OperationQueue::shared().async(
+    handle.getPath(), std::bind(&MergeFTSIndexLogic::proccessMerge, this));
     return false;
 }
 
@@ -160,32 +171,32 @@ void MergeFTSIndexLogic::proccessMerge()
     StringView table;
     {
         SharedLockGuard lockGuard(m_lock);
-        if(m_errorCount > 5){
+        if (m_errorCount > 5) {
             return;
         }
-        if(m_mergingTables.size() == 0){
+        if (m_mergingTables.size() == 0) {
             return;
         }
         table = *m_mergingTables.begin();
     }
     RecyclableHandle recyclableHandle = m_handleProvider->getHandle();
-    if(recyclableHandle == nullptr){
+    if (recyclableHandle == nullptr) {
         return;
     }
-    WCTRemedialAssert(
-    !recyclableHandle->isInTransaction(), "Merge Index can't be run in transaction.", return;);
-    
-    Handle* handle = recyclableHandle.get() ;
+    WCTRemedialAssert(!recyclableHandle->isInTransaction(),
+                      "Merge Index can't be run in transaction.",
+                      return;);
+
+    Handle *handle = recyclableHandle.get();
     handle->markErrorAsIgnorable(Error::Code::Interrupt);
     handle->markAsCanBeSuspended(true);
     handle->markErrorAsIgnorable(Error::Code::Busy);
     handle->setErrorType(ErrorTypeMergeIndex);
     handle->setTableMonitorEnable(false);
-    
-    while(!table.empty()){
-        
-        if(!mergeTable(*handle, table)){
-            if(!handle->getError().isIgnorable()){
+
+    while (!table.empty()) {
+        if (!mergeTable(*handle, table)) {
+            if (!handle->getError().isIgnorable()) {
                 increaseErrorCount();
             }
             break;
@@ -193,9 +204,9 @@ void MergeFTSIndexLogic::proccessMerge()
         SharedLockGuard lockGuard(m_lock);
         m_mergingTables.erase(table);
         m_mergedTables.emplace(table);
-        if(m_mergingTables.size() > 0){
+        if (m_mergingTables.size() > 0) {
             table = *m_mergingTables.begin();
-        }else{
+        } else {
             break;
         }
     }
@@ -209,82 +220,94 @@ void MergeFTSIndexLogic::proccessMerge()
 bool MergeFTSIndexLogic::mergeTable(Handle &handle, const StringView &table)
 {
     int preChangeCount;
-    Statement mergeSTM = StatementInsert().insertIntoTable(table).columns({Column(table), Column("rank"), Column().rowid()}).values({UnsafeStringView("merge"), 256, WCDB::BindParameter(1)});
-    if(!handle.prepare(mergeSTM)){
+    Statement mergeSTM
+    = StatementInsert()
+      .insertIntoTable(table)
+      .columns({ Column(table), Column("rank"), Column().rowid() })
+      .values({ UnsafeStringView("merge"), 256, WCDB::BindParameter(1) });
+    if (!handle.prepare(mergeSTM)) {
         return false;
     }
-    void** callbackPointer = new void*[2];
-    callbackPointer[0] = (void*)MergeFTSIndexLogic::userMergeCallback;
+    void **callbackPointer = new void *[2];
+    callbackPointer[0] = (void *) MergeFTSIndexLogic::userMergeCallback;
     callbackPointer[1] = &handle;
-    do{
+    do {
         preChangeCount = handle.getTotalChange();
         handle.bindPointer(callbackPointer, 1, "fts5_user_merge_callback", nullptr);
-        if(!handle.step()){
+        if (!handle.step()) {
             handle.finalize();
-            delete [] callbackPointer;
+            delete[] callbackPointer;
             return false;
-        }else{
+        } else {
             handle.reset();
         }
         usleep(1229); //Use prime numbers to reduce the probability of collision with external logic
     } while (handle.getTotalChange() - preChangeCount > 1);
 
     handle.finalize();
-    delete [] callbackPointer;
+    delete[] callbackPointer;
     return true;
 }
 
-void MergeFTSIndexLogic::userMergeCallback(Handle *handle, int *remainPages, int totalPagesWriten, int* lastCheckPages)
+void MergeFTSIndexLogic::userMergeCallback(Handle *handle,
+                                           int *remainPages,
+                                           int totalPagesWriten,
+                                           int *lastCheckPages)
 {
-    if(totalPagesWriten - *lastCheckPages< 16){
+    if (totalPagesWriten - *lastCheckPages < 16) {
         return;
     }
     *lastCheckPages = totalPagesWriten;
-    if(!handle->checkHasBusyRetry()){
+    if (!handle->checkHasBusyRetry()) {
         return;
     }
     *remainPages = totalPagesWriten - 1;
 }
 
-bool MergeFTSIndexLogic::checkModifiedTables(Handle& handle, TableArray newTables, TableArray modifiedTables)
+bool MergeFTSIndexLogic::checkModifiedTables(Handle &handle, TableArray newTables, TableArray modifiedTables)
 {
-    if(newTables != nullptr && newTables->size() > 0){
-        StatementSelect select = StatementSelect().select(Column().rowid()).from("sqlite_master").where(Column("name") == BindParameter(1) && Column("sql").like("CREATE VIRTUAL TABLE % USING fts5(%"));
-        
-        if(!handle.prepare(select)){
+    if (newTables != nullptr && newTables->size() > 0) {
+        StatementSelect select
+        = StatementSelect()
+          .select(Column().rowid())
+          .from("sqlite_master")
+          .where(Column("name") == BindParameter(1)
+                 && Column("sql").like("CREATE VIRTUAL TABLE % USING fts5(%"));
+
+        if (!handle.prepare(select)) {
             return false;
         }
-        
+
         TableArray fts5Tables(new std::vector<StringView>());
-        
+
         for (const auto &element : *newTables) {
-            if(m_mergedTables.find(element) != m_mergedTables.end()){
+            if (m_mergedTables.find(element) != m_mergedTables.end()) {
                 m_mergedTables.erase(element);
             }
             handle.bindText(element.data(), 1);
-            if(!handle.step()){
+            if (!handle.step()) {
                 handle.finalize();
                 return false;
             }
-            if(!handle.done()){
+            if (!handle.done()) {
                 m_mergingTables.emplace(element);
                 fts5Tables->push_back(element);
             }
             handle.reset();
         }
-        
+
         handle.finalize();
-        
-        for(const auto& element : *fts5Tables){
-            if(!tryConfigUserMerge(handle, element, true)){
+
+        for (const auto &element : *fts5Tables) {
+            if (!tryConfigUserMerge(handle, element, true)) {
                 return false;
             }
         }
     }
-    
-    if(modifiedTables != nullptr && modifiedTables->size() > 0){
-        for(const auto& element : *modifiedTables){
-            if(m_mergedTables.find(element) != m_mergedTables.end()){
+
+    if (modifiedTables != nullptr && modifiedTables->size() > 0) {
+        for (const auto &element : *modifiedTables) {
+            if (m_mergedTables.find(element) != m_mergedTables.end()) {
                 m_mergedTables.erase(element);
                 m_mergingTables.emplace(element);
             }
@@ -296,7 +319,7 @@ bool MergeFTSIndexLogic::checkModifiedTables(Handle& handle, TableArray newTable
 void MergeFTSIndexLogic::increaseErrorCount()
 {
     m_errorCount++;
-    if(m_errorCount.load() > 5){
+    if (m_errorCount.load() > 5) {
         Error error(Error::Code::Notice,
                     Error::Level::Notice,
                     "Auto merge fts index is stopped due to too many errors.");
@@ -307,10 +330,10 @@ void MergeFTSIndexLogic::increaseErrorCount()
 
 #pragma mark - OperationQueue
 
-MergeFTSIndexLogic::OperationQueue& MergeFTSIndexLogic::OperationQueue::shared()
+MergeFTSIndexLogic::OperationQueue &MergeFTSIndexLogic::OperationQueue::shared()
 {
-    static OperationQueue* g_operationQueue = nullptr;
-    if(!g_operationQueue){
+    static OperationQueue *g_operationQueue = nullptr;
+    if (!g_operationQueue) {
         g_operationQueue = new OperationQueue(AutoMergeFTSIndexQueueName);
     }
     return *g_operationQueue;
@@ -322,20 +345,27 @@ MergeFTSIndexLogic::OperationQueue::OperationQueue(const UnsafeStringView &name)
     run();
 }
 
-void MergeFTSIndexLogic::OperationQueue::async(const UnsafeStringView &path, const OperationCallBack &callback){
+void MergeFTSIndexLogic::OperationQueue::async(const UnsafeStringView &path,
+                                               const OperationCallBack &callback)
+{
     m_timedQueue.queue(StringView(path), 0, callback, AsyncMode::ForwardOnly);
 }
 
-void MergeFTSIndexLogic::OperationQueue::cancelOperation(const UnsafeStringView &path){
+void MergeFTSIndexLogic::OperationQueue::cancelOperation(const UnsafeStringView &path)
+{
     m_timedQueue.remove(StringView(path));
 }
 
 void MergeFTSIndexLogic::OperationQueue::main()
 {
-    m_timedQueue.loop(std::bind(&MergeFTSIndexLogic::OperationQueue::onTimed, this, std::placeholders::_1, std::placeholders::_2));
+    m_timedQueue.loop(std::bind(&MergeFTSIndexLogic::OperationQueue::onTimed,
+                                this,
+                                std::placeholders::_1,
+                                std::placeholders::_2));
 }
 
-void MergeFTSIndexLogic::OperationQueue::onTimed(const StringView &path, const OperationCallBack& callback)
+void MergeFTSIndexLogic::OperationQueue::onTimed(const StringView &path,
+                                                 const OperationCallBack &callback)
 {
     WCDB_UNUSED(path);
     callback();
