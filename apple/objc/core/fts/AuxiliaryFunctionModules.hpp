@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by 陈秋文 on 2021/10/17.
 //
 
 /*
@@ -24,31 +24,22 @@
 
 #pragma once
 
-#include <WCDB/Core.hpp>
-#include <WCDB/CoreConst.h>
-
-#include <WCDB/AsyncQueue.hpp>
-#include <WCDB/OperationQueue.hpp>
-
-#include <WCDB/AuxiliaryFunctionConfig.hpp>
-#include <WCDB/BasicConfig.hpp>
-#include <WCDB/CipherConfig.hpp>
-#include <WCDB/Config.hpp>
-#include <WCDB/Configs.hpp>
-#include <WCDB/CustomConfig.hpp>
-#include <WCDB/PerformanceTraceConfig.hpp>
-#include <WCDB/SQLTraceConfig.hpp>
-#include <WCDB/TokenizerConfig.hpp>
-
-#include <WCDB/Database.hpp>
-#include <WCDB/DatabasePool.hpp>
-#include <WCDB/RecyclableHandle.hpp>
-
-#include <WCDB/OneOrBinaryTokenizer.hpp>
-#include <WCDB/TokenizerModule.hpp>
-#include <WCDB/TokenizerModules.hpp>
-
 #include <WCDB/AuxiliaryFunctionModule.hpp>
-#include <WCDB/AuxiliaryFunctionModules.hpp>
+#include <WCDB/Lock.hpp>
+#include <WCDB/StringView.hpp>
+#include <list>
 
-#include <WCDB/MigrationInfo.hpp>
+namespace WCDB {
+
+class AuxiliaryFunctionModules final {
+public:
+    void add(const UnsafeStringView& name, const FTS5AuxiliaryFunctionModule& module);
+    const FTS5AuxiliaryFunctionModule* get(const UnsafeStringView& name) const;
+
+protected:
+    StringViewMap<const FTS5AuxiliaryFunctionModule> m_modules;
+    StringViewMap<const FTS5AuxiliaryFunctionModule*> m_pointers;
+    mutable SharedLock m_lock;
+};
+
+} // namespace WCDB

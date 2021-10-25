@@ -346,6 +346,7 @@
     self.tableClass = FTS5SymbolObject.class;
     self.isVirtualTable = YES;
     [self.database addTokenizer:WCTTokenizerOneOrBinary_FTS5];
+    [self.database addAuxiliaryFunction:WCTAuxiliaryFunction_SubstringMatchInfo];
     TestCaseAssertTrue([self createTable]);
 
     FTS5SymbolObject *dummy = [[FTS5SymbolObject alloc] init];
@@ -384,6 +385,18 @@
                    return [self.table getObjectsWhere:FTS5SymbolObject.content.match(query)];
                }];
     }
+}
+
+- (void)test_multi_level_highlight
+{
+    FTS5SymbolObject *content = [[FTS5SymbolObject alloc] init];
+    content.content = @"多级,分隔符,串联子串1;多级,分隔符,串联子串2;多级,分隔符,串联子串3";
+    TestCaseAssertTrue([self.table insertObject:content]);
+    [self doTestValue:@"1,2;串联;子串2;6;"
+               andSQL:@"SELECT substring_match_info(testTable, 0, ';,') FROM main.testTable WHERE content MATCH '子串2'"
+          bySelecting:^WCTValue * {
+              return [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Expression::function(WCTAuxiliaryFunction_SubstringMatchInfo).invoke().arguments({ WCDB::Column(self.tableName), 0, ";," })).from(self.tableName).where(FTS5SymbolObject.content.match(@"子串2"))];
+          }];
 }
 
 @end

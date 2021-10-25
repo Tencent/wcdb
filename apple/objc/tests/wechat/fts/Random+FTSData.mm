@@ -161,7 +161,13 @@
             item.mainSearchContent = [item.mainSearchContent stringByReplacingCharactersInRange:NSMakeRange(0, 8) withString:@"大规模批量测试内容"];
         }
         if (g_localId % 1000 == random.uint32 % 1000) {
-            item.mainSearchContent = [item.mainSearchContent stringByReplacingCharactersInRange:NSMakeRange(0, 8) withString:@"中等规模随机命中"];
+            for (int j = 0; j < 5; j++) {
+                item.mainSearchContent = [item.mainSearchContent stringByReplacingCharactersInRange:NSMakeRange(j * 20, 1) withString:@"\n"];
+            }
+            for (int j = 0; j < 12; j++) {
+                item.mainSearchContent = [item.mainSearchContent stringByReplacingCharactersInRange:NSMakeRange(j * 8, 1) withString:@"\t"];
+            }
+            item.mainSearchContent = [item.mainSearchContent stringByReplacingCharactersInRange:NSMakeRange(50, 8) withString:@"中等规模随机命中"];
         }
         if (g_localId % 2000 == 0) {
             item.mainSearchContent = [item.mainSearchContent stringByReplacingCharactersInRange:NSMakeRange(0, 7) withString:@"单于骑模具单车"];

@@ -174,6 +174,7 @@
 
     [self.factory.database addTokenizer:[self tokenizerName]];
     [self.database addTokenizer:[self tokenizerName]];
+    [self.database addAuxiliaryFunction:WCTAuxiliaryFunction_SubstringMatchInfo];
     [WCTDatabase configPinYinDict:@{
         @"单" : @[ @"shan", @"dan", @"chan" ],
         @"于" : @[ @"yu" ],
@@ -198,8 +199,10 @@
     for (int i = 0; i < 10; i++) {
         NSDate* start = [NSDate date];
         for (int j = 0; j < m_queryTimes; j++) {
-            m_resultCount = 0;
-            block();
+            @autoreleasepool {
+                m_resultCount = 0;
+                block();
+            }
         }
         double costTime = [[NSDate date] timeIntervalSinceDate:start];
         totalTime += costTime;
@@ -270,9 +273,12 @@
     NSMutableArray<NSArray<NSNumber*>*>* testCases = [[NSMutableArray alloc] init];
     NSArray<NSNumber*>* testCase;
 
-    int tkId = [self getTokenizerIdWithNeedBinary:NO needPinyin:NO needSymbol:NO];
-    testCase = [self genTestCaseConfigDataType:FTSDataType_Contact tableCount:1 tokenizerId:tkId quality:1000000 optimizeLevel:2 querylevel:2 queryTimes:10 queryType:6 needMultiThread:NO];
+    int tkId = [self getTokenizerIdWithNeedBinary:NO needPinyin:NO needSymbol:YES];
+    testCase = [self genTestCaseConfigDataType:FTSDataType_Contact tableCount:1 tokenizerId:tkId quality:10000 optimizeLevel:2 querylevel:2 queryTimes:10 queryType:5 needMultiThread:NO];
     [testCases addObject:testCase];
+    [self.database traceSQL:^(NSString* sql, const void* _Nonnull) {
+        NSLog(@"excute: %@", sql);
+    }];
 
     for (NSArray<NSNumber*>* config in testCases) {
         [self applyConfig:config];
@@ -341,25 +347,25 @@
             } break;
             case 5: {
                 [self queryInAllTable:^(NSString* tableName) {
-                    const WCDB::ResultColumn highlightColumn = WCDB::ResultColumn(WCDB::Expression::function("highlight").invoke().arguments({ WCDB::Column(tableName), 1, "<b>", "</b>" }));
+                    const WCDB::ResultColumn highlightColumn = WCDB::ResultColumn(WCDB::Expression::function(WCTAuxiliaryFunction_SubstringMatchInfo).invoke().arguments({ WCDB::Column(tableName), 0, "\n\t" }));
                     WCDB::ResultColumns resultColumns;
                     resultColumns.push_back(FTS5ContactSearchItem.listType);
                     resultColumns.push_back(FTS5ContactSearchItem.contactType);
                     resultColumns.push_back(FTS5ContactSearchItem.userName);
                     resultColumns.push_back(FTS5ContactSearchItem.associateChatRooms);
-                    //                    resultColumns.push_back(highlightColumn);
+                    resultColumns.push_back(highlightColumn);
                     NSArray* result = [self.database getRowsFromStatement:WCDB::StatementSelect().select(resultColumns).from(tableName).where(FTS5ContactSearchItem.mainSearchContent.match([self query]))];
                     self->m_resultCount += result.count;
                 }];
             } break;
             case 6: {
                 [self queryInAllTable:^(NSString* tableName) {
-                    const WCDB::ResultColumn highlightColumn = WCDB::ResultColumn(WCDB::Expression::function("highlight").invoke().arguments({ WCDB::Column(tableName), 1, "<b>", "</b>" }));
+                    const WCDB::ResultColumn highlightColumn = WCDB::ResultColumn(WCDB::Expression::function(WCTAuxiliaryFunction_SubstringMatchInfo).invoke().arguments({ WCDB::Column(tableName), 0, "\n\t" }));
                     WCDB::ResultColumns resultColumns;
                     resultColumns.push_back(FTS5ContactSearchItem.listType);
                     resultColumns.push_back(FTS5ContactSearchItem.contactType);
                     resultColumns.push_back(FTS5ContactSearchItem.userName);
-                    //                        resultColumns.push_back(highlightColumn);
+                    resultColumns.push_back(highlightColumn);
                     WCTColumnsXRows* result = [self.database getRowsFromStatement:WCDB::StatementSelect().select(resultColumns).from(tableName).where(FTS5ContactSearchItem.mainSearchContent.match([self query]))];
                     self->m_resultCount += result.count;
                     WCTHandle* handle = [self.database getHandle];
@@ -382,7 +388,6 @@
                             }
                         }
                     }
-                    NSLog(@"normal count %d", normalContactCount);
                     [handle invalidate];
                 }];
             }

@@ -80,6 +80,9 @@ static constexpr const char* PerformanceTraceConfigName
 static constexpr const char* SQLTraceConfigName = "com.Tencent.WCDB.Config.SQLTrace";
 #pragma mark - Config - Tokenize
 static constexpr const char* TokenizeConfigPrefix = "com.Tencent.WCDB.Config.Tokenize.";
+#pragma mark - Config - AuxiliaryFunction
+static constexpr const char* AuxiliaryFunctionConfigPrefix
+= "com.Tencent.WCDB.Config.AuxiliaryFunction.";
 
 #pragma mark - Notifier
 static constexpr const char* NotifierPreprocessorName = "com.Tencent.WCDB.Notifier.PreprocessTag";

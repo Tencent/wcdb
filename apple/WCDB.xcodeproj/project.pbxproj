@@ -818,6 +818,15 @@
 		39D81662227EC1D9009EC067 /* ColumnDef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D81661227EC1D9009EC067 /* ColumnDef.swift */; };
 		39D81664227EC1F7009EC067 /* ColumnType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D81663227EC1F7009EC067 /* ColumnType.swift */; };
 		39D81666227EC25E009EC067 /* ColumnConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D81665227EC25E009EC067 /* ColumnConstraint.swift */; };
+		7543DD83271C2F3B00B533B4 /* FTS5AuxiliaryFunctionTemplate.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543DD82271C2F3B00B533B4 /* FTS5AuxiliaryFunctionTemplate.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		7543DD86271C2FD000B533B4 /* AuxiliaryFunctionModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7543DD84271C2FD000B533B4 /* AuxiliaryFunctionModule.cpp */; };
+		7543DD87271C2FD000B533B4 /* AuxiliaryFunctionModule.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543DD85271C2FD000B533B4 /* AuxiliaryFunctionModule.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		7543DD8A271C343000B533B4 /* AuxiliaryFunctionModules.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7543DD88271C343000B533B4 /* AuxiliaryFunctionModules.cpp */; };
+		7543DD8B271C343000B533B4 /* AuxiliaryFunctionModules.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543DD89271C343000B533B4 /* AuxiliaryFunctionModules.hpp */; };
+		7543DD8E271C360E00B533B4 /* AuxiliaryFunctionConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7543DD8C271C360E00B533B4 /* AuxiliaryFunctionConfig.cpp */; };
+		7543DD8F271C360E00B533B4 /* AuxiliaryFunctionConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543DD8D271C360E00B533B4 /* AuxiliaryFunctionConfig.hpp */; };
+		7543DD92271C601F00B533B4 /* SubstringMatchInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7543DD90271C601F00B533B4 /* SubstringMatchInfo.cpp */; };
+		7543DD93271C601F00B533B4 /* SubstringMatchInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543DD91271C601F00B533B4 /* SubstringMatchInfo.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		755391D62403B3DB00036918 /* WCTHandleStatement.mm in Sources */ = {isa = PBXBuildFile; fileRef = 755391D52403B3DB00036918 /* WCTHandleStatement.mm */; };
 		755391E12403CB9E00036918 /* WCTHandleStatement+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 755391E02403CB9700036918 /* WCTHandleStatement+Private.h */; };
 		757457042402D614005E3682 /* WCTHandleStatement.h in Headers */ = {isa = PBXBuildFile; fileRef = 757457032402D614005E3682 /* WCTHandleStatement.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1782,6 +1791,15 @@
 		39D81661227EC1D9009EC067 /* ColumnDef.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnDef.swift; sourceTree = "<group>"; };
 		39D81663227EC1F7009EC067 /* ColumnType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnType.swift; sourceTree = "<group>"; };
 		39D81665227EC25E009EC067 /* ColumnConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnConstraint.swift; sourceTree = "<group>"; };
+		7543DD82271C2F3B00B533B4 /* FTS5AuxiliaryFunctionTemplate.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FTS5AuxiliaryFunctionTemplate.hpp; sourceTree = "<group>"; };
+		7543DD84271C2FD000B533B4 /* AuxiliaryFunctionModule.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AuxiliaryFunctionModule.cpp; sourceTree = "<group>"; };
+		7543DD85271C2FD000B533B4 /* AuxiliaryFunctionModule.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AuxiliaryFunctionModule.hpp; sourceTree = "<group>"; };
+		7543DD88271C343000B533B4 /* AuxiliaryFunctionModules.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AuxiliaryFunctionModules.cpp; sourceTree = "<group>"; };
+		7543DD89271C343000B533B4 /* AuxiliaryFunctionModules.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AuxiliaryFunctionModules.hpp; sourceTree = "<group>"; };
+		7543DD8C271C360E00B533B4 /* AuxiliaryFunctionConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AuxiliaryFunctionConfig.cpp; sourceTree = "<group>"; };
+		7543DD8D271C360E00B533B4 /* AuxiliaryFunctionConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AuxiliaryFunctionConfig.hpp; sourceTree = "<group>"; };
+		7543DD90271C601F00B533B4 /* SubstringMatchInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SubstringMatchInfo.cpp; sourceTree = "<group>"; };
+		7543DD91271C601F00B533B4 /* SubstringMatchInfo.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SubstringMatchInfo.hpp; sourceTree = "<group>"; };
 		755391D52403B3DB00036918 /* WCTHandleStatement.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTHandleStatement.mm; sourceTree = "<group>"; };
 		755391E02403CB9700036918 /* WCTHandleStatement+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTHandleStatement+Private.h"; sourceTree = "<group>"; };
 		757457032402D614005E3682 /* WCTHandleStatement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTHandleStatement.h; sourceTree = "<group>"; };
@@ -3032,12 +3050,21 @@
 				2304B42622156CD700901953 /* TokenizerModule.cpp */,
 				23E163D120FDDD8500C3F910 /* PorterStemming.c */,
 				23B4DCD92112AC5600954D71 /* TokenizerModuleTemplate.hpp */,
-				2304B42C22156E1500901953 /* TokenizerModules.cpp */,
 				2304B42D22156E1500901953 /* TokenizerModules.hpp */,
-				233E09B52216BD7B0006E608 /* OneOrBinaryTokenizer.cpp */,
+				2304B42C22156E1500901953 /* TokenizerModules.cpp */,
 				233E09B62216BD7B0006E608 /* OneOrBinaryTokenizer.hpp */,
-				23F70FBC20A055D400CCE3CD /* TokenizerConfig.cpp */,
+				233E09B52216BD7B0006E608 /* OneOrBinaryTokenizer.cpp */,
 				23F70FBD20A055D400CCE3CD /* TokenizerConfig.hpp */,
+				23F70FBC20A055D400CCE3CD /* TokenizerConfig.cpp */,
+				7543DD82271C2F3B00B533B4 /* FTS5AuxiliaryFunctionTemplate.hpp */,
+				7543DD85271C2FD000B533B4 /* AuxiliaryFunctionModule.hpp */,
+				7543DD84271C2FD000B533B4 /* AuxiliaryFunctionModule.cpp */,
+				7543DD89271C343000B533B4 /* AuxiliaryFunctionModules.hpp */,
+				7543DD88271C343000B533B4 /* AuxiliaryFunctionModules.cpp */,
+				7543DD8D271C360E00B533B4 /* AuxiliaryFunctionConfig.hpp */,
+				7543DD8C271C360E00B533B4 /* AuxiliaryFunctionConfig.cpp */,
+				7543DD91271C601F00B533B4 /* SubstringMatchInfo.hpp */,
+				7543DD90271C601F00B533B4 /* SubstringMatchInfo.cpp */,
 			);
 			path = fts;
 			sourceTree = "<group>";
@@ -3581,6 +3608,7 @@
 				23EEDD20217DFADC006E9E73 /* SyntaxTableConstraint.hpp in Headers */,
 				23F1698A20B6638F009B5C47 /* ThreadedErrors.hpp in Headers */,
 				23EEDCA8217DFADC006E9E73 /* TableConstraint.hpp in Headers */,
+				7543DD8F271C360E00B533B4 /* AuxiliaryFunctionConfig.hpp in Headers */,
 				23EEDCA6217DFADC006E9E73 /* SQL.hpp in Headers */,
 				23775B7020AD666900E21AB0 /* DeprecatedBackup.hpp in Headers */,
 				23D07CEC20BE873E0043F4D4 /* SequenceCrawler.hpp in Headers */,
@@ -3610,6 +3638,7 @@
 				23EEDD24217DFADC006E9E73 /* SyntaxUpsertClause.hpp in Headers */,
 				23408F11211897AA0071E5A7 /* Shm.hpp in Headers */,
 				23EEDCCC217DFADC006E9E73 /* StatementDetach.hpp in Headers */,
+				7543DD93271C601F00B533B4 /* SubstringMatchInfo.hpp in Headers */,
 				23EEDD30217DFADC006E9E73 /* SyntaxBeginSTMT.hpp in Headers */,
 				23EEDD58217DFADC006E9E73 /* SyntaxUpdateSTMT.hpp in Headers */,
 				23EEDCA2217DFADC006E9E73 /* ResultColumn.hpp in Headers */,
@@ -3726,6 +3755,7 @@
 				23EEDD3E217DFADC006E9E73 /* SyntaxDeleteSTMT.hpp in Headers */,
 				2395582621C143BB000C85E1 /* WCTMigrationInfo+Private.h in Headers */,
 				23EEDCE0217DFADC006E9E73 /* StatementSavepoint.hpp in Headers */,
+				7543DD8B271C343000B533B4 /* AuxiliaryFunctionModules.hpp in Headers */,
 				23775B6C20AD666900E21AB0 /* FullCrawler.hpp in Headers */,
 				2349F7701EA0D6680021EFA7 /* WCTDatabase+Table.h in Headers */,
 				23D0C31020C125420001BFAE /* SQLiteAssembler.hpp in Headers */,
@@ -3740,6 +3770,7 @@
 				23301BF72298FE9A00A8AB5A /* AutoMigrateConfig.hpp in Headers */,
 				237A65F520F731DF008B4771 /* UniqueList.hpp in Headers */,
 				2370980B20590CA700E768B4 /* HandleStatement.hpp in Headers */,
+				7543DD83271C2F3B00B533B4 /* FTS5AuxiliaryFunctionTemplate.hpp in Headers */,
 				23BBE2A8204955CE00C4CBB6 /* WCTCommon.h in Headers */,
 				23C7559320DCF90F00031A93 /* SQLiteLocker.hpp in Headers */,
 				2370B12721914ED500D3227C /* NSData+WCTColumnCoding.h in Headers */,
@@ -3785,6 +3816,7 @@
 				2349F7481EA0D6680021EFA7 /* WCTDatabase+File.h in Headers */,
 				23EEDD4C217DFADC006E9E73 /* SyntaxPragmaSTMT.hpp in Headers */,
 				23EEDCAC217DFADC006E9E73 /* Upsert.hpp in Headers */,
+				7543DD87271C2FD000B533B4 /* AuxiliaryFunctionModule.hpp in Headers */,
 				234DBD0D2064E045000E31E8 /* WCTChainCall.h in Headers */,
 				23F70FC620A0618100CCE3CD /* Configs.hpp in Headers */,
 				233A25D3219933DB00054EC4 /* WCTBuiltin.h in Headers */,
@@ -4387,6 +4419,7 @@
 				23EEDCC1217DFADC006E9E73 /* StatementCreateTable.cpp in Sources */,
 				2360A5F920D78F1B00E4A311 /* HandleNotification.cpp in Sources */,
 				23AD52DD20DB56D200664B62 /* Sequence.cpp in Sources */,
+				7543DD86271C2FD000B533B4 /* AuxiliaryFunctionModule.cpp in Sources */,
 				234EF46F2015CFDE00B81929 /* WCTConvertible.mm in Sources */,
 				23EEDCB5217DFADC006E9E73 /* StatementAlterTable.cpp in Sources */,
 				23F70FAC20A055C300CCE3CD /* CipherConfig.cpp in Sources */,
@@ -4476,6 +4509,7 @@
 				23EEDC99217DFADC006E9E73 /* Pragma.cpp in Sources */,
 				23AD52F220DBAC4C00664B62 /* UpgradeableErrorProne.cpp in Sources */,
 				23176A9C21BA7D460051ACF9 /* WCTDatabase+Version.mm in Sources */,
+				7543DD8A271C343000B533B4 /* AuxiliaryFunctionModules.cpp in Sources */,
 				23567D7520CA9200005F1C35 /* SharedThreadedErrorProne.cpp in Sources */,
 				23EEDC93217DFADC006E9E73 /* LiteralValue.cpp in Sources */,
 				23EEDD33217DFADC006E9E73 /* SyntaxCreateIndexSTMT.cpp in Sources */,
@@ -4525,8 +4559,10 @@
 				23EEDCCD217DFADC006E9E73 /* StatementDropIndex.cpp in Sources */,
 				23775B6220AD666900E21AB0 /* Error.cpp in Sources */,
 				23EEDCD5217DFADC006E9E73 /* StatementInsert.cpp in Sources */,
+				7543DD92271C601F00B533B4 /* SubstringMatchInfo.cpp in Sources */,
 				39C70CC72313E20F002D773C /* Assemble.cpp in Sources */,
 				23775B8220AD666900E21AB0 /* Cell.cpp in Sources */,
+				7543DD8E271C360E00B533B4 /* AuxiliaryFunctionConfig.cpp in Sources */,
 				236BACE321BF9F6400C8B4D9 /* WCTDatabase+Migration.mm in Sources */,
 				23567CFA20CA3889005F1C35 /* Frame.cpp in Sources */,
 				23B35C7820BFE39500425033 /* Path.cpp in Sources */,
