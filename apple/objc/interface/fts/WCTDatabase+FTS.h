@@ -22,6 +22,7 @@
  * limitations under the License.
  */
 
+#import <WCDB/AuxiliaryFunctionModule.hpp>
 #import <WCDB/WCTCommon.h>
 #import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTFTSTokenizer.h>
@@ -47,6 +48,8 @@ WCDB_EXTERN NSString* const WCTTokenizerParameter_OneWord;
 WCDB_EXTERN NSString* const WCTTokenizerParameter_PinYin;
 WCDB_EXTERN NSString* const WCTTokenizerParameter_NeedSymbol;
 
+WCDB_EXTERN NSString* const WCTAuxiliaryFunction_SubstringMatchInfo;
+
 @interface WCTDatabase (FTS)
 
 - (void)enableAutoMergeFTS5Index:(BOOL)enable;
@@ -54,6 +57,10 @@ WCDB_EXTERN NSString* const WCTTokenizerParameter_NeedSymbol;
 - (void)addTokenizer:(NSString*)tokenizerName;
 
 + (void)registerTokenizer:(const WCDB::TokenizerModule&)module named:(NSString*)name;
+
+- (void)addAuxiliaryFunction:(NSString*)auxiliaryFunctionName;
+
++ (void)registerAuxiliaryFunction:(const WCDB::FTS5AuxiliaryFunctionModule&)module named:(NSString*)name;
 
 // No thread safe
 + (void)configPinYinDict:(NSDictionary<NSString*, NSArray<NSString*>*>*)pinyinDict;

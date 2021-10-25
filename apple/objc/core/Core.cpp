@@ -42,7 +42,8 @@ Core& Core::shared()
 Core::Core()
 // Database
 : m_databasePool(this)
-, m_modules(std::make_shared<TokenizerModules>())
+, m_tokenizerModules(std::make_shared<TokenizerModules>())
+, m_auxiliaryFunctionModules(std::make_shared<AuxiliaryFunctionModules>())
 , m_operationQueue(std::make_shared<OperationQueue>(OperationQueueName, this))
 // Checkpoint
 , m_autoCheckpointConfig(std::make_shared<AutoCheckpointConfig>(m_operationQueue))
@@ -124,17 +125,36 @@ void Core::preprocessError(Error& error)
 #pragma mark - Tokenizer
 void Core::registerTokenizer(const UnsafeStringView& name, const TokenizerModule& module)
 {
-    m_modules->add(name, module);
+    m_tokenizerModules->add(name, module);
 }
 
 bool Core::tokenizerExists(const UnsafeStringView& name) const
 {
-    return m_modules->get(name) != nullptr;
+    return m_tokenizerModules->get(name) != nullptr;
 }
 
 std::shared_ptr<Config> Core::tokenizerConfig(const UnsafeStringView& tokenizeName)
 {
-    return std::make_shared<TokenizerConfig>(tokenizeName, m_modules);
+    return std::make_shared<TokenizerConfig>(tokenizeName, m_tokenizerModules);
+}
+
+#pragma mark - AuxiliaryFunction
+void Core::registerAuxiliaryFunction(const UnsafeStringView& name,
+                                     const FTS5AuxiliaryFunctionModule& module)
+{
+    m_auxiliaryFunctionModules->add(name, module);
+}
+
+bool Core::auxiliaryFunctionExists(const UnsafeStringView& name) const
+{
+    return m_auxiliaryFunctionModules->get(name) != nullptr;
+}
+
+std::shared_ptr<Config>
+Core::auxiliaryFunctionConfig(const UnsafeStringView& auxiliaryFunctionName)
+{
+    return std::make_shared<AuxiliaryFunctionConfig>(
+    auxiliaryFunctionName, m_auxiliaryFunctionModules);
 }
 
 #pragma mark - Operation

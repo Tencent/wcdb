@@ -23,6 +23,8 @@
  */
 
 #import <WCDB/Assertion.hpp>
+#import <WCDB/FTS5AuxiliaryFunctionTemplate.hpp>
+#import <WCDB/SubstringMatchInfo.hpp>
 #import <WCDB/WCTDatabase+FTS.h>
 #import <WCDB/WCTDatabase+Private.h>
 
@@ -42,13 +44,21 @@ NSString* const WCTModuleFTS3 = @"fts3";
 NSString* const WCTModuleFTS4 = @"fts4";
 NSString* const WCTModuleFTS5 = @"fts5";
 
+NSString* const WCTAuxiliaryFunction_SubstringMatchInfo = @"substring_match_info";
+
 static NSDictionary* g_pinyinDict = nil;
 
-static std::nullptr_t initialize()
+static std::nullptr_t initializeTokenizer()
 {
     WCDB::Core::shared().registerTokenizer(WCTTokenizerOneOrBinary, WCDB::FTS3TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizer>::specialize());
     WCDB::Core::shared().registerTokenizer(WCTTokenizerLegacyOneOrBinary, WCDB::FTS3TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizer>::specialize());
     [WCTDatabase registerTokenizer:WCDB::FTS5TokenizerModuleTemplate<WCTOneOrBinaryTokenizer>::specializeWithContext(nullptr) named:WCTTokenizerOneOrBinary_FTS5];
+    return nullptr;
+}
+
+static std::nullptr_t initializeAuxiliaryFunction()
+{
+    [WCTDatabase registerAuxiliaryFunction:WCDB::FTS5AuxiliaryFunctionTemplate<WCDB::SubstringMatchInfo>::specializeWithContext(nullptr) named:WCTAuxiliaryFunction_SubstringMatchInfo];
     return nullptr;
 }
 
@@ -61,7 +71,7 @@ static std::nullptr_t initialize()
 
 - (void)addTokenizer:(NSString*)tokenizerName
 {
-    WCDB_ONCE(initialize());
+    WCDB_ONCE(initializeTokenizer());
 
     WCDB::StringView configName = WCDB::StringView::formatted("%s%s", WCDB::TokenizeConfigPrefix, tokenizerName.UTF8String);
     _database->setConfig(configName, WCDB::Core::shared().tokenizerConfig(tokenizerName), WCDB::Configs::Priority::Higher);
@@ -76,6 +86,20 @@ static std::nullptr_t initialize()
 + (void)configPinYinDict:(NSDictionary<NSString*, NSArray<NSString*>*>*)pinyinDict
 {
     WCTOneOrBinaryTokenizer::configPinyinDict(pinyinDict);
+}
+
+- (void)addAuxiliaryFunction:(NSString*)auxiliaryFunctionName
+{
+    WCDB_ONCE(initializeAuxiliaryFunction());
+
+    WCDB::StringView configName = WCDB::StringView::formatted("%s%s", WCDB::AuxiliaryFunctionConfigPrefix, auxiliaryFunctionName.UTF8String);
+    _database->setConfig(configName, WCDB::Core::shared().auxiliaryFunctionConfig(auxiliaryFunctionName), WCDB::Configs::Priority::Higher);
+}
+
++ (void)registerAuxiliaryFunction:(const WCDB::FTS5AuxiliaryFunctionModule&)module named:(NSString*)name
+{
+    WCTRemedialAssert(name.length > 0, "Module name can't be nil.", return;);
+    WCDB::Core::shared().registerAuxiliaryFunction(name, module);
 }
 
 @end

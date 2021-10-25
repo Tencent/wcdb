@@ -34,6 +34,7 @@
 #include <WCDB/Database.hpp>
 #include <WCDB/DatabasePool.hpp>
 
+#include <WCDB/AuxiliaryFunctionModules.hpp>
 #include <WCDB/TokenizerModules.hpp>
 
 #include <WCDB/Notifier.hpp>
@@ -70,7 +71,18 @@ public:
     bool tokenizerExists(const UnsafeStringView& name) const;
 
 protected:
-    std::shared_ptr<TokenizerModules> m_modules;
+    std::shared_ptr<TokenizerModules> m_tokenizerModules;
+
+#pragma mark - AuxiliaryFunction
+public:
+    void registerAuxiliaryFunction(const UnsafeStringView& name,
+                                   const FTS5AuxiliaryFunctionModule& module);
+    std::shared_ptr<Config>
+    auxiliaryFunctionConfig(const UnsafeStringView& auxiliaryFunctionName);
+    bool auxiliaryFunctionExists(const UnsafeStringView& name) const;
+
+protected:
+    std::shared_ptr<AuxiliaryFunctionModules> m_auxiliaryFunctionModules;
 
 #pragma mark - Operation
 public:
