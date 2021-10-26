@@ -35,6 +35,7 @@ public:
     ~OneOrBinaryTokenizerInfo() override final;
     bool m_needBinary;
     bool m_needSymbol;
+    bool m_needSimplifiedChinese;
 };
 
 class OneOrBinaryTokenizer : public AbstractFTS3TokenizerCursorInfo, public AbstractFTS5Tokenizer {
@@ -60,8 +61,11 @@ protected:
     //You must figure out the unicode character set of [symbol] on current platform or implement it refer to http://www.fileformat.info/info/unicode/category/index.htm
     typedef unsigned short UnicodeChar;
     virtual std::pair<int, bool> isSymbol(UnicodeChar theChar) const = 0;
-    virtual const std::vector<WCDB::StringView> *
-    getPinYin(const WCDB::UnsafeStringView chineseCharacter) const = 0;
+    virtual StringView normalizeToken(UnsafeStringView &token) const = 0;
+    virtual const std::vector<StringView> *
+    getPinYin(const UnsafeStringView chineseCharacter) const = 0;
+    virtual const UnsafeStringView
+    getSimplifiedChinese(const UnsafeStringView chineseCharacter) const = 0;
 
 private:
     const char *m_input;
@@ -98,6 +102,7 @@ private:
     bool m_needBinary;
     bool m_ispinyin; //only for fts5
     bool m_needSymbol;
+    bool m_needSimplifiedChinese;
 
     int cursorStep();
     int cursorSetup();

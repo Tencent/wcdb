@@ -34,7 +34,7 @@ WCDB_SYNTHESIZE(content)
 WCDB_SYNTHESIZE(extension)
 
 WCDB_VIRTUAL_TABLE_MODULE(WCTModuleFTS3)
-WCDB_VIRTUAL_TABLE_TOKENIZE(WCTTokenizerOneOrBinary)
+WCDB_VIRTUAL_TABLE_TOKENIZE_WITH_PARAMETERS(WCTTokenizerOneOrBinary, WCTTokenizerParameter_ChineseTraditionalToSimplified)
 
 - (BOOL)isEqual:(NSObject*)object
 {

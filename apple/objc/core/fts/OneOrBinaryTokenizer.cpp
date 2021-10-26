@@ -35,13 +35,18 @@ namespace WCDB {
 
 #pragma mark - Tokenizer Info
 OneOrBinaryTokenizerInfo::OneOrBinaryTokenizerInfo(int argc, const char *const *argv)
-: AbstractFTS3TokenizerInfo(argc, argv), m_needBinary(true), m_needSymbol(false)
+: AbstractFTS3TokenizerInfo(argc, argv)
+, m_needBinary(true)
+, m_needSymbol(false)
+, m_needSimplifiedChinese(false)
 {
     for (int i = 0; i < argc; i++) {
         if (strcmp(argv[i], "just_one") == 0) {
             m_needBinary = false;
         } else if (strcmp(argv[i], "need_symbol") == 0) {
             m_needSymbol = true;
+        } else if (strcmp(argv[i], "chinese_traditional_to_simplified") == 0) {
+            m_needSimplifiedChinese = true;
         }
     }
 }
@@ -70,6 +75,7 @@ OneOrBinaryTokenizer::OneOrBinaryTokenizer(const char *input,
 , m_needBinary(true)
 , m_ispinyin(false)
 , m_needSymbol(false)
+, m_needSimplifiedChinese(false)
 {
     static_assert(sizeof(UnicodeChar) == 2, "UnicodeChar must be 2 byte length.");
 
@@ -83,6 +89,7 @@ OneOrBinaryTokenizer::OneOrBinaryTokenizer(const char *input,
     if (oneOrBinaryInfo != nullptr) {
         m_needBinary = oneOrBinaryInfo->m_needBinary;
         m_needSymbol = oneOrBinaryInfo->m_needSymbol;
+        m_needSimplifiedChinese = oneOrBinaryInfo->m_needSimplifiedChinese;
     }
 }
 
@@ -105,6 +112,7 @@ OneOrBinaryTokenizer::OneOrBinaryTokenizer(void *pCtx, const char **azArg, int n
 , m_needBinary(true)
 , m_ispinyin(false)
 , m_needSymbol(false)
+, m_needSimplifiedChinese(false)
 {
     for (int i = 0; i < nArg; i++) {
         if (strcmp(azArg[i], "just_one") == 0) {
@@ -115,12 +123,15 @@ OneOrBinaryTokenizer::OneOrBinaryTokenizer(void *pCtx, const char **azArg, int n
         } else if (strcmp(azArg[i], "need_symbol") == 0) {
             //symbol is ignored in pinyin tokenizer
             m_needSymbol = true;
+        } else if (strcmp(azArg[i], "chinese_traditional_to_simplified") == 0) {
+            m_needSimplifiedChinese = true;
         }
     }
     if (m_ispinyin) {
         //The pinyin parameter is incompatible with other parameters.
         m_needSymbol = false;
         m_needBinary = false;
+        m_needSimplifiedChinese = false;
     }
     static_assert(sizeof(UnicodeChar) == 2, "UnicodeChar must be 2 byte length.");
 }
@@ -416,9 +427,36 @@ int OneOrBinaryTokenizer::genNormalToken()
         if (code != Error::Code::OK) {
             return Error::c2rc(code);
         }
+    } else if (m_preTokenType != TokenType::BasicMultilingualPlaneOther
+               || !m_needSimplifiedChinese) {
+        UnsafeStringView token
+        = UnsafeStringView(m_input + m_startOffset, m_normalTokenLength);
+        StringView nomalizeToken = normalizeToken(token);
+        m_normalTokenLength = (int) nomalizeToken.length();
+        m_normalToken.assign(nomalizeToken.data(), nomalizeToken.data() + m_normalTokenLength);
+    } else if (!m_needBinary || m_subTokensDoubleChar) {
+        UnsafeStringView token
+        = UnsafeStringView(m_input + m_startOffset, m_normalTokenLength);
+        StringView nomalizeToken = normalizeToken(token);
+        UnsafeStringView simplifiedToken = getSimplifiedChinese(nomalizeToken);
+        m_normalTokenLength = (int) simplifiedToken.length();
+        m_normalToken.assign(simplifiedToken.data(), simplifiedToken.data() + m_normalTokenLength);
     } else {
-        m_normalToken.assign(m_input + m_startOffset,
-                             m_input + m_startOffset + m_normalTokenLength);
+        UnsafeStringView firstChar
+        = UnsafeStringView(m_input + m_startOffset, m_subTokensLengthArray[0]);
+        UnsafeStringView secondChar = UnsafeStringView(
+        m_input + m_startOffset + m_subTokensLengthArray[0], m_subTokensLengthArray[1]);
+        firstChar = getSimplifiedChinese(firstChar);
+        secondChar = getSimplifiedChinese(secondChar);
+        StringView normalizeFirstChar = normalizeToken(firstChar);
+        StringView normalizeSecondChar = normalizeToken(secondChar);
+        m_normalTokenLength
+        = (int) normalizeFirstChar.length() + (int) normalizeSecondChar.length();
+        m_normalToken.assign(normalizeFirstChar.data(),
+                             normalizeFirstChar.data() + normalizeFirstChar.length());
+        m_normalToken.insert(m_normalToken.end(),
+                             normalizeSecondChar.data(),
+                             normalizeSecondChar.data() + normalizeSecondChar.length());
     }
     m_position++;
     return Error::c2rc(Error::Code::OK);

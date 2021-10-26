@@ -45,14 +45,19 @@ public:
     WCTOneOrBinaryTokenizer& operator=(const WCTOneOrBinaryTokenizer& other);
 
     static void configPinyinDict(NSDictionary<NSString*, NSArray<NSString*>*>* pinyinDict);
+    static void configTraditionalChineseDict(NSDictionary<NSString*, NSString*>* traditionalChineseDict);
 
     ~WCTOneOrBinaryTokenizer() override final;
 
 protected:
     CFCharacterSetRef m_symbolCharacterSet;
     static WCDB::StringViewMap<std::vector<WCDB::StringView>>* m_pinyinDict;
+    static WCDB::StringViewMap<WCDB::StringView>* m_traditionalChineseDict;
     static CFCharacterSetRef generateSymbolCharacterSet();
 
     std::pair<int, bool> isSymbol(UnicodeChar theChar) const override final;
+    WCDB::StringView normalizeToken(WCDB::UnsafeStringView& token) const override final;
     const std::vector<WCDB::StringView>* getPinYin(const WCDB::UnsafeStringView chineseCharacter) const override final;
+    const WCDB::UnsafeStringView
+    getSimplifiedChinese(const WCDB::UnsafeStringView chineseCharacter) const override final;
 };

@@ -47,6 +47,7 @@ WCDB_EXTERN NSString* const WCTTokenizerLegacyOneOrBinary; // compatible for WCT
 WCDB_EXTERN NSString* const WCTTokenizerParameter_OneWord;
 WCDB_EXTERN NSString* const WCTTokenizerParameter_PinYin;
 WCDB_EXTERN NSString* const WCTTokenizerParameter_NeedSymbol;
+WCDB_EXTERN NSString* const WCTTokenizerParameter_ChineseTraditionalToSimplified;
 
 WCDB_EXTERN NSString* const WCTAuxiliaryFunction_SubstringMatchInfo;
 
@@ -64,6 +65,7 @@ WCDB_EXTERN NSString* const WCTAuxiliaryFunction_SubstringMatchInfo;
 
 // No thread safe
 + (void)configPinYinDict:(NSDictionary<NSString*, NSArray<NSString*>*>*)pinyinDict;
++ (void)configTraditionalChineseDict:(NSDictionary<NSString*, NSString*>*)traditionalChineseDict;
 
 @end
 

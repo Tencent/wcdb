@@ -39,6 +39,7 @@ NSString* const WCTTokenizerLegacyOneOrBinary = @"WCDB";
 NSString* const WCTTokenizerParameter_OneWord = @"just_one";
 NSString* const WCTTokenizerParameter_PinYin = @"pin_yin";
 NSString* const WCTTokenizerParameter_NeedSymbol = @"need_symbol";
+NSString* const WCTTokenizerParameter_ChineseTraditionalToSimplified = @"chinese_traditional_to_simplified";
 
 NSString* const WCTModuleFTS3 = @"fts3";
 NSString* const WCTModuleFTS4 = @"fts4";
@@ -86,6 +87,11 @@ static std::nullptr_t initializeAuxiliaryFunction()
 + (void)configPinYinDict:(NSDictionary<NSString*, NSArray<NSString*>*>*)pinyinDict
 {
     WCTOneOrBinaryTokenizer::configPinyinDict(pinyinDict);
+}
+
++ (void)configTraditionalChineseDict:(NSDictionary<NSString*, NSString*>*)traditionalChineseDict
+{
+    WCTOneOrBinaryTokenizer::configTraditionalChineseDict(traditionalChineseDict);
 }
 
 - (void)addAuxiliaryFunction:(NSString*)auxiliaryFunctionName
