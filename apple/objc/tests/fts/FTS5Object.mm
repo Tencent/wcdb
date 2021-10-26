@@ -33,7 +33,7 @@ WCDB_SYNTHESIZE(content)
 WCDB_SYNTHESIZE(extension)
 
 WCDB_VIRTUAL_TABLE_MODULE(WCTModuleFTS5)
-WCDB_VIRTUAL_TABLE_TOKENIZE_WITH_PARAMETERS(WCTTokenizerOneOrBinary_FTS5, WCTTokenizerParameter_OneWord)
+WCDB_VIRTUAL_TABLE_TOKENIZE_WITH_PARAMETERS(WCTTokenizerOneOrBinary_FTS5, WCTTokenizerParameter_OneWord, WCTTokenizerParameter_ChineseTraditionalToSimplified)
 
 - (BOOL)isEqual:(NSObject*)object
 {

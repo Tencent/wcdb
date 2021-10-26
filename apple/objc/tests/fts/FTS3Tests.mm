@@ -39,6 +39,10 @@
     self.tableClass = FTS3Object.class;
     self.isVirtualTable = YES;
     [self.database addTokenizer:WCTTokenizerOneOrBinary];
+    [WCTDatabase configTraditionalChineseDict:@{
+        @"們" : @"们",
+        @"員" : @"员",
+    }];
     TestCaseAssertTrue([self createTable]);
 
     FTS3Object *dummy = [[FTS3Object alloc] init];
@@ -77,6 +81,23 @@
                 andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '树' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:FTS3Object.content.match("树")];
+           }];
+}
+
+- (void)test_traditional_chinese
+{
+    FTS3Object *object = [[FTS3Object alloc] init];
+    object.content = @"我們是程序員";
+    TestCaseAssertTrue([self.table insertObject:object]);
+    [self doTestObject:object
+                andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '我們是程序員' ORDER BY rowid ASC"
+           bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
+               return [self.table getObjectsWhere:FTS3Object.content.match("我們是程序員")];
+           }];
+    [self doTestObject:object
+                andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '我们是程序员' ORDER BY rowid ASC"
+           bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
+               return [self.table getObjectsWhere:FTS3Object.content.match("我们是程序员")];
            }];
 }
 

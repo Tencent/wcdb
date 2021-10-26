@@ -105,6 +105,14 @@ std::pair<int, bool> WCTOneOrBinaryTokenizer::isSymbol(UnicodeChar theChar) cons
     return { WCDB::Error::c2rc(code), symbol };
 }
 
+WCDB::StringView WCTOneOrBinaryTokenizer::normalizeToken(WCDB::UnsafeStringView& token) const
+{
+    NSMutableString* nsToken = [[NSMutableString alloc] initWithBytes:token.data() length:token.length() encoding:NSUTF8StringEncoding];
+    CFMutableStringRef normalizationFormText = (__bridge_retained CFMutableStringRef)(nsToken);
+    CFStringNormalize(normalizationFormText, kCFStringNormalizationFormKD);
+    return WCDB::StringView((__bridge_transfer NSString*) normalizationFormText);
+}
+
 WCDB::StringViewMap<std::vector<WCDB::StringView>>* WCTOneOrBinaryTokenizer::m_pinyinDict = new WCDB::StringViewMap<std::vector<WCDB::StringView>>();
 
 void WCTOneOrBinaryTokenizer::configPinyinDict(NSDictionary<NSString*, NSArray<NSString*>*>* pinyinDict)
@@ -128,6 +136,20 @@ void WCTOneOrBinaryTokenizer::configPinyinDict(NSDictionary<NSString*, NSArray<N
     }
 }
 
+WCDB::StringViewMap<WCDB::StringView>* WCTOneOrBinaryTokenizer::m_traditionalChineseDict = new WCDB::StringViewMap<WCDB::StringView>();
+
+void WCTOneOrBinaryTokenizer::configTraditionalChineseDict(NSDictionary<NSString*, NSString*>* traditionalChineseDict)
+{
+    m_traditionalChineseDict->clear();
+    for (NSString* chinese in traditionalChineseDict.allKeys) {
+        NSString* simplifiedChinese = traditionalChineseDict[chinese];
+        if (chinese.UTF8String == nil || simplifiedChinese.UTF8String == nil) {
+            continue;
+        }
+        m_traditionalChineseDict->insert_or_assign(WCDB::StringView(chinese.UTF8String), WCDB::StringView(simplifiedChinese.UTF8String));
+    }
+}
+
 const std::vector<WCDB::StringView>* WCTOneOrBinaryTokenizer::getPinYin(const WCDB::UnsafeStringView chineseCharacter) const
 {
     auto iter = m_pinyinDict->find(chineseCharacter);
@@ -135,4 +157,13 @@ const std::vector<WCDB::StringView>* WCTOneOrBinaryTokenizer::getPinYin(const WC
         return &iter->second;
     }
     return nullptr;
+}
+
+const WCDB::UnsafeStringView WCTOneOrBinaryTokenizer::getSimplifiedChinese(const WCDB::UnsafeStringView chineseCharacter) const
+{
+    auto iter = m_traditionalChineseDict->find(chineseCharacter);
+    if (iter != m_traditionalChineseDict->end()) {
+        return iter->second;
+    }
+    return chineseCharacter;
 }
