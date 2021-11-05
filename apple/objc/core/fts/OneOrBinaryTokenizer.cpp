@@ -147,7 +147,7 @@ void OneOrBinaryTokenizer::loadInput(int flags, const char *pText, int nText)
     } else if (m_inputLength <= 0) {
         m_inputLength = (int) strlen(m_input);
     }
-    if (flags & FTS5_TOKENIZE_QUERY) {
+    if (flags & (FTS5_TOKENIZE_QUERY | FTS5_TOKENIZE_AUX)) {
         m_ispinyin = false;
     }
     m_position = 0;
@@ -162,14 +162,14 @@ void OneOrBinaryTokenizer::loadInput(int flags, const char *pText, int nText)
     m_subTokensDoubleChar = true;
     m_normalToken.clear();
     m_normalTokenLength = 0;
-    m_pinyinTokens.clear();
+    m_pinyinTokenArr.clear();
     m_pinyinTokenIndex = 0;
 }
 
 // for fts5
 int OneOrBinaryTokenizer::nextToken(int *tflags, const char **ppToken, int *nToken, int *iStart, int *iEnd)
 {
-    if (!m_ispinyin || m_pinyinTokens.size() == 0) {
+    if (!m_ispinyin || m_pinyinTokenArr.size() == m_pinyinTokenIndex) {
         while (true) {
             int ret = stepNextToken();
             if (Error::rc2c(ret) != Error::Code::OK) {
@@ -183,7 +183,7 @@ int OneOrBinaryTokenizer::nextToken(int *tflags, const char **ppToken, int *nTok
                 break;
             } else {
                 genPinyinToken();
-                if (m_pinyinTokens.size() > 0) {
+                if (m_pinyinTokenArr.size() > 0) {
                     break;
                 }
             }
@@ -200,13 +200,12 @@ int OneOrBinaryTokenizer::nextToken(int *tflags, const char **ppToken, int *nTok
         if (m_pinyinTokenIndex > 0) {
             *tflags = FTS5_TOKEN_COLOCATED;
         }
-        const auto pinyinToken = m_pinyinTokens.begin();
-        *ppToken = pinyinToken->data();
-        *nToken = (int) pinyinToken->length();
+        const StringView &pinyinToken = m_pinyinTokenArr[m_pinyinTokenIndex];
+        *ppToken = pinyinToken.data();
+        *nToken = (int) pinyinToken.length();
         *iStart = m_startOffset;
         *iEnd = m_endOffset;
         m_pinyinTokenIndex++;
-        m_pinyinTokens.erase(pinyinToken);
         return Error::c2rc(Error::Code::OK);
     }
 }
@@ -255,7 +254,8 @@ int OneOrBinaryTokenizer::stepNextToken()
                     return Error::c2rc(code);
                 }
             }
-        } else if (m_ispinyin) {
+        }
+        if (m_ispinyin) {
             while (m_cursorTokenType != TokenType::BasicMultilingualPlaneOther
                    && m_cursorTokenType != TokenType::None) {
                 code = Error::rc2c(cursorStep());
@@ -464,8 +464,9 @@ int OneOrBinaryTokenizer::genNormalToken()
 
 void OneOrBinaryTokenizer::genPinyinToken()
 {
-    m_pinyinTokens.clear();
+    m_pinyinTokenArr.clear();
     m_pinyinTokenIndex = 0;
+    StringViewSet pinyinSet;
     m_position++;
     UnsafeStringView token = UnsafeStringView(m_input + m_startOffset, m_normalTokenLength);
     const std::vector<StringView> *pinyinPtr = getPinYin(token);
@@ -476,12 +477,22 @@ void OneOrBinaryTokenizer::genPinyinToken()
         if (pinyin.length() == 0) {
             continue;
         }
-        //full pinyin
-        m_pinyinTokens.emplace(pinyin);
-        if (pinyin.length() > 1) {
-            //short pinyin
-            m_pinyinTokens.emplace(pinyin.data(), 1);
+        if (pinyinSet.find(pinyin) != pinyinSet.end()) {
+            continue;
         }
+        //full pinyin
+        m_pinyinTokenArr.emplace_back(pinyin);
+        pinyinSet.emplace(pinyin);
+        if (pinyin.length() <= 1) {
+            continue;
+        }
+        UnsafeStringView shortPinyin = UnsafeStringView(pinyin.data(), 1);
+        if (pinyinSet.find(shortPinyin) != pinyinSet.end()) {
+            continue;
+        }
+        //short pinyin
+        pinyinSet.emplace(shortPinyin);
+        m_pinyinTokenArr.emplace_back(shortPinyin);
     }
 }
 
