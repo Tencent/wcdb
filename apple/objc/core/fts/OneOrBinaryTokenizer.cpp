@@ -61,6 +61,7 @@ OneOrBinaryTokenizer::OneOrBinaryTokenizer(const char *input,
 , AbstractFTS5Tokenizer(nullptr, nullptr, 0)
 , m_input(input)
 , m_inputLength(inputLength)
+, m_flags(0)
 , m_position(0)
 , m_startOffset(0)
 , m_endOffset(0)
@@ -98,6 +99,7 @@ OneOrBinaryTokenizer::OneOrBinaryTokenizer(void *pCtx, const char **azArg, int n
 , AbstractFTS5Tokenizer(pCtx, azArg, nArg)
 , m_input(nullptr)
 , m_inputLength(0)
+, m_flags(0)
 , m_position(0)
 , m_startOffset(0)
 , m_endOffset(0)
@@ -129,7 +131,6 @@ OneOrBinaryTokenizer::OneOrBinaryTokenizer(void *pCtx, const char **azArg, int n
     }
     if (m_ispinyin) {
         //The pinyin parameter is incompatible with other parameters.
-        m_needSymbol = false;
         m_needBinary = false;
         m_needSimplifiedChinese = false;
     }
@@ -147,9 +148,7 @@ void OneOrBinaryTokenizer::loadInput(int flags, const char *pText, int nText)
     } else if (m_inputLength <= 0) {
         m_inputLength = (int) strlen(m_input);
     }
-    if (flags & (FTS5_TOKENIZE_QUERY | FTS5_TOKENIZE_AUX)) {
-        m_ispinyin = false;
-    }
+    m_flags = flags;
     m_position = 0;
     m_startOffset = 0;
     m_endOffset = 0;
@@ -169,13 +168,14 @@ void OneOrBinaryTokenizer::loadInput(int flags, const char *pText, int nText)
 // for fts5
 int OneOrBinaryTokenizer::nextToken(int *tflags, const char **ppToken, int *nToken, int *iStart, int *iEnd)
 {
-    if (!m_ispinyin || m_pinyinTokenArr.size() == m_pinyinTokenIndex) {
+    if (!m_ispinyin || (m_flags & FTS5_TOKENIZE_QUERY)
+        || m_pinyinTokenArr.size() == m_pinyinTokenIndex) {
         while (true) {
             int ret = stepNextToken();
             if (Error::rc2c(ret) != Error::Code::OK) {
                 return ret;
             }
-            if (!m_ispinyin) {
+            if (!m_ispinyin || (m_flags & FTS5_TOKENIZE_QUERY)) {
                 ret = genNormalToken();
                 if (Error::rc2c(ret) != Error::Code::OK) {
                     return ret;
@@ -190,7 +190,7 @@ int OneOrBinaryTokenizer::nextToken(int *tflags, const char **ppToken, int *nTok
         }
     }
     *tflags = 0;
-    if (!m_ispinyin) {
+    if (!m_ispinyin || (m_flags & FTS5_TOKENIZE_QUERY)) {
         *ppToken = m_normalToken.data();
         *nToken = m_normalTokenLength;
         *iStart = m_startOffset;
@@ -246,18 +246,17 @@ int OneOrBinaryTokenizer::stepNextToken()
             return Error::c2rc(Error::Code::Done);
         }
 
-        //Skip symbol
-        if (!m_needSymbol) {
-            while (m_cursorTokenType == TokenType::BasicMultilingualPlaneSymbol) {
+        if (m_ispinyin && !(m_flags & FTS5_TOKENIZE_QUERY)) {
+            while ((!m_needSymbol || m_cursorTokenType != TokenType::BasicMultilingualPlaneSymbol)
+                   && m_cursorTokenType != TokenType::BasicMultilingualPlaneOther
+                   && m_cursorTokenType != TokenType::None) {
                 code = Error::rc2c(cursorStep());
                 if (code != Error::Code::OK) {
                     return Error::c2rc(code);
                 }
             }
-        }
-        if (m_ispinyin) {
-            while (m_cursorTokenType != TokenType::BasicMultilingualPlaneOther
-                   && m_cursorTokenType != TokenType::None) {
+        } else if (!m_needSymbol || (m_flags & FTS5_TOKENIZE_QUERY && m_ispinyin)) { //Skip symbol
+            while (m_cursorTokenType == TokenType::BasicMultilingualPlaneSymbol) {
                 code = Error::rc2c(cursorStep());
                 if (code != Error::Code::OK) {
                     return Error::c2rc(code);
@@ -471,6 +470,10 @@ void OneOrBinaryTokenizer::genPinyinToken()
     UnsafeStringView token = UnsafeStringView(m_input + m_startOffset, m_normalTokenLength);
     const std::vector<StringView> *pinyinPtr = getPinYin(token);
     if (pinyinPtr == nullptr) {
+        if (m_preTokenType == TokenType::BasicMultilingualPlaneSymbol
+            && token.length() > 0) {
+            m_pinyinTokenArr.emplace_back(token);
+        }
         return;
     }
     for (const StringView &pinyin : *pinyinPtr) {

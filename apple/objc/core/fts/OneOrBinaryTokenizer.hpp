@@ -70,6 +70,7 @@ protected:
 private:
     const char *m_input;
     int m_inputLength;
+    int m_flags;
 
     int m_position;
     int m_startOffset;
