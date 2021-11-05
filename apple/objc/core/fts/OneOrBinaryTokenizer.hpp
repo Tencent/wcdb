@@ -95,7 +95,7 @@ private:
 
     std::vector<char> m_normalToken;
     int m_normalTokenLength;
-    std::set<StringView> m_pinyinTokens;
+    std::vector<StringView> m_pinyinTokenArr;
     int m_pinyinTokenIndex;
 
     // Can be configed by tokenizer parameters
