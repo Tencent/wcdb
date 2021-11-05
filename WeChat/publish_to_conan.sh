@@ -7,18 +7,18 @@ else
     brew install conan
 fi
 
-echo "Usage: publish_conan.sh -r [remote conan,default conan-mmclient] -p platform[ios/android] -v version[1.0.0] -d \"diretory to resources\" -n \"project name\""
+echo "Usage: publish_conan.sh -r [remote conan,default tencent-conan] -p platform[ios/android] -v version[1.0.0] -d \"diretory to resources\" -n \"project name\""
 
 dst=''
 name=''
 plat=''
 version=''
-remote='conan-mmclient'
+remote='tencent-conan'
 force=false
 publish_ios() {
     echo "conan ios, version: $version"
     conan remote add ${remote} http://conan.weixin.oa.com/artifactory/api/conan/${remote}
-    conan user -p mars@123 -r ${remote} mars
+    conan user -p b0e97e4237ca11ec9d426c92bf47000d -r ${remote} g_wxg_upload
     cd ${dst}
     conan new ${name}-ios/${version} --bare
     cat conanfile.py| sed 's/\"compiler\", //g' > ./conanfile2.py
@@ -40,7 +40,7 @@ publish_ios() {
 publish_android() {
     echo "conan android, version: $version"
     conan remote add ${remote} http://conan.weixin.oa.com/artifactory/api/conan/${remote}
-    conan user -p mars@123 -r ${remote} mars
+    conan user -p b0e97e4237ca11ec9d426c92bf47000d -r ${remote} g_wxg_upload
     cd ${dst}
     conan new ${name}-android/${version} --bare
     conan export-pkg . ${name}-android/${version}@conan/stable --force
