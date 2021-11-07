@@ -68,7 +68,8 @@ private:
     int m_columnNum;
 
     bool *m_phaseMatchResult;
-    int m_phaseMatchCount;
+    int m_substringPhaseMatchCount;
+    int m_currentPhaseMatchCount;
     int m_phaseCount;
 
     int *m_matchIndex;
