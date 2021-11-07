@@ -353,9 +353,7 @@ int OneOrBinaryTokenizer::cursorSetup()
                 WCTAssert(((unicode << 6) >> 6) == unicode);
                 unicode = (UnicodeChar) (((int) unicode << 6) | (m_input[i] & 0x3F));
             } else {
-                m_cursorTokenType = TokenType::None;
-                m_cursorTokenLength = m_inputLength - i;
-                return Error::c2rc(Error::Code::OK);
+                break;
             }
         }
         int rc;
@@ -380,6 +378,10 @@ int OneOrBinaryTokenizer::cursorSetup()
         } else {
             m_cursorTokenLength = 6;
         }
+    }
+    if (m_cursor + m_cursorTokenLength > m_inputLength) {
+        m_cursorTokenType = TokenType::None;
+        m_cursorTokenLength = m_inputLength - m_cursor;
     }
     return Error::c2rc(Error::Code::OK);
 }
