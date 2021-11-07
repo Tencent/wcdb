@@ -392,8 +392,10 @@ int OneOrBinaryTokenizer::lemmatization(const char *input, int inputLength)
     m_normalToken.assign(input, input + inputLength);
     std::transform(
     m_normalToken.begin(), m_normalToken.end(), m_normalToken.begin(), ::tolower);
-    m_normalTokenLength
-    = porterStem(m_normalToken.data(), 0, m_normalTokenLength - 1) + 1;
+    if (!m_ispinyin) {
+        m_normalTokenLength
+        = porterStem(m_normalToken.data(), 0, m_normalTokenLength - 1) + 1;
+    }
     return Error::c2rc(Error::Code::OK);
 }
 
