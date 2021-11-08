@@ -44,7 +44,6 @@
 #include <WCDB/DatabasePool.hpp>
 #include <WCDB/RecyclableHandle.hpp>
 
-#include <WCDB/OneOrBinaryTokenizer.hpp>
 #include <WCDB/TokenizerModule.hpp>
 #include <WCDB/TokenizerModules.hpp>
 

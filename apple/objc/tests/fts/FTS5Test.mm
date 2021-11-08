@@ -319,7 +319,7 @@
     self.expectMode = DatabaseTestCaseExpectFirstFewSQLs;
     self.tableClass = FTS5PinyinObject.class;
     self.isVirtualTable = YES;
-    [self.database addTokenizer:WCTTokenizerOneOrBinary_FTS5];
+    [self.database addTokenizer:WCTTokenizerPinyin];
     TestCaseAssertTrue([self createTable]);
 
     FTS5PinyinObject *dummy = [[FTS5PinyinObject alloc] init];
