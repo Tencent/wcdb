@@ -52,7 +52,7 @@ WCDB_IMPLEMENTATION(FTS5PinyinObject)
 WCDB_SYNTHESIZE(content)
 
 WCDB_VIRTUAL_TABLE_MODULE(WCTModuleFTS5)
-WCDB_VIRTUAL_TABLE_TOKENIZE_WITH_PARAMETERS(WCTTokenizerOneOrBinary_FTS5, WCTTokenizerParameter_OneWord, WCTTokenizerParameter_PinYin)
+WCDB_VIRTUAL_TABLE_TOKENIZE(WCTTokenizerPinyin)
 
 - (BOOL)isEqual:(NSObject*)object
 {

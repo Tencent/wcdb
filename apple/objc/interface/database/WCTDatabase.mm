@@ -28,7 +28,6 @@
 #import <WCDB/WCTDatabase+Memory.h>
 #import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTError+Private.h>
-#import <WCDB/WCTFTSTokenizer.h>
 #import <WCDB/WCTFoundation.h>
 #import <WCDB/WCTHandle+Private.h>
 

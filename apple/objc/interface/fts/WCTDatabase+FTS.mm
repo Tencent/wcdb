@@ -27,6 +27,8 @@
 #import <WCDB/SubstringMatchInfo.hpp>
 #import <WCDB/WCTDatabase+FTS.h>
 #import <WCDB/WCTDatabase+Private.h>
+#import <WCDB/WCTOneOrBinaryTokenizer.h>
+#import <WCDB/WCTPinyinTokenizer.h>
 
 NSString* const WCTTokenizerSimple = @"simple";
 NSString* const WCTTokenizerPorter = @"porter";
@@ -35,9 +37,9 @@ NSString* const WCTTokenizerUnicode61 = @"unicode61";
 NSString* const WCTTokenizerOneOrBinary = @"wcdb_one_or_binary";
 NSString* const WCTTokenizerOneOrBinary_FTS5 = @"wcdb_one_or_binary_fts5";
 NSString* const WCTTokenizerLegacyOneOrBinary = @"WCDB";
+NSString* const WCTTokenizerPinyin = @"wcdb_pinpin";
 
 NSString* const WCTTokenizerParameter_OneWord = @"just_one";
-NSString* const WCTTokenizerParameter_PinYin = @"pin_yin";
 NSString* const WCTTokenizerParameter_NeedSymbol = @"need_symbol";
 NSString* const WCTTokenizerParameter_ChineseTraditionalToSimplified = @"chinese_traditional_to_simplified";
 
@@ -51,9 +53,10 @@ static NSDictionary* g_pinyinDict = nil;
 
 static std::nullptr_t initializeTokenizer()
 {
-    WCDB::Core::shared().registerTokenizer(WCTTokenizerOneOrBinary, WCDB::FTS3TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizer>::specialize());
-    WCDB::Core::shared().registerTokenizer(WCTTokenizerLegacyOneOrBinary, WCDB::FTS3TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizer>::specialize());
+    WCDB::Core::shared().registerTokenizer(WCTTokenizerOneOrBinary, WCDB::FTS3TokenizerModuleTemplate<WCTOneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizer>::specialize());
+    WCDB::Core::shared().registerTokenizer(WCTTokenizerLegacyOneOrBinary, WCDB::FTS3TokenizerModuleTemplate<WCTOneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizer>::specialize());
     [WCTDatabase registerTokenizer:WCDB::FTS5TokenizerModuleTemplate<WCTOneOrBinaryTokenizer>::specializeWithContext(nullptr) named:WCTTokenizerOneOrBinary_FTS5];
+    [WCTDatabase registerTokenizer:WCDB::FTS5TokenizerModuleTemplate<WCTPinyinTokenizer>::specializeWithContext(nullptr) named:WCTTokenizerPinyin];
     return nullptr;
 }
 
@@ -86,12 +89,12 @@ static std::nullptr_t initializeAuxiliaryFunction()
 
 + (void)configPinYinDict:(NSDictionary<NSString*, NSArray<NSString*>*>*)pinyinDict
 {
-    WCTOneOrBinaryTokenizer::configPinyinDict(pinyinDict);
+    WCTFTSTokenizerUtil::configPinyinDict(pinyinDict);
 }
 
 + (void)configTraditionalChineseDict:(NSDictionary<NSString*, NSString*>*)traditionalChineseDict
 {
-    WCTOneOrBinaryTokenizer::configTraditionalChineseDict(traditionalChineseDict);
+    WCTFTSTokenizerUtil::configTraditionalChineseDict(traditionalChineseDict);
 }
 
 - (void)addAuxiliaryFunction:(NSString*)auxiliaryFunctionName

@@ -23,7 +23,7 @@
  */
 
 #import "WINQAssertion.h"
-#import <WCDB/WCTFTSTokenizer.h>
+#import <WCDB/WCTFTSTokenizerUtil.h>
 
 @interface StatementCreateVirtualTableTests : BaseTestCase
 

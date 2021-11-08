@@ -279,9 +279,11 @@
         break;
     }
     if (self.tokenizerName.length > 0) {
-        NSRange range = [self.tokenizerName rangeOfString:WCTTokenizerOneOrBinary];
-        NSString* tokenizerParameter = [[self.tokenizerName substringFromIndex:NSMaxRange(range)] stringByReplacingOccurrencesOfString:@" " withString:@"-"];
-        category = [category stringByAppendingString:tokenizerParameter];
+        NSRange range = [self.tokenizerName rangeOfString:@" "];
+        if (range.location != NSNotFound) {
+            NSString* tokenizerParameter = [[self.tokenizerName substringFromIndex:range.location] stringByReplacingOccurrencesOfString:@" " withString:@"-"];
+            category = [category stringByAppendingString:tokenizerParameter];
+        }
     }
     if (self.tableCount > 0) {
         category = [category stringByAppendingFormat:@"_Table%d", self.tableCount];

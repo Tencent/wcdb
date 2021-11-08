@@ -102,18 +102,18 @@
 - (int)getTokenizerIdWithNeedBinary:(BOOL)needBinary needPinyin:(BOOL)needPinyin needSymbol:(BOOL)needSymbol
 {
     if (needBinary) {
-        if (needPinyin) {
+        if (needSymbol) {
             return 0;
         } else {
-            if (needSymbol) {
-                return 1;
-            } else {
-                return 2;
-            }
+            return 1;
         }
     } else {
         if (needPinyin) {
-            return 3;
+            if (needSymbol) {
+                return 2;
+            } else {
+                return 3;
+            }
         } else {
             if (needSymbol) {
                 return 4;
@@ -128,10 +128,10 @@
 {
     NSString* name = [self tokenizerName];
     NSArray* tokenizers = @[
-        [NSString stringWithUTF8String:WCTFTSTokenizerUtil::tokenize(name, WCTTokenizerParameter_PinYin, nil).data()],
         [NSString stringWithUTF8String:WCTFTSTokenizerUtil::tokenize(name, WCTTokenizerParameter_NeedSymbol, nil).data()],
         [NSString stringWithUTF8String:WCTFTSTokenizerUtil::tokenize(name, nil).data()],
-        [NSString stringWithUTF8String:WCTFTSTokenizerUtil::tokenize(name, WCTTokenizerParameter_OneWord, WCTTokenizerParameter_PinYin, nil).data()],
+        [NSString stringWithUTF8String:WCTFTSTokenizerUtil::tokenize(name, nil).data()],
+        [NSString stringWithUTF8String:WCTFTSTokenizerUtil::tokenize(name, WCTTokenizerParameter_NeedSymbol, nil).data()],
         [NSString stringWithUTF8String:WCTFTSTokenizerUtil::tokenize(name, WCTTokenizerParameter_OneWord, WCTTokenizerParameter_NeedSymbol, nil).data()],
         [NSString stringWithUTF8String:WCTFTSTokenizerUtil::tokenize(name, WCTTokenizerParameter_OneWord, nil).data()]
     ];
