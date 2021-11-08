@@ -28,6 +28,7 @@
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Version.h>
 #include <execinfo.h>
+#include <stdlib.h>
 
 namespace WCDB {
 
