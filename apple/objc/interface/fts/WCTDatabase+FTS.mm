@@ -37,7 +37,7 @@ NSString* const WCTTokenizerUnicode61 = @"unicode61";
 NSString* const WCTTokenizerOneOrBinary = @"wcdb_one_or_binary";
 NSString* const WCTTokenizerOneOrBinary_FTS5 = @"wcdb_one_or_binary_fts5";
 NSString* const WCTTokenizerLegacyOneOrBinary = @"WCDB";
-NSString* const WCTTokenizerPinyin = @"wcdb_pinpin";
+NSString* const WCTTokenizerPinyin = @"wcdb_pinyin";
 
 NSString* const WCTTokenizerParameter_OneWord = @"just_one";
 NSString* const WCTTokenizerParameter_NeedSymbol = @"need_symbol";
