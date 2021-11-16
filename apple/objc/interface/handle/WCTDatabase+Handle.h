@@ -27,6 +27,16 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+class WCTScopedHandle {
+public:
+    WCTScopedHandle(WCTHandle *handle = nil);
+    ~WCTScopedHandle();
+    WCTHandle *getHandle() const;
+
+private:
+    WCTHandle *m_handle;
+};
+
 @interface WCTDatabase (Handle)
 
 - (WCTHandle *)getHandle;
@@ -36,5 +46,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)rawExecute:(NSString *)sql;
 
 @end
+
+#define WCDB_GET_SCOPED_HANDLE(database, handle) _WCDB_GET_SCOPED_HANDLE(database, handle, __COUNTER__)
+#define _WCDB_GET_SCOPED_HANDLE(database, handle, counter) __WCDB_GET_SCOPED_HANDLE(database, handle, counter)
+#define __WCDB_GET_SCOPED_HANDLE(database, handle, counter)        \
+    WCTScopedHandle __scopedHandle##counter([database getHandle]); \
+    WCTHandle *handle = __scopedHandle##counter.getHandle();
 
 NS_ASSUME_NONNULL_END
