@@ -26,6 +26,23 @@
 #import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTHandle+Private.h>
 
+WCTScopedHandle::WCTScopedHandle(WCTHandle *handle)
+: m_handle(handle)
+{
+}
+
+WCTScopedHandle::~WCTScopedHandle()
+{
+    if (m_handle != nil) {
+        [m_handle invalidate];
+    }
+}
+
+WCTHandle *WCTScopedHandle::getHandle() const
+{
+    return m_handle;
+}
+
 @implementation WCTDatabase (Handle)
 
 - (WCTHandle *)getHandle
