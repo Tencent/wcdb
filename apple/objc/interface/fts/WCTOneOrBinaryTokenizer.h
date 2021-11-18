@@ -30,7 +30,6 @@ class WCTOneOrBinaryTokenizerInfo final : public WCDB::AbstractFTS3TokenizerInfo
 public:
     WCTOneOrBinaryTokenizerInfo(int argc, const char *const *argv);
     ~WCTOneOrBinaryTokenizerInfo() override final;
-    bool m_needBinary;
     bool m_needSymbol;
     bool m_needSimplifiedChinese;
 };
@@ -38,7 +37,7 @@ public:
 class WCTOneOrBinaryTokenizer final : public WCDB::AbstractFTS3TokenizerCursorInfo,
                                       public WCDB::AbstractFTS5Tokenizer {
 public:
-    //for fts3
+    //for fts3/fts4
     WCTOneOrBinaryTokenizer(const char *input,
                             int inputLength,
                             WCDB::AbstractFTS3TokenizerInfo *tokenizerInfo);
@@ -78,8 +77,8 @@ private:
     std::vector<char> m_token;
     int m_tokenLength;
 
-    // Can be configed by tokenizer parameters
     bool m_needBinary;
+    // Can be configed by tokenizer parameters
     bool m_needSymbol;
     bool m_needSimplifiedChinese;
 

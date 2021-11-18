@@ -95,7 +95,7 @@
     if (m_dataType == FTSDataType_FTS3) {
         return WCTTokenizerOneOrBinary;
     } else {
-        return WCTTokenizerOneOrBinary_FTS5;
+        return WCTTokenizerVerbatim;
     }
 }
 
@@ -132,8 +132,8 @@
         [NSString stringWithUTF8String:WCTFTSTokenizerUtil::tokenize(name, nil).data()],
         [NSString stringWithUTF8String:WCTFTSTokenizerUtil::tokenize(name, nil).data()],
         [NSString stringWithUTF8String:WCTFTSTokenizerUtil::tokenize(name, WCTTokenizerParameter_NeedSymbol, nil).data()],
-        [NSString stringWithUTF8String:WCTFTSTokenizerUtil::tokenize(name, WCTTokenizerParameter_OneWord, WCTTokenizerParameter_NeedSymbol, nil).data()],
-        [NSString stringWithUTF8String:WCTFTSTokenizerUtil::tokenize(name, WCTTokenizerParameter_OneWord, nil).data()]
+        [NSString stringWithUTF8String:WCTFTSTokenizerUtil::tokenize(name, WCTTokenizerParameter_NeedSymbol, nil).data()],
+        [NSString stringWithUTF8String:WCTFTSTokenizerUtil::tokenize(name, nil).data()]
     ];
     return tokenizers[tkId];
 }
