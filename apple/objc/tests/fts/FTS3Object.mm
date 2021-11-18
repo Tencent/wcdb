@@ -53,7 +53,7 @@ WCDB_IMPLEMENTATION(FTS3SymbolObject)
 WCDB_SYNTHESIZE(content)
 
 WCDB_VIRTUAL_TABLE_MODULE(WCTModuleFTS3)
-WCDB_VIRTUAL_TABLE_TOKENIZE_WITH_PARAMETERS(WCTTokenizerOneOrBinary, WCTTokenizerParameter_NeedSymbol, WCTTokenizerParameter_OneWord)
+WCDB_VIRTUAL_TABLE_TOKENIZE_WITH_PARAMETERS(WCTTokenizerOneOrBinary, WCTTokenizerParameter_NeedSymbol)
 
 - (BOOL)isEqual:(NSObject*)object
 {

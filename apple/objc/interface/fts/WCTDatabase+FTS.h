@@ -40,13 +40,14 @@ WCDB_EXTERN NSString* const WCTTokenizerICU;
 WCDB_EXTERN NSString* const WCTTokenizerUnicode61;
 
 // WCDB implemented tokenizer
+// Only for fts3/fts4
 WCDB_EXTERN NSString* const WCTTokenizerOneOrBinary;
-WCDB_EXTERN NSString* const WCTTokenizerOneOrBinary_FTS5;
 WCDB_EXTERN NSString* const WCTTokenizerLegacyOneOrBinary; // compatible for WCTTokenizerNameWCDB before v1.1.0
-WCDB_EXTERN NSString* const WCTTokenizerPinyin;            //Only for fts5
+// Only for fts5
+WCDB_EXTERN NSString* const WCTTokenizerVerbatim;
+WCDB_EXTERN NSString* const WCTTokenizerPinyin;
 
 // Configurable parameters for WCDB implemented tokenizers
-WCDB_EXTERN NSString* const WCTTokenizerParameter_OneWord;
 WCDB_EXTERN NSString* const WCTTokenizerParameter_NeedSymbol;
 WCDB_EXTERN NSString* const WCTTokenizerParameter_ChineseTraditionalToSimplified;
 

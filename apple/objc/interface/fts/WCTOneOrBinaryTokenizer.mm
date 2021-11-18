@@ -33,14 +33,11 @@ extern int porterStem(char *p, int i, int j);
 #pragma mark - Tokenizer Info
 WCTOneOrBinaryTokenizerInfo::WCTOneOrBinaryTokenizerInfo(int argc, const char *const *argv)
 : WCDB::AbstractFTS3TokenizerInfo(argc, argv)
-, m_needBinary(true)
 , m_needSymbol(false)
 , m_needSimplifiedChinese(false)
 {
     for (int i = 0; i < argc; i++) {
-        if (strcmp(argv[i], "just_one") == 0) {
-            m_needBinary = false;
-        } else if (strcmp(argv[i], "need_symbol") == 0) {
+        if (strcmp(argv[i], "need_symbol") == 0) {
             m_needSymbol = true;
         } else if (strcmp(argv[i], "chinese_traditional_to_simplified") == 0) {
             m_needSimplifiedChinese = true;
@@ -80,7 +77,6 @@ WCTOneOrBinaryTokenizer::WCTOneOrBinaryTokenizer(const char *input,
     WCTOneOrBinaryTokenizerInfo *oneOrBinaryInfo
     = dynamic_cast<WCTOneOrBinaryTokenizerInfo *>(tokenizerInfo);
     if (oneOrBinaryInfo != nullptr) {
-        m_needBinary = oneOrBinaryInfo->m_needBinary;
         m_needSymbol = oneOrBinaryInfo->m_needSymbol;
         m_needSimplifiedChinese = oneOrBinaryInfo->m_needSimplifiedChinese;
     }
@@ -101,14 +97,12 @@ WCTOneOrBinaryTokenizer::WCTOneOrBinaryTokenizer(void *pCtx, const char **azArg,
 , m_subTokensCursor(0)
 , m_subTokensDoubleChar(true)
 , m_tokenLength(0)
-, m_needBinary(true)
+, m_needBinary(false)
 , m_needSymbol(false)
 , m_needSimplifiedChinese(false)
 {
     for (int i = 0; i < nArg; i++) {
-        if (strcmp(azArg[i], "just_one") == 0) {
-            m_needBinary = false;
-        } else if (strcmp(azArg[i], "need_symbol") == 0) {
+        if (strcmp(azArg[i], "need_symbol") == 0) {
             m_needSymbol = true;
         } else if (strcmp(azArg[i], "chinese_traditional_to_simplified") == 0) {
             m_needSimplifiedChinese = true;

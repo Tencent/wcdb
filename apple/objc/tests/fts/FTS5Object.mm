@@ -33,7 +33,7 @@ WCDB_SYNTHESIZE(content)
 WCDB_SYNTHESIZE(extension)
 
 WCDB_VIRTUAL_TABLE_MODULE(WCTModuleFTS5)
-WCDB_VIRTUAL_TABLE_TOKENIZE_WITH_PARAMETERS(WCTTokenizerOneOrBinary_FTS5, WCTTokenizerParameter_OneWord, WCTTokenizerParameter_ChineseTraditionalToSimplified)
+WCDB_VIRTUAL_TABLE_TOKENIZE_WITH_PARAMETERS(WCTTokenizerVerbatim, WCTTokenizerParameter_ChineseTraditionalToSimplified)
 
 - (BOOL)isEqual:(NSObject*)object
 {
@@ -71,7 +71,7 @@ WCDB_IMPLEMENTATION(FTS5SymbolObject)
 WCDB_SYNTHESIZE(content)
 
 WCDB_VIRTUAL_TABLE_MODULE(WCTModuleFTS5)
-WCDB_VIRTUAL_TABLE_TOKENIZE_WITH_PARAMETERS(WCTTokenizerOneOrBinary_FTS5, WCTTokenizerParameter_OneWord, WCTTokenizerParameter_NeedSymbol)
+WCDB_VIRTUAL_TABLE_TOKENIZE_WITH_PARAMETERS(WCTTokenizerVerbatim, WCTTokenizerParameter_NeedSymbol)
 
 - (BOOL)isEqual:(NSObject*)object
 {

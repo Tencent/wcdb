@@ -38,7 +38,7 @@
     self.expectMode = DatabaseTestCaseExpectFirstFewSQLs;
     self.tableClass = FTS5Object.class;
     self.isVirtualTable = YES;
-    [self.database addTokenizer:WCTTokenizerOneOrBinary_FTS5];
+    [self.database addTokenizer:WCTTokenizerVerbatim];
     [WCTDatabase configTraditionalChineseDict:@{
         @"們" : @"们",
         @"員" : @"员",
@@ -366,7 +366,7 @@
     self.expectMode = DatabaseTestCaseExpectFirstFewSQLs;
     self.tableClass = FTS5SymbolObject.class;
     self.isVirtualTable = YES;
-    [self.database addTokenizer:WCTTokenizerOneOrBinary_FTS5];
+    [self.database addTokenizer:WCTTokenizerVerbatim];
     [self.database addAuxiliaryFunction:WCTAuxiliaryFunction_SubstringMatchInfo];
     TestCaseAssertTrue([self createTable]);
 
