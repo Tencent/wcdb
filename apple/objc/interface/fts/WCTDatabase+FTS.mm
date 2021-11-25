@@ -41,6 +41,7 @@ NSString* const WCTTokenizerPinyin = @"wcdb_pinyin";
 
 NSString* const WCTTokenizerParameter_NeedSymbol = @"need_symbol";
 NSString* const WCTTokenizerParameter_ChineseTraditionalToSimplified = @"chinese_traditional_to_simplified";
+NSString* const WCTTokenizerParameter_SkipStemming = @"skip_stemming";
 
 NSString* const WCTModuleFTS3 = @"fts3";
 NSString* const WCTModuleFTS4 = @"fts4";
