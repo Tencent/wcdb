@@ -97,6 +97,11 @@ bool FactoryRetriever::work()
 
     reportSummary(SteadyClock::timeIntervalSinceSteadyClockToNow(before));
 
+    // Did not restore anything, return false
+    if (getScore().value() == 0) {
+        return exit(false);
+    }
+
     //4. Do a backup on restore db.
     FactoryBackup backup(factory);
     backup.setBackupExclusiveDelegate(m_exclusiveDelegate);
