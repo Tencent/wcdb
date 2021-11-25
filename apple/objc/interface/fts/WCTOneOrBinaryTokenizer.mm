@@ -35,12 +35,15 @@ WCTOneOrBinaryTokenizerInfo::WCTOneOrBinaryTokenizerInfo(int argc, const char *c
 : WCDB::AbstractFTS3TokenizerInfo(argc, argv)
 , m_needSymbol(false)
 , m_needSimplifiedChinese(false)
+, m_skipStemming(false)
 {
     for (int i = 0; i < argc; i++) {
         if (strcmp(argv[i], "need_symbol") == 0) {
             m_needSymbol = true;
         } else if (strcmp(argv[i], "chinese_traditional_to_simplified") == 0) {
             m_needSimplifiedChinese = true;
+        } else if (strcmp(argv[i], "skip_stemming") == 0) {
+            m_skipStemming = true;
         }
     }
 }
@@ -68,6 +71,7 @@ WCTOneOrBinaryTokenizer::WCTOneOrBinaryTokenizer(const char *input,
 , m_needBinary(true)
 , m_needSymbol(false)
 , m_needSimplifiedChinese(false)
+, m_skipStemming(false)
 {
     if (m_input == nullptr) {
         m_inputLength = 0;
@@ -79,6 +83,7 @@ WCTOneOrBinaryTokenizer::WCTOneOrBinaryTokenizer(const char *input,
     if (oneOrBinaryInfo != nullptr) {
         m_needSymbol = oneOrBinaryInfo->m_needSymbol;
         m_needSimplifiedChinese = oneOrBinaryInfo->m_needSimplifiedChinese;
+        m_skipStemming = oneOrBinaryInfo->m_skipStemming;
     }
 }
 
@@ -100,12 +105,15 @@ WCTOneOrBinaryTokenizer::WCTOneOrBinaryTokenizer(void *pCtx, const char **azArg,
 , m_needBinary(false)
 , m_needSymbol(false)
 , m_needSimplifiedChinese(false)
+, m_skipStemming(false)
 {
     for (int i = 0; i < nArg; i++) {
         if (strcmp(azArg[i], "need_symbol") == 0) {
             m_needSymbol = true;
         } else if (strcmp(azArg[i], "chinese_traditional_to_simplified") == 0) {
             m_needSimplifiedChinese = true;
+        } else if (strcmp(azArg[i], "skip_stemming") == 0) {
+            m_skipStemming = true;
         }
     }
 }
@@ -248,8 +256,10 @@ void WCTOneOrBinaryTokenizer::lemmatization(const char *input, int inputLength)
     m_token.assign(input, input + inputLength);
     std::transform(
     m_token.begin(), m_token.end(), m_token.begin(), ::tolower);
-    m_tokenLength
-    = porterStem(m_token.data(), 0, m_tokenLength - 1) + 1;
+    if (!m_skipStemming) {
+        m_tokenLength
+        = porterStem(m_token.data(), 0, m_tokenLength - 1) + 1;
+    }
 }
 
 void WCTOneOrBinaryTokenizer::subTokensStep()

@@ -32,6 +32,7 @@ public:
     ~WCTOneOrBinaryTokenizerInfo() override final;
     bool m_needSymbol;
     bool m_needSimplifiedChinese;
+    bool m_skipStemming;
 };
 
 class WCTOneOrBinaryTokenizer final : public WCDB::AbstractFTS3TokenizerCursorInfo,
@@ -81,6 +82,7 @@ private:
     // Can be configed by tokenizer parameters
     bool m_needSymbol;
     bool m_needSimplifiedChinese;
+    bool m_skipStemming;
 
     int cursorStep();
     void subTokensStep();

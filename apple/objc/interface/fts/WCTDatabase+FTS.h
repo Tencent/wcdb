@@ -50,6 +50,7 @@ WCDB_EXTERN NSString* const WCTTokenizerPinyin;
 // Configurable parameters for WCDB implemented tokenizers
 WCDB_EXTERN NSString* const WCTTokenizerParameter_NeedSymbol;
 WCDB_EXTERN NSString* const WCTTokenizerParameter_ChineseTraditionalToSimplified;
+WCDB_EXTERN NSString* const WCTTokenizerParameter_SkipStemming;
 
 WCDB_EXTERN NSString* const WCTAuxiliaryFunction_SubstringMatchInfo;
 
