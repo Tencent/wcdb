@@ -37,6 +37,11 @@ StatementPragma().pragma(Pragma::integrityCheck()).with(1).schema(Schema::main()
 , m_statementForReadTransaction(StatementBegin().beginDeferred())
 , m_statementForAcquireReadLock(
   StatementSelect().select(1).from(Syntax::masterTable).limit(0))
+, m_statementForGetFTSTable(
+  StatementSelect()
+  .select(Column("name"))
+  .from(Syntax::masterTable)
+  .where(Column("type") == "table" && Column("sql").like("CREATE VIRTUAL TABLE % USING fts%")))
 {
 }
 
@@ -58,6 +63,7 @@ bool OperationHandle::checkpoint()
 void OperationHandle::checkIntegrity()
 {
     auto optionalIntegrityMessages = getValues(m_statementForIntegrityCheck, 0);
+    bool needCheckFTS = true;
     if (optionalIntegrityMessages.has_value()) {
         auto &integrityMessages = optionalIntegrityMessages.value();
         WCTAssert(integrityMessages.size() == 1);
@@ -68,7 +74,30 @@ void OperationHandle::checkIntegrity()
                 error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
                 error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeIntegrity);
                 Notifier::shared().notify(error);
+                needCheckFTS = false;
             }
+        }
+    }
+    if (!needCheckFTS) {
+        return;
+    }
+    std::optional<std::set<StringView>> ftsTableSet
+    = getValues(m_statementForGetFTSTable, 0);
+    if (!ftsTableSet.has_value()) {
+        return;
+    }
+    for (const StringView &ftsTable : ftsTableSet.value()) {
+        if (executeStatement(
+            StatementInsert().insertIntoTable(ftsTable).column(Column(ftsTable)).value("integrity-check"))) {
+            continue;
+        }
+        if (Error::rc2ec((int) m_error.infos.at(ErrorIntKeyExtCode).integerValue())
+            == Error::ExtCode::CorruptVirtualTable) {
+            Error error(Error::Code::Corrupt, Error::Level::Error, m_error.getMessage());
+            error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
+            error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeIntegrity);
+            Notifier::shared().notify(error);
+            break;
         }
     }
 }
