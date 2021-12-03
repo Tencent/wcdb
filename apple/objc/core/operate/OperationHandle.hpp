@@ -68,6 +68,7 @@ public:
 protected:
     StatementBegin m_statementForReadTransaction;
     StatementSelect m_statementForAcquireReadLock;
+    StatementSelect m_statementForGetFTSTable;
 };
 
 } // namespace WCDB
