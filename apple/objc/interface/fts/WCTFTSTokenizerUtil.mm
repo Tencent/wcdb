@@ -148,10 +148,12 @@ std::pair<int, bool> WCTFTSTokenizerUtil::isSymbol(UnicodeChar theChar)
 
 WCDB::StringView WCTFTSTokenizerUtil::normalizeToken(WCDB::UnsafeStringView& token)
 {
-    NSMutableString* nsToken = [[NSMutableString alloc] initWithBytes:token.data() length:token.length() encoding:NSUTF8StringEncoding];
-    CFMutableStringRef normalizationFormText = (__bridge_retained CFMutableStringRef)(nsToken);
-    CFStringNormalize(normalizationFormText, kCFStringNormalizationFormKD);
-    return WCDB::StringView((__bridge_transfer NSString*) normalizationFormText);
+    @autoreleasepool {
+        NSMutableString* nsToken = [[NSMutableString alloc] initWithBytes:token.data() length:token.length() encoding:NSUTF8StringEncoding];
+        CFMutableStringRef normalizationFormText = (__bridge_retained CFMutableStringRef)(nsToken);
+        CFStringNormalize(normalizationFormText, kCFStringNormalizationFormKD);
+        return WCDB::StringView((__bridge_transfer NSString*) normalizationFormText);
+    }
 }
 
 WCDB::StringViewMap<std::vector<WCDB::StringView>>* WCTFTSTokenizerUtil::g_pinyinDict = new WCDB::StringViewMap<std::vector<WCDB::StringView>>();
