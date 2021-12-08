@@ -68,6 +68,7 @@ public:
     &enumeration);
 
     static bool setFileProtection(const UnsafeStringView &path, FileProtection fileProtection);
+    static StringView getTemporaryDirectory();
     static std::optional<FileProtection> getFileProtection(const UnsafeStringView &path);
 
 protected:
