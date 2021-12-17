@@ -146,9 +146,9 @@ public final class Handle {
 //Cipher
 extension Handle {
     public func setCipher(key: Data) throws {
-        let rc = key.withUnsafeBytes ({ (bytes: UnsafePointer<Int8>) -> Int32 in
-            return sqlite3_key(handle, bytes, Int32(key.count))
-        })
+        let rc = key.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) -> Int32 in
+            return sqlite3_key(handle, bytes.baseAddress, Int32(key.count))
+        }
         guard rc == SQLITE_OK else {
             throw Error.reportSQLite(tag: tag,
                                      path: path,
@@ -172,8 +172,8 @@ extension Handle {
     public func backup(withKey optionalKey: Data? = nil) throws {
         var rc = SQLITE_OK
         if let key = optionalKey {
-            key.withUnsafeBytes { (bytes: UnsafePointer<Int8>) -> Void in
-                rc = sqliterk_save_master(handle, backupPath, bytes, Int32(key.count))
+            key.withUnsafeBytes {
+                rc = sqliterk_save_master(handle, backupPath, $0.baseAddress, Int32(key.count))
             }
         } else {
             rc = sqliterk_save_master(handle, backupPath, nil, 0)
@@ -199,9 +199,9 @@ extension Handle {
         var info: OpaquePointer? = nil
         let backupSize: Int32 = Int32(optionalBackupKey?.count ?? 0)
         if let backupKey = optionalBackupKey {
-            backupKey.withUnsafeBytes({ (bytes: UnsafePointer<Int8>) -> Void in
-                rc = sqliterk_load_master(backupPath, bytes, backupSize, nil, 0, &info, kdfSalt)
-            })
+            backupKey.withUnsafeBytes {
+                rc = sqliterk_load_master(backupPath, $0.baseAddress, backupSize, nil, 0, &info, kdfSalt)
+            }
         }else {
             rc = sqliterk_load_master(backupPath, nil, backupSize, nil, 0, &info, kdfSalt)
         }
@@ -222,10 +222,10 @@ extension Handle {
         
         let databaseSize: Int32 = Int32(optionalDatabaseKey?.count ?? 0)
         if let databaseKey = optionalDatabaseKey {
-            databaseKey.withUnsafeBytes({ (bytes: UnsafePointer<Int8>) -> Void in
-                sqliterk_cipher_conf_set_key(&conf, bytes, databaseSize)
+            databaseKey.withUnsafeBytes {
+                sqliterk_cipher_conf_set_key(&conf, $0.baseAddress, databaseSize)
                 rc = sqliterk_open(source, &conf, &rk)
-            })
+            }
         }else {
             sqliterk_cipher_conf_set_key(&conf, nil, 0)
             rc = sqliterk_open(source, &conf, &rk)

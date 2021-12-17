@@ -21,7 +21,7 @@
 import Foundation
 
 /// Convenient interface for inserting
-public protocol InsertInterface: class {
+public protocol InsertInterface: AnyObject {
 
     /// Execute inserting with `TableEncodable` object on specific(or all) properties
     ///
@@ -123,7 +123,7 @@ extension InsertInterface where Self: Core {
 }
 
 /// Convenient interface for updating
-public protocol UpdateInterface: class {
+public protocol UpdateInterface: AnyObject {
 
     /// Execute updating with `TableEncodable` object on specific(or all) properties. 
     ///
@@ -289,7 +289,7 @@ extension UpdateInterface where Self: Core {
 }
 
 /// Convenient interface for deleting
-public protocol DeleteInterface: class {
+public protocol DeleteInterface: AnyObject {
 
     /// Execute deleting 
     ///
@@ -332,7 +332,7 @@ extension DeleteInterface where Self: Core {
 }
 
 /// Convenient interface for row selecting
-public protocol RowSelectInterface: class {
+public protocol RowSelectInterface: AnyObject {
 
     /// Get rows by specific selecting
     ///
@@ -612,7 +612,7 @@ extension RowSelectInterface where Self: Core {
 }
 
 /// Convenient interface for selecting
-public protocol SelectInterface: class {
+public protocol SelectInterface: AnyObject {
     //TODO: Add generic property convertible to fit the type
 
     /// Get objects on specific(or all) properties
@@ -757,7 +757,7 @@ extension SelectInterface where Self: Core {
 }
 
 /// Convenient interface for table related operation
-public protocol TableInterface: class {
+public protocol TableInterface: AnyObject {
     /// Create table, related indexes and constraints with specific type
     ///
     /// Note that it will create defined indexes automatically.
@@ -869,7 +869,7 @@ extension TableInterface where Self: Core {
                 }
                 var keys = orm.allKeys
                 for columnName in columnNames {
-                    if let index = keys.index(where: { (key) -> Bool in
+                    if let index = keys.firstIndex(where: { (key) -> Bool in
                         return key.stringValue.caseInsensitiveCompare(columnName) == ComparisonResult.orderedSame
                     }) {
                         keys.remove(at: index)
