@@ -59,6 +59,14 @@ bool Material::serialize(Serialization &serialization) const
             markAsEmpty("TableName");
             return false;
         }
+        if (element.second.sql.length() == 0) {
+            markAsEmpty("SQL");
+            return false;
+        }
+        if (element.second.verifiedPagenos.size() == 0) {
+            markAsEmpty("Pageno");
+            return false;
+        }
         if (!encoder.putSizedString(element.first) || !element.second.serialize(encoder)) {
             return false;
         }
@@ -74,7 +82,7 @@ bool Material::serializeData(Serialization &serialization, const Data &data)
 
 void Material::markAsEmpty(const UnsafeStringView &element)
 {
-    Error error(Error::Code::Empty, Error::Level::Ignore, "Element of material is empty.");
+    Error error(Error::Code::Empty, Error::Level::Error, "Element of material is empty.");
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.insert_or_assign("Element", element);
     Notifier::shared().notify(error);
@@ -157,7 +165,7 @@ std::optional<Data> Material::deserializeData(Deserialization &deserialization)
 
 void Material::markAsCorrupt(const UnsafeStringView &element)
 {
-    Error error(Error::Code::Corrupt, Error::Level::Ignore, "Material is corrupted");
+    Error error(Error::Code::Corrupt, Error::Level::Notice, "Material is corrupted");
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.insert_or_assign("Element", element);
     Notifier::shared().notify(error);

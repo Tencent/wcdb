@@ -65,7 +65,7 @@ uint32_t Shm::getBackfill() const
 
 void Shm::markAsCorrupted(const UnsafeStringView &message)
 {
-    Error error(Error::Code::Corrupt, Error::Level::Ignore, message);
+    Error error(Error::Code::Corrupt, Error::Level::Notice, message);
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
     Notifier::shared().notify(error);

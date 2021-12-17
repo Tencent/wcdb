@@ -182,7 +182,7 @@ int Pager::getNumberOfWalFrames() const
 #pragma mark - Error
 void Pager::markAsCorrupted(int page, const UnsafeStringView &message)
 {
-    Error error(Error::Code::Corrupt, Error::Level::Ignore, message);
+    Error error(Error::Code::Corrupt, Error::Level::Notice, message);
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
     error.infos.insert_or_assign("Page", page);
@@ -192,7 +192,7 @@ void Pager::markAsCorrupted(int page, const UnsafeStringView &message)
 
 void Pager::markAsError(Error::Code code)
 {
-    Error error(code, Error::Level::Ignore);
+    Error error(code, Error::Level::Notice);
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
     Notifier::shared().notify(error);
@@ -203,7 +203,6 @@ void Pager::markAsError(Error::Code code)
 bool Pager::doInitialize()
 {
     auto fileSize = FileManager::getFileSize(getPath());
-    ;
     if (!fileSize.has_value()) {
         assignWithSharedThreadedError();
         return false;
