@@ -33,6 +33,8 @@ const Pragma Pragma::CellSizeCheck("cell_size_check");
 const Pragma Pragma::CheckpointFullfsync("checkpoint_fullfsync");
 const Pragma Pragma::Cipher("cipher");
 const Pragma Pragma::CipherAddRandom("cipher_add_random");
+const Pragma Pragma::CipherCompatibility("cipher_compatibility");
+const Pragma Pragma::CipherDefaultCompatibility("cipher_default_compatibility");
 const Pragma Pragma::CipherDefaultKdfIter("cipher_default_kdf_iter");
 const Pragma Pragma::CipherDefaultPageSize("cipher_default_page_size");
 const Pragma Pragma::CipherDefaultUseHmac("cipher_default_use_hmac");

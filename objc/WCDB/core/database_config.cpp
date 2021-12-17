@@ -248,14 +248,20 @@ void Database::setConfig(const std::string &name, const Config &config)
     m_pool->setConfig(name, config);
 }
 
-void Database::setCipher(const void *key, int keySize, int pageSize)
+void Database::setCipher(const void *key, int keySize, int pageSize, int compatibility)
 {
     std::shared_ptr<std::vector<unsigned char>> keys(
         new std::vector<unsigned char>(keySize));
     memcpy(keys->data(), key, keySize);
     m_pool->setConfig(Database::defaultCipherConfigName,
-                      [keys, pageSize](std::shared_ptr<Handle> &handle,
+                      [keys, pageSize, compatibility](std::shared_ptr<Handle> &handle,
                                        Error &error) -> bool {
+                          //Set Cipher compatibility
+                          if (!handle->exec(StatementPragma().pragma(
+                                  Pragma::CipherDefaultCompatibility, compatibility))) {
+                              error = handle->getError();
+                              return false;
+                          }
 
                           //Set Cipher Key
                           bool result = handle->setCipherKey(

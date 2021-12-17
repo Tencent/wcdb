@@ -38,6 +38,8 @@ public:
     static const Pragma CheckpointFullfsync;
     static const Pragma Cipher;
     static const Pragma CipherAddRandom;
+    static const Pragma CipherCompatibility;
+    static const Pragma CipherDefaultCompatibility;
     static const Pragma CipherDefaultKdfIter;
     static const Pragma CipherDefaultPageSize;
     static const Pragma CipherPageSize;

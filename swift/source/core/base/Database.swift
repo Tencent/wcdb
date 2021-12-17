@@ -279,9 +279,12 @@ extension Database {
     /// - Parameters:
     ///   - optionalKey: Cipher key. Nil for no cipher.
     ///   - pageSize: Cipher page size.
-    public func setCipher(key optionalKey: Data?, pageSize: Int = 4096) {
+    public func setCipher(key optionalKey: Data?, pageSize: Int = 4096, compatibility: Int = 4) {
         if let key = optionalKey {
             handlePool.setConfig(named: DefaultConfigOrder.cipher.description, with: { (handle: Handle) throws in
+                let statementCipherCompatibility = StatementPragma().pragma(.cipherDefaultCompatibility, to: compatibility)
+                try handle.exec(statementCipherCompatibility)
+
                 let statementPragmaPageSize = StatementPragma().pragma(.cipherPageSize, to: pageSize)
                 try handle.setCipher(key: key)
                 try handle.exec(statementPragmaPageSize)

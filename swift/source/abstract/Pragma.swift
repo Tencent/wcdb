@@ -38,6 +38,8 @@ public struct Pragma: Describable {
     public static let checkpointFullfsync = Pragma(named: "checkpoint_fullfsync")
     public static let cipher = Pragma(named: "cipher")
     public static let cipherAddRandom = Pragma(named: "cipher_add_random")
+    public static let cipherCompatibility = Pragma(named: "cipher_compatibility")
+    public static let cipherDefaultCompatibility = Pragma(named: "cipher_default_compatibility")
     public static let cipherDefaultKdfIter = Pragma(named: "cipher_default_kdf_iter")
     public static let cipherDefaultPageSize = Pragma(named: "cipher_default_page_size")
     public static let cipherDefaultUseHmac = Pragma(named: "cipher_default_use_hmac")

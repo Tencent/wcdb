@@ -71,7 +71,7 @@ public:
                    const Config &config,
                    Configs::Order order);
     void setConfig(const std::string &name, const Config &config);
-    void setCipher(const void *key, int keySize, int pageSize = 4096);
+    void setCipher(const void *key, int keySize, int pageSize = 4096, int compatibility = 4);
     void setSynchronousFull(bool full);
     void setTokenizes(const std::list<std::string> &tokenizeNames);
     void setPerformanceTrace(const PerformanceTrace &trace);

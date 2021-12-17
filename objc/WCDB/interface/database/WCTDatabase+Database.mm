@@ -74,6 +74,11 @@
     _database->setCipher(cipherKey.bytes, (int) cipherKey.length, cipherPageSize);
 }
 
+- (void)setCipherKey:(NSData *)cipherKey cipherPageSize:(int)cipherPageSize compatibility:(int)compatibility
+{
+    _database->setCipher(cipherKey.bytes, (int) cipherKey.length, cipherPageSize, compatibility);
+}
+
 - (BOOL)canOpen
 {
     return _database->canOpen();
