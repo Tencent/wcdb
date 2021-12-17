@@ -26,22 +26,22 @@
 		233032681FB9437F00101373 /* sqliterk_util.h in Headers */ = {isa = PBXBuildFile; fileRef = 233032551FB9437F00101373 /* sqliterk_util.h */; };
 		233032691FB9437F00101373 /* sqliterk_values.c in Sources */ = {isa = PBXBuildFile; fileRef = 233032561FB9437F00101373 /* sqliterk_values.c */; };
 		2330326A1FB9437F00101373 /* sqliterk_values.h in Headers */ = {isa = PBXBuildFile; fileRef = 233032571FB9437F00101373 /* sqliterk_values.h */; };
-		23AC5C88213532560087C004 /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23AC5C7E213531DE0087C004 /* sqlcipher.framework */; };
+		BA324377276C213600125A5B /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA324371276C211500125A5B /* sqlcipher.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		23AC5C7D213531DE0087C004 /* PBXContainerItemProxy */ = {
+		BA324370276C211500125A5B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 233032751FB9455E00101373 /* sqlcipher.xcodeproj */;
+			containerPortal = BA32436C276C211500125A5B /* sqlcipher.preprocessed.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 239325C81E836A7700D677CC;
+			remoteGlobalIDString = 23F5BC4020887FAB000CCD37;
 			remoteInfo = sqlcipher;
 		};
-		23AC5C86213532530087C004 /* PBXContainerItemProxy */ = {
+		BA324375276C213200125A5B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 233032751FB9455E00101373 /* sqlcipher.xcodeproj */;
+			containerPortal = BA32436C276C211500125A5B /* sqlcipher.preprocessed.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 239325C71E836A7700D677CC;
+			remoteGlobalIDString = 23F5BBCF20887FAB000CCD37;
 			remoteInfo = sqlcipher;
 		};
 /* End PBXContainerItemProxy section */
@@ -68,7 +68,7 @@
 		233032561FB9437F00101373 /* sqliterk_values.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk_values.c; sourceTree = "<group>"; };
 		233032571FB9437F00101373 /* sqliterk_values.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqliterk_values.h; sourceTree = "<group>"; };
 		2330326C1FB9452800101373 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		233032751FB9455E00101373 /* sqlcipher.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = sqlcipher.xcodeproj; sourceTree = "<group>"; };
+		BA32436C276C211500125A5B /* sqlcipher.preprocessed.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqlcipher.preprocessed.xcodeproj; path = ../../../sqlcipher/sqlcipher.preprocessed.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,7 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23AC5C88213532560087C004 /* sqlcipher.framework in Frameworks */,
+				BA324377276C213600125A5B /* sqlcipher.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,7 +86,7 @@
 		2330322F1FB9435700101373 = {
 			isa = PBXGroup;
 			children = (
-				233032751FB9455E00101373 /* sqlcipher.xcodeproj */,
+				BA32436C276C211500125A5B /* sqlcipher.preprocessed.xcodeproj */,
 				233032441FB9437F00101373 /* repair */,
 				2330323A1FB9435700101373 /* Products */,
 				2330326B1FB9452800101373 /* Frameworks */,
@@ -136,10 +136,10 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		23AC5C72213531DE0087C004 /* Products */ = {
+		BA32436D276C211500125A5B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				23AC5C7E213531DE0087C004 /* sqlcipher.framework */,
+				BA324371276C211500125A5B /* sqlcipher.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -178,7 +178,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				23AC5C87213532530087C004 /* PBXTargetDependency */,
+				BA324376276C213200125A5B /* PBXTargetDependency */,
 			);
 			name = sqliterk;
 			productName = sqliterk;
@@ -212,8 +212,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 23AC5C72213531DE0087C004 /* Products */;
-					ProjectRef = 233032751FB9455E00101373 /* sqlcipher.xcodeproj */;
+					ProductGroup = BA32436D276C211500125A5B /* Products */;
+					ProjectRef = BA32436C276C211500125A5B /* sqlcipher.preprocessed.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -224,11 +224,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		23AC5C7E213531DE0087C004 /* sqlcipher.framework */ = {
+		BA324371276C211500125A5B /* sqlcipher.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = sqlcipher.framework;
-			remoteRef = 23AC5C7D213531DE0087C004 /* PBXContainerItemProxy */;
+			remoteRef = BA324370276C211500125A5B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -264,10 +264,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		23AC5C87213532530087C004 /* PBXTargetDependency */ = {
+		BA324376276C213200125A5B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = sqlcipher;
-			targetProxy = 23AC5C86213532530087C004 /* PBXContainerItemProxy */;
+			targetProxy = BA324375276C213200125A5B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -276,13 +276,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				"ARCHS[sdk=iphoneos*]" = (
-					"$(ARCHS_STANDARD)",
-					arm64,
-					armv7,
-				);
-				"ARCHS[sdk=iphonesimulator*]" = "$(ARCHS_STANDARD)";
-				"ARCHS[sdk=macosx*]" = "$(ARCHS_STANDARD)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -308,7 +301,6 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -336,14 +328,12 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx;
 				STRIP_INSTALLED_PRODUCT = NO;
 				STRIP_STYLE = debugging;
-				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator";
+				TARGETED_DEVICE_FAMILY = "1,2,3,6";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
-				"VALID_ARCHS[sdk=iphoneos*]" = "arm64 armv7";
-				"VALID_ARCHS[sdk=iphonesimulator*]" = x86_64;
-				"VALID_ARCHS[sdk=macosx*]" = x86_64;
+				VALID_ARCHS = "arm64 x86_64";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
@@ -354,13 +344,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				"ARCHS[sdk=iphoneos*]" = (
-					"$(ARCHS_STANDARD)",
-					arm64,
-					armv7,
-				);
-				"ARCHS[sdk=iphonesimulator*]" = "$(ARCHS_STANDARD)";
-				"ARCHS[sdk=macosx*]" = "$(ARCHS_STANDARD)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -386,7 +369,6 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -409,13 +391,11 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				SDKROOT = macosx;
 				STRIP_STYLE = "non-global";
-				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator";
+				TARGETED_DEVICE_FAMILY = "1,2,3,6";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
-				"VALID_ARCHS[sdk=iphoneos*]" = "arm64 armv7";
-				"VALID_ARCHS[sdk=iphonesimulator*]" = x86_64;
-				"VALID_ARCHS[sdk=macosx*]" = x86_64;
+				VALID_ARCHS = "arm64 x86_64";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
@@ -425,8 +405,6 @@
 		233032421FB9435700101373 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -446,8 +424,6 @@
 		233032431FB9435700101373 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -468,13 +444,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				"ARCHS[sdk=iphoneos*]" = (
-					"$(ARCHS_STANDARD)",
-					arm64,
-					armv7,
-				);
-				"ARCHS[sdk=iphonesimulator*]" = "$(ARCHS_STANDARD)";
-				"ARCHS[sdk=macosx*]" = "$(ARCHS_STANDARD)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -500,7 +469,6 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -523,13 +491,11 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				SDKROOT = macosx;
 				STRIP_STYLE = "non-global";
-				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator";
+				TARGETED_DEVICE_FAMILY = "1,2,3,6";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
-				"VALID_ARCHS[sdk=iphoneos*]" = "arm64 armv7";
-				"VALID_ARCHS[sdk=iphonesimulator*]" = x86_64;
-				"VALID_ARCHS[sdk=macosx*]" = x86_64;
+				VALID_ARCHS = "arm64 x86_64";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
@@ -539,8 +505,6 @@
 		23AC5D2D21355CD90087C004 /* WithoutBitcode */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;

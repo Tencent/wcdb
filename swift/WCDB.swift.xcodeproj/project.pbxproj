@@ -99,7 +99,6 @@
 		238D0BCF1FAB1F7E00BC2659 /* ThreadLocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B721FAB1F7E00BC2659 /* ThreadLocal.swift */; };
 		239FBDF320C6831A0082FE24 /* FundamentalValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239FBDF220C6831A0082FE24 /* FundamentalValue.swift */; };
 		23A00CD91FBAF82B000180A8 /* Tokenize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A00CD81FBAF82B000180A8 /* Tokenize.swift */; };
-		23AC5C83213531FE0087C004 /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23AC5C78213531DE0087C004 /* sqlcipher.framework */; };
 		23AC5C84213531FE0087C004 /* sqliterk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23AC5C7B213531DE0087C004 /* sqliterk.framework */; };
 		23AC5C8A21353B140087C004 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2330322D1FB9420000101373 /* libz.tbd */; };
 		23AC5C8E21353B980087C004 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 23AC5C8D21353B980087C004 /* libc++.tbd */; };
@@ -109,16 +108,10 @@
 		23E9E0051FC3C76F005DE71C /* SQLite-Bridging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0041FC3C76F005DE71C /* SQLite-Bridging.swift */; };
 		23E9E0071FC3D80B005DE71C /* Table.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0061FC3D80B005DE71C /* Table.swift */; };
 		23E9E0091FC3D810005DE71C /* TableInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0081FC3D810005DE71C /* TableInterface.swift */; };
+		BA324374276C212700125A5B /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA32436B276C211000125A5B /* sqlcipher.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		23AC5C77213531DE0087C004 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23E8206220C69F6B00D1901F /* sqlcipher.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 239325C81E836A7700D677CC;
-			remoteInfo = sqlcipher;
-		};
 		23AC5C7A213531DE0087C004 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 23E8205B20C69F6A00D1901F /* sqliterk.xcodeproj */;
@@ -126,19 +119,26 @@
 			remoteGlobalIDString = 233032391FB9435700101373;
 			remoteInfo = sqliterk;
 		};
-		23AC5C7F213531FA0087C004 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23E8206220C69F6B00D1901F /* sqlcipher.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 239325C71E836A7700D677CC;
-			remoteInfo = sqlcipher;
-		};
 		23AC5C81213531FA0087C004 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 23E8205B20C69F6A00D1901F /* sqliterk.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 233032381FB9435700101373;
 			remoteInfo = sqliterk;
+		};
+		BA32436A276C211000125A5B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BA324366276C211000125A5B /* sqlcipher.preprocessed.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 23F5BC4020887FAB000CCD37;
+			remoteInfo = sqlcipher;
+		};
+		BA324372276C211F00125A5B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BA324366276C211000125A5B /* sqlcipher.preprocessed.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 23F5BBCF20887FAB000CCD37;
+			remoteInfo = sqlcipher;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -243,11 +243,11 @@
 		23C8E0031FD8184300DAE97D /* CodableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableType.swift; sourceTree = "<group>"; };
 		23E737C31FB1601C00EEBC3D /* Master.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Master.swift; sourceTree = "<group>"; };
 		23E8205B20C69F6A00D1901F /* sqliterk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqliterk.xcodeproj; path = source/util/sqliterk.xcodeproj; sourceTree = "<group>"; };
-		23E8206220C69F6B00D1901F /* sqlcipher.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqlcipher.xcodeproj; path = source/util/sqlcipher.xcodeproj; sourceTree = "<group>"; };
 		23E9E0011FC3C5CB005DE71C /* Tracer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracer.swift; sourceTree = "<group>"; };
 		23E9E0041FC3C76F005DE71C /* SQLite-Bridging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SQLite-Bridging.swift"; sourceTree = "<group>"; };
 		23E9E0061FC3D80B005DE71C /* Table.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Table.swift; sourceTree = "<group>"; };
 		23E9E0081FC3D810005DE71C /* TableInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableInterface.swift; sourceTree = "<group>"; };
+		BA324366276C211000125A5B /* sqlcipher.preprocessed.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqlcipher.preprocessed.xcodeproj; path = ../sqlcipher/sqlcipher.preprocessed.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -257,8 +257,8 @@
 			files = (
 				23AC5C8E21353B980087C004 /* libc++.tbd in Frameworks */,
 				23AC5C8A21353B140087C004 /* libz.tbd in Frameworks */,
-				23AC5C83213531FE0087C004 /* sqlcipher.framework in Frameworks */,
 				23AC5C84213531FE0087C004 /* sqliterk.framework in Frameworks */,
+				BA324374276C212700125A5B /* sqlcipher.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -358,7 +358,7 @@
 		238D0AF91FAB1F4300BC2659 = {
 			isa = PBXGroup;
 			children = (
-				23E8206220C69F6B00D1901F /* sqlcipher.xcodeproj */,
+				BA324366276C211000125A5B /* sqlcipher.preprocessed.xcodeproj */,
 				23E8205B20C69F6A00D1901F /* sqliterk.xcodeproj */,
 				238D0B0F1FAB1F7E00BC2659 /* Info.plist */,
 				238D0B111FAB1F7E00BC2659 /* source */,
@@ -480,10 +480,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		23AC5C74213531DE0087C004 /* Products */ = {
+		BA324367276C211000125A5B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				23AC5C78213531DE0087C004 /* sqlcipher.framework */,
+				BA32436B276C211000125A5B /* sqlcipher.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -515,7 +515,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				23AC5C80213531FA0087C004 /* PBXTargetDependency */,
+				BA324373276C211F00125A5B /* PBXTargetDependency */,
 				23AC5C82213531FA0087C004 /* PBXTargetDependency */,
 			);
 			name = WCDB.swift;
@@ -551,8 +551,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 23AC5C74213531DE0087C004 /* Products */;
-					ProjectRef = 23E8206220C69F6B00D1901F /* sqlcipher.xcodeproj */;
+					ProductGroup = BA324367276C211000125A5B /* Products */;
+					ProjectRef = BA324366276C211000125A5B /* sqlcipher.preprocessed.xcodeproj */;
 				},
 				{
 					ProductGroup = 23AC5C70213531DE0087C004 /* Products */;
@@ -567,18 +567,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		23AC5C78213531DE0087C004 /* sqlcipher.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = sqlcipher.framework;
-			remoteRef = 23AC5C77213531DE0087C004 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		23AC5C7B213531DE0087C004 /* sqliterk.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = sqliterk.framework;
 			remoteRef = 23AC5C7A213531DE0087C004 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		BA32436B276C211000125A5B /* sqlcipher.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = sqlcipher.framework;
+			remoteRef = BA32436A276C211000125A5B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -700,15 +700,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		23AC5C80213531FA0087C004 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = sqlcipher;
-			targetProxy = 23AC5C7F213531FA0087C004 /* PBXContainerItemProxy */;
-		};
 		23AC5C82213531FA0087C004 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = sqliterk;
 			targetProxy = 23AC5C81213531FA0087C004 /* PBXContainerItemProxy */;
+		};
+		BA324373276C211F00125A5B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = sqlcipher;
+			targetProxy = BA324372276C211F00125A5B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -718,13 +718,6 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				"ARCHS[sdk=iphoneos*]" = (
-					"$(ARCHS_STANDARD)",
-					armv7,
-					arm64,
-				);
-				"ARCHS[sdk=iphonesimulator*]" = "$(ARCHS_STANDARD)";
-				"ARCHS[sdk=macosx*]" = "$(ARCHS_STANDARD)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -750,7 +743,6 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -783,14 +775,12 @@
 				OTHER_SWIFT_FLAGS = "-D DEBUG";
 				"OTHER_SWIFT_FLAGS[sdk=iphoneos*]" = "-D WCDB_IOS -D DEBUG";
 				"OTHER_SWIFT_FLAGS[sdk=iphonesimulator*]" = "-D WCDB_IOS -D DEBUG";
-				SDKROOT = macosx;
-				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
+				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos appletvos appletvsimulator";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2,3,6";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
-				"VALID_ARCHS[sdk=iphoneos*]" = "armv7 arm64";
-				"VALID_ARCHS[sdk=iphonesimulator*]" = x86_64;
-				"VALID_ARCHS[sdk=macosx*]" = x86_64;
+				VALID_ARCHS = "arm64 x86_64";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
@@ -802,13 +792,6 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				"ARCHS[sdk=iphoneos*]" = (
-					"$(ARCHS_STANDARD)",
-					armv7,
-					arm64,
-				);
-				"ARCHS[sdk=iphonesimulator*]" = "$(ARCHS_STANDARD)";
-				"ARCHS[sdk=macosx*]" = "$(ARCHS_STANDARD)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -834,7 +817,6 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -862,14 +844,12 @@
 				OTHER_SWIFT_FLAGS = "";
 				"OTHER_SWIFT_FLAGS[sdk=iphoneos*]" = "-D WCDB_IOS";
 				"OTHER_SWIFT_FLAGS[sdk=iphonesimulator*]" = "-D WCDB_IOS";
-				SDKROOT = macosx;
-				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
+				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos appletvos appletvsimulator";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2,3,6";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
-				"VALID_ARCHS[sdk=iphoneos*]" = "armv7 arm64";
-				"VALID_ARCHS[sdk=iphonesimulator*]" = x86_64;
-				"VALID_ARCHS[sdk=macosx*]" = x86_64;
+				VALID_ARCHS = "arm64 x86_64";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
@@ -880,8 +860,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -906,8 +884,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEFINES_MODULE = YES;
@@ -932,13 +908,6 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				"ARCHS[sdk=iphoneos*]" = (
-					"$(ARCHS_STANDARD)",
-					armv7,
-					arm64,
-				);
-				"ARCHS[sdk=iphonesimulator*]" = "$(ARCHS_STANDARD)";
-				"ARCHS[sdk=macosx*]" = "$(ARCHS_STANDARD)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -964,7 +933,6 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -991,14 +959,12 @@
 				OTHER_SWIFT_FLAGS = "";
 				"OTHER_SWIFT_FLAGS[sdk=iphoneos*]" = "-D WCDB_IOS";
 				"OTHER_SWIFT_FLAGS[sdk=iphonesimulator*]" = "-D WCDB_IOS";
-				SDKROOT = macosx;
-				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
+				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos appletvos appletvsimulator";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2,3,6";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
-				"VALID_ARCHS[sdk=iphoneos*]" = "armv7 arm64";
-				"VALID_ARCHS[sdk=iphonesimulator*]" = x86_64;
-				"VALID_ARCHS[sdk=macosx*]" = x86_64;
+				VALID_ARCHS = "arm64 x86_64";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
@@ -1009,8 +975,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEFINES_MODULE = YES;
