@@ -1,0 +1,83 @@
+name: "WCDB CI"
+
+on: 
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches: 
+      - '*'
+
+jobs:
+  Build-WCDBSwift:
+    name: Build WCDBSwift
+    runs-on: macos-latest
+    env: 
+      DEVELOPER_DIR: /Applications/Xcode.app
+      XCWORKSPACE_NAME: WCDB.xcworkspace
+      SCHEME_FOR_SWIFT: WCDB.swift
+    strategy:
+      matrix:
+        iosDestination: ["name=iPhone 12 Pro"]
+        tvOSDestination: ["name=Apple TV 4K"]
+        macOSDestination: ["platform=macOS"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Install xcpretty
+        run: gem install xcpretty
+
+      - name: Build iOS target - ${{ matrix.iosDestination }}
+        run: |
+          set -o pipefail
+          xcodebuild build -workspace "${{ env.XCWORKSPACE_NAME }}" -scheme "${{ env.SCHEME_FOR_SWIFT }}" -destination "${{ matrix.iosDestination }}" ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO | xcpretty -c
+
+      - name: Build tvOS target - ${{ matrix.tvOSDestination }}
+        run: |
+          set -o pipefail
+          xcodebuild build -workspace "${{ env.XCWORKSPACE_NAME }}" -scheme "${{ env.SCHEME_FOR_SWIFT }}" -destination "${{ matrix.tvOSDestination }}" ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO | xcpretty -c
+
+      - name: Build macOS target - ${{ matrix.macOSDestination }}
+        run: |
+          set -o pipefail
+          xcodebuild build -workspace "${{ env.XCWORKSPACE_NAME }}" -scheme "${{ env.SCHEME_FOR_SWIFT }}" -destination "${{ matrix.macOSDestination }}" ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO | xcpretty -c
+
+  Build-WCDB:
+    name: Build WCDB
+    runs-on: macos-latest
+    env:
+      DEVELOPER_DIR: /Applications/Xcode.app
+      XCWORKSPACE_NAME: WCDB.xcworkspace
+      SCHEME_FOR_OBJC: WCDB
+    strategy:
+      matrix:
+        iosDestination: ["name=iPhone 12 Pro"]
+        tvOSDestination: ["name=Apple TV 4K"]
+        macOSDestination: ["platform=macOS"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Install xcpretty
+        run: gem install xcpretty
+
+      - name: Build iOS target - ${{ matrix.iosDestination }}
+        run: |
+          set -o pipefail
+          xcodebuild build -workspace "${{ env.XCWORKSPACE_NAME }}" -scheme "${{ env.SCHEME_FOR_OBJC }}" -destination "${{ matrix.iosDestination }}" ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO | xcpretty -c
+
+      - name: Build tvOS target - ${{ matrix.tvOSDestination }}
+        run: |
+          set -o pipefail
+          xcodebuild build -workspace "${{ env.XCWORKSPACE_NAME }}" -scheme "${{ env.SCHEME_FOR_OBJC }}" -destination "${{ matrix.tvOSDestination }}" ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO | xcpretty -c
+
+      - name: Build macOS target - ${{ matrix.macOSDestination }}
+        run: |
+          set -o pipefail
+          xcodebuild build -workspace "${{ env.XCWORKSPACE_NAME }}" -scheme "${{ env.SCHEME_FOR_OBJC }}" -destination "${{ matrix.macOSDestination }}" ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO | xcpretty -c
