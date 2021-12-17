@@ -303,22 +303,13 @@ bool Wal::doInitialize()
 #pragma mark - Error
 void Wal::markAsCorrupted(int frame, const UnsafeStringView &message)
 {
-    Error error(Error::Code::Corrupt, Error::Level::Ignore, message);
+    Error error(Error::Code::Corrupt, Error::Level::Notice, message);
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
     error.infos.insert_or_assign("Frame", frame);
     Notifier::shared().notify(error);
     setError(std::move(error));
 }
-
-//void Wal::markAsError(Error::Code code)
-//{
-//    Error error(code, Error::Level::Ignore);
-//    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
-//    error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
-//    Notifier::shared().notify(error);
-//    setError(std::move(error));
-//}
 
 #pragma mark - Dispose
 int Wal::getDisposedPages() const

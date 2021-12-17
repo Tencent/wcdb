@@ -46,7 +46,7 @@ void Handle::setType(HandleType type)
         break;
     case HandleType::BackupRead:
     case HandleType::BackupWrite:
-        m_error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeMigrate);
+        m_error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeBackup);
         break;
     case HandleType::Checkpoint:
         m_error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeCheckpoint);

@@ -103,7 +103,7 @@ bool SQLiteBase::error(int rc, const char *sql)
         error.level = Error::Level::Error;
         result = false;
     } else {
-        error.level = Error::Level::Ignore;
+        error.level = Error::Level::Notice;
         result = true;
     }
     error.setSQLiteCode(rc, sqlite3_extended_errcode((sqlite3 *) m_handle));
