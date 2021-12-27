@@ -24,6 +24,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/BusyRetryConfig.hpp>
+#include <WCDB/CoreConst.h>
 #include <WCDB/Handle.hpp>
 #include <unistd.h>
 
@@ -124,6 +125,14 @@ bool Handle::configure()
         WCTAssert(m_invokeds.empty());
         for (const auto &element : m_pendings) {
             if (!element.value()->invoke(this)) {
+                if (element.key().caseInsensiveEqual(BasicConfigName) && !canWriteMainDB()) {
+                    //Setting the WAL journal mode requires writing the main DB.
+                    enableWriteMainDB(true);
+                    close();
+                    bool success = open();
+                    enableWriteMainDB(false);
+                    return success;
+                }
                 return false;
             }
             m_invokeds.insert(element.key(), element.value(), element.order());
