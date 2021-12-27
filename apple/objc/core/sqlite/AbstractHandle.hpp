@@ -68,6 +68,9 @@ public:
     virtual void close();
     bool isOpened() const;
 
+    void enableWriteMainDB(bool enable);
+    bool canWriteMainDB();
+
     long long getLastInsertedRowID();
     //    const char *getErrorMessage();
     //    Error::ExtCode getExtendedErrorCode();
@@ -80,6 +83,7 @@ public:
 protected:
     bool executeSQL(const UnsafeStringView &sql);
     bool executeStatement(const Statement &statement);
+    int m_customOpenFlag;
 
 #pragma mark - Statement
 public:

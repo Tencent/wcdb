@@ -35,6 +35,7 @@ namespace WCDB {
 #pragma mark - Initialize
 AbstractHandle::AbstractHandle()
 : m_handle(nullptr)
+, m_customOpenFlag(0)
 , m_transactionLevel(0)
 , m_transactionError(TransactionError::Allowed)
 , m_notification(this)
@@ -96,7 +97,13 @@ bool AbstractHandle::open()
 {
     bool succeed = true;
     if (!isOpened()) {
-        succeed = APIExit(sqlite3_open(m_path.data(), &m_handle));
+        if (m_customOpenFlag == 0) {
+            succeed = APIExit(sqlite3_open_v2(
+            m_path.data(), &m_handle, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_MAINDB_READONLY, 0));
+        } else {
+            succeed
+            = APIExit(sqlite3_open_v2(m_path.data(), &m_handle, m_customOpenFlag, 0));
+        }
         if (!succeed) {
             m_handle = nullptr;
         }
@@ -150,22 +157,19 @@ int AbstractHandle::getTotalChange()
     return sqlite3_total_changes(m_handle);
 }
 
-//Error::Code AbstractHandle::getResultCode()
-//{
-//    WCTAssert(isOpened());
-//    return (Error::Code) sqlite3_errcode(m_handle);
-//}
-//
-//const char *AbstractHandle::getErrorMessage()
-//{
-//    WCTAssert(isOpened());
-//    return sqlite3_errmsg(m_handle);
-//}
-//int AbstractHandle::getExtendedErrorCode()
-//{
-//    WCTAssert(isOpened());
-//    return sqlite3_extended_errcode(m_handle);
-//}
+void AbstractHandle::enableWriteMainDB(bool enable)
+{
+    if (enable) {
+        m_customOpenFlag = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE;
+    } else {
+        m_customOpenFlag = 0;
+    }
+}
+
+bool AbstractHandle::canWriteMainDB()
+{
+    return m_customOpenFlag & SQLITE_OPEN_READWRITE;
+}
 
 int AbstractHandle::getChanges()
 {

@@ -270,6 +270,10 @@ std::shared_ptr<Handle> Database::generateSlotedHandle(HandleType type)
     case HandleSlotOperation:
         handle = std::make_shared<OperationHandle>();
         break;
+    case HandleSlotCheckPoint: {
+        handle = std::make_shared<OperationHandle>();
+        handle->enableWriteMainDB(true);
+    } break;
     default:
         WCTAssert(slot == HandleSlotNormal);
         handle = std::make_shared<ConfiguredHandle>();
