@@ -33,6 +33,7 @@
 
 #include <WCDB/AssembleHandle.hpp>
 #include <WCDB/BusyRetryConfig.hpp>
+#include <WCDB/Core.hpp>
 #include <WCDB/MigrateHandle.hpp>
 #include <WCDB/MigratingHandle.hpp>
 #include <WCDB/OperationHandle.hpp>
@@ -279,6 +280,11 @@ std::shared_ptr<Handle> Database::generateSlotedHandle(HandleType type)
         handle = std::make_shared<ConfiguredHandle>();
         break;
     }
+    auto abTest = Core::shared().getABTestConfig("clicfg_wcdb_checkpoint_can_write_main_db");
+    if (!abTest.has_value() || !abTest.value().caseInsensiveEqual("1")) {
+        handle->enableWriteMainDB(true);
+    }
+
     if (handle == nullptr) {
         setThreadedError(Error(Error::Code::NoMemory, Error::Level::Error));
         return nullptr;
