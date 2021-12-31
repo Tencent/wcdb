@@ -51,6 +51,17 @@ StatementPragma& StatementPragma::to(const LiteralValue& value)
 StatementPragma& StatementPragma::with(const LiteralValue& value)
 {
     syntax().switcher = SyntaxType::Switch::With;
+    const StringView& stringValue = value.syntax().stringValue;
+    if (stringValue.length() > 2) {
+        if ((stringValue.hasPrefix("'") && stringValue.hasSuffix("'"))
+            || (stringValue.hasPrefix("[") && stringValue.hasSuffix("]"))
+            || (stringValue.hasPrefix("`") && stringValue.hasSuffix("`"))) {
+            const UnsafeStringView unQuateValue
+            = UnsafeStringView(stringValue.data() + 1, stringValue.length() - 2);
+            syntax().value = LiteralValue(unQuateValue);
+            return *this;
+        }
+    }
     syntax().value = value;
     return *this;
 }
