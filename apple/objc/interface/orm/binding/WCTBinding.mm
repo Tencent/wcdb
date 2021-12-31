@@ -195,6 +195,19 @@ std::pair<std::list<WCDB::StatementCreateIndex>, std::list<WCDB::StatementDropIn
 WCTBinding::generateIndexStatements(const WCDB::UnsafeStringView &tableName, bool isTableNewlyCreated) const
 {
     std::pair<std::list<WCDB::StatementCreateIndex>, std::list<WCDB::StatementDropIndex>> pairs;
+    WCDB::StringView closingQuotation;
+    if (tableName.length() > 2) {
+        if (tableName.hasPrefix("'") && tableName.hasSuffix("'")) {
+            closingQuotation = "'";
+        } else if (tableName.hasPrefix("\"") && tableName.hasSuffix("\"")) {
+            closingQuotation = "\"";
+        } else if (tableName.hasPrefix("[") && tableName.hasSuffix("]")) {
+            closingQuotation = "]";
+        } else if (tableName.hasPrefix("`") && tableName.hasSuffix("`")) {
+            closingQuotation = "`";
+        }
+    }
+
     for (const auto &iter : m_indexes) {
         WCTAssert(iter.first == iter.second.suffix);
         Index index = iter.second;
@@ -207,7 +220,13 @@ WCTBinding::generateIndexStatements(const WCDB::UnsafeStringView &tableName, boo
         case Index::Action::Create: {
             WCDB::StatementCreateIndex statement = index.statement;
             std::ostringstream stream;
-            stream << tableName << index.suffix;
+            if (closingQuotation.length() == 0) {
+                stream << tableName << index.suffix;
+            } else {
+                stream << WCDB::UnsafeStringView(tableName.data(), tableName.length() - 1);
+                stream << index.suffix;
+                stream << closingQuotation;
+            }
             statement.createIndex(WCDB::StringView(stream.str())).ifNotExists().table(tableName);
             pairs.first.push_back(statement);
         } break;

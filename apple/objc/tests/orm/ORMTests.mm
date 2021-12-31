@@ -230,7 +230,26 @@
 - (void)test_index
 {
     self.tableClass = IndexObject.class;
+    self.tableName = @"'test@Table'";
     NSArray<NSString*>* expected = @[
+#ifndef WCDB_WECHAT
+        @"CREATE TABLE IF NOT EXISTS main.'test@Table'(index_ INTEGER, indexAsc INTEGER, indexDesc INTEGER, uniqueIndex INTEGER, uniqueIndexAsc INTEGER, uniqueIndexDesc INTEGER, multiIndex INTEGER, multiIndexAsc INTEGER, multiIndexDesc INTEGER)",
+#else
+        @"CREATE TABLE IF NOT EXISTS main.'test@Table'(index_ INTEGER, indexAsc INTEGER, indexDesc INTEGER, multiIndex INTEGER, multiIndexAsc INTEGER, multiIndexDesc INTEGER, uniqueIndex INTEGER, uniqueIndexAsc INTEGER, uniqueIndexDesc INTEGER)",
+#endif
+        @"CREATE INDEX IF NOT EXISTS main.'test@Table_index' ON 'test@Table'(index_)",
+        @"CREATE INDEX IF NOT EXISTS main.'test@Table_index_asc' ON 'test@Table'(indexAsc)",
+        @"CREATE INDEX IF NOT EXISTS main.'test@Table_index_desc' ON 'test@Table'(indexDesc)",
+        @"CREATE INDEX IF NOT EXISTS main.'test@Table_multi_index' ON 'test@Table'(multiIndex, multiIndexAsc, multiIndexDesc)",
+        @"CREATE UNIQUE INDEX IF NOT EXISTS main.'test@Table_unique_index' ON 'test@Table'(uniqueIndex)",
+        @"CREATE UNIQUE INDEX IF NOT EXISTS main.'test@Table_unique_index_asc' ON 'test@Table'(uniqueIndexAsc)",
+        @"CREATE UNIQUE INDEX IF NOT EXISTS main.'test@Table_unique_index_desc' ON 'test@Table'(uniqueIndexDesc)",
+    ];
+    [self doTestCreateTableAndIndexSQLsAsExpected:expected];
+
+    [self dropTable];
+    self.tableName = nil;
+    expected = @[
 #ifndef WCDB_WECHAT
         @"CREATE TABLE IF NOT EXISTS main.testTable(index_ INTEGER, indexAsc INTEGER, indexDesc INTEGER, uniqueIndex INTEGER, uniqueIndexAsc INTEGER, uniqueIndexDesc INTEGER, multiIndex INTEGER, multiIndexAsc INTEGER, multiIndexDesc INTEGER)",
 #else
@@ -283,6 +302,20 @@
 #pragma mark - remap
 - (void)test_remap
 {
+    self.tableName = @"'test@Table'";
+    {
+        self.tableClass = OldRemapObject.class;
+        NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.'test@Table'(value INTEGER)" ];
+        [self doTestCreateTableAndIndexSQLsAsExpected:expected];
+    }
+    // remap
+    {
+        self.tableClass = NewRemapObject.class;
+        NSArray<NSString*>* expected = @[ @"PRAGMA main.table_info('test@Table')", @"ALTER TABLE main.'test@Table' ADD COLUMN newValue INTEGER", @"CREATE INDEX IF NOT EXISTS main.'test@Table_index' ON 'test@Table'(value)" ];
+        [self doTestCreateTableAndIndexSQLsAsExpected:expected];
+    }
+    [self dropTable];
+    self.tableName = nil;
     {
         self.tableClass = OldRemapObject.class;
         NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER)" ];

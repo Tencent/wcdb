@@ -127,6 +127,15 @@ bool UnsafeStringView::hasPrefix(const UnsafeStringView& target) const
     return has;
 }
 
+bool UnsafeStringView::hasSuffix(const UnsafeStringView& target) const
+{
+    bool has = false;
+    if (length() >= target.length()) {
+        has = strncmp(data() + length() - target.length(), target.data(), target.length()) == 0;
+    }
+    return has;
+}
+
 #pragma mark - UnsafeStringView - Modifier
 void UnsafeStringView::clear()
 {

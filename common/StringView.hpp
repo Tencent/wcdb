@@ -63,6 +63,7 @@ public:
     bool caseInsensiveEqual(const UnsafeStringView& other) const;
 
     bool hasPrefix(const UnsafeStringView& target) const;
+    bool hasSuffix(const UnsafeStringView& target) const;
 
 #pragma mark - UnsafeStringView - Operations
 public:
