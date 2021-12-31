@@ -38,6 +38,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)enableAutoCheckpoint:(BOOL)flag;
 
+- (BOOL)truncateCheckpoint;
+
+- (BOOL)passiveCheckpoint;
+
 - (BOOL)isOpened;
 
 - (BOOL)canOpen;

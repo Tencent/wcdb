@@ -43,7 +43,7 @@
     schema = @"testSchema";
     table = @"testTable";
     module = @"testModule";
-    argument1 = WCTFTSTokenizerUtil::tokenize(@"testTokenize");
+    argument1 = WCTFTSTokenizerUtil::tokenize(@"testTokenize", nil);
     argument2 = WCDB::ColumnDef(WCDB::Column(@"testColumn"), WCDB::ColumnType::Integer);
 }
 

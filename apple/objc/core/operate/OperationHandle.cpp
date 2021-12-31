@@ -53,12 +53,6 @@ void OperationHandle::doSuspend(bool suspend)
     BackupExclusiveDelegate::suspendBackup(suspend);
 }
 
-#pragma mark - Checkpoint
-bool OperationHandle::checkpoint()
-{
-    return Handle::checkpoint(CheckpointMode::Passive);
-}
-
 #pragma mark - Integrity
 void OperationHandle::checkIntegrity()
 {

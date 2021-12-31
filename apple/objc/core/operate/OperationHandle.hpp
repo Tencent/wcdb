@@ -40,10 +40,6 @@ public:
 protected:
     void doSuspend(bool suspend) override final;
 
-#pragma mark - Checkpoint
-public:
-    bool checkpoint();
-
 #pragma mark - Integrity
 public:
     void checkIntegrity();

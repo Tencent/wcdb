@@ -36,7 +36,7 @@
 - (void)test_empty
 {
     self.path = [self.directory stringByAppendingPathComponent:@"empty"];
-    TestCaseAssertEqual([self.database retrieve:nil], 0);
+    TestCaseAssertEqual([self.database retrieve:nil], -1);
 }
 
 - (void)doTestObjectsRetrieved
@@ -208,15 +208,6 @@
     TestCaseAssertTrue([self.database corruptHeaderWithinCloseAfterTruncatedCheckpoint]);
 
     TestCaseAssertTrue([self.database deposit]);
-
-    [self doTestRetrieveFailed];
-
-    [self doTestObjectsNotRetrieved];
-}
-
-- (void)test_retrieve_corrupted_without_backup_and_deposite
-{
-    TestCaseAssertTrue([self.database corruptHeaderWithinCloseAfterTruncatedCheckpoint]);
 
     [self doTestRetrieveFailed];
 

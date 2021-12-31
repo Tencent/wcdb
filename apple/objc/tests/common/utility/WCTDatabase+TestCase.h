@@ -57,10 +57,6 @@ typedef NSData* _Nonnull (^WCTCorruptDataBlock)(int size);
 
 - (BOOL)corruptCompletely;
 
-- (BOOL)truncateCheckpoint;
-
-- (BOOL)passiveCheckpoint;
-
 - (WCTOptionalBool)isAlreadyCheckpointed;
 
 - (WCTOptionalBool)isAlreadyTruncateCheckpointed;

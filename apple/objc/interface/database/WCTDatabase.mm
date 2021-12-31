@@ -99,6 +99,16 @@
     _database->close(callback);
 }
 
+- (BOOL)truncateCheckpoint
+{
+    return _database->checkpoint(false, WCDB::Database::CheckPointMode::Truncate);
+}
+
+- (BOOL)passiveCheckpoint
+{
+    return _database->checkpoint(false, WCDB::Database::CheckPointMode::Passive);
+}
+
 - (WCTError *)error
 {
     return [[WCTError alloc] initWithError:_database->getThreadedError()];

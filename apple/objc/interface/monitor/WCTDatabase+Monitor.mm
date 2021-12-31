@@ -43,10 +43,14 @@ void Core::print(const UnsafeStringView& message)
 
 + (void)globalTraceError:(WCTErrorTraceBlock)block
 {
-    WCDB::Core::shared().setNotificationWhenErrorTraced([block](const WCDB::Error& error) {
-        WCTError* nsError = [[WCTError alloc] initWithError:error];
-        block(nsError);
-    });
+    if (block != nil) {
+        WCDB::Core::shared().setNotificationWhenErrorTraced([block](const WCDB::Error& error) {
+            WCTError* nsError = [[WCTError alloc] initWithError:error];
+            block(nsError);
+        });
+    } else {
+        WCDB::Core::shared().setNotificationWhenErrorTraced(nullptr);
+    }
 }
 
 + (void)globalTracePerformance:(WCTPerformanceTraceBlock)trace
