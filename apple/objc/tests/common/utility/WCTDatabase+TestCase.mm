@@ -25,6 +25,7 @@
 #import "CoreConst.h"
 #import "TestCaseLog.h"
 #import "WCTDatabase+TestCase.h"
+#import <WCDB/WCTDatabase+Test.h>
 
 @implementation WCTDatabase (TestCase)
 
@@ -127,16 +128,6 @@
         result = 0;
     }
     return result;
-}
-
-- (BOOL)passiveCheckpoint
-{
-    return [self execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("PASSIVE")];
-}
-
-- (BOOL)truncateCheckpoint
-{
-    return [self execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("TRUNCATE")];
 }
 
 - (BOOL)corruptHeaderWithinCloseAfterTruncatedCheckpoint

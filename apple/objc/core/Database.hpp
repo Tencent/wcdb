@@ -182,7 +182,8 @@ protected:
 
 #pragma mark - Checkpoint
 public:
-    bool checkpoint(bool interruptible);
+    using CheckPointMode = AbstractHandle::CheckpointMode;
+    bool checkpoint(bool interruptible = true, CheckPointMode mode = CheckPointMode::Passive);
 
 #pragma mark - Memory
 public:

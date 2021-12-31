@@ -402,12 +402,12 @@
 - (void)test_symbol
 {
     FTS3SymbolObject *content = [[FTS3SymbolObject alloc] init];
-    content.content = @"\"#￥%…'  '！@…&*";
+    content.content = @"#￥%…'  '！@…&*";
     TestCaseAssertTrue([self.table insertObject:content]);
     content = [[FTS3SymbolObject alloc] init];
     content.content = @"！@…&*'  '\"#￥%…";
     TestCaseAssertTrue([self.table insertObject:content]);
-    NSArray *querys = @[ @"\"！@…&*'  '\"\"#￥%…\"", @"\"！@…&*'  '\"\"*\"" ];
+    NSArray *querys = @[ @"！@…&*'  '\"\"#￥%…", @"！@…&*'  '\"\"" ];
     for (NSString *query in querys) {
         [self doTestObject:content
                     andSQL:[NSString stringWithFormat:@"SELECT content FROM main.testTable WHERE content MATCH '%@' ORDER BY rowid ASC", [query stringByReplacingOccurrencesOfString:@"'" withString:@"''"]]
@@ -417,12 +417,12 @@
     }
 
     content = [[FTS3SymbolObject alloc] init];
-    content.content = @"abc*123_def@567";
+    content.content = @"abc*123_@567";
     TestCaseAssertTrue([self.table insertObject:content]);
     content = [[FTS3SymbolObject alloc] init];
     content.content = @"abc@123*def_567";
     TestCaseAssertTrue([self.table insertObject:content]);
-    querys = @[ @"\"abc@123*def_567\"", @"\"abc@123*def\"*" ];
+    querys = @[ @"abc@123*def_567", @"abc@123*def" ];
     for (NSString *query in querys) {
         [self doTestObject:content
                     andSQL:[NSString stringWithFormat:@"SELECT content FROM main.testTable WHERE content MATCH '%@' ORDER BY rowid ASC", query]

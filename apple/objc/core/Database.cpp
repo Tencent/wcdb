@@ -927,7 +927,7 @@ std::set<StringView> Database::getPathsOfSourceDatabases() const
 }
 
 #pragma mark - Checkpoint
-bool Database::checkpoint(bool interruptible)
+bool Database::checkpoint(bool interruptible, CheckPointMode mode)
 {
     InitializedGuard initializedGuard = initialize();
     if (!initializedGuard.valid()) {
@@ -936,7 +936,7 @@ bool Database::checkpoint(bool interruptible)
     bool succeed = false;
     RecyclableHandle handle = flowOut(HandleType::Checkpoint);
     if (handle != nullptr) {
-        if (m_closing != 0) {
+        if (m_closing != 0 && interruptible) {
             Error error(Error::Code::Interrupt, Error::Level::Ignore, "Interrupt due to it's closing");
             error.infos.insert_or_assign(ErrorStringKeyPath, path);
             error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeCheckpoint);
@@ -953,7 +953,7 @@ bool Database::checkpoint(bool interruptible)
             operationHandle->markAsCanBeSuspended(true);
         }
         operationHandle->markErrorAsIgnorable(Error::Code::Busy);
-        succeed = operationHandle->checkpoint();
+        succeed = operationHandle->checkpoint(mode);
         if (!succeed && operationHandle->getError().isIgnorable()) {
             succeed = true;
         }

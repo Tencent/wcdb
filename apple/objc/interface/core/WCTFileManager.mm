@@ -32,6 +32,12 @@
 
 namespace WCDB {
 
+StringView FileManager::getTemporaryDirectory()
+{
+    NSString *temDir = [NSTemporaryDirectory() stringByAppendingPathComponent:@"WCDBTrash"];
+    return StringView(temDir);
+}
+
 #if TARGET_OS_IPHONE
 template<>
 constexpr const char *Enum::description(const WCDB::FileProtection &fileProtection)
@@ -97,11 +103,6 @@ std::optional<WCDB::FileProtection> FileManager::getFileProtection(const WCDB::U
     return std::nullopt;
 }
 
-WCDB::StringView FileManager::getTemporaryDirectory()
-{
-    NSString *temDir = [NSTemporaryDirectory() stringByAppendingPathComponent:@"WCDBTrash"];
-    return WCDB::StringView(temDir);
-}
 #else
 bool FileManager::setFileProtection(const WCDB::UnsafeStringView &path, WCDB::FileProtection fileProtection)
 {
