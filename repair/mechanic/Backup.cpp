@@ -249,6 +249,9 @@ void Backup::onMasterCrawlerError()
 void Backup::onSequenceCellCrawled(const Cell &cell, const Sequence &sequence)
 {
     WCDB_UNUSED(cell)
+    if (sequence.seq == 0) {
+        return;
+    }
     if (!Master::isReservedTableName(sequence.name) && filter(sequence.name)) {
         Material::Content &content = getOrCreateContent(sequence.name);
         //the columns in sqlite_sequence are not unique.

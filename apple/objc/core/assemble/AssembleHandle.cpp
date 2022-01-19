@@ -208,6 +208,9 @@ bool AssembleHandle::lazyPrepareCell()
 #pragma mark - Assemble - Sequence
 bool AssembleHandle::assembleSequence(const UnsafeStringView &tableName, int64_t sequence)
 {
+    if (sequence == 0) {
+        return true;
+    }
     bool succeed = false;
     auto worked = updateSequence(tableName, sequence);
     if (worked.has_value()) {
