@@ -50,7 +50,7 @@ public:
 
 protected:
     void reduce();
-    int64_t euclidean(int64_t a, int64_t b);
+    int64_t euclidean(int64_t a, int64_t b) const;
 
 private:
     int64_t m_numerator;
