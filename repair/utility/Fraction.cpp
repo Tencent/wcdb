@@ -44,7 +44,7 @@ Fraction::Fraction(int64_t numerator, int64_t denominator)
                       m_denominator = 1;);
 }
 
-int64_t Fraction::euclidean(int64_t a, int64_t b)
+int64_t Fraction::euclidean(int64_t a, int64_t b) const
 {
     while (b != 0) {
         std::tie(a, b) = std::make_pair(b, a % b);
@@ -68,9 +68,10 @@ Fraction Fraction::operator+(const Fraction &operand) const
         numerator = m_numerator + operand.m_numerator;
         denominator = m_denominator;
     } else {
-        numerator = (m_numerator * operand.m_denominator)
-                    + (operand.m_numerator * m_denominator);
-        denominator = m_denominator * operand.m_denominator;
+        int64_t gcd = euclidean(m_denominator, operand.m_denominator);
+        numerator = (operand.m_denominator / gcd * m_numerator)
+                    + (m_denominator / gcd * operand.m_numerator);
+        denominator = m_denominator / gcd * operand.m_denominator;
     }
     Fraction result(numerator, denominator);
     result.reduce();
@@ -79,8 +80,10 @@ Fraction Fraction::operator+(const Fraction &operand) const
 
 Fraction Fraction::operator*(const Fraction &operand) const
 {
-    Fraction result(m_numerator * operand.m_numerator, m_denominator * operand.m_denominator);
-    result.reduce();
+    int64_t gcd1 = euclidean(m_numerator, operand.m_denominator);
+    int64_t gcd2 = euclidean(operand.m_numerator, m_denominator);
+    Fraction result(m_numerator / gcd1 * (operand.m_numerator / gcd2),
+                    m_denominator / gcd2 * (operand.m_denominator / gcd1));
     return result;
 }
 
@@ -89,9 +92,10 @@ Fraction &Fraction::operator+=(const Fraction &operand)
     if (m_denominator == operand.m_denominator) {
         m_numerator += operand.m_numerator;
     } else {
-        m_numerator = (m_numerator * operand.m_denominator)
-                      + (operand.m_numerator * m_denominator);
-        m_denominator *= operand.m_denominator;
+        int64_t gcd = euclidean(m_denominator, operand.m_denominator);
+        m_numerator = (operand.m_denominator / gcd * m_numerator)
+                      + (m_denominator / gcd * operand.m_numerator);
+        m_denominator *= operand.m_denominator / gcd;
     }
     reduce();
     return *this;
@@ -99,14 +103,19 @@ Fraction &Fraction::operator+=(const Fraction &operand)
 
 Fraction Fraction::operator/(const Fraction &operand) const
 {
-    Fraction result(m_numerator * operand.m_denominator, m_denominator * operand.m_numerator);
-    result.reduce();
+    int64_t gcd1 = euclidean(m_numerator, operand.m_numerator);
+    int64_t gcd2 = euclidean(m_denominator, operand.m_denominator);
+    Fraction result(m_numerator / gcd1 * (operand.m_denominator / gcd2),
+                    m_denominator / gcd2 * (operand.m_numerator / gcd1));
     return result;
 }
 
 bool Fraction::operator<(const Fraction &operand) const
 {
-    return (m_numerator * operand.m_denominator) < (operand.m_numerator * m_denominator);
+    int64_t gcd1 = euclidean(m_numerator, operand.m_numerator);
+    int64_t gcd2 = euclidean(m_denominator, operand.m_denominator);
+    return (m_numerator / gcd1 * (operand.m_denominator / gcd2))
+           < (m_denominator / gcd2 * (operand.m_numerator / gcd1));
 }
 
 double Fraction::value() const
