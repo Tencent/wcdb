@@ -24,7 +24,7 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/Assertion.hpp>
-#import <WCDB/Error.hpp>
+#import <WCDB/FTSError.hpp>
 #import <WCDB/WCTFTSTokenizerUtil.h>
 
 WCDB::StringView WCTFTSTokenizerUtil::tokenize(NSString* name, ...)
@@ -46,10 +46,10 @@ int WCTFTSTokenizerUtil::stepOneUnicode(const WCDB::UnsafeStringView input, Unic
     if (input.length() == 0) {
         unicodeType = UnicodeType::None;
         unicodeLength = 0;
-        return WCDB::Error::c2rc(WCDB::Error::Code::OK);
+        return WCDB::FTSError::OK();
     }
 
-    WCDB::Error::Code code;
+    int ret;
     const unsigned char& first = input.at(0);
     if (first < 0xC0) {
         unicodeLength = 1;
@@ -58,18 +58,16 @@ int WCTFTSTokenizerUtil::stepOneUnicode(const WCDB::UnsafeStringView input, Unic
         } else if ((first >= 0x41 && first <= 0x5a) || (first >= 0x61 && first <= 0x7a)) {
             unicodeType = UnicodeType::BasicMultilingualPlaneLetter;
         } else {
-            int rc;
             bool symbol = false;
-            std::tie(rc, symbol) = isSymbol(first);
-            code = WCDB::Error::rc2c(rc);
-            if (code == WCDB::Error::Code::OK) {
+            std::tie(ret, symbol) = isSymbol(first);
+            if (WCDB::FTSError::isOK(ret)) {
                 if (symbol) {
                     unicodeType = UnicodeType::BasicMultilingualPlaneSymbol;
                 } else {
                     unicodeType = UnicodeType::BasicMultilingualPlaneOther;
                 }
             } else {
-                return WCDB::Error::c2rc(code);
+                return ret;
             }
         }
     } else if (first < 0xF0) {
@@ -89,18 +87,16 @@ int WCTFTSTokenizerUtil::stepOneUnicode(const WCDB::UnsafeStringView input, Unic
                 break;
             }
         }
-        int rc;
         bool symbol = false;
-        std::tie(rc, symbol) = isSymbol(unicode);
-        code = WCDB::Error::rc2c(rc);
-        if (code == WCDB::Error::Code::OK) {
+        std::tie(ret, symbol) = isSymbol(unicode);
+        if (WCDB::FTSError::isOK(ret)) {
             if (symbol) {
                 unicodeType = UnicodeType::BasicMultilingualPlaneSymbol;
             } else {
                 unicodeType = UnicodeType::BasicMultilingualPlaneOther;
             }
         } else {
-            return WCDB::Error::c2rc(code);
+            return ret;
         }
     } else {
         unicodeType = UnicodeType::AuxiliaryPlaneOther;
@@ -116,7 +112,7 @@ int WCTFTSTokenizerUtil::stepOneUnicode(const WCDB::UnsafeStringView input, Unic
         unicodeType = UnicodeType::None;
         unicodeLength = (int) input.length();
     }
-    return WCDB::Error::c2rc(WCDB::Error::Code::OK);
+    return WCDB::FTSError::OK();
 }
 
 CFCharacterSetRef WCTFTSTokenizerUtil::g_symbolCharacterSet = CFCharacterSetCreateMutable(CFAllocatorGetDefault());
@@ -138,12 +134,12 @@ std::pair<int, bool> WCTFTSTokenizerUtil::isSymbol(UnicodeChar theChar)
         g_symbolCharacterSet = characterSetRef;
     });
     bool symbol = false;
-    WCDB::Error::Code code = WCDB::Error::Code::NoMemory;
+    int ret = WCDB::FTSError::NoMem();
     if (g_symbolCharacterSet != nil) {
         symbol = CFCharacterSetIsCharacterMember(g_symbolCharacterSet, theChar);
-        code = WCDB::Error::Code::OK;
+        ret = WCDB::FTSError::OK();
     }
-    return { WCDB::Error::c2rc(code), symbol };
+    return { ret, symbol };
 }
 
 WCDB::StringView WCTFTSTokenizerUtil::normalizeToken(WCDB::UnsafeStringView& token)

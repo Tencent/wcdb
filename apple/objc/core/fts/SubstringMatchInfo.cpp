@@ -23,18 +23,17 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/Error.hpp>
-#include <WCDB/SQLite.h>
 #include <WCDB/SubstringMatchInfo.hpp>
 
 namespace WCDB {
 
 #pragma mark - MultiLevelHighlight
 
-SubstringMatchInfo::SubstringMatchInfo(int nVal, sqlite3_value **apVal, void *context)
-: AbstractFTS5AuxiliaryFunctionObject(nVal, apVal, context)
-, m_input(nullptr)
-, m_inputLength(0)
+SubstringMatchInfo::SubstringMatchInfo(int nVal,
+                                       FTS5AuxiliaryFunctionValue **apVal,
+                                       void *context,
+                                       FTS5AuxiliaryFunctionAPI *apiObj)
+: AbstractFTS5AuxiliaryFunctionObject(nVal, apVal, context, apiObj)
 , m_columnNum(0)
 , m_phaseMatchResult(nullptr)
 , m_substringPhaseMatchCount(0)
@@ -49,8 +48,8 @@ SubstringMatchInfo::SubstringMatchInfo(int nVal, sqlite3_value **apVal, void *co
     if (nVal != 2) {
         return;
     }
-    m_columnNum = sqlite3_value_int(apVal[0]);
-    m_seperators = StringView((const char *) sqlite3_value_text(apVal[1]));
+    m_columnNum = (int) apiObj->getIntValue(apVal[0]);
+    m_seperators = apiObj->getTextValue(apVal[1]);
     m_matchIndex = new int[m_seperators.length()];
 }
 
@@ -96,12 +95,12 @@ void *pContext, int tflags, const char *pToken, int nToken, int iStartOff, int i
 int SubstringMatchInfo::internalTokenCallback(
 int tflags, const char *pToken, int nToken, int iStartOff, int iEndOff)
 {
-    if (tflags & FTS5_TOKEN_COLOCATED) {
-        return SQLITE_OK;
+    if (tflags != 0) {
+        return FTSError::OK();
     }
     WCDB_UNUSED(nToken);
     int iPos = m_tokenPos;
-    int rc = SQLITE_OK;
+    int rc = FTSError::OK();
     m_tokenPos++;
 
     int level = checkSeperator(pToken[0]);
@@ -111,7 +110,7 @@ int tflags, const char *pToken, int nToken, int iStartOff, int iEndOff)
             m_output.emplace_back(std::make_pair(
             UnsafeStringView(&m_input[m_bytePos], iStartOff - m_bytePos), -1));
             m_bytePos = iStartOff;
-            return SQLITE_DONE;
+            return FTSError::Done();
         } else {
             m_matchIndex[level]++;
             m_bytePos = iEndOff;
@@ -139,33 +138,32 @@ int tflags, const char *pToken, int nToken, int iStartOff, int iEndOff)
             && m_substringPhaseMatchCount < m_currentPhaseMatchCount) {
             rc = m_pIter.next(m_columnNum);
         } else {
-            rc = SQLITE_DONE;
+            rc = FTSError::Done();
         }
     }
     return rc;
 }
 
-void SubstringMatchInfo::process(const Fts5ExtensionApi *pApi, Fts5Context *pFts, sqlite3_context *pCtx)
+void SubstringMatchInfo::process(FTS5AuxiliaryFunctionAPI *apiObj)
 {
-    m_input = nullptr;
-    m_inputLength = 0;
+    m_input = UnsafeStringView();
     m_tokenPos = 0;
     m_bytePos = 0;
-    int rc = SQLITE_OK;
+    int rc = FTSError::OK();
 
-    rc = pApi->xColumnText(pFts, m_columnNum, &m_input, &m_inputLength);
-    if (m_input) {
-        m_phaseCount = pApi->xPhraseCount(pFts);
+    rc = apiObj->getTextForThisRow(m_columnNum, m_input);
+    if (m_input.length() > 0) {
+        m_phaseCount = apiObj->getPhraseCount();
         if (!m_phaseMatchResult) {
-            m_phaseMatchResult = new bool[pApi->xPhraseCount(pFts)];
+            m_phaseMatchResult = new bool[m_phaseCount];
         }
         m_pIter = PhaseInstIter();
-        rc = m_pIter.init(pApi, pFts);
-        if (rc == SQLITE_OK) {
+        rc = m_pIter.init(apiObj);
+        if (FTSError::isOK(rc)) {
             m_currentPhaseMatchCount = 0;
             memset(m_phaseMatchResult, 0, m_phaseCount * sizeof(bool));
             rc = m_pIter.next(m_columnNum);
-            while (rc == SQLITE_OK) {
+            while (FTSError::isOK(rc)) {
                 for (int phaseIndex : m_pIter.m_phaseIndexes) {
                     if (!m_phaseMatchResult[phaseIndex]) {
                         m_phaseMatchResult[phaseIndex] = true;
@@ -181,12 +179,12 @@ void SubstringMatchInfo::process(const Fts5ExtensionApi *pApi, Fts5Context *pFts
             rc = m_pIter.next(m_columnNum);
         }
         resetStatusFromLevel(0);
-        if (rc == SQLITE_OK) {
-            rc = pApi->xTokenize(pFts, m_input, m_inputLength, this, tokenCallback);
+        if (FTSError::isOK(rc)) {
+            rc = apiObj->tokenize(m_input, this, tokenCallback);
         }
-        if (m_bytePos < m_inputLength) {
+        if (m_bytePos < m_input.length()) {
             int i = m_bytePos;
-            for (; i < m_inputLength; i++) {
+            for (; i < m_input.length(); i++) {
                 int level = checkSeperator(m_input[i]);
                 if (level >= 0) {
                     m_output.emplace_back(std::make_pair(
@@ -194,21 +192,23 @@ void SubstringMatchInfo::process(const Fts5ExtensionApi *pApi, Fts5Context *pFts
                     break;
                 }
             }
-            if (i == m_inputLength) {
+            if (i == m_input.length()) {
                 m_output.emplace_back(std::make_pair(
                 UnsafeStringView(&m_input[m_bytePos], i - m_bytePos), -1));
             }
         }
-        if ((rc == SQLITE_OK || rc == SQLITE_DONE)
+        if ((FTSError::isOK(rc) || FTSError::isDone(rc))
             && m_substringPhaseMatchCount >= m_currentPhaseMatchCount) {
             WCTAssert(m_substringPhaseMatchCount == m_currentPhaseMatchCount);
             std::ostringstream stream;
             generateOutput(stream);
-            sqlite3_result_text(pCtx, stream.str().data(), -1, SQLITE_TRANSIENT);
+            StringView output = stream.str();
+            apiObj->setTextResult(output);
         }
     }
-    if (rc != SQLITE_OK && rc != SQLITE_DONE) {
-        sqlite3_result_error_code(pCtx, rc);
+    if (!FTSError::isOK(rc) && !FTSError::isDone(rc)) {
+        StringView msg = StringView("parse match info fail");
+        apiObj->setErrorResult(msg, rc);
     }
 }
 
@@ -237,34 +237,33 @@ void SubstringMatchInfo::generateOutput(std::ostringstream &stream)
 #pragma mark - PhaseInstIter
 
 SubstringMatchInfo::PhaseInstIter::PhaseInstIter()
-: m_pApi(nullptr), m_pFts(nullptr), m_curPhaseStart(-1), m_curPhaseEnd(-1), m_iInst(0), m_nInst(0)
+: m_curPhaseStart(-1), m_curPhaseEnd(-1), m_iInst(0), m_nInst(0)
 {
 }
 
 SubstringMatchInfo::PhaseInstIter::~PhaseInstIter() = default;
 
-int SubstringMatchInfo::PhaseInstIter::init(const Fts5ExtensionApi *pApi, Fts5Context *pFts)
+int SubstringMatchInfo::PhaseInstIter::init(FTS5AuxiliaryFunctionAPI *apiObj)
 {
-    m_pApi = pApi;
-    m_pFts = pFts;
-    return m_pApi->xInstCount(m_pFts, &m_nInst);
+    m_apiObj = apiObj;
+    return m_apiObj->instCount(&m_nInst);
 }
 
 int SubstringMatchInfo::PhaseInstIter::next(int iCol)
 {
-    int rc = SQLITE_OK;
+    int rc = FTSError::OK();
     m_curPhaseStart = -1;
     m_curPhaseEnd = -1;
     m_phaseIndexes.clear();
 
-    while (rc == SQLITE_OK && m_iInst < m_nInst) {
+    while (FTSError::isOK(rc) && m_iInst < m_nInst) {
         int ic;
         int io;
         int ip;
-        rc = m_pApi->xInst(m_pFts, m_iInst, &ip, &ic, &io);
-        if (rc == SQLITE_OK) {
+        rc = m_apiObj->inst(m_iInst, &ip, &ic, &io);
+        if (FTSError::isOK(rc)) {
             if (ic == iCol) {
-                int iEnd = io - 1 + m_pApi->xPhraseSize(m_pFts, ip);
+                int iEnd = io - 1 + m_apiObj->getPhraseSize(ip);
                 if (m_curPhaseEnd < 0) {
                     m_phaseIndexes.emplace_back(ip);
                     m_curPhaseStart = io;

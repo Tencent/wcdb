@@ -58,7 +58,12 @@ bool AuxiliaryFunctionConfig::invoke(Handle* handle)
             handle->finalize();
         }
         if (api->xCreateFunction(
-            api, name.data(), module->getContext(), module->getFunc(), nullptr)
+            api,
+            name.data(),
+            module->getContext(),
+            (void (*)(const Fts5ExtensionApi*, Fts5Context*, sqlite3_context*, int, sqlite3_value**))
+            module->getFunc(),
+            nullptr)
             != SQLITE_OK) {
             return false;
         }

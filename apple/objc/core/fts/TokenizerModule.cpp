@@ -64,16 +64,16 @@ int AbstractFTS3TokenizerModuleTemplate::newTokenizer(Tokenizer **ppTokenizer,
     WCTAssert(ppTokenizer != nullptr);
     *ppTokenizer = nullptr;
     if (info == nullptr) {
-        return SQLITE_NOMEM;
+        return FTSError::NoMem();
     }
     Tokenizer *tokenizer = (Tokenizer *) sqlite3_malloc(sizeof(Tokenizer));
     if (tokenizer == nullptr) {
-        return SQLITE_NOMEM;
+        return FTSError::NoMem();
     }
     memset(tokenizer, 0, sizeof(Tokenizer));
     tokenizer->info = info;
     *(sqlite3_tokenizer **) ppTokenizer = &tokenizer->base;
-    return SQLITE_OK;
+    return FTSError::OK();
 }
 
 AbstractFTS3TokenizerInfo *
@@ -95,16 +95,16 @@ int AbstractFTS3TokenizerModuleTemplate::newCursor(TokenizerCursor **ppCursor,
     WCTAssert(ppCursor != nullptr);
     *ppCursor = nullptr;
     if (info == nullptr) {
-        return SQLITE_NOMEM;
+        return FTSError::NoMem();
     }
     TokenizerCursor *cursor = (TokenizerCursor *) sqlite3_malloc(sizeof(TokenizerCursor));
     if (cursor == nullptr) {
-        return SQLITE_NOMEM;
+        return FTSError::NoMem();
     }
     memset(cursor, 0, sizeof(TokenizerCursor));
     cursor->info = info;
     *(sqlite3_tokenizer_cursor **) ppCursor = &cursor->base;
-    return SQLITE_OK;
+    return FTSError::OK();
 }
 
 AbstractFTS3TokenizerCursorInfo *
@@ -118,16 +118,6 @@ void AbstractFTS3TokenizerModuleTemplate::deleteCursor(TokenizerCursor *pCursor)
 {
     WCTAssert(pCursor != nullptr);
     sqlite3_free(pCursor);
-}
-
-int AbstractFTS3TokenizerModuleTemplate::OK()
-{
-    return SQLITE_OK;
-}
-
-bool AbstractFTS3TokenizerModuleTemplate::isOK(int rc)
-{
-    return rc == SQLITE_OK;
 }
 
 #pragma mark - FTS3TokenizerModule
@@ -174,23 +164,6 @@ FTS3TokenizerModule::FTS3TokenizerModule(const FTS3TokenizerModule::Create &crea
     static_assert(offsetof(FTS3TokenizerModule, m_languageid)
                   == offsetof(sqlite3_tokenizer_module, xLanguageid),
                   "");
-}
-
-#pragma mark - AbstractFTS5TokenizerModuleTemplate
-
-int AbstractFTS5TokenizerModuleTemplate::OK()
-{
-    return SQLITE_OK;
-}
-
-bool AbstractFTS5TokenizerModuleTemplate::isOK(int rc)
-{
-    return rc == SQLITE_OK;
-}
-
-bool AbstractFTS5TokenizerModuleTemplate::isDone(int rc)
-{
-    return rc == SQLITE_DONE;
 }
 
 #pragma mark - AbstractFTS5Tokenizer

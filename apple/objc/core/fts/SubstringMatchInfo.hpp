@@ -25,16 +25,18 @@
 #pragma once
 
 #include <WCDB/AuxiliaryFunctionModule.hpp>
-#include <WCDB/StringView.hpp>
 #include <vector>
 
 namespace WCDB {
 
 class SubstringMatchInfo : public AbstractFTS5AuxiliaryFunctionObject {
 public:
-    SubstringMatchInfo(int nVal, sqlite3_value **apVal, void *context);
+    SubstringMatchInfo(int nVal,
+                       FTS5AuxiliaryFunctionValue **apVal,
+                       void *context,
+                       FTS5AuxiliaryFunctionAPI *apiObj);
     ~SubstringMatchInfo();
-    void process(const Fts5ExtensionApi *pApi, Fts5Context *pFts, sqlite3_context *pCtx) override final;
+    void process(FTS5AuxiliaryFunctionAPI *apiObj) override final;
     static int
     tokenCallback(void *pContext, int tflags, const char *pToken, int nToken, int iStartOff, int iEndOff);
     int internalTokenCallback(int tflags, const char *pToken, int nToken, int iStartOff, int iEndOff);
@@ -46,12 +48,11 @@ private:
     public:
         PhaseInstIter();
         ~PhaseInstIter();
-        int init(const Fts5ExtensionApi *pApi, Fts5Context *pFts);
+        int init(FTS5AuxiliaryFunctionAPI *apiObj);
         int next(int iCol);
 
     private:
-        const Fts5ExtensionApi *m_pApi;
-        Fts5Context *m_pFts;
+        FTS5AuxiliaryFunctionAPI *m_apiObj;
         int m_curPhaseStart;
         int m_curPhaseEnd;
         int m_iInst;
@@ -63,8 +64,7 @@ private:
     int checkSeperator(char sep);
     void generateOutput(std::ostringstream &stream);
 
-    const char *m_input;
-    int m_inputLength;
+    UnsafeStringView m_input;
     int m_columnNum;
 
     bool *m_phaseMatchResult;

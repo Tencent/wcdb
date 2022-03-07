@@ -23,7 +23,7 @@
  */
 
 #import <WCDB/Assertion.hpp>
-#import <WCDB/Error.hpp>
+#import <WCDB/FTSError.hpp>
 #import <WCDB/WCTOneOrBinaryTokenizer.h>
 
 extern "C" {
@@ -148,7 +148,7 @@ void WCTOneOrBinaryTokenizer::loadInput(int flags, const char *pText, int nText)
 int WCTOneOrBinaryTokenizer::nextToken(int *tflags, const char **ppToken, int *nToken, int *iStart, int *iEnd)
 {
     int ret = stepNextToken();
-    if (WCDB::Error::rc2c(ret) != WCDB::Error::Code::OK) {
+    if (!WCDB::FTSError::isOK(ret)) {
         return ret;
     }
     genToken();
@@ -157,7 +157,7 @@ int WCTOneOrBinaryTokenizer::nextToken(int *tflags, const char **ppToken, int *n
     *nToken = m_tokenLength;
     *iStart = m_startOffset;
     *iEnd = m_endOffset;
-    return WCDB::Error::c2rc(WCDB::Error::Code::OK);
+    return WCDB::FTSError::OK();
 }
 
 // for fts3
@@ -165,7 +165,7 @@ int WCTOneOrBinaryTokenizer::step(
 const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *piPosition)
 {
     int ret = stepNextToken();
-    if (WCDB::Error::rc2c(ret) != WCDB::Error::Code::OK) {
+    if (!WCDB::FTSError::isOK(ret)) {
         return ret;
     }
     genToken();
@@ -174,27 +174,26 @@ const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *p
     *piStartOffset = m_startOffset;
     *piEndOffset = m_endOffset;
     *piPosition = m_position;
-    return WCDB::Error::c2rc(WCDB::Error::Code::OK);
+    return WCDB::FTSError::OK();
 }
 
 //Inspired by zorrozhang
 int WCTOneOrBinaryTokenizer::stepNextToken()
 {
-    WCDB::Error::Code code = WCDB::Error::Code::OK;
+    int ret = WCDB::FTSError::OK();
     if (m_position == 0) {
-        int ret = cursorStep();
-        code = WCDB::Error::rc2c(ret);
-        if (code != WCDB::Error::Code::OK) {
-            return WCDB::Error::c2rc(code);
+        ret = cursorStep();
+        if (!WCDB::FTSError::isOK(ret)) {
+            return ret;
         }
     }
 
     if (m_subTokensLengthArray.empty()) {
         if (!m_needSymbol) { //Skip symbol
             while (m_cursorTokenType == UnicodeType::BasicMultilingualPlaneSymbol) {
-                code = WCDB::Error::rc2c(cursorStep());
-                if (code != WCDB::Error::Code::OK) {
-                    return WCDB::Error::c2rc(code);
+                ret = cursorStep();
+                if (!WCDB::FTSError::isOK(ret)) {
+                    return ret;
                 }
             }
         }
@@ -204,11 +203,11 @@ int WCTOneOrBinaryTokenizer::stepNextToken()
         case UnicodeType::BasicMultilingualPlaneLetter:
         case UnicodeType::BasicMultilingualPlaneDigit:
             m_startOffset = m_cursor;
-            while (((code = WCDB::Error::rc2c(cursorStep())) == WCDB::Error::Code::OK)
+            while (WCDB::FTSError::isOK((ret = cursorStep()))
                    && m_cursorTokenType == m_preTokenType)
                 ;
-            if (code != WCDB::Error::Code::OK) {
-                return WCDB::Error::c2rc(code);
+            if (!WCDB::FTSError::isOK(ret)) {
+                return ret;
             }
             m_endOffset = m_cursor;
             m_tokenLength = m_endOffset - m_startOffset;
@@ -219,22 +218,22 @@ int WCTOneOrBinaryTokenizer::stepNextToken()
             m_subTokensLengthArray.push_back(m_cursorTokenLength);
             m_subTokensCursor = m_cursor;
             m_subTokensDoubleChar = m_needBinary;
-            while (((code = WCDB::Error::rc2c(cursorStep())) == WCDB::Error::Code::OK)
+            while (WCDB::FTSError::isOK((ret = cursorStep()))
                    && m_cursorTokenType == m_preTokenType) {
                 m_subTokensLengthArray.push_back(m_cursorTokenLength);
             }
-            if (code != WCDB::Error::Code::OK) {
-                return WCDB::Error::c2rc(code);
+            if (!WCDB::FTSError::isOK(ret)) {
+                return ret;
             }
             subTokensStep();
             break;
         case UnicodeType::None:
-            return WCDB::Error::c2rc(WCDB::Error::Code::Done);
+            return WCDB::FTSError::Done();
         }
     } else {
         subTokensStep();
     }
-    return WCDB::Error::c2rc(WCDB::Error::Code::OK);
+    return WCDB::FTSError::OK();
 }
 
 int WCTOneOrBinaryTokenizer::cursorStep()
@@ -247,7 +246,7 @@ int WCTOneOrBinaryTokenizer::cursorStep()
     m_cursor = m_inputLength;
     m_cursorTokenType = UnicodeType::None;
     m_cursorTokenLength = 0;
-    return WCDB::Error::c2rc(WCDB::Error::Code::OK);
+    return WCDB::FTSError::OK();
 }
 
 void WCTOneOrBinaryTokenizer::lemmatization(const char *input, int inputLength)

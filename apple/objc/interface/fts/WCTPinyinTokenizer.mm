@@ -23,7 +23,7 @@
  */
 
 #import <WCDB/Assertion.hpp>
-#import <WCDB/Error.hpp>
+#import <WCDB/FTSError.hpp>
 #import <WCDB/SQLite.h>
 #import <WCDB/WCTPinyinTokenizer.h>
 
@@ -79,7 +79,7 @@ int WCTPinyinTokenizer::nextToken(int *tflags, const char **ppToken, int *nToken
         || m_pinyinTokenArr.size() == m_pinyinTokenIndex) {
         while (true) {
             int ret = stepNextToken();
-            if (WCDB::Error::rc2c(ret) != WCDB::Error::Code::OK) {
+            if (!WCDB::FTSError::isOK(ret)) {
                 return ret;
             }
             if (m_flags & FTS5_TOKENIZE_QUERY) {
@@ -99,7 +99,7 @@ int WCTPinyinTokenizer::nextToken(int *tflags, const char **ppToken, int *nToken
         *nToken = m_normalTokenLength;
         *iStart = m_startOffset;
         *iEnd = m_endOffset;
-        return WCDB::Error::c2rc(WCDB::Error::Code::OK);
+        return WCDB::FTSError::OK();
     } else {
         if (m_pinyinTokenIndex > 0) {
             *tflags = FTS5_TOKEN_COLOCATED;
@@ -110,18 +110,17 @@ int WCTPinyinTokenizer::nextToken(int *tflags, const char **ppToken, int *nToken
         *iStart = m_startOffset;
         *iEnd = m_endOffset;
         m_pinyinTokenIndex++;
-        return WCDB::Error::c2rc(WCDB::Error::Code::OK);
+        return WCDB::FTSError::OK();
     }
 }
 
 int WCTPinyinTokenizer::stepNextToken()
 {
-    WCDB::Error::Code code = WCDB::Error::Code::OK;
+    int ret = WCDB::FTSError::OK();
     if (m_cursorTokenLength == 0) {
-        int ret = cursorStep();
-        code = WCDB::Error::rc2c(ret);
-        if (code != WCDB::Error::Code::OK) {
-            return WCDB::Error::c2rc(code);
+        ret = cursorStep();
+        if (!WCDB::FTSError::isOK(ret)) {
+            return ret;
         }
     }
 
@@ -130,9 +129,9 @@ int WCTPinyinTokenizer::stepNextToken()
         if (m_needSymbol && !(m_flags & FTS5_TOKENIZE_QUERY) && m_cursorTokenType == UnicodeType::BasicMultilingualPlaneSymbol) {
             break;
         }
-        code = WCDB::Error::rc2c(cursorStep());
-        if (code != WCDB::Error::Code::OK) {
-            return WCDB::Error::c2rc(code);
+        ret = cursorStep();
+        if (!WCDB::FTSError::isOK(ret)) {
+            return ret;
         }
     }
 
@@ -143,22 +142,22 @@ int WCTPinyinTokenizer::stepNextToken()
     case UnicodeType::BasicMultilingualPlaneOther:
         m_startOffset = m_cursor;
         if (m_preTokenType == UnicodeType::BasicMultilingualPlaneLetter) {
-            while (((code = WCDB::Error::rc2c(cursorStep())) == WCDB::Error::Code::OK)
+            while (WCDB::FTSError::isOK(ret = cursorStep())
                    && m_cursorTokenType == m_preTokenType)
                 ;
         } else {
-            code = WCDB::Error::rc2c(cursorStep());
+            ret = cursorStep();
         }
-        if (code != WCDB::Error::Code::OK) {
-            return WCDB::Error::c2rc(code);
+        if (!WCDB::FTSError::isOK(ret)) {
+            return ret;
         }
         m_endOffset = m_cursor;
         m_normalTokenLength = m_endOffset - m_startOffset;
         break;
     default:
-        return WCDB::Error::c2rc(WCDB::Error::Code::Done);
+        return WCDB::FTSError::Done();
     }
-    return WCDB::Error::c2rc(WCDB::Error::Code::OK);
+    return WCDB::FTSError::OK();
 }
 
 int WCTPinyinTokenizer::cursorStep()
@@ -171,7 +170,7 @@ int WCTPinyinTokenizer::cursorStep()
     m_cursor = m_inputLength;
     m_cursorTokenType = UnicodeType::None;
     m_cursorTokenLength = 0;
-    return WCDB::Error::c2rc(WCDB::Error::Code::OK);
+    return WCDB::FTSError::OK();
 }
 
 void WCTPinyinTokenizer::genNormalToken()

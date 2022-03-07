@@ -408,7 +408,7 @@
     }
 }
 
-- (void)test_multi_level_highlight
+- (void)test_substring_match_info
 {
     FTS5SymbolObject *content = [[FTS5SymbolObject alloc] init];
     content.content = @"多级,分隔符,串联子串1;多级,分隔符,串联子串2;多级,分隔符,串联子串3";

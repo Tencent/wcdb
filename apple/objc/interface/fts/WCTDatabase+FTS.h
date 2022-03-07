@@ -22,11 +22,13 @@
  * limitations under the License.
  */
 
-#import <WCDB/AuxiliaryFunctionModule.hpp>
-#import <WCDB/TokenizerModule.hpp>
+#import <WCDB/FTS5AuxiliaryFunctionTemplate.hpp>
+#import <WCDB/SubstringMatchInfo.hpp>
 #import <WCDB/WCTCommon.h>
 #import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTFTSTokenizerUtil.h>
+#import <WCDB/WCTOneOrBinaryTokenizer.h>
+#import <WCDB/WCTPinyinTokenizer.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

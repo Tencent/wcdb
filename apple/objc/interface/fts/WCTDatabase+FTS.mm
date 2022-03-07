@@ -23,12 +23,8 @@
  */
 
 #import <WCDB/Assertion.hpp>
-#import <WCDB/FTS5AuxiliaryFunctionTemplate.hpp>
-#import <WCDB/SubstringMatchInfo.hpp>
 #import <WCDB/WCTDatabase+FTS.h>
 #import <WCDB/WCTDatabase+Private.h>
-#import <WCDB/WCTOneOrBinaryTokenizer.h>
-#import <WCDB/WCTPinyinTokenizer.h>
 
 NSString* const WCTTokenizerSimple = @"simple";
 NSString* const WCTTokenizerPorter = @"porter";
