@@ -11,6 +11,8 @@
 		03450DBA2738DDE800C4DC1B /* WCTOneOrBinaryTokenizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 03450DB32738BBF000C4DC1B /* WCTOneOrBinaryTokenizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		03450E012738ECB800C4DC1B /* WCTOneOrBinaryTokenizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 03450DB22738BBF000C4DC1B /* WCTOneOrBinaryTokenizer.mm */; };
 		03450E032738ED0200C4DC1B /* WCTPinyinTokenizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 03450DB62738C8F800C4DC1B /* WCTPinyinTokenizer.mm */; };
+		03EA88CE27D5F05D0075C7BD /* FTSError.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 03EA88CD27D5F05D0075C7BD /* FTSError.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		03EA88D027D5F0840075C7BD /* FTSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03EA88CF27D5F0840075C7BD /* FTSError.cpp */; };
 		0D0D56C1254ABEAA000F16A6 /* FTS5Object.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D0D56C0254ABEAA000F16A6 /* FTS5Object.mm */; };
 		0D0D56CA254AC0F0000F16A6 /* FTS5Test.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D0D56C9254AC0F0000F16A6 /* FTS5Test.mm */; };
 		0D249BC12542B8E900B43BD9 /* MergeFTSIndexLogic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D249BC02542B8E900B43BD9 /* MergeFTSIndexLogic.hpp */; };
@@ -856,6 +858,8 @@
 		03450DB32738BBF000C4DC1B /* WCTOneOrBinaryTokenizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTOneOrBinaryTokenizer.h; sourceTree = "<group>"; };
 		03450DB62738C8F800C4DC1B /* WCTPinyinTokenizer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTPinyinTokenizer.mm; sourceTree = "<group>"; };
 		03450DB72738C8F800C4DC1B /* WCTPinyinTokenizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTPinyinTokenizer.h; sourceTree = "<group>"; };
+		03EA88CD27D5F05D0075C7BD /* FTSError.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FTSError.hpp; sourceTree = "<group>"; };
+		03EA88CF27D5F0840075C7BD /* FTSError.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FTSError.cpp; sourceTree = "<group>"; };
 		0D0D56BF254ABE9B000F16A6 /* FTS5Object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FTS5Object.h; sourceTree = "<group>"; };
 		0D0D56C0254ABEAA000F16A6 /* FTS5Object.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FTS5Object.mm; sourceTree = "<group>"; };
 		0D0D56C9254AC0F0000F16A6 /* FTS5Test.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FTS5Test.mm; sourceTree = "<group>"; };
@@ -2998,6 +3002,8 @@
 				7543DD8C271C360E00B533B4 /* AuxiliaryFunctionConfig.cpp */,
 				7543DD91271C601F00B533B4 /* SubstringMatchInfo.hpp */,
 				7543DD90271C601F00B533B4 /* SubstringMatchInfo.cpp */,
+				03EA88CD27D5F05D0075C7BD /* FTSError.hpp */,
+				03EA88CF27D5F0840075C7BD /* FTSError.cpp */,
 			);
 			path = fts;
 			sourceTree = "<group>";
@@ -3718,6 +3724,7 @@
 				23567D7720CA9200005F1C35 /* SharedThreadedErrorProne.hpp in Headers */,
 				2314AE7321070A1700244D39 /* Range.hpp in Headers */,
 				23EEDD1A217DFADC006E9E73 /* SyntaxResultColumn.hpp in Headers */,
+				03EA88CE27D5F05D0075C7BD /* FTSError.hpp in Headers */,
 				23775B8020AD666900E21AB0 /* Mechanic.hpp in Headers */,
 				2370B12321914ED500D3227C /* WCTMaster+WCTTableCoding.h in Headers */,
 				23EEDD18217DFADC006E9E73 /* SyntaxRecursiveCTE.hpp in Headers */,
@@ -4472,6 +4479,7 @@
 				23C7559A20DD17B100031A93 /* SQLiteBase.cpp in Sources */,
 				23EEDC8F217DFADC006E9E73 /* Join.cpp in Sources */,
 				23EEDD35217DFADC006E9E73 /* SyntaxCreateTableSTMT.cpp in Sources */,
+				03EA88D027D5F0840075C7BD /* FTSError.cpp in Sources */,
 				23EEDD41217DFADC006E9E73 /* SyntaxDropIndexSTMT.cpp in Sources */,
 				2360A5F720D78F1B00E4A311 /* HandleRelated.cpp in Sources */,
 				23EEDD03217DFADC006E9E73 /* SyntaxIdentifier.cpp in Sources */,

@@ -25,7 +25,6 @@
 #pragma once
 
 #include <WCDB/AuxiliaryFunctionModule.hpp>
-#include <WCDB/SQLite.h>
 
 namespace WCDB {
 
@@ -40,21 +39,25 @@ public:
         return FTS5AuxiliaryFunctionModule(run, pCtx);
     }
 
-    static void run(const Fts5ExtensionApi *pApi,
-                    Fts5Context *pFts,
-                    sqlite3_context *pCtx,
+    static void run(const FTS5AuxiliaryFunctionAPIPointer *pApi,
+                    FTS5AuxiliaryFunctionContext *pFts,
+                    FTS5SQLiteContext *pCtx,
                     int nVal,
-                    sqlite3_value **apVal)
+                    FTS5AuxiliaryFunctionValue **apVal)
     {
-        AbstractFTS5AuxiliaryFunctionObject *funcObject
-        = (AbstractFTS5AuxiliaryFunctionObject *) pApi->xGetAuxdata(pFts, false);
-        if (funcObject == nullptr) {
-            void *userData = pApi->xUserData(pFts);
-            funcObject = static_cast<AbstractFTS5AuxiliaryFunctionObject *>(
-            new AuxiliaryFunctionObject(nVal, apVal, userData));
-            pApi->xSetAuxdata(pFts, funcObject, deleteAuxData);
+        FTS5AuxiliaryFunctionAPI *apiObj = new FTS5AuxiliaryFunctionAPI(pApi, pCtx, pFts);
+        AbstractFTS5AuxiliaryFunctionObject *funcObject = apiObj->getOrCreateFunctionObject(
+        [nVal, apVal, apiObj](void *userData) {
+            AbstractFTS5AuxiliaryFunctionObject *funcObject
+            = static_cast<AbstractFTS5AuxiliaryFunctionObject *>(
+            new AuxiliaryFunctionObject(nVal, apVal, userData, apiObj));
+            return funcObject;
+        },
+        deleteAuxData);
+        if (funcObject != nullptr) {
+            funcObject->process(apiObj);
         }
-        funcObject->process(pApi, pFts, pCtx);
+        delete apiObj;
     }
 
     static void deleteAuxData(void *auxObject)

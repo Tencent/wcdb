@@ -23,6 +23,7 @@
  */
 
 #pragma once
+#include <WCDB/FTSError.hpp>
 #include <memory>
 
 namespace WCDB {
@@ -67,9 +68,6 @@ protected:
     newCursor(TokenizerCursor **ppCursor, AbstractFTS3TokenizerCursorInfo *info);
     static AbstractFTS3TokenizerCursorInfo *getCursorInfo(TokenizerCursor *pCursor);
     static void deleteCursor(TokenizerCursor *pCursor);
-
-    static int OK();
-    static bool isOK(int rc);
 };
 
 class FTS3TokenizerModule final {
@@ -115,11 +113,6 @@ public:
     AbstractFTS5TokenizerModuleTemplate &
     operator=(const AbstractFTS5TokenizerModuleTemplate &)
     = delete;
-
-protected:
-    static int OK();
-    static bool isOK(int rc);
-    static bool isDone(int rc);
 };
 
 class AbstractFTS5Tokenizer {

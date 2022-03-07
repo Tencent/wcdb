@@ -40,10 +40,6 @@
 #import <WCDB/WCTDatabase+Repair.h>
 #import <WCDB/WCTDatabase+Version.h>
 
-#import <WCDB/WCTFTSTokenizerUtil.h>
-#import <WCDB/WCTOneOrBinaryTokenizer.h>
-#import <WCDB/WCTPinyinTokenizer.h>
-
 #import <WCDB/WCTDatabase+Handle.h>
 #import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTHandle.h>

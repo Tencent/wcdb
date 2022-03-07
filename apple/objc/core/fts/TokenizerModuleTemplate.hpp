@@ -46,7 +46,7 @@ public:
     {
         TokenizerInfo *info = new TokenizerInfo(argc, argv);
         int rc = newTokenizer(ppTokenizer, info);
-        if (!isOK(rc)) {
+        if (!FTSError::isOK(rc)) {
             deleteTokenizerInfo(info);
             *ppTokenizer = nullptr;
         }
@@ -60,7 +60,7 @@ public:
             deleteTokenizerInfo(static_cast<TokenizerInfo *>(info));
             deleteTokenizer(pTokenizer);
         }
-        return OK();
+        return FTSError::OK();
     }
 
     static void deleteTokenizerInfo(TokenizerInfo *info)
@@ -76,7 +76,7 @@ public:
         TokenizerCursorInfo *info
         = new TokenizerCursorInfo(pInput, nBytes, getTokenizerInfo(pTokenizer));
         int rc = newCursor(ppCursor, info);
-        if (!isOK(rc)) {
+        if (!FTSError::isOK(rc)) {
             deleteCursorInfo(info);
             *ppCursor = nullptr;
         }
@@ -90,7 +90,7 @@ public:
             deleteCursorInfo(static_cast<TokenizerCursorInfo *>(info));
             deleteCursor(pCursor);
         }
-        return OK();
+        return FTSError::OK();
     }
 
     static void deleteCursorInfo(TokenizerCursorInfo *info)
@@ -128,13 +128,13 @@ public:
     {
         *ppTokenizer
         = static_cast<AbstractFTS5Tokenizer *>(new Fts5Tokenizer(pCtx, azArg, nArg));
-        return OK();
+        return FTSError::OK();
     }
 
     static int destroy(AbstractFTS5Tokenizer *pTokenizer)
     {
         delete pTokenizer;
-        return OK();
+        return FTSError::OK();
     }
 
     static int
@@ -152,15 +152,15 @@ public:
         int iEnd;
         int tflags;
         pTokenizer->loadInput(flags, pText, nText);
-        while ((rc = pTokenizer->nextToken(&tflags, &pToken, &nToken, &iStart, &iEnd))
-               == OK()) {
+        while (FTSError::isOK(
+        rc = pTokenizer->nextToken(&tflags, &pToken, &nToken, &iStart, &iEnd))) {
             rc = xToken(pCtx, tflags, pToken, nToken, iStart, iEnd);
-            if (!isOK(rc)) {
+            if (!FTSError::isOK(rc)) {
                 break;
             }
         }
-        if (isDone(rc)) {
-            return OK();
+        if (FTSError::isDone(rc)) {
+            return FTSError::OK();
         }
         return rc;
     }
