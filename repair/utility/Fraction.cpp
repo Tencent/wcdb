@@ -49,6 +49,9 @@ int64_t Fraction::euclidean(int64_t a, int64_t b) const
     while (b != 0) {
         std::tie(a, b) = std::make_pair(b, a % b);
     }
+    if (a == 0) {
+        a = 1;
+    }
     return a;
 }
 
