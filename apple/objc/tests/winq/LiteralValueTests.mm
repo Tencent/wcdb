@@ -139,18 +139,19 @@
 
 - (void)test_float
 {
-    auto testingSQL = WCDB::LiteralValue((float) 0.1);
+    auto testingSQL = WCDB::LiteralValue(0.1f);
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"0.1");
+    TestCaseAssertSQLEqual(testingSQL, [NSString createPreciseStringFromDouble:0.1f]);
 }
 
 - (void)test_double
 {
-    auto testingSQL = WCDB::LiteralValue((double) 0.1);
+    double value = 0.1;
+    auto testingSQL = WCDB::LiteralValue(value);
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"0.1");
+    TestCaseAssertSQLEqual(testingSQL, [NSString createPreciseStringFromDouble:0.1]);
 }
 
 - (void)test_string
@@ -355,7 +356,8 @@
 - (void)test_float_convertible
 {
     float sql = 1.1f;
-    NSString* expected = @"1.1";
+    NSString* expected = [NSString createPreciseStringFromDouble:sql];
+    ;
     TestCaseAssertWINQConvertible(WCDB::LiteralValue, sql, expected);
     TestCaseAssertWINQConvertible(WCDB::LiteralValues, sql, expected);
     TestCaseAssertWINQConvertible(WCDB::Expression, sql, expected);
@@ -371,7 +373,8 @@
 - (void)test_floats_convertible
 {
     std::list<float> sqls = { 1.1f, 2.2f };
-    NSString* expected = @"1.1, 2.2";
+    NSString* expected = [NSString stringWithFormat:@"%@, %@", [NSString createPreciseStringFromDouble:1.1f], [NSString createPreciseStringFromDouble:2.2f]];
+    ;
     TestCaseAssertWINQConvertible(WCDB::LiteralValues, sqls, expected);
     TestCaseAssertWINQConvertible(WCDB::Expressions, sqls, expected);
     TestCaseAssertWINQConvertible(WCDB::IndexedColumns, sqls, expected);
@@ -382,7 +385,7 @@
 - (void)test_double_convertible
 {
     double sql = 1.1;
-    NSString* expected = @"1.1";
+    NSString* expected = [NSString createPreciseStringFromDouble:sql];
     TestCaseAssertWINQConvertible(WCDB::LiteralValue, sql, expected);
     TestCaseAssertWINQConvertible(WCDB::LiteralValues, sql, expected);
     TestCaseAssertWINQConvertible(WCDB::Expression, sql, expected);
@@ -395,7 +398,7 @@
     TestCaseAssertWINQConvertible(WCDB::OrderingTerms, sql, expected);
 
     sql = [[NSDate date] timeIntervalSince1970];
-    expected = [NSString stringWithFormat:@"%.5f", sql];
+    expected = [NSString createPreciseStringFromDouble:sql];
     TestCaseAssertWINQConvertible(WCDB::LiteralValue, sql, expected);
     TestCaseAssertWINQConvertible(WCDB::LiteralValues, sql, expected);
     TestCaseAssertWINQConvertible(WCDB::Expression, sql, expected);
@@ -411,7 +414,7 @@
 - (void)test_doubles_convertible
 {
     std::list<double> sqls = { 1.1, 2.2 };
-    NSString* expected = @"1.1, 2.2";
+    NSString* expected = [NSString stringWithFormat:@"%@, %@", [NSString createPreciseStringFromDouble:1.1], [NSString createPreciseStringFromDouble:2.2]];
     TestCaseAssertWINQConvertible(WCDB::LiteralValues, sqls, expected);
     TestCaseAssertWINQConvertible(WCDB::Expressions, sqls, expected);
     TestCaseAssertWINQConvertible(WCDB::IndexedColumns, sqls, expected);
@@ -621,7 +624,7 @@
         (std::string) "t2",
         (NSString*) @"t3",
     };
-    NSString* expected = @"TRUE, 1, NULL, 2, 3, 1.1, 2.2, 't1', 't2', 't3'";
+    NSString* expected = [NSString stringWithFormat:@"TRUE, 1, NULL, 2, 3, %@, %@, 't1', 't2', 't3'", [NSString createPreciseStringFromDouble:1.1f], [NSString createPreciseStringFromDouble:2.2]];
     TestCaseAssertWINQConvertible(WCDB::LiteralValues, sqls, expected);
     TestCaseAssertWINQConvertible(WCDB::Expressions, sqls, expected);
     TestCaseAssertWINQConvertible(WCDB::IndexedColumns, sqls, expected);

@@ -190,7 +190,7 @@
         TestCaseAssertTrue([self.handle step]);
 
         double extractedValue = [self.handle extractDoubleAtIndex:0];
-        TestCaseAssertTrue([NSNumber value:extractedValue almostEqual:value]);
+        TestCaseAssertTrue(extractedValue == value);
         [self.handle finalizeStatement];
     }
 }
@@ -247,7 +247,7 @@
         TestCaseAssertTrue([self.handle step]);
 
         NSNumber* extractedValue = [self.handle extractNumberAtIndex:0];
-        TestCaseAssertTrue([value almostEqual:extractedValue]);
+        TestCaseAssertTrue([value isEqualToNumber:extractedValue]);
         [self.handle finalizeStatement];
     }
 }
