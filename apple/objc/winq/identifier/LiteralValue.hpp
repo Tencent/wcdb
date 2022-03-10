@@ -37,7 +37,6 @@ public:
     LiteralValue(int64_t value);
     LiteralValue(uint64_t value);
     LiteralValue(double value);
-    LiteralValue(float value);
     LiteralValue(std::nullptr_t);
     LiteralValue(bool value);
     LiteralValue(const UnsafeStringView& value);

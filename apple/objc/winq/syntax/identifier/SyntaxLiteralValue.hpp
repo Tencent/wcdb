@@ -37,12 +37,11 @@ public:
     ~LiteralValue() override final;
 
     WCDB_SYNTAX_MAIN_UNION_ENUM(
-    StringView, Null, Float, Double, Integer, UnsignedInteger, Bool, CurrentTime, CurrentDate, CurrentTimestamp);
+    StringView, Null, Float, Integer, UnsignedInteger, Bool, CurrentTime, CurrentDate, CurrentTimestamp);
 
     StringView stringValue;
     union {
-        double doubleValue;
-        float floatValue;
+        double floatValue;
         int64_t integerValue;
         uint64_t unsignedIntegerValue;
         bool boolValue;

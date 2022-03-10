@@ -38,19 +38,12 @@
 
 @end
 
-@interface NSNumber (TestCase)
-
-+ (BOOL)value:(double)left almostEqual:(double)right;
-
-- (BOOL)almostEqual:(NSNumber*)number;
-
-@end
-
 @interface NSString (TestCase)
 
 + (NSArray<NSString*>*)pathsByReplacingPaths:(NSArray<NSString*>*)paths withDirectory:(NSString*)directory;
 + (NSString*)pathByReplacingPath:(NSString*)path withDirectory:(NSString*)directory;
 - (NSString*)test_stringByStandardizingPath;
++ (NSString*)createPreciseStringFromDouble:(double)doubleValue;
 
 @end
 

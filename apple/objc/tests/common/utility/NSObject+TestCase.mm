@@ -44,28 +44,6 @@
 
 @end
 
-@implementation NSNumber (TestCase)
-
-+ (BOOL)value:(double)left almostEqual:(double)right
-{
-    // ulp == 10
-    return std::abs(left - right) < std::numeric_limits<double>::epsilon() * std::abs(left + right) * 10
-           || std::abs(left - right) < std::numeric_limits<double>::min();
-}
-
-- (BOOL)almostEqual:(NSNumber *)other
-{
-    if (other == nil) {
-        return NO;
-    }
-    if (CFNumberIsFloatType((CFNumberRef) self)) {
-        return [NSNumber value:self.doubleValue almostEqual:other.doubleValue];
-    }
-    return [self isEqualToNumber:other];
-}
-
-@end
-
 @implementation NSString (TestCase)
 
 + (NSString *)pathByReplacingPath:(NSString *)path withDirectory:(NSString *)directory
@@ -98,6 +76,14 @@
     }
 #endif
     return path;
+}
+
++ (NSString *)createPreciseStringFromDouble:(double)doubleValue
+{
+    std::ostringstream stream;
+    stream.precision(std::numeric_limits<double>::max_digits10);
+    stream << doubleValue;
+    return [NSString stringWithUTF8String:stream.str().data()];
 }
 
 @end
