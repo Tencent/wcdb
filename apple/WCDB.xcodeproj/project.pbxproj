@@ -270,12 +270,7 @@
 		234F0737227AA5C700DD65A2 /* BackupTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0731227AA5C700DD65A2 /* BackupTestCase.mm */; };
 		234F0738227AA5C700DD65A2 /* RetrieveRobustyTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0732227AA5C700DD65A2 /* RetrieveRobustyTests.mm */; };
 		234F0739227AA5C700DD65A2 /* RetrieveTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0734227AA5C700DD65A2 /* RetrieveTests.mm */; };
-		234F8AB4227AF5A900791E45 /* Column.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F8AB3227AF5A900791E45 /* Column.swift */; };
-		234F8AB8227AF78C00791E45 /* SQL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F8AB7227AF78C00791E45 /* SQL.swift */; };
-		234F8ABA227AF9D000791E45 /* BindParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F8AB9227AF9D000791E45 /* BindParameter.swift */; };
 		234F8AD9227B0B5400791E45 /* WCDBSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234F0745227AAE4B00DD65A2 /* WCDBSwift.framework */; };
-		234F8AE1227B0BF300791E45 /* ColumnTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F8AE0227B0BF300791E45 /* ColumnTests.swift */; };
-		234F8AE3227B292900791E45 /* WINQAssertion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F8AE2227B292900791E45 /* WINQAssertion.swift */; };
 		23545B992224E8270091C981 /* SyntaxAssertion.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23545B962224E8270091C981 /* SyntaxAssertion.hpp */; };
 		23545B9F2224E9C80091C981 /* SyntaxEnum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23545B9C2224E9C80091C981 /* SyntaxEnum.hpp */; };
 		23545BA22224EAA40091C981 /* SyntaxCommonConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23545BA12224EAA40091C981 /* SyntaxCommonConst.cpp */; };
@@ -759,9 +754,6 @@
 		39411A4122437E7B00A388F5 /* CaseInsensiveList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		39579858227FBC8A0069F985 /* WCTDatabase+Test.h in Headers */ = {isa = PBXBuildFile; fileRef = 39579856227FBC8A0069F985 /* WCTDatabase+Test.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3957985A227FBC8A0069F985 /* WCTDatabase+Test.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39579857227FBC8A0069F985 /* WCTDatabase+Test.mm */; };
-		3957985D227FD2370069F985 /* Syntax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3957985C227FD2370069F985 /* Syntax.swift */; };
-		3957985F227FD4F20069F985 /* Expression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3957985E227FD4F20069F985 /* Expression.swift */; };
-		39579861227FD5770069F985 /* ForeignKeyClause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39579860227FD5770069F985 /* ForeignKeyClause.swift */; };
 		3960D89B2319258B00EF05D1 /* SyntaxExplainSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3960D8992319258B00EF05D1 /* SyntaxExplainSTMT.cpp */; };
 		3960D89C2319258B00EF05D1 /* SyntaxExplainSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 3960D89A2319258B00EF05D1 /* SyntaxExplainSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		3960D89F2319288C00EF05D1 /* StatementExplain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3960D89D2319288C00EF05D1 /* StatementExplain.cpp */; };
@@ -792,9 +784,6 @@
 		39C70CC82313E20F002D773C /* Assemble.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39C70CC62313E20F002D773C /* Assemble.hpp */; };
 		39D3C74822A8B8C600C93DC0 /* OperationHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 39D3C74622A8B8C600C93DC0 /* OperationHandle.cpp */; };
 		39D3C74A22A8B8C600C93DC0 /* OperationHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39D3C74722A8B8C600C93DC0 /* OperationHandle.hpp */; };
-		39D81662227EC1D9009EC067 /* ColumnDef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D81661227EC1D9009EC067 /* ColumnDef.swift */; };
-		39D81664227EC1F7009EC067 /* ColumnType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D81663227EC1F7009EC067 /* ColumnType.swift */; };
-		39D81666227EC25E009EC067 /* ColumnConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D81665227EC25E009EC067 /* ColumnConstraint.swift */; };
 		7543DD83271C2F3B00B533B4 /* FTS5AuxiliaryFunctionTemplate.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543DD82271C2F3B00B533B4 /* FTS5AuxiliaryFunctionTemplate.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7543DD86271C2FD000B533B4 /* AuxiliaryFunctionModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7543DD84271C2FD000B533B4 /* AuxiliaryFunctionModule.cpp */; };
 		7543DD87271C2FD000B533B4 /* AuxiliaryFunctionModule.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543DD85271C2FD000B533B4 /* AuxiliaryFunctionModule.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1192,12 +1181,7 @@
 		234F0734227AA5C700DD65A2 /* RetrieveTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RetrieveTests.mm; sourceTree = "<group>"; };
 		234F0745227AAE4B00DD65A2 /* WCDBSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDBSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		234F0753227AB18B00DD65A2 /* host.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = host.xcconfig; sourceTree = "<group>"; };
-		234F8AB3227AF5A900791E45 /* Column.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Column.swift; sourceTree = "<group>"; };
-		234F8AB7227AF78C00791E45 /* SQL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQL.swift; sourceTree = "<group>"; };
-		234F8AB9227AF9D000791E45 /* BindParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindParameter.swift; sourceTree = "<group>"; };
 		234F8AD4227B0B5400791E45 /* SwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		234F8AE0227B0BF300791E45 /* ColumnTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnTests.swift; sourceTree = "<group>"; };
-		234F8AE2227B292900791E45 /* WINQAssertion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WINQAssertion.swift; sourceTree = "<group>"; };
 		23545B962224E8270091C981 /* SyntaxAssertion.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SyntaxAssertion.hpp; sourceTree = "<group>"; };
 		23545B9C2224E9C80091C981 /* SyntaxEnum.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SyntaxEnum.hpp; sourceTree = "<group>"; };
 		23545BA12224EAA40091C981 /* SyntaxCommonConst.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SyntaxCommonConst.cpp; sourceTree = "<group>"; };
@@ -1716,9 +1700,6 @@
 		39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CaseInsensiveList.hpp; sourceTree = "<group>"; };
 		39579856227FBC8A0069F985 /* WCTDatabase+Test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Test.h"; sourceTree = "<group>"; };
 		39579857227FBC8A0069F985 /* WCTDatabase+Test.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Test.mm"; sourceTree = "<group>"; };
-		3957985C227FD2370069F985 /* Syntax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Syntax.swift; sourceTree = "<group>"; };
-		3957985E227FD4F20069F985 /* Expression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expression.swift; sourceTree = "<group>"; };
-		39579860227FD5770069F985 /* ForeignKeyClause.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForeignKeyClause.swift; sourceTree = "<group>"; };
 		3960D8992319258B00EF05D1 /* SyntaxExplainSTMT.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SyntaxExplainSTMT.cpp; sourceTree = "<group>"; };
 		3960D89A2319258B00EF05D1 /* SyntaxExplainSTMT.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SyntaxExplainSTMT.hpp; sourceTree = "<group>"; };
 		3960D89D2319288C00EF05D1 /* StatementExplain.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StatementExplain.cpp; sourceTree = "<group>"; };
@@ -1741,9 +1722,6 @@
 		39C70CC62313E20F002D773C /* Assemble.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Assemble.hpp; sourceTree = "<group>"; };
 		39D3C74622A8B8C600C93DC0 /* OperationHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OperationHandle.cpp; sourceTree = "<group>"; };
 		39D3C74722A8B8C600C93DC0 /* OperationHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OperationHandle.hpp; sourceTree = "<group>"; };
-		39D81661227EC1D9009EC067 /* ColumnDef.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnDef.swift; sourceTree = "<group>"; };
-		39D81663227EC1F7009EC067 /* ColumnType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnType.swift; sourceTree = "<group>"; };
-		39D81665227EC25E009EC067 /* ColumnConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnConstraint.swift; sourceTree = "<group>"; };
 		7543DD82271C2F3B00B533B4 /* FTS5AuxiliaryFunctionTemplate.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FTS5AuxiliaryFunctionTemplate.hpp; sourceTree = "<group>"; };
 		7543DD84271C2FD000B533B4 /* AuxiliaryFunctionModule.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AuxiliaryFunctionModule.cpp; sourceTree = "<group>"; };
 		7543DD85271C2FD000B533B4 /* AuxiliaryFunctionModule.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AuxiliaryFunctionModule.hpp; sourceTree = "<group>"; };
@@ -1809,6 +1787,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		03E1620527F1AA1B00D2C926 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				2349F6A71EA0D6680021EFA7 /* utility */,
+				2349F6151EA0D6680021EFA7 /* core */,
+				2349F5D61EA0D6680021EFA7 /* winq */,
+				23775B3420AD666900E21AB0 /* repair */,
+				23775B2E20AD666900E21AB0 /* base */,
+			);
+			path = common;
+			sourceTree = "<group>";
+		};
 		2321243920172865008146EF /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -1846,12 +1836,19 @@
 			children = (
 				234F0376227A9EFA00DD65A2 /* tests */,
 				2370B0E321914EC200D3227C /* builtin */,
-				23775B2E20AD666900E21AB0 /* common */,
-				23775B3420AD666900E21AB0 /* repair */,
-				2349F5D61EA0D6680021EFA7 /* winq */,
-				2349F6151EA0D6680021EFA7 /* core */,
-				2349F62A1EA0D6680021EFA7 /* interface */,
-				2349F6A71EA0D6680021EFA7 /* utility */,
+				757457022402D571005E3682 /* statement */,
+				236BACDF21BF9F5900C8B4D9 /* migration */,
+				234DBCFE2064DE04000E31E8 /* transaction */,
+				234DBCEB2064DD0B000E31E8 /* handle */,
+				232147001F6AAE6500BF7AF2 /* fts */,
+				2386B3BD1ED442D9000B72F6 /* monitor */,
+				2349F63B1EA0D6680021EFA7 /* chaincall */,
+				2349F6561EA0D6680021EFA7 /* convenient */,
+				2349F65B1EA0D6680021EFA7 /* core */,
+				2349F6681EA0D6680021EFA7 /* database */,
+				2349F6791EA0D6680021EFA7 /* orm */,
+				2349F6991EA0D6680021EFA7 /* table */,
+				23D4DA442085A3D300AE6D90 /* Interface.h */,
 				2349F6BA1EA0D6680021EFA7 /* WCDB.h */,
 				39690182233B1945006EEFD4 /* BridgeHeader.h */,
 			);
@@ -1897,26 +1894,6 @@
 				391F7C83225DE8FD0095E82D /* Core.h */,
 			);
 			path = core;
-			sourceTree = "<group>";
-		};
-		2349F62A1EA0D6680021EFA7 /* interface */ = {
-			isa = PBXGroup;
-			children = (
-				757457022402D571005E3682 /* statement */,
-				236BACDF21BF9F5900C8B4D9 /* migration */,
-				234DBCFE2064DE04000E31E8 /* transaction */,
-				234DBCEB2064DD0B000E31E8 /* handle */,
-				232147001F6AAE6500BF7AF2 /* fts */,
-				2386B3BD1ED442D9000B72F6 /* monitor */,
-				2349F63B1EA0D6680021EFA7 /* chaincall */,
-				2349F6561EA0D6680021EFA7 /* convenient */,
-				2349F65B1EA0D6680021EFA7 /* core */,
-				2349F6681EA0D6680021EFA7 /* database */,
-				2349F6791EA0D6680021EFA7 /* orm */,
-				2349F6991EA0D6680021EFA7 /* table */,
-				23D4DA442085A3D300AE6D90 /* Interface.h */,
-			);
-			path = interface;
 			sourceTree = "<group>";
 		};
 		2349F63B1EA0D6680021EFA7 /* chaincall */ = {
@@ -2609,43 +2586,8 @@
 		234F074E227AAE7100DD65A2 /* swift */ = {
 			isa = PBXGroup;
 			children = (
-				234F8ABE227B0A0000791E45 /* tests */,
-				234F8AB2227AF59C00791E45 /* winq */,
 			);
 			path = swift;
-			sourceTree = "<group>";
-		};
-		234F8AB2227AF59C00791E45 /* winq */ = {
-			isa = PBXGroup;
-			children = (
-				234F8AB9227AF9D000791E45 /* BindParameter.swift */,
-				234F8AB3227AF5A900791E45 /* Column.swift */,
-				3957985C227FD2370069F985 /* Syntax.swift */,
-				234F8AB7227AF78C00791E45 /* SQL.swift */,
-				39D81661227EC1D9009EC067 /* ColumnDef.swift */,
-				39D81663227EC1F7009EC067 /* ColumnType.swift */,
-				39D81665227EC25E009EC067 /* ColumnConstraint.swift */,
-				3957985E227FD4F20069F985 /* Expression.swift */,
-				39579860227FD5770069F985 /* ForeignKeyClause.swift */,
-			);
-			path = winq;
-			sourceTree = "<group>";
-		};
-		234F8ABE227B0A0000791E45 /* tests */ = {
-			isa = PBXGroup;
-			children = (
-				234F8ABF227B0A0000791E45 /* winq */,
-			);
-			path = tests;
-			sourceTree = "<group>";
-		};
-		234F8ABF227B0A0000791E45 /* winq */ = {
-			isa = PBXGroup;
-			children = (
-				234F8AE0227B0BF300791E45 /* ColumnTests.swift */,
-				234F8AE2227B292900791E45 /* WINQAssertion.swift */,
-			);
-			path = winq;
 			sourceTree = "<group>";
 		};
 		235FBE92229145FC005C7723 /* sqlite */ = {
@@ -2702,7 +2644,7 @@
 			path = builtin;
 			sourceTree = "<group>";
 		};
-		23775B2E20AD666900E21AB0 /* common */ = {
+		23775B2E20AD666900E21AB0 /* base */ = {
 			isa = PBXGroup;
 			children = (
 				23F0FEB3215F5E9A008399FB /* Lock.cpp */,
@@ -2751,8 +2693,7 @@
 				233A8530215E7CFE00BB8D4F /* Console.cpp */,
 				233A8531215E7CFE00BB8D4F /* Console.hpp */,
 			);
-			name = common;
-			path = ../../common;
+			path = base;
 			sourceTree = "<group>";
 		};
 		23775B3420AD666900E21AB0 /* repair */ = {
@@ -2768,8 +2709,7 @@
 				23775B4D20AD666900E21AB0 /* basic */,
 				23775B5B20AD666900E21AB0 /* utility */,
 			);
-			name = repair;
-			path = ../../repair;
+			path = repair;
 			sourceTree = "<group>";
 		};
 		23775B3520AD666900E21AB0 /* crawl */ = {
@@ -2914,6 +2854,7 @@
 			isa = PBXGroup;
 			children = (
 				23A747BE20039675003CECFA /* sqlcipher.preprocessed.xcodeproj */,
+				03E1620527F1AA1B00D2C926 /* common */,
 				2349F5D51EA0D6680021EFA7 /* objc */,
 				234F074E227AAE7100DD65A2 /* swift */,
 				23F0FDEE215F266C008399FB /* support */,
@@ -4210,15 +4151,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				234F8AB8227AF78C00791E45 /* SQL.swift in Sources */,
-				234F8ABA227AF9D000791E45 /* BindParameter.swift in Sources */,
-				39579861227FD5770069F985 /* ForeignKeyClause.swift in Sources */,
-				234F8AB4227AF5A900791E45 /* Column.swift in Sources */,
-				3957985F227FD4F20069F985 /* Expression.swift in Sources */,
-				39D81662227EC1D9009EC067 /* ColumnDef.swift in Sources */,
-				39D81666227EC25E009EC067 /* ColumnConstraint.swift in Sources */,
-				39D81664227EC1F7009EC067 /* ColumnType.swift in Sources */,
-				3957985D227FD2370069F985 /* Syntax.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4226,8 +4158,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				234F8AE1227B0BF300791E45 /* ColumnTests.swift in Sources */,
-				234F8AE3227B292900791E45 /* WINQAssertion.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
