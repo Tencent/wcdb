@@ -19,34 +19,34 @@
  */
 
 import XCTest
-import WCDBSwift
+import WCDB
 
 class VirtualTableBindingTests: BaseTestCase {
 
-    class BaselineTestObject: TableCodable, Named {
-        var variable: Int = 0
-        enum CodingKeys: String, CodingTableKey {
-            typealias Root = BaselineTestObject
-            case variable
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var virtualTableBinding: VirtualTableBinding? {
-                return VirtualTableBinding(withModule: "fts3",
-                                           and: ModuleArgument(left: "left", right: "right"),
-                                                ModuleArgument(with: .WCDB))
-            }
-            static var tableConstraintBindings: [TableConstraintBinding.Name: TableConstraintBinding]? {
-                return [BaselineTestObject.name+"Constraint": MultiPrimaryBinding(indexesBy: variable)]
-            }
-        }
-    }
-
-    func testVirtualBinding() {
-        ORMVirtualTableBindingAssertEqual(
-            BaselineTestObject.self,
-            """
-            CREATE VIRTUAL TABLE IF NOT EXISTS BaselineTestObject USING fts3\
-            (variable INTEGER, CONSTRAINT BaselineTestObjectConstraint PRIMARY KEY(variable), left=right, tokenize=WCDB)
-            """
-        )
-    }
+//    class BaselineTestObject: TableCodable, Named {
+//        var variable: Int = 0
+//        enum CodingKeys: String, CodingTableKey {
+//            typealias Root = BaselineTestObject
+//            case variable
+//            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+//            static var virtualTableBinding: VirtualTableBinding? {
+//                return VirtualTableBinding(withModule: "fts3",
+//                                           and: ModuleArgument(left: "left", right: "right"),
+//                                                ModuleArgument(with: .WCDB))
+//            }
+//            static var tableConstraintBindings: [TableConstraintBinding.Name: TableConstraintBinding]? {
+//                return [BaselineTestObject.name+"Constraint": MultiPrimaryBinding(indexesBy: variable)]
+//            }
+//        }
+//    }
+//
+//    func testVirtualBinding() {
+//        ORMVirtualTableBindingAssertEqual(
+//            BaselineTestObject.self,
+//            """
+//            CREATE VIRTUAL TABLE IF NOT EXISTS BaselineTestObject USING fts3\
+//            (variable INTEGER, CONSTRAINT BaselineTestObjectConstraint PRIMARY KEY(variable), left=right, tokenize=WCDB)
+//            """
+//        )
+//    }
 }
