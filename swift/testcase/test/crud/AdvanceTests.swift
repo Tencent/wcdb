@@ -509,29 +509,29 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertEqual(optionalObject!.variable1, preInsertedObjects[0].variable1)
     }
 
-    class FTSObject: CRUDObjectBase, TableCodable {
-        var variable1: Int = 0
-        var variable2: String = ""
-
-        enum CodingKeys: String, CodingTableKey {
-            typealias Root = FTSObject
-            case variable1
-            case variable2
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
-                return [.variable1: ColumnConstraintBinding(isPrimary: true,
-                                                            orderBy: .ascending,
-                                                            isAutoIncrement: true)]
-            }
-            static var virtualTableBinding: VirtualTableBinding? {
-                return VirtualTableBinding(with: .fts3, and: ModuleArgument(with: .WCDB))
-            }
-        }
-
-        override var hashValue: Int {
-            return (String(variable1)+variable2).hashValue
-        }
-    }
+//    class FTSObject: CRUDObjectBase, TableCodable {
+//        var variable1: Int = 0
+//        var variable2: String = ""
+//
+//        enum CodingKeys: String, CodingTableKey {
+//            typealias Root = FTSObject
+//            case variable1
+//            case variable2
+//            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+//            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
+//                return [.variable1: ColumnConstraintBinding(isPrimary: true,
+//                                                            orderBy: .ascending,
+//                                                            isAutoIncrement: true)]
+//            }
+//            static var virtualTableBinding: VirtualTableBinding? {
+//                return VirtualTableBinding(with: .fts3, and: ModuleArgument(with: .WCDB))
+//            }
+//        }
+//
+//        override var hashValue: Int {
+//            return (String(variable1)+variable2).hashValue
+//        }
+//    }
 //    func testFTS() {
 //        //Give
 //        XCTAssertNoThrow(try database.close {

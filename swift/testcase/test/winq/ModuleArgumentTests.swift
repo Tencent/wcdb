@@ -19,7 +19,7 @@
  */
 
 import XCTest
-import WCDBSwift
+import WCDB
 
 class ModuleArgumentTests: BaseTestCase {
 
@@ -33,7 +33,7 @@ class ModuleArgumentTests: BaseTestCase {
 
         WINQAssertEqual(ModuleArgument(with: TableConstraint(named: "constraint1")), "CONSTRAINT constraint1")
 
-        WINQAssertEqual(ModuleArgument(with: .WCDB), "tokenize=WCDB")
+//        WINQAssertEqual(ModuleArgument(with: .WCDB), "tokenize=WCDB")
 
         WINQAssertEqual(ModuleArgument(withTokenize: "WCDB"), "tokenize=WCDB")
     }
