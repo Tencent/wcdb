@@ -3,7 +3,7 @@
 showUsage() {
     echo """\
   USAGE: bash $0 
-       -p/--platform iOS/macOS
+       -p/--platform iOS/macOS/watchOS
        -l/--language ObjC/Swift
        [-c/--configuration Debug/Release]: Default to Release.
        [-d/--destination destination]: Default to current directory.
@@ -89,8 +89,8 @@ derivedData="$destination"/derivedData
 products="$derivedData"/Build/Products
 
 if $static_framework; then
-    if [ "$language" != "ObjC" ] || [ "$platform" != "iOS" ]; then
-        echo 'Static library is only support iOS + ObjC.'
+    if [ "$language" != "ObjC" ] || [ "$platform" != "iOS" -a "$platform" != "watchOS" ]; then
+        echo 'Static library is only support iOS/watchOS + ObjC.'
         exit 1
     fi
 fi
@@ -131,8 +131,12 @@ case "$platform" in
     macOS)
         platformBasedParameters+=('product="$products/$configuration/$target.framework" sdk=macosx arch=x86_64')
     ;;
+    watchOS)
+        platformBasedParameters+=('product="$products/$configuration-watchos/$target.framework" sdk=watchos arch="armv7k -arch arm64_32"')
+        platformBasedParameters+=('product="$products/$configuration-watchsimulator/$target.framework" sdk=watchsimulator arch=i386')
+    ;;
     *)
-        echo 'Platform should be either iOS or macOS.'
+        echo 'Platform should be either iOS, macOS or watchOS.'
         showUsage
         exit 1
     ;;
