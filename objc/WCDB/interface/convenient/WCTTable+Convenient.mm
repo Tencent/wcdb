@@ -922,7 +922,7 @@
 - (BOOL)insertOrReplaceObject:(WCTObject *)object onProperties:(const WCTPropertyList &)propertyList
 {
     if (object) {
-        return [[[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName andReplaceFlag:NO] executeWithObjects:@[ object ]];
+        return [[[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName andReplaceFlag:YES] executeWithObjects:@[ object ]];
     }
     return NO;
 }
@@ -930,7 +930,7 @@
 - (BOOL)insertOrReplaceObjects:(NSArray<WCTObject *> *)objects onProperties:(const WCTPropertyList &)propertyList
 {
     if (objects) {
-        return [[[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName andReplaceFlag:NO] executeWithObjects:objects];
+        return [[[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName andReplaceFlag:YES] executeWithObjects:objects];
     }
     return NO;
 }
