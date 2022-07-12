@@ -36,6 +36,9 @@ public:
     using FactoryRelated::FactoryRelated;
     ~FactoryBackup() override final;
     bool work(const UnsafeStringView &database);
+    
+    void notifiyBackupBegin(StringView& materialPath);
+    void notifiyBackupEnd(StringView& materialPath, Backup& backup);
 };
 
 } //namespace Repair
