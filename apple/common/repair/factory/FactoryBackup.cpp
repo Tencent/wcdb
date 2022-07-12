@@ -37,6 +37,14 @@ FactoryBackup::~FactoryBackup() = default;
 
 bool FactoryBackup::work(const UnsafeStringView &database)
 {
+    auto materialPath = Factory::materialForSerializingForDatabase(database);
+    if(!materialPath.has_value()){
+        assignWithSharedThreadedError();
+        return false;
+    }
+    
+    notifiyBackupBegin(materialPath.value());
+    
     Backup backup(database);
     backup.setBackupSharedDelegate(m_sharedDelegate);
     backup.setBackupExclusiveDelegate(m_exclusiveDelegate);
@@ -50,20 +58,39 @@ bool FactoryBackup::work(const UnsafeStringView &database)
         return false;
     }
 
-    auto materialPath = Factory::materialForSerializingForDatabase(database);
-    if (materialPath.has_value() && backup.getMaterial().serialize(materialPath.value())) {
-        auto fileSize = FileManager::getFileSize(materialPath.value());
-        if (fileSize.has_value()) {
-            Error error(Error::Code::Notice, Error::Level::Notice, "Backup Info.");
-            error.infos.insert_or_assign("Size", fileSize.value());
-            error.infos.insert_or_assign(ErrorStringKeyPath, materialPath.value());
-            Notifier::shared().notify(error);
-        }
-        return true;
+    if (!backup.getMaterial().serialize(materialPath.value())) {
+        assignWithSharedThreadedError();
+        return false;
     }
 
-    assignWithSharedThreadedError();
-    return false;
+    notifiyBackupEnd(materialPath.value(), backup);
+    return true;
+}
+
+void FactoryBackup::notifiyBackupBegin(StringView& materialPath){
+    Error error(Error::Code::Notice, Error::Level::Notice, "Backup Begin.");
+    error.infos.insert_or_assign(ErrorStringKeyPath, materialPath);
+    Notifier::shared().notify(error);
+}
+
+void FactoryBackup::notifiyBackupEnd(StringView& materialPath, Backup& backup) {
+    auto fileSize = FileManager::getFileSize(materialPath);
+    if (fileSize.has_value()) {
+        uint32_t associatedTableCount = 0;
+        uint32_t leafPageCount = 0;
+        for(auto content: backup.getMaterial().contents){
+            associatedTableCount += content.second.associatedSQLs.size();
+            leafPageCount += content.second.verifiedPagenos.size();
+        }
+        Error error(Error::Code::Notice, Error::Level::Notice, "Backup End.");
+        error.infos.insert_or_assign("Size", fileSize.value());
+        error.infos.insert_or_assign("WalFrameCount", backup.getMaterial().info.numberOfWalFrames);
+        error.infos.insert_or_assign("TableCount", backup.getMaterial().contents.size());
+        error.infos.insert_or_assign("AssociatedTableCount", associatedTableCount);
+        error.infos.insert_or_assign("LeafPageCount", leafPageCount);
+        error.infos.insert_or_assign(ErrorStringKeyPath, materialPath);
+        Notifier::shared().notify(error);
+    }
 }
 
 } //namespace Repair
