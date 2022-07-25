@@ -22,11 +22,11 @@ import Foundation
 
 /// Chain call for row-selecting
 public final class RowSelect: Selectable {
-    internal init(with core: Core,
-                  results columnResultConvertibleList: [ColumnResultConvertible],
-                  tables: [String],
-                  isDistinct: Bool) throws {
-        guard !tables.isEmpty else {
+    init(with core: Core,
+         results columnResultConvertibleList: [ColumnResultConvertible],
+         tables: [String],
+         isDistinct: Bool) throws {
+        guard tables.count > 0 else {
             throw Error.reportInterface(tag: core.tag,
                                         path: core.path,
                                         operation: .select,

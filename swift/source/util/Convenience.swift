@@ -95,15 +95,15 @@ internal extension Array where Element==ColumnIndexConvertible {
 }
 
 internal extension Array where Element==PropertyConvertible {
-    internal func asCodingTableKeys() -> ContiguousArray<CodingTableKeyBase> {
-        return reduce(into: ContiguousArray<CodingTableKeyBase>()) { (result, element) in
+    internal func asCodingTableKeys() -> [CodingTableKeyBase] {
+        return reduce(into: [CodingTableKeyBase]()) { (result, element) in
             result.append(element.codingTableKey)
         }
     }
 }
 
 internal extension Array {
-    internal mutating func expand(toNewSize newSize: IndexDistance, fillWith value: Iterator.Element) {
+    internal mutating func expand(toNewSize newSize: Int, fillWith value: Iterator.Element) {
         if count < newSize {
             append(contentsOf: repeatElement(value, count: count.distance(to: newSize)))
         }
@@ -111,7 +111,7 @@ internal extension Array {
 }
 
 internal extension Array where Iterator.Element: FixedWidthInteger {
-    internal mutating func expand(toNewSize newSize: IndexDistance) {
+    internal mutating func expand(toNewSize newSize: Int) {
         expand(toNewSize: newSize, fillWith: 0)
     }
 }

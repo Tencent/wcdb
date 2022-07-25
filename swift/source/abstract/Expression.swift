@@ -37,7 +37,7 @@ public struct Expression: Describable {
         description = statementSelect.description
     }
 
-    internal init(withRaw raw: String) {
+    init(withRaw raw: String) {
         description = raw
     }
 }
@@ -47,25 +47,21 @@ extension Expression: ExpressibleByNilLiteral {
         self.init(with: LiteralValue(value))
     }
 }
-
 extension Expression: ExpressibleByBooleanLiteral {
     public init(booleanLiteral value: Bool) {
         self.init(with: LiteralValue(value))
     }
 }
-
 extension Expression: ExpressibleByIntegerLiteral {
     public init(integerLiteral value: Int) {
         self.init(with: LiteralValue(value))
     }
 }
-
 extension Expression: ExpressibleByFloatLiteral {
     public init(floatLiteral value: Double) {
         self.init(with: LiteralValue(value))
     }
 }
-
 extension Expression: ExpressibleByStringLiteral {
     public init(stringLiteral value: String) {
         self.init(with: LiteralValue(value))

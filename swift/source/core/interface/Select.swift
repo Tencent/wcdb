@@ -21,14 +21,11 @@
 import Foundation
 
 public final class Select: Selectable {
-    private let keys: ContiguousArray<CodingTableKeyBase>
+    private let keys: [CodingTableKeyBase]
 
     private lazy var decoder = TableDecoder(keys, on: optionalRecyclableHandleStatement!)
 
-    internal init(with core: Core,
-                  on propertyConvertibleList: [PropertyConvertible],
-                  table: String,
-                  isDistinct: Bool) throws {
+    init(with core: Core, on propertyConvertibleList: [PropertyConvertible], table: String, isDistinct: Bool) throws {
         //TODO: Use generic to check all coding table keys conform to same root type
         keys = propertyConvertibleList.asCodingTableKeys()
         let statement = StatementSelect().select(distinct: isDistinct, propertyConvertibleList).from(table)
@@ -68,6 +65,7 @@ public final class Select: Selectable {
     /// - Returns: Table decodable object. Nil means the end of iteration.
     /// - Throws: `Error`
     public func nextObject<Object: TableDecodable>(of type: Object.Type = Object.self) throws -> Object? {
+        assert(keys is [Object.CodingKeys], "Properties must belong to \(Object.self).CodingKeys.")
         guard try next() else {
             return nil
         }
@@ -80,6 +78,7 @@ public final class Select: Selectable {
     /// - Returns: Table decodable objects.
     /// - Throws: `Error`
     public func allObjects<Object: TableDecodable>(of type: Object.Type = Object.self) throws -> [Object] {
+        assert(keys is [Object.CodingKeys], "Properties must belong to \(Object.self).CodingKeys.")
         var objects: [Object] = []
         while try next() {
             objects.append(try Object.init(from: decoder))

@@ -29,8 +29,8 @@ public final class Delete {
     /// It should be called after executing successfully
     public var changes: Int?
 
-    internal init(with core: Core, andTableName tableName: String) throws {
-        guard !tableName.isEmpty else {
+    init(with core: Core, andTableName tableName: String) throws {
+        guard tableName.count > 0 else {
             throw Error.reportInterface(tag: core.tag,
                                         path: core.path,
                                         operation: .delete,

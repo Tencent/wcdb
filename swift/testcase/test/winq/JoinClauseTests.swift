@@ -39,7 +39,7 @@ class JoinClauseTests: BaseTestCase {
         )
 
         WINQAssertEqual(
-            generateJoinClause().naturalJoin("testJoinClauseTable2", with: .leftOuter),
+            generateJoinClause().natureJoin("testJoinClauseTable2", with: .leftOuter),
             "testJoinClauseTable NATURAL LEFT OUTER JOIN testJoinClauseTable2"
         )
 
@@ -48,7 +48,7 @@ class JoinClauseTests: BaseTestCase {
         )
 
         WINQAssertEqual(
-            generateJoinClause().naturalJoin("testJoinClauseTable2", with: .cross),
+            generateJoinClause().natureJoin("testJoinClauseTable2", with: .cross),
             "testJoinClauseTable NATURAL CROSS JOIN testJoinClauseTable2"
         )
 

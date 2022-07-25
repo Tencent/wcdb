@@ -124,8 +124,7 @@ class LiteralValueTests: BaseTestCase {
 
         WINQAssertEqual(LiteralValue(1), "1")
 
-        let int64: Int64 = 17626545782784
-        WINQAssertEqual(LiteralValue(int64), "17626545782784")
+        WINQAssertEqual(LiteralValue(17626545782784), "17626545782784")
 
         WINQAssertEqual(LiteralValue(0.1), "0.1")
 

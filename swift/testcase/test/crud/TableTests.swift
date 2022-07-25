@@ -27,7 +27,7 @@ class TableTests: BaseTestCase {
     override func setUp() {
         super.setUp()
         database = Database(withFileURL: self.recommendedPath)
-        database.tag = recommendedTag
+        database.tag = recommendTag
     }
 
     class BaselineObject: TableCodable, Named {

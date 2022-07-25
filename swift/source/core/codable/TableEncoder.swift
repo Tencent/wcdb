@@ -20,21 +20,21 @@
 
 import Foundation
 
-internal final class TableEncoder: Encoder {
+final class TableEncoder: Encoder {
 
     private var container: Any?
     private var keyedPrimaryKeyEncodableTableContainer: KeyedPrimaryKeyEncodableTableContainer?
 
     private let recyclableHandleStatement: RecyclableHandleStatement
 
-    internal typealias HashedKey = [Int: Int] // hash value -> index
+    typealias HashedKey = [Int: Int] // hash value -> index
     private let hashedKeys: HashedKey
 
-    internal var primaryKeyHash: Int?
-    internal var isPrimaryKeyEncoded = true
+    var primaryKeyHash: Int?
+    var isPrimaryKeyEncoded = true
 
-    internal init(_ codingTableKeys: ContiguousArray<CodingTableKeyBase>,
-                  on recyclableHandleStatement: RecyclableHandleStatement) {
+    init(_ codingTableKeys: [CodingTableKeyBase],
+         on recyclableHandleStatement: RecyclableHandleStatement) {
         var hashedKeys: HashedKey = [:]
         for (index, key) in codingTableKeys.enumerated() {
             hashedKeys[key.stringValue.hashValue] = index + 1
@@ -43,12 +43,12 @@ internal final class TableEncoder: Encoder {
         self.recyclableHandleStatement = recyclableHandleStatement
     }
 
-    internal init(_ hashedKeys: HashedKey, on recyclableHandleStatement: RecyclableHandleStatement) {
+    init(_ hashedKeys: HashedKey, on recyclableHandleStatement: RecyclableHandleStatement) {
         self.hashedKeys = hashedKeys
         self.recyclableHandleStatement = recyclableHandleStatement
     }
 
-    internal func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key: CodingKey {
+    func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key: CodingKey {
         if container == nil {
             let keyedContainer = KeyedEncodingTableContainer<Key>(with: hashedKeys,
                                                                   on: recyclableHandleStatement.raw)
@@ -69,7 +69,7 @@ internal final class TableEncoder: Encoder {
 
     private final class KeyedEncodingTableContainer<CodingKeys: CodingKey>
         : KeyedPrimaryKeyEncodableTableContainer, KeyedEncodingContainerProtocol {
-        internal typealias Key = CodingKeys
+        typealias Key = CodingKeys
 
         private let handleStatement: HandleStatement
         private let hashedKeys: HashedKey
@@ -85,7 +85,7 @@ internal final class TableEncoder: Encoder {
             return hashedKeys[hashValue]
         }
 
-        internal func bindPrimaryKeyOrReturnIndex(forKey key: Key) -> Int? {
+        func bindPrimaryKeyOrReturnIndex(forKey key: Key) -> Int? {
             let hashValue = key.stringValue.hashValue
             guard let index = bindIndex(by: hashValue) else {
                 return nil
@@ -97,49 +97,49 @@ internal final class TableEncoder: Encoder {
             return nil
         }
 
-        internal func encodeNil(forKey key: Key) throws {
+        func encodeNil(forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
             handleStatement.bind(nil, toIndex: index)
         }
 
-        internal func encode(_ value: Int, forKey key: Key) throws {
+        func encode(_ value: Int, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
             handleStatement.bind(value.toInt64(), toIndex: index)
         }
 
-        internal func encode(_ value: Bool, forKey key: Key) throws {
+        func encode(_ value: Bool, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
             handleStatement.bind(value.toInt32(), toIndex: index)
         }
 
-        internal func encode(_ value: Float, forKey key: Key) throws {
+        func encode(_ value: Float, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
             handleStatement.bind(value.toDouble(), toIndex: index)
         }
 
-        internal func encode(_ value: Double, forKey key: Key) throws {
+        func encode(_ value: Double, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
             handleStatement.bind(value, toIndex: index)
         }
 
-        internal func encode(_ value: String, forKey key: Key) throws {
+        func encode(_ value: String, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
             handleStatement.bind(value, toIndex: index)
         }
 
-        internal func encode<Object>(_ value: Object, forKey key: Key) throws where Object: Encodable {
+        func encode<Object>(_ value: Object, forKey key: Key) throws where Object: Encodable {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
@@ -148,70 +148,70 @@ internal final class TableEncoder: Encoder {
             handleStatement.bind(encodableColumnValue.archivedValue(), toIndex: index)
         }
 
-        internal func encode(_ value: Int8, forKey key: Key) throws {
+        func encode(_ value: Int8, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
             handleStatement.bind(value.toInt32(), toIndex: index)
         }
 
-        internal func encode(_ value: Int16, forKey key: Key) throws {
+        func encode(_ value: Int16, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
             handleStatement.bind(value.toInt32(), toIndex: index)
         }
 
-        internal func encode(_ value: Int32, forKey key: Key) throws {
+        func encode(_ value: Int32, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
             handleStatement.bind(value, toIndex: index)
         }
 
-        internal func encode(_ value: Int64, forKey key: Key) throws {
+        func encode(_ value: Int64, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
             handleStatement.bind(value, toIndex: index)
         }
 
-        internal func encode(_ value: UInt, forKey key: Key) throws {
+        func encode(_ value: UInt, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
             handleStatement.bind(value.toInt64(), toIndex: index)
         }
 
-        internal func encode(_ value: UInt8, forKey key: Key) throws {
+        func encode(_ value: UInt8, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
             handleStatement.bind(value.toInt32(), toIndex: index)
         }
 
-        internal func encode(_ value: UInt16, forKey key: Key) throws {
+        func encode(_ value: UInt16, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
             handleStatement.bind(value.toInt32(), toIndex: index)
         }
 
-        internal func encode(_ value: UInt32, forKey key: Key) throws {
+        func encode(_ value: UInt32, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
             handleStatement.bind(value.toInt32(), toIndex: index)
         }
 
-        internal func encode(_ value: UInt64, forKey key: Key) throws {
+        func encode(_ value: UInt64, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
             handleStatement.bind(value.toInt64(), toIndex: index)
         }
 
-        internal func encodeIfPresent(_ value: Bool?, forKey key: Key) throws {
+        func encodeIfPresent(_ value: Bool?, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
@@ -222,7 +222,7 @@ internal final class TableEncoder: Encoder {
             }
         }
 
-        internal func encodeIfPresent(_ value: Int?, forKey key: Key) throws {
+        func encodeIfPresent(_ value: Int?, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
@@ -233,7 +233,7 @@ internal final class TableEncoder: Encoder {
             }
         }
 
-        internal func encodeIfPresent(_ value: Int8?, forKey key: Key) throws {
+        func encodeIfPresent(_ value: Int8?, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
@@ -244,7 +244,7 @@ internal final class TableEncoder: Encoder {
             }
         }
 
-        internal func encodeIfPresent(_ value: Int16?, forKey key: Key) throws {
+        func encodeIfPresent(_ value: Int16?, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
@@ -255,7 +255,7 @@ internal final class TableEncoder: Encoder {
             }
         }
 
-        internal func encodeIfPresent(_ value: Int32?, forKey key: Key) throws {
+        func encodeIfPresent(_ value: Int32?, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
@@ -266,7 +266,7 @@ internal final class TableEncoder: Encoder {
             }
         }
 
-        internal func encodeIfPresent(_ value: Int64?, forKey key: Key) throws {
+        func encodeIfPresent(_ value: Int64?, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
@@ -277,7 +277,7 @@ internal final class TableEncoder: Encoder {
             }
         }
 
-        internal func encodeIfPresent(_ value: UInt?, forKey key: Key) throws {
+        func encodeIfPresent(_ value: UInt?, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
@@ -288,7 +288,7 @@ internal final class TableEncoder: Encoder {
             }
         }
 
-        internal func encodeIfPresent(_ value: UInt8?, forKey key: Key) throws {
+        func encodeIfPresent(_ value: UInt8?, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
@@ -299,7 +299,7 @@ internal final class TableEncoder: Encoder {
             }
         }
 
-        internal func encodeIfPresent(_ value: UInt16?, forKey key: Key) throws {
+        func encodeIfPresent(_ value: UInt16?, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
@@ -310,7 +310,7 @@ internal final class TableEncoder: Encoder {
             }
         }
 
-        internal func encodeIfPresent(_ value: UInt32?, forKey key: Key) throws {
+        func encodeIfPresent(_ value: UInt32?, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
@@ -321,7 +321,7 @@ internal final class TableEncoder: Encoder {
             }
         }
 
-        internal func encodeIfPresent(_ value: UInt64?, forKey key: Key) throws {
+        func encodeIfPresent(_ value: UInt64?, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
@@ -332,7 +332,7 @@ internal final class TableEncoder: Encoder {
             }
         }
 
-        internal func encodeIfPresent(_ value: Float?, forKey key: Key) throws {
+        func encodeIfPresent(_ value: Float?, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
@@ -343,7 +343,7 @@ internal final class TableEncoder: Encoder {
             }
         }
 
-        internal func encodeIfPresent(_ value: Double?, forKey key: Key) throws {
+        func encodeIfPresent(_ value: Double?, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
@@ -354,7 +354,7 @@ internal final class TableEncoder: Encoder {
             }
         }
 
-        internal func encodeIfPresent(_ value: String?, forKey key: Key) throws {
+        func encodeIfPresent(_ value: String?, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
@@ -365,8 +365,8 @@ internal final class TableEncoder: Encoder {
             }
         }
 
-        internal func encodeIfPresent<Object>(_ value: Object?,
-                                              forKey key: Key) throws
+        func encodeIfPresent<Object>(_ value: Object?,
+                                     forKey key: Key) throws
             where Object: Encodable {
                 guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                     return
@@ -380,42 +380,42 @@ internal final class TableEncoder: Encoder {
             }
         }
 
-        internal var codingPath: [CodingKey] {
+        var codingPath: [CodingKey] {
             fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
-        internal func superEncoder() -> Swift.Encoder {
+        func superEncoder() -> Swift.Encoder {
             fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
-        internal func superEncoder(forKey key: Key) -> Swift.Encoder {
+        func superEncoder(forKey key: Key) -> Swift.Encoder {
             fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
-        internal func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type,
-                                                 forKey key: Key) -> KeyedEncodingContainer<NestedKey>
+        func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type,
+                                        forKey key: Key) -> KeyedEncodingContainer<NestedKey>
             where NestedKey: CodingKey {
             fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
-        internal func nestedUnkeyedContainer(forKey key: Key) -> UnkeyedEncodingContainer {
+        func nestedUnkeyedContainer(forKey key: Key) -> UnkeyedEncodingContainer {
             fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
         }
     }
 
-    internal var codingPath: [CodingKey] {
+    var codingPath: [CodingKey] {
         fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 
-    internal var userInfo: [CodingUserInfoKey: Any] {
+    var userInfo: [CodingUserInfoKey: Any] {
         fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 
-    internal func singleValueContainer() -> SingleValueEncodingContainer {
+    func singleValueContainer() -> SingleValueEncodingContainer {
         fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 
-    internal func unkeyedContainer() -> UnkeyedEncodingContainer {
+    func unkeyedContainer() -> UnkeyedEncodingContainer {
         fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 }

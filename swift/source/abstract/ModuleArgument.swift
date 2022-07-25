@@ -36,7 +36,7 @@ public struct ModuleArgument: Describable {
     }
 
     public init(with tokenize: Tokenize) {
-        self.init(left: "tokenize", right: tokenize.module.name)
+        self.init(left: "tokenize", right: "temp")
     }
 
     public init(withTokenize tokenize: String) {

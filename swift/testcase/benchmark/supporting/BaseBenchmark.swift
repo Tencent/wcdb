@@ -50,16 +50,14 @@ class BaseBenchmark: BaseTestCase {
     func setUpWithPreInsertObjects(count: Int, intoIndexedTable index: Int = 0) {
         var objects = [BenchmarkObject]()
         for i in 0..<count {
-            objects.append(BenchmarkObject(withKey: Int64(i),
-                                           and: randomGenerator.data(withLength: config.valueLength)))
+            objects.append(BenchmarkObject(withKey: i, and: randomGenerator.data(withLength: config.valueLength)))
         }
         XCTAssertNoThrow(try database.insert(objects: objects, intoTable: getTableName(withIndex: index)))
     }
 
     func setUpWithPreCreateObject(count: Int) {
         for i in 0..<count {
-            objects.append(BenchmarkObject(withKey: Int64(i),
-                                           and: randomGenerator.data(withLength: config.valueLength)))
+            objects.append(BenchmarkObject(withKey: i, and: randomGenerator.data(withLength: config.valueLength)))
         }
     }
 

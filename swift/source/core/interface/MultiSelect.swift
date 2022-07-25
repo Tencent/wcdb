@@ -22,32 +22,31 @@ import Foundation
 
 /// Chain call for multi-selecting
 public final class MultiSelect: Selectable {
-    private let keys: ContiguousArray<CodingTableKeyBase>
+    private let keys: [CodingTableKeyBase]
 
-    internal init(with core: Core,
-                  on propertyConvertibleList: [PropertyConvertible],
-                  tables: [String],
-                  isDistinct: Bool = false) throws {
-        guard !propertyConvertibleList.isEmpty else {
+    init(with core: Core,
+         on propertyConvertibleList: [PropertyConvertible],
+         tables: [String],
+         isDistinct: Bool = false) throws {
+        guard propertyConvertibleList.count > 0 else {
             throw Error.reportInterface(tag: core.tag,
                                         path: core.path,
                                         operation: .select,
                                         code: .misuse,
                                         message: "Selecting nothing from \(tables) is invalid")
         }
-        guard !tables.isEmpty else {
+        guard tables.count > 0 else {
             throw Error.reportInterface(tag: core.tag,
                                         path: core.path,
                                         operation: .select,
                                         code: .misuse,
                                         message: "Empty table")
         }
-        self.keys = propertyConvertibleList.reduce(
-                into: ContiguousArray<CodingTableKeyBase>(), { (result, propertyConvertible) in
+        self.keys = propertyConvertibleList.map({ (propertyConvertible) -> CodingTableKeyBase in
             let codingTableKey = propertyConvertible.codingTableKey
             assert(codingTableKey.rootType is TableDecodableBase.Type,
                    "\(codingTableKey.rootType) must conform to TableDecodable protocol.")
-            result.append(codingTableKey)
+            return codingTableKey
         })
 
         let statement = StatementSelect().select(distinct: isDistinct, propertyConvertibleList).from(tables)
@@ -56,7 +55,7 @@ public final class MultiSelect: Selectable {
 
     private typealias Generator = () throws -> TableDecodableBase
 
-    private struct TypedIndexedKeys {
+    struct TypedIndexedKeys {
         let type: TableDecodableBase.Type
         var indexedKeys: TableDecoder.HashedKey
         init(_ type: TableDecodableBase.Type, key: String, index: Int) {

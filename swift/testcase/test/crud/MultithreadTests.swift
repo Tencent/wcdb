@@ -37,7 +37,7 @@ class MultithreadTests: CRUDTestCase {
     override func setUp() {
         super.setUp()
         group = DispatchGroup()
-        queue = DispatchQueue(label: String(recommendedTag), attributes: .concurrent)
+        queue = DispatchQueue(label: String(recommendTag), attributes: .concurrent)
 
         XCTAssertNoThrow(try database.delete(fromTable: tableName))
         database.close()
@@ -122,6 +122,7 @@ class MultithreadTests: CRUDTestCase {
         }
         database.close()
 
+        //Get single read time
         XCTAssertNoThrow(try database.delete(fromTable: tableName))
         database.close()
         //When
