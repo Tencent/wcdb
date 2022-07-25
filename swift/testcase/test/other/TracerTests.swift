@@ -56,7 +56,7 @@ class TracerTests: BaseTestCase {
         let database = Database(withFileURL: self.recommendedPath)
 
         //When
-        XCTAssertNoThrow(try database.getRows(on: Master.Properties.allColumns, fromTable: Master.builtinTableName))
+        XCTAssertNoThrow(try database.getRows(on: Master.Properties.any, fromTable: Master.builtinTableName))
 
         XCTAssertTrue(pass)
     }
@@ -64,7 +64,7 @@ class TracerTests: BaseTestCase {
     func testTraceError() {
         //Give
         let tableName = "nonexistentTable"
-        let expectedTag = self.recommendedTag
+        let expectedTag = self.recommendTag
         let expectedErrorCode = 1
         let expectedErrorMessage = "no such table: \(tableName)"
         let expectedOperation = 3
@@ -144,7 +144,7 @@ class TracerTests: BaseTestCase {
     func testGlobalTracePerformanceCommit() {
         //Give
         let tableName = TracerObject.name
-        let expectedTag = self.recommendedTag
+        let expectedTag = self.recommendTag
         let expectedSQL = "INSERT INTO \(tableName)(variable) VALUES(?)"
 
         //Then
@@ -179,7 +179,7 @@ class TracerTests: BaseTestCase {
     func testTraceRollback() {
         //Give
         let tableName = TracerObject.name
-        let expectedTag = self.recommendedTag
+        let expectedTag = self.recommendTag
         let expectedSQL = "INSERT INTO \(tableName)(variable) VALUES(?)"
         let expectedRollback = "ROLLBACK"
 

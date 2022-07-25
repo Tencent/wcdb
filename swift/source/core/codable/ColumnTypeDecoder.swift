@@ -45,11 +45,11 @@ internal final class ColumnTypeDecoder: Decoder {
             private let size: Int
             init<T>(of type: T.Type = T.self) {
                 size = MemoryLayout<T>.size
-                pointer = UnsafeMutableRawPointer.allocate(bytes: size, alignedTo: size)
+                pointer = UnsafeMutableRawPointer.allocate(byteCount: size, alignment: 1)
                 memset(pointer, 0, size)
             }
             internal func deallocate() {
-                pointer.deallocate(bytes: size, alignedTo: size)
+                pointer.deallocate()
             }
             internal func getPointee<T>(of type: T.Type = T.self) -> T {
                 return pointer.assumingMemoryBound(to: type).pointee
@@ -150,7 +150,7 @@ internal final class ColumnTypeDecoder: Decoder {
 
         internal func decode<T>(_ type: T.Type, forKey key: Key) throws -> T where T: Decodable {
             // `type` must conform to ColumnDecodableBase protocol
-            let columnDecodableType = type as! ColumnDecodableBase.Type
+            let columnDecodableType = type as! ColumnDecodable.Type
             decoder.results[key.stringValue] = columnDecodableType.columnType
 
             let sizedPointer = SizedPointer(of: T.self)

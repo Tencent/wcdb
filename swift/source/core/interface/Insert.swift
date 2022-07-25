@@ -27,11 +27,11 @@ public final class Insert {
     private let name: String
     private let isReplace: Bool
 
-    internal init(with core: Core,
-                  named name: String,
-                  on propertyConvertibleList: [PropertyConvertible]?,
-                  isReplace: Bool = false) throws {
-        guard !name.isEmpty else {
+    init(with core: Core,
+         named name: String,
+         on propertyConvertibleList: [PropertyConvertible]?,
+         isReplace: Bool = false) throws {
+        guard name.count > 0 else {
             throw Error.reportInterface(tag: core.tag,
                                         path: core.path,
                                         operation: .insert,
@@ -75,7 +75,7 @@ public final class Insert {
     /// - Parameter objects: Object to be inserted
     /// - Throws: Error
     public func execute<Object: TableEncodable>(with objects: [Object]) throws {
-        guard !objects.isEmpty else {
+        guard objects.count > 0 else {
             Error.warning("Inserting with an empty/nil object")
             return
         }

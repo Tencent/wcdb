@@ -21,8 +21,8 @@
 import Foundation
 
 public struct VirtualTableBinding {
-    public let arguments: [ModuleArgument]
-    public let module: String
+    let arguments: [ModuleArgument]
+    let module: String
 
     public init(withModule module: String, and arguments: [ModuleArgument]) {
         self.module = module

@@ -24,7 +24,7 @@ public protocol PropertyRedirectable {
     func `as`(_ propertyConvertible: PropertyConvertible) -> Property
 }
 
-public extension PropertyRedirectable where Self: Describable {
+extension PropertyRedirectable where Self: Describable {
     public func `as`(_ propertyConvertible: PropertyConvertible) -> Property {
         return Property(named: description, with: propertyConvertible.codingTableKey)
     }

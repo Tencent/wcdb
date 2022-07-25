@@ -25,7 +25,7 @@ class DatabaseTests: BaseTestCase {
 
     func testTag() {
         //Give
-        let tag = self.recommendedTag
+        let tag = self.recommendTag
         let path: String = self.recommendedPath.path
         var taggedDatabase: Database? = nil
         do {
@@ -46,7 +46,7 @@ class DatabaseTests: BaseTestCase {
         let path: String = self.recommendedPath.path
         let database: Database = Database(withPath: path)
         let database2: Database = Database(withPath: path)
-        database.tag = self.recommendedTag
+        database.tag = self.recommendTag
         XCTAssertNotNil(database2.tag)
         XCTAssertEqual(database2.tag, database.tag)
     }

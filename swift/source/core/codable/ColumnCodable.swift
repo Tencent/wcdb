@@ -20,83 +20,22 @@
 
 import Foundation
 
-// Base
+// Column 
 public protocol ColumnCodableBase {
     static var columnType: ColumnType {get}
 }
 
-public protocol ColumnEncodableBase: Encodable, ColumnCodableBase {
-    func archivedFundamentalValue() -> FundamentalColumnType?
+public protocol ColumnEncodable: Encodable, ColumnCodableBase {
+    func archivedValue() -> FundamentalValue
 }
-public protocol ColumnDecodableBase: Decodable, ColumnCodableBase {
-    init?(with value: FundamentalColumnType)
-}
-
-// Column 
-public protocol ColumnEncodable: ColumnEncodableBase, LiteralValueConvertible, ExpressionCanBeOperated {
-    associatedtype FundamentalType: FundamentalColumnType
-    func archivedValue() -> FundamentalType?
-}
-public extension ColumnEncodable {
-    public static var columnType: ColumnType {
-        return FundamentalType.columnType
-    }
-    public func archivedFundamentalValue() -> FundamentalColumnType? {
-        return archivedValue()
-    }
+public extension ColumnEncodable where Self: LiteralValueConvertible {
     public func asLiteralValue() -> LiteralValue {
         return LiteralValue(self)
     }
 }
 
-public protocol ColumnDecodable: ColumnDecodableBase {
-    associatedtype FundamentalType: FundamentalColumnType
-    init?(with value: FundamentalType)
-}
-public extension ColumnDecodable {
-    public static var columnType: ColumnType {
-        return FundamentalType.columnType
-    }
-    public init?(with value: FundamentalColumnType) {
-        self.init(with: value as! FundamentalType)
-    }
+public protocol ColumnDecodable: Decodable, ColumnCodableBase {
+    init?(with value: FundamentalValue)
 }
 
-public protocol ColumnCodable: ColumnEncodable, ColumnDecodable {}
-public extension ColumnCodable {
-    public static var columnType: ColumnType {
-        return FundamentalType.columnType
-    }
-}
-
-// Collection
-public protocol CollectionColumnEncodable: ColumnEncodableBase {
-    func archivedValue() -> Data?
-}
-public extension CollectionColumnEncodable {
-    public static var columnType: ColumnType {
-        return .BLOB
-    }
-    public func archivedFundamentalValue() -> FundamentalColumnType? {
-        return archivedValue()
-    }
-}
-
-public protocol CollectionColumnDecodable: ColumnDecodableBase {
-    init?(with value: Data)
-}
-public extension CollectionColumnDecodable {
-    public static var columnType: ColumnType {
-        return .BLOB
-    }
-    public init?(with value: FundamentalColumnType) {
-        self.init(with: value as! Data)
-    }
-}
-
-public protocol CollectionColumnCodable: CollectionColumnEncodable, CollectionColumnDecodable {}
-public extension CollectionColumnCodable {
-    public static var columnType: ColumnType {
-        return .BLOB
-    }
-}
+public typealias ColumnCodable = ColumnCodableBase & ColumnEncodable & ColumnDecodable

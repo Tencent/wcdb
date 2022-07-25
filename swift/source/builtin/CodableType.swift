@@ -26,9 +26,9 @@ import Foundation
  * .integer32:
  *      Bool, Int, Int8, Int16, Int32, UInt, UInt8, UInt16, UInt32  
  * .integer64:
- *      Int64, UInt64, Date
+ *      Int64, UInt64
  * .float:
- *      Float, Double
+ *      Float, Double, Date
  * .text:
  *      String, URL
  * .BLOB:
@@ -37,236 +37,287 @@ import Foundation
  */
 
 //Bultin Column Codable
-extension Int8: ColumnCodable {
-    public typealias FundamentalType = Int32
-    public init?(with value: Int32) {
-        self = value.toInt8()
+extension Int8: ColumnCodable, LiteralValueConvertible, ExpressionCanBeOperated {
+    public static var columnType: ColumnType {
+        return .integer32
     }
-    public func archivedValue() -> Int32? {
-        return self.toInt32()
+    public init?(with value: FundamentalValue) {
+        self = value.int32Value.toInt8()
     }
-}
-
-extension Int16: ColumnCodable {
-    public typealias FundamentalType = Int32
-    public init?(with value: Int32) {
-        self = value.toInt16()
-    }
-    public func archivedValue() -> Int32? {
-        return self.toInt32()
+    public func archivedValue() -> FundamentalValue {
+        return FundamentalValue(self.toInt32())
     }
 }
 
-extension Int32: ColumnCodable {
-    public typealias FundamentalType = Int32
-    public init?(with value: Int32) {
-        self = value
+extension Int16: ColumnCodable, LiteralValueConvertible, ExpressionCanBeOperated {
+    public static var columnType: ColumnType {
+        return .integer32
     }
-    public func archivedValue() -> Int32? {
-        return self
+    public init?(with value: FundamentalValue) {
+        self = value.int32Value.toInt16()
     }
-}
-
-extension Int64: ColumnCodable {
-    public typealias FundamentalType = Int64
-    public init?(with value: Int64) {
-        self = value
-    }
-    public func archivedValue() -> Int64? {
-        return self
+    public func archivedValue() -> FundamentalValue {
+        return FundamentalValue(self.toInt32())
     }
 }
 
-extension Int: ColumnCodable {
-    public typealias FundamentalType = Int64
-    public init?(with value: Int64) {
-        self = value.toInt()
+extension Int32: ColumnCodable, LiteralValueConvertible, ExpressionCanBeOperated {
+    public static var columnType: ColumnType {
+        return .integer32
     }
-    public func archivedValue() -> Int64? {
-        return self.toInt64()
+    public init?(with value: FundamentalValue) {
+        self = value.int32Value
     }
-}
-
-extension UInt8: ColumnCodable {
-    public typealias FundamentalType = Int32
-    public init?(with value: Int32) {
-        self = value.toUInt8()
-    }
-    public func archivedValue() -> Int32? {
-        return self.toInt32()
+    public func archivedValue() -> FundamentalValue {
+        return FundamentalValue(self)
     }
 }
 
-extension UInt16: ColumnCodable {
-    public typealias FundamentalType = Int32
-    public init?(with value: Int32) {
-        self = value.toUInt16()
+extension Int64: ColumnCodable, LiteralValueConvertible, ExpressionCanBeOperated {
+    public static var columnType: ColumnType {
+        return .integer64
     }
-    public func archivedValue() -> Int32? {
-        return self.toInt32()
+    public init?(with value: FundamentalValue) {
+        self = value.int64Value
     }
-}
-
-extension UInt32: ColumnCodable {
-    public typealias FundamentalType = Int32
-    public init?(with value: Int32) {
-        self = value.toUInt32()
-    }
-    public func archivedValue() -> Int32? {
-        return self.toInt32()
+    public func archivedValue() -> FundamentalValue {
+        return FundamentalValue(self)
     }
 }
 
-extension UInt64: ColumnCodable {
-    public typealias FundamentalType = Int64
-    public init?(with value: Int64) {
-        self = value.toUInt64()
+extension Int: ColumnCodable, LiteralValueConvertible, ExpressionCanBeOperated {
+    public static var columnType: ColumnType {
+        return .integer64
     }
-    public func archivedValue() -> Int64? {
-        return self.toInt64()
+    public init?(with value: FundamentalValue) {
+        self = value.int64Value.toInt()
     }
-}
-
-extension UInt: ColumnCodable {
-    public typealias FundamentalType = Int64
-    public init?(with value: Int64) {
-        self = value.toUInt()
-    }
-    public func archivedValue() -> Int64? {
-        return self.toInt64()
+    public func archivedValue() -> FundamentalValue {
+        return FundamentalValue(self.toInt64())
     }
 }
 
-extension Bool: ColumnCodable {
-    public typealias FundamentalType = Int32
-    public init?(with value: Int32) {
-        self = value.toBool()
+extension UInt8: ColumnCodable, LiteralValueConvertible, ExpressionCanBeOperated {
+    public static var columnType: ColumnType {
+        return .integer32
     }
-    public func archivedValue() -> Int32? {
-        return self.toInt32()
+    public init?(with value: FundamentalValue) {
+        self = value.int32Value.toUInt8()
     }
-}
-
-extension Float: ColumnCodable {
-    public typealias FundamentalType = Double
-    public init?(with value: Double) {
-        self = value.toFloat()
-    }
-    public func archivedValue() -> Double? {
-        return self.toDouble()
+    public func archivedValue() -> FundamentalValue {
+        return FundamentalValue(self.toInt32())
     }
 }
 
-extension Double: ColumnCodable {
-    public typealias FundamentalType = Double
-    public init?(with value: Double) {
-        self = value
+extension UInt16: ColumnCodable, LiteralValueConvertible, ExpressionCanBeOperated {
+    public static var columnType: ColumnType {
+        return .integer32
     }
-    public func archivedValue() -> Double? {
-        return self
+    public init?(with value: FundamentalValue) {
+        self = value.int32Value.toUInt16()
     }
-}
-
-extension String: ColumnCodable {
-    public typealias FundamentalType = String
-    public init?(with value: String) {
-        self = value
-    }
-    public func archivedValue() -> String? {
-        return self
+    public func archivedValue() -> FundamentalValue {
+        return FundamentalValue(self.toInt32())
     }
 }
 
-extension Data: ColumnCodable {
-    public typealias FundamentalType = Data
-    public init?(with value: Data) {
-        self = value
+extension UInt32: ColumnCodable, LiteralValueConvertible, ExpressionCanBeOperated {
+    public static var columnType: ColumnType {
+        return .integer32
     }
-    public func archivedValue() -> Data? {
-        return self
+    public init?(with value: FundamentalValue) {
+        self = value.int32Value.toUInt32()
     }
-}
-
-extension Date: ColumnCodable {
-    public typealias FundamentalType = Int64
-    public init?(with value: Int64) {
-        self.init(timeIntervalSince1970: TimeInterval(value))
-    }
-    public func archivedValue() -> Int64? {
-        return Int64(timeIntervalSince1970)
+    public func archivedValue() -> FundamentalValue {
+        return FundamentalValue(self.toInt32())
     }
 }
 
-extension URL: ColumnCodable {
-    public typealias FundamentalType = String
-    public init?(with value: String) {
-        self.init(string: value)
+extension UInt64: ColumnCodable, LiteralValueConvertible, ExpressionCanBeOperated {
+    public static var columnType: ColumnType {
+        return .integer64
     }
-    public func archivedValue() -> String? {
-        return self.absoluteString
+    public init?(with value: FundamentalValue) {
+        self = value.int64Value.toUInt64()
+    }
+    public func archivedValue() -> FundamentalValue {
+        return FundamentalValue(self.toInt64())
     }
 }
 
-extension Array: CollectionColumnCodable {
-    public init?(with value: Data) {
-        guard let decodable = try? JSONDecoder().decode(Array.self, from: value) else {
+extension UInt: ColumnCodable, LiteralValueConvertible, ExpressionCanBeOperated {
+    public static var columnType: ColumnType {
+        return .integer64
+    }
+    public init?(with value: FundamentalValue) {
+        self = value.int64Value.toUInt()
+    }
+    public func archivedValue() -> FundamentalValue {
+        return FundamentalValue(self.toInt64())
+    }
+}
+
+extension Bool: ColumnCodable, LiteralValueConvertible, ExpressionCanBeOperated {
+    public static var columnType: ColumnType {
+        return .integer32
+    }
+    public init?(with value: FundamentalValue) {
+        self = value.int32Value.toBool()
+    }
+    public func archivedValue() -> FundamentalValue {
+        return FundamentalValue(self.toInt32())
+    }
+}
+
+extension Float: ColumnCodable, LiteralValueConvertible, ExpressionCanBeOperated {
+    public static var columnType: ColumnType {
+        return .float
+    }
+    public init?(with value: FundamentalValue) {
+        self = value.doubleValue.toFloat()
+    }
+    public func archivedValue() -> FundamentalValue {
+        return FundamentalValue(self.toDouble())
+    }
+}
+
+extension Double: ColumnCodable, LiteralValueConvertible, ExpressionCanBeOperated {
+    public static var columnType: ColumnType {
+        return .float
+    }
+    public init?(with value: FundamentalValue) {
+        self = value.doubleValue
+    }
+    public func archivedValue() -> FundamentalValue {
+        return FundamentalValue(self)
+    }
+}
+
+extension String: ColumnCodable, LiteralValueConvertible, ExpressionCanBeOperated {
+    public static var columnType: ColumnType {
+        return .text
+    }
+    public init?(with value: FundamentalValue) {
+        self = value.stringValue
+    }
+    public func archivedValue() -> FundamentalValue {
+        return FundamentalValue(self)
+    }
+}
+
+extension Data: ColumnCodable, LiteralValueConvertible, ExpressionCanBeOperated {
+    public static var columnType: ColumnType {
+        return .BLOB
+    }
+    public init?(with value: FundamentalValue) {
+        self = value.dataValue
+    }
+    public func archivedValue() -> FundamentalValue {
+        return FundamentalValue(self)
+    }
+}
+
+extension Date: ColumnCodable, LiteralValueConvertible, ExpressionCanBeOperated {
+    public static var columnType: ColumnType {
+        return .float
+    }
+    public init?(with value: FundamentalValue) {
+        self.init(timeIntervalSince1970: value.doubleValue)
+    }
+    public func archivedValue() -> FundamentalValue {
+        return FundamentalValue(timeIntervalSince1970)
+    }
+}
+
+extension URL: ColumnCodable, LiteralValueConvertible, ExpressionCanBeOperated {
+    public static var columnType: ColumnType {
+        return .text
+    }
+    public init?(with value: FundamentalValue) {
+        self.init(string: value.stringValue)
+    }
+    public func archivedValue() -> FundamentalValue {
+        return FundamentalValue(self.absoluteString)
+    }
+}
+
+extension Array: ColumnCodable where Element: Codable {
+    public static var columnType: ColumnType {
+        return .BLOB
+    }
+    public init?(with value: FundamentalValue) {
+        guard let decodable = try? JSONDecoder().decode(Array.self, from: value.dataValue) else {
             return nil
         }
         self = decodable
     }
-    public func archivedValue() -> Data? {
-        return try? JSONEncoder().encode(self)
+    public func archivedValue() -> FundamentalValue {
+        guard let encoded = try? JSONEncoder().encode(self) else {
+            return FundamentalValue(nil)
+        }
+        return FundamentalValue(encoded)
     }
 }
 
-extension Dictionary: CollectionColumnCodable {
-    public init?(with value: Data) {
-        guard let decodable = try? JSONDecoder().decode(Dictionary.self, from: value) else {
+extension Dictionary: ColumnCodable where Key: Codable, Value: Codable {
+    public static var columnType: ColumnType {
+        return .BLOB
+    }
+    public init?(with value: FundamentalValue) {
+        guard let decodable = try? JSONDecoder().decode(Dictionary.self, from: value.dataValue) else {
             return nil
         }
         self = decodable
     }
-    public func archivedValue() -> Data? {
-        return try? JSONEncoder().encode(self)
+    public func archivedValue() -> FundamentalValue {
+        guard let encoded = try? JSONEncoder().encode(self) else {
+            return FundamentalValue(nil)
+        }
+        return FundamentalValue(encoded)
     }
 }
 
-extension Set: CollectionColumnCodable {
-    public init?(with value: Data) {
-        guard let decodable = try? JSONDecoder().decode(Set.self, from: value) else {
+extension Set: ColumnCodable where Element: Codable {
+    public static var columnType: ColumnType {
+        return .BLOB
+    }
+    public init?(with value: FundamentalValue) {
+        guard let decodable = try? JSONDecoder().decode(Set.self, from: value.dataValue) else {
             return nil
         }
         self = decodable
     }
-    public func archivedValue() -> Data? {
-        return try? JSONEncoder().encode(self)
+    public func archivedValue() -> FundamentalValue {
+        guard let encoded = try? JSONEncoder().encode(self) else {
+            return FundamentalValue(nil)
+        }
+        return FundamentalValue(encoded)
     }
 }
 
 //JSONCodable
-public protocol ColumnJSONEncodable: ColumnEncodable where FundamentalType == Data {}
+public protocol ColumnJSONEncodable: ColumnEncodable {}
 extension ColumnJSONEncodable {
-    public func archivedValue() -> FundamentalType? {
-        return try? JSONEncoder().encode(self)
+    public func archivedValue() -> FundamentalValue {
+        guard let encoded = try? JSONEncoder().encode(self) else {
+            return FundamentalValue(nil)
+        }
+        return FundamentalValue(encoded)
     }
 }
 
-public protocol ColumnJSONDecodable: ColumnDecodable where FundamentalType == Data {}
+public protocol ColumnJSONDecodable: ColumnDecodable {}
 extension ColumnJSONDecodable {
-    public init?(with value: FundamentalType) {
-        guard !value.isEmpty else {
+    public init?(with value: FundamentalValue) {
+        guard let decodable = try? JSONDecoder().decode(Self.self, from: value.dataValue) else {
             return nil
         }
-        guard let object = try? JSONDecoder().decode(Self.self, from: value) else {
-            return nil
-        }
-        self = object
+        self = decodable
     }
 }
 
 public protocol ColumnJSONCodable: ColumnJSONEncodable, ColumnJSONDecodable {}
 extension ColumnJSONCodable {
-    public typealias FundamentalType = Data
     public static var columnType: ColumnType {
         return .BLOB
     }

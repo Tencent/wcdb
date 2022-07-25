@@ -24,21 +24,21 @@ import Foundation
 public final class Update {
     private var core: Core
     private let statement = StatementUpdate()
-    private let keys: ContiguousArray<CodingTableKeyBase>
+    private let keys: [CodingTableKeyBase]
 
     /// The number of changed rows in the most recent call.
     /// It should be called after executing successfully
     public var changes: Int?
 
-    internal init(with core: Core, on propertyConvertibleList: [PropertyConvertible], andTable table: String) throws {
-        guard !propertyConvertibleList.isEmpty else {
+    init(with core: Core, on propertyConvertibleList: [PropertyConvertible], andTable table: String) throws {
+        guard propertyConvertibleList.count > 0 else {
             throw Error.reportInterface(tag: core.tag,
                                         path: core.path,
                                         operation: .update,
                                         code: .misuse,
                                         message: "Updating \(table) with empty property")
         }
-        guard !table.isEmpty else {
+        guard table.count > 0 else {
             throw Error.reportInterface(tag: core.tag,
                                         path: core.path,
                                         operation: .update,

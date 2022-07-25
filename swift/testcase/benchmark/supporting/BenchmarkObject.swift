@@ -22,7 +22,7 @@ import Foundation
 import WCDBSwift
 
 class BenchmarkObject: TableCodable, Named {
-    var key: Int64 = 0
+    var key: Int = 0
     var value: Data?
     enum CodingKeys: String, CodingTableKey {
         typealias Root = BenchmarkObject
@@ -30,7 +30,7 @@ class BenchmarkObject: TableCodable, Named {
         case value
         static let objectRelationalMapping = TableBinding(CodingKeys.self)
     }
-    init(withKey key: Int64, and data: Data) {
+    init(withKey key: Int, and data: Data) {
         self.key = key
         self.value = data
     }

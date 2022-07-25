@@ -32,7 +32,7 @@ public final class Table<Root: TableCodable> {
         return Root.self
     }
 
-    internal init(withDatabase database: Database, named name: String, of type: Root.Type = Root.self) {
+    init(withDatabase database: Database, named name: String, of type: Root.Type = Root.self) {
         self.database = database
         self.name = name
     }
