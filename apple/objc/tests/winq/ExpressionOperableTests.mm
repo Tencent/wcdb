@@ -23,6 +23,7 @@
  */
 
 #import "WINQAssertion.h"
+#include <WCDB/WCTConvertible.h>
 
 @interface ExpressionOperableTests : BaseTestCase
 
@@ -223,6 +224,15 @@
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testColumn == 1");
+}
+
+- (void)test_binary_equal_null
+{
+    NSString* content = nil;
+    auto testingSQL = columnExpression == content;
+    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
+    TestCaseAssertSQLEqual(testingSQL, @"testColumn == NULL");
 }
 
 - (void)test_binary_not_equal
