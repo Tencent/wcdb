@@ -49,11 +49,17 @@ IndexedColumn IndexedColumnConvertible<WCTProperty>::asIndexedColumn(const WCTPr
 
 LiteralValue LiteralValueConvertible<NSString*>::asLiteralValue(NSString* string)
 {
+    if(string == nil){
+        return WCDB::LiteralValue(nullptr);
+    }
     return WCDB::UnsafeStringView(string.UTF8String, [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
 }
 
 LiteralValue LiteralValueConvertible<NSNumber*>::asLiteralValue(NSNumber* number)
 {
+    if(number == nil){
+        return WCDB::LiteralValue(nullptr);
+    }
     if (number == nil || CFNumberIsFloatType((CFNumberRef) number)) {
         return (double) number.doubleValue;
     } else if (strcmp(number.objCType, "Q") == 0) {
