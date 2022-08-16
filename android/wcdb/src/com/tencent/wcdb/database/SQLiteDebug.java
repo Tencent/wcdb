@@ -167,6 +167,7 @@ public final class SQLiteDebug {
 
     private static volatile int sLastErrorLine;
     private static volatile ArrayList<IOTraceStats> sLastIOTraceStats;
+    private static final ThreadLocal<Throwable> sLastCorruptionException = new ThreadLocal<>();
 
     public static int getLastErrorLine() {
         return sLastErrorLine;
@@ -208,6 +209,14 @@ public final class SQLiteDebug {
         } catch (RuntimeException e) {
             Log.e(TAG, "Cannot collect I/O trace statistics: " + e.getMessage());
         }
+    }
+
+    static void setLastCorruptionException(Throwable ex) {
+        sLastCorruptionException.set(ex);
+    }
+
+    public static Throwable getLastCorruptionException() {
+        return sLastCorruptionException.get();
     }
 
 

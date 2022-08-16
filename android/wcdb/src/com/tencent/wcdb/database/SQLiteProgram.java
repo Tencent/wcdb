@@ -139,6 +139,7 @@ public abstract class SQLiteProgram extends SQLiteClosable {
 
         if (isCorruption) {
             SQLiteDebug.collectLastIOTraceStats(mDatabase);
+            SQLiteDebug.setLastCorruptionException(e);
             mDatabase.onCorruption();
         }
     }
