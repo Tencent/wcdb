@@ -24,3 +24,10 @@ WCDB.framework
 
 # WeChat
 WeChat/conan/*
+
+# wconan
+WeChat/.wconan2/
+WeChat/wconan_libs/
+WeChat/wconan_local_build/
+WeChat/wconan_publish.py
+WeChat/cmake-build-*/
