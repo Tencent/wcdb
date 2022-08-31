@@ -65,21 +65,22 @@
 
 - (void)doTestRow:(const WCDB::OneRowValue&)row
            andSQL:(NSString*)sql
-      bySelecting:(WCDB::OneRowValue (^)())block
+      bySelecting:(WCDB::OptionalOneRow (^)())block
 {
     TestCaseAssertTrue(row.size() > 0);
     TestCaseAssertTrue(sql != nil);
     [self doTestRows:{ row }
              andSQLs:@[ sql ]
-         bySelecting:^WCDB::MultiRowsValue {
-             WCDB::OneRowValue result = block();
-             return { result };
+         bySelecting:^WCDB::OptionalMultiRows {
+             WCDB::OptionalOneRow result = block();
+             TestCaseAssertTrue(result.has_value());
+             return std::make_optional<WCDB::MultiRowsValue>({ result.value() });
          }];
 }
 
 - (void)doTestColumn:(const WCDB::OneColumnValue&)column
               andSQL:(NSString*)sql
-         bySelecting:(WCDB::OneColumnValue (^)())block
+         bySelecting:(WCDB::OptionalOneColumn (^)())block
 {
     TestCaseAssertTrue(sql != nil);
     TestCaseAssertTrue(column.size() > 0);
@@ -89,10 +90,11 @@
     }
     [self doTestRows:rows
              andSQLs:@[ sql ]
-         bySelecting:^WCDB::MultiRowsValue {
-             WCDB::OneColumnValue result = block();
+         bySelecting:^WCDB::OptionalMultiRows {
+             WCDB::OptionalOneColumn result = block();
+             TestCaseAssertTrue(result.has_value());
              WCDB::MultiRowsValue resultRows;
-             for (WCDB::Value value : result) {
+             for (WCDB::Value value : result.value()) {
                  resultRows.push_back({ value });
              }
              return resultRows;
@@ -101,20 +103,21 @@
 
 - (void)doTestValue:(WCDB::Value)value
              andSQL:(NSString*)sql
-        bySelecting:(WCDB::Value (^)())block
+        bySelecting:(WCDB::OptionalValue (^)())block
 {
     TestCaseAssertTrue(sql != nil);
     [self doTestRows:{ { value } }
     andSQLs:@[ sql ]
-    bySelecting:^WCDB::MultiRowsValue {
-        WCDB::Value result = block();
-        return { { result } };
+    bySelecting:^WCDB::OptionalMultiRows {
+        WCDB::OptionalValue result = block();
+        TestCaseAssertTrue(result.has_value());
+        return std::make_optional<WCDB::MultiRowsValue>({ { result.value() } });
     }];
 }
 
 - (void)doTestRows:(const WCDB::MultiRowsValue&)rows
             andSQL:(NSString*)sql
-       bySelecting:(WCDB::MultiRowsValue (^)())block
+       bySelecting:(WCDB::OptionalMultiRows (^)())block
 {
     TestCaseAssertTrue(rows.size() > 0);
     TestCaseAssertTrue(sql != nil);
@@ -123,12 +126,14 @@
 
 - (void)doTestRows:(const WCDB::MultiRowsValue&)expectedRows
            andSQLs:(NSArray<NSString*>*)expectedSQLs
-       bySelecting:(WCDB::MultiRowsValue (^)())block
+       bySelecting:(WCDB::OptionalMultiRows (^)())block
 {
     __block WCDB::MultiRowsValue selected;
     [self doTestSQLs:expectedSQLs
          inOperation:^BOOL {
-             selected = block();
+             auto values = block();
+             TestCaseAssertTrue(values.has_value());
+             selected = values.value();
              return selected.size() > 0;
          }];
     TestCaseAssertEqual(selected.size(), expectedRows.size());
@@ -144,7 +149,9 @@
 
 - (WCDB::MultiRowsValue)getAllvalues
 {
-    return self.database->getAllRowsFromStatement(WCDB::StatementSelect().select(self.resultColumns).from(self.tableName.UTF8String));
+    auto values = self.database->getAllRowsFromStatement(WCDB::StatementSelect().select(self.resultColumns).from(self.tableName.UTF8String));
+    TestCaseAssertTrue(values.has_value());
+    return values.value();
 }
 
 @end

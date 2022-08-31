@@ -129,115 +129,118 @@ bool HandleOperation::deleteValues(const UnsafeStringView& table, const Expressi
     return getHandleHolder()->execute(StatementDelete().deleteFrom(table).where(where));
 }
 
-Value HandleOperation::selectValue(const ResultColumn& column, const UnsafeStringView& table)
+OptionalValue
+HandleOperation::selectValue(const ResultColumn& column, const UnsafeStringView& table)
 {
     return getValueFromStatement(StatementSelect().select(column).from(table));
 }
 
-Value HandleOperation::selectValue(const ResultColumn& column,
-                                   const UnsafeStringView& table,
-                                   const Expression& where)
+OptionalValue HandleOperation::selectValue(const ResultColumn& column,
+                                           const UnsafeStringView& table,
+                                           const Expression& where)
 {
     return getValueFromStatement(StatementSelect().select(column).from(table).where(where));
 }
 
-OneColumnValue HandleOperation::selectOneColumn(const ResultColumn& column,
-                                                const UnsafeStringView& table)
+OptionalOneColumn HandleOperation::selectOneColumn(const ResultColumn& column,
+                                                   const UnsafeStringView& table)
 {
     return getOneColumnFromStatement(StatementSelect().select(column).from(table));
 }
 
-OneColumnValue HandleOperation::selectOneColumn(const ResultColumn& column,
-                                                const UnsafeStringView& table,
-                                                const Expression& where)
+OptionalOneColumn HandleOperation::selectOneColumn(const ResultColumn& column,
+                                                   const UnsafeStringView& table,
+                                                   const Expression& where)
 {
     return getOneColumnFromStatement(
     StatementSelect().select(column).from(table).where(where));
 }
 
-OneColumnValue HandleOperation::selectOneColumn(const ResultColumn& column,
-                                                const UnsafeStringView& table,
-                                                const Expression& where,
-                                                const OrderingTerm& order)
+OptionalOneColumn HandleOperation::selectOneColumn(const ResultColumn& column,
+                                                   const UnsafeStringView& table,
+                                                   const Expression& where,
+                                                   const OrderingTerm& order)
 {
     return getOneColumnFromStatement(
     StatementSelect().select(column).from(table).where(where).order(order));
 }
 
-OneColumnValue HandleOperation::selectOneColumn(const ResultColumn& column,
-                                                const UnsafeStringView& table,
-                                                const Expression& where,
-                                                const OrderingTerm& order,
-                                                const LiteralValue& limit)
+OptionalOneColumn HandleOperation::selectOneColumn(const ResultColumn& column,
+                                                   const UnsafeStringView& table,
+                                                   const Expression& where,
+                                                   const OrderingTerm& order,
+                                                   const LiteralValue& limit)
 {
     return getOneColumnFromStatement(
     StatementSelect().select(column).from(table).where(where).order(order).limit(limit));
 }
 
-OneRowValue HandleOperation::selectOneRow(const ResultColumns& columns,
-                                          const UnsafeStringView& table)
+OptionalOneRow HandleOperation::selectOneRow(const ResultColumns& columns,
+                                             const UnsafeStringView& table)
 {
     return getOneRowFromStatement(StatementSelect().select(columns).from(table));
 }
 
-OneRowValue HandleOperation::selectOneRow(const ResultColumns& columns,
-                                          const UnsafeStringView& table,
-                                          const Expression& where)
+OptionalOneRow HandleOperation::selectOneRow(const ResultColumns& columns,
+                                             const UnsafeStringView& table,
+                                             const Expression& where)
 {
     return getOneRowFromStatement(StatementSelect().select(columns).from(table).where(where));
 }
 
-MultiRowsValue HandleOperation::selectAllRow(const ResultColumns& columns,
-                                             const UnsafeStringView& table)
+OptionalMultiRows HandleOperation::selectAllRow(const ResultColumns& columns,
+                                                const UnsafeStringView& table)
 {
     return getAllRowsFromStatement(StatementSelect().select(columns).from(table));
 }
 
-MultiRowsValue HandleOperation::selectAllRow(const ResultColumns& columns,
-                                             const UnsafeStringView& table,
-                                             const Expression& where)
+OptionalMultiRows HandleOperation::selectAllRow(const ResultColumns& columns,
+                                                const UnsafeStringView& table,
+                                                const Expression& where)
 {
     return getAllRowsFromStatement(StatementSelect().select(columns).from(table).where(where));
 }
 
-MultiRowsValue HandleOperation::selectAllRow(const ResultColumns& columns,
-                                             const UnsafeStringView& table,
-                                             const Expression& where,
-                                             const OrderingTerm& order)
+OptionalMultiRows HandleOperation::selectAllRow(const ResultColumns& columns,
+                                                const UnsafeStringView& table,
+                                                const Expression& where,
+                                                const OrderingTerm& order)
 {
     return getAllRowsFromStatement(
     StatementSelect().select(columns).from(table).where(where).order(order));
 }
 
-MultiRowsValue HandleOperation::selectAllRow(const ResultColumns& columns,
-                                             const UnsafeStringView& table,
-                                             const Expression& where,
-                                             const OrderingTerm& order,
-                                             const LiteralValue& limit)
+OptionalMultiRows HandleOperation::selectAllRow(const ResultColumns& columns,
+                                                const UnsafeStringView& table,
+                                                const Expression& where,
+                                                const OrderingTerm& order,
+                                                const LiteralValue& limit)
 {
     return getAllRowsFromStatement(
     StatementSelect().select(columns).from(table).where(where).order(order).limit(limit));
 }
 
-Value HandleOperation::getValueFromStatement(const Statement& statement, int index)
+OptionalValue HandleOperation::getValueFromStatement(const Statement& statement, int index)
 {
     Value result;
     RecyclableHandle handle = getHandleHolder();
     if (!handle->prepare(statement)) {
-        return result;
+        return OptionalValue();
     }
-    if (handle->step() && !handle->done()) {
+    bool succeed = false;
+    if ((succeed = handle->step()) && !handle->done()) {
         result = handle->getValue(index);
     }
     handle->finalize();
-    return result;
+    return succeed ? result : OptionalValue();
 }
 
-OneColumnValue
+OptionalOneColumn
 HandleOperation::getOneColumnFromStatement(const Statement& statement, int index)
 {
-    OneColumnValue result;
+    OptionalOneColumn result;
     RecyclableHandle handle = getHandleHolder();
+
     if (!handle->prepare(statement)) {
         return result;
     }
@@ -246,23 +249,24 @@ HandleOperation::getOneColumnFromStatement(const Statement& statement, int index
     return result;
 }
 
-OneRowValue HandleOperation::getOneRowFromStatement(const Statement& statement)
+OptionalOneRow HandleOperation::getOneRowFromStatement(const Statement& statement)
 {
     OneRowValue result;
     RecyclableHandle handle = getHandleHolder();
     if (!handle->prepare(statement)) {
-        return result;
+        return OptionalOneRow();
     }
-    if (handle->step() && !handle->done()) {
+    bool succeed = false;
+    if ((succeed = handle->step()) && !handle->done()) {
         result = handle->getOneRow();
     }
     handle->finalize();
-    return result;
+    return succeed ? result : OptionalOneRow();
 }
 
-MultiRowsValue HandleOperation::getAllRowsFromStatement(const Statement& statement)
+OptionalMultiRows HandleOperation::getAllRowsFromStatement(const Statement& statement)
 {
-    MultiRowsValue result;
+    OptionalMultiRows result;
     RecyclableHandle handle = getHandleHolder();
     if (!handle->prepare(statement)) {
         return result;

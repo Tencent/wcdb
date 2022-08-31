@@ -71,9 +71,9 @@ public:
     const BLOB getBLOB(int index = 0);
 
     Value getValue(int index = 0);
-    OneColumnValue getOneColumn(int index = 0);
+    OptionalOneColumn getOneColumn(int index = 0);
     OneRowValue getOneRow();
-    MultiRowsValue getAllRows();
+    OptionalMultiRows getAllRows();
 
     const UnsafeStringView getOriginColumnName(int index);
     const UnsafeStringView getColumnName(int index);

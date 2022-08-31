@@ -288,7 +288,7 @@ Value InnerHandle::getValue(int index)
     return m_mainStatement->getValue(index);
 }
 
-OneColumnValue InnerHandle::getOneColumn(int index)
+OptionalOneColumn InnerHandle::getOneColumn(int index)
 {
     return m_mainStatement->getOneColumn(index);
 }
@@ -298,7 +298,7 @@ OneRowValue InnerHandle::getOneRow()
     return m_mainStatement->getOneRow();
 }
 
-MultiRowsValue InnerHandle::getAllRows()
+OptionalMultiRows InnerHandle::getAllRows()
 {
     return m_mainStatement->getAllRows();
 }

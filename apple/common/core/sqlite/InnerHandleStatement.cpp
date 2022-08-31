@@ -337,13 +337,14 @@ Value InnerHandleStatement::getValue(int index)
     }
 }
 
-OneColumnValue InnerHandleStatement::getOneColumn(int index)
+OptionalOneColumn InnerHandleStatement::getOneColumn(int index)
 {
     OneColumnValue result;
-    while (step() && !done()) {
+    bool succeed = false;
+    while ((succeed = step()) && !done()) {
         result.push_back(getValue(index));
     }
-    return result;
+    return succeed ? result : OptionalOneColumn();
 }
 
 OneRowValue InnerHandleStatement::getOneRow()
@@ -356,13 +357,14 @@ OneRowValue InnerHandleStatement::getOneRow()
     return result;
 }
 
-MultiRowsValue InnerHandleStatement::getAllRows()
+OptionalMultiRows InnerHandleStatement::getAllRows()
 {
     MultiRowsValue result;
-    while (step() && !done()) {
+    bool succeed = false;
+    while ((succeed = step()) && !done()) {
         result.push_back(getOneRow());
     }
-    return result;
+    return succeed ? result : OptionalMultiRows();
 }
 
 signed long long InnerHandleStatement::getColumnSize(int index)

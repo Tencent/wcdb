@@ -83,9 +83,9 @@ public:
     virtual const BLOB getBLOB(int index = 0);
 
     virtual Value getValue(int index = 0);
-    virtual OneColumnValue getOneColumn(int index = 0);
+    virtual OptionalOneColumn getOneColumn(int index = 0);
     virtual OneRowValue getOneRow();
-    virtual MultiRowsValue getAllRows();
+    virtual OptionalMultiRows getAllRows();
 
     virtual const UnsafeStringView getOriginColumnName(int index);
     virtual const UnsafeStringView getColumnName(int index);
