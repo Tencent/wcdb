@@ -98,7 +98,8 @@
     });
 
     TestCaseAssertTrue(self.database->canOpen());
-    TestCaseAssertTrue(self.database->selectAllRow(self.resultColumns, self.tableName.UTF8String).size() == 1)
+    auto values = self.database->selectAllRow(self.resultColumns, self.tableName.UTF8String);
+    TestCaseAssertTrue(values.has_value() && values.value().size() == 1)
     TestCaseAssertFalse(self.database->insertOneRow(row, self.columns, self.tableName.UTF8String));
 
     // reset attribute
@@ -148,7 +149,8 @@
 
     unsigned long walFrameNum = 0;
     for (int i = 0; i < 2000; i++) {
-        TestCaseAssertTrue(self.database->getValueFromStatement(WCDB::StatementSelect().select(WCDB::Expression::function("count").invokeAll()).from(self.tableName.UTF8String)).intValue() == i);
+        auto value = self.database->getValueFromStatement(WCDB::StatementSelect().select(WCDB::Expression::function("count").invokeAll()).from(self.tableName.UTF8String));
+        TestCaseAssertTrue(value.has_value() && value.value().intValue() == i);
         TestCaseAssertTrue(self.database->insertOneRow(rows[i], self.columns, self.tableName.UTF8String));
         self.database->passiveCheckpoint();
         self.database->close([&]() {

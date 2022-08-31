@@ -163,7 +163,7 @@ Value StatementOperation::getValue(int index)
     return getInnerHandleStatement()->getValue(index);
 }
 
-OneColumnValue StatementOperation::getOneColumn(int index)
+OptionalOneColumn StatementOperation::getOneColumn(int index)
 {
     return getInnerHandleStatement()->getOneColumn(index);
 }
@@ -173,7 +173,7 @@ OneRowValue StatementOperation::getOneRow()
     return getInnerHandleStatement()->getOneRow();
 }
 
-MultiRowsValue StatementOperation::getAllRows()
+OptionalMultiRows StatementOperation::getAllRows()
 {
     return getInnerHandleStatement()->getAllRows();
 }

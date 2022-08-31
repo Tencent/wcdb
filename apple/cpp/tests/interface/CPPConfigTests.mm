@@ -78,7 +78,9 @@
         TestCaseAssertTrue(self.database->canOpen());
         TestCaseAssertTrue(uninvoked);
 
-        TestCaseAssertFalse(self.database->getValueFromStatement(getSecureDelete));
+        auto value = self.database->getValueFromStatement(getSecureDelete);
+        TestCaseAssertTrue(value.has_value())
+        TestCaseAssertFalse(value.value());
     }
 }
 

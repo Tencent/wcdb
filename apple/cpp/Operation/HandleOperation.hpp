@@ -60,52 +60,53 @@ public:
 
 #pragma mark - select
 public:
-    Value selectValue(const ResultColumn& column, const UnsafeStringView& table);
-    Value selectValue(const ResultColumn& column,
-                      const UnsafeStringView& table,
-                      const Expression& where);
+    OptionalValue selectValue(const ResultColumn& column, const UnsafeStringView& table);
+    OptionalValue selectValue(const ResultColumn& column,
+                              const UnsafeStringView& table,
+                              const Expression& where);
 
-    OneColumnValue
+    OptionalOneColumn
     selectOneColumn(const ResultColumn& column, const UnsafeStringView& table);
-    OneColumnValue selectOneColumn(const ResultColumn& column,
+    OptionalOneColumn selectOneColumn(const ResultColumn& column,
+                                      const UnsafeStringView& table,
+                                      const Expression& where);
+    OptionalOneColumn selectOneColumn(const ResultColumn& column,
+                                      const UnsafeStringView& table,
+                                      const Expression& where,
+                                      const OrderingTerm& order);
+    OptionalOneColumn selectOneColumn(const ResultColumn& column,
+                                      const UnsafeStringView& table,
+                                      const Expression& where,
+                                      const OrderingTerm& order,
+                                      const LiteralValue& limit);
+
+    OptionalOneRow
+    selectOneRow(const ResultColumns& columns, const UnsafeStringView& table);
+    OptionalOneRow selectOneRow(const ResultColumns& columns,
+                                const UnsafeStringView& table,
+                                const Expression& where);
+
+    OptionalMultiRows
+    selectAllRow(const ResultColumns& columns, const UnsafeStringView& table);
+    OptionalMultiRows selectAllRow(const ResultColumns& columns,
                                    const UnsafeStringView& table,
                                    const Expression& where);
-    OneColumnValue selectOneColumn(const ResultColumn& column,
+    OptionalMultiRows selectAllRow(const ResultColumns& columns,
                                    const UnsafeStringView& table,
                                    const Expression& where,
                                    const OrderingTerm& order);
-    OneColumnValue selectOneColumn(const ResultColumn& column,
+    OptionalMultiRows selectAllRow(const ResultColumns& columns,
                                    const UnsafeStringView& table,
                                    const Expression& where,
                                    const OrderingTerm& order,
                                    const LiteralValue& limit);
 
-    OneRowValue selectOneRow(const ResultColumns& columns, const UnsafeStringView& table);
-    OneRowValue selectOneRow(const ResultColumns& columns,
-                             const UnsafeStringView& table,
-                             const Expression& where);
-
-    MultiRowsValue
-    selectAllRow(const ResultColumns& columns, const UnsafeStringView& table);
-    MultiRowsValue selectAllRow(const ResultColumns& columns,
-                                const UnsafeStringView& table,
-                                const Expression& where);
-    MultiRowsValue selectAllRow(const ResultColumns& columns,
-                                const UnsafeStringView& table,
-                                const Expression& where,
-                                const OrderingTerm& order);
-    MultiRowsValue selectAllRow(const ResultColumns& columns,
-                                const UnsafeStringView& table,
-                                const Expression& where,
-                                const OrderingTerm& order,
-                                const LiteralValue& limit);
-
 #pragma mark - Statement
 public:
-    Value getValueFromStatement(const Statement& statement, int index = 0);
-    OneColumnValue getOneColumnFromStatement(const Statement& statement, int index = 0);
-    OneRowValue getOneRowFromStatement(const Statement& statement);
-    MultiRowsValue getAllRowsFromStatement(const Statement& statement);
+    OptionalValue getValueFromStatement(const Statement& statement, int index = 0);
+    OptionalOneRow getOneColumnFromStatement(const Statement& statement, int index = 0);
+    OptionalOneRow getOneRowFromStatement(const Statement& statement);
+    OptionalMultiRows getAllRowsFromStatement(const Statement& statement);
 
 #pragma mark - Transaction
 public:

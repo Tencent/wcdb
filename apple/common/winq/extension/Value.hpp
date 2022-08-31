@@ -119,4 +119,9 @@ typedef ValueArray<Value> OneRowValue;
 typedef ValueArray<Value> OneColumnValue;
 typedef std::vector<ValueArray<Value>> MultiRowsValue;
 
+typedef std::optional<Value> OptionalValue;
+typedef std::optional<ValueArray<Value>> OptionalOneRow;
+typedef std::optional<ValueArray<Value>> OptionalOneColumn;
+typedef std::optional<std::vector<ValueArray<Value>>> OptionalMultiRows;
+
 } // namespace WCDB

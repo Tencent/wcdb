@@ -39,23 +39,23 @@
 
 - (void)doTestRow:(const WCDB::OneRowValue&)row
            andSQL:(NSString*)sql
-      bySelecting:(WCDB::OneRowValue (^)())block;
+      bySelecting:(WCDB::OptionalOneRow (^)())block;
 
 - (void)doTestColumn:(const WCDB::OneColumnValue&)column
               andSQL:(NSString*)sql
-         bySelecting:(WCDB::OneColumnValue (^)())block;
+         bySelecting:(WCDB::OptionalOneColumn (^)())block;
 
 - (void)doTestValue:(WCDB::Value)value
              andSQL:(NSString*)sql
-        bySelecting:(WCDB::Value (^)())block;
+        bySelecting:(WCDB::OptionalValue (^)())block;
 
 - (void)doTestRows:(const WCDB::MultiRowsValue&)rows
             andSQL:(NSString*)sql
-       bySelecting:(WCDB::MultiRowsValue (^)())block;
+       bySelecting:(WCDB::OptionalMultiRows (^)())block;
 
 - (void)doTestRows:(const WCDB::MultiRowsValue&)rows
            andSQLs:(NSArray<NSString*>*)sqls
-       bySelecting:(WCDB::MultiRowsValue (^)())block;
+       bySelecting:(WCDB::OptionalMultiRows (^)())block;
 
 - (WCDB::MultiRowsValue)getAllvalues;
 
