@@ -42,18 +42,7 @@ bool HandleORMOperation::deleteObjects(const UnsafeStringView &table,
                                        const Expression &offset)
 {
     auto delete_ = prepareDelete().fromTable(table);
-    if (where.syntax().isValid()) {
-        delete_.where(where);
-    }
-    if (orders.size() > 0) {
-        delete_.orders(orders);
-    }
-    if (limit.syntax().isValid()) {
-        delete_.limit(limit);
-    }
-    if (offset.syntax().isValid()) {
-        delete_.offset(offset);
-    }
+    configStatement(delete_, where, orders, limit, offset);
     return delete_.execute();
 }
 

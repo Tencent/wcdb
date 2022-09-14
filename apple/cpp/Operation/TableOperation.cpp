@@ -39,6 +39,7 @@ bool TableOperation::insertRows(const MultiRowsValue &rows, const Columns &colum
                                  .columns(columns)
                                  .values(BindParameter::bindParameters(columns.size()));
         if (!handle.prepare(insert)) {
+            assignErrorToDatabase(handle.getError());
             return false;
         }
         for (const OneRowValue &row : rows) {
@@ -48,6 +49,7 @@ bool TableOperation::insertRows(const MultiRowsValue &rows, const Columns &colum
                               return false;) handle.reset();
             handle.bindRow(row);
             if (!handle.step()) {
+                assignErrorToDatabase(handle.getError());
                 handle.finalize();
                 return false;
             }
@@ -62,7 +64,11 @@ bool TableOperation::insertRows(const MultiRowsValue &rows, const Columns &colum
         return insertAction(handle);
     } else {
         Handle handle = Handle(getHandleHolder());
-        return handle.lazyRunTransaction(insertAction);
+        bool succeed = handle.lazyRunTransaction(insertAction);
+        if (!succeed) {
+            assignErrorToDatabase(handle.getError());
+        }
+        return succeed;
     }
 }
 
@@ -75,6 +81,7 @@ bool TableOperation::insertOrReplaceRows(const MultiRowsValue &rows, const Colum
                                  .columns(columns)
                                  .values(BindParameter::bindParameters(columns.size()));
         if (!handle.prepare(insert)) {
+            assignErrorToDatabase(handle.getError());
             return false;
         }
         for (const OneRowValue &row : rows) {
@@ -84,6 +91,7 @@ bool TableOperation::insertOrReplaceRows(const MultiRowsValue &rows, const Colum
                               return false;) handle.reset();
             handle.bindRow(row);
             if (!handle.step()) {
+                assignErrorToDatabase(handle.getError());
                 handle.finalize();
                 return false;
             }
@@ -98,7 +106,11 @@ bool TableOperation::insertOrReplaceRows(const MultiRowsValue &rows, const Colum
         return insertAction(handle);
     } else {
         Handle handle = Handle(getHandleHolder());
-        return handle.lazyRunTransaction(insertAction);
+        bool succeed = handle.lazyRunTransaction(insertAction);
+        if (!succeed) {
+            assignErrorToDatabase(handle.getError());
+        }
+        return succeed;
     }
 }
 
@@ -125,6 +137,9 @@ bool TableOperation::updateRow(const OneRowValue &row,
         succeed = handle->step();
         handle->finalize();
     }
+    if (!succeed) {
+        assignErrorToDatabase(handle->getError());
+    }
     return succeed;
 }
 
@@ -135,7 +150,12 @@ bool TableOperation::deleteValues(const Expression &where,
 {
     StatementDelete delete_ = StatementDelete().deleteFrom(getTableName());
     configStatement(delete_, where, orders, limit, offset);
-    return getHandleHolder()->execute(delete_);
+    auto handle = getHandleHolder();
+    bool succeed = handle->execute(delete_);
+    if (!succeed) {
+        assignErrorToDatabase(handle->getError());
+    }
+    return succeed;
 }
 
 OptionalValue TableOperation::selectValue(const ResultColumn &column,
@@ -185,6 +205,7 @@ OptionalValue TableOperation::getValueFromStatement(const Statement &statement, 
     Value result;
     RecyclableHandle handle = getHandleHolder();
     if (!handle->prepare(statement)) {
+        assignErrorToDatabase(handle->getError());
         return OptionalValue();
     }
     bool succeed = false;
@@ -192,6 +213,9 @@ OptionalValue TableOperation::getValueFromStatement(const Statement &statement, 
         result = handle->getValue(index);
     }
     handle->finalize();
+    if (!succeed) {
+        assignErrorToDatabase(handle->getError());
+    }
     return succeed ? result : OptionalValue();
 }
 
@@ -202,10 +226,14 @@ TableOperation::getOneColumnFromStatement(const Statement &statement, int index)
     RecyclableHandle handle = getHandleHolder();
 
     if (!handle->prepare(statement)) {
+        assignErrorToDatabase(handle->getError());
         return result;
     }
     result = handle->getOneColumn(index);
     handle->finalize();
+    if (!result.has_value()) {
+        assignErrorToDatabase(handle->getError());
+    }
     return result;
 }
 
@@ -214,6 +242,7 @@ OptionalOneRow TableOperation::getOneRowFromStatement(const Statement &statement
     OneRowValue result;
     RecyclableHandle handle = getHandleHolder();
     if (!handle->prepare(statement)) {
+        assignErrorToDatabase(handle->getError());
         return OptionalOneRow();
     }
     bool succeed = false;
@@ -221,6 +250,9 @@ OptionalOneRow TableOperation::getOneRowFromStatement(const Statement &statement
         result = handle->getOneRow();
     }
     handle->finalize();
+    if (!succeed) {
+        assignErrorToDatabase(handle->getError());
+    }
     return succeed ? result : OptionalOneRow();
 }
 
@@ -229,10 +261,14 @@ OptionalMultiRows TableOperation::getAllRowsFromStatement(const Statement &state
     OptionalMultiRows result;
     RecyclableHandle handle = getHandleHolder();
     if (!handle->prepare(statement)) {
+        assignErrorToDatabase(handle->getError());
         return result;
     }
     result = handle->getAllRows();
     handle->finalize();
+    if (!result.has_value()) {
+        assignErrorToDatabase(handle->getError());
+    }
     return result;
 }
 

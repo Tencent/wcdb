@@ -35,10 +35,14 @@
 
 namespace WCDB {
 
+class BaseOperation;
+
 // TODO: readonly manually - by removing basic config and adding query_only config?
 // TODO: support authorize
 class InnerDatabase final : private HandlePool, public MigrationEvent, public MergeFTSIndexHandleProvider {
 #pragma mark - Initializer
+    friend BaseOperation;
+
 public:
     InnerDatabase(const UnsafeStringView &path);
     InnerDatabase() = delete;

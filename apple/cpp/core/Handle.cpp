@@ -52,7 +52,10 @@ Handle::Handle(Handle&& other)
 {
 }
 
-Handle::~Handle() = default;
+Handle::~Handle()
+{
+    invalidate();
+};
 
 InnerHandle* Handle::getOrGenerateHandle()
 {

@@ -23,9 +23,19 @@
  */
 
 #include <WCDB/BaseOperation.hpp>
+#include <WCDB/InnerDatabase.hpp>
+#include <WCDB/InnerHandle.hpp>
 
 namespace WCDB {
 
 BaseOperation::~BaseOperation() = default;
+
+void BaseOperation::assignErrorToDatabase(const Error& error)
+{
+    auto database = getDatabaseHolder();
+    if (database != nullptr) {
+        database->setThreadedError(error);
+    }
+}
 
 } // namespace WCDB
