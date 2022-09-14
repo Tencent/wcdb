@@ -42,6 +42,7 @@ bool HandleOperation::insertRows(const MultiRowsValue &rows,
         = StatementInsert().insertIntoTable(table).columns(columns).values(
         BindParameter::bindParameters(columns.size()));
         if (!handle.prepare(insert)) {
+            assignErrorToDatabase(handle.getError());
             return false;
         }
         for (const OneRowValue &row : rows) {
@@ -52,6 +53,7 @@ bool HandleOperation::insertRows(const MultiRowsValue &rows,
             handle.bindRow(row);
             if (!handle.step()) {
                 handle.finalize();
+                assignErrorToDatabase(handle.getError());
                 return false;
             }
         }
@@ -77,6 +79,7 @@ bool HandleOperation::insertOrReplaceRows(const MultiRowsValue &rows,
         = StatementInsert().insertIntoTable(table).orReplace().columns(columns).values(
         BindParameter::bindParameters(columns.size()));
         if (!handle.prepare(insert)) {
+            assignErrorToDatabase(handle.getError());
             return false;
         }
         for (const OneRowValue &row : rows) {
@@ -87,6 +90,7 @@ bool HandleOperation::insertOrReplaceRows(const MultiRowsValue &rows,
             handle.bindRow(row);
             if (!handle.step()) {
                 handle.finalize();
+                assignErrorToDatabase(handle.getError());
                 return false;
             }
         }
@@ -127,6 +131,9 @@ bool HandleOperation::updateRow(const OneRowValue &row,
         succeed = handle->step();
         handle->finalize();
     }
+    if (!succeed) {
+        assignErrorToDatabase(handle->getError());
+    }
     return succeed;
 }
 
@@ -138,7 +145,7 @@ bool HandleOperation::deleteValues(const UnsafeStringView &table,
 {
     StatementDelete delete_ = StatementDelete().deleteFrom(table);
     configStatement(delete_, where, orders, limit, offset);
-    return getHandleHolder()->execute(delete_);
+    return execute(delete_);
 }
 
 OptionalValue HandleOperation::selectValue(const ResultColumn &column,
@@ -192,6 +199,7 @@ OptionalValue HandleOperation::getValueFromStatement(const Statement &statement,
     Value result;
     RecyclableHandle handle = getHandleHolder();
     if (!handle->prepare(statement)) {
+        assignErrorToDatabase(handle->getError());
         return OptionalValue();
     }
     bool succeed = false;
@@ -199,6 +207,9 @@ OptionalValue HandleOperation::getValueFromStatement(const Statement &statement,
         result = handle->getValue(index);
     }
     handle->finalize();
+    if (!succeed) {
+        assignErrorToDatabase(handle->getError());
+    }
     return succeed ? result : OptionalValue();
 }
 
@@ -209,10 +220,14 @@ HandleOperation::getOneColumnFromStatement(const Statement &statement, int index
     RecyclableHandle handle = getHandleHolder();
 
     if (!handle->prepare(statement)) {
+        assignErrorToDatabase(handle->getError());
         return result;
     }
     result = handle->getOneColumn(index);
     handle->finalize();
+    if (!result.has_value()) {
+        assignErrorToDatabase(handle->getError());
+    }
     return result;
 }
 
@@ -221,6 +236,7 @@ OptionalOneRow HandleOperation::getOneRowFromStatement(const Statement &statemen
     OneRowValue result;
     RecyclableHandle handle = getHandleHolder();
     if (!handle->prepare(statement)) {
+        assignErrorToDatabase(handle->getError());
         return OptionalOneRow();
     }
     bool succeed = false;
@@ -228,6 +244,9 @@ OptionalOneRow HandleOperation::getOneRowFromStatement(const Statement &statemen
         result = handle->getOneRow();
     }
     handle->finalize();
+    if (!succeed) {
+        assignErrorToDatabase(handle->getError());
+    }
     return succeed ? result : OptionalOneRow();
 }
 
@@ -236,24 +255,38 @@ OptionalMultiRows HandleOperation::getAllRowsFromStatement(const Statement &stat
     OptionalMultiRows result;
     RecyclableHandle handle = getHandleHolder();
     if (!handle->prepare(statement)) {
+        assignErrorToDatabase(handle->getError());
         return result;
     }
     result = handle->getAllRows();
     handle->finalize();
+    if (!result.has_value()) {
+        assignErrorToDatabase(handle->getError());
+    }
     return result;
 }
 
 bool HandleOperation::execute(const Statement &statement)
 {
-    return getHandleHolder()->execute(statement);
+    auto handle = getHandleHolder();
+    bool succeed = handle->execute(statement);
+    if (!succeed) {
+        assignErrorToDatabase(handle->getError());
+    }
+    return succeed;
 }
 
 bool HandleOperation::runTransaction(TransactionCallback inTransaction)
 {
-    return getHandleHolder()->runTransaction([inTransaction, this](InnerHandle *innerHandle) {
+    auto handle = getHandleHolder();
+    bool succeed = handle->runTransaction([inTransaction, this](InnerHandle *innerHandle) {
         Handle handle = Handle(getDatabaseHolder(), innerHandle);
         return inTransaction(handle);
     });
+    if (!succeed) {
+        assignErrorToDatabase(handle->getError());
+    }
+    return succeed;
 }
 
 bool HandleOperation::lazyRunTransaction(TransactionCallback inTransaction)
@@ -270,40 +303,60 @@ bool HandleOperation::lazyRunTransaction(TransactionCallback inTransaction)
 
 bool HandleOperation::runPauseableTransactionWithOneLoop(TransactionCallbackForOneLoop inTransaction)
 {
-    return getHandleHolder()->runPauseableTransactionWithOneLoop(
-    [inTransaction, this](InnerHandle *innerHandle, bool &stop, bool isNewTransaction) {
-        Handle handle = Handle(getDatabaseHolder(), innerHandle);
+    Handle handle = Handle(getDatabaseHolder());
+    bool succeed = handle.getHandleHolder()->runPauseableTransactionWithOneLoop(
+    [&](InnerHandle *, bool &stop, bool isNewTransaction) {
         return inTransaction(handle, stop, isNewTransaction);
     });
+    if (!succeed) {
+        assignErrorToDatabase(handle.getError());
+    }
+    return succeed;
 }
 
 bool HandleOperation::runNestedTransaction(TransactionCallback inTransaction)
 {
-    return getHandleHolder()->runNestedTransaction([inTransaction, this](InnerHandle *innerHandle) {
-        Handle handle = Handle(getDatabaseHolder(), innerHandle);
-        return inTransaction(handle);
-    });
+    auto handle = getHandleHolder();
+    bool succeed
+    = handle->runNestedTransaction([inTransaction, this](InnerHandle *innerHandle) {
+          Handle handle = Handle(getDatabaseHolder(), innerHandle);
+          return inTransaction(handle);
+      });
+    if (!succeed) {
+        assignErrorToDatabase(handle->getError());
+    }
+    return succeed;
 }
 
 std::optional<bool> HandleOperation::tableExists(const UnsafeStringView &tableName)
 {
-    return getHandleHolder()->tableExists(tableName);
+    auto handle = getHandleHolder();
+    auto result = handle->tableExists(tableName);
+    if (!result.has_value()) {
+        assignErrorToDatabase(handle->getError());
+    }
+    return result;
 }
 
 std::optional<std::set<StringView>>
 HandleOperation::getColumns(const UnsafeStringView &table)
 {
-    return getHandleHolder()->getColumns(table);
+    auto handle = getHandleHolder();
+    auto result = handle->getColumns(table);
+    if (!result.has_value()) {
+        assignErrorToDatabase(handle->getError());
+    }
+    return result;
 }
 
 bool HandleOperation::dropTable(const UnsafeStringView &tableName)
 {
-    return getHandleHolder()->execute(StatementDropTable().dropTable(tableName).ifExists());
+    return execute(StatementDropTable().dropTable(tableName).ifExists());
 }
 
 bool HandleOperation::dropIndex(const UnsafeStringView &indexName)
 {
-    return getHandleHolder()->execute(StatementDropIndex().dropIndex(indexName).ifExists());
+    return execute(StatementDropIndex().dropIndex(indexName).ifExists());
 }
 
 void HandleOperation::notifyError(Error &error)
