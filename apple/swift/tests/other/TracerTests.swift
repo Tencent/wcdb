@@ -52,7 +52,7 @@ class TracerTests: BaseTestCase {
         }
 
         // Give
-        let database = Database(withFileURL: self.recommendedPath)
+        let database = Database(at: self.recommendedPath)
 
         // When
         XCTAssertNoThrow(try database.getRows(on: Master.Properties.any, fromTable: Master.builtinTableName))
@@ -106,7 +106,7 @@ class TracerTests: BaseTestCase {
         }
 
         // Give
-        let database = Database(withFileURL: expectedPath)
+        let database = Database(at: expectedPath)
         database.tag = expectedTag
 
         // When
@@ -145,7 +145,7 @@ class TracerTests: BaseTestCase {
         }
 
         // Give
-        let database = Database(withFileURL: self.recommendedPath)
+        let database = Database(at: self.recommendedPath)
         XCTAssertNoThrow(try database.close {
             try database.removeFiles()
         })
@@ -156,7 +156,7 @@ class TracerTests: BaseTestCase {
         let template = TracerObject()
         template.isAutoIncrement = true
         let objects = [TracerObject](repeating: template, count: 100000)
-        XCTAssertNoThrow(try database.insert(objects: objects, intoTable: tableName))
+        XCTAssertNoThrow(try database.insert(objects, intoTable: tableName))
         XCTAssertNoThrow(database.close())
 
         XCTAssertTrue(`catch`)
@@ -181,7 +181,7 @@ class TracerTests: BaseTestCase {
         }
 
         // Give
-        let database = Database(withFileURL: self.recommendedPath)
+        let database = Database(at: self.recommendedPath)
         XCTAssertNoThrow(try database.close {
             try database.removeFiles()
         })
@@ -193,7 +193,7 @@ class TracerTests: BaseTestCase {
         template.isAutoIncrement = true
         let objects = [TracerObject](repeating: template, count: 100000)
         XCTAssertNoThrow(try database.run { (_) -> Bool in
-            try database.insert(objects: objects, intoTable: tableName)
+            try database.insert(objects, intoTable: tableName)
             return false
         })
         XCTAssertNoThrow(database.close())

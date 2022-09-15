@@ -48,11 +48,11 @@ public final class Table<Root: AnyObject> {
 
 internal extension Table {
 
-    func internalInsert(objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil, isReplace: Bool) throws where Object: TableEncodable {
+    func internalInsert(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil, isReplace: Bool) throws where Object: TableEncodable {
         let insert = Insert(with: try self.database.getHandle(), named: self.name, on: propertyConvertibleList, isReplace: isReplace)
         return try insert.execute(with: objects)
     }
-    func internalInsert(objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil, isReplace: Bool) throws where Object: WCTTableCoding {
+    func internalInsert(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil, isReplace: Bool) throws where Object: WCTTableCoding {
         let insert = Insert(with: try self.database.getHandle(), named: self.name, on: propertyConvertibleList, isReplace: isReplace)
         return try insert.execute(with: objects)
     }
@@ -164,13 +164,13 @@ extension Table: InsertTableInterface {
     ///   - objects: Table encodable object
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     /// - Throws: `Error`
-    public func insert(objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: TableEncodable {
-        try internalInsert(objects: objects, on: propertyConvertibleList, isReplace: false)
+    public func insert(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: TableEncodable {
+        try internalInsert(objects, on: propertyConvertibleList, isReplace: false)
     }
-    public func insert(objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: WCTTableCoding {
-        try internalInsert(objects: objects, on: propertyConvertibleList, isReplace: false)
+    public func insert(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: WCTTableCoding {
+        try internalInsert(objects, on: propertyConvertibleList, isReplace: false)
     }
-    public func insert(objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws {
+    public func insert(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws {
         fatalError("\(Object.self) must conform to TableEncodable or WCTTableCoding")
     }
 
@@ -185,13 +185,13 @@ extension Table: InsertTableInterface {
     ///   - objects: Table encodable object
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     /// - Throws: `Error`
-    public func insertOrReplace(objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: TableEncodable {
-        try internalInsert(objects: objects, on: propertyConvertibleList, isReplace: true)
+    public func insertOrReplace(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: TableEncodable {
+        try internalInsert(objects, on: propertyConvertibleList, isReplace: true)
     }
-    public func insertOrReplace(objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: WCTTableCoding {
-        try internalInsert(objects: objects, on: propertyConvertibleList, isReplace: true)
+    public func insertOrReplace(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: WCTTableCoding {
+        try internalInsert(objects, on: propertyConvertibleList, isReplace: true)
     }
-    public func insertOrReplace(objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws {
+    public func insertOrReplace(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws {
         fatalError("\(Object.self) must conform to TableEncodable or WCTTableCoding")
     }
 
@@ -205,13 +205,13 @@ extension Table: InsertTableInterface {
     ///   - objects: Table encodable object
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     /// - Throws: `Error`
-    public func insert(objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: TableEncodable {
-        try internalInsert(objects: objects, on: propertyConvertibleList, isReplace: false)
+    public func insert(_ objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: TableEncodable {
+        try internalInsert(objects, on: propertyConvertibleList, isReplace: false)
     }
-    public func insert(objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: WCTTableCoding {
-        try internalInsert(objects: objects, on: propertyConvertibleList, isReplace: false)
+    public func insert(_ objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: WCTTableCoding {
+        try internalInsert(objects, on: propertyConvertibleList, isReplace: false)
     }
-    public func insert(objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws {
+    public func insert(_ objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws {
         fatalError("\(Object.self) must conform to TableEncodable or WCTTableCoding")
     }
 
@@ -226,13 +226,13 @@ extension Table: InsertTableInterface {
     ///   - objects: Table encodable object
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     /// - Throws: `Error`
-    public func insertOrReplace(objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: TableEncodable {
-        try internalInsert(objects: objects, on: propertyConvertibleList, isReplace: true)
+    public func insertOrReplace(_ objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: TableEncodable {
+        try internalInsert(objects, on: propertyConvertibleList, isReplace: true)
     }
-    public func insertOrReplace(objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: WCTTableCoding {
-        try internalInsert(objects: objects, on: propertyConvertibleList, isReplace: true)
+    public func insertOrReplace(_ objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: WCTTableCoding {
+        try internalInsert(objects, on: propertyConvertibleList, isReplace: true)
     }
-    public func insertOrReplace(objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws {
+    public func insertOrReplace(_ objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws {
         fatalError("\(Object.self) must conform to TableEncodable or WCTTableCoding")
     }
 }

@@ -44,7 +44,7 @@ class CipherWriteBenchmark: BaseBenchmark {
         }, for: {
             do {
                 for object in objects {
-                    try database.insert(objects: object, intoTable: tableName)
+                    try database.insert(object, intoTable: tableName)
                 }
             } catch let error as WCDB.Error {
                 XCTFail(error.description)

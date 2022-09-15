@@ -23,10 +23,10 @@ import Foundation
 public protocol InsertTableInterface: AnyObject {
     associatedtype Object: AnyObject
 
-    func insert(objects: Object..., on propertyConvertibleList: [PropertyConvertible]?) throws
-    func insert(objects: [Object], on propertyConvertibleList: [PropertyConvertible]?) throws
-    func insertOrReplace(objects: Object..., on propertyConvertibleList: [PropertyConvertible]?) throws
-    func insertOrReplace(objects: [Object], on propertyConvertibleList: [PropertyConvertible]?) throws
+    func insert(_ objects: Object..., on propertyConvertibleList: [PropertyConvertible]?) throws
+    func insert(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]?) throws
+    func insertOrReplace(_ objects: Object..., on propertyConvertibleList: [PropertyConvertible]?) throws
+    func insertOrReplace(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]?) throws
 }
 
 public protocol UpdateTableInterface: AnyObject {

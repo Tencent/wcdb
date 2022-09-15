@@ -26,7 +26,7 @@ class TableTests: BaseTestCase {
 
     override func setUp() {
         super.setUp()
-        database = Database(withFileURL: self.recommendedPath)
+        database = Database(at: self.recommendedPath)
         database.tag = recommendTag
     }
 

@@ -39,11 +39,11 @@ public protocol InsertInterface: AnyObject {
     ///   - table: Table name
     /// - Throws: `Error`
     func insert<Object: TableEncodable>(
-        objects: Object...,
+        _ objects: Object...,
         on propertyConvertibleList: [PropertyConvertible]?,
         intoTable table: String) throws
     func insert<Object: WCTTableCoding>(
-        objects: Object...,
+        _ objects: Object...,
         on propertyConvertibleList: [PropertyConvertible]?,
         intoTable table: String) throws
 
@@ -59,11 +59,11 @@ public protocol InsertInterface: AnyObject {
     ///   - table: Table name
     /// - Throws: `Error`
     func insert<Object: TableEncodable>(
-        objects: [Object],
+        _ objects: [Object],
         on propertyConvertibleList: [PropertyConvertible]?,
         intoTable table: String) throws
     func insert<Object: WCTTableCoding>(
-        objects: [Object],
+        _ objects: [Object],
         on propertyConvertibleList: [PropertyConvertible]?,
         intoTable table: String) throws
 
@@ -80,11 +80,11 @@ public protocol InsertInterface: AnyObject {
     ///   - table: Table name
     /// - Throws: `Error`
     func insertOrReplace<Object: TableEncodable>(
-        objects: Object...,
+        _ objects: Object...,
         on propertyConvertibleList: [PropertyConvertible]?,
         intoTable table: String) throws
     func insertOrReplace<Object: WCTTableCoding>(
-        objects: Object...,
+        _ objects: Object...,
         on propertyConvertibleList: [PropertyConvertible]?,
         intoTable table: String) throws
 
@@ -101,25 +101,25 @@ public protocol InsertInterface: AnyObject {
     ///   - table: Table name
     /// - Throws: `Error`
     func insertOrReplace<Object: TableEncodable>(
-        objects: [Object],
+        _ objects: [Object],
         on propertyConvertibleList: [PropertyConvertible]?,
         intoTable table: String) throws
     func insertOrReplace<Object: WCTTableCoding>(
-        objects: [Object],
+        _ objects: [Object],
         on propertyConvertibleList: [PropertyConvertible]?,
         intoTable table: String) throws
 }
 
 extension InsertInterface where Self: HandleRepresentable {
     public func insert<Object: TableEncodable>(
-        objects: [Object],
+        _ objects: [Object],
         on propertyConvertibleList: [PropertyConvertible]? = nil,
         intoTable table: String) throws {
         let insert = Insert(with: try getHandle(), named: table, on: propertyConvertibleList, isReplace: false)
         return try insert.execute(with: objects)
     }
     public func insert<Object: WCTTableCoding>(
-        objects: [Object],
+        _ objects: [Object],
         on propertyConvertibleList: [PropertyConvertible]? = nil,
         intoTable table: String) throws {
         let insert = Insert(with: try getHandle(), named: table, on: propertyConvertibleList, isReplace: false)
@@ -127,14 +127,14 @@ extension InsertInterface where Self: HandleRepresentable {
     }
 
     public func insertOrReplace<Object: TableEncodable>(
-        objects: [Object],
+        _ objects: [Object],
         on propertyConvertibleList: [PropertyConvertible]? = nil,
         intoTable table: String) throws {
         let insert = Insert(with: try getHandle(), named: table, on: propertyConvertibleList, isReplace: true)
         return try insert.execute(with: objects)
     }
     public func insertOrReplace<Object: WCTTableCoding>(
-        objects: [Object],
+        _ objects: [Object],
         on propertyConvertibleList: [PropertyConvertible]? = nil,
         intoTable table: String) throws {
         let insert = Insert(with: try getHandle(), named: table, on: propertyConvertibleList, isReplace: true)
@@ -142,28 +142,28 @@ extension InsertInterface where Self: HandleRepresentable {
     }
 
     public func insert<Object: TableEncodable>(
-        objects: Object...,
+        _ objects: Object...,
         on propertyConvertibleList: [PropertyConvertible]? = nil,
         intoTable table: String) throws {
-        return try insert(objects: objects, on: propertyConvertibleList, intoTable: table)
+        return try insert(objects, on: propertyConvertibleList, intoTable: table)
     }
     public func insert<Object: WCTTableCoding>(
-        objects: Object...,
+        _ objects: Object...,
         on propertyConvertibleList: [PropertyConvertible]? = nil,
         intoTable table: String) throws {
-        return try insert(objects: objects, on: propertyConvertibleList, intoTable: table)
+        return try insert(objects, on: propertyConvertibleList, intoTable: table)
     }
 
     public func insertOrReplace<Object: TableEncodable>(
-        objects: Object...,
+        _ objects: Object...,
         on propertyConvertibleList: [PropertyConvertible]? = nil,
         intoTable table: String) throws {
-        return try insertOrReplace(objects: objects, on: propertyConvertibleList, intoTable: table)
+        return try insertOrReplace(objects, on: propertyConvertibleList, intoTable: table)
     }
     public func insertOrReplace<Object: WCTTableCoding>(
-        objects: Object...,
+        _ objects: Object...,
         on propertyConvertibleList: [PropertyConvertible]? = nil,
         intoTable table: String) throws {
-        return try insertOrReplace(objects: objects, on: propertyConvertibleList, intoTable: table)
+        return try insertOrReplace(objects, on: propertyConvertibleList, intoTable: table)
     }
 }

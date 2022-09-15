@@ -127,7 +127,7 @@ class MultiSelectTests: CRUDTestCase {
 
         XCTAssertNoThrow(try database.create(table: MultiSelectObject.name, of: MultiSelectObject.self))
 
-        XCTAssertNoThrow(try database.insert(objects: preInsertedMultiSelectObjects, intoTable: MultiSelectObject.name))
+        XCTAssertNoThrow(try database.insert(preInsertedMultiSelectObjects, intoTable: MultiSelectObject.name))
 
         let tables = [TestObject.name, MultiSelectObject.name]
         let optionalMultiSelect = WCDBAssertNoThrowReturned(

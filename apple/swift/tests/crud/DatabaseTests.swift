@@ -28,9 +28,9 @@ class DatabaseTests: BaseTestCase {
         let tag = self.recommendTag
         let path: String = self.recommendedPath.path
         var taggedDatabase: Database?
-        let database: Database = Database(withPath: path)
+        let database: Database = Database(at: path)
         database.tag = tag
-        taggedDatabase = Database(withPath: path)
+        taggedDatabase = Database(at: path)
         XCTAssertNotNil(taggedDatabase)
         XCTAssertEqual(taggedDatabase!.tag, tag)
         XCTAssertEqual(taggedDatabase!.path, path)
@@ -39,8 +39,8 @@ class DatabaseTests: BaseTestCase {
     func testMultiDatabase() {
         // Give
         let path: String = self.recommendedPath.path
-        let database: Database = Database(withPath: path)
-        let database2: Database = Database(withPath: path)
+        let database: Database = Database(at: path)
+        let database2: Database = Database(at: path)
         database.tag = self.recommendTag
         XCTAssertNotNil(database2.tag)
         XCTAssertEqual(database2.tag, database.tag)
@@ -50,20 +50,20 @@ class DatabaseTests: BaseTestCase {
         let blocks = self.recommendedPath
         fileManager.createFile(atPath: blocks.path, contents: Data(), attributes: nil)
         let path = URL(fileURLWithPath: blocks.path).appendingPathComponent("newPath")
-        let database = Database(withFileURL: path)
+        let database = Database(at: path)
         XCTAssertFalse(database.canOpen)
     }
 
     func testFailedToOpenDatabase() {
         let path = self.recommendedPath
         XCTAssertNoThrow(try fileManager.createDirectory(at: path, withIntermediateDirectories: true, attributes: nil))
-        let database = Database(withFileURL: path)
+        let database = Database(at: path)
         XCTAssertFalse(database.canOpen)
     }
 
     func testPurgeFreeHandles() {
         // Give
-        let database: Database = Database(withFileURL: self.recommendedPath)
+        let database: Database = Database(at: self.recommendedPath)
         // When
         XCTAssertTrue(database.canOpen)
         XCTAssertTrue(database.isOpened)

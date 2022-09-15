@@ -237,7 +237,7 @@ class SelectInterfaceTests: CRUDTestCase {
         let object1 = CRUDObject()
         object1.variable1 = 3
         object1.variable2 = "object1"
-        XCTAssertNoThrow(try database.insert(objects: object1, intoTable: CRUDObject.name))
+        XCTAssertNoThrow(try database.insert(object1, intoTable: CRUDObject.name))
         // When
         let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try database.getDistinctColumn(on: CRUDObject.variable2(), fromTable: CRUDObject.name)
@@ -252,7 +252,7 @@ class SelectInterfaceTests: CRUDTestCase {
         let object1 = CRUDObject()
         object1.variable1 = 3
         object1.variable2 = "object1"
-        XCTAssertNoThrow(try database.insert(objects: object1, intoTable: CRUDObject.name))
+        XCTAssertNoThrow(try database.insert(object1, intoTable: CRUDObject.name))
         // When
         let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try database.getDistinctColumn(on: CRUDObject.variable2(),
@@ -269,7 +269,7 @@ class SelectInterfaceTests: CRUDTestCase {
         let object1 = CRUDObject()
         object1.variable1 = 3
         object1.variable2 = "object1"
-        XCTAssertNoThrow(try database.insert(objects: object1, intoTable: CRUDObject.name))
+        XCTAssertNoThrow(try database.insert(object1, intoTable: CRUDObject.name))
         // Give
         let order = [CRUDObject.variable2().order(.descending)]
         // When
@@ -289,7 +289,7 @@ class SelectInterfaceTests: CRUDTestCase {
         let object1 = CRUDObject()
         object1.variable1 = 3
         object1.variable2 = "object1"
-        XCTAssertNoThrow(try database.insert(objects: object1, intoTable: CRUDObject.name))
+        XCTAssertNoThrow(try database.insert(object1, intoTable: CRUDObject.name))
         // When
         let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try database.getDistinctColumn(on: CRUDObject.variable2(), fromTable: CRUDObject.name, limit: 1)
@@ -304,7 +304,7 @@ class SelectInterfaceTests: CRUDTestCase {
         let object1 = CRUDObject()
         object1.variable1 = 3
         object1.variable2 = "object1"
-        XCTAssertNoThrow(try database.insert(objects: object1, intoTable: CRUDObject.name))
+        XCTAssertNoThrow(try database.insert(object1, intoTable: CRUDObject.name))
         // When
         let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try database.getDistinctColumn(on: CRUDObject.variable2(),
@@ -438,7 +438,7 @@ class SelectInterfaceTests: CRUDTestCase {
         let object1 = CRUDObject()
         object1.variable1 = 3
         object1.variable2 = "object1"
-        XCTAssertNoThrow(try database.insert(objects: object1, intoTable: CRUDObject.name))
+        XCTAssertNoThrow(try database.insert(object1, intoTable: CRUDObject.name))
         // When
         let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try table!.getDistinctColumn(on: CRUDObject.variable2())
@@ -455,7 +455,7 @@ class SelectInterfaceTests: CRUDTestCase {
         let object1 = CRUDObject()
         object1.variable1 = 3
         object1.variable2 = "object1"
-        XCTAssertNoThrow(try database.insert(objects: object1, intoTable: CRUDObject.name))
+        XCTAssertNoThrow(try database.insert(object1, intoTable: CRUDObject.name))
         // When
         let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try table!.getDistinctColumn(on: CRUDObject.variable2(),
@@ -473,7 +473,7 @@ class SelectInterfaceTests: CRUDTestCase {
         let object1 = CRUDObject()
         object1.variable1 = 3
         object1.variable2 = "object1"
-        XCTAssertNoThrow(try database.insert(objects: object1, intoTable: CRUDObject.name))
+        XCTAssertNoThrow(try database.insert(object1, intoTable: CRUDObject.name))
         // Give
         let order = [CRUDObject.variable2().order(.descending)]
         // When
@@ -493,7 +493,7 @@ class SelectInterfaceTests: CRUDTestCase {
         let object1 = CRUDObject()
         object1.variable1 = 3
         object1.variable2 = "object1"
-        XCTAssertNoThrow(try database.insert(objects: object1, intoTable: CRUDObject.name))
+        XCTAssertNoThrow(try database.insert(object1, intoTable: CRUDObject.name))
         // When
         let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try table!.getDistinctColumn(on: CRUDObject.variable2(), limit: 1)
@@ -510,7 +510,7 @@ class SelectInterfaceTests: CRUDTestCase {
         let object1 = CRUDObject()
         object1.variable1 = 3
         object1.variable2 = "object1"
-        XCTAssertNoThrow(try database.insert(objects: object1, intoTable: CRUDObject.name))
+        XCTAssertNoThrow(try database.insert(object1, intoTable: CRUDObject.name))
         // When
         let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try table!.getDistinctColumn(on: CRUDObject.variable2(), limit: 1, offset: 1)

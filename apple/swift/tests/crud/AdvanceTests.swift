@@ -148,7 +148,7 @@ class AdvanceTests: CRUDTestCase {
         let tableName = HandleStatementTypedObject.name
 
         XCTAssertNoThrow(try database.create(table: tableName, of: HandleStatementTypedObject.self))
-        XCTAssertNoThrow(try database.insert(objects: HandleStatementTypedObject(), intoTable: tableName))
+        XCTAssertNoThrow(try database.insert(HandleStatementTypedObject(), intoTable: tableName))
 
         let statement = StatementSelect().select(Column.all).from(tableName)
         let handle = WCDBAssertNoThrowReturned(try database.getHandle())!
@@ -494,7 +494,7 @@ class AdvanceTests: CRUDTestCase {
             let obj = TestObject()
             obj.variable1 = identifier
             obj.variable2 = "testObject"
-            XCTAssertNoThrow(try self.database.insert(objects: obj, intoTable: TestObject.name))
+            XCTAssertNoThrow(try self.database.insert(obj, intoTable: TestObject.name))
             Thread.sleep(forTimeInterval: 0.1)
             XCTAssertNoThrow(try self.database.commit())
             i += 1
@@ -564,7 +564,7 @@ class AdvanceTests: CRUDTestCase {
 //                       preInsertedChineseFTSObject,
 //                       preInsertedNumbericFTSObject,
 //                       preInsertedSymbolicFTSObject]
-//        XCTAssertNoThrow(try database.insert(objects: objects, intoTable: FTSObject.name))
+//        XCTAssertNoThrow(try database.insert(objects, intoTable: FTSObject.name))
 //
 //        //English
 //        do {

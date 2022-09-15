@@ -42,7 +42,7 @@ class MultithreadWriteWriteBenchmark: BaseMultithreadBenchmark {
         }, for: {
             queue.async(group: group, execute: {
                 do {
-                    try self.database.insert(objects: self.objects, intoTable: tableName)
+                    try self.database.insert(self.objects, intoTable: tableName)
                 } catch let error as WCDB.Error {
                     XCTFail(error.description)
                 } catch let error {
@@ -51,7 +51,7 @@ class MultithreadWriteWriteBenchmark: BaseMultithreadBenchmark {
             })
             queue.async(group: group, execute: {
                 do {
-                    try self.database.insert(objects: self.objects, intoTable: tableName)
+                    try self.database.insert(self.objects, intoTable: tableName)
                 } catch let error as WCDB.Error {
                     XCTFail(error.description)
                 } catch let error {

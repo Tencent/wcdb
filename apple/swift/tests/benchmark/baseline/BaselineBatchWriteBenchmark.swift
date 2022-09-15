@@ -41,7 +41,7 @@ class BaselineBatchWriteBenchmark: BaseBenchmark {
             setUpDatabaseCache()
         }, for: {
             do {
-                try database.insert(objects: objects, intoTable: tableName)
+                try database.insert(objects, intoTable: tableName)
             } catch let error as WCDB.Error {
                 XCTFail(error.description)
             } catch let error {

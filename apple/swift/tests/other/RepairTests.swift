@@ -36,7 +36,7 @@ class RepairTests: BaseTestCase {
 
     override func setUp() {
         super.setUp()
-        database = Database(withFileURL: self.recommendedPath)
+        database = Database(at: self.recommendedPath)
 
         let handle = WCDBAssertNoThrowReturned(try database.getHandle())!
         XCTAssertNoThrow(try handle.prepare(StatementPragma().pragma(.pageSize)))
@@ -53,7 +53,7 @@ class RepairTests: BaseTestCase {
 
         XCTAssertNoThrow(try database.create(table: TestObject.name, of: TestObject.self))
 
-        XCTAssertNoThrow(try database.insert(objects: preInsertedObjects, intoTable: TestObject.name))
+        XCTAssertNoThrow(try database.insert(preInsertedObjects, intoTable: TestObject.name))
     }
 
     func testBackup() {
@@ -98,7 +98,7 @@ class RepairTests: BaseTestCase {
         newContent.variable1 = 3
         newContent.variable2 = "object3"
         XCTAssertFalse(self.fileManager.fileExists(atPath: self.database.firstMaterialPath))
-        XCTAssertNoThrow(try self.database.insert(objects: newContent, intoTable: TestObject.name))
+        XCTAssertNoThrow(try self.database.insert(newContent, intoTable: TestObject.name))
         XCTAssertNoThrow(try self.database.passiveCheckpoint())
         Thread.sleep(forTimeInterval: 66)
         XCTAssertTrue(self.fileManager.fileExists(atPath: self.database.firstMaterialPath))
@@ -120,7 +120,7 @@ class RepairTests: BaseTestCase {
         let newObject = TestObject()
         newObject.variable2 = "object3"
         newObject.isAutoIncrement = true
-        XCTAssertNoThrow(try self.database.insert(objects: newObject, intoTable: TestObject.name))
+        XCTAssertNoThrow(try self.database.insert(newObject, intoTable: TestObject.name))
         rowid += 1
         XCTAssertTrue(newObject.lastInsertedRowID == rowid)
 
@@ -131,7 +131,7 @@ class RepairTests: BaseTestCase {
         XCTAssertTrue(num2 != nil && num2!.int32Value == 0)
 
         newObject.variable2 = "object4"
-        XCTAssertNoThrow(try self.database.insert(objects: newObject, intoTable: TestObject.name))
+        XCTAssertNoThrow(try self.database.insert(newObject, intoTable: TestObject.name))
         rowid += 1
         XCTAssertTrue(newObject.lastInsertedRowID == rowid)
 
