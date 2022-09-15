@@ -34,8 +34,8 @@ public class Database {
     /// which is also called as lazy initialization.
     ///
     /// - Parameter path: Path to your database
-    public convenience init(withPath path: String) {
-        self.init(withFileURL: URL(fileURLWithPath: path))
+    public convenience init(at path: String) {
+        self.init(at: URL(fileURLWithPath: path))
     }
 
     /// Init a database from file url.  
@@ -45,7 +45,7 @@ public class Database {
     /// which is also called as lazy initialization.
     ///
     /// - Parameter url: File url to your database
-    public convenience init(withFileURL url: URL) {
+    public convenience init(at url: URL) {
         #if swift(>=5)
         #else
             Error.fatalError("Swift 5 is required.")

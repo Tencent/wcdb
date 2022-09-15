@@ -32,7 +32,7 @@ class AdvanceCRUDTests: CRUDTestCase {
         object.isAutoIncrement = true
         // When
         for _ in 0..<1000 {
-            XCTAssertNoThrow(try database.insert(objects: object, intoTable: CRUDObject.name))
+            XCTAssertNoThrow(try database.insert(object, intoTable: CRUDObject.name))
         }
         var expectedSize: Int64!
         do {
@@ -105,7 +105,7 @@ class AdvanceCRUDTests: CRUDTestCase {
                                              of: DecodableObject.self))
 
         let object = EncodableObject()
-        XCTAssertNoThrow(try database.insert(objects: object,
+        XCTAssertNoThrow(try database.insert(object,
                                              intoTable: tableName))
 
         let decodableObject: DecodableObject? = WCDBAssertNoThrowReturned(

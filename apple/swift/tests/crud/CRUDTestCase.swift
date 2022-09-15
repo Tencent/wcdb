@@ -36,11 +36,11 @@ class CRUDTestCase: BaseTestCase {
 
     override func setUp() {
         super.setUp()
-        database = Database(withFileURL: self.recommendedPath)
+        database = Database(at: self.recommendedPath)
         database.tag = recommendTag
 
         XCTAssertNoThrow(try database.create(table: TestObject.name, of: TestObject.self))
 
-        XCTAssertNoThrow(try database.insert(objects: preInsertedObjects, intoTable: TestObject.name))
+        XCTAssertNoThrow(try database.insert(preInsertedObjects, intoTable: TestObject.name))
     }
 }

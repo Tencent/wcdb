@@ -99,7 +99,7 @@ class RowSelectTests: CRUDTestCase {
             object2.variable2 = "object2"
             return [object1, object2]
         }()
-        XCTAssertNoThrow(try database.insert(objects: preInsertedObjects, intoTable: CRUDObject.name))
+        XCTAssertNoThrow(try database.insert(preInsertedObjects, intoTable: CRUDObject.name))
 
         let optionalRowSelect = WCDBAssertNoThrowReturned(
             try database.prepareRowSelect(on: Column.all.count(),
@@ -175,7 +175,7 @@ class RowSelectTests: CRUDTestCase {
         let object1 = CRUDObject()
         object1.variable1 = 1
         object1.variable2 = "object3"
-        XCTAssertNoThrow(try database.insert(objects: object1, intoTable: table2))
+        XCTAssertNoThrow(try database.insert(object1, intoTable: table2))
 
         let column1Table1 = CRUDObject.variable1().in(table: table)
         let column1Table2 = CRUDObject.variable1().in(table: table2)
@@ -205,7 +205,7 @@ class RowSelectTests: CRUDTestCase {
         let object1 = CRUDObject()
         object1.variable1 = 1
         object1.variable2 = "object3"
-        XCTAssertNoThrow(try database.insert(objects: object1, intoTable: table2))
+        XCTAssertNoThrow(try database.insert(object1, intoTable: table2))
 
         let column1Table1 = CRUDObject.variable1().in(table: table)
         let column1Table2 = CRUDObject.variable1().in(table: table2)

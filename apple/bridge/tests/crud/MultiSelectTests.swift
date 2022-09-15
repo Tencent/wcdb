@@ -101,7 +101,7 @@ class MultiSelectTests: CRUDTestCase {
         super.setUp()
 
         XCTAssertNoThrow(try database.create(table: CRUDObject.nameForMultiSelect(), of: CRUDObject.self))
-        XCTAssertNoThrow(try database.insert(objects: preInsertedCRUDObjects, intoTable: CRUDObject.nameForMultiSelect()))
+        XCTAssertNoThrow(try database.insert(preInsertedCRUDObjects, intoTable: CRUDObject.nameForMultiSelect()))
 
         let tables = [CRUDObject.name, CRUDObject.nameForMultiSelect()]
         let property1 = CRUDObject.variable1().in(table: CRUDObject.name)

@@ -29,7 +29,7 @@ class InsertInterfaceTests: CRUDTestCase {
         object.variable1 = preInsertedObjects.count + 1
         object.variable2 = self.name
         // When
-        XCTAssertNoThrow(try database.insert(objects: object, intoTable: TestObject.name))
+        XCTAssertNoThrow(try database.insert(object, intoTable: TestObject.name))
         // Then
         let condition = TestObject.Properties.variable1 == object.variable1!
         let result: TestObject? = WCDBAssertNoThrowReturned(
@@ -46,7 +46,7 @@ class InsertInterfaceTests: CRUDTestCase {
         object.isAutoIncrement = true
         object.variable2 = self.name
         // When
-        XCTAssertNoThrow(try database.insert(objects: object, intoTable: TestObject.name))
+        XCTAssertNoThrow(try database.insert(object, intoTable: TestObject.name))
         // Then
         XCTAssertEqual(object.lastInsertedRowID, Int64(expectedRowID))
         let condition = TestObject.Properties.variable1 == expectedRowID
@@ -65,7 +65,7 @@ class InsertInterfaceTests: CRUDTestCase {
         object.variable1 = expectedReplacedRowID
         object.variable2 = self.name
         // When
-        XCTAssertNoThrow(try database.insertOrReplace(objects: object, intoTable: TestObject.name))
+        XCTAssertNoThrow(try database.insertOrReplace(object, intoTable: TestObject.name))
         // Then
         let condition = TestObject.Properties.variable1 == expectedReplacedRowID
         let result: TestObject? = WCDBAssertNoThrowReturned(
@@ -81,7 +81,7 @@ class InsertInterfaceTests: CRUDTestCase {
         object.variable1 = preInsertedObjects.count + 1
         object.variable2 = self.name
         // When
-        XCTAssertNoThrow(try database.insert(objects: object,
+        XCTAssertNoThrow(try database.insert(object,
                                              on: [TestObject.Properties.variable1],
                                              intoTable: TestObject.name))
         // Then
@@ -103,7 +103,7 @@ class InsertInterfaceTests: CRUDTestCase {
         )
         XCTAssertNotNil(table)
         // When
-        XCTAssertNoThrow(try table!.insert(objects: object))
+        XCTAssertNoThrow(try table!.insert(object))
         // Then
         let result = WCDBAssertNoThrowReturned(
             try table!.getObject(where: TestObject.Properties.variable1 == object.variable1!)
@@ -123,7 +123,7 @@ class InsertInterfaceTests: CRUDTestCase {
         )
         XCTAssertNotNil(table)
         // When
-        XCTAssertNoThrow(try table!.insertOrReplace(objects: object))
+        XCTAssertNoThrow(try table!.insertOrReplace(object))
         // Then
         let condition = TestObject.Properties.variable1 == expectedReplacedRowID
         let result: TestObject? = WCDBAssertNoThrowReturned(

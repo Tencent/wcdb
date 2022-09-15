@@ -32,7 +32,7 @@ class BaseBenchmark: BaseTestCase {
     override func setUp() {
         super.setUp()
 
-        database = Database(withFileURL: self.recommendedPath)
+        database = Database(at: self.recommendedPath)
     }
 
     func getTableName(withIndex index: Int = 0) -> String {
@@ -53,7 +53,7 @@ class BaseBenchmark: BaseTestCase {
         for i in 0..<count {
             objects.append(BenchmarkObject(withKey: i, and: randomGenerator.data(withLength: config.valueLength)))
         }
-        XCTAssertNoThrow(try database.insert(objects: objects, intoTable: getTableName(withIndex: index)))
+        XCTAssertNoThrow(try database.insert(objects, intoTable: getTableName(withIndex: index)))
     }
 
     func setUpWithPreCreateObject(count: Int) {

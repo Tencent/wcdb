@@ -51,7 +51,7 @@ public protocol TransactionInterface {
     /// Run a  transaction in closure
     ///
     ///     try database.run(transaction: { () throws -> Bool in
-    ///         try database.insert(objects: objects, intoTable: table)
+    ///         try database.insert(objects, intoTable: table)
     ///         return true // return true to commit transaction and return false to rollback transaction.
     ///     })
     ///
@@ -63,7 +63,7 @@ public protocol TransactionInterface {
     /// Run a controllable transaction in closure
     ///
     ///     try database.run(controllableTransaction: { () throws -> Bool in
-    ///         try database.insert(objects: objects, intoTable: table)
+    ///         try database.insert(objects, intoTable: table)
     ///         return true // return true to commit transaction and return false to rollback transaction.
     ///     })
     ///

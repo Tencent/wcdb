@@ -225,7 +225,7 @@ class TypedTests: CRUDTestCase {
         // Give
         XCTAssertNoThrow(try database.create(table: TypedTestObject.name, of: TypedTestObject.self))
         let object = TypedTestObject(with: .upperBoundary)
-        XCTAssertNoThrow(try database.insert(objects: object, intoTable: TypedTestObject.name))
+        XCTAssertNoThrow(try database.insert(object, intoTable: TypedTestObject.name))
         // When
         let selected: TypedTestObject? = WCDBAssertNoThrowReturned(
             try database.getObject(fromTable: TypedTestObject.name)
@@ -239,7 +239,7 @@ class TypedTests: CRUDTestCase {
         // Give
         XCTAssertNoThrow(try database.create(table: TypedTestObject.name, of: TypedTestObject.self))
         let object = TypedTestObject(with: .lowerBoundary)
-        XCTAssertNoThrow(try database.insert(objects: object, intoTable: TypedTestObject.name))
+        XCTAssertNoThrow(try database.insert(object, intoTable: TypedTestObject.name))
         // When
         let selected: TypedTestObject? = WCDBAssertNoThrowReturned(
             try database.getObject(fromTable: TypedTestObject.name)
@@ -395,7 +395,7 @@ class TypedTests: CRUDTestCase {
         XCTAssertNoThrow(try database.create(table: TypedNonOverflowTestObject.name,
                                              of: TypedNonOverflowTestObject.self))
         let overflow = TypedOverflowTestObject()
-        XCTAssertNoThrow(try database.insert(objects: overflow, intoTable: TypedNonOverflowTestObject.name))
+        XCTAssertNoThrow(try database.insert(overflow, intoTable: TypedNonOverflowTestObject.name))
         // When
         let selected: TypedNonOverflowTestObject? = WCDBAssertNoThrowReturned(
             try database.getObject(fromTable: TypedNonOverflowTestObject.name)
@@ -577,7 +577,7 @@ class TypedTests: CRUDTestCase {
         // Give
         XCTAssertNoThrow(try database.create(table: OptionalTypedTestObject.name, of: OptionalTypedTestObject.self))
         let object = OptionalTypedTestObject(with: .null)
-        XCTAssertNoThrow(try database.insert(objects: object, intoTable: OptionalTypedTestObject.name))
+        XCTAssertNoThrow(try database.insert(object, intoTable: OptionalTypedTestObject.name))
         // When
         let selected: OptionalTypedTestObject? = WCDBAssertNoThrowReturned(
             try database.getObject(fromTable: OptionalTypedTestObject.name)
@@ -591,7 +591,7 @@ class TypedTests: CRUDTestCase {
         // Give
         XCTAssertNoThrow(try database.create(table: OptionalTypedTestObject.name, of: OptionalTypedTestObject.self))
         let object = OptionalTypedTestObject(with: .zero)
-        XCTAssertNoThrow(try database.insert(objects: object, intoTable: OptionalTypedTestObject.name))
+        XCTAssertNoThrow(try database.insert(object, intoTable: OptionalTypedTestObject.name))
         // When
         let selected: OptionalTypedTestObject? = WCDBAssertNoThrowReturned(
             try database.getObject(fromTable: OptionalTypedTestObject.name)
@@ -605,7 +605,7 @@ class TypedTests: CRUDTestCase {
         // Give
         XCTAssertNoThrow(try database.create(table: OptionalTypedTestObject.name, of: OptionalTypedTestObject.self))
         let object = OptionalTypedTestObject(with: .normal)
-        XCTAssertNoThrow(try database.insert(objects: object, intoTable: OptionalTypedTestObject.name))
+        XCTAssertNoThrow(try database.insert(object, intoTable: OptionalTypedTestObject.name))
         let table = WCDBAssertNoThrowReturned(try database.getTable(named: OptionalTypedTestObject.name,
                                                                     of: OptionalTypedTestObject.self))
         XCTAssertNotNil(table)
@@ -665,7 +665,7 @@ class TypedTests: CRUDTestCase {
         // Give
         XCTAssertNoThrow(try database.create(table: TypedTestObject.name, of: TypedTestObject.self))
         let object = TypedTestObject(with: .lowerBoundary)
-        XCTAssertNoThrow(try database.insert(objects: object,
+        XCTAssertNoThrow(try database.insert(object,
                                              on: [TypedTestObject.Properties.int],
                                              intoTable: TypedTestObject.name))
         let table = WCDBAssertNoThrowReturned(
@@ -707,7 +707,7 @@ class TypedTests: CRUDTestCase {
         // Give
         XCTAssertNoThrow(try database.create(table: OptionalTypedTestObject.name, of: OptionalTypedTestObject.self))
         let object = OptionalTypedTestObject(with: .normal)
-        XCTAssertNoThrow(try database.insert(objects: object,
+        XCTAssertNoThrow(try database.insert(object,
                                              on: [OptionalTypedTestObject.Properties.int],
                                              intoTable: OptionalTypedTestObject.name))
         let table = WCDBAssertNoThrowReturned(
@@ -775,7 +775,7 @@ class TypedTests: CRUDTestCase {
         let typedMatchTable = TypedMatchTable()
         typedMatchTable.variable1 = TypedJSONCodableObject()
         typedMatchTable.variable1.variable = 1
-        XCTAssertNoThrow(try database.insert(objects: typedMatchTable, intoTable: tableName))
+        XCTAssertNoThrow(try database.insert(typedMatchTable, intoTable: tableName))
 
         var `catch` = false
         do {

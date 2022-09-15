@@ -47,7 +47,7 @@ class MultithreadTests: CRUDTestCase {
         let object = TestObject()
         object.isAutoIncrement = true
         let objects = Array(repeating: object, count: count)
-        XCTAssertNoThrow(try database.insert(objects: objects, intoTable: tableName))
+        XCTAssertNoThrow(try database.insert(objects, intoTable: tableName))
     }
 
     func testMultithreadReadRead() {
