@@ -35,7 +35,7 @@ public final class Handle {
         finalizeAllStatement()
     }
 
-    internal func getError() -> Error {
+    internal func getError() -> WCDBError {
         let cppError = WCDBHandleGetError(cppHandle)
         return ErrorBridge.getErrorFrom(cppError: cppError)
     }

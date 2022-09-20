@@ -159,7 +159,7 @@ final class TableDecoder: Decoder {
             // `key` must conform to ColumnDecodable protocol.
             let decodableType = Object.self as! ColumnDecodable.Type
             guard let wrappedDecoded = decodableType.init(with: handleStatement.columnValue(atIndex: index)) else {
-                throw Error(level: .Error, code: .Misuse, infos: [
+                throw WCDBError(level: .Error, code: .Misuse, infos: [
                     .message: ErrorValue("If [\(key)] would be decoded as nil, please make it optional.")
                 ])
             }
