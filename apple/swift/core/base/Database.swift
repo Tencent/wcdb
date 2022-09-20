@@ -48,7 +48,7 @@ public class Database {
     public convenience init(at url: URL) {
         #if swift(>=5)
         #else
-            Error.fatalError("Swift 5 is required.")
+            WCDBError.fatalError("Swift 5 is required.")
         #endif
         let database = WCDBCoreCreateDatabase(url.standardizedFileURL.path)
         self.init(with: database)
@@ -197,7 +197,7 @@ public class Database {
         WCDBCorePurgeAllDatabase()
     }
 
-    public func getError() -> Error {
+    public func getError() -> WCDBError {
         let cppError = WCDBDatabaseGetError(database)
         return ErrorBridge.getErrorFrom(cppError: cppError)
     }
@@ -277,6 +277,18 @@ public extension Database {
         WCDBDatabaseGlobalTracePerformance(nil)
     }
 
+    func trace(ofPerformance trace: @escaping PerformanceTracer) {
+        let callback: @convention(block) (UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>, Double) -> Void = {
+            (path, handleId, sql, cost) in
+            trace(String(cString: path), handleId, String(cString: sql), cost)
+        }
+        let imp = imp_implementationWithBlock(callback)
+        WCDBDatabaseTracePerformance(database, imp)
+    }
+    func trace(ofPerformance: Void?) {
+        WCDBDatabaseTracePerformance(database, nil)
+    }
+
     /// You can register a tracer to monitor the execution of all SQLs.
     /// It returns
     /// 1. Every SQL executed by the database.
@@ -304,6 +316,18 @@ public extension Database {
         WCDBDatabaseGlobalTraceSQL(nil)
     }
 
+    func trace(ofSQL trace: @escaping SQLTracer) {
+        let callback: @convention(block) (UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>) -> Void = {
+            (path, handleId, sql) in
+            trace(String(cString: path), handleId, String(cString: sql))
+        }
+        let imp = imp_implementationWithBlock(callback)
+        WCDBDatabaseTraceSQL(database, imp)
+    }
+    func trace(ofSQL: Void?) {
+        WCDBDatabaseTraceSQL(database, nil)
+    }
+
     /// You can register a reporter to monitor all errors.
     ///
     ///     Database.globalTrace(ofError: { (error) in
@@ -311,7 +335,7 @@ public extension Database {
     ///     })
     ///
     /// - Parameter errorReporter: report
-    static func globalTrace(ofError errorReporter: @escaping (Error) -> Void) {
+    static func globalTrace(ofError errorReporter: @escaping (WCDBError) -> Void) {
         let callback: @convention(block) (CPPError) -> Void = {
             (cppError) in
             let error = ErrorBridge.getErrorFrom(cppError: cppError)

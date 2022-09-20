@@ -94,7 +94,7 @@ func WCDBAssertNoThrowReturned<T>(_ expression: @autoclosure () throws -> T,
                                   whenFailed failedValue: @autoclosure () -> T) -> T {
     do {
         return try expression()
-    } catch let error as WCDB.Error {
+    } catch let error as WCDB.WCDBError {
         XCTFail(error.description)
     } catch {
         XCTFail(error.localizedDescription)
@@ -107,7 +107,7 @@ func WCDBAssertNoThrowReturned<T>(_ expression: @autoclosure () throws -> T,
                                   line: UInt = #line) -> T? {
     do {
         return try expression()
-    } catch let error as WCDB.Error {
+    } catch let error as WCDB.WCDBError {
         XCTFail(error.description)
     } catch {
         XCTFail(error.localizedDescription)

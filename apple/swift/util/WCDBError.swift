@@ -83,7 +83,7 @@ public struct ErrorValue {
     }
 }
 
-public final class Error: Swift.Error, CustomStringConvertible {
+public final class WCDBError: Swift.Error, CustomStringConvertible {
     public enum Code: Int {
         case OK = 0
         case Error = 1
@@ -265,20 +265,20 @@ public final class Error: Swift.Error, CustomStringConvertible {
         }
     }
 
-    public let level: Error.Level
-    public let code: Error.Code
+    public let level: WCDBError.Level
+    public let code: WCDBError.Code
 
-    public typealias Infos = [Error.Key: ErrorValue]
+    public typealias Infos = [WCDBError.Key: ErrorValue]
     public let infos: Infos
 
     public typealias ExtInfos = [String: ErrorValue]
     public let extInfos: ExtInfos
 
-    internal convenience init(level: Error.Level, code: Error.Code, infos: Infos) {
+    internal convenience init(level: WCDBError.Level, code: WCDBError.Code, infos: Infos) {
         self.init(level: level, code: code, infos: infos, extInfos: ExtInfos())
     }
 
-    internal init(level: Error.Level, code: Error.Code, infos: Infos, extInfos: ExtInfos) {
+    internal init(level: WCDBError.Level, code: WCDBError.Code, infos: Infos, extInfos: ExtInfos) {
         self.infos = infos
         self.level = level
         self.code = code
@@ -289,7 +289,7 @@ public final class Error: Swift.Error, CustomStringConvertible {
         return infos[.tag]?.intValue ?? 0
     }
 
-    public var extendedCode: Error.ExtendCode? {
+    public var extendedCode: WCDBError.ExtendCode? {
         if let code = infos[Key.extendedCode]?.intValue {
             return ExtendCode(rawValue: code)
         }

@@ -71,7 +71,7 @@ class TracerTests: BaseTestCase {
 
         // Then
         var `catch` = false
-        Database.globalTrace { (error: WCDB.Error) in
+        Database.globalTrace { (error: WCDB.WCDBError) in
             let tag = error.tag
             XCTAssertNotNil(tag)
             XCTAssertEqual(tag!, expectedTag)

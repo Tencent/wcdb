@@ -717,7 +717,7 @@
 		03E1664427F42D6600D2C926 /* BaseType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165E127F42D6500D2C926 /* BaseType.swift */; };
 		03E1664627F42D6600D2C926 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165E327F42D6500D2C926 /* Database.swift */; };
 		03E1664A27F42D6600D2C926 /* Recyclable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165E827F42D6500D2C926 /* Recyclable.swift */; };
-		03E1664C27F42D6600D2C926 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165EA27F42D6500D2C926 /* Error.swift */; };
+		03E1664C27F42D6600D2C926 /* WCDBError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165EA27F42D6500D2C926 /* WCDBError.swift */; };
 		03E1664D27F42D6600D2C926 /* SQLite-Bridging.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E165EB27F42D6500D2C926 /* SQLite-Bridging.h */; };
 		03E1664F27F42D6600D2C926 /* SQLite-Bridging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165ED27F42D6500D2C926 /* SQLite-Bridging.swift */; };
 		03E1665127F42D6600D2C926 /* WCDB-Bridging.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E165EF27F42D6500D2C926 /* WCDB-Bridging.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -2084,7 +2084,7 @@
 		03E165E127F42D6500D2C926 /* BaseType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseType.swift; sourceTree = "<group>"; };
 		03E165E327F42D6500D2C926 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		03E165E827F42D6500D2C926 /* Recyclable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recyclable.swift; sourceTree = "<group>"; };
-		03E165EA27F42D6500D2C926 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		03E165EA27F42D6500D2C926 /* WCDBError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WCDBError.swift; sourceTree = "<group>"; };
 		03E165EB27F42D6500D2C926 /* SQLite-Bridging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SQLite-Bridging.h"; sourceTree = "<group>"; };
 		03E165ED27F42D6500D2C926 /* SQLite-Bridging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SQLite-Bridging.swift"; sourceTree = "<group>"; };
 		03E165EE27F42D6500D2C926 /* Lock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lock.swift; sourceTree = "<group>"; };
@@ -3874,7 +3874,7 @@
 			isa = PBXGroup;
 			children = (
 				03E165E827F42D6500D2C926 /* Recyclable.swift */,
-				03E165EA27F42D6500D2C926 /* Error.swift */,
+				03E165EA27F42D6500D2C926 /* WCDBError.swift */,
 				03E165EE27F42D6500D2C926 /* Lock.swift */,
 				03E165F627F42D6500D2C926 /* Optional.swift */,
 				03E165F727F42D6500D2C926 /* Convenience.swift */,
@@ -7912,7 +7912,7 @@
 				23EEDCED217DFADC006E9E73 /* SyntaxBindParameter.cpp in Sources */,
 				23EEDD3F217DFADC006E9E73 /* SyntaxDetachSTMT.cpp in Sources */,
 				23775B8620AD666900E21AB0 /* Page.cpp in Sources */,
-				03E1664C27F42D6600D2C926 /* Error.swift in Sources */,
+				03E1664C27F42D6600D2C926 /* WCDBError.swift in Sources */,
 				03E1664027F42D6600D2C926 /* IndexBinding.swift in Sources */,
 				03E1661D27F42D6500D2C926 /* StatementRelease.swift in Sources */,
 				23EEDD0F217DFADC006E9E73 /* SyntaxOrderingTerm.cpp in Sources */,

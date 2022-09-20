@@ -25,14 +25,14 @@
 import Foundation
 
 internal final class ErrorBridge {
-    static func getErrorFrom(cppError error: CPPError) -> Error {
+    static func getErrorFrom(cppError error: CPPError) -> WCDBError {
         let recycleError = ObjectBridge.createRecyclableCPPObject(error)
-        let level = Error.Level(rawValue: Int(WCDBErrorGetLevel(recycleError.raw)))
-        let code = Error.Code(rawValue: WCDBErrorGetCode(recycleError.raw))
+        let level = WCDBError.Level(rawValue: Int(WCDBErrorGetLevel(recycleError.raw)))
+        let code = WCDBError.Code(rawValue: WCDBErrorGetCode(recycleError.raw))
         let message = String(cString: WCDBErrorGetMsg(recycleError.raw))
-        var infos = Error.Infos()
-        var extInfos = Error.ExtInfos()
-        infos[Error.Key.message] = ErrorValue(message)
+        var infos = WCDBError.Infos()
+        var extInfos = WCDBError.ExtInfos()
+        infos[WCDBError.Key.message] = ErrorValue(message)
         let enumerator: @convention(block) (UnsafePointer<Int8>, WCDBErrorValueType, Int, Double, UnsafePointer<Int8>) -> Void = {
             (ckey, valueType, intValue, doubleValue, stringValue) in
             let stringKey = String(cString: ckey)
@@ -47,7 +47,7 @@ internal final class ErrorBridge {
             default:
                 return
             }
-            let key = Error.Key(stringKey: stringKey)
+            let key = WCDBError.Key(stringKey: stringKey)
             if key != .invalidKey {
                 infos[key] = value
             } else {
@@ -56,11 +56,11 @@ internal final class ErrorBridge {
         }
         let imp = imp_implementationWithBlock(enumerator)
         WCDBErrorEnumerateAllInfo(recycleError.raw, imp)
-        return Error(level: level ?? .Error, code: code ?? .Error, infos: infos, extInfos: extInfos)
+        return WCDBError(level: level ?? .Error, code: code ?? .Error, infos: infos, extInfos: extInfos)
     }
 
     @discardableResult
-    static internal func report(level: Error.Level, code: Error.Code, infos: Error.Infos) -> Error {
+    static internal func report(level: WCDBError.Level, code: WCDBError.Code, infos: WCDBError.Infos) -> WCDBError {
         var cppLevel: WCDBErrorLevel = WCDBErrorLevel_Ignore
         switch level {
         case .Ignore:
@@ -76,7 +76,7 @@ internal final class ErrorBridge {
         case .Fatal:
             cppLevel = WCDBErrorLevel_Fatal
         }
-        let error = Error(level: level, code: code, infos: infos)
+        let error = WCDBError(level: level, code: code, infos: infos)
         WCDBErrorReport(cppLevel, error.code.rawValue, error.message, error.path, error.tag ?? 0)
         return error
     }

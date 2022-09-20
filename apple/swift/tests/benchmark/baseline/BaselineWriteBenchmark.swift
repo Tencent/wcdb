@@ -44,7 +44,7 @@ class BaselineWriteBenchmark: BaseBenchmark {
                 for object in objects {
                     try database.insert(object, intoTable: tableName)
                 }
-            } catch let error as WCDB.Error {
+            } catch let error as WCDB.WCDBError {
                 XCTFail(error.description)
             } catch let error {
                 XCTFail(error.localizedDescription)

@@ -472,7 +472,7 @@ class AdvanceTests: CRUDTestCase {
             }
             do {
                 return try self.database.run(pauseableTransaction: transaction)
-            } catch let error as WCDB.Error {
+            } catch let error as WCDB.WCDBError {
                 XCTFail(error.description)
             } catch {
                 XCTFail(error.localizedDescription)
