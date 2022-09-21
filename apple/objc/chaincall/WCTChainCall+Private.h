@@ -27,7 +27,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, WCTChainCallDisposeAction) {
-    WCTChainCallDisposeNoAction,
     WCTChainCallDisposeActionFinalizeStatement,
     WCTChainCallDisposeActionInvalidate,
 };
@@ -37,6 +36,8 @@ typedef NS_ENUM(NSUInteger, WCTChainCallDisposeAction) {
     WCTHandle* _handle;
 @private
     WCTChainCallDisposeAction _disposeAction;
+    int _changes;
+    WCTError* _error;
 }
 
 - (instancetype)initWithHandle:(WCTHandle*)handle NS_DESIGNATED_INITIALIZER;
@@ -46,6 +47,8 @@ typedef NS_ENUM(NSUInteger, WCTChainCallDisposeAction) {
 - (instancetype)finalizeStatementWhenDispose;
 
 - (void)tryDispose;
+
+- (void)saveChangesAndError:(BOOL)succeed;
 
 @end
 

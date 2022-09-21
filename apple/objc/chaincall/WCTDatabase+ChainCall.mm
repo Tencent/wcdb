@@ -35,27 +35,27 @@
 
 - (WCTInsert *)prepareInsert
 {
-    return [[WCTInsert alloc] initWithHandle:[self getHandle]];
+    return [[[WCTInsert alloc] initWithHandle:[self getHandle]] invalidateWhenDispose];
 }
 
 - (WCTDelete *)prepareDelete
 {
-    return [[WCTDelete alloc] initWithHandle:[self getHandle]];
+    return [[[WCTDelete alloc] initWithHandle:[self getHandle]] invalidateWhenDispose];
 }
 
 - (WCTUpdate *)prepareUpdate
 {
-    return [[WCTUpdate alloc] initWithHandle:[self getHandle]];
+    return [[[WCTUpdate alloc] initWithHandle:[self getHandle]] invalidateWhenDispose];
 }
 
 - (WCTSelect *)prepareSelect
 {
-    return [[WCTSelect alloc] initWithHandle:[self getHandle]];
+    return [[[WCTSelect alloc] initWithHandle:[self getHandle]] invalidateWhenDispose];
 }
 
 - (WCTMultiSelect *)prepareMultiSelect
 {
-    return [[WCTMultiSelect alloc] initWithHandle:[self getHandle]];
+    return [[[WCTMultiSelect alloc] initWithHandle:[self getHandle]] invalidateWhenDispose];
 }
 
 @end

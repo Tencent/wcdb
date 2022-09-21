@@ -70,7 +70,9 @@
 - (BOOL)execute
 {
     WCTTryDisposeGuard tryDisposeGuard(self);
-    return [_handle execute:_statement];
+    bool succeed = [_handle execute:_statement];
+    [self saveChangesAndError:succeed];
+    return succeed;
 }
 
 @end

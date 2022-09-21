@@ -33,20 +33,20 @@
 {
     WCTAssert(handle != nil);
     if (self = [super init]) {
-        _disposeAction = WCTChainCallDisposeNoAction;
+        _disposeAction = WCTChainCallDisposeActionFinalizeStatement;
         _handle = handle;
     }
     return self;
 }
 
-- (WCTHandle*)handle
-{
-    return _handle;
-}
-
 - (WCTError*)error
 {
-    return _handle.error;
+    return _error;
+}
+
+- (int)getChanges
+{
+    return _changes;
 }
 
 - (instancetype)invalidateWhenDispose
@@ -61,11 +61,18 @@
     return self;
 }
 
+- (void)saveChangesAndError:(BOOL)succeed
+{
+    if (succeed) {
+        _changes = [_handle getChanges];
+    } else {
+        _error = _handle.error;
+    }
+}
+
 - (void)tryDispose
 {
     switch (_disposeAction) {
-    case WCTChainCallDisposeNoAction:
-        break;
     case WCTChainCallDisposeActionFinalizeStatement:
         [_handle finalizeStatement];
         break;

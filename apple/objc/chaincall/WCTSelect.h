@@ -37,16 +37,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)ofClass:(Class)cls;
 
 /**
- @brief Get next selected object. You can do an iteration using it.
- 
-     WCTObject* object = nil;
-     while ((object = [select nextObject]) {
-        //...
-     }
+ @brief Get first selected object.
  
  @return The real type of WCTObject depends on your selection and ORM.
  */
-- (nullable ObjectType)nextObject;
+- (nullable ObjectType)firstObject;
 
 /**
  @brief Get all selected objects.

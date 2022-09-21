@@ -36,18 +36,15 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)onResultColumns:(const WCTResultColumns &)resultColumns;
 
 /**
- @brief Get next selected object. You can do an iteration using it.
+ @brief Get first selected objects.
  
-     WCTMultiObject* multiObject = nil;
-     while ((multiObject = [multiSelect nextMultiObject])) {
-        Class1* object1 = [multiObject objectForKey:tableName1];
-        Class2* object2 = [multiObject objectForKey:tableName2];
-        //...
-     }
+     WCTMultiObject* multiObject = [multiSelect firstMultiObject];
+     Class1* object1 = [multiObject objectForKey:tableName1];
+     Class2* object2 = [multiObject objectForKey:tableName2];
 
  @return See the example above
  */
-- (nullable WCTMultiObject *)nextMultiObject;
+- (nullable WCTMultiObject *)firstMultiObject;
 
 /**
  @brief Get all selected objects. 
