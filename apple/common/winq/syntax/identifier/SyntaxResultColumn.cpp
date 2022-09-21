@@ -33,7 +33,7 @@ ResultColumn::~ResultColumn() = default;
 
 bool ResultColumn::isValid() const
 {
-    return wildcard || expression.isValid();
+    return expression.isValid();
 }
 
 #pragma mark - Identifier
@@ -44,16 +44,9 @@ Identifier::Type ResultColumn::getType() const
 
 bool ResultColumn::describle(std::ostringstream& stream) const
 {
-    if (wildcard) {
-        if (!table.empty()) {
-            stream << table << ".";
-        }
-        stream << "*";
-    } else {
-        stream << expression;
-        if (!alias.empty()) {
-            stream << " AS " << alias;
-        }
+    stream << expression;
+    if (!alias.empty()) {
+        stream << " AS " << alias;
     }
     return true;
 }
@@ -61,9 +54,7 @@ bool ResultColumn::describle(std::ostringstream& stream) const
 void ResultColumn::iterate(const Iterator& iterator, bool& stop)
 {
     Identifier::iterate(iterator, stop);
-    if (!wildcard) {
-        recursiveIterate(expression, iterator, stop);
-    }
+    recursiveIterate(expression, iterator, stop);
 }
 
 } // namespace Syntax

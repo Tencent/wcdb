@@ -43,9 +43,6 @@ public:
 
     ResultColumn(const Expression& expression);
     ResultColumn& as(const UnsafeStringView& alias);
-
-    static ResultColumn all();
-    ResultColumn& inTable(const UnsafeStringView& table);
 };
 
 } // namespace WCDB

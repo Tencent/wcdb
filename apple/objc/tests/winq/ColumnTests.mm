@@ -118,4 +118,31 @@
     TestCaseAssertWINQConvertible(WCDB::OrderingTerms, sqls, expected);
 }
 
+- (void)test_result_column_all
+{
+    auto testingSQL = WCDB::Column::all();
+
+    auto testingTypes = { WCDB::SQL::Type::Column };
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
+    TestCaseAssertSQLEqual(testingSQL, @"*");
+}
+
+- (void)test_all
+{
+    auto testingSQL = WCDB::Column::all();
+
+    auto testingTypes = { WCDB::SQL::Type::Column };
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
+    TestCaseAssertSQLEqual(testingSQL, @"*");
+}
+
+- (void)test_all_with_table
+{
+    auto testingSQL = WCDB::Column::all().table(@"testTable");
+
+    auto testingTypes = { WCDB::SQL::Type::Column, WCDB::SQL::Type::Schema };
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
+    TestCaseAssertSQLEqual(testingSQL, @"main.testTable.*");
+}
+
 @end

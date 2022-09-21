@@ -38,7 +38,7 @@ public:
 
     Schema schema;
     StringView table;
-
+    bool wildcard = false;
     StringView name;
 
     bool isValid() const override final;

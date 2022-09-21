@@ -22,11 +22,15 @@ import Foundation
 
 public final class Column: Identifier<CPPColumn> {
 
-    public static let all: Column = Column(named: "*")
-    public static let rowid: Column = Column(named: "rowid")
+    public static let all: Column = Column(with: WCDBColumnCreateAll())
+    public static let rowid: Column = Column(with: WCDBColumnCreateRowId())
 
-    public init(named name: String) {
-        super.init(with: WCDBColumnCreateWithName(name.cString))
+    public convenience init(named name: String) {
+        self.init(with: WCDBColumnCreateWithName(name.cString))
+    }
+
+    internal override init(with cppObj: CPPColumn) {
+        super.init(with: cppObj)
     }
 
     @discardableResult

@@ -30,6 +30,7 @@ Column::Column() = default;
 
 Column::Column(const UnsafeStringView& name)
 {
+    syntax().wildcard = false;
     syntax().name = name;
 }
 
@@ -70,6 +71,13 @@ OrderingTerm Column::asOrder() const
 OrderingTerm Column::asOrder(const Order& order) const
 {
     return OrderingTerm(*this).order(order);
+}
+
+Column Column::all()
+{
+    Column result = Column();
+    result.syntax().wildcard = true;
+    return result;
 }
 
 Expression Column::asExpressionOperand() const

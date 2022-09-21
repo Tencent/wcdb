@@ -60,6 +60,7 @@ public:
     OrderingTerm asOrder(const Order& order) const;
 
     static Column rowid();
+    static Column all();
 
 protected:
     Expression asExpressionOperand() const override final;

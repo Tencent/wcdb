@@ -30,19 +30,9 @@ public final class ResultColumn: Identifier<CPPResultColumn> {
         self.init(with: cppColumn)
     }
 
-    public static func all() -> ResultColumn {
-        return ResultColumn(with: WCDBResultColumnCreateWithAllColumn())
-    }
-
     @discardableResult
     public func `as`(_ alias: String) -> ResultColumn {
         WCDBResultColumnConfigAlias(cppObj, alias.cString)
-        return self
-    }
-
-    @discardableResult
-    public func `in`(table: String) -> ResultColumn {
-        WCDBResultColumnConfigTable(cppObj, table.cString)
         return self
     }
 }

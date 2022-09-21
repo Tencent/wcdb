@@ -28,6 +28,8 @@
 
 WCDB_EXTERN_C_BEGIN
 
+CPPColumn WCDBColumnCreateAll();
+CPPColumn WCDBColumnCreateRowId();
 CPPColumn WCDBColumnCreateWithName(const char* _Nullable name);
 void WCDBColumnInTable(CPPColumn column, const char* _Nullable table);
 void WCDBColumnOfSchema(CPPColumn column, CPPSchema schema);

@@ -33,7 +33,7 @@ Column::~Column() = default;
 
 bool Column::isValid() const
 {
-    return !name.empty();
+    return wildcard || !name.empty();
 }
 
 #pragma mark - Identifier
@@ -50,7 +50,11 @@ bool Column::describle(std::ostringstream& stream) const
         }
         stream << table << ".";
     }
-    stream << name;
+    if (wildcard) {
+        stream << "*";
+    } else {
+        stream << name;
+    }
     return true;
 }
 
