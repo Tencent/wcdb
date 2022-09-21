@@ -96,7 +96,7 @@ void DatabasePool::purge()
 {
     SharedLockGuard lockGuard(m_lock);
     for (const auto &iter : m_databases) {
-        if (!iter.second.database->isBlockaded()){
+        if (!iter.second.database->isBlockaded()) {
             iter.second.database->purge();
         }
     }

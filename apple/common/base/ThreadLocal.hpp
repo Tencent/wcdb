@@ -41,7 +41,8 @@ protected:
     }
     static std::map<Identifier, T>& threadedStorage()
     {
-        thread_local std::unique_ptr<std::map<Identifier, T>> s_storage(new std::map<Identifier, T>());
+        thread_local std::unique_ptr<std::map<Identifier, T>> s_storage(
+        new std::map<Identifier, T>());
         return *s_storage;
     }
 };

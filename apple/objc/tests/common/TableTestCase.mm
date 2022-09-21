@@ -101,8 +101,8 @@
         [sqls addObject:@"COMMIT"];
     }
     [self doTestObjects:objects
-                  andSQLs:sqls
-        afterModification:block];
+                andSQLs:sqls
+      afterModification:block];
 }
 
 - (void)doTestObject:(NSObject<WCTTableCoding>*)object
