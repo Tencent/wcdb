@@ -423,6 +423,13 @@ bool AbstractHandle::beginTransaction()
 
 bool AbstractHandle::commitOrRollbackTransaction()
 {
+    /*
+    All statements must be reset before commit or rollback,
+    because sqlite will downgrade handle to a read-only transaction state
+    if there are other active statements that belong to this handle.
+    Please see the comment of btreeEndTransaction for more information.
+    */
+    resetAllStatements();
     bool succeed = true;
     if (isInTransaction()) {
         if (m_transactionError != TransactionError::Fatal) {
@@ -447,6 +454,13 @@ bool AbstractHandle::commitOrRollbackTransaction()
 
 void AbstractHandle::rollbackTransaction()
 {
+    /*
+    All statements must be reset before commit or rollback,
+    because sqlite will downgrade handle to a read-only transaction state
+    if there are other active statements that belong to this handle.
+    Please see the comment of btreeEndTransaction for more information.
+    */
+    resetAllStatements();
     bool succeed = true;
     // Transaction can be removed automatically in some case. e.g. interrupt step
     if (isInTransaction()) {
