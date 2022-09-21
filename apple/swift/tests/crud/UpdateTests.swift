@@ -35,12 +35,6 @@ class UpdateTests: CRUDTestCase {
         update = optionalUpdate!
     }
 
-    func testBase() {
-        XCTAssertNotNil(update.tag)
-        XCTAssertEqual(update.tag, database.tag)
-        XCTAssertEqual(update.path, database.path)
-    }
-
     func testUpdate() {
         // Give
         let object = TestObject()

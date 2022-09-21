@@ -21,40 +21,32 @@
 import Foundation
 
 public class Selectable {
-    private final var database: Database
-    final var handleStatement: HandleStatement?
+    internal final var handle: Handle
     final var statement: StatementSelect
 
-    init(with database: Database, statement: StatementSelect) {
+    init(with handle: Handle, statement: StatementSelect) {
         self.statement = statement
-        self.database = database
+        self.handle = handle
     }
 
     deinit {
-        try? finalize()
+        handle.finalize()
     }
 
-    final func finalize() throws {
-        if let handleStatement = self.handleStatement {
-            handleStatement.finalize()
-            self.handleStatement = nil
+    final func lazyPrepareStatement() throws {
+        if !handle.isPrepared {
+            try handle.prepare(statement)
         }
-    }
-
-    final func lazyHandleStatement() throws -> HandleStatement {
-        if handleStatement == nil {
-            handleStatement = try database.prepare(statement)
-        }
-        return handleStatement!
     }
 
     // Since `next()` may throw errors, it can't conform to `Sequence` protocol to fit a `for in` loop.
     @discardableResult
     public final func next() throws -> Bool {
         do {
-            return try lazyHandleStatement().step()
+            try lazyPrepareStatement()
+            return try handle.step()
         } catch let error {
-            try? finalize()
+            handle.finalize()
             throw error
         }
     }
@@ -127,17 +119,5 @@ public class Selectable {
     public final func having(_ expressionConvertibleHaving: Having) -> Self {
         statement.having(expressionConvertibleHaving)
         return self
-    }
-}
-
-extension Selectable: DatabaseRepresentable {
-    /// The tag of the related database.
-    public final var tag: Tag? {
-        return database.tag
-    }
-
-    /// The path of the related database.
-    public final var path: String {
-        return database.path
     }
 }

@@ -35,12 +35,6 @@ class RowSelectTests: CRUDTestCase {
         rowSelect = optionalRowSelect!
     }
 
-    func testBase() {
-        XCTAssertNotNil(rowSelect.tag)
-        XCTAssertEqual(rowSelect.tag, database.tag)
-        XCTAssertEqual(rowSelect.path, database.path)
-    }
-
     func testRowSelect() {
         // When
         let results: MultiRowsValue = WCDBAssertNoThrowReturned(try rowSelect.allRows())

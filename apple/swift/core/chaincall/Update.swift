@@ -22,7 +22,7 @@ import Foundation
 
 /// The chain call for updating
 public final class Update {
-    private var database: Database
+    private var handle: Handle
     private let statement = StatementUpdate()
     private let properties: [PropertyConvertible]
     private lazy var keys: [CodingTableKeyBase] = {
@@ -33,9 +33,9 @@ public final class Update {
     /// It should be called after executing successfully
     public var changes: Int?
 
-    init(with database: Database, on propertyConvertibleList: [PropertyConvertible], andTable table: String) {
+    init(with handle: Handle, on propertyConvertibleList: [PropertyConvertible], andTable table: String) {
         self.properties = propertyConvertibleList
-        self.database = database
+        self.handle = handle
         self.statement.update(table: table)
         var bindIndex: Int32 = 1
         for property in properties {
@@ -113,18 +113,20 @@ public final class Update {
     /// - Parameter object: Table encodable object
     /// - Throws: `Error`
     public func execute<Object: TableEncodable>(with object: Object) throws {
-        let handleStatement: HandleStatement = try database.prepare(statement)
-        let encoder = TableEncoder(keys, on: handleStatement)
+        try handle.prepare(statement)
+        let encoder = TableEncoder(keys, on: handle)
         try object.encode(to: encoder)
-        try handleStatement.step()
-        changes = handleStatement.changes
+        try handle.step()
+        changes = handle.changes
+        handle.finalize()
     }
 
     public func execute<Object: WCTTableCoding>(with object: Object) throws {
-        let handleStatement: HandleStatement = try database.prepare(statement)
-        WCTAPIBridge.bindProperties(properties.asWCTBridgeProperties(), ofObject: object, with: handleStatement.stmt)
-        try handleStatement.step()
-        changes = handleStatement.changes
+        try handle.prepare(statement)
+        WCTAPIBridge.bindProperties(properties.asWCTBridgeProperties(), ofObject: object, with: handle.getRawStatement())
+        try handle.step()
+        changes = handle.changes
+        handle.finalize()
     }
 
     /// Execute the update chain call with row.
@@ -132,29 +134,17 @@ public final class Update {
     /// - Parameter row: Column encodable row
     /// - Throws: `Error`
     public func execute(with row: [ColumnEncodable?]) throws {
-        let handleStatement: HandleStatement = try database.prepare(statement)
+        try handle.prepare(statement)
         for (index, value) in row.enumerated() {
             let bindingIndex = index + 1
             if let archivedValue = value?.archivedValue() {
-                handleStatement.bind(archivedValue, toIndex: bindingIndex)
+                handle.bind(archivedValue, toIndex: bindingIndex)
             } else {
-                handleStatement.bind(nil, toIndex: bindingIndex)
+                handle.bind(nil, toIndex: bindingIndex)
             }
         }
-        try handleStatement.step()
-        changes = handleStatement.changes
-    }
-}
-
-extension Update: DatabaseRepresentable {
-
-    /// The tag of the related database.
-    public var tag: Tag? {
-        return database.tag
-    }
-
-    /// The path of the related database.
-    public var path: String {
-        return database.path
+        try handle.step()
+        changes = handle.changes
+        handle.finalize()
     }
 }

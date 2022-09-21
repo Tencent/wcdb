@@ -23,7 +23,9 @@
  */
 
 #pragma once
+#include <WCDB/ErrorBridge.h>
 #include <WCDB/ObjectBridge.h>
+#include <WCDB/WinqBridge.h>
 
 WCDB_EXTERN_C_BEGIN
 
@@ -37,6 +39,9 @@ enum WCDBColumnValueType {
     WCDBColumnValueTypeNull,
 };
 
+CPPError WCDBHandleStatementGetError(CPPHandleStatement handleStatement);
+
+bool WCDBHandleStatementPrepare(CPPHandleStatement handleStatement, CPPStatement statement);
 bool WCDBHandleStatementCheckPrepared(CPPHandleStatement handleStatement);
 bool WCDBHandleStatementStep(CPPHandleStatement handleStatement);
 void WCDBHandleStatementReset(CPPHandleStatement handleStatement);

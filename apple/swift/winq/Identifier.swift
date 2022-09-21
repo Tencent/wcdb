@@ -28,7 +28,7 @@ import AppKit
 public typealias Describable = CustomStringConvertible
 
 public class Identifier<CPPType>: Describable, RawCPPObjectRepresentable {
-    internal final var cppObj: CPPType
+    internal final let cppObj: CPPType
     public var rawCPPObj: UnsafeMutablePointer<CPPObject> {
         unsafeBitCast(cppObj, to: UnsafeMutablePointer<CPPObject>.self)
     }

@@ -106,17 +106,13 @@ class MultiSelectTests: CRUDTestCase {
         let tables = [CRUDObject.name, CRUDObject.nameForMultiSelect()]
         let property1 = CRUDObject.variable1().in(table: CRUDObject.name)
         let property2 = CRUDObject.variable1().in(table: CRUDObject.nameForMultiSelect())
-        multiSelect = database.prepareMultiSelect(on: CRUDObject.variable1().in(table: CRUDObject.name),
-                                                  CRUDObject.variable2().in(table: CRUDObject.name),
-                                                  CRUDObject.variable1().in(table: CRUDObject.nameForMultiSelect()),
-                                                  CRUDObject.variable2().in(table: CRUDObject.nameForMultiSelect()),
-                                                  fromTables: tables).where(property1 == property2)
-    }
-
-    func testBase() {
-        XCTAssertNotNil(multiSelect.tag)
-        XCTAssertEqual(multiSelect.tag, database.tag)
-        XCTAssertEqual(multiSelect.path, database.path)
+        multiSelect = WCDBAssertNoThrowReturned(
+            try database.prepareMultiSelect(on: CRUDObject.variable1().in(table: CRUDObject.name),
+                                            CRUDObject.variable2().in(table: CRUDObject.name),
+                                            CRUDObject.variable1().in(table: CRUDObject.nameForMultiSelect()),
+                                            CRUDObject.variable2().in(table: CRUDObject.nameForMultiSelect()),
+                                            fromTables: tables).where(property1 == property2)
+        )!
     }
 
     func testSelect() {

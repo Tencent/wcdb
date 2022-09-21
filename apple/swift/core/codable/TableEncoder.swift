@@ -25,7 +25,7 @@ final class TableEncoder: Encoder {
     private var container: Any?
     private var keyedPrimaryKeyEncodableTableContainer: KeyedPrimaryKeyEncodableTableContainer?
 
-    private let handleStatement: HandleStatement
+    private let handleStatement: StatementInterface
 
     typealias HashedKey = [Int: Int] // hash value -> index
     private let hashedKeys: HashedKey
@@ -34,7 +34,7 @@ final class TableEncoder: Encoder {
     var isPrimaryKeyEncoded = true
 
     init(_ codingTableKeys: [CodingTableKeyBase],
-         on handleStatement: HandleStatement) {
+         on handleStatement: StatementInterface) {
         var hashedKeys: HashedKey = [:]
         for (index, key) in codingTableKeys.enumerated() {
             hashedKeys[key.stringValue.hashValue] = index + 1
@@ -43,7 +43,7 @@ final class TableEncoder: Encoder {
         self.handleStatement = handleStatement
     }
 
-    init(_ hashedKeys: HashedKey, on handleStatement: HandleStatement) {
+    init(_ hashedKeys: HashedKey, on handleStatement: StatementInterface) {
         self.hashedKeys = hashedKeys
         self.handleStatement = handleStatement
     }
@@ -70,11 +70,11 @@ final class TableEncoder: Encoder {
     private final class KeyedEncodingTableContainer<CodingKeys: CodingKey>: KeyedPrimaryKeyEncodableTableContainer, KeyedEncodingContainerProtocol {
         typealias Key = CodingKeys
 
-        private let handleStatement: HandleStatement
+        private let handleStatement: StatementInterface
         private let hashedKeys: HashedKey
 
         init(with hashedKeys: HashedKey,
-             on handleStatement: HandleStatement) {
+             on handleStatement: StatementInterface) {
             self.hashedKeys = hashedKeys
             self.handleStatement = handleStatement
             super.init()

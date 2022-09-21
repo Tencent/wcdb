@@ -1,3 +1,7 @@
+//
+// Created by qiuwenchen on 2022/9/13.
+//
+
 /*
  * Tencent is pleased to support the open source community by making
  * WCDB available.
@@ -17,9 +21,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#pragma once
 
-import Foundation
+namespace WCDB {
 
-typealias RecyclableCPPDatabase = Recyclable<CPPDatabase>
-typealias RecyclableCPPHandle = Recyclable<CPPHandle>
-typealias RecyclableCPPHandleStatement = Recyclable<CPPHandleStatement>
+class InnerHandle;
+
+class TransactionEvent {
+public:
+    virtual void markHandleAsTransactioned(InnerHandle* handle) = 0;
+    virtual void markHandleAsUntransactioned() = 0;
+    virtual ~TransactionEvent() = 0;
+};
+
+class TransactionGuard final {
+public:
+    TransactionGuard(TransactionEvent* event, InnerHandle* handle);
+    ~TransactionGuard();
+
+private:
+    TransactionEvent* m_event;
+    InnerHandle* m_handle;
+    bool m_isInTransactionBefore;
+};
+
+} //namespace WCDB

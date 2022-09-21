@@ -35,12 +35,6 @@ class InsertTests: CRUDTestCase {
         insert = optionalInsert!
     }
 
-    func testBase() {
-        XCTAssertNotNil(insert.tag)
-        XCTAssertEqual(insert.tag, database.tag)
-        XCTAssertEqual(insert.path, database.path)
-    }
-
     func testInsert() {
         // Give
         let object = CRUDObject()

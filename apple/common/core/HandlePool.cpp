@@ -263,6 +263,7 @@ void HandlePool::flowBack(HandleType type, const std::shared_ptr<InnerHandle> &h
     WCTAssert(referencedHandle.handle == handle);
     WCTAssert(referencedHandle.reference > 0);
     if (--referencedHandle.reference == 0) {
+        handle->configTransactionEvent(nullptr);
         referencedHandle.handle = nullptr;
         WCTRemedialAssert(
         !handle->isPrepared(), "Statement is not finalized.", handle->finalize(););

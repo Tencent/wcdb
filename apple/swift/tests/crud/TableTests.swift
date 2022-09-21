@@ -355,8 +355,5 @@ class TableTests: BaseTestCase {
         // Then
         table = WCDBAssertNoThrowReturned(try database.getTable(named: tableName))
         XCTAssertNotNil(table)
-        XCTAssertNotNil(table!.tag)
-        XCTAssertEqual(table!.tag, database.tag)
-        XCTAssertEqual(table!.path, database.path)
     }
 }

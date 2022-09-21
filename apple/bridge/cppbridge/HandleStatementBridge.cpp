@@ -22,10 +22,31 @@
  * limitations under the License.
  */
 
+#include <WCDB/AbstractHandle.hpp>
 #include <WCDB/HandleStatementBridge.h>
 #include <WCDB/InnerHandleStatement.hpp>
 #include <WCDB/ObjectBridge.hpp>
 #include <WCDB/UnsafeData.hpp>
+
+CPPError WCDBHandleStatementGetError(CPPHandleStatement handleStatement)
+{
+    WCDBGetObjectOrReturnValue(
+    handleStatement, WCDB::InnerHandleStatement, cppHandleStatement, CPPError());
+    WCDB::AbstractHandle* cppHandle = cppHandleStatement->getHandle();
+    if (!cppHandle) {
+        return CPPError();
+    }
+    const WCDB::Error& error = cppHandle->getError();
+    return WCDBCreateUnmanageCPPObject(CPPError, &error);
+}
+
+bool WCDBHandleStatementPrepare(CPPHandleStatement handleStatement, CPPStatement statement)
+{
+    WCDBGetObjectOrReturnValue(
+    handleStatement, WCDB::InnerHandleStatement, cppHandleStatement, false);
+    WCDBGetObjectOrReturnValue(statement, WCDB::Statement, cppStatement, true);
+    return cppHandleStatement->prepare(*cppStatement);
+}
 
 bool WCDBHandleStatementCheckPrepared(CPPHandleStatement handleStatement)
 {

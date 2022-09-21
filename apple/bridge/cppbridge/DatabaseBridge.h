@@ -48,11 +48,6 @@ void WCDBDatabaseBlockaded(CPPDatabase database);
 void WCDBDatabaseUnblockaded(CPPDatabase database);
 void WCDBDatabasePurge(CPPDatabase database);
 
-bool WCDBDatabaseBeginTransaction(CPPDatabase database);
-bool WCDBDatabaseCommitTransaction(CPPDatabase database);
-void WCDBDatabaseRollbackTransaction(CPPDatabase database);
-bool WCDBDatabaseIsInTransaction(CPPDatabase database);
-
 void WCDBDatabaseConfigCipher(CPPDatabase database,
                               const unsigned char* _Nullable cipherKey,
                               int keyLength,

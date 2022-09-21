@@ -210,13 +210,6 @@ public class Database {
         }
         return handle
     }
-
-    public func prepare(_ statement: Statement) throws -> HandleStatement {
-        let handle = try getHandle()
-        let handleStatement = try handle.prepare(statement)
-        return handleStatement
-    }
-
     /// Exec a specific sql.  
     /// Note that you can use this interface to execute a SQL that is not contained in the WCDB interface layer. 
     ///
@@ -224,84 +217,6 @@ public class Database {
     /// - Throws: `Error`
     public func exec(_ statement: Statement) throws {
         return try getHandle().exec(statement)
-    }
-
-    /// Separate interface of `run(transaction:)`  
-    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.
-    /// - Throws: `Error`
-    public func begin() throws {
-        if !WCDBDatabaseBeginTransaction(database) {
-            throw getError()
-        }
-    }
-
-    /// Separate interface of `run(transaction:)`  
-    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.
-    /// - Throws: `Error`
-    public func commit() throws {
-        if !WCDBDatabaseCommitTransaction(database) {
-            throw getError()
-        }
-    }
-
-    /// Separate interface of run(transaction:)
-    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.
-    /// - Throws: `Error`
-    public func rollback() {
-        WCDBDatabaseRollbackTransaction(database)
-    }
-
-    /// Run a embedded transaction in closure  
-    /// The embedded transaction means that it will run a transaction if it's not in other transaction, 
-    /// otherwise it will be executed within the existing transaction.
-    ///
-    ///     try database.run(embeddedTransaction: { () throws -> Void in 
-    ///         try database.insert(objects: objects, intoTable: table)
-    ///     })
-    ///
-    /// - Parameter embeddedTransaction: Operation inside transaction
-    /// - Throws: `Error`
-    public typealias TransactionClosure = () throws -> Void
-    public func run(transaction: TransactionClosure) throws {
-        if WCDBDatabaseIsInTransaction(database) {
-            return try transaction()
-        }
-        try begin()
-        do {
-            try transaction()
-            try commit()
-        } catch let error {
-            rollback()
-            throw error
-        }
-    }
-
-    /// Run a controllable transaction in closure
-    ///
-    ///     try database.run(controllableTransaction: { () throws -> Bool in
-    ///         try database.insert(objects: objects, intoTable: table)
-    ///         return true // return true to commit transaction and return false to rollback transaction.
-    ///     })
-    ///
-    /// - Parameter controllableTransaction: Operation inside transaction
-    /// - Throws: `Error`
-    public typealias ControlableTransactionClosure = () throws -> Bool
-    public func run(controllableTransaction: ControlableTransactionClosure) throws {
-        try begin()
-        var shouldRollback = true
-        do {
-            if try controllableTransaction() {
-                try commit()
-            } else {
-                shouldRollback = false
-                rollback()
-            }
-        } catch let error {
-            if shouldRollback {
-                rollback()
-            }
-            throw error
-        }
     }
 }
 
@@ -712,10 +627,7 @@ public extension Database {
     }
 }
 
-internal protocol DatabaseRepresentable: AnyObject {
-    var tag: Tag? {get}
-    var path: String {get}
-}
+extension Database: HandleRepresentable {}
 
 extension Database: InsertChainCallInterface {}
 extension Database: UpdateChainCallInterface {}
@@ -730,3 +642,4 @@ extension Database: DeleteInterface {}
 extension Database: RowSelectInterface {}
 extension Database: SelectInterface {}
 extension Database: TableInterface {}
+extension Database: TransactionInterface {}

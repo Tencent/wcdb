@@ -23,6 +23,7 @@ import Foundation
 /// Convenient table interface
 public final class Table<Root: AnyObject> {
     private let database: Database
+    public typealias Object = Root
 
     /// Table name
     public let name: String
@@ -48,11 +49,11 @@ public final class Table<Root: AnyObject> {
 internal extension Table {
 
     func internalInsert(objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil, isReplace: Bool) throws where Object: TableEncodable {
-        let insert = Insert(with: self.database, named: self.name, on: propertyConvertibleList, isReplace: isReplace)
+        let insert = Insert(with: try self.database.getHandle(), named: self.name, on: propertyConvertibleList, isReplace: isReplace)
         return try insert.execute(with: objects)
     }
     func internalInsert(objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil, isReplace: Bool) throws where Object: WCTTableCoding {
-        let insert = Insert(with: self.database, named: self.name, on: propertyConvertibleList, isReplace: isReplace)
+        let insert = Insert(with: try self.database.getHandle(), named: self.name, on: propertyConvertibleList, isReplace: isReplace)
         return try insert.execute(with: objects)
     }
 
@@ -62,7 +63,7 @@ internal extension Table {
                         orderBy orderList: [OrderBy]? = nil,
                         limit: Limit? = nil,
                         offset: Offset? = nil) throws where Object: TableEncodable {
-        let update = Update(with: self.database, on: propertyConvertibleList, andTable: self.name)
+        let update = Update(with: try self.database.getHandle(), on: propertyConvertibleList, andTable: self.name)
         if condition != nil {
             update.where(condition!)
         }
@@ -84,7 +85,7 @@ internal extension Table {
                         orderBy orderList: [OrderBy]? = nil,
                         limit: Limit? = nil,
                         offset: Offset? = nil) throws where Object: WCTTableCoding {
-        let update = Update(with: self.database, on: propertyConvertibleList, andTable: self.name)
+        let update = Update(with: try self.database.getHandle(), on: propertyConvertibleList, andTable: self.name)
         if condition != nil {
             update.where(condition!)
         }
@@ -106,7 +107,7 @@ internal extension Table {
                            orderBy orderList: [OrderBy]? = nil,
                            limit: Limit? = nil,
                            offset: Offset? = nil) throws -> [Object] where Object: TableDecodable {
-        let select = Select(with: self.database,
+        let select = Select(with: try self.database.getHandle(),
                             on: propertyConvertibleList.isEmpty ? Object.Properties.all : propertyConvertibleList,
                             table: self.name,
                             isDistinct: false)
@@ -130,7 +131,7 @@ internal extension Table {
                            orderBy orderList: [OrderBy]? = nil,
                            limit: Limit? = nil,
                            offset: Offset? = nil) throws -> [Object] where Object: WCTTableCoding {
-        let select = Select(with: self.database,
+        let select = Select(with: try self.database.getHandle(),
                             on: propertyConvertibleList.isEmpty ? Object.allProperties() : propertyConvertibleList,
                             table: self.name,
                             isDistinct: false)
@@ -148,20 +149,6 @@ internal extension Table {
             }
         }
         return try select.allObjects()
-    }
-}
-
-extension Table: DatabaseRepresentable {
-    public typealias Object = Root
-
-    /// The tag of the related database. 
-    public var tag: Tag? {
-        return database.tag
-    }
-
-    /// The path of the related database. 
-    public var path: String {
-        return database.path
     }
 }
 
@@ -362,7 +349,7 @@ extension Table: UpdateTableInterface {
                        orderBy orderList: [OrderBy]? = nil,
                        limit: Limit? = nil,
                        offset: Offset? = nil) throws {
-        let update = Update(with: self.database, on: propertyConvertibleList, andTable: self.name)
+        let update = Update(with: try self.database.getHandle(), on: propertyConvertibleList, andTable: self.name)
         if condition != nil {
             update.where(condition!)
         }
@@ -394,7 +381,7 @@ extension Table: DeleteTableInterface {
                        orderBy orderList: [OrderBy]? = nil,
                        limit: Limit? = nil,
                        offset: Offset? = nil) throws {
-        let delete = Delete(with: self.database, andTableName: self.name)
+        let delete = Delete(with: try self.database.getHandle(), andTableName: self.name)
         if condition != nil {
             delete.where(condition!)
         }
@@ -568,10 +555,10 @@ extension Table: RowSelectTableInterface {
                         orderBy orderList: [OrderBy]? = nil,
                         limit: Limit? = nil,
                         offset: Offset? = nil) throws -> MultiRowsValue {
-        let rowSelect = RowSelect(with: self.database,
-                                      results: columnResultConvertibleList,
-                                      tables: [self.name],
-                                      isDistinct: false)
+        let rowSelect = RowSelect(with: try self.database.getHandle(),
+                                  results: columnResultConvertibleList,
+                                  tables: [self.name],
+                                  isDistinct: false)
         if condition != nil {
             rowSelect.where(condition!)
         }
@@ -665,7 +652,7 @@ extension Table: RowSelectTableInterface {
                           orderBy orderList: [OrderBy]? = nil,
                           limit: Limit? = nil,
                           offset: Offset? = nil) throws -> OneColumnValue {
-        let rowSelect = RowSelect(with: self.database, results: [result], tables: [self.name], isDistinct: false)
+        let rowSelect = RowSelect(with: try self.database.getHandle(), results: [result], tables: [self.name], isDistinct: false)
         if condition != nil {
             rowSelect.where(condition!)
         }
@@ -697,7 +684,7 @@ extension Table: RowSelectTableInterface {
                                   orderBy orderList: [OrderBy]? = nil,
                                   limit: Limit? = nil,
                                   offset: Offset? = nil) throws -> OneColumnValue {
-        let rowSelect = RowSelect(with: self.database, results: [result], tables: [self.name], isDistinct: true)
+        let rowSelect = RowSelect(with: try self.database.getHandle(), results: [result], tables: [self.name], isDistinct: true)
         if condition != nil {
             rowSelect.where(condition!)
         }

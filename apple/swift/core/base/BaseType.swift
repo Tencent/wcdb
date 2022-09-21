@@ -19,30 +19,9 @@
  */
 
 import Foundation
-public final class HandleStatement {
-    internal let recyclableStmt: RecyclableCPPHandleStatement
-    internal let handle: Handle
-    public let tag: String
 
-    internal init(with stmt: CPPHandleStatement, and handle: Handle, and tag: String = "") {
-        self.recyclableStmt = ObjectBridge.createRecyclableCPPObject(stmt)
-        self.handle = handle
-        self.tag = tag
-    }
+public typealias Tag = Int
 
-    deinit {
-        finalize()
-    }
-}
-
-public protocol RawStatementmentRepresentable {
-    func getRawStatement() -> CPPHandleStatement
-}
-
-extension HandleStatement: RawStatementmentRepresentable {
-    public func getRawStatement() -> CPPHandleStatement {
-        return self.recyclableStmt.raw
-    }
-}
-
-extension HandleStatement: StatementInterface {}
+typealias RecyclableCPPDatabase = Recyclable<CPPDatabase>
+typealias RecyclableCPPHandle = Recyclable<CPPHandle>
+typealias RecyclableCPPHandleStatement = Recyclable<CPPHandleStatement>

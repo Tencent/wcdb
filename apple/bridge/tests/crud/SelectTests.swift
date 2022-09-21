@@ -28,13 +28,7 @@ class SelectTests: CRUDTestCase {
     override func setUp() {
         super.setUp()
 
-        select = database.prepareSelect(of: CRUDObject.self, fromTable: CRUDObject.name)
-    }
-
-    func testBase() {
-        XCTAssertNotNil(select.tag)
-        XCTAssertEqual(select.tag, database.tag)
-        XCTAssertEqual(select.path, database.path)
+        select = WCDBAssertNoThrowReturned(try database.prepareSelect(of: CRUDObject.self, fromTable: CRUDObject.name))!
     }
 
     func testSelect() {
@@ -79,7 +73,7 @@ class SelectTests: CRUDTestCase {
     }
 
     func testPartialSelect() {
-        let select = database.prepareSelect(on: CRUDObject.variable2().asProperty(), fromTable: CRUDObject.name)
+        let select = WCDBAssertNoThrowReturned(try database.prepareSelect(on: CRUDObject.variable2().asProperty(), fromTable: CRUDObject.name))!
         let results: [CRUDObject] = WCDBAssertNoThrowReturned(
             try select.allObjects(),
             whenFailed: [CRUDObject]()
@@ -131,7 +125,7 @@ class SelectTests: CRUDTestCase {
     }
 
     func testSelectFailed() {
-        select = database.prepareSelect(of: CRUDObject.self, fromTable: "nonexistentTable")
+        select = WCDBAssertNoThrowReturned(try database.prepareSelect(of: CRUDObject.self, fromTable: "nonexistentTable"))!
         XCTAssertThrowsError(try select.nextObject())
     }
 }

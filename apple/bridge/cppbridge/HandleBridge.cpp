@@ -27,6 +27,10 @@
 #include <WCDB/ObjectBridge.hpp>
 #include <WCDB/RecyclableHandle.hpp>
 
+WCDBDefineOneArgumentSwiftClosureBridgedType(WCDBTransaction, bool, CPPHandle)
+
+WCDBDefineMultiArgumentSwiftClosureBridgedType(WCDBPauseableTransaction, bool, CPPHandle, bool*, bool)
+
 CPPError WCDBHandleGetError(CPPHandle handle)
 {
     WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, CPPError());
@@ -41,20 +45,30 @@ bool WCDBHandleCheckValid(CPPHandle handle)
     return true;
 }
 
-CPPHandleStatement WCDBHandlePrepare(CPPHandle handle, CPPStatement statement)
+WCDB::InnerHandleStatement* WCDB::GetMainHandleStatement(WCDB::InnerHandle* handle)
+{
+    return handle->m_mainStatement;
+}
+
+CPPHandleStatement WCDBHandleGetMainStatement(CPPHandle handle)
 {
     WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, CPPHandleStatement());
-    WCDBGetObjectOrReturnValue(
-    statement, WCDB::Statement, cppStatement, CPPHandleStatement());
-    WCDB::InnerHandleStatement* handleStatement = cppHandle->getStatement();
-    handleStatement->prepare(*cppStatement);
+    WCDB::InnerHandleStatement* stmt = WCDB::GetMainHandleStatement(cppHandle);
+    return WCDBCreateUnmanageCPPObject(CPPHandleStatement, stmt);
+}
 
-    WCDB::Recyclable<WCDB::InnerHandleStatement*>* recycleHandleStatement
-    = new WCDB::Recyclable<WCDB::InnerHandleStatement*>(
-    handleStatement, [cppHandle](WCDB::InnerHandleStatement* handleStatement) {
-        cppHandle->returnStatement(handleStatement);
-    });
-    return WCDBCreateRecylableCPPObject(CPPHandleStatement, recycleHandleStatement);
+CPPHandleStatement WCDBHandleGetStatement(CPPHandle handle)
+{
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, CPPHandleStatement());
+    WCDB::InnerHandleStatement* stmt = cppHandle->getStatement();
+    return WCDBCreateUnmanageCPPObject(CPPHandleStatement, stmt);
+}
+
+void WCDBHandleReturnStatement(CPPHandle handle, CPPHandleStatement statement)
+{
+    WCDBGetObjectOrReturn(handle, WCDB::InnerHandle, cppHandle);
+    WCDBGetObjectOrReturn(statement, WCDB::InnerHandleStatement, cppStatement);
+    cppHandle->returnStatement(cppStatement);
 }
 
 bool WCDBHandleExcute(CPPHandle handle, CPPStatement statement)
@@ -92,4 +106,86 @@ bool WCDBHandleIsInTransaction(CPPHandle handle)
 {
     WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
     return cppHandle->isInTransaction();
+}
+
+bool WCDBHandleBeginTransaction(CPPHandle handle)
+{
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
+    return cppHandle->beginTransaction();
+}
+
+bool WCDBHandleCommitTransaction(CPPHandle handle)
+{
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
+    return cppHandle->commitOrRollbackTransaction();
+}
+
+void WCDBHandleRollbackTransaction(CPPHandle handle)
+{
+    WCDBGetObjectOrReturn(handle, WCDB::InnerHandle, cppHandle);
+    cppHandle->rollbackTransaction();
+}
+
+bool WCDBHandleBeginNestedTransaction(CPPHandle handle)
+{
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
+    return cppHandle->beginNestedTransaction();
+}
+
+bool WCDBHandleCommitNestedTransaction(CPPHandle handle)
+{
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
+    return cppHandle->commitOrRollbackNestedTransaction();
+}
+
+void WCDBHandleRollbackNestedTransaction(CPPHandle handle)
+{
+    WCDBGetObjectOrReturn(handle, WCDB::InnerHandle, cppHandle);
+    cppHandle->rollbackNestedTransaction();
+}
+
+bool WCDBHandleRunTransaction(CPPHandle handle, SwiftClosure* _Nullable transaction)
+{
+    WCDBTransaction bridgeTransaction
+    = WCDBCreateSwiftBridgedClosure(WCDBTransaction, transaction);
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
+    if (WCDBGetSwiftClosure(bridgeTransaction) != nullptr) {
+        return cppHandle->runTransaction([bridgeTransaction](WCDB::InnerHandle* innerHandle) {
+            CPPHandle bridgeHandle = WCDBCreateUnmanageCPPObject(CPPHandle, innerHandle);
+            return WCDBSwiftClosureCallWithOneArgument(bridgeTransaction, bridgeHandle);
+        });
+    } else {
+        return false;
+    }
+}
+
+bool WCDBHandleRunNestedTransaction(CPPHandle handle, SwiftClosure* _Nullable nestedTransaction)
+{
+    WCDBTransaction bridgeTransaction
+    = WCDBCreateSwiftBridgedClosure(WCDBTransaction, nestedTransaction);
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
+    if (WCDBGetSwiftClosure(bridgeTransaction) != nullptr) {
+        return cppHandle->runNestedTransaction([bridgeTransaction](WCDB::InnerHandle* innerHandle) {
+            CPPHandle bridgeHandle = WCDBCreateUnmanageCPPObject(CPPHandle, innerHandle);
+            return WCDBSwiftClosureCallWithOneArgument(bridgeTransaction, bridgeHandle);
+        });
+    } else {
+        return false;
+    }
+}
+bool WCDBHandleRunPauseableTransaction(CPPHandle handle, SwiftClosure* _Nullable pauseableTransaction)
+{
+    WCDBPauseableTransaction bridgeTransaction
+    = WCDBCreateSwiftBridgedClosure(WCDBPauseableTransaction, pauseableTransaction);
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
+    if (WCDBGetSwiftClosure(bridgeTransaction) != nullptr) {
+        return cppHandle->runPauseableTransactionWithOneLoop(
+        [bridgeTransaction](WCDB::InnerHandle* innerHandle, bool& stop, bool isNewTransaction) {
+            CPPHandle bridgeHandle = WCDBCreateUnmanageCPPObject(CPPHandle, innerHandle);
+            return WCDBSwiftClosureCallWithMultiArgument(
+            bridgeTransaction, bridgeHandle, &stop, isNewTransaction);
+        });
+    } else {
+        return false;
+    }
 }

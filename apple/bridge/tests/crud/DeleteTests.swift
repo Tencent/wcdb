@@ -27,13 +27,7 @@ class DeleteTests: CRUDTestCase {
 
     override func setUp() {
         super.setUp()
-        delete = database.prepareDelete(fromTable: CRUDObject.name)
-    }
-
-    func testBase() {
-        XCTAssertNotNil(delete.tag)
-        XCTAssertEqual(delete.tag, database.tag)
-        XCTAssertEqual(delete.path, database.path)
+        delete = WCDBAssertNoThrowReturned(try database.prepareDelete(fromTable: CRUDObject.name))
     }
 
     func testDelete() {

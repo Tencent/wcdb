@@ -22,14 +22,14 @@ import Foundation
 
 final class TableDecoder: Decoder {
 
-    private let handleStatement: HandleStatement
+    private let handleStatement: StatementInterface
 
     typealias HashedKey = [Int: Int] // hash value -> index
     private let hashedKeys: HashedKey
 
     private var container: Any?
 
-    init(_ codingTableKeys: [CodingTableKeyBase], on handleStatement: HandleStatement) {
+    init(_ codingTableKeys: [CodingTableKeyBase], on handleStatement: StatementInterface) {
         var hashedKeys: HashedKey = [:]
         for (index, key) in codingTableKeys.enumerated() {
             hashedKeys[key.stringValue.hashValue] = index
@@ -38,7 +38,7 @@ final class TableDecoder: Decoder {
         self.handleStatement = handleStatement
     }
 
-    init(_ hashedKeys: HashedKey, on handleStatement: HandleStatement) {
+    init(_ hashedKeys: HashedKey, on handleStatement: StatementInterface) {
         self.hashedKeys = hashedKeys
         self.handleStatement = handleStatement
     }
@@ -55,11 +55,11 @@ final class TableDecoder: Decoder {
     private final class KeyedDecodingTableContainer<CodingKeys: CodingKey>: KeyedDecodingContainerProtocol {
         typealias Key = CodingKeys
 
-        private let handleStatement: HandleStatement
+        private let handleStatement: StatementInterface
 
         private let hashedKeys: HashedKey
 
-        init(with hashedKeys: HashedKey, on handleStatement: HandleStatement) {
+        init(with hashedKeys: HashedKey, on handleStatement: StatementInterface) {
             self.handleStatement = handleStatement
             self.hashedKeys = hashedKeys
         }

@@ -22,27 +22,27 @@ import Foundation
 
 /// Chain call for row-selecting
 public final class RowSelect: Selectable {
-    init(with database: Database,
+    init(with handle: Handle,
          results columnResultConvertibleList: [ResultColumnConvertible],
          tables: [String],
          isDistinct: Bool) {
         let statement = StatementSelect().select(distinct: isDistinct, columnResultConvertibleList).from(tables)
-        super.init(with: database, statement: statement)
+        super.init(with: handle, statement: statement)
     }
 
     private func extract(atIndex index: Int) throws -> Value {
-        let handleStatement = try self.lazyHandleStatement()
-        switch handleStatement.columnType(atIndex: index) {
+        try lazyPrepareStatement()
+        switch handle.columnType(atIndex: index) {
         case .integer32:
-            return Value(handleStatement.columnValue(atIndex: index, of: Int32.self))
+            return Value(handle.columnValue(atIndex: index, of: Int32.self))
         case .integer64:
-            return Value(handleStatement.columnValue(atIndex: index, of: Int64.self))
+            return Value(handle.columnValue(atIndex: index, of: Int64.self))
         case .float:
-            return Value(handleStatement.columnValue(atIndex: index, of: Double.self))
+            return Value(handle.columnValue(atIndex: index, of: Double.self))
         case .text:
-            return Value(handleStatement.columnValue(atIndex: index, of: String.self))
+            return Value(handle.columnValue(atIndex: index, of: String.self))
         case .BLOB:
-            return Value(handleStatement.columnValue(atIndex: index, of: Data.self))
+            return Value(handle.columnValue(atIndex: index, of: Data.self))
         case .null:
             return Value(nil)
         }
@@ -50,8 +50,8 @@ public final class RowSelect: Selectable {
 
     private func extract() throws -> OneRowValue {
         var row: OneRowValue = []
-        let handleStatement = try self.lazyHandleStatement()
-        for index in 0..<handleStatement.columnCount() {
+        try lazyPrepareStatement()
+        for index in 0..<handle.columnCount() {
             row.append(try extract(atIndex: index))
         }
         return row

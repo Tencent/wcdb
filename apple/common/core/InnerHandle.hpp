@@ -27,13 +27,17 @@
 #include <WCDB/AbstractHandle.hpp>
 #include <WCDB/Configs.hpp>
 #include <WCDB/CoreConst.h>
+#include <WCDB/TransactionGuard.hpp>
 
 namespace WCDB {
 
 class Handle;
 
+InnerHandleStatement *GetMainHandleStatement(InnerHandle *handle);
+
 class InnerHandle : public AbstractHandle {
     friend Handle;
+    friend InnerHandleStatement *GetMainHandleStatement(InnerHandle *handle);
 #pragma mark - Initialize
 public:
     InnerHandle();
@@ -110,11 +114,22 @@ protected:
 public:
     typedef std::function<bool(InnerHandle *)> TransactionCallback;
     typedef std::function<bool(InnerHandle *, bool &, bool)> TransactionCallbackForOneLoop;
+    bool beginTransaction() override final;
+    void rollbackTransaction() override final;
+
     bool checkMainThreadBusyRetry();
     bool checkHasBusyRetry();
     bool runTransaction(const TransactionCallback &transaction);
     bool runNestedTransaction(const TransactionCallback &transaction);
     bool runPauseableTransactionWithOneLoop(const TransactionCallbackForOneLoop &transaction);
+
+    void configTransactionEvent(TransactionEvent *event);
+
+protected:
+    bool commitTransaction() override final;
+
+private:
+    TransactionEvent *m_transactionEvent;
 };
 
 class ConfiguredHandle final : public InnerHandle {

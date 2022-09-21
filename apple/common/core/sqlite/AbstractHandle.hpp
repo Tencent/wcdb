@@ -112,9 +112,9 @@ public:
 
 #pragma mark - Transaction
 public:
-    bool beginTransaction();
+    virtual bool beginTransaction();
     bool commitOrRollbackTransaction();
-    void rollbackTransaction();
+    virtual void rollbackTransaction();
 
     bool beginNestedTransaction();
     bool commitOrRollbackNestedTransaction();
@@ -123,6 +123,9 @@ public:
     void markErrorNotAllowedWithinTransaction();
     bool isErrorAllowedWithinTransaction() const;
     bool checkMainThreadBusyRetry() const;
+
+protected:
+    virtual bool commitTransaction();
 
 private:
     int m_transactionLevel;
