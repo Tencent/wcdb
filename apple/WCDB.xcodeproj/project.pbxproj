@@ -528,6 +528,10 @@
 		03A57F1C2840B5DC00D2A4C3 /* BindParameterBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03A57F1A2840B5DC00D2A4C3 /* BindParameterBridge.cpp */; };
 		03A57F1D2840B5DC00D2A4C3 /* BindParameterBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03A57F1B2840B5DC00D2A4C3 /* BindParameterBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		03A57F1F2840BEFF00D2A4C3 /* BindParameterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A57F1E2840BEFF00D2A4C3 /* BindParameterTests.swift */; };
+		03AA58B128D2DE5000376EC2 /* CrossPlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = 03AA58A628D2DE4F00376EC2 /* CrossPlatform.h */; };
+		03AA58B228D2DE5000376EC2 /* CrossPlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = 03AA58A628D2DE4F00376EC2 /* CrossPlatform.h */; };
+		03AA58C828D2E33800376EC2 /* CrossPlatform.c in Sources */ = {isa = PBXBuildFile; fileRef = 03AA58C728D2E33800376EC2 /* CrossPlatform.c */; };
+		03AA58C928D2E33800376EC2 /* CrossPlatform.c in Sources */ = {isa = PBXBuildFile; fileRef = 03AA58C728D2E33800376EC2 /* CrossPlatform.c */; };
 		03B6A33C2869C51B00D83EC4 /* StatementAlterTableBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03B6A33A2869C51B00D83EC4 /* StatementAlterTableBridge.cpp */; };
 		03B6A33D2869C51B00D83EC4 /* StatementAlterTableBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03B6A33B2869C51B00D83EC4 /* StatementAlterTableBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		03BF4B1A2888F87C00A30500 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
@@ -1848,6 +1852,8 @@
 		03A57F1A2840B5DC00D2A4C3 /* BindParameterBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BindParameterBridge.cpp; sourceTree = "<group>"; };
 		03A57F1B2840B5DC00D2A4C3 /* BindParameterBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BindParameterBridge.h; sourceTree = "<group>"; };
 		03A57F1E2840BEFF00D2A4C3 /* BindParameterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindParameterTests.swift; sourceTree = "<group>"; };
+		03AA58A628D2DE4F00376EC2 /* CrossPlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossPlatform.h; sourceTree = "<group>"; };
+		03AA58C728D2E33800376EC2 /* CrossPlatform.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CrossPlatform.c; sourceTree = "<group>"; };
 		03B6A33A2869C51B00D83EC4 /* StatementAlterTableBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StatementAlterTableBridge.cpp; sourceTree = "<group>"; };
 		03B6A33B2869C51B00D83EC4 /* StatementAlterTableBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StatementAlterTableBridge.h; sourceTree = "<group>"; };
 		03BF4B1F2888F87C00A30500 /* BenchmarkTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BenchmarkTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3396,6 +3402,8 @@
 		037C3C0F2897ECD700328EC8 /* platform */ = {
 			isa = PBXGroup;
 			children = (
+				03AA58A628D2DE4F00376EC2 /* CrossPlatform.h */,
+				03AA58C728D2E33800376EC2 /* CrossPlatform.c */,
 				037C3C102897EDC700328EC8 /* WCTFileManager.cpp */,
 				037C3C122897EFD600328EC8 /* WCTOperationQueue.cpp */,
 			);
@@ -5600,6 +5608,7 @@
 				037C3B7C2897E33600328EC8 /* StatementSavepoint.hpp in Headers */,
 				037C3B7D2897E33600328EC8 /* AuxiliaryFunctionModules.hpp in Headers */,
 				037C3B7E2897E33600328EC8 /* FullCrawler.hpp in Headers */,
+				03AA58B128D2DE5000376EC2 /* CrossPlatform.h in Headers */,
 				037C3B802897E33600328EC8 /* SQLiteAssembler.hpp in Headers */,
 				037C3B842897E33600328EC8 /* StatementAttach.hpp in Headers */,
 				037C3B852897E33600328EC8 /* ColumnDef.hpp in Headers */,
@@ -5870,6 +5879,7 @@
 				23EEDC74217DFADC006E9E73 /* SyntaxList.hpp in Headers */,
 				2349F76C1EA0D6680021EFA7 /* WCTTableConstraintMacro.h in Headers */,
 				03DCB5F3286C480900CBC75D /* StatementCreateIndexBridge.h in Headers */,
+				03AA58B228D2DE5000376EC2 /* CrossPlatform.h in Headers */,
 				23EEDC7C217DFADC006E9E73 /* ColumnConstraint.hpp in Headers */,
 				03F54825287D87F9007BCA3E /* StatementDropIndexBridge.h in Headers */,
 				237A8D5821ED88DF003AF5BB /* SQLiteDeclaration.h in Headers */,
@@ -6629,6 +6639,7 @@
 				037C3A142897E33600328EC8 /* CommonTableExpression.cpp in Sources */,
 				037C3A162897E33600328EC8 /* PerformanceTraceConfig.cpp in Sources */,
 				037C3A172897E33600328EC8 /* StatementCommit.cpp in Sources */,
+				03AA58C828D2E33800376EC2 /* CrossPlatform.c in Sources */,
 				037C3A1A2897E33600328EC8 /* AutoCheckpointConfig.cpp in Sources */,
 				037C3A1D2897E33600328EC8 /* Filter.cpp in Sources */,
 				037C3A1E2897E33600328EC8 /* Thread.cpp in Sources */,
@@ -7225,6 +7236,7 @@
 				2370B12621914ED500D3227C /* WCTMaster.mm in Sources */,
 				23EEDD4D217DFADC006E9E73 /* SyntaxReindexSTMT.cpp in Sources */,
 				03F54820287D8467007BCA3E /* StatementDetachBridge.cpp in Sources */,
+				03AA58C928D2E33800376EC2 /* CrossPlatform.c in Sources */,
 				032613B6283F8D7E00836E0F /* ColumnBridge.cpp in Sources */,
 				23EEDD39217DFADC006E9E73 /* SyntaxCreateViewSTMT.cpp in Sources */,
 				23EEDC77217DFADC006E9E73 /* BindParameter.cpp in Sources */,

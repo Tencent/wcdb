@@ -25,6 +25,7 @@
 #pragma once
 
 #include <WCDB/SharedThreadedErrorProne.hpp>
+#include <memory>
 #include <stdio.h>
 #include <stdlib.h>
 #include <type_traits>

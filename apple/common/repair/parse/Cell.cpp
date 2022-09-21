@@ -28,6 +28,7 @@
 #include <WCDB/Pager.hpp>
 #include <WCDB/Serialization.hpp>
 #include <WCDB/StringView.hpp>
+#include <cstring>
 #include <set>
 
 namespace WCDB {

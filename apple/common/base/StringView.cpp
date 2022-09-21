@@ -24,6 +24,7 @@
 
 #include <WCDB/Macro.h>
 #include <WCDB/StringView.hpp>
+#include <cstring>
 #include <zlib.h>
 
 namespace WCDB {

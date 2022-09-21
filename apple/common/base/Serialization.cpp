@@ -27,6 +27,7 @@
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Serialization.hpp>
 #include <WCDB/StringView.hpp>
+#include <cstring>
 
 namespace WCDB {
 

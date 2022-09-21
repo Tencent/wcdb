@@ -15,7 +15,7 @@ if (NOT DEFINED CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE STREQUAL "")
     set(CMAKE_BUILD_TYPE "Release")
 endif ()
 if (NOT DEFINED BUILD_SHARED_LIBS)
-    set(BUILD_SHARED_LIBS FALSE)
+    set(BUILD_SHARED_LIBS OFF)
 endif ()
 
 if (WIN32)
@@ -24,27 +24,27 @@ if (WIN32)
     endif ()
     # disable warning LNK4099: PDB 'xxx.pdb' was not found
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /ignore:4099")
-else ()
-    if (APPLE)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions -Wno-atomic-memory-ordering -Wno-deprecated-declarations")
-        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-dead_strip")
+elseif (APPLE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions -Wno-atomic-memory-ordering -Wno-deprecated-declarations")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-dead_strip")
 
-        # suppress generation of ZERO_CHECK in xcodeproj
-        set(CMAKE_SUPPRESS_REGENERATION true)
+    # suppress generation of ZERO_CHECK in xcodeproj
+    set(CMAKE_SUPPRESS_REGENERATION true)
 
-        # for symbols hidden
-        set(CMAKE_XCODE_ATTRIBUTE_DEPLOYMENT_POSTPROCESSING "YES")
-        set(CMAKE_XCODE_ATTRIBUTE_EXPORTED_SYMBOLS_FILE "${CMAKE_CURRENT_SOURCE_DIR}/export_symbol.list")
-        set(CMAKE_XCODE_ATTRIBUTE_GCC_SYMBOLS_PRIVATE_EXTERN "YES")
-        set(CMAKE_XCODE_ATTRIBUTE_STRIP_STYLE "non-global")
-    else ()
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
-        #set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--exclude-libs,ALL -Wl,--gc-sections")
-        if (LINUX)
-            set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-rpath,$ORIGIN")
-        endif ()
-    endif ()
+    # for symbols hidden
+    set(CMAKE_XCODE_ATTRIBUTE_DEPLOYMENT_POSTPROCESSING "YES")
+    set(CMAKE_XCODE_ATTRIBUTE_EXPORTED_SYMBOLS_FILE "${CMAKE_CURRENT_SOURCE_DIR}/export_symbol.list")
+    set(CMAKE_XCODE_ATTRIBUTE_GCC_SYMBOLS_PRIVATE_EXTERN "YES")
+    set(CMAKE_XCODE_ATTRIBUTE_STRIP_STYLE "non-global")
+elseif (LINUX)
+    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unknown-pragmas -Wno-pragmas -Wno-deprecated -Wno-unused-variable")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-pragmas -Wno-pragmas -Wno-deprecated -Wno-unused-variable")
+    endif()
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
+    #set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--exclude-libs,ALL -Wl,--gc-sections")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-rpath,$ORIGIN")
 endif ()
 
 wconan_import_libraries(
@@ -249,6 +249,7 @@ file(GLOB_RECURSE SRC_WCDB_COMMON
         )
 file(GLOB_RECURSE SRC_WCDB_CPP
         ${WCDB_SRC_DIR}/cpp/*.cpp
+        ${WCDB_SRC_DIR}/cpp/*.c
         )
 
 set(ALL_SRCS
@@ -364,6 +365,12 @@ elseif (APPLE)
     endif ()
 elseif (LINUX)
     target_link_libraries(${WCONAN_LIB_NAME} ${LINK_LIBRARIES} z pthread)
+    if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+        message(STATUS "Detected LP64 System, SQLite int64 set to long")
+        target_compile_definitions(${WCONAN_LIB_NAME} PRIVATE
+                SQLITE_INT64_TYPE=long
+                )
+    endif ()
 elseif (ANDROID)
     message(STATUS "---- BUILD FOR ANDROID: ANDROID_PLATFORM ${ANDROID_PLATFORM} ----")
     #add_definitions(-DMARS_STATIC_XLOG)
@@ -374,6 +381,12 @@ elseif (ANDROID)
             ${z-lib}
             c++_shared
             )
+    if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+        message(STATUS "Detected LP64 System, SQLite int64 set to long")
+        target_compile_definitions(${WCONAN_LIB_NAME} PRIVATE
+                SQLITE_INT64_TYPE=long
+                )
+    endif ()
 else ()
     message(FATAL_ERROR "Unsupported platform!")
 endif ()

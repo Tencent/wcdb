@@ -24,6 +24,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/SubstringMatchInfo.hpp>
+#include <cstring>
 
 namespace WCDB {
 

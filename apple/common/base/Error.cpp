@@ -27,7 +27,11 @@
 #include <WCDB/Error.hpp>
 #include <WCDB/SQLite.h>
 #include <WCDB/StringView.hpp>
+#include <cstring>
 #include <sstream>
+#ifndef __APPLE__
+#include <WCDB/CrossPlatform.h>
+#endif
 
 namespace WCDB {
 

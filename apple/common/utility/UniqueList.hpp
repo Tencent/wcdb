@@ -36,6 +36,8 @@
  * It's designed for tiny dataset less than 20 in usual thus... well.
  */
 
+#include <algorithm>
+#include <functional>
 #include <list>
 
 namespace WCDB {

@@ -27,6 +27,8 @@
 #include <WCDB/Thread.hpp>
 #include <WCDB/ThreadLocal.hpp>
 #include <atomic>
+#include <condition_variable>
+#include <functional>
 #include <mutex>
 #include <queue>
 
@@ -37,8 +39,9 @@ class Conditional final : public std::condition_variable {
 public:
     // false for timeout
     bool wait_for(std::unique_lock<std::mutex> &lockGuard, double seconds);
-
+#ifdef __APPLE__
     void notify(const Thread &thread);
+#endif
 };
 
 #pragma mark - Shared Lock

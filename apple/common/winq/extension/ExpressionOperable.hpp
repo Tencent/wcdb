@@ -39,8 +39,10 @@ protected:
 class ExpressionUnaryOperable : virtual public ExpressionOperable {
 public:
     virtual ~ExpressionUnaryOperable() override = 0;
+#ifndef __linux__
     Expression operator-() const;
     Expression operator+() const;
+#endif
     Expression operator!() const;
     Expression operator~() const;
     Expression isNull() const;

@@ -25,6 +25,9 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Lock.hpp>
 #include <condition_variable>
+#ifndef __APPLE__
+#include <WCDB/CrossPlatform.h>
+#endif
 
 namespace WCDB {
 
@@ -41,10 +44,12 @@ bool Conditional::wait_for(std::unique_lock<std::mutex> &lockGuard, double secon
     return !timeout;
 }
 
+#ifdef __APPLE__
 void Conditional::notify(const Thread &thread)
 {
     pthread_cond_signal_thread_np(native_handle(), thread.m_id);
 }
+#endif
 
 #pragma mark - Shared Lock
 SharedLock::SharedLock()
@@ -94,7 +99,11 @@ void SharedLock::unlockShared()
     if (m_readers == 0) {
         WCTAssert(m_threadedReaders.getOrCreate() == 0);
         if (m_writers == 0 && m_pendingWriters.size() > 0) {
+#ifdef __APPLE__
             m_conditionalWriters.notify(m_pendingWriters.front());
+#else
+            m_conditionalWriters.notify_all();
+#endif
         }
     }
 }
@@ -134,7 +143,11 @@ void SharedLock::unlock()
         m_locking = nullptr;
         // write lock first
         if (m_pendingWriters.size() > 0) {
+#ifdef __APPLE__
             m_conditionalWriters.notify(m_pendingWriters.front());
+#else
+            m_conditionalWriters.notify_all();
+#endif
         } else if (m_pendingReaders > 0) {
             m_conditionalReaders.notify_all();
         }

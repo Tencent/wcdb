@@ -24,6 +24,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Recyclable.hpp>
+#include <atomic>
 
 namespace WCDB {
 

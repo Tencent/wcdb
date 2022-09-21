@@ -23,6 +23,7 @@
  */
 
 #include <WCDB/Value.hpp>
+#include <cstring>
 #include <math.h>
 
 namespace WCDB {
