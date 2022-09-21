@@ -49,7 +49,7 @@ IndexedColumn IndexedColumnConvertible<WCTProperty>::asIndexedColumn(const WCTPr
 
 LiteralValue LiteralValueConvertible<NSString*>::asLiteralValue(NSString* string)
 {
-    if(string == nil){
+    if (string == nil) {
         return WCDB::LiteralValue(nullptr);
     }
     return WCDB::UnsafeStringView(string.UTF8String, [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
@@ -57,7 +57,7 @@ LiteralValue LiteralValueConvertible<NSString*>::asLiteralValue(NSString* string
 
 LiteralValue LiteralValueConvertible<NSNumber*>::asLiteralValue(NSNumber* number)
 {
-    if(number == nil){
+    if (number == nil) {
         return WCDB::LiteralValue(nullptr);
     }
     if (number == nil || CFNumberIsFloatType((CFNumberRef) number)) {

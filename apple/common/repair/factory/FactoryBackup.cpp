@@ -35,16 +35,16 @@ namespace Repair {
 
 FactoryBackup::~FactoryBackup() = default;
 
-bool FactoryBackup::work(const UnsafeStringView &database)
+bool FactoryBackup::work(const UnsafeStringView& database)
 {
     auto materialPath = Factory::materialForSerializingForDatabase(database);
-    if(!materialPath.has_value()){
+    if (!materialPath.has_value()) {
         assignWithSharedThreadedError();
         return false;
     }
-    
+
     notifiyBackupBegin(materialPath.value());
-    
+
     Backup backup(database);
     backup.setBackupSharedDelegate(m_sharedDelegate);
     backup.setBackupExclusiveDelegate(m_exclusiveDelegate);
@@ -67,18 +67,20 @@ bool FactoryBackup::work(const UnsafeStringView &database)
     return true;
 }
 
-void FactoryBackup::notifiyBackupBegin(StringView& materialPath){
+void FactoryBackup::notifiyBackupBegin(StringView& materialPath)
+{
     Error error(Error::Code::Notice, Error::Level::Notice, "Backup Begin.");
     error.infos.insert_or_assign(ErrorStringKeyPath, materialPath);
     Notifier::shared().notify(error);
 }
 
-void FactoryBackup::notifiyBackupEnd(StringView& materialPath, Backup& backup) {
+void FactoryBackup::notifiyBackupEnd(StringView& materialPath, Backup& backup)
+{
     auto fileSize = FileManager::getFileSize(materialPath);
     if (fileSize.has_value()) {
         uint32_t associatedTableCount = 0;
         uint32_t leafPageCount = 0;
-        for(auto content: backup.getMaterial().contents){
+        for (auto content : backup.getMaterial().contents) {
             associatedTableCount += content.second.associatedSQLs.size();
             leafPageCount += content.second.verifiedPagenos.size();
         }
