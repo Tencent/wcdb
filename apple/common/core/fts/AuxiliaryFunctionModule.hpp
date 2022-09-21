@@ -26,6 +26,7 @@
 
 #import <WCDB/FTSError.hpp>
 #import <WCDB/StringView.hpp>
+#include <functional>
 
 typedef struct FTS5AuxiliaryFunctionValue FTS5AuxiliaryFunctionValue;
 typedef struct FTS5AuxiliaryFunctionAPIPointer FTS5AuxiliaryFunctionAPIPointer;

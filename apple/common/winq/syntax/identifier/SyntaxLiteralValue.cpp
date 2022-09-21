@@ -24,6 +24,7 @@
 
 #include <WCDB/Syntax.h>
 #include <WCDB/SyntaxAssertion.hpp>
+#include <limits>
 
 namespace WCDB {
 

@@ -25,6 +25,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Data.hpp>
 #include <WCDB/Notifier.hpp>
+#include <cstring>
 #include <zlib.h>
 
 namespace WCDB {

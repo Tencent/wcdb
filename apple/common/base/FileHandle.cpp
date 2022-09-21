@@ -30,6 +30,9 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <unistd.h>
+#ifndef __APPLE__
+#include <WCDB/CrossPlatform.h>
+#endif
 
 namespace WCDB {
 

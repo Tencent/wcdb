@@ -30,6 +30,7 @@
 #include <WCDB/Serialization.hpp>
 #include <WCDB/StringView.hpp>
 #include <WCDB/ThreadedErrors.hpp>
+#include <cstring>
 
 #warning TODO - support cipher database
 namespace WCDB {

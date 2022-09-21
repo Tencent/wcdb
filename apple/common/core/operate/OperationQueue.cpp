@@ -31,6 +31,9 @@
 #include <WCDB/OperationQueue.hpp>
 #include <fcntl.h>
 #include <unistd.h>
+#ifndef __APPLE__
+#include <WCDB/CrossPlatform.h>
+#endif
 
 namespace WCDB {
 

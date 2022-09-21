@@ -25,6 +25,7 @@
 #pragma once
 
 #include <WCDB/Config.hpp>
+#include <functional>
 
 namespace WCDB {
 

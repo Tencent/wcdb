@@ -28,12 +28,16 @@
 #include <WCDB/Path.hpp>
 #include <WCDB/StringView.hpp>
 #include <WCDB/UnsafeData.hpp>
+#include <cstring>
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+#ifndef __APPLE__
+#include <WCDB/CrossPlatform.h>
+#endif
 
 namespace WCDB {
 

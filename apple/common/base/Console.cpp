@@ -27,7 +27,12 @@
 #include <WCDB/Error.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Version.h>
+#ifndef __APPLE__
+#include <WCDB/CrossPlatform.h>
+#endif
+#ifndef __ANDROID__
 #include <execinfo.h>
+#endif
 #include <stdlib.h>
 
 namespace WCDB {

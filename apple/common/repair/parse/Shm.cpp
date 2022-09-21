@@ -31,6 +31,7 @@
 #include <WCDB/Shm.hpp>
 #include <WCDB/StringView.hpp>
 #include <WCDB/Wal.hpp>
+#include <cstring>
 
 namespace WCDB {
 

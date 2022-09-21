@@ -25,6 +25,11 @@
 #include <WCDB/Error.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Thread.hpp>
+#include <cstring>
+#include <pthread.h>
+#ifndef __APPLE__
+#include <WCDB/CrossPlatform.h>
+#endif
 
 namespace WCDB {
 
@@ -33,13 +38,15 @@ Thread::Thread(pthread_t id) : m_id(id)
 {
 }
 
-Thread::Thread() : Thread(nullptr)
+// pthread_t in linux/android is a typedef of long
+// use NULL to keep compatability
+Thread::Thread() : Thread(NULL)
 {
 }
 
 Thread& Thread::operator=(const std::nullptr_t&)
 {
-    m_id = nullptr;
+    m_id = NULL;
     return *this;
 }
 

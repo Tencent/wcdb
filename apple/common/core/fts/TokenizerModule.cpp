@@ -26,6 +26,7 @@
 #include <WCDB/SQLite.h>
 #include <WCDB/SQLiteFTS3Tokenizer.h>
 #include <WCDB/TokenizerModule.hpp>
+#include <cstring>
 #include <memory>
 
 namespace WCDB {

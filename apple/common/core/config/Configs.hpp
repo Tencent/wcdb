@@ -27,6 +27,7 @@
 #include <WCDB/Config.hpp>
 #include <WCDB/StringView.hpp>
 #include <WCDB/UniqueList.hpp>
+#include <limits>
 
 namespace WCDB {
 

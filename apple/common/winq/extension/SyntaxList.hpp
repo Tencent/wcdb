@@ -25,6 +25,7 @@
 #pragma once
 
 #include <WCDB/ValueArray.hpp>
+#include <cassert>
 #include <list>
 #include <type_traits>
 
