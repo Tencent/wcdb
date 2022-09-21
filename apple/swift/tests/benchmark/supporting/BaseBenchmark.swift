@@ -41,8 +41,9 @@ class BaseBenchmark: BaseTestCase {
 
     func setUpWithPreCreateTable(count: Int = 1) {
         XCTAssertNoThrow(try database.run(transaction: {
+            _ in
             for i in 0..<count {
-                try database.create(table: getTableName(withIndex: i), of: BenchmarkObject.self)
+                try self.database.create(table: self.getTableName(withIndex: i), of: BenchmarkObject.self)
             }
         }))
     }

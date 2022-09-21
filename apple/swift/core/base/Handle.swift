@@ -20,60 +20,95 @@
 
 import Foundation
 
-public typealias Tag = Int
-
 public final class Handle {
     private let recyclableHandle: RecyclableCPPHandle
-    internal let handle: CPPHandle
+    internal let cppHandle: CPPHandle
+    private var handleStatementDic: [String: HandleStatement]
 
     internal init(withCPPHandle cppHandle: CPPHandle) {
         self.recyclableHandle = ObjectBridge.createRecyclableCPPObject(cppHandle)
-        self.handle = cppHandle
+        self.cppHandle = cppHandle
+        handleStatementDic = [:]
+    }
+
+    deinit {
+        finalizeAllStatement()
     }
 
     internal func getError() -> Error {
-        let cppError = WCDBHandleGetError(handle)
+        let cppError = WCDBHandleGetError(cppHandle)
         return ErrorBridge.getErrorFrom(cppError: cppError)
-    }
-
-    public func prepare(_ statement: Statement) throws -> HandleStatement {
-        let cppHandleStatement = withExtendedLifetime(statement) {
-            WCDBHandlePrepare(handle, $0.unmanagedCPPStatement)
-        }
-        let handleStatement = HandleStatement(with: cppHandleStatement, and: self)
-        if !WCDBHandleStatementCheckPrepared(cppHandleStatement) {
-            throw getError()
-        }
-        return handleStatement
     }
 
     public func exec(_ statement: Statement) throws {
         let excuted = withExtendedLifetime(statement) {
-            WCDBHandleExcute(handle, $0.unmanagedCPPStatement)
+            WCDBHandleExcute(cppHandle, $0.unmanagedCPPStatement)
         }
         if !excuted {
-            let cppError = WCDBHandleGetError(handle)
+            let cppError = WCDBHandleGetError(cppHandle)
             throw ErrorBridge.getErrorFrom(cppError: cppError)
         }
     }
 
+    public func getOrCreateHandleStatement(withTag tag: String) -> HandleStatement {
+        var handleStatment = handleStatementDic[tag]
+        if handleStatment == nil {
+            handleStatment = HandleStatement(with: WCDBHandleGetStatement(cppHandle), and: self, and: tag)
+            handleStatementDic[tag] = handleStatment!
+        }
+        return handleStatment!
+    }
+
+    public func finalizeAllStatement() {
+        for (_, handleStatment) in self.handleStatementDic {
+            handleStatment.finalize()
+            WCDBHandleReturnStatement(cppHandle, handleStatment.getRawStatement())
+        }
+        self.handleStatementDic.removeAll()
+        finalize()
+    }
+
     public var changes: Int {
-        return Int(WCDBHandleGetChange(handle))
+        return Int(WCDBHandleGetChange(cppHandle))
     }
 
     public var totalChanges: Int {
-        return Int(WCDBHandleGetTotalChange(handle))
+        return Int(WCDBHandleGetTotalChange(cppHandle))
     }
 
-    public var isReadonly: Bool {
-        return WCDBHandleIsReadOnly(handle)
-    }
-
-    public var isInTransaction: Bool {
-        return WCDBHandleIsInTransaction(handle)
-    }
-
-    public var lasInsertedRowID: Int64 {
-        return WCDBHandleGetLastInsertedRowID(handle)
+    public var lastInsertedRowID: Int64 {
+        return WCDBHandleGetLastInsertedRowID(cppHandle)
     }
 }
+
+public protocol HandleRepresentable {
+    func getHandle() throws -> Handle
+}
+
+extension Handle: HandleRepresentable {
+    public func getHandle() throws -> Handle {
+        return self
+    }
+}
+
+extension Handle: RawStatementmentRepresentable {
+    public func getRawStatement() -> CPPHandleStatement {
+        return WCDBHandleGetMainStatement(cppHandle)
+    }
+}
+
+extension Handle: StatementInterface {}
+
+extension Handle: InsertChainCallInterface {}
+extension Handle: UpdateChainCallInterface {}
+extension Handle: DeleteChainCallInterface {}
+extension Handle: RowSelectChainCallInterface {}
+extension Handle: SelectChainCallInterface {}
+extension Handle: MultiSelectChainCallInterface {}
+
+extension Handle: InsertInterface {}
+extension Handle: UpdateInterface {}
+extension Handle: DeleteInterface {}
+extension Handle: RowSelectInterface {}
+extension Handle: SelectInterface {}
+extension Handle: TransactionInterface {}

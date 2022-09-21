@@ -26,14 +26,14 @@ public final class Select: Selectable {
         self.properties.asCodingTableKeys()
     }()
 
-    private lazy var decoder = TableDecoder(keys, on: handleStatement!)
+    private lazy var decoder = TableDecoder(keys, on: handle)
 
-    init(with core: Database, on propertyConvertibleList: [PropertyConvertible], table: String, isDistinct: Bool) {
+    init(with handle: Handle, on propertyConvertibleList: [PropertyConvertible], table: String, isDistinct: Bool) {
         // TODO: Use generic to check all coding table keys conform to same root type
         assert(propertyConvertibleList.count > 0, "Property list must not be empty.")
         properties = propertyConvertibleList
         let statement = StatementSelect().select(distinct: isDistinct, propertyConvertibleList).from(table)
-        super.init(with: core, statement: statement)
+        super.init(with: handle, statement: statement)
     }
 
     /// Get next selected object according to the `CodingTableKey`. You can do an iteration using it.
@@ -52,7 +52,7 @@ public final class Select: Selectable {
             guard try next() else {
                 return nil
             }
-            return WCTAPIBridge.extractObject(onResultColumns: properties.asWCTBridgeProperties(), from: handleStatement!.stmt)
+            return WCTAPIBridge.extractObject(onResultColumns: properties.asWCTBridgeProperties(), from: handle.getRawStatement())
         }
     }
 
@@ -70,7 +70,7 @@ public final class Select: Selectable {
             }
         } else {
             while try next() {
-                if let obj = WCTAPIBridge.extractObject(onResultColumns: properties.asWCTBridgeProperties(), from: handleStatement!.stmt) {
+                if let obj = WCTAPIBridge.extractObject(onResultColumns: properties.asWCTBridgeProperties(), from: handle.getRawStatement()) {
                     objects.append(obj)
                 }
             }
@@ -95,7 +95,7 @@ public final class Select: Selectable {
         guard try next() else {
             return nil
         }
-        return WCTAPIBridge.extractObject(onResultColumns: properties.asWCTBridgeProperties(), from: handleStatement!.stmt) as? Object
+        return WCTAPIBridge.extractObject(onResultColumns: properties.asWCTBridgeProperties(), from: handle.getRawStatement()) as? Object
     }
 
     /// Get all selected objects.
@@ -115,7 +115,7 @@ public final class Select: Selectable {
         assert(!properties[0].isSwiftProperty(), "Properties must belong to objc obj.")
         var objects: [Object] = []
         while try next() {
-            if let obj = WCTAPIBridge.extractObject(onResultColumns: properties.asWCTBridgeProperties(), from: handleStatement!.stmt) {
+            if let obj = WCTAPIBridge.extractObject(onResultColumns: properties.asWCTBridgeProperties(), from: handle.getRawStatement()) {
                 objects.append(obj as! Object)
             }
         }

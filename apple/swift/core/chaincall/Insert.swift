@@ -22,19 +22,19 @@ import Foundation
 
 /// Chain call for inserting
 public final class Insert {
-    private let database: Database
+    private let handle: Handle
     private var properties: [PropertyConvertible]?
     private let name: String
     private let isReplace: Bool
 
-    init(with database: Database,
+    init(with handle: Handle,
          named name: String,
          on propertyConvertibleList: [PropertyConvertible]?,
          isReplace: Bool = false) {
         self.name = name
         self.properties = propertyConvertibleList
         self.isReplace = isReplace
-        self.database = database
+        self.handle = handle
     }
 
     private var conflict: ConflictAction? {
@@ -43,7 +43,7 @@ public final class Insert {
 
     private lazy var statement: StatementInsert = StatementInsert()
         .insert(intoTable: name).columns(properties!).onConflict(self.conflict)
-        .values(BindParameter.bindParameters(Int32(properties!.count)))
+        .values(BindParameter.bindParameters(properties!.count))
 
     /// Execute the insert chain call with objects.
     ///
@@ -70,18 +70,13 @@ public final class Insert {
     /// - Throws: Error
     public func execute<Object: TableEncodable>(with objects: [Object]) throws {
         guard objects.count > 0 else {
-            ErrorBridge.report(level: .Warning, code: .Misuse, infos: [
-                .tag: ErrorValue(Int(database.tag ?? 0)),
-                .path: ErrorValue(database.path),
-                .message: ErrorValue("Inserting with an empty/nil object")
-            ])
             return
         }
         let orm = Object.CodingKeys.objectRelationalMapping
-        func doInsertObject() throws {
+        func doInsertObject(_ handle: Handle) throws {
             properties = properties ?? Object.Properties.all
-            let handleStatement: HandleStatement = try database.prepare(statement)
-            let encoder = TableEncoder(properties!.asCodingTableKeys(), on: handleStatement)
+            try handle.prepare(statement)
+            let encoder = TableEncoder(properties!.asCodingTableKeys(), on: handle)
             if !isReplace {
                 encoder.primaryKeyHash = orm.getPrimaryKey()?.stringValue.hashValue
             }
@@ -90,43 +85,26 @@ public final class Insert {
                 let isAutoIncrement = object.isAutoIncrement
                 encoder.isPrimaryKeyEncoded = !isAutoIncrement
                 try object.encode(to: encoder)
-                try handleStatement.step()
+                try handle.step()
                 if !isReplace && isAutoIncrement {
-                    object.lastInsertedRowID = handleStatement.lastInsertedRowID
+                    object.lastInsertedRowID = handle.lastInsertedRowID
                 }
-                handleStatement.reset()
+                handle.reset()
             }
+            handle.finalize()
         }
-        return objects.count == 1 ? try doInsertObject() : try database.run(transaction: doInsertObject )
+        return objects.count == 1 ? try doInsertObject(handle) : try handle.run(transaction: doInsertObject)
     }
 
     public func execute<Object: WCTTableCoding>(with objects: [Object]) throws {
         guard objects.count > 0 else {
-            ErrorBridge.report(level: .Warning, code: .Misuse, infos: [
-                .tag: ErrorValue(Int(database.tag ?? 0)),
-                .path: ErrorValue(database.path),
-                .message: ErrorValue("Inserting with an empty/nil object")
-            ])
             return
         }
-        let handle = try database.getHandle()
         if !WCTAPIBridge.insertObjects(objects, intoTable: name,
                                        withProperties: properties?.asWCTBridgeProperties(),
                                        orReplace: isReplace,
-                                       with: handle.handle) {
+                                       with: handle.cppHandle) {
             throw handle.getError()
         }
-    }
-}
-
-extension Insert: DatabaseRepresentable {
-    /// The tag of the related database.
-    public var tag: Tag? {
-        return database.tag
-    }
-
-    /// The path of the related database.
-    public var path: String {
-        return database.path
     }
 }

@@ -36,14 +36,25 @@ WCDBDefineCPPBridgedType(CPPHandle)
 CPPError WCDBHandleGetError(CPPHandle handle);
 bool WCDBHandleCheckValid(CPPHandle handle);
 
-CPPHandleStatement WCDBHandlePrepare(CPPHandle handle, CPPStatement statement);
+CPPHandleStatement WCDBHandleGetMainStatement(CPPHandle handle);
+CPPHandleStatement WCDBHandleGetStatement(CPPHandle handle);
+void WCDBHandleReturnStatement(CPPHandle handle, CPPHandleStatement statement);
 bool WCDBHandleExcute(CPPHandle handle, CPPStatement statement);
 
 int WCDBHandleGetChange(CPPHandle handle);
 int WCDBHandleGetTotalChange(CPPHandle handle);
 signed long long WCDBHandleGetLastInsertedRowID(CPPHandle handle);
 
-bool WCDBHandleIsReadOnly(CPPHandle handle);
 bool WCDBHandleIsInTransaction(CPPHandle handle);
+bool WCDBHandleBeginTransaction(CPPHandle handle);
+bool WCDBHandleCommitTransaction(CPPHandle handle);
+void WCDBHandleRollbackTransaction(CPPHandle handle);
+bool WCDBHandleBeginNestedTransaction(CPPHandle handle);
+bool WCDBHandleCommitNestedTransaction(CPPHandle handle);
+void WCDBHandleRollbackNestedTransaction(CPPHandle handle);
+
+bool WCDBHandleRunTransaction(CPPHandle handle, SwiftClosure* _Nullable transaction);
+bool WCDBHandleRunNestedTransaction(CPPHandle handle, SwiftClosure* _Nullable nestedTransaction);
+bool WCDBHandleRunPauseableTransaction(CPPHandle handle, SwiftClosure* _Nullable pauseableTransaction);
 
 WCDB_EXTERN_C_END

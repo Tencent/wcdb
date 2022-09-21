@@ -38,15 +38,14 @@ class RepairTests: BaseTestCase {
         super.setUp()
         database = Database(withFileURL: self.recommendedPath)
 
-        let optionalHandleStatement = WCDBAssertNoThrowReturned(
-            try database.prepare(StatementPragma().pragma(.pageSize))
-        )
-        XCTAssertNotNil(optionalHandleStatement)
-        let handleStatement = optionalHandleStatement!
+        let handle = WCDBAssertNoThrowReturned(try database.getHandle())!
+        XCTAssertNoThrow(try handle.prepare(StatementPragma().pragma(.pageSize)))
 
-        XCTAssertNoThrow(try handleStatement.step())
+        XCTAssertNoThrow(try handle.step())
 
-        pageSize = handleStatement.value(atIndex: 0)
+        pageSize = handle.value(atIndex: 0)
+
+        handle.finalize()
 
         XCTAssertEqual(pageSize >> 1 & pageSize, 0)
 

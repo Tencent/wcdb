@@ -701,7 +701,6 @@
         double beginInterval = [[NSDate date] timeIntervalSinceDate:write2Begin];
         TestCaseAssertTrue(beginInterval < 1);
         [self.table insertObject:[Random.shared testCaseObjectWithIdentifier:identifier++]];
-        write2Begin = [NSDate date];
         [NSThread sleepForTimeInterval:0.1];
         TestCaseAssertTrue([self.database commitOrRollbackTransaction]);
     } while (++i < 10);
@@ -754,7 +753,6 @@
         double beginInterval = [[NSDate date] timeIntervalSinceDate:write2Begin];
         TestCaseAssertTrue(beginInterval < 1);
         [self.table insertObject:[Random.shared testCaseObjectWithIdentifier:identifier++]];
-        write2Begin = [NSDate date];
         [NSThread sleepForTimeInterval:0.1];
         TestCaseAssertTrue([self.database commitOrRollbackTransaction]);
     } while (++i < 10);

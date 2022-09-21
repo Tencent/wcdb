@@ -22,16 +22,16 @@ import Foundation
 
 /// Chain call for deleting
 public final class Delete {
-    private var database: Database
+    private var handle: Handle
     private let statement = StatementDelete()
 
     /// The number of changed rows in the most recent call.
     /// It should be called after executing successfully
     public var changes: Int?
 
-    init(with database: Database, andTableName tableName: String) {
+    init(with handle: Handle, andTableName tableName: String) {
         statement.delete(from: tableName)
-        self.database = database
+        self.handle = handle
     }
 
     /// WINQ interface for SQL
@@ -101,21 +101,9 @@ public final class Delete {
     ///
     /// - Throws: Error
     public func execute() throws {
-        let handleStatement: HandleStatement = try database.prepare(statement)
-        try handleStatement.step()
-        changes = handleStatement.changes
-    }
-}
-
-extension Delete: DatabaseRepresentable {
-
-    /// The tag of the related database.
-    public var tag: Tag? {
-        return database.tag
-    }
-
-    /// The path of the related database.
-    public var path: String {
-        return database.path
+        try handle.prepare(statement)
+        try handle.step()
+        changes = handle.changes
+        handle.finalize()
     }
 }

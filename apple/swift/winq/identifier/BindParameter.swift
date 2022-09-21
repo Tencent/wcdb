@@ -46,10 +46,10 @@ public final class BindParameter: Identifier<CPPBindParameter> {
         BindParameter(with: WCDBBindparameterCreateDollarSignType(name.cString))
     }
 
-    public static func bindParameters(_ num: Int32) -> [BindParameter] {
+    public static func bindParameters(_ num: Int) -> [BindParameter] {
         var bindParameters: [BindParameter] = []
         for i in 1...num {
-            bindParameters.append(BindParameter(i))
+            bindParameters.append(BindParameter(Int32(i)))
         }
         return bindParameters
     }

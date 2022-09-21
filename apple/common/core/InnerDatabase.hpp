@@ -31,6 +31,7 @@
 #include <WCDB/Migration.hpp>
 #include <WCDB/Tag.hpp>
 #include <WCDB/ThreadLocal.hpp>
+#include <WCDB/TransactionGuard.hpp>
 #include <WCDB/WINQ.h>
 
 namespace WCDB {
@@ -39,7 +40,11 @@ class BaseOperation;
 
 // TODO: readonly manually - by removing basic config and adding query_only config?
 // TODO: support authorize
-class InnerDatabase final : private HandlePool, public MigrationEvent, public MergeFTSIndexHandleProvider {
+class InnerDatabase final : private HandlePool,
+                            public MigrationEvent,
+                            public MergeFTSIndexHandleProvider,
+                            public TransactionEvent {
+    friend BaseOperation;
 #pragma mark - Initializer
     friend BaseOperation;
 
@@ -102,19 +107,8 @@ private:
 
 #pragma mark - Threaded
 private:
-    void markHandleAsTransactioned(const RecyclableHandle &handle);
-    void markHandleAsUntransactioned();
-
-    class TransactionGuard final {
-    public:
-        TransactionGuard(InnerDatabase *database, const RecyclableHandle &handle);
-        ~TransactionGuard();
-
-    private:
-        InnerDatabase *m_database;
-        RecyclableHandle m_handle;
-        bool m_isInTransactionBefore;
-    };
+    void markHandleAsTransactioned(InnerHandle *handle) override final;
+    void markHandleAsUntransactioned() override final;
 
     ThreadLocal<RecyclableHandle> m_transactionedHandles;
 

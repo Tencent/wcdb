@@ -25,7 +25,6 @@
 #include <WCDB/CipherConfig.hpp>
 #import <WCDB/Core.hpp>
 #import <WCDB/CustomConfig.hpp>
-#include <WCDB/Database.hpp>
 #include <WCDB/DatabaseBridge.h>
 #include <WCDB/InnerDatabase.hpp>
 #include <WCDB/ObjectBridge.hpp>
@@ -155,30 +154,6 @@ void WCDBDatabasePurge(CPPDatabase database)
 {
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     cppDatabase->purge();
-}
-
-bool WCDBDatabaseBeginTransaction(CPPDatabase database)
-{
-    WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, false);
-    return cppDatabase->beginTransaction();
-}
-
-bool WCDBDatabaseCommitTransaction(CPPDatabase database)
-{
-    WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, false);
-    return cppDatabase->commitOrRollbackTransaction();
-}
-
-void WCDBDatabaseRollbackTransaction(CPPDatabase database)
-{
-    WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
-    cppDatabase->rollbackTransaction();
-}
-
-bool WCDBDatabaseIsInTransaction(CPPDatabase database)
-{
-    WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, false);
-    return cppDatabase->isInTransaction();
 }
 
 void WCDBDatabaseConfigCipher(CPPDatabase database, const unsigned char* cipherKey, int keyLength, int pageSize)

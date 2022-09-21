@@ -423,6 +423,22 @@ bool AbstractHandle::beginTransaction()
 
 bool AbstractHandle::commitOrRollbackTransaction()
 {
+    bool succeed = true;
+    if (m_transactionError != TransactionError::Fatal) {
+        succeed = commitTransaction();
+    } else {
+        succeed = false;
+    }
+    if (!succeed) {
+        // If certain kinds of errors occur within a transaction, the transaction may or may not be rolled back automatically: https://sqlite.org/lang_transaction.html
+        rollbackTransaction();
+        succeed = false;
+    }
+    return succeed;
+}
+
+bool AbstractHandle::commitTransaction()
+{
     /*
     All statements must be reset before commit or rollback,
     because sqlite will downgrade handle to a read-only transaction state
@@ -431,23 +447,16 @@ bool AbstractHandle::commitOrRollbackTransaction()
     */
     resetAllStatements();
     bool succeed = true;
+    // Transaction can be removed automatically in some case. e.g. interrupt step
     if (isInTransaction()) {
-        if (m_transactionError != TransactionError::Fatal) {
-            static const StatementCommit *s_commit
-            = new StatementCommit(StatementCommit().commit());
+        static const StatementCommit *s_commit
+        = new StatementCommit(StatementCommit().commit());
 
-            succeed = executeStatement(*s_commit);
-            if (succeed) {
-                m_transactionLevel = 0;
-                m_transactionError = TransactionError::Allowed;
-            } else {
-                // If certain kinds of errors occur within a transaction, the transaction may or may not be rolled back automatically: https://sqlite.org/lang_transaction.html
-                rollbackTransaction();
-            }
-        } else {
-            rollbackTransaction();
-            succeed = false;
-        }
+        succeed = executeStatement(*s_commit);
+    }
+    if (succeed) {
+        m_transactionLevel = 0;
+        m_transactionError = TransactionError::Allowed;
     }
     return succeed;
 }

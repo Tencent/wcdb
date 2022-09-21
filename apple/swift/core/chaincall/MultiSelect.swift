@@ -27,13 +27,13 @@ public final class MultiSelect: Selectable {
         self.properties.asCodingTableKeys()
     }()
 
-    init(with database: Database,
+    init(with handle: Handle,
          on propertyConvertibleList: [PropertyConvertible],
          tables: [String],
          isDistinct: Bool = false) {
         properties = propertyConvertibleList
         let statement = StatementSelect().select(distinct: isDistinct, propertyConvertibleList).from(tables)
-        super.init(with: database, statement: statement)
+        super.init(with: handle, statement: statement)
     }
 
     private typealias Generator = () throws -> TableDecodableBase
@@ -48,11 +48,16 @@ public final class MultiSelect: Selectable {
     }
     private lazy var generators: [String: Generator] = {
         var mappedKeys: [String: TypedIndexedKeys] = [:]
-        let handleStatement = try? lazyHandleStatement()
-        assert(handleStatement != nil,
-               "It should not be failed. If you think it's a bug, please report an issue to us.")
+        if !handle.isPrepared {
+            do {
+                try handle.prepare(statement)
+            } catch let error {
+                assert(false,
+                       "It should not be failed. If you think it's a bug, please report an issue to us.")
+            }
+        }
         for (index, key) in keys.enumerated() {
-            let tableName = handleStatement!.columnTableName(atIndex: index)
+            let tableName = handle.columnTableName(atIndex: index)
             var typedIndexedKeys: TypedIndexedKeys! = mappedKeys[tableName]
             if typedIndexedKeys == nil {
                 let tableDecodableType = key.rootType as? TableDecodableBase.Type
@@ -66,7 +71,7 @@ public final class MultiSelect: Selectable {
         }
         var generators: [String: Generator] = [:]
         for (tableName, typedIndexedKey) in mappedKeys {
-            let decoder = TableDecoder(typedIndexedKey.indexedKeys, on: handleStatement!)
+            let decoder = TableDecoder(typedIndexedKey.indexedKeys, on: handle)
             let type = typedIndexedKey.type
             let generator = { () throws -> TableDecodableBase in
                 return try type.init(from: decoder)
@@ -83,10 +88,8 @@ public final class MultiSelect: Selectable {
                 multiObject[tableName] = try generator()
             }
         } else {
-            let handleStatement = try? lazyHandleStatement()
-            assert(handleStatement != nil,
-                   "It should not be failed. If you think it's a bug, please report an issue to us.")
-            multiObject = WCTAPIBridge.extractMultiObject(onResultColumns: properties.asWCTBridgeProperties(), from: handleStatement!.stmt)!
+            try lazyPrepareStatement()
+            multiObject = WCTAPIBridge.extractMultiObject(onResultColumns: properties.asWCTBridgeProperties(), from: handle.getRawStatement())!
         }
         return multiObject
     }

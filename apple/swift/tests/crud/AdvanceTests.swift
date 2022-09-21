@@ -25,90 +25,89 @@ class AdvanceTests: CRUDTestCase {
 
     func testHandleStatement() {
         let statement = StatementSelect().select(Column.all).from(Master.builtinTableName)
-        let optionalHandleStatement = WCDBAssertNoThrowReturned(try database.prepare(statement))
-        XCTAssertNotNil(optionalHandleStatement)
+        let handle = WCDBAssertNoThrowReturned(try database.getHandle())!
+
+        WCDBAssertNoThrowReturned(try handle.prepare(statement))
     }
 
     func testHandleStatementRead() {
         // Give
         let statement = StatementSelect().select(Column.all).from(TestObject.name)
-        let optionalHandleStatement = WCDBAssertNoThrowReturned(try database.prepare(statement))
-        XCTAssertNotNil(optionalHandleStatement)
-        let handleStatement = optionalHandleStatement!
+        let handle = WCDBAssertNoThrowReturned(try database.getHandle())!
+        XCTAssertNoThrow(try handle.prepare(statement))
 
         let expectedVariable1: Int32 = 1
         let expectedVariable2 = "object1"
         // When
-        XCTAssertNoThrow(try handleStatement.step())
+        XCTAssertNoThrow(try handle.step())
         // Then
-        XCTAssertEqual(handleStatement.columnCount(), 2)
+        XCTAssertEqual(handle.columnCount(), 2)
 
-        XCTAssertEqual(handleStatement.columnName(atIndex: 0), "variable1")
-        XCTAssertEqual(handleStatement.columnName(atIndex: 1), "variable2")
+        XCTAssertEqual(handle.columnName(atIndex: 0), "variable1")
+        XCTAssertEqual(handle.columnName(atIndex: 1), "variable2")
 
-        XCTAssertEqual(handleStatement.columnTableName(atIndex: 0), TestObject.name)
-        XCTAssertEqual(handleStatement.columnTableName(atIndex: 1), TestObject.name)
+        XCTAssertEqual(handle.columnTableName(atIndex: 0), TestObject.name)
+        XCTAssertEqual(handle.columnTableName(atIndex: 1), TestObject.name)
 
-        XCTAssertEqual(handleStatement.index(byName: "variable1"), 0)
-        XCTAssertEqual(handleStatement.index(byName: "variable2"), 1)
-        XCTAssertNil(handleStatement.index(byName: "nonexistent"))
+        XCTAssertEqual(handle.index(byName: "variable1"), 0)
+        XCTAssertEqual(handle.index(byName: "variable2"), 1)
+        XCTAssertNil(handle.index(byName: "nonexistent"))
 
-        XCTAssertEqual(handleStatement.columnType(atIndex: 0), ColumnType.integer64)
-        XCTAssertEqual(handleStatement.columnType(atIndex: 1), ColumnType.text)
-        XCTAssertEqual(handleStatement.columnType(byName: "variable1"), ColumnType.integer64)
-        XCTAssertEqual(handleStatement.columnType(byName: "variable2"), ColumnType.text)
-        XCTAssertEqual(handleStatement.columnType(byName: "nonexistent"), ColumnType.null)
+        XCTAssertEqual(handle.columnType(atIndex: 0), ColumnType.integer64)
+        XCTAssertEqual(handle.columnType(atIndex: 1), ColumnType.text)
+        XCTAssertEqual(handle.columnType(byName: "variable1"), ColumnType.integer64)
+        XCTAssertEqual(handle.columnType(byName: "variable2"), ColumnType.text)
+        XCTAssertEqual(handle.columnType(byName: "nonexistent"), ColumnType.null)
 
         do {
-            let variable1: Int32? = handleStatement.value(atIndex: 0)
+            let variable1: Int32? = handle.value(atIndex: 0)
             XCTAssertNotNil(variable1)
             XCTAssertEqual(variable1!, expectedVariable1)
-            let variable2: String? = handleStatement.value(atIndex: 1)
+            let variable2: String? = handle.value(atIndex: 1)
             XCTAssertNotNil(variable2)
             XCTAssertEqual(variable2!, expectedVariable2)
         }
 
         do {
-            let variable1: Int32? = handleStatement.value(byName: "variable1")
+            let variable1: Int32? = handle.value(byName: "variable1")
             XCTAssertNotNil(variable1)
             XCTAssertEqual(variable1!, expectedVariable1)
-            let variable2: String? = handleStatement.value(byName: "variable2")
+            let variable2: String? = handle.value(byName: "variable2")
             XCTAssertNotNil(variable2)
             XCTAssertEqual(variable2!, expectedVariable2)
-            let nonexistent: Int32? = handleStatement.value(byName: "nonexistent")
+            let nonexistent: Int32? = handle.value(byName: "nonexistent")
             XCTAssertNil(nonexistent)
         }
 
-        handleStatement.finalize()
+        handle.finalize()
     }
 
     func testHandleStatementWrite() {
         // Give
         let bindParameters = BindParameter.bindParameters(2)
         let statement = StatementInsert().insert(intoTable: TestObject.name).values(bindParameters)
-        let optionalHandleStatement = WCDBAssertNoThrowReturned(try database.prepare(statement))
-        XCTAssertNotNil(optionalHandleStatement)
-        let handleStatement = optionalHandleStatement!
+        let handle = WCDBAssertNoThrowReturned(try database.getHandle())!
+        XCTAssertNoThrow(try handle.prepare(statement))
 
         let expectedVariable1: Int32 = 3
         let expectedVariable2 = "object3"
         // When
-        handleStatement.bind(nil, toIndex: 1)
-        handleStatement.bind(expectedVariable2, toIndex: 2)
-        XCTAssertNoThrow(try handleStatement.step())
+        handle.bind(nil, toIndex: 1)
+        handle.bind(expectedVariable2, toIndex: 2)
+        XCTAssertNoThrow(try handle.step())
         // Then
-        XCTAssertEqual(handleStatement.lastInsertedRowID, 3)
-        XCTAssertEqual(handleStatement.changes, 1)
+        XCTAssertEqual(handle.lastInsertedRowID, 3)
+        XCTAssertEqual(handle.changes, 1)
         // When
-        handleStatement.reset()
+        handle.reset()
         let expectedObject = TestObject()
         expectedObject.variable1 = 4
         expectedObject.variable2 = "object4"
-        XCTAssertNoThrow(try handleStatement.bind([TestObject.Properties.variable1], of: expectedObject))
-        XCTAssertNoThrow(try handleStatement.bind(TestObject.Properties.variable2, of: expectedObject, toIndex: 2))
-        XCTAssertNoThrow(try handleStatement.step())
+        XCTAssertNoThrow(try handle.bind([TestObject.Properties.variable1], of: expectedObject))
+        XCTAssertNoThrow(try handle.bind(TestObject.Properties.variable2, of: expectedObject, toIndex: 2))
+        XCTAssertNoThrow(try handle.step())
 
-        handleStatement.finalize()
+        handle.finalize()
         // Then
         do {
             let condition = TestObject.Properties.variable1 == expectedVariable1
@@ -152,52 +151,51 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertNoThrow(try database.insert(objects: HandleStatementTypedObject(), intoTable: tableName))
 
         let statement = StatementSelect().select(Column.all).from(tableName)
-        let handleStatement: HandleStatement? = WCDBAssertNoThrowReturned(try database.prepare(statement))
-        XCTAssertNotNil(handleStatement)
-        let wrappedHandleStatement = handleStatement!
-        XCTAssertNoThrow(try wrappedHandleStatement.step())
+        let handle = WCDBAssertNoThrowReturned(try database.getHandle())!
+        XCTAssertNoThrow(try handle.prepare(statement))
+        XCTAssertNoThrow(try handle.step())
 
         do {
-            let v1: Int32? = wrappedHandleStatement.value(atIndex: 0)
+            let v1: Int32? = handle.value(atIndex: 0)
             XCTAssertNotNil(v1)
             XCTAssertEqual(v1!, 1)
 
-            let v2: Int64? = wrappedHandleStatement.value(atIndex: 1)
+            let v2: Int64? = handle.value(atIndex: 1)
             XCTAssertNotNil(v2)
             XCTAssertEqual(v2!, 2)
 
-            let v3: Double? = wrappedHandleStatement.value(atIndex: 2)
+            let v3: Double? = handle.value(atIndex: 2)
             XCTAssertNotNil(v3)
             XCTAssertEqual(v3!, 3.0)
 
-            let v4: String? = wrappedHandleStatement.value(atIndex: 3)
+            let v4: String? = handle.value(atIndex: 3)
             XCTAssertNotNil(v4)
             XCTAssertEqual(v4!, "4")
 
-            let v5: Data? = wrappedHandleStatement.value(atIndex: 4)
+            let v5: Data? = handle.value(atIndex: 4)
             XCTAssertNotNil(v5)
             XCTAssertEqual(v5!, "5".data(using: .ascii)!)
 
-            let v6: Data? = wrappedHandleStatement.value(atIndex: 5)
+            let v6: Data? = handle.value(atIndex: 5)
             XCTAssertNil(v6)
         }
         do {
-            let v1: Value = wrappedHandleStatement.value(atIndex: 0)
+            let v1: Value = handle.value(atIndex: 0)
             XCTAssertEqual(v1.int32Value, 1)
 
-            let v2: Value = wrappedHandleStatement.value(atIndex: 1)
+            let v2: Value = handle.value(atIndex: 1)
             XCTAssertEqual(v2.int64Value, 2)
 
-            let v3: Value = wrappedHandleStatement.value(atIndex: 2)
+            let v3: Value = handle.value(atIndex: 2)
             XCTAssertEqual(v3.doubleValue, 3.0)
 
-            let v4: Value = wrappedHandleStatement.value(atIndex: 3)
+            let v4: Value = handle.value(atIndex: 3)
             XCTAssertEqual(v4.stringValue, "4")
 
-            let v5: Value = wrappedHandleStatement.value(atIndex: 4)
+            let v5: Value = handle.value(atIndex: 4)
             XCTAssertEqual(v5.dataValue, "5".data(using: .ascii)!)
 
-            let v6: Value = wrappedHandleStatement.value(atIndex: 5)
+            let v6: Value = handle.value(atIndex: 5)
             XCTAssertEqual(v6.type, .null)
         }
     }
@@ -262,16 +260,15 @@ class AdvanceTests: CRUDTestCase {
         // Give
         let bindParameters = BindParameter.bindParameters(2)
         let statement = StatementInsert().insert(intoTable: TestObject.name).values(bindParameters)
-        let optionalHandleStatement = WCDBAssertNoThrowReturned(try database.prepare(statement))
-        XCTAssertNotNil(optionalHandleStatement)
-        let handleStatement = optionalHandleStatement!
+        let handle = WCDBAssertNoThrowReturned(try database.getHandle())!
+        XCTAssertNoThrow(try handle.prepare(statement))
 
         let expectedVariable2 = "object3"
         // When
-        handleStatement.bind(nil, toIndex: 1)
-        handleStatement.bind(expectedVariable2, toIndex: 2)
-        XCTAssertNoThrow(try handleStatement.step())
-        XCTAssertNoThrow(try handleStatement.step())
+        handle.bind(nil, toIndex: 1)
+        handle.bind(expectedVariable2, toIndex: 2)
+        XCTAssertNoThrow(try handle.step())
+        XCTAssertNoThrow(try handle.step())
     }
 
     func testExecFailed() {
@@ -319,16 +316,13 @@ class AdvanceTests: CRUDTestCase {
     func testConfig() {
         // Then
         do {
-            let optionalHandleStatement = WCDBAssertNoThrowReturned(
-                try database.prepare(StatementPragma().pragma(.secureDelete))
-            )
-            XCTAssertNotNil(optionalHandleStatement)
-            let handleStatement = optionalHandleStatement!
-            XCTAssertNoThrow(try handleStatement.step())
-            let isSecureDelete: Int32? = handleStatement.value(atIndex: 0)
+            let handle = WCDBAssertNoThrowReturned(try database.getHandle())!
+            XCTAssertNoThrow(try handle.prepare(StatementPragma().pragma(.secureDelete)))
+            XCTAssertNoThrow(try handle.step())
+            let isSecureDelete: Int32? = handle.value(atIndex: 0)
             XCTAssertNotNil(isSecureDelete)
             XCTAssertEqual(isSecureDelete!, 0)
-            handleStatement.finalize()
+            handle.finalize()
         }
         // Give
         database.close()
@@ -340,32 +334,26 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertTrue(database.canOpen)
         // Then
         do {
-            let optionalHandleStatement = WCDBAssertNoThrowReturned(
-                try database.prepare(StatementPragma().pragma(.secureDelete))
-            )
-            XCTAssertNotNil(optionalHandleStatement)
-            let handleStatement = optionalHandleStatement!
-            XCTAssertNoThrow(try handleStatement.step())
-            let isSecureDelete: Int32? = handleStatement.value(atIndex: 0)
+            let handle = WCDBAssertNoThrowReturned(try database.getHandle())!
+            XCTAssertNoThrow(try handle.prepare(StatementPragma().pragma(.secureDelete)))
+            XCTAssertNoThrow(try handle.step())
+            let isSecureDelete: Int32? = handle.value(atIndex: 0)
             XCTAssertNotNil(isSecureDelete)
             XCTAssertEqual(isSecureDelete!, 1)
-            handleStatement.finalize()
+            handle.finalize()
         }
     }
 
     func testOrderedConfig() {
         // Then
         do {
-            let optionalHandleStatement = WCDBAssertNoThrowReturned(
-                try database.prepare(StatementPragma().pragma(.secureDelete))
-            )
-            XCTAssertNotNil(optionalHandleStatement)
-            let handleStatement = optionalHandleStatement!
-            XCTAssertNoThrow(try handleStatement.step())
-            let isSecureDelete: Int32? = handleStatement.value(atIndex: 0)
+            let handle = WCDBAssertNoThrowReturned(try database.getHandle())!
+            XCTAssertNoThrow(try handle.prepare(StatementPragma().pragma(.secureDelete)))
+            XCTAssertNoThrow(try handle.step())
+            let isSecureDelete: Int32? = handle.value(atIndex: 0)
             XCTAssertNotNil(isSecureDelete)
             XCTAssertEqual(isSecureDelete!, 0)
-            handleStatement.finalize()
+            handle.finalize()
         }
         // Give
         database.close()
@@ -375,16 +363,11 @@ class AdvanceTests: CRUDTestCase {
         }, withPriority: .high)
         var tested = false
         database.setConfig(named: "test") { (handle) throws in
-
-            let handleStatement: HandleStatement? = WCDBAssertNoThrowReturned(
-                try handle.prepare(StatementPragma().pragma(.secureDelete))
-            )
-            XCTAssertNotNil(handleStatement)
-            let wrappedHandleStatement = handleStatement!
-            XCTAssertNoThrow(try wrappedHandleStatement.step())
-            let isSecureDelete: Int32 = wrappedHandleStatement.columnValue(atIndex: 0)
+            XCTAssertNoThrow(try handle.prepare(StatementPragma().pragma(.secureDelete)))
+            XCTAssertNoThrow(try handle.step())
+            let isSecureDelete: Int32 = handle.columnValue(atIndex: 0)
             XCTAssertEqual(isSecureDelete, 1)
-            wrappedHandleStatement.finalize()
+            handle.finalize()
 
             tested = true
         }
@@ -402,15 +385,11 @@ class AdvanceTests: CRUDTestCase {
         var tested = false
         database.setConfig(named: "test", withInvocation: { (handle) throws in
             // Then
-            let handleStatement: HandleStatement? = WCDBAssertNoThrowReturned(
-                try handle.prepare(StatementPragma().pragma(.secureDelete))
-            )
-            XCTAssertNotNil(handleStatement)
-            let wrappedHandleStatement = handleStatement!
-            XCTAssertNoThrow(try wrappedHandleStatement.step())
-            let isSecureDelete: Int32 = wrappedHandleStatement.columnValue(atIndex: 0)
+            XCTAssertNoThrow(try handle.prepare(StatementPragma().pragma(.secureDelete)))
+            XCTAssertNoThrow(try handle.step())
+            let isSecureDelete: Int32 = handle.columnValue(atIndex: 0)
             XCTAssertEqual(isSecureDelete, 0)
-            wrappedHandleStatement.finalize()
+            handle.finalize()
 
             tested = true
         }, withPriority: .high)
@@ -449,6 +428,81 @@ class AdvanceTests: CRUDTestCase {
         )
         XCTAssertNotNil(optionalObject)
         XCTAssertEqual(optionalObject!.variable1, preInsertedObjects[0].variable1)
+    }
+
+    func testPauseableTransaction() {
+        XCTAssertNoThrow(try database.drop(table: TestObject.name))
+        XCTAssertNoThrow(try database.create(table: TestObject.name, of: TestObject.self))
+        var identifier = 0
+        var pauseTimes = -1
+        let group = DispatchGroup()
+        let queue = DispatchQueue(label: String(recommendTag), attributes: .concurrent)
+        queue.async(group: group, execute: {
+            var i = 0
+            var write1Begin = Date()
+            var isPrepare = false
+            let transaction: WCDB.TransactionInterface.PauseableTransactionClosure = { handle, stop, isNewTransaction in
+                XCTAssertTrue(handle.isInTransaction)
+                if isNewTransaction {
+                    pauseTimes += 1
+                }
+                let beginInterval = Date().timeIntervalSince(write1Begin)
+                XCTAssertTrue(beginInterval < 1)
+
+                let handleStatement = handle.getOrCreateHandleStatement(withTag: "test")
+                if !handleStatement.isPrepared {
+                    XCTAssertTrue(!isPrepare)
+                    XCTAssertNoThrow(try handleStatement.prepare(StatementInsert().insert(intoTable: TestObject.name).columns(TestObject.Properties.all).values(BindParameter.bindParameters(TestObject.Properties.all.count))))
+
+                    isPrepare = true
+                }
+                handleStatement.reset()
+
+                identifier += 1
+                let obj = TestObject()
+                obj.variable1 = identifier
+                obj.variable2 = "testObject"
+                XCTAssertNoThrow(try handleStatement.bind(TestObject.Properties.all, of: obj))
+                XCTAssertNoThrow(try handleStatement.step())
+
+                Thread.sleep(forTimeInterval: 0.1)
+                i += 1
+                stop = i > 30
+                write1Begin = Date()
+            }
+            do {
+                return try self.database.run(pauseableTransaction: transaction)
+            } catch let error as WCDB.Error {
+                XCTFail(error.description)
+            } catch {
+                XCTFail(error.localizedDescription)
+            }
+        })
+        Thread.sleep(forTimeInterval: 0.5)
+        var i = 0
+        var write2Begin = Date()
+        repeat {
+            write2Begin = Date()
+            XCTAssertNoThrow(try self.database.begin())
+            XCTAssertTrue(self.database.isInTransaction)
+            let beginInterval = Date().timeIntervalSince(write2Begin)
+            if beginInterval >= 1 {
+
+            }
+            XCTAssertTrue(beginInterval < 1)
+            identifier += 1
+            let obj = TestObject()
+            obj.variable1 = identifier
+            obj.variable2 = "testObject"
+            XCTAssertNoThrow(try self.database.insert(objects: obj, intoTable: TestObject.name))
+            Thread.sleep(forTimeInterval: 0.1)
+            XCTAssertNoThrow(try self.database.commit())
+            i += 1
+        } while(i < 10)
+        group.wait()
+        let count = WCDBAssertNoThrowReturned(try self.database.getValue(on: TestObject.Properties.any.count(), fromTable: TestObject.name))!
+        XCTAssertTrue(count.int32Value == identifier)
+        XCTAssertTrue(pauseTimes > 1)
     }
 
 //    class FTSObject: TestObjectBase, TableCodable {

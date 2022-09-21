@@ -29,8 +29,8 @@ public protocol InsertChainCallInterface: AnyObject {
     ///   - cls: Type of table object
     ///   - table: Table name
     /// - Returns: `Insert`
-    func prepareInsert<Root: TableEncodable>(of cls: Root.Type, intoTable table: String) -> Insert
-    func prepareInsert<Root: WCTTableCoding>(of cls: Root.Type, intoTable table: String) -> Insert
+    func prepareInsert<Root: TableEncodable>(of cls: Root.Type, intoTable table: String) throws -> Insert
+    func prepareInsert<Root: WCTTableCoding>(of cls: Root.Type, intoTable table: String) throws -> Insert
 
     /// Prepare chain call for inserting or replacing of `TableEncodable` object
     ///
@@ -38,8 +38,8 @@ public protocol InsertChainCallInterface: AnyObject {
     ///   - cls: Type of table object
     ///   - table: Table name
     /// - Returns: `Insert`
-    func prepareInsertOrReplace<Root: TableEncodable>(of cls: Root.Type, intoTable table: String) -> Insert
-    func prepareInsertOrReplace<Root: WCTTableCoding>(of cls: Root.Type, intoTable table: String) -> Insert
+    func prepareInsertOrReplace<Root: TableEncodable>(of cls: Root.Type, intoTable table: String) throws -> Insert
+    func prepareInsertOrReplace<Root: WCTTableCoding>(of cls: Root.Type, intoTable table: String) throws -> Insert
 
     /// Prepare chain call for inserting on specific properties
     ///
@@ -47,7 +47,7 @@ public protocol InsertChainCallInterface: AnyObject {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list 
     ///   - table: Table name
     /// - Returns: `Insert`
-    func prepareInsert(on propertyConvertibleList: PropertyConvertible..., intoTable table: String) -> Insert
+    func prepareInsert(on propertyConvertibleList: PropertyConvertible..., intoTable table: String) throws -> Insert
 
     /// Prepare chain call for inserting or replacing on specific properties
     ///
@@ -56,7 +56,7 @@ public protocol InsertChainCallInterface: AnyObject {
     ///   - table: Table name
     /// - Returns: `Insert`
     func prepareInsertOrReplace(on propertyConvertibleList: PropertyConvertible...,
-                                intoTable table: String) -> Insert
+                                intoTable table: String) throws -> Insert
 
     /// Prepare chain call for inserting on specific properties
     ///
@@ -65,7 +65,7 @@ public protocol InsertChainCallInterface: AnyObject {
     ///   - table: Table name
     /// - Returns: `Insert`
     func prepareInsert(on propertyConvertibleList: [PropertyConvertible],
-                       intoTable table: String) -> Insert
+                       intoTable table: String) throws -> Insert
 
     /// Prepare chain call for inserting or replacing on specific properties
     ///
@@ -74,46 +74,46 @@ public protocol InsertChainCallInterface: AnyObject {
     ///   - table: Table name
     /// - Returns: `Insert`
     func prepareInsertOrReplace(on propertyConvertibleList: [PropertyConvertible],
-                                intoTable table: String) -> Insert
+                                intoTable table: String) throws -> Insert
 }
 
-extension InsertChainCallInterface where Self: Database {
-    public func prepareInsert<Root: TableEncodable>(of cls: Root.Type, intoTable table: String) -> Insert {
-        return Insert(with: self, named: table, on: cls.Properties.all, isReplace: false)
+extension InsertChainCallInterface where Self: HandleRepresentable {
+    public func prepareInsert<Root: TableEncodable>(of cls: Root.Type, intoTable table: String) throws -> Insert {
+        return Insert(with: try getHandle(), named: table, on: cls.Properties.all, isReplace: false)
     }
-    public func prepareInsert<Root: WCTTableCoding>(of cls: Root.Type, intoTable table: String) -> Insert {
-        return Insert(with: self, named: table, on: cls.allProperties(), isReplace: false)
+    public func prepareInsert<Root: WCTTableCoding>(of cls: Root.Type, intoTable table: String) throws -> Insert {
+        return Insert(with: try getHandle(), named: table, on: cls.allProperties(), isReplace: false)
     }
 
     public func prepareInsertOrReplace<Root: TableEncodable>(
         of cls: Root.Type,
-        intoTable table: String) -> Insert {
-        return Insert(with: self, named: table, on: cls.Properties.all, isReplace: true)
+        intoTable table: String) throws -> Insert {
+        return Insert(with: try getHandle(), named: table, on: cls.Properties.all, isReplace: true)
     }
     public func prepareInsertOrReplace<Root: WCTTableCoding>(
         of cls: Root.Type,
-        intoTable table: String) -> Insert {
-        return Insert(with: self, named: table, on: cls.allProperties(), isReplace: true)
+        intoTable table: String) throws -> Insert {
+        return Insert(with: try getHandle(), named: table, on: cls.allProperties(), isReplace: true)
     }
 
     public func prepareInsert(on propertyConvertibleList: PropertyConvertible...,
-                              intoTable table: String) -> Insert {
-        return prepareInsert(on: propertyConvertibleList, intoTable: table)
+                              intoTable table: String) throws -> Insert {
+        return try prepareInsert(on: propertyConvertibleList, intoTable: table)
     }
 
     public func prepareInsertOrReplace(on propertyConvertibleList: PropertyConvertible...,
-                                       intoTable table: String) -> Insert {
-        return prepareInsertOrReplace(on: propertyConvertibleList, intoTable: table)
+                                       intoTable table: String) throws -> Insert {
+        return try prepareInsertOrReplace(on: propertyConvertibleList, intoTable: table)
     }
 
     public func prepareInsert(on propertyConvertibleList: [PropertyConvertible],
-                              intoTable table: String) -> Insert {
-        return Insert(with: self, named: table, on: propertyConvertibleList, isReplace: false)
+                              intoTable table: String) throws -> Insert {
+        return Insert(with: try getHandle(), named: table, on: propertyConvertibleList, isReplace: false)
     }
 
     public func prepareInsertOrReplace(on propertyConvertibleList: [PropertyConvertible],
-                                       intoTable table: String) -> Insert {
-        return Insert(with: self, named: table, on: propertyConvertibleList, isReplace: true)
+                                       intoTable table: String) throws -> Insert {
+        return Insert(with: try getHandle(), named: table, on: propertyConvertibleList, isReplace: true)
     }
 }
 
@@ -124,12 +124,12 @@ public protocol DeleteChainCallInterface: AnyObject {
     ///
     /// - Parameter table: Table name
     /// - Returns: `Delete`
-    func prepareDelete(fromTable table: String) -> Delete
+    func prepareDelete(fromTable table: String) throws -> Delete
 }
 
-extension DeleteChainCallInterface where Self: Database {
-    public func prepareDelete(fromTable table: String) -> Delete {
-        return Delete(with: self, andTableName: table)
+extension DeleteChainCallInterface where Self: HandleRepresentable {
+    public func prepareDelete(fromTable table: String) throws -> Delete {
+        return Delete(with: try getHandle(), andTableName: table)
     }
 }
 
@@ -142,7 +142,7 @@ public protocol UpdateChainCallInterface: AnyObject {
     ///   - table: Table name
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     /// - Returns: `Update`
-    func prepareUpdate(table: String, on propertyConvertibleList: PropertyConvertible...) -> Update
+    func prepareUpdate(table: String, on propertyConvertibleList: PropertyConvertible...) throws -> Update
 
     /// Prepare chain call for updating on specific properties
     ///
@@ -150,16 +150,16 @@ public protocol UpdateChainCallInterface: AnyObject {
     ///   - table: Table name
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     /// - Returns: `Update`
-    func prepareUpdate(table: String, on propertyConvertibleList: [PropertyConvertible]) -> Update
+    func prepareUpdate(table: String, on propertyConvertibleList: [PropertyConvertible]) throws -> Update
 }
 
-extension UpdateChainCallInterface where Self: Database {
-    public func prepareUpdate(table: String, on propertyConvertibleList: PropertyConvertible...) -> Update {
-        return prepareUpdate(table: table, on: propertyConvertibleList)
+extension UpdateChainCallInterface where Self: HandleRepresentable {
+    public func prepareUpdate(table: String, on propertyConvertibleList: PropertyConvertible...) throws -> Update {
+        return try prepareUpdate(table: table, on: propertyConvertibleList)
     }
 
-    public func prepareUpdate(table: String, on propertyConvertibleList: [PropertyConvertible]) -> Update {
-        return Update(with: self, on: propertyConvertibleList, andTable: table)
+    public func prepareUpdate(table: String, on propertyConvertibleList: [PropertyConvertible]) throws -> Update {
+        return Update(with: try getHandle(), on: propertyConvertibleList, andTable: table)
     }
 }
 
@@ -175,7 +175,7 @@ public protocol RowSelectChainCallInterface: AnyObject {
     /// - Returns: `RowSelect`
     func prepareRowSelect(on columnResultConvertibleList: ResultColumnConvertible...,
                           fromTables tables: [String],
-                          isDistinct: Bool) -> RowSelect
+                          isDistinct: Bool) throws -> RowSelect
 
     /// Prepare chain call for row-selecting on specific column results
     ///
@@ -186,7 +186,7 @@ public protocol RowSelectChainCallInterface: AnyObject {
     /// - Returns: `RowSelect`
     func prepareRowSelect(on columnResultConvertibleList: [ResultColumnConvertible],
                           fromTables tables: [String],
-                          isDistinct: Bool) -> RowSelect
+                          isDistinct: Bool) throws -> RowSelect
 
     /// Prepare chain call for row-selecting on specific column results
     ///
@@ -197,7 +197,7 @@ public protocol RowSelectChainCallInterface: AnyObject {
     /// - Returns: `RowSelect`
     func prepareRowSelect(on columnResultConvertibleList: ResultColumnConvertible...,
                           fromTable table: String,
-                          isDistinct: Bool) -> RowSelect
+                          isDistinct: Bool) throws -> RowSelect
 
     /// Prepare chain call for row-selecting on specific column results
     ///
@@ -208,41 +208,41 @@ public protocol RowSelectChainCallInterface: AnyObject {
     /// - Returns: `RowSelect`
     func prepareRowSelect(on columnResultConvertibleList: [ResultColumnConvertible],
                           fromTable table: String,
-                          isDistinct: Bool) -> RowSelect
+                          isDistinct: Bool) throws -> RowSelect
 }
 
-extension RowSelectChainCallInterface where Self: Database {
+extension RowSelectChainCallInterface where Self: HandleRepresentable {
     public func prepareRowSelect(on columnResultConvertibleList: ResultColumnConvertible...,
                                  fromTables tables: [String],
-                                 isDistinct: Bool = false) -> RowSelect {
-        return prepareRowSelect(on: columnResultConvertibleList.isEmpty ?
-            [Column.all] : columnResultConvertibleList,
+                                 isDistinct: Bool = false) throws -> RowSelect {
+        return try prepareRowSelect(on: columnResultConvertibleList.isEmpty ?
+                                    [Column.all] : columnResultConvertibleList,
                                     fromTables: tables,
                                     isDistinct: isDistinct)
     }
 
     public func prepareRowSelect(on columnResultConvertibleList: [ResultColumnConvertible],
                                  fromTables tables: [String],
-                                 isDistinct: Bool = false) -> RowSelect {
-        return RowSelect(with: self, results: columnResultConvertibleList, tables: tables, isDistinct: isDistinct)
+                                 isDistinct: Bool = false) throws -> RowSelect {
+        return RowSelect(with: try getHandle(), results: columnResultConvertibleList, tables: tables, isDistinct: isDistinct)
     }
 
     public func prepareRowSelect(on columnResultConvertibleList: ResultColumnConvertible...,
                                  fromTable table: String,
-                                 isDistinct: Bool = false) -> RowSelect {
-        return prepareRowSelect(on: columnResultConvertibleList.isEmpty ?
-            [Column.all] : columnResultConvertibleList,
+                                 isDistinct: Bool = false) throws -> RowSelect {
+        return try prepareRowSelect(on: columnResultConvertibleList.isEmpty ?
+                                    [Column.all] : columnResultConvertibleList,
                                     fromTable: table,
                                     isDistinct: isDistinct)
     }
 
     public func prepareRowSelect(on columnResultConvertibleList: [ResultColumnConvertible],
                                  fromTable table: String,
-                                 isDistinct: Bool = false) -> RowSelect {
-        return RowSelect(with: self,
-                             results: columnResultConvertibleList,
-                             tables: [table],
-                             isDistinct: isDistinct)
+                                 isDistinct: Bool = false) throws -> RowSelect {
+        return RowSelect(with: try getHandle(),
+                         results: columnResultConvertibleList,
+                         tables: [table],
+                         isDistinct: isDistinct)
     }
 }
 
@@ -258,10 +258,10 @@ public protocol SelectChainCallInterface: AnyObject {
     /// - Returns: `Select`
     func prepareSelect<Root: TableDecodable>(of cls: Root.Type,
                                              fromTable table: String,
-                                             isDistinct: Bool) -> Select
+                                             isDistinct: Bool) throws -> Select
     func prepareSelect<Root: WCTTableCoding>(of cls: Root.Type,
                                              fromTable table: String,
-                                             isDistinct: Bool) -> Select
+                                             isDistinct: Bool) throws -> Select
 
     /// Prepare chain call for selecting on specific properties
     ///
@@ -272,7 +272,7 @@ public protocol SelectChainCallInterface: AnyObject {
     /// - Returns: `Select`
     func prepareSelect(on propertyConvertibleList: PropertyConvertible...,
                        fromTable table: String,
-                       isDistinct: Bool) -> Select
+                       isDistinct: Bool) throws -> Select
 
     /// Prepare chain call for selecting on specific properties
     ///
@@ -283,33 +283,33 @@ public protocol SelectChainCallInterface: AnyObject {
     /// - Returns: `Select`
     func prepareSelect(on propertyConvertibleList: [PropertyConvertible],
                        fromTable table: String,
-                       isDistinct: Bool) -> Select
+                       isDistinct: Bool) throws -> Select
 }
 
-extension SelectChainCallInterface where Self: Database {
+extension SelectChainCallInterface where Self: HandleRepresentable {
     public func prepareSelect<Root: TableDecodable>(of cls: Root.Type,
                                                     fromTable table: String,
-                                                    isDistinct: Bool = false) -> Select {
-        return Select(with: self, on: cls.Properties.all, table: table, isDistinct: isDistinct)
+                                                    isDistinct: Bool = false) throws -> Select {
+        return Select(with: try getHandle(), on: cls.Properties.all, table: table, isDistinct: isDistinct)
     }
     public func prepareSelect<Root: WCTTableCoding>(of cls: Root.Type,
                                                     fromTable table: String,
-                                                    isDistinct: Bool = false) -> Select {
-        return Select(with: self, on: cls.allProperties(), table: table, isDistinct: isDistinct)
+                                                    isDistinct: Bool = false) throws -> Select {
+        return Select(with: try getHandle(), on: cls.allProperties(), table: table, isDistinct: isDistinct)
     }
 
     public func prepareSelect(on propertyConvertibleList: PropertyConvertible...,
                               fromTable table: String,
-                              isDistinct: Bool = false) -> Select {
-        return prepareSelect(on: propertyConvertibleList,
+                              isDistinct: Bool = false) throws -> Select {
+        return try prepareSelect(on: propertyConvertibleList,
                                  fromTable: table,
                                  isDistinct: isDistinct)
     }
 
     public func prepareSelect(on propertyConvertibleList: [PropertyConvertible],
                               fromTable table: String,
-                              isDistinct: Bool = false) -> Select {
-        return Select(with: self, on: propertyConvertibleList, table: table, isDistinct: isDistinct)
+                              isDistinct: Bool = false) throws -> Select {
+        return Select(with: try getHandle(), on: propertyConvertibleList, table: table, isDistinct: isDistinct)
     }
 }
 
@@ -323,7 +323,7 @@ public protocol MultiSelectChainCallInterface: AnyObject {
     ///   - tables: Table name list
     /// - Returns: `MultiSelect`
     func prepareMultiSelect(on propertyConvertibleList: PropertyConvertible...,
-                            fromTables tables: [String]) -> MultiSelect
+                            fromTables tables: [String]) throws -> MultiSelect
 
     /// Prepare chain call for multi-selecting on specific properties
     ///
@@ -332,17 +332,17 @@ public protocol MultiSelectChainCallInterface: AnyObject {
     ///   - tables: Table name list
     /// - Returns: `MultiSelect`
     func prepareMultiSelect(on propertyConvertibleList: [PropertyConvertible],
-                            fromTables tables: [String]) -> MultiSelect
+                            fromTables tables: [String]) throws -> MultiSelect
 }
 
-extension MultiSelectChainCallInterface where Self: Database {
+extension MultiSelectChainCallInterface where Self: HandleRepresentable {
     public func prepareMultiSelect(on propertyConvertibleList: PropertyConvertible...,
-                                   fromTables tables: [String]) -> MultiSelect {
-        return prepareMultiSelect(on: propertyConvertibleList, fromTables: tables)
+                                   fromTables tables: [String]) throws -> MultiSelect {
+        return try prepareMultiSelect(on: propertyConvertibleList, fromTables: tables)
     }
 
     public func prepareMultiSelect(on propertyConvertibleList: [PropertyConvertible],
-                                   fromTables tables: [String]) -> MultiSelect {
-        return MultiSelect(with: self, on: propertyConvertibleList, tables: tables)
+                                   fromTables tables: [String]) throws -> MultiSelect {
+        return MultiSelect(with: try getHandle(), on: propertyConvertibleList, tables: tables)
     }
 }
