@@ -68,8 +68,8 @@ public:
 
     ResultFields redirect(const ResultColumns& resultColumns) const;
 
-    typedef ResultColumn (^RedirectBlock)(const Field&);
-    ResultFields redirect(RedirectBlock block) const;
+    typedef std::function<ResultColumn(const Field&)> RedirectAction;
+    ResultFields redirect(RedirectAction action) const;
 
     // It's not the count of the list, but the SQL function `count(*)`.
     Expression count() const;
