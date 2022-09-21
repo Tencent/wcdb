@@ -77,6 +77,11 @@
     return _handle;
 }
 
+- (void)dealloc
+{
+    [self finalizeAllStatements];
+}
+
 #pragma mark - HandleStatement
 
 - (WCTHandleStatement *)getOrCreateHandleStatementByTag:(NSString *)tag

@@ -453,19 +453,11 @@ bool InnerDatabase::runPauseableTransactionWithOneLoop(const TransactionCallback
         }
         needBegin = false;
         if (!transaction(handle.get(), stop, isNewTransaction)) {
-            /*
-             All statements must be reset before commit or rollback,
-             because sqlite will downgrade handle to a read-only transaction state
-             if there are other active statements that belong to this handle.
-             Please see the comment of btreeEndTransaction for more information.
-             */
-            handle->resetAllStatements();
             handle->rollbackTransaction();
             markHandleAsUntransactioned();
             return false;
         }
         if (handle.get()->checkMainThreadBusyRetry() || stop) {
-            handle->resetAllStatements();
             if (!handle->commitOrRollbackTransaction()) {
                 setThreadedError(handle->getError());
                 markHandleAsUntransactioned();
