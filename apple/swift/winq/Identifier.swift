@@ -23,7 +23,6 @@
  */
 
 import Foundation
-import AppKit
 
 public typealias Describable = CustomStringConvertible
 
