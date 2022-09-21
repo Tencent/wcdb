@@ -76,12 +76,12 @@ ResultFields Fields::redirect(const ResultColumns& resultColumns) const
     return result;
 }
 
-ResultFields Fields::redirect(RedirectBlock block) const
+ResultFields Fields::redirect(RedirectAction action) const
 {
-    WCTRemedialAssert(block != nullptr, "Redirect block can't be null.", return *this;);
+    WCTRemedialAssert(action != nullptr, "Redirect block can't be null.", return *this;);
     ResultFields results;
     for (const auto& field : *this) {
-        results.push_back(ResultField(block(field), field.getAccessor()));
+        results.push_back(ResultField(action(field), field.getAccessor()));
     }
     return results;
 }

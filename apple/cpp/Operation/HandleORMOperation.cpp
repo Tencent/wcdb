@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <Delete.hpp>
-#include <Handle.hpp>
+#include <WCDB/Delete.hpp>
+#include <WCDB/Handle.hpp>
 #include <WCDB/HandleORMOperation.hpp>
 
 namespace WCDB {
