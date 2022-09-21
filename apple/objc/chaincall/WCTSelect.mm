@@ -63,23 +63,27 @@
 {
     WCTTryDisposeGuard tryDisposeGuard(self);
     if (![self lazyPrepare]) {
+        [self saveChangesAndError:NO];
         return nil;
     }
     NSArray *objects = [_handle allObjectsOnResultColumns:_resultColumns];
-    [_handle finalizeStatement];
+    [self saveChangesAndError:objects != nil];
     return objects;
 }
 
-- (id /* WCTObject* */)nextObject
+- (id /* WCTObject* */)firstObject
 {
     WCTTryDisposeGuard tryDisposeGuard(self);
     if (![self lazyPrepare]) {
+        [self saveChangesAndError:NO];
         return nil;
     }
-    if (![_handle step] || [_handle done]) {
-        [_handle finalizeStatement];
+    BOOL succeed = false;
+    if (!(succeed = [_handle step]) || [_handle done]) {
+        [self saveChangesAndError:succeed];
         return nil;
     }
+    [self saveChangesAndError:succeed];
     return [_handle extractObjectOnResultColumns:_resultColumns];
 }
 

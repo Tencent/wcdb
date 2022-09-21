@@ -47,7 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)init UNAVAILABLE_ATTRIBUTE;
 
-- (WCTHandle *)handle;
+- (int)getChanges;
 
 - (WCTError *)error;
 

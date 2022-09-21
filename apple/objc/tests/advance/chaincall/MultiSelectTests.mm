@@ -120,11 +120,7 @@
         @{
             self.tableName : self.object1,
             self.tableName2 : self.object1InTable2,
-        },
-        @{
-            self.tableName : self.object2,
-            self.tableName2 : self.object2InTable2,
-        },
+        }
     ];
     [self doTestMultiObjects:objects
                       andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
@@ -142,10 +138,7 @@
                      [[[[self.database prepareMultiSelect] onResultColumns:resultColumns] fromTables:@[ self.tableName, self.tableName2 ]] where:TestCaseObject.identifier.table(self.tableName) == TestCaseObject.identifier.table(self.tableName2)];
 
                      NSMutableArray<WCTMultiObject*>* results = [NSMutableArray<WCTMultiObject*> array];
-                     WCTMultiObject* object;
-                     while ((object = [select nextMultiObject])) {
-                         [results addObject:object];
-                     }
+                     [results addObject:[select firstMultiObject]];
                      return results;
                  }];
 }
@@ -187,11 +180,7 @@
         @{
             self.tableName : self.object1,
             self.tableName2 : self.object1InTable2,
-        },
-        @{
-            self.tableName : self.object2,
-            self.tableName2 : self.object2InTable2,
-        },
+        }
     ];
     [self doTestMultiObjects:objects
                       andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
@@ -208,10 +197,7 @@
                      WCTMultiSelect* select = [[[[[self.database getHandle] prepareMultiSelect] onResultColumns:resultColumns] fromTables:@[ self.tableName, self.tableName2 ]] where:TestCaseObject.identifier.table(self.tableName) == TestCaseObject.identifier.table(self.tableName2)];
 
                      NSMutableArray<WCTMultiObject*>* results = [NSMutableArray<WCTMultiObject*> array];
-                     WCTMultiObject* object;
-                     while ((object = [select nextMultiObject])) {
-                         [results addObject:object];
-                     }
+                     [results addObject:[select firstMultiObject]];
                      return results;
                  }];
 }

@@ -139,8 +139,8 @@ typedef NS_ENUM(NSUInteger, WCTUpdateType) {
             }
             }
             result = [_handle step];
-            [_handle finalizeStatement];
         }
+        [self saveChangesAndError:result];
     }
     return result;
 }

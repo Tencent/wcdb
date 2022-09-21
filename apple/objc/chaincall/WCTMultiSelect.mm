@@ -53,17 +53,19 @@
     return self;
 }
 
-- (WCTMultiObject *)nextMultiObject
+- (WCTMultiObject *)firstMultiObject
 {
     WCTTryDisposeGuard tryDisposeGuard(self);
     if (![self lazyPrepare]) {
+        [self saveChangesAndError:false];
         return nil;
     }
-
-    if (![_handle step] || [_handle done]) {
-        [_handle finalizeStatement];
+    BOOL succeed = false;
+    if (!(succeed = [_handle step]) || [_handle done]) {
+        [self saveChangesAndError:succeed];
         return nil;
     }
+    [self saveChangesAndError:succeed];
     return [_handle extractMultiObjectOnResultColumns:_resultColumns];
 }
 
@@ -71,10 +73,11 @@
 {
     WCTTryDisposeGuard tryDisposeGuard(self);
     if (![self lazyPrepare]) {
+        [self saveChangesAndError:false];
         return nil;
     }
     NSArray<WCTMultiObject *> *results = [_handle allMultiObjectsOnResultColumns:_resultColumns];
-    [_handle finalizeStatement];
+    [self saveChangesAndError:results != nil];
     return results;
 }
 
