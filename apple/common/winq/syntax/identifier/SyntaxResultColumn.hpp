@@ -37,8 +37,6 @@ public:
 
     Expression expression;
     StringView alias;
-    bool wildcard = false;
-    StringView table;
 
     bool isValid() const override final;
 

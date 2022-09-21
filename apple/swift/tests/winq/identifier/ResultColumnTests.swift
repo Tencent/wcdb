@@ -33,7 +33,5 @@ class ResultColumnTests: BaseTestCase {
         WINQAssertEqual(generateColumnResult().`as`("testColumnResult"), "testColumn AS testColumnResult")
 
         WINQAssertEqual(generateColumnResult().asColumnResult(), "testColumn")
-
-        WINQAssertEqual(ResultColumn.all().in(table: "testTable"), "testTable.*")
     }
 }

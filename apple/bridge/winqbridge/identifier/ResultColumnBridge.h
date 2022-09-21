@@ -27,8 +27,6 @@
 WCDB_EXTERN_C_BEGIN
 
 CPPResultColumn WCDBResultColumnCreateWithExpression(CPPExpression expression);
-CPPResultColumn WCDBResultColumnCreateWithAllColumn(void);
 void WCDBResultColumnConfigAlias(CPPResultColumn column, const char* _Nullable alias);
-void WCDBResultColumnConfigTable(CPPResultColumn column, const char* _Nullable table);
 
 WCDB_EXTERN_C_END

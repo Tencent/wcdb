@@ -28,6 +28,16 @@
 #include <WCDB/ObjectBridge.hpp>
 #include <WCDB/Schema.hpp>
 
+CPPColumn WCDBColumnCreateAll()
+{
+    return WCDBCreateCPPBridgedObject(CPPColumn, WCDB::Column::all());
+}
+
+CPPColumn WCDBColumnCreateRowId()
+{
+    return WCDBCreateCPPBridgedObject(CPPColumn, WCDB::Column::rowid());
+}
+
 CPPColumn WCDBColumnCreateWithName(const char* _Nullable name)
 {
     return WCDBCreateCPPBridgedObject(

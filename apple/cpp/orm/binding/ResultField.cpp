@@ -26,6 +26,7 @@
 #include <WCDB/Binding.hpp>
 #include <WCDB/Field.hpp>
 #include <WCDB/ResultField.hpp>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
@@ -43,7 +44,6 @@ ResultField::~ResultField() = default;
 
 void ResultField::configWithBinding(const Binding& binding, void* memberPointer)
 {
-    syntax().wildcard = false;
     syntax().expression = Expression(binding.getColumnName(memberPointer));
     m_accessor = binding.getAccessor(memberPointer);
 }

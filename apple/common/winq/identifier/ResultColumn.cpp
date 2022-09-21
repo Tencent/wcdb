@@ -31,27 +31,12 @@ ResultColumn::~ResultColumn() = default;
 
 ResultColumn::ResultColumn(const Expression& expression)
 {
-    syntax().wildcard = false;
     syntax().expression = expression;
 }
 
 ResultColumn& ResultColumn::as(const UnsafeStringView& alias)
 {
     syntax().alias = alias;
-    return *this;
-}
-
-ResultColumn ResultColumn::all()
-{
-    ResultColumn result = ResultColumn();
-    result.syntax().wildcard = true;
-    return result;
-}
-
-ResultColumn& ResultColumn::inTable(const UnsafeStringView& table)
-{
-    WCTAssert(syntax().wildcard);
-    syntax().table = table;
     return *this;
 }
 

@@ -34,19 +34,8 @@ CPPResultColumn WCDBResultColumnCreateWithExpression(CPPExpression expression)
     return WCDBCreateCPPBridgedObject(CPPResultColumn, new WCDB::ResultColumn(*cppExpression));
 }
 
-CPPResultColumn WCDBResultColumnCreateWithAllColumn()
-{
-    return WCDBCreateCPPBridgedObject(CPPResultColumn, WCDB::ResultColumn::all());
-}
-
 void WCDBResultColumnConfigAlias(CPPResultColumn column, const char* _Nullable alias)
 {
     WCDBGetObjectOrReturn(column, WCDB::ResultColumn, cppColumn);
     cppColumn->as(alias);
-}
-
-void WCDBResultColumnConfigTable(CPPResultColumn column, const char* _Nullable table)
-{
-    WCDBGetObjectOrReturn(column, WCDB::ResultColumn, cppColumn);
-    cppColumn->inTable(table);
 }

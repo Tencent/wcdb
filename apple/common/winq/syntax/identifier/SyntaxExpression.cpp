@@ -155,12 +155,6 @@ bool Expression::describle(std::ostringstream& stream) const
         stream << bindParameter;
         break;
     case Switch::Column:
-        if (!table.empty()) {
-            if (!schema.empty()) {
-                stream << schema << ".";
-            }
-            stream << table << ".";
-        }
         stream << column;
         break;
     case Switch::UnaryOperation: {

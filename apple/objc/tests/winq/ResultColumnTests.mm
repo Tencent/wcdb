@@ -74,31 +74,4 @@
     TestCaseAssertSQLEqual(testingSQL, @"1 AS testAlias");
 }
 
-- (void)test_result_column_all
-{
-    auto testingSQL = WCDB::ResultColumn::all();
-
-    auto testingTypes = { WCDB::SQL::Type::ResultColumn };
-    TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"*");
-}
-
-- (void)test_all
-{
-    auto testingSQL = WCDB::ResultColumn::all();
-
-    auto testingTypes = { WCDB::SQL::Type::ResultColumn };
-    TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"*");
-}
-
-- (void)test_all_with_table
-{
-    auto testingSQL = WCDB::ResultColumn::all().inTable(table);
-
-    auto testingTypes = { WCDB::SQL::Type::ResultColumn };
-    TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"testTable.*");
-}
-
 @end
