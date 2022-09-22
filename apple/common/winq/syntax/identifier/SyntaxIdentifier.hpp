@@ -168,14 +168,23 @@ std::ostream& operator<<(std::ostream& stream, const std::list<T>& identifiers)
 
 #define WCDB_SYNTAX_ENUM_UNION(Type, nameOfType)                               \
     __WCDB_SYNTAX_UNION_ENUM(Type, nameOfType, __##nameOfType##Valid);         \
-    bool nameOfType##Valid() const { return __##nameOfType##Valid >= 0; }
+    bool nameOfType##Valid() const                                             \
+    {                                                                          \
+        return __##nameOfType##Valid >= 0;                                     \
+    }
 
 #define WCDB_SYNTAX_UNION_ENUM(Type, nameOfType, ...)                          \
     __WCDB_SYNTAX_ENUM(Type, __VA_ARGS__);                                     \
     __WCDB_SYNTAX_UNION_ENUM(Type, nameOfType, __##nameOfType##Valid);         \
-    bool nameOfType##Valid() const { return __##nameOfType##Valid >= 0; }
+    bool nameOfType##Valid() const                                             \
+    {                                                                          \
+        return __##nameOfType##Valid >= 0;                                     \
+    }
 
 #define WCDB_SYNTAX_MAIN_UNION_ENUM(...)                                       \
     __WCDB_SYNTAX_ENUM(Switch, __VA_ARGS__);                                   \
     __WCDB_SYNTAX_UNION_ENUM(Switch, switcher, __valid);                       \
-    bool isValid() const override final { return __valid >= 0; }
+    bool isValid() const override final                                        \
+    {                                                                          \
+        return __valid >= 0;                                                   \
+    }

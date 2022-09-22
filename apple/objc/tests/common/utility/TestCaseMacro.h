@@ -33,4 +33,7 @@
     _Pragma("clang diagnostic pop")
 
 #define strongify_or_return(variable)                                          \
-    strongify(variable) if (variable == nil) { return; }
+    strongify(variable) if (variable == nil)                                   \
+    {                                                                          \
+        return;                                                                \
+    }

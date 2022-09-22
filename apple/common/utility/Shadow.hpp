@@ -43,9 +43,13 @@ class Shadow final {
     //    static_assert(std::is_base_of<Cloneable<T>, T>::value, "");
 #pragma mark - NULL
 public:
-    Shadow() : m_payload(nullptr) {}
+    Shadow() : m_payload(nullptr)
+    {
+    }
 
-    Shadow(const std::nullptr_t&) : m_payload(nullptr) {}
+    Shadow(const std::nullptr_t&) : m_payload(nullptr)
+    {
+    }
 
     Shadow& operator=(const std::nullptr_t&)
     {
@@ -53,12 +57,20 @@ public:
         return *this;
     }
 
-    bool operator==(std::nullptr_t) const { return m_payload == nullptr; }
-    bool operator!=(std::nullptr_t) const { return m_payload != nullptr; }
+    bool operator==(std::nullptr_t) const
+    {
+        return m_payload == nullptr;
+    }
+    bool operator!=(std::nullptr_t) const
+    {
+        return m_payload != nullptr;
+    }
 
 #pragma mark - Value
 public:
-    Shadow(const T& value) : m_payload(value.clone()) {}
+    Shadow(const T& value) : m_payload(value.clone())
+    {
+    }
 
     Shadow& operator=(const T& value)
     {
@@ -67,15 +79,26 @@ public:
         return *this;
     }
 
-    T* get() const { return m_payload.get(); }
+    T* get() const
+    {
+        return m_payload.get();
+    }
 
-    constexpr T* operator->() const { return m_payload.get(); }
+    constexpr T* operator->() const
+    {
+        return m_payload.get();
+    }
 
-    T& operator*() const { return *m_payload.get(); }
+    T& operator*() const
+    {
+        return *m_payload.get();
+    }
 
 #pragma mark - Unique
 public:
-    Shadow(std::unique_ptr<T>&& value) : m_payload(std::move(value)) {}
+    Shadow(std::unique_ptr<T>&& value) : m_payload(std::move(value))
+    {
+    }
 
 #pragma mark - Shadow
 public:
@@ -86,7 +109,9 @@ public:
     {
     }
 
-    Shadow(Shadow<T>&& other) : m_payload(std::move(other.m_payload)) {}
+    Shadow(Shadow<T>&& other) : m_payload(std::move(other.m_payload))
+    {
+    }
 
     Shadow& operator=(const Shadow<T>& other)
     {
