@@ -135,7 +135,7 @@ private:
 
 #pragma mark - Interface
 public:
-    void setCipherKey(const UnsafeData &data);
+    bool setCipherKey(const UnsafeData &data);
 
     void enableExtendedResultCodes(bool enable);
 

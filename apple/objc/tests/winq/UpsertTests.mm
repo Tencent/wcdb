@@ -71,7 +71,7 @@
 
 - (void)test_upsert
 {
-    auto testingSQL = WCDB::Upsert().conflict().doNothing();
+    auto testingSQL = WCDB::Upsert().onConflict().doNothing();
 
     auto testingTypes = { WCDB::SQL::Type::UpsertClause };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
@@ -80,7 +80,7 @@
 
 - (void)test_with_indexed_column
 {
-    auto testingSQL = WCDB::Upsert().conflict().indexed(indexedColumn1).doNothing();
+    auto testingSQL = WCDB::Upsert().onConflict().indexed(indexedColumn1).doNothing();
 
     auto testingTypes = { WCDB::SQL::Type::UpsertClause, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
@@ -89,7 +89,7 @@
 
 - (void)test_with_indexed_columns
 {
-    auto testingSQL = WCDB::Upsert().conflict().indexed(indexedColumn1).indexed(indexedColumn2).doNothing();
+    auto testingSQL = WCDB::Upsert().onConflict().indexed(indexedColumn1).indexed(indexedColumn2).doNothing();
 
     auto testingTypes = { WCDB::SQL::Type::UpsertClause, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
@@ -98,7 +98,7 @@
 
 - (void)test_with_indexed_column_and_condition
 {
-    auto testingSQL = WCDB::Upsert().conflict().indexed(indexedColumn1).where(condition).doNothing();
+    auto testingSQL = WCDB::Upsert().onConflict().indexed(indexedColumn1).where(condition).doNothing();
 
     auto testingTypes = { WCDB::SQL::Type::UpsertClause, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
@@ -107,7 +107,7 @@
 
 - (void)test_with_update
 {
-    auto testingSQL = WCDB::Upsert().conflict().doUpdate().set(column).to(value1);
+    auto testingSQL = WCDB::Upsert().onConflict().doUpdate().set(column).to(value1);
 
     auto testingTypes = { WCDB::SQL::Type::UpsertClause, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
@@ -116,7 +116,7 @@
 
 - (void)test_with_update_multiple
 {
-    auto testingSQL = WCDB::Upsert().conflict().doUpdate().set(column).to(value1).set(columns).to(value2);
+    auto testingSQL = WCDB::Upsert().onConflict().doUpdate().set(column).to(value1).set(columns).to(value2);
 
     auto testingTypes = { WCDB::SQL::Type::UpsertClause, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
@@ -125,7 +125,7 @@
 
 - (void)test_with_update_condition
 {
-    auto testingSQL = WCDB::Upsert().conflict().doUpdate().set(column).to(value1).where(updateCondition);
+    auto testingSQL = WCDB::Upsert().onConflict().doUpdate().set(column).to(value1).where(updateCondition);
 
     auto testingTypes = { WCDB::SQL::Type::UpsertClause, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);

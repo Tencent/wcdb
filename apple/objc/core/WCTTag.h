@@ -24,5 +24,5 @@
 
 #import <stdint.h>
 
-typedef int32_t WCTTag;
+typedef long WCTTag;
 static WCTTag const WCTInvalidTag = 0;

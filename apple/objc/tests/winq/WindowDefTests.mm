@@ -51,10 +51,8 @@
 - (void)test_default_constructible
 {
     WCDB::WindowDef constructible;
-    TestCaseAssertTrue(constructible.syntax().isValid());
-    auto testingTypes = { WCDB::WindowDef::type };
-    TestCaseAssertIterateEqual(constructible, testingTypes);
-    TestCaseAssertSQLEqual(constructible, @"()");
+    TestCaseAssertFalse(constructible.syntax().isValid());
+    TestCaseAssertSQLEqual(constructible, @"");
 }
 
 - (void)test_get_type

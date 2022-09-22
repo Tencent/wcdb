@@ -47,9 +47,12 @@ public:
     Join& naturalInnerJoin(const TableOrSubquery& tableOrSubquery);
     Join& naturalCrossJoin(const TableOrSubquery& tableOrSubquery);
 
-    Join& constraint(const JoinConstraint& constraint);
+    Join& on(const Expression& expression);
+    Join& usingColumn(const Column& column);
+    Join& usingColumns(const Columns& columns);
 
 private:
+    Join& constraint(const JoinConstraint& constraint);
     Join& join(const Syntax::JoinOperator& joinOperator, const TableOrSubquery& tableOrSubquery);
 };
 

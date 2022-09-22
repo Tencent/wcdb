@@ -25,6 +25,7 @@
 #pragma once
 
 #include <WCDB/SyntaxIdentifier.hpp>
+#include <WCDB/SyntaxSchema.hpp>
 
 namespace WCDB {
 
@@ -35,6 +36,9 @@ class Column final : public Identifier {
 public:
     ~Column() override final;
 
+    Schema schema;
+    StringView table;
+
     StringView name;
 
     bool isValid() const override final;
@@ -44,6 +48,7 @@ public:
     static constexpr const Type type = Type::Column;
     Type getType() const override final;
     bool describle(std::ostringstream& stream) const override final;
+    void iterate(const Iterator& iterator, bool& stop) override final;
 };
 
 } // namespace Syntax

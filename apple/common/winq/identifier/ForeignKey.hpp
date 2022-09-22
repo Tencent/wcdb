@@ -47,7 +47,7 @@ public:
     ForeignKey& onUpdateRestrict();
     ForeignKey& onUpdateNoAction();
 
-    ForeignKey& match(const UnsafeStringView& name);
+    ForeignKey& match(const MatchType& match);
 
     ForeignKey& deferrable();
     ForeignKey& deferrableInitiallyDeferred();

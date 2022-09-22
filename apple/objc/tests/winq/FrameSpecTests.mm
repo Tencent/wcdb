@@ -90,15 +90,6 @@
     TestCaseAssertSQLEqual(testingSQL, @"RANGE CURRENT ROW");
 }
 
-- (void)test_following
-{
-    auto testingSQL = WCDB::FrameSpec().range().following(expression2);
-
-    auto testingTypes = { WCDB::SQL::Type::FrameSpec, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"RANGE 2 FOLLOWING");
-}
-
 - (void)test_between_unbounded_preceding_and_preceding
 {
     auto testingSQL = WCDB::FrameSpec().range().betweenUnboundedPreceding().andPreceding(expression2);

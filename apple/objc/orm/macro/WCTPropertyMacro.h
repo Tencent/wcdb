@@ -30,7 +30,11 @@
 #define __WCDB_PROPERTY_TYPE(className, propertyName) \
     decltype([className WCDB_ORM_TYPER].propertyName)
 
+#ifndef WCDB_SWIFT
 #define __WCDB_PROPERTY_IMP(propertyName) +(const WCTProperty &) propertyName;
+#else
+#define __WCDB_PROPERTY_IMP(propertyName) +(WCTBridgeProperty *) swift_##propertyName NS_SWIFT_NAME(propertyName());
+#endif
 
 // Synthesize
 #define WCDB_ORM_TYPE_SYNTHESIZE synthesize
@@ -47,4 +51,8 @@
     {                                                                                                                                                                                 \
         WCDB_UNUSED(binding)                                                                                                                                                          \
         return self.WINQName;                                                                                                                                                         \
+    }                                                                                                                                                                                 \
+    +(WCTBridgeProperty *) swift_##WINQName                                                                                                                                           \
+    {                                                                                                                                                                                 \
+        return [WCTBridgeProperty creatBridgeProperty:[self WINQName]];                                                                                                               \
     }

@@ -35,7 +35,9 @@ class InsertSTMT final : public Identifier {
 public:
     ~InsertSTMT() override final;
 
-    WithClause withClause;
+    bool recursive = false;
+    std::list<CommonTableExpression> commonTableExpressions;
+
     WCDB_SYNTAX_ENUM_UNION(ConflictAction, conflictAction);
     Schema schema;
     StringView table;

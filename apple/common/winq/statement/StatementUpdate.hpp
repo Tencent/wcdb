@@ -33,7 +33,8 @@ public:
     using SpecifiedSyntax<Syntax::UpdateSTMT, Statement>::SpecifiedSyntax;
     ~StatementUpdate() override final;
 
-    StatementUpdate& with(const With& with);
+    StatementUpdate& with(const CommonTableExpressions& commonTableExpressions);
+    StatementUpdate& recursive();
 
     StatementUpdate& update(const QualifiedTable& table);
     StatementUpdate& orRollback();

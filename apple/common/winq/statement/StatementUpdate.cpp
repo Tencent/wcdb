@@ -28,9 +28,15 @@ namespace WCDB {
 
 StatementUpdate::~StatementUpdate() = default;
 
-StatementUpdate& StatementUpdate::with(const With& with)
+StatementUpdate& StatementUpdate::with(const CommonTableExpressions& commonTableExpressions)
 {
-    syntax().withClause = with;
+    syntax().commonTableExpressions = commonTableExpressions;
+    return *this;
+}
+
+StatementUpdate& StatementUpdate::recursive()
+{
+    syntax().recursive = true;
     return *this;
 }
 

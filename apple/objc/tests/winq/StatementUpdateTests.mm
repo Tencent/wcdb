@@ -29,7 +29,7 @@
 @end
 
 @implementation StatementUpdateTests {
-    WCDB::With with;
+    WCDB::CommonTableExpression with;
     WCDB::QualifiedTable table;
     WCDB::Column column;
     WCDB::Columns columns;
@@ -46,7 +46,7 @@
 - (void)setUp
 {
     [super setUp];
-    with = WCDB::With().table(@"testTable").as(WCDB::StatementSelect().select(1));
+    with = WCDB::CommonTableExpression(@"testTable").as(WCDB::StatementSelect().select(1));
     table = @"testTable";
     column = WCDB::Column(@"testColumn");
     columns = {
@@ -93,7 +93,7 @@
 {
     auto testingSQL = WCDB::StatementUpdate().with(with).update(table).set(column).to(expression1);
 
-    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::WithClause, WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::CommonTableExpression, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"WITH testTable AS(SELECT 1) UPDATE main.testTable SET testColumn = 1");
 }

@@ -195,16 +195,6 @@ public:
 };
 
 template<typename T>
-class CTETableConvertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type> final
-: public std::true_type {
-public:
-    static CTETable asCTETable(const T& t)
-    {
-        return ColumnIsTextType<T>::asUnderlyingType(t);
-    }
-};
-
-template<typename T>
 class OrderingTermConvertible<T, typename std::enable_if<ExpressionConvertible<T>::value>::type> final
 : public std::true_type {
 public:

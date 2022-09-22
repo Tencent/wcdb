@@ -35,12 +35,12 @@ typedef void (^WCTErrorTraceBlock)(WCTError*);
 /**
  Trigger when a transaction or a normal sql ends.
  */
-typedef void (^WCTPerformanceTraceBlock)(NSString* /* sql */, double /* cost */, const void* /*handle*/);
+typedef void (^WCTPerformanceTraceBlock)(NSString* /* path */, uint64_t /*handleIdentifier*/, NSString* /* sql */, double /* cost */);
 
 /**
  Trigger when a SQL is executed.
  */
-typedef void (^WCTSQLTraceBlock)(NSString* /* sql */, const void* /*handle*/);
+typedef void (^WCTSQLTraceBlock)(NSString* /* path */, uint64_t /*handleIdentifier*/, NSString* /* sql */);
 
 @interface WCTDatabase (Monitor)
 
@@ -59,19 +59,17 @@ typedef void (^WCTSQLTraceBlock)(NSString* /* sql */, const void* /*handle*/);
 /**
  @brief You can register a tracer to monitor the performance of all SQLs.
  It returns 
- 1. The collection of SQLs and the executions count of each SQL.
- 2. Time consuming in nanoseconds.
- 3. Tag of database.
+ 1. Every SQL executed by the database.
+ 2. Time consuming in seconds.
+ 3. Path of database.
+ 4. The id of the handle executing this SQL.
  Note that:
  1. You should register trace before all db operations. 
- 2. Global tracer will be recovered by db tracer.
+ 2. Global tracer and db tracer do not interfere with each other.
  
- [WCTDatabase globalTracePerformance:^(WCTTag tag, NSDictionary<NSString*, NSNumber*>* sqls, NSInteger cost) {
- NSLog(@"Tag: %d", tag);
- [sqls enumerateKeysAndObjectsUsingBlock:^(NSString *sql, NSNumber *count, BOOL *) {
- NSLog(@"SQL: %@ Count: %d", sql, count.intValue);
- }];
- NSLog(@"Total cost %ld nanoseconds", (long)cost);
+ [WCTDatabase globalTracePerformance:^(NSString* path,  uint64_t handleIdentifier, NSString* sql , double cost) {
+ NSLog(@"Path: %%@", path);
+ NSLog(@"The handle with id %llu took %f seconds to execute %@",  handleIdentifier, cost, sql);
  }];
  
  @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
@@ -86,8 +84,9 @@ typedef void (^WCTSQLTraceBlock)(NSString* /* sql */, const void* /*handle*/);
  It returns a prepared or executed SQL.
  Note that you should register trace before all db operations. 
  
- [WCTDatabase globalTraceSQL:^(NSString* sql) {
- NSLog(@"SQL: %@", sql);
+ [WCTDatabase globalTraceSQL:^(NSString* path,  uint64_t handleIdentifier, NSString* sql , double cost) {
+ NSLog(@"Path: %%@", path);
+ NSLog(@"The handle with id %llu excuted %@",  handleIdentifier, sql);
  }];
  
  @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.

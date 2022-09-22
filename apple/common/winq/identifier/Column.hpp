@@ -45,6 +45,9 @@ public:
     explicit Column(const UnsafeStringView& name);
     virtual ~Column() override;
 
+    Column& table(const UnsafeStringView& table);
+    Column& schema(const Schema& schema);
+
     static Column rowid();
 
 protected:

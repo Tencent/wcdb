@@ -46,7 +46,7 @@
     [super setUp];
     operand = 1;
     expression = 2;
-    collation = @"testCollation";
+    collation = @"BINARY";
     select = WCDB::StatementSelect().select(1);
     expressions = {
         1,
@@ -352,7 +352,7 @@
     auto testingSQL = columnExpression.collate(collation);
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"testColumn COLLATE testCollation");
+    TestCaseAssertSQLEqual(testingSQL, @"testColumn COLLATE BINARY");
 }
 
 - (void)test_between

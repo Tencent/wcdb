@@ -53,6 +53,9 @@ void Identifier::iterate(const Iterator &iterator)
 
 void Identifier::recursiveIterate(Identifier &identifier, const Iterator &iterator, bool &stop)
 {
+    if (stop) {
+        return;
+    }
     identifier.iterate(iterator, stop);
 }
 
@@ -94,12 +97,6 @@ std::unique_ptr<Identifier> Identifier::clone() const
         return std::make_unique<IndexedColumn>(*static_cast<const IndexedColumn *>(this));
     case Type::TableConstraint:
         return std::make_unique<TableConstraint>(*static_cast<const TableConstraint *>(this));
-    case Type::CTETableName:
-        return std::make_unique<CTETableName>(*static_cast<const CTETableName *>(this));
-    case Type::WithClause:
-        return std::make_unique<WithClause>(*static_cast<const WithClause *>(this));
-    case Type::RecursiveCTE:
-        return std::make_unique<RecursiveCTE>(*static_cast<const RecursiveCTE *>(this));
     case Type::CommonTableExpression:
         return std::make_unique<CommonTableExpression>(
         *static_cast<const CommonTableExpression *>(this));
@@ -124,12 +121,6 @@ std::unique_ptr<Identifier> Identifier::clone() const
         return std::make_unique<ResultColumn>(*static_cast<const ResultColumn *>(this));
     case Type::FrameSpec:
         return std::make_unique<FrameSpec>(*static_cast<const FrameSpec *>(this));
-    case Type::FunctionInvocation:
-        return std::make_unique<FunctionInvocation>(
-        *static_cast<const FunctionInvocation *>(this));
-    case Type::WindowFunctionInvocation:
-        return std::make_unique<WindowFunctionInvocation>(
-        *static_cast<const WindowFunctionInvocation *>(this));
     case Type::AlterTableSTMT:
         return std::make_unique<AlterTableSTMT>(*static_cast<const AlterTableSTMT *>(this));
     case Type::AnalyzeSTMT:
@@ -189,8 +180,6 @@ std::unique_ptr<Identifier> Identifier::clone() const
         return nullptr;
     }
 }
-
-STMT::~STMT() = default;
 
 } // namespace Syntax
 

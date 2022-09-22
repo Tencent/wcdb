@@ -28,9 +28,15 @@ namespace WCDB {
 
 StatementDelete::~StatementDelete() = default;
 
-StatementDelete& StatementDelete::with(const With& with)
+StatementDelete& StatementDelete::with(const CommonTableExpressions& commonTableExpressions)
 {
-    syntax().withClause = with;
+    syntax().commonTableExpressions = commonTableExpressions;
+    return *this;
+}
+
+StatementDelete& StatementDelete::recursive()
+{
+    syntax().recursive = true;
     return *this;
 }
 

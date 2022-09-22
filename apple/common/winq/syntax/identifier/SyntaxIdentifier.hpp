@@ -41,6 +41,7 @@ public:
     virtual ~Identifier() override = 0;
 
     enum class Type {
+        Invalid = 0,
         Column,
         Schema,
         ColumnDef,
@@ -54,9 +55,6 @@ public:
         Filter,
         IndexedColumn,
         TableConstraint,
-        CTETableName,
-        WithClause,
-        RecursiveCTE,
         CommonTableExpression,
         QualifiedTableName,
         OrderingTerm,
@@ -68,8 +66,6 @@ public:
         SelectCore,
         ResultColumn,
         FrameSpec,
-        FunctionInvocation,
-        WindowFunctionInvocation,
 
         AlterTableSTMT,
         AnalyzeSTMT,
@@ -133,11 +129,6 @@ protected:
         }
     }
     static constexpr const char* space = " ";
-};
-
-class STMT : public Identifier {
-public:
-    virtual ~STMT() = 0;
 };
 
 } // namespace Syntax

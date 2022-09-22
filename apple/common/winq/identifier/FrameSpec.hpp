@@ -38,7 +38,6 @@ public:
     FrameSpec& unboundedPreceding();
     FrameSpec& preceding(const Expression& expression);
     FrameSpec& currentRow();
-    FrameSpec& following(const Expression& expression);
 
     FrameSpec& betweenUnboundedPreceding();
     FrameSpec& betweenPreceding(const Expression& expression);

@@ -39,8 +39,7 @@ CipherConfig::~CipherConfig() = default;
 
 bool CipherConfig::invoke(Handle *handle)
 {
-    handle->setCipherKey(m_key);
-    return handle->execute(m_statement);
+    return handle->setCipherKey(m_key) && handle->execute(m_statement);
 }
 
 } //namespace WCDB

@@ -57,8 +57,8 @@ void Core::print(const UnsafeStringView& message)
 {
     WCDB::Handle::PerformanceNotification callback = nullptr;
     if (trace != nil) {
-        callback = [trace](const WCDB::UnsafeStringView& sql, double cost, const void* handle) {
-            trace([NSString stringWithUTF8String:sql.data()], cost, handle);
+        callback = [trace](const WCDB::UnsafeStringView& path, const WCDB::UnsafeStringView& sql, double cost, const void* handle) {
+            trace([NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithUTF8String:sql.data()], cost);
         };
     }
     WCDB::Core::shared().setNotificationWhenPerformanceGlobalTraced(callback);
@@ -68,8 +68,8 @@ void Core::print(const UnsafeStringView& message)
 {
     WCDB::Handle::SQLNotification callback = nullptr;
     if (trace != nil) {
-        callback = [trace](const WCDB::UnsafeStringView& sql, const void* handle) {
-            trace([NSString stringWithView:sql], handle);
+        callback = [trace](const WCDB::UnsafeStringView& path, const WCDB::UnsafeStringView& sql, const void* handle) {
+            trace([NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithView:sql]);
         };
     }
     WCDB::Core::shared().setNotificationForSQLGLobalTraced(callback);
@@ -78,8 +78,8 @@ void Core::print(const UnsafeStringView& message)
 - (void)tracePerformance:(WCTPerformanceTraceBlock)trace
 {
     if (trace != nil) {
-        WCDB::Handle::PerformanceNotification callback = [trace](const WCDB::UnsafeStringView& sql, double cost, const void* handle) {
-            trace([NSString stringWithUTF8String:sql.data()], cost, handle);
+        WCDB::Handle::PerformanceNotification callback = [trace](const WCDB::UnsafeStringView& path, const WCDB::UnsafeStringView& sql, double cost, const void* handle) {
+            trace([NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithUTF8String:sql.data()], cost);
         };
         _database->setConfig(WCDB::PerformanceTraceConfigName,
                              std::static_pointer_cast<WCDB::Config>(std::make_shared<WCDB::PerformanceTraceConfig>(callback)),
@@ -92,8 +92,8 @@ void Core::print(const UnsafeStringView& message)
 - (void)traceSQL:(WCTSQLTraceBlock)trace
 {
     if (trace != nil) {
-        WCDB::Handle::SQLNotification callback = [trace](const WCDB::UnsafeStringView& sql, const void* handle) {
-            trace([NSString stringWithView:sql], handle);
+        WCDB::Handle::SQLNotification callback = [trace](const WCDB::UnsafeStringView& path, const WCDB::UnsafeStringView& sql, const void* handle) {
+            trace([NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithView:sql]);
         };
         _database->setConfig(WCDB::SQLTraceConfigName,
                              std::static_pointer_cast<WCDB::Config>(std::make_shared<WCDB::SQLTraceConfig>(callback)),

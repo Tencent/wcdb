@@ -44,19 +44,8 @@ public:
     ResultColumn(const Expression& expression);
     ResultColumn& as(const UnsafeStringView& alias);
 
-    static ResultColumnAll all();
-};
-
-class ResultColumnAll final : public ResultColumn {
-public:
-    ResultColumnAll();
-    ~ResultColumnAll() override final;
-
-    Expression count() const;
-    ResultColumnAll& inTable(const UnsafeStringView& table);
-
-protected:
-    using ResultColumn::as;
+    static ResultColumn all();
+    ResultColumn& inTable(const UnsafeStringView& table);
 };
 
 } // namespace WCDB

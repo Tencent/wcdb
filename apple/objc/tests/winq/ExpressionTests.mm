@@ -75,7 +75,7 @@
     raiseFunction = WCDB::RaiseFunction().ignore();
     windowFunction = @"testWindowFunction";
     filter = WCDB::Filter().where(1);
-    windowDef = WCDB::WindowDef();
+    windowDef = WCDB::WindowDef().partition(expressions);
     window = @"testWindow";
 }
 
@@ -109,24 +109,6 @@
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::BindParameter };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"?1");
-}
-
-- (void)test_column
-{
-    auto testingSQL = WCDB::Expression(column).table(table).schema(schema);
-
-    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column };
-    TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"testSchema.testTable.testColumn");
-}
-
-- (void)test_column_without_schema
-{
-    auto testingSQL = WCDB::Expression(column).table(table);
-
-    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column };
-    TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"main.testTable.testColumn");
 }
 
 - (void)test_column_without_table
@@ -297,45 +279,45 @@
 {
     auto testingSQL = WCDB::Expression::windowFunction(windowFunction).invoke().argument(expression1).over(windowDef);
 
-    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef };
+    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"testWindowFunction(1) OVER()");
+    TestCaseAssertSQLEqual(testingSQL, @"testWindowFunction(1) OVER(PARTITION BY 1, 2)");
 }
 
 - (void)test_window_function_with_arguments
 {
     auto testingSQL = WCDB::Expression::windowFunction(windowFunction).invoke().argument(expression1).argument(expression2).over(windowDef);
 
-    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef };
+    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"testWindowFunction(1, 2) OVER()");
+    TestCaseAssertSQLEqual(testingSQL, @"testWindowFunction(1, 2) OVER(PARTITION BY 1, 2)");
 }
 
 - (void)test_window_function_without_parameter
 {
     auto testingSQL = WCDB::Expression::windowFunction(windowFunction).invoke().over(windowDef);
 
-    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::WindowDef };
+    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"testWindowFunction() OVER()");
+    TestCaseAssertSQLEqual(testingSQL, @"testWindowFunction() OVER(PARTITION BY 1, 2)");
 }
 
 - (void)test_window_function_all
 {
     auto testingSQL = WCDB::Expression::windowFunction(windowFunction).invokeAll().over(windowDef);
 
-    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::WindowDef };
+    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"testWindowFunction(*) OVER()");
+    TestCaseAssertSQLEqual(testingSQL, @"testWindowFunction(*) OVER(PARTITION BY 1, 2)");
 }
 
 - (void)test_window_function_with_filter
 {
     auto testingSQL = WCDB::Expression::windowFunction(windowFunction).invoke().argument(expression1).filter(filter).over(windowDef);
 
-    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Filter, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef };
+    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Filter, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"testWindowFunction(1) FILTER(WHERE 1) OVER()");
+    TestCaseAssertSQLEqual(testingSQL, @"testWindowFunction(1) FILTER(WHERE 1) OVER(PARTITION BY 1, 2)");
 }
 
 - (void)test_window_function_with_name
@@ -382,7 +364,7 @@
 
 - (void)test_precedence
 {
-    TestCaseAssertSQLEqual((!(((column && 1) > 2) - 3)).collate(@"testCollation"), @"(NOT (((testColumn AND 1) > 2) - 3)) COLLATE testCollation");
+    TestCaseAssertSQLEqual((!(((column && 1) > 2) - 3)).collate(@"NOCASE"), @"(NOT (((testColumn AND 1) > 2) - 3)) COLLATE NOCASE");
 }
 
 - (void)test_boundary

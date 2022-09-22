@@ -494,7 +494,6 @@
     TestCaseAssertWINQConvertible(WCDB::OrderingTerms, sql, expected);
 
     TestCaseAssertWINQConvertible(WCDB::QualifiedTable, sql, @"main.t");
-    TestCaseAssertWINQConvertible(WCDB::CTETable, sql, @"t");
     TestCaseAssertWINQConvertible(WCDB::TableOrSubquery, sql, @"main.t");
     TestCaseAssertWINQConvertible(WCDB::TablesOrSubqueries, sql, @"main.t");
 }
@@ -533,7 +532,6 @@
     TestCaseAssertWINQConvertible(WCDB::OrderingTerms, sql, expected);
 
     TestCaseAssertWINQConvertible(WCDB::QualifiedTable, sql, @"main.t");
-    TestCaseAssertWINQConvertible(WCDB::CTETable, sql, @"t");
     TestCaseAssertWINQConvertible(WCDB::TableOrSubquery, sql, @"main.t");
     TestCaseAssertWINQConvertible(WCDB::TablesOrSubqueries, sql, @"main.t");
 }
@@ -572,7 +570,6 @@
     TestCaseAssertWINQConvertible(WCDB::OrderingTerms, sql, expected);
 
     TestCaseAssertWINQConvertible(WCDB::QualifiedTable, sql, @"main.t");
-    TestCaseAssertWINQConvertible(WCDB::CTETable, sql, @"t");
     TestCaseAssertWINQConvertible(WCDB::TableOrSubquery, sql, @"main.t");
     TestCaseAssertWINQConvertible(WCDB::TablesOrSubqueries, sql, @"main.t");
 }

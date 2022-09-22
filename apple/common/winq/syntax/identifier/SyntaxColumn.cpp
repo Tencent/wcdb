@@ -44,8 +44,22 @@ Identifier::Type Column::getType() const
 
 bool Column::describle(std::ostringstream& stream) const
 {
+    if (!table.empty()) {
+        if (!schema.empty()) {
+            stream << schema << ".";
+        }
+        stream << table << ".";
+    }
     stream << name;
     return true;
+}
+
+void Column::iterate(const Iterator& iterator, bool& stop)
+{
+    Identifier::iterate(iterator, stop);
+    if (!table.empty()) {
+        recursiveIterate(schema, iterator, stop);
+    }
 }
 
 } // namespace Syntax

@@ -64,9 +64,9 @@ WCDB::OrderingTerm WCTProperty::asOrder(const WCTOrder& order) const
     return WCDB::OrderingTerm(*this).order(order);
 }
 
-WCDB::Expression WCTProperty::table(const WCDB::UnsafeStringView& table) const
+WCDB::Column WCTProperty::table(const WCDB::UnsafeStringView& table) const
 {
-    return WCDB::Expression((const WCDB::Column&) *this).table(table);
+    return WCDB::Column(*this).table(table);
 }
 
 #pragma mark - WCTProperties
@@ -74,7 +74,7 @@ WCTProperties::~SyntaxList() = default;
 
 WCDB::Expression WCTProperties::count() const
 {
-    return WCDB::ResultColumnAll().count();
+    return Expression::function("count").invokeAll();
 }
 
 WCTResultColumns WCTProperties::redirect(const WCDB::ResultColumns& resultColumns) const
@@ -104,7 +104,7 @@ WCDB::Expressions WCTProperties::table(NSString* table) const
 {
     WCDB::Expressions expressions;
     for (const auto& property : *this) {
-        expressions.push_back(WCDB::Expression(property).table(table));
+        expressions.push_back(property.table(table));
     }
     return expressions;
 }

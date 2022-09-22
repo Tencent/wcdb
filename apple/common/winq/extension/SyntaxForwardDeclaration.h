@@ -31,6 +31,7 @@ namespace WCDB {
 typedef Syntax::ColumnType ColumnType;
 typedef Syntax::Order Order;
 typedef Syntax::Conflict Conflict;
+typedef Syntax::MatchType MatchType;
 
 class Schema;
 class Column;
@@ -41,9 +42,6 @@ class IndexedColumn;
 class ColumnConstraint;
 class TableConstraint;
 class ForeignKey;
-class With;
-class CTETable;
-class RecursiveCTE;
 class CommonTableExpression;
 class Expression;
 class ModuleArgument;
@@ -59,8 +57,6 @@ class OrderingTerm;
 class QualifiedTable;
 class WindowDef;
 class FrameSpec;
-class FunctionInvocation;
-class WindowFunctionInvocation;
 class Filter;
 
 class Statement;

@@ -88,6 +88,13 @@ enum class ConflictAction {
     Fail,
     Ignore,
 };
+
+enum class MatchType {
+    Simple = 1,
+    Full,
+    Partial,
+};
+
 extern const StringView& masterTable;
 extern const StringView& mainSchema;
 extern const StringView& tempSchema;

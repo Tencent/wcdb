@@ -20,6 +20,34 @@
                ReferencedContainer = "container:WCDB.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "234F8AD3227B0B5400791E45"
+               BuildableName = "SwiftTests.xctest"
+               BlueprintName = "SwiftTests"
+               ReferencedContainer = "container:WCDB.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "03330FA828167ECC0094CFCF"
+               BuildableName = "SwiftBridgeObjcTest.xctest"
+               BlueprintName = "SwiftBridgeObjcTest"
+               ReferencedContainer = "container:WCDB.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -57,8 +85,28 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "234F035B227A9CFE00DD65A2"
-               BuildableName = "Tests.xctest"
-               BlueprintName = "Tests"
+               BuildableName = "ObjcTests.xctest"
+               BlueprintName = "ObjcTests"
+               ReferencedContainer = "container:WCDB.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "234F8AD3227B0B5400791E45"
+               BuildableName = "SwiftTests.xctest"
+               BlueprintName = "SwiftTests"
+               ReferencedContainer = "container:WCDB.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "03330FA828167ECC0094CFCF"
+               BuildableName = "SwiftBridgeObjcTest.xctest"
+               BlueprintName = "SwiftBridgeObjcTest"
                ReferencedContainer = "container:WCDB.xcodeproj">
             </BuildableReference>
          </TestableReference>

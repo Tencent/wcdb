@@ -32,19 +32,27 @@
 #import <WCDB/WCTTableConstraintMacro.h>
 #import <WCDB/WCTVirtualTableMacro.h>
 
-#define WCDB_IMPLEMENTATION(className)                                        \
-    +(const WCTBinding &) objectRelationalMapping                             \
-    {                                                                         \
-        static const WCTBinding *s_binding = new WCTBinding(className.class); \
-        return *s_binding;                                                    \
-    }                                                                         \
-    +(const WCTProperties &) allProperties                                    \
-    {                                                                         \
-        return [className objectRelationalMapping].getProperties();           \
-    }                                                                         \
-    +(className *) WCDB_ORM_TYPER                                             \
-    {                                                                         \
-        return nil;                                                           \
+#define WCDB_IMPLEMENTATION(className)                                               \
+    +(const WCTBinding &) objectRelationalMapping                                    \
+    {                                                                                \
+        static const WCTBinding *s_binding = new WCTBinding(className.class);        \
+        return *s_binding;                                                           \
+    }                                                                                \
+    +(const WCTProperties &) allProperties                                           \
+    {                                                                                \
+        return [className objectRelationalMapping].getProperties();                  \
+    }                                                                                \
+    +(WCTBridgeProperties *) allBridgeProperties                                     \
+    {                                                                                \
+        NSMutableArray *properties = [[NSMutableArray alloc] init];                  \
+        for (const WCTProperty &property : [self allProperties]) {                   \
+            [properties addObject:[WCTBridgeProperty creatBridgeProperty:property]]; \
+        }                                                                            \
+        return properties;                                                           \
+    }                                                                                \
+    +(className *) WCDB_ORM_TYPER                                                    \
+    {                                                                                \
+        return nil;                                                                  \
     }
 
 // Property - declare column

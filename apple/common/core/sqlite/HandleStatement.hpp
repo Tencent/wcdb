@@ -72,6 +72,7 @@ public:
     virtual Float getDouble(int index);
     virtual Text getText(int index);
     virtual const BLOB getBLOB(int index);
+    virtual signed long long getColumnSize(int index);
 
     virtual ColumnType getType(int index);
 

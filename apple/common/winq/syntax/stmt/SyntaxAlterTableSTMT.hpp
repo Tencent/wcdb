@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class AlterTableSTMT final : public STMT {
+class AlterTableSTMT final : public Identifier {
 #pragma mark - Syntax
 public:
     ~AlterTableSTMT() override final;

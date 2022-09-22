@@ -35,7 +35,9 @@ class UpdateSTMT final : public Identifier {
 public:
     ~UpdateSTMT() override final;
 
-    WithClause withClause;
+    bool recursive = false;
+    std::list<CommonTableExpression> commonTableExpressions;
+
     WCDB_SYNTAX_ENUM_UNION(ConflictAction, conflictAction);
     QualifiedTableName table;
     std::list<std::list<Column>> columnsList;

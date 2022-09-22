@@ -103,6 +103,7 @@ void HandleStatement::analysisStatement(const Statement &statement)
 bool HandleStatement::prepare(const UnsafeStringView &sql)
 {
     WCTRemedialAssert(!isPrepared(), "Last statement is not finalized.", finalize(););
+    WCTAssert(sql.length() > 0);
 
     bool result = APIExit(
     sqlite3_prepare_v2(getRawHandle(), sql.data(), -1, &m_stmt, nullptr), sql);
@@ -291,6 +292,13 @@ const HandleStatement::BLOB HandleStatement::getBLOB(int index)
     return BLOB::immutable(
     reinterpret_cast<const unsigned char *>(sqlite3_column_blob(m_stmt, index)),
     sqlite3_column_bytes(m_stmt, index));
+}
+
+signed long long HandleStatement::getColumnSize(int index)
+{
+    WCTAssert(isPrepared());
+    WCTAssert(isBusy());
+    return sqlite3_column_bytes(m_stmt, index);
 }
 
 bool HandleStatement::isBusy()

@@ -60,6 +60,7 @@
 #import <WCDB/WCTTable.h>
 #import <WCDB/WCTTableProtocol.h>
 
+#import <WCDB/WCTBridgeProperty+CPP.h>
 #import <WCDB/WCTDatabase+Monitor.h>
 #import <WCDB/WCTError.h>
 #import <WCDB/WCTTag.h>

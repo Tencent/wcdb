@@ -38,7 +38,7 @@ public:
     WCDB::OrderingTerm asOrder() const;
     WCDB::OrderingTerm asOrder(const WCTOrder& order) const;
 
-    WCDB::Expression table(const WCDB::UnsafeStringView& table) const;
+    WCDB::Column table(const WCDB::UnsafeStringView& table) const;
 };
 
 namespace WCDB {

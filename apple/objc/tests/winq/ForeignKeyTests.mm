@@ -32,7 +32,7 @@
     NSString* name;
     WCDB::Column column1;
     WCDB::Column column2;
-    NSString* match;
+    WCDB::MatchType match;
 }
 
 - (void)setUp
@@ -41,7 +41,7 @@
     name = @"testForeignTable";
     column1 = WCDB::Column(@"testColumn1");
     column2 = WCDB::Column(@"testColumn2");
-    match = @"testMatch";
+    match = WCDB::MatchType::Simple;
 }
 
 - (void)test_default_constructible
@@ -172,7 +172,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ForeignKeyClause };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"REFERENCES testForeignTable MATCH testMatch NOT DEFERRABLE INITIALLY DEFERRED");
+    TestCaseAssertSQLEqual(testingSQL, @"REFERENCES testForeignTable MATCH SIMPLE NOT DEFERRABLE INITIALLY DEFERRED");
 }
 
 - (void)test_foreign_table_without_action

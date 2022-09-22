@@ -30,7 +30,6 @@
 
 #include <WCDB/SyntaxCommonConst.hpp>
 
-#include <WCDB/SyntaxCTETableName.hpp>
 #include <WCDB/SyntaxColumn.hpp>
 #include <WCDB/SyntaxColumnConstraint.hpp>
 #include <WCDB/SyntaxColumnDef.hpp>
@@ -39,7 +38,6 @@
 #include <WCDB/SyntaxFilter.hpp>
 #include <WCDB/SyntaxForeignKeyClause.hpp>
 #include <WCDB/SyntaxFrameSpec.hpp>
-#include <WCDB/SyntaxFunctionInvocation.hpp>
 #include <WCDB/SyntaxIdentifier.hpp>
 #include <WCDB/SyntaxIndexedColumn.hpp>
 #include <WCDB/SyntaxJoinClause.hpp>
@@ -48,15 +46,12 @@
 #include <WCDB/SyntaxOrderingTerm.hpp>
 #include <WCDB/SyntaxPragma.hpp>
 #include <WCDB/SyntaxQualifiedTableName.hpp>
-#include <WCDB/SyntaxRecursiveCTE.hpp>
 #include <WCDB/SyntaxResultColumn.hpp>
 #include <WCDB/SyntaxSchema.hpp>
 #include <WCDB/SyntaxSelectCore.hpp>
 #include <WCDB/SyntaxTableConstraint.hpp>
 #include <WCDB/SyntaxTableOrSubquery.hpp>
 #include <WCDB/SyntaxUpsertClause.hpp>
-#include <WCDB/SyntaxWindowFunctionInvocation.hpp>
-#include <WCDB/SyntaxWithClause.hpp>
 
 #include <WCDB/SyntaxAlterTableSTMT.hpp>
 #include <WCDB/SyntaxAnalyzeSTMT.hpp>

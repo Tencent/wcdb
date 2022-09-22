@@ -52,8 +52,6 @@ constexpr const char* Enum::description(const Syntax::ForeignKeyClause::Switch& 
         return "ON UPDATE RESTRICT";
     case Syntax::ForeignKeyClause::Switch::OnUpdateNoAction:
         return "ON UPDATE NO ACTION";
-    case Syntax::ForeignKeyClause::Switch::Match:
-        return "MATCH";
     }
 }
 
@@ -98,14 +96,11 @@ bool ForeignKeyClause::describle(std::ostringstream& stream) const
     if (!columns.empty()) {
         stream << "(" << columns << ")";
     }
-    auto iter = matchings.begin();
     for (const auto& switcher : switchers) {
         stream << space << switcher;
-        if (switcher == Switch::Match) {
-            WCTSyntaxRemedialAssert(iter != matchings.end());
-            stream << space << *iter;
-            ++iter;
-        }
+    }
+    if (matchTypeValid()) {
+        stream << space << "MATCH" << space << matchType;
     }
     if (deferrableValid()) {
         stream << space << deferrable;

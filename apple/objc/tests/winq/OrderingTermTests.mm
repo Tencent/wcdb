@@ -37,7 +37,7 @@
 {
     [super setUp];
     expression = WCDB::Column(@"testColumn");
-    collation = @"testCollation";
+    collation = @"BINARY";
 }
 
 - (void)test_default_constructible
@@ -69,7 +69,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"testColumn COLLATE testCollation");
+    TestCaseAssertSQLEqual(testingSQL, @"testColumn COLLATE BINARY");
 }
 
 - (void)test_with_order
