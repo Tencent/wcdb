@@ -29,7 +29,7 @@
 @end
 
 @implementation StatementDeleteTests {
-    WCDB::With with;
+    WCDB::CommonTableExpression with;
     WCDB::QualifiedTable table;
     WCDB::Expression condition;
     WCDB::OrderingTerms orderingTerms;
@@ -40,7 +40,7 @@
 - (void)setUp
 {
     [super setUp];
-    with = WCDB::With().table(@"testTable").as(WCDB::StatementSelect().select(1));
+    with = WCDB::CommonTableExpression(@"testTable").as(WCDB::StatementSelect().select(1));
     table = @"testTable";
     condition = 2;
     orderingTerms = {
@@ -78,7 +78,7 @@
 {
     auto testingSQL = WCDB::StatementDelete().with(with).deleteFrom(table).where(condition).order(orderingTerms).limit(limit).offset(limitParameter);
 
-    auto testingTypes = { WCDB::SQL::Type::DeleteSTMT, WCDB::SQL::Type::WithClause, WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::DeleteSTMT, WCDB::SQL::Type::CommonTableExpression, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"WITH testTable AS(SELECT 1) DELETE FROM main.testTable WHERE 2 ORDER BY testColumn1, testColumn2 LIMIT 3 OFFSET 4");
 }

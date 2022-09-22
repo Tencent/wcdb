@@ -55,13 +55,11 @@ public:
     Expression(const Column& column);
     Expression(const StatementSelect& select);
 
-    Expression& table(const UnsafeStringView& table);
-    Expression& schema(const Schema& schema);
-
     explicit Expression(const Expressions& expressions);
     Expression(const RaiseFunction& raiseFunction);
 
     static Expression function(const UnsafeStringView& function);
+    Expression& schema(const Schema& schema);
     Expression& invoke();
     Expression& argument(const Expression& parameter);
     Expression& arguments(const Expressions& parameters);

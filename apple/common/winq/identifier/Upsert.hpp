@@ -32,7 +32,7 @@ class Upsert final : public SpecifiedSyntax<Syntax::UpsertClause, SQL> {
 public:
     ~Upsert() override final;
 
-    Upsert& conflict();
+    Upsert& onConflict();
     Upsert& indexed(const IndexedColumn& indexedColumn);
     Upsert& where(const Expression& condition);
     Upsert& doNothing();

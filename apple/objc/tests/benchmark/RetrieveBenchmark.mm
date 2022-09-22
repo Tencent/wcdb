@@ -62,7 +62,6 @@
     TestCaseAssertTrue([self.database removeFiles]);
 }
 
-#ifndef WCDB_QUICK_TESTS
 - (void)test_backup
 {
     __block BOOL result;
@@ -121,6 +120,5 @@
         TestCaseAssertEqual(score, 1.0f);
     }];
 }
-#endif
 
 @end

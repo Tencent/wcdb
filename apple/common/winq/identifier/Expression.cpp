@@ -52,12 +52,6 @@ Expression::Expression(const StatementSelect& select)
     syntax().select = select;
 }
 
-Expression& Expression::table(const UnsafeStringView& table)
-{
-    syntax().table = table;
-    return *this;
-}
-
 Expression& Expression::schema(const Schema& schema)
 {
     syntax().schema = schema;

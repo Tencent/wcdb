@@ -34,7 +34,7 @@ const Tag& Tag::invalid()
     return *s_invalid;
 }
 
-Tag::Tag(int32_t tag) : m_value(tag)
+Tag::Tag(long tag) : m_value(tag)
 {
     WCTRemedialAssert(m_value != TagInvalidValue, "Tag can't be 0.", return;);
 }
@@ -53,12 +53,12 @@ bool Tag::operator!=(const Tag& other) const
     return m_value != other.m_value;
 }
 
-Tag::operator int32_t() const
+Tag::operator long() const
 {
     return value();
 }
 
-int32_t Tag::value() const
+long Tag::value() const
 {
     return m_value;
 }

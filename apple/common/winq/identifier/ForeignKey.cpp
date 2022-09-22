@@ -100,10 +100,9 @@ ForeignKey& ForeignKey::onUpdateNoAction()
     return *this;
 }
 
-ForeignKey& ForeignKey::match(const UnsafeStringView& name)
+ForeignKey& ForeignKey::match(const MatchType& type)
 {
-    syntax().switchers.push_back(SyntaxType::Switch::Match);
-    syntax().matchings.push_back(StringView(name));
+    syntax().matchType = type;
     return *this;
 }
 

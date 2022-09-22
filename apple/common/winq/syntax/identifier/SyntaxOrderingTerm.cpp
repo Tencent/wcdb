@@ -46,7 +46,7 @@ Identifier::Type OrderingTerm::getType() const
 bool OrderingTerm::describle(std::ostringstream& stream) const
 {
     stream << expression;
-    if (!collation.empty()) {
+    if (collation.length() > 0) {
         stream << " COLLATE " << collation;
     }
     if (orderValid()) {

@@ -59,6 +59,24 @@
     TestCaseAssertSQLEqual(testingSQL, @"testColumn");
 }
 
+- (void)test_column_with_table_and_schema
+{
+    auto testingSQL = WCDB::Column(@"testColumn").table(@"testTable").schema(@"testSchema");
+
+    auto testingTypes = { WCDB::SQL::Type::Column, WCDB::SQL::Type::Schema };
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
+    TestCaseAssertSQLEqual(testingSQL, @"testSchema.testTable.testColumn");
+}
+
+- (void)test_column_with_table_without_schema
+{
+    auto testingSQL = WCDB::Column(@"testColumn").table(@"testTable");
+
+    auto testingTypes = { WCDB::SQL::Type::Column, WCDB::SQL::Type::Schema };
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
+    TestCaseAssertSQLEqual(testingSQL, @"main.testTable.testColumn");
+}
+
 - (void)test_rowid
 {
     TestCaseAssertSQLEqual(WCDB::Column::rowid(), @"rowid");

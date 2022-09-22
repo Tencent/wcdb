@@ -74,13 +74,13 @@ void HandleNotification::postTraceNotification(unsigned int flag, void *P, void 
     case SQLITE_TRACE_STMT: {
         const char *sql = static_cast<const char *>(X);
         if (sql) {
-            postSQLTraceNotification(sql, getHandle());
+            postSQLTraceNotification(getHandle()->getPath(), sql, getHandle());
         }
     } break;
     case SQLITE_TRACE_PROFILE: {
         const char *sql = sqlite3_sql(stmt);
         sqlite3_int64 *cost = (sqlite3_int64 *) X;
-        postPerformanceTraceNotification(sql, *cost, getHandle());
+        postPerformanceTraceNotification(getHandle()->getPath(), sql, *cost, getHandle());
     } break;
     default:
         break;
@@ -124,12 +124,13 @@ void HandleNotification::setNotificationWhenSQLTraced(const UnsafeStringView &na
     }
 }
 
-void HandleNotification::postSQLTraceNotification(const UnsafeStringView &sql,
+void HandleNotification::postSQLTraceNotification(const UnsafeStringView &path,
+                                                  const UnsafeStringView &sql,
                                                   const void *handle)
 {
     WCTAssert(!m_sqlNotifications.empty());
     for (const auto &element : m_sqlNotifications) {
-        element.second(sql, handle);
+        element.second(path, sql, handle);
     }
 }
 
@@ -155,13 +156,14 @@ void HandleNotification::setNotificationWhenPerformanceTraced(const UnsafeString
     }
 }
 
-void HandleNotification::postPerformanceTraceNotification(const UnsafeStringView &sql,
+void HandleNotification::postPerformanceTraceNotification(const UnsafeStringView &path,
+                                                          const UnsafeStringView &sql,
                                                           const int64_t &cost,
                                                           const void *handle)
 {
     WCTAssert(!m_performanceNotifications.empty());
     for (const auto &element : m_performanceNotifications) {
-        element.second(sql, (double) cost / (int) 1E9, handle);
+        element.second(path, sql, (double) cost / (int) 1E9, handle);
     }
 }
 

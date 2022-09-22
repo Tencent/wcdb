@@ -73,7 +73,7 @@ protected:
 
 #pragma mark - Handle
 public:
-    RecyclableHandle getHandle();
+    RecyclableHandle getHandle() override;
     bool execute(const Statement &statement);
     bool execute(const UnsafeStringView &sql);
     std::optional<bool> tableExists(const UnsafeStringView &table);
@@ -134,7 +134,7 @@ public:
 
 #pragma mark - File
 public:
-    const StringView &getPath() const;
+    const StringView &getPath() const override;
     std::list<StringView> getPaths() const;
     static std::list<StringView> pathsOfDatabase(const UnsafeStringView &database);
 

@@ -45,8 +45,12 @@ Identifier::Type UpdateSTMT::getType() const
 
 bool UpdateSTMT::describle(std::ostringstream& stream, bool skipSchema) const
 {
-    if (withClause.isValid()) {
-        stream << withClause << space;
+    if (!commonTableExpressions.empty()) {
+        stream << "WITH ";
+        if (recursive) {
+            stream << "RECURSIVE ";
+        }
+        stream << commonTableExpressions << space;
     }
     stream << "UPDATE ";
     if (conflictActionValid()) {
@@ -107,9 +111,7 @@ bool UpdateSTMT::describle(std::ostringstream& stream) const
 void UpdateSTMT::iterate(const Iterator& iterator, bool& stop)
 {
     Identifier::iterate(iterator, stop);
-    if (withClause.isValid()) {
-        recursiveIterate(withClause, iterator, stop);
-    }
+    listIterate(commonTableExpressions, iterator, stop);
     recursiveIterate(table, iterator, stop);
     if (!columnsList.empty()) {
         WCTIterateRemedialAssert(columnsList.size() == expressions.size());

@@ -33,7 +33,7 @@ WindowDef::~WindowDef() = default;
 
 bool WindowDef::isValid() const
 {
-    return true;
+    return !expressions.empty() || !orderingTerms.empty() || frameSpec.isValid();
 }
 
 #pragma mark - Identifier

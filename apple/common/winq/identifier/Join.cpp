@@ -100,6 +100,21 @@ Join& Join::naturalCrossJoin(const TableOrSubquery& tableOrSubquery)
     return *this;
 }
 
+Join& Join::on(const Expression& expression)
+{
+    return constraint(JoinConstraint().on(expression));
+}
+
+Join& Join::usingColumn(const Column& column)
+{
+    return constraint(JoinConstraint().column(column));
+}
+
+Join& Join::usingColumns(const Columns& columns)
+{
+    return constraint(JoinConstraint().columns(columns));
+}
+
 Join& Join::constraint(const JoinConstraint& constraint)
 {
     syntax().joinConstraints.back() = constraint;

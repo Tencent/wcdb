@@ -36,7 +36,6 @@
 #include <WCDB/FTS3Function.hpp>
 
 #include <WCDB/BindParameter.hpp>
-#include <WCDB/CTETable.hpp>
 #include <WCDB/Column.hpp>
 #include <WCDB/ColumnConstraint.hpp>
 #include <WCDB/ColumnDef.hpp>
@@ -45,7 +44,6 @@
 #include <WCDB/Filter.hpp>
 #include <WCDB/ForeignKey.hpp>
 #include <WCDB/FrameSpec.hpp>
-#include <WCDB/FunctionInvocation.hpp>
 #include <WCDB/IndexedColumn.hpp>
 #include <WCDB/Join.hpp>
 #include <WCDB/JoinConstraint.hpp>
@@ -54,15 +52,12 @@
 #include <WCDB/Pragma.hpp>
 #include <WCDB/QualifiedTable.hpp>
 #include <WCDB/RaiseFunction.hpp>
-#include <WCDB/RecursiveCTE.hpp>
 #include <WCDB/ResultColumn.hpp>
 #include <WCDB/Schema.hpp>
 #include <WCDB/TableConstraint.hpp>
 #include <WCDB/TableOrSubquery.hpp>
 #include <WCDB/Upsert.hpp>
 #include <WCDB/WindowDef.hpp>
-#include <WCDB/WindowFunctionInvocation.hpp>
-#include <WCDB/With.hpp>
 
 #include <WCDB/Statement.hpp>
 #include <WCDB/StatementAlterTable.hpp>

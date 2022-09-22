@@ -22,19 +22,41 @@
  * limitations under the License.
  */
 
+#ifdef WCDB_SWIFT
+
+#import <WCDB/WCTBridgeProperty.h>
+
+#else
+
+#import <WCDB/WCTBridgeProperty+CPP.h>
 #import <WCDB/WCTCommon.h>
 #import <WCDB/WCTProperty.h>
 
+#endif
+
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol WCTTableCoding
+@protocol WCTTableCoding <NSObject>
+
+#ifdef WCDB_SWIFT
+
+@required
++ (WCTBridgeProperties*)allBridgeProperties NS_SWIFT_NAME(allProperties());
+
+#else
+
 @required
 + (const WCTBinding &)objectRelationalMapping;
 + (const WCTProperties &)allProperties;
 @optional
++ (void)additionalObjectRelationalMapping:(WCTBinding &)binding;
+
+#endif
+
+@optional
 @property (nonatomic, assign) long long lastInsertedRowID;
 @property (nonatomic, assign) BOOL isAutoIncrement;
-+ (void)additionalObjectRelationalMapping:(WCTBinding &)binding;
+
 @end
 
 NS_ASSUME_NONNULL_END

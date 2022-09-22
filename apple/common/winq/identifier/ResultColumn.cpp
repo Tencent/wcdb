@@ -22,6 +22,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/WINQ.h>
 
 namespace WCDB {
@@ -40,26 +41,18 @@ ResultColumn& ResultColumn::as(const UnsafeStringView& alias)
     return *this;
 }
 
-ResultColumnAll ResultColumn::all()
+ResultColumn ResultColumn::all()
 {
-    return ResultColumnAll();
+    ResultColumn result = ResultColumn();
+    result.syntax().wildcard = true;
+    return result;
 }
 
-ResultColumnAll::ResultColumnAll()
+ResultColumn& ResultColumn::inTable(const UnsafeStringView& table)
 {
-    syntax().wildcard = true;
-}
-
-ResultColumnAll::~ResultColumnAll() = default;
-
-ResultColumnAll& ResultColumnAll::inTable(const UnsafeStringView& table)
-{
+    WCTAssert(syntax().wildcard);
     syntax().table = table;
     return *this;
 }
 
-Expression ResultColumnAll::count() const
-{
-    return Expression::function("count").invokeAll();
-}
 } // namespace WCDB

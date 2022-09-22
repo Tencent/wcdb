@@ -386,10 +386,11 @@ bool Expression::describle(std::ostringstream& stream) const
         if (filter.isValid()) {
             stream << space << filter;
         }
-        stream << " OVER";
-        if (windowName.empty()) {
+        if (windowDef.isValid()) {
+            stream << " OVER";
             stream << windowDef;
-        } else {
+        } else if (!windowName.empty()) {
+            stream << " OVER";
             stream << space << windowName;
         }
         break;
@@ -464,9 +465,6 @@ void Expression::iterate(const Iterator& iterator, bool& stop)
         recursiveIterate(bindParameter, iterator, stop);
         break;
     case Switch::Column:
-        if (!table.empty()) {
-            recursiveIterate(schema, iterator, stop);
-        }
         recursiveIterate(column, iterator, stop);
         break;
     case Switch::In: {

@@ -31,9 +31,7 @@
 @implementation JoinTests {
     WCDB::TableOrSubquery tableOrSubquery;
     WCDB::TableOrSubquery tableOrSubquery1;
-    WCDB::JoinConstraint joinConstraint1;
     WCDB::TableOrSubquery tableOrSubquery2;
-    WCDB::JoinConstraint joinConstraint2;
 }
 
 - (void)setUp
@@ -41,9 +39,7 @@
     [super setUp];
     tableOrSubquery = @"testTable";
     tableOrSubquery1 = @"testTable1";
-    joinConstraint1 = WCDB::JoinConstraint().on(1);
     tableOrSubquery2 = @"testTable2";
-    joinConstraint2 = WCDB::JoinConstraint().on(2);
 }
 
 - (void)test_default_constructible
@@ -161,7 +157,7 @@
 
 - (void)test_join_with_constraint
 {
-    auto testingSQL = WCDB::Join().table(tableOrSubquery).join(tableOrSubquery1).constraint(joinConstraint1);
+    auto testingSQL = WCDB::Join().table(tableOrSubquery).join(tableOrSubquery1).on(1);
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::JoinConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
@@ -170,7 +166,7 @@
 
 - (void)test_multiple_join
 {
-    auto testingSQL = WCDB::Join().table(tableOrSubquery).join(tableOrSubquery1).constraint(joinConstraint1).leftOuterJoin(tableOrSubquery2).constraint(joinConstraint2);
+    auto testingSQL = WCDB::Join().table(tableOrSubquery).join(tableOrSubquery1).on(1).leftOuterJoin(tableOrSubquery2).on(2);
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::JoinConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::JoinConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);

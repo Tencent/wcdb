@@ -36,7 +36,7 @@ public:
     ~ExplainSTMT() override final;
 
     bool queryPlan = false;
-    Shadow<STMT> stmt;
+    Shadow<Identifier> stmt;
 
     bool isValid() const override final;
 

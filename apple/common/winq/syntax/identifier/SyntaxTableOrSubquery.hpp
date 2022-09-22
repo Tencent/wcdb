@@ -26,6 +26,7 @@
 
 #include <WCDB/SyntaxIdentifier.hpp>
 #include <WCDB/SyntaxJoinClause.hpp>
+#include <WCDB/SyntaxSelectSTMT.hpp>
 
 namespace WCDB {
 

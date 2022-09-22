@@ -43,9 +43,10 @@ public:
 
     WCDB_SYNTAX_ENUM_UNION(Order, order);
     WCDB_SYNTAX_ENUM_UNION(Conflict, conflict);
+
+    StringView collation;
     bool autoIncrement = false;
     Expression expression;
-    StringView collation;
     ForeignKeyClause foreignKeyClause;
 
 #pragma mark - Identifier

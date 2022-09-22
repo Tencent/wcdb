@@ -33,18 +33,18 @@ class Tag final {
 public:
     static const Tag& invalid();
 
-    Tag(int32_t tag);
+    Tag(long tag);
 
     bool operator==(const Tag& other) const;
     bool operator!=(const Tag& other) const;
-    operator int32_t() const;
-    int32_t value() const;
+    operator long() const;
+    long value() const;
 
     bool isValid() const;
 
 private:
     Tag(const std::nullptr_t&);
-    int32_t m_value;
+    long m_value;
 };
 
 } // namespace WCDB

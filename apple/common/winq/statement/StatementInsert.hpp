@@ -33,7 +33,9 @@ public:
     using SpecifiedSyntax<Syntax::InsertSTMT, Statement>::SpecifiedSyntax;
     ~StatementInsert() override final;
 
-    StatementInsert& with(const With& with);
+    StatementInsert& with(const CommonTableExpressions& commonTableExpressions);
+    StatementInsert& recursive();
+
     StatementInsert& insertIntoTable(const UnsafeStringView& table);
     StatementInsert& schema(const Schema& schema);
 

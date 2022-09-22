@@ -60,12 +60,6 @@ public:
 };
 
 template<typename T, typename Enable = void>
-class CTETableConvertible final : public std::false_type {
-public:
-    static CTETable asCTETable(const T&);
-};
-
-template<typename T, typename Enable = void>
 class OrderingTermConvertible final : public std::false_type {
 public:
     static OrderingTerm asOrderingTerm(const T&);

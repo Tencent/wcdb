@@ -41,7 +41,11 @@ static constexpr const double OperationQueueRateForTooManyFileDescriptors = 0.7;
 #pragma mark - Operation Queue - Checkpoint
 static constexpr const double OperationQueueTimeIntervalForCheckpoint = 10.0;
 #pragma mark - Operation Queue - Backup
-static constexpr const double OperationQueueTimeIntervalForBackup = 600.0;
+#ifndef WCDB_QUICK_TESTS
+static double OperationQueueTimeIntervalForBackup = 600.0;
+#else
+static double OperationQueueTimeIntervalForBackup = 60.0;
+#endif
 #pragma mark - Operation Queue - Merge FTS Index
 static constexpr const double OperationQueueTimeIntervalForMergeFTSIndex
 = 1.871; //Use prime numbers to reduce the probability of collision with external logic
@@ -156,6 +160,7 @@ static constexpr const char* ErrorSourceRepair = "Repair";
 static constexpr const char* ErrorSourceSystem = "System";
 static constexpr const char* ErrorSourceAssertion = "Assertion";
 static constexpr const char* ErrorSourceNative = "Native";
+static constexpr const char* ErrorSourceSwift = "Swift";
 
 #pragma mark - Error - Type
 static constexpr const char* ErrorTypeMigrate = "Migrate";

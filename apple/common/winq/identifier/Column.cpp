@@ -33,6 +33,18 @@ Column::Column(const UnsafeStringView& name)
     syntax().name = name;
 }
 
+Column& Column::schema(const Schema& schema)
+{
+    syntax().schema = schema;
+    return *this;
+}
+
+Column& Column::table(const UnsafeStringView& table)
+{
+    syntax().table = table;
+    return *this;
+}
+
 Column::~Column() = default;
 
 Column Column::rowid()

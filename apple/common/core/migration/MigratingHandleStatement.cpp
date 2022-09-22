@@ -110,7 +110,8 @@ MigratingHandleStatement::process(const Statement& originStatement)
                 Syntax::Expression& syntax = (Syntax::Expression&) identifier;
                 switch (syntax.switcher) {
                 case Syntax::Expression::Switch::Column:
-                    succeed = tryFallbackToUnionedView(syntax.schema, syntax.table);
+                    succeed = tryFallbackToUnionedView(syntax.column.schema,
+                                                       syntax.column.table);
                     break;
                 case Syntax::Expression::Switch::In:
                     if (syntax.inSwitcher == Syntax::Expression::SwitchIn::Table) {

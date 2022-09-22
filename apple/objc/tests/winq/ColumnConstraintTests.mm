@@ -48,7 +48,7 @@
     condition = 1;
     defaultValue = 1;
     defaultExpression = 1;
-    collation = @"testCollation";
+    collation = @"BINARY";
     foreignKey = WCDB::ForeignKey().references(@"testForeignTable");
 }
 
@@ -171,7 +171,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ColumnConstraint };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"CONSTRAINT testColumnConstraint COLLATE testCollation");
+    TestCaseAssertSQLEqual(testingSQL, @"CONSTRAINT testColumnConstraint COLLATE BINARY");
 }
 
 - (void)test_foreign_key

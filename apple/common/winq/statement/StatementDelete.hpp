@@ -33,7 +33,9 @@ public:
     using SpecifiedSyntax<Syntax::DeleteSTMT, Statement>::SpecifiedSyntax;
     ~StatementDelete() override final;
 
-    StatementDelete& with(const With& with);
+    StatementDelete& with(const CommonTableExpressions& commonTableExpressions);
+    StatementDelete& recursive();
+
     StatementDelete& deleteFrom(const QualifiedTable& table);
     StatementDelete& where(const Expression& condition);
     StatementDelete& order(const OrderingTerms& orderingTerms);

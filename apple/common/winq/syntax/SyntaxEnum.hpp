@@ -135,4 +135,17 @@ constexpr const char* Enum::description(const Syntax::ConflictAction& action)
     }
 }
 
+template<>
+constexpr const char* Enum::description(const Syntax::MatchType& match)
+{
+    switch (match) {
+    case Syntax::MatchType::Simple:
+        return "SIMPLE";
+    case Syntax::MatchType::Full:
+        return "FULL";
+    case Syntax::MatchType::Partial:
+        return "PARTIAL";
+    }
+}
+
 } // namespace WCDB

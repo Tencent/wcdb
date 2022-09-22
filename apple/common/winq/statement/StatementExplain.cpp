@@ -43,7 +43,7 @@ StatementExplain& StatementExplain::explainQueryPlan(const Statement& statement)
 void StatementExplain::explain(const Statement& statement, bool queryPlan)
 {
     syntax().queryPlan = queryPlan;
-    syntax().stmt = (const Syntax::STMT&) statement.syntax();
+    syntax().stmt = statement.syntax();
 }
 
 } // namespace WCDB

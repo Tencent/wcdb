@@ -48,7 +48,7 @@ bool IndexedColumn::describle(std::ostringstream& stream) const
         stream << expression;
         break;
     }
-    if (!collation.empty()) {
+    if (collation.length() > 0) {
         stream << " COLLATE " << collation;
     }
     if (orderValid()) {

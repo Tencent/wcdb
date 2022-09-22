@@ -48,10 +48,9 @@ public:
         OnUpdateCascade,
         OnUpdateRestrict,
         OnUpdateNoAction,
-        Match,
     };
     std::list<Switch> switchers;
-    std::list<StringView> matchings;
+    WCDB_SYNTAX_ENUM_UNION(MatchType, matchType);
 
     WCDB_SYNTAX_UNION_ENUM(Deferrable,
                            deferrable,

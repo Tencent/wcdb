@@ -73,6 +73,16 @@ static std::nullptr_t initialize()
     WCDB::Core::shared().enableAutoCheckpoint(_database, flag);
 }
 
+- (BOOL)truncateCheckpoint
+{
+    return _database->checkpoint(false, WCDB::Database::CheckPointMode::Truncate);
+}
+
+- (BOOL)passiveCheckpoint
+{
+    return _database->checkpoint(false, WCDB::Database::CheckPointMode::Passive);
+}
+
 - (BOOL)isOpened
 {
     return _database->isOpened();

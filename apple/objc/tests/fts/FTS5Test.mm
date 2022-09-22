@@ -294,7 +294,7 @@
     [NSThread sleepForTimeInterval:10];
     WCTValue *count = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column("segid").count().distinct()).from([NSString stringWithFormat:@"%@_idx", self.tableName])];
     TestCaseAssertTrue(count.numberValue.intValue < 8);
-    TestCaseAssertTrue(maxCost < 0.02);
+    TestCaseAssertTrue(maxCost < 0.1);
 }
 
 @end

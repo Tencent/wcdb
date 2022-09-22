@@ -28,9 +28,15 @@ namespace WCDB {
 
 StatementInsert::~StatementInsert() = default;
 
-StatementInsert& StatementInsert::with(const With& with)
+StatementInsert& StatementInsert::with(const CommonTableExpressions& commonTableExpressions)
 {
-    syntax().withClause = with;
+    syntax().commonTableExpressions = commonTableExpressions;
+    return *this;
+}
+
+StatementInsert& StatementInsert::recursive()
+{
+    syntax().recursive = true;
     return *this;
 }
 

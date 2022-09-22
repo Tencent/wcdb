@@ -44,7 +44,7 @@
 {
     TestCaseAssertSQLEqual(WCDB::AggregateFunction::avg(expression1), @"avg(1)");
     TestCaseAssertSQLEqual(WCDB::AggregateFunction::count(expression1), @"count(1)");
-    TestCaseAssertSQLEqual(WCDB::ResultColumnAll().count(), @"count(*)");
+    TestCaseAssertSQLEqual(WCDB::Expression::function("count").invokeAll(), @"count(*)");
     TestCaseAssertSQLEqual(WCDB::AggregateFunction::groupConcat(expression1), @"group_concat(1)");
     TestCaseAssertSQLEqual(WCDB::AggregateFunction::groupConcat(expression1, expression2), @"group_concat(1, 2)");
     TestCaseAssertSQLEqual(WCDB::AggregateFunction::max(expression1), @"max(1)");

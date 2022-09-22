@@ -55,12 +55,6 @@ NSString* getDescriptionOfType(WCDB::Syntax::Identifier::Type type)
         return @"IndexedColumn";
     case Syntax::Identifier::Type::TableConstraint:
         return @"TableConstraint";
-    case Syntax::Identifier::Type::CTETableName:
-        return @"CTETableName";
-    case Syntax::Identifier::Type::WithClause:
-        return @"WithClause";
-    case Syntax::Identifier::Type::RecursiveCTE:
-        return @"RecursiveCTE";
     case Syntax::Identifier::Type::CommonTableExpression:
         return @"CommonTableExpression";
     case Syntax::Identifier::Type::QualifiedTableName:
@@ -83,10 +77,6 @@ NSString* getDescriptionOfType(WCDB::Syntax::Identifier::Type type)
         return @"ResultColumn";
     case Syntax::Identifier::Type::FrameSpec:
         return @"FrameSpec";
-    case Syntax::Identifier::Type::FunctionInvocation:
-        return @"FunctionInvocation";
-    case Syntax::Identifier::Type::WindowFunctionInvocation:
-        return @"WindowFunctionInvocation";
     case Syntax::Identifier::Type::AlterTableSTMT:
         return @"AlterTableSTMT";
     case Syntax::Identifier::Type::AnalyzeSTMT:
@@ -139,6 +129,8 @@ NSString* getDescriptionOfType(WCDB::Syntax::Identifier::Type type)
         return @"VacuumSTMT";
     case Syntax::Identifier::Type::ExplainSTMT:
         return @"ExplainSTMT";
+    case Syntax::Identifier::Type::Invalid:
+        return @"InvalidSTMT";
     }
 }
 

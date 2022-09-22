@@ -29,7 +29,7 @@
 @end
 
 @implementation StatementInsertTests {
-    WCDB::With with;
+    WCDB::CommonTableExpression with;
     WCDB::Schema schema;
     NSString* table;
     NSString* alias;
@@ -47,7 +47,7 @@
 - (void)setUp
 {
     [super setUp];
-    with = WCDB::With().table(@"testTable").as(WCDB::StatementSelect().select(1));
+    with = WCDB::CommonTableExpression(@"testTable").as(WCDB::StatementSelect().select(1));
     schema = @"testSchema";
     table = @"testTable";
     alias = @"testAliasTable";
@@ -67,7 +67,7 @@
         3,
         4,
     };
-    upsert = WCDB::Upsert().conflict().doNothing();
+    upsert = WCDB::Upsert().onConflict().doNothing();
     select = WCDB::StatementSelect().select(1);
 }
 
@@ -161,7 +161,7 @@
 {
     auto testingSQL = WCDB::StatementInsert().with(with).insertIntoTable(table).schema(schema).column(column1).values(expressions1);
 
-    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::WithClause, WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::CommonTableExpression, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"WITH testTable AS(SELECT 1) INSERT INTO testSchema.testTable(testColumn1) VALUES(1, 2)");
 }

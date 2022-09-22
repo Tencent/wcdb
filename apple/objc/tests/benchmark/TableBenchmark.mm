@@ -65,7 +65,6 @@
     [self.database removeFiles];
 }
 
-#ifndef WCDB_QUICK_TESTS
 - (void)test_initialization
 {
     __block BOOL result;
@@ -152,6 +151,5 @@
         TestCaseAssertTrue(result);
     }];
 }
-#endif
 
 @end

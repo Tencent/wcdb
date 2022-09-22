@@ -463,10 +463,10 @@ void AbstractHandle::rollbackTransaction()
 }
 
 #pragma mark - Interface
-void AbstractHandle::setCipherKey(const UnsafeData &data)
+bool AbstractHandle::setCipherKey(const UnsafeData &data)
 {
     WCTAssert(isOpened());
-    APIExit(sqlite3_key(m_handle, data.buffer(), (int) data.size()));
+    return APIExit(sqlite3_key(m_handle, data.buffer(), (int) data.size()));
 }
 
 void AbstractHandle::enableExtendedResultCodes(bool enable)

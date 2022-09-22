@@ -35,7 +35,8 @@ class DeleteSTMT final : public Identifier {
 public:
     ~DeleteSTMT() override final;
 
-    WithClause withClause;
+    bool recursive = false;
+    std::list<CommonTableExpression> commonTableExpressions;
     QualifiedTableName table;
     Expression condition;
     std::list<OrderingTerm> orderingTerms;

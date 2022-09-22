@@ -56,6 +56,16 @@
     return self;
 }
 
+- (instancetype)initWithUnsafeHandle:(WCDB::Handle *)handle
+{
+    WCTAssert(handle != nil);
+    if (self = [super init]) {
+        _handle = handle;
+        _handleHolder = nullptr;
+    }
+    return self;
+}
+
 - (WCDB::Handle *)getOrGenerateHandle
 {
     if (_handle == nullptr) {

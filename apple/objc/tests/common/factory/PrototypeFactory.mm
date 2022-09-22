@@ -26,6 +26,7 @@
 #import "NSObject+TestCase.h"
 #import "TestCaseAssertion.h"
 #import "TestCaseLog.h"
+#import "WCTDatabase+Test.h"
 
 @interface PrototypeFactory ()
 @end

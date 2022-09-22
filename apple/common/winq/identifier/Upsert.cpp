@@ -28,7 +28,7 @@ namespace WCDB {
 
 Upsert::~Upsert() = default;
 
-Upsert& Upsert::conflict()
+Upsert& Upsert::onConflict()
 {
     return *this;
 }

@@ -62,14 +62,6 @@ FrameSpec& FrameSpec::currentRow()
     return *this;
 }
 
-FrameSpec& FrameSpec::following(const Expression& expression)
-{
-    syntax().between = false;
-    syntax().firstEvent = SyntaxType::FirstEvent::Following;
-    syntax().expression1 = expression;
-    return *this;
-}
-
 FrameSpec& FrameSpec::betweenUnboundedPreceding()
 {
     syntax().between = true;
