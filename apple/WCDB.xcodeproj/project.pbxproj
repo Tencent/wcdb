@@ -667,7 +667,7 @@
 		03E1661127F42D6500D2C926 /* StatementUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165A727F42D6500D2C926 /* StatementUpdate.swift */; };
 		03E1661227F42D6500D2C926 /* TableOrSubquery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165A827F42D6500D2C926 /* TableOrSubquery.swift */; };
 		03E1661327F42D6500D2C926 /* LiteralValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165A927F42D6500D2C926 /* LiteralValue.swift */; };
-		03E1661427F42D6500D2C926 /* FundamentalValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165AA27F42D6500D2C926 /* FundamentalValue.swift */; };
+		03E1661427F42D6500D2C926 /* Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165AA27F42D6500D2C926 /* Value.swift */; };
 		03E1661527F42D6500D2C926 /* StatementCreateTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165AB27F42D6500D2C926 /* StatementCreateTable.swift */; };
 		03E1661627F42D6500D2C926 /* Join.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165AC27F42D6500D2C926 /* Join.swift */; };
 		03E1661727F42D6500D2C926 /* StatementDelete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165AD27F42D6500D2C926 /* StatementDelete.swift */; };
@@ -2005,7 +2005,7 @@
 		03E165A727F42D6500D2C926 /* StatementUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatementUpdate.swift; sourceTree = "<group>"; };
 		03E165A827F42D6500D2C926 /* TableOrSubquery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableOrSubquery.swift; sourceTree = "<group>"; };
 		03E165A927F42D6500D2C926 /* LiteralValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiteralValue.swift; sourceTree = "<group>"; };
-		03E165AA27F42D6500D2C926 /* FundamentalValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FundamentalValue.swift; sourceTree = "<group>"; };
+		03E165AA27F42D6500D2C926 /* Value.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Value.swift; sourceTree = "<group>"; };
 		03E165AB27F42D6500D2C926 /* StatementCreateTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatementCreateTable.swift; sourceTree = "<group>"; };
 		03E165AC27F42D6500D2C926 /* Join.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Join.swift; sourceTree = "<group>"; };
 		03E165AD27F42D6500D2C926 /* StatementDelete.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatementDelete.swift; sourceTree = "<group>"; };
@@ -3713,7 +3713,7 @@
 			isa = PBXGroup;
 			children = (
 				75A46C0828432A5D00B58207 /* SyntaxConst.swift */,
-				03E165AA27F42D6500D2C926 /* FundamentalValue.swift */,
+				03E165AA27F42D6500D2C926 /* Value.swift */,
 				03261363283F6CFB00836E0F /* Identifier.swift */,
 				03E165B727F42D6500D2C926 /* Statement.swift */,
 				03261361283F6CC600836E0F /* identifier */,
@@ -7405,7 +7405,7 @@
 				03E165FD27F42D6500D2C926 /* StatementInsert.swift in Sources */,
 				23EEDD47217DFADC006E9E73 /* SyntaxDropViewSTMT.cpp in Sources */,
 				03E1662427F42D6500D2C926 /* StatementPragma.swift in Sources */,
-				03E1661427F42D6500D2C926 /* FundamentalValue.swift in Sources */,
+				03E1661427F42D6500D2C926 /* Value.swift in Sources */,
 				23EEDC97217DFADC006E9E73 /* OrderingTerm.cpp in Sources */,
 				03E1661A27F42D6500D2C926 /* StatementRollback.swift in Sources */,
 				23EEDC68217DFADC006E9E73 /* ColumnType.cpp in Sources */,

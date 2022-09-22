@@ -30,26 +30,26 @@ public final class RowSelect: Selectable {
         super.init(with: core, statement: statement)
     }
 
-    private func extract(atIndex index: Int) throws -> FundamentalValue {
+    private func extract(atIndex index: Int) throws -> Value {
         let handleStatement = try self.lazyHandleStatement()
         switch handleStatement.columnType(atIndex: index) {
         case .integer32:
-            return FundamentalValue(handleStatement.columnValue(atIndex: index, of: Int32.self))
+            return Value(handleStatement.columnValue(atIndex: index, of: Int32.self))
         case .integer64:
-            return FundamentalValue(handleStatement.columnValue(atIndex: index, of: Int64.self))
+            return Value(handleStatement.columnValue(atIndex: index, of: Int64.self))
         case .float:
-            return FundamentalValue(handleStatement.columnValue(atIndex: index, of: Double.self))
+            return Value(handleStatement.columnValue(atIndex: index, of: Double.self))
         case .text:
-            return FundamentalValue(handleStatement.columnValue(atIndex: index, of: String.self))
+            return Value(handleStatement.columnValue(atIndex: index, of: String.self))
         case .BLOB:
-            return FundamentalValue(handleStatement.columnValue(atIndex: index, of: Data.self))
+            return Value(handleStatement.columnValue(atIndex: index, of: Data.self))
         case .null:
-            return FundamentalValue(nil)
+            return Value(nil)
         }
     }
 
-    private func extract() throws -> FundamentalRow {
-        var row: FundamentalRow = []
+    private func extract() throws -> OneRowValue {
+        var row: OneRowValue = []
         let handleStatement = try self.lazyHandleStatement()
         for index in 0..<handleStatement.columnCount() {
             row.append(try extract(atIndex: index))
@@ -66,9 +66,9 @@ public final class RowSelect: Selectable {
     ///         print(row[3].stringValue)
     ///     }
     ///
-    /// - Returns: Array with `FundamentalValue`. Nil means the end of iteration.
+    /// - Returns: Array with `Value`. Nil means the end of iteration.
     /// - Throws: `Error`
-    public func nextRow() throws -> FundamentalRow? {
+    public func nextRow() throws -> OneRowValue? {
         guard try next() else {
             return nil
         }
@@ -77,10 +77,10 @@ public final class RowSelect: Selectable {
 
     /// Get all selected row.
     ///
-    /// - Returns: Array with `Array<FundamentalValue>`
+    /// - Returns: Array with `Array<Value>`
     /// - Throws: `Error`
-    public func allRows() throws -> FundamentalRowXColumn {
-        var rows: [[FundamentalValue]] = []
+    public func allRows() throws -> MultiRowsValue {
+        var rows: [[Value]] = []
         while try next() {
             rows.append(try extract())
         }
@@ -93,9 +93,9 @@ public final class RowSelect: Selectable {
     ///         print(value.int32Value)
     ///     }
     ///
-    /// - Returns: `FundamentalValue`. Nil means the end of iteration.
+    /// - Returns: `Value`. Nil means the end of iteration.
     /// - Throws: `Error`
-    public func nextValue() throws -> FundamentalValue? {
+    public func nextValue() throws -> Value? {
         guard try next() else {
             return nil
         }
@@ -104,10 +104,10 @@ public final class RowSelect: Selectable {
 
     /// Get all selected values.
     ///
-    /// - Returns: Array with `FundamentalValue`.
+    /// - Returns: Array with `Value`.
     /// - Throws: `Error`
-    public func allValues() throws -> FundamentalColumn {
-        var values: [FundamentalValue] = []
+    public func allValues() throws -> OneColumnValue {
+        var values: [Value] = []
         while try next() {
             values.append(try extract(atIndex: 0))
         }

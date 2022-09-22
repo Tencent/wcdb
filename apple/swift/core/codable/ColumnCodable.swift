@@ -26,7 +26,7 @@ public protocol ColumnCodableBase {
 }
 
 public protocol ColumnEncodable: Encodable, ColumnCodableBase {
-    func archivedValue() -> FundamentalValue
+    func archivedValue() -> Value
 }
 public extension ColumnEncodable where Self: LiteralValueConvertible {
     func asLiteralValue() -> LiteralValue {
@@ -35,7 +35,7 @@ public extension ColumnEncodable where Self: LiteralValueConvertible {
 }
 
 public protocol ColumnDecodable: Decodable, ColumnCodableBase {
-    init?(with value: FundamentalValue)
+    init?(with value: Value)
 }
 
 public typealias ColumnCodable = ColumnCodableBase & ColumnEncodable & ColumnDecodable

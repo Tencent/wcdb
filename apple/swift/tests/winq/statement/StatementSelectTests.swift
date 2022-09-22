@@ -89,12 +89,12 @@ class StatementSelectTests: BaseTestCase {
         )
 
         WINQAssertEqual(
-            StatementSelect().with(CommonTableExpression(table1).column(column1).as(StatementSelect().select(1)), CommonTableExpression(table2).column(column2).as(StatementSelect().select(2))).select(1,2),
+            StatementSelect().with(CommonTableExpression(table1).column(column1).as(StatementSelect().select(1)), CommonTableExpression(table2).column(column2).as(StatementSelect().select(2))).select(1, 2),
             "WITH table1(column1) AS(SELECT 1), table2(column2) AS(SELECT 2) SELECT 1, 2"
         )
 
         WINQAssertEqual(
-            StatementSelect().with(recursive: true, CommonTableExpression(table1).column(column1).as(StatementSelect().select(1)), CommonTableExpression(table2).column(column2).as(StatementSelect().select(2))).select(1,2),
+            StatementSelect().with(recursive: true, CommonTableExpression(table1).column(column1).as(StatementSelect().select(1)), CommonTableExpression(table2).column(column2).as(StatementSelect().select(2))).select(1, 2),
             "WITH RECURSIVE table1(column1) AS(SELECT 1), table2(column2) AS(SELECT 2) SELECT 1, 2"
         )
 

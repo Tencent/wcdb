@@ -27,10 +27,10 @@ class LiteralValueTests: BaseTestCase {
         static var columnType: ColumnType {
             return .integer32
         }
-        func archivedValue() -> FundamentalValue {
-            return FundamentalValue(int32)
+        func archivedValue() -> Value {
+            return Value(int32)
         }
-        init?(with value: FundamentalValue) {
+        init?(with value: Value) {
             self.init(value.int32Value)
         }
         init(_ value: Int32) {
@@ -43,10 +43,10 @@ class LiteralValueTests: BaseTestCase {
         static var columnType: ColumnType {
             return .integer64
         }
-        func archivedValue() -> FundamentalValue {
-            return FundamentalValue(int64)
+        func archivedValue() -> Value {
+            return Value(int64)
         }
-        init?(with value: FundamentalValue) {
+        init?(with value: Value) {
             self.init(value.int64Value)
         }
         init(_ value: Int64) {
@@ -59,10 +59,10 @@ class LiteralValueTests: BaseTestCase {
         static var columnType: ColumnType {
             return .float
         }
-        func archivedValue() -> FundamentalValue {
-            return FundamentalValue(double)
+        func archivedValue() -> Value {
+            return Value(double)
         }
-        init?(with value: FundamentalValue) {
+        init?(with value: Value) {
             self.init(value.doubleValue)
         }
         init(_ value: Double) {
@@ -75,10 +75,10 @@ class LiteralValueTests: BaseTestCase {
         static var columnType: ColumnType {
             return .float
         }
-        func archivedValue() -> FundamentalValue {
-            return FundamentalValue(string)
+        func archivedValue() -> Value {
+            return Value(string)
         }
-        init?(with value: FundamentalValue) {
+        init?(with value: Value) {
             self.init(value.stringValue)
         }
         init(_ value: String) {
@@ -91,10 +91,10 @@ class LiteralValueTests: BaseTestCase {
         static var columnType: ColumnType {
             return .BLOB
         }
-        func archivedValue() -> FundamentalValue {
-            return FundamentalValue(data)
+        func archivedValue() -> Value {
+            return Value(data)
         }
-        init?(with value: FundamentalValue) {
+        init?(with value: Value) {
             self.init(value.dataValue)
         }
         init(_ value: Data) {

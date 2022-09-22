@@ -51,7 +51,7 @@ public final class LiteralValue: Identifier<CPPLiteralValue> {
         self.init(with: WCDBLiteralValueCreateWithNull())
     }
 
-    public convenience init(_ value: FundamentalValue) {
+    public convenience init(_ value: Value) {
         switch value.type {
         case .integer32:
             self.init(value.int32Value)

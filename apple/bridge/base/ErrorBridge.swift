@@ -33,7 +33,7 @@ internal final class ErrorBridge {
         var infos = Error.Infos()
         var extInfos = Error.ExtInfos()
         infos[Error.Key.message] = ErrorValue(message)
-        let enumerator : @convention(block) (UnsafePointer<Int8>, WCDBErrorValueType, Int, Double, UnsafePointer<Int8>) -> Void = {
+        let enumerator: @convention(block) (UnsafePointer<Int8>, WCDBErrorValueType, Int, Double, UnsafePointer<Int8>) -> Void = {
             (ckey, valueType, intValue, doubleValue, stringValue) in
             let stringKey = String(cString: ckey)
             var value: ErrorValue
