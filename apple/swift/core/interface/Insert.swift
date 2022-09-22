@@ -22,19 +22,19 @@ import Foundation
 
 /// Chain call for inserting
 public final class Insert {
-    private let core: Core
+    private let database: Database
     private var properties: [PropertyConvertible]?
     private let name: String
     private let isReplace: Bool
 
-    init(with core: Core,
+    init(with database: Database,
          named name: String,
          on propertyConvertibleList: [PropertyConvertible]?,
          isReplace: Bool = false) {
         self.name = name
         self.properties = propertyConvertibleList
         self.isReplace = isReplace
-        self.core = core
+        self.database = database
     }
 
     private var conflict: ConflictAction? {
@@ -71,8 +71,8 @@ public final class Insert {
     public func execute<Object: TableEncodable>(with objects: [Object]) throws {
         guard objects.count > 0 else {
             ErrorBridge.report(level: .Warning, code: .Misuse, infos: [
-                .tag: ErrorValue(Int(core.tag ?? 0)),
-                .path: ErrorValue(core.path),
+                .tag: ErrorValue(Int(database.tag ?? 0)),
+                .path: ErrorValue(database.path),
                 .message: ErrorValue("Inserting with an empty/nil object")
             ])
             return
@@ -80,7 +80,7 @@ public final class Insert {
         let orm = Object.CodingKeys.objectRelationalMapping
         func doInsertObject() throws {
             properties = properties ?? Object.Properties.all
-            let handleStatement: HandleStatement = try core.prepare(statement)
+            let handleStatement: HandleStatement = try database.prepare(statement)
             let encoder = TableEncoder(properties!.asCodingTableKeys(), on: handleStatement)
             if !isReplace {
                 encoder.primaryKeyHash = orm.getPrimaryKey()?.stringValue.hashValue
@@ -97,19 +97,19 @@ public final class Insert {
                 handleStatement.reset()
             }
         }
-        return objects.count == 1 ? try doInsertObject() : try core.run(embeddedTransaction: doInsertObject )
+        return objects.count == 1 ? try doInsertObject() : try database.run(transaction: doInsertObject )
     }
 
     public func execute<Object: WCTTableCoding>(with objects: [Object]) throws {
         guard objects.count > 0 else {
             ErrorBridge.report(level: .Warning, code: .Misuse, infos: [
-                .tag: ErrorValue(Int(core.tag ?? 0)),
-                .path: ErrorValue(core.path),
+                .tag: ErrorValue(Int(database.tag ?? 0)),
+                .path: ErrorValue(database.path),
                 .message: ErrorValue("Inserting with an empty/nil object")
             ])
             return
         }
-        let handle = try core.getHandle()
+        let handle = try database.getHandle()
         if !WCTAPIBridge.insertObjects(objects, intoTable: name,
                                        withProperties: properties?.asWCTBridgeProperties(),
                                        orReplace: isReplace,
@@ -119,14 +119,14 @@ public final class Insert {
     }
 }
 
-extension Insert: CoreRepresentable {
+extension Insert: DatabaseRepresentable {
     /// The tag of the related database.
     public var tag: Tag? {
-        return core.tag
+        return database.tag
     }
 
     /// The path of the related database.
     public var path: String {
-        return core.path
+        return database.path
     }
 }

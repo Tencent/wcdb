@@ -794,12 +794,12 @@ class TypedTests: CRUDTestCase {
 
         let statementInsert = StatementInsert().insert(intoTable: tableName).columns(TypedMatchTable.Properties.variable1)
                                                .values(BindParameter(1))
-        let coreStatement = try? database.prepare(statementInsert)
-        XCTAssertNotNil(coreStatement)
-        let wrappedCoreStatement = coreStatement!
-        wrappedCoreStatement.bind("", toIndex: 1)
-        XCTAssertNoThrow(try wrappedCoreStatement.step())
-        XCTAssertNoThrow(try wrappedCoreStatement.finalize())
+        let handleStatement = try? database.prepare(statementInsert)
+        XCTAssertNotNil(handleStatement)
+        let wrappedHandleStatement = handleStatement!
+        wrappedHandleStatement.bind("", toIndex: 1)
+        XCTAssertNoThrow(try wrappedHandleStatement.step())
+        XCTAssertNoThrow(try wrappedHandleStatement.finalize())
 
         var `catch` = false
         do {

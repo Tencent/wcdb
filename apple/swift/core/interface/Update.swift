@@ -22,7 +22,7 @@ import Foundation
 
 /// The chain call for updating
 public final class Update {
-    private var core: Core
+    private var database: Database
     private let statement = StatementUpdate()
     private let properties: [PropertyConvertible]
     private lazy var keys: [CodingTableKeyBase] = {
@@ -33,9 +33,9 @@ public final class Update {
     /// It should be called after executing successfully
     public var changes: Int?
 
-    init(with core: Core, on propertyConvertibleList: [PropertyConvertible], andTable table: String) {
+    init(with database: Database, on propertyConvertibleList: [PropertyConvertible], andTable table: String) {
         self.properties = propertyConvertibleList
-        self.core = core
+        self.database = database
         self.statement.update(table: table)
         var bindIndex: Int32 = 1
         for property in properties {
@@ -113,7 +113,7 @@ public final class Update {
     /// - Parameter object: Table encodable object
     /// - Throws: `Error`
     public func execute<Object: TableEncodable>(with object: Object) throws {
-        let handleStatement: HandleStatement = try core.prepare(statement)
+        let handleStatement: HandleStatement = try database.prepare(statement)
         let encoder = TableEncoder(keys, on: handleStatement)
         try object.encode(to: encoder)
         try handleStatement.step()
@@ -121,7 +121,7 @@ public final class Update {
     }
 
     public func execute<Object: WCTTableCoding>(with object: Object) throws {
-        let handleStatement: HandleStatement = try core.prepare(statement)
+        let handleStatement: HandleStatement = try database.prepare(statement)
         WCTAPIBridge.bindProperties(properties.asWCTBridgeProperties(), ofObject: object, with: handleStatement.stmt)
         try handleStatement.step()
         changes = handleStatement.changes
@@ -132,7 +132,7 @@ public final class Update {
     /// - Parameter row: Column encodable row
     /// - Throws: `Error`
     public func execute(with row: [ColumnEncodable?]) throws {
-        let handleStatement: HandleStatement = try core.prepare(statement)
+        let handleStatement: HandleStatement = try database.prepare(statement)
         for (index, value) in row.enumerated() {
             let bindingIndex = index + 1
             if let archivedValue = value?.archivedValue() {
@@ -146,15 +146,15 @@ public final class Update {
     }
 }
 
-extension Update: CoreRepresentable {
+extension Update: DatabaseRepresentable {
 
     /// The tag of the related database.
     public var tag: Tag? {
-        return core.tag
+        return database.tag
     }
 
     /// The path of the related database.
     public var path: String {
-        return core.path
+        return database.path
     }
 }

@@ -21,13 +21,13 @@
 import Foundation
 
 public class Selectable {
-    private final var core: Core
+    private final var database: Database
     final var handleStatement: HandleStatement?
     final var statement: StatementSelect
 
-    init(with core: Core, statement: StatementSelect) {
+    init(with database: Database, statement: StatementSelect) {
         self.statement = statement
-        self.core = core
+        self.database = database
     }
 
     deinit {
@@ -43,7 +43,7 @@ public class Selectable {
 
     final func lazyHandleStatement() throws -> HandleStatement {
         if handleStatement == nil {
-            handleStatement = try core.prepare(statement)
+            handleStatement = try database.prepare(statement)
         }
         return handleStatement!
     }
@@ -130,14 +130,14 @@ public class Selectable {
     }
 }
 
-extension Selectable: CoreRepresentable {
+extension Selectable: DatabaseRepresentable {
     /// The tag of the related database.
     public final var tag: Tag? {
-        return core.tag
+        return database.tag
     }
 
     /// The path of the related database.
     public final var path: String {
-        return core.path
+        return database.path
     }
 }
