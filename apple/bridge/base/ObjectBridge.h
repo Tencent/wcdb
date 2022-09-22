@@ -42,7 +42,10 @@ typedef struct CPPObject {
 void WCDBReleaseCPPObject(CPPObject* _Nonnull obj);
 
 #define WCDBDefineSwiftObjectBridgedType(typename)                             \
-    typedef struct typename { WCDB::Recyclable<SwiftObject*> innerValue; }     \
+    typedef struct typename                                                    \
+    {                                                                          \
+        WCDB::Recyclable<SwiftObject*> innerValue;                             \
+    }                                                                          \
     typename;
 
 #define WCDBDefineMultiArgumentSwiftClosureBridgedType(typename, returnType, firstArgType, ...) \
@@ -64,7 +67,10 @@ void WCDBReleaseCPPObject(CPPObject* _Nonnull obj);
     typedef WCDB::Recyclable<typename##ClosureType> typename;
 
 #define WCDBDefineCPPBridgedType(typename)                                     \
-    typedef struct typename { CPPObject* _Nullable innerValue; }               \
+    typedef struct typename                                                    \
+    {                                                                          \
+        CPPObject* _Nullable innerValue;                                       \
+    }                                                                          \
     typename;
 
 #define WCDBDefineOptionalBridgedType(bridgedTypeName, originalTypeName)       \

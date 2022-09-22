@@ -48,7 +48,7 @@ if [ $extension = "h" ] || [ $extension = "hpp" ] || [ $extension = "c" ] || [ $
 elif [ $extension = "swift" ]; then
     # swiftlint
     echo "Formatting by swiftlint for $path ..."
-    swiftlint autocorrect --quiet --path "$path"
+    swiftlint --autocorrect --quiet --config ../templates/.swiftlint.yml "$path"
 else
     echo "Skip Formatting for ${path}"
 fi
