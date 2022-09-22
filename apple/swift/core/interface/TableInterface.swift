@@ -67,43 +67,43 @@ public protocol RowSelectTableInterface: AnyObject {
                  where condition: Condition?,
                  orderBy orderList: [OrderBy]?,
                  limit: Limit?,
-                 offset: Offset?) throws -> FundamentalRowXColumn
+                 offset: Offset?) throws -> MultiRowsValue
     func getRows(on columnResultConvertibleList: ResultColumnConvertible...,
                  where condition: Condition?,
                  orderBy orderList: [OrderBy]?,
                  limit: Limit?,
-                 offset: Offset?) throws -> FundamentalRowXColumn
+                 offset: Offset?) throws -> MultiRowsValue
 
     func getRow(on columnResultConvertibleList: ResultColumnConvertible...,
                 where condition: Condition?,
                 orderBy orderList: [OrderBy]?,
-                offset: Offset?) throws -> FundamentalRow
+                offset: Offset?) throws -> OneRowValue
     func getRow(on columnResultConvertibleList: [ResultColumnConvertible],
                 where condition: Condition?,
                 orderBy orderList: [OrderBy]?,
-                offset: Offset?) throws -> FundamentalRow
+                offset: Offset?) throws -> OneRowValue
 
     func getColumn(on result: ResultColumnConvertible,
                    where condition: Condition?,
                    orderBy orderList: [OrderBy]?,
                    limit: Limit?,
-                   offset: Offset?) throws -> FundamentalColumn
+                   offset: Offset?) throws -> OneColumnValue
     func getDistinctColumn(on result: ResultColumnConvertible,
                            where condition: Condition?,
                            orderBy orderList: [OrderBy]?,
                            limit: Limit?,
-                           offset: Offset?) throws -> FundamentalColumn
+                           offset: Offset?) throws -> OneColumnValue
 
     func getValue(on result: ResultColumnConvertible,
                   where condition: Condition?,
                   orderBy orderList: [OrderBy]?,
                   limit: Limit?,
-                  offset: Offset?) throws -> FundamentalValue
+                  offset: Offset?) throws -> Value
     func getDistinctValue(on result: ResultColumnConvertible,
                           where condition: Condition?,
                           orderBy orderList: [OrderBy]?,
                           limit: Limit?,
-                          offset: Offset?) throws -> FundamentalValue
+                          offset: Offset?) throws -> Value
 }
 
 public protocol SelectTableInterface: AnyObject {

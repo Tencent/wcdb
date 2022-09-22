@@ -53,11 +53,11 @@ internal final class ObjectBridge {
         }
     }
 
-    static func extendLifetime<Result>(_ objList: Any..., execute body:@escaping () -> Result) -> Result {
+    static func extendLifetime<Result>(_ objList: Any..., execute body: @escaping () -> Result) -> Result {
         extendLifetime(objList, execute: body)
     }
 
-    static func extendLifetime<Result>(_ objList: [Any], execute body:@escaping () -> Result) -> Result {
+    static func extendLifetime<Result>(_ objList: [Any], execute body: @escaping () -> Result) -> Result {
         var execution: () -> Result = body
         for oneObj in objList {
             execution = { [execution] in

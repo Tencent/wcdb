@@ -134,7 +134,7 @@ public final class Database: Core {
     /// - Throws: Rethrows your error.
     public func close(onClosed: @escaping OnClosed) throws {
         var callbackError: Swift.Error?
-        let closeCallback : @convention(block) () -> Void = {
+        let closeCallback: @convention(block) () -> Void = {
             do {
                 try onClosed()
             } catch {
@@ -284,7 +284,7 @@ public extension Database {
     ///
     /// - Parameter trace: trace. Nil to disable global preformance trace.
     static func globalTrace(ofPerformance trace: @escaping PerformanceTracer) {
-        let callback : @convention(block) (UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>, Double) -> Void = {
+        let callback: @convention(block) (UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>, Double) -> Void = {
             (path, handleId, sql, cost) in
             trace(String(cString: path), handleId, String(cString: sql), cost)
         }
@@ -311,7 +311,7 @@ public extension Database {
     ///
     /// - Parameter trace: trace. Nil to disable global sql trace.
     static func globalTrace(ofSQL trace: @escaping SQLTracer) {
-        let callback : @convention(block) (UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>) -> Void = {
+        let callback: @convention(block) (UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>) -> Void = {
             (path, handleId, sql) in
             trace(String(cString: path), handleId, String(cString: sql))
         }
@@ -330,7 +330,7 @@ public extension Database {
     ///
     /// - Parameter errorReporter: report
     static func globalTrace(ofError errorReporter: @escaping (Error) -> Void) {
-        let callback : @convention(block) (CPPError) -> Void = {
+        let callback: @convention(block) (CPPError) -> Void = {
             (cppError) in
             let error = ErrorBridge.getErrorFrom(cppError: cppError)
             errorReporter(error)
@@ -369,7 +369,7 @@ public extension Database {
                    withInvocation invocation: @escaping Config,
                    withUninvocation uninvocation: Config? = nil,
                    withPriority priority: ConfigPriority = ConfigPriority.default) {
-        let invocationBlock : @convention(block) (CPPHandle) -> Bool = {
+        let invocationBlock: @convention(block) (CPPHandle) -> Bool = {
             cppHandle in
             let handle = Handle(withCPPHandle: cppHandle)
             var ret = true
@@ -383,7 +383,7 @@ public extension Database {
         let invocationImp = imp_implementationWithBlock(invocationBlock)
         var uninvocationImp: IMP?
         if let uninvocation = uninvocation {
-            let uninvocationBlock : @convention(block) (CPPHandle) -> Bool = {
+            let uninvocationBlock: @convention(block) (CPPHandle) -> Bool = {
                 cppHandle in
                 let handle = Handle(withCPPHandle: cppHandle)
                 var ret = true
@@ -463,7 +463,7 @@ public extension Database {
     /// Paths to all database-related files.
     var paths: [String] {
         var paths: [String] = []
-        let enumerator : @convention(block) (UnsafePointer<CChar>) -> Void = {
+        let enumerator: @convention(block) (UnsafePointer<CChar>) -> Void = {
             path in
             paths.append(String(cString: path))
         }
@@ -517,7 +517,7 @@ public extension Database {
     /// - Parameter callback: The callback of notification.
     func setNotification(whenCorrupted callback: OnCorrupted?) {
         if let callback = callback {
-            let internalCallBack : @convention(block) (CPPDatabase) -> Void = {cppDatabase in
+            let internalCallBack: @convention(block) (CPPDatabase) -> Void = {cppDatabase in
                 let database = Database(with: cppDatabase)
                 callback(database)
             }
@@ -567,7 +567,7 @@ public extension Database {
     /// - Parameter filter: The table filter. A table name will be pass to filter when it's called.
     func filterBackup(tableShouldBeBackedUp filter: BackupFiilter?) {
         if let filter = filter {
-            let internalFilter : @convention(block) (UnsafePointer<CChar>) -> Bool = {tableName in
+            let internalFilter: @convention(block) (UnsafePointer<CChar>) -> Bool = {tableName in
                 return filter(String(cString: tableName))
             }
             let internalFilterImp = imp_implementationWithBlock(internalFilter)
@@ -586,7 +586,7 @@ public extension Database {
     func retrieve(with progress: RetrieveProgress?) -> Double {
         var internalProgressImp: IMP?
         if let progress = progress {
-            let internalProgress : @convention(block) (OpaquePointer, Double, Double) -> Void = {
+            let internalProgress: @convention(block) (OpaquePointer, Double, Double) -> Void = {
                 _, percentage, increment in
                 progress(percentage, increment)
             }

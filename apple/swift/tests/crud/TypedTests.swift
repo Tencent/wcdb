@@ -42,11 +42,11 @@ class TypedTests: CRUDTestCase {
             return .integer64
         }
 
-        func archivedValue() -> FundamentalValue {
-            return FundamentalValue(Int64(self.rawValue))
+        func archivedValue() -> Value {
+            return Value(Int64(self.rawValue))
         }
 
-        init?(with value: FundamentalValue) {
+        init?(with value: Value) {
             guard let object = TypedCodableObject(rawValue: Int(truncatingIfNeeded: value.int64Value)) else {
                 return nil
             }

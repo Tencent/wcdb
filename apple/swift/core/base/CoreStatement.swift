@@ -142,20 +142,20 @@ public final class CoreStatement {
     ///
     /// - Parameter index: Begin with 0
     /// - Returns: `Int32`, `Int64`, `Double`, `String`, `Data` or `nil` value.
-    public func value(atIndex index: Int) -> FundamentalValue {
+    public func value(atIndex index: Int) -> Value {
         switch handleStatement.columnType(atIndex: index) {
         case .integer32:
-            return FundamentalValue(handleStatement.columnValue(atIndex: index, of: Int32.self))
+            return Value(handleStatement.columnValue(atIndex: index, of: Int32.self))
         case .integer64:
-            return FundamentalValue(handleStatement.columnValue(atIndex: index, of: Int64.self))
+            return Value(handleStatement.columnValue(atIndex: index, of: Int64.self))
         case .float:
-            return FundamentalValue(handleStatement.columnValue(atIndex: index, of: Double.self))
+            return Value(handleStatement.columnValue(atIndex: index, of: Double.self))
         case .text:
-            return FundamentalValue(handleStatement.columnValue(atIndex: index, of: String.self))
+            return Value(handleStatement.columnValue(atIndex: index, of: String.self))
         case .BLOB:
-            return FundamentalValue(handleStatement.columnValue(atIndex: index, of: Data.self))
+            return Value(handleStatement.columnValue(atIndex: index, of: Data.self))
         case .null:
-            return FundamentalValue(nil)
+            return Value(nil)
         }
     }
 

@@ -21,7 +21,7 @@
 import Foundation
 
 // nullable, Int32, Int64, Double, String, Data
-public struct FundamentalValue {
+public struct Value {
     private let base: Any?
     public let type: ColumnType
 
@@ -139,17 +139,17 @@ public struct FundamentalValue {
     }
 }
 
-public typealias FundamentalColumn = [FundamentalValue]
-public typealias FundamentalRow = [FundamentalValue]
+public typealias OneColumnValue = [Value]
+public typealias OneRowValue = [Value]
 
-public typealias FundamentalRowXColumn = [FundamentalRow]
+public typealias MultiRowsValue = [OneRowValue]
 
-extension Array where Element==[FundamentalValue] {
-    public subscript(row row: Array.Index, column column: Array<FundamentalValue>.Index) -> FundamentalValue {
+extension Array where Element==[Value] {
+    public subscript(row row: Array.Index, column column: Array<Value>.Index) -> Value {
         return self[row][column]
     }
 
-    public subscript(row row: Array.Index) -> FundamentalColumn {
+    public subscript(row row: Array.Index) -> OneColumnValue {
         return self[row]
     }
 }

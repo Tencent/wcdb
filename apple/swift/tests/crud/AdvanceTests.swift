@@ -182,22 +182,22 @@ class AdvanceTests: CRUDTestCase {
             XCTAssertNil(v6)
         }
         do {
-            let v1: FundamentalValue = wrappedCoreStatement.value(atIndex: 0)
+            let v1: Value = wrappedCoreStatement.value(atIndex: 0)
             XCTAssertEqual(v1.int32Value, 1)
 
-            let v2: FundamentalValue = wrappedCoreStatement.value(atIndex: 1)
+            let v2: Value = wrappedCoreStatement.value(atIndex: 1)
             XCTAssertEqual(v2.int64Value, 2)
 
-            let v3: FundamentalValue = wrappedCoreStatement.value(atIndex: 2)
+            let v3: Value = wrappedCoreStatement.value(atIndex: 2)
             XCTAssertEqual(v3.doubleValue, 3.0)
 
-            let v4: FundamentalValue = wrappedCoreStatement.value(atIndex: 3)
+            let v4: Value = wrappedCoreStatement.value(atIndex: 3)
             XCTAssertEqual(v4.stringValue, "4")
 
-            let v5: FundamentalValue = wrappedCoreStatement.value(atIndex: 4)
+            let v5: Value = wrappedCoreStatement.value(atIndex: 4)
             XCTAssertEqual(v5.dataValue, "5".data(using: .ascii)!)
 
-            let v6: FundamentalValue = wrappedCoreStatement.value(atIndex: 5)
+            let v6: Value = wrappedCoreStatement.value(atIndex: 5)
             XCTAssertEqual(v6.type, .null)
         }
     }
@@ -205,7 +205,7 @@ class AdvanceTests: CRUDTestCase {
     func testFundamentalValue() {
         // Give
         let int32Value: Int32 = 1
-        let int32FundamentalValue = FundamentalValue(int32Value)
+        let int32FundamentalValue = Value(int32Value)
         XCTAssertEqual(int32FundamentalValue.int32Value, 1)
         XCTAssertEqual(int32FundamentalValue.int64Value, 1)
         XCTAssertEqual(int32FundamentalValue.doubleValue, 1.0)
@@ -214,7 +214,7 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertEqual(int32FundamentalValue.type, .integer32)
 
         let int64Value: Int64 = 2
-        let int64FundamentalValue = FundamentalValue(int64Value)
+        let int64FundamentalValue = Value(int64Value)
         XCTAssertEqual(int64FundamentalValue.int32Value, 2)
         XCTAssertEqual(int64FundamentalValue.int64Value, 2)
         XCTAssertEqual(int64FundamentalValue.doubleValue, 2.0)
@@ -223,7 +223,7 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertEqual(int64FundamentalValue.type, .integer64)
 
         let doubleValue: Double = 3.0
-        let doubleFundamentalValue = FundamentalValue(doubleValue)
+        let doubleFundamentalValue = Value(doubleValue)
         XCTAssertEqual(doubleFundamentalValue.int32Value, 3)
         XCTAssertEqual(doubleFundamentalValue.int64Value, 3)
         XCTAssertEqual(doubleFundamentalValue.doubleValue, 3.0)
@@ -232,7 +232,7 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertEqual(doubleFundamentalValue.type, .float)
 
         let stringValue: String = "4"
-        let stringFundamentalValue = FundamentalValue(stringValue)
+        let stringFundamentalValue = Value(stringValue)
         XCTAssertEqual(stringFundamentalValue.int32Value, 4)
         XCTAssertEqual(stringFundamentalValue.int64Value, 4)
         XCTAssertEqual(stringFundamentalValue.doubleValue, 4.0)
@@ -241,7 +241,7 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertEqual(stringFundamentalValue.type, .text)
 
         let dataValue: Data = "5".data(using: .ascii)!
-        let dataFundamentalValue = FundamentalValue(dataValue)
+        let dataFundamentalValue = Value(dataValue)
         XCTAssertEqual(dataFundamentalValue.int32Value, 0)
         XCTAssertEqual(dataFundamentalValue.int64Value, 0)
         XCTAssertEqual(dataFundamentalValue.doubleValue, 0)
@@ -249,7 +249,7 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertEqual(dataFundamentalValue.dataValue, "5".data(using: .ascii)!)
         XCTAssertEqual(dataFundamentalValue.type, .BLOB)
 
-        let nullFundamentalValue = FundamentalValue(nil)
+        let nullFundamentalValue = Value(nil)
         XCTAssertEqual(nullFundamentalValue.int32Value, 0)
         XCTAssertEqual(nullFundamentalValue.int64Value, 0)
         XCTAssertEqual(nullFundamentalValue.doubleValue, 0)

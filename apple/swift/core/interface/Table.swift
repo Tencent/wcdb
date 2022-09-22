@@ -561,13 +561,13 @@ extension Table: RowSelectTableInterface {
     ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
-    /// - Returns: `FundamentalRowXColumn`
+    /// - Returns: `MultiRowsValue`
     /// - Throws: `Error`
     public func getRows(on columnResultConvertibleList: [ResultColumnConvertible],
                         where condition: Condition? = nil,
                         orderBy orderList: [OrderBy]? = nil,
                         limit: Limit? = nil,
-                        offset: Offset? = nil) throws -> FundamentalRowXColumn {
+                        offset: Offset? = nil) throws -> MultiRowsValue {
         let rowSelect = RowSelect(with: self.database,
                                       results: columnResultConvertibleList,
                                       tables: [self.name],
@@ -596,13 +596,13 @@ extension Table: RowSelectTableInterface {
     ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
-    /// - Returns: `FundamentalRowXColumn`
+    /// - Returns: `MultiRowsValue`
     /// - Throws: `Error`
     public func getRows(on columnResultConvertibleList: ResultColumnConvertible...,
                         where condition: Condition? = nil,
                         orderBy orderList: [OrderBy]? = nil,
                         limit: Limit? = nil,
-                        offset: Offset? = nil) throws -> FundamentalRowXColumn {
+                        offset: Offset? = nil) throws -> MultiRowsValue {
         return try getRows(on: columnResultConvertibleList.isEmpty ? [Column.all] : columnResultConvertibleList,
                            where: condition,
                            orderBy: orderList,
@@ -617,12 +617,12 @@ extension Table: RowSelectTableInterface {
     ///   - condition: Expression convertible
     ///   - orderList: Order convertible list
     ///   - offset: Expression convertible
-    /// - Returns: `FundamentalRowXColumn`
+    /// - Returns: `MultiRowsValue`
     /// - Throws: `Error`
     public func getRow(on columnResultConvertibleList: ResultColumnConvertible...,
                        where condition: Condition? = nil,
                        orderBy orderList: [OrderBy]? = nil,
-                       offset: Offset? = nil) throws -> FundamentalRow {
+                       offset: Offset? = nil) throws -> OneRowValue {
         return try getRows(on: columnResultConvertibleList.isEmpty ? [Column.all] : columnResultConvertibleList,
                            where: condition,
                            orderBy: orderList,
@@ -637,12 +637,12 @@ extension Table: RowSelectTableInterface {
     ///   - condition: Expression convertible
     ///   - orderList: Order convertible list
     ///   - offset: Expression convertible
-    /// - Returns: `FundamentalRowXColumn`
+    /// - Returns: `MultiRowsValue`
     /// - Throws: `Error`
     public func getRow(on columnResultConvertibleList: [ResultColumnConvertible],
                        where condition: Condition? = nil,
                        orderBy orderList: [OrderBy]? = nil,
-                       offset: Offset? = nil) throws -> FundamentalRow {
+                       offset: Offset? = nil) throws -> OneRowValue {
         return try getRows(on: columnResultConvertibleList,
                            where: condition,
                            orderBy: orderList,
@@ -658,13 +658,13 @@ extension Table: RowSelectTableInterface {
     ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
-    /// - Returns: `FundamentalColumn`
+    /// - Returns: `OneColumnValue`
     /// - Throws: `Error`
     public func getColumn(on result: ResultColumnConvertible,
                           where condition: Condition? = nil,
                           orderBy orderList: [OrderBy]? = nil,
                           limit: Limit? = nil,
-                          offset: Offset? = nil) throws -> FundamentalColumn {
+                          offset: Offset? = nil) throws -> OneColumnValue {
         let rowSelect = RowSelect(with: self.database, results: [result], tables: [self.name], isDistinct: false)
         if condition != nil {
             rowSelect.where(condition!)
@@ -690,13 +690,13 @@ extension Table: RowSelectTableInterface {
     ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
-    /// - Returns: `FundamentalColumn`
+    /// - Returns: `OneColumnValue`
     /// - Throws: `Error`
     public func getDistinctColumn(on result: ResultColumnConvertible,
                                   where condition: Condition? = nil,
                                   orderBy orderList: [OrderBy]? = nil,
                                   limit: Limit? = nil,
-                                  offset: Offset? = nil) throws -> FundamentalColumn {
+                                  offset: Offset? = nil) throws -> OneColumnValue {
         let rowSelect = RowSelect(with: self.database, results: [result], tables: [self.name], isDistinct: true)
         if condition != nil {
             rowSelect.where(condition!)
@@ -721,18 +721,18 @@ extension Table: RowSelectTableInterface {
     ///   - condition: Expression convertible
     ///   - orderList: Order convertible list
     ///   - offset: Expression convertible
-    /// - Returns: `FundamentalValue`
+    /// - Returns: `Value`
     /// - Throws: `Error`
     public func getValue(on result: ResultColumnConvertible,
                          where condition: Condition? = nil,
                          orderBy orderList: [OrderBy]? = nil,
                          limit: Limit? = nil,
-                         offset: Offset? = nil) throws -> FundamentalValue {
+                         offset: Offset? = nil) throws -> Value {
         return (try getRows(on: result,
                             where: condition,
                             orderBy: orderList,
                             limit: 1,
-                            offset: offset).first?.first) ?? FundamentalValue(nil)
+                            offset: offset).first?.first) ?? Value(nil)
     }
 
     /// Get distinct value by specific selecting
@@ -742,13 +742,13 @@ extension Table: RowSelectTableInterface {
     ///   - condition: Expression convertible
     ///   - orderList: Order convertible list
     ///   - offset: Expression convertible
-    /// - Returns: `FundamentalValue`
+    /// - Returns: `Value`
     /// - Throws: `Error`
     public func getDistinctValue(on result: ResultColumnConvertible,
                                  where condition: Condition? = nil,
                                  orderBy orderList: [OrderBy]? = nil,
                                  limit: Limit? = nil,
-                                 offset: Offset? = nil) throws -> FundamentalValue {
-        return (try getDistinctColumn(on: result).first) ?? FundamentalValue(nil)
+                                 offset: Offset? = nil) throws -> Value {
+        return (try getDistinctColumn(on: result).first) ?? Value(nil)
     }
 }

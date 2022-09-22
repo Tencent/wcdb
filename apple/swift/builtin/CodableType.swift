@@ -41,11 +41,11 @@ extension Int8: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable
     public static var columnType: ColumnType {
         return .integer32
     }
-    public init?(with value: FundamentalValue) {
+    public init?(with value: Value) {
         self = value.int32Value.toInt8()
     }
-    public func archivedValue() -> FundamentalValue {
-        return FundamentalValue(self.toInt32())
+    public func archivedValue() -> Value {
+        return Value(self.toInt32())
     }
 }
 
@@ -53,11 +53,11 @@ extension Int16: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperabl
     public static var columnType: ColumnType {
         return .integer32
     }
-    public init?(with value: FundamentalValue) {
+    public init?(with value: Value) {
         self = value.int32Value.toInt16()
     }
-    public func archivedValue() -> FundamentalValue {
-        return FundamentalValue(self.toInt32())
+    public func archivedValue() -> Value {
+        return Value(self.toInt32())
     }
 }
 
@@ -65,11 +65,11 @@ extension Int32: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperabl
     public static var columnType: ColumnType {
         return .integer32
     }
-    public init?(with value: FundamentalValue) {
+    public init?(with value: Value) {
         self = value.int32Value
     }
-    public func archivedValue() -> FundamentalValue {
-        return FundamentalValue(self)
+    public func archivedValue() -> Value {
+        return Value(self)
     }
 }
 
@@ -77,11 +77,11 @@ extension Int64: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperabl
     public static var columnType: ColumnType {
         return .integer64
     }
-    public init?(with value: FundamentalValue) {
+    public init?(with value: Value) {
         self = value.int64Value
     }
-    public func archivedValue() -> FundamentalValue {
-        return FundamentalValue(self)
+    public func archivedValue() -> Value {
+        return Value(self)
     }
 }
 
@@ -89,11 +89,11 @@ extension Int: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable 
     public static var columnType: ColumnType {
         return .integer64
     }
-    public init?(with value: FundamentalValue) {
+    public init?(with value: Value) {
         self = value.int64Value.toInt()
     }
-    public func archivedValue() -> FundamentalValue {
-        return FundamentalValue(self.toInt64())
+    public func archivedValue() -> Value {
+        return Value(self.toInt64())
     }
 }
 
@@ -101,11 +101,11 @@ extension UInt8: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperabl
     public static var columnType: ColumnType {
         return .integer32
     }
-    public init?(with value: FundamentalValue) {
+    public init?(with value: Value) {
         self = value.int32Value.toUInt8()
     }
-    public func archivedValue() -> FundamentalValue {
-        return FundamentalValue(self.toInt32())
+    public func archivedValue() -> Value {
+        return Value(self.toInt32())
     }
 }
 
@@ -113,11 +113,11 @@ extension UInt16: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperab
     public static var columnType: ColumnType {
         return .integer32
     }
-    public init?(with value: FundamentalValue) {
+    public init?(with value: Value) {
         self = value.int32Value.toUInt16()
     }
-    public func archivedValue() -> FundamentalValue {
-        return FundamentalValue(self.toInt32())
+    public func archivedValue() -> Value {
+        return Value(self.toInt32())
     }
 }
 
@@ -125,11 +125,11 @@ extension UInt32: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperab
     public static var columnType: ColumnType {
         return .integer32
     }
-    public init?(with value: FundamentalValue) {
+    public init?(with value: Value) {
         self = value.int32Value.toUInt32()
     }
-    public func archivedValue() -> FundamentalValue {
-        return FundamentalValue(self.toInt32())
+    public func archivedValue() -> Value {
+        return Value(self.toInt32())
     }
 }
 
@@ -137,11 +137,11 @@ extension UInt64: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperab
     public static var columnType: ColumnType {
         return .integer64
     }
-    public init?(with value: FundamentalValue) {
+    public init?(with value: Value) {
         self = value.int64Value.toUInt64()
     }
-    public func archivedValue() -> FundamentalValue {
-        return FundamentalValue(self.toInt64())
+    public func archivedValue() -> Value {
+        return Value(self.toInt64())
     }
 }
 
@@ -149,11 +149,11 @@ extension UInt: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable
     public static var columnType: ColumnType {
         return .integer64
     }
-    public init?(with value: FundamentalValue) {
+    public init?(with value: Value) {
         self = value.int64Value.toUInt()
     }
-    public func archivedValue() -> FundamentalValue {
-        return FundamentalValue(self.toInt64())
+    public func archivedValue() -> Value {
+        return Value(self.toInt64())
     }
 }
 
@@ -161,11 +161,11 @@ extension Bool: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable
     public static var columnType: ColumnType {
         return .integer32
     }
-    public init?(with value: FundamentalValue) {
+    public init?(with value: Value) {
         self = value.int32Value.toBool()
     }
-    public func archivedValue() -> FundamentalValue {
-        return FundamentalValue(self.toInt32())
+    public func archivedValue() -> Value {
+        return Value(self.toInt32())
     }
 }
 
@@ -173,11 +173,11 @@ extension Float: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperabl
     public static var columnType: ColumnType {
         return .float
     }
-    public init?(with value: FundamentalValue) {
+    public init?(with value: Value) {
         self = value.doubleValue.toFloat()
     }
-    public func archivedValue() -> FundamentalValue {
-        return FundamentalValue(self.toDouble())
+    public func archivedValue() -> Value {
+        return Value(self.toDouble())
     }
 }
 
@@ -185,11 +185,11 @@ extension Double: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperab
     public static var columnType: ColumnType {
         return .float
     }
-    public init?(with value: FundamentalValue) {
+    public init?(with value: Value) {
         self = value.doubleValue
     }
-    public func archivedValue() -> FundamentalValue {
-        return FundamentalValue(self)
+    public func archivedValue() -> Value {
+        return Value(self)
     }
 }
 
@@ -197,11 +197,11 @@ extension String: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperab
     public static var columnType: ColumnType {
         return .text
     }
-    public init?(with value: FundamentalValue) {
+    public init?(with value: Value) {
         self = value.stringValue
     }
-    public func archivedValue() -> FundamentalValue {
-        return FundamentalValue(self)
+    public func archivedValue() -> Value {
+        return Value(self)
     }
 }
 
@@ -209,11 +209,11 @@ extension Data: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable
     public static var columnType: ColumnType {
         return .BLOB
     }
-    public init?(with value: FundamentalValue) {
+    public init?(with value: Value) {
         self = value.dataValue
     }
-    public func archivedValue() -> FundamentalValue {
-        return FundamentalValue(self)
+    public func archivedValue() -> Value {
+        return Value(self)
     }
 }
 
@@ -221,11 +221,11 @@ extension Date: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable
     public static var columnType: ColumnType {
         return .float
     }
-    public init?(with value: FundamentalValue) {
+    public init?(with value: Value) {
         self.init(timeIntervalSince1970: value.doubleValue)
     }
-    public func archivedValue() -> FundamentalValue {
-        return FundamentalValue(timeIntervalSince1970)
+    public func archivedValue() -> Value {
+        return Value(timeIntervalSince1970)
     }
 }
 
@@ -233,11 +233,11 @@ extension URL: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable 
     public static var columnType: ColumnType {
         return .text
     }
-    public init?(with value: FundamentalValue) {
+    public init?(with value: Value) {
         self.init(string: value.stringValue)
     }
-    public func archivedValue() -> FundamentalValue {
-        return FundamentalValue(self.absoluteString)
+    public func archivedValue() -> Value {
+        return Value(self.absoluteString)
     }
 }
 
@@ -245,17 +245,17 @@ extension Array: ColumnCodable where Element: Codable {
     public static var columnType: ColumnType {
         return .BLOB
     }
-    public init?(with value: FundamentalValue) {
+    public init?(with value: Value) {
         guard let decodable = try? JSONDecoder().decode(Array.self, from: value.dataValue) else {
             return nil
         }
         self = decodable
     }
-    public func archivedValue() -> FundamentalValue {
+    public func archivedValue() -> Value {
         guard let encoded = try? JSONEncoder().encode(self) else {
-            return FundamentalValue(nil)
+            return Value(nil)
         }
-        return FundamentalValue(encoded)
+        return Value(encoded)
     }
 }
 
@@ -263,17 +263,17 @@ extension Dictionary: ColumnCodable where Key: Codable, Value: Codable {
     public static var columnType: ColumnType {
         return .BLOB
     }
-    public init?(with value: FundamentalValue) {
+    public init?(with value: WCDB.Value) {
         guard let decodable = try? JSONDecoder().decode(Dictionary.self, from: value.dataValue) else {
             return nil
         }
         self = decodable
     }
-    public func archivedValue() -> FundamentalValue {
+    public func archivedValue() -> WCDB.Value {
         guard let encoded = try? JSONEncoder().encode(self) else {
-            return FundamentalValue(nil)
+            return WCDB.Value(nil)
         }
-        return FundamentalValue(encoded)
+        return WCDB.Value(encoded)
     }
 }
 
@@ -281,34 +281,34 @@ extension Set: ColumnCodable where Element: Codable {
     public static var columnType: ColumnType {
         return .BLOB
     }
-    public init?(with value: FundamentalValue) {
+    public init?(with value: Value) {
         guard let decodable = try? JSONDecoder().decode(Set.self, from: value.dataValue) else {
             return nil
         }
         self = decodable
     }
-    public func archivedValue() -> FundamentalValue {
+    public func archivedValue() -> Value {
         guard let encoded = try? JSONEncoder().encode(self) else {
-            return FundamentalValue(nil)
+            return Value(nil)
         }
-        return FundamentalValue(encoded)
+        return Value(encoded)
     }
 }
 
 // JSONCodable
 public protocol ColumnJSONEncodable: ColumnEncodable {}
 extension ColumnJSONEncodable {
-    public func archivedValue() -> FundamentalValue {
+    public func archivedValue() -> Value {
         guard let encoded = try? JSONEncoder().encode(self) else {
-            return FundamentalValue(nil)
+            return Value(nil)
         }
-        return FundamentalValue(encoded)
+        return Value(encoded)
     }
 }
 
 public protocol ColumnJSONDecodable: ColumnDecodable {}
 extension ColumnJSONDecodable {
-    public init?(with value: FundamentalValue) {
+    public init?(with value: Value) {
         guard let decodable = try? JSONDecoder().decode(Self.self, from: value.dataValue) else {
             return nil
         }

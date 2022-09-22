@@ -59,7 +59,7 @@ public final class HandleStatement {
         return WCDBHandleStatementIsReadOnly(stmt)
     }
 
-    public func bind(_ value: FundamentalValue, toIndex index: Int) {
+    public func bind(_ value: Value, toIndex index: Int) {
         switch value.type {
         case .integer32:
             bind(value.int32Value, toIndex: index)
@@ -102,20 +102,20 @@ public final class HandleStatement {
         WCDBHandleStatementBindNull(stmt, Int32(index))
     }
 
-    public func columnValue(atIndex index: Int) -> FundamentalValue {
+    public func columnValue(atIndex index: Int) -> Value {
         switch columnType(atIndex: index) {
         case .integer32:
-            return FundamentalValue(columnValue(atIndex: index, of: Int32.self))
+            return Value(columnValue(atIndex: index, of: Int32.self))
         case .integer64:
-            return FundamentalValue(columnValue(atIndex: index, of: Int64.self))
+            return Value(columnValue(atIndex: index, of: Int64.self))
         case .float:
-            return FundamentalValue(columnValue(atIndex: index, of: Double.self))
+            return Value(columnValue(atIndex: index, of: Double.self))
         case .text:
-            return FundamentalValue(columnValue(atIndex: index, of: String.self))
+            return Value(columnValue(atIndex: index, of: String.self))
         case .BLOB:
-            return FundamentalValue(columnValue(atIndex: index, of: Data.self))
+            return Value(columnValue(atIndex: index, of: Data.self))
         case .null:
-            return FundamentalValue(nil)
+            return Value(nil)
         }
     }
 

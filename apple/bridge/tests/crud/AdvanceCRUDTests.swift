@@ -59,8 +59,8 @@ class AdvanceCRUDTests: CRUDTestCase {
             return .integer64
         }
 
-        func archivedValue() -> FundamentalValue {
-            return FundamentalValue(Int64(variable1))
+        func archivedValue() -> Value {
+            return Value(Int64(variable1))
         }
 
         var variable1: Int = 0
@@ -71,7 +71,7 @@ class AdvanceCRUDTests: CRUDTestCase {
             return .integer64
         }
 
-        init?(with value: FundamentalValue) {
+        init?(with value: Value) {
             variable1 = Int(truncatingIfNeeded: value.int64Value)
         }
 

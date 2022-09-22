@@ -95,7 +95,7 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testRowSelect() {
         // When
-        let results: FundamentalRowXColumn = WCDBAssertNoThrowReturned(
+        let results: MultiRowsValue = WCDBAssertNoThrowReturned(
             try database.getRows(fromTable: TestObject.name)
         )
         // Then
@@ -108,7 +108,7 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testConditionalRowSelect() {
         // When
-        let results: FundamentalRowXColumn = WCDBAssertNoThrowReturned(
+        let results: MultiRowsValue = WCDBAssertNoThrowReturned(
             try database.getRows(fromTable: TestObject.name, where: TestObject.Properties.variable1 == 1)
         )
         // Then
@@ -121,7 +121,7 @@ class SelectInterfaceTests: CRUDTestCase {
         // Give
         let order = [TestObject.Properties.variable1.order(.descending)]
         // When
-        let results: FundamentalRowXColumn = WCDBAssertNoThrowReturned(
+        let results: MultiRowsValue = WCDBAssertNoThrowReturned(
             try database.getRows(fromTable: TestObject.name, orderBy: order)
         )
         // Then
@@ -134,7 +134,7 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testLimitedRowSelect() {
         // When
-        let results: FundamentalRowXColumn = WCDBAssertNoThrowReturned(
+        let results: MultiRowsValue = WCDBAssertNoThrowReturned(
             try database.getRows(fromTable: TestObject.name, limit: 1)
         )
         // Then
@@ -145,7 +145,7 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testOffsetRowSelect() {
         // When
-        let results: FundamentalRowXColumn = WCDBAssertNoThrowReturned(
+        let results: MultiRowsValue = WCDBAssertNoThrowReturned(
             try database.getRows(fromTable: TestObject.name, limit: 1, offset: 1)
         )
         // Then
@@ -157,7 +157,7 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testPartialRowSelect() {
         // When
-        let results: FundamentalRowXColumn = WCDBAssertNoThrowReturned(
+        let results: MultiRowsValue = WCDBAssertNoThrowReturned(
             try database.getRows(on: TestObject.Properties.variable2, fromTable: TestObject.name)
         )
         // Then
@@ -168,7 +168,7 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testRowSelectOne() {
         // When
-        let results: FundamentalRow = WCDBAssertNoThrowReturned(
+        let results: OneRowValue = WCDBAssertNoThrowReturned(
             try database.getRow(fromTable: TestObject.name)
         )
         // Then
@@ -179,7 +179,7 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testRowSelectColumn() {
         // When
-        let results: FundamentalColumn = WCDBAssertNoThrowReturned(
+        let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try database.getColumn(on: TestObject.Properties.variable1, fromTable: TestObject.name)
         )
         // Then
@@ -189,7 +189,7 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testConditionalRowSelectColumn() {
         // When
-        let results: FundamentalColumn = WCDBAssertNoThrowReturned(
+        let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try database.getColumn(on: TestObject.Properties.variable1,
                                    fromTable: TestObject.name,
                                    where: TestObject.Properties.variable1 == 1)
@@ -203,7 +203,7 @@ class SelectInterfaceTests: CRUDTestCase {
         // Give
         let order = [TestObject.Properties.variable1.order(.descending)]
         // When
-        let results: FundamentalColumn = WCDBAssertNoThrowReturned(
+        let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try database.getColumn(on: TestObject.Properties.variable1, fromTable: TestObject.name, orderBy: order)
         )
         // Then
@@ -214,7 +214,7 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testLimitedRowSelectColumn() {
         // When
-        let results: FundamentalColumn = WCDBAssertNoThrowReturned(
+        let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try database.getColumn(on: TestObject.Properties.variable1, fromTable: TestObject.name, limit: 1)
         )
         // Then
@@ -224,7 +224,7 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testOffsetRowSelectColumn() {
         // When
-        let results: FundamentalColumn = WCDBAssertNoThrowReturned(
+        let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try database.getColumn(on: TestObject.Properties.variable1, fromTable: TestObject.name, limit: 1, offset: 1)
         )
         // Then
@@ -239,7 +239,7 @@ class SelectInterfaceTests: CRUDTestCase {
         object1.variable2 = "object1"
         XCTAssertNoThrow(try database.insert(objects: object1, intoTable: TestObject.name))
         // When
-        let results: FundamentalColumn = WCDBAssertNoThrowReturned(
+        let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try database.getDistinctColumn(on: TestObject.Properties.variable2, fromTable: TestObject.name)
         )
         // Then
@@ -254,7 +254,7 @@ class SelectInterfaceTests: CRUDTestCase {
         object1.variable2 = "object1"
         XCTAssertNoThrow(try database.insert(objects: object1, intoTable: TestObject.name))
         // When
-        let results: FundamentalColumn = WCDBAssertNoThrowReturned(
+        let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try database.getDistinctColumn(on: TestObject.Properties.variable2,
                                            fromTable: TestObject.name,
                                            where: TestObject.Properties.variable1 == 1)
@@ -273,7 +273,7 @@ class SelectInterfaceTests: CRUDTestCase {
         // Give
         let order = [TestObject.Properties.variable2.order(.descending)]
         // When
-        let results: FundamentalColumn = WCDBAssertNoThrowReturned(
+        let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try database.getDistinctColumn(on: TestObject.Properties.variable2,
                                            fromTable: TestObject.name,
                                            orderBy: order)
@@ -291,7 +291,7 @@ class SelectInterfaceTests: CRUDTestCase {
         object1.variable2 = "object1"
         XCTAssertNoThrow(try database.insert(objects: object1, intoTable: TestObject.name))
         // When
-        let results: FundamentalColumn = WCDBAssertNoThrowReturned(
+        let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try database.getDistinctColumn(on: TestObject.Properties.variable2, fromTable: TestObject.name, limit: 1)
         )
         // Then
@@ -306,7 +306,7 @@ class SelectInterfaceTests: CRUDTestCase {
         object1.variable2 = "object1"
         XCTAssertNoThrow(try database.insert(objects: object1, intoTable: TestObject.name))
         // When
-        let results: FundamentalColumn = WCDBAssertNoThrowReturned(
+        let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try database.getDistinctColumn(on: TestObject.Properties.variable2,
                                            fromTable: TestObject.name,
                                            limit: 1,
@@ -319,7 +319,7 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testRowSelectValue() {
         // When
-        let result: FundamentalValue? = WCDBAssertNoThrowReturned(
+        let result: Value? = WCDBAssertNoThrowReturned(
             try database.getValue(on: TestObject.Properties.variable2, fromTable: TestObject.name)
         )
         // Then
@@ -340,7 +340,7 @@ class SelectInterfaceTests: CRUDTestCase {
         let table: Table<TestObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: TestObject.name))
         XCTAssertNotNil(table)
         // When
-        let results: FundamentalRowXColumn = WCDBAssertNoThrowReturned(try table!.getRows())
+        let results: MultiRowsValue = WCDBAssertNoThrowReturned(try table!.getRows())
         // Then
         XCTAssertEqual(results.count, preInsertedObjects.count)
         XCTAssertEqual(Int(results[row: 0, column: 0].int64Value), preInsertedObjects[0].variable1)
@@ -354,7 +354,7 @@ class SelectInterfaceTests: CRUDTestCase {
         let table: Table<TestObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: TestObject.name))
         XCTAssertNotNil(table)
         // When
-        let results: FundamentalRow = WCDBAssertNoThrowReturned(
+        let results: OneRowValue = WCDBAssertNoThrowReturned(
             try table!.getRow()
         )
         // Then
@@ -368,7 +368,7 @@ class SelectInterfaceTests: CRUDTestCase {
         let table: Table<TestObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: TestObject.name))
         XCTAssertNotNil(table)
         // When
-        let results: FundamentalColumn = WCDBAssertNoThrowReturned(
+        let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try table!.getColumn(on: TestObject.Properties.variable1)
         )
         // Then
@@ -381,7 +381,7 @@ class SelectInterfaceTests: CRUDTestCase {
         let table: Table<TestObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: TestObject.name))
         XCTAssertNotNil(table)
         // When
-        let results: FundamentalColumn = WCDBAssertNoThrowReturned(
+        let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try table!.getColumn(on: TestObject.Properties.variable1, where: TestObject.Properties.variable1 == 1)
         )
         // Then
@@ -396,7 +396,7 @@ class SelectInterfaceTests: CRUDTestCase {
         // Give
         let order = [TestObject.Properties.variable1.order(.descending)]
         // When
-        let results: FundamentalColumn = WCDBAssertNoThrowReturned(
+        let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try table!.getColumn(on: TestObject.Properties.variable1, orderBy: order)
         )
         // Then
@@ -410,7 +410,7 @@ class SelectInterfaceTests: CRUDTestCase {
         let table: Table<TestObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: TestObject.name))
         XCTAssertNotNil(table)
         // When
-        let results: FundamentalColumn = WCDBAssertNoThrowReturned(
+        let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try table!.getColumn(on: TestObject.Properties.variable1, limit: 1)
         )
         // Then
@@ -423,7 +423,7 @@ class SelectInterfaceTests: CRUDTestCase {
         let table: Table<TestObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: TestObject.name))
         XCTAssertNotNil(table)
         // When
-        let results: FundamentalColumn = WCDBAssertNoThrowReturned(
+        let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try table!.getColumn(on: TestObject.Properties.variable1, limit: 1, offset: 1)
         )
         // Then
@@ -440,7 +440,7 @@ class SelectInterfaceTests: CRUDTestCase {
         object1.variable2 = "object1"
         XCTAssertNoThrow(try database.insert(objects: object1, intoTable: TestObject.name))
         // When
-        let results: FundamentalColumn = WCDBAssertNoThrowReturned(
+        let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try table!.getDistinctColumn(on: TestObject.Properties.variable2)
         )
         // Then
@@ -457,7 +457,7 @@ class SelectInterfaceTests: CRUDTestCase {
         object1.variable2 = "object1"
         XCTAssertNoThrow(try database.insert(objects: object1, intoTable: TestObject.name))
         // When
-        let results: FundamentalColumn = WCDBAssertNoThrowReturned(
+        let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try table!.getDistinctColumn(on: TestObject.Properties.variable2,
                                          where: TestObject.Properties.variable1 == 1)
         )
@@ -477,7 +477,7 @@ class SelectInterfaceTests: CRUDTestCase {
         // Give
         let order = [TestObject.Properties.variable2.order(.descending)]
         // When
-        let results: FundamentalColumn = WCDBAssertNoThrowReturned(
+        let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try table!.getDistinctColumn(on: TestObject.Properties.variable2, orderBy: order)
         )
         // Then
@@ -495,7 +495,7 @@ class SelectInterfaceTests: CRUDTestCase {
         object1.variable2 = "object1"
         XCTAssertNoThrow(try database.insert(objects: object1, intoTable: TestObject.name))
         // When
-        let results: FundamentalColumn = WCDBAssertNoThrowReturned(
+        let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try table!.getDistinctColumn(on: TestObject.Properties.variable2, limit: 1)
         )
         // Then
@@ -512,7 +512,7 @@ class SelectInterfaceTests: CRUDTestCase {
         object1.variable2 = "object1"
         XCTAssertNoThrow(try database.insert(objects: object1, intoTable: TestObject.name))
         // When
-        let results: FundamentalColumn = WCDBAssertNoThrowReturned(
+        let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try table!.getDistinctColumn(on: TestObject.Properties.variable2, limit: 1, offset: 1)
         )
         // Then
@@ -525,7 +525,7 @@ class SelectInterfaceTests: CRUDTestCase {
         let table: Table<TestObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: TestObject.name))
         XCTAssertNotNil(table)
         // When
-        let result: FundamentalValue? = WCDBAssertNoThrowReturned(
+        let result: Value? = WCDBAssertNoThrowReturned(
             try table!.getValue(on: TestObject.Properties.variable2)
         )
         // Then

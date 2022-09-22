@@ -24,7 +24,6 @@
 
 import Foundation
 
-import Foundation
 public final class StatementCreateTrigger: Identifier<CPPStatementCreateTrigger>, Statement {
     public init() {
         super.init(with: WCDBStatementCreateTriggerCreate())
