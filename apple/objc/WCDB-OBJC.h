@@ -40,7 +40,3 @@
 #import <WCDB/WINQ.h>
 
 #import <WCDB/WCTDatabase+Test.h>
-
-#import <WCDB/CPPORM.h>
-#import <WCDB/CPPORMMacro.h>
-#import <WCDB/CppInterface.h>

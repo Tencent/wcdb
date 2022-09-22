@@ -218,7 +218,7 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
         ${WCDB_SRC_DIR}/cpp/*TableOperation.hpp
         ${WCDB_SRC_DIR}/cpp/*TableORMOperation.hpp
         ${WCDB_SRC_DIR}/cpp/*Update.hpp
-        ${WCDB_SRC_DIR}/WCDB.h
+        ${WCDB_SRC_DIR}/cpp/*WCDB-CPP.h
         )
 # export public headers
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/.wconan2/include/WCDB)

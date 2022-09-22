@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCDB.h>
+#import <WCDB/WCDB-CPP.h>
 
 class CPPTestCaseObject {
 public:

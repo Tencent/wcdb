@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCDB.h>
+#import <WCDB/WCDB-CPP.h>
 
 enum EnumType {
     Min = std::numeric_limits<int>::min(),
