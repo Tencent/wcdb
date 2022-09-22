@@ -22,6 +22,7 @@
  * limitations under the License.
  */
 
+#import <WCDB/Assertion.hpp>
 #import <WCDB/WCTConvertible.h>
 
 namespace WCDB {
@@ -32,8 +33,20 @@ ColumnIsTextType<NSString*>::asUnderlyingType(NSString* text)
     return UnsafeStringView(text.UTF8String, [text lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
 }
 
+ColumnTypeInfo<ColumnType::Text>::UnderlyingType
+ColumnIsTextType<NSMutableString*>::asUnderlyingType(NSMutableString* text)
+{
+    return UnsafeStringView(text.UTF8String, [text lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+}
+
 ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
 ColumnIsBLOBType<NSData*>::asUnderlyingType(NSData* data)
+{
+    return UnsafeData((unsigned char*) data.bytes, (size_t) data.length);
+}
+
+ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
+ColumnIsBLOBType<NSMutableData*>::asUnderlyingType(NSMutableData* data)
 {
     return UnsafeData((unsigned char*) data.bytes, (size_t) data.length);
 }
@@ -49,6 +62,14 @@ IndexedColumn IndexedColumnConvertible<WCTProperty>::asIndexedColumn(const WCTPr
 }
 
 LiteralValue LiteralValueConvertible<NSString*>::asLiteralValue(NSString* string)
+{
+    if (string == nil) {
+        return LiteralValue(nullptr);
+    }
+    return UnsafeStringView(string.UTF8String, [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+}
+
+LiteralValue LiteralValueConvertible<NSMutableString*>::asLiteralValue(NSMutableString* string)
 {
     if (string == nil) {
         return LiteralValue(nullptr);
@@ -76,5 +97,67 @@ LiteralValue LiteralValueConvertible<BOOL>::asLiteralValue(BOOL value)
     return LiteralValue((bool) value);
 }
 #endif // OBJC_BOOL_IS_CHAR
+
+Expressions _SyntaxList<Expression>::Convertible<NSArray*>::asSyntaxList(const NSArray* values)
+{
+    Expressions result;
+    for (id value in values) {
+        if ([value isKindOfClass:NSString.class]) {
+            NSString* stringValue = (NSString*) value;
+            result.push_back(stringValue);
+        } else if ([value isKindOfClass:NSNumber.class]) {
+            NSNumber* number = (NSNumber*) value;
+            result.push_back(number);
+        } else {
+            NSCAssert(false, @"Only supports converting NSNumber and NSString in array into expressions");
+        }
+    }
+    return result;
+}
+
+#define WCDB_IMPLEMENT_EXPRESSIONS_CONVERTIBLE_OF_ARRAY(Type)                               \
+    Expressions _SyntaxList<Expression>::Convertible<Type>::asSyntaxList(const Type values) \
+    {                                                                                       \
+        return _SyntaxList<Expression>::Convertible<NSArray*>::asSyntaxList(values);        \
+    }
+
+WCDB_IMPLEMENT_EXPRESSIONS_CONVERTIBLE_OF_ARRAY(NSArray<NSString*>*)
+WCDB_IMPLEMENT_EXPRESSIONS_CONVERTIBLE_OF_ARRAY(NSArray<NSMutableString*>*)
+WCDB_IMPLEMENT_EXPRESSIONS_CONVERTIBLE_OF_ARRAY(NSArray<NSNumber*>*)
+WCDB_IMPLEMENT_EXPRESSIONS_CONVERTIBLE_OF_ARRAY(NSMutableArray*)
+WCDB_IMPLEMENT_EXPRESSIONS_CONVERTIBLE_OF_ARRAY(NSMutableArray<NSString*>*)
+WCDB_IMPLEMENT_EXPRESSIONS_CONVERTIBLE_OF_ARRAY(NSMutableArray<NSMutableString*>*)
+WCDB_IMPLEMENT_EXPRESSIONS_CONVERTIBLE_OF_ARRAY(NSMutableArray<NSNumber*>*)
+
+Expressions _SyntaxList<Expression>::Convertible<NSSet*>::asSyntaxList(const NSSet* values)
+{
+    Expressions result;
+    for (id value in values) {
+        if ([value isKindOfClass:NSString.class]) {
+            NSString* stringValue = (NSString*) value;
+            result.push_back(stringValue);
+        } else if ([value isKindOfClass:NSNumber.class]) {
+            NSNumber* number = (NSNumber*) value;
+            result.push_back(number);
+        } else {
+            NSCAssert(false, @"Only supports converting NSNumber and NSString in set into expressions");
+        }
+    }
+    return result;
+}
+
+#define WCDB_IMPLEMENT_EXPRESSIONS_CONVERTIBLE_OF_Set(Type)                                 \
+    Expressions _SyntaxList<Expression>::Convertible<Type>::asSyntaxList(const Type values) \
+    {                                                                                       \
+        return _SyntaxList<Expression>::Convertible<NSSet*>::asSyntaxList(values);          \
+    }
+
+WCDB_IMPLEMENT_EXPRESSIONS_CONVERTIBLE_OF_Set(NSSet<NSString*>*)
+WCDB_IMPLEMENT_EXPRESSIONS_CONVERTIBLE_OF_Set(NSSet<NSMutableString*>*)
+WCDB_IMPLEMENT_EXPRESSIONS_CONVERTIBLE_OF_Set(NSSet<NSNumber*>*)
+WCDB_IMPLEMENT_EXPRESSIONS_CONVERTIBLE_OF_Set(NSMutableSet*)
+WCDB_IMPLEMENT_EXPRESSIONS_CONVERTIBLE_OF_Set(NSMutableSet<NSString*>*)
+WCDB_IMPLEMENT_EXPRESSIONS_CONVERTIBLE_OF_Set(NSMutableSet<NSMutableString*>*)
+WCDB_IMPLEMENT_EXPRESSIONS_CONVERTIBLE_OF_Set(NSMutableSet<NSNumber*>*)
 
 }

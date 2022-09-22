@@ -48,9 +48,22 @@ public:
 };
 
 template<>
+struct ColumnIsTextType<NSMutableString *> : public std::true_type {
+public:
+    static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
+    asUnderlyingType(NSMutableString *text);
+};
+
+template<>
 class LiteralValueConvertible<NSString *> final : public std::true_type {
 public:
     static LiteralValue asLiteralValue(NSString *string);
+};
+
+template<>
+class LiteralValueConvertible<NSMutableString *> final : public std::true_type {
+public:
+    static LiteralValue asLiteralValue(NSMutableString *string);
 };
 
 template<>
@@ -75,6 +88,13 @@ public:
 };
 
 template<>
+struct ColumnIsBLOBType<NSMutableData *> : public std::true_type {
+public:
+    static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
+    asUnderlyingType(NSMutableData *data);
+};
+
+template<>
 class ExpressionConvertible<WCTProperty> final : public std::true_type {
 public:
     static Expression asExpression(const WCTProperty &property);
@@ -85,6 +105,31 @@ class IndexedColumnConvertible<WCTProperty> final : public std::true_type {
 public:
     static IndexedColumn asIndexedColumn(const WCTProperty &property);
 };
+
+#define WCDB_DEFINE_EXPRESSIONS_CONVERTIBLE(Type)                              \
+    template<>                                                                 \
+    template<>                                                                 \
+    struct _SyntaxList<Expression>::Convertible<Type> final : std::true_type { \
+        static Expressions asSyntaxList(const Type);                           \
+    };
+
+WCDB_DEFINE_EXPRESSIONS_CONVERTIBLE(NSArray *)
+WCDB_DEFINE_EXPRESSIONS_CONVERTIBLE(NSArray<NSString *> *)
+WCDB_DEFINE_EXPRESSIONS_CONVERTIBLE(NSArray<NSMutableString *> *)
+WCDB_DEFINE_EXPRESSIONS_CONVERTIBLE(NSArray<NSNumber *> *)
+WCDB_DEFINE_EXPRESSIONS_CONVERTIBLE(NSMutableArray *)
+WCDB_DEFINE_EXPRESSIONS_CONVERTIBLE(NSMutableArray<NSString *> *)
+WCDB_DEFINE_EXPRESSIONS_CONVERTIBLE(NSMutableArray<NSMutableString *> *)
+WCDB_DEFINE_EXPRESSIONS_CONVERTIBLE(NSMutableArray<NSNumber *> *)
+
+WCDB_DEFINE_EXPRESSIONS_CONVERTIBLE(NSSet *)
+WCDB_DEFINE_EXPRESSIONS_CONVERTIBLE(NSSet<NSString *> *)
+WCDB_DEFINE_EXPRESSIONS_CONVERTIBLE(NSSet<NSMutableString *> *)
+WCDB_DEFINE_EXPRESSIONS_CONVERTIBLE(NSSet<NSNumber *> *)
+WCDB_DEFINE_EXPRESSIONS_CONVERTIBLE(NSMutableSet *)
+WCDB_DEFINE_EXPRESSIONS_CONVERTIBLE(NSMutableSet<NSString *> *)
+WCDB_DEFINE_EXPRESSIONS_CONVERTIBLE(NSMutableSet<NSMutableString *> *)
+WCDB_DEFINE_EXPRESSIONS_CONVERTIBLE(NSMutableSet<NSNumber *> *)
 
 template<typename T>
 struct remove_ownership {

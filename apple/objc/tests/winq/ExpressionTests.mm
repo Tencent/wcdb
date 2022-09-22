@@ -362,6 +362,54 @@
     TestCaseAssertWINQConvertible(WCDB::OrderingTerms, sqls, expected);
 }
 
+- (void)test_convert_NSArray_to_expressions
+{
+    NSMutableArray<NSMutableString*>* textArray = [[NSMutableArray alloc] init];
+    [textArray addObject:[[NSMutableString alloc] initWithString:@"text1"]];
+    [textArray addObject:[[NSMutableString alloc] initWithString:@"text2"]];
+    WCDB::Column textColumn = WCDB::Column("textColumn");
+
+    TestCaseAssertSQLEqual(textColumn.in(textArray), @"textColumn IN('text1', 'text2')");
+    TestCaseAssertSQLEqual(textColumn.in((NSMutableArray<NSString*>*) textArray), @"textColumn IN('text1', 'text2')");
+    TestCaseAssertSQLEqual(textColumn.in((NSArray<NSString*>*) textArray), @"textColumn IN('text1', 'text2')");
+    TestCaseAssertSQLEqual(textColumn.in((NSArray<NSMutableString*>*) textArray), @"textColumn IN('text1', 'text2')");
+    TestCaseAssertSQLEqual(textColumn.in((NSMutableArray*) textArray), @"textColumn IN('text1', 'text2')");
+    TestCaseAssertSQLEqual(textColumn.in((NSArray*) textArray), @"textColumn IN('text1', 'text2')");
+
+    NSMutableArray<NSNumber*>* numberArray = [[NSMutableArray alloc] init];
+    [numberArray addObject:@(1)];
+    [numberArray addObject:@(2)];
+
+    TestCaseAssertSQLEqual(textColumn.in(numberArray), @"textColumn IN(1, 2)");
+    TestCaseAssertSQLEqual(textColumn.in((NSMutableArray*) numberArray), @"textColumn IN(1, 2)");
+    TestCaseAssertSQLEqual(textColumn.in((NSArray<NSNumber*>*) numberArray), @"textColumn IN(1, 2)");
+    TestCaseAssertSQLEqual(textColumn.in((NSArray*) numberArray), @"textColumn IN(1, 2)");
+}
+
+- (void)test_convert_NSSet_to_expressions
+{
+    NSMutableSet<NSMutableString*>* textSet = [[NSMutableSet alloc] init];
+    [textSet addObject:[[NSMutableString alloc] initWithString:@"text1"]];
+    [textSet addObject:[[NSMutableString alloc] initWithString:@"text2"]];
+    WCDB::Column textColumn = WCDB::Column("textColumn");
+
+    TestCaseAssertSQLEqual(textColumn.in(textSet), @"textColumn IN('text1', 'text2')");
+    TestCaseAssertSQLEqual(textColumn.in((NSMutableSet<NSString*>*) textSet), @"textColumn IN('text1', 'text2')");
+    TestCaseAssertSQLEqual(textColumn.in((NSSet<NSString*>*) textSet), @"textColumn IN('text1', 'text2')");
+    TestCaseAssertSQLEqual(textColumn.in((NSSet<NSMutableString*>*) textSet), @"textColumn IN('text1', 'text2')");
+    TestCaseAssertSQLEqual(textColumn.in((NSMutableSet*) textSet), @"textColumn IN('text1', 'text2')");
+    TestCaseAssertSQLEqual(textColumn.in((NSSet*) textSet), @"textColumn IN('text1', 'text2')");
+
+    NSMutableSet<NSNumber*>* numberSet = [[NSMutableSet alloc] init];
+    [numberSet addObject:@(1)];
+    [numberSet addObject:@(2)];
+
+    TestCaseAssertSQLEqual(textColumn.in(numberSet), @"textColumn IN(1, 2)");
+    TestCaseAssertSQLEqual(textColumn.in((NSMutableSet*) numberSet), @"textColumn IN(1, 2)");
+    TestCaseAssertSQLEqual(textColumn.in((NSSet<NSNumber*>*) numberSet), @"textColumn IN(1, 2)");
+    TestCaseAssertSQLEqual(textColumn.in((NSSet*) numberSet), @"textColumn IN(1, 2)");
+}
+
 - (void)test_precedence
 {
     TestCaseAssertSQLEqual((!(((column && 1) > 2) - 3)).collate(@"NOCASE"), @"(NOT (((testColumn AND 1) > 2) - 3)) COLLATE NOCASE");
