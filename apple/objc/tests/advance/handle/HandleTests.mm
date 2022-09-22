@@ -177,7 +177,7 @@
 
 - (void)test_double
 {
-    double value = Random.shared.double_;
+    double value = 1.2;
     {
         TestCaseAssertTrue([self.handle prepare:self.statementInsert]);
         [self.handle bindDouble:value toIndex:1];

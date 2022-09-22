@@ -24,7 +24,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/AutoMergeFTSIndexConfig.hpp>
-#include <WCDB/Handle.hpp>
+#include <WCDB/InnerHandle.hpp>
 #include <WCDB/StringView.hpp>
 
 namespace WCDB {
@@ -39,7 +39,7 @@ AutoMergeFTSIndexConfig::AutoMergeFTSIndexConfig(const std::shared_ptr<AutoMerge
 
 AutoMergeFTSIndexConfig::~AutoMergeFTSIndexConfig() = default;
 
-bool AutoMergeFTSIndexConfig::invoke(Handle *handle)
+bool AutoMergeFTSIndexConfig::invoke(InnerHandle *handle)
 {
     handle->setNotificationWhenTableModified(m_identifier,
                                              std::bind(&AutoMergeFTSIndexConfig::onTableModified,
@@ -55,7 +55,7 @@ bool AutoMergeFTSIndexConfig::invoke(Handle *handle)
     return true;
 }
 
-bool AutoMergeFTSIndexConfig::uninvoke(Handle *handle)
+bool AutoMergeFTSIndexConfig::uninvoke(InnerHandle *handle)
 {
     handle->unsetNotificationWhenCommitted(m_identifier);
     handle->setNotificationWhenTableModified(m_identifier, nullptr);

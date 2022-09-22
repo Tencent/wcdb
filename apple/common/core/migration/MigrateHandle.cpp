@@ -148,8 +148,8 @@ std::optional<bool> MigrateHandle::migrateRows(const MigrationInfo* info)
     double timeIntervalWithinTransaction = calculateTimeIntervalWithinTransaction();
     SteadyClock beforeTransaction = SteadyClock::now();
     std::optional<bool> migrated;
-    if (runTransaction(
-        [&migrated, &beforeTransaction, &timeIntervalWithinTransaction, this](Handle*) -> bool {
+    if (runTransaction([&migrated, &beforeTransaction, &timeIntervalWithinTransaction, this](
+                       InnerHandle*) -> bool {
             double cost = 0;
             do {
                 migrated = migrateRow();

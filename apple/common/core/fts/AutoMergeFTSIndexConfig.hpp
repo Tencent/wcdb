@@ -43,8 +43,8 @@ public:
     AutoMergeFTSIndexConfig(const std::shared_ptr<AutoMergeFTSIndexOperator>& operator_);
     ~AutoMergeFTSIndexConfig() override final;
 
-    bool invoke(Handle* handle) override final;
-    bool uninvoke(Handle* handle) override final;
+    bool invoke(InnerHandle* handle) override final;
+    bool uninvoke(InnerHandle* handle) override final;
 
     using TableArray = AutoMergeFTSIndexOperator::TableArray;
 

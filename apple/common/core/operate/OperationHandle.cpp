@@ -24,7 +24,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/CoreConst.h>
-#include <WCDB/Handle.hpp>
+#include <WCDB/InnerHandle.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/OperationHandle.hpp>
 #include <WCDB/RepairKit.h>
@@ -99,17 +99,17 @@ void OperationHandle::checkIntegrity()
 #pragma mark - Backup
 void OperationHandle::setBackupPath(const UnsafeStringView &path)
 {
-    Handle::setPath(path);
+    InnerHandle::setPath(path);
 }
 
 const StringView &OperationHandle::getBackupPath() const
 {
-    return Handle::getPath();
+    return InnerHandle::getPath();
 }
 
 const Error &OperationHandle::getBackupError() const
 {
-    return Handle::getError();
+    return InnerHandle::getError();
 }
 
 bool OperationHandle::acquireBackupSharedLock()
@@ -136,7 +136,7 @@ bool OperationHandle::releaseBackupExclusiveLock()
 
 void OperationHandle::finishBackup()
 {
-    Handle::close();
+    InnerHandle::close();
 }
 
 } // namespace WCDB

@@ -24,17 +24,17 @@
 
 #pragma once
 
-#include <WCDB/HandleStatement.hpp>
+#include <WCDB/InnerHandleStatement.hpp>
 
 namespace WCDB {
 
 class MigratingHandle;
 
-class MigratingHandleStatement final : public HandleStatement {
+class MigratingHandleStatement final : public InnerHandleStatement {
     friend class MigratingHandle;
 
 private:
-    using Super = HandleStatement;
+    using Super = InnerHandleStatement;
 
 public:
     MigratingHandleStatement() = delete;
@@ -53,24 +53,32 @@ public:
     bool step() override final;
     void reset() override final;
 
-    void bindInteger(const Integer &value, int index) override final;
-    void bindDouble(const Float &value, int index) override final;
-    void bindText(const Text &value, int index) override final;
-    void bindBLOB(const BLOB &value, int index) override final;
+    void bindInteger(const Integer &value, int index = 1) override final;
+    void bindDouble(const Float &value, int index = 1) override final;
+    void bindText(const Text &value, int index = 1) override final;
+    void bindBLOB(const BLOB &value, int index = 1) override final;
     void bindNull(int index) override final;
     void bindPointer(void *ptr, int index, const Text &type, void (*destructor)(void *)) override final;
+
+    using Super::bindValue;
+    using Super::bindRow;
 
     using Super::getInteger;
     using Super::getDouble;
     using Super::getText;
     using Super::getBLOB;
 
+    using Super::getValue;
+    using Super::getOneColumn;
+    using Super::getOneRow;
+    using Super::getAllRows;
+
     using Super::getType;
     using Super::getOriginColumnName;
     using Super::getColumnName;
     using Super::getColumnTableName;
 
-    using Super::isReadonly;
+    using Super::isReadOnly;
     using Super::getNumberOfColumns;
 
 protected:
@@ -79,10 +87,9 @@ protected:
     bool tryFallbackToUnionedView(Syntax::Schema &schema, StringView &table);
     bool tryFallbackToSourceTable(Syntax::Schema &schema, StringView &table);
     bool m_processing;
-    std::shared_ptr<HandleStatement> m_additionalStatement;
+    std::shared_ptr<InnerHandleStatement> m_additionalStatement;
 
 protected:
-    using Super::isBusy;
     MigratingHandleStatement(MigratingHandle *handle);
 
 #pragma mark - Migrate
@@ -96,8 +103,8 @@ protected:
     void resetMigrate();
 
 private:
-    std::shared_ptr<HandleStatement> m_migrateStatement;
-    std::shared_ptr<HandleStatement> m_removeMigratedStatement;
+    std::shared_ptr<InnerHandleStatement> m_migrateStatement;
+    std::shared_ptr<InnerHandleStatement> m_removeMigratedStatement;
     int m_rowidIndexOfMigratingStatement;
 };
 

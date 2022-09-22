@@ -31,8 +31,8 @@
 #include <WCDB/PerformanceTraceConfig.hpp>
 #include <WCDB/SQLTraceConfig.hpp>
 
-#include <WCDB/Database.hpp>
 #include <WCDB/DatabasePool.hpp>
+#include <WCDB/InnerDatabase.hpp>
 
 #include <WCDB/AuxiliaryFunctionModules.hpp>
 #include <WCDB/TokenizerModules.hpp>
@@ -61,7 +61,7 @@ public:
 
 protected:
     void preprocessError(Error& error);
-    void databaseDidCreate(Database* database) override final;
+    void databaseDidCreate(InnerDatabase* database) override final;
     DatabasePool m_databasePool;
 
 #pragma mark - Tokenizer
@@ -86,7 +86,7 @@ protected:
 
 #pragma mark - Operation
 public:
-    typedef std::function<void(Database*)> CorruptedNotification;
+    typedef std::function<void(InnerDatabase*)> CorruptedNotification;
     bool isFileObservedCorrupted(const UnsafeStringView& path);
     void setNotificationWhenDatabaseCorrupted(const UnsafeStringView& path,
                                               const CorruptedNotification& notification);
@@ -103,21 +103,21 @@ protected:
 
 #pragma mark - Checkpoint
 public:
-    void enableAutoCheckpoint(Database* database, bool enable);
+    void enableAutoCheckpoint(InnerDatabase* database, bool enable);
 
 private:
     std::shared_ptr<Config> m_autoCheckpointConfig;
 
 #pragma mark - Backup
 public:
-    void enableAutoBackup(Database* database, bool enable);
+    void enableAutoBackup(InnerDatabase* database, bool enable);
 
 protected:
     std::shared_ptr<Config> m_autoBackupConfig;
 
 #pragma mark - Migration
 public:
-    void enableAutoMigration(Database* database, bool enable);
+    void enableAutoMigration(InnerDatabase* database, bool enable);
 
 protected:
     std::shared_ptr<Config> m_autoMigrateConfig;
@@ -142,7 +142,7 @@ protected:
 #pragma mark - Merge FTS Index
 public:
     using TableArray = OperationQueue::TableArray;
-    void enableAutoMergeFTSIndex(Database* database, bool enable);
+    void enableAutoMergeFTSIndex(InnerDatabase* database, bool enable);
     std::optional<bool>
     mergeFTSIndexShouldBeOperated(const UnsafeStringView& path,
                                   TableArray newTables,

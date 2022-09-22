@@ -50,14 +50,14 @@ RecyclableDatabase DatabasePool::getOrCreate(const UnsafeStringView &path)
     if (iter != m_databases.end()) {
         return get(iter);
     }
-    ReferencedDatabase referencedDatabase(std::make_shared<Database>(normalized));
+    ReferencedDatabase referencedDatabase(std::make_shared<InnerDatabase>(normalized));
     auto result = m_databases.emplace(normalized, std::move(referencedDatabase));
     WCTAssert(result.second);
     m_event->databaseDidCreate(result.first->second.database.get());
     return get(result.first);
 }
 
-DatabasePool::ReferencedDatabase::ReferencedDatabase(std::shared_ptr<Database> &&database_)
+DatabasePool::ReferencedDatabase::ReferencedDatabase(std::shared_ptr<InnerDatabase> &&database_)
 : database(std::move(database_)), reference(0)
 {
 }
@@ -79,7 +79,7 @@ DatabasePool::get(const StringViewMap<ReferencedDatabase>::iterator &iter)
     std::bind(&DatabasePool::flowBack, this, std::placeholders::_1));
 }
 
-void DatabasePool::flowBack(Database *database)
+void DatabasePool::flowBack(InnerDatabase *database)
 {
     // shared lock is enough.
     SharedLockGuard lockGuard(m_lock);

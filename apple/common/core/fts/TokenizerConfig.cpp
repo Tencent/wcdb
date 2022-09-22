@@ -23,7 +23,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/Handle.hpp>
+#include <WCDB/InnerHandle.hpp>
 #include <WCDB/SQLite.h>
 #include <WCDB/TokenizerConfig.hpp>
 #include <WCDB/TokenizerModules.hpp>
@@ -48,7 +48,7 @@ TokenizerConfig::TokenizerConfig(const UnsafeStringView& name_,
 
 TokenizerConfig::~TokenizerConfig() = default;
 
-bool TokenizerConfig::invoke(Handle* handle)
+bool TokenizerConfig::invoke(InnerHandle* handle)
 {
     const TokenizerModule* module = m_modules->get(name);
     WCTRemedialAssert(module != nullptr, "Module does not exist.", return true;);

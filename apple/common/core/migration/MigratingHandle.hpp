@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/Handle.hpp>
+#include <WCDB/InnerHandle.hpp>
 #include <WCDB/MigratingHandleStatement.hpp>
 #include <WCDB/Migration.hpp>
 
@@ -32,9 +32,9 @@ namespace WCDB {
 
 class MigrationInfo;
 
-class MigratingHandle final : public Handle, public Migration::Binder {
+class MigratingHandle final : public InnerHandle, public Migration::Binder {
 private:
-    using Super = Handle;
+    using Super = InnerHandle;
 #pragma mark - Initialize
 public:
     MigratingHandle(Migration &migration);
@@ -64,8 +64,8 @@ protected:
 
 #pragma mark - Statement
 public:
-    virtual HandleStatement *getStatement() override final;
-    virtual void returnStatement(HandleStatement *handleStatement) override final;
+    virtual InnerHandleStatement *getStatement() override final;
+    virtual void returnStatement(InnerHandleStatement *handleStatement) override final;
     void finalize() override final;
     void resetAllStatements() override final;
 

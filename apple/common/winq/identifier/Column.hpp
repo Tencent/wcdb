@@ -27,6 +27,7 @@
 #include <WCDB/AggregateFunction.hpp>
 #include <WCDB/CoreFunction.hpp>
 #include <WCDB/FTS3Function.hpp>
+#include <WCDB/OrderingTerm.hpp>
 #include <WCDB/SQL.hpp>
 
 namespace WCDB {
@@ -41,12 +42,18 @@ class Column : public SpecifiedSyntax<Syntax::Column, SQL>,
                public AggregateFunctionOperable,
                public FTS3FunctionOperable {
 public:
+    template<typename T, typename Enable = typename std::enable_if<ColumnConvertible<T>::value>::type>
+    Column(const T& t) : Column(ColumnConvertible<T>::asColumn(t))
+    {
+    }
     Column();
-    explicit Column(const UnsafeStringView& name);
+    Column(const UnsafeStringView& name);
     virtual ~Column() override;
 
     Column& table(const UnsafeStringView& table);
     Column& schema(const Schema& schema);
+    OrderingTerm asAscendingOrder();
+    OrderingTerm asDescendingOrder();
 
     static Column rowid();
 

@@ -29,22 +29,24 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-UnsafeData::UnsafeData() : m_buffer(nullptr), m_size(0)
+UnsafeData::UnsafeData() : m_buffer(nullptr), m_size(0), m_sharedBuffer(nullptr)
 {
 }
 
 UnsafeData::UnsafeData(unsigned char *buffer, size_t size)
-: m_buffer(buffer), m_size(size)
+: m_buffer(buffer), m_size(size), m_sharedBuffer(nullptr)
 {
 }
 
 UnsafeData::UnsafeData(const UnsafeData &other)
-: m_buffer(other.m_buffer), m_size(other.m_size)
+: m_buffer(other.m_buffer), m_size(other.m_size), m_sharedBuffer(other.m_sharedBuffer)
 {
 }
 
 UnsafeData::UnsafeData(UnsafeData &&other)
-: m_buffer(other.m_buffer), m_size(other.m_size)
+: m_buffer(other.m_buffer)
+, m_size(other.m_size)
+, m_sharedBuffer(std::move(other.m_sharedBuffer))
 {
     other.m_buffer = nullptr;
     other.m_size = 0;
@@ -56,6 +58,7 @@ UnsafeData &UnsafeData::operator=(const UnsafeData &other)
 {
     m_buffer = other.m_buffer;
     m_size = other.m_size;
+    m_sharedBuffer = other.m_sharedBuffer;
     return *this;
 }
 
@@ -63,9 +66,17 @@ UnsafeData &UnsafeData::operator=(UnsafeData &&other)
 {
     m_buffer = other.m_buffer;
     m_size = other.m_size;
+    m_sharedBuffer = std::move(other.m_sharedBuffer);
     other.m_buffer = nullptr;
     other.m_size = 0;
     return *this;
+}
+
+UnsafeData::UnsafeData(unsigned char *buffer,
+                       size_t size,
+                       const std::shared_ptr<std::vector<unsigned char>> &sharedBuffer)
+: m_buffer(buffer), m_size(size), m_sharedBuffer(sharedBuffer)
+{
 }
 
 const UnsafeData UnsafeData::immutable(const unsigned char *buffer, size_t size)
@@ -77,14 +88,17 @@ const UnsafeData UnsafeData::immutable(const unsigned char *buffer, size_t size)
 UnsafeData UnsafeData::subdata(size_t size) const
 {
     WCTRemedialAssert(size <= m_size, "Memory cross-border", return UnsafeData(););
-    return UnsafeData(m_buffer, size);
+    return subdata(0, size);
 }
 
 UnsafeData UnsafeData::subdata(off_t offset, size_t size) const
 {
+    if (size == 0) {
+        return null();
+    }
     WCTRemedialAssert(
     offset + size <= m_size, "Memory cross-border", return UnsafeData(););
-    return UnsafeData(m_buffer + offset, size);
+    return UnsafeData(m_buffer + offset, size, m_sharedBuffer);
 }
 
 #pragma mark - Empty
@@ -125,6 +139,11 @@ const unsigned char *UnsafeData::buffer() const
 unsigned char *UnsafeData::buffer()
 {
     return m_buffer ? m_buffer : emptyBuffer();
+}
+
+bool UnsafeData::hasSharedBuffer() const
+{
+    return m_sharedBuffer != nullptr;
 }
 
 } // namespace WCDB

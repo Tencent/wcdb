@@ -36,7 +36,7 @@ RecyclableHandle::RecyclableHandle(const std::nullptr_t &)
 {
 }
 
-RecyclableHandle::RecyclableHandle(const std::shared_ptr<Handle> &value,
+RecyclableHandle::RecyclableHandle(const std::shared_ptr<InnerHandle> &value,
                                    const Super::OnRecycled &onRecycled)
 : Super(value, onRecycled), m_handle(value.get())
 {
@@ -58,7 +58,7 @@ RecyclableHandle &RecyclableHandle::operator=(const RecyclableHandle &other)
     return *this;
 }
 
-Handle *RecyclableHandle::get() const
+InnerHandle *RecyclableHandle::get() const
 {
     return m_handle;
 }

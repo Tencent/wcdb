@@ -30,49 +30,53 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-Data::Data() : UnsafeData(), m_sharedBuffer(nullptr)
+Data::Data() : UnsafeData()
 {
 }
 
-Data::Data(size_t size) : UnsafeData(), m_sharedBuffer(nullptr)
+Data::Data(size_t size) : UnsafeData()
 {
     reset(size);
 }
 
-Data::Data(const unsigned char* buffer, size_t size)
-: UnsafeData(), m_sharedBuffer(nullptr)
+Data::Data(const unsigned char* buffer, size_t size) : UnsafeData()
 {
     reset(buffer, size);
 }
 
-Data::Data(const UnsafeData& unsafeData)
+Data::Data(const UnsafeData& unsafeData) : UnsafeData(unsafeData)
 {
-    reset(unsafeData);
+    if (!unsafeData.hasSharedBuffer()) {
+        reset(unsafeData);
+    }
 }
 
-Data::Data(const Data& data)
-: UnsafeData(data), m_sharedBuffer(data.m_sharedBuffer)
+Data::Data(UnsafeData&& unsafeData) : UnsafeData(std::move(unsafeData))
 {
-}
-
-Data::Data(Data&& data)
-: UnsafeData(std::move(data)), m_sharedBuffer(std::move(data.m_sharedBuffer))
-{
+    if (!hasSharedBuffer()) {
+        reset(m_buffer, m_size);
+    }
 }
 
 Data::~Data() = default;
 
-Data& Data::operator=(const Data& other)
+Data& Data::operator=(const UnsafeData& unsafeData)
 {
-    UnsafeData::operator=(other);
-    m_sharedBuffer = other.m_sharedBuffer;
+    if (unsafeData.hasSharedBuffer()) {
+        UnsafeData::operator=(unsafeData);
+    } else {
+        reset(unsafeData);
+    }
     return *this;
 }
 
-Data& Data::operator=(Data&& other)
+Data& Data::operator=(UnsafeData&& unsafeData)
 {
-    UnsafeData::operator=(std::move(other));
-    m_sharedBuffer = std::move(other.m_sharedBuffer);
+    if (unsafeData.hasSharedBuffer()) {
+        UnsafeData::operator=(std::move(unsafeData));
+    } else {
+        reset(unsafeData);
+    }
     return *this;
 }
 
@@ -88,8 +92,10 @@ size_t Data::getSharedSize() const
     return m_sharedBuffer->size();
 }
 
-Data::Data(const std::shared_ptr<std::vector<unsigned char>>& sharedBuffer, off_t offset, size_t size)
-: UnsafeData(sharedBuffer->data() + offset, size), m_sharedBuffer(sharedBuffer)
+Data::Data(unsigned char* buffer,
+           size_t size,
+           const std::shared_ptr<std::vector<unsigned char>>& sharedBuffer)
+: UnsafeData(buffer, size, sharedBuffer)
 {
 }
 
@@ -157,7 +163,7 @@ Data Data::subdata(off_t offset, size_t size) const
     WCTRemedialAssert(size > 0 && getCurrentOffset() + offset + size <= getSharedSize(),
                       "Memory cross-border.",
                       return null(););
-    return Data(m_sharedBuffer, getCurrentOffset() + offset, size);
+    return Data(m_buffer + offset, size, m_sharedBuffer);
 }
 
 const Data& Data::null()

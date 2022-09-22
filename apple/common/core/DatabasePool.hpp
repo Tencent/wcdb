@@ -24,20 +24,20 @@
 
 #pragma once
 
-#include <WCDB/Database.hpp>
+#include <WCDB/InnerDatabase.hpp>
 #include <WCDB/Lock.hpp>
 #include <WCDB/Path.hpp>
 
 namespace WCDB {
 
-typedef Recyclable<Database*> RecyclableDatabase;
+typedef Recyclable<InnerDatabase*> RecyclableDatabase;
 
 class DatabasePoolEvent {
 public:
     virtual ~DatabasePoolEvent() = 0;
 
 protected:
-    virtual void databaseDidCreate(Database* database) = 0;
+    virtual void databaseDidCreate(InnerDatabase* database) = 0;
     friend class DatabasePool;
 };
 
@@ -52,15 +52,15 @@ public:
 
 protected:
     struct ReferencedDatabase {
-        ReferencedDatabase(std::shared_ptr<Database>&& database);
+        ReferencedDatabase(std::shared_ptr<InnerDatabase>&& database);
         ReferencedDatabase(ReferencedDatabase&& other);
-        std::shared_ptr<Database> database;
+        std::shared_ptr<InnerDatabase> database;
         std::atomic<int> reference;
     };
     typedef struct ReferencedDatabase ReferencedDatabase;
 
     RecyclableDatabase get(const StringViewMap<ReferencedDatabase>::iterator& iter);
-    void flowBack(Database* database);
+    void flowBack(InnerDatabase* database);
 
     StringViewMap<ReferencedDatabase> m_databases; //path->{database, reference}
     SharedLock m_lock;

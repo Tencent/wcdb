@@ -28,7 +28,7 @@
 namespace WCDB {
 
 AssembleHandle::AssembleHandle()
-: Handle()
+: InnerHandle()
 , Repair::AssembleDelegate()
 , m_statementForDisableJounral(StatementPragma().pragma(Pragma::journalMode()).to("OFF"))
 , m_statementForEnableMMap(StatementPragma().pragma(Pragma::mmapSize()).to(2147418112))
@@ -57,22 +57,22 @@ AssembleHandle::~AssembleHandle()
 #pragma mark - Assemble
 void AssembleHandle::setAssemblePath(const UnsafeStringView &path)
 {
-    Handle::setPath(path);
+    InnerHandle::setPath(path);
 }
 
 const StringView &AssembleHandle::getAssemblePath() const
 {
-    return Handle::getPath();
+    return InnerHandle::getPath();
 }
 
 const Error &AssembleHandle::getAssembleError() const
 {
-    return Handle::getError();
+    return InnerHandle::getError();
 }
 
 void AssembleHandle::finishAssemble()
 {
-    Handle::close();
+    InnerHandle::close();
 }
 
 bool AssembleHandle::markAsAssembling()
@@ -268,22 +268,22 @@ bool AssembleHandle::markSequenceAsAssembled()
 #pragma mark - Backup
 void AssembleHandle::setBackupPath(const UnsafeStringView &path)
 {
-    Handle::setPath(path);
+    InnerHandle::setPath(path);
 }
 
 const StringView &AssembleHandle::getBackupPath() const
 {
-    return Handle::getPath();
+    return InnerHandle::getPath();
 }
 
 const Error &AssembleHandle::getBackupError() const
 {
-    return Handle::getError();
+    return InnerHandle::getError();
 }
 
 void AssembleHandle::finishBackup()
 {
-    Handle::close();
+    InnerHandle::close();
 }
 
 bool AssembleHandle::acquireBackupSharedLock()

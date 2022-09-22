@@ -25,6 +25,7 @@
 #pragma once
 
 #include <WCDB/Convertible.hpp>
+#include <WCDB/Value.hpp>
 
 namespace WCDB {
 
@@ -106,6 +107,12 @@ public:
     }
 };
 
+template<>
+class LiteralValueConvertible<Value> final : public std::true_type {
+public:
+    static LiteralValue asLiteralValue(const Value& value);
+};
+
 template<typename T>
 class ExpressionConvertible<T, typename std::enable_if<LiteralValueConvertible<T>::value>::type> final
 : public std::true_type {
@@ -132,6 +139,12 @@ template<>
 class ExpressionConvertible<LiteralValue> final : public std::true_type {
 public:
     static Expression asExpression(const LiteralValue& literalValue);
+};
+
+template<>
+class ExpressionConvertible<Value> final : public std::true_type {
+public:
+    static Expression asExpression(const Value& value);
 };
 
 template<>
@@ -175,6 +188,16 @@ public:
     static ResultColumn asResultColumn(const T& t)
     {
         return ExpressionConvertible<T>::asExpression(t);
+    }
+};
+
+template<typename T>
+class ColumnConvertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type> final
+: public std::true_type {
+public:
+    static Column asColumn(const T& t)
+    {
+        return ColumnIsTextType<T>::asUnderlyingType(t);
     }
 };
 

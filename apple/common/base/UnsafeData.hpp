@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <type_traits>
+#include <vector>
 
 namespace WCDB {
 
@@ -58,8 +59,12 @@ public:
     static const UnsafeData immutable(const unsigned char *buffer, size_t size);
 
 protected:
+    UnsafeData(unsigned char *buffer,
+               size_t size,
+               const std::shared_ptr<std::vector<unsigned char>> &sharedBuffer);
     unsigned char *m_buffer;
     size_t m_size;
+    std::shared_ptr<std::vector<unsigned char>> m_sharedBuffer;
 
 #pragma mark - Subdata
 public:
@@ -82,6 +87,8 @@ public:
     //Nota that buffer will never be null.
     const unsigned char *buffer() const;
     unsigned char *buffer();
+
+    bool hasSharedBuffer() const;
 };
 
 }; // namespace WCDB

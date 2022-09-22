@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/Handle.hpp>
+#include <WCDB/InnerHandle.hpp>
 #include <WCDB/Migration.hpp>
 #include <array>
 
@@ -34,7 +34,7 @@ namespace WCDB {
 // However, it's very wasteful for those resources(CPU, IO...) when the step is too small.
 // So stepper will try to migrate one by one until the count of dirty pages(to be written) is changed.
 // In addition, stepper can/will be interrupted when database is not idled.
-class MigrateHandle final : public Handle, public Migration::Stepper {
+class MigrateHandle final : public InnerHandle, public Migration::Stepper {
 public:
     MigrateHandle();
     ~MigrateHandle() override final;
@@ -60,8 +60,8 @@ protected:
 
 private:
     const MigrationInfo* m_migratingInfo;
-    HandleStatement* m_migrateStatement;
-    HandleStatement* m_removeMigratedStatement;
+    InnerHandleStatement* m_migrateStatement;
+    InnerHandleStatement* m_removeMigratedStatement;
 
 #pragma mark - Sample
 protected:

@@ -26,7 +26,6 @@
 
 #include <WCDB/UnsafeData.hpp>
 #include <memory>
-#include <vector>
 
 namespace WCDB {
 
@@ -35,22 +34,20 @@ class Data final : public UnsafeData {
 public:
     Data();
     Data(const UnsafeData& data);
-    Data(const Data& data);
-    Data(Data&& data);
+    Data(UnsafeData&& data);
     Data(size_t size);
     Data(const unsigned char* buffer, size_t size);
     ~Data() override final;
 
-    Data& operator=(const Data& other);
-    Data& operator=(Data&& other);
+    Data& operator=(const UnsafeData& other);
+    Data& operator=(UnsafeData&& other);
 
 protected:
-    Data(const std::shared_ptr<std::vector<unsigned char>>& sharedBuffer, off_t offset, size_t size);
+    Data(unsigned char* buffer,
+         size_t size,
+         const std::shared_ptr<std::vector<unsigned char>>& sharedBuffer);
     off_t getCurrentOffset() const;
     size_t getSharedSize() const;
-
-private:
-    std::shared_ptr<std::vector<unsigned char>> m_sharedBuffer;
 
 #pragma mark - Reset
 public:

@@ -31,7 +31,7 @@
 
 - (void)filterMigration:(WCTMigrationFilterBlock)filter
 {
-    WCDB::Database::MigrationFilter callback = nullptr;
+    WCDB::InnerDatabase::MigrationFilter callback = nullptr;
     if (filter != nil) {
         callback = [filter](WCDB::MigrationUserInfo& userInfo) {
             WCTMigrationUserInfo* nsUserInfo = [[WCTMigrationUserInfo alloc] initWithBaseInfo:userInfo];
@@ -57,9 +57,9 @@
 
 - (void)setNotificationWhenMigrated:(WCTMigratedNotificationBlock)onMigrated
 {
-    WCDB::Database::MigratedCallback callback = nullptr;
+    WCDB::InnerDatabase::MigratedCallback callback = nullptr;
     if (onMigrated != nil) {
-        callback = [onMigrated](WCDB::Database* database, const WCDB::MigrationBaseInfo* info) {
+        callback = [onMigrated](WCDB::InnerDatabase* database, const WCDB::MigrationBaseInfo* info) {
             WCTMigrationBaseInfo* nsInfo = nil;
             if (info != nil) {
                 nsInfo = [[WCTMigrationBaseInfo alloc] initWithBaseInfo:*info];

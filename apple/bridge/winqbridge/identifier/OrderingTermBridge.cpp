@@ -25,7 +25,7 @@
 #include <WCDB/Expression.hpp>
 #include <WCDB/ObjectBridge.hpp>
 #include <WCDB/OrderingTerm.hpp>
-#include <WCDB/OrderingTermBirdge.h>
+#include <WCDB/OrderingTermBridge.h>
 #include <WCDB/WinqBridge.hpp>
 
 CPPOrderingTerm WCDBOrderingTermCreate(CPPExpression expression)

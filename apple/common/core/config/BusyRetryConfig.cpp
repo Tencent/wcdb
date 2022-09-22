@@ -25,7 +25,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/BusyRetryConfig.hpp>
 #include <WCDB/CoreConst.h>
-#include <WCDB/Handle.hpp>
+#include <WCDB/InnerHandle.hpp>
 #include <WCDB/Time.hpp>
 
 namespace WCDB {
@@ -53,14 +53,14 @@ BusyRetryConfig::~BusyRetryConfig()
     m_identifier, nullptr, nullptr, nullptr, nullptr);
 }
 
-bool BusyRetryConfig::invoke(Handle* handle)
+bool BusyRetryConfig::invoke(InnerHandle* handle)
 {
     handle->setNotificationWhenBusy(std::bind(
     &BusyRetryConfig::onBusy, this, std::placeholders::_1, std::placeholders::_2));
     return true;
 }
 
-bool BusyRetryConfig::uninvoke(Handle* handle)
+bool BusyRetryConfig::uninvoke(InnerHandle* handle)
 {
     handle->setNotificationWhenBusy(nullptr);
     return true;

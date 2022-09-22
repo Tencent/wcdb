@@ -35,7 +35,7 @@
 @implementation WCTHandle
 
 #pragma mark - LifeCycle
-- (instancetype)initWithDatabase:(WCTDatabase *)database andUnsafeHandle:(WCDB::Handle *)handle
+- (instancetype)initWithDatabase:(WCTDatabase *)database andUnsafeHandle:(WCDB::InnerHandle *)handle
 {
     WCTAssert(database != nil);
     WCTAssert(handle != nil);
@@ -56,7 +56,7 @@
     return self;
 }
 
-- (instancetype)initWithUnsafeHandle:(WCDB::Handle *)handle
+- (instancetype)initWithUnsafeHandle:(WCDB::InnerHandle *)handle
 {
     WCTAssert(handle != nil);
     if (self = [super init]) {
@@ -66,7 +66,7 @@
     return self;
 }
 
-- (WCDB::Handle *)getOrGenerateHandle
+- (WCDB::InnerHandle *)getOrGenerateHandle
 {
     if (_handle == nullptr) {
         _handleHolder = [_database generateHandle];
@@ -98,7 +98,7 @@
         [_handleStatementDic enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, WCTHandleStatement *_Nonnull obj, BOOL *_Nonnull stop) {
             WCDB_UNUSED(key);
             WCDB_UNUSED(stop);
-            WCDB::HandleStatement *handleStatement = [obj getRawHandleStatement];
+            WCDB::InnerHandleStatement *handleStatement = [obj getRawHandleStatement];
             if (handleStatement != nullptr) {
                 handleStatement->finalize();
                 [self returnRawStatement:handleStatement];
@@ -111,18 +111,18 @@
     }
 }
 
-- (WCDB::HandleStatement *)getRawHandleStatement
+- (WCDB::InnerHandleStatement *)getRawHandleStatement
 {
-    WCDB::Handle *dbHandle = [self getOrGenerateHandle];
+    WCDB::InnerHandle *dbHandle = [self getOrGenerateHandle];
     if (dbHandle != nullptr) {
         return dbHandle->getStatement();
     }
     return nullptr;
 }
 
-- (void)returnRawStatement:(WCDB::HandleStatement *)handleStatement
+- (void)returnRawStatement:(WCDB::InnerHandleStatement *)handleStatement
 {
-    WCDB::Handle *dbHandle = [self getOrGenerateHandle];
+    WCDB::InnerHandle *dbHandle = [self getOrGenerateHandle];
     WCTAssert(handleStatement != nullptr);
     if (dbHandle != nullptr && handleStatement != nullptr) {
         dbHandle->returnStatement(handleStatement);
@@ -141,7 +141,7 @@
         [_handleStatementDic enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, WCTHandleStatement *_Nonnull obj, BOOL *_Nonnull stop) {
             WCDB_UNUSED(key);
             WCDB_UNUSED(stop);
-            WCDB::HandleStatement *handleStatement = [obj getRawHandleStatement];
+            WCDB::InnerHandleStatement *handleStatement = [obj getRawHandleStatement];
             if (handleStatement != nullptr) {
                 handleStatement->finalize();
                 [self returnRawStatement:handleStatement];
@@ -171,7 +171,7 @@
 - (BOOL)execute:(const WCDB::Statement &)statement
 {
     BOOL succeed = NO;
-    WCDB::Handle *handle = [self getOrGenerateHandle];
+    WCDB::InnerHandle *handle = [self getOrGenerateHandle];
     if (handle != nullptr) {
         succeed = handle->execute(statement);
     }
@@ -182,7 +182,7 @@
 - (BOOL)rawExecute:(NSString *)sql
 {
     BOOL succeed = NO;
-    WCDB::Handle *handle = [self getOrGenerateHandle];
+    WCDB::InnerHandle *handle = [self getOrGenerateHandle];
     if (handle != nullptr) {
         succeed = handle->execute(sql);
     }
@@ -193,7 +193,7 @@
 - (BOOL)prepare:(const WCDB::Statement &)statement
 {
     BOOL succeed = NO;
-    WCDB::Handle *handle = [self getOrGenerateHandle];
+    WCDB::InnerHandle *handle = [self getOrGenerateHandle];
     if (handle != nullptr) {
         succeed = handle->prepare(statement);
     }
@@ -204,7 +204,7 @@
 - (BOOL)rawPrepare:(NSString *)sql
 {
     BOOL succeed = NO;
-    WCDB::Handle *handle = [self getOrGenerateHandle];
+    WCDB::InnerHandle *handle = [self getOrGenerateHandle];
     if (handle != nullptr) {
         succeed = handle->prepare(sql);
     }
@@ -671,7 +671,7 @@
 #pragma mark - Helper
 - (BOOL)lazyRunTransaction:(WCTTransactionBlock)transaction
 {
-    WCDB::Handle *handle = [self getOrGenerateHandle];
+    WCDB::InnerHandle *handle = [self getOrGenerateHandle];
     if (handle == nullptr) {
         return NO;
     }

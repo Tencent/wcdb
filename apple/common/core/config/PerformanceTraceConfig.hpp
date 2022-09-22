@@ -25,7 +25,7 @@
 #pragma once
 
 #include <WCDB/Config.hpp>
-#include <WCDB/Handle.hpp>
+#include <WCDB/InnerHandle.hpp>
 #include <WCDB/Lock.hpp>
 
 namespace WCDB {
@@ -35,12 +35,12 @@ public:
     PerformanceTracer();
     virtual ~PerformanceTracer() = 0;
 
-    using Notification = Handle::PerformanceNotification;
+    using Notification = InnerHandle::PerformanceNotification;
 
 protected:
     void setNotification(const Notification &notification);
-    bool invoke(Handle *handle);
-    bool uninvoke(Handle *handle);
+    bool invoke(InnerHandle *handle);
+    bool uninvoke(InnerHandle *handle);
 
 private:
     const StringView m_identifier;
@@ -52,8 +52,8 @@ public:
     PerformanceTraceConfig(const Notification &notification);
     ~PerformanceTraceConfig() override final;
 
-    bool invoke(Handle *handle) override final;
-    bool uninvoke(Handle *handle) override final;
+    bool invoke(InnerHandle *handle) override final;
+    bool uninvoke(InnerHandle *handle) override final;
 
 private:
     using PerformanceTracer::setNotification;
@@ -64,8 +64,8 @@ public:
     ShareablePerformanceTraceConfig();
     ~ShareablePerformanceTraceConfig() override final;
 
-    bool invoke(Handle *handle) override final;
-    bool uninvoke(Handle *handle) override final;
+    bool invoke(InnerHandle *handle) override final;
+    bool uninvoke(InnerHandle *handle) override final;
 
     void setNotification(const Notification &notification);
 

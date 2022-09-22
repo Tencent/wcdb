@@ -33,7 +33,7 @@
 
 @implementation WCTHandleStatement
 
-- (instancetype)initWithHandle:(WCDB::HandleStatement *)handlesStatement andTag:(NSString *)tag
+- (instancetype)initWithHandle:(WCDB::InnerHandleStatement *)handlesStatement andTag:(NSString *)tag
 {
     if (self = [super init]) {
         _handleStatement = handlesStatement;
@@ -42,7 +42,7 @@
     return self;
 }
 
-- (WCDB::HandleStatement *)getRawHandleStatement
+- (WCDB::InnerHandleStatement *)getRawHandleStatement
 {
     return _handleStatement;
 }
@@ -120,7 +120,7 @@
 - (BOOL)isStatementReadonly
 {
     WCTHandleStatementAssert(return NO);
-    return _handleStatement->isReadonly();
+    return _handleStatement->isReadOnly();
 }
 
 #pragma mark - Bind

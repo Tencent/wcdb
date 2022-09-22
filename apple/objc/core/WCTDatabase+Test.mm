@@ -75,12 +75,12 @@ static std::nullptr_t initialize()
 
 - (BOOL)truncateCheckpoint
 {
-    return _database->checkpoint(false, WCDB::Database::CheckPointMode::Truncate);
+    return _database->checkpoint(false, WCDB::InnerDatabase::CheckPointMode::Truncate);
 }
 
 - (BOOL)passiveCheckpoint
 {
-    return _database->checkpoint(false, WCDB::Database::CheckPointMode::Passive);
+    return _database->checkpoint(false, WCDB::InnerDatabase::CheckPointMode::Passive);
 }
 
 - (BOOL)isOpened

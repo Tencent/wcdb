@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include <WCDB/ValueArray.hpp>
 #include <list>
 #include <type_traits>
 
@@ -64,6 +65,22 @@ public:
 
     template<typename U, typename Enable = typename std::enable_if<std::is_constructible<T, U>::value>::type>
     _SyntaxList(const std::initializer_list<U>& others)
+    {
+        for (const auto& other : others) {
+            this->push_back(other);
+        }
+    }
+
+    template<typename U, typename Enable = typename std::enable_if<std::is_constructible<T, U>::value>::type>
+    _SyntaxList(const std::vector<U>& others)
+    {
+        for (const auto& other : others) {
+            this->push_back(other);
+        }
+    }
+
+    template<typename U, typename Enable = typename std::enable_if<std::is_constructible<T, U>::value>::type>
+    _SyntaxList(const ValueArray<U>& others)
     {
         for (const auto& other : others) {
             this->push_back(other);

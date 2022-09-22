@@ -23,7 +23,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/HandleStatement.hpp>
+#import <WCDB/InnerHandleStatement.hpp>
 #import <WCDB/ObjectBridge.hpp>
 #import <WCDB/WCTAPIBridge.h>
 #import <WCDB/WCTBridgeProperty+CPP.h>
@@ -42,7 +42,7 @@
           withClass:(Class<WCTTableCoding>)tableClass
          withHandle:(CPPHandle)handle
 {
-    WCDBGetObjectOrReturnValue(handle, WCDB::Handle, cppHandle, NO);
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, NO);
     WCTHandle* wctHandle = [[WCTHandle alloc] initWithUnsafeHandle:cppHandle];
     return [wctHandle createTable:name withClass:tableClass];
 }
@@ -51,7 +51,7 @@
                  withClass:(Class<WCTTableCoding>)tableClass
                 withHandle:(CPPHandle)handle
 {
-    WCDBGetObjectOrReturnValue(handle, WCDB::Handle, cppHandle, NO);
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, NO);
     WCTHandle* wctHandle = [[WCTHandle alloc] initWithUnsafeHandle:cppHandle];
     return [wctHandle createVirtualTable:name withClass:tableClass];
 }
@@ -65,7 +65,7 @@
     if (objects.count == 0) {
         return YES;
     }
-    WCDBGetObjectOrReturnValue(handle, WCDB::Handle, cppHandle, NO);
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, NO);
     WCTHandle* wctHandle = [[WCTHandle alloc] initWithUnsafeHandle:cppHandle];
     WCTProperties wctProperties;
     if (properties.count > 0) {
@@ -87,7 +87,7 @@
               ofObject:(WCTObject*)object
    withHandleStatement:(CPPHandleStatement)handleStatement
 {
-    WCDBGetObjectOrReturn(handleStatement, WCDB::HandleStatement, cppHandleStatement);
+    WCDBGetObjectOrReturn(handleStatement, WCDB::InnerHandleStatement, cppHandleStatement);
     WCTHandleStatement* wctHandleStatement = [[WCTHandleStatement alloc] initWithHandle:cppHandleStatement andTag:nil];
     WCTProperties wctProperties;
     for (WCTBridgeProperty* bridgeProperty in properties) {
@@ -101,7 +101,7 @@
              toIndex:(int)index
  withHandleStatement:(CPPHandleStatement)handleStatement
 {
-    WCDBGetObjectOrReturn(handleStatement, WCDB::HandleStatement, cppHandleStatement);
+    WCDBGetObjectOrReturn(handleStatement, WCDB::InnerHandleStatement, cppHandleStatement);
     WCTHandleStatement* wctHandleStatement = [[WCTHandleStatement alloc] initWithHandle:cppHandleStatement andTag:nil];
     [wctHandleStatement bindProperty:property.wctProperty ofObject:object toIndex:index];
 }
@@ -109,7 +109,7 @@
 + (WCTObject*)extractObjectOnResultColumns:(WCTBridgeProperties*)properties
                        fromHandleStatement:(CPPHandleStatement)handleStatement
 {
-    WCDBGetObjectOrReturnValue(handleStatement, WCDB::HandleStatement, cppHandleStatement, nil);
+    WCDBGetObjectOrReturnValue(handleStatement, WCDB::InnerHandleStatement, cppHandleStatement, nil);
     WCTHandleStatement* wctHandleStatement = [[WCTHandleStatement alloc] initWithHandle:cppHandleStatement andTag:nil];
     WCTResultColumns resultColumns;
     for (WCTBridgeProperty* bridgeProperty in properties) {
@@ -121,7 +121,7 @@
 + (WCTMultiObject*)extractMultiObjectOnResultColumns:(WCTBridgeProperties*)properties
                                  fromHandleStatement:(CPPHandleStatement)handleStatement
 {
-    WCDBGetObjectOrReturnValue(handleStatement, WCDB::HandleStatement, cppHandleStatement, nil);
+    WCDBGetObjectOrReturnValue(handleStatement, WCDB::InnerHandleStatement, cppHandleStatement, nil);
     WCTHandleStatement* wctHandleStatement = [[WCTHandleStatement alloc] initWithHandle:cppHandleStatement andTag:nil];
     WCTResultColumns resultColumns;
     for (WCTBridgeProperty* bridgeProperty in properties) {

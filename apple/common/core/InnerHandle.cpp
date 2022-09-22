@@ -25,21 +25,21 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/BusyRetryConfig.hpp>
 #include <WCDB/CoreConst.h>
-#include <WCDB/Handle.hpp>
+#include <WCDB/InnerHandle.hpp>
 #include <unistd.h>
 
 namespace WCDB {
 
-Handle::Handle() : m_mainStatement(getStatement())
+InnerHandle::InnerHandle() : m_mainStatement(getStatement())
 {
 }
 
-Handle::~Handle()
+InnerHandle::~InnerHandle()
 {
     returnStatement(m_mainStatement);
 }
 
-void Handle::setType(HandleType type)
+void InnerHandle::setType(HandleType type)
 {
     switch (type) {
     case HandleType::Migrate:
@@ -66,7 +66,7 @@ void Handle::setType(HandleType type)
     }
 }
 
-void Handle::setErrorType(const UnsafeStringView &type)
+void InnerHandle::setErrorType(const UnsafeStringView &type)
 {
     if (!type.empty()) {
         m_error.infos.insert_or_assign(ErrorStringKeyType, type);
@@ -76,7 +76,7 @@ void Handle::setErrorType(const UnsafeStringView &type)
 }
 
 #pragma mark - Config
-bool Handle::open()
+bool InnerHandle::open()
 {
     bool succeed = false;
     if (AbstractHandle::open()) {
@@ -89,7 +89,7 @@ bool Handle::open()
     return succeed;
 }
 
-void Handle::close()
+void InnerHandle::close()
 {
     if (isOpened()) {
         while (!m_invokeds.empty()) {
@@ -101,7 +101,7 @@ void Handle::close()
     AbstractHandle::close();
 }
 
-bool Handle::reconfigure(const Configs &newConfigs)
+bool InnerHandle::reconfigure(const Configs &newConfigs)
 {
     if (newConfigs != m_pendings) {
         m_pendings = newConfigs;
@@ -112,7 +112,7 @@ bool Handle::reconfigure(const Configs &newConfigs)
     return true;
 }
 
-bool Handle::configure()
+bool InnerHandle::configure()
 {
     if (m_pendings != m_invokeds) {
         while (!m_invokeds.empty()) {
@@ -143,7 +143,7 @@ bool Handle::configure()
 }
 
 #pragma mark - Statement
-bool Handle::execute(const Statement &statement)
+bool InnerHandle::execute(const Statement &statement)
 {
     bool succeed = false;
     if (prepare(statement)) {
@@ -153,7 +153,7 @@ bool Handle::execute(const Statement &statement)
     return succeed;
 }
 
-bool Handle::execute(const UnsafeStringView &sql)
+bool InnerHandle::execute(const UnsafeStringView &sql)
 {
     bool succeed = false;
     if (prepare(sql)) {
@@ -163,128 +163,158 @@ bool Handle::execute(const UnsafeStringView &sql)
     return succeed;
 }
 
-bool Handle::prepare(const Statement &statement)
+bool InnerHandle::prepare(const Statement &statement)
 {
     return m_mainStatement->prepare(statement);
 }
 
-bool Handle::prepare(const UnsafeStringView &sql)
+bool InnerHandle::prepare(const UnsafeStringView &sql)
 {
     return m_mainStatement->prepare(sql);
 }
 
-bool Handle::isPrepared()
+bool InnerHandle::isPrepared()
 {
     return m_mainStatement->isPrepared();
 }
 
-void Handle::reset()
+void InnerHandle::reset()
 {
     m_mainStatement->reset();
 }
 
-bool Handle::done()
+bool InnerHandle::done()
 {
     return m_mainStatement->done();
 }
 
-bool Handle::step()
+bool InnerHandle::step()
 {
     return m_mainStatement->step();
 }
 
-int Handle::getNumberOfColumns()
+int InnerHandle::getNumberOfColumns()
 {
     return m_mainStatement->getNumberOfColumns();
 }
 
-const UnsafeStringView Handle::getOriginColumnName(int index)
+const UnsafeStringView InnerHandle::getOriginColumnName(int index)
 {
     return m_mainStatement->getOriginColumnName(index);
 }
 
-const UnsafeStringView Handle::getColumnName(int index)
+const UnsafeStringView InnerHandle::getColumnName(int index)
 {
     return m_mainStatement->getColumnName(index);
 }
 
-const UnsafeStringView Handle::getColumnTableName(int index)
+const UnsafeStringView InnerHandle::getColumnTableName(int index)
 {
     return m_mainStatement->getColumnTableName(index);
 }
 
-ColumnType Handle::getType(int index)
+ColumnType InnerHandle::getType(int index)
 {
     return m_mainStatement->getType(index);
 }
 
-void Handle::bindInteger(const Integer &value, int index)
+void InnerHandle::bindInteger(const Integer &value, int index)
 {
     m_mainStatement->bindInteger(value, index);
 }
 
-void Handle::bindDouble(const Float &value, int index)
+void InnerHandle::bindDouble(const Float &value, int index)
 {
     m_mainStatement->bindDouble(value, index);
 }
 
-void Handle::bindText(const Text &value, int index)
+void InnerHandle::bindText(const Text &value, int index)
 {
     m_mainStatement->bindText(value, index);
 }
 
-void Handle::bindBLOB(const BLOB &value, int index)
+void InnerHandle::bindBLOB(const BLOB &value, int index)
 {
     m_mainStatement->bindBLOB(value, index);
 }
 
-void Handle::bindNull(int index)
+void InnerHandle::bindNull(int index)
 {
     m_mainStatement->bindNull(index);
 }
 
-void Handle::bindPointer(void *ptr, int index, const Text &type, void (*destructor)(void *))
+void InnerHandle::bindPointer(void *ptr, int index, const Text &type, void (*destructor)(void *))
 {
     m_mainStatement->bindPointer(ptr, index, type, destructor);
 }
 
-int Handle::bindParameterIndex(const Text &parameterName)
+void InnerHandle::bindValue(const Value &value, int index)
+{
+    m_mainStatement->bindValue(value, index);
+}
+
+void InnerHandle::bindRow(const OneRowValue &row)
+{
+    m_mainStatement->bindRow(row);
+}
+
+int InnerHandle::bindParameterIndex(const Text &parameterName)
 {
     return m_mainStatement->bindParameterIndex(parameterName);
 }
 
-Handle::Integer Handle::getInteger(int index)
+InnerHandle::Integer InnerHandle::getInteger(int index)
 {
     return m_mainStatement->getInteger(index);
 }
 
-Handle::Float Handle::getDouble(int index)
+InnerHandle::Float InnerHandle::getDouble(int index)
 {
     return m_mainStatement->getDouble(index);
 }
 
-Handle::Text Handle::getText(int index)
+InnerHandle::Text InnerHandle::getText(int index)
 {
     return m_mainStatement->getText(index);
 }
 
-Handle::BLOB Handle::getBLOB(int index)
+InnerHandle::BLOB InnerHandle::getBLOB(int index)
 {
     return m_mainStatement->getBLOB(index);
 }
 
-void Handle::finalize()
+Value InnerHandle::getValue(int index)
+{
+    return m_mainStatement->getValue(index);
+}
+
+OneColumnValue InnerHandle::getOneColumn(int index)
+{
+    return m_mainStatement->getOneColumn(index);
+}
+
+OneRowValue InnerHandle::getOneRow()
+{
+    return m_mainStatement->getOneRow();
+}
+
+MultiRowsValue InnerHandle::getAllRows()
+{
+    return m_mainStatement->getAllRows();
+}
+
+void InnerHandle::finalize()
 {
     m_mainStatement->finalize();
 }
 
-bool Handle::isStatementReadonly()
+bool InnerHandle::isStatementReadonly()
 {
-    return m_mainStatement->isReadonly();
+    return m_mainStatement->isReadOnly();
 }
 
 #pragma mark - Transaction
-bool Handle::checkMainThreadBusyRetry()
+bool InnerHandle::checkMainThreadBusyRetry()
 {
     const auto &element = m_pendings.find(StringView(BusyRetryConfigName));
     if (element == m_pendings.end()) {
@@ -298,7 +328,7 @@ bool Handle::checkMainThreadBusyRetry()
     return config->checkMainThreadBusyRetry(getPath());
 }
 
-bool Handle::checkHasBusyRetry()
+bool InnerHandle::checkHasBusyRetry()
 {
     const auto &element = m_pendings.find(StringView(BusyRetryConfigName));
     if (element == m_pendings.end()) {
@@ -312,7 +342,7 @@ bool Handle::checkHasBusyRetry()
     return config->checkHasBusyRetry(getPath());
 }
 
-bool Handle::runNestedTransaction(const TransactionCallback &transaction)
+bool InnerHandle::runNestedTransaction(const TransactionCallback &transaction)
 {
     if (beginNestedTransaction()) {
         if (transaction(this)) {
@@ -324,7 +354,7 @@ bool Handle::runNestedTransaction(const TransactionCallback &transaction)
     return false;
 }
 
-bool Handle::runTransaction(const TransactionCallback &transaction)
+bool InnerHandle::runTransaction(const TransactionCallback &transaction)
 {
     if (beginTransaction()) {
         if (transaction(this)) {
@@ -336,7 +366,7 @@ bool Handle::runTransaction(const TransactionCallback &transaction)
     return false;
 }
 
-bool Handle::runPauseableTransactionWithOneLoop(const TransactionCallbackForOneLoop &transaction)
+bool InnerHandle::runPauseableTransactionWithOneLoop(const TransactionCallbackForOneLoop &transaction)
 {
     bool stop = false;
     bool needBegin = true;

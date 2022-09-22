@@ -35,13 +35,13 @@ SQLTracer::SQLTracer()
 
 SQLTracer::~SQLTracer() = default;
 
-bool SQLTracer::invoke(Handle *handle)
+bool SQLTracer::invoke(InnerHandle *handle)
 {
     handle->setNotificationWhenSQLTraced(m_identifier, m_notification);
     return true;
 }
 
-bool SQLTracer::uninvoke(Handle *handle)
+bool SQLTracer::uninvoke(InnerHandle *handle)
 {
     handle->setNotificationWhenSQLTraced(m_identifier, nullptr);
     return true;
@@ -59,12 +59,12 @@ SQLTraceConfig::SQLTraceConfig(const Notification &notification)
 
 SQLTraceConfig::~SQLTraceConfig() = default;
 
-bool SQLTraceConfig::invoke(Handle *handle)
+bool SQLTraceConfig::invoke(InnerHandle *handle)
 {
     return SQLTracer::invoke(handle);
 }
 
-bool SQLTraceConfig::uninvoke(Handle *handle)
+bool SQLTraceConfig::uninvoke(InnerHandle *handle)
 {
     return SQLTracer::uninvoke(handle);
 }
@@ -79,13 +79,13 @@ void ShareableSQLTraceConfig::setNotification(const Notification &notification)
     SQLTracer::setNotification(notification);
 }
 
-bool ShareableSQLTraceConfig::invoke(Handle *handle)
+bool ShareableSQLTraceConfig::invoke(InnerHandle *handle)
 {
     SharedLockGuard lockGuard(m_lock);
     return SQLTracer::invoke(handle);
 }
 
-bool ShareableSQLTraceConfig::uninvoke(Handle *handle)
+bool ShareableSQLTraceConfig::uninvoke(InnerHandle *handle)
 {
     SharedLockGuard lockGuard(m_lock);
     return SQLTracer::uninvoke(handle);

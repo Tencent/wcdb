@@ -38,8 +38,8 @@ public:
     BusyRetryConfig();
     ~BusyRetryConfig() override final;
 
-    bool invoke(Handle* handle) override final;
-    bool uninvoke(Handle* handle) override final;
+    bool invoke(InnerHandle* handle) override final;
+    bool uninvoke(InnerHandle* handle) override final;
     bool checkMainThreadBusyRetry(const UnsafeStringView& path);
     bool checkHasBusyRetry(const UnsafeStringView& path);
 

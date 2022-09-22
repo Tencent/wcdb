@@ -41,7 +41,7 @@
 #include <WCDB/IndexedColumnBridge.h>
 #include <WCDB/JoinBridge.h>
 #include <WCDB/LiteralValueBridge.h>
-#include <WCDB/OrderingTermBirdge.h>
+#include <WCDB/OrderingTermBridge.h>
 #include <WCDB/PragmaBridge.h>
 #include <WCDB/QualifiedTableBridge.h>
 #include <WCDB/RaiseFunctionBridge.h>

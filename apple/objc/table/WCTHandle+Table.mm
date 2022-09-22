@@ -38,7 +38,7 @@
 - (WCTOptionalBool)tableExists:(NSString *)tableName
 {
     WCTOptionalBool exists;
-    WCDB::Handle *handle = [self getOrGenerateHandle];
+    WCDB::InnerHandle *handle = [self getOrGenerateHandle];
     if (handle != nullptr) {
         exists = handle->tableExists(tableName);
     }
@@ -84,7 +84,7 @@
     WCTAssert([(id) tableClass respondsToSelector:@selector(objectRelationalMapping)] && [(id) tableClass respondsToSelector:@selector(allProperties)]);
     // TODO: check the constraints are as expected here.
     return [self lazyRunTransaction:^BOOL(WCTHandle *nsHandle) {
-        WCDB::Handle *handle = [nsHandle getOrGenerateHandle];
+        WCDB::InnerHandle *handle = [nsHandle getOrGenerateHandle];
         WCTAssert(handle != nullptr);
         auto exists = handle->tableExists(tableName);
         if (!exists.has_value()) {

@@ -30,11 +30,14 @@
 
 namespace WCDB {
 
-class Handle : public AbstractHandle {
+class Handle;
+
+class InnerHandle : public AbstractHandle {
+    friend Handle;
 #pragma mark - Initialize
 public:
-    Handle();
-    virtual ~Handle() override = 0;
+    InnerHandle();
+    virtual ~InnerHandle() override = 0;
 
     void setType(HandleType type);
     void setErrorType(const UnsafeStringView &type);
@@ -57,49 +60,56 @@ public:
     bool execute(const Statement &statement);
     bool execute(const UnsafeStringView &sql);
 
-    virtual bool prepare(const Statement &statement);
-    virtual bool prepare(const UnsafeStringView &sql);
-    virtual bool isPrepared();
+    bool prepare(const Statement &statement);
+    bool prepare(const UnsafeStringView &sql);
+    bool isPrepared();
     virtual void finalize();
 
-    virtual bool step();
-    virtual bool done();
-    virtual void reset();
+    bool step();
+    bool done();
+    void reset();
 
-    using Integer = HandleStatement::Integer;
-    using Text = HandleStatement::Text;
-    using Float = HandleStatement::Float;
-    using BLOB = HandleStatement::BLOB;
+    using Integer = InnerHandleStatement::Integer;
+    using Text = InnerHandleStatement::Text;
+    using Float = InnerHandleStatement::Float;
+    using BLOB = InnerHandleStatement::BLOB;
 
-    virtual void bindInteger(const Integer &value, int index);
-    virtual void bindDouble(const Float &value, int index);
-    virtual void bindText(const Text &value, int index);
-    virtual void bindBLOB(const BLOB &value, int index);
-    virtual void bindNull(int index);
-    virtual void
-    bindPointer(void *ptr, int index, const Text &type, void (*destructor)(void *));
+    void bindInteger(const Integer &value, int index = 1);
+    void bindDouble(const Float &value, int index = 1);
+    void bindText(const Text &value, int index = 1);
+    void bindBLOB(const BLOB &value, int index = 1);
+    void bindNull(int index);
+    void bindPointer(void *ptr, int index, const Text &type, void (*destructor)(void *));
     virtual int bindParameterIndex(const Text &parameterName);
 
-    virtual Integer getInteger(int index);
-    virtual Float getDouble(int index);
-    virtual Text getText(int index);
-    virtual BLOB getBLOB(int index);
+    void bindValue(const Value &value, int index = 1);
+    void bindRow(const OneRowValue &row);
 
-    virtual ColumnType getType(int index);
-    virtual const UnsafeStringView getOriginColumnName(int index);
-    virtual const UnsafeStringView getColumnName(int index);
-    virtual const UnsafeStringView getColumnTableName(int index);
+    Integer getInteger(int index = 0);
+    Float getDouble(int index = 0);
+    Text getText(int index = 0);
+    BLOB getBLOB(int index = 0);
 
-    virtual bool isStatementReadonly();
-    virtual int getNumberOfColumns();
+    Value getValue(int index = 0);
+    OneColumnValue getOneColumn(int index = 0);
+    OneRowValue getOneRow();
+    MultiRowsValue getAllRows();
+
+    const UnsafeStringView getOriginColumnName(int index);
+    const UnsafeStringView getColumnName(int index);
+    const UnsafeStringView getColumnTableName(int index);
+
+    ColumnType getType(int index);
+    bool isStatementReadonly();
+    int getNumberOfColumns();
 
 protected:
-    HandleStatement *m_mainStatement;
+    InnerHandleStatement *m_mainStatement;
 
 #pragma mark - Transaction
 public:
-    typedef std::function<bool(Handle *)> TransactionCallback;
-    typedef std::function<bool(Handle *, bool &, bool)> TransactionCallbackForOneLoop;
+    typedef std::function<bool(InnerHandle *)> TransactionCallback;
+    typedef std::function<bool(InnerHandle *, bool &, bool)> TransactionCallbackForOneLoop;
     bool checkMainThreadBusyRetry();
     bool checkHasBusyRetry();
     bool runTransaction(const TransactionCallback &transaction);
@@ -107,7 +117,7 @@ public:
     bool runPauseableTransactionWithOneLoop(const TransactionCallbackForOneLoop &transaction);
 };
 
-class ConfiguredHandle final : public Handle {
+class ConfiguredHandle final : public InnerHandle {
 public:
     ~ConfiguredHandle() override final;
 };

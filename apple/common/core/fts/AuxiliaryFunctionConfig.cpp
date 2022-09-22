@@ -25,7 +25,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/AuxiliaryFunctionConfig.hpp>
 #include <WCDB/AuxiliaryFunctionModules.hpp>
-#include <WCDB/Handle.hpp>
+#include <WCDB/InnerHandle.hpp>
 #include <WCDB/SQLite.h>
 
 namespace WCDB {
@@ -42,7 +42,7 @@ AuxiliaryFunctionConfig::AuxiliaryFunctionConfig(const UnsafeStringView& name_,
 
 AuxiliaryFunctionConfig::~AuxiliaryFunctionConfig() = default;
 
-bool AuxiliaryFunctionConfig::invoke(Handle* handle)
+bool AuxiliaryFunctionConfig::invoke(InnerHandle* handle)
 {
     const FTS5AuxiliaryFunctionModule* module = m_modules->get(name);
     WCTRemedialAssert(module != nullptr, "Module does not exist.", return true;);

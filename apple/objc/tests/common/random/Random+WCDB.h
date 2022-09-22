@@ -27,7 +27,7 @@
 
 @interface Random (WCDB)
 
-- (WCTTag)tag;
+- (long)tag;
 
 - (NSString*)tableName;
 

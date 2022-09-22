@@ -26,13 +26,13 @@
 
 namespace WCDB {
 
-class Handle;
+class InnerHandle;
 
 class Config {
 public:
     virtual ~Config() = 0;
-    virtual bool invoke(Handle *handle) = 0;
-    virtual bool uninvoke(Handle *handle);
+    virtual bool invoke(InnerHandle *handle) = 0;
+    virtual bool uninvoke(InnerHandle *handle);
 };
 
 } //namespace WCDB

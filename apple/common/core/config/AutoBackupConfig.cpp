@@ -24,7 +24,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/AutoBackupConfig.hpp>
-#include <WCDB/Handle.hpp>
+#include <WCDB/InnerHandle.hpp>
 #include <WCDB/StringView.hpp>
 
 namespace WCDB {
@@ -39,7 +39,7 @@ AutoBackupConfig::AutoBackupConfig(const std::shared_ptr<AutoBackupOperator> &op
 
 AutoBackupConfig::~AutoBackupConfig() = default;
 
-bool AutoBackupConfig::invoke(Handle *handle)
+bool AutoBackupConfig::invoke(InnerHandle *handle)
 {
     handle->setNotificationWhenCheckpointed(
     m_identifier,
@@ -48,7 +48,7 @@ bool AutoBackupConfig::invoke(Handle *handle)
     return true;
 }
 
-bool AutoBackupConfig::uninvoke(Handle *handle)
+bool AutoBackupConfig::uninvoke(InnerHandle *handle)
 {
     handle->setNotificationWhenCheckpointed(m_identifier, nullptr);
 

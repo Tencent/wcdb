@@ -24,26 +24,28 @@
 
 #pragma once
 
+#include <WCDB/ColumnType.hpp>
 #include <WCDB/HandleRelated.hpp>
 #include <WCDB/SQLiteDeclaration.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Statement.hpp>
+#include <WCDB/Value.hpp>
 
 namespace WCDB {
 
-class HandleStatement : public HandleRelated {
+class InnerHandleStatement : public HandleRelated {
     friend class AbstractHandle;
 
 public:
-    HandleStatement() = delete;
-    HandleStatement(const HandleStatement &) = delete;
-    HandleStatement &operator=(const HandleStatement &) = delete;
+    InnerHandleStatement() = delete;
+    InnerHandleStatement(const InnerHandleStatement &) = delete;
+    InnerHandleStatement &operator=(const InnerHandleStatement &) = delete;
 
-    HandleStatement(HandleStatement &&other);
-    HandleStatement(AbstractHandle *handle);
+    InnerHandleStatement(InnerHandleStatement &&other);
+    InnerHandleStatement(AbstractHandle *handle);
 
     void enableTableMonitor();
 
-    virtual ~HandleStatement() override;
+    virtual ~InnerHandleStatement() override;
 
     virtual bool prepare(const Statement &statement);
     virtual bool prepare(const UnsafeStringView &sql);
@@ -59,29 +61,37 @@ public:
     using Float = ColumnTypeInfo<ColumnType::Float>::UnderlyingType;
     using BLOB = ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType;
 
-    virtual void bindInteger(const Integer &value, int index);
-    virtual void bindDouble(const Float &value, int index);
-    virtual void bindText(const Text &value, int index);
-    virtual void bindBLOB(const BLOB &value, int index);
-    virtual void bindNull(int index);
+    virtual void bindInteger(const Integer &value, int index = 1);
+    virtual void bindDouble(const Float &value, int index = 1);
+    virtual void bindText(const Text &value, int index = 1);
+    virtual void bindBLOB(const BLOB &value, int index = 1);
+    virtual void bindNull(int index = 1);
     virtual void
     bindPointer(void *ptr, int index, const Text &type, void (*destructor)(void *));
     int bindParameterIndex(const Text &parameterName);
 
-    virtual Integer getInteger(int index);
-    virtual Float getDouble(int index);
-    virtual Text getText(int index);
-    virtual const BLOB getBLOB(int index);
-    virtual signed long long getColumnSize(int index);
+    virtual void bindValue(const Value &value, int index = 1);
+    virtual void bindRow(const OneRowValue &row);
 
-    virtual ColumnType getType(int index);
-
+    virtual ColumnType getType(int index = 0);
+    virtual signed long long getColumnSize(int index = 0);
     virtual int getNumberOfColumns();
+
+    virtual Integer getInteger(int index = 0);
+    virtual Float getDouble(int index = 0);
+    virtual Text getText(int index = 0);
+    virtual const BLOB getBLOB(int index = 0);
+
+    virtual Value getValue(int index = 0);
+    virtual OneColumnValue getOneColumn(int index = 0);
+    virtual OneRowValue getOneRow();
+    virtual MultiRowsValue getAllRows();
+
     virtual const UnsafeStringView getOriginColumnName(int index);
     virtual const UnsafeStringView getColumnName(int index);
     virtual const UnsafeStringView getColumnTableName(int index);
 
-    virtual bool isReadonly();
+    virtual bool isReadOnly();
 
 protected:
     virtual bool isBusy();

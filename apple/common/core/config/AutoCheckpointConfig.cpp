@@ -25,7 +25,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/AutoCheckpointConfig.hpp>
 #include <WCDB/Global.hpp>
-#include <WCDB/Handle.hpp>
+#include <WCDB/InnerHandle.hpp>
 #include <WCDB/StringView.hpp>
 #include <regex>
 
@@ -48,7 +48,7 @@ AutoCheckpointConfig::~AutoCheckpointConfig()
     Global::shared().setNotificationForLog(m_identifier, nullptr);
 }
 
-bool AutoCheckpointConfig::invoke(Handle* handle)
+bool AutoCheckpointConfig::invoke(InnerHandle* handle)
 {
     static_assert(SQLITE_DEFAULT_WAL_AUTOCHECKPOINT == 0, "");
 
@@ -60,7 +60,7 @@ bool AutoCheckpointConfig::invoke(Handle* handle)
     return true;
 }
 
-bool AutoCheckpointConfig::uninvoke(Handle* handle)
+bool AutoCheckpointConfig::uninvoke(InnerHandle* handle)
 {
     handle->unsetNotificationWhenCommitted(m_identifier);
 
