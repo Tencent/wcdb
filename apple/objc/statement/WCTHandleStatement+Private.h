@@ -27,8 +27,8 @@
 
 @interface WCTHandleStatement () {
 @private
-    WCDB::HandleStatement* _handleStatement;
+    WCDB::InnerHandleStatement* _handleStatement;
 }
-- (instancetype)initWithHandle:(WCDB::HandleStatement*)handlesStatement andTag:(NSString*)tag;
-- (WCDB::HandleStatement*)getRawHandleStatement;
+- (instancetype)initWithHandle:(WCDB::InnerHandleStatement*)handlesStatement andTag:(NSString*)tag;
+- (WCDB::InnerHandleStatement*)getRawHandleStatement;
 @end

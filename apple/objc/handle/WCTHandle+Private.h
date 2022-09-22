@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface WCTHandle () {
 @private
     WCTDatabase *_database;
-    WCDB::Handle *_handle;
+    WCDB::InnerHandle *_handle;
     WCDB::RecyclableHandle _handleHolder;
     NSMutableDictionary<NSString *, WCTHandleStatement *> *_handleStatementDic;
 }
@@ -41,13 +41,13 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - LifeCycle
 - (instancetype)init NS_DESIGNATED_INITIALIZER;
 
-- (instancetype)initWithDatabase:(WCTDatabase *)database andUnsafeHandle:(WCDB::Handle *)handle NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithDatabase:(WCTDatabase *)database andUnsafeHandle:(WCDB::InnerHandle *)handle NS_DESIGNATED_INITIALIZER;
 
 - (instancetype)initWithDatabase:(WCTDatabase *)database NS_DESIGNATED_INITIALIZER;
 
-- (instancetype)initWithUnsafeHandle:(WCDB::Handle *)handle NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithUnsafeHandle:(WCDB::InnerHandle *)handle NS_DESIGNATED_INITIALIZER;
 
-- (nullable WCDB::Handle *)getOrGenerateHandle;
+- (nullable WCDB::InnerHandle *)getOrGenerateHandle;
 
 - (BOOL)lazyRunTransaction:(WCTTransactionBlock)transaction;
 

@@ -33,7 +33,7 @@
 
 @implementation WCTDatabase
 
-- (instancetype)initWithUnsafeDatabase:(WCDB::Database *)database
+- (instancetype)initWithUnsafeDatabase:(WCDB::InnerDatabase *)database
 {
     WCTAssert(database != nullptr);
     if (self = [super init]) {
@@ -59,7 +59,7 @@
 {
     if (self = [super init]) {
         m_isInMemory = YES;
-        _database = new WCDB::Database(":memory:");
+        _database = new WCDB::InnerDatabase(":memory:");
         _database->setInMemory();
         WCTAssert(_database != nullptr);
     }

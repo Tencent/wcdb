@@ -24,12 +24,12 @@
 
 #pragma once
 
-#include <WCDB/Handle.hpp>
+#include <WCDB/InnerHandle.hpp>
 #include <WCDB/RepairKit.h>
 
 namespace WCDB {
 
-class AssembleHandle final : public Handle,
+class AssembleHandle final : public InnerHandle,
                              public Repair::AssembleDelegate,
                              public Repair::BackupSharedDelegate,
                              public Repair::BackupExclusiveDelegate {
@@ -66,7 +66,7 @@ protected:
     bool lazyPrepareCell();
     int64_t m_integerPrimary;
     StringView m_table;
-    HandleStatement *m_cellStatement;
+    InnerHandleStatement *m_cellStatement;
 
 #pragma mark - Assemble - Sequence
 public:

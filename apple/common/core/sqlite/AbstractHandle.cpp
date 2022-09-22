@@ -131,7 +131,7 @@ bool AbstractHandle::executeSQL(const UnsafeStringView &sql)
 {
     // use seperated sqlite3_exec to get more information
     WCTAssert(isOpened());
-    HandleStatement handleStatement(this);
+    InnerHandleStatement handleStatement(this);
     bool succeed = handleStatement.prepare(sql);
     if (succeed) {
         succeed = handleStatement.step();
@@ -190,13 +190,13 @@ bool AbstractHandle::isInTransaction()
 }
 
 #pragma mark - Statement
-HandleStatement *AbstractHandle::getStatement()
+InnerHandleStatement *AbstractHandle::getStatement()
 {
-    m_handleStatements.push_back(HandleStatement(this));
+    m_handleStatements.push_back(InnerHandleStatement(this));
     return &m_handleStatements.back();
 }
 
-void AbstractHandle::returnStatement(HandleStatement *handleStatement)
+void AbstractHandle::returnStatement(InnerHandleStatement *handleStatement)
 {
     if (handleStatement != nullptr) {
         for (auto iter = m_handleStatements.begin(); iter != m_handleStatements.end(); ++iter) {
@@ -251,7 +251,7 @@ AbstractHandle::tableExists(const Schema &schema, const UnsafeStringView &table)
     StatementSelect statement
     = StatementSelect().select(1).from(TableOrSubquery(table).schema(schema)).limit(1);
 
-    HandleStatement handleStatement(this);
+    InnerHandleStatement handleStatement(this);
     markErrorAsIgnorable(Error::Code::Error);
     bool succeed = handleStatement.prepare(statement);
     std::optional<bool> exists;
@@ -283,7 +283,7 @@ std::optional<std::vector<ColumnMeta>>
 AbstractHandle::getTableMeta(const Schema &schema, const UnsafeStringView &table)
 {
     std::optional<std::vector<ColumnMeta>> metas;
-    HandleStatement handleStatement(this);
+    InnerHandleStatement handleStatement(this);
     if (handleStatement.prepare(
         StatementPragma().pragma(Pragma::tableInfo()).schema(schema).with(table))) {
         bool succeed = false;
@@ -308,7 +308,7 @@ std::optional<std::set<StringView>>
 AbstractHandle::getValues(const Statement &statement, int index)
 {
     std::optional<std::set<StringView>> values;
-    HandleStatement handleStatement(this);
+    InnerHandleStatement handleStatement(this);
     if (handleStatement.prepare(statement)) {
         std::set<StringView> rows;
         bool succeed = false;

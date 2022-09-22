@@ -23,7 +23,7 @@
  */
 
 #include <WCDB/AsyncQueue.hpp>
-#include <WCDB/Handle.hpp>
+#include <WCDB/InnerHandle.hpp>
 #include <WCDB/Lock.hpp>
 #include <WCDB/RecyclableHandle.hpp>
 #include <WCDB/StringView.hpp>
@@ -50,17 +50,17 @@ public:
     std::optional<bool> triggerMerge(TableArray newTables, TableArray modifiedTables);
 
 private:
-    bool tryInit(Handle& handle);
+    bool tryInit(InnerHandle& handle);
     std::optional<bool>
-    triggerMerge(Handle& handle, TableArray newTables, TableArray modifiedTables);
-    bool tryConfigUserMerge(Handle& handle, const UnsafeStringView& table, bool isNew);
-    bool checkModifiedTables(Handle& handle, TableArray newTables, TableArray modifiedTables);
+    triggerMerge(InnerHandle& handle, TableArray newTables, TableArray modifiedTables);
+    bool tryConfigUserMerge(InnerHandle& handle, const UnsafeStringView& table, bool isNew);
+    bool checkModifiedTables(InnerHandle& handle, TableArray newTables, TableArray modifiedTables);
     void proccessMerge();
-    bool mergeTable(Handle& handle, const StringView& table);
+    bool mergeTable(InnerHandle& handle, const StringView& table);
     void increaseErrorCount();
 
     static void
-    userMergeCallback(Handle* handle, int* remainPages, int totalPagesWriten, int* lastCheckPages);
+    userMergeCallback(InnerHandle* handle, int* remainPages, int totalPagesWriten, int* lastCheckPages);
 
     MergeFTSIndexHandleProvider* m_handleProvider;
 

@@ -22,41 +22,41 @@
  * limitations under the License.
  */
 
-#include <WCDB/HandleStatement.hpp>
 #include <WCDB/HandleStatementBridge.h>
+#include <WCDB/InnerHandleStatement.hpp>
 #include <WCDB/ObjectBridge.hpp>
 #include <WCDB/UnsafeData.hpp>
 
 bool WCDBHandleStatementCheckPrepared(CPPHandleStatement handleStatement)
 {
     WCDBGetObjectOrReturnValue(
-    handleStatement, WCDB::HandleStatement, cppHandleStatement, false);
+    handleStatement, WCDB::InnerHandleStatement, cppHandleStatement, false);
     return cppHandleStatement->isPrepared();
 }
 
 bool WCDBHandleStatementStep(CPPHandleStatement handleStatement)
 {
     WCDBGetObjectOrReturnValue(
-    handleStatement, WCDB::HandleStatement, cppHandleStatement, false);
+    handleStatement, WCDB::InnerHandleStatement, cppHandleStatement, false);
     return cppHandleStatement->step();
 }
 
 void WCDBHandleStatementReset(CPPHandleStatement handleStatement)
 {
-    WCDBGetObjectOrReturn(handleStatement, WCDB::HandleStatement, cppHandleStatement);
+    WCDBGetObjectOrReturn(handleStatement, WCDB::InnerHandleStatement, cppHandleStatement);
     cppHandleStatement->reset();
 }
 
 void WCDBHandleStatementFinalize(CPPHandleStatement handleStatement)
 {
-    WCDBGetObjectOrReturn(handleStatement, WCDB::HandleStatement, cppHandleStatement);
+    WCDBGetObjectOrReturn(handleStatement, WCDB::InnerHandleStatement, cppHandleStatement);
     cppHandleStatement->finalize();
 }
 
 bool WCDBHandleStatementIsDone(CPPHandleStatement handleStatement)
 {
     WCDBGetObjectOrReturnValue(
-    handleStatement, WCDB::HandleStatement, cppHandleStatement, true);
+    handleStatement, WCDB::InnerHandleStatement, cppHandleStatement, true);
     return cppHandleStatement->done();
 }
 
@@ -64,19 +64,19 @@ void WCDBHandleStatementBindInteger(CPPHandleStatement handleStatement,
                                     int index,
                                     signed long long intValue)
 {
-    WCDBGetObjectOrReturn(handleStatement, WCDB::HandleStatement, cppHandleStatement);
+    WCDBGetObjectOrReturn(handleStatement, WCDB::InnerHandleStatement, cppHandleStatement);
     cppHandleStatement->bindInteger(intValue, index);
 }
 
 void WCDBHandleStatementBindDouble(CPPHandleStatement handleStatement, int index, double doubleValue)
 {
-    WCDBGetObjectOrReturn(handleStatement, WCDB::HandleStatement, cppHandleStatement);
+    WCDBGetObjectOrReturn(handleStatement, WCDB::InnerHandleStatement, cppHandleStatement);
     cppHandleStatement->bindDouble(doubleValue, index);
 }
 
 void WCDBHandleStatementBindText(CPPHandleStatement handleStatement, int index, const char* _Nonnull text)
 {
-    WCDBGetObjectOrReturn(handleStatement, WCDB::HandleStatement, cppHandleStatement);
+    WCDBGetObjectOrReturn(handleStatement, WCDB::InnerHandleStatement, cppHandleStatement);
     cppHandleStatement->bindText(WCDB::UnsafeStringView(text), index);
 }
 
@@ -85,14 +85,14 @@ void WCDBHandleStatementBindBlob(CPPHandleStatement handleStatement,
                                  const unsigned char* _Nonnull buffer,
                                  unsigned long long buffLength)
 {
-    WCDBGetObjectOrReturn(handleStatement, WCDB::HandleStatement, cppHandleStatement);
+    WCDBGetObjectOrReturn(handleStatement, WCDB::InnerHandleStatement, cppHandleStatement);
     cppHandleStatement->bindBLOB(
     WCDB::UnsafeData::immutable(buffer, (size_t) buffLength), index);
 }
 
 void WCDBHandleStatementBindNull(CPPHandleStatement handleStatement, int index)
 {
-    WCDBGetObjectOrReturn(handleStatement, WCDB::HandleStatement, cppHandleStatement);
+    WCDBGetObjectOrReturn(handleStatement, WCDB::InnerHandleStatement, cppHandleStatement);
     cppHandleStatement->bindNull(index);
 }
 
@@ -100,7 +100,7 @@ WCDBColumnValueType
 WCDBHandleStatementGetColumnType(CPPHandleStatement handleStatement, int index)
 {
     WCDBGetObjectOrReturnValue(
-    handleStatement, WCDB::HandleStatement, cppHandleStatement, WCDBColumnValueTypeNull);
+    handleStatement, WCDB::InnerHandleStatement, cppHandleStatement, WCDBColumnValueTypeNull);
     switch (cppHandleStatement->getType(index)) {
     case WCDB::Syntax::ColumnType::Integer:
         return WCDBColumnValueTypeInterger;
@@ -118,14 +118,14 @@ WCDBHandleStatementGetColumnType(CPPHandleStatement handleStatement, int index)
 signed long long WCDBHandleStatementGetInteger(CPPHandleStatement handleStatement, int index)
 {
     WCDBGetObjectOrReturnValue(
-    handleStatement, WCDB::HandleStatement, cppHandleStatement, 0);
+    handleStatement, WCDB::InnerHandleStatement, cppHandleStatement, 0);
     return cppHandleStatement->getInteger(index);
 }
 
 double WCDBHandleStatementGetDouble(CPPHandleStatement handleStatement, int index)
 {
     WCDBGetObjectOrReturnValue(
-    handleStatement, WCDB::HandleStatement, cppHandleStatement, 0);
+    handleStatement, WCDB::InnerHandleStatement, cppHandleStatement, 0);
     return cppHandleStatement->getDouble(index);
 }
 
@@ -133,7 +133,7 @@ const char* _Nullable WCDBHandleStatementGetText(CPPHandleStatement handleStatem
 {
     {
         WCDBGetObjectOrReturnValue(
-        handleStatement, WCDB::HandleStatement, cppHandleStatement, nullptr);
+        handleStatement, WCDB::InnerHandleStatement, cppHandleStatement, nullptr);
         return cppHandleStatement->getText(index).data();
     }
 }
@@ -142,7 +142,7 @@ const unsigned char*
 WCDBHandleStatementGetBlob(CPPHandleStatement handleStatement, int index)
 {
     WCDBGetObjectOrReturnValue(
-    handleStatement, WCDB::HandleStatement, cppHandleStatement, nullptr);
+    handleStatement, WCDB::InnerHandleStatement, cppHandleStatement, nullptr);
     return cppHandleStatement->getBLOB(index).buffer();
 }
 
@@ -150,21 +150,21 @@ signed long long
 WCDBHandleStatementGetColumnSize(CPPHandleStatement handleStatement, int index)
 {
     WCDBGetObjectOrReturnValue(
-    handleStatement, WCDB::HandleStatement, cppHandleStatement, 0);
+    handleStatement, WCDB::InnerHandleStatement, cppHandleStatement, 0);
     return cppHandleStatement->getColumnSize(index);
 }
 
 int WCDBHandleStatementGetColumnCount(CPPHandleStatement handleStatement)
 {
     WCDBGetObjectOrReturnValue(
-    handleStatement, WCDB::HandleStatement, cppHandleStatement, 0);
+    handleStatement, WCDB::InnerHandleStatement, cppHandleStatement, 0);
     return cppHandleStatement->getNumberOfColumns();
 }
 
 const char* _Nullable WCDBHandleStatementGetColumnName(CPPHandleStatement handleStatement, int index)
 {
     WCDBGetObjectOrReturnValue(
-    handleStatement, WCDB::HandleStatement, cppHandleStatement, nullptr);
+    handleStatement, WCDB::InnerHandleStatement, cppHandleStatement, nullptr);
     return cppHandleStatement->getColumnName(index).data();
 }
 
@@ -172,7 +172,7 @@ const char* _Nullable WCDBHandleStatementGetOriginalColumnName(CPPHandleStatemen
                                                                int index)
 {
     WCDBGetObjectOrReturnValue(
-    handleStatement, WCDB::HandleStatement, cppHandleStatement, nullptr);
+    handleStatement, WCDB::InnerHandleStatement, cppHandleStatement, nullptr);
     return cppHandleStatement->getOriginColumnName(index).data();
 }
 
@@ -180,13 +180,13 @@ const char* _Nullable WCDBHandleStatementGetColumnTableName(CPPHandleStatement h
                                                             int index)
 {
     WCDBGetObjectOrReturnValue(
-    handleStatement, WCDB::HandleStatement, cppHandleStatement, nullptr);
+    handleStatement, WCDB::InnerHandleStatement, cppHandleStatement, nullptr);
     return cppHandleStatement->getColumnTableName(index).data();
 }
 
 bool WCDBHandleStatementIsReadOnly(CPPHandleStatement handleStatement)
 {
     WCDBGetObjectOrReturnValue(
-    handleStatement, WCDB::HandleStatement, cppHandleStatement, false);
-    return cppHandleStatement->isReadonly();
+    handleStatement, WCDB::InnerHandleStatement, cppHandleStatement, false);
+    return cppHandleStatement->isReadOnly();
 }

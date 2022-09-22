@@ -26,7 +26,7 @@
 #include <WCDB/BasicConfig.hpp>
 #include <WCDB/Core.hpp>
 #include <WCDB/CoreConst.h>
-#include <WCDB/Handle.hpp>
+#include <WCDB/InnerHandle.hpp>
 #include <WCDB/Macro.h>
 
 namespace WCDB {
@@ -44,7 +44,7 @@ BasicConfig::BasicConfig()
 
 BasicConfig::~BasicConfig() = default;
 
-bool BasicConfig::invoke(Handle* handle)
+bool BasicConfig::invoke(InnerHandle* handle)
 {
     static_assert(SQLITE_DEFAULT_SYNCHRONOUS == 1, "");
     static_assert(SQLITE_DEFAULT_WAL_SYNCHRONOUS == 1, "");
@@ -62,7 +62,7 @@ bool BasicConfig::invoke(Handle* handle)
 }
 
 #pragma mark - Pragma
-bool BasicConfig::getOrSetPragmaBegin(Handle* handle, const StatementPragma& get)
+bool BasicConfig::getOrSetPragmaBegin(InnerHandle* handle, const StatementPragma& get)
 {
     bool succeed = false;
     if (handle->prepare(get)) {
@@ -74,7 +74,7 @@ bool BasicConfig::getOrSetPragmaBegin(Handle* handle, const StatementPragma& get
     return succeed;
 }
 
-bool BasicConfig::getOrSetPragmaEnd(Handle* handle, const StatementPragma& set, bool conditionToSet)
+bool BasicConfig::getOrSetPragmaEnd(InnerHandle* handle, const StatementPragma& set, bool conditionToSet)
 {
     WCTAssert(handle->isPrepared());
     handle->finalize();
@@ -86,7 +86,7 @@ bool BasicConfig::getOrSetPragmaEnd(Handle* handle, const StatementPragma& set, 
 }
 
 #pragma mark - Pragma - Journal Mode
-bool BasicConfig::lazySetJournalModeWAL(Handle* handle)
+bool BasicConfig::lazySetJournalModeWAL(InnerHandle* handle)
 {
     bool succeed = false;
     handle->markErrorAsIgnorable(Error::Code::Busy);

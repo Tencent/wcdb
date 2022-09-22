@@ -39,7 +39,7 @@ public:
 
     StringView name;
 
-    bool invoke(Handle* handle) override final;
+    bool invoke(InnerHandle* handle) override final;
 
 protected:
     std::shared_ptr<TokenizerModules> m_modules;

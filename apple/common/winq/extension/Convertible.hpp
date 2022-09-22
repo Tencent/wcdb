@@ -48,6 +48,12 @@ public:
 };
 
 template<typename T, typename Enable = void>
+class ColumnConvertible final : public std::false_type {
+public:
+    static Column asColumn(const T&);
+};
+
+template<typename T, typename Enable = void>
 class ResultColumnConvertible final : public std::false_type {
 public:
     static ResultColumn asResultColumn(const T&);

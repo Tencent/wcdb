@@ -40,8 +40,8 @@ public:
     AutoBackupConfig(const std::shared_ptr<AutoBackupOperator>& operator_);
     ~AutoBackupConfig() override final;
 
-    bool invoke(Handle* handle) override final;
-    bool uninvoke(Handle* handle) override final;
+    bool invoke(InnerHandle* handle) override final;
+    bool uninvoke(InnerHandle* handle) override final;
 
 protected:
     const StringView m_identifier;

@@ -64,12 +64,12 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
      withPriority:(WCTConfigPriority)priority
 {
     WCTRemedialAssert(nsInvocation != nil, "Use [removeConfigForName:] instead.", return;);
-    WCDB::CustomConfig::Invocation invocation = [nsInvocation, self](WCDB::Handle* handle) -> bool {
+    WCDB::CustomConfig::Invocation invocation = [nsInvocation, self](WCDB::InnerHandle* handle) -> bool {
         return nsInvocation([[WCTHandle alloc] initWithDatabase:self andUnsafeHandle:handle]);
     };
     WCDB::CustomConfig::Invocation uninvocation = nullptr;
     if (nsUninvocation != nil) {
-        uninvocation = [nsUninvocation, self](WCDB::Handle* handle) -> bool {
+        uninvocation = [nsUninvocation, self](WCDB::InnerHandle* handle) -> bool {
             return nsUninvocation([[WCTHandle alloc] initWithDatabase:self andUnsafeHandle:handle]);
         };
     }

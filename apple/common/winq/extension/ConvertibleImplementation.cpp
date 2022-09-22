@@ -31,6 +31,20 @@ LiteralValue LiteralValueConvertible<bool>::asLiteralValue(const bool &t)
     return t;
 }
 
+LiteralValue LiteralValueConvertible<Value>::asLiteralValue(const Value &value)
+{
+    switch (value.getType()) {
+    case Value::Type::Null:
+        return nullptr;
+    case Value::Type::Integer:
+        return value.intValue();
+    case Value::Type::Float:
+        return value.floatValue();
+    default:
+        return value.textValue();
+    }
+}
+
 Expression ExpressionConvertible<Column>::asExpression(const Column &column)
 {
     return column;
@@ -44,6 +58,11 @@ Expression ExpressionConvertible<BindParameter>::asExpression(const BindParamete
 Expression ExpressionConvertible<LiteralValue>::asExpression(const LiteralValue &literalValue)
 {
     return literalValue;
+}
+
+Expression ExpressionConvertible<Value>::asExpression(const Value &value)
+{
+    return LiteralValue(value);
 }
 
 Expression ExpressionConvertible<RaiseFunction>::asExpression(const RaiseFunction &raiseFunction)

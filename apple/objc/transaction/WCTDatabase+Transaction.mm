@@ -51,7 +51,7 @@
 - (BOOL)runTransaction:(WCDB_NO_ESCAPE WCTTransactionBlock)inTransaction
 {
     WCTRemedialAssert(inTransaction, "Transaction block can't be null.", return NO;);
-    return _database->runTransaction([&inTransaction, self](WCDB::Handle *handle) -> bool {
+    return _database->runTransaction([&inTransaction, self](WCDB::InnerHandle *handle) -> bool {
         @autoreleasepool {
             WCTHandle *transactionHandle = [[WCTHandle alloc] initWithDatabase:self andUnsafeHandle:handle];
             BOOL result = inTransaction(transactionHandle);
@@ -66,7 +66,7 @@
     WCTRemedialAssert(inTransaction, "Transaction block can't be null.", return NO;);
     WCTHandle *transactionHandle = nil;
     BOOL ocStop = NO;
-    bool ret = _database->runPauseableTransactionWithOneLoop([&inTransaction, self, transactionHandle, ocStop](WCDB::Handle *handle, bool &stop, bool isNewTransaction) mutable -> bool {
+    bool ret = _database->runPauseableTransactionWithOneLoop([&inTransaction, self, transactionHandle, ocStop](WCDB::InnerHandle *handle, bool &stop, bool isNewTransaction) mutable -> bool {
         @autoreleasepool {
             if (!transactionHandle) {
                 transactionHandle = [[WCTHandle alloc] initWithDatabase:self andUnsafeHandle:handle];
@@ -100,7 +100,7 @@
 - (BOOL)runNestedTransaction:(WCDB_NO_ESCAPE WCTTransactionBlock)inTransaction
 {
     WCTRemedialAssert(inTransaction, "Transaction block can't be null.", return NO;);
-    return _database->runNestedTransaction([&inTransaction, self](WCDB::Handle *handle) -> bool {
+    return _database->runNestedTransaction([&inTransaction, self](WCDB::InnerHandle *handle) -> bool {
         @autoreleasepool {
             WCTHandle *transactionHandle = [[WCTHandle alloc] initWithDatabase:self andUnsafeHandle:handle];
             BOOL result = inTransaction(transactionHandle);

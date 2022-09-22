@@ -33,12 +33,12 @@ NS_ASSUME_NONNULL_BEGIN
     WCDB::RecyclableDatabase _databaseHolder;
     BOOL m_isInMemory;
 @protected
-    WCDB::Database *_database;
+    WCDB::InnerDatabase *_database;
 }
 
 - (instancetype)init NS_DESIGNATED_INITIALIZER;
 
-- (instancetype)initWithUnsafeDatabase:(WCDB::Database *)database NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithUnsafeDatabase:(WCDB::InnerDatabase *)database NS_DESIGNATED_INITIALIZER;
 
 - (WCDB::RecyclableHandle)generateHandle;
 

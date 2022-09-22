@@ -24,7 +24,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/AutoMigrateConfig.hpp>
-#include <WCDB/Handle.hpp>
+#include <WCDB/InnerHandle.hpp>
 
 namespace WCDB {
 
@@ -38,7 +38,7 @@ AutoMigrateConfig::AutoMigrateConfig(const std::shared_ptr<AutoMigrateOperator>&
 
 AutoMigrateConfig::~AutoMigrateConfig() = default;
 
-bool AutoMigrateConfig::invoke(Handle* handle)
+bool AutoMigrateConfig::invoke(InnerHandle* handle)
 {
     const UnsafeStringView& path = handle->getPath();
     if (++getOrCreateRegister(path) == 1) {
@@ -47,7 +47,7 @@ bool AutoMigrateConfig::invoke(Handle* handle)
     return true;
 }
 
-bool AutoMigrateConfig::uninvoke(Handle* handle)
+bool AutoMigrateConfig::uninvoke(InnerHandle* handle)
 {
     const UnsafeStringView& path = handle->getPath();
     if (--getOrCreateRegister(path) == 0) {

@@ -31,7 +31,7 @@ namespace WCDB {
 
 #pragma mark - Initialize
 MigratingHandle::MigratingHandle(Migration& migration)
-: Handle(), Migration::Binder(migration)
+: InnerHandle(), Migration::Binder(migration)
 {
     Super::returnStatement(m_mainStatement);
     m_mainStatement = getStatement();
@@ -263,13 +263,13 @@ void MigratingHandle::finalize()
     stopReferenced();
 }
 
-HandleStatement* MigratingHandle::getStatement()
+InnerHandleStatement* MigratingHandle::getStatement()
 {
     m_migratingHandleStatements.push_back(MigratingHandleStatement(this));
     return &m_migratingHandleStatements.back();
 }
 
-void MigratingHandle::returnStatement(HandleStatement* handleStatement)
+void MigratingHandle::returnStatement(InnerHandleStatement* handleStatement)
 {
     if (handleStatement != nullptr) {
         for (auto iter = m_migratingHandleStatements.begin();

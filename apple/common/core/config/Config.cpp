@@ -29,7 +29,7 @@ namespace WCDB {
 
 Config::~Config() = default;
 
-bool Config::uninvoke(Handle *handle)
+bool Config::uninvoke(InnerHandle *handle)
 {
     WCDB_UNUSED(handle)
     return true;

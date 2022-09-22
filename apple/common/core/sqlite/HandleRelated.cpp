@@ -23,8 +23,8 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/Handle.hpp>
 #include <WCDB/HandleRelated.hpp>
+#include <WCDB/InnerHandle.hpp>
 
 namespace WCDB {
 

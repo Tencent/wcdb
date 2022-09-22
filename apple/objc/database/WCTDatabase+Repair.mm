@@ -35,7 +35,7 @@
 {
     WCDB::Core::CorruptedNotification notification = nullptr;
     if (onCorrupted != nil) {
-        notification = [onCorrupted](WCDB::Database *database) {
+        notification = [onCorrupted](WCDB::InnerDatabase *database) {
             onCorrupted([[WCTDatabase alloc] initWithUnsafeDatabase:database]);
         };
     }
@@ -55,7 +55,7 @@
 
 - (void)filterBackup:(WCTBackupFilterBlock)tableShouldBeBackedUp
 {
-    WCDB::Database::BackupFilter filter = nullptr;
+    WCDB::InnerDatabase::BackupFilter filter = nullptr;
     if (tableShouldBeBackedUp != nil) {
         filter = [tableShouldBeBackedUp](const WCDB::UnsafeStringView &tableName) -> bool {
             return tableShouldBeBackedUp([NSString stringWithView:tableName]);
@@ -81,7 +81,7 @@
 
 - (double)retrieve:(WCDB_NO_ESCAPE WCTRetrieveProgressUpdateBlock)onProgressUpdated
 {
-    WCDB::Database::RetrieveProgressCallback callback = nullptr;
+    WCDB::InnerDatabase::RetrieveProgressCallback callback = nullptr;
     if (onProgressUpdated != nil) {
         callback = [onProgressUpdated](double percentage, double increment) {
             onProgressUpdated(percentage, increment);

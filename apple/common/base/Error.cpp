@@ -303,6 +303,43 @@ Error::InfoValue::UnderlyingType Error::InfoValue::underlyingType() const
     return m_underlyingType;
 }
 
+#pragma mark - Common Info
+UnsafeStringView Error::getPath() const
+{
+    auto iter = infos.find(ErrorStringKeyPath);
+    if (iter != infos.end()) {
+        return iter->second.stringValue();
+    }
+    return UnsafeStringView();
+}
+
+UnsafeStringView Error::getSQL() const
+{
+    auto iter = infos.find(ErrorStringKeySQL);
+    if (iter != infos.end()) {
+        return iter->second.stringValue();
+    }
+    return UnsafeStringView();
+}
+
+Tag Error::getTag() const
+{
+    auto iter = infos.find(ErrorIntKeyTag);
+    if (iter != infos.end()) {
+        return iter->second.integerValue();
+    }
+    return Tag::invalid();
+}
+
+Error::ExtCode Error::getExtCode() const
+{
+    auto iter = infos.find(ErrorIntKeyExtCode);
+    if (iter != infos.end()) {
+        return rc2ec((int) iter->second.integerValue());
+    }
+    return rc2ec(0);
+}
+
 #pragma mark - Description
 StringView Error::getDescription() const
 {

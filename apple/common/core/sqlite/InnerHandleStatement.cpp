@@ -24,12 +24,13 @@
 
 #include <WCDB/AbstractHandle.hpp>
 #include <WCDB/Assertion.hpp>
-#include <WCDB/HandleStatement.hpp>
+#include <WCDB/InnerHandleStatement.hpp>
 #include <WCDB/SQLite.h>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
-HandleStatement::HandleStatement(HandleStatement &&other)
+InnerHandleStatement::InnerHandleStatement(InnerHandleStatement &&other)
 : HandleRelated(other.getHandle())
 , m_stmt(other.m_stmt)
 , m_done(other.m_done)
@@ -40,17 +41,17 @@ HandleStatement::HandleStatement(HandleStatement &&other)
     other.m_stmt = nullptr;
 }
 
-HandleStatement::HandleStatement(AbstractHandle *handle)
+InnerHandleStatement::InnerHandleStatement(AbstractHandle *handle)
 : HandleRelated(handle), m_stmt(nullptr), m_done(false)
 {
 }
 
-HandleStatement::~HandleStatement()
+InnerHandleStatement::~InnerHandleStatement()
 {
     finalize();
 }
 
-bool HandleStatement::prepare(const Statement &statement)
+bool InnerHandleStatement::prepare(const Statement &statement)
 {
     if (getHandle()->needMonitorTable()) {
         analysisStatement(statement);
@@ -58,7 +59,7 @@ bool HandleStatement::prepare(const Statement &statement)
     return prepare(statement.getDescription());
 }
 
-void HandleStatement::analysisStatement(const Statement &statement)
+void InnerHandleStatement::analysisStatement(const Statement &statement)
 {
     m_modifiedTable.clear();
     m_newTable.clear();
@@ -100,7 +101,7 @@ void HandleStatement::analysisStatement(const Statement &statement)
     }
 }
 
-bool HandleStatement::prepare(const UnsafeStringView &sql)
+bool InnerHandleStatement::prepare(const UnsafeStringView &sql)
 {
     WCTRemedialAssert(!isPrepared(), "Last statement is not finalized.", finalize(););
     WCTAssert(sql.length() > 0);
@@ -114,18 +115,18 @@ bool HandleStatement::prepare(const UnsafeStringView &sql)
     return result;
 }
 
-void HandleStatement::reset()
+void InnerHandleStatement::reset()
 {
     WCTAssert(isPrepared());
     APIExit(sqlite3_reset(m_stmt));
 }
 
-bool HandleStatement::done()
+bool InnerHandleStatement::done()
 {
     return m_done;
 }
 
-bool HandleStatement::step()
+bool InnerHandleStatement::step()
 {
     WCTAssert(isPrepared());
 
@@ -145,7 +146,7 @@ bool HandleStatement::step()
     return APIExit(rc, sql);
 }
 
-void HandleStatement::finalize()
+void InnerHandleStatement::finalize()
 {
     if (m_stmt != nullptr) {
         // no need to call APIExit since it returns old code only.
@@ -154,31 +155,31 @@ void HandleStatement::finalize()
     }
 }
 
-int HandleStatement::getNumberOfColumns()
+int InnerHandleStatement::getNumberOfColumns()
 {
     WCTAssert(isPrepared());
     return sqlite3_column_count(m_stmt);
 }
 
-const UnsafeStringView HandleStatement::getOriginColumnName(int index)
+const UnsafeStringView InnerHandleStatement::getOriginColumnName(int index)
 {
     WCTAssert(isPrepared());
     return sqlite3_column_origin_name(m_stmt, index);
 }
 
-const UnsafeStringView HandleStatement::getColumnName(int index)
+const UnsafeStringView InnerHandleStatement::getColumnName(int index)
 {
     WCTAssert(isPrepared());
     return sqlite3_column_name(m_stmt, index);
 }
 
-const UnsafeStringView HandleStatement::getColumnTableName(int index)
+const UnsafeStringView InnerHandleStatement::getColumnTableName(int index)
 {
     WCTAssert(isPrepared());
     return sqlite3_column_table_name(m_stmt, index);
 }
 
-ColumnType HandleStatement::getType(int index)
+ColumnType InnerHandleStatement::getType(int index)
 {
     WCTAssert(isPrepared());
     switch (sqlite3_column_type(m_stmt, index)) {
@@ -195,7 +196,7 @@ ColumnType HandleStatement::getType(int index)
     }
 }
 
-void HandleStatement::bindInteger(const Integer &value, int index)
+void InnerHandleStatement::bindInteger(const Integer &value, int index)
 {
     WCTAssert(isPrepared());
     WCTAssert(!isBusy());
@@ -204,7 +205,7 @@ void HandleStatement::bindInteger(const Integer &value, int index)
     WCDB_UNUSED(succeed);
 }
 
-void HandleStatement::bindDouble(const Float &value, int index)
+void InnerHandleStatement::bindDouble(const Float &value, int index)
 {
     WCTAssert(isPrepared());
     WCTAssert(!isBusy());
@@ -213,7 +214,7 @@ void HandleStatement::bindDouble(const Float &value, int index)
     WCDB_UNUSED(succeed);
 }
 
-void HandleStatement::bindText(const Text &value, int index)
+void InnerHandleStatement::bindText(const Text &value, int index)
 {
     WCTAssert(isPrepared());
     WCTAssert(!isBusy());
@@ -224,7 +225,7 @@ void HandleStatement::bindText(const Text &value, int index)
     WCDB_UNUSED(succeed);
 }
 
-void HandleStatement::bindBLOB(const BLOB &value, int index)
+void InnerHandleStatement::bindBLOB(const BLOB &value, int index)
 {
     WCTAssert(isPrepared());
     WCTAssert(!isBusy());
@@ -235,7 +236,7 @@ void HandleStatement::bindBLOB(const BLOB &value, int index)
     WCDB_UNUSED(succeed);
 }
 
-void HandleStatement::bindNull(int index)
+void InnerHandleStatement::bindNull(int index)
 {
     WCTAssert(isPrepared());
     WCTAssert(!isBusy());
@@ -244,7 +245,10 @@ void HandleStatement::bindNull(int index)
     WCDB_UNUSED(succeed);
 }
 
-void HandleStatement::bindPointer(void *ptr, int index, const Text &type, void (*destructor)(void *))
+void InnerHandleStatement::bindPointer(void *ptr,
+                                       int index,
+                                       const Text &type,
+                                       void (*destructor)(void *))
 {
     WCTAssert(isPrepared());
     WCTAssert(!isBusy());
@@ -254,7 +258,7 @@ void HandleStatement::bindPointer(void *ptr, int index, const Text &type, void (
     WCDB_UNUSED(succeed);
 }
 
-int HandleStatement::bindParameterIndex(const Text &parameterName)
+int InnerHandleStatement::bindParameterIndex(const Text &parameterName)
 {
     WCTAssert(isPrepared());
     WCTAssert(!isBusy());
@@ -262,21 +266,21 @@ int HandleStatement::bindParameterIndex(const Text &parameterName)
     return index;
 }
 
-HandleStatement::Integer HandleStatement::getInteger(int index)
+InnerHandleStatement::Integer InnerHandleStatement::getInteger(int index)
 {
     WCTAssert(isPrepared());
     WCTAssert(isBusy());
     return static_cast<Integer>(sqlite3_column_int64(m_stmt, index));
 }
 
-HandleStatement::Float HandleStatement::getDouble(int index)
+InnerHandleStatement::Float InnerHandleStatement::getDouble(int index)
 {
     WCTAssert(isPrepared());
     WCTAssert(isBusy());
     return static_cast<Float>(sqlite3_column_double(m_stmt, index));
 }
 
-HandleStatement::Text HandleStatement::getText(int index)
+InnerHandleStatement::Text InnerHandleStatement::getText(int index)
 {
     WCTAssert(isPrepared());
     WCTAssert(isBusy());
@@ -285,7 +289,7 @@ HandleStatement::Text HandleStatement::getText(int index)
     sqlite3_column_bytes(m_stmt, index));
 }
 
-const HandleStatement::BLOB HandleStatement::getBLOB(int index)
+const InnerHandleStatement::BLOB InnerHandleStatement::getBLOB(int index)
 {
     WCTAssert(isPrepared());
     WCTAssert(isBusy());
@@ -294,26 +298,93 @@ const HandleStatement::BLOB HandleStatement::getBLOB(int index)
     sqlite3_column_bytes(m_stmt, index));
 }
 
-signed long long HandleStatement::getColumnSize(int index)
+void InnerHandleStatement::bindValue(const Value &value, int index)
+{
+    switch (value.getType()) {
+    case ColumnType::Null:
+        return bindNull(index);
+    case ColumnType::Integer:
+        return bindInteger(value, index);
+    case ColumnType::Float:
+        return bindDouble(value, index);
+    case ColumnType::Text:
+        return bindText(value, index);
+    case ColumnType::BLOB:
+        return bindBLOB(value, index);
+    }
+}
+
+void InnerHandleStatement::bindRow(const OneRowValue &row)
+{
+    for (int i = 1; i <= row.size(); i++) {
+        bindValue(row[i - 1], i);
+    }
+}
+
+Value InnerHandleStatement::getValue(int index)
+{
+    switch (getType(index)) {
+    case ColumnType::Null:
+        return Value(nullptr);
+    case ColumnType::Integer:
+        return Value(getInteger(index));
+    case ColumnType::Float:
+        return Value(getDouble(index));
+    case ColumnType::Text:
+        return Value(getText(index));
+    case ColumnType::BLOB:
+        return Value(getBLOB(index));
+    }
+}
+
+OneColumnValue InnerHandleStatement::getOneColumn(int index)
+{
+    OneColumnValue result;
+    while (step() && !done()) {
+        result.push_back(getValue(index));
+    }
+    return result;
+}
+
+OneRowValue InnerHandleStatement::getOneRow()
+{
+    OneRowValue result;
+    int count = getNumberOfColumns();
+    for (int i = 0; i < count; i++) {
+        result.push_back(getValue(i));
+    }
+    return result;
+}
+
+MultiRowsValue InnerHandleStatement::getAllRows()
+{
+    MultiRowsValue result;
+    while (step() && !done()) {
+        result.push_back(getOneRow());
+    }
+    return result;
+}
+
+signed long long InnerHandleStatement::getColumnSize(int index)
 {
     WCTAssert(isPrepared());
     WCTAssert(isBusy());
     return sqlite3_column_bytes(m_stmt, index);
 }
 
-bool HandleStatement::isBusy()
+bool InnerHandleStatement::isBusy()
 {
     WCTAssert(isPrepared());
     return sqlite3_stmt_busy(m_stmt) != 0;
 }
 
-bool HandleStatement::isReadonly()
+bool InnerHandleStatement::isReadOnly()
 {
     WCTAssert(isPrepared());
     return sqlite3_stmt_readonly(m_stmt) != 0;
 }
 
-bool HandleStatement::isPrepared()
+bool InnerHandleStatement::isPrepared()
 {
     return m_stmt != nullptr;
 }

@@ -34,14 +34,14 @@ CustomConfig::CustomConfig(const Invocation &invocation, const Invocation &uninv
 
 CustomConfig::~CustomConfig() = default;
 
-bool CustomConfig::invoke(Handle *handle)
+bool CustomConfig::invoke(InnerHandle *handle)
 {
     WCTRemedialAssert(
     m_invocation != nullptr, "Invocation should not be null.", return false;);
     return m_invocation(handle);
 }
 
-bool CustomConfig::uninvoke(Handle *handle)
+bool CustomConfig::uninvoke(InnerHandle *handle)
 {
     bool succeed = true;
     if (m_uninvocation != nullptr) {

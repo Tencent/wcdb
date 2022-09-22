@@ -103,4 +103,3 @@ public final class ColumnConstraint: Identifier<CPPColumnConstraint> {
         return self
     }
 }
-

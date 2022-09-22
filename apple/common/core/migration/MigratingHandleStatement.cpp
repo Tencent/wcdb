@@ -28,10 +28,11 @@
 #include <WCDB/MigratingHandleStatement.hpp>
 #include <WCDB/SQLite.h>
 #include <WCDB/StringView.hpp>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 MigratingHandleStatement::MigratingHandleStatement(MigratingHandleStatement&& other)
-: HandleStatement(std::move(other))
+: InnerHandleStatement(std::move(other))
 , m_processing(other.m_processing)
 , m_additionalStatement(other.m_additionalStatement)
 , m_migrateStatement(other.m_migrateStatement)
@@ -46,11 +47,11 @@ MigratingHandleStatement::MigratingHandleStatement(MigratingHandleStatement&& ot
 }
 
 MigratingHandleStatement::MigratingHandleStatement(MigratingHandle* handle)
-: HandleStatement(handle)
+: InnerHandleStatement(handle)
 , m_processing(false)
-, m_additionalStatement(std::make_shared<HandleStatement>(handle))
-, m_migrateStatement(std::make_shared<HandleStatement>(handle))
-, m_removeMigratedStatement(std::make_shared<HandleStatement>(handle))
+, m_additionalStatement(std::make_shared<InnerHandleStatement>(handle))
+, m_migrateStatement(std::make_shared<InnerHandleStatement>(handle))
+, m_removeMigratedStatement(std::make_shared<InnerHandleStatement>(handle))
 , m_rowidIndexOfMigratingStatement(0)
 {
 }
@@ -328,7 +329,7 @@ bool MigratingHandleStatement::step()
         MigratingHandle* migratingHandle = dynamic_cast<MigratingHandle*>(getHandle());
         WCTAssert(migratingHandle != nullptr);
         return migratingHandle->runNestedTransaction(
-        [this](Handle*) -> bool { return realStep(); });
+        [this](InnerHandle*) -> bool { return realStep(); });
     }
     return realStep();
 }

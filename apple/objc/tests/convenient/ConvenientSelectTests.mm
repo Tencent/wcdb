@@ -22,6 +22,7 @@
  * limitations under the License.
  */
 
+#import "CRUDTestCase.h"
 #import "TestCase.h"
 
 @interface ConvenientSelectTests : CRUDTestCase

@@ -34,16 +34,16 @@ public:
     BasicConfig();
     ~BasicConfig() override final;
 
-    bool invoke(Handle* handle) override final;
+    bool invoke(InnerHandle* handle) override final;
 
 #pragma mark - Pragma
 private:
-    bool getOrSetPragmaBegin(Handle* handle, const StatementPragma& get);
-    bool getOrSetPragmaEnd(Handle* handle, const StatementPragma& set, bool conditionToSet);
+    bool getOrSetPragmaBegin(InnerHandle* handle, const StatementPragma& get);
+    bool getOrSetPragmaEnd(InnerHandle* handle, const StatementPragma& set, bool conditionToSet);
 
 #pragma mark - Pragma - Journal Mode
 protected:
-    bool lazySetJournalModeWAL(Handle* handle);
+    bool lazySetJournalModeWAL(InnerHandle* handle);
 
 private:
     const StatementPragma m_getJournalMode;

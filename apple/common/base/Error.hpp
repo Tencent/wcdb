@@ -25,6 +25,7 @@
 #pragma once
 
 #include <WCDB/StringView.hpp>
+#include <WCDB/Tag.hpp>
 #include <any>
 #include <map>
 
@@ -320,6 +321,13 @@ public:
         UnderlyingType m_underlyingType;
     };
     StringViewMap<InfoValue> infos;
+
+#pragma mark - Common Info
+public:
+    UnsafeStringView getPath() const;
+    UnsafeStringView getSQL() const;
+    Tag getTag() const;
+    ExtCode getExtCode() const;
 
 #pragma mark - Descritpion
 public:

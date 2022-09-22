@@ -24,7 +24,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/CipherConfig.hpp>
-#include <WCDB/Handle.hpp>
+#include <WCDB/InnerHandle.hpp>
 
 namespace WCDB {
 
@@ -37,7 +37,7 @@ CipherConfig::CipherConfig(const UnsafeData &cipher, int pageSize)
 
 CipherConfig::~CipherConfig() = default;
 
-bool CipherConfig::invoke(Handle *handle)
+bool CipherConfig::invoke(InnerHandle *handle)
 {
     return handle->setCipherKey(m_key) && handle->execute(m_statement);
 }

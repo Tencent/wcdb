@@ -96,7 +96,7 @@ void Core::purgeDatabasePool()
     m_databasePool.purge();
 }
 
-void Core::databaseDidCreate(Database* database)
+void Core::databaseDidCreate(InnerDatabase* database)
 {
     WCTAssert(database != nullptr);
 
@@ -250,7 +250,7 @@ void Core::setNotificationWhenDatabaseCorrupted(const UnsafeStringView& path,
 }
 
 #pragma mark - Checkpoint
-void Core::enableAutoCheckpoint(Database* database, bool enable)
+void Core::enableAutoCheckpoint(InnerDatabase* database, bool enable)
 {
     if (enable) {
         database->setConfig(
@@ -263,7 +263,7 @@ void Core::enableAutoCheckpoint(Database* database, bool enable)
 }
 
 #pragma mark - Backup
-void Core::enableAutoBackup(Database* database, bool enable)
+void Core::enableAutoBackup(InnerDatabase* database, bool enable)
 {
     WCTAssert(database != nullptr);
     if (enable) {
@@ -277,7 +277,7 @@ void Core::enableAutoBackup(Database* database, bool enable)
 }
 
 #pragma mark - Migration
-void Core::enableAutoMigration(Database* database, bool enable)
+void Core::enableAutoMigration(InnerDatabase* database, bool enable)
 {
     WCTAssert(database != nullptr);
     if (enable) {
@@ -292,7 +292,7 @@ void Core::enableAutoMigration(Database* database, bool enable)
 }
 
 #pragma mark - Merge FTS Index
-void Core::enableAutoMergeFTSIndex(Database* database, bool enable)
+void Core::enableAutoMergeFTSIndex(InnerDatabase* database, bool enable)
 {
     WCTAssert(database != nullptr);
     if (enable) {

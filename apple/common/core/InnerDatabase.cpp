@@ -23,9 +23,9 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/Database.hpp>
 #include <WCDB/Error.hpp>
 #include <WCDB/FileManager.hpp>
+#include <WCDB/InnerDatabase.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/RepairKit.h>
@@ -42,7 +42,7 @@
 namespace WCDB {
 
 #pragma mark - Initializer
-Database::Database(const UnsafeStringView &path)
+InnerDatabase::InnerDatabase(const UnsafeStringView &path)
 : HandlePool(path)
 , m_initialized(false)
 , m_closing(0)
@@ -56,27 +56,27 @@ Database::Database(const UnsafeStringView &path)
 {
 }
 
-Database::~Database() = default;
+InnerDatabase::~InnerDatabase() = default;
 
 #pragma mark - Basic
-void Database::setTag(const Tag &tag)
+void InnerDatabase::setTag(const Tag &tag)
 {
     LockGuard memoryGuard(m_memory);
     m_tag = tag;
 }
 
-Tag Database::getTag() const
+Tag InnerDatabase::getTag() const
 {
     SharedLockGuard memoryGuard(m_memory);
     return m_tag;
 }
 
-bool Database::canOpen()
+bool InnerDatabase::canOpen()
 {
     return getHandle() != nullptr;
 }
 
-void Database::didDrain()
+void InnerDatabase::didDrain()
 {
     WCTAssert(m_concurrency.writeSafety());
     WCTAssert(m_memory.writeSafety());
@@ -84,7 +84,7 @@ void Database::didDrain()
     m_initialized = false;
 }
 
-void Database::close(const ClosedCallback &onClosed)
+void InnerDatabase::close(const ClosedCallback &onClosed)
 {
     if (m_isInMemory) {
         if (m_sharedInMemoryHandle != nullptr) {
@@ -113,12 +113,12 @@ void Database::close(const ClosedCallback &onClosed)
     --m_closing;
 }
 
-bool Database::isOpened() const
+bool InnerDatabase::isOpened() const
 {
     return isAliving();
 }
 
-Database::InitializedGuard Database::initialize()
+InnerDatabase::InitializedGuard InnerDatabase::initialize()
 {
     do {
         {
@@ -169,28 +169,28 @@ Database::InitializedGuard Database::initialize()
 }
 
 #pragma mark - Config
-void Database::setConfigs(const Configs &configs)
+void InnerDatabase::setConfigs(const Configs &configs)
 {
     LockGuard memoryGuard(m_memory);
     m_configs = configs;
 }
 
-void Database::setConfig(const UnsafeStringView &name,
-                         const std::shared_ptr<Config> &config,
-                         int priority)
+void InnerDatabase::setConfig(const UnsafeStringView &name,
+                              const std::shared_ptr<Config> &config,
+                              int priority)
 {
     LockGuard memoryGuard(m_memory);
     m_configs.insert(StringView(name), config, priority);
 }
 
-void Database::removeConfig(const UnsafeStringView &name)
+void InnerDatabase::removeConfig(const UnsafeStringView &name)
 {
     LockGuard memoryGuard(m_memory);
     m_configs.erase(StringView(name));
 }
 
 #pragma mark - Handle
-RecyclableHandle Database::getHandle()
+RecyclableHandle InnerDatabase::getHandle()
 {
     if (m_isInMemory) {
         InitializedGuard initializedGuard = initialize();
@@ -213,7 +213,7 @@ RecyclableHandle Database::getHandle()
     return flowOut(m_migration.shouldMigrate() ? HandleType::Migrating : HandleType::Normal);
 }
 
-bool Database::execute(const Statement &statement)
+bool InnerDatabase::execute(const Statement &statement)
 {
     RecyclableHandle handle = getHandle();
     if (handle != nullptr) {
@@ -226,7 +226,7 @@ bool Database::execute(const Statement &statement)
     return false;
 }
 
-bool Database::execute(const UnsafeStringView &sql)
+bool InnerDatabase::execute(const UnsafeStringView &sql)
 {
     RecyclableHandle handle = getHandle();
     if (handle != nullptr) {
@@ -239,7 +239,7 @@ bool Database::execute(const UnsafeStringView &sql)
     return false;
 }
 
-std::optional<bool> Database::tableExists(const UnsafeStringView &table)
+std::optional<bool> InnerDatabase::tableExists(const UnsafeStringView &table)
 {
     std::optional<bool> exists;
     RecyclableHandle handle = getHandle();
@@ -253,11 +253,11 @@ std::optional<bool> Database::tableExists(const UnsafeStringView &table)
     return exists;
 }
 
-std::shared_ptr<Handle> Database::generateSlotedHandle(HandleType type)
+std::shared_ptr<InnerHandle> InnerDatabase::generateSlotedHandle(HandleType type)
 {
     WCTAssert(m_concurrency.readSafety());
     HandleSlot slot = slotOfHandleType(type);
-    std::shared_ptr<Handle> handle;
+    std::shared_ptr<InnerHandle> handle;
     switch (slot) {
     case HandleSlotMigrating:
         handle = std::make_shared<MigratingHandle>(m_migration);
@@ -297,12 +297,12 @@ std::shared_ptr<Handle> Database::generateSlotedHandle(HandleType type)
     return handle;
 }
 
-bool Database::willReuseSlotedHandle(HandleType type, Handle *handle)
+bool InnerDatabase::willReuseSlotedHandle(HandleType type, InnerHandle *handle)
 {
     return setupHandle(type, handle);
 }
 
-bool Database::setupHandle(HandleType type, Handle *handle)
+bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
 {
     WCTAssert(handle != nullptr);
 
@@ -334,28 +334,29 @@ bool Database::setupHandle(HandleType type, Handle *handle)
 }
 
 #pragma mark - Threaded
-void Database::markHandleAsTransactioned(const RecyclableHandle &handle)
+void InnerDatabase::markHandleAsTransactioned(const RecyclableHandle &handle)
 {
     WCTAssert(m_transactionedHandles.getOrCreate().get() == nullptr);
     m_transactionedHandles.getOrCreate() = handle;
     WCTAssert(m_transactionedHandles.getOrCreate().get() != nullptr);
 }
 
-void Database::markHandleAsUntransactioned()
+void InnerDatabase::markHandleAsUntransactioned()
 {
     WCTAssert(m_transactionedHandles.getOrCreate().get() != nullptr);
     m_transactionedHandles.getOrCreate() = nullptr;
     WCTAssert(m_transactionedHandles.getOrCreate().get() == nullptr);
 }
 
-Database::TransactionGuard::TransactionGuard(Database *database, const RecyclableHandle &handle)
+InnerDatabase::TransactionGuard::TransactionGuard(InnerDatabase *database,
+                                                  const RecyclableHandle &handle)
 : m_database(database), m_handle(handle), m_isInTransactionBefore(handle->isInTransaction())
 {
     WCTAssert(m_database != nullptr);
     WCTAssert(m_handle != nullptr);
 }
 
-Database::TransactionGuard::~TransactionGuard()
+InnerDatabase::TransactionGuard::~TransactionGuard()
 {
     bool isInTransactionAfter = m_handle->isInTransaction();
     if (!m_isInTransactionBefore && isInTransactionAfter) {
@@ -366,14 +367,14 @@ Database::TransactionGuard::~TransactionGuard()
 }
 
 #pragma mark - Transaction
-bool Database::isInTransaction()
+bool InnerDatabase::isInTransaction()
 {
     WCTAssert(m_transactionedHandles.getOrCreate().get() == nullptr
               || m_transactionedHandles.getOrCreate().get()->isInTransaction());
     return m_transactionedHandles.getOrCreate().get() != nullptr;
 }
 
-bool Database::beginTransaction()
+bool InnerDatabase::beginTransaction()
 {
     RecyclableHandle handle = getHandle();
     if (handle == nullptr) {
@@ -387,7 +388,7 @@ bool Database::beginTransaction()
     return false;
 }
 
-bool Database::commitOrRollbackTransaction()
+bool InnerDatabase::commitOrRollbackTransaction()
 {
     RecyclableHandle handle = getHandle();
     WCTRemedialAssert(handle != nullptr,
@@ -401,7 +402,7 @@ bool Database::commitOrRollbackTransaction()
     return false;
 }
 
-void Database::rollbackTransaction()
+void InnerDatabase::rollbackTransaction()
 {
     RecyclableHandle handle = getHandle();
     WCTRemedialAssert(handle != nullptr,
@@ -411,7 +412,7 @@ void Database::rollbackTransaction()
     handle->rollbackTransaction();
 }
 
-bool Database::runTransaction(const TransactionCallback &transaction)
+bool InnerDatabase::runTransaction(const TransactionCallback &transaction)
 {
     if (!beginTransaction()) {
         return false;
@@ -426,7 +427,7 @@ bool Database::runTransaction(const TransactionCallback &transaction)
     return false;
 }
 
-bool Database::runPauseableTransactionWithOneLoop(const TransactionCallbackForOneLoop &transaction)
+bool InnerDatabase::runPauseableTransactionWithOneLoop(const TransactionCallbackForOneLoop &transaction)
 {
     // get threaded handle
     RecyclableHandle handle = getHandle();
@@ -481,7 +482,7 @@ bool Database::runPauseableTransactionWithOneLoop(const TransactionCallbackForOn
     return true;
 }
 
-bool Database::beginNestedTransaction()
+bool InnerDatabase::beginNestedTransaction()
 {
     RecyclableHandle handle = getHandle();
     if (handle != nullptr) {
@@ -494,7 +495,7 @@ bool Database::beginNestedTransaction()
     return false;
 }
 
-bool Database::commitOrRollbackNestedTransaction()
+bool InnerDatabase::commitOrRollbackNestedTransaction()
 {
     RecyclableHandle handle = getHandle();
     WCTRemedialAssert(handle != nullptr,
@@ -508,7 +509,7 @@ bool Database::commitOrRollbackNestedTransaction()
     return false;
 }
 
-void Database::rollbackNestedTransaction()
+void InnerDatabase::rollbackNestedTransaction()
 {
     RecyclableHandle handle = getHandle();
     WCTRemedialAssert(handle != nullptr,
@@ -518,7 +519,7 @@ void Database::rollbackNestedTransaction()
     handle->rollbackNestedTransaction();
 }
 
-bool Database::runNestedTransaction(const TransactionCallback &transaction)
+bool InnerDatabase::runNestedTransaction(const TransactionCallback &transaction)
 {
     if (!beginNestedTransaction()) {
         return false;
@@ -534,7 +535,7 @@ bool Database::runNestedTransaction(const TransactionCallback &transaction)
 }
 
 #pragma mark - File
-bool Database::removeFiles()
+bool InnerDatabase::removeFiles()
 {
     if (m_isInMemory) {
         return false;
@@ -551,7 +552,7 @@ bool Database::removeFiles()
     return result;
 }
 
-std::optional<size_t> Database::getFilesSize()
+std::optional<size_t> InnerDatabase::getFilesSize()
 {
     if (m_isInMemory) {
         return 0;
@@ -563,7 +564,7 @@ std::optional<size_t> Database::getFilesSize()
     return size;
 }
 
-bool Database::moveFiles(const UnsafeStringView &directory)
+bool InnerDatabase::moveFiles(const UnsafeStringView &directory)
 {
     if (m_isInMemory) {
         return false;
@@ -580,12 +581,12 @@ bool Database::moveFiles(const UnsafeStringView &directory)
     return result;
 }
 
-const StringView &Database::getPath() const
+const StringView &InnerDatabase::getPath() const
 {
     return path;
 }
 
-std::list<StringView> Database::getPaths() const
+std::list<StringView> InnerDatabase::getPaths() const
 {
     if (m_isInMemory) {
         return { path };
@@ -593,33 +594,33 @@ std::list<StringView> Database::getPaths() const
     return pathsOfDatabase(path);
 }
 
-std::list<StringView> Database::pathsOfDatabase(const UnsafeStringView &database)
+std::list<StringView> InnerDatabase::pathsOfDatabase(const UnsafeStringView &database)
 {
     return {
         StringView(database),
-        Handle::walPathOfDatabase(database),
+        InnerHandle::walPathOfDatabase(database),
         Repair::Factory::firstMaterialPathForDatabase(database),
         Repair::Factory::lastMaterialPathForDatabase(database),
         Repair::Factory::factoryPathForDatabase(database),
-        Handle::journalPathOfDatabase(database),
-        Handle::shmPathOfDatabase(database),
+        InnerHandle::journalPathOfDatabase(database),
+        InnerHandle::shmPathOfDatabase(database),
     };
 }
 
-void Database::setInMemory()
+void InnerDatabase::setInMemory()
 {
     WCTAssert(!m_initialized);
     m_isInMemory = true;
 }
 
 #pragma mark - Repair
-void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
+void InnerDatabase::filterBackup(const BackupFilter &tableShouldBeBackedup)
 {
     LockGuard memoryGuard(m_memory);
     m_factory.filter(tableShouldBeBackedup);
 }
 
-bool Database::backup(bool interruptible)
+bool InnerDatabase::backup(bool interruptible)
 {
     if (m_isInMemory) {
         return false;
@@ -683,7 +684,7 @@ bool Database::backup(bool interruptible)
     return succeed;
 }
 
-bool Database::deposit()
+bool InnerDatabase::deposit()
 {
     if (m_isInMemory) {
         return false;
@@ -743,7 +744,7 @@ bool Database::deposit()
     return result;
 }
 
-double Database::retrieve(const RetrieveProgressCallback &onProgressUpdated)
+double InnerDatabase::retrieve(const RetrieveProgressCallback &onProgressUpdated)
 {
     if (m_isInMemory) {
         return 0;
@@ -791,13 +792,13 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdated)
     return result;
 }
 
-bool Database::containsDeposited() const
+bool InnerDatabase::containsDeposited() const
 {
     SharedLockGuard concurrencyGuard(m_concurrency);
     return m_factory.containsDeposited();
 }
 
-bool Database::removeDeposited()
+bool InnerDatabase::removeDeposited()
 {
     bool result = false;
     close([&result, this]() {
@@ -809,7 +810,7 @@ bool Database::removeDeposited()
     return result;
 }
 
-bool Database::removeMaterials()
+bool InnerDatabase::removeMaterials()
 {
     bool result = false;
     close([&result, this]() {
@@ -823,7 +824,7 @@ bool Database::removeMaterials()
     return result;
 }
 
-void Database::checkIntegrity(bool interruptible)
+void InnerDatabase::checkIntegrity(bool interruptible)
 {
     InitializedGuard initializedGuard = initialize();
     if (!initializedGuard.valid()) {
@@ -855,7 +856,7 @@ void Database::checkIntegrity(bool interruptible)
 }
 
 #pragma mark - Migration
-std::optional<bool> Database::stepMigration(bool interruptible)
+std::optional<bool> InnerDatabase::stepMigration(bool interruptible)
 {
     InitializedGuard initializedGuard = initialize();
     if (!initializedGuard.valid()) {
@@ -897,7 +898,7 @@ std::optional<bool> Database::stepMigration(bool interruptible)
     return done;
 }
 
-void Database::didMigrate(const MigrationBaseInfo *info)
+void InnerDatabase::didMigrate(const MigrationBaseInfo *info)
 {
     SharedLockGuard lockGuard(m_memory);
     if (m_migratedCallback != nullptr) {
@@ -905,29 +906,29 @@ void Database::didMigrate(const MigrationBaseInfo *info)
     }
 }
 
-void Database::setNotificationWhenMigrated(const MigratedCallback &callback)
+void InnerDatabase::setNotificationWhenMigrated(const MigratedCallback &callback)
 {
     LockGuard lockGuard(m_memory);
     m_migratedCallback = callback;
 }
 
-void Database::filterMigration(const MigrationFilter &filter)
+void InnerDatabase::filterMigration(const MigrationFilter &filter)
 {
     close(std::bind(&Migration::filterTable, &m_migration, filter));
 }
 
-bool Database::isMigrated() const
+bool InnerDatabase::isMigrated() const
 {
     return m_migration.isMigrated();
 }
 
-std::set<StringView> Database::getPathsOfSourceDatabases() const
+std::set<StringView> InnerDatabase::getPathsOfSourceDatabases() const
 {
     return m_migration.getPathsOfSourceDatabases();
 }
 
 #pragma mark - Checkpoint
-bool Database::checkpoint(bool interruptible, CheckPointMode mode)
+bool InnerDatabase::checkpoint(bool interruptible, CheckPointMode mode)
 {
     InitializedGuard initializedGuard = initialize();
     if (!initializedGuard.valid()) {
@@ -968,7 +969,7 @@ bool Database::checkpoint(bool interruptible, CheckPointMode mode)
 
 #pragma mark - AutoMergeFTSIndex
 
-std::optional<bool> Database::mergeFTSIndex(TableArray newTables, TableArray modifiedTables)
+std::optional<bool> InnerDatabase::mergeFTSIndex(TableArray newTables, TableArray modifiedTables)
 {
     InitializedGuard initializedGuard = initialize();
     if (!initializedGuard.valid()) {

@@ -26,6 +26,7 @@
 #include <WCDB/CoreConst.h>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/HandlePool.hpp>
+#include <WCDB/InnerHandle.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/Serialization.hpp>
@@ -150,7 +151,7 @@ bool HandlePool::isAliving() const
     return aliving;
 }
 
-const std::set<std::shared_ptr<Handle>> &HandlePool::getHandlesOfSlot(HandleSlot slot)
+const std::set<std::shared_ptr<InnerHandle>> &HandlePool::getHandlesOfSlot(HandleSlot slot)
 {
     WCTAssert(m_concurrency.readSafety());
     WCTAssert(m_memory.readSafety());
@@ -179,7 +180,7 @@ RecyclableHandle HandlePool::flowOut(HandleType type)
     }
 
     SharedLockGuard concurrencyGuard(m_concurrency);
-    std::shared_ptr<Handle> handle;
+    std::shared_ptr<InnerHandle> handle;
     {
         LockGuard memoryGuard(m_memory);
         auto &freeSlot = m_frees[slot];
@@ -248,7 +249,7 @@ RecyclableHandle HandlePool::flowOut(HandleType type)
     handle, std::bind(&HandlePool::flowBack, this, type, std::placeholders::_1));
 }
 
-void HandlePool::flowBack(HandleType type, const std::shared_ptr<Handle> &handle)
+void HandlePool::flowBack(HandleType type, const std::shared_ptr<InnerHandle> &handle)
 {
     WCTAssert(handle != nullptr);
     WCTAssert(m_concurrency.readSafety());

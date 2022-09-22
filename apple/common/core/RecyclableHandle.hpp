@@ -24,28 +24,30 @@
 
 #pragma once
 
-#include <WCDB/Handle.hpp>
 #include <WCDB/Recyclable.hpp>
 
 namespace WCDB {
 
-class RecyclableHandle final : public Recyclable<std::shared_ptr<Handle>> {
+class InnerHandle;
+
+class RecyclableHandle final : public Recyclable<std::shared_ptr<InnerHandle>> {
 public:
-    using Super = Recyclable<std::shared_ptr<Handle>>;
+    using Super = Recyclable<std::shared_ptr<InnerHandle>>;
 
     RecyclableHandle();
     RecyclableHandle(const std::nullptr_t &);
-    RecyclableHandle(const std::shared_ptr<Handle> &value, const Super::OnRecycled &onRecycled);
+    RecyclableHandle(const std::shared_ptr<InnerHandle> &value,
+                     const Super::OnRecycled &onRecycled);
     ~RecyclableHandle() override final;
 
     RecyclableHandle &operator=(const std::nullptr_t &);
     RecyclableHandle &operator=(const RecyclableHandle &other);
 
-    constexpr Handle *operator->() const { return m_handle; }
-    Handle *get() const;
+    constexpr InnerHandle *operator->() const { return m_handle; }
+    InnerHandle *get() const;
 
 protected:
-    Handle *m_handle;
+    InnerHandle *m_handle;
 };
 
 } //namespace WCDB

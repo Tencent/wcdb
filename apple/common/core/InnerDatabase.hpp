@@ -37,14 +37,14 @@ namespace WCDB {
 
 // TODO: readonly manually - by removing basic config and adding query_only config?
 // TODO: support authorize
-class Database final : private HandlePool, public MigrationEvent, public MergeFTSIndexHandleProvider {
+class InnerDatabase final : private HandlePool, public MigrationEvent, public MergeFTSIndexHandleProvider {
 #pragma mark - Initializer
 public:
-    Database(const UnsafeStringView &path);
-    Database() = delete;
-    Database(const Database &) = delete;
-    Database &operator=(const Database &) = delete;
-    ~Database() override final;
+    InnerDatabase(const UnsafeStringView &path);
+    InnerDatabase() = delete;
+    InnerDatabase(const InnerDatabase &) = delete;
+    InnerDatabase &operator=(const InnerDatabase &) = delete;
+    ~InnerDatabase() override final;
 
 protected:
     // All public interfaces that are related with concurrency should make sure the initialization.
@@ -79,11 +79,11 @@ public:
     std::optional<bool> tableExists(const UnsafeStringView &table);
 
 protected:
-    std::shared_ptr<Handle> generateSlotedHandle(HandleType type) override final;
-    bool willReuseSlotedHandle(HandleType type, Handle *handle) override final;
+    std::shared_ptr<InnerHandle> generateSlotedHandle(HandleType type) override final;
+    bool willReuseSlotedHandle(HandleType type, InnerHandle *handle) override final;
 
 private:
-    bool setupHandle(HandleType type, Handle *handle);
+    bool setupHandle(HandleType type, InnerHandle *handle);
 
 #pragma mark - Config
 public:
@@ -103,11 +103,11 @@ private:
 
     class TransactionGuard final {
     public:
-        TransactionGuard(Database *database, const RecyclableHandle &handle);
+        TransactionGuard(InnerDatabase *database, const RecyclableHandle &handle);
         ~TransactionGuard();
 
     private:
-        Database *m_database;
+        InnerDatabase *m_database;
         RecyclableHandle m_handle;
         bool m_isInTransactionBefore;
     };
@@ -116,8 +116,8 @@ private:
 
 #pragma mark - Transaction
 public:
-    using TransactionCallback = Handle::TransactionCallback;
-    using TransactionCallbackForOneLoop = Handle::TransactionCallbackForOneLoop;
+    using TransactionCallback = InnerHandle::TransactionCallback;
+    using TransactionCallbackForOneLoop = InnerHandle::TransactionCallbackForOneLoop;
 
     bool isInTransaction();
 
@@ -166,7 +166,7 @@ public:
     typedef Migration::Filter MigrationFilter;
     void filterMigration(const MigrationFilter &filter);
 
-    typedef std::function<void(Database *, const MigrationBaseInfo *)> MigratedCallback;
+    typedef std::function<void(InnerDatabase *, const MigrationBaseInfo *)> MigratedCallback;
     void setNotificationWhenMigrated(const MigratedCallback &callback);
 
     std::optional<bool> stepMigration(bool interruptible);
@@ -192,7 +192,7 @@ public:
 
 private:
     bool m_isInMemory;
-    std::shared_ptr<Handle> m_sharedInMemoryHandle;
+    std::shared_ptr<InnerHandle> m_sharedInMemoryHandle;
 
 #pragma mark - Error
 public:

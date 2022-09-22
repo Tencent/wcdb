@@ -47,7 +47,7 @@ MergeFTSIndexLogic::MergeFTSIndexLogic(MergeFTSIndexHandleProvider *handleProvid
 {
 }
 
-bool MergeFTSIndexLogic::tryInit(Handle &handle)
+bool MergeFTSIndexLogic::tryInit(InnerHandle &handle)
 {
     if (m_hasInit) {
         return true;
@@ -78,7 +78,9 @@ bool MergeFTSIndexLogic::tryInit(Handle &handle)
     return true;
 }
 
-bool MergeFTSIndexLogic::tryConfigUserMerge(Handle &handle, const UnsafeStringView &table, bool isNew)
+bool MergeFTSIndexLogic::tryConfigUserMerge(InnerHandle &handle,
+                                            const UnsafeStringView &table,
+                                            bool isNew)
 {
     bool needConfig = isNew;
     if (!isNew) {
@@ -120,7 +122,7 @@ MergeFTSIndexLogic::triggerMerge(TableArray newTables, TableArray modifiedTables
                       "Merge Index can't be run in transaction.",
                       return std::nullopt;);
 
-    Handle *handle = recyclableHandle.get();
+    InnerHandle *handle = recyclableHandle.get();
     handle->markErrorAsIgnorable(Error::Code::Interrupt);
     handle->markAsCanBeSuspended(true);
     handle->markErrorAsIgnorable(Error::Code::Busy);
@@ -141,7 +143,7 @@ MergeFTSIndexLogic::triggerMerge(TableArray newTables, TableArray modifiedTables
 }
 
 std::optional<bool>
-MergeFTSIndexLogic::triggerMerge(Handle &handle, TableArray newTables, TableArray modifiedTables)
+MergeFTSIndexLogic::triggerMerge(InnerHandle &handle, TableArray newTables, TableArray modifiedTables)
 {
     LockGuard lockGuard(m_lock);
     if (m_errorCount.load() > 5) {
@@ -187,7 +189,7 @@ void MergeFTSIndexLogic::proccessMerge()
                       "Merge Index can't be run in transaction.",
                       return;);
 
-    Handle *handle = recyclableHandle.get();
+    InnerHandle *handle = recyclableHandle.get();
     handle->markErrorAsIgnorable(Error::Code::Interrupt);
     handle->markAsCanBeSuspended(true);
     handle->markErrorAsIgnorable(Error::Code::Busy);
@@ -217,7 +219,7 @@ void MergeFTSIndexLogic::proccessMerge()
     handle->setTableMonitorEnable(true);
 }
 
-bool MergeFTSIndexLogic::mergeTable(Handle &handle, const StringView &table)
+bool MergeFTSIndexLogic::mergeTable(InnerHandle &handle, const StringView &table)
 {
     int preChangeCount;
     Statement mergeSTM
@@ -249,7 +251,7 @@ bool MergeFTSIndexLogic::mergeTable(Handle &handle, const StringView &table)
     return true;
 }
 
-void MergeFTSIndexLogic::userMergeCallback(Handle *handle,
+void MergeFTSIndexLogic::userMergeCallback(InnerHandle *handle,
                                            int *remainPages,
                                            int totalPagesWriten,
                                            int *lastCheckPages)
@@ -264,7 +266,9 @@ void MergeFTSIndexLogic::userMergeCallback(Handle *handle,
     *remainPages = totalPagesWriten - 1;
 }
 
-bool MergeFTSIndexLogic::checkModifiedTables(Handle &handle, TableArray newTables, TableArray modifiedTables)
+bool MergeFTSIndexLogic::checkModifiedTables(InnerHandle &handle,
+                                             TableArray newTables,
+                                             TableArray modifiedTables)
 {
     if (newTables != nullptr && newTables->size() > 0) {
         StatementSelect select

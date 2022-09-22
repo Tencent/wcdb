@@ -35,7 +35,7 @@ public:
     CipherConfig(const UnsafeData &cipher, int pageSize);
     ~CipherConfig() override final;
 
-    bool invoke(Handle *handle) override final;
+    bool invoke(InnerHandle *handle) override final;
 
 protected:
     const Data m_key;

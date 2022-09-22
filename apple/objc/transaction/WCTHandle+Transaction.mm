@@ -32,14 +32,14 @@
 - (void)markErrorNotAllowedWithinTransaction
 {
     WCTHandleAssert(return;);
-    WCDB::Handle *handle = [self getOrGenerateHandle];
+    WCDB::InnerHandle *handle = [self getOrGenerateHandle];
     handle->markErrorNotAllowedWithinTransaction();
 }
 
 - (BOOL)isInTransaction
 {
     BOOL isInTransaction = NO;
-    WCDB::Handle *handle = [self getOrGenerateHandle];
+    WCDB::InnerHandle *handle = [self getOrGenerateHandle];
     if (handle != nullptr) {
         isInTransaction = handle->isInTransaction();
     }
@@ -49,7 +49,7 @@
 - (BOOL)beginTransaction
 {
     BOOL succeed = NO;
-    WCDB::Handle *handle = [self getOrGenerateHandle];
+    WCDB::InnerHandle *handle = [self getOrGenerateHandle];
     if (handle != nullptr) {
         succeed = handle->beginTransaction();
     }
@@ -58,14 +58,14 @@
 
 - (BOOL)commitOrRollbackTransaction
 {
-    WCDB::Handle *handle = [self getOrGenerateHandle];
+    WCDB::InnerHandle *handle = [self getOrGenerateHandle];
     WCTRemedialAssert(handle != nullptr && handle->isInTransaction(), "Commit or rollback transaction should be called only after beginTransaction called.", return NO;);
     return handle->commitOrRollbackTransaction();
 }
 
 - (void)rollbackTransaction
 {
-    WCDB::Handle *handle = [self getOrGenerateHandle];
+    WCDB::InnerHandle *handle = [self getOrGenerateHandle];
     WCTRemedialAssert(handle != nullptr && handle->isInTransaction(), "Rollback transaction should be called only after beginTransaction called.", return;);
     handle->rollbackTransaction();
 }
@@ -74,9 +74,9 @@
 {
     WCTRemedialAssert(inTransaction, "Transaction block can't be null.", return NO;);
     BOOL succeed = NO;
-    WCDB::Handle *handle = [self getOrGenerateHandle];
+    WCDB::InnerHandle *handle = [self getOrGenerateHandle];
     if (handle != nullptr) {
-        succeed = handle->runTransaction([&inTransaction, self](WCDB::Handle *) -> bool {
+        succeed = handle->runTransaction([&inTransaction, self](WCDB::InnerHandle *) -> bool {
             @autoreleasepool {
                 return inTransaction(self);
             }
@@ -88,12 +88,12 @@
 - (BOOL)runPauseableTransactionWithOneLoop:(WCDB_NO_ESCAPE WCTTransactionBlockForOneLoop)inTransaction
 {
     WCTRemedialAssert(inTransaction, "Transaction block can't be null.", return NO;);
-    WCDB::Handle *handle = [self getOrGenerateHandle];
+    WCDB::InnerHandle *handle = [self getOrGenerateHandle];
     if (handle == nullptr) {
         return NO;
     }
     BOOL ocStop = NO;
-    bool ret = handle->runPauseableTransactionWithOneLoop([&inTransaction, self, ocStop](WCDB::Handle *, bool &stop, bool isNewTransaction) mutable -> bool {
+    bool ret = handle->runPauseableTransactionWithOneLoop([&inTransaction, self, ocStop](WCDB::InnerHandle *, bool &stop, bool isNewTransaction) mutable -> bool {
         @autoreleasepool {
             BOOL result = inTransaction(self, &ocStop, isNewTransaction);
             stop = ocStop;
@@ -106,7 +106,7 @@
 - (BOOL)beginNestedTransaction
 {
     BOOL succeed = NO;
-    WCDB::Handle *handle = [self getOrGenerateHandle];
+    WCDB::InnerHandle *handle = [self getOrGenerateHandle];
     if (handle != nullptr) {
         succeed = handle->beginNestedTransaction();
     }
@@ -115,14 +115,14 @@
 
 - (BOOL)commitOrRollbackNestedTransaction
 {
-    WCDB::Handle *handle = [self getOrGenerateHandle];
+    WCDB::InnerHandle *handle = [self getOrGenerateHandle];
     WCTRemedialAssert(handle != nullptr && handle->isInTransaction(), "Commit or rollback transaction should be called only after beginTransaction called.", return NO;);
     return handle->commitOrRollbackNestedTransaction();
 }
 
 - (void)rollbackNestedTransaction
 {
-    WCDB::Handle *handle = [self getOrGenerateHandle];
+    WCDB::InnerHandle *handle = [self getOrGenerateHandle];
     WCTRemedialAssert(handle != nullptr && handle->isInTransaction(), "Rollback transaction should be called only after beginTransaction called.", return;);
     return handle->rollbackNestedTransaction();
 }
@@ -131,9 +131,9 @@
 {
     WCTRemedialAssert(inTransaction, "Transaction block can't be null.", return NO;);
     BOOL succeed = NO;
-    WCDB::Handle *handle = [self getOrGenerateHandle];
+    WCDB::InnerHandle *handle = [self getOrGenerateHandle];
     if (handle != nullptr) {
-        succeed = handle->runNestedTransaction([&inTransaction, self](WCDB::Handle *) -> bool {
+        succeed = handle->runNestedTransaction([&inTransaction, self](WCDB::InnerHandle *) -> bool {
             @autoreleasepool {
                 return inTransaction(self);
             }

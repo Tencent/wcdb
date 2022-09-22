@@ -27,7 +27,7 @@
 #include <WCDB/ColumnMeta.hpp>
 #include <WCDB/ErrorProne.hpp>
 #include <WCDB/HandleNotification.hpp>
-#include <WCDB/HandleStatement.hpp>
+#include <WCDB/InnerHandleStatement.hpp>
 #include <WCDB/StringView.hpp>
 #include <WCDB/WINQ.h>
 #include <set>
@@ -87,13 +87,13 @@ protected:
 
 #pragma mark - Statement
 public:
-    virtual HandleStatement *getStatement();
-    virtual void returnStatement(HandleStatement *handleStatement);
+    virtual InnerHandleStatement *getStatement();
+    virtual void returnStatement(InnerHandleStatement *handleStatement);
     virtual void resetAllStatements();
     virtual void finalizeStatements();
 
 private:
-    std::list<HandleStatement> m_handleStatements;
+    std::list<InnerHandleStatement> m_handleStatements;
 
 #pragma mark - Meta
 public:

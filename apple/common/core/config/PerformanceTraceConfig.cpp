@@ -41,13 +41,13 @@ void PerformanceTracer::setNotification(const Notification &notification)
     m_notification = notification;
 }
 
-bool PerformanceTracer::invoke(Handle *handle)
+bool PerformanceTracer::invoke(InnerHandle *handle)
 {
     handle->setNotificationWhenPerformanceTraced(m_identifier, m_notification);
     return true;
 }
 
-bool PerformanceTracer::uninvoke(Handle *handle)
+bool PerformanceTracer::uninvoke(InnerHandle *handle)
 {
     handle->setNotificationWhenPerformanceTraced(m_identifier, nullptr);
     return true;
@@ -61,12 +61,12 @@ PerformanceTraceConfig::PerformanceTraceConfig(const Notification &notification)
 
 PerformanceTraceConfig::~PerformanceTraceConfig() = default;
 
-bool PerformanceTraceConfig::invoke(Handle *handle)
+bool PerformanceTraceConfig::invoke(InnerHandle *handle)
 {
     return PerformanceTracer::invoke(handle);
 }
 
-bool PerformanceTraceConfig::uninvoke(Handle *handle)
+bool PerformanceTraceConfig::uninvoke(InnerHandle *handle)
 {
     return PerformanceTracer::uninvoke(handle);
 }
@@ -82,13 +82,13 @@ void ShareablePerformanceTraceConfig::setNotification(const Notification &notifi
     PerformanceTracer::setNotification(notification);
 }
 
-bool ShareablePerformanceTraceConfig::invoke(Handle *handle)
+bool ShareablePerformanceTraceConfig::invoke(InnerHandle *handle)
 {
     SharedLockGuard lockGuard(m_lock);
     return PerformanceTracer::invoke(handle);
 }
 
-bool ShareablePerformanceTraceConfig::uninvoke(Handle *handle)
+bool ShareablePerformanceTraceConfig::uninvoke(InnerHandle *handle)
 {
     SharedLockGuard lockGuard(m_lock);
     return PerformanceTracer::uninvoke(handle);

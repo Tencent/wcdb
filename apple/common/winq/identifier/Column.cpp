@@ -52,6 +52,16 @@ Column Column::rowid()
     return Column("rowid");
 }
 
+OrderingTerm Column::asAscendingOrder()
+{
+    return OrderingTerm(*this).order(Order::ASC);
+}
+
+OrderingTerm Column::asDescendingOrder()
+{
+    return OrderingTerm(*this).order(Order::DESC);
+}
+
 Expression Column::asExpressionOperand() const
 {
     return Expression(*this);

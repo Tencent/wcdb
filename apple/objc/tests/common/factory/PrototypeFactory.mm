@@ -23,9 +23,7 @@
  */
 
 #import "PrototypeFactory.h"
-#import "NSObject+TestCase.h"
-#import "TestCaseAssertion.h"
-#import "TestCaseLog.h"
+#import "TestCase.h"
 
 @interface PrototypeFactory ()
 @end

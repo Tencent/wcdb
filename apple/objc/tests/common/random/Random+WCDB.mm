@@ -26,12 +26,12 @@
 
 @implementation Random (WCDB)
 
-- (WCTTag)tag
+- (long)tag
 {
-    WCTTag tag;
+    long tag;
     do {
         tag = self.int32;
-    } while (tag == WCTInvalidTag);
+    } while (tag == 0);
     return tag;
 }
 

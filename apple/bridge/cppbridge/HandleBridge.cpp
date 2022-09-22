@@ -23,34 +23,35 @@
  */
 
 #include <WCDB/HandleBridge.h>
+#include <WCDB/InnerHandle.hpp>
 #include <WCDB/ObjectBridge.hpp>
 #include <WCDB/RecyclableHandle.hpp>
 
 CPPError WCDBHandleGetError(CPPHandle handle)
 {
-    WCDBGetObjectOrReturnValue(handle, WCDB::Handle, cppHandle, CPPError());
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, CPPError());
     const WCDB::Error& error = cppHandle->getError();
     return WCDBCreateUnmanageCPPObject(CPPError, &error);
 }
 
 bool WCDBHandleCheckValid(CPPHandle handle)
 {
-    WCDBGetObjectOrReturnValue(handle, WCDB::Handle, cppHandle, false);
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
     WCDB_UNUSED(cppHandle);
     return true;
 }
 
 CPPHandleStatement WCDBHandlePrepare(CPPHandle handle, CPPStatement statement)
 {
-    WCDBGetObjectOrReturnValue(handle, WCDB::Handle, cppHandle, CPPHandleStatement());
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, CPPHandleStatement());
     WCDBGetObjectOrReturnValue(
     statement, WCDB::Statement, cppStatement, CPPHandleStatement());
-    WCDB::HandleStatement* handleStatement = cppHandle->getStatement();
+    WCDB::InnerHandleStatement* handleStatement = cppHandle->getStatement();
     handleStatement->prepare(*cppStatement);
 
-    WCDB::Recyclable<WCDB::HandleStatement*>* recycleHandleStatement
-    = new WCDB::Recyclable<WCDB::HandleStatement*>(
-    handleStatement, [cppHandle](WCDB::HandleStatement* handleStatement) {
+    WCDB::Recyclable<WCDB::InnerHandleStatement*>* recycleHandleStatement
+    = new WCDB::Recyclable<WCDB::InnerHandleStatement*>(
+    handleStatement, [cppHandle](WCDB::InnerHandleStatement* handleStatement) {
         cppHandle->returnStatement(handleStatement);
     });
     return WCDBCreateRecylableCPPObject(CPPHandleStatement, recycleHandleStatement);
@@ -58,37 +59,37 @@ CPPHandleStatement WCDBHandlePrepare(CPPHandle handle, CPPStatement statement)
 
 bool WCDBHandleExcute(CPPHandle handle, CPPStatement statement)
 {
-    WCDBGetObjectOrReturnValue(handle, WCDB::Handle, cppHandle, false);
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
     WCDBGetObjectOrReturnValue(statement, WCDB::Statement, cppStatement, false);
     return cppHandle->execute(*cppStatement);
 }
 
 int WCDBHandleGetChange(CPPHandle handle)
 {
-    WCDBGetObjectOrReturnValue(handle, WCDB::Handle, cppHandle, 0);
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, 0);
     return cppHandle->getChanges();
 }
 
 int WCDBHandleGetTotalChange(CPPHandle handle)
 {
-    WCDBGetObjectOrReturnValue(handle, WCDB::Handle, cppHandle, 0);
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, 0);
     return cppHandle->getTotalChange();
 }
 
 signed long long WCDBHandleGetLastInsertedRowID(CPPHandle handle)
 {
-    WCDBGetObjectOrReturnValue(handle, WCDB::Handle, cppHandle, 0);
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, 0);
     return cppHandle->getLastInsertedRowID();
 }
 
 bool WCDBHandleIsReadOnly(CPPHandle handle)
 {
-    WCDBGetObjectOrReturnValue(handle, WCDB::Handle, cppHandle, true);
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, true);
     return cppHandle->isReadonly();
 }
 
 bool WCDBHandleIsInTransaction(CPPHandle handle)
 {
-    WCDBGetObjectOrReturnValue(handle, WCDB::Handle, cppHandle, false);
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
     return cppHandle->isInTransaction();
 }

@@ -132,7 +132,11 @@ bool FactoryRetriever::work()
     //6. Remove all deposited dbs if error is ignorable.
     if (getErrorSeverity() <= UpgradeableErrorProne::Severity::Normal) {
         const StringView tempDir = FileManager::getTemporaryDirectory();
-        FileManager::moveItems({ factory.directory }, tempDir);
+        if (tempDir.length() > 0) {
+            FileManager::moveItems({ factory.directory }, tempDir);
+        } else {
+            FileManager::removeItem(factory.directory);
+        }
     }
 
     return exit(true);

@@ -25,12 +25,12 @@
 #pragma once
 
 #include <WCDB/CoreConst.h>
-#include <WCDB/Handle.hpp>
+#include <WCDB/InnerHandle.hpp>
 #include <WCDB/RepairKit.h>
 
 namespace WCDB {
 
-class OperationHandle final : public Handle,
+class OperationHandle final : public InnerHandle,
                               public Repair::BackupSharedDelegate,
                               public Repair::BackupExclusiveDelegate {
 public:

@@ -40,8 +40,8 @@
 #include <WCDB/SQLTraceConfig.hpp>
 #include <WCDB/TokenizerConfig.hpp>
 
-#include <WCDB/Database.hpp>
 #include <WCDB/DatabasePool.hpp>
+#include <WCDB/InnerDatabase.hpp>
 #include <WCDB/RecyclableHandle.hpp>
 
 #include <WCDB/TokenizerModule.hpp>

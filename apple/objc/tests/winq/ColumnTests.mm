@@ -82,6 +82,12 @@
     TestCaseAssertSQLEqual(WCDB::Column::rowid(), @"rowid");
 }
 
+- (void)test_rowid_order
+{
+    TestCaseAssertSQLEqual(WCDB::Column::rowid().asAscendingOrder(), @"rowid ASC");
+    TestCaseAssertSQLEqual(WCDB::Column::rowid().asDescendingOrder(), @"rowid DESC");
+}
+
 - (void)test_column_convertible
 {
     WCDB::Column sql(@"testColumn");
