@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by qiuwenchen on 2022/8/10.
 //
 
 /*
@@ -27,7 +27,7 @@
 #error `CLANG_CXX_LANGUAGE_STANDARD = gnu++17` and `CLANG_CXX_LIBRARY = libc++` build settings are required.
 #endif
 #else // __cplusplus
-#error Objective-C++ environment is required. (By changing suffix of those files including <WCDB/WCDB.h> from `.m` to `.mm`.
+#error C++ environment is required.
 #endif // __cplusplus
 
 // WCDB may fail to compile since there are few frameworks that define `offset` as a macro.
@@ -35,10 +35,7 @@
 #error Symbol `offset` should not be defined as a macro since it's a common used word.
 #endif
 
-#import <WCDB/Interface.h>
-#import <WCDB/WCTBuiltin.h>
-#import <WCDB/WINQ.h>
-
-#import <WCDB/CPPORM.h>
-#import <WCDB/CPPORMMacro.h>
-#import <WCDB/CppInterface.h>
+#include <WCDB/CPPORM.h>
+#include <WCDB/CPPORMMacro.h>
+#include <WCDB/CppInterface.h>
+#include <WCDB/WINQ.h>

@@ -1,5 +1,5 @@
 //
-// Created by 陈秋文 on 2022/9/7.
+// Created by sanhuazhang on 2019/05/02
 //
 
 /*
@@ -22,9 +22,20 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCDB-CPP.h>
+#ifdef __cplusplus
+#if __cplusplus < 201703L
+#error `CLANG_CXX_LANGUAGE_STANDARD = gnu++17` and `CLANG_CXX_LIBRARY = libc++` build settings are required.
+#endif
+#else // __cplusplus
+#error Objective-C++ environment is required. (By changing suffix of those files including <WCDB/WCDB.h> from `.m` to `.mm`.
+#endif // __cplusplus
 
-class CPPColumnConstraintAutoIncrementAsc {
-    int value;
-    WCDB_CPP_ORM_DECLARATION(CPPColumnConstraintAutoIncrementAsc)
-};
+// WCDB may fail to compile since there are few frameworks that define `offset` as a macro.
+#ifdef offset
+#error Symbol `offset` should not be defined as a macro since it's a common used word.
+#endif
+
+#import <WCDB/Interface.h>
+#import <WCDB/WCTBuiltin.h>
+#import <WCDB/WINQ.h>
+
