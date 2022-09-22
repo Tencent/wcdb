@@ -282,10 +282,6 @@ std::shared_ptr<InnerHandle> InnerDatabase::generateSlotedHandle(HandleType type
         handle = std::make_shared<ConfiguredHandle>();
         break;
     }
-    auto abTest = Core::shared().getABTestConfig("clicfg_wcdb_checkpoint_can_write_main_db");
-    if (!abTest.has_value() || !abTest.value().caseInsensiveEqual("1")) {
-        handle->enableWriteMainDB(true);
-    }
 
     if (handle == nullptr) {
         setThreadedError(Error(Error::Code::NoMemory, Error::Level::Error));
