@@ -22,12 +22,12 @@ import Foundation
 
 /// Chain call for row-selecting
 public final class RowSelect: Selectable {
-    init(with core: Core,
+    init(with database: Database,
          results columnResultConvertibleList: [ResultColumnConvertible],
          tables: [String],
          isDistinct: Bool) {
         let statement = StatementSelect().select(distinct: isDistinct, columnResultConvertibleList).from(tables)
-        super.init(with: core, statement: statement)
+        super.init(with: database, statement: statement)
     }
 
     private func extract(atIndex index: Int) throws -> Value {

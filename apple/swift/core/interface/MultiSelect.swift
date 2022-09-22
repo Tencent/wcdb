@@ -27,13 +27,13 @@ public final class MultiSelect: Selectable {
         self.properties.asCodingTableKeys()
     }()
 
-    init(with core: Core,
+    init(with database: Database,
          on propertyConvertibleList: [PropertyConvertible],
          tables: [String],
          isDistinct: Bool = false) {
         properties = propertyConvertibleList
         let statement = StatementSelect().select(distinct: isDistinct, propertyConvertibleList).from(tables)
-        super.init(with: core, statement: statement)
+        super.init(with: database, statement: statement)
     }
 
     private typealias Generator = () throws -> TableDecodableBase

@@ -35,6 +35,10 @@ public final class HandleStatement {
         finalize()
     }
 
+    /// The wrapper of `sqlite3_step`
+    ///
+    /// - Returns: True means you can continue stepping while false means the stepping has been completed.
+    /// - Throws: `Error`
     @discardableResult
     public func step() throws -> Bool {
         if !WCDBHandleStatementStep(stmt) {
@@ -43,20 +47,111 @@ public final class HandleStatement {
         return !WCDBHandleStatementIsDone(stmt)
     }
 
+    /// The wrapper of `sqlite3_reset`
+    ///
+    /// - Throws: `Error`
     public func reset() {
         WCDBHandleStatementReset(stmt)
     }
 
+    /// The wrapper of `sqlite3_finalize`
+    ///
+    /// - Throws: `Error`
     public func finalize() {
         WCDBHandleStatementFinalize(stmt)
     }
 
+    /// The number of changed rows in the most recent call.
+    /// It should be called after executing successfully
     public var changes: Int {
         return Int(handle.changes)
     }
 
+    /// The wrapper of `sqlite3_stmt_readonly`
+    ///
+    /// - Throws: `Error`
     public var isReadOnly: Bool {
         return WCDBHandleStatementIsReadOnly(stmt)
+    }
+
+    /// The wrapper of `sqlite3_bind_*` for binding property of object to index.
+    ///
+    /// - Parameters:
+    ///   - propertyConvertible: `Property` or `CodingTableKey`
+    ///   - object: Table encodable object
+    ///   - index: Begin with 1
+    /// - Throws: `Error`
+    public func bind<TableEncodableType: TableEncodable>(
+        _ propertyConvertible: PropertyConvertible,
+        of object: TableEncodableType,
+        toIndex index: Int = 1) throws {
+        try bind([(propertyConvertible, toIndex: index)], of: object)
+    }
+    public func bind<TableEncodableType: WCTTableCoding>(
+        _ propertyConvertible: PropertyConvertible,
+        of object: TableEncodableType,
+        toIndex index: Int = 1) throws {
+        try bind([(propertyConvertible, toIndex: index)], of: object)
+    }
+
+    /// The wrapper of `sqlite3_bind_*` for binding properties of object to indexes.
+    ///
+    /// - Parameters:
+    ///   - indexedPropertyConvertibleList: Indexed `Property` or `CodingTableKey` list
+    ///   - object: Table encodable object
+    /// - Throws: Begin with 1
+    public func bind<TableEncodableType: TableEncodable>(
+        _ indexedPropertyConvertibleList: [(_: PropertyConvertible, toIndex: Int)],
+        of object: TableEncodableType) throws {
+        var hashedKeys: TableEncoder.HashedKey = [:]
+        for args in indexedPropertyConvertibleList {
+            hashedKeys[args.0.codingTableKey!.stringValue.hashValue] = args.toIndex
+        }
+        let encoder = TableEncoder(hashedKeys, on: self)
+        try object.encode(to: encoder)
+    }
+    public func bind<TableEncodableType: WCTTableCoding>(
+        _ indexedPropertyConvertibleList: [(_: PropertyConvertible, toIndex: Int)],
+        of object: TableEncodableType) throws {
+        for args in indexedPropertyConvertibleList {
+            assert(args.0.wctProperty != nil, "WCTProperty should not be failed. If you think it's a bug, please report an issue to us.")
+            WCTAPIBridge.bindProperty(args.0.wctProperty!, ofObject: object, to: Int32(truncatingIfNeeded: args.toIndex), with: stmt)
+        }
+    }
+
+    /// The wrapper of `sqlite3_bind_*` for binding properties of object.
+    ///
+    /// - Parameters:
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - object: Table encodable object
+    /// - Throws: Begin with 1
+    public func bind<TableEncodableType: TableEncodable>(
+        _ propertyConvertibleList: [PropertyConvertible],
+        of object: TableEncodableType) throws {
+        var hashedKeys: TableEncoder.HashedKey = [:]
+        for (index, propertyConvertible) in propertyConvertibleList.enumerated() {
+            hashedKeys[propertyConvertible.codingTableKey!.stringValue.hashValue] = index + 1
+        }
+        let encoder = TableEncoder(hashedKeys, on: self)
+        try object.encode(to: encoder)
+    }
+    public func bind<TableEncodableType: WCTTableCoding>(
+        _ propertyConvertibleList: [PropertyConvertible],
+        of object: TableEncodableType) throws {
+        WCTAPIBridge.bindProperties(propertyConvertibleList.asWCTBridgeProperties(), ofObject: object, with: stmt)
+    }
+
+    /// The wrapper of `sqlite3_bind_*` for binding column encodable object.
+    ///
+    /// - Parameters:
+    ///   - value: Column encodable object
+    ///   - index: Begin with 1
+    public func bind(_ value: ColumnEncodable?, toIndex index: Int) {
+        guard let bindingValue = value?.archivedValue() else {
+            bindNull(toIndex: index)
+            return
+        }
+        bind(bindingValue, toIndex: index)
     }
 
     public func bind(_ value: Value, toIndex index: Int) {
@@ -72,7 +167,7 @@ public final class HandleStatement {
         case .BLOB:
             bind(value.dataValue, toIndex: index)
         case .null:
-            bind(nil, toIndex: index)
+            bindNull(toIndex: index)
         }
     }
 
@@ -98,7 +193,7 @@ public final class HandleStatement {
         }
     }
 
-    public func bind(_ _: Void?, toIndex index: Int) {
+    internal func bindNull(toIndex index: Int) {
         WCDBHandleStatementBindNull(stmt, Int32(index))
     }
 
@@ -117,6 +212,83 @@ public final class HandleStatement {
         case .null:
             return Value(nil)
         }
+    }
+
+    /// The wrapper of `sqlite3_column_*` for getting column decodable value.
+    ///
+    /// - Parameters:
+    ///   - index: Begin with 0
+    ///   - type: Type of column codable object
+    /// - Returns: Same as type
+    public func value(atIndex index: Int, of type: ColumnDecodable.Type) -> ColumnDecodable? {
+        guard columnType(atIndex: index) != .null else {
+            return nil
+        }
+        return type.init(with: columnValue(atIndex: index))
+    }
+
+    /// The wrapper of `sqlite3_column_*` for getting column decodable value.
+    ///
+    /// - Parameters:
+    ///   - index: Begin with 0
+    ///   - type: Type of column codable object
+    /// - Returns: Same as type
+    public func value<ColumnDecodableType: ColumnDecodable>(
+        atIndex index: Int,
+        of type: ColumnDecodableType.Type = ColumnDecodableType.self) -> ColumnDecodableType? {
+        guard columnType(atIndex: index) != .null else {
+            return nil
+        }
+        return type.init(with: columnValue(atIndex: index))
+    }
+
+    /// The wrapper of `sqlite3_column_*` for getting fundamentable value.
+    ///
+    /// - Parameter index: Begin with 0
+    /// - Returns: `Int32`, `Int64`, `Double`, `String`, `Data` or `nil` value.
+    public func value(atIndex index: Int) -> Value {
+        switch columnType(atIndex: index) {
+        case .integer32:
+            return Value(columnValue(atIndex: index, of: Int32.self))
+        case .integer64:
+            return Value(columnValue(atIndex: index, of: Int64.self))
+        case .float:
+            return Value(columnValue(atIndex: index, of: Double.self))
+        case .text:
+            return Value(columnValue(atIndex: index, of: String.self))
+        case .BLOB:
+            return Value(columnValue(atIndex: index, of: Data.self))
+        case .null:
+            return Value(nil)
+        }
+    }
+
+    /// The wrapper of `sqlite3_column_*` for getting column decodable value.
+    ///
+    /// - Parameters:
+    ///   - name: Name of the column
+    ///   - type: Type of column codable object
+    /// - Returns: Same as type. Nil will be returned if no such a column.
+    public func value<ColumnDecodableType: ColumnDecodable>(
+        byName name: String,
+        of type: ColumnDecodableType.Type = ColumnDecodableType.self) -> ColumnDecodableType? {
+        guard let index = index(byName: name) else {
+            return nil
+        }
+        return value(atIndex: index)
+    }
+
+    /// Get index by column name.
+    ///
+    /// - Parameter name: Name of the column
+    /// - Returns: Index of given column name. Nil will be returned if no such a column.
+    public func index(byName name: String) -> Int? {
+        for index in 0..<columnCount() {
+            if columnName(atIndex: index)==name {
+                return index
+            }
+        }
+        return nil
     }
 
     public func columnValue(atIndex index: Int, of type: Int32.Type = Int32.self) -> Int32 {
@@ -146,15 +318,33 @@ public final class HandleStatement {
         return Data(bytes: bytes, count: count)
     }
 
+    /// The wrapper of `sqlite3_column_count`.
+    ///
+    /// - Returns: Count of column result
     public func columnCount() -> Int {
         return Int(WCDBHandleStatementGetColumnCount(stmt))
     }
 
+    /// The wrapper of `sqlite3_column_type`
+    ///
+    /// - Parameter name: Name of the column
+    /// - Returns: Column type. For a non-exists column, `.null` will be returned.
     public func columnName(atIndex index: Int) -> String {
         guard let cString = WCDBHandleStatementGetColumnName(stmt, Int32(index)) else {
             return ""
         }
         return String(cString: cString)
+    }
+
+    /// The wrapper of `sqlite3_column_type`
+    ///
+    /// - Parameter name: Name of the column
+    /// - Returns: Column type. For a non-exists column, `.null` will be returned.
+    public func columnType(byName name: String) -> ColumnType {
+        guard let index = index(byName: name) else {
+            return .null
+        }
+        return columnType(atIndex: index)
     }
 
     public func originalColumnName(atIndex index: Int) -> String {
@@ -164,6 +354,10 @@ public final class HandleStatement {
         return String(cString: cString)
     }
 
+    /// The wrapper of `sqlite3_column_table_name`.
+    ///
+    /// - Parameter index: Begin with 0
+    /// - Returns: The related table of column at index
     public func columnTableName(atIndex index: Int) -> String {
         guard let cString = WCDBHandleStatementGetColumnTableName(stmt, Int32(index)) else {
             return ""
@@ -171,6 +365,10 @@ public final class HandleStatement {
         return String(cString: cString)
     }
 
+    /// The wrapper of `sqlite3_column_type`
+    ///
+    /// - Parameter index: Begin with 0
+    /// - Returns: Type of the column
     public func columnType(atIndex index: Int) -> ColumnType {
         switch WCDBHandleStatementGetColumnType(stmt, Int32(index)) {
         case WCDBColumnValueTypeInterger:
@@ -186,6 +384,7 @@ public final class HandleStatement {
         }
     }
 
+    /// The row id of most recent insertion.
     public var lastInsertedRowID: Int64 {
         return handle.lasInsertedRowID
     }

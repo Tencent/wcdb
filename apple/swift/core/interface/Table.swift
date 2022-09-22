@@ -57,11 +57,11 @@ internal extension Table {
     }
 
     func internalUpdate(on propertyConvertibleList: [PropertyConvertible],
-                       with object: Object,
-                       where condition: Condition? = nil,
-                       orderBy orderList: [OrderBy]? = nil,
-                       limit: Limit? = nil,
-                       offset: Offset? = nil) throws where Object: TableEncodable {
+                        with object: Object,
+                        where condition: Condition? = nil,
+                        orderBy orderList: [OrderBy]? = nil,
+                        limit: Limit? = nil,
+                        offset: Offset? = nil) throws where Object: TableEncodable {
         let update = Update(with: self.database, on: propertyConvertibleList, andTable: self.name)
         if condition != nil {
             update.where(condition!)
@@ -79,11 +79,11 @@ internal extension Table {
         return try update.execute(with: object)
     }
     func internalUpdate(on propertyConvertibleList: [PropertyConvertible],
-                       with object: Object,
-                       where condition: Condition? = nil,
-                       orderBy orderList: [OrderBy]? = nil,
-                       limit: Limit? = nil,
-                       offset: Offset? = nil) throws where Object: WCTTableCoding {
+                        with object: Object,
+                        where condition: Condition? = nil,
+                        orderBy orderList: [OrderBy]? = nil,
+                        limit: Limit? = nil,
+                        offset: Offset? = nil) throws where Object: WCTTableCoding {
         let update = Update(with: self.database, on: propertyConvertibleList, andTable: self.name)
         if condition != nil {
             update.where(condition!)
@@ -151,7 +151,7 @@ internal extension Table {
     }
 }
 
-extension Table: CoreRepresentable {
+extension Table: DatabaseRepresentable {
     public typealias Object = Root
 
     /// The tag of the related database. 

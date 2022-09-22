@@ -21,7 +21,11 @@
 import Foundation
 
 /// Thread-safe Database object
-public final class Database: Core {
+public class Database {
+    internal final let recyclableDatabase: RecyclableCPPDatabase
+    internal final var database: CPPDatabase {
+        return recyclableDatabase.raw
+    }
 
     /// Init a database from path.  
     /// Note that all database objects with same path share the same core.
@@ -50,6 +54,13 @@ public final class Database: Core {
         self.init(with: database)
     }
 
+    internal init(with cppDatabase: CPPDatabase) {
+        DispatchQueue.once(name: "com.Tencent.WCDB.swift.purge", {
+            ObjectBridge.initializeCPPAPI()
+        })
+        self.recyclableDatabase = ObjectBridge.createRecyclableCPPObject(cppDatabase)
+    }
+
     /// The tag of the database. Default to nil.  
     /// You should set it on a database and can get it from all kind of Core objects, 
     /// including `Database`, `Table`, `Transaction`, `Select`, `RowSelect`, `MultiSelect`, `Insert`, `Delete`, 
@@ -61,7 +72,7 @@ public final class Database: Core {
     ///     database1.tag = 1
     ///     print("Tag: \(database2.tag!)") // print 1
     ///
-    public override var tag: Tag? {
+    public var tag: Tag? {
         get {
             let tag = WCDBDatabaseGetTag(database)
             if tag != 0 {
@@ -76,6 +87,14 @@ public final class Database: Core {
                 WCDBDatabaseSetTag(database, 0)
             }
         }
+    }
+
+    /// The path of the related database.
+    public final var path: String {
+        if let path = WCDBDatabaseGetPath(database) {
+            return String(cString: path)
+        }
+        return ""
     }
 
     /// Since WCDB is using lazy initialization, 
@@ -114,7 +133,7 @@ public final class Database: Core {
     /// Since this method will wait until all sqlite handles return, it may lead to deadlock in some bad practice. 
     ///     The key to avoid deadlock is to make sure all WCDB objects in current thread is dealloced. In detail:  
     ///     1. You should not keep WCDB objects, including `Insert`, `Delete`, `Update`, `Select`, `RowSelect`, 
-    ///        `MultiSelect`, `CoreStatement`. These objects should not be kept.
+    ///        `MultiSelect`, `Handle`, `HandleStatement`. These objects should not be kept.
     ///        You should get them, use them, then release them right away.  
     ///     2. WCDB objects may not be out of its' scope.  
     ///     The best practice is to call `close:` in sub-thread and display a loading animation in main thread.  
@@ -178,9 +197,24 @@ public final class Database: Core {
         WCDBCorePurgeAllDatabase()
     }
 
-    override func prepare(_ statement: Statement) throws -> HandleStatement {
+    public func getError() -> Error {
+        let cppError = WCDBDatabaseGetError(database)
+        return ErrorBridge.getErrorFrom(cppError: cppError)
+    }
+
+    public func getHandle() throws -> Handle {
+        let cppHandle = WCDBDatabaseGetHandle(database)
+        let handle = Handle(withCPPHandle: cppHandle)
+        if !WCDBHandleCheckValid(cppHandle) {
+            throw getError()
+        }
+        return handle
+    }
+
+    public func prepare(_ statement: Statement) throws -> HandleStatement {
         let handle = try getHandle()
-        return try prepare(statement, in: handle)
+        let handleStatement = try handle.prepare(statement)
+        return handleStatement
     }
 
     /// Exec a specific sql.  
@@ -188,35 +222,32 @@ public final class Database: Core {
     ///
     /// - Parameter statement: WINQ statement
     /// - Throws: `Error`
-    public override func exec(_ statement: Statement) throws {
-        try exec(statement, in: getHandle())
+    public func exec(_ statement: Statement) throws {
+        return try getHandle().exec(statement)
     }
 
     /// Separate interface of `run(transaction:)`  
-    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.  
-    /// To do a cross-thread transaction, use `getTransaction`.
+    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.
     /// - Throws: `Error`
-    public override func begin() throws {
+    public func begin() throws {
         if !WCDBDatabaseBeginTransaction(database) {
             throw getError()
         }
     }
 
     /// Separate interface of `run(transaction:)`  
-    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread. 
-    /// To do a cross-thread transaction, use `getTransaction`.
+    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.
     /// - Throws: `Error`
-    public override func commit() throws {
+    public func commit() throws {
         if !WCDBDatabaseCommitTransaction(database) {
             throw getError()
         }
     }
 
     /// Separate interface of run(transaction:)
-    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.  
-    /// To do a cross-thread transaction, use `getTransaction`.
+    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.
     /// - Throws: `Error`
-    public override func rollback() {
+    public func rollback() {
         WCDBDatabaseRollbackTransaction(database)
     }
 
@@ -230,11 +261,47 @@ public final class Database: Core {
     ///
     /// - Parameter embeddedTransaction: Operation inside transaction
     /// - Throws: `Error`
-    public override func run(embeddedTransaction: TransactionClosure) throws {
+    public typealias TransactionClosure = () throws -> Void
+    public func run(transaction: TransactionClosure) throws {
         if WCDBDatabaseIsInTransaction(database) {
-            return try embeddedTransaction()
+            return try transaction()
         }
-        return try run(transaction: embeddedTransaction)
+        try begin()
+        do {
+            try transaction()
+            try commit()
+        } catch let error {
+            rollback()
+            throw error
+        }
+    }
+
+    /// Run a controllable transaction in closure
+    ///
+    ///     try database.run(controllableTransaction: { () throws -> Bool in
+    ///         try database.insert(objects: objects, intoTable: table)
+    ///         return true // return true to commit transaction and return false to rollback transaction.
+    ///     })
+    ///
+    /// - Parameter controllableTransaction: Operation inside transaction
+    /// - Throws: `Error`
+    public typealias ControlableTransactionClosure = () throws -> Bool
+    public func run(controllableTransaction: ControlableTransactionClosure) throws {
+        try begin()
+        var shouldRollback = true
+        do {
+            if try controllableTransaction() {
+                try commit()
+            } else {
+                shouldRollback = false
+                rollback()
+            }
+        } catch let error {
+            if shouldRollback {
+                rollback()
+            }
+            throw error
+        }
     }
 }
 
@@ -448,6 +515,15 @@ public extension Database {
         }
         return Table<Root>(withDatabase: self, named: name)
     }
+
+    func isTableExists(_ table: String) throws -> Bool {
+        let ret = WCDBDatabaseExistTable(database, table)
+        if !ret.hasValue {
+            let error = WCDBDatabaseGetError(database)
+            throw ErrorBridge.getErrorFrom(cppError: error)
+        }
+        return ret.value
+    }
 }
 
 // File
@@ -634,6 +710,11 @@ public extension Database {
             throw getError()
         }
     }
+}
+
+internal protocol DatabaseRepresentable: AnyObject {
+    var tag: Tag? {get}
+    var path: String {get}
 }
 
 extension Database: InsertChainCallInterface {}

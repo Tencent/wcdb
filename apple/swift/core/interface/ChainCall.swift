@@ -77,7 +77,7 @@ public protocol InsertChainCallInterface: AnyObject {
                                 intoTable table: String) -> Insert
 }
 
-extension InsertChainCallInterface where Self: Core {
+extension InsertChainCallInterface where Self: Database {
     public func prepareInsert<Root: TableEncodable>(of cls: Root.Type, intoTable table: String) -> Insert {
         return Insert(with: self, named: table, on: cls.Properties.all, isReplace: false)
     }
@@ -127,7 +127,7 @@ public protocol DeleteChainCallInterface: AnyObject {
     func prepareDelete(fromTable table: String) -> Delete
 }
 
-extension DeleteChainCallInterface where Self: Core {
+extension DeleteChainCallInterface where Self: Database {
     public func prepareDelete(fromTable table: String) -> Delete {
         return Delete(with: self, andTableName: table)
     }
@@ -153,7 +153,7 @@ public protocol UpdateChainCallInterface: AnyObject {
     func prepareUpdate(table: String, on propertyConvertibleList: [PropertyConvertible]) -> Update
 }
 
-extension UpdateChainCallInterface where Self: Core {
+extension UpdateChainCallInterface where Self: Database {
     public func prepareUpdate(table: String, on propertyConvertibleList: PropertyConvertible...) -> Update {
         return prepareUpdate(table: table, on: propertyConvertibleList)
     }
@@ -211,7 +211,7 @@ public protocol RowSelectChainCallInterface: AnyObject {
                           isDistinct: Bool) -> RowSelect
 }
 
-extension RowSelectChainCallInterface where Self: Core {
+extension RowSelectChainCallInterface where Self: Database {
     public func prepareRowSelect(on columnResultConvertibleList: ResultColumnConvertible...,
                                  fromTables tables: [String],
                                  isDistinct: Bool = false) -> RowSelect {
@@ -286,7 +286,7 @@ public protocol SelectChainCallInterface: AnyObject {
                        isDistinct: Bool) -> Select
 }
 
-extension SelectChainCallInterface where Self: Core {
+extension SelectChainCallInterface where Self: Database {
     public func prepareSelect<Root: TableDecodable>(of cls: Root.Type,
                                                     fromTable table: String,
                                                     isDistinct: Bool = false) -> Select {
@@ -335,7 +335,7 @@ public protocol MultiSelectChainCallInterface: AnyObject {
                             fromTables tables: [String]) -> MultiSelect
 }
 
-extension MultiSelectChainCallInterface where Self: Core {
+extension MultiSelectChainCallInterface where Self: Database {
     public func prepareMultiSelect(on propertyConvertibleList: PropertyConvertible...,
                                    fromTables tables: [String]) -> MultiSelect {
         return prepareMultiSelect(on: propertyConvertibleList, fromTables: tables)

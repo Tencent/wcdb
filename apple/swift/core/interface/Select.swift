@@ -28,7 +28,7 @@ public final class Select: Selectable {
 
     private lazy var decoder = TableDecoder(keys, on: handleStatement!)
 
-    init(with core: Core, on propertyConvertibleList: [PropertyConvertible], table: String, isDistinct: Bool) {
+    init(with core: Database, on propertyConvertibleList: [PropertyConvertible], table: String, isDistinct: Bool) {
         // TODO: Use generic to check all coding table keys conform to same root type
         assert(propertyConvertibleList.count > 0, "Property list must not be empty.")
         properties = propertyConvertibleList

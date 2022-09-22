@@ -713,8 +713,6 @@
 		03E1664227F42D6600D2C926 /* WCDBTokenize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165DE27F42D6500D2C926 /* WCDBTokenize.swift */; };
 		03E1664427F42D6600D2C926 /* RecyclableCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165E127F42D6500D2C926 /* RecyclableCore.swift */; };
 		03E1664627F42D6600D2C926 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165E327F42D6500D2C926 /* Database.swift */; };
-		03E1664727F42D6600D2C926 /* Core.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165E427F42D6500D2C926 /* Core.swift */; };
-		03E1664927F42D6600D2C926 /* CoreStatement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165E627F42D6500D2C926 /* CoreStatement.swift */; };
 		03E1664A27F42D6600D2C926 /* Recyclable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165E827F42D6500D2C926 /* Recyclable.swift */; };
 		03E1664C27F42D6600D2C926 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165EA27F42D6500D2C926 /* Error.swift */; };
 		03E1664D27F42D6600D2C926 /* SQLite-Bridging.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E165EB27F42D6500D2C926 /* SQLite-Bridging.h */; };
@@ -2074,8 +2072,6 @@
 		03E165DE27F42D6500D2C926 /* WCDBTokenize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WCDBTokenize.swift; sourceTree = "<group>"; };
 		03E165E127F42D6500D2C926 /* RecyclableCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecyclableCore.swift; sourceTree = "<group>"; };
 		03E165E327F42D6500D2C926 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
-		03E165E427F42D6500D2C926 /* Core.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Core.swift; sourceTree = "<group>"; };
-		03E165E627F42D6500D2C926 /* CoreStatement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreStatement.swift; sourceTree = "<group>"; };
 		03E165E827F42D6500D2C926 /* Recyclable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recyclable.swift; sourceTree = "<group>"; };
 		03E165EA27F42D6500D2C926 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		03E165EB27F42D6500D2C926 /* SQLite-Bridging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SQLite-Bridging.h"; sourceTree = "<group>"; };
@@ -3854,8 +3850,6 @@
 				03E165A427F42D6500D2C926 /* HandleStatement.swift */,
 				03E165E127F42D6500D2C926 /* RecyclableCore.swift */,
 				03E165E327F42D6500D2C926 /* Database.swift */,
-				03E165E427F42D6500D2C926 /* Core.swift */,
-				03E165E627F42D6500D2C926 /* CoreStatement.swift */,
 			);
 			path = base;
 			sourceTree = "<group>";
@@ -7747,7 +7741,6 @@
 				23EEDD2D217DFADC006E9E73 /* SyntaxAttachSTMT.cpp in Sources */,
 				23A09D7D2146204400F62EE8 /* MigratingHandle.cpp in Sources */,
 				23EEDD07217DFADC006E9E73 /* SyntaxJoinClause.cpp in Sources */,
-				03E1664927F42D6600D2C926 /* CoreStatement.swift in Sources */,
 				232741521F6FBD50004E96F7 /* WCTDatabase+FTS.mm in Sources */,
 				23EEDD43217DFADC006E9E73 /* SyntaxDropTableSTMT.cpp in Sources */,
 				753636DD28BBC3820025C2C4 /* Table.cpp in Sources */,
@@ -7796,7 +7789,6 @@
 				75F4DE58288411DB00760DC3 /* StatementBegin.swift in Sources */,
 				75F4DE4B288405DD00760DC3 /* StatementSavepointBridge.cpp in Sources */,
 				03E1662527F42D6500D2C926 /* Handle.swift in Sources */,
-				03E1664727F42D6600D2C926 /* Core.swift in Sources */,
 				233A8532215E7CFE00BB8D4F /* Console.cpp in Sources */,
 				03E1660C27F42D6500D2C926 /* IndexedColumn.swift in Sources */,
 				23EEDCAB217DFADC006E9E73 /* Upsert.cpp in Sources */,

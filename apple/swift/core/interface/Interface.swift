@@ -106,7 +106,7 @@ public protocol InsertInterface: AnyObject {
         intoTable table: String) throws
 }
 
-extension InsertInterface where Self: Core {
+extension InsertInterface where Self: Database {
     public func insert<Object: TableEncodable>(
         objects: [Object],
         on propertyConvertibleList: [PropertyConvertible]? = nil,
@@ -262,7 +262,7 @@ public protocol UpdateInterface: AnyObject {
                 offset: Offset?) throws
 }
 
-extension UpdateInterface where Self: Core {
+extension UpdateInterface where Self: Database {
     public func update<Object: TableEncodable>(
         table: String,
         on propertyConvertibleList: [PropertyConvertible],
@@ -405,7 +405,7 @@ public protocol DeleteInterface: AnyObject {
                 offset: Offset?) throws
 }
 
-extension DeleteInterface where Self: Core {
+extension DeleteInterface where Self: Database {
     public func delete(fromTable table: String,
                        where condition: Condition? = nil,
                        orderBy orderList: [OrderBy]? = nil,
@@ -571,7 +571,7 @@ public protocol RowSelectInterface: AnyObject {
                           offset: Offset?) throws -> Value
 }
 
-extension RowSelectInterface where Self: Core {
+extension RowSelectInterface where Self: Database {
     public func getRows(on columnResultConvertibleList: [ResultColumnConvertible],
                         fromTable table: String,
                         where condition: Condition? = nil,
@@ -812,7 +812,7 @@ public protocol SelectInterface: AnyObject {
         offset: Offset?) throws -> Object?
 }
 
-extension SelectInterface where Self: Core {
+extension SelectInterface where Self: Database {
     public func getObjects<Object: TableDecodable>(
         on propertyConvertibleList: [PropertyConvertible],
         fromTable table: String,
@@ -1038,11 +1038,11 @@ public protocol TableInterface: AnyObject {
     func drop(index name: String) throws
 }
 
-extension TableInterface where Self: Core {
+extension TableInterface where Self: Database {
     public func create<Root: TableDecodable>(
         table name: String,
         of rootType: Root.Type) throws {
-        try run(embeddedTransaction: {
+        try run(transaction: {
             let orm = Root.CodingKeys.objectRelationalMapping
             if try isTableExists(name) {
                 var columnNames: [String] = []
