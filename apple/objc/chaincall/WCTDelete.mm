@@ -51,7 +51,7 @@
 
 - (instancetype)orders:(const WCDB::OrderingTerms &)orders
 {
-    _statement.order(orders);
+    _statement.orders(orders);
     return self;
 }
 

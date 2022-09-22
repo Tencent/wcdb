@@ -28,6 +28,8 @@
 #include <type_traits>
 #include <vector>
 
+namespace WCDB {
+
 template<typename T>
 class ValueArray : public std::vector<T> {
 public:
@@ -64,3 +66,5 @@ public:
         }
     }
 };
+
+} // namespace WCDB

@@ -70,13 +70,13 @@
 {
     NSDate* main = [NSDate date];
     NSDate* subthread = [NSDate date];
-    self.database->close([=]() {
+    self.database->close([&]() {
         [self.dispatch async:^{
             TestCaseAssertTrue(self.database->canOpen());
-            [subthread dateByAddingTimeInterval:[[NSDate date] timeIntervalSinceDate:subthread]];
+            subthread = [NSDate date];
         }];
         [NSThread sleepForTimeInterval:1];
-        [main dateByAddingTimeInterval:[[NSDate date] timeIntervalSinceDate:main]];
+        main = [NSDate date];
     });
     [self.dispatch waitUntilDone];
     TestCaseAssertTrue([main compare:subthread] == NSOrderedAscending);
@@ -85,8 +85,8 @@
 - (void)test_readonly
 {
     WCDB::OneRowValue row = [Random.shared autoIncrementTestCaseValuesWithCount:1][0];
-    TestCaseAssertTrue([self createTable]);
-    TestCaseAssertTrue(self.database->insertOneRow(row, self.columns, self.tableName.UTF8String));
+    TestCaseAssertTrue([self createValueTable]);
+    TestCaseAssertTrue(self.database->insertRows(row, self.columns, self.tableName.UTF8String));
 
     self.database->close([=]() {
         for (const WCDB::UnsafeStringView path : self.database->getPaths()) {
@@ -100,7 +100,7 @@
     TestCaseAssertTrue(self.database->canOpen());
     auto values = self.database->selectAllRow(self.resultColumns, self.tableName.UTF8String);
     TestCaseAssertTrue(values.has_value() && values.value().size() == 1)
-    TestCaseAssertFalse(self.database->insertOneRow(row, self.columns, self.tableName.UTF8String));
+    TestCaseAssertFalse(self.database->insertRows(row, self.columns, self.tableName.UTF8String));
 
     // reset attribute
     for (const WCDB::UnsafeStringView path : self.database->getPaths()) {
@@ -145,13 +145,13 @@
 {
     WCDB::MultiRowsValue rows = [Random.shared autoIncrementTestCaseValuesWithCount:2000];
 
-    TestCaseAssertTrue([self createTable]);
+    TestCaseAssertTrue([self createValueTable]);
 
     unsigned long walFrameNum = 0;
     for (int i = 0; i < 2000; i++) {
         auto value = self.database->getValueFromStatement(WCDB::StatementSelect().select(WCDB::Expression::function("count").invokeAll()).from(self.tableName.UTF8String));
         TestCaseAssertTrue(value.has_value() && value.value().intValue() == i);
-        TestCaseAssertTrue(self.database->insertOneRow(rows[i], self.columns, self.tableName.UTF8String));
+        TestCaseAssertTrue(self.database->insertRows(rows[i], self.columns, self.tableName.UTF8String));
         self.database->passiveCheckpoint();
         self.database->close([&]() {
             if (walFrameNum != 0) {

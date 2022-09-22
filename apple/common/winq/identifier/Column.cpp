@@ -52,14 +52,24 @@ Column Column::rowid()
     return Column("rowid");
 }
 
-OrderingTerm Column::asAscendingOrder()
+IndexedColumn Column::asIndex() const
 {
-    return OrderingTerm(*this).order(Order::ASC);
+    return IndexedColumn(*this);
 }
 
-OrderingTerm Column::asDescendingOrder()
+IndexedColumn Column::asIndex(const Order& order) const
 {
-    return OrderingTerm(*this).order(Order::DESC);
+    return IndexedColumn(*this).order(order);
+}
+
+OrderingTerm Column::asOrder() const
+{
+    return OrderingTerm(*this);
+}
+
+OrderingTerm Column::asOrder(const Order& order) const
+{
+    return OrderingTerm(*this).order(order);
 }
 
 Expression Column::asExpressionOperand() const

@@ -39,7 +39,8 @@ Handle::Handle(RecyclableHandle handle)
 {
 }
 
-Handle::Handle(InnerHandle* handle) : m_innerHandle(handle)
+Handle::Handle(Recyclable<InnerDatabase*> database, InnerHandle* handle)
+: m_databaseHolder(database), m_innerHandle(handle)
 {
 }
 
@@ -59,6 +60,7 @@ InnerHandle* Handle::getOrGenerateHandle()
         m_handleHolder = m_databaseHolder->getHandle();
         m_innerHandle = m_handleHolder.get();
     }
+    WCTAssert(m_innerHandle != nullptr);
     return m_innerHandle;
 }
 
@@ -78,6 +80,19 @@ RecyclableHandle Handle::getHandleHolder()
     }
 }
 
+Recyclable<InnerDatabase*> Handle::getDatabaseHolder()
+{
+    WCTAssert(m_databaseHolder != nullptr);
+    return m_databaseHolder;
+}
+
+void Handle::invalidate()
+{
+    finalizeAllStatement();
+    m_innerHandle = nullptr;
+    m_handleHolder = nullptr;
+}
+
 long long Handle::getLastInsertedRowID()
 {
     return getOrGenerateHandle()->getLastInsertedRowID();
@@ -91,6 +106,11 @@ int Handle::getChanges()
 int Handle::getTotalChange()
 {
     return getOrGenerateHandle()->getTotalChange();
+}
+
+const Error& Handle::getError()
+{
+    return getOrGenerateHandle()->getError();
 }
 
 HandleStatement& Handle::getOrCreateHandleStatementWithTag(const UnsafeStringView& tag)

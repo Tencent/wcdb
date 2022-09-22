@@ -23,33 +23,33 @@
  */
 
 #pragma once
+#include <WCDB/HandleORMOperation.hpp>
 #include <WCDB/HandleOperation.hpp>
 #include <WCDB/HandleStatement.hpp>
-#include <WCDB/RecyclableHandle.hpp>
 #include <WCDB/Statement.hpp>
 
 namespace WCDB {
 
-class InnerDatabase;
-class Database;
-
-class Handle : public HandleOperation, public StatementOperation {
+class Handle final : public StatementOperation, public HandleORMOperation {
     friend class Database;
     friend class HandleOperation;
+    friend class TableOperation;
+    friend class BaseChainCall;
 
 #pragma mark - Basic
 protected:
     Handle() = delete;
-    Handle(const HandleStatement&) = delete;
-    Handle& operator=(const HandleStatement&) = delete;
+    Handle(const Handle&) = delete;
+    Handle& operator=(const Handle&) = delete;
 
-    Handle(InnerHandle* handle);
     Handle(RecyclableHandle handle);
     Handle(Recyclable<InnerDatabase*> database);
+    Handle(Recyclable<InnerDatabase*> database, InnerHandle* handle);
 
     InnerHandle* getOrGenerateHandle();
     InnerHandleStatement* getInnerHandleStatement() override final;
     RecyclableHandle getHandleHolder() override final;
+    Recyclable<InnerDatabase*> getDatabaseHolder() override final;
 
 private:
     Recyclable<InnerDatabase*> m_databaseHolder;
@@ -59,9 +59,12 @@ private:
 public:
     Handle(Handle&& other);
     ~Handle() override final;
+    //Handles of current thread need to be destructed or invalidated before you close the database.
+    void invalidate();
     long long getLastInsertedRowID();
     int getChanges();
     int getTotalChange();
+    const Error& getError();
 
 #pragma mark - Multi Statement
 public:

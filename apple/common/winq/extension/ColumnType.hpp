@@ -199,6 +199,8 @@ struct ColumnIsTextType<const char *> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
     asUnderlyingType(const char *text);
+    static const char *
+    fromUnderlyingType(const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t);
 };
 
 template<>
@@ -206,13 +208,16 @@ struct ColumnIsTextType<char *> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
     asUnderlyingType(const char *text);
+    static char *
+    fromUnderlyingType(const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t);
 };
 
 template<int size>
 struct ColumnIsTextType<const char[size]> : public std::true_type {
 public:
+    using ValueType = char[size];
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
-    asUnderlyingType(const char text[size])
+    asUnderlyingType(const ValueType &text)
     {
         return text;
     }
@@ -221,8 +226,9 @@ public:
 template<int size>
 struct ColumnIsTextType<char[size]> : public std::true_type {
 public:
+    using ValueType = char[size];
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
-    asUnderlyingType(const char text[size])
+    asUnderlyingType(const ValueType &text)
     {
         return text;
     }
@@ -233,6 +239,8 @@ struct ColumnIsTextType<std::string> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
     asUnderlyingType(const std::string &text);
+    static std::string
+    fromUnderlyingType(const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t);
 };
 
 template<>
@@ -240,6 +248,8 @@ struct ColumnIsTextType<UnsafeStringView> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
     asUnderlyingType(const UnsafeStringView &text);
+    static UnsafeStringView
+    fromUnderlyingType(const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t);
 };
 
 template<>
@@ -247,6 +257,8 @@ struct ColumnIsTextType<StringView> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
     asUnderlyingType(const UnsafeStringView &text);
+    static StringView
+    fromUnderlyingType(const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t);
 };
 
 //BLOB
@@ -255,6 +267,8 @@ struct ColumnIsBLOBType<std::vector<unsigned char>> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
     asUnderlyingType(const std::vector<unsigned char> &blob);
+    static std::vector<unsigned char>
+    fromUnderlyingType(const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &t);
 };
 
 template<>
@@ -262,6 +276,39 @@ struct ColumnIsBLOBType<UnsafeData> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
     asUnderlyingType(const UnsafeData &blob);
+    static UnsafeData
+    fromUnderlyingType(const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &t);
+};
+
+template<>
+struct ColumnIsBLOBType<Data> : public std::true_type {
+public:
+    static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
+    asUnderlyingType(const UnsafeData &blob);
+    static Data
+    fromUnderlyingType(const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &t);
+};
+
+template<int size>
+struct ColumnIsBLOBType<const unsigned char[size]> : public std::true_type {
+public:
+    using ValueType = unsigned char[size];
+    static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
+    asUnderlyingType(const ValueType &data)
+    {
+        return UnsafeData(data, size);
+    }
+};
+
+template<int size>
+struct ColumnIsBLOBType<unsigned char[size]> : public std::true_type {
+public:
+    using ValueType = unsigned char[size];
+    static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
+    asUnderlyingType(const ValueType &data)
+    {
+        return UnsafeData((unsigned char *) data, size);
+    }
 };
 
 template<typename T>
@@ -271,6 +318,16 @@ public:
     static UnsafeStringView asUnsafeStringView(const T &t)
     {
         return ColumnIsTextType<T>::asUnderlyingType(t);
+    }
+};
+
+template<typename T>
+struct UnsafeData::Convertible<T, typename std::enable_if<ColumnIsBLOBType<T>::value>::type>
+: public std::true_type {
+public:
+    static UnsafeData asUnsafeData(const T &t)
+    {
+        return ColumnIsBLOBType<T>::asUnderlyingType(t);
     }
 };
 

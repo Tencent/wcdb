@@ -1,5 +1,5 @@
 //
-// Created by qiuwenchen on 2022/8/9.
+// Created by qiuwenchen on 2022/9/5.
 //
 
 /*
@@ -22,9 +22,14 @@
  * limitations under the License.
  */
 
-#pragma once
+#import <WCDB/WCDB.h>
 
-#include <WCDB/Database.hpp>
-#include <WCDB/Handle.hpp>
-#include <WCDB/HandleStatement.hpp>
-#include <WCDB/Tag.hpp>
+class CPPTableConstraintObject {
+    int multiPrimary;
+    int multiPrimaryAsc;
+    int multiPrimaryDesc;
+    int multiUnique;
+    int multiUniqueAsc;
+    int multiUniqueDesc;
+    WCDB_CPP_ORM_DECLARATION(CPPTableConstraintObject);
+};

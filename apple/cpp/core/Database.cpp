@@ -37,6 +37,7 @@ namespace WCDB {
 
 Database::Database(const UnsafeStringView& path)
 {
+    WCDB_USED int i = 0;
     const char* resolvePath = realpath(path.data(), nullptr);
     if (resolvePath == nullptr && errno == ENOENT) {
         FileManager::createFile(path);
@@ -84,6 +85,11 @@ RecyclableHandle Database::getHandleHolder()
     return m_databaseHolder->getHandle();
 }
 
+Recyclable<InnerDatabase*> Database::getDatabaseHolder()
+{
+    return m_databaseHolder;
+}
+
 void Database::setTag(const long& tag)
 {
     m_innerDatabase->setTag(tag);
@@ -99,14 +105,14 @@ const StringView& Database::getPath() const
     return m_innerDatabase->getPath();
 }
 
+const Error& Database::getError() const
+{
+    return m_innerDatabase->getThreadedError();
+}
+
 Handle Database::getHandle()
 {
     return Handle(m_databaseHolder);
-}
-
-bool Database::execute(Statement statement)
-{
-    return m_innerDatabase->execute(statement);
 }
 
 bool Database::canOpen() const
@@ -325,14 +331,14 @@ void Database::setConfig(const UnsafeStringView& name,
 {
     m_innerDatabase->purge();
     CustomConfig::Invocation configInvocation
-    = [invocation](InnerHandle* innerHandle) -> bool {
-        Handle handle = Handle(innerHandle);
+    = [invocation, this](InnerHandle* innerHandle) -> bool {
+        Handle handle = Handle(m_databaseHolder, innerHandle);
         return invocation(handle);
     };
     CustomConfig::Invocation configUninvocation = nullptr;
     if (unInvocation != nullptr) {
-        configUninvocation = [unInvocation](InnerHandle* innerHandle) -> bool {
-            Handle handle = Handle(innerHandle);
+        configUninvocation = [unInvocation, this](InnerHandle* innerHandle) -> bool {
+            Handle handle = Handle(m_databaseHolder, innerHandle);
             return unInvocation(handle);
         };
     }

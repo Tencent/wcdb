@@ -52,8 +52,12 @@ public:
 
     Column& table(const UnsafeStringView& table);
     Column& schema(const Schema& schema);
-    OrderingTerm asAscendingOrder();
-    OrderingTerm asDescendingOrder();
+
+    IndexedColumn asIndex() const;
+    IndexedColumn asIndex(const Order& order) const;
+
+    OrderingTerm asOrder() const;
+    OrderingTerm asOrder(const Order& order) const;
 
     static Column rowid();
 

@@ -29,17 +29,6 @@ namespace WCDB {
 
 StatementOperation::~StatementOperation() = default;
 
-bool StatementOperation::execute(const Statement &statement)
-{
-    bool succeed = false;
-    InnerHandleStatement *handleStatement = getInnerHandleStatement();
-    if (handleStatement->prepare(statement)) {
-        succeed = handleStatement->step();
-        handleStatement->finalize();
-    }
-    return succeed;
-}
-
 bool StatementOperation::prepare(const Statement &statement)
 {
     return getInnerHandleStatement()->prepare(statement);

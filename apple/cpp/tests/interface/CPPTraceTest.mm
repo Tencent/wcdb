@@ -48,7 +48,7 @@
 
 - (void)test_trace_performance
 {
-    TestCaseAssertTrue([self createTable]);
+    TestCaseAssertTrue([self createValueTable]);
 
     WCDB::MultiRowsValue objects = [Random.shared autoIncrementTestCaseValuesWithCount:10000];
 
@@ -62,7 +62,7 @@
             [expectedFootprints removeObjectAtIndex:0];
         }
     });
-    TestCaseAssertTrue(self.database->insertMultiRows(objects, self.columns, self.tableName.UTF8String));
+    TestCaseAssertTrue(self.database->insertRows(objects, self.columns, self.tableName.UTF8String));
     TestCaseAssertTrue(expectedFootprints.count == 0);
     self.database->tracePerformance(nil);
 }
@@ -115,8 +115,8 @@
             [expectedFootprints removeObjectAtIndex:0];
         }
     });
-    TestCaseAssertTrue([self createTable]);
-    TestCaseAssertTrue(self.database->insertMultiRows(objects, self.columns, self.tableName.UTF8String));
+    TestCaseAssertTrue([self createValueTable]);
+    TestCaseAssertTrue(self.database->insertRows(objects, self.columns, self.tableName.UTF8String));
     TestCaseAssertTrue(expectedFootprints.count == 0);
     WCDB::Database::globalTracePerformance(nil);
 }

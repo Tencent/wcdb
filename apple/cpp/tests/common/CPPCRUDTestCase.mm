@@ -26,39 +26,62 @@
 #import "CPPTestCase.h"
 
 @implementation CPPCRUDTestCase {
+    CPPTestCaseObject _object1;
+    CPPTestCaseObject _object2;
+    WCDB::ValueArray<CPPTestCaseObject> _objects;
+
     WCDB::OneRowValue _row1;
     WCDB::OneRowValue _row2;
     WCDB::MultiRowsValue _rows;
 }
 
+- (void)setUp
+{
+    [super setUp];
+    _object1 = [Random.shared testCaseObjectWithIdentifier:1];
+    _object2 = [Random.shared testCaseObjectWithIdentifier:2];
+    _objects = { _object1, _object2 };
+
+    _row1 = [Random.shared testCaseValuesWithCount:1 startingFromIdentifier:1][0];
+    _row2 = [Random.shared testCaseValuesWithCount:1 startingFromIdentifier:2][0];
+    _rows = { self.row1, self.row2 };
+}
+
+- (CPPTestCaseObject&)object1
+{
+    return _object1;
+}
+
+- (CPPTestCaseObject&)object2
+{
+    return _object2;
+}
+
+- (WCDB::ValueArray<CPPTestCaseObject>&)objects
+{
+    return _objects;
+}
+
+- (void)insertPresetObjects
+{
+    TestCaseAssertTrue([self createObjectTable]);
+    TestCaseAssertTrue(self.database->insertObjects(_objects, self.tableName.UTF8String));
+    self.database->close();
+}
+
 - (WCDB::OneRowValue)row1
 {
-    @synchronized(self) {
-        if (_row1.size() == 0) {
-            _row1 = [Random.shared testCaseValuesWithCount:1 startingFromIdentifier:1][0];
-        }
-        return _row1;
-    }
+    return _row1;
 }
 
 - (WCDB::OneRowValue)row2
 {
-    @synchronized(self) {
-        if (_row2.size() == 0) {
-            _row2 = [Random.shared testCaseValuesWithCount:1 startingFromIdentifier:2][0];
-        }
-        return _row2;
-    }
+    return _row2;
 }
 
 - (WCDB::MultiRowsValue)rows
 {
-    @synchronized(self) {
-        if (_rows.size() == 0) {
-            _rows = { self.row1, self.row2 };
-        }
-        return _rows;
-    }
+    return _rows;
 }
 
 - (int64_t)nextIdentifier
@@ -75,8 +98,8 @@
 
 - (void)insertPresetRows
 {
-    TestCaseAssertTrue([self createTable]);
-    TestCaseAssertTrue(self.database->insertMultiRows(self.rows, self.columns, self.tableName.UTF8String));
+    TestCaseAssertTrue([self createValueTable]);
+    TestCaseAssertTrue(self.database->insertRows(self.rows, self.columns, self.tableName.UTF8String));
     self.database->close();
 }
 

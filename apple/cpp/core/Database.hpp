@@ -26,25 +26,24 @@
 #include <WCDB/AuxiliaryFunctionModule.hpp>
 #include <WCDB/Error.hpp>
 #include <WCDB/Handle.hpp>
-#include <WCDB/HandleOperation.hpp>
+#include <WCDB/HandleORMOperation.hpp>
 #include <WCDB/Statement.hpp>
 #include <WCDB/TokenizerModule.hpp>
 
 namespace WCDB {
 
-class InnerDatabase;
-
-class Database : public HandleOperation {
+class Database final : public HandleORMOperation {
 public:
     Database(const UnsafeStringView &path);
     Database() = delete;
     Database(const Database &);
     Database &operator=(const Database &);
-    ~Database();
+    ~Database() override final;
 
 private:
     Database(InnerDatabase *database);
     RecyclableHandle getHandleHolder() override final;
+    Recyclable<InnerDatabase *> getDatabaseHolder() override final;
     Recyclable<InnerDatabase *> m_databaseHolder;
     InnerDatabase *m_innerDatabase;
 
@@ -53,9 +52,9 @@ public:
     void setTag(const long &tag);
     long getTag() const;
     const StringView &getPath() const;
+    const Error &getError() const;
 
     Handle getHandle();
-    bool execute(Statement statement);
 
     bool canOpen() const;
     bool isOpened() const;
@@ -200,7 +199,7 @@ public:
      @param cipherKey Cipher key.
      @param cipherPageSize Cipher Page Size
      */
-    void setCipherKey(const UnsafeData &cipherKey, int cipherPageSize = SQLITE_DEFAULT_PAGE_SIZE);
+    void setCipherKey(const UnsafeData &cipherKey, int cipherPageSize = 4096);
 
     /**
      @brief Set config for this database.

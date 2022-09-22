@@ -29,36 +29,37 @@ namespace WCDB {
 ColumnTypeInfo<ColumnType::Text>::UnderlyingType
 ColumnIsTextType<NSString*>::asUnderlyingType(NSString* text)
 {
-    return WCDB::UnsafeStringView(text.UTF8String, [text lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+    return UnsafeStringView(text.UTF8String, [text lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
 }
 
-const UnsafeData UnsafeData::Convertible<NSData*>::asUnsafeData(NSData* data)
+ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
+ColumnIsBLOBType<NSData*>::asUnderlyingType(NSData* data)
 {
     return UnsafeData((unsigned char*) data.bytes, (size_t) data.length);
 }
 
 Expression ExpressionConvertible<WCTProperty>::asExpression(const WCTProperty& property)
 {
-    return Expression((const WCDB::Column&) property);
+    return Expression((const Column&) property);
 }
 
 IndexedColumn IndexedColumnConvertible<WCTProperty>::asIndexedColumn(const WCTProperty& property)
 {
-    return Expression((const WCDB::Column&) property);
+    return Expression((const Column&) property);
 }
 
 LiteralValue LiteralValueConvertible<NSString*>::asLiteralValue(NSString* string)
 {
     if (string == nil) {
-        return WCDB::LiteralValue(nullptr);
+        return LiteralValue(nullptr);
     }
-    return WCDB::UnsafeStringView(string.UTF8String, [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+    return UnsafeStringView(string.UTF8String, [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
 }
 
 LiteralValue LiteralValueConvertible<NSNumber*>::asLiteralValue(NSNumber* number)
 {
     if (number == nil) {
-        return WCDB::LiteralValue(nullptr);
+        return LiteralValue(nullptr);
     }
     if (number == nil || CFNumberIsFloatType((CFNumberRef) number)) {
         return (double) number.doubleValue;

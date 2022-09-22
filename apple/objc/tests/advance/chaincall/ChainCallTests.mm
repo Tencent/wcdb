@@ -122,6 +122,7 @@
 
     [WCTDatabase simulateIOError:WCTSimulateNoneIOError];
     // oneObject is not nil, so done is false.
+    select = [[[[self.database prepareSelect] onResultColumns:TestCaseObject.allProperties] fromTable:self.tableName] limit:1];
     TestCaseAssertTrue([select firstObject] != nil);
 }
 

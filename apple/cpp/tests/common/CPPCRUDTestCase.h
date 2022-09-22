@@ -26,6 +26,13 @@
 
 @interface CPPCRUDTestCase : CPPTableTestCase
 
+#pragma mark - object
+@property (nonatomic, readonly) CPPTestCaseObject& object1;
+@property (nonatomic, readonly) CPPTestCaseObject& object2;
+@property (nonatomic, readonly) WCDB::ValueArray<CPPTestCaseObject>& objects;
+- (void)insertPresetObjects;
+
+#pragma mark - value
 @property (nonatomic, readonly) WCDB::OneRowValue row1;
 @property (nonatomic, readonly) WCDB::OneRowValue row2;
 @property (nonatomic, readonly) WCDB::MultiRowsValue rows;

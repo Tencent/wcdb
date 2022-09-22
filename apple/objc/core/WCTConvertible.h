@@ -68,9 +68,10 @@ public:
 #endif // OBJC_BOOL_IS_CHAR
 
 template<>
-struct UnsafeData::Convertible<NSData *> : public std::true_type {
+struct ColumnIsBLOBType<NSData *> : public std::true_type {
 public:
-    static const UnsafeData asUnsafeData(NSData *data);
+    static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
+    asUnderlyingType(NSData *data);
 };
 
 template<>

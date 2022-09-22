@@ -27,7 +27,7 @@
 #error `CLANG_CXX_LANGUAGE_STANDARD = gnu++17` and `CLANG_CXX_LIBRARY = libc++` build settings are required.
 #endif
 #else // __cplusplus
-#error Objective-C++ environment is required. (By changing suffix of those files including <WCDB/WCDB.h> from `.m` to `.mm`.
+#error C++ environment is required.
 #endif // __cplusplus
 
 // WCDB may fail to compile since there are few frameworks that define `offset` as a macro.
@@ -35,5 +35,7 @@
 #error Symbol `offset` should not be defined as a macro since it's a common used word.
 #endif
 
+#include <WCDB/CPPORM.h>
+#include <WCDB/CPPORMMacro.h>
 #include <WCDB/CppInterface.h>
 #include <WCDB/WINQ.h>

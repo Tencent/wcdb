@@ -51,4 +51,39 @@
     return result;
 }
 
+- (CPPTestCaseObject)testCaseObjectWithIdentifier:(int)identifier
+{
+    return CPPTestCaseObject(identifier, self.string.UTF8String);
+}
+
+- (CPPTestCaseObject)autoIncrementTestCaseObject
+{
+    return [self autoIncrementTestCaseObjectWithIdentifier:0];
+}
+
+- (CPPTestCaseObject)autoIncrementTestCaseObjectWithIdentifier:(int)identifier
+{
+    CPPTestCaseObject obj = CPPTestCaseObject::autoIncrementObject(self.string.UTF8String);
+    obj.identifier = identifier;
+    return obj;
+}
+
+- (WCDB::ValueArray<CPPTestCaseObject>)testCaseObjectsWithCount:(NSUInteger)count startingFromIdentifier:(int)identifier
+{
+    WCDB::ValueArray<CPPTestCaseObject> result;
+    for (NSUInteger i = identifier; i < identifier + count; ++i) {
+        result.push_back([self testCaseObjectWithIdentifier:(int) i]);
+    }
+    return result;
+}
+
+- (WCDB::ValueArray<CPPTestCaseObject>)autoIncrementTestCaseObjectsWithCount:(NSUInteger)count
+{
+    WCDB::ValueArray<CPPTestCaseObject> result;
+    for (NSUInteger i = 0; i < count; ++i) {
+        result.push_back([self testCaseObjectWithIdentifier:(int) i]);
+    }
+    return result;
+}
+
 @end

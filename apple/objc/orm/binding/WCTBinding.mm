@@ -34,7 +34,7 @@
 
 #pragma mark - Binding
 WCTBinding::WCTBinding(Class cls)
-: m_cls(cls)
+: WCDB::BaseBinding(), m_cls(cls)
 {
     // __wcdb_
     NSString *prefix = @WCDB_STRINGIFY(WCDB_ORM_PREFIX) "_";
@@ -100,139 +100,8 @@ const WCTProperties &WCTBinding::getProperties() const
 }
 
 #pragma mark - Column Def
-const WCDB::CaseInsensiveList<WCDB::ColumnDef> &WCTBinding::getColumnDefs() const
-{
-    return m_columnDefs;
-}
-
 WCDB::ColumnDef *WCTBinding::getColumnDef(const WCTProperty &property)
 {
     WCDB::StringView name = property.getDescription();
-    WCDB::ColumnDef *columnDef = nullptr;
-    auto iter = m_columnDefs.caseInsensiveFind(name);
-    if (iter != m_columnDefs.end()) {
-        columnDef = &iter->second;
-    }
-    return columnDef;
-}
-
-#pragma mark - Table
-WCDB::StatementCreateTable WCTBinding::generateCreateTableStatement(const WCDB::UnsafeStringView &tableName) const
-{
-    WCDB::StatementCreateTable statement = statementTable;
-    statement.createTable(tableName).ifNotExists();
-    for (const auto &iter : m_columnDefs) {
-        statement.define(iter.second);
-    }
-    for (const auto &constraint : m_constraints) {
-        statement.constraint(constraint.second);
-    }
-    return statement;
-}
-
-WCDB::StatementCreateVirtualTable
-WCTBinding::generateCreateVirtualTableStatement(const WCDB::UnsafeStringView &tableName) const
-{
-    WCDB::StatementCreateVirtualTable statement = statementVirtualTable;
-    statement.createVirtualTable(tableName).ifNotExists();
-    std::list<WCDB::StringView> &arguments = statement.syntax().arguments;
-    bool isFTS5 = statement.syntax().module.caseInsensiveEqual("fts5");
-    for (const auto &iter : m_columnDefs) {
-        if (isFTS5) {
-            bool added = false;
-            for (auto constrain : iter.second.syntax().constraints) {
-                if (constrain.getDescription().find("UNINDEXED") == 0) {
-                    arguments.push_back(WCDB::StringView().formatted("%s %s", iter.second.syntax().column.getDescription().data(), constrain.getDescription().data()));
-                    added = YES;
-                    break;
-                }
-            }
-            // FTS5 does not need type
-            if (!added) {
-                arguments.push_back(iter.second.syntax().column.getDescription());
-            }
-        } else {
-            arguments.push_back(iter.second.getDescription());
-        }
-    }
-    return statement;
-}
-
-#pragma mark - Table Constraint
-WCDB::TableConstraint &WCTBinding::getOrCreateTableConstraint(const WCDB::UnsafeStringView &name)
-{
-    auto iter = m_constraints.find(name);
-    if (iter == m_constraints.end()) {
-        iter = m_constraints.emplace(name, WCDB::TableConstraint(name)).first;
-    }
-    return iter->second;
-}
-
-#pragma mark - Index
-
-WCTBinding::Index::Index(const WCDB::UnsafeStringView &suffix_)
-: suffix(suffix_)
-, action(Action::Create)
-{
-}
-
-WCTBinding::Index &WCTBinding::getOrCreateIndex(const WCDB::UnsafeStringView &suffix)
-{
-    auto iter = m_indexes.find(suffix);
-    if (iter == m_indexes.end()) {
-        iter = m_indexes.emplace(suffix, Index(suffix)).first;
-    }
-    WCTAssert(iter->first == iter->second.suffix);
-    return iter->second;
-}
-
-std::pair<std::list<WCDB::StatementCreateIndex>, std::list<WCDB::StatementDropIndex>>
-WCTBinding::generateIndexStatements(const WCDB::UnsafeStringView &tableName, bool isTableNewlyCreated) const
-{
-    std::pair<std::list<WCDB::StatementCreateIndex>, std::list<WCDB::StatementDropIndex>> pairs;
-    WCDB::StringView closingQuotation;
-    if (tableName.length() > 2) {
-        if (tableName.hasPrefix("'") && tableName.hasSuffix("'")) {
-            closingQuotation = "'";
-        } else if (tableName.hasPrefix("\"") && tableName.hasSuffix("\"")) {
-            closingQuotation = "\"";
-        } else if (tableName.hasPrefix("[") && tableName.hasSuffix("]")) {
-            closingQuotation = "]";
-        } else if (tableName.hasPrefix("`") && tableName.hasSuffix("`")) {
-            closingQuotation = "`";
-        }
-    }
-
-    for (const auto &iter : m_indexes) {
-        WCTAssert(iter.first == iter.second.suffix);
-        Index index = iter.second;
-        switch (index.action) {
-        case Index::Action::CreateForNewlyCreatedTableOnly:
-            if (!isTableNewlyCreated) {
-                break;
-            }
-            // fallthrough
-        case Index::Action::Create: {
-            WCDB::StatementCreateIndex statement = index.statement;
-            std::ostringstream stream;
-            if (closingQuotation.length() == 0) {
-                stream << tableName << index.suffix;
-            } else {
-                stream << WCDB::UnsafeStringView(tableName.data(), tableName.length() - 1);
-                stream << index.suffix;
-                stream << closingQuotation;
-            }
-            statement.createIndex(WCDB::StringView(stream.str())).ifNotExists().table(tableName);
-            pairs.first.push_back(statement);
-        } break;
-        default:
-            WCTAssert(index.action == Index::Action::Drop);
-            std::ostringstream stream;
-            stream << tableName << index.suffix;
-            WCDB::StatementDropIndex statement = WCDB::StatementDropIndex().dropIndex(WCDB::StringView(stream.str())).ifExists();
-            pairs.second.push_back(statement);
-            break;
-        }
-    }
-    return pairs;
+    return BaseBinding::getColumnDef(name);
 }

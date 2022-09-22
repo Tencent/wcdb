@@ -183,7 +183,7 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
 
         m_statementForDeletingMigratedOneRow = StatementDelete()
                                                .deleteFrom(qualifiedSourceTable)
-                                               .order(descendingRowid)
+                                               .orders(descendingRowid)
                                                .limit(1);
     }
 

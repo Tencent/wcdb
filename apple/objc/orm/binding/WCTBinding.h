@@ -22,6 +22,7 @@
  * limitations under the License.
  */
 
+#import <WCDB/BaseBinding.hpp>
 #import <WCDB/CaseInsensiveList.hpp>
 #import <WCDB/StringView.hpp>
 #import <WCDB/WCTColumnCoding.h>
@@ -30,7 +31,7 @@
 #import <WCDB/WCTTableCoding.h>
 #import <map>
 
-class WCTBinding final {
+class WCTBinding final : public WCDB::BaseBinding {
 #pragma mark - Binding
 public:
     WCTBinding(Class cls);
@@ -48,51 +49,5 @@ private:
 
 #pragma mark - Column Def
 public:
-    const WCDB::CaseInsensiveList<WCDB::ColumnDef> &getColumnDefs() const;
     WCDB::ColumnDef *getColumnDef(const WCTProperty &property);
-
-private:
-    WCDB::CaseInsensiveList<WCDB::ColumnDef> m_columnDefs;
-
-#pragma mark - Table
-public:
-    WCDB::StatementCreateTable
-    generateCreateTableStatement(const WCDB::UnsafeStringView &tableName) const;
-
-    WCDB::StatementCreateVirtualTable
-    generateCreateVirtualTableStatement(const WCDB::UnsafeStringView &tableName) const;
-
-    WCDB::StatementCreateTable statementTable;
-    WCDB::StatementCreateVirtualTable statementVirtualTable;
-
-#pragma mark - Table Constraint
-public:
-    WCDB::TableConstraint &getOrCreateTableConstraint(const WCDB::UnsafeStringView &name);
-
-private:
-    /* constraint name */
-    WCDB::StringViewMap<WCDB::TableConstraint> m_constraints;
-
-#pragma mark - Index
-public:
-    struct Index {
-        Index(const WCDB::UnsafeStringView &suffix);
-        const WCDB::StringView suffix;
-        enum class Action {
-            Create,
-            CreateForNewlyCreatedTableOnly, // create if and only if the table is newly created by createTable:withClass:
-            Drop,
-        } action;
-        WCDB::StatementCreateIndex statement;
-    };
-    typedef struct Index Index;
-    Index &getOrCreateIndex(const WCDB::UnsafeStringView &suffix);
-
-    std::pair<std::list<WCDB::StatementCreateIndex>, std::list<WCDB::StatementDropIndex>>
-    generateIndexStatements(const WCDB::UnsafeStringView &tableName,
-                            bool isTableNewlyCreated) const;
-
-private:
-    /* index suffix */
-    WCDB::StringViewMap<Index> m_indexes;
 };
