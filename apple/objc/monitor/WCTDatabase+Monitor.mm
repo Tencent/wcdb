@@ -34,7 +34,9 @@ namespace WCDB {
 
 void Core::print(const UnsafeStringView& message)
 {
+#if WCDB_DEBUG
     NSLog(@"%s", message.data());
+#endif
 }
 
 }
