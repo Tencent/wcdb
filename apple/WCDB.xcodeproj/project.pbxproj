@@ -3363,7 +3363,6 @@
 				75A46C062843273A00B58207 /* ColumnConstraint.swift */,
 				03E165B427F42D6500D2C926 /* ColumnDef.swift */,
 				03E8228B2844BEFF0072CA57 /* CommonTableExpression.swift */,
-				03E165A127F42D6500D2C926 /* Convertible.swift */,
 				03E1659127F42D6500D2C926 /* Expression.swift */,
 				039BD3952845CB4200C58BE2 /* Filter.swift */,
 				03E1659D27F42D6500D2C926 /* ForeignKey.swift */,
@@ -3779,6 +3778,7 @@
 				03E165AA27F42D6500D2C926 /* Value.swift */,
 				03261363283F6CFB00836E0F /* Identifier.swift */,
 				03E165B727F42D6500D2C926 /* Statement.swift */,
+				03E165A127F42D6500D2C926 /* Convertible.swift */,
 				03261361283F6CC600836E0F /* identifier */,
 				03261362283F6CD300836E0F /* statement */,
 			);

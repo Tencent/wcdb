@@ -96,6 +96,17 @@ public:
         }
     }
 
+    template<typename V, typename Enable = void>
+    struct Convertible : public std::false_type {
+    public:
+        static _SyntaxList<T> asSyntaxList(const V&);
+    };
+
+    template<typename V, std::enable_if_t<Convertible<V>::value, int> = 0>
+    _SyntaxList(const V& v) : _SyntaxList(Convertible<V>::asSyntaxList(v))
+    {
+    }
+
     virtual ~_SyntaxList() = default;
 
     operator std::list<SyntaxType>() const
