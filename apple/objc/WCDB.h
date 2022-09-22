@@ -35,9 +35,12 @@
 #error Symbol `offset` should not be defined as a macro since it's a common used word.
 #endif
 
-#import <WCDB/CppInterface.h>
 #import <WCDB/Interface.h>
 #import <WCDB/WCTBuiltin.h>
 #import <WCDB/WINQ.h>
 
 #import <WCDB/WCTDatabase+Test.h>
+
+#import <WCDB/CPPORM.h>
+#import <WCDB/CPPORMMacro.h>
+#import <WCDB/CppInterface.h>

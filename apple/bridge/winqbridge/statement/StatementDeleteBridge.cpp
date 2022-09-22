@@ -71,7 +71,7 @@ void WCDBStatementDeleteConfigOrder(CPPStatementDelete deleteStatement,
 {
     WCDBGetObjectOrReturn(deleteStatement, WCDB::StatementDelete, cppDelete);
     WCDBGetCPPSyntaxListOrReturn(WCDB::OrderingTerm, cppOrders, orders, orderNum);
-    cppDelete->order(cppOrders);
+    cppDelete->orders(cppOrders);
 }
 
 void WCDBStatementDeleteConfigLimitRange(CPPStatementDelete deleteStatement,

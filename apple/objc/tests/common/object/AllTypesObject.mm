@@ -75,11 +75,11 @@ WCDB_PRIMARY(type)
 #define ASSIGN_WITH_MAX_VALUE(property) \
     ASSIGN_WITH_TYPED_MAX_VALUE(property, decltype(object.property))
 
-    ASSIGN_WITH_MAX_VALUE(enumNSValue);
-    ASSIGN_WITH_MAX_VALUE(optionNSValue);
-    ASSIGN_WITH_MAX_VALUE(enumValue);
-    ASSIGN_WITH_MAX_VALUE(enumClassValue);
-    ASSIGN_WITH_MAX_VALUE(literalEnumValue);
+    object.enumNSValue = EnumNSTypeMax;
+    object.optionNSValue = OptionNSTypeMax;
+    object.enumValue = EnumType::Max;
+    object.enumClassValue = EnumClassType::Max;
+    object.literalEnumValue = LiteralEnum::EnumMax;
 
     ASSIGN_WITH_MAX_VALUE(trueOrFalseValue);
     object.yesOrNoValue = YES;
@@ -117,11 +117,11 @@ WCDB_PRIMARY(type)
     object.property = std::numeric_limits<type>::min()
 #define ASSIGN_WITH_MIN_VALUE(property) ASSIGN_WITH_TYPED_MIN_VALUE(property, decltype(object.property))
 
-    ASSIGN_WITH_MIN_VALUE(enumNSValue);
-    ASSIGN_WITH_MIN_VALUE(optionNSValue);
-    ASSIGN_WITH_MIN_VALUE(enumValue);
-    ASSIGN_WITH_MIN_VALUE(enumClassValue);
-    ASSIGN_WITH_MIN_VALUE(literalEnumValue);
+    object.enumNSValue = EnumNSTypeMin;
+    object.optionNSValue = OptionNSTypeMin;
+    object.enumValue = EnumType::Min;
+    object.enumClassValue = EnumClassType::Min;
+    object.literalEnumValue = LiteralEnum::EnumMin;
 
     ASSIGN_WITH_MIN_VALUE(trueOrFalseValue);
     object.yesOrNoValue = NO;

@@ -199,7 +199,7 @@
         NSMutableArray<NSString *> *expectedSQLs = [NSMutableArray arrayWithArray:testSQLs];
         NSThread *tracedThread = [NSThread currentThread];
         __weak CPPDatabaseTestCase *weakSelf = self;
-        _database->traceSQL([weakSelf, tracedThread, expectedSQLs, trace](const WCDB::UnsafeStringView &, const WCDB::UnsafeStringView &sql, const void *) {
+        self.database->traceSQL([weakSelf, tracedThread, expectedSQLs, trace](const WCDB::UnsafeStringView &, const WCDB::UnsafeStringView &sql, const void *) {
             CPPDatabaseTestCase *strongSelf = weakSelf;
             if (!strongSelf.expectSQLsInAllThreads && tracedThread != [NSThread currentThread]) {
                 // skip other thread sqls due to the setting
@@ -213,7 +213,7 @@
             }
         });
         if (self.expectMode != DatabaseTestCaseExpectSomeSQLs) {
-            if (!_database->canOpen()) {
+            if (!self.database->canOpen()) {
                 TestCaseFailure();
                 break;
             }
@@ -235,7 +235,7 @@
         }
         [trace makeNO];
     } while (false);
-    _database->traceSQL(nullptr);
+    self.database->traceSQL(nullptr);
 }
 
 - (void)doTestSQLAsExpected:(NSMutableArray<NSString *> *)expectedSQLs sql:(const WCDB::UnsafeStringView &)cppSql

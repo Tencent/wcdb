@@ -38,7 +38,7 @@ public:
 
     StatementDelete& deleteFrom(const QualifiedTable& table);
     StatementDelete& where(const Expression& condition);
-    StatementDelete& order(const OrderingTerms& orderingTerms);
+    StatementDelete& orders(const OrderingTerms& orderingTerms);
 
     StatementDelete& limit(const Expression& from, const Expression& to);
 

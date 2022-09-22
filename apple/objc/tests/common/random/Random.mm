@@ -31,6 +31,9 @@
     std::shared_ptr<std::uniform_int_distribution<uint64_t>> _uniformUInt64;
     std::shared_ptr<std::uniform_int_distribution<uint32_t>> _uniformUInt32;
     std::shared_ptr<std::uniform_int_distribution<uint8_t>> _uniformUInt8;
+    std::shared_ptr<std::uniform_int_distribution<int8_t>> _uniformInt8;
+    std::shared_ptr<std::uniform_int_distribution<uint16_t>> _uniformUInt16;
+    std::shared_ptr<std::uniform_int_distribution<int16_t>> _uniformInt16;
     std::shared_ptr<std::uniform_int_distribution<int64_t>> _uniformInt64;
     std::shared_ptr<std::uniform_int_distribution<int32_t>> _uniformInt32;
     std::shared_ptr<std::uniform_int_distribution<bool>> _uniformBool;
@@ -115,6 +118,33 @@
             _uniformUInt8 = std::make_shared<std::uniform_int_distribution<uint8_t>>(std::numeric_limits<uint8_t>::min(), std::numeric_limits<uint8_t>::max());
         }
         return _uniformUInt8;
+    }
+}
+- (std::shared_ptr<std::uniform_int_distribution<int8_t>> &)uniformInt8
+{
+    @synchronized(self) {
+        if (_uniformInt8 == nullptr) {
+            _uniformInt8 = std::make_shared<std::uniform_int_distribution<int8_t>>(std::numeric_limits<int8_t>::min(), std::numeric_limits<int8_t>::max());
+        }
+        return _uniformInt8;
+    }
+}
+- (std::shared_ptr<std::uniform_int_distribution<uint16_t>> &)uniformUInt16
+{
+    @synchronized(self) {
+        if (_uniformUInt16 == nullptr) {
+            _uniformUInt16 = std::make_shared<std::uniform_int_distribution<uint16_t>>(std::numeric_limits<uint16_t>::min(), std::numeric_limits<uint16_t>::max());
+        }
+        return _uniformUInt16;
+    }
+}
+- (std::shared_ptr<std::uniform_int_distribution<int16_t>> &)uniformInt16
+{
+    @synchronized(self) {
+        if (_uniformInt16 == nullptr) {
+            _uniformInt16 = std::make_shared<std::uniform_int_distribution<int16_t>>(std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max());
+        }
+        return _uniformInt16;
     }
 }
 - (std::shared_ptr<std::uniform_int_distribution<int64_t>> &)uniformInt64
@@ -208,6 +238,21 @@
 - (uint8_t)uint8
 {
     return (*self.uniformUInt8.get())(*self.engine.get());
+}
+
+- (int8_t)int8
+{
+    return (*self.uniformInt8.get())(*self.engine.get());
+}
+
+- (uint16_t)uint16
+{
+    return (*self.uniformUInt8.get())(*self.engine.get());
+}
+
+- (int16_t)int16
+{
+    return (*self.uniformInt16.get())(*self.engine.get());
 }
 
 - (int64_t)int64

@@ -23,37 +23,28 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/CoreConst.h>
 #include <WCDB/Handle.hpp>
 #include <WCDB/HandleOperation.hpp>
 #include <WCDB/InnerHandle.hpp>
-#include <WCDB/WINQ.h>
+#include <WCDB/Notifier.hpp>
 
 namespace WCDB {
 
 HandleOperation::~HandleOperation() = default;
 
-bool HandleOperation::insertOneRow(const OneRowValue& row,
-                                   const Columns& columns,
-                                   const UnsafeStringView& table)
+bool HandleOperation::insertRows(const MultiRowsValue &rows,
+                                 const Columns &columns,
+                                 const UnsafeStringView &table)
 {
-    WCTRemedialAssert(row.size() == columns.size(),
-                      "Number of values is not equal to number of columns",
-                      return false;) return getHandleHolder()
-    ->execute(WCDB::StatementInsert().insertIntoTable(table).columns(columns).values(row));
-}
-
-bool HandleOperation::insertMultiRows(const MultiRowsValue& rows,
-                                      const Columns& columns,
-                                      const UnsafeStringView& table)
-{
-    return lazyRunTransaction([&](Handle& handle) {
+    auto insertAction = [&](Handle &handle) {
         StatementInsert insert
         = StatementInsert().insertIntoTable(table).columns(columns).values(
         BindParameter::bindParameters(columns.size()));
         if (!handle.prepare(insert)) {
             return false;
         }
-        for (const OneRowValue& row : rows) {
+        for (const OneRowValue &row : rows) {
             WCTRemedialAssert(columns.size() == row.size(),
                               "Number of values is not equal to number of columns",
                               handle.finalize();
@@ -66,32 +57,29 @@ bool HandleOperation::insertMultiRows(const MultiRowsValue& rows,
         }
         handle.finalize();
         return true;
-    });
+    };
+    if (rows.size() == 0) {
+        return true;
+    } else if (rows.size() == 1) {
+        Handle handle = Handle(getHandleHolder());
+        return insertAction(handle);
+    } else {
+        return lazyRunTransaction(insertAction);
+    }
 }
 
-bool HandleOperation::insertOrReplaceOneRow(const OneRowValue& row,
-                                            const Columns& columns,
-                                            const UnsafeStringView& table)
+bool HandleOperation::insertOrReplaceRows(const MultiRowsValue &rows,
+                                          const Columns &columns,
+                                          const UnsafeStringView &table)
 {
-    WCTRemedialAssert(row.size() == columns.size(),
-                      "Number of values is not equal to number of columns",
-                      return false;) return getHandleHolder()
-    ->execute(
-    WCDB::StatementInsert().insertIntoTable(table).orReplace().columns(columns).values(row));
-}
-
-bool HandleOperation::insertOrReplaceMultiRows(const MultiRowsValue& rows,
-                                               const Columns& columns,
-                                               const UnsafeStringView& table)
-{
-    return lazyRunTransaction([&](Handle& handle) {
+    auto insertAction = [&](Handle &handle) {
         StatementInsert insert
         = StatementInsert().insertIntoTable(table).orReplace().columns(columns).values(
         BindParameter::bindParameters(columns.size()));
         if (!handle.prepare(insert)) {
             return false;
         }
-        for (const OneRowValue& row : rows) {
+        for (const OneRowValue &row : rows) {
             WCTRemedialAssert(columns.size() == row.size(),
                               "Number of values is not equal to number of columns",
                               handle.finalize();
@@ -104,123 +92,102 @@ bool HandleOperation::insertOrReplaceMultiRows(const MultiRowsValue& rows,
         }
         handle.finalize();
         return true;
-    });
+    };
+    if (rows.size() == 0) {
+        return true;
+    } else if (rows.size() == 1) {
+        Handle handle = Handle(getHandleHolder());
+        return insertAction(handle);
+    } else {
+        return lazyRunTransaction(insertAction);
+    }
 }
 
-bool HandleOperation::updateValues(const OneRowValue& values,
-                                   const Columns& columns,
-                                   const UnsafeStringView& table,
-                                   const Expression& where)
+bool HandleOperation::updateRow(const OneRowValue &row,
+                                const Columns &columns,
+                                const UnsafeStringView &table,
+                                const Expression &where,
+                                const OrderingTerms &orders,
+                                const Expression &limit,
+                                const Expression &offset)
 {
     WCTRemedialAssert(columns.size() > 0, "Number of columns can not be zero", return false;)
-    WCTRemedialAssert(columns.size() == values.size(),
-                      "Number of values is not equal to number of columns",
+    WCTRemedialAssert(columns.size() == row.size(),
+                      "Number of values in this row is not equal to number of columns",
                       return false;) StatementUpdate update
     = StatementUpdate().update(table);
     for (int i = 0; i < columns.size(); i++) {
-        update.set(columns[i]).to(values[i]);
+        update.set(columns[i]).to(WCDB::BindParameter(i + 1));
     }
-    update.where(where);
-    return getHandleHolder()->execute(update);
+    configStatement(update, where, orders, limit, offset);
+    RecyclableHandle handle = getHandleHolder();
+    bool succeed = false;
+    if ((succeed = handle->prepare(update))) {
+        handle->bindRow(row);
+        succeed = handle->step();
+        handle->finalize();
+    }
+    return succeed;
 }
 
-bool HandleOperation::deleteValues(const UnsafeStringView& table, const Expression& where)
+bool HandleOperation::deleteValues(const UnsafeStringView &table,
+                                   const Expression &where,
+                                   const OrderingTerms &orders,
+                                   const Expression &limit,
+                                   const Expression &offset)
 {
-    return getHandleHolder()->execute(StatementDelete().deleteFrom(table).where(where));
+    StatementDelete delete_ = StatementDelete().deleteFrom(table);
+    configStatement(delete_, where, orders, limit, offset);
+    return getHandleHolder()->execute(delete_);
 }
 
-OptionalValue
-HandleOperation::selectValue(const ResultColumn& column, const UnsafeStringView& table)
+OptionalValue HandleOperation::selectValue(const ResultColumn &column,
+                                           const UnsafeStringView &table,
+                                           const Expression &where,
+                                           const OrderingTerms &orders,
+                                           const Expression &offset)
 {
-    return getValueFromStatement(StatementSelect().select(column).from(table));
+    auto select = StatementSelect().select(column).from(table);
+    configStatement(select, where, orders, Expression(1), offset);
+    return getValueFromStatement(select);
 }
 
-OptionalValue HandleOperation::selectValue(const ResultColumn& column,
-                                           const UnsafeStringView& table,
-                                           const Expression& where)
+OptionalOneColumn HandleOperation::selectOneColumn(const ResultColumn &column,
+                                                   const UnsafeStringView &table,
+                                                   const Expression &where,
+                                                   const OrderingTerms &orders,
+                                                   const Expression &limit,
+                                                   const Expression &offset)
 {
-    return getValueFromStatement(StatementSelect().select(column).from(table).where(where));
+    auto select = StatementSelect().select(column).from(table);
+    configStatement(select, where, orders, limit, offset);
+    return getOneColumnFromStatement(select);
 }
 
-OptionalOneColumn HandleOperation::selectOneColumn(const ResultColumn& column,
-                                                   const UnsafeStringView& table)
+OptionalOneRow HandleOperation::selectOneRow(const ResultColumns &columns,
+                                             const UnsafeStringView &table,
+                                             const Expression &where,
+                                             const OrderingTerms &orders,
+                                             const Expression &offset)
 {
-    return getOneColumnFromStatement(StatementSelect().select(column).from(table));
+    auto select = StatementSelect().select(columns).from(table);
+    configStatement(select, where, orders, Expression(1), offset);
+    return getOneRowFromStatement(select);
 }
 
-OptionalOneColumn HandleOperation::selectOneColumn(const ResultColumn& column,
-                                                   const UnsafeStringView& table,
-                                                   const Expression& where)
+OptionalMultiRows HandleOperation::selectAllRow(const ResultColumns &columns,
+                                                const UnsafeStringView &table,
+                                                const Expression &where,
+                                                const OrderingTerms &orders,
+                                                const Expression &limit,
+                                                const Expression &offset)
 {
-    return getOneColumnFromStatement(
-    StatementSelect().select(column).from(table).where(where));
+    auto select = StatementSelect().select(columns).from(table);
+    configStatement(select, where, orders, limit, offset);
+    return getAllRowsFromStatement(select);
 }
 
-OptionalOneColumn HandleOperation::selectOneColumn(const ResultColumn& column,
-                                                   const UnsafeStringView& table,
-                                                   const Expression& where,
-                                                   const OrderingTerm& order)
-{
-    return getOneColumnFromStatement(
-    StatementSelect().select(column).from(table).where(where).order(order));
-}
-
-OptionalOneColumn HandleOperation::selectOneColumn(const ResultColumn& column,
-                                                   const UnsafeStringView& table,
-                                                   const Expression& where,
-                                                   const OrderingTerm& order,
-                                                   const LiteralValue& limit)
-{
-    return getOneColumnFromStatement(
-    StatementSelect().select(column).from(table).where(where).order(order).limit(limit));
-}
-
-OptionalOneRow HandleOperation::selectOneRow(const ResultColumns& columns,
-                                             const UnsafeStringView& table)
-{
-    return getOneRowFromStatement(StatementSelect().select(columns).from(table));
-}
-
-OptionalOneRow HandleOperation::selectOneRow(const ResultColumns& columns,
-                                             const UnsafeStringView& table,
-                                             const Expression& where)
-{
-    return getOneRowFromStatement(StatementSelect().select(columns).from(table).where(where));
-}
-
-OptionalMultiRows HandleOperation::selectAllRow(const ResultColumns& columns,
-                                                const UnsafeStringView& table)
-{
-    return getAllRowsFromStatement(StatementSelect().select(columns).from(table));
-}
-
-OptionalMultiRows HandleOperation::selectAllRow(const ResultColumns& columns,
-                                                const UnsafeStringView& table,
-                                                const Expression& where)
-{
-    return getAllRowsFromStatement(StatementSelect().select(columns).from(table).where(where));
-}
-
-OptionalMultiRows HandleOperation::selectAllRow(const ResultColumns& columns,
-                                                const UnsafeStringView& table,
-                                                const Expression& where,
-                                                const OrderingTerm& order)
-{
-    return getAllRowsFromStatement(
-    StatementSelect().select(columns).from(table).where(where).order(order));
-}
-
-OptionalMultiRows HandleOperation::selectAllRow(const ResultColumns& columns,
-                                                const UnsafeStringView& table,
-                                                const Expression& where,
-                                                const OrderingTerm& order,
-                                                const LiteralValue& limit)
-{
-    return getAllRowsFromStatement(
-    StatementSelect().select(columns).from(table).where(where).order(order).limit(limit));
-}
-
-OptionalValue HandleOperation::getValueFromStatement(const Statement& statement, int index)
+OptionalValue HandleOperation::getValueFromStatement(const Statement &statement, int index)
 {
     Value result;
     RecyclableHandle handle = getHandleHolder();
@@ -236,7 +203,7 @@ OptionalValue HandleOperation::getValueFromStatement(const Statement& statement,
 }
 
 OptionalOneColumn
-HandleOperation::getOneColumnFromStatement(const Statement& statement, int index)
+HandleOperation::getOneColumnFromStatement(const Statement &statement, int index)
 {
     OptionalOneColumn result;
     RecyclableHandle handle = getHandleHolder();
@@ -249,7 +216,7 @@ HandleOperation::getOneColumnFromStatement(const Statement& statement, int index
     return result;
 }
 
-OptionalOneRow HandleOperation::getOneRowFromStatement(const Statement& statement)
+OptionalOneRow HandleOperation::getOneRowFromStatement(const Statement &statement)
 {
     OneRowValue result;
     RecyclableHandle handle = getHandleHolder();
@@ -264,7 +231,7 @@ OptionalOneRow HandleOperation::getOneRowFromStatement(const Statement& statemen
     return succeed ? result : OptionalOneRow();
 }
 
-OptionalMultiRows HandleOperation::getAllRowsFromStatement(const Statement& statement)
+OptionalMultiRows HandleOperation::getAllRowsFromStatement(const Statement &statement)
 {
     OptionalMultiRows result;
     RecyclableHandle handle = getHandleHolder();
@@ -276,10 +243,15 @@ OptionalMultiRows HandleOperation::getAllRowsFromStatement(const Statement& stat
     return result;
 }
 
+bool HandleOperation::execute(const Statement &statement)
+{
+    return getHandleHolder()->execute(statement);
+}
+
 bool HandleOperation::runTransaction(TransactionCallback inTransaction)
 {
-    return getHandleHolder()->runTransaction([inTransaction](InnerHandle* innerHandle) {
-        Handle handle = Handle(innerHandle);
+    return getHandleHolder()->runTransaction([inTransaction, this](InnerHandle *innerHandle) {
+        Handle handle = Handle(getDatabaseHolder(), innerHandle);
         return inTransaction(handle);
     });
 }
@@ -288,7 +260,7 @@ bool HandleOperation::lazyRunTransaction(TransactionCallback inTransaction)
 {
     RecyclableHandle handleHolder = getHandleHolder();
     if (handleHolder->isInTransaction()) {
-        Handle handle = Handle(handleHolder.get());
+        Handle handle = Handle(getDatabaseHolder(), handleHolder.get());
         return inTransaction(handle);
     } else {
         handleHolder->markErrorNotAllowedWithinTransaction();
@@ -299,33 +271,50 @@ bool HandleOperation::lazyRunTransaction(TransactionCallback inTransaction)
 bool HandleOperation::runPauseableTransactionWithOneLoop(TransactionCallbackForOneLoop inTransaction)
 {
     return getHandleHolder()->runPauseableTransactionWithOneLoop(
-    [inTransaction](InnerHandle* innerHandle, bool& stop, bool isNewTransaction) {
-        Handle handle = Handle(innerHandle);
+    [inTransaction, this](InnerHandle *innerHandle, bool &stop, bool isNewTransaction) {
+        Handle handle = Handle(getDatabaseHolder(), innerHandle);
         return inTransaction(handle, stop, isNewTransaction);
     });
 }
 
 bool HandleOperation::runNestedTransaction(TransactionCallback inTransaction)
 {
-    return getHandleHolder()->runNestedTransaction([inTransaction](InnerHandle* innerHandle) {
-        Handle handle = Handle(innerHandle);
+    return getHandleHolder()->runNestedTransaction([inTransaction, this](InnerHandle *innerHandle) {
+        Handle handle = Handle(getDatabaseHolder(), innerHandle);
         return inTransaction(handle);
     });
 }
 
-std::optional<bool> HandleOperation::tableExists(const UnsafeStringView& tableName)
+std::optional<bool> HandleOperation::tableExists(const UnsafeStringView &tableName)
 {
     return getHandleHolder()->tableExists(tableName);
 }
 
-bool HandleOperation::dropTable(const UnsafeStringView& tableName)
+std::optional<std::set<StringView>>
+HandleOperation::getColumns(const UnsafeStringView &table)
+{
+    return getHandleHolder()->getColumns(table);
+}
+
+bool HandleOperation::dropTable(const UnsafeStringView &tableName)
 {
     return getHandleHolder()->execute(StatementDropTable().dropTable(tableName).ifExists());
 }
 
-bool HandleOperation::dropIndex(const UnsafeStringView& indexName)
+bool HandleOperation::dropIndex(const UnsafeStringView &indexName)
 {
     return getHandleHolder()->execute(StatementDropIndex().dropIndex(indexName).ifExists());
+}
+
+void HandleOperation::notifyError(Error &error)
+{
+    error.infos.insert_or_assign(ErrorStringKeyPath, getHandleHolder()->getPath());
+    Notifier::shared().notify(error);
+}
+
+void HandleOperation::assertCondition(bool condition)
+{
+    WCTAssert(condition);
 }
 
 } // namespace WCDB

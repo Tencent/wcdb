@@ -1,5 +1,5 @@
 //
-// Created by qiuwenchen on 2022/8/3.
+// Created by qiuwenchen on 2022/9/7.
 //
 
 /*
@@ -22,33 +22,22 @@
  * limitations under the License.
  */
 
-#pragma once
-#include <WCDB/Statement.hpp>
-#include <WCDB/StatementOperation.hpp>
+#import <WCDB/WCDB.h>
 
-namespace WCDB {
-
-class InnerHandleStatement;
-class Handle;
-
-class HandleStatement : public StatementOperation {
-    friend class Handle;
-
+class CPPTestCaseObject {
 public:
-    HandleStatement(HandleStatement &&other);
-    ~HandleStatement() override final;
-    StringView m_tag;
+    CPPTestCaseObject();
+    CPPTestCaseObject(int id, const char *text);
+    CPPTestCaseObject(int id, const std::string &text);
+    CPPTestCaseObject(int id);
+    ~CPPTestCaseObject();
+    static CPPTestCaseObject autoIncrementObject(const std::string &text);
+    static CPPTestCaseObject autoIncrementObject(const char *text);
 
-protected:
-    HandleStatement() = delete;
-    HandleStatement(const HandleStatement &) = delete;
-    HandleStatement &operator=(const HandleStatement &) = delete;
-    HandleStatement(InnerHandleStatement *handleStatement);
+    bool operator==(const CPPTestCaseObject &other);
 
-    InnerHandleStatement *getInnerHandleStatement() override final;
+    int identifier;
+    std::string content;
 
-private:
-    InnerHandleStatement *m_innerHandleStatement;
+    WCDB_CPP_ORM_DECLARATION(CPPTestCaseObject)
 };
-
-} //namespace WCDB

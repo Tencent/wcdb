@@ -32,12 +32,6 @@ public:
     WCTProperty(const WCDB::UnsafeStringView& name, const WCTColumnBinding& columnBinding);
     ~WCTProperty() override final;
 
-    WCDB::IndexedColumn asIndex() const;
-    WCDB::IndexedColumn asIndex(const WCTOrder& order) const;
-
-    WCDB::OrderingTerm asOrder() const;
-    WCDB::OrderingTerm asOrder(const WCTOrder& order) const;
-
     WCDB::Column table(const WCDB::UnsafeStringView& table) const;
 };
 

@@ -247,7 +247,7 @@
         TestCaseAssertTrue([self.handle step]);
 
         NSNumber* extractedValue = [self.handle extractNumberAtIndex:0];
-        TestCaseAssertTrue([value isEqualToNumber:extractedValue]);
+        TestCaseAssertTrue(abs(value.doubleValue - extractedValue.doubleValue) / abs(extractedValue.doubleValue) < 10000000);
         [self.handle finalizeStatement];
     }
 }

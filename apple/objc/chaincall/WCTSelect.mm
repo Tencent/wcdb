@@ -32,12 +32,18 @@
 
 @implementation WCTSelect {
     WCTResultColumns _resultColumns;
+    Class<WCTTableCoding> m_class;
 }
 
 - (void)willPrepare:(WCDB::StatementSelect &)statement
 {
     if (statement.syntax().orderingTerms.empty()) {
-        statement.order(WCDB::OrderingTerm::ascendingRowid());
+        WCTAssert(m_class != nil && [m_class respondsToSelector:@selector(objectRelationalMapping)]);
+        const WCTBinding &binding = [m_class objectRelationalMapping];
+        const WCDB::StatementCreateTable &createTable = binding.statementTable;
+        if (!createTable.syntax().withoutRowid) {
+            statement.order(WCDB::OrderingTerm::ascendingRowid());
+        }
     }
 }
 
@@ -49,6 +55,7 @@
 
 - (instancetype)onResultColumns:(const WCTResultColumns &)resultColumns
 {
+    m_class = resultColumns.front().getColumnBinding().getClass();
     _resultColumns = resultColumns;
     _statement.select(_resultColumns);
     return self;

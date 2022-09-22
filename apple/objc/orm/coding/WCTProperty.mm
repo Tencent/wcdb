@@ -44,26 +44,6 @@ WCTProperty::WCTProperty(const WCDB::UnsafeStringView& name, const WCTColumnBind
 {
 }
 
-WCDB::IndexedColumn WCTProperty::asIndex() const
-{
-    return WCDB::IndexedColumn(*this);
-}
-
-WCDB::IndexedColumn WCTProperty::asIndex(const WCTOrder& order) const
-{
-    return WCDB::IndexedColumn(*this).order(order);
-}
-
-WCDB::OrderingTerm WCTProperty::asOrder() const
-{
-    return WCDB::OrderingTerm(*this);
-}
-
-WCDB::OrderingTerm WCTProperty::asOrder(const WCTOrder& order) const
-{
-    return WCDB::OrderingTerm(*this).order(order);
-}
-
 WCDB::Column WCTProperty::table(const WCDB::UnsafeStringView& table) const
 {
     return WCDB::Column(*this).table(table);

@@ -23,8 +23,14 @@
  */
 
 #import "CPPTableTestCase.h"
+#import "CPPORMTestUtil.h"
 #import "TestCaseAssertion.h"
 #import <Foundation/Foundation.h>
+
+@interface CPPTableTestCase () {
+    std::shared_ptr<WCDB::Table<CPPTestCaseObject>> m_table;
+}
+@end
 
 @implementation CPPTableTestCase
 
@@ -38,7 +44,104 @@
     }
 }
 
-- (BOOL)createTable
+#pragma mark - Object
+- (WCDB::Table<CPPTestCaseObject>&)table
+{
+    if (!m_table) {
+        m_table = std::make_shared<WCDB::Table<CPPTestCaseObject>>(self.database->getTable<CPPTestCaseObject>(self.tableName.UTF8String));
+    }
+    return *m_table.get();
+}
+
+- (BOOL)createObjectTable
+{
+    return self.database->createTable<CPPTestCaseObject>(self.tableName.UTF8String);
+}
+
+- (void)doTestObjects:(const WCDB::ValueArray<CPPTestCaseObject>&)objects
+               andSQL:(NSString*)sql
+    afterModification:(BOOL (^)())block
+{
+    [self doTestObjects:objects andSQLs:@[ sql ] afterModification:block];
+}
+
+- (void)doTestObjects:(const WCDB::ValueArray<CPPTestCaseObject>&)objects
+              andSQLs:(NSArray<NSString*>*)sqls
+    afterModification:(BOOL (^)())block
+{
+    TestCaseAssertTrue(sqls.count > 0);
+    [self doTestSQLs:sqls inOperation:block];
+    WCDB::ValueArray<CPPTestCaseObject> selected = [self getAllObjects];
+    [self check:CPPMultiRowValueExtract(selected) isEqualTo:CPPMultiRowValueExtract(objects)];
+}
+
+- (void)doTestObjects:(const WCDB::ValueArray<CPPTestCaseObject>&)objects
+            andNumber:(int)numberOfInsertSQLs
+         ofInsertSQLs:(NSString*)insertSQL
+       afterInsertion:(BOOL (^)())block
+{
+    TestCaseAssertTrue(numberOfInsertSQLs > 0);
+    TestCaseAssertTrue(insertSQL != nil);
+    NSMutableArray<NSString*>* sqls = [NSMutableArray array];
+    if (numberOfInsertSQLs > 1) {
+        [sqls addObject:@"BEGIN IMMEDIATE"];
+    }
+    for (int i = 0; i < numberOfInsertSQLs; ++i) {
+        [sqls addObject:insertSQL];
+    }
+    if (numberOfInsertSQLs > 1) {
+        [sqls addObject:@"COMMIT"];
+    }
+    [self doTestObjects:objects
+                andSQLs:sqls
+      afterModification:block];
+}
+
+- (void)doTestObject:(const CPPTestCaseObject&)object
+              andSQL:(NSString*)sql
+         bySelecting:(std::optional<CPPTestCaseObject> (^)())block
+{
+    [self doTestObjects:object
+                andSQLs:@[ sql ]
+            bySelecting:^std::optional<WCDB::ValueArray<CPPTestCaseObject>> {
+                const std::optional<CPPTestCaseObject> result = block();
+                TestCaseAssertTrue(result.has_value());
+                return { result.value() };
+            }];
+}
+
+- (void)doTestObjects:(const WCDB::ValueArray<CPPTestCaseObject>&)expectedObjects
+               andSQL:(NSString*)sql
+          bySelecting:(std::optional<WCDB::ValueArray<CPPTestCaseObject>> (^)())block
+{
+    [self doTestObjects:expectedObjects andSQLs:@[ sql ] bySelecting:block];
+}
+
+- (void)doTestObjects:(const WCDB::ValueArray<CPPTestCaseObject>&)expectedObjects
+              andSQLs:(NSArray<NSString*>*)expectedSQLs
+          bySelecting:(std::optional<WCDB::ValueArray<CPPTestCaseObject>> (^)())block
+{
+    __block WCDB::ValueArray<CPPTestCaseObject> selected;
+    [self doTestSQLs:expectedSQLs
+         inOperation:^BOOL {
+             auto values = block();
+             TestCaseAssertTrue(values.has_value());
+             selected = values.value();
+             return selected.size() > 0;
+         }];
+    [self check:CPPMultiRowValueExtract(selected) isEqualTo:CPPMultiRowValueExtract(expectedObjects)];
+}
+
+- (WCDB::ValueArray<CPPTestCaseObject>)getAllObjects
+{
+    auto allObject = self.table.getAllObjects();
+    TestCaseAssertTrue(allObject.has_value());
+    return allObject.value();
+}
+
+#pragma mark - Value
+
+- (BOOL)createValueTable
 {
     WCDB::StatementCreateTable createTable = WCDB::StatementCreateTable().createTable(self.tableName.UTF8String);
     createTable.define(WCDB::ColumnDef("identifier", WCDB::ColumnType::Integer).constraint(WCDB::ColumnConstraint().primaryKey().autoIncrement()));
@@ -101,7 +204,7 @@
          }];
 }
 
-- (void)doTestValue:(WCDB::Value)value
+- (void)doTestValue:(const WCDB::Value&)value
              andSQL:(NSString*)sql
         bySelecting:(WCDB::OptionalValue (^)())block
 {
@@ -136,6 +239,11 @@
              selected = values.value();
              return selected.size() > 0;
          }];
+    [self check:selected isEqualTo:expectedRows];
+}
+
+- (void)check:(const WCDB::MultiRowsValue&)selected isEqualTo:(const WCDB::MultiRowsValue&)expectedRows
+{
     TestCaseAssertEqual(selected.size(), expectedRows.size());
     for (int i = 0; i < selected.size(); i++) {
         const WCDB::OneRowValue& selectedRow = selected[i];

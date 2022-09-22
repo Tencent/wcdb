@@ -52,7 +52,7 @@ StatementDelete& StatementDelete::where(const Expression& condition)
     return *this;
 }
 
-StatementDelete& StatementDelete::order(const OrderingTerms& orderingTerms)
+StatementDelete& StatementDelete::orders(const OrderingTerms& orderingTerms)
 {
     syntax().orderingTerms = orderingTerms;
     return *this;

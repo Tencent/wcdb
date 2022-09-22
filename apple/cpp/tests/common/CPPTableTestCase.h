@@ -23,38 +23,67 @@
  */
 
 #import "CPPDatabaseTestCase.h"
-#import <WCDB/Value.hpp>
-#import <WCDB/WINQ.h>
+#import "CPPTestCaseObject.h"
 
 @interface CPPTableTestCase : CPPDatabaseTestCase
 
-@property (nonatomic, retain) NSString* tableName;
+@property (nonatomic, retain) NSString *tableName;
+- (BOOL)dropTable;
 
-- (BOOL)createTable;
+#pragma mark - Object
+@property (nonatomic, readonly) WCDB::Table<CPPTestCaseObject> &table;
+- (BOOL)createObjectTable;
 
+- (void)doTestObjects:(const WCDB::ValueArray<CPPTestCaseObject> &)objects
+               andSQL:(NSString *)sql
+    afterModification:(BOOL (^)())block;
+
+- (void)doTestObjects:(const WCDB::ValueArray<CPPTestCaseObject> &)objects
+              andSQLs:(NSArray<NSString *> *)sqls
+    afterModification:(BOOL (^)())block;
+
+- (void)doTestObjects:(const WCDB::ValueArray<CPPTestCaseObject> &)objects
+            andNumber:(int)numberOfInsertSQLs
+         ofInsertSQLs:(NSString *)insertSQL
+       afterInsertion:(BOOL (^)())block;
+
+- (void)doTestObject:(const CPPTestCaseObject &)object
+              andSQL:(NSString *)sql
+         bySelecting:(std::optional<CPPTestCaseObject> (^)())block;
+
+- (void)doTestObjects:(const WCDB::ValueArray<CPPTestCaseObject> &)objects
+               andSQL:(NSString *)sql
+          bySelecting:(std::optional<WCDB::ValueArray<CPPTestCaseObject>> (^)())block;
+
+- (void)doTestObjects:(const WCDB::ValueArray<CPPTestCaseObject> &)expectedObjects
+              andSQLs:(NSArray<NSString *> *)expectedSQLs
+          bySelecting:(std::optional<WCDB::ValueArray<CPPTestCaseObject>> (^)())block;
+
+- (WCDB::ValueArray<CPPTestCaseObject>)getAllObjects;
+
+#pragma mark - Value
+- (BOOL)createValueTable;
 - (WCDB::Columns)columns;
 - (WCDB::ResultColumns)resultColumns;
 
-- (BOOL)dropTable;
-
-- (void)doTestRow:(const WCDB::OneRowValue&)row
-           andSQL:(NSString*)sql
+- (void)doTestRow:(const WCDB::OneRowValue &)row
+           andSQL:(NSString *)sql
       bySelecting:(WCDB::OptionalOneRow (^)())block;
 
-- (void)doTestColumn:(const WCDB::OneColumnValue&)column
-              andSQL:(NSString*)sql
+- (void)doTestColumn:(const WCDB::OneColumnValue &)column
+              andSQL:(NSString *)sql
          bySelecting:(WCDB::OptionalOneColumn (^)())block;
 
-- (void)doTestValue:(WCDB::Value)value
-             andSQL:(NSString*)sql
+- (void)doTestValue:(const WCDB::Value &)value
+             andSQL:(NSString *)sql
         bySelecting:(WCDB::OptionalValue (^)())block;
 
-- (void)doTestRows:(const WCDB::MultiRowsValue&)rows
-            andSQL:(NSString*)sql
+- (void)doTestRows:(const WCDB::MultiRowsValue &)rows
+            andSQL:(NSString *)sql
        bySelecting:(WCDB::OptionalMultiRows (^)())block;
 
-- (void)doTestRows:(const WCDB::MultiRowsValue&)rows
-           andSQLs:(NSArray<NSString*>*)sqls
+- (void)doTestRows:(const WCDB::MultiRowsValue &)rows
+           andSQLs:(NSArray<NSString *> *)sqls
        bySelecting:(WCDB::OptionalMultiRows (^)())block;
 
 - (WCDB::MultiRowsValue)getAllvalues;

@@ -238,12 +238,12 @@
         @"CREATE TABLE IF NOT EXISTS main.'test@Table'(index_ INTEGER, indexAsc INTEGER, indexDesc INTEGER, multiIndex INTEGER, multiIndexAsc INTEGER, multiIndexDesc INTEGER, uniqueIndex INTEGER, uniqueIndexAsc INTEGER, uniqueIndexDesc INTEGER)",
 #endif
         @"CREATE INDEX IF NOT EXISTS main.'test@Table_index' ON 'test@Table'(index_)",
-        @"CREATE INDEX IF NOT EXISTS main.'test@Table_index_asc' ON 'test@Table'(indexAsc)",
-        @"CREATE INDEX IF NOT EXISTS main.'test@Table_index_desc' ON 'test@Table'(indexDesc)",
-        @"CREATE INDEX IF NOT EXISTS main.'test@Table_multi_index' ON 'test@Table'(multiIndex, multiIndexAsc, multiIndexDesc)",
+        @"CREATE INDEX IF NOT EXISTS main.'test@Table_index_asc' ON 'test@Table'(indexAsc ASC)",
+        @"CREATE INDEX IF NOT EXISTS main.'test@Table_index_desc' ON 'test@Table'(indexDesc DESC)",
+        @"CREATE INDEX IF NOT EXISTS main.'test@Table_multi_index' ON 'test@Table'(multiIndex, multiIndexAsc ASC, multiIndexDesc DESC)",
         @"CREATE UNIQUE INDEX IF NOT EXISTS main.'test@Table_unique_index' ON 'test@Table'(uniqueIndex)",
-        @"CREATE UNIQUE INDEX IF NOT EXISTS main.'test@Table_unique_index_asc' ON 'test@Table'(uniqueIndexAsc)",
-        @"CREATE UNIQUE INDEX IF NOT EXISTS main.'test@Table_unique_index_desc' ON 'test@Table'(uniqueIndexDesc)",
+        @"CREATE UNIQUE INDEX IF NOT EXISTS main.'test@Table_unique_index_asc' ON 'test@Table'(uniqueIndexAsc ASC)",
+        @"CREATE UNIQUE INDEX IF NOT EXISTS main.'test@Table_unique_index_desc' ON 'test@Table'(uniqueIndexDesc DESC)",
     ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected];
 
@@ -256,12 +256,12 @@
         @"CREATE TABLE IF NOT EXISTS main.testTable(index_ INTEGER, indexAsc INTEGER, indexDesc INTEGER, multiIndex INTEGER, multiIndexAsc INTEGER, multiIndexDesc INTEGER, uniqueIndex INTEGER, uniqueIndexAsc INTEGER, uniqueIndexDesc INTEGER)",
 #endif
         @"CREATE INDEX IF NOT EXISTS main.testTable_index ON testTable(index_)",
-        @"CREATE INDEX IF NOT EXISTS main.testTable_index_asc ON testTable(indexAsc)",
-        @"CREATE INDEX IF NOT EXISTS main.testTable_index_desc ON testTable(indexDesc)",
-        @"CREATE INDEX IF NOT EXISTS main.testTable_multi_index ON testTable(multiIndex, multiIndexAsc, multiIndexDesc)",
+        @"CREATE INDEX IF NOT EXISTS main.testTable_index_asc ON testTable(indexAsc ASC)",
+        @"CREATE INDEX IF NOT EXISTS main.testTable_index_desc ON testTable(indexDesc DESC)",
+        @"CREATE INDEX IF NOT EXISTS main.testTable_multi_index ON testTable(multiIndex, multiIndexAsc ASC, multiIndexDesc DESC)",
         @"CREATE UNIQUE INDEX IF NOT EXISTS main.testTable_unique_index ON testTable(uniqueIndex)",
-        @"CREATE UNIQUE INDEX IF NOT EXISTS main.testTable_unique_index_asc ON testTable(uniqueIndexAsc)",
-        @"CREATE UNIQUE INDEX IF NOT EXISTS main.testTable_unique_index_desc ON testTable(uniqueIndexDesc)",
+        @"CREATE UNIQUE INDEX IF NOT EXISTS main.testTable_unique_index_asc ON testTable(uniqueIndexAsc ASC)",
+        @"CREATE UNIQUE INDEX IF NOT EXISTS main.testTable_unique_index_desc ON testTable(uniqueIndexDesc DESC)",
     ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected];
 }

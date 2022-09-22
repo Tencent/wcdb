@@ -42,15 +42,15 @@ WCDB_SYNTHESIZE(multiIndexAsc)
 WCDB_SYNTHESIZE(multiIndexDesc)
 
 WCDB_INDEX(@"_index", index_);
-WCDB_INDEX(@"_index_asc", indexAsc);
-WCDB_INDEX(@"_index_desc", indexDesc);
+WCDB_INDEX_ASC(@"_index_asc", indexAsc);
+WCDB_INDEX_DESC(@"_index_desc", indexDesc);
 
 WCDB_UNIQUE_INDEX(@"_unique_index", uniqueIndex);
-WCDB_UNIQUE_INDEX(@"_unique_index_asc", uniqueIndexAsc);
-WCDB_UNIQUE_INDEX(@"_unique_index_desc", uniqueIndexDesc);
+WCDB_UNIQUE_INDEX_ASC(@"_unique_index_asc", uniqueIndexAsc);
+WCDB_UNIQUE_INDEX_DESC(@"_unique_index_desc", uniqueIndexDesc);
 
 WCDB_INDEX(@"_multi_index", multiIndex);
-WCDB_INDEX(@"_multi_index", multiIndexAsc);
-WCDB_INDEX(@"_multi_index", multiIndexDesc);
+WCDB_INDEX_ASC(@"_multi_index", multiIndexAsc);
+WCDB_INDEX_DESC(@"_multi_index", multiIndexDesc);
 
 @end

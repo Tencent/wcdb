@@ -22,6 +22,7 @@
  * limitations under the License.
  */
 
+#import "CPPTestCaseObject.h"
 #import "Random.h"
 #import <WCDB/Value.hpp>
 
@@ -30,5 +31,15 @@
 - (WCDB::MultiRowsValue)testCaseValuesWithCount:(NSUInteger)count startingFromIdentifier:(int64_t)identifier;
 
 - (WCDB::MultiRowsValue)autoIncrementTestCaseValuesWithCount:(NSUInteger)count;
+
+- (CPPTestCaseObject)testCaseObjectWithIdentifier:(int)identifier;
+
+- (CPPTestCaseObject)autoIncrementTestCaseObject;
+
+- (CPPTestCaseObject)autoIncrementTestCaseObjectWithIdentifier:(int)identifier;
+
+- (WCDB::ValueArray<CPPTestCaseObject>)testCaseObjectsWithCount:(NSUInteger)count startingFromIdentifier:(int)identifier;
+
+- (WCDB::ValueArray<CPPTestCaseObject>)autoIncrementTestCaseObjectsWithCount:(NSUInteger)count;
 
 @end

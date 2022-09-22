@@ -23,95 +23,79 @@
  */
 
 #pragma once
-#include <WCDB/RecyclableHandle.hpp>
-#include <WCDB/SyntaxForwardDeclaration.h>
+
+#include <WCDB/BaseOperation.hpp>
 #include <WCDB/Value.hpp>
-#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
-class RecyclableHandle;
-class Handle;
-
-class HandleOperation {
-#pragma mark - insert
+class HandleOperation : public BaseOperation {
+#pragma mark - Insert
 public:
-    bool insertOneRow(const OneRowValue& row, const Columns& columns, const UnsafeStringView& table);
-    bool insertMultiRows(const MultiRowsValue& rows,
-                         const Columns& columns,
-                         const UnsafeStringView& table);
-    bool insertOrReplaceOneRow(const OneRowValue& row,
-                               const Columns& columns,
-                               const UnsafeStringView& table);
-    bool insertOrReplaceMultiRows(const MultiRowsValue& rows,
-                                  const Columns& columns,
-                                  const UnsafeStringView& table);
+    bool insertRows(const MultiRowsValue &rows, const Columns &columns, const UnsafeStringView &table);
+    bool insertOrReplaceRows(const MultiRowsValue &rows,
+                             const Columns &columns,
+                             const UnsafeStringView &table);
 
-#pragma mark - update
+#pragma mark - Update
 public:
-    bool updateValues(const OneRowValue& values,
-                      const Columns& columns,
-                      const UnsafeStringView& table,
-                      const Expression& where);
+    bool updateRow(const OneRowValue &row,
+                   const Columns &columns,
+                   const UnsafeStringView &table,
+                   const Expression &where = Expression(),
+                   const OrderingTerms &orders = OrderingTerms(),
+                   const Expression &limit = Expression(),
+                   const Expression &offset = Expression());
 
 #pragma mark - delete
 public:
-    bool deleteValues(const UnsafeStringView& table, const Expression& where);
+    bool deleteValues(const UnsafeStringView &table,
+                      const Expression &where = Expression(),
+                      const OrderingTerms &orders = OrderingTerms(),
+                      const Expression &limit = Expression(),
+                      const Expression &offset = Expression());
 
-#pragma mark - select
+#pragma mark - Select
 public:
-    OptionalValue selectValue(const ResultColumn& column, const UnsafeStringView& table);
-    OptionalValue selectValue(const ResultColumn& column,
-                              const UnsafeStringView& table,
-                              const Expression& where);
+    OptionalValue selectValue(const ResultColumn &column,
+                              const UnsafeStringView &table,
+                              const Expression &where = Expression(),
+                              const OrderingTerms &orders = OrderingTerms(),
+                              const Expression &offset = Expression());
 
-    OptionalOneColumn
-    selectOneColumn(const ResultColumn& column, const UnsafeStringView& table);
-    OptionalOneColumn selectOneColumn(const ResultColumn& column,
-                                      const UnsafeStringView& table,
-                                      const Expression& where);
-    OptionalOneColumn selectOneColumn(const ResultColumn& column,
-                                      const UnsafeStringView& table,
-                                      const Expression& where,
-                                      const OrderingTerm& order);
-    OptionalOneColumn selectOneColumn(const ResultColumn& column,
-                                      const UnsafeStringView& table,
-                                      const Expression& where,
-                                      const OrderingTerm& order,
-                                      const LiteralValue& limit);
+    OptionalOneColumn selectOneColumn(const ResultColumn &column,
+                                      const UnsafeStringView &table,
+                                      const Expression &where = Expression(),
+                                      const OrderingTerms &orders = OrderingTerms(),
+                                      const Expression &limit = Expression(),
+                                      const Expression &offset = Expression());
 
-    OptionalOneRow
-    selectOneRow(const ResultColumns& columns, const UnsafeStringView& table);
-    OptionalOneRow selectOneRow(const ResultColumns& columns,
-                                const UnsafeStringView& table,
-                                const Expression& where);
+    OptionalOneRow selectOneRow(const ResultColumns &columns,
+                                const UnsafeStringView &table,
+                                const Expression &where = Expression(),
+                                const OrderingTerms &orders = OrderingTerms(),
+                                const Expression &offset = Expression());
 
-    OptionalMultiRows
-    selectAllRow(const ResultColumns& columns, const UnsafeStringView& table);
-    OptionalMultiRows selectAllRow(const ResultColumns& columns,
-                                   const UnsafeStringView& table,
-                                   const Expression& where);
-    OptionalMultiRows selectAllRow(const ResultColumns& columns,
-                                   const UnsafeStringView& table,
-                                   const Expression& where,
-                                   const OrderingTerm& order);
-    OptionalMultiRows selectAllRow(const ResultColumns& columns,
-                                   const UnsafeStringView& table,
-                                   const Expression& where,
-                                   const OrderingTerm& order,
-                                   const LiteralValue& limit);
+    OptionalMultiRows selectAllRow(const ResultColumns &columns,
+                                   const UnsafeStringView &table,
+                                   const Expression &where = Expression(),
+                                   const OrderingTerms &orders = OrderingTerms(),
+                                   const Expression &limit = Expression(),
+                                   const Expression &offset = Expression());
 
 #pragma mark - Statement
 public:
-    OptionalValue getValueFromStatement(const Statement& statement, int index = 0);
-    OptionalOneRow getOneColumnFromStatement(const Statement& statement, int index = 0);
-    OptionalOneRow getOneRowFromStatement(const Statement& statement);
-    OptionalMultiRows getAllRowsFromStatement(const Statement& statement);
+    OptionalValue getValueFromStatement(const Statement &statement, int index = 0);
+    OptionalOneRow getOneColumnFromStatement(const Statement &statement, int index = 0);
+    OptionalOneRow getOneRowFromStatement(const Statement &statement);
+    OptionalMultiRows getAllRowsFromStatement(const Statement &statement);
+
+    bool execute(const Statement &statement);
 
 #pragma mark - Transaction
 public:
-    typedef std::function<bool(Handle&)> TransactionCallback;
-    typedef std::function<bool(Handle&, bool&, bool)> TransactionCallbackForOneLoop;
+    typedef std::function<bool(Handle &)> TransactionCallback;
+    typedef std::function<bool(Handle &, bool &, bool)> TransactionCallbackForOneLoop;
 
     bool runTransaction(TransactionCallback inTransaction);
     bool runPauseableTransactionWithOneLoop(TransactionCallbackForOneLoop inTransaction);
@@ -122,13 +106,15 @@ protected:
 
 #pragma mark - Table
 public:
-    std::optional<bool> tableExists(const UnsafeStringView& tableName);
-    bool dropTable(const UnsafeStringView& tableName);
-    bool dropIndex(const UnsafeStringView& indexName);
+    std::optional<bool> tableExists(const UnsafeStringView &tableName);
+    std::optional<std::set<StringView>> getColumns(const UnsafeStringView &table);
+    bool dropTable(const UnsafeStringView &tableName);
+    bool dropIndex(const UnsafeStringView &indexName);
 
 protected:
-    virtual ~HandleOperation();
-    virtual RecyclableHandle getHandleHolder() = 0;
+    void notifyError(Error &error);
+    void assertCondition(bool condition);
+    virtual ~HandleOperation() override = 0;
 };
 
 } //namespace WCDB
