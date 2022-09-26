@@ -125,7 +125,7 @@ esac
 platformBasedParameters=()
 case "$platform" in
     iOS)
-        platformBasedParameters+=('product="$products/$configuration-iphoneos/$target.framework" sdk=iphoneos arch="arm64 -arch arm64e"')
+        platformBasedParameters+=('product="$products/$configuration-iphoneos/$target.framework" sdk=iphoneos arch="arm64"')
         platformBasedParameters+=('product="$products/$configuration-iphonesimulator/$target.framework" sdk=iphonesimulator arch=x86_64')
     ;;
     macOS)
@@ -160,9 +160,11 @@ then
 fi
 declare template
 machos=()
+productsDir=()
 for platformBasedParameter in "${platformBasedParameters[@]}"; do
     eval "$platformBasedParameter"
     machos+=( "$product/$target" )
+    productsDir+=( $product )
     if [ -z "$template" ]; then
         template="$product"
     fi
@@ -193,5 +195,11 @@ if (( ${#machos[@]} > 1 )); then
         echo "Lipo mach-o failed."
         exit 1
     fi
+    for product in "${productsDir[@]}"; do
+        if ! cp -Rf "$product/Modules" "$output"; then
+            echo "Copy Modules $product/Modules failed."
+            exit 1
+        fi
+    done
 fi
 echo "Output at $output"
