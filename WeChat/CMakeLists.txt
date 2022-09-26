@@ -28,8 +28,7 @@ endif ()
 
 # Platform dependent linker settings
 if (ANDROID)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wfinal-dtor-non-final-class")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wfinal-dtor-non-final-class")
+    # No linker flag to add
 elseif (APPLE)
     set(LIB_FRAMEWORK_IDENTIFIER "com.Tencent.WCDB")
     #add_definitions(-DFORCE_POSIX)
