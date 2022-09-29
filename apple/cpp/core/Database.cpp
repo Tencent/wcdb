@@ -37,7 +37,6 @@ namespace WCDB {
 
 Database::Database(const UnsafeStringView& path)
 {
-    WCDB_USED int i = 0;
     const char* resolvePath = realpath(path.data(), nullptr);
     if (resolvePath == nullptr && errno == ENOENT) {
         FileManager::createFile(path);
