@@ -78,7 +78,8 @@ public:
         static_assert(offsetof(T, innerValue) == 0, "");
 
         auto recylableObj = Recyclable<SwiftObject*>(obj, [](SwiftObject* obj) {
-            WCTAssert(WCDBReleaseSwiftObject != nullptr) WCDBReleaseSwiftObject(obj);
+            WCTAssert(WCDBReleaseSwiftObject != nullptr);
+            WCDBReleaseSwiftObject(obj);
         });
         T ret;
         ret.innerValue = recylableObj;

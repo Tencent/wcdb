@@ -92,21 +92,25 @@ enum WCDBSyntaxTransactionType {
 WCDBDefineCPPBridgedType(CPPStatement);
 CPPStatement WCDBGetUnmangedStatement(CPPObject* _Nonnull statement);
 
-WCDBDefineCPPBridgedType(CPPBindParameter) WCDBDefineCPPBridgedType(CPPColumn)
+WCDBDefineCPPBridgedType(CPPBindParameter);
+WCDBDefineCPPBridgedType(CPPColumn);
 WCDBDefineCPPBridgedType(CPPColumnConstraint);
 WCDBDefineCPPBridgedType(CPPColumnDef);
 WCDBDefineCPPBridgedType(CPPCommonTableExpression);
-WCDBDefineCPPBridgedType(CPPExpression) WCDBDefineCPPBridgedType(CPPFilter);
+WCDBDefineCPPBridgedType(CPPExpression);
+WCDBDefineCPPBridgedType(CPPFilter);
 WCDBDefineCPPBridgedType(CPPForeignKey);
 WCDBDefineCPPBridgedType(CPPFrameSpec);
 WCDBDefineCPPBridgedType(CPPIndexedColumn);
 WCDBDefineCPPBridgedType(CPPJoin);
-WCDBDefineCPPBridgedType(CPPLiteralValue) WCDBDefineCPPBridgedType(CPPOrderingTerm);
+WCDBDefineCPPBridgedType(CPPLiteralValue);
+WCDBDefineCPPBridgedType(CPPOrderingTerm);
 WCDBDefineCPPBridgedType(CPPPragma);
 WCDBDefineCPPBridgedType(CPPQualifiedTable);
 WCDBDefineCPPBridgedType(CPPRaiseFunction);
 WCDBDefineCPPBridgedType(CPPResultColumn);
-WCDBDefineCPPBridgedType(CPPSchema) WCDBDefineCPPBridgedType(CPPTableConstraint);
+WCDBDefineCPPBridgedType(CPPSchema);
+WCDBDefineCPPBridgedType(CPPTableConstraint);
 WCDBDefineCPPBridgedType(CPPTableOrSubquery);
 WCDBDefineCPPBridgedType(CPPUpsert);
 WCDBDefineCPPBridgedType(CPPWindowDef);
