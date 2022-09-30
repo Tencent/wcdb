@@ -61,14 +61,15 @@ void HandlePool::blockade()
 
 void HandlePool::unblockade()
 {
-    WCTRemedialAssert(
-    isBlockaded(), "Unblockade should not be called without blockaded.", return;);
+    WCTRemedialAssert(m_concurrency.writeSafety(),
+                      "Unblockade should not be called without blockaded.",
+                      return;);
     m_concurrency.unlock();
 }
 
 bool HandlePool::isBlockaded() const
 {
-    return m_concurrency.level() == SharedLock::Level::Write;
+    return m_concurrency.isLocked();
 }
 
 void HandlePool::didDrain()

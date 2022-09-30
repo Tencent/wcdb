@@ -130,6 +130,11 @@ void SharedLock::lock()
     m_locking = Thread::current();
 }
 
+bool SharedLock::isLocked()
+{
+    return m_writers > 0;
+}
+
 void SharedLock::unlock()
 {
     WCTRemedialAssert(
