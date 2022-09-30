@@ -840,6 +840,10 @@
 		0D3AE54025416DB4007B9D0E /* AutoMergeFTSIndexConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D3AE53F25416DB4007B9D0E /* AutoMergeFTSIndexConfig.cpp */; };
 		0DAE11D428DC6CC6003FB63A /* WCDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 0DAE11D328DC6CC6003FB63A /* WCDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0DAE11D528DC6D85003FB63A /* WCDB-CPP.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E5CB0028A3513C005353D9 /* WCDB-CPP.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0DC98FD228E46049007F3796 /* DBOperationNotifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DC98FD028E46049007F3796 /* DBOperationNotifier.cpp */; };
+		0DC98FD328E46049007F3796 /* DBOperationNotifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DC98FD028E46049007F3796 /* DBOperationNotifier.cpp */; };
+		0DC98FD428E46049007F3796 /* DBOperationNotifier.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DC98FD128E46049007F3796 /* DBOperationNotifier.hpp */; };
+		0DC98FD528E46049007F3796 /* DBOperationNotifier.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DC98FD128E46049007F3796 /* DBOperationNotifier.hpp */; };
 		2304B42822156CD700901953 /* TokenizerModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2304B42622156CD700901953 /* TokenizerModule.cpp */; };
 		2304B42A22156CD700901953 /* TokenizerModule.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2304B42722156CD700901953 /* TokenizerModule.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2304B42E22156E1500901953 /* TokenizerModules.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2304B42C22156E1500901953 /* TokenizerModules.cpp */; };
@@ -2183,6 +2187,8 @@
 		0D3AE53725416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AutoMergeFTSIndexConfig.hpp; sourceTree = "<group>"; };
 		0D3AE53F25416DB4007B9D0E /* AutoMergeFTSIndexConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AutoMergeFTSIndexConfig.cpp; sourceTree = "<group>"; };
 		0DAE11D328DC6CC6003FB63A /* WCDB.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCDB.h; sourceTree = "<group>"; };
+		0DC98FD028E46049007F3796 /* DBOperationNotifier.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DBOperationNotifier.cpp; sourceTree = "<group>"; };
+		0DC98FD128E46049007F3796 /* DBOperationNotifier.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DBOperationNotifier.hpp; sourceTree = "<group>"; };
 		2304B42622156CD700901953 /* TokenizerModule.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TokenizerModule.cpp; sourceTree = "<group>"; };
 		2304B42722156CD700901953 /* TokenizerModule.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TokenizerModule.hpp; sourceTree = "<group>"; };
 		2304B42C22156E1500901953 /* TokenizerModules.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TokenizerModules.cpp; sourceTree = "<group>"; };
@@ -4924,6 +4930,8 @@
 				237A8D5721ED88DF003AF5BB /* SQLiteDeclaration.h */,
 				233A8530215E7CFE00BB8D4F /* Console.cpp */,
 				233A8531215E7CFE00BB8D4F /* Console.hpp */,
+				0DC98FD128E46049007F3796 /* DBOperationNotifier.hpp */,
+				0DC98FD028E46049007F3796 /* DBOperationNotifier.cpp */,
 			);
 			path = base;
 			sourceTree = "<group>";
@@ -5882,6 +5890,7 @@
 				7521D39428BD1187009C33D0 /* ChainCall.hpp in Headers */,
 				037C3B5E2897E33600328EC8 /* SQLite.h in Headers */,
 				037C3B5F2897E33600328EC8 /* SyntaxPragma.hpp in Headers */,
+				0DC98FD428E46049007F3796 /* DBOperationNotifier.hpp in Headers */,
 				037C3B642897E33600328EC8 /* StatementCreateVirtualTable.hpp in Headers */,
 				037C3B652897E33600328EC8 /* SQLiteFTS3Tokenizer.h in Headers */,
 				037C3B672897E33600328EC8 /* HandlePool.hpp in Headers */,
@@ -6200,6 +6209,7 @@
 				237A8D5821ED88DF003AF5BB /* SQLiteDeclaration.h in Headers */,
 				23545B9F2224E9C80091C981 /* SyntaxEnum.hpp in Headers */,
 				75F4DE52288407F800760DC3 /* StatementVacuumBridge.h in Headers */,
+				0DC98FD528E46049007F3796 /* DBOperationNotifier.hpp in Headers */,
 				036E50BB28115BA0007365CD /* WCTBridgeProperty+CPP.h in Headers */,
 				23EEDCC6217DFADC006E9E73 /* StatementCreateView.hpp in Headers */,
 				23EEDD3C217DFADC006E9E73 /* SyntaxCreateVirtualTableSTMT.hpp in Headers */,
@@ -6886,6 +6896,7 @@
 				037C39982897E33600328EC8 /* SyntaxCreateViewSTMT.cpp in Sources */,
 				037C39992897E33600328EC8 /* BindParameter.cpp in Sources */,
 				037C399A2897E33600328EC8 /* AutoBackupConfig.cpp in Sources */,
+				0DC98FD228E46049007F3796 /* DBOperationNotifier.cpp in Sources */,
 				037C399D2897E33600328EC8 /* SyntaxRaiseFunction.cpp in Sources */,
 				037C399E2897E33600328EC8 /* FrameSpec.cpp in Sources */,
 				03AFD34C28B8BB7600EF5E56 /* Binding.cpp in Sources */,
@@ -7778,6 +7789,7 @@
 				03321E8828A503F3000AFD6D /* StatementOperation.cpp in Sources */,
 				03E1665927F42D6600D2C926 /* Convenience.swift in Sources */,
 				75F1A30A2871E764008503A2 /* StatementDeleteBridge.cpp in Sources */,
+				0DC98FD328E46049007F3796 /* DBOperationNotifier.cpp in Sources */,
 				23E163D320FDDD8500C3F910 /* PorterStemming.c in Sources */,
 				03E1661727F42D6500D2C926 /* StatementDelete.swift in Sources */,
 				03EE3DAA288165A700C8F0B3 /* StatementInsertBridge.cpp in Sources */,

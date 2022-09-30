@@ -146,7 +146,8 @@ extension TableInterface where Self: Database {
                         keys.remove(at: index)
                     } else {
                         ErrorBridge.report(level: .Warning, code: .Misuse, infos: [
-                            .message: ErrorValue("Skip column named [\(columnName)] for table [\(name)]")
+                            .message: ErrorValue("Skip column named [\(columnName)] for table [\(name)]"),
+                            .path: ErrorValue(self.path)
                         ])
                     }
                 }

@@ -25,6 +25,7 @@
 #import <WCDB/Assertion.hpp>
 #import <WCDB/Console.hpp>
 #import <WCDB/Core.hpp>
+#import <WCDB/DBOperationNotifier.hpp>
 #import <WCDB/WCTDatabase+Monitor.h>
 #import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTError+Private.h>
@@ -102,6 +103,18 @@ void Core::print(const UnsafeStringView& message)
                              WCDB::Configs::Priority::Highest);
     } else {
         _database->removeConfig(WCDB::SQLTraceConfigName);
+    }
+}
+
++ (void)globalTraceDatabaseOperation:(nullable WCDB_ESCAPE WCTDatabaseOperationTraceBlock)trace
+{
+    if (trace != nil) {
+        WCDB::DBOperationNotifier::shared().setNotification([=](WCDB::InnerDatabase* innerDatabase, WCDB::DBOperationNotifier::Operation operation) {
+            WCTDatabase* database = [[WCTDatabase alloc] initWithUnsafeDatabase:innerDatabase];
+            trace(database, (WCTDatabaseOperation) operation);
+        });
+    } else {
+        WCDB::DBOperationNotifier::shared().setNotification(nil);
     }
 }
 

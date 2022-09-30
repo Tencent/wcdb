@@ -348,6 +348,28 @@ public extension Database {
         WCDBDatabaseGlobalTraceError(nil)
     }
 
+    enum Operation: Int {
+        case Create = 0
+        case SetTag = 1
+        case OpenHandle = 2
+    }
+
+    typealias OperationTracer = (Database, Operation) -> Void
+
+    static func globalTrace(ofDatabaseOperation tracer: @escaping OperationTracer) {
+        let callback: @convention(block) (CPPDatabase, Int) -> Void = {
+            (cppDatabase, operation) in
+            let database = Database(with: cppDatabase)
+            tracer(database, Operation(rawValue: operation) ?? .Create)
+        }
+        let imp = imp_implementationWithBlock(callback)
+        WCDBDatabaseGlobalTraceOperation(imp)
+    }
+
+    static func globalTrace(ofDatabaseOperation trace: Void?) {
+        WCDBDatabaseGlobalTraceOperation(nil)
+    }
+
     enum ConfigPriority: Int32 {
         case high = -100
         case `default` = 0

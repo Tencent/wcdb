@@ -133,4 +133,29 @@
     [WCTDatabase globalTracePerformance:nil];
 }
 
+- (void)test_global_trace_db_operation
+{
+    __block long tag = 0;
+    __block NSString* path = nil;
+    __block int openHandleCount = 0;
+    [WCTDatabase globalTraceDatabaseOperation:^(WCTDatabase* database, WCTDatabaseOperation operation) {
+        switch (operation) {
+        case WCTDatabaseOperation_Create:
+            path = database.path;
+            break;
+        case WCTDatabaseOperation_SetTag:
+            tag = database.tag;
+            break;
+        case WCTDatabaseOperation_OpenHandle:
+            openHandleCount++;
+            break;
+        }
+    }];
+    TestCaseAssertTrue([self createTable]);
+    TestCaseAssertTrue([self.database insertObjects:[Random.shared autoIncrementTestCaseObjectsWithCount:10] intoTable:self.tableName]);
+    TestCaseAssertTrue(tag == self.database.tag);
+    TestCaseAssertStringEqual(path, self.database.path);
+    TestCaseAssertTrue(openHandleCount == 1);
+}
+
 @end

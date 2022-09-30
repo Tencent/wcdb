@@ -229,14 +229,4 @@ void FileHandle::setThreadedError()
     SharedThreadedErrorProne::setThreadedError(std::move(error));
 }
 
-//void FileHandle::markAsMisuse(const char *message)
-//{
-//    Error error(Error::Code::Misuse,
-//                m_errorIgnorable ? Error::Level::Warning : Error::Level::Error);
-//    error.message = message;
-//    error.infos.insert_or_assign(ErrorStringKeyPath, path);
-//    Notifier::shared().notify(error);
-//    SharedThreadedErrorProne::setThreadedError(std::move(error));
-//}
-
 } //namespace WCDB

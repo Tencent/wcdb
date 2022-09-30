@@ -34,6 +34,7 @@
 #include <WCDB/AssembleHandle.hpp>
 #include <WCDB/BusyRetryConfig.hpp>
 #include <WCDB/Core.hpp>
+#include <WCDB/DBOperationNotifier.hpp>
 #include <WCDB/MigrateHandle.hpp>
 #include <WCDB/MigratingHandle.hpp>
 #include <WCDB/OperationHandle.hpp>
@@ -54,6 +55,8 @@ InnerDatabase::InnerDatabase(const UnsafeStringView &path)
 , m_sharedInMemoryHandle(nullptr)
 , m_mergeLogic(this)
 {
+    DBOperationNotifier::shared().notifyOperation(
+    this, DBOperationNotifier::Operation::Create);
 }
 
 InnerDatabase::~InnerDatabase() = default;
@@ -63,6 +66,8 @@ void InnerDatabase::setTag(const Tag &tag)
 {
     LockGuard memoryGuard(m_memory);
     m_tag = tag;
+    DBOperationNotifier::shared().notifyOperation(
+    this, DBOperationNotifier::Operation::SetTag);
 }
 
 Tag InnerDatabase::getTag() const
@@ -291,7 +296,10 @@ std::shared_ptr<InnerHandle> InnerDatabase::generateSlotedHandle(HandleType type
     if (!setupHandle(type, handle.get())) {
         return nullptr;
     }
-
+    if (slot == HandleSlotNormal || slot == HandleSlotMigrating) {
+        DBOperationNotifier::shared().notifyOperation(
+        this, DBOperationNotifier::Operation::OpenHandle);
+    }
     return handle;
 }
 

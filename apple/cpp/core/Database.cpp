@@ -25,6 +25,7 @@
 #include <WCDB/CipherConfig.hpp>
 #include <WCDB/Core.hpp>
 #include <WCDB/CustomConfig.hpp>
+#include <WCDB/DBOperationNotifier.hpp>
 #include <WCDB/Database.hpp>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/InnerDatabase.hpp>
@@ -77,6 +78,7 @@ Database::~Database() = default;
 
 Database::Database(InnerDatabase* database) : m_innerDatabase(database)
 {
+    m_databaseHolder = RecyclableDatabase(m_innerDatabase, nullptr);
 }
 
 RecyclableHandle Database::getHandleHolder()
@@ -190,6 +192,19 @@ void Database::traceSQL(Database::SQLNotification trace)
         Configs::Priority::Highest);
     } else {
         m_innerDatabase->removeConfig(SQLTraceConfigName);
+    }
+}
+
+void Database::globalTraceDatabaseOperation(DBOperationTrace callback)
+{
+    if (callback != nullptr) {
+        DBOperationNotifier::shared().setNotification(
+        [=](InnerDatabase* innerDatabase, DBOperationNotifier::Operation operation) {
+            Database database = Database(innerDatabase);
+            callback(database, (Operation) operation);
+        });
+    } else {
+        DBOperationNotifier::shared().setNotification(nullptr);
     }
 }
 
