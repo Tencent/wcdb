@@ -55,6 +55,7 @@ public:
     ~SharedLock();
 
     void lock();
+    bool isLocked();
     void unlock();
 
     void lockShared();
