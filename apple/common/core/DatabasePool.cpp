@@ -57,6 +57,18 @@ RecyclableDatabase DatabasePool::getOrCreate(const UnsafeStringView &path)
     return get(result.first);
 }
 
+Tag DatabasePool::getTag(const UnsafeStringView &path)
+{
+    StringView normalized = Path::normalize(path);
+    SharedLockGuard lockGuard(m_lock);
+    auto iter = m_databases.find(normalized);
+    if (iter != m_databases.end()) {
+        return get(iter).get()->getTag();
+    } else {
+        return Tag::invalid();
+    }
+}
+
 DatabasePool::ReferencedDatabase::ReferencedDatabase(std::shared_ptr<InnerDatabase> &&database_)
 : database(std::move(database_)), reference(0)
 {

@@ -27,6 +27,7 @@
 #include <WCDB/InnerDatabase.hpp>
 #include <WCDB/Lock.hpp>
 #include <WCDB/Path.hpp>
+#include <WCDB/Tag.hpp>
 
 namespace WCDB {
 
@@ -47,6 +48,7 @@ public:
     DatabasePool(DatabasePoolEvent* event);
 
     RecyclableDatabase getOrCreate(const UnsafeStringView& path);
+    Tag getTag(const UnsafeStringView& path);
 
     void purge();
 
