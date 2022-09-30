@@ -42,6 +42,18 @@ typedef void (^WCTPerformanceTraceBlock)(NSString* /* path */, uint64_t /*handle
  */
 typedef void (^WCTSQLTraceBlock)(NSString* /* path */, uint64_t /*handleIdentifier*/, NSString* /* sql */);
 
+typedef NS_ENUM(NSUInteger, WCTDatabaseOperation) {
+    WCTDatabaseOperation_Create = 0,
+    WCTDatabaseOperation_SetTag,
+    WCTDatabaseOperation_OpenHandle,
+};
+
+/**
+ Trigger when a database has specific operation.
+ */
+
+typedef void (^WCTDatabaseOperationTraceBlock)(WCTDatabase* /* database */, WCTDatabaseOperation /* type of operation*/);
+
 @interface WCTDatabase (Monitor)
 
 /**
@@ -98,6 +110,8 @@ typedef void (^WCTSQLTraceBlock)(NSString* /* path */, uint64_t /*handleIdentifi
 - (void)traceSQL:(nullable WCDB_ESCAPE WCTSQLTraceBlock)trace;
 
 - (void)tracePerformance:(nullable WCDB_ESCAPE WCTPerformanceTraceBlock)trace;
+
++ (void)globalTraceDatabaseOperation:(nullable WCDB_ESCAPE WCTDatabaseOperationTraceBlock)trace;
 
 @end
 

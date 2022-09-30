@@ -22,6 +22,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/PerformanceTraceConfig.hpp>
 #include <WCDB/StringView.hpp>
 
@@ -79,6 +80,7 @@ ShareablePerformanceTraceConfig::~ShareablePerformanceTraceConfig() = default;
 void ShareablePerformanceTraceConfig::setNotification(const Notification &notification)
 {
     LockGuard lockGuard(m_lock);
+    WCTAssert(m_notification == nullptr || notification == nullptr);
     PerformanceTracer::setNotification(notification);
 }
 

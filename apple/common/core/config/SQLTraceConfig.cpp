@@ -76,6 +76,7 @@ ShareableSQLTraceConfig::~ShareableSQLTraceConfig() = default;
 void ShareableSQLTraceConfig::setNotification(const Notification &notification)
 {
     LockGuard lockGuard(m_lock);
+    WCTAssert(m_notification == nullptr || notification == nullptr);
     SQLTracer::setNotification(notification);
 }
 

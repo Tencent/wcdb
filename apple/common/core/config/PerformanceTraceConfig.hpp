@@ -42,7 +42,6 @@ protected:
     bool invoke(InnerHandle *handle);
     bool uninvoke(InnerHandle *handle);
 
-private:
     const StringView m_identifier;
     Notification m_notification;
 };

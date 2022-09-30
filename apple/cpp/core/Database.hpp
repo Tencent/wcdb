@@ -105,6 +105,14 @@ public:
     static void globalTraceSQL(SQLNotification trace);
     void traceSQL(SQLNotification trace);
 
+    enum Operation : short {
+        Create = 0,
+        SetTag,
+        OpenHandle,
+    };
+    typedef std::function<void(Database &database, Operation operation)> DBOperationTrace;
+    static void globalTraceDatabaseOperation(DBOperationTrace callback);
+
 #pragma mark - File
 public:
     /**

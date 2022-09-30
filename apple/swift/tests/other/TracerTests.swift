@@ -117,7 +117,7 @@ class TracerTests: BaseTestCase {
         XCTAssertTrue(`catch`)
     }
 
-    class TracerObject: TableCodable, Named {
+    final class TracerObject: TableCodable, Named {
         var variable = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = TracerObject
@@ -199,5 +199,35 @@ class TracerTests: BaseTestCase {
         XCTAssertNoThrow(database.close())
 
         XCTAssertTrue(catchInsert && catchRollback)
+    }
+
+    func testTraceDatabaseOperation() {
+        var tag = 0
+        var path = ""
+        var openCount = 0
+        Database.globalTrace(ofDatabaseOperation: {
+            (database, operation) in
+            switch operation {
+            case .Create:
+                path = database.path
+            case .SetTag:
+                tag = database.tag ?? 0
+            case .OpenHandle:
+                openCount += 1
+            @unknown default:
+                fatalError()
+            }
+        })
+        let database = Database(at: self.recommendedPath)
+        database.tag = self.recommendTag
+        XCTAssertNoThrow(database)
+        XCTAssertNoThrow(try database.create(table: TracerObject.name, of: TracerObject.self))
+        let template = TracerObject()
+        template.isAutoIncrement = true
+        let objects = [TracerObject](repeating: template, count: 10)
+        XCTAssertNoThrow(try database.insert(objects, intoTable: TracerObject.name))
+        XCTAssertTrue(tag == database.tag)
+        XCTAssertTrue(path == database.path)
+        XCTAssertTrue(openCount == 1)
     }
 }

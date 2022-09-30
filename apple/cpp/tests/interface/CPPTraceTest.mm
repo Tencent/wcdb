@@ -121,4 +121,29 @@
     WCDB::Database::globalTracePerformance(nil);
 }
 
+- (void)test_trace_db_operation
+{
+    long tag = 0;
+    WCDB::StringView path;
+    int openHandleCount = 0;
+    WCDB::Database::globalTraceDatabaseOperation([&](WCDB::Database &database, WCDB::Database::Operation operation) {
+        switch (operation) {
+        case WCDB::Database::Operation::Create:
+            path = database.getPath();
+            break;
+        case WCDB::Database::Operation::SetTag:
+            tag = database.getTag();
+            break;
+        case WCDB::Database::Operation::OpenHandle:
+            openHandleCount++;
+            break;
+        }
+    });
+    TestCaseAssertTrue([self createValueTable]);
+    TestCaseAssertTrue(self.database->insertRows([Random.shared autoIncrementTestCaseValuesWithCount:10], self.columns, self.tableName.UTF8String));
+    TestCaseAssertTrue(tag = self.database->getTag());
+    TestCaseAssertCPPStringEqual(path.data(), self.database->getPath().data());
+    TestCaseAssertTrue(openHandleCount == 1);
+}
+
 @end

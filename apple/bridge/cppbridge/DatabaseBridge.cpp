@@ -25,6 +25,7 @@
 #include <WCDB/CipherConfig.hpp>
 #import <WCDB/Core.hpp>
 #import <WCDB/CustomConfig.hpp>
+#include <WCDB/DBOperationNotifier.hpp>
 #include <WCDB/DatabaseBridge.h>
 #include <WCDB/InnerDatabase.hpp>
 #include <WCDB/ObjectBridge.hpp>
@@ -49,6 +50,8 @@ WCDBDefineOneArgumentSwiftClosureBridgedType(WCDBCorruptedNotification, void, CP
 WCDBDefineOneArgumentSwiftClosureBridgedType(WCDBBackupFilter, bool, const char*)
 
 WCDBDefineMultiArgumentSwiftClosureBridgedType(WCDBRetrieveProgress, void, void*, double, double)
+
+WCDBDefineMultiArgumentSwiftClosureBridgedType(WCDBDatabaseOperationTracer, void, CPPDatabase, long);
 
 CPPError WCDBDatabaseGetError(CPPDatabase database)
 {
@@ -284,6 +287,21 @@ void WCDBDatabaseGlobalTraceError(SwiftClosure* _Nullable tracer)
         });
     } else {
         WCDB::Core::shared().setNotificationWhenErrorTraced(nullptr);
+    }
+}
+
+void WCDBDatabaseGlobalTraceOperation(SwiftClosure* _Nullable tracer)
+{
+    WCDBDatabaseOperationTracer bridgeTracer
+    = WCDBCreateSwiftBridgedClosure(WCDBDatabaseOperationTracer, tracer);
+    if (WCDBGetSwiftClosure(bridgeTracer) != nullptr) {
+        WCDB::DBOperationNotifier::shared().setNotification(
+        [=](WCDB::InnerDatabase* database, WCDB::DBOperationNotifier::Operation operation) {
+            CPPDatabase cppDatabase = WCDBCreateUnmanageCPPObject(CPPDatabase, database);
+            WCDBSwiftClosureCallWithMultiArgument(bridgeTracer, cppDatabase, (long) operation);
+        });
+    } else {
+        WCDB::DBOperationNotifier::shared().setNotification(nullptr);
     }
 }
 
