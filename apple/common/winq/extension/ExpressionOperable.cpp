@@ -152,11 +152,17 @@ Expression ExpressionBinaryOperable::operator>=(const Expression &operand) const
 
 Expression ExpressionBinaryOperable::operator==(const Expression &operand) const
 {
+    if (operand.syntax().switcher == Syntax::Expression::Switch::LiteralValue && operand.syntax().literalValue.switcher == Syntax::LiteralValue::Switch::Null){
+        return asExpressionOperand().isNull();
+    }
     return binaryOperate(operand, Expression::SyntaxType::BinaryOperator::Equal);
 }
 
 Expression ExpressionBinaryOperable::operator!=(const Expression &operand) const
 {
+    if (operand.syntax().switcher == Syntax::Expression::Switch::LiteralValue && operand.syntax().literalValue.switcher == Syntax::LiteralValue::Switch::Null){
+        return asExpressionOperand().notNull();
+    }
     return binaryOperate(operand, Expression::SyntaxType::BinaryOperator::NotEqual);
 }
 
