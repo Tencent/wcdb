@@ -230,9 +230,18 @@
 {
     NSString* content = nil;
     auto testingSQL = columnExpression == content;
-    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"testColumn == NULL");
+    TestCaseAssertSQLEqual(testingSQL, @"testColumn ISNULL");
+}
+
+- (void)test_binary_not_equal_null
+{
+    NSString* content = nil;
+    auto testingSQL = columnExpression != content;
+    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
+    TestCaseAssertSQLEqual(testingSQL, @"testColumn NOTNULL");
 }
 
 - (void)test_binary_not_equal
