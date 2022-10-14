@@ -150,6 +150,7 @@
 
     TestCaseCounter *numberOfFailures = [TestCaseCounter value:0];
     weakify(self);
+    [WCTDatabase globalTraceError:nil];
     [WCTDatabase globalTraceError:^(WCTError *error) {
         strongify_or_return(self);
         if (error.code == WCTErrorCodeIOError

@@ -120,6 +120,7 @@
     __block double mechanicWeight = 0;
     __block double crawlerWeight = 0;
 
+    [WCTDatabase globalTraceError:nil];
     [WCTDatabase globalTraceError:^(WCTError* error) {
         if (error.level == WCTErrorLevelNotice
             && error.code == WCTErrorCodeNotice) {

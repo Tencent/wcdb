@@ -74,6 +74,7 @@
 - (void)test_feature_auto_purge_due_to_memory_warning
 {
     __block TestCaseResult* tested = [TestCaseResult no];
+    [WCTDatabase globalTraceError:nil];
     [WCTDatabase globalTraceError:^(WCTError* error) {
         if (error.level == WCTErrorLevelWarning
             && error.code == WCTErrorCodeWarning) {
@@ -97,6 +98,7 @@
 - (void)test_feature_auto_purge_will_not_be_too_frequent
 {
     __block TestCaseResult* tested = [TestCaseResult no];
+    [WCTDatabase globalTraceError:nil];
     [WCTDatabase globalTraceError:^(WCTError* error) {
         if (error.level == WCTErrorLevelWarning
             && error.code == WCTErrorCodeWarning) {
@@ -157,6 +159,7 @@
 
     // purge will be done after a few moment.
     __block TestCaseResult* tested = [TestCaseResult no];
+    [WCTDatabase globalTraceError:nil];
     [WCTDatabase globalTraceError:^(WCTError* error) {
         if (error.level == WCTErrorLevelWarning
             && error.code == WCTErrorCodeWarning) {
@@ -197,6 +200,7 @@
 
     // purge will be done after a few moment.
     __block TestCaseResult* tested = [TestCaseResult no];
+    [WCTDatabase globalTraceError:nil];
     [WCTDatabase globalTraceError:^(WCTError* error) {
         if (error.level == WCTErrorLevelWarning
             && error.code == WCTErrorCodeWarning) {

@@ -57,6 +57,7 @@
                                                                              @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)",
                                                                              @"COMMIT",
                                                                              nil];
+    self.database->tracePerformance(nullptr);
     self.database->tracePerformance([&](const WCDB::UnsafeStringView &, const WCDB::UnsafeStringView &sql, double, const void *) {
         if (strcmp(sql.data(), expectedFootprints.firstObject.UTF8String) == 0) {
             [expectedFootprints removeObjectAtIndex:0];
@@ -70,6 +71,7 @@
 - (void)test_global_trace_error
 {
     BOOL tested = NO;
+    WCDB::Database::globalTraceError(nullptr);
     WCDB::Database::globalTraceError([&](const WCDB::Error &error) {
         if (error.level == WCDB::Error::Level::Error
             && strcmp(error.getPath().data(), self.path.UTF8String) == 0
@@ -144,6 +146,7 @@
     TestCaseAssertTrue(tag = self.database->getTag());
     TestCaseAssertCPPStringEqual(path.data(), self.database->getPath().data());
     TestCaseAssertTrue(openHandleCount == 1);
+    WCDB::Database::globalTraceDatabaseOperation(nullptr);
 }
 
 @end

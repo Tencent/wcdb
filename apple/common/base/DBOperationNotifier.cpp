@@ -38,7 +38,6 @@ DBOperationNotifier &DBOperationNotifier::shared()
 
 void DBOperationNotifier::setNotification(const Callback &callback)
 {
-    WCTAssert(callback != nullptr);
     LockGuard lockGuard(m_lock);
     if (callback != nullptr) {
         WCTAssert(m_notification == nullptr);

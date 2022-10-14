@@ -170,7 +170,7 @@
 
 + (void)enablePerformanceTrace
 {
-    WCDB::Database::globalTracePerformance([](const WCDB::UnsafeStringView &path, const WCDB::UnsafeStringView &sql, double cost, const void *handle) {
+    WCDB::Database::globalTracePerformance([=](const WCDB::UnsafeStringView &path, const WCDB::UnsafeStringView &sql, double cost, const void *handle) {
         WCDB_UNUSED(path);
         WCDB_UNUSED(handle);
         NSThread *currentThread = [NSThread currentThread];
