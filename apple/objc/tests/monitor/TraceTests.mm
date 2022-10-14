@@ -75,6 +75,7 @@
     __block BOOL tested = NO;
     __block BOOL start = NO;
     weakify(self);
+    [WCTDatabase globalTraceError:nil];
     [WCTDatabase globalTraceError:^(WCTError* error) {
         strongify_or_return(self);
         if (error.level == WCTErrorLevelError

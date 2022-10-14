@@ -39,6 +39,7 @@ void Notifier::setNotification(int order, const UnsafeStringView &key, const Cal
 {
     WCTAssert(callback != nullptr);
     LockGuard lockGuard(m_lock);
+    WCTAssert(m_notifications.find(StringView(key)) == m_notifications.end());
     m_notifications.insert(StringView(key), callback, order);
 }
 
