@@ -91,6 +91,14 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
 + (void)setABTestConfigWithName:(NSString*)name
                        andValue:(NSString*)value
 {
+    if ([name isEqualToString:@"clicfg_db_use_new_checkpoint"]) {
+        if ([value isEqualToString:@"1"]) {
+            sqlite3_config(SQLITE_CONFIG_USE_NEW_CHECKPOINT, 1);
+        } else {
+            sqlite3_config(SQLITE_CONFIG_USE_NEW_CHECKPOINT, 0);
+        }
+        return;
+    }
     WCDB::Core::shared().setABTestConfig(name, value);
 }
 
