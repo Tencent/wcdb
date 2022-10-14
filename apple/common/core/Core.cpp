@@ -74,8 +74,6 @@ Core::Core()
     NotifierPreprocessorName,
     std::bind(&Core::preprocessError, this, std::placeholders::_1));
 
-    setNotificationWhenErrorTraced(Core::onErrorTraced);
-
     m_operationQueue->run();
 }
 
@@ -346,25 +344,6 @@ void Core::setNotificationWhenErrorTraced(const Notifier::Callback& notification
     } else {
         Notifier::shared().unsetNotification(WCDB::NotifierLoggerName);
     }
-}
-
-void Core::onErrorTraced(const Error& error)
-{
-    switch (error.level) {
-    case Error::Level::Ignore:
-    case Error::Level::Debug:
-        break;
-    default:
-        print(error.getDescription());
-        break;
-    }
-    if (error.level == Error::Level::Fatal) {
-        breakpoint();
-    }
-}
-
-void Core::breakpoint()
-{
 }
 
 #pragma mark - Config
