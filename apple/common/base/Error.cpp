@@ -225,6 +225,10 @@ void Error::setSQLiteCode(int rc, const UnsafeStringView& message)
         infos.insert_or_assign(ErrorIntKeyExtCode, rc);
     }
     infos.insert_or_assign(ErrorStringKeySource, ErrorSourceSQLite);
+    if (code == Code::CantOpen || code == Code::IOError) {
+        infos.insert_or_assign("SystemErrno", errno);
+        infos.insert_or_assign("SystemErrMsg", strerror(errno));
+    }
 }
 
 Error::Code Error::code() const
