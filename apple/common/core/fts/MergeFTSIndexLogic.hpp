@@ -22,6 +22,8 @@
  * limitations under the License.
  */
 
+#pragma once
+
 #include <WCDB/AsyncQueue.hpp>
 #include <WCDB/InnerHandle.hpp>
 #include <WCDB/Lock.hpp>
@@ -48,6 +50,7 @@ public:
     MergeFTSIndexLogic(MergeFTSIndexHandleProvider* provider);
     using TableArray = std::shared_ptr<std::vector<StringView>>;
     std::optional<bool> triggerMerge(TableArray newTables, TableArray modifiedTables);
+    void proccessMerge();
 
 private:
     bool tryInit(InnerHandle& handle);
@@ -55,7 +58,6 @@ private:
     triggerMerge(InnerHandle& handle, TableArray newTables, TableArray modifiedTables);
     bool tryConfigUserMerge(InnerHandle& handle, const UnsafeStringView& table, bool isNew);
     bool checkModifiedTables(InnerHandle& handle, TableArray newTables, TableArray modifiedTables);
-    void proccessMerge();
     bool mergeTable(InnerHandle& handle, const StringView& table);
     void increaseErrorCount();
 
@@ -81,7 +83,7 @@ private:
         OperationQueue(const UnsafeStringView& name);
         static OperationQueue& shared();
 
-        using OperationCallBack = std::function<void(void)>;
+        using OperationCallBack = std::function<void(const UnsafeStringView&)>;
         void async(const UnsafeStringView& path, const OperationCallBack& callback);
         void cancelOperation(const UnsafeStringView& path);
 
