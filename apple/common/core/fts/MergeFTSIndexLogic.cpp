@@ -23,6 +23,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/Core.hpp>
 #include <WCDB/CoreConst.h>
 #include <WCDB/Error.hpp>
 #include <WCDB/MergeFTSIndexLogic.hpp>
@@ -163,8 +164,12 @@ MergeFTSIndexLogic::triggerMerge(InnerHandle &handle, TableArray newTables, Tabl
     if (m_processing) {
         return false;
     }
-    OperationQueue::shared().async(
-    handle.getPath(), std::bind(&MergeFTSIndexLogic::proccessMerge, this));
+    OperationQueue::shared().async(handle.getPath(), [](const UnsafeStringView &path) {
+        RecyclableDatabase database = Core::shared().getOrCreateDatabase(path);
+        if (database != nullptr) {
+            database->proccessMerge();
+        }
+    });
     return false;
 }
 
@@ -245,7 +250,6 @@ bool MergeFTSIndexLogic::mergeTable(InnerHandle &handle, const StringView &table
         }
         usleep(1229); //Use prime numbers to reduce the probability of collision with external logic
     } while (handle.getTotalChange() - preChangeCount > 1);
-
     handle.finalize();
     delete[] callbackPointer;
     return true;
@@ -371,8 +375,7 @@ void MergeFTSIndexLogic::OperationQueue::main()
 void MergeFTSIndexLogic::OperationQueue::onTimed(const StringView &path,
                                                  const OperationCallBack &callback)
 {
-    WCDB_UNUSED(path);
-    callback();
+    callback(path);
 }
 
 } // namespace WCDB

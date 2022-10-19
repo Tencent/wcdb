@@ -200,6 +200,7 @@ public:
 public:
     using TableArray = std::shared_ptr<std::vector<StringView>>;
     std::optional<bool> mergeFTSIndex(TableArray newTables, TableArray modifiedTables);
+    void proccessMerge();
 
 private:
     MergeFTSIndexLogic m_mergeLogic;

@@ -922,4 +922,23 @@ std::optional<bool> InnerDatabase::mergeFTSIndex(TableArray newTables, TableArra
     return m_mergeLogic.triggerMerge(newTables, modifiedTables);
 }
 
+void InnerDatabase::proccessMerge()
+{
+    InitializedGuard initializedGuard = initialize();
+    if (!initializedGuard.valid()) {
+        return; // mark as succeed if it's not an auto initialize action.
+    }
+    if (m_closing != 0) {
+        Error error(Error::Code::Interrupt,
+                    Error::Level::Ignore,
+                    "Interrupt merge fts index due to it's closing.");
+        error.infos.insert_or_assign(ErrorStringKeyPath, path);
+        error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeBackup);
+        Notifier::shared().notify(error);
+        setThreadedError(std::move(error));
+        return;
+    }
+    return m_mergeLogic.proccessMerge();
+}
+
 } //namespace WCDB
