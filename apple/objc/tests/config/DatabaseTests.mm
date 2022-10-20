@@ -174,6 +174,30 @@
     }
 }
 
+- (void)test_long_write_with_checkpoint
+{
+    NSString* tableName = @"testTable";
+    TestCaseAssertTrue([self.database createTable:tableName withClass:TestCaseObject.class]);
+
+    for (int i = 0; i < 1000; i++) {
+        for (int j = 0; j < 5; j++) {
+            NSArray<TestCaseObject*>* objs = [[Random shared] autoIncrementTestCaseObjectsWithCount:2];
+            TestCaseAssertTrue([self.database insertObjects:objs intoTable:tableName]);
+        }
+        [self.dispatch async:^{
+            [self.database passiveCheckpoint];
+        }];
+        if ([Random shared].boolean) {
+            usleep(10000);
+        }
+        TestCaseAssertTrue([self.database getValueOnResultColumn:TestCaseObject.allProperties.count() fromTable:tableName].numberValue.intValue == 10 * (1 + i));
+
+        if ([Random shared].boolean) {
+            [self.database close];
+        }
+    }
+}
+
 - (void)test_in_memory_db
 {
     WCTDatabase* db = [[WCTDatabase alloc] initInMemoryDatabase];
