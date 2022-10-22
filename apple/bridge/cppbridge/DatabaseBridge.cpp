@@ -290,6 +290,20 @@ void WCDBDatabaseGlobalTraceError(SwiftClosure* _Nullable tracer)
     }
 }
 
+void WCDBDatabaseTraceError(const char* _Nonnull path, SwiftClosure* _Nullable tracer)
+{
+    WCDBErrorTracer bridgedTracer = WCDBCreateSwiftBridgedClosure(WCDBErrorTracer, tracer);
+    if (WCDBGetSwiftClosure(bridgedTracer) != nullptr) {
+        WCDB::Core::shared().setNotificationWhenErrorTraced(
+        path, [bridgedTracer](const WCDB::Error& error) {
+            CPPError cppError = WCDBCreateUnmanageCPPObject(CPPError, &error);
+            WCDBSwiftClosureCallWithOneArgument(bridgedTracer, cppError);
+        });
+    } else {
+        WCDB::Core::shared().setNotificationWhenErrorTraced(path, nullptr);
+    }
+}
+
 void WCDBDatabaseGlobalTraceOperation(SwiftClosure* _Nullable tracer)
 {
     WCDBDatabaseOperationTracer bridgeTracer

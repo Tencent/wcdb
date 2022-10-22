@@ -103,9 +103,25 @@ void Core::databaseDidCreate(InnerDatabase* database)
     enableAutoCheckpoint(database, true);
 }
 
+void Core::setThreadedDatabase(const UnsafeStringView& path)
+{
+    m_associateDatabases.getOrCreate() = path;
+}
+
 void Core::preprocessError(Error& error)
 {
     auto& infos = error.infos;
+
+    if (error.getPath().size() == 0 && m_associateDatabases.getOrCreate().size() > 0) {
+        error.infos.insert_or_assign(ErrorStringKeyPath, m_associateDatabases.getOrCreate());
+    }
+    if (error.getPath().length() == 0 && error.getAssociatePath().length() > 0) {
+        error.infos.insert_or_assign(ErrorStringKeyPath, error.getAssociatePath());
+        error.infos.erase(ErrorStringKeyAssociatePath);
+    }
+    if (error.getPath().compare(error.getAssociatePath()) == 0) {
+        error.infos.erase(ErrorStringKeyAssociatePath);
+    }
 
     auto iter = infos.find(UnsafeStringView(ErrorStringKeyPath));
     if (iter != infos.end()
@@ -343,6 +359,25 @@ void Core::setNotificationWhenErrorTraced(const Notifier::Callback& notification
         std::numeric_limits<int>::min(), WCDB::NotifierLoggerName, notification);
     } else {
         Notifier::shared().unsetNotification(WCDB::NotifierLoggerName);
+    }
+}
+
+void Core::setNotificationWhenErrorTraced(const UnsafeStringView& path,
+                                          const Notifier::Callback& notification)
+{
+    StringView notifierKey
+    = StringView::formatted("%s_%s", NotifierLoggerName, path.data());
+    if (notification != nullptr) {
+        StringView catchedPath = StringView(path);
+        Notifier::Callback realNotification = [=](const Error& error) {
+            if (error.getPath().length() == 0 || error.getPath().compare(catchedPath) == 0) {
+                notification(error);
+            }
+        };
+        Notifier::shared().setNotification(
+        std::numeric_limits<int>::min() + 1, notifierKey, realNotification);
+    } else {
+        Notifier::shared().unsetNotification(notifierKey);
     }
 }
 

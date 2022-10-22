@@ -150,13 +150,10 @@
 
     TestCaseCounter *numberOfFailures = [TestCaseCounter value:0];
     weakify(self);
-    [WCTDatabase globalTraceError:nil];
-    [WCTDatabase globalTraceError:^(WCTError *error) {
+    [self.database traceError:^(WCTError *error) {
         strongify_or_return(self);
         if (error.code == WCTErrorCodeIOError
-            && error.level == WCTErrorLevelError
-            && error.tag == self.database.tag
-            && [error.path isEqualToString:self.database.path]) {
+            && error.level == WCTErrorLevelError) {
             [numberOfFailures increment];
         }
     }];
@@ -175,8 +172,6 @@
     TestCaseAssertTrue(numberOfFailures.value == WCDB::OperationQueueTolerableFailuresForMigration);
 
     [WCTDatabase simulateIOError:WCTSimulateNoneIOError];
-
-    [WCTDatabase globalTraceError:nil];
 }
 
 - (void)doTestFeatureMigrateNewlyCreatedTableAfterMigrated

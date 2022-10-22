@@ -185,7 +185,7 @@ void Pager::markAsCorrupted(int page, const UnsafeStringView &message)
 {
     Error error(Error::Code::Corrupt, Error::Level::Notice, message);
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
+    error.infos.insert_or_assign(ErrorStringKeyAssociatePath, getPath());
     error.infos.insert_or_assign("Page", page);
     Notifier::shared().notify(error);
     setError(std::move(error));
@@ -195,7 +195,7 @@ void Pager::markAsError(Error::Code code)
 {
     Error error(code, Error::Level::Notice);
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
+    error.infos.insert_or_assign(ErrorStringKeyAssociatePath, getPath());
     Notifier::shared().notify(error);
     setError(std::move(error));
 }

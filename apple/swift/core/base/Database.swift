@@ -348,6 +348,20 @@ public extension Database {
         WCDBDatabaseGlobalTraceError(nil)
     }
 
+    func trace(ofError errorReporter: @escaping (WCDBError) -> Void) {
+        let callback: @convention(block) (CPPError) -> Void = {
+            (cppError) in
+            let error = ErrorBridge.getErrorFrom(cppError: cppError)
+            errorReporter(error)
+        }
+        let imp = imp_implementationWithBlock(callback)
+        WCDBDatabaseTraceError(path, imp)
+    }
+
+    func trace(ofError: Void?) {
+        WCDBDatabaseTraceError(path, nil)
+    }
+
     enum Operation: Int {
         case Create = 0
         case SetTag = 1

@@ -279,6 +279,7 @@ void OperationQueue::doMigrate(const UnsafeStringView& path, int numberOfFailure
                         Error::Level::Notice,
                         "Auto migration is stopped due to too many errors.");
             error.infos.insert_or_assign(ErrorStringKeyPath, path);
+            error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeMigrate);
             Notifier::shared().notify(error);
         }
     }

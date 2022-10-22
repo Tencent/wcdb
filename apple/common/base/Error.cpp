@@ -321,6 +321,15 @@ UnsafeStringView Error::getPath() const
     return UnsafeStringView();
 }
 
+UnsafeStringView Error::getAssociatePath() const
+{
+    auto iter = infos.find(ErrorStringKeyAssociatePath);
+    if (iter != infos.end()) {
+        return iter->second.stringValue();
+    }
+    return UnsafeStringView();
+}
+
 UnsafeStringView Error::getSQL() const
 {
     auto iter = infos.find(ErrorStringKeySQL);

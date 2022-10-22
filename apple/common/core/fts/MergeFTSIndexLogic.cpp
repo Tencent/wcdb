@@ -332,6 +332,7 @@ void MergeFTSIndexLogic::increaseErrorCount()
                     Error::Level::Notice,
                     "Auto merge fts index is stopped due to too many errors.");
         error.infos.insert_or_assign(ErrorStringKeyPath, m_handleProvider->getPath());
+        error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeMergeIndex);
         Notifier::shared().notify(error);
     }
 }

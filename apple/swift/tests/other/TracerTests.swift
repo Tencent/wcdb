@@ -60,7 +60,7 @@ class TracerTests: BaseTestCase {
         XCTAssertTrue(pass)
     }
 
-    func testTraceError() {
+    func testGlobalTraceError() {
         // Give
         let tableName = "nonexistentTable"
         let expectedTag = self.recommendTag
@@ -108,6 +108,63 @@ class TracerTests: BaseTestCase {
         // Give
         let database = Database(at: expectedPath)
         database.tag = expectedTag
+
+        // When
+        XCTAssertThrowsError(
+            try database.getRows(on: Column.all, fromTable: tableName)
+        )
+
+        XCTAssertTrue(`catch`)
+    }
+
+    func testTraceError() {
+        // Give
+        let tableName = "nonexistentTable"
+        let expectedTag = self.recommendTag
+        let expectedErrorCode = 1
+        let expectedErrorMessage = "no such table: main.\(tableName)"
+        let expectedSQL = "SELECT * FROM main.\(tableName)"
+        let expectedPath = self.recommendedPath
+
+        // Give
+        let database = Database(at: expectedPath)
+        database.tag = expectedTag
+
+        // Then
+        var `catch` = false
+        database.trace { (error: WCDB.WCDBError) in
+            let tag = error.tag
+            XCTAssertNotNil(tag)
+            XCTAssertEqual(tag!, expectedTag)
+
+            let code = error.code
+            XCTAssertEqual(code.rawValue, expectedErrorCode)
+
+            let message = error.message
+            XCTAssertNotNil(message)
+            XCTAssertEqual(message!, expectedErrorMessage)
+
+            let sql = error.sql
+            XCTAssertNotNil(sql)
+            XCTAssertEqual(sql!, expectedSQL)
+
+            let path = error.path
+            XCTAssertNotNil(path)
+            XCTAssertEqual(path!, expectedPath.path)
+
+            XCTAssertNil(error.extendedCode)
+
+            let wrongStringType = error.infos[.tag]?.stringValue
+            XCTAssertNotNil(wrongStringType)
+            XCTAssertEqual(wrongStringType, String(expectedTag))
+
+            let wrongIntType = error.infos[.path]?.intValue
+            XCTAssertNotNil(wrongIntType)
+            XCTAssertEqual(wrongIntType!, 0)
+
+            `catch` = true
+            print(error)
+        }
 
         // When
         XCTAssertThrowsError(

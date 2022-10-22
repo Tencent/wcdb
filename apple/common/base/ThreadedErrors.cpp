@@ -22,6 +22,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/CoreConst.h>
 #include <WCDB/Macro.h>
 #include <WCDB/ThreadedErrors.hpp>
 

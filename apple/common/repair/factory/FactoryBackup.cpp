@@ -43,7 +43,7 @@ bool FactoryBackup::work(const UnsafeStringView& database)
         return false;
     }
 
-    notifiyBackupBegin(materialPath.value());
+    notifiyBackupBegin(database);
 
     Backup backup(database);
     backup.setBackupSharedDelegate(m_sharedDelegate);
@@ -57,24 +57,25 @@ bool FactoryBackup::work(const UnsafeStringView& database)
         setError(backup.getError());
         return false;
     }
-
     if (!backup.getMaterial().serialize(materialPath.value())) {
         assignWithSharedThreadedError();
         return false;
     }
 
-    notifiyBackupEnd(materialPath.value(), backup);
+    notifiyBackupEnd(database, materialPath.value(), backup);
     return true;
 }
 
-void FactoryBackup::notifiyBackupBegin(StringView& materialPath)
+void FactoryBackup::notifiyBackupBegin(const UnsafeStringView& database)
 {
     Error error(Error::Code::Notice, Error::Level::Notice, "Backup Begin.");
-    error.infos.insert_or_assign(ErrorStringKeyPath, materialPath);
+    error.infos.insert_or_assign(ErrorStringKeyPath, database);
     Notifier::shared().notify(error);
 }
 
-void FactoryBackup::notifiyBackupEnd(StringView& materialPath, Backup& backup)
+void FactoryBackup::notifiyBackupEnd(const UnsafeStringView& database,
+                                     const UnsafeStringView& materialPath,
+                                     Backup& backup)
 {
     auto fileSize = FileManager::getFileSize(materialPath);
     if (fileSize.has_value()) {
@@ -90,7 +91,7 @@ void FactoryBackup::notifiyBackupEnd(StringView& materialPath, Backup& backup)
         error.infos.insert_or_assign("TableCount", backup.getMaterial().contents.size());
         error.infos.insert_or_assign("AssociatedTableCount", associatedTableCount);
         error.infos.insert_or_assign("LeafPageCount", leafPageCount);
-        error.infos.insert_or_assign(ErrorStringKeyPath, materialPath);
+        error.infos.insert_or_assign(ErrorStringKeyPath, database);
         Notifier::shared().notify(error);
     }
 }

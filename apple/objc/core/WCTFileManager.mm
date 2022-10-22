@@ -78,7 +78,7 @@ bool FileManager::setFileProtection(const WCDB::UnsafeStringView &path, WCDB::Fi
     }
     WCDB::Error error(WCDB::Error::Code::IOError, WCDB::Error::Level::Error, nsError.description);
     error.infos.insert_or_assign(WCDB::ErrorStringKeySource, WCDB::ErrorSourceNative);
-    error.infos.insert_or_assign(WCDB::ErrorStringKeyPath, path);
+    error.infos.insert_or_assign(ErrorStringKeyAssociatePath, path);
     error.infos.insert_or_assign(WCDB::ErrorIntKeyExtCode, nsError.code);
     WCDB::Notifier::shared().notify(error);
     WCDB::ThreadedErrors::shared().setThreadedError(std::move(error));
@@ -96,7 +96,7 @@ std::optional<WCDB::FileProtection> FileManager::getFileProtection(const WCDB::U
     }
     WCDB::Error error(WCDB::Error::Code::IOError, WCDB::Error::Level::Error, nsError.description);
     error.infos.insert_or_assign(WCDB::ErrorStringKeySource, WCDB::ErrorSourceNative);
-    error.infos.insert_or_assign(WCDB::ErrorStringKeyPath, path);
+    error.infos.insert_or_assign(WCDB::ErrorStringKeyAssociatePath, path);
     error.infos.insert_or_assign(WCDB::ErrorIntKeyExtCode, nsError.code);
     WCDB::Notifier::shared().notify(error);
     WCDB::ThreadedErrors::shared().setThreadedError(std::move(error));
