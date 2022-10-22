@@ -145,6 +145,9 @@ static constexpr const char* ErrorStringKeySource = "Source";
 #define WCDB_ERROR_STRING_KEY_PATH "Path"
 static constexpr const char* ErrorStringKeyPath = WCDB_ERROR_STRING_KEY_PATH;
 
+#define WCDB_ERROR_STRING_KEY_ASSOCIATE_PATH "AssociatePath"
+static constexpr const char* ErrorStringKeyAssociatePath = WCDB_ERROR_STRING_KEY_ASSOCIATE_PATH;
+
 #define WCDB_ERROR_STRING_KEY_SQL "SQL"
 static constexpr const char* ErrorStringKeySQL = WCDB_ERROR_STRING_KEY_SQL;
 

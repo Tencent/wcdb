@@ -305,7 +305,7 @@ void Wal::markAsCorrupted(int frame, const UnsafeStringView &message)
 {
     Error error(Error::Code::Corrupt, Error::Level::Notice, message);
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
+    error.infos.insert_or_assign(ErrorStringKeyAssociatePath, getPagerPath());
     error.infos.insert_or_assign("Frame", frame);
     Notifier::shared().notify(error);
     setError(std::move(error));

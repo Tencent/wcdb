@@ -37,8 +37,10 @@ public:
     ~FactoryBackup() override final;
     bool work(const UnsafeStringView& database);
 
-    void notifiyBackupBegin(StringView& materialPath);
-    void notifiyBackupEnd(StringView& materialPath, Backup& backup);
+    void notifiyBackupBegin(const UnsafeStringView& database);
+    void notifiyBackupEnd(const UnsafeStringView& database,
+                          const UnsafeStringView& materialPath,
+                          Backup& backup);
 };
 
 } //namespace Repair

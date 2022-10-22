@@ -435,7 +435,7 @@ void FileManager::setThreadedError(const UnsafeStringView &path)
     Error error;
     error.level = Error::Level::Error;
     error.setSystemCode(errno, Error::Code::IOError);
-    error.infos.insert_or_assign(ErrorStringKeyPath, path);
+    error.infos.insert_or_assign(ErrorStringKeyAssociatePath, path);
     Notifier::shared().notify(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
 }

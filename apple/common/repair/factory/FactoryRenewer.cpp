@@ -64,7 +64,7 @@ bool FactoryRenewer::work()
     if (exists.value()) {
         Error error(Error::Code::Misuse, Error::Level::Warning, "Database already exists when renewing.");
         error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
-        error.infos.insert_or_assign(ErrorStringKeyPath, database);
+        error.infos.insert_or_assign(ErrorStringKeyPath, factory.database);
         Notifier::shared().notify(error);
         FileManager::removeItem(directory);
         factory.removeDirectoryIfEmpty();
@@ -200,7 +200,7 @@ bool FactoryRenewer::resolveInfosForDatabase(StringViewMap<Info> &infos,
     if (materialPaths.empty()) {
         Error error(Error::Code::NotFound, Error::Level::Warning, "Material is not found when renewing.");
         error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
-        error.infos.insert_or_assign(ErrorStringKeyPath, databaseForAcquisition);
+        error.infos.insert_or_assign(ErrorStringKeyAssociatePath, databaseForAcquisition);
         Notifier::shared().notify(error);
         return true;
     }
@@ -223,7 +223,7 @@ bool FactoryRenewer::resolveInfosForDatabase(StringViewMap<Info> &infos,
                                 Error::Level::Notice,
                                 "Different sqls is found in materials.");
                     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
-                    error.infos.insert_or_assign(ErrorStringKeyPath, materialPath);
+                    error.infos.insert_or_assign("MaterialPaths", materialPath);
                     error.infos.insert_or_assign("SQL1", element.second.sql);
                     error.infos.insert_or_assign("SQL2", iter->second.sql);
                     Notifier::shared().notify(error);
@@ -238,7 +238,7 @@ bool FactoryRenewer::resolveInfosForDatabase(StringViewMap<Info> &infos,
     // Regard it as no error
     Error error(Error::Code::Notice, Error::Level::Notice, "All materials are corrupted when renewing.");
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.insert_or_assign(ErrorStringKeyPath, databaseForAcquisition);
+    error.infos.insert_or_assign(ErrorStringKeyAssociatePath, databaseForAcquisition);
     Notifier::shared().notify(error);
     return true;
 }

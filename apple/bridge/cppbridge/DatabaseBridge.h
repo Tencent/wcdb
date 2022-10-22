@@ -63,6 +63,7 @@ void WCDBDatabaseTracePerformance(CPPDatabase database, SwiftClosure* _Nullable 
 void WCDBDatabaseGlobalTraceSQL(SwiftClosure* _Nullable tracer);
 void WCDBDatabaseTraceSQL(CPPDatabase database, SwiftClosure* _Nullable tracer);
 void WCDBDatabaseGlobalTraceError(SwiftClosure* _Nullable tracer);
+void WCDBDatabaseTraceError(const char* _Nonnull path, SwiftClosure* _Nullable tracer);
 void WCDBDatabaseGlobalTraceOperation(SwiftClosure* _Nullable tracer);
 
 bool WCDBDatabaseRemoveFile(CPPDatabase database);

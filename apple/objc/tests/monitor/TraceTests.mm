@@ -96,6 +96,26 @@
     [WCTDatabase globalTraceError:nil];
 }
 
+- (void)test_database_trace_error
+{
+    self.tableClass = TestCaseObject.class;
+
+    __block BOOL tested = NO;
+    __block BOOL start = NO;
+    weakify(self);
+    [self.database traceError:^(WCTError* error) {
+        strongify_or_return(self);
+        TestCaseAssertTrue([error.path isEqualToString:self.path]);
+        tested = YES;
+    }];
+
+    TestCaseAssertTrue([self.database canOpen]);
+
+    start = YES;
+    TestCaseAssertFalse([self.database execute:WCDB::StatementSelect().select(1).from(@"dummy")]);
+    TestCaseAssertTrue(tested);
+}
+
 - (void)test_global_trace_sql
 {
     WCDB::StatementPragma statement = WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion());

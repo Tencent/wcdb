@@ -68,7 +68,7 @@ std::optional<bool> Repairman::isEmptyDatabase()
         if (fileSize.value() == 0) {
             Error error(Error::Code::Empty, Error::Level::Warning, "Database is not found or empty.");
             error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
-            error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
+            error.infos.insert_or_assign(ErrorStringKeyAssociatePath, getPath());
             Notifier::shared().notify(error);
             return true;
         } else {

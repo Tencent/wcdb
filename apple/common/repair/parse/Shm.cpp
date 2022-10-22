@@ -68,7 +68,7 @@ void Shm::markAsCorrupted(const UnsafeStringView &message)
 {
     Error error(Error::Code::Corrupt, Error::Level::Notice, message);
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
+    error.infos.insert_or_assign(ErrorStringKeyAssociatePath, getPagerPath());
     Notifier::shared().notify(error);
     setError(std::move(error));
 }

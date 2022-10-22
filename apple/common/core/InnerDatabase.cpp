@@ -596,6 +596,9 @@ bool InnerDatabase::backup(bool interruptible)
             return false;
         }
     }
+
+    Core::shared().setThreadedDatabase(path);
+
     Repair::FactoryBackup backup = m_factory.backup();
     backup.setBackupSharedDelegate(
     static_cast<OperationHandle *>(backupReadHandle.get()));
@@ -615,6 +618,7 @@ bool InnerDatabase::backup(bool interruptible)
         operationBackupWriteHandle->markErrorAsUnignorable();
         operationBackupReadHandle->markErrorAsUnignorable();
     }
+    Core::shared().setThreadedDatabase("");
     return succeed;
 }
 
@@ -650,6 +654,8 @@ bool InnerDatabase::deposit()
         WCTAssert(!backupWriteHandle->isOpened());
         WCTAssert(!assemblerHandle->isOpened());
 
+        Core::shared().setThreadedDatabase(path);
+
         Repair::FactoryRenewer renewer = m_factory.renewer();
         renewer.setBackupSharedDelegate(
         static_cast<AssembleHandle *>(backupReadHandle.get()));
@@ -660,6 +666,7 @@ bool InnerDatabase::deposit()
         // Prepare a new database from material at renew directory and wait for moving
         if (!renewer.prepare()) {
             setThreadedError(renewer.getError());
+            Core::shared().setThreadedDatabase("");
             return;
         }
         Repair::FactoryDepositor depositor = m_factory.depositor();
@@ -671,10 +678,12 @@ bool InnerDatabase::deposit()
         // At next time this database launchs, the retrieveRenewed method will do the remaining work. So data will never lost.
         if (!renewer.work()) {
             setThreadedError(renewer.getError());
+            Core::shared().setThreadedDatabase("");
             return;
         }
         result = true;
     });
+    Core::shared().setThreadedDatabase("");
     return result;
 }
 
@@ -710,6 +719,8 @@ double InnerDatabase::retrieve(const RetrieveProgressCallback &onProgressUpdated
         WCTAssert(!backupWriteHandle->isOpened());
         WCTAssert(!assemblerHandle->isOpened());
 
+        Core::shared().setThreadedDatabase(path);
+
         Repair::FactoryRetriever retriever = m_factory.retriever();
         retriever.setBackupSharedDelegate(
         static_cast<AssembleHandle *>(backupReadHandle.get()));
@@ -722,6 +733,7 @@ double InnerDatabase::retrieve(const RetrieveProgressCallback &onProgressUpdated
             result = retriever.getScore().value();
         }
         setThreadedError(retriever.getError()); // retriever may have non-critical error even if it succeeds.
+        Core::shared().setThreadedDatabase("");
     });
     return result;
 }
@@ -811,6 +823,7 @@ std::optional<bool> InnerDatabase::stepMigration(bool interruptible)
             if (m_closing != 0) {
                 Error error(Error::Code::Interrupt, Error::Level::Ignore, "Interrupt due to it's closing");
                 error.infos.insert_or_assign(ErrorStringKeyPath, path);
+                error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeMigrate);
                 Notifier::shared().notify(error);
                 setThreadedError(std::move(error));
                 return false;

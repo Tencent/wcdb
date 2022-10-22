@@ -76,6 +76,7 @@ public:
      */
     typedef std::function<void(const Error &)> ErrorNotification;
     static void globalTraceError(ErrorNotification trace);
+    void traceError(ErrorNotification trace);
 
     /**
      @brief You can register a tracer to monitor the performance of all SQLs.

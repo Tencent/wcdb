@@ -82,7 +82,7 @@ bool Mechanic::work()
             m_pager.disposeWal();
             Error error(Error::Code::Notice, Error::Level::Notice, "Dispose WAL of non-match salt.");
             error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
-            error.infos.insert_or_assign(ErrorStringKeyPath, m_pager.getPath());
+            error.infos.insert_or_assign(ErrorStringKeyAssociatePath, m_pager.getPath());
             error.infos.insert_or_assign("WalSalt1", m_pager.getWalSalt().first);
             error.infos.insert_or_assign("WalSalt2", m_pager.getWalSalt().second);
             error.infos.insert_or_assign("MaterialSalt1",

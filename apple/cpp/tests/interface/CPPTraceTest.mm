@@ -87,6 +87,24 @@
     TestCaseAssertTrue(tested);
 }
 
+- (void)test_trace_error
+{
+    BOOL tested = NO;
+    self.database->traceError([&](const WCDB::Error &error) {
+        TestCaseAssertCPPStringEqual(error.getPath().data(), self.path.UTF8String);
+        TestCaseAssertEqual(error.getTag().value(), self.database->getTag());
+        if (error.level == WCDB::Error::Level::Error
+            && error.code() == WCDB::Error::Code::Error
+            && strcmp(error.getSQL().data(), "SELECT 1 FROM main.dummy") == 0) {
+            tested = YES;
+        }
+    });
+
+    TestCaseAssertTrue(self.database->canOpen());
+    TestCaseAssertFalse(self.database->execute(WCDB::StatementSelect().select(1).from("dummy")));
+    TestCaseAssertTrue(tested);
+}
+
 - (void)test_global_trace_sql
 {
     WCDB::StatementPragma statement = WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion());

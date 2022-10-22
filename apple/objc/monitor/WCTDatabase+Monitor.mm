@@ -56,6 +56,16 @@ void Core::print(const UnsafeStringView& message)
     }
 }
 
+- (void)traceError:(nullable WCDB_ESCAPE WCTErrorTraceBlock)block
+{
+    if (block != nil) {
+        WCDB::Core::shared().setNotificationWhenErrorTraced(self.path, [block](const WCDB::Error& error) {
+            WCTError* nsError = [[WCTError alloc] initWithError:error];
+            block(nsError);
+        });
+    }
+}
+
 + (void)globalTracePerformance:(WCTPerformanceTraceBlock)trace
 {
     WCDB::InnerHandle::PerformanceNotification callback = nullptr;

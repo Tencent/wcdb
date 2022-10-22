@@ -210,7 +210,7 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
     } else {
         Error warning(Error::Code::NotFound, Error::Level::Warning, "Material is not found");
         warning.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
-        warning.infos.insert_or_assign(ErrorStringKeyPath, databasePath);
+        warning.infos.insert_or_assign(ErrorStringKeyAssociatePath, databasePath);
         Notifier::shared().notify(warning);
     }
 
@@ -249,7 +249,7 @@ void FactoryRetriever::reportMechanic(const Fraction &score,
 {
     Error error(Error::Code::Notice, Error::Level::Notice, "Mechanic Retrieve Report.");
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.insert_or_assign(ErrorStringKeyPath, path);
+    error.infos.insert_or_assign(ErrorStringKeyAssociatePath, path);
     error.infos.insert_or_assign("Score", score.value());
     auto optionalMaterial = material.stringify();
     if (optionalMaterial.has_value()) {
@@ -267,6 +267,7 @@ void FactoryRetriever::reportFullCrawler(const Fraction &score,
 {
     Error error(Error::Code::Notice, Error::Level::Notice, "Crawler Retrieve Report.");
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.insert_or_assign(ErrorStringKeyAssociatePath, path);
     error.infos.insert_or_assign(ErrorStringKeyPath, path);
     error.infos.insert_or_assign("Score", score.value());
     finishReportOfPerformance(error, path, cost);
@@ -279,7 +280,7 @@ void FactoryRetriever::reportSummary(double cost)
 {
     Error error(Error::Code::Notice, Error::Level::Notice, "Summary Retrieve Report.");
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.insert_or_assign(ErrorStringKeyPath, database);
+    error.infos.insert_or_assign(ErrorStringKeyPath, factory.database);
     error.infos.insert_or_assign("Cost", StringView::formatted("%f sec", cost));
     error.infos.insert_or_assign("Score", getScore().value());
     Notifier::shared().notify(error);

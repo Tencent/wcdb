@@ -57,11 +57,13 @@ public:
     RecyclableDatabase getOrCreateDatabase(const UnsafeStringView& path);
 
     void purgeDatabasePool();
+    void setThreadedDatabase(const UnsafeStringView& path);
 
 protected:
     void preprocessError(Error& error);
     void databaseDidCreate(InnerDatabase* database) override final;
     DatabasePool m_databasePool;
+    ThreadLocal<StringView> m_associateDatabases;
 
 #pragma mark - Tokenizer
 public:
@@ -127,6 +129,8 @@ public:
     void setNotificationWhenPerformanceGlobalTraced(
     const ShareablePerformanceTraceConfig::Notification& notification);
     void setNotificationWhenErrorTraced(const Notifier::Callback& notification);
+    void setNotificationWhenErrorTraced(const UnsafeStringView& path,
+                                        const Notifier::Callback& notification);
 
 protected:
     std::shared_ptr<Config> m_globalSQLTraceConfig;
@@ -135,7 +139,6 @@ protected:
     void globalLog(int rc, const char* message);
 
     static void breakpoint() WCDB_USED WCDB_NO_INLINE;
-    static void onErrorTraced(const Error& error);
     static void print(const UnsafeStringView& message);
 
 #pragma mark - Merge FTS Index

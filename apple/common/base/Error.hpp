@@ -325,6 +325,7 @@ public:
 #pragma mark - Common Info
 public:
     UnsafeStringView getPath() const;
+    UnsafeStringView getAssociatePath() const;
     UnsafeStringView getSQL() const;
     Tag getTag() const;
     ExtCode getExtCode() const;

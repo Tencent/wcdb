@@ -161,6 +161,11 @@ void Database::globalTraceError(Database::ErrorNotification trace)
     Core::shared().setNotificationWhenErrorTraced(trace);
 }
 
+void Database::traceError(ErrorNotification trace)
+{
+    Core::shared().setNotificationWhenErrorTraced(getPath(), trace);
+}
+
 void Database::globalTracePerformance(Database::PerformanceNotification trace)
 {
     Core::shared().setNotificationWhenPerformanceGlobalTraced(trace);

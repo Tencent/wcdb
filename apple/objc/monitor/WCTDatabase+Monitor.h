@@ -67,6 +67,7 @@ typedef void (^WCTDatabaseOperationTraceBlock)(WCTDatabase* /* database */, WCTD
  @see WCTErrorTraceBlock
  */
 + (void)globalTraceError:(nullable WCDB_ESCAPE WCTErrorTraceBlock)block;
+- (void)traceError:(nullable WCDB_ESCAPE WCTErrorTraceBlock)block;
 
 /**
  @brief You can register a tracer to monitor the performance of all SQLs.
