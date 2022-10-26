@@ -76,6 +76,13 @@ public:
         return operator==(Value(other));
     }
 
+    bool operator!=(const Value& other) const;
+    template<class T, std::enable_if_t<std::is_constructible<Value, T>::value, int> = 0>
+    bool operator!=(const T& other) const
+    {
+        return operator!=(Value(other));
+    }
+
     template<class T, std::enable_if_t<ColumnIsIntegerType<T>::value, int> = 0>
     operator T() const
     {
@@ -100,6 +107,7 @@ public:
     StringView textValue() const;
     Data blobValue() const;
     bool isNull() const;
+    bool isEmpty() const;
 
 private:
     Type m_type;

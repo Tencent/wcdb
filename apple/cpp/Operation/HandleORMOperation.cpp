@@ -25,6 +25,7 @@
 #include <WCDB/Delete.hpp>
 #include <WCDB/Handle.hpp>
 #include <WCDB/HandleORMOperation.hpp>
+#include <WCDB/MultiSelect.hpp>
 
 namespace WCDB {
 
@@ -44,6 +45,39 @@ bool HandleORMOperation::deleteObjects(const UnsafeStringView &table,
     auto delete_ = prepareDelete().fromTable(table);
     configStatement(delete_, where, orders, limit, offset);
     return delete_.execute();
+}
+
+MultiSelect HandleORMOperation::prepareMultiSelect()
+{
+    return MultiSelect(getDatabaseHolder());
+}
+
+std::optional<MultiObject>
+HandleORMOperation::getFirstMultiObject(const ValueArray<StringView> tables,
+                                        const ResultFields &resultFields,
+                                        const Expression &where,
+                                        const OrderingTerms &orders,
+                                        const Expression &limit,
+                                        const Expression &offset)
+{
+    auto select = prepareMultiSelect();
+    select.onResultFields(resultFields).fromTables(tables);
+    configStatement(select, where, orders, limit, offset);
+    return select.firstMultiObject();
+}
+
+std::optional<ValueArray<MultiObject>>
+HandleORMOperation::getAllMultiObjects(const ValueArray<StringView> tables,
+                                       const ResultFields &resultFields,
+                                       const Expression &where,
+                                       const OrderingTerms &orders,
+                                       const Expression &limit,
+                                       const Expression &offset)
+{
+    auto select = prepareMultiSelect();
+    select.onResultFields(resultFields).fromTables(tables);
+    configStatement(select, where, orders, limit, offset);
+    return select.allMultiObjects();
 }
 
 } //namespace WCDB

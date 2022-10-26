@@ -26,6 +26,14 @@
 
 #import <WCDB/WINQ.h>
 
+#define WCDB_CPP_ORM_STATIC_ASSERT_FOR_OBJECT_TYPE                                             \
+    static_assert(ObjectType::isObjectRelationMapped, "This class has no ORM configuration."); \
+    static_assert(std::is_constructible<ObjectType>::value,                                    \
+                  "This class must have default constructor.");                                \
+    static_assert(std::is_copy_assignable<ObjectType>::value                                   \
+                  && std::is_copy_constructible<ObjectType>::value,                            \
+                  "This class must be copy constructible and copy assignable.");
+
 namespace WCDB {
 
 class BaseAccessor;
@@ -55,6 +63,8 @@ class BaseChainCall;
 template<class ObjectType>
 class Table;
 
+class MultiObject;
+
 template<class ObjectType>
 class Insert;
 
@@ -65,5 +75,7 @@ class Delete;
 
 template<class ObjectType>
 class Select;
+
+class MultiSelect;
 
 } //namespace WCDB

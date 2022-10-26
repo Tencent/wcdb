@@ -129,6 +129,8 @@ public:
         return Select<ObjectType>(getDatabaseHolder());
     }
 
+    MultiSelect prepareMultiSelect();
+
 #pragma mark - Insert
     template<class ObjectType>
     bool insertObjects(const ValueArray<ObjectType> &objs,
@@ -205,7 +207,7 @@ public:
                              const Expression &offset = Expression())
     {
         auto select
-        = prepareSelect<ObjectType>().fromTable(table).onResultColumns(resultFields);
+        = prepareSelect<ObjectType>().fromTable(table).onResultFields(resultFields);
         configStatement(select, where, orders, Expression(1), offset);
         return select.firstObject();
     }
@@ -233,10 +235,26 @@ public:
                             const Expression &offset = Expression())
     {
         auto select
-        = prepareSelect<ObjectType>().fromTable(table).onResultColumns(resultFields);
+        = prepareSelect<ObjectType>().fromTable(table).onResultFields(resultFields);
         configStatement(select, where, orders, limit, offset);
         return select.allObjects();
     }
+
+    std::optional<MultiObject>
+    getFirstMultiObject(const ValueArray<StringView> tables,
+                        const ResultFields &resultFields,
+                        const Expression &where = Expression(),
+                        const OrderingTerms &orders = OrderingTerms(),
+                        const Expression &limit = Expression(),
+                        const Expression &offset = Expression());
+
+    std::optional<ValueArray<MultiObject>>
+    getAllMultiObjects(const ValueArray<StringView> tables,
+                       const ResultFields &resultFields,
+                       const Expression &where = Expression(),
+                       const OrderingTerms &orders = OrderingTerms(),
+                       const Expression &limit = Expression(),
+                       const Expression &offset = Expression());
 
 protected:
     virtual ~HandleORMOperation() override = 0;

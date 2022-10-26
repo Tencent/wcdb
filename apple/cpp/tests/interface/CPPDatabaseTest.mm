@@ -99,8 +99,8 @@
 
     TestCaseAssertTrue(self.database->canOpen());
     auto values = self.database->selectAllRow(self.resultColumns, self.tableName.UTF8String);
-    TestCaseAssertTrue(values.has_value() && values.value().size() == 1)
-    TestCaseAssertFalse(self.database->insertRows(row, self.columns, self.tableName.UTF8String));
+    TestCaseAssertTrue(values.has_value() && values.value().size() == 1);
+    XCTAssertFalse(self.database->insertRows(row, self.columns, self.tableName.UTF8String));
 
     // reset attribute
     for (const WCDB::UnsafeStringView path : self.database->getPaths()) {
@@ -148,7 +148,7 @@
     TestCaseAssertTrue([self createValueTable]);
 
     unsigned long walFrameNum = 0;
-    for (int i = 0; i < 2000; i++) {
+    for (int i = 0; i < 100; i++) {
         auto value = self.database->getValueFromStatement(WCDB::StatementSelect().select(WCDB::Expression::function("count").invokeAll()).from(self.tableName.UTF8String));
         TestCaseAssertTrue(value.has_value() && value.value().intValue() == i);
         TestCaseAssertTrue(self.database->insertRows(rows[i], self.columns, self.tableName.UTF8String));

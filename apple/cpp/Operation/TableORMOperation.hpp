@@ -122,7 +122,7 @@ public:
                              const OrderingTerms &orders = OrderingTerms(),
                              const Expression &offset = Expression())
     {
-        auto select = prepareSelect().onResultColumns(resultFields);
+        auto select = prepareSelect().onResultFields(resultFields);
         configStatement(select, where, orders, Expression(1), offset);
         return select.firstObject();
     }
@@ -145,7 +145,7 @@ public:
                             const Expression &limit = Expression(),
                             const Expression &offset = Expression())
     {
-        auto select = prepareSelect().onResultColumns(resultFields);
+        auto select = prepareSelect().onResultFields(resultFields);
         configStatement(select, where, orders, limit, offset);
         return select.allObjects();
     }

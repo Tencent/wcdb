@@ -92,6 +92,11 @@ bool Value::operator==(const Value &other) const
     }
 }
 
+bool Value::operator!=(const Value &other) const
+{
+    return !(operator==(other));
+}
+
 Value::operator bool() const
 {
     return boolValue();
@@ -314,6 +319,22 @@ Data Value::blobValue() const
 bool Value::isNull() const
 {
     return m_type == Type::Null;
+}
+
+bool Value::isEmpty() const
+{
+    switch (m_type) {
+    case Type::Integer:
+        return m_value.intValue == 0;
+    case Type::Float:
+        return m_value.floatValue == 0;
+    case Type::Text:
+        return m_value.textValue->length() == 0;
+    case Type::BLOB:
+        return m_value.blobValue->size() == 0;
+    case Type::Null:
+        return true;
+    }
 }
 
 } // namespace WCDB

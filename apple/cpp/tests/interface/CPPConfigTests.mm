@@ -79,7 +79,7 @@
         TestCaseAssertTrue(uninvoked);
 
         auto value = self.database->getValueFromStatement(getSecureDelete);
-        TestCaseAssertTrue(value.has_value())
+        TestCaseAssertTrue(value.has_value());
         TestCaseAssertFalse(value.value());
     }
 }

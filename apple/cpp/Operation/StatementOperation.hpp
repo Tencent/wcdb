@@ -62,35 +62,7 @@ public:
     template<class ObjectType>
     void bindObject(const ObjectType& obj, const Field& field, int index = 1)
     {
-        WCDB_CPP_ORM_STATIC_ASSERT_FOR_OBJECT_TYPE
-        auto accessor = field.getAccessor();
-        switch (accessor->getColumnType()) {
-        case ColumnType::Integer: {
-            auto intAccessor
-            = dynamic_cast<Accessor<ObjectType, ColumnType::Integer>*>(accessor.get());
-            bindInteger(intAccessor->getValue(obj), index);
-        } break;
-        case ColumnType::Float: {
-            auto floatAccessor
-            = dynamic_cast<Accessor<ObjectType, ColumnType::Float>*>(accessor.get());
-            bindDouble(floatAccessor->getValue(obj), index);
-        } break;
-        case ColumnType::Text: {
-            auto textAccessor
-            = dynamic_cast<Accessor<ObjectType, ColumnType::Text>*>(accessor.get());
-            bindText(textAccessor->getValue(obj), index);
-        } break;
-        case ColumnType::BLOB: {
-            auto blobAccessor
-            = dynamic_cast<Accessor<ObjectType, ColumnType::BLOB>*>(accessor.get());
-            bindBLOB(blobAccessor->getValue(obj), index);
-        } break;
-        case ColumnType::Null: {
-            bindNull(index);
-        } break;
-        default:
-            break;
-        }
+        bindValue(field.getValue<ObjectType>(obj), index);
     }
 
     template<class ObjectType>
@@ -98,7 +70,7 @@ public:
     {
         int index = 1;
         for (const Field& field : fields) {
-            bindObject(obj, field, index);
+            bindValue(field.getValue<ObjectType>(obj), index);
             index++;
         }
     }
@@ -119,63 +91,32 @@ public:
     OptionalMultiRows getAllRows();
 
     template<class ObjectType>
-    void extractValueToObject(ObjectType& obj, const ResultField& field, int index = 0)
-    {
-        WCDB_CPP_ORM_STATIC_ASSERT_FOR_OBJECT_TYPE
-        auto accessor = field.getAccessor();
-        switch (accessor->getColumnType()) {
-        case ColumnType::Integer: {
-            auto intAccessor
-            = dynamic_cast<Accessor<ObjectType, ColumnType::Integer>*>(accessor.get());
-            intAccessor->setValue(obj, getInteger(index));
-        } break;
-        case ColumnType::Float: {
-            auto floatAccessor
-            = dynamic_cast<Accessor<ObjectType, ColumnType::Float>*>(accessor.get());
-            floatAccessor->setValue(obj, getDouble(index));
-        } break;
-        case ColumnType::Text: {
-            auto textAccessor
-            = dynamic_cast<Accessor<ObjectType, ColumnType::Text>*>(accessor.get());
-            textAccessor->setValue(obj, getText(index));
-        } break;
-        case ColumnType::BLOB: {
-            auto blobAccessor
-            = dynamic_cast<Accessor<ObjectType, ColumnType::BLOB>*>(accessor.get());
-            blobAccessor->setValue(obj, getBLOB(index));
-        } break;
-        case ColumnType::Null: {
-            auto nullAccessor
-            = dynamic_cast<Accessor<ObjectType, ColumnType::Null>*>(accessor.get());
-            nullAccessor->setValue(obj, nullptr);
-        } break;
-        default:
-            break;
-        }
-    }
-
-    template<class ObjectType>
-    ObjectType getObject(const ResultFields& resultFields)
+    ObjectType extractOneObject(const ResultFields& resultFields)
     {
         ObjectType obj;
         int index = 0;
         for (const ResultField& field : resultFields) {
-            extractValueToObject(obj, field, index);
+            field.setValue<ObjectType>(obj, getValue(index));
             index++;
         }
         return obj;
     }
 
     template<class ObjectType>
-    std::optional<ValueArray<ObjectType>> getAllObject(const ResultFields& resultFields)
+    std::optional<ValueArray<ObjectType>>
+    extractAllObjects(const ResultFields& resultFields)
     {
         ValueArray<ObjectType> result;
         bool succeed = false;
         while ((succeed = step()) && !done()) {
-            result.push_back(getObject<ObjectType>(resultFields));
+            result.push_back(extractOneObject<ObjectType>(resultFields));
         }
         return succeed ? result : std::optional<std::vector<ObjectType>>();
     }
+
+    MultiObject extractOneMultiObject(const ResultFields& resultFields);
+    std::optional<ValueArray<MultiObject>>
+    extractAllMultiObjects(const ResultFields& resultFields);
 
     const UnsafeStringView getOriginColumnName(int index);
     const UnsafeStringView getColumnName(int index);
