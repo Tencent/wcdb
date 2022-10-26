@@ -23,6 +23,7 @@
  */
 
 #include <WCDB/InnerHandleStatement.hpp>
+#include <WCDB/MultiObject.hpp>
 #include <WCDB/StatementOperation.hpp>
 
 namespace WCDB {
@@ -165,6 +166,29 @@ OneRowValue StatementOperation::getOneRow()
 OptionalMultiRows StatementOperation::getAllRows()
 {
     return getInnerHandleStatement()->getAllRows();
+}
+
+MultiObject StatementOperation::extractOneMultiObject(const ResultFields &resultFields)
+{
+    MultiObject result;
+    int index = 0;
+    for (const ResultField &field : resultFields) {
+        const UnsafeStringView table = getColumnTableName(index);
+        result.addField(table, field, getValue(index));
+        ++index;
+    }
+    return result;
+}
+
+std::optional<ValueArray<MultiObject>>
+StatementOperation::extractAllMultiObjects(const ResultFields &resultFields)
+{
+    ValueArray<MultiObject> result;
+    bool succeed = false;
+    while ((succeed = step()) && !done()) {
+        result.push_back(extractOneMultiObject(resultFields));
+    }
+    return succeed ? result : std::optional<std::vector<MultiObject>>();
 }
 
 const UnsafeStringView StatementOperation::getOriginColumnName(int index)

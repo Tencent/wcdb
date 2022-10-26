@@ -69,7 +69,7 @@ public:
         return *this;
     }
 
-    Select<ObjectType> &onResultColumns(const ResultFields &resultFields)
+    Select<ObjectType> &onResultFields(const ResultFields &resultFields)
     {
         m_fields = resultFields;
         m_statement.select(resultFields);
@@ -80,7 +80,7 @@ public:
     {
         std::optional<ValueArray<ObjectType>> objects;
         if (prepareStatement()) {
-            objects = m_handle->getAllObject<ObjectType>(m_fields);
+            objects = m_handle->extractAllObjects<ObjectType>(m_fields);
             m_handle->finalize();
         }
         m_handle->invalidate();
@@ -92,7 +92,7 @@ public:
         std::optional<ObjectType> object;
         if (prepareStatement()) {
             if (m_handle->step() && !m_handle->done()) {
-                object = m_handle->getObject<ObjectType>(m_fields);
+                object = m_handle->extractOneObject<ObjectType>(m_fields);
             }
             m_handle->finalize();
         }

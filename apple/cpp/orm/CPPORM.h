@@ -24,14 +24,6 @@
 
 #pragma once
 
-#define WCDB_CPP_ORM_STATIC_ASSERT_FOR_OBJECT_TYPE                                             \
-    static_assert(ObjectType::isObjectRelationMapped, "This class has no ORM configuration."); \
-    static_assert(std::is_constructible<ObjectType>::value,                                    \
-                  "This class must have default constructor.");                                \
-    static_assert(std::is_copy_assignable<ObjectType>::value                                   \
-                  && std::is_copy_constructible<ObjectType>::value,                            \
-                  "This class must be copy constructible and copy assignable.");
-
 #include <WCDB/Binding.hpp>
 #include <WCDB/FTSTokenizerUtil.hpp>
 #include <WCDB/Field.hpp>

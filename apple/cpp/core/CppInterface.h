@@ -32,5 +32,6 @@
 
 #include <WCDB/Delete.hpp>
 #include <WCDB/Insert.hpp>
+#include <WCDB/MultiSelect.hpp>
 #include <WCDB/Select.hpp>
 #include <WCDB/Update.hpp>

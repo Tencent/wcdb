@@ -39,14 +39,14 @@ public:
     template<typename U, typename Enable = typename std::enable_if<std::is_constructible<T, U>::value>::type>
     ValueArray(const U& u)
     {
-        this->push_back(u);
+        this->emplace_back(u);
     }
 
     template<typename U, typename Enable = typename std::enable_if<std::is_constructible<T, U>::value>::type>
     ValueArray(const std::list<U>& others)
     {
         for (const auto& other : others) {
-            this->push_back(other);
+            this->emplace_back(other);
         }
     }
 
@@ -54,7 +54,7 @@ public:
     ValueArray(const std::initializer_list<U>& others)
     {
         for (const auto& other : others) {
-            this->push_back(other);
+            this->emplace_back(other);
         }
     }
 
@@ -62,7 +62,7 @@ public:
     ValueArray(const std::vector<U>& others)
     {
         for (const auto& other : others) {
-            this->push_back(other);
+            this->emplace_back(other);
         }
     }
 };

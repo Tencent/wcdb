@@ -336,7 +336,7 @@ void AbstractHandle::markErrorNotAllowedWithinTransaction()
 
 bool AbstractHandle::isErrorAllowedWithinTransaction() const
 {
-    return m_transactionError == TransactionError::NotAllowed;
+    return m_transactionError != TransactionError::NotAllowed;
 }
 
 StringView AbstractHandle::getSavepointName(int transactionLevel)

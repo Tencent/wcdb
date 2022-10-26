@@ -37,16 +37,19 @@
 {
     WCDB::Value value;
     TestCaseAssertTrue(value.isNull());
+    TestCaseAssertTrue(value.isEmpty());
     TestCaseAssertTrue((int) value == 0);
     TestCaseAssertFalse(value);
 
     value = nullptr;
     TestCaseAssertTrue(value.isNull());
+    TestCaseAssertTrue(value.isEmpty());
     TestCaseAssertTrue((int) value == 0);
     TestCaseAssertFalse(value);
 
     value = WCDB::Value(nullptr);
     TestCaseAssertTrue(value.isNull());
+    TestCaseAssertTrue(value.isEmpty());
     TestCaseAssertTrue((int) value == 0);
     TestCaseAssertFalse(value);
 
@@ -56,13 +59,16 @@
 
 - (void)test_interger
 {
-    WCDB::Value value(1);
-    TestCaseAssertTrue(value.intValue() == 1);
-    TestCaseAssertTrue((int) value == 1);
-    TestCaseAssertTrue(value);
+    WCDB::Value value(0);
+    TestCaseAssertTrue(value.intValue() == 0);
+    TestCaseAssertTrue((int) value == 0);
+    TestCaseAssertFalse(value);
+    TestCaseAssertTrue(value.isEmpty());
+    TestCaseAssertFalse(value.isNull());
 
     value = 1;
     TestCaseAssertFalse(value.isNull());
+    TestCaseAssertFalse(value.isEmpty());
     TestCaseAssertTrue((int) value == 1);
     TestCaseAssertTrue(value);
 
@@ -72,13 +78,15 @@
 
 - (void)test_float
 {
-    WCDB::Value value(1.2);
-    TestCaseAssertTrue(value.floatValue() == 1.2);
-    TestCaseAssertTrue((double) value == 1.2);
-    TestCaseAssertTrue(value);
+    WCDB::Value value(0);
+    TestCaseAssertTrue(value.floatValue() == 0);
+    TestCaseAssertTrue((double) value == 0);
+    TestCaseAssertFalse(value);
+    TestCaseAssertTrue(value.isEmpty());
 
     value = 1.2;
     TestCaseAssertFalse(value.isNull());
+    TestCaseAssertFalse(value.isEmpty());
     TestCaseAssertTrue((double) value == 1.2);
     TestCaseAssertTrue(value);
 
@@ -88,15 +96,17 @@
 
 - (void)test_string
 {
-    WCDB::Value value("abc");
-    TestCaseAssertStringEqual([NSString stringWithUTF8String:value.textValue().data()], @"abc");
+    WCDB::Value value("");
+    TestCaseAssertStringEqual([NSString stringWithUTF8String:value.textValue().data()], @"");
     TestCaseAssertFalse(value.isNull());
+    TestCaseAssertTrue(value.isEmpty());
     TestCaseAssertTrue((double) value == 0);
     TestCaseAssertFalse(value);
 
     value = "1.2";
     TestCaseAssertStringEqual([NSString stringWithUTF8String:value.textValue().data()], @"1.2");
     TestCaseAssertFalse(value.isNull());
+    TestCaseAssertFalse(value.isEmpty());
     TestCaseAssertTrue((double) value == 1.2);
     TestCaseAssertTrue(value);
 
@@ -104,18 +114,20 @@
     TestCaseAssertSQLEqual(literal, @"'1.2'");
 }
 
-- (void)test_blocb
+- (void)test_blob
 {
-    NSData* nsData = [@"abc" dataUsingEncoding:NSUTF8StringEncoding];
+    NSData* nsData = [@"" dataUsingEncoding:NSUTF8StringEncoding];
     WCDB::Value value(WCDB::UnsafeData((unsigned char*) nsData.bytes, nsData.length));
-    TestCaseAssertStringEqual([NSString stringWithUTF8String:value.textValue().data()], @"abc");
+    TestCaseAssertStringEqual([NSString stringWithUTF8String:value.textValue().data()], @"");
     TestCaseAssertFalse(value.isNull());
+    TestCaseAssertTrue(value.isEmpty());
     TestCaseAssertFalse(value);
 
     NSData* nsData2 = [@"1.2" dataUsingEncoding:NSUTF8StringEncoding];
     value = WCDB::UnsafeData((unsigned char*) nsData2.bytes, nsData2.length);
     TestCaseAssertStringEqual([NSString stringWithUTF8String:value.textValue().data()], @"1.2");
     TestCaseAssertFalse(value.isNull());
+    TestCaseAssertFalse(value.isEmpty());
     TestCaseAssertTrue((double) value == 1.2);
     TestCaseAssertTrue(value);
 

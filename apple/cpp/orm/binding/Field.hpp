@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include <WCDB/Accessor.hpp>
 #include <WCDB/CPPDeclaration.h>
 #include <WCDB/MemberPointer.hpp>
 
@@ -32,6 +33,9 @@ namespace WCDB {
 #pragma mark - Field
 
 class Field final : public Column {
+    friend class ResultField;
+    friend class SyntaxList<Field>;
+
 public:
     Field() = delete;
     Field(const UnsafeStringView& name, const std::shared_ptr<BaseAccessor> accessor);
@@ -51,6 +55,38 @@ public:
 
     Column table(const UnsafeStringView& table) const;
 
+    template<class ObjectType>
+    Value getValue(const ObjectType& obj) const
+    {
+        WCDB_CPP_ORM_STATIC_ASSERT_FOR_OBJECT_TYPE
+        switch (m_accessor->getColumnType()) {
+        case ColumnType::Integer: {
+            auto intAccessor = dynamic_cast<Accessor<ObjectType, ColumnType::Integer>*>(
+            m_accessor.get());
+            return intAccessor->getValue(obj);
+        } break;
+        case ColumnType::Float: {
+            auto floatAccessor
+            = dynamic_cast<Accessor<ObjectType, ColumnType::Float>*>(m_accessor.get());
+            return floatAccessor->getValue(obj);
+        } break;
+        case ColumnType::Text: {
+            auto textAccessor
+            = dynamic_cast<Accessor<ObjectType, ColumnType::Text>*>(m_accessor.get());
+            return textAccessor->getValue(obj);
+        } break;
+        case ColumnType::BLOB: {
+            auto blobAccessor
+            = dynamic_cast<Accessor<ObjectType, ColumnType::BLOB>*>(m_accessor.get());
+            return blobAccessor->getValue(obj);
+        } break;
+        case ColumnType::Null: {
+            return nullptr;
+        } break;
+        }
+    }
+
+protected:
     std::shared_ptr<BaseAccessor> getAccessor() const;
 
 private:

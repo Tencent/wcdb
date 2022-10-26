@@ -24,6 +24,7 @@
 
 #import "TestCaseLog.h"
 #import <Foundation/Foundation.h>
+#import <XCTest/XCTestAssertions.h>
 
 #define TestCaseHintStringEqual(expect, but)        \
     {                                               \
@@ -40,17 +41,11 @@
         }                                           \
     }
 
-#define TestCaseFailure() abort()
+#define TestCaseFailure() XCTAssertTrue(false)
 
-#define TestCaseAssertTrue(cond) \
-    {                            \
-        if (!(cond)) {           \
-            TestCaseFailure();   \
-        }                        \
-    }
+#define TestCaseAssertTrue(cond) XCTAssertTrue(cond)
 
-#define TestCaseAssertFalse(cond) \
-    TestCaseAssertTrue(!(cond))
+#define TestCaseAssertFalse(cond) XCTAssertFalse(cond)
 
 #define TestCaseAssertEqual(left, right) \
     TestCaseAssertTrue((left) == (right))
@@ -58,8 +53,7 @@
 #define TestCaseAssertNotEqual(left, right) \
     TestCaseAssertTrue((left) != (right))
 
-#define TestCaseAssertObjectEqual(left, right) \
-    TestCaseAssertTrue([(left) isEqual:(right)])
+#define TestCaseAssertObjectEqual(left, right) XCTAssertEqualObjects(left, right)
 
 #define TestCaseAssertSQLEqual(_sql, _expected)              \
     {                                                        \

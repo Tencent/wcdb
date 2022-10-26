@@ -1712,6 +1712,15 @@
 		75D99B8128CA441E00BEC8B5 /* BaseOperation.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75D99B7F28CA441E00BEC8B5 /* BaseOperation.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		75D99B8328CA46A400BEC8B5 /* BaseOperation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75D99B8228CA46A400BEC8B5 /* BaseOperation.cpp */; };
 		75D99B8428CA46A400BEC8B5 /* BaseOperation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75D99B8228CA46A400BEC8B5 /* BaseOperation.cpp */; };
+		75E50A0B29067BC800B73E62 /* MultiObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E50A0929067BC800B73E62 /* MultiObject.cpp */; };
+		75E50A0C29067BC800B73E62 /* MultiObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E50A0929067BC800B73E62 /* MultiObject.cpp */; };
+		75E50A0D29067BC800B73E62 /* MultiObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75E50A0A29067BC800B73E62 /* MultiObject.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		75E50A0E29067BC800B73E62 /* MultiObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75E50A0A29067BC800B73E62 /* MultiObject.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		75E50A2D2907921600B73E62 /* MultiSelect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E50A2B2907921600B73E62 /* MultiSelect.cpp */; };
+		75E50A2E2907921600B73E62 /* MultiSelect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E50A2B2907921600B73E62 /* MultiSelect.cpp */; };
+		75E50A2F2907921600B73E62 /* MultiSelect.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75E50A2C2907921600B73E62 /* MultiSelect.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		75E50A302907921600B73E62 /* MultiSelect.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75E50A2C2907921600B73E62 /* MultiSelect.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		75E50AC22908EC7100B73E62 /* ORMMultiSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75E50AC12908EC7100B73E62 /* ORMMultiSelectTests.mm */; };
 		75EB1965287F068200AA62F7 /* StatementDropTriggerBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75EB1963287F068200AA62F7 /* StatementDropTriggerBridge.cpp */; };
 		75EB1966287F068200AA62F7 /* StatementDropTriggerBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75EB1964287F068200AA62F7 /* StatementDropTriggerBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75EB1968287F078E00AA62F7 /* StatementDropTrigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EB1967287F078E00AA62F7 /* StatementDropTrigger.swift */; };
@@ -3144,6 +3153,11 @@
 		75D4834828A7C42F004FDD3C /* Random+CPPTestObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "Random+CPPTestObject.mm"; sourceTree = "<group>"; };
 		75D99B7F28CA441E00BEC8B5 /* BaseOperation.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BaseOperation.hpp; sourceTree = "<group>"; };
 		75D99B8228CA46A400BEC8B5 /* BaseOperation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BaseOperation.cpp; sourceTree = "<group>"; };
+		75E50A0929067BC800B73E62 /* MultiObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MultiObject.cpp; sourceTree = "<group>"; };
+		75E50A0A29067BC800B73E62 /* MultiObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MultiObject.hpp; sourceTree = "<group>"; };
+		75E50A2B2907921600B73E62 /* MultiSelect.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MultiSelect.cpp; sourceTree = "<group>"; };
+		75E50A2C2907921600B73E62 /* MultiSelect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MultiSelect.hpp; sourceTree = "<group>"; };
+		75E50AC12908EC7100B73E62 /* ORMMultiSelectTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ORMMultiSelectTests.mm; sourceTree = "<group>"; };
 		75EB1963287F068200AA62F7 /* StatementDropTriggerBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StatementDropTriggerBridge.cpp; sourceTree = "<group>"; };
 		75EB1964287F068200AA62F7 /* StatementDropTriggerBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StatementDropTriggerBridge.h; sourceTree = "<group>"; };
 		75EB1967287F078E00AA62F7 /* StatementDropTrigger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatementDropTrigger.swift; sourceTree = "<group>"; };
@@ -5604,6 +5618,10 @@
 				039D724928BF773D00990803 /* Delete.hpp */,
 				03D077FB28C20FEE009A3B18 /* Delete.cpp */,
 				039D724D28BF795700990803 /* Select.hpp */,
+				75E50A2C2907921600B73E62 /* MultiSelect.hpp */,
+				75E50A2B2907921600B73E62 /* MultiSelect.cpp */,
+				75E50A0A29067BC800B73E62 /* MultiObject.hpp */,
+				75E50A0929067BC800B73E62 /* MultiObject.cpp */,
 			);
 			path = chaincall;
 			sourceTree = "<group>";
@@ -5617,6 +5635,7 @@
 				752C7E3F28C8E94200C9FFA6 /* ORMInsertTests.mm */,
 				03B4DB1528C98E5E00F64141 /* ORMSelectTests.mm */,
 				0344BA8028C9DC7D000BC154 /* ORMUpdateTests.mm */,
+				75E50AC12908EC7100B73E62 /* ORMMultiSelectTests.mm */,
 				0344BACA28CA0589000BC154 /* ChainCallTests.mm */,
 			);
 			path = operation;
@@ -5921,11 +5940,13 @@
 				037C3B912897E33600328EC8 /* SQLiteLocker.hpp in Headers */,
 				037C3B942897E33600328EC8 /* ConvertibleImplementation.hpp in Headers */,
 				037C3B952897E33600328EC8 /* RaiseFunction.hpp in Headers */,
+				75E50A0D29067BC800B73E62 /* MultiObject.hpp in Headers */,
 				037C3B962897E33600328EC8 /* InnerHandle.hpp in Headers */,
 				037C3B982897E33600328EC8 /* Global.hpp in Headers */,
 				037C3B992897E33600328EC8 /* StatementBegin.hpp in Headers */,
 				037C3B9A2897E33600328EC8 /* SyntaxQualifiedTableName.hpp in Headers */,
 				037C3B9C2897E33600328EC8 /* SyntaxJoinClause.hpp in Headers */,
+				75E50A2F2907921600B73E62 /* MultiSelect.hpp in Headers */,
 				037C3B9F2897E33600328EC8 /* CoreFunction.hpp in Headers */,
 				03321E8928A503F3000AFD6D /* StatementOperation.hpp in Headers */,
 				037C3BA32897E33600328EC8 /* Frame.hpp in Headers */,
@@ -6085,6 +6106,7 @@
 				23A6D4C120BFD7F9004F2DAA /* Progress.hpp in Headers */,
 				23EEDCFE217DFADC006E9E73 /* SyntaxForeignKeyClause.hpp in Headers */,
 				23545B992224E8270091C981 /* SyntaxAssertion.hpp in Headers */,
+				75E50A0E29067BC800B73E62 /* MultiObject.hpp in Headers */,
 				23EEDD1E217DFADC006E9E73 /* SyntaxSelectCore.hpp in Headers */,
 				23EEDD20217DFADC006E9E73 /* SyntaxTableConstraint.hpp in Headers */,
 				23F1698A20B6638F009B5C47 /* ThreadedErrors.hpp in Headers */,
@@ -6279,6 +6301,7 @@
 				23EEDD3E217DFADC006E9E73 /* SyntaxDeleteSTMT.hpp in Headers */,
 				2395582621C143BB000C85E1 /* WCTMigrationInfo+Private.h in Headers */,
 				032613B7283F8D7E00836E0F /* ColumnBridge.h in Headers */,
+				75E50A302907921600B73E62 /* MultiSelect.hpp in Headers */,
 				23EEDCE0217DFADC006E9E73 /* StatementSavepoint.hpp in Headers */,
 				7543DD8B271C343000B533B4 /* AuxiliaryFunctionModules.hpp in Headers */,
 				75F32F1028B9F90900A72697 /* FTSTokenizerUtil.hpp in Headers */,
@@ -6827,6 +6850,7 @@
 				037C390E2897E33600328EC8 /* SyntaxResultColumn.cpp in Sources */,
 				037C390F2897E33600328EC8 /* Initializeable.cpp in Sources */,
 				037C39102897E33600328EC8 /* PageBasedFileHandle.cpp in Sources */,
+				75E50A2D2907921600B73E62 /* MultiSelect.cpp in Sources */,
 				037C39122897E33600328EC8 /* Progress.cpp in Sources */,
 				037C39132897E33600328EC8 /* Mechanic.cpp in Sources */,
 				037C39172897E33600328EC8 /* SyntaxUpdateSTMT.cpp in Sources */,
@@ -6896,6 +6920,7 @@
 				037C39982897E33600328EC8 /* SyntaxCreateViewSTMT.cpp in Sources */,
 				037C39992897E33600328EC8 /* BindParameter.cpp in Sources */,
 				037C399A2897E33600328EC8 /* AutoBackupConfig.cpp in Sources */,
+				75E50A0B29067BC800B73E62 /* MultiObject.cpp in Sources */,
 				0DC98FD228E46049007F3796 /* DBOperationNotifier.cpp in Sources */,
 				037C399D2897E33600328EC8 /* SyntaxRaiseFunction.cpp in Sources */,
 				037C399E2897E33600328EC8 /* FrameSpec.cpp in Sources */,
@@ -7123,6 +7148,7 @@
 				03E5CC5428A38F0F005353D9 /* Random.mm in Sources */,
 				75882C8128C7C3E600F95947 /* CPPColumnConstraintPrimaryAsc.cpp in Sources */,
 				0344BACB28CA0589000BC154 /* ChainCallTests.mm in Sources */,
+				75E50AC22908EC7100B73E62 /* ORMMultiSelectTests.mm in Sources */,
 				03E5CC5528A38F0F005353D9 /* Dispatch.mm in Sources */,
 				753C085028A8D5F70042C427 /* CPPCRUDTestCase.mm in Sources */,
 			);
@@ -7571,6 +7597,7 @@
 				2370B12921914ED500D3227C /* NSNull+WCTColumnCoding.mm in Sources */,
 				23A64D0F214A4A7000ED28BB /* Migration.cpp in Sources */,
 				3962FFCF23051F71008934D4 /* Configs.cpp in Sources */,
+				75E50A0C29067BC800B73E62 /* MultiObject.cpp in Sources */,
 				23EEDD37217DFADC006E9E73 /* SyntaxCreateTriggerSTMT.cpp in Sources */,
 				03E1661F27F42D6500D2C926 /* StatementReindex.swift in Sources */,
 				23EEDC79217DFADC006E9E73 /* Column.cpp in Sources */,
@@ -7825,6 +7852,7 @@
 				23EEDD55217DFADC006E9E73 /* SyntaxSelectSTMT.cpp in Sources */,
 				39B524DE2304F9A2001DF52D /* InnerHandle.cpp in Sources */,
 				03D077FD28C20FEE009A3B18 /* Delete.cpp in Sources */,
+				75E50A2E2907921600B73E62 /* MultiSelect.cpp in Sources */,
 				23F340DF204D3482007DB8AB /* WCTDatabase+ChainCall.mm in Sources */,
 				23F0FEB7215F5E9A008399FB /* Lock.cpp in Sources */,
 				039760AE27F5C1CA0071FA8F /* DatabaseBridge.cpp in Sources */,
