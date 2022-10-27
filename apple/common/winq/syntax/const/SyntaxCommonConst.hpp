@@ -96,6 +96,7 @@ enum class MatchType {
 };
 
 extern const StringView& masterTable;
+extern const StringView& sequenceTable;
 extern const StringView& mainSchema;
 extern const StringView& tempSchema;
 extern const StringView& builtinTablePrefix;

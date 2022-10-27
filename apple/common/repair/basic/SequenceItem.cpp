@@ -22,21 +22,15 @@
  * limitations under the License.
  */
 
-#pragma once
-
-#include <WCDB/StringView.hpp>
+#include <WCDB/SequenceItem.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-struct Sequence {
-    Sequence();
-    static const char* tableName();
-
-    StringView name;
-    int64_t seq;
-};
+SequenceItem::SequenceItem() : seq(0)
+{
+}
 
 } //namespace Repair
 

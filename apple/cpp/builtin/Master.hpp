@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2018/09/26
+// Created by qiuwenchen on 2022/10/27.
 //
 
 /*
@@ -24,25 +24,22 @@
 
 #pragma once
 
-#include <WCDB/StringView.hpp>
+#include <WCDB/CPPORM.h>
+#include <WCDB/CPPORMMacro.h>
 
 namespace WCDB {
 
-namespace Repair {
-
-struct Master {
+class Master {
 public:
-    Master();
-
-    static bool isReservedTableName(const UnsafeStringView &tableName);
+    static const StringView& tableName;
 
     StringView type;
     StringView name;
-    StringView tableName;
-    StringView sql;
+    StringView tblName;
     int rootpage;
-};
+    StringView sql;
 
-} //namespace Repair
+    WCDB_CPP_ORM_DECLARATION(Master);
+};
 
 } //namespace WCDB

@@ -123,14 +123,14 @@ protected:
 
 #pragma mark - MasterCrawlerDelegate
 protected:
-    void onMasterCellCrawled(const Cell &cell, const Master &master) override final;
+    void onMasterCellCrawled(const Cell &cell, const MasterItem &master) override final;
     void onMasterCrawlerError() override final;
 
     MasterCrawler m_masterCrawler;
 
 #pragma mark - SequenceCrawlerDelegate
 protected:
-    void onSequenceCellCrawled(const Cell &cell, const Sequence &sequence) override final;
+    void onSequenceCellCrawled(const Cell &cell, const SequenceItem &sequence) override final;
     void onSequenceCrawlerError() override final;
 };
 

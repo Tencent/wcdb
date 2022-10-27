@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Repair {
 
-struct Sequence;
+struct SequenceItem;
 class SequenceCrawler;
 
 class SequenceCrawlerDelegate {
@@ -41,7 +41,7 @@ protected:
     friend class SequenceCrawler;
 
     virtual void onSequencePageCrawled(const Page &page);
-    virtual void onSequenceCellCrawled(const Cell &cell, const Sequence &sequence) = 0;
+    virtual void onSequenceCellCrawled(const Cell &cell, const SequenceItem &sequence) = 0;
     virtual void onSequenceCrawlerError() = 0;
 };
 

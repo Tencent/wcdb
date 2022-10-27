@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Repair {
 
-struct Master;
+struct MasterItem;
 class MasterCrawler;
 
 class MasterCrawlerDelegate {
@@ -41,7 +41,7 @@ protected:
     friend class MasterCrawler;
 
     virtual void onMasterPageCrawled(const Page &page);
-    virtual void onMasterCellCrawled(const Cell &cell, const Master &master) = 0;
+    virtual void onMasterCellCrawled(const Cell &cell, const MasterItem &master) = 0;
     virtual void onMasterCrawlerError() = 0;
 };
 

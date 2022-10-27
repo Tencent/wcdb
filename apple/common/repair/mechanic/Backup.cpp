@@ -27,11 +27,12 @@
 #include <WCDB/Cell.hpp>
 #include <WCDB/CoreConst.h>
 #include <WCDB/FileManager.hpp>
-#include <WCDB/Master.hpp>
+#include <WCDB/MasterItem.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Page.hpp>
-#include <WCDB/Sequence.hpp>
+#include <WCDB/SequenceItem.hpp>
 #include <WCDB/StringView.hpp>
+#include <WCDB/SyntaxCommonConst.hpp>
 
 namespace WCDB {
 
@@ -215,15 +216,16 @@ void Backup::onCrawlerError()
 }
 
 #pragma mark - MasterCrawlerDelegate
-void Backup::onMasterCellCrawled(const Cell &cell, const Master &master)
+void Backup::onMasterCellCrawled(const Cell &cell, const MasterItem &master)
 {
     WCDB_UNUSED(cell)
-    if (master.name == Sequence::tableName()) {
+    if (master.name == Syntax::sequenceTable) {
         SequenceCrawler crawler;
         crawler.setAssociatedPager(&m_pager);
         crawler.work(master.rootpage, this);
-    } else if (filter(master.tableName) && !Master::isReservedTableName(master.tableName)
-               && !Master::isReservedTableName(master.name)) {
+    } else if (filter(master.tableName)
+               && !MasterItem::isReservedTableName(master.tableName)
+               && !MasterItem::isReservedTableName(master.name)) {
         Material::Content &content = getOrCreateContent(master.tableName);
         if (master.type.caseInsensiveEqual("table")
             && master.name.caseInsensiveEqual(master.tableName)) {
@@ -246,13 +248,13 @@ void Backup::onMasterCrawlerError()
 }
 
 #pragma mark - SequenceCrawlerDelegate
-void Backup::onSequenceCellCrawled(const Cell &cell, const Sequence &sequence)
+void Backup::onSequenceCellCrawled(const Cell &cell, const SequenceItem &sequence)
 {
     WCDB_UNUSED(cell)
     if (sequence.seq == 0) {
         return;
     }
-    if (!Master::isReservedTableName(sequence.name) && filter(sequence.name)) {
+    if (!MasterItem::isReservedTableName(sequence.name) && filter(sequence.name)) {
         Material::Content &content = getOrCreateContent(sequence.name);
         //the columns in sqlite_sequence are not unique.
         content.sequence = std::max(content.sequence, sequence.seq);

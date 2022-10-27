@@ -22,20 +22,26 @@
  * limitations under the License.
  */
 
-#include <WCDB/Sequence.hpp>
+#pragma once
+
+#include <WCDB/StringView.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-Sequence::Sequence() : seq(0)
-{
-}
+struct MasterItem {
+public:
+    MasterItem();
 
-const char* Sequence::tableName()
-{
-    return "sqlite_sequence";
-}
+    static bool isReservedTableName(const UnsafeStringView &tableName);
+
+    StringView type;
+    StringView name;
+    StringView tableName;
+    StringView sql;
+    int rootpage;
+};
 
 } //namespace Repair
 
