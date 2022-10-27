@@ -28,6 +28,8 @@
 
 #define __WCDB_CPP_COLUMN_CONSTRAINT_BEGIN(fieldName)                          \
     {                                                                          \
+        static_assert(has_synthesized_##fieldName,                             \
+                      "You need to synthesize this field before you use it");  \
         WCDB::ColumnConstraint columnConstraint;
 
 #define __WCDB_CPP_COLUMN_CONSTRAINT_END(fieldName)                              \
