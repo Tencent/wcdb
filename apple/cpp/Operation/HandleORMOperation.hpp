@@ -53,59 +53,8 @@ public:
     {
         WCDB_CPP_ORM_STATIC_ASSERT_FOR_OBJECT_TYPE
         assertCondition(tableName.length() > 0);
-        return runTransaction([=](Handle &) {
-            auto exists = tableExists(tableName);
-            if (!exists.has_value()) {
-                return false;
-            }
-            const Binding &binding = ObjectType::getObjectRelationBinding();
-            if (exists.value()) {
-                auto optionalColumnNames = getColumns(tableName);
-                if (!optionalColumnNames.has_value()) {
-                    return false;
-                }
-                std::set<StringView> &columnNames = optionalColumnNames.value();
-                //Check whether the column names exists
-                const auto &columnDefs = binding.getColumnDefs();
-                for (const auto &columnDef : columnDefs) {
-                    auto iter = columnNames.find(columnDef.first);
-                    if (iter == columnNames.end()) {
-                        //Add new column
-                        if (!execute(StatementAlterTable().alterTable(tableName).addColumn(
-                            columnDef.second))) {
-                            return false;
-                        }
-                    } else {
-                        columnNames.erase(iter);
-                    }
-                }
-                for (const auto &columnName : columnNames) {
-                    Error error(Error::Code::Mismatch, Error::Level::Notice, "Skip column");
-                    error.infos.insert_or_assign("Table", StringView(tableName));
-                    error.infos.insert_or_assign("Column", StringView(columnName));
-                    notifyError(error);
-                }
-            } else {
-                if (!execute(binding.generateCreateTableStatement(tableName))) {
-                    return false;
-                }
-            }
-            std::list<StatementCreateIndex> createIndexStatements;
-            std::list<StatementDropIndex> dropIndexStatements;
-            std::tie(createIndexStatements, dropIndexStatements)
-            = binding.generateIndexStatements(tableName, !exists.value());
-            for (const StatementCreateIndex &statement : createIndexStatements) {
-                if (!execute(statement)) {
-                    return false;
-                }
-            }
-            for (const StatementDropIndex &statement : dropIndexStatements) {
-                if (!execute(statement)) {
-                    return false;
-                }
-            }
-            return true;
-        });
+        const Binding &binding = ObjectType::getObjectRelationBinding();
+        return createTable(tableName, binding);
     }
 
 #pragma mark - ChainCall
@@ -257,6 +206,7 @@ public:
                        const Expression &offset = Expression());
 
 protected:
+    bool createTable(const UnsafeStringView &tableName, const Binding &binding);
     virtual ~HandleORMOperation() override = 0;
 };
 
