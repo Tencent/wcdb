@@ -32,6 +32,8 @@
 
 #define __WCDB_CPP_INDEX_BEGIN_WITH_FIELD_NAME(indexSuffixName, fieldName)              \
     {                                                                                   \
+        static_assert(has_synthesized_##fieldName,                                      \
+                      "You need to synthesize this field before you use it");           \
         WCDB::BaseBinding::Index &index = g_binding->getOrCreateIndex(indexSuffixName); \
         auto temp_memory_point = &WCDBORMType::fieldName;                               \
         WCDB_UNUSED(temp_memory_point)

@@ -28,8 +28,8 @@
 
 #define __WCDB_CPP_SYNTHESIZE_IMP(fieldName, columnName)                                                        \
     auto _mp_##fieldName = &WCDBORMType::fieldName;                                                             \
-    constexpr bool _has_synthesized_##fieldName = true;                                                         \
-    WCDB_UNUSED(_has_synthesized_##fieldName);                                                                  \
+    constexpr bool has_synthesized_##fieldName = true;                                                          \
+    WCDB_UNUSED(has_synthesized_##fieldName);                                                                   \
     auto& _field_##fieldName = g_binding->registerField(                                                        \
     WCDB::castMemberPointer(_mp_##fieldName),                                                                   \
     columnName,                                                                                                 \
