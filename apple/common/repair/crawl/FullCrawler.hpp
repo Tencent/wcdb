@@ -70,7 +70,7 @@ protected:
 #pragma mark - MasterCrawlerDelegate
 protected:
     void onMasterPageCrawled(const Page &page) override final;
-    void onMasterCellCrawled(const Cell &cell, const Master &master) override final;
+    void onMasterCellCrawled(const Cell &cell, const MasterItem &master) override final;
     void onMasterCrawlerError() override final;
 
     MasterCrawler m_masterCrawler;
@@ -78,7 +78,7 @@ protected:
 #pragma mark - SequenceCrawlerDelegate
 protected:
     void onSequencePageCrawled(const Page &page) override final;
-    void onSequenceCellCrawled(const Cell &cell, const Sequence &sequence) override final;
+    void onSequenceCellCrawled(const Cell &cell, const SequenceItem &sequence) override final;
     void onSequenceCrawlerError() override final;
 
     SequenceCrawler m_sequenceCrawler;

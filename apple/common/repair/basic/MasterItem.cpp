@@ -22,18 +22,18 @@
  * limitations under the License.
  */
 
-#include <WCDB/Master.hpp>
+#include <WCDB/MasterItem.hpp>
 #include <WCDB/StringView.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-Master::Master() : rootpage(0)
+MasterItem::MasterItem() : rootpage(0)
 {
 }
 
-bool Master::isReservedTableName(const UnsafeStringView &tableName)
+bool MasterItem::isReservedTableName(const UnsafeStringView &tableName)
 {
     return tableName.caseInsensiveEqual("sqlite_");
 }

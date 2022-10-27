@@ -25,11 +25,12 @@
 #include <WCDB/Assemble.hpp>
 #include <WCDB/Assertion.hpp>
 #include <WCDB/FullCrawler.hpp>
-#include <WCDB/Master.hpp>
+#include <WCDB/MasterItem.hpp>
 #include <WCDB/Page.hpp>
-#include <WCDB/Sequence.hpp>
 #include <WCDB/SequenceCrawler.hpp>
+#include <WCDB/SequenceItem.hpp>
 #include <WCDB/StringView.hpp>
+#include <WCDB/SyntaxCommonConst.hpp>
 
 namespace WCDB {
 
@@ -142,18 +143,19 @@ void FullCrawler::onMasterPageCrawled(const Page &page)
     markPageAsCounted(page);
 }
 
-void FullCrawler::onMasterCellCrawled(const Cell &cell, const Master &master)
+void FullCrawler::onMasterCellCrawled(const Cell &cell, const MasterItem &master)
 {
     if (isErrorCritial()) {
         return;
     }
     markCellAsCounted(cell);
-    if (master.name == Sequence::tableName()) {
+    if (master.name == Syntax::sequenceTable) {
         WCTAssert(master.type.caseInsensiveEqual("table"));
         WCTAssert(master.tableName.caseInsensiveEqual(master.name));
         m_sequenceCrawler.work(master.rootpage, this);
-    } else if (!filter(master.tableName) || Master::isReservedTableName(master.name)
-               || Master::isReservedTableName(master.tableName)) {
+    } else if (!filter(master.tableName)
+               || MasterItem::isReservedTableName(master.name)
+               || MasterItem::isReservedTableName(master.tableName)) {
         //Skip no backup table and sqlite reserved table
         return;
     } else {
@@ -185,7 +187,7 @@ void FullCrawler::onSequencePageCrawled(const Page &page)
     markPageAsCounted(page);
 }
 
-void FullCrawler::onSequenceCellCrawled(const Cell &cell, const Sequence &sequence)
+void FullCrawler::onSequenceCellCrawled(const Cell &cell, const SequenceItem &sequence)
 {
     if (isErrorCritial()) {
         return;

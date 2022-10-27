@@ -24,8 +24,8 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Cell.hpp>
-#include <WCDB/Master.hpp>
 #include <WCDB/MasterCrawler.hpp>
+#include <WCDB/MasterItem.hpp>
 #include <WCDB/Page.hpp>
 #include <WCDB/StringView.hpp>
 
@@ -55,7 +55,7 @@ bool MasterCrawler::work(MasterCrawlerDelegate *delegate)
 
 void MasterCrawler::onCellCrawled(const Cell &cell)
 {
-    Master master;
+    MasterItem master;
     if (cell.getValueType(0) == Cell::Type::Text) {
         master.type = cell.stringValue(0);
     }

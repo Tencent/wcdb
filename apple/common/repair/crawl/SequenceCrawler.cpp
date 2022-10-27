@@ -25,8 +25,8 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Cell.hpp>
 #include <WCDB/Page.hpp>
-#include <WCDB/Sequence.hpp>
 #include <WCDB/SequenceCrawler.hpp>
+#include <WCDB/SequenceItem.hpp>
 #include <WCDB/StringView.hpp>
 
 namespace WCDB {
@@ -76,7 +76,7 @@ void SequenceCrawler::onCellCrawled(const Cell &cell)
         return;
     }
 
-    Sequence sequence;
+    SequenceItem sequence;
     sequence.name = std::move(name);
     sequence.seq = cell.integerValue(1);
     m_delegate->onSequenceCellCrawled(cell, sequence);
