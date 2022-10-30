@@ -35,7 +35,7 @@ MasterItem::MasterItem() : rootpage(0)
 
 bool MasterItem::isReservedTableName(const UnsafeStringView &tableName)
 {
-    return tableName.caseInsensiveEqual("sqlite_");
+    return tableName.hasPrefix("sqlite_");
 }
 
 } //namespace Repair
