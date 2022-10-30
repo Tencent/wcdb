@@ -96,12 +96,6 @@ const std::string_view& UnsafeStringView::emptyView()
     return *s_emptyView;
 }
 
-//#pragma mark - UnsafeStringView - Ownership
-//bool UnsafeStringView::owned() const
-//{
-//    return m_buffer != nullptr || empty();
-//}
-
 #pragma mark - UnsafeStringView - Comparison
 int UnsafeStringView::caseInsensiveCompare(const UnsafeStringView& other) const
 {
@@ -110,7 +104,10 @@ int UnsafeStringView::caseInsensiveCompare(const UnsafeStringView& other) const
 
 bool UnsafeStringView::caseInsensiveEqual(const UnsafeStringView& other) const
 {
-    return caseInsensiveCompare(other) == 0;
+    if (length() != other.length()) {
+        return false;
+    }
+    return strcasecmp(data(), other.data()) == 0;
 }
 
 #pragma mark - UnsafeStringView - Operations
