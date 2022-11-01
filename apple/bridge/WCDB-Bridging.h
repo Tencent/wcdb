@@ -83,5 +83,6 @@
 #define WCDB_SWIFT 1
 #include <WCDB/WCTAPIBridge.h>
 #include <WCDB/WCTBridgeProperty.h>
+#include <WCDB/WCTColumnCoding.h>
 #include <WCDB/WCTMacro.h>
 #include <WCDB/WCTTableCoding.h>

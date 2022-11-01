@@ -30,10 +30,12 @@
 #define __WCDB_PROPERTY_TYPE(className, propertyName) \
     decltype([className WCDB_ORM_TYPER].propertyName)
 
-#ifndef WCDB_SWIFT
+#ifdef __cplusplus
 #define __WCDB_PROPERTY_IMP(propertyName) +(const WCTProperty &) propertyName;
-#else
+#elif WCDB_SWIFT
 #define __WCDB_PROPERTY_IMP(propertyName) +(WCTBridgeProperty *) swift_##propertyName NS_SWIFT_NAME(propertyName());
+#else
+#define __WCDB_PROPERTY_IMP(propertyName)
 #endif
 
 // Synthesize

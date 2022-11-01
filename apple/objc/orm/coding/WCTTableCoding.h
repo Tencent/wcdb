@@ -26,7 +26,7 @@
 
 #import <WCDB/WCTBridgeProperty.h>
 
-#else
+#elif __cplusplus
 
 #import <WCDB/WCTBridgeProperty+CPP.h>
 #import <WCDB/WCTCommon.h>
@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 @required
 + (WCTBridgeProperties*)allBridgeProperties NS_SWIFT_NAME(allProperties());
 
-#else
+#elif __cplusplus
 
 @required
 + (const WCTBinding &)objectRelationalMapping;

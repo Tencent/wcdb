@@ -357,7 +357,6 @@
 {
     float sql = 1.1f;
     NSString* expected = [NSString createPreciseStringFromDouble:sql];
-    ;
     TestCaseAssertWINQConvertible(WCDB::LiteralValue, sql, expected);
     TestCaseAssertWINQConvertible(WCDB::LiteralValues, sql, expected);
     TestCaseAssertWINQConvertible(WCDB::Expression, sql, expected);
