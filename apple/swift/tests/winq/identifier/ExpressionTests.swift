@@ -285,45 +285,4 @@ class ExpresssionTests: BaseTestCase {
 
         WINQExpressionAssertEqual((left != right), "left != 1")
     }
-
-    func testCanBeOperatedXOperable() {
-        // Give
-        let left = 1
-        let right = OperableObject.Properties.right
-
-        // Then
-        WINQExpressionAssertEqual((left || right), "1 OR right")
-
-        WINQExpressionAssertEqual((left && right), "1 AND right")
-
-        WINQExpressionAssertEqual((left * right), "1 * right")
-
-        WINQExpressionAssertEqual((left / right), "1 / right")
-
-        WINQExpressionAssertEqual((left % right), "1 % right")
-
-        WINQExpressionAssertEqual((left + right), "1 + right")
-
-        WINQExpressionAssertEqual((left - right), "1 - right")
-
-        WINQExpressionAssertEqual((left << right), "1 << right")
-
-        WINQExpressionAssertEqual((left >> right), "1 >> right")
-
-        WINQExpressionAssertEqual((left & right), "1 & right")
-
-        WINQExpressionAssertEqual((left | right), "1 | right")
-
-        WINQExpressionAssertEqual((left < right), "1 < right")
-
-        WINQExpressionAssertEqual((left <= right), "1 <= right")
-
-        WINQExpressionAssertEqual((left > right), "1 > right")
-
-        WINQExpressionAssertEqual((left >= right), "1 >= right")
-
-        WINQExpressionAssertEqual((left == right), "1 == right")
-
-        WINQExpressionAssertEqual((left != right), "1 != right")
-    }
 }

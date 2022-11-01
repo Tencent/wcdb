@@ -37,7 +37,7 @@ import Foundation
  */
 
 // Bultin Column Codable
-extension Int8: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable {
+extension Int8: ColumnCodable, LiteralValueConvertible {
     public static var columnType: ColumnType {
         return .integer32
     }
@@ -49,7 +49,7 @@ extension Int8: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable
     }
 }
 
-extension Int16: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable {
+extension Int16: ColumnCodable, LiteralValueConvertible {
     public static var columnType: ColumnType {
         return .integer32
     }
@@ -61,7 +61,7 @@ extension Int16: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperabl
     }
 }
 
-extension Int32: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable {
+extension Int32: ColumnCodable, LiteralValueConvertible {
     public static var columnType: ColumnType {
         return .integer32
     }
@@ -73,7 +73,7 @@ extension Int32: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperabl
     }
 }
 
-extension Int64: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable {
+extension Int64: ColumnCodable, LiteralValueConvertible {
     public static var columnType: ColumnType {
         return .integer64
     }
@@ -85,7 +85,7 @@ extension Int64: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperabl
     }
 }
 
-extension Int: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable {
+extension Int: ColumnCodable, LiteralValueConvertible {
     public static var columnType: ColumnType {
         return .integer64
     }
@@ -97,7 +97,7 @@ extension Int: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable 
     }
 }
 
-extension UInt8: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable {
+extension UInt8: ColumnCodable, LiteralValueConvertible {
     public static var columnType: ColumnType {
         return .integer32
     }
@@ -109,7 +109,7 @@ extension UInt8: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperabl
     }
 }
 
-extension UInt16: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable {
+extension UInt16: ColumnCodable, LiteralValueConvertible {
     public static var columnType: ColumnType {
         return .integer32
     }
@@ -121,7 +121,7 @@ extension UInt16: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperab
     }
 }
 
-extension UInt32: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable {
+extension UInt32: ColumnCodable, LiteralValueConvertible {
     public static var columnType: ColumnType {
         return .integer32
     }
@@ -133,7 +133,7 @@ extension UInt32: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperab
     }
 }
 
-extension UInt64: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable {
+extension UInt64: ColumnCodable, LiteralValueConvertible {
     public static var columnType: ColumnType {
         return .integer64
     }
@@ -145,7 +145,7 @@ extension UInt64: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperab
     }
 }
 
-extension UInt: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable {
+extension UInt: ColumnCodable, LiteralValueConvertible {
     public static var columnType: ColumnType {
         return .integer64
     }
@@ -157,7 +157,7 @@ extension UInt: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable
     }
 }
 
-extension Bool: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable {
+extension Bool: ColumnCodable, LiteralValueConvertible {
     public static var columnType: ColumnType {
         return .integer32
     }
@@ -169,7 +169,7 @@ extension Bool: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable
     }
 }
 
-extension Float: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable {
+extension Float: ColumnCodable, LiteralValueConvertible {
     public static var columnType: ColumnType {
         return .float
     }
@@ -181,7 +181,7 @@ extension Float: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperabl
     }
 }
 
-extension Double: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable {
+extension Double: ColumnCodable, LiteralValueConvertible {
     public static var columnType: ColumnType {
         return .float
     }
@@ -193,7 +193,7 @@ extension Double: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperab
     }
 }
 
-extension String: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable {
+extension String: ColumnCodable, LiteralValueConvertible {
     public static var columnType: ColumnType {
         return .text
     }
@@ -205,7 +205,7 @@ extension String: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperab
     }
 }
 
-extension Data: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable {
+extension Data: ColumnCodable, LiteralValueConvertible {
     public static var columnType: ColumnType {
         return .BLOB
     }
@@ -217,7 +217,7 @@ extension Data: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable
     }
 }
 
-extension Date: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable {
+extension Date: ColumnCodable, LiteralValueConvertible {
     public static var columnType: ColumnType {
         return .float
     }
@@ -229,7 +229,7 @@ extension Date: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable
     }
 }
 
-extension URL: ColumnCodable, LiteralValueConvertible, ExpressionBinaryOperable {
+extension URL: ColumnCodable, LiteralValueConvertible {
     public static var columnType: ColumnType {
         return .text
     }
