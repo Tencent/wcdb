@@ -154,7 +154,7 @@ public class Core: CoreRepresentable {
     }
 }
 
-protocol CoreRepresentable: class {
+protocol CoreRepresentable: AnyObject {
     var tag: Tag? {get}
     var path: String {get}
 }

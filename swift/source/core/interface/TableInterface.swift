@@ -20,7 +20,7 @@
 
 import Foundation
 
-public protocol InsertTableInterface: class {
+public protocol InsertTableInterface: AnyObject {
     associatedtype Object: TableEncodable
 
     func insert(objects: Object..., on propertyConvertibleList: [PropertyConvertible]?) throws
@@ -29,7 +29,7 @@ public protocol InsertTableInterface: class {
     func insertOrReplace(objects: [Object], on propertyConvertibleList: [PropertyConvertible]?) throws
 }
 
-public protocol UpdateTableInterface: class {
+public protocol UpdateTableInterface: AnyObject {
     associatedtype Object: TableEncodable
 
     func update(on propertyConvertibleList: PropertyConvertible...,
@@ -58,11 +58,11 @@ public protocol UpdateTableInterface: class {
                 offset: Offset?) throws
 }
 
-public protocol DeleteTableInterface: class {
+public protocol DeleteTableInterface: AnyObject {
     func delete(where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws
 }
 
-public protocol RowSelectTableInterface: class {
+public protocol RowSelectTableInterface: AnyObject {
     func getRows(on columnResultConvertibleList: [ColumnResultConvertible],
                  where condition: Condition?,
                  orderBy orderList: [OrderBy]?,
@@ -106,7 +106,7 @@ public protocol RowSelectTableInterface: class {
                           offset: Offset?) throws -> FundamentalValue
 }
 
-public protocol SelectTableInterface: class {
+public protocol SelectTableInterface: AnyObject {
     associatedtype Object: TableDecodable
 
     //TODO: Add generic property convertible to fit the type

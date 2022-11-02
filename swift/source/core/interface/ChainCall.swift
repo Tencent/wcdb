@@ -21,7 +21,7 @@
 import Foundation
 
 /// ChainCall interface for inserting
-public protocol InsertChainCallInterface: class {
+public protocol InsertChainCallInterface: AnyObject {
 
     /// Prepare chain call for inserting of `TableEncodable` object
     ///
@@ -114,7 +114,7 @@ extension InsertChainCallInterface where Self: Core {
 }
 
 /// ChainCall interface for deleting
-public protocol DeleteChainCallInterface: class {
+public protocol DeleteChainCallInterface: AnyObject {
 
     /// Prepare chain call for deleting on specific properties
     ///
@@ -131,7 +131,7 @@ extension DeleteChainCallInterface where Self: Core {
 }
 
 /// ChainCall interface for updating
-public protocol UpdateChainCallInterface: class {
+public protocol UpdateChainCallInterface: AnyObject {
 
     /// Prepare chain call for updating on specific properties
     ///
@@ -163,7 +163,7 @@ extension UpdateChainCallInterface where Self: Core {
 }
 
 /// ChainCall interface for row-selecting
-public protocol RowSelectChainCallInterface: class {
+public protocol RowSelectChainCallInterface: AnyObject {
 
     /// Prepare chain call for row-selecting on specific column results
     ///
@@ -250,7 +250,7 @@ extension RowSelectChainCallInterface where Self: Core {
 }
 
 /// ChainCall interface for selecting
-public protocol SelectChainCallInterface: class {
+public protocol SelectChainCallInterface: AnyObject {
 
     /// Prepare chain call for selecting of `TableDecodable` object
     ///
@@ -312,7 +312,7 @@ extension SelectChainCallInterface where Self: Core {
 }
 
 /// ChainCall interface for multi-selecting
-public protocol MultiSelectChainCallInterface: class {
+public protocol MultiSelectChainCallInterface: AnyObject {
 
     /// Prepare chain call for multi-selecting on specific properties
     ///

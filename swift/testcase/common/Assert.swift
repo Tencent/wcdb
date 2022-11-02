@@ -119,7 +119,7 @@ func WCDBAssertNoThrowReturned<T: OptionalRepresentable>(
     _ expression: @autoclosure () throws -> T,
     file: StaticString = #file,
     line: UInt = #line) -> T {
-    return WCDBAssertNoThrowReturned(expression, file: file, line: line, whenFailed: T.`nil`)
+    return WCDBAssertNoThrowReturned(try expression(), file: file, line: line, whenFailed: T.`nil`)
 }
 
 protocol ArrayRepresentable {
@@ -135,5 +135,5 @@ func WCDBAssertNoThrowReturned<T: ArrayRepresentable>(
     _ expression: @autoclosure () throws -> T,
     file: StaticString = #file,
     line: UInt = #line) -> T {
-    return WCDBAssertNoThrowReturned(expression, file: file, line: line, whenFailed: T())
+    return WCDBAssertNoThrowReturned(try expression(), file: file, line: line, whenFailed: T())
 }

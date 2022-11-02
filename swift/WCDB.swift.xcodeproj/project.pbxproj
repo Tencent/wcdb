@@ -786,7 +786,7 @@
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				"VALID_ARCHS[sdk=iphoneos*]" = "armv7 arm64";
 				"VALID_ARCHS[sdk=iphonesimulator*]" = x86_64;
@@ -865,7 +865,7 @@
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				"VALID_ARCHS[sdk=iphoneos*]" = "armv7 arm64";
 				"VALID_ARCHS[sdk=iphonesimulator*]" = x86_64;
@@ -994,7 +994,7 @@
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				"VALID_ARCHS[sdk=iphoneos*]" = "armv7 arm64";
 				"VALID_ARCHS[sdk=iphonesimulator*]" = x86_64;
