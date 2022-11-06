@@ -22,27 +22,26 @@
  * limitations under the License.
  */
 
-#import <WCDB/TokenizerModuleTemplate.hpp>
-#import <WCDB/WCTFTSTokenizerUtil.h>
-#import <vector>
+#include <WCDB/BaseTokenizerUtil.hpp>
+#include <WCDB/TokenizerModuleTemplate.hpp>
 
-class WCTOneOrBinaryTokenizerInfo final : public WCDB::AbstractFTS3TokenizerInfo {
+namespace WCDB {
+
+class OneOrBinaryTokenizerInfo final : public AbstractFTS3TokenizerInfo {
 public:
-    WCTOneOrBinaryTokenizerInfo(int argc, const char *const *argv);
-    ~WCTOneOrBinaryTokenizerInfo() override final;
+    OneOrBinaryTokenizerInfo(int argc, const char *const *argv);
+    ~OneOrBinaryTokenizerInfo() override final;
     bool m_needSymbol;
     bool m_needSimplifiedChinese;
     bool m_skipStemming;
 };
 
-class WCTOneOrBinaryTokenizer final : public WCDB::AbstractFTS3TokenizerCursorInfo,
-                                      public WCDB::AbstractFTS5Tokenizer {
+class OneOrBinaryTokenizer final : public AbstractFTS3TokenizerCursorInfo,
+                                   public AbstractFTS5Tokenizer {
 public:
     //for fts3/fts4
-    WCTOneOrBinaryTokenizer(const char *input,
-                            int inputLength,
-                            WCDB::AbstractFTS3TokenizerInfo *tokenizerInfo);
-    ~WCTOneOrBinaryTokenizer() override;
+    OneOrBinaryTokenizer(const char *input, int inputLength, AbstractFTS3TokenizerInfo *tokenizerInfo);
+    ~OneOrBinaryTokenizer() override;
     int step(const char **ppToken,
              int *pnBytes,
              int *piStartOffset,
@@ -50,7 +49,7 @@ public:
              int *piPosition) override final;
 
     //for fts5
-    WCTOneOrBinaryTokenizer(void *pCtx, const char **azArg, int nArg);
+    OneOrBinaryTokenizer(void *pCtx, const char **azArg, int nArg);
     void loadInput(int flags, const char *pText, int nText) override;
     int nextToken(int *tflags, const char **ppToken, int *nToken, int *iStart, int *iEnd) override;
 
@@ -67,7 +66,7 @@ private:
     int m_cursor;
     int m_cursorTokenLength;
 
-    using UnicodeType = WCTFTSTokenizerUtil::UnicodeType;
+    using UnicodeType = BaseTokenizerUtil::UnicodeType;
     UnicodeType m_cursorTokenType;
     UnicodeType m_preTokenType;
 
@@ -84,9 +83,11 @@ private:
     bool m_needSimplifiedChinese;
     bool m_skipStemming;
 
-    int cursorStep();
+    void cursorStep();
     void subTokensStep();
 
     void lemmatization(const char *input, int inputLength);
     void genToken();
 };
+
+} //namespace WCDB

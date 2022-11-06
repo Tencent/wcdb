@@ -23,44 +23,28 @@
  */
 
 #import <WCDB/Assertion.hpp>
+#import <WCDB/FTSConst.h>
 #import <WCDB/WCTDatabase+FTS.h>
 #import <WCDB/WCTDatabase+Private.h>
 
-NSString* const WCTTokenizerSimple = @"simple";
-NSString* const WCTTokenizerPorter = @"porter";
-NSString* const WCTTokenizerICU = @"icu";
-NSString* const WCTTokenizerUnicode61 = @"unicode61";
-NSString* const WCTTokenizerOneOrBinary = @"wcdb_one_or_binary";
-NSString* const WCTTokenizerLegacyOneOrBinary = @"WCDB";
-NSString* const WCTTokenizerVerbatim = @"wcdb_verbatim";
-NSString* const WCTTokenizerPinyin = @"wcdb_pinyin";
+NSString* const WCTTokenizerSimple = [NSString stringWithUTF8String:WCDB::TokenizerSimple];
+NSString* const WCTTokenizerPorter = [NSString stringWithUTF8String:WCDB::TokenizerPorter];
+NSString* const WCTTokenizerICU = [NSString stringWithUTF8String:WCDB::TokenizerICU];
+NSString* const WCTTokenizerUnicode61 = [NSString stringWithUTF8String:WCDB::TokenizerUnicode61];
+NSString* const WCTTokenizerOneOrBinary = [NSString stringWithUTF8String:WCDB::TokenizerOneOrBinary];
+NSString* const WCTTokenizerLegacyOneOrBinary = [NSString stringWithUTF8String:WCDB::TokenizerLegacyOneOrBinary];
+NSString* const WCTTokenizerVerbatim = [NSString stringWithUTF8String:WCDB::TokenizerVerbatim];
+NSString* const WCTTokenizerPinyin = [NSString stringWithUTF8String:WCDB::TokenizerPinyin];
 
-NSString* const WCTTokenizerParameter_NeedSymbol = @"need_symbol";
-NSString* const WCTTokenizerParameter_ChineseTraditionalToSimplified = @"chinese_traditional_to_simplified";
-NSString* const WCTTokenizerParameter_SkipStemming = @"skip_stemming";
+NSString* const WCTTokenizerParameter_NeedSymbol = [NSString stringWithUTF8String:WCDB::TokenizerParameter_NeedSymbol];
+NSString* const WCTTokenizerParameter_ChineseTraditionalToSimplified = [NSString stringWithUTF8String:WCDB::TokenizerParameter_ChineseTraditionalToSimplified];
+NSString* const WCTTokenizerParameter_SkipStemming = [NSString stringWithUTF8String:WCDB::TokenizerParameter_SkipStemming];
 
-NSString* const WCTModuleFTS3 = @"fts3";
-NSString* const WCTModuleFTS4 = @"fts4";
-NSString* const WCTModuleFTS5 = @"fts5";
+NSString* const WCTModuleFTS3 = [NSString stringWithUTF8String:WCDB::ModuleFTS3];
+NSString* const WCTModuleFTS4 = [NSString stringWithUTF8String:WCDB::ModuleFTS4];
+NSString* const WCTModuleFTS5 = [NSString stringWithUTF8String:WCDB::ModuleFTS5];
 
-NSString* const WCTAuxiliaryFunction_SubstringMatchInfo = @"substring_match_info";
-
-static NSDictionary* g_pinyinDict = nil;
-
-static std::nullptr_t initializeTokenizer()
-{
-    WCDB::Core::shared().registerTokenizer(WCTTokenizerOneOrBinary, WCDB::FTS3TokenizerModuleTemplate<WCTOneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizer>::specialize());
-    WCDB::Core::shared().registerTokenizer(WCTTokenizerLegacyOneOrBinary, WCDB::FTS3TokenizerModuleTemplate<WCTOneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizer>::specialize());
-    [WCTDatabase registerTokenizer:WCDB::FTS5TokenizerModuleTemplate<WCTOneOrBinaryTokenizer>::specializeWithContext(nullptr) named:WCTTokenizerVerbatim];
-    [WCTDatabase registerTokenizer:WCDB::FTS5TokenizerModuleTemplate<WCTPinyinTokenizer>::specializeWithContext(nullptr) named:WCTTokenizerPinyin];
-    return nullptr;
-}
-
-static std::nullptr_t initializeAuxiliaryFunction()
-{
-    [WCTDatabase registerAuxiliaryFunction:WCDB::FTS5AuxiliaryFunctionTemplate<WCDB::SubstringMatchInfo>::specializeWithContext(nullptr) named:WCTAuxiliaryFunction_SubstringMatchInfo];
-    return nullptr;
-}
+NSString* const WCTAuxiliaryFunction_SubstringMatchInfo = [NSString stringWithUTF8String:WCDB::AuxiliaryFunction_SubstringMatchInfo];
 
 @implementation WCTDatabase (FTS)
 
@@ -71,8 +55,7 @@ static std::nullptr_t initializeAuxiliaryFunction()
 
 - (void)addTokenizer:(NSString*)tokenizerName
 {
-    WCDB_ONCE(initializeTokenizer());
-
+    WCDB_ONCE(WCTFTSTokenizerUtil::configDefaultSymbolDetectorAndUnicodeNormalizer());
     WCDB::StringView configName = WCDB::StringView::formatted("%s%s", WCDB::TokenizeConfigPrefix, tokenizerName.UTF8String);
     _database->setConfig(configName, WCDB::Core::shared().tokenizerConfig(tokenizerName), WCDB::Configs::Priority::Higher);
 }
@@ -95,8 +78,6 @@ static std::nullptr_t initializeAuxiliaryFunction()
 
 - (void)addAuxiliaryFunction:(NSString*)auxiliaryFunctionName
 {
-    WCDB_ONCE(initializeAuxiliaryFunction());
-
     WCDB::StringView configName = WCDB::StringView::formatted("%s%s", WCDB::AuxiliaryFunctionConfigPrefix, auxiliaryFunctionName.UTF8String);
     _database->setConfig(configName, WCDB::Core::shared().auxiliaryFunctionConfig(auxiliaryFunctionName), WCDB::Configs::Priority::Higher);
 }

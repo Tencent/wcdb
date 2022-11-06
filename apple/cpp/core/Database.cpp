@@ -266,6 +266,26 @@ void Database::registerAuxiliaryFunction(const UnsafeStringView& name,
     Core::shared().registerAuxiliaryFunction(name, module);
 }
 
+void Database::configSymbolDetector(SymbolDetector detector)
+{
+    FTSTokenizerUtil::configSymbolDetector(detector);
+}
+
+void Database::configUnicodeNormalizer(UnicodeNormalizer normalizer)
+{
+    FTSTokenizerUtil::configUnicodeNormalizer(normalizer);
+}
+
+void Database::configPinyinConverter(PinYinConverter converter)
+{
+    FTSTokenizerUtil::configPinyinConverter(converter);
+}
+
+void Database::configTraditionalChineseConverter(TraditionalChineseConverter converter)
+{
+    FTSTokenizerUtil::configTraditionalChineseConverter(converter);
+}
+
 void Database::purge()
 {
     m_innerDatabase->purge();

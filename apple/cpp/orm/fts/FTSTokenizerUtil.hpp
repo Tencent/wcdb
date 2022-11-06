@@ -22,11 +22,14 @@
  * limitations under the License.
  */
 
-#include <WCDB/StringView.hpp>
+#pragma once
+
+#include <WCDB/BaseTokenizerUtil.hpp>
+#include <WCDB/FTSConst.h>
 
 namespace WCDB {
 
-class FTSTokenizerUtil {
+class FTSTokenizerUtil final : public BaseTokenizerUtil {
 public:
     static StringView tokenize(const char* name, ...);
 };

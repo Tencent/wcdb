@@ -76,7 +76,7 @@
     __WCDB_CPP_COLUMN_CONSTRAINT_END(fieldName)
 
 // unindexed for fts
-#define __WCDB_CPP_NOTINDEXED_IMP(fieldName)                                   \
+#define __WCDB_CPP_UNINDEXED_IMP(fieldName)                                    \
     __WCDB_CPP_COLUMN_CONSTRAINT_BEGIN(fieldName)                              \
-    columnConstraint.notIndexed();                                             \
+    columnConstraint.notIndexed();                                              \
     __WCDB_CPP_COLUMN_CONSTRAINT_END(fieldName)
