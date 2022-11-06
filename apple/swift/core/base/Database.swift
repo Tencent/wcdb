@@ -55,7 +55,7 @@ public class Database {
     }
 
     internal init(with cppDatabase: CPPDatabase) {
-        DispatchQueue.once(name: "com.Tencent.WCDB.swift.purge", {
+        DispatchQueue.once(name: "Once.ObjectBridge", {
             ObjectBridge.initializeCPPAPI()
         })
         self.recyclableDatabase = ObjectBridge.createRecyclableCPPObject(cppDatabase)
@@ -558,7 +558,7 @@ public extension Database {
     }
 }
 
-//// Repair
+// Repair
 public extension Database {
     typealias OnCorrupted = (_ corruptedDatabase: Database) -> Void
     /// You can register a notification callback for database corruption.
@@ -669,6 +669,60 @@ public extension Database {
     }
 }
 
+// FTS
+public struct BuiltinTokenizer {
+    public static let Simple = String(cString: WCDBTokenizerSimple)
+    public static let Porter = String(cString: WCDBTokenizerPorter)
+    public static let ICU = String(cString: WCDBTokenizerICU)
+    public static let Unicode61 = String(cString: WCDBTokenizerUnicode61)
+
+    // Only for fts3/fts4, compatible with WCDB tokenizer of older versions
+    public static let OneOrBinary = String(cString: WCDBTokenizerLegacyOneOrBinary)
+
+    // for fts5
+    public static let Pinyin = String(cString: WCDBTokenizerPinyin)
+    public static let Verbatim = String(cString: WCDBTokenizerVerbatim)
+
+    // Optional parameters for WCDB implemented tokenizers
+    public struct Parameter {
+        public static let NeedSymbol = String(cString: WCDBTokenizerParameter_NeedSymbol)
+        public static let SimplifyChinese = String(cString: WCDBTokenizerParameter_SimplifyChinese)
+        public static let SkipStemming = String(cString: WCDBTokenizerParameter_SkipStemming)
+    }
+}
+
+public struct BuiltinAuxiliaryFunction {
+    public static let SubstringMatchInfo = String(cString: WCDBAuxiliaryFunction_SubstringMatchInfo)
+}
+
+public extension Database {
+    func setAutoMergeFTS5Index(enable: Bool) {
+        WCDBDatabaseEnableAutoMergeFTS5Index(database, enable)
+    }
+
+    func add(tokenizer: String) {
+        WCTAPIBridge.configDefaultSymbolDetectorAndUnicodeNormalizer()
+        WCDBDatabaseAddTokenizer(database, tokenizer.cString)
+    }
+
+    static func register<TokenizerType: Tokenizer>(tokenizer: TokenizerType.Type, of name: String, of version: FTSVersion) {
+        FTSBridge.register(tokenizer: tokenizer, of: name, of: version)
+    }
+
+    func add(auxFunction: String) {
+        WCDBDatabaseAddAuxiliaryFunction(database, auxFunction.cString)
+    }
+
+    static func config(pinyinDict: [String: [String]]) {
+        WCTAPIBridge.configPinyinDict(pinyinDict)
+    }
+
+    static func config(traditionalChineseDict: [String: String]) {
+        WCTAPIBridge.configTraditionalChineseDict(traditionalChineseDict)
+    }
+}
+
+// checkpoint
 public extension Database {
     /// Checkpoint database in passive mode.
     /// WCDB will automatically checkpoint databases after it changes.

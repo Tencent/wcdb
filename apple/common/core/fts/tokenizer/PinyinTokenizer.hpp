@@ -27,11 +27,11 @@
 
 namespace WCDB {
 
-class PinyinTokenizer final : public AbstractFTS5Tokenizer {
+class PinyinTokenizer final : public AbstractFTSTokenizer {
 public:
-    PinyinTokenizer(void *pCtx, const char **azArg, int nArg);
-    void loadInput(int flags, const char *pText, int nText) override;
-    int nextToken(int *tflags, const char **ppToken, int *nToken, int *iStart, int *iEnd) override;
+    PinyinTokenizer(const char *const *azArg, int nArg, void *pCtx);
+    void loadInput(const char *pText, int nText, int flags) override;
+    int nextToken(const char **ppToken, int *nToken, int *iStart, int *iEnd, int *tflags, int *iPosition) override;
 
     ~PinyinTokenizer() override;
     int stepNextToken();

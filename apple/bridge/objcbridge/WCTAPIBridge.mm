@@ -28,6 +28,7 @@
 #import <WCDB/WCTAPIBridge.h>
 #import <WCDB/WCTBridgeProperty+CPP.h>
 #import <WCDB/WCTDeclaration.h>
+#import <WCDB/WCTFTSTokenizerUtil.h>
 #import <WCDB/WCTHandle+ChainCall.h>
 #import <WCDB/WCTHandle+Private.h>
 #import <WCDB/WCTHandle+Table.h>
@@ -128,6 +129,21 @@
         resultColumns.emplace_back(bridgeProperty.wctProperty);
     }
     return [wctHandleStatement extractMultiObjectOnResultColumns:resultColumns];
+}
+
++ (void)configDefaultSymbolDetectorAndUnicodeNormalizer
+{
+    WCTFTSTokenizerUtil::configDefaultSymbolDetectorAndUnicodeNormalizer();
+}
+
++ (void)configPinyinDict:(NSDictionary<NSString*, NSArray<NSString*>*>*)pinyinDict
+{
+    WCTFTSTokenizerUtil::configPinyinDict(pinyinDict);
+}
+
++ (void)configTraditionalChineseDict:(NSDictionary<NSString*, NSString*>*)traditionalChineseDict
+{
+    WCTFTSTokenizerUtil::configTraditionalChineseDict(traditionalChineseDict);
 }
 
 @end

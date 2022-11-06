@@ -48,3 +48,20 @@ void WCDBColumnDefConfigConstraint(CPPColumnDef columnDef, CPPColumnConstraint c
     WCDBGetObjectOrReturn(constraint, WCDB::ColumnConstraint, cppColumnConstraint);
     cppColumnDef->constraint(*cppColumnConstraint);
 }
+
+const char* _Nonnull WCDBColumnDefGetColumnName(CPPColumnDef columnDef)
+{
+    WCDBGetObjectOrReturnValue(columnDef, WCDB::ColumnDef, cppColumnDef, "");
+    return cppColumnDef->syntax().column.name.data();
+}
+
+bool WCDBColumnDefIsNotIndexed(CPPColumnDef columnDef)
+{
+    WCDBGetObjectOrReturnValue(columnDef, WCDB::ColumnDef, cppColumnDef, false);
+    for (auto constrain : cppColumnDef->syntax().constraints) {
+        if (constrain.switcher == WCDB::Syntax::ColumnConstraint::Switch::UnIndexed) {
+            return true;
+        }
+    }
+    return false;
+}

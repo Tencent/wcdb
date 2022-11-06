@@ -645,7 +645,6 @@
 		03DCB5EF286C3D8E00CBC75D /* StatementAttachBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03DCB5ED286C3D8E00CBC75D /* StatementAttachBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		03DCB5F2286C480900CBC75D /* StatementCreateIndexBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03DCB5F0286C480900CBC75D /* StatementCreateIndexBridge.cpp */; };
 		03DCB5F3286C480900CBC75D /* StatementCreateIndexBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03DCB5F1286C480900CBC75D /* StatementCreateIndexBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		03E165F927F42D6500D2C926 /* ModuleArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1658F27F42D6500D2C926 /* ModuleArgument.swift */; };
 		03E165FB27F42D6500D2C926 /* Expression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1659127F42D6500D2C926 /* Expression.swift */; };
 		03E165FC27F42D6500D2C926 /* StatementExplain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1659227F42D6500D2C926 /* StatementExplain.swift */; };
 		03E165FD27F42D6500D2C926 /* StatementInsert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1659327F42D6500D2C926 /* StatementInsert.swift */; };
@@ -658,7 +657,6 @@
 		03E1660627F42D6500D2C926 /* StatementCreateVirtualTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1659C27F42D6500D2C926 /* StatementCreateVirtualTable.swift */; };
 		03E1660727F42D6500D2C926 /* ForeignKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1659D27F42D6500D2C926 /* ForeignKey.swift */; };
 		03E1660827F42D6500D2C926 /* OrderingTerm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1659E27F42D6500D2C926 /* OrderingTerm.swift */; };
-		03E1660927F42D6500D2C926 /* Tokenize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1659F27F42D6500D2C926 /* Tokenize.swift */; };
 		03E1660A27F42D6500D2C926 /* TableConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165A027F42D6500D2C926 /* TableConstraint.swift */; };
 		03E1660B27F42D6500D2C926 /* Convertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165A127F42D6500D2C926 /* Convertible.swift */; };
 		03E1660C27F42D6500D2C926 /* IndexedColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165A227F42D6500D2C926 /* IndexedColumn.swift */; };
@@ -711,7 +709,6 @@
 		03E1663F27F42D6600D2C926 /* VirtualTableBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165DA27F42D6500D2C926 /* VirtualTableBinding.swift */; };
 		03E1664027F42D6600D2C926 /* IndexBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165DB27F42D6500D2C926 /* IndexBinding.swift */; };
 		03E1664127F42D6600D2C926 /* TableBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165DC27F42D6500D2C926 /* TableBinding.swift */; };
-		03E1664227F42D6600D2C926 /* WCDBTokenize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165DE27F42D6500D2C926 /* WCDBTokenize.swift */; };
 		03E1664427F42D6600D2C926 /* BaseType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165E127F42D6500D2C926 /* BaseType.swift */; };
 		03E1664627F42D6600D2C926 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165E327F42D6500D2C926 /* Database.swift */; };
 		03E1664A27F42D6600D2C926 /* Recyclable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165E827F42D6500D2C926 /* Recyclable.swift */; };
@@ -736,7 +733,6 @@
 		03E1678127F434E900D2C926 /* ColumnDefTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1672F27F434E800D2C926 /* ColumnDefTests.swift */; };
 		03E1678227F434E900D2C926 /* LiteralValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1673027F434E800D2C926 /* LiteralValueTests.swift */; };
 		03E1678327F434E900D2C926 /* StatementAttachTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1673127F434E800D2C926 /* StatementAttachTests.swift */; };
-		03E1678427F434E900D2C926 /* ModuleArgumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1673227F434E800D2C926 /* ModuleArgumentTests.swift */; };
 		03E1678527F434E900D2C926 /* TableOrSubqueryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1673327F434E800D2C926 /* TableOrSubqueryTests.swift */; };
 		03E1678627F434E900D2C926 /* StatementReindexTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1673427F434E800D2C926 /* StatementReindexTests.swift */; };
 		03E1678727F434E900D2C926 /* OrderingTermTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1673527F434E800D2C926 /* OrderingTermTests.swift */; };
@@ -1051,7 +1047,7 @@
 		234F064C227AA51500DD65A2 /* FTS3Object.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F064A227AA51500DD65A2 /* FTS3Object.mm */; };
 		234F06A6227AA55400DD65A2 /* AdditionalORMObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F06A4227AA55400DD65A2 /* AdditionalORMObject.mm */; };
 		234F06AD227AA56300DD65A2 /* VirtualTableFTS5Object.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F06A9227AA56300DD65A2 /* VirtualTableFTS5Object.mm */; };
-		234F06AE227AA56300DD65A2 /* VirtualTableFTS3Object.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F06AB227AA56300DD65A2 /* VirtualTableFTS3Object.mm */; };
+		234F06AE227AA56300DD65A2 /* VirtualTableFTS4Object.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F06AB227AA56300DD65A2 /* VirtualTableFTS4Object.mm */; };
 		234F06B2227AA56B00DD65A2 /* TableConstraintObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F06B0227AA56B00DD65A2 /* TableConstraintObject.mm */; };
 		234F06B6227AA57100DD65A2 /* PropertyObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F06B5227AA57100DD65A2 /* PropertyObject.mm */; };
 		234F06D2227AA57D00DD65A2 /* ColumnConstraintAutoIncrement.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F06B8227AA57A00DD65A2 /* ColumnConstraintAutoIncrement.mm */; };
@@ -1606,6 +1602,8 @@
 		39C70CC82313E20F002D773C /* Assemble.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39C70CC62313E20F002D773C /* Assemble.hpp */; };
 		39D3C74822A8B8C600C93DC0 /* OperationHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 39D3C74622A8B8C600C93DC0 /* OperationHandle.cpp */; };
 		39D3C74A22A8B8C600C93DC0 /* OperationHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39D3C74722A8B8C600C93DC0 /* OperationHandle.hpp */; };
+		750DC06C2913DE7300F19044 /* FTSBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 750DC0692913DE7300F19044 /* FTSBridge.cpp */; };
+		750DC06E2913DE7300F19044 /* FTSBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 750DC06A2913DE7300F19044 /* FTSBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75195E812852454700EC8C1F /* FrameSpecTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75195E802852454700EC8C1F /* FrameSpecTests.swift */; };
 		751CA67728C64B7B00874A7A /* CPPAllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 751CA67528C64B7B00874A7A /* CPPAllTypesObject.mm */; };
 		75204AE8283FD6DC0002E40C /* Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75204AE7283FD6DC0002E40C /* Schema.swift */; };
@@ -1653,6 +1651,7 @@
 		75535246290E63E5008376AB /* CPPFTS5Tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75535245290E63E5008376AB /* CPPFTS5Tests.mm */; };
 		755391D62403B3DB00036918 /* WCTHandleStatement.mm in Sources */ = {isa = PBXBuildFile; fileRef = 755391D52403B3DB00036918 /* WCTHandleStatement.mm */; };
 		755391E12403CB9E00036918 /* WCTHandleStatement+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 755391E02403CB9700036918 /* WCTHandleStatement+Private.h */; };
+		755B5A6929154361006955AF /* OneOrBinaryTokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 03450DB32738BBF000C4DC1B /* OneOrBinaryTokenizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		756A773827F9EDCA00105B7C /* HandleStatementBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 756A773727F9EDCA00105B7C /* HandleStatementBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		756A773D27F9EDDE00105B7C /* HandleStatementBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 756A773C27F9EDDE00105B7C /* HandleStatementBridge.cpp */; };
 		756A774027FAC18000105B7C /* CoreBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 756A773F27FAC17F00105B7C /* CoreBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1752,6 +1751,8 @@
 		75E50AC22908EC7100B73E62 /* ORMMultiSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75E50AC12908EC7100B73E62 /* ORMMultiSelectTests.mm */; };
         75E76AE42917AE2A00073CCA /* CPPVirtualTableFTS4Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E76AE22917AE2A00073CCA /* CPPVirtualTableFTS4Object.cpp */; };
         75E76AE72917B07E00073CCA /* CPPVirtualTableFTS5Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E76AE52917B07E00073CCA /* CPPVirtualTableFTS5Object.cpp */; };
+		75E76AD429161EE400073CCA /* FTSBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E76AD329161EE400073CCA /* FTSBridge.swift */; };
+		75E76AE029176FA600073CCA /* TokenizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E76ADF29176FA600073CCA /* TokenizerTests.swift */; };
 		75EB1965287F068200AA62F7 /* StatementDropTriggerBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75EB1963287F068200AA62F7 /* StatementDropTriggerBridge.cpp */; };
 		75EB1966287F068200AA62F7 /* StatementDropTriggerBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75EB1964287F068200AA62F7 /* StatementDropTriggerBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75EB1968287F078E00AA62F7 /* StatementDropTrigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EB1967287F078E00AA62F7 /* StatementDropTrigger.swift */; };
@@ -2044,7 +2045,6 @@
 		03DCB5ED286C3D8E00CBC75D /* StatementAttachBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StatementAttachBridge.h; sourceTree = "<group>"; };
 		03DCB5F0286C480900CBC75D /* StatementCreateIndexBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StatementCreateIndexBridge.cpp; sourceTree = "<group>"; };
 		03DCB5F1286C480900CBC75D /* StatementCreateIndexBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StatementCreateIndexBridge.h; sourceTree = "<group>"; };
-		03E1658F27F42D6500D2C926 /* ModuleArgument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModuleArgument.swift; sourceTree = "<group>"; };
 		03E1659127F42D6500D2C926 /* Expression.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Expression.swift; sourceTree = "<group>"; };
 		03E1659227F42D6500D2C926 /* StatementExplain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatementExplain.swift; sourceTree = "<group>"; };
 		03E1659327F42D6500D2C926 /* StatementInsert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatementInsert.swift; sourceTree = "<group>"; };
@@ -2057,7 +2057,6 @@
 		03E1659C27F42D6500D2C926 /* StatementCreateVirtualTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatementCreateVirtualTable.swift; sourceTree = "<group>"; };
 		03E1659D27F42D6500D2C926 /* ForeignKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForeignKey.swift; sourceTree = "<group>"; };
 		03E1659E27F42D6500D2C926 /* OrderingTerm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderingTerm.swift; sourceTree = "<group>"; };
-		03E1659F27F42D6500D2C926 /* Tokenize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tokenize.swift; sourceTree = "<group>"; };
 		03E165A027F42D6500D2C926 /* TableConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableConstraint.swift; sourceTree = "<group>"; };
 		03E165A127F42D6500D2C926 /* Convertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Convertible.swift; sourceTree = "<group>"; };
 		03E165A227F42D6500D2C926 /* IndexedColumn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexedColumn.swift; sourceTree = "<group>"; };
@@ -2110,7 +2109,6 @@
 		03E165DA27F42D6500D2C926 /* VirtualTableBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualTableBinding.swift; sourceTree = "<group>"; };
 		03E165DB27F42D6500D2C926 /* IndexBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexBinding.swift; sourceTree = "<group>"; };
 		03E165DC27F42D6500D2C926 /* TableBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableBinding.swift; sourceTree = "<group>"; };
-		03E165DE27F42D6500D2C926 /* WCDBTokenize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WCDBTokenize.swift; sourceTree = "<group>"; };
 		03E165E127F42D6500D2C926 /* BaseType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseType.swift; sourceTree = "<group>"; };
 		03E165E327F42D6500D2C926 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		03E165E827F42D6500D2C926 /* Recyclable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recyclable.swift; sourceTree = "<group>"; };
@@ -2151,7 +2149,6 @@
 		03E1672F27F434E800D2C926 /* ColumnDefTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColumnDefTests.swift; sourceTree = "<group>"; };
 		03E1673027F434E800D2C926 /* LiteralValueTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiteralValueTests.swift; sourceTree = "<group>"; };
 		03E1673127F434E800D2C926 /* StatementAttachTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatementAttachTests.swift; sourceTree = "<group>"; };
-		03E1673227F434E800D2C926 /* ModuleArgumentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModuleArgumentTests.swift; sourceTree = "<group>"; };
 		03E1673327F434E800D2C926 /* TableOrSubqueryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableOrSubqueryTests.swift; sourceTree = "<group>"; };
 		03E1673427F434E800D2C926 /* StatementReindexTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatementReindexTests.swift; sourceTree = "<group>"; };
 		03E1673527F434E800D2C926 /* OrderingTermTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderingTermTests.swift; sourceTree = "<group>"; };
@@ -2474,11 +2471,11 @@
 		234F06A4227AA55400DD65A2 /* AdditionalORMObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AdditionalORMObject.mm; sourceTree = "<group>"; };
 		234F06A5227AA55400DD65A2 /* AdditionalORMObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdditionalORMObject.h; sourceTree = "<group>"; };
 		234F06A7227AA56200DD65A2 /* VirtualTableFTS5Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualTableFTS5Object.h; sourceTree = "<group>"; };
-		234F06A8227AA56300DD65A2 /* VirtualTableFTS3Object+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "VirtualTableFTS3Object+WCTTableCoding.h"; sourceTree = "<group>"; };
+		234F06A8227AA56300DD65A2 /* VirtualTableFTS4Object+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "VirtualTableFTS4Object+WCTTableCoding.h"; sourceTree = "<group>"; };
 		234F06A9227AA56300DD65A2 /* VirtualTableFTS5Object.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = VirtualTableFTS5Object.mm; sourceTree = "<group>"; };
 		234F06AA227AA56300DD65A2 /* VirtualTableFTS5Object+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "VirtualTableFTS5Object+WCTTableCoding.h"; sourceTree = "<group>"; };
-		234F06AB227AA56300DD65A2 /* VirtualTableFTS3Object.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = VirtualTableFTS3Object.mm; sourceTree = "<group>"; };
-		234F06AC227AA56300DD65A2 /* VirtualTableFTS3Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualTableFTS3Object.h; sourceTree = "<group>"; };
+		234F06AB227AA56300DD65A2 /* VirtualTableFTS4Object.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = VirtualTableFTS4Object.mm; sourceTree = "<group>"; };
+		234F06AC227AA56300DD65A2 /* VirtualTableFTS4Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualTableFTS4Object.h; sourceTree = "<group>"; };
 		234F06AF227AA56B00DD65A2 /* TableConstraintObject+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TableConstraintObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		234F06B0227AA56B00DD65A2 /* TableConstraintObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableConstraintObject.mm; sourceTree = "<group>"; };
 		234F06B1227AA56B00DD65A2 /* TableConstraintObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableConstraintObject.h; sourceTree = "<group>"; };
@@ -3094,6 +3091,8 @@
 		39C70CC62313E20F002D773C /* Assemble.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Assemble.hpp; sourceTree = "<group>"; };
 		39D3C74622A8B8C600C93DC0 /* OperationHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OperationHandle.cpp; sourceTree = "<group>"; };
 		39D3C74722A8B8C600C93DC0 /* OperationHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OperationHandle.hpp; sourceTree = "<group>"; };
+		750DC0692913DE7300F19044 /* FTSBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FTSBridge.cpp; sourceTree = "<group>"; };
+		750DC06A2913DE7300F19044 /* FTSBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FTSBridge.h; sourceTree = "<group>"; };
 		75195E802852454700EC8C1F /* FrameSpecTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameSpecTests.swift; sourceTree = "<group>"; };
 		751CA67228C6491A00874A7A /* CPPFieldObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPPFieldObject.h; sourceTree = "<group>"; };
 		751CA67528C64B7B00874A7A /* CPPAllTypesObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CPPAllTypesObject.mm; sourceTree = "<group>"; };
@@ -3238,6 +3237,8 @@
         75E76AE32917AE2A00073CCA /* CPPVirtualTableFTS4Object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CPPVirtualTableFTS4Object.hpp; sourceTree = "<group>"; };
         75E76AE52917B07E00073CCA /* CPPVirtualTableFTS5Object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CPPVirtualTableFTS5Object.cpp; sourceTree = "<group>"; };
         75E76AE62917B07E00073CCA /* CPPVirtualTableFTS5Object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CPPVirtualTableFTS5Object.hpp; sourceTree = "<group>"; };
+		75E76AD329161EE400073CCA /* FTSBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FTSBridge.swift; sourceTree = "<group>"; };
+		75E76ADF29176FA600073CCA /* TokenizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenizerTests.swift; sourceTree = "<group>"; };
 		75EB1963287F068200AA62F7 /* StatementDropTriggerBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StatementDropTriggerBridge.cpp; sourceTree = "<group>"; };
 		75EB1964287F068200AA62F7 /* StatementDropTriggerBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StatementDropTriggerBridge.h; sourceTree = "<group>"; };
 		75EB1967287F078E00AA62F7 /* StatementDropTrigger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatementDropTrigger.swift; sourceTree = "<group>"; };
@@ -3421,7 +3422,6 @@
 				03E165A227F42D6500D2C926 /* IndexedColumn.swift */,
 				03E165AC27F42D6500D2C926 /* Join.swift */,
 				03E165A927F42D6500D2C926 /* LiteralValue.swift */,
-				03E1658F27F42D6500D2C926 /* ModuleArgument.swift */,
 				03E1659827F42D6500D2C926 /* Operable.swift */,
 				03E1659E27F42D6500D2C926 /* OrderingTerm.swift */,
 				03E1659727F42D6500D2C926 /* Pragma.swift */,
@@ -3431,7 +3431,6 @@
 				75204AE7283FD6DC0002E40C /* Schema.swift */,
 				03E165A027F42D6500D2C926 /* TableConstraint.swift */,
 				03E165A827F42D6500D2C926 /* TableOrSubquery.swift */,
-				03E1659F27F42D6500D2C926 /* Tokenize.swift */,
 				75AF6AF32855CCDD00A7C43D /* Upsert.swift */,
 				039BD3972845CB7C00C58BE2 /* WindowDef.swift */,
 			);
@@ -3716,6 +3715,9 @@
 				756A773C27F9EDDE00105B7C /* HandleStatementBridge.cpp */,
 				756A773F27FAC17F00105B7C /* CoreBridge.h */,
 				756A774227FAC1D900105B7C /* CoreBridge.cpp */,
+				750DC06A2913DE7300F19044 /* FTSBridge.h */,
+				750DC0692913DE7300F19044 /* FTSBridge.cpp */,
+				75E76AD329161EE400073CCA /* FTSBridge.swift */,
 			);
 			path = cppbridge;
 			sourceTree = "<group>";
@@ -3736,7 +3738,6 @@
 				03E1674227F434E800D2C926 /* IndexedColumnTests.swift */,
 				03E1673F27F434E800D2C926 /* JoinTests.swift */,
 				03E1673027F434E800D2C926 /* LiteralValueTests.swift */,
-				03E1673227F434E800D2C926 /* ModuleArgumentTests.swift */,
 				03E1673527F434E800D2C926 /* OrderingTermTests.swift */,
 				75AF6AE32854F2FC00A7C43D /* QualifiedTableTests.swift */,
 				752594922851FCEF0068A602 /* RaiseFunctionTests.swift */,
@@ -3855,7 +3856,6 @@
 				03E165C127F42D6500D2C926 /* interface */,
 				03E165CE27F42D6500D2C926 /* codable */,
 				03E165D527F42D6500D2C926 /* binding */,
-				03E165DD27F42D6500D2C926 /* fts */,
 				03E165DF27F42D6500D2C926 /* base */,
 			);
 			path = core;
@@ -3901,14 +3901,6 @@
 				03E165DC27F42D6500D2C926 /* TableBinding.swift */,
 			);
 			path = binding;
-			sourceTree = "<group>";
-		};
-		03E165DD27F42D6500D2C926 /* fts */ = {
-			isa = PBXGroup;
-			children = (
-				03E165DE27F42D6500D2C926 /* WCDBTokenize.swift */,
-			);
-			path = fts;
 			sourceTree = "<group>";
 		};
 		03E165DF27F42D6500D2C926 /* base */ = {
@@ -4016,6 +4008,7 @@
 				03E1672027F434E800D2C926 /* TracerTests.swift */,
 				03E1672127F434E800D2C926 /* RepairTests.swift */,
 				03E1672227F434E800D2C926 /* FileTests.swift */,
+				75E76ADF29176FA600073CCA /* TokenizerTests.swift */,
 			);
 			path = other;
 			sourceTree = "<group>";
@@ -4736,9 +4729,9 @@
 		234F0436227A9EFA00DD65A2 /* virtual_table */ = {
 			isa = PBXGroup;
 			children = (
-				234F06AC227AA56300DD65A2 /* VirtualTableFTS3Object.h */,
-				234F06AB227AA56300DD65A2 /* VirtualTableFTS3Object.mm */,
-				234F06A8227AA56300DD65A2 /* VirtualTableFTS3Object+WCTTableCoding.h */,
+				234F06AC227AA56300DD65A2 /* VirtualTableFTS4Object.h */,
+				234F06AB227AA56300DD65A2 /* VirtualTableFTS4Object.mm */,
+				234F06A8227AA56300DD65A2 /* VirtualTableFTS4Object+WCTTableCoding.h */,
 				234F06A7227AA56200DD65A2 /* VirtualTableFTS5Object.h */,
 				234F06A9227AA56300DD65A2 /* VirtualTableFTS5Object.mm */,
 				234F06AA227AA56300DD65A2 /* VirtualTableFTS5Object+WCTTableCoding.h */,
@@ -6161,6 +6154,7 @@
 				037C3BBF2897E33600328EC8 /* SyntaxPragmaSTMT.hpp in Headers */,
 				039D724E28BF795700990803 /* Select.hpp in Headers */,
 				037C3BC02897E33600328EC8 /* Upsert.hpp in Headers */,
+				755B5A6929154361006955AF /* OneOrBinaryTokenizer.hpp in Headers */,
 				037C3BC22897E33600328EC8 /* AuxiliaryFunctionModule.hpp in Headers */,
 				037C3BC42897E33600328EC8 /* Configs.hpp in Headers */,
 				037C3BC82897E33600328EC8 /* SharedThreadedErrorProne.hpp in Headers */,
@@ -6541,6 +6535,7 @@
 				23567CFC20CA3889005F1C35 /* Frame.hpp in Headers */,
 				754014C4290BEDA600EA8D33 /* FTSConst.h in Headers */,
 				23776CA7218C41E600E985DC /* WCTChainCall+Private.h in Headers */,
+				750DC06E2913DE7300F19044 /* FTSBridge.h in Headers */,
 				39D3C74A22A8B8C600C93DC0 /* OperationHandle.hpp in Headers */,
 				758D9D0728BA7F06001B3D2D /* CPPColumnConstraintMacro.h in Headers */,
 				2349F7681EA0D6680021EFA7 /* WCTProperty.h in Headers */,
@@ -7474,7 +7469,7 @@
 				234F06D8227AA57D00DD65A2 /* ColumnConstraintPrimary.mm in Sources */,
 				39327B6F22CF275200AABD4B /* TestCaseLog.mm in Sources */,
 				234F061C227AA4F600DD65A2 /* ResultColumnTests.mm in Sources */,
-				234F06AE227AA56300DD65A2 /* VirtualTableFTS3Object.mm in Sources */,
+				234F06AE227AA56300DD65A2 /* VirtualTableFTS4Object.mm in Sources */,
 				39327B1F22CF271F00AABD4B /* BaseTestCase.mm in Sources */,
 				234F071D227AA5B700DD65A2 /* DatabaseMigrationCompatibleTests.mm in Sources */,
 				03BF4B3E2888FA3800A30500 /* DatabaseTestCase.mm in Sources */,
@@ -7591,7 +7586,6 @@
 				03E1677C27F434E900D2C926 /* StatementExplainTests.swift in Sources */,
 				03E1679427F434E900D2C926 /* IndexedColumnTests.swift in Sources */,
 				03E1678927F434E900D2C926 /* ForeignKeyTests.swift in Sources */,
-				03E1678427F434E900D2C926 /* ModuleArgumentTests.swift in Sources */,
 				03E1679927F434E900D2C926 /* AdvanceCRUDTests.swift in Sources */,
 				03A57F16284089B800D2A4C3 /* SchemaTests.swift in Sources */,
 				03E1678527F434E900D2C926 /* TableOrSubqueryTests.swift in Sources */,
@@ -7631,6 +7625,7 @@
 				03E1677F27F434E900D2C926 /* TableConstraintTests.swift in Sources */,
 				03E1678E27F434E900D2C926 /* StatementCreateIndexTests.swift in Sources */,
 				03E1678227F434E900D2C926 /* LiteralValueTests.swift in Sources */,
+				75E76AE029176FA600073CCA /* TokenizerTests.swift in Sources */,
 				03E167AB27F434E900D2C926 /* SelectTests.swift in Sources */,
 				03E1678827F434E900D2C926 /* StatementPragmaTests.swift in Sources */,
 				03E1679127F434E900D2C926 /* JoinTests.swift in Sources */,
@@ -7747,6 +7742,7 @@
 				23D0C36320C14ACC0001BFAE /* FactoryRelated.cpp in Sources */,
 				235FBE9522914E0D005C7723 /* Global.cpp in Sources */,
 				233A058C2062698E00F1A212 /* WCTHandle+ChainCall.mm in Sources */,
+				750DC06C2913DE7300F19044 /* FTSBridge.cpp in Sources */,
 				75AF6AE9285594A100A7C43D /* ResultColumnBridge.cpp in Sources */,
 				03EE3A51287FCECF00C8F0B3 /* StatementCreateTrigger.swift in Sources */,
 				23EEDD45217DFADC006E9E73 /* SyntaxDropTriggerSTMT.cpp in Sources */,
@@ -7879,7 +7875,6 @@
 				23EEDCEF217DFADC006E9E73 /* SyntaxColumn.cpp in Sources */,
 				23EEDCFB217DFADC006E9E73 /* SyntaxFilter.cpp in Sources */,
 				23EEDCC9217DFADC006E9E73 /* StatementDelete.cpp in Sources */,
-				03E1660927F42D6500D2C926 /* Tokenize.swift in Sources */,
 				23567D4920CA7DBC005F1C35 /* ErrorProne.cpp in Sources */,
 				2349F7281EA0D6680021EFA7 /* WCTMultiSelect.mm in Sources */,
 				23EEDD49217DFADC006E9E73 /* SyntaxInsertSTMT.cpp in Sources */,
@@ -8024,10 +8019,8 @@
 				23A64D09214A458A00ED28BB /* MigrationInfo.cpp in Sources */,
 				23775B7A20AD666900E21AB0 /* Material.cpp in Sources */,
 				23EEDC87217DFADC006E9E73 /* ForeignKey.cpp in Sources */,
-				03E1664227F42D6600D2C926 /* WCDBTokenize.swift in Sources */,
 				23775B9620AD666900E21AB0 /* Crawlable.cpp in Sources */,
 				39D3C74822A8B8C600C93DC0 /* OperationHandle.cpp in Sources */,
-				03E165F927F42D6500D2C926 /* ModuleArgument.swift in Sources */,
 				23EEDC66217DFADC006E9E73 /* AggregateFunction.cpp in Sources */,
 				23C7559A20DD17B100031A93 /* SQLiteBase.cpp in Sources */,
 				23EEDC8F217DFADC006E9E73 /* Join.cpp in Sources */,
@@ -8059,6 +8052,7 @@
 				75CD026D28CF8F360071B6C3 /* DeleteInterface.swift in Sources */,
 				75F4DE5528840C4800760DC3 /* StatementBeginBridge.cpp in Sources */,
 				03A57F192840B5A700D2A4C3 /* BindParameter.swift in Sources */,
+				75E76AD429161EE400073CCA /* FTSBridge.swift in Sources */,
 				2308F84F20E32A51001CD9C3 /* FileHandle.cpp in Sources */,
 				03E1661627F42D6500D2C926 /* Join.swift in Sources */,
 				75AF6AFA2856303700A7C43D /* PragmaBridge.cpp in Sources */,

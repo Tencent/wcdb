@@ -20,24 +20,43 @@
 
 import Foundation
 
+public enum FTSVersion: Describable {
+    case FTS3
+    case FTS4
+    case FTS5
+    internal var cValue: WCDBFTSVersion {
+        switch self {
+        case .FTS3:
+            return WCDBFTSVersion3
+        case .FTS4:
+            return WCDBFTSVersion4
+        case .FTS5:
+            return WCDBFTSVersion5
+        }
+    }
+    public var description: String {
+        switch self {
+        case .FTS3:
+            return "fts3"
+        case .FTS4:
+            return "fts4"
+        case .FTS5:
+            return "fts5"
+        }
+    }
+}
+
 public struct VirtualTableBinding {
-    let arguments: [ModuleArgument]
     let module: String
+    let parameters: [String]
 
-    public init(withModule module: String, and arguments: [ModuleArgument]) {
+    public init(withModule version: FTSVersion, and tokenizer: String...) {
+        self.module = version.description
+        self.parameters = ["tokenize = \(tokenizer.joined(separateBy: " "))"]
+    }
+
+    public init(withModule module: String, and parameters: String...) {
         self.module = module
-        self.arguments = arguments
-    }
-
-    public init(withModule module: String, and arguments: ModuleArgument...) {
-        self.init(withModule: module, and: arguments)
-    }
-
-    public init(with module: FTSModule, and arguments: [ModuleArgument]) {
-        self.init(withModule: module.name, and: arguments)
-    }
-
-    public init(with module: FTSModule, and arguments: ModuleArgument...) {
-        self.init(with: module, and: arguments)
+        self.parameters = parameters
     }
 }

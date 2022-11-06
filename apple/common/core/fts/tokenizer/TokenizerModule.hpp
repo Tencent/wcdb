@@ -28,28 +28,25 @@
 
 namespace WCDB {
 
-#pragma mark - fts3
-
-class AbstractFTS3TokenizerInfo {
+class AbstractFTSTokenizer {
 public:
-    AbstractFTS3TokenizerInfo(int argc, const char *const *argv);
-    virtual ~AbstractFTS3TokenizerInfo() = 0;
-};
-
-class AbstractFTS3TokenizerCursorInfo {
-public:
-    AbstractFTS3TokenizerCursorInfo(const char *input,
-                                    int inputLength,
-                                    AbstractFTS3TokenizerInfo *tokenizerInfo);
-    virtual ~AbstractFTS3TokenizerCursorInfo() = 0;
-
-    virtual int
-    step(const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *piPosition)
+    AbstractFTSTokenizer(const char *const *azArg, int nArg, void *pCtx /* pCtx is only used in FTS5 */);
+    virtual ~AbstractFTSTokenizer() = 0;
+    virtual void
+    loadInput(const char *pText, int nText, int flags /* flags is only used in FTS5 */)
+    = 0;
+    virtual int nextToken(const char **ppToken,
+                          int *nToken,
+                          int *iStart,
+                          int *iEnd,
+                          int *tflags,   //tflags is only used in FTS5
+                          int *iPosition //iPosition is only used in FTS3/4
+                          )
     = 0;
 };
 
-typedef struct Tokenizer Tokenizer;
-typedef struct TokenizerCursor TokenizerCursor;
+typedef struct FTS3TokenizerWrap FTS3TokenizerWrap;
+typedef struct FTS3TokenizeCursorWrap FTS3TokenizeCursorWrap;
 
 class AbstractFTS3TokenizerModuleTemplate {
 public:
@@ -60,29 +57,32 @@ public:
     = delete;
 
 protected:
-    static int newTokenizer(Tokenizer **ppTokenizer, AbstractFTS3TokenizerInfo *info);
-    static AbstractFTS3TokenizerInfo *getTokenizerInfo(Tokenizer *pTokenizer);
-    static void deleteTokenizer(Tokenizer *pTokenizer);
-
     static int
-    newCursor(TokenizerCursor **ppCursor, AbstractFTS3TokenizerCursorInfo *info);
-    static AbstractFTS3TokenizerCursorInfo *getCursorInfo(TokenizerCursor *pCursor);
-    static void deleteCursor(TokenizerCursor *pCursor);
+    newTokenizer(FTS3TokenizerWrap **ppTokenizerWrap, AbstractFTSTokenizer *tokenizer);
+    static AbstractFTSTokenizer *getTokenizerFromWrap(FTS3TokenizerWrap *tokenizerWrap);
+    static void deleteTokenizerWrap(FTS3TokenizerWrap *ppTokenizer);
+
+    static int newCursor(FTS3TokenizeCursorWrap **ppCursor, AbstractFTSTokenizer *tokenizer);
+    static AbstractFTSTokenizer *getTokenizerFromCurser(FTS3TokenizeCursorWrap *pCursor);
+    static void deleteCursor(FTS3TokenizeCursorWrap *pCursor);
 };
 
 class FTS3TokenizerModule final {
 public:
-    typedef int (*Create)(int argc, const char *const *argv, Tokenizer **ppTokenizer);
-    typedef int (*Destroy)(Tokenizer *pTokenizer);
-    typedef int (*Open)(Tokenizer *pTokenizer, const char *pInput, int nBytes, TokenizerCursor **ppCursor);
-    typedef int (*Close)(TokenizerCursor *pCursor);
-    typedef int (*Next)(TokenizerCursor *pCursor,
+    typedef int (*Create)(int argc, const char *const *argv, FTS3TokenizerWrap **ppTokenizer);
+    typedef int (*Destroy)(FTS3TokenizerWrap *pTokenizer);
+    typedef int (*Open)(FTS3TokenizerWrap *pTokenizer,
+                        const char *pInput,
+                        int nBytes,
+                        FTS3TokenizeCursorWrap **ppCursor);
+    typedef int (*Close)(FTS3TokenizeCursorWrap *pCursor);
+    typedef int (*Next)(FTS3TokenizeCursorWrap *pCursor,
                         const char **ppToken,
                         int *pnBytes,
                         int *piStartOffset,
                         int *piEndOffset,
                         int *piPosition);
-    typedef int (*Languageid)(TokenizerCursor *pCursor, int iLangid);
+    typedef int (*Languageid)(FTS3TokenizeCursorWrap *pCursor, int iLangid);
 
     FTS3TokenizerModule();
     FTS3TokenizerModule(const Create &create,
@@ -115,23 +115,13 @@ public:
     = delete;
 };
 
-class AbstractFTS5Tokenizer {
-public:
-    AbstractFTS5Tokenizer(void *pCtx, const char **azArg, int nArg);
-    virtual ~AbstractFTS5Tokenizer() = 0;
-    virtual void loadInput(int flags, const char *pText, int nText) = 0;
-    virtual int
-    nextToken(int *tflags, const char **ppToken, int *nToken, int *iStart, int *iEnd)
-    = 0;
-};
-
 class FTS5TokenizerModule final {
 public:
-    typedef int (*Create)(void *, const char **azArg, int nArg, AbstractFTS5Tokenizer **ppTokenizer);
-    typedef int (*Destroy)(AbstractFTS5Tokenizer *pTokenizer);
+    typedef int (*Create)(void *, const char *const *azArg, int nArg, AbstractFTSTokenizer **ppTokenizer);
+    typedef int (*Destroy)(AbstractFTSTokenizer *pTokenizer);
     typedef int (*TokenCallback)(
     void *pCtx, int tflags, const char *pToken, int nToken, int iStart, int iEnd);
-    typedef int (*Tokenize)(AbstractFTS5Tokenizer *pTokenizer,
+    typedef int (*Tokenize)(AbstractFTSTokenizer *pTokenizer,
                             void *pCtx,
                             int flags,
                             const char *pText,

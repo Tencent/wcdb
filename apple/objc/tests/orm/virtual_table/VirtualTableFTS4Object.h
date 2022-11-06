@@ -22,11 +22,11 @@
  * limitations under the License.
  */
 
-#import "VirtualTableFTS3Object.h"
-#import <WCDB/WCDB.h>
+#import <Foundation/Foundation.h>
 
-@interface VirtualTableFTS3Object (WCTTableCoding) <WCTTableCoding>
+@interface VirtualTableFTS4Object : NSObject
 
-WCDB_PROPERTY(value)
+@property (nonatomic, assign) int identifier;
+@property (nonatomic, assign) NSString* content;
 
 @end

@@ -65,11 +65,11 @@ WCDB_SYNTHESIZE(reservedText)
 WCDB_VIRTUAL_TABLE_MODULE(WCTModuleFTS4)
 WCDB_VIRTUAL_TABLE_TOKENIZE(WCTTokenizerOneOrBinary)
 WCDB_VIRTUAL_TABLE_EXTERNAL_CONTENT("")
-WCDB_NOTINDEXED(userNameId)
-WCDB_NOTINDEXED(msgLocalId)
-WCDB_NOTINDEXED(createTime)
-WCDB_NOTINDEXED(reservedInt)
-WCDB_NOTINDEXED(reservedText)
+WCDB_UNINDEXED(userNameId)
+WCDB_UNINDEXED(msgLocalId)
+WCDB_UNINDEXED(createTime)
+WCDB_UNINDEXED(reservedInt)
+WCDB_UNINDEXED(reservedText)
 
 WCDB_MULTI_PRIMARY("userNameId_msgLocalId_createTime", userNameId)
 WCDB_MULTI_PRIMARY("userNameId_msgLocalId_createTime", msgLocalId)
@@ -127,11 +127,11 @@ WCDB_DEFAULT(reservedInt, 0)
 WCDB_DEFAULT(userNameId, 0)
 WCDB_DEFAULT(createTime, 0)
 
-WCDB_NOTINDEXED(userNameId)
-WCDB_NOTINDEXED(msgLocalId)
-WCDB_NOTINDEXED(createTime)
-WCDB_NOTINDEXED(reservedInt)
-WCDB_NOTINDEXED(reservedText)
+WCDB_UNINDEXED(userNameId)
+WCDB_UNINDEXED(msgLocalId)
+WCDB_UNINDEXED(createTime)
+WCDB_UNINDEXED(reservedInt)
+WCDB_UNINDEXED(reservedText)
 
 - (id)init
 {
@@ -182,10 +182,10 @@ WCDB_DEFAULT(localId, 0)
 WCDB_DEFAULT(updateTime, 0)
 WCDB_DEFAULT(FavItemReservedInt, 0)
 
-WCDB_NOTINDEXED(localId)
-WCDB_NOTINDEXED(updateTime)
-WCDB_NOTINDEXED(FavItemReservedInt)
-WCDB_NOTINDEXED(FavItemReservedText)
+WCDB_UNINDEXED(localId)
+WCDB_UNINDEXED(updateTime)
+WCDB_UNINDEXED(FavItemReservedInt)
+WCDB_UNINDEXED(FavItemReservedText)
 
 - (id)init
 {
@@ -236,8 +236,8 @@ WCDB_VIRTUAL_TABLE_TOKENIZE_WITH_PARAMETERS(WCTTokenizerVerbatim, WCTTokenizerPa
 
 WCDB_DEFAULT(listType, 0)
 WCDB_DEFAULT(contactType, 0)
-WCDB_NOTINDEXED(listType)
-WCDB_NOTINDEXED(contactType)
-WCDB_NOTINDEXED(associateChatRooms)
+WCDB_UNINDEXED(listType)
+WCDB_UNINDEXED(contactType)
+WCDB_UNINDEXED(associateChatRooms)
 
 @end

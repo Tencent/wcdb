@@ -31,94 +31,89 @@
 
 namespace WCDB {
 
-struct Tokenizer {
+#pragma mark - AbstractFTS5Tokenizer
+AbstractFTSTokenizer::AbstractFTSTokenizer(const char *const *azArg, int nArg, void *pCtx){
+    WCDB_UNUSED(pCtx) WCDB_UNUSED(azArg) WCDB_UNUSED(nArg)
+}
+
+AbstractFTSTokenizer::~AbstractFTSTokenizer()
+= default;
+
+struct FTS3TokenizerWrap {
     sqlite3_tokenizer base;
-    AbstractFTS3TokenizerInfo *info;
+    AbstractFTSTokenizer *tokenizer;
 };
 
-struct TokenizerCursor {
+struct FTS3TokenizeCursorWrap {
     sqlite3_tokenizer_cursor base;
-    AbstractFTS3TokenizerCursorInfo *info;
+    AbstractFTSTokenizer *tokenizer;
 };
-
-#pragma mark - AbstractFTS3TokenizerInfo
-AbstractFTS3TokenizerInfo::AbstractFTS3TokenizerInfo(int argc, const char *const *argv){
-    WCDB_UNUSED(argc) WCDB_UNUSED(argv)
-}
-
-AbstractFTS3TokenizerInfo::~AbstractFTS3TokenizerInfo()
-= default;
-
-#pragma mark - AbstractFTS3TokenizerCursorInfo
-AbstractFTS3TokenizerCursorInfo::AbstractFTS3TokenizerCursorInfo(
-const char *input, int inputLength, AbstractFTS3TokenizerInfo *tokenizerInfo){
-    WCDB_UNUSED(input) WCDB_UNUSED(inputLength) WCDB_UNUSED(tokenizerInfo)
-}
-
-AbstractFTS3TokenizerCursorInfo::~AbstractFTS3TokenizerCursorInfo()
-= default;
 
 #pragma mark - AbstractFTS3TokenizerModuleTemplate
-int AbstractFTS3TokenizerModuleTemplate::newTokenizer(Tokenizer **ppTokenizer,
-                                                      AbstractFTS3TokenizerInfo *info)
+int AbstractFTS3TokenizerModuleTemplate::newTokenizer(FTS3TokenizerWrap **ppTokenizerWrap,
+                                                      AbstractFTSTokenizer *tokenizer)
 {
-    WCTAssert(ppTokenizer != nullptr);
-    *ppTokenizer = nullptr;
-    if (info == nullptr) {
-        return FTSError::NoMem();
-    }
-    Tokenizer *tokenizer = (Tokenizer *) sqlite3_malloc(sizeof(Tokenizer));
+    WCTAssert(ppTokenizerWrap != nullptr);
+    *ppTokenizerWrap = nullptr;
     if (tokenizer == nullptr) {
         return FTSError::NoMem();
     }
-    memset(tokenizer, 0, sizeof(Tokenizer));
-    tokenizer->info = info;
-    *(sqlite3_tokenizer **) ppTokenizer = &tokenizer->base;
+    FTS3TokenizerWrap *tokenizerWrap
+    = (FTS3TokenizerWrap *) sqlite3_malloc(sizeof(FTS3TokenizerWrap));
+    if (tokenizer == nullptr) {
+        return FTSError::NoMem();
+    }
+    memset(tokenizerWrap, 0, sizeof(FTS3TokenizerWrap));
+    tokenizerWrap->tokenizer = tokenizer;
+    *(sqlite3_tokenizer **) ppTokenizerWrap = &tokenizerWrap->base;
     return FTSError::OK();
 }
 
-AbstractFTS3TokenizerInfo *
-AbstractFTS3TokenizerModuleTemplate::getTokenizerInfo(Tokenizer *pTokenizer)
+AbstractFTSTokenizer *
+AbstractFTS3TokenizerModuleTemplate::getTokenizerFromWrap(FTS3TokenizerWrap *tokenizerWrap)
 {
-    WCTAssert(pTokenizer != nullptr);
-    return pTokenizer->info;
+    WCTAssert(tokenizerWrap != nullptr);
+    return tokenizerWrap->tokenizer;
 }
 
-void AbstractFTS3TokenizerModuleTemplate::deleteTokenizer(Tokenizer *pTokenizer)
+void AbstractFTS3TokenizerModuleTemplate::deleteTokenizerWrap(FTS3TokenizerWrap *ppTokenizerWrap)
 {
-    WCTAssert(pTokenizer != nullptr);
-    sqlite3_free(pTokenizer);
+    if (ppTokenizerWrap != nullptr) {
+        sqlite3_free(ppTokenizerWrap);
+    }
 }
 
-int AbstractFTS3TokenizerModuleTemplate::newCursor(TokenizerCursor **ppCursor,
-                                                   AbstractFTS3TokenizerCursorInfo *info)
+int AbstractFTS3TokenizerModuleTemplate::newCursor(FTS3TokenizeCursorWrap **ppCursor,
+                                                   AbstractFTSTokenizer *tokenizer)
 {
     WCTAssert(ppCursor != nullptr);
     *ppCursor = nullptr;
-    if (info == nullptr) {
+    if (tokenizer == nullptr) {
         return FTSError::NoMem();
     }
-    TokenizerCursor *cursor = (TokenizerCursor *) sqlite3_malloc(sizeof(TokenizerCursor));
+    FTS3TokenizeCursorWrap *cursor
+    = (FTS3TokenizeCursorWrap *) sqlite3_malloc(sizeof(FTS3TokenizeCursorWrap));
     if (cursor == nullptr) {
         return FTSError::NoMem();
     }
-    memset(cursor, 0, sizeof(TokenizerCursor));
-    cursor->info = info;
+    memset(cursor, 0, sizeof(FTS3TokenizeCursorWrap));
+    cursor->tokenizer = tokenizer;
     *(sqlite3_tokenizer_cursor **) ppCursor = &cursor->base;
     return FTSError::OK();
 }
 
-AbstractFTS3TokenizerCursorInfo *
-AbstractFTS3TokenizerModuleTemplate::getCursorInfo(TokenizerCursor *pCursor)
+AbstractFTSTokenizer *
+AbstractFTS3TokenizerModuleTemplate::getTokenizerFromCurser(FTS3TokenizeCursorWrap *pCursor)
 {
     WCTAssert(pCursor != nullptr);
-    return pCursor->info;
+    return pCursor->tokenizer;
 }
 
-void AbstractFTS3TokenizerModuleTemplate::deleteCursor(TokenizerCursor *pCursor)
+void AbstractFTS3TokenizerModuleTemplate::deleteCursor(FTS3TokenizeCursorWrap *pCursor)
 {
-    WCTAssert(pCursor != nullptr);
-    sqlite3_free(pCursor);
+    if (pCursor != nullptr) {
+        sqlite3_free(pCursor);
+    }
 }
 
 #pragma mark - FTS3TokenizerModule
@@ -166,14 +161,6 @@ FTS3TokenizerModule::FTS3TokenizerModule(const FTS3TokenizerModule::Create &crea
                   == offsetof(sqlite3_tokenizer_module, xLanguageid),
                   "");
 }
-
-#pragma mark - AbstractFTS5Tokenizer
-AbstractFTS5Tokenizer::AbstractFTS5Tokenizer(void *pCtx, const char **azArg, int nArg){
-    WCDB_UNUSED(pCtx) WCDB_UNUSED(azArg) WCDB_UNUSED(nArg)
-}
-
-AbstractFTS5Tokenizer::~AbstractFTS5Tokenizer()
-= default;
 
 #pragma mark - FTS5TokenizerModule
 FTS5TokenizerModule::FTS5TokenizerModule()

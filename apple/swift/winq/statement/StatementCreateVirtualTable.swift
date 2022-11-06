@@ -46,14 +46,30 @@ public final class StatementCreateVirtualTable: Identifier<CPPStatementCreateVir
     }
 
     @discardableResult
+    public func using(module: FTSVersion) -> StatementCreateVirtualTable {
+        WCDBStatementCreateVirtualTableConfigModule(cppObj, module.description.cString)
+        return self
+    }
+
+    @discardableResult
     public func using(module: String) -> StatementCreateVirtualTable {
         WCDBStatementCreateVirtualTableConfigModule(cppObj, module.cString)
         return self
     }
 
     @discardableResult
-    public func arguments(_ args: [CustomStringConvertible]) -> StatementCreateVirtualTable {
-        let discriptions = args.map { $0.description }
+    public func arguments(_ args: [Describable]) -> StatementCreateVirtualTable {
+        var discriptions: [String]
+        if args.count == 1, let args = args[0] as? [Describable] {
+            discriptions = args.map {
+                $0.description
+            }
+        } else {
+            discriptions = args.map {
+                $0.description
+            }
+        }
+
         withExtendedLifetime(discriptions) {
             let cppArgs = $0.map { $0.cString }
             cppArgs.withUnsafeBufferPointer {
@@ -64,7 +80,7 @@ public final class StatementCreateVirtualTable: Identifier<CPPStatementCreateVir
     }
 
     @discardableResult
-    public func arguments(_ args: CustomStringConvertible...) -> StatementCreateVirtualTable {
+    public func arguments(_ args: Describable...) -> StatementCreateVirtualTable {
         arguments(args)
     }
 }

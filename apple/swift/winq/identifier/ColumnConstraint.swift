@@ -98,8 +98,8 @@ public final class ColumnConstraint: Identifier<CPPColumnConstraint> {
     }
 
     @discardableResult
-    public func notIndexed() -> ColumnConstraint {
-        WCDBColumnConstraintConfigNotIndexed(cppObj)
+    public func unIndexed() -> ColumnConstraint {
+        WCDBColumnConstraintConfigUnIndexed(cppObj)
         return self
     }
 }

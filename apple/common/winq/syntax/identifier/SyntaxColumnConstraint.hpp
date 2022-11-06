@@ -39,7 +39,7 @@ public:
     ~ColumnConstraint() override final;
 
     StringView name;
-    WCDB_SYNTAX_MAIN_UNION_ENUM(PrimaryKey, NotNull, Unique, Check, Default, Collate, ForeignKey, NotIndexed, );
+    WCDB_SYNTAX_MAIN_UNION_ENUM(PrimaryKey, NotNull, Unique, Check, Default, Collate, ForeignKey, UnIndexed, );
 
     WCDB_SYNTAX_ENUM_UNION(Order, order);
     WCDB_SYNTAX_ENUM_UNION(Conflict, conflict);

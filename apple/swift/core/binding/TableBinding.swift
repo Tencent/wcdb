@@ -123,15 +123,28 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey> {
 
     public func generateCreateVirtualTableStatement(named table: String) -> StatementCreateVirtualTable {
         assert(virtualTableBinding != nil, "Virtual table binding is not defined")
-        let columnModuleArguments = allColumnDef.map { ModuleArgument(with: $0) }
-        let tableCostraintArguments = tableConstraintBindings?.map { (tableConstraintBinding) -> ModuleArgument in
-            let key = tableConstraintBinding.key
-            return ModuleArgument(with: tableConstraintBinding.value.generateConstraint(withName: key))
-        } ?? []
-        let arguments = columnModuleArguments + tableCostraintArguments + virtualTableBinding!.arguments
-        return StatementCreateVirtualTable()
-            .create(virtualTable: table)
-            .using(module: virtualTableBinding!.module).arguments(arguments)
+        var statement = StatementCreateVirtualTable().create(virtualTable: table).ifNotExists()
+        guard let virtualTableBinding = virtualTableBinding else {
+            return statement
+        }
+        var arguments: [String] = []
+        arguments.append(contentsOf: virtualTableBinding.parameters)
+        let isFTS5 = virtualTableBinding.module == FTSVersion.FTS5.description
+        for columnDef in allColumnDef {
+            if isFTS5 {
+                let columnName = String(cString: WCDBColumnDefGetColumnName(columnDef.cppObj))
+                if WCDBColumnDefIsNotIndexed(columnDef.cppObj) {
+                    arguments.append("\(columnName) UNINDEXED")
+                } else {
+                    arguments.append(columnName)
+                }
+            } else {
+                arguments.append(columnDef.description)
+            }
+        }
+        statement.using(module: virtualTableBinding.module)
+        statement.arguments(arguments)
+        return statement
     }
 
     public func generateCreateTableStatement(named table: String) -> StatementCreateTable {

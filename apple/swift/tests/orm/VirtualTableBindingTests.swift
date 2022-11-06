@@ -23,30 +23,57 @@ import WCDB
 
 class VirtualTableBindingTests: BaseTestCase {
 
-//    class BaselineTestObject: TableCodable, Named {
-//        var variable: Int = 0
-//        enum CodingKeys: String, CodingTableKey {
-//            typealias Root = BaselineTestObject
-//            case variable
-//            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-//            static var virtualTableBinding: VirtualTableBinding? {
-//                return VirtualTableBinding(withModule: "fts3",
-//                                           and: ModuleArgument(left: "left", right: "right"),
-//                                                ModuleArgument(with: .WCDB))
-//            }
-//            static var tableConstraintBindings: [TableConstraintBinding.Name: TableConstraintBinding]? {
-//                return [BaselineTestObject.name+"Constraint": MultiPrimaryBinding(indexesBy: variable)]
-//            }
-//        }
-//    }
-//
-//    func testVirtualBinding() {
-//        ORMVirtualTableBindingAssertEqual(
-//            BaselineTestObject.self,
-//            """
-//            CREATE VIRTUAL TABLE IF NOT EXISTS BaselineTestObject USING fts3\
-//            (variable INTEGER, CONSTRAINT BaselineTestObjectConstraint PRIMARY KEY(variable), left=right, tokenize=WCDB)
-//            """
-//        )
-//    }
+    class FTS3TestObject: TableCodable, Named {
+        var id: Int = 0
+        var content: String = ""
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = FTS3TestObject
+            case id
+            case content
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var virtualTableBinding: VirtualTableBinding? {
+                return VirtualTableBinding(withModule: .FTS3, and: BuiltinTokenizer.OneOrBinary, BuiltinTokenizer.Parameter.NeedSymbol)
+            }
+            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
+                return [.id: ColumnConstraintBinding(isNotIndexed: true)]
+            }
+        }
+    }
+
+    func testFTS3VirtualBinding() {
+        ORMVirtualTableBindingAssertEqual(
+            FTS3TestObject.self,
+            """
+            CREATE VIRTUAL TABLE IF NOT EXISTS main.FTS3TestObject USING fts3\
+            (tokenize = WCDB need_symbol, id INTEGER, content TEXT, notindexed=id)
+            """
+        )
+    }
+
+    class FTS5TestObject: TableCodable, Named {
+        var id: Int = 0
+        var content: String = ""
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = FTS5TestObject
+            case id
+            case content
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var virtualTableBinding: VirtualTableBinding? {
+                return VirtualTableBinding(withModule: .FTS5, and: BuiltinTokenizer.Verbatim, BuiltinTokenizer.Parameter.SkipStemming, BuiltinTokenizer.Parameter.SimplifyChinese)
+            }
+            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
+                return [.id: ColumnConstraintBinding(isNotIndexed: true)]
+            }
+        }
+    }
+
+    func testFTS5VirtualBinding() {
+        ORMVirtualTableBindingAssertEqual(
+            FTS5TestObject.self,
+            """
+            CREATE VIRTUAL TABLE IF NOT EXISTS main.FTS5TestObject USING fts5\
+            (tokenize = 'wcdb_verbatim skip_stemming chinese_traditional_to_simplified', id UNINDEXED, content)
+            """
+        )
+    }
 }

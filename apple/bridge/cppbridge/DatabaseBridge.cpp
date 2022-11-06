@@ -23,8 +23,8 @@
  */
 
 #include <WCDB/CipherConfig.hpp>
-#import <WCDB/Core.hpp>
-#import <WCDB/CustomConfig.hpp>
+#include <WCDB/Core.hpp>
+#include <WCDB/CustomConfig.hpp>
 #include <WCDB/DBOperationNotifier.hpp>
 #include <WCDB/DatabaseBridge.h>
 #include <WCDB/InnerDatabase.hpp>

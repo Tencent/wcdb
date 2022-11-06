@@ -49,9 +49,9 @@ WCDB_EXTERN NSString* const WCTTokenizerLegacyOneOrBinary; // compatible for WCT
 WCDB_EXTERN NSString* const WCTTokenizerVerbatim;
 WCDB_EXTERN NSString* const WCTTokenizerPinyin;
 
-// Configurable parameters for WCDB implemented tokenizers
+// Optional parameters for WCDB implemented tokenizers
 WCDB_EXTERN NSString* const WCTTokenizerParameter_NeedSymbol;
-WCDB_EXTERN NSString* const WCTTokenizerParameter_ChineseTraditionalToSimplified;
+WCDB_EXTERN NSString* const WCTTokenizerParameter_SimplifyChinese;
 WCDB_EXTERN NSString* const WCTTokenizerParameter_SkipStemming;
 
 WCDB_EXTERN NSString* const WCTAuxiliaryFunction_SubstringMatchInfo;

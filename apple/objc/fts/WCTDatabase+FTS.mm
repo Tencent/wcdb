@@ -37,7 +37,7 @@ NSString* const WCTTokenizerVerbatim = [NSString stringWithUTF8String:WCDB::Toke
 NSString* const WCTTokenizerPinyin = [NSString stringWithUTF8String:WCDB::TokenizerPinyin];
 
 NSString* const WCTTokenizerParameter_NeedSymbol = [NSString stringWithUTF8String:WCDB::TokenizerParameter_NeedSymbol];
-NSString* const WCTTokenizerParameter_ChineseTraditionalToSimplified = [NSString stringWithUTF8String:WCDB::TokenizerParameter_ChineseTraditionalToSimplified];
+NSString* const WCTTokenizerParameter_SimplifyChinese = [NSString stringWithUTF8String:WCDB::TokenizerParameter_SimplifyChinese];
 NSString* const WCTTokenizerParameter_SkipStemming = [NSString stringWithUTF8String:WCDB::TokenizerParameter_SkipStemming];
 
 NSString* const WCTModuleFTS3 = [NSString stringWithUTF8String:WCDB::ModuleFTS3];
@@ -55,7 +55,7 @@ NSString* const WCTAuxiliaryFunction_SubstringMatchInfo = [NSString stringWithUT
 
 - (void)addTokenizer:(NSString*)tokenizerName
 {
-    WCDB_ONCE(WCTFTSTokenizerUtil::configDefaultSymbolDetectorAndUnicodeNormalizer());
+    WCTFTSTokenizerUtil::configDefaultSymbolDetectorAndUnicodeNormalizer();
     WCDB::StringView configName = WCDB::StringView::formatted("%s%s", WCDB::TokenizeConfigPrefix, tokenizerName.UTF8String);
     _database->setConfig(configName, WCDB::Core::shared().tokenizerConfig(tokenizerName), WCDB::Configs::Priority::Higher);
 }

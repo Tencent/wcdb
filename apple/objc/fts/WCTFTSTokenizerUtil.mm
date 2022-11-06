@@ -39,33 +39,35 @@ WCDB::StringView WCTFTSTokenizerUtil::tokenize(NSString* name, ...)
     return WCDB::StringView(stream.str());
 }
 
-bool WCTFTSTokenizerUtil::configDefaultSymbolDetectorAndUnicodeNormalizer()
+void WCTFTSTokenizerUtil::configDefaultSymbolDetectorAndUnicodeNormalizer()
 {
-    //Refer to http://www.fileformat.info/info/unicode/category/index.htm
-    //Code: Cc, Cf, Z*, U000A ~ U000D, U0085, M*, P*, S* and illegal character set
-    CFMutableCharacterSetRef characterSetRef = CFCharacterSetCreateMutable(CFAllocatorGetDefault());
-    CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetControl));
-    CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetWhitespaceAndNewline));
-    CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetNonBase));
-    CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetPunctuation));
-    CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetSymbol));
-    CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetIllegal));
-    configSymbolDetector([=](UnicodeChar theChar) {
-        bool symbol = false;
-        if (characterSetRef != nil) {
-            symbol = CFCharacterSetIsCharacterMember(characterSetRef, theChar);
-        }
-        return symbol;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        //Refer to http://www.fileformat.info/info/unicode/category/index.htm
+        //Code: Cc, Cf, Z*, U000A ~ U000D, U0085, M*, P*, S* and illegal character set
+        CFMutableCharacterSetRef characterSetRef = CFCharacterSetCreateMutable(CFAllocatorGetDefault());
+        CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetControl));
+        CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetWhitespaceAndNewline));
+        CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetNonBase));
+        CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetPunctuation));
+        CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetSymbol));
+        CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetIllegal));
+        configSymbolDetector([=](UnicodeChar theChar) {
+            bool symbol = false;
+            if (characterSetRef != nil) {
+                symbol = CFCharacterSetIsCharacterMember(characterSetRef, theChar);
+            }
+            return symbol;
+        });
+        configUnicodeNormalizer([](const WCDB::UnsafeStringView& token) {
+            @autoreleasepool {
+                NSMutableString* nsToken = [[NSMutableString alloc] initWithBytes:token.data() length:token.length() encoding:NSUTF8StringEncoding];
+                CFMutableStringRef normalizationFormText = (__bridge_retained CFMutableStringRef)(nsToken);
+                CFStringNormalize(normalizationFormText, kCFStringNormalizationFormKD);
+                return WCDB::StringView((__bridge_transfer NSString*) normalizationFormText);
+            }
+        });
     });
-    configUnicodeNormalizer([](const WCDB::UnsafeStringView& token) {
-        @autoreleasepool {
-            NSMutableString* nsToken = [[NSMutableString alloc] initWithBytes:token.data() length:token.length() encoding:NSUTF8StringEncoding];
-            CFMutableStringRef normalizationFormText = (__bridge_retained CFMutableStringRef)(nsToken);
-            CFStringNormalize(normalizationFormText, kCFStringNormalizationFormKD);
-            return WCDB::StringView((__bridge_transfer NSString*) normalizationFormText);
-        }
-    });
-    return true;
 }
 
 void WCTFTSTokenizerUtil::configPinyinDict(NSDictionary<NSString*, NSArray<NSString*>*>* pinyinDict)

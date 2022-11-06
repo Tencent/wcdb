@@ -22,6 +22,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/FTSConst.h>
 #include <WCDB/Syntax.h>
 #include <WCDB/SyntaxAssertion.hpp>
 
@@ -52,7 +53,7 @@ bool CreateVirtualTableSTMT::describle(std::ostringstream& stream) const
         stream << schema << ".";
     }
     stream << table << " USING " << module;
-    bool isFTS5 = module.caseInsensiveEqual("fts5");
+    bool isFTS5 = module.caseInsensiveEqual(ModuleFTS5);
     StringView tokenizerPrefix = tokenizerPreFix();
     if (!arguments.empty()) {
         stream << "(";

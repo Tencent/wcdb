@@ -1,3 +1,7 @@
+//
+// Created by sanhuazhang on 2019/05/02
+//
+
 /*
  * Tencent is pleased to support the open source community by making
  * WCDB available.
@@ -18,28 +22,12 @@
  * limitations under the License.
  */
 
-import Foundation
+#import "VirtualTableFTS4Object.h"
+#import <WCDB/WCDB.h>
 
-public struct ModuleArgument: Describable {
-    public private(set) var description: String
+@interface VirtualTableFTS4Object (WCTTableCoding) <WCTTableCoding>
 
-    public init(with tableConstraint: TableConstraint) {
-        description = tableConstraint.description
-    }
+WCDB_PROPERTY(identifier)
+WCDB_PROPERTY(content)
 
-    public init(with columnDef: ColumnDef) {
-        description = columnDef.description
-    }
-
-    public init(left: String, right: String) {
-        description = "\(left)=\(right)"
-    }
-
-    public init(with tokenize: Tokenize) {
-        self.init(left: "tokenize", right: "temp")
-    }
-
-    public init(withTokenize tokenize: String) {
-        self.init(left: "tokenize", right: tokenize)
-    }
-}
+@end

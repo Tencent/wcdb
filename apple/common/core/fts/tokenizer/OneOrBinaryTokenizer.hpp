@@ -27,31 +27,12 @@
 
 namespace WCDB {
 
-class OneOrBinaryTokenizerInfo final : public AbstractFTS3TokenizerInfo {
+class OneOrBinaryTokenizer final : public AbstractFTSTokenizer {
 public:
-    OneOrBinaryTokenizerInfo(int argc, const char *const *argv);
-    ~OneOrBinaryTokenizerInfo() override final;
-    bool m_needSymbol;
-    bool m_needSimplifiedChinese;
-    bool m_skipStemming;
-};
-
-class OneOrBinaryTokenizer final : public AbstractFTS3TokenizerCursorInfo,
-                                   public AbstractFTS5Tokenizer {
-public:
-    //for fts3/fts4
-    OneOrBinaryTokenizer(const char *input, int inputLength, AbstractFTS3TokenizerInfo *tokenizerInfo);
-    ~OneOrBinaryTokenizer() override;
-    int step(const char **ppToken,
-             int *pnBytes,
-             int *piStartOffset,
-             int *piEndOffset,
-             int *piPosition) override final;
-
-    //for fts5
-    OneOrBinaryTokenizer(void *pCtx, const char **azArg, int nArg);
-    void loadInput(int flags, const char *pText, int nText) override;
-    int nextToken(int *tflags, const char **ppToken, int *nToken, int *iStart, int *iEnd) override;
+    OneOrBinaryTokenizer(const char *const *azArg, int nArg, void *pCtx);
+    ~OneOrBinaryTokenizer();
+    void loadInput(const char *pText, int nText, int flags) override;
+    int nextToken(const char **ppToken, int *nToken, int *iStart, int *iEnd, int *tflags, int *iPosition) override;
 
     int stepNextToken();
 

@@ -25,6 +25,7 @@
 #include <WCDB/CoreBridge.h>
 #include <WCDB/DatabaseBridge.h>
 #include <WCDB/ErrorBridge.h>
+#include <WCDB/FTSBridge.h>
 #include <WCDB/HandleBridge.h>
 #include <WCDB/HandleStatementBridge.h>
 
