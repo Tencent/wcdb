@@ -30,13 +30,19 @@ static constexpr const char* TokenizerSimple = "simple";
 static constexpr const char* TokenizerPorter = "porter";
 static constexpr const char* TokenizerICU = "icu";
 static constexpr const char* TokenizerUnicode61 = "unicode61";
+
+// WCDB implemented tokenizer
+// Only for fts3/fts4
 static constexpr const char* TokenizerOneOrBinary = "wcdb_one_or_binary";
-static constexpr const char* TokenizerLegacyOneOrBinary = "WCDB";
+static constexpr const char* TokenizerLegacyOneOrBinary
+= "WCDB"; // Same as TokenizerOneOrBinary, just for compatibility with older versions
+// Only for fts5
 static constexpr const char* TokenizerVerbatim = "wcdb_verbatim";
 static constexpr const char* TokenizerPinyin = "wcdb_pinyin";
 
+// Optional parameters for WCDB implemented tokenizers
 static constexpr const char* TokenizerParameter_NeedSymbol = "need_symbol";
-static constexpr const char* TokenizerParameter_ChineseTraditionalToSimplified
+static constexpr const char* TokenizerParameter_SimplifyChinese
 = "chinese_traditional_to_simplified";
 static constexpr const char* TokenizerParameter_SkipStemming = "skip_stemming";
 

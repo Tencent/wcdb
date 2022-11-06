@@ -26,6 +26,7 @@
 
 @interface VirtualTableFTS5Object : NSObject
 
-@property (nonatomic, assign) int value;
+@property (nonatomic, assign) int identifier;
+@property (nonatomic, assign) NSString* content;
 
 @end

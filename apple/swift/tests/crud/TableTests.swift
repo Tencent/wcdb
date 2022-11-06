@@ -164,40 +164,81 @@ class TableTests: BaseTestCase {
             """)
     }
 
-//    class VirtualTableObject: TableCodable, Named {
-//        var variable1: Int32 = 0
-//        var variable2: Int32 = 0
-//
-//        enum CodingKeys: String, CodingTableKey {
-//            typealias Root = VirtualTableObject
-//            case variable1
-//            case variable2
-//            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-//            static var virtualTableBinding: VirtualTableBinding? {
-//                return VirtualTableBinding(with: .fts3, and: ModuleArgument(with: .WCDB))
-//            }
-//        }
-//    }
-//    func testCreateVirtualTable() {
-//        //Give
-//        let tableName = VirtualTableObject.name
-//        database.setTokenizes(.WCDB)
-//        //When
-//        XCTAssertNoThrow(try database.create(virtualTable: tableName, of: VirtualTableObject.self))
-//        //Then
-//        let optionalObject: Master? = WCDBAssertNoThrowReturned(
-//            try database.getObject(fromTable: Master.builtinTableName, where: Master.Properties.name==tableName)
-//        )
-//        XCTAssertNotNil(optionalObject)
-//        let object = optionalObject!
-//        XCTAssertEqual(
-//            object.sql!,
-//            """
-//            CREATE VIRTUAL TABLE VirtualTableObject USING fts3\
-//            (variable1 INTEGER, variable2 INTEGER, tokenize=WCDB)
-//            """
-//        )
-//    }
+    class FTS3Object: TableCodable, Named {
+        var id: Int32 = 0
+        var content: String = ""
+
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = FTS3Object
+            case id
+            case content
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var virtualTableBinding: VirtualTableBinding? {
+                return VirtualTableBinding(withModule: .FTS3, and: BuiltinTokenizer.OneOrBinary, BuiltinTokenizer.Parameter.NeedSymbol)
+            }
+            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
+                return [.id: ColumnConstraintBinding(isNotIndexed: true)]
+            }
+        }
+    }
+    func testCreateFTS3VirtualTable() {
+        // Give
+        let tableName = FTS3Object.name
+        database.add(tokenizer: BuiltinTokenizer.OneOrBinary)
+        // When
+        XCTAssertNoThrow(try database.create(virtualTable: tableName, of: FTS3Object.self))
+        // Then
+        let optionalObject: Master? = WCDBAssertNoThrowReturned(
+            try database.getObject(fromTable: Master.builtinTableName, where: Master.Properties.name==tableName)
+        )
+        XCTAssertNotNil(optionalObject)
+        let object = optionalObject!
+        XCTAssertEqual(
+            object.sql!,
+            """
+            CREATE VIRTUAL TABLE FTS3Object USING fts3\
+            (tokenize = WCDB need_symbol, id INTEGER, content TEXT, notindexed=id)
+            """
+        )
+    }
+
+    class FTS5Object: TableCodable, Named {
+        var id: Int32 = 0
+        var content: String = ""
+
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = FTS5Object
+            case id
+            case content
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var virtualTableBinding: VirtualTableBinding? {
+                return VirtualTableBinding(withModule: .FTS5, and: BuiltinTokenizer.Verbatim, BuiltinTokenizer.Parameter.SkipStemming)
+            }
+            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
+                return [.id: ColumnConstraintBinding(isNotIndexed: true)]
+            }
+        }
+    }
+    func testCreateFTS5VirtualTable() {
+        // Give
+        let tableName = FTS5Object.name
+        database.add(tokenizer: BuiltinTokenizer.Verbatim)
+        // When
+        XCTAssertNoThrow(try database.create(virtualTable: tableName, of: FTS5Object.self))
+        // Then
+        let optionalObject: Master? = WCDBAssertNoThrowReturned(
+            try database.getObject(fromTable: Master.builtinTableName, where: Master.Properties.name==tableName)
+        )
+        XCTAssertNotNil(optionalObject)
+        let object = optionalObject!
+        XCTAssertEqual(
+            object.sql!,
+            """
+            CREATE VIRTUAL TABLE FTS5Object USING fts5\
+            (tokenize = 'wcdb_verbatim skip_stemming', id UNINDEXED, content)
+            """
+        )
+    }
 
     class AutoFitBaseLineObject: TableCodable, Named {
         var anInt32: Int32 = -1

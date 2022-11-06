@@ -23,14 +23,15 @@
  */
 
 #import <WCDB/Assertion.hpp>
+#import <WCDB/FTSConst.h>
 #import <WCDB/FTSError.hpp>
 #import <WCDB/PinyinTokenizer.hpp>
 #import <WCDB/SQLite.h>
 
 namespace WCDB {
 
-PinyinTokenizer::PinyinTokenizer(void *pCtx, const char **azArg, int nArg)
-: AbstractFTS5Tokenizer(pCtx, azArg, nArg)
+PinyinTokenizer::PinyinTokenizer(const char *const *azArg, int nArg, void *pCtx)
+: AbstractFTSTokenizer(azArg, nArg, pCtx)
 , m_input(nullptr)
 , m_inputLength(0)
 , m_flags(0)
@@ -45,7 +46,7 @@ PinyinTokenizer::PinyinTokenizer(void *pCtx, const char **azArg, int nArg)
 , m_needSymbol(false)
 {
     for (int i = 0; i < nArg; i++) {
-        if (strcmp(azArg[i], "need_symbol") == 0) {
+        if (strcmp(azArg[i], WCDB::TokenizerParameter_NeedSymbol) == 0) {
             m_needSymbol = true;
         }
     }
@@ -53,15 +54,10 @@ PinyinTokenizer::PinyinTokenizer(void *pCtx, const char **azArg, int nArg)
 
 PinyinTokenizer::~PinyinTokenizer() = default;
 
-void PinyinTokenizer::loadInput(int flags, const char *pText, int nText)
+void PinyinTokenizer::loadInput(const char *pText, int nText, int flags)
 {
     m_input = pText;
     m_inputLength = nText;
-    if (m_input == nullptr) {
-        m_inputLength = 0;
-    } else if (m_inputLength <= 0) {
-        m_inputLength = (int) strlen(m_input);
-    }
     m_flags = flags;
     m_startOffset = 0;
     m_endOffset = 0;
@@ -75,8 +71,10 @@ void PinyinTokenizer::loadInput(int flags, const char *pText, int nText)
     m_pinyinTokenIndex = 0;
 }
 
-int PinyinTokenizer::nextToken(int *tflags, const char **ppToken, int *nToken, int *iStart, int *iEnd)
+int PinyinTokenizer::nextToken(
+const char **ppToken, int *nToken, int *iStart, int *iEnd, int *tflags, int *iPosition)
 {
+    WCDB_UNUSED(iPosition)
     if (m_flags & FTS5_TOKENIZE_QUERY || m_pinyinTokenArr.size() == m_pinyinTokenIndex) {
         while (true) {
             int ret = stepNextToken();

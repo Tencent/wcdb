@@ -505,127 +505,241 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertTrue(pauseTimes > 1)
     }
 
-//    class FTSObject: TestObjectBase, TableCodable {
-//        var variable1: Int = 0
-//        var variable2: String = ""
-//
-//        enum CodingKeys: String, CodingTableKey {
-//            typealias Root = FTSObject
-//            case variable1
-//            case variable2
-//            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-//            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
-//                return [.variable1: ColumnConstraintBinding(isPrimary: true,
-//                                                            orderBy: .ascending,
-//                                                            isAutoIncrement: true)]
-//            }
-//            static var virtualTableBinding: VirtualTableBinding? {
-//                return VirtualTableBinding(with: .fts3, and: ModuleArgument(with: .WCDB))
-//            }
-//        }
-//
-//        override var hashValue: Int {
-//            return (String(variable1)+variable2).hashValue
-//        }
-//    }
-//    func testFTS() {
-//        //Give
-//        XCTAssertNoThrow(try database.close {
-//            try self.database.removeFiles()
-//        })
-//        database.setTokenizes(.WCDB)
-//        XCTAssertNoThrow(try database.create(virtualTable: FTSObject.name, of: FTSObject.self))
-//
-//        let preInsertedEnglishFTSObject: FTSObject = {
-//            let object = FTSObject()
-//            object.variable1 = 1
-//            object.variable2 = "This is English test content"
-//            return object
-//        }()
-//        let preInsertedChineseFTSObject: FTSObject = {
-//            let object = FTSObject()
-//            object.variable1 = 2
-//            object.variable2 = "这是中文测试内容"
-//            return object
-//        }()
-//        let preInsertedNumbericFTSObject: FTSObject = {
-//            let object = FTSObject()
-//            object.variable1 = 1
-//            object.variable2 = "123456"
-//            return object
-//        }()
-//        let preInsertedSymbolicFTSObject: FTSObject = {
-//            let object = FTSObject()
-//            object.variable1 = 1
-//            object.variable2 = "abc..def"
-//            return object
-//        }()
-//        let objects = [preInsertedEnglishFTSObject,
-//                       preInsertedChineseFTSObject,
-//                       preInsertedNumbericFTSObject,
-//                       preInsertedSymbolicFTSObject]
-//        XCTAssertNoThrow(try database.insert(objects, intoTable: FTSObject.name))
-//
-//        //English
-//        do {
-//            //When
-//            let condition = FTSObject.Properties.variable2.match("Engl*")
-//            let objects = WCDBAssertNoThrowReturned(
-//                try database.getObjects(fromTable: FTSObject.name, where: condition),
-//                whenFailed: [FTSObject]()
-//            )
-//            //Then
-//            XCTAssertEqual(objects.count, 1)
-//            XCTAssertEqual(objects[0], preInsertedEnglishFTSObject)
-//        }
-//        //Chinese
-//        do {
-//            //When
-//            let condition = FTSObject.Properties.variable2.match("中文*")
-//            let objects = WCDBAssertNoThrowReturned(
-//                try database.getObjects(fromTable: FTSObject.name, where: condition),
-//                whenFailed: [FTSObject]()
-//            )
-//            //Then
-//            XCTAssertEqual(objects.count, 1)
-//            XCTAssertEqual(objects[0], preInsertedChineseFTSObject)
-//        }
-//        //Numberic
-//        do {
-//            //When
-//            let condition = FTSObject.Properties.variable2.match("123*")
-//            let objects = WCDBAssertNoThrowReturned(
-//                try database.getObjects(fromTable: FTSObject.name, where: condition),
-//                whenFailed: [FTSObject]()
-//            )
-//            //Then
-//            XCTAssertEqual(objects.count, 1)
-//            XCTAssertEqual(objects[0], preInsertedNumbericFTSObject)
-//        }
-//        //Symbolic
-//        do {
-//            //When
-//            let condition = FTSObject.Properties.variable2.match("def")
-//            let objects = WCDBAssertNoThrowReturned(
-//                try database.getObjects(fromTable: FTSObject.name, where: condition),
-//                whenFailed: [FTSObject]()
-//            )
-//            //Then
-//            XCTAssertEqual(objects.count, 1)
-//            XCTAssertEqual(objects[0], preInsertedSymbolicFTSObject)
-//        }
-//
-//        //Find Chinese
-//        do {
-//            //When
-//            let condition = FTSObject.Properties.variable2.match("文测")
-//            let objects = WCDBAssertNoThrowReturned(
-//                try database.getObjects(fromTable: FTSObject.name, where: condition),
-//                whenFailed: [FTSObject]()
-//            )
-//            //Then
-//            XCTAssertEqual(objects.count, 1)
-//            XCTAssertEqual(objects[0], preInsertedChineseFTSObject)
-//        }
-//    }
+    class FTS3Object: TestObjectBase, TableCodable {
+        var variable1: Int = 0
+        var variable2: String = ""
+
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = FTS3Object
+            case variable1
+            case variable2
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var virtualTableBinding: VirtualTableBinding? {
+                return VirtualTableBinding(withModule: .FTS3, and: BuiltinTokenizer.OneOrBinary)
+            }
+        }
+
+        override var hashValue: Int {
+            return (String(variable1)+variable2).hashValue
+        }
+    }
+    func testFTS3() {
+        // Give
+        XCTAssertNoThrow(try database.close {
+            try self.database.removeFiles()
+        })
+        database.add(tokenizer: BuiltinTokenizer.OneOrBinary)
+        XCTAssertNoThrow(try database.create(virtualTable: FTS3Object.name, of: FTS3Object.self))
+
+        let preInsertedEnglishFTS3Object: FTS3Object = {
+            let object = FTS3Object()
+            object.variable1 = 1
+            object.variable2 = "This is English test content"
+            return object
+        }()
+        let preInsertedChineseFTS3Object: FTS3Object = {
+            let object = FTS3Object()
+            object.variable1 = 2
+            object.variable2 = "这是中文测试内容"
+            return object
+        }()
+        let preInsertedNumbericFTS3Object: FTS3Object = {
+            let object = FTS3Object()
+            object.variable1 = 1
+            object.variable2 = "123456"
+            return object
+        }()
+        let preInsertedSymbolicFTS3Object: FTS3Object = {
+            let object = FTS3Object()
+            object.variable1 = 1
+            object.variable2 = "abc..def"
+            return object
+        }()
+        let objects = [preInsertedEnglishFTS3Object,
+                       preInsertedChineseFTS3Object,
+                       preInsertedNumbericFTS3Object,
+                       preInsertedSymbolicFTS3Object]
+        XCTAssertNoThrow(try database.insert(objects, intoTable: FTS3Object.name))
+
+        // English
+        do {
+            // When
+            let condition = FTS3Object.Properties.variable2.match("Engl*")
+            let objects = WCDBAssertNoThrowReturned(
+                try database.getObjects(fromTable: FTS3Object.name, where: condition),
+                whenFailed: [FTS3Object]()
+            )
+            // Then
+            XCTAssertEqual(objects.count, 1)
+            XCTAssertEqual(objects[0], preInsertedEnglishFTS3Object)
+        }
+        // Chinese
+        do {
+            // When
+            let condition = FTS3Object.Properties.variable2.match("中文*")
+            let objects = WCDBAssertNoThrowReturned(
+                try database.getObjects(fromTable: FTS3Object.name, where: condition),
+                whenFailed: [FTS3Object]()
+            )
+            // Then
+            XCTAssertEqual(objects.count, 1)
+            XCTAssertEqual(objects[0], preInsertedChineseFTS3Object)
+        }
+        // Numberic
+        do {
+            // When
+            let condition = FTS3Object.Properties.variable2.match("123*")
+            let objects = WCDBAssertNoThrowReturned(
+                try database.getObjects(fromTable: FTS3Object.name, where: condition),
+                whenFailed: [FTS3Object]()
+            )
+            // Then
+            XCTAssertEqual(objects.count, 1)
+            XCTAssertEqual(objects[0], preInsertedNumbericFTS3Object)
+        }
+        // Symbolic
+        do {
+            // When
+            let condition = FTS3Object.Properties.variable2.match("def")
+            let objects = WCDBAssertNoThrowReturned(
+                try database.getObjects(fromTable: FTS3Object.name, where: condition),
+                whenFailed: [FTS3Object]()
+            )
+            // Then
+            XCTAssertEqual(objects.count, 1)
+            XCTAssertEqual(objects[0], preInsertedSymbolicFTS3Object)
+        }
+
+        // Find Chinese
+        do {
+            // When
+            let condition = FTS3Object.Properties.variable2.match("文测")
+            let objects = WCDBAssertNoThrowReturned(
+                try database.getObjects(fromTable: FTS3Object.name, where: condition),
+                whenFailed: [FTS3Object]()
+            )
+            // Then
+            XCTAssertEqual(objects.count, 1)
+            XCTAssertEqual(objects[0], preInsertedChineseFTS3Object)
+        }
+    }
+
+    class FTS5Object: TestObjectBase, TableCodable {
+            var variable1: Int = 0
+            var variable2: String = ""
+
+            enum CodingKeys: String, CodingTableKey {
+                typealias Root = FTS5Object
+                case variable1
+                case variable2
+                static let objectRelationalMapping = TableBinding(CodingKeys.self)
+                static var virtualTableBinding: VirtualTableBinding? {
+                    return VirtualTableBinding(withModule: .FTS5, and: BuiltinTokenizer.Verbatim)
+                }
+            }
+
+            override var hashValue: Int {
+                return (String(variable1)+variable2).hashValue
+            }
+        }
+        func testFTS5() {
+            // Give
+            XCTAssertNoThrow(try database.close {
+                try self.database.removeFiles()
+            })
+            database.add(tokenizer: BuiltinTokenizer.Verbatim)
+            XCTAssertNoThrow(try database.create(virtualTable: FTS5Object.name, of: FTS5Object.self))
+
+            let preInsertedEnglishFTS5Object: FTS5Object = {
+                let object = FTS5Object()
+                object.variable1 = 1
+                object.variable2 = "This is English test content"
+                return object
+            }()
+            let preInsertedChineseFTS5Object: FTS5Object = {
+                let object = FTS5Object()
+                object.variable1 = 2
+                object.variable2 = "这是中文测试内容"
+                return object
+            }()
+            let preInsertedNumbericFTS5Object: FTS5Object = {
+                let object = FTS5Object()
+                object.variable1 = 1
+                object.variable2 = "123456"
+                return object
+            }()
+            let preInsertedSymbolicFTS5Object: FTS5Object = {
+                let object = FTS5Object()
+                object.variable1 = 1
+                object.variable2 = "abc..def"
+                return object
+            }()
+            let objects = [preInsertedEnglishFTS5Object,
+                           preInsertedChineseFTS5Object,
+                           preInsertedNumbericFTS5Object,
+                           preInsertedSymbolicFTS5Object]
+            XCTAssertNoThrow(try database.insert(objects, intoTable: FTS5Object.name))
+
+            // English
+            do {
+                // When
+                let condition = FTS5Object.Properties.variable2.match("Engl*")
+                let objects = WCDBAssertNoThrowReturned(
+                    try database.getObjects(fromTable: FTS5Object.name, where: condition),
+                    whenFailed: [FTS5Object]()
+                )
+                // Then
+                XCTAssertEqual(objects.count, 1)
+                XCTAssertEqual(objects[0], preInsertedEnglishFTS5Object)
+            }
+            // Chinese
+            do {
+                // When
+                let condition = FTS5Object.Properties.variable2.match("中文*")
+                let objects = WCDBAssertNoThrowReturned(
+                    try database.getObjects(fromTable: FTS5Object.name, where: condition),
+                    whenFailed: [FTS5Object]()
+                )
+                // Then
+                XCTAssertEqual(objects.count, 1)
+                XCTAssertEqual(objects[0], preInsertedChineseFTS5Object)
+            }
+            // Numberic
+            do {
+                // When
+                let condition = FTS5Object.Properties.variable2.match("123*")
+                let objects = WCDBAssertNoThrowReturned(
+                    try database.getObjects(fromTable: FTS5Object.name, where: condition),
+                    whenFailed: [FTS5Object]()
+                )
+                // Then
+                XCTAssertEqual(objects.count, 1)
+                XCTAssertEqual(objects[0], preInsertedNumbericFTS5Object)
+            }
+            // Symbolic
+            do {
+                // When
+                let condition = FTS5Object.Properties.variable2.match("def")
+                let objects = WCDBAssertNoThrowReturned(
+                    try database.getObjects(fromTable: FTS5Object.name, where: condition),
+                    whenFailed: [FTS5Object]()
+                )
+                // Then
+                XCTAssertEqual(objects.count, 1)
+                XCTAssertEqual(objects[0], preInsertedSymbolicFTS5Object)
+            }
+
+            // Find Chinese
+            do {
+                // When
+                let condition = FTS5Object.Properties.variable2.match("文测")
+                let objects = WCDBAssertNoThrowReturned(
+                    try database.getObjects(fromTable: FTS5Object.name, where: condition),
+                    whenFailed: [FTS5Object]()
+                )
+                // Then
+                XCTAssertEqual(objects.count, 1)
+                XCTAssertEqual(objects[0], preInsertedChineseFTS5Object)
+            }
+        }
 }

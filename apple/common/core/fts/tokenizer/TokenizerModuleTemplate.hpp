@@ -29,12 +29,10 @@
 
 namespace WCDB {
 
-template<typename TokenizerInfo, typename TokenizerCursorInfo>
+template<typename Fts3Tokenizer>
 class FTS3TokenizerModuleTemplate final : protected AbstractFTS3TokenizerModuleTemplate {
 public:
-    static_assert(std::is_base_of<AbstractFTS3TokenizerInfo, TokenizerInfo>::value, "");
-    static_assert(std::is_base_of<AbstractFTS3TokenizerCursorInfo, TokenizerCursorInfo>::value,
-                  "");
+    static_assert(std::is_base_of<AbstractFTSTokenizer, Fts3Tokenizer>::value, "");
 
     static TokenizerModule specialize()
     {
@@ -42,80 +40,80 @@ public:
         create, destroy, open, close, next));
     }
 
-    static int create(int argc, const char *const *argv, Tokenizer **ppTokenizer)
+    static int create(int argc, const char *const *argv, FTS3TokenizerWrap **ppTokenizerWrap)
     {
-        TokenizerInfo *info = new TokenizerInfo(argc, argv);
-        int rc = newTokenizer(ppTokenizer, info);
+        Fts3Tokenizer *tokenizer = new Fts3Tokenizer(argv, argc, nullptr);
+        int rc = newTokenizer(ppTokenizerWrap, tokenizer);
         if (!FTSError::isOK(rc)) {
-            deleteTokenizerInfo(info);
-            *ppTokenizer = nullptr;
+            if (tokenizer != nullptr) {
+                delete tokenizer;
+            }
+            deleteTokenizerWrap(*ppTokenizerWrap);
+            *ppTokenizerWrap = nullptr;
         }
         return rc;
     }
 
-    static int destroy(Tokenizer *pTokenizer)
+    static int destroy(FTS3TokenizerWrap *tokenizerWrap)
     {
-        if (pTokenizer != nullptr) {
-            AbstractFTS3TokenizerInfo *info = getTokenizerInfo(pTokenizer);
-            deleteTokenizerInfo(static_cast<TokenizerInfo *>(info));
-            deleteTokenizer(pTokenizer);
+        if (tokenizerWrap != nullptr) {
+            AbstractFTSTokenizer *tokenizer = getTokenizerFromWrap(tokenizerWrap);
+            deleteTokenizer(static_cast<Fts3Tokenizer *>(tokenizer));
+            deleteTokenizerWrap(tokenizerWrap);
         }
         return FTSError::OK();
     }
 
-    static void deleteTokenizerInfo(TokenizerInfo *info)
+    static void deleteTokenizer(Fts3Tokenizer *tokenizer)
     {
-        if (info != nullptr) {
-            delete info;
+        if (tokenizer != nullptr) {
+            delete tokenizer;
         }
     }
 
-    static int
-    open(Tokenizer *pTokenizer, const char *pInput, int nBytes, TokenizerCursor **ppCursor)
+    static int open(FTS3TokenizerWrap *tokenizerWrap,
+                    const char *pInput,
+                    int nBytes,
+                    FTS3TokenizeCursorWrap **ppCursor)
     {
-        TokenizerCursorInfo *info
-        = new TokenizerCursorInfo(pInput, nBytes, getTokenizerInfo(pTokenizer));
-        int rc = newCursor(ppCursor, info);
+        AbstractFTSTokenizer *tokenizer = getTokenizerFromWrap(tokenizerWrap);
+        if (pInput == nullptr) {
+            nBytes = 0;
+        } else if (nBytes <= 0) {
+            nBytes = (int) strlen(pInput);
+        }
+        tokenizer->loadInput(pInput, nBytes, 0);
+        int rc = newCursor(ppCursor, tokenizer);
         if (!FTSError::isOK(rc)) {
-            deleteCursorInfo(info);
+            deleteCursor(*ppCursor);
             *ppCursor = nullptr;
         }
         return rc;
     }
 
-    static int close(TokenizerCursor *pCursor)
+    static int close(FTS3TokenizeCursorWrap *pCursor)
     {
-        if (pCursor != nullptr) {
-            AbstractFTS3TokenizerCursorInfo *info = getCursorInfo(pCursor);
-            deleteCursorInfo(static_cast<TokenizerCursorInfo *>(info));
-            deleteCursor(pCursor);
-        }
+        deleteCursor(pCursor);
         return FTSError::OK();
     }
 
-    static void deleteCursorInfo(TokenizerCursorInfo *info)
-    {
-        if (info != nullptr) {
-            delete info;
-        }
-    }
-
-    static int next(TokenizerCursor *pCursor,
+    static int next(FTS3TokenizeCursorWrap *pCursor,
                     const char **ppToken,
                     int *pnBytes,
                     int *piStartOffset,
                     int *piEndOffset,
                     int *piPosition)
     {
-        AbstractFTS3TokenizerCursorInfo *info = getCursorInfo(pCursor);
-        return info->step(ppToken, pnBytes, piStartOffset, piEndOffset, piPosition);
+        AbstractFTSTokenizer *tokenizer = getTokenizerFromCurser(pCursor);
+        return tokenizer->nextToken(
+        ppToken, pnBytes, piStartOffset, piEndOffset, nullptr, piPosition);
     }
 };
 
 template<typename Fts5Tokenizer>
 class FTS5TokenizerModuleTemplate final : protected AbstractFTS5TokenizerModuleTemplate {
 public:
-    static_assert(std::is_base_of<AbstractFTS5Tokenizer, Fts5Tokenizer>::value, "");
+    static_assert(std::is_base_of<AbstractFTSTokenizer, Fts5Tokenizer>::value, "");
 
     static TokenizerModule specializeWithContext(void *pCtx)
     {
@@ -124,21 +122,21 @@ public:
     }
 
     static int
-    create(void *pCtx, const char **azArg, int nArg, AbstractFTS5Tokenizer **ppTokenizer)
+    create(void *pCtx, const char *const *azArg, int nArg, AbstractFTSTokenizer **ppTokenizer)
     {
         *ppTokenizer
-        = static_cast<AbstractFTS5Tokenizer *>(new Fts5Tokenizer(pCtx, azArg, nArg));
+        = static_cast<AbstractFTSTokenizer *>(new Fts5Tokenizer(azArg, nArg, pCtx));
         return FTSError::OK();
     }
 
-    static int destroy(AbstractFTS5Tokenizer *pTokenizer)
+    static int destroy(AbstractFTSTokenizer *pTokenizer)
     {
         delete pTokenizer;
         return FTSError::OK();
     }
 
     static int
-    tokenize(AbstractFTS5Tokenizer *pTokenizer,
+    tokenize(AbstractFTSTokenizer *pTokenizer,
              void *pCtx,
              int flags,
              const char *pText,
@@ -151,9 +149,14 @@ public:
         int iStart;
         int iEnd;
         int tflags;
-        pTokenizer->loadInput(flags, pText, nText);
-        while (FTSError::isOK(
-        rc = pTokenizer->nextToken(&tflags, &pToken, &nToken, &iStart, &iEnd))) {
+        if (pText == nullptr) {
+            nText = 0;
+        } else if (nText <= 0) {
+            nText = (int) strlen(pText);
+        }
+        pTokenizer->loadInput(pText, nText, flags);
+        while (FTSError::isOK(rc = pTokenizer->nextToken(
+                              &pToken, &nToken, &iStart, &iEnd, &tflags, nullptr))) {
             rc = xToken(pCtx, tflags, pToken, nToken, iStart, iEnd);
             if (!FTSError::isOK(rc)) {
                 break;

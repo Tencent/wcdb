@@ -22,17 +22,22 @@
  * limitations under the License.
  */
 
-#import "VirtualTableFTS3Object.h"
-#import "VirtualTableFTS3Object+WCTTableCoding.h"
+#import "VirtualTableFTS4Object.h"
+#import "VirtualTableFTS4Object+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
-@implementation VirtualTableFTS3Object
+@implementation VirtualTableFTS4Object
 
-WCDB_IMPLEMENTATION(VirtualTableFTS3Object)
-WCDB_SYNTHESIZE(value)
+WCDB_IMPLEMENTATION(VirtualTableFTS4Object)
+WCDB_SYNTHESIZE(identifier)
+WCDB_SYNTHESIZE(content)
 
-WCDB_VIRTUAL_TABLE_MODULE(WCTModuleFTS3)
+WCDB_VIRTUAL_TABLE_MODULE(WCTModuleFTS4)
 
 WCDB_VIRTUAL_TABLE_TOKENIZE(WCTTokenizerOneOrBinary)
+
+WCDB_VIRTUAL_TABLE_EXTERNAL_CONTENT("contentTable")
+
+WCDB_UNINDEXED(identifier)
 
 @end

@@ -27,6 +27,7 @@
 
 @interface VirtualTableFTS5Object (WCTTableCoding) <WCTTableCoding>
 
-WCDB_PROPERTY(value)
+WCDB_PROPERTY(identifier)
+WCDB_PROPERTY(content)
 
 @end

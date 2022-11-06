@@ -29,10 +29,15 @@
 @implementation VirtualTableFTS5Object
 
 WCDB_IMPLEMENTATION(VirtualTableFTS5Object)
-WCDB_SYNTHESIZE(value)
+WCDB_SYNTHESIZE(identifier)
+WCDB_SYNTHESIZE(content)
 
 WCDB_VIRTUAL_TABLE_MODULE(WCTModuleFTS5)
 
 WCDB_VIRTUAL_TABLE_TOKENIZE(WCTTokenizerPorter)
+
+WCDB_VIRTUAL_TABLE_EXTERNAL_CONTENT("contentTable")
+
+WCDB_UNINDEXED(identifier)
 
 @end

@@ -37,7 +37,7 @@ WCDB_CPP_SYNTHESIZE(content)
 WCDB_CPP_SYNTHESIZE(extension)
 
 WCDB_CPP_VIRTUAL_TABLE_MODULE(WCDB::ModuleFTS5)
-WCDB_CPP_VIRTUAL_TABLE_TOKENIZE_WITH_PARAMETERS(WCDB::TokenizerVerbatim, WCDB::TokenizerParameter_ChineseTraditionalToSimplified)
+WCDB_CPP_VIRTUAL_TABLE_TOKENIZE_WITH_PARAMETERS(WCDB::TokenizerVerbatim, WCDB::TokenizerParameter_SimplifyChinese)
 WCDB_CPP_ORM_IMPLEMENTATION_END
 
 bool CPPFTS5Object::operator==(const CPPFTS5Object &other)

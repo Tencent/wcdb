@@ -23,6 +23,7 @@
  */
 
 #import <WCDB/Assertion.hpp>
+#import <WCDB/FTSConst.h>
 #import <WCDB/FTSError.hpp>
 #import <WCDB/OneOrBinaryTokenizer.hpp>
 
@@ -32,66 +33,9 @@ extern int porterStem(char *p, int i, int j);
 
 namespace WCDB {
 
-#pragma mark - Tokenizer Info
-OneOrBinaryTokenizerInfo::OneOrBinaryTokenizerInfo(int argc, const char *const *argv)
-: AbstractFTS3TokenizerInfo(argc, argv)
-, m_needSymbol(false)
-, m_needSimplifiedChinese(false)
-, m_skipStemming(false)
-{
-    for (int i = 0; i < argc; i++) {
-        if (strcmp(argv[i], "need_symbol") == 0) {
-            m_needSymbol = true;
-        } else if (strcmp(argv[i], "chinese_traditional_to_simplified") == 0) {
-            m_needSimplifiedChinese = true;
-        } else if (strcmp(argv[i], "skip_stemming") == 0) {
-            m_skipStemming = true;
-        }
-    }
-}
-
-OneOrBinaryTokenizerInfo::~OneOrBinaryTokenizerInfo() = default;
-
 #pragma mark - Tokenizer
-OneOrBinaryTokenizer::OneOrBinaryTokenizer(const char *input,
-                                           int inputLength,
-                                           AbstractFTS3TokenizerInfo *tokenizerInfo)
-: AbstractFTS3TokenizerCursorInfo(input, inputLength, tokenizerInfo)
-, AbstractFTS5Tokenizer(nullptr, nullptr, 0)
-, m_input(input)
-, m_inputLength(inputLength)
-, m_position(0)
-, m_startOffset(0)
-, m_endOffset(0)
-, m_cursor(0)
-, m_cursorTokenLength(0)
-, m_cursorTokenType(UnicodeType::None)
-, m_preTokenType(UnicodeType::None)
-, m_subTokensCursor(0)
-, m_subTokensDoubleChar(true)
-, m_tokenLength(0)
-, m_needBinary(true)
-, m_needSymbol(false)
-, m_needSimplifiedChinese(false)
-, m_skipStemming(false)
-{
-    if (m_input == nullptr) {
-        m_inputLength = 0;
-    } else if (m_inputLength <= 0) {
-        m_inputLength = (int) strlen(m_input);
-    }
-    OneOrBinaryTokenizerInfo *oneOrBinaryInfo
-    = dynamic_cast<OneOrBinaryTokenizerInfo *>(tokenizerInfo);
-    if (oneOrBinaryInfo != nullptr) {
-        m_needSymbol = oneOrBinaryInfo->m_needSymbol;
-        m_needSimplifiedChinese = oneOrBinaryInfo->m_needSimplifiedChinese;
-        m_skipStemming = oneOrBinaryInfo->m_skipStemming;
-    }
-}
-
-OneOrBinaryTokenizer::OneOrBinaryTokenizer(void *pCtx, const char **azArg, int nArg)
-: AbstractFTS3TokenizerCursorInfo(nullptr, 0, nullptr)
-, AbstractFTS5Tokenizer(pCtx, azArg, nArg)
+OneOrBinaryTokenizer::OneOrBinaryTokenizer(const char *const *azArg, int nArg, void *pCtx)
+: AbstractFTSTokenizer(azArg, nArg, pCtx)
 , m_input(nullptr)
 , m_inputLength(0)
 , m_position(0)
@@ -110,11 +54,11 @@ OneOrBinaryTokenizer::OneOrBinaryTokenizer(void *pCtx, const char **azArg, int n
 , m_skipStemming(false)
 {
     for (int i = 0; i < nArg; i++) {
-        if (strcmp(azArg[i], "need_symbol") == 0) {
+        if (strcmp(azArg[i], WCDB::TokenizerParameter_NeedSymbol) == 0) {
             m_needSymbol = true;
-        } else if (strcmp(azArg[i], "chinese_traditional_to_simplified") == 0) {
+        } else if (strcmp(azArg[i], WCDB::TokenizerParameter_SimplifyChinese) == 0) {
             m_needSimplifiedChinese = true;
-        } else if (strcmp(azArg[i], "skip_stemming") == 0) {
+        } else if (strcmp(azArg[i], WCDB::TokenizerParameter_SkipStemming) == 0) {
             m_skipStemming = true;
         }
     }
@@ -122,16 +66,11 @@ OneOrBinaryTokenizer::OneOrBinaryTokenizer(void *pCtx, const char **azArg, int n
 
 OneOrBinaryTokenizer::~OneOrBinaryTokenizer() = default;
 
-void OneOrBinaryTokenizer::loadInput(int flags, const char *pText, int nText)
+void OneOrBinaryTokenizer::loadInput(const char *pText, int nText, int flags)
 {
     WCDB_UNUSED(flags);
     m_input = pText;
     m_inputLength = nText;
-    if (m_input == nullptr) {
-        m_inputLength = 0;
-    } else if (m_inputLength <= 0) {
-        m_inputLength = (int) strlen(m_input);
-    }
     m_position = 0;
     m_startOffset = 0;
     m_endOffset = 0;
@@ -146,36 +85,24 @@ void OneOrBinaryTokenizer::loadInput(int flags, const char *pText, int nText)
     m_tokenLength = 0;
 }
 
-// for fts5
-int OneOrBinaryTokenizer::nextToken(int *tflags, const char **ppToken, int *nToken, int *iStart, int *iEnd)
+int OneOrBinaryTokenizer::nextToken(
+const char **ppToken, int *nToken, int *iStart, int *iEnd, int *tflags, int *iPosition)
 {
     int ret = stepNextToken();
     if (!FTSError::isOK(ret)) {
         return ret;
     }
     genToken();
-    *tflags = 0;
+    if (tflags != nullptr) {
+        *tflags = 0;
+    }
     *ppToken = m_token.data();
     *nToken = m_tokenLength;
     *iStart = m_startOffset;
     *iEnd = m_endOffset;
-    return FTSError::OK();
-}
-
-// for fts3
-int OneOrBinaryTokenizer::step(
-const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *piPosition)
-{
-    int ret = stepNextToken();
-    if (!FTSError::isOK(ret)) {
-        return ret;
+    if (iPosition != nullptr) {
+        *iPosition = m_position;
     }
-    genToken();
-    *ppToken = m_token.data();
-    *pnBytes = m_tokenLength;
-    *piStartOffset = m_startOffset;
-    *piEndOffset = m_endOffset;
-    *piPosition = m_position;
     return FTSError::OK();
 }
 

@@ -44,6 +44,6 @@ void WCDBColumnConstraintConfigCollation(CPPColumnConstraint constraint,
                                          const char* _Nullable collation);
 void WCDBColumnConstraintConfigForeignKey(CPPColumnConstraint constraint,
                                           CPPForeignKey foreignKey);
-void WCDBColumnConstraintConfigNotIndexed(CPPColumnConstraint constraint);
+void WCDBColumnConstraintConfigUnIndexed(CPPColumnConstraint constraint);
 
 WCDB_EXTERN_C_END

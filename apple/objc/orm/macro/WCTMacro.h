@@ -97,8 +97,8 @@
     __WCDB_CHECK_IMP(propertyName, condition)
 
 //For FTS
-#define WCDB_NOTINDEXED(propertyName) \
-    __WCDB_NOTINDEXED_IMP(propertyName)
+#define WCDB_UNINDEXED(propertyName) \
+    __WCDB_UNINDEXED_IMP(propertyName)
 
 // Table Constraint
 #define WCDB_WITHOUT_ROWID \

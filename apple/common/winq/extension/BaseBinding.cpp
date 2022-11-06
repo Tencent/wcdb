@@ -74,7 +74,7 @@ BaseBinding::generateCreateVirtualTableStatement(const UnsafeStringView &tableNa
         if (isFTS5) {
             bool added = false;
             for (auto constrain : iter.second.syntax().constraints) {
-                if (constrain.getDescription().find("UNINDEXED") == 0) {
+                if (constrain.switcher == WCDB::Syntax::ColumnConstraint::Switch::UnIndexed) {
                     arguments.push_back(StringView().formatted(
                     "%s %s",
                     iter.second.syntax().column.getDescription().data(),

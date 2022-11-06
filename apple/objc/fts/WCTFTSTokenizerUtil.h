@@ -31,7 +31,7 @@ public:
     //Parameters should end with nullptr
     static WCDB::StringView tokenize(NSString* name, ...);
 
-    static bool configDefaultSymbolDetectorAndUnicodeNormalizer();
+    static void configDefaultSymbolDetectorAndUnicodeNormalizer();
 
     static void configPinyinDict(NSDictionary<NSString*, NSArray<NSString*>*>* pinyinDict);
     static void configTraditionalChineseDict(NSDictionary<NSString*, NSString*>* traditionalChineseDict);

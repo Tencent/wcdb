@@ -82,12 +82,10 @@ Core::Core()
     m_operationQueue->run();
 
     //config FTS
-    registerTokenizer(
-    TokenizerOneOrBinary,
-    FTS3TokenizerModuleTemplate<OneOrBinaryTokenizerInfo, OneOrBinaryTokenizer>::specialize());
-    registerTokenizer(
-    TokenizerLegacyOneOrBinary,
-    FTS3TokenizerModuleTemplate<OneOrBinaryTokenizerInfo, OneOrBinaryTokenizer>::specialize());
+    registerTokenizer(TokenizerOneOrBinary,
+                      FTS3TokenizerModuleTemplate<OneOrBinaryTokenizer>::specialize());
+    registerTokenizer(TokenizerLegacyOneOrBinary,
+                      FTS3TokenizerModuleTemplate<OneOrBinaryTokenizer>::specialize());
     registerTokenizer(
     TokenizerVerbatim,
     FTS5TokenizerModuleTemplate<OneOrBinaryTokenizer>::specializeWithContext(nullptr));

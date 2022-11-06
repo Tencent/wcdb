@@ -31,5 +31,7 @@ WCDB_EXTERN_C_BEGIN
 CPPColumnDef WCDBColumnDefCreateWithoutType(CPPColumn column);
 CPPColumnDef WCDBColumnDefCreateWithType(CPPColumn column, enum WCDBSyntaxColumnType type);
 void WCDBColumnDefConfigConstraint(CPPColumnDef columnDef, CPPColumnConstraint constraint);
+const char* _Nonnull WCDBColumnDefGetColumnName(CPPColumnDef columnDef);
+bool WCDBColumnDefIsNotIndexed(CPPColumnDef columnDef);
 
 WCDB_EXTERN_C_END

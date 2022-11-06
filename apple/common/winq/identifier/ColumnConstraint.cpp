@@ -99,9 +99,9 @@ ColumnConstraint& ColumnConstraint::foreignKey(const ForeignKey& foreignKey)
     return *this;
 }
 
-ColumnConstraint& ColumnConstraint::notIndexed()
+ColumnConstraint& ColumnConstraint::unIndexed()
 {
-    syntax().switcher = SyntaxType::Switch::NotIndexed;
+    syntax().switcher = SyntaxType::Switch::UnIndexed;
     return *this;
 }
 

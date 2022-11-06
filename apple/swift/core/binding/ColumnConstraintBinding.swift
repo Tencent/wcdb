@@ -28,6 +28,7 @@ public struct ColumnConstraintBinding {
     let isNotNull: Bool
     let isUnique: Bool
     let term: Order?
+    let isNotIndexed: Bool
 
     public init(isPrimary: Bool = false,
                 orderBy term: Order? = nil,
@@ -35,7 +36,8 @@ public struct ColumnConstraintBinding {
                 onConflict conflict: ConflictAction? = nil,
                 isNotNull: Bool = false,
                 isUnique: Bool = false,
-                defaultTo defaultValue: LiteralValue? = nil) {
+                defaultTo defaultValue: LiteralValue? = nil,
+                isNotIndexed: Bool = false) {
         self.isPrimary = isPrimary
         self.isAutoIncrement = isAutoIncrement
         self.isNotNull = isNotNull
@@ -43,6 +45,7 @@ public struct ColumnConstraintBinding {
         self.defaultValue = defaultValue
         self.term = term
         self.conflict = conflict
+        self.isNotIndexed = isNotIndexed
     }
 
     public init<T: ColumnEncodable>(
@@ -52,7 +55,8 @@ public struct ColumnConstraintBinding {
         onConflict conflict: ConflictAction? = nil,
         isNotNull: Bool = false,
         isUnique: Bool = false,
-        defaultTo defaultEncodedValue: T) {
+        defaultTo defaultEncodedValue: T,
+        isNotIndexed: Bool = false) {
         var defaultValue: LiteralValue!
         let value = defaultEncodedValue.archivedValue()
         switch T.columnType {
@@ -75,7 +79,8 @@ public struct ColumnConstraintBinding {
                   onConflict: conflict,
                   isNotNull: isNotNull,
                   isUnique: isUnique,
-                  defaultTo: defaultValue)
+                  defaultTo: defaultValue,
+                  isNotIndexed: isNotIndexed)
     }
 
     func generateColumnDef(with rawColumnDef: ColumnDef) -> ColumnDef {
@@ -91,6 +96,9 @@ public struct ColumnConstraintBinding {
         }
         if let defaultValue = defaultValue {
             columnDef.makeDefault(to: defaultValue)
+        }
+        if isNotIndexed {
+            columnDef.makeNotIndexed()
         }
         return columnDef
     }

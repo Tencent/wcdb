@@ -48,7 +48,7 @@ public:
 
     ColumnConstraint& collate(const UnsafeStringView& collation);
     ColumnConstraint& foreignKey(const ForeignKey& foreignKey);
-    ColumnConstraint& notIndexed();
+    ColumnConstraint& unIndexed();
 };
 
 } // namespace WCDB

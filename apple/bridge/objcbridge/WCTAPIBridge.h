@@ -61,6 +61,12 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable WCTMultiObject *)extractMultiObjectOnResultColumns:(WCTBridgeProperties *)properties
                                            fromHandleStatement:(CPPHandleStatement)handleStatement;
 
++ (void)configDefaultSymbolDetectorAndUnicodeNormalizer;
+
++ (void)configPinyinDict:(NSDictionary<NSString *, NSArray<NSString *> *> *)pinyinDict;
+
++ (void)configTraditionalChineseDict:(NSDictionary<NSString *, NSString *> *)traditionalChineseDict;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -105,8 +105,8 @@ void WCDBColumnConstraintConfigForeignKey(CPPColumnConstraint constraint, CPPFor
     cppColumnConstraint->foreignKey(*cppObj);
 }
 
-void WCDBColumnConstraintConfigNotIndexed(CPPColumnConstraint constraint)
+void WCDBColumnConstraintConfigUnIndexed(CPPColumnConstraint constraint)
 {
     WCDBGetObjectOrReturn(constraint, WCDB::ColumnConstraint, cppConstraint);
-    cppConstraint->notIndexed();
+    cppConstraint->unIndexed();
 }

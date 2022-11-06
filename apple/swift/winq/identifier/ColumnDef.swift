@@ -85,4 +85,10 @@ public final class ColumnDef: Identifier<CPPColumnDef> {
         self.addConstraint(ColumnConstraint().foreignKey(with: foreignKey))
         return self
     }
+
+    @discardableResult
+    public func makeNotIndexed() -> ColumnDef {
+        self.addConstraint(ColumnConstraint().unIndexed())
+        return self
+    }
 }

@@ -80,7 +80,7 @@ bool ColumnConstraint::describle(std::ostringstream& stream) const
     case Switch::ForeignKey:
         stream << foreignKeyClause;
         break;
-    case Switch::NotIndexed:
+    case Switch::UnIndexed:
         stream << "UNINDEXED";
         break;
     }
@@ -95,7 +95,7 @@ void ColumnConstraint::iterate(const Iterator& iterator, bool& stop)
     case Switch::NotNull:
     case Switch::Unique:
     case Switch::Collate:
-    case Switch::NotIndexed:
+    case Switch::UnIndexed:
         break;
     case Switch::Check:
         recursiveIterate(expression, iterator, stop);

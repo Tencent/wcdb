@@ -59,8 +59,8 @@
 #import "TableConstraintObject+WCTTableCoding.h"
 #import "TableConstraintObject.h"
 #import "TestCase.h"
-#import "VirtualTableFTS3Object+WCTTableCoding.h"
-#import "VirtualTableFTS3Object.h"
+#import "VirtualTableFTS4Object+WCTTableCoding.h"
+#import "VirtualTableFTS4Object.h"
 #import "VirtualTableFTS5Object+WCTTableCoding.h"
 #import "VirtualTableFTS5Object.h"
 
@@ -277,16 +277,16 @@
 #pragma mark - virtual table
 - (void)test_virtual_table_fts3
 {
-    self.tableClass = VirtualTableFTS3Object.class;
+    self.tableClass = VirtualTableFTS4Object.class;
     [self.database addTokenizer:WCTTokenizerOneOrBinary];
-    NSString* expected = @"CREATE VIRTUAL TABLE IF NOT EXISTS main.testTable USING fts3(tokenize = wcdb_one_or_binary, value INTEGER)";
+    NSString* expected = @"CREATE VIRTUAL TABLE IF NOT EXISTS main.testTable USING fts4(tokenize = wcdb_one_or_binary, content='contentTable', identifier INTEGER, content TEXT, notindexed=identifier)";
     [self doTestCreateVirtualTableSQLAsExpected:expected];
 }
 
 - (void)test_virtual_table_fts5
 {
     self.tableClass = VirtualTableFTS5Object.class;
-    NSString* expected = @"CREATE VIRTUAL TABLE IF NOT EXISTS main.testTable USING fts5(tokenize = 'porter', value)";
+    NSString* expected = @"CREATE VIRTUAL TABLE IF NOT EXISTS main.testTable USING fts5(tokenize = 'porter', content='contentTable', identifier UNINDEXED, content)";
     [self doTestCreateVirtualTableSQLAsExpected:expected];
 }
 
