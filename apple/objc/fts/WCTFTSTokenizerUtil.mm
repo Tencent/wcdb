@@ -23,8 +23,6 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/Assertion.hpp>
-#import <WCDB/FTSError.hpp>
 #import <WCDB/WCTFTSTokenizerUtil.h>
 
 WCDB::StringView WCTFTSTokenizerUtil::tokenize(NSString* name, ...)
@@ -41,122 +39,38 @@ WCDB::StringView WCTFTSTokenizerUtil::tokenize(NSString* name, ...)
     return WCDB::StringView(stream.str());
 }
 
-int WCTFTSTokenizerUtil::stepOneUnicode(const WCDB::UnsafeStringView input, UnicodeType& unicodeType, int& unicodeLength)
+bool WCTFTSTokenizerUtil::configDefaultSymbolDetectorAndUnicodeNormalizer()
 {
-    if (input.length() == 0) {
-        unicodeType = UnicodeType::None;
-        unicodeLength = 0;
-        return WCDB::FTSError::OK();
-    }
-
-    int ret;
-    const unsigned char& first = input.at(0);
-    if (first < 0xC0) {
-        unicodeLength = 1;
-        if (first >= 0x30 && first <= 0x39) {
-            unicodeType = UnicodeType::BasicMultilingualPlaneDigit;
-        } else if ((first >= 0x41 && first <= 0x5a) || (first >= 0x61 && first <= 0x7a)) {
-            unicodeType = UnicodeType::BasicMultilingualPlaneLetter;
-        } else {
-            bool symbol = false;
-            std::tie(ret, symbol) = isSymbol(first);
-            if (WCDB::FTSError::isOK(ret)) {
-                if (symbol) {
-                    unicodeType = UnicodeType::BasicMultilingualPlaneSymbol;
-                } else {
-                    unicodeType = UnicodeType::BasicMultilingualPlaneOther;
-                }
-            } else {
-                return ret;
-            }
-        }
-    } else if (first < 0xF0) {
-        UnicodeChar unicode = 0;
-        if (first < 0xE0) {
-            unicodeLength = 2;
-            unicode = first & 0x1F;
-        } else {
-            unicodeLength = 3;
-            unicode = first & 0x0F;
-        }
-        for (int i = 1; i < unicodeLength; ++i) {
-            if (i < input.length()) {
-                WCTAssert(((unicode << 6) >> 6) == unicode);
-                unicode = (UnicodeChar) (((int) unicode << 6) | (input.at(i) & 0x3F));
-            } else {
-                break;
-            }
-        }
+    //Refer to http://www.fileformat.info/info/unicode/category/index.htm
+    //Code: Cc, Cf, Z*, U000A ~ U000D, U0085, M*, P*, S* and illegal character set
+    CFMutableCharacterSetRef characterSetRef = CFCharacterSetCreateMutable(CFAllocatorGetDefault());
+    CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetControl));
+    CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetWhitespaceAndNewline));
+    CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetNonBase));
+    CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetPunctuation));
+    CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetSymbol));
+    CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetIllegal));
+    configSymbolDetector([=](UnicodeChar theChar) {
         bool symbol = false;
-        std::tie(ret, symbol) = isSymbol(unicode);
-        if (WCDB::FTSError::isOK(ret)) {
-            if (symbol) {
-                unicodeType = UnicodeType::BasicMultilingualPlaneSymbol;
-            } else {
-                unicodeType = UnicodeType::BasicMultilingualPlaneOther;
-            }
-        } else {
-            return ret;
+        if (characterSetRef != nil) {
+            symbol = CFCharacterSetIsCharacterMember(characterSetRef, theChar);
         }
-    } else {
-        unicodeType = UnicodeType::AuxiliaryPlaneOther;
-        if (first < 0xF8) {
-            unicodeLength = 4;
-        } else if (first < 0xFC) {
-            unicodeLength = 5;
-        } else {
-            unicodeLength = 6;
-        }
-    }
-    if (unicodeLength > input.length()) {
-        unicodeType = UnicodeType::None;
-        unicodeLength = (int) input.length();
-    }
-    return WCDB::FTSError::OK();
-}
-
-CFCharacterSetRef WCTFTSTokenizerUtil::g_symbolCharacterSet = CFCharacterSetCreateMutable(CFAllocatorGetDefault());
-
-std::pair<int, bool> WCTFTSTokenizerUtil::isSymbol(UnicodeChar theChar)
-{
-    static_assert(sizeof(UnicodeChar) == 2, "UnicodeChar must be 2 byte length.");
-
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        //Code: Cc, Cf, Z*, U000A ~ U000D, U0085, M*, P*, S* and illegal character set
-        CFMutableCharacterSetRef characterSetRef = CFCharacterSetCreateMutable(CFAllocatorGetDefault());
-        CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetControl));
-        CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetWhitespaceAndNewline));
-        CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetNonBase));
-        CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetPunctuation));
-        CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetSymbol));
-        CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetIllegal));
-        g_symbolCharacterSet = characterSetRef;
+        return symbol;
     });
-    bool symbol = false;
-    int ret = WCDB::FTSError::NoMem();
-    if (g_symbolCharacterSet != nil) {
-        symbol = CFCharacterSetIsCharacterMember(g_symbolCharacterSet, theChar);
-        ret = WCDB::FTSError::OK();
-    }
-    return { ret, symbol };
+    configUnicodeNormalizer([](const WCDB::UnsafeStringView& token) {
+        @autoreleasepool {
+            NSMutableString* nsToken = [[NSMutableString alloc] initWithBytes:token.data() length:token.length() encoding:NSUTF8StringEncoding];
+            CFMutableStringRef normalizationFormText = (__bridge_retained CFMutableStringRef)(nsToken);
+            CFStringNormalize(normalizationFormText, kCFStringNormalizationFormKD);
+            return WCDB::StringView((__bridge_transfer NSString*) normalizationFormText);
+        }
+    });
+    return true;
 }
-
-WCDB::StringView WCTFTSTokenizerUtil::normalizeToken(WCDB::UnsafeStringView& token)
-{
-    @autoreleasepool {
-        NSMutableString* nsToken = [[NSMutableString alloc] initWithBytes:token.data() length:token.length() encoding:NSUTF8StringEncoding];
-        CFMutableStringRef normalizationFormText = (__bridge_retained CFMutableStringRef)(nsToken);
-        CFStringNormalize(normalizationFormText, kCFStringNormalizationFormKD);
-        return WCDB::StringView((__bridge_transfer NSString*) normalizationFormText);
-    }
-}
-
-WCDB::StringViewMap<std::vector<WCDB::StringView>>* WCTFTSTokenizerUtil::g_pinyinDict = new WCDB::StringViewMap<std::vector<WCDB::StringView>>();
 
 void WCTFTSTokenizerUtil::configPinyinDict(NSDictionary<NSString*, NSArray<NSString*>*>* pinyinDict)
 {
-    g_pinyinDict->clear();
+    WCDB::StringViewMap<std::vector<WCDB::StringView>>* cppPinyinDict = new WCDB::StringViewMap<std::vector<WCDB::StringView>>();
     for (NSString* character in pinyinDict.allKeys) {
         if (character.UTF8String == nil) {
             continue;
@@ -170,39 +84,21 @@ void WCTFTSTokenizerUtil::configPinyinDict(NSDictionary<NSString*, NSArray<NSStr
             value.push_back(WCDB::StringView(piniyn.UTF8String));
         }
         if (value.size() > 0) {
-            g_pinyinDict->insert_or_assign(key, value);
+            cppPinyinDict->insert_or_assign(key, value);
         }
     }
+    WCDB::BaseTokenizerUtil::configPinyinDict(cppPinyinDict);
 }
-
-WCDB::StringViewMap<WCDB::StringView>* WCTFTSTokenizerUtil::g_traditionalChineseDict = new WCDB::StringViewMap<WCDB::StringView>();
 
 void WCTFTSTokenizerUtil::configTraditionalChineseDict(NSDictionary<NSString*, NSString*>* traditionalChineseDict)
 {
-    g_traditionalChineseDict->clear();
+    WCDB::StringViewMap<WCDB::StringView>* cppTraditionalChineseDict = new WCDB::StringViewMap<WCDB::StringView>();
     for (NSString* chinese in traditionalChineseDict.allKeys) {
         NSString* simplifiedChinese = traditionalChineseDict[chinese];
         if (chinese.UTF8String == nil || simplifiedChinese.UTF8String == nil) {
             continue;
         }
-        g_traditionalChineseDict->insert_or_assign(WCDB::StringView(chinese.UTF8String), WCDB::StringView(simplifiedChinese.UTF8String));
+        cppTraditionalChineseDict->insert_or_assign(WCDB::StringView(chinese.UTF8String), WCDB::StringView(simplifiedChinese.UTF8String));
     }
-}
-
-const std::vector<WCDB::StringView>* WCTFTSTokenizerUtil::getPinYin(const WCDB::UnsafeStringView chineseCharacter)
-{
-    auto iter = g_pinyinDict->find(chineseCharacter);
-    if (iter != g_pinyinDict->end()) {
-        return &iter->second;
-    }
-    return nullptr;
-}
-
-const WCDB::UnsafeStringView WCTFTSTokenizerUtil::getSimplifiedChinese(const WCDB::UnsafeStringView chineseCharacter)
-{
-    auto iter = g_traditionalChineseDict->find(chineseCharacter);
-    if (iter != g_traditionalChineseDict->end()) {
-        return iter->second;
-    }
-    return chineseCharacter;
+    WCDB::BaseTokenizerUtil::configTraditionalChineseDict(cppTraditionalChineseDict);
 }

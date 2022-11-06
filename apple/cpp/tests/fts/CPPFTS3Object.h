@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by 陈秋文 on 2022/10/29.
 //
 
 /*
@@ -22,17 +22,22 @@
  * limitations under the License.
  */
 
-#import <CoreFoundation/CoreFoundation.h>
-#import <WCDB/BaseTokenizerUtil.hpp>
-#import <WCDB/WCTCommon.h>
+#include <WCDB/WCDB-CPP.h>
 
-class WCTFTSTokenizerUtil final : public WCDB::BaseTokenizerUtil {
+class CPPFTS3Object {
 public:
-    //Parameters should end with nullptr
-    static WCDB::StringView tokenize(NSString* name, ...);
+    CPPFTS3Object();
+    CPPFTS3Object(WCDB::UnsafeStringView cont, WCDB::UnsafeStringView ext);
+    WCDB::StringView content;
+    WCDB::StringView extension;
+    bool operator==(const CPPFTS3Object& other);
+    WCDB_CPP_ORM_DECLARATION(CPPFTS3Object);
+};
 
-    static bool configDefaultSymbolDetectorAndUnicodeNormalizer();
-
-    static void configPinyinDict(NSDictionary<NSString*, NSArray<NSString*>*>* pinyinDict);
-    static void configTraditionalChineseDict(NSDictionary<NSString*, NSString*>* traditionalChineseDict);
+class CPPFTS3SymbolObject {
+public:
+    CPPFTS3SymbolObject();
+    WCDB::StringView content;
+    bool operator==(const CPPFTS3SymbolObject& other);
+    WCDB_CPP_ORM_DECLARATION(CPPFTS3SymbolObject);
 };

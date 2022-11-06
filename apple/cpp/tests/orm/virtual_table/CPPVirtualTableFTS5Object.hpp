@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by 陈秋文 on 2022/11/6.
 //
 
 /*
@@ -22,17 +22,11 @@
  * limitations under the License.
  */
 
-#import <CoreFoundation/CoreFoundation.h>
-#import <WCDB/BaseTokenizerUtil.hpp>
-#import <WCDB/WCTCommon.h>
+#import <WCDB/WCDB-CPP.h>
 
-class WCTFTSTokenizerUtil final : public WCDB::BaseTokenizerUtil {
+class CPPVirtualTableFTS5Object {
 public:
-    //Parameters should end with nullptr
-    static WCDB::StringView tokenize(NSString* name, ...);
-
-    static bool configDefaultSymbolDetectorAndUnicodeNormalizer();
-
-    static void configPinyinDict(NSDictionary<NSString*, NSArray<NSString*>*>* pinyinDict);
-    static void configTraditionalChineseDict(NSDictionary<NSString*, NSString*>* traditionalChineseDict);
+    int identifier;
+    std::string content;
+    WCDB_CPP_ORM_DECLARATION(CPPVirtualTableFTS5Object);
 };

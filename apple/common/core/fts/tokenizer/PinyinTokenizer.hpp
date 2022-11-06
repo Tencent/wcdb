@@ -22,21 +22,22 @@
  * limitations under the License.
  */
 
-#import <WCDB/TokenizerModuleTemplate.hpp>
-#import <WCDB/WCTFTSTokenizerUtil.h>
-#import <vector>
+#include <WCDB/BaseTokenizerUtil.hpp>
+#include <WCDB/TokenizerModuleTemplate.hpp>
 
-class WCTPinyinTokenizer final : public WCDB::AbstractFTS5Tokenizer {
+namespace WCDB {
+
+class PinyinTokenizer final : public AbstractFTS5Tokenizer {
 public:
-    WCTPinyinTokenizer(void *pCtx, const char **azArg, int nArg);
+    PinyinTokenizer(void *pCtx, const char **azArg, int nArg);
     void loadInput(int flags, const char *pText, int nText) override;
     int nextToken(int *tflags, const char **ppToken, int *nToken, int *iStart, int *iEnd) override;
 
-    ~WCTPinyinTokenizer() override;
+    ~PinyinTokenizer() override;
     int stepNextToken();
 
 private:
-    using UnicodeType = WCTFTSTokenizerUtil::UnicodeType;
+    using UnicodeType = BaseTokenizerUtil::UnicodeType;
 
     const char *m_input;
     int m_inputLength;
@@ -53,15 +54,17 @@ private:
 
     std::vector<char> m_normalToken;
     int m_normalTokenLength;
-    std::vector<WCDB::StringView> m_pinyinTokenArr;
+    std::vector<StringView> m_pinyinTokenArr;
     int m_pinyinTokenIndex;
 
     // Can be configed by tokenizer parameters
     bool m_needSymbol;
 
-    int cursorStep();
+    void cursorStep();
     void subTokensStep();
 
     void genNormalToken();
     void genPinyinToken();
 };
+
+} //namespace WCDB

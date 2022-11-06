@@ -23,12 +23,12 @@
  */
 
 #import <WCDB/FTS5AuxiliaryFunctionTemplate.hpp>
+#import <WCDB/OneOrBinaryTokenizer.hpp>
+#import <WCDB/PinyinTokenizer.hpp>
 #import <WCDB/SubstringMatchInfo.hpp>
 #import <WCDB/WCTCommon.h>
 #import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTFTSTokenizerUtil.h>
-#import <WCDB/WCTOneOrBinaryTokenizer.h>
-#import <WCDB/WCTPinyinTokenizer.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

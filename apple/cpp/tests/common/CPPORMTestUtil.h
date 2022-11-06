@@ -36,6 +36,12 @@ BOOL CPPTestTableCreate(CPPTableTestCase* testCase)
     return testCase.database->createTable<ObjectType>(testCase.tableName.UTF8String);
 }
 
+template<class ObjectType>
+BOOL CPPTestVirtualTableCreate(CPPTableTestCase* testCase)
+{
+    return testCase.database->createVirtualTable<ObjectType>(testCase.tableName.UTF8String);
+}
+
 #pragma mark - extract value
 
 template<class ObjectType>

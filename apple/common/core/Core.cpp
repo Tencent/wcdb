@@ -25,10 +25,15 @@
 #include <WCDB/AutoMigrateConfig.hpp>
 #include <WCDB/BusyRetryConfig.hpp>
 #include <WCDB/Core.h>
+#include <WCDB/FTS5AuxiliaryFunctionTemplate.hpp>
+#include <WCDB/FTSConst.h>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Global.hpp>
 #include <WCDB/Notifier.hpp>
+#include <WCDB/OneOrBinaryTokenizer.hpp>
+#include <WCDB/PinyinTokenizer.hpp>
 #include <WCDB/StringView.hpp>
+#include <WCDB/SubstringMatchInfo.hpp>
 
 namespace WCDB {
 
@@ -75,6 +80,24 @@ Core::Core()
     std::bind(&Core::preprocessError, this, std::placeholders::_1));
 
     m_operationQueue->run();
+
+    //config FTS
+    registerTokenizer(
+    TokenizerOneOrBinary,
+    FTS3TokenizerModuleTemplate<OneOrBinaryTokenizerInfo, OneOrBinaryTokenizer>::specialize());
+    registerTokenizer(
+    TokenizerLegacyOneOrBinary,
+    FTS3TokenizerModuleTemplate<OneOrBinaryTokenizerInfo, OneOrBinaryTokenizer>::specialize());
+    registerTokenizer(
+    TokenizerVerbatim,
+    FTS5TokenizerModuleTemplate<OneOrBinaryTokenizer>::specializeWithContext(nullptr));
+    registerTokenizer(
+    TokenizerPinyin,
+    FTS5TokenizerModuleTemplate<PinyinTokenizer>::specializeWithContext(nullptr));
+
+    registerAuxiliaryFunction(
+    AuxiliaryFunction_SubstringMatchInfo,
+    FTS5AuxiliaryFunctionTemplate<SubstringMatchInfo>::specializeWithContext(nullptr));
 }
 
 Core::~Core()

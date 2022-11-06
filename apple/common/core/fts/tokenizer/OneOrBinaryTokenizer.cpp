@@ -24,15 +24,17 @@
 
 #import <WCDB/Assertion.hpp>
 #import <WCDB/FTSError.hpp>
-#import <WCDB/WCTOneOrBinaryTokenizer.h>
+#import <WCDB/OneOrBinaryTokenizer.hpp>
 
 extern "C" {
 extern int porterStem(char *p, int i, int j);
 }
 
+namespace WCDB {
+
 #pragma mark - Tokenizer Info
-WCTOneOrBinaryTokenizerInfo::WCTOneOrBinaryTokenizerInfo(int argc, const char *const *argv)
-: WCDB::AbstractFTS3TokenizerInfo(argc, argv)
+OneOrBinaryTokenizerInfo::OneOrBinaryTokenizerInfo(int argc, const char *const *argv)
+: AbstractFTS3TokenizerInfo(argc, argv)
 , m_needSymbol(false)
 , m_needSimplifiedChinese(false)
 , m_skipStemming(false)
@@ -48,14 +50,14 @@ WCTOneOrBinaryTokenizerInfo::WCTOneOrBinaryTokenizerInfo(int argc, const char *c
     }
 }
 
-WCTOneOrBinaryTokenizerInfo::~WCTOneOrBinaryTokenizerInfo() = default;
+OneOrBinaryTokenizerInfo::~OneOrBinaryTokenizerInfo() = default;
 
 #pragma mark - Tokenizer
-WCTOneOrBinaryTokenizer::WCTOneOrBinaryTokenizer(const char *input,
-                                                 int inputLength,
-                                                 WCDB::AbstractFTS3TokenizerInfo *tokenizerInfo)
-: WCDB::AbstractFTS3TokenizerCursorInfo(input, inputLength, tokenizerInfo)
-, WCDB::AbstractFTS5Tokenizer(nullptr, nullptr, 0)
+OneOrBinaryTokenizer::OneOrBinaryTokenizer(const char *input,
+                                           int inputLength,
+                                           AbstractFTS3TokenizerInfo *tokenizerInfo)
+: AbstractFTS3TokenizerCursorInfo(input, inputLength, tokenizerInfo)
+, AbstractFTS5Tokenizer(nullptr, nullptr, 0)
 , m_input(input)
 , m_inputLength(inputLength)
 , m_position(0)
@@ -78,8 +80,8 @@ WCTOneOrBinaryTokenizer::WCTOneOrBinaryTokenizer(const char *input,
     } else if (m_inputLength <= 0) {
         m_inputLength = (int) strlen(m_input);
     }
-    WCTOneOrBinaryTokenizerInfo *oneOrBinaryInfo
-    = dynamic_cast<WCTOneOrBinaryTokenizerInfo *>(tokenizerInfo);
+    OneOrBinaryTokenizerInfo *oneOrBinaryInfo
+    = dynamic_cast<OneOrBinaryTokenizerInfo *>(tokenizerInfo);
     if (oneOrBinaryInfo != nullptr) {
         m_needSymbol = oneOrBinaryInfo->m_needSymbol;
         m_needSimplifiedChinese = oneOrBinaryInfo->m_needSimplifiedChinese;
@@ -87,7 +89,7 @@ WCTOneOrBinaryTokenizer::WCTOneOrBinaryTokenizer(const char *input,
     }
 }
 
-WCTOneOrBinaryTokenizer::WCTOneOrBinaryTokenizer(void *pCtx, const char **azArg, int nArg)
+OneOrBinaryTokenizer::OneOrBinaryTokenizer(void *pCtx, const char **azArg, int nArg)
 : AbstractFTS3TokenizerCursorInfo(nullptr, 0, nullptr)
 , AbstractFTS5Tokenizer(pCtx, azArg, nArg)
 , m_input(nullptr)
@@ -118,9 +120,9 @@ WCTOneOrBinaryTokenizer::WCTOneOrBinaryTokenizer(void *pCtx, const char **azArg,
     }
 }
 
-WCTOneOrBinaryTokenizer::~WCTOneOrBinaryTokenizer() = default;
+OneOrBinaryTokenizer::~OneOrBinaryTokenizer() = default;
 
-void WCTOneOrBinaryTokenizer::loadInput(int flags, const char *pText, int nText)
+void OneOrBinaryTokenizer::loadInput(int flags, const char *pText, int nText)
 {
     WCDB_UNUSED(flags);
     m_input = pText;
@@ -145,10 +147,10 @@ void WCTOneOrBinaryTokenizer::loadInput(int flags, const char *pText, int nText)
 }
 
 // for fts5
-int WCTOneOrBinaryTokenizer::nextToken(int *tflags, const char **ppToken, int *nToken, int *iStart, int *iEnd)
+int OneOrBinaryTokenizer::nextToken(int *tflags, const char **ppToken, int *nToken, int *iStart, int *iEnd)
 {
     int ret = stepNextToken();
-    if (!WCDB::FTSError::isOK(ret)) {
+    if (!FTSError::isOK(ret)) {
         return ret;
     }
     genToken();
@@ -157,15 +159,15 @@ int WCTOneOrBinaryTokenizer::nextToken(int *tflags, const char **ppToken, int *n
     *nToken = m_tokenLength;
     *iStart = m_startOffset;
     *iEnd = m_endOffset;
-    return WCDB::FTSError::OK();
+    return FTSError::OK();
 }
 
 // for fts3
-int WCTOneOrBinaryTokenizer::step(
+int OneOrBinaryTokenizer::step(
 const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *piPosition)
 {
     int ret = stepNextToken();
-    if (!WCDB::FTSError::isOK(ret)) {
+    if (!FTSError::isOK(ret)) {
         return ret;
     }
     genToken();
@@ -174,94 +176,77 @@ const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *p
     *piStartOffset = m_startOffset;
     *piEndOffset = m_endOffset;
     *piPosition = m_position;
-    return WCDB::FTSError::OK();
+    return FTSError::OK();
 }
 
 //Inspired by zorrozhang
-int WCTOneOrBinaryTokenizer::stepNextToken()
+int OneOrBinaryTokenizer::stepNextToken()
 {
-    int ret = WCDB::FTSError::OK();
     if (m_position == 0) {
-        ret = cursorStep();
-        if (!WCDB::FTSError::isOK(ret)) {
-            return ret;
-        }
+        cursorStep();
     }
-
     if (m_subTokensLengthArray.empty()) {
         if (!m_needSymbol) { //Skip symbol
             while (m_cursorTokenType == UnicodeType::BasicMultilingualPlaneSymbol) {
-                ret = cursorStep();
-                if (!WCDB::FTSError::isOK(ret)) {
-                    return ret;
-                }
+                cursorStep();
             }
         }
-
         m_preTokenType = m_cursorTokenType;
         switch (m_preTokenType) {
         case UnicodeType::BasicMultilingualPlaneLetter:
         case UnicodeType::BasicMultilingualPlaneDigit:
             m_startOffset = m_cursor;
-            while (WCDB::FTSError::isOK((ret = cursorStep()))
-                   && m_cursorTokenType == m_preTokenType)
-                ;
-            if (!WCDB::FTSError::isOK(ret)) {
-                return ret;
-            }
+            do {
+                cursorStep();
+            } while (m_cursorTokenType == m_preTokenType);
             m_endOffset = m_cursor;
             m_tokenLength = m_endOffset - m_startOffset;
             break;
         case UnicodeType::BasicMultilingualPlaneSymbol:
         case UnicodeType::BasicMultilingualPlaneOther:
         case UnicodeType::AuxiliaryPlaneOther:
-            m_subTokensLengthArray.push_back(m_cursorTokenLength);
             m_subTokensCursor = m_cursor;
             m_subTokensDoubleChar = m_needBinary;
-            while (WCDB::FTSError::isOK((ret = cursorStep()))
-                   && m_cursorTokenType == m_preTokenType) {
+            do {
                 m_subTokensLengthArray.push_back(m_cursorTokenLength);
-            }
-            if (!WCDB::FTSError::isOK(ret)) {
-                return ret;
-            }
+                cursorStep();
+            } while (m_cursorTokenType == m_preTokenType);
             subTokensStep();
             break;
         case UnicodeType::None:
-            return WCDB::FTSError::Done();
+            return FTSError::Done();
         }
     } else {
         subTokensStep();
     }
-    return WCDB::FTSError::OK();
+    return FTSError::OK();
 }
 
-int WCTOneOrBinaryTokenizer::cursorStep()
+void OneOrBinaryTokenizer::cursorStep()
 {
     if (m_cursor + m_cursorTokenLength < m_inputLength) {
         m_cursor += m_cursorTokenLength;
-        WCDB::UnsafeStringView currentInput = WCDB::UnsafeStringView(m_input + m_cursor, m_inputLength - m_cursor);
-        return WCTFTSTokenizerUtil::stepOneUnicode(currentInput, m_cursorTokenType, m_cursorTokenLength);
+        UnsafeStringView currentInput
+        = UnsafeStringView(m_input + m_cursor, m_inputLength - m_cursor);
+        BaseTokenizerUtil::stepOneUnicode(currentInput, m_cursorTokenType, m_cursorTokenLength);
+        return;
     }
     m_cursor = m_inputLength;
     m_cursorTokenType = UnicodeType::None;
     m_cursorTokenLength = 0;
-    return WCDB::FTSError::OK();
 }
 
-void WCTOneOrBinaryTokenizer::lemmatization(const char *input, int inputLength)
+void OneOrBinaryTokenizer::lemmatization(const char *input, int inputLength)
 {
     // tolower only. You can implement your own lemmatization.
     m_token.assign(input, input + inputLength);
-    std::transform(
-    m_token.begin(), m_token.end(), m_token.begin(), ::tolower);
+    std::transform(m_token.begin(), m_token.end(), m_token.begin(), ::tolower);
     if (!m_skipStemming) {
-        m_tokenLength
-        = porterStem(m_token.data(), 0, m_tokenLength - 1) + 1;
+        m_tokenLength = porterStem(m_token.data(), 0, m_tokenLength - 1) + 1;
     }
 }
 
-void WCTOneOrBinaryTokenizer::subTokensStep()
+void OneOrBinaryTokenizer::subTokensStep()
 {
     m_startOffset = m_subTokensCursor;
     m_tokenLength = m_subTokensLengthArray[0];
@@ -284,33 +269,31 @@ void WCTOneOrBinaryTokenizer::subTokensStep()
     m_endOffset = m_startOffset + m_tokenLength;
 }
 
-void WCTOneOrBinaryTokenizer::genToken()
+void OneOrBinaryTokenizer::genToken()
 {
     if (m_preTokenType == UnicodeType::BasicMultilingualPlaneLetter) {
         lemmatization(m_input + m_startOffset, m_tokenLength);
     } else if (m_preTokenType != UnicodeType::BasicMultilingualPlaneOther
                || !m_needSimplifiedChinese) {
-        WCDB::UnsafeStringView token
-        = WCDB::UnsafeStringView(m_input + m_startOffset, m_tokenLength);
-        WCDB::StringView nomalizeToken = WCTFTSTokenizerUtil::normalizeToken(token);
+        UnsafeStringView token = UnsafeStringView(m_input + m_startOffset, m_tokenLength);
+        StringView nomalizeToken = BaseTokenizerUtil::normalizeToken(token);
         m_tokenLength = (int) nomalizeToken.length();
         m_token.assign(nomalizeToken.data(), nomalizeToken.data() + m_tokenLength);
     } else if (!m_needBinary || m_subTokensDoubleChar) {
-        WCDB::UnsafeStringView token
-        = WCDB::UnsafeStringView(m_input + m_startOffset, m_tokenLength);
-        WCDB::StringView nomalizeToken = WCTFTSTokenizerUtil::normalizeToken(token);
-        WCDB::UnsafeStringView simplifiedToken = WCTFTSTokenizerUtil::getSimplifiedChinese(nomalizeToken);
+        UnsafeStringView token = UnsafeStringView(m_input + m_startOffset, m_tokenLength);
+        StringView nomalizeToken = BaseTokenizerUtil::normalizeToken(token);
+        StringView simplifiedToken = BaseTokenizerUtil::getSimplifiedChinese(nomalizeToken);
         m_tokenLength = (int) simplifiedToken.length();
         m_token.assign(simplifiedToken.data(), simplifiedToken.data() + m_tokenLength);
     } else {
-        WCDB::UnsafeStringView firstChar
-        = WCDB::UnsafeStringView(m_input + m_startOffset, m_subTokensLengthArray[0]);
-        WCDB::UnsafeStringView secondChar = WCDB::UnsafeStringView(
+        UnsafeStringView firstChar
+        = UnsafeStringView(m_input + m_startOffset, m_subTokensLengthArray[0]);
+        UnsafeStringView secondChar = UnsafeStringView(
         m_input + m_startOffset + m_subTokensLengthArray[0], m_subTokensLengthArray[1]);
-        firstChar = WCTFTSTokenizerUtil::getSimplifiedChinese(firstChar);
-        secondChar = WCTFTSTokenizerUtil::getSimplifiedChinese(secondChar);
-        WCDB::StringView normalizeFirstChar = WCTFTSTokenizerUtil::normalizeToken(firstChar);
-        WCDB::StringView normalizeSecondChar = WCTFTSTokenizerUtil::normalizeToken(secondChar);
+        firstChar = BaseTokenizerUtil::getSimplifiedChinese(firstChar);
+        secondChar = BaseTokenizerUtil::getSimplifiedChinese(secondChar);
+        StringView normalizeFirstChar = BaseTokenizerUtil::normalizeToken(firstChar);
+        StringView normalizeSecondChar = BaseTokenizerUtil::normalizeToken(secondChar);
         m_tokenLength
         = (int) normalizeFirstChar.length() + (int) normalizeSecondChar.length();
         m_token.assign(normalizeFirstChar.data(),
@@ -321,3 +304,5 @@ void WCTOneOrBinaryTokenizer::genToken()
     }
     m_position++;
 }
+
+} //namespace WCDB

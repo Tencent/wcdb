@@ -25,6 +25,7 @@
 #pragma once
 #include <WCDB/AuxiliaryFunctionModule.hpp>
 #include <WCDB/Error.hpp>
+#include <WCDB/FTSTokenizerUtil.hpp>
 #include <WCDB/Handle.hpp>
 #include <WCDB/HandleORMOperation.hpp>
 #include <WCDB/Statement.hpp>
@@ -158,12 +159,26 @@ public:
 
     void addTokenizer(const UnsafeStringView &tokenize);
 
-    void registerTokenizer(const UnsafeStringView &name, const TokenizerModule &module);
+    static void
+    registerTokenizer(const UnsafeStringView &name, const TokenizerModule &module);
 
     void addAuxiliaryFunction(const UnsafeStringView &functionName);
 
     static void registerAuxiliaryFunction(const UnsafeStringView &name,
                                           const FTS5AuxiliaryFunctionModule &module);
+
+    typedef BaseTokenizerUtil::UnicodeChar UnicodeChar;
+    typedef BaseTokenizerUtil::SymbolDetector SymbolDetector;
+    static void configSymbolDetector(SymbolDetector detector);
+
+    typedef BaseTokenizerUtil::UnicodeNormalizer UnicodeNormalizer;
+    static void configUnicodeNormalizer(UnicodeNormalizer normalizer);
+
+    typedef BaseTokenizerUtil::PinYinConverter PinYinConverter;
+    static void configPinyinConverter(PinYinConverter converter);
+
+    typedef BaseTokenizerUtil::TraditionalChineseConverter TraditionalChineseConverter;
+    static void configTraditionalChineseConverter(TraditionalChineseConverter converter);
 
 #pragma mark - Memory
     /**

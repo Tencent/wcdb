@@ -154,3 +154,5 @@ public:                                                                        \
 
 #define WCDB_CPP_VIRTUAL_TABLE_MODULE(moduleName)                              \
     __WCDB_CPP_VIRTUAL_TABLE_MODULE_IMP(moduleName)
+
+#define WCDB_CPP_UNINDEXED(propertyName) __WCDB_CPP_UNINDEXED_IMP(propertyName)

@@ -222,7 +222,6 @@
             andSQL:(NSString*)sql
        bySelecting:(WCDB::OptionalMultiRows (^)())block
 {
-    TestCaseAssertTrue(rows.size() > 0);
     TestCaseAssertTrue(sql != nil);
     [self doTestRows:rows andSQLs:@[ sql ] bySelecting:block];
 }
@@ -237,7 +236,7 @@
              auto values = block();
              TestCaseAssertTrue(values.has_value());
              selected = values.value();
-             return selected.size() > 0;
+             return values.has_value();
          }];
     [self check:selected isEqualTo:expectedRows];
 }

@@ -38,6 +38,8 @@
 #import "CPPOldRemapObject.hpp"
 #import "CPPTableConstraintObject.hpp"
 #import "CPPTestCase.h"
+#include "CPPVirtualTableFTS4Object.hpp"
+#include "CPPVirtualTableFTS5Object.hpp"
 #import <Foundation/Foundation.h>
 
 @interface CPPORMTests : CPPTableTestCase
@@ -279,6 +281,26 @@
                                               return CPPTestTableCreate<CPPDropIndexObject>(self);
                                           }];
     }
+}
+
+#pragma mark - virtual table
+- (void)test_virtual_table_fts3
+{
+    self.database->addTokenizer(WCDB::TokenizerOneOrBinary);
+    NSString* expected = @"CREATE VIRTUAL TABLE IF NOT EXISTS main.testTable USING fts4(tokenize = wcdb_one_or_binary, content='contentTable', identifier INTEGER, content TEXT, notindexed=identifier)";
+    [self doTestSQLs:@[ expected ]
+         inOperation:^BOOL {
+             return CPPTestVirtualTableCreate<CPPVirtualTableFTS4Object>(self);
+         }];
+}
+
+- (void)test_virtual_table_fts5
+{
+    NSString* expected = @"CREATE VIRTUAL TABLE IF NOT EXISTS main.testTable USING fts5(tokenize = 'porter', content='contentTable', identifier UNINDEXED, content)";
+    [self doTestSQLs:@[ expected ]
+         inOperation:^BOOL {
+             return CPPTestVirtualTableCreate<CPPVirtualTableFTS5Object>(self);
+         }];
 }
 
 @end
