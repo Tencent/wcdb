@@ -1,3 +1,7 @@
+//
+// Created by 陈秋文 on 2022/11/10.
+//
+
 /*
  * Tencent is pleased to support the open source community by making
  * WCDB available.
@@ -20,17 +24,16 @@
 
 import Foundation
 
-public struct ColumnConstraintBinding {
-    let isPrimary: Bool
-    let isAutoIncrement: Bool
-    let defaultValue: LiteralValue?
-    let conflict: ConflictAction?
-    let isNotNull: Bool
-    let isUnique: Bool
-    let term: Order?
-    let isNotIndexed: Bool
+public final class ColumnConstraintConfig<CodingTableKeyType: CodingTableKey>: TableConfiguration {
+    let codingKey: CodingTableKeyType
+    private var columnConstraints: [ColumnConstraint] = []
 
-    public init(isPrimary: Bool = false,
+    public func config(with tableBinding: TableBindingBase) {
+        tableBinding.columnConstraints[codingKey.rawValue] = columnConstraints
+    }
+
+    required public init(_ codingKey: CodingTableKeyType,
+                isPrimary: Bool = false,
                 orderBy term: Order? = nil,
                 isAutoIncrement: Bool = false,
                 onConflict conflict: ConflictAction? = nil,
@@ -38,17 +41,37 @@ public struct ColumnConstraintBinding {
                 isUnique: Bool = false,
                 defaultTo defaultValue: LiteralValue? = nil,
                 isNotIndexed: Bool = false) {
-        self.isPrimary = isPrimary
-        self.isAutoIncrement = isAutoIncrement
-        self.isNotNull = isNotNull
-        self.isUnique = isUnique
-        self.defaultValue = defaultValue
-        self.term = term
-        self.conflict = conflict
-        self.isNotIndexed = isNotIndexed
+        self.codingKey = codingKey
+        if isPrimary {
+            let constrant = ColumnConstraint()
+            constrant.primaryKey()
+            if let term = term {
+                constrant.order(term)
+            }
+            if isAutoIncrement {
+                constrant.autoIncrement()
+            }
+            if let conflict = conflict {
+                constrant.conflict(action: conflict)
+            }
+            columnConstraints.append(constrant)
+        }
+        if isNotNull {
+            columnConstraints.append(ColumnConstraint().notNull())
+        }
+        if isUnique {
+            columnConstraints.append(ColumnConstraint().unique())
+        }
+        if let defaultValue = defaultValue {
+            columnConstraints.append(ColumnConstraint().default(with: defaultValue))
+        }
+        if isNotIndexed {
+            columnConstraints.append(ColumnConstraint().unIndexed())
+        }
     }
 
-    public init<T: ColumnEncodable>(
+    public convenience init<T: ColumnEncodable>(
+        _ codingKey: CodingTableKeyType,
         isPrimary: Bool = false,
         orderBy term: Order? = nil,
         isAutoIncrement: Bool = false,
@@ -73,7 +96,8 @@ public struct ColumnConstraintBinding {
         case .null:
             defaultValue = LiteralValue(nil)
         }
-        self.init(isPrimary: isPrimary,
+        self.init(codingKey,
+                  isPrimary: isPrimary,
                   orderBy: term,
                   isAutoIncrement: isAutoIncrement,
                   onConflict: conflict,
@@ -81,25 +105,5 @@ public struct ColumnConstraintBinding {
                   isUnique: isUnique,
                   defaultTo: defaultValue,
                   isNotIndexed: isNotIndexed)
-    }
-
-    func generateColumnDef(with rawColumnDef: ColumnDef) -> ColumnDef {
-        let columnDef = rawColumnDef
-        if isPrimary {
-            columnDef.makePrimary(orderBy: term, isAutoIncrement: isAutoIncrement, onConflict: conflict)
-        }
-        if isNotNull {
-            columnDef.makeNotNull()
-        }
-        if isUnique {
-            columnDef.makeUnique()
-        }
-        if let defaultValue = defaultValue {
-            columnDef.makeDefault(to: defaultValue)
-        }
-        if isNotIndexed {
-            columnDef.makeNotIndexed()
-        }
-        return columnDef
     }
 }

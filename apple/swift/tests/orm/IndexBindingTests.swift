@@ -28,9 +28,8 @@ class IndexBindingTests: BaseTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = BaselineTestObject
             case variable
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var indexBindings: [IndexBinding.Subfix: IndexBinding]? {
-                return ["_index": IndexBinding(indexesBy: variable)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindIndex(variable, namedWith: "_index")
             }
         }
     }
@@ -40,9 +39,8 @@ class IndexBindingTests: BaseTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = UniqueTestObject
             case variable
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var indexBindings: [IndexBinding.Subfix: IndexBinding]? {
-                return ["_index": IndexBinding(isUnique: true, indexesBy: variable)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindIndex(variable, namedWith: "_index", isUnique: true)
             }
         }
     }
@@ -54,9 +52,8 @@ class IndexBindingTests: BaseTestCase {
             typealias Root = MultiIndexesTestObject
             case variable1
             case variable2
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var indexBindings: [IndexBinding.Subfix: IndexBinding]? {
-                return ["_index": IndexBinding(indexesBy: variable1, variable2)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindIndex(variable1, variable2, namedWith: "_index")
             }
         }
     }

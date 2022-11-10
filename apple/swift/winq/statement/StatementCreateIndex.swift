@@ -35,6 +35,12 @@ public final class StatementCreateIndex: Identifier<CPPStatementCreateIndex>, St
     }
 
     @discardableResult
+    public func unique() -> StatementCreateIndex {
+        WCDBStatementCreatIndexConfigUniqe(cppObj)
+        return self
+    }
+
+    @discardableResult
     public func ifNotExists() -> StatementCreateIndex {
         WCDBStatementCreatIndexConfigIfNotExist(cppObj)
         return self

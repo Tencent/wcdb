@@ -179,9 +179,8 @@ class TracerTests: BaseTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = TracerObject
             case variable
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
-                return [.variable: ColumnConstraintBinding(isPrimary: true, orderBy: .ascending, isAutoIncrement: true)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindColumnConstraint(variable, isPrimary: true, orderBy: .ascending, isAutoIncrement: true)
             }
         }
         var isAutoIncrement: Bool = false

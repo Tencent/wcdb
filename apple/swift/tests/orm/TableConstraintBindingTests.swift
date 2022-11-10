@@ -26,14 +26,12 @@ class TableConstraintBindingTests: BaseTestCase {
     class BaselineMultiPrimaryTestObject: TableCodable, Named {
         var variable1: Int = 0
         var variable2: Int = 0
-        static let constraintName = BaselineMultiPrimaryTestObject.name + "Constraint"
         enum CodingKeys: String, CodingTableKey {
             typealias Root = BaselineMultiPrimaryTestObject
             case variable1
             case variable2
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var tableConstraintBindings: [TableConstraintBinding.Name: TableConstraintBinding]? {
-                return [constraintName: MultiPrimaryBinding(indexesBy: variable1, variable2)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindMultiPrimary(.variable1, .variable2)
             }
         }
     }
@@ -41,14 +39,12 @@ class TableConstraintBindingTests: BaseTestCase {
     class MultiPrimaryConflictTestObject: TableCodable, Named {
         var variable1: Int = 0
         var variable2: Int = 0
-        static let constraintName = MultiPrimaryConflictTestObject.name + "Constraint"
         enum CodingKeys: String, CodingTableKey {
             typealias Root = MultiPrimaryConflictTestObject
             case variable1
             case variable2
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var tableConstraintBindings: [TableConstraintBinding.Name: TableConstraintBinding]? {
-                return [constraintName: MultiPrimaryBinding(indexesBy: variable1, variable2, onConflict: .Replace)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindMultiPrimary(.variable1, .variable2, onConflict: .Replace)
             }
         }
     }
@@ -59,7 +55,7 @@ class TableConstraintBindingTests: BaseTestCase {
             """
             CREATE TABLE IF NOT EXISTS main.BaselineMultiPrimaryTestObject\
             (variable1 INTEGER, variable2 INTEGER, \
-            CONSTRAINT BaselineMultiPrimaryTestObjectConstraint PRIMARY KEY(variable1, variable2))
+            PRIMARY KEY(variable1, variable2))
             """
         )
 
@@ -68,7 +64,6 @@ class TableConstraintBindingTests: BaseTestCase {
             """
             CREATE TABLE IF NOT EXISTS main.MultiPrimaryConflictTestObject\
             (variable1 INTEGER, variable2 INTEGER, \
-            CONSTRAINT MultiPrimaryConflictTestObjectConstraint \
             PRIMARY KEY(variable1, variable2) ON CONFLICT REPLACE)
             """
         )
@@ -77,14 +72,12 @@ class TableConstraintBindingTests: BaseTestCase {
     class BaselineMultiUniqueTestObject: TableCodable, Named {
         var variable1: Int = 0
         var variable2: Int = 0
-        static let constraintName = BaselineMultiUniqueTestObject.name + "Constraint"
         enum CodingKeys: String, CodingTableKey {
             typealias Root = BaselineMultiUniqueTestObject
             case variable1
             case variable2
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var tableConstraintBindings: [TableConstraintBinding.Name: TableConstraintBinding]? {
-                return [constraintName: MultiUniqueBinding(indexesBy: variable1, variable2)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindMultiUnique(variable1, variable2)
             }
         }
     }
@@ -92,15 +85,12 @@ class TableConstraintBindingTests: BaseTestCase {
     class MultiUniqueConflictTestObject: TableCodable, Named {
         var variable1: Int = 0
         var variable2: Int = 0
-        static let constraintName = MultiUniqueConflictTestObject.name + "Constraint"
         enum CodingKeys: String, CodingTableKey {
             typealias Root = MultiUniqueConflictTestObject
             case variable1
             case variable2
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var tableConstraintBindings: [TableConstraintBinding.Name: TableConstraintBinding]? {
-                return [constraintName: MultiUniqueBinding(indexesBy: variable1, variable2,
-                                                           onConflict: .Replace)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindMultiUnique(.variable1, .variable2, onConflict: .Replace)
             }
         }
     }
@@ -111,7 +101,6 @@ class TableConstraintBindingTests: BaseTestCase {
             CREATE TABLE IF NOT EXISTS main.BaselineMultiUniqueTestObject\
             (variable1 INTEGER, \
             variable2 INTEGER, \
-            CONSTRAINT BaselineMultiUniqueTestObjectConstraint \
             UNIQUE(variable1, variable2))
             """
         )
@@ -121,7 +110,6 @@ class TableConstraintBindingTests: BaseTestCase {
             """
             CREATE TABLE IF NOT EXISTS main.MultiUniqueConflictTestObject\
             (variable1 INTEGER, variable2 INTEGER, \
-            CONSTRAINT MultiUniqueConflictTestObjectConstraint \
             UNIQUE(variable1, variable2) ON CONFLICT REPLACE)
             """
         )
@@ -135,9 +123,10 @@ class TableConstraintBindingTests: BaseTestCase {
             typealias Root = CheckTestObject
             case variable1
             case variable2
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var tableConstraintBindings: [TableConstraintBinding.Name: TableConstraintBinding]? {
-                return [constraintName: CheckBinding(check: variable1 > 1)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindChecks {
+                    variable1 > 1
+                }
             }
         }
     }
@@ -148,7 +137,6 @@ class TableConstraintBindingTests: BaseTestCase {
             CREATE TABLE IF NOT EXISTS main.CheckTestObject\
             (variable1 INTEGER, \
             variable2 INTEGER, \
-            CONSTRAINT CheckTestObjectConstraint \
             CHECK(variable1 > 1))
             """
         )
@@ -157,16 +145,12 @@ class TableConstraintBindingTests: BaseTestCase {
     class ForeignKeyTestObject: TableCodable, Named {
         var variable1: Int = 0
         var variable2: Int = 0
-        static let constraintName = ForeignKeyTestObject.name + "Constraint"
         enum CodingKeys: String, CodingTableKey {
             typealias Root = ForeignKeyTestObject
             case variable1
             case variable2
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var tableConstraintBindings: [TableConstraintBinding.Name: TableConstraintBinding]? {
-                let foreignKey = ForeignKey().references(with: ForeignKeyTestObject.name).columns(variable2)
-                return [constraintName: ForeignKeyBinding(variable1,
-                                                          foreignKey: foreignKey)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindForeginKey(variable1, foreignKey: ForeignKey().references(with: ForeignKeyTestObject.name).columns(variable2))
             }
         }
     }
@@ -177,7 +161,6 @@ class TableConstraintBindingTests: BaseTestCase {
             CREATE TABLE IF NOT EXISTS main.ForeignKeyTestObject\
             (variable1 INTEGER, \
             variable2 INTEGER, \
-            CONSTRAINT ForeignKeyTestObjectConstraint \
             FOREIGN KEY(variable1) REFERENCES ForeignKeyTestObject(variable2))
             """
         )

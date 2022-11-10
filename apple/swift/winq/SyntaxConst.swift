@@ -99,3 +99,29 @@ public enum TransactionType {
         }
     }
 }
+
+public enum FTSVersion: Describable {
+    case FTS3
+    case FTS4
+    case FTS5
+    internal var cValue: WCDBFTSVersion {
+        switch self {
+        case .FTS3:
+            return WCDBFTSVersion3
+        case .FTS4:
+            return WCDBFTSVersion4
+        case .FTS5:
+            return WCDBFTSVersion5
+        }
+    }
+    public var description: String {
+        switch self {
+        case .FTS3:
+            return "fts3"
+        case .FTS4:
+            return "fts4"
+        case .FTS5:
+            return "fts5"
+        }
+    }
+}

@@ -20,49 +20,20 @@
 
 import Foundation
 
-public final class TableBinding<CodingTableKeyType: CodingTableKey> {
+public class TableBindingBase {
+    internal var columnConstraints: [String: [ColumnConstraint]] = [:]
+    internal var tableConstraints: [TableConstraint] = []
+    internal var indexes: [String: StatementCreateIndex] = [:]
+    internal var virtualTableBinding: VirtualTableConfig?
+}
+
+public final class TableBinding<CodingTableKeyType: CodingTableKey>: TableBindingBase {
     private let properties: [CodingTableKeyType: Property]
-    let allProperties: [Property]
-    let allKeys: [CodingTableKeyType]
-
-    private lazy var columnTypes: [String: ColumnType] = {
-        // CodingTableKeyType.Root must conform to TableEncodable protocol.
-        let tableDecodableType = CodingTableKeyType.Root.self as! TableDecodableBase.Type
-        return ColumnTypeDecoder.types(of: tableDecodableType)
-    }()
-
-    private lazy var allColumnDef: [ColumnDef] = allKeys.map { (key) -> ColumnDef in
-        return generateColumnDef(with: key)
-    }
-
-    private typealias ColumnConstraintBindingMap = [CodingTableKeyType: ColumnConstraintBinding]
-    private lazy var columnConstraintBindings: ColumnConstraintBindingMap? = CodingTableKeyType.columnConstraintBindings
-
-    private typealias IndexBindingMap = [IndexBinding.Subfix: IndexBinding]
-    private lazy var indexBindings: IndexBindingMap? = CodingTableKeyType.indexBindings
-
-    private typealias TableConstraintBindingMap = [TableConstraintBinding.Name: TableConstraintBinding]
-    private lazy var tableConstraintBindings: TableConstraintBindingMap? = CodingTableKeyType.tableConstraintBindings
-    private lazy var virtualTableBinding: VirtualTableBinding? = CodingTableKeyType.virtualTableBinding
-
-    private lazy var primaryKey: CodingTableKeyType? = {
-        guard let filtered = columnConstraintBindings?.filter({ (args) -> Bool in
-            return args.value.isPrimary
-        }) else {
-            return nil
-        }
-        guard filtered.count == 1 else {
-            assert(filtered.count == 0, "Only one primary key is supported. Use MultiPrimaryBinding instead")
-            return nil
-        }
-        return filtered.first!.key
-    }()
 
     public init(_ type: CodingTableKeyType.Type) {
         var allProperties: [Property] = []
         var properties: [CodingTableKeyType: Property] = [:]
         var allKeys: [CodingTableKeyType] = []
-
         var i = 0
         while true {
             guard let key = (withUnsafePointer(to: &i) {
@@ -100,6 +71,52 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey> {
         #endif
     }
 
+    @resultBuilder
+    public struct TableConfigurationBuilder {
+        public static func buildBlock(_ configs: TableConfiguration...) -> [TableConfiguration] {
+            return configs
+        }
+        public static func buildBlock() -> [TableConfiguration] {
+            return []
+        }
+    }
+
+    public convenience init(_ type: CodingTableKeyType.Type, @TableConfigurationBuilder _ configBuildler: () -> [TableConfiguration]) {
+        self.init(type)
+        let configs = configBuildler()
+        for config in configs {
+            config.config(with: self)
+        }
+    }
+
+    let allProperties: [Property]
+    let allKeys: [CodingTableKeyType]
+
+    private lazy var columnTypes: [String: ColumnType] = {
+        // CodingTableKeyType.Root must conform to TableEncodable protocol.
+        let tableDecodableType = CodingTableKeyType.Root.self as! TableDecodableBase.Type
+        return ColumnTypeDecoder.types(of: tableDecodableType)
+    }()
+
+    private lazy var allColumnDef: [ColumnDef] = allKeys.map { (key) -> ColumnDef in
+        return generateColumnDef(with: key)
+    }
+
+    private lazy var primaryKey: CodingTableKeyType? = {
+        let filtered = allKeys.filter({ key in
+            if let constraints = columnConstraints[key.rawValue], constraints.contains(where: { WCDBColumnConstraintIsPrimaryKey($0.cppObj)
+            }) {
+                return true
+            }
+            return false
+        })
+        guard filtered.count == 1 else {
+            assert(filtered.count == 0, "Only one primary key is supported. Use MultiPrimaryBinding instead")
+            return nil
+        }
+        return filtered.first!
+    }()
+
     typealias TypedCodingTableKeyType = CodingTableKeyType
     func property<CodingTableKeyType: CodingTableKey>(from codingTableKey: CodingTableKeyType) -> Property {
         let typedCodingTableKey = codingTableKey as? TypedCodingTableKeyType
@@ -115,8 +132,10 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey> {
         let columnType = columnTypes[codingTableKey!.stringValue]
         assert(columnType != nil, "It should not be failed. If you think it's a bug, please report an issue to us.")
         var columnDef = ColumnDef(with: codingTableKey!, and: columnType!)
-        if let index = columnConstraintBindings?.index(forKey: codingTableKey!) {
-            columnDef = columnConstraintBindings![index].value.generateColumnDef(with: columnDef)
+        if let index = columnConstraints.index(forKey: codingTableKey!.rawValue) {
+            for constraint in columnConstraints[index].value {
+                columnDef.addConstraint(constraint)
+            }
         }
         return columnDef
     }
@@ -148,15 +167,12 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey> {
     }
 
     public func generateCreateTableStatement(named table: String) -> StatementCreateTable {
-        let tableConstraints = tableConstraintBindings?.map { $0.value.generateConstraint(withName: $0.key) }
         return StatementCreateTable().create(table: table).ifNotExists().with(columns: allColumnDef).constraint(tableConstraints)
     }
 
     public func generateCreateIndexStatements(onTable table: String) -> [StatementCreateIndex]? {
-        guard let indexBindings = self.indexBindings else {
-            return nil
-        }
-        return indexBindings.map { $0.value.generateCreateIndexStatement(onTable: table, withIndexSubfix: $0.key)}
+
+        return indexes.map { $0.value.create(index: table + $0.key).on(table: table) }
     }
 
     func getPrimaryKey() -> CodingTableKeyBase? {

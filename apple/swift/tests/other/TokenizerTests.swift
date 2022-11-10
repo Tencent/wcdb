@@ -109,9 +109,8 @@ class TokenizerTests: BaseTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = FTS3Object
             case content
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var virtualTableBinding: VirtualTableBinding? {
-                return VirtualTableBinding(withModule: .FTS3, and: CustomTokenizer.fts3Name, CustomTokenizer.testParameter1, CustomTokenizer.testParameter2)
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindVirtualTable(withModule: .FTS3, and: CustomTokenizer.fts3Name, CustomTokenizer.testParameter1, CustomTokenizer.testParameter2)
             }
         }
     }
@@ -138,9 +137,8 @@ class TokenizerTests: BaseTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = FTS5Object
             case content
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var virtualTableBinding: VirtualTableBinding? {
-                return VirtualTableBinding(withModule: .FTS5, and: CustomTokenizer.fts5Name, CustomTokenizer.testParameter1, CustomTokenizer.testParameter2)
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindVirtualTable(withModule: .FTS5, and: CustomTokenizer.fts5Name, CustomTokenizer.testParameter1, CustomTokenizer.testParameter2)
             }
         }
     }

@@ -58,9 +58,8 @@ class TestObject: TestObjectBase, TableCodable {
         typealias Root = TestObject
         case variable1
         case variable2
-        static let objectRelationalMapping = TableBinding(CodingKeys.self)
-        static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
-            return [.variable1: ColumnConstraintBinding(isPrimary: true, orderBy: .ascending, isAutoIncrement: true)]
+        static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            BindColumnConstraint(variable1, isPrimary: true, orderBy: .ascending, isAutoIncrement: true)
         }
     }
 

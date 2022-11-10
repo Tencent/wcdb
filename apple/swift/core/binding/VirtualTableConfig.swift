@@ -1,3 +1,7 @@
+//
+// Created by 陈秋文 on 2022/11/10.
+//
+
 /*
  * Tencent is pleased to support the open source community by making
  * WCDB available.
@@ -20,35 +24,13 @@
 
 import Foundation
 
-public enum FTSVersion: Describable {
-    case FTS3
-    case FTS4
-    case FTS5
-    internal var cValue: WCDBFTSVersion {
-        switch self {
-        case .FTS3:
-            return WCDBFTSVersion3
-        case .FTS4:
-            return WCDBFTSVersion4
-        case .FTS5:
-            return WCDBFTSVersion5
-        }
-    }
-    public var description: String {
-        switch self {
-        case .FTS3:
-            return "fts3"
-        case .FTS4:
-            return "fts4"
-        case .FTS5:
-            return "fts5"
-        }
-    }
-}
-
-public struct VirtualTableBinding {
+public final class VirtualTableConfig: TableConfiguration {
     let module: String
     let parameters: [String]
+
+    public func config(with tableBinding: TableBindingBase) {
+        tableBinding.virtualTableBinding = self
+    }
 
     public init(withModule version: FTSVersion, and tokenizer: String...) {
         self.module = version.description

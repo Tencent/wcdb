@@ -37,9 +37,8 @@ class ColumnConstraintBindingTests: BaseTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = PrimaryTestObject
             case variable = "primaryVariable"
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
-                return [.variable: ColumnConstraintBinding(isPrimary: true)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindColumnConstraint(variable, isPrimary: true)
             }
         }
     }
@@ -49,9 +48,8 @@ class ColumnConstraintBindingTests: BaseTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = OrderedPrimaryTestObject
             case variable = "orderedPrimaryVariable"
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
-                return [.variable: ColumnConstraintBinding(isPrimary: true, orderBy: .ascending)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindColumnConstraint(variable, isPrimary: true, orderBy: .ascending)
             }
         }
     }
@@ -61,9 +59,8 @@ class ColumnConstraintBindingTests: BaseTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = AutoIncrementPrimaryTestObject
             case variable = "autoIncrementPrimaryVariable"
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
-                return [.variable: ColumnConstraintBinding(isPrimary: true, isAutoIncrement: true)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindColumnConstraint(variable, isPrimary: true, isAutoIncrement: true)
             }
         }
     }
@@ -72,9 +69,8 @@ class ColumnConstraintBindingTests: BaseTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = ConflictPrimaryTestObject
             case variable = "conflictPrimaryVariable"
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
-                return [.variable: ColumnConstraintBinding(isPrimary: true, onConflict: .Replace)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindColumnConstraint(variable, isPrimary: true, onConflict: .Replace)
             }
         }
     }
@@ -84,9 +80,8 @@ class ColumnConstraintBindingTests: BaseTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = NotNullTestObject
             case variable = "notNullVariable"
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
-                return [.variable: ColumnConstraintBinding(isNotNull: true)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindColumnConstraint(variable, isNotNull: true)
             }
         }
     }
@@ -96,9 +91,8 @@ class ColumnConstraintBindingTests: BaseTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = UniqueTestObject
             case variable = "uniqueVariable"
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
-                return [.variable: ColumnConstraintBinding(isUnique: true)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindColumnConstraint(variable, isUnique: true)
             }
         }
     }
@@ -108,9 +102,8 @@ class ColumnConstraintBindingTests: BaseTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = DefaultInt32ValueTestObject
             case variable = "defaultValueVariable"
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
-                return [.variable: ColumnConstraintBinding(defaultTo: Int32(1))]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindColumnConstraint(variable, defaultTo: Int32(1))
             }
         }
     }
@@ -120,9 +113,8 @@ class ColumnConstraintBindingTests: BaseTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = DefaultInt64ValueTestObject
             case variable = "defaultValueVariable"
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
-                return [.variable: ColumnConstraintBinding(defaultTo: Int64(1))]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindColumnConstraint(variable, defaultTo: Int64(1))
             }
         }
     }
@@ -132,9 +124,8 @@ class ColumnConstraintBindingTests: BaseTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = DefaultFloatValueTestObject
             case variable = "defaultValueVariable"
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
-                return [.variable: ColumnConstraintBinding(defaultTo: Double(1.2))]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindColumnConstraint(variable, defaultTo: Double(1.2))
             }
         }
     }
@@ -144,9 +135,8 @@ class ColumnConstraintBindingTests: BaseTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = DefaultTextValueTestObject
             case variable = "defaultValueVariable"
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
-                return [.variable: ColumnConstraintBinding(defaultTo: "defaultString")]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindColumnConstraint(variable, defaultTo: "defaultString")
             }
         }
     }
@@ -156,9 +146,8 @@ class ColumnConstraintBindingTests: BaseTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = DefaultBLOBValueTestObject
             case variable = "defaultValueVariable"
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
-                return [.variable: ColumnConstraintBinding(defaultTo: "defaultData".data(using: .ascii)!)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindColumnConstraint(variable, defaultTo: "defaultData".data(using: .ascii)!)
             }
         }
     }

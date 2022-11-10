@@ -513,9 +513,8 @@ class AdvanceTests: CRUDTestCase {
             typealias Root = FTS3Object
             case variable1
             case variable2
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var virtualTableBinding: VirtualTableBinding? {
-                return VirtualTableBinding(withModule: .FTS3, and: BuiltinTokenizer.OneOrBinary)
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindVirtualTable(withModule: .FTS3, and: BuiltinTokenizer.OneOrBinary)
             }
         }
 
@@ -632,9 +631,8 @@ class AdvanceTests: CRUDTestCase {
                 typealias Root = FTS5Object
                 case variable1
                 case variable2
-                static let objectRelationalMapping = TableBinding(CodingKeys.self)
-                static var virtualTableBinding: VirtualTableBinding? {
-                    return VirtualTableBinding(withModule: .FTS5, and: BuiltinTokenizer.Verbatim)
+                static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                    BindVirtualTable(withModule: .FTS5, and: BuiltinTokenizer.Verbatim)
                 }
             }
 
