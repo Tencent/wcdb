@@ -34,10 +34,14 @@ public protocol CodingTableKey: CodingTableKeyBase,
     static var any: Column {get}
 
     static var objectRelationalMapping: TableBinding<Self> {get}
-    static var columnConstraintBindings: [Self: ColumnConstraintBinding]? {get}
-    static var indexBindings: [IndexBinding.Subfix: IndexBinding]? {get}
-    static var tableConstraintBindings: [TableConstraintBinding.Name: TableConstraintBinding]? {get}
-    static var virtualTableBinding: VirtualTableBinding? {get}
+
+    typealias BindColumnConstraint = ColumnConstraintConfig<Self>
+    typealias BindIndex = IndexConfig<Self>
+    typealias BindMultiPrimary = MultiPrimaryConfig<Self>
+    typealias BindMultiUnique = MultiUniqueConfig<Self>
+    typealias BindChecks = CheckExpressionConfig
+    typealias BindForeginKey = ForeignKeyConfig<Self>
+    typealias BindVirtualTable = VirtualTableConfig
 }
 
 extension CodingTableKey {
@@ -52,24 +56,6 @@ extension CodingTableKey {
     }
     public static var any: Column {
         return Column.all
-    }
-}
-
-extension CodingTableKey {
-    public static var columnConstraintBindings: [Self: ColumnConstraintBinding]? {
-        return nil
-    }
-
-    public static var indexBindings: [IndexBinding.Subfix: IndexBinding]? {
-        return nil
-    }
-
-    public static var tableConstraintBindings: [TableConstraintBinding.Name: TableConstraintBinding]? {
-        return nil
-    }
-
-    public static var virtualTableBinding: VirtualTableBinding? {
-        return nil
     }
 }
 

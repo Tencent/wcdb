@@ -44,9 +44,8 @@ class TableTests: BaseTestCase {
             case aString
             case aData
             case aDouble
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
-                return [.anInt32: ColumnConstraintBinding(isPrimary: true, orderBy: .ascending, isAutoIncrement: true)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindColumnConstraint(anInt32, isPrimary: true, orderBy: .ascending, isAutoIncrement: true)
             }
         }
 
@@ -85,9 +84,8 @@ class TableTests: BaseTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = SkipColumnObject
             case anInt32
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
-                return [.anInt32: ColumnConstraintBinding(isPrimary: true, orderBy: .ascending, isAutoIncrement: true)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindColumnConstraint(anInt32, isPrimary: true, orderBy: .ascending, isAutoIncrement: true)
             }
         }
 
@@ -108,9 +106,8 @@ class TableTests: BaseTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = IndexObject
             case variable
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var indexBindings: [IndexBinding.Subfix: IndexBinding]? {
-                return ["_index": IndexBinding(indexesBy: variable)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindIndex(variable, namedWith: "_index")
             }
         }
     }
@@ -137,9 +134,8 @@ class TableTests: BaseTestCase {
             typealias Root = ConstraintObject
             case variable1
             case variable2
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var tableConstraintBindings: [TableConstraintBinding.Name: TableConstraintBinding]? {
-                return ["ConstraintObjectConstraint": MultiUniqueBinding(indexesBy: variable1, variable2)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindMultiUnique(variable1, variable2)
             }
         }
     }
@@ -159,7 +155,6 @@ class TableTests: BaseTestCase {
             """
             CREATE TABLE \(tableName)\
             (variable1 INTEGER, variable2 INTEGER, \
-            CONSTRAINT ConstraintObjectConstraint \
             UNIQUE(variable1, variable2))
             """)
     }
@@ -172,12 +167,9 @@ class TableTests: BaseTestCase {
             typealias Root = FTS3Object
             case id
             case content
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var virtualTableBinding: VirtualTableBinding? {
-                return VirtualTableBinding(withModule: .FTS3, and: BuiltinTokenizer.OneOrBinary, BuiltinTokenizer.Parameter.NeedSymbol)
-            }
-            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
-                return [.id: ColumnConstraintBinding(isNotIndexed: true)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindColumnConstraint(id, isNotIndexed: true)
+                BindVirtualTable(withModule: .FTS3, and: BuiltinTokenizer.OneOrBinary, BuiltinTokenizer.Parameter.NeedSymbol)
             }
         }
     }
@@ -210,12 +202,9 @@ class TableTests: BaseTestCase {
             typealias Root = FTS5Object
             case id
             case content
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var virtualTableBinding: VirtualTableBinding? {
-                return VirtualTableBinding(withModule: .FTS5, and: BuiltinTokenizer.Verbatim, BuiltinTokenizer.Parameter.SkipStemming)
-            }
-            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
-                return [.id: ColumnConstraintBinding(isNotIndexed: true)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindColumnConstraint(id, isNotIndexed: true)
+                BindVirtualTable(withModule: .FTS5, and: BuiltinTokenizer.Verbatim, BuiltinTokenizer.Parameter.SkipStemming)
             }
         }
     }
@@ -258,9 +247,8 @@ class TableTests: BaseTestCase {
             case aData
             case aDouble
             case newColumn
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
-                return [.anInt32: ColumnConstraintBinding(isPrimary: true, orderBy: .ascending, isAutoIncrement: true)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindColumnConstraint(anInt32, isPrimary: true, orderBy: .ascending, isAutoIncrement: true)
             }
         }
     }

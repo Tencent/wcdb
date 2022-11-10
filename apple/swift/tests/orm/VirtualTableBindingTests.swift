@@ -30,12 +30,9 @@ class VirtualTableBindingTests: BaseTestCase {
             typealias Root = FTS3TestObject
             case id
             case content
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var virtualTableBinding: VirtualTableBinding? {
-                return VirtualTableBinding(withModule: .FTS3, and: BuiltinTokenizer.OneOrBinary, BuiltinTokenizer.Parameter.NeedSymbol)
-            }
-            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
-                return [.id: ColumnConstraintBinding(isNotIndexed: true)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindVirtualTable(withModule: .FTS3, and: BuiltinTokenizer.OneOrBinary, BuiltinTokenizer.Parameter.NeedSymbol)
+                BindColumnConstraint(id, isNotIndexed: true)
             }
         }
     }
@@ -57,12 +54,9 @@ class VirtualTableBindingTests: BaseTestCase {
             typealias Root = FTS5TestObject
             case id
             case content
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var virtualTableBinding: VirtualTableBinding? {
-                return VirtualTableBinding(withModule: .FTS5, and: BuiltinTokenizer.Verbatim, BuiltinTokenizer.Parameter.SkipStemming, BuiltinTokenizer.Parameter.SimplifyChinese)
-            }
-            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
-                return [.id: ColumnConstraintBinding(isNotIndexed: true)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindVirtualTable(withModule: .FTS5, and: BuiltinTokenizer.Verbatim, BuiltinTokenizer.Parameter.SkipStemming, BuiltinTokenizer.Parameter.SimplifyChinese)
+                BindColumnConstraint(id, isNotIndexed: true)
             }
         }
     }
