@@ -19,6 +19,7 @@
  */
 
 import Foundation
+import WCDB_Private
 
 /// Chain call for inserting
 public final class Insert {

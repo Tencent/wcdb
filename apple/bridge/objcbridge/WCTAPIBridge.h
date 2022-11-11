@@ -25,10 +25,12 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/HandleBridge.h>
 #import <WCDB/WCTBridgeProperty.h>
-#import <WCDB/WCTDeclaration.h>
-#import <WCDB/WCTTableCoding.h>
 
 NS_ASSUME_NONNULL_BEGIN
+
+@protocol WCTTableCoding;
+typedef NSObject<WCTTableCoding> WCTObject;
+typedef NSDictionary<NSString * /*table name */, WCTObject *> WCTMultiObject;
 
 @interface WCTAPIBridge : NSObject
 

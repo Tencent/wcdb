@@ -19,6 +19,7 @@
  */
 
 import Foundation
+import WCDB_Private
 
 public class TableBindingBase {
     internal var columnConstraints: [String: [ColumnConstraint]] = [:]

@@ -19,6 +19,7 @@
  */
 
 import Foundation
+import WCDB_Private
 
 /// The chain call for updating
 public final class Update {

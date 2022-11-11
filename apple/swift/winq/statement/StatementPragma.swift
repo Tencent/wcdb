@@ -19,6 +19,7 @@
  */
 
 import Foundation
+import WCDB_Private
 public final class StatementPragma: Identifier<CPPStatementPragma>, Statement {
     public init() {
         super.init(with: WCDBStatementPragmaCreate())

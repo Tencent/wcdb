@@ -6,6 +6,7 @@ MACH_O_TYPE = mh_dylib
 // Packaging
 INFOPLIST_FILE = $(SRCROOT)/support/Info.plist
 MODULEMAP_FILE = $(SRCROOT)/support/WCDB.modulemap
+MODULEMAP_PRIVATE_FILE = $(SRCROOT)/support/WCDB.private.modulemap
 PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.$(PRODUCT_NAME:rfc1034identifier)
 
 // Versioning

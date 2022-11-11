@@ -23,6 +23,7 @@
  */
 
 import Foundation
+import WCDB_Private
 
 public final class CheckExpressionConfig: TableConfiguration {
     private let constraints: [TableConstraint]

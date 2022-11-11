@@ -19,6 +19,7 @@
  */
 
 import Foundation
+import WCDB_Private
 public final class StatementRollback: Identifier<CPPStatementRollback>, Statement {
     public init() {
         super.init(with: WCDBStatementRollbackCreate())

@@ -19,6 +19,7 @@
  */
 
 import Foundation
+import WCDB_Private
 
 // nullable, Int32, Int64, Double, String, Data
 public struct Value {

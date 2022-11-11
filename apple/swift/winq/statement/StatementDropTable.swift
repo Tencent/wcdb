@@ -19,6 +19,7 @@
  */
 
 import Foundation
+import WCDB_Private
 public final class StatementDropTable: Identifier<CPPStatementDropTable>, Statement {
     public init() {
         super.init(with: WCDBStatementDropTableCreate())

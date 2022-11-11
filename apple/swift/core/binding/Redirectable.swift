@@ -19,6 +19,7 @@
  */
 
 import Foundation
+import WCDB_Private
 
 public protocol PropertyRedirectable {
     func `as`(_ propertyConvertible: PropertyConvertible) -> Property

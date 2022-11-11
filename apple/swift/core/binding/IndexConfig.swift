@@ -23,6 +23,7 @@
  */
 
 import Foundation
+import WCDB_Private
 
 public final class IndexConfig<CodingTableKeyType: CodingTableKey>: TableConfiguration {
     private let codingKeys: [CodingTableKeyType]

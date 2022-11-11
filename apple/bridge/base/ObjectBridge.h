@@ -24,7 +24,15 @@
 
 #pragma once
 
-#include <WCDB/Macro.h>
+#if defined(__cplusplus)
+#define WCDB_EXTERN extern "C"
+#define WCDB_EXTERN_C_BEGIN extern "C" {
+#define WCDB_EXTERN_C_END }
+#else
+#define WCDB_EXTERN extern
+#define WCDB_EXTERN_C_BEGIN
+#define WCDB_EXTERN_C_END
+#endif
 
 WCDB_EXTERN_C_BEGIN
 

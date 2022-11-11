@@ -19,6 +19,7 @@
  */
 
 import Foundation
+import WCDB_Private
 
 public typealias Condition = ExpressionConvertible
 public typealias Limit = ExpressionConvertible

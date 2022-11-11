@@ -19,6 +19,7 @@
  */
 
 import Foundation
+import WCDB_Private
 public final class HandleStatement {
     internal let recyclableStmt: RecyclableCPPHandleStatement
     internal let handle: Handle
