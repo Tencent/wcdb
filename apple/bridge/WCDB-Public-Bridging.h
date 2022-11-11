@@ -1,5 +1,5 @@
 //
-// Created by 陈秋文 on 2022/11/10.
+// Created by 陈秋文 on 2022/11/11.
 //
 
 /*
@@ -22,24 +22,7 @@
  * limitations under the License.
  */
 
-import Foundation
-import WCDB_Private
-
-public final class VirtualTableConfig: TableConfiguration {
-    let module: String
-    let parameters: [String]
-
-    public func config(with tableBinding: TableBindingBase) {
-        tableBinding.virtualTableBinding = self
-    }
-
-    public init(withModule version: FTSVersion, and tokenizer: String...) {
-        self.module = version.description
-        self.parameters = ["tokenize = \(tokenizer.joined(separateBy: " "))"]
-    }
-
-    public init(withModule module: String, and parameters: String...) {
-        self.module = module
-        self.parameters = parameters
-    }
-}
+#define WCDB_SWIFT 1
+#include <WCDB/WCTColumnCoding.h>
+#include <WCDB/WCTMacro.h>
+#include <WCDB/WCTTableCoding.h>

@@ -23,6 +23,7 @@
  */
 
 import Foundation
+import WCDB_Private
 
 public final class ForeignKeyConfig<CodingTableKeyType: CodingTableKey>: TableConfiguration {
     let codingKeys: [CodingTableKeyType]

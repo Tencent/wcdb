@@ -19,6 +19,7 @@
  */
 
 import Foundation
+import WCDB_Private
 
 public class Selectable {
     internal final var handle: Handle

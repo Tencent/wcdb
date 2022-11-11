@@ -14,14 +14,14 @@
 		03239D6428C60F5C00C8D691 /* CPPTableConstraintObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03239D6228C60F5C00C8D691 /* CPPTableConstraintObject.cpp */; };
 		03239D6628C6153F00C8D691 /* CPPORMTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 03239D6528C6153F00C8D691 /* CPPORMTests.mm */; };
 		0326130D283F56BD00836E0F /* LiteralValueBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0326130B283F56BD00836E0F /* LiteralValueBridge.cpp */; };
-		0326130E283F56BD00836E0F /* LiteralValueBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 0326130C283F56BD00836E0F /* LiteralValueBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0326130F283F573C00836E0F /* WinqBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 032612BB283F279800836E0F /* WinqBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0326130E283F56BD00836E0F /* LiteralValueBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 0326130C283F56BD00836E0F /* LiteralValueBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		0326130F283F573C00836E0F /* WinqBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 032612BB283F279800836E0F /* WinqBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		03261311283F5E0300836E0F /* WinqBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03261310283F5E0300836E0F /* WinqBridge.cpp */; };
 		03261364283F6CFB00836E0F /* Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03261363283F6CFB00836E0F /* Identifier.swift */; };
 		032613B6283F8D7E00836E0F /* ColumnBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 032613B4283F8D7E00836E0F /* ColumnBridge.cpp */; };
-		032613B7283F8D7E00836E0F /* ColumnBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 032613B5283F8D7E00836E0F /* ColumnBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		032613B7283F8D7E00836E0F /* ColumnBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 032613B5283F8D7E00836E0F /* ColumnBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		032613BA283F8E4900836E0F /* ExpressionBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 032613B8283F8E4900836E0F /* ExpressionBridge.cpp */; };
-		032613BB283F8E4900836E0F /* ExpressionBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 032613B9283F8E4900836E0F /* ExpressionBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		032613BB283F8E4900836E0F /* ExpressionBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 032613B9283F8E4900836E0F /* ExpressionBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		032E112428C8511E00BCACE0 /* CPPIndexObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 032E112228C8511E00BCACE0 /* CPPIndexObject.cpp */; };
 		032E112828C8724A00BCACE0 /* CPPOldRemapObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 032E112628C8724A00BCACE0 /* CPPOldRemapObject.cpp */; };
 		032E112B28C874F500BCACE0 /* CPPNewRemapObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 032E112928C874F500BCACE0 /* CPPNewRemapObject.cpp */; };
@@ -61,9 +61,9 @@
 		03450DBA2738DDE800C4DC1B /* OneOrBinaryTokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 03450DB32738BBF000C4DC1B /* OneOrBinaryTokenizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		03450E012738ECB800C4DC1B /* OneOrBinaryTokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03450DB22738BBF000C4DC1B /* OneOrBinaryTokenizer.cpp */; };
 		03450E032738ED0200C4DC1B /* PinyinTokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03450DB62738C8F800C4DC1B /* PinyinTokenizer.cpp */; };
-		036E50B728115AB8007365CD /* WCTBridgeProperty.h in Headers */ = {isa = PBXBuildFile; fileRef = 036E50B628115AB8007365CD /* WCTBridgeProperty.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		036E50B728115AB8007365CD /* WCTBridgeProperty.h in Headers */ = {isa = PBXBuildFile; fileRef = 036E50B628115AB8007365CD /* WCTBridgeProperty.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		036E50B928115B1D007365CD /* WCTBridgeProperty.mm in Sources */ = {isa = PBXBuildFile; fileRef = 036E50B828115B1D007365CD /* WCTBridgeProperty.mm */; };
-		036E50BB28115BA0007365CD /* WCTBridgeProperty+CPP.h in Headers */ = {isa = PBXBuildFile; fileRef = 036E50BA28115BA0007365CD /* WCTBridgeProperty+CPP.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		036E50BB28115BA0007365CD /* WCTBridgeProperty+CPP.h in Headers */ = {isa = PBXBuildFile; fileRef = 036E50BA28115BA0007365CD /* WCTBridgeProperty+CPP.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		036E50C128116D7A007365CD /* WCTBridgeProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036E50C028116D7A007365CD /* WCTBridgeProperty.swift */; };
 		037330C1289A909A0030C113 /* Database.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 037330BF289A909A0030C113 /* Database.cpp */; };
 		037330C2289A909A0030C113 /* Database.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 037330C0289A909A0030C113 /* Database.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -522,18 +522,18 @@
 		037C3C112897EDC700328EC8 /* WCTFileManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 037C3C102897EDC700328EC8 /* WCTFileManager.cpp */; };
 		037C3C132897EFD600328EC8 /* WCTOperationQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 037C3C122897EFD600328EC8 /* WCTOperationQueue.cpp */; };
 		0381A67B2817A36300E64463 /* SelectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03331021281681200094CFCF /* SelectTests.swift */; };
-		0393BEDC27F6ED860058B295 /* ErrorBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 0393BEDB27F6ED860058B295 /* ErrorBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0393BEDC27F6ED860058B295 /* ErrorBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 0393BEDB27F6ED860058B295 /* ErrorBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		0393BEE127F6EDAC0058B295 /* ErrorBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0393BEDF27F6EDAC0058B295 /* ErrorBridge.cpp */; };
-		0393BEE427F715180058B295 /* HandleBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 0393BEE327F715180058B295 /* HandleBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0393BEE427F715180058B295 /* HandleBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 0393BEE327F715180058B295 /* HandleBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		0393BEE627F7152F0058B295 /* HandleBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0393BEE527F7152F0058B295 /* HandleBridge.cpp */; };
 		0397605827F54FA10071FA8F /* ObjectBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0397605727F54FA10071FA8F /* ObjectBridge.cpp */; };
 		039760A827F563F00071FA8F /* ObjectBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039760A727F563F00071FA8F /* ObjectBridge.swift */; };
-		039760AB27F5C0DD0071FA8F /* DatabaseBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 039760AA27F5C0DD0071FA8F /* DatabaseBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		039760AB27F5C0DD0071FA8F /* DatabaseBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 039760AA27F5C0DD0071FA8F /* DatabaseBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		039760AE27F5C1CA0071FA8F /* DatabaseBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 039760AC27F5C1CA0071FA8F /* DatabaseBridge.cpp */; };
 		039BD3962845CB4200C58BE2 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039BD3952845CB4200C58BE2 /* Filter.swift */; };
 		039BD3982845CB7C00C58BE2 /* WindowDef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039BD3972845CB7C00C58BE2 /* WindowDef.swift */; };
 		039BD4362846113D00C58BE2 /* ExpressionOperatableBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 039BD4342846113D00C58BE2 /* ExpressionOperatableBridge.cpp */; };
-		039BD4372846113D00C58BE2 /* ExpressionOperatableBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 039BD4352846113D00C58BE2 /* ExpressionOperatableBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		039BD4372846113D00C58BE2 /* ExpressionOperatableBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 039BD4352846113D00C58BE2 /* ExpressionOperatableBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		039D724A28BF773D00990803 /* Delete.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 039D724928BF773D00990803 /* Delete.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		039D724B28BF773D00990803 /* Delete.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 039D724928BF773D00990803 /* Delete.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		039D724E28BF795700990803 /* Select.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 039D724D28BF795700990803 /* Select.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -543,7 +543,7 @@
 		03A57F16284089B800D2A4C3 /* SchemaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A57F15284089B800D2A4C3 /* SchemaTests.swift */; };
 		03A57F192840B5A700D2A4C3 /* BindParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A57F172840B5A000D2A4C3 /* BindParameter.swift */; };
 		03A57F1C2840B5DC00D2A4C3 /* BindParameterBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03A57F1A2840B5DC00D2A4C3 /* BindParameterBridge.cpp */; };
-		03A57F1D2840B5DC00D2A4C3 /* BindParameterBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03A57F1B2840B5DC00D2A4C3 /* BindParameterBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		03A57F1D2840B5DC00D2A4C3 /* BindParameterBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03A57F1B2840B5DC00D2A4C3 /* BindParameterBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		03A57F1F2840BEFF00D2A4C3 /* BindParameterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A57F1E2840BEFF00D2A4C3 /* BindParameterTests.swift */; };
 		03AA58B128D2DE5000376EC2 /* CrossPlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = 03AA58A628D2DE4F00376EC2 /* CrossPlatform.h */; };
 		03AA58B228D2DE5000376EC2 /* CrossPlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = 03AA58A628D2DE4F00376EC2 /* CrossPlatform.h */; };
@@ -566,7 +566,7 @@
 		03AFD35028B8C4EB00EF5E56 /* Field.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03AFD34E28B8C4EB00EF5E56 /* Field.cpp */; };
 		03B4DB1628C98E5E00F64141 /* ORMSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 03B4DB1528C98E5E00F64141 /* ORMSelectTests.mm */; };
 		03B6A33C2869C51B00D83EC4 /* StatementAlterTableBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03B6A33A2869C51B00D83EC4 /* StatementAlterTableBridge.cpp */; };
-		03B6A33D2869C51B00D83EC4 /* StatementAlterTableBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03B6A33B2869C51B00D83EC4 /* StatementAlterTableBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		03B6A33D2869C51B00D83EC4 /* StatementAlterTableBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03B6A33B2869C51B00D83EC4 /* StatementAlterTableBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		03BF4B1A2888F87C00A30500 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		03BF4B222888F8EC00A30500 /* InitializationBenchmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1670B27F434E800D2C926 /* InitializationBenchmark.swift */; };
 		03BF4B232888F8F800A30500 /* SyncWriteBenchmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1670C27F434E800D2C926 /* SyncWriteBenchmark.swift */; };
@@ -620,7 +620,7 @@
 		03BF4B532888FAA600A30500 /* DatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39327AE322CF271E00AABD4B /* DatabaseTestCase.mm */; };
 		03BFC5392852E9CB00673AE4 /* WindowDefTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BFC5382852E9CB00673AE4 /* WindowDefTests.swift */; };
 		03BFC5D72853538400673AE4 /* IndexedColumnBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03BFC5D52853538400673AE4 /* IndexedColumnBridge.cpp */; };
-		03BFC5D82853538400673AE4 /* IndexedColumnBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03BFC5D62853538400673AE4 /* IndexedColumnBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		03BFC5D82853538400673AE4 /* IndexedColumnBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03BFC5D62853538400673AE4 /* IndexedColumnBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		03C2EAED27F8382200B41169 /* ErrorBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C2EAEC27F8382200B41169 /* ErrorBridge.swift */; };
 		03D077EE28C1F072009A3B18 /* TableOperation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03D077EC28C1F072009A3B18 /* TableOperation.cpp */; };
 		03D077EF28C1F072009A3B18 /* TableOperation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03D077EC28C1F072009A3B18 /* TableOperation.cpp */; };
@@ -638,13 +638,13 @@
 		03D3A2A828A65F3E0064D4D4 /* Lock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165EE27F42D6500D2C926 /* Lock.swift */; };
 		03D3A2A928A6643E0064D4D4 /* HandleStatement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0373310A289A94E00030C113 /* HandleStatement.cpp */; };
 		03DCB5E6286C2E5300CBC75D /* StatementAnalyzeBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03DCB5E4286C2E5300CBC75D /* StatementAnalyzeBridge.cpp */; };
-		03DCB5E7286C2E5300CBC75D /* StatementAnalyzeBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03DCB5E5286C2E5300CBC75D /* StatementAnalyzeBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		03DCB5E7286C2E5300CBC75D /* StatementAnalyzeBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03DCB5E5286C2E5300CBC75D /* StatementAnalyzeBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		03DCB5E9286C345C00CBC75D /* StatementAnalyze.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DCB5E8286C345C00CBC75D /* StatementAnalyze.swift */; };
 		03DCB5EB286C35A600CBC75D /* StatementAnalyzeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DCB5EA286C35A600CBC75D /* StatementAnalyzeTests.swift */; };
 		03DCB5EE286C3D8E00CBC75D /* StatementAttachBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03DCB5EC286C3D8E00CBC75D /* StatementAttachBridge.cpp */; };
-		03DCB5EF286C3D8E00CBC75D /* StatementAttachBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03DCB5ED286C3D8E00CBC75D /* StatementAttachBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		03DCB5EF286C3D8E00CBC75D /* StatementAttachBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03DCB5ED286C3D8E00CBC75D /* StatementAttachBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		03DCB5F2286C480900CBC75D /* StatementCreateIndexBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03DCB5F0286C480900CBC75D /* StatementCreateIndexBridge.cpp */; };
-		03DCB5F3286C480900CBC75D /* StatementCreateIndexBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03DCB5F1286C480900CBC75D /* StatementCreateIndexBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		03DCB5F3286C480900CBC75D /* StatementCreateIndexBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03DCB5F1286C480900CBC75D /* StatementCreateIndexBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		03E165FB27F42D6500D2C926 /* Expression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1659127F42D6500D2C926 /* Expression.swift */; };
 		03E165FC27F42D6500D2C926 /* StatementExplain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1659227F42D6500D2C926 /* StatementExplain.swift */; };
 		03E165FD27F42D6500D2C926 /* StatementInsert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1659327F42D6500D2C926 /* StatementInsert.swift */; };
@@ -709,7 +709,7 @@
 		03E1664627F42D6600D2C926 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165E327F42D6500D2C926 /* Database.swift */; };
 		03E1664A27F42D6600D2C926 /* Recyclable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165E827F42D6500D2C926 /* Recyclable.swift */; };
 		03E1664C27F42D6600D2C926 /* WCDBError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165EA27F42D6500D2C926 /* WCDBError.swift */; };
-		03E1665127F42D6600D2C926 /* WCDB-Bridging.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E165EF27F42D6500D2C926 /* WCDB-Bridging.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		03E1665127F42D6600D2C926 /* WCDB-Private-Bridging.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E165EF27F42D6500D2C926 /* WCDB-Private-Bridging.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		03E1665827F42D6600D2C926 /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165F627F42D6500D2C926 /* Optional.swift */; };
 		03E1665927F42D6600D2C926 /* Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165F727F42D6500D2C926 /* Convenience.swift */; };
 		03E1677327F434E900D2C926 /* TracerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1672027F434E800D2C926 /* TracerTests.swift */; };
@@ -771,7 +771,7 @@
 		03E167B027F434E900D2C926 /* Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1676127F434E800D2C926 /* Assert.swift */; };
 		03E167B127F434E900D2C926 /* BaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1676227F434E800D2C926 /* BaseTestCase.swift */; };
 		03E167B227F434E900D2C926 /* Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1676327F434E800D2C926 /* Convenience.swift */; };
-		03E167B827F46C7100D2C926 /* ObjectBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E167B727F46C7100D2C926 /* ObjectBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		03E167B827F46C7100D2C926 /* ObjectBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E167B727F46C7100D2C926 /* ObjectBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		03E167BA27F46E2E00D2C926 /* ObjectBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 03E167B927F46E2E00D2C926 /* ObjectBridge.hpp */; };
 		03E3180D28A21AF800540CB1 /* CppInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E3180C28A21AF800540CB1 /* CppInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		03E3180E28A21AF800540CB1 /* CppInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E3180C28A21AF800540CB1 /* CppInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -799,31 +799,31 @@
 		03E5CC7028A3BDF3005353D9 /* Value.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 03E5CC6D28A3BDF3005353D9 /* Value.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		03E5CC7128A3BDF3005353D9 /* Value.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 03E5CC6D28A3BDF3005353D9 /* Value.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		03E8228028447B940072CA57 /* ColumnDefBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03E8227E28447B940072CA57 /* ColumnDefBridge.cpp */; };
-		03E8228128447B940072CA57 /* ColumnDefBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E8227F28447B940072CA57 /* ColumnDefBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		03E8228128447B940072CA57 /* ColumnDefBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E8227F28447B940072CA57 /* ColumnDefBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		03E822842844B8760072CA57 /* CommonTableExpressionBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03E822822844B8760072CA57 /* CommonTableExpressionBridge.cpp */; };
-		03E822852844B8760072CA57 /* CommonTableExpressionBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E822832844B8760072CA57 /* CommonTableExpressionBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		03E822852844B8760072CA57 /* CommonTableExpressionBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E822832844B8760072CA57 /* CommonTableExpressionBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		03E822882844B8CD0072CA57 /* StatementSelectBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03E822862844B8CD0072CA57 /* StatementSelectBridge.cpp */; };
-		03E822892844B8CD0072CA57 /* StatementSelectBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E822872844B8CD0072CA57 /* StatementSelectBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		03E822892844B8CD0072CA57 /* StatementSelectBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E822872844B8CD0072CA57 /* StatementSelectBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		03E8228C2844BEFF0072CA57 /* CommonTableExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E8228B2844BEFF0072CA57 /* CommonTableExpression.swift */; };
 		03E8228E2844C0E70072CA57 /* CommonTableExpressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E8228D2844C0E70072CA57 /* CommonTableExpressionTests.swift */; };
 		03E822912844E1AB0072CA57 /* RaiseFunctionBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03E8228F2844E1AB0072CA57 /* RaiseFunctionBridge.cpp */; };
-		03E822922844E1AB0072CA57 /* RaiseFunctionBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E822902844E1AB0072CA57 /* RaiseFunctionBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		03E822922844E1AB0072CA57 /* RaiseFunctionBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E822902844E1AB0072CA57 /* RaiseFunctionBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		03EA88CE27D5F05D0075C7BD /* FTSError.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 03EA88CD27D5F05D0075C7BD /* FTSError.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		03EA88D027D5F0840075C7BD /* FTSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03EA88CF27D5F0840075C7BD /* FTSError.cpp */; };
 		03EE3A51287FCECF00C8F0B3 /* StatementCreateTrigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03EE3A50287FCECF00C8F0B3 /* StatementCreateTrigger.swift */; };
 		03EE3DA728810C2000C8F0B3 /* StatementCreateTriggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03EE3DA628810C2000C8F0B3 /* StatementCreateTriggerTests.swift */; };
 		03EE3DAA288165A700C8F0B3 /* StatementInsertBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03EE3DA8288165A700C8F0B3 /* StatementInsertBridge.cpp */; };
-		03EE3DAB288165A700C8F0B3 /* StatementInsertBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03EE3DA9288165A700C8F0B3 /* StatementInsertBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		03EE3DAB288165A700C8F0B3 /* StatementInsertBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03EE3DA9288165A700C8F0B3 /* StatementInsertBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		03EE3DAE28816DA800C8F0B3 /* StatementUpdateBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03EE3DAC28816DA800C8F0B3 /* StatementUpdateBridge.cpp */; };
-		03EE3DAF28816DA800C8F0B3 /* StatementUpdateBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03EE3DAD28816DA800C8F0B3 /* StatementUpdateBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		03EE3DAF28816DA800C8F0B3 /* StatementUpdateBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03EE3DAD28816DA800C8F0B3 /* StatementUpdateBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		03F428EB28BF686F005CE249 /* Update.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 03F428E828BF686F005CE249 /* Update.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		03F428EC28BF686F005CE249 /* Update.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 03F428E828BF686F005CE249 /* Update.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		03F54820287D8467007BCA3E /* StatementDetachBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03F5481E287D8467007BCA3E /* StatementDetachBridge.cpp */; };
-		03F54821287D8467007BCA3E /* StatementDetachBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03F5481F287D8467007BCA3E /* StatementDetachBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		03F54821287D8467007BCA3E /* StatementDetachBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03F5481F287D8467007BCA3E /* StatementDetachBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		03F54824287D87F9007BCA3E /* StatementDropIndexBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03F54822287D87F9007BCA3E /* StatementDropIndexBridge.cpp */; };
-		03F54825287D87F9007BCA3E /* StatementDropIndexBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03F54823287D87F9007BCA3E /* StatementDropIndexBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		03F54825287D87F9007BCA3E /* StatementDropIndexBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03F54823287D87F9007BCA3E /* StatementDropIndexBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		03F54828287D93A7007BCA3E /* StatementDropTableBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03F54826287D93A7007BCA3E /* StatementDropTableBridge.cpp */; };
-		03F54829287D93A7007BCA3E /* StatementDropTableBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03F54827287D93A7007BCA3E /* StatementDropTableBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		03F54829287D93A7007BCA3E /* StatementDropTableBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03F54827287D93A7007BCA3E /* StatementDropTableBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		0D0D56C1254ABEAA000F16A6 /* FTS5Object.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D0D56C0254ABEAA000F16A6 /* FTS5Object.mm */; };
 		0D0D56CA254AC0F0000F16A6 /* FTS5Test.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D0D56C9254AC0F0000F16A6 /* FTS5Test.mm */; };
 		0D249BC12542B8E900B43BD9 /* MergeFTSIndexLogic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D249BC02542B8E900B43BD9 /* MergeFTSIndexLogic.hpp */; };
@@ -1594,20 +1594,21 @@
 		39D3C74822A8B8C600C93DC0 /* OperationHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 39D3C74622A8B8C600C93DC0 /* OperationHandle.cpp */; };
 		39D3C74A22A8B8C600C93DC0 /* OperationHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39D3C74722A8B8C600C93DC0 /* OperationHandle.hpp */; };
 		750DC06C2913DE7300F19044 /* FTSBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 750DC0692913DE7300F19044 /* FTSBridge.cpp */; };
-		750DC06E2913DE7300F19044 /* FTSBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 750DC06A2913DE7300F19044 /* FTSBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		750DC06E2913DE7300F19044 /* FTSBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 750DC06A2913DE7300F19044 /* FTSBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75195E812852454700EC8C1F /* FrameSpecTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75195E802852454700EC8C1F /* FrameSpecTests.swift */; };
 		751CA67728C64B7B00874A7A /* CPPAllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 751CA67528C64B7B00874A7A /* CPPAllTypesObject.mm */; };
 		75204AE8283FD6DC0002E40C /* Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75204AE7283FD6DC0002E40C /* Schema.swift */; };
 		75204AEB283FD7410002E40C /* SchemaBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75204AE9283FD7410002E40C /* SchemaBridge.cpp */; };
-		75204AEC283FD7410002E40C /* SchemaBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75204AEA283FD7410002E40C /* SchemaBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75204AEC283FD7410002E40C /* SchemaBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75204AEA283FD7410002E40C /* SchemaBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		7521D39228BD1187009C33D0 /* ChainCall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7521D39028BD1187009C33D0 /* ChainCall.cpp */; };
 		7521D39328BD1187009C33D0 /* ChainCall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7521D39028BD1187009C33D0 /* ChainCall.cpp */; };
 		7521D39428BD1187009C33D0 /* ChainCall.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7521D39128BD1187009C33D0 /* ChainCall.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521D39528BD1187009C33D0 /* ChainCall.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7521D39128BD1187009C33D0 /* ChainCall.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		7521D6B9291E771F009642EF /* WCDB-Public-Bridging.h in Headers */ = {isa = PBXBuildFile; fileRef = 7521D6B8291E771C009642EF /* WCDB-Public-Bridging.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		752594932851FCEF0068A602 /* RaiseFunctionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752594922851FCEF0068A602 /* RaiseFunctionTests.swift */; };
 		752594E228521AA00068A602 /* FilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752594E128521AA00068A602 /* FilterTests.swift */; };
 		752594E5285226C00068A602 /* FrameSpecBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 752594E3285226C00068A602 /* FrameSpecBridge.cpp */; };
-		752594E6285226C00068A602 /* FrameSpecBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 752594E4285226C00068A602 /* FrameSpecBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		752594E6285226C00068A602 /* FrameSpecBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 752594E4285226C00068A602 /* FrameSpecBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		752594E828522A4A0068A602 /* FrameSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752594E728522A4A0068A602 /* FrameSpec.swift */; };
 		752C7E3D28C8E16800C9FFA6 /* ORMDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 752C7E3C28C8E16800C9FFA6 /* ORMDeleteTests.mm */; };
 		752C7E4028C8E94200C9FFA6 /* ORMInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 752C7E3F28C8E94200C9FFA6 /* ORMInsertTests.mm */; };
@@ -1643,16 +1644,16 @@
 		755391D62403B3DB00036918 /* WCTHandleStatement.mm in Sources */ = {isa = PBXBuildFile; fileRef = 755391D52403B3DB00036918 /* WCTHandleStatement.mm */; };
 		755391E12403CB9E00036918 /* WCTHandleStatement+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 755391E02403CB9700036918 /* WCTHandleStatement+Private.h */; };
 		755B5A6929154361006955AF /* OneOrBinaryTokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 03450DB32738BBF000C4DC1B /* OneOrBinaryTokenizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		756A773827F9EDCA00105B7C /* HandleStatementBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 756A773727F9EDCA00105B7C /* HandleStatementBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		756A773827F9EDCA00105B7C /* HandleStatementBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 756A773727F9EDCA00105B7C /* HandleStatementBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		756A773D27F9EDDE00105B7C /* HandleStatementBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 756A773C27F9EDDE00105B7C /* HandleStatementBridge.cpp */; };
-		756A774027FAC18000105B7C /* CoreBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 756A773F27FAC17F00105B7C /* CoreBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		756A774027FAC18000105B7C /* CoreBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 756A773F27FAC17F00105B7C /* CoreBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		756A774327FAC1D900105B7C /* CoreBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 756A774227FAC1D900105B7C /* CoreBridge.cpp */; };
 		757457042402D614005E3682 /* WCTHandleStatement.h in Headers */ = {isa = PBXBuildFile; fileRef = 757457032402D614005E3682 /* WCTHandleStatement.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75751ED82412AD11006CBFFD /* MigratingHandleStatement.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75751ED62412AD10006CBFFD /* MigratingHandleStatement.hpp */; };
 		75751ED92412AD11006CBFFD /* MigratingHandleStatement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75751ED72412AD11006CBFFD /* MigratingHandleStatement.cpp */; };
 		7575F7B2280679D7006259E2 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		757821E1286DF5EB0092F858 /* StatementCreateTableBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 757821DF286DF5EB0092F858 /* StatementCreateTableBridge.cpp */; };
-		757821E2286DF5EB0092F858 /* StatementCreateTableBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 757821E0286DF5EB0092F858 /* StatementCreateTableBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		757821E2286DF5EB0092F858 /* StatementCreateTableBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 757821E0286DF5EB0092F858 /* StatementCreateTableBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75882C7D28C7C2EF00F95947 /* CPPColumnConstraintPrimary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75882C7B28C7C2EF00F95947 /* CPPColumnConstraintPrimary.cpp */; };
 		75882C8128C7C3E600F95947 /* CPPColumnConstraintPrimaryAsc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75882C7F28C7C3E600F95947 /* CPPColumnConstraintPrimaryAsc.cpp */; };
 		75882C8428C7C4A300F95947 /* CPPColumnConstraintPrimaryDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75882C8228C7C4A300F95947 /* CPPColumnConstraintPrimaryDesc.cpp */; };
@@ -1670,41 +1671,41 @@
 		7596162328BFB05100AE86BA /* CPPDeclaration.h in Headers */ = {isa = PBXBuildFile; fileRef = 7596162228BFB05100AE86BA /* CPPDeclaration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7596162428BFB05100AE86BA /* CPPDeclaration.h in Headers */ = {isa = PBXBuildFile; fileRef = 7596162228BFB05100AE86BA /* CPPDeclaration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75A46C00284310CE00B58207 /* ColumnConstraintBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75A46BFE284310CE00B58207 /* ColumnConstraintBridge.cpp */; };
-		75A46C01284310CE00B58207 /* ColumnConstraintBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A46BFF284310CE00B58207 /* ColumnConstraintBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75A46C01284310CE00B58207 /* ColumnConstraintBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A46BFF284310CE00B58207 /* ColumnConstraintBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75A46C0428431D6300B58207 /* ForeignKeyBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75A46C0228431D6300B58207 /* ForeignKeyBridge.cpp */; };
-		75A46C0528431D6300B58207 /* ForeignKeyBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A46C0328431D6300B58207 /* ForeignKeyBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75A46C0528431D6300B58207 /* ForeignKeyBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A46C0328431D6300B58207 /* ForeignKeyBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75A46C072843273A00B58207 /* ColumnConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A46C062843273A00B58207 /* ColumnConstraint.swift */; };
 		75A46C0928432A5D00B58207 /* SyntaxConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A46C0828432A5D00B58207 /* SyntaxConst.swift */; };
 		75A46C0B2843709500B58207 /* ColumnConstraintTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A46C0A2843709500B58207 /* ColumnConstraintTests.swift */; };
-		75A46C0E2843B3BC00B58207 /* OrderingTermBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A46C0C2843B3BC00B58207 /* OrderingTermBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75A46C0E2843B3BC00B58207 /* OrderingTermBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A46C0C2843B3BC00B58207 /* OrderingTermBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75A46C0F2843B3BC00B58207 /* OrderingTermBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75A46C0D2843B3BC00B58207 /* OrderingTermBridge.cpp */; };
 		75A46C112843B73C00B58207 /* WinqBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75A46C102843B73C00B58207 /* WinqBridge.hpp */; };
 		75AF6AD728544C8800A7C43D /* TableOrSubqueryBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75AF6AD528544C8800A7C43D /* TableOrSubqueryBridge.cpp */; };
-		75AF6AD828544C8800A7C43D /* TableOrSubqueryBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AF6AD628544C8800A7C43D /* TableOrSubqueryBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75AF6AD828544C8800A7C43D /* TableOrSubqueryBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AF6AD628544C8800A7C43D /* TableOrSubqueryBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75AF6ADB2854C5ED00A7C43D /* JoinBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75AF6AD92854C5ED00A7C43D /* JoinBridge.cpp */; };
-		75AF6ADC2854C5ED00A7C43D /* JoinBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AF6ADA2854C5ED00A7C43D /* JoinBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75AF6ADC2854C5ED00A7C43D /* JoinBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AF6ADA2854C5ED00A7C43D /* JoinBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75AF6ADF2854EF6D00A7C43D /* QualifiedTableBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75AF6ADD2854EF6D00A7C43D /* QualifiedTableBridge.cpp */; };
-		75AF6AE02854EF6D00A7C43D /* QualifiedTableBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AF6ADE2854EF6D00A7C43D /* QualifiedTableBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75AF6AE02854EF6D00A7C43D /* QualifiedTableBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AF6ADE2854EF6D00A7C43D /* QualifiedTableBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75AF6AE22854F19800A7C43D /* QualifiedTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AF6AE12854F19800A7C43D /* QualifiedTable.swift */; };
 		75AF6AE52854F32200A7C43D /* QualifiedTableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AF6AE32854F2FC00A7C43D /* QualifiedTableTests.swift */; };
 		75AF6AE9285594A100A7C43D /* ResultColumnBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75AF6AE7285594A100A7C43D /* ResultColumnBridge.cpp */; };
-		75AF6AEA285594A100A7C43D /* ResultColumnBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AF6AE8285594A100A7C43D /* ResultColumnBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75AF6AEA285594A100A7C43D /* ResultColumnBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AF6AE8285594A100A7C43D /* ResultColumnBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75AF6AED28559F4800A7C43D /* TableConstraintBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75AF6AEB28559F4800A7C43D /* TableConstraintBridge.cpp */; };
-		75AF6AEE28559F4800A7C43D /* TableConstraintBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AF6AEC28559F4800A7C43D /* TableConstraintBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75AF6AEE28559F4800A7C43D /* TableConstraintBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AF6AEC28559F4800A7C43D /* TableConstraintBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75AF6AF12855C8BF00A7C43D /* UpsertBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75AF6AEF2855C8BF00A7C43D /* UpsertBridge.cpp */; };
-		75AF6AF22855C8BF00A7C43D /* UpsertBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AF6AF02855C8BF00A7C43D /* UpsertBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75AF6AF22855C8BF00A7C43D /* UpsertBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AF6AF02855C8BF00A7C43D /* UpsertBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75AF6AF42855CCDD00A7C43D /* Upsert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AF6AF32855CCDD00A7C43D /* Upsert.swift */; };
 		75AF6AF62855D21000A7C43D /* UpsertTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AF6AF52855D21000A7C43D /* UpsertTests.swift */; };
 		75AF6AFA2856303700A7C43D /* PragmaBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75AF6AF82856303700A7C43D /* PragmaBridge.cpp */; };
-		75AF6AFB2856303700A7C43D /* PragmaBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AF6AF92856303700A7C43D /* PragmaBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75AF6AFB2856303700A7C43D /* PragmaBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AF6AF92856303700A7C43D /* PragmaBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75B698D5290AD4C0006E1F8F /* BaseTokenizerUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75B698D3290AD4C0006E1F8F /* BaseTokenizerUtil.cpp */; };
 		75B698D6290AD4C0006E1F8F /* BaseTokenizerUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75B698D3290AD4C0006E1F8F /* BaseTokenizerUtil.cpp */; };
 		75B698D7290AD4C0006E1F8F /* BaseTokenizerUtil.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75B698D4290AD4C0006E1F8F /* BaseTokenizerUtil.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		75B698D8290AD4C0006E1F8F /* BaseTokenizerUtil.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75B698D4290AD4C0006E1F8F /* BaseTokenizerUtil.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		75C1033E28450CC50006BBCB /* FilterBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C1033C28450CC50006BBCB /* FilterBridge.cpp */; };
-		75C1033F28450CC50006BBCB /* FilterBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C1033D28450CC50006BBCB /* FilterBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75C1033F28450CC50006BBCB /* FilterBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C1033D28450CC50006BBCB /* FilterBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75C1034228450D840006BBCB /* WindowDefBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C1034028450D840006BBCB /* WindowDefBridge.cpp */; };
-		75C1034328450D840006BBCB /* WindowDefBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C1034128450D840006BBCB /* WindowDefBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75C1034328450D840006BBCB /* WindowDefBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C1034128450D840006BBCB /* WindowDefBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75C10345284530BF0006BBCB /* RaiseFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C10344284530BF0006BBCB /* RaiseFunction.swift */; };
 		75C1374224BAF7C5001C0D5E /* MissColumnTableMigratingCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75C1373A24BAF7B2001C0D5E /* MissColumnTableMigratingCompatibleTests.mm */; };
 		75C1374324BAF7C5001C0D5E /* MissColumnTableMigrationCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75C1373B24BAF7B2001C0D5E /* MissColumnTableMigrationCompatibleTests.mm */; };
@@ -1726,7 +1727,7 @@
 		75CD026F28CF8F5F0071B6C3 /* SelectInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75CD026E28CF8F5F0071B6C3 /* SelectInterface.swift */; };
 		75CD027128CF900C0071B6C3 /* TableInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75CD027028CF900C0071B6C3 /* TableInterface.swift */; };
 		75CD724F290D2449008583A3 /* CPPFTS3Object.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75CD724D290D2449008583A3 /* CPPFTS3Object.mm */; };
-		75CE3EFE2812D95100E132F6 /* WCTAPIBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CE3EFD2812D95100E132F6 /* WCTAPIBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75CE3EFE2812D95100E132F6 /* WCTAPIBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CE3EFD2812D95100E132F6 /* WCTAPIBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75CE3F002812E1A400E132F6 /* WCTAPIBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75CE3EFF2812E1A400E132F6 /* WCTAPIBridge.mm */; };
 		75D4834228A79AD3004FDD3C /* CPPTraceTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75D4834128A79AD3004FDD3C /* CPPTraceTest.mm */; };
 		75D4834528A7A827004FDD3C /* CPPTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75D4834428A7A827004FDD3C /* CPPTableTestCase.mm */; };
@@ -1749,23 +1750,23 @@
 		75E76AE42917AE2A00073CCA /* CPPVirtualTableFTS4Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E76AE22917AE2A00073CCA /* CPPVirtualTableFTS4Object.cpp */; };
 		75E76AE72917B07E00073CCA /* CPPVirtualTableFTS5Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E76AE52917B07E00073CCA /* CPPVirtualTableFTS5Object.cpp */; };
 		75EB1965287F068200AA62F7 /* StatementDropTriggerBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75EB1963287F068200AA62F7 /* StatementDropTriggerBridge.cpp */; };
-		75EB1966287F068200AA62F7 /* StatementDropTriggerBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75EB1964287F068200AA62F7 /* StatementDropTriggerBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75EB1966287F068200AA62F7 /* StatementDropTriggerBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75EB1964287F068200AA62F7 /* StatementDropTriggerBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75EB1968287F078E00AA62F7 /* StatementDropTrigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EB1967287F078E00AA62F7 /* StatementDropTrigger.swift */; };
 		75EB196B287F08A300AA62F7 /* StatementDropTriggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EB1969287F086D00AA62F7 /* StatementDropTriggerTests.swift */; };
 		75EB196E287F093B00AA62F7 /* StatementDropViewBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75EB196C287F093B00AA62F7 /* StatementDropViewBridge.cpp */; };
-		75EB196F287F093B00AA62F7 /* StatementDropViewBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75EB196D287F093B00AA62F7 /* StatementDropViewBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75EB196F287F093B00AA62F7 /* StatementDropViewBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75EB196D287F093B00AA62F7 /* StatementDropViewBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75EB1971287F0A2600AA62F7 /* StatementDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EB1970287F0A2600AA62F7 /* StatementDropView.swift */; };
 		75EB1A07287F0AFA00AA62F7 /* StatementDropViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EB1A05287F0AF700AA62F7 /* StatementDropViewTests.swift */; };
 		75EB1A0A287F0BDA00AA62F7 /* StatementCreateViewBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75EB1A08287F0BDA00AA62F7 /* StatementCreateViewBridge.cpp */; };
-		75EB1A0B287F0BDA00AA62F7 /* StatementCreateViewBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75EB1A09287F0BDA00AA62F7 /* StatementCreateViewBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75EB1A0B287F0BDA00AA62F7 /* StatementCreateViewBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75EB1A09287F0BDA00AA62F7 /* StatementCreateViewBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75EB1A0D287F0DE200AA62F7 /* StatementCreateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EB1A0C287F0DE200AA62F7 /* StatementCreateView.swift */; };
 		75EB1A10287F0EB900AA62F7 /* StatementCreateViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EB1A0E287F0E3700AA62F7 /* StatementCreateViewTests.swift */; };
 		75EB1A13287F10BF00AA62F7 /* StatementCreateTriggerBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75EB1A11287F10BF00AA62F7 /* StatementCreateTriggerBridge.cpp */; };
-		75EB1A14287F10BF00AA62F7 /* StatementCreateTriggerBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75EB1A12287F10BF00AA62F7 /* StatementCreateTriggerBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75EB1A14287F10BF00AA62F7 /* StatementCreateTriggerBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75EB1A12287F10BF00AA62F7 /* StatementCreateTriggerBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75F1A3062871DE9A008503A2 /* StatementCreateVirtualTableBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F1A3042871DE9A008503A2 /* StatementCreateVirtualTableBridge.cpp */; };
-		75F1A3072871DE9A008503A2 /* StatementCreateVirtualTableBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F1A3052871DE9A008503A2 /* StatementCreateVirtualTableBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75F1A3072871DE9A008503A2 /* StatementCreateVirtualTableBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F1A3052871DE9A008503A2 /* StatementCreateVirtualTableBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75F1A30A2871E764008503A2 /* StatementDeleteBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F1A3082871E764008503A2 /* StatementDeleteBridge.cpp */; };
-		75F1A30B2871E764008503A2 /* StatementDeleteBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F1A3092871E764008503A2 /* StatementDeleteBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75F1A30B2871E764008503A2 /* StatementDeleteBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F1A3092871E764008503A2 /* StatementDeleteBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75F32F0928B9CE8E00A72697 /* CPPORMMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F32F0828B9CE8E00A72697 /* CPPORMMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75F32F0A28B9CE8E00A72697 /* CPPORMMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F32F0828B9CE8E00A72697 /* CPPORMMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75F32F0D28B9F90900A72697 /* FTSTokenizerUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F32F0B28B9F90900A72697 /* FTSTokenizerUtil.cpp */; };
@@ -1783,25 +1784,25 @@
 		75F32F2A28BA31CD00A72697 /* ResultField.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75F32F2728BA31CD00A72697 /* ResultField.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		75F32F2B28BA31CD00A72697 /* ResultField.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75F32F2728BA31CD00A72697 /* ResultField.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		75F4DE332883E43C00760DC3 /* StatementExplainBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F4DE312883E43C00760DC3 /* StatementExplainBridge.cpp */; };
-		75F4DE342883E43C00760DC3 /* StatementExplainBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F4DE322883E43C00760DC3 /* StatementExplainBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75F4DE342883E43C00760DC3 /* StatementExplainBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F4DE322883E43C00760DC3 /* StatementExplainBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75F4DE372883E88100760DC3 /* StatementPragmaBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F4DE352883E88100760DC3 /* StatementPragmaBridge.cpp */; };
-		75F4DE382883E88100760DC3 /* StatementPragmaBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F4DE362883E88100760DC3 /* StatementPragmaBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75F4DE382883E88100760DC3 /* StatementPragmaBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F4DE362883E88100760DC3 /* StatementPragmaBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75F4DE3F2883F0A800760DC3 /* StatementReindexBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F4DE3D2883F0A800760DC3 /* StatementReindexBridge.cpp */; };
-		75F4DE402883F0A800760DC3 /* StatementReindexBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F4DE3E2883F0A800760DC3 /* StatementReindexBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75F4DE402883F0A800760DC3 /* StatementReindexBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F4DE3E2883F0A800760DC3 /* StatementReindexBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75F4DE432883FD6A00760DC3 /* StatementReleaseBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F4DE412883FD6A00760DC3 /* StatementReleaseBridge.cpp */; };
-		75F4DE442883FD6A00760DC3 /* StatementReleaseBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F4DE422883FD6A00760DC3 /* StatementReleaseBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75F4DE442883FD6A00760DC3 /* StatementReleaseBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F4DE422883FD6A00760DC3 /* StatementReleaseBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75F4DE472884032600760DC3 /* StatementRollbackBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F4DE452884032600760DC3 /* StatementRollbackBridge.cpp */; };
-		75F4DE482884032600760DC3 /* StatementRollbackBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F4DE462884032600760DC3 /* StatementRollbackBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75F4DE482884032600760DC3 /* StatementRollbackBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F4DE462884032600760DC3 /* StatementRollbackBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75F4DE4B288405DD00760DC3 /* StatementSavepointBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F4DE49288405DD00760DC3 /* StatementSavepointBridge.cpp */; };
-		75F4DE4C288405DD00760DC3 /* StatementSavepointBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F4DE4A288405DD00760DC3 /* StatementSavepointBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75F4DE4C288405DD00760DC3 /* StatementSavepointBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F4DE4A288405DD00760DC3 /* StatementSavepointBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75F4DE51288407F800760DC3 /* StatementVacuumBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F4DE4F288407F800760DC3 /* StatementVacuumBridge.cpp */; };
-		75F4DE52288407F800760DC3 /* StatementVacuumBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F4DE50288407F800760DC3 /* StatementVacuumBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75F4DE52288407F800760DC3 /* StatementVacuumBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F4DE50288407F800760DC3 /* StatementVacuumBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75F4DE5528840C4800760DC3 /* StatementBeginBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F4DE5328840C4800760DC3 /* StatementBeginBridge.cpp */; };
-		75F4DE5628840C4800760DC3 /* StatementBeginBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F4DE5428840C4800760DC3 /* StatementBeginBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75F4DE5628840C4800760DC3 /* StatementBeginBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F4DE5428840C4800760DC3 /* StatementBeginBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75F4DE58288411DB00760DC3 /* StatementBegin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F4DE57288411DB00760DC3 /* StatementBegin.swift */; };
 		75F4DE5A2884132F00760DC3 /* StatementBeginTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F4DE592884132F00760DC3 /* StatementBeginTests.swift */; };
 		75F4DE5F2884149100760DC3 /* StatementCommitBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F4DE5D2884149100760DC3 /* StatementCommitBridge.cpp */; };
-		75F4DE602884149100760DC3 /* StatementCommitBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F4DE5E2884149100760DC3 /* StatementCommitBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75F4DE602884149100760DC3 /* StatementCommitBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F4DE5E2884149100760DC3 /* StatementCommitBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75F4DE622884161200760DC3 /* StatementCommit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F4DE612884161200760DC3 /* StatementCommit.swift */; };
 		75F4DE642884164E00760DC3 /* StatementCommitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F4DE632884164E00760DC3 /* StatementCommitTests.swift */; };
 		75FFD33028BE5BB70051DB07 /* Insert.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75FFD32D28BE5BB70051DB07 /* Insert.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -2091,7 +2092,7 @@
 		03E165E827F42D6500D2C926 /* Recyclable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recyclable.swift; sourceTree = "<group>"; };
 		03E165EA27F42D6500D2C926 /* WCDBError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WCDBError.swift; sourceTree = "<group>"; };
 		03E165EE27F42D6500D2C926 /* Lock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lock.swift; sourceTree = "<group>"; };
-		03E165EF27F42D6500D2C926 /* WCDB-Bridging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCDB-Bridging.h"; sourceTree = "<group>"; };
+		03E165EF27F42D6500D2C926 /* WCDB-Private-Bridging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCDB-Private-Bridging.h"; sourceTree = "<group>"; };
 		03E165F627F42D6500D2C926 /* Optional.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Optional.swift; sourceTree = "<group>"; };
 		03E165F727F42D6500D2C926 /* Convenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Convenience.swift; sourceTree = "<group>"; };
 		03E1670B27F434E800D2C926 /* InitializationBenchmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitializationBenchmark.swift; sourceTree = "<group>"; };
@@ -3069,6 +3070,8 @@
 		75204AEA283FD7410002E40C /* SchemaBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SchemaBridge.h; sourceTree = "<group>"; };
 		7521D39028BD1187009C33D0 /* ChainCall.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ChainCall.cpp; sourceTree = "<group>"; };
 		7521D39128BD1187009C33D0 /* ChainCall.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ChainCall.hpp; sourceTree = "<group>"; };
+		7521D6B6291E6DFC009642EF /* WCDB.private.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = WCDB.private.modulemap; sourceTree = "<group>"; };
+		7521D6B8291E771C009642EF /* WCDB-Public-Bridging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCDB-Public-Bridging.h"; sourceTree = "<group>"; };
 		752594922851FCEF0068A602 /* RaiseFunctionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RaiseFunctionTests.swift; sourceTree = "<group>"; };
 		752594E128521AA00068A602 /* FilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterTests.swift; sourceTree = "<group>"; };
 		752594E3285226C00068A602 /* FrameSpecBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FrameSpecBridge.cpp; sourceTree = "<group>"; };
@@ -4039,7 +4042,8 @@
 				036E506728113C87007365CD /* objcbridge */,
 				032612BA283F24A000836E0F /* winqbridge */,
 				03331004281681200094CFCF /* tests */,
-				03E165EF27F42D6500D2C926 /* WCDB-Bridging.h */,
+				03E165EF27F42D6500D2C926 /* WCDB-Private-Bridging.h */,
+				7521D6B8291E771C009642EF /* WCDB-Public-Bridging.h */,
 			);
 			path = bridge;
 			sourceTree = "<group>";
@@ -5535,6 +5539,7 @@
 				234F0369227A9E3C00DD65A2 /* Info.plist */,
 				234F036E227A9E3D00DD65A2 /* WCDB.modulemap */,
 				234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */,
+				7521D6B6291E6DFC009642EF /* WCDB.private.modulemap */,
 			);
 			path = support;
 			sourceTree = "<group>";
@@ -6138,7 +6143,6 @@
 				23B4DCE32112B03C00954D71 /* AsyncQueue.hpp in Headers */,
 				23301BFB229A851800A8AB5A /* AutoBackupConfig.hpp in Headers */,
 				23EEDCE7217DFADC006E9E73 /* WINQ.h in Headers */,
-				03E167B827F46C7100D2C926 /* ObjectBridge.h in Headers */,
 				23759463210081AA00DBB721 /* UnsafeData.hpp in Headers */,
 				03E3180F28A21B0000540CB1 /* Handle.hpp in Headers */,
 				23DF0A0E219029DB00F0B2B6 /* WCTDeclaration.h in Headers */,
@@ -6156,11 +6160,9 @@
 				23EEDD2E217DFADC006E9E73 /* SyntaxAttachSTMT.hpp in Headers */,
 				23EEDC80217DFADC006E9E73 /* CommonTableExpression.hpp in Headers */,
 				03A15DFA28AA636A0031A50A /* ValueArray.hpp in Headers */,
-				75EB1A14287F10BF00AA62F7 /* StatementCreateTriggerBridge.h in Headers */,
 				39690194233B2235006EEFD4 /* WCTTable+Table.h in Headers */,
 				233A8534215E7CFE00BB8D4F /* Console.hpp in Headers */,
 				2370B11F21914ED500D3227C /* NSObject+WCTColumnCoding.h in Headers */,
-				75AF6AF22855C8BF00A7C43D /* UpsertBridge.h in Headers */,
 				39579858227FBC8A0069F985 /* WCTDatabase+Test.h in Headers */,
 				391F7C84225DE8FD0095E82D /* Core.h in Headers */,
 				2360A5FB20D78F1B00E4A311 /* HandleNotification.hpp in Headers */,
@@ -6170,7 +6172,6 @@
 				23EEDC6A217DFADC006E9E73 /* Convertible.hpp in Headers */,
 				23AF4E2020CD04E20050033C /* Initializeable.hpp in Headers */,
 				75A46C112843B73C00B58207 /* WinqBridge.hpp in Headers */,
-				03E1665127F42D6600D2C926 /* WCDB-Bridging.h in Headers */,
 				2316D93121057CA700707AFC /* Recyclable.hpp in Headers */,
 				237C900721D45E6700EE6E44 /* CoreConst.h in Headers */,
 				23775B8420AD666900E21AB0 /* Cell.hpp in Headers */,
@@ -6180,14 +6181,12 @@
 				23775B8C20AD666900E21AB0 /* Pager.hpp in Headers */,
 				23EEDD34217DFADC006E9E73 /* SyntaxCreateIndexSTMT.hpp in Headers */,
 				23B101E92090667E005D9DD3 /* WCTMacroUtility.h in Headers */,
-				752594E6285226C00068A602 /* FrameSpecBridge.h in Headers */,
 				23775B9820AD666900E21AB0 /* Crawlable.hpp in Headers */,
 				23EEDC94217DFADC006E9E73 /* LiteralValue.hpp in Headers */,
 				0D5363ED290A65390026A4DC /* Master.hpp in Headers */,
 				23F70FD820A07CEC00CCE3CD /* CustomConfig.hpp in Headers */,
 				23EEDCC2217DFADC006E9E73 /* StatementCreateTable.hpp in Headers */,
 				23EEDC88217DFADC006E9E73 /* ForeignKey.hpp in Headers */,
-				75AF6AFB2856303700A7C43D /* PragmaBridge.h in Headers */,
 				2372E05A21A2633800051D9A /* WCTTryDisposeGuard.h in Headers */,
 				23176A8C21B912B10051ACF9 /* Version.h in Headers */,
 				03AFD34328B8B21B00EF5E56 /* Field.hpp in Headers */,
@@ -6195,11 +6194,7 @@
 				23EEDCD2217DFADC006E9E73 /* StatementDropTrigger.hpp in Headers */,
 				75D99B8128CA441E00BEC8B5 /* BaseOperation.hpp in Headers */,
 				23EEDC72217DFADC006E9E73 /* FTS3Function.hpp in Headers */,
-				75CE3EFE2812D95100E132F6 /* WCTAPIBridge.h in Headers */,
-				03EE3DAB288165A700C8F0B3 /* StatementInsertBridge.h in Headers */,
-				75AF6ADC2854C5ED00A7C43D /* JoinBridge.h in Headers */,
 				234DBD092064DE23000E31E8 /* WCTTransaction.h in Headers */,
-				03E822922844E1AB0072CA57 /* RaiseFunctionBridge.h in Headers */,
 				23593B7F20D3ADF80058B416 /* WalRelated.hpp in Headers */,
 				23D0C36520C14ACC0001BFAE /* FactoryRelated.hpp in Headers */,
 				23EEDD56217DFADC006E9E73 /* SyntaxSelectSTMT.hpp in Headers */,
@@ -6219,7 +6214,6 @@
 				23F1698A20B6638F009B5C47 /* ThreadedErrors.hpp in Headers */,
 				23EEDCA8217DFADC006E9E73 /* TableConstraint.hpp in Headers */,
 				7543DD8F271C360E00B533B4 /* AuxiliaryFunctionConfig.hpp in Headers */,
-				757821E2286DF5EB0092F858 /* StatementCreateTableBridge.h in Headers */,
 				23EEDCA6217DFADC006E9E73 /* SQL.hpp in Headers */,
 				23775B7020AD666900E21AB0 /* DeprecatedBackup.hpp in Headers */,
 				23D07CEC20BE873E0043F4D4 /* SequenceCrawler.hpp in Headers */,
@@ -6228,7 +6222,6 @@
 				23775BCF20AD72BC00E21AB0 /* Data.hpp in Headers */,
 				23DF0A0B2190275B00F0B2B6 /* WCTDatabase.h in Headers */,
 				23775B6020AD666900E21AB0 /* Assertion.hpp in Headers */,
-				75F4DE482884032600760DC3 /* StatementRollbackBridge.h in Headers */,
 				23906AB9215E500100C2B717 /* WCTDatabase+Monitor.h in Headers */,
 				23EEDC86217DFADC006E9E73 /* Filter.hpp in Headers */,
 				23EEDD48217DFADC006E9E73 /* SyntaxDropViewSTMT.hpp in Headers */,
@@ -6243,7 +6236,6 @@
 				23EEDCC0217DFADC006E9E73 /* StatementCreateIndex.hpp in Headers */,
 				236BACE621BF9FC900C8B4D9 /* WCTMigrationInfo.h in Headers */,
 				03D077F428C1F611009A3B18 /* TableORMOperation.hpp in Headers */,
-				03BFC5D82853538400673AE4 /* IndexedColumnBridge.h in Headers */,
 				23D4DA452085A40A00AE6D90 /* Interface.h in Headers */,
 				235EE9C522B6321A008F6658 /* StringView.hpp in Headers */,
 				23B9E66B20AE6EEA00CF1683 /* RepairKit.h in Headers */,
@@ -6254,10 +6246,7 @@
 				23EEDCCC217DFADC006E9E73 /* StatementDetach.hpp in Headers */,
 				7596162428BFB05100AE86BA /* CPPDeclaration.h in Headers */,
 				7543DD93271C601F00B533B4 /* SubstringMatchInfo.hpp in Headers */,
-				756A774027FAC18000105B7C /* CoreBridge.h in Headers */,
-				03DCB5EF286C3D8E00CBC75D /* StatementAttachBridge.h in Headers */,
 				23EEDD30217DFADC006E9E73 /* SyntaxBeginSTMT.hpp in Headers */,
-				75AF6AD828544C8800A7C43D /* TableOrSubqueryBridge.h in Headers */,
 				23EEDD58217DFADC006E9E73 /* SyntaxUpdateSTMT.hpp in Headers */,
 				23EEDCA2217DFADC006E9E73 /* ResultColumn.hpp in Headers */,
 				23EEDCC4217DFADC006E9E73 /* StatementCreateTrigger.hpp in Headers */,
@@ -6280,20 +6269,16 @@
 				23D0C35320C149D80001BFAE /* Factory.hpp in Headers */,
 				23FEC463206B3032001E7A3B /* WCTConvenient.h in Headers */,
 				23EEDD00217DFADC006E9E73 /* SyntaxFrameSpec.hpp in Headers */,
-				75F4DE602884149100760DC3 /* StatementCommitBridge.h in Headers */,
 				23B35C7620BFE39500425033 /* Path.hpp in Headers */,
-				75AF6AE02854EF6D00A7C43D /* QualifiedTableBridge.h in Headers */,
 				23A64D11214A4A7000ED28BB /* Migration.hpp in Headers */,
 				75F32F1A28BA083E00A72697 /* CPPIndexMacro.h in Headers */,
 				23EEDD16217DFADC006E9E73 /* SyntaxRaiseFunction.hpp in Headers */,
 				23EEDCE2217DFADC006E9E73 /* StatementSelect.hpp in Headers */,
-				756A773827F9EDCA00105B7C /* HandleStatementBridge.h in Headers */,
 				23EEDD44217DFADC006E9E73 /* SyntaxDropTableSTMT.hpp in Headers */,
 				23F340DE204D3482007DB8AB /* WCTDatabase+ChainCall.h in Headers */,
 				3960D89C2319258B00EF05D1 /* SyntaxExplainSTMT.hpp in Headers */,
 				23EEDCD4217DFADC006E9E73 /* StatementDropView.hpp in Headers */,
 				3960D8A02319288C00EF05D1 /* StatementExplain.hpp in Headers */,
-				036E50B728115AB8007365CD /* WCTBridgeProperty.h in Headers */,
 				23775B7820AD666900E21AB0 /* Backup.hpp in Headers */,
 				23AD52D820DB4A3C00664B62 /* MasterItem.hpp in Headers */,
 				03E3181128A21B0A00540CB1 /* Database.hpp in Headers */,
@@ -6306,21 +6291,16 @@
 				23EEDCFA217DFADC006E9E73 /* SyntaxExpression.hpp in Headers */,
 				23D07CE620BE87360043F4D4 /* MasterCrawler.hpp in Headers */,
 				23790A7F219315E50098797F /* WCTColumnConstraintMacro.h in Headers */,
-				75AF6AEE28559F4800A7C43D /* TableConstraintBridge.h in Headers */,
 				2304B43022156E1500901953 /* TokenizerModules.hpp in Headers */,
-				75F4DE382883E88100760DC3 /* StatementPragmaBridge.h in Headers */,
 				23EEDC9C217DFADC006E9E73 /* QualifiedTable.hpp in Headers */,
 				0D3AE53825416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp in Headers */,
 				231C35EF21DE09EC00B5D3D2 /* Exiting.hpp in Headers */,
 				23F70FA220A055B400CCE3CD /* Config.hpp in Headers */,
 				234DBCF32064DD0C000E31E8 /* WCTDatabase+Handle.h in Headers */,
-				03F54821287D8467007BCA3E /* StatementDetachBridge.h in Headers */,
 				2349F76A1EA0D6680021EFA7 /* WCTMacro.h in Headers */,
 				23775B8820AD666900E21AB0 /* Page.hpp in Headers */,
-				75F4DE5628840C4800760DC3 /* StatementBeginBridge.h in Headers */,
 				23EEDCFC217DFADC006E9E73 /* SyntaxFilter.hpp in Headers */,
 				23EEDCDE217DFADC006E9E73 /* StatementRollback.hpp in Headers */,
-				75F1A3072871DE9A008503A2 /* StatementCreateVirtualTableBridge.h in Headers */,
 				23EEDCB6217DFADC006E9E73 /* StatementAlterTable.hpp in Headers */,
 				23EEDCD8217DFADC006E9E73 /* StatementPragma.hpp in Headers */,
 				2349F7081EA0D6680021EFA7 /* RecyclableHandle.hpp in Headers */,
@@ -6332,15 +6312,11 @@
 				23EEDCDA217DFADC006E9E73 /* StatementReindex.hpp in Headers */,
 				23EEDC74217DFADC006E9E73 /* SyntaxList.hpp in Headers */,
 				2349F76C1EA0D6680021EFA7 /* WCTTableConstraintMacro.h in Headers */,
-				03DCB5F3286C480900CBC75D /* StatementCreateIndexBridge.h in Headers */,
 				03AA58B228D2DE5000376EC2 /* CrossPlatform.h in Headers */,
 				23EEDC7C217DFADC006E9E73 /* ColumnConstraint.hpp in Headers */,
-				03F54825287D87F9007BCA3E /* StatementDropIndexBridge.h in Headers */,
 				237A8D5821ED88DF003AF5BB /* SQLiteDeclaration.h in Headers */,
 				23545B9F2224E9C80091C981 /* SyntaxEnum.hpp in Headers */,
-				75F4DE52288407F800760DC3 /* StatementVacuumBridge.h in Headers */,
 				0DC98FD528E46049007F3796 /* DBOperationNotifier.hpp in Headers */,
-				036E50BB28115BA0007365CD /* WCTBridgeProperty+CPP.h in Headers */,
 				23EEDCC6217DFADC006E9E73 /* StatementCreateView.hpp in Headers */,
 				23EEDD3C217DFADC006E9E73 /* SyntaxCreateVirtualTableSTMT.hpp in Headers */,
 				23EEDD61217DFB17006E9E73 /* Shadow.hpp in Headers */,
@@ -6348,7 +6324,6 @@
 				03AFD33528B883E700EF5E56 /* Accessor.hpp in Headers */,
 				2349F7231EA0D6680021EFA7 /* WCTInsert.h in Headers */,
 				23EEDC92217DFADC006E9E73 /* JoinConstraint.hpp in Headers */,
-				0326130F283F573C00836E0F /* WinqBridge.h in Headers */,
 				23EEDD50217DFADC006E9E73 /* SyntaxReleaseSTMT.hpp in Headers */,
 				2308F85520E32A51001CD9C3 /* Serialization.hpp in Headers */,
 				2349F76D1EA0D6680021EFA7 /* WCTIndexMacro.h in Headers */,
@@ -6356,16 +6331,12 @@
 				23EEDCF0217DFADC006E9E73 /* SyntaxColumn.hpp in Headers */,
 				2349F6FF1EA0D6680021EFA7 /* InnerDatabase.hpp in Headers */,
 				3969018C233B1B2F006EEFD4 /* WCTTag.h in Headers */,
-				75EB196F287F093B00AA62F7 /* StatementDropViewBridge.h in Headers */,
 				039D724B28BF773D00990803 /* Delete.hpp in Headers */,
 				0D249BC12542B8E900B43BD9 /* MergeFTSIndexLogic.hpp in Headers */,
 				23EEDD2C217DFADC006E9E73 /* SyntaxAnalyzeSTMT.hpp in Headers */,
 				23EEDCF2217DFADC006E9E73 /* SyntaxColumnConstraint.hpp in Headers */,
-				03E822892844B8CD0072CA57 /* StatementSelectBridge.h in Headers */,
-				03A57F1D2840B5DC00D2A4C3 /* BindParameterBridge.h in Headers */,
 				7521D39528BD1187009C33D0 /* ChainCall.hpp in Headers */,
 				75751ED82412AD11006CBFFD /* MigratingHandleStatement.hpp in Headers */,
-				75EB1966287F068200AA62F7 /* StatementDropTriggerBridge.h in Headers */,
 				23790A80219315E50098797F /* WCTVirtualTableMacro.h in Headers */,
 				2386B3C71ED442FE000B72F6 /* WCTError+Private.h in Headers */,
 				23EEDD4E217DFADC006E9E73 /* SyntaxReindexSTMT.hpp in Headers */,
@@ -6388,9 +6359,7 @@
 				2349F7341EA0D6680021EFA7 /* WCTUpdate.h in Headers */,
 				2349F7061EA0D6680021EFA7 /* HandlePool.hpp in Headers */,
 				23EEDCD6217DFADC006E9E73 /* StatementInsert.hpp in Headers */,
-				0393BEDC27F6ED860058B295 /* ErrorBridge.h in Headers */,
 				23D0C35720C149D80001BFAE /* FactoryDepositor.hpp in Headers */,
-				03E8228128447B940072CA57 /* ColumnDefBridge.h in Headers */,
 				03E3180E28A21AF800540CB1 /* CppInterface.h in Headers */,
 				23EEDC8A217DFADC006E9E73 /* FrameSpec.hpp in Headers */,
 				23F70FC020A055D400CCE3CD /* TokenizerConfig.hpp in Headers */,
@@ -6399,16 +6368,12 @@
 				753636DF28BBC3820025C2C4 /* Table.hpp in Headers */,
 				2349F78E1EA0D6680021EFA7 /* WCDB-OBJC.h in Headers */,
 				23EEDD60217DFB17006E9E73 /* Enum.hpp in Headers */,
-				75F4DE442883FD6A00760DC3 /* StatementReleaseBridge.h in Headers */,
 				23EEDD40217DFADC006E9E73 /* SyntaxDetachSTMT.hpp in Headers */,
 				23EEDC69217DFADC006E9E73 /* ColumnType.hpp in Headers */,
-				75C1033F28450CC50006BBCB /* FilterBridge.h in Headers */,
-				75EB1A0B287F0BDA00AA62F7 /* StatementCreateViewBridge.h in Headers */,
 				2370B1322191533C00D3227C /* WCTOptional.h in Headers */,
 				2349F7271EA0D6680021EFA7 /* WCTMultiSelect.h in Headers */,
 				23EEDD3E217DFADC006E9E73 /* SyntaxDeleteSTMT.hpp in Headers */,
 				2395582621C143BB000C85E1 /* WCTMigrationInfo+Private.h in Headers */,
-				032613B7283F8D7E00836E0F /* ColumnBridge.h in Headers */,
 				75E50A302907921600B73E62 /* MultiSelect.hpp in Headers */,
 				23EEDCE0217DFADC006E9E73 /* StatementSavepoint.hpp in Headers */,
 				7543DD8B271C343000B533B4 /* AuxiliaryFunctionModules.hpp in Headers */,
@@ -6424,7 +6389,6 @@
 				23EEDC7E217DFADC006E9E73 /* ColumnDef.hpp in Headers */,
 				2349F75A1EA0D6680021EFA7 /* WCTRuntimeCppAccessor.h in Headers */,
 				39690190233B20BC006EEFD4 /* WCTTableProtocol.h in Headers */,
-				75A46C0E2843B3BC00B58207 /* OrderingTermBridge.h in Headers */,
 				23EB91E020CA1EBE00ECF668 /* Wal.hpp in Headers */,
 				23EEDD54217DFADC006E9E73 /* SyntaxSavepointSTMT.hpp in Headers */,
 				23301BF72298FE9A00A8AB5A /* AutoMigrateConfig.hpp in Headers */,
@@ -6432,7 +6396,6 @@
 				237A65F520F731DF008B4771 /* UniqueList.hpp in Headers */,
 				2370980B20590CA700E768B4 /* InnerHandleStatement.hpp in Headers */,
 				7543DD83271C2F3B00B533B4 /* FTS5AuxiliaryFunctionTemplate.hpp in Headers */,
-				03B6A33D2869C51B00D83EC4 /* StatementAlterTableBridge.h in Headers */,
 				23BBE2A8204955CE00C4CBB6 /* WCTCommon.h in Headers */,
 				23C7559320DCF90F00031A93 /* SQLiteLocker.hpp in Headers */,
 				2370B12721914ED500D3227C /* NSData+WCTColumnCoding.h in Headers */,
@@ -6447,16 +6410,73 @@
 				23EEDD14217DFADC006E9E73 /* SyntaxQualifiedTableName.hpp in Headers */,
 				2349F7551EA0D6680021EFA7 /* WCTBaseAccessor.h in Headers */,
 				23EEDD08217DFADC006E9E73 /* SyntaxJoinClause.hpp in Headers */,
-				2370B11D21914ED500D3227C /* NSString+WCTColumnCoding.h in Headers */,
-				2349F7571EA0D6680021EFA7 /* WCTObjCAccessor.h in Headers */,
-				23EEDC6E217DFADC006E9E73 /* CoreFunction.hpp in Headers */,
+				03E167B827F46C7100D2C926 /* ObjectBridge.h in Headers */,
+				75EB1A14287F10BF00AA62F7 /* StatementCreateTriggerBridge.h in Headers */,
+				75AF6AF22855C8BF00A7C43D /* UpsertBridge.h in Headers */,
+				03E1665127F42D6600D2C926 /* WCDB-Private-Bridging.h in Headers */,
+				752594E6285226C00068A602 /* FrameSpecBridge.h in Headers */,
+				75AF6AFB2856303700A7C43D /* PragmaBridge.h in Headers */,
+				75CE3EFE2812D95100E132F6 /* WCTAPIBridge.h in Headers */,
+				03EE3DAB288165A700C8F0B3 /* StatementInsertBridge.h in Headers */,
+				75AF6ADC2854C5ED00A7C43D /* JoinBridge.h in Headers */,
+				03E822922844E1AB0072CA57 /* RaiseFunctionBridge.h in Headers */,
+				757821E2286DF5EB0092F858 /* StatementCreateTableBridge.h in Headers */,
+				75F4DE482884032600760DC3 /* StatementRollbackBridge.h in Headers */,
+				03BFC5D82853538400673AE4 /* IndexedColumnBridge.h in Headers */,
+				756A774027FAC18000105B7C /* CoreBridge.h in Headers */,
+				03DCB5EF286C3D8E00CBC75D /* StatementAttachBridge.h in Headers */,
+				75AF6AD828544C8800A7C43D /* TableOrSubqueryBridge.h in Headers */,
+				75F4DE602884149100760DC3 /* StatementCommitBridge.h in Headers */,
+				75AF6AE02854EF6D00A7C43D /* QualifiedTableBridge.h in Headers */,
+				756A773827F9EDCA00105B7C /* HandleStatementBridge.h in Headers */,
+				036E50B728115AB8007365CD /* WCTBridgeProperty.h in Headers */,
+				75AF6AEE28559F4800A7C43D /* TableConstraintBridge.h in Headers */,
+				75F4DE382883E88100760DC3 /* StatementPragmaBridge.h in Headers */,
+				03F54821287D8467007BCA3E /* StatementDetachBridge.h in Headers */,
+				75F4DE5628840C4800760DC3 /* StatementBeginBridge.h in Headers */,
+				75F1A3072871DE9A008503A2 /* StatementCreateVirtualTableBridge.h in Headers */,
+				03DCB5F3286C480900CBC75D /* StatementCreateIndexBridge.h in Headers */,
+				03F54825287D87F9007BCA3E /* StatementDropIndexBridge.h in Headers */,
+				75F4DE52288407F800760DC3 /* StatementVacuumBridge.h in Headers */,
+				036E50BB28115BA0007365CD /* WCTBridgeProperty+CPP.h in Headers */,
+				0326130F283F573C00836E0F /* WinqBridge.h in Headers */,
+				75EB196F287F093B00AA62F7 /* StatementDropViewBridge.h in Headers */,
+				03E822892844B8CD0072CA57 /* StatementSelectBridge.h in Headers */,
+				03A57F1D2840B5DC00D2A4C3 /* BindParameterBridge.h in Headers */,
+				75EB1966287F068200AA62F7 /* StatementDropTriggerBridge.h in Headers */,
+				0393BEDC27F6ED860058B295 /* ErrorBridge.h in Headers */,
+				03E8228128447B940072CA57 /* ColumnDefBridge.h in Headers */,
+				75F4DE442883FD6A00760DC3 /* StatementReleaseBridge.h in Headers */,
+				75C1033F28450CC50006BBCB /* FilterBridge.h in Headers */,
+				75EB1A0B287F0BDA00AA62F7 /* StatementCreateViewBridge.h in Headers */,
+				032613B7283F8D7E00836E0F /* ColumnBridge.h in Headers */,
+				75A46C0E2843B3BC00B58207 /* OrderingTermBridge.h in Headers */,
+				03B6A33D2869C51B00D83EC4 /* StatementAlterTableBridge.h in Headers */,
 				0393BEE427F715180058B295 /* HandleBridge.h in Headers */,
 				75204AEC283FD7410002E40C /* SchemaBridge.h in Headers */,
 				75C1034328450D840006BBCB /* WindowDefBridge.h in Headers */,
+				750DC06E2913DE7300F19044 /* FTSBridge.h in Headers */,
+				032613BB283F8E4900836E0F /* ExpressionBridge.h in Headers */,
+				75F4DE342883E43C00760DC3 /* StatementExplainBridge.h in Headers */,
+				75A46C01284310CE00B58207 /* ColumnConstraintBridge.h in Headers */,
+				039760AB27F5C0DD0071FA8F /* DatabaseBridge.h in Headers */,
+				03F54829287D93A7007BCA3E /* StatementDropTableBridge.h in Headers */,
+				039BD4372846113D00C58BE2 /* ExpressionOperatableBridge.h in Headers */,
+				75F4DE402883F0A800760DC3 /* StatementReindexBridge.h in Headers */,
+				75F4DE4C288405DD00760DC3 /* StatementSavepointBridge.h in Headers */,
+				03E822852844B8760072CA57 /* CommonTableExpressionBridge.h in Headers */,
+				03DCB5E7286C2E5300CBC75D /* StatementAnalyzeBridge.h in Headers */,
+				75A46C0528431D6300B58207 /* ForeignKeyBridge.h in Headers */,
+				75AF6AEA285594A100A7C43D /* ResultColumnBridge.h in Headers */,
+				0326130E283F56BD00836E0F /* LiteralValueBridge.h in Headers */,
+				75F1A30B2871E764008503A2 /* StatementDeleteBridge.h in Headers */,
+				03EE3DAF28816DA800C8F0B3 /* StatementUpdateBridge.h in Headers */,
+				2370B11D21914ED500D3227C /* NSString+WCTColumnCoding.h in Headers */,
+				2349F7571EA0D6680021EFA7 /* WCTObjCAccessor.h in Headers */,
+				23EEDC6E217DFADC006E9E73 /* CoreFunction.hpp in Headers */,
 				23567CFC20CA3889005F1C35 /* Frame.hpp in Headers */,
 				754014C4290BEDA600EA8D33 /* FTSConst.h in Headers */,
 				23776CA7218C41E600E985DC /* WCTChainCall+Private.h in Headers */,
-				750DC06E2913DE7300F19044 /* FTSBridge.h in Headers */,
 				39D3C74A22A8B8C600C93DC0 /* OperationHandle.hpp in Headers */,
 				758D9D0728BA7F06001B3D2D /* CPPColumnConstraintMacro.h in Headers */,
 				2349F7681EA0D6680021EFA7 /* WCTProperty.h in Headers */,
@@ -6469,12 +6489,10 @@
 				233B098221BE50D2005AD534 /* AssembleHandle.hpp in Headers */,
 				03D077F128C1F072009A3B18 /* TableOperation.hpp in Headers */,
 				3934DAED229B6659008A6AEC /* OperationQueue.hpp in Headers */,
-				032613BB283F8E4900836E0F /* ExpressionBridge.h in Headers */,
 				23EEDCAE217DFADC006E9E73 /* WindowDef.hpp in Headers */,
 				232741501F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */,
 				03E167BA27F46E2E00D2C926 /* ObjectBridge.hpp in Headers */,
 				2349F76B1EA0D6680021EFA7 /* WCTPropertyMacro.h in Headers */,
-				75F4DE342883E43C00760DC3 /* StatementExplainBridge.h in Headers */,
 				23EEDD22217DFADC006E9E73 /* SyntaxTableOrSubquery.hpp in Headers */,
 				23EEDCDC217DFADC006E9E73 /* StatementRelease.hpp in Headers */,
 				2349F76F1EA0D6680021EFA7 /* WCTORM.h in Headers */,
@@ -6486,16 +6504,13 @@
 				23EEDCE4217DFADC006E9E73 /* StatementUpdate.hpp in Headers */,
 				23C7559C20DD17B100031A93 /* SQLiteBase.hpp in Headers */,
 				23EEDC84217DFADC006E9E73 /* Expression.hpp in Headers */,
-				75A46C01284310CE00B58207 /* ColumnConstraintBridge.h in Headers */,
 				2349F7481EA0D6680021EFA7 /* WCTDatabase+File.h in Headers */,
 				23EEDD4C217DFADC006E9E73 /* SyntaxPragmaSTMT.hpp in Headers */,
 				23EEDCAC217DFADC006E9E73 /* Upsert.hpp in Headers */,
-				039760AB27F5C0DD0071FA8F /* DatabaseBridge.h in Headers */,
 				7543DD87271C2FD000B533B4 /* AuxiliaryFunctionModule.hpp in Headers */,
 				234DBD0D2064E045000E31E8 /* WCTChainCall.h in Headers */,
 				75B698D8290AD4C0006E1F8F /* BaseTokenizerUtil.hpp in Headers */,
 				23F70FC620A0618100CCE3CD /* Configs.hpp in Headers */,
-				03F54829287D93A7007BCA3E /* StatementDropTableBridge.h in Headers */,
 				233A25D3219933DB00054EC4 /* WCTBuiltin.h in Headers */,
 				23BBE2B12049576D00C4CBB6 /* WCTDatabase+Memory.h in Headers */,
 				23567D7720CA9200005F1C35 /* SharedThreadedErrorProne.hpp in Headers */,
@@ -6510,9 +6525,6 @@
 				23EEDD0A217DFADC006E9E73 /* SyntaxJoinConstraint.hpp in Headers */,
 				23567D4720CA7DBC005F1C35 /* ErrorProne.hpp in Headers */,
 				2349F7581EA0D6680021EFA7 /* WCTRuntimeBaseAccessor.h in Headers */,
-				039BD4372846113D00C58BE2 /* ExpressionOperatableBridge.h in Headers */,
-				75F4DE402883F0A800760DC3 /* StatementReindexBridge.h in Headers */,
-				75F4DE4C288405DD00760DC3 /* StatementSavepointBridge.h in Headers */,
 				23EEDCBE217DFADC006E9E73 /* StatementCommit.hpp in Headers */,
 				23EEDCF4217DFADC006E9E73 /* SyntaxColumnDef.hpp in Headers */,
 				2316D94B2105D21500707AFC /* LRUCache.hpp in Headers */,
@@ -6527,7 +6539,6 @@
 				234EF46E2015CFDE00B81929 /* WCTConvertible.h in Headers */,
 				2349F7741EA0D6680021EFA7 /* WCTTable+Private.h in Headers */,
 				23775B6420AD666900E21AB0 /* Error.hpp in Headers */,
-				03E822852844B8760072CA57 /* CommonTableExpressionBridge.h in Headers */,
 				23D96B932050DED700DB5E93 /* DatabasePool.hpp in Headers */,
 				23EEDD26217DFADC006E9E73 /* SyntaxWindowDef.hpp in Headers */,
 				2370B12221914ED500D3227C /* WCTMaster.h in Headers */,
@@ -6536,20 +6547,17 @@
 				23EEDCB4217DFADC006E9E73 /* Statement.hpp in Headers */,
 				23F0FEB6215F5E9A008399FB /* ThreadLocal.hpp in Headers */,
 				23EEDCA4217DFADC006E9E73 /* Schema.hpp in Headers */,
-				03DCB5E7286C2E5300CBC75D /* StatementAnalyzeBridge.h in Headers */,
-				75A46C0528431D6300B58207 /* ForeignKeyBridge.h in Headers */,
 				23EEDD42217DFADC006E9E73 /* SyntaxDropIndexSTMT.hpp in Headers */,
 				39C70CC82313E20F002D773C /* Assemble.hpp in Headers */,
 				234DBD032064DE04000E31E8 /* WCTDatabase+Transaction.h in Headers */,
+				7521D6B9291E771F009642EF /* WCDB-Public-Bridging.h in Headers */,
 				23EEDCEE217DFADC006E9E73 /* SyntaxBindParameter.hpp in Headers */,
 				23F0FEB5215F5E9A008399FB /* Lock.hpp in Headers */,
 				23D0C35F20C149D80001BFAE /* FactoryRetriever.hpp in Headers */,
 				2396EB0D21801BD60079066C /* WCTResultColumn.h in Headers */,
 				234DBD052064DE04000E31E8 /* WCTHandle+Transaction.h in Headers */,
 				3934DB26229B951C008A6AEC /* AutoCheckpointConfig.hpp in Headers */,
-				75AF6AEA285594A100A7C43D /* ResultColumnBridge.h in Headers */,
 				3932B9FD25232E490094F3F8 /* WCTColumnCoding.h in Headers */,
-				0326130E283F56BD00836E0F /* LiteralValueBridge.h in Headers */,
 				23EEDD5A217DFADC006E9E73 /* SyntaxVacuumSTMT.hpp in Headers */,
 				23775B7C20AD666900E21AB0 /* Material.hpp in Headers */,
 				23EEDD4A217DFADC006E9E73 /* SyntaxInsertSTMT.hpp in Headers */,
@@ -6558,9 +6566,7 @@
 				2349F72E1EA0D6680021EFA7 /* WCTSelectable+Private.h in Headers */,
 				23DD76BF20CF78C800E9B451 /* FactoryRenewer.hpp in Headers */,
 				23EEDCB8217DFADC006E9E73 /* StatementAnalyze.hpp in Headers */,
-				75F1A30B2871E764008503A2 /* StatementDeleteBridge.h in Headers */,
 				23D0C38F20C17CAE0001BFAE /* FactoryBackup.hpp in Headers */,
-				03EE3DAF28816DA800C8F0B3 /* StatementUpdateBridge.h in Headers */,
 				23F70FAE20A055C300CCE3CD /* CipherConfig.hpp in Headers */,
 				23EEDD52217DFADC006E9E73 /* SyntaxRollbackSTMT.hpp in Headers */,
 				0DAE11D428DC6CC6003FB63A /* WCDB.h in Headers */,

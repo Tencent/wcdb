@@ -23,6 +23,7 @@
  */
 
 import Foundation
+import WCDB_Private
 public final class StatementCreateView: Identifier<CPPStatementCreateView>, Statement {
     public init() {
         super.init(with: WCDBStatementCreateViewCreate())

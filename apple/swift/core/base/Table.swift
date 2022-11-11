@@ -19,6 +19,7 @@
  */
 
 import Foundation
+import WCDB_Private
 
 /// Convenient table interface
 public final class Table<Root: AnyObject> {

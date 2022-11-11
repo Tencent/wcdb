@@ -19,6 +19,7 @@
  */
 
 import Foundation
+import WCDB_Private
 
 public final class Select: Selectable {
     private let properties: [PropertyConvertible]

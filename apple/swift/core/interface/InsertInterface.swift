@@ -23,6 +23,7 @@
  */
 
 import Foundation
+import WCDB_Private
 
 /// Convenient interface for inserting
 public protocol InsertInterface: AnyObject {

@@ -23,6 +23,7 @@
  */
 
 import Foundation
+import WCDB_Private
 
 public final class MultiUniqueConfig<CodingTableKeyType: CodingTableKey>: TableConfiguration {
     private let codingKeys: [CodingTableKeyType]

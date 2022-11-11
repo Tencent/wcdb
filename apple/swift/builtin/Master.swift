@@ -19,6 +19,7 @@
  */
 
 import Foundation
+import WCDB_Private
 
 public struct Master: TableCodable {
     public static let builtinTableName: String = "sqlite_master"

@@ -8,7 +8,7 @@ framework module WCDB {
     }
 
 	module BridgeHeader [extern_c] {
-		umbrella header "WCDB-Bridging.h"
+		umbrella header "WCDB-Public-Bridging.h"
 		export *
 	}
 }
