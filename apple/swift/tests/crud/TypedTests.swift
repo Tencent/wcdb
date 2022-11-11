@@ -58,7 +58,7 @@ class TypedTests: CRUDTestCase {
         }
     }
 
-    class TypedTestObject: TableCodable, Named, Equatable, CustomDebugStringConvertible {
+    final class TypedTestObject: TableCodable, Named, Equatable, CustomDebugStringConvertible {
         var int: Int = 0
         var int8: Int8 = 0
         var int16: Int16 = 0
@@ -249,7 +249,7 @@ class TypedTests: CRUDTestCase {
         XCTAssertEqual(selected!, object)
     }
 
-    class TypedNonOverflowTestObject: TableCodable, Named, Equatable, CustomDebugStringConvertible {
+    final class TypedNonOverflowTestObject: TableCodable, Named, Equatable, CustomDebugStringConvertible {
         var int: Int = 0
         var int8: Int8 = 0
         var int16: Int16 = 0
@@ -337,7 +337,7 @@ class TypedTests: CRUDTestCase {
         }
     }
 
-    class TypedOverflowTestObject: TableCodable, CustomDebugStringConvertible {
+    final class TypedOverflowTestObject: TableCodable, CustomDebugStringConvertible {
         var int64Variable0: Int64 = Int64.max
         var int64Variable1: Int64 = Int64.max
         var int64Variable2: Int64 = Int64.max
@@ -417,7 +417,7 @@ class TypedTests: CRUDTestCase {
         XCTAssertEqual(wrapped.double, overflow.doubleVariable1)
     }
 
-    class OptionalTypedTestObject: TableCodable, Named, Equatable, CustomDebugStringConvertible {
+    final class OptionalTypedTestObject: TableCodable, Named, Equatable, CustomDebugStringConvertible {
         var int: Int?
         var int8: Int8?
         var int16: Int16?
@@ -749,7 +749,7 @@ class TypedTests: CRUDTestCase {
         var noMatchVariable: Int = 1
     }
 
-    class TypedMatchTable: TableCodable {
+    final class TypedMatchTable: TableCodable {
         var variable1 = TypedJSONCodableObject()
         enum CodingKeys: String, CodingTableKey {
             typealias Root = TypedMatchTable
@@ -758,7 +758,7 @@ class TypedTests: CRUDTestCase {
         }
     }
 
-    class TypedNoMatchTable: TableCodable {
+    final class TypedNoMatchTable: TableCodable {
         var variable1 = TypedNoMatchJSONCodableObject()
         enum CodingKeys: String, CodingTableKey {
             typealias Root = TypedNoMatchTable

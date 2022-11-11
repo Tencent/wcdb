@@ -74,7 +74,7 @@ extension Array where Element==[String: TestObjectBase] {
 
 class MultiSelectTests: CRUDTestCase {
 
-    class MultiSelectObject: TestObjectBase, TableCodable {
+    final class MultiSelectObject: TestObjectBase, TableCodable {
         var variable1: Int = 0
         var variable2: String = ""
 

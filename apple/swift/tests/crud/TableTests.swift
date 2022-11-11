@@ -30,7 +30,7 @@ class TableTests: BaseTestCase {
         database.tag = recommendTag
     }
 
-    class BaselineObject: TableCodable, Named {
+    final class BaselineObject: TableCodable, Named {
         var anInt32: Int32 = -1
         var anInt64: Int64 = 17626545782784
         var aString: String = "string"
@@ -78,7 +78,7 @@ class TableTests: BaseTestCase {
         )
     }
 
-    class SkipColumnObject: TableCodable, Named {
+    final class SkipColumnObject: TableCodable, Named {
         var anInt32: Int32 = -1
 
         enum CodingKeys: String, CodingTableKey {
@@ -101,7 +101,7 @@ class TableTests: BaseTestCase {
         XCTAssertNoThrow(try database.create(table: tableName, of: SkipColumnObject.self))
     }
 
-    class IndexObject: TableCodable, Named {
+    final class IndexObject: TableCodable, Named {
         var variable: Int32 = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = IndexObject
@@ -126,7 +126,7 @@ class TableTests: BaseTestCase {
         XCTAssertEqual(object.sql!, "CREATE INDEX \(indexName) ON IndexObject(variable)")
     }
 
-    class ConstraintObject: TableCodable, Named {
+    final class ConstraintObject: TableCodable, Named {
         var variable1: Int32 = 0
         var variable2: Int32 = 0
 
@@ -159,7 +159,7 @@ class TableTests: BaseTestCase {
             """)
     }
 
-    class FTS3Object: TableCodable, Named {
+    final class FTS3Object: TableCodable, Named {
         var id: Int32 = 0
         var content: String = ""
 
@@ -194,7 +194,7 @@ class TableTests: BaseTestCase {
         )
     }
 
-    class FTS5Object: TableCodable, Named {
+    final class FTS5Object: TableCodable, Named {
         var id: Int32 = 0
         var content: String = ""
 
@@ -229,7 +229,7 @@ class TableTests: BaseTestCase {
         )
     }
 
-    class AutoFitBaseLineObject: TableCodable, Named {
+    final class AutoFitBaseLineObject: TableCodable, Named {
         var anInt32: Int32 = -1
         var anInt64: Int64 = 17626545782784
         var aString: String = "string"

@@ -131,7 +131,7 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey>: TableBindin
         assert(codingTableKey != nil, "[\(key)] must conform to CodingTableKey protocol.")
         let columnType = columnTypes[codingTableKey!.stringValue]
         assert(columnType != nil, "It should not be failed. If you think it's a bug, please report an issue to us.")
-        var columnDef = ColumnDef(with: codingTableKey!, and: columnType!)
+        let columnDef = ColumnDef(with: codingTableKey!, and: columnType!)
         if let index = columnConstraints.index(forKey: codingTableKey!.rawValue) {
             for constraint in columnConstraints[index].value {
                 columnDef.addConstraint(constraint)
@@ -142,7 +142,7 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey>: TableBindin
 
     public func generateCreateVirtualTableStatement(named table: String) -> StatementCreateVirtualTable {
         assert(virtualTableBinding != nil, "Virtual table binding is not defined")
-        var statement = StatementCreateVirtualTable().create(virtualTable: table).ifNotExists()
+        let statement = StatementCreateVirtualTable().create(virtualTable: table).ifNotExists()
         guard let virtualTableBinding = virtualTableBinding else {
             return statement
         }

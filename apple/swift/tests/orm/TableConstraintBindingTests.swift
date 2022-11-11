@@ -23,7 +23,7 @@ import WCDB
 
 class TableConstraintBindingTests: BaseTestCase {
 
-    class BaselineMultiPrimaryTestObject: TableCodable, Named {
+    final class BaselineMultiPrimaryTestObject: TableCodable, Named {
         var variable1: Int = 0
         var variable2: Int = 0
         enum CodingKeys: String, CodingTableKey {
@@ -36,7 +36,7 @@ class TableConstraintBindingTests: BaseTestCase {
         }
     }
 
-    class MultiPrimaryConflictTestObject: TableCodable, Named {
+    final class MultiPrimaryConflictTestObject: TableCodable, Named {
         var variable1: Int = 0
         var variable2: Int = 0
         enum CodingKeys: String, CodingTableKey {
@@ -69,7 +69,7 @@ class TableConstraintBindingTests: BaseTestCase {
         )
     }
 
-    class BaselineMultiUniqueTestObject: TableCodable, Named {
+    final class BaselineMultiUniqueTestObject: TableCodable, Named {
         var variable1: Int = 0
         var variable2: Int = 0
         enum CodingKeys: String, CodingTableKey {
@@ -82,7 +82,7 @@ class TableConstraintBindingTests: BaseTestCase {
         }
     }
 
-    class MultiUniqueConflictTestObject: TableCodable, Named {
+    final class MultiUniqueConflictTestObject: TableCodable, Named {
         var variable1: Int = 0
         var variable2: Int = 0
         enum CodingKeys: String, CodingTableKey {
@@ -115,7 +115,7 @@ class TableConstraintBindingTests: BaseTestCase {
         )
     }
 
-    class CheckTestObject: TableCodable, Named {
+    final class CheckTestObject: TableCodable, Named {
         var variable1: Int = 0
         var variable2: Int = 0
         static let constraintName = CheckTestObject.name + "Constraint"
@@ -142,7 +142,7 @@ class TableConstraintBindingTests: BaseTestCase {
         )
     }
 
-    class ForeignKeyTestObject: TableCodable, Named {
+    final class ForeignKeyTestObject: TableCodable, Named {
         var variable1: Int = 0
         var variable2: Int = 0
         enum CodingKeys: String, CodingTableKey {

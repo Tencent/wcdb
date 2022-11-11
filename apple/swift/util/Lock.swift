@@ -20,7 +20,7 @@
 
 import Foundation
 
-internal protocol Lockable: class {
+internal protocol Lockable: AnyObject {
     func lock()
     func unlock()
 }
@@ -144,7 +144,7 @@ internal extension DispatchQueue {
     private static let spin = Spin()
     private static var tracker: Set<String> = []
 
-    internal static func once(name: String, _ block: () -> Void) {
+    static func once(name: String, _ block: () -> Void) {
         spin.lock(); defer { spin.unlock() }
         guard !tracker.contains(name) else {
             return

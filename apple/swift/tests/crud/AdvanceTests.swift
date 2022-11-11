@@ -127,7 +127,7 @@ class AdvanceTests: CRUDTestCase {
         }
     }
 
-    class HandleStatementTypedObject: TableCodable, Named {
+    final class HandleStatementTypedObject: TableCodable, Named {
         var int32: Int32 = 1
         var int64: Int64 = 2
         var double: Double = 3.0
@@ -505,7 +505,7 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertTrue(pauseTimes > 1)
     }
 
-    class FTS3Object: TestObjectBase, TableCodable {
+    final class FTS3Object: TestObjectBase, TableCodable {
         var variable1: Int = 0
         var variable2: String = ""
 
@@ -623,7 +623,7 @@ class AdvanceTests: CRUDTestCase {
         }
     }
 
-    class FTS5Object: TestObjectBase, TableCodable {
+    final class FTS5Object: TestObjectBase, TableCodable {
             var variable1: Int = 0
             var variable2: String = ""
 

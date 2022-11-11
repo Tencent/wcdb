@@ -103,7 +103,7 @@ class TokenizerTests: BaseTestCase {
         database = Database(at: self.recommendedPath)
     }
 
-    class FTS3Object: TableCodable, Named {
+    final class FTS3Object: TableCodable, Named {
         var content: String = ""
 
         enum CodingKeys: String, CodingTableKey {
@@ -131,7 +131,7 @@ class TokenizerTests: BaseTestCase {
         XCTAssertEqual(matchObj!.content, obj.content)
     }
 
-    class FTS5Object: TableCodable, Named {
+    final class FTS5Object: TableCodable, Named {
         var content: String = ""
 
         enum CodingKeys: String, CodingTableKey {
