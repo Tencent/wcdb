@@ -23,7 +23,7 @@ import WCDB
 
 class ColumnConstraintBindingTests: BaseTestCase {
 
-    class BaselineTestObject: TableCodable {
+    final class BaselineTestObject: TableCodable {
         var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = BaselineTestObject
@@ -32,7 +32,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
         }
     }
 
-    class PrimaryTestObject: TableCodable {
+    final class PrimaryTestObject: TableCodable {
         var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = PrimaryTestObject
@@ -43,7 +43,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
         }
     }
 
-    class OrderedPrimaryTestObject: TableCodable {
+    final class OrderedPrimaryTestObject: TableCodable {
         var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = OrderedPrimaryTestObject
@@ -54,7 +54,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
         }
     }
 
-    class AutoIncrementPrimaryTestObject: TableCodable {
+    final class AutoIncrementPrimaryTestObject: TableCodable {
         var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = AutoIncrementPrimaryTestObject
@@ -64,7 +64,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
             }
         }
     }
-    class ConflictPrimaryTestObject: TableCodable {
+    final class ConflictPrimaryTestObject: TableCodable {
         var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = ConflictPrimaryTestObject
@@ -75,7 +75,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
         }
     }
 
-    class NotNullTestObject: TableCodable {
+    final class NotNullTestObject: TableCodable {
         var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = NotNullTestObject
@@ -86,7 +86,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
         }
     }
 
-    class UniqueTestObject: TableCodable {
+    final class UniqueTestObject: TableCodable {
         var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = UniqueTestObject
@@ -97,7 +97,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
         }
     }
 
-    class DefaultInt32ValueTestObject: TableCodable {
+    final class DefaultInt32ValueTestObject: TableCodable {
         var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = DefaultInt32ValueTestObject
@@ -108,7 +108,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
         }
     }
 
-    class DefaultInt64ValueTestObject: TableCodable {
+    final class DefaultInt64ValueTestObject: TableCodable {
         var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = DefaultInt64ValueTestObject
@@ -119,7 +119,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
         }
     }
 
-    class DefaultFloatValueTestObject: TableCodable {
+    final class DefaultFloatValueTestObject: TableCodable {
         var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = DefaultFloatValueTestObject
@@ -130,7 +130,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
         }
     }
 
-    class DefaultTextValueTestObject: TableCodable {
+    final  class DefaultTextValueTestObject: TableCodable {
         var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = DefaultTextValueTestObject
@@ -141,7 +141,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
         }
     }
 
-    class DefaultBLOBValueTestObject: TableCodable {
+    final class DefaultBLOBValueTestObject: TableCodable {
         var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = DefaultBLOBValueTestObject

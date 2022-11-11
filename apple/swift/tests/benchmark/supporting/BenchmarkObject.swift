@@ -21,7 +21,7 @@
 import Foundation
 import WCDB
 
-class BenchmarkObject: TableCodable, Named {
+final class BenchmarkObject: TableCodable, Named {
     var key: Int = 0
     var value: Data?
     enum CodingKeys: String, CodingTableKey {

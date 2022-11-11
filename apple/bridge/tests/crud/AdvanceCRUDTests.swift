@@ -80,7 +80,7 @@ class AdvanceCRUDTests: CRUDTestCase {
         var variable1: Int = 0
     }
 
-    class EncodableObject: TableEncodable {
+    final class EncodableObject: TableEncodable {
         var variable1: EncodableColumn = EncodableColumn()
         enum CodingKeys: String, CodingTableKey {
             typealias Root = EncodableObject
@@ -89,7 +89,7 @@ class AdvanceCRUDTests: CRUDTestCase {
         }
     }
 
-    class DecodableObject: TableDecodable {
+    final class DecodableObject: TableDecodable {
         var variable1: DecodableColumn = DecodableColumn()
 
         enum CodingKeys: String, CodingTableKey {

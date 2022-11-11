@@ -113,7 +113,7 @@ class SelectTests: CRUDTestCase {
         XCTAssertEqual(results.sorted(), preInsertedObjects.sorted())
     }
 
-    class WrongObject: TableCodable {
+    final class WrongObject: TableCodable {
         var variable1: Int? = 0
         var variable2: String? = ""
         enum CodingKeys: String, CodingTableKey {

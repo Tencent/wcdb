@@ -23,7 +23,7 @@ import WCDB
 
 class VirtualTableBindingTests: BaseTestCase {
 
-    class FTS3TestObject: TableCodable, Named {
+    final class FTS3TestObject: TableCodable, Named {
         var id: Int = 0
         var content: String = ""
         enum CodingKeys: String, CodingTableKey {
@@ -47,7 +47,7 @@ class VirtualTableBindingTests: BaseTestCase {
         )
     }
 
-    class FTS5TestObject: TableCodable, Named {
+    final class FTS5TestObject: TableCodable, Named {
         var id: Int = 0
         var content: String = ""
         enum CodingKeys: String, CodingTableKey {

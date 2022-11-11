@@ -59,7 +59,7 @@ class ExpresssionTests: BaseTestCase {
         WINQAssertEqual(Expression.case(1).when(2).then(3), "CASE 1 WHEN 2 THEN 3 END")
     }
 
-    class OperableObject: TableCodable {
+    final class OperableObject: TableCodable {
         var left: Int = 0
         var right: String = ""
         enum CodingKeys: String, CodingTableKey {

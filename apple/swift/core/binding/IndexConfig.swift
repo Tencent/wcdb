@@ -30,7 +30,7 @@ public final class IndexConfig<CodingTableKeyType: CodingTableKey>: TableConfigu
     private let unique: Bool
 
     public func config(with tableBinding: TableBindingBase) {
-        var statement = StatementCreateIndex().ifNotExists().indexesBy(codingKeys)
+        let statement = StatementCreateIndex().ifNotExists().indexesBy(codingKeys)
         if unique {
             statement.unique()
         }

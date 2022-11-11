@@ -8246,6 +8246,7 @@
 					arm64e,
 				);
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
+				DEAD_CODE_STRIPPING = YES;
 				SWIFT_VERSION = 5.0;
 				VALID_ARCHS = "arm64e arm64 x86_64";
 				"VALID_ARCHS[sdk=watchos*]" = "arm64_32 armv7k";
@@ -8263,6 +8264,7 @@
 					arm64e,
 				);
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				DEAD_CODE_STRIPPING = YES;
 				SWIFT_VERSION = 5.0;
 				VALID_ARCHS = "arm64e arm64 x86_64";
 				"VALID_ARCHS[sdk=watchos*]" = "arm64_32 armv7k";

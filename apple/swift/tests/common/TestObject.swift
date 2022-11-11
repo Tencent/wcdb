@@ -22,7 +22,7 @@ import Foundation
 import WCDB
 
 class TestObjectBase: Named, Hashable, Comparable, CustomDebugStringConvertible {
-    var hashValue: Int {
+    func hash(into hasher: inout Hasher) {
         fatalError()
     }
 
@@ -50,7 +50,7 @@ class TestObjectBase: Named, Hashable, Comparable, CustomDebugStringConvertible 
     }
 }
 
-class TestObject: TestObjectBase, TableCodable {
+final class TestObject: TestObjectBase, TableCodable {
     var variable1: Int? = 0
     var variable2: String? = ""
 
