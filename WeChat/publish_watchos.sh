@@ -14,7 +14,7 @@ then
     rm -r "$build"
 fi
 mkdir "$build"
-if ! bash "$build_tool" --platform watchOS --language ObjC --configuration Release --destination "$build" --static-framework --wechat; then
+if ! bash "$build_tool" --platform watchOS --language ObjC --configuration Release --destination "$build" --disable-bitcode --static-framework --wechat; then
     exit 1
 fi
 
