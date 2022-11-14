@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
-#include <WCDB/Column.hpp>
-#include <WCDB/ColumnDef.hpp>
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/Schema.hpp>
-#include <WCDB/StatementAlterTable.hpp>
-#include <WCDB/StatementAlterTableBridge.h>
+#include "StatementAlterTableBridge.h"
+#include "Column.hpp"
+#include "ColumnDef.hpp"
+#include "ObjectBridge.hpp"
+#include "Schema.hpp"
+#include "StatementAlterTable.hpp"
 
 CPPStatementAlterTable WCDBStatementAlterTableCreate()
 {

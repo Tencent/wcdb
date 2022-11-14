@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/HandleBridge.h>
-#include <WCDB/InnerHandle.hpp>
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/RecyclableHandle.hpp>
+#include "HandleBridge.h"
+#include "InnerHandle.hpp"
+#include "ObjectBridge.hpp"
+#include "RecyclableHandle.hpp"
 
 WCDBDefineOneArgumentSwiftClosureBridgedType(WCDBTransaction, bool, CPPHandle)
 

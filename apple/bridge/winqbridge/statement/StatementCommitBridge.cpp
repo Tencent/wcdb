@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/StatementCommit.hpp>
-#include <WCDB/StatementCommitBridge.h>
-#include <WCDB/WinqBridge.hpp>
+#include "StatementCommitBridge.h"
+#include "StatementCommit.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementCommit WCDBStatementCommitCreate()
 {

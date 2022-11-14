@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/QualifiedTable.hpp>
-#include <WCDB/QualifiedTableBridge.h>
+#include "QualifiedTableBridge.h"
+#include "ObjectBridge.hpp"
+#include "QualifiedTable.hpp"
 
 CPPQualifiedTable WCDBQualifiedTableCreateWithTable(const char* _Nullable name)
 {

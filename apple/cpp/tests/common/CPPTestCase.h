@@ -38,4 +38,4 @@
 #import "TestCaseAssertion.h"
 #import "TestCaseLog.h"
 #import "TestCaseMacro.h"
-#import <WCDB/WCDB-CPP.h>
+#import <WCDB/WCDBCpp.h>

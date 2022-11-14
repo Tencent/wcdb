@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Expression.hpp>
-#include <WCDB/Filter.hpp>
-#include <WCDB/FilterBridge.h>
-#include <WCDB/ObjectBridge.hpp>
+#include "FilterBridge.h"
+#include "Expression.hpp"
+#include "Filter.hpp"
+#include "ObjectBridge.hpp"
 
 CPPFilter WCDBFilterCreate()
 {

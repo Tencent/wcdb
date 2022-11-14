@@ -82,4 +82,3 @@
 #include <WCDB/StatementVacuumBridge.h>
 
 #include <WCDB/WCTAPIBridge.h>
-#include <WCDB/WCTBridgeProperty.h>

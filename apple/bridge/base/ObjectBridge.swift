@@ -23,7 +23,7 @@
  */
 
 import Foundation
-import ObjectiveC
+import WCDB_Private
 
 internal final class ObjectBridge {
 

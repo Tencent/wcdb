@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Statement.hpp>
-#include <WCDB/StatementExplain.hpp>
-#include <WCDB/StatementExplainBridge.h>
-#include <WCDB/WinqBridge.hpp>
+#include "StatementExplainBridge.h"
+#include "Statement.hpp"
+#include "StatementExplain.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementExplain WCDBStatementExplainCreate(void)
 {

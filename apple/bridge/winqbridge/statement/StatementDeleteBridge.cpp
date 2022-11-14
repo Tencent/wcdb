@@ -22,13 +22,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/CommonTableExpression.hpp>
-#include <WCDB/Expression.hpp>
-#include <WCDB/OrderingTerm.hpp>
-#include <WCDB/QualifiedTable.hpp>
-#include <WCDB/StatementDelete.hpp>
-#include <WCDB/StatementDeleteBridge.h>
-#include <WCDB/WinqBridge.hpp>
+#include "StatementDeleteBridge.h"
+#include "CommonTableExpression.hpp"
+#include "Expression.hpp"
+#include "OrderingTerm.hpp"
+#include "QualifiedTable.hpp"
+#include "StatementDelete.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementDelete WCDBStatementDeleteCreate(void)
 {

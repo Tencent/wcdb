@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/Core.hpp>
-#include <WCDB/CoreBridge.h>
-#include <WCDB/ObjectBridge.hpp>
+#include "CoreBridge.h"
+#include "Core.hpp"
+#include "ObjectBridge.hpp"
 
 CPPDatabase WCDBCoreCreateDatabase(const char* _Nonnull path)
 {

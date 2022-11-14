@@ -22,13 +22,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/Expression.hpp>
-#include <WCDB/Join.hpp>
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/StatementSelect.hpp>
-#include <WCDB/TableOrSubquery.hpp>
-#include <WCDB/TableOrSubqueryBridge.h>
-#include <WCDB/WinqBridge.hpp>
+#include "TableOrSubqueryBridge.h"
+#include "Expression.hpp"
+#include "Join.hpp"
+#include "ObjectBridge.hpp"
+#include "StatementSelect.hpp"
+#include "TableOrSubquery.hpp"
+#include "WinqBridge.hpp"
 
 CPPTableOrSubquery WCDBTableOrSubqueryCreateWithTable(const char* _Nullable tableName)
 {

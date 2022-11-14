@@ -23,6 +23,7 @@
  */
 
 import Foundation
+import WCDB_Private
 
 extension WCTBridgeProperty: PropertyOperable {
 

@@ -62,10 +62,6 @@ public protocol StatementInterface: AnyObject {
         _ propertyConvertible: PropertyConvertible,
         of object: TableEncodableType,
         toIndex index: Int) throws
-    func bind<TableEncodableType: WCTTableCoding>(
-        _ propertyConvertible: PropertyConvertible,
-        of object: TableEncodableType,
-        toIndex index: Int) throws
 
     /// The wrapper of `sqlite3_bind_*` for binding properties of object to indexes.
     ///
@@ -76,9 +72,6 @@ public protocol StatementInterface: AnyObject {
     func bind<TableEncodableType: TableEncodable>(
         _ indexedPropertyConvertibleList: [(_: PropertyConvertible, toIndex: Int)],
         of object: TableEncodableType) throws
-    func bind<TableEncodableType: WCTTableCoding>(
-        _ indexedPropertyConvertibleList: [(_: PropertyConvertible, toIndex: Int)],
-        of object: TableEncodableType) throws
 
     /// The wrapper of `sqlite3_bind_*` for binding properties of object.
     ///
@@ -87,10 +80,6 @@ public protocol StatementInterface: AnyObject {
     ///   - object: Table encodable object
     /// - Throws: Begin with 1
     func bind<TableEncodableType: TableEncodable>(
-        _ propertyConvertibleList: [PropertyConvertible],
-        of object: TableEncodableType) throws
-
-    func bind<TableEncodableType: WCTTableCoding>(
         _ propertyConvertibleList: [PropertyConvertible],
         of object: TableEncodableType) throws
 
@@ -229,12 +218,6 @@ extension StatementInterface where Self: RawStatementmentRepresentable {
         toIndex index: Int = 1) throws {
         try bind([(propertyConvertible, toIndex: index)], of: object)
     }
-    public func bind<TableEncodableType: WCTTableCoding>(
-        _ propertyConvertible: PropertyConvertible,
-        of object: TableEncodableType,
-        toIndex index: Int = 1) throws {
-        try bind([(propertyConvertible, toIndex: index)], of: object)
-    }
 
     public func bind<TableEncodableType: TableEncodable>(
         _ indexedPropertyConvertibleList: [(_: PropertyConvertible, toIndex: Int)],
@@ -246,14 +229,6 @@ extension StatementInterface where Self: RawStatementmentRepresentable {
         let encoder = TableEncoder(hashedKeys, on: self)
         try object.encode(to: encoder)
     }
-    public func bind<TableEncodableType: WCTTableCoding>(
-        _ indexedPropertyConvertibleList: [(_: PropertyConvertible, toIndex: Int)],
-        of object: TableEncodableType) throws {
-        for args in indexedPropertyConvertibleList {
-            assert(args.0.wctProperty != nil, "WCTProperty should not be failed. If you think it's a bug, please report an issue to us.")
-            WCTAPIBridge.bindProperty(args.0.wctProperty!, ofObject: object, to: Int32(truncatingIfNeeded: args.toIndex), with: getRawStatement())
-        }
-    }
 
     public func bind<TableEncodableType: TableEncodable>(
         _ propertyConvertibleList: [PropertyConvertible],
@@ -264,11 +239,6 @@ extension StatementInterface where Self: RawStatementmentRepresentable {
         }
         let encoder = TableEncoder(hashedKeys, on: self)
         try object.encode(to: encoder)
-    }
-    public func bind<TableEncodableType: WCTTableCoding>(
-        _ propertyConvertibleList: [PropertyConvertible],
-        of object: TableEncodableType) throws {
-        WCTAPIBridge.bindProperties(propertyConvertibleList.asWCTBridgeProperties(), ofObject: object, with: getRawStatement())
     }
 
     public func bind(_ value: ColumnEncodable?, toIndex index: Int) {

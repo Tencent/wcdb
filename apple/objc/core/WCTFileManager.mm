@@ -22,12 +22,14 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
 #import <WCDB/CoreConst.h>
 #import <WCDB/Enum.hpp>
+#import <WCDB/Error.hpp>
 #import <WCDB/FileManager.hpp>
 #import <WCDB/Notifier.hpp>
+#import <WCDB/StringView.hpp>
 #import <WCDB/ThreadedErrors.hpp>
-#import <WCDB/WCTCommon.h>
 #import <WCDB/WCTFoundation.h>
 
 namespace WCDB {
@@ -35,57 +37,57 @@ namespace WCDB {
 StringView FileManager::getTemporaryDirectory()
 {
     NSString *temDir = [NSTemporaryDirectory() stringByAppendingPathComponent:@"WCDBTrash"];
-    return StringView(temDir);
+    return StringView(temDir.UTF8String);
 }
 
 #if TARGET_OS_IPHONE
 template<>
-constexpr const char *Enum::description(const WCDB::FileProtection &fileProtection)
+constexpr const char *Enum::description(const FileProtection &fileProtection)
 {
     switch (fileProtection) {
-    case WCDB::FileProtection::None:
+    case FileProtection::None:
         return NSFileProtectionNone.UTF8String;
-    case WCDB::FileProtection::Complete:
+    case FileProtection::Complete:
         return NSFileProtectionComplete.UTF8String;
-    case WCDB::FileProtection::CompleteUnlessOpen:
+    case FileProtection::CompleteUnlessOpen:
         return NSFileProtectionCompleteUnlessOpen.UTF8String;
-    case WCDB::FileProtection::CompleteUntilFirstUserAuthentication:
+    case FileProtection::CompleteUntilFirstUserAuthentication:
         return NSFileProtectionCompleteUntilFirstUserAuthentication.UTF8String;
     }
 }
 
-static WCDB::FileProtection fileProtectionForAttribute(NSString *fileAttributeProtection)
+static FileProtection fileProtectionForAttribute(NSString *fileAttributeProtection)
 {
     if ([fileAttributeProtection isEqualToString:NSFileProtectionComplete]) {
-        return WCDB::FileProtection::Complete;
+        return FileProtection::Complete;
     } else if ([fileAttributeProtection isEqualToString:NSFileProtectionCompleteUnlessOpen]) {
-        return WCDB::FileProtection::CompleteUnlessOpen;
+        return FileProtection::CompleteUnlessOpen;
     } else if ([fileAttributeProtection isEqualToString:NSFileProtectionCompleteUntilFirstUserAuthentication]) {
-        return WCDB::FileProtection::CompleteUntilFirstUserAuthentication;
+        return FileProtection::CompleteUntilFirstUserAuthentication;
     }
-    return WCDB::FileProtection::None;
+    return FileProtection::None;
 }
 
-bool FileManager::setFileProtection(const WCDB::UnsafeStringView &path, WCDB::FileProtection fileProtection)
+bool FileManager::setFileProtection(const UnsafeStringView &path, FileProtection fileProtection)
 {
     NSError *nsError = nil;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *nsPath = [NSString stringWithView:path];
-    if ([fileManager setAttributes:@{NSFileProtectionKey : @(WCDB::Enum::description(fileProtection))}
+    if ([fileManager setAttributes:@{NSFileProtectionKey : @(Enum::description(fileProtection))}
                       ofItemAtPath:nsPath
                              error:&nsError]) {
         return true;
     }
-    WCDB::Error error(WCDB::Error::Code::IOError, WCDB::Error::Level::Error, nsError.description);
-    error.infos.insert_or_assign(WCDB::ErrorStringKeySource, WCDB::ErrorSourceNative);
+    Error error(Error::Code::IOError, Error::Level::Error, nsError.description.UTF8String);
+    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceNative);
     error.infos.insert_or_assign(ErrorStringKeyAssociatePath, path);
-    error.infos.insert_or_assign(WCDB::ErrorIntKeyExtCode, nsError.code);
-    WCDB::Notifier::shared().notify(error);
-    WCDB::ThreadedErrors::shared().setThreadedError(std::move(error));
+    error.infos.insert_or_assign(ErrorIntKeyExtCode, nsError.code);
+    Notifier::shared().notify(error);
+    ThreadedErrors::shared().setThreadedError(std::move(error));
     return false;
 }
 
-std::optional<WCDB::FileProtection> FileManager::getFileProtection(const WCDB::UnsafeStringView &path)
+std::optional<FileProtection> FileManager::getFileProtection(const UnsafeStringView &path)
 {
     NSError *nsError = nil;
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -94,27 +96,27 @@ std::optional<WCDB::FileProtection> FileManager::getFileProtection(const WCDB::U
     if (attributes != nil) {
         return fileProtectionForAttribute(attributes[NSFileProtectionKey]);
     }
-    WCDB::Error error(WCDB::Error::Code::IOError, WCDB::Error::Level::Error, nsError.description);
-    error.infos.insert_or_assign(WCDB::ErrorStringKeySource, WCDB::ErrorSourceNative);
-    error.infos.insert_or_assign(WCDB::ErrorStringKeyAssociatePath, path);
-    error.infos.insert_or_assign(WCDB::ErrorIntKeyExtCode, nsError.code);
-    WCDB::Notifier::shared().notify(error);
-    WCDB::ThreadedErrors::shared().setThreadedError(std::move(error));
+    Error error(Error::Code::IOError, Error::Level::Error, nsError.description.UTF8String);
+    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceNative);
+    error.infos.insert_or_assign(ErrorStringKeyAssociatePath, path);
+    error.infos.insert_or_assign(ErrorIntKeyExtCode, nsError.code);
+    Notifier::shared().notify(error);
+    ThreadedErrors::shared().setThreadedError(std::move(error));
     return std::nullopt;
 }
 
 #else
-bool FileManager::setFileProtection(const WCDB::UnsafeStringView &path, WCDB::FileProtection fileProtection)
+bool FileManager::setFileProtection(const UnsafeStringView &path, FileProtection fileProtection)
 {
     WCDB_UNUSED(path)
     WCDB_UNUSED(fileProtection)
     return true;
 }
 
-std::optional<WCDB::FileProtection> FileManager::getFileProtection(const WCDB::UnsafeStringView &path)
+std::optional<FileProtection> FileManager::getFileProtection(const UnsafeStringView &path)
 {
     WCDB_UNUSED(path)
-    return WCDB::FileProtection::None;
+    return FileProtection::None;
 }
 #endif
 

@@ -22,7 +22,7 @@ import Foundation
 import WCDB_Private
 
 public protocol InsertTableInterface: AnyObject {
-    associatedtype Object: AnyObject
+    associatedtype Object: TableEncodable
 
     func insert(_ objects: Object..., on propertyConvertibleList: [PropertyConvertible]?) throws
     func insert(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]?) throws
@@ -31,7 +31,7 @@ public protocol InsertTableInterface: AnyObject {
 }
 
 public protocol UpdateTableInterface: AnyObject {
-    associatedtype Object: AnyObject
+    associatedtype Object: TableEncodable
 
     func update(on propertyConvertibleList: PropertyConvertible...,
                 with object: Object,
@@ -108,7 +108,7 @@ public protocol RowSelectTableInterface: AnyObject {
 }
 
 public protocol SelectTableInterface: AnyObject {
-    associatedtype Object: AnyObject
+    associatedtype Object: TableDecodable
 
     // TODO: Add generic property convertible to fit the type
     func getObjects(on propertyConvertibleList: [PropertyConvertible],

@@ -22,11 +22,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/AbstractHandle.hpp>
-#include <WCDB/HandleStatementBridge.h>
-#include <WCDB/InnerHandleStatement.hpp>
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/UnsafeData.hpp>
+#include "HandleStatementBridge.h"
+#include "AbstractHandle.hpp"
+#include "InnerHandleStatement.hpp"
+#include "ObjectBridge.hpp"
+#include "UnsafeData.hpp"
 
 CPPError WCDBHandleStatementGetError(CPPHandleStatement handleStatement)
 {

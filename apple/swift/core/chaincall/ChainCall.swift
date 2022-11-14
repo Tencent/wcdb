@@ -31,7 +31,6 @@ public protocol InsertChainCallInterface: AnyObject {
     ///   - table: Table name
     /// - Returns: `Insert`
     func prepareInsert<Root: TableEncodable>(of cls: Root.Type, intoTable table: String) throws -> Insert
-    func prepareInsert<Root: WCTTableCoding>(of cls: Root.Type, intoTable table: String) throws -> Insert
 
     /// Prepare chain call for inserting or replacing of `TableEncodable` object
     ///
@@ -40,7 +39,6 @@ public protocol InsertChainCallInterface: AnyObject {
     ///   - table: Table name
     /// - Returns: `Insert`
     func prepareInsertOrReplace<Root: TableEncodable>(of cls: Root.Type, intoTable table: String) throws -> Insert
-    func prepareInsertOrReplace<Root: WCTTableCoding>(of cls: Root.Type, intoTable table: String) throws -> Insert
 
     /// Prepare chain call for inserting on specific properties
     ///
@@ -82,19 +80,11 @@ extension InsertChainCallInterface where Self: HandleRepresentable {
     public func prepareInsert<Root: TableEncodable>(of cls: Root.Type, intoTable table: String) throws -> Insert {
         return Insert(with: try getHandle(), named: table, on: cls.Properties.all, isReplace: false)
     }
-    public func prepareInsert<Root: WCTTableCoding>(of cls: Root.Type, intoTable table: String) throws -> Insert {
-        return Insert(with: try getHandle(), named: table, on: cls.allProperties(), isReplace: false)
-    }
 
     public func prepareInsertOrReplace<Root: TableEncodable>(
         of cls: Root.Type,
         intoTable table: String) throws -> Insert {
         return Insert(with: try getHandle(), named: table, on: cls.Properties.all, isReplace: true)
-    }
-    public func prepareInsertOrReplace<Root: WCTTableCoding>(
-        of cls: Root.Type,
-        intoTable table: String) throws -> Insert {
-        return Insert(with: try getHandle(), named: table, on: cls.allProperties(), isReplace: true)
     }
 
     public func prepareInsert(on propertyConvertibleList: PropertyConvertible...,
@@ -260,9 +250,6 @@ public protocol SelectChainCallInterface: AnyObject {
     func prepareSelect<Root: TableDecodable>(of cls: Root.Type,
                                              fromTable table: String,
                                              isDistinct: Bool) throws -> Select
-    func prepareSelect<Root: WCTTableCoding>(of cls: Root.Type,
-                                             fromTable table: String,
-                                             isDistinct: Bool) throws -> Select
 
     /// Prepare chain call for selecting on specific properties
     ///
@@ -292,11 +279,6 @@ extension SelectChainCallInterface where Self: HandleRepresentable {
                                                     fromTable table: String,
                                                     isDistinct: Bool = false) throws -> Select {
         return Select(with: try getHandle(), on: cls.Properties.all, table: table, isDistinct: isDistinct)
-    }
-    public func prepareSelect<Root: WCTTableCoding>(of cls: Root.Type,
-                                                    fromTable table: String,
-                                                    isDistinct: Bool = false) throws -> Select {
-        return Select(with: try getHandle(), on: cls.allProperties(), table: table, isDistinct: isDistinct)
     }
 
     public func prepareSelect(on propertyConvertibleList: PropertyConvertible...,

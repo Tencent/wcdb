@@ -22,15 +22,15 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Core.hpp>
-#include <WCDB/CustomConfig.hpp>
-#include <WCDB/FTSBridge.h>
-#include <WCDB/FTSConst.h>
-#include <WCDB/InnerDatabase.hpp>
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/SQLite.h>
-#include <WCDB/TokenizerModule.hpp>
+#include "FTSBridge.h"
+#include "Assertion.hpp"
+#include "Core.hpp"
+#include "CustomConfig.hpp"
+#include "FTSConst.h"
+#include "InnerDatabase.hpp"
+#include "ObjectBridge.hpp"
+#include "SQLite.h"
+#include "TokenizerModule.hpp"
 
 SwiftObject* _Nullable (*_Nullable WCDBSwiftTokenizerCreate)(
 int typeId, int argc, const char* _Nullable const* _Nullable argv)

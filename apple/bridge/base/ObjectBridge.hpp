@@ -24,9 +24,9 @@
 
 #pragma once
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/ObjectBridge.h>
-#include <WCDB/Recyclable.hpp>
+#include "Assertion.hpp"
+#include "ObjectBridge.h"
+#include "Recyclable.hpp"
 
 #define __WCDBGetObjectOrReturn(rawObj, objType, typedObjName, action)            \
     objType* typedObjName                                                         \

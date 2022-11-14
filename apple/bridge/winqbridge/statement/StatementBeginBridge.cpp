@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/StatementBegin.hpp>
-#include <WCDB/StatementBeginBridge.h>
-#include <WCDB/WinqBridge.hpp>
+#include "StatementBeginBridge.h"
+#include "StatementBegin.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementBegin WCDBStatementBeginCreate()
 {

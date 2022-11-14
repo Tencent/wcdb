@@ -22,11 +22,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/CommonTableExpression.hpp>
-#include <WCDB/CommonTableExpressionBridge.h>
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/StatementSelect.hpp>
-#include <WCDB/WinqBridge.hpp>
+#include "CommonTableExpressionBridge.h"
+#include "CommonTableExpression.hpp"
+#include "ObjectBridge.hpp"
+#include "StatementSelect.hpp"
+#include "WinqBridge.hpp"
 
 CPPCommonTableExpression WCDBCommonTableExpressionCreate(const char* _Nullable tableName)
 {

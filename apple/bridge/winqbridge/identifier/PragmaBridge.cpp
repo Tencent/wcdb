@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/Pragma.hpp>
-#include <WCDB/PragmaBridge.h>
+#include "PragmaBridge.h"
+#include "ObjectBridge.hpp"
+#include "Pragma.hpp"
 
 CPPPragma WCDBPragmaCreateWithName(const char* _Nullable name)
 {

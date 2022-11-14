@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/ObjectBridge.hpp>
+#include "ObjectBridge.hpp"
 
 void (*_Nullable WCDBReleaseSwiftObject)(SwiftObject* _Nonnull obj) = nullptr;
 

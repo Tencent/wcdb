@@ -22,7 +22,7 @@ import Foundation
 import WCDB_Private
 
 public final class Select: Selectable {
-    private let properties: [PropertyConvertible]
+    internal let properties: [PropertyConvertible]
     private lazy var keys: [CodingTableKeyBase] = {
         self.properties.asCodingTableKeys()
     }()
@@ -42,6 +42,7 @@ public final class Select: Selectable {
     /// - Returns: Table decodable object according to the `CodingTableKey`. Nil means the end of iteration.
     /// - Throws: `Error`
     public func nextObject() throws -> Any? {
+#if WCDB_SWIFT_BRIDGE_OBJC
         if properties[0].isSwiftProperty() {
             let rootType = keys[0].rootType as? TableDecodableBase.Type
             assert(rootType != nil, "\(keys[0].rootType) must conform to TableDecodable protocol.")
@@ -55,6 +56,15 @@ public final class Select: Selectable {
             }
             return WCTAPIBridge.extractObject(onResultColumns: properties.asWCTBridgeProperties(), from: handle.getRawStatement())
         }
+#else
+        assert(properties[0].isSwiftProperty())
+        let rootType = keys[0].rootType as? TableDecodableBase.Type
+        assert(rootType != nil, "\(keys[0].rootType) must conform to TableDecodable protocol.")
+        guard try next() else {
+            return nil
+        }
+        return try rootType!.init(from: decoder)
+#endif
     }
 
     /// Get all selected objects according to the `CodingTableKey`.
@@ -63,6 +73,7 @@ public final class Select: Selectable {
     /// - Throws: `Error`
     public func allObjects() throws -> [Any] {
         var objects: [Any] = []
+#if WCDB_SWIFT_BRIDGE_OBJC
         if properties[0].isSwiftProperty() {
             let rootType = keys[0].rootType as? TableDecodableBase.Type
             assert(rootType != nil, "\(keys[0].rootType) must conform to TableDecodable protocol.")
@@ -76,6 +87,14 @@ public final class Select: Selectable {
                 }
             }
         }
+#else
+        assert(properties[0].isSwiftProperty())
+        let rootType = keys[0].rootType as? TableDecodableBase.Type
+        assert(rootType != nil, "\(keys[0].rootType) must conform to TableDecodable protocol.")
+        while try next() {
+            objects.append(try rootType!.init(from: decoder))
+        }
+#endif
         return objects
     }
 
@@ -91,13 +110,6 @@ public final class Select: Selectable {
         }
         return try Object.init(from: decoder)
     }
-    public func nextObject<Object: WCTTableCoding>(of type: Object.Type = Object.self) throws -> Object? {
-        assert(!properties[0].isSwiftProperty(), "Properties must belong to objc obj.")
-        guard try next() else {
-            return nil
-        }
-        return WCTAPIBridge.extractObject(onResultColumns: properties.asWCTBridgeProperties(), from: handle.getRawStatement()) as? Object
-    }
 
     /// Get all selected objects.
     ///
@@ -109,16 +121,6 @@ public final class Select: Selectable {
         var objects: [Object] = []
         while try next() {
             objects.append(try Object.init(from: decoder))
-        }
-        return objects
-    }
-    public func allObjects<Object: WCTTableCoding>(of type: Object.Type = Object.self) throws -> [Object] {
-        assert(!properties[0].isSwiftProperty(), "Properties must belong to objc obj.")
-        var objects: [Object] = []
-        while try next() {
-            if let obj = WCTAPIBridge.extractObject(onResultColumns: properties.asWCTBridgeProperties(), from: handle.getRawStatement()) {
-                objects.append(obj as! Object)
-            }
         }
         return objects
     }

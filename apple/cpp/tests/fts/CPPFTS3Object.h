@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/WCDB-CPP.h>
+#include <WCDB/WCDBCpp.h>
 
 class CPPFTS3Object {
 public:

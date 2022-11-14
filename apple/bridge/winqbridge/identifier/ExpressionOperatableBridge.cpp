@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Expression.hpp>
-#include <WCDB/ExpressionOperatableBridge.h>
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/StatementSelect.hpp>
-#include <WCDB/WinqBridge.hpp>
+#include "ExpressionOperatableBridge.h"
+#include "Assertion.hpp"
+#include "Expression.hpp"
+#include "ObjectBridge.hpp"
+#include "StatementSelect.hpp"
+#include "WinqBridge.hpp"
 
 CPPExpression WCDBExpressionUnaryOperate(CPPExpression expression,
                                          enum WCDBExpressionUnaryOperateType operatorType)

@@ -24,16 +24,18 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/HandleBridge.h>
-#import <WCDB/WCTBridgeProperty.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol WCTTableCoding;
 typedef NSObject<WCTTableCoding> WCTObject;
 typedef NSDictionary<NSString * /*table name */, WCTObject *> WCTMultiObject;
+@class WCTBridgeProperty;
+typedef NSArray<WCTBridgeProperty *> WCTBridgeProperties;
 
 @interface WCTAPIBridge : NSObject
 
+#ifdef WCDB_SWIFT_BRIDGE_OBJC
 + (BOOL)createTable:(NSString *)name
           withClass:(Class<WCTTableCoding>)tableClass
          withHandle:(CPPHandle)handle;
@@ -62,6 +64,7 @@ typedef NSDictionary<NSString * /*table name */, WCTObject *> WCTMultiObject;
 
 + (nullable WCTMultiObject *)extractMultiObjectOnResultColumns:(WCTBridgeProperties *)properties
                                            fromHandleStatement:(CPPHandleStatement)handleStatement;
+#endif
 
 + (void)configDefaultSymbolDetectorAndUnicodeNormalizer;
 

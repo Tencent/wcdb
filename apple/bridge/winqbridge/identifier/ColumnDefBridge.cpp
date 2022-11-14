@@ -22,11 +22,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/ColumnConstraint.hpp>
-#include <WCDB/ColumnDef.hpp>
-#include <WCDB/ColumnDefBridge.h>
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/WinqBridge.hpp>
+#include "ColumnDefBridge.h"
+#include "ColumnConstraint.hpp"
+#include "ColumnDef.hpp"
+#include "ObjectBridge.hpp"
+#include "WinqBridge.hpp"
 
 CPPColumnDef WCDBColumnDefCreateWithoutType(CPPColumn column)
 {

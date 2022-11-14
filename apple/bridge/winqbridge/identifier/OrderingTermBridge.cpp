@@ -22,11 +22,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/Expression.hpp>
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/OrderingTerm.hpp>
-#include <WCDB/OrderingTermBridge.h>
-#include <WCDB/WinqBridge.hpp>
+#include "OrderingTermBridge.h"
+#include "Expression.hpp"
+#include "ObjectBridge.hpp"
+#include "OrderingTerm.hpp"
+#include "WinqBridge.hpp"
 
 CPPOrderingTerm WCDBOrderingTermCreate(CPPExpression expression)
 {

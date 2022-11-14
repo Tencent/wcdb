@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
-#include <WCDB/Expression.hpp>
-#include <WCDB/IndexedColumn.hpp>
-#include <WCDB/Schema.hpp>
-#include <WCDB/StatementCreateIndex.hpp>
-#include <WCDB/StatementCreateIndexBridge.h>
-#include <WCDB/WinqBridge.hpp>
+#include "StatementCreateIndexBridge.h"
+#include "Expression.hpp"
+#include "IndexedColumn.hpp"
+#include "Schema.hpp"
+#include "StatementCreateIndex.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementCreateIndex WCDBStatementCreatIndexCreate()
 {

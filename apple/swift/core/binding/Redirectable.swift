@@ -27,7 +27,11 @@ public protocol PropertyRedirectable {
 
 extension PropertyRedirectable where Self: Describable {
     public func `as`(_ propertyConvertible: PropertyConvertible) -> Property {
+#if WCDB_SWIFT_BRIDGE_OBJC
         return Property(named: description, with: propertyConvertible.codingTableKey, with: propertyConvertible.wctProperty)
+#else
+        return Property(named: description, with: propertyConvertible.codingTableKey)
+#endif
     }
 }
 

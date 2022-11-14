@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/StatementRelease.hpp>
-#include <WCDB/StatementReleaseBridge.h>
-#include <WCDB/WinqBridge.hpp>
+#include "StatementReleaseBridge.h"
+#include "StatementRelease.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementRelease WCDBStatementReleaseCreate(void)
 {

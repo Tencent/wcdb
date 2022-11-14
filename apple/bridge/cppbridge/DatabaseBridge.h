@@ -23,9 +23,9 @@
  */
 
 #pragma once
-#include <WCDB/ErrorBridge.h>
-#include <WCDB/HandleBridge.h>
-#include <WCDB/ObjectBridge.h>
+#include "ErrorBridge.h"
+#include "HandleBridge.h"
+#include "ObjectBridge.h"
 
 WCDB_EXTERN_C_BEGIN
 

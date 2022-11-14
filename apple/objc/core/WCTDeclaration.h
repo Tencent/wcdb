@@ -23,7 +23,6 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/Macro.h>
 
 #ifdef __cplusplus
 

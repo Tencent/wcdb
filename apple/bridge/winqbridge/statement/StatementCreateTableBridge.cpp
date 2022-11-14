@@ -22,13 +22,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/ColumnDef.hpp>
-#include <WCDB/Schema.hpp>
-#include <WCDB/StatementCreateTable.hpp>
-#include <WCDB/StatementCreateTableBridge.h>
-#include <WCDB/StatementSelect.hpp>
-#include <WCDB/TableConstraint.hpp>
-#include <WCDB/WinqBridge.hpp>
+#include "StatementCreateTableBridge.h"
+#include "ColumnDef.hpp"
+#include "Schema.hpp"
+#include "StatementCreateTable.hpp"
+#include "StatementSelect.hpp"
+#include "TableConstraint.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementCreateTable WCDBStatementCreateTableCreate(void)
 {

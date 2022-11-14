@@ -22,11 +22,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/Column.hpp>
-#include <WCDB/ForeignKey.hpp>
-#include <WCDB/ForeignKeyBridge.h>
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/WinqBridge.hpp>
+#include "ForeignKeyBridge.h"
+#include "Column.hpp"
+#include "ForeignKey.hpp"
+#include "ObjectBridge.hpp"
+#include "WinqBridge.hpp"
 
 CPPForeignKey WCDBForeignKeyCreate()
 {

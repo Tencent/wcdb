@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/Schema.hpp>
-#include <WCDB/SchemaBridge.h>
+#include "SchemaBridge.h"
+#include "ObjectBridge.hpp"
+#include "Schema.hpp"
 
 CPPSchema WCDBSchemaCreateWithName(const char* _Nullable name)
 {

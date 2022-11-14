@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/ExpressionBridge.h>
+#include "ExpressionBridge.h"
 
 WCDB_EXTERN_C_BEGIN
 

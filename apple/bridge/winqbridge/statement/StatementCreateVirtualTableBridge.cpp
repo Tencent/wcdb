@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Schema.hpp>
-#include <WCDB/StatementCreateVirtualTable.hpp>
-#include <WCDB/StatementCreateVirtualTableBridge.h>
-#include <WCDB/WinqBridge.hpp>
+#include "StatementCreateVirtualTableBridge.h"
+#include "Schema.hpp"
+#include "StatementCreateVirtualTable.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementCreateVirtualTable WCDBStatementCreateVirtualTableCreate(void)
 {

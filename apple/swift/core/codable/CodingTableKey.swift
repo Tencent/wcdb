@@ -68,11 +68,11 @@ extension CodingTableKey {
     public var codingTableKey: CodingTableKeyBase? {
         return self
     }
-
+#if WCDB_SWIFT_BRIDGE_OBJC
     public var wctProperty: WCTBridgeProperty? {
         return nil
     }
-
+#endif
     public func `as`(_ propertyConvertible: PropertyConvertible) -> Property {
         return Property(named: stringValue, with: propertyConvertible.codingTableKey)
     }

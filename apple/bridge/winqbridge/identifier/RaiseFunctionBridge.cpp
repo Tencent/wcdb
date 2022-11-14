@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/RaiseFunction.hpp>
-#include <WCDB/RaiseFunctionBridge.h>
+#include "RaiseFunctionBridge.h"
+#include "ObjectBridge.hpp"
+#include "RaiseFunction.hpp"
 
 CPPRaiseFunction WCDBRaiseFunctionCreate()
 {

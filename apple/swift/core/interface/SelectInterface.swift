@@ -327,13 +327,6 @@ public protocol SelectInterface: AnyObject {
         orderBy orderList: [OrderBy]?,
         limit: Limit?,
         offset: Offset?) throws -> [Object]
-    func getObjects<Object: WCTTableCoding>(
-        on propertyConvertibleList: [PropertyConvertible],
-        fromTable table: String,
-        where condition: Condition?,
-        orderBy orderList: [OrderBy]?,
-        limit: Limit?,
-        offset: Offset?) throws -> [Object]
 
     /// Get objects on specific(or all) properties
     ///
@@ -353,13 +346,6 @@ public protocol SelectInterface: AnyObject {
         orderBy orderList: [OrderBy]?,
         limit: Limit?,
         offset: Offset?) throws -> [Object]
-    func getObjects<Object: WCTTableCoding>(
-        on propertyConvertibleList: PropertyConvertible...,
-        fromTable table: String,
-        where condition: Condition?,
-        orderBy orderList: [OrderBy]?,
-        limit: Limit?,
-        offset: Offset?) throws -> [Object]
 
     /// Get object on specific(or all) properties
     ///
@@ -377,12 +363,6 @@ public protocol SelectInterface: AnyObject {
         where condition: Condition?,
         orderBy orderList: [OrderBy]?,
         offset: Offset?) throws -> Object?
-    func getObject<Object: WCTTableCoding>(
-        on propertyConvertibleList: [PropertyConvertible],
-        fromTable table: String,
-        where condition: Condition?,
-        orderBy orderList: [OrderBy]?,
-        offset: Offset?) throws -> Object?
 
     /// Get object on specific(or all) properties
     ///
@@ -400,39 +380,10 @@ public protocol SelectInterface: AnyObject {
         where condition: Condition?,
         orderBy orderList: [OrderBy]?,
         offset: Offset?) throws -> Object?
-    func getObject<Object: WCTTableCoding>(
-        on propertyConvertibleList: PropertyConvertible...,
-        fromTable table: String,
-        where condition: Condition?,
-        orderBy orderList: [OrderBy]?,
-        offset: Offset?) throws -> Object?
 }
 
 extension SelectInterface where Self: HandleRepresentable {
     public func getObjects<Object: TableDecodable>(
-        on propertyConvertibleList: [PropertyConvertible],
-        fromTable table: String,
-        where condition: Condition? = nil,
-        orderBy orderList: [OrderBy]? = nil,
-        limit: Limit? = nil,
-        offset: Offset? = nil) throws -> [Object] {
-        let select = Select(with: try getHandle(), on: propertyConvertibleList, table: table, isDistinct: false)
-        if condition != nil {
-            select.where(condition!)
-        }
-        if orderList != nil {
-            select.order(by: orderList!)
-        }
-        if limit != nil {
-            if offset != nil {
-                select.limit(limit!, offset: offset!)
-            } else {
-                select.limit(limit!)
-            }
-        }
-        return try select.allObjects()
-    }
-    public func getObjects<Object: WCTTableCoding>(
         on propertyConvertibleList: [PropertyConvertible],
         fromTable table: String,
         where condition: Condition? = nil,
@@ -470,35 +421,8 @@ extension SelectInterface where Self: HandleRepresentable {
                               limit: limit,
                               offset: offset)
     }
-    public func getObjects<Object: WCTTableCoding>(
-        on propertyConvertibleList: PropertyConvertible...,
-        fromTable table: String,
-        where condition: Condition? = nil,
-        orderBy orderList: [OrderBy]? = nil,
-        limit: Limit? = nil,
-        offset: Offset? = nil) throws -> [Object] {
-        return try getObjects(on: propertyConvertibleList.isEmpty ? Object.allProperties() : propertyConvertibleList,
-                              fromTable: table,
-                              where: condition,
-                              orderBy: orderList,
-                              limit: limit,
-                              offset: offset)
-    }
 
     public func getObject<Object: TableDecodable>(
-        on propertyConvertibleList: [PropertyConvertible],
-        fromTable table: String,
-        where condition: Condition? = nil,
-        orderBy orderList: [OrderBy]? = nil,
-        offset: Offset? = nil) throws -> Object? {
-        return try getObjects(on: propertyConvertibleList,
-                              fromTable: table,
-                              where: condition,
-                              orderBy: orderList,
-                              limit: 1,
-                              offset: offset).first
-    }
-    public func getObject<Object: WCTTableCoding>(
         on propertyConvertibleList: [PropertyConvertible],
         fromTable table: String,
         where condition: Condition? = nil,
@@ -519,18 +443,6 @@ extension SelectInterface where Self: HandleRepresentable {
         orderBy orderList: [OrderBy]? = nil,
         offset: Offset? = nil) throws -> Object? {
         return try getObject(on: propertyConvertibleList.isEmpty ? Object.Properties.all : propertyConvertibleList,
-                             fromTable: table,
-                             where: condition,
-                             orderBy: orderList,
-                             offset: offset)
-    }
-    public func getObject<Object: WCTTableCoding>(
-        on propertyConvertibleList: PropertyConvertible...,
-        fromTable table: String,
-        where condition: Condition? = nil,
-        orderBy orderList: [OrderBy]? = nil,
-        offset: Offset? = nil) throws -> Object? {
-        return try getObject(on: propertyConvertibleList.isEmpty ? Object.allProperties() : propertyConvertibleList,
                              fromTable: table,
                              where: condition,
                              orderBy: orderList,

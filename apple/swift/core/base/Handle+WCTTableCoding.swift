@@ -1,5 +1,5 @@
 //
-// Created by 陈秋文 on 2022/11/11.
+// Created by 陈秋文 on 2022/11/13.
 //
 
 /*
@@ -22,7 +22,13 @@
  * limitations under the License.
  */
 
-#define WCDB_SWIFT 1
-#include <WCDB/WCTColumnCoding.h>
-#include <WCDB/WCTMacro.h>
-#include <WCDB/WCTTableCoding.h>
+import Foundation
+
+extension Handle: StatementInterfaceForObjc {}
+
+extension Handle: InsertChainCallInterfaceForObjc {}
+extension Handle: SelectChainCallInterfaceForObjc {}
+
+extension Handle: InsertInterfaceForObjc {}
+extension Handle: UpdateInterfaceForObjc {}
+extension Handle: SelectInterfaceForObjc {}

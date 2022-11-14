@@ -47,14 +47,6 @@ public protocol UpdateInterface: AnyObject {
         orderBy orderList: [OrderBy]?,
         limit: Limit?,
         offset: Offset?) throws
-    func update<Object: WCTTableCoding>(
-        table: String,
-        on propertyConvertibleList: PropertyConvertible...,
-        with object: Object,
-        where condition: Condition?,
-        orderBy orderList: [OrderBy]?,
-        limit: Limit?,
-        offset: Offset?) throws
 
     /// Execute updating with `TableEncodable` object on specific(or all) properties.
     ///
@@ -68,14 +60,6 @@ public protocol UpdateInterface: AnyObject {
     ///   - offset: Expression convertible
     /// - Throws: `Error`
     func update<Object: TableEncodable>(
-        table: String,
-        on propertyConvertibleList: [PropertyConvertible],
-        with object: Object,
-        where condition: Condition?,
-        orderBy orderList: [OrderBy]?,
-        limit: Limit?,
-        offset: Offset?) throws
-    func update<Object: WCTTableCoding>(
         table: String,
         on propertyConvertibleList: [PropertyConvertible],
         with object: Object,
@@ -148,48 +132,8 @@ extension UpdateInterface where Self: HandleRepresentable {
         }
         return try update.execute(with: object)
     }
-    public func update<Object: WCTTableCoding>(
-        table: String,
-        on propertyConvertibleList: [PropertyConvertible],
-        with object: Object,
-        where condition: Condition? = nil,
-        orderBy orderList: [OrderBy]? = nil,
-        limit: Limit? = nil,
-        offset: Offset? = nil) throws {
-        let update = Update(with: try getHandle(), on: propertyConvertibleList, andTable: table)
-        if condition != nil {
-            update.where(condition!)
-        }
-        if orderList != nil {
-            update.order(by: orderList!)
-        }
-        if limit != nil {
-            if offset != nil {
-                update.limit(limit!, offset: offset!)
-            } else {
-                update.limit(limit!)
-            }
-        }
-        return try update.execute(with: object)
-    }
 
     public func update<Object: TableEncodable>(
-        table: String,
-        on propertyConvertibleList: PropertyConvertible...,
-        with object: Object,
-        where condition: Condition? = nil,
-        orderBy orderList: [OrderBy]? = nil,
-        limit: Limit? = nil,
-        offset: Offset? = nil) throws {
-        return try update(table: table,
-                          on: propertyConvertibleList,
-                          with: object,
-                          where: condition,
-                          orderBy: orderList,
-                          limit: limit,
-                          offset: offset)
-    }
-    public func update<Object: WCTTableCoding>(
         table: String,
         on propertyConvertibleList: PropertyConvertible...,
         with object: Object,

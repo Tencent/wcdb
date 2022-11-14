@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Schema.hpp>
-#include <WCDB/StatementDropView.hpp>
-#include <WCDB/StatementDropViewBridge.h>
-#include <WCDB/WinqBridge.hpp>
+#include "StatementDropViewBridge.h"
+#include "Schema.hpp"
+#include "StatementDropView.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementDropView WCDBStatementDropViewCreate(void)
 {

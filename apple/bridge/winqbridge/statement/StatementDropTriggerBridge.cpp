@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Schema.hpp>
-#include <WCDB/StatementDropTrigger.hpp>
-#include <WCDB/StatementDropTriggerBridge.h>
-#include <WCDB/WinqBridge.hpp>
+#include "StatementDropTriggerBridge.h"
+#include "Schema.hpp"
+#include "StatementDropTrigger.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementDropTrigger WCDBStatementDropTriggerCreate(void)
 {

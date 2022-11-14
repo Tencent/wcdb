@@ -29,7 +29,7 @@
 #import "TestCaseAssertion.h"
 #import "TestCaseLog.h"
 #import <Foundation/Foundation.h>
-#import <WCDB/WCDB-CPP.h>
+#import <WCDB/WCDBCpp.h>
 
 @implementation CPPBaseTestCase {
     Random *_random;

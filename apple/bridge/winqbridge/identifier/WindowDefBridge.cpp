@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
-#include <WCDB/Expression.hpp>
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/OrderingTerm.hpp>
-#include <WCDB/WindowDef.hpp>
-#include <WCDB/WindowDefBridge.h>
-#include <WCDB/WinqBridge.hpp>
+#include "WindowDefBridge.h"
+#include "Expression.hpp"
+#include "ObjectBridge.hpp"
+#include "OrderingTerm.hpp"
+#include "WindowDef.hpp"
+#include "WinqBridge.hpp"
 
 CPPWindowDef WCDBWindowDefCreate(void)
 {

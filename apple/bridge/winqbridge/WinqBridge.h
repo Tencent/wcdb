@@ -23,7 +23,7 @@
  */
 #pragma once
 
-#include <WCDB/ObjectBridge.h>
+#include "ObjectBridge.h"
 
 WCDB_EXTERN_C_BEGIN
 

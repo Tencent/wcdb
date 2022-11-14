@@ -23,7 +23,7 @@
  */
 
 import Foundation
-import ObjectiveC
+import WCDB_Private
 
 public enum TokenizerErrorCode {
     case OK

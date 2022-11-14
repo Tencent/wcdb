@@ -23,7 +23,7 @@
  */
 #pragma once
 
-#include <WCDB/WinqBridge.h>
+#include "WinqBridge.h"
 
 WCDB_EXTERN_C_BEGIN
 

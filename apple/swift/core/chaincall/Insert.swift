@@ -23,10 +23,10 @@ import WCDB_Private
 
 /// Chain call for inserting
 public final class Insert {
-    private let handle: Handle
-    private var properties: [PropertyConvertible]?
-    private let name: String
-    private let isReplace: Bool
+    internal let handle: Handle
+    internal var properties: [PropertyConvertible]?
+    internal let name: String
+    internal let isReplace: Bool
 
     init(with handle: Handle,
          named name: String,
@@ -55,9 +55,6 @@ public final class Insert {
     /// - Parameter objects: Object to be inserted
     /// - Throws: Error
     public func execute<Object: TableEncodable>(with objects: Object...) throws {
-        try execute(with: objects)
-    }
-    public func execute<Object: WCTTableCoding>(with objects: Object...) throws {
         try execute(with: objects)
     }
 
@@ -95,17 +92,5 @@ public final class Insert {
             handle.finalize()
         }
         return objects.count == 1 ? try doInsertObject(handle) : try handle.run(transaction: doInsertObject)
-    }
-
-    public func execute<Object: WCTTableCoding>(with objects: [Object]) throws {
-        guard objects.count > 0 else {
-            return
-        }
-        if !WCTAPIBridge.insertObjects(objects, intoTable: name,
-                                       withProperties: properties?.asWCTBridgeProperties(),
-                                       orReplace: isReplace,
-                                       with: handle.cppHandle) {
-            throw handle.getError()
-        }
     }
 }

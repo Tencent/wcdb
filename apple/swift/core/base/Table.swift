@@ -23,7 +23,7 @@ import WCDB_Private
 
 /// Convenient table interface
 public final class Table<Root: AnyObject> {
-    private let database: Database
+    internal let database: Database
     public typealias Object = Root
 
     /// Table name
@@ -34,15 +34,16 @@ public final class Table<Root: AnyObject> {
         return Root.self
     }
 
-    init(withDatabase database: Database, named name: String, of type: Root.Type = Root.self) where Root: TableCodable {
+    internal init(withDatabase database: Database, named name: String) {
         self.database = database
         self.name = name
     }
-    init(withDatabase database: Database, named name: String, of type: Root.Type = Root.self) where Root: WCTTableCoding {
-        self.database = database
-        self.name = name
+
+    convenience init(withDatabase database: Database, named name: String, of type: Root.Type = Root.self) where Root: TableCodable {
+        self.init(withDatabase: database, named: name)
     }
-    init(withDatabase database: Database, named name: String, of type: Root.Type = Root.self) {
+
+    convenience init(withDatabase database: Database, named name: String, of type: Root.Type = Root.self) {
         fatalError("\(Object.self) must conform to TableCodable or WCTTableCoding")
     }
 }
@@ -53,10 +54,6 @@ internal extension Table {
         let insert = Insert(with: try self.database.getHandle(), named: self.name, on: propertyConvertibleList, isReplace: isReplace)
         return try insert.execute(with: objects)
     }
-    func internalInsert(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil, isReplace: Bool) throws where Object: WCTTableCoding {
-        let insert = Insert(with: try self.database.getHandle(), named: self.name, on: propertyConvertibleList, isReplace: isReplace)
-        return try insert.execute(with: objects)
-    }
 
     func internalUpdate(on propertyConvertibleList: [PropertyConvertible],
                         with object: Object,
@@ -64,28 +61,6 @@ internal extension Table {
                         orderBy orderList: [OrderBy]? = nil,
                         limit: Limit? = nil,
                         offset: Offset? = nil) throws where Object: TableEncodable {
-        let update = Update(with: try self.database.getHandle(), on: propertyConvertibleList, andTable: self.name)
-        if condition != nil {
-            update.where(condition!)
-        }
-        if orderList != nil {
-            update.order(by: orderList!)
-        }
-        if limit != nil {
-            if offset != nil {
-                update.limit(limit!, offset: offset!)
-            } else {
-                update.limit(limit!)
-            }
-        }
-        return try update.execute(with: object)
-    }
-    func internalUpdate(on propertyConvertibleList: [PropertyConvertible],
-                        with object: Object,
-                        where condition: Condition? = nil,
-                        orderBy orderList: [OrderBy]? = nil,
-                        limit: Limit? = nil,
-                        offset: Offset? = nil) throws where Object: WCTTableCoding {
         let update = Update(with: try self.database.getHandle(), on: propertyConvertibleList, andTable: self.name)
         if condition != nil {
             update.where(condition!)
@@ -127,33 +102,9 @@ internal extension Table {
         }
         return try select.allObjects()
     }
-    func internalGetObjects(on propertyConvertibleList: [PropertyConvertible],
-                           where condition: Condition? = nil,
-                           orderBy orderList: [OrderBy]? = nil,
-                           limit: Limit? = nil,
-                           offset: Offset? = nil) throws -> [Object] where Object: WCTTableCoding {
-        let select = Select(with: try self.database.getHandle(),
-                            on: propertyConvertibleList.isEmpty ? Object.allProperties() : propertyConvertibleList,
-                            table: self.name,
-                            isDistinct: false)
-        if condition != nil {
-            select.where(condition!)
-        }
-        if orderList != nil {
-            select.order(by: orderList!)
-        }
-        if limit != nil {
-            if offset != nil {
-                select.limit(limit!, offset: offset!)
-            } else {
-                select.limit(limit!)
-            }
-        }
-        return try select.allObjects()
-    }
 }
 
-extension Table: InsertTableInterface {
+extension Table: InsertTableInterface where Root: TableCodable {
 
     /// Execute inserting with `TableCodable` object on specific(or all) properties
     ///
@@ -165,14 +116,8 @@ extension Table: InsertTableInterface {
     ///   - objects: Table encodable object
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     /// - Throws: `Error`
-    public func insert(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: TableEncodable {
-        try internalInsert(objects, on: propertyConvertibleList, isReplace: false)
-    }
-    public func insert(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: WCTTableCoding {
-        try internalInsert(objects, on: propertyConvertibleList, isReplace: false)
-    }
     public func insert(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws {
-        fatalError("\(Object.self) must conform to TableEncodable or WCTTableCoding")
+        try internalInsert(objects, on: propertyConvertibleList, isReplace: false)
     }
 
     /// Execute inserting or replacing with `TableCodable` object on specific(or all) properties.  
@@ -186,14 +131,8 @@ extension Table: InsertTableInterface {
     ///   - objects: Table encodable object
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     /// - Throws: `Error`
-    public func insertOrReplace(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: TableEncodable {
-        try internalInsert(objects, on: propertyConvertibleList, isReplace: true)
-    }
-    public func insertOrReplace(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: WCTTableCoding {
-        try internalInsert(objects, on: propertyConvertibleList, isReplace: true)
-    }
     public func insertOrReplace(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws {
-        fatalError("\(Object.self) must conform to TableEncodable or WCTTableCoding")
+        try internalInsert(objects, on: propertyConvertibleList, isReplace: true)
     }
 
     /// Execute inserting with `TableCodable` object on specific(or all) properties
@@ -206,14 +145,8 @@ extension Table: InsertTableInterface {
     ///   - objects: Table encodable object
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     /// - Throws: `Error`
-    public func insert(_ objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: TableEncodable {
-        try internalInsert(objects, on: propertyConvertibleList, isReplace: false)
-    }
-    public func insert(_ objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: WCTTableCoding {
-        try internalInsert(objects, on: propertyConvertibleList, isReplace: false)
-    }
     public func insert(_ objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws {
-        fatalError("\(Object.self) must conform to TableEncodable or WCTTableCoding")
+        try internalInsert(objects, on: propertyConvertibleList, isReplace: false)
     }
 
     /// Execute inserting or replacing with `TableCodable` object on specific(or all) properties.  
@@ -227,18 +160,12 @@ extension Table: InsertTableInterface {
     ///   - objects: Table encodable object
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     /// - Throws: `Error`
-    public func insertOrReplace(_ objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: TableEncodable {
-        try internalInsert(objects, on: propertyConvertibleList, isReplace: true)
-    }
-    public func insertOrReplace(_ objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: WCTTableCoding {
-        try internalInsert(objects, on: propertyConvertibleList, isReplace: true)
-    }
     public func insertOrReplace(_ objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws {
-        fatalError("\(Object.self) must conform to TableEncodable or WCTTableCoding")
+        try internalInsert(objects, on: propertyConvertibleList, isReplace: true)
     }
 }
 
-extension Table: UpdateTableInterface {
+extension Table: UpdateTableInterface where Root: TableEncodable {
 
     /// Execute updating with `TableCodable` object on specific(or all) properties. 
     ///
@@ -255,24 +182,8 @@ extension Table: UpdateTableInterface {
                        where condition: Condition? = nil,
                        orderBy orderList: [OrderBy]? = nil,
                        limit: Limit? = nil,
-                       offset: Offset? = nil) throws where Object: TableEncodable {
-        return try internalUpdate(on: propertyConvertibleList, with: object, where: condition, orderBy: orderList, limit: limit, offset: offset)
-    }
-    public func update(on propertyConvertibleList: [PropertyConvertible],
-                       with object: Object,
-                       where condition: Condition? = nil,
-                       orderBy orderList: [OrderBy]? = nil,
-                       limit: Limit? = nil,
-                       offset: Offset? = nil) throws where Object: WCTTableCoding {
-        return try internalUpdate(on: propertyConvertibleList, with: object, where: condition, orderBy: orderList, limit: limit, offset: offset)
-    }
-    public func update(on propertyConvertibleList: [PropertyConvertible],
-                       with object: Object,
-                       where condition: Condition? = nil,
-                       orderBy orderList: [OrderBy]? = nil,
-                       limit: Limit? = nil,
                        offset: Offset? = nil) throws {
-        fatalError("\(Object.self) must conform to TableEncodable or WCTTableCoding")
+        return try internalUpdate(on: propertyConvertibleList, with: object, where: condition, orderBy: orderList, limit: limit, offset: offset)
     }
 
     /// Execute updating with `TableCodable` object on specific(or all) properties. 
@@ -290,24 +201,8 @@ extension Table: UpdateTableInterface {
                        where condition: Condition? = nil,
                        orderBy orderList: [OrderBy]? = nil,
                        limit: Limit? = nil,
-                       offset: Offset? = nil) throws where Object: TableEncodable {
-        return try internalUpdate(on: propertyConvertibleList, with: object, where: condition, orderBy: orderList, limit: limit, offset: offset)
-    }
-    public func update(on propertyConvertibleList: PropertyConvertible...,
-                       with object: Object,
-                       where condition: Condition? = nil,
-                       orderBy orderList: [OrderBy]? = nil,
-                       limit: Limit? = nil,
-                       offset: Offset? = nil) throws where Object: WCTTableCoding {
-        return try internalUpdate(on: propertyConvertibleList, with: object, where: condition, orderBy: orderList, limit: limit, offset: offset)
-    }
-    public func update(on propertyConvertibleList: PropertyConvertible...,
-                       with object: Object,
-                       where condition: Condition? = nil,
-                       orderBy orderList: [OrderBy]? = nil,
-                       limit: Limit? = nil,
                        offset: Offset? = nil) throws {
-        fatalError("\(Object.self) must conform to TableEncodable or WCTTableCoding")
+        return try internalUpdate(on: propertyConvertibleList, with: object, where: condition, orderBy: orderList, limit: limit, offset: offset)
     }
 
     /// Execute updating with row on specific(or all) properties. 
@@ -400,7 +295,7 @@ extension Table: DeleteTableInterface {
     }
 }
 
-extension Table: SelectTableInterface {
+extension Table: SelectTableInterface where Root: TableDecodable {
 
     /// Get objects on specific(or all) properties
     ///
@@ -416,22 +311,8 @@ extension Table: SelectTableInterface {
                            where condition: Condition? = nil,
                            orderBy orderList: [OrderBy]? = nil,
                            limit: Limit? = nil,
-                           offset: Offset? = nil) throws -> [Object] where Object: TableDecodable {
-        return try internalGetObjects(on: propertyConvertibleList, where: condition, orderBy: orderList, limit: limit, offset: offset)
-    }
-    public func getObjects(on propertyConvertibleList: [PropertyConvertible],
-                           where condition: Condition? = nil,
-                           orderBy orderList: [OrderBy]? = nil,
-                           limit: Limit? = nil,
-                           offset: Offset? = nil) throws -> [Object] where Object: WCTTableCoding {
-        return try internalGetObjects(on: propertyConvertibleList, where: condition, orderBy: orderList, limit: limit, offset: offset)
-    }
-    public func getObjects(on propertyConvertibleList: [PropertyConvertible],
-                           where condition: Condition? = nil,
-                           orderBy orderList: [OrderBy]? = nil,
-                           limit: Limit? = nil,
                            offset: Offset? = nil) throws -> [Object] {
-        fatalError("\(Object.self) must conform to TableEncodable or WCTTableCoding")
+        return try internalGetObjects(on: propertyConvertibleList, where: condition, orderBy: orderList, limit: limit, offset: offset)
     }
 
     /// Get objects on specific(or all) properties
@@ -448,22 +329,8 @@ extension Table: SelectTableInterface {
                            where condition: Condition? = nil,
                            orderBy orderList: [OrderBy]? = nil,
                            limit: Limit? = nil,
-                           offset: Offset? = nil) throws -> [Object] where Object: TableDecodable {
-        return try internalGetObjects(on: propertyConvertibleList, where: condition, orderBy: orderList, limit: limit, offset: offset)
-    }
-    public func getObjects(on propertyConvertibleList: PropertyConvertible...,
-                           where condition: Condition? = nil,
-                           orderBy orderList: [OrderBy]? = nil,
-                           limit: Limit? = nil,
-                           offset: Offset? = nil) throws -> [Object] where Object: WCTTableCoding {
-        return try internalGetObjects(on: propertyConvertibleList, where: condition, orderBy: orderList, limit: limit, offset: offset)
-    }
-    public func getObjects(on propertyConvertibleList: PropertyConvertible...,
-                           where condition: Condition? = nil,
-                           orderBy orderList: [OrderBy]? = nil,
-                           limit: Limit? = nil,
                            offset: Offset? = nil) throws -> [Object] {
-        fatalError("\(Object.self) must conform to TableEncodable or WCTTableCoding")
+        return try internalGetObjects(on: propertyConvertibleList, where: condition, orderBy: orderList, limit: limit, offset: offset)
     }
 
     /// Get object on specific(or all) properties
@@ -478,28 +345,12 @@ extension Table: SelectTableInterface {
     public func getObject(on propertyConvertibleList: [PropertyConvertible],
                           where condition: Condition? = nil,
                           orderBy orderList: [OrderBy]? = nil,
-                          offset: Offset? = nil) throws -> Object? where Object: TableDecodable {
-        return try internalGetObjects(on: propertyConvertibleList,
-                              where: condition,
-                              orderBy: orderList,
-                              limit: 1,
-                              offset: offset).first
-    }
-    public func getObject(on propertyConvertibleList: [PropertyConvertible],
-                          where condition: Condition? = nil,
-                          orderBy orderList: [OrderBy]? = nil,
-                          offset: Offset? = nil) throws -> Object? where Object: WCTTableCoding {
-        return try internalGetObjects(on: propertyConvertibleList,
-                              where: condition,
-                              orderBy: orderList,
-                              limit: 1,
-                              offset: offset).first
-    }
-    public func getObject(on propertyConvertibleList: [PropertyConvertible],
-                          where condition: Condition? = nil,
-                          orderBy orderList: [OrderBy]? = nil,
                           offset: Offset? = nil) throws -> Object? {
-        fatalError("\(Object.self) must conform to TableEncodable or WCTTableCoding")
+        return try internalGetObjects(on: propertyConvertibleList,
+                              where: condition,
+                              orderBy: orderList,
+                              limit: 1,
+                              offset: offset).first
     }
 
     /// Get object on specific(or all) properties
@@ -514,28 +365,12 @@ extension Table: SelectTableInterface {
     public func getObject(on propertyConvertibleList: PropertyConvertible...,
                           where condition: Condition? = nil,
                           orderBy orderList: [OrderBy]? = nil,
-                          offset: Offset? = nil) throws -> Object? where Object: TableDecodable {
+                          offset: Offset? = nil) throws -> Object? {
         return try getObjects(on: propertyConvertibleList.isEmpty ? Object.Properties.all : propertyConvertibleList,
                               where: condition,
                               orderBy: orderList,
                               limit: 1,
                               offset: offset).first
-    }
-    public func getObject(on propertyConvertibleList: PropertyConvertible...,
-                          where condition: Condition? = nil,
-                          orderBy orderList: [OrderBy]? = nil,
-                          offset: Offset? = nil) throws -> Object? where Object: WCTTableCoding {
-        return try getObjects(on: propertyConvertibleList.isEmpty ? Object.allProperties() : propertyConvertibleList,
-                              where: condition,
-                              orderBy: orderList,
-                              limit: 1,
-                              offset: offset).first
-    }
-    public func getObject(on propertyConvertibleList: PropertyConvertible...,
-                          where condition: Condition? = nil,
-                          orderBy orderList: [OrderBy]? = nil,
-                          offset: Offset? = nil) throws -> Object? {
-        fatalError("\(Object.self) must conform to TableEncodable or WCTTableCoding")
     }
 }
 

@@ -22,14 +22,14 @@
  * limitations under the License.
  */
 
-#include <WCDB/Column.hpp>
-#include <WCDB/CommonTableExpression.hpp>
-#include <WCDB/Expression.hpp>
-#include <WCDB/OrderingTerm.hpp>
-#include <WCDB/QualifiedTable.hpp>
-#include <WCDB/StatementUpdate.hpp>
-#include <WCDB/StatementUpdateBridge.h>
-#include <WCDB/WinqBridge.hpp>
+#include "StatementUpdateBridge.h"
+#include "Column.hpp"
+#include "CommonTableExpression.hpp"
+#include "Expression.hpp"
+#include "OrderingTerm.hpp"
+#include "QualifiedTable.hpp"
+#include "StatementUpdate.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementUpdate WCDBStatementUpdateCreate(void)
 {

@@ -22,15 +22,15 @@
  * limitations under the License.
  */
 
-#include <WCDB/Column.hpp>
-#include <WCDB/CommonTableExpression.hpp>
-#include <WCDB/Expression.hpp>
-#include <WCDB/Schema.hpp>
-#include <WCDB/StatementInsert.hpp>
-#include <WCDB/StatementInsertBridge.h>
-#include <WCDB/StatementSelect.hpp>
-#include <WCDB/Upsert.hpp>
-#include <WCDB/WinqBridge.hpp>
+#include "StatementInsertBridge.h"
+#include "Column.hpp"
+#include "CommonTableExpression.hpp"
+#include "Expression.hpp"
+#include "Schema.hpp"
+#include "StatementInsert.hpp"
+#include "StatementSelect.hpp"
+#include "Upsert.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementInsert WCDBStatementInsertCreate(void)
 {

@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Schema.hpp>
-#include <WCDB/StatementReindex.hpp>
-#include <WCDB/StatementReindexBridge.h>
-#include <WCDB/WinqBridge.hpp>
+#include "StatementReindexBridge.h"
+#include "Schema.hpp"
+#include "StatementReindex.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementReIndex WCDBStatementReIndexCreate(void)
 {
