@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/StatementSavepoint.hpp>
-#include <WCDB/StatementSavepointBridge.h>
-#include <WCDB/WinqBridge.hpp>
+#include "StatementSavepointBridge.h"
+#include "StatementSavepoint.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementSavepoint WCDBStatementSavepointCreate(void)
 {

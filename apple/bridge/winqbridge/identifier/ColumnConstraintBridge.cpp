@@ -22,11 +22,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/ColumnConstraint.hpp>
-#include <WCDB/ColumnConstraintBridge.h>
-#include <WCDB/ForeignKey.hpp>
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/WinqBridge.hpp>
+#include "ColumnConstraintBridge.h"
+#include "ColumnConstraint.hpp"
+#include "ForeignKey.hpp"
+#include "ObjectBridge.hpp"
+#include "WinqBridge.hpp"
 
 CPPColumnConstraint WCDBColumnConstraintCreate(const char* _Nullable name)
 {

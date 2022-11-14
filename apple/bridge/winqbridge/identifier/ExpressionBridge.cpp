@@ -22,18 +22,18 @@
  * limitations under the License.
  */
 
-#include <WCDB/BindParameter.hpp>
-#include <WCDB/Column.hpp>
-#include <WCDB/Expression.hpp>
-#include <WCDB/ExpressionBridge.h>
-#include <WCDB/Filter.hpp>
-#include <WCDB/LiteralValue.hpp>
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/RaiseFunction.hpp>
-#include <WCDB/StatementSelect.hpp>
-#include <WCDB/SyntaxForwardDeclaration.h>
-#include <WCDB/WindowDef.hpp>
-#include <WCDB/WinqBridge.hpp>
+#include "ExpressionBridge.h"
+#include "BindParameter.hpp"
+#include "Column.hpp"
+#include "Expression.hpp"
+#include "Filter.hpp"
+#include "LiteralValue.hpp"
+#include "ObjectBridge.hpp"
+#include "RaiseFunction.hpp"
+#include "StatementSelect.hpp"
+#include "SyntaxForwardDeclaration.h"
+#include "WindowDef.hpp"
+#include "WinqBridge.hpp"
 
 CPPExpression WCDBExpressionCreateWithLiteralValue(CPPLiteralValue value)
 {

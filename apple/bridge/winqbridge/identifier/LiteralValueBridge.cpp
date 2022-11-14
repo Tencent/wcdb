@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/LiteralValue.hpp>
-#include <WCDB/LiteralValueBridge.h>
-#include <WCDB/ObjectBridge.hpp>
+#include "LiteralValueBridge.h"
+#include "LiteralValue.hpp"
+#include "ObjectBridge.hpp"
 
 CPPLiteralValue WCDBLiteralValueCreateWithInt64(long long value)
 {

@@ -44,11 +44,6 @@
     return [NSString stringWithUTF8String:m_innerProperty->getDescription().data()];
 }
 
-- (Class)objType
-{
-    return m_innerProperty->getColumnBinding().getClass();
-}
-
 - (const WCTProperty&)wctProperty
 {
     return *m_innerProperty;

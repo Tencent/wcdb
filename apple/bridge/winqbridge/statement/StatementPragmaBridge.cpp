@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
-#include <WCDB/LiteralValue.hpp>
-#include <WCDB/Pragma.hpp>
-#include <WCDB/Schema.hpp>
-#include <WCDB/StatementPragma.hpp>
-#include <WCDB/StatementPragmaBridge.h>
-#include <WCDB/WinqBridge.hpp>
+#include "StatementPragmaBridge.h"
+#include "LiteralValue.hpp"
+#include "Pragma.hpp"
+#include "Schema.hpp"
+#include "StatementPragma.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementPragma WCDBStatementPragmaCreate(void)
 {

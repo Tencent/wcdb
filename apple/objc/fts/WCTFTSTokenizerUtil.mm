@@ -22,7 +22,9 @@
  * limitations under the License.
  */
 
+#import <CoreFoundation/CoreFoundation.h>
 #import <Foundation/Foundation.h>
+#import <WCDB/WCTCommon.h>
 #import <WCDB/WCTFTSTokenizerUtil.h>
 
 WCDB::StringView WCTFTSTokenizerUtil::tokenize(NSString* name, ...)
@@ -64,7 +66,7 @@ void WCTFTSTokenizerUtil::configDefaultSymbolDetectorAndUnicodeNormalizer()
                 NSMutableString* nsToken = [[NSMutableString alloc] initWithBytes:token.data() length:token.length() encoding:NSUTF8StringEncoding];
                 CFMutableStringRef normalizationFormText = (__bridge_retained CFMutableStringRef)(nsToken);
                 CFStringNormalize(normalizationFormText, kCFStringNormalizationFormKD);
-                return WCDB::StringView((__bridge_transfer NSString*) normalizationFormText);
+                return WCDB::StringView(((__bridge_transfer NSString*) normalizationFormText).UTF8String);
             }
         });
     });

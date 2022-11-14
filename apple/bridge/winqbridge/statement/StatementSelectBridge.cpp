@@ -22,15 +22,15 @@
  * limitations under the License.
  */
 
-#include <WCDB/CommonTableExpression.hpp>
-#include <WCDB/Expression.hpp>
-#include <WCDB/OrderingTerm.hpp>
-#include <WCDB/ResultColumn.hpp>
-#include <WCDB/StatementSelect.hpp>
-#include <WCDB/StatementSelectBridge.h>
-#include <WCDB/TableOrSubquery.hpp>
-#include <WCDB/WindowDef.hpp>
-#include <WCDB/WinqBridge.hpp>
+#include "StatementSelectBridge.h"
+#include "CommonTableExpression.hpp"
+#include "Expression.hpp"
+#include "OrderingTerm.hpp"
+#include "ResultColumn.hpp"
+#include "StatementSelect.hpp"
+#include "TableOrSubquery.hpp"
+#include "WindowDef.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementSelect WCDBStatementSelectCreate()
 {

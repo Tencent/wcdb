@@ -22,11 +22,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/Expression.hpp>
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/Schema.hpp>
-#include <WCDB/StatementAttach.hpp>
-#include <WCDB/StatementAttachBridge.h>
+#include "StatementAttachBridge.h"
+#include "Expression.hpp"
+#include "ObjectBridge.hpp"
+#include "Schema.hpp"
+#include "StatementAttach.hpp"
 
 CPPStatementAttach WCDBStatementAttachCreate()
 {

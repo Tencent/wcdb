@@ -22,15 +22,15 @@
  * limitations under the License.
  */
 
-#include <WCDB/Column.hpp>
-#include <WCDB/Schema.hpp>
-#include <WCDB/StatementCreateTrigger.hpp>
-#include <WCDB/StatementCreateTriggerBridge.h>
-#include <WCDB/StatementDelete.hpp>
-#include <WCDB/StatementInsert.hpp>
-#include <WCDB/StatementSelect.hpp>
-#include <WCDB/StatementUpdate.hpp>
-#include <WCDB/WinqBridge.hpp>
+#include "StatementCreateTriggerBridge.h"
+#include "Column.hpp"
+#include "Schema.hpp"
+#include "StatementCreateTrigger.hpp"
+#include "StatementDelete.hpp"
+#include "StatementInsert.hpp"
+#include "StatementSelect.hpp"
+#include "StatementUpdate.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementCreateTrigger WCDBStatementCreateTriggerCreate(void)
 {

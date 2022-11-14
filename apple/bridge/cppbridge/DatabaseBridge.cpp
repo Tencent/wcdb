@@ -22,13 +22,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/CipherConfig.hpp>
-#include <WCDB/Core.hpp>
-#include <WCDB/CustomConfig.hpp>
-#include <WCDB/DBOperationNotifier.hpp>
-#include <WCDB/DatabaseBridge.h>
-#include <WCDB/InnerDatabase.hpp>
-#include <WCDB/ObjectBridge.hpp>
+#include "DatabaseBridge.h"
+#include "CipherConfig.hpp"
+#include "Core.hpp"
+#include "CustomConfig.hpp"
+#include "DBOperationNotifier.hpp"
+#include "InnerDatabase.hpp"
+#include "ObjectBridge.hpp"
 
 WCDBDefineNoArgumentSwiftClosureBridgedType(WCDBDatabaseCloseCallback, void)
 

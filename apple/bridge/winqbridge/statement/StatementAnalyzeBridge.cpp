@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/Schema.hpp>
-#include <WCDB/StatementAnalyze.hpp>
-#include <WCDB/StatementAnalyzeBridge.h>
+#include "StatementAnalyzeBridge.h"
+#include "ObjectBridge.hpp"
+#include "Schema.hpp"
+#include "StatementAnalyze.hpp"
 
 CPPStatementAnalyze WCDBStatementAnalyzeCreate(void)
 {

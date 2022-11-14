@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Schema.hpp>
-#include <WCDB/StatementDropIndex.hpp>
-#include <WCDB/StatementDropIndexBridge.h>
-#include <WCDB/WinqBridge.hpp>
+#include "StatementDropIndexBridge.h"
+#include "Schema.hpp"
+#include "StatementDropIndex.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementDropIndex WCDBStatementDropIndexCreate(void)
 {

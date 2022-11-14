@@ -26,9 +26,10 @@
 #import <WCDB/InnerHandleStatement.hpp>
 #import <WCDB/ObjectBridge.hpp>
 #import <WCDB/WCTAPIBridge.h>
+#import <WCDB/WCTFTSTokenizerUtil.h>
+#ifdef WCDB_SWIFT_BRIDGE_OBJC
 #import <WCDB/WCTBridgeProperty+CPP.h>
 #import <WCDB/WCTDeclaration.h>
-#import <WCDB/WCTFTSTokenizerUtil.h>
 #import <WCDB/WCTHandle+ChainCall.h>
 #import <WCDB/WCTHandle+Private.h>
 #import <WCDB/WCTHandle+Table.h>
@@ -36,11 +37,14 @@
 #import <WCDB/WCTInsert.h>
 #import <WCDB/WCTResultColumn.h>
 #import <WCDB/WCTTableCoding.h>
+#endif
 
 @implementation WCTAPIBridge
 
+#ifdef WCDB_SWIFT_BRIDGE_OBJC
+
 + (BOOL)createTable:(NSString*)name
-          withClass:(Class<WCTTableCoding>)tableClass
+          withClass:(Class)tableClass
          withHandle:(CPPHandle)handle
 {
     WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, NO);
@@ -49,7 +53,7 @@
 }
 
 + (BOOL)createVirtualTable:(NSString*)name
-                 withClass:(Class<WCTTableCoding>)tableClass
+                 withClass:(Class)tableClass
                 withHandle:(CPPHandle)handle
 {
     WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, NO);
@@ -130,6 +134,8 @@
     }
     return [wctHandleStatement extractMultiObjectOnResultColumns:resultColumns];
 }
+
+#endif
 
 + (void)configDefaultSymbolDetectorAndUnicodeNormalizer
 {

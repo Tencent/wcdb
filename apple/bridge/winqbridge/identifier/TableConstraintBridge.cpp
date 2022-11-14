@@ -22,14 +22,14 @@
  * limitations under the License.
  */
 
-#include <WCDB/Column.hpp>
-#include <WCDB/Expression.hpp>
-#include <WCDB/ForeignKey.hpp>
-#include <WCDB/IndexedColumn.hpp>
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/TableConstraint.hpp>
-#include <WCDB/TableConstraintBridge.h>
-#include <WCDB/WinqBridge.hpp>
+#include "TableConstraintBridge.h"
+#include "Column.hpp"
+#include "Expression.hpp"
+#include "ForeignKey.hpp"
+#include "IndexedColumn.hpp"
+#include "ObjectBridge.hpp"
+#include "TableConstraint.hpp"
+#include "WinqBridge.hpp"
 
 CPPTableConstraint WCDBTableConstraintCreate(const char* _Nullable name)
 {

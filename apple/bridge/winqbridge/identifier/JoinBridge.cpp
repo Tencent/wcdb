@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
-#include <WCDB/Column.hpp>
-#include <WCDB/Expression.hpp>
-#include <WCDB/Join.hpp>
-#include <WCDB/JoinBridge.h>
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/WinqBridge.hpp>
+#include "JoinBridge.h"
+#include "Column.hpp"
+#include "Expression.hpp"
+#include "Join.hpp"
+#include "ObjectBridge.hpp"
+#include "WinqBridge.hpp"
 
 CPPJoin WCDBJoinCreateWithTableOrSubquery(CPPTableOrSubquery query)
 {

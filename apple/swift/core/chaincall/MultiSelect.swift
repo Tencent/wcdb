@@ -84,6 +84,7 @@ public final class MultiSelect: Selectable {
 
     private func extractMultiObject() throws -> [String: Any] {
         var multiObject: [String: Any] = [:]
+#if WCDB_SWIFT_BRIDGE_OBJC
         if properties[0].isSwiftProperty() {
             for (tableName, generator) in generators {
                 multiObject[tableName] = try generator()
@@ -92,6 +93,12 @@ public final class MultiSelect: Selectable {
             try lazyPrepareStatement()
             multiObject = WCTAPIBridge.extractMultiObject(onResultColumns: properties.asWCTBridgeProperties(), from: handle.getRawStatement())!
         }
+#else
+        assert(properties[0].isSwiftProperty())
+        for (tableName, generator) in generators {
+            multiObject[tableName] = try generator()
+        }
+#endif
         return multiObject
     }
 

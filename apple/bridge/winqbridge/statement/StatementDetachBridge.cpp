@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Schema.hpp>
-#include <WCDB/StatementDetach.hpp>
-#include <WCDB/StatementDetachBridge.h>
-#include <WCDB/WinqBridge.hpp>
+#include "StatementDetachBridge.h"
+#include "Schema.hpp"
+#include "StatementDetach.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementDetach WCDBStatementDetachCreate(void)
 {

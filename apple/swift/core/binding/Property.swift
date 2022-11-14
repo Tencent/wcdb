@@ -25,9 +25,9 @@ public protocol PropertyConvertible: ColumnConvertible, PropertyRedirectable {
     func isSwiftProperty() -> Bool
 
     var codingTableKey: CodingTableKeyBase? {get}
-
+#if WCDB_SWIFT_BRIDGE_OBJC
     var wctProperty: WCTBridgeProperty? {get}
-
+#endif
     func asProperty() -> Property
 
     func `in`(table: String) -> Property
@@ -38,6 +38,7 @@ public typealias PropertyOperable = PropertyConvertible & ExpressionOperable
 public final class Property: Describable {
     public private(set) var description: String
     public private(set) var codingTableKey: CodingTableKeyBase?
+#if WCDB_SWIFT_BRIDGE_OBJC
     public private(set) var wctProperty: WCTBridgeProperty?
 
     public init(named name: String, with codingTableKey: CodingTableKeyBase?, with wctProperty: WCTBridgeProperty?) {
@@ -48,18 +49,15 @@ public final class Property: Describable {
 
     public init(named name: String, with wctProperty: WCTBridgeProperty?) {
         self.wctProperty = wctProperty
-        self.codingTableKey = nil
         self.description = name
     }
-
+#endif
     public init(named name: String, with codingTableKey: CodingTableKeyBase?) {
-        self.wctProperty = nil
         self.codingTableKey = codingTableKey
         self.description = name
     }
 
     public init(with codingTableKey: CodingTableKeyBase) {
-        self.wctProperty = nil
         self.codingTableKey = codingTableKey
         self.description = codingTableKey.stringValue
     }
@@ -80,7 +78,11 @@ extension Property: PropertyOperable {
 
     public func `in`(table: String) -> Property {
         let column: Column = self.in(table: table)
+#if WCDB_SWIFT_BRIDGE_OBJC
         return Property(named: column.description, with: codingTableKey, with: wctProperty)
+#else
+        return Property(named: column.description, with: codingTableKey)
+#endif
     }
 
     public func asColumn() -> Column {

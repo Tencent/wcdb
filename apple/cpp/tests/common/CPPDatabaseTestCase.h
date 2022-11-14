@@ -23,7 +23,7 @@
  */
 
 #import "CPPBaseTestCase.h"
-#import <WCDB/WCDB-CPP.h>
+#import <WCDB/WCDBCpp.h>
 
 typedef NS_ENUM(NSUInteger, DatabaseTestCaseExpect) {
     DatabaseTestCaseExpectAllSQLs = 0,

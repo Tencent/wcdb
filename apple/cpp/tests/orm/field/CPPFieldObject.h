@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCDB-CPP.h>
+#import <WCDB/WCDBCpp.h>
 
 class CPPFieldObject {
     int field;

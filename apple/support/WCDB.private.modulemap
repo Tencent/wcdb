@@ -2,7 +2,7 @@ framework module WCDB_Private {
     requires objc
 
     module BridgeHeader [extern_c] {
-        umbrella header "WCDB-Private-Bridging.h"
+        umbrella header "WCDBBridging.h"
         export *
     }
 }

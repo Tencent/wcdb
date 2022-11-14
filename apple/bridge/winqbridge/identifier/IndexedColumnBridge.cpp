@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
-#include <WCDB/Column.hpp>
-#include <WCDB/Expression.hpp>
-#include <WCDB/IndexedColumn.hpp>
-#include <WCDB/IndexedColumnBridge.h>
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/WinqBridge.hpp>
+#include "IndexedColumnBridge.h"
+#include "Column.hpp"
+#include "Expression.hpp"
+#include "IndexedColumn.hpp"
+#include "ObjectBridge.hpp"
+#include "WinqBridge.hpp"
 
 CPPIndexedColumn WCDBIndexedColumnCreateWithColumn(CPPColumn column)
 {

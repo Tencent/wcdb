@@ -23,9 +23,9 @@ import WCDB_Private
 
 /// The chain call for updating
 public final class Update {
-    private var handle: Handle
-    private let statement = StatementUpdate()
-    private let properties: [PropertyConvertible]
+    internal var handle: Handle
+    internal let statement = StatementUpdate()
+    internal let properties: [PropertyConvertible]
     private lazy var keys: [CodingTableKeyBase] = {
         self.properties.asCodingTableKeys()
     }()
@@ -117,14 +117,6 @@ public final class Update {
         try handle.prepare(statement)
         let encoder = TableEncoder(keys, on: handle)
         try object.encode(to: encoder)
-        try handle.step()
-        changes = handle.changes
-        handle.finalize()
-    }
-
-    public func execute<Object: WCTTableCoding>(with object: Object) throws {
-        try handle.prepare(statement)
-        WCTAPIBridge.bindProperties(properties.asWCTBridgeProperties(), ofObject: object, with: handle.getRawStatement())
         try handle.step()
         changes = handle.changes
         handle.finalize()

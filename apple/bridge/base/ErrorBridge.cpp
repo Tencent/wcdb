@@ -22,11 +22,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/CoreConst.h>
-#include <WCDB/ErrorBridge.h>
-#include <WCDB/ErrorProne.hpp>
-#include <WCDB/Notifier.hpp>
-#include <WCDB/ObjectBridge.hpp>
+#include "ErrorBridge.h"
+#include "CoreConst.h"
+#include "ErrorProne.hpp"
+#include "Notifier.hpp"
+#include "ObjectBridge.hpp"
 
 WCDBDefineMultiArgumentSwiftClosureBridgedType(
 WCDBErrorInfoEnumerator, void, const char*, WCDBErrorValueType, long, double, const char*)

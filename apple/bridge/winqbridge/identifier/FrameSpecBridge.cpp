@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Expression.hpp>
-#include <WCDB/FrameSpec.hpp>
-#include <WCDB/FrameSpecBridge.h>
-#include <WCDB/ObjectBridge.hpp>
+#include "FrameSpecBridge.h"
+#include "Expression.hpp"
+#include "FrameSpec.hpp"
+#include "ObjectBridge.hpp"
 
 CPPFrameSpec WCDBFrameSpecCreate()
 {

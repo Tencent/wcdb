@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/BindParameter.hpp>
-#include <WCDB/BindParameterBridge.h>
-#include <WCDB/ObjectBridge.hpp>
+#include "BindParameterBridge.h"
+#include "BindParameter.hpp"
+#include "ObjectBridge.hpp"
 
 CPPBindParameter WCDBBindparameterCreateQuestionSignType(int num)
 {

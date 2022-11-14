@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Expression.hpp>
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/ResultColumn.hpp>
-#include <WCDB/ResultColumnBridge.h>
+#include "ResultColumnBridge.h"
+#include "Expression.hpp"
+#include "ObjectBridge.hpp"
+#include "ResultColumn.hpp"
 
 CPPResultColumn WCDBResultColumnCreateWithExpression(CPPExpression expression)
 {

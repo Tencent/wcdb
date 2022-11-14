@@ -22,11 +22,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/Column.hpp>
-#include <WCDB/ColumnBridge.h>
-#include <WCDB/Expression.hpp>
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/Schema.hpp>
+#include "ColumnBridge.h"
+#include "Column.hpp"
+#include "Expression.hpp"
+#include "ObjectBridge.hpp"
+#include "Schema.hpp"
 
 CPPColumn WCDBColumnCreateAll()
 {

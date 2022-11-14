@@ -27,7 +27,6 @@
 @interface WCTBridgeProperty : NSObject
 
 @property (nonatomic, strong, readonly) NSString* propertyName;
-@property (nonatomic, assign, readonly) Class objType;
 
 @end
 

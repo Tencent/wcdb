@@ -23,11 +23,11 @@
  */
 
 #pragma once
-#include <WCDB/ObjectBridge.h>
+#include "ObjectBridge.h"
 
-#include <WCDB/ErrorBridge.h>
-#include <WCDB/HandleStatementBridge.h>
-#include <WCDB/WinqBridge.h>
+#include "ErrorBridge.h"
+#include "HandleStatementBridge.h"
+#include "WinqBridge.h"
 
 WCDB_EXTERN_C_BEGIN
 

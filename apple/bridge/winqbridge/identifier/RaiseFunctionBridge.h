@@ -23,7 +23,7 @@
  */
 
 #pragma once
-#include <WCDB/WinqBridge.h>
+#include "WinqBridge.h"
 
 enum WCDBSyntaxRaiseAction {
     WCDBSyntaxRaiseAction_Ignore = 0,

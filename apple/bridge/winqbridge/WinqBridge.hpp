@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/SyntaxForwardDeclaration.h>
-#include <WCDB/SyntaxList.hpp>
-#include <WCDB/WinqBridge.h>
+#include "ObjectBridge.hpp"
+#include "SyntaxForwardDeclaration.h"
+#include "SyntaxList.hpp"
+#include "WinqBridge.h"
 
 #define __WCDBGetCPPSyntaxList(CPPObjType, cppList, rawList, rawCount, action) \
     WCDB::SyntaxList<CPPObjType> cppList                                       \

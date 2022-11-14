@@ -22,13 +22,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/Column.hpp>
-#include <WCDB/Expression.hpp>
-#include <WCDB/IndexedColumn.hpp>
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/Upsert.hpp>
-#include <WCDB/UpsertBridge.h>
-#include <WCDB/WinqBridge.hpp>
+#include "UpsertBridge.h"
+#include "Column.hpp"
+#include "Expression.hpp"
+#include "IndexedColumn.hpp"
+#include "ObjectBridge.hpp"
+#include "Upsert.hpp"
+#include "WinqBridge.hpp"
 
 CPPUpsert WCDBUpsertCreate()
 {

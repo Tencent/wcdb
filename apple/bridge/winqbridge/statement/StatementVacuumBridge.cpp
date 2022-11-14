@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Schema.hpp>
-#include <WCDB/StatementVacuum.hpp>
-#include <WCDB/StatementVacuumBridge.h>
-#include <WCDB/WinqBridge.hpp>
+#include "StatementVacuumBridge.h"
+#include "Schema.hpp"
+#include "StatementVacuum.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementVacuum WCDBStatementVacuumCreate(void)
 {

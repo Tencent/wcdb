@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/StatementRollback.hpp>
-#include <WCDB/StatementRollbackBridge.h>
-#include <WCDB/WinqBridge.hpp>
+#include "StatementRollbackBridge.h"
+#include "StatementRollback.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementRollback WCDBStatementRollbackCreate(void)
 {

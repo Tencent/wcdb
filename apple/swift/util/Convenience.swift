@@ -102,12 +102,14 @@ internal extension Array where Element==PropertyConvertible {
             result.append(element.codingTableKey!)
         }
     }
+#if WCDB_SWIFT_BRIDGE_OBJC
     func asWCTBridgeProperties() -> [WCTBridgeProperty] {
         return reduce(into: [WCTBridgeProperty]()) { (result, element) in
             assert(element.wctProperty != nil, "WCTProperty should not be failed. If you think it's a bug, please report an issue to us.")
             result.append(element.wctProperty!)
         }
     }
+#endif
 }
 
 internal extension Array {

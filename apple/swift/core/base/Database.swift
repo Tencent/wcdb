@@ -483,14 +483,6 @@ public extension Database {
         }
         return Table<Root>(withDatabase: self, named: name)
     }
-    func getTable<Root: WCTTableCoding>(
-        named name: String,
-        of type: Root.Type = Root.self) throws -> Table<Root>? {
-        guard try isTableExists(name) else {
-            return nil
-        }
-        return Table<Root>(withDatabase: self, named: name)
-    }
 
     func isTableExists(_ table: String) throws -> Bool {
         let ret = WCDBDatabaseExistTable(database, table)

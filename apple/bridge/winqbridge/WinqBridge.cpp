@@ -22,11 +22,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/ObjectBridge.hpp>
-#include <WCDB/Recyclable.hpp>
-#include <WCDB/SQL.hpp>
-#include <WCDB/Statement.hpp>
-#include <WCDB/WinqBridge.hpp>
+#include "WinqBridge.hpp"
+#include "ObjectBridge.hpp"
+#include "Recyclable.hpp"
+#include "SQL.hpp"
+#include "Statement.hpp"
 
 const char* _Nonnull WCDBWinqGetDescription(CPPObject* statement)
 {

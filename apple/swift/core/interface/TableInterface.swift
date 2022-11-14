@@ -45,7 +45,6 @@ public protocol TableInterface: AnyObject {
     ///   - rootType: Type of table encodable object
     /// - Throws: `Error`
     func create<Root: TableDecodable>(table name: String, of rootType: Root.Type) throws
-    func create<Root: WCTTableCoding>(table name: String, of rootType: Root.Type) throws
 
     /// Create virtual table and constraints with specific type
     ///
@@ -58,7 +57,6 @@ public protocol TableInterface: AnyObject {
     ///   - rootType: Type of table encodable object
     /// - Throws: `Error`
     func create<Root: TableDecodable>(virtualTable name: String, of rootType: Root.Type) throws
-    func create<Root: WCTTableCoding>(virtualTable name: String, of rootType: Root.Type) throws
 
     /// Create table manually
     ///
@@ -161,26 +159,9 @@ extension TableInterface where Self: Database {
             try orm.generateCreateIndexStatements(onTable: name)?.forEach { try handle.exec($0) }
         })
     }
-    public func create<Root: WCTTableCoding>(
-        table name: String,
-        of rootType: Root.Type) throws {
-        let handle = try getHandle()
-        try withExtendedLifetime(handle) {
-            if !WCTAPIBridge.createTable(name, withClass: rootType, with: $0.cppHandle) {
-                throw handle.getError()
-            }
-        }
-    }
 
     public func create<Root: TableDecodable>(virtualTable name: String, of rootType: Root.Type) throws {
         try exec(rootType.CodingKeys.objectRelationalMapping.generateCreateVirtualTableStatement(named: name))
-    }
-
-    public func create<Root: WCTTableCoding>(virtualTable name: String, of rootType: Root.Type) throws {
-        let handle = try getHandle()
-        if !WCTAPIBridge.createVirtualTable(name, withClass: rootType, with: handle.cppHandle) {
-            throw handle.getError()
-        }
     }
 
     public func create(table name: String,

@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
-#include <WCDB/Column.hpp>
-#include <WCDB/Schema.hpp>
-#include <WCDB/StatementCreateView.hpp>
-#include <WCDB/StatementCreateViewBridge.h>
-#include <WCDB/StatementSelect.hpp>
-#include <WCDB/WinqBridge.hpp>
+#include "StatementCreateViewBridge.h"
+#include "Column.hpp"
+#include "Schema.hpp"
+#include "StatementCreateView.hpp"
+#include "StatementSelect.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementCreateView WCDBStatementCreateViewCreate(void)
 {
