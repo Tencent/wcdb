@@ -32,6 +32,7 @@ dependencies {
 
 wechatPublish {
     publishAllVariants true
+    withJavadoc = false
 
     publishToBintray {
         repo = 'wcdb'
