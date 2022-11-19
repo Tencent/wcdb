@@ -1,4 +1,3 @@
-
 def extensionClass
 
 // Detect supported plugin modules
@@ -28,7 +27,7 @@ class WeChatPublishExtension {
     boolean withNativeSymbols = true
     boolean withDependencies = true
 
-    boolean publishToBintray = false
+    boolean publishToBintray = false /* Deprecated */
 
     boolean publishAllVariants = false
     Set<String> publishVariants = []
@@ -37,12 +36,14 @@ class WeChatPublishExtension {
     Set<String> publishFlavors = []
     String defaultFlavor
 
+    boolean checkRemoteArtifactExistence = false
+
     private final Project project
     private boolean usedDefaultIsSnapshot = true
 
-    private final ArrayList<Closure> bintrayConfigureClosures = []
     private final ArrayList<Closure> mavenPublishClosures = []
 
+    protected final ArrayList<Closure> pomClosures = []
 
     WeChatPublishExtension(Project proj) {
         project = proj
@@ -64,7 +65,7 @@ class WeChatPublishExtension {
         // Verify configuration values
         verifyPublishConfiguration()
 
-        // Emit Maven and/or bintray DSL
+        // Emit Maven DSL
         // Apply plugins if not done already
         if (!project.plugins.hasPlugin('maven-publish')) {
             project.plugins.apply('maven-publish')
@@ -73,12 +74,20 @@ class WeChatPublishExtension {
         mountAdditionalLogic(project)
 
         emitPublicationDSL(project)
+
+        if (project.hasProperty('signingKeyId') || project.hasProperty('signing.keyId')) {
+            if (!project.plugins.hasPlugin('signing')) {
+                project.plugins.apply('signing')
+            }
+            emitSigningConfig(project)
+        }
+
         emitRepositoryDSL(project)
     }
 
     void bintrayPackage(Closure cl) {
-        if (cl != null)
-            bintrayConfigureClosures << cl
+         // if (cl != null)
+         //     bintrayConfigureClosures << cl
     }
 
     void publishToMaven(Closure cl) {
@@ -86,11 +95,16 @@ class WeChatPublishExtension {
             mavenPublishClosures << cl
     }
 
+    void pom(Closure cl) {
+        if (cl != null)
+            pomClosures << cl
+    }
+
     void publishToBintray(Closure cl) {
-        if (cl != null) {
-            publishToBintray = true
-            bintrayConfigureClosures << cl
-        }
+         if (cl != null) {
+             publishToBintray = true
+             // bintrayConfigureClosures << cl
+         }
     }
 
     String getFullVersion() {
@@ -171,6 +185,17 @@ class WeChatPublishExtension {
 
     protected void emitPublicationDSL(Project project) {}
 
+    private void emitSigningConfig(Project project) {
+        project.ext['signing.keyId'] = project.findProperty("signingKeyId")
+        project.ext['signing.password'] = project.findProperty("signingPassword")
+        project.ext['signing.secretKeyRingFile'] = project.findProperty("signingSecretKeyRingFile")
+        project.signing {
+            project.publishing.publications.all { publication ->
+                sign publication
+            }
+        }
+    }
+
     private void emitRepositoryDSL(Project project) {
         mavenPublishClosures.each { cl ->
             project.publishing.repositories {
@@ -182,46 +207,44 @@ class WeChatPublishExtension {
         }
 
         if (publishToBintray) {
-            if (!project.hasProperty('BINTRAY_USER') ||
-                    !project.hasProperty('BINTRAY_APIKEY')) {
-                System.err.println 'BINTRAY_USER and BINTRAY_APIKEY not specified, skip Bintray upload.'
-                publishToBintray = false
-            }
+            System.err.println("[WeChatPublish] [W] 'publishToBintray' was deprecated and ignored now, consider migrate to MavenCentral instead.")
         }
+    }
 
-        if (publishToBintray) {
-            if (!project.plugins.hasPlugin('com.jfrog.bintray')) {
-                project.apply plugin: 'com.jfrog.bintray'
-            }
-
-            def bintrayUser = project.property('BINTRAY_USER')
-            def bintrayKey = project.property('BINTRAY_APIKEY')
-
-            // Emit bintray DSL
-            def configureClosures = bintrayConfigureClosures
-            project.bintray {
-                user = bintrayUser
-                key = bintrayKey
-                publications = [publicationName]
-
-                publish = true
-                override = true
-
-                pkg {
-                    // Default values, can be changed
-                    name = project.rootProject.name
-                    repo = project.artifactId
-                    vcsUrl = ''
-                    licenses = []
-
-                    version {
-                        name = fullVersion
-                        released = new Date()
+    protected void validateArtifactNotExists(Project project, String groupId, String artifactId, String version) {
+        if (!checkRemoteArtifactExistence) {
+            return
+        }
+        if (isSnapshot) {
+            System.out.println("[WeChatPublish] [I] Snapshot version, skip artifact existance validation.")
+            return
+        }
+        project.gradle.taskGraph.whenReady {
+            project.publishing.repositories.each { repo ->
+                def conn
+                try {
+                    def repoUrlStr = repo.url.toString()
+                    if (repoUrlStr.startsWith('https://')) {
+                        repoUrlStr = 'http://' + repoUrlStr.substring(8)
                     }
-
-                    configureClosures.each {
-                        it.delegate = delegate
-                        it()
+                    def url = new URL("${repoUrlStr}/${groupId.replace('.', '/')}/${artifactId}/${version}")
+                    conn = url.openConnection() as HttpURLConnection
+                    conn.setRequestMethod('GET')
+                    conn.connectTimeout = 3000
+                    conn.readTimeout = 5000
+                    try {
+                        def respHttpCode = conn.responseCode
+                        if (respHttpCode == 200 || respHttpCode == 302) {
+                            throw new GradleException("Artifact ${groupId}:${artifactId}:${version} has already exist in repo ${repoUrlStr}")
+                        }
+                    } catch (SocketTimeoutException e) {
+                        System.err.println("Timeout when checking if '${groupId}:${artifactId}:${version}' exists in '${repoUrlStr}'.")
+                    }
+                } finally {
+                    try {
+                        conn.disconnect()
+                    } catch (ignored) {
+                        // Ignored.
                     }
                 }
             }
@@ -321,6 +344,8 @@ class WeChatJavaLibraryPublishExtension extends WeChatPublishExtension {
                 artifactId this.artifactId
                 version this.fullVersion
 
+                validateArtifactNotExists(project, groupId, artifactId, version)
+
                 // Emit sourcesJar task
                 if (withSources) {
                     artifact sourcesJarTask
@@ -329,6 +354,14 @@ class WeChatJavaLibraryPublishExtension extends WeChatPublishExtension {
                 // Emit javadocJar task
                 if (withJavadoc) {
                     artifact javadocJarTask
+                }
+            }
+        }
+
+        pomClosures.each { cl ->
+            project.publishing.publications {
+                "${publicationName}"(MavenPublication) {
+                    pom cl
                 }
             }
         }
@@ -381,7 +414,8 @@ class WeChatAndroidLibraryPublishExtension extends WeChatPublishExtension {
                 title = null
 
                 def classpathFiles = project.files(android.getBootClasspath().join(File.pathSeparator))
-                classpathFiles += project.files(project.configurations.compile)
+                classpathFiles += project.files(project.configurations.api)
+                classpathFiles += project.files(project.configurations.implementation)
                 doFirst { classpath += classpathFiles }
 
                 source = variant.javaCompile.source
@@ -502,6 +536,8 @@ class WeChatAndroidLibraryPublishExtension extends WeChatPublishExtension {
                             artifactId this.artifactId
                         }
 
+                        validateArtifactNotExists(project, groupId, artifactId, version)
+
                         pom {
                             packaging 'aar'
 
@@ -571,6 +607,14 @@ class WeChatAndroidLibraryPublishExtension extends WeChatPublishExtension {
                                 }
                             }
                         }
+                    }
+                }
+            }
+
+            pomClosures.each { cl ->
+                project.publishing.publications {
+                    "${publicationName}${cFlavorName}"(MavenPublication) {
+                        pom cl
                     }
                 }
             }

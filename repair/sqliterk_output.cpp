@@ -125,8 +125,10 @@ struct sqliterk_master_entity {
     }
 };
 typedef std::map<std::string, sqliterk_master_entity> sqliterk_master_map;
-struct sqliterk_master_info : public sqliterk_master_map {
-};
+struct sqliterk_master_info : public sqliterk_master_map {};
+
+typedef std::map<std::string, std::vector<int>> sqliterk_leaf_map;
+struct sqliterk_leaf_info : public sqliterk_leaf_map {};
 
 struct sqliterk_output_column_info {
     char affinity;
@@ -565,7 +567,7 @@ int sqliterk_output(sqliterk *rk,
                     sqliterk_master_info *master_,
                     unsigned int flags)
 {
-    return sqliterk_output_cb(rk, db, master_, flags, NULL, NULL);
+    return sqliterk_output_cb_leaf(rk, db, master_, NULL, flags, NULL, NULL);
 }
 
 int sqliterk_output_cb(sqliterk *rk,
@@ -578,10 +580,25 @@ int sqliterk_output_cb(sqliterk *rk,
                                        sqliterk_column *column),
                        void *user)
 {
+    return sqliterk_output_cb_leaf(rk, db, master_, NULL, flags, callback, user);
+}
+
+int sqliterk_output_cb_leaf(sqliterk *rk,
+                            sqlite3 *db,
+                            sqliterk_master_info *master_,
+                            sqliterk_leaf_info *leaf_,
+                            unsigned int flags,
+                            int (*callback)(void *user,
+                                            sqliterk *rk,
+                                            sqliterk_table *table,
+                                            sqliterk_column *column),
+                            void *user)
+{
     if (!rk || !db)
         return SQLITERK_MISUSE;
 
     sqliterk_master_map *master = static_cast<sqliterk_master_map *>(master_);
+    const sqliterk_leaf_map *leaf = static_cast<sqliterk_leaf_map *>(leaf_);
     sqliterk_output_ctx ctx;
     ctx.db = db;
     ctx.stmt = NULL;
@@ -656,6 +673,17 @@ int sqliterk_output_cb(sqliterk *rk,
             sqliterkOSInfo(SQLITERK_OK, "[%s] -> pgno: %d", name, root_page);
             ctx.table_cursor = it;
             rc = sqliterk_parse_page(rk, root_page);
+            if (rc != SQLITERK_CANCELLED && leaf) {
+                auto leafIt = leaf->find(it->first);
+                if (leafIt != leaf->end()) {
+                    auto& allPages = leafIt->second;
+                    for (int pgno : allPages) {
+                        rc = sqliterk_parse_page(rk, pgno);
+                        if (rc == SQLITERK_CANCELLED)
+                            break;
+                    }
+                }
+            }
             if (ctx.stmt) {
                 const char *sql =
                         (rc == SQLITERK_CANCELLED) ? "ROLLBACK;" : "COMMIT;";
@@ -1179,4 +1207,149 @@ void sqliterk_free_master(sqliterk_master_info *master)
 {
     if (master)
         delete static_cast<sqliterk_master_map *>(master);
+}
+
+int sqliterk_scan_leaf(sqlite3 *db, const char * const *tables, int num_tables, sqliterk_leaf_info **out,
+                       volatile int *cancelFlag)
+{
+    int rc;
+    sqlite3_stmt *stmt = NULL;
+    sqliterk_leaf_map *result = new sqliterk_leaf_map();
+    auto lastRecord = result->end();
+    int row_count = 0;
+
+    std::string sql = "SELECT name, pageno FROM dbstat WHERE pagetype = 'leaf'";
+    if (tables && num_tables > 0) {
+        sql += " AND name IN (";
+        for (int i = 0; i < num_tables; ++i) {
+            sql += '\'';
+            sql += tables[i];
+            sql += "',";
+        }
+        sql.back() = ')';
+    }
+
+    rc = sqlite3_prepare_v2(db, sql.c_str(), sql.size(), &stmt, NULL);
+    if (rc != SQLITE_OK) goto bail;
+
+    if (cancelFlag) {
+        sqlite3_progress_handler(db, 8,
+                                 [](void *p) { return *reinterpret_cast<volatile int *>(p); },
+                                 (void *) cancelFlag);
+    }
+
+    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+        const char *name = (const char *) sqlite3_column_text(stmt, 0);
+        int pageNo = sqlite3_column_int(stmt, 1);
+        if (lastRecord == result->end() || lastRecord->first != name) {
+            lastRecord = result->emplace(std::string(name), std::vector<int>()).first;
+        }
+        lastRecord->second.push_back(pageNo);
+        ++row_count;
+    }
+    sqlite3_progress_handler(db, 0, NULL, NULL);
+    rc = sqlite3_finalize(stmt);
+    if (rc != SQLITE_OK) goto bail;
+
+    sqliterkOSInfo(SQLITERK_OK, "Scanned leaf info with %zu tables and %d entries.",
+                   result->size(), row_count);
+    *out = static_cast<sqliterk_leaf_info *>(result);
+    return SQLITERK_OK;
+
+bail:
+    sqliterkOSError(rc, "Failed to backup master table: %s",
+                    sqlite3_errmsg(db));
+    if (stmt) {
+        sqlite3_finalize(stmt);
+    }
+    delete result;
+    return rc;
+}
+
+static const uint8_t LEAF_HEADER[] = {0x64, 0x42, 0x6c, 0x65, 0x61, 0x46, 0x00, 0x00}; // "dBleaF\0\0"
+int sqliterk_save_leaf(const sqliterk_leaf_info *li, const char *path)
+{
+    uint32_t uint_buf;
+    uint16_t strlen_buf;
+    const sqliterk_leaf_map& leafMap = *li;
+    FILE *fp = fopen(path, "wb");
+    if (!fp) goto bail;
+
+    // HEADER
+    if (fwrite(LEAF_HEADER, sizeof(LEAF_HEADER), 1, fp) != 1) goto bail;
+
+    // table count
+    uint_buf = li->size();
+    if (fwrite(&uint_buf, sizeof(uint_buf), 1, fp) != 1) goto bail;
+
+    for (auto const& tbl : leafMap) {
+        strlen_buf = tbl.first.size();
+        if (fwrite(&strlen_buf, sizeof(strlen_buf), 1, fp) != 1) goto bail;
+        if (fwrite(tbl.first.c_str(), strlen_buf, 1, fp) != 1) goto bail;
+
+        auto const& pages = tbl.second;
+        uint_buf = pages.size();
+        if (fwrite(&uint_buf, sizeof(uint_buf), 1, fp) != 1) goto bail;
+
+        for (int pageNo : pages) {
+            uint_buf = pageNo;
+            if (fwrite(&uint_buf, sizeof(uint_buf), 1, fp) != 1) goto bail;
+        }
+    }
+
+    fclose(fp);
+    return SQLITERK_OK;
+
+bail:
+    sqliterkOSError(SQLITERK_IOERR, "Cannot write to file '%s': %s", path, strerror(errno));
+    if (fp) fclose(fp);
+    return SQLITERK_IOERR;
+}
+
+int sqliterk_load_leaf(const char *path, sqliterk_leaf_info** out)
+{
+    sqliterk_leaf_map *result = new sqliterk_leaf_map();
+    uint8_t header[8];
+    uint32_t table_count;
+
+    FILE *fp = fopen(path, "rb");
+    if (!fp) goto bail;
+
+    if (fread(header, sizeof(header), 1, fp) != 1) goto bail;
+    if (memcmp(header, LEAF_HEADER, sizeof(LEAF_HEADER))) goto bail;
+
+    if (fread(&table_count, sizeof(table_count), 1, fp) != 1) goto bail;
+    while (table_count--) {
+        uint16_t strlen_buf;
+        if (fread(&strlen_buf, sizeof(strlen_buf), 1, fp) != 1) goto bail;
+        std::string name(strlen_buf, '\0');
+        if (fread(name.data(), strlen_buf, 1, fp) != 1) goto bail;
+
+        uint32_t page_count;
+        if (fread(&page_count, sizeof(page_count), 1, fp) != 1) goto bail;
+        std::vector<int> pages(page_count);
+
+        while (page_count--) {
+            int page_no;
+            if (fread(&page_no, sizeof(int), 1, fp) != 1) goto bail;
+            pages.push_back(page_no);
+        }
+
+        result->emplace(std::move(name), std::move(pages));
+    }
+
+    fclose(fp);
+    *out = static_cast<sqliterk_leaf_info *>(result);
+    return SQLITERK_OK;
+
+bail:
+    sqliterkOSError(SQLITERK_IOERR, "Cannot load file '%s': %s", path, strerror(errno));
+    if (fp) fclose(fp);
+    delete result;
+    return SQLITERK_IOERR;
+}
+
+void sqliterk_free_leaf(sqliterk_leaf_info *li)
+{
+    delete static_cast<sqliterk_leaf_map *>(li);
 }

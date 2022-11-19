@@ -5,31 +5,31 @@ apply from: rootProject.file('gradle/WeChatNativeDepend.gradle')
 
 artifactId = 'wcdb-android'
 
-int ndkVersion() {
-    if (android.ndkDirectory != null) {
-        def propFile = new File(android.ndkDirectory, 'source.properties')
-        if (propFile.exists()) {
-            def props = new Properties()
-            props.load(propFile.newInputStream())
-            def numericVersion = (props['Pkg.Revision'] =~ /^[0-9]+/)[0]
-            return numericVersion as int
-        }
-    }
-    return 0
-}
+//int ndkVersion() {
+//    if (android.ndkDirectory != null) {
+//        System.err.println(android.ndkDirectory)
+//        def propFile = new File(android.ndkDirectory, 'source.properties')
+//        if (propFile.exists()) {
+//            def props = new Properties()
+//            props.load(propFile.newInputStream())
+//            def numericVersion = (props['Pkg.Revision'] =~ /^[0-9]+/)[0]
+//            return numericVersion as int
+//        }
+//    }
+//    return 0
+//}
 
 android {
-    def ndkVer = ndkVersion()
-    def useGcc = rootProject.hasProperty('USE_GCC') &&
-            rootProject.USE_GCC == '1' &&
-            ndkVer < 16     // In NDK >= r16, universal header breaks mmap with _FILE_OFFSET_BITS=64
+//    def ndkVer = ndkVersion()
+//    def useGcc = rootProject.hasProperty('USE_GCC') &&
+//            rootProject.USE_GCC == '1' &&
+//            ndkVer < 16     // In NDK >= r16, universal header breaks mmap with _FILE_OFFSET_BITS=64
 
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 32
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 28
+        targetSdkVersion 32
         versionCode 1
         versionName version
 
@@ -37,10 +37,10 @@ android {
             ndkBuild {
                 arguments "-j${Runtime.getRuntime().availableProcessors()}".toString()
                 abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
-                if (useGcc) {
-                    abiFilters 'armeabi'
-                    arguments 'USE_GCC=1'   // clang generates wrong code when targeting armeabi
-                }
+//                if (useGcc) {
+//                    abiFilters 'armeabi'
+//                    arguments 'USE_GCC=1'   // clang generates wrong code when targeting armeabi
+//                }
             }
 
             // Native dependencies

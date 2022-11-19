@@ -59,6 +59,7 @@ void sqliterk_cipher_conf_set_key(sqliterk_cipher_conf *conf, const void* key, i
 
 typedef struct sqlite3 sqlite3;
 typedef struct sqliterk_master_info sqliterk_master_info;
+typedef struct sqliterk_leaf_info sqliterk_leaf_info;
 
 #define SQLITERK_OUTPUT_NO_CREATE_TABLES 0x0001
 #define SQLITERK_OUTPUT_ALL_TABLES 0x0002
@@ -88,6 +89,16 @@ int sqliterk_output_cb(sqliterk *rk,
                                        sqliterk_table *table,
                                        sqliterk_column *column),
                        void *user);
+int sqliterk_output_cb_leaf(sqliterk *rk,
+                            sqlite3 *db,
+                            sqliterk_master_info *master,
+                            sqliterk_leaf_info *leaf,
+                            unsigned int flags,
+                            int (*callback)(void *user,
+                                            sqliterk *rk,
+                                            sqliterk_table *table,
+                                            sqliterk_column *column),
+                            void *user);
 void sqliterk_cancel(sqliterk *rk);
 int sqliterk_make_master(const char **tables,
                          int num_tables,
@@ -104,6 +115,11 @@ int sqliterk_load_master(const char *path,
                          sqliterk_master_info **out_master,
                          unsigned char *out_kdf_salt);
 void sqliterk_free_master(sqliterk_master_info *master);
+int sqliterk_scan_leaf(sqlite3 *db, const char * const *tables, int num_tables,
+                       sqliterk_leaf_info **out, volatile int *cancelFlag);
+int sqliterk_save_leaf(const sqliterk_leaf_info *li, const char *path);
+int sqliterk_load_leaf(const char *path, sqliterk_leaf_info** out);
+void sqliterk_free_leaf(sqliterk_leaf_info *li);
 
 // A database may have many kind of tables or indexes, such as a customized
 // index or a system-level table and so on. But you should be only concern
