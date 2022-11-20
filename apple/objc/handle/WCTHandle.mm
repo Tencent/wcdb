@@ -77,11 +77,6 @@
     return _handle;
 }
 
-- (void)dealloc
-{
-    [self finalizeAllStatements];
-}
-
 #pragma mark - HandleStatement
 
 - (WCTHandleStatement *)getOrCreateHandleStatementByTag:(NSString *)tag
@@ -142,23 +137,9 @@
 
 - (void)invalidate
 {
-    if (_handleStatementDic != nil) {
-        [_handleStatementDic enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, WCTHandleStatement *_Nonnull obj, BOOL *_Nonnull stop) {
-            WCDB_UNUSED(key);
-            WCDB_UNUSED(stop);
-            WCDB::InnerHandleStatement *handleStatement = [obj getRawHandleStatement];
-            if (handleStatement != nullptr) {
-                handleStatement->finalize();
-                [self returnRawStatement:handleStatement];
-            }
-        }];
-        [_handleStatementDic removeAllObjects];
-    }
+    [self finalizeAllStatements];
     _database = nil;
-    if (_handle != nullptr) {
-        _handle->finalize();
-        _handle = nullptr;
-    }
+    _handle = nullptr;
     _handleHolder = nullptr;
 }
 

@@ -442,7 +442,7 @@ bool AbstractHandle::commitTransaction()
     /*
     All statements must be reset before commit or rollback,
     because sqlite will downgrade handle to a read-only transaction state
-    if there are other active statements that belong to this handle.
+    if some statements of this handle are still active.
     Please see the comment of btreeEndTransaction for more information.
     */
     resetAllStatements();
@@ -466,7 +466,7 @@ void AbstractHandle::rollbackTransaction()
     /*
     All statements must be reset before commit or rollback,
     because sqlite will downgrade handle to a read-only transaction state
-    if there are other active statements that belong to this handle.
+    if some statements of this handle are still active.
     Please see the comment of btreeEndTransaction for more information.
     */
     resetAllStatements();
