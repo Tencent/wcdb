@@ -336,7 +336,7 @@ static JNICALL jlong nativeScanLeaf(JNIEnv *env, jclass cls, jlong dbPtr, jobjec
         tables = std::vector<const char *>(num_tables);
         for (int i = 0; i < num_tables; ++i) {
             jstring str = static_cast<jstring>(env->GetObjectArrayElement(tableArr, i));
-            tables.push_back(env->GetStringUTFChars(str, NULL));
+            tables[i] = (env->GetStringUTFChars(str, NULL));
             env->DeleteLocalRef(str);
         }
     }
