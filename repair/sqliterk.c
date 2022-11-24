@@ -345,6 +345,14 @@ int sqliterkGetParsedPageCount(sqliterk *rk)
     return sqliterkPagerGetParsedPageCount(rk->pager);
 }
 
+int sqliterkGetDamagedPageCount(sqliterk *rk)
+{
+    if (!rk) {
+        return 0;
+    }
+    return sqliterkPagerGetDamagedPageCount(rk->pager);
+}
+
 int sqliterkGetValidPageCount(sqliterk *rk)
 {
     if (!rk) {

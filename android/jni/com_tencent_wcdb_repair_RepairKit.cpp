@@ -209,6 +209,21 @@ static JNICALL jstring nativeLastError(JNIEnv *env, jclass cls)
     return env->NewStringUTF(g_error_msg);
 }
 
+static JNICALL jintArray nativeGetStatistics(JNIEnv *env, jclass cls, jlong rkPtr)
+{
+    sqliterk *rk = (sqliterk *) (intptr_t) rkPtr;
+    jint st[4];
+
+    st[0] = sqliterk_page_count(rk);
+    st[1] = sqliterk_valid_page_count(rk);
+    st[2] = sqliterk_parsed_page_count(rk);
+    st[3] = sqliterk_damaged_page_count(rk);
+
+    jintArray result = env->NewIntArray(4);
+    env->SetIntArrayRegion(result, 0, 4, st);
+    return result;
+}
+
 static JNICALL jlong nativeMakeMaster(JNIEnv *env,
                                       jclass cls,
                                       jobjectArray tableArr)
@@ -447,6 +462,7 @@ static const JNINativeMethod sRepairMethods[] = {
     {"nativeCancel", "(J)V", (void *) nativeCancel},
     {"nativeIntegrityFlags", "(J)I", (void *) nativeIntegrityFlags},
     {"nativeLastError", "()Ljava/lang/String;", (void *) nativeLastError},
+    {"nativeGetStatistics", "(J)[I", (void *) nativeGetStatistics},
     {"nativeMakeMaster", "([Ljava/lang/String;)J", (void *) nativeMakeMaster},
     {"nativeSaveMaster", "(JLjava/lang/String;[B)Z", (void *) nativeSaveMaster},
     {"nativeLoadMaster", "(Ljava/lang/String;[B[Ljava/lang/String;[B)J",

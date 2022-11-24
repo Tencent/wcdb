@@ -561,8 +561,12 @@ void sqliterkPagerSetStatus(sqliterk_pager *pager,
     }
 
     pager->pagesStatus[pageno - 1] = status;
-    if (status == sqliterk_status_checked)
+    if (status == sqliterk_status_checked) {
         pager->integrity |= SQLITERK_INTEGRITY_DATA;
+        pager->checkedPageCount++;
+    } else if (status == sqliterk_status_damaged) {
+        pager->damagedPageCount++;
+    }
 }
 
 sqliterk_status sqliterkPagerGetStatus(sqliterk_pager *pager, int pageno)
@@ -576,17 +580,18 @@ sqliterk_status sqliterkPagerGetStatus(sqliterk_pager *pager, int pageno)
 
 int sqliterkPagerGetParsedPageCount(sqliterk_pager *pager)
 {
-    if (!pager || !pager->pagesStatus) {
+    if (!pager) {
         return 0;
     }
+    return pager->checkedPageCount;
+}
 
-    int i, count = 0;
-    for (i = 0; i < pager->pagecount; i++) {
-        if (pager->pagesStatus[i] == sqliterk_status_checked) {
-            count++;
-        }
+int sqliterkPagerGetDamagedPageCount(sqliterk_pager *pager)
+{
+    if (!pager) {
+        return 0;
     }
-    return count;
+    return pager->damagedPageCount;
 }
 
 int sqliterkPagerGetValidPageCount(sqliterk_pager *pager)

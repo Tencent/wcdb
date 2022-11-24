@@ -167,6 +167,7 @@ int64_t sqliterk_column_rowid(sqliterk_column *column);
 #define SQLITERK_INTEGRITY_KDF_SALT 0x0004
 
 int sqliterk_parsed_page_count(sqliterk *rk);
+int sqliterk_damaged_page_count(sqliterk *rk);
 int sqliterk_valid_page_count(sqliterk *rk);
 int sqliterk_page_count(sqliterk *rk);
 unsigned int sqliterk_integrity(sqliterk *rk);

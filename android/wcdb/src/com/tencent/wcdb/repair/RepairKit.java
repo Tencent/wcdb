@@ -262,6 +262,25 @@ public class RepairKit implements CancellationSignal.OnCancelListener {
         return (mIntegrityFlags & INTEGRITY_DATA) == 0;
     }
 
+    public static class Statistics {
+        public final int totalPages;
+        public final int validPages;
+        public final int parsedPages;
+        public final int damagedPages;
+        Statistics(int[] st) {
+            totalPages = st[0];
+            validPages = st[1];
+            parsedPages = st[2];
+            damagedPages = st[3];
+        }
+    }
+    public Statistics getStatistics() {
+        if (mNativePtr == 0)
+            throw new IllegalArgumentException();
+        int[] stat = nativeGetStatistics(mNativePtr);
+        return new Statistics(stat);
+    }
+
     /**
      * Retrieve the last error message.
      * @return last error message
@@ -552,6 +571,7 @@ public class RepairKit implements CancellationSignal.OnCancelListener {
     private static native void nativeCancel(long rkPtr);
     private static native int nativeIntegrityFlags(long rkPtr);
     private static native String nativeLastError();
+    private static native int[] nativeGetStatistics(long rkPtr);
     private static native long nativeMakeMaster(String[] tables);
     private static native boolean nativeSaveMaster(long dbPtr, String path, byte[] key);
     private static native long nativeLoadMaster(String path, byte[] key, String[] tables,

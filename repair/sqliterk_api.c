@@ -160,6 +160,11 @@ int sqliterk_parsed_page_count(sqliterk *rk)
     return sqliterkGetParsedPageCount(rk);
 }
 
+int sqliterk_damaged_page_count(sqliterk *rk)
+{
+    return sqliterkGetDamagedPageCount(rk);
+}
+
 int sqliterk_valid_page_count(sqliterk *rk)
 {
     return sqliterkGetValidPageCount(rk);

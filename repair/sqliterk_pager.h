@@ -67,6 +67,9 @@ struct sqliterk_pager {
     int usableSize;         // pagesize-reservedBytes
     unsigned int integrity; // integrity flags.
 
+    int checkedPageCount;
+    int damagedPageCount;
+
     sqliterk_codec *codec; // Codec context, implemented in SQLCipher library.
 };
 
@@ -84,6 +87,7 @@ void sqliterkPagerSetStatus(sqliterk_pager *pager,
                             sqliterk_status status);
 sqliterk_status sqliterkPagerGetStatus(sqliterk_pager *pager, int pageno);
 int sqliterkPagerGetParsedPageCount(sqliterk_pager *pager);
+int sqliterkPagerGetDamagedPageCount(sqliterk_pager *pager);
 int sqliterkPagerGetValidPageCount(sqliterk_pager *pager);
 unsigned int sqliterkPagerGetIntegrity(sqliterk_pager *pager);
 
