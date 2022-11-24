@@ -410,17 +410,24 @@ public class RepairKit implements CancellationSignal.OnCancelListener {
                 });
             }
 
-            long dbPtr = db.acquireNativeConnectionHandle("scanLeaf", true, false);
             if (tables != null && tables.length == 0)
                 tables = null;
-            long leafPtr = nativeScanLeaf(dbPtr, tables, (cs == null) ? null : cancelFlag);
-            if (cs != null) {
-                cs.setOnCancelListener(null);
+            long dbPtr = db.acquireNativeConnectionHandle("scanLeaf", true, false);
+            Exception ex = null;
+            try {
+                long leafPtr = nativeScanLeaf(dbPtr, tables, (cs == null) ? null : cancelFlag);
+                if (leafPtr == 0)
+                    throw new SQLiteException("Cannot scan leaf info.");
+                return new LeafInfo(leafPtr);
+            } catch (Exception e) {
+                ex = e;
+                throw e;
+            } finally {
+                if (cs != null) {
+                    cs.setOnCancelListener(null);
+                }
+                db.releaseNativeConnection(dbPtr, ex);
             }
-            if (leafPtr == 0)
-                throw new SQLiteException("Cannot scan leaf info.");
-
-            return new LeafInfo(leafPtr);
         }
 
         public void save(String path) throws IOException {

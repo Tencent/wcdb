@@ -21,6 +21,8 @@
 #include "JNIHelp.h"
 #include "Logger.h"
 #include "ModuleLoader.h"
+#include "SQLiteCommon.h"
+#include <sqlite3.h>
 #include <jni.h>
 #include <SQLiteRepairKit.h>
 #include <stdlib.h>
@@ -348,16 +350,18 @@ static JNICALL jlong nativeScanLeaf(JNIEnv *env, jclass cls, jlong dbPtr, jobjec
     }
 
     sqliterk_leaf_info *out;
-    jlong result = 0;
-    if (sqliterk_scan_leaf(db, tables.data(), tables.size(), &out,
-                           outCancelFlag ? &sScanCancelFlag : nullptr) == SQLITERK_OK) {
-        result = (jlong) (intptr_t) out;
-    }
+    int rc = sqliterk_scan_leaf(db, tables.data(), tables.size(), &out,
+                                outCancelFlag ? &sScanCancelFlag : nullptr);
+    jlong result = (rc == SQLITE_OK) ? (jlong) (intptr_t) out : 0;
 
     for (int i = 0; i < tables.size(); ++i) {
         jstring str = static_cast<jstring>(env->GetObjectArrayElement(tableArr, i));
         env->ReleaseStringUTFChars(str, tables[i]);
         env->DeleteLocalRef(str);
+    }
+
+    if (rc != SQLITE_OK) {
+        throw_sqlite3_exception(env, db);
     }
 
     return result;
