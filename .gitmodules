@@ -1,3 +1,3 @@
 [submodule "sqlcipher"]
 	path = sqlcipher
-	url = http://git.code.oa.com/wcdb/sqlcipher.git
+	url = https://git.woa.com/wcdb/sqlcipher.git
