@@ -1249,6 +1249,7 @@ int sqliterk_scan_leaf(sqlite3 *db, const char * const *tables, int num_tables, 
     }
     sqlite3_progress_handler(db, 0, NULL, NULL);
     rc = sqlite3_finalize(stmt);
+    stmt = NULL;
     if (rc != SQLITE_OK) goto bail;
 
     sqliterkOSInfo(SQLITERK_OK, "Scanned leaf info with %zu tables and %d entries.",
