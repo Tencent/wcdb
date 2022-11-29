@@ -39,7 +39,7 @@ class Page final : public PagerRelated, public Initializeable {
 #pragma mark - Initialize
 public:
     Page(int number, Pager *pager);
-    Page(int number, Pager *pager, const MappedData &data);
+    Page(int number, Pager *pager, const UnsafeData &data);
     ~Page() override final;
 
     const int number;
@@ -55,12 +55,12 @@ public:
     std::optional<Type> acquireType();
     Type getType() const;
 
-    const MappedData &getData() const;
+    const Data &getData() const;
 
 protected:
     Type m_type;
     Deserialization m_deserialization;
-    MappedData m_data;
+    Data m_data;
 
 #pragma mark - Interior Table
 public:

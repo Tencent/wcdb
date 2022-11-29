@@ -33,94 +33,115 @@
 
 - (void)test_backup
 {
-    TestCaseAssertTrue([self.database backup]);
+    [self
+    excuteTest:^{
+        TestCaseAssertTrue([self.database backup]);
+    }];
 }
 
 - (void)test_dual_backup
 {
-    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
-    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
+    [self
+    excuteTest:^{
+        TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
+        TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
 
-    TestCaseAssertTrue([self.database backup]);
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
-    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
+        TestCaseAssertTrue([self.database backup]);
+        TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
+        TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
 
-    [NSThread sleepForTimeInterval:1];
-    TestCaseAssertTrue([self.database backup]);
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
+        [NSThread sleepForTimeInterval:1];
+        TestCaseAssertTrue([self.database backup]);
+        TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
+        TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
 
-    {
-        // old one will be replaced
-        NSDate *firstBackupModifiedDate = [self.fileManager attributesOfItemAtPath:self.database.firstMaterialPath error:nil][NSFileModificationDate];
-        TestCaseAssertTrue(firstBackupModifiedDate != nil);
-        NSDate *lastBackupModifiedDate = [self.fileManager attributesOfItemAtPath:self.database.lastMaterialPath error:nil][NSFileModificationDate];
-        TestCaseAssertTrue(lastBackupModifiedDate != nil);
-        TestCaseAssertTrue([firstBackupModifiedDate compare:lastBackupModifiedDate] == NSOrderedAscending);
-    }
+        {
+            // old one will be replaced
+            NSDate *firstBackupModifiedDate = [self.fileManager attributesOfItemAtPath:self.database.firstMaterialPath error:nil][NSFileModificationDate];
+            TestCaseAssertTrue(firstBackupModifiedDate != nil);
+            NSDate *lastBackupModifiedDate = [self.fileManager attributesOfItemAtPath:self.database.lastMaterialPath error:nil][NSFileModificationDate];
+            TestCaseAssertTrue(lastBackupModifiedDate != nil);
+            TestCaseAssertTrue([firstBackupModifiedDate compare:lastBackupModifiedDate] == NSOrderedAscending);
+        }
 
-    [NSThread sleepForTimeInterval:1];
-    TestCaseAssertTrue([self.database backup]);
+        [NSThread sleepForTimeInterval:1];
+        TestCaseAssertTrue([self.database backup]);
 
-    {
-        // old one will be replaced
-        NSDate *firstBackupModifiedDate = [self.fileManager attributesOfItemAtPath:self.database.firstMaterialPath error:nil][NSFileModificationDate];
-        TestCaseAssertTrue(firstBackupModifiedDate != nil);
-        NSDate *lastBackupModifiedDate = [self.fileManager attributesOfItemAtPath:self.database.lastMaterialPath error:nil][NSFileModificationDate];
-        TestCaseAssertTrue(lastBackupModifiedDate != nil);
-        TestCaseAssertTrue([firstBackupModifiedDate compare:lastBackupModifiedDate] == NSOrderedDescending);
-    }
+        {
+            // old one will be replaced
+            NSDate *firstBackupModifiedDate = [self.fileManager attributesOfItemAtPath:self.database.firstMaterialPath error:nil][NSFileModificationDate];
+            TestCaseAssertTrue(firstBackupModifiedDate != nil);
+            NSDate *lastBackupModifiedDate = [self.fileManager attributesOfItemAtPath:self.database.lastMaterialPath error:nil][NSFileModificationDate];
+            TestCaseAssertTrue(lastBackupModifiedDate != nil);
+            TestCaseAssertTrue([firstBackupModifiedDate compare:lastBackupModifiedDate] == NSOrderedDescending);
+        }
+    }];
 }
 
 - (void)test_empty_backup
 {
-    TestCaseAssertTrue([self.database removeFiles]);
-    TestCaseAssertTrue([self.database backup]);
+    [self
+    excuteTest:^{
+        TestCaseAssertTrue([self.database removeFiles]);
+        TestCaseAssertTrue([self.database backup]);
+    }];
 }
 
 - (void)test_wal
 {
-    TestCaseAssertTrue([[self.fileManager attributesOfItemAtPath:self.database.walPath error:nil] fileSize] > 0);
-
-    TestCaseAssertTrue([self.database backup]);
+    [self
+    excuteTest:^{
+        TestCaseAssertTrue([[self.fileManager attributesOfItemAtPath:self.database.walPath error:nil] fileSize] > 0);
+        TestCaseAssertTrue([self.database backup]);
+    }];
 }
 
 - (void)test_empty_wal
 {
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    TestCaseAssertTrue([[fileManager attributesOfItemAtPath:self.database.walPath error:nil] fileSize] > 0);
-    TestCaseAssertTrue([self.database truncateCheckpoint]);
-    TestCaseAssertTrue([[fileManager attributesOfItemAtPath:self.database.walPath error:nil] fileSize] == 0);
-    TestCaseAssertTrue([self.database backup]);
+    [self
+    excuteTest:^{
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        TestCaseAssertTrue([[fileManager attributesOfItemAtPath:self.database.walPath error:nil] fileSize] > 0);
+        TestCaseAssertTrue([self.database truncateCheckpoint]);
+        TestCaseAssertTrue([[fileManager attributesOfItemAtPath:self.database.walPath error:nil] fileSize] == 0);
+        TestCaseAssertTrue([self.database backup]);
+    }];
 }
 
 - (void)test_filter
 {
-    TestCaseAssertTrue([self.database backup]);
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
-    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
+    [self
+    excuteTest:^{
+        [self.database filterBackup:nil];
+        TestCaseAssertTrue([self.database backup]);
+        TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
+        TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
 
-    [self.database filterBackup:^BOOL(NSString *tableName) {
-        WCDB_UNUSED(tableName)
-        return NO;
+        [self.database filterBackup:^BOOL(NSString *tableName) {
+            WCDB_UNUSED(tableName)
+            return NO;
+        }];
+        [NSThread sleepForTimeInterval:1];
+        TestCaseAssertTrue([self.database backup]);
+        TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
+        TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
+
+        NSInteger firstMaterialSize = (NSInteger) [self.fileManager getFileSizeIfExists:self.database.firstMaterialPath];
+        NSInteger lastMaterialSize = (NSInteger) [self.fileManager getFileSizeIfExists:self.database.lastMaterialPath];
+        TestCaseAssertTrue(firstMaterialSize > lastMaterialSize);
     }];
-    [NSThread sleepForTimeInterval:1];
-    TestCaseAssertTrue([self.database backup]);
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
-
-    NSInteger firstMaterialSize = (NSInteger) [self.fileManager getFileSizeIfExists:self.database.firstMaterialPath];
-    NSInteger lastMaterialSize = (NSInteger) [self.fileManager getFileSizeIfExists:self.database.lastMaterialPath];
-    TestCaseAssertTrue(firstMaterialSize > lastMaterialSize);
 }
 
 - (void)test_backup_fail
 {
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    TestCaseAssertTrue([fileManager createDirectoryAtPath:self.database.firstMaterialPath withIntermediateDirectories:YES attributes:nil error:nil]);
-    TestCaseAssertTrue([fileManager createDirectoryAtPath:self.database.lastMaterialPath withIntermediateDirectories:YES attributes:nil error:nil]);
+    [self
+    excuteTest:^{
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        TestCaseAssertTrue([fileManager createDirectoryAtPath:self.database.firstMaterialPath withIntermediateDirectories:YES attributes:nil error:nil]);
+        TestCaseAssertTrue([fileManager createDirectoryAtPath:self.database.lastMaterialPath withIntermediateDirectories:YES attributes:nil error:nil]);
 
-    TestCaseAssertFalse([self.database backup]);
+        TestCaseAssertFalse([self.database backup]);
+    }];
 }
 
 - (BOOL)checkAutoBackedup
@@ -137,9 +158,12 @@
 
 - (void)test_auto_backup_when_checkpointed
 {
-    [self.database enableAutoCheckpoint:NO];
-    [self.database enableAutoBackup:YES];
-    TestCaseAssertTrue([self checkAutoBackedup]);
+    [self
+    excuteTest:^{
+        [self.database enableAutoCheckpoint:NO];
+        [self.database enableAutoBackup:YES];
+        TestCaseAssertTrue([self checkAutoBackedup]);
+    }];
 }
 
 - (int)getInteriorTablePage

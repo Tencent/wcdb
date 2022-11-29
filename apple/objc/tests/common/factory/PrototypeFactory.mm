@@ -33,6 +33,30 @@
     NSString* _path;
 }
 
++ (NSData*)commonCipherKey
+{
+    static NSData* g_cipherKey = Random.shared.data;
+    return g_cipherKey;
+}
+
++ (void)tryCleanOldCipherDBAtDirectory:(NSString*)directory
+{
+    static NSMutableSet* g_cleanedOldDirectory = [[NSMutableSet alloc] init];
+    @synchronized(self) {
+        if (![g_cleanedOldDirectory containsObject:directory]) {
+            NSFileManager* mgr = [NSFileManager defaultManager];
+            NSString* cipherDirectory = [directory stringByAppendingPathComponent:@"cipherPrototype"];
+            NSArray* files = [mgr getAllFilesAtDirectory:cipherDirectory];
+            if (files.count > 0) {
+                [mgr setFileImmutable:NO ofItemsIfExistsAtPaths:files];
+                [mgr removeItemsIfExistsAtPaths:files];
+            }
+
+            [g_cleanedOldDirectory addObject:directory];
+        }
+    }
+}
+
 - (instancetype)initWithDirectory:(NSString*)directory
 {
     if (self = [super init]) {
@@ -59,6 +83,13 @@
     [self reset];
 }
 
+- (void)setNeedCipher:(BOOL)needCipher
+{
+    _needCipher = needCipher;
+    [PrototypeFactory tryCleanOldCipherDBAtDirectory:self.directory];
+    [self reset];
+}
+
 - (double)lowerQuality
 {
     return self.quality * (1.0 - self.tolerance);
@@ -74,7 +105,7 @@
     @synchronized(self) {
         if (_path == nil) {
             NSString* fileName = [NSString stringWithFormat:@"%@", [NSNumber numberWithDouble:self.quality]];
-            _path = [[[self.directory stringByAppendingPathComponent:@"prototype"] stringByAppendingPathComponent:self.delegate.categoryOfPrototype] stringByAppendingPathComponent:fileName];
+            _path = [[[self.directory stringByAppendingPathComponent:_needCipher ? @"cipherPrototype" : @"prototype"] stringByAppendingPathComponent:self.delegate.categoryOfPrototype] stringByAppendingPathComponent:fileName];
         }
         return _path;
     }
@@ -85,6 +116,9 @@
     @synchronized(self) {
         if (_database == nil) {
             _database = [[WCTDatabase alloc] initWithPath:self.path];
+            if (_needCipher) {
+                [_database setCipherKey:PrototypeFactory.commonCipherKey];
+            }
             [self configurePrototype];
         }
         return _database;

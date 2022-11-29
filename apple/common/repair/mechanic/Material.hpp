@@ -63,7 +63,7 @@ protected:
 #pragma mark - Header
 protected:
     static constexpr const uint32_t magic = 0x57434442;
-    static constexpr const uint32_t version = 0x01000000; //1.0.0.0
+    static constexpr const uint32_t version = 0x01000001; //1.0.0.1
     static constexpr const int headerSize = sizeof(magic) + sizeof(version); //magic + version
 
 #pragma mark - Info
@@ -78,6 +78,7 @@ public:
         uint32_t reservedBytes;
         std::pair<uint32_t, uint32_t> walSalt;
         uint32_t numberOfWalFrames;
+        StringView cipherSalt; // added in 1.0.0.1
 #pragma mark - Serializable
     public:
         bool serialize(Serialization &serialization) const override final;

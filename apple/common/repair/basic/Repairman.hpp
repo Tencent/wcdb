@@ -25,6 +25,7 @@
 #pragma once
 
 #include <WCDB/Assemble.hpp>
+#include <WCDB/Cipher.hpp>
 #include <WCDB/Crawlable.hpp>
 #include <WCDB/ErrorProne.hpp>
 #include <WCDB/Progress.hpp>
@@ -41,6 +42,7 @@ class Repairman : public Crawlable,
                   public UpgradeableErrorProne,
                   public Progress,
                   public SegmentedScoreable,
+                  public CipherDelegateHolder,
                   public AssembleDelegateHolder {
 #pragma mark - Initialize
 public:

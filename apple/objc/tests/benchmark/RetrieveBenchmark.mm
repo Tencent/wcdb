@@ -31,6 +31,7 @@
 
 @implementation RetrieveBenchmark {
     SizeBasedFactory* _factory;
+    NSData* _cipherKey;
 }
 
 - (SizeBasedFactory*)factory
@@ -43,10 +44,22 @@
     }
 }
 
+- (NSData*)cipherKey
+{
+    @synchronized(self) {
+        if (_cipherKey.length == 0) {
+            _cipherKey = Random.shared.data;
+        }
+        return _cipherKey;
+    }
+}
+
 - (void)setUp
 {
     [super setUp];
 
+    self.factory.needCipher = NO;
+    [self.database setCipherKey:nil];
     self.factory.quality = 100 * 1024 * 1024;
     self.factory.tolerance = 0.02;
 }
@@ -65,6 +78,28 @@
 - (void)test_backup
 {
     __block BOOL result;
+    [self
+    doMeasure:^{
+        result = [self.database backup];
+    }
+    setUp:^{
+        [self setUpDatabase];
+    }
+    tearDown:^{
+        [self tearDownDatabase];
+        result = NO;
+    }
+    checkCorrectness:^{
+        TestCaseAssertTrue(result);
+        TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
+    }];
+}
+
+- (void)test_cipher_backup
+{
+    __block BOOL result;
+    [self.database setCipherKey:SizeBasedFactory.commonCipherKey];
+    self.factory.needCipher = YES;
     [self
     doMeasure:^{
         result = [self.database backup];
@@ -102,9 +137,52 @@
     }];
 }
 
+- (void)test_cipher_retrieve
+{
+    __block double score;
+    [self.database setCipherKey:SizeBasedFactory.commonCipherKey];
+    self.factory.needCipher = YES;
+    [self
+    doMeasure:^{
+        score = [self.database retrieve:nil];
+    }
+    setUp:^{
+        [self setUpDatabase];
+        TestCaseAssertTrue([self.database backup]);
+    }
+    tearDown:^{
+        [self tearDownDatabase];
+        score = 0.0f;
+    }
+    checkCorrectness:^{
+        TestCaseAssertEqual(score, 1.0f);
+    }];
+}
+
 - (void)test_retrieve_without_backup
 {
     __block double score;
+    [self
+    doMeasure:^{
+        score = [self.database retrieve:nil];
+    }
+    setUp:^{
+        [self setUpDatabase];
+    }
+    tearDown:^{
+        [self tearDownDatabase];
+        score = 0.0f;
+    }
+    checkCorrectness:^{
+        TestCaseAssertEqual(score, 1.0f);
+    }];
+}
+
+- (void)test_ciper_retrieve_without_backup
+{
+    __block double score;
+    [self.database setCipherKey:SizeBasedFactory.commonCipherKey];
+    self.factory.needCipher = YES;
     [self
     doMeasure:^{
         score = [self.database retrieve:nil];

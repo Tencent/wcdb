@@ -24,10 +24,14 @@
 
 #import <WCDB/Core.hpp>
 #import <WCDB/CoreConst.h>
+#import <WCDB/FileHandle.hpp>
 #import <WCDB/Notifier.hpp>
 #import <WCDB/SQLite.h>
+#import <WCDB/WCTConvertible.h>
+#import <WCDB/WCTDatabase+Convenient.h>
 #import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTDatabase+Test.h>
+#include <iomanip>
 
 static std::atomic<WCTSimulateIOErrorOptions> &simulateIOErrorOptions()
 {

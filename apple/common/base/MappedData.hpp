@@ -35,6 +35,7 @@ class MappedData final : public UnsafeData {
 public:
     MappedData();
     MappedData(unsigned char* mapped, size_t size);
+    MappedData(unsigned char* mapped, size_t size, SharedHighWater highWater);
     MappedData(const MappedData& other);
     MappedData(MappedData&& other);
     MappedData& operator=(const MappedData& other);
@@ -43,20 +44,14 @@ public:
 
     MappedData subdata(size_t size) const;
     MappedData subdata(off_t offset, size_t size) const;
-    void unmap();
 
     static const MappedData& null();
 
-    static ssize_t getMappedHighWater();
-
 protected:
-    static ShareableHighWater& sharedHighWater();
-
-    static void unmapData(UnsafeData& data);
-    static void unmapBuffer(unsigned char* buffer, size_t size);
-
-    MappedData(const UnsafeData& data, const Recyclable<UnsafeData>& mapped);
-    Recyclable<UnsafeData> m_mapped;
+    MappedData(const UnsafeData& data);
+    using SharedData = UnsafeData::SharedData;
+    using SharedBuffer = UnsafeData::SharedBuffer;
+    static void unmapData(SharedData& data);
 };
 
 } // namespace WCDB

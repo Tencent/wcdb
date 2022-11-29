@@ -69,7 +69,7 @@ protected:
 
 #pragma mark - Memory map
 public:
-    MappedData map(off_t offset, size_t size);
+    MappedData map(off_t offset, size_t size, SharedHighWater highWater = nullptr);
 
 #pragma mark - Error
 protected:

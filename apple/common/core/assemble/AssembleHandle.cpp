@@ -309,4 +309,43 @@ bool AssembleHandle::releaseBackupExclusiveLock()
     return true;
 }
 
+const Error &AssembleHandle::getCipherError() const
+{
+    return InnerHandle::getError();
+}
+
+bool AssembleHandle::openCipherInMemory()
+{
+    InnerHandle::setPath(":memory:");
+    return InnerHandle::open();
+}
+
+void AssembleHandle::closeCipher()
+{
+    InnerHandle::close();
+}
+
+void *AssembleHandle::getCipherContext()
+{
+    if (!isOpened()) {
+        return nullptr;
+    }
+    return AbstractHandle::getCipherContext();
+}
+
+size_t AssembleHandle::getCipherPageSize()
+{
+    return AbstractHandle::getCipherPageSize();
+}
+
+StringView AssembleHandle::getCipherSalt()
+{
+    return AbstractHandle::getCipherSalt();
+}
+
+bool AssembleHandle::setCipherSalt(const UnsafeStringView &salt)
+{
+    return AbstractHandle::setCipherSalt(salt);
+}
+
 } // namespace WCDB

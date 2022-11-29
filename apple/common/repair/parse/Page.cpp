@@ -38,7 +38,7 @@ Page::Page(int number_, Pager *pager) : PagerRelated(pager), number(number_)
 {
 }
 
-Page::Page(int number_, Pager *pager, const MappedData &data)
+Page::Page(int number_, Pager *pager, const UnsafeData &data)
 : PagerRelated(pager), number(number_), m_deserialization(data), m_data(data)
 {
 }
@@ -49,7 +49,7 @@ std::optional<Page::Type> Page::acquireType()
 {
     int type = 0;
     if (m_deserialization.data().empty()) {
-        MappedData data = m_pager->acquirePageData(number, getOffsetOfHeader(), 1);
+        UnsafeData data = m_pager->acquirePageData(number, getOffsetOfHeader(), 1);
         if (data.empty()) {
             return std::nullopt;
         }
@@ -72,7 +72,7 @@ std::optional<Page::Type> Page::acquireType()
     }
 }
 
-const MappedData &Page::getData() const
+const Data &Page::getData() const
 {
     WCTAssert(isInitialized());
     return m_data;

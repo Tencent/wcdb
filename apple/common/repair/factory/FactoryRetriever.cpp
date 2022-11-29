@@ -35,6 +35,7 @@
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/ThreadedErrors.hpp>
+#include <iomanip>
 #include <numeric>
 
 namespace WCDB {
@@ -192,6 +193,7 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
                                                    true,
                                                    std::placeholders::_1,
                                                    std::placeholders::_2));
+            mechanic.setCipherDelegate(m_cipherDelegate);
             SteadyClock before = SteadyClock::now();
             bool result = mechanic.work();
             if (!result) {
@@ -224,6 +226,19 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
                                               std::placeholders::_1,
                                               std::placeholders::_2));
     fullCrawler.filter(factory.getFilter());
+    fullCrawler.setCipherDelegate(m_cipherDelegate);
+    if (!useMaterial) {
+        auto salt = tryGetCiperSaltFromPath(databasePath);
+        if (!salt.has_value()) {
+            return false;
+        }
+        if (salt->length() == 32) {
+            m_cipherDelegate->closeCipher();
+            m_cipherDelegate->openCipherInMemory();
+            m_cipherDelegate->setCipherSalt(salt.value());
+        }
+    }
+
     SteadyClock before = SteadyClock::now();
     if (fullCrawler.work()) {
         reportFullCrawler(fullCrawler.getScore(),
@@ -231,7 +246,6 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
                           SteadyClock::timeIntervalSinceSteadyClockToNow(before));
         score = std::max(score, fullCrawler.getScore());
     } else if (!useMaterial) {
-        WCTAssert(isErrorCritial());
         setCriticalError(fullCrawler.getError());
         return false;
     }
@@ -239,6 +253,38 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
 
     increaseScore(databasePath, score);
     return true;
+}
+
+std::optional<StringView>
+FactoryRetriever::tryGetCiperSaltFromPath(const UnsafeStringView &databasePath)
+{
+    int saltLength = 16;
+    if (FileManager::getFileSize(databasePath) < saltLength) {
+        return StringView();
+    }
+    FileHandle handle(databasePath);
+    std::optional<StringView> result;
+    if (!handle.open(FileHandle::Mode::ReadOnly)) {
+        setCriticalErrorWithSharedThreadedError();
+        return result;
+    }
+    Data saltData = handle.read(0, saltLength);
+    if (saltData.size() != saltLength) {
+        setCriticalErrorWithSharedThreadedError();
+        return result;
+    }
+    if (strncmp("SQLite format 3\000", (const char *) saltData.buffer(), saltLength) == 0) {
+        return StringView();
+    }
+    std::ostringstream ss;
+    ss << std::hex << std::setfill('0');
+    for (int i = 0; i < saltLength; i++) {
+        int c = saltData.buffer()[i];
+        ss << std::setw(2) << c;
+    }
+    std::string salt = ss.str();
+    result = StringView(std::move(salt));
+    return result;
 }
 
 #pragma mark - Report

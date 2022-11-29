@@ -541,7 +541,9 @@ std::pair<size_t, uint64_t> Deserialization::getVarint(off_t offset) const
 
 StringView Deserialization::getString(off_t offset, size_t size) const
 {
-    WCTAssert(size > 0);
+    if (size == 0) {
+        return StringView();
+    }
     WCTAssert(isEnough((size_t) offset + size));
     return StringView(reinterpret_cast<const char *>(base() + offset), size);
 }

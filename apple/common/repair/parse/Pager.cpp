@@ -27,25 +27,28 @@
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Pager.hpp>
+#include <WCDB/SQLite.h>
 #include <WCDB/Serialization.hpp>
 #include <WCDB/StringView.hpp>
 #include <WCDB/ThreadedErrors.hpp>
 #include <cstring>
 
-#warning TODO - support cipher database
 namespace WCDB {
 
 namespace Repair {
 
 #pragma mark - Initialize
-Pager::Pager(const UnsafeStringView &path)
+Pager::Pager(const UnsafeStringView& path)
 : m_fileHandle(path)
+, m_pCodec(nullptr)
 , m_pageSize(-1)
 , m_reservedBytes(-1)
 , m_numberOfPages(0)
 , m_fileSize(0)
 , m_wal(this)
 , m_walImportance(true)
+, m_cache(maxAllowedCacheMemory)
+, m_highWater(std::make_shared<ShareableHighWater>())
 {
 }
 
@@ -63,7 +66,12 @@ void Pager::setReservedBytes(int reservedBytes)
     m_reservedBytes = reservedBytes;
 }
 
-const StringView &Pager::getPath() const
+void Pager::setCipherContext(void* ctx)
+{
+    m_pCodec = ctx;
+}
+
+const StringView& Pager::getPath() const
 {
     return m_fileHandle.path;
 }
@@ -93,32 +101,36 @@ int Pager::getReservedBytes() const
     return m_reservedBytes;
 }
 
-MappedData Pager::acquirePageData(int number)
+UnsafeData Pager::acquirePageData(int number)
 {
     return acquirePageData(number, 0, m_pageSize);
 }
 
-MappedData Pager::acquirePageData(int number, off_t offset, size_t size)
+UnsafeData Pager::acquirePageData(int number, off_t offset, size_t size)
 {
     WCTAssert(isInitialized());
     WCTAssert(number > 0);
     WCTAssert(offset + size <= m_pageSize);
-    MappedData data;
-    if (m_wal.containsPage(number)) {
-        data = m_wal.acquirePageData(number, offset, size);
-    } else if (number > m_numberOfPages) {
-        markAsCorrupted(
-        number,
-        StringView::formatted(
-        "Acquired page number: %d exceeds the page count: %d.", number, m_numberOfPages));
-        return MappedData::null();
-    } else {
-        data = m_fileHandle.mapPage(number, offset, size);
+    if (m_cache.exists(number)) {
+        return m_cache.get(number).subdata(offset, size);
     }
-    if (data.size() != size) {
+    UnsafeData data;
+    if (m_wal.containsPage(number)) {
+        data = m_wal.acquirePageData(number);
+    } else {
+        if (number > m_numberOfPages) {
+            markAsCorrupted(
+            number,
+            StringView::formatted(
+            "Acquired page number: %d exceeds the page count: %d.", number, m_numberOfPages));
+            return MappedData::null();
+        }
+        data = m_fileHandle.mapPage(number);
+    }
+    if (data.size() != m_pageSize) {
         if (data.size() > 0) {
             //short read
-            markAsCorrupted((int) (offset / m_pageSize + 1),
+            markAsCorrupted(number,
                             StringView::formatted("Acquired page data with size: %d is less than the expected size: %d.",
                                                   data.size(),
                                                   size));
@@ -127,22 +139,44 @@ MappedData Pager::acquirePageData(int number, off_t offset, size_t size)
         }
         return MappedData::null();
     }
-    return data;
+    if (m_pCodec) {
+        void* decodedBuffer = sqlite3Codec(m_pCodec, data.buffer(), number, 4);
+        if (decodedBuffer == nullptr) {
+            markAsCorrupted(number, "Decode page data fail!");
+            return MappedData::null();
+        }
+        data = Data(reinterpret_cast<unsigned char*>(decodedBuffer), m_pageSize, m_highWater);
+    }
+    m_cache.insert(number, data);
+    tryPurgeCache();
+    return data.subdata(offset, size);
 }
 
-MappedData Pager::acquireData(off_t offset, size_t size)
+UnsafeData Pager::acquireHeader()
 {
     WCTAssert(m_fileHandle.isOpened());
-    MappedData data = m_fileHandle.map(offset, size);
-    if (data.size() != size) {
-        if (data.size() > 0) {
-            markAsCorrupted((int) (offset / m_pageSize + 1),
-                            StringView::formatted("Acquired data with size: %d is less than the expected size: %d.",
-                                                  data.size(),
-                                                  size));
+    WCTAssert(m_pCodec == nullptr || m_pageSize > 0);
+    UnsafeData data;
+    if (m_pCodec == nullptr) {
+        data = m_fileHandle.map(0, 100);
+        if (data.size() != 100) {
+            assignWithSharedThreadedError();
+        }
+    } else {
+        data = m_fileHandle.map(0, m_pageSize);
+        if (data.size() == m_pageSize) {
+            void* decodedBuffer = sqlite3Codec(m_pCodec, data.buffer(), 1, 4);
+            if (decodedBuffer == nullptr) {
+                markAsCorrupted(1, "Decode page data fail!");
+                return MappedData::null();
+            }
+            data
+            = Data(reinterpret_cast<unsigned char*>(decodedBuffer), m_pageSize).subdata(0, 100);
         } else {
             assignWithSharedThreadedError();
         }
+    }
+    if (data.size() != 100) {
         return MappedData::null();
     }
     return data;
@@ -170,7 +204,7 @@ void Pager::disposeWal()
     m_wal.dispose();
 }
 
-const std::pair<uint32_t, uint32_t> &Pager::getWalSalt() const
+const std::pair<uint32_t, uint32_t>& Pager::getWalSalt() const
 {
     return m_wal.getSalt();
 }
@@ -181,7 +215,7 @@ int Pager::getNumberOfWalFrames() const
 }
 
 #pragma mark - Error
-void Pager::markAsCorrupted(int page, const UnsafeStringView &message)
+void Pager::markAsCorrupted(int page, const UnsafeStringView& message)
 {
     Error error(Error::Code::Corrupt, Error::Level::Notice, message);
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
@@ -220,9 +254,8 @@ bool Pager::doInitialize()
     }
     FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(getPath());
     if (m_pageSize == -1 || m_reservedBytes == -1) {
-        MappedData data = acquireData(0, 100);
+        UnsafeData data = acquireHeader();
         if (data.empty()) {
-            assignWithSharedThreadedError();
             return false;
         }
         if (memcmp(data.buffer(), "SQLite format 3\000", 16) != 0) {
@@ -266,6 +299,62 @@ bool Pager::doInitialize()
     }
     disposeWal();
     return true;
+}
+
+void Pager::tryPurgeCache()
+{
+    ssize_t allowedSize = maxAllowedCacheMemory * 2;
+    if (m_pCodec) {
+        allowedSize *= 2;
+    }
+    if (m_highWater->getCurrent() <= allowedSize) {
+        return;
+    }
+    Error error(Error::Code::Warning, Error::Level::Warning, "Mapped memory exceeds.");
+    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.insert_or_assign(ErrorStringKeyAssociatePath, getPath());
+    error.infos.insert_or_assign("CurrentSize", m_highWater->getCurrent());
+    error.infos.insert_or_assign("HighWater", m_highWater->getHighWater());
+    error.infos.insert_or_assign("AllowedHighWater", allowedSize);
+    Notifier::shared().notify(error);
+
+    if (m_pCodec != nullptr) {
+        m_fileHandle.purgeAll();
+        while (!m_cache.empty() && m_highWater->getCurrent() > allowedSize) {
+            m_cache.purge();
+        }
+    } else {
+        m_cache.purge(m_cache.size());
+        while (m_highWater->getCurrent() > allowedSize && m_fileHandle.purgeOne())
+            ;
+    }
+}
+
+Pager::Cache::Cache(size_t maxAllowedMemory)
+: LRUCache<uint32_t, UnsafeData>()
+, m_maxAllowedMemory(maxAllowedMemory)
+, m_currentUsedMemery(0)
+{
+}
+
+Pager::Cache::~Cache() = default;
+
+void Pager::Cache::insert(uint32_t pageNum, const UnsafeData& data)
+{
+    WCTAssert(!exists(pageNum));
+    m_currentUsedMemery += data.size();
+    put(pageNum, data);
+}
+
+bool Pager::Cache::shouldPurge() const
+{
+    return m_currentUsedMemery > m_maxAllowedMemory;
+}
+
+void Pager::Cache::willPurge(const uint32_t& pageNum, const UnsafeData& data)
+{
+    WCDB_UNUSED(pageNum)
+    m_currentUsedMemery -= data.size();
 }
 
 } //namespace Repair

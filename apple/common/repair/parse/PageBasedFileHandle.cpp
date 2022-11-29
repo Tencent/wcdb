@@ -57,7 +57,10 @@ Range PageBasedFileHandle::restrictedRange(Range::Location base,
     return result;
 }
 
-MappedData PageBasedFileHandle::mapPage(int pageno, off_t offsetWithinPage, size_t sizeWithinPage)
+MappedData PageBasedFileHandle::mapPage(int pageno,
+                                        off_t offsetWithinPage,
+                                        size_t sizeWithinPage,
+                                        SharedHighWater highWater)
 {
     WCTAssert(m_cachePageSize > 0);
     WCTAssert(pageno > 0);
@@ -94,25 +97,10 @@ MappedData PageBasedFileHandle::mapPage(int pageno, off_t offsetWithinPage, size
 
         markErrorAsIgnorable(ignorable);
         MappedData mappedData
-        = map(range.location * m_cachePageSize, range.length * m_cachePageSize);
+        = map(range.location * m_cachePageSize, range.length * m_cachePageSize, highWater);
         markErrorAsIgnorable(false);
 
         if (!mappedData.empty()) {
-            ssize_t highWater = MappedData::getMappedHighWater();
-            static constexpr const ssize_t s_allowedHighWater = maxAllowedCacheMemory * 2;
-            if (highWater > s_allowedHighWater) {
-                Error error(Error::Code::Warning, Error::Level::Warning, "Mapped memory exceeds.");
-                error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
-                error.infos.insert_or_assign(ErrorStringKeyAssociatePath, path);
-                error.infos.insert_or_assign("HighWater", highWater);
-                error.infos.insert_or_assign("AllowedHighWater", s_allowedHighWater);
-                Notifier::shared().notify(error);
-
-                while (!m_cache.empty() && MappedData::getMappedHighWater() > s_allowedHighWater) {
-                    m_cache.purge();
-                }
-            }
-
             m_cache.insert(range, mappedData);
             off_t offsetWithinCache = offset - range.location * m_cachePageSize;
             WCTAssert(offsetWithinCache < range.length * m_cachePageSize);
@@ -133,10 +121,10 @@ MappedData PageBasedFileHandle::mapPage(int pageno, off_t offsetWithinPage, size
 }
 
 #pragma mark - PageSize
-MappedData PageBasedFileHandle::mapPage(int pageno)
+MappedData PageBasedFileHandle::mapPage(int pageno, SharedHighWater highWater)
 {
     WCTAssert(pageno > 0);
-    return mapPage(pageno, 0, m_pageSize);
+    return mapPage(pageno, 0, m_pageSize, highWater);
 }
 
 const size_t& PageBasedFileHandle::memoryPageSize()
@@ -171,6 +159,20 @@ void PageBasedFileHandle::setPageSize(size_t pageSize)
 }
 
 #pragma mark - Cache
+void PageBasedFileHandle::purgeAll()
+{
+    m_cache.purge(m_cache.size());
+}
+
+bool PageBasedFileHandle::purgeOne()
+{
+    if (m_cache.empty()) {
+        return false;
+    }
+    m_cache.purge();
+    return true;
+}
+
 PageBasedFileHandle::Cache::Cache(size_t maxAllowedMemory)
 : LRUCache<WCDB::Range, WCDB::MappedData>()
 , m_range(Range::notFound())

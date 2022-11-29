@@ -2971,6 +2971,15 @@
 		75A46C0E2843B3BC00B58207 /* OrderingTermBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A46C0C2843B3BC00B58207 /* OrderingTermBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75A46C0F2843B3BC00B58207 /* OrderingTermBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75A46C0D2843B3BC00B58207 /* OrderingTermBridge.cpp */; };
 		75A46C112843B73C00B58207 /* WinqBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75A46C102843B73C00B58207 /* WinqBridge.hpp */; };
+		75A60AAF29345A38009C1B3C /* Cipher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75A60AAD29345A38009C1B3C /* Cipher.cpp */; };
+		75A60AB029345A38009C1B3C /* Cipher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75A60AAD29345A38009C1B3C /* Cipher.cpp */; };
+		75A60AB129345A38009C1B3C /* Cipher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75A60AAD29345A38009C1B3C /* Cipher.cpp */; };
+		75A60AB229345A38009C1B3C /* Cipher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75A60AAD29345A38009C1B3C /* Cipher.cpp */; };
+		75A60AB329345A38009C1B3C /* Cipher.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75A60AAE29345A38009C1B3C /* Cipher.hpp */; };
+		75A60AB429345A38009C1B3C /* Cipher.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75A60AAE29345A38009C1B3C /* Cipher.hpp */; };
+		75A60AB529345A38009C1B3C /* Cipher.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75A60AAE29345A38009C1B3C /* Cipher.hpp */; };
+		75A60AB629345A38009C1B3C /* Cipher.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75A60AAE29345A38009C1B3C /* Cipher.hpp */; };
+		75A60AB72934EC65009C1B3C /* RandomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1671827F434E800D2C926 /* RandomData.swift */; };
 		75AF6AD728544C8800A7C43D /* TableOrSubqueryBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75AF6AD528544C8800A7C43D /* TableOrSubqueryBridge.cpp */; };
 		75AF6AD828544C8800A7C43D /* TableOrSubqueryBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AF6AD628544C8800A7C43D /* TableOrSubqueryBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75AF6ADB2854C5ED00A7C43D /* JoinBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75AF6AD92854C5ED00A7C43D /* JoinBridge.cpp */; };
@@ -4467,6 +4476,8 @@
 		75A46C0C2843B3BC00B58207 /* OrderingTermBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OrderingTermBridge.h; sourceTree = "<group>"; };
 		75A46C0D2843B3BC00B58207 /* OrderingTermBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OrderingTermBridge.cpp; sourceTree = "<group>"; };
 		75A46C102843B73C00B58207 /* WinqBridge.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WinqBridge.hpp; sourceTree = "<group>"; };
+		75A60AAD29345A38009C1B3C /* Cipher.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Cipher.cpp; sourceTree = "<group>"; };
+		75A60AAE29345A38009C1B3C /* Cipher.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Cipher.hpp; sourceTree = "<group>"; };
 		75AF6AD528544C8800A7C43D /* TableOrSubqueryBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TableOrSubqueryBridge.cpp; sourceTree = "<group>"; };
 		75AF6AD628544C8800A7C43D /* TableOrSubqueryBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TableOrSubqueryBridge.h; sourceTree = "<group>"; };
 		75AF6AD92854C5ED00A7C43D /* JoinBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = JoinBridge.cpp; sourceTree = "<group>"; };
@@ -5310,7 +5321,6 @@
 				03E1671527F434E800D2C926 /* BaseBenchmark.swift */,
 				03E1671627F434E800D2C926 /* BenchmarkObject.swift */,
 				03E1671727F434E800D2C926 /* Config.swift */,
-				03E1671827F434E800D2C926 /* RandomData.swift */,
 			);
 			path = supporting;
 			sourceTree = "<group>";
@@ -5384,6 +5394,7 @@
 		03E1676027F434E800D2C926 /* common */ = {
 			isa = PBXGroup;
 			children = (
+				03E1671827F434E800D2C926 /* RandomData.swift */,
 				03E1676127F434E800D2C926 /* Assert.swift */,
 				03E1676227F434E800D2C926 /* BaseTestCase.swift */,
 				03E1676327F434E800D2C926 /* Convenience.swift */,
@@ -6320,8 +6331,6 @@
 				390E1C5A2296414C00C24598 /* Thread.cpp */,
 				390E1C5B2296414C00C24598 /* Thread.hpp */,
 				23F0FEB2215F5E9A008399FB /* ThreadLocal.hpp */,
-				2316D92E21057CA700707AFC /* MappedData.cpp */,
-				2316D92B21057CA600707AFC /* MappedData.hpp */,
 				2316D92D21057CA700707AFC /* Recyclable.hpp */,
 				236996B121D5C4FF00E72E81 /* Recyclable.cpp */,
 				23E7EB1B2123D58D0056B5D8 /* HighWater.cpp */,
@@ -6347,6 +6356,8 @@
 				23775B3120AD666900E21AB0 /* Error.hpp */,
 				23775B3220AD666900E21AB0 /* Notifier.cpp */,
 				23775B3320AD666900E21AB0 /* Notifier.hpp */,
+				2316D92E21057CA700707AFC /* MappedData.cpp */,
+				2316D92B21057CA600707AFC /* MappedData.hpp */,
 				23775BCB20AD72BC00E21AB0 /* Data.cpp */,
 				23775BCC20AD72BC00E21AB0 /* Data.hpp */,
 				2375945F210081AA00DBB721 /* UnsafeData.cpp */,
@@ -6465,6 +6476,8 @@
 				23AD52D520DB4A3C00664B62 /* MasterItem.hpp */,
 				23AD52DB20DB56D200664B62 /* SequenceItem.cpp */,
 				23AD52DC20DB56D200664B62 /* SequenceItem.hpp */,
+				75A60AAD29345A38009C1B3C /* Cipher.cpp */,
+				75A60AAE29345A38009C1B3C /* Cipher.hpp */,
 			);
 			path = basic;
 			sourceTree = "<group>";
@@ -7299,6 +7312,7 @@
 				037C3AEB2897E33600328EC8 /* SyntaxUpsertClause.hpp in Headers */,
 				037C3AEC2897E33600328EC8 /* Shm.hpp in Headers */,
 				0D5363F2290A75F20026A4DC /* Sequence.hpp in Headers */,
+				75A60AB529345A38009C1B3C /* Cipher.hpp in Headers */,
 				037C3AED2897E33600328EC8 /* StatementDetach.hpp in Headers */,
 				03E5CB0128A3513C005353D9 /* WCDBCpp.h in Headers */,
 				037C3AEE2897E33600328EC8 /* SubstringMatchInfo.hpp in Headers */,
@@ -7557,6 +7571,7 @@
 				23176A8C21B912B10051ACF9 /* Version.h in Headers */,
 				03AFD34328B8B21B00EF5E56 /* Field.hpp in Headers */,
 				23A3CFB5205FB1A800692F94 /* WCTHandle+Convenient.h in Headers */,
+				75A60AB329345A38009C1B3C /* Cipher.hpp in Headers */,
 				23EEDCD2217DFADC006E9E73 /* StatementDropTrigger.hpp in Headers */,
 				75D99B8128CA441E00BEC8B5 /* BaseOperation.hpp in Headers */,
 				23EEDC72217DFADC006E9E73 /* FTS3Function.hpp in Headers */,
@@ -7977,6 +7992,7 @@
 				7521D8B7291E9ABB009642EF /* BasicConfig.hpp in Headers */,
 				7521D8B8291E9ABB009642EF /* StatementDropIndex.hpp in Headers */,
 				7521D8B9291E9ABB009642EF /* Pager.hpp in Headers */,
+				75A60AB429345A38009C1B3C /* Cipher.hpp in Headers */,
 				7521D8BA291E9ABB009642EF /* SyntaxCreateIndexSTMT.hpp in Headers */,
 				7521D8BB291E9ABB009642EF /* WCTMacroUtility.h in Headers */,
 				7521D8BC291E9ABB009642EF /* Crawlable.hpp in Headers */,
@@ -8449,6 +8465,7 @@
 				7521DD24291EA349009642EF /* AutoMigrateConfig.hpp in Headers */,
 				7521DD26291EA349009642EF /* UniqueList.hpp in Headers */,
 				7521DD27291EA349009642EF /* InnerHandleStatement.hpp in Headers */,
+				75A60AB629345A38009C1B3C /* Cipher.hpp in Headers */,
 				7521DD28291EA349009642EF /* FTS5AuxiliaryFunctionTemplate.hpp in Headers */,
 				7521DD2A291EA349009642EF /* SQLiteLocker.hpp in Headers */,
 				7521DD2D291EA349009642EF /* ConvertibleImplementation.hpp in Headers */,
@@ -9224,6 +9241,7 @@
 				037C3A272897E33600328EC8 /* SyntaxAnalyzeSTMT.cpp in Sources */,
 				037C3A292897E33600328EC8 /* SyntaxQualifiedTableName.cpp in Sources */,
 				037C3A2A2897E33600328EC8 /* SyntaxSchema.cpp in Sources */,
+				75A60AB129345A38009C1B3C /* Cipher.cpp in Sources */,
 				037C3A302897E33600328EC8 /* ColumnMeta.cpp in Sources */,
 				037C3A312897E33600328EC8 /* UnsafeData.cpp in Sources */,
 				037C3A322897E33600328EC8 /* ColumnDef.cpp in Sources */,
@@ -9605,6 +9623,7 @@
 				75EB1A07287F0AFA00AA62F7 /* StatementDropViewTests.swift in Sources */,
 				03E1679A27F434E900D2C926 /* TableTests.swift in Sources */,
 				03E167A827F434E900D2C926 /* DeleteInterfaceTests.swift in Sources */,
+				75A60AB72934EC65009C1B3C /* RandomData.swift in Sources */,
 				03E1678627F434E900D2C926 /* StatementReindexTests.swift in Sources */,
 				03E1677527F434E900D2C926 /* FileTests.swift in Sources */,
 				03E1679B27F434E900D2C926 /* InsertTests.swift in Sources */,
@@ -9666,6 +9685,7 @@
 				23D0C35120C149D80001BFAE /* Factory.cpp in Sources */,
 				234DBD042064DE04000E31E8 /* WCTDatabase+Transaction.mm in Sources */,
 				2396EB0E21801BD60079066C /* WCTResultColumn.mm in Sources */,
+				75A60AAF29345A38009C1B3C /* Cipher.cpp in Sources */,
 				3962FFC82305142A008934D4 /* Statement.cpp in Sources */,
 				23D0C38D20C17CAE0001BFAE /* FactoryBackup.cpp in Sources */,
 				752594E5285226C00068A602 /* FrameSpecBridge.cpp in Sources */,
@@ -10341,6 +10361,7 @@
 				7521D81A291E9ABB009642EF /* StatementCommit.cpp in Sources */,
 				7521D81B291E9ABB009642EF /* WCTSelectable.mm in Sources */,
 				7521D81D291E9ABB009642EF /* AutoCheckpointConfig.cpp in Sources */,
+				75A60AB029345A38009C1B3C /* Cipher.cpp in Sources */,
 				7521D820291E9ABB009642EF /* Filter.cpp in Sources */,
 				7521D821291E9ABB009642EF /* Thread.cpp in Sources */,
 				7521D822291E9ABB009642EF /* OperationQueue.cpp in Sources */,
@@ -10677,6 +10698,7 @@
 				7521DB8F291EA349009642EF /* StatementExplain.cpp in Sources */,
 				7521DB90291EA349009642EF /* Core.cpp in Sources */,
 				7521DB91291EA349009642EF /* SyntaxIndexedColumn.cpp in Sources */,
+				75A60AB229345A38009C1B3C /* Cipher.cpp in Sources */,
 				7521DB92291EA349009642EF /* TableConstraint.swift in Sources */,
 				7521DB93291EA349009642EF /* Pager.cpp in Sources */,
 				7521DB94291EA349009642EF /* StatementInterface.swift in Sources */,
@@ -10959,6 +10981,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 234F042F227A9EFA00DD65A2 /* Tests.xcconfig */;
 			buildSettings = {
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = WCDB_QUICK_TESTS;
 			};
 			name = Debug;
 		};
@@ -10983,7 +11006,7 @@
 				);
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDB.modulemap";
 				MODULEMAP_PRIVATE_FILE = "$(SRCROOT)/support/WCDB.private.modulemap";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = WCDB_SWIFT_BRIDGE_OBJC;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "WCDB_SWIFT_BRIDGE_OBJC WCDB_QUICK_TESTS";
 			};
 			name = Debug;
 		};
@@ -11039,6 +11062,7 @@
 				);
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				DEAD_CODE_STRIPPING = YES;
+				SWIFT_ENFORCE_EXCLUSIVE_ACCESS = "debug-only";
 				SWIFT_VERSION = 5.0;
 				VALID_ARCHS = "arm64e arm64 x86_64";
 				"VALID_ARCHS[sdk=watchos*]" = "arm64_32 armv7k";
@@ -11057,6 +11081,7 @@
 				);
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				DEAD_CODE_STRIPPING = YES;
+				SWIFT_ENFORCE_EXCLUSIVE_ACCESS = "debug-only";
 				SWIFT_VERSION = 5.0;
 				VALID_ARCHS = "arm64e arm64 x86_64";
 				"VALID_ARCHS[sdk=watchos*]" = "arm64_32 armv7k";

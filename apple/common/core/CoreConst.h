@@ -44,7 +44,7 @@ static constexpr const double OperationQueueTimeIntervalForCheckpoint = 10.0;
 #ifndef WCDB_QUICK_TESTS
 static double OperationQueueTimeIntervalForBackup = 600.0;
 #else
-static double OperationQueueTimeIntervalForBackup = 60.0;
+static double OperationQueueTimeIntervalForBackup = 10.0;
 #endif
 #pragma mark - Operation Queue - Merge FTS Index
 static constexpr const double OperationQueueTimeIntervalForMergeFTSIndex
@@ -112,6 +112,7 @@ enum HandleCategory : unsigned int {
     HandleCategoryCheckpoint,
     HandleCategoryIntegrity,
     HandleCategoryAssemble,
+    HandleCategoryCipher,
     HandleCategoryCount,
 };
 enum class HandleType : unsigned int {
@@ -123,6 +124,7 @@ enum class HandleType : unsigned int {
     Checkpoint = (HandleCategoryCheckpoint << 8) | HandleSlotCheckPoint,
     Integrity = (HandleCategoryIntegrity << 8) | HandleSlotOperation,
     Assemble = (HandleCategoryAssemble << 8) | HandleSlotAssemble,
+    AssembleCipher = (HandleCategoryCipher << 8) | HandleSlotAssemble,
     AssembleBackupRead = (HandleCategoryBackupRead << 8) | HandleSlotAssemble,
     AssembleBackupWrite = (HandleCategoryBackupWrite << 8) | HandleSlotAssemble,
 };

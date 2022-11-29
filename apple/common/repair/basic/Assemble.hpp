@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/StringView.hpp>
+#include <WCDB/Cipher.hpp>
 #include <map>
 
 namespace WCDB {
@@ -35,7 +35,7 @@ namespace Repair {
 
 class Cell;
 
-class AssembleDelegate {
+class AssembleDelegate : public CipherDelegate {
 public:
     AssembleDelegate();
     virtual ~AssembleDelegate() = 0;

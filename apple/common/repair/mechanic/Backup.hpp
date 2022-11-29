@@ -24,17 +24,17 @@
 
 #pragma once
 
+#include <WCDB/Cipher.hpp>
 #include <WCDB/MasterCrawler.hpp>
 #include <WCDB/Material.hpp>
 #include <WCDB/SequenceCrawler.hpp>
-#include <WCDB/StringView.hpp>
 #include <vector>
 
 namespace WCDB {
 
 namespace Repair {
 
-class BackupBaseDelegate {
+class BackupBaseDelegate : public CipherDelegate {
 public:
     virtual ~BackupBaseDelegate() = 0;
 

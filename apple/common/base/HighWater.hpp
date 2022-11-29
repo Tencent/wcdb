@@ -64,4 +64,6 @@ protected:
     mutable std::mutex m_lock;
 };
 
+typedef std::shared_ptr<ShareableHighWater> SharedHighWater;
+
 } // namespace WCDB

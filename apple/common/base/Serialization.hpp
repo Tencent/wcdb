@@ -84,6 +84,7 @@ public:
     void reset(const UnsafeData &data);
 
     const UnsafeData &data() const override final;
+    uint32_t version;
 
 protected:
     UnsafeData m_data;

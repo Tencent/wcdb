@@ -22,7 +22,6 @@ import XCTest
 import WCDB
 
 class RepairTests: DatabaseTestCase {
-    var pageSize: Int32!
     let preInsertedObjects: [TestObject] = {
         let object1 = TestObject()
         object1.variable1 = 1
@@ -33,111 +32,114 @@ class RepairTests: DatabaseTestCase {
         return [object1, object2]
     }()
 
-    override func setUp() {
-        super.setUp()
-
-        let handle = WCDBAssertNoThrowReturned(try database.getHandle())!
-        XCTAssertNoThrow(try handle.prepare(StatementPragma().pragma(.pageSize)))
-
-        XCTAssertNoThrow(try handle.step())
-
-        pageSize = handle.value(atIndex: 0)
-
-        handle.finalize()
-
-        XCTAssertEqual(pageSize >> 1 & pageSize, 0)
-
-        XCTAssertGreaterThan(pageSize, 0)
-
+    func excuteTest(_ operation: () throws -> Void) {
         XCTAssertNoThrow(try database.create(table: TestObject.name, of: TestObject.self))
-
         XCTAssertNoThrow(try database.insert(preInsertedObjects, intoTable: TestObject.name))
+        XCTAssertNoThrow(try operation())
+        XCTAssertNoThrow(try database.removeFiles())
+        database.setCipher(key: RandomData(withSeed: 0).data(withLength: 32))
+        XCTAssertNoThrow(try database.create(table: TestObject.name, of: TestObject.self))
+        XCTAssertNoThrow(try database.insert(preInsertedObjects, intoTable: TestObject.name))
+        XCTAssertNoThrow(try operation())
     }
 
     func testBackup() {
-        XCTAssertFalse(self.fileManager.fileExists(atPath: self.database.firstMaterialPath))
-        XCTAssertFalse(self.fileManager.fileExists(atPath: self.database.lastMaterialPath))
+        excuteTest {
+            XCTAssertFalse(self.fileManager.fileExists(atPath: self.database.firstMaterialPath))
+            XCTAssertFalse(self.fileManager.fileExists(atPath: self.database.lastMaterialPath))
 
-        XCTAssertNoThrow(try self.database.backup())
-        XCTAssertTrue(self.fileManager.fileExists(atPath: self.database.firstMaterialPath))
-        XCTAssertFalse(self.fileManager.fileExists(atPath: self.database.lastMaterialPath))
+            XCTAssertNoThrow(try self.database.backup())
+            XCTAssertTrue(self.fileManager.fileExists(atPath: self.database.firstMaterialPath))
+            XCTAssertFalse(self.fileManager.fileExists(atPath: self.database.lastMaterialPath))
 
-        Thread.sleep(forTimeInterval: 1)
+            Thread.sleep(forTimeInterval: 1)
 
-        XCTAssertNoThrow(try self.database.backup())
-        XCTAssertTrue(self.fileManager.fileExists(atPath: self.database.firstMaterialPath))
-        XCTAssertTrue(self.fileManager.fileExists(atPath: self.database.lastMaterialPath))
+            XCTAssertNoThrow(try self.database.backup())
+            XCTAssertTrue(self.fileManager.fileExists(atPath: self.database.firstMaterialPath))
+            XCTAssertTrue(self.fileManager.fileExists(atPath: self.database.lastMaterialPath))
+        }
     }
 
     func testBackupFilter() {
+        excuteTest {
+            database.filterBackup(tableShouldBeBackedUp: nil)
 
-        XCTAssertNoThrow(try self.database.backup())
-        XCTAssertTrue(self.fileManager.fileExists(atPath: self.database.firstMaterialPath))
-        XCTAssertFalse(self.fileManager.fileExists(atPath: self.database.lastMaterialPath))
+            XCTAssertNoThrow(try self.database.backup())
+            XCTAssertTrue(self.fileManager.fileExists(atPath: self.database.firstMaterialPath))
+            XCTAssertFalse(self.fileManager.fileExists(atPath: self.database.lastMaterialPath))
 
-        database.filterBackup { _ in
-            return false
+            database.filterBackup { _ in
+                return false
+            }
+
+            Thread.sleep(forTimeInterval: 1)
+
+            XCTAssertNoThrow(try self.database.backup())
+            XCTAssertTrue(self.fileManager.fileExists(atPath: self.database.firstMaterialPath))
+            XCTAssertTrue(self.fileManager.fileExists(atPath: self.database.lastMaterialPath))
+
+            let firstSize = self.fileManager.fileSize(of: self.database.firstMaterialPath)
+            let lastSize = self.fileManager.fileSize(of: self.database.lastMaterialPath)
+            XCTAssertTrue(firstSize > lastSize)
         }
-
-        Thread.sleep(forTimeInterval: 1)
-
-        XCTAssertNoThrow(try self.database.backup())
-        XCTAssertTrue(self.fileManager.fileExists(atPath: self.database.firstMaterialPath))
-        XCTAssertTrue(self.fileManager.fileExists(atPath: self.database.lastMaterialPath))
-
-        let firstSize = self.fileManager.fileSize(of: self.database.firstMaterialPath)
-        let lastSize = self.fileManager.fileSize(of: self.database.lastMaterialPath)
-        XCTAssertTrue(firstSize > lastSize)
     }
 
     func testAutoBackup() {
-        self.database.setAutoBackup(enable: true)
-        let newContent = TestObject()
-        newContent.variable1 = 3
-        newContent.variable2 = "object3"
-        XCTAssertFalse(self.fileManager.fileExists(atPath: self.database.firstMaterialPath))
-        XCTAssertNoThrow(try self.database.insert(newContent, intoTable: TestObject.name))
-        XCTAssertNoThrow(try self.database.passiveCheckpoint())
-        Thread.sleep(forTimeInterval: 66)
-        XCTAssertTrue(self.fileManager.fileExists(atPath: self.database.firstMaterialPath))
+        excuteTest {
+            self.database.setAutoBackup(enable: true)
+            let newContent = TestObject()
+            newContent.variable1 = 3
+            newContent.variable2 = "object3"
+            XCTAssertFalse(self.fileManager.fileExists(atPath: self.database.firstMaterialPath))
+            XCTAssertNoThrow(try self.database.insert(newContent, intoTable: TestObject.name))
+            XCTAssertNoThrow(try self.database.passiveCheckpoint())
+#if WCDB_QUICK_TESTS
+            Thread.sleep(forTimeInterval: 12)
+#else
+            Thread.sleep(forTimeInterval: 66)
+#endif
+            XCTAssertTrue(self.fileManager.fileExists(atPath: self.database.firstMaterialPath))
+        }
     }
 
     func testDeposit() {
-        // 0.
-        let num0 = try? database.getValue(on: TestObject.Properties.any.count(), fromTable: TestObject.name)
-        XCTAssertTrue(num0 != nil && num0!.int32Value > 0)
-        var rowid = num0!.int32Value
+        excuteTest {
+            // 0.
+            let num0 = try? database.getValue(on: TestObject.Properties.any.count(), fromTable: TestObject.name)
+            XCTAssertTrue(num0 != nil && num0!.int32Value > 0)
+            var rowid = num0!.int32Value
 
-        // 1.
-        XCTAssertNoThrow(try database.backup())
-        XCTAssertNoThrow(try database.deposit())
+            // 1.
+            XCTAssertNoThrow(try database.backup())
+            XCTAssertNoThrow(try database.deposit())
 
-        let num1 = try? database.getValue(on: TestObject.Properties.any.count(), fromTable: TestObject.name)
-        XCTAssertTrue(num1 != nil && num1!.int32Value == 0)
+            let num1 = try? database.getValue(on: TestObject.Properties.any.count(), fromTable: TestObject.name)
+            XCTAssertTrue(num1 != nil && num1!.int32Value == 0)
 
-        let newObject = TestObject()
-        newObject.variable2 = "object3"
-        newObject.isAutoIncrement = true
-        XCTAssertNoThrow(try self.database.insert(newObject, intoTable: TestObject.name))
-        rowid += 1
-        XCTAssertTrue(newObject.lastInsertedRowID == rowid)
+            let newObject = TestObject()
+            newObject.variable2 = "object3"
+            newObject.isAutoIncrement = true
+            XCTAssertNoThrow(try self.database.insert(newObject, intoTable: TestObject.name))
+            rowid += 1
+            XCTAssertTrue(newObject.lastInsertedRowID == rowid)
 
-        // 2.
-        XCTAssertNoThrow(try database.backup())
-        XCTAssertNoThrow(try database.deposit())
-        let num2 = try? database.getValue(on: TestObject.Properties.any.count(), fromTable: TestObject.name)
-        XCTAssertTrue(num2 != nil && num2!.int32Value == 0)
+            // 2.
+            XCTAssertNoThrow(try database.backup())
+            XCTAssertNoThrow(try database.deposit())
+            let num2 = try? database.getValue(on: TestObject.Properties.any.count(), fromTable: TestObject.name)
+            XCTAssertTrue(num2 != nil && num2!.int32Value == 0)
 
-        newObject.variable2 = "object4"
-        XCTAssertNoThrow(try self.database.insert(newObject, intoTable: TestObject.name))
-        rowid += 1
-        XCTAssertTrue(newObject.lastInsertedRowID == rowid)
+            newObject.variable2 = "object4"
+            XCTAssertNoThrow(try self.database.insert(newObject, intoTable: TestObject.name))
+            rowid += 1
+            XCTAssertTrue(newObject.lastInsertedRowID == rowid)
 
-        XCTAssertTrue(self.fileManager.fileExists(atPath: self.database.factoryPath))
-        XCTAssertTrue(self.database.containDepositedFiles())
-        XCTAssertNoThrow(try self.database.removeDepositedFiles())
-        XCTAssertFalse(self.database.containDepositedFiles())
-        XCTAssertFalse(self.fileManager.fileExists(atPath: self.database.factoryPath))
+            XCTAssertTrue(self.fileManager.fileExists(atPath: self.database.factoryPath))
+            XCTAssertTrue(self.database.containDepositedFiles())
+            XCTAssertNoThrow(try self.database.removeDepositedFiles())
+            XCTAssertFalse(self.database.containDepositedFiles())
+            XCTAssertFalse(self.fileManager.fileExists(atPath: self.database.factoryPath))
+        }
     }
 
     func doTestRetrieve(expecting success: Bool) {
@@ -166,30 +168,38 @@ class RepairTests: DatabaseTestCase {
     }
 
     func testRetrieveWithBackupAndDeposit() {
-        XCTAssertNoThrow(try database.backup())
-        XCTAssertNoThrow(try database.deposit())
-        XCTAssertNoThrow(try database.corruptHeader())
-        doTestRetrieve(expecting: true)
-        doTestObjectsRetrieved(expecting: true)
+        excuteTest {
+            XCTAssertNoThrow(try database.backup())
+            XCTAssertNoThrow(try database.deposit())
+            XCTAssertNoThrow(try database.corruptHeader())
+            doTestRetrieve(expecting: true)
+            doTestObjectsRetrieved(expecting: true)
+        }
     }
 
     func testRetrieveWithBackupAndWithoutDeposit() {
-        XCTAssertNoThrow(try database.backup())
-        XCTAssertNoThrow(try database.corruptHeader())
-        doTestRetrieve(expecting: true)
-        doTestObjectsRetrieved(expecting: true)
+        excuteTest {
+            XCTAssertNoThrow(try database.backup())
+            XCTAssertNoThrow(try database.corruptHeader())
+            doTestRetrieve(expecting: true)
+            doTestObjectsRetrieved(expecting: true)
+        }
     }
 
     func testRetrieveWithoutBackupAndWithDeposit() {
-        XCTAssertNoThrow(try database.deposit())
-        XCTAssertNoThrow(try database.corruptHeader())
-        doTestRetrieve(expecting: false)
-        doTestObjectsRetrieved(expecting: true)
+        excuteTest {
+            XCTAssertNoThrow(try database.deposit())
+            XCTAssertNoThrow(try database.corruptHeader())
+            doTestRetrieve(expecting: false)
+            doTestObjectsRetrieved(expecting: true)
+        }
     }
 
     func testRetrieveWithoutBackupAndDeposit() {
-        XCTAssertNoThrow(try database.corruptHeader())
-        doTestRetrieve(expecting: false)
-        doTestObjectsRetrieved(expecting: false)
+        excuteTest {
+            XCTAssertNoThrow(try database.corruptHeader())
+            doTestRetrieve(expecting: false)
+            doTestObjectsRetrieved(expecting: false)
+        }
     }
 }

@@ -169,6 +169,34 @@
     return immutable;
 }
 
+- (NSArray *)getAllFilesAtDirectory:(NSString *)directory
+{
+    NSMutableArray *directories = [[NSMutableArray alloc] initWithObjects:directory, nil];
+    NSString *currentDir;
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+    NSFileManager *mgr = [NSFileManager defaultManager];
+    NSString *currentPath;
+    BOOL isDir = NO;
+    BOOL isExist = NO;
+    while (directories.count > 0) {
+        currentDir = directories.lastObject;
+        [directories removeLastObject];
+        NSError *error;
+        NSArray *files = [mgr contentsOfDirectoryAtPath:currentDir error:&error];
+        TestCaseAssertNil(error);
+        for (NSString *file in files) {
+            currentPath = [currentDir stringByAppendingPathComponent:file];
+            isExist = [mgr fileExistsAtPath:currentPath isDirectory:&isDir];
+            if (isDir) {
+                [directories addObject:currentPath];
+            } else if (isExist) {
+                [result addObject:currentPath];
+            }
+        }
+    }
+    return result;
+}
+
 #if TARGET_OS_IPHONE && !TARGET_IPHONE_SIMULATOR
 - (void)setFileProtectionOfPath:(NSString *)path to:(NSFileProtectionType)type
 {

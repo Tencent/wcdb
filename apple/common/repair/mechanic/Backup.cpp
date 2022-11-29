@@ -116,6 +116,17 @@ bool Backup::work()
         }
         shared = true;
 
+        void *pCodec = m_sharedDelegate->getCipherContext();
+        if (pCodec != nullptr) {
+            size_t pageSize = m_sharedDelegate->getCipherPageSize();
+            if (pageSize == 0) {
+                setError(m_sharedDelegate->getBackupError());
+                break;
+            }
+            m_pager.setCipherContext(pCodec);
+            m_pager.setPageSize((int) pageSize);
+        }
+
         if (!m_pager.initialize()) {
             break;
         }
@@ -132,6 +143,7 @@ bool Backup::work()
             m_material.info.walSalt = m_pager.getWalSalt();
             m_material.info.numberOfWalFrames = m_pager.getNumberOfWalFrames();
         }
+        m_material.info.cipherSalt = m_sharedDelegate->getCipherSalt();
         succeed = m_masterCrawler.work(this);
     } while (false);
 

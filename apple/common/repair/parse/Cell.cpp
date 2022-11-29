@@ -265,7 +265,7 @@ bool Cell::doInitialize()
             }
             overflowPagenos.emplace(overflowPageno);
             //fill payload with overflow data
-            MappedData overflow = m_pager->acquirePageData(overflowPageno);
+            UnsafeData overflow = m_pager->acquirePageData(overflowPageno);
             if (overflow.empty()) {
                 return false;
             }

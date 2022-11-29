@@ -37,8 +37,9 @@ public:
     PageBasedFileHandle(const UnsafeStringView& path);
     ~PageBasedFileHandle() override final;
 
-    MappedData mapPage(int pageno, off_t offset, size_t size);
-    MappedData mapPage(int pageno);
+    MappedData
+    mapPage(int pageno, off_t offset, size_t size, SharedHighWater highWater = nullptr);
+    MappedData mapPage(int pageno, SharedHighWater highWater = nullptr);
 
 protected:
     static Range
@@ -53,6 +54,10 @@ protected:
     size_t m_pageSize;
 
 #pragma mark - Cache
+public:
+    void purgeAll();
+    bool purgeOne();
+
 protected:
     static constexpr const size_t cacheMemoryPerRange = 1 * 1024 * 1024;
     static constexpr const size_t maxAllowedCacheMemory = 16 * 1024 * 1024;
@@ -67,6 +72,7 @@ protected:
         using Location = Range::Location;
         using Length = Range::Length;
         using Super::purge;
+        using Super::size;
         using Super::empty;
 
         void setRange(const Range& range);

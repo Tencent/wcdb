@@ -59,6 +59,7 @@ void InnerHandle::setType(HandleType type)
     case HandleType::Assemble:
     case HandleType::AssembleBackupRead:
     case HandleType::AssembleBackupWrite:
+    case HandleType::AssembleCipher:
         m_error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeAssemble);
         break;
     default:

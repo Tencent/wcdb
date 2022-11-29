@@ -44,7 +44,7 @@ typedef BOOL (^WCTConfigBlock)(WCTHandle* _Nonnull);
  @brief This interface is equivalent to [database setCipherKey:cipherKey andCipherPageSize:4096];
  @param cipherKey Cipher key.
  */
-- (void)setCipherKey:(NSData*)cipherKey;
+- (void)setCipherKey:(NSData* _Nullable)cipherKey;
 
 /**
  @brief Set cipher key for a database. 
@@ -53,7 +53,7 @@ typedef BOOL (^WCTConfigBlock)(WCTHandle* _Nonnull);
  @param cipherKey Cipher key.
  @param cipherPageSize Cipher Page Size
  */
-- (void)setCipherKey:(NSData*)cipherKey
+- (void)setCipherKey:(NSData* _Nullable)cipherKey
    andCipherPageSize:(int)cipherPageSize;
 
 /**
