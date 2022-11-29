@@ -21,13 +21,7 @@
 import XCTest
 import WCDB
 
-class FileTests: BaseTestCase {
-    var database: Database!
-
-    override func setUp() {
-        super.setUp()
-        database = Database(at: self.recommendedPath)
-    }
+class FileTests: DatabaseTestCase {
 
     func testPaths() {
         // Give

@@ -21,8 +21,7 @@
 import XCTest
 import WCDB
 
-class RepairTests: BaseTestCase {
-    var database: Database!
+class RepairTests: DatabaseTestCase {
     var pageSize: Int32!
     let preInsertedObjects: [TestObject] = {
         let object1 = TestObject()
@@ -36,7 +35,6 @@ class RepairTests: BaseTestCase {
 
     override func setUp() {
         super.setUp()
-        database = Database(at: self.recommendedPath)
 
         let handle = WCDBAssertNoThrowReturned(try database.getHandle())!
         XCTAssertNoThrow(try handle.prepare(StatementPragma().pragma(.pageSize)))

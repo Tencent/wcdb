@@ -21,14 +21,7 @@
 import XCTest
 import WCDB
 
-class TableTests: BaseTestCase {
-    var database: Database!
-
-    override func setUp() {
-        super.setUp()
-        database = Database(at: self.recommendedPath)
-        database.tag = recommendTag
-    }
+class TableTests: DatabaseTestCase {
 
     final class BaselineObject: TableCodable, Named {
         var anInt32: Int32 = -1
