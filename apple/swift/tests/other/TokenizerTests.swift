@@ -25,8 +25,7 @@
 import XCTest
 import WCDB
 
-class TokenizerTests: BaseTestCase {
-    var database: Database!
+class TokenizerTests: DatabaseTestCase {
 
     class CustomTokenizer: Tokenizer {
 
@@ -96,11 +95,6 @@ class TokenizerTests: BaseTestCase {
             }
             return.OK
         }
-    }
-
-    override func setUp() {
-        super.setUp()
-        database = Database(at: self.recommendedPath)
     }
 
     final class FTS3Object: TableCodable, Named {

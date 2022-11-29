@@ -21,19 +21,12 @@
 import XCTest
 import WCDB
 
-class BaseBenchmark: BaseTestCase {
+class BaseBenchmark: DatabaseTestCase {
 
     var config = Config.default
-    var database: Database!
     lazy var randomGenerator = RandomData(withSeed: config.randomSeed)
 
     var objects: [BenchmarkObject] = []
-
-    override func setUp() {
-        super.setUp()
-
-        database = Database(at: self.recommendedPath)
-    }
 
     func getTableName(withIndex index: Int = 0) -> String {
         return "\(BenchmarkObject.name)\(index)"

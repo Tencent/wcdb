@@ -1,3 +1,7 @@
+//
+// Created by 陈秋文 on 2022/11/28.
+//
+
 /*
  * Tencent is pleased to support the open source community by making
  * WCDB available.
@@ -18,26 +22,17 @@
  * limitations under the License.
  */
 
-import XCTest
+import Foundation
 import WCDB
 
-class CRUDTestCase: DatabaseTestCase {
-
-    let preInsertedObjects: [TestObject] = {
-        let object1 = TestObject()
-        object1.variable1 = 1
-        object1.variable2 = "object1"
-        let object2 = TestObject()
-        object2.variable1 = 2
-        object2.variable2 = "object2"
-        return [object1, object2]
-    }()
-
+class DatabaseTestCase: BaseTestCase {
+    var database: Database!
     override func setUp() {
         super.setUp()
-
-        XCTAssertNoThrow(try database.create(table: TestObject.name, of: TestObject.self))
-
-        XCTAssertNoThrow(try database.insert(preInsertedObjects, intoTable: TestObject.name))
+        database = Database(at: self.recommendedPath)
+        database.tag = recommendTag
+        database.trace { error in
+            print(error)
+        }
     }
 }

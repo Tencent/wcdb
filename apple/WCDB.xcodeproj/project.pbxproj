@@ -2929,6 +2929,8 @@
 		7525C15C2920D22300FD34C7 /* TableCRUDInterface+WCTTableCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7525C15B2920D22300FD34C7 /* TableCRUDInterface+WCTTableCoding.swift */; };
 		752C7E3D28C8E16800C9FFA6 /* ORMDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 752C7E3C28C8E16800C9FFA6 /* ORMDeleteTests.mm */; };
 		752C7E4028C8E94200C9FFA6 /* ORMInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 752C7E3F28C8E94200C9FFA6 /* ORMInsertTests.mm */; };
+		753473602935C1E400911FCA /* DatabaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7534735F2935C1E400911FCA /* DatabaseTestCase.swift */; };
+		753473612935C1E400911FCA /* DatabaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7534735F2935C1E400911FCA /* DatabaseTestCase.swift */; };
 		753636DC28BBC3820025C2C4 /* Table.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 753636DA28BBC3820025C2C4 /* Table.cpp */; };
 		753636DD28BBC3820025C2C4 /* Table.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 753636DA28BBC3820025C2C4 /* Table.cpp */; };
 		753636DE28BBC3820025C2C4 /* Table.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 753636DB28BBC3820025C2C4 /* Table.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -4455,6 +4457,7 @@
 		7525C15B2920D22300FD34C7 /* TableCRUDInterface+WCTTableCoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TableCRUDInterface+WCTTableCoding.swift"; sourceTree = "<group>"; };
 		752C7E3C28C8E16800C9FFA6 /* ORMDeleteTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ORMDeleteTests.mm; sourceTree = "<group>"; };
 		752C7E3F28C8E94200C9FFA6 /* ORMInsertTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ORMInsertTests.mm; sourceTree = "<group>"; };
+		7534735F2935C1E400911FCA /* DatabaseTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseTestCase.swift; sourceTree = "<group>"; };
 		753636DA28BBC3820025C2C4 /* Table.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Table.cpp; sourceTree = "<group>"; };
 		753636DB28BBC3820025C2C4 /* Table.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Table.hpp; sourceTree = "<group>"; };
 		7537E58428B91F510077D92B /* Accessor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Accessor.cpp; sourceTree = "<group>"; };
@@ -5455,6 +5458,7 @@
 				03E1676227F434E800D2C926 /* BaseTestCase.swift */,
 				03E1676327F434E800D2C926 /* Convenience.swift */,
 				03E1675227F434E800D2C926 /* TestObject.swift */,
+				7534735F2935C1E400911FCA /* DatabaseTestCase.swift */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -9446,6 +9450,7 @@
 				03BF4B4A2888FA7300A30500 /* Random+TestCaseObject.mm in Sources */,
 				03BF4B532888FAA600A30500 /* DatabaseTestCase.mm in Sources */,
 				03BF4B322888F95600A30500 /* BaseTestCase.swift in Sources */,
+				753473612935C1E400911FCA /* DatabaseTestCase.swift in Sources */,
 				03BF4B4E2888FA7F00A30500 /* Signpost.mm in Sources */,
 				03BF4B462888FA6400A30500 /* TablesBasedFactory.mm in Sources */,
 				03BF4B312888F95300A30500 /* Assert.swift in Sources */,
@@ -9712,6 +9717,7 @@
 				03E1677D27F434E900D2C926 /* StatementSavepointTests.swift in Sources */,
 				03E167AE27F434E900D2C926 /* ColumnConstraintBindingTests.swift in Sources */,
 				03E1679827F434E900D2C926 /* ColumnTypeTests.swift in Sources */,
+				753473602935C1E400911FCA /* DatabaseTestCase.swift in Sources */,
 				03E167A027F434E900D2C926 /* InsertInterfaceTests.swift in Sources */,
 				03E1679C27F434E900D2C926 /* AdvanceTests.swift in Sources */,
 				03E167B227F434E900D2C926 /* Convenience.swift in Sources */,
