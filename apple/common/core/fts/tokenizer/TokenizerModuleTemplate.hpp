@@ -25,6 +25,7 @@
 #pragma once
 
 #include <WCDB/TokenizerModule.hpp>
+#include <cstring>
 #include <type_traits>
 
 namespace WCDB {
