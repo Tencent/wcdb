@@ -23,6 +23,7 @@
  */
 
 #include <WCDB/ColumnType.hpp>
+#include <cstring>
 
 namespace WCDB {
 

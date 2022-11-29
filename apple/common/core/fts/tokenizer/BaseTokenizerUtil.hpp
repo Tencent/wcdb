@@ -25,6 +25,7 @@
 #pragma once
 
 #include <WCDB/StringView.hpp>
+#include <functional>
 #include <vector>
 
 namespace WCDB {

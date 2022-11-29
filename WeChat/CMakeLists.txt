@@ -39,7 +39,7 @@ elseif (APPLE)
 elseif (LINUX)
     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unknown-pragmas -Wno-pragmas -Wno-deprecated -Wno-unused-variable")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-pragmas -Wno-pragmas -Wno-deprecated -Wno-unused-variable")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-pragmas -Wno-pragmas -Wno-deprecated -Wno-unused-variable -fpermissive")
     endif ()
     #set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-rpath,'$ORIGIN'")
 elseif (WIN32)
@@ -53,6 +53,7 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
         ${WCDB_SRC_DIR}/common/*AggregateFunction.hpp
         ${WCDB_SRC_DIR}/common/*AuxiliaryFunctionModule.hpp
         ${WCDB_SRC_DIR}/common/*BaseBinding.hpp
+        ${WCDB_SRC_DIR}/common/*BaseTokenizerUtil.hpp
         ${WCDB_SRC_DIR}/common/*BindParameter.hpp
         ${WCDB_SRC_DIR}/common/*CaseInsensiveList.hpp
         ${WCDB_SRC_DIR}/common/*Column.hpp
@@ -72,12 +73,14 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
         ${WCDB_SRC_DIR}/common/*FrameSpec.hpp
         ${WCDB_SRC_DIR}/common/*FTS3Function.hpp
         ${WCDB_SRC_DIR}/common/*FTS5AuxiliaryFunctionTemplate.hpp
+        ${WCDB_SRC_DIR}/common/*FTSConst.h
         ${WCDB_SRC_DIR}/common/*FTSError.hpp
         ${WCDB_SRC_DIR}/common/*IndexedColumn.hpp
         ${WCDB_SRC_DIR}/common/*Join.hpp
         ${WCDB_SRC_DIR}/common/*JoinConstraint.hpp
         ${WCDB_SRC_DIR}/common/*LiteralValue.hpp
         ${WCDB_SRC_DIR}/common/*Macro.h
+        ${WCDB_SRC_DIR}/common/*OneOrBinaryTokenizer.hpp
         ${WCDB_SRC_DIR}/common/*OrderingTerm.hpp
         ${WCDB_SRC_DIR}/common/*Pragma.hpp
         ${WCDB_SRC_DIR}/common/*QualifiedTable.hpp
@@ -86,6 +89,7 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
         ${WCDB_SRC_DIR}/common/*RecyclableHandle.hpp
         ${WCDB_SRC_DIR}/common/*ResultColumn.hpp
         ${WCDB_SRC_DIR}/common/*Schema.hpp
+        ${WCDB_SRC_DIR}/common/*Sequence.hpp
         ${WCDB_SRC_DIR}/common/*Shadow.hpp
         ${WCDB_SRC_DIR}/common/*SharedThreadedErrorProne.hpp
         ${WCDB_SRC_DIR}/common/*SQL.hpp
@@ -208,7 +212,10 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
         ${WCDB_SRC_DIR}/cpp/*HandleORMOperation.hpp
         ${WCDB_SRC_DIR}/cpp/*HandleStatement.hpp
         ${WCDB_SRC_DIR}/cpp/*Insert.hpp
+        ${WCDB_SRC_DIR}/cpp/*Master.hpp
         ${WCDB_SRC_DIR}/cpp/*MemberPointer.hpp
+        ${WCDB_SRC_DIR}/cpp/*MultiObject.hpp
+        ${WCDB_SRC_DIR}/cpp/*MultiSelect.hpp
         ${WCDB_SRC_DIR}/cpp/*ResultField.hpp
         ${WCDB_SRC_DIR}/cpp/*RunTimeAccessor.hpp
         ${WCDB_SRC_DIR}/cpp/*Select.hpp
@@ -217,7 +224,7 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
         ${WCDB_SRC_DIR}/cpp/*TableOperation.hpp
         ${WCDB_SRC_DIR}/cpp/*TableORMOperation.hpp
         ${WCDB_SRC_DIR}/cpp/*Update.hpp
-        ${WCDB_SRC_DIR}/cpp/*WCDB-CPP.h
+        ${WCDB_SRC_DIR}/cpp/*WCDBCpp.h
         )
 # export public headers
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/.wconan2/include/WCDB)
@@ -332,13 +339,18 @@ elseif (WIN32)
 else ()
 endif ()
 
+#set(WCONAN_LIBS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/wconan_libs/${CMAKE_BUILD_TYPE}/${CMAKE_BUILD_TYPE}/libs)
+#message(STATUS "WCONAN_LIBS_DIR: ${WCONAN_LIBS_DIR}")
+#set(WCONAN_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/wconan_libs/${CMAKE_BUILD_TYPE}/${CMAKE_BUILD_TYPE}/include)
+#message(STATUS "WCONAN_INCLUDE_DIR: ${WCONAN_INCLUDE_DIR}")
 
 if (ANDROID)
     message(STATUS "---- BUILD FOR ANDROID ----")
     find_library(z-lib z)
     target_link_libraries(${TARGET_NAME}
             ${LINK_LIBRARIES}
-            ${z-lib})
+            ${z-lib}
+            crypto)
 elseif (APPLE)
     message(STATUS "---- BUILD FOR APPLE ----")
     set(MACOSX_FRAMEWORK_SHORT_VERSION_STRING ${WCONAN_LIB_VERSION})
@@ -363,11 +375,13 @@ elseif (LINUX)
     message(STATUS "---- BUILD FOR LINUX ----")
     target_link_libraries(${TARGET_NAME} ${LINK_LIBRARIES}
             pthread
-            z)
+            z
+            crypto)
 elseif (WIN32)
     message(STATUS "---- BUILD FOR WINDOWS ----")
     target_link_libraries(${TARGET_NAME} ${LINK_LIBRARIES}
-            z)
+            z
+            crypto)
 else ()
     message(FATAL_ERROR "Unsupported platform!")
 endif ()
