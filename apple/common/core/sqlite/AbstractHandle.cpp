@@ -485,13 +485,7 @@ void AbstractHandle::rollbackTransaction()
     }
 }
 
-#pragma mark - Interface
-bool AbstractHandle::setCipherKey(const UnsafeData &data)
-{
-    WCTAssert(isOpened());
-    return APIExit(sqlite3_key(m_handle, data.buffer(), (int) data.size()));
-}
-
+#pragma mark - Wal
 void AbstractHandle::enableExtendedResultCodes(bool enable)
 {
     WCTAssert(isOpened());
@@ -519,6 +513,9 @@ void AbstractHandle::disableCheckpointWhenClosing(bool disable)
 
 void AbstractHandle::setWALFilePersist(int persist)
 {
+    if (m_path.compare(":memory:") == 0) {
+        return;
+    }
     WCTAssert(isOpened());
     APIExit(sqlite3_file_control(
     m_handle, Syntax::mainSchema.data(), SQLITE_FCNTL_PERSIST_WAL, &persist));
@@ -662,6 +659,72 @@ void AbstractHandle::doSuspend(bool suspend)
     if (isOpened()) {
         sqlite3_suspend(m_handle, suspend);
     }
+}
+
+#pragma mark - Cipher
+
+void *AbstractHandle::getCipherContext()
+{
+    WCTAssert(isOpened());
+    return sqlite3_getCipherContext(m_handle, Schema::main().getDescription().data());
+}
+
+size_t AbstractHandle::getCipherPageSize()
+{
+    WCTAssert(isOpened());
+    InnerHandleStatement handleStatement(this);
+    Statement cipherPageSize = StatementPragma().pragma(Pragma::cipherPageSize());
+    size_t size = 0;
+    if (handleStatement.prepare(cipherPageSize) && handleStatement.step()) {
+        size = handleStatement.getInteger();
+    }
+    handleStatement.finalize();
+    return size;
+}
+
+bool AbstractHandle::setCipherKey(const UnsafeData &data)
+{
+    WCTAssert(isOpened());
+    return APIExit(sqlite3_key(m_handle, data.buffer(), (int) data.size()));
+}
+
+bool AbstractHandle::setCipherPageSize(int pageSize)
+{
+    WCTAssert(isOpened());
+    InnerHandleStatement handleStatement(this);
+    Statement cipherPageSize
+    = StatementPragma().pragma(Pragma::cipherPageSize()).to(pageSize);
+    bool succeed = handleStatement.prepare(cipherPageSize) && handleStatement.step();
+    handleStatement.finalize();
+    return succeed;
+}
+
+StringView AbstractHandle::getCipherSalt()
+{
+    WCTAssert(isOpened());
+    InnerHandleStatement handleStatement(this);
+    Statement cipherSalt = StatementPragma().pragma(Pragma::cipherSalt());
+    StringView salt;
+    if (handleStatement.prepare(cipherSalt) && handleStatement.step()
+        && !handleStatement.done()) {
+        salt = handleStatement.getText();
+    }
+    handleStatement.finalize();
+    return salt;
+}
+bool AbstractHandle::setCipherSalt(const UnsafeStringView &salt)
+{
+    WCTAssert(isOpened());
+    InnerHandleStatement handleStatement(this);
+    StatementPragma cipherSalt = StatementPragma().pragma(Pragma::cipherSalt());
+    if (salt.length() == 32 && !salt.hasPrefix("x'")) {
+        cipherSalt.to(StringView::formatted("x'%s'", salt.data()));
+    } else {
+        cipherSalt.to(salt);
+    }
+    bool succeed = handleStatement.prepare(cipherSalt) && handleStatement.step();
+    handleStatement.finalize();
+    return succeed;
 }
 
 } //namespace WCDB

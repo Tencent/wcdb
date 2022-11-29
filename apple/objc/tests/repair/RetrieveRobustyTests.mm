@@ -22,17 +22,15 @@
  * limitations under the License.
  */
 
+#import "BackupTestCase.h"
 #import "TestCase.h"
 
-@interface RetrieveRobustyTests : CRUDTestCase
+@interface RetrieveRobustyTests : BackupTestCase
 
 @property (nonatomic, readonly) double expectedAttackRadio;
 @property (nonatomic, readonly) NSString* tablePrefix;
-@property (nonatomic, readonly) NSInteger expectedDatabaseSize;
+@property (nonatomic, assign) NSInteger expectedDatabaseSize;
 @property (nonatomic, readonly) double deviationForTolerance;
-
-@property (nonatomic, readonly) int step;
-@property (nonatomic, readonly) int shuffle;
 
 @end
 
@@ -41,9 +39,7 @@
 - (void)setUp
 {
     [super setUp];
-
-    TestCaseAssertTrue(self.step >= self.shuffle);
-
+    self.skipDebugLog = YES;
     [self.database enableAutoCheckpoint:NO];
 }
 
@@ -57,29 +53,9 @@
     return @"t_";
 }
 
-- (NSInteger)expectedDatabaseSize
-{
-    return 10 * 1024 * 1024;
-}
-
 - (double)deviationForTolerance
 {
     return 0.05;
-}
-
-- (int)step
-{
-    return 3;
-}
-
-- (int)shuffle
-{
-    return 3;
-}
-
-- (int)getRealStep
-{
-    return self.step + (Random.shared.uint32 % self.shuffle) * Random.shared.boolean ? 1 : -1;
 }
 
 - (BOOL)shouldAttack
@@ -97,7 +73,6 @@
                            andExpectedTableObjects:(NSDictionary<NSString*, NSArray<TestCaseObject*>*>*)expectedTableObjects
 {
     int totalCount = 0;
-    int retrievedCount = 0;
     int matchedCount = 0;
     for (NSString* expectedTableName in expectedTableObjects.allKeys) {
         NSArray<TestCaseObject*>* expectedObjects = [expectedTableObjects objectForKey:expectedTableName];
@@ -106,7 +81,6 @@
         totalCount += expectedObjectsSet.count;
 
         NSArray<TestCaseObject*>* retrievedObjects = [retrievedTableObjects objectForKey:expectedTableName];
-        retrievedCount += retrievedObjects.count;
         if (retrievedObjects.count > 0) {
             for (TestCaseObject* retrievedObject in retrievedObjects) {
                 if ([expectedObjectsSet containsObject:retrievedObject]) {
@@ -220,27 +194,40 @@
 
 - (void)test_feature_page_based_robusty
 {
-    TestCaseAssertTrue([self fillDatabaseUntilMeetExpectedSize]);
+    NSArray* sizes = @[
+        @(10 * 1024 * 1024),
+#ifndef WCDB_QUICK_TESTS
+        @(100 * 1024 * 1024),
+        @(1024 * 1024 * 1024),
+#endif
+    ];
+    for (NSNumber* size in sizes) {
+        self.expectedDatabaseSize = size.integerValue;
+        [self.database removeFiles];
+        [self
+        excuteTest:^{
+            TestCaseAssertTrue([self fillDatabaseUntilMeetExpectedSize]);
 
-    NSDictionary<NSString*, NSArray<TestCaseObject*>*>* expectedTableObjects = [self getTableObjects];
-    TestCaseAssertTrue(expectedTableObjects != nil);
+            NSDictionary<NSString*, NSArray<TestCaseObject*>*>* expectedTableObjects = [self getTableObjects];
+            TestCaseAssertTrue(expectedTableObjects != nil);
 
-    TestCaseAssertTrue([self.database backup]);
+            TestCaseAssertTrue([self.database backup]);
 
-    double attackedRadio = [self pageBasedAttackAsExpectedRadio];
-    TestCaseAssertTrue(attackedRadio > 0);
+            double attackedRadio = [self pageBasedAttackAsExpectedRadio];
 
-    double retrievedScore = [self.database retrieve:nullptr];
+            double retrievedScore = [self.database retrieve:nullptr];
 
-    NSDictionary<NSString*, NSArray<TestCaseObject*>*>* retrievedTableObjects = [self getTableObjects];
-    TestCaseAssertTrue(retrievedTableObjects != nil);
+            NSDictionary<NSString*, NSArray<TestCaseObject*>*>* retrievedTableObjects = [self getTableObjects];
+            TestCaseAssertTrue(retrievedTableObjects != nil);
 
-    double objectsScore = [self getObjectsScoreFromRetrievedTableObjects:retrievedTableObjects andExpectedTableObjects:expectedTableObjects];
+            double objectsScore = [self getObjectsScoreFromRetrievedTableObjects:retrievedTableObjects andExpectedTableObjects:expectedTableObjects];
 
-    TestCaseLog(@"Radio: attacked: %.8f, expected %.8f", attackedRadio, self.expectedAttackRadio);
-    TestCaseLog(@"Score: retrieve: %.8f, objects: %.8f", retrievedScore, objectsScore);
+            TestCaseLog(@"Radio: attacked: %.8f, expected %.8f", attackedRadio, self.expectedAttackRadio);
+            TestCaseLog(@"Score: retrieve: %.8f, objects: %.8f", retrievedScore, objectsScore);
 
-    TestCaseAssertTrue([self isToleranceForRetrieveScore:retrievedScore andObjectsScore:objectsScore]);
+            TestCaseAssertTrue([self isToleranceForRetrieveScore:retrievedScore andObjectsScore:objectsScore]);
+        }];
+    }
 }
 
 @end

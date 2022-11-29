@@ -26,6 +26,7 @@
 
 #include <WCDB/Error.hpp>
 #include <WCDB/ErrorProne.hpp>
+#include <WCDB/HighWater.hpp>
 #include <WCDB/Initializeable.hpp>
 #include <WCDB/PageBasedFileHandle.hpp>
 #include <WCDB/Wal.hpp>
@@ -39,30 +40,32 @@ namespace Repair {
 class Pager final : public ErrorProne, public Initializeable {
 #pragma mark - Initialize
 public:
-    Pager(const UnsafeStringView &path);
+    Pager(const UnsafeStringView& path);
     ~Pager() override final;
 
     void setPageSize(int pageSize);
     void setReservedBytes(int reservedBytes);
+    void setCipherContext(void* ctx);
 
-    const StringView &getPath() const;
+    const StringView& getPath() const;
 
 protected:
     PageBasedFileHandle m_fileHandle;
+    void* m_pCodec;
     friend class PagerRelated;
 
 #pragma mark - Page
 public:
     int getNumberOfPages() const;
-    MappedData acquirePageData(int number);
-    MappedData acquirePageData(int number, off_t offset, size_t size);
+    UnsafeData acquirePageData(int number);
+    UnsafeData acquirePageData(int number, off_t offset, size_t size);
 
     int getUsableSize() const;
     int getPageSize() const;
     int getReservedBytes() const;
 
 protected:
-    MappedData acquireData(off_t offset, size_t size);
+    UnsafeData acquireHeader();
     int m_pageSize;
     int m_reservedBytes;
     int m_numberOfPages;
@@ -75,7 +78,7 @@ public:
     void setMaxWalFrame(int maxWalFrame);
     int getDisposedWalPages() const;
     void disposeWal();
-    const std::pair<uint32_t, uint32_t> &getWalSalt() const;
+    const std::pair<uint32_t, uint32_t>& getWalSalt() const;
 
 protected:
     Wal m_wal;
@@ -83,13 +86,33 @@ protected:
 
 #pragma mark - Error
 public:
-    void markAsCorrupted(int page, const UnsafeStringView &message);
+    void markAsCorrupted(int page, const UnsafeStringView& message);
 
     void markAsError(Error::Code code);
 
 #pragma mark - Initializeable
 protected:
     bool doInitialize() override final;
+
+#pragma mark - Cache
+protected:
+    static constexpr const size_t maxAllowedCacheMemory = 16 * 1024 * 1024;
+    class Cache final : public LRUCache<uint32_t, UnsafeData> {
+    public:
+        Cache(size_t maxAllowedMemory);
+        ~Cache() override final;
+
+        void insert(uint32_t pageNum, const UnsafeData& data);
+
+    protected:
+        bool shouldPurge() const override final;
+        void willPurge(const uint32_t& pageNum, const UnsafeData& data) override final;
+        size_t m_maxAllowedMemory;
+        size_t m_currentUsedMemery;
+    };
+    void tryPurgeCache();
+    Cache m_cache;
+    SharedHighWater m_highWater;
 };
 
 } //namespace Repair

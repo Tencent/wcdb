@@ -188,7 +188,7 @@ bool FileHandle::write(off_t offset, const UnsafeData &unsafeData)
 }
 
 #pragma mark - Memory map
-MappedData FileHandle::map(off_t offset, size_t size)
+MappedData FileHandle::map(off_t offset, size_t size, SharedHighWater highWater)
 {
     WCTRemedialAssert(m_mode == Mode::ReadOnly,
                       "Map is only supported in Readonly mode.",
@@ -210,7 +210,8 @@ MappedData FileHandle::map(off_t offset, size_t size)
         SharedThreadedErrorProne::setThreadedError(std::move(error));
         return MappedData::null();
     }
-    return MappedData(reinterpret_cast<unsigned char *>(mapped), roundedSize).subdata(alignment, size);
+    return MappedData(reinterpret_cast<unsigned char *>(mapped), roundedSize, highWater)
+    .subdata(alignment, size);
 }
 
 #pragma mark - Error

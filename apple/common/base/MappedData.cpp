@@ -28,90 +28,75 @@
 
 namespace WCDB {
 
-MappedData::MappedData() : UnsafeData(), m_mapped(UnsafeData::null(), nullptr)
+MappedData::MappedData() : UnsafeData()
 {
 }
 
 MappedData::MappedData(unsigned char* mapped, size_t size)
-: UnsafeData(mapped, size), m_mapped(UnsafeData(mapped, size), MappedData::unmapData)
+: UnsafeData(mapped, size, SharedBuffer(makeSharedBuffer(mapped, size, MappedData::unmapData)))
 {
-    sharedHighWater().increase(size);
+}
+
+MappedData::MappedData(unsigned char* mapped, size_t size, SharedHighWater highWater)
+: UnsafeData(mapped, size)
+{
+    m_sharedBuffer = makeSharedBuffer(mapped, size, [highWater](SharedData& data) {
+        unmapData(data);
+        if (highWater != nullptr) {
+            highWater->decrease(data.size);
+        }
+    });
+    if (highWater != nullptr) {
+        highWater->increase(size);
+    }
 }
 
 MappedData::~MappedData() = default;
 
-ssize_t MappedData::getMappedHighWater()
+void MappedData::unmapData(SharedData& data)
 {
-    return sharedHighWater().getHighWater();
-}
-
-ShareableHighWater& MappedData::sharedHighWater()
-{
-    static ShareableHighWater* s_highWater = new ShareableHighWater(0);
-    return *s_highWater;
-}
-
-void MappedData::unmap()
-{
-    unmapBuffer(m_buffer, m_size);
-}
-
-void MappedData::unmapBuffer(unsigned char* buffer, size_t size)
-{
-    if (munmap(buffer, size) == 0) {
-        sharedHighWater().decrease(size);
-    } else {
+    if (munmap(data.buffer, data.size) != 0) {
         Error error;
         error.level = Error::Level::Error;
         error.setSystemCode(errno, Error::Code::IOError);
-        error.infos.insert_or_assign("MunmapSize", size);
+        error.infos.insert_or_assign("MunmapSize", data.size);
         Notifier::shared().notify(error);
         SharedThreadedErrorProne::setThreadedError(std::move(error));
     }
 }
 
-void MappedData::unmapData(UnsafeData& data)
-{
-    unmapBuffer(data.buffer(), data.size());
-}
-
-MappedData::MappedData(const UnsafeData& data, const Recyclable<UnsafeData>& mapped)
-: UnsafeData(data), m_mapped(mapped)
+MappedData::MappedData(const MappedData& other) : UnsafeData(other)
 {
 }
 
-MappedData::MappedData(const MappedData& other)
-: UnsafeData(other), m_mapped(other.m_mapped)
+MappedData::MappedData(MappedData&& other) : UnsafeData(std::move(other))
 {
 }
 
-MappedData::MappedData(MappedData&& other)
-: UnsafeData(std::move(other)), m_mapped(std::move(other.m_mapped))
+MappedData::MappedData(const UnsafeData& data) : UnsafeData(data)
 {
 }
 
 MappedData& MappedData::operator=(const MappedData& other)
 {
     UnsafeData::operator=(other);
-    m_mapped = other.m_mapped;
     return *this;
 }
 
 MappedData& MappedData::operator=(MappedData&& other)
 {
     UnsafeData::operator=(std::move(other));
-    m_mapped = std::move(other.m_mapped);
     return *this;
 }
 
 MappedData MappedData::subdata(size_t size) const
 {
-    return MappedData(UnsafeData::subdata(size), m_mapped);
+    return MappedData(UnsafeData::subdata(size));
 }
 
 MappedData MappedData::subdata(off_t offset, size_t size) const
 {
-    return MappedData(UnsafeData::subdata(offset, size), m_mapped);
+    return MappedData(UnsafeData::subdata(offset, size));
 }
 
 const MappedData& MappedData::null()

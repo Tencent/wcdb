@@ -711,6 +711,10 @@ double InnerDatabase::retrieve(const RetrieveProgressCallback &onProgressUpdated
         if (assemblerHandle == nullptr) {
             return;
         }
+        RecyclableHandle cipherHandle = flowOut(HandleType::AssembleCipher);
+        if (cipherHandle == nullptr) {
+            return;
+        }
         WCTAssert(backupReadHandle.get() != backupWriteHandle.get());
         WCTAssert(backupReadHandle.get() != assemblerHandle.get());
         WCTAssert(backupWriteHandle.get() != assemblerHandle.get());
@@ -718,6 +722,7 @@ double InnerDatabase::retrieve(const RetrieveProgressCallback &onProgressUpdated
         WCTAssert(!backupReadHandle->isOpened());
         WCTAssert(!backupWriteHandle->isOpened());
         WCTAssert(!assemblerHandle->isOpened());
+        WCTAssert(!cipherHandle->isOpened());
 
         Core::shared().setThreadedDatabase(path);
 
@@ -728,6 +733,8 @@ double InnerDatabase::retrieve(const RetrieveProgressCallback &onProgressUpdated
         static_cast<AssembleHandle *>(backupWriteHandle.get()));
         retriever.setAssembleDelegate(
         static_cast<AssembleHandle *>(assemblerHandle.get()));
+        retriever.setCipherDelegate(static_cast<Repair::AssembleDelegate *>(
+        static_cast<AssembleHandle *>(cipherHandle.get())));
         retriever.setProgressCallback(onProgressUpdated);
         if (retriever.work()) {
             result = retriever.getScore().value();

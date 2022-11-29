@@ -139,4 +139,45 @@ void OperationHandle::finishBackup()
     InnerHandle::close();
 }
 
+#pragma mark - Cipher
+
+const Error &OperationHandle::getCipherError() const
+{
+    return InnerHandle::getError();
+}
+
+bool OperationHandle::openCipherInMemory()
+{
+    InnerHandle::setPath(":memory:");
+    return InnerHandle::open();
+}
+
+void OperationHandle::closeCipher()
+{
+    InnerHandle::close();
+}
+
+void *OperationHandle::getCipherContext()
+{
+    if (!isOpened()) {
+        return nullptr;
+    }
+    return AbstractHandle::getCipherContext();
+}
+
+size_t OperationHandle::getCipherPageSize()
+{
+    return AbstractHandle::getCipherPageSize();
+}
+
+StringView OperationHandle::getCipherSalt()
+{
+    return AbstractHandle::getCipherSalt();
+}
+
+bool OperationHandle::setCipherSalt(const UnsafeStringView &salt)
+{
+    return AbstractHandle::setCipherSalt(salt);
+}
+
 } // namespace WCDB

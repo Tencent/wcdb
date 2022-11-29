@@ -30,44 +30,47 @@
 
 @implementation DepositTests
 
-- (void)test_deposit
+- (void)test_desposit
 {
-    TestCaseObject* object = [Random.shared autoIncrementTestCaseObject];
-    int rowId = (int) self.objects.count;
+    [self
+    excuteTest:^{
+        TestCaseObject* object = [Random.shared autoIncrementTestCaseObject];
+        int rowId = (int) self.objects.count;
 
-    {
-        // 1.
-        TestCaseAssertTrue([self.database backup]);
-        TestCaseAssertTrue([self.database deposit]);
+        {
+            // 1.
+            TestCaseAssertTrue([self.database backup]);
+            TestCaseAssertTrue([self.database deposit]);
 
-        NSNumber* count = [self.database getValueFromStatement:WCDB::StatementSelect().select(TestCaseObject.allProperties.count()).from(self.tableName)].numberValue;
-        TestCaseAssertTrue(count != nil);
-        TestCaseAssertTrue(count.integerValue == 0);
+            NSNumber* count = [self.database getValueFromStatement:WCDB::StatementSelect().select(TestCaseObject.allProperties.count()).from(self.tableName)].numberValue;
+            TestCaseAssertTrue(count != nil);
+            TestCaseAssertTrue(count.integerValue == 0);
 
-        TestCaseAssertTrue([self.table insertObject:object]);
-        ++rowId;
-        TestCaseAssertTrue(object.lastInsertedRowID == rowId);
-    }
+            TestCaseAssertTrue([self.table insertObject:object]);
+            ++rowId;
+            TestCaseAssertTrue(object.lastInsertedRowID == rowId);
+        }
 
-    {
-        // 2.
-        TestCaseAssertTrue([self.database backup]);
-        TestCaseAssertTrue([self.database deposit]);
+        {
+            // 2.
+            TestCaseAssertTrue([self.database backup]);
+            TestCaseAssertTrue([self.database deposit]);
 
-        NSNumber* count = [self.database getValueFromStatement:WCDB::StatementSelect().select(TestCaseObject.allProperties.count()).from(self.tableName)].numberValue;
-        TestCaseAssertTrue(count != nil);
-        TestCaseAssertTrue(count.integerValue == 0);
+            NSNumber* count = [self.database getValueFromStatement:WCDB::StatementSelect().select(TestCaseObject.allProperties.count()).from(self.tableName)].numberValue;
+            TestCaseAssertTrue(count != nil);
+            TestCaseAssertTrue(count.integerValue == 0);
 
-        TestCaseAssertTrue([self.table insertObject:object]);
-        ++rowId;
-        TestCaseAssertTrue(object.lastInsertedRowID == rowId);
-    }
+            TestCaseAssertTrue([self.table insertObject:object]);
+            ++rowId;
+            TestCaseAssertTrue(object.lastInsertedRowID == rowId);
+        }
 
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.factoryPath]);
-    TestCaseAssertTrue([self.database containsDeposited]);
-    TestCaseAssertTrue([self.database removeDeposited]);
-    TestCaseAssertFalse([self.database containsDeposited]);
-    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.factoryPath]);
+        TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.factoryPath]);
+        TestCaseAssertTrue([self.database containsDeposited]);
+        TestCaseAssertTrue([self.database removeDeposited]);
+        TestCaseAssertFalse([self.database containsDeposited]);
+        TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.factoryPath]);
+    }];
 }
 
 @end

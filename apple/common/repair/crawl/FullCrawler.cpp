@@ -58,6 +58,17 @@ bool FullCrawler::work()
         return exit(false);
     }
 
+    void *pCodec = m_cipherDelegate->getCipherContext();
+    if (pCodec != nullptr) {
+        size_t pageSize = m_cipherDelegate->getCipherPageSize();
+        if (pageSize == 0) {
+            setCriticalError(m_cipherDelegate->getCipherError());
+            return exit(false);
+        }
+        m_pager.setCipherContext(pCodec);
+        m_pager.setPageSize((int) pageSize);
+    }
+
     if (!m_pager.initialize()) {
         if (m_pager.getError().isCorruption()) {
             tryUpgradeCrawlerError();

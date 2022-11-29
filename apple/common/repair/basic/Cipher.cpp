@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by 陈秋文 on 2022/11/28.
 //
 
 /*
@@ -22,24 +22,25 @@
  * limitations under the License.
  */
 
-#pragma once
-
-#include <WCDB/Config.hpp>
-#include <WCDB/Data.hpp>
-#include <WCDB/WINQ.h>
+#include <WCDB/Cipher.hpp>
 
 namespace WCDB {
 
-class CipherConfig final : public Config {
-public:
-    CipherConfig(const UnsafeData &cipher, int pageSize);
-    ~CipherConfig() override final;
+namespace Repair {
 
-    bool invoke(InnerHandle *handle) override final;
+CipherDelegate::~CipherDelegate() = default;
 
-protected:
-    const Data m_key;
-    const int m_pageSize;
-};
+CipherDelegateHolder::CipherDelegateHolder() : m_cipherDelegate(nullptr)
+{
+}
+
+CipherDelegateHolder::~CipherDelegateHolder() = default;
+
+void CipherDelegateHolder::setCipherDelegate(CipherDelegate *delegate)
+{
+    m_cipherDelegate = delegate;
+}
+
+} //namespace Repair
 
 } //namespace WCDB

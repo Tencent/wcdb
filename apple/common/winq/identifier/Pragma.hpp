@@ -111,6 +111,7 @@ public:
     static Pragma cipherDefaultKdfIter();
     static Pragma cipherDefaultPageSize();
     static Pragma cipherPageSize();
+    static Pragma cipherSalt();
     static Pragma cipherDefaultUseHmac();
     static Pragma cipherMigrate();
     static Pragma cipherProfile();

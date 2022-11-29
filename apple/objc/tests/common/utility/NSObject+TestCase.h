@@ -55,6 +55,7 @@
 - (void)setFileImmutable:(BOOL)immutable ofItemsIfExistsAtPath:(NSString*)path;
 - (void)setFileImmutable:(BOOL)immutable ofItemsIfExistsAtPaths:(NSArray<NSString*>*)paths;
 - (BOOL)isFileImmutableOfItemAtPath:(NSString*)path;
+- (NSArray*)getAllFilesAtDirectory:(NSString*)directory;
 
 #if TARGET_OS_IPHONE && !TARGET_IPHONE_SIMULATOR
 - (void)setFileProtectionOfPath:(NSString*)path to:(NSFileProtectionType)type;

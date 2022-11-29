@@ -29,9 +29,7 @@
 namespace WCDB {
 
 CipherConfig::CipherConfig(const UnsafeData &cipher, int pageSize)
-: Config()
-, m_key(cipher)
-, m_statement(StatementPragma().pragma(Pragma::cipherPageSize()).to(pageSize))
+: Config(), m_key(cipher), m_pageSize(pageSize)
 {
 }
 
@@ -39,7 +37,7 @@ CipherConfig::~CipherConfig() = default;
 
 bool CipherConfig::invoke(InnerHandle *handle)
 {
-    return handle->setCipherKey(m_key) && handle->execute(m_statement);
+    return handle->setCipherKey(m_key) && handle->setCipherPageSize(m_pageSize);
 }
 
 } //namespace WCDB

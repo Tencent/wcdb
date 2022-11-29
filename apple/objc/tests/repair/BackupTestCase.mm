@@ -27,10 +27,14 @@
 
 @implementation BackupTestCase
 
-- (void)setUp
+- (void)excuteTest:(void (^)())operation
 {
-    [super setUp];
     [self insertPresetObjects];
+    operation();
+    [self.database removeFiles];
+    [self.database setCipherKey:Random.shared.data];
+    [self insertPresetObjects];
+    operation();
 }
 
 - (int)framesForTolerance

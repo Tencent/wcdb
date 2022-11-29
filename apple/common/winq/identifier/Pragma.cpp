@@ -138,6 +138,11 @@ Pragma Pragma::cipherPageSize()
     return Pragma("cipher_page_size");
 }
 
+Pragma Pragma::cipherSalt()
+{
+    return Pragma("cipher_salt");
+}
+
 Pragma Pragma::collationList()
 {
     return Pragma("collation_list");

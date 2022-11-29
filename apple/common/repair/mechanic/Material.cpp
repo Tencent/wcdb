@@ -52,7 +52,6 @@ bool Material::serialize(Serialization &serialization) const
     }
 
     //Contents
-    Data encoded;
     Serialization encoder;
     for (const auto &element : contents) {
         if (element.first.empty()) {
@@ -103,10 +102,12 @@ bool Material::deserialize(Deserialization &deserialization)
         markAsCorrupt("Magic");
         return false;
     }
-    if (versionValue != 0x01000000) {
+    if (versionValue != 0x01000000 && versionValue != 0x01000001) {
         markAsCorrupt("Version");
         return false;
     }
+
+    deserialization.version = versionValue;
 
     //Info
     if (!info.deserialize(deserialization)) {
@@ -192,6 +193,7 @@ bool Material::Info::serialize(Serialization &serialization) const
     serialization.put4BytesUInt(walSalt.first);
     serialization.put4BytesUInt(walSalt.second);
     serialization.put4BytesUInt(numberOfWalFrames);
+    serialization.putSizedString(cipherSalt);
     return true;
 }
 
@@ -207,6 +209,10 @@ bool Material::Info::deserialize(Deserialization &deserialization)
     walSalt.first = deserialization.advance4BytesUInt();
     walSalt.second = deserialization.advance4BytesUInt();
     numberOfWalFrames = deserialization.advance4BytesUInt();
+    if (deserialization.version == Material::version) {
+        size_t lengthOfSizedString;
+        std::tie(lengthOfSizedString, cipherSalt) = deserialization.advanceSizedString();
+    }
     return true;
 }
 

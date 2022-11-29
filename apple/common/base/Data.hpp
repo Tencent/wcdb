@@ -29,6 +29,9 @@
 
 namespace WCDB {
 
+class ShareableHighWater;
+typedef std::shared_ptr<ShareableHighWater> SharedHighWater;
+
 class Data final : public UnsafeData {
 #pragma mark - Initialize
 public:
@@ -37,15 +40,17 @@ public:
     Data(UnsafeData&& data);
     Data(size_t size);
     Data(const unsigned char* buffer, size_t size);
+    Data(const unsigned char* buffer, size_t size, SharedHighWater highWater);
+
     ~Data() override final;
 
     Data& operator=(const UnsafeData& other);
     Data& operator=(UnsafeData&& other);
 
 protected:
-    Data(unsigned char* buffer,
-         size_t size,
-         const std::shared_ptr<std::vector<unsigned char>>& sharedBuffer);
+    using SharedData = UnsafeData::SharedData;
+    using SharedBuffer = UnsafeData::SharedBuffer;
+    Data(unsigned char* buffer, size_t size, const SharedBuffer& sharedBuffer);
     off_t getCurrentOffset() const;
     size_t getSharedSize() const;
 
@@ -53,9 +58,12 @@ protected:
 public:
     bool resize(size_t size);
 
-    bool reset(const unsigned char* buffer, size_t size);
+    bool reset(const unsigned char* buffer, size_t size, SharedHighWater highWater);
     bool reset(size_t size);
     bool reset(const UnsafeData& unsafeData);
+
+protected:
+    static void dealloc(SharedData& data);
 
 #pragma mark - Subdata
 public:

@@ -70,8 +70,8 @@ protected:
 
     Deserialization m_deserialization;
     Data m_overflowedPayloadHolder;
-    MappedData m_nonOverflowedPayloadHolder;
-    UnsafeData m_payload;
+    Data m_nonOverflowedPayloadHolder;
+    Data m_payload;
     //serial type -> offset of value
     std::vector<std::pair<int, int>> m_columns;
 

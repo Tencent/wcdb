@@ -66,6 +66,17 @@ bool Mechanic::work()
     m_pager.setPageSize(m_material->info.pageSize);
     m_pager.setReservedBytes(m_material->info.reservedBytes);
 
+    if (!m_material->info.cipherSalt.empty()) {
+        WCTAssert(m_cipherDelegate != nullptr);
+        m_cipherDelegate->closeCipher();
+        if (!m_cipherDelegate->openCipherInMemory()) {
+            setCriticalError(m_cipherDelegate->getCipherError());
+            return exit(false);
+        }
+        m_cipherDelegate->setCipherSalt(m_material->info.cipherSalt);
+        m_pager.setCipherContext(m_cipherDelegate->getCipherContext());
+    }
+
     if (!m_pager.initialize()) {
         //Actually, the initialization of pager always succeed if material is not corrupted.
         if (m_pager.getError().isCorruption()) {

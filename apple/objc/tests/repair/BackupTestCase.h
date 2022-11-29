@@ -26,6 +26,6 @@
 
 @interface BackupTestCase : CRUDTestCase
 
-@property (nonatomic, readonly) int framesForTolerance;
+- (void)excuteTest:(void (^)())operation;
 
 @end

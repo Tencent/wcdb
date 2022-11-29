@@ -43,6 +43,8 @@
 
 @property (nonatomic, readonly) Dispatch* dispatch;
 
+@property (nonatomic, assign) BOOL skipDebugLog;
+
 - (void)log:(NSString*)format, ...;
 
 @end

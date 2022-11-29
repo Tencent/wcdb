@@ -40,6 +40,7 @@ class FactoryRetriever final : public FactoryRelated,
                                public UpgradeableErrorProne,
                                public Progress,
                                public Scoreable,
+                               public CipherDelegateHolder,
                                public AssembleDelegateHolder,
                                public BackupDelegateHolder {
 #pragma mark - Retriever
@@ -57,6 +58,7 @@ protected:
 
 protected:
     bool restore(const UnsafeStringView &database);
+    std::optional<StringView> tryGetCiperSaltFromPath(const UnsafeStringView &database);
     const StringView databaseFileName;
 
 #pragma mark - Report

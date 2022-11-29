@@ -54,6 +54,10 @@
 
 @property (nonatomic, assign) double quality;
 
+@property (nonatomic, assign) BOOL needCipher;
+
++ (NSData*)commonCipherKey;
+
 - (void)produce:(NSString*)destination;
 
 - (void)removePrototype;

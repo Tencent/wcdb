@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include <WCDB/Recyclable.hpp>
 #include <WCDB/SharedThreadedErrorProne.hpp>
 #include <memory>
 #include <stdio.h>
@@ -60,12 +61,25 @@ public:
     static const UnsafeData immutable(const unsigned char *buffer, size_t size);
 
 protected:
-    UnsafeData(unsigned char *buffer,
-               size_t size,
-               const std::shared_ptr<std::vector<unsigned char>> &sharedBuffer);
     unsigned char *m_buffer;
     size_t m_size;
-    std::shared_ptr<std::vector<unsigned char>> m_sharedBuffer;
+
+#pragma mark - SharedBuffer
+protected:
+    struct SharedData {
+        SharedData(unsigned char *buffer, size_t size);
+        SharedData(std::nullptr_t p);
+        bool operator==(const std::nullptr_t &) const;
+        bool operator!=(const std::nullptr_t &) const;
+        unsigned char *buffer;
+        size_t size;
+    };
+    typedef Recyclable<SharedData> SharedBuffer;
+    static SharedBuffer
+    makeSharedBuffer(unsigned char *buffer, size_t size, SharedBuffer::OnRecycled onRecycle);
+
+    UnsafeData(unsigned char *buffer, size_t size, const SharedBuffer &sharedBuffer);
+    SharedBuffer m_sharedBuffer;
 
 #pragma mark - Subdata
 public:

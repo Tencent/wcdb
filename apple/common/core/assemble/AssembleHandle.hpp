@@ -96,6 +96,17 @@ public:
     bool acquireBackupExclusiveLock() override final;
     bool releaseBackupExclusiveLock() override final;
 
+#pragma mark - Cipher
+public:
+    virtual const Error &getCipherError() const override final;
+    virtual bool openCipherInMemory() override final;
+    virtual void closeCipher() override final;
+
+    void *getCipherContext() override final;
+    size_t getCipherPageSize() override final;
+    StringView getCipherSalt() override final;
+    bool setCipherSalt(const UnsafeStringView &salt) override final;
+
 protected:
     StatementBegin m_statementForReadTransaction;
     StatementSelect m_statementForAcquireReadLock;

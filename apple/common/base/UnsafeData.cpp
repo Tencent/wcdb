@@ -72,11 +72,15 @@ UnsafeData &UnsafeData::operator=(UnsafeData &&other)
     return *this;
 }
 
-UnsafeData::UnsafeData(unsigned char *buffer,
-                       size_t size,
-                       const std::shared_ptr<std::vector<unsigned char>> &sharedBuffer)
+UnsafeData::UnsafeData(unsigned char *buffer, size_t size, const SharedBuffer &sharedBuffer)
 : m_buffer(buffer), m_size(size), m_sharedBuffer(sharedBuffer)
 {
+}
+
+UnsafeData::SharedBuffer
+UnsafeData::makeSharedBuffer(unsigned char *buffer, size_t size, SharedBuffer::OnRecycled onRecycle)
+{
+    return SharedBuffer(SharedData(buffer, size), onRecycle);
 }
 
 const UnsafeData UnsafeData::immutable(const unsigned char *buffer, size_t size)
@@ -144,6 +148,25 @@ unsigned char *UnsafeData::buffer()
 bool UnsafeData::hasSharedBuffer() const
 {
     return m_sharedBuffer != nullptr;
+}
+
+UnsafeData::SharedData::SharedData(unsigned char *buffer, size_t size)
+: buffer(buffer), size(size)
+{
+}
+
+UnsafeData::SharedData::SharedData(std::nullptr_t) : buffer(nullptr), size(0)
+{
+}
+
+bool UnsafeData::SharedData::operator==(const std::nullptr_t &) const
+{
+    return buffer == nullptr;
+}
+
+bool UnsafeData::SharedData::operator!=(const std::nullptr_t &) const
+{
+    return buffer != nullptr;
 }
 
 } // namespace WCDB

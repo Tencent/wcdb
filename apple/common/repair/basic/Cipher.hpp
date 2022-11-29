@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by 陈秋文 on 2022/11/28.
 //
 
 /*
@@ -24,22 +24,35 @@
 
 #pragma once
 
-#include <WCDB/Config.hpp>
-#include <WCDB/Data.hpp>
-#include <WCDB/WINQ.h>
+#include <WCDB/Error.hpp>
+#include <WCDB/StringView.hpp>
 
 namespace WCDB {
 
-class CipherConfig final : public Config {
-public:
-    CipherConfig(const UnsafeData &cipher, int pageSize);
-    ~CipherConfig() override final;
+namespace Repair {
 
-    bool invoke(InnerHandle *handle) override final;
+class CipherDelegate {
+public:
+    virtual ~CipherDelegate() = 0;
+    virtual const Error &getCipherError() const = 0;
+    virtual bool openCipherInMemory() = 0;
+    virtual void closeCipher() = 0;
+    virtual void *getCipherContext() = 0;
+    virtual size_t getCipherPageSize() = 0;
+    virtual StringView getCipherSalt() = 0;
+    virtual bool setCipherSalt(const UnsafeStringView &salt) = 0;
+};
+
+class CipherDelegateHolder {
+public:
+    CipherDelegateHolder();
+    virtual ~CipherDelegateHolder() = 0;
+    void setCipherDelegate(CipherDelegate *delegate);
 
 protected:
-    const Data m_key;
-    const int m_pageSize;
+    CipherDelegate *m_cipherDelegate;
 };
+
+} //namespace Repair
 
 } //namespace WCDB

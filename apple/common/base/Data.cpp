@@ -24,6 +24,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Data.hpp>
+#include <WCDB/HighWater.hpp>
 #include <WCDB/Notifier.hpp>
 #include <cstring>
 #include <zlib.h>
@@ -42,7 +43,12 @@ Data::Data(size_t size) : UnsafeData()
 
 Data::Data(const unsigned char* buffer, size_t size) : UnsafeData()
 {
-    reset(buffer, size);
+    reset(buffer, size, nullptr);
+}
+
+Data::Data(const unsigned char* buffer, size_t size, SharedHighWater highWater)
+{
+    reset(buffer, size, highWater);
 }
 
 Data::Data(const UnsafeData& unsafeData) : UnsafeData(unsafeData)
@@ -55,7 +61,7 @@ Data::Data(const UnsafeData& unsafeData) : UnsafeData(unsafeData)
 Data::Data(UnsafeData&& unsafeData) : UnsafeData(std::move(unsafeData))
 {
     if (!hasSharedBuffer()) {
-        reset(m_buffer, m_size);
+        reset(m_buffer, m_size, nullptr);
     }
 }
 
@@ -84,18 +90,16 @@ Data& Data::operator=(UnsafeData&& unsafeData)
 off_t Data::getCurrentOffset() const
 {
     WCTAssert(m_sharedBuffer != nullptr);
-    return m_buffer - m_sharedBuffer->data();
+    return m_buffer - m_sharedBuffer.get().buffer;
 }
 
 size_t Data::getSharedSize() const
 {
     WCTAssert(m_sharedBuffer != nullptr);
-    return m_sharedBuffer->size();
+    return m_sharedBuffer.get().size;
 }
 
-Data::Data(unsigned char* buffer,
-           size_t size,
-           const std::shared_ptr<std::vector<unsigned char>>& sharedBuffer)
+Data::Data(unsigned char* buffer, size_t size, const SharedBuffer& sharedBuffer)
 : UnsafeData(buffer, size, sharedBuffer)
 {
 }
@@ -106,7 +110,7 @@ bool Data::resize(size_t size)
     if (m_sharedBuffer != nullptr && getCurrentOffset() + size <= getSharedSize()) {
         m_size = size;
     } else {
-        std::shared_ptr<std::vector<unsigned char>> oldSharedBuffer = m_sharedBuffer;
+        SharedBuffer oldSharedBuffer = m_sharedBuffer;
         unsigned char* oldBuffer = m_buffer;
         size_t oldSize = m_size;
         if (!reset(size)) {
@@ -119,35 +123,47 @@ bool Data::resize(size_t size)
     return true;
 }
 
-bool Data::reset(const unsigned char* buffer, size_t size)
+bool Data::reset(const unsigned char* buffer, size_t size, SharedHighWater highWater)
 {
     if (size == 0) {
         m_sharedBuffer = nullptr;
         return true;
     }
-    std::shared_ptr<std::vector<unsigned char>> newSharedBuffer
-    = std::make_shared<std::vector<unsigned char>>(size);
-    if (newSharedBuffer == nullptr) {
+    unsigned char* newBuffer = new unsigned char[size];
+    if (newBuffer == nullptr) {
         setThreadedError(Error(Error::Code::NoMemory, Error::Level::Error));
         return false;
     }
-    if (buffer != nullptr) {
-        newSharedBuffer->assign(buffer, buffer + size);
+    if (highWater != nullptr) {
+        highWater->increase(size);
     }
-    m_sharedBuffer = newSharedBuffer;
+    if (buffer != nullptr) {
+        memcpy(newBuffer, buffer, size);
+    }
+    m_sharedBuffer = makeSharedBuffer(newBuffer, size, [highWater](SharedData& data) {
+        Data::dealloc(data);
+        if (highWater != nullptr) {
+            highWater->decrease(data.size);
+        }
+    });
     m_size = size;
-    m_buffer = m_sharedBuffer->data();
+    m_buffer = m_sharedBuffer.get().buffer;
     return true;
 }
 
 bool Data::reset(size_t size)
 {
-    return reset(nullptr, size);
+    return reset(nullptr, size, nullptr);
 }
 
 bool Data::reset(const UnsafeData& unsafeData)
 {
-    return reset(unsafeData.buffer(), unsafeData.size());
+    return reset(unsafeData.buffer(), unsafeData.size(), nullptr);
+}
+
+void Data::dealloc(SharedData& data)
+{
+    delete[] data.buffer;
 }
 
 #pragma mark - Subdata

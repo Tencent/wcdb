@@ -136,10 +136,8 @@ private:
     } m_transactionError;
     static StringView getSavepointName(int transactionLevel);
 
-#pragma mark - Interface
+#pragma mark - Wal
 public:
-    bool setCipherKey(const UnsafeData &data);
-
     void enableExtendedResultCodes(bool enable);
 
     enum class CheckpointMode {
@@ -214,6 +212,15 @@ protected:
 
 private:
     std::atomic<bool> m_canBeSuspended;
+
+#pragma mark - Cipher
+public:
+    size_t getCipherPageSize();
+    void *getCipherContext();
+    bool setCipherKey(const UnsafeData &data);
+    bool setCipherPageSize(int pageSize);
+    StringView getCipherSalt();
+    bool setCipherSalt(const UnsafeStringView &salt);
 };
 
 } //namespace WCDB
