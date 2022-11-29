@@ -25,6 +25,7 @@
 #pragma once
 
 #include <WCDB/Macro.h>
+#include <mutex>
 
 #define __WCDB_CPP_ORM_COMMON_DECLARATION(className)                               \
     std::shared_ptr<long long> lastInsertedRowID = std::make_shared<long long>(0); \

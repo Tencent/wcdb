@@ -24,6 +24,7 @@
 
 #include <WCDB/FTSTokenizerUtil.hpp>
 #include <WCDB/StatementCreateVirtualTable.hpp>
+#include <cstdarg>
 
 namespace WCDB {
 
