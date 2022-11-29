@@ -2879,7 +2879,7 @@
 		7521DDD4291EA349009642EF /* CipherConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FAB20A055C300CCE3CD /* CipherConfig.hpp */; };
 		7521DDD5291EA349009642EF /* SyntaxRollbackSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDC5A217DFADC006E9E73 /* SyntaxRollbackSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521DDD7291EA349009642EF /* MigratingHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A09D6A2146204300F62EE8 /* MigratingHandle.hpp */; };
-		7521DDDF291EA729009642EF /* StatementOperation.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 03321E8628A503F3000AFD6D /* StatementOperation.hpp */; };
+		7521DDDF291EA729009642EF /* StatementOperation.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 03321E8628A503F3000AFD6D /* StatementOperation.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521DDE229208EB6009642EF /* WCTAPIBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CE3EFD2812D95100E132F6 /* WCTAPIBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		7521DDE529209B8D009642EF /* ChainCall+WCTTableCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7521DDE429209B8D009642EF /* ChainCall+WCTTableCoding.swift */; };
 		7521DDE829209C90009642EF /* Handle+WCTTableCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7521DDE729209C90009642EF /* Handle+WCTTableCoding.swift */; };
