@@ -314,6 +314,7 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
 
     handle->setType(type);
     HandleSlot slot = slotOfHandleType(type);
+    HandleCategory category = categoryOfHandleType(type);
 
     Configs configs;
     {
@@ -326,7 +327,7 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
         return false;
     }
 
-    if (slot != HandleSlotAssemble) {
+    if (slot != HandleSlotAssemble && category != HandleCategoryCipher) {
         handle->setPath(path);
         if (!handle->open()) {
             setThreadedError(handle->getError());
@@ -570,13 +571,20 @@ bool InnerDatabase::backup(bool interruptible)
     if (backupReadHandle == nullptr) {
         return false;
     }
-
     RecyclableHandle backupWriteHandle = flowOut(HandleType::BackupWrite);
     if (backupWriteHandle == nullptr) {
         return false;
     }
+    RecyclableHandle cipherHandle = flowOut(HandleType::BackupCipher);
+    if (cipherHandle == nullptr) {
+        return false;
+    }
 
     WCTAssert(backupReadHandle.get() != backupWriteHandle.get());
+    WCTAssert(backupReadHandle.get() != cipherHandle.get());
+    WCTAssert(backupWriteHandle.get() != cipherHandle.get());
+
+    WCTAssert(!cipherHandle->isOpened());
 
     OperationHandle *operationBackupReadHandle
     = static_cast<OperationHandle *>(backupReadHandle.get());
@@ -604,6 +612,9 @@ bool InnerDatabase::backup(bool interruptible)
     static_cast<OperationHandle *>(backupReadHandle.get()));
     backup.setBackupExclusiveDelegate(
     static_cast<OperationHandle *>(backupWriteHandle.get()));
+    backup.setCipherDelegate(static_cast<Repair::BackupSharedDelegate *>(
+    static_cast<OperationHandle *>(cipherHandle.get())));
+
     bool succeed = backup.work(getPath());
     if (!succeed) {
         if (backup.getError().level == Error::Level::Ignore) {
@@ -618,6 +629,7 @@ bool InnerDatabase::backup(bool interruptible)
         operationBackupWriteHandle->markErrorAsUnignorable();
         operationBackupReadHandle->markErrorAsUnignorable();
     }
+    cipherHandle->close();
     Core::shared().setThreadedDatabase("");
     return succeed;
 }
@@ -646,13 +658,21 @@ bool InnerDatabase::deposit()
         if (assemblerHandle == nullptr) {
             return;
         }
+        RecyclableHandle cipherHandle = flowOut(HandleType::AssembleCipher);
+        if (cipherHandle == nullptr) {
+            return;
+        }
         WCTAssert(backupReadHandle.get() != backupWriteHandle.get());
         WCTAssert(backupReadHandle.get() != assemblerHandle.get());
         WCTAssert(backupWriteHandle.get() != assemblerHandle.get());
+        WCTAssert(backupReadHandle.get() != cipherHandle.get());
+        WCTAssert(backupWriteHandle.get() != cipherHandle.get());
+        WCTAssert(assemblerHandle.get() != cipherHandle.get());
 
         WCTAssert(!backupReadHandle->isOpened());
         WCTAssert(!backupWriteHandle->isOpened());
         WCTAssert(!assemblerHandle->isOpened());
+        WCTAssert(!cipherHandle->isOpened());
 
         Core::shared().setThreadedDatabase(path);
 
@@ -663,6 +683,8 @@ bool InnerDatabase::deposit()
         static_cast<AssembleHandle *>(backupWriteHandle.get()));
         renewer.setAssembleDelegate(
         static_cast<AssembleHandle *>(assemblerHandle.get()));
+        renewer.setCipherDelegate(static_cast<Repair::AssembleDelegate *>(
+        static_cast<AssembleHandle *>(cipherHandle.get())));
         // Prepare a new database from material at renew directory and wait for moving
         if (!renewer.prepare()) {
             setThreadedError(renewer.getError());
@@ -679,9 +701,10 @@ bool InnerDatabase::deposit()
         if (!renewer.work()) {
             setThreadedError(renewer.getError());
             Core::shared().setThreadedDatabase("");
-            return;
+        } else {
+            result = true;
         }
-        result = true;
+        cipherHandle->close();
     });
     Core::shared().setThreadedDatabase("");
     return result;
@@ -718,6 +741,9 @@ double InnerDatabase::retrieve(const RetrieveProgressCallback &onProgressUpdated
         WCTAssert(backupReadHandle.get() != backupWriteHandle.get());
         WCTAssert(backupReadHandle.get() != assemblerHandle.get());
         WCTAssert(backupWriteHandle.get() != assemblerHandle.get());
+        WCTAssert(backupReadHandle.get() != cipherHandle.get());
+        WCTAssert(backupWriteHandle.get() != cipherHandle.get());
+        WCTAssert(assemblerHandle.get() != cipherHandle.get());
 
         WCTAssert(!backupReadHandle->isOpened());
         WCTAssert(!backupWriteHandle->isOpened());
@@ -741,6 +767,7 @@ double InnerDatabase::retrieve(const RetrieveProgressCallback &onProgressUpdated
         }
         setThreadedError(retriever.getError()); // retriever may have non-critical error even if it succeeds.
         Core::shared().setThreadedDatabase("");
+        cipherHandle->close();
     });
     return result;
 }

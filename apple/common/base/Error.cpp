@@ -149,6 +149,46 @@ Error::Error(Code code, Level level_, const UnsafeStringView& message)
     setCode(code, message);
 }
 
+Error::Error(Error&& other)
+: level(other.level)
+, m_code(other.m_code)
+, m_message(std::move(other.m_message))
+, infos(std::move(other.infos))
+{
+    other.level = Level::Ignore;
+    other.m_code = Code::OK;
+    other.m_message.clear();
+}
+
+Error::Error(const Error& other)
+: level(other.level)
+, m_code(other.m_code)
+, m_message(std::move(other.m_message))
+, infos(std::move(other.infos))
+{
+}
+
+Error& Error::operator=(Error&& other)
+{
+    level = other.level;
+    m_code = other.m_code;
+    m_message = std::move(other.m_message);
+    infos = std::move(other.infos);
+    other.level = Level::Ignore;
+    other.m_code = Code::OK;
+    other.m_message.clear();
+    return *this;
+}
+
+Error& Error::operator=(const Error& other)
+{
+    level = other.level;
+    m_code = other.m_code;
+    m_message = std::move(other.m_message);
+    infos = std::move(other.infos);
+    return *this;
+}
+
 #pragma mark - Level
 bool Error::isIgnorable() const
 {

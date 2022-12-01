@@ -29,6 +29,7 @@
 
 - (void)excuteTest:(void (^)())operation
 {
+    [self.database setCipherKey:nil];
     [self insertPresetObjects];
     operation();
     [self.database removeFiles];

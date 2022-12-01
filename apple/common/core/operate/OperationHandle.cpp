@@ -146,10 +146,19 @@ const Error &OperationHandle::getCipherError() const
     return InnerHandle::getError();
 }
 
-bool OperationHandle::openCipherInMemory()
+bool OperationHandle::openCipherInMemory(bool onlyUsedCipherKey)
 {
     InnerHandle::setPath(":memory:");
-    return InnerHandle::open();
+    if (onlyUsedCipherKey) {
+        return InnerHandle::openPureCipherDB();
+    } else {
+        return InnerHandle::open();
+    }
+}
+
+bool OperationHandle::isCipherDB() const
+{
+    return InnerHandle::isCipherDB();
 }
 
 void OperationHandle::closeCipher()

@@ -63,9 +63,10 @@ public:
 
 #pragma mark - Cipher
 public:
-    virtual const Error &getCipherError() const override final;
-    virtual bool openCipherInMemory() override final;
-    virtual void closeCipher() override final;
+    const Error &getCipherError() const override final;
+    bool openCipherInMemory(bool onlyUsedCipherKey) override final;
+    bool isCipherDB() const override final;
+    void closeCipher() override final;
 
     void *getCipherContext() override final;
     size_t getCipherPageSize() override final;

@@ -33,6 +33,7 @@ class RepairTests: DatabaseTestCase {
     }()
 
     func excuteTest(_ operation: () throws -> Void) {
+        database.setCipher(key: nil)
         XCTAssertNoThrow(try database.create(table: TestObject.name, of: TestObject.self))
         XCTAssertNoThrow(try database.insert(preInsertedObjects, intoTable: TestObject.name))
         XCTAssertNoThrow(try operation())
@@ -61,27 +62,27 @@ class RepairTests: DatabaseTestCase {
     }
 
     func testBackupFilter() {
-        excuteTest {
-            database.filterBackup(tableShouldBeBackedUp: nil)
+        XCTAssertNoThrow(try database.create(table: TestObject.name, of: TestObject.self))
+        XCTAssertNoThrow(try database.insert(preInsertedObjects, intoTable: TestObject.name))
+        database.filterBackup(tableShouldBeBackedUp: nil)
 
-            XCTAssertNoThrow(try self.database.backup())
-            XCTAssertTrue(self.fileManager.fileExists(atPath: self.database.firstMaterialPath))
-            XCTAssertFalse(self.fileManager.fileExists(atPath: self.database.lastMaterialPath))
+        XCTAssertNoThrow(try self.database.backup())
+        XCTAssertTrue(self.fileManager.fileExists(atPath: self.database.firstMaterialPath))
+        XCTAssertFalse(self.fileManager.fileExists(atPath: self.database.lastMaterialPath))
 
-            database.filterBackup { _ in
-                return false
-            }
-
-            Thread.sleep(forTimeInterval: 1)
-
-            XCTAssertNoThrow(try self.database.backup())
-            XCTAssertTrue(self.fileManager.fileExists(atPath: self.database.firstMaterialPath))
-            XCTAssertTrue(self.fileManager.fileExists(atPath: self.database.lastMaterialPath))
-
-            let firstSize = self.fileManager.fileSize(of: self.database.firstMaterialPath)
-            let lastSize = self.fileManager.fileSize(of: self.database.lastMaterialPath)
-            XCTAssertTrue(firstSize > lastSize)
+        database.filterBackup { _ in
+            return false
         }
+
+        Thread.sleep(forTimeInterval: 1)
+
+        XCTAssertNoThrow(try self.database.backup())
+        XCTAssertTrue(self.fileManager.fileExists(atPath: self.database.firstMaterialPath))
+        XCTAssertTrue(self.fileManager.fileExists(atPath: self.database.lastMaterialPath))
+
+        let firstSize = self.fileManager.fileSize(of: self.database.firstMaterialPath)
+        let lastSize = self.fileManager.fileSize(of: self.database.lastMaterialPath)
+        XCTAssertTrue(firstSize > lastSize)
     }
 
     func testAutoBackup() {

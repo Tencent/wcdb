@@ -24,7 +24,10 @@
 
 #include <WCDB/Macro.h>
 #include <WCDB/StringView.hpp>
+#include <WCDB/UnsafeData.hpp>
 #include <cstring>
+#include <iomanip>
+#include <numeric>
 #include <zlib.h>
 
 namespace WCDB {
@@ -221,6 +224,17 @@ StringView StringView::formatted(const char* format, ...)
         }
     } while (true);
     return StringView(std::move(result));
+}
+
+StringView StringView::hexString(const UnsafeData& data)
+{
+    std::ostringstream ss;
+    ss << std::hex << std::setfill('0');
+    for (int i = 0; i < data.size(); i++) {
+        int c = data.buffer()[i];
+        ss << std::setw(2) << c;
+    }
+    return StringView(ss.str());
 }
 
 bool StringViewComparator::operator()(const StringView& lhs, const StringView& rhs) const

@@ -121,6 +121,7 @@ enum class HandleType : unsigned int {
     Migrate = (HandleCategoryMigrate << 8) | HandleSlotMigrate,
     BackupRead = (HandleCategoryBackupRead << 8) | HandleSlotOperation,
     BackupWrite = (HandleCategoryBackupWrite << 8) | HandleSlotOperation,
+    BackupCipher = (HandleCategoryCipher << 8) | HandleSlotOperation,
     Checkpoint = (HandleCategoryCheckpoint << 8) | HandleSlotCheckPoint,
     Integrity = (HandleCategoryIntegrity << 8) | HandleSlotOperation,
     Assemble = (HandleCategoryAssemble << 8) | HandleSlotAssemble,

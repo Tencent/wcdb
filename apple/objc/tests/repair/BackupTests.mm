@@ -110,26 +110,24 @@
 
 - (void)test_filter
 {
-    [self
-    excuteTest:^{
-        [self.database filterBackup:nil];
-        TestCaseAssertTrue([self.database backup]);
-        TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
-        TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
+    [self insertPresetObjects];
+    [self.database filterBackup:nil];
+    TestCaseAssertTrue([self.database backup]);
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
 
-        [self.database filterBackup:^BOOL(NSString *tableName) {
-            WCDB_UNUSED(tableName)
-            return NO;
-        }];
-        [NSThread sleepForTimeInterval:1];
-        TestCaseAssertTrue([self.database backup]);
-        TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
-        TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
-
-        NSInteger firstMaterialSize = (NSInteger) [self.fileManager getFileSizeIfExists:self.database.firstMaterialPath];
-        NSInteger lastMaterialSize = (NSInteger) [self.fileManager getFileSizeIfExists:self.database.lastMaterialPath];
-        TestCaseAssertTrue(firstMaterialSize > lastMaterialSize);
+    [self.database filterBackup:^BOOL(NSString *tableName) {
+        WCDB_UNUSED(tableName)
+        return NO;
     }];
+    [NSThread sleepForTimeInterval:1];
+    TestCaseAssertTrue([self.database backup]);
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
+
+    NSInteger firstMaterialSize = (NSInteger) [self.fileManager getFileSizeIfExists:self.database.firstMaterialPath];
+    NSInteger lastMaterialSize = (NSInteger) [self.fileManager getFileSizeIfExists:self.database.lastMaterialPath];
+    TestCaseAssertTrue(firstMaterialSize > lastMaterialSize);
 }
 
 - (void)test_backup_fail

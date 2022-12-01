@@ -35,7 +35,8 @@ class CipherDelegate {
 public:
     virtual ~CipherDelegate() = 0;
     virtual const Error &getCipherError() const = 0;
-    virtual bool openCipherInMemory() = 0;
+    virtual bool openCipherInMemory(bool onlyUsedCipherKey = false) = 0;
+    virtual bool isCipherDB() const = 0;
     virtual void closeCipher() = 0;
     virtual void *getCipherContext() = 0;
     virtual size_t getCipherPageSize() = 0;

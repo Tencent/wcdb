@@ -34,6 +34,7 @@ namespace Repair {
 
 class FactoryRenewer final : public FactoryRelated,
                              public ErrorProne,
+                             public CipherDelegateHolder,
                              public AssembleDelegateHolder,
                              public BackupDelegateHolder {
 public:

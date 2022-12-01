@@ -26,8 +26,11 @@
 #include <WCDB/CoreConst.h>
 #include <WCDB/Data.hpp>
 #include <WCDB/Error.hpp>
+#include <WCDB/FileHandle.hpp>
+#include <WCDB/FileManager.hpp>
 #include <WCDB/Material.hpp>
 #include <WCDB/Notifier.hpp>
+#include <WCDB/SQLite.h>
 #include <WCDB/Serialization.hpp>
 
 namespace WCDB {
@@ -79,6 +82,96 @@ bool Material::serializeData(Serialization &serialization, const Data &data)
     return serialization.put4BytesUInt(checksum) && serialization.putSizedData(data);
 }
 
+bool Material::encryptedSerialize(const UnsafeStringView &path,
+                                  const UnsafeStringView &salt) const
+{
+    WCTAssert(path.length() > 0 && salt.size() == saltBytes * 2);
+    Data rawData = serialize();
+    if (rawData.empty()) {
+        return false;
+    }
+
+    WCTAssert(m_cipherDelegate != nullptr);
+    m_cipherDelegate->closeCipher();
+    if (!m_cipherDelegate->openCipherInMemory(true)) {
+        setThreadedError(std::move(m_cipherDelegate->getCipherError()));
+        return false;
+    }
+
+    size_t pageSize = m_cipherDelegate->getCipherPageSize();
+    if (pageSize == 0) {
+        setThreadedError(std::move(m_cipherDelegate->getCipherError()));
+        return false;
+    }
+    WCTAssert((pageSize & (pageSize - 1)) == 0);
+
+    if (!m_cipherDelegate->setCipherSalt(salt)) {
+        setThreadedError(std::move(m_cipherDelegate->getCipherError()));
+        return false;
+    }
+
+    void *pCodec = m_cipherDelegate->getCipherContext();
+    WCTAssert(pCodec != nullptr);
+
+    int reserveBytes = sqlcipher_codec_ctx_get_reservesize(pCodec);
+    WCTAssert(reserveBytes > 0);
+    size_t usableSize = pageSize - reserveBytes;
+    int pageCount = int((rawData.size() + saltBytes - 1) / usableSize) + 1;
+    size_t totalSize = pageCount * pageSize;
+
+    Data encryptData(totalSize);
+    if (encryptData.size() != totalSize) {
+        return false;
+    }
+
+    memset(encryptData.buffer(), 0, encryptData.size());
+    unsigned char *encryptAddr = encryptData.buffer();
+    unsigned char *dataAddr = rawData.buffer();
+
+    for (int pageNo = 1; pageNo <= pageCount; pageNo++) {
+        if (pageNo == 1) {
+            size_t length = usableSize > rawData.size() + saltBytes ?
+                            rawData.size() :
+                            usableSize - saltBytes;
+            memcpy(encryptAddr + saltBytes, dataAddr, length);
+        } else {
+            size_t length = pageNo * usableSize > rawData.size() + saltBytes ?
+                            rawData.size() + saltBytes - (pageNo - 1) * usableSize :
+                            usableSize;
+            memcpy(encryptAddr, dataAddr, length);
+        }
+
+        unsigned char *pData
+        = (unsigned char *) sqlite3Codec(pCodec, encryptAddr, pageNo, 6);
+        WCTAssert(pData != nullptr);
+        if (*pData == 0 && memcmp(pData, pData + 1, pageSize - 1) == 0) {
+            Error error(Error::Code::Error,
+                        Error::Level::Error,
+                        StringView::formatted(
+                        "fail to encrypt data at page %d, total page %d", pageNo, pageCount));
+            Notifier::shared().notify(error);
+            setThreadedError(std::move(error));
+            return false;
+        }
+        memcpy(encryptAddr, pData, pageSize);
+        encryptAddr += pageSize;
+        if (pageNo == 1) {
+            dataAddr += usableSize - saltBytes;
+        } else {
+            dataAddr += usableSize;
+        }
+    }
+    WCTAssert(salt.compare(StringView::hexString(encryptData.subdata(saltBytes))) == 0);
+    FileHandle fileHandle(path);
+    if (!fileHandle.open(FileHandle::Mode::OverWrite)) {
+        return false;
+    }
+    bool succeed = fileHandle.write(0, encryptData);
+    fileHandle.close();
+    FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
+    return succeed;
+}
+
 void Material::markAsEmpty(const UnsafeStringView &element)
 {
     Error error(Error::Code::Empty, Error::Level::Error, "Element of material is empty.");
@@ -102,12 +195,10 @@ bool Material::deserialize(Deserialization &deserialization)
         markAsCorrupt("Magic");
         return false;
     }
-    if (versionValue != 0x01000000 && versionValue != 0x01000001) {
+    if (versionValue != 0x01000000) {
         markAsCorrupt("Version");
         return false;
     }
-
-    deserialization.version = versionValue;
 
     //Info
     if (!info.deserialize(deserialization)) {
@@ -164,6 +255,81 @@ std::optional<Data> Material::deserializeData(Deserialization &deserialization)
     return data;
 }
 
+bool Material::decryptedDeserialize(const UnsafeStringView &path)
+{
+    FileHandle fileHandle(path);
+    if (!fileHandle.open(FileHandle::Mode::ReadOnly)) {
+        return false;
+    }
+
+    Data rawData = fileHandle.mapOrReadAllData();
+    if (rawData.empty()) {
+        return false;
+    }
+
+    WCTAssert(m_cipherDelegate != nullptr);
+    m_cipherDelegate->closeCipher();
+    if (!m_cipherDelegate->openCipherInMemory(true)) {
+        setThreadedError(std::move(m_cipherDelegate->getCipherError()));
+        return false;
+    }
+
+    size_t pageSize = m_cipherDelegate->getCipherPageSize();
+    if (pageSize == 0) {
+        setThreadedError(std::move(m_cipherDelegate->getCipherError()));
+        return false;
+    }
+    WCTAssert((pageSize & (pageSize - 1)) == 0);
+    if (rawData.size() % pageSize != 0) {
+        markAsCorrupt("Material");
+        return false;
+    }
+
+    StringView salt = StringView::hexString(rawData.subdata(saltBytes));
+    if (!m_cipherDelegate->setCipherSalt(salt)) {
+        setThreadedError(std::move(m_cipherDelegate->getCipherError()));
+        return false;
+    }
+
+    void *pCodec = m_cipherDelegate->getCipherContext();
+    WCTAssert(pCodec != nullptr);
+
+    int reserveBytes = sqlcipher_codec_ctx_get_reservesize(pCodec);
+    WCTAssert(reserveBytes > 0);
+    size_t usableSize = pageSize - reserveBytes;
+    int pageCount = int(rawData.size() / usableSize);
+    size_t totalSize = pageCount * usableSize - saltBytes;
+
+    Data decryptData(totalSize);
+    if (decryptData.size() != totalSize) {
+        return false;
+    }
+
+    unsigned char *rawAdder = rawData.buffer();
+    unsigned char *dataAdder = decryptData.buffer();
+    for (int pageNo = 1; pageNo <= pageCount; pageNo++) {
+        unsigned char *pData
+        = (unsigned char *) sqlite3Codec(pCodec, rawAdder, pageNo, 4);
+        if (pData == nullptr) {
+            markAsCorrupt(StringView::formatted("Page %d", pageNo));
+            return false;
+        }
+        if (pageNo == 1) {
+            memcpy(dataAdder, pData + saltBytes, usableSize - saltBytes);
+            dataAdder += usableSize - saltBytes;
+        } else {
+            memcpy(dataAdder, pData, usableSize);
+            dataAdder += usableSize;
+        }
+        rawAdder += pageSize;
+    }
+    if (!deserialize(decryptData)) {
+        return false;
+    }
+    info.cipherSalt = salt;
+    return true;
+}
+
 void Material::markAsCorrupt(const UnsafeStringView &element)
 {
     Error error(Error::Code::Corrupt, Error::Level::Notice, "Material is corrupted");
@@ -193,7 +359,6 @@ bool Material::Info::serialize(Serialization &serialization) const
     serialization.put4BytesUInt(walSalt.first);
     serialization.put4BytesUInt(walSalt.second);
     serialization.put4BytesUInt(numberOfWalFrames);
-    serialization.putSizedString(cipherSalt);
     return true;
 }
 
@@ -209,10 +374,6 @@ bool Material::Info::deserialize(Deserialization &deserialization)
     walSalt.first = deserialization.advance4BytesUInt();
     walSalt.second = deserialization.advance4BytesUInt();
     numberOfWalFrames = deserialization.advance4BytesUInt();
-    if (deserialization.version == Material::version) {
-        size_t lengthOfSizedString;
-        std::tie(lengthOfSizedString, cipherSalt) = deserialization.advanceSizedString();
-    }
     return true;
 }
 

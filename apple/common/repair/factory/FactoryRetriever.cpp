@@ -34,8 +34,8 @@
 #include <WCDB/Mechanic.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Path.hpp>
+#include <WCDB/SQLite.h>
 #include <WCDB/ThreadedErrors.hpp>
-#include <iomanip>
 #include <numeric>
 
 namespace WCDB {
@@ -107,6 +107,7 @@ bool FactoryRetriever::work()
     FactoryBackup backup(factory);
     backup.setBackupExclusiveDelegate(m_exclusiveDelegate);
     backup.setBackupSharedDelegate(m_sharedDelegate);
+    backup.setCipherDelegate(m_cipherDelegate);
     if (!backup.work(database)) {
         setCriticalError(backup.getError());
         return exit(false);
@@ -167,7 +168,13 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
         Time materialTime;
         StringView path;
         for (const auto &materialPath : materialPaths) {
-            useMaterial = material.deserialize(materialPath);
+            if (!m_sharedDelegate->isCipherDB()) {
+                useMaterial = material.deserialize(materialPath);
+            } else {
+                material.setCipherDelegate(m_cipherDelegate);
+                useMaterial = material.decryptedDeserialize(materialPath);
+            }
+
             if (useMaterial) {
                 auto optionalMaterialTime = FileManager::getFileModifiedTime(materialPath);
                 if (!optionalMaterialTime.has_value()) {
@@ -176,8 +183,7 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
                 }
                 materialTime = std::move(optionalMaterialTime.value());
                 break;
-            }
-            if (!ThreadedErrors::shared().getThreadedError().isCorruption()) {
+            } else if (!ThreadedErrors::shared().getThreadedError().isCorruption()) {
                 setCriticalErrorWithSharedThreadedError();
                 return false;
             }
@@ -276,15 +282,7 @@ FactoryRetriever::tryGetCiperSaltFromPath(const UnsafeStringView &databasePath)
     if (strncmp("SQLite format 3\000", (const char *) saltData.buffer(), saltLength) == 0) {
         return StringView();
     }
-    std::ostringstream ss;
-    ss << std::hex << std::setfill('0');
-    for (int i = 0; i < saltLength; i++) {
-        int c = saltData.buffer()[i];
-        ss << std::setw(2) << c;
-    }
-    std::string salt = ss.str();
-    result = StringView(std::move(salt));
-    return result;
+    return StringView::hexString(saltData);
 }
 
 #pragma mark - Report

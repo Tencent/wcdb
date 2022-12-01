@@ -657,30 +657,11 @@ bool Deserializable::deserialize(const UnsafeStringView &path)
     if (!fileHandle.open(FileHandle::Mode::ReadOnly)) {
         return false;
     }
-    bool succeed = false;
-    do {
-        ssize_t size = fileHandle.size();
-        if (size < 0) {
-            break;
-        }
-        {
-            FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
-            fileHandle.markErrorAsIgnorable(true);
-            MappedData data = fileHandle.map(0, size);
-            fileHandle.markErrorAsIgnorable(false);
-            if (data.size() == size) {
-                succeed = deserialize(data);
-            }
-        }
-        if (!succeed) {
-            Data data = fileHandle.read(0, size);
-            if (data.size() == size) {
-                succeed = deserialize(data);
-            }
-        }
-    } while (false);
-    fileHandle.close();
-    return succeed;
+    Data data = fileHandle.mapOrReadAllData();
+    if (data.empty() || !deserialize(data)) {
+        return false;
+    }
+    return true;
 }
 
 } //namespace WCDB

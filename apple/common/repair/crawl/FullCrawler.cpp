@@ -58,14 +58,18 @@ bool FullCrawler::work()
         return exit(false);
     }
 
-    void *pCodec = m_cipherDelegate->getCipherContext();
-    if (pCodec != nullptr) {
+    if (m_cipherDelegate->isCipherDB()) {
         size_t pageSize = m_cipherDelegate->getCipherPageSize();
         if (pageSize == 0) {
             setCriticalError(m_cipherDelegate->getCipherError());
             return exit(false);
         }
-        m_pager.setCipherContext(pCodec);
+        void *pCodec = m_cipherDelegate->getCipherContext();
+        if (pCodec == nullptr) {
+            setCriticalError(m_cipherDelegate->getCipherError());
+            return exit(false);
+        }
+        m_pager.setCipherContext(m_cipherDelegate->getCipherContext());
         m_pager.setPageSize((int) pageSize);
     }
 

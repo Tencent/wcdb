@@ -314,10 +314,19 @@ const Error &AssembleHandle::getCipherError() const
     return InnerHandle::getError();
 }
 
-bool AssembleHandle::openCipherInMemory()
+bool AssembleHandle::openCipherInMemory(bool onlyUsedCipherKey)
 {
     InnerHandle::setPath(":memory:");
-    return InnerHandle::open();
+    if (onlyUsedCipherKey) {
+        return InnerHandle::openPureCipherDB();
+    } else {
+        return InnerHandle::open();
+    }
+}
+
+bool AssembleHandle::isCipherDB() const
+{
+    return InnerHandle::isCipherDB();
 }
 
 void AssembleHandle::closeCipher()
