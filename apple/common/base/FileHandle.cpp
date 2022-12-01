@@ -25,6 +25,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/CoreConst.h>
 #include <WCDB/FileHandle.hpp>
+#include <WCDB/FileManager.hpp>
 #include <WCDB/Notifier.hpp>
 #include <errno.h>
 #include <fcntl.h>
@@ -212,6 +213,28 @@ MappedData FileHandle::map(off_t offset, size_t size, SharedHighWater highWater)
     }
     return MappedData(reinterpret_cast<unsigned char *>(mapped), roundedSize, highWater)
     .subdata(alignment, size);
+}
+
+UnsafeData FileHandle::mapOrReadAllData()
+{
+    do {
+        ssize_t fileSize = size();
+        if (fileSize < 0) {
+            break;
+        }
+        FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
+        markErrorAsIgnorable(true);
+        UnsafeData data = map(0, fileSize);
+        markErrorAsIgnorable(false);
+        if (data.size() == fileSize) {
+            return data;
+        }
+        data = read(0, fileSize);
+        if (data.size() == fileSize) {
+            return data;
+        }
+    } while (false);
+    return UnsafeData::null();
 }
 
 #pragma mark - Error

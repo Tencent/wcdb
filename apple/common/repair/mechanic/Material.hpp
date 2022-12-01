@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include <WCDB/Cipher.hpp>
 #include <WCDB/Serialization.hpp>
 #include <WCDB/StringView.hpp>
 #include <list>
@@ -39,10 +40,11 @@ class Deserialization;
 
 namespace Repair {
 
-class Material final : public Serializable, public Deserializable {
+class Material final : public Serializable, public Deserializable, public CipherDelegateHolder {
 #pragma mark - Serializable
 public:
     bool serialize(Serialization &serialization) const override final;
+    bool encryptedSerialize(const UnsafeStringView &path, const UnsafeStringView &salt) const;
     using Serializable::serialize;
 
     ~Material() override final;
@@ -54,6 +56,7 @@ protected:
 #pragma mark - Deserializable
 public:
     bool deserialize(Deserialization &deserialization) override final;
+    bool decryptedDeserialize(const UnsafeStringView &path);
     using Deserializable::deserialize;
 
 protected:
@@ -63,7 +66,8 @@ protected:
 #pragma mark - Header
 protected:
     static constexpr const uint32_t magic = 0x57434442;
-    static constexpr const uint32_t version = 0x01000001; //1.0.0.1
+    static constexpr const uint32_t version = 0x01000000; //1.0.0.0
+    static constexpr const uint8_t saltBytes = 16;
     static constexpr const int headerSize = sizeof(magic) + sizeof(version); //magic + version
 
 #pragma mark - Info
@@ -78,7 +82,7 @@ public:
         uint32_t reservedBytes;
         std::pair<uint32_t, uint32_t> walSalt;
         uint32_t numberOfWalFrames;
-        StringView cipherSalt; // added in 1.0.0.1
+        StringView cipherSalt; //It is not serialized or deserialized directly
 #pragma mark - Serializable
     public:
         bool serialize(Serialization &serialization) const override final;

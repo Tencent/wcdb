@@ -160,6 +160,7 @@ bool FactoryRenewer::prepare()
         FactoryBackup backup(factory);
         backup.setBackupExclusiveDelegate(m_exclusiveDelegate);
         backup.setBackupSharedDelegate(m_sharedDelegate);
+        backup.setCipherDelegate(m_cipherDelegate);
         if (!backup.work(tempDatabase)) {
             setError(backup.getError());
             return false;
@@ -206,12 +207,21 @@ bool FactoryRenewer::resolveInfosForDatabase(StringViewMap<Info> &infos,
     }
     for (const auto &materialPath : materialPaths) {
         Material material;
-        if (!material.deserialize(materialPath)) {
+        bool succeed = false;
+        if (!m_sharedDelegate->isCipherDB()) {
+            succeed = material.deserialize(materialPath);
+        } else {
+            material.setCipherDelegate(m_cipherDelegate);
+            succeed = material.decryptedDeserialize(materialPath);
+        }
+        if (!succeed) {
             if (ThreadedErrors::shared().getThreadedError().isCorruption()) {
                 continue;
+            } else {
+                break;
             }
-            break;
         }
+
         for (auto &element : material.contents) {
             auto iter = infos.find(element.first);
             if (iter == infos.end()) {

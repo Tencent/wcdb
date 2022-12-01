@@ -116,13 +116,13 @@ bool Backup::work()
         }
         shared = true;
 
-        void *pCodec = m_sharedDelegate->getCipherContext();
-        if (pCodec != nullptr) {
+        if (m_sharedDelegate->isCipherDB()) {
             size_t pageSize = m_sharedDelegate->getCipherPageSize();
             if (pageSize == 0) {
                 setError(m_sharedDelegate->getBackupError());
                 break;
             }
+            void *pCodec = m_sharedDelegate->getCipherContext();
             m_pager.setCipherContext(pCodec);
             m_pager.setPageSize((int) pageSize);
         }
@@ -137,13 +137,13 @@ bool Backup::work()
         }
         exclusive = false;
 
+        m_material.setCipherDelegate(m_cipherDelegate);
         m_material.info.pageSize = m_pager.getPageSize();
         m_material.info.reservedBytes = m_pager.getReservedBytes();
         if (m_pager.getNumberOfWalFrames() > 0) {
             m_material.info.walSalt = m_pager.getWalSalt();
             m_material.info.numberOfWalFrames = m_pager.getNumberOfWalFrames();
         }
-        m_material.info.cipherSalt = m_sharedDelegate->getCipherSalt();
         succeed = m_masterCrawler.work(this);
     } while (false);
 

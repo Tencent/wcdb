@@ -33,6 +33,8 @@
 
 namespace WCDB {
 
+class UnsafeData;
+
 class UnsafeStringView : public std::string_view {
 #pragma mark - UnsafeStringView - Constructor
 public:
@@ -113,6 +115,7 @@ public:
 
 #pragma mark - StringView - Utility
     static StringView formatted(const char* format, ...);
+    static StringView hexString(const UnsafeData& data);
 };
 
 struct StringViewComparator {

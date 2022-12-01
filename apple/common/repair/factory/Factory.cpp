@@ -273,7 +273,6 @@ Factory::materialsForDeserializingForDatabase(const UnsafeStringView &database)
     StringView firstMaterialPath = Factory::firstMaterialPathForDatabase(database);
     auto optionalFirstMaterialModifiedTime
     = getModifiedTimeOr0IfNotExists(firstMaterialPath);
-    ;
     if (!optionalFirstMaterialModifiedTime.has_value()) {
         return std::nullopt;
     }

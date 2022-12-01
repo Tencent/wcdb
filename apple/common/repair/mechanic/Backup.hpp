@@ -85,6 +85,7 @@ protected:
 class Backup final : public Crawlable,
                      public MasterCrawlerDelegate,
                      public SequenceCrawlerDelegate,
+                     public CipherDelegateHolder,
                      public BackupDelegateHolder,
                      public ErrorProne {
 #pragma mark - Initialize

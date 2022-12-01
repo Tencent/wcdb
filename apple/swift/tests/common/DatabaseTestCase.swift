@@ -32,6 +32,7 @@ class DatabaseTestCase: BaseTestCase {
         database = Database(at: self.recommendedPath)
         database.tag = recommendTag
         database.trace { error in
+            assert(error.level != .Fatal)
             print(error)
         }
     }

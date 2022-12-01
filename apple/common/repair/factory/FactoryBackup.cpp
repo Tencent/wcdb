@@ -46,22 +46,38 @@ bool FactoryBackup::work(const UnsafeStringView& database)
     notifiyBackupBegin(database);
 
     Backup backup(database);
+    backup.setCipherDelegate(m_cipherDelegate);
     backup.setBackupSharedDelegate(m_sharedDelegate);
     backup.setBackupExclusiveDelegate(m_exclusiveDelegate);
     backup.filter(factory.getFilter());
     if (!backup.work()) {
         // Treat database empty error as succeed
         if (backup.getError().code() == Error::Code::Empty) {
+            notifiyBackupEnd(database, materialPath.value(), backup);
             return true;
         }
         setError(backup.getError());
         return false;
     }
-    if (!backup.getMaterial().serialize(materialPath.value())) {
-        assignWithSharedThreadedError();
-        return false;
-    }
 
+    if (!m_sharedDelegate->isCipherDB()) {
+        if (!backup.getMaterial().serialize(materialPath.value())) {
+            assignWithSharedThreadedError();
+            return false;
+        }
+    } else {
+        StringView salt = m_sharedDelegate->getCipherSalt();
+        if (salt.length() == 0) {
+            setError(m_sharedDelegate->getCipherError());
+            return false;
+        }
+        WCTAssert(salt.length() == 32) if (!backup.getMaterial().encryptedSerialize(
+                                           materialPath.value(), salt))
+        {
+            assignWithSharedThreadedError();
+            return false;
+        }
+    }
     notifiyBackupEnd(database, materialPath.value(), backup);
     return true;
 }

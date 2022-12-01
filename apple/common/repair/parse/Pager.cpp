@@ -68,6 +68,7 @@ void Pager::setReservedBytes(int reservedBytes)
 
 void Pager::setCipherContext(void* ctx)
 {
+    WCTAssert(ctx != nullptr);
     m_pCodec = ctx;
 }
 

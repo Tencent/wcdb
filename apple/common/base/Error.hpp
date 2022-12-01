@@ -38,6 +38,11 @@ public:
     enum class Code;
     Error();
     Error(Code code, Level level, const UnsafeStringView &message = UnsafeStringView());
+    Error(Error &&other);
+    Error(const Error &other);
+
+    Error &operator=(Error &&other);
+    Error &operator=(const Error &other);
 
     //    void clear();
 
