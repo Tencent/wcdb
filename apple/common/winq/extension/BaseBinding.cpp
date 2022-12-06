@@ -51,9 +51,10 @@ ColumnDef *BaseBinding::getColumnDef(const UnsafeStringView &columnName)
 }
 
 #pragma mark - Table
-bool BaseBinding::createTable(const UnsafeStringView &tableName, InnerHandle &handle) const
+bool BaseBinding::createTable(const UnsafeStringView &tableName, InnerHandle *handle) const
 {
-    return handle.runTransactionIfNotInTransaction([&](InnerHandle *handle) {
+    WCTAssert(handle != nullptr);
+    return handle->runTransactionIfNotInTransaction([&](InnerHandle *handle) {
         auto exists = handle->tableExists(tableName);
         if (!exists.has_value()) {
             return false;
@@ -83,6 +84,7 @@ bool BaseBinding::createTable(const UnsafeStringView &tableName, InnerHandle &ha
                 Error error(Error::Code::Mismatch, Error::Level::Notice, "Skip column");
                 error.infos.insert_or_assign("Table", StringView(tableName));
                 error.infos.insert_or_assign("Column", StringView(columnName));
+                error.infos.insert_or_assign(ErrorStringKeyPath, handle->getPath());
                 Notifier::shared().notify(error);
             }
         } else {
@@ -108,9 +110,10 @@ bool BaseBinding::createTable(const UnsafeStringView &tableName, InnerHandle &ha
     });
 }
 
-bool BaseBinding::createVirtualTable(const UnsafeStringView &tableName, InnerHandle &handle) const
+bool BaseBinding::createVirtualTable(const UnsafeStringView &tableName, InnerHandle *handle) const
 {
-    return handle.execute(generateCreateVirtualTableStatement(tableName));
+    WCTAssert(handle != nullptr);
+    return handle->execute(generateCreateVirtualTableStatement(tableName));
 }
 
 StatementCreateTable
@@ -156,6 +159,66 @@ BaseBinding::generateCreateVirtualTableStatement(const UnsafeStringView &tableNa
         }
     }
     return statement;
+}
+
+bool BaseBinding::tryRecoverColumn(const UnsafeStringView &columnName,
+                                   const UnsafeStringView &tableName,
+                                   const UnsafeStringView &schemaName,
+                                   const UnsafeStringView &sql,
+                                   InnerHandle *handle) const
+{
+    if (m_columnDefs.caseInsensiveFind(columnName) == m_columnDefs.end()) {
+        return false;
+    }
+    if (!handle->tableExists(schemaName, tableName)) {
+        return false;
+    }
+    auto optionalColumnNames = handle->getColumns(schemaName, tableName);
+    if (!optionalColumnNames.has_value()) {
+        return false;
+    }
+    std::set<StringView> &columnNames = optionalColumnNames.value();
+
+    const auto &columnDefs = getColumnDefs();
+    int matchCount = 0;
+    for (const auto &columnDef : columnDefs) {
+        if (columnNames.find(columnDef.first) != columnNames.end()) {
+            matchCount++;
+        }
+    }
+    if (matchCount < 2 || matchCount < (columnDefs.size() + 1) / 2) {
+        return false;
+    }
+
+    for (const auto &columnDef : columnDefs) {
+        if (columnNames.find(columnDef.first) != columnNames.end()) {
+            continue;
+        }
+        if (columnDef.second.syntax().isPrimaryKey()
+            || columnDef.second.syntax().isUnique()) {
+            continue;
+        }
+        //Add new column
+        StatementAlterTable alterTable = StatementAlterTable()
+                                         .alterTable(tableName)
+                                         .schema(schemaName)
+                                         .addColumn(columnDef.second);
+        if (handle->execute(alterTable)) {
+            Error error(Error::Code::Warning, Error::Level::Warning, "Auto add column");
+            error.infos.insert_or_assign("Column",
+                                         columnDef.second.syntax().column.name);
+            error.infos.insert_or_assign("Table", tableName);
+            if (schemaName.length() > 0) {
+                error.infos.insert_or_assign("Schema", schemaName);
+            }
+            error.infos.insert_or_assign(ErrorStringKeySQL, sql);
+            error.infos.insert_or_assign(ErrorStringKeyPath, handle->getPath());
+            Notifier::shared().notify(error);
+        } else if (!handle->getError().getMessage().hasPrefix("duplicate column name: ")) {
+            return false;
+        }
+    }
+    return true;
 }
 
 #pragma mark - Table Constraint

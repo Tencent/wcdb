@@ -55,46 +55,6 @@ internal extension Array where Element: Describable {
     }
 }
 
-internal extension Array where Element==ResultColumnConvertible {
-    func joined(separateBy separator: String = ", ") -> String {
-        return joined({ $0.asColumnResult().description }, separateBy: separator)
-    }
-}
-
-internal extension Array where Element==ExpressionConvertible {
-    func joined(separateBy separator: String = ", ") -> String {
-        return joined({ $0.asExpression().description }, separateBy: separator)
-    }
-}
-
-internal extension Array where Element==ColumnConvertible {
-    func joined(separateBy separator: String = ", ") -> String {
-        return joined({ $0.asColumn().description }, separateBy: separator)
-    }
-}
-
-internal extension Array where Element==TableOrSubqueryConvertible {
-    func joined(separateBy separator: String = ", ") -> String {
-        return joined({ $0.asTableOrSubquery().description }, separateBy: separator)
-    }
-}
-
-internal extension Array where Element==OrderingTermConvertible {
-    func joined(separateBy separator: String = ", ") -> String {
-        return joined({ $0.asOrder().description }, separateBy: separator)
-    }
-}
-
-internal extension Array where Element==IndexedColumnConvertible {
-    func joined(separateBy separator: String = ", ") -> String {
-        return joined({ $0.asIndex().description }, separateBy: separator)
-    }
-
-    func asIndexes() -> [IndexedColumn] {
-        return map { $0.asIndex() }
-    }
-}
-
 internal extension Array where Element==PropertyConvertible {
     func asCodingTableKeys() -> [CodingTableKeyBase] {
         return reduce(into: [CodingTableKeyBase]()) { (result, element) in

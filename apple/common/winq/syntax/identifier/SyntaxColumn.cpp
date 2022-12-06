@@ -42,6 +42,16 @@ Identifier::Type Column::getType() const
     return type;
 }
 
+const BaseBinding* Column::getTableBinding() const
+{
+    if (tableBinding != nullptr) {
+        return tableBinding;
+    } else if (tableBindingRetrive != nullptr) {
+        return tableBindingRetrive();
+    }
+    return nullptr;
+}
+
 bool Column::describle(std::ostringstream& stream) const
 {
     if (!table.empty()) {

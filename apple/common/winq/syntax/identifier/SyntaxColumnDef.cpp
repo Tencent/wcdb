@@ -69,9 +69,34 @@ bool ColumnDef::isAutoIncrement() const
     for (const auto& constraint : constraints) {
         if (constraint.isAutoIncrement()) {
             isAutoIncrement = true;
+            break;
         }
     }
     return isAutoIncrement;
+}
+
+bool ColumnDef::isPrimaryKey() const
+{
+    bool isPrimary = false;
+    for (const auto& constraint : constraints) {
+        if (constraint.isPrimaryKey()) {
+            isPrimary = true;
+            break;
+        }
+    }
+    return isPrimary;
+}
+
+bool ColumnDef::isUnique() const
+{
+    bool isUnique = false;
+    for (const auto& constraint : constraints) {
+        if (constraint.isUnique()) {
+            isUnique = true;
+            break;
+        }
+    }
+    return isUnique;
 }
 
 } // namespace Syntax

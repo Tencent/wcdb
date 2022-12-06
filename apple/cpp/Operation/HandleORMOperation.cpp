@@ -86,7 +86,7 @@ bool HandleORMOperation::createTable(const UnsafeStringView &tableName, const Bi
     if (handle == nullptr) {
         return false;
     }
-    return binding.createTable(tableName, *(handle.get()));
+    return binding.createTable(tableName, handle.get());
 }
 
 bool HandleORMOperation::createVirtualTable(const UnsafeStringView &tableName,
@@ -96,7 +96,7 @@ bool HandleORMOperation::createVirtualTable(const UnsafeStringView &tableName,
     if (handle == nullptr) {
         return false;
     }
-    return binding.createVirtualTable(tableName, *(handle.get()));
+    return binding.createVirtualTable(tableName, handle.get());
 }
 
 } //namespace WCDB

@@ -48,6 +48,7 @@
 #import "DropIndexObject.h"
 #import "IndexObject+WCTTableCoding.h"
 #import "IndexObject.h"
+#import "NewPropertyObject.h"
 #import "NewRemapObject+WCTTableCoding.h"
 #import "NewRemapObject.h"
 #import "NewlyCreatedTableIndexObject+WCTTableCoding.h"
@@ -161,6 +162,13 @@
         @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER PRIMARY KEY)",
     ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected];
+}
+
+- (void)test_new_column
+{
+    self.tableClass = ColumnConstraintPrimary.class;
+    [self createTable];
+    [self.database execute:WCDB::StatementSelect().select({ WCDB::Column("newColumn1").table("").schema("newSchema"), WCDB::Column("newColumn2").table("newtable") }).from(self.tableName)];
 }
 
 - (void)test_column_constraint_primary_asc
@@ -358,6 +366,138 @@
         NSArray<NSString*>* expected = @[ @"PRAGMA main.table_info('testTable')", @"DROP INDEX IF EXISTS main.testTable_index" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected];
     }
+}
+
+#pragma mark - auto add column
+- (void)test_auto_add_column
+{
+    NSString* fakeTable = @"fakeTable";
+    TestCaseAssertTrue([self.database createTable:fakeTable withClass:NewPropertyObject.class]);
+
+    [self testAutoAddColumn:NewPropertyObject.insertValue
+                  isSucceed:YES
+                   byExcute:^bool {
+                       return [self.database insertObject:[[NewPropertyObject alloc] init] intoTable:self.tableName];
+                   }];
+
+    [self testAutoAddColumn:NewPropertyObject.updateValue
+                  isSucceed:YES
+                   byExcute:^bool {
+                       return [self.database updateTable:self.tableName setProperty:NewPropertyObject.updateValue toValue:@(1)];
+                   }];
+
+    [self testAutoAddColumn:NewPropertyObject.deleteValue
+                  isSucceed:YES
+                   byExcute:^bool {
+                       return [self.database deleteFromTable:self.tableName where:NewPropertyObject.deleteValue == 1];
+                   }];
+
+    [self testAutoAddColumn:NewPropertyObject.deleteValue
+                  isSucceed:YES
+                   byExcute:^bool {
+                       return [self.database deleteFromTable:self.tableName where:NewPropertyObject.deleteValue.table(self.tableName) == 1];
+                   }];
+
+    [self testAutoAddColumn:NewPropertyObject.deleteValue
+                  isSucceed:NO
+                   byExcute:^bool {
+                       return [self.database deleteFromTable:self.tableName where:NewPropertyObject.deleteValue.table(fakeTable) == 1];
+                   }];
+
+    [self testAutoAddColumn:NewPropertyObject.deleteValue
+                  isSucceed:NO
+                   byExcute:^bool {
+                       return [self.database deleteFromTable:self.tableName where:NewPropertyObject.deleteValue.table(self.tableName).schema("notExistSchema") == 1];
+                   }];
+
+    [self testAutoAddColumn:NewPropertyObject.selectValue
+                  isSucceed:YES
+                   byExcute:^bool {
+                       return [self.database getColumnOnResultColumn:NewPropertyObject.selectValue fromTable:self.tableName] != nil;
+                   }];
+
+    [self testAutoAddColumn:NewPropertyObject.selectValue
+                  isSucceed:YES
+                   byExcute:^bool {
+                       return [self.database getColumnOnResultColumn:NewPropertyObject.insertValue fromTable:self.tableName where:NewPropertyObject.selectValue == 1] != nil;
+                   }];
+
+    [self testAutoAddColumn:NewPropertyObject.selectValue
+                  isSucceed:YES
+                   byExcute:^bool {
+                       return [self.database getColumnOnResultColumn:NewPropertyObject.insertValue fromTable:self.tableName orders:NewPropertyObject.selectValue] != nil;
+                   }];
+
+    [self testAutoAddColumn:NewPropertyObject.selectValue
+                  isSucceed:YES
+                   byExcute:^bool {
+                       return [self.database getColumnOnResultColumn:NewPropertyObject.insertValue fromTable:self.tableName orders:NewPropertyObject.selectValue.table(self.tableName)] != nil;
+                   }];
+
+    [self testAutoAddColumn:NewPropertyObject.selectValue
+                  isSucceed:NO
+                   byExcute:^bool {
+                       return [self.database getColumnOnResultColumn:NewPropertyObject.insertValue fromTable:self.tableName orders:NewPropertyObject.selectValue.table(fakeTable)] != nil;
+                   }];
+
+    [self testAutoAddColumn:NewPropertyObject.selectValue
+                  isSucceed:NO
+                   byExcute:^bool {
+                       return [self.database getColumnOnResultColumn:NewPropertyObject.insertValue fromTable:self.tableName orders:NewPropertyObject.selectValue.table(self.tableName).schema("notExistSchema")] != nil;
+                   }];
+
+    [self testAutoAddColumn:NewPropertyObject.multiSelectValue
+                  isSucceed:YES
+                   byExcute:^bool {
+                       WCTMultiSelect* select = [self.database prepareMultiSelect];
+                       [[select onResultColumns:{ NewPropertyObject.multiSelectValue.table(self.tableName), NewPropertyObject.multiSelectValue.table(fakeTable) }] fromTables:@[ self.tableName, fakeTable ]];
+                       return select.allMultiObjects != nil;
+                   }];
+
+    [self testAutoAddColumn:NewPropertyObject.multiSelectValue
+                  isSucceed:NO
+                   byExcute:^bool {
+                       WCTMultiSelect* select = [self.database prepareMultiSelect];
+                       [[select onResultColumns:{ NewPropertyObject.multiSelectValue.table(self.tableName).schema("notExistSchema"), NewPropertyObject.multiSelectValue.table(fakeTable) }] fromTables:@[ self.tableName, fakeTable ]];
+                       return select.allMultiObjects != nil;
+                   }];
+
+    [self testAutoAddColumn:NewPropertyObject.primeryValue
+                  isSucceed:NO
+                   byExcute:^bool {
+                       return [self.database getColumnOnResultColumn:NewPropertyObject.primeryValue fromTable:self.tableName] != nil;
+                   }];
+
+    [self testAutoAddColumn:NewPropertyObject.uniqueValue
+                  isSucceed:NO
+                   byExcute:^bool {
+                       return [self.database getColumnOnResultColumn:NewPropertyObject.uniqueValue fromTable:self.tableName] != nil;
+                   }];
+}
+
+- (void)testAutoAddColumn:(const WCTProperty&)newProperty isSucceed:(BOOL)isSucceed byExcute:(bool (^)())block
+{
+    auto createTable = WCDB::StatementCreateTable().createTable(self.tableName);
+    auto binding = const_cast<WCTBinding*>(&NewPropertyObject.objectRelationalMapping);
+    auto properties = NewPropertyObject.allProperties.propertiesByRemovingProperties(newProperty);
+    for (const auto& property : properties) {
+        createTable.define(*binding->getColumnDef(property));
+    }
+    NSString* propertyName = [NSString stringWithUTF8String:newProperty.getDescription().data()];
+    TestCaseAssertTrue([self.database execute:createTable]);
+    __block bool autoAdded = false;
+    [self.database traceError:^(WCTError* error) {
+        if (![error.message isEqualToString:@"Auto add column"]) {
+            return;
+        }
+        autoAdded = YES;
+        TestCaseAssertTrue([error.userInfo[@"Table"] isEqualToString:self.tableName]);
+        TestCaseAssertTrue([error.userInfo[@"Column"] isEqualToString:propertyName]);
+    }];
+    TestCaseAssertTrue(block() == isSucceed);
+    TestCaseAssertTrue(autoAdded || !isSucceed);
+    TestCaseAssertTrue([self.database dropTable:self.tableName]);
+    [self.database traceError:nil];
 }
 
 @end

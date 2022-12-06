@@ -32,7 +32,12 @@ public:
     WCTProperty(const WCDB::UnsafeStringView& name, const WCTColumnBinding& columnBinding);
     ~WCTProperty() override final;
 
-    WCDB::Column table(const WCDB::UnsafeStringView& table) const;
+    WCTProperty table(const WCDB::UnsafeStringView& table) const;
+    WCTProperty schema(const WCDB::Schema& schema) const;
+
+private:
+    WCTProperty(const WCTColumnBinding& columnBinding, const Column& column);
+    void configTableBindingRetrive();
 };
 
 namespace WCDB {

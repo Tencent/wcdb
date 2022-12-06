@@ -53,6 +53,7 @@ private:
 
 #pragma mark - ColumnDef
 public:
+    using BaseBinding::getColumnDef;
     ColumnDef* getColumnDef(void* memberPointer);
 
 #pragma mark - IndexColumn

@@ -31,6 +31,8 @@ public protocol PropertyConvertible: ColumnConvertible, PropertyRedirectable {
     func asProperty() -> Property
 
     func `in`(table: String) -> Property
+
+    func of(schema schemaConvertible: SchemaConvertible) -> Property
 }
 
 public typealias PropertyOperable = PropertyConvertible & ExpressionOperable
@@ -38,6 +40,9 @@ public typealias PropertyOperable = PropertyConvertible & ExpressionOperable
 public final class Property: Describable {
     public private(set) var description: String
     public private(set) var codingTableKey: CodingTableKeyBase?
+    internal var tableBinding: UnsafeRawPointer?
+    internal var tableName: String?
+    internal var schema: SchemaConvertible?
 #if WCDB_SWIFT_BRIDGE_OBJC
     public private(set) var wctProperty: WCTBridgeProperty?
 
@@ -65,6 +70,18 @@ public final class Property: Describable {
     public var name: String {
         return description
     }
+
+    internal func copyAsNewProperty() -> Property {
+#if WCDB_SWIFT_BRIDGE_OBJC
+        let property = Property(named: description, with: codingTableKey, with: wctProperty)
+#else
+        let property = Property(named: description, with: codingTableKey)
+#endif
+        property.tableBinding = tableBinding
+        property.tableName = tableName
+        property.schema = schema
+        return property
+    }
 }
 
 extension Property: PropertyOperable {
@@ -77,15 +94,25 @@ extension Property: PropertyOperable {
     }
 
     public func `in`(table: String) -> Property {
-        let column: Column = self.in(table: table)
-#if WCDB_SWIFT_BRIDGE_OBJC
-        return Property(named: column.description, with: codingTableKey, with: wctProperty)
-#else
-        return Property(named: column.description, with: codingTableKey)
-#endif
+        let property = copyAsNewProperty()
+        property.tableName = table
+        return property
+    }
+
+    public func of(schema schemaConvertible: SchemaConvertible) -> Property {
+        let property = copyAsNewProperty()
+        property.schema = schemaConvertible
+        return property
     }
 
     public func asColumn() -> Column {
-        return Column(named: name)
+        let column = Column(named: name, binded: tableBinding)
+        if let tableName = tableName {
+            column.in(table: tableName)
+        }
+        if let schema = schema {
+            column.of(schema: schema)
+        }
+        return column
     }
 }

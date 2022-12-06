@@ -40,11 +40,13 @@ extension WCTBridgeProperty: PropertyOperable {
     }
 
     public func asProperty() -> Property {
-        return Property(named: propertyName, with: codingTableKey, with: wctProperty)
+        var property = Property(named: propertyName, with: codingTableKey, with: wctProperty)
+        property.tableBinding = tableBinding()
+        return property
     }
 
     public func asColumn() -> Column {
-        return Column(named: propertyName)
+        return asProperty().asColumn()
     }
 
     public func `as`(_ propertyConvertible: PropertyConvertible) -> Property {
@@ -53,6 +55,10 @@ extension WCTBridgeProperty: PropertyOperable {
 
     public func `in`(table: String) -> Property {
         return asProperty().`in`(table: table)
+    }
+
+    public func of(schema schemaConvertible: SchemaConvertible) -> Property {
+        return asProperty().of(schema: schemaConvertible)
     }
 
     public func asExpression() -> Expression {

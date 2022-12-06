@@ -32,6 +32,7 @@ public class TableBindingBase {
 
 public final class TableBinding<CodingTableKeyType: CodingTableKey>: TableBindingBase {
     private let properties: [CodingTableKeyType: Property]
+    private var configBuilder: (() -> [TableConfiguration])?
 
     public init(_ type: CodingTableKeyType.Type) {
         var allProperties: [Property] = []
@@ -57,15 +58,20 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey>: TableBindin
         self.allKeys = allKeys
         self.properties = properties
         self.allProperties = allProperties
+        self.configBuilder = nil
 
         super.init()
+
+        for property in allProperties {
+            property.tableBinding = WCDBBindingGetBaseBinding(cppBinding)
+        }
 
         if let tableDecodableType = CodingTableKeyType.Root.self as? TableDecodableBase.Type {
             let types = ColumnTypeDecoder.types(of: tableDecodableType)
             for key in self.allKeys {
                 let columnType = types[key.stringValue]
                 assert(columnType != nil, "It should not be failed. If you think it's a bug, please report an issue to us.")
-                let columnDef = ColumnDef(with: key, and: columnType!)
+                let columnDef = ColumnDef(named: key.rawValue, and: columnType!)
                 withExtendedLifetime(columnDef) {
                     WCDBBindingAddColumnDef(cppBinding, key.rawValue.cString, $0.cppObj)
                 }
@@ -95,12 +101,9 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey>: TableBindin
         }
     }
 
-    public convenience init(_ type: CodingTableKeyType.Type, @TableConfigurationBuilder _ configBuildler: () -> [TableConfiguration]) {
+    public convenience init(_ type: CodingTableKeyType.Type, @TableConfigurationBuilder _ configBuilder: @escaping () -> [TableConfiguration]) {
         self.init(type)
-        let configs = configBuildler()
-        for config in configs {
-            config.config(with: self)
-        }
+        self.configBuilder = configBuilder
     }
 
     let allProperties: [Property]
@@ -115,6 +118,16 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey>: TableBindin
             return nil
         }
         return filtered.first!
+    }()
+
+    internal lazy var innerBinding: CPPBinding = {
+        if let configBuilder = configBuilder {
+            let configs = configBuilder()
+            for config in configs {
+                config.config(with: self)
+            }
+        }
+        return cppBinding
     }()
 
     typealias TypedCodingTableKeyType = CodingTableKeyType

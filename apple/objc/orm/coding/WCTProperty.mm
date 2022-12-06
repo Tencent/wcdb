@@ -23,9 +23,11 @@
  */
 
 #import <WCDB/Assertion.hpp>
+#import <WCDB/WCTBinding.h>
 #import <WCDB/WCTColumnBinding.h>
 #import <WCDB/WCTProperty.h>
 #import <WCDB/WCTResultColumn.h>
+#import <WCDB/WCTTableCoding.h>
 
 #pragma mark - WCTProperty
 
@@ -36,17 +38,41 @@ WCTProperty::WCTProperty(const WCTColumnBinding& columnBinding)
 : WCDB::Column(columnBinding.getPropertyName())
 , WCTColumnBindingHolder(columnBinding)
 {
+    configTableBindingRetrive();
 }
 
 WCTProperty::WCTProperty(const WCDB::UnsafeStringView& name, const WCTColumnBinding& columnBinding)
 : WCDB::Column(name)
 , WCTColumnBindingHolder(columnBinding)
 {
+    configTableBindingRetrive();
 }
 
-WCDB::Column WCTProperty::table(const WCDB::UnsafeStringView& table) const
+WCTProperty::WCTProperty(const WCTColumnBinding& columnBinding, const Column& column)
+: WCDB::Column(column)
+, WCTColumnBindingHolder(columnBinding)
 {
-    return WCDB::Column(*this).table(table);
+    configTableBindingRetrive();
+}
+
+void WCTProperty::configTableBindingRetrive()
+{
+    Class cls = m_columnBinding.getClass();
+    if ([cls conformsToProtocol:@protocol(WCTTableCoding)]) {
+        syntax().tableBindingRetrive = [=]() {
+            return dynamic_cast<const WCDB::BaseBinding*>(&[cls objectRelationalMapping]);
+        };
+    }
+}
+
+WCTProperty WCTProperty::table(const WCDB::UnsafeStringView& table) const
+{
+    return WCTProperty(m_columnBinding, WCDB::Column(*this).table(table));
+}
+
+WCTProperty WCTProperty::schema(const WCDB::Schema& schema) const
+{
+    return WCTProperty(m_columnBinding, WCDB::Column(*this).schema(schema));
 }
 
 #pragma mark - WCTProperties

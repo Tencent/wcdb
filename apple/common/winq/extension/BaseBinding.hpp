@@ -45,18 +45,23 @@ protected:
 
 #pragma mark - Table
 public:
-    bool createTable(const UnsafeStringView &tableName, InnerHandle &handle) const;
-    bool createVirtualTable(const UnsafeStringView &tableName, InnerHandle &handle) const;
+    bool createTable(const UnsafeStringView &tableName, InnerHandle *handle) const;
+    bool createVirtualTable(const UnsafeStringView &tableName, InnerHandle *handle) const;
 
-    StatementCreateTable statementTable;
-    StatementCreateVirtualTable statementVirtualTable;
-
-protected:
     StatementCreateTable
     generateCreateTableStatement(const UnsafeStringView &tableName) const;
 
     StatementCreateVirtualTable
     generateCreateVirtualTableStatement(const UnsafeStringView &tableName) const;
+
+    StatementCreateTable statementTable;
+    StatementCreateVirtualTable statementVirtualTable;
+
+    bool tryRecoverColumn(const UnsafeStringView &columnName,
+                          const UnsafeStringView &tableName,
+                          const UnsafeStringView &schemaName,
+                          const UnsafeStringView &sql,
+                          InnerHandle *handle) const;
 
 #pragma mark - Table Constraint
 public:

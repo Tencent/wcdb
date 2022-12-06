@@ -37,6 +37,11 @@ Field::Field(const UnsafeStringView& name, const std::shared_ptr<BaseAccessor> a
 {
 }
 
+Field::Field(const std::shared_ptr<BaseAccessor> accessor, const Column& column)
+: Column(column), m_accessor(accessor)
+{
+}
+
 Field::~Field() = default;
 
 std::shared_ptr<BaseAccessor> Field::getAccessor() const
@@ -47,12 +52,18 @@ std::shared_ptr<BaseAccessor> Field::getAccessor() const
 void Field::configWithBinding(const Binding& binding, void* memberPointer)
 {
     syntax().name = binding.getColumnName(memberPointer);
+    syntax().tableBinding = dynamic_cast<const BaseBinding*>(&binding);
     m_accessor = binding.getAccessor(memberPointer);
 }
 
-Column Field::table(const UnsafeStringView& table) const
+Field Field::table(const UnsafeStringView& table) const
 {
-    return Column(*this).table(table);
+    return Field(m_accessor, Column(*this).table(table));
+}
+
+Field Field::schema(const Schema& schema) const
+{
+    return Field(m_accessor, Column(*this).schema(schema));
 }
 
 #pragma mark - Fields

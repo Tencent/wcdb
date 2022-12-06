@@ -111,12 +111,18 @@ bool WCDBBindingCreateTable(CPPBinding binding, const char* _Nullable tableName,
 {
     WCDBGetObjectOrReturnValue(binding, WCDB::SwiftBinding, cppBinding, false);
     WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
-    return cppBinding->createTable(tableName, *cppHandle);
+    return cppBinding->createTable(tableName, cppHandle);
 }
 
 bool WCDBBindingCreateVirtualTable(CPPBinding binding, const char* _Nullable tableName, CPPHandle handle)
 {
     WCDBGetObjectOrReturnValue(binding, WCDB::SwiftBinding, cppBinding, false);
     WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
-    return cppBinding->createVirtualTable(tableName, *cppHandle);
+    return cppBinding->createVirtualTable(tableName, cppHandle);
+}
+
+const void* _Nullable WCDBBindingGetBaseBinding(CPPBinding binding)
+{
+    WCDBGetObjectOrReturnValue(binding, WCDB::SwiftBinding, cppBinding, nullptr);
+    return dynamic_cast<const WCDB::BaseBinding*>(cppBinding);
 }

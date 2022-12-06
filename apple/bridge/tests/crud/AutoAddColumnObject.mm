@@ -1,5 +1,5 @@
 //
-// Created by qiuwenchen on 2022/5/26.
+// Created by 陈秋文 on 2022/12/6.
 //
 
 /*
@@ -22,17 +22,22 @@
  * limitations under the License.
  */
 
-#pragma once
+#import "AutoAddColumnObject.h"
+#import <Foundation/Foundation.h>
+#import <WCDB/WCDB.h>
 
-#include "WinqBridge.h"
+@implementation AutoAddColumnObject
 
-WCDB_EXTERN_C_BEGIN
+WCDB_IMPLEMENTATION(AutoAddColumnObject)
+WCDB_SYNTHESIZE(primeryValue)
+WCDB_SYNTHESIZE(uniqueValue)
+WCDB_SYNTHESIZE(insertValue)
+WCDB_SYNTHESIZE(updateValue)
+WCDB_SYNTHESIZE(selectValue)
+WCDB_SYNTHESIZE(multiSelectValue)
+WCDB_SYNTHESIZE(deleteValue)
 
-CPPColumn WCDBColumnCreateAll();
-CPPColumn WCDBColumnCreateRowId();
-CPPColumn WCDBColumnCreateWithName(const char* _Nullable name, const void* _Nullable binding);
-void WCDBColumnInTable(CPPColumn column, const char* _Nullable table);
-void WCDBColumnOfSchema(CPPColumn column, CPPSchema schema);
-CPPExpression WCDBColumnAsExpressionOperand(CPPColumn column);
+WCDB_PRIMARY(primeryValue)
+WCDB_UNIQUE(uniqueValue)
 
-WCDB_EXTERN_C_END
+@end

@@ -63,6 +63,8 @@ void Core::print(const UnsafeStringView& message)
             WCTError* nsError = [[WCTError alloc] initWithError:error];
             block(nsError);
         });
+    } else {
+        WCDB::Core::shared().setNotificationWhenErrorTraced(self.path, nullptr);
     }
 }
 

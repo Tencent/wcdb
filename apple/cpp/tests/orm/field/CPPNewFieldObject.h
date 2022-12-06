@@ -1,5 +1,5 @@
 //
-// Created by qiuwenchen on 2022/5/26.
+// Created by 陈秋文 on 2022/12/4.
 //
 
 /*
@@ -22,17 +22,27 @@
  * limitations under the License.
  */
 
-#pragma once
+#import <WCDB/WCDBCpp.h>
 
-#include "WinqBridge.h"
-
-WCDB_EXTERN_C_BEGIN
-
-CPPColumn WCDBColumnCreateAll();
-CPPColumn WCDBColumnCreateRowId();
-CPPColumn WCDBColumnCreateWithName(const char* _Nullable name, const void* _Nullable binding);
-void WCDBColumnInTable(CPPColumn column, const char* _Nullable table);
-void WCDBColumnOfSchema(CPPColumn column, CPPSchema schema);
-CPPExpression WCDBColumnAsExpressionOperand(CPPColumn column);
-
-WCDB_EXTERN_C_END
+class CPPNewFieldObject {
+public:
+    int primeryValue;
+    int uniqueValue;
+    int insertValue;
+    int updateValue;
+    int selectValue;
+    int multiSelectValue;
+    int deleteValue;
+    int indexValue;
+    WCDB_CPP_ORM_DECLARE_AND_START_IMPLEMENT(CPPNewFieldObject)
+    WCDB_CPP_SYNTHESIZE(primeryValue)
+    WCDB_CPP_SYNTHESIZE(uniqueValue)
+    WCDB_CPP_SYNTHESIZE(insertValue)
+    WCDB_CPP_SYNTHESIZE(updateValue)
+    WCDB_CPP_SYNTHESIZE(selectValue)
+    WCDB_CPP_SYNTHESIZE(multiSelectValue)
+    WCDB_CPP_SYNTHESIZE(deleteValue)
+    WCDB_CPP_PRIMARY(primeryValue)
+    WCDB_CPP_UNIQUE(uniqueValue)
+    WCDB_CPP_ORM_IMPLEMENTATION_END
+};

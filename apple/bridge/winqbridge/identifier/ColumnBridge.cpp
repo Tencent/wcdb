@@ -38,10 +38,12 @@ CPPColumn WCDBColumnCreateRowId()
     return WCDBCreateCPPBridgedObject(CPPColumn, WCDB::Column::rowid());
 }
 
-CPPColumn WCDBColumnCreateWithName(const char* _Nullable name)
+CPPColumn WCDBColumnCreateWithName(const char* _Nullable name, const void* _Nullable binding)
 {
     return WCDBCreateCPPBridgedObject(
-    CPPColumn, new WCDB::Column(WCDB::UnsafeStringView(name)));
+    CPPColumn,
+    new WCDB::Column(WCDB::UnsafeStringView(name),
+                     static_cast<const WCDB::BaseBinding*>(binding)));
 }
 
 void WCDBColumnInTable(CPPColumn column, const char* _Nullable table)

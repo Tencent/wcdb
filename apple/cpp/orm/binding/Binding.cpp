@@ -43,6 +43,7 @@ const Field &Binding::registerField(void *memberPointer,
     m_columnDefs.emplace_back(
     std::make_pair(name, ColumnDef(name, accessor->getColumnType())));
     m_fields.emplace_back(name, accessor);
+    m_fields.back().syntax().tableBinding = this;
     return m_fields.back();
 }
 

@@ -1,5 +1,5 @@
 //
-// Created by qiuwenchen on 2022/4/21.
+// Created by 陈秋文 on 2022/12/6.
 //
 
 /*
@@ -23,35 +23,26 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTBridgeProperty+CPP.h>
+#import <WCDB/WCTMacro.h>
+#import <WCDB/WCTTableCoding.h>
 
-@interface WCTBridgeProperty () {
-    const WCTProperty* m_innerProperty;
-}
-@end
+@interface AutoAddColumnObject : NSObject <WCTTableCoding>
 
-@implementation WCTBridgeProperty
+@property (nonatomic, assign) int primeryValue;
+@property (nonatomic, assign) int uniqueValue;
+@property (nonatomic, assign) int insertValue;
+@property (nonatomic, assign) int updateValue;
+@property (nonatomic, assign) int selectValue;
+@property (nonatomic, assign) int multiSelectValue;
+@property (nonatomic, assign) int deleteValue;
+@property (nonatomic, assign) int indexValue;
 
-+ (WCTBridgeProperty*)creatBridgeProperty:(const WCTProperty&)wctProperty
-{
-    WCTBridgeProperty* property = [[WCTBridgeProperty alloc] init];
-    property->m_innerProperty = &wctProperty;
-    return property;
-}
-
-- (NSString*)propertyName
-{
-    return [NSString stringWithUTF8String:m_innerProperty->getDescription().data()];
-}
-
-- (const WCTProperty&)wctProperty
-{
-    return *m_innerProperty;
-}
-
-- (const void* _Nullable)tableBinding
-{
-    return self.wctProperty.syntax().getTableBinding();
-}
+WCDB_PROPERTY(primeryValue)
+WCDB_PROPERTY(uniqueValue)
+WCDB_PROPERTY(insertValue)
+WCDB_PROPERTY(updateValue)
+WCDB_PROPERTY(selectValue)
+WCDB_PROPERTY(multiSelectValue)
+WCDB_PROPERTY(deleteValue)
 
 @end

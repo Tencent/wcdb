@@ -29,6 +29,8 @@
 
 namespace WCDB {
 
+class BaseBinding;
+
 namespace Syntax {
 
 class Column final : public Identifier {
@@ -42,6 +44,13 @@ public:
     StringView name;
 
     bool isValid() const override final;
+
+#pragma mark - TableBinding
+public:
+    typedef std::function<const BaseBinding*()> TableBindingRetirve;
+    TableBindingRetirve tableBindingRetrive = nullptr;
+    const BaseBinding* tableBinding = nullptr;
+    const BaseBinding* getTableBinding() const;
 
 #pragma mark - Identifier
 public:

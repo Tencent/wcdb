@@ -21,9 +21,7 @@
 import XCTest
 import WCDB
 
-class CRUDTestCase: BaseTestCase {
-
-    var database: Database!
+class CRUDTestCase: DatabaseTestCase {
     let preInsertedObjects: [CRUDObject] = {
         let object1 = CRUDObject()
         object1.variable1 = 1
@@ -36,9 +34,6 @@ class CRUDTestCase: BaseTestCase {
 
     override func setUp() {
         super.setUp()
-        database = Database(at: self.recommendedPath)
-        database.tag = recommendTag
-
         XCTAssertNoThrow(try database.create(table: CRUDObject.name, of: CRUDObject.self))
 
         XCTAssertNoThrow(try database.insert(preInsertedObjects, intoTable: CRUDObject.name))
