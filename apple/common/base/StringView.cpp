@@ -137,6 +137,11 @@ bool UnsafeStringView::hasSuffix(const UnsafeStringView& target) const
     return has;
 }
 
+bool UnsafeStringView::contain(const UnsafeStringView& target) const
+{
+    return find(target) != std::string_view::npos;
+}
+
 #pragma mark - UnsafeStringView - Modifier
 void UnsafeStringView::clear()
 {

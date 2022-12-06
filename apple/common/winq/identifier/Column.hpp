@@ -48,6 +48,7 @@ public:
     }
     Column();
     Column(const UnsafeStringView& name);
+    Column(const UnsafeStringView& name, const BaseBinding* binding);
     virtual ~Column() override;
 
     Column& table(const UnsafeStringView& table);

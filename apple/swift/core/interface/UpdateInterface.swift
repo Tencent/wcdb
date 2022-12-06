@@ -99,6 +99,44 @@ public protocol UpdateInterface: AnyObject {
     ///   - offset: Expression convertible
     /// - Throws: `Error`
     func update(table: String,
+                on propertyConvertibleList: PropertyConvertible...,
+                with row: ColumnEncodable...,
+                where condition: Condition?,
+                orderBy orderList: [OrderBy]?,
+                limit: Limit?,
+                offset: Offset?) throws
+
+    /// Execute updating with row on specific(or all) properties.
+    ///
+    /// - Parameters:
+    ///   - table: Table name
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - object: Table encodable object
+    ///   - condition: Expression convertible
+    ///   - orderList: Order convertible list
+    ///   - limit: Expression convertible
+    ///   - offset: Expression convertible
+    /// - Throws: `Error`
+    func update(table: String,
+                on propertyConvertibleList: [PropertyConvertible],
+                with row: ColumnEncodable...,
+                where condition: Condition?,
+                orderBy orderList: [OrderBy]?,
+                limit: Limit?,
+                offset: Offset?) throws
+
+    /// Execute updating with row on specific(or all) properties.
+    ///
+    /// - Parameters:
+    ///   - table: Table name
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - object: Table encodable object
+    ///   - condition: Expression convertible
+    ///   - orderList: Order convertible list
+    ///   - limit: Expression convertible
+    ///   - offset: Expression convertible
+    /// - Throws: `Error`
+    func update(table: String,
                 on propertyConvertibleList: [PropertyConvertible],
                 with row: [ColumnEncodable],
                 where condition: Condition?,
@@ -153,6 +191,38 @@ extension UpdateInterface where Self: HandleRepresentable {
     public func update(table: String,
                        on propertyConvertibleList: PropertyConvertible...,
                        with row: [ColumnEncodable],
+                       where condition: Condition? = nil,
+                       orderBy orderList: [OrderBy]? = nil,
+                       limit: Limit? = nil,
+                       offset: Offset? = nil) throws {
+        return try update(table: table,
+                          on: propertyConvertibleList,
+                          with: row,
+                          where: condition,
+                          orderBy: orderList,
+                          limit: limit,
+                          offset: offset)
+    }
+
+    public func update(table: String,
+                       on propertyConvertibleList: PropertyConvertible...,
+                       with row: ColumnEncodable...,
+                       where condition: Condition? = nil,
+                       orderBy orderList: [OrderBy]? = nil,
+                       limit: Limit? = nil,
+                       offset: Offset? = nil) throws {
+        return try update(table: table,
+                          on: propertyConvertibleList,
+                          with: row,
+                          where: condition,
+                          orderBy: orderList,
+                          limit: limit,
+                          offset: offset)
+    }
+
+    public func update(table: String,
+                       on propertyConvertibleList: [PropertyConvertible],
+                       with row: ColumnEncodable...,
                        where condition: Condition? = nil,
                        orderBy orderList: [OrderBy]? = nil,
                        limit: Limit? = nil,

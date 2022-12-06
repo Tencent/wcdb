@@ -441,29 +441,6 @@ public extension Database {
         }
         WCDBDatabaseConfig(database, name, invocationImp, uninvocationImp, priority.rawValue)
     }
-
-//    /// This interface is equivalent to `database.setTokenizes(tokenizes)`
-//    ///
-//    /// - Parameter tokenizes: registed tokenizeName. You can use builtin tokenizer named `.WCDB`
-//    public func setTokenizes(_ tokenizes: Tokenize...) {
-//        setTokenizes(tokenizes)
-//    }
-//
-//    /// Setup multiple tokenizers with names for current database.
-//    ///
-//    /// - Parameter tokenizes: registed tokenizeName. You can use builtin tokenizer named .WCDB
-//    public func setTokenizes(_ tokenizes: [Tokenize]) {
-//        handlePool.setConfig(named: DefaultConfigOrder.tokenize.description) { (handle: Handle) throws in
-//            try tokenizes.forEach({ (tokenize) in
-//                let module = tokenize.module
-//                let handleStatement = try handle.prepare(CommonStatement.fts3Tokenizer)
-//                handleStatement.bind(module.name, toIndex: 1)
-//                handleStatement.bind(module.address, toIndex: 2)
-//                try handleStatement.step()
-//                try handleStatement.finalize()
-//            })
-//        }
-//    }
 }
 
 // Table

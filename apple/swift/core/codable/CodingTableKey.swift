@@ -85,11 +85,15 @@ extension CodingTableKey {
         return asProperty().`in`(table: table)
     }
 
+    public func of(schema schemaConvertible: SchemaConvertible) -> Property {
+        return asProperty().of(schema: schemaConvertible)
+    }
+
     public func asExpression() -> Expression {
         return asColumn().asExpression()
     }
 
     public func asColumn() -> Column {
-        return Column(named: stringValue)
+        return asProperty().asColumn()
     }
 }

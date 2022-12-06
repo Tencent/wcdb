@@ -115,6 +115,16 @@ bool ColumnConstraint::isAutoIncrement() const
     return switcher == Switch::PrimaryKey && autoIncrement;
 }
 
+bool ColumnConstraint::isPrimaryKey() const
+{
+    return switcher == Switch::PrimaryKey;
+}
+
+bool ColumnConstraint::isUnique() const
+{
+    return switcher == Switch::Unique;
+}
+
 } // namespace Syntax
 
 } // namespace WCDB

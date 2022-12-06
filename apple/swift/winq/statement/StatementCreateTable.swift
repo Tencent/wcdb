@@ -57,10 +57,12 @@ public final class StatementCreateTable: Identifier<CPPStatementCreateTable>, St
         return self
     }
 
+    @discardableResult
     public func with(columns: ColumnDef...) -> StatementCreateTable {
         with(columns: columns)
     }
 
+    @discardableResult
     public func with(columns: [ColumnDef]) -> StatementCreateTable {
         withExtendedLifetime(columns) {
             let cppColumns = $0.map { $0.cppObj }
@@ -71,10 +73,12 @@ public final class StatementCreateTable: Identifier<CPPStatementCreateTable>, St
         return self
     }
 
+    @discardableResult
     public func constraint(_ constraints: TableConstraint...) -> StatementCreateTable {
         constraint(constraints)
     }
 
+    @discardableResult
     public func constraint(_ constraints: [TableConstraint]? = nil) -> StatementCreateTable {
         if let constraints = constraints {
             withExtendedLifetime(constraints) {
@@ -87,6 +91,7 @@ public final class StatementCreateTable: Identifier<CPPStatementCreateTable>, St
         return self
     }
 
+    @discardableResult
     public func withoutRowid() -> StatementCreateTable {
         WCDBStatementCreateTableConfigWithoutRowId(cppObj)
         return self

@@ -67,6 +67,7 @@ public:
 
     bool hasPrefix(const UnsafeStringView& target) const;
     bool hasSuffix(const UnsafeStringView& target) const;
+    bool contain(const UnsafeStringView& target) const;
 
 #pragma mark - UnsafeStringView - Operations
 public:

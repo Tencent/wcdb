@@ -59,6 +59,8 @@ public:
 #pragma mark - Utility
 public:
     bool isAutoIncrement() const;
+    bool isPrimaryKey() const;
+    bool isUnique() const;
 };
 
 } // namespace Syntax

@@ -53,7 +53,8 @@ public:
         configWithBinding(binding, voidPointer);
     }
 
-    Column table(const UnsafeStringView& table) const;
+    Field table(const UnsafeStringView& table) const;
+    Field schema(const Schema& schema) const;
 
     template<class ObjectType>
     Value getValue(const ObjectType& obj) const
@@ -90,6 +91,7 @@ protected:
     std::shared_ptr<BaseAccessor> getAccessor() const;
 
 private:
+    Field(const std::shared_ptr<BaseAccessor> accessor, const Column& column);
     void configWithBinding(const Binding& binding, void* memberPointer);
     std::shared_ptr<BaseAccessor> m_accessor;
 };

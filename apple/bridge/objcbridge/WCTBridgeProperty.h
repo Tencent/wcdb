@@ -26,7 +26,9 @@
 
 @interface WCTBridgeProperty : NSObject
 
-@property (nonatomic, strong, readonly) NSString* propertyName;
+@property (nonatomic, strong, readonly) NSString* _Nonnull propertyName;
+
+- (const void* _Nullable)tableBinding;
 
 @end
 

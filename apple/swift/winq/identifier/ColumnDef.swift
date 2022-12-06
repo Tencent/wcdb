@@ -23,19 +23,24 @@ import WCDB_Private
 
 public final class ColumnDef: Identifier<CPPColumnDef> {
 
-    public init(with columnConvertible: ColumnConvertible, and optionalType: ColumnType? = nil) {
+    convenience public init(with columnConvertible: ColumnConvertible, and optionalType: ColumnType? = nil) {
         let column = columnConvertible.asColumn()
         if let type = optionalType {
             let cppColumnDef = withExtendedLifetime(column) {
                 WCDBColumnDefCreateWithType(column.cppObj, type.cValue)
             }
-            super.init(with: cppColumnDef)
+            self.init(with: cppColumnDef)
         } else {
             let cppColumnDef = withExtendedLifetime(column) {
                 WCDBColumnDefCreateWithoutType(column.cppObj)
             }
-            super.init(with: cppColumnDef)
+            self.init(with: cppColumnDef)
         }
+    }
+
+    convenience internal init(named name: String, and optionalType: ColumnType? = nil) {
+        let column = Column(named: name)
+        self.init(with: column, and: optionalType)
     }
 
     public func addConstraint(_ constraint: ColumnConstraint) {

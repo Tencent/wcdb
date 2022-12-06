@@ -98,6 +98,12 @@ protected:
 
 private:
     void analysisStatement(const Statement &statement);
+    bool tryExtractColumnInfo(const Statement &statement,
+                              const StringView &msg,
+                              StringView &columnName,
+                              StringView &tableName,
+                              StringView &schemaName,
+                              const BaseBinding **binding);
     sqlite3_stmt *m_stmt;
     bool m_done;
     StringView m_newTable;

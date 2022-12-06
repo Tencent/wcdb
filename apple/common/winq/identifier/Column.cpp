@@ -34,6 +34,13 @@ Column::Column(const UnsafeStringView& name)
     syntax().name = name;
 }
 
+Column::Column(const UnsafeStringView& name, const BaseBinding* binding)
+{
+    syntax().wildcard = false;
+    syntax().name = name;
+    syntax().tableBinding = binding;
+}
+
 Column& Column::schema(const Schema& schema)
 {
     syntax().schema = schema;

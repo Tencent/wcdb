@@ -24,6 +24,8 @@
 
 #include <WCDB/AbstractHandle.hpp>
 #include <WCDB/Assertion.hpp>
+#include <WCDB/BaseBinding.hpp>
+#include <WCDB/InnerHandle.hpp>
 #include <WCDB/InnerHandleStatement.hpp>
 #include <WCDB/SQLite.h>
 #include <WCDB/WINQ.h>
@@ -56,7 +58,50 @@ bool InnerHandleStatement::prepare(const Statement &statement)
     if (getHandle()->needMonitorTable()) {
         analysisStatement(statement);
     }
-    return prepare(statement.getDescription());
+
+    const StringView &sql = statement.getDescription();
+    if (prepare(sql)) {
+        return true;
+    }
+
+    auto statementType = statement.getType();
+    if (statementType != Syntax::Identifier::Type::InsertSTMT
+        && statementType != Syntax::Identifier::Type::DeleteSTMT
+        && statementType != Syntax::Identifier::Type::UpdateSTMT
+        && statementType != Syntax::Identifier::Type::SelectSTMT) {
+        return false;
+    }
+
+    const Error &error = getHandle()->getError();
+    if (error.code() != Error::Code::Error || (int) error.getExtCode() != 0) {
+        return false;
+    }
+    const StringView &msg = error.getMessage();
+    if (!msg.hasPrefix("no such column: ")
+        && !(statement.getType() == Syntax::Identifier::Type::InsertSTMT
+             && msg.hasPrefix("table ") && msg.contain(" has no column named "))) {
+        return false;
+    }
+
+    InnerHandle *innerHandle = dynamic_cast<InnerHandle *>(getHandle());
+    if (!innerHandle) {
+        return false;
+    }
+
+    StringView columnName;
+    StringView tableName;
+    StringView schemaName;
+    const BaseBinding *binding = nullptr;
+    if (!tryExtractColumnInfo(statement, msg, columnName, tableName, schemaName, &binding)) {
+        return false;
+    }
+
+    WCTAssert(binding != nullptr);
+    if (!binding->tryRecoverColumn(columnName, tableName, schemaName, sql, innerHandle)) {
+        return false;
+    }
+
+    return prepare(sql);
 }
 
 void InnerHandleStatement::analysisStatement(const Statement &statement)
@@ -99,6 +144,142 @@ void InnerHandleStatement::analysisStatement(const Statement &statement)
     default:
         break;
     }
+}
+
+bool InnerHandleStatement::tryExtractColumnInfo(const Statement &statement,
+                                                const StringView &msg,
+                                                StringView &columnName,
+                                                StringView &tableName,
+                                                StringView &schemaName,
+                                                const BaseBinding **binding)
+{
+    StringView columnInfo[3];
+    const char *msgStr = msg.data();
+    bool isInsert = false;
+    if (msg.hasPrefix("no such column: ")) {
+        int index = 2;
+        size_t preLocation = msg.length();
+        int i = (int) msg.length() - 2;
+        for (; i >= 17; i--) {
+            if (msgStr[i] == ' ') {
+                return false;
+            }
+            if (msgStr[i] == '.') {
+                columnInfo[index] = StringView(msgStr + i + 1, preLocation - i - 1);
+                preLocation = i;
+                index--;
+            }
+            if (index < 0) {
+                return false;
+            }
+        }
+        columnInfo[index] = StringView(msgStr + i, preLocation - i);
+    } else {
+        isInsert = true;
+        off_t firstLoc = msg.find(" has no column named ");
+        const UnsafeStringView tablePart(msgStr + 6, firstLoc - 6);
+        off_t secondLoc = tablePart.find(".");
+        if (secondLoc == std::string_view::npos) {
+            columnInfo[1] = tablePart;
+        } else {
+            columnInfo[0] = StringView(tablePart.data(), secondLoc);
+            columnInfo[1] = StringView(tablePart.data() + secondLoc + 1,
+                                       tablePart.length() - secondLoc - 1);
+        }
+        columnInfo[2]
+        = StringView(msg.data() + firstLoc + 21, msg.length() - firstLoc - 21);
+    }
+
+    schemaName = columnInfo[0];
+    tableName = columnInfo[1];
+    columnName = columnInfo[2];
+    if (columnName.length() == 0) {
+        return false;
+    }
+
+    bool tableSpecified = tableName.length() > 0;
+    bool schemaSpecified = schemaName.length() > 0;
+    WCTAssert(tableSpecified || !schemaSpecified);
+    bool findTable = !tableSpecified;
+    Statement copyStatement = statement;
+    bool invalidStatement = false;
+
+    copyStatement.iterate([&](Syntax::Identifier &identifier, bool &stop) {
+        StringView curTableName;
+        Syntax::Schema curSchema;
+        bool needCheckTable = false;
+        switch (identifier.getType()) {
+        case Syntax::Identifier::Type::Column: {
+            Syntax::Column &column = (Syntax::Column &) identifier;
+            if (column.name.compare(columnName) != 0) {
+                return;
+            }
+            if (!isInsert) {
+                if ((tableSpecified && column.table.compare(tableName) != 0)
+                    || (!tableSpecified && column.table.length() > 0)) {
+                    return;
+                }
+                if ((schemaSpecified && column.schema.name.compare(schemaName) != 0)
+                    || (!schemaSpecified && tableSpecified && !column.schema.isMain())) {
+                    return;
+                }
+            }
+            const BaseBinding *newBinding = column.getTableBinding();
+            if (newBinding != nullptr && *binding != nullptr && newBinding != *binding) {
+                invalidStatement = true;
+                stop = true;
+                return;
+            }
+            *binding = newBinding;
+        } break;
+        case Syntax::Identifier::Type::QualifiedTableName: {
+            Syntax::QualifiedTableName &qualifiedTable
+            = (Syntax::QualifiedTableName &) identifier;
+            curTableName = qualifiedTable.table;
+            curSchema = qualifiedTable.schema;
+            needCheckTable = true;
+        } break;
+        case Syntax::Identifier::Type::TableOrSubquery: {
+            Syntax::TableOrSubquery &tableOrSubquery = (Syntax::TableOrSubquery &) identifier;
+            if (tableOrSubquery.switcher == Syntax::TableOrSubquery::Switch::Table) {
+                curTableName = tableOrSubquery.tableOrFunction;
+                curSchema = tableOrSubquery.schema;
+                needCheckTable = true;
+            }
+        } break;
+        case Syntax::Identifier::Type::InsertSTMT: {
+            Syntax::InsertSTMT &insert = (Syntax::InsertSTMT &) identifier;
+            curTableName = insert.table;
+            curSchema = insert.schema;
+            needCheckTable = true;
+        } break;
+        default:
+            break;
+        }
+        if (!needCheckTable) {
+            return;
+        }
+
+        if (!tableSpecified) {
+            if ((tableName.length() > 0 && tableName.compare(curTableName) != 0)
+                || (schemaName.length() > 0 && curSchema.name.compare(schemaName) != 0)) {
+                invalidStatement = true;
+                stop = true;
+                return;
+            }
+            tableName = curTableName;
+            if (!curSchema.isMain()) {
+                schemaName = curSchema.name;
+            }
+        } else if (!findTable && curTableName.compare(tableName) == 0) {
+            if ((schemaName.length() == 0 && curSchema.isMain())
+                || (schemaName.length() > 0 && curSchema.name.compare(schemaName) == 0)) {
+                findTable = true;
+            }
+        }
+    });
+
+    return *binding != nullptr && findTable && !invalidStatement;
 }
 
 bool InnerHandleStatement::prepare(const UnsafeStringView &sql)

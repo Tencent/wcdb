@@ -124,7 +124,7 @@ extension TableInterface where Self: Database {
         table name: String,
         of rootType: Root.Type) throws {
             let handle = try getHandle()
-            let ret = WCDBBindingCreateTable(rootType.CodingKeys.objectRelationalMapping.cppBinding, name.cString, handle.cppHandle)
+            let ret = WCDBBindingCreateTable(rootType.CodingKeys.objectRelationalMapping.innerBinding, name.cString, handle.cppHandle)
             if !ret {
                 throw handle.getError()
             }
@@ -132,7 +132,7 @@ extension TableInterface where Self: Database {
 
     public func create<Root: TableDecodable>(virtualTable name: String, of rootType: Root.Type) throws {
         let handle = try getHandle()
-        let ret = WCDBBindingCreateVirtualTable(rootType.CodingKeys.objectRelationalMapping.cppBinding, name.cString, handle.cppHandle)
+        let ret = WCDBBindingCreateVirtualTable(rootType.CodingKeys.objectRelationalMapping.innerBinding, name.cString, handle.cppHandle)
         if !ret {
             throw handle.getError()
         }

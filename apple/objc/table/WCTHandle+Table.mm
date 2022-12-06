@@ -68,7 +68,7 @@
     const WCTBinding &binding = [cls objectRelationalMapping];
     WCDB::InnerHandle *innerHandle = [self getOrGenerateHandle];
     WCTAssert(innerHandle != nullptr);
-    return binding.createVirtualTable(tableName, *innerHandle);
+    return binding.createVirtualTable(tableName, innerHandle);
 }
 
 - (BOOL)dropTable:(NSString *)tableName
@@ -88,7 +88,7 @@
     const WCTBinding &binding = [tableClass objectRelationalMapping];
     WCDB::InnerHandle *innerHandle = [self getOrGenerateHandle];
     WCTAssert(innerHandle != nullptr);
-    return binding.createTable(tableName, *innerHandle);
+    return binding.createTable(tableName, innerHandle);
 }
 
 @end

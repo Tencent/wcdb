@@ -27,7 +27,11 @@ public final class Column: Identifier<CPPColumn> {
     public static let rowid: Column = Column(with: WCDBColumnCreateRowId())
 
     public convenience init(named name: String) {
-        self.init(with: WCDBColumnCreateWithName(name.cString))
+        self.init(named: name, binded: nil)
+    }
+
+    internal convenience init(named name: String, binded tableBinding: UnsafeRawPointer?) {
+        self.init(with: WCDBColumnCreateWithName(name.cString, tableBinding))
     }
 
     internal override init(with cppObj: CPPColumn) {

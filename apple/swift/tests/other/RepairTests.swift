@@ -199,6 +199,7 @@ class RepairTests: DatabaseTestCase {
     func testRetrieveWithoutBackupAndDeposit() {
         excuteTest {
             XCTAssertNoThrow(try database.corruptHeader())
+            XCTAssertNoThrow(try database.deposit())
             doTestRetrieve(expecting: false)
             doTestObjectsRetrieved(expecting: false)
         }

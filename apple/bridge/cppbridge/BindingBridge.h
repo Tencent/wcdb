@@ -50,4 +50,6 @@ bool WCDBBindingCreateVirtualTable(CPPBinding binding,
                                    const char* _Nullable tableName,
                                    CPPHandle handle);
 
+const void* _Nullable WCDBBindingGetBaseBinding(CPPBinding binding);
+
 WCDB_EXTERN_C_END
