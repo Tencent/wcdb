@@ -61,15 +61,20 @@ InnerHandle* Handle::getOrGenerateHandle()
 {
     if (m_innerHandle == nullptr) {
         m_handleHolder = m_databaseHolder->getHandle();
-        m_innerHandle = m_handleHolder.get();
+        if (m_handleHolder != nullptr) {
+            m_innerHandle = m_handleHolder.get();
+        }
     }
-    WCTAssert(m_innerHandle != nullptr);
     return m_innerHandle;
 }
 
 InnerHandleStatement* Handle::getInnerHandleStatement()
 {
-    return getOrGenerateHandle()->m_mainStatement;
+    auto handle = getOrGenerateHandle();
+    if (handle == nullptr) {
+        return nullptr;
+    }
+    return handle->m_mainStatement;
 }
 
 RecyclableHandle Handle::getHandleHolder()
@@ -98,22 +103,42 @@ void Handle::invalidate()
 
 long long Handle::getLastInsertedRowID()
 {
-    return getOrGenerateHandle()->getLastInsertedRowID();
+    auto handle = getOrGenerateHandle();
+    if (handle == nullptr) {
+        return 0;
+    }
+    return handle->getLastInsertedRowID();
 }
 
 int Handle::getChanges()
 {
-    return getOrGenerateHandle()->getChanges();
+    auto handle = getOrGenerateHandle();
+    if (handle == nullptr) {
+        return 0;
+    }
+    return handle->getChanges();
 }
 
 int Handle::getTotalChange()
 {
-    return getOrGenerateHandle()->getTotalChange();
+    auto handle = getOrGenerateHandle();
+    if (handle == nullptr) {
+        return 0;
+    }
+    return handle->getTotalChange();
 }
 
 const Error& Handle::getError()
 {
-    return getOrGenerateHandle()->getError();
+    auto handle = getOrGenerateHandle();
+    if (handle == nullptr) {
+        if (m_databaseHolder != nullptr) {
+            return m_databaseHolder->getThreadedError();
+        }
+        static Error* error = new Error();
+        return *error;
+    }
+    return handle->getError();
 }
 
 HandleStatement& Handle::getOrCreateHandleStatementWithTag(const UnsafeStringView& tag)
@@ -132,6 +157,9 @@ HandleStatement& Handle::getOrCreateHandleStatementWithTag(const UnsafeStringVie
 void Handle::finalizeAllStatement()
 {
     InnerHandle* handle = getOrGenerateHandle();
+    if (handle == nullptr) {
+        return;
+    }
     for (auto iter = m_handleStatementDic.begin(); iter != m_handleStatementDic.end(); iter++) {
         iter->second.finalize();
         handle->returnStatement(iter->second.m_innerHandleStatement);

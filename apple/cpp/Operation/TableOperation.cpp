@@ -27,6 +27,12 @@
 #include <WCDB/InnerHandle.hpp>
 #include <WCDB/TableOperation.hpp>
 
+#define GetHandleOrReturnValue(value)                                          \
+    RecyclableHandle handle = getHandleHolder();                               \
+    if (handle == nullptr) {                                                   \
+        return value;                                                          \
+    }
+
 namespace WCDB {
 
 TableOperation::~TableOperation() = default;
@@ -57,16 +63,16 @@ bool TableOperation::insertRows(const MultiRowsValue &rows, const Columns &colum
         handle.finalize();
         return true;
     };
+    GetHandleOrReturnValue(false);
+    Handle newHandle = Handle(handle);
     if (rows.size() == 0) {
         return true;
     } else if (rows.size() == 1) {
-        Handle handle = Handle(getHandleHolder());
-        return insertAction(handle);
+        return insertAction(newHandle);
     } else {
-        Handle handle = Handle(getHandleHolder());
-        bool succeed = handle.lazyRunTransaction(insertAction);
+        bool succeed = newHandle.lazyRunTransaction(insertAction);
         if (!succeed) {
-            assignErrorToDatabase(handle.getError());
+            assignErrorToDatabase(newHandle.getError());
         }
         return succeed;
     }
@@ -99,16 +105,16 @@ bool TableOperation::insertOrReplaceRows(const MultiRowsValue &rows, const Colum
         handle.finalize();
         return true;
     };
+    GetHandleOrReturnValue(false);
+    Handle newHandle = Handle(handle);
     if (rows.size() == 0) {
         return true;
     } else if (rows.size() == 1) {
-        Handle handle = Handle(getHandleHolder());
-        return insertAction(handle);
+        return insertAction(newHandle);
     } else {
-        Handle handle = Handle(getHandleHolder());
-        bool succeed = handle.lazyRunTransaction(insertAction);
+        bool succeed = newHandle.lazyRunTransaction(insertAction);
         if (!succeed) {
-            assignErrorToDatabase(handle.getError());
+            assignErrorToDatabase(newHandle.getError());
         }
         return succeed;
     }
@@ -130,7 +136,7 @@ bool TableOperation::updateRow(const OneRowValue &row,
         update.set(columns[i]).to(WCDB::BindParameter(i + 1));
     }
     configStatement(update, where, orders, limit, offset);
-    RecyclableHandle handle = getHandleHolder();
+    GetHandleOrReturnValue(false);
     bool succeed = false;
     if ((succeed = handle->prepare(update))) {
         handle->bindRow(row);
@@ -150,7 +156,7 @@ bool TableOperation::deleteValues(const Expression &where,
 {
     StatementDelete delete_ = StatementDelete().deleteFrom(getTableName());
     configStatement(delete_, where, orders, limit, offset);
-    auto handle = getHandleHolder();
+    GetHandleOrReturnValue(false);
     bool succeed = handle->execute(delete_);
     if (!succeed) {
         assignErrorToDatabase(handle->getError());
@@ -202,11 +208,11 @@ OptionalMultiRows TableOperation::selectAllRow(const ResultColumns &columns,
 
 OptionalValue TableOperation::getValueFromStatement(const Statement &statement, int index)
 {
-    Value result;
-    RecyclableHandle handle = getHandleHolder();
+    OptionalValue result;
+    GetHandleOrReturnValue(result);
     if (!handle->prepare(statement)) {
         assignErrorToDatabase(handle->getError());
-        return OptionalValue();
+        return result;
     }
     bool succeed = false;
     if ((succeed = handle->step()) && !handle->done()) {
@@ -216,14 +222,14 @@ OptionalValue TableOperation::getValueFromStatement(const Statement &statement, 
     if (!succeed) {
         assignErrorToDatabase(handle->getError());
     }
-    return succeed ? result : OptionalValue();
+    return result;
 }
 
 OptionalOneColumn
 TableOperation::getOneColumnFromStatement(const Statement &statement, int index)
 {
     OptionalOneColumn result;
-    RecyclableHandle handle = getHandleHolder();
+    GetHandleOrReturnValue(result);
 
     if (!handle->prepare(statement)) {
         assignErrorToDatabase(handle->getError());
@@ -239,11 +245,11 @@ TableOperation::getOneColumnFromStatement(const Statement &statement, int index)
 
 OptionalOneRow TableOperation::getOneRowFromStatement(const Statement &statement)
 {
-    OneRowValue result;
-    RecyclableHandle handle = getHandleHolder();
+    OptionalOneRow result;
+    GetHandleOrReturnValue(result);
     if (!handle->prepare(statement)) {
         assignErrorToDatabase(handle->getError());
-        return OptionalOneRow();
+        return result;
     }
     bool succeed = false;
     if ((succeed = handle->step()) && !handle->done()) {
@@ -253,13 +259,13 @@ OptionalOneRow TableOperation::getOneRowFromStatement(const Statement &statement
     if (!succeed) {
         assignErrorToDatabase(handle->getError());
     }
-    return succeed ? result : OptionalOneRow();
+    return result;
 }
 
 OptionalMultiRows TableOperation::getAllRowsFromStatement(const Statement &statement)
 {
     OptionalMultiRows result;
-    RecyclableHandle handle = getHandleHolder();
+    GetHandleOrReturnValue(false);
     if (!handle->prepare(statement)) {
         assignErrorToDatabase(handle->getError());
         return result;
