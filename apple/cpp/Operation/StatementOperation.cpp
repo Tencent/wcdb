@@ -26,68 +26,92 @@
 #include <WCDB/MultiObject.hpp>
 #include <WCDB/StatementOperation.hpp>
 
+#define GetHandleStatementOrReturn                                             \
+    auto handleStatement = getInnerHandleStatement();                          \
+    if (handleStatement == nullptr) {                                          \
+        return;                                                                \
+    }
+
+#define GetHandleStatementOrReturnValue(value)                                 \
+    auto handleStatement = getInnerHandleStatement();                          \
+    if (handleStatement == nullptr) {                                          \
+        return value;                                                          \
+    }
+
 namespace WCDB {
 
 StatementOperation::~StatementOperation() = default;
 
 bool StatementOperation::prepare(const Statement &statement)
 {
-    return getInnerHandleStatement()->prepare(statement);
+    GetHandleStatementOrReturnValue(false);
+    return handleStatement->prepare(statement);
 }
 
 bool StatementOperation::isPrepared()
 {
-    return getInnerHandleStatement()->isPrepared();
+    GetHandleStatementOrReturnValue(false);
+    return handleStatement->isPrepared();
 }
 
 void StatementOperation::finalize()
 {
-    getInnerHandleStatement()->finalize();
+    GetHandleStatementOrReturn;
+    handleStatement->finalize();
 }
 
 bool StatementOperation::step()
 {
-    return getInnerHandleStatement()->step();
+    GetHandleStatementOrReturnValue(false);
+    return handleStatement->step();
 }
 
 bool StatementOperation::done()
 {
-    return getInnerHandleStatement()->done();
+    GetHandleStatementOrReturnValue(true);
+    return handleStatement->done();
 }
 
 void StatementOperation::reset()
 {
-    getInnerHandleStatement()->reset();
+    GetHandleStatementOrReturn;
+    handleStatement->reset();
 }
 
 bool StatementOperation::isReadOnly()
 {
-    return getInnerHandleStatement()->isReadOnly();
+    GetHandleStatementOrReturnValue(false);
+    return handleStatement->isReadOnly();
 }
 
 void StatementOperation::bindInteger(const Integer &value, int index)
 {
-    getInnerHandleStatement()->bindInteger(value, index);
+    GetHandleStatementOrReturn;
+    handleStatement->bindInteger(value, index);
 }
 
 void StatementOperation::bindDouble(const Float &value, int index)
 {
-    getInnerHandleStatement()->bindDouble(value, index);
+    GetHandleStatementOrReturn;
+    handleStatement->bindDouble(value, index);
 }
 
 void StatementOperation::bindText(const Text &value, int index)
 {
-    getInnerHandleStatement()->bindText(value, index);
+    GetHandleStatementOrReturn;
+    handleStatement->bindText(value, index);
 }
 
 void StatementOperation::bindBLOB(const BLOB &value, int index)
 {
-    getInnerHandleStatement()->bindBLOB(value, index);
+    GetHandleStatementOrReturn;
+    handleStatement->bindBLOB(value, index);
 }
 
 void StatementOperation::bindNull(int index)
 {
-    getInnerHandleStatement()->bindNull(index);
+    GetHandleStatementOrReturn;
+    handleStatement->bindNull(index);
 }
 
 void StatementOperation::bindPointer(void *ptr,
@@ -95,82 +119,98 @@ void StatementOperation::bindPointer(void *ptr,
                                      const Text &type,
                                      void (*destructor)(void *))
 {
-    getInnerHandleStatement()->bindPointer(ptr, index, type, destructor);
+    GetHandleStatementOrReturn;
+    handleStatement->bindPointer(ptr, index, type, destructor);
 }
 
 void StatementOperation::bindValue(const Value &value, int index)
 {
-    getInnerHandleStatement()->bindValue(value, index);
+    GetHandleStatementOrReturn;
+    handleStatement->bindValue(value, index);
 }
 
 void StatementOperation::bindRow(const OneRowValue &row)
 {
-    getInnerHandleStatement()->bindRow(row);
+    GetHandleStatementOrReturn;
+    handleStatement->bindRow(row);
 }
 
 int StatementOperation::bindParameterIndex(const Text &parameterName)
 {
-    return getInnerHandleStatement()->bindParameterIndex(parameterName);
+    GetHandleStatementOrReturnValue(0);
+    return handleStatement->bindParameterIndex(parameterName);
 }
 
 signed long long StatementOperation::getColumnSize(int index)
 {
-    return getInnerHandleStatement()->getColumnSize(index);
+    GetHandleStatementOrReturnValue(0);
+    return handleStatement->getColumnSize(index);
 }
 
 ColumnType StatementOperation::getType(int index)
 {
-    return getInnerHandleStatement()->getType(index);
+    GetHandleStatementOrReturnValue(ColumnType::Null);
+    return handleStatement->getType(index);
 }
 
 int StatementOperation::getNumberOfColumns()
 {
-    return getInnerHandleStatement()->getNumberOfColumns();
+    GetHandleStatementOrReturnValue(0);
+    return handleStatement->getNumberOfColumns();
 }
 
 StatementOperation::Integer StatementOperation::getInteger(int index)
 {
-    return getInnerHandleStatement()->getInteger(index);
+    GetHandleStatementOrReturnValue(0);
+    return handleStatement->getInteger(index);
 }
 
 StatementOperation::Float StatementOperation::getDouble(int index)
 {
-    return getInnerHandleStatement()->getDouble(index);
+    GetHandleStatementOrReturnValue(0);
+    return handleStatement->getDouble(index);
 }
 
 StatementOperation::Text StatementOperation::getText(int index)
 {
-    return getInnerHandleStatement()->getText(index);
+    GetHandleStatementOrReturnValue(StatementOperation::Text());
+    return handleStatement->getText(index);
 }
 
 const StatementOperation::BLOB StatementOperation::getBLOB(int index)
 {
-    return getInnerHandleStatement()->getBLOB(index);
+    GetHandleStatementOrReturnValue(StatementOperation::BLOB());
+    return handleStatement->getBLOB(index);
 }
 
 Value StatementOperation::getValue(int index)
 {
-    return getInnerHandleStatement()->getValue(index);
+    GetHandleStatementOrReturnValue(0);
+    return handleStatement->getValue(index);
 }
 
 OptionalOneColumn StatementOperation::getOneColumn(int index)
 {
-    return getInnerHandleStatement()->getOneColumn(index);
+    GetHandleStatementOrReturnValue(OptionalOneColumn());
+    return handleStatement->getOneColumn(index);
 }
 
 OneRowValue StatementOperation::getOneRow()
 {
-    return getInnerHandleStatement()->getOneRow();
+    GetHandleStatementOrReturnValue(OneRowValue());
+    return handleStatement->getOneRow();
 }
 
 OptionalMultiRows StatementOperation::getAllRows()
 {
-    return getInnerHandleStatement()->getAllRows();
+    GetHandleStatementOrReturnValue(OptionalMultiRows());
+    return handleStatement->getAllRows();
 }
 
 MultiObject StatementOperation::extractOneMultiObject(const ResultFields &resultFields)
 {
     MultiObject result;
+    GetHandleStatementOrReturnValue(result);
     int index = 0;
     for (const ResultField &field : resultFields) {
         const UnsafeStringView table = getColumnTableName(index);
@@ -193,17 +233,20 @@ StatementOperation::extractAllMultiObjects(const ResultFields &resultFields)
 
 const UnsafeStringView StatementOperation::getOriginColumnName(int index)
 {
-    return getInnerHandleStatement()->getOriginColumnName(index);
+    GetHandleStatementOrReturnValue(UnsafeStringView());
+    return handleStatement->getOriginColumnName(index);
 }
 
 const UnsafeStringView StatementOperation::getColumnName(int index)
 {
-    return getInnerHandleStatement()->getColumnName(index);
+    GetHandleStatementOrReturnValue(UnsafeStringView());
+    return handleStatement->getColumnName(index);
 }
 
 const UnsafeStringView StatementOperation::getColumnTableName(int index)
 {
-    return getInnerHandleStatement()->getColumnTableName(index);
+    GetHandleStatementOrReturnValue(UnsafeStringView());
+    return handleStatement->getColumnTableName(index);
 }
 
 } //namespace WCDB

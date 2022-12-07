@@ -174,4 +174,16 @@
     }
 }
 
+- (void)testOpenFail
+{
+    auto database = WCDB::Database(self.directory);
+    TestCaseAssertFalse(database.canOpen());
+    TestCaseAssertFalse(database.selectValue(WCDB::Column::all().count(), WCDB::Master::tableName).has_value());
+    WCDB::Handle handle = database.getHandle();
+    TestCaseAssertFalse(handle.selectValue(WCDB::Column::all().count(), WCDB::Master::tableName).has_value());
+    TestCaseAssertFalse(database.createTable<CPPTestCaseObject>(self.tableName.UTF8String));
+    WCDB::Table<CPPTestCaseObject> table = database.getTable<CPPTestCaseObject>(self.tableName);
+    TestCaseAssertFalse(table.selectValue(WCDB::Column::all().count()).has_value());
+}
+
 @end

@@ -29,6 +29,12 @@
 #include <WCDB/InnerHandle.hpp>
 #include <WCDB/Notifier.hpp>
 
+#define GetHandleOrReturnValue(value)                                          \
+    RecyclableHandle handle = getHandleHolder();                               \
+    if (handle == nullptr) {                                                   \
+        return value;                                                          \
+    }
+
 namespace WCDB {
 
 HandleOperation::~HandleOperation() = default;
@@ -63,8 +69,9 @@ bool HandleOperation::insertRows(const MultiRowsValue &rows,
     if (rows.size() == 0) {
         return true;
     } else if (rows.size() == 1) {
-        Handle handle = Handle(getHandleHolder());
-        return insertAction(handle);
+        GetHandleOrReturnValue(false);
+        Handle newHandle = Handle(handle);
+        return insertAction(newHandle);
     } else {
         return lazyRunTransaction(insertAction);
     }
@@ -100,8 +107,9 @@ bool HandleOperation::insertOrReplaceRows(const MultiRowsValue &rows,
     if (rows.size() == 0) {
         return true;
     } else if (rows.size() == 1) {
-        Handle handle = Handle(getHandleHolder());
-        return insertAction(handle);
+        GetHandleOrReturnValue(false);
+        Handle newHandle = Handle(handle);
+        return insertAction(newHandle);
     } else {
         return lazyRunTransaction(insertAction);
     }
@@ -124,7 +132,7 @@ bool HandleOperation::updateRow(const OneRowValue &row,
         update.set(columns[i]).to(WCDB::BindParameter(i + 1));
     }
     configStatement(update, where, orders, limit, offset);
-    RecyclableHandle handle = getHandleHolder();
+    GetHandleOrReturnValue(false);
     bool succeed = false;
     if ((succeed = handle->prepare(update))) {
         handle->bindRow(row);
@@ -196,11 +204,11 @@ OptionalMultiRows HandleOperation::selectAllRow(const ResultColumns &columns,
 
 OptionalValue HandleOperation::getValueFromStatement(const Statement &statement, int index)
 {
-    Value result;
-    RecyclableHandle handle = getHandleHolder();
+    OptionalValue result;
+    GetHandleOrReturnValue(result);
     if (!handle->prepare(statement)) {
         assignErrorToDatabase(handle->getError());
-        return OptionalValue();
+        return result;
     }
     bool succeed = false;
     if ((succeed = handle->step()) && !handle->done()) {
@@ -210,15 +218,14 @@ OptionalValue HandleOperation::getValueFromStatement(const Statement &statement,
     if (!succeed) {
         assignErrorToDatabase(handle->getError());
     }
-    return succeed ? result : OptionalValue();
+    return result;
 }
 
 OptionalOneColumn
 HandleOperation::getOneColumnFromStatement(const Statement &statement, int index)
 {
     OptionalOneColumn result;
-    RecyclableHandle handle = getHandleHolder();
-
+    GetHandleOrReturnValue(result);
     if (!handle->prepare(statement)) {
         assignErrorToDatabase(handle->getError());
         return result;
@@ -233,11 +240,11 @@ HandleOperation::getOneColumnFromStatement(const Statement &statement, int index
 
 OptionalOneRow HandleOperation::getOneRowFromStatement(const Statement &statement)
 {
-    OneRowValue result;
-    RecyclableHandle handle = getHandleHolder();
+    OptionalOneRow result;
+    GetHandleOrReturnValue(result);
     if (!handle->prepare(statement)) {
         assignErrorToDatabase(handle->getError());
-        return OptionalOneRow();
+        return result;
     }
     bool succeed = false;
     if ((succeed = handle->step()) && !handle->done()) {
@@ -247,13 +254,13 @@ OptionalOneRow HandleOperation::getOneRowFromStatement(const Statement &statemen
     if (!succeed) {
         assignErrorToDatabase(handle->getError());
     }
-    return succeed ? result : OptionalOneRow();
+    return result;
 }
 
 OptionalMultiRows HandleOperation::getAllRowsFromStatement(const Statement &statement)
 {
     OptionalMultiRows result;
-    RecyclableHandle handle = getHandleHolder();
+    GetHandleOrReturnValue(result);
     if (!handle->prepare(statement)) {
         assignErrorToDatabase(handle->getError());
         return result;
@@ -268,7 +275,7 @@ OptionalMultiRows HandleOperation::getAllRowsFromStatement(const Statement &stat
 
 bool HandleOperation::execute(const Statement &statement)
 {
-    auto handle = getHandleHolder();
+    GetHandleOrReturnValue(false);
     bool succeed = handle->execute(statement);
     if (!succeed) {
         assignErrorToDatabase(handle->getError());
@@ -278,7 +285,7 @@ bool HandleOperation::execute(const Statement &statement)
 
 bool HandleOperation::runTransaction(TransactionCallback inTransaction)
 {
-    auto handle = getHandleHolder();
+    GetHandleOrReturnValue(false);
     bool succeed = handle->runTransaction([inTransaction, this](InnerHandle *innerHandle) {
         Handle handle = Handle(getDatabaseHolder(), innerHandle);
         return inTransaction(handle);
@@ -291,32 +298,36 @@ bool HandleOperation::runTransaction(TransactionCallback inTransaction)
 
 bool HandleOperation::lazyRunTransaction(TransactionCallback inTransaction)
 {
-    RecyclableHandle handleHolder = getHandleHolder();
-    if (handleHolder->isInTransaction()) {
-        Handle handle = Handle(getDatabaseHolder(), handleHolder.get());
-        return inTransaction(handle);
+    GetHandleOrReturnValue(false);
+    if (handle->isInTransaction()) {
+        Handle newHandle = Handle(getDatabaseHolder(), handle.get());
+        return inTransaction(newHandle);
     } else {
-        handleHolder->markErrorNotAllowedWithinTransaction();
+        handle->markErrorNotAllowedWithinTransaction();
         return runTransaction(inTransaction);
     }
 }
 
 bool HandleOperation::runPauseableTransactionWithOneLoop(TransactionCallbackForOneLoop inTransaction)
 {
-    Handle handle = Handle(getDatabaseHolder());
-    bool succeed = handle.getHandleHolder()->runPauseableTransactionWithOneLoop(
+    Handle newHandle = Handle(getDatabaseHolder());
+    auto handleHolder = newHandle.getHandleHolder();
+    if (handleHolder == nullptr) {
+        return false;
+    }
+    bool succeed = handleHolder->runPauseableTransactionWithOneLoop(
     [&](InnerHandle *, bool &stop, bool isNewTransaction) {
-        return inTransaction(handle, stop, isNewTransaction);
+        return inTransaction(newHandle, stop, isNewTransaction);
     });
     if (!succeed) {
-        assignErrorToDatabase(handle.getError());
+        assignErrorToDatabase(newHandle.getError());
     }
     return succeed;
 }
 
 bool HandleOperation::runNestedTransaction(TransactionCallback inTransaction)
 {
-    auto handle = getHandleHolder();
+    GetHandleOrReturnValue(false);
     bool succeed
     = handle->runNestedTransaction([inTransaction, this](InnerHandle *innerHandle) {
           Handle handle = Handle(getDatabaseHolder(), innerHandle);
@@ -330,8 +341,9 @@ bool HandleOperation::runNestedTransaction(TransactionCallback inTransaction)
 
 std::optional<bool> HandleOperation::tableExists(const UnsafeStringView &tableName)
 {
-    auto handle = getHandleHolder();
-    auto result = handle->tableExists(tableName);
+    std::optional<bool> result;
+    GetHandleOrReturnValue(result);
+    result = handle->tableExists(tableName);
     if (!result.has_value()) {
         assignErrorToDatabase(handle->getError());
     }
@@ -341,8 +353,9 @@ std::optional<bool> HandleOperation::tableExists(const UnsafeStringView &tableNa
 std::optional<std::set<StringView>>
 HandleOperation::getColumns(const UnsafeStringView &table)
 {
-    auto handle = getHandleHolder();
-    auto result = handle->getColumns(table);
+    std::optional<std::set<StringView>> result;
+    GetHandleOrReturnValue(result);
+    result = handle->getColumns(table);
     if (!result.has_value()) {
         assignErrorToDatabase(handle->getError());
     }
@@ -361,7 +374,10 @@ bool HandleOperation::dropIndex(const UnsafeStringView &indexName)
 
 void HandleOperation::notifyError(Error &error)
 {
-    error.infos.insert_or_assign(ErrorStringKeyPath, getHandleHolder()->getPath());
+    auto handleHolder = getHandleHolder();
+    if (handleHolder != nullptr) {
+        error.infos.insert_or_assign(ErrorStringKeyPath, handleHolder->getPath());
+    }
     Notifier::shared().notify(error);
 }
 
