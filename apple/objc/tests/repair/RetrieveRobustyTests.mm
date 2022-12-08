@@ -107,14 +107,14 @@
 
         int count = 0;
         do {
-            count = Random.shared.uint8 * 10;
+            count = Random.shared.uint8;
         } while (count == 0);
         NSArray<TestCaseObject*>* objects = [Random.shared autoIncrementTestCaseObjectsWithCount:count];
         if (![self.database insertObjects:objects intoTable:currentTable]) {
             TestCaseFailure();
             return NO;
         }
-        if (Random.shared.uint8 % 100 == 0) {
+        if (Random.shared.uint8 % 10 == 0) {
             if (![self.database truncateCheckpoint]) {
                 TestCaseFailure();
                 return NO;
@@ -196,8 +196,8 @@
 {
     NSArray* sizes = @[
         @(10 * 1024 * 1024),
-        @(100 * 1024 * 1024),
 #ifndef WCDB_QUICK_TESTS
+        @(100 * 1024 * 1024),
         @(1024 * 1024 * 1024),
 #endif
     ];
