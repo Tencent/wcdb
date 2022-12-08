@@ -40,7 +40,8 @@
 
     self.expectMode = DatabaseTestCaseExpectSomeSQLs;
 
-    TestCaseAssertTrue([[self.table getObjectsOrders:MigrationObject.identifier.asOrder(WCTOrderedAscending)] isEqualToArray:self.objects]);
+    if (self.mode != MigrationObjectORMModeMissOneColumn && self.mode != MigrationObjectORMModeMissTwoColumn)
+        TestCaseAssertTrue([[self.table getObjectsOrders:MigrationObject.identifier.asOrder(WCTOrderedAscending)] isEqualToArray:self.objects]);
 }
 
 - (NSString*)schemaName
@@ -67,7 +68,7 @@
     [sqls addObject:@"BEGIN IMMEDIATE"];
     [sqls addObject:[NSString stringWithFormat:@"INSERT INTO %@.%@(identifier, content) VALUES(?1, ?2)", self.schemaName, self.sourceTable]];
     [sqls addObject:[NSString stringWithFormat:@"DELETE FROM %@.%@ WHERE rowid == ?1", self.schemaName, self.sourceTable]];
-    if (self.mode == MigrationObjectORMModeNormal || self.mode == MigrationObjectORMModeMissColumn) {
+    if (self.mode == MigrationObjectORMModeNormal || self.mode == MigrationObjectORMModeMissOneColumn || self.mode == MigrationObjectORMModeMissTwoColumn) {
         [sqls addObject:@"INSERT INTO main.testTable(rowid, identifier, content) VALUES((SELECT max(rowid) + 1 FROM temp.wcdb_union_testTable), ?1, ?2)"];
     } else {
         [sqls addObject:[NSString stringWithFormat:@"INSERT INTO main.testTable(rowid, identifier, content) VALUES(?%d, ?1, ?2)", SQLITE_MAX_VARIABLE_NUMBER]];

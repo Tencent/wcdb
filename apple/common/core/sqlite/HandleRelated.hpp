@@ -43,6 +43,8 @@ protected:
     bool APIExit(int rc);
     bool APIExit(int rc, const UnsafeStringView &sql);
     bool APIExit(int rc, const char *sql);
+    void cacheCurrentTransactionError();
+    void resumeCacheTransactionError();
 
 private:
     AbstractHandle *m_handle;

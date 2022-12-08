@@ -38,7 +38,7 @@
     _toMigrate = [NSMutableDictionary<NSString*, NSString*> dictionaryWithObject:self.sourceTable forKey:self.tableName];
 
     TestCaseAssertTrue([self.sourceDatabase execute:[MigrationObject statementForCreatingSourceTable:self.sourceTable withMode:self.mode]]);
-    if (self.mode != MigrationObjectORMModeMissColumn) {
+    if (self.mode != MigrationObjectORMModeMissOneColumn && self.mode != MigrationObjectORMModeMissTwoColumn) {
         TestCaseAssertTrue([self.sourceDatabase insertObjects:self.objects intoTable:self.sourceTable]);
     } else {
         WCTProperties properties;
@@ -66,7 +66,7 @@
     TestCaseAssertFalse(self.database.isMigrated);
     self.tableClass = MigrationObject.class;
     TestCaseAssertTrue([self.database execute:[MigrationObject statementForCreatingTargetTable:self.tableName withMode:self.mode]]);
-    TestCaseAssertTrue([self createTable]);
+    self.table = [self.database getTable:self.tableName withClass:self.tableClass];
     [self.database close];
 }
 
@@ -112,7 +112,7 @@
 {
     @synchronized(self) {
         if (_objects == nil) {
-            _objects = [Random.shared migrationObjectsWithCount:10000 startingFromIdentifier:1 withoutContent:self.mode == MigrationObjectORMModeMissColumn];
+            _objects = [Random.shared migrationObjectsWithCount:10000 startingFromIdentifier:1 withoutContent:self.mode == MigrationObjectORMModeMissOneColumn || self.mode == MigrationObjectORMModeMissTwoColumn];
         }
         return _objects;
     }

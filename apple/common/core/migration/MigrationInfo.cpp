@@ -247,6 +247,22 @@ const StatementCreateView& MigrationInfo::getStatementForCreatingUnionedView() c
     return m_statementForCreatingUnionedView;
 }
 
+StatementCreateView
+MigrationInfo::getStatementForCreatingUnionedView(const Columns& columns) const
+{
+    StatementCreateView createView = getStatementForCreatingUnionedView();
+    Columns newColumns = columns;
+    newColumns.push_back(Column::rowid());
+    createView.columns(newColumns);
+    ResultColumns resultColumns;
+    resultColumns.insert(resultColumns.begin(), newColumns.begin(), newColumns.end());
+    createView.syntax().select.select.resultColumns = resultColumns;
+    for (auto& core : createView.syntax().select.cores) {
+        core.resultColumns = resultColumns;
+    }
+    return createView;
+}
+
 const StatementDropView
 MigrationInfo::getStatementForDroppingUnionedView(const UnsafeStringView& unionedView)
 {

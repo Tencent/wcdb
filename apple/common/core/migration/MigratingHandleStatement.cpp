@@ -54,6 +54,9 @@ MigratingHandleStatement::MigratingHandleStatement(MigratingHandle* handle)
 , m_removeMigratedStatement(std::make_shared<InnerHandleStatement>(handle))
 , m_rowidIndexOfMigratingStatement(0)
 {
+    m_additionalStatement->enableAutoAddColumn();
+    m_migrateStatement->enableAutoAddColumn();
+    m_removeMigratedStatement->enableAutoAddColumn();
 }
 
 MigratingHandleStatement::~MigratingHandleStatement()
@@ -229,21 +232,7 @@ MigratingHandleStatement::process(const Statement& originStatement)
             const Syntax::AlterTableSTMT& falledBackSTMT
             = static_cast<const Syntax::AlterTableSTMT&>(falledBackStatement.syntax());
             if (!migratedSTMT.isTargetingSameTable(falledBackSTMT)) {
-                if (migratedSTMT.switcher == Syntax::AlterTableSTMT::Switch::AddColumn) {
-                    WCDB::StatementPragma getColumnsStatement
-                    = StatementPragma()
-                      .pragma(Pragma::tableInfo())
-                      .schema(migratedSTMT.schema.name)
-                      .with(migratedSTMT.table);
-                    auto columns = this->getHandle()->getValues(getColumnsStatement, 1);
-                    if (!columns.has_value()
-                        || columns->find(migratedSTMT.columnDef.column.name)
-                           == columns->end()) {
-                        statements.push_back(originStatement);
-                    }
-                } else {
-                    statements.push_back(originStatement);
-                }
+                statements.push_back(originStatement);
             }
         } break;
         default:

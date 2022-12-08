@@ -50,6 +50,7 @@ public:
 public:
     bool empty() const;
     bool isMain() const;
+    bool isTemp() const;
     bool isTargetingSameSchema(const Schema& other) const;
 };
 

@@ -130,6 +130,7 @@ public:
      ORDER BY rowid ASC
      */
     const StatementCreateView& getStatementForCreatingUnionedView() const;
+    StatementCreateView getStatementForCreatingUnionedView(const Columns& columns) const;
 
     /*
      DROP VIEW IF EXISTS temp.[unionedView]

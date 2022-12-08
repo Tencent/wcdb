@@ -58,6 +58,11 @@ bool Schema::isMain() const
     return name.empty() || name == mainSchema;
 }
 
+bool Schema::isTemp() const
+{
+    return name == tempSchema;
+}
+
 bool Schema::empty() const
 {
     return name.empty();

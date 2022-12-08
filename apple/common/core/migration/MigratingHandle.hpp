@@ -43,10 +43,16 @@ public:
 #pragma mark - Meta
     virtual std::optional<std::set<StringView>>
     getColumns(const Schema &schema, const UnsafeStringView &table) override final;
+    virtual bool addColumn(const Schema &schema,
+                           const UnsafeStringView &table,
+                           const ColumnDef &column) override final;
+    bool rebindUnionView(const UnsafeStringView &table, const Columns &columns);
+    bool checkSourceTable(const UnsafeStringView &table, const UnsafeStringView &sourceTable);
 
 #pragma mark - Binder
 protected:
     bool bindInfos(const StringViewMap<const MigrationInfo *> &migratings) override final;
+    std::optional<const MigrationInfo *> getBindingInfo(const UnsafeStringView &table);
 
 private:
     bool rebindViews(const StringViewMap<const MigrationInfo *> &migratings);

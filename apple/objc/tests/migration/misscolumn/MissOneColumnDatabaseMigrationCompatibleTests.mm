@@ -22,25 +22,48 @@
  * limitations under the License.
  */
 
-#import "TestCase.h"
+#import "MigrationCompatibleTestCase.h"
 
-typedef NS_ENUM(NSUInteger, MigrationObjectORMMode) {
-    MigrationObjectORMModeNormal = 0,
-    MigrationObjectORMModePrimaryKey,
-    MigrationObjectORMModeAutoIncrement,
-    MigrationObjectORMModeMissOneColumn,
-    MigrationObjectORMModeMissTwoColumn,
-};
+@interface MissOneColumnDatabaseMigrationCompatibleTests : MigrationCompatibleTestCase
+@end
 
-@interface MigrationObject : NSObject
+@implementation MissOneColumnDatabaseMigrationCompatibleTests
 
-@property (nonatomic, assign) int identifier;
-@property (nonatomic, retain) NSString *content;
+- (void)setUp
+{
+    self.mode = MigrationObjectORMModeMissOneColumn;
+    self.isCrossDatabaseMigration = YES;
+    [super setUp];
+}
 
-+ (WCDB::StatementCreateTable)statementForCreatingTargetTable:(NSString *)tableName withMode:(MigrationObjectORMMode)mode;
+- (void)test_insert
+{
+    [self doTestInsert];
+}
 
-+ (WCDB::StatementCreateTable)statementForCreatingSourceTable:(NSString *)tableName withMode:(MigrationObjectORMMode)mode;
+- (void)test_limited_update
+{
+    [self doTestLimitedUpdate];
+}
 
-+ (instancetype)objectWithIdentifier:(int)identifier andContent:(NSString *)content;
+- (void)test_select
+{
+    [self doTestSelect];
+}
+
+- (void)test_drop_table
+{
+    [self doTestDropTable];
+}
+
+- (void)test_subquery_within_update
+{
+    [self doTestSubqueryWithinUpdate];
+}
+
+- (NSArray<NSObject<WCTTableCoding>*>*)getAllObjects
+{
+    return [self.table getObjectsOrders:MigrationObject.identifier.asOrder(WCTOrderedAscending)];
+}
 
 @end

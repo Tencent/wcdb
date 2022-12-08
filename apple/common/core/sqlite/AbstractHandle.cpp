@@ -38,6 +38,7 @@ AbstractHandle::AbstractHandle()
 , m_customOpenFlag(0)
 , m_transactionLevel(0)
 , m_transactionError(TransactionError::Allowed)
+, m_cacheTransactionError(TransactionError::Allowed)
 , m_notification(this)
 , m_tableMonitorForbidden(false)
 , m_canBeSuspended(false)
@@ -193,6 +194,7 @@ bool AbstractHandle::isInTransaction()
 InnerHandleStatement *AbstractHandle::getStatement()
 {
     m_handleStatements.push_back(InnerHandleStatement(this));
+    m_handleStatements.back().enableAutoAddColumn();
     return &m_handleStatements.back();
 }
 
@@ -263,6 +265,29 @@ AbstractHandle::tableExists(const Schema &schema, const UnsafeStringView &table)
     }
     markErrorAsUnignorable();
     return exists;
+}
+
+bool AbstractHandle::addColumn(const Schema &schema,
+                               const UnsafeStringView &table,
+                               const ColumnDef &column)
+{
+    StatementAlterTable statement
+    = StatementAlterTable().alterTable(table).schema(schema).addColumn(column);
+    InnerHandleStatement handleStatement(this);
+    bool hasCacheError = false;
+    if (m_transactionError != TransactionError::Fatal) {
+        hasCacheError = true;
+        cacheCurrentTransactionError();
+    }
+    bool succeed = handleStatement.prepare(statement) && handleStatement.step();
+    if (!succeed && getError().getMessage().hasPrefix("duplicate column name: ")) {
+        succeed = true;
+        if (hasCacheError) {
+            resumeCacheTransactionError();
+        }
+    }
+    handleStatement.finalize();
+    return succeed;
 }
 
 std::optional<std::set<StringView>>
@@ -337,6 +362,16 @@ void AbstractHandle::markErrorNotAllowedWithinTransaction()
 bool AbstractHandle::isErrorAllowedWithinTransaction() const
 {
     return m_transactionError != TransactionError::NotAllowed;
+}
+
+void AbstractHandle::cacheCurrentTransactionError()
+{
+    m_cacheTransactionError = m_transactionError;
+}
+
+void AbstractHandle::resumeCacheTransactionError()
+{
+    m_transactionError = m_cacheTransactionError;
 }
 
 StringView AbstractHandle::getSavepointName(int transactionLevel)

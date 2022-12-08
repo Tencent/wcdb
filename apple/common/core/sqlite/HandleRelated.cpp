@@ -60,4 +60,13 @@ sqlite3 *HandleRelated::getRawHandle()
     return m_handle->getRawHandle();
 }
 
+void HandleRelated::cacheCurrentTransactionError()
+{
+    m_handle->cacheCurrentTransactionError();
+}
+void HandleRelated::resumeCacheTransactionError()
+{
+    m_handle->resumeCacheTransactionError();
+}
+
 } //namespace WCDB

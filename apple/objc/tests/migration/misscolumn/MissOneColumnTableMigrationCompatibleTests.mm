@@ -24,30 +24,22 @@
 
 #import "MigrationCompatibleTestCase.h"
 
-@interface MissColumnTableMigratingCompatibleTests : MigrationCompatibleTestCase
+@interface MissOneColumnTableMigrationCompatibleTests : MigrationCompatibleTestCase
 
 @end
 
-@implementation MissColumnTableMigratingCompatibleTests
+@implementation MissOneColumnTableMigrationCompatibleTests
 
 - (void)setUp
 {
-    self.mode = MigrationObjectORMModeMissColumn;
+    self.mode = MigrationObjectORMModeMissOneColumn;
     self.isCrossDatabaseMigration = NO;
     [super setUp];
-
-    TestCaseAssertTrue([self.database stepMigration]);
-    TestCaseAssertFalse([self.database isMigrated]);
 }
 
 - (void)test_insert
 {
     [self doTestInsert];
-}
-
-- (void)test_limited_delete
-{
-    [self doTestLimitedDelete];
 }
 
 - (void)test_limited_update
@@ -63,11 +55,6 @@
 - (void)test_drop_table
 {
     [self doTestDropTable];
-}
-
-- (void)test_subquery_within_delete
-{
-    [self doTestSubqueryWithinDelete];
 }
 
 - (void)test_subquery_within_update
