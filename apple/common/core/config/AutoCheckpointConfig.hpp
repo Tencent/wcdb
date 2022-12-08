@@ -25,6 +25,7 @@
 #pragma once
 
 #include <WCDB/Config.hpp>
+#include <WCDB/Statement.hpp>
 
 namespace WCDB {
 
@@ -49,6 +50,7 @@ protected:
     void log(int rc, const char *message);
 
     std::shared_ptr<AutoCheckpointOperator> m_operator;
+    Statement m_disableAutoCheckpoint;
 };
 
 } //namespace WCDB
