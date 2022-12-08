@@ -26,6 +26,7 @@
 #include <WCDB/AutoCheckpointConfig.hpp>
 #include <WCDB/Global.hpp>
 #include <WCDB/InnerHandle.hpp>
+#include <WCDB/StatementPragma.hpp>
 #include <WCDB/StringView.hpp>
 #include <regex>
 
@@ -34,7 +35,10 @@ namespace WCDB {
 AutoCheckpointOperator::~AutoCheckpointOperator() = default;
 
 AutoCheckpointConfig::AutoCheckpointConfig(const std::shared_ptr<AutoCheckpointOperator>& operator_)
-: Config(), m_identifier(StringView::formatted("Checkpoint-%p", this)), m_operator(operator_)
+: Config()
+, m_identifier(StringView::formatted("Checkpoint-%p", this))
+, m_operator(operator_)
+, m_disableAutoCheckpoint(StatementPragma().pragma(Pragma::walAutocheckpoint()).to(0))
 {
     WCTAssert(m_operator != nullptr);
 
@@ -50,13 +54,13 @@ AutoCheckpointConfig::~AutoCheckpointConfig()
 
 bool AutoCheckpointConfig::invoke(InnerHandle* handle)
 {
-    static_assert(SQLITE_DEFAULT_WAL_AUTOCHECKPOINT == 0, "");
-
+    if (SQLITE_DEFAULT_WAL_AUTOCHECKPOINT != 0 && !handle->execute(m_disableAutoCheckpoint)) {
+        return false;
+    }
     handle->setNotificationWhenCommitted(
     0,
     m_identifier,
     std::bind(&AutoCheckpointConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
-
     return true;
 }
 
