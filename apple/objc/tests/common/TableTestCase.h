@@ -26,7 +26,7 @@
 
 @interface TableTestCase : DatabaseTestCase
 
-@property (nonatomic, readonly) WCTTable* table;
+@property (nonatomic, retain) WCTTable* table;
 @property (nonatomic, retain) NSString* tableName;
 @property (nonatomic, retain) Class tableClass;
 

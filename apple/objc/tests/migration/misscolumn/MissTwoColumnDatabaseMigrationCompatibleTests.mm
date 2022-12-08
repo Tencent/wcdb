@@ -24,14 +24,14 @@
 
 #import "MigrationCompatibleTestCase.h"
 
-@interface MissColumnDatabaseMigrationCompatibleTests : MigrationCompatibleTestCase
+@interface MissTwoColumnDatabaseMigrationCompatibleTests : MigrationCompatibleTestCase
 @end
 
-@implementation MissColumnDatabaseMigrationCompatibleTests
+@implementation MissTwoColumnDatabaseMigrationCompatibleTests
 
 - (void)setUp
 {
-    self.mode = MigrationObjectORMModeMissColumn;
+    self.mode = MigrationObjectORMModeMissTwoColumn;
     self.isCrossDatabaseMigration = YES;
     [super setUp];
 }

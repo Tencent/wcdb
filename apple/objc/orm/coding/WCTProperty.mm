@@ -58,11 +58,12 @@ WCTProperty::WCTProperty(const WCTColumnBinding& columnBinding, const Column& co
 void WCTProperty::configTableBindingRetrive()
 {
     Class cls = m_columnBinding.getClass();
-    if ([cls conformsToProtocol:@protocol(WCTTableCoding)]) {
-        syntax().tableBindingRetrive = [=]() {
+    syntax().tableBindingRetrive = [=]() {
+        if ([cls respondsToSelector:@selector(objectRelationalMapping)]) {
             return dynamic_cast<const WCDB::BaseBinding*>(&[cls objectRelationalMapping]);
-        };
-    }
+        }
+        return (const WCDB::BaseBinding*) nullptr;
+    };
 }
 
 WCTProperty WCTProperty::table(const WCDB::UnsafeStringView& table) const

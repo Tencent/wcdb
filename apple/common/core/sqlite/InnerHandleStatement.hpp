@@ -92,6 +92,7 @@ public:
     virtual const UnsafeStringView getColumnTableName(int index);
 
     virtual bool isReadOnly();
+    void enableAutoAddColumn();
 
 protected:
     virtual bool isBusy();
@@ -108,6 +109,7 @@ private:
     bool m_done;
     StringView m_newTable;
     StringView m_modifiedTable;
+    bool m_needAutoAddColumn;
 };
 
 } //namespace WCDB

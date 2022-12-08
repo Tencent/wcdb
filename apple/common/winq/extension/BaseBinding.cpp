@@ -26,6 +26,7 @@
 #include <WCDB/BaseBinding.hpp>
 #include <WCDB/Error.hpp>
 #include <WCDB/InnerHandle.hpp>
+#include <WCDB/MigratingHandle.hpp>
 #include <WCDB/Notifier.hpp>
 
 namespace WCDB {
@@ -54,6 +55,7 @@ ColumnDef *BaseBinding::getColumnDef(const UnsafeStringView &columnName)
 bool BaseBinding::createTable(const UnsafeStringView &tableName, InnerHandle *handle) const
 {
     WCTAssert(handle != nullptr);
+    handle->markErrorNotAllowedWithinTransaction();
     return handle->runTransactionIfNotInTransaction([&](InnerHandle *handle) {
         auto exists = handle->tableExists(tableName);
         if (!exists.has_value()) {
@@ -71,9 +73,7 @@ bool BaseBinding::createTable(const UnsafeStringView &tableName, InnerHandle *ha
                 auto iter = columnNames.find(columnDef.first);
                 if (iter == columnNames.end()) {
                     //Add new column
-                    if (!handle->execute(
-                        StatementAlterTable().alterTable(tableName).addColumn(
-                        columnDef.second))) {
+                    if (!handle->addColumn(Schema::main(), tableName, columnDef.second)) {
                         return false;
                     }
                 } else {
@@ -186,7 +186,7 @@ bool BaseBinding::tryRecoverColumn(const UnsafeStringView &columnName,
             matchCount++;
         }
     }
-    if (matchCount < 2 || matchCount < (columnDefs.size() + 1) / 2) {
+    if (matchCount != columnDefs.size() - 1 && matchCount < (columnDefs.size() + 1) / 2) {
         return false;
     }
 
@@ -199,11 +199,7 @@ bool BaseBinding::tryRecoverColumn(const UnsafeStringView &columnName,
             continue;
         }
         //Add new column
-        StatementAlterTable alterTable = StatementAlterTable()
-                                         .alterTable(tableName)
-                                         .schema(schemaName)
-                                         .addColumn(columnDef.second);
-        if (handle->execute(alterTable)) {
+        if (handle->addColumn(schemaName, tableName, columnDef.second)) {
             Error error(Error::Code::Warning, Error::Level::Warning, "Auto add column");
             error.infos.insert_or_assign("Column",
                                          columnDef.second.syntax().column.name);
@@ -214,9 +210,17 @@ bool BaseBinding::tryRecoverColumn(const UnsafeStringView &columnName,
             error.infos.insert_or_assign(ErrorStringKeySQL, sql);
             error.infos.insert_or_assign(ErrorStringKeyPath, handle->getPath());
             Notifier::shared().notify(error);
-        } else if (!handle->getError().getMessage().hasPrefix("duplicate column name: ")) {
+        } else {
             return false;
         }
+    }
+    MigratingHandle *migratingHandle = dynamic_cast<MigratingHandle *>(handle);
+    if (migratingHandle != nullptr) {
+        Columns columns;
+        for (const auto &columnDef : columnDefs) {
+            columns.push_back(columnDef.second.syntax().column.name);
+        }
+        return migratingHandle->rebindUnionView(tableName, columns);
     }
     return true;
 }

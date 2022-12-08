@@ -102,6 +102,9 @@ public:
     std::optional<bool> tableExists(const UnsafeStringView &table);
     std::optional<bool> tableExists(const Schema &schema, const UnsafeStringView &table);
 
+    virtual bool
+    addColumn(const Schema &schema, const UnsafeStringView &table, const ColumnDef &column);
+
     virtual std::optional<std::set<StringView>>
     getColumns(const Schema &schema, const UnsafeStringView &table);
     std::optional<std::set<StringView>> getColumns(const UnsafeStringView &table);
@@ -125,6 +128,8 @@ public:
     bool checkMainThreadBusyRetry() const;
 
 protected:
+    void cacheCurrentTransactionError();
+    void resumeCacheTransactionError();
     virtual bool commitTransaction();
 
 private:
@@ -134,6 +139,7 @@ private:
         NotAllowed,
         Fatal,
     } m_transactionError;
+    TransactionError m_cacheTransactionError;
     static StringView getSavepointName(int transactionLevel);
 
 #pragma mark - Wal

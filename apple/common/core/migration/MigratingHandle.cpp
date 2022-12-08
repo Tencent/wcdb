@@ -45,6 +45,23 @@ MigratingHandle::~MigratingHandle()
 
 #pragma mark - Meta
 
+std::optional<const MigrationInfo*>
+MigratingHandle::getBindingInfo(const UnsafeStringView& table)
+{
+    std::optional<const MigrationInfo*> result;
+
+    startBinding();
+
+    result = bindTable(table);
+
+    bool success = stopBinding(true);
+    if (!success) {
+        return std::optional<const MigrationInfo*>();
+    }
+
+    return result;
+}
+
 std::optional<std::set<StringView>>
 MigratingHandle::getColumns(const Schema& schema, const UnsafeStringView& table)
 {
@@ -55,24 +72,19 @@ MigratingHandle::getColumns(const Schema& schema, const UnsafeStringView& table)
     if (!schema.syntax().isMain()) {
         return ret;
     }
-    const MigrationInfo* info = nullptr;
 
-    startBinding();
-
-    auto optionalInfo = bindTable(table);
-    if (optionalInfo.has_value()) {
-        info = optionalInfo.value();
+    auto info = getBindingInfo(table);
+    if (!info.has_value()) {
+        return std::optional<std::set<StringView>>();
     }
-    bool success = stopBinding(true);
-
-    if (info == nullptr || !success) {
+    if (info.value() == nullptr) {
         return ret;
     }
 
     WCDB::StatementPragma statement = StatementPragma()
                                       .pragma(Pragma::tableInfo())
-                                      .schema(info->getSchemaForSourceDatabase())
-                                      .with(info->getSourceTable());
+                                      .schema(info.value()->getSchemaForSourceDatabase())
+                                      .with(info.value()->getSourceTable());
     auto sourceColumns = getValues(statement, 1);
     if (!sourceColumns.has_value()) {
         return std::nullopt;
@@ -86,6 +98,70 @@ MigratingHandle::getColumns(const Schema& schema, const UnsafeStringView& table)
         }
     }
     return ret;
+}
+
+bool MigratingHandle::addColumn(const Schema& schema,
+                                const UnsafeStringView& table,
+                                const ColumnDef& column)
+{
+    if (!Super::addColumn(schema, table, column)) {
+        return false;
+    }
+
+    if (!schema.syntax().isMain()) {
+        return true;
+    }
+
+    auto info = getBindingInfo(table);
+    if (!info.has_value()) {
+        return false;
+    }
+    if (info.value() == nullptr) {
+        return true;
+    }
+
+    return Super::addColumn(
+    info.value()->getSchemaForSourceDatabase(), info.value()->getSourceTable(), column);
+}
+
+bool MigratingHandle::rebindUnionView(const UnsafeStringView& table, const Columns& columns)
+{
+    auto info = getBindingInfo(table);
+    if (!info.has_value()) {
+        return false;
+    }
+    if (info.value() == nullptr) {
+        return true;
+    }
+
+    return runTransactionIfNotInTransaction([&](InnerHandle* handle) {
+        InnerHandleStatement handleStatement = InnerHandleStatement(handle);
+        bool succeed = handleStatement.prepare(MigrationInfo::getStatementForDroppingUnionedView(
+                       info.value()->getUnionedView()))
+                       && handleStatement.step();
+        handleStatement.finalize();
+        if (!succeed) {
+            return false;
+        }
+        StatementCreateView createView
+        = info.value()->getStatementForCreatingUnionedView(columns);
+        succeed = handleStatement.prepare(createView) && handleStatement.step();
+        handleStatement.finalize();
+        return succeed;
+    });
+}
+
+bool MigratingHandle::checkSourceTable(const UnsafeStringView& table,
+                                       const UnsafeStringView& sourceTable)
+{
+    auto info = getBindingInfo(table);
+    if (!info.has_value()) {
+        return false;
+    }
+    if (info.value() == nullptr) {
+        return false;
+    }
+    return info.value()->getSourceTable().compare(sourceTable) == 0;
 }
 
 #pragma mark - Info Initializer
@@ -266,6 +342,7 @@ void MigratingHandle::finalize()
 InnerHandleStatement* MigratingHandle::getStatement()
 {
     m_migratingHandleStatements.push_back(MigratingHandleStatement(this));
+    m_migratingHandleStatements.back().enableAutoAddColumn();
     return &m_migratingHandleStatements.back();
 }
 

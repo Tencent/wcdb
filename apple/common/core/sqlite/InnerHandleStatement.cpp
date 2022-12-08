@@ -27,8 +27,11 @@
 #include <WCDB/BaseBinding.hpp>
 #include <WCDB/InnerHandle.hpp>
 #include <WCDB/InnerHandleStatement.hpp>
+#include <WCDB/MigratingHandle.hpp>
+#include <WCDB/MigrationInfo.hpp>
 #include <WCDB/SQLite.h>
 #include <WCDB/WINQ.h>
+#include <string.h>
 
 namespace WCDB {
 
@@ -38,13 +41,14 @@ InnerHandleStatement::InnerHandleStatement(InnerHandleStatement &&other)
 , m_done(other.m_done)
 , m_newTable(other.m_newTable)
 , m_modifiedTable(other.m_modifiedTable)
+, m_needAutoAddColumn(other.m_needAutoAddColumn)
 {
     other.m_done = false;
     other.m_stmt = nullptr;
 }
 
 InnerHandleStatement::InnerHandleStatement(AbstractHandle *handle)
-: HandleRelated(handle), m_stmt(nullptr), m_done(false)
+: HandleRelated(handle), m_stmt(nullptr), m_done(false), m_needAutoAddColumn(false)
 {
 }
 
@@ -60,8 +64,15 @@ bool InnerHandleStatement::prepare(const Statement &statement)
     }
 
     const StringView &sql = statement.getDescription();
+    if (m_needAutoAddColumn) {
+        cacheCurrentTransactionError();
+    }
     if (prepare(sql)) {
         return true;
+    }
+
+    if (!m_needAutoAddColumn) {
+        return false;
     }
 
     auto statementType = statement.getType();
@@ -101,6 +112,7 @@ bool InnerHandleStatement::prepare(const Statement &statement)
         return false;
     }
 
+    resumeCacheTransactionError();
     return prepare(sql);
 }
 
@@ -260,10 +272,34 @@ bool InnerHandleStatement::tryExtractColumnInfo(const Statement &statement,
             return;
         }
 
+        if (curTableName.hasPrefix(MigrationInfo::getUnionedViewPrefix())
+            && curSchema.isTemp()) {
+            size_t prefixLength = strlen(MigrationInfo::getUnionedViewPrefix());
+            curTableName = StringView(curTableName.data() + prefixLength,
+                                      curTableName.length() - prefixLength);
+            curSchema = Schema("");
+        }
+        if (curSchema.name.hasPrefix(MigrationInfo::getSchemaPrefix())) {
+            curSchema = Schema("");
+        }
+
         if (!tableSpecified) {
-            if ((tableName.length() > 0 && tableName.compare(curTableName) != 0)
-                || (schemaName.length() > 0 && curSchema.name.compare(schemaName) != 0)) {
+            if (tableName.length() > 0 && tableName.compare(curTableName) != 0) {
+                MigratingHandle *migratingHandle
+                = dynamic_cast<MigratingHandle *>(getHandle());
+                if (migratingHandle != nullptr) {
+                    if (!migratingHandle->checkSourceTable(tableName, curTableName)
+                        && !migratingHandle->checkSourceTable(curTableName, tableName)) {
+                        invalidStatement = true;
+                    }
+                } else {
+                    invalidStatement = true;
+                }
+            }
+            if (schemaName.length() > 0 && curSchema.name.compare(schemaName) != 0) {
                 invalidStatement = true;
+            }
+            if (invalidStatement) {
                 stop = true;
                 return;
             }
@@ -278,7 +314,6 @@ bool InnerHandleStatement::tryExtractColumnInfo(const Statement &statement,
             }
         }
     });
-
     return *binding != nullptr && findTable && !invalidStatement;
 }
 
@@ -559,6 +594,11 @@ bool InnerHandleStatement::isBusy()
 {
     WCTAssert(isPrepared());
     return sqlite3_stmt_busy(m_stmt) != 0;
+}
+
+void InnerHandleStatement::enableAutoAddColumn()
+{
+    m_needAutoAddColumn = true;
 }
 
 bool InnerHandleStatement::isReadOnly()

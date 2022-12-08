@@ -44,7 +44,8 @@ WCDB_SYNTHESIZE(content)
         return [MigrationObject statementForCreatingPrimaryKeyTable:tableName];
     case MigrationObjectORMModeAutoIncrement:
         return [MigrationObject statementForCreatingAutoIncrementTable:tableName];
-    case MigrationObjectORMModeMissColumn:
+    case MigrationObjectORMModeMissOneColumn:
+    case MigrationObjectORMModeMissTwoColumn:
         return [MigrationObject statementForCreatingMissColumnTable:tableName];
     }
 }
@@ -53,8 +54,10 @@ WCDB_SYNTHESIZE(content)
 {
     switch (mode) {
     case MigrationObjectORMModeNormal:
-    case MigrationObjectORMModeMissColumn:
+    case MigrationObjectORMModeMissOneColumn:
         return [MigrationObject statementForCreatingNormalTable:tableName];
+    case MigrationObjectORMModeMissTwoColumn:
+        return [MigrationObject statementForCreatingMissColumnTable:tableName];
     case MigrationObjectORMModePrimaryKey:
         return [MigrationObject statementForCreatingPrimaryKeyTable:tableName];
     case MigrationObjectORMModeAutoIncrement:
