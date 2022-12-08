@@ -371,6 +371,7 @@
 #pragma mark - auto add column
 - (void)test_auto_add_column
 {
+    [WCTDatabase setABTestConfigWithName:@"clicfg_db_auto_add_column" andValue:@"1"];
     NSString* fakeTable = @"fakeTable";
     TestCaseAssertTrue([self.database createTable:fakeTable withClass:NewPropertyObject.class]);
 
@@ -473,6 +474,7 @@
                    byExcute:^bool {
                        return [self.database getColumnOnResultColumn:NewPropertyObject.uniqueValue fromTable:self.tableName] != nil;
                    }];
+    [WCTDatabase removeABTestConfigWithName:@"clicfg_db_auto_add_column"];
 }
 
 - (void)testAutoAddColumn:(const WCTProperty&)newProperty isSucceed:(BOOL)isSucceed byExcute:(bool (^)())block

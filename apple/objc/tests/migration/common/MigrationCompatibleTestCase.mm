@@ -36,12 +36,19 @@
 
 - (void)setUp
 {
+    [WCTDatabase setABTestConfigWithName:@"clicfg_db_auto_add_column" andValue:@"1"];
     [super setUp];
 
     self.expectMode = DatabaseTestCaseExpectSomeSQLs;
 
     if (self.mode != MigrationObjectORMModeMissOneColumn && self.mode != MigrationObjectORMModeMissTwoColumn)
         TestCaseAssertTrue([[self.table getObjectsOrders:MigrationObject.identifier.asOrder(WCTOrderedAscending)] isEqualToArray:self.objects]);
+}
+
+- (void)tearDown
+{
+    [super tearDown];
+    [WCTDatabase removeABTestConfigWithName:@"clicfg_db_auto_add_column"];
 }
 
 - (NSString*)schemaName

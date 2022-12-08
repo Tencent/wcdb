@@ -25,6 +25,7 @@
 #include <WCDB/AbstractHandle.hpp>
 #include <WCDB/Assertion.hpp>
 #include <WCDB/BaseBinding.hpp>
+#include <WCDB/Core.hpp>
 #include <WCDB/InnerHandle.hpp>
 #include <WCDB/InnerHandleStatement.hpp>
 #include <WCDB/MigratingHandle.hpp>
@@ -598,7 +599,10 @@ bool InnerHandleStatement::isBusy()
 
 void InnerHandleStatement::enableAutoAddColumn()
 {
-    m_needAutoAddColumn = true;
+    auto config = Core::shared().getABTestConfig("clicfg_db_auto_add_column");
+    if (config.has_value() && config.value().compare("1") == 0) {
+        m_needAutoAddColumn = true;
+    }
 }
 
 bool InnerHandleStatement::isReadOnly()
