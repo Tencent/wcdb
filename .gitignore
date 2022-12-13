@@ -33,3 +33,4 @@ WeChat/wconan_local_build/
 WeChat/wconan_package.lock
 WeChat/wconan_publish.py
 WeChat/cmake-build-*/
+WeChat/compile.log
