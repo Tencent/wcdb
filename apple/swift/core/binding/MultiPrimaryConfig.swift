@@ -35,7 +35,9 @@ public final class MultiPrimaryConfig<CodingTableKeyType: CodingTableKey>: Table
         if let wrappedConflict = conflict {
             tableConstraint.onConflict(wrappedConflict)
         }
-        tableBinding.tableConstraints.append(tableConstraint)
+        withExtendedLifetime(tableConstraint) {
+            WCDBBindingAddTableConstraint(tableBinding.cppBinding, $0.cppObj)
+        }
     }
 
     required public init(_ codingKeys: CodingTableKeyType..., onConflict conflict: ConflictAction? = nil) {

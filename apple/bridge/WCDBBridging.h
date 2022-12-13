@@ -22,6 +22,7 @@
 
 #include <WCDB/ObjectBridge.h>
 
+#include <WCDB/BindingBridge.h>
 #include <WCDB/CoreBridge.h>
 #include <WCDB/DatabaseBridge.h>
 #include <WCDB/ErrorBridge.h>

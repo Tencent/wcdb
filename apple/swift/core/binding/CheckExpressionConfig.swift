@@ -29,7 +29,11 @@ public final class CheckExpressionConfig: TableConfiguration {
     private let constraints: [TableConstraint]
 
     public func config(with tableBinding: TableBindingBase) {
-        tableBinding.tableConstraints.append(contentsOf: constraints)
+        for constraint in constraints {
+            withExtendedLifetime(constraint) {
+                WCDBBindingAddTableConstraint(tableBinding.cppBinding, $0.cppObj)
+            }
+        }
     }
 
     public init(@CheckExpressionBuilder _ constraintBuilder: () -> [TableConstraint]) {

@@ -30,7 +30,10 @@ public final class VirtualTableConfig: TableConfiguration {
     let parameters: [String]
 
     public func config(with tableBinding: TableBindingBase) {
-        tableBinding.virtualTableBinding = self
+        WCDBBindingConfigVirtualModule(tableBinding.cppBinding, module.cString)
+        for parameter in parameters {
+            WCDBBindingConfigVirtualModuleArgument(tableBinding.cppBinding, parameter.cString)
+        }
     }
 
     public init(withModule version: FTSVersion, and tokenizer: String...) {

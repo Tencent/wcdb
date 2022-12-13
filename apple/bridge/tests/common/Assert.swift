@@ -49,45 +49,6 @@ func WINQExpressionAssertEqual(
     XCTAssertEqual(expression().description, description(), file: file, line: line)
 }
 
-func ORMConstraintBindingAssertEqual<TableCodableObject: TableCodable>(
-    _ expression1: @autoclosure () -> TableCodableObject.Type,
-    _ expression2: @autoclosure () -> String,
-    file: StaticString = #file,
-    line: UInt = #line) {
-    let type = expression1()
-    let className = String(describing: type)
-    let orm = type.CodingKeys.objectRelationalMapping
-    let description1 = orm.generateCreateTableStatement(named: className).description
-    let description2 = expression2()
-    XCTAssertEqual(description1, description2, file: file, line: line)
-}
-
-func ORMIndexBindingAssertEqual<TableCodableObject: TableCodable>(
-    _ expression1: @autoclosure () -> TableCodableObject.Type,
-    _ expression2: @autoclosure () -> String,
-    file: StaticString = #file,
-    line: UInt = #line) {
-    let type = expression1()
-    let className = String(describing: type)
-    let orm = type.CodingKeys.objectRelationalMapping
-    let description1 = orm.generateCreateIndexStatements(onTable: className)![0].description
-    let description2 = expression2()
-    XCTAssertEqual(description1, description2, file: file, line: line)
-}
-
-func ORMVirtualTableBindingAssertEqual<TableCodableObject: TableCodable>(
-    _ expression1: @autoclosure () -> TableCodableObject.Type,
-    _ expression2: @autoclosure () -> String,
-    file: StaticString = #file,
-    line: UInt = #line) {
-    let type = expression1()
-    let className = String(describing: type)
-    let orm = type.CodingKeys.objectRelationalMapping
-    let description1 = orm.generateCreateVirtualTableStatement(named: className).description
-    let description2 = expression2()
-    XCTAssertEqual(description1, description2, file: file, line: line)
-}
-
 func WCDBAssertNoThrowReturned<T>(_ expression: @autoclosure () throws -> T,
                                   file: StaticString = #file,
                                   line: UInt = #line,

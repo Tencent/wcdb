@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class IndexBindingTests: BaseTestCase {
+class IndexBindingTests: ORMTestCase {
 
     final class BaselineTestObject: TableCodable {
         var variable: Int = 0

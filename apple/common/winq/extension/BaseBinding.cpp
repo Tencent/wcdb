@@ -22,9 +22,11 @@
  * limitations under the License.
  */
 
-#import <WCDB/Assertion.hpp>
+#include <WCDB/Assertion.hpp>
 #include <WCDB/BaseBinding.hpp>
-#import <WCDB/Error.hpp>
+#include <WCDB/Error.hpp>
+#include <WCDB/InnerHandle.hpp>
+#include <WCDB/Notifier.hpp>
 
 namespace WCDB {
 
@@ -49,6 +51,68 @@ ColumnDef *BaseBinding::getColumnDef(const UnsafeStringView &columnName)
 }
 
 #pragma mark - Table
+bool BaseBinding::createTable(const UnsafeStringView &tableName, InnerHandle &handle) const
+{
+    return handle.runTransactionIfNotInTransaction([&](InnerHandle *handle) {
+        auto exists = handle->tableExists(tableName);
+        if (!exists.has_value()) {
+            return false;
+        }
+        if (exists.value()) {
+            auto optionalColumnNames = handle->getColumns(tableName);
+            if (!optionalColumnNames.has_value()) {
+                return false;
+            }
+            std::set<StringView> &columnNames = optionalColumnNames.value();
+            //Check whether the column names exists
+            const auto &columnDefs = getColumnDefs();
+            for (const auto &columnDef : columnDefs) {
+                auto iter = columnNames.find(columnDef.first);
+                if (iter == columnNames.end()) {
+                    //Add new column
+                    if (!handle->execute(
+                        StatementAlterTable().alterTable(tableName).addColumn(
+                        columnDef.second))) {
+                        return false;
+                    }
+                } else {
+                    columnNames.erase(iter);
+                }
+            }
+            for (const auto &columnName : columnNames) {
+                Error error(Error::Code::Mismatch, Error::Level::Notice, "Skip column");
+                error.infos.insert_or_assign("Table", StringView(tableName));
+                error.infos.insert_or_assign("Column", StringView(columnName));
+                Notifier::shared().notify(error);
+            }
+        } else {
+            if (!handle->execute(generateCreateTableStatement(tableName))) {
+                return false;
+            }
+        }
+        std::list<StatementCreateIndex> createIndexStatements;
+        std::list<StatementDropIndex> dropIndexStatements;
+        std::tie(createIndexStatements, dropIndexStatements)
+        = generateIndexStatements(tableName, !exists.value());
+        for (const StatementCreateIndex &statement : createIndexStatements) {
+            if (!handle->execute(statement)) {
+                return false;
+            }
+        }
+        for (const StatementDropIndex &statement : dropIndexStatements) {
+            if (!handle->execute(statement)) {
+                return false;
+            }
+        }
+        return true;
+    });
+}
+
+bool BaseBinding::createVirtualTable(const UnsafeStringView &tableName, InnerHandle &handle) const
+{
+    return handle.execute(generateCreateVirtualTableStatement(tableName));
+}
+
 StatementCreateTable
 BaseBinding::generateCreateTableStatement(const UnsafeStringView &tableName) const
 {

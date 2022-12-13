@@ -40,13 +40,6 @@ void WCDBColumnConstraintConfigPrimaryKey(CPPColumnConstraint constraint)
     cppColumnConstraint->primaryKey();
 }
 
-bool WCDBColumnConstraintIsPrimaryKey(CPPColumnConstraint constraint)
-{
-    WCDBGetObjectOrReturnValue(constraint, WCDB::ColumnConstraint, cppConstraint, false);
-    return cppConstraint->syntax().switcher
-           == WCDB::Syntax::ColumnConstraint::Switch::PrimaryKey;
-}
-
 void WCDBColumnConstraintConfigOrder(CPPColumnConstraint constraint, WCDBSyntaxOrder order)
 {
     WCDBGetObjectOrReturn(constraint, WCDB::ColumnConstraint, cppColumnConstraint);

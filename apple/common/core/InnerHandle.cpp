@@ -378,6 +378,15 @@ bool InnerHandle::runNestedTransaction(const TransactionCallback &transaction)
     return false;
 }
 
+bool InnerHandle::runTransactionIfNotInTransaction(const TransactionCallback &transaction)
+{
+    if (isInTransaction()) {
+        return transaction(this);
+    } else {
+        return runTransaction(transaction);
+    }
+}
+
 bool InnerHandle::runTransaction(const TransactionCallback &transaction)
 {
     if (beginTransaction()) {

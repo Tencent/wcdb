@@ -123,45 +123,19 @@ extension TableInterface where Self: Database {
     public func create<Root: TableDecodable>(
         table name: String,
         of rootType: Root.Type) throws {
-        try run(transaction: {
-            handle in
-            let orm = Root.CodingKeys.objectRelationalMapping
-            if try self.isTableExists(name) {
-                var columnNames: [String] = []
-                do {
-                    let statementPragma = StatementPragma().pragma(.tableInfo).with(name)
-                    try handle.prepare(statementPragma)
-                    while try handle.step() {
-                        let columnName: String = handle.columnValue(atIndex: 1)
-                        columnNames.append(columnName)
-                    }
-                    handle.finalize()
-                }
-                var keys = orm.allKeys
-                for columnName in columnNames {
-                    if let index = keys.firstIndex(where: { (key) -> Bool in
-                        return key.stringValue.caseInsensitiveCompare(columnName) == ComparisonResult.orderedSame
-                    }) {
-                        keys.remove(at: index)
-                    } else {
-                        ErrorBridge.report(level: .Warning, code: .Misuse, infos: [
-                            .message: ErrorValue("Skip column named [\(columnName)] for table [\(name)]"),
-                            .path: ErrorValue(self.path)
-                        ])
-                    }
-                }
-                try keys.forEach {
-                    try handle.exec(StatementAlterTable().alter(table: name).addColumn(with: orm.generateColumnDef(with: $0)))
-                }
-            } else {
-                try handle.exec(orm.generateCreateTableStatement(named: name))
+            let handle = try getHandle()
+            let ret = WCDBBindingCreateTable(rootType.CodingKeys.objectRelationalMapping.cppBinding, name.cString, handle.cppHandle)
+            if !ret {
+                throw handle.getError()
             }
-            try orm.generateCreateIndexStatements(onTable: name)?.forEach { try handle.exec($0) }
-        })
     }
 
     public func create<Root: TableDecodable>(virtualTable name: String, of rootType: Root.Type) throws {
-        try exec(rootType.CodingKeys.objectRelationalMapping.generateCreateVirtualTableStatement(named: name))
+        let handle = try getHandle()
+        let ret = WCDBBindingCreateVirtualTable(rootType.CodingKeys.objectRelationalMapping.cppBinding, name.cString, handle.cppHandle)
+        if !ret {
+            throw handle.getError()
+        }
     }
 
     public func create(table name: String,

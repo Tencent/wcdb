@@ -65,7 +65,10 @@
                  withClass:(Class<WCTTableCoding>)cls
 {
     WCTRemedialAssert(tableName != nil && cls != nil, "Class or table name can't be null.", return NO;);
-    return [self execute:[cls objectRelationalMapping].generateCreateVirtualTableStatement(tableName)];
+    const WCTBinding &binding = [cls objectRelationalMapping];
+    WCDB::InnerHandle *innerHandle = [self getOrGenerateHandle];
+    WCTAssert(innerHandle != nullptr);
+    return binding.createVirtualTable(tableName, *innerHandle);
 }
 
 - (BOOL)dropTable:(NSString *)tableName
@@ -82,61 +85,10 @@
 {
     WCTAssert(tableName != nil && tableClass != nil);
     WCTAssert([(id) tableClass respondsToSelector:@selector(objectRelationalMapping)] && [(id) tableClass respondsToSelector:@selector(allProperties)]);
-    // TODO: check the constraints are as expected here.
-    return [self lazyRunTransaction:^BOOL(WCTHandle *nsHandle) {
-        WCDB::InnerHandle *handle = [nsHandle getOrGenerateHandle];
-        WCTAssert(handle != nullptr);
-        auto exists = handle->tableExists(tableName);
-        if (!exists.has_value()) {
-            return NO;
-        }
-        const WCTBinding &binding = [tableClass objectRelationalMapping];
-        if (exists.value()) {
-            auto optionalColumnNames = handle->getColumns(tableName);
-            if (!optionalColumnNames.has_value()) {
-                return NO;
-            }
-            std::set<WCDB::StringView> &columnNames = optionalColumnNames.value();
-            //Check whether the column names exists
-            const auto &columnDefs = binding.getColumnDefs();
-            for (const auto &columnDef : columnDefs) {
-                auto iter = columnNames.find(columnDef.first);
-                if (iter == columnNames.end()) {
-                    //Add new column
-                    if (!handle->execute(WCDB::StatementAlterTable().alterTable(tableName).addColumn(columnDef.second))) {
-                        return NO;
-                    }
-                } else {
-                    columnNames.erase(iter);
-                }
-            }
-            for (const auto &columnName : columnNames) {
-                WCDB::Error error(WCDB::Error::Code::Mismatch, WCDB::Error::Level::Notice, "Skip column");
-                error.infos.insert_or_assign("Table", WCDB::StringView(tableName));
-                error.infos.insert_or_assign("Column", WCDB::StringView(columnName));
-                error.infos.insert_or_assign(WCDB::ErrorStringKeyPath, handle->getPath());
-                WCDB::Notifier::shared().notify(error);
-            }
-        } else {
-            if (!handle->execute(binding.generateCreateTableStatement(tableName))) {
-                return NO;
-            }
-        }
-        std::list<WCDB::StatementCreateIndex> createIndexStatements;
-        std::list<WCDB::StatementDropIndex> dropIndexStatements;
-        std::tie(createIndexStatements, dropIndexStatements) = binding.generateIndexStatements(tableName, !exists.value());
-        for (const WCDB::StatementCreateIndex &statement : createIndexStatements) {
-            if (!handle->execute(statement)) {
-                return NO;
-            }
-        }
-        for (const WCDB::StatementDropIndex &statement : dropIndexStatements) {
-            if (!handle->execute(statement)) {
-                return NO;
-            }
-        }
-        return YES;
-    }];
+    const WCTBinding &binding = [tableClass objectRelationalMapping];
+    WCDB::InnerHandle *innerHandle = [self getOrGenerateHandle];
+    WCTAssert(innerHandle != nullptr);
+    return binding.createTable(tableName, *innerHandle);
 }
 
 @end

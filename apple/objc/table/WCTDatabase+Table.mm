@@ -59,7 +59,10 @@
                  withClass:(Class<WCTTableCoding>)tableClass
 {
     WCTRemedialAssert(tableName != nil && tableClass != nil, "Class or table name can't be null.", return NO;);
-    return _database->execute([tableClass objectRelationalMapping].generateCreateVirtualTableStatement(tableName));
+    WCTHandle *handle = [self getHandle];
+    BOOL result = [handle createVirtualTable:tableName withClass:tableClass];
+    [handle invalidate];
+    return result;
 }
 
 - (BOOL)dropTable:(NSString *)tableName

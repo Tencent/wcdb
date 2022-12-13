@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class VirtualTableBindingTests: BaseTestCase {
+class VirtualTableBindingTests: ORMTestCase {
 
     final class FTS3TestObject: TableCodable, Named {
         var id: Int = 0
@@ -38,6 +38,7 @@ class VirtualTableBindingTests: BaseTestCase {
     }
 
     func testFTS3VirtualBinding() {
+        self.database.add(tokenizer: BuiltinTokenizer.OneOrBinary)
         ORMVirtualTableBindingAssertEqual(
             FTS3TestObject.self,
             """
@@ -62,6 +63,7 @@ class VirtualTableBindingTests: BaseTestCase {
     }
 
     func testFTS5VirtualBinding() {
+        self.database.add(tokenizer: BuiltinTokenizer.Verbatim)
         ORMVirtualTableBindingAssertEqual(
             FTS5TestObject.self,
             """
