@@ -93,6 +93,8 @@ WCTBinding::WCTBinding(Class cls)
 #endif
 }
 
+WCTBinding::~WCTBinding() = default;
+
 void WCTBinding::assertNoInheritance(const WCTProperty &property, Class cls)
 {
     WCTRemedialAssert(property.getColumnBinding().getClass() == cls, "Inheritance is not supported for ORM.", ;);

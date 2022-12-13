@@ -30,7 +30,6 @@ WCDB_EXTERN_C_BEGIN
 
 CPPColumnConstraint WCDBColumnConstraintCreate(const char* _Nullable name);
 void WCDBColumnConstraintConfigPrimaryKey(CPPColumnConstraint constraint);
-bool WCDBColumnConstraintIsPrimaryKey(CPPColumnConstraint constraint);
 void WCDBColumnConstraintConfigOrder(CPPColumnConstraint constraint,
                                      enum WCDBSyntaxOrder order);
 void WCDBColumnConstraintConfigCoflictAction(CPPColumnConstraint constraint,

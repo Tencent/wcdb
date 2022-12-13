@@ -44,8 +44,8 @@ public:
     {
         WCDB_CPP_ORM_STATIC_ASSERT_FOR_OBJECT_TYPE
         assertCondition(tableName.length() > 0);
-        return execute(ObjectType::getObjectRelationBinding().generateCreateVirtualTableStatement(
-        tableName));
+        const WCDB::Binding &binding = ObjectType::getObjectRelationBinding();
+        return createVirtualTable(tableName, binding);
     }
 
     template<class ObjectType>
@@ -207,6 +207,7 @@ public:
 
 protected:
     bool createTable(const UnsafeStringView &tableName, const Binding &binding);
+    bool createVirtualTable(const UnsafeStringView &tableName, const Binding &binding);
     virtual ~HandleORMOperation() override = 0;
 };
 

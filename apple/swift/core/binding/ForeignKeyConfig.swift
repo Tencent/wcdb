@@ -35,6 +35,9 @@ public final class ForeignKeyConfig<CodingTableKeyType: CodingTableKey>: TableCo
     }
 
     public func config(with tableBinding: TableBindingBase) {
-        tableBinding.tableConstraints.append(TableConstraint().foreignKey(codingKeys, foreignKey: foreignKey))
+        let tableConstraint = TableConstraint().foreignKey(codingKeys, foreignKey: foreignKey)
+        withExtendedLifetime(tableConstraint) {
+            WCDBBindingAddTableConstraint(tableBinding.cppBinding, $0.cppObj)
+        }
     }
 }

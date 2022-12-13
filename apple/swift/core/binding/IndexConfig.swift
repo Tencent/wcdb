@@ -35,7 +35,9 @@ public final class IndexConfig<CodingTableKeyType: CodingTableKey>: TableConfigu
         if unique {
             statement.unique()
         }
-        tableBinding.indexes[subfix] = statement
+        withExtendedLifetime(statement) {
+            WCDBBindingAddIndex(tableBinding.cppBinding, subfix.cString, $0.cppObj)
+        }
     }
 
     required public init(_ codingKeys: CodingTableKeyType..., namedWith subfix: String, isUnique: Bool = false) {

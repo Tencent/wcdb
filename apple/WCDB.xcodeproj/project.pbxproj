@@ -2931,6 +2931,10 @@
 		7525C15C2920D22300FD34C7 /* TableCRUDInterface+WCTTableCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7525C15B2920D22300FD34C7 /* TableCRUDInterface+WCTTableCoding.swift */; };
 		752C7E3D28C8E16800C9FFA6 /* ORMDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 752C7E3C28C8E16800C9FFA6 /* ORMDeleteTests.mm */; };
 		752C7E4028C8E94200C9FFA6 /* ORMInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 752C7E3F28C8E94200C9FFA6 /* ORMInsertTests.mm */; };
+		752CF3F8293A490F009ED8FB /* BindingBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 752CF3F6293A490F009ED8FB /* BindingBridge.cpp */; };
+		752CF3F9293A490F009ED8FB /* BindingBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 752CF3F6293A490F009ED8FB /* BindingBridge.cpp */; };
+		752CF3FA293A490F009ED8FB /* BindingBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 752CF3F7293A490F009ED8FB /* BindingBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		752CF3FB293A490F009ED8FB /* BindingBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 752CF3F7293A490F009ED8FB /* BindingBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		753473602935C1E400911FCA /* DatabaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7534735F2935C1E400911FCA /* DatabaseTestCase.swift */; };
 		753473612935C1E400911FCA /* DatabaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7534735F2935C1E400911FCA /* DatabaseTestCase.swift */; };
 		753636DC28BBC3820025C2C4 /* Table.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 753636DA28BBC3820025C2C4 /* Table.cpp */; };
@@ -2958,6 +2962,7 @@
 		7543DD8F271C360E00B533B4 /* AuxiliaryFunctionConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543DD8D271C360E00B533B4 /* AuxiliaryFunctionConfig.hpp */; };
 		7543DD92271C601F00B533B4 /* SubstringMatchInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7543DD90271C601F00B533B4 /* SubstringMatchInfo.cpp */; };
 		7543DD93271C601F00B533B4 /* SubstringMatchInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543DD91271C601F00B533B4 /* SubstringMatchInfo.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		7543EDE3293B49CB00336DA9 /* ORMTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7543EDE2293B49CB00336DA9 /* ORMTestCase.swift */; };
 		7547A3CD290D28A200AFA132 /* OneOrBinaryTokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03450DB22738BBF000C4DC1B /* OneOrBinaryTokenizer.cpp */; };
 		7547A3CF290D2B2600AFA132 /* CPPFTS3Tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7547A3CE290D2B2600AFA132 /* CPPFTS3Tests.mm */; };
 		75535243290E620F008376AB /* CPPFTS5Object.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75535242290E620F008376AB /* CPPFTS5Object.mm */; };
@@ -4469,6 +4474,8 @@
 		7525C15B2920D22300FD34C7 /* TableCRUDInterface+WCTTableCoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TableCRUDInterface+WCTTableCoding.swift"; sourceTree = "<group>"; };
 		752C7E3C28C8E16800C9FFA6 /* ORMDeleteTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ORMDeleteTests.mm; sourceTree = "<group>"; };
 		752C7E3F28C8E94200C9FFA6 /* ORMInsertTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ORMInsertTests.mm; sourceTree = "<group>"; };
+		752CF3F6293A490F009ED8FB /* BindingBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BindingBridge.cpp; sourceTree = "<group>"; };
+		752CF3F7293A490F009ED8FB /* BindingBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BindingBridge.h; sourceTree = "<group>"; };
 		7534735F2935C1E400911FCA /* DatabaseTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseTestCase.swift; sourceTree = "<group>"; };
 		753636DA28BBC3820025C2C4 /* Table.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Table.cpp; sourceTree = "<group>"; };
 		753636DB28BBC3820025C2C4 /* Table.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Table.hpp; sourceTree = "<group>"; };
@@ -4489,6 +4496,7 @@
 		7543DD8D271C360E00B533B4 /* AuxiliaryFunctionConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AuxiliaryFunctionConfig.hpp; sourceTree = "<group>"; };
 		7543DD90271C601F00B533B4 /* SubstringMatchInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SubstringMatchInfo.cpp; sourceTree = "<group>"; };
 		7543DD91271C601F00B533B4 /* SubstringMatchInfo.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SubstringMatchInfo.hpp; sourceTree = "<group>"; };
+		7543EDE2293B49CB00336DA9 /* ORMTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ORMTestCase.swift; sourceTree = "<group>"; };
 		7547A3CE290D2B2600AFA132 /* CPPFTS3Tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CPPFTS3Tests.mm; sourceTree = "<group>"; };
 		75535242290E620F008376AB /* CPPFTS5Object.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CPPFTS5Object.mm; sourceTree = "<group>"; };
 		75535244290E621B008376AB /* CPPFTS5Object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPPFTS5Object.h; sourceTree = "<group>"; };
@@ -5112,6 +5120,8 @@
 				750DC06A2913DE7300F19044 /* FTSBridge.h */,
 				750DC0692913DE7300F19044 /* FTSBridge.cpp */,
 				75E76AD329161EE400073CCA /* FTSBridge.swift */,
+				752CF3F7293A490F009ED8FB /* BindingBridge.h */,
+				752CF3F6293A490F009ED8FB /* BindingBridge.cpp */,
 			);
 			path = cppbridge;
 			sourceTree = "<group>";
@@ -5460,6 +5470,7 @@
 				03E1675D27F434E800D2C926 /* VirtualTableBindingTests.swift */,
 				03E1675E27F434E800D2C926 /* ColumnConstraintBindingTests.swift */,
 				03E1675F27F434E800D2C926 /* IndexBindingTests.swift */,
+				7543EDE2293B49CB00336DA9 /* ORMTestCase.swift */,
 			);
 			path = orm;
 			sourceTree = "<group>";
@@ -7699,6 +7710,7 @@
 				2360A60920D78F2C00E4A311 /* PerformanceTraceConfig.hpp in Headers */,
 				237B47B121FEEA200059227A /* ColumnMeta.hpp in Headers */,
 				23EABBE6206D08EC00241F3B /* WCTHandle+Table.h in Headers */,
+				752CF3FA293A490F009ED8FB /* BindingBridge.h in Headers */,
 				239776FE202AF2E3000A681C /* Macro.h in Headers */,
 				03E3181028A21B0500540CB1 /* HandleStatement.hpp in Headers */,
 				237A8D6021EDBB2E003AF5BB /* BusyRetryConfig.hpp in Headers */,
@@ -8697,6 +8709,7 @@
 				7521DDB7291EA349009642EF /* Error.hpp in Headers */,
 				7521DDB8291EA349009642EF /* DatabasePool.hpp in Headers */,
 				7521DDB9291EA349009642EF /* SyntaxWindowDef.hpp in Headers */,
+				752CF3FB293A490F009ED8FB /* BindingBridge.h in Headers */,
 				7521DDBB291EA349009642EF /* TableOrSubquery.hpp in Headers */,
 				7521DDBD291EA349009642EF /* Statement.hpp in Headers */,
 				7521DDBE291EA349009642EF /* ThreadLocal.hpp in Headers */,
@@ -9795,6 +9808,7 @@
 				03E1677F27F434E900D2C926 /* TableConstraintTests.swift in Sources */,
 				03E1678E27F434E900D2C926 /* StatementCreateIndexTests.swift in Sources */,
 				03E1678227F434E900D2C926 /* LiteralValueTests.swift in Sources */,
+				7543EDE3293B49CB00336DA9 /* ORMTestCase.swift in Sources */,
 				75E76AE029176FA600073CCA /* TokenizerTests.swift in Sources */,
 				03E167AB27F434E900D2C926 /* SelectTests.swift in Sources */,
 				03E1678827F434E900D2C926 /* StatementPragmaTests.swift in Sources */,
@@ -10255,6 +10269,7 @@
 				23EEDCD9217DFADC006E9E73 /* StatementReindex.cpp in Sources */,
 				2370B12021914ED500D3227C /* NSObject+WCTColumnCoding.mm in Sources */,
 				2349F7321EA0D6680021EFA7 /* WCTTable+ChainCall.mm in Sources */,
+				752CF3F8293A490F009ED8FB /* BindingBridge.cpp in Sources */,
 				23EB91DE20CA1EBE00ECF668 /* Wal.cpp in Sources */,
 				23577F7A1F74F4E800D31C05 /* WCTFTSTokenizerUtil.mm in Sources */,
 				03E1664127F42D6600D2C926 /* TableBinding.swift in Sources */,
@@ -10730,6 +10745,7 @@
 				7521DAD4291EA349009642EF /* StatementAnalyzeBridge.cpp in Sources */,
 				7521DAD6291EA349009642EF /* ColumnTypeDecoder.swift in Sources */,
 				7521DAD7291EA349009642EF /* Redirectable.swift in Sources */,
+				752CF3F9293A490F009ED8FB /* BindingBridge.cpp in Sources */,
 				7521DAD8291EA349009642EF /* StatementExplainBridge.cpp in Sources */,
 				7521DAD9291EA349009642EF /* JoinConstraint.cpp in Sources */,
 				7521DADA291EA349009642EF /* StatementDropTriggerBridge.cpp in Sources */,

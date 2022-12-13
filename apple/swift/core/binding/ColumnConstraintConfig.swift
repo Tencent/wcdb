@@ -30,7 +30,9 @@ public final class ColumnConstraintConfig<CodingTableKeyType: CodingTableKey>: T
     private var columnConstraints: [ColumnConstraint] = []
 
     public func config(with tableBinding: TableBindingBase) {
-        tableBinding.columnConstraints[codingKey.rawValue] = columnConstraints
+        for constraint in columnConstraints {
+            WCDBBindingAddColumnConstraint(tableBinding.cppBinding, codingKey.rawValue.cString, constraint.cppObj)
+        }
     }
 
     required public init(_ codingKey: CodingTableKeyType,
