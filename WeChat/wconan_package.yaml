@@ -25,6 +25,11 @@ default:
 
 
 android:
+  version: 1.0.7
+  build_types: shared
+  dependencies:
+    sqlcipher: 1.0.4-SNAPSHOT
+
   options:
     auto_synthesis_aar: true
 
