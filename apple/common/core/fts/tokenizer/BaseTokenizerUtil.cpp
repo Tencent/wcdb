@@ -154,13 +154,19 @@ BaseTokenizerUtil::getPinYin(const UnsafeStringView& chineseCharacter)
 WCDB::StringViewMap<std::vector<WCDB::StringView>>* BaseTokenizerUtil::g_pinyinDict = nullptr;
 void BaseTokenizerUtil::configPinyinDict(WCDB::StringViewMap<std::vector<WCDB::StringView>>* dict)
 {
-    WCTAssert(g_pinyinDict == nullptr || getPinyinConverter() == nullptr);
+    if (g_pinyinDict != nullptr) {
+        delete g_pinyinDict;
+        g_pinyinDict = nullptr;
+    }
     g_pinyinDict = dict;
 }
 
 void BaseTokenizerUtil::configPinyinConverter(PinYinConverter converter)
 {
-    WCTAssert(g_pinyinDict == nullptr || getPinyinConverter() == nullptr);
+    if (g_pinyinDict != nullptr) {
+        delete g_pinyinDict;
+        g_pinyinDict = nullptr;
+    }
     getPinyinConverter() = converter;
 }
 
@@ -194,15 +200,19 @@ const StringView BaseTokenizerUtil::getSimplifiedChinese(const UnsafeStringView&
 WCDB::StringViewMap<WCDB::StringView>* BaseTokenizerUtil::g_traditionalChineseDict = nullptr;
 void BaseTokenizerUtil::configTraditionalChineseDict(WCDB::StringViewMap<WCDB::StringView>* dict)
 {
-    WCTAssert(g_traditionalChineseDict == nullptr
-              || getTraditionalChineseConverter() == nullptr);
+    if (g_traditionalChineseDict != nullptr) {
+        delete g_traditionalChineseDict;
+        g_traditionalChineseDict = nullptr;
+    }
     g_traditionalChineseDict = dict;
 }
 
 void BaseTokenizerUtil::configTraditionalChineseConverter(TraditionalChineseConverter converter)
 {
-    WCTAssert(g_traditionalChineseDict == nullptr
-              || getTraditionalChineseConverter() == nullptr);
+    if (g_traditionalChineseDict != nullptr) {
+        delete g_traditionalChineseDict;
+        g_traditionalChineseDict = nullptr;
+    }
     getTraditionalChineseConverter() = converter;
 }
 
