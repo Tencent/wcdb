@@ -4,7 +4,7 @@ showUsage() {
     echo """\
   USAGE: bash $0 
        -p/--platform iOS/macOS/watchOS
-       -l/--language ObjC/Swift
+       -l/--language ObjC/Swift/Cpp
        [-c/--configuration Debug/Release]: Default to Release.
        [-d/--destination destination]: Default to current directory.
        [--test]: Enable test.
@@ -83,7 +83,7 @@ derivedData="$destination"/derivedData
 products="$derivedData"/Build/Products
 
 if $static_framework; then
-    if [ "$language" != "ObjC" ] || [ "$platform" != "iOS" -a "$platform" != "watchOS" ]; then
+    if [ "$language" != "ObjC" -a "$language" != "Cpp" ] || [ "$platform" != "iOS" -a "$platform" != "watchOS" ]; then
         echo 'Static library is only support iOS/watchOS + ObjC.'
         exit 1
     fi
@@ -103,15 +103,22 @@ fi
 settings=`bash $ScriptDir/settings.sh $settingsPrameter`
 
 declare target
+declare scheme
 case "$language" in
     ObjC)
         target=WCDB
+        scheme=WCDB
     ;;
     Swift)
         target=WCDBSwift
+        scheme=WCDBSwift
+    ;;
+    Cpp)
+        target=WCDB
+        scheme=WCDBCpp
     ;;
     *)
-        echo 'Language should be either ObjC or Swift.'
+        echo 'Language should be ObjC/Swift/Cpp.'
         showUsage
         exit 1
     ;;
@@ -162,7 +169,7 @@ for platformBasedParameter in "${platformBasedParameters[@]}"; do
     if [ -z "$template" ]; then
         template="$product"
     fi
-    builder="xcrun xcodebuild -arch $arch -scheme $target -project $project -configuration $configuration -derivedDataPath $derivedData -sdk $sdk $settings $action"
+    builder="xcrun xcodebuild -arch $arch -scheme $scheme -project $project -configuration $configuration -derivedDataPath $derivedData -sdk $sdk $settings $action"
     if $pretty; then
         if type xcpretty > /dev/null; then
             builder+=" | xcpretty"
