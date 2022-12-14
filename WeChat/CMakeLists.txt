@@ -182,6 +182,7 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
         ${WCDB_SRC_DIR}/cpp/*Accessor.hpp
         ${WCDB_SRC_DIR}/cpp/*BaseOperation.hpp
         ${WCDB_SRC_DIR}/cpp/*Binding.hpp
+        ${WCDB_SRC_DIR}/cpp/*Builtin.h
         ${WCDB_SRC_DIR}/cpp/*ChainCall.hpp
         ${WCDB_SRC_DIR}/cpp/*CPPBindingMacro.h
         ${WCDB_SRC_DIR}/cpp/*CPPColumnConstraintMacro.h
