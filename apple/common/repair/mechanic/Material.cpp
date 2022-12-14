@@ -32,6 +32,7 @@
 #include <WCDB/Notifier.hpp>
 #include <WCDB/SQLite.h>
 #include <WCDB/Serialization.hpp>
+#include <cstring>
 
 namespace WCDB {
 
