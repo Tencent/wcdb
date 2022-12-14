@@ -36,6 +36,7 @@
 #include <WCDB/Path.hpp>
 #include <WCDB/SQLite.h>
 #include <WCDB/ThreadedErrors.hpp>
+#include <cstring>
 #include <numeric>
 
 namespace WCDB {

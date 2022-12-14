@@ -1,22 +1,18 @@
-# For more information about using CMake with Android Studio, read the
-# documentation: https://d.android.com/studio/projects/add-native-code.html
-
-# Sets the minimum version of CMake required to build the native library.
-
 cmake_minimum_required(VERSION 3.6)
-
-# Declares and names the project.
 
 project(WCDB)
 
-# Creates and names a library, sets it as either STATIC
-# or SHARED, and provides the relative paths to its source code.
-# You can define multiple libraries, and CMake builds them for you.
-# Gradle automatically packages shared libraries with your APK.
-include(wconan.cmake)
+set(WCONAN_CMAKE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/wconan.cmake)
+if (EXISTS ${WCONAN_CMAKE_PATH})
+    set(WCONAN_MODE ON CACHE BOOL "Build with wconan" FORCE)
+    include(${WCONAN_CMAKE_PATH})
+endif ()
+
+if (NOT DEFINED WCONAN_LIB_NAME)
+    set(WCONAN_LIB_NAME "WCDB")
+endif ()
 
 set(TARGET_NAME ${WCONAN_LIB_NAME})
-set(TARGET_INSTALL_DIR ".")
 
 if (NOT DEFINED CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
@@ -30,18 +26,12 @@ endif ()
 if (ANDROID)
     # No linker flag to add
 elseif (APPLE)
-    set(LIB_FRAMEWORK_IDENTIFIER "com.Tencent.WCDB")
-    #add_definitions(-DFORCE_POSIX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-atomic-memory-ordering -Wno-deprecated-declarations")
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-dead_strip")
-    # suppress generation of ZERO_CHECK in xcodeproj
-    set(CMAKE_SUPPRESS_REGENERATION true)
+    # APPLE should be built from xcodeproj!
 elseif (LINUX)
     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unknown-pragmas -Wno-pragmas -Wno-deprecated -Wno-unused-variable")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-pragmas -Wno-pragmas -Wno-deprecated -Wno-unused-variable -fpermissive")
     endif ()
-    #set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-rpath,'$ORIGIN'")
 elseif (WIN32)
     # TODO
 endif ()
@@ -227,14 +217,16 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
         ${WCDB_SRC_DIR}/cpp/*WCDBCpp.h
         )
 # export public headers
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/.wconan2/include/WCDB)
-file(COPY ${WCDB_PUBLIC_HEADERS} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/.wconan2/include/WCDB)
+file(REMOVE_RECURSE ${CMAKE_CURRENT_SOURCE_DIR}/wconan_build/export_headers)
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/wconan_build/export_headers/WCDB)
+file(COPY ${WCDB_PUBLIC_HEADERS} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/wconan_build/export_headers/WCDB)
 
 # copy all headers to include
 file(GLOB_RECURSE WCDB_ALL_HEADERS
         ${WCDB_SRC_DIR}/*.hpp
         ${WCDB_SRC_DIR}/*.h
         )
+file(REMOVE_RECURSE ${CMAKE_CURRENT_BINARY_DIR}/include)
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/WCDB)
 file(COPY ${WCDB_ALL_HEADERS} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/include/WCDB)
 
@@ -255,133 +247,76 @@ set(ALL_SRCS
         ${SRC_WCDB_CPP}
         )
 
-add_library(${TARGET_NAME} ${ALL_SRCS})
+set(SQLCIPHER_COMPILE_DEFS)
+set(SQLCIPHER_SRC_ROOT)
+set(LIB_SQLCIPHER sqlcipher)
+include(sqlcipher.cmake)
 
-wconan_target_import_libraries(
-        TARGET ${TARGET_NAME}
-        DIR wconan_libs
-        LIBRARIES sqlcipher
-)
+if (WCONAN_MODE)
+    wconan_get_libraries_dir(
+            WCONAN_LIB_DIR
+            wconan_libs
+    )
+    target_include_directories(${LIB_SQLCIPHER} PUBLIC ${WCONAN_LIB_DIR}/include)
+    target_link_directories(${LIB_SQLCIPHER} PUBLIC ${WCONAN_LIB_DIR}/libs)
+    target_link_libraries(${LIB_SQLCIPHER} PUBLIC crypto)
 
-target_include_directories(${TARGET_NAME} PRIVATE
-        ${CMAKE_CURRENT_BINARY_DIR}/include
-        )
+    set(SQLCIPHER_SYSTEM_DEFS)
+    set(SQLCIPHER_SYSTEM_SRC)
 
-target_compile_definitions(${TARGET_NAME} PUBLIC
-        _HAVE_SQLITE_CONFIG_H
-        OMIT_MEM_SECURITY=1
-        OMIT_MEMLOCK=1
-        SQLCIPHER_PREPROCESSED=1
-        SQLITE_CORE=1
-        SQLITE_DEFAULT_CACHE_SIZE=-2000
-        SQLITE_DEFAULT_JOURNAL_SIZE_LIMIT=4194304
-        SQLITE_DEFAULT_LOCKING_MODE=0
-        SQLITE_DEFAULT_MEMSTATUS=0
-        SQLITE_DEFAULT_PAGE_SIZE=4096
-        SQLITE_DEFAULT_SYNCHRONOUS=1
-        SQLITE_DEFAULT_WAL_AUTOCHECKPOINT=0
-        SQLITE_DEFAULT_WAL_SYNCHRONOUS=1
-        SQLITE_ENABLE_API_ARMOR=1
-        SQLITE_ENABLE_BATCH_ATOMIC_WRITE=1
-        SQLITE_ENABLE_COLUMN_METADATA=1
-        SQLITE_ENABLE_DBSTAT_VTAB=1
-        SQLITE_ENABLE_FTS3=1
-        SQLITE_ENABLE_FTS3_PARENTHESIS=1
-        SQLITE_ENABLE_FTS3_TOKENIZER=1
-        SQLITE_ENABLE_FTS5=1
-        SQLITE_ENABLE_RTREE=1
-        SQLITE_ENABLE_UPDATE_DELETE_LIMIT=1
-        SQLITE_HAS_CODEC=1
-        SQLITE_LIKE_DOESNT_MATCH_BLOBS=1
-        SQLITE_MALLOC_SOFT_LIMIT=0
-        SQLITE_MAX_ATTACHED=64
-        SQLITE_MAX_EXPR_DEPTH=0
-        SQLITE_MAX_SCHEMA_RETRY=50
-        SQLITE_MAX_VARIABLE_NUMBER=99
-        SQLITE_OMIT_BUILTIN_TEST=1
-        SQLITE_OMIT_COMPILEOPTION_DIAGS=1
-        SQLITE_OMIT_DEPRECATED=1
-        SQLITE_OMIT_LOAD_EXTENSION=1
-        SQLITE_OMIT_PROGRESS_CALLBACK=1
-        SQLITE_OMIT_SHARED_CACHE=1
-        SQLITE_PRINT_BUF_SIZE=256
-        SQLITE_SYSTEM_MALLOC=1
-        SQLITE_TEMP_STORE=2
-        SQLITE_THREADSAFE=2
-        SQLITE_UNTESTABLE=1
-        SQLITE_USE_ALLOCA=1
-        SQLITE_WCDB=1
-        SQLITE_WCDB_CHECKPOINT_HANDLER=1
-        SQLITE_WCDB_LOCK_HOOK=1
-        SQLITE_WCDB_SUSPEND=1
-        USE_PREAD=1
-        )
-
-# Platform dependent settings
-if (ANDROID)
-    if (CMAKE_SIZEOF_VOID_P EQUAL 8)
-        message(STATUS "Detected LP64 System, SQLite int64 set to long")
-        target_compile_definitions(${TARGET_NAME} PRIVATE
-                SQLITE_INT64_TYPE=long
-                )
+    if (ANDROID OR LINUX)
+        list(APPEND SQLCIPHER_SYSTEM_DEFS
+                SQLCIPHER_CRYPTO_OPENSSL=1
+                SQLITE_OS_UNIX=1)
+        list(APPEND SQLCIPHER_SYSTEM_SRC
+                ${SQLCIPHER_SRC_ROOT}/src/crypto.c
+                ${SQLCIPHER_SRC_ROOT}/src/crypto_impl.c
+                ${SQLCIPHER_SRC_ROOT}/src/crypto_openssl.c
+                ${SQLCIPHER_SRC_ROOT}/src/mutex_unix.c
+                ${SQLCIPHER_SRC_ROOT}/src/os_unix.c)
+    elseif (WIN32)
+        list(APPEND SQLCIPHER_SYSTEM_DEFS
+                SQLCIPHER_CRYPTO_OPENSSL=1
+                SQLITE_OS_WIN=1)
+        list(APPEND SQLCIPHER_SYSTEM_SRC
+                ${SQLCIPHER_SRC_ROOT}/src/crypto.c
+                ${SQLCIPHER_SRC_ROOT}/src/crypto_impl.c
+                ${SQLCIPHER_SRC_ROOT}/src/crypto_openssl.c
+                ${SQLCIPHER_SRC_ROOT}/src/mutex_w32.c
+                ${SQLCIPHER_SRC_ROOT}/src/os_win.c)
     endif ()
-elseif (APPLE)
-    # TODO
-elseif (LINUX)
-    if (CMAKE_SIZEOF_VOID_P EQUAL 8)
-        message(STATUS "Detected LP64 System, SQLite int64 set to long")
-        target_compile_definitions(${TARGET_NAME} PRIVATE
-                SQLITE_INT64_TYPE=long
-                )
-    endif ()
-elseif (WIN32)
-    # TODO
-else ()
+
+    target_compile_definitions(${LIB_SQLCIPHER} PRIVATE
+            ${SQLCIPHER_SYSTEM_DEFS})
+    target_sources(${LIB_SQLCIPHER} PRIVATE
+            ${SQLCIPHER_SYSTEM_SRC})
 endif ()
 
-#set(WCONAN_LIBS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/wconan_libs/${CMAKE_BUILD_TYPE}/${CMAKE_BUILD_TYPE}/libs)
-#message(STATUS "WCONAN_LIBS_DIR: ${WCONAN_LIBS_DIR}")
-#set(WCONAN_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/wconan_libs/${CMAKE_BUILD_TYPE}/${CMAKE_BUILD_TYPE}/include)
-#message(STATUS "WCONAN_INCLUDE_DIR: ${WCONAN_INCLUDE_DIR}")
+add_library(${TARGET_NAME} ${ALL_SRCS})
+
+target_include_directories(${TARGET_NAME} PRIVATE
+        ${CMAKE_CURRENT_BINARY_DIR}/include)
+
+target_link_libraries(${TARGET_NAME} PRIVATE
+        ${LIB_SQLCIPHER})
 
 if (ANDROID)
     message(STATUS "---- BUILD FOR ANDROID ----")
     find_library(z-lib z)
-    target_link_libraries(${TARGET_NAME}
+    target_link_libraries(${TARGET_NAME} PRIVATE
             ${LINK_LIBRARIES}
-            ${z-lib}
-            crypto)
-elseif (APPLE)
-    message(STATUS "---- BUILD FOR APPLE ----")
-    set(MACOSX_FRAMEWORK_SHORT_VERSION_STRING ${WCONAN_LIB_VERSION})
-    set(MACOSX_FRAMEWORK_BUNDLE_VERSION ${WCONAN_LIB_VERSION})
-    set_target_properties(${TARGET_NAME} PROPERTIES
-            FRAMEWORK TRUE
-            MACOSX_FRAMEWORK_IDENTIFIER ${LIB_FRAMEWORK_IDENTIFIER}
-            XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER ${LIB_FRAMEWORK_IDENTIFIER}
-            XCODE_ATTRIBUTE_GCC_GENERATE_DEBUGGING_SYMBOLS "YES"
-            XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT "dwarf-with-dsym"
-            XCODE_ATTRIBUTE_CLANG_DEBUG_INFORMATION_LEVEL[variant=Release] "default"
-            XCODE_ATTRIBUTE_CLANG_DEBUG_INFORMATION_LEVEL[variant=Release] "line-tables-only"
-            LINK_FLAGS "${APPLE_LINK_FLAGS}"
-            # use wconan2 to export headers
-            #PUBLIC_HEADER "${ALL_FRAMEWORK_HEADERS}"
-            )
-    target_link_libraries(${TARGET_NAME} ${LINK_LIBRARIES}
-            "-framework Security"
-            "-framework Foundation"
-            z)
+            ${z-lib})
 elseif (LINUX)
     message(STATUS "---- BUILD FOR LINUX ----")
-    target_link_libraries(${TARGET_NAME} ${LINK_LIBRARIES}
+    target_link_libraries(${TARGET_NAME} PRIVATE
+            ${LINK_LIBRARIES}
             pthread
-            z
-            crypto)
+            z)
 elseif (WIN32)
     message(STATUS "---- BUILD FOR WINDOWS ----")
-    target_link_libraries(${TARGET_NAME} ${LINK_LIBRARIES}
-            z
-            crypto)
+    target_link_libraries(${TARGET_NAME} PRIVATE
+            ${LINK_LIBRARIES}
+            z)
 else ()
     message(FATAL_ERROR "Unsupported platform!")
 endif ()
