@@ -53,9 +53,11 @@ public:
     static std::optional<std::pair<bool, bool>> itemExists(const UnsafeStringView &path);
     static std::optional<size_t> getDirectorySize(const UnsafeStringView &directory);
     static std::optional<size_t> getFileSize(const UnsafeStringView &file);
+#ifndef __ANDROID__
     static bool
     createFileHardLink(const UnsafeStringView &from, const UnsafeStringView &to);
     static bool removeFileHardLink(const UnsafeStringView &path);
+#endif
     static bool createDirectory(const UnsafeStringView &path);
     static std::optional<Time> getFileModifiedTime(const UnsafeStringView &path);
     static std::optional<Time> getFileCreatedTime(const UnsafeStringView &path);
@@ -90,8 +92,10 @@ public:
     createDirectoryWithIntermediateDirectories(const UnsafeStringView &directory);
     static bool
     setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(const UnsafeStringView &path);
+#ifndef __ANDROID__
     static bool
     createDirectoryHardLink(const UnsafeStringView &from, const UnsafeStringView &to);
+#endif
 
 #pragma mark - Error
 protected:

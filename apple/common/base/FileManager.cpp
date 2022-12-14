@@ -115,7 +115,7 @@ const std::function<bool(const UnsafeStringView &, const UnsafeStringView &, boo
 
     return true;
 }
-
+#ifndef __ANDROID__
 bool FileManager::createFileHardLink(const UnsafeStringView &from, const UnsafeStringView &to)
 {
     if (link(from.data(), to.data()) == 0) {
@@ -133,6 +133,7 @@ bool FileManager::removeFileHardLink(const UnsafeStringView &path)
     setThreadedError(path);
     return false;
 }
+#endif
 
 bool FileManager::removeFile(const UnsafeStringView &file)
 {
@@ -346,12 +347,20 @@ bool FileManager::moveItems(const std::list<std::pair<StringView, StringView>> &
                 break;
             }
             if (isDirectory) {
+#ifdef __ANDROID__
+                if (::rename(pairedPath.first.data(), newPath.data()) != 0) {
+#else
                 if (!createDirectoryHardLink(pairedPath.first, newPath)) {
+#endif
                     result = false;
                     break;
                 }
             } else {
+#ifdef __ANDROID__
+                if (::rename(pairedPath.first.data(), newPath.data()) != 0) {
+#else
                 if (!createFileHardLink(pairedPath.first, newPath)) {
+#endif
                     result = false;
                     break;
                 }
@@ -402,6 +411,7 @@ bool FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(
     return true;
 }
 
+#ifndef __ANDROID__
 bool FileManager::createDirectoryHardLink(const UnsafeStringView &from,
                                           const UnsafeStringView &to)
 {
@@ -428,6 +438,7 @@ bool FileManager::createDirectoryHardLink(const UnsafeStringView &from,
     removeItem(to);
     return false;
 }
+#endif
 
 #pragma mark - Error
 void FileManager::setThreadedError(const UnsafeStringView &path)
