@@ -79,7 +79,6 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
         ${WCDB_SRC_DIR}/common/*RecyclableHandle.hpp
         ${WCDB_SRC_DIR}/common/*ResultColumn.hpp
         ${WCDB_SRC_DIR}/common/*Schema.hpp
-        ${WCDB_SRC_DIR}/common/*Sequence.hpp
         ${WCDB_SRC_DIR}/common/*Shadow.hpp
         ${WCDB_SRC_DIR}/common/*SharedThreadedErrorProne.hpp
         ${WCDB_SRC_DIR}/common/*SQL.hpp
@@ -210,6 +209,7 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
         ${WCDB_SRC_DIR}/cpp/*ResultField.hpp
         ${WCDB_SRC_DIR}/cpp/*RunTimeAccessor.hpp
         ${WCDB_SRC_DIR}/cpp/*Select.hpp
+        ${WCDB_SRC_DIR}/cpp/*Sequence.hpp
         ${WCDB_SRC_DIR}/cpp/*StatementOperation.hpp
         ${WCDB_SRC_DIR}/cpp/*Table.hpp
         ${WCDB_SRC_DIR}/cpp/*TableOperation.hpp
