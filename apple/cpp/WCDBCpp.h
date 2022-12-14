@@ -35,7 +35,7 @@
 #error Symbol `offset` should not be defined as a macro since it's a common used word.
 #endif
 
-#include <WCDB/Buildtin.h>
+#include <WCDB/Builtin.h>
 #include <WCDB/CPPORM.h>
 #include <WCDB/CPPORMMacro.h>
 #include <WCDB/CppInterface.h>

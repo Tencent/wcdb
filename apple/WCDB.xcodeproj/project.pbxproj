@@ -826,8 +826,7 @@
 		0D249BC92542B90600B43BD9 /* MergeFTSIndexLogic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D249BC82542B90600B43BD9 /* MergeFTSIndexLogic.cpp */; };
 		0D3AE53825416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D3AE53725416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp */; };
 		0D3AE54025416DB4007B9D0E /* AutoMergeFTSIndexConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D3AE53F25416DB4007B9D0E /* AutoMergeFTSIndexConfig.cpp */; };
-		0D4FE5EF29482F4D0061C3CA /* Buildtin.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D4FE5EE29482F4D0061C3CA /* Buildtin.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0D4FE5F029482F4D0061C3CA /* Buildtin.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D4FE5EE29482F4D0061C3CA /* Buildtin.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0D4FE5EF29482F4D0061C3CA /* Builtin.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D4FE5EE29482F4D0061C3CA /* Builtin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0D5363EA290A65390026A4DC /* Master.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D5363E8290A65390026A4DC /* Master.cpp */; };
 		0D5363EB290A65390026A4DC /* Master.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D5363E8290A65390026A4DC /* Master.cpp */; };
 		0D5363EC290A65390026A4DC /* Master.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D5363E9290A65390026A4DC /* Master.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -3124,6 +3123,7 @@
 		75F4DE642884164E00760DC3 /* StatementCommitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F4DE632884164E00760DC3 /* StatementCommitTests.swift */; };
 		75FFD33028BE5BB70051DB07 /* Insert.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75FFD32D28BE5BB70051DB07 /* Insert.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		75FFD33128BE5BB70051DB07 /* Insert.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75FFD32D28BE5BB70051DB07 /* Insert.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		DDADC4742949F7C20057AEDB /* Builtin.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D4FE5EE29482F4D0061C3CA /* Builtin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -3546,7 +3546,7 @@
 		0D249BC82542B90600B43BD9 /* MergeFTSIndexLogic.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MergeFTSIndexLogic.cpp; sourceTree = "<group>"; };
 		0D3AE53725416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AutoMergeFTSIndexConfig.hpp; sourceTree = "<group>"; };
 		0D3AE53F25416DB4007B9D0E /* AutoMergeFTSIndexConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AutoMergeFTSIndexConfig.cpp; sourceTree = "<group>"; };
-		0D4FE5EE29482F4D0061C3CA /* Buildtin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Buildtin.h; sourceTree = "<group>"; };
+		0D4FE5EE29482F4D0061C3CA /* Builtin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Builtin.h; sourceTree = "<group>"; };
 		0D5363E8290A65390026A4DC /* Master.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Master.cpp; sourceTree = "<group>"; };
 		0D5363E9290A65390026A4DC /* Master.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Master.hpp; sourceTree = "<group>"; };
 		0D5363EE290A75F20026A4DC /* Sequence.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sequence.cpp; sourceTree = "<group>"; };
@@ -5519,7 +5519,7 @@
 		0D5363E7290A64320026A4DC /* builtin */ = {
 			isa = PBXGroup;
 			children = (
-				0D4FE5EE29482F4D0061C3CA /* Buildtin.h */,
+				0D4FE5EE29482F4D0061C3CA /* Builtin.h */,
 				0D5363E9290A65390026A4DC /* Master.hpp */,
 				0D5363E8290A65390026A4DC /* Master.cpp */,
 				0D5363EF290A75F20026A4DC /* Sequence.hpp */,
@@ -7495,6 +7495,7 @@
 				037C3BAB2897E33600328EC8 /* AssembleHandle.hpp in Headers */,
 				037C3BAC2897E33600328EC8 /* OperationQueue.hpp in Headers */,
 				037C3BAE2897E33600328EC8 /* WindowDef.hpp in Headers */,
+				DDADC4742949F7C20057AEDB /* Builtin.h in Headers */,
 				037C3BB32897E33600328EC8 /* SyntaxTableOrSubquery.hpp in Headers */,
 				037C3BB42897E33600328EC8 /* StatementRelease.hpp in Headers */,
 				037C3BB62897E33600328EC8 /* Notifier.hpp in Headers */,
@@ -7671,7 +7672,7 @@
 				23B9E66B20AE6EEA00CF1683 /* RepairKit.h in Headers */,
 				23F340DA204D32C3007DB8AB /* WCTTable.h in Headers */,
 				23EEDC98217DFADC006E9E73 /* OrderingTerm.hpp in Headers */,
-				0D4FE5EF29482F4D0061C3CA /* Buildtin.h in Headers */,
+				0D4FE5EF29482F4D0061C3CA /* Builtin.h in Headers */,
 				23EEDD24217DFADC006E9E73 /* SyntaxUpsertClause.hpp in Headers */,
 				23408F11211897AA0071E5A7 /* Shm.hpp in Headers */,
 				23EEDCCC217DFADC006E9E73 /* StatementDetach.hpp in Headers */,
@@ -8013,7 +8014,6 @@
 				7521D895291E9ABB009642EF /* WINQ.h in Headers */,
 				7521D896291E9ABB009642EF /* UnsafeData.hpp in Headers */,
 				7521D898291E9ABB009642EF /* WCTDeclaration.h in Headers */,
-				0D4FE5F029482F4D0061C3CA /* Buildtin.h in Headers */,
 				7521D899291E9ABB009642EF /* Core.hpp in Headers */,
 				7521D89A291E9ABB009642EF /* DeprecatedRepairKit.hpp in Headers */,
 				7521D89C291E9ABB009642EF /* WCTHandle+ChainCall.h in Headers */,
