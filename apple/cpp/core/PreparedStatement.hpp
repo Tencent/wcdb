@@ -29,24 +29,23 @@
 
 namespace WCDB {
 
-class HandleStatement final : public StatementOperation {
+class PreparedStatement final : public StatementOperation {
     friend class Handle;
 
 public:
-    HandleStatement(HandleStatement &&other);
-    ~HandleStatement() override final;
-    StringView m_tag;
+    PreparedStatement(PreparedStatement &&other);
+    ~PreparedStatement() override final;
 
 protected:
-    HandleStatement() = delete;
-    HandleStatement(const HandleStatement &) = delete;
-    HandleStatement &operator=(const HandleStatement &) = delete;
-    HandleStatement(InnerHandleStatement *handleStatement);
+    PreparedStatement() = delete;
+    PreparedStatement(const PreparedStatement &) = delete;
+    PreparedStatement &operator=(const PreparedStatement &) = delete;
+    PreparedStatement(HandleStatement *handleStatement);
 
-    InnerHandleStatement *getInnerHandleStatement() override final;
+    HandleStatement *getInnerHandleStatement() override final;
 
 private:
-    InnerHandleStatement *m_innerHandleStatement;
+    HandleStatement *m_innerHandleStatement;
 };
 
 } //namespace WCDB

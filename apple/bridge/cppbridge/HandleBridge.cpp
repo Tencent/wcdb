@@ -45,7 +45,7 @@ bool WCDBHandleCheckValid(CPPHandle handle)
     return true;
 }
 
-WCDB::InnerHandleStatement* WCDB::GetMainHandleStatement(WCDB::InnerHandle* handle)
+WCDB::HandleStatement* WCDB::GetMainHandleStatement(WCDB::InnerHandle* handle)
 {
     return handle->m_mainStatement;
 }
@@ -53,22 +53,24 @@ WCDB::InnerHandleStatement* WCDB::GetMainHandleStatement(WCDB::InnerHandle* hand
 CPPHandleStatement WCDBHandleGetMainStatement(CPPHandle handle)
 {
     WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, CPPHandleStatement());
-    WCDB::InnerHandleStatement* stmt = WCDB::GetMainHandleStatement(cppHandle);
+    WCDB::HandleStatement* stmt = WCDB::GetMainHandleStatement(cppHandle);
     return WCDBCreateUnmanageCPPObject(CPPHandleStatement, stmt);
 }
 
-CPPHandleStatement WCDBHandleGetStatement(CPPHandle handle)
+CPPHandleStatement
+WCDBHandleGetOrCreatePreparedStatement(CPPHandle handle, CPPStatement statement)
 {
     WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, CPPHandleStatement());
-    WCDB::InnerHandleStatement* stmt = cppHandle->getStatement();
+    WCDBGetObjectOrReturnValue(
+    statement, WCDB::Statement, cppStatement, CPPHandleStatement());
+    WCDB::HandleStatement* stmt = cppHandle->getOrCreatePreparedStatement(*cppStatement);
     return WCDBCreateUnmanageCPPObject(CPPHandleStatement, stmt);
 }
 
-void WCDBHandleReturnStatement(CPPHandle handle, CPPHandleStatement statement)
+void WCDBHandleFinalizeStatements(CPPHandle handle)
 {
     WCDBGetObjectOrReturn(handle, WCDB::InnerHandle, cppHandle);
-    WCDBGetObjectOrReturn(statement, WCDB::InnerHandleStatement, cppStatement);
-    cppHandle->returnStatement(cppStatement);
+    cppHandle->finalizeStatements();
 }
 
 bool WCDBHandleExcute(CPPHandle handle, CPPStatement statement)

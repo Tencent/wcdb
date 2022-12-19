@@ -25,7 +25,7 @@
 #pragma once
 #include <WCDB/HandleORMOperation.hpp>
 #include <WCDB/HandleOperation.hpp>
-#include <WCDB/HandleStatement.hpp>
+#include <WCDB/PreparedStatement.hpp>
 #include <WCDB/Statement.hpp>
 
 namespace WCDB {
@@ -47,7 +47,7 @@ protected:
     Handle(Recyclable<InnerDatabase*> database, InnerHandle* handle);
 
     InnerHandle* getOrGenerateHandle();
-    InnerHandleStatement* getInnerHandleStatement() override final;
+    HandleStatement* getInnerHandleStatement() override final;
     RecyclableHandle getHandleHolder() override final;
     Recyclable<InnerDatabase*> getDatabaseHolder() override final;
 
@@ -66,13 +66,16 @@ public:
     int getTotalChange();
     const Error& getError();
 
+#pragma mark - Statement
+    bool prepare(const Statement& statement);
+    bool isPrepared();
+    void finalize();
+
 #pragma mark - Multi Statement
 public:
-    HandleStatement& getOrCreateHandleStatementWithTag(const UnsafeStringView& tag);
+    std::optional<PreparedStatement>
+    getOrCreatePreparedStatement(const Statement& statement);
     void finalizeAllStatement();
-
-private:
-    StringViewMap<HandleStatement> m_handleStatementDic;
 };
 
 } //namespace WCDB

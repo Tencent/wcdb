@@ -66,7 +66,7 @@ protected:
     bool lazyPrepareCell();
     int64_t m_integerPrimary;
     StringView m_table;
-    InnerHandleStatement *m_cellStatement;
+    HandleStatement *m_cellStatement;
 
 #pragma mark - Assemble - Sequence
 public:

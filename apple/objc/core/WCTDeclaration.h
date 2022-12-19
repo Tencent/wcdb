@@ -49,8 +49,8 @@
 #pragma mark - Handle
 @class WCTHandle;
 
-#pragma mark - HandleStatement
-@class WCTHandleStatement;
+#pragma mark - Statement
+@class WCTPreparedStatement;
 
 #pragma mark - ORM
 

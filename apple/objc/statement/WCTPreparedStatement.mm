@@ -25,138 +25,87 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTFoundation.h>
 #import <WCDB/WCTHandle+Private.h>
-#import <WCDB/WCTHandleStatement+Private.h>
-#import <WCDB/WCTHandleStatement.h>
 #import <WCDB/WCTORM.h>
+#import <WCDB/WCTPreparedStatement+Private.h>
+#import <WCDB/WCTPreparedStatement.h>
 
-#define WCTHandleStatementAssert(remedial) WCTRemedialAssert(_handleStatement != nullptr, "handleStatement is null", remedial;)
+#define WCTPreparedStatementAssert(remedial) WCTRemedialAssert(_handleStatement != nullptr, "handleStatement is null", remedial;)
 
-@implementation WCTHandleStatement
+@implementation WCTPreparedStatement
 
-- (instancetype)initWithHandle:(WCDB::InnerHandleStatement *)handlesStatement andTag:(NSString *)tag
+- (instancetype)initWithHandleStatement:(WCDB::HandleStatement *)handlesStatement
 {
     if (self = [super init]) {
         _handleStatement = handlesStatement;
-        _tag = tag;
     }
     return self;
 }
 
-- (WCDB::InnerHandleStatement *)getRawHandleStatement
+- (WCDB::HandleStatement *)getRawHandleStatement
 {
     return _handleStatement;
-}
-
-#pragma mark - Execute
-- (BOOL)execute:(const WCDB::Statement &)statement
-{
-    WCTHandleStatementAssert(return NO);
-    bool succeed = false;
-    if (_handleStatement->prepare(statement)) {
-        succeed = _handleStatement->step();
-        _handleStatement->finalize();
-    }
-    return succeed;
-}
-
-//rawExecute should no be used to access or modify the data in a migrating table.
-- (BOOL)rawExecute:(NSString *)sql
-{
-    WCTHandleStatementAssert(return NO);
-    bool succeed = false;
-    if (_handleStatement->prepare(sql)) {
-        succeed = _handleStatement->step();
-        _handleStatement->finalize();
-    }
-    return succeed;
-}
-
-#pragma mark - Prepare
-- (BOOL)prepare:(const WCDB::Statement &)statement
-{
-    WCTHandleStatementAssert(return NO);
-    return _handleStatement->prepare(statement);
-}
-
-//rawPrepare should no be used to access or modify the data in a migrating table.
-- (BOOL)rawPrepare:(NSString *)sql
-{
-    WCTHandleStatementAssert(return NO);
-    return _handleStatement->prepare(sql);
-}
-
-- (BOOL)isPrepared
-{
-    WCTHandleStatementAssert(return NO);
-    return _handleStatement->isPrepared();
-}
-
-- (void)finalize
-{
-    WCTHandleStatementAssert(return );
-    _handleStatement->finalize();
 }
 
 #pragma mark - Step
 - (BOOL)step
 {
-    WCTHandleStatementAssert(return NO);
+    WCTPreparedStatementAssert(return NO);
     return _handleStatement->step();
 }
 
 - (void)reset
 {
-    WCTHandleStatementAssert(return );
+    WCTPreparedStatementAssert(return );
     _handleStatement->reset();
 }
 
 - (BOOL)done
 {
-    WCTHandleStatementAssert(return NO);
+    WCTPreparedStatementAssert(return NO);
     return _handleStatement->done();
 }
 
 #pragma mark - State
 - (BOOL)isStatementReadonly
 {
-    WCTHandleStatementAssert(return NO);
+    WCTPreparedStatementAssert(return NO);
     return _handleStatement->isReadOnly();
 }
 
 #pragma mark - Bind
 - (void)bindInteger:(const int64_t &)value toIndex:(int)index
 {
-    WCTHandleStatementAssert(return );
+    WCTPreparedStatementAssert(return );
     _handleStatement->bindInteger(value, index);
 }
 
 - (void)bindDouble:(const double &)value toIndex:(int)index
 {
-    WCTHandleStatementAssert(return );
+    WCTPreparedStatementAssert(return );
     _handleStatement->bindDouble(value, index);
 }
 
 - (void)bindNullToIndex:(int)index
 {
-    WCTHandleStatementAssert(return );
+    WCTPreparedStatementAssert(return );
     _handleStatement->bindNull(index);
 }
 
 - (void)bindString:(NSString *)string toIndex:(int)index
 {
-    WCTHandleStatementAssert(return );
+    WCTPreparedStatementAssert(return );
     _handleStatement->bindText(WCDB::UnsafeStringView(string), index);
 }
 
 - (void)bindData:(NSData *)data toIndex:(int)index
 {
-    WCTHandleStatementAssert(return );
+    WCTPreparedStatementAssert(return );
     _handleStatement->bindBLOB(data, index);
 }
 
 - (void)bindNumber:(NSNumber *)number toIndex:(int)index
 {
-    WCTHandleStatementAssert(return );
+    WCTPreparedStatementAssert(return );
     if (number == nil || CFNumberIsFloatType((CFNumberRef) number)) {
         _handleStatement->bindDouble(number.doubleValue, index);
     } else {
@@ -167,7 +116,7 @@
 - (void)bindValue:(WCTColumnCodingValue *)value
           toIndex:(int)index
 {
-    WCTHandleStatementAssert(return );
+    WCTPreparedStatementAssert(return );
     WCTValue *archivedValue = [value archivedWCTValue];
     switch ([value.class columnType]) {
     case WCTColumnTypeNull:
@@ -192,7 +141,7 @@
             ofObject:(WCTObject *)object
              toIndex:(int)index
 {
-    WCTHandleStatementAssert(return );
+    WCTPreparedStatementAssert(return );
     const std::shared_ptr<const WCTBaseAccessor> &accessor = property.getColumnBinding().getAccessor();
     switch (accessor->getAccessorType()) {
     case WCTAccessorCpp: {
@@ -256,7 +205,7 @@
 - (void)bindProperties:(const WCTProperties &)properties
               ofObject:(WCTObject *)object
 {
-    WCTHandleStatementAssert(return );
+    WCTPreparedStatementAssert(return );
     int index = 1;
     for (const auto &property : properties) {
         [self bindProperty:property ofObject:object toIndex:index];
@@ -266,32 +215,32 @@
 
 - (int)bindParameterIndex:(const WCDB::BindParameter &)parameter
 {
-    WCTHandleStatementAssert(return 0);
+    WCTPreparedStatementAssert(return 0);
     return _handleStatement->bindParameterIndex(parameter.getDescription());
 }
 
 #pragma mark - Get
 - (int64_t)extractIntegerAtIndex:(int)index
 {
-    WCTHandleStatementAssert(return 0);
+    WCTPreparedStatementAssert(return 0);
     return _handleStatement->getInteger(index);
 }
 
 - (double)extractDoubleAtIndex:(int)index
 {
-    WCTHandleStatementAssert(return 0);
+    WCTPreparedStatementAssert(return 0);
     return _handleStatement->getDouble(index);
 }
 
 - (NSString *)extractStringAtIndex:(int)index
 {
-    WCTHandleStatementAssert(return nil);
+    WCTPreparedStatementAssert(return nil);
     return [NSString stringWithView:_handleStatement->getText(index)];
 }
 
 - (NSNumber *)extractNumberAtIndex:(int)index
 {
-    WCTHandleStatementAssert(return nil);
+    WCTPreparedStatementAssert(return nil);
     switch (_handleStatement->getType(index)) {
     case WCDB::ColumnType::Integer:
         return [NSNumber numberWithLongLong:_handleStatement->getInteger(index)];
@@ -302,14 +251,14 @@
 
 - (NSData *)extractDataAtIndex:(int)index
 {
-    WCTHandleStatementAssert(return nil);
+    WCTPreparedStatementAssert(return nil);
     const WCDB::UnsafeData blob = _handleStatement->getBLOB(index);
     return [NSData dataWithBytes:blob.buffer() length:blob.size()];
 }
 
 - (WCTValue *)extractValueAtIndex:(int)index
 {
-    WCTHandleStatementAssert(return nil);
+    WCTPreparedStatementAssert(return nil);
     switch ([self extractTypeAtIndex:index]) {
     case WCTColumnTypeInteger:
         return [NSNumber numberWithLongLong:[self extractIntegerAtIndex:index]];
@@ -326,37 +275,37 @@
 
 - (WCTColumnType)extractTypeAtIndex:(int)index
 {
-    WCTHandleStatementAssert(return WCTColumnTypeNull);
+    WCTPreparedStatementAssert(return WCTColumnTypeNull);
     return (WCTColumnType) _handleStatement->getType(index);
 }
 
 - (int)extractNumberOfColumns
 {
-    WCTHandleStatementAssert(return 0);
+    WCTPreparedStatementAssert(return 0);
     return _handleStatement->getNumberOfColumns();
 }
 
 - (NSString *)extractOriginColumnNameAtIndex:(int)index
 {
-    WCTHandleStatementAssert(return nil);
+    WCTPreparedStatementAssert(return nil);
     return [NSString stringWithView:_handleStatement->getOriginColumnName(index)];
 }
 
 - (NSString *)extractColumnNameAtIndex:(int)index
 {
-    WCTHandleStatementAssert(return nil);
+    WCTPreparedStatementAssert(return nil);
     return [NSString stringWithView:_handleStatement->getColumnName(index)];
 }
 
 - (NSString *)extractTableNameAtIndex:(int)index
 {
-    WCTHandleStatementAssert(return nil);
+    WCTPreparedStatementAssert(return nil);
     return [NSString stringWithView:_handleStatement->getColumnTableName(index)];
 }
 
 - (WCTOneRow *)extractRow
 {
-    WCTHandleStatementAssert(return nil);
+    WCTPreparedStatementAssert(return nil);
     int count = [self extractNumberOfColumns];
     NSMutableArray *row = [NSMutableArray arrayWithCapacity:count];
     for (int index = 0; index < count; ++index) {
@@ -368,7 +317,7 @@
 
 - (WCTObject *)extractObjectOnResultColumns:(const WCTResultColumns &)resultColumns
 {
-    WCTHandleStatementAssert(return nil);
+    WCTPreparedStatementAssert(return nil);
     Class cls = resultColumns.front().getColumnBinding().getClass();
     WCTObject *object = [[cls alloc] init];
     int index = 0;
@@ -407,7 +356,7 @@
       toColumnBindingHolder:(const WCTColumnBindingHolder &)columnBindingHolder
                    ofObject:(WCTObject *)object
 {
-    WCTHandleStatementAssert(return );
+    WCTPreparedStatementAssert(return );
     const std::shared_ptr<const WCTBaseAccessor> &accessor = columnBindingHolder.getColumnBinding().getAccessor();
     switch (accessor->getAccessorType()) {
     case WCTAccessorCpp: {
@@ -465,13 +414,13 @@
 #pragma mark - Get All
 - (WCTOneColumn *)allValues
 {
-    WCTHandleStatementAssert(return nil);
+    WCTPreparedStatementAssert(return nil);
     return [self allValuesAtIndex:0];
 }
 
 - (WCTOneColumn *)allValuesAtIndex:(int)index
 {
-    WCTHandleStatementAssert(return nil);
+    WCTPreparedStatementAssert(return nil);
     NSMutableArray *column = [NSMutableArray array];
     BOOL succeed = NO;
     while ((succeed = [self step]) && ![self done]) {
@@ -483,7 +432,7 @@
 
 - (WCTColumnsXRows *)allRows
 {
-    WCTHandleStatementAssert(return nil);
+    WCTPreparedStatementAssert(return nil);
     NSMutableArray *rows = [NSMutableArray array];
     BOOL succeed = NO;
     while ((succeed = [self step]) && ![self done]) {
@@ -494,7 +443,7 @@
 
 - (NSArray /* <WCTObject*> */ *)allObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
 {
-    WCTHandleStatementAssert(return nil);
+    WCTPreparedStatementAssert(return nil);
     NSMutableArray *objects = [NSMutableArray array];
     BOOL succeed = NO;
     while ((succeed = [self step]) && ![self done]) {
@@ -505,7 +454,7 @@
 
 - (NSArray<WCTMultiObject *> *)allMultiObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
 {
-    WCTHandleStatementAssert(return nil);
+    WCTPreparedStatementAssert(return nil);
     NSMutableArray *multiObjects = [NSMutableArray array];
     BOOL succeed = NO;
     while ((succeed = [self step]) && ![self done]) {

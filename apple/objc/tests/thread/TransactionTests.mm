@@ -674,12 +674,9 @@
             double beginInterval = [[NSDate date] timeIntervalSinceDate:write1Begin];
             TestCaseAssertTrue(beginInterval < 1);
 
-            WCTHandleStatement* handleStament = [handle getOrCreateHandleStatementByTag:@"test"];
             WCTProperties properties = [self.tableClass allProperties];
-            if (![handleStament isPrepared]) {
-                [self.tableClass allProperties];
-                TestCaseAssertTrue([handleStament prepare:WCDB::StatementInsert().insertIntoTable(self.tableName).columns(properties).values(WCDB::BindParameter::bindParameters(properties.size()))]);
-            }
+            WCTPreparedStatement* handleStament = [handle getOrCreatePreparedStatement:WCDB::StatementInsert().insertIntoTable(self.tableName).columns(properties).values(WCDB::BindParameter::bindParameters(properties.size()))];
+            TestCaseAssertNotNil(handleStament);
             [handleStament reset];
             [handleStament bindProperties:properties ofObject:[Random.shared testCaseObjectWithIdentifier:identifier++]];
             TestCaseAssertTrue([handleStament step]);
@@ -725,13 +722,9 @@
             if (isNewTransaction) pauseTime++;
             double beginInterval = [[NSDate date] timeIntervalSinceDate:write1Begin];
             TestCaseAssertTrue(beginInterval < 1);
-
-            WCTHandleStatement* handleStament = [handle getOrCreateHandleStatementByTag:@"test"];
             WCTProperties properties = [self.tableClass allProperties];
-            if (![handleStament isPrepared]) {
-                [self.tableClass allProperties];
-                TestCaseAssertTrue([handleStament prepare:WCDB::StatementInsert().insertIntoTable(self.tableName).columns(properties).values(WCDB::BindParameter::bindParameters(properties.size()))]);
-            }
+            WCTPreparedStatement* handleStament = [handle getOrCreatePreparedStatement:WCDB::StatementInsert().insertIntoTable(self.tableName).columns(properties).values(WCDB::BindParameter::bindParameters(properties.size()))];
+            TestCaseAssertNotNil(handleStament);
             [handleStament reset];
             [handleStament bindProperties:properties ofObject:[Random.shared testCaseObjectWithIdentifier:identifier++]];
             TestCaseAssertTrue([handleStament step]);
@@ -772,12 +765,9 @@
             __block int i = 0;
             BOOL ret = [self.database runPauseableTransactionWithOneLoop:^BOOL(WCTHandle* _Nonnull handle, BOOL* _Nonnull stop, BOOL) {
                 TestCaseAssertTrue(handle.isInTransaction);
-                WCTHandleStatement* handleStament = [handle getOrCreateHandleStatementByTag:@"test"];
                 WCTProperties properties = [self.tableClass allProperties];
-                if (![handleStament isPrepared]) {
-                    [self.tableClass allProperties];
-                    TestCaseAssertTrue([handleStament prepare:WCDB::StatementInsert().insertIntoTable(self.tableName).columns(properties).values(WCDB::BindParameter::bindParameters(properties.size()))]);
-                }
+                WCTPreparedStatement* handleStament = [handle getOrCreatePreparedStatement:WCDB::StatementInsert().insertIntoTable(self.tableName).columns(properties).values(WCDB::BindParameter::bindParameters(properties.size()))];
+                TestCaseAssertNotNil(handleStament);
                 [handleStament reset];
                 [handleStament bindProperties:properties ofObject:[Random.shared testCaseObjectWithIdentifier:identifier++]];
                 TestCaseAssertTrue([handleStament step]);

@@ -39,9 +39,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)validate;
 
-#pragma mark - HandleStatement
+#pragma mark - Statement
 
-- (WCTHandleStatement *)getOrCreateHandleStatementByTag:(NSString *)tag;
+- (WCTPreparedStatement *)getOrCreatePreparedStatement:(const WCDB::Statement &)statement;
 
 - (void)finalizeAllStatements;
 

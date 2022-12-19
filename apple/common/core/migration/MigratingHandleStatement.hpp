@@ -24,17 +24,17 @@
 
 #pragma once
 
-#include <WCDB/InnerHandleStatement.hpp>
+#include <WCDB/HandleStatement.hpp>
 
 namespace WCDB {
 
 class MigratingHandle;
 
-class MigratingHandleStatement final : public InnerHandleStatement {
+class MigratingHandleStatement final : public HandleStatement {
     friend class MigratingHandle;
 
 private:
-    using Super = InnerHandleStatement;
+    using Super = HandleStatement;
 
 public:
     MigratingHandleStatement() = delete;
@@ -87,7 +87,7 @@ protected:
     bool tryFallbackToUnionedView(Syntax::Schema &schema, StringView &table);
     bool tryFallbackToSourceTable(Syntax::Schema &schema, StringView &table);
     bool m_processing;
-    std::shared_ptr<InnerHandleStatement> m_additionalStatement;
+    std::shared_ptr<HandleStatement> m_additionalStatement;
 
 protected:
     MigratingHandleStatement(MigratingHandle *handle);
@@ -103,8 +103,8 @@ protected:
     void resetMigrate();
 
 private:
-    std::shared_ptr<InnerHandleStatement> m_migrateStatement;
-    std::shared_ptr<InnerHandleStatement> m_removeMigratedStatement;
+    std::shared_ptr<HandleStatement> m_migrateStatement;
+    std::shared_ptr<HandleStatement> m_removeMigratedStatement;
     int m_rowidIndexOfMigratingStatement;
 };
 

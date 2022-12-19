@@ -35,7 +35,6 @@ NS_ASSUME_NONNULL_BEGIN
     WCTDatabase *_database;
     WCDB::InnerHandle *_handle;
     WCDB::RecyclableHandle _handleHolder;
-    NSMutableDictionary<NSString *, WCTHandleStatement *> *_handleStatementDic;
 }
 
 #pragma mark - LifeCycle

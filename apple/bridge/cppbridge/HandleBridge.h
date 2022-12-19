@@ -37,8 +37,9 @@ CPPError WCDBHandleGetError(CPPHandle handle);
 bool WCDBHandleCheckValid(CPPHandle handle);
 
 CPPHandleStatement WCDBHandleGetMainStatement(CPPHandle handle);
-CPPHandleStatement WCDBHandleGetStatement(CPPHandle handle);
-void WCDBHandleReturnStatement(CPPHandle handle, CPPHandleStatement statement);
+CPPHandleStatement
+WCDBHandleGetOrCreatePreparedStatement(CPPHandle handle, CPPStatement statement);
+void WCDBHandleFinalizeStatements(CPPHandle handle);
 bool WCDBHandleExcute(CPPHandle handle, CPPStatement statement);
 
 int WCDBHandleGetChange(CPPHandle handle);
