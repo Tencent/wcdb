@@ -32,7 +32,7 @@
 
 namespace WCDB {
 MigratingHandleStatement::MigratingHandleStatement(MigratingHandleStatement&& other)
-: InnerHandleStatement(std::move(other))
+: HandleStatement(std::move(other))
 , m_processing(other.m_processing)
 , m_additionalStatement(other.m_additionalStatement)
 , m_migrateStatement(other.m_migrateStatement)
@@ -47,11 +47,11 @@ MigratingHandleStatement::MigratingHandleStatement(MigratingHandleStatement&& ot
 }
 
 MigratingHandleStatement::MigratingHandleStatement(MigratingHandle* handle)
-: InnerHandleStatement(handle)
+: HandleStatement(handle)
 , m_processing(false)
-, m_additionalStatement(std::make_shared<InnerHandleStatement>(handle))
-, m_migrateStatement(std::make_shared<InnerHandleStatement>(handle))
-, m_removeMigratedStatement(std::make_shared<InnerHandleStatement>(handle))
+, m_additionalStatement(std::make_shared<HandleStatement>(handle))
+, m_migrateStatement(std::make_shared<HandleStatement>(handle))
+, m_removeMigratedStatement(std::make_shared<HandleStatement>(handle))
 , m_rowidIndexOfMigratingStatement(0)
 {
     m_additionalStatement->enableAutoAddColumn();

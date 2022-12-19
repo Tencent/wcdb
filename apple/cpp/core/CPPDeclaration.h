@@ -55,8 +55,8 @@ class InnerDatabase;
 class Database;
 class InnerHandle;
 class Handle;
-class InnerHandleStatement;
 class HandleStatement;
+class PreparedStatement;
 
 class BaseChainCall;
 

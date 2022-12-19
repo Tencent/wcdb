@@ -135,7 +135,7 @@ bool MigratingHandle::rebindUnionView(const UnsafeStringView& table, const Colum
     }
 
     return runTransactionIfNotInTransaction([&](InnerHandle* handle) {
-        InnerHandleStatement handleStatement = InnerHandleStatement(handle);
+        HandleStatement handleStatement = HandleStatement(handle);
         bool succeed = handleStatement.prepare(MigrationInfo::getStatementForDroppingUnionedView(
                        info.value()->getUnionedView()))
                        && handleStatement.step();
@@ -339,14 +339,14 @@ void MigratingHandle::finalize()
     stopReferenced();
 }
 
-InnerHandleStatement* MigratingHandle::getStatement()
+HandleStatement* MigratingHandle::getStatement()
 {
     m_migratingHandleStatements.push_back(MigratingHandleStatement(this));
     m_migratingHandleStatements.back().enableAutoAddColumn();
     return &m_migratingHandleStatements.back();
 }
 
-void MigratingHandle::returnStatement(InnerHandleStatement* handleStatement)
+void MigratingHandle::returnStatement(HandleStatement* handleStatement)
 {
     if (handleStatement != nullptr) {
         for (auto iter = m_migratingHandleStatements.begin();

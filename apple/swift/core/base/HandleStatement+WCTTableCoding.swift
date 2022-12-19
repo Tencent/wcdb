@@ -24,4 +24,4 @@
 
 import Foundation
 
-extension HandleStatement: StatementInterfaceForObjc {}
+extension PreparedStatement: StatementInterfaceForObjc {}

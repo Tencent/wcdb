@@ -26,7 +26,7 @@
 
 #include <WCDB/Database.hpp>
 #include <WCDB/Handle.hpp>
-#include <WCDB/HandleStatement.hpp>
+#include <WCDB/PreparedStatement.hpp>
 #include <WCDB/Table.hpp>
 #include <WCDB/Tag.hpp>
 

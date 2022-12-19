@@ -33,10 +33,6 @@ namespace WCDB {
 class StatementOperation {
 public:
 #pragma mark - Basic
-    bool prepare(const Statement& statement);
-    bool isPrepared();
-    void finalize();
-
     bool step();
     bool done();
     void reset();
@@ -124,7 +120,7 @@ public:
 
 protected:
     virtual ~StatementOperation() = 0;
-    virtual InnerHandleStatement* getInnerHandleStatement() = 0;
+    virtual HandleStatement* getInnerHandleStatement() = 0;
 };
 
 } //namespace WCDB

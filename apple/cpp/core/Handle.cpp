@@ -27,6 +27,18 @@
 #include <WCDB/InnerHandle.hpp>
 #include <WCDB/RecyclableHandle.hpp>
 
+#define GetInnerHandleOrReturnValue(value)                                     \
+    InnerHandle* handle = getOrGenerateHandle();                               \
+    if (handle == nullptr) {                                                   \
+        return value;                                                          \
+    }
+
+#define GetInnerHandleOrReturn                                                 \
+    InnerHandle* handle = getOrGenerateHandle();                               \
+    if (handle == nullptr) {                                                   \
+        return;                                                                \
+    }
+
 namespace WCDB {
 
 Handle::Handle(Recyclable<InnerDatabase*> database)
@@ -48,7 +60,6 @@ Handle::Handle(Handle&& other)
 : m_databaseHolder(std::move(other.m_databaseHolder))
 , m_handleHolder(std::move(other.m_handleHolder))
 , m_innerHandle(other.m_innerHandle)
-, m_handleStatementDic(std::move(other.m_handleStatementDic))
 {
 }
 
@@ -68,12 +79,9 @@ InnerHandle* Handle::getOrGenerateHandle()
     return m_innerHandle;
 }
 
-InnerHandleStatement* Handle::getInnerHandleStatement()
+HandleStatement* Handle::getInnerHandleStatement()
 {
-    auto handle = getOrGenerateHandle();
-    if (handle == nullptr) {
-        return nullptr;
-    }
+    GetInnerHandleOrReturnValue(nullptr);
     return handle->m_mainStatement;
 }
 
@@ -103,28 +111,19 @@ void Handle::invalidate()
 
 long long Handle::getLastInsertedRowID()
 {
-    auto handle = getOrGenerateHandle();
-    if (handle == nullptr) {
-        return 0;
-    }
+    GetInnerHandleOrReturnValue(0);
     return handle->getLastInsertedRowID();
 }
 
 int Handle::getChanges()
 {
-    auto handle = getOrGenerateHandle();
-    if (handle == nullptr) {
-        return 0;
-    }
+    GetInnerHandleOrReturnValue(0);
     return handle->getChanges();
 }
 
 int Handle::getTotalChange()
 {
-    auto handle = getOrGenerateHandle();
-    if (handle == nullptr) {
-        return 0;
-    }
+    GetInnerHandleOrReturnValue(0);
     return handle->getTotalChange();
 }
 
@@ -141,33 +140,49 @@ const Error& Handle::getError()
     return handle->getError();
 }
 
-HandleStatement& Handle::getOrCreateHandleStatementWithTag(const UnsafeStringView& tag)
+bool Handle::prepare(const Statement& statement)
 {
-    auto iter = m_handleStatementDic.find(tag);
-    if (iter == m_handleStatementDic.end()) {
-        iter = m_handleStatementDic
-               .try_emplace(StringView(tag),
-                            HandleStatement(getOrGenerateHandle()->getStatement()))
-               .first;
-        iter->second.m_tag = tag;
+    HandleStatement* handleStatement = getInnerHandleStatement();
+    if (handleStatement == nullptr) {
+        return false;
     }
-    return iter->second;
+    return handleStatement->prepare(statement);
+}
+
+bool Handle::isPrepared()
+{
+    HandleStatement* handleStatement = getInnerHandleStatement();
+    if (handleStatement == nullptr) {
+        return false;
+    }
+    return handleStatement->isPrepared();
+}
+
+void Handle::finalize()
+{
+    HandleStatement* handleStatement = getInnerHandleStatement();
+    if (handleStatement == nullptr) {
+        return;
+    }
+    handleStatement->finalize();
+}
+
+std::optional<PreparedStatement>
+Handle::getOrCreatePreparedStatement(const Statement& statement)
+{
+    std::optional<PreparedStatement> result;
+    GetInnerHandleOrReturnValue(result);
+    HandleStatement* preparedStatement = handle->getOrCreatePreparedStatement(statement);
+    if (preparedStatement == nullptr) {
+        return result;
+    }
+    return PreparedStatement(preparedStatement);
 }
 
 void Handle::finalizeAllStatement()
 {
-    InnerHandle* handle = getOrGenerateHandle();
-    if (handle == nullptr) {
-        return;
-    }
-    for (auto iter = m_handleStatementDic.begin(); iter != m_handleStatementDic.end(); iter++) {
-        iter->second.finalize();
-        handle->returnStatement(iter->second.m_innerHandleStatement);
-    }
-    m_handleStatementDic.clear();
-    if (m_innerHandle != nullptr) {
-        m_innerHandle->finalize();
-    }
+    GetInnerHandleOrReturn;
+    handle->finalizeStatements();
 }
 
 } //namespace WCDB

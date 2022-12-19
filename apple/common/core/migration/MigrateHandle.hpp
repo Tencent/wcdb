@@ -60,8 +60,8 @@ protected:
 
 private:
     const MigrationInfo* m_migratingInfo;
-    InnerHandleStatement* m_migrateStatement;
-    InnerHandleStatement* m_removeMigratedStatement;
+    HandleStatement* m_migrateStatement;
+    HandleStatement* m_removeMigratedStatement;
 
 #pragma mark - Sample
 protected:

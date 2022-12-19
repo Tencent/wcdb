@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/InnerHandleStatement.hpp>
+#include <WCDB/HandleStatement.hpp>
 #include <WCDB/MultiObject.hpp>
 #include <WCDB/StatementOperation.hpp>
 
@@ -41,24 +41,6 @@
 namespace WCDB {
 
 StatementOperation::~StatementOperation() = default;
-
-bool StatementOperation::prepare(const Statement &statement)
-{
-    GetHandleStatementOrReturnValue(false);
-    return handleStatement->prepare(statement);
-}
-
-bool StatementOperation::isPrepared()
-{
-    GetHandleStatementOrReturnValue(false);
-    return handleStatement->isPrepared();
-}
-
-void StatementOperation::finalize()
-{
-    GetHandleStatementOrReturn;
-    handleStatement->finalize();
-}
 
 bool StatementOperation::step()
 {

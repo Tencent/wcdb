@@ -27,14 +27,6 @@ import WCDB_Private
 
 public protocol StatementInterface: AnyObject {
 
-    /// The wrapper of `sqlite3_prepare`
-    ///
-    /// - Throws: `Error`
-    func prepare(_ statement: Statement) throws
-
-    /// Check if current statement is prepared
-    var isPrepared: Bool { get }
-
     /// The wrapper of `sqlite3_step`
     ///
     /// - Returns: True means you can continue stepping while false means the stepping has been completed.
@@ -44,9 +36,6 @@ public protocol StatementInterface: AnyObject {
 
     /// The wrapper of `sqlite3_reset`
     func reset() throws
-
-    /// The wrapper of `sqlite3_finalize`
-    func finalize()
 
     /// The wrapper of `sqlite3_getRawStatement()_readonly`
     var isReadOnly: Bool { get }
@@ -177,19 +166,6 @@ public protocol StatementInterface: AnyObject {
 }
 
 extension StatementInterface where Self: RawStatementmentRepresentable {
-    public func prepare(_ statement: Statement) throws {
-        let succeed = withExtendedLifetime(statement) {
-            WCDBHandleStatementPrepare(getRawStatement(), $0.unmanagedCPPStatement)
-        }
-        if !succeed {
-            let cppError = WCDBHandleStatementGetError(getRawStatement())
-            throw ErrorBridge.getErrorFrom(cppError: cppError)
-        }
-    }
-
-    public var isPrepared: Bool {
-        WCDBHandleStatementCheckPrepared(getRawStatement())
-    }
 
     @discardableResult
     public func step() throws -> Bool {
@@ -202,10 +178,6 @@ extension StatementInterface where Self: RawStatementmentRepresentable {
 
     public func reset() {
         WCDBHandleStatementReset(getRawStatement())
-    }
-
-    public func finalize() {
-        WCDBHandleStatementFinalize(getRawStatement())
     }
 
     public var isReadOnly: Bool {

@@ -24,12 +24,10 @@ import WCDB_Private
 public final class Handle {
     private let recyclableHandle: RecyclableCPPHandle
     internal let cppHandle: CPPHandle
-    private var handleStatementDic: [String: HandleStatement]
 
     internal init(withCPPHandle cppHandle: CPPHandle) {
         self.recyclableHandle = ObjectBridge.createRecyclableCPPObject(cppHandle)
         self.cppHandle = cppHandle
-        handleStatementDic = [:]
     }
 
     deinit {
@@ -51,22 +49,18 @@ public final class Handle {
         }
     }
 
-    public func getOrCreateHandleStatement(withTag tag: String) -> HandleStatement {
-        var handleStatment = handleStatementDic[tag]
-        if handleStatment == nil {
-            handleStatment = HandleStatement(with: WCDBHandleGetStatement(cppHandle), and: self, and: tag)
-            handleStatementDic[tag] = handleStatment!
+    public func getOrCreatePreparedStatement(with statement: Statement) throws -> PreparedStatement {
+        let cppHandleStatement = withExtendedLifetime(statement) { WCDBHandleGetOrCreatePreparedStatement(cppHandle, $0.unmanagedCPPStatement)
         }
-        return handleStatment!
+        let preparedStatement = PreparedStatement(with: cppHandleStatement)
+        if !WCDBHandleStatementCheckPrepared(cppHandleStatement) {
+            throw getError()
+        }
+        return preparedStatement
     }
 
     public func finalizeAllStatement() {
-        for (_, handleStatment) in self.handleStatementDic {
-            handleStatment.finalize()
-            WCDBHandleReturnStatement(cppHandle, handleStatment.getRawStatement())
-        }
-        self.handleStatementDic.removeAll()
-        finalize()
+        WCDBHandleFinalizeStatements(cppHandle)
     }
 
     public var changes: Int {
@@ -95,6 +89,29 @@ extension Handle: HandleRepresentable {
 extension Handle: RawStatementmentRepresentable {
     public func getRawStatement() -> CPPHandleStatement {
         return WCDBHandleGetMainStatement(cppHandle)
+    }
+
+    /// The wrapper of `sqlite3_prepare`
+    ///
+    /// - Throws: `Error`
+    public func prepare(_ statement: Statement) throws {
+        let succeed = withExtendedLifetime(statement) {
+            WCDBHandleStatementPrepare(getRawStatement(), $0.unmanagedCPPStatement)
+        }
+        if !succeed {
+            let cppError = WCDBHandleStatementGetError(getRawStatement())
+            throw ErrorBridge.getErrorFrom(cppError: cppError)
+        }
+    }
+
+    /// Check if current statement is prepared
+    public var isPrepared: Bool {
+        WCDBHandleStatementCheckPrepared(getRawStatement())
+    }
+
+    /// The wrapper of `sqlite3_finalize`
+    public func finalize() {
+        WCDBHandleStatementFinalize(getRawStatement())
     }
 }
 

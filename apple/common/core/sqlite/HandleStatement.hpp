@@ -32,20 +32,20 @@
 
 namespace WCDB {
 
-class InnerHandleStatement : public HandleRelated {
+class HandleStatement : public HandleRelated {
     friend class AbstractHandle;
 
 public:
-    InnerHandleStatement() = delete;
-    InnerHandleStatement(const InnerHandleStatement &) = delete;
-    InnerHandleStatement &operator=(const InnerHandleStatement &) = delete;
+    HandleStatement() = delete;
+    HandleStatement(const HandleStatement &) = delete;
+    HandleStatement &operator=(const HandleStatement &) = delete;
 
-    InnerHandleStatement(InnerHandleStatement &&other);
-    InnerHandleStatement(AbstractHandle *handle);
+    HandleStatement(HandleStatement &&other);
+    HandleStatement(AbstractHandle *handle);
 
     void enableTableMonitor();
 
-    virtual ~InnerHandleStatement() override;
+    virtual ~HandleStatement() override;
 
     virtual bool prepare(const Statement &statement);
     virtual bool prepare(const UnsafeStringView &sql);

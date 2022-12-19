@@ -440,7 +440,6 @@ class AdvanceTests: CRUDTestCase {
         queue.async(group: group, execute: {
             var i = 0
             var write1Begin = Date()
-            var isPrepare = false
             let transaction: WCDB.TransactionInterface.PauseableTransactionClosure = { handle, stop, isNewTransaction in
                 XCTAssertTrue(handle.isInTransaction)
                 if isNewTransaction {
@@ -449,21 +448,15 @@ class AdvanceTests: CRUDTestCase {
                 let beginInterval = Date().timeIntervalSince(write1Begin)
                 XCTAssertTrue(beginInterval < 1)
 
-                let handleStatement = handle.getOrCreateHandleStatement(withTag: "test")
-                if !handleStatement.isPrepared {
-                    XCTAssertTrue(!isPrepare)
-                    XCTAssertNoThrow(try handleStatement.prepare(StatementInsert().insert(intoTable: TestObject.name).columns(TestObject.Properties.all).values(BindParameter.bindParameters(TestObject.Properties.all.count))))
-
-                    isPrepare = true
-                }
-                handleStatement.reset()
+                let handleStatement = WCDBAssertNoThrowReturned(try handle.getOrCreatePreparedStatement(with: StatementInsert().insert(intoTable: TestObject.name).columns(TestObject.Properties.all).values(BindParameter.bindParameters(TestObject.Properties.all.count))))
+                handleStatement!.reset()
 
                 identifier += 1
                 let obj = TestObject()
                 obj.variable1 = identifier
                 obj.variable2 = "testObject"
-                XCTAssertNoThrow(try handleStatement.bind(TestObject.Properties.all, of: obj))
-                XCTAssertNoThrow(try handleStatement.step())
+                XCTAssertNoThrow(try handleStatement!.bind(TestObject.Properties.all, of: obj))
+                XCTAssertNoThrow(try handleStatement!.step())
 
                 Thread.sleep(forTimeInterval: 0.1)
                 i += 1

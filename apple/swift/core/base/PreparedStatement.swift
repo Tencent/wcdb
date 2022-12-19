@@ -20,19 +20,15 @@
 
 import Foundation
 import WCDB_Private
-public final class HandleStatement {
+public final class PreparedStatement {
     internal let recyclableStmt: RecyclableCPPHandleStatement
-    internal let handle: Handle
-    public let tag: String
 
-    internal init(with stmt: CPPHandleStatement, and handle: Handle, and tag: String = "") {
+    internal init(with stmt: CPPHandleStatement) {
         self.recyclableStmt = ObjectBridge.createRecyclableCPPObject(stmt)
-        self.handle = handle
-        self.tag = tag
     }
 
     deinit {
-        finalize()
+        WCDBHandleStatementFinalize(getRawStatement())
     }
 }
 
@@ -40,10 +36,10 @@ public protocol RawStatementmentRepresentable {
     func getRawStatement() -> CPPHandleStatement
 }
 
-extension HandleStatement: RawStatementmentRepresentable {
+extension PreparedStatement: RawStatementmentRepresentable {
     public func getRawStatement() -> CPPHandleStatement {
         return self.recyclableStmt.raw
     }
 }
 
-extension HandleStatement: StatementInterface {}
+extension PreparedStatement: StatementInterface {}

@@ -29,8 +29,8 @@
 #import <WCDB/WCTFoundation.h>
 #import <WCDB/WCTHandle+Private.h>
 #import <WCDB/WCTHandle+Transaction.h>
-#import <WCDB/WCTHandleStatement+Private.h>
 #import <WCDB/WCTORM.h>
+#import <WCDB/WCTPreparedStatement+Private.h>
 
 @implementation WCTHandle
 
@@ -77,55 +77,25 @@
     return _handle;
 }
 
-#pragma mark - HandleStatement
+#pragma mark - Statement
 
-- (WCTHandleStatement *)getOrCreateHandleStatementByTag:(NSString *)tag
+- (WCTPreparedStatement *)getOrCreatePreparedStatement:(const WCDB::Statement &)statement
 {
-    if (!_handleStatementDic) {
-        _handleStatementDic = [[NSMutableDictionary alloc] init];
+    WCDB::InnerHandle *dbHandle = [self getOrGenerateHandle];
+    if (dbHandle == nil) {
+        return nil;
     }
-    WCTHandleStatement *handleStatement = [_handleStatementDic objectForKey:tag];
-    if (!handleStatement) {
-        handleStatement = [[WCTHandleStatement alloc] initWithHandle:[self getRawHandleStatement] andTag:tag];
-        _handleStatementDic[tag] = handleStatement;
+    WCDB::HandleStatement *preparedHandleStatement = dbHandle->getOrCreatePreparedStatement(statement);
+    if (preparedHandleStatement == nullptr) {
+        return nullptr;
     }
-    return handleStatement;
+    return [[WCTPreparedStatement alloc] initWithHandleStatement:preparedHandleStatement];
 }
 
 - (void)finalizeAllStatements
 {
-    if (_handleStatementDic != nil) {
-        [_handleStatementDic enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, WCTHandleStatement *_Nonnull obj, BOOL *_Nonnull stop) {
-            WCDB_UNUSED(key);
-            WCDB_UNUSED(stop);
-            WCDB::InnerHandleStatement *handleStatement = [obj getRawHandleStatement];
-            if (handleStatement != nullptr) {
-                handleStatement->finalize();
-                [self returnRawStatement:handleStatement];
-            }
-        }];
-        [_handleStatementDic removeAllObjects];
-    }
     if (_handle != nullptr) {
-        _handle->finalize();
-    }
-}
-
-- (WCDB::InnerHandleStatement *)getRawHandleStatement
-{
-    WCDB::InnerHandle *dbHandle = [self getOrGenerateHandle];
-    if (dbHandle != nullptr) {
-        return dbHandle->getStatement();
-    }
-    return nullptr;
-}
-
-- (void)returnRawStatement:(WCDB::InnerHandleStatement *)handleStatement
-{
-    WCDB::InnerHandle *dbHandle = [self getOrGenerateHandle];
-    WCTAssert(handleStatement != nullptr);
-    if (dbHandle != nullptr && handleStatement != nullptr) {
-        dbHandle->returnStatement(handleStatement);
+        _handle->finalizeStatements();
     }
 }
 

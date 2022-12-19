@@ -134,7 +134,7 @@ public class Database {
     /// Since this method will wait until all sqlite handles return, it may lead to deadlock in some bad practice. 
     ///     The key to avoid deadlock is to make sure all WCDB objects in current thread is dealloced. In detail:  
     ///     1. You should not keep WCDB objects, including `Insert`, `Delete`, `Update`, `Select`, `RowSelect`, 
-    ///        `MultiSelect`, `Handle`, `HandleStatement`. These objects should not be kept.
+    ///        `MultiSelect`, `Handle`, `PreparedStatement`. These objects should not be kept.
     ///        You should get them, use them, then release them right away.  
     ///     2. WCDB objects may not be out of its' scope.  
     ///     The best practice is to call `close:` in sub-thread and display a loading animation in main thread.  

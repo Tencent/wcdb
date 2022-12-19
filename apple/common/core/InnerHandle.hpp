@@ -33,11 +33,11 @@ namespace WCDB {
 
 class Handle;
 
-InnerHandleStatement *GetMainHandleStatement(InnerHandle *handle);
+HandleStatement *GetMainHandleStatement(InnerHandle *handle);
 
 class InnerHandle : public AbstractHandle {
     friend Handle;
-    friend InnerHandleStatement *GetMainHandleStatement(InnerHandle *handle);
+    friend HandleStatement *GetMainHandleStatement(InnerHandle *handle);
 #pragma mark - Initialize
 public:
     InnerHandle();
@@ -73,10 +73,10 @@ public:
     bool done();
     void reset();
 
-    using Integer = InnerHandleStatement::Integer;
-    using Text = InnerHandleStatement::Text;
-    using Float = InnerHandleStatement::Float;
-    using BLOB = InnerHandleStatement::BLOB;
+    using Integer = HandleStatement::Integer;
+    using Text = HandleStatement::Text;
+    using Float = HandleStatement::Float;
+    using BLOB = HandleStatement::BLOB;
 
     void bindInteger(const Integer &value, int index = 1);
     void bindDouble(const Float &value, int index = 1);
@@ -108,7 +108,7 @@ public:
     int getNumberOfColumns();
 
 protected:
-    InnerHandleStatement *m_mainStatement;
+    HandleStatement *m_mainStatement;
 
 #pragma mark - Transaction
 public:

@@ -132,7 +132,7 @@ bool AbstractHandle::executeSQL(const UnsafeStringView &sql)
 {
     // use seperated sqlite3_exec to get more information
     WCTAssert(isOpened());
-    InnerHandleStatement handleStatement(this);
+    HandleStatement handleStatement(this);
     bool succeed = handleStatement.prepare(sql);
     if (succeed) {
         succeed = handleStatement.step();
@@ -191,14 +191,14 @@ bool AbstractHandle::isInTransaction()
 }
 
 #pragma mark - Statement
-InnerHandleStatement *AbstractHandle::getStatement()
+HandleStatement *AbstractHandle::getStatement()
 {
-    m_handleStatements.push_back(InnerHandleStatement(this));
+    m_handleStatements.push_back(HandleStatement(this));
     m_handleStatements.back().enableAutoAddColumn();
     return &m_handleStatements.back();
 }
 
-void AbstractHandle::returnStatement(InnerHandleStatement *handleStatement)
+void AbstractHandle::returnStatement(HandleStatement *handleStatement)
 {
     if (handleStatement != nullptr) {
         for (auto iter = m_handleStatements.begin(); iter != m_handleStatements.end(); ++iter) {
@@ -224,6 +224,39 @@ void AbstractHandle::finalizeStatements()
     for (auto &handleStatement : m_handleStatements) {
         handleStatement.finalize();
     }
+}
+
+HandleStatement *AbstractHandle::getOrCreatePreparedStatement(const Statement &statement)
+{
+    const StringView &sql = statement.getDescription();
+    if (sql.length() == 0) {
+        m_error.setCode(Error::Code::Error, "invalid statement");
+        m_error.level = Error::Level::Error;
+        Notifier::shared().notify(m_error);
+        return nullptr;
+    }
+    auto iter = m_preparedStatements.find(sql);
+    HandleStatement *preparedStatement;
+    if (iter == m_preparedStatements.end()) {
+        preparedStatement = getStatement();
+        m_preparedStatements[sql] = preparedStatement;
+    } else {
+        preparedStatement = iter->second;
+    }
+    WCTAssert(preparedStatement != nullptr);
+    if (!preparedStatement->isPrepared() && !preparedStatement->prepare(statement)) {
+        return nullptr;
+    }
+    return preparedStatement;
+}
+
+void AbstractHandle::returnAllPreparedStatement()
+{
+    for (const auto &iter : m_preparedStatements) {
+        iter.second->finalize();
+        returnStatement(iter.second);
+    }
+    m_preparedStatements.clear();
 }
 
 #pragma mark - Meta
@@ -253,7 +286,7 @@ AbstractHandle::tableExists(const Schema &schema, const UnsafeStringView &table)
     StatementSelect statement
     = StatementSelect().select(1).from(TableOrSubquery(table).schema(schema)).limit(1);
 
-    InnerHandleStatement handleStatement(this);
+    HandleStatement handleStatement(this);
     markErrorAsIgnorable(Error::Code::Error);
     bool succeed = handleStatement.prepare(statement);
     std::optional<bool> exists;
@@ -273,7 +306,7 @@ bool AbstractHandle::addColumn(const Schema &schema,
 {
     StatementAlterTable statement
     = StatementAlterTable().alterTable(table).schema(schema).addColumn(column);
-    InnerHandleStatement handleStatement(this);
+    HandleStatement handleStatement(this);
     bool hasCacheError = false;
     if (m_transactionError != TransactionError::Fatal) {
         hasCacheError = true;
@@ -308,7 +341,7 @@ std::optional<std::vector<ColumnMeta>>
 AbstractHandle::getTableMeta(const Schema &schema, const UnsafeStringView &table)
 {
     std::optional<std::vector<ColumnMeta>> metas;
-    InnerHandleStatement handleStatement(this);
+    HandleStatement handleStatement(this);
     if (handleStatement.prepare(
         StatementPragma().pragma(Pragma::tableInfo()).schema(schema).with(table))) {
         bool succeed = false;
@@ -333,7 +366,7 @@ std::optional<std::set<StringView>>
 AbstractHandle::getValues(const Statement &statement, int index)
 {
     std::optional<std::set<StringView>> values;
-    InnerHandleStatement handleStatement(this);
+    HandleStatement handleStatement(this);
     if (handleStatement.prepare(statement)) {
         std::set<StringView> rows;
         bool succeed = false;
@@ -707,7 +740,7 @@ void *AbstractHandle::getCipherContext()
 size_t AbstractHandle::getCipherPageSize()
 {
     WCTAssert(isOpened());
-    InnerHandleStatement handleStatement(this);
+    HandleStatement handleStatement(this);
     Statement cipherPageSize = StatementPragma().pragma(Pragma::cipherPageSize());
     size_t size = 0;
     if (handleStatement.prepare(cipherPageSize) && handleStatement.step()) {
@@ -726,7 +759,7 @@ bool AbstractHandle::setCipherKey(const UnsafeData &data)
 bool AbstractHandle::setCipherPageSize(int pageSize)
 {
     WCTAssert(isOpened());
-    InnerHandleStatement handleStatement(this);
+    HandleStatement handleStatement(this);
     Statement cipherPageSize
     = StatementPragma().pragma(Pragma::cipherPageSize()).to(pageSize);
     bool succeed = handleStatement.prepare(cipherPageSize) && handleStatement.step();
@@ -737,7 +770,7 @@ bool AbstractHandle::setCipherPageSize(int pageSize)
 StringView AbstractHandle::getCipherSalt()
 {
     WCTAssert(isOpened());
-    InnerHandleStatement handleStatement(this);
+    HandleStatement handleStatement(this);
     Statement cipherSalt = StatementPragma().pragma(Pragma::cipherSalt());
     StringView salt;
     if (handleStatement.prepare(cipherSalt) && handleStatement.step()
@@ -750,7 +783,7 @@ StringView AbstractHandle::getCipherSalt()
 bool AbstractHandle::setCipherSalt(const UnsafeStringView &salt)
 {
     WCTAssert(isOpened());
-    InnerHandleStatement handleStatement(this);
+    HandleStatement handleStatement(this);
     StatementPragma cipherSalt = StatementPragma().pragma(Pragma::cipherSalt());
     if (salt.length() == 32 && !salt.hasPrefix("x'")) {
         cipherSalt.to(StringView::formatted("x'%s'", salt.data()));

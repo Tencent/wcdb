@@ -1,5 +1,5 @@
 //
-// Created by qiuwenchen on 2020/2/24.
+// Created by qiuwenchen on 2022/8/3.
 //
 
 /*
@@ -21,14 +21,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#import <WCDB/Core.h>
-#import <WCDB/WCTHandle.h>
-#import <WCDB/WCTHandleStatement.h>
 
-@interface WCTHandleStatement () {
-@private
-    WCDB::InnerHandleStatement* _handleStatement;
+#include <WCDB/HandleStatement.hpp>
+#include <WCDB/PreparedStatement.hpp>
+
+namespace WCDB {
+
+PreparedStatement::PreparedStatement(HandleStatement* handleStatement)
+: m_innerHandleStatement(handleStatement)
+{
 }
-- (instancetype)initWithHandle:(WCDB::InnerHandleStatement*)handlesStatement andTag:(NSString*)tag;
-- (WCDB::InnerHandleStatement*)getRawHandleStatement;
-@end
+
+PreparedStatement::PreparedStatement(PreparedStatement&& other)
+: m_innerHandleStatement(other.m_innerHandleStatement)
+{
+}
+
+PreparedStatement::~PreparedStatement() = default;
+
+HandleStatement* PreparedStatement::getInnerHandleStatement()
+{
+    return m_innerHandleStatement;
+}
+
+} //namespace WCDB
