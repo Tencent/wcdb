@@ -277,7 +277,7 @@
     testCase = [self genTestCaseConfigDataType:FTSDataType_Contact tableCount:1 tokenizerId:tkId quality:10000 optimizeLevel:2 querylevel:2 queryTimes:10 queryType:5 needMultiThread:NO];
     [testCases addObject:testCase];
     [self.database traceSQL:^(NSString* sql, const void* _Nonnull) {
-        NSLog(@"excute: %@", sql);
+        NSLog(@"execute: %@", sql);
     }];
 
     for (NSArray<NSNumber*>* config in testCases) {

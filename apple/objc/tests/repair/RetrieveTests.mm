@@ -36,7 +36,7 @@
 - (void)test_empty
 {
     [self
-    excuteTest:^{
+    executeTest:^{
         self.path = [self.directory stringByAppendingPathComponent:@"empty"];
         TestCaseAssertEqual([self.database retrieve:nil], -1);
         self.path = nil;
@@ -99,7 +99,7 @@
 - (void)test_retrieve_with_backup_and_deposit
 {
     [self
-    excuteTest:^{
+    executeTest:^{
         TestCaseAssertTrue([self.database backup]);
         TestCaseAssertTrue([self.database deposit]);
 
@@ -149,7 +149,7 @@
         }
     }];
     [self
-    excuteTest:^{
+    executeTest:^{
         TestCaseAssertTrue([self.database backup]);
 
         [self doTestRetrieve];
@@ -175,7 +175,7 @@
 - (void)test_retrieve_without_backup_and_with_deposit
 {
     [self
-    excuteTest:^{
+    executeTest:^{
         TestCaseAssertTrue([self.database deposit]);
 
         [self doTestRetrieve];
@@ -186,7 +186,7 @@
 - (void)test_retrieve_without_backup_and_deposite
 {
     [self
-    excuteTest:^{
+    executeTest:^{
         [self doTestRetrieve];
         [self doTestObjectsRetrieved];
     }];
@@ -196,7 +196,7 @@
 - (void)test_retrieve_corrupted_with_backup_and_deposit
 {
     [self
-    excuteTest:^{
+    executeTest:^{
         TestCaseAssertTrue([self.database backup]);
 
         TestCaseAssertTrue([self.database corruptHeaderWithinCloseAfterTruncatedCheckpoint]);
@@ -212,7 +212,7 @@
 - (void)test_retrieve_corrupted_with_backup_and_without_deposit
 {
     [self
-    excuteTest:^{
+    executeTest:^{
         TestCaseAssertTrue([self.database backup]);
 
         TestCaseAssertTrue([self.database corruptHeaderWithinCloseAfterTruncatedCheckpoint]);
@@ -226,7 +226,7 @@
 - (void)test_retrieve_corrupted_without_backup_and_with_deposit
 {
     [self
-    excuteTest:^{
+    executeTest:^{
         TestCaseAssertTrue([self.database corruptHeaderWithinCloseAfterTruncatedCheckpoint]);
 
         TestCaseAssertTrue([self.database deposit]);
@@ -242,7 +242,7 @@
     Class oldClass = self.tableClass;
     NSString* oldTableName = self.tableName;
     [self
-    excuteTest:^{
+    executeTest:^{
         self.tableClass = AllTypesObject.class;
         self.tableName = Random.shared.tableName;
         TestCaseAssertTrue([self createTable]);

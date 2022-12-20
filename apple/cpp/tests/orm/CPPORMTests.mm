@@ -312,106 +312,106 @@
 
     [self testAutoAddColumn:WCDB_FIELD(CPPNewFieldObject::insertValue)
                   isSucceed:YES
-                   byExcute:^bool {
-                       return self.database->insertObjects<CPPNewFieldObject>(CPPNewFieldObject(), self.tableName.UTF8String);
-                   }];
+                  byExecute:^bool {
+                      return self.database->insertObjects<CPPNewFieldObject>(CPPNewFieldObject(), self.tableName.UTF8String);
+                  }];
 
     [self testAutoAddColumn:WCDB_FIELD(CPPNewFieldObject::updateValue)
                   isSucceed:YES
-                   byExcute:^bool {
-                       return self.database->updateRow(1, WCDB_FIELD(CPPNewFieldObject::updateValue), self.tableName.UTF8String);
-                   }];
+                  byExecute:^bool {
+                      return self.database->updateRow(1, WCDB_FIELD(CPPNewFieldObject::updateValue), self.tableName.UTF8String);
+                  }];
 
     [self testAutoAddColumn:WCDB_FIELD(CPPNewFieldObject::deleteValue)
                   isSucceed:YES
-                   byExcute:^bool {
-                       return self.database->deleteObjects(self.tableName.UTF8String, WCDB_FIELD(CPPNewFieldObject::deleteValue) == 1);
-                   }];
+                  byExecute:^bool {
+                      return self.database->deleteObjects(self.tableName.UTF8String, WCDB_FIELD(CPPNewFieldObject::deleteValue) == 1);
+                  }];
 
     [self testAutoAddColumn:WCDB_FIELD(CPPNewFieldObject::deleteValue)
                   isSucceed:YES
-                   byExcute:^bool {
-                       return self.database->deleteObjects(self.tableName.UTF8String, WCDB_FIELD(CPPNewFieldObject::deleteValue).table(self.tableName.UTF8String) == 1);
-                   }];
+                  byExecute:^bool {
+                      return self.database->deleteObjects(self.tableName.UTF8String, WCDB_FIELD(CPPNewFieldObject::deleteValue).table(self.tableName.UTF8String) == 1);
+                  }];
 
     [self testAutoAddColumn:WCDB_FIELD(CPPNewFieldObject::deleteValue)
                   isSucceed:NO
-                   byExcute:^bool {
-                       return self.database->deleteObjects(self.tableName.UTF8String, WCDB_FIELD(CPPNewFieldObject::deleteValue).table(fakeTable.UTF8String) == 1);
-                   }];
+                  byExecute:^bool {
+                      return self.database->deleteObjects(self.tableName.UTF8String, WCDB_FIELD(CPPNewFieldObject::deleteValue).table(fakeTable.UTF8String) == 1);
+                  }];
 
     [self testAutoAddColumn:WCDB_FIELD(CPPNewFieldObject::deleteValue)
                   isSucceed:NO
-                   byExcute:^bool {
-                       return self.database->deleteObjects(self.tableName.UTF8String, WCDB_FIELD(CPPNewFieldObject::deleteValue).table(self.tableName.UTF8String).schema("notExistSchema") == 1);
-                   }];
+                  byExecute:^bool {
+                      return self.database->deleteObjects(self.tableName.UTF8String, WCDB_FIELD(CPPNewFieldObject::deleteValue).table(self.tableName.UTF8String).schema("notExistSchema") == 1);
+                  }];
 
     [self testAutoAddColumn:WCDB_FIELD(CPPNewFieldObject::selectValue)
                   isSucceed:YES
-                   byExcute:^bool {
-                       return self.database->selectOneColumn(WCDB_FIELD(CPPNewFieldObject::selectValue), self.tableName.UTF8String).has_value();
-                   }];
+                  byExecute:^bool {
+                      return self.database->selectOneColumn(WCDB_FIELD(CPPNewFieldObject::selectValue), self.tableName.UTF8String).has_value();
+                  }];
 
     [self testAutoAddColumn:WCDB_FIELD(CPPNewFieldObject::selectValue)
                   isSucceed:YES
-                   byExcute:^bool {
-                       return self.database->selectOneColumn(WCDB_FIELD(CPPNewFieldObject::insertValue), self.tableName.UTF8String, WCDB_FIELD(CPPNewFieldObject::selectValue) == 1).has_value();
-                   }];
+                  byExecute:^bool {
+                      return self.database->selectOneColumn(WCDB_FIELD(CPPNewFieldObject::insertValue), self.tableName.UTF8String, WCDB_FIELD(CPPNewFieldObject::selectValue) == 1).has_value();
+                  }];
 
     [self testAutoAddColumn:WCDB_FIELD(CPPNewFieldObject::selectValue)
                   isSucceed:YES
-                   byExcute:^bool {
-                       return self.database->selectOneColumn(WCDB_FIELD(CPPNewFieldObject::insertValue), self.tableName.UTF8String, WCDB::Expression(), WCDB_FIELD(CPPNewFieldObject::selectValue).asOrder()).has_value();
-                   }];
+                  byExecute:^bool {
+                      return self.database->selectOneColumn(WCDB_FIELD(CPPNewFieldObject::insertValue), self.tableName.UTF8String, WCDB::Expression(), WCDB_FIELD(CPPNewFieldObject::selectValue).asOrder()).has_value();
+                  }];
 
     [self testAutoAddColumn:WCDB_FIELD(CPPNewFieldObject::selectValue)
                   isSucceed:YES
-                   byExcute:^bool {
-                       return self.database->selectOneColumn(WCDB_FIELD(CPPNewFieldObject::insertValue), self.tableName.UTF8String, WCDB::Expression(), WCDB_FIELD(CPPNewFieldObject::selectValue).table(self.tableName.UTF8String).asOrder()).has_value();
-                   }];
+                  byExecute:^bool {
+                      return self.database->selectOneColumn(WCDB_FIELD(CPPNewFieldObject::insertValue), self.tableName.UTF8String, WCDB::Expression(), WCDB_FIELD(CPPNewFieldObject::selectValue).table(self.tableName.UTF8String).asOrder()).has_value();
+                  }];
 
     [self testAutoAddColumn:WCDB_FIELD(CPPNewFieldObject::selectValue)
                   isSucceed:NO
-                   byExcute:^bool {
-                       return self.database->selectOneColumn(WCDB_FIELD(CPPNewFieldObject::insertValue), self.tableName.UTF8String, WCDB::Expression(), WCDB_FIELD(CPPNewFieldObject::selectValue).table(fakeTable.UTF8String).asOrder()).has_value();
-                   }];
+                  byExecute:^bool {
+                      return self.database->selectOneColumn(WCDB_FIELD(CPPNewFieldObject::insertValue), self.tableName.UTF8String, WCDB::Expression(), WCDB_FIELD(CPPNewFieldObject::selectValue).table(fakeTable.UTF8String).asOrder()).has_value();
+                  }];
 
     [self testAutoAddColumn:WCDB_FIELD(CPPNewFieldObject::selectValue)
                   isSucceed:NO
-                   byExcute:^bool {
-                       return self.database->selectOneColumn(WCDB_FIELD(CPPNewFieldObject::insertValue), self.tableName.UTF8String, WCDB::Expression(), WCDB_FIELD(CPPNewFieldObject::selectValue).table(self.tableName.UTF8String).schema("notExistSchema").asOrder()).has_value();
-                   }];
+                  byExecute:^bool {
+                      return self.database->selectOneColumn(WCDB_FIELD(CPPNewFieldObject::insertValue), self.tableName.UTF8String, WCDB::Expression(), WCDB_FIELD(CPPNewFieldObject::selectValue).table(self.tableName.UTF8String).schema("notExistSchema").asOrder()).has_value();
+                  }];
 
     [self testAutoAddColumn:WCDB_FIELD(CPPNewFieldObject::multiSelectValue)
                   isSucceed:YES
-                   byExcute:^bool {
-                       WCDB::MultiSelect multiSelect = self.database->prepareMultiSelect();
-                       multiSelect.onResultFields({ WCDB_FIELD(CPPNewFieldObject::multiSelectValue).table(self.tableName.UTF8String), WCDB_FIELD(CPPNewFieldObject::multiSelectValue).table(fakeTable.UTF8String) }).fromTables({ self.tableName.UTF8String, fakeTable.UTF8String });
-                       return multiSelect.allMultiObjects().has_value();
-                   }];
+                  byExecute:^bool {
+                      WCDB::MultiSelect multiSelect = self.database->prepareMultiSelect();
+                      multiSelect.onResultFields({ WCDB_FIELD(CPPNewFieldObject::multiSelectValue).table(self.tableName.UTF8String), WCDB_FIELD(CPPNewFieldObject::multiSelectValue).table(fakeTable.UTF8String) }).fromTables({ self.tableName.UTF8String, fakeTable.UTF8String });
+                      return multiSelect.allMultiObjects().has_value();
+                  }];
 
     [self testAutoAddColumn:WCDB_FIELD(CPPNewFieldObject::multiSelectValue)
                   isSucceed:NO
-                   byExcute:^bool {
-                       WCDB::MultiSelect multiSelect = self.database->prepareMultiSelect();
-                       multiSelect.onResultFields({ WCDB_FIELD(CPPNewFieldObject::multiSelectValue).table(self.tableName.UTF8String).schema("notExistSchema"), WCDB_FIELD(CPPNewFieldObject::multiSelectValue).table(fakeTable.UTF8String) }).fromTables({ self.tableName.UTF8String, fakeTable.UTF8String });
-                       return multiSelect.allMultiObjects().has_value();
-                   }];
+                  byExecute:^bool {
+                      WCDB::MultiSelect multiSelect = self.database->prepareMultiSelect();
+                      multiSelect.onResultFields({ WCDB_FIELD(CPPNewFieldObject::multiSelectValue).table(self.tableName.UTF8String).schema("notExistSchema"), WCDB_FIELD(CPPNewFieldObject::multiSelectValue).table(fakeTable.UTF8String) }).fromTables({ self.tableName.UTF8String, fakeTable.UTF8String });
+                      return multiSelect.allMultiObjects().has_value();
+                  }];
 
     [self testAutoAddColumn:WCDB_FIELD(CPPNewFieldObject::primeryValue)
                   isSucceed:NO
-                   byExcute:^bool {
-                       return self.database->selectOneColumn(WCDB_FIELD(CPPNewFieldObject::insertValue), self.tableName.UTF8String, WCDB_FIELD(CPPNewFieldObject::primeryValue) == 1).has_value();
-                   }];
+                  byExecute:^bool {
+                      return self.database->selectOneColumn(WCDB_FIELD(CPPNewFieldObject::insertValue), self.tableName.UTF8String, WCDB_FIELD(CPPNewFieldObject::primeryValue) == 1).has_value();
+                  }];
 
     [self testAutoAddColumn:WCDB_FIELD(CPPNewFieldObject::uniqueValue)
                   isSucceed:NO
-                   byExcute:^bool {
-                       return self.database->selectOneColumn(WCDB_FIELD(CPPNewFieldObject::insertValue), self.tableName.UTF8String, WCDB_FIELD(CPPNewFieldObject::uniqueValue) == 1).has_value();
-                   }];
+                  byExecute:^bool {
+                      return self.database->selectOneColumn(WCDB_FIELD(CPPNewFieldObject::insertValue), self.tableName.UTF8String, WCDB_FIELD(CPPNewFieldObject::uniqueValue) == 1).has_value();
+                  }];
 }
 
-- (void)testAutoAddColumn:(const WCDB::Field&)newField isSucceed:(BOOL)isSucceed byExcute:(bool (^)())block
+- (void)testAutoAddColumn:(const WCDB::Field&)newField isSucceed:(BOOL)isSucceed byExecute:(bool (^)())block
 {
     auto createTable = WCDB::StatementCreateTable().createTable(self.tableName.UTF8String);
     auto binding = const_cast<WCDB::Binding*>(&CPPNewFieldObject::getObjectRelationBinding());

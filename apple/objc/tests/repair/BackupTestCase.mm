@@ -27,7 +27,7 @@
 
 @implementation BackupTestCase
 
-- (void)excuteTest:(void (^)())operation
+- (void)executeTest:(void (^)())operation
 {
     [self.database setCipherKey:nil];
     [self insertPresetObjects];

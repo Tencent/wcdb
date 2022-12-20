@@ -120,7 +120,7 @@ class AutoAddColumnTests: DatabaseTestCase {
         }
     }
 
-    func doTestAutoAdd(column codingKey: any CodingTableKey, is succeed: Bool, by excute: () throws -> Void) {
+    func doTestAutoAdd(column codingKey: any CodingTableKey, is succeed: Bool, by execute: () throws -> Void) {
         let tableName = AutoAddColumnObject.name
         let propertyName = codingKey.asProperty().name
         let createTable = StatementCreateTable().create(table: tableName)
@@ -142,10 +142,10 @@ class AutoAddColumnTests: DatabaseTestCase {
             XCTAssertEqual(error.extInfos["Column"]?.stringValue, propertyName)
         }
         if succeed {
-            XCTAssertNoThrow(try excute())
+            XCTAssertNoThrow(try execute())
             XCTAssertEqual(autoAdded, true)
         } else {
-            XCTAssertThrowsError(try excute())
+            XCTAssertThrowsError(try execute())
             XCTAssertEqual(autoAdded, false)
         }
         XCTAssertNoThrow(try self.database.drop(table: tableName))

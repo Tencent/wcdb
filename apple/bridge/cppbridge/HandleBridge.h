@@ -40,7 +40,7 @@ CPPHandleStatement WCDBHandleGetMainStatement(CPPHandle handle);
 CPPHandleStatement
 WCDBHandleGetOrCreatePreparedStatement(CPPHandle handle, CPPStatement statement);
 void WCDBHandleFinalizeStatements(CPPHandle handle);
-bool WCDBHandleExcute(CPPHandle handle, CPPStatement statement);
+bool WCDBHandleExecute(CPPHandle handle, CPPStatement statement);
 
 int WCDBHandleGetChange(CPPHandle handle);
 int WCDBHandleGetTotalChange(CPPHandle handle);
