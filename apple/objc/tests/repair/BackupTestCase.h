@@ -26,6 +26,6 @@
 
 @interface BackupTestCase : CRUDTestCase
 
-- (void)excuteTest:(void (^)())operation;
+- (void)executeTest:(void (^)())operation;
 
 @end

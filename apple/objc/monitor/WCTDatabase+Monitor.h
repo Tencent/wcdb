@@ -99,7 +99,7 @@ typedef void (^WCTDatabaseOperationTraceBlock)(WCTDatabase* /* database */, WCTD
  
  [WCTDatabase globalTraceSQL:^(NSString* path,  uint64_t handleIdentifier, NSString* sql , double cost) {
  NSLog(@"Path: %%@", path);
- NSLog(@"The handle with id %llu excuted %@",  handleIdentifier, sql);
+ NSLog(@"The handle with id %llu executed %@",  handleIdentifier, sql);
  }];
  
  @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.

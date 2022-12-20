@@ -34,7 +34,7 @@
 - (void)test_backup
 {
     [self
-    excuteTest:^{
+    executeTest:^{
         TestCaseAssertTrue([self.database backup]);
     }];
 }
@@ -42,7 +42,7 @@
 - (void)test_dual_backup
 {
     [self
-    excuteTest:^{
+    executeTest:^{
         TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
         TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
 
@@ -81,7 +81,7 @@
 - (void)test_empty_backup
 {
     [self
-    excuteTest:^{
+    executeTest:^{
         TestCaseAssertTrue([self.database removeFiles]);
         TestCaseAssertTrue([self.database backup]);
     }];
@@ -90,7 +90,7 @@
 - (void)test_wal
 {
     [self
-    excuteTest:^{
+    executeTest:^{
         TestCaseAssertTrue([[self.fileManager attributesOfItemAtPath:self.database.walPath error:nil] fileSize] > 0);
         TestCaseAssertTrue([self.database backup]);
     }];
@@ -99,7 +99,7 @@
 - (void)test_empty_wal
 {
     [self
-    excuteTest:^{
+    executeTest:^{
         NSFileManager *fileManager = [NSFileManager defaultManager];
         TestCaseAssertTrue([[fileManager attributesOfItemAtPath:self.database.walPath error:nil] fileSize] > 0);
         TestCaseAssertTrue([self.database truncateCheckpoint]);
@@ -133,7 +133,7 @@
 - (void)test_backup_fail
 {
     [self
-    excuteTest:^{
+    executeTest:^{
         NSFileManager *fileManager = [NSFileManager defaultManager];
         TestCaseAssertTrue([fileManager createDirectoryAtPath:self.database.firstMaterialPath withIntermediateDirectories:YES attributes:nil error:nil]);
         TestCaseAssertTrue([fileManager createDirectoryAtPath:self.database.lastMaterialPath withIntermediateDirectories:YES attributes:nil error:nil]);
@@ -157,7 +157,7 @@
 - (void)test_auto_backup_when_checkpointed
 {
     [self
-    excuteTest:^{
+    executeTest:^{
         [self.database enableAutoCheckpoint:NO];
         [self.database enableAutoBackup:YES];
         TestCaseAssertTrue([self checkAutoBackedup]);

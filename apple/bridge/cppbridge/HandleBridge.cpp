@@ -73,7 +73,7 @@ void WCDBHandleFinalizeStatements(CPPHandle handle)
     cppHandle->finalizeStatements();
 }
 
-bool WCDBHandleExcute(CPPHandle handle, CPPStatement statement)
+bool WCDBHandleExecute(CPPHandle handle, CPPStatement statement)
 {
     WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
     WCDBGetObjectOrReturnValue(statement, WCDB::Statement, cppStatement, false);

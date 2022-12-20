@@ -205,7 +205,7 @@
         self.expectedDatabaseSize = size.integerValue;
         [self.database removeFiles];
         [self
-        excuteTest:^{
+        executeTest:^{
             TestCaseAssertTrue([self fillDatabaseUntilMeetExpectedSize]);
 
             NSDictionary<NSString*, NSArray<TestCaseObject*>*>* expectedTableObjects = [self getTableObjects];

@@ -33,7 +33,7 @@
 - (void)test_desposit
 {
     [self
-    excuteTest:^{
+    executeTest:^{
         TestCaseObject* object = [Random.shared autoIncrementTestCaseObject];
         int rowId = (int) self.objects.count;
 

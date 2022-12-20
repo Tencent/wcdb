@@ -299,7 +299,7 @@ public extension Database {
     ///
     ///     Database.globalTrace(ofSQL: { (path, handleId, sql) in
     ///         print("Path: \(path)")
-    ///         print("The handle with id \(handleId) excuted \(sql)")
+    ///         print("The handle with id \(handleId) executed \(sql)")
     ///     })
     ///
     /// Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.

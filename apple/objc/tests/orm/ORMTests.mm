@@ -377,107 +377,107 @@
 
     [self testAutoAddColumn:NewPropertyObject.insertValue
                   isSucceed:YES
-                   byExcute:^bool {
-                       return [self.database insertObject:[[NewPropertyObject alloc] init] intoTable:self.tableName];
-                   }];
+                  byExecute:^bool {
+                      return [self.database insertObject:[[NewPropertyObject alloc] init] intoTable:self.tableName];
+                  }];
 
     [self testAutoAddColumn:NewPropertyObject.updateValue
                   isSucceed:YES
-                   byExcute:^bool {
-                       return [self.database updateTable:self.tableName setProperty:NewPropertyObject.updateValue toValue:@(1)];
-                   }];
+                  byExecute:^bool {
+                      return [self.database updateTable:self.tableName setProperty:NewPropertyObject.updateValue toValue:@(1)];
+                  }];
 
     [self testAutoAddColumn:NewPropertyObject.deleteValue
                   isSucceed:YES
-                   byExcute:^bool {
-                       return [self.database deleteFromTable:self.tableName where:NewPropertyObject.deleteValue == 1];
-                   }];
+                  byExecute:^bool {
+                      return [self.database deleteFromTable:self.tableName where:NewPropertyObject.deleteValue == 1];
+                  }];
 
     [self testAutoAddColumn:NewPropertyObject.deleteValue
                   isSucceed:YES
-                   byExcute:^bool {
-                       return [self.database deleteFromTable:self.tableName where:NewPropertyObject.deleteValue.table(self.tableName) == 1];
-                   }];
+                  byExecute:^bool {
+                      return [self.database deleteFromTable:self.tableName where:NewPropertyObject.deleteValue.table(self.tableName) == 1];
+                  }];
 
     [self testAutoAddColumn:NewPropertyObject.deleteValue
                   isSucceed:NO
-                   byExcute:^bool {
-                       return [self.database deleteFromTable:self.tableName where:NewPropertyObject.deleteValue.table(fakeTable) == 1];
-                   }];
+                  byExecute:^bool {
+                      return [self.database deleteFromTable:self.tableName where:NewPropertyObject.deleteValue.table(fakeTable) == 1];
+                  }];
 
     [self testAutoAddColumn:NewPropertyObject.deleteValue
                   isSucceed:NO
-                   byExcute:^bool {
-                       return [self.database deleteFromTable:self.tableName where:NewPropertyObject.deleteValue.table(self.tableName).schema("notExistSchema") == 1];
-                   }];
+                  byExecute:^bool {
+                      return [self.database deleteFromTable:self.tableName where:NewPropertyObject.deleteValue.table(self.tableName).schema("notExistSchema") == 1];
+                  }];
 
     [self testAutoAddColumn:NewPropertyObject.selectValue
                   isSucceed:YES
-                   byExcute:^bool {
-                       return [self.database getColumnOnResultColumn:NewPropertyObject.selectValue fromTable:self.tableName] != nil;
-                   }];
+                  byExecute:^bool {
+                      return [self.database getColumnOnResultColumn:NewPropertyObject.selectValue fromTable:self.tableName] != nil;
+                  }];
 
     [self testAutoAddColumn:NewPropertyObject.selectValue
                   isSucceed:YES
-                   byExcute:^bool {
-                       return [self.database getColumnOnResultColumn:NewPropertyObject.insertValue fromTable:self.tableName where:NewPropertyObject.selectValue == 1] != nil;
-                   }];
+                  byExecute:^bool {
+                      return [self.database getColumnOnResultColumn:NewPropertyObject.insertValue fromTable:self.tableName where:NewPropertyObject.selectValue == 1] != nil;
+                  }];
 
     [self testAutoAddColumn:NewPropertyObject.selectValue
                   isSucceed:YES
-                   byExcute:^bool {
-                       return [self.database getColumnOnResultColumn:NewPropertyObject.insertValue fromTable:self.tableName orders:NewPropertyObject.selectValue] != nil;
-                   }];
+                  byExecute:^bool {
+                      return [self.database getColumnOnResultColumn:NewPropertyObject.insertValue fromTable:self.tableName orders:NewPropertyObject.selectValue] != nil;
+                  }];
 
     [self testAutoAddColumn:NewPropertyObject.selectValue
                   isSucceed:YES
-                   byExcute:^bool {
-                       return [self.database getColumnOnResultColumn:NewPropertyObject.insertValue fromTable:self.tableName orders:NewPropertyObject.selectValue.table(self.tableName)] != nil;
-                   }];
+                  byExecute:^bool {
+                      return [self.database getColumnOnResultColumn:NewPropertyObject.insertValue fromTable:self.tableName orders:NewPropertyObject.selectValue.table(self.tableName)] != nil;
+                  }];
 
     [self testAutoAddColumn:NewPropertyObject.selectValue
                   isSucceed:NO
-                   byExcute:^bool {
-                       return [self.database getColumnOnResultColumn:NewPropertyObject.insertValue fromTable:self.tableName orders:NewPropertyObject.selectValue.table(fakeTable)] != nil;
-                   }];
+                  byExecute:^bool {
+                      return [self.database getColumnOnResultColumn:NewPropertyObject.insertValue fromTable:self.tableName orders:NewPropertyObject.selectValue.table(fakeTable)] != nil;
+                  }];
 
     [self testAutoAddColumn:NewPropertyObject.selectValue
                   isSucceed:NO
-                   byExcute:^bool {
-                       return [self.database getColumnOnResultColumn:NewPropertyObject.insertValue fromTable:self.tableName orders:NewPropertyObject.selectValue.table(self.tableName).schema("notExistSchema")] != nil;
-                   }];
+                  byExecute:^bool {
+                      return [self.database getColumnOnResultColumn:NewPropertyObject.insertValue fromTable:self.tableName orders:NewPropertyObject.selectValue.table(self.tableName).schema("notExistSchema")] != nil;
+                  }];
 
     [self testAutoAddColumn:NewPropertyObject.multiSelectValue
                   isSucceed:YES
-                   byExcute:^bool {
-                       WCTMultiSelect* select = [self.database prepareMultiSelect];
-                       [[select onResultColumns:{ NewPropertyObject.multiSelectValue.table(self.tableName), NewPropertyObject.multiSelectValue.table(fakeTable) }] fromTables:@[ self.tableName, fakeTable ]];
-                       return select.allMultiObjects != nil;
-                   }];
+                  byExecute:^bool {
+                      WCTMultiSelect* select = [self.database prepareMultiSelect];
+                      [[select onResultColumns:{ NewPropertyObject.multiSelectValue.table(self.tableName), NewPropertyObject.multiSelectValue.table(fakeTable) }] fromTables:@[ self.tableName, fakeTable ]];
+                      return select.allMultiObjects != nil;
+                  }];
 
     [self testAutoAddColumn:NewPropertyObject.multiSelectValue
                   isSucceed:NO
-                   byExcute:^bool {
-                       WCTMultiSelect* select = [self.database prepareMultiSelect];
-                       [[select onResultColumns:{ NewPropertyObject.multiSelectValue.table(self.tableName).schema("notExistSchema"), NewPropertyObject.multiSelectValue.table(fakeTable) }] fromTables:@[ self.tableName, fakeTable ]];
-                       return select.allMultiObjects != nil;
-                   }];
+                  byExecute:^bool {
+                      WCTMultiSelect* select = [self.database prepareMultiSelect];
+                      [[select onResultColumns:{ NewPropertyObject.multiSelectValue.table(self.tableName).schema("notExistSchema"), NewPropertyObject.multiSelectValue.table(fakeTable) }] fromTables:@[ self.tableName, fakeTable ]];
+                      return select.allMultiObjects != nil;
+                  }];
 
     [self testAutoAddColumn:NewPropertyObject.primeryValue
                   isSucceed:NO
-                   byExcute:^bool {
-                       return [self.database getColumnOnResultColumn:NewPropertyObject.primeryValue fromTable:self.tableName] != nil;
-                   }];
+                  byExecute:^bool {
+                      return [self.database getColumnOnResultColumn:NewPropertyObject.primeryValue fromTable:self.tableName] != nil;
+                  }];
 
     [self testAutoAddColumn:NewPropertyObject.uniqueValue
                   isSucceed:NO
-                   byExcute:^bool {
-                       return [self.database getColumnOnResultColumn:NewPropertyObject.uniqueValue fromTable:self.tableName] != nil;
-                   }];
+                  byExecute:^bool {
+                      return [self.database getColumnOnResultColumn:NewPropertyObject.uniqueValue fromTable:self.tableName] != nil;
+                  }];
     [WCTDatabase removeABTestConfigWithName:@"clicfg_db_auto_add_column"];
 }
 
-- (void)testAutoAddColumn:(const WCTProperty&)newProperty isSucceed:(BOOL)isSucceed byExcute:(bool (^)())block
+- (void)testAutoAddColumn:(const WCTProperty&)newProperty isSucceed:(BOOL)isSucceed byExecute:(bool (^)())block
 {
     auto createTable = WCDB::StatementCreateTable().createTable(self.tableName);
     auto binding = const_cast<WCTBinding*>(&NewPropertyObject.objectRelationalMapping);

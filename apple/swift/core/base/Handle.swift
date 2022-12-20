@@ -40,10 +40,10 @@ public final class Handle {
     }
 
     public func exec(_ statement: Statement) throws {
-        let excuted = withExtendedLifetime(statement) {
-            WCDBHandleExcute(cppHandle, $0.unmanagedCPPStatement)
+        let executed = withExtendedLifetime(statement) {
+            WCDBHandleExecute(cppHandle, $0.unmanagedCPPStatement)
         }
-        if !excuted {
+        if !executed {
             let cppError = WCDBHandleGetError(cppHandle)
             throw ErrorBridge.getErrorFrom(cppError: cppError)
         }
