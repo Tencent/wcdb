@@ -287,7 +287,7 @@
 #pragma mark - virtual table
 - (void)test_virtual_table_fts3
 {
-    self.database->addTokenizer(WCDB::TokenizerOneOrBinary);
+    self.database->addTokenizer(WCDB::BuiltinTokenizer::OneOrBinary);
     NSString* expected = @"CREATE VIRTUAL TABLE IF NOT EXISTS main.testTable USING fts4(tokenize = wcdb_one_or_binary, content='contentTable', identifier INTEGER, content TEXT, notindexed=identifier)";
     [self doTestSQLs:@[ expected ]
          inOperation:^BOOL {

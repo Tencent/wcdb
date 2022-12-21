@@ -26,30 +26,46 @@
 
 namespace WCDB {
 
-static constexpr const char* TokenizerSimple = "simple";
-static constexpr const char* TokenizerPorter = "porter";
-static constexpr const char* TokenizerICU = "icu";
-static constexpr const char* TokenizerUnicode61 = "unicode61";
+namespace BuiltinTokenizer {
+
+static constexpr const char* Simple = "simple";
+static constexpr const char* Porter = "porter";
+static constexpr const char* ICU = "icu";
+static constexpr const char* Unicode61 = "unicode61";
 
 // WCDB implemented tokenizer
 // Only for fts3/fts4
-static constexpr const char* TokenizerOneOrBinary = "wcdb_one_or_binary";
-static constexpr const char* TokenizerLegacyOneOrBinary
-= "WCDB"; // Same as TokenizerOneOrBinary, just for compatibility with older versions
+static constexpr const char* OneOrBinary = "wcdb_one_or_binary";
+static constexpr const char* LegacyOneOrBinary
+= "WCDB"; // Same as OneOrBinary, just for compatibility with older versions
 // Only for fts5
-static constexpr const char* TokenizerVerbatim = "wcdb_verbatim";
-static constexpr const char* TokenizerPinyin = "wcdb_pinyin";
+static constexpr const char* Verbatim = "wcdb_verbatim";
+static constexpr const char* Pinyin = "wcdb_pinyin";
 
 // Optional parameters for WCDB implemented tokenizers
-static constexpr const char* TokenizerParameter_NeedSymbol = "need_symbol";
-static constexpr const char* TokenizerParameter_SimplifyChinese
+namespace Parameter {
+
+static constexpr const char* NeedSymbol = "need_symbol";
+static constexpr const char* SimplifyChinese
 = "chinese_traditional_to_simplified";
-static constexpr const char* TokenizerParameter_SkipStemming = "skip_stemming";
+static constexpr const char* SkipStemming = "skip_stemming";
 
-static constexpr const char* ModuleFTS3 = "fts3";
-static constexpr const char* ModuleFTS4 = "fts4";
-static constexpr const char* ModuleFTS5 = "fts5";
+} //namespace Parameter
 
-static constexpr const char* AuxiliaryFunction_SubstringMatchInfo = "substring_match_info";
+} //namespace BuiltinTokenizer
+
+namespace Module {
+
+static constexpr const char* FTS3 = "fts3";
+static constexpr const char* FTS4 = "fts4";
+static constexpr const char* FTS5 = "fts5";
+
+}; // namespace Module
+
+namespace BuiltinAuxiliaryFunction {
+
+static constexpr const char* SubstringMatchInfo = "substring_match_info";
+
+} //namespace BuiltinAuxiliaryFunction
 
 } //namespace WCDB

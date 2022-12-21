@@ -54,11 +54,11 @@ OneOrBinaryTokenizer::OneOrBinaryTokenizer(const char *const *azArg, int nArg, v
 , m_skipStemming(false)
 {
     for (int i = 0; i < nArg; i++) {
-        if (strcmp(azArg[i], WCDB::TokenizerParameter_NeedSymbol) == 0) {
+        if (strcmp(azArg[i], BuiltinTokenizer::Parameter::NeedSymbol) == 0) {
             m_needSymbol = true;
-        } else if (strcmp(azArg[i], WCDB::TokenizerParameter_SimplifyChinese) == 0) {
+        } else if (strcmp(azArg[i], BuiltinTokenizer::Parameter::SimplifyChinese) == 0) {
             m_needSimplifiedChinese = true;
-        } else if (strcmp(azArg[i], WCDB::TokenizerParameter_SkipStemming) == 0) {
+        } else if (strcmp(azArg[i], BuiltinTokenizer::Parameter::SkipStemming) == 0) {
             m_skipStemming = true;
         }
     }

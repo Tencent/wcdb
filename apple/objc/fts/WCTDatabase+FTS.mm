@@ -27,24 +27,24 @@
 #import <WCDB/WCTDatabase+FTS.h>
 #import <WCDB/WCTDatabase+Private.h>
 
-NSString* const WCTTokenizerSimple = [NSString stringWithUTF8String:WCDB::TokenizerSimple];
-NSString* const WCTTokenizerPorter = [NSString stringWithUTF8String:WCDB::TokenizerPorter];
-NSString* const WCTTokenizerICU = [NSString stringWithUTF8String:WCDB::TokenizerICU];
-NSString* const WCTTokenizerUnicode61 = [NSString stringWithUTF8String:WCDB::TokenizerUnicode61];
-NSString* const WCTTokenizerOneOrBinary = [NSString stringWithUTF8String:WCDB::TokenizerOneOrBinary];
-NSString* const WCTTokenizerLegacyOneOrBinary = [NSString stringWithUTF8String:WCDB::TokenizerLegacyOneOrBinary];
-NSString* const WCTTokenizerVerbatim = [NSString stringWithUTF8String:WCDB::TokenizerVerbatim];
-NSString* const WCTTokenizerPinyin = [NSString stringWithUTF8String:WCDB::TokenizerPinyin];
+NSString* const WCTTokenizerSimple = [NSString stringWithUTF8String:WCDB::BuiltinTokenizer::Simple];
+NSString* const WCTTokenizerPorter = [NSString stringWithUTF8String:WCDB::BuiltinTokenizer::Porter];
+NSString* const WCTTokenizerICU = [NSString stringWithUTF8String:WCDB::BuiltinTokenizer::ICU];
+NSString* const WCTTokenizerUnicode61 = [NSString stringWithUTF8String:WCDB::BuiltinTokenizer::Unicode61];
+NSString* const WCTTokenizerOneOrBinary = [NSString stringWithUTF8String:WCDB::BuiltinTokenizer::OneOrBinary];
+NSString* const WCTTokenizerLegacyOneOrBinary = [NSString stringWithUTF8String:WCDB::BuiltinTokenizer::LegacyOneOrBinary];
+NSString* const WCTTokenizerVerbatim = [NSString stringWithUTF8String:WCDB::BuiltinTokenizer::Verbatim];
+NSString* const WCTTokenizerPinyin = [NSString stringWithUTF8String:WCDB::BuiltinTokenizer::Pinyin];
 
-NSString* const WCTTokenizerParameter_NeedSymbol = [NSString stringWithUTF8String:WCDB::TokenizerParameter_NeedSymbol];
-NSString* const WCTTokenizerParameter_SimplifyChinese = [NSString stringWithUTF8String:WCDB::TokenizerParameter_SimplifyChinese];
-NSString* const WCTTokenizerParameter_SkipStemming = [NSString stringWithUTF8String:WCDB::TokenizerParameter_SkipStemming];
+NSString* const WCTTokenizerParameter_NeedSymbol = [NSString stringWithUTF8String:WCDB::BuiltinTokenizer::Parameter::NeedSymbol];
+NSString* const WCTTokenizerParameter_SimplifyChinese = [NSString stringWithUTF8String:WCDB::BuiltinTokenizer::Parameter::SimplifyChinese];
+NSString* const WCTTokenizerParameter_SkipStemming = [NSString stringWithUTF8String:WCDB::BuiltinTokenizer::Parameter::SkipStemming];
 
-NSString* const WCTModuleFTS3 = [NSString stringWithUTF8String:WCDB::ModuleFTS3];
-NSString* const WCTModuleFTS4 = [NSString stringWithUTF8String:WCDB::ModuleFTS4];
-NSString* const WCTModuleFTS5 = [NSString stringWithUTF8String:WCDB::ModuleFTS5];
+NSString* const WCTModuleFTS3 = [NSString stringWithUTF8String:WCDB::Module::FTS3];
+NSString* const WCTModuleFTS4 = [NSString stringWithUTF8String:WCDB::Module::FTS4];
+NSString* const WCTModuleFTS5 = [NSString stringWithUTF8String:WCDB::Module::FTS5];
 
-NSString* const WCTAuxiliaryFunction_SubstringMatchInfo = [NSString stringWithUTF8String:WCDB::AuxiliaryFunction_SubstringMatchInfo];
+NSString* const WCTAuxiliaryFunction_SubstringMatchInfo = [NSString stringWithUTF8String:WCDB::BuiltinAuxiliaryFunction::SubstringMatchInfo];
 
 @implementation WCTDatabase (FTS)
 
