@@ -170,17 +170,17 @@ void WCDBDatabaseEnableAutoMergeFTS5Index(CPPDatabase database, bool enable)
     WCDB::Core::shared().enableAutoMergeFTSIndex(cppDatabase, enable);
 }
 
-const char* WCDBTokenizerSimple = WCDB::TokenizerSimple;
-const char* WCDBTokenizerPorter = WCDB::TokenizerPorter;
-const char* WCDBTokenizerICU = WCDB::TokenizerICU;
-const char* WCDBTokenizerUnicode61 = WCDB::TokenizerUnicode61;
-const char* WCDBTokenizerOneOrBinary = WCDB::TokenizerOneOrBinary;
-const char* WCDBTokenizerLegacyOneOrBinary = WCDB::TokenizerLegacyOneOrBinary;
-const char* WCDBTokenizerVerbatim = WCDB::TokenizerVerbatim;
-const char* WCDBTokenizerPinyin = WCDB::TokenizerPinyin;
-const char* WCDBTokenizerParameter_NeedSymbol = WCDB::TokenizerParameter_NeedSymbol;
-const char* WCDBTokenizerParameter_SimplifyChinese = WCDB::TokenizerParameter_SimplifyChinese;
-const char* WCDBTokenizerParameter_SkipStemming = WCDB::TokenizerParameter_SkipStemming;
+const char* WCDBTokenizerSimple = WCDB::BuiltinTokenizer::Simple;
+const char* WCDBTokenizerPorter = WCDB::BuiltinTokenizer::Porter;
+const char* WCDBTokenizerICU = WCDB::BuiltinTokenizer::ICU;
+const char* WCDBTokenizerUnicode61 = WCDB::BuiltinTokenizer::Unicode61;
+const char* WCDBTokenizerOneOrBinary = WCDB::BuiltinTokenizer::OneOrBinary;
+const char* WCDBTokenizerLegacyOneOrBinary = WCDB::BuiltinTokenizer::LegacyOneOrBinary;
+const char* WCDBTokenizerVerbatim = WCDB::BuiltinTokenizer::Verbatim;
+const char* WCDBTokenizerPinyin = WCDB::BuiltinTokenizer::Pinyin;
+const char* WCDBTokenizerParameter_NeedSymbol = WCDB::BuiltinTokenizer::Parameter::NeedSymbol;
+const char* WCDBTokenizerParameter_SimplifyChinese = WCDB::BuiltinTokenizer::Parameter::SimplifyChinese;
+const char* WCDBTokenizerParameter_SkipStemming = WCDB::BuiltinTokenizer::Parameter::SkipStemming;
 
 void WCDBDatabaseAddTokenizer(CPPDatabase database, const char* _Nullable tokenizer)
 {
@@ -195,7 +195,7 @@ void WCDBDatabaseAddTokenizer(CPPDatabase database, const char* _Nullable tokeni
                            WCDB::Configs::Priority::Higher);
 }
 
-const char* WCDBAuxiliaryFunction_SubstringMatchInfo = WCDB::AuxiliaryFunction_SubstringMatchInfo;
+const char* WCDBAuxiliaryFunction_SubstringMatchInfo = WCDB::BuiltinAuxiliaryFunction::SubstringMatchInfo;
 
 void WCDBDatabaseAddAuxiliaryFunction(CPPDatabase database, const char* _Nullable auxFunction)
 {

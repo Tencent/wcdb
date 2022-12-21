@@ -46,7 +46,7 @@ PinyinTokenizer::PinyinTokenizer(const char *const *azArg, int nArg, void *pCtx)
 , m_needSymbol(false)
 {
     for (int i = 0; i < nArg; i++) {
-        if (strcmp(azArg[i], WCDB::TokenizerParameter_NeedSymbol) == 0) {
+        if (strcmp(azArg[i], BuiltinTokenizer::Parameter::NeedSymbol) == 0) {
             m_needSymbol = true;
         }
     }

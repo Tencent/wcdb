@@ -82,19 +82,19 @@ Core::Core()
     m_operationQueue->run();
 
     //config FTS
-    registerTokenizer(TokenizerOneOrBinary,
+    registerTokenizer(BuiltinTokenizer::OneOrBinary,
                       FTS3TokenizerModuleTemplate<OneOrBinaryTokenizer>::specialize());
-    registerTokenizer(TokenizerLegacyOneOrBinary,
+    registerTokenizer(BuiltinTokenizer::LegacyOneOrBinary,
                       FTS3TokenizerModuleTemplate<OneOrBinaryTokenizer>::specialize());
     registerTokenizer(
-    TokenizerVerbatim,
+    BuiltinTokenizer::Verbatim,
     FTS5TokenizerModuleTemplate<OneOrBinaryTokenizer>::specializeWithContext(nullptr));
     registerTokenizer(
-    TokenizerPinyin,
+    BuiltinTokenizer::Pinyin,
     FTS5TokenizerModuleTemplate<PinyinTokenizer>::specializeWithContext(nullptr));
 
     registerAuxiliaryFunction(
-    AuxiliaryFunction_SubstringMatchInfo,
+    BuiltinAuxiliaryFunction::SubstringMatchInfo,
     FTS5AuxiliaryFunctionTemplate<SubstringMatchInfo>::specializeWithContext(nullptr));
 }
 

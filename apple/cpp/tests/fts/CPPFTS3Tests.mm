@@ -40,7 +40,7 @@
 {
     [super setUp];
     self.expectMode = DatabaseTestCaseExpectFirstFewSQLs;
-    self.database->addTokenizer(WCDB::TokenizerOneOrBinary);
+    self.database->addTokenizer(WCDB::BuiltinTokenizer::OneOrBinary);
     WCDB::Database::configSymbolDetector([](WCDB::Database::UnicodeChar theChar) {
         if (theChar < 0xC0) {
             if (!(theChar >= 0x30 && theChar <= 0x39) && !((theChar >= 0x41 && theChar <= 0x5a) || (theChar >= 0x61 && theChar <= 0x7a))) {
@@ -386,7 +386,7 @@
 {
     [super setUp];
     self.expectMode = DatabaseTestCaseExpectFirstFewSQLs;
-    self.database->addTokenizer(WCDB::TokenizerOneOrBinary);
+    self.database->addTokenizer(WCDB::BuiltinTokenizer::OneOrBinary);
     WCDB::Database::configSymbolDetector([](WCDB::Database::UnicodeChar theChar) {
         if (theChar < 0xC0) {
             if (!(theChar >= 0x30 && theChar <= 0x39) && !((theChar >= 0x41 && theChar <= 0x5a) || (theChar >= 0x61 && theChar <= 0x7a))) {

@@ -40,7 +40,7 @@
 {
     [super setUp];
     self.expectMode = DatabaseTestCaseExpectFirstFewSQLs;
-    self.database->addTokenizer(WCDB::TokenizerVerbatim);
+    self.database->addTokenizer(WCDB::BuiltinTokenizer::Verbatim);
     WCDB::Database::configSymbolDetector([](WCDB::Database::UnicodeChar theChar) {
         if (theChar < 0xC0) {
             if (!(theChar >= 0x30 && theChar <= 0x39) && !((theChar >= 0x41 && theChar <= 0x5a) || (theChar >= 0x61 && theChar <= 0x7a))) {
@@ -346,7 +346,7 @@
         }
         return false;
     });
-    self.database->addTokenizer(WCDB::TokenizerPinyin);
+    self.database->addTokenizer(WCDB::BuiltinTokenizer::Pinyin);
 
     TestCaseAssertTrue(self.database->createVirtualTable<CPPFTS5PinyinObject>(self.tableName.UTF8String));
     CPPFTS5PinyinObject object;
@@ -391,8 +391,8 @@
 {
     [super setUp];
     self.expectMode = DatabaseTestCaseExpectFirstFewSQLs;
-    self.database->addTokenizer(WCDB::TokenizerVerbatim);
-    self.database->addAuxiliaryFunction(WCDB::AuxiliaryFunction_SubstringMatchInfo);
+    self.database->addTokenizer(WCDB::BuiltinTokenizer::Verbatim);
+    self.database->addAuxiliaryFunction(WCDB::BuiltinAuxiliaryFunction::SubstringMatchInfo);
     WCDB::Database::configSymbolDetector([](WCDB::Database::UnicodeChar theChar) {
         if (theChar < 0xC0) {
             if (!(theChar >= 0x30 && theChar <= 0x39) && !((theChar >= 0x41 && theChar <= 0x5a) || (theChar >= 0x61 && theChar <= 0x7a))) {
@@ -449,7 +449,7 @@
     [self doTestValue:"1,2;串联;子串2;6;"
                andSQL:@"SELECT substring_match_info(testTable, 0, ';,') FROM main.testTable WHERE content MATCH '子串2'"
           bySelecting:^WCDB::OptionalValue {
-              return self.database->getValueFromStatement(WCDB::StatementSelect().select(WCDB::Expression::function(WCDB::AuxiliaryFunction_SubstringMatchInfo).invoke().arguments({ WCDB::Column(self.tableName.UTF8String), 0, ";," })).from(self.tableName.UTF8String).where(WCDB_FIELD(CPPFTS5SymbolObject::content).match("子串2")));
+              return self.database->getValueFromStatement(WCDB::StatementSelect().select(WCDB::Expression::function(WCDB::BuiltinAuxiliaryFunction::SubstringMatchInfo).invoke().arguments({ WCDB::Column(self.tableName.UTF8String), 0, ";," })).from(self.tableName.UTF8String).where(WCDB_FIELD(CPPFTS5SymbolObject::content).match("子串2")));
           }];
 }
 
