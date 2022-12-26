@@ -25,6 +25,10 @@
 #include <WCDB/CrossPlatform.h>
 #include <errno.h>
 #include <unistd.h>
+#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 30
+#include <sys/syscall.h>
+#define gettid() syscall(SYS_gettid)
+#endif
 
 #ifdef __ANDROID__
 int backtrace(void** buffer, int size)

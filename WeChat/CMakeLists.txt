@@ -79,7 +79,6 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
         ${WCDB_SRC_DIR}/common/*RecyclableHandle.hpp
         ${WCDB_SRC_DIR}/common/*ResultColumn.hpp
         ${WCDB_SRC_DIR}/common/*Schema.hpp
-        ${WCDB_SRC_DIR}/common/*Sequence.hpp
         ${WCDB_SRC_DIR}/common/*Shadow.hpp
         ${WCDB_SRC_DIR}/common/*SharedThreadedErrorProne.hpp
         ${WCDB_SRC_DIR}/common/*SQL.hpp
@@ -201,15 +200,16 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
         ${WCDB_SRC_DIR}/cpp/*Handle.hpp
         ${WCDB_SRC_DIR}/cpp/*HandleOperation.hpp
         ${WCDB_SRC_DIR}/cpp/*HandleORMOperation.hpp
-        ${WCDB_SRC_DIR}/cpp/*HandleStatement.hpp
         ${WCDB_SRC_DIR}/cpp/*Insert.hpp
         ${WCDB_SRC_DIR}/cpp/*Master.hpp
         ${WCDB_SRC_DIR}/cpp/*MemberPointer.hpp
         ${WCDB_SRC_DIR}/cpp/*MultiObject.hpp
         ${WCDB_SRC_DIR}/cpp/*MultiSelect.hpp
+        ${WCDB_SRC_DIR}/cpp/*PreparedStatement.hpp
         ${WCDB_SRC_DIR}/cpp/*ResultField.hpp
         ${WCDB_SRC_DIR}/cpp/*RunTimeAccessor.hpp
         ${WCDB_SRC_DIR}/cpp/*Select.hpp
+        ${WCDB_SRC_DIR}/cpp/*Sequence.hpp
         ${WCDB_SRC_DIR}/cpp/*StatementOperation.hpp
         ${WCDB_SRC_DIR}/cpp/*Table.hpp
         ${WCDB_SRC_DIR}/cpp/*TableOperation.hpp
