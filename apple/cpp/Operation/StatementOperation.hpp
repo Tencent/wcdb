@@ -33,9 +33,47 @@ namespace WCDB {
 class StatementOperation {
 public:
 #pragma mark - Basic
+    /**
+     @brief Use `sqlite3_prepare` internally to prepare a new statement.
+     @warning You should firstly use `StatementOperation::finalize()` to finalize the previous statement prepared by `StatementOperation::prepare()`. If you need to prepare multiple statements at the same time, `Handle::getOrCreatePreparedStatement()` is recommended.
+     @see   `Handle::getOrCreatePreparedStatement()`
+     @return True if no error occurs.
+     */
+    bool prepare(const Statement& statement);
+
+    /**
+     @brief Check if there is a statement previously prepared by `StatementOperation::prepare()`.
+     @return True if there is a prepared statement.
+     */
+    bool isPrepared();
+
+    /**
+     @brief Finalize the statement previously prepared by `StatementOperation::prepare()`.
+     @warning You should finalize the previously prepared statement before use a new statement.
+     */
+    void finalize();
+    
+    /**
+     This class is a wrapper for `sqlite3_stmt`.
+     @warning Not Thread-safe.
+     @return True if no error occurs.
+     */
     bool step();
+
+    /**
+     @brief Check if you can continue stepping.
+     @return True if you can continue stepping.
+     */
     bool done();
+
+    /**
+     @brief The wrapper of `sqlite3_reset`.
+     */
     void reset();
+
+    /**
+     @brief The wrapper of `sqlite3_stmt_readonly`.
+     */
     bool isReadOnly();
 
 #pragma mark - Bind Value
@@ -44,23 +82,66 @@ public:
     using Float = ColumnTypeInfo<ColumnType::Float>::UnderlyingType;
     using BLOB = ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType;
 
+    /**
+     @brief The wrapper of `sqlite3_bind_int64`.
+     */
     void bindInteger(const Integer& value, int index = 1);
+
+    /**
+     @brief The wrapper of `sqlite3_bind_double`.
+     */
     void bindDouble(const Float& value, int index = 1);
+
+    /**
+     @brief The wrapper of `sqlite3_bind_text`.
+     */
     void bindText(const Text& value, int index = 1);
+
+    /**
+     @brief The wrapper of `sqlite3_bind_int64`.
+     */
     void bindBLOB(const BLOB& value, int index = 1);
+
+    /**
+     @brief The wrapper of `sqlite3_bind_null`.
+     */
     void bindNull(int index = 1);
-    void bindPointer(void* ptr, int index, const Text& type, void (*destructor)(void*));
+
+    /**
+     @brief The wrapper of `sqlite3_bind_parameter_index`.
+     */
     int bindParameterIndex(const Text& parameterName);
 
+    /**
+     @brief The wrapper of `sqlite3_bind_*`.
+     It will call the appropriate routine according to the column type returned by `Value::getType()`.
+     @param value A value wrapping the type.
+     @see   `WCDB::Value`
+     */
     void bindValue(const Value& value, int index = 1);
+
+    /**
+     @brief The wrapper of `sqlite3_bind_*` for binding an array of value.
+     It will call the appropriate routine according to the column type returned by `Value::getType()`.
+     @param row An array of value.
+     @see   `WCDB::Value`
+     */
     void bindRow(const OneRowValue& row);
 
+    /**
+     @brief The wrapper of `sqlite3_bind_*` for binding property of object to index.
+     It will call the appropriate routine according to the data type of property.
+     */
     template<class ObjectType>
     void bindObject(const ObjectType& obj, const Field& field, int index = 1)
     {
         bindValue(field.getValue<ObjectType>(obj), index);
     }
 
+    /**
+     @brief The wrapper of `sqlite3_bind_*` for binding the specified properties of object.
+     It will call the appropriate routine according to the data type of properties.
+     */
     template<class ObjectType>
     void bindObject(const ObjectType& obj, const Fields& fields)
     {
@@ -71,21 +152,68 @@ public:
         }
     }
 
-#pragma mark - Extract Result
+#pragma mark - Extract Column meta
+    /**
+     @brief The wrapper of `sqlite3_column_type`.
+     */
     ColumnType getType(int index = 0);
-    signed long long getColumnSize(int index = 0);
+
+    /**
+     @brief The wrapper of `sqlite3_column_count`.
+     */
     int getNumberOfColumns();
 
+    /**
+     @brief The wrapper of `sqlite3_column_origin_name`.
+     */
+    const UnsafeStringView getOriginColumnName(int index);
+
+    /**
+     @brief The wrapper of `sqlite3_column_name`.
+     */
+    const UnsafeStringView getColumnName(int index);
+
+    /**
+     @brief The wrapper of `sqlite3_column_table_name`.
+     */
+    const UnsafeStringView getColumnTableName(int index);
+
+#pragma mark - Extract Row data
+    /**
+     @brief The wrapper of `sqlite3_column_int64`.
+     */
     Integer getInteger(int index = 0);
+
+    /**
+     @brief The wrapper of `sqlite3_column_double`.
+     */
     Float getDouble(int index = 0);
+
+    /**
+     @brief The wrapper of `sqlite3_column_text`.
+     */
     Text getText(int index = 0);
+
+    /**
+     @brief The wrapper of `sqlite3_column_blob`.
+     */
     const BLOB getBLOB(int index = 0);
 
+    /**
+     @brief The wrapper of `sqlite3_column_*`.
+     */
     Value getValue(int index = 0);
-    OptionalOneColumn getOneColumn(int index = 0);
-    OneRowValue getOneRow();
-    OptionalMultiRows getAllRows();
 
+    /**
+     @brief Extract all values of current row.
+     @return An array of NSObject that conforms to WCTValue.
+     */
+    OneRowValue getOneRow();
+
+    /**
+     @brief Extract the values of the current row and assign them into the fields specified by resultFields of a new object.
+     @return An object.
+     */
     template<class ObjectType>
     ObjectType extractOneObject(const ResultFields& resultFields)
     {
@@ -98,6 +226,30 @@ public:
         return obj;
     }
 
+    /**
+     @brief Extract the results of a multi-table query in the current row.
+     @return A `WCDB::MultiObject` containing the result of multi-table.
+     @see   `WCDB::MultiObject`
+     */
+    MultiObject extractOneMultiObject(const ResultFields& resultFields);
+
+#pragma mark - Step And Extract All Data
+    /**
+     @brief Extract all the values of the column of index in the result.
+     @return An array of Value.
+     */
+    OptionalOneColumn getOneColumn(int index = 0);
+
+    /**
+     @brief Extract all the values in the result.
+     @return A two-dimensional array.
+     */
+    OptionalMultiRows getAllRows();
+
+    /**
+     @brief Extract the values of all rows in the result and assign them into the fields specified by resultFields of new objects.
+     @return An array of objects.
+     */
     template<class ObjectType>
     std::optional<ValueArray<ObjectType>>
     extractAllObjects(const ResultFields& resultFields)
@@ -110,13 +262,12 @@ public:
         return succeed ? result : std::optional<std::vector<ObjectType>>();
     }
 
-    MultiObject extractOneMultiObject(const ResultFields& resultFields);
+    /**
+     @brief Extract the results of a multi-table query.
+     @return An array of `WCDB::MultiObject`.
+     */
     std::optional<ValueArray<MultiObject>>
     extractAllMultiObjects(const ResultFields& resultFields);
-
-    const UnsafeStringView getOriginColumnName(int index);
-    const UnsafeStringView getColumnName(int index);
-    const UnsafeStringView getColumnTableName(int index);
 
 protected:
     virtual ~StatementOperation() = 0;

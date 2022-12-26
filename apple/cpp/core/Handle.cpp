@@ -140,33 +140,6 @@ const Error& Handle::getError()
     return handle->getError();
 }
 
-bool Handle::prepare(const Statement& statement)
-{
-    HandleStatement* handleStatement = getInnerHandleStatement();
-    if (handleStatement == nullptr) {
-        return false;
-    }
-    return handleStatement->prepare(statement);
-}
-
-bool Handle::isPrepared()
-{
-    HandleStatement* handleStatement = getInnerHandleStatement();
-    if (handleStatement == nullptr) {
-        return false;
-    }
-    return handleStatement->isPrepared();
-}
-
-void Handle::finalize()
-{
-    HandleStatement* handleStatement = getInnerHandleStatement();
-    if (handleStatement == nullptr) {
-        return;
-    }
-    handleStatement->finalize();
-}
-
 std::optional<PreparedStatement>
 Handle::getOrCreatePreparedStatement(const Statement& statement)
 {

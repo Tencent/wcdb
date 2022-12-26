@@ -31,8 +31,24 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface WCTUpdate<ObjectType> : WCTChainCall
 
+/**
+ @brief The statement that `WCTUpdate` will execute.
+ You can cunstomize this statement directly to implement the capabilities not provided by the following methods.
+ */
+- (WCDB::StatementUpdate &)statement;
+
+/**
+ @brief WINQ interface for SQL.
+ @param tableName The name of the table to update content.
+ @return self
+ */
 - (instancetype)table:(NSString *)tableName;
 
+/**
+ @brief WINQ interface for SQL.
+ @param properties The properties used to specify the columns where data is updated.
+ @return self
+ */
 - (instancetype)set:(const WCTProperties &)properties;
 
 /**
@@ -63,15 +79,32 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (instancetype)offset:(const WCDB::Expression &)offset;
 
+/**
+ @brief Execute the update statement with one object.
+ @param object Object to be updated into table.
+ @return self.
+ */
 - (instancetype)toObject:(ObjectType)object;
 
+/**
+ @brief Execute the update statement with one value.
+ @param value Value to be updated into table.
+ @return self.
+ */
 - (instancetype)toValue:(WCTColumnCodingValue *)value;
 
+/**
+ @brief Execute the update statement with one row of value.
+ @param row The row to be updated into table.
+ @return self.
+ */
 - (instancetype)toRow:(WCTColumnCodingRow *)row;
 
+/**
+ @brief Execute the update statement.
+ @return YES if no error occurs.
+ */
 - (BOOL)execute;
-
-- (WCDB::StatementUpdate &)statement;
 
 @end
 

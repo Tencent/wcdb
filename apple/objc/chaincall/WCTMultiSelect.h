@@ -31,8 +31,18 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface WCTMultiSelect : WCTSelectable
 
+/**
+ @brief WINQ interface for SQL.
+ @param tableNames The names of the tables to query data from.
+ @return self
+ */
 - (instancetype)fromTables:(NSArray<NSString *> *)tableNames;
 
+/**
+ @brief WINQ interface for SQL.
+ @param resultColumns The column results to be selected.
+ @return self
+ */
 - (instancetype)onResultColumns:(const WCTResultColumns &)resultColumns;
 
 /**

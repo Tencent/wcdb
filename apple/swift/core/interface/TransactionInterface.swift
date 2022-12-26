@@ -41,19 +41,28 @@ public protocol TransactionInterface {
     /// Throws: `Error`
     func rollback() throws
 
+    /// Check whether the current database has begun a transaction in the current thread.
     var isInTransaction: Bool { get }
 
+    /// Separate interface of `run(nestedTransaction:)`
+    /// You should call `beginNestedTransaction`, `commitNestedTransaction`, `rollbackNestedTransaction` and all other operations in same thread.
+    /// - Throws: `Error`
     func beginNestedTransaction() throws
 
+    /// Separate interface of `run(nestedTransaction:)`
+    /// You should call `beginNestedTransaction`, `commitNestedTransaction`, `rollbackNestedTransaction` and all other operations in same thread.
+    /// - Throws: `Error`
     func commitNestedTransaction() throws
 
+    /// Separate interface of `run(nestedTransaction:)`
+    /// You should call `beginNestedTransaction`, `commitNestedTransaction`, `rollbackNestedTransaction` and all other operations in same thread.
+    /// Throws: `Error`
     func rollbackNestedTransaction() throws
 
     /// Run a  transaction in closure
     ///
-    ///     try database.run(transaction: { () throws -> Bool in
+    ///     try database.run(transaction: { _ in
     ///         try database.insert(objects, intoTable: table)
-    ///         return true // return true to commit transaction and return false to rollback transaction.
     ///     })
     ///
     /// - Parameter transaction: Operation inside transaction
@@ -63,7 +72,7 @@ public protocol TransactionInterface {
 
     /// Run a controllable transaction in closure
     ///
-    ///     try database.run(controllableTransaction: { () throws -> Bool in
+    ///     try database.run(controllableTransaction: { _ in
     ///         try database.insert(objects, intoTable: table)
     ///         return true // return true to commit transaction and return false to rollback transaction.
     ///     })
@@ -73,9 +82,39 @@ public protocol TransactionInterface {
     typealias ControlableTransactionClosure = (Handle) throws -> Bool
     func run(controllableTransaction: @escaping ControlableTransactionClosure) throws
 
+    /// Run a  nested transaction in closure
+    ///
+    ///     try database.run(nestedTransaction: { () throws -> Bool in
+    ///         try database.insert(objects, intoTable: table)
+    ///     })
+    ///
+    /// - Parameter transaction: Operation inside transaction
+    /// - Throws: `Error`
     func run(nestedTransaction: @escaping TransactionClosure) throws
 
     typealias PauseableTransactionClosure = (Handle, inout Bool, Bool) throws -> Void
+    /// Run a pauseable transaction in block.
+    ///
+    /// Firstly, WCDB will begin a transaction and call the block.
+    /// After the block is finished, WCDB will check whether the main thread is suspended due to the current transaction.
+    /// If not, it will call the block again; if it is, it will temporarily commit the current transaction.
+    /// Once database operations in main thread are finished, WCDB will rebegin a new transaction in the current thread and call the block.
+    /// This process will be repeated until the second parameter of the block is specified as true, or some error occurs during the transaction.
+    ///
+    ///     try self.database.run(pauseableTransaction: { (handle, stop, isNewTransaction) in
+    ///         if (isNewTraction) {
+    ///             // Do some initialization for new transaction.
+    ///         }
+    ///
+    ///         // Perform a small amount of data processing.
+    ///
+    ///         if( All database operations are finished ) {
+    ///             stop = true;
+    ///         }
+    ///     }
+    ///
+    /// - Parameter pauseableTransaction: Operation inside transaction for one loop.
+    /// - Throws: `Error`
     func run(pauseableTransaction: @escaping PauseableTransactionClosure) throws
 }
 

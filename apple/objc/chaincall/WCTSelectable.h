@@ -31,38 +31,38 @@ NS_ASSUME_NONNULL_BEGIN
 @interface WCTSelectable : WCTChainCall
 
 /**
- WINQ interface for SQL.
+ The statement will be executed.
+ You can cunstomize this statement directly to implement the capabilities not provided by the following methods.
+ */
+- (WCDB::StatementSelect &)statement;
 
+/**
+ @brief WINQ interface for SQL.
  @param condition condition
  @return self
  */
 - (instancetype)where:(const WCDB::Expression &)condition;
 
 /**
- WINQ interface for SQL.
-
+ @brief WINQ interface for SQL.
  @param orders order list
  @return self
  */
 - (instancetype)orders:(const WCDB::OrderingTerms &)orders;
 
 /**
- WINQ interface for SQL.
-
+ @brief WINQ interface for SQL.
  @param limit limit
  @return self
  */
 - (instancetype)limit:(const WCDB::Expression &)limit;
 
 /**
- WINQ interface for SQL.
-
+ @brief WINQ interface for SQL.
  @param offset offset
  @return self
  */
 - (instancetype)offset:(const WCDB::Expression &)offset;
-
-- (WCDB::StatementSelect &)statement;
 
 @end
 

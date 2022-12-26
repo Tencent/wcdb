@@ -29,6 +29,9 @@
 
 namespace WCDB {
 
+/**
+ Builtin ORM for `sqlite_sequence` table. For further information, see https://sqlite.org/autoinc.html .
+ */
 class Sequence {
 public:
     static const StringView& tableName;

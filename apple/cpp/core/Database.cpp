@@ -200,13 +200,13 @@ void Database::traceSQL(Database::SQLNotification trace)
     }
 }
 
-void Database::globalTraceDatabaseOperation(DBOperationTrace callback)
+void Database::globalTraceDatabaseOperation(DBOperationTrace trace)
 {
-    if (callback != nullptr) {
+    if (trace != nullptr) {
         DBOperationNotifier::shared().setNotification(
         [=](InnerDatabase* innerDatabase, DBOperationNotifier::Operation operation) {
             Database database = Database(innerDatabase);
-            callback(database, (Operation) operation);
+            trace(database, (Operation) operation);
         });
     } else {
         DBOperationNotifier::shared().setNotification(nullptr);
@@ -233,9 +233,9 @@ std::optional<size_t> Database::getFilesSize() const
     return m_innerDatabase->getFilesSize();
 }
 
-void Database::enableAutoMergeFTS5Index(bool enable)
+void Database::enableAutoMergeFTS5Index(bool flag)
 {
-    Core::shared().enableAutoMergeFTSIndex(m_innerDatabase, enable);
+    Core::shared().enableAutoMergeFTSIndex(m_innerDatabase, flag);
 }
 
 void Database::addTokenizer(const UnsafeStringView& tokenize)
@@ -316,9 +316,9 @@ bool Database::isAlreadyCorrupted()
     return Core::shared().isFileObservedCorrupted(getPath());
 }
 
-void Database::enableAutoBackup(bool enable)
+void Database::enableAutoBackup(bool flag)
 {
-    Core::shared().enableAutoBackup(m_innerDatabase, enable);
+    Core::shared().enableAutoBackup(m_innerDatabase, flag);
 }
 
 bool Database::backup()
@@ -417,9 +417,9 @@ bool Database::stepMigration()
     return done.has_value();
 }
 
-void Database::enableAutoMigration(bool enable)
+void Database::enableAutoMigration(bool flag)
 {
-    Core::shared().enableAutoMigration(m_innerDatabase, enable);
+    Core::shared().enableAutoMigration(m_innerDatabase, flag);
 }
 
 void Database::setNotificationWhenMigrated(Database::MigratedCallback onMigrated)

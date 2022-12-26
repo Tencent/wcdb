@@ -62,10 +62,7 @@ public class Database {
         self.recyclableDatabase = ObjectBridge.createRecyclableCPPObject(cppDatabase)
     }
 
-    /// The tag of the database. Default to nil.  
-    /// You should set it on a database and can get it from all kind of Core objects, 
-    /// including `Database`, `Table`, `Transaction`, `Select`, `RowSelect`, `MultiSelect`, `Insert`, `Delete`, 
-    /// `Update` and so on.   
+    /// The tag of the database. Default to nil.
     /// Note that core objects with same path share this tag, even they are not the same object.
     ///
     ///     let database1 = Database(withPath: path)
@@ -198,11 +195,19 @@ public class Database {
         WCDBCorePurgeAllDatabase()
     }
 
-    public func getError() -> WCDBError {
+    internal func getError() -> WCDBError {
         let cppError = WCDBDatabaseGetError(database)
         return ErrorBridge.getErrorFrom(cppError: cppError)
     }
 
+    /// Create a `Handle` for current database.
+    /// `Handle` is a wrapper for sqlite db handle of type `sqlite3*`,
+    /// and the sqlite db handle is lazy initialized and will not be actually generated until the first operation on current handle takes place.
+    /// Note that all `Handle` created by the current database in the current thread will share the same sqlite db handle internally,
+    /// so it can avoid the deadlock between different sqlite db handles in some extreme cases.
+    ///
+    /// - Returns: A new `Handle`.
+    /// - Throws: `Error`
     public func getHandle() throws -> Handle {
         let cppHandle = WCDBDatabaseGetHandle(database)
         let handle = Handle(withCPPHandle: cppHandle)
@@ -211,6 +216,7 @@ public class Database {
         }
         return handle
     }
+
     /// Exec a specific sql.  
     /// Note that you can use this interface to execute a SQL that is not contained in the WCDB interface layer. 
     ///
@@ -278,6 +284,10 @@ public extension Database {
         WCDBDatabaseGlobalTracePerformance(nil)
     }
 
+    /// You can register a reporter to monitor all errors of current database.
+    /// Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
+    ///
+    /// - Parameter trace: trace. Nil to disable preformance trace.
     func trace(ofPerformance trace: @escaping PerformanceTracer) {
         let callback: @convention(block) (UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>, Double) -> Void = {
             (path, handleId, sql, cost) in
@@ -294,7 +304,7 @@ public extension Database {
     /// It returns
     /// 1. Every SQL executed by the database.
     /// 2. Path of database.
-    /// 4. The id of the handle executing this SQL.
+    /// 3. The id of the handle executing this SQL.
     /// Note that you should register trace before all db operations.
     ///
     ///     Database.globalTrace(ofSQL: { (path, handleId, sql) in
@@ -317,6 +327,10 @@ public extension Database {
         WCDBDatabaseGlobalTraceSQL(nil)
     }
 
+    /// You can register a tracer to monitor the execution of all SQLs executed in the current database.
+    /// Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
+    ///
+    /// - Parameter trace: trace. Nil to disable sql trace.
     func trace(ofSQL trace: @escaping SQLTracer) {
         let callback: @convention(block) (UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>) -> Void = {
             (path, handleId, sql) in
@@ -335,7 +349,7 @@ public extension Database {
     ///         print("[WCDB] \(error.description)")
     ///     })
     ///
-    /// - Parameter errorReporter: report
+    /// - Parameter errorReporter: report. Nil to disable error trace.
     static func globalTrace(ofError errorReporter: @escaping (WCDBError) -> Void) {
         let callback: @convention(block) (CPPError) -> Void = {
             (cppError) in
@@ -349,6 +363,9 @@ public extension Database {
         WCDBDatabaseGlobalTraceError(nil)
     }
 
+    /// You can register a reporter to monitor all errors of current database.
+    ///
+    /// - Parameter errorReporter: report. Nil to disable error trace.
     func trace(ofError errorReporter: @escaping (WCDBError) -> Void) {
         let callback: @convention(block) (CPPError) -> Void = {
             (cppError) in
@@ -358,7 +375,6 @@ public extension Database {
         let imp = imp_implementationWithBlock(callback)
         WCDBDatabaseTraceError(path, imp)
     }
-
     func trace(ofError: Void?) {
         WCDBDatabaseTraceError(path, nil)
     }
@@ -369,13 +385,19 @@ public extension Database {
         case OpenHandle = 2
     }
 
-    typealias OperationTracer = (Database, Operation) -> Void
+    typealias OperationTracer = (Database, Database.Operation) -> Void
 
-    static func globalTrace(ofDatabaseOperation tracer: @escaping OperationTracer) {
+    /// You can register a tracer to these database events:
+    /// 1. creating a database object for the first time;
+    /// 2. setting a tag on the database;
+    /// 3. opening a new database handle.
+    ///
+    /// - Parameter trace: trace. Nil to disable error trace.
+    static func globalTrace(ofDatabaseOperation trace: @escaping OperationTracer) {
         let callback: @convention(block) (CPPDatabase, Int) -> Void = {
             (cppDatabase, operation) in
             let database = Database(with: cppDatabase)
-            tracer(database, Operation(rawValue: operation) ?? .Create)
+            trace(database, Operation(rawValue: operation) ?? .Create)
         }
         let imp = imp_implementationWithBlock(callback)
         WCDBDatabaseGlobalTraceOperation(imp)
@@ -392,7 +414,6 @@ public extension Database {
     }
 
     typealias Config = (Handle) throws -> Void
-
     /// Set config for this database.
     ///
     /// Since WCDB is a multi-handle database, an executing handle will not apply this config immediately.  
@@ -461,6 +482,11 @@ public extension Database {
         return Table<Root>(withDatabase: self, named: name)
     }
 
+    /// Check the existence of the table.
+    ///
+    /// - Parameter table: The name of the table.
+    /// - Returns: false for a non-existent table.
+    /// - Throws: `Error`
     func isTableExists(_ table: String) throws -> Bool {
         let ret = WCDBDatabaseExistTable(database, table)
         if !ret.hasValue {
@@ -532,8 +558,10 @@ public extension Database {
 public extension Database {
     typealias OnCorrupted = (_ corruptedDatabase: Database) -> Void
     /// You can register a notification callback for database corruption.
-    ///
-    /// After database corruption, you can call retrieve method to repair the database, or just remove it.
+    /// If the current database reports an error of `SQLITE_CORRUPT` or `SQLITE_NOTADB` during operation,
+    /// WCDB will asynchronously use `PRAGMA integrity_check` to check whether this database is truely corrupted.
+    /// Once confirmed, WCDB will notify you through the callback registered by this method.
+    /// In the callback, you can delete the corrupted database or try to repair the database.
     ///
     /// - Parameter callback: The callback of notification.
     func setNotification(whenCorrupted callback: OnCorrupted?) {
@@ -550,7 +578,7 @@ public extension Database {
     }
 
     /// Check if the database is corrupted.
-    /// You'd better not call this method on the main thread, because it is time consuming.
+    /// Since this method will check all the contents of the database until it finds something corrupted, it is time consuming and you'd better not call this method on the main thread.
     func checkIfCorrupted() -> Bool {
         return WCDBDatabaseCheckIfCorrupted(database)
     }
@@ -560,9 +588,13 @@ public extension Database {
         return WCDBDatabaseCheckIsAlreadyCorrupted(database)
     }
 
-    /// Set the flag to enable auto-backup.
+    /// Enable database to automatically backup itself after there are updates.
     ///
-    /// Once enabled, database will automatically backup itself after there are updates.
+    /// The backup content mainly includes the SQL statements related to table creation,
+    /// and all leaf page numbers of each table in database.
+    /// The backup content will be saved in the same directory of the database.
+    /// And the backup file name is the database file name plus "-first.material" and "-last.material" suffixes.
+    ///
     /// Auto-backup do not degrade IO performance of the database.
     func setAutoBackup(enable flag: Bool) {
         WCDBDatabaseEnableAutoBackup(database, flag)
@@ -582,7 +614,7 @@ public extension Database {
 
     /// Set a filter to tell which table should be backed up.
     ///
-    /// The filter will be called for ecery table in database during the initialization of backup logic.
+    /// The filter will be called for every table in database during the initialization of backup logic.
     /// If there are some tables that do not need to be backed up, return false when these table names are passed into the filter.
     ///
     /// - Parameter filter: The table filter. A table name will be pass to filter when it's called.
@@ -599,11 +631,17 @@ public extension Database {
     }
 
     typealias RetrieveProgress = (_ percentage: Double, _ increment: Double) -> Void
-    /// Recover data from a corruped db. You'd better to recover a closed database.
-    /// You'd better not call this method on the main thread, because it is time consuming.
+    /// Recover data from a corruped db.
+    ///
+    /// If there is a valid backup of this database, most of the uncorrupted data can be recovered,
+    /// otherwise WCDB will try to read all the data that can still be accessed, starting from the first page of the database.
+    /// In the extreme case where this database is not backed up and the first page is corrupted, no data can be recovered.
+    ///
+    /// Since repairing a database requires reading all uncorrupted data and writing them to a new database, it may take a lot of time to finish the job.
+    /// During this period, you'd better display a loading view on the screen and present the processing percentage.
     ///
     /// - Parameter progress: A closure that receives the repair progress.
-    /// - Returns: Percentage of repaired data. 0 means data recovery failed. 1 means data is fully recovered.
+    /// - Returns: Percentage of repaired data. 0 or less then 0 means data recovery failed. 1 means data is fully recovered.
     func retrieve(with progress: RetrieveProgress?) -> Double {
         var internalProgressImp: IMP?
         if let progress = progress {
@@ -619,6 +657,7 @@ public extension Database {
 
     /// Deposit database.
     /// This method is designed for conditions where the database is corrupted and cannot be repaired temporarily. It can deposit the corrupted database to a new location and create a temporary database for the user. The contents of the deposited database will be restored when you recover the database.
+    /// This method can be called multiple times without loss of data.
     /// - Throws: `Error`
     func deposit() throws {
         if !WCDBDatabaseDeposit(database) {
@@ -641,20 +680,38 @@ public extension Database {
 
 // FTS
 public struct BuiltinTokenizer {
+    /// The following four are sqlite built-in fts tokenizers.
+    /// `Simple` can be used in fts3/4 and the others can be used in fts3/4/5.
     public static let Simple = String(cString: WCDBTokenizerSimple)
     public static let Porter = String(cString: WCDBTokenizerPorter)
     public static let ICU = String(cString: WCDBTokenizerICU)
     public static let Unicode61 = String(cString: WCDBTokenizerUnicode61)
 
-    // Only for fts3/fts4, compatible with WCDB tokenizer of older versions
+    /// `OneOrBinary`is WCDB implemented tokenizers for fts3/4.
+    /// It's compatible with WCDB tokenizer of older versions.
+    ///
+    /// When tokenizing, symbol characters are ignored by default.
+    /// Consecutive English letters will be recognized as an English token, and this token will be stemmed using the porter stemming algorithm.
+    /// Continuous Arabic numerals will be recognized as a single numeric token.
+    /// For other Unicode characters, each character will be recognized as one token.
+    ///
+    /// For example, the sentence "The phone number of 张三 is 12345" will be split into these tokens: "the", "phone", "number", "of", "张", "三", "is", "12345".
     public static let OneOrBinary = String(cString: WCDBTokenizerLegacyOneOrBinary)
 
-    // for fts5
-    public static let Pinyin = String(cString: WCDBTokenizerPinyin)
+    /// The following two are WCDB implemented tokenizers for fts5.
+    ///
+    /// `Verbatim` has the same tokenize rules as `OneOrBinary`.
+    /// `Pinyin` is designed for pinyin search. You can use the simplified or full pinyin of Chinese characters to search for Chinese characters.
+    /// Before using this tokenizer, you need to use `config(pinyinDict:)` to configure the mapping relationship between Chinese characters and their pinyin.
     public static let Verbatim = String(cString: WCDBTokenizerVerbatim)
+    public static let Pinyin = String(cString: WCDBTokenizerPinyin)
 
-    // Optional parameters for WCDB implemented tokenizers
     public struct Parameter {
+        /// The following three are optional parameters for WCDB implemented tokenizers.
+        ///
+        /// Configuring `NeedSymbol` allows the tokenizer to recognize each symbol character as a token.
+        /// Configuring `SimplifyChinese` enables the tokenizer to convert each traditional Chinese character into a simplified Chinese character, so that you can use Simplified Chinese characters to search Traditional Chinese characters. Note that you need to call `config(traditionalChineseDict:)` to configure the mapping relationship between traditional Chinese characters and simplified Chinese characters before using the tokenizer.
+        /// Configuring `SkipStemming` will disable the stemming during tokenization.
         public static let NeedSymbol = String(cString: WCDBTokenizerParameter_NeedSymbol)
         public static let SimplifyChinese = String(cString: WCDBTokenizerParameter_SimplifyChinese)
         public static let SkipStemming = String(cString: WCDBTokenizerParameter_SkipStemming)
@@ -662,32 +719,82 @@ public struct BuiltinTokenizer {
 }
 
 public struct BuiltinAuxiliaryFunction {
+    /// `SubstringMatchInfo` is a WCDB implemented auxiliary function for fts5.
+    ///
+    /// When you need to concat multiple contents together with multi-level separators and save them in a single column of the fts5 table,
+    /// you can use this auxiliary function to improve the accuracy of searching for the contents of this column.
+    ///
+    /// Suppose you have a friend named 张三, whose address is 广州 and 上海, and phone number is 12345 and 67890.
+    /// You can use semicolon and comma as two-level separators to concat your friend's information into "张三;广州,上海;12345,67890",
+    /// and save it in a column named "friends" in an fts5 table. Then you can use following code to search your friend:
+    ///
+    ///     fts5Table.getColumn(on: Expression.function(BuiltinAuxiliaryFunction.SubstringMatchInfo).invoke().arguments(Column(named: fts5Table.name), 0, ";,"), where: Column(named: "friends").match("州"))
+    ///
+    /// The first argument of SubstringMatchInfo is a column named with table name.
+    /// The second argument is the index of the colum you need to search. The index is are numbered starting from 0.
+    /// The third parameter is the separator used when concating the content, which should be arranged according to their level.
+    ///
+    /// Then you will get this string result "1,0;广;州;3;". The result is made by concating a variety of information with the separator you passed in.
+    /// The first part of the result "1,0" gives the hierarchical position of the matched content within matched column.
+    /// The second part "广;州" is the original text of the matching content, you can use it for highlighting.
+    /// The third part "3" is the byte offset of the matching content in the original text, you can use it to sort the results.
+    ///
+    /// The search results may contain some empty strings, which are invalid results.
+    /// This kind of results appear when the content of some rows contain the tokens you are searching for,
+    /// but these tokens are located in different parts separated by separators. You just need to ignore these results.
     public static let SubstringMatchInfo = String(cString: WCDBAuxiliaryFunction_SubstringMatchInfo)
 }
 
 public extension Database {
+    /// Enable to automatically merge b-tree segments of fts5 index after modifying the content in fts5 table.
+    ///
+    /// The merge operation will be performed in a separate sub-thread, and will be suspended when it detects that other threads need to modify the fts table.
+    /// So it will improve the performance of modifying the fts5 table.
+    ///
+    /// Using auto-merge, WCDB can maintain only one segment per level in the fts5 index structure.
+    /// So it will significantly improve the search performance of the fts5 index.
     func setAutoMergeFTS5Index(enable: Bool) {
         WCDBDatabaseEnableAutoMergeFTS5Index(database, enable)
     }
 
+    /// Setup tokenizer with name for current database.
+    ///
+    /// You can set up the built-in tokenizers of sqlite and the tokenizers implemented by WCDB directly.
+    /// If you want to use your custom tokenizer, you should firstly register it through `register(tokenizer:of:of:)`
+    ///
+    /// - Parameter tokenizer: Name of tokenizer.
     func add(tokenizer: String) {
         WCTAPIBridge.configDefaultSymbolDetectorAndUnicodeNormalizer()
         WCDBDatabaseAddTokenizer(database, tokenizer.cString)
     }
 
+    /// Register custom tokenizer.
+    /// The custom tokenizer needs to implement the `Tokenizer` protocal.
+    ///
+    /// - Parameters:
+    ///  - tokenizer:Type of tokenizer.
+    ///  - name: Name of Tokenizer.
+    ///  - version: version of fts.
     static func register<TokenizerType: Tokenizer>(tokenizer: TokenizerType.Type, of name: String, of version: FTSVersion) {
         FTSBridge.register(tokenizer: tokenizer, of: name, of: version)
     }
 
+    /// Setup auxiliary function with name for current database.
+    ///
+    /// You can set up the built-in auxiliary functions of sqlite and the auxiliary functions implemented by WCDB directly.
+    ///
+    /// - Parameter auxFunction: Name of auxiliary function.
     func add(auxFunction: String) {
         WCDBDatabaseAddAuxiliaryFunction(database, auxFunction.cString)
     }
 
-    static func config(pinyinDict: [String: [String]]) {
+    /// Configure the mapping relationship between Chinese characters and their pinyin.
+    static func config(pinyinDict: [String /*Chinese character*/ : [String] /*Pinyin array*/]) {
         WCTAPIBridge.configPinyinDict(pinyinDict)
     }
 
-    static func config(traditionalChineseDict: [String: String]) {
+    /// Configure the mapping relationship between traditional Chinese characters and simplified Chinese characters.
+    static func config(traditionalChineseDict: [String /*Traditional Chinese character*/ : String /*Simplified Chinese character*/]) {
         WCTAPIBridge.configTraditionalChineseDict(traditionalChineseDict)
     }
 }

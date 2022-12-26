@@ -31,6 +31,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WCTTable<ObjectType> : NSObject
 
+/**
+ You should use `-[WCTDatabase getTable:withClass:]` or `-[WCTHandle getTable:withClass:]` to obtain `WCTTable`.
+ */
 - (instancetype)init UNAVAILABLE_ATTRIBUTE;
 
 /**
@@ -43,8 +46,19 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, readonly) Class tableClass;
 
+/**
+ The database that generate current table.
+ */
 @property (nonatomic, readonly) WCTDatabase *database;
 
+/**
+ @brief Get the most recent error for the database of current table in the current thread.
+        Since it is too cumbersome to get the error after every database operation, it‘s better to use monitoring interfaces to obtain database errors and print them to the log.
+ @see   `[WCTDatabase globalTraceError:]`
+ @see   `[WCTDatabase traceError:]`
+ 
+ @return WCTError
+ */
 - (WCTError *)error;
 
 @end

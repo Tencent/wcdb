@@ -34,6 +34,12 @@ class MultiObject {
 public:
     MultiObject();
     ~MultiObject();
+
+    /**
+     @brief Get result of specified table.
+     @param table Table name.
+     @return an object of specified type.
+     */
     template<class ObjectType>
     std::optional<ObjectType> objectAtTable(const UnsafeStringView& table)
     {
@@ -51,6 +57,11 @@ public:
         return result;
     }
 
+    /**
+     @brief add an object as result of the specified table.
+     @param obj The object to add.
+     @param table Table name.
+     */
     template<class ObjectType>
     void addObject(const ObjectType& obj, const UnsafeStringView& table)
     {

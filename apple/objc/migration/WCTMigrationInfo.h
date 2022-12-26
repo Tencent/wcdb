@@ -30,17 +30,23 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)init UNAVAILABLE_ATTRIBUTE;
 
+// Target table of migration
 @property (nonatomic, readonly) NSString* table;
+// Target database of migration
 @property (nonatomic, readonly) NSString* database;
+// Source table of migration
 @property (nonatomic, readonly) NSString* sourceTable;
+// Source datatase of migration
 @property (nonatomic, readonly) NSString* sourceDatabase;
 
 @end
 
 @interface WCTMigrationUserInfo : WCTMigrationBaseInfo
 
+// Set new value to sourceTable in WCTMigrationBaseInfo.
 - (void)setSourceTable:(NSString*)table;
 
+// Set new value to sourceDatabase in WCTMigrationBaseInfo.
 - (void)setSourceDatabase:(NSString*)database;
 
 @end

@@ -31,13 +31,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  @brief Remove all database-related files.
- @warning You should call it on a closed database. Otherwise you will get a warning.
  @return YES if all files are removed.
  */
 - (BOOL)removeFiles;
 
 /**
- @brief This interface is equivalent to [database moveFilesToDirectory:directory withExtraFiles:nil andError:error].
+ @brief Move all database-related files to another directory safely.
+ @warning Since file operation is not atomic, There may be some accidents during this period. For example, app may crash while db file is moved to destination and wal file is not. Then none of destination and source contains the whole data. This interface can make sure all of your data is in source or destination. 
  @param directory destination
  @return YES if all files are moved.
  */
@@ -51,7 +51,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  @brief Get the space used by the database files.
- @warning You should call it on a closed database. Otherwise you will get a warning.
  @return The sum of files size in bytes.
  */
 - (WCTOptionalSize)getFilesSize;

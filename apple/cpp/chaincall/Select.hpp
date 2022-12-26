@@ -39,36 +39,66 @@ class Select final : public ChainCall<StatementSelect> {
 public:
     ~Select() override final = default;
 
+    /**
+     WINQ interface for SQL.
+     @param condition condition
+     @return this
+     */
     Select<ObjectType> &where(const Expression &condition)
     {
         m_statement.where(condition);
         return *this;
     }
 
+    /**
+     @brief WINQ interface for SQL.
+     @param orders order list
+     @return this
+     */
     Select<ObjectType> &orders(const OrderingTerms &orders)
     {
         m_statement.orders(orders);
         return *this;
     }
 
+    /**
+     @brief WINQ interface for SQL.
+     @param limit limit
+     @return this
+     */
     Select<ObjectType> &limit(const Expression &limit)
     {
         m_statement.limit(limit);
         return *this;
     }
 
+    /**
+     @brief WINQ interface for SQL.
+     @param offset offset
+     @return this
+     */
     Select<ObjectType> &offset(const Expression &offset)
     {
         m_statement.offset(offset);
         return *this;
     }
 
+    /**
+     @brief WINQ interface for SQL.
+     @param tableName The name of the table to query data from.
+     @return this
+     */
     Select<ObjectType> &fromTable(const UnsafeStringView &tableName)
     {
         m_statement.from(tableName);
         return *this;
     }
 
+    /**
+     @brief WINQ interface for SQL.
+     @param resultFields The column results to be selected.
+     @return this
+     */
     Select<ObjectType> &onResultFields(const ResultFields &resultFields)
     {
         m_fields = resultFields;
@@ -76,6 +106,10 @@ public:
         return *this;
     }
 
+    /**
+     @brief Get all selected objects.
+     @return The array collection of ObjectType.
+     */
     std::optional<ValueArray<ObjectType>> allObjects()
     {
         std::optional<ValueArray<ObjectType>> objects;
@@ -87,6 +121,9 @@ public:
         return objects;
     }
 
+    /**
+     @brief Get first selected object.
+     */
     std::optional<ObjectType> firstObject()
     {
         std::optional<ObjectType> object;

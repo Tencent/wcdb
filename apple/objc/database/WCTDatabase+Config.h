@@ -41,7 +41,7 @@ typedef BOOL (^WCTConfigBlock)(WCTHandle* _Nonnull);
 @interface WCTDatabase (Config)
 
 /**
- @brief This interface is equivalent to [database setCipherKey:cipherKey andCipherPageSize:4096];
+ @brief This interface is equivalent to `-[WCTDatabase setCipherKey:cipherKey andCipherPageSize:4096]`;
  @param cipherKey Cipher key.
  */
 - (void)setCipherKey:(NSData* _Nullable)cipherKey;
@@ -60,9 +60,9 @@ typedef BOOL (^WCTConfigBlock)(WCTHandle* _Nonnull);
  @brief Set config for this database.  
  @warning Since WCDB is a multi-handle database, an executing handle will not apply this config immediately. Instead, all handles will run this config before its next operation.  
  
- [database setConfig:^BOOL(std::shared_ptr<WCDB::Handle> &handle, WCDB::Error& error) {
- return handle->execute(WCDB::StatementPragma().pragma(WCDB::Pragma::SecureDelete, YES));
- } forName:@"demo" withPriority:1];
+     [database setConfig:^BOOL(std::shared_ptr<WCDB::Handle> &handle, WCDB::Error& error) {
+        return handle->execute(WCDB::StatementPragma().pragma(WCDB::Pragma::secureDelete()).to(true));
+     } forName:@"demo" withPriority:WCTConfigPriorityDefault];
  */
 - (void)setConfig:(WCDB_ESCAPE WCTConfigBlock)invocation
  withUninvocation:(nullable WCDB_ESCAPE WCTConfigBlock)uninvocation
@@ -70,12 +70,15 @@ typedef BOOL (^WCTConfigBlock)(WCTHandle* _Nonnull);
      withPriority:(WCTConfigPriority)priority;
 
 /**
- @brief This interface is equivalent to [database setConfig:config forName:name withPriority:INT_MAX];
+ @brief This interface is equivalent to `-[WCTDatabase setConfig:config forName:name withPriority:INT_MAX]`;
  */
 - (void)setConfig:(WCDB_ESCAPE WCTConfigBlock)invocation
  withUninvocation:(nullable WCDB_ESCAPE WCTConfigBlock)uninvocation
           forName:(NSString*)name;
 
+/**
+ @brief Remove a config.
+ */
 - (void)removeConfigForName:(NSString*)name;
 
 /**

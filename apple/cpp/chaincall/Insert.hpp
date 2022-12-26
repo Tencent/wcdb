@@ -41,17 +41,32 @@ class Insert final : public ChainCall<StatementInsert> {
 public:
     ~Insert() override final = default;
 
+    /**
+     @brief WINQ interface for SQL.
+     @return this
+     */
     Insert<ObjectType>& orReplace()
     {
         m_statement.orReplace();
         return *this;
     }
 
+    /**
+     @brief WINQ interface for SQL.
+     @param table The name of the table to insert objects to.
+     @return this
+     */
     Insert<ObjectType>& intoTable(const UnsafeStringView& table)
     {
         m_statement.insertIntoTable(table);
         return *this;
     }
+
+    /**
+     @brief WINQ interface for SQL.
+     @param fields Do a partial insertion with the specific fields.
+     @return this
+     */
     Insert<ObjectType>& onFields(const Fields& fields)
     {
         m_fields = fields;
@@ -59,12 +74,23 @@ public:
         return *this;
     }
 
+    /**
+     @brief Inset an array of objects.
+     @param values Objects to be inserted into table.
+     @return this.
+     */
     Insert<ObjectType>& values(const ValueArray<ObjectType> values)
     {
         m_values = values;
         return *this;
     }
 
+    /**
+     @brief Execute the insert statement.
+            Note that it will run embedded transaction while values.count>1 .
+            The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     @return True if no error occurs.
+     */
     bool execute()
     {
         bool succeed = true;

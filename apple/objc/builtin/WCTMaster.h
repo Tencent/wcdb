@@ -26,6 +26,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ Builtin ORM for `sqlite_master` table. For further information, see https://www.sqlite.org/schematab.html .
+ */
+
 @interface WCTMaster : NSObject
 
 @property (class, nonatomic, readonly) NSString *tableName;

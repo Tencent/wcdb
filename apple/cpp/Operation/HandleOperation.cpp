@@ -350,18 +350,6 @@ std::optional<bool> HandleOperation::tableExists(const UnsafeStringView &tableNa
     return result;
 }
 
-std::optional<std::set<StringView>>
-HandleOperation::getColumns(const UnsafeStringView &table)
-{
-    std::optional<std::set<StringView>> result;
-    GetHandleOrReturnValue(result);
-    result = handle->getColumns(table);
-    if (!result.has_value()) {
-        assignErrorToDatabase(handle->getError());
-    }
-    return result;
-}
-
 bool HandleOperation::dropTable(const UnsafeStringView &tableName)
 {
     return execute(StatementDropTable().dropTable(tableName).ifExists());

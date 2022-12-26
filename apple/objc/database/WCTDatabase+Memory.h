@@ -28,8 +28,8 @@
 
 /**
  @brief Purge all free memory of this database.
- WCDB will cache and reuse some sqlite handles to improve performance. 
- The max count of free sqlite handles is same as the number of concurrent threads supported by the hardware implementation.
+ WCDB will cache and reuse some sqlite db handles to improve performance. 
+ The max count of free sqlite db handles is same as the number of concurrent threads supported by the hardware implementation.
  You can call it to save some memory.
  */
 - (void)purge;
@@ -37,7 +37,7 @@
 /**
  @brief Purge all free memory of all databases.
  Note that WCDB will call this interface automatically while it receives memory warning on iOS.
- @see purge
+ @see   `purge`
  */
 + (void)purgeAll;
 

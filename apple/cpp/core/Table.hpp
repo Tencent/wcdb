@@ -35,14 +35,29 @@ public:
     virtual ~BaseTable() = 0;
 
 #pragma mark - Basic
+    /**
+     @brief Get the most recent error for the database of current table in the current thread.
+            Since it is too cumbersome to get the error after every database operation, it‘s better to use monitoring interfaces to obtain database errors and print them to the log.
+     @see   `static Database::globalTraceError()`
+     @see   `Database::traceError()`
+     @return WCDB::Error
+     */
     const Error &getError() const;
+
+    /**
+     @brief Get the name of the table.
+     */
     const StringView &getTableName() const;
-    StringView getIndexNameWithSuffix(const UnsafeStringView &suffix) const;
+
+    /**
+     @brief Drop index with name tableName + subfix.
+     */
     bool dropIndexWithSuffix(const UnsafeStringView &suffix);
 
 protected:
     BaseTable(Recyclable<InnerDatabase *> database, const UnsafeStringView &tableName);
     RecyclableHandle getHandle();
+    StringView getIndexNameWithSuffix(const UnsafeStringView &suffix) const;
 
     StringView m_tableName;
     Recyclable<InnerDatabase *> m_databaseHolder;

@@ -28,8 +28,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WCTDatabase (Version)
 
+/**
+ Version of WCDB.
+ */
 @property (class, readonly, nonatomic) NSString *version;
 
+/**
+ Source id of WCDB. It varies from each build of WCDB.
+ */
 @property (class, readonly, nonatomic) NSString *sourceId;
 
 @end

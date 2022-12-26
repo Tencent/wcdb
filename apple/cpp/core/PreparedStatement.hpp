@@ -43,6 +43,9 @@ protected:
     PreparedStatement(HandleStatement *handleStatement);
 
     HandleStatement *getInnerHandleStatement() override final;
+    using StatementOperation::prepare;
+    using StatementOperation::isPrepared;
+    using StatementOperation::finalize;
 
 private:
     HandleStatement *m_innerHandleStatement;

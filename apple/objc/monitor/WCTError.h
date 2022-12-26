@@ -43,6 +43,9 @@ typedef NS_ENUM(NSUInteger, WCTErrorLevel) {
 };
 
 typedef NS_ENUM(NSUInteger, WCTErrorCode) {
+    /**
+     * Error code for sqlite. You can check it at http://www.sqlite.org/rescode.html .
+     */
     WCTErrorCodeOK = 0,
     WCTErrorCodeError = 1,
     WCTErrorCodeInternal = 2,
@@ -77,6 +80,9 @@ typedef NS_ENUM(NSUInteger, WCTErrorCode) {
 };
 
 typedef NS_ENUM(NSUInteger, WCTErrorExtendedCode) {
+    /**
+     * Extended error code for sqlite. You can check it at http://www.sqlite.org/rescode.html .
+     */
     WCTErrorExtendedCodeErrorMissingCollseq = ((NSUInteger) WCTErrorCodeError | (1 << 8)),         // 257
     WCTErrorExtendedCodeErrorRetry = ((NSUInteger) WCTErrorCodeError | (2 << 8)),                  // 513
     WCTErrorExtendedCodeErrorSnapshot = ((NSUInteger) WCTErrorCodeError | (3 << 8)),               // 769
@@ -157,36 +163,62 @@ typedef NS_ENUM(NSUInteger, WCTErrorExtendedCode) {
 
 + (instancetype)errorWithDomain:(NSErrorDomain)domain code:(NSInteger)code userInfo:(nullable NSDictionary<NSErrorUserInfoKey, id> *)dict UNAVAILABLE_ATTRIBUTE;
 
+/**
+ * Level of error.
+ */
 @property (nonatomic, readonly) WCTErrorLevel level;
 
+/**
+ * Text message that helps you debug it.
+ */
 @property (nonatomic, readonly) NSString *message;
 
+/**
+ @brief Convenient interface for checking code==0.
+ @return YES for no error
+ */
 - (BOOL)isOK;
 
+/**
+ @brief Convenient interface for checking code==`WCTErrorCodeCorrupt` or code==`WCTErrorCodeNotADatabase`, which means database may be corrupted.
+ @return YES for no error
+ */
 - (BOOL)isCorruption;
 
 @end
 
 @interface WCTError (Path)
 
+/**
+ * The file path of database that is being manipulated when an error occurs.
+ */
 - (nullable NSString *)path;
 
 @end
 
 @interface WCTError (Tag)
 
+/**
+ * The tag of database that is being manipulated when an error occurs.
+ */
 - (WCTTag)tag;
 
 @end
 
 @interface WCTError (SQL)
 
+/**
+ * The SQL is being executed when an error occurs.
+ */
 - (nullable NSString *)sql;
 
 @end
 
 @interface WCTError (ExtendedCode)
 
+/**
+ * Extended error code for sqlite. You can check it at http://www.sqlite.org/rescode.html .
+ */
 - (WCTErrorExtendedCode)extendedCode;
 
 @end

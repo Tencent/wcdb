@@ -32,6 +32,11 @@ namespace WCDB {
 class HandleORMOperation : public HandleOperation {
 public:
 #pragma mark - Table
+    /**
+     @brief Get a wrapper from an existing table.
+     @param tableName The name of the table.
+     @return WCDB::Table.
+     */
     template<class ObjectType>
     Table<ObjectType> getTable(const UnsafeStringView &tableName)
     {
@@ -39,6 +44,12 @@ public:
         return Table<ObjectType>(getDatabaseHolder(), tableName);
     }
 
+    /**
+     @brief Create virtual table from ORM if not exists.
+     @see   http://www.sqlite.org/vtab.html
+     @param tableName The name of the virtual table to be created.
+     @return True if no error occurs.
+     */
     template<class ObjectType>
     bool createVirtualTable(const UnsafeStringView &tableName)
     {
@@ -48,6 +59,13 @@ public:
         return createVirtualTable(tableName, binding);
     }
 
+    /**
+     @brief Create table and indexes from ORM if not exists.
+     @note  It will run embedded transaction, and add newly defined columns automatically.
+            The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     @param tableName This would be the name of the table and the prefix of the index names.
+     @return True if no error occurs.
+     */
     template<class ObjectType>
     bool createTable(const UnsafeStringView &tableName)
     {
@@ -58,29 +76,49 @@ public:
     }
 
 #pragma mark - ChainCall
+    /**
+     @brief Generate a `WCDB::Insert` to do an insertion or replacement.
+     */
     template<class ObjectType>
     Insert<ObjectType> prepareInsert()
     {
         return Insert<ObjectType>(getDatabaseHolder());
     }
 
+    /**
+     @brief Generate a `WCDB::Delete` to do a deletion.
+     */
     Delete prepareDelete();
 
+    /**
+     @brief Generate a `WCDB::Update` to do an update.
+     */
     template<class ObjectType>
     Update<ObjectType> prepareUpdate()
     {
         return Update<ObjectType>(getDatabaseHolder());
     }
 
+    /**
+     @brief Generate a `WCDB::Select` to do an object selection.
+     */
     template<class ObjectType>
     Select<ObjectType> prepareSelect()
     {
         return Select<ObjectType>(getDatabaseHolder());
     }
 
+    /**
+     @brief Generate a `WCDB::MultiSelect` to do a cross table selection.
+     */
     MultiSelect prepareMultiSelect();
 
 #pragma mark - Insert
+    /**
+     @brief Execute inserting with multi objects on specific(or all) fields.
+     @note  It will run embedded transaction while objs.size>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     @return True if no error occurs.
+     */
     template<class ObjectType>
     bool insertObjects(const ValueArray<ObjectType> &objs,
                        const UnsafeStringView &table,
@@ -96,6 +134,12 @@ public:
         return insert.execute();
     }
 
+    /**
+     @brief Execute inserting with multi objects on specific(or all) fields.
+     It will replace the original row while they have same primary key or row id.
+     @note  It will run embedded transaction while objs.size>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     @return True if no error occurs.
+     */
     template<class ObjectType>
     bool insertOrReplaceObjects(const ValueArray<ObjectType> &objs,
                                 const UnsafeStringView &table,
@@ -113,6 +157,10 @@ public:
     }
 
 #pragma mark - Delete
+    /**
+     @brief Execute deleting.
+     @return True if no error occurs.
+     */
     bool deleteObjects(const UnsafeStringView &table,
                        const Expression &where = Expression(),
                        const OrderingTerms &orders = OrderingTerms(),
@@ -120,6 +168,10 @@ public:
                        const Expression &offset = Expression());
 
 #pragma mark - Update
+    /**
+     @brief Execute updating with object on specific(or all) fields.
+     @return True if no error occurs.
+     */
     template<class ObjectType>
     bool updateObject(const ObjectType &obj,
                       const Fields &fields,
@@ -135,6 +187,9 @@ public:
     }
 
 #pragma mark - Select
+    /**
+     @brief Get an object by specific selecting.
+     */
     template<class ObjectType>
     std::optional<ObjectType>
     getFirstObject(const UnsafeStringView &table,
@@ -147,6 +202,9 @@ public:
         return select.firstObject();
     }
 
+    /**
+     @brief Get an object on specific fields by specific selecting.
+     */
     template<class ObjectType>
     std::optional<ObjectType>
     getFirstObjectWithFields(const UnsafeStringView &table,
@@ -161,6 +219,9 @@ public:
         return select.firstObject();
     }
 
+    /**
+     @brief Get objects by specific selecting.
+     */
     template<class ObjectType>
     std::optional<ValueArray<ObjectType>>
     getAllObjects(const UnsafeStringView &table,
@@ -174,6 +235,9 @@ public:
         return select.allObjects();
     }
 
+    /**
+     @brief Get objects on specific fields by specific selecting.
+     */
     template<class ObjectType>
     std::optional<ValueArray<ObjectType>>
     getAllObjectsWithFields(const UnsafeStringView &table,
@@ -189,6 +253,9 @@ public:
         return select.allObjects();
     }
 
+    /**
+     @brief Get first row of objects by specific multi-selecting.
+     */
     std::optional<MultiObject>
     getFirstMultiObject(const ValueArray<StringView> tables,
                         const ResultFields &resultFields,
@@ -197,6 +264,9 @@ public:
                         const Expression &limit = Expression(),
                         const Expression &offset = Expression());
 
+    /**
+     @brief Get objects by specific multi-selecting.
+     */
     std::optional<ValueArray<MultiObject>>
     getAllMultiObjects(const ValueArray<StringView> tables,
                        const ResultFields &resultFields,
