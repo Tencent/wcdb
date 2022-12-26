@@ -34,24 +34,57 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WCTDatabase (Test)
 
+// Only for test
 + (void)simulateIOError:(WCTSimulateIOErrorOptions)options;
 
+// Only for test
 - (void)enableAutoCheckpoint:(BOOL)flag;
 
+/**
+ @brief Checkpoint the current database with truncate mode.
+ */
 - (BOOL)truncateCheckpoint;
 
+/**
+ @brief Checkpoint the current database with passive mode.
+ */
 - (BOOL)passiveCheckpoint;
 
+/**
+ @brief Check database is already opened.
+ @return isOpened
+ */
 - (BOOL)isOpened;
 
+/**
+ @brief Since WCDB is using lazy initialization, [initWithPath:] never return nil even the database can't open. So you can call this to check whether the database can be opened.
+ @return NO if an error occurs during sqlite db handle initialization.
+ */
 - (BOOL)canOpen;
 
+/**
+ @brief This interface is equivalent to -[WCTDatabase close:nil].
+ @see `-[WCTDatabase close:]`
+ */
 - (void)close;
 
+/**
+ @brief Check whether database is blockaded.
+ @see `-[WCTDatabase close:]`
+ @return isBlockaded
+ */
 - (BOOL)isBlockaded;
 
+/**
+ @brief Blockade the database.
+ @see `-[WCTDatabase close:]`
+ */
 - (void)blockade;
 
+/**
+ @brief Unblockade the database.
+ @see `-[WCTDatabase close:]`
+ */
 - (void)unblockade;
 
 @end

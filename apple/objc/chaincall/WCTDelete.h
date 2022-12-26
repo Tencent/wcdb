@@ -31,8 +31,17 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface WCTDelete : WCTChainCall
 
+/**
+ @brief The statement that `WCTDelete` will execute.
+ You can cunstomize this statement directly to implement the capabilities not provided by the following methods.
+ */
 - (WCDB::StatementDelete &)statement;
 
+/**
+ @brief WINQ interface for SQL.
+ @param tableName The name of the table to delete data from.
+ @return self
+ */
 - (instancetype)fromTable:(NSString *)tableName;
 
 /**

@@ -30,4 +30,4 @@
 #import <WCDB/NSString+WCTColumnCoding.h>
 
 #import <WCDB/WCTMaster+WCTTableCoding.h>
-#import <WCDB/WCTMaster.h>
+#import <WCDB/WCTSequence+WCTTableCoding.h>

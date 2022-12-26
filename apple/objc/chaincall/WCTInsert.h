@@ -27,20 +27,57 @@
 NS_ASSUME_NONNULL_BEGIN
 
 // TODO: implement insertOrUpdate through upsert feature
+/**
+ Not Thread-safe
+ */
 @interface WCTInsert<ObjectType> : WCTChainCall
 
+/**
+ @brief The statement that `WCTInsert` will execute.
+ You can cunstomize this statement directly to implement the capabilities not provided by the following methods.
+ */
 - (WCDB::StatementInsert &)statement;
 
+/**
+ @brief WINQ interface for SQL.
+ @return self
+ */
 - (instancetype)orReplace;
 
+/**
+ @brief WINQ interface for SQL.
+ @param tableName The name of the table to insert objects to.
+ @return self
+ */
 - (instancetype)intoTable:(NSString *)tableName;
 
+/**
+ @brief WINQ interface for SQL.
+ @param properties Do a partial insertion with the specific properties.
+ @return self
+ */
 - (instancetype)onProperties:(const WCTProperties &)properties;
 
+/**
+ @brief Inset an array of objects.
+ @param objects Objects to be inserted into table.
+ @return self.
+ */
 - (instancetype)values:(NSArray<ObjectType> *)objects;
 
+/**
+ @brief Inset one object.
+ @param object Object to be inserted into table.
+ @return self.
+ */
 - (instancetype)value:(ObjectType)object;
 
+/**
+ @brief Execute the insert statement.
+        Note that it will run embedded transaction while objects.count>1 .
+        The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+ @return YES if no error occurs.
+ */
 - (BOOL)execute;
 
 @end

@@ -27,22 +27,105 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef BOOL (^WCTTransactionBlock)(WCTHandle *);
-typedef BOOL (^WCTTransactionBlockForOneLoop)(WCTHandle *handle, BOOL *stop, BOOL isNewTransaction);
+/**
+ Triggered when a new transaction is begun successfully.
+ */
+typedef BOOL (^WCTTransactionBlock)(WCTHandle* /*handle*/);
+
+/**
+ Triggered when a new transaction is begun successfully or the main thread isn't suspended due to the current transaction.
+ */
+typedef BOOL (^WCTTransactionBlockForOneLoop)(WCTHandle* /*handle*/, BOOL* /*stop*/, BOOL /*isNewTransaction*/);
 
 @protocol WCTTransactionProtocol
 @required
+/**
+ @brief Check whether the current database has begun a transaction in the current thread with `sqlite3_get_autocommit`.
+ @return YES if current database has begun a transaction in the current thread.
+ */
 - (BOOL)isInTransaction;
 
+/**
+ @brief Separate interface of `-[WCTTransactionProtocol runTransaction:]`.
+ @warning You should call `beginTransaction`, `commitOrRollbackTransaction`, `rollbackTransaction` and all other operations in same thread.
+ @return YES only if no error occurs.
+ */
 - (BOOL)beginTransaction;
+
+/**
+ @brief Separate interface of `-[WCTTransactionProtocol runTransaction:]`.
+ It will commit current transaction if no error occurs during the transaction, otherwise it will rollback current transaction.
+ @warning You should call `beginTransaction`, `commitOrRollbackTransaction`, `rollbackTransaction` and all other operations in same thread.
+ @return YES only if current transaction is committed successfully.
+ */
 - (BOOL)commitOrRollbackTransaction;
+
+/**
+ @brief Separate interface of `-[WCTTransactionProtocol runTransaction:]`.
+ @warning You should call `beginTransaction`, `commitOrRollbackTransaction`, `rollbackTransaction` and all other operations in same thread.
+ */
 - (void)rollbackTransaction;
+
+/**
+ @brief Run a transaction in block.
+ @param inTransaction Operation inside transaction.
+ @return YES only if current transaction is committed successfully.
+ */
 - (BOOL)runTransaction:(WCDB_NO_ESCAPE WCTTransactionBlock)inTransaction;
+
+/**
+ @brief Run a pauseable transaction in block.
+ Firstly, WCDB will begin a transaction and call the block. After the block is finished, WCDB will check whether the main thread is suspended due to the current transaction. If not, it will call the block again; if it is, it will temporarily commit the current transaction. Once database operations in main thread are finished, WCDB will rebegin a new transaction in the current thread and call the block. This process will be repeated until the second parameter of the block is specified as YES, or some error occurs during the transaction.
+ You can use pauseable transaction to do some long term database operations, such as data cleaning or data migration, and avoid to block the main thread.
+ 
+     BOOL allCommited = [database runPauseableTransactionWithOneLoop:^BOOL(WCTHandle *handle, BOOL *stop, BOOL isNewTraction) {
+         if(isNewTraction) {
+             // Do some initialization for new transaction.
+         }
+     
+         // Perform a small amount of data processing.
+     
+         if( Error occurs ) {
+             return NO;
+         }
+         if( All database operations are finished ) {
+             *stop = YES;
+         }
+         return YES;
+     }];
+ 
+ @param inTransaction Operation inside transaction for one loop.
+ @see   `WCTTransactionBlockForOneLoop`
+ @return YES only if all transactions are committed.
+ */
 - (BOOL)runPauseableTransactionWithOneLoop:(WCDB_NO_ESCAPE WCTTransactionBlockForOneLoop)inTransaction;
 
+/**
+ @brief Separate interface of `-[WCTTransactionProtocol runNestedTransaction:]`.
+ @warning You should call `beginNestedTransaction`, `commitOrRollbackNestedTransaction`, `rollbackNestedTransaction` and all other operations in same thread.
+ @return YES only if no error occurs.
+ */
 - (BOOL)beginNestedTransaction;
+
+/**
+ @brief Separate interface of `-[WCTTransactionProtocol runNestedTransaction:]`.
+ It will commit current nest transaction if no error occurs during the nest transaction, otherwise it will rollback current nest transaction.
+ @warning You should call `beginNestedTransaction`, `commitOrRollbackNestedTransaction`, `rollbackNestedTransaction` and all other operations in same thread.
+ @return YES only if current nest transaction is committed successfully.
+ */
 - (BOOL)commitOrRollbackNestedTransaction;
+
+/**
+ @brief Separate interface of `-[WCTTransactionProtocol runNestedTransaction:]`.
+ @warning You should call `beginNestedTransaction`, `commitOrRollbackNestedTransaction`, `rollbackNestedTransaction` and all other operations in same thread.
+ */
 - (void)rollbackNestedTransaction;
+
+/**
+ @brief Run a transaction in block.
+ @param inTransaction Operation inside transaction.
+ @return YES only if current nest transaction is committed successfully.
+ */
 - (BOOL)runNestedTransaction:(WCDB_NO_ESCAPE WCTTransactionBlock)inTransaction;
 @end
 

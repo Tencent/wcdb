@@ -38,11 +38,27 @@ private:
 };
 
 @interface WCTDatabase (Handle)
-
+/**
+ @brief Create a `WCTHandle` for current database.
+ WCTHandle is a wrapper for sqlite db handle of type `sqlite3*`, and the sqlite db handle is lazy initialized and will not be actually generated until the first operation on current handle takes place.
+ `WCDB_GET_SCOPED_HANDLE` is a better way to create a WCTHandle, so that the handle will be invalidated automatically when the current scope is finished.
+ @note  All WCTHandles created by the current database in the current thread will share the same sqlite db handle internally, so it can avoid the deadlock between different sqlite db handles in some extreme cases.
+ @return A WCTHandle object.
+ */
 - (WCTHandle *)getHandle;
 
+/**
+ @brief Execute a statement directly.
+ @return YES if no error occurs.
+ */
 - (BOOL)execute:(const WCDB::Statement &)statement;
-//rawExecute should no be used to access or modify the data in a migrating table.
+
+/**
+ @brief Execute a sql string directly.
+ @warning You should no use this method to access or modify the data in a migrating table..
+ @see   `-[WCTDatabase filterMigration:]`
+ @return YES if no error occurs.
+ */
 - (BOOL)rawExecute:(NSString *)sql;
 
 @end

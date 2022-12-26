@@ -38,16 +38,45 @@ class Delete final : public ChainCall<StatementDelete> {
 public:
     ~Delete() override final;
 
+    /**
+     @brief WINQ interface for SQL.
+     @param tableName The name of the table to delete data from.
+     @return this
+     */
     Delete &fromTable(const UnsafeStringView &tableName);
 
+    /**
+     @brief WINQ interface for SQL.
+     @param condition condition
+     @return this
+     */
     Delete &where(const Expression &condition);
 
+    /**
+     @brief WINQ interface for SQL.
+     @param orders order list
+     @return this
+     */
     Delete &orders(const OrderingTerms &orders);
 
+    /**
+     @brief WINQ interface for SQL.
+     @param limit limit
+     @return this
+     */
     Delete &limit(const Expression &limit);
 
+    /**
+     @brief WINQ interface for SQL.
+     @param offset offset
+     @return this
+     */
     Delete &offset(const Expression &offset);
 
+    /**
+     @brief Execute the delete SQL.
+     @return True if no error occurs.
+     */
     bool execute();
 
 protected:

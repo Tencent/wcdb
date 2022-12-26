@@ -42,6 +42,24 @@ namespace WCDB {
 
 StatementOperation::~StatementOperation() = default;
 
+bool StatementOperation::prepare(const Statement& statement)
+{
+    GetHandleStatementOrReturnValue(false);
+    return handleStatement->prepare(statement);
+}
+
+bool StatementOperation::isPrepared()
+{
+    GetHandleStatementOrReturnValue(false);
+    return handleStatement->isPrepared();
+}
+
+void StatementOperation::finalize()
+{
+    GetHandleStatementOrReturn;
+    handleStatement->finalize();
+}
+
 bool StatementOperation::step()
 {
     GetHandleStatementOrReturnValue(false);
@@ -96,15 +114,6 @@ void StatementOperation::bindNull(int index)
     handleStatement->bindNull(index);
 }
 
-void StatementOperation::bindPointer(void *ptr,
-                                     int index,
-                                     const Text &type,
-                                     void (*destructor)(void *))
-{
-    GetHandleStatementOrReturn;
-    handleStatement->bindPointer(ptr, index, type, destructor);
-}
-
 void StatementOperation::bindValue(const Value &value, int index)
 {
     GetHandleStatementOrReturn;
@@ -121,12 +130,6 @@ int StatementOperation::bindParameterIndex(const Text &parameterName)
 {
     GetHandleStatementOrReturnValue(0);
     return handleStatement->bindParameterIndex(parameterName);
-}
-
-signed long long StatementOperation::getColumnSize(int index)
-{
-    GetHandleStatementOrReturnValue(0);
-    return handleStatement->getColumnSize(index);
 }
 
 ColumnType StatementOperation::getType(int index)

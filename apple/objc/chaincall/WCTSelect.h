@@ -30,10 +30,25 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface WCTSelect<ObjectType> : WCTSelectable
 
+/**
+ @brief WINQ interface for SQL.
+ @param tableName The name of the table to query data from.
+ @return self
+ */
 - (instancetype)fromTable:(NSString *)tableName;
 
+/**
+ @brief WINQ interface for SQL.
+ @param resultColumns The column results to be selected.
+ @return self
+ */
 - (instancetype)onResultColumns:(const WCTResultColumns &)resultColumns;
 
+/**
+ @brief WINQ interface for SQL.
+ @param cls The class of the object to be selected.
+ @return self
+ */
 - (instancetype)ofClass:(Class)cls;
 
 /**

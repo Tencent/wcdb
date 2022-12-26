@@ -1,5 +1,5 @@
 //
-// Created by qiuwenchen on 2022/10/27.
+// Created by 陈秋文 on 2022/12/20.
 //
 
 /*
@@ -22,27 +22,16 @@
  * limitations under the License.
  */
 
-#pragma once
-
-#include <WCDB/CPPORM.h>
-#include <WCDB/CPPORMMacro.h>
-
-namespace WCDB {
+#import <Foundation/Foundation.h>
 
 /**
- Builtin ORM for `sqlite_master` table. For further information, see https://www.sqlite.org/schematab.html .
+ Builtin ORM for `sqlite_sequence` table. For further information, see https://sqlite.org/autoinc.html .
  */
-class Master {
-public:
-    static const StringView& tableName;
+@interface WCTSequence : NSObject
 
-    StringView type;
-    StringView name;
-    StringView tblName;
-    int rootpage;
-    StringView sql;
++ (NSString *)tableName;
 
-    WCDB_CPP_ORM_DECLARATION(Master);
-};
+@property (nonatomic, retain) NSString *name;
+@property (nonatomic, assign) int seq;
 
-} //namespace WCDB
+@end

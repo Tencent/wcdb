@@ -37,14 +37,65 @@ class MultiSelect : public ChainCall<StatementSelect> {
 public:
     ~MultiSelect();
 
-    MultiSelect &onResultFields(const ResultFields &resultFields);
-    MultiSelect &fromTables(ValueArray<StringView> tableNames);
+    /**
+     @brief WINQ interface for SQL.
+     @param condition condition
+     @return this
+     */
     MultiSelect &where(const Expression &condition);
+
+    /**
+     @brief WINQ interface for SQL.
+     @param orders order list
+     @return this
+     */
     MultiSelect &orders(const OrderingTerms &orders);
+
+    /**
+     @brief WINQ interface for SQL.
+     @param limit limit
+     @return this
+     */
     MultiSelect &limit(const Expression &limit);
+
+    /**
+     @brief WINQ interface for SQL.
+     @param offset offset
+     @return this
+     */
     MultiSelect &offset(const Expression &offset);
 
+    /**
+     @brief WINQ interface for SQL.
+     @param resultFields The column results to be selected.
+     @return this
+     */
+    MultiSelect &onResultFields(const ResultFields &resultFields);
+
+    /**
+     @brief WINQ interface for SQL.
+     @param tableNames The names of the tables to query data from.
+     @return this
+     */
+    MultiSelect &fromTables(ValueArray<StringView> tableNames);
+
+    /**
+     @brief Get first selected objects.
+     
+         std::optional<WCDB::MultiObject> multiObject = multiSelect.firstMultiObject();
+         if(multiObject.has_value()) {
+             TestClass1 object1 = multiObject.value().objectAtTable<TestClass1>("table1");
+             TestClass2 object2 = multiObject.value().objectAtTable<TestClass2>("table2");
+         }
+
+     @return See the example above
+     */
     std::optional<MultiObject> firstMultiObject();
+
+    /**
+     @brief Get all selected objects.
+     @return Array with all selected objects.
+     */
     std::optional<ValueArray<MultiObject>> allMultiObjects();
 
 protected:

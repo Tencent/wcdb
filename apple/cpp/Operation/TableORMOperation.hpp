@@ -36,27 +36,44 @@ template<class ObjectType>
 class TableORMOperation : public TableOperation {
 public:
 #pragma mark - ChainCall
+    /**
+     @brief Generate a `WCDB::Insert` to do an insertion or replacement.
+     */
     Insert<ObjectType> prepareInsert()
     {
         return Insert<ObjectType>(getDatabaseHolder()).intoTable(getTableName());
     }
 
+    /**
+     @brief Generate a `WCDB::Delete` to do a deletion.
+     */
     Delete prepareDelete()
     {
         return Delete(getDatabaseHolder()).fromTable(getTableName());
     }
 
+    /**
+     @brief Generate a `WCDB::Update` to do an update.
+     */
     Update<ObjectType> prepareUpdate()
     {
         return Update<ObjectType>(getDatabaseHolder()).table(getTableName());
     }
 
+    /**
+     @brief Generate a `WCDB::Select` to do an object selection.
+     */
     Select<ObjectType> prepareSelect()
     {
         return Select<ObjectType>(getDatabaseHolder()).fromTable(getTableName());
     }
 
 #pragma mark - Insert
+    /**
+     @brief Execute inserting with multi objects on specific(or all) fields.
+     @note  It will run embedded transaction while objs.size>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     @return True if no error occurs.
+     */
     bool insertObjects(const ValueArray<ObjectType> &objs, const Fields &fields = Fields())
     {
         if (objs.size() == 0) {
@@ -69,6 +86,12 @@ public:
         return insert.execute();
     }
 
+    /**
+     @brief Execute inserting with multi objects on specific(or all) fields.
+     It will replace the original row while they have same primary key or row id.
+     @note  It will run embedded transaction while objs.size>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     @return True if no error occurs.
+     */
     bool insertOrReplaceObjects(const ValueArray<ObjectType> &objs,
                                 const Fields &fields = Fields())
     {
@@ -83,6 +106,10 @@ public:
     }
 
 #pragma mark - Delete
+    /**
+     @brief Execute deleting.
+     @return True if no error occurs.
+     */
     bool deleteObjects(const Expression &where = Expression(),
                        const OrderingTerms &orders = OrderingTerms(),
                        const Expression &limit = Expression())
@@ -93,6 +120,10 @@ public:
     }
 
 #pragma mark - Update
+    /**
+     @brief Execute updating with object on specific(or all) fields.
+     @return True if no error occurs.
+     */
     bool updateObject(const ObjectType &obj,
                       const Fields &fields,
                       const Expression &where = Expression(),
@@ -106,6 +137,9 @@ public:
     }
 
 #pragma mark - Select
+    /**
+     @brief Get an object by specific selecting.
+     */
     std::optional<ObjectType>
     getFirstObject(const Expression &where = Expression(),
                    const OrderingTerms &orders = OrderingTerms(),
@@ -116,6 +150,9 @@ public:
         return select.firstObject();
     }
 
+    /**
+     @brief Get an object on specific fields by specific selecting.
+     */
     std::optional<ObjectType>
     getFirstObjectWithFields(const ResultFields &resultFields,
                              const Expression &where = Expression(),
@@ -127,6 +164,9 @@ public:
         return select.firstObject();
     }
 
+    /**
+     @brief Get objects by specific selecting.
+     */
     std::optional<ValueArray<ObjectType>>
     getAllObjects(const Expression &where = Expression(),
                   const OrderingTerms &orders = OrderingTerms(),
@@ -138,6 +178,9 @@ public:
         return select.allObjects();
     }
 
+    /**
+     @brief Get objects on specific fields by specific selecting.
+     */
     std::optional<ValueArray<ObjectType>>
     getAllObjectsWithFields(const ResultFields &resultFields,
                             const Expression &where = Expression(),

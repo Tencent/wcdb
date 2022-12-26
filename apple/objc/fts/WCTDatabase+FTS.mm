@@ -48,9 +48,9 @@ NSString* const WCTAuxiliaryFunction_SubstringMatchInfo = [NSString stringWithUT
 
 @implementation WCTDatabase (FTS)
 
-- (void)enableAutoMergeFTS5Index:(BOOL)enable
+- (void)enableAutoMergeFTS5Index:(BOOL)flag
 {
-    WCDB::Core::shared().enableAutoMergeFTSIndex(_database, enable);
+    WCDB::Core::shared().enableAutoMergeFTSIndex(_database, flag);
 }
 
 - (void)addTokenizer:(NSString*)tokenizerName

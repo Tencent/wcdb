@@ -179,8 +179,10 @@ const char* WCDBTokenizerLegacyOneOrBinary = WCDB::BuiltinTokenizer::LegacyOneOr
 const char* WCDBTokenizerVerbatim = WCDB::BuiltinTokenizer::Verbatim;
 const char* WCDBTokenizerPinyin = WCDB::BuiltinTokenizer::Pinyin;
 const char* WCDBTokenizerParameter_NeedSymbol = WCDB::BuiltinTokenizer::Parameter::NeedSymbol;
-const char* WCDBTokenizerParameter_SimplifyChinese = WCDB::BuiltinTokenizer::Parameter::SimplifyChinese;
-const char* WCDBTokenizerParameter_SkipStemming = WCDB::BuiltinTokenizer::Parameter::SkipStemming;
+const char* WCDBTokenizerParameter_SimplifyChinese
+= WCDB::BuiltinTokenizer::Parameter::SimplifyChinese;
+const char* WCDBTokenizerParameter_SkipStemming
+= WCDB::BuiltinTokenizer::Parameter::SkipStemming;
 
 void WCDBDatabaseAddTokenizer(CPPDatabase database, const char* _Nullable tokenizer)
 {
@@ -195,7 +197,8 @@ void WCDBDatabaseAddTokenizer(CPPDatabase database, const char* _Nullable tokeni
                            WCDB::Configs::Priority::Higher);
 }
 
-const char* WCDBAuxiliaryFunction_SubstringMatchInfo = WCDB::BuiltinAuxiliaryFunction::SubstringMatchInfo;
+const char* WCDBAuxiliaryFunction_SubstringMatchInfo
+= WCDB::BuiltinAuxiliaryFunction::SubstringMatchInfo;
 
 void WCDBDatabaseAddAuxiliaryFunction(CPPDatabase database, const char* _Nullable auxFunction)
 {

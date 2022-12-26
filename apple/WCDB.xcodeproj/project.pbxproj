@@ -679,7 +679,6 @@
 		03E1662127F42D6500D2C926 /* Statement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165B727F42D6500D2C926 /* Statement.swift */; };
 		03E1662427F42D6500D2C926 /* StatementPragma.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165BA27F42D6500D2C926 /* StatementPragma.swift */; };
 		03E1662527F42D6500D2C926 /* Handle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165BB27F42D6500D2C926 /* Handle.swift */; };
-		03E1662627F42D6500D2C926 /* CommonStatement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165BD27F42D6500D2C926 /* CommonStatement.swift */; };
 		03E1662727F42D6500D2C926 /* CodableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165BE27F42D6500D2C926 /* CodableType.swift */; };
 		03E1662827F42D6500D2C926 /* Master.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165BF27F42D6500D2C926 /* Master.swift */; };
 		03E1662927F42D6600D2C926 /* Declare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165C227F42D6500D2C926 /* Declare.swift */; };
@@ -2303,7 +2302,6 @@
 		7521DAA8291EA349009642EF /* FTS3Function.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB73217DFADC006E9E73 /* FTS3Function.cpp */; };
 		7521DAA9291EA349009642EF /* RecyclableHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6241EA0D6680021EFA7 /* RecyclableHandle.cpp */; };
 		7521DAAA291EA349009642EF /* ErrorBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C2EAEC27F8382200B41169 /* ErrorBridge.swift */; };
-		7521DAAB291EA349009642EF /* CommonStatement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165BD27F42D6500D2C926 /* CommonStatement.swift */; };
 		7521DAAC291EA349009642EF /* StatementExplain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1659227F42D6500D2C926 /* StatementExplain.swift */; };
 		7521DAAD291EA349009642EF /* ResultColumn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBA4217DFADC006E9E73 /* ResultColumn.cpp */; };
 		7521DAAE291EA349009642EF /* StatementRollbackBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F4DE452884032600760DC3 /* StatementRollbackBridge.cpp */; };
@@ -3078,6 +3076,12 @@
 		75D4834228A79AD3004FDD3C /* CPPTraceTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75D4834128A79AD3004FDD3C /* CPPTraceTest.mm */; };
 		75D4834528A7A827004FDD3C /* CPPTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75D4834428A7A827004FDD3C /* CPPTableTestCase.mm */; };
 		75D4834928A7C42F004FDD3C /* Random+CPPTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75D4834828A7C42F004FDD3C /* Random+CPPTestObject.mm */; };
+		75D566FB2951B7DE00098DD9 /* WCTSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 75D566FA2951B7DE00098DD9 /* WCTSequence.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75D566FC2951B7DE00098DD9 /* WCTSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 75D566FA2951B7DE00098DD9 /* WCTSequence.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75D566FE2951B7EA00098DD9 /* WCTSequence.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75D566FD2951B7EA00098DD9 /* WCTSequence.mm */; };
+		75D566FF2951B7EA00098DD9 /* WCTSequence.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75D566FD2951B7EA00098DD9 /* WCTSequence.mm */; };
+		75D567012951B90E00098DD9 /* WCTSequence+WCTTableCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 75D567002951B80B00098DD9 /* WCTSequence+WCTTableCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75D567022951B90F00098DD9 /* WCTSequence+WCTTableCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 75D567002951B80B00098DD9 /* WCTSequence+WCTTableCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75D99B8028CA441E00BEC8B5 /* BaseOperation.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75D99B7F28CA441E00BEC8B5 /* BaseOperation.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		75D99B8128CA441E00BEC8B5 /* BaseOperation.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75D99B7F28CA441E00BEC8B5 /* BaseOperation.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		75D99B8328CA46A400BEC8B5 /* BaseOperation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75D99B8228CA46A400BEC8B5 /* BaseOperation.cpp */; };
@@ -3439,7 +3443,6 @@
 		03E165B727F42D6500D2C926 /* Statement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Statement.swift; sourceTree = "<group>"; };
 		03E165BA27F42D6500D2C926 /* StatementPragma.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatementPragma.swift; sourceTree = "<group>"; };
 		03E165BB27F42D6500D2C926 /* Handle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Handle.swift; sourceTree = "<group>"; };
-		03E165BD27F42D6500D2C926 /* CommonStatement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonStatement.swift; sourceTree = "<group>"; };
 		03E165BE27F42D6500D2C926 /* CodableType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodableType.swift; sourceTree = "<group>"; };
 		03E165BF27F42D6500D2C926 /* Master.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Master.swift; sourceTree = "<group>"; };
 		03E165C227F42D6500D2C926 /* Declare.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Declare.swift; sourceTree = "<group>"; };
@@ -4626,6 +4629,9 @@
 		75D4834628A7A83C004FDD3C /* CPPTableTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPPTableTestCase.h; sourceTree = "<group>"; };
 		75D4834728A7C422004FDD3C /* Random+CPPTestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Random+CPPTestObject.h"; sourceTree = "<group>"; };
 		75D4834828A7C42F004FDD3C /* Random+CPPTestObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "Random+CPPTestObject.mm"; sourceTree = "<group>"; };
+		75D566FA2951B7DE00098DD9 /* WCTSequence.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTSequence.h; sourceTree = "<group>"; };
+		75D566FD2951B7EA00098DD9 /* WCTSequence.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTSequence.mm; sourceTree = "<group>"; };
+		75D567002951B80B00098DD9 /* WCTSequence+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTSequence+WCTTableCoding.h"; sourceTree = "<group>"; };
 		75D99B7F28CA441E00BEC8B5 /* BaseOperation.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BaseOperation.hpp; sourceTree = "<group>"; };
 		75D99B8228CA46A400BEC8B5 /* BaseOperation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BaseOperation.cpp; sourceTree = "<group>"; };
 		75E50A0929067BC800B73E62 /* MultiObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MultiObject.cpp; sourceTree = "<group>"; };
@@ -5271,7 +5277,6 @@
 		03E165BC27F42D6500D2C926 /* builtin */ = {
 			isa = PBXGroup;
 			children = (
-				03E165BD27F42D6500D2C926 /* CommonStatement.swift */,
 				03E165BE27F42D6500D2C926 /* CodableType.swift */,
 				03E165BF27F42D6500D2C926 /* Master.swift */,
 			);
@@ -6433,6 +6438,9 @@
 				2370B11421914ED500D3227C /* WCTMaster.mm */,
 				2370B11121914ED400D3227C /* WCTMaster+WCTTableCoding.h */,
 				233A25D2219933D800054EC4 /* WCTBuiltin.h */,
+				75D566FA2951B7DE00098DD9 /* WCTSequence.h */,
+				75D566FD2951B7EA00098DD9 /* WCTSequence.mm */,
+				75D567002951B80B00098DD9 /* WCTSequence+WCTTableCoding.h */,
 			);
 			path = builtin;
 			sourceTree = "<group>";
@@ -7873,6 +7881,7 @@
 				39A3341922B0DD9F008EA5D5 /* WCTFoundation.h in Headers */,
 				23EEDCF0217DFADC006E9E73 /* SyntaxColumn.hpp in Headers */,
 				2349F6FF1EA0D6680021EFA7 /* InnerDatabase.hpp in Headers */,
+				75D567012951B90E00098DD9 /* WCTSequence+WCTTableCoding.h in Headers */,
 				3969018C233B1B2F006EEFD4 /* WCTTag.h in Headers */,
 				039D724B28BF773D00990803 /* Delete.hpp in Headers */,
 				0D249BC12542B8E900B43BD9 /* MergeFTSIndexLogic.hpp in Headers */,
@@ -8107,6 +8116,7 @@
 				23EEDC67217DFADC006E9E73 /* AggregateFunction.hpp in Headers */,
 				2386B3C51ED442FE000B72F6 /* WCTError.h in Headers */,
 				2349F72E1EA0D6680021EFA7 /* WCTSelectable+Private.h in Headers */,
+				75D566FB2951B7DE00098DD9 /* WCTSequence.h in Headers */,
 				23DD76BF20CF78C800E9B451 /* FactoryRenewer.hpp in Headers */,
 				23EEDCB8217DFADC006E9E73 /* StatementAnalyze.hpp in Headers */,
 				23D0C38F20C17CAE0001BFAE /* FactoryBackup.hpp in Headers */,
@@ -8173,6 +8183,7 @@
 				7521D8CB291E9ABB009642EF /* FactoryRelated.hpp in Headers */,
 				7521D8CC291E9ABB009642EF /* SyntaxSelectSTMT.hpp in Headers */,
 				7521D8CD291E9ABB009642EF /* WCTPreparedStatement+Private.h in Headers */,
+				75D566FC2951B7DE00098DD9 /* WCTSequence.h in Headers */,
 				7521D8CE291E9ABB009642EF /* PerformanceTraceConfig.hpp in Headers */,
 				7521D8CF291E9ABB009642EF /* ColumnMeta.hpp in Headers */,
 				7521D8D0291E9ABB009642EF /* WCTHandle+Table.h in Headers */,
@@ -8300,6 +8311,7 @@
 				7521D95B291E9ABB009642EF /* SyntaxCommonTableExpression.hpp in Headers */,
 				7521D95C291E9ABB009642EF /* UpgradeableErrorProne.hpp in Headers */,
 				7521D95D291E9ABB009642EF /* WCTDelete.h in Headers */,
+				75D567022951B90F00098DD9 /* WCTSequence+WCTTableCoding.h in Headers */,
 				7521D95E291E9ABB009642EF /* PagerRelated.hpp in Headers */,
 				7521D95F291E9ABB009642EF /* WCTColumnBinding.h in Headers */,
 				7521D961291E9ABB009642EF /* Tag.hpp in Headers */,
@@ -9904,6 +9916,7 @@
 				75EB1A0A287F0BDA00AA62F7 /* StatementCreateViewBridge.cpp in Sources */,
 				03E1663727F42D6600D2C926 /* TableCodable.swift in Sources */,
 				23775B6620AD666900E21AB0 /* Notifier.cpp in Sources */,
+				75D566FE2951B7EA00098DD9 /* WCTSequence.mm in Sources */,
 				03E165FD27F42D6500D2C926 /* StatementInsert.swift in Sources */,
 				23EEDD47217DFADC006E9E73 /* SyntaxDropViewSTMT.cpp in Sources */,
 				03E1662427F42D6500D2C926 /* StatementPragma.swift in Sources */,
@@ -9953,7 +9966,6 @@
 				23EEDC71217DFADC006E9E73 /* FTS3Function.cpp in Sources */,
 				2349F7071EA0D6680021EFA7 /* RecyclableHandle.cpp in Sources */,
 				03C2EAED27F8382200B41169 /* ErrorBridge.swift in Sources */,
-				03E1662627F42D6500D2C926 /* CommonStatement.swift in Sources */,
 				03E165FC27F42D6500D2C926 /* StatementExplain.swift in Sources */,
 				23EEDCA1217DFADC006E9E73 /* ResultColumn.cpp in Sources */,
 				75F4DE472884032600760DC3 /* StatementRollbackBridge.cpp in Sources */,
@@ -10532,6 +10544,7 @@
 				7521D7AE291E9ABB009642EF /* SyntaxFilter.cpp in Sources */,
 				7521D7AF291E9ABB009642EF /* StatementDelete.cpp in Sources */,
 				7521D7B0291E9ABB009642EF /* ErrorProne.cpp in Sources */,
+				75D566FF2951B7EA00098DD9 /* WCTSequence.mm in Sources */,
 				7521D7B1291E9ABB009642EF /* WCTMultiSelect.mm in Sources */,
 				7521D7B2291E9ABB009642EF /* SyntaxInsertSTMT.cpp in Sources */,
 				7521D7B5291E9ABB009642EF /* Shm.cpp in Sources */,
@@ -10748,7 +10761,6 @@
 				7521DAA8291EA349009642EF /* FTS3Function.cpp in Sources */,
 				7521DAA9291EA349009642EF /* RecyclableHandle.cpp in Sources */,
 				7521DAAA291EA349009642EF /* ErrorBridge.swift in Sources */,
-				7521DAAB291EA349009642EF /* CommonStatement.swift in Sources */,
 				7521DAAC291EA349009642EF /* StatementExplain.swift in Sources */,
 				7521DAAD291EA349009642EF /* ResultColumn.cpp in Sources */,
 				7521DAAE291EA349009642EF /* StatementRollbackBridge.cpp in Sources */,
