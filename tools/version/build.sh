@@ -83,8 +83,8 @@ derivedData="$destination"/derivedData
 products="$derivedData"/Build/Products
 
 if $static_framework; then
-    if [ "$language" != "ObjC" -a "$language" != "Cpp" ] || [ "$platform" != "iOS" -a "$platform" != "watchOS" ]; then
-        echo 'Static library is only support iOS/watchOS + ObjC.'
+    if [ "$language" != "ObjC" -a "$language" != "Cpp" ] || [ "$platform" != "iOS" -a "$platform" != "watchOS" -a "$platform" != "macOS" ]; then
+        echo 'Static library is only support iOS/macOS/watchOS + ObjC.'
         exit 1
     fi
 fi
