@@ -61,7 +61,7 @@ macos:
     system: custom
     # build static lib
     script: |-
-      ../tools/version/build.sh -p macOS -l ObjC -c Release -d wconan_build/macos/release/static --wechat --disable-bitcode --static-framework
+      ../tools/version/build.sh -p macOS -l Cpp -c Release -d wconan_build/macos/release/static --wechat --disable-bitcode --static-framework
 
   dependencies:
 

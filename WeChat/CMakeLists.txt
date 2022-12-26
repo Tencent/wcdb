@@ -200,12 +200,12 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
         ${WCDB_SRC_DIR}/cpp/*Handle.hpp
         ${WCDB_SRC_DIR}/cpp/*HandleOperation.hpp
         ${WCDB_SRC_DIR}/cpp/*HandleORMOperation.hpp
-        ${WCDB_SRC_DIR}/cpp/*HandleStatement.hpp
         ${WCDB_SRC_DIR}/cpp/*Insert.hpp
         ${WCDB_SRC_DIR}/cpp/*Master.hpp
         ${WCDB_SRC_DIR}/cpp/*MemberPointer.hpp
         ${WCDB_SRC_DIR}/cpp/*MultiObject.hpp
         ${WCDB_SRC_DIR}/cpp/*MultiSelect.hpp
+        ${WCDB_SRC_DIR}/cpp/*PreparedStatement.hpp
         ${WCDB_SRC_DIR}/cpp/*ResultField.hpp
         ${WCDB_SRC_DIR}/cpp/*RunTimeAccessor.hpp
         ${WCDB_SRC_DIR}/cpp/*Select.hpp
