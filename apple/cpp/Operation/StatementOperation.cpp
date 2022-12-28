@@ -42,7 +42,7 @@ namespace WCDB {
 
 StatementOperation::~StatementOperation() = default;
 
-bool StatementOperation::prepare(const Statement& statement)
+bool StatementOperation::prepare(const Statement &statement)
 {
     GetHandleStatementOrReturnValue(false);
     return handleStatement->prepare(statement);
