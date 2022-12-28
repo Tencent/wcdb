@@ -87,7 +87,9 @@
     WCTAssert([(id) tableClass respondsToSelector:@selector(objectRelationalMapping)] && [(id) tableClass respondsToSelector:@selector(allProperties)]);
     const WCTBinding &binding = [tableClass objectRelationalMapping];
     WCDB::InnerHandle *innerHandle = [self getOrGenerateHandle];
-    WCTAssert(innerHandle != nullptr);
+    if (innerHandle == nullptr) {
+        return NO;
+    }
     return binding.createTable(tableName, innerHandle);
 }
 

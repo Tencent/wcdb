@@ -52,7 +52,7 @@ public:
      @warning You should finalize the previously prepared statement before use a new statement.
      */
     void finalize();
-    
+
     /**
      This class is a wrapper for `sqlite3_stmt`.
      @warning Not Thread-safe.
