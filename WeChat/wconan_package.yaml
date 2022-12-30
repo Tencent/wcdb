@@ -97,4 +97,30 @@ watchos:
       all: wconan_build/watchos/release/static/output
 
 
+macos-all:
+  build_types: shared, static
+  build:
+    system: custom
+    # build static lib
+    script: |-
+      ../tools/version/build.sh -p macOS -l Cpp -c Release -d wconan_build/macos-all/release/shared --wechat --disable-bitcode --universal && \
+      ../tools/version/build.sh -p macOS -l Cpp -c Release -d wconan_build/macos-all/release/static --wechat --disable-bitcode --static-framework --universal
+
+  dependencies:
+
+  scripts:
+    pre_build: 'rm -r ${yaml_dir}/wconan_build/macos-all/release'
+    post_build: |-
+      mkdir -p ${yaml_dir}/wconan_build/macos-all/release/shared/output && \
+      mv ${yaml_dir}/wconan_build/macos-all/release/shared/WCDB.framework ${yaml_dir}/wconan_build/macos-all/release/shared/output/ && \
+      mkdir -p ${yaml_dir}/wconan_build/macos-all/release/static/output && \
+      mv ${yaml_dir}/wconan_build/macos-all/release/static/WCDB.framework ${yaml_dir}/wconan_build/macos-all/release/static/output/
+
+  outputs:
+    release_shared:
+      all: wconan_build/macos-all/release/shared/output
+    release_static:
+      all: wconan_build/macos-all/release/static/output
+
+
 # windows:
