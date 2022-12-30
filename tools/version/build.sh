@@ -12,6 +12,7 @@ showUsage() {
        [--static-framework]: Produce dynamic framework if not specified.
        [--pretty]: Use \`xcpretty\` if available.
        [--wechat]: For WeChat.
+       [--universal]: Build universal library for macOS.
 """
 }
 
@@ -27,6 +28,7 @@ configuration=Release
 pretty=false
 action=build
 wechat=false
+universal=false
 
 while [[ $# -gt 0 ]]
 do
@@ -73,6 +75,10 @@ case "$key" in
     wechat=true
     shift
     ;;
+    --universal)
+    universal=true
+    shift
+    ;;
     -h|--help)
     showUsage
     exit 0
@@ -90,7 +96,13 @@ products="$derivedData"/Build/Products
 
 if $static_framework; then
     if [ "$language" != "ObjC" -a "$language" != "Cpp" ] || [ "$platform" != "iOS" -a "$platform" != "watchOS" -a "$platform" != "macOS" ]; then
-        echo 'Static library is only support iOS/macOS/watchOS + ObjC.'
+        echo 'Static library is only supported with iOS/macOS/watchOS + ObjC/Cpp.'
+        exit 1
+    fi
+fi
+if $universal; then
+    if [ "$platform" != "macOS" ]; then
+        echo 'Universal library is only supported with watchOS.'
         exit 1
     fi
 fi
@@ -136,7 +148,11 @@ case "$platform" in
         platformBasedParameters+=('product="$products/$configuration-iphonesimulator/$target.framework" sdk=iphonesimulator arch=x86_64')
     ;;
     macOS)
-        platformBasedParameters+=('product="$products/$configuration/$target.framework" sdk=macosx arch=x86_64')
+        macosArchs='x86_64'
+        if $universal; then
+        	macosArchs='x86_64 -arch arm64'
+        fi
+        platformBasedParameters+=('product="$products/$configuration/$target.framework" sdk=macosx arch=$macosArchs')
     ;;
     watchOS)
         platformBasedParameters+=('product="$products/$configuration-watchos/$target.framework" sdk=watchos arch="armv7k -arch arm64_32"')
