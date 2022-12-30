@@ -1,4 +1,4 @@
-set(SQLCIPHER_SRC_ROOT ${CMAKE_CURRENT_LIST_DIR}/../sqlcipher)
+set(SQLCIPHER_SRC_ROOT ${CMAKE_CURRENT_LIST_DIR}/../../sqlcipher)
 
 # Copy all headers to include folder
 file(GLOB SQLCIPHER_PUBLIC_HEADERS

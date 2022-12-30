@@ -1,10 +1,10 @@
-# version 1.0.6
+# version 1.0.7
 include(CMakeParseArguments)
 include(CheckFunctionExists)
 
 # read WCONAN_PACKAGE_NAME from wconan_package.yaml
-if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/wconan_package.yaml")
-    file(READ "${CMAKE_CURRENT_SOURCE_DIR}/wconan_package.yaml" TEMP_YAML)
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../../WeChat/wconan_package.yaml")
+    file(READ "${CMAKE_CURRENT_SOURCE_DIR}/../../WeChat/wconan_package.yaml" TEMP_YAML)
     string(REGEX MATCH "[ \t]*name[ \t]*:[ \t]*([0-9a-zA-Z\\.\\_\\-]*)" _ ${TEMP_YAML})
     set(WCONAN_PACKAGE_NAME ${CMAKE_MATCH_1})
     message(STATUS "WCONAN_PACKAGE_NAME: ${WCONAN_PACKAGE_NAME}")
@@ -29,10 +29,10 @@ endif ()
 
 message(STATUS "wconan.cmake - WCONAN_PACKAGE_NAME: [${WCONAN_PACKAGE_NAME}], WCONAN_LIB_NAME: [${WCONAN_LIB_NAME}], WCONAN_LIB_VERSION: [${WCONAN_LIB_VERSION}] , WCONAN_APPLE_LIB_VERSION: [${WCONAN_APPLE_LIB_VERSION}]")
 
-# auto generate lib_version.cpp
-# when build with cmake, lib_version.cpp should contain a function like this:
+# auto generate lib_version.c
+# when build with cmake, lib_version.c should contain a function like this:
 #     extern "C" const char* get_owl_version();
-set(SRC_LIB_VERSION ${CMAKE_CURRENT_SOURCE_DIR}/wconan_build/cmake/lib_version.c)
+set(SRC_LIB_VERSION ${CMAKE_CURRENT_SOURCE_DIR}/../../WeChat/wconan_build/cmake/lib_version.c)
 execute_process(
         COMMAND git rev-parse --abbrev-ref HEAD
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
@@ -48,7 +48,7 @@ execute_process(
 message(STATUS "GIT_BRANCH ${GIT_BRANCH}, GIT_COMMIT_ID: ${GIT_COMMIT_ID}")
 string(TOLOWER ${WCONAN_LIB_NAME} WCONAN_LIB_NAME_LOWER)
 file(WRITE "${SRC_LIB_VERSION}" "const char* get_${WCONAN_LIB_NAME_LOWER}_version() { return \"${WCONAN_LIB_NAME} ${WCONAN_LIB_VERSION} ${GIT_BRANCH} ${GIT_COMMIT_ID}(\" __DATE__ \" \" __TIME__ \")\"; }")
-set(DEFAULT_GIT_IGNORE ${CMAKE_CURRENT_SOURCE_DIR}/wconan_build/cmake/.gitignore)
+set(DEFAULT_GIT_IGNORE ${CMAKE_CURRENT_SOURCE_DIR}/../../WeChat/wconan_build/cmake/.gitignore)
 if (NOT EXISTS "${DEFAULT_GIT_IGNORE}")
     file(WRITE "${DEFAULT_GIT_IGNORE}" "*")
 endif ()
@@ -115,7 +115,7 @@ else ()
 endif ()
 
 if (NOT DEFINED WCONAN_TARGET_PLATFORM)
-    # WCONAN_TARGET_PLATFORM is defined by wconan, eg
+    # WCONAN_TARGET_PLATFORM is defined by wconan, e.g.
     #     wconan build -cmake . -p linux-x86_64-gcc-5.4.0_adj
     # the WCONAN_TARGET_PLATFORM is linux-x86_64-gcc-5.4.0_adj
     set(WCONAN_TARGET_PLATFORM ${WCONAN_LOCAL_PLATFORM})
@@ -176,7 +176,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 function(wconan_get_libraries_dir out_libraries_dir download_dir)
-    set(libraries_dir "${CMAKE_CURRENT_SOURCE_DIR}/${download_dir}/${CMAKE_BUILD_TYPE}/${WCONAN_TARGET_PLATFORM}")
+    set(libraries_dir "${CMAKE_CURRENT_SOURCE_DIR}/../../WeChat/${download_dir}/${CMAKE_BUILD_TYPE}/${WCONAN_TARGET_PLATFORM}")
     set(${out_libraries_dir} ${libraries_dir} PARENT_SCOPE)
     message(STATUS "out_libraries_dir ${libraries_dir}")
 endfunction()
@@ -186,6 +186,30 @@ function(wconan_set_link_directories download_dir)
         wconan_get_libraries_dir(LIBRARIES_DIR ${download_dir})
         link_directories(${LIBRARIES_DIR}/libs)
     endif()
+endfunction()
+
+function(wconan_find_library out_lib_name libs_dir lib_name)
+    # try find using original name
+    if (EXISTS "${libs_dir}/lib${lib_name}.a" OR
+            EXISTS "${libs_dir}/${lib_name}.lib" OR
+            EXISTS "${libs_dir}/lib${lib_name}.so" OR
+            EXISTS "${libs_dir}/${lib_name}.framework")
+        set(${out_lib_name} ${lib_name} PARENT_SCOPE)
+        return()
+    endif()
+    # try find using alternate name
+    string(REPLACE "-" "_" alt_lib_name ${lib_name})
+    if (NOT alt_lib_name STREQUAL "${lib_name}")
+        if (EXISTS "${libs_dir}/lib${alt_lib_name}.a" OR
+                EXISTS "${libs_dir}/${alt_lib_name}.lib" OR
+                EXISTS "${libs_dir}/lib${alt_lib_name}.so" OR
+                EXISTS "${libs_dir}/${alt_lib_name}.framework")
+            set(${out_lib_name} ${alt_lib_name} PARENT_SCOPE)
+            return()
+        endif()
+    endif()
+    # not found
+    set(${out_lib_name} "" PARENT_SCOPE)
 endfunction()
 
 #
@@ -228,19 +252,25 @@ function(wconan_target_import_libraries)
     endif()
     target_sources(${WCONAN_TARGET} PRIVATE ${SRC_LIB_VERSION})
     foreach (lib_name ${WCONAN_LIBRARIES})
-        string(REPLACE "-" "_" real_lib_name ${lib_name})
-        if (EXISTS "${libs_dir}/lib${real_lib_name}.a" OR
-                EXISTS "${libs_dir}/${real_lib_name}.lib" OR
-                EXISTS "${libs_dir}/lib${real_lib_name}.so" OR
-                EXISTS "${libs_dir}/${real_lib_name}.framework")
+        wconan_find_library(real_lib_name ${libs_dir} ${lib_name})
+        if (NOT real_lib_name STREQUAL "")
             if (APPLE AND EXISTS "${libs_dir}/${real_lib_name}.framework")
                 list(APPEND link_libraries "-framework ${real_lib_name}")
             else()
                 list(APPEND link_libraries ${real_lib_name})
             endif()
-            message(STATUS "find ${lib_name} -> ${real_lib_name}, OK")
+            if (real_lib_name STREQUAL ${lib_name})
+                message(STATUS "find ${lib_name}, OK")
+            else()
+                message(STATUS "find ${lib_name} -> ${real_lib_name}, OK")
+            endif()
         else()
-            message(STATUS "find ${lib_name} -> ${real_lib_name}, NOT FOUND")
+            string(REPLACE "-" "_" alt_lib_name ${lib_name})
+            if (alt_lib_name STREQUAL ${lib_name})
+                message(STATUS "find ${lib_name}, NOT FOUND")
+            else()
+                message(STATUS "find ${lib_name} or ${alt_lib_name}, NOT FOUND")
+            endif ()
         endif()
         if (EXISTS "${libs_dir}/${real_lib_name}.framework/Headers")
             #            file(GLOB headers_list "${libs_dir}/${real_lib_name}.framework/Headers")

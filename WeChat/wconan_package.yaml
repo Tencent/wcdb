@@ -18,7 +18,7 @@ default:
 
   build: &default_build_config
     system: cmake
-    path:
+    path: ../tools/version
     arguments:
 
   outputs:

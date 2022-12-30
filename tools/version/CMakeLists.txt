@@ -2,8 +2,9 @@ cmake_minimum_required(VERSION 3.6)
 
 project(WCDB)
 
-set(WCONAN_CMAKE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/wconan.cmake)
+set(WCONAN_CMAKE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../WeChat/wconan.cmake)
 if (EXISTS ${WCONAN_CMAKE_PATH})
+    message(STATUS "${WCONAN_CMAKE_PATH} found.")
     set(WCONAN_MODE ON CACHE BOOL "Build with wconan" FORCE)
     include(${WCONAN_CMAKE_PATH})
 endif ()
@@ -36,7 +37,7 @@ elseif (WIN32)
     # TODO
 endif ()
 
-set(WCDB_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../apple)
+set(WCDB_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../apple)
 
 # Copy all headers to include folder
 file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
@@ -218,9 +219,9 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
         ${WCDB_SRC_DIR}/cpp/*WCDBCpp.h
         )
 # export public headers
-file(REMOVE_RECURSE ${CMAKE_CURRENT_SOURCE_DIR}/wconan_build/export_headers)
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/wconan_build/export_headers/WCDB)
-file(COPY ${WCDB_PUBLIC_HEADERS} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/wconan_build/export_headers/WCDB)
+file(REMOVE_RECURSE ${CMAKE_CURRENT_BINARY_DIR}/export_headers)
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/export_headers/WCDB)
+file(COPY ${WCDB_PUBLIC_HEADERS} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/export_headers/WCDB)
 
 # copy all headers to include
 file(GLOB_RECURSE WCDB_ALL_HEADERS
