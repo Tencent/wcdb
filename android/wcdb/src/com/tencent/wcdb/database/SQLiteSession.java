@@ -883,10 +883,13 @@ public final class SQLiteSession {
     }
 
     /*package*/ void releaseConnectionForNativeHandle(Exception ex) {
-        if (mConnection != null) {
-            mConnection.endNativeHandle(ex);
+        try {
+            if (mConnection != null) {
+                mConnection.endNativeHandle(ex);
+            }
+        } finally {
+            releaseConnection();
         }
-        releaseConnection();
     }
 
     /*package*/ SQLiteConnection.PreparedStatement acquirePreparedStatement(String sql,

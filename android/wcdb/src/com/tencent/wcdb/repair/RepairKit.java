@@ -28,12 +28,15 @@ import com.tencent.wcdb.database.SQLiteDatabase;
 import com.tencent.wcdb.database.SQLiteException;
 import com.tencent.wcdb.support.CancellationSignal;
 
+import java.io.IOException;
+
 
 /**
  * Database repair toolkit to parse a corrupted database file and
  * write its content to another (newly created) database.
  */
 public class RepairKit implements CancellationSignal.OnCancelListener {
+    private static final String TAG = "WCDB.RepairKit";
 
     /**
      * Result code that indicates successful operation.
@@ -78,6 +81,7 @@ public class RepairKit implements CancellationSignal.OnCancelListener {
     private long mNativePtr;
     private int mIntegrityFlags;
     private MasterInfo mMasterInfo;
+    private LeafInfo mLeafInfo;
     private Callback mCallback;
     private RepairCursor mCurrentCursor;
 
@@ -108,6 +112,11 @@ public class RepairKit implements CancellationSignal.OnCancelListener {
      * @throws IllegalArgumentException when path is null.
      */
     public RepairKit(String path, byte[] key, SQLiteCipherSpec cipherSpec, MasterInfo master) {
+        this(path, key, cipherSpec, master, null);
+    }
+
+    public RepairKit(String path, byte[] key, SQLiteCipherSpec cipherSpec, MasterInfo master,
+                     LeafInfo leaf) {
         if (path == null)
             throw new IllegalArgumentException();
 
@@ -117,6 +126,7 @@ public class RepairKit implements CancellationSignal.OnCancelListener {
 
         mIntegrityFlags = nativeIntegrityFlags(mNativePtr);
         mMasterInfo = master;
+        mLeafInfo = leaf;
     }
 
     /**
@@ -142,6 +152,11 @@ public class RepairKit implements CancellationSignal.OnCancelListener {
      * after this method is called.
      */
     public void release() {
+        if (mLeafInfo != null) {
+            mLeafInfo.release();
+            mLeafInfo = null;
+        }
+
         if (mMasterInfo != null) {
             mMasterInfo.release();
             mMasterInfo = null;
@@ -169,9 +184,10 @@ public class RepairKit implements CancellationSignal.OnCancelListener {
             throw new IllegalArgumentException();
 
         long masterPtr = (mMasterInfo == null) ? 0 : mMasterInfo.mMasterPtr;
+        long leafPtr = (mLeafInfo == null) ? 0 : mLeafInfo.mLeafPtr;
 
         long dbPtr = db.acquireNativeConnectionHandle("repair", false, false);
-        int ret = nativeOutput(mNativePtr, dbPtr, masterPtr, flags);
+        int ret = nativeOutput(mNativePtr, dbPtr, masterPtr, leafPtr, flags);
         db.releaseNativeConnection(dbPtr, null);
         mCurrentCursor = null;
 
@@ -246,6 +262,25 @@ public class RepairKit implements CancellationSignal.OnCancelListener {
         return (mIntegrityFlags & INTEGRITY_DATA) == 0;
     }
 
+    public static class Statistics {
+        public final int totalPages;
+        public final int validPages;
+        public final int parsedPages;
+        public final int damagedPages;
+        Statistics(int[] st) {
+            totalPages = st[0];
+            validPages = st[1];
+            parsedPages = st[2];
+            damagedPages = st[3];
+        }
+    }
+    public Statistics getStatistics() {
+        if (mNativePtr == 0)
+            throw new IllegalArgumentException();
+        int[] stat = nativeGetStatistics(mNativePtr);
+        return new Statistics(stat);
+    }
+
     /**
      * Retrieve the last error message.
      * @return last error message
@@ -270,8 +305,8 @@ public class RepairKit implements CancellationSignal.OnCancelListener {
      * @see RepairKit#RepairKit(String, byte[], SQLiteCipherSpec, MasterInfo)
      */
     public static class MasterInfo {
-        private long mMasterPtr;
-        private byte[] mKDFSalt;
+        long mMasterPtr;
+        byte[] mKDFSalt;
 
         private MasterInfo(long ptr, byte[] salt) {
             mMasterPtr = ptr;
@@ -358,6 +393,78 @@ public class RepairKit implements CancellationSignal.OnCancelListener {
         protected void finalize() throws Throwable {
             release();
             super.finalize();
+        }
+    }
+
+    public static class LeafInfo {
+        long mLeafPtr;
+
+        private LeafInfo(long leafPtr) {
+            mLeafPtr = leafPtr;
+        }
+
+        public void release() {
+            if (mLeafPtr == 0) return;
+
+            nativeFreeLeaf(mLeafPtr);
+            mLeafPtr = 0;
+        }
+
+        @Override
+        protected void finalize() throws Throwable {
+            release();
+            super.finalize();
+        }
+
+        public static LeafInfo scan(SQLiteDatabase db, String[] tables, CancellationSignal cs) {
+            final long[] cancelFlag = new long[1];
+
+            if (cs != null) {
+                cs.setOnCancelListener(new CancellationSignal.OnCancelListener() {
+                    @Override
+                    public void onCancel() {
+                        if (cancelFlag[0] != 0)
+                            nativeCancelScanLeaf(cancelFlag[0]);
+                    }
+                });
+            }
+
+            if (tables != null && tables.length == 0)
+                tables = null;
+            long dbPtr = db.acquireNativeConnectionHandle("scanLeaf", true, false);
+            Exception ex = null;
+            try {
+                if (cs != null) {
+                    cs.throwIfCanceled();
+                }
+
+                long leafPtr = nativeScanLeaf(dbPtr, tables, (cs == null) ? null : cancelFlag);
+                if (leafPtr == 0)
+                    throw new SQLiteException("Cannot scan leaf info.");
+                return new LeafInfo(leafPtr);
+            } catch (Exception e) {
+                ex = e;
+                throw e;
+            } finally {
+                if (cs != null) {
+                    cs.setOnCancelListener(null);
+                }
+                db.releaseNativeConnection(dbPtr, ex);
+            }
+        }
+
+        public void save(String path) throws IOException {
+            if (mLeafPtr == 0) return;
+
+            if (!nativeSaveLeaf(mLeafPtr, path))
+                throw new IOException("Cannot save leaf info.");
+        }
+
+        public static LeafInfo load(String path) throws IOException {
+            long leafPtr = nativeLoadLeaf(path);
+            if (leafPtr == 0)
+                throw new IOException("Cannot load leaf info.");
+            return new LeafInfo(leafPtr);
         }
     }
 
@@ -464,13 +571,20 @@ public class RepairKit implements CancellationSignal.OnCancelListener {
     private static native long nativeInit(String path, byte[] key, SQLiteCipherSpec cipherSpec,
                                           byte[] salt);
     private static native void nativeFini(long rkPtr);
-    private native int nativeOutput(long rkPtr, long dbPtr, long masterPtr, int flags);
+    private native int nativeOutput(long rkPtr, long dbPtr, long masterPtr, long leafPtr, int flags);
     private static native void nativeCancel(long rkPtr);
     private static native int nativeIntegrityFlags(long rkPtr);
     private static native String nativeLastError();
+    private static native int[] nativeGetStatistics(long rkPtr);
     private static native long nativeMakeMaster(String[] tables);
     private static native boolean nativeSaveMaster(long dbPtr, String path, byte[] key);
     private static native long nativeLoadMaster(String path, byte[] key, String[] tables,
                                                 byte[] outSalt);
     private static native void nativeFreeMaster(long masterPtr);
+
+    private static native long nativeScanLeaf(long dbPtr, String[] tables, long[] outCancelFlag);
+    private static native void nativeCancelScanLeaf(long cancelFlagPtr);
+    private static native boolean nativeSaveLeaf(long leafPtr, String path);
+    private static native long nativeLoadLeaf(String path);
+    private static native void nativeFreeLeaf(long leafPtr);
 }

@@ -21,11 +21,14 @@
 #include "JNIHelp.h"
 #include "Logger.h"
 #include "ModuleLoader.h"
+#include "SQLiteCommon.h"
+#include <sqlite3.h>
 #include <jni.h>
 #include <SQLiteRepairKit.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <vector>
 
 static int g_error_result = 0;
 static char g_error_msg[2048] = {0};
@@ -169,12 +172,13 @@ static JNICALL jint nativeOutput(JNIEnv *env,
                                      jlong rkPtr,
                                      jlong dbPtr,
                                      jlong masterPtr,
+                                     jlong leafPtr,
                                      jint flags)
 {
     sqliterk *rk = (sqliterk *) (intptr_t) rkPtr;
     sqlite3 *db = (sqlite3 *) (intptr_t) dbPtr;
-    sqliterk_master_info *master =
-        (sqliterk_master_info *) (intptr_t) masterPtr;
+    sqliterk_master_info *master =(sqliterk_master_info *) (intptr_t) masterPtr;
+    sqliterk_leaf_info *leaf = (sqliterk_leaf_info *) (intptr_t) leafPtr;
 
     callback_data data;
     data.env = env;
@@ -182,7 +186,7 @@ static JNICALL jint nativeOutput(JNIEnv *env,
     data.last_table = nullptr;
     data.last_root = 0;
     
-    int rc = sqliterk_output_cb(rk, db, master, flags, output_callback, &data);
+    int rc = sqliterk_output_cb_leaf(rk, db, master, leaf, flags, output_callback, &data);
     if (rc == SQLITERK_OK) return 0;
     if (rc == SQLITERK_CANCELLED) return 1;
     return -1;
@@ -203,6 +207,21 @@ static JNICALL jint nativeIntegrityFlags(JNIEnv *env, jclass cls, jlong rkPtr)
 static JNICALL jstring nativeLastError(JNIEnv *env, jclass cls)
 {
     return env->NewStringUTF(g_error_msg);
+}
+
+static JNICALL jintArray nativeGetStatistics(JNIEnv *env, jclass cls, jlong rkPtr)
+{
+    sqliterk *rk = (sqliterk *) (intptr_t) rkPtr;
+    jint st[4];
+
+    st[0] = sqliterk_page_count(rk);
+    st[1] = sqliterk_valid_page_count(rk);
+    st[2] = sqliterk_parsed_page_count(rk);
+    st[3] = sqliterk_damaged_page_count(rk);
+
+    jintArray result = env->NewIntArray(4);
+    env->SetIntArrayRegion(result, 0, 4, st);
+    return result;
 }
 
 static JNICALL jlong nativeMakeMaster(JNIEnv *env,
@@ -322,6 +341,75 @@ static JNICALL void nativeFreeMaster(JNIEnv *env, jclass cls, jlong masterPtr)
     sqliterk_free_master(master);
 }
 
+// TODO: global variable should not be used here
+static volatile int sScanCancelFlag = 0;
+static JNICALL jlong nativeScanLeaf(JNIEnv *env, jclass cls, jlong dbPtr, jobjectArray tableArr,
+                                    jlongArray outCancelFlag)
+{
+    sqlite3 *db = (sqlite3 *) (intptr_t) dbPtr;
+    std::vector<const char *> tables;
+    if (tableArr) {
+        int num_tables = env->GetArrayLength(tableArr);
+        tables = std::vector<const char *>(num_tables);
+        for (int i = 0; i < num_tables; ++i) {
+            jstring str = static_cast<jstring>(env->GetObjectArrayElement(tableArr, i));
+            tables[i] = (env->GetStringUTFChars(str, NULL));
+            env->DeleteLocalRef(str);
+        }
+    }
+
+    if (outCancelFlag) {
+        sScanCancelFlag = 0;
+        jlong ptr = (jlong) (intptr_t) &sScanCancelFlag;
+        env->SetLongArrayRegion(outCancelFlag, 0, 1, &ptr);
+    }
+
+    sqliterk_leaf_info *out;
+    int rc = sqliterk_scan_leaf(db, tables.data(), tables.size(), &out,
+                                outCancelFlag ? &sScanCancelFlag : nullptr);
+    jlong result = (rc == SQLITE_OK) ? (jlong) (intptr_t) out : 0;
+
+    for (int i = 0; i < tables.size(); ++i) {
+        jstring str = static_cast<jstring>(env->GetObjectArrayElement(tableArr, i));
+        env->ReleaseStringUTFChars(str, tables[i]);
+        env->DeleteLocalRef(str);
+    }
+
+    if (rc != SQLITE_OK) {
+        throw_sqlite3_exception(env, db);
+    }
+
+    return result;
+}
+
+static JNICALL void nativeCancelScanLeaf(JNIEnv *env, jclass cls, jlong cancelFlagPtr) {
+    *(volatile int *) (intptr_t) cancelFlagPtr = 1;
+}
+
+static JNICALL jboolean nativeSaveLeaf(JNIEnv *env, jclass cls, jlong leafPtr, jstring pathStr) {
+    sqliterk_leaf_info *li = (sqliterk_leaf_info *) (intptr_t) leafPtr;
+
+    const char *path = env->GetStringUTFChars(pathStr, nullptr);
+    int rc = sqliterk_save_leaf(li, path);
+
+    env->ReleaseStringUTFChars(pathStr, path);
+    return rc == SQLITERK_OK;
+}
+
+static JNICALL jlong nativeLoadLeaf(JNIEnv *env, jclass cls, jstring pathStr) {
+    const char *path = env->GetStringUTFChars(pathStr, nullptr);
+
+    sqliterk_leaf_info *out;
+    int rc = sqliterk_load_leaf(path, &out);
+
+    env->ReleaseStringUTFChars(pathStr, path);
+    return rc == SQLITERK_OK ? (jlong) (intptr_t) out : 0;
+}
+
+static JNICALL void nativeFreeLeaf(JNIEnv *env, jclass cls, jlong leafPtr) {
+    sqliterk_free_leaf((sqliterk_leaf_info *) (intptr_t) leafPtr);
+}
+
 static JNICALL jint cursorNativeGetColumnCount(JNIEnv *env, jclass, jlong ptr)
 {
     sqliterk_column *column = (sqliterk_column *) (intptr_t) ptr;
@@ -370,15 +458,21 @@ static const JNINativeMethod sRepairMethods[] = {
      "(Ljava/lang/String;[BLcom/tencent/wcdb/database/SQLiteCipherSpec;[B)J",
      (void *) nativeInit},
     {"nativeFini", "(J)V", (void *) nativeFini},
-    {"nativeOutput", "(JJJI)I", (void *) nativeOutput},
+    {"nativeOutput", "(JJJJI)I", (void *) nativeOutput},
     {"nativeCancel", "(J)V", (void *) nativeCancel},
     {"nativeIntegrityFlags", "(J)I", (void *) nativeIntegrityFlags},
     {"nativeLastError", "()Ljava/lang/String;", (void *) nativeLastError},
+    {"nativeGetStatistics", "(J)[I", (void *) nativeGetStatistics},
     {"nativeMakeMaster", "([Ljava/lang/String;)J", (void *) nativeMakeMaster},
     {"nativeSaveMaster", "(JLjava/lang/String;[B)Z", (void *) nativeSaveMaster},
     {"nativeLoadMaster", "(Ljava/lang/String;[B[Ljava/lang/String;[B)J",
      (void *) nativeLoadMaster},
     {"nativeFreeMaster", "(J)V", (void *) nativeFreeMaster},
+    {"nativeScanLeaf", "(J[Ljava/lang/String;[J)J", (void *) nativeScanLeaf},
+    {"nativeCancelScanLeaf", "(J)V", (void *) nativeCancelScanLeaf},
+    {"nativeSaveLeaf", "(JLjava/lang/String;)Z", (void *) nativeSaveLeaf},
+    {"nativeLoadLeaf", "(Ljava/lang/String;)J", (void *) nativeLoadLeaf},
+    {"nativeFreeLeaf", "(J)V", (void *) nativeFreeLeaf},
 };
 
 static const JNINativeMethod sCursorMethods[] = {

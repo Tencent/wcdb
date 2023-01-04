@@ -188,7 +188,7 @@ static int sqliterkBtreeParsePage(sqliterk_btree *btree, int pageno)
     int cellsCount;
     sqliterkParseInt(pagedata, 3 + sqliterkPageHeaderOffset(page), 2,
                      &cellsCount);
-    if (cellsCount <= 0 || cellsCount * 2 + offsetCellPointerArray >
+    if (cellsCount < 0 || cellsCount * 2 + offsetCellPointerArray >
                                sqliterkPagerGetSize(btree->pager)) {
         rc = SQLITERK_DAMAGED;
         goto sqliterkBtreeParsePage_End;

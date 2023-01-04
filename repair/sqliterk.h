@@ -37,6 +37,7 @@ int sqliterkSetUserInfo(sqliterk *rk, void *userInfo);
 void *sqliterkGetUserInfo(sqliterk *rk);
 
 int sqliterkGetParsedPageCount(sqliterk *rk);
+int sqliterkGetDamagedPageCount(sqliterk *rk);
 int sqliterkGetValidPageCount(sqliterk *rk);
 int sqliterkGetPageCount(sqliterk *rk);
 unsigned int sqliterkGetIntegrity(sqliterk *rk);
