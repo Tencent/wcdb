@@ -88,6 +88,7 @@ android {
 
 wechatPublish {
     publishAllVariants true
+    withJavadoc false
 
     publishToBintray {
         repo = 'wcdb'

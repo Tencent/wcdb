@@ -199,7 +199,7 @@ for android_arch in $BUILD_ARCHS; do
 
   android_cc="$gcc_prefix-gcc --sysroot=$android_sysroot"
   android_cflags="$android_cflags -g -Wall -funwind-tables -fstack-protector -fomit-frame-pointer -DNDEBUG -DANDROID -D__ANDROID_API__=$android_api"
-  android_path="$ANDROID_NDK_ROOT/toolchains/$android_eabi-4.9/prebuilt/$ndk_host/bin"
+  android_path="$ANDROID_NDK_ROOT/toolchains/$android_eabi-4.9/prebuilt/$ndk_host/bin:$ANDROID_NDK_ROOT/prebuilt/$ndk_host/bin"
   android_prefix="$(pwd)/android/prebuilt/$android_arch"
   
   if [ "$USE_CLANG" == 1 ]; then
