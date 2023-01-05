@@ -58,7 +58,7 @@
             return self;
         }
         _resultList.insert(_resultList.begin(), resultList.begin(), resultList.end());
-        _statement.select(_resultList, _resultList.isDistinct()).from(tableName.UTF8String);
+        _statement.select(_resultList, resultList.isDistinct()).from(tableName.UTF8String);
         _cls = nil;
         for (const WCTResult &result : _resultList) {
             Class cls = result.getBindingClass();

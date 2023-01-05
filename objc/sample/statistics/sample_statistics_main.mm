@@ -65,9 +65,10 @@ void sample_statistics_main(NSString *baseDirectory)
     //trace for transaction
     {
         NSMutableArray *objects = [[NSMutableArray alloc] init];
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 1; i < 10; ++i) {
             WCTSampleStatistics *object = [[WCTSampleStatistics alloc] init];
             object.intValue = i;
+            [objects addObject:object];
         }
         [database insertObjects:objects into:tableName];
 
