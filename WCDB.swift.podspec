@@ -2,7 +2,7 @@
 # pod trunk push --verbose --allow-warnings WCDB.swift.podspec
 Pod::Spec.new do |wcdb|
   wcdb.name         = "WCDB.swift"
-  wcdb.version      = "1.0.8.2"
+  wcdb.version      = "1.1.0"
   wcdb.summary      = "WCDB is a cross-platform database framework developed by WeChat."
   wcdb.description  = <<-DESC
                       The WeChat Database, for Swift. (If you want to use WCDB for Objective-C, see the "WCDB" pod.)
@@ -17,7 +17,7 @@ Pod::Spec.new do |wcdb|
   wcdb.osx.deployment_target = "10.9"
   wcdb.watchos.deployment_target = "2.0"
   wcdb.tvos.deployment_target = "9.0"
-  wcdb.source       = { :git => "https://github.com/Tencent/wcdb.git", :tag => "v1.0.8.2" }
+  wcdb.source       = { :git => "https://github.com/Tencent/wcdb.git", :tag => "v1.1.0" }
   wcdb.source_files  = "swift/source/**/*.swift", "swift/source/**/**/*.swift", "swift/source/util/*.{h,c}"
   wcdb.module_name = "WCDBSwift"
   wcdb.requires_arc = true
@@ -33,7 +33,7 @@ Pod::Spec.new do |wcdb|
     "OTHER_SWIFT_FLAGS[config=Debug][sdk=iphonesimulator*]" => "-D WCDB_IOS -D DEBUG",
     "OTHER_SWIFT_FLAGS[config=Debug][sdk=iphoneos*]" => "-D WCDB_IOS -D DEBUG",
   }
-  wcdb.swift_version = '4.2'
-  wcdb.dependency 'WCDBOptimizedSQLCipher', '~> 1.2.0'
-  wcdb.dependency 'SQLiteRepairKit', '~> 1.2.0'
+  wcdb.swift_version = '5'
+  wcdb.dependency 'WCDBOptimizedSQLCipher', '~> 1.3.0'
+  wcdb.dependency 'SQLiteRepairKit', '~> 1.3.0'
 end
