@@ -52,5 +52,5 @@
 #import "ObjectsBasedFactory.h"
 #import "TablesBasedFactory.h"
 
-#import "WCTDatabase+TestCase.h"
 #import "WCTDatabase+Test.h"
+#import "WCTDatabase+TestCase.h"

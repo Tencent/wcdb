@@ -30,8 +30,8 @@
 #import "TestCaseAssertion.h"
 #import "TestCaseObject+WCTTableCoding.h"
 #import "TestCaseObject.h"
-#import "WCTDatabase+TestCase.h"
 #import "WCTDatabase+Test.h"
+#import "WCTDatabase+TestCase.h"
 #import <WCDB/WCDB.h>
 
 @implementation SizeBasedFactory
