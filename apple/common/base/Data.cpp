@@ -129,7 +129,7 @@ bool Data::reset(const unsigned char* buffer, size_t size, SharedHighWater highW
         m_sharedBuffer = nullptr;
         return true;
     }
-    unsigned char* newBuffer = new unsigned char[size];
+    unsigned char* newBuffer = (unsigned char*) malloc(size * sizeof(unsigned char));
     if (newBuffer == nullptr) {
         setThreadedError(Error(Error::Code::NoMemory, Error::Level::Error));
         return false;
@@ -163,7 +163,7 @@ bool Data::reset(const UnsafeData& unsafeData)
 
 void Data::dealloc(SharedData& data)
 {
-    delete[] data.buffer;
+    free(data.buffer);
 }
 
 #pragma mark - Subdata
