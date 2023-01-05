@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D5F9732296521A5007A2537 /* upsert.c in Sources */ = {isa = PBXBuildFile; fileRef = 0D5F9730296521A5007A2537 /* upsert.c */; };
+		0D5F9733296521A5007A2537 /* window.c in Sources */ = {isa = PBXBuildFile; fileRef = 0D5F9731296521A5007A2537 /* window.c */; };
 		232DA3221FB0700A0075F021 /* callback.c in Sources */ = {isa = PBXBuildFile; fileRef = 232DA3211FB070090075F021 /* callback.c */; };
 		232DA3241FB070110075F021 /* loadext.c in Sources */ = {isa = PBXBuildFile; fileRef = 232DA3231FB070110075F021 /* loadext.c */; };
 		232DA3261FB070180075F021 /* rowset.c in Sources */ = {isa = PBXBuildFile; fileRef = 232DA3251FB070180075F021 /* rowset.c */; };
 		232DA3281FB070210075F021 /* treeview.c in Sources */ = {isa = PBXBuildFile; fileRef = 232DA3271FB070210075F021 /* treeview.c */; };
-		232DA32A1FB0703C0075F021 /* userauth.c in Sources */ = {isa = PBXBuildFile; fileRef = 232DA3291FB0703C0075F021 /* userauth.c */; };
 		232DA32C1FB070540075F021 /* vtab.c in Sources */ = {isa = PBXBuildFile; fileRef = 232DA32B1FB070530075F021 /* vtab.c */; };
 		232DA32E1FB070640075F021 /* btmutex.c in Sources */ = {isa = PBXBuildFile; fileRef = 232DA32D1FB070640075F021 /* btmutex.c */; };
 		232DA3301FB0706B0075F021 /* btree.c in Sources */ = {isa = PBXBuildFile; fileRef = 232DA32F1FB0706B0075F021 /* btree.c */; };
@@ -113,13 +114,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0D5F9730296521A5007A2537 /* upsert.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = upsert.c; sourceTree = "<group>"; };
+		0D5F9731296521A5007A2537 /* window.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = window.c; sourceTree = "<group>"; };
 		23121C071E6FFA890012B45E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		232DA3201FB06FFD0075F021 /* keywordhash.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = keywordhash.h; path = ../keywordhash.h; sourceTree = "<group>"; };
 		232DA3211FB070090075F021 /* callback.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = callback.c; sourceTree = "<group>"; };
 		232DA3231FB070110075F021 /* loadext.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = loadext.c; sourceTree = "<group>"; };
 		232DA3251FB070180075F021 /* rowset.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = rowset.c; sourceTree = "<group>"; };
 		232DA3271FB070210075F021 /* treeview.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = treeview.c; sourceTree = "<group>"; };
-		232DA3291FB0703C0075F021 /* userauth.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = userauth.c; path = ../ext/userauth/userauth.c; sourceTree = "<group>"; };
 		232DA32B1FB070530075F021 /* vtab.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = vtab.c; sourceTree = "<group>"; };
 		232DA32D1FB070640075F021 /* btmutex.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = btmutex.c; sourceTree = "<group>"; };
 		232DA32F1FB0706B0075F021 /* btree.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = btree.c; sourceTree = "<group>"; };
@@ -292,12 +294,13 @@
 		23121B7C1E6FF93D0012B45E /* src */ = {
 			isa = PBXGroup;
 			children = (
+				0D5F9730296521A5007A2537 /* upsert.c */,
+				0D5F9731296521A5007A2537 /* window.c */,
 				232DA3201FB06FFD0075F021 /* keywordhash.h */,
 				232DA3211FB070090075F021 /* callback.c */,
 				232DA3231FB070110075F021 /* loadext.c */,
 				232DA3251FB070180075F021 /* rowset.c */,
 				232DA3271FB070210075F021 /* treeview.c */,
-				232DA3291FB0703C0075F021 /* userauth.c */,
 				232DA32B1FB070530075F021 /* vtab.c */,
 				232DA32D1FB070640075F021 /* btmutex.c */,
 				232DA32F1FB0706B0075F021 /* btree.c */,
@@ -507,6 +510,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 23121ADB1E6FF9110012B45E;
@@ -575,7 +579,6 @@
 				232DA37B1FB0716B0075F021 /* mutex_noop.c in Sources */,
 				232DA3A81FB0823F0075F021 /* func.c in Sources */,
 				232DA3371FB070BB0075F021 /* fts3_aux.c in Sources */,
-				232DA32A1FB0703C0075F021 /* userauth.c in Sources */,
 				232DA3701FB071460075F021 /* malloc.c in Sources */,
 				232DA3C91FB082A90075F021 /* insert.c in Sources */,
 				232DA3961FB071AC0075F021 /* pcache.c in Sources */,
@@ -597,6 +600,7 @@
 				232DA4051FB0836E0075F021 /* vdbemem.c in Sources */,
 				232DA3F81FB0836E0075F021 /* utf.c in Sources */,
 				232DA3221FB0700A0075F021 /* callback.c in Sources */,
+				0D5F9732296521A5007A2537 /* upsert.c in Sources */,
 				232DA3391FB070C00075F021 /* fts3_expr.c in Sources */,
 				232DA39F1FB082040075F021 /* tokenize.c in Sources */,
 				232DA3921FB071A70075F021 /* pager.c in Sources */,
@@ -617,6 +621,7 @@
 				232DA32E1FB070640075F021 /* btmutex.c in Sources */,
 				232DA35B1FB071120075F021 /* notify.c in Sources */,
 				232DA3D51FB082F30075F021 /* json1.c in Sources */,
+				0D5F9733296521A5007A2537 /* window.c in Sources */,
 				232DA36E1FB071460075F021 /* mem1.c in Sources */,
 				232DA3721FB071460075F021 /* mem5.c in Sources */,
 				232DA3F91FB0836E0075F021 /* vdbe.c in Sources */,
@@ -698,6 +703,7 @@
 					"USE_PREAD=1",
 					"SQLITE_TEMP_STORE=2",
 					SQLCIPHER_PREPROCESSED,
+					HAVE_UTIME,
 					HAVE_USLEEP,
 					"SQLITE_MALLOC_SOFT_LIMIT=0",
 					"SQLITE_WCDB_SIGNAL_RETRY=1",
@@ -709,9 +715,16 @@
 					SQLITE_OMIT_DEPRECATED,
 					SQLITE_OMIT_PROGRESS_CALLBACK,
 					SQLITE_OMIT_SHARED_CACHE,
-					OMIT_CONSTTIME_MEM,
 					OMIT_MEMLOCK,
+					SQLITE_WCDB_CHECKPOINT_HANDLER,
+					SQLITE_MMAP_READWRITE,
+					SQLITE_ENABLE_DBSTAT_VTAB,
+					SQLITE_WCDB_DIRTY_PAGE_COUNT,
 					SQLITE_ENABLE_FTS3_TOKENIZER,
+					"SQLITE_PRINT_BUF_SIZE=256",
+					"SQLITE_MAX_ATTACHED=64",
+					SQLITE_USE_ALLOCA,
+					"SQLITE_DEBUG=1",
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -788,6 +801,7 @@
 					SQLCIPHER_CRYPTO_CC,
 					"USE_PREAD=1",
 					SQLCIPHER_PREPROCESSED,
+					HAVE_UTIME,
 					HAVE_USLEEP,
 					"SQLITE_MALLOC_SOFT_LIMIT=0",
 					"SQLITE_WCDB_SIGNAL_RETRY=1",
@@ -799,9 +813,16 @@
 					SQLITE_OMIT_PROGRESS_CALLBACK,
 					SQLITE_OMIT_SHARED_CACHE,
 					SQLITE_ENABLE_COLUMN_METADATA,
-					OMIT_CONSTTIME_MEM,
 					OMIT_MEMLOCK,
 					SQLITE_ENABLE_FTS3_TOKENIZER,
+					SQLITE_ENABLE_DBSTAT_VTAB,
+					SQLITE_WCDB_CHECKPOINT_HANDLER,
+					SQLITE_MMAP_READWRITE,
+					SQLITE_WCDB_DIRTY_PAGE_COUNT,
+					"SQLITE_PRINT_BUF_SIZE=256",
+					"SQLITE_MAX_ATTACHED=64",
+					SQLITE_USE_ALLOCA,
+					"NDEBUG=1",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;

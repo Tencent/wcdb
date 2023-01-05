@@ -278,18 +278,6 @@ static constexpr char SQLITE_AFF_TEXT = 'B';
 static constexpr char SQLITE_AFF_NUMERIC = 'C';
 static constexpr char SQLITE_AFF_INTEGER = 'D';
 static constexpr char SQLITE_AFF_REAL = 'E';
-static constexpr uint32_t string_digits(const char *s)
-{
-    uint32_t h = 0;
-    if (s[0] == '\0') return h;
-    h = s[0] << 24;
-    if (s[1] == '\0') return h;
-    h |= s[1] << 16;
-    if (s[2] == '\0') return h;
-    h |= s[2] << 8;
-    h |= s[3];
-    return h;
-}
 
 static char parse_affinity(const char *type)
 {
@@ -301,22 +289,22 @@ static char parse_affinity(const char *type)
     char aff = SQLITE_AFF_NUMERIC;
     do {
         h = (h << 8) + toupper((*type++) & 0xFF);
-        if ((h << 8) == string_digits("INT")) {
+        if ((h << 8) == ('I'<<16)+('N'<<8)+'T') {
             aff = SQLITE_AFF_INTEGER;
         } else {
             switch (h) {
-                case string_digits("CHAR"):
-                case string_digits("CLOB"):
-                case string_digits("TEXT"):
+                case ('C'<<24)+('H'<<16)+('A'<<8)+'R':/* CHAR */
+                case ('C'<<24)+('L'<<16)+('O'<<8)+'B':/* CLOB */
+                case ('T'<<24)+('E'<<16)+('X'<<8)+'T':/* TEXT */
                     aff = SQLITE_AFF_TEXT;
                     break;
-                case string_digits("BLOB"):
+                case ('B'<<24)+('L'<<16)+('O'<<8)+'B':/* BLOB */
                     if (aff == SQLITE_AFF_NUMERIC || aff == SQLITE_AFF_REAL)
                         aff = SQLITE_AFF_BLOB;
                     break;
-                case string_digits("REAL"):
-                case string_digits("FLOA"):
-                case string_digits("DOUB"):
+                case ('R'<<24)+('E'<<16)+('A'<<8)+'L':/* REAL */
+                case ('F'<<24)+('L'<<16)+('O'<<8)+'A':/* FLOA */
+                case ('D'<<24)+('O'<<16)+('U'<<8)+'B':/* DOUB */
                     if (aff == SQLITE_AFF_NUMERIC)
                         aff = SQLITE_AFF_REAL;
                     break;
