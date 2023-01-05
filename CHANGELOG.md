@@ -1,3 +1,10 @@
+## v1.1.0
+
+#### iOS/macOS
+* Support Swift 5 for Xcode 14.
+* Fix compile error for SQLCipher 4.1.0.
+* Fix some bug.
+
 ## v1.0.8.2
 
 #### iOS/macOS
