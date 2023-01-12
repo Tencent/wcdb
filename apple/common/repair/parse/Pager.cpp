@@ -117,7 +117,7 @@ UnsafeData Pager::acquirePageData(int number, off_t offset, size_t size)
     }
     UnsafeData data;
     if (m_wal.containsPage(number)) {
-        data = m_wal.acquirePageData(number);
+        data = m_wal.acquirePageData(number, m_highWater);
     } else {
         if (number > m_numberOfPages) {
             markAsCorrupted(
@@ -126,7 +126,7 @@ UnsafeData Pager::acquirePageData(int number, off_t offset, size_t size)
             "Acquired page number: %d exceeds the page count: %d.", number, m_numberOfPages));
             return MappedData::null();
         }
-        data = m_fileHandle.mapPage(number);
+        data = m_fileHandle.mapPage(number, m_highWater);
     }
     if (data.size() != m_pageSize) {
         if (data.size() > 0) {
