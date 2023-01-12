@@ -47,13 +47,14 @@ public:
 protected:
     FileHandle m_fileHandle;
     friend class WalRelated;
-    MappedData acquireData(off_t offset, size_t size);
+    MappedData acquireData(off_t offset, size_t size, SharedHighWater highWater = nullptr);
 
 #pragma mark - Page
 public:
     bool containsPage(int pageno) const;
-    MappedData acquirePageData(int pageno);
-    MappedData acquirePageData(int pageno, off_t offset, size_t size);
+    MappedData acquirePageData(int pageno, SharedHighWater highWater = nullptr);
+    MappedData
+    acquirePageData(int pageno, off_t offset, size_t size, SharedHighWater highWater = nullptr);
     int getMaxPageno() const;
 
 protected:

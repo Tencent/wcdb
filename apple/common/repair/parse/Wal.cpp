@@ -59,10 +59,10 @@ const StringView &Wal::getPath() const
     return m_fileHandle.path;
 }
 
-MappedData Wal::acquireData(off_t offset, size_t size)
+MappedData Wal::acquireData(off_t offset, size_t size, SharedHighWater highWater)
 {
     WCTAssert(m_fileHandle.isOpened());
-    MappedData data = m_fileHandle.map(offset, size);
+    MappedData data = m_fileHandle.map(offset, size, highWater);
     if (data.size() != size) {
         if (data.size() > 0) {
             markAsCorrupted((int) ((offset - headerSize) / getFrameSize() + 1),
@@ -83,19 +83,20 @@ bool Wal::containsPage(int pageno) const
     return m_pages2Frames.find(pageno) != m_pages2Frames.end();
 }
 
-MappedData Wal::acquirePageData(int pageno)
+MappedData Wal::acquirePageData(int pageno, SharedHighWater highWater)
 {
-    return acquirePageData(pageno, 0, getPageSize());
+    return acquirePageData(pageno, 0, getPageSize(), highWater);
 }
 
-MappedData Wal::acquirePageData(int pageno, off_t offset, size_t size)
+MappedData Wal::acquirePageData(int pageno, off_t offset, size_t size, SharedHighWater highWater)
 {
     WCTAssert(isInitialized());
     WCTAssert(containsPage(pageno));
     WCTAssert(offset + size <= getPageSize());
     return acquireData(headerSize + getFrameSize() * (m_pages2Frames[pageno] - 1)
                        + Frame::headerSize + offset,
-                       size);
+                       size,
+                       highWater);
 }
 
 int Wal::getMaxPageno() const
