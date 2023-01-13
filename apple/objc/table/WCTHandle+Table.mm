@@ -67,7 +67,9 @@
     WCTRemedialAssert(tableName != nil && cls != nil, "Class or table name can't be null.", return NO;);
     const WCTBinding &binding = [cls objectRelationalMapping];
     WCDB::InnerHandle *innerHandle = [self getOrGenerateHandle];
-    WCTAssert(innerHandle != nullptr);
+    if (innerHandle == nullptr) {
+        return NO;
+    }
     return binding.createVirtualTable(tableName, innerHandle);
 }
 
