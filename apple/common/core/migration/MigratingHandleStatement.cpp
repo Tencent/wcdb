@@ -444,7 +444,22 @@ bool MigratingHandleStatement::stepMigration(const int64_t& rowid)
     if (m_rowidIndexOfMigratingStatement > 0) {
         m_migrateStatement->bindInteger(rowid, m_rowidIndexOfMigratingStatement);
     }
-    return m_removeMigratedStatement->step() && m_migrateStatement->step();
+    if (!m_removeMigratedStatement->step()) {
+        return false;
+    }
+    if (!m_migrateStatement->step()) {
+        if (getHandle()->getError().code() == Error::Code::Constraint) {
+            Error error
+            = Error(Error::Code::Warning,
+                    Error::Level::Warning,
+                    StringView::formatted("UNIQUE constraint failed with rowId %d, rowidIndex %d",
+                                          rowid,
+                                          m_rowidIndexOfMigratingStatement));
+            Notifier::shared().notify(error);
+        }
+        return false;
+    }
+    return true;
 }
 
 void MigratingHandleStatement::finalizeMigrate()
