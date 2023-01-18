@@ -78,6 +78,7 @@ MigratingHandleStatement::process(const Statement& originStatement)
 
         // It's dangerous to use origin statement after tampering since all the tokens are not fit.
         Statement falledBackStatement = originStatement;
+        falledBackStatement.syntax();
         // fallback
         falledBackStatement.iterate([&succeed, this, migratingHandle](
                                     Syntax::Identifier& identifier, bool& stop) {

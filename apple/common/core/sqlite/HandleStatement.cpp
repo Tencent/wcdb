@@ -216,7 +216,8 @@ bool HandleStatement::tryExtractColumnInfo(const Statement &statement,
     bool findTable = !tableSpecified;
     Statement copyStatement = statement;
     bool invalidStatement = false;
-
+    
+    copyStatement.syntax();
     copyStatement.iterate([&](Syntax::Identifier &identifier, bool &stop) {
         StringView curTableName;
         Syntax::Schema curSchema;
