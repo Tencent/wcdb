@@ -45,6 +45,7 @@ public:
 
     typedef Syntax::Identifier::Iterator Iterator;
     void iterate(const Iterator& iterator);
+    void iterate(const Iterator& iterator) const;
 
     virtual StringView getDescription() const;
 

@@ -79,8 +79,14 @@ SQL::Type SQL::getType() const
     return m_syntax->getType();
 }
 
+void SQL::iterate(const Iterator& iterator) const
+{
+    return m_syntax->iterate(iterator);
+}
+
 void SQL::iterate(const Iterator& iterator)
 {
+    std::atomic_store(&m_description, std::shared_ptr<StringView>(nullptr));
     return m_syntax->iterate(iterator);
 }
 
