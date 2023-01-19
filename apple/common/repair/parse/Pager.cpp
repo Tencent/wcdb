@@ -311,7 +311,7 @@ void Pager::tryPurgeCache()
     if (m_highWater->getCurrent() <= allowedSize) {
         return;
     }
-    Error error(Error::Code::Warning, Error::Level::Warning, "Mapped memory exceeds.");
+    Error error(Error::Code::Notice, Error::Level::Notice, "Mapped memory exceeds.");
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.insert_or_assign(ErrorStringKeyAssociatePath, getPath());
     error.infos.insert_or_assign("CurrentSize", m_highWater->getCurrent());
