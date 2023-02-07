@@ -254,12 +254,15 @@ public:
     std::optional<ValueArray<ObjectType>>
     extractAllObjects(const ResultFields& resultFields)
     {
-        ValueArray<ObjectType> result;
+        std::optional<ValueArray<ObjectType>> result;
         bool succeed = false;
         while ((succeed = step()) && !done()) {
-            result.push_back(extractOneObject<ObjectType>(resultFields));
+            if (!result.has_value()) {
+                result = ValueArray<ObjectType>();
+            }
+            result->push_back(extractOneObject<ObjectType>(resultFields));
         }
-        return succeed ? result : std::optional<std::vector<ObjectType>>();
+        return result;
     }
 
     /**

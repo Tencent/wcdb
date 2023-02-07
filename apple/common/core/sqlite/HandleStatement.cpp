@@ -554,12 +554,15 @@ Value HandleStatement::getValue(int index)
 
 OptionalOneColumn HandleStatement::getOneColumn(int index)
 {
-    OneColumnValue result;
+    OptionalOneColumn result;
     bool succeed = false;
     while ((succeed = step()) && !done()) {
-        result.push_back(getValue(index));
+        if (!result.has_value()) {
+            result = OneColumnValue();
+        }
+        result->push_back(getValue(index));
     }
-    return succeed ? result : OptionalOneColumn();
+    return result;
 }
 
 OneRowValue HandleStatement::getOneRow()
@@ -574,12 +577,15 @@ OneRowValue HandleStatement::getOneRow()
 
 OptionalMultiRows HandleStatement::getAllRows()
 {
-    MultiRowsValue result;
+    OptionalMultiRows result;
     bool succeed = false;
     while ((succeed = step()) && !done()) {
-        result.push_back(getOneRow());
+        if (!result.has_value()) {
+            result = MultiRowsValue();
+        }
+        result->push_back(getOneRow());
     }
-    return succeed ? result : OptionalMultiRows();
+    return result;
 }
 
 signed long long HandleStatement::getColumnSize(int index)

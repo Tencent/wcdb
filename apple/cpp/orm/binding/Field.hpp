@@ -62,23 +62,23 @@ public:
         WCDB_CPP_ORM_STATIC_ASSERT_FOR_OBJECT_TYPE
         switch (m_accessor->getColumnType()) {
         case ColumnType::Integer: {
-            auto intAccessor = dynamic_cast<Accessor<ObjectType, ColumnType::Integer>*>(
-            m_accessor.get());
+            auto intAccessor
+            = static_cast<Accessor<ObjectType, ColumnType::Integer>*>(m_accessor.get());
             return intAccessor->getValue(obj);
         } break;
         case ColumnType::Float: {
             auto floatAccessor
-            = dynamic_cast<Accessor<ObjectType, ColumnType::Float>*>(m_accessor.get());
+            = static_cast<Accessor<ObjectType, ColumnType::Float>*>(m_accessor.get());
             return floatAccessor->getValue(obj);
         } break;
         case ColumnType::Text: {
             auto textAccessor
-            = dynamic_cast<Accessor<ObjectType, ColumnType::Text>*>(m_accessor.get());
+            = static_cast<Accessor<ObjectType, ColumnType::Text>*>(m_accessor.get());
             return textAccessor->getValue(obj);
         } break;
         case ColumnType::BLOB: {
             auto blobAccessor
-            = dynamic_cast<Accessor<ObjectType, ColumnType::BLOB>*>(m_accessor.get());
+            = static_cast<Accessor<ObjectType, ColumnType::BLOB>*>(m_accessor.get());
             return blobAccessor->getValue(obj);
         } break;
         case ColumnType::Null: {

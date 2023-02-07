@@ -208,12 +208,15 @@ MultiObject StatementOperation::extractOneMultiObject(const ResultFields &result
 std::optional<ValueArray<MultiObject>>
 StatementOperation::extractAllMultiObjects(const ResultFields &resultFields)
 {
-    ValueArray<MultiObject> result;
+    std::optional<ValueArray<MultiObject>> result;
     bool succeed = false;
     while ((succeed = step()) && !done()) {
-        result.push_back(extractOneMultiObject(resultFields));
+        if (!result.has_value()) {
+            result = ValueArray<MultiObject>();
+        }
+        result->push_back(extractOneMultiObject(resultFields));
     }
-    return succeed ? result : std::optional<std::vector<MultiObject>>();
+    return result;
 }
 
 const UnsafeStringView StatementOperation::getOriginColumnName(int index)
