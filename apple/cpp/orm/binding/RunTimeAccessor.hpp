@@ -63,7 +63,6 @@ public:
     {
         instance.*Super::m_memberPointer
         = ColumnIsTextType<FieldType>::fromUnderlyingType(value);
-        ;
     }
 };
 
@@ -129,7 +128,6 @@ public:
     {
         instance.*Super::m_memberPointer
         = ColumnIsBLOBType<FieldType>::fromUnderlyingType(value);
-        ;
     }
 };
 
