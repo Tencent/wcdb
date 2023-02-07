@@ -38,6 +38,11 @@ namespace WCDB {
 
 Database::Database(const UnsafeStringView& path)
 {
+    if (path.compare(":memory:") == 0) {
+        m_databaseHolder = Core::shared().getOrCreateDatabase(path);
+        m_innerDatabase = m_databaseHolder.get();
+        return;
+    }
     const char* resolvePath = realpath(path.data(), nullptr);
     if (resolvePath == nullptr && errno == ENOENT) {
         FileManager::createFile(path);
