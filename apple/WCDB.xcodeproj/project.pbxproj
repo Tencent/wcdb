@@ -825,6 +825,7 @@
 		0D249BC92542B90600B43BD9 /* MergeFTSIndexLogic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D249BC82542B90600B43BD9 /* MergeFTSIndexLogic.cpp */; };
 		0D3AE53825416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D3AE53725416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp */; };
 		0D3AE54025416DB4007B9D0E /* AutoMergeFTSIndexConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D3AE53F25416DB4007B9D0E /* AutoMergeFTSIndexConfig.cpp */; };
+		0D4947D0299DE22D00F9518E /* WCTBridgeProperty.mm in Sources */ = {isa = PBXBuildFile; fileRef = 036E50B828115B1D007365CD /* WCTBridgeProperty.mm */; };
 		0D4FE5EF29482F4D0061C3CA /* Builtin.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D4FE5EE29482F4D0061C3CA /* Builtin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0D5363EA290A65390026A4DC /* Master.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D5363E8290A65390026A4DC /* Master.cpp */; };
 		0D5363EB290A65390026A4DC /* Master.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D5363E8290A65390026A4DC /* Master.cpp */; };
@@ -10282,6 +10283,7 @@
 				7521D712291E9ABB009642EF /* FTS3Function.cpp in Sources */,
 				7521D713291E9ABB009642EF /* RecyclableHandle.cpp in Sources */,
 				7521D717291E9ABB009642EF /* ResultColumn.cpp in Sources */,
+				0D4947D0299DE22D00F9518E /* WCTBridgeProperty.mm in Sources */,
 				7521D719291E9ABB009642EF /* FullCrawler.cpp in Sources */,
 				7521D71A291E9ABB009642EF /* SyntaxVacuumSTMT.cpp in Sources */,
 				7521D71D291E9ABB009642EF /* StatementCreateTable.cpp in Sources */,
