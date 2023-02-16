@@ -812,7 +812,7 @@ public extension Database {
 
     /// Checkpoint database in truncate mode.
     func truncateCheckpoint() throws {
-        if !WCDBDatabasePassiveCheckpoint(database) {
+        if !WCDBDatabaseTruncateCheckpoint(database) {
             throw getError()
         }
     }
