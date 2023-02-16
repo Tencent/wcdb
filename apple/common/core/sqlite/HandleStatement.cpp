@@ -603,10 +603,7 @@ bool HandleStatement::isBusy()
 
 void HandleStatement::enableAutoAddColumn()
 {
-    auto config = Core::shared().getABTestConfig("clicfg_db_auto_add_column");
-    if (config.has_value() && config.value().compare("1") == 0) {
-        m_needAutoAddColumn = true;
-    }
+    m_needAutoAddColumn = true;
 }
 
 bool HandleStatement::isReadOnly()
