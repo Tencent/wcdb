@@ -91,7 +91,7 @@ bool MigrateHandle::detach()
 }
 
 #pragma mark - Stepper
-std::optional<std::set<StringView>> MigrateHandle::getAllTables()
+Optional<std::set<StringView>> MigrateHandle::getAllTables()
 {
     Column name("name");
     Column type("type");
@@ -115,12 +115,12 @@ bool MigrateHandle::dropSourceTable(const MigrationInfo* info)
     return succeed;
 }
 
-std::optional<bool> MigrateHandle::migrateRows(const MigrationInfo* info)
+Optional<bool> MigrateHandle::migrateRows(const MigrationInfo* info)
 {
     WCTAssert(info != nullptr);
     auto exists = tableExists(info->getTable());
-    if (!exists.has_value()) {
-        return std::nullopt;
+    if (!exists.succeed()) {
+        return NullOpt;
     }
 
     if (!exists.value()) {
@@ -129,52 +129,52 @@ std::optional<bool> MigrateHandle::migrateRows(const MigrationInfo* info)
 
     if (m_migratingInfo != info) {
         if (!reAttach(info->getSourceDatabase(), info->getSchemaForSourceDatabase())) {
-            return std::nullopt;
+            return NullOpt;
         }
         m_migratingInfo = info;
     }
 
     if (!m_migrateStatement->isPrepared()
         && !m_migrateStatement->prepare(m_migratingInfo->getStatementForMigratingOneRow())) {
-        return std::nullopt;
+        return NullOpt;
     }
 
     if (!m_removeMigratedStatement->isPrepared()
         && !m_removeMigratedStatement->prepare(
         m_migratingInfo->getStatementForDeletingMigratedOneRow())) {
-        return std::nullopt;
+        return NullOpt;
     }
 
     double timeIntervalWithinTransaction = calculateTimeIntervalWithinTransaction();
     SteadyClock beforeTransaction = SteadyClock::now();
-    std::optional<bool> migrated;
+    Optional<bool> migrated;
     if (runTransaction([&migrated, &beforeTransaction, &timeIntervalWithinTransaction, this](
                        InnerHandle*) -> bool {
             double cost = 0;
             do {
                 migrated = migrateRow();
                 cost = SteadyClock::timeIntervalSinceSteadyClockToNow(beforeTransaction);
-            } while (migrated.has_value() && !migrated.value()
+            } while (migrated.succeed() && !migrated.value()
                      && cost < timeIntervalWithinTransaction);
             timeIntervalWithinTransaction = cost;
-            return migrated.has_value();
+            return migrated.succeed();
         })) {
         // update only if succeed
         double timeIntervalWholeTranscation
         = SteadyClock::timeIntervalSinceSteadyClockToNow(beforeTransaction);
         addSample(timeIntervalWithinTransaction, timeIntervalWholeTranscation);
 
-        WCTAssert(migrated.has_value());
+        WCTAssert(migrated.succeed());
         return migrated;
     }
-    return std::nullopt;
+    return NullOpt;
 }
 
-std::optional<bool> MigrateHandle::migrateRow()
+Optional<bool> MigrateHandle::migrateRow()
 {
     WCTAssert(m_migrateStatement->isPrepared() && m_removeMigratedStatement->isPrepared());
     WCTAssert(isInTransaction());
-    std::optional<bool> migrated;
+    Optional<bool> migrated;
     m_migrateStatement->reset();
     m_removeMigratedStatement->reset();
     if (m_migrateStatement->step()) {
@@ -238,29 +238,28 @@ double MigrateHandle::calculateTimeIntervalWithinTransaction() const
 }
 
 #pragma mark - Info Initializer
-std::optional<bool> MigrateHandle::sourceTableExists(const MigrationUserInfo& userInfo)
+Optional<bool> MigrateHandle::sourceTableExists(const MigrationUserInfo& userInfo)
 {
     Schema schema = userInfo.getSchemaForSourceDatabase();
     if (!reAttach(userInfo.getSourceDatabase(), schema)) {
-        return std::nullopt;
+        return NullOpt;
     }
     return tableExists(schema, userInfo.getSourceTable());
 }
 
-std::optional<std::pair<bool, std::set<StringView>>>
+Optional<std::pair<bool, std::set<StringView>>>
 MigrateHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
 {
     auto exists = tableExists(Schema::main(), userInfo.getTable());
-    ;
-    if (!exists.has_value()) {
-        return std::nullopt;
+    if (!exists.succeed()) {
+        return NullOpt;
     }
     bool integerPrimary = false;
     std::set<StringView> names;
     if (exists.value()) {
         auto optionalMetas = getTableMeta(Schema::main(), userInfo.getTable());
-        if (!optionalMetas.has_value()) {
-            return std::nullopt;
+        if (!optionalMetas.succeed()) {
+            return NullOpt;
         }
         auto& metas = optionalMetas.value();
         integerPrimary = ColumnMeta::getIndexOfIntegerPrimary(metas) >= 0;

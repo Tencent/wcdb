@@ -194,7 +194,7 @@
 {
     WCTOptionalSize frames = [self getNumberOfWalFrames];
     if (frames.failed()) {
-        return std::nullopt;
+        return WCDB::NullOpt;
     }
     if (frames.value() == 0) {
         return YES;
@@ -202,7 +202,7 @@
 
     BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:self.shmPath];
     if (!exists) {
-        return std::nullopt;
+        return WCDB::NullOpt;
     }
 
     NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:self.shmPath];
@@ -210,14 +210,14 @@
     [fileHandle seekToFileOffset:16];
     NSData *data = [fileHandle readDataOfLength:4];
     if (data == nil) {
-        return std::nullopt;
+        return WCDB::NullOpt;
     }
     uint32_t maxFrame = *(uint32_t *) data.bytes;
 
     [fileHandle seekToFileOffset:96];
     data = [fileHandle readDataOfLength:4];
     if (data == nil) {
-        return std::nullopt;
+        return WCDB::NullOpt;
     }
     uint32_t backfill = *(uint32_t *) data.bytes;
 
@@ -230,7 +230,7 @@
 {
     WCTOptionalSize frames = [self getNumberOfWalFrames];
     if (frames.failed()) {
-        return std::nullopt;
+        return WCDB::NullOpt;
     }
     return frames.value() == 0;
 }

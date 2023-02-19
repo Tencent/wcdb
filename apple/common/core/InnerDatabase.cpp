@@ -159,7 +159,7 @@ InnerDatabase::InitializedGuard InnerDatabase::initialize()
             }
         }
         auto exists = FileManager::fileExists(path);
-        if (!exists.has_value()) {
+        if (!exists.succeed()) {
             assignWithSharedThreadedError();
             break;
         }
@@ -247,13 +247,13 @@ bool InnerDatabase::execute(const UnsafeStringView &sql)
     return false;
 }
 
-std::optional<bool> InnerDatabase::tableExists(const UnsafeStringView &table)
+Optional<bool> InnerDatabase::tableExists(const UnsafeStringView &table)
 {
-    std::optional<bool> exists;
+    Optional<bool> exists;
     RecyclableHandle handle = getHandle();
     if (handle != nullptr) {
         exists = handle->tableExists(table);
-        if (!exists.has_value()) {
+        if (!exists.succeed()) {
             setThreadedError(handle->getError());
         }
     }
@@ -487,13 +487,13 @@ bool InnerDatabase::removeFiles()
     return result;
 }
 
-std::optional<size_t> InnerDatabase::getFilesSize()
+Optional<size_t> InnerDatabase::getFilesSize()
 {
     if (m_isInMemory) {
         return 0;
     }
     auto size = FileManager::getItemsSize(getPaths());
-    if (!size.has_value()) {
+    if (!size.succeed()) {
         assignWithSharedThreadedError();
     }
     return size;
@@ -836,18 +836,17 @@ void InnerDatabase::checkIntegrity(bool interruptible)
 }
 
 #pragma mark - Migration
-std::optional<bool> InnerDatabase::stepMigration(bool interruptible)
+Optional<bool> InnerDatabase::stepMigration(bool interruptible)
 {
     InitializedGuard initializedGuard = initialize();
     if (!initializedGuard.valid()) {
-        return std::nullopt;
+        return NullOpt;
     }
     WCTRemedialAssert(
-    !isInTransaction(), "Migrating can't be run in transaction.", return std::nullopt;);
-    WCTRemedialAssert(m_migration.shouldMigrate(),
-                      "It's not configured for migration.",
-                      return std::nullopt;);
-    std::optional<bool> done;
+    !isInTransaction(), "Migrating can't be run in transaction.", return NullOpt;);
+    WCTRemedialAssert(
+    m_migration.shouldMigrate(), "It's not configured for migration.", return NullOpt;);
+    Optional<bool> done;
     RecyclableHandle handle = flowOut(HandleType::Migrate);
     if (handle != nullptr) {
         WCTAssert(dynamic_cast<MigrateHandle *>(handle.get()) != nullptr);
@@ -867,7 +866,7 @@ std::optional<bool> InnerDatabase::stepMigration(bool interruptible)
         }
         migrateHandle->markErrorAsIgnorable(Error::Code::Busy);
         done = m_migration.step(*migrateHandle);
-        if (!done.has_value() && handle->getError().isIgnorable()) {
+        if (!done.succeed() && handle->getError().isIgnorable()) {
             done = false;
         }
         migrateHandle->markErrorAsUnignorable();
@@ -950,7 +949,7 @@ bool InnerDatabase::checkpoint(bool interruptible, CheckPointMode mode)
 
 #pragma mark - AutoMergeFTSIndex
 
-std::optional<bool> InnerDatabase::mergeFTSIndex(TableArray newTables, TableArray modifiedTables)
+Optional<bool> InnerDatabase::mergeFTSIndex(TableArray newTables, TableArray modifiedTables)
 {
     InitializedGuard initializedGuard = initialize();
     if (!initializedGuard.valid()) {

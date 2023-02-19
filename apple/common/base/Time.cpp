@@ -72,7 +72,7 @@ bool Time::empty() const
     return time_since_epoch().count() == 0;
 }
 
-std::optional<StringView> Time::stringify() const
+Optional<StringView> Time::stringify() const
 {
     std::time_t nanoseconds
     = (std::time_t) std::chrono::duration_cast<std::chrono::nanoseconds>(time_since_epoch())
@@ -85,7 +85,7 @@ std::optional<StringView> Time::stringify() const
         error.setSystemCode(errno, Error::Code::Error);
         Notifier::shared().notify(error);
         setThreadedError(std::move(error));
-        return std::nullopt;
+        return NullOpt;
     }
     std::time_t nanosecondsPart = nanoseconds % (int) 1E9;
     std::ostringstream stream;

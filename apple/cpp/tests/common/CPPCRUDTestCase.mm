@@ -92,7 +92,7 @@
 - (int)allRowsCount
 {
     WCDB::OptionalValue value = self.database->getValueFromStatement(WCDB::StatementSelect().select(WCDB::Expression::function("count").invokeAll()).from(self.tableName.UTF8String));
-    TestCaseAssertTrue(value.has_value());
+    TestCaseAssertTrue(value.succeed());
     return value.value();
 }
 

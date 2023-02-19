@@ -58,12 +58,12 @@ bool BaseBinding::createTable(const UnsafeStringView &tableName, InnerHandle *ha
     handle->markErrorNotAllowedWithinTransaction();
     return handle->runTransactionIfNotInTransaction([&](InnerHandle *handle) {
         auto exists = handle->tableExists(tableName);
-        if (!exists.has_value()) {
+        if (!exists.succeed()) {
             return false;
         }
         if (exists.value()) {
             auto optionalColumnNames = handle->getColumns(tableName);
-            if (!optionalColumnNames.has_value()) {
+            if (!optionalColumnNames.succeed()) {
                 return false;
             }
             std::set<StringView> &columnNames = optionalColumnNames.value();
@@ -170,11 +170,12 @@ bool BaseBinding::tryRecoverColumn(const UnsafeStringView &columnName,
     if (m_columnDefs.caseInsensiveFind(columnName) == m_columnDefs.end()) {
         return false;
     }
-    if (!handle->tableExists(schemaName, tableName)) {
+    auto exist = handle->tableExists(schemaName, tableName);
+    if (exist.failed() || !exist.value()) {
         return false;
     }
     auto optionalColumnNames = handle->getColumns(schemaName, tableName);
-    if (!optionalColumnNames.has_value()) {
+    if (!optionalColumnNames.succeed()) {
         return false;
     }
     std::set<StringView> &columnNames = optionalColumnNames.value();

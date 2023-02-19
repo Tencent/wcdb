@@ -41,12 +41,12 @@ public:
      @return an object of specified type.
      */
     template<class ObjectType>
-    std::optional<ObjectType> objectAtTable(const UnsafeStringView& table)
+    Optional<ObjectType> objectAtTable(const UnsafeStringView& table)
     {
         WCDB_CPP_ORM_STATIC_ASSERT_FOR_OBJECT_TYPE
         auto iter = m_objs.find(table);
         if (iter == m_objs.end()) {
-            return std::optional<ObjectType>();
+            return Optional<ObjectType>();
         }
         ObjectType result;
         ObjectValue& objValue = iter->second;

@@ -45,13 +45,13 @@ Page::Page(int number_, Pager *pager, const UnsafeData &data)
 
 Page::~Page() = default;
 
-std::optional<Page::Type> Page::acquireType()
+Optional<Page::Type> Page::acquireType()
 {
     int type = 0;
     if (m_deserialization.data().empty()) {
         UnsafeData data = m_pager->acquirePageData(number, getOffsetOfHeader(), 1);
         if (data.empty()) {
-            return std::nullopt;
+            return NullOpt;
         }
         Deserialization deserialization(data);
         WCTAssert(deserialization.canAdvance(1));

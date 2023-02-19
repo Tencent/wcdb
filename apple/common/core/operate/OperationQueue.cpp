@@ -93,7 +93,7 @@ void OperationQueue::handleError(const Error& error)
     }
 
     auto optionalIdentifier = FileManager::getFileIdentifier(path);
-    if (!optionalIdentifier.has_value()) {
+    if (!optionalIdentifier.succeed()) {
         return;
     }
     uint32_t identifier = optionalIdentifier.value();
@@ -266,7 +266,7 @@ void OperationQueue::doMigrate(const UnsafeStringView& path, int numberOfFailure
               && numberOfFailures < OperationQueueTolerableFailuresForMigration);
 
     auto done = m_event->migrationShouldBeOperated(path);
-    if (done.has_value()) {
+    if (done.succeed()) {
         if (!done.value()) {
             asyncMigrate(path, OperationQueueTimeIntervalForMigration, numberOfFailures);
         }
@@ -505,7 +505,7 @@ bool OperationQueue::isFileObservedCorrupted(const UnsafeStringView& path) const
 
     bool corrupted = false;
     auto identifier = FileManager::getFileIdentifier(path);
-    if (identifier.has_value()) {
+    if (identifier.succeed()) {
         SharedLockGuard lockGuard(m_lock);
         corrupted = m_corrupteds.find(identifier.value()) != m_corrupteds.end();
     }

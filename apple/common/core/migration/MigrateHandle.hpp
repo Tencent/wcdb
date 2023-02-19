@@ -50,10 +50,10 @@ private:
 
 #pragma mark - Stepper
 protected:
-    std::optional<std::set<StringView>> getAllTables() override final;
+    Optional<std::set<StringView>> getAllTables() override final;
     bool dropSourceTable(const MigrationInfo* info) override final;
-    std::optional<bool> migrateRows(const MigrationInfo* info) override final;
-    std::optional<bool> migrateRow();
+    Optional<bool> migrateRows(const MigrationInfo* info) override final;
+    Optional<bool> migrateRow();
 
     bool reAttachMigrationInfo(const MigrationInfo* info);
     void finalizeMigrationStatement();
@@ -81,8 +81,8 @@ private:
 
 #pragma mark - Info Initializer
 protected:
-    std::optional<bool> sourceTableExists(const MigrationUserInfo& userInfo) override final;
-    std::optional<std::pair<bool, std::set<StringView>>>
+    Optional<bool> sourceTableExists(const MigrationUserInfo& userInfo) override final;
+    Optional<std::pair<bool, std::set<StringView>>>
     getColumnsOfUserInfo(const MigrationUserInfo& userInfo) override final;
     const StringView& getDatabasePath() const override final;
 };

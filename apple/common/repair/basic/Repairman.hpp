@@ -28,11 +28,11 @@
 #include <WCDB/Cipher.hpp>
 #include <WCDB/Crawlable.hpp>
 #include <WCDB/ErrorProne.hpp>
+#include <WCDB/Optional.hpp>
 #include <WCDB/Progress.hpp>
 #include <WCDB/Scoreable.hpp>
 #include <WCDB/UpgradeableErrorProne.hpp>
 #include <list>
-#include <optional>
 
 namespace WCDB {
 
@@ -52,7 +52,7 @@ public:
     const StringView &getPath() const;
 
 protected:
-    std::optional<bool> isEmptyDatabase();
+    Optional<bool> isEmptyDatabase();
     bool exit();
     bool exit(bool result);
 

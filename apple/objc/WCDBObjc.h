@@ -23,8 +23,8 @@
  */
 
 #ifdef __cplusplus
-#if __cplusplus < 201703L
-#error `CLANG_CXX_LANGUAGE_STANDARD = gnu++17` and `CLANG_CXX_LIBRARY = libc++` build settings are required.
+#if __cplusplus < 201402L
+#error `CLANG_CXX_LANGUAGE_STANDARD = gnu++14` and `CLANG_CXX_LIBRARY = libc++` build settings are required.
 #endif
 #else // __cplusplus
 #error Objective-C++ environment is required. (By changing suffix of those files including <WCDB/WCDB.h> from `.m` to `.mm`.

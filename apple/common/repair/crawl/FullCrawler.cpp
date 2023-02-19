@@ -50,7 +50,7 @@ FullCrawler::~FullCrawler() = default;
 bool FullCrawler::work()
 {
     auto isEmpty = isEmptyDatabase();
-    if (isEmpty.has_value()) {
+    if (isEmpty.succeed()) {
         if (isEmpty.value()) {
             return exit(true);
         }
@@ -89,7 +89,7 @@ bool FullCrawler::work()
         Page page(i, &m_pager);
         auto type = page.acquireType();
         // treat as leaf table if unknown
-        if (type.value_or(Page::Type::LeafTable) == Page::Type::LeafTable) {
+        if (type.failed() || type.value() == Page::Type::LeafTable) {
             ++numbersOfLeafTablePages;
         }
     }

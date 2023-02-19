@@ -60,7 +60,7 @@
 
 - (void)doTestMultiObjects:(const WCDB::ValueArray<WCDB::MultiObject>&)multiObjects
                     andSQL:(NSString*)sql
-               bySelecting:(std::optional<WCDB::ValueArray<WCDB::MultiObject>> (^)())block
+               bySelecting:(WCDB::Optional<WCDB::ValueArray<WCDB::MultiObject>> (^)())block
 {
     TestCaseAssertTrue(multiObjects.size() > 0);
     TestCaseAssertTrue(sql.length > 0);
@@ -68,7 +68,7 @@
     [self doTestSQLs:@[ sql ]
          inOperation:^BOOL {
              auto values = block();
-             TestCaseAssertTrue(values.has_value());
+             TestCaseAssertTrue(values.succeed());
              results = values.value();
              return results.size() > 0;
          }];
@@ -88,7 +88,7 @@
     TestCaseAssertTrue(self.object1InTable2 == multiObj.objectAtTable<CPPTestCaseObject>(self.tableName2.UTF8String).value());
     [self doTestMultiObjects:multiObj
                       andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
-                 bySelecting:^std::optional<WCDB::ValueArray<WCDB::MultiObject>> {
+                 bySelecting:^WCDB::Optional<WCDB::ValueArray<WCDB::MultiObject>> {
                      WCDB::ResultFields resultColumns
                      = CPPTestCaseObject::allFields()
                        .redirect([self](const WCDB::Field& field) -> WCDB::ResultColumn {
@@ -117,7 +117,7 @@
     TestCaseAssertTrue(self.object2InTable2 == multiObj2.objectAtTable<CPPTestCaseObject>(self.tableName2.UTF8String).value());
     [self doTestMultiObjects:{ multiObj1, multiObj2 }
                       andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
-                 bySelecting:^std::optional<WCDB::ValueArray<WCDB::MultiObject>> {
+                 bySelecting:^WCDB::Optional<WCDB::ValueArray<WCDB::MultiObject>> {
                      WCDB::ResultFields resultColumns
                      = CPPTestCaseObject::allFields()
                        .redirect([self](const WCDB::Field& field) -> WCDB::ResultColumn {
@@ -141,7 +141,7 @@
     TestCaseAssertTrue(self.object1InTable2 == multiObj.objectAtTable<CPPTestCaseObject>(self.tableName2.UTF8String).value());
     [self doTestMultiObjects:multiObj
                       andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
-                 bySelecting:^std::optional<WCDB::ValueArray<WCDB::MultiObject>> {
+                 bySelecting:^WCDB::Optional<WCDB::ValueArray<WCDB::MultiObject>> {
                      WCDB::ResultFields resultColumns
                      = CPPTestCaseObject::allFields()
                        .redirect([self](const WCDB::Field& field) -> WCDB::ResultColumn {
@@ -170,7 +170,7 @@
     TestCaseAssertTrue(self.object2InTable2 == multiObj2.objectAtTable<CPPTestCaseObject>(self.tableName2.UTF8String).value());
     [self doTestMultiObjects:{ multiObj1, multiObj2 }
                       andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
-                 bySelecting:^std::optional<WCDB::ValueArray<WCDB::MultiObject>> {
+                 bySelecting:^WCDB::Optional<WCDB::ValueArray<WCDB::MultiObject>> {
                      WCDB::ResultFields resultColumns
                      = CPPTestCaseObject::allFields()
                        .redirect([self](const WCDB::Field& field) -> WCDB::ResultColumn {

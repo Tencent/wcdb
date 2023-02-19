@@ -73,7 +73,7 @@ ResultFields& ResultFields::addingNewResultColumns(const ResultFields& resultCol
 bool ResultFields::isEqual(const ResultField& left, const ResultField& right)
 {
     return left.getAccessor().get() == right.getAccessor().get()
-           && left.getDescription() == right.getDescription();
+           && left.getDescription().compare(right.getDescription()) == 0;
 }
 
 ResultFields

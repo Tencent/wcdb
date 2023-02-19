@@ -27,6 +27,7 @@
 #if WCDB_USE_BUILTIN_SQLITE_REPAIR
 
 #include <WCDB/Assembler.hpp>
+#include <WCDB/Optional.hpp>
 #include <WCDB/SQLiteBase.hpp>
 #include <list>
 
@@ -60,8 +61,8 @@ public:
 #pragma mark - Cell
 protected:
     bool lazyPrepareCell();
-    std::optional<StringView> getAssembleSQL(const UnsafeStringView &tableName);
-    std::optional<std::list<StringView>> getColumnNames(const UnsafeStringView &tableName);
+    Optional<StringView> getAssembleSQL(const UnsafeStringView &tableName);
+    Optional<std::list<StringView>> getColumnNames(const UnsafeStringView &tableName);
 
     StringView m_table;
     int m_primary;
@@ -73,7 +74,7 @@ protected:
     bool assembleSequence(const UnsafeStringView &tableName, int64_t sequence) override final;
     bool markSequenceAsAssembled();
 
-    std::optional<bool> updateSequence(const UnsafeStringView &tableName, int64_t sequence);
+    Optional<bool> updateSequence(const UnsafeStringView &tableName, int64_t sequence);
     bool insertSequence(const UnsafeStringView &tableName, int64_t sequence);
 
 #pragma mark - SQLite Base

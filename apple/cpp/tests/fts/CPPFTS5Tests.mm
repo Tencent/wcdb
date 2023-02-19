@@ -266,14 +266,14 @@
         CPPFTS5Object object(Random.shared.chineseString.UTF8String, "");
         TestCaseAssertTrue(self.ftsTable.insertObjects(object));
         WCDB::OptionalValue count = self.database->getValueFromStatement(WCDB::StatementSelect().select(WCDB::Column("segid").count().distinct()).from(WCDB::StringView::formatted("%s_idx", self.tableName.UTF8String)));
-        TestCaseAssertTrue(count.has_value());
+        TestCaseAssertTrue(count.succeed());
         TestCaseAssertTrue(count.value() == i + 2);
     }
 
     [NSThread sleepForTimeInterval:2.5];
 
     WCDB::OptionalValue count = self.database->getValueFromStatement(WCDB::StatementSelect().select(WCDB::Column("segid").count().distinct()).from(WCDB::StringView::formatted("%s_idx", self.tableName.UTF8String)));
-    TestCaseAssertTrue(count.has_value());
+    TestCaseAssertTrue(count.succeed());
     TestCaseAssertTrue(count.value() == 1);
 }
 
@@ -302,7 +302,7 @@
     }
     [NSThread sleepForTimeInterval:10];
     WCDB::OptionalValue count = self.database->getValueFromStatement(WCDB::StatementSelect().select(WCDB::Column("segid").count().distinct()).from(WCDB::StringView::formatted("%s_idx", self.tableName.UTF8String)));
-    TestCaseAssertTrue(count.has_value());
+    TestCaseAssertTrue(count.succeed());
     TestCaseAssertTrue(count.value().intValue() < 8);
     TestCaseAssertTrue(maxCost < 0.1);
 }

@@ -104,8 +104,8 @@ OptionalBool WCDBDatabaseExistTable(CPPDatabase database, const char* tableName)
     OptionalBool ret = { false, false };
     WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, ret);
     auto exist = cppDatabase->tableExists(WCDB::UnsafeStringView(tableName));
-    if (exist.has_value()) {
-        ret.hasValue = exist.has_value();
+    if (exist.succeed()) {
+        ret.hasValue = exist.succeed();
         ret.value = exist.value();
     }
     return ret;
@@ -336,7 +336,7 @@ OptionalUInt64 WCDBDatabaseGetFileSize(CPPDatabase database)
     OptionalUInt64 ret = { false, 0 };
     WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, ret);
     auto size = cppDatabase->getFilesSize();
-    if (size.has_value()) {
+    if (size.succeed()) {
         ret.hasValue = true;
         ret.value = size.value();
     }

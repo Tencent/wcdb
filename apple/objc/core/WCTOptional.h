@@ -23,8 +23,8 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <WCDB/Optional.hpp>
 #import <WCDB/WCTConvertible.h>
-#import <optional>
 #import <type_traits>
 
 template<typename T>
@@ -36,13 +36,13 @@ public:
 
     const T& value() const
     {
-        if (m_real.has_value()) {
+        if (m_real.succeed()) {
             return m_real.value();
         }
         return m_default;
     }
 
-    BOOL succeed() const { return m_real.has_value(); }
+    BOOL succeed() const { return m_real.succeed(); }
     BOOL failed() const { return !succeed(); }
 
     WCTIncompleteOptional& operator=(const T& value)
@@ -53,7 +53,7 @@ public:
 
 protected:
     WCTIncompleteOptional(const T& defaultValue)
-    : m_real(std::nullopt), m_default(defaultValue)
+    : m_real(WCDB::NullOpt), m_default(defaultValue)
     {
     }
 
@@ -62,13 +62,13 @@ protected:
     {
     }
 
-    WCTIncompleteOptional(std::optional<T>&& optional, const T& defaultValue)
+    WCTIncompleteOptional(WCDB::Optional<T>&& optional, const T& defaultValue)
     : m_real(std::move(optional)), m_default(defaultValue)
     {
     }
 
 private:
-    std::optional<T> m_real;
+    WCDB::Optional<T> m_real;
     T m_default;
 };
 
@@ -81,7 +81,7 @@ public:
     WCTFundamentalOptional()
     : Super(defaultValue) {}
 
-    WCTFundamentalOptional(const std::nullopt_t&)
+    WCTFundamentalOptional(const WCDB::NullOpt_T&)
     : Super(defaultValue) {}
 
     WCTFundamentalOptional(const T& value)
@@ -90,7 +90,7 @@ public:
     ~WCTFundamentalOptional() override = default;
 
 protected:
-    WCTFundamentalOptional(std::optional<T>&& optional)
+    WCTFundamentalOptional(WCDB::Optional<T>&& optional)
     : Super(std::move(optional), defaultValue)
     {
     }
@@ -102,7 +102,7 @@ class WCTOptionalBool final : public WCTFundamentalOptional<BOOL, NO> {
 public:
     using Super::WCTFundamentalOptional;
 
-    WCTOptionalBool(std::optional<bool>&& optional);
+    WCTOptionalBool(WCDB::Optional<bool>&& optional);
     ~WCTOptionalBool() override final;
 };
 
@@ -113,5 +113,5 @@ public:
     using Super::WCTFundamentalOptional;
     ~WCTOptionalSize() override final;
 
-    WCTOptionalSize(std::optional<size_t>&& optional);
+    WCTOptionalSize(WCDB::Optional<size_t>&& optional);
 };

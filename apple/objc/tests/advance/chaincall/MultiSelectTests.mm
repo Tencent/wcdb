@@ -127,10 +127,10 @@
                  bySelecting:^NSArray<WCTMultiObject*>* {
                      WCTResultColumns resultColumns
                      = TestCaseObject.allProperties
-                       .redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
+                       .redirect(^WCDB::ResultColumn(const WCTProperty& property) {
                            return property.table(self.tableName);
                        })
-                       .addingNewResultColumns(TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
+                       .addingNewResultColumns(TestCaseObject.allProperties.redirect(^WCDB::ResultColumn(const WCTProperty& property) {
                            return property.table(self.tableName2);
                        }));
 
@@ -160,10 +160,10 @@
                  bySelecting:^NSArray<WCTMultiObject*>* {
                      WCTResultColumns resultColumns
                      = TestCaseObject.allProperties
-                       .redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
+                       .redirect(^WCDB::ResultColumn(const WCTProperty& property) {
                            return property.table(self.tableName);
                        })
-                       .addingNewResultColumns(TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
+                       .addingNewResultColumns(TestCaseObject.allProperties.redirect(^WCDB::ResultColumn(const WCTProperty& property) {
                            return property.table(self.tableName2);
                        }));
 
@@ -187,10 +187,10 @@
                  bySelecting:^NSArray<WCTMultiObject*>* {
                      WCTResultColumns resultColumns
                      = TestCaseObject.allProperties
-                       .redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
+                       .redirect(^WCDB::ResultColumn(const WCTProperty& property) {
                            return property.table(self.tableName);
                        })
-                       .addingNewResultColumns(TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
+                       .addingNewResultColumns(TestCaseObject.allProperties.redirect(^WCDB::ResultColumn(const WCTProperty& property) {
                            return property.table(self.tableName2);
                        }));
 
@@ -219,10 +219,10 @@
                  bySelecting:^NSArray<WCTMultiObject*>* {
                      WCTResultColumns resultColumns
                      = TestCaseObject.allProperties
-                       .redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
+                       .redirect(^WCDB::ResultColumn(const WCTProperty& property) {
                            return property.table(self.tableName);
                        })
-                       .addingNewResultColumns(TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
+                       .addingNewResultColumns(TestCaseObject.allProperties.redirect(^WCDB::ResultColumn(const WCTProperty& property) {
                            return property.table(self.tableName2);
                        }));
 

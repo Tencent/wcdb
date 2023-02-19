@@ -69,7 +69,7 @@
                  self.database->close();
                  return self.database->canOpen();
              }];
-        TestCaseAssertTrue(self.database->getValueFromStatement(getSecureDelete));
+        TestCaseAssertTrue(self.database->getValueFromStatement(getSecureDelete).value());
     }
     {
         // uninvocation
@@ -79,7 +79,7 @@
         TestCaseAssertTrue(uninvoked);
 
         auto value = self.database->getValueFromStatement(getSecureDelete);
-        TestCaseAssertTrue(value.has_value());
+        TestCaseAssertTrue(value.succeed());
         TestCaseAssertFalse(value.value());
     }
 }

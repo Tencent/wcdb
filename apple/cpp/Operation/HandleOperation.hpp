@@ -212,7 +212,7 @@ public:
      @param tableName The name of the table to be checked.
      @return result.
      */
-    std::optional<bool> tableExists(const UnsafeStringView &tableName);
+    Optional<bool> tableExists(const UnsafeStringView &tableName);
 
     /**
      @brief Drop table if exists.

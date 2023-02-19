@@ -140,10 +140,9 @@ public:
     /**
      @brief Get an object by specific selecting.
      */
-    std::optional<ObjectType>
-    getFirstObject(const Expression &where = Expression(),
-                   const OrderingTerms &orders = OrderingTerms(),
-                   const Expression &offset = Expression())
+    Optional<ObjectType> getFirstObject(const Expression &where = Expression(),
+                                        const OrderingTerms &orders = OrderingTerms(),
+                                        const Expression &offset = Expression())
     {
         auto select = prepareSelect();
         configStatement(select, where, orders, Expression(1), offset);
@@ -153,7 +152,7 @@ public:
     /**
      @brief Get an object on specific fields by specific selecting.
      */
-    std::optional<ObjectType>
+    Optional<ObjectType>
     getFirstObjectWithFields(const ResultFields &resultFields,
                              const Expression &where = Expression(),
                              const OrderingTerms &orders = OrderingTerms(),
@@ -167,7 +166,7 @@ public:
     /**
      @brief Get objects by specific selecting.
      */
-    std::optional<ValueArray<ObjectType>>
+    Optional<ValueArray<ObjectType>>
     getAllObjects(const Expression &where = Expression(),
                   const OrderingTerms &orders = OrderingTerms(),
                   const Expression &limit = Expression(),
@@ -181,7 +180,7 @@ public:
     /**
      @brief Get objects on specific fields by specific selecting.
      */
-    std::optional<ValueArray<ObjectType>>
+    Optional<ValueArray<ObjectType>>
     getAllObjectsWithFields(const ResultFields &resultFields,
                             const Expression &where = Expression(),
                             const OrderingTerms &orders = OrderingTerms(),

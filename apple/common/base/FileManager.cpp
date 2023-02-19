@@ -42,7 +42,7 @@
 namespace WCDB {
 
 #pragma mark - Basic
-std::optional<std::pair<bool, bool>> FileManager::itemExists(const UnsafeStringView &path)
+Optional<std::pair<bool, bool>> FileManager::itemExists(const UnsafeStringView &path)
 {
     struct stat s;
     if (stat(path.data(), &s) == 0) {
@@ -55,10 +55,10 @@ std::optional<std::pair<bool, bool>> FileManager::itemExists(const UnsafeStringV
         return std::make_pair(false, false);
     }
     setThreadedError(path);
-    return std::nullopt;
+    return NullOpt;
 }
 
-std::optional<size_t> FileManager::getFileSize(const UnsafeStringView &file)
+Optional<size_t> FileManager::getFileSize(const UnsafeStringView &file)
 {
     struct stat temp;
     if (stat(file.data(), &temp) == 0) {
@@ -67,25 +67,25 @@ std::optional<size_t> FileManager::getFileSize(const UnsafeStringView &file)
         return 0;
     }
     setThreadedError(file);
-    return std::nullopt;
+    return NullOpt;
 }
 
-std::optional<size_t> FileManager::getDirectorySize(const UnsafeStringView &directory)
+Optional<size_t> FileManager::getDirectorySize(const UnsafeStringView &directory)
 {
-    std::optional<size_t> totalSize = 0;
+    Optional<size_t> totalSize = 0;
     if (!enumerateDirectory(
         directory,
         [&totalSize](const UnsafeStringView &directory, const UnsafeStringView &subpath, bool isDirectory) {
             StringView path = Path::addComponent(directory, subpath);
             auto size = isDirectory ? getDirectorySize(path) : getFileSize(path);
-            if (!size.has_value()) {
-                totalSize = std::nullopt;
+            if (!size.succeed()) {
+                totalSize = NullOpt;
                 return false;
             }
             totalSize.value() += size.value();
             return true;
         })) {
-        totalSize = std::nullopt;
+        totalSize = NullOpt;
     };
     return totalSize;
 }
@@ -192,27 +192,27 @@ bool FileManager::createDirectory(const UnsafeStringView &path)
     return false;
 }
 
-std::optional<Time> FileManager::getFileModifiedTime(const UnsafeStringView &path)
+Optional<Time> FileManager::getFileModifiedTime(const UnsafeStringView &path)
 {
     struct stat result;
     if (stat(path.data(), &result) == 0) {
         return Time(result.st_mtimespec);
     }
     setThreadedError(path);
-    return std::nullopt;
+    return NullOpt;
 }
 
-std::optional<Time> FileManager::getFileCreatedTime(const UnsafeStringView &path)
+Optional<Time> FileManager::getFileCreatedTime(const UnsafeStringView &path)
 {
     struct stat result;
     if (stat(path.data(), &result) == 0) {
         return Time(result.st_ctimespec);
     }
     setThreadedError(path);
-    return std::nullopt;
+    return NullOpt;
 }
 
-std::optional<uint32_t> FileManager::getFileIdentifier(const UnsafeStringView &path)
+Optional<uint32_t> FileManager::getFileIdentifier(const UnsafeStringView &path)
 {
     struct stat result;
     if (stat(path.data(), &result) == 0) {
@@ -222,7 +222,7 @@ std::optional<uint32_t> FileManager::getFileIdentifier(const UnsafeStringView &p
         memcpy(buffer + sizeof(result.st_dev), &result.st_ino, sizeof(result.st_ino));
         return UnsafeData(buffer, size).hash();
     }
-    return std::nullopt;
+    return NullOpt;
 }
 
 bool FileManager::createFile(const UnsafeStringView &path)
@@ -239,7 +239,7 @@ bool FileManager::createFile(const UnsafeStringView &path)
 }
 
 #pragma mark - Combination
-std::optional<size_t> FileManager::getItemSize(const UnsafeStringView &path)
+Optional<size_t> FileManager::getItemSize(const UnsafeStringView &path)
 {
     struct stat temp;
     if (stat(path.data(), &temp) == 0) {
@@ -251,39 +251,39 @@ std::optional<size_t> FileManager::getItemSize(const UnsafeStringView &path)
         return 0;
     }
     setThreadedError(path);
-    return std::nullopt;
+    return NullOpt;
 }
 
-std::optional<bool> FileManager::fileExists(const UnsafeStringView &file)
+Optional<bool> FileManager::fileExists(const UnsafeStringView &file)
 {
     auto result = itemExists(file);
-    if (result.has_value()) {
+    if (result.succeed()) {
         bool exists, isDirectory;
         std::tie(exists, isDirectory) = result.value();
         return exists && !isDirectory;
     }
-    return std::nullopt;
+    return NullOpt;
 }
 
-std::optional<bool> FileManager::directoryExists(const UnsafeStringView &directory)
+Optional<bool> FileManager::directoryExists(const UnsafeStringView &directory)
 {
     auto result = itemExists(directory);
-    if (result.has_value()) {
+    if (result.succeed()) {
         bool exists, isDirectory;
         std::tie(exists, isDirectory) = result.value();
         return exists && isDirectory;
     }
-    return std::nullopt;
+    return NullOpt;
 }
 
-std::optional<size_t> FileManager::getItemsSize(const std::list<StringView> &paths)
+Optional<size_t> FileManager::getItemsSize(const std::list<StringView> &paths)
 {
     size_t size = 0;
-    std::optional<size_t> temp;
+    Optional<size_t> temp;
     for (const auto &path : paths) {
         temp = getItemSize(path);
-        if (!temp.has_value()) {
-            return std::nullopt;
+        if (!temp.succeed()) {
+            return NullOpt;
         }
         size += temp.value();
     }
@@ -335,7 +335,7 @@ bool FileManager::moveItems(const std::list<std::pair<StringView, StringView>> &
     std::list<StringView> recovers;
     for (const auto &pairedPath : pairedPaths) {
         auto optionalExists = itemExists(pairedPath.first);
-        if (!optionalExists.has_value()) {
+        if (!optionalExists.succeed()) {
             break;
         }
         bool exists, isDirectory;
@@ -385,7 +385,7 @@ bool FileManager::moveItems(const std::list<std::pair<StringView, StringView>> &
 bool FileManager::createDirectoryWithIntermediateDirectories(const UnsafeStringView &directory)
 {
     auto exists = directoryExists(directory);
-    if (!exists.has_value()) {
+    if (!exists.succeed()) {
         return false;
     }
     if (!exists.value()) {
@@ -399,7 +399,7 @@ bool FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(
 {
     if (!path.empty()) {
         auto optionalFileProtection = getFileProtection(path);
-        if (!optionalFileProtection.has_value()) {
+        if (!optionalFileProtection.succeed()) {
             return false;
         }
         FileProtection fileProtection = optionalFileProtection.value();

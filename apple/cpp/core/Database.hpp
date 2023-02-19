@@ -301,7 +301,7 @@ public:
      @brief Get the space used by the database files.
      @return The sum of files size in bytes.
      */
-    std::optional<size_t> getFilesSize() const;
+    Optional<size_t> getFilesSize() const;
 
 #pragma mark - FTS
 public:

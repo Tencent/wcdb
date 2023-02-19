@@ -99,7 +99,7 @@
 
     TestCaseAssertTrue(self.database->canOpen());
     auto values = self.database->selectAllRow(self.resultColumns, self.tableName.UTF8String);
-    TestCaseAssertTrue(values.has_value() && values.value().size() == 1);
+    TestCaseAssertTrue(values.succeed() && values.value().size() == 1);
     XCTAssertFalse(self.database->insertRows(row, self.columns, self.tableName.UTF8String));
 
     // reset attribute
@@ -150,7 +150,7 @@
     unsigned long walFrameNum = 0;
     for (int i = 0; i < 100; i++) {
         auto value = self.database->getValueFromStatement(WCDB::StatementSelect().select(WCDB::Expression::function("count").invokeAll()).from(self.tableName.UTF8String));
-        TestCaseAssertTrue(value.has_value() && value.value().intValue() == i);
+        TestCaseAssertTrue(value.succeed() && value.value().intValue() == i);
         TestCaseAssertTrue(self.database->insertRows(rows[i], self.columns, self.tableName.UTF8String));
         self.database->passiveCheckpoint();
         self.database->close([&]() {
@@ -178,12 +178,12 @@
 {
     auto database = WCDB::Database(self.directory);
     TestCaseAssertFalse(database.canOpen());
-    TestCaseAssertFalse(database.selectValue(WCDB::Column::all().count(), WCDB::Master::tableName).has_value());
+    TestCaseAssertFalse(database.selectValue(WCDB::Column::all().count(), WCDB::Master::tableName).succeed());
     WCDB::Handle handle = database.getHandle();
-    TestCaseAssertFalse(handle.selectValue(WCDB::Column::all().count(), WCDB::Master::tableName).has_value());
+    TestCaseAssertFalse(handle.selectValue(WCDB::Column::all().count(), WCDB::Master::tableName).succeed());
     TestCaseAssertFalse(database.createTable<CPPTestCaseObject>(self.tableName.UTF8String));
     WCDB::Table<CPPTestCaseObject> table = database.getTable<CPPTestCaseObject>(self.tableName);
-    TestCaseAssertFalse(table.selectValue(WCDB::Column::all().count()).has_value());
+    TestCaseAssertFalse(table.selectValue(WCDB::Column::all().count()).succeed());
 }
 
 @end

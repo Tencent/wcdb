@@ -116,8 +116,8 @@
         }
     }
 
-    std::optional<BOOL> respondsToSetLastInsertedRowID;
-    std::optional<BOOL> respondsToIsAutoIncrement;
+    WCDB::Optional<BOOL> respondsToSetLastInsertedRowID;
+    WCDB::Optional<BOOL> respondsToIsAutoIncrement;
 
     BOOL succeed = NO;
     if ([_handle prepare:_statement]) {
@@ -135,10 +135,10 @@
                                  ofObject:value
                                   toIndex:index];
                 } else {
-                    if (!respondsToIsAutoIncrement.has_value()) {
+                    if (!respondsToIsAutoIncrement.succeed()) {
                         respondsToIsAutoIncrement = [value respondsToSelector:@selector(isAutoIncrement)];
                     }
-                    WCTAssert(respondsToIsAutoIncrement.has_value());
+                    WCTAssert(respondsToIsAutoIncrement.succeed());
 
                     BOOL isAutoIncrement = NO;
                     if (respondsToIsAutoIncrement.value()) {
@@ -161,10 +161,10 @@
             }
 
             // setup last inserted rowid
-            if (!respondsToSetLastInsertedRowID.has_value()) {
+            if (!respondsToSetLastInsertedRowID.succeed()) {
                 respondsToSetLastInsertedRowID = [value respondsToSelector:@selector(setLastInsertedRowID:)];
             }
-            WCTAssert(respondsToSetLastInsertedRowID.has_value());
+            WCTAssert(respondsToSetLastInsertedRowID.succeed());
             if (respondsToSetLastInsertedRowID.value()) {
                 [value setLastInsertedRowID:[_handle getLastInsertedRowID]];
             }

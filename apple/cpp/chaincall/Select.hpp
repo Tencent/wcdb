@@ -110,9 +110,9 @@ public:
      @brief Get all selected objects.
      @return The array collection of ObjectType.
      */
-    std::optional<ValueArray<ObjectType>> allObjects()
+    Optional<ValueArray<ObjectType>> allObjects()
     {
-        std::optional<ValueArray<ObjectType>> objects;
+        Optional<ValueArray<ObjectType>> objects;
         if (prepareStatement()) {
             objects = m_handle->extractAllObjects<ObjectType>(m_fields);
             m_handle->finalize();
@@ -124,9 +124,9 @@ public:
     /**
      @brief Get first selected object.
      */
-    std::optional<ObjectType> firstObject()
+    Optional<ObjectType> firstObject()
     {
-        std::optional<ObjectType> object;
+        Optional<ObjectType> object;
         if (prepareStatement()) {
             if (m_handle->step() && !m_handle->done()) {
                 object = m_handle->extractOneObject<ObjectType>(m_fields);

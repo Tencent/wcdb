@@ -65,8 +65,7 @@ MigratingHandleStatement::~MigratingHandleStatement()
 }
 
 #pragma mark - Migration
-std::optional<std::list<Statement>>
-MigratingHandleStatement::process(const Statement& originStatement)
+Optional<std::list<Statement>> MigratingHandleStatement::process(const Statement& originStatement)
 {
     m_processing = true;
     bool succeed = true;
@@ -245,7 +244,7 @@ MigratingHandleStatement::process(const Statement& originStatement)
     if (succeed) {
         return std::move(statements);
     } else {
-        return std::nullopt;
+        return NullOpt;
     }
 }
 
@@ -255,7 +254,7 @@ bool MigratingHandleStatement::tryFallbackToUnionedView(Syntax::Schema& schema, 
         MigratingHandle* migratingHandle = dynamic_cast<MigratingHandle*>(getHandle());
         WCTAssert(migratingHandle != nullptr);
         auto optionalInfo = migratingHandle->bindTable(table);
-        if (!optionalInfo.has_value()) {
+        if (!optionalInfo.succeed()) {
             return false;
         }
         const MigrationInfo* info = optionalInfo.value();
@@ -273,7 +272,7 @@ bool MigratingHandleStatement::tryFallbackToSourceTable(Syntax::Schema& schema, 
         MigratingHandle* migratingHandle = dynamic_cast<MigratingHandle*>(getHandle());
         WCTAssert(migratingHandle != nullptr);
         auto optionalInfo = migratingHandle->bindTable(table);
-        if (!optionalInfo.has_value()) {
+        if (!optionalInfo.succeed()) {
             return false;
         }
         const MigrationInfo* info = optionalInfo.value();
@@ -291,7 +290,7 @@ bool MigratingHandleStatement::prepare(const Statement& statement)
     WCTAssert(!m_processing);
     WCTRemedialAssert(!isPrepared(), "Last statement is not finalized.", finalize(););
     auto optionalStatements = process(statement);
-    if (!optionalStatements.has_value()) {
+    if (!optionalStatements.succeed()) {
         return false;
     }
     auto& statements = optionalStatements.value();

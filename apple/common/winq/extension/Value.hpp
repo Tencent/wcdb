@@ -24,6 +24,7 @@
 
 #pragma once
 #include <WCDB/ColumnType.hpp>
+#include <WCDB/Optional.hpp>
 #include <WCDB/ValueArray.hpp>
 
 namespace WCDB {
@@ -127,9 +128,9 @@ typedef ValueArray<Value> OneRowValue;
 typedef ValueArray<Value> OneColumnValue;
 typedef ValueArray<ValueArray<Value>> MultiRowsValue;
 
-typedef std::optional<Value> OptionalValue;
-typedef std::optional<ValueArray<Value>> OptionalOneRow;
-typedef std::optional<ValueArray<Value>> OptionalOneColumn;
-typedef std::optional<ValueArray<ValueArray<Value>>> OptionalMultiRows;
+typedef Optional<Value> OptionalValue;
+typedef Optional<ValueArray<Value>> OptionalOneRow;
+typedef Optional<ValueArray<Value>> OptionalOneColumn;
+typedef Optional<ValueArray<ValueArray<Value>>> OptionalMultiRows;
 
 } // namespace WCDB

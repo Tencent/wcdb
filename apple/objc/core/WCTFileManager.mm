@@ -87,7 +87,7 @@ bool FileManager::setFileProtection(const UnsafeStringView &path, FileProtection
     return false;
 }
 
-std::optional<FileProtection> FileManager::getFileProtection(const UnsafeStringView &path)
+Optional<FileProtection> FileManager::getFileProtection(const UnsafeStringView &path)
 {
     NSError *nsError = nil;
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -102,7 +102,7 @@ std::optional<FileProtection> FileManager::getFileProtection(const UnsafeStringV
     error.infos.insert_or_assign(ErrorIntKeyExtCode, nsError.code);
     Notifier::shared().notify(error);
     ThreadedErrors::shared().setThreadedError(std::move(error));
-    return std::nullopt;
+    return WCDB::NullOpt;
 }
 
 #else
@@ -113,7 +113,7 @@ bool FileManager::setFileProtection(const UnsafeStringView &path, FileProtection
     return true;
 }
 
-std::optional<FileProtection> FileManager::getFileProtection(const UnsafeStringView &path)
+Optional<FileProtection> FileManager::getFileProtection(const UnsafeStringView &path)
 {
     WCDB_UNUSED(path)
     return FileProtection::None;

@@ -35,6 +35,7 @@ class Pager;
 class PagerRelated {
 public:
     PagerRelated(Pager *pager);
+    PagerRelated(const PagerRelated &);
     PagerRelated(PagerRelated &&);
     virtual ~PagerRelated() = 0;
     PagerRelated &operator=(PagerRelated &&);

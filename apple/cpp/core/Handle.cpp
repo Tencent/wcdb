@@ -140,10 +140,9 @@ const Error& Handle::getError()
     return handle->getError();
 }
 
-std::optional<PreparedStatement>
-Handle::getOrCreatePreparedStatement(const Statement& statement)
+Optional<PreparedStatement> Handle::getOrCreatePreparedStatement(const Statement& statement)
 {
-    std::optional<PreparedStatement> result;
+    Optional<PreparedStatement> result;
     GetInnerHandleOrReturnValue(result);
     HandleStatement* preparedStatement = handle->getOrCreatePreparedStatement(statement);
     if (preparedStatement == nullptr) {

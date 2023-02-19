@@ -190,10 +190,10 @@ Core::auxiliaryFunctionConfig(const UnsafeStringView& auxiliaryFunctionName)
 }
 
 #pragma mark - Operation
-std::optional<bool> Core::migrationShouldBeOperated(const UnsafeStringView& path)
+Optional<bool> Core::migrationShouldBeOperated(const UnsafeStringView& path)
 {
     RecyclableDatabase database = m_databasePool.getOrCreate(path);
-    std::optional<bool> done = false; // mark as no error if database is not referenced.
+    Optional<bool> done = false; // mark as no error if database is not referenced.
     if (database != nullptr) {
         done = database->stepMigration(true);
     }
@@ -256,7 +256,7 @@ void Core::setNotificationWhenDatabaseCorrupted(const UnsafeStringView& path,
               database->blockade();
               do {
                   auto exists = FileManager::fileExists(path);
-                  if (!exists.has_value()) {
+                  if (!exists.succeed()) {
                       // I/O error
                       break;
                   }
@@ -265,7 +265,7 @@ void Core::setNotificationWhenDatabaseCorrupted(const UnsafeStringView& path,
                       break;
                   }
                   auto identifier = FileManager::getFileIdentifier(path);
-                  if (!identifier.has_value()) {
+                  if (!identifier.succeed()) {
                       // I/O error
                       break;
                   }
@@ -339,12 +339,12 @@ void Core::enableAutoMergeFTSIndex(InnerDatabase* database, bool enable)
     }
 }
 
-std::optional<bool> Core::mergeFTSIndexShouldBeOperated(const UnsafeStringView& path,
-                                                        TableArray newTables,
-                                                        TableArray modifiedTables)
+Optional<bool> Core::mergeFTSIndexShouldBeOperated(const UnsafeStringView& path,
+                                                   TableArray newTables,
+                                                   TableArray modifiedTables)
 {
     RecyclableDatabase database = m_databasePool.getOrCreate(path);
-    std::optional<bool> done = false; // mark as no error if database is not referenced.
+    Optional<bool> done = false; // mark as no error if database is not referenced.
     if (database != nullptr) {
         done = database->mergeFTSIndex(newTables, modifiedTables);
     }
@@ -415,13 +415,13 @@ void Core::removeABTestConfig(const UnsafeStringView configName)
     m_abtestConfig.erase(configName);
 }
 
-std::optional<UnsafeStringView> Core::getABTestConfig(UnsafeStringView configName)
+Optional<UnsafeStringView> Core::getABTestConfig(UnsafeStringView configName)
 {
     SharedLockGuard memoryGuard(m_memory);
     if (m_abtestConfig.find(configName) != m_abtestConfig.end()) {
         return m_abtestConfig[configName];
     }
-    return std::nullopt;
+    return NullOpt;
 }
 
 } // namespace WCDB

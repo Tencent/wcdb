@@ -85,7 +85,7 @@ public:
     RecyclableHandle getHandle() override;
     bool execute(const Statement &statement);
     bool execute(const UnsafeStringView &sql);
-    std::optional<bool> tableExists(const UnsafeStringView &table);
+    Optional<bool> tableExists(const UnsafeStringView &table);
 
 protected:
     std::shared_ptr<InnerHandle> generateSlotedHandle(HandleType type) override final;
@@ -138,7 +138,7 @@ public:
 
     bool moveFiles(const UnsafeStringView &directory);
     bool removeFiles();
-    std::optional<size_t> getFilesSize();
+    Optional<size_t> getFilesSize();
 
 #pragma mark - Repair
 public:
@@ -167,7 +167,7 @@ public:
     typedef std::function<void(InnerDatabase *, const MigrationBaseInfo *)> MigratedCallback;
     void setNotificationWhenMigrated(const MigratedCallback &callback);
 
-    std::optional<bool> stepMigration(bool interruptible);
+    Optional<bool> stepMigration(bool interruptible);
 
     bool isMigrated() const;
 
@@ -199,7 +199,7 @@ public:
 #pragma mark - Merge FTS Index
 public:
     using TableArray = std::shared_ptr<std::vector<StringView>>;
-    std::optional<bool> mergeFTSIndex(TableArray newTables, TableArray modifiedTables);
+    Optional<bool> mergeFTSIndex(TableArray newTables, TableArray modifiedTables);
     void proccessMerge();
 
 private:

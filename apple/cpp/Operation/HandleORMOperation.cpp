@@ -52,7 +52,7 @@ MultiSelect HandleORMOperation::prepareMultiSelect()
     return MultiSelect(getDatabaseHolder());
 }
 
-std::optional<MultiObject>
+Optional<MultiObject>
 HandleORMOperation::getFirstMultiObject(const ValueArray<StringView> tables,
                                         const ResultFields &resultFields,
                                         const Expression &where,
@@ -66,7 +66,7 @@ HandleORMOperation::getFirstMultiObject(const ValueArray<StringView> tables,
     return select.firstMultiObject();
 }
 
-std::optional<ValueArray<MultiObject>>
+Optional<ValueArray<MultiObject>>
 HandleORMOperation::getAllMultiObjects(const ValueArray<StringView> tables,
                                        const ResultFields &resultFields,
                                        const Expression &where,

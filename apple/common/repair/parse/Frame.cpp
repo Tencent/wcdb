@@ -51,7 +51,7 @@ const std::pair<uint32_t, uint32_t> &Frame::getChecksum() const
     return m_checksum;
 }
 
-std::optional<Page::Type> Frame::getPageType() const
+Optional<Page::Type> Frame::getPageType() const
 {
     WCTAssert(isInitialized());
     MappedData pageData = m_data.subdata(headerSize, m_wal->getPageSize());

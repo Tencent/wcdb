@@ -1,5 +1,5 @@
 //
-// Created by qiuwenchen on 2022/8/10.
+// Created by 陈秋文 on 2023/2/18.
 //
 
 /*
@@ -22,21 +22,12 @@
  * limitations under the License.
  */
 
-#ifdef __cplusplus
-#if __cplusplus < 201402L
-#error `CLANG_CXX_LANGUAGE_STANDARD = gnu++14` and `CLANG_CXX_LIBRARY = libc++` build settings are required.
-#endif
-#else // __cplusplus
-#error C++ environment is required.
-#endif // __cplusplus
+#include <WCDB/Optional.hpp>
 
-// WCDB may fail to compile since there are few frameworks that define `offset` as a macro.
-#ifdef offset
-#error Symbol `offset` should not be defined as a macro since it's a common used word.
-#endif
+namespace WCDB {
 
-#include <WCDB/Builtin.h>
-#include <WCDB/CPPORM.h>
-#include <WCDB/CPPORMMacro.h>
-#include <WCDB/CppInterface.h>
-#include <WCDB/WINQ.h>
+_OptionalValueFlag::_OptionalValueFlag() : m_hasValue(false)
+{
+}
+
+} // namespace WCDB
