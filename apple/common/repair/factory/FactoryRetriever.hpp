@@ -27,6 +27,7 @@
 #include <WCDB/Assemble.hpp>
 #include <WCDB/FactoryBackup.hpp>
 #include <WCDB/FactoryRelated.hpp>
+#include <WCDB/Optional.hpp>
 #include <WCDB/Progress.hpp>
 #include <WCDB/Scoreable.hpp>
 #include <WCDB/Time.hpp>
@@ -58,7 +59,7 @@ protected:
 
 protected:
     bool restore(const UnsafeStringView &database);
-    std::optional<StringView> tryGetCiperSaltFromPath(const UnsafeStringView &database);
+    Optional<StringView> tryGetCiperSaltFromPath(const UnsafeStringView &database);
     const StringView databaseFileName;
 
 #pragma mark - Report

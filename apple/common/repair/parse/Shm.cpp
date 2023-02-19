@@ -78,7 +78,7 @@ bool Shm::doInitialize()
     WCTAssert(m_wal->isInitialized() || m_wal->isInitializing());
 
     auto optionalFileSize = FileManager::getFileSize(getPath());
-    if (!optionalFileSize.has_value()) {
+    if (!optionalFileSize.succeed()) {
         assignWithSharedThreadedError();
         return false;
     }

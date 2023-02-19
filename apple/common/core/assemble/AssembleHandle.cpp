@@ -186,7 +186,7 @@ bool AssembleHandle::lazyPrepareCell()
     }
 
     auto optionalMetas = getTableMeta(Schema::main(), m_table);
-    if (!optionalMetas.has_value()) {
+    if (!optionalMetas.succeed()) {
         return false;
     }
     auto &metas = optionalMetas.value();
@@ -213,7 +213,7 @@ bool AssembleHandle::assembleSequence(const UnsafeStringView &tableName, int64_t
     }
     bool succeed = false;
     auto worked = updateSequence(tableName, sequence);
-    if (worked.has_value()) {
+    if (worked.succeed()) {
         if (worked.value()) {
             succeed = true;
         } else {
@@ -223,10 +223,10 @@ bool AssembleHandle::assembleSequence(const UnsafeStringView &tableName, int64_t
     return succeed;
 }
 
-std::optional<bool>
+Optional<bool>
 AssembleHandle::updateSequence(const UnsafeStringView &tableName, int64_t sequence)
 {
-    std::optional<bool> worked;
+    Optional<bool> worked;
     if (prepare(m_statementForUpdateSequence)) {
         bindInteger(sequence, 1);
         bindText(tableName, 2);

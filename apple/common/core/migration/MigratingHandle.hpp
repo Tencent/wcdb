@@ -41,7 +41,7 @@ public:
     ~MigratingHandle() override final;
 
 #pragma mark - Meta
-    virtual std::optional<std::set<StringView>>
+    virtual Optional<std::set<StringView>>
     getColumns(const Schema &schema, const UnsafeStringView &table) override final;
     virtual bool addColumn(const Schema &schema,
                            const UnsafeStringView &table,
@@ -52,7 +52,7 @@ public:
 #pragma mark - Binder
 protected:
     bool bindInfos(const StringViewMap<const MigrationInfo *> &migratings) override final;
-    std::optional<const MigrationInfo *> getBindingInfo(const UnsafeStringView &table);
+    Optional<const MigrationInfo *> getBindingInfo(const UnsafeStringView &table);
 
 private:
     bool rebindViews(const StringViewMap<const MigrationInfo *> &migratings);
@@ -63,9 +63,9 @@ private:
 #pragma mark - Info Initializer
 protected:
     // integer primary, columns
-    std::optional<std::pair<bool, std::set<StringView>>>
+    Optional<std::pair<bool, std::set<StringView>>>
     getColumnsOfUserInfo(const MigrationUserInfo &userInfo) override final;
-    std::optional<bool> sourceTableExists(const MigrationUserInfo &userInfo) override final;
+    Optional<bool> sourceTableExists(const MigrationUserInfo &userInfo) override final;
     const StringView &getDatabasePath() const override final;
 
 #pragma mark - Statement

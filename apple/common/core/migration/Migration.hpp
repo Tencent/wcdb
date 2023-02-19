@@ -26,6 +26,7 @@
 
 #include <WCDB/Lock.hpp>
 #include <WCDB/MigrationInfo.hpp>
+#include <WCDB/Optional.hpp>
 #include <WCDB/Recyclable.hpp>
 #include <functional>
 #include <map>
@@ -69,11 +70,10 @@ protected:
         virtual ~InfoInitializer() = 0;
 
     protected:
-        virtual std::optional<bool>
-        sourceTableExists(const MigrationUserInfo& userInfo) = 0;
+        virtual Optional<bool> sourceTableExists(const MigrationUserInfo& userInfo) = 0;
         // When succeed, empty column indicates that table does not exist.
         // succeed, contains integer primary key, columns
-        virtual std::optional<std::pair<bool, std::set<StringView>>>
+        virtual Optional<std::pair<bool, std::set<StringView>>>
         getColumnsOfUserInfo(const MigrationUserInfo& userInfo) = 0;
         virtual const StringView& getDatabasePath() const = 0;
     };
@@ -86,7 +86,7 @@ protected:
     void markAsUnreferenced(const MigrationInfo* info);
     void markAsDropped(const MigrationInfo* info);
     void markAsMigrated(const MigrationInfo* info);
-    std::optional<RecyclableMigrationInfo> getInfo(const UnsafeStringView& table);
+    Optional<RecyclableMigrationInfo> getInfo(const UnsafeStringView& table);
 
 private:
     // Those infos needed to be migrate will be held by m_migrating after initialized. (Other infos that already migrated or have no need to migrate will be dropped when initializing.)
@@ -129,7 +129,7 @@ public:
         bool stopBinding(bool succeed);
         void stopReferenced();
 
-        std::optional<const MigrationInfo*> bindTable(const UnsafeStringView& table);
+        Optional<const MigrationInfo*> bindTable(const UnsafeStringView& table);
         bool hintThatTableWillBeCreated(const UnsafeStringView& table);
         const MigrationInfo* getBoundInfo(const UnsafeStringView& table);
 
@@ -145,7 +145,7 @@ public:
     };
 
 protected:
-    std::optional<RecyclableMigrationInfo>
+    Optional<RecyclableMigrationInfo>
     getOrInitInfo(InfoInitializer& initializer, const UnsafeStringView& table);
     void tryReduceBounds(StringViewMap<const MigrationInfo*>& bounds);
 
@@ -159,19 +159,19 @@ public:
         virtual ~Stepper() override = 0;
 
     protected:
-        virtual std::optional<std::set<StringView>> getAllTables() = 0;
+        virtual Optional<std::set<StringView>> getAllTables() = 0;
         virtual bool dropSourceTable(const MigrationInfo* info) = 0;
-        virtual std::optional<bool> migrateRows(const MigrationInfo* info) = 0;
+        virtual Optional<bool> migrateRows(const MigrationInfo* info) = 0;
     };
 
     // done
-    std::optional<bool> step(Migration::Stepper& stepper);
+    Optional<bool> step(Migration::Stepper& stepper);
 
 protected:
     // worked
-    std::optional<bool> tryDropUnreferencedTable(Migration::Stepper& stepper);
-    std::optional<bool> tryMigrateRows(Migration::Stepper& stepper);
-    std::optional<bool> tryAcquireTables(Migration::Stepper& stepper);
+    Optional<bool> tryDropUnreferencedTable(Migration::Stepper& stepper);
+    Optional<bool> tryMigrateRows(Migration::Stepper& stepper);
+    Optional<bool> tryAcquireTables(Migration::Stepper& stepper);
 
 private:
     bool m_tableAcquired;

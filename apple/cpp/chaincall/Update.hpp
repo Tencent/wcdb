@@ -128,7 +128,7 @@ public:
      */
     Update<ObjectType> &toValue(const Value &value)
     {
-        m_row = std::make_optional<OneRowValue>({ value });
+        m_row = { value };
         return *this;
     }
 
@@ -150,10 +150,10 @@ public:
     bool execute()
     {
         bool result = true;
-        if (m_row.has_value() || m_obj.has_value()) {
+        if (m_row.succeed() || m_obj.succeed()) {
             result = false;
             if (m_handle->prepare(m_statement)) {
-                if (m_obj.has_value()) {
+                if (m_obj.succeed()) {
                     m_handle->bindObject(m_obj.value(), m_fields);
                 } else {
                     m_handle->bindRow(m_row.value());
@@ -175,7 +175,7 @@ protected:
 private:
     Fields m_fields;
     OptionalOneRow m_row;
-    std::optional<ObjectType> m_obj;
+    Optional<ObjectType> m_obj;
 };
 
 } //namespace WCDB

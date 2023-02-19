@@ -232,7 +232,7 @@ HandleOperation::getOneColumnFromStatement(const Statement &statement, int index
     }
     result = handle->getOneColumn(index);
     handle->finalize();
-    if (!result.has_value()) {
+    if (!result.succeed()) {
         assignErrorToDatabase(handle->getError());
     }
     return result;
@@ -267,7 +267,7 @@ OptionalMultiRows HandleOperation::getAllRowsFromStatement(const Statement &stat
     }
     result = handle->getAllRows();
     handle->finalize();
-    if (!result.has_value()) {
+    if (!result.succeed()) {
         assignErrorToDatabase(handle->getError());
     }
     return result;
@@ -339,12 +339,12 @@ bool HandleOperation::runNestedTransaction(TransactionCallback inTransaction)
     return succeed;
 }
 
-std::optional<bool> HandleOperation::tableExists(const UnsafeStringView &tableName)
+Optional<bool> HandleOperation::tableExists(const UnsafeStringView &tableName)
 {
-    std::optional<bool> result;
+    Optional<bool> result;
     GetHandleOrReturnValue(result);
     result = handle->tableExists(tableName);
-    if (!result.has_value()) {
+    if (!result.succeed()) {
         assignErrorToDatabase(handle->getError());
     }
     return result;

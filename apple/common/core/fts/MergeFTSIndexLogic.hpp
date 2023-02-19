@@ -49,12 +49,12 @@ public:
     MergeFTSIndexLogic() = delete;
     MergeFTSIndexLogic(MergeFTSIndexHandleProvider* provider);
     using TableArray = std::shared_ptr<std::vector<StringView>>;
-    std::optional<bool> triggerMerge(TableArray newTables, TableArray modifiedTables);
+    Optional<bool> triggerMerge(TableArray newTables, TableArray modifiedTables);
     void proccessMerge();
 
 private:
     bool tryInit(InnerHandle& handle);
-    std::optional<bool>
+    Optional<bool>
     triggerMerge(InnerHandle& handle, TableArray newTables, TableArray modifiedTables);
     bool tryConfigUserMerge(InnerHandle& handle, const UnsafeStringView& table, bool isNew);
     bool checkModifiedTables(InnerHandle& handle, TableArray newTables, TableArray modifiedTables);

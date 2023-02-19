@@ -82,21 +82,21 @@ public:
     /**
      @brief Get first selected objects.
      
-         std::optional<WCDB::MultiObject> multiObject = multiSelect.firstMultiObject();
-         if(multiObject.has_value()) {
+         Optional<WCDB::MultiObject> multiObject = multiSelect.firstMultiObject();
+         if(multiObject.succeed()) {
              TestClass1 object1 = multiObject.value().objectAtTable<TestClass1>("table1");
              TestClass2 object2 = multiObject.value().objectAtTable<TestClass2>("table2");
          }
 
      @return See the example above
      */
-    std::optional<MultiObject> firstMultiObject();
+    Optional<MultiObject> firstMultiObject();
 
     /**
      @brief Get all selected objects.
      @return Array with all selected objects.
      */
-    std::optional<ValueArray<MultiObject>> allMultiObjects();
+    Optional<ValueArray<MultiObject>> allMultiObjects();
 
 protected:
     MultiSelect(Recyclable<InnerDatabase *> databaseHolder);

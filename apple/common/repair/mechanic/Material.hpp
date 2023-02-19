@@ -25,6 +25,7 @@
 #pragma once
 
 #include <WCDB/Cipher.hpp>
+#include <WCDB/Optional.hpp>
 #include <WCDB/Serialization.hpp>
 #include <WCDB/StringView.hpp>
 #include <list>
@@ -60,7 +61,7 @@ public:
     using Deserializable::deserialize;
 
 protected:
-    static std::optional<Data> deserializeData(Deserialization &deserialization);
+    static Optional<Data> deserializeData(Deserialization &deserialization);
     static void markAsCorrupt(const UnsafeStringView &element);
 
 #pragma mark - Header

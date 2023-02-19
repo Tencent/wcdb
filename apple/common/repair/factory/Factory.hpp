@@ -28,11 +28,11 @@
 #include <WCDB/FactoryDepositor.hpp>
 #include <WCDB/FactoryRenewer.hpp>
 #include <WCDB/FactoryRetriever.hpp>
+#include <WCDB/Optional.hpp>
 #include <WCDB/StringView.hpp>
 #include <WCDB/Time.hpp>
 #include <future>
 #include <list>
-#include <optional>
 
 namespace WCDB {
 
@@ -55,8 +55,8 @@ public:
     StringView getDatabaseName() const;
     bool removeDirectoryIfEmpty() const;
     bool removeDeposited() const;
-    std::optional<std::list<StringView>> getWorkshopDirectories() const;
-    std::optional<StringView> getUniqueWorkshopDiectory() const;
+    Optional<std::list<StringView>> getWorkshopDirectories() const;
+    Optional<StringView> getUniqueWorkshopDiectory() const;
     bool containsDeposited() const;
 
 #pragma mark - Factory Related
@@ -84,14 +84,13 @@ public:
     static StringView lastMaterialPathForDatabase(const UnsafeStringView &database);
     static StringView factoryPathForDatabase(const UnsafeStringView &database);
 
-    static std::optional<StringView>
+    static Optional<StringView>
     materialForSerializingForDatabase(const UnsafeStringView &database);
-    static std::optional<std::list<StringView>>
+    static Optional<std::list<StringView>>
     materialsForDeserializingForDatabase(const UnsafeStringView &database);
 
 protected:
-    static std::optional<Time>
-    getModifiedTimeOr0IfNotExists(const UnsafeStringView &path);
+    static Optional<Time> getModifiedTimeOr0IfNotExists(const UnsafeStringView &path);
 };
 
 } //namespace Repair

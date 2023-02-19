@@ -35,7 +35,7 @@ namespace WCDB {
 
 class UnsafeData;
 
-class UnsafeStringView : public std::string_view {
+class UnsafeStringView {
 #pragma mark - UnsafeStringView - Constructor
 public:
     UnsafeStringView();
@@ -47,17 +47,29 @@ public:
 
     UnsafeStringView& operator=(const UnsafeStringView& other);
     UnsafeStringView& operator=(UnsafeStringView&& other);
+    bool operator==(const UnsafeStringView& other) const;
+    bool operator!=(const UnsafeStringView& other) const;
+    bool operator<(const UnsafeStringView& other) const;
+    bool operator>(const UnsafeStringView& other) const;
+    const char& operator[](off_t off) const;
+    operator std::string() const;
 
     virtual ~UnsafeStringView();
+
+    const char* data() const;
+    size_t length() const;
+    size_t size() const;
+    bool empty() const;
+    const char& at(off_t off) const;
 
 protected:
     UnsafeStringView(std::shared_ptr<const std::string>&& buffer);
     void assign(std::shared_ptr<const std::string>&& buffer);
 
-    static const std::string_view& emptyView();
-
 private:
     friend class StringView;
+    const char* m_data;
+    size_t m_length;
     std::shared_ptr<const std::string> m_buffer;
 
 #pragma mark - UnsafeStringView - Comparison
@@ -68,23 +80,20 @@ public:
     bool hasPrefix(const UnsafeStringView& target) const;
     bool hasSuffix(const UnsafeStringView& target) const;
     bool contain(const UnsafeStringView& target) const;
+    int compare(const UnsafeStringView& other) const;
+
+    static constexpr size_t npos = -1;
+    size_t find(const UnsafeStringView& other) const;
 
 #pragma mark - UnsafeStringView - Operations
 public:
     uint32_t hash() const;
-
-private:
-    using std::string_view::substr;
 
 #pragma mark - UnsafeStringView - Modifiers
 public:
     void clear();
 
 private:
-    using std::string_view::remove_prefix;
-    using std::string_view::remove_suffix;
-    using std::string_view::swap;
-
 #pragma mark - UnsafeStringView - Convertible
 public:
     template<typename T, typename Enable = void>
@@ -152,14 +161,36 @@ public:
         return this->find(key)->second;
     }
 
-    using Super::insert_or_assign;
     void insert_or_assign(const UnsafeStringView& key, const T& value)
     {
-        this->Super::insert_or_assign(StringView(key), value);
+        StringView stringKey = StringView(key);
+        auto find = Super::find(stringKey);
+        if (find != Super::end()) {
+            find->second = value;
+        } else {
+            Super::insert(std::make_pair(stringKey, value));
+        }
     }
     void insert_or_assign(const UnsafeStringView& key, T&& value)
     {
-        this->Super::insert_or_assign(StringView(key), std::move(value));
+        StringView stringKey = StringView(key);
+        auto find = Super::find(stringKey);
+        if (find != Super::end()) {
+            find->second = std::move(value);
+        } else {
+            Super::insert(std::make_pair(stringKey, std::move(value)));
+        }
+    }
+
+    using Super::emplace;
+    auto emplace(const UnsafeStringView& key, const T& value)
+    {
+        return this->Super::emplace(std::make_pair(StringView(key), value));
+    }
+
+    auto emplace(const UnsafeStringView& key, T&& value)
+    {
+        return this->Super::emplace(std::make_pair(StringView(key), std::forward<T>(value)));
     }
 
     using Super::operator[];

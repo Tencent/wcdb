@@ -74,7 +74,7 @@ bool FactoryRetriever::work()
 
     //1.5 calculate weights to deal with the progress and score
     auto optionalWorkshopDirectories = factory.getWorkshopDirectories();
-    if (!optionalWorkshopDirectories.has_value()) {
+    if (!optionalWorkshopDirectories.succeed()) {
         setCriticalErrorWithSharedThreadedError();
         return exit(false);
     }
@@ -156,7 +156,7 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
 {
     // material paths is already ordered by modified time
     auto optionalMaterialPaths = Factory::materialsForDeserializingForDatabase(databasePath);
-    if (!optionalMaterialPaths.has_value()) {
+    if (!optionalMaterialPaths.succeed()) {
         setCriticalErrorWithSharedThreadedError();
         return false;
     }
@@ -178,7 +178,7 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
 
             if (useMaterial) {
                 auto optionalMaterialTime = FileManager::getFileModifiedTime(materialPath);
-                if (!optionalMaterialTime.has_value()) {
+                if (!optionalMaterialTime.succeed()) {
                     setCriticalErrorWithSharedThreadedError();
                     return false;
                 }
@@ -236,7 +236,7 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
     fullCrawler.setCipherDelegate(m_cipherDelegate);
     if (!useMaterial) {
         auto salt = tryGetCiperSaltFromPath(databasePath);
-        if (!salt.has_value()) {
+        if (!salt.succeed()) {
             return false;
         }
         if (salt->length() == 32) {
@@ -262,15 +262,16 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
     return true;
 }
 
-std::optional<StringView>
+Optional<StringView>
 FactoryRetriever::tryGetCiperSaltFromPath(const UnsafeStringView &databasePath)
 {
     int saltLength = 16;
-    if (FileManager::getFileSize(databasePath) < saltLength) {
+    auto size = FileManager::getFileSize(databasePath);
+    if (size.failed() || size.value() < saltLength) {
         return StringView();
     }
     FileHandle handle(databasePath);
-    std::optional<StringView> result;
+    Optional<StringView> result;
     if (!handle.open(FileHandle::Mode::ReadOnly)) {
         setCriticalErrorWithSharedThreadedError();
         return result;
@@ -297,7 +298,7 @@ void FactoryRetriever::reportMechanic(const Fraction &score,
     error.infos.insert_or_assign(ErrorStringKeyAssociatePath, path);
     error.infos.insert_or_assign("Score", score.value());
     auto optionalMaterial = material.stringify();
-    if (optionalMaterial.has_value()) {
+    if (optionalMaterial.succeed()) {
         error.infos.insert_or_assign("Material", optionalMaterial.value());
     }
     finishReportOfPerformance(error, path, cost);
@@ -375,7 +376,7 @@ bool FactoryRetriever::calculateSize(const UnsafeStringView &databasePath)
 {
     auto fileSize
     = FileManager::getItemsSize(Factory::databasePathsForDatabase(databasePath));
-    if (!fileSize.has_value()) {
+    if (!fileSize.succeed()) {
         setCriticalErrorWithSharedThreadedError();
         return false;
     }

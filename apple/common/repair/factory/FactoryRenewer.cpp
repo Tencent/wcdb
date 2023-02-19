@@ -47,7 +47,7 @@ FactoryRenewer::~FactoryRenewer() = default;
 bool FactoryRenewer::work()
 {
     auto exists = FileManager::fileExists(database);
-    if (!exists.has_value()) {
+    if (!exists.succeed()) {
         assignWithSharedThreadedError();
         return false;
     }
@@ -57,7 +57,7 @@ bool FactoryRenewer::work()
     }
 
     exists = FileManager::fileExists(factory.database);
-    if (!exists.has_value()) {
+    if (!exists.succeed()) {
         assignWithSharedThreadedError();
         return false;
     }
@@ -106,7 +106,7 @@ bool FactoryRenewer::prepare()
 
     // 2. get deposited directories for acquisition
     auto optionalWorkshopDirectories = factory.getWorkshopDirectories();
-    if (!optionalWorkshopDirectories.has_value()) {
+    if (!optionalWorkshopDirectories.succeed()) {
         assignWithSharedThreadedError();
         return false;
     }
@@ -152,7 +152,7 @@ bool FactoryRenewer::prepare()
 
     // 5. force backup assembled database if exists
     auto fileSize = FileManager::getFileSize(tempDatabase);
-    if (!fileSize.has_value()) {
+    if (!fileSize.succeed()) {
         assignWithSharedThreadedError();
         return false;
     }
@@ -192,7 +192,7 @@ bool FactoryRenewer::resolveInfosForDatabase(StringViewMap<Info> &infos,
 {
     auto optionalMaterialPaths
     = Factory::materialsForDeserializingForDatabase(databaseForAcquisition);
-    if (!optionalMaterialPaths.has_value()) {
+    if (!optionalMaterialPaths.succeed()) {
         assignWithSharedThreadedError();
         return false;
     }

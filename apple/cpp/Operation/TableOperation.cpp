@@ -237,7 +237,7 @@ TableOperation::getOneColumnFromStatement(const Statement &statement, int index)
     }
     result = handle->getOneColumn(index);
     handle->finalize();
-    if (!result.has_value()) {
+    if (!result.succeed()) {
         assignErrorToDatabase(handle->getError());
     }
     return result;
@@ -272,7 +272,7 @@ OptionalMultiRows TableOperation::getAllRowsFromStatement(const Statement &state
     }
     result = handle->getAllRows();
     handle->finalize();
-    if (!result.has_value()) {
+    if (!result.succeed()) {
         assignErrorToDatabase(handle->getError());
     }
     return result;

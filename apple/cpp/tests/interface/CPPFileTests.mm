@@ -169,7 +169,7 @@
     TestCaseAssertTrue([self.fileManager createFileAtPath:self.directory contents:dummyData attributes:nil]);
 
     auto fileSizeOptional = self.database->getFilesSize();
-    TestCaseAssertTrue(!fileSizeOptional.has_value());
+    TestCaseAssertTrue(!fileSizeOptional.succeed());
 }
 
 - (void)test_feature_auto_create_immediate_directory

@@ -112,8 +112,7 @@ bool MergeFTSIndexLogic::tryConfigUserMerge(InnerHandle &handle,
     return true;
 }
 
-std::optional<bool>
-MergeFTSIndexLogic::triggerMerge(TableArray newTables, TableArray modifiedTables)
+Optional<bool> MergeFTSIndexLogic::triggerMerge(TableArray newTables, TableArray modifiedTables)
 {
     RecyclableHandle recyclableHandle = m_handleProvider->getHandle();
     if (recyclableHandle == nullptr) {
@@ -121,7 +120,7 @@ MergeFTSIndexLogic::triggerMerge(TableArray newTables, TableArray modifiedTables
     }
     WCTRemedialAssert(!recyclableHandle->isInTransaction(),
                       "Merge Index can't be run in transaction.",
-                      return std::nullopt;);
+                      return NullOpt;);
 
     InnerHandle *handle = recyclableHandle.get();
     handle->markErrorAsIgnorable(Error::Code::Interrupt);
@@ -130,8 +129,8 @@ MergeFTSIndexLogic::triggerMerge(TableArray newTables, TableArray modifiedTables
     handle->setErrorType(ErrorTypeMergeIndex);
     handle->setTableMonitorEnable(false);
 
-    std::optional<bool> done = triggerMerge(*handle, newTables, modifiedTables);
-    if (!done.has_value() && handle->getError().isIgnorable()) {
+    Optional<bool> done = triggerMerge(*handle, newTables, modifiedTables);
+    if (!done.succeed() && handle->getError().isIgnorable()) {
         done = false;
     }
 
@@ -143,20 +142,20 @@ MergeFTSIndexLogic::triggerMerge(TableArray newTables, TableArray modifiedTables
     return done;
 }
 
-std::optional<bool>
+Optional<bool>
 MergeFTSIndexLogic::triggerMerge(InnerHandle &handle, TableArray newTables, TableArray modifiedTables)
 {
     LockGuard lockGuard(m_lock);
     if (m_errorCount.load() > 5) {
-        return std::nullopt;
+        return NullOpt;
     }
     if (!tryInit(handle)) {
         increaseErrorCount();
-        return std::nullopt;
+        return NullOpt;
     }
     if (!checkModifiedTables(handle, newTables, modifiedTables)) {
         increaseErrorCount();
-        return std::nullopt;
+        return NullOpt;
     }
     if (m_mergingTables.size() == 0) {
         return true;

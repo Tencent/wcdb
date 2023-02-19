@@ -83,7 +83,7 @@ public:
 
 protected:
     bool realStep();
-    std::optional<std::list<Statement>> process(const Statement &statement);
+    Optional<std::list<Statement>> process(const Statement &statement);
     bool tryFallbackToUnionedView(Syntax::Schema &schema, StringView &table);
     bool tryFallbackToSourceTable(Syntax::Schema &schema, StringView &table);
     bool m_processing;

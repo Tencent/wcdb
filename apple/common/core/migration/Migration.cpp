@@ -99,7 +99,7 @@ bool Migration::initInfo(InfoInitializer& initializer, const UnsafeStringView& t
     }
 
     auto exists = initializer.sourceTableExists(userInfo);
-    if (!exists.has_value()) {
+    if (!exists.succeed()) {
         return false;
     }
     if (!exists.value()) {
@@ -108,7 +108,7 @@ bool Migration::initInfo(InfoInitializer& initializer, const UnsafeStringView& t
     }
 
     auto optionalColumns = initializer.getColumnsOfUserInfo(userInfo);
-    if (!optionalColumns.has_value()) {
+    if (!optionalColumns.succeed()) {
         return false;
     }
     bool containsPrimaryKey = optionalColumns.value().first;
@@ -216,7 +216,7 @@ void Migration::releaseInfo(const MigrationInfo* info)
     }
 }
 
-std::optional<RecyclableMigrationInfo> Migration::getInfo(const UnsafeStringView& table)
+Optional<RecyclableMigrationInfo> Migration::getInfo(const UnsafeStringView& table)
 {
     LockGuard lockGuard(m_lock);
     auto iter = m_filted.find(table);
@@ -229,7 +229,7 @@ std::optional<RecyclableMigrationInfo> Migration::getInfo(const UnsafeStringView
         }
         return nullptr;
     }
-    return std::nullopt;
+    return NullOpt;
 }
 
 #pragma mark - Bind
@@ -278,14 +278,13 @@ void Migration::Binder::stopReferenced()
     m_referenceds.clear();
 }
 
-std::optional<const MigrationInfo*>
-Migration::Binder::bindTable(const UnsafeStringView& table)
+Optional<const MigrationInfo*> Migration::Binder::bindTable(const UnsafeStringView& table)
 {
     WCTAssert(m_binding);
-    std::optional<const MigrationInfo*> info = nullptr;
+    Optional<const MigrationInfo*> info = (MigrationInfo*) nullptr;
     if (!table.empty()) {
         auto optionalReferencedInfo = m_migration.getOrInitInfo(*this, table);
-        if (optionalReferencedInfo.has_value()) {
+        if (optionalReferencedInfo.succeed()) {
             auto& referencedInfo = optionalReferencedInfo.value();
             m_referenceds.emplace(table, referencedInfo);
             info = referencedInfo.get();
@@ -310,11 +309,11 @@ const MigrationInfo* Migration::Binder::getBoundInfo(const UnsafeStringView& tab
     return info;
 }
 
-std::optional<RecyclableMigrationInfo>
+Optional<RecyclableMigrationInfo>
 Migration::getOrInitInfo(InfoInitializer& initializer, const UnsafeStringView& table)
 {
     auto info = getInfo(table);
-    if (!info.has_value() && initInfo(initializer, table)) {
+    if (!info.succeed() && initInfo(initializer, table)) {
         info = getInfo(table);
     }
     return info;
@@ -348,18 +347,18 @@ void Migration::tryReduceBounds(StringViewMap<const MigrationInfo*>& bounds)
 #pragma mark - Step
 Migration::Stepper::~Stepper() = default;
 
-std::optional<bool> Migration::step(Migration::Stepper& stepper)
+Optional<bool> Migration::step(Migration::Stepper& stepper)
 {
     auto worked = tryDropUnreferencedTable(stepper);
-    if (!worked.has_value()) {
-        return std::nullopt;
+    if (!worked.succeed()) {
+        return NullOpt;
     }
     if (worked.value()) {
         return false;
     }
     worked = tryMigrateRows(stepper);
-    if (!worked.has_value()) {
-        return std::nullopt;
+    if (!worked.succeed()) {
+        return NullOpt;
     }
     if (worked.value()) {
         return false;
@@ -367,13 +366,13 @@ std::optional<bool> Migration::step(Migration::Stepper& stepper)
     // acquire table is a readonly operation.
     // retry if and only if it works.
     worked = tryAcquireTables(stepper);
-    if (!worked.has_value()) {
-        return std::nullopt;
+    if (!worked.succeed()) {
+        return NullOpt;
     }
     if (worked.value()) {
         return step(stepper);
     }
-    WCTAssert(worked.has_value());
+    WCTAssert(worked.succeed());
     WCTAssert(!worked.value());
 
     {
@@ -397,7 +396,7 @@ std::optional<bool> Migration::step(Migration::Stepper& stepper)
     return true;
 }
 
-std::optional<bool> Migration::tryDropUnreferencedTable(Migration::Stepper& stepper)
+Optional<bool> Migration::tryDropUnreferencedTable(Migration::Stepper& stepper)
 {
     const MigrationInfo* info = nullptr;
     {
@@ -407,7 +406,7 @@ std::optional<bool> Migration::tryDropUnreferencedTable(Migration::Stepper& step
             WCTAssert(info != nullptr);
         }
     }
-    std::optional<bool> worked = false;
+    Optional<bool> worked = false;
     if (info != nullptr) {
         if (stepper.dropSourceTable(info)) {
             worked = true;
@@ -422,13 +421,13 @@ std::optional<bool> Migration::tryDropUnreferencedTable(Migration::Stepper& step
                 m_event->didMigrate(info);
             }
         } else {
-            worked = std::nullopt;
+            worked = NullOpt;
         }
     }
     return worked;
 }
 
-std::optional<bool> Migration::tryMigrateRows(Migration::Stepper& stepper)
+Optional<bool> Migration::tryMigrateRows(Migration::Stepper& stepper)
 {
     const MigrationInfo* info = nullptr;
     {
@@ -449,13 +448,13 @@ std::optional<bool> Migration::tryMigrateRows(Migration::Stepper& stepper)
     }
     WCTAssert(info != nullptr);
     auto migrated = stepper.migrateRows(info);
-    if (migrated.value_or(false)) {
+    if (migrated.succeed() && migrated.value()) {
         markAsMigrated(info);
     }
     return migrated;
 }
 
-std::optional<bool> Migration::tryAcquireTables(Migration::Stepper& stepper)
+Optional<bool> Migration::tryAcquireTables(Migration::Stepper& stepper)
 {
     {
         SharedLockGuard lockGuard(m_lock);
@@ -464,15 +463,15 @@ std::optional<bool> Migration::tryAcquireTables(Migration::Stepper& stepper)
         }
     }
     auto optionalTables = stepper.getAllTables();
-    if (!optionalTables.has_value()) {
-        return std::nullopt;
+    if (!optionalTables.succeed()) {
+        return NullOpt;
     }
     std::set<StringView>& tables = optionalTables.value();
     tables.insert(m_hints.begin(), m_hints.end());
     for (const auto& table : tables) {
         WCTAssert(!table.hasPrefix(Syntax::builtinTablePrefix));
         if (!initInfo(stepper, table)) {
-            return std::nullopt;
+            return NullOpt;
         }
     }
     LockGuard lockGuard(m_lock);

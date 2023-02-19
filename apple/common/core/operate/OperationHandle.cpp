@@ -58,7 +58,7 @@ void OperationHandle::checkIntegrity()
 {
     auto optionalIntegrityMessages = getValues(m_statementForIntegrityCheck, 0);
     bool needCheckFTS = true;
-    if (optionalIntegrityMessages.has_value()) {
+    if (optionalIntegrityMessages.succeed()) {
         auto &integrityMessages = optionalIntegrityMessages.value();
         WCTAssert(integrityMessages.size() == 1);
         if (integrityMessages.size() > 0) {
@@ -75,9 +75,8 @@ void OperationHandle::checkIntegrity()
     if (!needCheckFTS) {
         return;
     }
-    std::optional<std::set<StringView>> ftsTableSet
-    = getValues(m_statementForGetFTSTable, 0);
-    if (!ftsTableSet.has_value()) {
+    Optional<std::set<StringView>> ftsTableSet = getValues(m_statementForGetFTSTable, 0);
+    if (!ftsTableSet.succeed()) {
         return;
     }
     for (const StringView &ftsTable : ftsTableSet.value()) {

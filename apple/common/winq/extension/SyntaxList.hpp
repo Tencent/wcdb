@@ -50,10 +50,27 @@ public:
 
     _SyntaxList(const T& t) { this->push_back(t); }
 
-    template<typename U, typename Enable = typename std::enable_if<std::is_constructible<T, U>::value>::type>
-    _SyntaxList(const U& u)
+    template<typename V, typename Enable = void>
+    struct Convertible : public std::false_type {
+    public:
+        static _SyntaxList<T> asSyntaxList(const V&);
+    };
+
+    template<typename U>
+    struct Convertible<U, typename std::enable_if<!std::is_base_of<_SyntaxList, U>::value && std::is_constructible<T, U>::value>::type>
+    : public std::true_type {
+    public:
+        static _SyntaxList<T> asSyntaxList(const U& u)
+        {
+            _SyntaxList<T> t;
+            t.emplace_back(u);
+            return t;
+        }
+    };
+
+    template<typename V, typename Enable = typename std::enable_if<Convertible<V>::value>::type>
+    _SyntaxList(const V& v) : _SyntaxList(Convertible<V>::asSyntaxList(v))
     {
-        this->emplace_back(u);
     }
 
     template<typename U, typename Enable = typename std::enable_if<std::is_constructible<T, U>::value>::type>
@@ -94,17 +111,6 @@ public:
         for (const auto& other : others) {
             this->emplace_back(other);
         }
-    }
-
-    template<typename V, typename Enable = void>
-    struct Convertible : public std::false_type {
-    public:
-        static _SyntaxList<T> asSyntaxList(const V&);
-    };
-
-    template<typename V, std::enable_if_t<Convertible<V>::value, int> = 0>
-    _SyntaxList(const V& v) : _SyntaxList(Convertible<V>::asSyntaxList(v))
-    {
     }
 
     virtual ~_SyntaxList() = default;

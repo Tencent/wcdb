@@ -37,6 +37,10 @@ PagerRelated::PagerRelated(Pager *pager) : m_pager(pager)
     WCTAssert(m_pager != nullptr);
 }
 
+PagerRelated::PagerRelated(const PagerRelated &other) : m_pager(other.m_pager)
+{
+}
+
 PagerRelated::PagerRelated(PagerRelated &&other) : m_pager(other.m_pager)
 {
 }

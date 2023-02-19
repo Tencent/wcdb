@@ -42,7 +42,7 @@ TokenizerConfig::TokenizerConfig(const UnsafeStringView& name_,
   Expression::function("fts5").invoke().arguments(BindParameter::bindParameters(1))))
 {
     size_t pos = name.find(" ");
-    if (pos != std::string::npos) {
+    if (pos != UnsafeStringView::npos) {
         name = StringView(name.data(), pos);
     }
 }
@@ -55,7 +55,7 @@ bool TokenizerConfig::invoke(InnerHandle* handle)
     WCTRemedialAssert(module != nullptr, "Module does not exist.", return true;);
     if (module->getFts3Module() != nullptr) {
         auto exists = handle->ft3TokenizerExists(name);
-        if (!exists.has_value()) {
+        if (!exists.succeed()) {
             return false;
         }
         if (exists.value()) {

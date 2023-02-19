@@ -25,12 +25,12 @@
 #pragma once
 
 #include <WCDB/Error.hpp>
+#include <WCDB/Optional.hpp>
 #include <WCDB/SharedThreadedErrorProne.hpp>
 #include <WCDB/StringView.hpp>
 #include <WCDB/Time.hpp>
 #include <functional>
 #include <list>
-#include <optional>
 
 namespace WCDB {
 
@@ -50,18 +50,18 @@ public:
 #pragma mark - Basic
 public:
     // exists, directory?
-    static std::optional<std::pair<bool, bool>> itemExists(const UnsafeStringView &path);
-    static std::optional<size_t> getDirectorySize(const UnsafeStringView &directory);
-    static std::optional<size_t> getFileSize(const UnsafeStringView &file);
+    static Optional<std::pair<bool, bool>> itemExists(const UnsafeStringView &path);
+    static Optional<size_t> getDirectorySize(const UnsafeStringView &directory);
+    static Optional<size_t> getFileSize(const UnsafeStringView &file);
 #ifndef __ANDROID__
     static bool
     createFileHardLink(const UnsafeStringView &from, const UnsafeStringView &to);
     static bool removeFileHardLink(const UnsafeStringView &path);
 #endif
     static bool createDirectory(const UnsafeStringView &path);
-    static std::optional<Time> getFileModifiedTime(const UnsafeStringView &path);
-    static std::optional<Time> getFileCreatedTime(const UnsafeStringView &path);
-    static std::optional<uint32_t> getFileIdentifier(const UnsafeStringView &path);
+    static Optional<Time> getFileModifiedTime(const UnsafeStringView &path);
+    static Optional<Time> getFileCreatedTime(const UnsafeStringView &path);
+    static Optional<uint32_t> getFileIdentifier(const UnsafeStringView &path);
     static bool createFile(const UnsafeStringView &path);
 
     static bool enumerateDirectory(
@@ -71,7 +71,7 @@ public:
 
     static bool setFileProtection(const UnsafeStringView &path, FileProtection fileProtection);
     static StringView getTemporaryDirectory();
-    static std::optional<FileProtection> getFileProtection(const UnsafeStringView &path);
+    static Optional<FileProtection> getFileProtection(const UnsafeStringView &path);
 
 protected:
     static bool removeFile(const UnsafeStringView &file);
@@ -79,10 +79,10 @@ protected:
 
 #pragma mark - Combination
 public:
-    static std::optional<bool> fileExists(const UnsafeStringView &file);
-    static std::optional<bool> directoryExists(const UnsafeStringView &directory);
-    static std::optional<size_t> getItemSize(const UnsafeStringView &path);
-    static std::optional<size_t> getItemsSize(const std::list<StringView> &paths);
+    static Optional<bool> fileExists(const UnsafeStringView &file);
+    static Optional<bool> directoryExists(const UnsafeStringView &directory);
+    static Optional<size_t> getItemSize(const UnsafeStringView &path);
+    static Optional<size_t> getItemsSize(const std::list<StringView> &paths);
     static bool removeItem(const UnsafeStringView &path);
     static bool removeItems(const std::list<StringView> &paths);
     static bool

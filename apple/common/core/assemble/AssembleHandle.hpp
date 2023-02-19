@@ -73,7 +73,7 @@ public:
     bool assembleSequence(const UnsafeStringView &tableName, int64_t sequence) override final;
 
 protected:
-    std::optional<bool> updateSequence(const UnsafeStringView &tableName, int64_t sequence);
+    Optional<bool> updateSequence(const UnsafeStringView &tableName, int64_t sequence);
     bool insertSequence(const UnsafeStringView &tableName, int64_t sequence);
     static constexpr const char *s_dummySequence = "wcdb_dummy_sqlite_sequence";
     bool markSequenceAsAssembling();

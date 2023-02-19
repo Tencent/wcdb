@@ -25,8 +25,8 @@
 #pragma once
 
 #include <WCDB/Macro.h>
+#include <WCDB/Optional.hpp>
 #include <WCDB/StringView.hpp>
-#include <optional>
 
 namespace WCDB {
 
@@ -46,7 +46,7 @@ public:
 #endif // WCDB_DEBUG
 
 private:
-    static std::optional<StringView> callstacks();
+    static Optional<StringView> callstacks();
 };
 
 } // namespace WCDB

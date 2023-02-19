@@ -26,6 +26,7 @@
 
 #include <WCDB/Initializeable.hpp>
 #include <WCDB/MappedData.hpp>
+#include <WCDB/Optional.hpp>
 #include <WCDB/PagerRelated.hpp>
 #include <WCDB/Serialization.hpp>
 
@@ -52,7 +53,7 @@ public:
         LeafTable = 13,
     };
 
-    std::optional<Type> acquireType();
+    Optional<Type> acquireType();
     Type getType() const;
 
     const Data &getData() const;

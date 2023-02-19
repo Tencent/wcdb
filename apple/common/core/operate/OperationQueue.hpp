@@ -36,6 +36,7 @@
 #include <WCDB/AutoCheckpointConfig.hpp>
 #include <WCDB/AutoMergeFTSIndexConfig.hpp>
 #include <WCDB/AutoMigrateConfig.hpp>
+#include <WCDB/Optional.hpp>
 
 namespace WCDB {
 
@@ -44,15 +45,14 @@ public:
     virtual ~OperationEvent() = 0;
 
 protected:
-    virtual std::optional<bool>
-    migrationShouldBeOperated(const UnsafeStringView& path) = 0;
+    virtual Optional<bool> migrationShouldBeOperated(const UnsafeStringView& path) = 0;
     virtual void backupShouldBeOperated(const UnsafeStringView& path) = 0;
     virtual void checkpointShouldBeOperated(const UnsafeStringView& path) = 0;
     virtual void integrityShouldBeChecked(const UnsafeStringView& path) = 0;
     virtual void purgeShouldBeOperated() = 0;
 
     using TableArray = AutoMergeFTSIndexOperator::TableArray;
-    virtual std::optional<bool>
+    virtual Optional<bool>
     mergeFTSIndexShouldBeOperated(const UnsafeStringView& path, TableArray newTables, TableArray modifiedTables)
     = 0;
 

@@ -45,7 +45,7 @@ bool FileManager::setFileProtection(const WCDB::UnsafeStringView &path,
     return true;
 }
 
-std::optional<WCDB::FileProtection>
+Optional<WCDB::FileProtection>
 FileManager::getFileProtection(const WCDB::UnsafeStringView &path)
 {
     WCDB_UNUSED(path)

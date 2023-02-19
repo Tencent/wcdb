@@ -204,7 +204,7 @@ bool Wal::doInitialize()
     }
 
     auto fileSize = FileManager::getFileSize(getPath());
-    if (!fileSize.has_value()) {
+    if (!fileSize.succeed()) {
         assignWithSharedThreadedError();
         return false;
     }

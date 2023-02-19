@@ -99,33 +99,33 @@
 
 - (void)doTestObject:(const CPPTestCaseObject&)object
               andSQL:(NSString*)sql
-         bySelecting:(std::optional<CPPTestCaseObject> (^)())block
+         bySelecting:(WCDB::Optional<CPPTestCaseObject> (^)())block
 {
     [self doTestObjects:object
                 andSQLs:@[ sql ]
-            bySelecting:^std::optional<WCDB::ValueArray<CPPTestCaseObject>> {
-                const std::optional<CPPTestCaseObject> result = block();
-                TestCaseAssertTrue(result.has_value());
+            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+                const WCDB::Optional<CPPTestCaseObject> result = block();
+                TestCaseAssertTrue(result.succeed());
                 return { result.value() };
             }];
 }
 
 - (void)doTestObjects:(const WCDB::ValueArray<CPPTestCaseObject>&)expectedObjects
                andSQL:(NSString*)sql
-          bySelecting:(std::optional<WCDB::ValueArray<CPPTestCaseObject>> (^)())block
+          bySelecting:(WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> (^)())block
 {
     [self doTestObjects:expectedObjects andSQLs:@[ sql ] bySelecting:block];
 }
 
 - (void)doTestObjects:(const WCDB::ValueArray<CPPTestCaseObject>&)expectedObjects
               andSQLs:(NSArray<NSString*>*)expectedSQLs
-          bySelecting:(std::optional<WCDB::ValueArray<CPPTestCaseObject>> (^)())block
+          bySelecting:(WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> (^)())block
 {
     __block WCDB::ValueArray<CPPTestCaseObject> selected;
     [self doTestSQLs:expectedSQLs
          inOperation:^BOOL {
              auto values = block();
-             TestCaseAssertTrue(values.has_value());
+             TestCaseAssertTrue(values.succeed());
              selected = values.value();
              return selected.size() > 0;
          }];
@@ -135,7 +135,7 @@
 - (WCDB::ValueArray<CPPTestCaseObject>)getAllObjects
 {
     auto allObject = self.table.getAllObjects();
-    TestCaseAssertTrue(allObject.has_value());
+    TestCaseAssertTrue(allObject.succeed());
     return allObject.value();
 }
 
@@ -176,8 +176,8 @@
              andSQLs:@[ sql ]
          bySelecting:^WCDB::OptionalMultiRows {
              WCDB::OptionalOneRow result = block();
-             TestCaseAssertTrue(result.has_value());
-             return std::make_optional<WCDB::MultiRowsValue>({ result.value() });
+             TestCaseAssertTrue(result.succeed());
+             return { result.value() };
          }];
 }
 
@@ -195,7 +195,7 @@
              andSQLs:@[ sql ]
          bySelecting:^WCDB::OptionalMultiRows {
              WCDB::OptionalOneColumn result = block();
-             TestCaseAssertTrue(result.has_value());
+             TestCaseAssertTrue(result.succeed());
              WCDB::MultiRowsValue resultRows;
              for (WCDB::Value value : result.value()) {
                  resultRows.push_back({ value });
@@ -213,8 +213,11 @@
     andSQLs:@[ sql ]
     bySelecting:^WCDB::OptionalMultiRows {
         WCDB::OptionalValue result = block();
-        TestCaseAssertTrue(result.has_value());
-        return std::make_optional<WCDB::MultiRowsValue>({ { result.value() } });
+        TestCaseAssertTrue(result.succeed());
+        static_assert(std::is_constructible<WCDB::MultiRowsValue, std::vector<std::vector<WCDB::Value>>>::value, "");
+        WCDB::MultiRowsValue values = { { result.value() } };
+
+        return values;
     }];
 }
 
@@ -234,9 +237,9 @@
     [self doTestSQLs:expectedSQLs
          inOperation:^BOOL {
              auto values = block();
-             TestCaseAssertTrue(values.has_value());
+             TestCaseAssertTrue(values.succeed());
              selected = values.value();
-             return values.has_value();
+             return values.succeed();
          }];
     [self check:selected isEqualTo:expectedRows];
 }
@@ -257,7 +260,7 @@
 - (WCDB::MultiRowsValue)getAllvalues
 {
     auto values = self.database->getAllRowsFromStatement(WCDB::StatementSelect().select(self.resultColumns).from(self.tableName.UTF8String));
-    TestCaseAssertTrue(values.has_value());
+    TestCaseAssertTrue(values.succeed());
     return values.value();
 }
 

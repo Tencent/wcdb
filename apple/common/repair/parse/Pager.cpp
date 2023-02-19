@@ -239,7 +239,7 @@ void Pager::markAsError(Error::Code code)
 bool Pager::doInitialize()
 {
     auto fileSize = FileManager::getFileSize(getPath());
-    if (!fileSize.has_value()) {
+    if (!fileSize.succeed()) {
         assignWithSharedThreadedError();
         return false;
     }

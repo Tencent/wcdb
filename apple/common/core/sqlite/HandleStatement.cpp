@@ -192,7 +192,7 @@ bool HandleStatement::tryExtractColumnInfo(const Statement &statement,
         off_t firstLoc = msg.find(" has no column named ");
         const UnsafeStringView tablePart(msgStr + 6, firstLoc - 6);
         off_t secondLoc = tablePart.find(".");
-        if (secondLoc == std::string_view::npos) {
+        if (secondLoc == UnsafeStringView::npos) {
             columnInfo[1] = tablePart;
         } else {
             columnInfo[0] = StringView(tablePart.data(), secondLoc);
@@ -557,12 +557,12 @@ OptionalOneColumn HandleStatement::getOneColumn(int index)
     OptionalOneColumn result;
     bool succeed = false;
     while ((succeed = step()) && !done()) {
-        if (!result.has_value()) {
+        if (!result.succeed()) {
             result = OneColumnValue();
         }
         result->push_back(getValue(index));
     }
-    return result;
+    return succeed && !result.hasValue() ? OneColumnValue() : result;
 }
 
 OneRowValue HandleStatement::getOneRow()
@@ -580,12 +580,12 @@ OptionalMultiRows HandleStatement::getAllRows()
     OptionalMultiRows result;
     bool succeed = false;
     while ((succeed = step()) && !done()) {
-        if (!result.has_value()) {
+        if (!result.succeed()) {
             result = MultiRowsValue();
         }
         result->push_back(getOneRow());
     }
-    return result;
+    return succeed && !result.hasValue() ? MultiRowsValue() : result;
 }
 
 signed long long HandleStatement::getColumnSize(int index)

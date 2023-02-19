@@ -38,7 +38,7 @@ FactoryBackup::~FactoryBackup() = default;
 bool FactoryBackup::work(const UnsafeStringView& database)
 {
     auto materialPath = Factory::materialForSerializingForDatabase(database);
-    if (!materialPath.has_value()) {
+    if (!materialPath.succeed()) {
         assignWithSharedThreadedError();
         return false;
     }
@@ -94,7 +94,7 @@ void FactoryBackup::notifiyBackupEnd(const UnsafeStringView& database,
                                      Backup& backup)
 {
     auto fileSize = FileManager::getFileSize(materialPath);
-    if (fileSize.has_value()) {
+    if (fileSize.succeed()) {
         uint32_t associatedTableCount = 0;
         uint32_t leafPageCount = 0;
         for (auto content : backup.getMaterial().contents) {

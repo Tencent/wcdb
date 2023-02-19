@@ -65,12 +65,12 @@ bool CreateVirtualTableSTMT::describle(std::ostringstream& stream) const
             } else {
                 comma = true;
             }
-            off_t loc = std::string_view::npos;
+            off_t loc = UnsafeStringView::npos;
             if (isFTS5 && (loc = argument.find(tokenizerPrefix)) == 0) {
                 stream << tokenizerPrefix << "'";
                 stream << UnsafeStringView(argument.data() + 11, argument.length() - 11);
                 stream << "'";
-            } else if (!isFTS5 && (loc = argument.find("UNINDEXED")) != std::string_view::npos) {
+            } else if (!isFTS5 && (loc = argument.find("UNINDEXED")) != UnsafeStringView::npos) {
                 std::string columnDef = std::string(argument.data()).erase(loc - 1, 10);
                 off_t spaceLoc = argument.find(" ");
                 notIndexedColumn.push_back(std::string(argument.data(), spaceLoc));

@@ -45,10 +45,9 @@ MigratingHandle::~MigratingHandle()
 
 #pragma mark - Meta
 
-std::optional<const MigrationInfo*>
-MigratingHandle::getBindingInfo(const UnsafeStringView& table)
+Optional<const MigrationInfo*> MigratingHandle::getBindingInfo(const UnsafeStringView& table)
 {
-    std::optional<const MigrationInfo*> result;
+    Optional<const MigrationInfo*> result;
 
     startBinding();
 
@@ -56,17 +55,17 @@ MigratingHandle::getBindingInfo(const UnsafeStringView& table)
 
     bool success = stopBinding(true);
     if (!success) {
-        return std::optional<const MigrationInfo*>();
+        return Optional<const MigrationInfo*>();
     }
 
     return result;
 }
 
-std::optional<std::set<StringView>>
+Optional<std::set<StringView>>
 MigratingHandle::getColumns(const Schema& schema, const UnsafeStringView& table)
 {
     auto ret = Super::getColumns(schema, table);
-    if (!ret.has_value()) {
+    if (!ret.succeed()) {
         return ret;
     }
     if (!schema.syntax().isMain()) {
@@ -74,8 +73,8 @@ MigratingHandle::getColumns(const Schema& schema, const UnsafeStringView& table)
     }
 
     auto info = getBindingInfo(table);
-    if (!info.has_value()) {
-        return std::optional<std::set<StringView>>();
+    if (!info.succeed()) {
+        return Optional<std::set<StringView>>();
     }
     if (info.value() == nullptr) {
         return ret;
@@ -86,8 +85,8 @@ MigratingHandle::getColumns(const Schema& schema, const UnsafeStringView& table)
                                       .schema(info.value()->getSchemaForSourceDatabase())
                                       .with(info.value()->getSourceTable());
     auto sourceColumns = getValues(statement, 1);
-    if (!sourceColumns.has_value()) {
-        return std::nullopt;
+    if (!sourceColumns.succeed()) {
+        return NullOpt;
     }
     auto iterator = ret->begin();
     while (iterator != ret->end()) {
@@ -113,7 +112,7 @@ bool MigratingHandle::addColumn(const Schema& schema,
     }
 
     auto info = getBindingInfo(table);
-    if (!info.has_value()) {
+    if (!info.succeed()) {
         return false;
     }
     if (info.value() == nullptr) {
@@ -127,7 +126,7 @@ bool MigratingHandle::addColumn(const Schema& schema,
 bool MigratingHandle::rebindUnionView(const UnsafeStringView& table, const Columns& columns)
 {
     auto info = getBindingInfo(table);
-    if (!info.has_value()) {
+    if (!info.succeed()) {
         return false;
     }
     if (info.value() == nullptr) {
@@ -155,7 +154,7 @@ bool MigratingHandle::checkSourceTable(const UnsafeStringView& table,
                                        const UnsafeStringView& sourceTable)
 {
     auto info = getBindingInfo(table);
-    if (!info.has_value()) {
+    if (!info.succeed()) {
         return false;
     }
     if (info.value() == nullptr) {
@@ -165,20 +164,20 @@ bool MigratingHandle::checkSourceTable(const UnsafeStringView& table,
 }
 
 #pragma mark - Info Initializer
-std::optional<std::pair<bool, std::set<StringView>>>
+Optional<std::pair<bool, std::set<StringView>>>
 MigratingHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
 {
     auto exists = tableExists(Schema::main(), userInfo.getTable());
-    if (!exists.has_value()) {
-        return std::nullopt;
+    if (!exists.succeed()) {
+        return NullOpt;
     }
 
     bool integerPrimary = false;
     std::set<StringView> names;
     if (exists.value()) {
         auto optionalMetas = getTableMeta(Schema::main(), userInfo.getTable());
-        if (!optionalMetas.has_value()) {
-            return std::nullopt;
+        if (!optionalMetas.succeed()) {
+            return NullOpt;
         }
         auto& metas = optionalMetas.value();
         integerPrimary = ColumnMeta::getIndexOfIntegerPrimary(metas) >= 0;
@@ -189,20 +188,20 @@ MigratingHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
     return std::make_pair(integerPrimary, names);
 }
 
-std::optional<bool> MigratingHandle::sourceTableExists(const MigrationUserInfo& userInfo)
+Optional<bool> MigratingHandle::sourceTableExists(const MigrationUserInfo& userInfo)
 {
     Schema schema = userInfo.getSchemaForSourceDatabase();
     if (!schema.syntax().isMain()) {
         auto optionalAttacheds
         = getValues(MigrationInfo::getStatementForSelectingDatabaseList(), 1);
-        if (!optionalAttacheds.has_value()) {
-            return std::nullopt;
+        if (!optionalAttacheds.succeed()) {
+            return NullOpt;
         }
         std::set<StringView>& attacheds = optionalAttacheds.value();
         if (attacheds.find(schema.getDescription()) == attacheds.end()) {
             if (!executeStatement(userInfo.getStatementForAttachingSchema())
                 || !trySynchronousTransactionAfterAttached()) {
-                return std::nullopt;
+                return NullOpt;
             }
         }
     }
@@ -226,13 +225,13 @@ bool MigratingHandle::rebindViews(const StringViewMap<const MigrationInfo*>& mig
 
     // get existing unioned views
     auto exists = tableExists(Schema::temp(), Syntax::masterTable);
-    if (!exists.has_value()) {
+    if (!exists.succeed()) {
         return false;
     }
     if (exists.value()) {
         auto existingViews
         = getValues(MigrationInfo::getStatementForSelectingUnionedView(), 0);
-        if (!existingViews.has_value()) {
+        if (!existingViews.succeed()) {
             return false;
         }
 
@@ -275,7 +274,7 @@ bool MigratingHandle::rebindSchemas(const StringViewMap<const MigrationInfo*>& m
 
     auto existingSchemas
     = getValues(MigrationInfo::getStatementForSelectingDatabaseList(), 1);
-    if (!existingSchemas.has_value()) {
+    if (!existingSchemas.succeed()) {
         return false;
     }
 

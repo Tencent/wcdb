@@ -43,7 +43,8 @@ bool LiteralValue::describle(std::ostringstream& stream) const
     switch (switcher) {
     case Switch::StringView: {
         stream << "'";
-        for (const auto character : stringValue) {
+        for (int i = 0; i < stringValue.length(); i++) {
+            const auto character = stringValue.at(i);
             if (character != '\'') {
                 stream << character;
             } else {

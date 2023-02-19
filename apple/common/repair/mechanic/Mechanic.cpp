@@ -53,7 +53,7 @@ bool Mechanic::work()
     WCTAssert(m_material != nullptr);
 
     auto isEmpty = isEmptyDatabase();
-    if (isEmpty.has_value()) {
+    if (isEmpty.succeed()) {
         if (isEmpty.value()) {
             return exit(true);
         }

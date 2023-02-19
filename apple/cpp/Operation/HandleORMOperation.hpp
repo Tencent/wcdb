@@ -191,11 +191,10 @@ public:
      @brief Get an object by specific selecting.
      */
     template<class ObjectType>
-    std::optional<ObjectType>
-    getFirstObject(const UnsafeStringView &table,
-                   const Expression &where = Expression(),
-                   const OrderingTerms &orders = OrderingTerms(),
-                   const Expression &offset = Expression())
+    Optional<ObjectType> getFirstObject(const UnsafeStringView &table,
+                                        const Expression &where = Expression(),
+                                        const OrderingTerms &orders = OrderingTerms(),
+                                        const Expression &offset = Expression())
     {
         auto select = prepareSelect<ObjectType>().fromTable(table);
         configStatement(select, where, orders, Expression(1), offset);
@@ -206,7 +205,7 @@ public:
      @brief Get an object on specific fields by specific selecting.
      */
     template<class ObjectType>
-    std::optional<ObjectType>
+    Optional<ObjectType>
     getFirstObjectWithFields(const UnsafeStringView &table,
                              const ResultFields &resultFields,
                              const Expression &where = Expression(),
@@ -223,7 +222,7 @@ public:
      @brief Get objects by specific selecting.
      */
     template<class ObjectType>
-    std::optional<ValueArray<ObjectType>>
+    Optional<ValueArray<ObjectType>>
     getAllObjects(const UnsafeStringView &table,
                   const Expression &where = Expression(),
                   const OrderingTerms &orders = OrderingTerms(),
@@ -239,7 +238,7 @@ public:
      @brief Get objects on specific fields by specific selecting.
      */
     template<class ObjectType>
-    std::optional<ValueArray<ObjectType>>
+    Optional<ValueArray<ObjectType>>
     getAllObjectsWithFields(const UnsafeStringView &table,
                             const ResultFields &resultFields,
                             const Expression &where = Expression(),
@@ -256,7 +255,7 @@ public:
     /**
      @brief Get first row of objects by specific multi-selecting.
      */
-    std::optional<MultiObject>
+    Optional<MultiObject>
     getFirstMultiObject(const ValueArray<StringView> tables,
                         const ResultFields &resultFields,
                         const Expression &where = Expression(),
@@ -267,7 +266,7 @@ public:
     /**
      @brief Get objects by specific multi-selecting.
      */
-    std::optional<ValueArray<MultiObject>>
+    Optional<ValueArray<MultiObject>>
     getAllMultiObjects(const ValueArray<StringView> tables,
                        const ResultFields &resultFields,
                        const Expression &where = Expression(),

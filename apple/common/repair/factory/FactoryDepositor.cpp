@@ -36,7 +36,7 @@ FactoryDepositor::~FactoryDepositor() = default;
 bool FactoryDepositor::work()
 {
     auto optionalWorkshopDirectory = factory.getUniqueWorkshopDiectory();
-    if (!optionalWorkshopDirectory.has_value()) {
+    if (!optionalWorkshopDirectory.succeed()) {
         assignWithSharedThreadedError();
         return false;
     }

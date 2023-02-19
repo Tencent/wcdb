@@ -28,6 +28,7 @@
 #include <WCDB/ErrorProne.hpp>
 #include <WCDB/HandleNotification.hpp>
 #include <WCDB/HandleStatement.hpp>
+#include <WCDB/Optional.hpp>
 #include <WCDB/StringView.hpp>
 #include <WCDB/WINQ.h>
 #include <set>
@@ -100,21 +101,21 @@ private:
 
 #pragma mark - Meta
 public:
-    std::optional<bool> ft3TokenizerExists(const UnsafeStringView &tokenizer);
+    Optional<bool> ft3TokenizerExists(const UnsafeStringView &tokenizer);
 
-    std::optional<bool> tableExists(const UnsafeStringView &table);
-    std::optional<bool> tableExists(const Schema &schema, const UnsafeStringView &table);
+    Optional<bool> tableExists(const UnsafeStringView &table);
+    Optional<bool> tableExists(const Schema &schema, const UnsafeStringView &table);
 
     virtual bool
     addColumn(const Schema &schema, const UnsafeStringView &table, const ColumnDef &column);
 
-    virtual std::optional<std::set<StringView>>
+    virtual Optional<std::set<StringView>>
     getColumns(const Schema &schema, const UnsafeStringView &table);
-    std::optional<std::set<StringView>> getColumns(const UnsafeStringView &table);
+    Optional<std::set<StringView>> getColumns(const UnsafeStringView &table);
 
-    std::optional<std::vector<ColumnMeta>>
+    Optional<std::vector<ColumnMeta>>
     getTableMeta(const Schema &schema, const UnsafeStringView &table);
-    std::optional<std::set<StringView>> getValues(const Statement &statement, int index);
+    Optional<std::set<StringView>> getValues(const Statement &statement, int index);
 
 #pragma mark - Transaction
 public:

@@ -53,7 +53,7 @@ OTHER_CFLAGS = -fno-aligned-allocation -Wall -Wextra -Wno-sign-compare
 GCC_C_LANGUAGE_STANDARD = gnu11
 
 // Apple Clang - Language - C++
-CLANG_CXX_LANGUAGE_STANDARD = gnu++17
+CLANG_CXX_LANGUAGE_STANDARD = gnu++14
 CLANG_CXX_LIBRARY = libc++
 GCC_ENABLE_CPP_EXCEPTIONS = NO
 GCC_ENABLE_CPP_RTTI = YES

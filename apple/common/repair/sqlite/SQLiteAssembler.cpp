@@ -166,7 +166,7 @@ bool SQLiteAssembler::lazyPrepareCell()
     return m_cellSTMT != nullptr;
 }
 
-std::optional<StringView> SQLiteAssembler::getAssembleSQL(const UnsafeStringView &tableName)
+Optional<StringView> SQLiteAssembler::getAssembleSQL(const UnsafeStringView &tableName)
 {
     bool succeed;
     std::list<StringView> columnNames;
@@ -193,7 +193,7 @@ std::optional<StringView> SQLiteAssembler::getAssembleSQL(const UnsafeStringView
     return { true, firstHalfStream.str() + lastHalfStream.str() };
 }
 
-std::optional<std::list<StringView>>
+Optional<std::list<StringView>>
 SQLiteAssembler::getColumnNames(const UnsafeStringView &tableName)
 {
     std::ostringstream stream;
@@ -239,7 +239,7 @@ bool SQLiteAssembler::markSequenceAsAssembled()
     return execute("DROP TABLE IF EXISTS wcdb_dummy_sqlite_sequence");
 }
 
-std::optional<bool>
+Optional<bool>
 SQLiteAssembler::updateSequence(const UnsafeStringView &tableName, int64_t sequence)
 {
     void *stmt = prepare("UPDATE sqlite_sequence SET seq = ?1 WHERE name = ?2");

@@ -24,17 +24,17 @@
 
 #import <WCDB/WCTOptional.h>
 
-WCTOptionalBool::WCTOptionalBool(std::optional<bool>&& optional)
-: Super(optional.has_value() ? std::optional<BOOL>((BOOL) optional.value()) :
-                               std::optional<BOOL>(std::nullopt))
+WCTOptionalBool::WCTOptionalBool(WCDB::Optional<bool>&& optional)
+: Super(optional.succeed() ? WCDB::Optional<BOOL>((BOOL) optional.value()) :
+                             WCDB::Optional<BOOL>(WCDB::NullOpt))
 {
 }
 
 WCTOptionalBool::~WCTOptionalBool() = default;
 
-WCTOptionalSize::WCTOptionalSize(std::optional<size_t>&& optional)
-: Super(optional.has_value() ? std::optional<NSUInteger>((NSUInteger) optional.value()) :
-                               std::optional<NSUInteger>(std::nullopt))
+WCTOptionalSize::WCTOptionalSize(WCDB::Optional<size_t>&& optional)
+: Super(optional.succeed() ? WCDB::Optional<NSUInteger>((NSUInteger) optional.value()) :
+                             WCDB::Optional<NSUInteger>(WCDB::NullOpt))
 {
 }
 

@@ -233,7 +233,7 @@ std::list<StringView> Database::getPaths() const
     return m_innerDatabase->getPaths();
 }
 
-std::optional<size_t> Database::getFilesSize() const
+Optional<size_t> Database::getFilesSize() const
 {
     return m_innerDatabase->getFilesSize();
 }
@@ -419,7 +419,7 @@ void Database::filterMigration(MigrationFilter filter)
 bool Database::stepMigration()
 {
     auto done = m_innerDatabase->stepMigration(false);
-    return done.has_value();
+    return done.succeed();
 }
 
 void Database::enableAutoMigration(bool flag)

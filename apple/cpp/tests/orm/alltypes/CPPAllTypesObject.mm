@@ -192,7 +192,7 @@ CPPAllTypesObject CPPAllTypesObject::randomObject()
 
     object.stringViewValue = random.string.UTF8String;
     object.constCharpValue = object.stdStringValue.data();
-    object.charpValue = object.stdStringValue.data();
+    object.charpValue = const_cast<char*>(object.stdStringValue.data());
     object.stdStringValue = random.string.UTF8String;
     object.unsafeStringViewValue = object.stringViewValue;
     memcpy(object.charArrValue, [random stringWithLength:99].UTF8String, 100);

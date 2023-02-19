@@ -93,8 +93,7 @@ public:
                                               const CorruptedNotification& notification);
 
 protected:
-    std::optional<bool>
-    migrationShouldBeOperated(const UnsafeStringView& path) override final;
+    Optional<bool> migrationShouldBeOperated(const UnsafeStringView& path) override final;
     void backupShouldBeOperated(const UnsafeStringView& path) override final;
     void checkpointShouldBeOperated(const UnsafeStringView& path) override final;
     void integrityShouldBeChecked(const UnsafeStringView& path) override final;
@@ -145,10 +144,9 @@ protected:
 public:
     using TableArray = OperationQueue::TableArray;
     void enableAutoMergeFTSIndex(InnerDatabase* database, bool enable);
-    std::optional<bool>
-    mergeFTSIndexShouldBeOperated(const UnsafeStringView& path,
-                                  TableArray newTables,
-                                  TableArray modifiedTables) override final;
+    Optional<bool> mergeFTSIndexShouldBeOperated(const UnsafeStringView& path,
+                                                 TableArray newTables,
+                                                 TableArray modifiedTables) override final;
 
 protected:
     std::shared_ptr<Config> m_AutoMergeFTSConfig;
@@ -157,7 +155,7 @@ protected:
 public:
     void setABTestConfig(const UnsafeStringView configName, const UnsafeStringView configValue);
     void removeABTestConfig(const UnsafeStringView configName);
-    std::optional<UnsafeStringView> getABTestConfig(UnsafeStringView configName);
+    Optional<UnsafeStringView> getABTestConfig(UnsafeStringView configName);
 
 protected:
     Configs m_configs;

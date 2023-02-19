@@ -207,7 +207,7 @@ bool Material::deserialize(Deserialization &deserialization)
     }
 
     auto decompressed = deserializeData(deserialization);
-    if (!decompressed.has_value()) {
+    if (!decompressed.succeed()) {
         return false;
     }
 
@@ -230,28 +230,28 @@ bool Material::deserialize(Deserialization &deserialization)
     return true;
 }
 
-std::optional<Data> Material::deserializeData(Deserialization &deserialization)
+Optional<Data> Material::deserializeData(Deserialization &deserialization)
 {
     if (!deserialization.canAdvance(sizeof(uint32_t))) {
         markAsCorrupt("Checksum");
-        return std::nullopt;
+        return NullOpt;
     }
     uint32_t checksum = deserialization.advance4BytesUInt();
     auto intermediate = deserialization.advanceSizedData();
     if (intermediate.first == 0) {
         markAsCorrupt("Content");
-        return std::nullopt;
+        return NullOpt;
     }
     Data data;
     if (!intermediate.second.empty()) {
         data = intermediate.second;
         if (checksum != data.hash()) {
             markAsCorrupt("Checksum");
-            return std::nullopt;
+            return NullOpt;
         }
     } else if (checksum != 0) {
         markAsCorrupt("Checksum");
-        return std::nullopt;
+        return NullOpt;
     }
     return data;
 }

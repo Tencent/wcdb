@@ -251,25 +251,24 @@ public:
      @return An array of objects.
      */
     template<class ObjectType>
-    std::optional<ValueArray<ObjectType>>
-    extractAllObjects(const ResultFields& resultFields)
+    Optional<ValueArray<ObjectType>> extractAllObjects(const ResultFields& resultFields)
     {
-        std::optional<ValueArray<ObjectType>> result;
+        Optional<ValueArray<ObjectType>> result;
         bool succeed = false;
         while ((succeed = step()) && !done()) {
-            if (!result.has_value()) {
+            if (!result.succeed()) {
                 result = ValueArray<ObjectType>();
             }
             result->push_back(extractOneObject<ObjectType>(resultFields));
         }
-        return result;
+        return succeed && !result.hasValue() ? ValueArray<ObjectType>() : result;
     }
 
     /**
      @brief Extract the results of a multi-table query.
      @return An array of `WCDB::MultiObject`.
      */
-    std::optional<ValueArray<MultiObject>>
+    Optional<ValueArray<MultiObject>>
     extractAllMultiObjects(const ResultFields& resultFields);
 
 protected:

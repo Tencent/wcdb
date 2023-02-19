@@ -260,12 +260,12 @@ void AbstractHandle::returnAllPreparedStatement()
 }
 
 #pragma mark - Meta
-std::optional<bool> AbstractHandle::ft3TokenizerExists(const UnsafeStringView &tokenizer)
+Optional<bool> AbstractHandle::ft3TokenizerExists(const UnsafeStringView &tokenizer)
 {
     markErrorAsIgnorable(Error::Code::Error);
     bool succeed = executeStatement(StatementSelect().select(
     Expression::function("fts3_tokenizer").invoke().arguments(tokenizer)));
-    std::optional<bool> exists;
+    Optional<bool> exists;
     if (succeed) {
         exists = true;
     } else if (m_error.isIgnorable()) {
@@ -275,12 +275,12 @@ std::optional<bool> AbstractHandle::ft3TokenizerExists(const UnsafeStringView &t
     return exists;
 }
 
-std::optional<bool> AbstractHandle::tableExists(const UnsafeStringView &table)
+Optional<bool> AbstractHandle::tableExists(const UnsafeStringView &table)
 {
     return tableExists(Schema::main(), table);
 }
 
-std::optional<bool>
+Optional<bool>
 AbstractHandle::tableExists(const Schema &schema, const UnsafeStringView &table)
 {
     StatementSelect statement
@@ -289,7 +289,7 @@ AbstractHandle::tableExists(const Schema &schema, const UnsafeStringView &table)
     HandleStatement handleStatement(this);
     markErrorAsIgnorable(Error::Code::Error);
     bool succeed = handleStatement.prepare(statement);
-    std::optional<bool> exists;
+    Optional<bool> exists;
     if (succeed) {
         handleStatement.finalize();
         exists = true;
@@ -323,13 +323,12 @@ bool AbstractHandle::addColumn(const Schema &schema,
     return succeed;
 }
 
-std::optional<std::set<StringView>>
-AbstractHandle::getColumns(const UnsafeStringView &table)
+Optional<std::set<StringView>> AbstractHandle::getColumns(const UnsafeStringView &table)
 {
     return getColumns(Schema::main(), table);
 }
 
-std::optional<std::set<StringView>>
+Optional<std::set<StringView>>
 AbstractHandle::getColumns(const Schema &schema, const UnsafeStringView &table)
 {
     WCDB::StatementPragma statement
@@ -337,10 +336,10 @@ AbstractHandle::getColumns(const Schema &schema, const UnsafeStringView &table)
     return getValues(statement, 1);
 }
 
-std::optional<std::vector<ColumnMeta>>
+Optional<std::vector<ColumnMeta>>
 AbstractHandle::getTableMeta(const Schema &schema, const UnsafeStringView &table)
 {
-    std::optional<std::vector<ColumnMeta>> metas;
+    Optional<std::vector<ColumnMeta>> metas;
     HandleStatement handleStatement(this);
     if (handleStatement.prepare(
         StatementPragma().pragma(Pragma::tableInfo()).schema(schema).with(table))) {
@@ -362,10 +361,10 @@ AbstractHandle::getTableMeta(const Schema &schema, const UnsafeStringView &table
     return metas;
 }
 
-std::optional<std::set<StringView>>
+Optional<std::set<StringView>>
 AbstractHandle::getValues(const Statement &statement, int index)
 {
-    std::optional<std::set<StringView>> values;
+    Optional<std::set<StringView>> values;
     HandleStatement handleStatement(this);
     if (handleStatement.prepare(statement)) {
         std::set<StringView> rows;

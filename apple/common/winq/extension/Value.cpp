@@ -79,7 +79,7 @@ bool Value::operator==(const Value &other) const
     case Type::Float:
         return m_value.floatValue == other.m_value.floatValue;
     case Type::Text:
-        return *m_value.textValue == *other.m_value.textValue;
+        return (*m_value.textValue).compare(*other.m_value.textValue) == 0;
     case Type::BLOB: {
         if (m_value.blobValue->size() != other.m_value.blobValue->size()) {
             return false;

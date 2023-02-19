@@ -31,7 +31,6 @@
 #include <WCDB/SyntaxForwardDeclaration.h>
 #include <WCDB/SyntaxList.hpp>
 #include <memory>
-#include <optional>
 
 namespace WCDB {
 

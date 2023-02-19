@@ -24,10 +24,10 @@
 
 #pragma once
 
+#include <WCDB/Optional.hpp>
 #include <WCDB/SharedThreadedErrorProne.hpp>
 #include <WCDB/StringView.hpp>
 #include <chrono>
-#include <optional>
 
 namespace WCDB {
 
@@ -45,7 +45,7 @@ public:
     std::time_t seconds() const;
     std::time_t nanoseconds() const;
     bool empty() const;
-    std::optional<StringView> stringify() const;
+    Optional<StringView> stringify() const;
 };
 
 class SteadyClock final : public std::chrono::steady_clock::time_point {

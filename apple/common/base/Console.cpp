@@ -49,7 +49,7 @@ void Console::fatal(const UnsafeStringView& message, const char* file, int line,
     error.infos.insert_or_assign("Version", WCDB_VERSION_STRING);
     error.infos.insert_or_assign("Build", WCDB_BUILD_STRING);
     auto callstacks = Console::callstacks();
-    if (callstacks.has_value()) {
+    if (callstacks.succeed()) {
         error.infos.insert_or_assign("Callstacks", callstacks.value());
     }
     Notifier::shared().notify(error);
@@ -64,7 +64,7 @@ void Console::fatal(const UnsafeStringView& message)
     error.infos.insert_or_assign("Version", WCDB_VERSION_STRING);
     error.infos.insert_or_assign("Build", WCDB_BUILD_STRING);
     auto callstacks = Console::callstacks();
-    if (callstacks.has_value()) {
+    if (callstacks.succeed()) {
         error.infos.insert_or_assign("Callstacks", callstacks.value());
     }
     Notifier::shared().notify(error);
@@ -72,14 +72,14 @@ void Console::fatal(const UnsafeStringView& message)
 
 #endif // WCDB_DEBUG
 
-std::optional<StringView> Console::callstacks()
+Optional<StringView> Console::callstacks()
 {
     constexpr const int size = 100;
     void* buffer[size];
     int depth = backtrace(buffer, size);
     char** symbols = backtrace_symbols(buffer, depth);
     if (symbols == nullptr) {
-        return std::nullopt;
+        return NullOpt;
     }
 
     std::ostringstream stream;
