@@ -42,7 +42,7 @@ Identifier::Type CommonTableExpression::getType() const
     return type;
 }
 
-bool CommonTableExpression::describle(std::ostringstream& stream) const
+bool CommonTableExpression::describle(std::ostream& stream) const
 {
     stream << table;
     if (!columns.empty()) {

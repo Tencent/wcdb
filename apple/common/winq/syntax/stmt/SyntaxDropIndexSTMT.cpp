@@ -42,7 +42,7 @@ Identifier::Type DropIndexSTMT::getType() const
     return type;
 }
 
-bool DropIndexSTMT::describle(std::ostringstream& stream) const
+bool DropIndexSTMT::describle(std::ostream& stream) const
 {
     stream << "DROP INDEX ";
     if (ifExists) {

@@ -43,7 +43,7 @@ Identifier::Type CreateVirtualTableSTMT::getType() const
     return type;
 }
 
-bool CreateVirtualTableSTMT::describle(std::ostringstream& stream) const
+bool CreateVirtualTableSTMT::describle(std::ostream& stream) const
 {
     stream << "CREATE VIRTUAL TABLE ";
     if (ifNotExists) {

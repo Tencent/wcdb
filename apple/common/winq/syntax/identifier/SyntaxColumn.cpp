@@ -52,7 +52,7 @@ const BaseBinding* Column::getTableBinding() const
     return nullptr;
 }
 
-bool Column::describle(std::ostringstream& stream) const
+bool Column::describle(std::ostream& stream) const
 {
     if (!table.empty()) {
         if (!schema.empty()) {

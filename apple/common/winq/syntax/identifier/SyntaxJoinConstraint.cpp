@@ -42,7 +42,7 @@ Identifier::Type JoinConstraint::getType() const
     return type;
 }
 
-bool JoinConstraint::describle(std::ostringstream& stream) const
+bool JoinConstraint::describle(std::ostream& stream) const
 {
     if (!columns.empty()) {
         stream << "USING(" << columns << ")";

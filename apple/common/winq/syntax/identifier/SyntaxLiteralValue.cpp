@@ -38,7 +38,7 @@ Identifier::Type LiteralValue::getType() const
     return type;
 }
 
-bool LiteralValue::describle(std::ostringstream& stream) const
+bool LiteralValue::describle(std::ostream& stream) const
 {
     switch (switcher) {
     case Switch::StringView: {

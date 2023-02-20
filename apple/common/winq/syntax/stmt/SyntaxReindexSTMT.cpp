@@ -37,7 +37,7 @@ Identifier::Type ReindexSTMT::getType() const
     return type;
 }
 
-bool ReindexSTMT::describle(std::ostringstream& stream) const
+bool ReindexSTMT::describle(std::ostream& stream) const
 {
     stream << "REINDEX";
     switch (switcher) {

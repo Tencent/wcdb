@@ -37,7 +37,7 @@ Identifier::Type AlterTableSTMT::getType() const
     return type;
 }
 
-bool AlterTableSTMT::describle(std::ostringstream& stream) const
+bool AlterTableSTMT::describle(std::ostream& stream) const
 {
     stream << "ALTER TABLE ";
     if (!schema.empty()) {

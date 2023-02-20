@@ -37,7 +37,7 @@ Identifier::Type TableOrSubquery::getType() const
     return type;
 }
 
-bool TableOrSubquery::describle(std::ostringstream& stream) const
+bool TableOrSubquery::describle(std::ostream& stream) const
 {
     switch (switcher) {
     case Switch::Table:

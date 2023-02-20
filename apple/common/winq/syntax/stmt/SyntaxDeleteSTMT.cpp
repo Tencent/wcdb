@@ -42,12 +42,12 @@ Identifier::Type DeleteSTMT::getType() const
     return type;
 }
 
-bool DeleteSTMT::describle(std::ostringstream& stream) const
+bool DeleteSTMT::describle(std::ostream& stream) const
 {
     return describle(stream, false);
 }
 
-bool DeleteSTMT::describle(std::ostringstream& stream, bool skipSchema) const
+bool DeleteSTMT::describle(std::ostream& stream, bool skipSchema) const
 {
     if (!commonTableExpressions.empty()) {
         stream << "WITH ";

@@ -42,7 +42,7 @@ Identifier::Type ExplainSTMT::getType() const
     return type;
 }
 
-bool ExplainSTMT::describle(std::ostringstream& stream) const
+bool ExplainSTMT::describle(std::ostream& stream) const
 {
     stream << "EXPLAIN ";
     if (queryPlan) {

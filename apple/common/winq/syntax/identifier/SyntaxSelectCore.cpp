@@ -37,7 +37,7 @@ Identifier::Type SelectCore::getType() const
     return type;
 }
 
-bool SelectCore::describle(std::ostringstream& stream) const
+bool SelectCore::describle(std::ostream& stream) const
 {
     switch (switcher) {
     case Switch::Select:

@@ -110,8 +110,7 @@ Identifier::Type Expression::getType() const
     return type;
 }
 
-static void
-streamAutoParenthesesExpression(std::ostringstream& stream, const Expression& expression)
+static void streamAutoParenthesesExpression(std::ostream& stream, const Expression& expression)
 {
     bool parentheses;
     switch (expression.switcher) {
@@ -145,7 +144,7 @@ streamAutoParenthesesExpression(std::ostringstream& stream, const Expression& ex
     }
 }
 
-bool Expression::describle(std::ostringstream& stream) const
+bool Expression::describle(std::ostream& stream) const
 {
     switch (switcher) {
     case Switch::LiteralValue:

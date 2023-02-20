@@ -42,7 +42,7 @@ Identifier::Type CreateViewSTMT::getType() const
     return type;
 }
 
-bool CreateViewSTMT::describle(std::ostringstream& stream) const
+bool CreateViewSTMT::describle(std::ostream& stream) const
 {
     stream << "CREATE ";
     if (temp) {

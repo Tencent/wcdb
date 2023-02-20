@@ -37,7 +37,7 @@ Identifier::Type UpsertClause::getType() const
     return type;
 }
 
-bool UpsertClause::describle(std::ostringstream& stream) const
+bool UpsertClause::describle(std::ostream& stream) const
 {
     stream << "ON CONFLICT";
     if (!indexedColumns.empty()) {

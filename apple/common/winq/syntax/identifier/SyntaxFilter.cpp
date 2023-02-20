@@ -42,7 +42,7 @@ Identifier::Type Filter::getType() const
     return type;
 }
 
-bool Filter::describle(std::ostringstream& stream) const
+bool Filter::describle(std::ostream& stream) const
 {
     stream << "FILTER(WHERE " << *expression << ")";
     return true;

@@ -37,7 +37,7 @@ Identifier::Type RollbackSTMT::getType() const
     return type;
 }
 
-bool RollbackSTMT::describle(std::ostringstream& stream) const
+bool RollbackSTMT::describle(std::ostream& stream) const
 {
     stream << "ROLLBACK";
     switch (switcher) {

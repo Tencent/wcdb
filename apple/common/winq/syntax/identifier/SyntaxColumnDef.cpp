@@ -43,7 +43,7 @@ Identifier::Type ColumnDef::getType() const
     return type;
 }
 
-bool ColumnDef::describle(std::ostringstream& stream) const
+bool ColumnDef::describle(std::ostream& stream) const
 {
     stream << column;
     if (columnTypeValid()) {

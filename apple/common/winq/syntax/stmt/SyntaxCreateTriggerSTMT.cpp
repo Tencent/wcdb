@@ -69,7 +69,7 @@ Identifier::Type CreateTriggerSTMT::getType() const
     return type;
 }
 
-bool CreateTriggerSTMT::describle(std::ostringstream& stream) const
+bool CreateTriggerSTMT::describle(std::ostream& stream) const
 {
     stream << "CREATE ";
     if (temp) {

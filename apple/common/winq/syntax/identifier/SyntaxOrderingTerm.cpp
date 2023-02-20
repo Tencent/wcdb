@@ -43,7 +43,7 @@ Identifier::Type OrderingTerm::getType() const
     return type;
 }
 
-bool OrderingTerm::describle(std::ostringstream& stream) const
+bool OrderingTerm::describle(std::ostream& stream) const
 {
     stream << expression;
     if (collation.length() > 0) {

@@ -41,7 +41,7 @@ public:
 public:
     static constexpr const Type type = Type::BeginSTMT;
     Type getType() const override final;
-    bool describle(std::ostringstream& stream) const override final;
+    bool describle(std::ostream& stream) const override final;
 };
 
 } // namespace Syntax

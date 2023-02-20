@@ -42,7 +42,7 @@ Identifier::Type ReleaseSTMT::getType() const
     return type;
 }
 
-bool ReleaseSTMT::describle(std::ostringstream& stream) const
+bool ReleaseSTMT::describle(std::ostream& stream) const
 {
     stream << "RELEASE " << savepoint;
     return true;
