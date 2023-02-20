@@ -105,8 +105,7 @@ public:
 
     virtual bool isValid() const = 0;
 
-protected:
-    virtual bool describle(std::ostringstream& stream) const = 0;
+    virtual bool describle(std::ostream& stream) const = 0;
 
 #pragma mark - Iterable
 public:

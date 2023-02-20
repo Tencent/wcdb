@@ -187,6 +187,6 @@ std::unique_ptr<Identifier> Identifier::clone() const
 
 std::ostream &operator<<(std::ostream &stream, const WCDB::Syntax::Identifier &identifier)
 {
-    stream << identifier.getDescription();
+    identifier.describle(stream);
     return stream;
 }

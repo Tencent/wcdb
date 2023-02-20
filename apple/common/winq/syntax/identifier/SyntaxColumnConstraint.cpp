@@ -38,7 +38,7 @@ Identifier::Type ColumnConstraint::getType() const
     return type;
 }
 
-bool ColumnConstraint::describle(std::ostringstream& stream) const
+bool ColumnConstraint::describle(std::ostream& stream) const
 {
     if (!name.empty()) {
         stream << "CONSTRAINT " << name << space;

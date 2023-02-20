@@ -42,7 +42,7 @@ Identifier::Type CommitSTMT::getType() const
     return type;
 }
 
-bool CommitSTMT::describle(std::ostringstream& stream) const
+bool CommitSTMT::describle(std::ostream& stream) const
 {
     stream << "COMMIT";
     return true;

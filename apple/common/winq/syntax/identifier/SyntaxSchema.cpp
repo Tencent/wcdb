@@ -47,7 +47,7 @@ Identifier::Type Schema::getType() const
     return type;
 }
 
-bool Schema::describle(std::ostringstream& stream) const
+bool Schema::describle(std::ostream& stream) const
 {
     stream << name;
     return true;

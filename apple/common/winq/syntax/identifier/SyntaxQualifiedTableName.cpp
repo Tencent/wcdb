@@ -42,12 +42,12 @@ Identifier::Type QualifiedTableName::getType() const
     return type;
 }
 
-bool QualifiedTableName::describle(std::ostringstream& stream) const
+bool QualifiedTableName::describle(std::ostream& stream) const
 {
     return describle(stream, false);
 }
 
-bool QualifiedTableName::describle(std::ostringstream& stream, bool skipSchema) const
+bool QualifiedTableName::describle(std::ostream& stream, bool skipSchema) const
 {
     if (!skipSchema && !schema.empty()) {
         stream << schema << ".";

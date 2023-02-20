@@ -42,7 +42,7 @@ Identifier::Type PragmaSTMT::getType() const
     return type;
 }
 
-bool PragmaSTMT::describle(std::ostringstream& stream) const
+bool PragmaSTMT::describle(std::ostream& stream) const
 {
     stream << "PRAGMA ";
     if (!schema.empty()) {

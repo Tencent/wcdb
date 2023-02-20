@@ -37,7 +37,7 @@ Identifier::Type CreateTableSTMT::getType() const
     return type;
 }
 
-bool CreateTableSTMT::describle(std::ostringstream& stream) const
+bool CreateTableSTMT::describle(std::ostream& stream) const
 {
     stream << "CREATE ";
     if (temp) {

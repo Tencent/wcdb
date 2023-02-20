@@ -42,7 +42,7 @@ Identifier::Type DropTableSTMT::getType() const
     return type;
 }
 
-bool DropTableSTMT::describle(std::ostringstream& stream) const
+bool DropTableSTMT::describle(std::ostream& stream) const
 {
     stream << "DROP TABLE ";
     if (ifExists) {

@@ -44,7 +44,7 @@ public:
 public:
     static constexpr const Type type = Type::Schema;
     Type getType() const override final;
-    bool describle(std::ostringstream& stream) const override final;
+    bool describle(std::ostream& stream) const override final;
 
 #pragma mark - Utility
 public:

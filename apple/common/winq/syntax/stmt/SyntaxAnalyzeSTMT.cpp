@@ -37,7 +37,7 @@ Identifier::Type AnalyzeSTMT::getType() const
     return type;
 }
 
-bool AnalyzeSTMT::describle(std::ostringstream& stream) const
+bool AnalyzeSTMT::describle(std::ostream& stream) const
 {
     stream << "ANALYZE";
     switch (switcher) {

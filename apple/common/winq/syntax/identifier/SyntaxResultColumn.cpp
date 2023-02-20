@@ -42,7 +42,7 @@ Identifier::Type ResultColumn::getType() const
     return type;
 }
 
-bool ResultColumn::describle(std::ostringstream& stream) const
+bool ResultColumn::describle(std::ostream& stream) const
 {
     stream << expression;
     if (!alias.empty()) {

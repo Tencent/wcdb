@@ -43,7 +43,7 @@ Identifier::Type UpdateSTMT::getType() const
     return type;
 }
 
-bool UpdateSTMT::describle(std::ostringstream& stream, bool skipSchema) const
+bool UpdateSTMT::describle(std::ostream& stream, bool skipSchema) const
 {
     if (!commonTableExpressions.empty()) {
         stream << "WITH ";
@@ -103,7 +103,7 @@ bool UpdateSTMT::describle(std::ostringstream& stream, bool skipSchema) const
     return true;
 }
 
-bool UpdateSTMT::describle(std::ostringstream& stream) const
+bool UpdateSTMT::describle(std::ostream& stream) const
 {
     return describle(stream, false);
 }

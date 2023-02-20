@@ -49,7 +49,7 @@ public:
 public:
     static constexpr const Type type = Type::IndexedColumn;
     Type getType() const override final;
-    bool describle(std::ostringstream& stream) const override final;
+    bool describle(std::ostream& stream) const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

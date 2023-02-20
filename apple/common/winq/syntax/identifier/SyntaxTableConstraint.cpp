@@ -38,7 +38,7 @@ Identifier::Type TableConstraint::getType() const
     return type;
 }
 
-bool TableConstraint::describle(std::ostringstream& stream) const
+bool TableConstraint::describle(std::ostream& stream) const
 {
     if (!name.empty()) {
         stream << "CONSTRAINT " << name << space;

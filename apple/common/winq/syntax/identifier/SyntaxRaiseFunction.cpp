@@ -53,7 +53,7 @@ Identifier::Type RaiseFunction::getType() const
     return type;
 }
 
-bool RaiseFunction::describle(std::ostringstream& stream) const
+bool RaiseFunction::describle(std::ostream& stream) const
 {
     stream << "RAISE(" << switcher;
     switch (switcher) {

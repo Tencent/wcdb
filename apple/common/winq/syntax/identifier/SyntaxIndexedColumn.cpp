@@ -38,7 +38,7 @@ Identifier::Type IndexedColumn::getType() const
     return type;
 }
 
-bool IndexedColumn::describle(std::ostringstream& stream) const
+bool IndexedColumn::describle(std::ostream& stream) const
 {
     switch (switcher) {
     case Switch::Column:

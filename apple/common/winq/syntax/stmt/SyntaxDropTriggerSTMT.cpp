@@ -42,7 +42,7 @@ Identifier::Type DropTriggerSTMT::getType() const
     return type;
 }
 
-bool DropTriggerSTMT::describle(std::ostringstream& stream) const
+bool DropTriggerSTMT::describle(std::ostream& stream) const
 {
     stream << "DROP TRIGGER ";
     if (ifExists) {

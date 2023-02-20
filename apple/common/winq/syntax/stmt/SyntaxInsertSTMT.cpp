@@ -38,7 +38,7 @@ Identifier::Type InsertSTMT::getType() const
     return type;
 }
 
-bool InsertSTMT::describle(std::ostringstream& stream, bool skipSchema) const
+bool InsertSTMT::describle(std::ostream& stream, bool skipSchema) const
 {
     if (!commonTableExpressions.empty()) {
         stream << "WITH ";
@@ -90,7 +90,7 @@ bool InsertSTMT::describle(std::ostringstream& stream, bool skipSchema) const
     return true;
 }
 
-bool InsertSTMT::describle(std::ostringstream& stream) const
+bool InsertSTMT::describle(std::ostream& stream) const
 {
     return describle(stream, false);
 }

@@ -37,7 +37,7 @@ Identifier::Type VacuumSTMT::getType() const
     return type;
 }
 
-bool VacuumSTMT::describle(std::ostringstream& stream) const
+bool VacuumSTMT::describle(std::ostream& stream) const
 {
     stream << "VACUUM";
     switch (switcher) {

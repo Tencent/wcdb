@@ -42,7 +42,7 @@ Identifier::Type DropViewSTMT::getType() const
     return type;
 }
 
-bool DropViewSTMT::describle(std::ostringstream& stream) const
+bool DropViewSTMT::describle(std::ostream& stream) const
 {
     stream << "DROP VIEW ";
     if (ifExists) {

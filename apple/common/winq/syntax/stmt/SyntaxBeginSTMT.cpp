@@ -51,7 +51,7 @@ Identifier::Type BeginSTMT::getType() const
     return type;
 }
 
-bool BeginSTMT::describle(std::ostringstream& stream) const
+bool BeginSTMT::describle(std::ostream& stream) const
 {
     stream << "BEGIN " << switcher;
     return true;

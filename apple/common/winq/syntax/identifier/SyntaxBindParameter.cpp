@@ -53,7 +53,7 @@ Identifier::Type BindParameter::getType() const
     return type;
 }
 
-bool BindParameter::describle(std::ostringstream& stream) const
+bool BindParameter::describle(std::ostream& stream) const
 {
     stream << switcher;
     switch (switcher) {

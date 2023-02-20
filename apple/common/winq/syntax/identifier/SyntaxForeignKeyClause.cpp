@@ -90,7 +90,7 @@ Identifier::Type ForeignKeyClause::getType() const
     return type;
 }
 
-bool ForeignKeyClause::describle(std::ostringstream& stream) const
+bool ForeignKeyClause::describle(std::ostream& stream) const
 {
     stream << "REFERENCES " << foreignTable;
     if (!columns.empty()) {

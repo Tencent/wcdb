@@ -42,7 +42,7 @@ Identifier::Type SavepointSTMT::getType() const
     return type;
 }
 
-bool SavepointSTMT::describle(std::ostringstream& stream) const
+bool SavepointSTMT::describle(std::ostream& stream) const
 {
     stream << "SAVEPOINT " << savepoint;
     return true;

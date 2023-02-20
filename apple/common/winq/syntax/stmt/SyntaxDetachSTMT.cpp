@@ -42,7 +42,7 @@ Identifier::Type DetachSTMT::getType() const
     return type;
 }
 
-bool DetachSTMT::describle(std::ostringstream& stream) const
+bool DetachSTMT::describle(std::ostream& stream) const
 {
     stream << "DETACH " << schema;
     return true;

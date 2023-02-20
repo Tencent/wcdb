@@ -54,8 +54,8 @@ public:
 public:
     static constexpr const Type type = Type::InsertSTMT;
     Type getType() const override final;
-    bool describle(std::ostringstream& stream) const override final;
-    bool describle(std::ostringstream& stream, bool skipSchema) const;
+    bool describle(std::ostream& stream) const override final;
+    bool describle(std::ostream& stream, bool skipSchema) const;
     void iterate(const Iterator& iterator, bool& stop) override final;
 
 #pragma mark - Utility

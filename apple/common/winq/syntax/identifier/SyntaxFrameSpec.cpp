@@ -79,7 +79,7 @@ Identifier::Type FrameSpec::getType() const
     return type;
 }
 
-bool FrameSpec::describle(std::ostringstream& stream) const
+bool FrameSpec::describle(std::ostream& stream) const
 {
     stream << switcher << space;
     if (between) {

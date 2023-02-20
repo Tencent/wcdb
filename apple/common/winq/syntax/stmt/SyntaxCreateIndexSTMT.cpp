@@ -42,7 +42,7 @@ Identifier::Type CreateIndexSTMT::getType() const
     return type;
 }
 
-bool CreateIndexSTMT::describle(std::ostringstream& stream) const
+bool CreateIndexSTMT::describle(std::ostream& stream) const
 {
     stream << "CREATE ";
     if (unique) {

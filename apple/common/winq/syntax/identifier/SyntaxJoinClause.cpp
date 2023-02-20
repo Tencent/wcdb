@@ -43,7 +43,7 @@ Identifier::Type JoinClause::getType() const
     return type;
 }
 
-bool JoinClause::describle(std::ostringstream& stream) const
+bool JoinClause::describle(std::ostream& stream) const
 {
     auto tableOrSubquery = tableOrSubqueries.begin();
     stream << *tableOrSubquery;

@@ -42,7 +42,7 @@ Identifier::Type WindowDef::getType() const
     return type;
 }
 
-bool WindowDef::describle(std::ostringstream& stream) const
+bool WindowDef::describle(std::ostream& stream) const
 {
     stream << "(";
     bool extraSpace = false;

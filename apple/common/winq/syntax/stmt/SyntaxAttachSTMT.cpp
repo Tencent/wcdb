@@ -42,7 +42,7 @@ Identifier::Type AttachSTMT::getType() const
     return type;
 }
 
-bool AttachSTMT::describle(std::ostringstream& stream) const
+bool AttachSTMT::describle(std::ostream& stream) const
 {
     stream << "ATTACH " << expression << " AS " << schema;
     return true;

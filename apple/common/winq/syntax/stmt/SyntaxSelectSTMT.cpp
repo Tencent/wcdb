@@ -43,7 +43,7 @@ Identifier::Type SelectSTMT::getType() const
     return type;
 }
 
-bool SelectSTMT::describle(std::ostringstream& stream) const
+bool SelectSTMT::describle(std::ostream& stream) const
 {
     if (!commonTableExpressions.empty()) {
         stream << "WITH ";
