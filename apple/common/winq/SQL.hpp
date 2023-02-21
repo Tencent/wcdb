@@ -66,6 +66,7 @@ protected:
 private:
     Shadow<Syntax::Identifier> m_syntax;
     mutable std::shared_ptr<StringView> m_description;
+    mutable bool m_hasDescription;
 };
 
 template<typename __SyntaxType, typename __SQLType>
