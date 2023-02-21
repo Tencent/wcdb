@@ -37,11 +37,24 @@ bool isIntegerColumnType(const UnsafeStringView& type)
            || type.caseInsensiveEqual("UNSIGNED BIG INT")
            || type.caseInsensiveEqual("INT2") || type.caseInsensiveEqual("INT8");
 }
-const StringView* masterTablePtr = new StringView("sqlite_master");
-const StringView* sequenceTablePtr = new StringView("sqlite_sequence");
-const StringView* mainSchemaPtr = new StringView("main");
-const StringView* tempSchemaPtr = new StringView("temp");
-const StringView* builtinTablePrefixPtr = new StringView("sqlite_");
+
+const char* masterTableString = "sqlite_master";
+const char* sequenceTableString = "sqlite_sequence";
+const char* mainSchemaString = "main";
+const char* tempSchemaString = "temp";
+const char* builtinTablePrefixString = "sqlite_";
+
+const StringView* masterTablePtr
+= new StringView(StringView::makeConstant(masterTableString));
+const StringView* sequenceTablePtr
+= new StringView(StringView::makeConstant(sequenceTableString));
+const StringView* mainSchemaPtr
+= new StringView(StringView::makeConstant(mainSchemaString));
+const StringView* tempSchemaPtr
+= new StringView(StringView::makeConstant(tempSchemaString));
+const StringView* builtinTablePrefixPtr
+= new StringView(StringView::makeConstant(builtinTablePrefixString));
+
 const StringView& masterTable = *masterTablePtr;
 const StringView& sequenceTable = *sequenceTablePtr;
 const StringView& mainSchema = *mainSchemaPtr;

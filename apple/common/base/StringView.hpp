@@ -70,6 +70,7 @@ private:
     friend class StringView;
     const char* m_data;
     size_t m_length;
+    bool m_bConstant;
     std::shared_ptr<const std::string> m_buffer;
 
 #pragma mark - UnsafeStringView - Comparison
@@ -126,6 +127,7 @@ public:
 #pragma mark - StringView - Utility
     static StringView formatted(const char* format, ...);
     static StringView hexString(const UnsafeData& data);
+    static StringView makeConstant(const char* string);
 };
 
 struct StringViewComparator {

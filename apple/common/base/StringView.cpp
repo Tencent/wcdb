@@ -34,29 +34,36 @@ namespace WCDB {
 
 #pragma mark - UnsafeStringView - Constructor
 UnsafeStringView::UnsafeStringView()
-: m_data(""), m_length(0), m_buffer(nullptr)
+: m_data(""), m_length(0), m_bConstant(false), m_buffer(nullptr)
 {
 }
 
 UnsafeStringView::UnsafeStringView(const char* string)
 : m_data(string != nullptr ? string : "")
 , m_length(string != nullptr ? strlen(string) : 0)
+, m_bConstant(false)
 , m_buffer(nullptr)
 {
 }
 
 UnsafeStringView::UnsafeStringView(const char* string, size_t length)
-: m_data(string != nullptr ? string : ""), m_length(length), m_buffer(nullptr)
+: m_data(string != nullptr ? string : ""), m_length(length), m_bConstant(false), m_buffer(nullptr)
 {
 }
 
 UnsafeStringView::UnsafeStringView(const UnsafeStringView& other)
-: m_data(other.m_data), m_length(other.m_length), m_buffer(other.m_buffer)
+: m_data(other.m_data)
+, m_length(other.m_length)
+, m_bConstant(other.m_bConstant)
+, m_buffer(other.m_buffer)
 {
 }
 
 UnsafeStringView::UnsafeStringView(UnsafeStringView&& other)
-: m_data(other.m_data), m_length(other.m_length), m_buffer(std::move(other.m_buffer))
+: m_data(other.m_data)
+, m_length(other.m_length)
+, m_bConstant(other.m_bConstant)
+, m_buffer(std::move(other.m_buffer))
 {
 }
 
@@ -73,6 +80,7 @@ UnsafeStringView& UnsafeStringView::operator=(const UnsafeStringView& other)
 {
     m_data = other.m_data;
     m_length = other.m_length;
+    m_bConstant = other.m_bConstant;
     m_buffer = other.m_buffer;
     return *this;
 }
@@ -81,6 +89,7 @@ UnsafeStringView& UnsafeStringView::operator=(UnsafeStringView&& other)
 {
     m_data = other.m_data;
     m_length = other.m_length;
+    m_bConstant = other.m_bConstant;
     m_buffer = std::move(other.m_buffer);
     return *this;
 }
@@ -145,6 +154,7 @@ const char& UnsafeStringView::at(off_t off) const
 
 void UnsafeStringView::assign(std::shared_ptr<const std::string>&& buffer)
 {
+    m_bConstant = false;
     if (buffer != nullptr) {
         m_data = buffer->data();
         m_length = buffer->length();
@@ -258,19 +268,31 @@ StringView::StringView(std::string&& string)
 }
 
 StringView::StringView(const UnsafeStringView& other)
-: UnsafeStringView(
-other.m_buffer != nullptr ?
-std::shared_ptr<const std::string>(other.m_buffer) :
-(other.empty() ? nullptr : std::make_shared<std::string>(other.data(), other.length())))
+: UnsafeStringView(other.m_buffer != nullptr ?
+                   std::shared_ptr<const std::string>(other.m_buffer) :
+                   (other.empty() || other.m_bConstant ?
+                    nullptr :
+                    std::make_shared<std::string>(other.data(), other.length())))
 {
+    if (other.m_bConstant) {
+        m_data = other.m_data;
+        m_length = other.m_length;
+        m_bConstant = true;
+    }
 }
 
 StringView::StringView(UnsafeStringView&& other)
-: UnsafeStringView(
-other.m_buffer != nullptr ?
-std::move(other.m_buffer) :
-(other.empty() ? nullptr : std::make_shared<std::string>(other.data(), other.length())))
+: UnsafeStringView(other.m_buffer != nullptr ?
+                   std::move(other.m_buffer) :
+                   (other.empty() || other.m_bConstant ?
+                    nullptr :
+                    std::make_shared<std::string>(other.data(), other.length())))
 {
+    if (other.m_bConstant) {
+        m_data = other.m_data;
+        m_length = other.m_length;
+        m_bConstant = true;
+    }
 }
 
 StringView& StringView::operator=(const UnsafeStringView& other)
@@ -278,7 +300,13 @@ StringView& StringView::operator=(const UnsafeStringView& other)
     if (other.m_buffer != nullptr) {
         UnsafeStringView::operator=(other);
     } else if (!other.empty()) {
-        assign(std::make_shared<const std::string>(other.data(), other.length()));
+        if (other.m_bConstant) {
+            m_data = other.m_data;
+            m_length = other.m_length;
+            m_bConstant = true;
+        } else {
+            assign(std::make_shared<const std::string>(other.data(), other.length()));
+        }
     } else {
         assign(nullptr);
     }
@@ -290,7 +318,13 @@ StringView& StringView::operator=(UnsafeStringView&& other)
     if (other.m_buffer != nullptr) {
         UnsafeStringView::operator=(std::move(other));
     } else if (!other.empty()) {
-        assign(std::make_shared<const std::string>(other.data(), other.length()));
+        if (other.m_bConstant) {
+            m_data = other.m_data;
+            m_length = other.m_length;
+            m_bConstant = true;
+        } else {
+            assign(std::make_shared<const std::string>(other.data(), other.length()));
+        }
     } else {
         assign(nullptr);
     }
@@ -330,6 +364,17 @@ StringView StringView::hexString(const UnsafeData& data)
         ss << std::setw(2) << c;
     }
     return StringView(ss.str());
+}
+
+StringView StringView::makeConstant(const char* string)
+{
+    StringView ret;
+    if (string != nullptr) {
+        ret.m_data = string;
+        ret.m_length = strlen(string);
+        ret.m_bConstant = true;
+    }
+    return ret;
 }
 
 bool StringViewComparator::operator()(const StringView& lhs, const StringView& rhs) const
