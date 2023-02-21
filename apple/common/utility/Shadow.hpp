@@ -29,13 +29,10 @@
 namespace WCDB {
 
 template<typename T>
-class Shadow;
-
-template<typename T>
 class Cloneable {
 public:
     virtual ~Cloneable() = default;
-    virtual std::unique_ptr<T> clone() const = 0;
+    virtual std::shared_ptr<T> clone() const = 0;
 };
 
 template<typename T>
@@ -43,17 +40,18 @@ class Shadow final {
     //    static_assert(std::is_base_of<Cloneable<T>, T>::value, "");
 #pragma mark - NULL
 public:
-    Shadow() : m_payload(nullptr)
+    Shadow() : m_payload(nullptr), m_isPrivate(true)
     {
     }
 
-    Shadow(const std::nullptr_t&) : m_payload(nullptr)
+    Shadow(const std::nullptr_t&) : m_payload(nullptr), m_isPrivate(true)
     {
     }
 
     Shadow& operator=(const std::nullptr_t&)
     {
         m_payload = nullptr;
+        m_isPrivate = true;
         return *this;
     }
 
@@ -68,70 +66,76 @@ public:
 
 #pragma mark - Value
 public:
-    Shadow(const T& value) : m_payload(value.clone())
+    Shadow(const T& value) : m_payload(value.clone()), m_isPrivate(true)
+    {
+    }
+
+    Shadow(std::shared_ptr<T>&& value)
+    : m_payload(std::move(value)), m_isPrivate(true)
     {
     }
 
     Shadow& operator=(const T& value)
     {
-        m_payload
-        = std::move(std::unique_ptr<T>{ static_cast<T*>(value.clone().release()) });
+        auto newPayload = value.clone();
+        m_payload = std::shared_ptr<T>(newPayload, static_cast<T*>(newPayload.get()));
+        m_isPrivate = true;
         return *this;
     }
 
-    T* get() const
+    const T* get() const
     {
         return m_payload.get();
     }
 
-    constexpr T* operator->() const
+    T* get()
     {
+        if (!m_isPrivate) {
+            if (m_payload.use_count() > 1) {
+                auto newPayload = m_payload->clone();
+                m_payload
+                = std::shared_ptr<T>(newPayload, static_cast<T*>(newPayload.get()));
+                m_isPrivate = true;
+            } else {
+                m_isPrivate = false;
+            }
+        }
         return m_payload.get();
-    }
-
-    T& operator*() const
-    {
-        return *m_payload.get();
-    }
-
-#pragma mark - Unique
-public:
-    Shadow(std::unique_ptr<T>&& value) : m_payload(std::move(value))
-    {
     }
 
 #pragma mark - Shadow
 public:
     Shadow(const Shadow<T>& other)
-    : m_payload(other.get() != nullptr ? std::unique_ptr<T>{ static_cast<T*>(
-                other.m_payload.get()->clone().release()) } :
-                                         nullptr)
+    : m_payload(other.m_payload), m_isPrivate(other.m_payload != nullptr ? false : true)
     {
+        if (other.m_payload != nullptr) {
+            other.m_isPrivate = false;
+        }
     }
 
-    Shadow(Shadow<T>&& other) : m_payload(std::move(other.m_payload))
+    Shadow(Shadow<T>&& other)
+    : m_payload(std::move(other.m_payload)), m_isPrivate(other.m_isPrivate)
     {
     }
 
     Shadow& operator=(const Shadow<T>& other)
     {
-        if (other.get() != nullptr) {
-            m_payload = std::move(std::unique_ptr<T>{
-            static_cast<T*>(other.m_payload.get()->clone().release()) });
-        } else {
-            m_payload = nullptr;
-        }
+        m_payload = other.m_payload;
+        m_isPrivate = m_payload == nullptr;
+        other.m_isPrivate = m_isPrivate;
         return *this;
     }
 
     Shadow& operator=(Shadow<T>&& other)
     {
         m_payload = std::move(other.m_payload);
+        m_isPrivate = other.m_isPrivate;
         return *this;
     }
 
 private:
-    std::unique_ptr<T> m_payload;
+    std::shared_ptr<T> m_payload;
+    mutable bool m_isPrivate;
 };
 
 } // namespace WCDB

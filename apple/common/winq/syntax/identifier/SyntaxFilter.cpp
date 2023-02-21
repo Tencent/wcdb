@@ -44,14 +44,14 @@ Identifier::Type Filter::getType() const
 
 bool Filter::describle(std::ostream& stream) const
 {
-    stream << "FILTER(WHERE " << *expression << ")";
+    stream << "FILTER(WHERE " << *expression.get() << ")";
     return true;
 }
 
 void Filter::iterate(const Iterator& iterator, bool& stop)
 {
     Identifier::iterate(iterator, stop);
-    expression->iterate(iterator, stop);
+    expression.get()->iterate(iterator, stop);
 }
 
 } // namespace Syntax

@@ -98,7 +98,7 @@ public:
 
     StringView getDescription() const;
 
-    std::unique_ptr<Identifier> clone() const override final;
+    std::shared_ptr<Identifier> clone() const override final;
 
     typedef int Valid;
     static constexpr const Valid invalid = -1;
@@ -110,7 +110,10 @@ public:
 #pragma mark - Iterable
 public:
     typedef std::function<void(Identifier&, bool& stop)> Iterator;
+    typedef std::function<void(const Identifier&, bool& stop)> ConstIterator;
+
     void iterate(const Iterator& iterator);
+    void iterate(const ConstIterator& iterator) const;
 
 protected:
     virtual void iterate(const Iterator& iterator, bool& stop);

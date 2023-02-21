@@ -52,7 +52,7 @@ SQL::SQL(Shadow<Syntax::Identifier>&& syntax)
 {
 }
 
-SQL::SQL(std::unique_ptr<Syntax::Identifier>&& underlying)
+SQL::SQL(std::shared_ptr<Syntax::Identifier>&& underlying)
 : m_syntax(std::move(underlying)), m_description(nullptr)
 {
 }
@@ -76,18 +76,18 @@ SQL& SQL::operator=(SQL&& other)
 
 SQL::Type SQL::getType() const
 {
-    return m_syntax->getType();
+    return m_syntax.get()->getType();
 }
 
-void SQL::iterate(const Iterator& iterator) const
+void SQL::iterate(const ConstIterator& iterator) const
 {
-    return m_syntax->iterate(iterator);
+    return m_syntax.get()->iterate(iterator);
 }
 
 void SQL::iterate(const Iterator& iterator)
 {
     std::atomic_store(&m_description, std::shared_ptr<StringView>(nullptr));
-    return m_syntax->iterate(iterator);
+    return m_syntax.get()->iterate(iterator);
 }
 
 StringView SQL::getDescription() const
@@ -99,7 +99,8 @@ StringView SQL::getDescription() const
     while (description == nullptr) {
         if (m_syntax != nullptr) {
             std::atomic_store(
-            &m_description, std::make_shared<StringView>(m_syntax->getDescription()));
+            &m_description,
+            std::make_shared<StringView>(m_syntax.get()->getDescription()));
             description = std::atomic_load(&m_description);
         } else {
             return StringView();

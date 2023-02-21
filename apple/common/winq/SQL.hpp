@@ -31,6 +31,7 @@
 #include <WCDB/SyntaxForwardDeclaration.h>
 #include <WCDB/SyntaxList.hpp>
 #include <memory>
+#include <optional>
 
 namespace WCDB {
 
@@ -44,7 +45,8 @@ public:
 
     typedef Syntax::Identifier::Iterator Iterator;
     void iterate(const Iterator& iterator);
-    void iterate(const Iterator& iterator) const;
+    typedef Syntax::Identifier::ConstIterator ConstIterator;
+    void iterate(const ConstIterator& iterator) const;
 
     virtual StringView getDescription() const;
 
@@ -56,7 +58,7 @@ protected:
     SQL(SQL&& sql);
     SQL(const Shadow<Syntax::Identifier>& syntax);
     SQL(Shadow<Syntax::Identifier>&& syntax);
-    SQL(std::unique_ptr<Syntax::Identifier>&& underlying);
+    SQL(std::shared_ptr<Syntax::Identifier>&& underlying);
 
     SQL& operator=(const SQL& other);
     SQL& operator=(SQL&& other);
@@ -80,7 +82,7 @@ private:
     static_assert(std::is_base_of<SQL, SQLType>::value, "");
 
 public:
-    SpecifiedSyntax() : Super(std::make_unique<SyntaxType>()) {}
+    SpecifiedSyntax() : Super(std::make_shared<SyntaxType>()) {}
 
     explicit SpecifiedSyntax(const Self& other) : Super(other) {}
 
