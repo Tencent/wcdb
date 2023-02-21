@@ -469,7 +469,7 @@ void Expression::iterate(const Iterator& iterator, bool& stop)
             break;
         case SwitchIn::Select:
             WCTIterateRemedialAssert(select != nullptr);
-            select->iterate(iterator, stop);
+            select.get()->iterate(iterator, stop);
             break;
         case SwitchIn::Expressions: {
             while (++iter != expressions.end()) {
@@ -492,11 +492,11 @@ void Expression::iterate(const Iterator& iterator, bool& stop)
     }
     case Switch::Exists:
         WCTIterateRemedialAssert(select != nullptr);
-        select->iterate(iterator, stop);
+        select.get()->iterate(iterator, stop);
         break;
     case Switch::Select:
         WCTIterateRemedialAssert(select != nullptr);
-        select->iterate(iterator, stop);
+        select.get()->iterate(iterator, stop);
         break;
     case Switch::RaiseFunction:
         recursiveIterate(raiseFunction, iterator, stop);

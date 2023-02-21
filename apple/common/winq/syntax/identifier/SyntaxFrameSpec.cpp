@@ -117,7 +117,7 @@ void FrameSpec::iterate(const Iterator& iterator, bool& stop)
     switch (firstEvent) {
     case FirstEvent::Preceding:
     case FirstEvent::Following:
-        expression1->iterate(iterator, stop);
+        expression1.get()->iterate(iterator, stop);
         // fallthrough
     case FirstEvent::UnboundedPreceding:
     case FirstEvent::CurrentRow:
@@ -127,7 +127,7 @@ void FrameSpec::iterate(const Iterator& iterator, bool& stop)
         switch (secondEvent) {
         case SecondEvent::Preceding:
         case SecondEvent::Following:
-            expression2->iterate(iterator, stop);
+            expression2.get()->iterate(iterator, stop);
             // fallthrough
         case SecondEvent::UnboundedFollowing:
         case SecondEvent::CurrentRow:
