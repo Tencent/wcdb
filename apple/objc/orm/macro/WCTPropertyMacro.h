@@ -42,19 +42,20 @@
 #define WCDB_ORM_TYPE_SYNTHESIZE synthesize
 
 // __wcdb_className_synthesize_uniqueID
-#define __WCDB_SYNTHESIZE_IMP(WINQName, propertyName, columnName)                                                                                                                     \
-    +(const WCTProperty &) WINQName                                                                                                                                                   \
-    {                                                                                                                                                                                 \
-        static const WCTProperty *s_property = new WCTProperty(columnName, WCTColumnBinding::generate<__WCDB_PROPERTY_TYPE(self, propertyName)>(self, WCDB_STRINGIFY(propertyName))); \
-        WCTBinding::assertNoInheritance(*s_property, self);                                                                                                                           \
-        return *s_property;                                                                                                                                                           \
-    }                                                                                                                                                                                 \
-    +(const WCTProperty &) WCDB_ORM_UNIQUE(WCDB_ORM_TYPE_SYNTHESIZE)                                                                                                                  \
-    {                                                                                                                                                                                 \
-        WCDB_UNUSED(binding)                                                                                                                                                          \
-        return self.WINQName;                                                                                                                                                         \
-    }                                                                                                                                                                                 \
-    +(WCTBridgeProperty *) swift_##WINQName                                                                                                                                           \
-    {                                                                                                                                                                                 \
-        return [WCTBridgeProperty creatBridgeProperty:[self WINQName]];                                                                                                               \
+#define __WCDB_SYNTHESIZE_IMP(WINQName, propertyName, columnName)                                                                                                                                               \
+    +(const WCTProperty &) WINQName                                                                                                                                                                             \
+    {                                                                                                                                                                                                           \
+        static const char *name = columnName;                                                                                                                                                                   \
+        static const WCTProperty *s_property = new WCTProperty(WCDB::StringView::makeConstant(name), WCTColumnBinding::generate<__WCDB_PROPERTY_TYPE(self, propertyName)>(self, WCDB_STRINGIFY(propertyName))); \
+        WCTBinding::assertNoInheritance(*s_property, self);                                                                                                                                                     \
+        return *s_property;                                                                                                                                                                                     \
+    }                                                                                                                                                                                                           \
+    +(const WCTProperty &) WCDB_ORM_UNIQUE(WCDB_ORM_TYPE_SYNTHESIZE)                                                                                                                                            \
+    {                                                                                                                                                                                                           \
+        WCDB_UNUSED(binding)                                                                                                                                                                                    \
+        return self.WINQName;                                                                                                                                                                                   \
+    }                                                                                                                                                                                                           \
+    +(WCTBridgeProperty *) swift_##WINQName                                                                                                                                                                     \
+    {                                                                                                                                                                                                           \
+        return [WCTBridgeProperty creatBridgeProperty:[self WINQName]];                                                                                                                                         \
     }

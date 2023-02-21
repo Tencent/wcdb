@@ -9,7 +9,8 @@
  * Copyright (C) 2017 THL A29 Limited, a Tencent company.
  * All rights reserved.
  *
- * Licensed under the BSD 3-Clause License (the "License"); you may not use
+ * Licensed under the BSD 3-Clause License (the "License";
+    return Pragma(StringView::makeConstant(string)); you may not use
  * this file except in compliance with the License. You may obtain a copy of
  * the License at
  *
@@ -35,382 +36,458 @@ Pragma::Pragma(const UnsafeStringView& name)
 
 Pragma Pragma::applicationId()
 {
-    return Pragma("application_id");
+    static const char* string = "application_id";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::autoVacuum()
 {
-    return Pragma("auto_vacuum");
+    static const char* string = "auto_vacuum";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::automaticIndex()
 {
-    return Pragma("automatic_index");
+    static const char* string = "automatic_index";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::busyTimeout()
 {
-    return Pragma("busy_timeout");
+    static const char* string = "busy_timeout";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::cacheSize()
 {
-    return Pragma("cache_size");
+    static const char* string = "cache_size";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::cacheSpill()
 {
-    return Pragma("cache_spill");
+    static const char* string = "cache_spill";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::caseSensitiveLike()
 {
-    return Pragma("case_sensitive_like");
+    static const char* string = "case_sensitive_like";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::cellSizeCheck()
 {
-    return Pragma("cell_size_check");
+    static const char* string = "cell_size_check";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::checkpointFullfsync()
 {
-    return Pragma("checkpoint_fullfsync");
+    static const char* string = "checkpoint_fullfsync";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::cipher()
 {
-    return Pragma("cipher");
+    static const char* string = "cipher";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::cipherAddRandom()
 {
-    return Pragma("cipher_add_random");
+    static const char* string = "cipher_add_random";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::cipherDefaultKdfIter()
 {
-    return Pragma("cipher_default_kdf_iter");
+    static const char* string = "cipher_default_kdf_iter";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::cipherDefaultPageSize()
 {
-    return Pragma("cipher_default_page_size");
+    static const char* string = "cipher_default_page_size";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::cipherDefaultUseHmac()
 {
-    return Pragma("cipher_default_use_hmac");
+    static const char* string = "cipher_default_use_hmac";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::cipherMigrate()
 {
-    return Pragma("cipher_migrate");
+    static const char* string = "cipher_migrate";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::cipherProfile()
 {
-    return Pragma("cipher_profile");
+    static const char* string = "cipher_profile";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::cipherProvider()
 {
-    return Pragma("cipher_provider");
+    static const char* string = "cipher_provider";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::cipherProviderVersion()
 {
-    return Pragma("cipher_provider_version");
+    static const char* string = "cipher_provider_version";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::cipherUseHmac()
 {
-    return Pragma("cipher_use_hmac");
+    static const char* string = "cipher_use_hmac";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::cipherVersion()
 {
-    return Pragma("cipher_version");
+    static const char* string = "cipher_version";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::cipherPageSize()
 {
-    return Pragma("cipher_page_size");
+    static const char* string = "cipher_page_size";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::cipherSalt()
 {
-    return Pragma("cipher_salt");
+    static const char* string = "cipher_salt";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::collationList()
 {
-    return Pragma("collation_list");
+    static const char* string = "collation_list";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::dataVersion()
 {
-    return Pragma("data_version");
+    static const char* string = "data_version";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::databaseList()
 {
-    return Pragma("database_list");
+    static const char* string = "database_list";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::deferForeignKeys()
 {
-    return Pragma("defer_foreign_keys");
+    static const char* string = "defer_foreign_keys";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::encoding()
 {
-    return Pragma("encoding");
+    static const char* string = "encoding";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::foreignKeyCheck()
 {
-    return Pragma("foreign_key_check");
+    static const char* string = "foreign_key_check";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::foreignKeyList()
 {
-    return Pragma("foreign_key_list");
+    static const char* string = "foreign_key_list";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::foreignKeys()
 {
-    return Pragma("foreign_keys");
+    static const char* string = "foreign_keys";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::freelistCount()
 {
-    return Pragma("freelist_count");
+    static const char* string = "freelist_count";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::fullfsync()
 {
-    return Pragma("fullfsync");
+    static const char* string = "fullfsync";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::functionList()
 {
-    return Pragma("function_list");
+    static const char* string = "function_list";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::ignoreCheckConstraints()
 {
-    return Pragma("ignore_check_constraints");
+    static const char* string = "ignore_check_constraints";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::incrementalVacuum()
 {
-    return Pragma("incremental_vacuum");
+    static const char* string = "incremental_vacuum";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::indexInfo()
 {
-    return Pragma("index_info");
+    static const char* string = "index_info";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::indexList()
 {
-    return Pragma("index_list");
+    static const char* string = "index_list";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::indexXinfo()
 {
-    return Pragma("index_xinfo");
+    static const char* string = "index_xinfo";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::integrityCheck()
 {
-    return Pragma("integrity_check");
+    static const char* string = "integrity_check";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::journalMode()
 {
-    return Pragma("journal_mode");
+    static const char* string = "journal_mode";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::journalSizeLimit()
 {
-    return Pragma("journal_size_limit");
+    static const char* string = "journal_size_limit";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::key()
 {
-    return Pragma("key");
+    static const char* string = "key";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::kdfIter()
 {
-    return Pragma("kdf_iter");
+    static const char* string = "kdf_iter";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::legacyFileFormat()
 {
-    return Pragma("legacy_file_format");
+    static const char* string = "legacy_file_format";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::lockingMode()
 {
-    return Pragma("locking_mode");
+    static const char* string = "locking_mode";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::maxPageCount()
 {
-    return Pragma("max_page_count");
+    static const char* string = "max_page_count";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::mmapSize()
 {
-    return Pragma("mmap_size");
+    static const char* string = "mmap_size";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::moduleList()
 {
-    return Pragma("module_list");
+    static const char* string = "module_list";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::optimize()
 {
-    return Pragma("optimize");
+    static const char* string = "optimize";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::pageCount()
 {
-    return Pragma("page_count");
+    static const char* string = "page_count";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::pageSize()
 {
-    return Pragma("page_size");
+    static const char* string = "page_size";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::parserTrace()
 {
-    return Pragma("parser_trace");
+    static const char* string = "parser_trace";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::pragmaList()
 {
-    return Pragma("pragma_list");
+    static const char* string = "pragma_list";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::queryOnly()
 {
-    return Pragma("query_only");
+    static const char* string = "query_only";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::quickCheck()
 {
-    return Pragma("quick_check");
+    static const char* string = "quick_check";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::readUncommitted()
 {
-    return Pragma("read_uncommitted");
+    static const char* string = "read_uncommitted";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::recursiveTriggers()
 {
-    return Pragma("recursive_triggers");
+    static const char* string = "recursive_triggers";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::rekey()
 {
-    return Pragma("rekey");
+    static const char* string = "rekey";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::reverseUnorderedSelects()
 {
-    return Pragma("reverse_unordered_selects");
+    static const char* string = "reverse_unordered_selects";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::schemaVersion()
 {
-    return Pragma("schema_version");
+    static const char* string = "schema_version";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::secureDelete()
 {
-    return Pragma("secure_delete");
+    static const char* string = "secure_delete";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::shrinkMemory()
 {
-    return Pragma("shrink_memory");
+    static const char* string = "shrink_memory";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::softHeapLimit()
 {
-    return Pragma("soft_heap_limit");
+    static const char* string = "soft_heap_limit";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::stats()
 {
-    return Pragma("stats");
+    static const char* string = "stats";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::synchronous()
 {
-    return Pragma("synchronous");
+    static const char* string = "synchronous";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::tableInfo()
 {
-    return Pragma("table_info");
+    static const char* string = "table_info";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::tempStore()
 {
-    return Pragma("temp_store");
+    static const char* string = "temp_store";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::threads()
 {
-    return Pragma("threads");
+    static const char* string = "threads";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::userVersion()
 {
-    return Pragma("user_version");
+    static const char* string = "user_version";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::vdbeAddoptrace()
 {
-    return Pragma("vdbe_addoptrace");
+    static const char* string = "vdbe_addoptrace";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::vdbeDebug()
 {
-    return Pragma("vdbe_debug");
+    static const char* string = "vdbe_debug";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::vdbeListing()
 {
-    return Pragma("vdbe_listing");
+    static const char* string = "vdbe_listing";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::vdbeTrace()
 {
-    return Pragma("vdbe_trace");
+    static const char* string = "vdbe_trace";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::walAutocheckpoint()
 {
-    return Pragma("wal_autocheckpoint");
+    static const char* string = "wal_autocheckpoint";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::walCheckpoint()
 {
-    return Pragma("wal_checkpoint");
+    static const char* string = "wal_checkpoint";
+    return Pragma(StringView::makeConstant(string));
 }
 
 Pragma Pragma::writableSchema()
 {
-    return Pragma("writable_schema");
+    static const char* string = "writable_schema";
+    return Pragma(StringView::makeConstant(string));
 }
 
 } // namespace WCDB
