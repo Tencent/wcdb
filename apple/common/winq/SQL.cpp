@@ -31,29 +31,35 @@ namespace WCDB {
 SQL::SQL() = default;
 
 SQL::SQL(const SQL& other)
-: m_syntax(other.m_syntax), m_description(std::atomic_load(&other.m_description))
+: m_syntax(other.m_syntax)
+, m_description(other.m_hasDescription ? std::atomic_load(&other.m_description) : nullptr)
+, m_hasDescription(other.m_hasDescription)
 {
 }
 
 SQL::SQL(SQL&& other)
 : m_syntax(std::move(other.m_syntax))
-, m_description(std::atomic_load(&other.m_description))
+, m_description(other.m_hasDescription ? std::atomic_load(&other.m_description) : nullptr)
+, m_hasDescription(other.m_hasDescription)
 {
-    std::atomic_store(&other.m_description, std::shared_ptr<StringView>(nullptr));
+    if (other.m_hasDescription) {
+        std::atomic_store(&other.m_description, std::shared_ptr<StringView>(nullptr));
+        other.m_hasDescription = false;
+    }
 }
 
 SQL::SQL(const Shadow<Syntax::Identifier>& syntax)
-: m_syntax(syntax), m_description(nullptr)
+: m_syntax(syntax), m_description(nullptr), m_hasDescription(false)
 {
 }
 
 SQL::SQL(Shadow<Syntax::Identifier>&& syntax)
-: m_syntax(std::move(syntax)), m_description(nullptr)
+: m_syntax(std::move(syntax)), m_description(nullptr), m_hasDescription(false)
 {
 }
 
 SQL::SQL(std::shared_ptr<Syntax::Identifier>&& underlying)
-: m_syntax(std::move(underlying)), m_description(nullptr)
+: m_syntax(std::move(underlying)), m_description(nullptr), m_hasDescription(false)
 {
 }
 
@@ -62,15 +68,28 @@ SQL::~SQL() = default;
 SQL& SQL::operator=(const SQL& other)
 {
     m_syntax = other.m_syntax;
-    m_description = std::atomic_load(&other.m_description);
+    if (other.m_hasDescription) {
+        m_description = std::atomic_load(&other.m_description);
+    } else {
+        m_description = nullptr;
+    }
+    m_hasDescription = other.m_hasDescription;
     return *this;
 }
 
 SQL& SQL::operator=(SQL&& other)
 {
     m_syntax = std::move(other.m_syntax);
-    m_description = std::atomic_load(&other.m_description);
-    std::atomic_store(&other.m_description, std::shared_ptr<StringView>(nullptr));
+    if (other.m_hasDescription) {
+        m_description = std::atomic_load(&other.m_description);
+    } else {
+        m_description = nullptr;
+    }
+    m_hasDescription = other.m_hasDescription;
+    if (other.m_hasDescription) {
+        std::atomic_store(&other.m_description, std::shared_ptr<StringView>(nullptr));
+        other.m_hasDescription = false;
+    }
     return *this;
 }
 
@@ -86,7 +105,10 @@ void SQL::iterate(const ConstIterator& iterator) const
 
 void SQL::iterate(const Iterator& iterator)
 {
-    std::atomic_store(&m_description, std::shared_ptr<StringView>(nullptr));
+    if (m_hasDescription) {
+        std::atomic_store(&m_description, std::shared_ptr<StringView>(nullptr));
+        m_hasDescription = false;
+    }
     return m_syntax.get()->iterate(iterator);
 }
 
@@ -102,6 +124,7 @@ StringView SQL::getDescription() const
             &m_description,
             std::make_shared<StringView>(m_syntax.get()->getDescription()));
             description = std::atomic_load(&m_description);
+            m_hasDescription = true;
         } else {
             return StringView();
         }
@@ -112,7 +135,10 @@ StringView SQL::getDescription() const
 Syntax::Identifier& SQL::syntax()
 {
     // Note that `syntax()` is not designed for thread-safe.
-    std::atomic_store(&m_description, std::shared_ptr<StringView>(nullptr));
+    if (m_hasDescription) {
+        std::atomic_store(&m_description, std::shared_ptr<StringView>(nullptr));
+        m_hasDescription = false;
+    }
     return *m_syntax.get();
 }
 
