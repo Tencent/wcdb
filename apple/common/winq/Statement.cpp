@@ -28,4 +28,54 @@ namespace WCDB {
 
 Statement::~Statement() = default;
 
+Statement::Statement(const Statement& sql) : SQL(sql), m_syntax(sql.m_syntax)
+{
 }
+
+Statement::Statement(Statement&& sql)
+: SQL(std::move(sql)), m_syntax(std::move(sql.m_syntax))
+{
+}
+
+Statement::Statement(const Shadow<Syntax::Identifier>& syntax)
+: SQL(), m_syntax(syntax)
+{
+}
+
+Statement::Statement(Shadow<Syntax::Identifier>&& syntax)
+: SQL(), m_syntax(std::move(syntax))
+{
+}
+
+Statement::Statement(std::shared_ptr<Syntax::Identifier>&& underlying)
+: SQL(), m_syntax(std::move(underlying))
+{
+}
+
+Statement& Statement::operator=(const Statement& other)
+{
+    m_syntax = other.m_syntax;
+    SQL::operator=(other);
+    return *this;
+}
+
+Statement& Statement::operator=(Statement&& other)
+{
+    m_syntax = std::move(other.m_syntax);
+    SQL::operator=(std::move(other));
+    return *this;
+}
+
+Syntax::Identifier& Statement::syntax()
+{
+    m_syntaxPtr = m_syntax.get();
+    return SQL::syntax();
+}
+
+const Syntax::Identifier& Statement::syntax() const
+{
+    m_syntaxPtr = const_cast<Syntax::Identifier*>(m_syntax.get());
+    return SQL::syntax();
+}
+
+} //namespace WCDB

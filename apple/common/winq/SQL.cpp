@@ -31,14 +31,14 @@ namespace WCDB {
 SQL::SQL() = default;
 
 SQL::SQL(const SQL& other)
-: m_syntax(other.m_syntax)
+: m_syntaxPtr(other.m_syntaxPtr)
 , m_description(other.m_hasDescription ? std::atomic_load(&other.m_description) : nullptr)
 , m_hasDescription(other.m_hasDescription)
 {
 }
 
 SQL::SQL(SQL&& other)
-: m_syntax(std::move(other.m_syntax))
+: m_syntaxPtr(other.m_syntaxPtr)
 , m_description(other.m_hasDescription ? std::atomic_load(&other.m_description) : nullptr)
 , m_hasDescription(other.m_hasDescription)
 {
@@ -48,26 +48,10 @@ SQL::SQL(SQL&& other)
     }
 }
 
-SQL::SQL(const Shadow<Syntax::Identifier>& syntax)
-: m_syntax(syntax), m_description(nullptr), m_hasDescription(false)
-{
-}
-
-SQL::SQL(Shadow<Syntax::Identifier>&& syntax)
-: m_syntax(std::move(syntax)), m_description(nullptr), m_hasDescription(false)
-{
-}
-
-SQL::SQL(std::shared_ptr<Syntax::Identifier>&& underlying)
-: m_syntax(std::move(underlying)), m_description(nullptr), m_hasDescription(false)
-{
-}
-
 SQL::~SQL() = default;
 
 SQL& SQL::operator=(const SQL& other)
 {
-    m_syntax = other.m_syntax;
     if (other.m_hasDescription) {
         m_description = std::atomic_load(&other.m_description);
     } else {
@@ -79,7 +63,6 @@ SQL& SQL::operator=(const SQL& other)
 
 SQL& SQL::operator=(SQL&& other)
 {
-    m_syntax = std::move(other.m_syntax);
     if (other.m_hasDescription) {
         m_description = std::atomic_load(&other.m_description);
     } else {
@@ -95,12 +78,12 @@ SQL& SQL::operator=(SQL&& other)
 
 SQL::Type SQL::getType() const
 {
-    return m_syntax.get()->getType();
+    return syntax().getType();
 }
 
 void SQL::iterate(const ConstIterator& iterator) const
 {
-    return m_syntax.get()->iterate(iterator);
+    return syntax().iterate(iterator);
 }
 
 void SQL::iterate(const Iterator& iterator)
@@ -109,7 +92,7 @@ void SQL::iterate(const Iterator& iterator)
         std::atomic_store(&m_description, std::shared_ptr<StringView>(nullptr));
         m_hasDescription = false;
     }
-    return m_syntax.get()->iterate(iterator);
+    return syntax().iterate(iterator);
 }
 
 StringView SQL::getDescription() const
@@ -119,10 +102,9 @@ StringView SQL::getDescription() const
     // So we must make this const function thread-safe.
     std::shared_ptr<StringView> description = std::atomic_load(&m_description);
     while (description == nullptr) {
-        if (m_syntax != nullptr) {
+        if (syntax().isValid()) {
             std::atomic_store(
-            &m_description,
-            std::make_shared<StringView>(m_syntax.get()->getDescription()));
+            &m_description, std::make_shared<StringView>(syntax().getDescription()));
             description = std::atomic_load(&m_description);
             m_hasDescription = true;
         } else {
@@ -139,12 +121,12 @@ Syntax::Identifier& SQL::syntax()
         std::atomic_store(&m_description, std::shared_ptr<StringView>(nullptr));
         m_hasDescription = false;
     }
-    return *m_syntax.get();
+    return *m_syntaxPtr;
 }
 
 const Syntax::Identifier& SQL::syntax() const
 {
-    return *m_syntax.get();
+    return *m_syntaxPtr;
 }
 
 } // namespace WCDB
