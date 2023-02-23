@@ -31,12 +31,16 @@
 
 @property (nonatomic, readonly) ObjectsBasedFactory* factory;
 
+@property (nonatomic, assign) int testQuality;
+
 - (void)setUpDatabase;
 - (void)tearDownDatabase;
 
 - (void)doTestWrite;
 
 - (void)doTestRead;
+
+- (void)doTestBatchRead;
 
 - (void)doTestBatchWrite;
 
