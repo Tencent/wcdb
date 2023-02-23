@@ -40,6 +40,11 @@
     [self doTestRead];
 }
 
+- (void)test_batch_read
+{
+    [self doTestBatchRead];
+}
+
 - (void)test_batch_write
 {
     [self doTestBatchWrite];
@@ -65,6 +70,34 @@
     checkCorrectness:^{
         TestCaseAssertTrue(result);
     }];
+}
+
+- (void)test_winq_read
+{
+    [self
+           doMeasure:^{
+               for (int i = 0; i < self.testQuality; i++) {
+                   WCDB::StatementSelect select = WCDB::StatementSelect().select(TestCaseObject.allProperties).from(self.tableName).where(TestCaseObject.identifier == 1);
+                   WCDB::StringView description = select.getDescription();
+               }
+           }
+               setUp:nil
+            tearDown:nil
+    checkCorrectness:nil];
+}
+
+- (void)test_winq_write
+{
+    [self
+           doMeasure:^{
+               for (int i = 0; i < self.testQuality; i++) {
+                   WCDB::StatementInsert insert = WCDB::StatementInsert().insertIntoTable(self.tableName).columns(TestCaseObject.allProperties).values(WCDB::BindParameter::bindParameters(TestCaseObject.allProperties.size()));
+                   WCDB::StringView description = insert.getDescription();
+               }
+           }
+               setUp:nil
+            tearDown:nil
+    checkCorrectness:nil];
 }
 
 @end

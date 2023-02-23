@@ -44,12 +44,14 @@
 
     self.factory.tolerance = 0.0f;
     self.factory.quality = 1000000;
+
+    self.testQuality = 100000;
+    self.tableName = self.factory.tableName;
 }
 
 - (void)setUpDatabase
 {
     [self.factory produce:self.path];
-    self.tableName = self.factory.tableName;
 
     TestCaseAssertOptionalEqual([self.database getNumberOfWalFrames], 0);
     TestCaseAssertFalse([self.database isOpened]);
@@ -62,9 +64,7 @@
 
 - (void)doTestWrite
 {
-    int numberOfObjects = 10000;
-
-    NSArray* objects = [Random.shared testCaseObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.quality];
+    NSArray* objects = [Random.shared testCaseObjectsWithCount:self.testQuality startingFromIdentifier:(int) self.factory.quality];
     __block BOOL result;
     [self
     doMeasure:^{
@@ -90,10 +90,32 @@
 
 - (void)doTestRead
 {
+    __block NSMutableArray<TestCaseObject*>* result;
+    [self
+    doMeasure:^{
+        for (int i = 1; i <= self.testQuality; i++) {
+            TestCaseObject* obj = [self.database getObjectOfClass:TestCaseObject.class fromTable:self.tableName where:TestCaseObject.identifier == i];
+            [result addObject:obj];
+        }
+    }
+    setUp:^{
+        [self setUpDatabase];
+    }
+    tearDown:^{
+        [self tearDownDatabase];
+        result = [NSMutableArray new];
+    }
+    checkCorrectness:^{
+        TestCaseAssertEqual(result.count, self.testQuality);
+    }];
+}
+
+- (void)doTestBatchRead
+{
     __block NSArray<TestCaseObject*>* result;
     [self
     doMeasure:^{
-        result = [self.database getObjectsOfClass:TestCaseObject.class fromTable:self.tableName];
+        result = [self.database getObjectsOfClass:TestCaseObject.class fromTable:self.tableName limit:self.testQuality];
     }
     setUp:^{
         [self setUpDatabase];
@@ -103,15 +125,13 @@
         result = nil;
     }
     checkCorrectness:^{
-        TestCaseAssertEqual(result.count, self.factory.quality);
+        TestCaseAssertEqual(result.count, self.testQuality);
     }];
 }
 
 - (void)doTestBatchWrite
 {
-    int numberOfObjects = 1000000;
-
-    NSArray* objects = [Random.shared testCaseObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.quality];
+    NSArray* objects = [Random.shared testCaseObjectsWithCount:self.testQuality startingFromIdentifier:(int) self.factory.quality];
     __block BOOL result;
     [self
     doMeasure:^{

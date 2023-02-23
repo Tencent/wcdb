@@ -30,6 +30,6 @@
 
 WCDB_IMPLEMENTATION(PropertyObject)
 WCDB_SYNTHESIZE(property)
-WCDB_SYNTHESIZE_COLUMN(propertyWithDifferentName, @"differentName")
+WCDB_SYNTHESIZE_COLUMN(propertyWithDifferentName, "differentName")
 
 @end
