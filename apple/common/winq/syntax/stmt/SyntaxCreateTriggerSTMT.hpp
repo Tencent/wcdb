@@ -44,13 +44,13 @@ public:
     bool ifNotExists = false;
     Schema schema;
     StringView trigger;
-    enum class Timing {
+    enum class Timing : signed char {
         Before = 1,
         After,
         InsteadOf,
     } timing;
     bool specifiedTiming = false;
-    enum class Event {
+    enum class Event : signed char {
         Delete = 1,
         Insert,
         Update,
@@ -60,7 +60,7 @@ public:
     bool forEachFow = false;
     Expression condition;
 
-    enum class STMT {
+    enum class STMT : signed char {
         Insert = 1,
         Update,
         Delete,

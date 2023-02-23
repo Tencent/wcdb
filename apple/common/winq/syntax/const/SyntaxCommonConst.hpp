@@ -31,7 +31,7 @@ class StringView;
 
 namespace Syntax {
 
-enum class ColumnType {
+enum class ColumnType : signed char {
     Null = 0,
     Integer,
     Float,
@@ -41,14 +41,14 @@ enum class ColumnType {
 
 bool isIntegerColumnType(const UnsafeStringView& type);
 
-enum class CompoundOperator : int {
+enum class CompoundOperator : signed char {
     Union = 1,
     UnionAll,
     Intersect,
     Except,
 };
 
-enum class Conflict {
+enum class Conflict : signed char {
     Rollback = 1,
     Abort,
     Fail,
@@ -56,7 +56,7 @@ enum class Conflict {
     Replace,
 };
 
-enum class JoinOperator : int {
+enum class JoinOperator : signed char {
     With = 1,
     Join,
     LeftOuterJoin,
@@ -70,18 +70,18 @@ enum class JoinOperator : int {
     NaturalCrossJoin,
 };
 
-enum class Order : int {
+enum class Order : signed char {
     ASC = 0,
     DESC,
 };
 
-enum class LimitParameterType {
+enum class LimitParameterType : signed char {
     NotSet = 0,
     Offset,
     End,
 };
 
-enum class ConflictAction {
+enum class ConflictAction : signed char {
     Replace = 1,
     Rollback,
     Abort,
@@ -89,7 +89,7 @@ enum class ConflictAction {
     Ignore,
 };
 
-enum class MatchType {
+enum class MatchType : signed char {
     Simple = 1,
     Full,
     Partial,

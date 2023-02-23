@@ -37,7 +37,7 @@ public:
 
     Schema schema;
     Pragma pragma;
-    enum class Switch {
+    enum class Switch : signed char {
         NotSet = 0,
         To,
         With,

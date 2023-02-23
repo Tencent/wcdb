@@ -153,7 +153,7 @@ Expression ExpressionBinaryOperable::operator>=(const Expression &operand) const
 Expression ExpressionBinaryOperable::operator==(const Expression &operand) const
 {
     if (operand.syntax().switcher == Syntax::Expression::Switch::LiteralValue
-        && operand.syntax().literalValue.switcher == Syntax::LiteralValue::Switch::Null) {
+        && operand.syntax().literalValue().switcher == Syntax::LiteralValue::Switch::Null) {
         return asExpressionOperand().isNull();
     }
     return binaryOperate(operand, Expression::SyntaxType::BinaryOperator::Equal);
@@ -162,7 +162,7 @@ Expression ExpressionBinaryOperable::operator==(const Expression &operand) const
 Expression ExpressionBinaryOperable::operator!=(const Expression &operand) const
 {
     if (operand.syntax().switcher == Syntax::Expression::Switch::LiteralValue
-        && operand.syntax().literalValue.switcher == Syntax::LiteralValue::Switch::Null) {
+        && operand.syntax().literalValue().switcher == Syntax::LiteralValue::Switch::Null) {
         return asExpressionOperand().notNull();
     }
     return binaryOperate(operand, Expression::SyntaxType::BinaryOperator::NotEqual);
@@ -294,9 +294,10 @@ Expression ExpressionBetweenOperable::betweenOperate(const Expression &left,
 {
     Expression expression;
     expression.syntax().switcher = Expression::SyntaxType::Switch::Between;
-    expression.syntax().expressions.push_back(asExpressionOperand());
-    expression.syntax().expressions.push_back(left);
-    expression.syntax().expressions.push_back(right);
+    auto &expressionList = expression.syntax().expressions;
+    expressionList.push_back(asExpressionOperand());
+    expressionList.push_back(left);
+    expressionList.push_back(right);
     return expression;
 }
 
@@ -327,7 +328,7 @@ Expression ExpressionInOperable::inTable(const UnsafeStringView &table) const
     expression.syntax().isNot = false;
     expression.syntax().expressions.push_back(asExpressionOperand());
     expression.syntax().inSwitcher = Expression::SyntaxType::SwitchIn::Table;
-    expression.syntax().table = table;
+    expression.syntax().table() = table;
     return expression;
 }
 
@@ -345,7 +346,7 @@ Expression ExpressionInOperable::in(const StatementSelect &select) const
     expression.syntax().isNot = false;
     expression.syntax().expressions.push_back(asExpressionOperand());
     expression.syntax().inSwitcher = Expression::SyntaxType::SwitchIn::Select;
-    expression.syntax().select = select;
+    expression.syntax().select() = select;
     return expression;
 }
 
@@ -361,10 +362,10 @@ Expression ExpressionInOperable::in(const Expressions &expressions) const
     Expression expression;
     expression.syntax().switcher = Expression::SyntaxType::Switch::In;
     expression.syntax().isNot = false;
-    expression.syntax().expressions.push_back(asExpressionOperand());
+    auto &expressionList = expression.syntax().expressions;
+    expressionList.push_back(asExpressionOperand());
     expression.syntax().inSwitcher = Expression::SyntaxType::SwitchIn::Expressions;
-    expression.syntax().expressions.insert(
-    expression.syntax().expressions.end(), expressions.begin(), expressions.end());
+    expressionList.insert(expressionList.end(), expressions.begin(), expressions.end());
     return expression;
 }
 
@@ -382,7 +383,7 @@ Expression ExpressionInOperable::inFunction(const UnsafeStringView &tableFunctio
     expression.syntax().inSwitcher = Expression::SyntaxType::SwitchIn::Function;
     expression.syntax().isNot = false;
     expression.syntax().expressions.push_back(asExpressionOperand());
-    expression.syntax().function = tableFunction;
+    expression.syntax().function() = tableFunction;
     return expression;
 }
 
@@ -401,7 +402,7 @@ Expression ExpressionCollateOperable::collate(const UnsafeStringView &collation)
     Expression expression;
     expression.syntax().switcher = Expression::SyntaxType::Switch::Collate;
     expression.syntax().expressions.push_back(asExpressionOperand());
-    expression.syntax().collation = collation;
+    expression.syntax().collation() = collation;
     return expression;
 }
 

@@ -51,7 +51,7 @@ public:
         ObjectType result;
         ObjectValue& objValue = iter->second;
         for (ResultField& field : objValue.m_fields) {
-            const StringView& fieldName = field.syntax().expression.column.name;
+            const StringView& fieldName = field.syntax().expression.column().name;
             field.setValue(result, objValue.m_values[fieldName]);
         }
         return result;
