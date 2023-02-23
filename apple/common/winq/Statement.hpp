@@ -30,8 +30,75 @@ namespace WCDB {
 
 class Statement : public SQL {
 public:
-    using SQL::SQL;
     virtual ~Statement() override;
+    Statement(const Shadow<Syntax::Identifier>& syntax);
+    Statement(Shadow<Syntax::Identifier>&& syntax);
+    Statement(std::shared_ptr<Syntax::Identifier>&& underlying);
+
+    virtual Syntax::Identifier& syntax() override;
+    virtual const Syntax::Identifier& syntax() const override;
+
+    Statement(const Statement& sql);
+    Statement(Statement&& sql);
+    Statement& operator=(const Statement& other);
+    Statement& operator=(Statement&& other);
+
+private:
+    Shadow<Syntax::Identifier> m_syntax;
+};
+
+template<typename __SyntaxType>
+class SpecifiedSyntax<__SyntaxType, Statement> : public Statement {
+public:
+    using SyntaxType = __SyntaxType;
+    static constexpr const SQL::Type type = SyntaxType::type;
+
+private:
+    using Self = SpecifiedSyntax<SyntaxType, Statement>;
+    using Super = Statement;
+    static_assert(std::is_base_of<Syntax::Identifier, SyntaxType>::value, "");
+    static_assert(std::is_base_of<SQL, Statement>::value, "");
+
+public:
+    SpecifiedSyntax() : Super(std::make_shared<SyntaxType>()) {}
+
+    explicit SpecifiedSyntax(const Self& other) : Super(other) {}
+
+    explicit SpecifiedSyntax(const SyntaxType& syntax) : Super(syntax) {}
+
+    SpecifiedSyntax(SyntaxType&& syntax) : Super(std::move(syntax)) {}
+
+    SpecifiedSyntax(Self&& other) : Super(std::move(other)) {}
+
+    ~SpecifiedSyntax() override = default;
+
+    Self& operator=(const Self& other)
+    {
+        Super::operator=(other);
+        return *this;
+    }
+
+    Self& operator=(Self&& other)
+    {
+        Super::operator=(std::move(other));
+        return *this;
+    }
+
+    SyntaxType& syntax() override
+    {
+        return static_cast<SyntaxType&>(Super::syntax());
+    }
+
+    const SyntaxType& syntax() const override
+    {
+        return static_cast<const SyntaxType&>(Super::syntax());
+    }
+
+    // Convert SQL to Syntax implicitly
+    operator const SyntaxType&() const
+    {
+        return static_cast<const SyntaxType&>(Super::syntax());
+    }
 };
 
 } // namespace WCDB

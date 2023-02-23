@@ -48,7 +48,7 @@ public:
     typedef Syntax::Identifier::ConstIterator ConstIterator;
     void iterate(const ConstIterator& iterator) const;
 
-    virtual StringView getDescription() const;
+    StringView getDescription() const;
 
     virtual Syntax::Identifier& syntax();
     virtual const Syntax::Identifier& syntax() const;
@@ -56,17 +56,12 @@ public:
 protected:
     SQL(const SQL& sql);
     SQL(SQL&& sql);
-    SQL(const Shadow<Syntax::Identifier>& syntax);
-    SQL(Shadow<Syntax::Identifier>&& syntax);
-    SQL(std::shared_ptr<Syntax::Identifier>&& underlying);
-
     SQL& operator=(const SQL& other);
     SQL& operator=(SQL&& other);
 
-private:
-    Shadow<Syntax::Identifier> m_syntax;
+    mutable Syntax::Identifier* m_syntaxPtr = nullptr;
     mutable std::shared_ptr<StringView> m_description;
-    mutable bool m_hasDescription;
+    mutable bool m_hasDescription = false;
 };
 
 template<typename __SyntaxType, typename __SQLType>
@@ -81,29 +76,50 @@ private:
     using Super = SQLType;
     static_assert(std::is_base_of<Syntax::Identifier, SyntaxType>::value, "");
     static_assert(std::is_base_of<SQL, SQLType>::value, "");
+    __SyntaxType m_syntax;
 
 public:
-    SpecifiedSyntax() : Super(std::make_shared<SyntaxType>()) {}
+    SpecifiedSyntax() : Super(), m_syntax() { this->m_syntaxPtr = &m_syntax; }
 
-    explicit SpecifiedSyntax(const Self& other) : Super(other) {}
+    explicit SpecifiedSyntax(const Self& other)
+    : Super(other), m_syntax(other.m_syntax)
+    {
+        this->m_syntaxPtr = &m_syntax;
+    }
 
-    explicit SpecifiedSyntax(const SyntaxType& syntax) : Super(syntax) {}
+    explicit SpecifiedSyntax(const SyntaxType& syntax)
+    : Super(), m_syntax(syntax)
+    {
+        this->m_syntaxPtr = &m_syntax;
+    }
 
-    SpecifiedSyntax(SyntaxType&& syntax) : Super(std::move(syntax)) {}
+    SpecifiedSyntax(SyntaxType&& syntax)
+    : Super(std::move(syntax)), m_syntax(std::move(syntax))
+    {
+        this->m_syntaxPtr = &m_syntax;
+    }
 
-    SpecifiedSyntax(Self&& other) : Super(std::move(other)) {}
+    SpecifiedSyntax(Self&& other)
+    : Super(std::move(other)), m_syntax(std::move(other.m_syntax))
+    {
+        this->m_syntaxPtr = &m_syntax;
+    }
 
     ~SpecifiedSyntax() override = default;
 
     Self& operator=(const Self& other)
     {
         Super::operator=(other);
+        m_syntax = other.m_syntax;
+        this->m_syntaxPtr = &m_syntax;
         return *this;
     }
 
-    SQL& operator=(SQL&& other)
+    Self& operator=(Self&& other)
     {
         Super::operator=(std::move(other));
+        m_syntax = std::move(other.m_syntax);
+        this->m_syntaxPtr = &m_syntax;
         return *this;
     }
 
