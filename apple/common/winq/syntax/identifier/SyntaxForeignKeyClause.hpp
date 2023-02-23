@@ -37,7 +37,7 @@ public:
 
     StringView foreignTable;
     std::list<Column> columns;
-    enum class Switch {
+    enum class Switch : signed char {
         OnDeleteSetNull = 1,
         OnDeleteSetDefault,
         OnDeleteCascade,

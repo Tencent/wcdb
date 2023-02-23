@@ -102,9 +102,207 @@ Enum::description(const Syntax::Expression::BinaryOperator& binaryOperator)
 
 namespace Syntax {
 
-Expression::~Expression() = default;
+#pragma mark - ExpressionMember
+void ExpressionUnionMember::firstMemberReset() const
+{
+    if (m_firstMember == Member::Invalid) {
+        return;
+    }
+    switch (m_firstMember) {
+    case Member::literalValue:
+        m_literalValue.~LiteralValue();
+        break;
+    case Member::bindParameter:
+        m_bindParameter.~BindParameter();
+        break;
+    case Member::column:
+        m_column.~Column();
+        break;
+    case Member::raiseFunction:
+        m_raiseFunction.~RaiseFunction();
+        break;
+    case Member::windowDef:
+        m_windowDef.~WindowDef();
+        break;
+    case Member::windowName:
+        m_windowName.~StringView();
+        break;
+    default:
+        break;
+    }
+    m_firstMember = Member::Invalid;
+}
+
+void ExpressionUnionMember::secondMemberReset() const
+{
+    if (m_secondMember == Member::Invalid) {
+        return;
+    }
+    switch (m_secondMember) {
+    case Member::select:
+        m_select.~Shadow<SelectSTMT>();
+        break;
+    case Member::collation:
+        m_collation.~StringView();
+        break;
+    case Member::schema:
+        m_schema.~Schema();
+        break;
+    case Member::filter:
+        m_filter.~Filter();
+        break;
+    default:
+        break;
+    }
+    m_secondMember = Member::Invalid;
+}
+
+void ExpressionUnionMember::thirdMemberReset() const
+{
+    if (m_thirdMember == Member::Invalid) {
+        return;
+    }
+    switch (m_thirdMember) {
+    case Member::table:
+        m_table.~StringView();
+        break;
+    case Member::function:
+        m_function.~StringView();
+    default:
+        break;
+    }
+    m_thirdMember = Member::Invalid;
+}
+
+template<typename T>
+void ExpressionUnionMember::assignFromOther(T&& other)
+{
+    if (other.m_firstMember != Member::Invalid) {
+        switch (other.m_firstMember) {
+        case Member::literalValue:
+            new ((void*) std::addressof(m_literalValue))
+            LiteralValue(std::forward<T>(other).m_literalValue);
+            break;
+        case Member::bindParameter:
+            new ((void*) std::addressof(m_bindParameter))
+            BindParameter(std::forward<T>(other).m_bindParameter);
+            break;
+        case Member::column:
+            new ((void*) std::addressof(m_column)) Column(std::forward<T>(other).m_column);
+            break;
+        case Member::raiseFunction:
+            new ((void*) std::addressof(m_raiseFunction))
+            RaiseFunction(std::forward<T>(other).m_raiseFunction);
+            break;
+        case Member::windowDef:
+            new ((void*) std::addressof(m_windowDef))
+            WindowDef(std::forward<T>(other).m_windowDef);
+            break;
+        case Member::windowName:
+            new ((void*) std::addressof(m_windowName))
+            StringView(std::forward<T>(other).m_windowName);
+            break;
+        default:
+            break;
+        }
+        m_firstMember = other.m_firstMember;
+    }
+    if (other.m_secondMember != Member::Invalid) {
+        switch (other.m_secondMember) {
+        case Member::select:
+            new ((void*) std::addressof(m_select))
+            Shadow<SelectSTMT>(std::forward<T>(other).m_select);
+            break;
+        case Member::collation:
+            new ((void*) std::addressof(m_collation))
+            StringView(std::forward<T>(other).m_collation);
+            break;
+        case Member::schema:
+            new ((void*) std::addressof(m_schema)) Schema(std::forward<T>(other).m_schema);
+            break;
+        case Member::filter:
+            new ((void*) std::addressof(m_filter)) Filter(std::forward<T>(other).m_filter);
+            break;
+        default:
+            break;
+        }
+        m_secondMember = other.m_secondMember;
+    }
+    if (other.m_thirdMember != Member::Invalid) {
+        switch (other.m_thirdMember) {
+        case Member::table:
+            new ((void*) std::addressof(m_table))
+            StringView(std::forward<T>(other).m_table);
+            break;
+        case Member::function:
+            new ((void*) std::addressof(m_function))
+            StringView(std::forward<T>(other).m_function);
+            break;
+        default:
+            break;
+        }
+        m_thirdMember = other.m_thirdMember;
+    }
+}
+
+ExpressionUnionMember::ExpressionUnionMember()
+: m_firstMember(Member::Invalid)
+, m_secondMember(Member::Invalid)
+, m_thirdMember(Member::Invalid)
+{
+}
+
+ExpressionUnionMember::~ExpressionUnionMember()
+{
+    firstMemberReset();
+    secondMemberReset();
+    thirdMemberReset();
+};
+
+ExpressionUnionMember::ExpressionUnionMember(const ExpressionUnionMember& other)
+{
+    assignFromOther(other);
+}
+
+ExpressionUnionMember::ExpressionUnionMember(ExpressionUnionMember&& other)
+{
+    assignFromOther(std::move(other));
+}
+
+ExpressionUnionMember& ExpressionUnionMember::operator=(const ExpressionUnionMember& other)
+{
+    firstMemberReset();
+    secondMemberReset();
+    thirdMemberReset();
+    assignFromOther(other);
+    return *this;
+}
+
+ExpressionUnionMember& ExpressionUnionMember::operator=(ExpressionUnionMember&& other)
+{
+    firstMemberReset();
+    secondMemberReset();
+    thirdMemberReset();
+    assignFromOther(std::move(other));
+    return *this;
+}
+
+WCDB_SYNTAX_UNION_MEMBER_IMPLEMENT(ExpressionUnionMember, firstMember, LiteralValue, literalValue)
+WCDB_SYNTAX_UNION_MEMBER_IMPLEMENT(ExpressionUnionMember, firstMember, BindParameter, bindParameter)
+WCDB_SYNTAX_UNION_MEMBER_IMPLEMENT(ExpressionUnionMember, firstMember, Column, column)
+WCDB_SYNTAX_UNION_MEMBER_IMPLEMENT(ExpressionUnionMember, firstMember, RaiseFunction, raiseFunction)
+WCDB_SYNTAX_UNION_MEMBER_IMPLEMENT(ExpressionUnionMember, firstMember, WindowDef, windowDef)
+WCDB_SYNTAX_UNION_MEMBER_IMPLEMENT(ExpressionUnionMember, firstMember, StringView, windowName)
+WCDB_SYNTAX_UNION_MEMBER_IMPLEMENT(ExpressionUnionMember, secondMember, Shadow<SelectSTMT>, select)
+WCDB_SYNTAX_UNION_MEMBER_IMPLEMENT(ExpressionUnionMember, secondMember, StringView, collation)
+WCDB_SYNTAX_UNION_MEMBER_IMPLEMENT(ExpressionUnionMember, secondMember, Schema, schema)
+WCDB_SYNTAX_UNION_MEMBER_IMPLEMENT(ExpressionUnionMember, secondMember, Filter, filter)
+WCDB_SYNTAX_UNION_MEMBER_IMPLEMENT(ExpressionUnionMember, thirdMember, StringView, table)
+WCDB_SYNTAX_UNION_MEMBER_IMPLEMENT(ExpressionUnionMember, thirdMember, StringView, function)
 
 #pragma mark - Identifier
+Expression::~Expression() = default;
+
 Identifier::Type Expression::getType() const
 {
     return type;
@@ -148,13 +346,13 @@ bool Expression::describle(std::ostream& stream) const
 {
     switch (switcher) {
     case Switch::LiteralValue:
-        stream << literalValue;
+        stream << literalValue();
         break;
     case Switch::BindParameter:
-        stream << bindParameter;
+        stream << bindParameter();
         break;
     case Switch::Column:
-        stream << column;
+        stream << column();
         break;
     case Switch::UnaryOperation: {
         WCTSyntaxRemedialAssert(expressions.size() == 1);
@@ -182,7 +380,7 @@ bool Expression::describle(std::ostream& stream) const
         }
         break;
     }
-    case Switch::BinaryOperation:
+    case Switch::BinaryOperation: {
         switch (binaryOperator) {
         case Syntax::Expression::BinaryOperator::Concatenate:
         case Syntax::Expression::BinaryOperator::Multiply:
@@ -237,9 +435,9 @@ bool Expression::describle(std::ostream& stream) const
             break;
         }
         }
-        break;
+    } break;
     case Switch::Function:
-        stream << function << "(";
+        stream << function() << "(";
         if (!expressions.empty()) {
             if (distinct) {
                 stream << "DISTINCT ";
@@ -260,7 +458,7 @@ bool Expression::describle(std::ostream& stream) const
     case Switch::Collate:
         WCTSyntaxRemedialAssert(expressions.size() == 1);
         streamAutoParenthesesExpression(stream, *expressions.begin());
-        stream << " COLLATE " << collation;
+        stream << " COLLATE " << collation();
         break;
     case Switch::Between: {
         WCTSyntaxRemedialAssert(expressions.size() == 3);
@@ -288,8 +486,8 @@ bool Expression::describle(std::ostream& stream) const
             stream << "()";
             break;
         case SwitchIn::Select:
-            WCTSyntaxRemedialAssert(select != nullptr);
-            stream << "(" << *select.get() << ")";
+            WCTSyntaxRemedialAssert(select() != nullptr);
+            stream << "(" << *select().get() << ")";
             break;
         case SwitchIn::Expressions: {
             stream << "(";
@@ -307,17 +505,17 @@ bool Expression::describle(std::ostream& stream) const
         }
         case SwitchIn::Table:
             stream << space;
-            if (!schema.empty()) {
-                stream << schema << ".";
+            if (!schema().empty()) {
+                stream << schema() << ".";
             }
-            stream << table;
+            stream << table();
             break;
         case SwitchIn::Function: {
             stream << space;
-            if (!schema.empty()) {
-                stream << schema << ".";
+            if (!schema().empty()) {
+                stream << schema() << ".";
             }
-            stream << function << "(";
+            stream << function() << "(";
             bool comma = false;
             while (++iter != expressions.end()) {
                 if (comma) {
@@ -334,15 +532,15 @@ bool Expression::describle(std::ostream& stream) const
         break;
     }
     case Switch::Exists:
-        WCTSyntaxRemedialAssert(select != nullptr);
+        WCTSyntaxRemedialAssert(select() != nullptr);
         if (isNot) {
             stream << "NOT ";
         }
-        stream << "EXISTS(" << *select.get() << ")";
+        stream << "EXISTS(" << *select().get() << ")";
         break;
     case Switch::Select:
-        WCTSyntaxRemedialAssert(select != nullptr);
-        stream << "(" << *select.get() << ")";
+        WCTSyntaxRemedialAssert(select() != nullptr);
+        stream << "(" << *select().get() << ")";
         break;
     case Switch::Case: {
         WCTSyntaxRemedialAssert(expressions.size() >= hasCase + 2 + hasElse);
@@ -366,25 +564,25 @@ bool Expression::describle(std::ostream& stream) const
         break;
     }
     case Switch::RaiseFunction:
-        stream << raiseFunction;
+        stream << raiseFunction();
         break;
     case Switch::Window:
-        stream << function << "(";
+        stream << function() << "(";
         if (!expressions.empty()) {
             stream << expressions;
         } else if (useWildcard) {
             stream << "*";
         }
         stream << ")";
-        if (filter.isValid()) {
-            stream << space << filter;
+        if (filter().isValid()) {
+            stream << space << filter();
         }
-        if (windowDef.isValid()) {
+        if (m_firstMember == Member::windowDef && windowDef().isValid()) {
             stream << " OVER";
-            stream << windowDef;
-        } else if (!windowName.empty()) {
+            stream << windowDef();
+        } else if (m_firstMember == Member::windowName && !windowName().empty()) {
             stream << " OVER";
-            stream << space << windowName;
+            stream << space << windowName();
         }
         break;
     }
@@ -452,13 +650,13 @@ void Expression::iterate(const Iterator& iterator, bool& stop)
         break;
     // others
     case Switch::LiteralValue:
-        recursiveIterate(literalValue, iterator, stop);
+        recursiveIterate(literalValue(), iterator, stop);
         break;
     case Switch::BindParameter:
-        recursiveIterate(bindParameter, iterator, stop);
+        recursiveIterate(bindParameter(), iterator, stop);
         break;
     case Switch::Column:
-        recursiveIterate(column, iterator, stop);
+        recursiveIterate(column(), iterator, stop);
         break;
     case Switch::In: {
         WCTIterateRemedialAssert(expressions.size() >= 1);
@@ -468,8 +666,8 @@ void Expression::iterate(const Iterator& iterator, bool& stop)
         case SwitchIn::Empty:
             break;
         case SwitchIn::Select:
-            WCTIterateRemedialAssert(select != nullptr);
-            select.get()->iterate(iterator, stop);
+            WCTIterateRemedialAssert(select() != nullptr);
+            select().get()->iterate(iterator, stop);
             break;
         case SwitchIn::Expressions: {
             while (++iter != expressions.end()) {
@@ -478,10 +676,10 @@ void Expression::iterate(const Iterator& iterator, bool& stop)
             break;
         }
         case SwitchIn::Table:
-            recursiveIterate(schema, iterator, stop);
+            recursiveIterate(schema(), iterator, stop);
             break;
         case SwitchIn::Function: {
-            recursiveIterate(schema, iterator, stop);
+            recursiveIterate(schema(), iterator, stop);
             while (++iter != expressions.end()) {
                 iter->iterate(iterator, stop);
             }
@@ -491,23 +689,23 @@ void Expression::iterate(const Iterator& iterator, bool& stop)
         break;
     }
     case Switch::Exists:
-        WCTIterateRemedialAssert(select != nullptr);
-        select.get()->iterate(iterator, stop);
+        WCTIterateRemedialAssert(select() != nullptr);
+        select().get()->iterate(iterator, stop);
         break;
     case Switch::Select:
-        WCTIterateRemedialAssert(select != nullptr);
-        select.get()->iterate(iterator, stop);
+        WCTIterateRemedialAssert(select() != nullptr);
+        select().get()->iterate(iterator, stop);
         break;
     case Switch::RaiseFunction:
-        recursiveIterate(raiseFunction, iterator, stop);
+        recursiveIterate(raiseFunction(), iterator, stop);
         break;
     case Switch::Window:
         listIterate(expressions, iterator, stop);
-        if (filter.isValid()) {
-            recursiveIterate(filter, iterator, stop);
+        if (filter().isValid()) {
+            recursiveIterate(filter(), iterator, stop);
         }
-        if (windowName.empty()) {
-            recursiveIterate(windowDef, iterator, stop);
+        if (m_firstMember == Member::windowDef) {
+            recursiveIterate(windowDef(), iterator, stop);
         }
         break;
     }

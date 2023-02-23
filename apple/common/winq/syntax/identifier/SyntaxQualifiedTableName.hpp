@@ -38,7 +38,7 @@ public:
     Schema schema;
     StringView table;
     StringView alias;
-    enum class Switch {
+    enum class Switch : signed char {
         NotSet = 0,
         Indexed,
         NotIndexed,

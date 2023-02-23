@@ -57,7 +57,7 @@ bool MultiObject::ObjectValue::operator==(const ObjectValue& other) const
 {
     StringViewSet checkedFields;
     for (auto iter = m_fields.begin(); iter != m_fields.end(); iter++) {
-        const StringView& columnName = iter->syntax().expression.column.name;
+        const StringView& columnName = iter->syntax().expression.column().name;
         checkedFields.insert(columnName);
         const Value& myValue = m_values.at(columnName);
         auto otherIter = other.m_values.find(columnName);
@@ -70,7 +70,7 @@ bool MultiObject::ObjectValue::operator==(const ObjectValue& other) const
         }
     }
     for (auto iter = other.m_fields.begin(); iter != other.m_fields.end(); iter++) {
-        const StringView& columnName = iter->syntax().expression.column.name;
+        const StringView& columnName = iter->syntax().expression.column().name;
         if (checkedFields.find(columnName) != checkedFields.end()) {
             continue;
         }
@@ -102,7 +102,7 @@ void MultiObject::addField(const UnsafeStringView& table, const ResultField& fie
 
 void MultiObject::ObjectValue::addField(const ResultField& field, const Value& value)
 {
-    const StringView& columnName = field.syntax().expression.column.name;
+    const StringView& columnName = field.syntax().expression.column().name;
     WCTRemedialAssert(
     columnName.length() > 0,
     StringView::formatted("invalid result column %s", field.getDescription().data()),

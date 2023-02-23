@@ -39,17 +39,17 @@ public:
 
     WCDB_SYNTAX_MAIN_UNION_ENUM(Range, Rows, );
 
-    enum class Event {
+    enum class Event : signed char {
         Single = 1,
         Between,
     } event;
-    enum class FirstEvent {
+    enum class FirstEvent : signed char {
         UnboundedPreceding = 1,
         Preceding,
         Following,
         CurrentRow,
     } firstEvent;
-    enum class SecondEvent {
+    enum class SecondEvent : signed char {
         UnboundedFollowing = 1,
         Preceding,
         Following,

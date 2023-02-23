@@ -31,30 +31,30 @@ Expression::~Expression() = default;
 Expression::Expression(const LiteralValue& literalValue)
 {
     syntax().switcher = SyntaxType::Switch::LiteralValue;
-    syntax().literalValue = literalValue;
+    syntax().literalValue() = literalValue;
 }
 
 Expression::Expression(const BindParameter& bindParameter)
 {
     syntax().switcher = SyntaxType::Switch::BindParameter;
-    syntax().bindParameter = bindParameter;
+    syntax().bindParameter() = bindParameter;
 }
 
 Expression::Expression(const Column& column)
 {
     syntax().switcher = SyntaxType::Switch::Column;
-    syntax().column = column;
+    syntax().column() = column;
 }
 
 Expression::Expression(const StatementSelect& select)
 {
     syntax().switcher = SyntaxType::Switch::Select;
-    syntax().select = select;
+    syntax().select() = select;
 }
 
 Expression& Expression::schema(const Schema& schema)
 {
-    syntax().schema = schema;
+    syntax().schema() = schema;
     return *this;
 }
 
@@ -67,14 +67,14 @@ Expression::Expression(const Expressions& expressions)
 Expression::Expression(const RaiseFunction& raiseFunction)
 {
     syntax().switcher = SyntaxType::Switch::RaiseFunction;
-    syntax().raiseFunction = raiseFunction;
+    syntax().raiseFunction() = raiseFunction;
 }
 
 Expression Expression::function(const UnsafeStringView& function)
 {
     Expression expression;
     expression.syntax().switcher = SyntaxType::Switch::Function;
-    expression.syntax().function = function;
+    expression.syntax().function() = function;
     expression.syntax().useWildcard = false;
     return expression;
 }
@@ -94,9 +94,8 @@ Expression& Expression::argument(const Expression& parameter)
 
 Expression& Expression::arguments(const Expressions& parameters)
 {
-    for (const auto& parameter : parameters) {
-        syntax().expressions.push_back(parameter);
-    }
+    syntax().expressions.insert(
+    syntax().expressions.end(), parameters.begin(), parameters.end());
     syntax().useWildcard = false;
     return *this;
 }
@@ -132,7 +131,7 @@ Expression Expression::exists(const StatementSelect& select)
     Expression expression;
     expression.syntax().switcher = SyntaxType::Switch::Exists;
     expression.syntax().isNot = false;
-    expression.syntax().select = select;
+    expression.syntax().select() = select;
     return expression;
 }
 
@@ -141,7 +140,7 @@ Expression Expression::notExists(const StatementSelect& select)
     Expression expression;
     expression.syntax().switcher = SyntaxType::Switch::Exists;
     expression.syntax().isNot = true;
-    expression.syntax().select = select;
+    expression.syntax().select() = select;
     return expression;
 }
 
@@ -192,25 +191,25 @@ Expression Expression::windowFunction(const UnsafeStringView& function)
 {
     Expression expression;
     expression.syntax().switcher = SyntaxType::Switch::Window;
-    expression.syntax().function = function;
+    expression.syntax().function() = function;
     return expression;
 }
 
 Expression& Expression::filter(const Filter& filter)
 {
-    syntax().filter = filter;
+    syntax().filter() = filter;
     return *this;
 }
 
 Expression& Expression::over(const WindowDef& windowDef)
 {
-    syntax().windowDef = windowDef;
+    syntax().windowDef() = windowDef;
     return *this;
 }
 
 Expression& Expression::over(const UnsafeStringView& window)
 {
-    syntax().windowName = window;
+    syntax().windowName() = window;
     return *this;
 }
 

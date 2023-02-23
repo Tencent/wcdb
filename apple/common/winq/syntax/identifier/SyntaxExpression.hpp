@@ -38,10 +38,95 @@ namespace Syntax {
 
 class SelectSTMT;
 
-class Expression final : public Identifier {
-#pragma mark - Lang
+class ExpressionUnionMember {
+public:
+    ExpressionUnionMember();
+    ~ExpressionUnionMember();
+    ExpressionUnionMember(const ExpressionUnionMember& other);
+    ExpressionUnionMember(ExpressionUnionMember&& other);
+    ExpressionUnionMember& operator=(const ExpressionUnionMember& other);
+    ExpressionUnionMember& operator=(ExpressionUnionMember&& other);
+
+    LiteralValue& literalValue();
+    BindParameter& bindParameter();
+    Column& column();
+    Shadow<SelectSTMT>& select();
+    StringView& table();
+    RaiseFunction& raiseFunction();
+    WindowDef& windowDef();
+    StringView& collation();
+    Schema& schema();
+    Filter& filter();
+    StringView& windowName();
+    StringView& function();
+
+    const LiteralValue& literalValue() const;
+    const BindParameter& bindParameter() const;
+    const Column& column() const;
+    const Shadow<SelectSTMT>& select() const;
+    const StringView& table() const;
+    const RaiseFunction& raiseFunction() const;
+    const WindowDef& windowDef() const;
+    const StringView& collation() const;
+    const Schema& schema() const;
+    const Filter& filter() const;
+    const StringView& windowName() const;
+    const StringView& function() const;
+
+protected:
+    enum class Member : signed char {
+        Invalid = 0,
+        literalValue,
+        bindParameter,
+        column,
+        raiseFunction,
+        windowDef,
+        windowName,
+        select,
+        collation,
+        schema,
+        filter,
+        table,
+        function,
+    };
+
+    mutable Member m_firstMember = Member::Invalid;
+    mutable Member m_secondMember = Member::Invalid;
+    mutable Member m_thirdMember = Member::Invalid;
+
+    union {
+        mutable LiteralValue m_literalValue;
+        mutable BindParameter m_bindParameter;
+        mutable Column m_column;
+        mutable RaiseFunction m_raiseFunction;
+        mutable WindowDef m_windowDef;
+        mutable StringView m_windowName;
+    };
+    void firstMemberReset() const;
+
+    union {
+        mutable Shadow<SelectSTMT> m_select;
+        mutable StringView m_collation;
+        mutable Schema m_schema;
+        mutable Filter m_filter;
+    };
+    void secondMemberReset() const;
+
+    union {
+        mutable StringView m_table;
+        mutable StringView m_function;
+    };
+    void thirdMemberReset() const;
+
+    template<typename T>
+    void assignFromOther(T&& member);
+};
+
+class Expression final : public Identifier, public ExpressionUnionMember {
 public:
     ~Expression() override final;
+
+    std::list<Expression> expressions;
 
     WCDB_SYNTAX_MAIN_UNION_ENUM(LiteralValue,
                                 BindParameter,
@@ -60,14 +145,7 @@ public:
                                 Window,
                                 Select, );
 
-    LiteralValue literalValue;
-    BindParameter bindParameter;
-
-    Schema schema;
-    StringView table;
-    Column column;
-
-    enum class UnaryOperator {
+    enum class UnaryOperator : signed char {
         Negative = 1,
         Positive,
         Tilde,
@@ -75,7 +153,7 @@ public:
         Null,
     } unaryOperator;
 
-    enum class BinaryOperator {
+    enum class BinaryOperator : signed char {
         Concatenate = 1,
         Multiply,
         Divide,
@@ -101,36 +179,24 @@ public:
         Match,
     } binaryOperator;
 
-    std::list<Expression> expressions;
-
-    StringView function;
     bool distinct = false;
     bool useWildcard = false;
 
     ColumnType castType;
 
-    StringView collation;
-
     bool isNot = false;
     bool escape = false;
 
-    enum class SwitchIn {
+    bool hasCase = false;
+    bool hasElse = false;
+
+    enum class SwitchIn : signed char {
         Empty = 1,
         Select,
         Expressions,
         Table,
         Function,
     } inSwitcher;
-    Shadow<SelectSTMT> select;
-
-    bool hasCase = false;
-    bool hasElse = false;
-
-    RaiseFunction raiseFunction;
-
-    WindowDef windowDef;
-    StringView windowName;
-    Filter filter;
 
 #pragma mark - Identifier
 public:

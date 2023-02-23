@@ -40,7 +40,7 @@ class Identifier : public Cloneable<Identifier> {
 public:
     virtual ~Identifier() override = 0;
 
-    enum class Type {
+    enum class Type : signed char {
         Invalid = 0,
         Column,
         Schema,
@@ -100,7 +100,7 @@ public:
 
     std::shared_ptr<Identifier> clone() const override final;
 
-    typedef int Valid;
+    typedef signed char Valid;
     static constexpr const Valid invalid = -1;
 
     virtual bool isValid() const = 0;
@@ -155,7 +155,7 @@ std::ostream& operator<<(std::ostream& stream, const std::list<T>& identifiers)
 }
 
 #define __WCDB_SYNTAX_ENUM(Type, ...)                                          \
-    enum class Type {                                                          \
+    enum class Type : signed char {                                            \
         WCDB_FIRST_ARG(__VA_ARGS__) = 1,                                       \
         WCDB_NON_FIRST_ARGS(__VA_ARGS__)                                       \
     };
@@ -189,4 +189,28 @@ std::ostream& operator<<(std::ostream& stream, const std::list<T>& identifiers)
     bool isValid() const override final                                        \
     {                                                                          \
         return __valid >= 0;                                                   \
+    }
+
+#define WCDB_SYNTAX_UNION_MEMBER_IMPLEMENT(NameSpace, MemberTag, Type, name)   \
+    Type& NameSpace::name()                                                    \
+    {                                                                          \
+        if (m_##MemberTag != Member::name) {                                   \
+            MemberTag##Reset();                                                \
+        }                                                                      \
+        if (m_##MemberTag == Member::Invalid) {                                \
+            new ((void*) std::addressof(m_##name)) Type();                     \
+            m_##MemberTag = Member::name;                                      \
+        }                                                                      \
+        return m_##name;                                                       \
+    }                                                                          \
+    const Type& NameSpace::name() const                                        \
+    {                                                                          \
+        if (m_##MemberTag != Member::name) {                                   \
+            MemberTag##Reset();                                                \
+        }                                                                      \
+        if (m_##MemberTag == Member::Invalid) {                                \
+            new ((void*) std::addressof(m_##name)) Type();                     \
+            m_##MemberTag = Member::name;                                      \
+        }                                                                      \
+        return m_##name;                                                       \
     }
