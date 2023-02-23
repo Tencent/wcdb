@@ -34,54 +34,49 @@ namespace WCDB {
 
 #pragma mark - UnsafeStringView - Constructor
 UnsafeStringView::UnsafeStringView()
-: m_data(""), m_length(0), m_bConstant(false), m_buffer(nullptr)
+: m_data(""), m_length(0), m_referenceCount(nullptr)
 {
 }
 
 UnsafeStringView::UnsafeStringView(const char* string)
 : m_data(string != nullptr ? string : "")
-, m_length(string != nullptr ? strlen(string) : 0)
-, m_bConstant(false)
-, m_buffer(nullptr)
+, m_length(string != nullptr ? (int) strlen(string) : 0)
+, m_referenceCount(nullptr)
 {
 }
 
 UnsafeStringView::UnsafeStringView(const char* string, size_t length)
-: m_data(string != nullptr ? string : ""), m_length(length), m_bConstant(false), m_buffer(nullptr)
+: m_data(string != nullptr ? string : ""), m_length(length), m_referenceCount(nullptr)
 {
 }
 
 UnsafeStringView::UnsafeStringView(const UnsafeStringView& other)
-: m_data(other.m_data)
-, m_length(other.m_length)
-, m_bConstant(other.m_bConstant)
-, m_buffer(other.m_buffer)
+: m_data(other.m_data), m_length(other.m_length), m_referenceCount(other.m_referenceCount)
 {
+    if ((int64_t) m_referenceCount > ConstanceReference) {
+        (*m_referenceCount)++;
+    }
 }
 
 UnsafeStringView::UnsafeStringView(UnsafeStringView&& other)
-: m_data(other.m_data)
-, m_length(other.m_length)
-, m_bConstant(other.m_bConstant)
-, m_buffer(std::move(other.m_buffer))
+: m_data(other.m_data), m_length(other.m_length), m_referenceCount(other.m_referenceCount)
 {
+    other.m_referenceCount = nullptr;
 }
 
-UnsafeStringView::UnsafeStringView(std::shared_ptr<const std::string>&& buffer)
-: m_data(buffer != nullptr ? buffer->data() : "")
-, m_length(buffer != nullptr ? buffer->length() : 0)
-, m_buffer(std::move(buffer))
+UnsafeStringView::~UnsafeStringView()
 {
-}
-
-UnsafeStringView::~UnsafeStringView() = default;
+    tryFreeContent();
+};
 
 UnsafeStringView& UnsafeStringView::operator=(const UnsafeStringView& other)
 {
     m_data = other.m_data;
     m_length = other.m_length;
-    m_bConstant = other.m_bConstant;
-    m_buffer = other.m_buffer;
+    m_referenceCount = other.m_referenceCount;
+    if (((uint64_t) m_referenceCount > ConstanceReference)) {
+        (*m_referenceCount)++;
+    }
     return *this;
 }
 
@@ -89,8 +84,8 @@ UnsafeStringView& UnsafeStringView::operator=(UnsafeStringView&& other)
 {
     m_data = other.m_data;
     m_length = other.m_length;
-    m_bConstant = other.m_bConstant;
-    m_buffer = std::move(other.m_buffer);
+    m_referenceCount = other.m_referenceCount;
+    other.m_referenceCount = nullptr;
     return *this;
 }
 
@@ -150,20 +145,6 @@ bool UnsafeStringView::empty() const
 const char& UnsafeStringView::at(off_t off) const
 {
     return m_data[off];
-}
-
-void UnsafeStringView::assign(std::shared_ptr<const std::string>&& buffer)
-{
-    m_bConstant = false;
-    if (buffer != nullptr) {
-        m_data = buffer->data();
-        m_length = buffer->length();
-        m_buffer = std::move(buffer);
-    } else {
-        m_data = nullptr;
-        m_length = 0;
-        m_buffer = nullptr;
-    }
 }
 
 #pragma mark - UnsafeStringView - Comparison
@@ -245,88 +226,121 @@ size_t UnsafeStringView::find(const UnsafeStringView& other) const
 #pragma mark - UnsafeStringView - Modifier
 void UnsafeStringView::clear()
 {
-    assign(nullptr);
+    tryFreeContent();
+    m_referenceCount = nullptr;
+    m_data = "";
+    m_length = 0;
+}
+
+void UnsafeStringView::tryFreeContent()
+{
+    if ((uint64_t) m_referenceCount <= ConstanceReference) {
+        return;
+    }
+    (*m_referenceCount)--;
+    if (*m_referenceCount == 0) {
+        m_referenceCount->~atomic<int>();
+        free(m_referenceCount);
+    }
 }
 
 #pragma mark - StringView - Constructor
 StringView::StringView() = default;
-StringView::~StringView() = default;
 
-StringView::StringView(const char* string)
-: UnsafeStringView(string != nullptr ? std::make_shared<const std::string>(string) : nullptr)
+void StringView::constructString(const char* content, size_t length)
 {
+    if (content == nullptr) {
+        return;
+    }
+    if (length == 0) {
+        length = strlen(content);
+    }
+    constexpr int referenceSize = sizeof(std::atomic<int>);
+    m_referenceCount = (std::atomic<int>*) malloc(referenceSize + length + 1);
+    if (m_referenceCount == nullptr) {
+        return;
+    }
+    new (m_referenceCount) std::atomic<int>(1);
+    char* data = (char*) (m_referenceCount + 1);
+    memcpy(data, (void*) content, length);
+    data[length] = '\0';
+    m_data = data;
+    m_length = length;
 }
 
-StringView::StringView(const char* string, size_t length)
-: UnsafeStringView(string != nullptr ? std::make_shared<const std::string>(string, length) : nullptr)
+void StringView::assignString(const char* content, size_t length)
 {
+    if (content == nullptr) {
+        clear();
+        return;
+    }
+    if (length == 0) {
+        length = strlen(content);
+    }
+
+    constexpr int referenceSize = sizeof(std::atomic<int>);
+    m_referenceCount = (std::atomic<int>*) malloc(referenceSize + length + 1);
+    if (m_referenceCount == nullptr) {
+        clear();
+        return;
+    } else {
+        tryFreeContent();
+    }
+    new (m_referenceCount) std::atomic<int>(1);
+    char* data = (char*) (m_referenceCount + 1);
+    memcpy(data, (void*) content, length);
+    data[length] = '\0';
+    m_data = data;
+    m_length = length;
 }
 
-StringView::StringView(std::string&& string)
-: UnsafeStringView(std::make_shared<const std::string>(std::move(string)))
+StringView::StringView(const char* string) : UnsafeStringView()
 {
+    constructString(string, 0);
+}
+
+StringView::StringView(const char* string, size_t length) : UnsafeStringView()
+{
+    constructString(string, length);
+}
+
+StringView::StringView(std::string&& string) : UnsafeStringView()
+{
+    constructString(string.data(), string.length());
 }
 
 StringView::StringView(const UnsafeStringView& other)
-: UnsafeStringView(other.m_buffer != nullptr ?
-                   std::shared_ptr<const std::string>(other.m_buffer) :
-                   (other.empty() || other.m_bConstant ?
-                    nullptr :
-                    std::make_shared<std::string>(other.data(), other.length())))
+: UnsafeStringView(other.m_referenceCount != nullptr ? other : UnsafeStringView())
 {
-    if (other.m_bConstant) {
-        m_data = other.m_data;
-        m_length = other.m_length;
-        m_bConstant = true;
+    if (other.m_referenceCount == nullptr) {
+        constructString(other.m_data, other.m_length);
     }
 }
 
 StringView::StringView(UnsafeStringView&& other)
-: UnsafeStringView(other.m_buffer != nullptr ?
-                   std::move(other.m_buffer) :
-                   (other.empty() || other.m_bConstant ?
-                    nullptr :
-                    std::make_shared<std::string>(other.data(), other.length())))
+: UnsafeStringView(other.m_referenceCount != nullptr ? std::move(other) : UnsafeStringView())
 {
-    if (other.m_bConstant) {
-        m_data = other.m_data;
-        m_length = other.m_length;
-        m_bConstant = true;
+    if (other.m_referenceCount == nullptr) {
+        constructString(other.m_data, other.m_length);
     }
 }
 
 StringView& StringView::operator=(const UnsafeStringView& other)
 {
-    if (other.m_buffer != nullptr) {
+    if (other.m_referenceCount != nullptr) {
         UnsafeStringView::operator=(other);
-    } else if (!other.empty()) {
-        if (other.m_bConstant) {
-            m_data = other.m_data;
-            m_length = other.m_length;
-            m_bConstant = true;
-        } else {
-            assign(std::make_shared<const std::string>(other.data(), other.length()));
-        }
     } else {
-        assign(nullptr);
+        assignString(other.m_data, other.m_length);
     }
     return *this;
 }
 
 StringView& StringView::operator=(UnsafeStringView&& other)
 {
-    if (other.m_buffer != nullptr) {
+    if (other.m_referenceCount != nullptr) {
         UnsafeStringView::operator=(std::move(other));
-    } else if (!other.empty()) {
-        if (other.m_bConstant) {
-            m_data = other.m_data;
-            m_length = other.m_length;
-            m_bConstant = true;
-        } else {
-            assign(std::make_shared<const std::string>(other.data(), other.length()));
-        }
     } else {
-        assign(nullptr);
+        assignString(other.m_data, other.m_length);
     }
     return *this;
 }
@@ -372,7 +386,7 @@ StringView StringView::makeConstant(const char* string)
     if (string != nullptr) {
         ret.m_data = string;
         ret.m_length = strlen(string);
-        ret.m_bConstant = true;
+        ret.m_referenceCount = (std::atomic<int>*) ConstanceReference;
     }
     return ret;
 }

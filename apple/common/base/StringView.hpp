@@ -54,7 +54,7 @@ public:
     const char& operator[](off_t off) const;
     operator std::string() const;
 
-    virtual ~UnsafeStringView();
+    ~UnsafeStringView();
 
     const char* data() const;
     size_t length() const;
@@ -62,16 +62,12 @@ public:
     bool empty() const;
     const char& at(off_t off) const;
 
-protected:
-    UnsafeStringView(std::shared_ptr<const std::string>&& buffer);
-    void assign(std::shared_ptr<const std::string>&& buffer);
-
 private:
     friend class StringView;
+    static constexpr int ConstanceReference = 1;
     const char* m_data;
     size_t m_length;
-    bool m_bConstant;
-    std::shared_ptr<const std::string> m_buffer;
+    std::atomic<int>* m_referenceCount;
 
 #pragma mark - UnsafeStringView - Comparison
 public:
@@ -93,6 +89,9 @@ public:
 #pragma mark - UnsafeStringView - Modifiers
 public:
     void clear();
+
+protected:
+    void tryFreeContent();
 
 private:
 #pragma mark - UnsafeStringView - Convertible
@@ -119,7 +118,6 @@ public:
     explicit StringView(const UnsafeStringView& other);
     StringView(UnsafeStringView&& other);
     StringView(std::string&& string);
-    ~StringView() override final;
 
     StringView& operator=(const UnsafeStringView& other);
     StringView& operator=(UnsafeStringView&& other);
@@ -128,6 +126,10 @@ public:
     static StringView formatted(const char* format, ...);
     static StringView hexString(const UnsafeData& data);
     static StringView makeConstant(const char* string);
+
+protected:
+    void constructString(const char* content, size_t length);
+    void assignString(const char* content, size_t length);
 };
 
 struct StringViewComparator {
