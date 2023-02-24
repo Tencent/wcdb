@@ -48,7 +48,7 @@
 
     [self doTestObjects:@[ object ]
               andNumber:1
-           ofInsertSQLs:@"INSERT INTO main.testTable(integerObject, doubleObject, stringObject, dataObject) VALUES(?1, ?2, ?3, ?4)"
+           ofInsertSQLs:@"INSERT INTO testTable(integerObject, doubleObject, stringObject, dataObject) VALUES(?1, ?2, ?3, ?4)"
          afterInsertion:^BOOL {
              return [self.database insertObject:object intoTable:self.tableName];
          }];

@@ -33,26 +33,26 @@ class StatementDeleteTests: BaseTestCase {
         let column1 = Column(named: "column1")
         let column2 = Column(named: "column2")
 
-        WINQAssertEqual(generateStatementDelete().`where`(column1 > 1), "DELETE FROM main.testTable WHERE column1 > 1")
+        WINQAssertEqual(generateStatementDelete().`where`(column1 > 1), "DELETE FROM testTable WHERE column1 > 1")
 
         WINQAssertEqual(StatementDelete().delete(from: "testTable".asQualifiedTable().of(schema: "testSchema")).`where`(column1 > 1), "DELETE FROM testSchema.testTable WHERE column1 > 1")
 
         WINQAssertEqual(
             generateStatementDelete().order(by: column1.asOrder(), column2.asOrder()),
-            "DELETE FROM main.testTable ORDER BY column1, column2")
+            "DELETE FROM testTable ORDER BY column1, column2")
 
-        WINQAssertEqual(generateStatementDelete().limit(1), "DELETE FROM main.testTable LIMIT 1")
+        WINQAssertEqual(generateStatementDelete().limit(1), "DELETE FROM testTable LIMIT 1")
 
-        WINQAssertEqual(generateStatementDelete().limit(from: 1, to: 2), "DELETE FROM main.testTable LIMIT 1, 2")
+        WINQAssertEqual(generateStatementDelete().limit(from: 1, to: 2), "DELETE FROM testTable LIMIT 1, 2")
 
-        WINQAssertEqual(generateStatementDelete().limit(1).offset(3), "DELETE FROM main.testTable LIMIT 1 OFFSET 3")
+        WINQAssertEqual(generateStatementDelete().limit(1).offset(3), "DELETE FROM testTable LIMIT 1 OFFSET 3")
 
         WINQAssertEqual(
             generateStatementDelete()
                 .`where`(column1 > 1)
                 .order(by: column1.asOrder(), column2.asOrder())
                 .limit(1).offset(2),
-            "DELETE FROM main.testTable WHERE column1 > 1 ORDER BY column1, column2 LIMIT 1 OFFSET 2"
+            "DELETE FROM testTable WHERE column1 > 1 ORDER BY column1, column2 LIMIT 1 OFFSET 2"
         )
 
         WINQAssertEqual(
@@ -60,7 +60,7 @@ class StatementDeleteTests: BaseTestCase {
                 .with(CommonTableExpression("testTable").as(StatementSelect().select(1)))
                 .delete(from: "testTable")
                 .`where`(column1 > 1),
-            "WITH testTable AS(SELECT 1) DELETE FROM main.testTable WHERE column1 > 1"
+            "WITH testTable AS(SELECT 1) DELETE FROM testTable WHERE column1 > 1"
         )
     }
 }

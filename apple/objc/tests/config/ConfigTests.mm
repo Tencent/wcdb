@@ -71,7 +71,7 @@
         forName:self.configName];
 
         self.expectMode = DatabaseTestCaseExpectSomeSQLs;
-        [self doTestSQLs:@[ @"PRAGMA main.secure_delete = TRUE" ]
+        [self doTestSQLs:@[ @"PRAGMA secure_delete = TRUE" ]
              inOperation:^BOOL {
                  [self.database close];
                  return [self.database canOpen];

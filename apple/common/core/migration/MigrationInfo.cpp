@@ -111,7 +111,7 @@ Schema MigrationUserInfo::getSchemaForSourceDatabase() const
     if (isCrossDatabase()) {
         return getSchemaForDatabase(getSourceDatabase());
     }
-    return Schema::main();
+    return Schema();
 }
 
 #pragma mark - MigrationInfo
@@ -130,7 +130,7 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
         m_statementForAttachingSchema
         = StatementAttach().attach(getSourceDatabase()).as(m_schemaForSourceDatabase);
     } else {
-        m_schemaForSourceDatabase = Schema::main();
+        m_schemaForSourceDatabase = Schema();
     }
 
     Column rowid = Column::rowid();
@@ -152,18 +152,17 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
         stream << getUnionedViewPrefix() << getTable();
         m_unionedView = StringView(stream.str());
 
-        m_statementForCreatingUnionedView
-        = StatementCreateView()
-          .createView(m_unionedView)
-          .temp()
-          .ifNotExists()
-          .columns(columns)
-          .as(StatementSelect()
-              .select(resultColumns)
-              .from(TableOrSubquery(getTable()).schema(Schema::main()))
-              .unionAll()
-              .select(resultColumns)
-              .from(sourceTableQuery));
+        m_statementForCreatingUnionedView = StatementCreateView()
+                                            .createView(m_unionedView)
+                                            .temp()
+                                            .ifNotExists()
+                                            .columns(columns)
+                                            .as(StatementSelect()
+                                                .select(resultColumns)
+                                                .from(TableOrSubquery(getTable()))
+                                                .unionAll()
+                                                .select(resultColumns)
+                                                .from(sourceTableQuery));
     }
 
     // Migrate
@@ -173,7 +172,6 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
         m_statementForMigratingOneRow = StatementInsert()
                                         .insertIntoTable(getTable())
                                         .orReplace()
-                                        .schema(Schema::main())
                                         .columns(columns)
                                         .values(StatementSelect()
                                                 .select(resultColumns)
@@ -233,7 +231,7 @@ StatementDetach MigrationInfo::getStatementForDetachingSchema(const Schema& sche
 
 StatementPragma MigrationInfo::getStatementForSelectingDatabaseList()
 {
-    return StatementPragma().pragma(Pragma::databaseList()).schema(Schema::main());
+    return StatementPragma().pragma(Pragma::databaseList());
 }
 
 #pragma mark - View
@@ -302,7 +300,7 @@ StatementInsert MigrationInfo::getStatementForMigrating(const Syntax::InsertSTMT
     StatementInsert statement(stmt);
 
     auto& syntax = statement.syntax();
-    syntax.schema = Schema::main();
+    syntax.schema = Schema();
     syntax.table = getTable();
     WCTAssert(!syntax.isMultiWrite());
 

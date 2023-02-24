@@ -54,7 +54,7 @@
 
     NSMutableArray<NSString *> *expectedFootprints = [[NSMutableArray alloc] initWithObjects:
                                                                              @"BEGIN IMMEDIATE",
-                                                                             @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)",
+                                                                             @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)",
                                                                              @"COMMIT",
                                                                              nil];
     self.database->tracePerformance(nullptr);
@@ -77,7 +77,7 @@
             && strcmp(error.getPath().data(), self.path.UTF8String) == 0
             && error.getTag().value() == self.database->getTag()
             && error.code() == WCDB::Error::Code::Error
-            && strcmp(error.getSQL().data(), "SELECT 1 FROM main.dummy") == 0) {
+            && strcmp(error.getSQL().data(), "SELECT 1 FROM dummy") == 0) {
             tested = YES;
         }
     });
@@ -95,7 +95,7 @@
         TestCaseAssertEqual(error.getTag().value(), self.database->getTag());
         if (error.level == WCDB::Error::Level::Error
             && error.code() == WCDB::Error::Code::Error
-            && strcmp(error.getSQL().data(), "SELECT 1 FROM main.dummy") == 0) {
+            && strcmp(error.getSQL().data(), "SELECT 1 FROM dummy") == 0) {
             tested = YES;
         }
     });
@@ -127,7 +127,7 @@
 
     NSMutableArray<NSString *> *expectedFootprints = [[NSMutableArray alloc] initWithObjects:
                                                                              @"BEGIN IMMEDIATE",
-                                                                             @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)",
+                                                                             @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)",
                                                                              @"COMMIT",
                                                                              nil];
     WCDB::Database::globalTracePerformance([&](const WCDB::UnsafeStringView &, const WCDB::UnsafeStringView &sql, double, const void *) {

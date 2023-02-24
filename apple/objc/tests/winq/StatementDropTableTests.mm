@@ -76,9 +76,9 @@
 {
     auto testingSQL = WCDB::StatementDropTable().dropTable(table).ifExists();
 
-    auto testingTypes = { WCDB::SQL::Type::DropTableSTMT, WCDB::SQL::Type::Schema };
+    auto testingTypes = { WCDB::SQL::Type::DropTableSTMT };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"DROP TABLE IF EXISTS main.testTable");
+    TestCaseAssertSQLEqual(testingSQL, @"DROP TABLE IF EXISTS testTable");
 }
 
 @end

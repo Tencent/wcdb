@@ -41,7 +41,7 @@
 - (void)test_database_delete
 {
     [self doTestObjects:{}
-    andSQL:@"DELETE FROM main.testTable"
+    andSQL:@"DELETE FROM testTable"
     afterModification:^BOOL {
         return self.database->deleteObjects(self.tableName.UTF8String);
     }];
@@ -50,7 +50,7 @@
 - (void)test_database_delete_where
 {
     [self doTestObjects:self.object1
-                 andSQL:@"DELETE FROM main.testTable WHERE identifier == 2"
+                 andSQL:@"DELETE FROM testTable WHERE identifier == 2"
       afterModification:^BOOL {
           return self.database->deleteObjects(self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) == 2);
       }];
@@ -59,7 +59,7 @@
 - (void)test_database_delete_where_order_limit
 {
     [self doTestObjects:self.object1
-                 andSQL:@"DELETE FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
+                 andSQL:@"DELETE FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
       afterModification:^BOOL {
           return self.database->deleteObjects(self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1);
       }];
@@ -69,7 +69,7 @@
 - (void)test_table_delete
 {
     [self doTestObjects:{}
-    andSQL:@"DELETE FROM main.testTable"
+    andSQL:@"DELETE FROM testTable"
     afterModification:^BOOL {
         return self.table.deleteObjects();
     }];
@@ -78,7 +78,7 @@
 - (void)test_table_delete_where
 {
     [self doTestObjects:self.object1
-                 andSQL:@"DELETE FROM main.testTable WHERE identifier == 2"
+                 andSQL:@"DELETE FROM testTable WHERE identifier == 2"
       afterModification:^BOOL {
           return self.table.deleteObjects(WCDB_FIELD(CPPTestCaseObject::identifier) == 2);
       }];
@@ -87,7 +87,7 @@
 - (void)test_table_delete_where_order_limit
 {
     [self doTestObjects:self.object1
-                 andSQL:@"DELETE FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
+                 andSQL:@"DELETE FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
       afterModification:^BOOL {
           return self.table.deleteObjects(WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1);
       }];

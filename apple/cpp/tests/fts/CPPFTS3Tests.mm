@@ -74,27 +74,27 @@
     CPPFTS3Object object("苹果树", "");
     TestCaseAssertTrue(self.ftsTable.insertObjects(object));
     [self doTestRows:{ CPPOneRowValueExtract(object) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '苹' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '苹' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("苹")).value());
          }];
     [self doTestRows:{ CPPOneRowValueExtract(object) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '苹果' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '苹果' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("苹果")).value());
          }];
     [self doTestRows:{ CPPOneRowValueExtract(object) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '苹果树' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '苹果树' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("苹果树")).value());
          }];
     [self doTestRows:{ CPPOneRowValueExtract(object) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '果树' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '果树' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("果树")).value());
          }];
     [self doTestRows:{ CPPOneRowValueExtract(object) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '树' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '树' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("树")).value());
          }];
@@ -105,12 +105,12 @@
     CPPFTS3Object object("我們是程序員", "");
     TestCaseAssertTrue(self.ftsTable.insertObjects(object));
     [self doTestRows:{ CPPOneRowValueExtract(object) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '我們是程序員' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '我們是程序員' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("我們是程序員")).value());
          }];
     [self doTestRows:{ CPPOneRowValueExtract(object) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '我们是程序员' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '我们是程序员' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("我们是程序员")).value());
          }];
@@ -122,47 +122,47 @@
     TestCaseAssertTrue(self.ftsTable.insertObjects(object));
 
     [self doTestRows:{ CPPOneRowValueExtract(object) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'WCDB' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'WCDB' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("WCDB")).value());
          }];
     [self doTestRows:{ CPPOneRowValueExtract(object) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'WeChat' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'WeChat' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("WeChat")).value());
          }];
 
     // case insensive
     [self doTestRows:{ CPPOneRowValueExtract(object) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'DATABASE' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'DATABASE' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("DATABASE")).value());
          }];
 
     // stemming
     [self doTestRows:{ CPPOneRowValueExtract(object) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'developer' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'developer' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("developer")).value());
          }];
 
     // prefix
     [self doTestRows:{ CPPOneRowValueExtract(object) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'plat*' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'plat*' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("plat*")).value());
          }];
 
     // phrase
     [self doTestRows:{ CPPOneRowValueExtract(object) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'dat* fram*' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'dat* fram*' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("dat* fram*")).value());
          }];
 
     // bad case
     [self doTestRows:{}
-    andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'Hello' ORDER BY rowid ASC"
+    andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'Hello' ORDER BY rowid ASC"
     bySelecting:^WCDB::OptionalMultiRows {
         return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("Hello")).value());
     }];
@@ -174,24 +174,24 @@
     TestCaseAssertTrue(self.ftsTable.insertObjects(object));
 
     [self doTestRows:{ CPPOneRowValueExtract(object) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '123' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '123' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("123")).value());
          }];
     [self doTestRows:{ CPPOneRowValueExtract(object) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '456' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '456' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("456")).value());
          }];
     [self doTestRows:{ CPPOneRowValueExtract(object) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '789' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '789' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("789")).value());
          }];
 
     // bad case
     [self doTestRows:{}
-    andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '567' ORDER BY rowid ASC"
+    andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '567' ORDER BY rowid ASC"
     bySelecting:^WCDB::OptionalMultiRows {
         return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("567")).value());
     }];
@@ -203,22 +203,22 @@
     TestCaseAssertTrue(self.ftsTable.insertObjects(object));
 
     [self doTestRows:{ CPPOneRowValueExtract(object) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '中' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '中' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("中")).value());
          }];
     [self doTestRows:{ CPPOneRowValueExtract(object) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'English' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'English' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("English")).value());
          }];
     [self doTestRows:{ CPPOneRowValueExtract(object) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '語' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '語' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("語")).value());
          }];
     [self doTestRows:{ CPPOneRowValueExtract(object) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '123' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '123' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("123")).value());
          }];
@@ -233,27 +233,27 @@
     TestCaseAssertTrue(self.ftsTable.insertObjects(extension));
 
     [self doTestRows:{ CPPOneRowValueExtract(content) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'error_prone' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'error_prone' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("error_prone")).value());
          }];
     [self doTestRows:{ CPPOneRowValueExtract(extension) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE extension MATCH 'error_prone' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE extension MATCH 'error_prone' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::extension).match("error_prone")).value());
          }];
     [self doTestRows:{ CPPOneRowValueExtract(content), CPPOneRowValueExtract(extension) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE testTable MATCH 'error_prone' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE testTable MATCH 'error_prone' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB::Column(self.tableName.UTF8String).match("error_prone")).value());
          }];
     [self doTestRows:{ CPPOneRowValueExtract(content) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE testTable MATCH 'content: error_prone' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE testTable MATCH 'content: error_prone' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB::Column(self.tableName.UTF8String).match("content: error_prone")).value());
          }];
     [self doTestRows:{ CPPOneRowValueExtract(extension) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE testTable MATCH 'extension: error_prone' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE testTable MATCH 'extension: error_prone' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB::Column(self.tableName.UTF8String).match("extension: error_prone")).value());
          }];
@@ -271,24 +271,24 @@
     TestCaseAssertTrue(self.ftsTable.insertObjects(objectWithEleventGaps));
 
     [self doTestRows:{ CPPOneRowValueExtract(objectWithOneGaps) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'Cowherd NEAR/1 WeaverGirl' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'Cowherd NEAR/1 WeaverGirl' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("Cowherd NEAR/1 WeaverGirl")).value());
          }];
     [self doTestRows:{ CPPOneRowValueExtract(objectWithOneGaps), CPPOneRowValueExtract(objectWithTenGaps) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'Cowherd NEAR/10 WeaverGirl' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'Cowherd NEAR/10 WeaverGirl' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("Cowherd NEAR/10 WeaverGirl")).value());
          }];
     [self doTestRows:{ CPPOneRowValueExtract(objectWithOneGaps), CPPOneRowValueExtract(objectWithTenGaps), CPPOneRowValueExtract(objectWithEleventGaps) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'Cowherd NEAR/11 WeaverGirl' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'Cowherd NEAR/11 WeaverGirl' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("Cowherd NEAR/11 WeaverGirl")).value());
          }];
 
     // default behaviours
     [self doTestRows:{ CPPOneRowValueExtract(objectWithOneGaps), CPPOneRowValueExtract(objectWithTenGaps) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'Cowherd NEAR WeaverGirl' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'Cowherd NEAR WeaverGirl' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("Cowherd NEAR WeaverGirl")).value());
          }];
@@ -306,17 +306,17 @@
     TestCaseAssertTrue(self.ftsTable.insertObjects(cd));
 
     [self doTestRows:{ CPPOneRowValueExtract(bc) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'b AND c' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'b AND c' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("b AND c")).value());
          }];
     [self doTestRows:{ CPPOneRowValueExtract(ab), CPPOneRowValueExtract(bc), CPPOneRowValueExtract(cd) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'b OR c' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'b OR c' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("b OR c")).value());
          }];
     [self doTestRows:{ CPPOneRowValueExtract(ab) }
-              andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'b NOT c' ORDER BY rowid ASC"
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'b NOT c' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("b NOT c")).value());
          }];
@@ -342,7 +342,7 @@
           "0 0 14 4 " // The word at offset 14 length 4 in the column [content] is matching the query [f*], which is "four".
           "1 0 0 4 "  // The word at offset 0 length 4 in the column [extension] is matching the query [f*], which is "five".
           "1 1 26 3"  // The word at offset 26 length 3 in the column [extension] is matching the query [t*], which is "ten".
-               andSQL:@"SELECT offsets(testTable) FROM main.testTable WHERE testTable MATCH 'f* t*' ORDER BY rowid ASC"
+               andSQL:@"SELECT offsets(testTable) FROM testTable WHERE testTable MATCH 'f* t*' ORDER BY rowid ASC"
           bySelecting:^WCDB::OptionalValue {
               WCDB::Column tableColumn(self.tableName.UTF8String);
               return self.database->getValueFromStatement(WCDB::StatementSelect().select(tableColumn.offsets()).from(self.tableName.UTF8String).where(tableColumn.match("f* t*")).order(WCDB::OrderingTerm::ascendingRowid()));
@@ -363,7 +363,7 @@
 //    [self doTestColumn:{ "dummy /* extension */"
 //                         "...WCDB have more /* efficient */ performance.",
 //                         "/* Encryption */ Support, Corruption recovery..." }
-//                andSQL:@"SELECT snippet(testTable, '/* ', ' */', '...', -1, 5) FROM main.testTable WHERE extension MATCH 'e*' ORDER BY rowid ASC"
+//                andSQL:@"SELECT snippet(testTable, '/* ', ' */', '...', -1, 5) FROM testTable WHERE extension MATCH 'e*' ORDER BY rowid ASC"
 //           bySelecting:^WCDB::OptionalOneColumn {
 //               const char *startMatchText = "/* ";
 //               const char *endMatchText = " */";
@@ -413,7 +413,7 @@
     NSArray *querys = @[ @"！@…&*'  '\"\"#￥%…", @"！@…&*'  '\"\"" ];
     for (NSString *query in querys) {
         [self doTestRows:{ CPPOneRowValueExtract(content) }
-                  andSQL:[NSString stringWithFormat:@"SELECT content FROM main.testTable WHERE content MATCH '%@' ORDER BY rowid ASC", [query stringByReplacingOccurrencesOfString:@"'" withString:@"''"]]
+                  andSQL:[NSString stringWithFormat:@"SELECT content FROM testTable WHERE content MATCH '%@' ORDER BY rowid ASC", [query stringByReplacingOccurrencesOfString:@"'" withString:@"''"]]
              bySelecting:^WCDB::OptionalMultiRows {
                  return CPPMultiRowValueExtract(self.database->getAllObjects<CPPFTS3SymbolObject>(self.tableName.UTF8String, WCDB_FIELD(CPPFTS3SymbolObject::content).match(query.UTF8String)).value());
              }];
@@ -428,7 +428,7 @@
     querys = @[ @"abc@123*def_567", @"abc@123*def" ];
     for (NSString *query in querys) {
         [self doTestRows:{ CPPOneRowValueExtract(content) }
-                  andSQL:[NSString stringWithFormat:@"SELECT content FROM main.testTable WHERE content MATCH '%@' ORDER BY rowid ASC", query]
+                  andSQL:[NSString stringWithFormat:@"SELECT content FROM testTable WHERE content MATCH '%@' ORDER BY rowid ASC", query]
              bySelecting:^WCDB::OptionalMultiRows {
                  return CPPMultiRowValueExtract(self.database->getAllObjects<CPPFTS3SymbolObject>(self.tableName.UTF8String, WCDB_FIELD(CPPFTS3SymbolObject::content).match(query.UTF8String)).value());
              }];

@@ -78,9 +78,9 @@
 {
     auto testingSQL = WCDB::StatementPragma().pragma(pragma).to(value);
 
-    auto testingTypes = { WCDB::SQL::Type::PragmaSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Pragma, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::PragmaSTMT, WCDB::SQL::Type::Pragma, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"PRAGMA main.testPragma = 1");
+    TestCaseAssertSQLEqual(testingSQL, @"PRAGMA testPragma = 1");
 }
 
 - (void)test_pragma_with

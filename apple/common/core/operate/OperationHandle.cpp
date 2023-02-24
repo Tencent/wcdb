@@ -33,7 +33,7 @@ namespace WCDB {
 
 OperationHandle::OperationHandle()
 : m_statementForIntegrityCheck(
-StatementPragma().pragma(Pragma::integrityCheck()).with(1).schema(Schema::main()))
+StatementPragma().pragma(Pragma::integrityCheck()).with(1))
 , m_statementForReadTransaction(StatementBegin().beginDeferred())
 , m_statementForAcquireReadLock(
   StatementSelect().select(1).from(Syntax::masterTable).limit(0))

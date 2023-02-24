@@ -62,7 +62,7 @@
     __block CPPTestCaseObject autoIncrementObject = CPPTestCaseObject::autoIncrementObject(self.object3.content);
     [self doTestObjects:{ self.object1, self.object2, self.object3 }
               andNumber:1
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              BOOL result = self.database->insertObjects<CPPTestCaseObject>(autoIncrementObject, self.tableName.UTF8String);
              if (result) {
@@ -78,7 +78,7 @@
     __block CPPTestCaseObject autoIncrementObject = CPPTestCaseObject::autoIncrementObject(self.object3.content);
     [self doTestObjects:{ self.object1, self.object2, self.object3 }
               andNumber:1
-           ofInsertSQLs:@"INSERT INTO main.testTable(content) VALUES(?1)"
+           ofInsertSQLs:@"INSERT INTO testTable(content) VALUES(?1)"
          afterInsertion:^BOOL {
              BOOL result = self.database->insertObjects<CPPTestCaseObject>(autoIncrementObject, self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::content));
              if (result) {
@@ -94,7 +94,7 @@
 {
     [self doTestObjects:{ self.object1, self.object2, self.object3 }
               andNumber:1
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return self.database->insertObjects<CPPTestCaseObject>(self.object3, self.tableName.UTF8String);
          }];
@@ -104,7 +104,7 @@
 {
     [self doTestObjects:{ self.object1, self.object2, self.object3, self.object4 }
               andNumber:2
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return self.database->insertObjects<CPPTestCaseObject>({ self.object3, self.object4 }, self.tableName.UTF8String);
          }];
@@ -115,7 +115,7 @@
 {
     [self doTestObjects:{ self.renewedObject1, self.object2 }
               andNumber:1
-           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return self.database->insertOrReplaceObjects<CPPTestCaseObject>(self.renewedObject1, self.tableName.UTF8String);
          }];
@@ -125,7 +125,7 @@
 {
     [self doTestObjects:{ self.renewedObject1, self.renewedObject2 }
               andNumber:2
-           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return self.database->insertOrReplaceObjects<CPPTestCaseObject>({ self.renewedObject1, self.renewedObject2 }, self.tableName.UTF8String);
          }];
@@ -136,7 +136,7 @@
 {
     [self doTestObjects:{ self.object1, self.object2, self.partialObject3 }
               andNumber:1
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return self.database->insertObjects<CPPTestCaseObject>(self.object3, self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier));
          }];
@@ -146,7 +146,7 @@
 {
     [self doTestObjects:{ self.object1, self.object2, self.partialObject3, self.partialObject4 }
               andNumber:2
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return self.database->insertObjects<CPPTestCaseObject>({ self.object3, self.object4 }, self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier));
          }];
@@ -157,7 +157,7 @@
 {
     [self doTestObjects:{ self.renewedPartialObject1, self.object2 }
               andNumber:1
-           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return self.database->insertOrReplaceObjects<CPPTestCaseObject>(self.object1, self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier));
          }];
@@ -167,7 +167,7 @@
 {
     [self doTestObjects:{ self.renewedPartialObject1, self.renewedPartialObject2 }
               andNumber:2
-           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return self.database->insertOrReplaceObjects<CPPTestCaseObject>({ self.object1, self.object2 }, self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier));
          }];
@@ -178,7 +178,7 @@
 {
     [self doTestObjects:{ self.object1, self.object2, self.object3 }
               andNumber:1
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return self.table.insertObjects(self.object3);
          }];
@@ -188,7 +188,7 @@
 {
     [self doTestObjects:{ self.object1, self.object2, self.object3, self.object4 }
               andNumber:2
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return self.table.insertObjects({ self.object3, self.object4 });
          }];
@@ -199,7 +199,7 @@
 {
     [self doTestObjects:{ self.renewedObject1, self.object2 }
               andNumber:1
-           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return self.table.insertOrReplaceObjects(self.renewedObject1);
          }];
@@ -209,7 +209,7 @@
 {
     [self doTestObjects:{ self.renewedObject1, self.renewedObject2 }
               andNumber:2
-           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return self.table.insertOrReplaceObjects({ self.renewedObject1, self.renewedObject2 });
          }];
@@ -220,7 +220,7 @@
 {
     [self doTestObjects:{ self.object1, self.object2, self.partialObject3 }
               andNumber:1
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return self.table.insertObjects(self.object3, WCDB_FIELD(CPPTestCaseObject::identifier));
          }];
@@ -230,7 +230,7 @@
 {
     [self doTestObjects:{ self.object1, self.object2, self.partialObject3, self.partialObject4 }
               andNumber:2
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return self.table.insertObjects({ self.object3, self.object4 }, WCDB_FIELD(CPPTestCaseObject::identifier));
          }];
@@ -241,7 +241,7 @@
 {
     [self doTestObjects:{ self.renewedPartialObject1, self.object2 }
               andNumber:1
-           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return self.table.insertOrReplaceObjects(self.object1, WCDB_FIELD(CPPTestCaseObject::identifier));
          }];
@@ -251,7 +251,7 @@
 {
     [self doTestObjects:{ self.renewedPartialObject1, self.renewedPartialObject2 }
               andNumber:2
-           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return self.table.insertOrReplaceObjects({ self.object1, self.object2 }, WCDB_FIELD(CPPTestCaseObject::identifier));
          }];
@@ -262,7 +262,7 @@
 {
     [self doTestObjects:{ self.object1, self.object2, self.object3 }
               andNumber:1
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return self.database->getHandle().insertObjects<CPPTestCaseObject>(self.object3, self.tableName.UTF8String);
          }];
@@ -272,7 +272,7 @@
 {
     [self doTestObjects:{ self.object1, self.object2, self.object3, self.object4 }
               andNumber:2
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return self.database->getHandle().insertObjects<CPPTestCaseObject>({ self.object3, self.object4 }, self.tableName.UTF8String);
          }];
@@ -283,7 +283,7 @@
 {
     [self doTestObjects:{ self.renewedObject1, self.object2 }
               andNumber:1
-           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return self.database->getHandle().insertOrReplaceObjects<CPPTestCaseObject>(self.renewedObject1, self.tableName.UTF8String);
          }];
@@ -293,7 +293,7 @@
 {
     [self doTestObjects:{ self.renewedObject1, self.renewedObject2 }
               andNumber:2
-           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return self.database->getHandle().insertOrReplaceObjects<CPPTestCaseObject>({ self.renewedObject1, self.renewedObject2 }, self.tableName.UTF8String);
          }];
@@ -304,7 +304,7 @@
 {
     [self doTestObjects:{ self.object1, self.object2, self.partialObject3 }
               andNumber:1
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return self.database->getHandle().insertObjects<CPPTestCaseObject>(self.object3, self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier));
          }];
@@ -314,7 +314,7 @@
 {
     [self doTestObjects:{ self.object1, self.object2, self.partialObject3, self.partialObject4 }
               andNumber:2
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return self.database->getHandle().insertObjects<CPPTestCaseObject>({ self.object3, self.object4 }, self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier));
          }];
@@ -325,7 +325,7 @@
 {
     [self doTestObjects:{ self.renewedPartialObject1, self.object2 }
               andNumber:1
-           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return self.database->getHandle().insertOrReplaceObjects<CPPTestCaseObject>(self.object1, self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier));
          }];
@@ -335,7 +335,7 @@
 {
     [self doTestObjects:{ self.renewedPartialObject1, self.renewedPartialObject2 }
               andNumber:2
-           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return self.database->getHandle().insertOrReplaceObjects<CPPTestCaseObject>({ self.object1, self.object2 }, self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier));
          }];

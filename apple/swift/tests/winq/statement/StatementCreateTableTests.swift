@@ -41,7 +41,7 @@ class StatementCreateTableTests: BaseTestCase {
 
         WINQAssertEqual(
             StatementCreateTable().create(table: table1).with(columns: def1, def2),
-            "CREATE TABLE main.table1(column1 INTEGER, column2 TEXT)"
+            "CREATE TABLE table1(column1 INTEGER, column2 TEXT)"
         )
 
         WINQAssertEqual(
@@ -51,7 +51,7 @@ class StatementCreateTableTests: BaseTestCase {
 
         WINQAssertEqual(
             StatementCreateTable().create(table: table1).with(columns: def1, def2).withoutRowid(),
-            "CREATE TABLE main.table1(column1 INTEGER, column2 TEXT) WITHOUT ROWID"
+            "CREATE TABLE table1(column1 INTEGER, column2 TEXT) WITHOUT ROWID"
         )
 
         WINQAssertEqual(
@@ -61,13 +61,13 @@ class StatementCreateTableTests: BaseTestCase {
 
         WINQAssertEqual(
             StatementCreateTable().create(table: table1).ifNotExists().with(columns: def1, def2),
-            "CREATE TABLE IF NOT EXISTS main.table1(column1 INTEGER, column2 TEXT)"
+            "CREATE TABLE IF NOT EXISTS table1(column1 INTEGER, column2 TEXT)"
         )
 
         WINQAssertEqual(
             StatementCreateTable().create(table: table1).with(columns: def1, def2).constraint(constraint1, constraint2),
             """
-            CREATE TABLE main.table1\
+            CREATE TABLE table1\
             (column1 INTEGER, column2 TEXT, \
             CONSTRAINT constraint1 PRIMARY KEY(column1), \
             CONSTRAINT constraint2 UNIQUE(column2))
@@ -76,12 +76,12 @@ class StatementCreateTableTests: BaseTestCase {
 
         WINQAssertEqual(
             StatementCreateTable().create(table: table2).as(statementSelect),
-            "CREATE TABLE main.table2 AS SELECT column1 FROM main.table1"
+            "CREATE TABLE table2 AS SELECT column1 FROM table1"
         )
 
         WINQAssertEqual(
             StatementCreateTable().create(table: table2).ifNotExists().as(statementSelect),
-            "CREATE TABLE IF NOT EXISTS main.table2 AS SELECT column1 FROM main.table1"
+            "CREATE TABLE IF NOT EXISTS table2 AS SELECT column1 FROM table1"
         )
     }
 }

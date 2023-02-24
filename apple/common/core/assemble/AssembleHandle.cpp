@@ -185,7 +185,7 @@ bool AssembleHandle::lazyPrepareCell()
         return true;
     }
 
-    auto optionalMetas = getTableMeta(Schema::main(), m_table);
+    auto optionalMetas = getTableMeta(Schema(), m_table);
     if (!optionalMetas.succeed()) {
         return false;
     }

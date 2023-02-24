@@ -86,9 +86,9 @@
 {
     auto testingSQL = WCDB::StatementAnalyze().analyze().table(table);
 
-    auto testingTypes = { WCDB::SQL::Type::AnalyzeSTMT, WCDB::SQL::Type::Schema };
+    auto testingTypes = { WCDB::SQL::Type::AnalyzeSTMT };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"ANALYZE main.testTable");
+    TestCaseAssertSQLEqual(testingSQL, @"ANALYZE testTable");
 }
 
 - (void)test_analyze_index

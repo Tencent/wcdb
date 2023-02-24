@@ -36,22 +36,22 @@ class StatementCreateViewTests: BaseTestCase {
 
         WINQAssertEqual(
             StatementCreateView().create(view: "testView").with(columns: column1, column2).as(statementSelect),
-            "CREATE VIEW main.testView(column1, column2) AS SELECT column1 FROM main.testTable"
+            "CREATE VIEW testView(column1, column2) AS SELECT column1 FROM testTable"
         )
 
         WINQAssertEqual(
             StatementCreateView().create(view: "testView", isTemp: true).with(columns: column1, column2).as(statementSelect),
-            "CREATE TEMP VIEW testView(column1, column2) AS SELECT column1 FROM main.testTable"
+            "CREATE TEMP VIEW testView(column1, column2) AS SELECT column1 FROM testTable"
         )
 
         WINQAssertEqual(
             StatementCreateView().create(view: "testView").of(schema: "testSchema").with(columns: column1, column2).as(statementSelect),
-            "CREATE VIEW testSchema.testView(column1, column2) AS SELECT column1 FROM main.testTable"
+            "CREATE VIEW testSchema.testView(column1, column2) AS SELECT column1 FROM testTable"
         )
 
         WINQAssertEqual(
             StatementCreateView().create(view: "testView").ifNotExists().with(columns: column1, column2).as(statementSelect),
-            "CREATE VIEW IF NOT EXISTS main.testView(column1, column2) AS SELECT column1 FROM main.testTable"
+            "CREATE VIEW IF NOT EXISTS testView(column1, column2) AS SELECT column1 FROM testTable"
         )
     }
 }

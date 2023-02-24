@@ -75,10 +75,10 @@
     auto testingSQL = WCDB::StatementAlterTable()
                       .alterTable(table)
                       .renameToTable(newTable);
-    auto testingTypes = { WCDB::SQL::Type::AlterTableSTMT, WCDB::SQL::Type::Schema };
+    auto testingTypes = { WCDB::SQL::Type::AlterTableSTMT };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL,
-                           @"ALTER TABLE main.testTable RENAME TO testNewTable");
+                           @"ALTER TABLE testTable RENAME TO testNewTable");
 }
 
 - (void)test_alter_table_rename_column

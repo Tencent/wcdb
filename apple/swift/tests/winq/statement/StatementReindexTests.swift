@@ -25,10 +25,10 @@ class StatementReindexTests: BaseTestCase {
 
     func testStatementReindex() {
 
-        WINQAssertEqual(StatementReindex().reindex(table: "testTable"), "REINDEX main.testTable")
+        WINQAssertEqual(StatementReindex().reindex(table: "testTable"), "REINDEX testTable")
         WINQAssertEqual(StatementReindex().reindex(table: "testTable").of(schema: "testSchema"), "REINDEX testSchema.testTable")
 
-        WINQAssertEqual(StatementReindex().reindex(index: "testIndex"), "REINDEX main.testIndex")
+        WINQAssertEqual(StatementReindex().reindex(index: "testIndex"), "REINDEX testIndex")
         WINQAssertEqual(StatementReindex().reindex(index: "testIndex").of(schema: "testSchema"), "REINDEX testSchema.testIndex")
 
         WINQAssertEqual(StatementReindex().reindex(collation: "testCollation"), "REINDEX testCollation")

@@ -69,54 +69,54 @@
 {
     auto testingSQL = WCDB::StatementDelete().deleteFrom(table).where(condition).orders(orderingTerms).limit(limit).offset(limitParameter);
 
-    auto testingTypes = { WCDB::SQL::Type::DeleteSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::DeleteSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"DELETE FROM main.testTable WHERE 2 ORDER BY testColumn1, testColumn2 LIMIT 3 OFFSET 4");
+    TestCaseAssertSQLEqual(testingSQL, @"DELETE FROM testTable WHERE 2 ORDER BY testColumn1, testColumn2 LIMIT 3 OFFSET 4");
 }
 
 - (void)test_delete_with
 {
     auto testingSQL = WCDB::StatementDelete().with(with).deleteFrom(table).where(condition).orders(orderingTerms).limit(limit).offset(limitParameter);
 
-    auto testingTypes = { WCDB::SQL::Type::DeleteSTMT, WCDB::SQL::Type::CommonTableExpression, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::DeleteSTMT, WCDB::SQL::Type::CommonTableExpression, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"WITH testTable AS(SELECT 1) DELETE FROM main.testTable WHERE 2 ORDER BY testColumn1, testColumn2 LIMIT 3 OFFSET 4");
+    TestCaseAssertSQLEqual(testingSQL, @"WITH testTable AS(SELECT 1) DELETE FROM testTable WHERE 2 ORDER BY testColumn1, testColumn2 LIMIT 3 OFFSET 4");
 }
 
 - (void)test_delete_without_condition
 {
     auto testingSQL = WCDB::StatementDelete().deleteFrom(table).orders(orderingTerms).limit(limit).offset(limitParameter);
 
-    auto testingTypes = { WCDB::SQL::Type::DeleteSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::DeleteSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"DELETE FROM main.testTable ORDER BY testColumn1, testColumn2 LIMIT 3 OFFSET 4");
+    TestCaseAssertSQLEqual(testingSQL, @"DELETE FROM testTable ORDER BY testColumn1, testColumn2 LIMIT 3 OFFSET 4");
 }
 
 - (void)test_delete_without_orders
 {
     auto testingSQL = WCDB::StatementDelete().deleteFrom(table).where(condition).limit(limit).offset(limitParameter);
 
-    auto testingTypes = { WCDB::SQL::Type::DeleteSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::DeleteSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"DELETE FROM main.testTable WHERE 2 LIMIT 3 OFFSET 4");
+    TestCaseAssertSQLEqual(testingSQL, @"DELETE FROM testTable WHERE 2 LIMIT 3 OFFSET 4");
 }
 
 - (void)test_delete_with_length
 {
     auto testingSQL = WCDB::StatementDelete().deleteFrom(table).where(condition).orders(orderingTerms).limit(limit, limitParameter);
 
-    auto testingTypes = { WCDB::SQL::Type::DeleteSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::DeleteSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"DELETE FROM main.testTable WHERE 2 ORDER BY testColumn1, testColumn2 LIMIT 3, 4");
+    TestCaseAssertSQLEqual(testingSQL, @"DELETE FROM testTable WHERE 2 ORDER BY testColumn1, testColumn2 LIMIT 3, 4");
 }
 
 - (void)test_delete_without_offset
 {
     auto testingSQL = WCDB::StatementDelete().deleteFrom(table).where(condition).orders(orderingTerms).limit(limit);
 
-    auto testingTypes = { WCDB::SQL::Type::DeleteSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::DeleteSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"DELETE FROM main.testTable WHERE 2 ORDER BY testColumn1, testColumn2 LIMIT 3");
+    TestCaseAssertSQLEqual(testingSQL, @"DELETE FROM testTable WHERE 2 ORDER BY testColumn1, testColumn2 LIMIT 3");
 }
 
 @end

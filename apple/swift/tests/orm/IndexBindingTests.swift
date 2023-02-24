@@ -61,18 +61,18 @@ class IndexBindingTests: ORMTestCase {
     func testIndexBinding() {
         ORMIndexBindingAssertEqual(
             BaselineTestObject.self,
-            "CREATE INDEX IF NOT EXISTS main.BaselineTestObject_index ON BaselineTestObject(variable)"
+            "CREATE INDEX IF NOT EXISTS BaselineTestObject_index ON BaselineTestObject(variable)"
         )
 
         ORMIndexBindingAssertEqual(
             UniqueTestObject.self,
-            "CREATE UNIQUE INDEX IF NOT EXISTS main.UniqueTestObject_index ON UniqueTestObject(variable)"
+            "CREATE UNIQUE INDEX IF NOT EXISTS UniqueTestObject_index ON UniqueTestObject(variable)"
         )
 
         ORMIndexBindingAssertEqual(
             MultiIndexesTestObject.self,
             """
-            CREATE INDEX IF NOT EXISTS main.MultiIndexesTestObject_index \
+            CREATE INDEX IF NOT EXISTS MultiIndexesTestObject_index \
             ON MultiIndexesTestObject(variable1, variable2)
             """)
     }

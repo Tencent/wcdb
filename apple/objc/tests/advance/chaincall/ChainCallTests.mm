@@ -40,76 +40,76 @@
 - (void)test_database_delete
 {
     WCTDelete* delete_ = [[self.database prepareDelete] fromTable:self.tableName];
-    TestCaseAssertSQLEqual(delete_.statement, @"DELETE FROM main.testTable");
+    TestCaseAssertSQLEqual(delete_.statement, @"DELETE FROM testTable");
 }
 
 - (void)test_table_delete
 {
     WCTDelete* delete_ = [self.table prepareDelete];
-    TestCaseAssertSQLEqual(delete_.statement, @"DELETE FROM main.testTable");
+    TestCaseAssertSQLEqual(delete_.statement, @"DELETE FROM testTable");
 }
 
 - (void)test_handle_delete
 {
     WCTDelete* delete_ = [[[self.database getHandle] prepareDelete] fromTable:self.tableName];
-    TestCaseAssertSQLEqual(delete_.statement, @"DELETE FROM main.testTable");
+    TestCaseAssertSQLEqual(delete_.statement, @"DELETE FROM testTable");
 }
 
 #pragma mark - Insert
 - (void)test_database_insert
 {
     WCTInsert* insert = [[[self.database prepareInsert] onProperties:TestCaseObject.allProperties] intoTable:self.tableName];
-    TestCaseAssertSQLEqual(insert.statement, @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)");
+    TestCaseAssertSQLEqual(insert.statement, @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)");
 }
 
 - (void)test_table_insert
 {
     WCTInsert* insert = [[self.table prepareInsert] onProperties:TestCaseObject.allProperties];
-    TestCaseAssertSQLEqual(insert.statement, @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)");
+    TestCaseAssertSQLEqual(insert.statement, @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)");
 }
 
 - (void)test_handle_insert
 {
     WCTInsert* insert = [[[[self.database getHandle] prepareInsert] onProperties:TestCaseObject.allProperties] intoTable:self.tableName];
-    TestCaseAssertSQLEqual(insert.statement, @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)");
+    TestCaseAssertSQLEqual(insert.statement, @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)");
 }
 
 #pragma mark - Update
 - (void)test_database_update
 {
     WCTUpdate* update = [[[self.database prepareUpdate] table:self.tableName] set:TestCaseObject.content];
-    TestCaseAssertSQLEqual(update.statement, @"UPDATE main.testTable SET content = ?1");
+    TestCaseAssertSQLEqual(update.statement, @"UPDATE testTable SET content = ?1");
 }
 
 - (void)test_table_update
 {
     WCTUpdate* update = [[self.table prepareUpdate] set:TestCaseObject.content];
-    TestCaseAssertSQLEqual(update.statement, @"UPDATE main.testTable SET content = ?1");
+    TestCaseAssertSQLEqual(update.statement, @"UPDATE testTable SET content = ?1");
 }
 
 - (void)test_handle_update
 {
     WCTUpdate* update = [[[[self.database getHandle] prepareUpdate] table:self.tableName] set:TestCaseObject.content];
-    TestCaseAssertSQLEqual(update.statement, @"UPDATE main.testTable SET content = ?1");
+    TestCaseAssertSQLEqual(update.statement, @"UPDATE testTable SET content = ?1");
 }
 
 #pragma mark - Select
 - (void)test_database_select
 {
     WCTSelect* select = [[[self.database prepareSelect] onResultColumns:TestCaseObject.allProperties] fromTable:self.tableName];
-    TestCaseAssertSQLEqual(select.statement, @"SELECT identifier, content FROM main.testTable");
+    TestCaseAssertSQLEqual(select.statement, @"SELECT identifier, content FROM testTable");
 }
 
 - (void)test_table_select
 {
     WCTSelect* select = [[self.table prepareSelect] onResultColumns:TestCaseObject.allProperties];
-    TestCaseAssertSQLEqual(select.statement, @"SELECT identifier, content FROM main.testTable");
+    TestCaseAssertSQLEqual(select.statement, @"SELECT identifier, content FROM testTable");
 }
 
 - (void)test_handle_select
 {
     WCTSelect* select = [[[[self.database getHandle] prepareSelect] onResultColumns:TestCaseObject.allProperties] fromTable:self.tableName];
-    TestCaseAssertSQLEqual(select.statement, @"SELECT identifier, content FROM main.testTable");
+    TestCaseAssertSQLEqual(select.statement, @"SELECT identifier, content FROM testTable");
 }
 
 - (void)test_check_next_object_failed_using_done
@@ -135,7 +135,7 @@
         TestCaseObject.content.redirect(TestCaseObject.content.table(tableName2)),
     };
     WCTMultiSelect* select = [[[[self.database prepareMultiSelect] onResultColumns:resultColumns] fromTables:@[ self.tableName, tableName2 ]] where:TestCaseObject.identifier.table(self.tableName) == TestCaseObject.identifier.table(tableName2)];
-    TestCaseAssertSQLEqual(select.statement, @"SELECT main.testTable.content, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier");
+    TestCaseAssertSQLEqual(select.statement, @"SELECT testTable.content, testTable2.content FROM testTable, testTable2 WHERE testTable.identifier == testTable2.identifier");
 }
 
 - (void)test_handle_multi_select
@@ -146,7 +146,7 @@
         TestCaseObject.content.redirect(TestCaseObject.content.table(tableName2)),
     };
     WCTMultiSelect* select = [[[[[self.database getHandle] prepareMultiSelect] onResultColumns:resultColumns] fromTables:@[ self.tableName, tableName2 ]] where:TestCaseObject.identifier.table(self.tableName) == TestCaseObject.identifier.table(tableName2)];
-    TestCaseAssertSQLEqual(select.statement, @"SELECT main.testTable.content, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier");
+    TestCaseAssertSQLEqual(select.statement, @"SELECT testTable.content, testTable2.content FROM testTable, testTable2 WHERE testTable.identifier == testTable2.identifier");
 }
 
 @end

@@ -72,9 +72,9 @@
 {
     auto testingSQL = WCDB::Column(@"testColumn").table(@"testTable");
 
-    auto testingTypes = { WCDB::SQL::Type::Column, WCDB::SQL::Type::Schema };
+    auto testingTypes = { WCDB::SQL::Type::Column };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"main.testTable.testColumn");
+    TestCaseAssertSQLEqual(testingSQL, @"testTable.testColumn");
 }
 
 - (void)test_rowid
@@ -140,9 +140,9 @@
 {
     auto testingSQL = WCDB::Column::all().table(@"testTable");
 
-    auto testingTypes = { WCDB::SQL::Type::Column, WCDB::SQL::Type::Schema };
+    auto testingTypes = { WCDB::SQL::Type::Column };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"main.testTable.*");
+    TestCaseAssertSQLEqual(testingSQL, @"testTable.*");
 }
 
 @end

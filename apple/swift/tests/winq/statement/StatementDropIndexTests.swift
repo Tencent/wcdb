@@ -25,9 +25,9 @@ class StatementDropIndexTests: BaseTestCase {
 
     func testStatementDropIndex() {
 
-        WINQAssertEqual(StatementDropIndex().drop(index: "testIndex"), "DROP INDEX main.testIndex")
+        WINQAssertEqual(StatementDropIndex().drop(index: "testIndex"), "DROP INDEX testIndex")
 
-        WINQAssertEqual(StatementDropIndex().drop(index: "testIndex").ifExists(), "DROP INDEX IF EXISTS main.testIndex")
+        WINQAssertEqual(StatementDropIndex().drop(index: "testIndex").ifExists(), "DROP INDEX IF EXISTS testIndex")
 
         WINQAssertEqual(StatementDropIndex().drop(index: "testIndex").of(schema: "testSchema"), "DROP INDEX testSchema.testIndex")
 

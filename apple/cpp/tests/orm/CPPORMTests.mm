@@ -68,7 +68,7 @@
 #pragma mark - field
 - (void)test_field
 {
-    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(field INTEGER, differentName INTEGER)" ];
+    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(field INTEGER, differentName INTEGER)" ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected
                                       inOperation:^BOOL {
                                           return CPPTestTableCreate<CPPFieldObject>(self);
@@ -78,7 +78,7 @@
 #pragma mark - table constraint
 - (void)test_table_constraint
 {
-    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(multiPrimary INTEGER, multiPrimaryAsc INTEGER, multiPrimaryDesc INTEGER, multiUnique INTEGER, multiUniqueAsc INTEGER, multiUniqueDesc INTEGER, CONSTRAINT multi_primary PRIMARY KEY(multiPrimary, multiPrimaryAsc ASC, multiPrimaryDesc DESC), CONSTRAINT multi_unique UNIQUE(multiUnique, multiUniqueAsc ASC, multiUniqueDesc DESC))" ];
+    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(multiPrimary INTEGER, multiPrimaryAsc INTEGER, multiPrimaryDesc INTEGER, multiUnique INTEGER, multiUniqueAsc INTEGER, multiUniqueDesc INTEGER, CONSTRAINT multi_primary PRIMARY KEY(multiPrimary, multiPrimaryAsc ASC, multiPrimaryDesc DESC), CONSTRAINT multi_unique UNIQUE(multiUnique, multiUniqueAsc ASC, multiUniqueDesc DESC))" ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected
                                       inOperation:^BOOL {
                                           return CPPTestTableCreate<CPPTableConstraintObject>(self);
@@ -87,7 +87,7 @@
 
 - (void)test_all_types
 {
-    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(type TEXT, enumValue INTEGER, enumClassValue INTEGER, literalEnumValue INTEGER, trueOrFalseValue INTEGER, charValue INTEGER, unsignedCharValue INTEGER, shortValue INTEGER, unsignedShortValue INTEGER, intValue INTEGER, unsignedIntValue INTEGER, int32Value INTEGER, int64Value INTEGER, uint32Value INTEGER, uint64Value INTEGER, floatValue REAL, doubleValue REAL, constCharpValue TEXT, charpValue TEXT, constCharArrValue TEXT, charArrValue TEXT, stdStringValue TEXT, unsafeStringViewValue TEXT, stringViewValue TEXT, blobValue BLOB, unsafeDataValue BLOB, dataValue BLOB, constUnsignedCharArrValue BLOB, unsignedCharArrValue BLOB)" ];
+    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(type TEXT, enumValue INTEGER, enumClassValue INTEGER, literalEnumValue INTEGER, trueOrFalseValue INTEGER, charValue INTEGER, unsignedCharValue INTEGER, shortValue INTEGER, unsignedShortValue INTEGER, intValue INTEGER, unsignedIntValue INTEGER, int32Value INTEGER, int64Value INTEGER, uint32Value INTEGER, uint64Value INTEGER, floatValue REAL, doubleValue REAL, constCharpValue TEXT, charpValue TEXT, constCharArrValue TEXT, charArrValue TEXT, stdStringValue TEXT, unsafeStringViewValue TEXT, stringViewValue TEXT, blobValue BLOB, unsafeDataValue BLOB, dataValue BLOB, constUnsignedCharArrValue BLOB, unsignedCharArrValue BLOB)" ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected
                                       inOperation:^BOOL {
                                           return CPPTestTableCreate<CPPAllTypesObject>(self);
@@ -135,7 +135,7 @@
 - (void)test_column_constraint_primary
 {
     NSArray<NSString*>* expected = @[
-        @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER PRIMARY KEY)",
+        @"CREATE TABLE IF NOT EXISTS testTable(value INTEGER PRIMARY KEY)",
     ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected
                                       inOperation:^BOOL {
@@ -146,7 +146,7 @@
 - (void)test_column_constraint_primary_asc
 {
     NSArray<NSString*>* expected = @[
-        @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER PRIMARY KEY ASC)",
+        @"CREATE TABLE IF NOT EXISTS testTable(value INTEGER PRIMARY KEY ASC)",
     ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected
                                       inOperation:^BOOL {
@@ -157,7 +157,7 @@
 - (void)test_column_constraint_primary_desc
 {
     NSArray<NSString*>* expected = @[
-        @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER PRIMARY KEY DESC)",
+        @"CREATE TABLE IF NOT EXISTS testTable(value INTEGER PRIMARY KEY DESC)",
     ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected
                                       inOperation:^BOOL {
@@ -168,7 +168,7 @@
 - (void)test_column_constraint_auto_increment
 {
     NSArray<NSString*>* expected = @[
-        @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER PRIMARY KEY AUTOINCREMENT)",
+        @"CREATE TABLE IF NOT EXISTS testTable(value INTEGER PRIMARY KEY AUTOINCREMENT)",
     ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected
                                       inOperation:^BOOL {
@@ -179,7 +179,7 @@
 - (void)test_column_constraint_auto_increment_asc
 {
     NSArray<NSString*>* expected = @[
-        @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER PRIMARY KEY ASC AUTOINCREMENT)",
+        @"CREATE TABLE IF NOT EXISTS testTable(value INTEGER PRIMARY KEY ASC AUTOINCREMENT)",
     ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected
                                       inOperation:^BOOL {
@@ -190,7 +190,7 @@
 - (void)test_column_constraint_unique
 {
     NSArray<NSString*>* expected = @[
-        @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER UNIQUE)",
+        @"CREATE TABLE IF NOT EXISTS testTable(value INTEGER UNIQUE)",
     ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected
                                       inOperation:^BOOL {
@@ -201,7 +201,7 @@
 - (void)test_column_constraint_default
 {
     NSArray<NSString*>* expected = @[
-        @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER DEFAULT 1)",
+        @"CREATE TABLE IF NOT EXISTS testTable(value INTEGER DEFAULT 1)",
     ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected
                                       inOperation:^BOOL {
@@ -213,14 +213,14 @@
 - (void)test_index
 {
     NSArray<NSString*>* expected = @[
-        @"CREATE TABLE IF NOT EXISTS main.testTable(index_ INTEGER, indexAsc INTEGER, indexDesc INTEGER, uniqueIndex INTEGER, uniqueIndexAsc INTEGER, uniqueIndexDesc INTEGER, multiIndex INTEGER, multiIndexAsc INTEGER, multiIndexDesc INTEGER)",
-        @"CREATE INDEX IF NOT EXISTS main.testTable_index ON testTable(index_)",
-        @"CREATE INDEX IF NOT EXISTS main.testTable_index_asc ON testTable(indexAsc ASC)",
-        @"CREATE INDEX IF NOT EXISTS main.testTable_index_desc ON testTable(indexDesc DESC)",
-        @"CREATE INDEX IF NOT EXISTS main.testTable_multi_index ON testTable(multiIndex, multiIndexAsc ASC, multiIndexDesc DESC)",
-        @"CREATE UNIQUE INDEX IF NOT EXISTS main.testTable_unique_index ON testTable(uniqueIndex)",
-        @"CREATE UNIQUE INDEX IF NOT EXISTS main.testTable_unique_index_asc ON testTable(uniqueIndexAsc ASC)",
-        @"CREATE UNIQUE INDEX IF NOT EXISTS main.testTable_unique_index_desc ON testTable(uniqueIndexDesc DESC)",
+        @"CREATE TABLE IF NOT EXISTS testTable(index_ INTEGER, indexAsc INTEGER, indexDesc INTEGER, uniqueIndex INTEGER, uniqueIndexAsc INTEGER, uniqueIndexDesc INTEGER, multiIndex INTEGER, multiIndexAsc INTEGER, multiIndexDesc INTEGER)",
+        @"CREATE INDEX IF NOT EXISTS testTable_index ON testTable(index_)",
+        @"CREATE INDEX IF NOT EXISTS testTable_index_asc ON testTable(indexAsc ASC)",
+        @"CREATE INDEX IF NOT EXISTS testTable_index_desc ON testTable(indexDesc DESC)",
+        @"CREATE INDEX IF NOT EXISTS testTable_multi_index ON testTable(multiIndex, multiIndexAsc ASC, multiIndexDesc DESC)",
+        @"CREATE UNIQUE INDEX IF NOT EXISTS testTable_unique_index ON testTable(uniqueIndex)",
+        @"CREATE UNIQUE INDEX IF NOT EXISTS testTable_unique_index_asc ON testTable(uniqueIndexAsc ASC)",
+        @"CREATE UNIQUE INDEX IF NOT EXISTS testTable_unique_index_desc ON testTable(uniqueIndexDesc DESC)",
     ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected
                                       inOperation:^BOOL {
@@ -232,7 +232,7 @@
 - (void)test_remap
 {
     {
-        NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER)" ];
+        NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(value INTEGER)" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected
                                           inOperation:^BOOL {
                                               return CPPTestTableCreate<CPPOldRemapObject>(self);
@@ -240,7 +240,7 @@
     }
     // remap
     {
-        NSArray<NSString*>* expected = @[ @"PRAGMA main.table_info('testTable')", @"ALTER TABLE main.testTable ADD COLUMN newValue INTEGER", @"CREATE INDEX IF NOT EXISTS main.testTable_index ON testTable(value)" ];
+        NSArray<NSString*>* expected = @[ @"PRAGMA table_info('testTable')", @"ALTER TABLE testTable ADD COLUMN newValue INTEGER", @"CREATE INDEX IF NOT EXISTS testTable_index ON testTable(value)" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected
                                           inOperation:^BOOL {
                                               return CPPTestTableCreate<CPPNewRemapObject>(self);
@@ -251,7 +251,7 @@
 - (void)test_remap_with_extra_actions
 {
     {
-        NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER)" ];
+        NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(value INTEGER)" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected
                                           inOperation:^BOOL {
                                               return CPPTestTableCreate<CPPOldRemapObject>(self);
@@ -259,7 +259,7 @@
     }
     // remap
     {
-        NSArray<NSString*>* expected = @[ @"PRAGMA main.table_info('testTable')", @"ALTER TABLE main.testTable ADD COLUMN newValue INTEGER" ];
+        NSArray<NSString*>* expected = @[ @"PRAGMA table_info('testTable')", @"ALTER TABLE testTable ADD COLUMN newValue INTEGER" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected
                                           inOperation:^BOOL {
                                               return CPPTestTableCreate<CPPNewlyCreatedTableIndexObject>(self);
@@ -268,7 +268,7 @@
     TestCaseAssertTrue([self dropTable]);
     // newly create
     {
-        NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER, newValue INTEGER)", @"CREATE INDEX IF NOT EXISTS main.testTable_index ON testTable(value)" ];
+        NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(value INTEGER, newValue INTEGER)", @"CREATE INDEX IF NOT EXISTS testTable_index ON testTable(value)" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected
                                           inOperation:^BOOL {
                                               return CPPTestTableCreate<CPPNewlyCreatedTableIndexObject>(self);
@@ -276,7 +276,7 @@
     }
     // drop index
     {
-        NSArray<NSString*>* expected = @[ @"PRAGMA main.table_info('testTable')", @"DROP INDEX IF EXISTS main.testTable_index" ];
+        NSArray<NSString*>* expected = @[ @"PRAGMA table_info('testTable')", @"DROP INDEX IF EXISTS testTable_index" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected
                                           inOperation:^BOOL {
                                               return CPPTestTableCreate<CPPDropIndexObject>(self);
@@ -288,7 +288,7 @@
 - (void)test_virtual_table_fts3
 {
     self.database->addTokenizer(WCDB::BuiltinTokenizer::OneOrBinary);
-    NSString* expected = @"CREATE VIRTUAL TABLE IF NOT EXISTS main.testTable USING fts4(tokenize = wcdb_one_or_binary, content='contentTable', identifier INTEGER, content TEXT, notindexed=identifier)";
+    NSString* expected = @"CREATE VIRTUAL TABLE IF NOT EXISTS testTable USING fts4(tokenize = wcdb_one_or_binary, content='contentTable', identifier INTEGER, content TEXT, notindexed=identifier)";
     [self doTestSQLs:@[ expected ]
          inOperation:^BOOL {
              return CPPTestVirtualTableCreate<CPPVirtualTableFTS4Object>(self);
@@ -297,7 +297,7 @@
 
 - (void)test_virtual_table_fts5
 {
-    NSString* expected = @"CREATE VIRTUAL TABLE IF NOT EXISTS main.testTable USING fts5(tokenize = 'porter', content='contentTable', identifier UNINDEXED, content)";
+    NSString* expected = @"CREATE VIRTUAL TABLE IF NOT EXISTS testTable USING fts5(tokenize = 'porter', content='contentTable', identifier UNINDEXED, content)";
     [self doTestSQLs:@[ expected ]
          inOperation:^BOOL {
              return CPPTestVirtualTableCreate<CPPVirtualTableFTS5Object>(self);

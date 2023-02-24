@@ -84,126 +84,126 @@
 {
     auto testingSQL = WCDB::StatementUpdate().update(table).set(column).to(expression1);
 
-    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1");
+    TestCaseAssertSQLEqual(testingSQL, @"UPDATE testTable SET testColumn = 1");
 }
 
 - (void)test_update_with
 {
     auto testingSQL = WCDB::StatementUpdate().with(with).update(table).set(column).to(expression1);
 
-    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::CommonTableExpression, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::CommonTableExpression, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"WITH testTable AS(SELECT 1) UPDATE main.testTable SET testColumn = 1");
+    TestCaseAssertSQLEqual(testingSQL, @"WITH testTable AS(SELECT 1) UPDATE testTable SET testColumn = 1");
 }
 
 - (void)test_update_or_rollback
 {
     auto testingSQL = WCDB::StatementUpdate().update(table).orRollback().set(column).to(expression1);
 
-    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"UPDATE OR ROLLBACK main.testTable SET testColumn = 1");
+    TestCaseAssertSQLEqual(testingSQL, @"UPDATE OR ROLLBACK testTable SET testColumn = 1");
 }
 
 - (void)test_update_or_abort
 {
     auto testingSQL = WCDB::StatementUpdate().update(table).orAbort().set(column).to(expression1);
 
-    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"UPDATE OR ABORT main.testTable SET testColumn = 1");
+    TestCaseAssertSQLEqual(testingSQL, @"UPDATE OR ABORT testTable SET testColumn = 1");
 }
 
 - (void)test_update_or_replace
 {
     auto testingSQL = WCDB::StatementUpdate().update(table).orReplace().set(column).to(expression1);
 
-    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"UPDATE OR REPLACE main.testTable SET testColumn = 1");
+    TestCaseAssertSQLEqual(testingSQL, @"UPDATE OR REPLACE testTable SET testColumn = 1");
 }
 
 - (void)test_update_or_fail
 {
     auto testingSQL = WCDB::StatementUpdate().update(table).orFail().set(column).to(expression1);
 
-    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"UPDATE OR FAIL main.testTable SET testColumn = 1");
+    TestCaseAssertSQLEqual(testingSQL, @"UPDATE OR FAIL testTable SET testColumn = 1");
 }
 
 - (void)test_update_or_ignore
 {
     auto testingSQL = WCDB::StatementUpdate().update(table).orIgnore().set(column).to(expression1);
 
-    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"UPDATE OR IGNORE main.testTable SET testColumn = 1");
+    TestCaseAssertSQLEqual(testingSQL, @"UPDATE OR IGNORE testTable SET testColumn = 1");
 }
 
 - (void)test_update_multiple
 {
     auto testingSQL = WCDB::StatementUpdate().update(table).set(column).to(expression1).set(columns).to(expression2);
 
-    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1, (testColumn1, testColumn2) = 2");
+    TestCaseAssertSQLEqual(testingSQL, @"UPDATE testTable SET testColumn = 1, (testColumn1, testColumn2) = 2");
 }
 
 - (void)test_update_with_condition
 {
     auto testingSQL = WCDB::StatementUpdate().update(table).set(column).to(expression1).where(condition);
 
-    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 WHERE 3");
+    TestCaseAssertSQLEqual(testingSQL, @"UPDATE testTable SET testColumn = 1 WHERE 3");
 }
 
 - (void)test_update_with_seperated_orders
 {
     auto testingSQL = WCDB::StatementUpdate().update(table).set(column).to(expression1).order(orderingTerm1).order(orderingTerm2).limit(limit);
 
-    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 ORDER BY 1, 2 LIMIT 1");
+    TestCaseAssertSQLEqual(testingSQL, @"UPDATE testTable SET testColumn = 1 ORDER BY 1, 2 LIMIT 1");
 }
 
 - (void)test_update_with_orders
 {
     auto testingSQL = WCDB::StatementUpdate().update(table).set(column).to(expression1).orders(orderingTerms).limit(limit);
 
-    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 ORDER BY 1, 2 LIMIT 1");
+    TestCaseAssertSQLEqual(testingSQL, @"UPDATE testTable SET testColumn = 1 ORDER BY 1, 2 LIMIT 1");
 }
 
 - (void)test_update_with_limit
 {
     auto testingSQL = WCDB::StatementUpdate().update(table).set(column).to(expression1).limit(limit);
 
-    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 LIMIT 1");
+    TestCaseAssertSQLEqual(testingSQL, @"UPDATE testTable SET testColumn = 1 LIMIT 1");
 }
 
 - (void)test_update_with_limit_length
 {
     auto testingSQL = WCDB::StatementUpdate().update(table).set(column).to(expression1).limit(limit, limitParameter);
 
-    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 LIMIT 1, 2");
+    TestCaseAssertSQLEqual(testingSQL, @"UPDATE testTable SET testColumn = 1 LIMIT 1, 2");
 }
 
 - (void)test_update_with_limit_offset
 {
     auto testingSQL = WCDB::StatementUpdate().update(table).set(column).to(expression1).limit(limit).offset(limitParameter);
 
-    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 LIMIT 1 OFFSET 2");
+    TestCaseAssertSQLEqual(testingSQL, @"UPDATE testTable SET testColumn = 1 LIMIT 1 OFFSET 2");
 }
 
 @end

@@ -52,7 +52,7 @@
 - (void)test_handle_insert_row
 {
     WCDB::OneRowValue row = [Random.shared testCaseValuesWithCount:1 startingFromIdentifier:[self nextIdentifier]][0];
-    [self doTestSQLs:@[ @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)" ]
+    [self doTestSQLs:@[ @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)" ]
          inOperation:^BOOL {
              return self.handle->insertRows(row, self.columns, self.tableName.UTF8String);
          }];
@@ -62,7 +62,7 @@
 - (void)test_handle_insert_or_replace_row
 {
     WCDB::OneRowValue row = [Random.shared testCaseValuesWithCount:1 startingFromIdentifier:[self nextIdentifier] - 1][0];
-    [self doTestSQLs:@[ @"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)" ]
+    [self doTestSQLs:@[ @"INSERT OR REPLACE INTO testTable(identifier, content) VALUES(?1, ?2)" ]
          inOperation:^BOOL {
              return self.handle->insertOrReplaceRows(row, self.columns, self.tableName.UTF8String);
          }];
@@ -74,7 +74,7 @@
     WCDB::MultiRowsValue rows = [Random.shared testCaseValuesWithCount:2 startingFromIdentifier:[self nextIdentifier]];
     self.expectMode = DatabaseTestCaseExpectSomeSQLs;
     [self doTestSQLs:@[ @"BEGIN IMMEDIATE",
-                        @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)",
+                        @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)",
                         @"COMMIT" ]
          inOperation:^BOOL {
              return self.handle->insertRows(rows, self.columns, self.tableName.UTF8String);
@@ -87,7 +87,7 @@
     WCDB::MultiRowsValue rows = [Random.shared testCaseValuesWithCount:2 startingFromIdentifier:[self nextIdentifier] - 2];
     self.expectMode = DatabaseTestCaseExpectSomeSQLs;
     [self doTestSQLs:@[ @"BEGIN IMMEDIATE",
-                        @"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)",
+                        @"INSERT OR REPLACE INTO testTable(identifier, content) VALUES(?1, ?2)",
                         @"COMMIT" ]
          inOperation:^BOOL {
              return self.handle->insertOrReplaceRows(rows, self.columns, self.tableName.UTF8String);
@@ -97,7 +97,7 @@
 
 - (void)test_handle_update_value
 {
-    [self doTestSQLs:@[ @"UPDATE main.testTable SET content = ?1 WHERE identifier == 2" ]
+    [self doTestSQLs:@[ @"UPDATE testTable SET content = ?1 WHERE identifier == 2" ]
          inOperation:^BOOL {
              return self.handle->updateRow(self.row1[1], WCDB::Column("content"), self.tableName.UTF8String, WCDB::Column("identifier") == self.row2[0]);
          }];
@@ -106,7 +106,7 @@
 
 - (void)test_handle_update_values
 {
-    [self doTestSQLs:@[ @"UPDATE main.testTable SET identifier = ?1, content = ?2 WHERE identifier == 1" ]
+    [self doTestSQLs:@[ @"UPDATE testTable SET identifier = ?1, content = ?2 WHERE identifier == 1" ]
          inOperation:^BOOL {
              return self.handle->updateRow(self.row1, self.columns, self.tableName.UTF8String, WCDB::Column("identifier") == self.row1[0]);
          }];
@@ -115,7 +115,7 @@
 
 - (void)test_handle_delete
 {
-    [self doTestSQLs:@[ @"DELETE FROM main.testTable WHERE identifier == 1" ]
+    [self doTestSQLs:@[ @"DELETE FROM testTable WHERE identifier == 1" ]
          inOperation:^BOOL {
              return self.handle->deleteValues(self.tableName.UTF8String, WCDB::Column("identifier") == 1);
          }];
@@ -125,7 +125,7 @@
 - (void)test_handle_select_value
 {
     [self doTestValue:self.row1[0]
-               andSQL:@"SELECT identifier FROM main.testTable LIMIT 1"
+               andSQL:@"SELECT identifier FROM testTable LIMIT 1"
           bySelecting:^WCDB::OptionalValue {
               return self.handle->selectValue(WCDB::Column("identifier"), self.tableName.UTF8String);
           }];
@@ -134,7 +134,7 @@
 - (void)test_handle_select_value_where
 {
     [self doTestValue:self.row1[0]
-               andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1 LIMIT 1"
+               andSQL:@"SELECT identifier FROM testTable WHERE identifier == 1 LIMIT 1"
           bySelecting:^WCDB::OptionalValue {
               return self.handle->selectValue(WCDB::Column("identifier"), self.tableName.UTF8String, WCDB::Column("identifier") == 1);
           }];
@@ -143,7 +143,7 @@
 - (void)test_handle_select_one_column
 {
     [self doTestColumn:{ self.row1[0], self.row2[0] }
-                andSQL:@"SELECT identifier FROM main.testTable"
+                andSQL:@"SELECT identifier FROM testTable"
            bySelecting:^WCDB::OptionalOneColumn {
                return self.handle->selectOneColumn(WCDB::Column("identifier"), self.tableName.UTF8String);
            }];
@@ -152,7 +152,7 @@
 - (void)test_handle_select_one_column_where
 {
     [self doTestColumn:self.row1[0]
-                andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1"
+                andSQL:@"SELECT identifier FROM testTable WHERE identifier == 1"
            bySelecting:^WCDB::OptionalOneColumn {
                return self.handle->selectOneColumn(WCDB::Column("identifier"), self.tableName.UTF8String, WCDB::Column("identifier") == 1);
            }];
@@ -161,7 +161,7 @@
 - (void)test_handle_select_one_column_where_order
 {
     [self doTestColumn:self.row1[0]
-                andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1 ORDER BY identifier"
+                andSQL:@"SELECT identifier FROM testTable WHERE identifier == 1 ORDER BY identifier"
            bySelecting:^WCDB::OptionalOneColumn {
                return self.handle->selectOneColumn(WCDB::Column("identifier"), self.tableName.UTF8String, WCDB::Column("identifier") == 1, WCDB::Column("identifier"));
            }];
@@ -170,7 +170,7 @@
 - (void)test_handle_select_one_column_where_order_limit
 {
     [self doTestColumn:self.row1[0]
-                andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1 ORDER BY identifier ASC LIMIT 1"
+                andSQL:@"SELECT identifier FROM testTable WHERE identifier == 1 ORDER BY identifier ASC LIMIT 1"
            bySelecting:^WCDB::OptionalOneColumn {
                return self.handle->selectOneColumn(WCDB::Column("identifier"), self.tableName.UTF8String, WCDB::Column("identifier") == 1, WCDB::Column("identifier").asOrder(WCDB::Order::ASC), 1);
            }];
@@ -179,7 +179,7 @@
 - (void)test_handle_select_one_row
 {
     [self doTestRow:self.row1
-             andSQL:@"SELECT identifier, content FROM main.testTable LIMIT 1"
+             andSQL:@"SELECT identifier, content FROM testTable LIMIT 1"
         bySelecting:^WCDB::OptionalOneColumn {
             return self.handle->selectOneRow(self.columns, self.tableName.UTF8String);
         }];
@@ -188,7 +188,7 @@
 - (void)test_handle_select_one_row_where
 {
     [self doTestRow:self.row1
-             andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier == 1 LIMIT 1"
+             andSQL:@"SELECT identifier, content FROM testTable WHERE identifier == 1 LIMIT 1"
         bySelecting:^WCDB::OptionalOneColumn {
             return self.handle->selectOneRow(self.columns, self.tableName.UTF8String, WCDB::Column("identifier") == 1);
         }];
@@ -197,7 +197,7 @@
 - (void)test_handle_select_all_row
 {
     [self doTestRows:self.rows
-              andSQL:@"SELECT identifier, content FROM main.testTable"
+              andSQL:@"SELECT identifier, content FROM testTable"
          bySelecting:^WCDB::OptionalMultiRows {
              return self.handle->selectAllRow(self.columns, self.tableName.UTF8String);
          }];
@@ -206,7 +206,7 @@
 - (void)test_handle_select_all_row_where
 {
     [self doTestRows:{ self.row1 }
-              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier == 1"
+              andSQL:@"SELECT identifier, content FROM testTable WHERE identifier == 1"
          bySelecting:^WCDB::OptionalMultiRows {
              return self.handle->selectAllRow(self.columns, self.tableName.UTF8String, WCDB::Column("identifier") == 1);
          }];
@@ -215,7 +215,7 @@
 - (void)test_handle_select_all_row_where_order
 {
     [self doTestRows:{ self.row1 }
-              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier == 1 ORDER BY identifier"
+              andSQL:@"SELECT identifier, content FROM testTable WHERE identifier == 1 ORDER BY identifier"
          bySelecting:^WCDB::OptionalMultiRows {
              return self.handle->selectAllRow(self.columns, self.tableName.UTF8String, WCDB::Column("identifier") == 1, WCDB::Column("identifier"));
          }];
@@ -224,7 +224,7 @@
 - (void)test_handle_select_all_row_where_order_limit
 {
     [self doTestRows:{ self.row1 }
-              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier == 1 ORDER BY identifier ASC LIMIT 1"
+              andSQL:@"SELECT identifier, content FROM testTable WHERE identifier == 1 ORDER BY identifier ASC LIMIT 1"
          bySelecting:^WCDB::OptionalMultiRows {
              return self.handle->selectAllRow(self.columns, self.tableName.UTF8String, WCDB::Column("identifier") == 1, WCDB::Column("identifier").asOrder(WCDB::Order::ASC), 1);
          }];
@@ -234,7 +234,7 @@
 - (void)test_database_insert_row
 {
     WCDB::OneRowValue row = [Random.shared testCaseValuesWithCount:1 startingFromIdentifier:[self nextIdentifier]][0];
-    [self doTestSQLs:@[ @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)" ]
+    [self doTestSQLs:@[ @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)" ]
          inOperation:^BOOL {
              return self.database->insertRows(row, self.columns, self.tableName.UTF8String);
          }];
@@ -244,7 +244,7 @@
 - (void)test_database_insert_or_replace_row
 {
     WCDB::OneRowValue row = [Random.shared testCaseValuesWithCount:1 startingFromIdentifier:[self nextIdentifier] - 1][0];
-    [self doTestSQLs:@[ @"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)" ]
+    [self doTestSQLs:@[ @"INSERT OR REPLACE INTO testTable(identifier, content) VALUES(?1, ?2)" ]
          inOperation:^BOOL {
              return self.database->insertOrReplaceRows(row, self.columns, self.tableName.UTF8String);
          }];
@@ -256,7 +256,7 @@
     WCDB::MultiRowsValue rows = [Random.shared testCaseValuesWithCount:2 startingFromIdentifier:[self nextIdentifier]];
     self.expectMode = DatabaseTestCaseExpectSomeSQLs;
     [self doTestSQLs:@[ @"BEGIN IMMEDIATE",
-                        @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)",
+                        @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)",
                         @"COMMIT" ]
          inOperation:^BOOL {
              return self.database->insertRows(rows, self.columns, self.tableName.UTF8String);
@@ -269,7 +269,7 @@
     WCDB::MultiRowsValue rows = [Random.shared testCaseValuesWithCount:2 startingFromIdentifier:[self nextIdentifier] - 2];
     self.expectMode = DatabaseTestCaseExpectSomeSQLs;
     [self doTestSQLs:@[ @"BEGIN IMMEDIATE",
-                        @"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)",
+                        @"INSERT OR REPLACE INTO testTable(identifier, content) VALUES(?1, ?2)",
                         @"COMMIT" ]
          inOperation:^BOOL {
              return self.database->insertOrReplaceRows(rows, self.columns, self.tableName.UTF8String);
@@ -279,7 +279,7 @@
 
 - (void)test_database_update_value
 {
-    [self doTestSQLs:@[ @"UPDATE main.testTable SET content = ?1 WHERE identifier == 2" ]
+    [self doTestSQLs:@[ @"UPDATE testTable SET content = ?1 WHERE identifier == 2" ]
          inOperation:^BOOL {
              return self.database->updateRow(self.row1[1], WCDB::Column("content"), self.tableName.UTF8String, WCDB::Column("identifier") == self.row2[0]);
          }];
@@ -288,7 +288,7 @@
 
 - (void)test_database_update_values
 {
-    [self doTestSQLs:@[ @"UPDATE main.testTable SET identifier = ?1, content = ?2 WHERE identifier == 1" ]
+    [self doTestSQLs:@[ @"UPDATE testTable SET identifier = ?1, content = ?2 WHERE identifier == 1" ]
          inOperation:^BOOL {
              return self.database->updateRow(self.row1, self.columns, self.tableName.UTF8String, WCDB::Column("identifier") == self.row1[0]);
          }];
@@ -297,7 +297,7 @@
 
 - (void)test_database_delete
 {
-    [self doTestSQLs:@[ @"DELETE FROM main.testTable WHERE identifier == 1" ]
+    [self doTestSQLs:@[ @"DELETE FROM testTable WHERE identifier == 1" ]
          inOperation:^BOOL {
              return self.database->deleteValues(self.tableName.UTF8String, WCDB::Column("identifier") == 1);
          }];
@@ -307,7 +307,7 @@
 - (void)test_database_select_value
 {
     [self doTestValue:self.row1[0]
-               andSQL:@"SELECT identifier FROM main.testTable LIMIT 1"
+               andSQL:@"SELECT identifier FROM testTable LIMIT 1"
           bySelecting:^WCDB::OptionalValue {
               return self.database->selectValue(WCDB::Column("identifier"), self.tableName.UTF8String);
           }];
@@ -316,7 +316,7 @@
 - (void)test_database_select_value_where
 {
     [self doTestValue:self.row1[0]
-               andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1 LIMIT 1"
+               andSQL:@"SELECT identifier FROM testTable WHERE identifier == 1 LIMIT 1"
           bySelecting:^WCDB::OptionalValue {
               return self.database->selectValue(WCDB::Column("identifier"), self.tableName.UTF8String, WCDB::Column("identifier") == 1);
           }];
@@ -325,7 +325,7 @@
 - (void)test_database_select_one_column
 {
     [self doTestColumn:{ self.row1[0], self.row2[0] }
-                andSQL:@"SELECT identifier FROM main.testTable"
+                andSQL:@"SELECT identifier FROM testTable"
            bySelecting:^WCDB::OptionalOneColumn {
                return self.database->selectOneColumn(WCDB::Column("identifier"), self.tableName.UTF8String);
            }];
@@ -334,7 +334,7 @@
 - (void)test_database_select_one_column_where
 {
     [self doTestColumn:self.row1[0]
-                andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1"
+                andSQL:@"SELECT identifier FROM testTable WHERE identifier == 1"
            bySelecting:^WCDB::OptionalOneColumn {
                return self.database->selectOneColumn(WCDB::Column("identifier"), self.tableName.UTF8String, WCDB::Column("identifier") == 1);
            }];
@@ -343,7 +343,7 @@
 - (void)test_database_select_one_column_where_order
 {
     [self doTestColumn:self.row1[0]
-                andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1 ORDER BY identifier"
+                andSQL:@"SELECT identifier FROM testTable WHERE identifier == 1 ORDER BY identifier"
            bySelecting:^WCDB::OptionalOneColumn {
                return self.database->selectOneColumn(WCDB::Column("identifier"), self.tableName.UTF8String, WCDB::Column("identifier") == 1, WCDB::Column("identifier"));
            }];
@@ -352,7 +352,7 @@
 - (void)test_database_select_one_column_where_order_limit
 {
     [self doTestColumn:self.row1[0]
-                andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1 ORDER BY identifier ASC LIMIT 1"
+                andSQL:@"SELECT identifier FROM testTable WHERE identifier == 1 ORDER BY identifier ASC LIMIT 1"
            bySelecting:^WCDB::OptionalOneColumn {
                return self.database->selectOneColumn(WCDB::Column("identifier"), self.tableName.UTF8String, WCDB::Column("identifier") == 1, WCDB::Column("identifier").asOrder(WCDB::Order::ASC), 1);
            }];
@@ -361,7 +361,7 @@
 - (void)test_database_select_one_row
 {
     [self doTestRow:self.row1
-             andSQL:@"SELECT identifier, content FROM main.testTable LIMIT 1"
+             andSQL:@"SELECT identifier, content FROM testTable LIMIT 1"
         bySelecting:^WCDB::OptionalOneColumn {
             return self.database->selectOneRow(self.columns, self.tableName.UTF8String);
         }];
@@ -370,7 +370,7 @@
 - (void)test_database_select_one_row_where
 {
     [self doTestRow:self.row1
-             andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier == 1 LIMIT 1"
+             andSQL:@"SELECT identifier, content FROM testTable WHERE identifier == 1 LIMIT 1"
         bySelecting:^WCDB::OptionalOneColumn {
             return self.database->selectOneRow(self.columns, self.tableName.UTF8String, WCDB::Column("identifier") == 1);
         }];
@@ -379,7 +379,7 @@
 - (void)test_database_select_all_row
 {
     [self doTestRows:self.rows
-              andSQL:@"SELECT identifier, content FROM main.testTable"
+              andSQL:@"SELECT identifier, content FROM testTable"
          bySelecting:^WCDB::OptionalMultiRows {
              return self.database->selectAllRow(self.columns, self.tableName.UTF8String);
          }];
@@ -388,7 +388,7 @@
 - (void)test_database_select_all_row_where
 {
     [self doTestRows:{ self.row1 }
-              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier == 1"
+              andSQL:@"SELECT identifier, content FROM testTable WHERE identifier == 1"
          bySelecting:^WCDB::OptionalMultiRows {
              return self.database->selectAllRow(self.columns, self.tableName.UTF8String, WCDB::Column("identifier") == 1);
          }];
@@ -397,7 +397,7 @@
 - (void)test_database_select_all_row_where_order
 {
     [self doTestRows:{ self.row1 }
-              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier == 1 ORDER BY identifier"
+              andSQL:@"SELECT identifier, content FROM testTable WHERE identifier == 1 ORDER BY identifier"
          bySelecting:^WCDB::OptionalMultiRows {
              return self.database->selectAllRow(self.columns, self.tableName.UTF8String, WCDB::Column("identifier") == 1, WCDB::Column("identifier"));
          }];
@@ -406,7 +406,7 @@
 - (void)test_database_select_all_row_where_order_limit
 {
     [self doTestRows:{ self.row1 }
-              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier == 1 ORDER BY identifier ASC LIMIT 1"
+              andSQL:@"SELECT identifier, content FROM testTable WHERE identifier == 1 ORDER BY identifier ASC LIMIT 1"
          bySelecting:^WCDB::OptionalMultiRows {
              return self.database->selectAllRow(self.columns, self.tableName.UTF8String, WCDB::Column("identifier") == 1, WCDB::Column("identifier").asOrder(WCDB::Order::ASC), 1);
          }];

@@ -67,9 +67,9 @@
 {
     auto testingSQL = WCDB::StatementExplain().explainQueryPlan(pragma);
 
-    auto testingTypes = { WCDB::SQL::Type::ExplainSTMT, WCDB::SQL::Type::PragmaSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Pragma };
+    auto testingTypes = { WCDB::SQL::Type::ExplainSTMT, WCDB::SQL::Type::PragmaSTMT, WCDB::SQL::Type::Pragma };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"EXPLAIN QUERY PLAN PRAGMA main.integrity_check");
+    TestCaseAssertSQLEqual(testingSQL, @"EXPLAIN QUERY PLAN PRAGMA integrity_check");
 }
 
 @end

@@ -41,7 +41,7 @@ class TracerTests: BaseTestCase {
 
     func testTraceSQL() {
         // Give
-        let expectedSQL = "SELECT * FROM main.sqlite_master"
+        let expectedSQL = "SELECT * FROM sqlite_master"
 
         // Then
         var pass = false
@@ -65,8 +65,8 @@ class TracerTests: BaseTestCase {
         let tableName = "nonexistentTable"
         let expectedTag = self.recommendTag
         let expectedErrorCode = 1
-        let expectedErrorMessage = "no such table: main.\(tableName)"
-        let expectedSQL = "SELECT * FROM main.\(tableName)"
+        let expectedErrorMessage = "no such table: \(tableName)"
+        let expectedSQL = "SELECT * FROM \(tableName)"
         let expectedPath = self.recommendedPath
 
         // Then
@@ -122,8 +122,8 @@ class TracerTests: BaseTestCase {
         let tableName = "nonexistentTable"
         let expectedTag = self.recommendTag
         let expectedErrorCode = 1
-        let expectedErrorMessage = "no such table: main.\(tableName)"
-        let expectedSQL = "SELECT * FROM main.\(tableName)"
+        let expectedErrorMessage = "no such table: \(tableName)"
+        let expectedSQL = "SELECT * FROM \(tableName)"
         let expectedPath = self.recommendedPath
 
         // Give
@@ -190,7 +190,7 @@ class TracerTests: BaseTestCase {
         // Give
         let tableName = TracerObject.name
         let expectedPath = self.recommendedPath.path
-        let expectedSQL = "INSERT INTO main.\(tableName)(variable) VALUES(?1)"
+        let expectedSQL = "INSERT INTO \(tableName)(variable) VALUES(?1)"
 
         // Then
         var `catch` = false
@@ -222,7 +222,7 @@ class TracerTests: BaseTestCase {
         // Give
         let tableName = TracerObject.name
         let expectedPath = self.recommendedPath.path
-        let expectedSQL = "INSERT INTO main.\(tableName)(variable) VALUES(?1)"
+        let expectedSQL = "INSERT INTO \(tableName)(variable) VALUES(?1)"
         let expectedRollback = "ROLLBACK"
 
         // Then

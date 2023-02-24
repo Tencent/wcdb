@@ -65,16 +65,16 @@
 {
     auto testingSQL = WCDB::StatementCreateView().createView(name).as(select);
 
-    auto testingTypes = { WCDB::SQL::Type::CreateViewSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::CreateViewSTMT, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"CREATE VIEW main.testView AS SELECT 1");
+    TestCaseAssertSQLEqual(testingSQL, @"CREATE VIEW testView AS SELECT 1");
 }
 
 - (void)test_create_temp_view
 {
     auto testingSQL = WCDB::StatementCreateView().createView(name).temp().as(select);
 
-    auto testingTypes = { WCDB::SQL::Type::CreateViewSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::CreateViewSTMT, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CREATE TEMP VIEW testView AS SELECT 1");
 }
@@ -83,9 +83,9 @@
 {
     auto testingSQL = WCDB::StatementCreateView().createView(name).ifNotExists().as(select);
 
-    auto testingTypes = { WCDB::SQL::Type::CreateViewSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::CreateViewSTMT, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"CREATE VIEW IF NOT EXISTS main.testView AS SELECT 1");
+    TestCaseAssertSQLEqual(testingSQL, @"CREATE VIEW IF NOT EXISTS testView AS SELECT 1");
 }
 
 - (void)test_create_view_with_schema
@@ -101,9 +101,9 @@
 {
     auto testingSQL = WCDB::StatementCreateView().createView(name).columns(columns).as(select);
 
-    auto testingTypes = { WCDB::SQL::Type::CreateViewSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::CreateViewSTMT, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"CREATE VIEW main.testView(testColumn1, testColumn2) AS SELECT 1");
+    TestCaseAssertSQLEqual(testingSQL, @"CREATE VIEW testView(testColumn1, testColumn2) AS SELECT 1");
 }
 
 @end

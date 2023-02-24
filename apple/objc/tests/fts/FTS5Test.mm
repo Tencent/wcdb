@@ -58,27 +58,27 @@
     TestCaseAssertTrue([self.table insertObject:object]);
 
     [self doTestObject:object
-                andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '苹' ORDER BY rowid ASC"
+                andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '苹' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:FTS5Object.content.match("苹")];
            }];
     [self doTestObject:object
-                andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '苹果' ORDER BY rowid ASC"
+                andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '苹果' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:FTS5Object.content.match("苹果")];
            }];
     [self doTestObject:object
-                andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '苹果树' ORDER BY rowid ASC"
+                andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '苹果树' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:FTS5Object.content.match("苹果树")];
            }];
     [self doTestObject:object
-                andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '果树' ORDER BY rowid ASC"
+                andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '果树' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:FTS5Object.content.match("果树")];
            }];
     [self doTestObject:object
-                andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '树' ORDER BY rowid ASC"
+                andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '树' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:FTS5Object.content.match("树")];
            }];
@@ -90,12 +90,12 @@
     object.content = @"我們是程序員";
     TestCaseAssertTrue([self.table insertObject:object]);
     [self doTestObject:object
-                andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '我们是程序员' ORDER BY rowid ASC"
+                andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '我们是程序员' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:FTS5Object.content.match("我们是程序员")];
            }];
     [self doTestObject:object
-                andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '我們是程序員' ORDER BY rowid ASC"
+                andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '我們是程序員' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:FTS5Object.content.match("我們是程序員")];
            }];
@@ -108,47 +108,47 @@
     TestCaseAssertTrue([self.table insertObject:object]);
 
     [self doTestObject:object
-                andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'WCDB' ORDER BY rowid ASC"
+                andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'WCDB' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:FTS5Object.content.match("WCDB")];
            }];
     [self doTestObject:object
-                andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'WeChat' ORDER BY rowid ASC"
+                andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'WeChat' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:FTS5Object.content.match("WeChat")];
            }];
 
     // case insensive
     [self doTestObject:object
-                andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'DATABASE' ORDER BY rowid ASC"
+                andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'DATABASE' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:FTS5Object.content.match("DATABASE")];
            }];
 
     // stemming
     [self doTestObject:object
-                andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'developer' ORDER BY rowid ASC"
+                andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'developer' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:FTS5Object.content.match("developer")];
            }];
 
     // prefix
     [self doTestObject:object
-                andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'plat*' ORDER BY rowid ASC"
+                andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'plat*' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:FTS5Object.content.match("plat*")];
            }];
 
     // phrase
     [self doTestObject:object
-                andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'dat* fram*' ORDER BY rowid ASC"
+                andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'dat* fram*' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:FTS5Object.content.match("dat* fram*")];
            }];
 
     // bad case
     [self doTestObjects:@[]
-                 andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'Hello' ORDER BY rowid ASC"
+                 andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'Hello' ORDER BY rowid ASC"
             bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                 return [self.table getObjectsWhere:FTS5Object.content.match("Hello")];
             }];
@@ -161,24 +161,24 @@
     TestCaseAssertTrue([self.table insertObject:object]);
 
     [self doTestObject:object
-                andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '123' ORDER BY rowid ASC"
+                andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '123' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:FTS5Object.content.match("123")];
            }];
     [self doTestObject:object
-                andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '456' ORDER BY rowid ASC"
+                andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '456' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:FTS5Object.content.match("456")];
            }];
     [self doTestObject:object
-                andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '789' ORDER BY rowid ASC"
+                andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '789' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:FTS5Object.content.match("789")];
            }];
 
     // bad case
     [self doTestObjects:@[]
-                 andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '567' ORDER BY rowid ASC"
+                 andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '567' ORDER BY rowid ASC"
             bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                 return [self.table getObjectsWhere:FTS5Object.content.match("567")];
             }];
@@ -191,22 +191,22 @@
     TestCaseAssertTrue([self.table insertObject:object]);
 
     [self doTestObject:object
-                andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '中' ORDER BY rowid ASC"
+                andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '中' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:FTS5Object.content.match("中")];
            }];
     [self doTestObject:object
-                andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'English' ORDER BY rowid ASC"
+                andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'English' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:FTS5Object.content.match("English")];
            }];
     [self doTestObject:object
-                andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '語' ORDER BY rowid ASC"
+                andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '語' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:FTS5Object.content.match("語")];
            }];
     [self doTestObject:object
-                andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '123' ORDER BY rowid ASC"
+                andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '123' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:FTS5Object.content.match("123")];
            }];
@@ -223,27 +223,27 @@
     TestCaseAssertTrue([self.table insertObject:extension]);
 
     [self doTestObject:content
-                andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH 'error_prone' ORDER BY rowid ASC"
+                andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'error_prone' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:FTS5Object.content.match("error_prone")];
            }];
     [self doTestObject:extension
-                andSQL:@"SELECT content, extension FROM main.testTable WHERE extension MATCH 'error_prone' ORDER BY rowid ASC"
+                andSQL:@"SELECT content, extension FROM testTable WHERE extension MATCH 'error_prone' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:FTS5Object.extension.match("error_prone")];
            }];
     [self doTestObjects:@[ content, extension ]
-                 andSQL:@"SELECT content, extension FROM main.testTable WHERE testTable MATCH 'error_prone' ORDER BY rowid ASC"
+                 andSQL:@"SELECT content, extension FROM testTable WHERE testTable MATCH 'error_prone' ORDER BY rowid ASC"
             bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                 return [self.table getObjectsWhere:WCDB::Column(self.tableName).match("error_prone")];
             }];
     [self doTestObject:content
-                andSQL:@"SELECT content, extension FROM main.testTable WHERE testTable MATCH 'content: error_prone' ORDER BY rowid ASC"
+                andSQL:@"SELECT content, extension FROM testTable WHERE testTable MATCH 'content: error_prone' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:WCDB::Column(self.tableName).match("content: error_prone")];
            }];
     [self doTestObject:extension
-                andSQL:@"SELECT content, extension FROM main.testTable WHERE testTable MATCH 'extension: error_prone' ORDER BY rowid ASC"
+                andSQL:@"SELECT content, extension FROM testTable WHERE testTable MATCH 'extension: error_prone' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:WCDB::Column(self.tableName).match("extension: error_prone")];
            }];
@@ -345,7 +345,7 @@
     ];
     for (NSString *query in querys) {
         [self doTestObject:content
-                    andSQL:[NSString stringWithFormat:@"SELECT content FROM main.testTable WHERE content MATCH '%@' ORDER BY rowid ASC", query]
+                    andSQL:[NSString stringWithFormat:@"SELECT content FROM testTable WHERE content MATCH '%@' ORDER BY rowid ASC", query]
                bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                    return [self.table getObjectsWhere:FTS5PinyinObject.content.match(query)];
                }];
@@ -386,7 +386,7 @@
     NSArray *querys = @[ @"\"！@…&*'  '\"\"#￥%…\"", @"\"！@…&*'  '\"\"\"*" ];
     for (NSString *query in querys) {
         [self doTestObject:content
-                    andSQL:[NSString stringWithFormat:@"SELECT content FROM main.testTable WHERE content MATCH '%@' ORDER BY rowid ASC", [query stringByReplacingOccurrencesOfString:@"'" withString:@"''"]]
+                    andSQL:[NSString stringWithFormat:@"SELECT content FROM testTable WHERE content MATCH '%@' ORDER BY rowid ASC", [query stringByReplacingOccurrencesOfString:@"'" withString:@"''"]]
                bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                    return [self.table getObjectsWhere:FTS5SymbolObject.content.match(query)];
                }];
@@ -401,7 +401,7 @@
     querys = @[ @"\"abc@123*def_567\"", @"\"abc@123*def\"*" ];
     for (NSString *query in querys) {
         [self doTestObject:content
-                    andSQL:[NSString stringWithFormat:@"SELECT content FROM main.testTable WHERE content MATCH '%@' ORDER BY rowid ASC", query]
+                    andSQL:[NSString stringWithFormat:@"SELECT content FROM testTable WHERE content MATCH '%@' ORDER BY rowid ASC", query]
                bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                    return [self.table getObjectsWhere:FTS5SymbolObject.content.match(query)];
                }];
@@ -414,7 +414,7 @@
     content.content = @"多级,分隔符,串联子串1;多级,分隔符,串联子串2;多级,分隔符,串联子串3";
     TestCaseAssertTrue([self.table insertObject:content]);
     [self doTestValue:@"1,2;串联;子串2;6;"
-               andSQL:@"SELECT substring_match_info(testTable, 0, ';,') FROM main.testTable WHERE content MATCH '子串2'"
+               andSQL:@"SELECT substring_match_info(testTable, 0, ';,') FROM testTable WHERE content MATCH '子串2'"
           bySelecting:^WCTValue * {
               return [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Expression::function(WCTAuxiliaryFunction_SubstringMatchInfo).invoke().arguments({ WCDB::Column(self.tableName), 0, ";," })).from(self.tableName).where(FTS5SymbolObject.content.match(@"子串2"))];
           }];

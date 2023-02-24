@@ -30,22 +30,22 @@ class StatementUpdateTests: BaseTestCase {
 
         WINQAssertEqual(
             StatementUpdate().update(table: "testTable").set(column1).to(1),
-            "UPDATE main.testTable SET column1 = 1"
+            "UPDATE testTable SET column1 = 1"
         )
 
         WINQAssertEqual(
             StatementUpdate().update(table: "testTable").onConflict( .Replace).set(column1).to(1).set(column2).to("test"),
-            "UPDATE OR REPLACE main.testTable SET column1 = 1, column2 = 'test'"
+            "UPDATE OR REPLACE testTable SET column1 = 1, column2 = 'test'"
         )
 
         WINQAssertEqual(
             StatementUpdate().update(table: "testTable").set(column1).to(1).set(column2).to("test"),
-            "UPDATE main.testTable SET column1 = 1, column2 = 'test'"
+            "UPDATE testTable SET column1 = 1, column2 = 'test'"
         )
 
         WINQAssertEqual(
             StatementUpdate().update(table: "testTable").set(column1).to(1).`where`(column1 > 1),
-            "UPDATE main.testTable SET column1 = 1 WHERE column1 > 1"
+            "UPDATE testTable SET column1 = 1 WHERE column1 > 1"
         )
 
         WINQAssertEqual(
@@ -53,32 +53,32 @@ class StatementUpdateTests: BaseTestCase {
                 .update(table: "testTable")
                 .set(column1).to(1)
                 .order(by: column1.asOrder(), column2.asOrder()),
-            "UPDATE main.testTable SET column1 = 1 ORDER BY column1, column2"
+            "UPDATE testTable SET column1 = 1 ORDER BY column1, column2"
         )
 
         WINQAssertEqual(
             StatementUpdate().update(table: "testTable").set(column1).to(1).limit(1),
-            "UPDATE main.testTable SET column1 = 1 LIMIT 1"
+            "UPDATE testTable SET column1 = 1 LIMIT 1"
         )
 
         WINQAssertEqual(
             StatementUpdate().update(table: "testTable").set(column1).to(1).limit(from: 1, to: 2),
-            "UPDATE main.testTable SET column1 = 1 LIMIT 1, 2"
+            "UPDATE testTable SET column1 = 1 LIMIT 1, 2"
         )
 
         WINQAssertEqual(
             StatementUpdate().update(table: "testTable").set(column1).to(1).limit(1).offset(3),
-            "UPDATE main.testTable SET column1 = 1 LIMIT 1 OFFSET 3"
+            "UPDATE testTable SET column1 = 1 LIMIT 1 OFFSET 3"
         )
 
         WINQAssertEqual(
             StatementUpdate().with(CommonTableExpression("testTable").column(column1).as(StatementSelect().select(1))).update(table: "testTable").set(column1).to(1),
-            "WITH testTable(column1) AS(SELECT 1) UPDATE main.testTable SET column1 = 1"
+            "WITH testTable(column1) AS(SELECT 1) UPDATE testTable SET column1 = 1"
         )
 
         WINQAssertEqual(
             StatementUpdate().with(recursive: true, CommonTableExpression("table1").column(column1).as(StatementSelect().select(1)), CommonTableExpression("table2").column(column2).as(StatementSelect().select(2))).update(table: "testTable").set(column1).to(1),
-            "WITH RECURSIVE table1(column1) AS(SELECT 1), table2(column2) AS(SELECT 2) UPDATE main.testTable SET column1 = 1"
+            "WITH RECURSIVE table1(column1) AS(SELECT 1), table2(column2) AS(SELECT 2) UPDATE testTable SET column1 = 1"
         )
     }
 }

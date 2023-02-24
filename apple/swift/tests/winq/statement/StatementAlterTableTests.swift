@@ -27,7 +27,7 @@ class StatementAlterTableTests: BaseTestCase {
 
         WINQAssertEqual(
             StatementAlterTable().alter(table: "table1").rename(to: "table2"),
-            "ALTER TABLE main.table1 RENAME TO table2"
+            "ALTER TABLE table1 RENAME TO table2"
         )
 
         WINQAssertEqual(
@@ -38,13 +38,13 @@ class StatementAlterTableTests: BaseTestCase {
         let column = Column(named: "column1")
         WINQAssertEqual(
             StatementAlterTable().alter(table: "table1").addColumn(with: column.asDef(with: .float)),
-            "ALTER TABLE main.table1 ADD COLUMN column1 REAL"
+            "ALTER TABLE table1 ADD COLUMN column1 REAL"
         )
 
         let newColumn = Column(named: "column2")
         WINQAssertEqual(
             StatementAlterTable().alter(table: "table1").rename(column: column, to: newColumn),
-            "ALTER TABLE main.table1 RENAME COLUMN column1 TO column2"
+            "ALTER TABLE table1 RENAME COLUMN column1 TO column2"
         )
     }
 }

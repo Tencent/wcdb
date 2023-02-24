@@ -53,7 +53,7 @@ class TableConstraintBindingTests: ORMTestCase {
         ORMConstraintBindingAssertEqual(
             BaselineMultiPrimaryTestObject.self,
             """
-            CREATE TABLE IF NOT EXISTS main.BaselineMultiPrimaryTestObject\
+            CREATE TABLE IF NOT EXISTS BaselineMultiPrimaryTestObject\
             (variable1 INTEGER, variable2 INTEGER, \
             PRIMARY KEY(variable1, variable2))
             """
@@ -62,7 +62,7 @@ class TableConstraintBindingTests: ORMTestCase {
         ORMConstraintBindingAssertEqual(
             MultiPrimaryConflictTestObject.self,
             """
-            CREATE TABLE IF NOT EXISTS main.MultiPrimaryConflictTestObject\
+            CREATE TABLE IF NOT EXISTS MultiPrimaryConflictTestObject\
             (variable1 INTEGER, variable2 INTEGER, \
             PRIMARY KEY(variable1, variable2) ON CONFLICT REPLACE)
             """
@@ -98,7 +98,7 @@ class TableConstraintBindingTests: ORMTestCase {
         ORMConstraintBindingAssertEqual(
             BaselineMultiUniqueTestObject.self,
             """
-            CREATE TABLE IF NOT EXISTS main.BaselineMultiUniqueTestObject\
+            CREATE TABLE IF NOT EXISTS BaselineMultiUniqueTestObject\
             (variable1 INTEGER, \
             variable2 INTEGER, \
             UNIQUE(variable1, variable2))
@@ -108,7 +108,7 @@ class TableConstraintBindingTests: ORMTestCase {
         ORMConstraintBindingAssertEqual(
             MultiUniqueConflictTestObject.self,
             """
-            CREATE TABLE IF NOT EXISTS main.MultiUniqueConflictTestObject\
+            CREATE TABLE IF NOT EXISTS MultiUniqueConflictTestObject\
             (variable1 INTEGER, variable2 INTEGER, \
             UNIQUE(variable1, variable2) ON CONFLICT REPLACE)
             """
@@ -134,7 +134,7 @@ class TableConstraintBindingTests: ORMTestCase {
         ORMConstraintBindingAssertEqual(
             CheckTestObject.self,
             """
-            CREATE TABLE IF NOT EXISTS main.CheckTestObject\
+            CREATE TABLE IF NOT EXISTS CheckTestObject\
             (variable1 INTEGER, \
             variable2 INTEGER, \
             CHECK(variable1 > 1))
@@ -158,7 +158,7 @@ class TableConstraintBindingTests: ORMTestCase {
         ORMConstraintBindingAssertEqual(
             ForeignKeyTestObject.self,
             """
-            CREATE TABLE IF NOT EXISTS main.ForeignKeyTestObject\
+            CREATE TABLE IF NOT EXISTS ForeignKeyTestObject\
             (variable1 INTEGER, \
             variable2 INTEGER, \
             FOREIGN KEY(variable1) REFERENCES ForeignKeyTestObject(variable2))

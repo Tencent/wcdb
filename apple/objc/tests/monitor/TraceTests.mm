@@ -54,7 +54,7 @@
 
     __block NSMutableArray* expectedFootprints = [[NSMutableArray alloc] initWithObjects:
                                                                          @"BEGIN IMMEDIATE",
-                                                                         @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)",
+                                                                         @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)",
                                                                          @"COMMIT",
                                                                          nil];
     [self.database tracePerformance:^(NSString*, UInt64, NSString* sql, double) {
@@ -82,7 +82,7 @@
             && [error.path isEqualToString:self.path]
             && error.tag == self.database.tag
             && error.code == WCTErrorCodeError
-            && [error.sql isEqualToString:@"SELECT 1 FROM main.dummy"]) {
+            && [error.sql isEqualToString:@"SELECT 1 FROM dummy"]) {
             tested = YES;
         }
     }];
@@ -138,7 +138,7 @@
 
     __block NSMutableArray* expectedFootprints = [[NSMutableArray alloc] initWithObjects:
                                                                          @"BEGIN IMMEDIATE",
-                                                                         @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)",
+                                                                         @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)",
                                                                          @"COMMIT",
                                                                          nil];
     [WCTDatabase globalTracePerformance:^(NSString*, UInt64, NSString* sql, double) {
