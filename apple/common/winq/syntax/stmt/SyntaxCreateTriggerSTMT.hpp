@@ -58,7 +58,7 @@ public:
     std::list<Column> columns;
     StringView table;
     bool forEachFow = false;
-    Expression condition;
+    Optional<Expression> condition;
 
     enum class STMT : signed char {
         Insert = 1,

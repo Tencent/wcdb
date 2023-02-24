@@ -34,7 +34,7 @@ OrderingTerm::~OrderingTerm() = default;
 
 bool OrderingTerm::isValid() const
 {
-    return expression.isValid();
+    return WCDB_SYNTAX_CHECK_OPTIONAL_VALID(expression);
 }
 
 #pragma mark - Identifier
@@ -45,7 +45,7 @@ Identifier::Type OrderingTerm::getType() const
 
 bool OrderingTerm::describle(std::ostream& stream) const
 {
-    stream << expression;
+    stream << expression.getOrCreate();
     if (collation.length() > 0) {
         stream << " COLLATE " << collation;
     }
@@ -58,7 +58,7 @@ bool OrderingTerm::describle(std::ostream& stream) const
 void OrderingTerm::iterate(const Iterator& iterator, bool& stop)
 {
     Identifier::iterate(iterator, stop);
-    recursiveIterate(expression, iterator, stop);
+    recursiveIterate(expression.getOrCreate(), iterator, stop);
 }
 
 } // namespace Syntax

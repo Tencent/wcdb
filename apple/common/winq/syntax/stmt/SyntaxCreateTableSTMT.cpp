@@ -63,7 +63,7 @@ bool CreateTableSTMT::describle(std::ostream& stream) const
         }
         break;
     case Switch::Select:
-        stream << " AS " << select;
+        stream << " AS " << select.getOrCreate();
         break;
     }
     return true;
@@ -79,7 +79,7 @@ void CreateTableSTMT::iterate(const Iterator& iterator, bool& stop)
         listIterate(tableConstraints, iterator, stop);
         break;
     case Switch::Select:
-        recursiveIterate(select, iterator, stop);
+        recursiveIterate(select.getOrCreate(), iterator, stop);
         break;
     }
 }

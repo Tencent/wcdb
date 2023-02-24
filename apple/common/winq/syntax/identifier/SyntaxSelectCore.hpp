@@ -43,10 +43,10 @@ public:
     bool distinct = false;
     std::list<ResultColumn> resultColumns;
     std::list<TableOrSubquery> tableOrSubqueries;
-    JoinClause joinClause;
-    Expression condition;
+    Optional<JoinClause> joinClause;
+    Optional<Expression> condition;
     std::list<Expression> groups;
-    Expression having;
+    Optional<Expression> having;
     std::list<StringView> windows;
     std::list<WindowDef> windowDefs;
 

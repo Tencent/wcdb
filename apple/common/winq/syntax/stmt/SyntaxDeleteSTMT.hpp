@@ -38,11 +38,11 @@ public:
     bool recursive = false;
     std::list<CommonTableExpression> commonTableExpressions;
     QualifiedTableName table;
-    Expression condition;
+    Optional<Expression> condition;
     std::list<OrderingTerm> orderingTerms;
-    Expression limit;
+    Optional<Expression> limit;
     LimitParameterType limitParameterType = LimitParameterType::NotSet;
-    Expression limitParameter;
+    Optional<Expression> limitParameter;
 
     bool isValid() const override final;
 

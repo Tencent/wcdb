@@ -73,6 +73,7 @@ public:
     Shadow(std::shared_ptr<T>&& value)
     : m_payload(std::move(value)), m_isPrivate(true)
     {
+        m_isPrivate = true;
     }
 
     Shadow& operator=(const T& value)

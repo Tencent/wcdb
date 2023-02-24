@@ -42,10 +42,10 @@ bool IndexedColumn::describle(std::ostream& stream) const
 {
     switch (switcher) {
     case Switch::Column:
-        stream << column;
+        stream << column.getOrCreate();
         break;
     case Switch::Expression:
-        stream << expression;
+        stream << expression.getOrCreate();
         break;
     }
     if (collation.length() > 0) {
@@ -62,10 +62,10 @@ void IndexedColumn::iterate(const Iterator& iterator, bool& stop)
     Identifier::iterate(iterator, stop);
     switch (switcher) {
     case Switch::Column:
-        recursiveIterate(column, iterator, stop);
+        recursiveIterate(column.getOrCreate(), iterator, stop);
         break;
     case Switch::Expression:
-        recursiveIterate(expression, iterator, stop);
+        recursiveIterate(expression.getOrCreate(), iterator, stop);
     }
 }
 

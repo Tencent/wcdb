@@ -66,6 +66,9 @@ protected:
 
 template<typename __SyntaxType, typename __SQLType>
 class SpecifiedSyntax : public __SQLType {
+    static_assert(sizeof(__SyntaxType) < 1000,
+                  "Syntax is too large to be allocated on the stack.");
+
 public:
     using SyntaxType = __SyntaxType;
     static constexpr const SQL::Type type = SyntaxType::type;

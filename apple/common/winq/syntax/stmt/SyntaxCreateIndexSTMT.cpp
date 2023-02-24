@@ -56,8 +56,8 @@ bool CreateIndexSTMT::describle(std::ostream& stream) const
         stream << schema << ".";
     }
     stream << index << " ON " << table << "(" << indexedColumns << ")";
-    if (condition.isValid()) {
-        stream << " WHERE " << condition;
+    if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(condition)) {
+        stream << " WHERE " << condition.value();
     }
     return true;
 }
@@ -67,8 +67,8 @@ void CreateIndexSTMT::iterate(const Iterator& iterator, bool& stop)
     Identifier::iterate(iterator, stop);
     recursiveIterate(schema, iterator, stop);
     listIterate(indexedColumns, iterator, stop);
-    if (condition.isValid()) {
-        recursiveIterate(condition, iterator, stop);
+    if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(condition)) {
+        recursiveIterate(condition.value(), iterator, stop);
     }
 }
 

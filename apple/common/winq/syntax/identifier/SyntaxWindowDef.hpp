@@ -41,7 +41,7 @@ public:
 
     std::list<Expression> expressions;
     std::list<OrderingTerm> orderingTerms;
-    FrameSpec frameSpec;
+    Optional<FrameSpec> frameSpec;
 
     bool isValid() const override final;
 

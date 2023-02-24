@@ -42,11 +42,11 @@ public:
     QualifiedTableName table;
     std::list<std::list<Column>> columnsList;
     std::list<Expression> expressions;
-    Expression condition;
+    Optional<Expression> condition;
     std::list<OrderingTerm> orderingTerms;
-    Expression limit;
+    Optional<Expression> limit;
     LimitParameterType limitParameterType = LimitParameterType::NotSet;
-    Expression limitParameter;
+    Optional<Expression> limitParameter;
 
     bool isValid() const override final;
 

@@ -46,7 +46,7 @@ public:
     _OptionalValueFlag();
 
 protected:
-    bool m_hasValue;
+    mutable bool m_hasValue;
 };
 
 template<class T, bool = std::is_trivially_destructible<T>::value>
@@ -95,8 +95,8 @@ class _OptionalValueDestruct<T, true> : public _OptionalValueFlag {
 
 protected:
     union {
-        char m_nullState;
-        T m_value;
+        mutable char m_nullState;
+        mutable T m_value;
     };
 
     void reset()
@@ -274,6 +274,24 @@ public:
     constexpr inline const T* operator->() const
     {
         return &this->m_value;
+    }
+
+    T& getOrCreate()
+    {
+        if (!this->m_hasValue) {
+            new ((void*) std::addressof(this->m_value)) T();
+            this->m_hasValue = true;
+        }
+        return this->m_value;
+    }
+
+    const T& getOrCreate() const
+    {
+        if (!this->m_hasValue) {
+            new ((void*) std::addressof(this->m_value)) T();
+            this->m_hasValue = true;
+        }
+        return this->m_value;
     }
 
 #pragma mark - Constructor

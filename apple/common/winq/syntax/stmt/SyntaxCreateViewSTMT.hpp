@@ -40,7 +40,7 @@ public:
     Schema schema;
     StringView view;
     std::list<Column> columns;
-    SelectSTMT select;
+    Optional<SelectSTMT> select;
 
     bool isValid() const override final;
 

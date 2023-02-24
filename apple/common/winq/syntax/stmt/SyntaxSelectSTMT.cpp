@@ -34,7 +34,7 @@ SelectSTMT::~SelectSTMT() = default;
 
 bool SelectSTMT::isValid() const
 {
-    return select.isValid();
+    return WCDB_SYNTAX_CHECK_OPTIONAL_VALID(select);
 }
 
 #pragma mark - Identifier
@@ -52,7 +52,7 @@ bool SelectSTMT::describle(std::ostream& stream) const
         }
         stream << commonTableExpressions << space;
     }
-    stream << select;
+    stream << select.getOrCreate();
     if (!cores.empty()) {
         WCTSyntaxRemedialAssert(cores.size() == compoundOperators.size());
         auto core = cores.begin();
@@ -66,16 +66,16 @@ bool SelectSTMT::describle(std::ostream& stream) const
     if (!orderingTerms.empty()) {
         stream << " ORDER BY " << orderingTerms;
     }
-    if (limit.isValid()) {
-        stream << " LIMIT " << limit;
+    if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(limit)) {
+        stream << " LIMIT " << limit.value();
         switch (limitParameterType) {
         case LimitParameterType::NotSet:
             break;
         case LimitParameterType::Offset:
-            stream << " OFFSET " << limitParameter;
+            stream << " OFFSET " << limitParameter.getOrCreate();
             break;
         case LimitParameterType::End:
-            stream << ", " << limitParameter;
+            stream << ", " << limitParameter.getOrCreate();
             break;
         }
     }
@@ -86,17 +86,17 @@ void SelectSTMT::iterate(const Iterator& iterator, bool& stop)
 {
     Identifier::iterate(iterator, stop);
     listIterate(commonTableExpressions, iterator, stop);
-    recursiveIterate(select, iterator, stop);
+    recursiveIterate(select.getOrCreate(), iterator, stop);
     listIterate(cores, iterator, stop);
     listIterate(orderingTerms, iterator, stop);
-    if (limit.isValid()) {
-        recursiveIterate(limit, iterator, stop);
+    if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(limit)) {
+        recursiveIterate(limit.value(), iterator, stop);
         switch (limitParameterType) {
         case LimitParameterType::NotSet:
             break;
         case LimitParameterType::Offset:
         case LimitParameterType::End:
-            recursiveIterate(limitParameter, iterator, stop);
+            recursiveIterate(limitParameter.getOrCreate(), iterator, stop);
             break;
         }
     }

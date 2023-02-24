@@ -43,14 +43,14 @@ public:
     bool recursive = false;
     std::list<CommonTableExpression> commonTableExpressions;
 
-    SelectCore select;
+    Optional<SelectCore> select;
     std::list<SelectCore> cores;
     std::list<CompoundOperator> compoundOperators;
 
     std::list<OrderingTerm> orderingTerms;
-    Expression limit;
+    Optional<Expression> limit;
     LimitParameterType limitParameterType = LimitParameterType::NotSet;
-    Expression limitParameter;
+    Optional<Expression> limitParameter;
 
     bool isValid() const override final;
 

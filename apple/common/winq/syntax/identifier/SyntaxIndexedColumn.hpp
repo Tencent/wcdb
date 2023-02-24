@@ -39,8 +39,8 @@ public:
 
     WCDB_SYNTAX_MAIN_UNION_ENUM(Column, Expression);
 
-    Column column;
-    Expression expression;
+    Optional<Column> column;
+    Optional<Expression> expression;
     StringView collation;
 
     WCDB_SYNTAX_ENUM_UNION(Order, order);

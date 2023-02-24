@@ -25,6 +25,7 @@
 #pragma once
 
 #include <WCDB/Macro.h>
+#include <WCDB/Optional.hpp>
 #include <WCDB/Shadow.hpp>
 #include <WCDB/StringView.hpp>
 #include <WCDB/SyntaxCommonConst.hpp>
@@ -214,3 +215,6 @@ std::ostream& operator<<(std::ostream& stream, const std::list<T>& identifiers)
         }                                                                      \
         return m_##name;                                                       \
     }
+
+#define WCDB_SYNTAX_CHECK_OPTIONAL_VALID(value)                                \
+    (value.hasValue() && value->isValid())

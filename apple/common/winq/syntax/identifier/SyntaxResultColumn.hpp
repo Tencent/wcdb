@@ -35,7 +35,7 @@ class ResultColumn final : public Identifier {
 public:
     ~ResultColumn() override final;
 
-    Expression expression;
+    Optional<Expression> expression;
     StringView alias;
 
     bool isValid() const override final;

@@ -33,7 +33,8 @@ WindowDef::~WindowDef() = default;
 
 bool WindowDef::isValid() const
 {
-    return !expressions.empty() || !orderingTerms.empty() || frameSpec.isValid();
+    return !expressions.empty() || !orderingTerms.empty()
+           || WCDB_SYNTAX_CHECK_OPTIONAL_VALID(frameSpec);
 }
 
 #pragma mark - Identifier
@@ -56,11 +57,11 @@ bool WindowDef::describle(std::ostream& stream) const
         }
         stream << "ORDER BY " << orderingTerms;
     }
-    if (frameSpec.isValid()) {
+    if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(frameSpec)) {
         if (extraSpace) {
             stream << space;
         }
-        stream << frameSpec;
+        stream << frameSpec.value();
     }
     stream << ")";
     return true;
@@ -71,8 +72,8 @@ void WindowDef::iterate(const Iterator& iterator, bool& stop)
     Identifier::iterate(iterator, stop);
     listIterate(expressions, iterator, stop);
     listIterate(orderingTerms, iterator, stop);
-    if (frameSpec.isValid()) {
-        recursiveIterate(frameSpec, iterator, stop);
+    if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(frameSpec)) {
+        recursiveIterate(frameSpec.value(), iterator, stop);
     }
 }
 

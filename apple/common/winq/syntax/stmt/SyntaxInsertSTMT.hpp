@@ -46,9 +46,9 @@ public:
 
     WCDB_SYNTAX_MAIN_UNION_ENUM(Values, Select, Default);
     std::list<std::list<Expression>> expressionsValues;
-    SelectSTMT select;
+    Optional<SelectSTMT> select;
 
-    UpsertClause upsertClause;
+    Optional<UpsertClause> upsertClause;
 
 #pragma mark - Identifier
 public:

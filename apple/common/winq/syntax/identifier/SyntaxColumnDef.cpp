@@ -34,7 +34,7 @@ ColumnDef::~ColumnDef() = default;
 
 bool ColumnDef::isValid() const
 {
-    return column.isValid();
+    return WCDB_SYNTAX_CHECK_OPTIONAL_VALID(column);
 }
 
 #pragma mark - Identifier
@@ -45,7 +45,7 @@ Identifier::Type ColumnDef::getType() const
 
 bool ColumnDef::describle(std::ostream& stream) const
 {
-    stream << column;
+    stream << column.getOrCreate();
     if (columnTypeValid()) {
         stream << space << columnType;
     };
@@ -58,7 +58,7 @@ bool ColumnDef::describle(std::ostream& stream) const
 void ColumnDef::iterate(const Iterator& iterator, bool& stop)
 {
     Identifier::iterate(iterator, stop);
-    recursiveIterate(column, iterator, stop);
+    recursiveIterate(column.getOrCreate(), iterator, stop);
     listIterate(constraints, iterator, stop);
 }
 

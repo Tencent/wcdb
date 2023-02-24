@@ -191,7 +191,7 @@ StatementSelect& StatementSelect::offset(const Expression& offset)
 Syntax::SelectCore& StatementSelect::currentCore()
 {
     if (syntax().cores.empty()) {
-        return syntax().select;
+        return syntax().select.getOrCreate();
     } else {
         return syntax().cores.back();
     }

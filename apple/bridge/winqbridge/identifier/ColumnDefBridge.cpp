@@ -52,7 +52,7 @@ void WCDBColumnDefConfigConstraint(CPPColumnDef columnDef, CPPColumnConstraint c
 const char* _Nonnull WCDBColumnDefGetColumnName(CPPColumnDef columnDef)
 {
     WCDBGetObjectOrReturnValue(columnDef, WCDB::ColumnDef, cppColumnDef, "");
-    return cppColumnDef->syntax().column.name.data();
+    return cppColumnDef->syntax().column.getOrCreate().name.data();
 }
 
 bool WCDBColumnDefIsNotIndexed(CPPColumnDef columnDef)

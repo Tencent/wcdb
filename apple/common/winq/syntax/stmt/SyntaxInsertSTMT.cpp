@@ -78,14 +78,14 @@ bool InsertSTMT::describle(std::ostream& stream, bool skipSchema) const
         break;
     }
     case Switch::Select:
-        stream << select;
+        stream << select.getOrCreate();
         break;
     case Switch::Default:
         stream << "DEFAULT VALUES";
         break;
     }
-    if (upsertClause.isValid()) {
-        stream << space << upsertClause;
+    if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(upsertClause)) {
+        stream << space << upsertClause.value();
     }
     return true;
 }
@@ -109,13 +109,13 @@ void InsertSTMT::iterate(const Iterator& iterator, bool& stop)
         break;
     }
     case Switch::Select:
-        recursiveIterate(select, iterator, stop);
+        recursiveIterate(select.getOrCreate(), iterator, stop);
         break;
     case Switch::Default:
         break;
     }
-    if (upsertClause.isValid()) {
-        recursiveIterate(upsertClause, iterator, stop);
+    if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(upsertClause)) {
+        recursiveIterate(upsertClause.value(), iterator, stop);
     }
 }
 

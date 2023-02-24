@@ -42,8 +42,8 @@ bool UpsertClause::describle(std::ostream& stream) const
     stream << "ON CONFLICT";
     if (!indexedColumns.empty()) {
         stream << "(" << indexedColumns << ")";
-        if (condition.isValid()) {
-            stream << " WHERE " << condition;
+        if (condition != nullptr && condition.get()->isValid()) {
+            stream << " WHERE " << *condition.get();
         }
     }
     stream << " DO ";
@@ -72,8 +72,8 @@ bool UpsertClause::describle(std::ostream& stream) const
             ++columns;
             ++expression;
         }
-        if (updateCondition.isValid()) {
-            stream << " WHERE " << updateCondition;
+        if (updateCondition != nullptr && updateCondition.get()->isValid()) {
+            stream << " WHERE " << *updateCondition.get();
         }
     } break;
     }
@@ -85,8 +85,8 @@ void UpsertClause::iterate(const Iterator& iterator, bool& stop)
     Identifier::iterate(iterator, stop);
     if (!indexedColumns.empty()) {
         listIterate(indexedColumns, iterator, stop);
-        if (condition.isValid()) {
-            recursiveIterate(condition, iterator, stop);
+        if (condition != nullptr && condition.get()->isValid()) {
+            recursiveIterate(*condition.get(), iterator, stop);
         }
     }
     if (!columnsList.empty()) {
@@ -99,8 +99,8 @@ void UpsertClause::iterate(const Iterator& iterator, bool& stop)
             ++columns;
             ++expression;
         }
-        if (updateCondition.isValid()) {
-            recursiveIterate(updateCondition, iterator, stop);
+        if (updateCondition != nullptr && updateCondition.get()->isValid()) {
+            recursiveIterate(*updateCondition.get(), iterator, stop);
         }
     }
 }

@@ -152,7 +152,7 @@ private:
         if (m_fields.size() == 0) {
             m_fields = ObjectType::allFields();
         }
-        if (m_statement.syntax().select.resultColumns.size() == 0) {
+        if (m_statement.syntax().select.getOrCreate().resultColumns.size() == 0) {
             m_statement.select(m_fields);
         }
         if (m_statement.syntax().orderingTerms.empty()) {

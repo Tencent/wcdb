@@ -35,7 +35,7 @@ class JoinConstraint final : public Identifier {
 public:
     ~JoinConstraint() override final;
 
-    Expression expression;
+    Optional<Expression> expression;
     std::list<Column> columns;
     bool isValid() const override final;
 

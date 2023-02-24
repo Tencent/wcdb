@@ -57,10 +57,10 @@ bool TableConstraint::describle(std::ostream& stream) const
         }
         break;
     case Switch::Check:
-        stream << "CHECK(" << expression << ")";
+        stream << "CHECK(" << expression.getOrCreate() << ")";
         break;
     case Switch::ForeignKey:
-        stream << "FOREIGN KEY(" << columns << ") " << foreignKeyClause;
+        stream << "FOREIGN KEY(" << columns << ") " << foreignKeyClause.getOrCreate();
         break;
     }
     return true;
@@ -75,11 +75,11 @@ void TableConstraint::iterate(const Iterator& iterator, bool& stop)
         listIterate(indexedColumns, iterator, stop);
         break;
     case Switch::Check:
-        recursiveIterate(expression, iterator, stop);
+        recursiveIterate(expression.getOrCreate(), iterator, stop);
         break;
     case Switch::ForeignKey:
         listIterate(columns, iterator, stop);
-        recursiveIterate(foreignKeyClause, iterator, stop);
+        recursiveIterate(foreignKeyClause.getOrCreate(), iterator, stop);
         break;
     }
 }

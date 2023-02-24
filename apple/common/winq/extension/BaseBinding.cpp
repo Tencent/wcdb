@@ -144,7 +144,7 @@ BaseBinding::generateCreateVirtualTableStatement(const UnsafeStringView &tableNa
                 if (constrain.switcher == WCDB::Syntax::ColumnConstraint::Switch::UnIndexed) {
                     arguments.push_back(StringView().formatted(
                     "%s %s",
-                    iter.second.syntax().column.getDescription().data(),
+                    iter.second.syntax().column.getOrCreate().getDescription().data(),
                     constrain.getDescription().data()));
                     added = true;
                     break;
@@ -152,7 +152,7 @@ BaseBinding::generateCreateVirtualTableStatement(const UnsafeStringView &tableNa
             }
             // FTS5 does not need type
             if (!added) {
-                arguments.push_back(iter.second.syntax().column.getDescription());
+                arguments.push_back(iter.second.syntax().column.getOrCreate().getDescription());
             }
         } else {
             arguments.push_back(iter.second.getDescription());
@@ -202,8 +202,8 @@ bool BaseBinding::tryRecoverColumn(const UnsafeStringView &columnName,
         //Add new column
         if (handle->addColumn(schemaName, tableName, columnDef.second)) {
             Error error(Error::Code::Warning, Error::Level::Warning, "Auto add column");
-            error.infos.insert_or_assign("Column",
-                                         columnDef.second.syntax().column.name);
+            error.infos.insert_or_assign(
+            "Column", columnDef.second.syntax().column.getOrCreate().name);
             error.infos.insert_or_assign("Table", tableName);
             if (schemaName.length() > 0) {
                 error.infos.insert_or_assign("Schema", schemaName);
@@ -219,7 +219,7 @@ bool BaseBinding::tryRecoverColumn(const UnsafeStringView &columnName,
     if (migratingHandle != nullptr) {
         Columns columns;
         for (const auto &columnDef : columnDefs) {
-            columns.push_back(columnDef.second.syntax().column.name);
+            columns.push_back(columnDef.second.syntax().column.getOrCreate().name);
         }
         return migratingHandle->rebindUnionView(tableName, columns);
     }
