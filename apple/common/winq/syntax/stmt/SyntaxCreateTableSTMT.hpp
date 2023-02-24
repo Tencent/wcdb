@@ -48,7 +48,7 @@ public:
     std::list<TableConstraint> tableConstraints;
     bool withoutRowid = false;
 
-    SelectSTMT select;
+    Optional<SelectSTMT> select;
 
 #pragma mark - Identifier
 public:

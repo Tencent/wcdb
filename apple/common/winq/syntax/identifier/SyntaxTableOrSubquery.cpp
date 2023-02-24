@@ -72,10 +72,10 @@ bool TableOrSubquery::describle(std::ostream& stream) const
         stream << "(" << tableOrSubqueries << ")";
         break;
     case Switch::JoinClause:
-        stream << "(" << joinClause << ")";
+        stream << "(" << *joinClause.get() << ")";
         break;
     case Switch::Select:
-        stream << "(" << select << ")";
+        stream << "(" << *select.get() << ")";
         if (!alias.empty()) {
             stream << " AS " << alias;
         }
@@ -99,10 +99,10 @@ void TableOrSubquery::iterate(const Iterator& iterator, bool& stop)
         listIterate(tableOrSubqueries, iterator, stop);
         break;
     case Switch::JoinClause:
-        recursiveIterate(joinClause, iterator, stop);
+        recursiveIterate(*joinClause.get(), iterator, stop);
         break;
     case Switch::Select:
-        recursiveIterate(select, iterator, stop);
+        recursiveIterate(*select.get(), iterator, stop);
         break;
     }
 }

@@ -46,8 +46,8 @@ public:
 
     StringView collation;
     bool autoIncrement = false;
-    Expression expression;
-    ForeignKeyClause foreignKeyClause;
+    Optional<Expression> expression;
+    Optional<ForeignKeyClause> foreignKeyClause;
 
 #pragma mark - Identifier
 public:

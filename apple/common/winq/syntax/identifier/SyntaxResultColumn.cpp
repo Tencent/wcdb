@@ -33,7 +33,7 @@ ResultColumn::~ResultColumn() = default;
 
 bool ResultColumn::isValid() const
 {
-    return expression.isValid();
+    return WCDB_SYNTAX_CHECK_OPTIONAL_VALID(expression);
 }
 
 #pragma mark - Identifier
@@ -44,7 +44,7 @@ Identifier::Type ResultColumn::getType() const
 
 bool ResultColumn::describle(std::ostream& stream) const
 {
-    stream << expression;
+    stream << expression.getOrCreate();
     if (!alias.empty()) {
         stream << " AS " << alias;
     }
@@ -54,7 +54,7 @@ bool ResultColumn::describle(std::ostream& stream) const
 void ResultColumn::iterate(const Iterator& iterator, bool& stop)
 {
     Identifier::iterate(iterator, stop);
-    recursiveIterate(expression, iterator, stop);
+    recursiveIterate(expression.getOrCreate(), iterator, stop);
 }
 
 } // namespace Syntax

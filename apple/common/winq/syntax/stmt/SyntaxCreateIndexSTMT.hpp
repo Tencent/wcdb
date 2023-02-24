@@ -42,7 +42,7 @@ public:
     StringView index;
     StringView table;
     std::list<IndexedColumn> indexedColumns;
-    Expression condition;
+    Optional<Expression> condition;
 
     bool isValid() const override final;
 

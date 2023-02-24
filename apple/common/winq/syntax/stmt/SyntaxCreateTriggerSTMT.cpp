@@ -94,8 +94,8 @@ bool CreateTriggerSTMT::describle(std::ostream& stream) const
     if (forEachFow) {
         stream << "FOR EACH ROW ";
     }
-    if (condition.isValid()) {
-        stream << "WHEN " << condition << space;
+    if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(condition)) {
+        stream << "WHEN " << condition.value() << space;
     }
     stream << "BEGIN ";
     auto insert = inserts.begin();
@@ -144,8 +144,8 @@ void CreateTriggerSTMT::iterate(const Iterator& iterator, bool& stop)
     if (event == Event::Update) {
         listIterate(columns, iterator, stop);
     }
-    if (condition.isValid()) {
-        recursiveIterate(condition, iterator, stop);
+    if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(condition)) {
+        recursiveIterate(condition.value(), iterator, stop);
     }
     auto insert = inserts.begin();
     auto delete_ = deletes.begin();

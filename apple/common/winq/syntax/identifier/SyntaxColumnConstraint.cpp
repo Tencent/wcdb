@@ -69,16 +69,16 @@ bool ColumnConstraint::describle(std::ostream& stream) const
         }
         break;
     case Switch::Check:
-        stream << "CHECK(" << expression << ")";
+        stream << "CHECK(" << expression.getOrCreate() << ")";
         break;
     case Switch::Default:
-        stream << "DEFAULT " << expression;
+        stream << "DEFAULT " << expression.getOrCreate();
         break;
     case Switch::Collate:
         stream << "COLLATE " << collation;
         break;
     case Switch::ForeignKey:
-        stream << foreignKeyClause;
+        stream << foreignKeyClause.getOrCreate();
         break;
     case Switch::UnIndexed:
         stream << "UNINDEXED";
@@ -98,13 +98,13 @@ void ColumnConstraint::iterate(const Iterator& iterator, bool& stop)
     case Switch::UnIndexed:
         break;
     case Switch::Check:
-        recursiveIterate(expression, iterator, stop);
+        recursiveIterate(expression.getOrCreate(), iterator, stop);
         break;
     case Switch::Default:
-        recursiveIterate(expression, iterator, stop);
+        recursiveIterate(expression.getOrCreate(), iterator, stop);
         break;
     case Switch::ForeignKey:
-        recursiveIterate(foreignKeyClause, iterator, stop);
+        recursiveIterate(foreignKeyClause.getOrCreate(), iterator, stop);
         break;
     }
 }

@@ -59,7 +59,7 @@ bool CreateViewSTMT::describle(std::ostream& stream) const
     if (!columns.empty()) {
         stream << "(" << columns << ")";
     }
-    stream << " AS " << select;
+    stream << " AS " << select.getOrCreate();
     return true;
 }
 
@@ -68,7 +68,7 @@ void CreateViewSTMT::iterate(const Iterator& iterator, bool& stop)
     Identifier::iterate(iterator, stop);
     recursiveIterate(schema, iterator, stop);
     listIterate(columns, iterator, stop);
-    recursiveIterate(select, iterator, stop);
+    recursiveIterate(select.getOrCreate(), iterator, stop);
 }
 
 } // namespace Syntax

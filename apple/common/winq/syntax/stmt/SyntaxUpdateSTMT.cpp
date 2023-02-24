@@ -80,22 +80,22 @@ bool UpdateSTMT::describle(std::ostream& stream, bool skipSchema) const
             ++columns;
             ++expression;
         }
-        if (condition.isValid()) {
-            stream << " WHERE " << condition;
+        if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(condition)) {
+            stream << " WHERE " << condition.value();
         }
         if (!orderingTerms.empty()) {
             stream << " ORDER BY " << orderingTerms;
         }
-        if (limit.isValid()) {
-            stream << " LIMIT " << limit;
+        if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(limit)) {
+            stream << " LIMIT " << limit.value();
             switch (limitParameterType) {
             case LimitParameterType::NotSet:
                 break;
             case LimitParameterType::Offset:
-                stream << " OFFSET " << limitParameter;
+                stream << " OFFSET " << limitParameter.getOrCreate();
                 break;
             case LimitParameterType::End:
-                stream << ", " << limitParameter;
+                stream << ", " << limitParameter.getOrCreate();
                 break;
             }
         }
@@ -123,20 +123,20 @@ void UpdateSTMT::iterate(const Iterator& iterator, bool& stop)
             ++columns;
             ++expression;
         }
-        if (condition.isValid()) {
-            recursiveIterate(condition, iterator, stop);
+        if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(condition)) {
+            recursiveIterate(condition.value(), iterator, stop);
         }
         if (!orderingTerms.empty()) {
             listIterate(orderingTerms, iterator, stop);
         }
-        if (limit.isValid()) {
-            recursiveIterate(limit, iterator, stop);
+        if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(limit)) {
+            recursiveIterate(limit.value(), iterator, stop);
             switch (limitParameterType) {
             case LimitParameterType::NotSet:
                 break;
             case LimitParameterType::Offset:
             case LimitParameterType::End:
-                recursiveIterate(limitParameter, iterator, stop);
+                recursiveIterate(limitParameter.getOrCreate(), iterator, stop);
                 break;
             }
         }

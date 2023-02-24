@@ -74,7 +74,7 @@ WCDB_SYNTHESIZE(content)
 {
     WCDB::StatementCreateTable statement = MigrationObject.objectRelationalMapping.generateCreateTableStatement(tableName);
     for (auto& columnDef : statement.syntax().columnDefs) {
-        if (columnDef.column.name == MigrationObject.identifier.getDescription()) {
+        if (columnDef.column.getOrCreate().name == MigrationObject.identifier.getDescription()) {
             WCDB::ColumnConstraint constraint;
             constraint.primaryKey().order(WCDB::Order::ASC);
             columnDef.constraints.push_back(constraint.syntax());
@@ -88,7 +88,7 @@ WCDB_SYNTHESIZE(content)
 {
     WCDB::StatementCreateTable statement = MigrationObject.objectRelationalMapping.generateCreateTableStatement(tableName);
     for (auto& columnDef : statement.syntax().columnDefs) {
-        if (columnDef.column.name == MigrationObject.identifier.getDescription()) {
+        if (columnDef.column.getOrCreate().name == MigrationObject.identifier.getDescription()) {
             WCDB::ColumnConstraint constraint;
             constraint.primaryKey().order(WCDB::Order::ASC).autoIncrement();
             columnDef.constraints.push_back(constraint.syntax());
@@ -103,7 +103,7 @@ WCDB_SYNTHESIZE(content)
     WCDB::StatementCreateTable statement = MigrationObject.objectRelationalMapping.generateCreateTableStatement(tableName);
     auto iterater = statement.syntax().columnDefs.begin();
     while (iterater != statement.syntax().columnDefs.end()) {
-        if (iterater->column.name == MigrationObject.content.getDescription()) {
+        if (iterater->column.getOrCreate().name == MigrationObject.content.getDescription()) {
             statement.syntax().columnDefs.erase(iterater);
             break;
         }

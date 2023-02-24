@@ -206,6 +206,8 @@ public:
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 
+static_assert(sizeof(Expression) < 500, "Expression is too large.");
+
 } // namespace Syntax
 
 } // namespace WCDB

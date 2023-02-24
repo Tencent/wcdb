@@ -60,22 +60,22 @@ bool DeleteSTMT::describle(std::ostream& stream, bool skipSchema) const
     if (!table.describle(stream, skipSchema)) {
         return false;
     }
-    if (condition.isValid()) {
-        stream << " WHERE " << condition;
+    if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(condition)) {
+        stream << " WHERE " << condition.value();
     }
     if (!orderingTerms.empty()) {
         stream << " ORDER BY " << orderingTerms;
     }
-    if (limit.isValid()) {
-        stream << " LIMIT " << limit;
+    if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(limit)) {
+        stream << " LIMIT " << limit.value();
         switch (limitParameterType) {
         case LimitParameterType::NotSet:
             break;
         case LimitParameterType::Offset:
-            stream << " OFFSET " << limitParameter;
+            stream << " OFFSET " << limitParameter.getOrCreate();
             break;
         case LimitParameterType::End:
-            stream << ", " << limitParameter;
+            stream << ", " << limitParameter.getOrCreate();
             break;
         }
     }
@@ -87,18 +87,18 @@ void DeleteSTMT::iterate(const Iterator& iterator, bool& stop)
     Identifier::iterate(iterator, stop);
     listIterate(commonTableExpressions, iterator, stop);
     recursiveIterate(table, iterator, stop);
-    if (condition.isValid()) {
-        recursiveIterate(condition, iterator, stop);
+    if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(condition)) {
+        recursiveIterate(condition.getOrCreate(), iterator, stop);
     }
     listIterate(orderingTerms, iterator, stop);
-    if (limit.isValid()) {
-        recursiveIterate(limit, iterator, stop);
+    if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(limit)) {
+        recursiveIterate(limit.getOrCreate(), iterator, stop);
         switch (limitParameterType) {
         case LimitParameterType::NotSet:
             break;
         case LimitParameterType::Offset:
         case LimitParameterType::End:
-            recursiveIterate(limitParameter, iterator, stop);
+            recursiveIterate(limitParameter.getOrCreate(), iterator, stop);
             break;
         }
     }

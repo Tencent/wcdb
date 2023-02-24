@@ -35,7 +35,7 @@ class OrderingTerm final : public Identifier {
 public:
     ~OrderingTerm() override final;
 
-    Expression expression;
+    Optional<Expression> expression;
     StringView collation;
     WCDB_SYNTAX_ENUM_UNION(Order, order);
 

@@ -33,7 +33,7 @@ JoinConstraint::~JoinConstraint() = default;
 
 bool JoinConstraint::isValid() const
 {
-    return !columns.empty() || expression.isValid();
+    return !columns.empty() || (expression.hasValue() && expression->isValid());
 }
 
 #pragma mark - Identifier
@@ -47,7 +47,7 @@ bool JoinConstraint::describle(std::ostream& stream) const
     if (!columns.empty()) {
         stream << "USING(" << columns << ")";
     } else {
-        stream << "ON " << expression;
+        stream << "ON " << expression.getOrCreate();
     }
     return true;
 }
@@ -58,7 +58,7 @@ void JoinConstraint::iterate(const Iterator& iterator, bool& stop)
     if (!columns.empty()) {
         listIterate(columns, iterator, stop);
     } else {
-        recursiveIterate(expression, iterator, stop);
+        recursiveIterate(expression.getOrCreate(), iterator, stop);
     }
 }
 

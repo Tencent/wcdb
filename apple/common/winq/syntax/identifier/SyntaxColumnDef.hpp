@@ -36,7 +36,7 @@ class ColumnDef final : public Identifier {
 public:
     ~ColumnDef() override final;
 
-    Column column;
+    Optional<Column> column;
     WCDB_SYNTAX_ENUM_UNION(ColumnType, columnType);
     std::list<ColumnConstraint> constraints;
 

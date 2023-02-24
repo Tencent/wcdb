@@ -45,10 +45,10 @@ public:
     std::list<IndexedColumn> indexedColumns;
     WCDB_SYNTAX_ENUM_UNION(Conflict, conflict);
 
-    Expression expression;
+    Optional<Expression> expression;
 
     std::list<Column> columns;
-    ForeignKeyClause foreignKeyClause;
+    Optional<ForeignKeyClause> foreignKeyClause;
 
 #pragma mark - Identifier
 public:

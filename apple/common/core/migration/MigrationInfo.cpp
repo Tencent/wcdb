@@ -256,8 +256,8 @@ MigrationInfo::getStatementForCreatingUnionedView(const Columns& columns) const
     createView.columns(newColumns);
     ResultColumns resultColumns;
     resultColumns.insert(resultColumns.begin(), newColumns.begin(), newColumns.end());
-    createView.syntax().select.select.resultColumns = resultColumns;
-    for (auto& core : createView.syntax().select.cores) {
+    createView.syntax().select.getOrCreate().select.getOrCreate().resultColumns = resultColumns;
+    for (auto& core : createView.syntax().select.getOrCreate().cores) {
         core.resultColumns = resultColumns;
     }
     return createView;
@@ -347,10 +347,10 @@ MigrationInfo::getStatementForLimitedUpdatingTable(const Statement& sourceStatem
       .from(TableOrSubquery(getUnionedView()).schema(Schema::temp()));
 
     Syntax::SelectSTMT& selectSyntax = select.syntax();
-    Syntax::SelectCore& coreSyntax = selectSyntax.select;
+    Syntax::SelectCore& coreSyntax = selectSyntax.select.getOrCreate();
 
     coreSyntax.condition = updateSyntax.condition;
-    updateSyntax.condition.__valid = Syntax::Identifier::invalid;
+    updateSyntax.condition.getOrCreate().__valid = Syntax::Identifier::invalid;
 
     selectSyntax.orderingTerms = updateSyntax.orderingTerms;
     updateSyntax.orderingTerms.clear();
@@ -358,7 +358,7 @@ MigrationInfo::getStatementForLimitedUpdatingTable(const Statement& sourceStatem
     selectSyntax.limit = updateSyntax.limit;
     selectSyntax.limitParameterType = updateSyntax.limitParameterType;
     selectSyntax.limitParameter = updateSyntax.limitParameter;
-    updateSyntax.limit.__valid = Syntax::Identifier::invalid;
+    updateSyntax.limit.getOrCreate().__valid = Syntax::Identifier::invalid;
 
     statementUpdate.where(Column::rowid().in(select));
 
@@ -378,10 +378,10 @@ MigrationInfo::getStatementForLimitedDeletingFromTable(const Statement& sourceSt
       .from(TableOrSubquery(getUnionedView()).schema(Schema::temp()));
 
     Syntax::SelectSTMT& selectSyntax = select.syntax();
-    Syntax::SelectCore& coreSyntax = selectSyntax.select;
+    Syntax::SelectCore& coreSyntax = selectSyntax.select.getOrCreate();
 
     coreSyntax.condition = deleteSyntax.condition;
-    deleteSyntax.condition.__valid = Syntax::Identifier::invalid;
+    deleteSyntax.condition.getOrCreate().__valid = Syntax::Identifier::invalid;
 
     selectSyntax.orderingTerms = deleteSyntax.orderingTerms;
     deleteSyntax.orderingTerms.clear();
@@ -389,7 +389,7 @@ MigrationInfo::getStatementForLimitedDeletingFromTable(const Statement& sourceSt
     selectSyntax.limit = deleteSyntax.limit;
     selectSyntax.limitParameterType = deleteSyntax.limitParameterType;
     selectSyntax.limitParameter = deleteSyntax.limitParameter;
-    deleteSyntax.limit.__valid = Syntax::Identifier::invalid;
+    deleteSyntax.limit.getOrCreate().__valid = Syntax::Identifier::invalid;
 
     statementDelete.where(Column::rowid().in(select));
 

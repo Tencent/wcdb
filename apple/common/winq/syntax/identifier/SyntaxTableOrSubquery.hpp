@@ -51,8 +51,8 @@ public:
     StringView index;
     std::list<Expression> expressions;
     std::list<TableOrSubquery> tableOrSubqueries;
-    JoinClause joinClause;
-    SelectSTMT select;
+    Shadow<JoinClause> joinClause;
+    Shadow<SelectSTMT> select;
 
 #pragma mark - Identifier
 public:

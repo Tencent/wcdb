@@ -36,11 +36,11 @@ public:
     ~UpsertClause() override final;
 
     std::list<IndexedColumn> indexedColumns;
-    Expression condition;
+    Shadow<Expression> condition;
     WCDB_SYNTAX_MAIN_UNION_ENUM(Nothing, Update);
     std::list<std::list<Column>> columnsList;
     std::list<Expression> expressions;
-    Expression updateCondition;
+    Shadow<Expression> updateCondition;
 
 #pragma mark - Identifier
 public:

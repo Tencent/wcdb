@@ -46,21 +46,21 @@ bool SelectCore::describle(std::ostream& stream) const
             stream << "DISTINCT ";
         }
         stream << resultColumns;
-        if (!tableOrSubqueries.empty() || joinClause.isValid()) {
+        if (!tableOrSubqueries.empty() || WCDB_SYNTAX_CHECK_OPTIONAL_VALID(joinClause)) {
             stream << " FROM ";
             if (!tableOrSubqueries.empty()) {
                 stream << tableOrSubqueries;
             } else {
-                stream << joinClause;
+                stream << joinClause.value();
             }
         }
-        if (condition.isValid()) {
-            stream << " WHERE " << condition;
+        if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(condition)) {
+            stream << " WHERE " << condition.value();
         }
         if (!groups.empty()) {
             stream << " GROUP BY " << groups;
-            if (having.isValid()) {
-                stream << " HAVING " << having;
+            if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(having)) {
+                stream << " HAVING " << having.value();
             }
         }
         if (!windows.empty()) {
@@ -105,16 +105,16 @@ void SelectCore::iterate(const Iterator& iterator, bool& stop)
         listIterate(resultColumns, iterator, stop);
         if (!tableOrSubqueries.empty()) {
             listIterate(tableOrSubqueries, iterator, stop);
-        } else if (joinClause.isValid()) {
-            recursiveIterate(joinClause, iterator, stop);
+        } else if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(joinClause)) {
+            recursiveIterate(joinClause.value(), iterator, stop);
         }
-        if (condition.isValid()) {
-            recursiveIterate(condition, iterator, stop);
+        if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(condition)) {
+            recursiveIterate(condition.value(), iterator, stop);
         }
         if (!groups.empty()) {
             listIterate(groups, iterator, stop);
-            if (having.isValid()) {
-                recursiveIterate(having, iterator, stop);
+            if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(having)) {
+                recursiveIterate(having.value(), iterator, stop);
             }
         }
         if (!windows.empty()) {
