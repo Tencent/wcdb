@@ -171,10 +171,13 @@
 
 - (NSArray *)getAllFilesAtDirectory:(NSString *)directory
 {
+    NSFileManager *mgr = [NSFileManager defaultManager];
+    if (![mgr fileExistsAtPath:directory]) {
+        return nil;
+    }
     NSMutableArray *directories = [[NSMutableArray alloc] initWithObjects:directory, nil];
     NSString *currentDir;
     NSMutableArray *result = [[NSMutableArray alloc] init];
-    NSFileManager *mgr = [NSFileManager defaultManager];
     NSString *currentPath;
     BOOL isDir = NO;
     BOOL isExist = NO;

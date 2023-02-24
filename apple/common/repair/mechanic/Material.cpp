@@ -297,8 +297,8 @@ bool Material::decryptedDeserialize(const UnsafeStringView &path)
 
     int reserveBytes = sqlcipher_codec_ctx_get_reservesize(pCodec);
     WCTAssert(reserveBytes > 0);
+    int pageCount = int(rawData.size() / pageSize);
     size_t usableSize = pageSize - reserveBytes;
-    int pageCount = int(rawData.size() / usableSize);
     size_t totalSize = pageCount * usableSize - saltBytes;
 
     Data decryptData(totalSize);

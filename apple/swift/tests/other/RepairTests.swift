@@ -97,7 +97,7 @@ class RepairTests: DatabaseTestCase {
 #if WCDB_QUICK_TESTS
             Thread.sleep(forTimeInterval: 12)
 #else
-            Thread.sleep(forTimeInterval: 66)
+            Thread.sleep(forTimeInterval: 606)
 #endif
             XCTAssertTrue(self.fileManager.fileExists(atPath: self.database.firstMaterialPath))
         }
