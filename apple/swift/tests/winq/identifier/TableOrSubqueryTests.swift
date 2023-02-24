@@ -24,39 +24,39 @@ import WCDB
 class TableOrSubqueryTests: BaseTestCase {
 
     func testSubquery() {
-        WINQAssertEqual(TableOrSubquery(withTable: "testTable"), "main.testTable")
+        WINQAssertEqual(TableOrSubquery(withTable: "testTable"), "testTable")
 
         WINQAssertEqual(TableOrSubquery(withTable: "testTable").of(schema: "testSchema"), "testSchema.testTable")
 
-        WINQAssertEqual(TableOrSubquery(withTable: "testTable").indexed(by: "testIndex"), "main.testTable INDEXED BY testIndex")
+        WINQAssertEqual(TableOrSubquery(withTable: "testTable").indexed(by: "testIndex"), "testTable INDEXED BY testIndex")
 
-        WINQAssertEqual(TableOrSubquery(withTable: "testTable").notIndexed(), "main.testTable NOT INDEXED")
+        WINQAssertEqual(TableOrSubquery(withTable: "testTable").notIndexed(), "testTable NOT INDEXED")
 
-        WINQAssertEqual(TableOrSubquery(withTable: "testTable").as(alias: "testAliasTable"), "main.testTable AS testAliasTable")
+        WINQAssertEqual(TableOrSubquery(withTable: "testTable").as(alias: "testAliasTable"), "testTable AS testAliasTable")
 
         WINQAssertEqual(TableOrSubquery.function("testFunction").of(schema: "testSchema"), "testSchema.testFunction()")
 
-        WINQAssertEqual(TableOrSubquery.function("testFunction").arguments(1, 2), "main.testFunction(1, 2)")
+        WINQAssertEqual(TableOrSubquery.function("testFunction").arguments(1, 2), "testFunction(1, 2)")
 
-        WINQAssertEqual(TableOrSubquery.function("testFunction").as(alias: "testAliasTable"), "main.testFunction() AS testAliasTable")
+        WINQAssertEqual(TableOrSubquery.function("testFunction").as(alias: "testAliasTable"), "testFunction() AS testAliasTable")
 
-        WINQAssertEqual(TableOrSubquery(with: "testTable1", "testTable2"), "(main.testTable1, main.testTable2)")
+        WINQAssertEqual(TableOrSubquery(with: "testTable1", "testTable2"), "(testTable1, testTable2)")
 
-        WINQAssertEqual(TableOrSubquery(with: "testTable1", "testTable2"), "(main.testTable1, main.testTable2)")
+        WINQAssertEqual(TableOrSubquery(with: "testTable1", "testTable2"), "(testTable1, testTable2)")
 
-        WINQAssertEqual(TableOrSubquery.master(), "main.sqlite_master")
+        WINQAssertEqual(TableOrSubquery.master(), "sqlite_master")
 
         // Give
         let joinClause = Join(with: "testTable")
         let statementSelect = StatementSelect().select(1).from("testTable")
 
         // Then
-        WINQAssertEqual(TableOrSubquery(with: joinClause).asTableOrSubquery(), "(main.testTable)")
+        WINQAssertEqual(TableOrSubquery(with: joinClause).asTableOrSubquery(), "(testTable)")
 
-        WINQAssertEqual(TableOrSubquery(with: joinClause), "(main.testTable)")
+        WINQAssertEqual(TableOrSubquery(with: joinClause), "(testTable)")
 
-        WINQAssertEqual(TableOrSubquery(with: statementSelect), "(SELECT 1 FROM main.testTable)")
+        WINQAssertEqual(TableOrSubquery(with: statementSelect), "(SELECT 1 FROM testTable)")
 
-        WINQAssertEqual(TableOrSubquery(with: statementSelect).as(alias: "testAliasTable"), "(SELECT 1 FROM main.testTable) AS testAliasTable")
+        WINQAssertEqual(TableOrSubquery(with: statementSelect).as(alias: "testAliasTable"), "(SELECT 1 FROM testTable) AS testAliasTable")
     }
 }

@@ -174,23 +174,23 @@ class ColumnConstraintBindingTests: ORMTestCase {
 
         ORMConstraintBindingAssertEqual(
             BaselineTestObject.self,
-            "CREATE TABLE IF NOT EXISTS main.BaselineTestObject(variable INTEGER)"
+            "CREATE TABLE IF NOT EXISTS BaselineTestObject(variable INTEGER)"
         )
 
         ORMConstraintBindingAssertEqual(
             PrimaryTestObject.self,
-            "CREATE TABLE IF NOT EXISTS main.PrimaryTestObject(primaryVariable INTEGER PRIMARY KEY)"
+            "CREATE TABLE IF NOT EXISTS PrimaryTestObject(primaryVariable INTEGER PRIMARY KEY)"
         )
 
         ORMConstraintBindingAssertEqual(
             OrderedPrimaryTestObject.self,
-            "CREATE TABLE IF NOT EXISTS main.OrderedPrimaryTestObject(orderedPrimaryVariable INTEGER PRIMARY KEY ASC)"
+            "CREATE TABLE IF NOT EXISTS OrderedPrimaryTestObject(orderedPrimaryVariable INTEGER PRIMARY KEY ASC)"
         )
 
         ORMConstraintBindingAssertEqual(
             AutoIncrementPrimaryTestObject.self,
             """
-            CREATE TABLE IF NOT EXISTS main.AutoIncrementPrimaryTestObject\
+            CREATE TABLE IF NOT EXISTS AutoIncrementPrimaryTestObject\
             (autoIncrementPrimaryVariable INTEGER PRIMARY KEY AUTOINCREMENT)
             """
         )
@@ -198,47 +198,47 @@ class ColumnConstraintBindingTests: ORMTestCase {
         ORMConstraintBindingAssertEqual(
             ConflictPrimaryTestObject.self,
             """
-            CREATE TABLE IF NOT EXISTS main.ConflictPrimaryTestObject\
+            CREATE TABLE IF NOT EXISTS ConflictPrimaryTestObject\
             (conflictPrimaryVariable INTEGER PRIMARY KEY ON CONFLICT REPLACE)
             """
         )
 
         ORMConstraintBindingAssertEqual(
             NotNullTestObject.self,
-            "CREATE TABLE IF NOT EXISTS main.NotNullTestObject(notNullVariable INTEGER NOT NULL)"
+            "CREATE TABLE IF NOT EXISTS NotNullTestObject(notNullVariable INTEGER NOT NULL)"
         )
 
         ORMConstraintBindingAssertEqual(
             UniqueTestObject.self,
-            "CREATE TABLE IF NOT EXISTS main.UniqueTestObject(uniqueVariable INTEGER UNIQUE)"
+            "CREATE TABLE IF NOT EXISTS UniqueTestObject(uniqueVariable INTEGER UNIQUE)"
         )
 
         ORMConstraintBindingAssertEqual(
             DefaultInt32ValueTestObject.self,
-            "CREATE TABLE IF NOT EXISTS main.DefaultInt32ValueTestObject(defaultValueVariable INTEGER DEFAULT 1)"
+            "CREATE TABLE IF NOT EXISTS DefaultInt32ValueTestObject(defaultValueVariable INTEGER DEFAULT 1)"
         )
 
         ORMConstraintBindingAssertEqual(
             DefaultInt64ValueTestObject.self,
-            "CREATE TABLE IF NOT EXISTS main.DefaultInt64ValueTestObject(defaultValueVariable INTEGER DEFAULT 1)"
+            "CREATE TABLE IF NOT EXISTS DefaultInt64ValueTestObject(defaultValueVariable INTEGER DEFAULT 1)"
         )
 
         ORMConstraintBindingAssertEqual(
             DefaultFloatValueTestObject.self,
-            "CREATE TABLE IF NOT EXISTS main.DefaultFloatValueTestObject(defaultValueVariable INTEGER DEFAULT 1.2)"
+            "CREATE TABLE IF NOT EXISTS DefaultFloatValueTestObject(defaultValueVariable INTEGER DEFAULT 1.2)"
         )
 
         ORMConstraintBindingAssertEqual(
             DefaultTextValueTestObject.self,
             """
-            CREATE TABLE IF NOT EXISTS main.DefaultTextValueTestObject\
+            CREATE TABLE IF NOT EXISTS DefaultTextValueTestObject\
             (defaultValueVariable INTEGER DEFAULT 'defaultString')
             """
         )
 
         ORMConstraintBindingAssertEqual(
             DefaultBLOBValueTestObject.self,
-            "CREATE TABLE IF NOT EXISTS main.DefaultBLOBValueTestObject(defaultValueVariable INTEGER DEFAULT 'defaultData')"
+            "CREATE TABLE IF NOT EXISTS DefaultBLOBValueTestObject(defaultValueVariable INTEGER DEFAULT 'defaultData')"
         )
     }
 }

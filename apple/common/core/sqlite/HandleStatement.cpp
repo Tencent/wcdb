@@ -212,6 +212,21 @@ bool HandleStatement::tryExtractColumnInfo(const Statement &statement,
 
     bool tableSpecified = tableName.length() > 0;
     bool schemaSpecified = schemaName.length() > 0;
+
+    if (schemaSpecified) {
+        if (tableName.hasPrefix(MigrationInfo::getUnionedViewPrefix())
+            && schemaName.compare(Syntax::tempSchema) == 0) {
+            size_t prefixLength = strlen(MigrationInfo::getUnionedViewPrefix());
+            tableName = StringView(tableName.data() + prefixLength,
+                                   tableName.length() - prefixLength);
+            schemaName = "";
+            schemaSpecified = false;
+        } else if (schemaName.hasPrefix(MigrationInfo::getSchemaPrefix())) {
+            schemaName = "";
+            schemaSpecified = false;
+        }
+    }
+
     WCTAssert(tableSpecified || !schemaSpecified);
     bool findTable = !tableSpecified;
     Statement copyStatement = statement;
@@ -279,10 +294,10 @@ bool HandleStatement::tryExtractColumnInfo(const Statement &statement,
             size_t prefixLength = strlen(MigrationInfo::getUnionedViewPrefix());
             curTableName = StringView(curTableName.data() + prefixLength,
                                       curTableName.length() - prefixLength);
-            curSchema = Schema("");
+            curSchema = Schema();
         }
         if (curSchema.name.hasPrefix(MigrationInfo::getSchemaPrefix())) {
-            curSchema = Schema("");
+            curSchema = Schema();
         }
 
         if (!tableSpecified) {

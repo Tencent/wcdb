@@ -394,9 +394,9 @@
 - (void)test_in_table_without_schema
 {
     auto testingSQL = column.inTable(table);
-    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Schema };
+    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"testColumn IN main.testTable");
+    TestCaseAssertSQLEqual(testingSQL, @"testColumn IN testTable");
 }
 
 - (void)test_in_function
@@ -410,9 +410,9 @@
 - (void)test_in_function_without_schema
 {
     auto testingSQL = column.inFunction(function).invoke().arguments(expressions);
-    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"testColumn IN main.testFunction(1, 2)");
+    TestCaseAssertSQLEqual(testingSQL, @"testColumn IN testFunction(1, 2)");
 }
 
 - (void)test_in_function_without_parameter

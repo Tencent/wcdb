@@ -64,7 +64,7 @@
 #pragma mark - Execute
 - (void)test_execute
 {
-    [self doTestSQLs:@[ @"PRAGMA main.user_version = 123" ]
+    [self doTestSQLs:@[ @"PRAGMA user_version = 123" ]
          inOperation:^BOOL {
              return self.handle->execute(WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion()).to(123));
          }];
@@ -84,7 +84,7 @@
 #pragma mark - Step
 - (void)test_step
 {
-    [self doTestSQLs:@[ @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)", @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)" ]
+    [self doTestSQLs:@[ @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)", @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)" ]
          inOperation:^BOOL {
              WCDB::StatementInsert statement = WCDB::StatementInsert().insertIntoTable(self.tableName.UTF8String).column(WCDB::Column("identifier")).column(WCDB::Column("content")).values(WCDB::BindParameter::bindParameters(2));
              if (!self.handle->prepare(statement)) {

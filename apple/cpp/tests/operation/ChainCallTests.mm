@@ -40,76 +40,76 @@
 - (void)test_database_delete
 {
     WCDB::Delete delete_ = self.database->prepareDelete().fromTable(self.tableName.UTF8String);
-    TestCaseAssertSQLEqual(delete_.getStatement(), @"DELETE FROM main.testTable");
+    TestCaseAssertSQLEqual(delete_.getStatement(), @"DELETE FROM testTable");
 }
 
 - (void)test_table_delete
 {
     WCDB::Delete delete_ = self.table.prepareDelete();
-    TestCaseAssertSQLEqual(delete_.getStatement(), @"DELETE FROM main.testTable");
+    TestCaseAssertSQLEqual(delete_.getStatement(), @"DELETE FROM testTable");
 }
 
 - (void)test_handle_delete
 {
     WCDB::Delete delete_ = self.database->getHandle().prepareDelete().fromTable(self.tableName.UTF8String);
-    TestCaseAssertSQLEqual(delete_.getStatement(), @"DELETE FROM main.testTable");
+    TestCaseAssertSQLEqual(delete_.getStatement(), @"DELETE FROM testTable");
 }
 
 #pragma mark - Insert
 - (void)test_database_insert
 {
     WCDB::Insert<CPPTestCaseObject> insert = self.database->prepareInsert<CPPTestCaseObject>().intoTable(self.tableName.UTF8String).onFields(CPPTestCaseObject::allFields());
-    TestCaseAssertSQLEqual(insert.getStatement(), @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)");
+    TestCaseAssertSQLEqual(insert.getStatement(), @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)");
 }
 
 - (void)test_table_insert
 {
     WCDB::Insert<CPPTestCaseObject> insert = self.table.prepareInsert().onFields(CPPTestCaseObject::allFields());
-    TestCaseAssertSQLEqual(insert.getStatement(), @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)");
+    TestCaseAssertSQLEqual(insert.getStatement(), @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)");
 }
 
 - (void)test_handle_insert
 {
     WCDB::Insert<CPPTestCaseObject> insert = self.database->getHandle().prepareInsert<CPPTestCaseObject>().intoTable(self.tableName.UTF8String).onFields(CPPTestCaseObject::allFields());
-    TestCaseAssertSQLEqual(insert.getStatement(), @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)");
+    TestCaseAssertSQLEqual(insert.getStatement(), @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)");
 }
 
 #pragma mark - Update
 - (void)test_database_update
 {
     WCDB::Update<CPPTestCaseObject> update = self.database->prepareUpdate<CPPTestCaseObject>().table(self.tableName.UTF8String).set(WCDB_FIELD(CPPTestCaseObject::content));
-    TestCaseAssertSQLEqual(update.getStatement(), @"UPDATE main.testTable SET content = ?1");
+    TestCaseAssertSQLEqual(update.getStatement(), @"UPDATE testTable SET content = ?1");
 }
 
 - (void)test_table_update
 {
     WCDB::Update<CPPTestCaseObject> update = self.table.prepareUpdate().set(WCDB_FIELD(CPPTestCaseObject::content));
-    TestCaseAssertSQLEqual(update.getStatement(), @"UPDATE main.testTable SET content = ?1");
+    TestCaseAssertSQLEqual(update.getStatement(), @"UPDATE testTable SET content = ?1");
 }
 
 - (void)test_handle_update
 {
     WCDB::Update<CPPTestCaseObject> update = self.database->getHandle().prepareUpdate<CPPTestCaseObject>().table(self.tableName.UTF8String).set(WCDB_FIELD(CPPTestCaseObject::content));
-    TestCaseAssertSQLEqual(update.getStatement(), @"UPDATE main.testTable SET content = ?1");
+    TestCaseAssertSQLEqual(update.getStatement(), @"UPDATE testTable SET content = ?1");
 }
 
 #pragma mark - Select
 - (void)test_database_select
 {
     WCDB::Select<CPPTestCaseObject> select = self.database->prepareSelect<CPPTestCaseObject>().fromTable(self.tableName.UTF8String).onResultFields(CPPTestCaseObject::allFields()).where(WCDB_FIELD(CPPTestCaseObject::identifier) == 1);
-    TestCaseAssertSQLEqual(select.getStatement(), @"SELECT identifier, content FROM main.testTable WHERE identifier == 1");
+    TestCaseAssertSQLEqual(select.getStatement(), @"SELECT identifier, content FROM testTable WHERE identifier == 1");
 }
 
 - (void)test_table_select
 {
     WCDB::Select<CPPTestCaseObject> select = self.table.prepareSelect().onResultFields(CPPTestCaseObject::allFields()).where(WCDB_FIELD(CPPTestCaseObject::identifier) == 1);
-    TestCaseAssertSQLEqual(select.getStatement(), @"SELECT identifier, content FROM main.testTable WHERE identifier == 1");
+    TestCaseAssertSQLEqual(select.getStatement(), @"SELECT identifier, content FROM testTable WHERE identifier == 1");
 }
 
 - (void)test_handle_select
 {
     WCDB::Select<CPPTestCaseObject> select = self.database->getHandle().prepareSelect<CPPTestCaseObject>().fromTable(self.tableName.UTF8String).onResultFields(CPPTestCaseObject::allFields()).where(WCDB_FIELD(CPPTestCaseObject::identifier) == 1);
-    TestCaseAssertSQLEqual(select.getStatement(), @"SELECT identifier, content FROM main.testTable WHERE identifier == 1");
+    TestCaseAssertSQLEqual(select.getStatement(), @"SELECT identifier, content FROM testTable WHERE identifier == 1");
 }
 
 #pragma mark - MultiSelect
@@ -124,7 +124,7 @@
           return field.table(self.tableName2.UTF8String);
       }));
     WCDB::MultiSelect select = self.database->prepareMultiSelect().onResultFields(resultColumns).fromTables({ self.tableName.UTF8String, self.tableName2.UTF8String }).where(WCDB_FIELD(CPPTestCaseObject::identifier).table(self.tableName.UTF8String) == WCDB_FIELD(CPPTestCaseObject::identifier).table(self.tableName2.UTF8String));
-    TestCaseAssertSQLEqual(select.getStatement(), @"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier");
+    TestCaseAssertSQLEqual(select.getStatement(), @"SELECT testTable.identifier, testTable.content, testTable2.identifier, testTable2.content FROM testTable, testTable2 WHERE testTable.identifier == testTable2.identifier");
 }
 
 - (void)test_handle_multiselect
@@ -138,7 +138,7 @@
           return field.table(self.tableName2.UTF8String);
       }));
     WCDB::MultiSelect select = self.database->getHandle().prepareMultiSelect().onResultFields(resultColumns).fromTables({ self.tableName.UTF8String, self.tableName2.UTF8String }).where(WCDB_FIELD(CPPTestCaseObject::identifier).table(self.tableName.UTF8String) == WCDB_FIELD(CPPTestCaseObject::identifier).table(self.tableName2.UTF8String));
-    TestCaseAssertSQLEqual(select.getStatement(), @"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier");
+    TestCaseAssertSQLEqual(select.getStatement(), @"SELECT testTable.identifier, testTable.content, testTable2.identifier, testTable2.content FROM testTable, testTable2 WHERE testTable.identifier == testTable2.identifier");
 }
 
 @end

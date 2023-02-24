@@ -84,7 +84,7 @@ bool MigrateHandle::detach()
     if (!m_attached.syntax().isMain()) {
         succeed = execute(WCDB::StatementDetach().detach(m_attached));
         if (succeed) {
-            m_attached = Schema::main();
+            m_attached = Schema();
         }
     }
     return succeed;
@@ -250,14 +250,14 @@ Optional<bool> MigrateHandle::sourceTableExists(const MigrationUserInfo& userInf
 Optional<std::pair<bool, std::set<StringView>>>
 MigrateHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
 {
-    auto exists = tableExists(Schema::main(), userInfo.getTable());
+    auto exists = tableExists(Schema(), userInfo.getTable());
     if (!exists.succeed()) {
         return NullOpt;
     }
     bool integerPrimary = false;
     std::set<StringView> names;
     if (exists.value()) {
-        auto optionalMetas = getTableMeta(Schema::main(), userInfo.getTable());
+        auto optionalMetas = getTableMeta(Schema(), userInfo.getTable());
         if (!optionalMetas.succeed()) {
             return NullOpt;
         }

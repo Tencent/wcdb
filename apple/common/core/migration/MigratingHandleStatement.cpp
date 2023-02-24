@@ -186,7 +186,7 @@ Optional<std::list<Statement>> MigratingHandleStatement::process(const Statement
                 Syntax::UpdateSTMT& stmt
                 = static_cast<Syntax::UpdateSTMT&>(statements.back().syntax());
                 stmt.table.table = migratedTableName;
-                stmt.table.schema = Schema::main();
+                stmt.table.schema = Schema();
             }
         } break;
         case Syntax::Identifier::Type::DeleteSTMT: {
@@ -209,7 +209,7 @@ Optional<std::list<Statement>> MigratingHandleStatement::process(const Statement
                 Syntax::DeleteSTMT& stmt
                 = static_cast<Syntax::DeleteSTMT&>(statements.back().syntax());
                 stmt.table.table = migratedTableName;
-                stmt.table.schema = Schema::main();
+                stmt.table.schema = Schema();
             }
         } break;
         case Syntax::Identifier::Type::DropTableSTMT: {

@@ -170,9 +170,9 @@
 {
     auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).column(column1).values(expressions1);
 
-    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"INSERT INTO main.testTable(testColumn1) VALUES(1, 2)");
+    TestCaseAssertSQLEqual(testingSQL, @"INSERT INTO testTable(testColumn1) VALUES(1, 2)");
 }
 
 - (void)test_insert_with_alias

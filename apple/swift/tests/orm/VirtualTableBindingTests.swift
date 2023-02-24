@@ -42,7 +42,7 @@ class VirtualTableBindingTests: ORMTestCase {
         ORMVirtualTableBindingAssertEqual(
             FTS3TestObject.self,
             """
-            CREATE VIRTUAL TABLE IF NOT EXISTS main.FTS3TestObject USING fts3\
+            CREATE VIRTUAL TABLE IF NOT EXISTS FTS3TestObject USING fts3\
             (tokenize = WCDB need_symbol, id INTEGER, content TEXT, notindexed=id)
             """
         )
@@ -67,7 +67,7 @@ class VirtualTableBindingTests: ORMTestCase {
         ORMVirtualTableBindingAssertEqual(
             FTS5TestObject.self,
             """
-            CREATE VIRTUAL TABLE IF NOT EXISTS main.FTS5TestObject USING fts5\
+            CREATE VIRTUAL TABLE IF NOT EXISTS FTS5TestObject USING fts5\
             (tokenize = 'wcdb_verbatim skip_stemming chinese_traditional_to_simplified', id UNINDEXED, content)
             """
         )

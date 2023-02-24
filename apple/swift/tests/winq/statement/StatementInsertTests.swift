@@ -32,7 +32,7 @@ class StatementInsertTests: BaseTestCase {
 
         WINQAssertEqual(
             StatementInsert().insert(intoTable: "testTable").values(1, "value"),
-            "INSERT INTO main.testTable VALUES(1, 'value')"
+            "INSERT INTO testTable VALUES(1, 'value')"
         )
 
         WINQAssertEqual(
@@ -47,22 +47,22 @@ class StatementInsertTests: BaseTestCase {
 
         WINQAssertEqual(
             StatementInsert().insert(intoTable: "testTable").columns(column1, column2).values(1, "value"),
-            "INSERT INTO main.testTable(column1, column2) VALUES(1, 'value')"
+            "INSERT INTO testTable(column1, column2) VALUES(1, 'value')"
         )
 
         WINQAssertEqual(
             StatementInsert().insert(intoTable: "testTable").onConflict(.Replace).values(1, "value"),
-            "INSERT OR REPLACE INTO main.testTable VALUES(1, 'value')"
+            "INSERT OR REPLACE INTO testTable VALUES(1, 'value')"
         )
 
         WINQAssertEqual(
             StatementInsert().insert(intoTable: "testTable").defaultValues(),
-            "INSERT INTO main.testTable DEFAULT VALUES"
+            "INSERT INTO testTable DEFAULT VALUES"
         )
 
         WINQAssertEqual(
             StatementInsert().insert(intoTable: "testTable").columns(column1, column2).values(1, "value").upsert(Upsert().doNothing()),
-            "INSERT INTO main.testTable(column1, column2) VALUES(1, 'value') ON CONFLICT DO NOTHING"
+            "INSERT INTO testTable(column1, column2) VALUES(1, 'value') ON CONFLICT DO NOTHING"
         )
     }
 }

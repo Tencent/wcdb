@@ -29,9 +29,9 @@ class StatementDropViewTests: BaseTestCase {
 
     func testStatementDropView() {
 
-        WINQAssertEqual(StatementDropView().drop(view: "testView"), "DROP VIEW main.testView")
+        WINQAssertEqual(StatementDropView().drop(view: "testView"), "DROP VIEW testView")
 
-        WINQAssertEqual(StatementDropView().drop(view: "testView").ifExists(), "DROP VIEW IF EXISTS main.testView")
+        WINQAssertEqual(StatementDropView().drop(view: "testView").ifExists(), "DROP VIEW IF EXISTS testView")
 
         WINQAssertEqual(StatementDropView().drop(view: "testView").of(schema: "testSchema"), "DROP VIEW testSchema.testView")
 

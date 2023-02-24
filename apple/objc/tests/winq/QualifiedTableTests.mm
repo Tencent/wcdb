@@ -71,9 +71,9 @@
 {
     auto testingSQL = WCDB::QualifiedTable(table);
 
-    auto testingTypes = { WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema };
+    auto testingTypes = { WCDB::SQL::Type::QualifiedTableName };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"main.testTable");
+    TestCaseAssertSQLEqual(testingSQL, @"testTable");
 }
 
 - (void)test_qualified_table_with_alias

@@ -46,7 +46,7 @@
 - (void)doTestObjectsRetrieved
 {
     [self doTestObjects:self.objects
-                 andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY rowid ASC"
+                 andSQL:@"SELECT identifier, content FROM testTable ORDER BY rowid ASC"
             bySelecting:^NSArray<NSObject<WCTTableCoding>*>* {
                 return [self.table getObjects];
             }];
@@ -55,7 +55,7 @@
 - (void)doTestObjectsNotRetrieved
 {
     [self doTestObjects:@[]
-                 andSQL:@"SELECT type, name, tbl_name, rootpage, sql FROM main.sqlite_master WHERE name == 'testTable' ORDER BY rowid ASC"
+                 andSQL:@"SELECT type, name, tbl_name, rootpage, sql FROM sqlite_master WHERE name == 'testTable' ORDER BY rowid ASC"
             bySelecting:^NSArray<NSObject<WCTTableCoding>*>* {
                 return [self.database getObjectsOfClass:WCTMaster.class fromTable:WCTMaster.tableName where:WCTMaster.name == self.tableName];
             }];

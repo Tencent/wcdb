@@ -55,7 +55,7 @@
 - (void)test_database_update_table_set_properties_to_object
 {
     [self doTestObjects:{ self.renewedObject1, self.renewedObject2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1"
+                 andSQL:@"UPDATE testTable SET content = ?1"
       afterModification:^BOOL {
           return self.database->updateObject<CPPTestCaseObject>(self.renewObject, WCDB_FIELD(CPPTestCaseObject::content), self.tableName.UTF8String);
       }];
@@ -64,7 +64,7 @@
 - (void)test_database_update_table_set_properties_to_object_where
 {
     [self doTestObjects:{ self.renewedObject1, self.object2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
+                 andSQL:@"UPDATE testTable SET content = ?1 WHERE identifier == 1"
       afterModification:^BOOL {
           return self.database->updateObject<CPPTestCaseObject>(self.renewObject, WCDB_FIELD(CPPTestCaseObject::content), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) == 1);
       }];
@@ -73,7 +73,7 @@
 - (void)test_database_update_table_set_properties_to_object_where_orders_limit
 {
     [self doTestObjects:{ self.object1, self.renewedObject2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
+                 andSQL:@"UPDATE testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
       afterModification:^BOOL {
           return self.database->updateObject<CPPTestCaseObject>(self.renewObject, WCDB_FIELD(CPPTestCaseObject::content), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1);
       }];
@@ -82,7 +82,7 @@
 - (void)test_database_update_table_set_properties_to_object_where_orders_limit_offset
 {
     [self doTestObjects:{ self.renewedObject1, self.object2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+                 andSQL:@"UPDATE testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
       afterModification:^BOOL {
           return self.database->updateObject<CPPTestCaseObject>(self.renewObject, WCDB_FIELD(CPPTestCaseObject::content), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1, 1);
       }];
@@ -92,7 +92,7 @@
 - (void)test_database_update_table_set_properties_to_row
 {
     [self doTestObjects:{ self.renewedObject1, self.renewedObject2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1"
+                 andSQL:@"UPDATE testTable SET content = ?1"
       afterModification:^BOOL {
           return self.database->updateRow(self.renewRow, WCDB_FIELD(CPPTestCaseObject::content), self.tableName.UTF8String);
       }];
@@ -101,7 +101,7 @@
 - (void)test_database_update_table_set_properties_to_row_where
 {
     [self doTestObjects:{ self.renewedObject1, self.object2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
+                 andSQL:@"UPDATE testTable SET content = ?1 WHERE identifier == 1"
       afterModification:^BOOL {
           return self.database->updateRow(self.renewRow, WCDB_FIELD(CPPTestCaseObject::content), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) == 1);
       }];
@@ -110,7 +110,7 @@
 - (void)test_database_update_table_set_properties_to_row_where_orders_limit_offset
 {
     [self doTestObjects:{ self.renewedObject1, self.object2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+                 andSQL:@"UPDATE testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
       afterModification:^BOOL {
           return self.database->updateRow(self.renewRow, WCDB_FIELD(CPPTestCaseObject::content), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1, 1);
       }];
@@ -120,7 +120,7 @@
 - (void)test_database_update_table_set_property_to_value
 {
     [self doTestObjects:{ self.renewedObject1, self.renewedObject2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1"
+                 andSQL:@"UPDATE testTable SET content = ?1"
       afterModification:^BOOL {
           return self.database->updateRow(self.renewValue, WCDB_FIELD(CPPTestCaseObject::content), self.tableName.UTF8String);
       }];
@@ -129,7 +129,7 @@
 - (void)test_database_update_table_set_property_to_value_where
 {
     [self doTestObjects:{ self.renewedObject1, self.object2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
+                 andSQL:@"UPDATE testTable SET content = ?1 WHERE identifier == 1"
       afterModification:^BOOL {
           return self.database->updateRow(self.renewValue, WCDB_FIELD(CPPTestCaseObject::content), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) == 1);
       }];
@@ -138,7 +138,7 @@
 - (void)test_database_update_table_set_property_to_value_where_orders_limit
 {
     [self doTestObjects:{ self.object1, self.renewedObject2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
+                 andSQL:@"UPDATE testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
       afterModification:^BOOL {
           return self.database->updateRow(self.renewValue, WCDB_FIELD(CPPTestCaseObject::content), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1);
       }];
@@ -147,7 +147,7 @@
 - (void)test_database_update_table_set_property_to_value_where_orders_limit_offset
 {
     [self doTestObjects:{ self.renewedObject1, self.object2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+                 andSQL:@"UPDATE testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
       afterModification:^BOOL {
           return self.database->updateRow(self.renewValue, WCDB_FIELD(CPPTestCaseObject::content), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1, 1);
       }];
@@ -157,7 +157,7 @@
 - (void)test_table_update_table_set_properties_to_object
 {
     [self doTestObjects:{ self.renewedObject1, self.renewedObject2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1"
+                 andSQL:@"UPDATE testTable SET content = ?1"
       afterModification:^BOOL {
           return self.table.updateObject(self.renewObject, WCDB_FIELD(CPPTestCaseObject::content));
       }];
@@ -166,7 +166,7 @@
 - (void)test_table_update_table_set_properties_to_object_where
 {
     [self doTestObjects:{ self.renewedObject1, self.object2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
+                 andSQL:@"UPDATE testTable SET content = ?1 WHERE identifier == 1"
       afterModification:^BOOL {
           return self.table.updateObject(self.renewObject, WCDB_FIELD(CPPTestCaseObject::content), WCDB_FIELD(CPPTestCaseObject::identifier) == 1);
       }];
@@ -175,7 +175,7 @@
 - (void)test_table_update_table_set_properties_to_object_where_orders_limit
 {
     [self doTestObjects:{ self.object1, self.renewedObject2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
+                 andSQL:@"UPDATE testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
       afterModification:^BOOL {
           return self.table.updateObject(self.renewObject, WCDB_FIELD(CPPTestCaseObject::content), WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1);
       }];
@@ -184,7 +184,7 @@
 - (void)test_table_update_table_set_properties_to_object_where_orders_limit_offset
 {
     [self doTestObjects:{ self.renewedObject1, self.object2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+                 andSQL:@"UPDATE testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
       afterModification:^BOOL {
           return self.table.updateObject(self.renewObject, WCDB_FIELD(CPPTestCaseObject::content), WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1, 1);
       }];
@@ -194,7 +194,7 @@
 - (void)test_table_update_table_set_properties_to_row
 {
     [self doTestObjects:{ self.renewedObject1, self.renewedObject2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1"
+                 andSQL:@"UPDATE testTable SET content = ?1"
       afterModification:^BOOL {
           return self.table.updateRow(self.renewRow, WCDB_FIELD(CPPTestCaseObject::content));
       }];
@@ -203,7 +203,7 @@
 - (void)test_table_update_table_set_properties_to_row_where
 {
     [self doTestObjects:{ self.renewedObject1, self.object2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
+                 andSQL:@"UPDATE testTable SET content = ?1 WHERE identifier == 1"
       afterModification:^BOOL {
           return self.table.updateRow(self.renewRow, WCDB_FIELD(CPPTestCaseObject::content), WCDB_FIELD(CPPTestCaseObject::identifier) == 1);
       }];
@@ -212,7 +212,7 @@
 - (void)test_table_update_table_set_properties_to_row_where_orders_limit_offset
 {
     [self doTestObjects:{ self.renewedObject1, self.object2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+                 andSQL:@"UPDATE testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
       afterModification:^BOOL {
           return self.table.updateRow(self.renewRow, WCDB_FIELD(CPPTestCaseObject::content), WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1, 1);
       }];
@@ -222,7 +222,7 @@
 - (void)test_table_update_table_set_property_to_value
 {
     [self doTestObjects:{ self.renewedObject1, self.renewedObject2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1"
+                 andSQL:@"UPDATE testTable SET content = ?1"
       afterModification:^BOOL {
           return self.table.updateRow(self.renewValue, WCDB_FIELD(CPPTestCaseObject::content));
       }];
@@ -231,7 +231,7 @@
 - (void)test_table_update_table_set_property_to_value_where
 {
     [self doTestObjects:{ self.renewedObject1, self.object2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
+                 andSQL:@"UPDATE testTable SET content = ?1 WHERE identifier == 1"
       afterModification:^BOOL {
           return self.table.updateRow(self.renewValue, WCDB_FIELD(CPPTestCaseObject::content), WCDB_FIELD(CPPTestCaseObject::identifier) == 1);
       }];
@@ -240,7 +240,7 @@
 - (void)test_table_update_table_set_property_to_value_where_orders_limit
 {
     [self doTestObjects:{ self.object1, self.renewedObject2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
+                 andSQL:@"UPDATE testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
       afterModification:^BOOL {
           return self.table.updateRow(self.renewValue, WCDB_FIELD(CPPTestCaseObject::content), WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1);
       }];
@@ -249,7 +249,7 @@
 - (void)test_table_update_table_set_property_to_value_where_orders_limit_offset
 {
     [self doTestObjects:{ self.renewedObject1, self.object2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+                 andSQL:@"UPDATE testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
       afterModification:^BOOL {
           return self.table.updateRow(self.renewValue, WCDB_FIELD(CPPTestCaseObject::content), WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1, 1);
       }];
@@ -259,7 +259,7 @@
 - (void)test_handle_update_table_set_properties_to_object
 {
     [self doTestObjects:{ self.renewedObject1, self.renewedObject2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1"
+                 andSQL:@"UPDATE testTable SET content = ?1"
       afterModification:^BOOL {
           return self.database->getHandle().updateObject<CPPTestCaseObject>(self.renewObject, WCDB_FIELD(CPPTestCaseObject::content), self.tableName.UTF8String);
       }];
@@ -268,7 +268,7 @@
 - (void)test_handle_update_table_set_properties_to_object_where
 {
     [self doTestObjects:{ self.renewedObject1, self.object2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
+                 andSQL:@"UPDATE testTable SET content = ?1 WHERE identifier == 1"
       afterModification:^BOOL {
           return self.database->getHandle().updateObject<CPPTestCaseObject>(self.renewObject, WCDB_FIELD(CPPTestCaseObject::content), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) == 1);
       }];
@@ -277,7 +277,7 @@
 - (void)test_handle_update_table_set_properties_to_object_where_orders_limit
 {
     [self doTestObjects:{ self.object1, self.renewedObject2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
+                 andSQL:@"UPDATE testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
       afterModification:^BOOL {
           return self.database->getHandle().updateObject<CPPTestCaseObject>(self.renewObject, WCDB_FIELD(CPPTestCaseObject::content), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1);
       }];
@@ -286,7 +286,7 @@
 - (void)test_handle_update_table_set_properties_to_object_where_orders_limit_offset
 {
     [self doTestObjects:{ self.renewedObject1, self.object2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+                 andSQL:@"UPDATE testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
       afterModification:^BOOL {
           return self.database->getHandle().updateObject<CPPTestCaseObject>(self.renewObject, WCDB_FIELD(CPPTestCaseObject::content), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1, 1);
       }];
@@ -296,7 +296,7 @@
 - (void)test_handle_update_table_set_properties_to_row
 {
     [self doTestObjects:{ self.renewedObject1, self.renewedObject2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1"
+                 andSQL:@"UPDATE testTable SET content = ?1"
       afterModification:^BOOL {
           return self.database->getHandle().updateRow(self.renewRow, WCDB_FIELD(CPPTestCaseObject::content), self.tableName.UTF8String);
       }];
@@ -305,7 +305,7 @@
 - (void)test_handle_update_table_set_properties_to_row_where
 {
     [self doTestObjects:{ self.renewedObject1, self.object2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
+                 andSQL:@"UPDATE testTable SET content = ?1 WHERE identifier == 1"
       afterModification:^BOOL {
           return self.database->getHandle().updateRow(self.renewRow, WCDB_FIELD(CPPTestCaseObject::content), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) == 1);
       }];
@@ -314,7 +314,7 @@
 - (void)test_handle_update_table_set_properties_to_row_where_orders_limit_offset
 {
     [self doTestObjects:{ self.renewedObject1, self.object2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+                 andSQL:@"UPDATE testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
       afterModification:^BOOL {
           return self.database->getHandle().updateRow(self.renewRow, WCDB_FIELD(CPPTestCaseObject::content), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1, 1);
       }];
@@ -324,7 +324,7 @@
 - (void)test_handle_update_table_set_property_to_value
 {
     [self doTestObjects:{ self.renewedObject1, self.renewedObject2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1"
+                 andSQL:@"UPDATE testTable SET content = ?1"
       afterModification:^BOOL {
           return self.database->getHandle().updateRow(self.renewValue, WCDB_FIELD(CPPTestCaseObject::content), self.tableName.UTF8String);
       }];
@@ -333,7 +333,7 @@
 - (void)test_handle_update_table_set_property_to_value_where
 {
     [self doTestObjects:{ self.renewedObject1, self.object2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
+                 andSQL:@"UPDATE testTable SET content = ?1 WHERE identifier == 1"
       afterModification:^BOOL {
           return self.database->getHandle().updateRow(self.renewValue, WCDB_FIELD(CPPTestCaseObject::content), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) == 1);
       }];
@@ -342,7 +342,7 @@
 - (void)test_handle_update_table_set_property_to_value_where_orders_limit
 {
     [self doTestObjects:{ self.object1, self.renewedObject2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
+                 andSQL:@"UPDATE testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
       afterModification:^BOOL {
           return self.database->getHandle().updateRow(self.renewValue, WCDB_FIELD(CPPTestCaseObject::content), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1);
       }];
@@ -351,7 +351,7 @@
 - (void)test_handle_update_table_set_property_to_value_where_orders_limit_offset
 {
     [self doTestObjects:{ self.renewedObject1, self.object2 }
-                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+                 andSQL:@"UPDATE testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
       afterModification:^BOOL {
           return self.database->getHandle().updateRow(self.renewValue, WCDB_FIELD(CPPTestCaseObject::content), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1, 1);
       }];

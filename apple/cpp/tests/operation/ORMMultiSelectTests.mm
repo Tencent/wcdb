@@ -87,7 +87,7 @@
     TestCaseAssertTrue(self.object1 == multiObj.objectAtTable<CPPTestCaseObject>(self.tableName.UTF8String).value());
     TestCaseAssertTrue(self.object1InTable2 == multiObj.objectAtTable<CPPTestCaseObject>(self.tableName2.UTF8String).value());
     [self doTestMultiObjects:multiObj
-                      andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
+                      andSQL:@"SELECT testTable.identifier, testTable.content, testTable2.identifier, testTable2.content FROM testTable, testTable2 WHERE testTable.identifier == testTable2.identifier"
                  bySelecting:^WCDB::Optional<WCDB::ValueArray<WCDB::MultiObject>> {
                      WCDB::ResultFields resultColumns
                      = CPPTestCaseObject::allFields()
@@ -116,7 +116,7 @@
     TestCaseAssertTrue(self.object2 == multiObj2.objectAtTable<CPPTestCaseObject>(self.tableName.UTF8String).value());
     TestCaseAssertTrue(self.object2InTable2 == multiObj2.objectAtTable<CPPTestCaseObject>(self.tableName2.UTF8String).value());
     [self doTestMultiObjects:{ multiObj1, multiObj2 }
-                      andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
+                      andSQL:@"SELECT testTable.identifier, testTable.content, testTable2.identifier, testTable2.content FROM testTable, testTable2 WHERE testTable.identifier == testTable2.identifier"
                  bySelecting:^WCDB::Optional<WCDB::ValueArray<WCDB::MultiObject>> {
                      WCDB::ResultFields resultColumns
                      = CPPTestCaseObject::allFields()
@@ -140,7 +140,7 @@
     TestCaseAssertTrue(self.object1 == multiObj.objectAtTable<CPPTestCaseObject>(self.tableName.UTF8String).value());
     TestCaseAssertTrue(self.object1InTable2 == multiObj.objectAtTable<CPPTestCaseObject>(self.tableName2.UTF8String).value());
     [self doTestMultiObjects:multiObj
-                      andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
+                      andSQL:@"SELECT testTable.identifier, testTable.content, testTable2.identifier, testTable2.content FROM testTable, testTable2 WHERE testTable.identifier == testTable2.identifier"
                  bySelecting:^WCDB::Optional<WCDB::ValueArray<WCDB::MultiObject>> {
                      WCDB::ResultFields resultColumns
                      = CPPTestCaseObject::allFields()
@@ -169,7 +169,7 @@
     TestCaseAssertTrue(self.object2 == multiObj2.objectAtTable<CPPTestCaseObject>(self.tableName.UTF8String).value());
     TestCaseAssertTrue(self.object2InTable2 == multiObj2.objectAtTable<CPPTestCaseObject>(self.tableName2.UTF8String).value());
     [self doTestMultiObjects:{ multiObj1, multiObj2 }
-                      andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
+                      andSQL:@"SELECT testTable.identifier, testTable.content, testTable2.identifier, testTable2.content FROM testTable, testTable2 WHERE testTable.identifier == testTable2.identifier"
                  bySelecting:^WCDB::Optional<WCDB::ValueArray<WCDB::MultiObject>> {
                      WCDB::ResultFields resultColumns
                      = CPPTestCaseObject::allFields()

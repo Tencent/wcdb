@@ -25,9 +25,9 @@ class StatementDropTableTests: BaseTestCase {
 
     func testStatementDropTable() {
 
-        WINQAssertEqual(StatementDropTable().drop(table: "testTable"), "DROP TABLE main.testTable")
+        WINQAssertEqual(StatementDropTable().drop(table: "testTable"), "DROP TABLE testTable")
 
-        WINQAssertEqual(StatementDropTable().drop(table: "testTable").ifExists(), "DROP TABLE IF EXISTS main.testTable")
+        WINQAssertEqual(StatementDropTable().drop(table: "testTable").ifExists(), "DROP TABLE IF EXISTS testTable")
 
         WINQAssertEqual(StatementDropTable().drop(table: "testTable").of(schema: "testSchema"), "DROP TABLE testSchema.testTable")
 

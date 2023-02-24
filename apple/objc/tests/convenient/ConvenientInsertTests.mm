@@ -146,7 +146,7 @@
     TestCaseObject* autoIncrementObject = [TestCaseObject autoIncrementObjectWithContent:self.object3.content];
     [self doTestObjects:@[ self.object1, self.object2, self.object3 ]
               andNumber:1
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              BOOL result = [self.database insertObject:autoIncrementObject intoTable:self.tableName];
              if (result) {
@@ -162,7 +162,7 @@
     TestCaseObject* autoIncrementObject = [TestCaseObject autoIncrementObjectWithContent:self.object3.content];
     [self doTestObjects:@[ self.object1, self.object2, self.object3 ]
               andNumber:1
-           ofInsertSQLs:@"INSERT INTO main.testTable(content) VALUES(?1)"
+           ofInsertSQLs:@"INSERT INTO testTable(content) VALUES(?1)"
          afterInsertion:^BOOL {
              BOOL result = [self.database insertObject:autoIncrementObject onProperties:TestCaseObject.content intoTable:self.tableName];
              if (result) {
@@ -178,7 +178,7 @@
 {
     [self doTestObjects:@[ self.object1, self.object2, self.object3 ]
               andNumber:1
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return [self.database insertObject:self.object3 intoTable:self.tableName];
          }];
@@ -188,7 +188,7 @@
 {
     [self doTestObjects:@[ self.object1, self.object2, self.object3, self.object4 ]
               andNumber:2
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return [self.database insertObjects:@[ self.object3, self.object4 ] intoTable:self.tableName];
          }];
@@ -199,7 +199,7 @@
 {
     [self doTestObjects:@[ self.renewedObject1, self.object2 ]
               andNumber:1
-           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return [self.database insertOrReplaceObject:self.renewedObject1 intoTable:self.tableName];
          }];
@@ -209,7 +209,7 @@
 {
     [self doTestObjects:@[ self.renewedObject1, self.renewedObject2 ]
               andNumber:2
-           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return [self.database insertOrReplaceObjects:@[ self.renewedObject1, self.renewedObject2 ] intoTable:self.tableName];
          }];
@@ -220,7 +220,7 @@
 {
     [self doTestObjects:@[ self.object1, self.object2, self.partialObject3 ]
               andNumber:1
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return [self.database insertObject:self.object3 onProperties:TestCaseObject.identifier intoTable:self.tableName];
          }];
@@ -230,7 +230,7 @@
 {
     [self doTestObjects:@[ self.object1, self.object2, self.partialObject3, self.partialObject4 ]
               andNumber:2
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return [self.database insertObjects:@[ self.object3, self.object4 ] onProperties:TestCaseObject.identifier intoTable:self.tableName];
          }];
@@ -241,7 +241,7 @@
 {
     [self doTestObjects:@[ self.renewedPartialObject1, self.object2 ]
               andNumber:1
-           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return [self.database insertOrReplaceObject:self.object1 onProperties:TestCaseObject.identifier intoTable:self.tableName];
          }];
@@ -251,7 +251,7 @@
 {
     [self doTestObjects:@[ self.renewedPartialObject1, self.renewedPartialObject2 ]
               andNumber:2
-           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return [self.database insertOrReplaceObjects:@[ self.object1, self.object2 ] onProperties:TestCaseObject.identifier intoTable:self.tableName];
          }];
@@ -262,7 +262,7 @@
 {
     [self doTestObjects:@[ self.object1, self.object2, self.object3 ]
               andNumber:1
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return [self.table insertObject:self.object3];
          }];
@@ -272,7 +272,7 @@
 {
     [self doTestObjects:@[ self.object1, self.object2, self.object3, self.object4 ]
               andNumber:2
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return [self.table insertObjects:@[ self.object3, self.object4 ]];
          }];
@@ -283,7 +283,7 @@
 {
     [self doTestObjects:@[ self.renewedObject1, self.object2 ]
               andNumber:1
-           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return [self.table insertOrReplaceObject:self.renewedObject1];
          }];
@@ -293,7 +293,7 @@
 {
     [self doTestObjects:@[ self.renewedObject1, self.renewedObject2 ]
               andNumber:2
-           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return [self.table insertOrReplaceObjects:@[ self.renewedObject1, self.renewedObject2 ]];
          }];
@@ -304,7 +304,7 @@
 {
     [self doTestObjects:@[ self.object1, self.object2, self.partialObject3 ]
               andNumber:1
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return [self.table insertObject:self.object3 onProperties:TestCaseObject.identifier];
          }];
@@ -314,7 +314,7 @@
 {
     [self doTestObjects:@[ self.object1, self.object2, self.partialObject3, self.partialObject4 ]
               andNumber:2
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return [self.table insertObjects:@[ self.object3, self.object4 ] onProperties:TestCaseObject.identifier];
          }];
@@ -325,7 +325,7 @@
 {
     [self doTestObjects:@[ self.renewedPartialObject1, self.object2 ]
               andNumber:1
-           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return [self.table insertOrReplaceObject:self.object1 onProperties:TestCaseObject.identifier];
          }];
@@ -335,7 +335,7 @@
 {
     [self doTestObjects:@[ self.renewedPartialObject1, self.renewedPartialObject2 ]
               andNumber:2
-           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return [self.table insertOrReplaceObjects:@[ self.object1, self.object2 ] onProperties:TestCaseObject.identifier];
          }];
@@ -346,7 +346,7 @@
 {
     [self doTestObjects:@[ self.object1, self.object2, self.object3 ]
               andNumber:1
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return [[self.database getHandle] insertObject:self.object3 intoTable:self.tableName];
          }];
@@ -356,7 +356,7 @@
 {
     [self doTestObjects:@[ self.object1, self.object2, self.object3, self.object4 ]
               andNumber:2
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return [[self.database getHandle] insertObjects:@[ self.object3, self.object4 ] intoTable:self.tableName];
          }];
@@ -367,7 +367,7 @@
 {
     [self doTestObjects:@[ self.renewedObject1, self.object2 ]
               andNumber:1
-           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return [[self.database getHandle] insertOrReplaceObject:self.renewedObject1 intoTable:self.tableName];
          }];
@@ -377,7 +377,7 @@
 {
     [self doTestObjects:@[ self.renewedObject1, self.renewedObject2 ]
               andNumber:2
-           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return [[self.database getHandle] insertOrReplaceObjects:@[ self.renewedObject1, self.renewedObject2 ] intoTable:self.tableName];
          }];
@@ -388,7 +388,7 @@
 {
     [self doTestObjects:@[ self.object1, self.object2, self.partialObject3 ]
               andNumber:1
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return [[self.database getHandle] insertObject:self.object3 onProperties:TestCaseObject.identifier intoTable:self.tableName];
          }];
@@ -398,7 +398,7 @@
 {
     [self doTestObjects:@[ self.object1, self.object2, self.partialObject3, self.partialObject4 ]
               andNumber:2
-           ofInsertSQLs:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
+           ofInsertSQLs:@"INSERT INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return [[self.database getHandle] insertObjects:@[ self.object3, self.object4 ] onProperties:TestCaseObject.identifier intoTable:self.tableName];
          }];
@@ -409,7 +409,7 @@
 {
     [self doTestObjects:@[ self.renewedPartialObject1, self.object2 ]
               andNumber:1
-           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return [[self.database getHandle] insertOrReplaceObject:self.object1 onProperties:TestCaseObject.identifier intoTable:self.tableName];
          }];
@@ -419,7 +419,7 @@
 {
     [self doTestObjects:@[ self.renewedPartialObject1, self.renewedPartialObject2 ]
               andNumber:2
-           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return [[self.database getHandle] insertOrReplaceObjects:@[ self.object1, self.object2 ] onProperties:TestCaseObject.identifier intoTable:self.tableName];
          }];

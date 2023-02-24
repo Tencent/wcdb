@@ -29,9 +29,9 @@ class StatementDropTriggerTests: BaseTestCase {
 
     func testStatementDropTrigger() {
 
-        WINQAssertEqual(StatementDropTrigger().drop(trigger: "testTrigger"), "DROP TRIGGER main.testTrigger")
+        WINQAssertEqual(StatementDropTrigger().drop(trigger: "testTrigger"), "DROP TRIGGER testTrigger")
 
-        WINQAssertEqual(StatementDropTrigger().drop(trigger: "testTrigger").ifExists(), "DROP TRIGGER IF EXISTS main.testTrigger")
+        WINQAssertEqual(StatementDropTrigger().drop(trigger: "testTrigger").ifExists(), "DROP TRIGGER IF EXISTS testTrigger")
 
         WINQAssertEqual(StatementDropTrigger().drop(trigger: "testTrigger").of(schema: "testSchema"), "DROP TRIGGER testSchema.testTrigger")
 

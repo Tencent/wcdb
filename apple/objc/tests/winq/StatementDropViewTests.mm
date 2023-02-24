@@ -76,9 +76,9 @@
 {
     auto testingSQL = WCDB::StatementDropView().dropView(view).ifExists();
 
-    auto testingTypes = { WCDB::SQL::Type::DropViewSTMT, WCDB::SQL::Type::Schema };
+    auto testingTypes = { WCDB::SQL::Type::DropViewSTMT };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"DROP VIEW IF EXISTS main.testView");
+    TestCaseAssertSQLEqual(testingSQL, @"DROP VIEW IF EXISTS testView");
 }
 
 @end

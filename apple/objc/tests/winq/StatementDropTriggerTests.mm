@@ -76,9 +76,9 @@
 {
     auto testingSQL = WCDB::StatementDropTrigger().dropTrigger(trigger).ifExists();
 
-    auto testingTypes = { WCDB::SQL::Type::DropTriggerSTMT, WCDB::SQL::Type::Schema };
+    auto testingTypes = { WCDB::SQL::Type::DropTriggerSTMT };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"DROP TRIGGER IF EXISTS main.testTrigger");
+    TestCaseAssertSQLEqual(testingSQL, @"DROP TRIGGER IF EXISTS testTrigger");
 }
 
 @end

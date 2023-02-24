@@ -106,9 +106,9 @@
 {
     self.tableClass = PropertyObject.class;
 #ifndef WCDB_WECHAT
-    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(property INTEGER, differentName INTEGER)" ];
+    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(property INTEGER, differentName INTEGER)" ];
 #else
-    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(differentName INTEGER, property INTEGER)" ];
+    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(differentName INTEGER, property INTEGER)" ];
 #endif
     [self doTestCreateTableAndIndexSQLsAsExpected:expected];
 }
@@ -117,9 +117,9 @@
 {
     self.tableClass = AllTypesObject.class;
 #ifndef WCDB_WECHAT
-    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(type TEXT PRIMARY KEY, enumNSValue INTEGER, optionNSValue INTEGER, enumValue INTEGER, enumClassValue INTEGER, literalEnumValue INTEGER, trueOrFalseValue INTEGER, yesOrNoValue INTEGER, intValue INTEGER, unsignedIntValue INTEGER, int32Value INTEGER, int64Value INTEGER, uint32Value INTEGER, uint64Value INTEGER, integerValue INTEGER, uintegerValue INTEGER, floatValue REAL, doubleValue REAL, numberValue REAL, dateValue REAL, stringValue TEXT, dataValue BLOB, codingValue BLOB, renamedGSValue INTEGER)" ];
+    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(type TEXT PRIMARY KEY, enumNSValue INTEGER, optionNSValue INTEGER, enumValue INTEGER, enumClassValue INTEGER, literalEnumValue INTEGER, trueOrFalseValue INTEGER, yesOrNoValue INTEGER, intValue INTEGER, unsignedIntValue INTEGER, int32Value INTEGER, int64Value INTEGER, uint32Value INTEGER, uint64Value INTEGER, integerValue INTEGER, uintegerValue INTEGER, floatValue REAL, doubleValue REAL, numberValue REAL, dateValue REAL, stringValue TEXT, dataValue BLOB, codingValue BLOB, renamedGSValue INTEGER)" ];
 #else
-    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(codingValue BLOB, dataValue BLOB, dateValue REAL, doubleValue REAL, enumClassValue INTEGER, enumNSValue INTEGER, enumValue INTEGER, floatValue REAL, int32Value INTEGER, int64Value INTEGER, integerValue INTEGER, intValue INTEGER, literalEnumValue INTEGER, numberValue REAL, optionNSValue INTEGER, renamedGSValue INTEGER, stringValue TEXT, trueOrFalseValue INTEGER, type TEXT PRIMARY KEY, uint32Value INTEGER, uint64Value INTEGER, uintegerValue INTEGER, unsignedIntValue INTEGER, yesOrNoValue INTEGER)" ];
+    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(codingValue BLOB, dataValue BLOB, dateValue REAL, doubleValue REAL, enumClassValue INTEGER, enumNSValue INTEGER, enumValue INTEGER, floatValue REAL, int32Value INTEGER, int64Value INTEGER, integerValue INTEGER, intValue INTEGER, literalEnumValue INTEGER, numberValue REAL, optionNSValue INTEGER, renamedGSValue INTEGER, stringValue TEXT, trueOrFalseValue INTEGER, type TEXT PRIMARY KEY, uint32Value INTEGER, uint64Value INTEGER, uintegerValue INTEGER, unsignedIntValue INTEGER, yesOrNoValue INTEGER)" ];
 #endif
     [self doTestCreateTableAndIndexSQLsAsExpected:expected];
 
@@ -159,7 +159,7 @@
 {
     self.tableClass = ColumnConstraintPrimary.class;
     NSArray<NSString*>* expected = @[
-        @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER PRIMARY KEY)",
+        @"CREATE TABLE IF NOT EXISTS testTable(value INTEGER PRIMARY KEY)",
     ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected];
 }
@@ -175,7 +175,7 @@
 {
     self.tableClass = ColumnConstraintPrimaryAsc.class;
     NSArray<NSString*>* expected = @[
-        @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER PRIMARY KEY ASC)",
+        @"CREATE TABLE IF NOT EXISTS testTable(value INTEGER PRIMARY KEY ASC)",
     ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected];
 }
@@ -184,7 +184,7 @@
 {
     self.tableClass = ColumnConstraintPrimaryDesc.class;
     NSArray<NSString*>* expected = @[
-        @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER PRIMARY KEY DESC)",
+        @"CREATE TABLE IF NOT EXISTS testTable(value INTEGER PRIMARY KEY DESC)",
     ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected];
 }
@@ -193,7 +193,7 @@
 {
     self.tableClass = ColumnConstraintAutoIncrement.class;
     NSArray<NSString*>* expected = @[
-        @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER PRIMARY KEY AUTOINCREMENT)",
+        @"CREATE TABLE IF NOT EXISTS testTable(value INTEGER PRIMARY KEY AUTOINCREMENT)",
     ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected];
 }
@@ -202,7 +202,7 @@
 {
     self.tableClass = ColumnConstraintAutoIncrementAsc.class;
     NSArray<NSString*>* expected = @[
-        @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER PRIMARY KEY ASC AUTOINCREMENT)",
+        @"CREATE TABLE IF NOT EXISTS testTable(value INTEGER PRIMARY KEY ASC AUTOINCREMENT)",
     ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected];
 }
@@ -211,7 +211,7 @@
 {
     self.tableClass = ColumnConstraintUnique.class;
     NSArray<NSString*>* expected = @[
-        @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER UNIQUE)",
+        @"CREATE TABLE IF NOT EXISTS testTable(value INTEGER UNIQUE)",
     ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected];
 }
@@ -220,7 +220,7 @@
 {
     self.tableClass = ColumnConstraintDefault.class;
     NSArray<NSString*>* expected = @[
-        @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER DEFAULT 1)",
+        @"CREATE TABLE IF NOT EXISTS testTable(value INTEGER DEFAULT 1)",
     ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected];
 }
@@ -229,7 +229,7 @@
 {
     self.tableClass = ColumnConstraintCheck.class;
     NSArray<NSString*>* expected = @[
-        @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER CHECK(value > 1))",
+        @"CREATE TABLE IF NOT EXISTS testTable(value INTEGER CHECK(value > 1))",
     ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected];
 }
@@ -241,17 +241,17 @@
     self.tableName = @"'test@Table'";
     NSArray<NSString*>* expected = @[
 #ifndef WCDB_WECHAT
-        @"CREATE TABLE IF NOT EXISTS main.'test@Table'(index_ INTEGER, indexAsc INTEGER, indexDesc INTEGER, uniqueIndex INTEGER, uniqueIndexAsc INTEGER, uniqueIndexDesc INTEGER, multiIndex INTEGER, multiIndexAsc INTEGER, multiIndexDesc INTEGER)",
+        @"CREATE TABLE IF NOT EXISTS 'test@Table'(index_ INTEGER, indexAsc INTEGER, indexDesc INTEGER, uniqueIndex INTEGER, uniqueIndexAsc INTEGER, uniqueIndexDesc INTEGER, multiIndex INTEGER, multiIndexAsc INTEGER, multiIndexDesc INTEGER)",
 #else
-        @"CREATE TABLE IF NOT EXISTS main.'test@Table'(index_ INTEGER, indexAsc INTEGER, indexDesc INTEGER, multiIndex INTEGER, multiIndexAsc INTEGER, multiIndexDesc INTEGER, uniqueIndex INTEGER, uniqueIndexAsc INTEGER, uniqueIndexDesc INTEGER)",
+        @"CREATE TABLE IF NOT EXISTS 'test@Table'(index_ INTEGER, indexAsc INTEGER, indexDesc INTEGER, multiIndex INTEGER, multiIndexAsc INTEGER, multiIndexDesc INTEGER, uniqueIndex INTEGER, uniqueIndexAsc INTEGER, uniqueIndexDesc INTEGER)",
 #endif
-        @"CREATE INDEX IF NOT EXISTS main.'test@Table_index' ON 'test@Table'(index_)",
-        @"CREATE INDEX IF NOT EXISTS main.'test@Table_index_asc' ON 'test@Table'(indexAsc ASC)",
-        @"CREATE INDEX IF NOT EXISTS main.'test@Table_index_desc' ON 'test@Table'(indexDesc DESC)",
-        @"CREATE INDEX IF NOT EXISTS main.'test@Table_multi_index' ON 'test@Table'(multiIndex, multiIndexAsc ASC, multiIndexDesc DESC)",
-        @"CREATE UNIQUE INDEX IF NOT EXISTS main.'test@Table_unique_index' ON 'test@Table'(uniqueIndex)",
-        @"CREATE UNIQUE INDEX IF NOT EXISTS main.'test@Table_unique_index_asc' ON 'test@Table'(uniqueIndexAsc ASC)",
-        @"CREATE UNIQUE INDEX IF NOT EXISTS main.'test@Table_unique_index_desc' ON 'test@Table'(uniqueIndexDesc DESC)",
+        @"CREATE INDEX IF NOT EXISTS 'test@Table_index' ON 'test@Table'(index_)",
+        @"CREATE INDEX IF NOT EXISTS 'test@Table_index_asc' ON 'test@Table'(indexAsc ASC)",
+        @"CREATE INDEX IF NOT EXISTS 'test@Table_index_desc' ON 'test@Table'(indexDesc DESC)",
+        @"CREATE INDEX IF NOT EXISTS 'test@Table_multi_index' ON 'test@Table'(multiIndex, multiIndexAsc ASC, multiIndexDesc DESC)",
+        @"CREATE UNIQUE INDEX IF NOT EXISTS 'test@Table_unique_index' ON 'test@Table'(uniqueIndex)",
+        @"CREATE UNIQUE INDEX IF NOT EXISTS 'test@Table_unique_index_asc' ON 'test@Table'(uniqueIndexAsc ASC)",
+        @"CREATE UNIQUE INDEX IF NOT EXISTS 'test@Table_unique_index_desc' ON 'test@Table'(uniqueIndexDesc DESC)",
     ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected];
 
@@ -259,17 +259,17 @@
     self.tableName = nil;
     expected = @[
 #ifndef WCDB_WECHAT
-        @"CREATE TABLE IF NOT EXISTS main.testTable(index_ INTEGER, indexAsc INTEGER, indexDesc INTEGER, uniqueIndex INTEGER, uniqueIndexAsc INTEGER, uniqueIndexDesc INTEGER, multiIndex INTEGER, multiIndexAsc INTEGER, multiIndexDesc INTEGER)",
+        @"CREATE TABLE IF NOT EXISTS testTable(index_ INTEGER, indexAsc INTEGER, indexDesc INTEGER, uniqueIndex INTEGER, uniqueIndexAsc INTEGER, uniqueIndexDesc INTEGER, multiIndex INTEGER, multiIndexAsc INTEGER, multiIndexDesc INTEGER)",
 #else
-        @"CREATE TABLE IF NOT EXISTS main.testTable(index_ INTEGER, indexAsc INTEGER, indexDesc INTEGER, multiIndex INTEGER, multiIndexAsc INTEGER, multiIndexDesc INTEGER, uniqueIndex INTEGER, uniqueIndexAsc INTEGER, uniqueIndexDesc INTEGER)",
+        @"CREATE TABLE IF NOT EXISTS testTable(index_ INTEGER, indexAsc INTEGER, indexDesc INTEGER, multiIndex INTEGER, multiIndexAsc INTEGER, multiIndexDesc INTEGER, uniqueIndex INTEGER, uniqueIndexAsc INTEGER, uniqueIndexDesc INTEGER)",
 #endif
-        @"CREATE INDEX IF NOT EXISTS main.testTable_index ON testTable(index_)",
-        @"CREATE INDEX IF NOT EXISTS main.testTable_index_asc ON testTable(indexAsc ASC)",
-        @"CREATE INDEX IF NOT EXISTS main.testTable_index_desc ON testTable(indexDesc DESC)",
-        @"CREATE INDEX IF NOT EXISTS main.testTable_multi_index ON testTable(multiIndex, multiIndexAsc ASC, multiIndexDesc DESC)",
-        @"CREATE UNIQUE INDEX IF NOT EXISTS main.testTable_unique_index ON testTable(uniqueIndex)",
-        @"CREATE UNIQUE INDEX IF NOT EXISTS main.testTable_unique_index_asc ON testTable(uniqueIndexAsc ASC)",
-        @"CREATE UNIQUE INDEX IF NOT EXISTS main.testTable_unique_index_desc ON testTable(uniqueIndexDesc DESC)",
+        @"CREATE INDEX IF NOT EXISTS testTable_index ON testTable(index_)",
+        @"CREATE INDEX IF NOT EXISTS testTable_index_asc ON testTable(indexAsc ASC)",
+        @"CREATE INDEX IF NOT EXISTS testTable_index_desc ON testTable(indexDesc DESC)",
+        @"CREATE INDEX IF NOT EXISTS testTable_multi_index ON testTable(multiIndex, multiIndexAsc ASC, multiIndexDesc DESC)",
+        @"CREATE UNIQUE INDEX IF NOT EXISTS testTable_unique_index ON testTable(uniqueIndex)",
+        @"CREATE UNIQUE INDEX IF NOT EXISTS testTable_unique_index_asc ON testTable(uniqueIndexAsc ASC)",
+        @"CREATE UNIQUE INDEX IF NOT EXISTS testTable_unique_index_desc ON testTable(uniqueIndexDesc DESC)",
     ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected];
 }
@@ -278,7 +278,7 @@
 - (void)test_table_constraint
 {
     self.tableClass = TableConstraintObject.class;
-    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(multiPrimary INTEGER, multiPrimaryAsc INTEGER, multiPrimaryDesc INTEGER, multiUnique INTEGER, multiUniqueAsc INTEGER, multiUniqueDesc INTEGER, CONSTRAINT multi_primary PRIMARY KEY(multiPrimary, multiPrimaryAsc ASC, multiPrimaryDesc DESC), CONSTRAINT multi_unique UNIQUE(multiUnique, multiUniqueAsc ASC, multiUniqueDesc DESC))" ];
+    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(multiPrimary INTEGER, multiPrimaryAsc INTEGER, multiPrimaryDesc INTEGER, multiUnique INTEGER, multiUniqueAsc INTEGER, multiUniqueDesc INTEGER, CONSTRAINT multi_primary PRIMARY KEY(multiPrimary, multiPrimaryAsc ASC, multiPrimaryDesc DESC), CONSTRAINT multi_unique UNIQUE(multiUnique, multiUniqueAsc ASC, multiUniqueDesc DESC))" ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected];
 }
 
@@ -287,14 +287,14 @@
 {
     self.tableClass = VirtualTableFTS4Object.class;
     [self.database addTokenizer:WCTTokenizerOneOrBinary];
-    NSString* expected = @"CREATE VIRTUAL TABLE IF NOT EXISTS main.testTable USING fts4(tokenize = wcdb_one_or_binary, content='contentTable', identifier INTEGER, content TEXT, notindexed=identifier)";
+    NSString* expected = @"CREATE VIRTUAL TABLE IF NOT EXISTS testTable USING fts4(tokenize = wcdb_one_or_binary, content='contentTable', identifier INTEGER, content TEXT, notindexed=identifier)";
     [self doTestCreateVirtualTableSQLAsExpected:expected];
 }
 
 - (void)test_virtual_table_fts5
 {
     self.tableClass = VirtualTableFTS5Object.class;
-    NSString* expected = @"CREATE VIRTUAL TABLE IF NOT EXISTS main.testTable USING fts5(tokenize = 'porter', content='contentTable', identifier UNINDEXED, content)";
+    NSString* expected = @"CREATE VIRTUAL TABLE IF NOT EXISTS testTable USING fts5(tokenize = 'porter', content='contentTable', identifier UNINDEXED, content)";
     [self doTestCreateVirtualTableSQLAsExpected:expected];
 }
 
@@ -302,8 +302,8 @@
 - (void)test_additional_orm
 {
     self.tableClass = AdditionalORMObject.class;
-    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER PRIMARY KEY ON CONFLICT ABORT, CONSTRAINT table_constraint CHECK(value > 10))",
-                                      @"CREATE INDEX IF NOT EXISTS main.testTable_index ON testTable(value ASC)" ];
+    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(value INTEGER PRIMARY KEY ON CONFLICT ABORT, CONSTRAINT table_constraint CHECK(value > 10))",
+                                      @"CREATE INDEX IF NOT EXISTS testTable_index ON testTable(value ASC)" ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected];
 }
 
@@ -313,26 +313,26 @@
     self.tableName = @"'test@Table'";
     {
         self.tableClass = OldRemapObject.class;
-        NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.'test@Table'(value INTEGER)" ];
+        NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS 'test@Table'(value INTEGER)" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected];
     }
     // remap
     {
         self.tableClass = NewRemapObject.class;
-        NSArray<NSString*>* expected = @[ @"PRAGMA main.table_info('test@Table')", @"ALTER TABLE main.'test@Table' ADD COLUMN newValue INTEGER", @"CREATE INDEX IF NOT EXISTS main.'test@Table_index' ON 'test@Table'(value)" ];
+        NSArray<NSString*>* expected = @[ @"PRAGMA table_info('test@Table')", @"ALTER TABLE 'test@Table' ADD COLUMN newValue INTEGER", @"CREATE INDEX IF NOT EXISTS 'test@Table_index' ON 'test@Table'(value)" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected];
     }
     [self dropTable];
     self.tableName = nil;
     {
         self.tableClass = OldRemapObject.class;
-        NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER)" ];
+        NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(value INTEGER)" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected];
     }
     // remap
     {
         self.tableClass = NewRemapObject.class;
-        NSArray<NSString*>* expected = @[ @"PRAGMA main.table_info('testTable')", @"ALTER TABLE main.testTable ADD COLUMN newValue INTEGER", @"CREATE INDEX IF NOT EXISTS main.testTable_index ON testTable(value)" ];
+        NSArray<NSString*>* expected = @[ @"PRAGMA table_info('testTable')", @"ALTER TABLE testTable ADD COLUMN newValue INTEGER", @"CREATE INDEX IF NOT EXISTS testTable_index ON testTable(value)" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected];
     }
 }
@@ -341,29 +341,29 @@
 {
     {
         self.tableClass = OldRemapObject.class;
-        NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER)" ];
+        NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(value INTEGER)" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected];
     }
     // remap
     {
         self.tableClass = NewlyCreatedTableIndexObject.class;
-        NSArray<NSString*>* expected = @[ @"PRAGMA main.table_info('testTable')", @"ALTER TABLE main.testTable ADD COLUMN newValue INTEGER" ];
+        NSArray<NSString*>* expected = @[ @"PRAGMA table_info('testTable')", @"ALTER TABLE testTable ADD COLUMN newValue INTEGER" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected];
     }
     TestCaseAssertTrue([self dropTable]);
     // newly create
     {
 #ifndef WCDB_WECHAT
-        NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER, newValue INTEGER)", @"CREATE INDEX IF NOT EXISTS main.testTable_index ON testTable(value)" ];
+        NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(value INTEGER, newValue INTEGER)", @"CREATE INDEX IF NOT EXISTS testTable_index ON testTable(value)" ];
 #else
-        NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(newValue INTEGER, value INTEGER)", @"CREATE INDEX IF NOT EXISTS main.testTable_index ON testTable(value)" ];
+        NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(newValue INTEGER, value INTEGER)", @"CREATE INDEX IF NOT EXISTS testTable_index ON testTable(value)" ];
 #endif
         [self doTestCreateTableAndIndexSQLsAsExpected:expected];
     }
     // drop index
     {
         self.tableClass = DropIndexObject.class;
-        NSArray<NSString*>* expected = @[ @"PRAGMA main.table_info('testTable')", @"DROP INDEX IF EXISTS main.testTable_index" ];
+        NSArray<NSString*>* expected = @[ @"PRAGMA table_info('testTable')", @"DROP INDEX IF EXISTS testTable_index" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected];
     }
 }

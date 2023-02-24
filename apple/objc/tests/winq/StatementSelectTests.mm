@@ -150,18 +150,18 @@
 {
     auto testingSQL = WCDB::StatementSelect().select(resultColumns).from(tablesOrSubqueries);
 
-    auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
+    auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::TableOrSubquery };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"SELECT 1, 2 FROM main.testTable1, main.testTable2");
+    TestCaseAssertSQLEqual(testingSQL, @"SELECT 1, 2 FROM testTable1, testTable2");
 }
 
 - (void)test_select_from_join
 {
     auto testingSQL = WCDB::StatementSelect().select(resultColumns).from(join);
 
-    auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
+    auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"SELECT 1, 2 FROM main.testTable");
+    TestCaseAssertSQLEqual(testingSQL, @"SELECT 1, 2 FROM testTable");
 }
 
 - (void)test_select_with_condition

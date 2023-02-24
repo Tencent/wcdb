@@ -82,9 +82,9 @@
 {
     auto testingSQL = WCDB::TableOrSubquery(table);
 
-    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"main.testTable");
+    TestCaseAssertSQLEqual(testingSQL, @"testTable");
 }
 
 - (void)test_table_with_schema
@@ -100,36 +100,36 @@
 {
     auto testingSQL = WCDB::TableOrSubquery(table).as(alias);
 
-    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"main.testTable AS testAliasTable");
+    TestCaseAssertSQLEqual(testingSQL, @"testTable AS testAliasTable");
 }
 
 - (void)test_table_with_index
 {
     auto testingSQL = WCDB::TableOrSubquery(table).indexed(index);
 
-    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"main.testTable INDEXED BY testIndex");
+    TestCaseAssertSQLEqual(testingSQL, @"testTable INDEXED BY testIndex");
 }
 
 - (void)test_table_without_index
 {
     auto testingSQL = WCDB::TableOrSubquery(table).notIndexed();
 
-    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"main.testTable NOT INDEXED");
+    TestCaseAssertSQLEqual(testingSQL, @"testTable NOT INDEXED");
 }
 
 - (void)test_table_function
 {
     auto testingSQL = WCDB::TableOrSubquery::function(function).invoke();
 
-    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"main.testFunction()");
+    TestCaseAssertSQLEqual(testingSQL, @"testFunction()");
 }
 
 - (void)test_table_function_with_schema
@@ -145,54 +145,54 @@
 {
     auto testingSQL = WCDB::TableOrSubquery::function(function).invoke().argument(expression1);
 
-    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"main.testFunction(1)");
+    TestCaseAssertSQLEqual(testingSQL, @"testFunction(1)");
 }
 
 - (void)test_table_function_with_seperated_parameters
 {
     auto testingSQL = WCDB::TableOrSubquery::function(function).invoke().argument(expression1).argument(expression2);
 
-    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"main.testFunction(1, 2)");
+    TestCaseAssertSQLEqual(testingSQL, @"testFunction(1, 2)");
 }
 
 - (void)test_table_function_with_parameters
 {
     auto testingSQL = WCDB::TableOrSubquery::function(function).invoke().arguments(expressions);
 
-    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"main.testFunction(1, 2)");
+    TestCaseAssertSQLEqual(testingSQL, @"testFunction(1, 2)");
 }
 
 - (void)test_table_function_with_alias
 {
     auto testingSQL = WCDB::TableOrSubquery::function(function).as(alias).invoke();
 
-    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"main.testFunction() AS testAliasTable");
+    TestCaseAssertSQLEqual(testingSQL, @"testFunction() AS testAliasTable");
 }
 
 - (void)test_tables_or_subqueries
 {
     auto testingSQL = WCDB::TableOrSubquery(tablesOrSubqueries);
 
-    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::TableOrSubquery };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"(main.testTable1, main.testTable2)");
+    TestCaseAssertSQLEqual(testingSQL, @"(testTable1, testTable2)");
 }
 
 - (void)test_join
 {
     auto testingSQL = WCDB::TableOrSubquery(join);
 
-    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"(main.testJoinTable)");
+    TestCaseAssertSQLEqual(testingSQL, @"(testJoinTable)");
 }
 
 - (void)test_select
@@ -215,7 +215,7 @@
 
 - (void)test_master
 {
-    TestCaseAssertSQLEqual(WCDB::TableOrSubquery::master(), @"main.sqlite_master");
+    TestCaseAssertSQLEqual(WCDB::TableOrSubquery::master(), @"sqlite_master");
 }
 
 @end

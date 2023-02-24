@@ -34,8 +34,7 @@ bool Schema::isValid() const
     return !name.empty();
 }
 
-// Typically, empty schema is not allowed in WCDB. If you really need a empty schema, you should specify it explicitly.
-Schema::Schema() : name(mainSchema)
+Schema::Schema() : name()
 {
 }
 
@@ -70,7 +69,7 @@ bool Schema::empty() const
 
 bool Schema::isTargetingSameSchema(const Schema& other) const
 {
-    return getDescription() == other.getDescription();
+    return (isMain() && other.isMain()) || (getDescription() == other.getDescription());
 }
 
 } // namespace Syntax

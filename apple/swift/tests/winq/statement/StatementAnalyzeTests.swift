@@ -46,7 +46,7 @@ class StatementAnalyzeTests: BaseTestCase {
 
         WINQAssertEqual(
             StatementAnalyze().analyze().table("testTable"),
-            "ANALYZE main.testTable"
+            "ANALYZE testTable"
         )
 
         WINQAssertEqual(

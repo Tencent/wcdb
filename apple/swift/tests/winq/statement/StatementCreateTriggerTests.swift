@@ -57,7 +57,7 @@ class StatementCreateTriggerTests: BaseTestCase {
 
         WINQAssertEqual(
             StatementCreateTrigger().create(trigger: name).before().delete().on(table: table).forEachRow().when(condition).execute(update),
-            "CREATE TRIGGER main.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN 1 BEGIN UPDATE testTable SET testColumn = 1; END"
+            "CREATE TRIGGER testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN 1 BEGIN UPDATE testTable SET testColumn = 1; END"
         )
 
         WINQAssertEqual(

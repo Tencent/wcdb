@@ -103,9 +103,9 @@
 {
     auto testingSQL = WCDB::StatementCreateIndex().createIndex(index).table(table).indexed(indexedColumn1);
 
-    auto testingTypes = { WCDB::SQL::Type::CreateIndexSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
+    auto testingTypes = { WCDB::SQL::Type::CreateIndexSTMT, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"CREATE INDEX main.testIndex ON testTable(testColumn1)");
+    TestCaseAssertSQLEqual(testingSQL, @"CREATE INDEX testIndex ON testTable(testColumn1)");
 }
 
 - (void)test_create_index_with_condition

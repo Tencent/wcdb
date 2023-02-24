@@ -35,7 +35,7 @@
 {
     TestCaseAssertTrue([self createTable]);
 
-    [self doTestSQLs:@[ @"DROP INDEX IF EXISTS main.testTable_index" ]
+    [self doTestSQLs:@[ @"DROP INDEX IF EXISTS testTable_index" ]
          inOperation:^BOOL {
              return [self.table dropIndexWithSuffix:@"_index"];
          }];
@@ -60,7 +60,7 @@
 
 - (void)test_database_drop_table
 {
-    [self doTestSQLs:@[ @"DROP TABLE IF EXISTS main.testTable" ]
+    [self doTestSQLs:@[ @"DROP TABLE IF EXISTS testTable" ]
          inOperation:^BOOL {
              return [self.database dropTable:self.tableName];
          }];
@@ -69,7 +69,7 @@
 
 - (void)test_database_drop_index
 {
-    [self doTestSQLs:@[ @"DROP INDEX IF EXISTS main.testTable_index" ]
+    [self doTestSQLs:@[ @"DROP INDEX IF EXISTS testTable_index" ]
          inOperation:^BOOL {
              return [self.database dropIndex:@"testTable_index"];
          }];
@@ -90,7 +90,7 @@
 - (void)test_handle_drop_table
 {
     WCTHandle* handle = [self.database getHandle];
-    [self doTestSQLs:@[ @"DROP TABLE IF EXISTS main.testTable" ]
+    [self doTestSQLs:@[ @"DROP TABLE IF EXISTS testTable" ]
          inOperation:^BOOL {
              return [handle dropTable:self.tableName];
          }];
@@ -100,7 +100,7 @@
 - (void)test_handle_drop_index
 {
     WCTHandle* handle = [self.database getHandle];
-    [self doTestSQLs:@[ @"DROP INDEX IF EXISTS main.testTable_index" ]
+    [self doTestSQLs:@[ @"DROP INDEX IF EXISTS testTable_index" ]
          inOperation:^BOOL {
              return [handle dropIndex:@"testTable_index"];
          }];

@@ -133,17 +133,17 @@ class ExpresssionTests: BaseTestCase {
 
         WINQExpressionAssertEqual(
             Expression.exists(statementSelect),
-            "EXISTS(SELECT left FROM main.testExpressionTable)"
+            "EXISTS(SELECT left FROM testExpressionTable)"
         )
 
         WINQExpressionAssertEqual(
             Expression.notExists(statementSelect),
-            "NOT EXISTS(SELECT left FROM main.testExpressionTable)"
+            "NOT EXISTS(SELECT left FROM testExpressionTable)"
         )
 
-        WINQExpressionAssertEqual(left.`in`(statementSelect), "left IN(SELECT left FROM main.testExpressionTable)")
+        WINQExpressionAssertEqual(left.`in`(statementSelect), "left IN(SELECT left FROM testExpressionTable)")
 
-        WINQExpressionAssertEqual(left.notIn(statementSelect), "left NOT IN(SELECT left FROM main.testExpressionTable)")
+        WINQExpressionAssertEqual(left.notIn(statementSelect), "left NOT IN(SELECT left FROM testExpressionTable)")
 
         WINQExpressionAssertEqual(left.`in`(right), "left IN(right)")
 
@@ -151,13 +151,13 @@ class ExpresssionTests: BaseTestCase {
 
         WINQExpressionAssertEqual(left.in(function: "testFunction").schema("testSchema").invoke().arguments(1, 2), "left IN testSchema.testFunction(1, 2)")
 
-        WINQExpressionAssertEqual(left.notIn(function: "testFunction").invoke().arguments(1, 2), "left NOT IN main.testFunction(1, 2)")
+        WINQExpressionAssertEqual(left.notIn(function: "testFunction").invoke().arguments(1, 2), "left NOT IN testFunction(1, 2)")
 
-        WINQExpressionAssertEqual(left.notIn(function: "testFunction"), "left NOT IN main.testFunction()")
+        WINQExpressionAssertEqual(left.notIn(function: "testFunction"), "left NOT IN testFunction()")
 
         WINQExpressionAssertEqual(left.inTable("testTable").schema("testSchema"), "left IN testSchema.testTable")
 
-        WINQExpressionAssertEqual(left.notInTable("testTable"), "left NOT IN main.testTable")
+        WINQExpressionAssertEqual(left.notInTable("testTable"), "left NOT IN testTable")
 
         WINQExpressionAssertEqual(left.avg(), "AVG(left)")
 

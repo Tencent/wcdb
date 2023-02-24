@@ -76,9 +76,9 @@
 {
     auto testingSQL = WCDB::StatementDropIndex().dropIndex(index).ifExists();
 
-    auto testingTypes = { WCDB::SQL::Type::DropIndexSTMT, WCDB::SQL::Type::Schema };
+    auto testingTypes = { WCDB::SQL::Type::DropIndexSTMT };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"DROP INDEX IF EXISTS main.testIndex");
+    TestCaseAssertSQLEqual(testingSQL, @"DROP INDEX IF EXISTS testIndex");
 }
 
 @end

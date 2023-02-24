@@ -89,9 +89,9 @@
 {
     auto testingSQL = WCDB::StatementReindex().reindex().table(table);
 
-    auto testingTypes = { WCDB::SQL::Type::ReindexSTMT, WCDB::SQL::Type::Schema };
+    auto testingTypes = { WCDB::SQL::Type::ReindexSTMT };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"REINDEX main.testTable");
+    TestCaseAssertSQLEqual(testingSQL, @"REINDEX testTable");
 }
 
 - (void)test_reindex_index
@@ -107,9 +107,9 @@
 {
     auto testingSQL = WCDB::StatementReindex().reindex().index(index);
 
-    auto testingTypes = { WCDB::SQL::Type::ReindexSTMT, WCDB::SQL::Type::Schema };
+    auto testingTypes = { WCDB::SQL::Type::ReindexSTMT };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"REINDEX main.testIndex");
+    TestCaseAssertSQLEqual(testingSQL, @"REINDEX testIndex");
 }
 
 @end

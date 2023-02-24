@@ -83,9 +83,9 @@
 {
     auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(table).usingModule(module).argument(argument1);
 
-    auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT, WCDB::SQL::Type::Schema };
+    auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"CREATE VIRTUAL TABLE main.testTable USING testModule(tokenize = testTokenize)");
+    TestCaseAssertSQLEqual(testingSQL, @"CREATE VIRTUAL TABLE testTable USING testModule(tokenize = testTokenize)");
 }
 
 - (void)test_create_virtual_table_with_arguments

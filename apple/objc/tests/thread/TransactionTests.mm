@@ -40,7 +40,7 @@
 - (void)test_database_commit
 {
     [self doTestObjects:@[ self.object2 ]
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           return [self.database runTransaction:^BOOL(WCTHandle* handle) {
               return [handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1];
@@ -51,7 +51,7 @@
 - (void)test_database_rollback
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"ROLLBACK" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"ROLLBACK" ]
       afterModification:^BOOL {
           __block BOOL tested = NO;
           __block BOOL unexpected = NO;
@@ -73,7 +73,7 @@
 - (void)test_database_auto_rollback
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           __block BOOL unexpected = NO;
           __block BOOL tested = NO;
@@ -100,7 +100,7 @@
 - (void)test_database_seperated_commit
 {
     [self doTestObjects:@[ self.object2 ]
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           return [self.database beginTransaction]
                  && [self.database deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]
@@ -111,7 +111,7 @@
 - (void)test_database_seperated_auto_rollback
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           BOOL unexpected = NO;
           [WCTDatabase simulateIOError:WCTSimulateWriteIOError];
@@ -138,7 +138,7 @@
 - (void)test_database_seperated_rollback
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"ROLLBACK" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"ROLLBACK" ]
       afterModification:^BOOL {
           if (![self.database beginTransaction]
               || ![self.database deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
@@ -154,7 +154,7 @@
 - (void)test_database_commit_nested
 {
     [self doTestObjects:@[ self.object2 ]
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           return [self.database runNestedTransaction:^BOOL(WCTHandle* handle) {
               return [handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1];
@@ -165,7 +165,7 @@
 - (void)test_database_rollback_nested
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"ROLLBACK" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"ROLLBACK" ]
       afterModification:^BOOL {
           __block BOOL unexpected = NO;
           if ([self.database runNestedTransaction:^BOOL(WCTHandle* handle) {
@@ -185,7 +185,7 @@
 - (void)test_database_auto_rollback_nested
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           __block BOOL unexpected = NO;
           [WCTDatabase simulateIOError:WCTSimulateWriteIOError];
@@ -210,7 +210,7 @@
 - (void)test_database_seperated_commit_nested
 {
     [self doTestObjects:@[ self.object2 ]
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           return [self.database beginNestedTransaction]
                  && [self.database deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]
@@ -221,7 +221,7 @@
 - (void)test_database_seperated_auto_rollback_nested
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           BOOL unexpected = NO;
           [WCTDatabase simulateIOError:WCTSimulateWriteIOError];
@@ -248,7 +248,7 @@
 - (void)test_database_seperated_rollback_nested
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"ROLLBACK" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"ROLLBACK" ]
       afterModification:^BOOL {
           if (![self.database beginNestedTransaction]
               || ![self.database deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
@@ -283,7 +283,7 @@
 - (void)test_handle_commit
 {
     [self doTestObjects:@[ self.object2 ]
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           return [[self.database getHandle] runTransaction:^BOOL(WCTHandle* handle) {
               return [handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1];
@@ -294,7 +294,7 @@
 - (void)test_handle_rollback
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"ROLLBACK" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"ROLLBACK" ]
       afterModification:^BOOL {
           __block BOOL unexpected = NO;
           __block BOOL tested = NO;
@@ -316,7 +316,7 @@
 - (void)test_handle_auto_rollback
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           __block BOOL unexpected = NO;
           __block BOOL tested = NO;
@@ -344,7 +344,7 @@
 - (void)test_handle_seperated_commit
 {
     [self doTestObjects:@[ self.object2 ]
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           WCTHandle* handle = [self.database getHandle];
           return [handle beginTransaction]
@@ -356,7 +356,7 @@
 - (void)test_handle_seperated_auto_rollback
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           WCTHandle* handle = [self.database getHandle];
           BOOL unexpected = NO;
@@ -384,7 +384,7 @@
 - (void)test_handle_seperated_rollback
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"ROLLBACK" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"ROLLBACK" ]
       afterModification:^BOOL {
           WCTHandle* handle = [self.database getHandle];
           if (![handle beginTransaction]
@@ -401,7 +401,7 @@
 - (void)test_handle_commit_nested
 {
     [self doTestObjects:@[ self.object2 ]
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           return [[self.database getHandle] runNestedTransaction:^BOOL(WCTHandle* handle) {
               return [handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1];
@@ -412,7 +412,7 @@
 - (void)test_handle_rollback_nested
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"ROLLBACK" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"ROLLBACK" ]
       afterModification:^BOOL {
           __block BOOL unexpected = NO;
           if ([[self.database getHandle] runNestedTransaction:^BOOL(WCTHandle* handle) {
@@ -432,7 +432,7 @@
 - (void)test_handle_auto_rollback_nested
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           __block BOOL unexpected = NO;
           [WCTDatabase simulateIOError:WCTSimulateWriteIOError];
@@ -458,7 +458,7 @@
 - (void)test_handle_seperated_commit_nested
 {
     [self doTestObjects:@[ self.object2 ]
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           WCTHandle* handle = [self.database getHandle];
           return [handle beginNestedTransaction]
@@ -470,7 +470,7 @@
 - (void)test_handle_seperated_auto_rollback_nested
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           WCTHandle* handle = [self.database getHandle];
           BOOL unexpected = NO;
@@ -498,7 +498,7 @@
 - (void)test_handle_seperated_rollback_nested
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"ROLLBACK" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"ROLLBACK" ]
       afterModification:^BOOL {
           WCTHandle* handle = [self.database getHandle];
           if (![handle beginNestedTransaction]
@@ -535,7 +535,7 @@
 - (void)test_commit_and_commit_nested
 {
     [self doTestObjects:@[]
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"SAVEPOINT wcdb_lv_2", @"DELETE FROM main.testTable WHERE identifier == 2", @"RELEASE wcdb_lv_2", @"COMMIT" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"SAVEPOINT wcdb_lv_2", @"DELETE FROM testTable WHERE identifier == 2", @"RELEASE wcdb_lv_2", @"COMMIT" ]
       afterModification:^BOOL {
           return [self.database runTransaction:^BOOL(WCTHandle* handle) {
               return [handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]
@@ -549,7 +549,7 @@
 - (void)test_commit_and_rollback_nested
 {
     [self doTestObjects:@[ self.object2 ]
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"SAVEPOINT wcdb_lv_2", @"DELETE FROM main.testTable WHERE identifier == 2", @"ROLLBACK TO wcdb_lv_2", @"COMMIT" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"SAVEPOINT wcdb_lv_2", @"DELETE FROM testTable WHERE identifier == 2", @"ROLLBACK TO wcdb_lv_2", @"COMMIT" ]
       afterModification:^BOOL {
           __block BOOL unexpected = NO;
           __block BOOL tested = NO;
@@ -580,7 +580,7 @@
 - (void)test_rollback_and_commit_nested
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"SAVEPOINT wcdb_lv_2", @"DELETE FROM main.testTable WHERE identifier == 2", @"RELEASE wcdb_lv_2", @"ROLLBACK" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"SAVEPOINT wcdb_lv_2", @"DELETE FROM testTable WHERE identifier == 2", @"RELEASE wcdb_lv_2", @"ROLLBACK" ]
       afterModification:^BOOL {
           __block BOOL unexpected = NO;
           __block BOOL tested = NO;
@@ -608,7 +608,7 @@
 - (void)test_rollback_and_rollback_nested
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"SAVEPOINT wcdb_lv_2", @"DELETE FROM main.testTable WHERE identifier == 2", @"ROLLBACK TO wcdb_lv_2", @"ROLLBACK" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM testTable WHERE identifier == 1", @"SAVEPOINT wcdb_lv_2", @"DELETE FROM testTable WHERE identifier == 2", @"ROLLBACK TO wcdb_lv_2", @"ROLLBACK" ]
       afterModification:^BOOL {
           __block BOOL unexpected = NO;
           __block BOOL tested = NO;

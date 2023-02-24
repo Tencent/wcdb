@@ -36,12 +36,12 @@ class StatementCreateVirtualTableTests: BaseTestCase {
         WINQAssertEqual(
             StatementCreateVirtualTable()
                 .create(virtualTable: virtualTable1).ifNotExists().using(module: .FTS3).arguments(tokenizer),
-            "CREATE VIRTUAL TABLE IF NOT EXISTS main.virtualTable1 USING fts3(tokenize=WCDB)"
+            "CREATE VIRTUAL TABLE IF NOT EXISTS virtualTable1 USING fts3(tokenize=WCDB)"
         )
 
         WINQAssertEqual(
             StatementCreateVirtualTable().create(virtualTable: virtualTable2).using(module: module).arguments(argument),
-            "CREATE VIRTUAL TABLE main.virtualTable2 USING testModule(left=right)"
+            "CREATE VIRTUAL TABLE virtualTable2 USING testModule(left=right)"
         )
     }
 }

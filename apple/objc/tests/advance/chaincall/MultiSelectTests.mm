@@ -123,7 +123,7 @@
         }
     ];
     [self doTestMultiObjects:objects
-                      andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
+                      andSQL:@"SELECT testTable.identifier, testTable.content, testTable2.identifier, testTable2.content FROM testTable, testTable2 WHERE testTable.identifier == testTable2.identifier"
                  bySelecting:^NSArray<WCTMultiObject*>* {
                      WCTResultColumns resultColumns
                      = TestCaseObject.allProperties
@@ -156,7 +156,7 @@
         },
     ];
     [self doTestMultiObjects:objects
-                      andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
+                      andSQL:@"SELECT testTable.identifier, testTable.content, testTable2.identifier, testTable2.content FROM testTable, testTable2 WHERE testTable.identifier == testTable2.identifier"
                  bySelecting:^NSArray<WCTMultiObject*>* {
                      WCTResultColumns resultColumns
                      = TestCaseObject.allProperties
@@ -183,7 +183,7 @@
         }
     ];
     [self doTestMultiObjects:objects
-                      andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
+                      andSQL:@"SELECT testTable.identifier, testTable.content, testTable2.identifier, testTable2.content FROM testTable, testTable2 WHERE testTable.identifier == testTable2.identifier"
                  bySelecting:^NSArray<WCTMultiObject*>* {
                      WCTResultColumns resultColumns
                      = TestCaseObject.allProperties
@@ -215,7 +215,7 @@
         },
     ];
     [self doTestMultiObjects:objects
-                      andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
+                      andSQL:@"SELECT testTable.identifier, testTable.content, testTable2.identifier, testTable2.content FROM testTable, testTable2 WHERE testTable.identifier == testTable2.identifier"
                  bySelecting:^NSArray<WCTMultiObject*>* {
                      WCTResultColumns resultColumns
                      = TestCaseObject.allProperties

@@ -29,7 +29,7 @@ class QualifiedTableTests: BaseTestCase {
 
     func testQualifiedTable() {
 
-        WINQAssertEqual(QualifiedTable(with: "testTable"), "main.testTable")
+        WINQAssertEqual(QualifiedTable(with: "testTable"), "testTable")
 
         WINQAssertEqual(QualifiedTable(with: "testTable").of(schema: "testSchema"), "testSchema.testTable")
 

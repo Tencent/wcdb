@@ -35,7 +35,7 @@ class StatementCreateIndexTests: BaseTestCase {
 
         WINQAssertEqual(
             StatementCreateIndex().create(index: indexName1).on(table: table1).indexesBy(index1, index2),
-            "CREATE INDEX main.index1 ON table1(column1, column2 ASC)"
+            "CREATE INDEX index1 ON table1(column1, column2 ASC)"
         )
 
         WINQAssertEqual(
@@ -47,21 +47,21 @@ class StatementCreateIndexTests: BaseTestCase {
             StatementCreateIndex()
                 .create(index: indexName1, isUnique: true)
                 .on(table: table1).indexesBy(index1, index2),
-            "CREATE UNIQUE INDEX main.index1 ON table1(column1, column2 ASC)"
+            "CREATE UNIQUE INDEX index1 ON table1(column1, column2 ASC)"
         )
 
         WINQAssertEqual(
             StatementCreateIndex()
                 .create(index: indexName1).ifNotExists()
                 .on(table: table1).indexesBy(index1, index2),
-            "CREATE INDEX IF NOT EXISTS main.index1 ON table1(column1, column2 ASC)"
+            "CREATE INDEX IF NOT EXISTS index1 ON table1(column1, column2 ASC)"
         )
 
         WINQAssertEqual(
             StatementCreateIndex()
                 .create(index: indexName1)
                 .on(table: table1).indexesBy(index1, index2).`where`(column1 >= 1),
-            "CREATE INDEX main.index1 ON table1(column1, column2 ASC) WHERE column1 >= 1"
+            "CREATE INDEX index1 ON table1(column1, column2 ASC) WHERE column1 >= 1"
         )
     }
 }

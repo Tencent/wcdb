@@ -26,72 +26,72 @@ class JoinTests: BaseTestCase {
     func testJoin() {
         WINQAssertEqual(
             Join(with: "testTable").join("testTable1"),
-            "main.testTable JOIN main.testTable1"
+            "testTable JOIN testTable1"
         )
 
         WINQAssertEqual(
             Join(with: "testTable").with("testTable1"),
-            "main.testTable, main.testTable1"
+            "testTable, testTable1"
         )
 
         WINQAssertEqual(
             Join(with: "testTable").leftJoin("testTable1"),
-            "main.testTable LEFT JOIN main.testTable1"
+            "testTable LEFT JOIN testTable1"
         )
 
         WINQAssertEqual(
             Join(with: "testTable").leftOuterJoin("testTable1"),
-            "main.testTable LEFT OUTER JOIN main.testTable1"
+            "testTable LEFT OUTER JOIN testTable1"
         )
 
         WINQAssertEqual(
             Join(with: "testTable").innerJoin("testTable1"),
-            "main.testTable INNER JOIN main.testTable1"
+            "testTable INNER JOIN testTable1"
         )
 
         WINQAssertEqual(
             Join(with: "testTable").crossJoin("testTable1"),
-            "main.testTable CROSS JOIN main.testTable1"
+            "testTable CROSS JOIN testTable1"
         )
 
         WINQAssertEqual(
             Join(with: "testTable").naturalJoin("testTable1"),
-            "main.testTable NATURAL JOIN main.testTable1"
+            "testTable NATURAL JOIN testTable1"
         )
 
         WINQAssertEqual(
             Join(with: "testTable").naturalLeftJoin("testTable1"),
-            "main.testTable NATURAL LEFT JOIN main.testTable1"
+            "testTable NATURAL LEFT JOIN testTable1"
         )
 
         WINQAssertEqual(
             Join(with: "testTable").naturalLeftOuterJoin("testTable1"),
-            "main.testTable NATURAL LEFT OUTER JOIN main.testTable1"
+            "testTable NATURAL LEFT OUTER JOIN testTable1"
         )
 
         WINQAssertEqual(
             Join(with: "testTable").naturalInnerJoin("testTable1"),
-            "main.testTable NATURAL INNER JOIN main.testTable1"
+            "testTable NATURAL INNER JOIN testTable1"
         )
 
         WINQAssertEqual(
             Join(with: "testTable").naturalCrossJoin("testTable1"),
-            "main.testTable NATURAL CROSS JOIN main.testTable1"
+            "testTable NATURAL CROSS JOIN testTable1"
         )
 
         WINQAssertEqual(
             Join(with: "testTable").join("testTable1").on(1),
-            "main.testTable JOIN main.testTable1 ON 1"
+            "testTable JOIN testTable1 ON 1"
         )
 
         WINQAssertEqual(
             Join(with: "testTable").join("testTable1").using(Column(named: "testColumn1"), Column(named: "testColumn2")),
-            "main.testTable JOIN main.testTable1 USING(testColumn1, testColumn2)"
+            "testTable JOIN testTable1 USING(testColumn1, testColumn2)"
         )
 
         WINQAssertEqual(
             Join(with: "testTable").join("testTable1").on(1).leftOuterJoin("testTable2").on(2),
-            "main.testTable JOIN main.testTable1 ON 1 LEFT OUTER JOIN main.testTable2 ON 2"
+            "testTable JOIN testTable1 ON 1 LEFT OUTER JOIN testTable2 ON 2"
         )
     }
 }

@@ -73,7 +73,7 @@ bool BaseBinding::createTable(const UnsafeStringView &tableName, InnerHandle *ha
                 auto iter = columnNames.find(columnDef.first);
                 if (iter == columnNames.end()) {
                     //Add new column
-                    if (!handle->addColumn(Schema::main(), tableName, columnDef.second)) {
+                    if (!handle->addColumn(Schema(), tableName, columnDef.second)) {
                         return false;
                     }
                 } else {

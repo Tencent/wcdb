@@ -86,7 +86,7 @@
 {
     auto testingSQL = WCDB::StatementCreateTable().createTable(table).temp().define(columnDef1);
 
-    auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
+    auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CREATE TEMP TABLE testTable(testColumn1 INTEGER)");
 }
@@ -104,9 +104,9 @@
 {
     auto testingSQL = WCDB::StatementCreateTable().createTable(table).define(columnDef1);
 
-    auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
+    auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"CREATE TABLE main.testTable(testColumn1 INTEGER)");
+    TestCaseAssertSQLEqual(testingSQL, @"CREATE TABLE testTable(testColumn1 INTEGER)");
 }
 
 - (void)test_create_table_with_constraint

@@ -30,7 +30,7 @@ class ColumnTests: BaseTestCase {
 
         WINQAssertEqual(Column(named: "testColumn"), "testColumn")
 
-        WINQAssertEqual(Column(named: "testColumn").in(table: "TestTable"), "main.TestTable.testColumn")
+        WINQAssertEqual(Column(named: "testColumn").in(table: "TestTable"), "TestTable.testColumn")
 
         WINQAssertEqual(Column(named: "testColumn").in(table: "TestTable").of(schema: "TestSchema"), "TestSchema.TestTable.testColumn")
     }
