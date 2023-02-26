@@ -36,5 +36,5 @@ void WCDBReleaseCPPObject(CPPObject* _Nonnull obj)
     if (obj->deleter != nullptr) {
         obj->deleter(obj->realValue);
     }
-    delete obj;
+    free(obj);
 }

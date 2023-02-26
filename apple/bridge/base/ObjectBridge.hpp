@@ -102,11 +102,13 @@ public:
                                                bool isRecyclable = false)
     {
         static_assert(!std::is_same<T, CPPObject>::value, "");
-        CPPObject* cppObj = new CPPObject();
+        CPPObject* cppObj = (CPPObject*) malloc(sizeof(CPPObject));
         cppObj->realValue = (void*) obj;
         cppObj->isRecyclableObj = isRecyclable;
         if (autoRelease) {
             cppObj->deleter = releaseCPPObject<T>;
+        } else {
+            cppObj->deleter = nullptr;
         }
         return cppObj;
     }
@@ -118,11 +120,15 @@ public:
     {
         static_assert(!std::is_same<T, CPPObject>::value, "");
         static_assert(std::is_copy_constructible<T>::value, "");
-        CPPObject* cppObj = new CPPObject();
-        cppObj->realValue = new T(obj);
+        assert(autoRelease == true);
+        CPPObject* cppObj = (CPPObject*) malloc(sizeof(CPPObject) + sizeof(T));
+        cppObj->realValue = cppObj + 1;
+        new (cppObj->realValue) T(obj);
         cppObj->isRecyclableObj = isRecyclable;
         if (autoRelease) {
             cppObj->deleter = releaseCPPObject<T>;
+        } else {
+            cppObj->deleter = nullptr;
         }
         return cppObj;
     }
@@ -134,11 +140,15 @@ public:
     {
         static_assert(!std::is_same<T, CPPObject>::value, "");
         static_assert(std::is_copy_constructible<T>::value, "");
-        CPPObject* cppObj = new CPPObject();
-        cppObj->realValue = new T(std::move(obj));
+        assert(autoRelease == true);
+        CPPObject* cppObj = (CPPObject*) malloc(sizeof(CPPObject) + sizeof(T));
+        cppObj->realValue = cppObj + 1;
+        new (cppObj->realValue) T(std::move(obj));
         cppObj->isRecyclableObj = isRecyclable;
         if (autoRelease) {
             cppObj->deleter = releaseCPPObject<T>;
+        } else {
+            cppObj->deleter = nullptr;
         }
         return cppObj;
     }
@@ -159,7 +169,7 @@ public:
     {
         T* typedObj = (T*) obj;
         if (typedObj != nullptr) {
-            delete typedObj;
+            typedObj->~T();
         }
     }
 
