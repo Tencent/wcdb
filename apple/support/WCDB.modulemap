@@ -1,0 +1,21 @@
+framework module WCDB {
+    requires objc
+
+	module All {
+		header "WCDB.h"
+        export *
+        requires cplusplus17
+    }
+
+	module BridgeHeader [extern_c] {
+        header "WCTBridgeMacro.h"
+        header "WCTBridgeProperty.h"
+        header "WCTDeclaration.h"
+        header "WCTValue.h"
+        header "WCTColumnCoding.h"
+        header "Macro.h"
+        header "WCTPropertyMacro.h"
+        header "WCTTableCoding.h"
+		export *
+	}
+}

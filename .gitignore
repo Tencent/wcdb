@@ -17,3 +17,7 @@ xcuserdata
 xcuserdata/*
 *.xcworkspace/*
 *.xcworkspace
+DerivedData
+
+# WCDB
+WCDB.framework

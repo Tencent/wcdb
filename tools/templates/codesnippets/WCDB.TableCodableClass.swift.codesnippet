@@ -11,15 +11,16 @@
 	<key>IDECodeSnippetContents</key>
 	<string>class &lt;#Class name#&gt;: WCDBSwift.TableCodable {
     //Your own properties
-    let variable1: Int = 0
-    var variable2: String? // Optional if it would be nil in some WCDB selection
-    var variable3: Double? // Optional if it would be nil in some WCDB selection
+    var variable1: Int = 0
+    var variable2: String? // Optional if it would be nil in some WCDB selection.
+    var variable3: Double? // Optional if it would be nil in some WCDB selection.
+    let invalid: Int = 0 // An initialized constant property is not allowed.
     let unbound: Date? = nil
         
     enum CodingKeys: String, CodingTableKey {
         typealias Root = &lt;#Class name#&gt;
         
-        //List the properties which should be bound to table
+        //List the properties which should be bound to table.
         case variable1 = "custom_name"
         case variable2
         case variable3
@@ -29,7 +30,7 @@
         //Column constraints for primary key, unique, not null, default value and so on. It is optional.
         //static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
         //    return [
-        //        .variable: ColumnConstraintBinding(isPrimary: true, isAutoIncrement: true),
+        //        .variable1: ColumnConstraintBinding(isPrimary: true, isAutoIncrement: true),
         //        .variable2: ColumnConstraintBinding(isUnique: true)
         //    ]
         //}
@@ -54,7 +55,7 @@
         //}
     }
     
-    //Properties below are needed only the primary key is auto-incremental
+    //Properties below are needed when the primary key is auto-increment.
     //var isAutoIncrement: Bool = false
     //var lastInsertedRowID: Int64 = 0
 }</string>

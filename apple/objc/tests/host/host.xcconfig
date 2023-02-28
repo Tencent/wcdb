@@ -1,0 +1,10 @@
+// Signing
+CODE_SIGN_IDENTITY = -
+
+// Packaging
+INFOPLIST_FILE = $(SRCROOT)/objc/tests/host/Info.plist
+
+// User-Defined
+PRINCIPAL_CLASS[sdk=iphonesimulator*] = UIApplication
+PRINCIPAL_CLASS[sdk=iphoneos*] = UIApplication
+PRINCIPAL_CLASS[sdk=macosx*] = NSApplication

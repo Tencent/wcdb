@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>classNames</key>
+	<dict>
+		<key>BaselineBenchmark</key>
+		<dict>
+			<key>test_batch_write</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.88557</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 11:21:56 AM</string>
+				</dict>
+			</dict>
+			<key>test_create_index</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.62401</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 11:21:56 AM</string>
+				</dict>
+			</dict>
+			<key>test_read</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.79519</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 11:21:56 AM</string>
+				</dict>
+			</dict>
+			<key>test_write</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.3795</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 11:21:56 AM</string>
+				</dict>
+			</dict>
+		</dict>
+		<key>CipherBenchmark</key>
+		<dict>
+			<key>test_batch_write</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>1.3455</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 11:21:56 AM</string>
+				</dict>
+			</dict>
+			<key>test_create_index</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.94787</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 11:21:56 AM</string>
+				</dict>
+			</dict>
+			<key>test_read</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>1.0573</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 11:21:56 AM</string>
+				</dict>
+			</dict>
+			<key>test_write</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.58609</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 11:21:56 AM</string>
+				</dict>
+			</dict>
+		</dict>
+		<key>DatabaseMigrationBenchmark</key>
+		<dict>
+			<key>test_batch_write</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>7.9021</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 11:21:56 AM</string>
+				</dict>
+			</dict>
+			<key>test_migrate</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>4.3242</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 11:21:56 AM</string>
+				</dict>
+			</dict>
+			<key>test_read</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.94377</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 11:21:56 AM</string>
+				</dict>
+			</dict>
+			<key>test_write</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.95744</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 11:21:56 AM</string>
+				</dict>
+			</dict>
+		</dict>
+		<key>InitializationBenchmark</key>
+		<dict>
+			<key>test_exists</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.12595</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 11:21:56 AM</string>
+				</dict>
+			</dict>
+			<key>test_initialization</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>1.8123</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 11:21:56 AM</string>
+				</dict>
+			</dict>
+		</dict>
+		<key>RetrieveBenchmark</key>
+		<dict>
+			<key>test_backup</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.41051</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 11:21:56 AM</string>
+				</dict>
+			</dict>
+			<key>test_retrieve</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>8.4732</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 11:21:56 AM</string>
+				</dict>
+			</dict>
+			<key>test_retrieve_without_backup</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>7.8254</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 11:21:56 AM</string>
+				</dict>
+			</dict>
+		</dict>
+		<key>TableBenchmark</key>
+		<dict>
+			<key>test_insert_into_multiple_tables_within_one_transaction</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.866</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 4:43:13 PM</string>
+				</dict>
+			</dict>
+			<key>test_insert_into_multiple_tables_within_seperated_transaction</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.82</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 4:43:10 PM</string>
+				</dict>
+			</dict>
+		</dict>
+		<key>TableMigrationBenchmark</key>
+		<dict>
+			<key>test_batch_write</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>7.822</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 11:21:56 AM</string>
+				</dict>
+			</dict>
+			<key>test_migrate</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>3.901</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 11:21:56 AM</string>
+				</dict>
+			</dict>
+			<key>test_read</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.91252</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 11:21:56 AM</string>
+				</dict>
+			</dict>
+			<key>test_write</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.88807</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 11:21:56 AM</string>
+				</dict>
+			</dict>
+		</dict>
+	</dict>
+</dict>
+</plist>

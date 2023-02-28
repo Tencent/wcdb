@@ -1,0 +1,32 @@
+#include "Base.xcconfig"
+
+// Architectures
+ONLY_ACTIVE_ARCH = YES
+
+// Build Options
+DEBUG_INFORMATION_FORMAT = dwarf-with-dsym
+VALIDATE_PRODUCT = YES
+
+// Deployment
+DEPLOYMENT_POSTPROCESSING = YES
+COPY_PHASE_STRIP = YES
+STRIP_STYLE = non-global
+
+// Linking
+DEAD_CODE_STRIPPING = YES
+
+// Code Generation
+LLVM_LTO = YES
+GCC_OPTIMIZATION_LEVEL = s
+
+// Preprocessing
+ENABLE_NS_ASSERTIONS = NO
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) NDEBUG=1
+
+// Swift Compiler - Code Generation
+SWIFT_COMPILATION_MODE = wholemodule
+SWIFT_OPTIMIZATION_LEVEL = -Owholemodule;
+
+// User-Defined
+BITCODE_GENERATION_MODE = bitcode
+

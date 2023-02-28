@@ -1,6 +1,6 @@
 [submodule "sqlcipher"]
 	path = sqlcipher
-	url = https://github.com/Tencent/sqlcipher.git
+	url = git@github.com:Tencent/sqlcipher.git
 [submodule "openssl"]
 	path = openssl
 	url = https://github.com/openssl/openssl.git

@@ -5,9 +5,9 @@
 	<key>Kind</key>
 	<string>Xcode.IDEFoundation.TextSubstitutionFileTemplateKind</string>
 	<key>Description</key>
-	<string>A WCTTableCoding class.</string>
+	<string>Table Codable Template.</string>
 	<key>Summary</key>
-	<string>A WCTTableCoding class</string>
+	<string>Table Codable Template.</string>
 	<key>SortOrder</key>
 	<string>1</string>
 	<key>DefaultCompletionName</key>

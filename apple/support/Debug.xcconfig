@@ -1,0 +1,36 @@
+#include "Base.xcconfig"
+
+// Architectures
+ONLY_ACTIVE_ARCH = YES
+
+// Build Options
+DEBUG_INFORMATION_FORMAT = dwarf
+VALIDATE_PRODUCT = NO
+ENABLE_TESTABILITY = YES
+
+// Deployment
+DEPLOYMENT_POSTPROCESSING = NO
+COPY_PHASE_STRIP = NO
+STRIP_STYLE = debugging
+
+// Linking
+DEAD_CODE_STRIPPING = NO
+
+// Code Generation
+LLVM_LTO = NO
+GCC_OPTIMIZATION_LEVEL = 0
+
+// Preprocessing
+ENABLE_NS_ASSERTIONS = YES
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) DEBUG=1 WCDB_DEBUG=1 WCDB_QUICK_TESTS=1
+
+// Swift Compiler - Code Generation
+SWIFT_COMPILATION_MODE = singlefile
+SWIFT_OPTIMIZATION_LEVEL = -Onone
+
+// Static Analyzer - Issues - Apple APIs
+CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES
+
+// User-Defined
+BITCODE_GENERATION_MODE = marker
+
