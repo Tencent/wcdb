@@ -172,4 +172,8 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_definitions(sqlcipher PRIVATE
             SQLITE_DEBUG
             )
+else ()
+    target_compile_definitions(sqlcipher PRIVATE
+            NDEBUG
+            )
 endif ()

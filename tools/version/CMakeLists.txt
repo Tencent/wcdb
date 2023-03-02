@@ -3,10 +3,48 @@ cmake_minimum_required(VERSION 3.6)
 project(WCDB)
 
 set(WCONAN_CMAKE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../WeChat/wconan.cmake)
-if (EXISTS ${WCONAN_CMAKE_PATH})
+if (NOT SKIP_WCONAN AND EXISTS ${WCONAN_CMAKE_PATH})
     message(STATUS "${WCONAN_CMAKE_PATH} found.")
     set(WCONAN_MODE ON CACHE BOOL "Build with wconan" FORCE)
     include(${WCONAN_CMAKE_PATH})
+endif ()
+
+# platform define, available platforms:
+# ANDROID, APPLE(MACOS/IOS/...), WIN32, LINUX
+# for LINUX: use CMAKE_CROSSCOMPILING to distinguish normal Linux(Ubuntu, Centos, etc) and embedding Linux
+# for ANDROID: use ANDROID_ABI to distinguish different arch("arm64-v8a", "armeabi-v7a", etc)
+# for WIN32: use CMAKE_SIZEOF_VOID_P to distinguish different arch(X86_64, x86)
+if (APPLE)
+    message(STATUS "PLATFORM: Apple ${CMAKE_SYSTEM_NAME}")
+    if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+        set(MACOS TRUE)
+    elseif (${CMAKE_SYSTEM_NAME} MATCHES "watchOS")
+        set(WATCHOS TRUE)
+    elseif (${CMAKE_SYSTEM_NAME} MATCHES "tvOS")
+        set(TVOS TRUE)
+    elseif (${CMAKE_SYSTEM_NAME} MATCHES "iOS")
+        set(IOS TRUE)
+    else ()
+        message(FATAL_ERROR "CMAKE_SYSTEM_NAME ${CMAKE_SYSTEM_NAME} is not supported")
+    endif ()
+elseif (ANDROID)
+    message(STATUS "PLATFORM: ${ANDROID_PLATFORM} ${ANDROID_ABI}")
+    set(ANDROID_ARCH_LIST armeabi-v7a arm64-v8a x86 x86_64)
+    if(NOT ${ANDROID_ABI} IN_LIST ANDROID_ARCH_LIST)
+        message(FATAL_ERROR "unsupported ANDROID_ABI ${ANDROID_ABI}")
+    endif()
+elseif (WIN32)
+    if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+        set(X86_ARCH "x86_64")
+    else ()
+        set(X86_ARCH "x86")
+    endif ()
+    message(STATUS "PLATFORM: Windows ${X86_ARCH}")
+elseif (UNIX)
+    message(STATUS "PLATFORM: Linux ${CMAKE_SYSTEM_PROCESSOR}")
+    set(LINUX TRUE)
+else ()
+    message(FATAL_ERROR "unsupported platform")
 endif ()
 
 if (NOT DEFINED WCONAN_LIB_NAME)
@@ -20,22 +58,66 @@ if (NOT DEFINED CMAKE_BUILD_TYPE)
 endif ()
 
 if (NOT DEFINED BUILD_SHARED_LIBS)
-    set(BUILD_SHARED_LIBS OFF)
+    set(BUILD_SHARED_LIBS ON)
 endif ()
 
-# Platform dependent linker settings
-if (ANDROID)
-    # No linker flag to add
-elseif (APPLE)
-    # APPLE should be built from xcodeproj!
-elseif (LINUX)
-    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unknown-pragmas -Wno-pragmas -Wno-deprecated -Wno-unused-variable")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-pragmas -Wno-pragmas -Wno-deprecated -Wno-unused-variable -fpermissive")
-    endif ()
-elseif (WIN32)
-    # TODO
+if (ANDROID AND NOT DEFINED ANDROID_STL)
+    set(ANDROID_STL "c++_shared")
 endif ()
+
+# set default compiler flags for each platform
+if (WIN32)
+    enable_language(C CXX ASM_MASM)
+    set(COMM_FLAGS_ "/utf-8 /EHsc")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMM_FLAGS_}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMM_FLAGS_}")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Zi")
+    set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /DEBUG /OPT:REF /OPT:ICF")
+
+    if (CMAKE_CL_64)
+        add_definitions(-D_WIN64 -DWIN64)
+    endif ()
+
+    add_compile_options(
+            $<$<CONFIG:>:/MT> #---------|
+            $<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
+            $<$<CONFIG:Release>:/MT> #--|
+    )
+else ()
+    enable_language(C CXX)
+    set(COMM_FLAGS_ "-Wall -g")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMM_FLAGS_}")
+    # xcode 14.0.1 must manually set -std=c++14 since set(CMAKE_CXX_STANDARD 14) has no effect when compiler iOS-Simulator on M1
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMM_FLAGS_} -std=c++14")
+
+    if (LINUX)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -pthread")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -pthread")
+        if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unknown-pragmas -Wno-pragmas -Wno-deprecated -Wno-unused-variable")
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-pragmas -Wno-pragmas -Wno-deprecated -Wno-unused-variable -fpermissive")
+        endif ()
+    elseif (ANDROID)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mno-outline-atomics")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mno-outline-atomics")
+    endif()
+
+    if (APPLE)
+        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-dead_strip")
+    else ()
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ffunction-sections -fdata-sections")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffunction-sections -fdata-sections")
+        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--gc-sections")
+    endif ()
+endif ()
+
+if (UNIX)
+    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+endif ()
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(WCDB_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../apple)
 
@@ -254,45 +336,35 @@ set(SQLCIPHER_SRC_ROOT)
 set(LIB_SQLCIPHER sqlcipher)
 include(sqlcipher.cmake)
 
-if (WCONAN_MODE)
-    wconan_get_libraries_dir(
-            WCONAN_LIB_DIR
-            wconan_libs
-    )
-    target_include_directories(${LIB_SQLCIPHER} PUBLIC ${WCONAN_LIB_DIR}/include)
-    target_link_directories(${LIB_SQLCIPHER} PUBLIC ${WCONAN_LIB_DIR}/libs)
-    target_link_libraries(${LIB_SQLCIPHER} PUBLIC crypto)
+set(SQLCIPHER_SYSTEM_DEFS)
+set(SQLCIPHER_SYSTEM_SRC)
 
-    set(SQLCIPHER_SYSTEM_DEFS)
-    set(SQLCIPHER_SYSTEM_SRC)
-
-    if (ANDROID OR LINUX)
-        list(APPEND SQLCIPHER_SYSTEM_DEFS
-                SQLCIPHER_CRYPTO_OPENSSL=1
-                SQLITE_OS_UNIX=1)
-        list(APPEND SQLCIPHER_SYSTEM_SRC
-                ${SQLCIPHER_SRC_ROOT}/src/crypto.c
-                ${SQLCIPHER_SRC_ROOT}/src/crypto_impl.c
-                ${SQLCIPHER_SRC_ROOT}/src/crypto_openssl.c
-                ${SQLCIPHER_SRC_ROOT}/src/mutex_unix.c
-                ${SQLCIPHER_SRC_ROOT}/src/os_unix.c)
-    elseif (WIN32)
-        list(APPEND SQLCIPHER_SYSTEM_DEFS
-                SQLCIPHER_CRYPTO_OPENSSL=1
-                SQLITE_OS_WIN=1)
-        list(APPEND SQLCIPHER_SYSTEM_SRC
-                ${SQLCIPHER_SRC_ROOT}/src/crypto.c
-                ${SQLCIPHER_SRC_ROOT}/src/crypto_impl.c
-                ${SQLCIPHER_SRC_ROOT}/src/crypto_openssl.c
-                ${SQLCIPHER_SRC_ROOT}/src/mutex_w32.c
-                ${SQLCIPHER_SRC_ROOT}/src/os_win.c)
-    endif ()
-
-    target_compile_definitions(${LIB_SQLCIPHER} PRIVATE
-            ${SQLCIPHER_SYSTEM_DEFS})
-    target_sources(${LIB_SQLCIPHER} PRIVATE
-            ${SQLCIPHER_SYSTEM_SRC})
+if (ANDROID OR LINUX)
+    list(APPEND SQLCIPHER_SYSTEM_DEFS
+            SQLCIPHER_CRYPTO_OPENSSL=1
+            SQLITE_OS_UNIX=1)
+    list(APPEND SQLCIPHER_SYSTEM_SRC
+            ${SQLCIPHER_SRC_ROOT}/src/crypto.c
+            ${SQLCIPHER_SRC_ROOT}/src/crypto_impl.c
+            ${SQLCIPHER_SRC_ROOT}/src/crypto_openssl.c
+            ${SQLCIPHER_SRC_ROOT}/src/mutex_unix.c
+            ${SQLCIPHER_SRC_ROOT}/src/os_unix.c)
+elseif (WIN32)
+    list(APPEND SQLCIPHER_SYSTEM_DEFS
+            SQLCIPHER_CRYPTO_OPENSSL=1
+            SQLITE_OS_WIN=1)
+    list(APPEND SQLCIPHER_SYSTEM_SRC
+            ${SQLCIPHER_SRC_ROOT}/src/crypto.c
+            ${SQLCIPHER_SRC_ROOT}/src/crypto_impl.c
+            ${SQLCIPHER_SRC_ROOT}/src/crypto_openssl.c
+            ${SQLCIPHER_SRC_ROOT}/src/mutex_w32.c
+            ${SQLCIPHER_SRC_ROOT}/src/os_win.c)
 endif ()
+
+target_compile_definitions(${LIB_SQLCIPHER} PRIVATE
+        ${SQLCIPHER_SYSTEM_DEFS})
+target_sources(${LIB_SQLCIPHER} PRIVATE
+        ${SQLCIPHER_SYSTEM_SRC})
 
 add_library(${TARGET_NAME} ${ALL_SRCS})
 
@@ -302,22 +374,46 @@ target_include_directories(${TARGET_NAME} PRIVATE
 target_link_libraries(${TARGET_NAME} PRIVATE
         ${LIB_SQLCIPHER})
 
+if (WCONAN_MODE)
+    wconan_get_libraries_dir(
+            WCONAN_LIB_DIR
+            wconan_libs
+    )
+    target_include_directories(${LIB_SQLCIPHER} PUBLIC ${WCONAN_LIB_DIR}/include)
+    target_link_directories(${LIB_SQLCIPHER} PUBLIC ${WCONAN_LIB_DIR}/libs)
+else ()
+    if(ANDROID)
+        target_include_directories(${LIB_SQLCIPHER} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../prebuild/openssl/include)
+        target_link_directories(${LIB_SQLCIPHER} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../prebuild/openssl/android/${CMAKE_ANDROID_ARCH_ABI})
+    elseif(LINUX)
+        target_include_directories(${LIB_SQLCIPHER} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../prebuild/openssl/include)
+        target_include_directories(${LIB_SQLCIPHER} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../prebuild/zlib/include)
+        target_link_directories(${LIB_SQLCIPHER} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../prebuild/zlib/linux/arm64)
+        target_link_directories(${LIB_SQLCIPHER} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../prebuild/zlib/linux/x86_64)
+        target_link_directories(${LIB_SQLCIPHER} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../prebuild/openssl/linux/arm64)
+        target_link_directories(${LIB_SQLCIPHER} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../prebuild/openssl/linux/x86_64)
+    endif()
+endif ()
+
 if (ANDROID)
     message(STATUS "---- BUILD FOR ANDROID ----")
     find_library(z-lib z)
     target_link_libraries(${TARGET_NAME} PRIVATE
             ${LINK_LIBRARIES}
-            ${z-lib})
+            ${z-lib}
+            crypto)
 elseif (LINUX)
     message(STATUS "---- BUILD FOR LINUX ----")
     target_link_libraries(${TARGET_NAME} PRIVATE
             ${LINK_LIBRARIES}
+            crypto
             pthread
             z)
 elseif (WIN32)
     message(STATUS "---- BUILD FOR WINDOWS ----")
     target_link_libraries(${TARGET_NAME} PRIVATE
             ${LINK_LIBRARIES}
+            crypto
             z)
 else ()
     message(FATAL_ERROR "Unsupported platform!")

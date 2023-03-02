@@ -129,52 +129,6 @@ message(STATUS "WCONAN_TARGET_PLATFORM: ${WCONAN_TARGET_PLATFORM}")
 message(STATUS "CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR}")
 message(STATUS "CMAKE_SIZEOF_VOID_P: ${CMAKE_SIZEOF_VOID_P}")
 
-# set default compiler flags for each platform
-if (WIN32)
-    enable_language(C CXX ASM_MASM)
-    set(COMM_FLAGS_ "/utf-8 /EHsc")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMM_FLAGS_}")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMM_FLAGS_}")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Zi")
-    #set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /SAFESEH:NO")
-    set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /DEBUG /OPT:REF /OPT:ICF")
-
-    if (CMAKE_CL_64)
-        add_definitions(-D_WIN64 -DWIN64)
-    endif ()
-
-    add_compile_options(
-            $<$<CONFIG:>:/MT> #---------|
-            $<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
-            $<$<CONFIG:Release>:/MT> #--|
-    )
-else ()
-    enable_language(C CXX ASM)
-    set(COMM_FLAGS_ "-Wall -g")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMM_FLAGS_}")
-    # xcode 14.0.1 must manually set -std=c++14 since set(CMAKE_CXX_STANDARD 14) has no effect when compiler iOS-Simulator on M1
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMM_FLAGS_} -std=c++17")
-    #    if (NOT APPLE)
-    #        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -s")
-    #    endif ()
-
-    if (UNIX)
-        set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-    endif ()
-
-    if (APPLE)
-        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-dead_strip")
-    else ()
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ffunction-sections -fdata-sections")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffunction-sections -fdata-sections")
-        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--gc-sections")
-    endif ()
-endif ()
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
 function(wconan_get_libraries_dir out_libraries_dir download_dir)
     set(libraries_dir "${CMAKE_CURRENT_SOURCE_DIR}/../../WeChat/${download_dir}/${CMAKE_BUILD_TYPE}/${WCONAN_TARGET_PLATFORM}")
     set(${out_libraries_dir} ${libraries_dir} PARENT_SCOPE)
