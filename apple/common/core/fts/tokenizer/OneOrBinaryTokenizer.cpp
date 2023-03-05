@@ -22,10 +22,11 @@
  * limitations under the License.
  */
 
-#import <WCDB/Assertion.hpp>
-#import <WCDB/FTSConst.h>
-#import <WCDB/FTSError.hpp>
-#import <WCDB/OneOrBinaryTokenizer.hpp>
+#include <WCDB/Assertion.hpp>
+#include <WCDB/FTSConst.h>
+#include <WCDB/FTSError.hpp>
+#include <WCDB/OneOrBinaryTokenizer.hpp>
+#include <algorithm>
 
 extern "C" {
 extern int porterStem(char *p, int i, int j);

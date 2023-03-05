@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+StatementCreateTable::StatementCreateTable() = default;
+
 StatementCreateTable::~StatementCreateTable() = default;
 
 StatementCreateTable& StatementCreateTable::createTable(const UnsafeStringView& table)

@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+FrameSpec::FrameSpec() = default;
+
 FrameSpec::~FrameSpec() = default;
 
 FrameSpec& FrameSpec::range()

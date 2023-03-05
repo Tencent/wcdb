@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+TableOrSubquery::TableOrSubquery() = default;
+
 TableOrSubquery::TableOrSubquery(const UnsafeStringView& table)
 {
     syntax().switcher = SyntaxType::Switch::Table;

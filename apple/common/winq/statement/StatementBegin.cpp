@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+StatementBegin::StatementBegin() = default;
+
 StatementBegin::~StatementBegin() = default;
 
 StatementBegin& StatementBegin::beginDeferred()

@@ -27,6 +27,8 @@
 
 namespace WCDB {
 
+ResultColumn::ResultColumn() = default;
+
 ResultColumn::~ResultColumn() = default;
 
 ResultColumn::ResultColumn(const Expression& expression)

@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+StatementCreateView::StatementCreateView() = default;
+
 StatementCreateView::~StatementCreateView() = default;
 
 StatementCreateView& StatementCreateView::createView(const UnsafeStringView& view)

@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+StatementDelete::StatementDelete() = default;
+
 StatementDelete::~StatementDelete() = default;
 
 StatementDelete& StatementDelete::with(const CommonTableExpressions& commonTableExpressions)

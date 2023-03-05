@@ -74,6 +74,7 @@ Expression Fields::count() const
     return Expression::function("count").invokeAll();
 }
 
+#ifndef __linux__
 ResultFields Fields::redirect(const ResultColumns& resultColumns) const
 {
     ResultFields result;
@@ -86,6 +87,7 @@ ResultFields Fields::redirect(const ResultColumns& resultColumns) const
     }
     return result;
 }
+#endif
 
 ResultFields Fields::redirect(RedirectAction action) const
 {

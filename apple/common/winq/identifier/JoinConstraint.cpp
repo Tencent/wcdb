@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+JoinConstraint::JoinConstraint() = default;
+
 JoinConstraint::~JoinConstraint() = default;
 
 JoinConstraint& JoinConstraint::on(const Expression& expression)

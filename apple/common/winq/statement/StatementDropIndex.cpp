@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+StatementDropIndex::StatementDropIndex() = default;
+
 StatementDropIndex::~StatementDropIndex() = default;
 
 StatementDropIndex& StatementDropIndex::dropIndex(const UnsafeStringView& index)

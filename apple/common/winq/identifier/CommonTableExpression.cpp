@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+CommonTableExpression::CommonTableExpression() = default;
+
 CommonTableExpression::CommonTableExpression(const UnsafeStringView& table)
 {
     syntax().table = table;

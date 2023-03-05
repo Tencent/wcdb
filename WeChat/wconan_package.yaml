@@ -131,6 +131,12 @@ linux-x86_64-gcc-5.4.0: &linux_config
   dependencies:
     <<: *default_dependencies
     zlib: 1.2.11
+  outputs: 
+    headers: [ "wconan_build/export_headers" ]
+  scripts:
+    post_build: |-
+      cp -af "wconan_build/cmake/${platform}/Release/static/cmake/export_headers" "wconan_build/"
+      cp -af "wconan_build/cmake/${platform}/Release/shared/cmake/export_headers" "wconan_build/"
 
 linux-arm64-gcc-linaro-7.5.0:
   <<: *linux_config

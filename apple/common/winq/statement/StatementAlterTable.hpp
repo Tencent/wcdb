@@ -31,6 +31,7 @@ namespace WCDB {
 class StatementAlterTable final : public SpecifiedSyntax<Syntax::AlterTableSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::AlterTableSTMT, Statement>::SpecifiedSyntax;
+    StatementAlterTable();
     ~StatementAlterTable() override final;
 
     StatementAlterTable& alterTable(const UnsafeStringView& table);

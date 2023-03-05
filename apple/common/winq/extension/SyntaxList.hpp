@@ -48,6 +48,8 @@ public:
     typedef T SQLType;
     typedef typename T::SyntaxType SyntaxType;
 
+    _SyntaxList() {}
+
     _SyntaxList(const T& t) { this->push_back(t); }
 
     template<typename V, typename Enable = void>
@@ -56,6 +58,13 @@ public:
         static _SyntaxList<T> asSyntaxList(const V&);
     };
 
+#if defined(__linux__)
+    template<typename U, typename Enable = void>
+    _SyntaxList(const U& u)
+    {
+        this->emplace_back(u);
+    }
+#else
     template<typename U>
     struct Convertible<U, typename std::enable_if<!std::is_base_of<_SyntaxList, U>::value && std::is_constructible<T, U>::value>::type>
     : public std::true_type {
@@ -72,6 +81,7 @@ public:
     _SyntaxList(const V& v) : _SyntaxList(Convertible<V>::asSyntaxList(v))
     {
     }
+#endif
 
     template<typename U, typename Enable = typename std::enable_if<std::is_constructible<T, U>::value>::type>
     _SyntaxList(const SyntaxList<U>& others)

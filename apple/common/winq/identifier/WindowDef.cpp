@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+WindowDef::WindowDef() = default;
+
 WindowDef::~WindowDef() = default;
 
 WindowDef& WindowDef::partition(const Expressions& expressions)

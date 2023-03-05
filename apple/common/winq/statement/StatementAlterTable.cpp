@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+StatementAlterTable::StatementAlterTable() = default;
+
 StatementAlterTable::~StatementAlterTable() = default;
 
 StatementAlterTable& StatementAlterTable::alterTable(const UnsafeStringView& table)

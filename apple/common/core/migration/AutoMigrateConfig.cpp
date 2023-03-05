@@ -70,7 +70,8 @@ std::atomic<int>& AutoMigrateConfig::getOrCreateRegister(const UnsafeStringView&
         LockGuard lockGuard(m_lock);
         auto iter = m_registers.find(path);
         if (iter == m_registers.end()) {
-            iter = m_registers.emplace(path, 0).first;
+            m_registers[path] = 0;
+            iter = m_registers.find(path);
         }
         WCTAssert(iter->second.load() >= 0);
         return iter->second;

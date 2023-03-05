@@ -125,7 +125,7 @@ bool Migration::initInfo(InfoInitializer& initializer, const UnsafeStringView& t
             const MigrationInfo* hold = &m_holder.back();
             m_migratings.emplace(hold);
             m_referenceds.emplace(hold, 0);
-            m_filted.emplace(table, hold);
+            m_filted.insert_or_assign(table, hold);
             m_hints.erase(table);
         }
     }
@@ -136,7 +136,7 @@ void Migration::markAsNoNeedToMigrate(const UnsafeStringView& table)
 {
     LockGuard lockGuard(m_lock);
     if (m_filted.find(table) == m_filted.end()) {
-        m_filted.emplace(table, nullptr);
+        m_filted.insert_or_assign(table, nullptr);
     }
     m_hints.erase(table);
 }
@@ -286,7 +286,7 @@ Optional<const MigrationInfo*> Migration::Binder::bindTable(const UnsafeStringVi
         auto optionalReferencedInfo = m_migration.getOrInitInfo(*this, table);
         if (optionalReferencedInfo.succeed()) {
             auto& referencedInfo = optionalReferencedInfo.value();
-            m_referenceds.emplace(table, referencedInfo);
+            m_referenceds.insert_or_assign(table, referencedInfo);
             info = referencedInfo.get();
         }
     }

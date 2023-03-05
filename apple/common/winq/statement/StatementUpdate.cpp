@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+StatementUpdate::StatementUpdate() = default;
+
 StatementUpdate::~StatementUpdate() = default;
 
 StatementUpdate& StatementUpdate::with(const CommonTableExpressions& commonTableExpressions)

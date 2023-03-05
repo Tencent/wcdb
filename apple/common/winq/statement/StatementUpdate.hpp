@@ -31,6 +31,7 @@ namespace WCDB {
 class StatementUpdate final : public SpecifiedSyntax<Syntax::UpdateSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::UpdateSTMT, Statement>::SpecifiedSyntax;
+    StatementUpdate();
     ~StatementUpdate() override final;
 
     StatementUpdate& with(const CommonTableExpressions& commonTableExpressions);

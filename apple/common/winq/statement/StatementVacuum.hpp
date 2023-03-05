@@ -31,6 +31,7 @@ namespace WCDB {
 class StatementVacuum final : public SpecifiedSyntax<Syntax::VacuumSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::VacuumSTMT, Statement>::SpecifiedSyntax;
+    StatementVacuum();
     ~StatementVacuum() override final;
 
     StatementVacuum& vacuum();

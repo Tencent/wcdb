@@ -261,6 +261,7 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
         ${WCDB_SRC_DIR}/common/*WCTBinding.h
         ${WCDB_SRC_DIR}/common/*WindowDef.hpp
         ${WCDB_SRC_DIR}/common/*WINQ.h
+        ${WCDB_SRC_DIR}/common/*Optional.hpp
         ${WCDB_SRC_DIR}/cpp/*Accessor.hpp
         ${WCDB_SRC_DIR}/cpp/*BaseOperation.hpp
         ${WCDB_SRC_DIR}/cpp/*Binding.hpp

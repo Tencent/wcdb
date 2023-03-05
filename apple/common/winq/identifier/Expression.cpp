@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+Expression::Expression() = default;
+
 Expression::~Expression() = default;
 
 Expression::Expression(const LiteralValue& literalValue)

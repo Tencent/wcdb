@@ -30,6 +30,7 @@ namespace WCDB {
 
 class RaiseFunction final : public SpecifiedSyntax<Syntax::RaiseFunction, SQL> {
 public:
+    RaiseFunction();
     ~RaiseFunction() override final;
     RaiseFunction& ignore();
     RaiseFunction& rollback(const UnsafeStringView& errorMessage);

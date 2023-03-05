@@ -31,6 +31,7 @@ namespace WCDB {
 class Join final : public SpecifiedSyntax<Syntax::JoinClause, SQL> {
 public:
     using SpecifiedSyntax<Syntax::JoinClause, SQL>::SpecifiedSyntax;
+    Join();
     ~Join() override final;
 
     Join& table(const TableOrSubquery& tableOrSubquery);

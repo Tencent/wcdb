@@ -31,6 +31,7 @@ namespace WCDB {
 class StatementPragma final : public SpecifiedSyntax<Syntax::PragmaSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::PragmaSTMT, Statement>::SpecifiedSyntax;
+    StatementPragma();
     ~StatementPragma() override final;
 
     StatementPragma& pragma(const Pragma& pragma);

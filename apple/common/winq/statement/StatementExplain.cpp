@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+StatementExplain::StatementExplain() = default;
+
 StatementExplain::~StatementExplain() = default;
 
 StatementExplain& StatementExplain::explain(const Statement& statement)

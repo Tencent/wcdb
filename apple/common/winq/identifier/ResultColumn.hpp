@@ -33,6 +33,7 @@ class ResultColumnAll;
 class ResultColumn : public SpecifiedSyntax<Syntax::ResultColumn, SQL> {
 public:
     using SpecifiedSyntax<Syntax::ResultColumn, SQL>::SpecifiedSyntax;
+    ResultColumn();
     virtual ~ResultColumn() override;
 
     template<typename T, typename Enable = typename std::enable_if<ResultColumnConvertible<T>::value>::type>

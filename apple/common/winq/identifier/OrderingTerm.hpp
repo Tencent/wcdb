@@ -31,6 +31,7 @@ namespace WCDB {
 class OrderingTerm final : public SpecifiedSyntax<Syntax::OrderingTerm, SQL> {
 public:
     using SpecifiedSyntax<Syntax::OrderingTerm, SQL>::SpecifiedSyntax;
+    OrderingTerm();
     ~OrderingTerm() override final;
 
     template<typename T, typename Enable = typename std::enable_if<OrderingTermConvertible<T>::value>::type>

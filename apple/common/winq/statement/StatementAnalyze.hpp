@@ -30,6 +30,7 @@ namespace WCDB {
 
 class StatementAnalyze final : public SpecifiedSyntax<Syntax::AnalyzeSTMT, Statement> {
 public:
+    StatementAnalyze();
     using SpecifiedSyntax<Syntax::AnalyzeSTMT, Statement>::SpecifiedSyntax;
     ~StatementAnalyze() override final;
 

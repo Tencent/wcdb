@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+StatementReindex::StatementReindex() = default;
+
 StatementReindex::~StatementReindex() = default;
 
 StatementReindex& StatementReindex::reindex()

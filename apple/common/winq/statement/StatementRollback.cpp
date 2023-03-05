@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+StatementRollback::StatementRollback() = default;
+
 StatementRollback::~StatementRollback() = default;
 
 StatementRollback& StatementRollback::rollback()
