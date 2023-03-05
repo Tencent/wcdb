@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+StatementCommit::StatementCommit() = default;
+
 StatementCommit::~StatementCommit() = default;
 
 StatementCommit& StatementCommit::commit()

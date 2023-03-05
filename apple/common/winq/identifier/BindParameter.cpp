@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+BindParameter::BindParameter() = default;
+
 BindParameter::BindParameter(int n)
 {
     syntax().switcher = SyntaxType::Switch::QuestionSign;

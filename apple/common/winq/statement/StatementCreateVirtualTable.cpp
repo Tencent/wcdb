@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+StatementCreateVirtualTable::StatementCreateVirtualTable() = default;
+
 StatementCreateVirtualTable::~StatementCreateVirtualTable() = default;
 
 StatementCreateVirtualTable&

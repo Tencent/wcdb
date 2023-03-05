@@ -34,6 +34,7 @@ template<typename T>
 class ValueArray : public std::vector<T> {
 public:
     using std::vector<T>::vector;
+    ValueArray() = default;
     ValueArray(const T& value) { this->push_back(value); }
 
     template<typename U, typename Enable = typename std::enable_if<std::is_constructible<T, U>::value>::type>

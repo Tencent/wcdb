@@ -31,6 +31,7 @@ namespace WCDB {
 class StatementExplain final : public SpecifiedSyntax<Syntax::ExplainSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::ExplainSTMT, Statement>::SpecifiedSyntax;
+    StatementExplain();
     ~StatementExplain() override final;
 
     StatementExplain& explain(const Statement& statement);

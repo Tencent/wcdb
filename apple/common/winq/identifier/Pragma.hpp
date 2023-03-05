@@ -32,6 +32,7 @@ class Pragma final : public SpecifiedSyntax<Syntax::Pragma, SQL> {
 #pragma mark - Initializer
 public:
     using SpecifiedSyntax<Syntax::Pragma, SQL>::SpecifiedSyntax;
+    Pragma();
     ~Pragma() override final;
 
     template<typename T, typename Enable = typename std::enable_if<ColumnIsTextType<T>::value>::type>

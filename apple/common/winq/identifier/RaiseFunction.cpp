@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+RaiseFunction::RaiseFunction() = default;
+
 RaiseFunction::~RaiseFunction() = default;
 
 RaiseFunction& RaiseFunction::ignore()

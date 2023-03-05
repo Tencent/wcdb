@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+StatementVacuum::StatementVacuum() = default;
+
 StatementVacuum::~StatementVacuum() = default;
 
 StatementVacuum& StatementVacuum::vacuum()

@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+LiteralValue::LiteralValue() = default;
+
 LiteralValue::~LiteralValue() = default;
 
 LiteralValue::LiteralValue(int64_t value)

@@ -26,7 +26,6 @@
 
 #include <WCDB/StringView.hpp>
 #include <WCDB/Tag.hpp>
-#include <any>
 #include <map>
 
 namespace WCDB {

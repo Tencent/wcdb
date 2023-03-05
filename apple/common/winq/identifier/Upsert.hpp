@@ -30,6 +30,7 @@ namespace WCDB {
 
 class Upsert final : public SpecifiedSyntax<Syntax::UpsertClause, SQL> {
 public:
+    Upsert();
     ~Upsert() override final;
 
     Upsert& onConflict();

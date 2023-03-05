@@ -85,6 +85,7 @@ public:
             return nullptr;
         } break;
         }
+        return nullptr;
     }
 
 protected:
@@ -104,7 +105,9 @@ public:
     using _SyntaxList<Field>::_SyntaxList;
     ~SyntaxList() override final;
 
+#ifndef __linux__
     ResultFields redirect(const ResultColumns& resultColumns) const;
+#endif
 
     typedef std::function<ResultColumn(const Field&)> RedirectAction;
     ResultFields redirect(RedirectAction action) const;

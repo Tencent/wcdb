@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+ColumnDef::ColumnDef() = default;
+
 ColumnDef::ColumnDef(const Column& column)
 {
     syntax().column = column;

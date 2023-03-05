@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+StatementAnalyze::StatementAnalyze() = default;
+
 StatementAnalyze::~StatementAnalyze() = default;
 
 StatementAnalyze& StatementAnalyze::analyze()

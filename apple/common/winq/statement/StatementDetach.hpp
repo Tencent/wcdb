@@ -31,6 +31,7 @@ namespace WCDB {
 class StatementDetach final : public SpecifiedSyntax<Syntax::DetachSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::DetachSTMT, Statement>::SpecifiedSyntax;
+    StatementDetach();
     ~StatementDetach() override final;
 
     StatementDetach& detach(const Schema& schema);

@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+StatementCreateIndex::StatementCreateIndex() = default;
+
 StatementCreateIndex::~StatementCreateIndex() = default;
 
 StatementCreateIndex& StatementCreateIndex::createIndex(const UnsafeStringView& index)

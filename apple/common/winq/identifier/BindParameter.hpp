@@ -31,6 +31,7 @@ namespace WCDB {
 class BindParameter final : public SpecifiedSyntax<Syntax::BindParameter, SQL> {
 public:
     using SpecifiedSyntax<Syntax::BindParameter, SQL>::SpecifiedSyntax;
+    BindParameter();
     BindParameter(int n);
     explicit BindParameter(const UnsafeStringView& name);
     ~BindParameter() override final;

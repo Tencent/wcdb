@@ -30,6 +30,7 @@ namespace WCDB {
 
 class ForeignKey final : public SpecifiedSyntax<Syntax::ForeignKeyClause, SQL> {
 public:
+    ForeignKey();
     ~ForeignKey() override final;
 
     ForeignKey& references(const UnsafeStringView& table);

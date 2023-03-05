@@ -43,7 +43,7 @@ public:
     RecyclableHandle &operator=(const std::nullptr_t &);
     RecyclableHandle &operator=(const RecyclableHandle &other);
 
-    constexpr InnerHandle *operator->() const { return m_handle; }
+    InnerHandle *operator->() const { return m_handle; }
     InnerHandle *get() const;
 
 protected:

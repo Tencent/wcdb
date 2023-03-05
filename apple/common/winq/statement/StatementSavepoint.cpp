@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+StatementSavepoint::StatementSavepoint() = default;
+
 StatementSavepoint::~StatementSavepoint() = default;
 
 StatementSavepoint& StatementSavepoint::savepoint(const UnsafeStringView& savepoint)

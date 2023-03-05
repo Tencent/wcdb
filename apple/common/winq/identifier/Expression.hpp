@@ -50,6 +50,7 @@ public:
     {
     }
 
+    Expression();
     Expression(const LiteralValue& literalValue);
     Expression(const BindParameter& bindParameter);
     Expression(const Column& column);

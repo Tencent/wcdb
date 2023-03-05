@@ -30,6 +30,7 @@ namespace WCDB {
 
 class WindowDef final : public SpecifiedSyntax<Syntax::WindowDef, SQL> {
 public:
+    WindowDef();
     ~WindowDef() override final;
 
     WindowDef& partition(const Expressions& expressions);

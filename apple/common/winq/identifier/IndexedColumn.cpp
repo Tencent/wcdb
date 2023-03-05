@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+IndexedColumn::IndexedColumn() = default;
+
 IndexedColumn::IndexedColumn(const Column& column)
 {
     syntax().switcher = SyntaxType::Switch::Column;

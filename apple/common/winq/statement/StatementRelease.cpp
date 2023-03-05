@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+StatementRelease::StatementRelease() = default;
+
 StatementRelease::~StatementRelease() = default;
 
 StatementRelease& StatementRelease::release(const UnsafeStringView& savepoint)

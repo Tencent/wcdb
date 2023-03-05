@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+StatementPragma::StatementPragma() = default;
+
 StatementPragma::~StatementPragma() = default;
 
 StatementPragma& StatementPragma::pragma(const Pragma& pragma)

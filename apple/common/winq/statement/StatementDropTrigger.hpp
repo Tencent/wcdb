@@ -32,6 +32,7 @@ class StatementDropTrigger final
 : public SpecifiedSyntax<Syntax::DropTriggerSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::DropTriggerSTMT, Statement>::SpecifiedSyntax;
+    StatementDropTrigger();
     ~StatementDropTrigger() override final;
 
     StatementDropTrigger& dropTrigger(const UnsafeStringView& trigger);

@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+StatementInsert::StatementInsert() = default;
+
 StatementInsert::~StatementInsert() = default;
 
 StatementInsert& StatementInsert::with(const CommonTableExpressions& commonTableExpressions)

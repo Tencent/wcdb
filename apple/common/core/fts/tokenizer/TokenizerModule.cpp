@@ -31,6 +31,10 @@
 
 namespace WCDB {
 
+#ifndef offsetof
+#define offsetof(STRUCTURE, FIELD) ((int) ((char *) &((STRUCTURE *) 0)->FIELD))
+#endif
+
 #pragma mark - AbstractFTS5Tokenizer
 AbstractFTSTokenizer::AbstractFTSTokenizer(const char *const *azArg, int nArg, void *pCtx){
     WCDB_UNUSED(pCtx) WCDB_UNUSED(azArg) WCDB_UNUSED(nArg)

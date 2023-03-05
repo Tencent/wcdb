@@ -31,6 +31,7 @@ namespace WCDB {
 class StatementRollback final : public SpecifiedSyntax<Syntax::RollbackSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::RollbackSTMT, Statement>::SpecifiedSyntax;
+    StatementRollback();
     ~StatementRollback() override final;
 
     StatementRollback& rollback();

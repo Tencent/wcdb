@@ -26,6 +26,8 @@
 
 namespace WCDB {
 
+ForeignKey::ForeignKey() = default;
+
 ForeignKey::~ForeignKey() = default;
 
 ForeignKey& ForeignKey::references(const UnsafeStringView& table)

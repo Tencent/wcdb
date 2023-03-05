@@ -32,6 +32,7 @@ class Filter final : public SpecifiedSyntax<Syntax::Filter, SQL> {
 public:
     using SpecifiedSyntax<Syntax::Filter, SQL>::SpecifiedSyntax;
     ~Filter() override final;
+    Filter();
     Filter& where(const Expression& expression);
 };
 
