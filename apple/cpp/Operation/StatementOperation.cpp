@@ -205,10 +205,10 @@ MultiObject StatementOperation::extractOneMultiObject(const ResultFields &result
     return result;
 }
 
-Optional<ValueArray<MultiObject>>
+OptionalMultiObjectArray
 StatementOperation::extractAllMultiObjects(const ResultFields &resultFields)
 {
-    Optional<ValueArray<MultiObject>> result;
+    OptionalMultiObjectArray result;
     bool succeed = false;
     while ((succeed = step()) && !done()) {
         if (!result.succeed()) {

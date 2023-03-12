@@ -90,4 +90,7 @@ private:
     StringViewMap<ObjectValue> m_objs;
 };
 
+typedef Optional<MultiObject> OptionalMultiObject;
+typedef OptionalValueArray<MultiObject> OptionalMultiObjectArray;
+
 } // namespace WCDB

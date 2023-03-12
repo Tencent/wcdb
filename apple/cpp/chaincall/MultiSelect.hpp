@@ -90,13 +90,13 @@ public:
 
      @return See the example above
      */
-    Optional<MultiObject> firstMultiObject();
+    OptionalMultiObject firstMultiObject();
 
     /**
      @brief Get all selected objects.
      @return Array with all selected objects.
      */
-    Optional<ValueArray<MultiObject>> allMultiObjects();
+    OptionalMultiObjectArray allMultiObjects();
 
 protected:
     MultiSelect(Recyclable<InnerDatabase *> databaseHolder);

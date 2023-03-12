@@ -51,4 +51,6 @@ private:
     HandleStatement *m_innerHandleStatement;
 };
 
+typedef Optional<PreparedStatement> OptionalPreparedStatement;
+
 } //namespace WCDB

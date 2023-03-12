@@ -101,7 +101,7 @@
 {
     [self doTestObjects:self.objects
                  andSQL:@"SELECT identifier, content FROM testTable ORDER BY rowid ASC"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.database->getAllObjects<CPPTestCaseObject>(self.tableName.UTF8String);
             }];
 }
@@ -110,7 +110,7 @@
 {
     [self doTestObjects:self.object1
                  andSQL:@"SELECT identifier, content FROM testTable WHERE identifier == 1 ORDER BY rowid ASC"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.database->getAllObjects<CPPTestCaseObject>(self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) == 1);
             }];
 }
@@ -119,7 +119,7 @@
 {
     [self doTestObjects:{ self.object2, self.object1 }
                  andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.database->getAllObjects<CPPTestCaseObject>(self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC));
             }];
 }
@@ -128,7 +128,7 @@
 {
     [self doTestObjects:self.object2
                  andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.database->getAllObjects<CPPTestCaseObject>(self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1);
             }];
 }
@@ -137,7 +137,7 @@
 {
     [self doTestObjects:self.object1
                  andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.database->getAllObjects<CPPTestCaseObject>(self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1, 1);
             }];
 }
@@ -184,7 +184,7 @@
 {
     [self doTestObjects:self.partialObjects
                  andSQL:@"SELECT identifier FROM testTable ORDER BY rowid ASC"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.database->getAllObjectsWithFields<CPPTestCaseObject>(self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier));
             }];
 }
@@ -193,7 +193,7 @@
 {
     [self doTestObjects:self.partialObject1
                  andSQL:@"SELECT identifier FROM testTable WHERE identifier == 1 ORDER BY rowid ASC"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.database->getAllObjectsWithFields<CPPTestCaseObject>(self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier), WCDB_FIELD(CPPTestCaseObject::identifier) == 1);
             }];
 }
@@ -202,7 +202,7 @@
 {
     [self doTestObjects:{ self.partialObject2, self.partialObject1 }
                  andSQL:@"SELECT identifier FROM testTable WHERE identifier > 0 ORDER BY identifier DESC"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.database->getAllObjectsWithFields<CPPTestCaseObject>(self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier), WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC));
             }];
 }
@@ -211,7 +211,7 @@
 {
     [self doTestObjects:self.partialObject2
                  andSQL:@"SELECT identifier FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.database->getAllObjectsWithFields<CPPTestCaseObject>(self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier), WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1);
             }];
 }
@@ -220,7 +220,7 @@
 {
     [self doTestObjects:self.partialObject1
                  andSQL:@"SELECT identifier FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.database->getAllObjectsWithFields<CPPTestCaseObject>(self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier), WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1, 1);
             }];
 }
@@ -473,7 +473,7 @@
 {
     [self doTestObjects:self.objects
                  andSQL:@"SELECT identifier, content FROM testTable ORDER BY rowid ASC"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.table.getAllObjects();
             }];
 }
@@ -482,7 +482,7 @@
 {
     [self doTestObjects:self.object1
                  andSQL:@"SELECT identifier, content FROM testTable WHERE identifier == 1 ORDER BY rowid ASC"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.table.getAllObjects(WCDB_FIELD(CPPTestCaseObject::identifier) == 1);
             }];
 }
@@ -491,7 +491,7 @@
 {
     [self doTestObjects:{ self.object2, self.object1 }
                  andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.table.getAllObjects(WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC));
             }];
 }
@@ -500,7 +500,7 @@
 {
     [self doTestObjects:self.object2
                  andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.table.getAllObjects(WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1);
             }];
 }
@@ -509,7 +509,7 @@
 {
     [self doTestObjects:self.object1
                  andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.table.getAllObjects(WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1, 1);
             }];
 }
@@ -556,7 +556,7 @@
 {
     [self doTestObjects:self.partialObjects
                  andSQL:@"SELECT identifier FROM testTable ORDER BY rowid ASC"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.table.getAllObjectsWithFields(WCDB_FIELD(CPPTestCaseObject::identifier));
             }];
 }
@@ -565,7 +565,7 @@
 {
     [self doTestObjects:self.partialObject1
                  andSQL:@"SELECT identifier FROM testTable WHERE identifier == 1 ORDER BY rowid ASC"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.table.getAllObjectsWithFields(WCDB_FIELD(CPPTestCaseObject::identifier), WCDB_FIELD(CPPTestCaseObject::identifier) == 1);
             }];
 }
@@ -574,7 +574,7 @@
 {
     [self doTestObjects:{ self.partialObject2, self.partialObject1 }
                  andSQL:@"SELECT identifier FROM testTable WHERE identifier > 0 ORDER BY identifier DESC"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.table.getAllObjectsWithFields(WCDB_FIELD(CPPTestCaseObject::identifier), WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC));
             }];
 }
@@ -583,7 +583,7 @@
 {
     [self doTestObjects:self.partialObject2
                  andSQL:@"SELECT identifier FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.table.getAllObjectsWithFields(WCDB_FIELD(CPPTestCaseObject::identifier), WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1);
             }];
 }
@@ -592,7 +592,7 @@
 {
     [self doTestObjects:self.partialObject1
                  andSQL:@"SELECT identifier FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.table.getAllObjectsWithFields(WCDB_FIELD(CPPTestCaseObject::identifier), WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1, 1);
             }];
 }
@@ -845,7 +845,7 @@
 {
     [self doTestObjects:self.objects
                  andSQL:@"SELECT identifier, content FROM testTable ORDER BY rowid ASC"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.database->getHandle().getAllObjects<CPPTestCaseObject>(self.tableName.UTF8String);
             }];
 }
@@ -854,7 +854,7 @@
 {
     [self doTestObjects:self.object1
                  andSQL:@"SELECT identifier, content FROM testTable WHERE identifier == 1 ORDER BY rowid ASC"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.database->getHandle().getAllObjects<CPPTestCaseObject>(self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) == 1);
             }];
 }
@@ -863,7 +863,7 @@
 {
     [self doTestObjects:{ self.object2, self.object1 }
                  andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.database->getHandle().getAllObjects<CPPTestCaseObject>(self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC));
             }];
 }
@@ -872,7 +872,7 @@
 {
     [self doTestObjects:self.object2
                  andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.database->getHandle().getAllObjects<CPPTestCaseObject>(self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1);
             }];
 }
@@ -881,7 +881,7 @@
 {
     [self doTestObjects:self.object1
                  andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.database->getHandle().getAllObjects<CPPTestCaseObject>(self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1, 1);
             }];
 }
@@ -928,7 +928,7 @@
 {
     [self doTestObjects:self.partialObjects
                  andSQL:@"SELECT identifier FROM testTable ORDER BY rowid ASC"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.database->getHandle().getAllObjectsWithFields<CPPTestCaseObject>(self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier));
             }];
 }
@@ -937,7 +937,7 @@
 {
     [self doTestObjects:self.partialObject1
                  andSQL:@"SELECT identifier FROM testTable WHERE identifier == 1 ORDER BY rowid ASC"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.database->getHandle().getAllObjectsWithFields<CPPTestCaseObject>(self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier), WCDB_FIELD(CPPTestCaseObject::identifier) == 1);
             }];
 }
@@ -946,7 +946,7 @@
 {
     [self doTestObjects:{ self.partialObject2, self.partialObject1 }
                  andSQL:@"SELECT identifier FROM testTable WHERE identifier > 0 ORDER BY identifier DESC"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.database->getHandle().getAllObjectsWithFields<CPPTestCaseObject>(self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier), WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC));
             }];
 }
@@ -955,7 +955,7 @@
 {
     [self doTestObjects:self.partialObject2
                  andSQL:@"SELECT identifier FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.database->getHandle().getAllObjectsWithFields<CPPTestCaseObject>(self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier), WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1);
             }];
 }
@@ -964,7 +964,7 @@
 {
     [self doTestObjects:self.partialObject1
                  andSQL:@"SELECT identifier FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 return self.database->getHandle().getAllObjectsWithFields<CPPTestCaseObject>(self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier), WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1, 1);
             }];
 }
