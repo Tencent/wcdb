@@ -2,32 +2,30 @@
 
 #import "___VARIABLE_productName___Tokenizer.h"
 
-#pragma mark - Tokenizer Info
-___VARIABLE_productName___TokenizerInfo::___VARIABLE_productName___TokenizerInfo(int argc, const char *const *argv)
-: WCDB::AbstractTokenizerInfo(argc, argv)
-{
-}
-
-___VARIABLE_productName___TokenizerInfo::~___VARIABLE_productName___TokenizerInfo()
-{
-}
-
 #pragma mark - Tokenizer Cursor Info
-___VARIABLE_productName___TokenizerCursorInfo::___VARIABLE_productName___TokenizerCursorInfo(const char *input, int inputLength, WCDB::AbstractTokenizerInfo *tokenizerInfo)
-: WCDB::AbstractTokenizerCursorInfo(input, inputLength, tokenizerInfo)
-, m_tokenizerInfo(static_cast<___VARIABLE_productName___TokenizerInfo *>(tokenizerInfo))
+___VARIABLE_productName___Tokenizer::___VARIABLE_productName___Tokenizer(const char *const *azArg,
+                                                                         int nArg,
+                                                                         void *pCtx /* pCtx is only used in FTS5 */)
+: WCDB::AbstractFTSTokenizer(azArg, nArg, pCtx)
 {
 }
 
-___VARIABLE_productName___TokenizerCursorInfo::~___VARIABLE_productName___TokenizerCursorInfo()
+___VARIABLE_productName___Tokenizer::~___VARIABLE_productName___Tokenizer()
 {
 }
 
-int ___VARIABLE_productName___CursorInfo::step(const char **ppToken,
-                                               int *pnBytes,
-                                               int *piStartOffset,
-                                               int *piEndOffset,
-                                               int *piPosition)
+void ___VARIABLE_productName___Tokenizer::loadInput(const char *pText,
+                                                    int nText,
+                                                    int flags) // flags is only used in FTS5
+{
+}
+
+int ___VARIABLE_productName___Tokenizer::nextToken(const char **ppToken,
+                                                   int *nToken,
+                                                   int *iStart,
+                                                   int *iEnd,
+                                                   int *tflags,    //tflags is only used in FTS5
+                                                   int *iPosition) //iPosition is only used in FTS3/4
 {
     if (/* done */) {
         return WCTErrorCodeDone;

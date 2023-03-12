@@ -1,18 +1,18 @@
 // ___FILEHEADER___
 
 import Foundation
-import WCDBSwift
+import WCDB
 
-class ___VARIABLE_productName___: WCDBSwift.ColumnCodable, WCDBSwift.LiteralValueConvertible, WCDBSwift.ExpressionCanBeOperated {
+class ___VARIABLE_productName___: WCDB.ColumnCodable, WCDB.LiteralValueConvertible {
     static var columnType: ColumnType {
         return .BLOB
     }
 
-    required init?(with value: FundamentalValue) {
+    required init?(with value: WCDB.Value) {
 		/* <#Init ___VARIABLE_productName___ From value.dataValue#> */
     }
 
-    func archivedValue() -> FundamentalValue {
-        return FundamentalValue(<#Data#>)
+    func archivedValue() -> WCDB.Value {
+        return WCDB.Value(<#Data#>)
     }
 }
