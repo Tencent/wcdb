@@ -9,17 +9,17 @@
 		<string>All</string>
 	</array>
 	<key>IDECodeSnippetContents</key>
-	<string>class &lt;#Class name#&gt;: WCDBSwift.ColumnCodable, WCDBSwift.LiteralValueConvertible, WCDBSwift.ExpressionCanBeOperated {
+	<string>class &lt;#Class name#&gt;: WCDB.ColumnCodable, WCDB.LiteralValueConvertible, WCDB.ExpressionCanBeOperated {
 	static var columnType: ColumnType {
 		return .float
 	}
     
-    required init?(with value: FundamentalValue) {
+    required init?(with value: WCDB.Value) {
     	&lt;#init with value.doubleValue#&gt;
     }
     
-    func archivedValue() -&gt; FundamentalValue {
-        return FundamentalValue(&lt;#Double#&gt;)
+    func archivedValue() -&gt; WCDB.Value {
+        return WCDB.Value(&lt;#Double#&gt;)
     }
 }
 </string>

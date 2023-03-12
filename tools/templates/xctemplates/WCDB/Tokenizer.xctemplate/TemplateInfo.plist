@@ -7,7 +7,7 @@
 	<key>Description</key>
 	<string>Tokenizer Template.</string>
 	<key>Summary</key>
-	<string>Tokenizer Template</string>
+	<string>Tokenizer Template.</string>
 	<key>SortOrder</key>
 	<string>1</string>
 	<key>DefaultCompletionName</key>
@@ -49,12 +49,17 @@
 			<key>Values</key>
 			<array>
 				<string>Objective-C</string>
+				<string>Swift</string>
 			</array>
 			<key>AllowedTypes</key>
 			<dict>
 				<key>Objective-C</key>
 				<array>
 					<string>public.objective-c-plus-plus-source</string>
+				</array>
+				<key>Swift</key>
+				<array>
+					<string>public.swift-source</string>
 				</array>
 			</dict>
 		</dict>
