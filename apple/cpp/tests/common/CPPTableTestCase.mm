@@ -103,7 +103,7 @@
 {
     [self doTestObjects:object
                 andSQLs:@[ sql ]
-            bySelecting:^WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> {
+            bySelecting:^WCDB::OptionalValueArray<CPPTestCaseObject> {
                 const WCDB::Optional<CPPTestCaseObject> result = block();
                 TestCaseAssertTrue(result.succeed());
                 return { result.value() };
@@ -112,14 +112,14 @@
 
 - (void)doTestObjects:(const WCDB::ValueArray<CPPTestCaseObject>&)expectedObjects
                andSQL:(NSString*)sql
-          bySelecting:(WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> (^)())block
+          bySelecting:(WCDB::OptionalValueArray<CPPTestCaseObject> (^)())block
 {
     [self doTestObjects:expectedObjects andSQLs:@[ sql ] bySelecting:block];
 }
 
 - (void)doTestObjects:(const WCDB::ValueArray<CPPTestCaseObject>&)expectedObjects
               andSQLs:(NSArray<NSString*>*)expectedSQLs
-          bySelecting:(WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> (^)())block
+          bySelecting:(WCDB::OptionalValueArray<CPPTestCaseObject> (^)())block
 {
     __block WCDB::ValueArray<CPPTestCaseObject> selected;
     [self doTestSQLs:expectedSQLs

@@ -166,7 +166,7 @@ public:
     /**
      @brief Get objects by specific selecting.
      */
-    Optional<ValueArray<ObjectType>>
+    OptionalValueArray<ObjectType>
     getAllObjects(const Expression &where = Expression(),
                   const OrderingTerms &orders = OrderingTerms(),
                   const Expression &limit = Expression(),
@@ -180,7 +180,7 @@ public:
     /**
      @brief Get objects on specific fields by specific selecting.
      */
-    Optional<ValueArray<ObjectType>>
+    OptionalValueArray<ObjectType>
     getAllObjectsWithFields(const ResultFields &resultFields,
                             const Expression &where = Expression(),
                             const OrderingTerms &orders = OrderingTerms(),

@@ -128,9 +128,12 @@ typedef ValueArray<Value> OneRowValue;
 typedef ValueArray<Value> OneColumnValue;
 typedef ValueArray<ValueArray<Value>> MultiRowsValue;
 
+template<typename ValueType>
+using OptionalValueArray = Optional<ValueArray<ValueType>>;
+
 typedef Optional<Value> OptionalValue;
-typedef Optional<ValueArray<Value>> OptionalOneRow;
-typedef Optional<ValueArray<Value>> OptionalOneColumn;
-typedef Optional<ValueArray<ValueArray<Value>>> OptionalMultiRows;
+typedef OptionalValueArray<Value> OptionalOneRow;
+typedef OptionalValueArray<Value> OptionalOneColumn;
+typedef OptionalValueArray<ValueArray<Value>> OptionalMultiRows;
 
 } // namespace WCDB

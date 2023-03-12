@@ -110,9 +110,9 @@ public:
      @brief Get all selected objects.
      @return The array collection of ObjectType.
      */
-    Optional<ValueArray<ObjectType>> allObjects()
+    OptionalValueArray<ObjectType> allObjects()
     {
-        Optional<ValueArray<ObjectType>> objects;
+        OptionalValueArray<ObjectType> objects;
         if (prepareStatement()) {
             objects = m_handle->extractAllObjects<ObjectType>(m_fields);
             m_handle->finalize();

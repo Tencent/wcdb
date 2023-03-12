@@ -25,6 +25,7 @@
 #pragma once
 #include <WCDB/CPPDeclaration.h>
 #include <WCDB/CPPORM.h>
+#include <WCDB/MultiObject.hpp>
 #include <WCDB/Statement.hpp>
 #include <WCDB/Value.hpp>
 
@@ -251,9 +252,9 @@ public:
      @return An array of objects.
      */
     template<class ObjectType>
-    Optional<ValueArray<ObjectType>> extractAllObjects(const ResultFields& resultFields)
+    OptionalValueArray<ObjectType> extractAllObjects(const ResultFields& resultFields)
     {
-        Optional<ValueArray<ObjectType>> result;
+        OptionalValueArray<ObjectType> result;
         bool succeed = false;
         while ((succeed = step()) && !done()) {
             if (!result.succeed()) {
@@ -268,8 +269,7 @@ public:
      @brief Extract the results of a multi-table query.
      @return An array of `WCDB::MultiObject`.
      */
-    Optional<ValueArray<MultiObject>>
-    extractAllMultiObjects(const ResultFields& resultFields);
+    OptionalMultiObjectArray extractAllMultiObjects(const ResultFields& resultFields);
 
 protected:
     virtual ~StatementOperation() = 0;

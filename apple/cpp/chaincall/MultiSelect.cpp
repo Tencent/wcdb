@@ -87,9 +87,9 @@ bool MultiSelect::prepareStatement()
     return m_handle->prepare(m_statement);
 }
 
-Optional<MultiObject> MultiSelect::firstMultiObject()
+OptionalMultiObject MultiSelect::firstMultiObject()
 {
-    Optional<MultiObject> object;
+    OptionalMultiObject object;
     WCTRemedialAssert(m_fields.size() != 0, "Result columns can't be empty.", return object;);
     if (prepareStatement()) {
         if (m_handle->step() && !m_handle->done()) {
@@ -101,9 +101,9 @@ Optional<MultiObject> MultiSelect::firstMultiObject()
     return object;
 }
 
-Optional<ValueArray<MultiObject>> MultiSelect::allMultiObjects()
+OptionalMultiObjectArray MultiSelect::allMultiObjects()
 {
-    Optional<ValueArray<MultiObject>> objects;
+    OptionalMultiObjectArray objects;
     WCTRemedialAssert(
     m_fields.size() != 0, "Result columns can't be empty.", return objects;);
     if (prepareStatement()) {

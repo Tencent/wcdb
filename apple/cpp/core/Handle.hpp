@@ -103,7 +103,7 @@ public:
      @param statement The SQL statememt needed to prepare.
      @return a `WCDB::PreparedStatement` object with `sqlite3_stmt` inside, or nil if error occurs.
      */
-    Optional<PreparedStatement> getOrCreatePreparedStatement(const Statement& statement);
+    OptionalPreparedStatement getOrCreatePreparedStatement(const Statement& statement);
 
     /**
      @brief Use `sqlite3_finalize` to finalize all `sqlite3_stmt` generate by current handle.

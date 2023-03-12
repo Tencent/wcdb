@@ -53,11 +53,11 @@
 
 - (void)doTestObjects:(const WCDB::ValueArray<CPPTestCaseObject> &)objects
                andSQL:(NSString *)sql
-          bySelecting:(WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> (^)())block;
+          bySelecting:(WCDB::OptionalValueArray<CPPTestCaseObject> (^)())block;
 
 - (void)doTestObjects:(const WCDB::ValueArray<CPPTestCaseObject> &)expectedObjects
               andSQLs:(NSArray<NSString *> *)expectedSQLs
-          bySelecting:(WCDB::Optional<WCDB::ValueArray<CPPTestCaseObject>> (^)())block;
+          bySelecting:(WCDB::OptionalValueArray<CPPTestCaseObject> (^)())block;
 
 - (WCDB::ValueArray<CPPTestCaseObject>)getAllObjects;
 
