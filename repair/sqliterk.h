@@ -25,9 +25,7 @@ typedef struct sqliterk sqliterk;
 typedef struct sqliterk_cipher_conf sqliterk_cipher_conf;
 typedef struct sqliterk_notify sqliterk_notify;
 
-int sqliterkOpen(const char *path,
-                 const sqliterk_cipher_conf *cipher,
-                 sqliterk **rk);
+int sqliterkOpen(const char *path, const sqliterk_cipher_conf *cipher, sqliterk **rk);
 int sqliterkParse(sqliterk *rk);
 int sqliterkParsePage(sqliterk *rk, int pageno);
 int sqliterkParseMaster(sqliterk *rk);

@@ -24,7 +24,7 @@
 #include <map>
 #ifdef WCDB_BUILTIN_SQLCIPHER
 #include <sqlcipher/sqlite3.h>
-#else  //WCDB_BUILTIN_SQLCIPHER
+#else //WCDB_BUILTIN_SQLCIPHER
 #include <sqlite3.h>
 #endif //WCDB_BUILTIN_SQLCIPHER
 #include <stdint.h>
@@ -75,8 +75,8 @@ public:
     {
 #if defined(__APPLE__)
         if (!m_cryptor) {
-            CCCryptorCreate(kCCEncrypt, kCCAlgorithmRC4, 0, m_key, m_keyLength,
-                            nullptr, &m_cryptor);
+            CCCryptorCreate(
+            kCCEncrypt, kCCAlgorithmRC4, 0, m_key, m_keyLength, nullptr, &m_cryptor);
         }
 
         size_t cryptBytes = 0;
@@ -117,31 +117,32 @@ struct sqliterk_master_entity {
 
     sqliterk_master_entity() {}
 
-    sqliterk_master_entity(sqliterk_type type_,
-                           const char *sql_,
-                           int root_page_)
-            : type(type_), sql(sql_), root_page(root_page_)
+    sqliterk_master_entity(sqliterk_type type_, const char *sql_, int root_page_)
+    : type(type_), sql(sql_), root_page(root_page_)
     {
     }
 };
 typedef std::map<std::string, sqliterk_master_entity> sqliterk_master_map;
-struct sqliterk_master_info : public sqliterk_master_map {
-};
+struct sqliterk_master_info : public sqliterk_master_map {};
 
 struct sqliterk_output_column_info {
     char affinity;
     bool not_null;
     sqlite3_value *default_value = NULL;
 
-    sqliterk_output_column_info(char aff, bool nn, sqlite3_value *dflt) :
-            affinity(aff), not_null(nn), default_value(dflt) {}
+    sqliterk_output_column_info(char aff, bool nn, sqlite3_value *dflt)
+    : affinity(aff), not_null(nn), default_value(dflt)
+    {
+    }
 
-    sqliterk_output_column_info(sqliterk_output_column_info&& other) :
-            affinity(other.affinity), not_null(other.not_null), default_value(other.default_value) {
+    sqliterk_output_column_info(sqliterk_output_column_info &&other)
+    : affinity(other.affinity), not_null(other.not_null), default_value(other.default_value)
+    {
         other.default_value = NULL;
     }
 
-    ~sqliterk_output_column_info() {
+    ~sqliterk_output_column_info()
+    {
         if (default_value) {
             sqlite3_value_free(default_value);
         }
@@ -163,10 +164,7 @@ struct sqliterk_output_ctx {
     unsigned int fail_count;
     volatile unsigned cancelled;
 
-    int (*callback)(void *user,
-                    sqliterk *rk,
-                    sqliterk_table *table,
-                    sqliterk_column *column);
+    int (*callback)(void *user, sqliterk *rk, sqliterk_table *table, sqliterk_column *column);
     void *user;
 };
 
@@ -174,15 +172,11 @@ static void dummyParseTableCallback(sqliterk *rk, sqliterk_table *table)
 {
 }
 
-static int master_onParseColumn(sqliterk *rk,
-                                sqliterk_table *table,
-                                sqliterk_column *column)
+static int master_onParseColumn(sqliterk *rk, sqliterk_table *table, sqliterk_column *column)
 {
-    sqliterk_output_ctx *ctx =
-            (sqliterk_output_ctx *) sqliterk_get_user_info(rk);
+    sqliterk_output_ctx *ctx = (sqliterk_output_ctx *) sqliterk_get_user_info(rk);
 
-    if (ctx->cancelled)
-        return SQLITERK_CANCELLED;
+    if (ctx->cancelled) return SQLITERK_CANCELLED;
 
     // For master table, check whether we should ignore, or create table
     // and prepare for insertion.
@@ -196,8 +190,7 @@ static int master_onParseColumn(sqliterk *rk,
     const char *sql = sqliterk_column_text(column, 4);
     sqliterk_type type;
 
-    if (!typestr || !name || !sql || root_page <= 0)
-        return SQLITERK_OK;
+    if (!typestr || !name || !sql || root_page <= 0) return SQLITERK_OK;
 
     if (strcmp(typestr, "table") == 0)
         type = sqliterk_type_table;
@@ -207,14 +200,12 @@ static int master_onParseColumn(sqliterk *rk,
         return SQLITERK_OK;
 
     // TODO: deal with system tables.
-    if (strncmp(name, "sqlite_", 7) == 0)
-        return SQLITERK_OK;
+    if (strncmp(name, "sqlite_", 7) == 0) return SQLITERK_OK;
 
     // Skip table if we are not interested.
     if (!(ctx->flags & SQLITERK_OUTPUT_ALL_TABLES)) {
         sqliterk_master_map::iterator it = ctx->tables.find(tbl_name);
-        if (it == ctx->tables.end())
-            return SQLITERK_OK;
+        if (it == ctx->tables.end()) return SQLITERK_OK;
     }
 
     // Check CREATE statement if requested.
@@ -222,10 +213,11 @@ static int master_onParseColumn(sqliterk *rk,
         sqliterk_master_map::iterator it = ctx->tables.find(name);
         if (it != ctx->tables.end()) {
             const sqliterk_master_entity &e = it->second;
-            if (e.root_page > 0 && !e.sql.empty() &&
-                (e.type == sqliterk_type_table || e.type == sqliterk_type_index)) {
+            if (e.root_page > 0 && !e.sql.empty()
+                && (e.type == sqliterk_type_table || e.type == sqliterk_type_index)) {
                 if (e.sql != sql) {
-                    sqliterkOSWarning(SQLITERK_DAMAGED, "SQL mismatch: '%s' <-> '%s'", sql, e.sql.c_str());
+                    sqliterkOSWarning(
+                    SQLITERK_DAMAGED, "SQL mismatch: '%s' <-> '%s'", sql, e.sql.c_str());
                     if (strlen(sql) < e.sql.size()) {
                         return SQLITERK_OK;
                     }
@@ -252,8 +244,7 @@ static void fini_insert(sqliterk_output_ctx *ctx)
 
 static sqlite3_value *eval_value(sqlite3 *db, const char *value)
 {
-    if (!value || !*value)
-        return NULL;
+    if (!value || !*value) return NULL;
 
     std::string sql("SELECT ");
     sql += value;
@@ -289,25 +280,24 @@ static char parse_affinity(const char *type)
     char aff = SQLITE_AFF_NUMERIC;
     do {
         h = (h << 8) + toupper((*type++) & 0xFF);
-        if ((h << 8) == ('I'<<16)+('N'<<8)+'T') {
+        if ((h << 8) == ('I' << 16) + ('N' << 8) + 'T') {
             aff = SQLITE_AFF_INTEGER;
         } else {
             switch (h) {
-                case ('C'<<24)+('H'<<16)+('A'<<8)+'R':/* CHAR */
-                case ('C'<<24)+('L'<<16)+('O'<<8)+'B':/* CLOB */
-                case ('T'<<24)+('E'<<16)+('X'<<8)+'T':/* TEXT */
-                    aff = SQLITE_AFF_TEXT;
-                    break;
-                case ('B'<<24)+('L'<<16)+('O'<<8)+'B':/* BLOB */
-                    if (aff == SQLITE_AFF_NUMERIC || aff == SQLITE_AFF_REAL)
-                        aff = SQLITE_AFF_BLOB;
-                    break;
-                case ('R'<<24)+('E'<<16)+('A'<<8)+'L':/* REAL */
-                case ('F'<<24)+('L'<<16)+('O'<<8)+'A':/* FLOA */
-                case ('D'<<24)+('O'<<16)+('U'<<8)+'B':/* DOUB */
-                    if (aff == SQLITE_AFF_NUMERIC)
-                        aff = SQLITE_AFF_REAL;
-                    break;
+            case ('C' << 24) + ('H' << 16) + ('A' << 8) + 'R': /* CHAR */
+            case ('C' << 24) + ('L' << 16) + ('O' << 8) + 'B': /* CLOB */
+            case ('T' << 24) + ('E' << 16) + ('X' << 8) + 'T': /* TEXT */
+                aff = SQLITE_AFF_TEXT;
+                break;
+            case ('B' << 24) + ('L' << 16) + ('O' << 8) + 'B': /* BLOB */
+                if (aff == SQLITE_AFF_NUMERIC || aff == SQLITE_AFF_REAL)
+                    aff = SQLITE_AFF_BLOB;
+                break;
+            case ('R' << 24) + ('E' << 16) + ('A' << 8) + 'L': /* REAL */
+            case ('F' << 24) + ('L' << 16) + ('O' << 8) + 'A': /* FLOA */
+            case ('D' << 24) + ('O' << 16) + ('U' << 8) + 'B': /* DOUB */
+                if (aff == SQLITE_AFF_NUMERIC) aff = SQLITE_AFF_REAL;
+                break;
             }
         }
     } while (*type);
@@ -325,11 +315,10 @@ static int init_insert(sqliterk_output_ctx *ctx, const std::string &table)
     sql = "PRAGMA table_info(";
     sql += table;
     sql += ");";
-    int rc =
-            sqlite3_prepare_v2(ctx->db, sql.c_str(), -1, &table_info_stmt, NULL);
+    int rc = sqlite3_prepare_v2(ctx->db, sql.c_str(), -1, &table_info_stmt, NULL);
     if (rc != SQLITE_OK) {
-        sqliterkOSWarning(rc, "Failed to prepare SQL: %s [SQL: %s]",
-                          sqlite3_errmsg(ctx->db), sql.c_str());
+        sqliterkOSWarning(
+        rc, "Failed to prepare SQL: %s [SQL: %s]", sqlite3_errmsg(ctx->db), sql.c_str());
         fini_insert(ctx);
         return -1;
     }
@@ -358,8 +347,8 @@ static int init_insert(sqliterk_output_ctx *ctx, const std::string &table)
         if (ipk_column >= 0) {
             int pk_idx = sqlite3_column_int(table_info_stmt, 5);
             if (pk_idx == 1) {
-                const char *column_type =
-                        (const char *) sqlite3_column_text(table_info_stmt, 2);
+                const char *column_type
+                = (const char *) sqlite3_column_text(table_info_stmt, 2);
                 if (strcasecmp(column_type, "INTEGER") == 0)
                     ipk_column = ctx->real_columns;
             } else if (pk_idx != 0) {
@@ -371,9 +360,10 @@ static int init_insert(sqliterk_output_ctx *ctx, const std::string &table)
     }
     rc = sqlite3_finalize(table_info_stmt);
     if (rc != SQLITE_OK || ctx->real_columns == 0) {
-        sqliterkOSWarning(
-                rc, "Failed to execute SQL: %s [SQL: PRAGMA table_info(%s);]",
-                sqlite3_errmsg(ctx->db), table.c_str());
+        sqliterkOSWarning(rc,
+                          "Failed to execute SQL: %s [SQL: PRAGMA table_info(%s);]",
+                          sqlite3_errmsg(ctx->db),
+                          table.c_str());
         fini_insert(ctx);
         return -1;
     }
@@ -384,8 +374,8 @@ static int init_insert(sqliterk_output_ctx *ctx, const std::string &table)
     sqlite3_stmt *stmt;
     rc = sqlite3_prepare_v2(ctx->db, sql.c_str(), -1, &stmt, NULL);
     if (rc != SQLITE_OK) {
-        sqliterkOSWarning(rc, "Failed to prepare SQL: %s [SQL: %s]",
-                          sqlite3_errmsg(ctx->db), sql.c_str());
+        sqliterkOSWarning(
+        rc, "Failed to prepare SQL: %s [SQL: %s]", sqlite3_errmsg(ctx->db), sql.c_str());
         fini_insert(ctx);
         return -1;
     }
@@ -397,30 +387,23 @@ static int init_insert(sqliterk_output_ctx *ctx, const std::string &table)
 
 static void table_onBeginParseTable(sqliterk *rk, sqliterk_table *table)
 {
-    sqliterk_output_ctx *ctx =
-            (sqliterk_output_ctx *) sqliterk_get_user_info(rk);
+    sqliterk_output_ctx *ctx = (sqliterk_output_ctx *) sqliterk_get_user_info(rk);
 
-    sqliterkBtreeSetMeta((sqliterk_btree *) table,
-                         ctx->table_cursor->first.c_str(),
-                         sqliterk_btree_type_table);
+    sqliterkBtreeSetMeta(
+    (sqliterk_btree *) table, ctx->table_cursor->first.c_str(), sqliterk_btree_type_table);
 }
 
-static int table_onParseColumn(sqliterk *rk,
-                               sqliterk_table *table,
-                               sqliterk_column *column)
+static int table_onParseColumn(sqliterk *rk, sqliterk_table *table, sqliterk_column *column)
 {
-    sqliterk_output_ctx *ctx =
-            (sqliterk_output_ctx *) sqliterk_get_user_info(rk);
+    sqliterk_output_ctx *ctx = (sqliterk_output_ctx *) sqliterk_get_user_info(rk);
 
-    if (ctx->cancelled)
-        return SQLITERK_CANCELLED;
+    if (ctx->cancelled) return SQLITERK_CANCELLED;
 
     int rc;
     if (ctx->callback) {
         rc = ctx->callback(ctx->user, rk, table, column);
         if (rc != SQLITERK_OK) {
-            if (rc == SQLITERK_IGNORE)
-                rc = SQLITERK_OK;
+            if (rc == SQLITERK_IGNORE) rc = SQLITERK_OK;
             return rc;
         }
     }
@@ -458,7 +441,8 @@ static int table_onParseColumn(sqliterk *rk,
     // Check column count: if row has more columns in B-tree than in SQL statement, it's probably
     // come from wrong table and should consider corrupted.
     if (columns > ctx->real_columns || columns > ctx->column_info.size()) {
-        sqliterkOSWarning(SQLITERK_DAMAGED, "Column count mismatch: %d vs %d", columns, ctx->real_columns);
+        sqliterkOSWarning(
+        SQLITERK_DAMAGED, "Column count mismatch: %d vs %d", columns, ctx->real_columns);
         ctx->fail_count++;
         return SQLITERK_OK;
     }
@@ -468,52 +452,48 @@ static int table_onParseColumn(sqliterk *rk,
     for (i = 0; i < columns; i++) {
         sqliterk_value_type type = sqliterk_column_type(column, i);
         switch (type) {
-            case sqliterk_value_type_binary:
-                sqlite3_bind_blob(stmt, i + 1,
-                                  sqliterk_column_binary(column, i),
-                                  sqliterk_column_bytes(column, i), NULL);
-                break;
-            case sqliterk_value_type_integer:
-                // INTEGER value should not be stored in columns with TEXT affinity.
-                if (ctx->column_info[i].affinity == SQLITE_AFF_TEXT) {
-                    sqliterkOSWarning(SQLITERK_DAMAGED, "INTEGER value detected in column with TEXT affinity.");
-                    ctx->fail_count++;
-                    return SQLITERK_OK;
-                }
+        case sqliterk_value_type_binary:
+            sqlite3_bind_blob(
+            stmt, i + 1, sqliterk_column_binary(column, i), sqliterk_column_bytes(column, i), NULL);
+            break;
+        case sqliterk_value_type_integer:
+            // INTEGER value should not be stored in columns with TEXT affinity.
+            if (ctx->column_info[i].affinity == SQLITE_AFF_TEXT) {
+                sqliterkOSWarning(SQLITERK_DAMAGED, "INTEGER value detected in column with TEXT affinity.");
+                ctx->fail_count++;
+                return SQLITERK_OK;
+            }
 
-                sqlite3_bind_int64(stmt, i + 1,
-                                   sqliterk_column_integer64(column, i));
-                break;
-            case sqliterk_value_type_null:
-                // If NOT NULL is defined in this column, the recovered row is considered corrupted.
-                if (ctx->column_info[i].not_null) {
-                    sqliterkOSWarning(SQLITERK_DAMAGED, "NULL value detected in NOT NULL column.");
-                    ctx->fail_count++;
-                    return SQLITERK_OK;
-                }
+            sqlite3_bind_int64(stmt, i + 1, sqliterk_column_integer64(column, i));
+            break;
+        case sqliterk_value_type_null:
+            // If NOT NULL is defined in this column, the recovered row is considered corrupted.
+            if (ctx->column_info[i].not_null) {
+                sqliterkOSWarning(SQLITERK_DAMAGED, "NULL value detected in NOT NULL column.");
+                ctx->fail_count++;
+                return SQLITERK_OK;
+            }
 
-                // If it's INTEGER PRIMARY KEY column, bind rowid instead.
-                if (ctx->ipk_column == i + 1)
-                    sqlite3_bind_int64(stmt, i + 1,
-                                       sqliterk_column_rowid(column));
-                else
-                    sqlite3_bind_null(stmt, i + 1);
-                break;
-            case sqliterk_value_type_number:
-                // REAL value should not be stored in columns with TEXT affinity.
-                if (ctx->column_info[i].affinity == SQLITE_AFF_TEXT) {
-                    sqliterkOSWarning(SQLITERK_DAMAGED, "REAL value detected in column with TEXT affinity.");
-                    ctx->fail_count++;
-                    return SQLITERK_OK;
-                }
+            // If it's INTEGER PRIMARY KEY column, bind rowid instead.
+            if (ctx->ipk_column == i + 1)
+                sqlite3_bind_int64(stmt, i + 1, sqliterk_column_rowid(column));
+            else
+                sqlite3_bind_null(stmt, i + 1);
+            break;
+        case sqliterk_value_type_number:
+            // REAL value should not be stored in columns with TEXT affinity.
+            if (ctx->column_info[i].affinity == SQLITE_AFF_TEXT) {
+                sqliterkOSWarning(SQLITERK_DAMAGED, "REAL value detected in column with TEXT affinity.");
+                ctx->fail_count++;
+                return SQLITERK_OK;
+            }
 
-                sqlite3_bind_double(stmt, i + 1,
-                                    sqliterk_column_number(column, i));
-                break;
-            case sqliterk_value_type_text:
-                sqlite3_bind_text(stmt, i + 1, sqliterk_column_text(column, i),
-                                  sqliterk_column_bytes(column, i), NULL);
-                break;
+            sqlite3_bind_double(stmt, i + 1, sqliterk_column_number(column, i));
+            break;
+        case sqliterk_value_type_text:
+            sqlite3_bind_text(
+            stmt, i + 1, sqliterk_column_text(column, i), sqliterk_column_bytes(column, i), NULL);
+            break;
         }
     }
 
@@ -529,8 +509,8 @@ static int table_onParseColumn(sqliterk *rk,
     }
     rc = sqlite3_reset(stmt);
     if (rc != SQLITE_OK) {
-        sqliterkOSWarning(rc, "Failed to execute SQL: %s [SQL: %s]",
-                          sqlite3_errmsg(ctx->db), sqlite3_sql(stmt));
+        sqliterkOSWarning(
+        rc, "Failed to execute SQL: %s [SQL: %s]", sqlite3_errmsg(ctx->db), sqlite3_sql(stmt));
         ctx->fail_count++;
         return SQLITERK_OK;
     }
@@ -548,10 +528,7 @@ static int table_onParseColumn(sqliterk *rk,
     return SQLITERK_OK;
 }
 
-int sqliterk_output(sqliterk *rk,
-                    sqlite3 *db,
-                    sqliterk_master_info *master_,
-                    unsigned int flags)
+int sqliterk_output(sqliterk *rk, sqlite3 *db, sqliterk_master_info *master_, unsigned int flags)
 {
     return sqliterk_output_cb(rk, db, master_, flags, NULL, NULL);
 }
@@ -560,14 +537,10 @@ int sqliterk_output_cb(sqliterk *rk,
                        sqlite3 *db,
                        sqliterk_master_info *master_,
                        unsigned int flags,
-                       int (*callback)(void *user,
-                                       sqliterk *rk,
-                                       sqliterk_table *table,
-                                       sqliterk_column *column),
+                       int (*callback)(void *user, sqliterk *rk, sqliterk_table *table, sqliterk_column *column),
                        void *user)
 {
-    if (!rk || !db)
-        return SQLITERK_MISUSE;
+    if (!rk || !db) return SQLITERK_MISUSE;
 
     sqliterk_master_map *master = static_cast<sqliterk_master_map *>(master_);
     sqliterk_output_ctx ctx;
@@ -596,8 +569,10 @@ int sqliterk_output_cb(sqliterk *rk,
     sqliterk_set_recursive(rk, 0);
 
     const char *db_file = sqlite3_db_filename(db, "main");
-    sqliterkOSInfo(SQLITERK_OK, "Output recovered data to '%s', flags 0x%04x",
-                   db_file ? db_file : "unknown", flags);
+    sqliterkOSInfo(SQLITERK_OK,
+                   "Output recovered data to '%s', flags 0x%04x",
+                   db_file ? db_file : "unknown",
+                   flags);
 
     // Parse sqlite_master for table info.
     sqliterkOSDebug(SQLITERK_OK, "Begin parsing sqlite_master...");
@@ -607,25 +582,21 @@ int sqliterk_output_cb(sqliterk *rk,
     } else if (rc != SQLITERK_OK)
         sqliterkOSWarning(rc, "Failed to parse sqlite_master.");
     else
-        sqliterkOSInfo(rc, "Parsed sqlite_master. [table/index: %zu]",
-                       ctx.tables.size());
+        sqliterkOSInfo(
+        rc, "Parsed sqlite_master. [table/index: %zu]", ctx.tables.size());
 
     // Parse all tables.
     notify.onBeginParseTable = table_onBeginParseTable;
     notify.onParseColumn = table_onParseColumn;
     sqliterk_register_notify(rk, notify);
 
-    for (sqliterk_master_map::iterator it = ctx.tables.begin();
-         it != ctx.tables.end(); ++it) {
-        if (ctx.cancelled)
-            goto cancelled;
+    for (sqliterk_master_map::iterator it = ctx.tables.begin(); it != ctx.tables.end(); ++it) {
+        if (ctx.cancelled) goto cancelled;
 
-        if (it->second.type != sqliterk_type_table)
-            continue;
+        if (it->second.type != sqliterk_type_table) continue;
 
         // Run CREATE TABLE statements if necessary.
-        if (!(ctx.flags & SQLITERK_OUTPUT_NO_CREATE_TABLES) &&
-            !it->second.sql.empty()) {
+        if (!(ctx.flags & SQLITERK_OUTPUT_NO_CREATE_TABLES) && !it->second.sql.empty()) {
             sqliterkOSInfo(SQLITERK_OK, ">>> %s", it->second.sql.c_str());
             char *errmsg = NULL;
             const char *sql = it->second.sql.c_str();
@@ -645,15 +616,13 @@ int sqliterk_output_cb(sqliterk *rk,
             ctx.table_cursor = it;
             rc = sqliterk_parse_page(rk, root_page);
             if (ctx.stmt) {
-                const char *sql =
-                        (rc == SQLITERK_CANCELLED) ? "ROLLBACK;" : "COMMIT;";
+                const char *sql = (rc == SQLITERK_CANCELLED) ? "ROLLBACK;" : "COMMIT;";
 
                 // Commit transaction and free statement.
                 char *errmsg;
                 int rc2 = sqlite3_exec(ctx.db, sql, NULL, NULL, &errmsg);
                 if (errmsg) {
-                    sqliterkOSWarning(rc2, "Failed to commit transaction: %s",
-                                      errmsg);
+                    sqliterkOSWarning(rc2, "Failed to commit transaction: %s", errmsg);
                     sqlite3_free(errmsg);
                 }
 
@@ -662,9 +631,8 @@ int sqliterk_output_cb(sqliterk *rk,
             if (rc == SQLITERK_CANCELLED) {
                 goto cancelled;
             } else if (rc != SQLITERK_OK) {
-                sqliterkOSWarning(rc,
-                                  "Failed to parse B-tree with root page %d.",
-                                  it->second.root_page);
+                sqliterkOSWarning(
+                rc, "Failed to parse B-tree with root page %d.", it->second.root_page);
             }
         }
     }
@@ -672,12 +640,11 @@ int sqliterk_output_cb(sqliterk *rk,
     // Iterate through indices, create them if necessary.
     if (!(ctx.flags & SQLITERK_OUTPUT_NO_CREATE_TABLES)) {
         for (sqliterk_master_map::iterator it = ctx.tables.begin();
-             it != ctx.tables.end(); ++it) {
-            if (ctx.cancelled)
-                goto cancelled;
+             it != ctx.tables.end();
+             ++it) {
+            if (ctx.cancelled) goto cancelled;
 
-            if (it->second.type != sqliterk_type_index)
-                continue;
+            if (it->second.type != sqliterk_type_index) continue;
 
             const char *sql = it->second.sql.c_str();
             sqliterkOSDebug(SQLITERK_OK, ">>> %s", sql);
@@ -706,29 +673,28 @@ int sqliterk_output_cb(sqliterk *rk,
     } else {
         sqliterkOSInfo(SQLITERK_OK,
                        "Recovery output finished. [succeeded: %u, failed: %u]",
-                       ctx.success_count, ctx.fail_count);
+                       ctx.success_count,
+                       ctx.fail_count);
         return SQLITERK_OK;
     }
 
-    cancelled:
+cancelled:
     sqliterkOSInfo(SQLITERK_CANCELLED,
                    "Recovery cancelled. [succeeded: %u, failed: %u]",
-                   ctx.success_count, ctx.fail_count);
+                   ctx.success_count,
+                   ctx.fail_count);
     return SQLITERK_CANCELLED;
 }
 
 void sqliterk_cancel(sqliterk *rk)
 {
-    sqliterk_output_ctx *ctx =
-            (sqliterk_output_ctx *) sqliterk_get_user_info(rk);
+    sqliterk_output_ctx *ctx = (sqliterk_output_ctx *) sqliterk_get_user_info(rk);
     if (ctx) {
         ctx->cancelled = 1;
     }
 }
 
-int sqliterk_make_master(const char **tables,
-                         int num_tables,
-                         sqliterk_master_info **out_master)
+int sqliterk_make_master(const char **tables, int num_tables, sqliterk_master_info **out_master)
 {
     if (!tables || !num_tables) {
         *out_master = NULL;
@@ -737,8 +703,7 @@ int sqliterk_make_master(const char **tables,
 
     sqliterk_master_map *master = new sqliterk_master_map();
     for (int i = 0; i < num_tables; i++)
-        (*master)[tables[i]] =
-                sqliterk_master_entity(sqliterk_type_unknown, "", 0);
+        (*master)[tables[i]] = sqliterk_master_entity(sqliterk_type_unknown, "", 0);
 
     *out_master = static_cast<sqliterk_master_info *>(master);
     return SQLITERK_OK;
@@ -770,15 +735,12 @@ struct master_file_entity {
 };
 #pragma pack(pop)
 
-int sqliterk_save_master(sqlite3 *db,
-                         const char *path,
-                         const void *key,
-                         int key_len)
+int sqliterk_save_master(sqlite3 *db, const char *path, const void *key, int key_len)
 {
     FILE *fp = NULL;
     int rc = SQLITERK_OK;
     sqlite3_stmt *stmt = NULL;
-    z_stream zstrm = {0};
+    z_stream zstrm = { 0 };
     CipherContext cipherContext(CipherContext::Encrypt);
     unsigned char in_buf[512 + 8];
     unsigned char out_buf[2048];
@@ -787,14 +749,12 @@ int sqliterk_save_master(sqlite3 *db,
 
     // Prepare deflate stream.
     rc = deflateInit(&zstrm, Z_DEFAULT_COMPRESSION);
-    if (rc != Z_OK)
-        goto bail_zlib;
+    if (rc != Z_OK) goto bail_zlib;
     zstrm.data_type = Z_TEXT;
 
     // Open output file.
     fp = fopen(path, "wb");
-    if (!fp)
-        goto bail_errno;
+    if (!fp) goto bail_errno;
 
     // Prepare cipher key.
     if (key && key_len) {
@@ -804,15 +764,12 @@ int sqliterk_save_master(sqlite3 *db,
     }
 
     // Prepare SQL statement.
-    rc =
-            sqlite3_prepare_v2(db, "SELECT * FROM sqlite_master;", -1, &stmt, NULL);
-    if (rc != SQLITE_OK)
-        goto bail_sqlite;
+    rc = sqlite3_prepare_v2(db, "SELECT * FROM sqlite_master;", -1, &stmt, NULL);
+    if (rc != SQLITE_OK) goto bail_sqlite;
 
     // Write dummy header.
     memset(&header, 0, sizeof(header));
-    if (fwrite(&header, sizeof(header), 1, fp) != 1)
-        goto bail_errno;
+    if (fwrite(&header, sizeof(header), 1, fp) != 1) goto bail_errno;
 
     // Read all rows.
     while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
@@ -826,12 +783,10 @@ int sqliterk_save_master(sqlite3 *db,
         const char *sql = (const char *) sqlite3_column_text(stmt, 4);
 
         // Skip invalid rows.
-        if (!typestr || !name || !tbl_name || !sql)
-            continue;
+        if (!typestr || !name || !tbl_name || !sql) continue;
 
         // Skip system tables and indices.
-        if (strncmp(name, "sqlite_", 7) == 0)
-            continue;
+        if (strncmp(name, "sqlite_", 7) == 0) continue;
 
         unsigned char type;
         if (strcmp(typestr, "table") == 0)
@@ -842,9 +797,8 @@ int sqliterk_save_master(sqlite3 *db,
             continue;
 
         if (name_len > 255 || tbl_name_len > 255 || sql_len > 65535) {
-            sqliterkOSError(SQLITERK_IOERR,
-                            "Table/index has name longer than 255: %s, %s",
-                            name, tbl_name);
+            sqliterkOSError(
+            SQLITERK_IOERR, "Table/index has name longer than 255: %s, %s", name, tbl_name);
             goto bail;
         }
 
@@ -863,23 +817,21 @@ int sqliterk_save_master(sqlite3 *db,
         p_data += tbl_name_len + 1;
 
         zstrm.next_in = in_buf;
-        zstrm.avail_in = (uInt)(p_data - in_buf);
+        zstrm.avail_in = (uInt) (p_data - in_buf);
 
         do {
             zstrm.next_out = out_buf;
             zstrm.avail_out = sizeof(out_buf);
             rc = deflate(&zstrm, Z_NO_FLUSH);
-            if (rc == Z_STREAM_ERROR)
-                goto bail_zlib;
+            if (rc == Z_STREAM_ERROR) goto bail_zlib;
 
             unsigned have = sizeof(out_buf) - zstrm.avail_out;
             if (key) {
                 cipherContext.cipher(out_buf, have);
             }
             if (fwrite(out_buf, 1, have, fp) != have) {
-                sqliterkOSError(SQLITERK_IOERR,
-                                "Cannot write to backup file: %s",
-                                strerror(errno));
+                sqliterkOSError(
+                SQLITERK_IOERR, "Cannot write to backup file: %s", strerror(errno));
                 goto bail;
             }
         } while (zstrm.avail_out == 0);
@@ -891,17 +843,15 @@ int sqliterk_save_master(sqlite3 *db,
             zstrm.next_out = out_buf;
             zstrm.avail_out = sizeof(out_buf);
             rc = deflate(&zstrm, Z_NO_FLUSH);
-            if (rc == Z_STREAM_ERROR)
-                goto bail_zlib;
+            if (rc == Z_STREAM_ERROR) goto bail_zlib;
 
             unsigned have = sizeof(out_buf) - zstrm.avail_out;
             if (key) {
                 cipherContext.cipher(out_buf, have);
             }
             if (fwrite(out_buf, 1, have, fp) != have) {
-                sqliterkOSError(SQLITERK_IOERR,
-                                "Cannot write to backup file: %s",
-                                strerror(errno));
+                sqliterkOSError(
+                SQLITERK_IOERR, "Cannot write to backup file: %s", strerror(errno));
                 goto bail;
             }
         } while (zstrm.avail_out == 0);
@@ -910,8 +860,7 @@ int sqliterk_save_master(sqlite3 *db,
     } // sqlite3_step
     rc = sqlite3_finalize(stmt);
     stmt = NULL;
-    if (rc != SQLITE_OK)
-        goto bail_sqlite;
+    if (rc != SQLITE_OK) goto bail_sqlite;
 
     // Flush Z-stream.
     zstrm.avail_in = 0;
@@ -919,16 +868,15 @@ int sqliterk_save_master(sqlite3 *db,
         zstrm.next_out = out_buf;
         zstrm.avail_out = sizeof(out_buf);
         rc = deflate(&zstrm, Z_FINISH);
-        if (rc == Z_STREAM_ERROR)
-            goto bail_zlib;
+        if (rc == Z_STREAM_ERROR) goto bail_zlib;
 
         unsigned have = sizeof(out_buf) - zstrm.avail_out;
         if (key) {
             cipherContext.cipher(out_buf, have);
         }
         if (fwrite(out_buf, 1, have, fp) != have) {
-            sqliterkOSError(SQLITERK_IOERR, "Cannot write to backup file: %s",
-                            strerror(errno));
+            sqliterkOSError(
+            SQLITERK_IOERR, "Cannot write to backup file: %s", strerror(errno));
             goto bail;
         }
     } while (zstrm.avail_out == 0);
@@ -937,13 +885,10 @@ int sqliterk_save_master(sqlite3 *db,
     // Read KDF salt from file header.
     sqlite3_file *db_file;
     rc = sqlite3_file_control(db, "main", SQLITE_FCNTL_FILE_POINTER, &db_file);
-    if (rc != SQLITE_OK)
-        goto bail_sqlite;
+    if (rc != SQLITE_OK) goto bail_sqlite;
 
-    rc = db_file->pMethods->xRead(db_file, header.kdf_salt,
-                                  sizeof(header.kdf_salt), 0);
-    if (rc != SQLITE_OK)
-        goto bail_sqlite;
+    rc = db_file->pMethods->xRead(db_file, header.kdf_salt, sizeof(header.kdf_salt), 0);
+    if (rc != SQLITE_OK) goto bail_sqlite;
 
     // Write real header.
     memcpy(header.magic, SQLITERK_SM_MAGIC, sizeof(header.magic));
@@ -956,36 +901,29 @@ int sqliterk_save_master(sqlite3 *db,
     sqliterkOSInfo(SQLITERK_OK, "Saved master info with %u entries.", entities);
     return SQLITERK_OK;
 
-    bail_zlib:
-    sqliterkOSError(SQLITERK_CANTOPEN, "Failed to backup master table: %s",
-                    zstrm.msg);
+bail_zlib:
+    sqliterkOSError(
+    SQLITERK_CANTOPEN, "Failed to backup master table: %s", zstrm.msg);
     goto bail;
-    bail_errno:
+bail_errno:
     sqliterkOSError(rc, "Failed to backup master table: %s", strerror(errno));
     goto bail;
-    bail_sqlite:
-    sqliterkOSError(rc, "Failed to backup master table: %s",
-                    sqlite3_errmsg(db));
+bail_sqlite:
+    sqliterkOSError(rc, "Failed to backup master table: %s", sqlite3_errmsg(db));
 
-    bail:
-    if (fp)
-        fclose(fp);
-    if (stmt)
-        sqlite3_finalize(stmt);
+bail:
+    if (fp) fclose(fp);
+    if (stmt) sqlite3_finalize(stmt);
     deflateEnd(&zstrm);
     return rc;
 }
 
 static const size_t IN_BUF_SIZE = 4096;
-static int inflate_read(FILE *fp,
-                        z_streamp strm,
-                        void *buf,
-                        unsigned size,
-                        CipherContext *cipherContext)
+static int
+inflate_read(FILE *fp, z_streamp strm, void *buf, unsigned size, CipherContext *cipherContext)
 {
     int ret;
-    if (size == 0)
-        return SQLITERK_OK;
+    if (size == 0) return SQLITERK_OK;
 
     strm->next_out = (unsigned char *) buf;
     strm->avail_out = size;
@@ -996,8 +934,7 @@ static int inflate_read(FILE *fp,
             strm->total_in = 0;
 
             ret = (int) fread(in_buf, 1, IN_BUF_SIZE, fp);
-            if (ret == 0 && ferror(fp))
-                return SQLITERK_IOERR;
+            if (ret == 0 && ferror(fp)) return SQLITERK_IOERR;
             if (ret > 0) {
                 if (cipherContext) {
                     cipherContext->cipher(in_buf, ret);
@@ -1008,8 +945,7 @@ static int inflate_read(FILE *fp,
         }
 
         ret = inflate(strm, Z_NO_FLUSH);
-        if (ret != Z_OK && ret != Z_STREAM_END)
-            return SQLITERK_DAMAGED;
+        if (ret != Z_OK && ret != Z_STREAM_END) return SQLITERK_DAMAGED;
 
     } while (strm->avail_out > 0 && ret != Z_STREAM_END);
 
@@ -1030,7 +966,7 @@ int sqliterk_load_master(const char *path,
                          unsigned char *out_kdf_salt)
 {
     FILE *fp = NULL;
-    z_stream zstrm = {0};
+    z_stream zstrm = { 0 };
     CipherContext cipherContext(CipherContext::Decrypt);
     int rc;
     unsigned char in_buf[IN_BUF_SIZE];
@@ -1040,43 +976,36 @@ int sqliterk_load_master(const char *path,
 
     // Allocate output buffer.
     char *str_buf = (char *) malloc(65536 + 512);
-    if (!str_buf)
-        goto bail_errno;
+    if (!str_buf) goto bail_errno;
 
     // Sort table filter for later binary searching.
     if (tables && num_tables) {
-        sqliterk_make_master(tables, num_tables,
-                             (sqliterk_master_info **) &master);
+        sqliterk_make_master(tables, num_tables, (sqliterk_master_info **) &master);
 
         size_t filter_size = num_tables * sizeof(const char *);
         filter = (const char **) malloc(filter_size);
-        if (!filter)
-            goto bail_errno;
+        if (!filter) goto bail_errno;
 
         memcpy(filter, tables, filter_size);
         qsort(filter, num_tables, sizeof(const char *), pstrcmp);
     }
-    if (!master)
-        master = new sqliterk_master_map();
+    if (!master) master = new sqliterk_master_map();
 
     fp = fopen(path, "rb");
-    if (!fp)
-        goto bail_errno;
+    if (!fp) goto bail_errno;
 
     // Read header.
     master_file_header header;
-    if (fread(&header, sizeof(header), 1, fp) != 1)
-        goto bail_errno;
-    if (memcmp(header.magic, SQLITERK_SM_MAGIC, sizeof(header.magic)) != 0 ||
-        header.version != SQLITERK_SM_VERSION) {
+    if (fread(&header, sizeof(header), 1, fp) != 1) goto bail_errno;
+    if (memcmp(header.magic, SQLITERK_SM_MAGIC, sizeof(header.magic)) != 0
+        || header.version != SQLITERK_SM_VERSION) {
         sqliterkOSError(SQLITERK_DAMAGED, "Invalid format: %s", path);
         goto bail;
     }
 
     // Initialize zlib and RC4.
     rc = inflateInit(&zstrm);
-    if (rc != Z_OK)
-        goto bail_zlib;
+    if (rc != Z_OK) goto bail_zlib;
 
     if (key && key_len) {
         cipherContext.setKey(key, key_len);
@@ -1091,17 +1020,17 @@ int sqliterk_load_master(const char *path,
     while (entities--) {
         // Read entity header.
         master_file_entity entity;
-        rc = inflate_read(fp, &zstrm, &entity, sizeof(entity),
-                          key ? &cipherContext : NULL);
+        rc = inflate_read(fp, &zstrm, &entity, sizeof(entity), key ? &cipherContext : NULL);
         if (rc == SQLITERK_IOERR)
             goto bail_errno;
         else if (rc == SQLITERK_DAMAGED)
             goto bail_zlib;
 
         // Read names and SQL.
-        rc = inflate_read(fp, &zstrm, str_buf,
-                          entity.name_len + entity.tbl_name_len +
-                          entity.sql_len + 3,
+        rc = inflate_read(fp,
+                          &zstrm,
+                          str_buf,
+                          entity.name_len + entity.tbl_name_len + entity.sql_len + 3,
                           key ? &cipherContext : NULL);
         if (rc == SQLITERK_IOERR)
             goto bail_errno;
@@ -1111,19 +1040,15 @@ int sqliterk_load_master(const char *path,
         const char *name = str_buf;
         const char *tbl_name = name + entity.name_len + 1;
         const char *sql = tbl_name + entity.tbl_name_len + 1;
-        if (name[entity.name_len] != '\0' ||
-            tbl_name[entity.tbl_name_len] != '\0' ||
-            sql[entity.sql_len] != '\0') {
-            sqliterkOSError(SQLITERK_DAMAGED,
-                            "Invalid string. File corrupted.");
+        if (name[entity.name_len] != '\0' || tbl_name[entity.tbl_name_len] != '\0'
+            || sql[entity.sql_len] != '\0') {
+            sqliterkOSError(SQLITERK_DAMAGED, "Invalid string. File corrupted.");
             goto bail;
         }
 
         // Filter tables.
-        if (!filter || bsearch(&tbl_name, filter, num_tables,
-                               sizeof(const char *), pstrcmp)) {
-            sqliterk_master_entity e(sqliterk_type_unknown, sql,
-                                     entity.root_page);
+        if (!filter || bsearch(&tbl_name, filter, num_tables, sizeof(const char *), pstrcmp)) {
+            sqliterk_master_entity e(sqliterk_type_unknown, sql, entity.root_page);
             if (entity.type == SQLITERK_SM_TYPE_TABLE)
                 e.type = sqliterk_type_table;
             else if (entity.type == SQLITERK_SM_TYPE_INDEX)
@@ -1141,30 +1066,25 @@ int sqliterk_load_master(const char *path,
     if (out_kdf_salt)
         memcpy(out_kdf_salt, header.kdf_salt, sizeof(header.kdf_salt));
     *out_master = static_cast<sqliterk_master_info *>(master);
-    sqliterkOSInfo(SQLITERK_OK, "Loaded master info with %zu valid entries.",
-                   master->size());
+    sqliterkOSInfo(
+    SQLITERK_OK, "Loaded master info with %zu valid entries.", master->size());
     return SQLITERK_OK;
 
-    bail_errno:
-    sqliterkOSError(SQLITERK_IOERR, "Cannot load master table: %s",
-                    strerror(errno));
+bail_errno:
+    sqliterkOSError(SQLITERK_IOERR, "Cannot load master table: %s", strerror(errno));
     goto bail;
-    bail_zlib:
-    sqliterkOSError(SQLITERK_DAMAGED, "Cannot load master table: %s",
-                    zstrm.msg);
-    bail:
-    if (master)
-        delete master;
+bail_zlib:
+    sqliterkOSError(SQLITERK_DAMAGED, "Cannot load master table: %s", zstrm.msg);
+bail:
+    if (master) delete master;
     free(str_buf);
     free(filter);
     inflateEnd(&zstrm);
-    if (fp)
-        fclose(fp);
+    if (fp) fclose(fp);
     return SQLITERK_DAMAGED;
 }
 
 void sqliterk_free_master(sqliterk_master_info *master)
 {
-    if (master)
-        delete static_cast<sqliterk_master_map *>(master);
+    if (master) delete static_cast<sqliterk_master_map *>(master);
 }

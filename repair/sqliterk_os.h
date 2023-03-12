@@ -34,14 +34,11 @@ typedef struct sqliterk_os sqliterk_os;
 void *sqliterkOSMalloc(size_t size);
 void sqliterkOSFree(void *p);
 
-int sqliterkOSLog(sqliterk_loglevel loglevel,
-                  int result,
-                  const char *format,
-                  ...)
+int sqliterkOSLog(sqliterk_loglevel loglevel, int result, const char *format, ...)
 #ifdef __GNUC__
-    __attribute__((format(printf, 3, 4)))
+__attribute__((format(printf, 3, 4)))
 #endif
-    ;
+;
 int sqliterkOSRegister(sqliterk_os os);
 
 #define sqliterkOSDebug(result, ...)                                           \
@@ -55,10 +52,7 @@ int sqliterkOSRegister(sqliterk_os os);
 
 int sqliterkOSReadOnlyOpen(const char *path, sqliterk_file **file);
 int sqliterkOSClose(sqliterk_file *file);
-int sqliterkOSRead(sqliterk_file *file,
-                   off_t offset,
-                   unsigned char *data,
-                   size_t *size);
+int sqliterkOSRead(sqliterk_file *file, off_t offset, unsigned char *data, size_t *size);
 int sqliterkOSFileSize(sqliterk_file *file, size_t *filesize);
 const char *sqliterkOSGetFilePath(sqliterk_file *file);
 

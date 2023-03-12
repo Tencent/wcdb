@@ -37,26 +37,18 @@ struct sqliterk {
 };
 
 //declaration
-static void sqliterkNotify_onBeginParseBtree(sqliterk *rk,
-                                             sqliterk_btree *btree);
-static void
-sqliterkNotify_onEndParseBtree(sqliterk *rk, sqliterk_btree *btree, int result);
+static void sqliterkNotify_onBeginParseBtree(sqliterk *rk, sqliterk_btree *btree);
+static void sqliterkNotify_onEndParseBtree(sqliterk *rk, sqliterk_btree *btree, int result);
 static int sqliterkNotify_onParseColumn(sqliterk *rk,
                                         sqliterk_btree *btree,
                                         sqliterk_page *page,
                                         sqliterk_column *column);
-static int sqliterkNotify_onBeginParsePage(sqliterk *rk,
-                                           sqliterk_btree *btree,
-                                           int pageno);
-static void sqliterkNotify_onEndParsePage(sqliterk *rk,
-                                          sqliterk_btree *btree,
-                                          int pageno,
-                                          int result);
+static int sqliterkNotify_onBeginParsePage(sqliterk *rk, sqliterk_btree *btree, int pageno);
+static void
+sqliterkNotify_onEndParsePage(sqliterk *rk, sqliterk_btree *btree, int pageno, int result);
 static int sqliterkParseBtree(sqliterk *rk, sqliterk_btree *btree);
 
-int sqliterkOpen(const char *path,
-                 const sqliterk_cipher_conf *cipher,
-                 sqliterk **rk)
+int sqliterkOpen(const char *path, const sqliterk_cipher_conf *cipher, sqliterk **rk)
 {
     if (!rk) {
         return SQLITERK_MISUSE;
@@ -65,8 +57,7 @@ int sqliterkOpen(const char *path,
     sqliterk *therk = sqliterkOSMalloc(sizeof(sqliterk));
     if (!therk) {
         rc = SQLITERK_NOMEM;
-        sqliterkOSError(rc, "Not enough memory, required: %zu bytes",
-                        sizeof(sqliterk));
+        sqliterkOSError(rc, "Not enough memory, required: %zu bytes", sizeof(sqliterk));
         goto sqliterkOpen_Failed;
     }
 
@@ -83,8 +74,8 @@ int sqliterkOpen(const char *path,
     therk->recursive = 1;
 
     *rk = therk;
-    sqliterkOSInfo(SQLITERK_OK, "RepairKit on '%s' opened, %s.", path,
-                   cipher ? "encrypted" : "plain-text");
+    sqliterkOSInfo(
+    SQLITERK_OK, "RepairKit on '%s' opened, %s.", path, cipher ? "encrypted" : "plain-text");
     return SQLITERK_OK;
 
 sqliterkOpen_Failed:
@@ -119,8 +110,7 @@ int sqliterkParsePage(sqliterk *rk, int pageno)
     if (!rk) {
         return SQLITERK_MISUSE;
     }
-    if (sqliterkPagerGetStatus(rk->pager, pageno) !=
-        sqliterk_status_unchecked) {
+    if (sqliterkPagerGetStatus(rk->pager, pageno) != sqliterk_status_unchecked) {
         return SQLITERK_OK;
     }
     int rc = SQLITERK_OK;
@@ -173,21 +163,20 @@ int sqliterkClose(sqliterk *rk)
     return SQLITERK_OK;
 }
 
-static void sqliterkNotify_onBeginParseBtree(sqliterk *rk,
-                                             sqliterk_btree *btree)
+static void sqliterkNotify_onBeginParseBtree(sqliterk *rk, sqliterk_btree *btree)
 {
     if (rk->notify.onBeginParseTable) {
         rk->notify.onBeginParseTable(rk, (sqliterk_table *) btree);
     }
     sqliterk_page *rootpage = sqliterkBtreeGetRootPage(btree);
-    sqliterkOSDebug(
-        SQLITERK_OK, "Parsing B-tree -> [root: %d, name: %s, type: %s]",
-        sqliterkPageGetPageno(rootpage), sqliterkBtreeGetName(btree),
-        sqliterkBtreeGetTypeName(sqliterkBtreeGetType(btree)));
+    sqliterkOSDebug(SQLITERK_OK,
+                    "Parsing B-tree -> [root: %d, name: %s, type: %s]",
+                    sqliterkPageGetPageno(rootpage),
+                    sqliterkBtreeGetName(btree),
+                    sqliterkBtreeGetTypeName(sqliterkBtreeGetType(btree)));
 }
 
-static void
-sqliterkNotify_onEndParseBtree(sqliterk *rk, sqliterk_btree *btree, int result)
+static void sqliterkNotify_onEndParseBtree(sqliterk *rk, sqliterk_btree *btree, int result)
 {
     if (rk->notify.onEndParseTable) {
         rk->notify.onEndParseTable(rk, (sqliterk_table *) btree);
@@ -210,24 +199,21 @@ static int sqliterkNotify_onParseColumn(sqliterk *rk,
             return result;
         } else if (result != SQLITERK_OK) {
             int pageno = sqliterkPageGetPageno(page);
-            sqliterkPagerSetStatus(rk->pager, pageno,
-                                   sqliterk_status_discarded);
-            sqliterk_values *overflowPages =
-                sqliterkColumnGetOverflowPages(column);
+            sqliterkPagerSetStatus(rk->pager, pageno, sqliterk_status_discarded);
+            sqliterk_values *overflowPages = sqliterkColumnGetOverflowPages(column);
 
             int i;
             for (i = 0; i < sqliterkValuesGetCount(overflowPages); i++) {
-                sqliterkPagerSetStatus(
-                    rk->pager, sqliterkValuesGetInteger(overflowPages, i),
-                    sqliterk_status_discarded);
+                sqliterkPagerSetStatus(rk->pager,
+                                       sqliterkValuesGetInteger(overflowPages, i),
+                                       sqliterk_status_discarded);
             }
         }
     } else {
         result = SQLITERK_OK;
     }
 
-    if (sqliterkBtreeGetType(btree) == sqliterk_btree_type_master &&
-        rk->recursive) {
+    if (sqliterkBtreeGetType(btree) == sqliterk_btree_type_master && rk->recursive) {
         // Recursively decode the page since the mapping of [table]->[rootPageno] is known
         sqliterk_values *values = sqliterkColumnGetValues(column);
         const char *type = sqliterkValuesGetText(values, 0);
@@ -239,26 +225,22 @@ static int sqliterkNotify_onParseColumn(sqliterk *rk,
             rc = sqliterkBtreeOpen(rk, rk->pager, rootPageno, &subbtree);
             if (rc == SQLITERK_OK) {
                 if (memcmp("table", type, 5) == 0) {
-                    sqliterkBtreeSetMeta(subbtree, name,
-                                         sqliterk_btree_type_table);
+                    sqliterkBtreeSetMeta(subbtree, name, sqliterk_btree_type_table);
                 } else if (memcmp("index", type, 5) == 0) {
-                    sqliterkBtreeSetMeta(subbtree, name,
-                                         sqliterk_btree_type_index);
+                    sqliterkBtreeSetMeta(subbtree, name, sqliterk_btree_type_index);
                 } else {
-                    sqliterkBtreeSetMeta(subbtree, name,
-                                         sqliterk_btree_type_unknown);
+                    sqliterkBtreeSetMeta(subbtree, name, sqliterk_btree_type_unknown);
                 }
                 rc = sqliterkParseBtree(rk, subbtree);
             }
             if (rc != SQLITERK_OK) {
                 sqliterk_page *rootpage = sqliterkBtreeGetRootPage(subbtree);
-                sqliterkOSError(
-                    rc,
-                    "sqliterkNotify_onParseColumn: failed to parse known "
-                    "table with root page no. %d, name %s, type %s",
-                    sqliterkPageGetPageno(rootpage),
-                    sqliterkBtreeGetName(subbtree),
-                    sqliterkBtreeGetTypeName(sqliterkBtreeGetType(subbtree)));
+                sqliterkOSError(rc,
+                                "sqliterkNotify_onParseColumn: failed to parse known "
+                                "table with root page no. %d, name %s, type %s",
+                                sqliterkPageGetPageno(rootpage),
+                                sqliterkBtreeGetName(subbtree),
+                                sqliterkBtreeGetTypeName(sqliterkBtreeGetType(subbtree)));
             }
             if (subbtree) {
                 sqliterkBtreeClose(subbtree);
@@ -269,8 +251,7 @@ static int sqliterkNotify_onParseColumn(sqliterk *rk,
     return result;
 }
 
-static int
-sqliterkNotify_onBeginParsePage(sqliterk *rk, sqliterk_btree *btree, int pageno)
+static int sqliterkNotify_onBeginParsePage(sqliterk *rk, sqliterk_btree *btree, int pageno)
 {
     //sqliterkOSDebug(SQLITERK_OK, "sqliterkNotify_onBeginParsePage: %d", pageno);
     if (sqliterkPagerGetStatus(rk->pager, pageno) == sqliterk_status_checking) {
@@ -280,30 +261,26 @@ sqliterkNotify_onBeginParsePage(sqliterk *rk, sqliterk_btree *btree, int pageno)
     return SQLITERK_OK;
 }
 
-static void sqliterkNotify_onEndParsePage(sqliterk *rk,
-                                          sqliterk_btree *btree,
-                                          int pageno,
-                                          int result)
+static void
+sqliterkNotify_onEndParsePage(sqliterk *rk, sqliterk_btree *btree, int pageno, int result)
 {
     if (!rk) {
         return;
     }
     switch (result) {
-        case SQLITERK_OK:
-            sqliterkPagerSetStatus(rk->pager, pageno, sqliterk_status_checked);
-            break;
-        case SQLITERK_DAMAGED:
-            sqliterkPagerSetStatus(rk->pager, pageno, sqliterk_status_damaged);
-            break;
-        case SQLITERK_CANCELLED:
-            sqliterkOSDebug(SQLITERK_CANCELLED, "Cancelled parsing page %d.",
-                            pageno);
-            break;
-        default:
-            sqliterkOSWarning(SQLITERK_MISUSE,
-                              "Cannot parse page %d. Invalid type.", pageno);
-            sqliterkPagerSetStatus(rk->pager, pageno, sqliterk_status_invalid);
-            break;
+    case SQLITERK_OK:
+        sqliterkPagerSetStatus(rk->pager, pageno, sqliterk_status_checked);
+        break;
+    case SQLITERK_DAMAGED:
+        sqliterkPagerSetStatus(rk->pager, pageno, sqliterk_status_damaged);
+        break;
+    case SQLITERK_CANCELLED:
+        sqliterkOSDebug(SQLITERK_CANCELLED, "Cancelled parsing page %d.", pageno);
+        break;
+    default:
+        sqliterkOSWarning(SQLITERK_MISUSE, "Cannot parse page %d. Invalid type.", pageno);
+        sqliterkPagerSetStatus(rk->pager, pageno, sqliterk_status_invalid);
+        break;
     }
     //sqliterkOSDebug(result, "sqliterkNotify_onEndParsePage: %d", pageno);
     if (rk->notify.didParsePage) {

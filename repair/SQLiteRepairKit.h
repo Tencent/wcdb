@@ -38,9 +38,7 @@ struct sqliterk_notify {
     // which is the column in a non-system table or the "sqlite_master"
     // return SQLITERK_OK to tell sqliterk that you already know that
     // meaning of this column
-    int (*onParseColumn)(sqliterk *rk,
-                         sqliterk_table *table,
-                         sqliterk_column *column);
+    int (*onParseColumn)(sqliterk *rk, sqliterk_table *table, sqliterk_column *column);
     void (*onEndParseTable)(sqliterk *rk, sqliterk_table *table);
     void (*didParsePage)(sqliterk *rk, int pageno);
 };
@@ -54,8 +52,8 @@ typedef struct sqliterk_cipher_conf {
     int use_hmac;
     const unsigned char *kdf_salt;
 } sqliterk_cipher_conf;
-    
-void sqliterk_cipher_conf_set_key(sqliterk_cipher_conf *conf, const void* key, int key_len);
+
+void sqliterk_cipher_conf_set_key(sqliterk_cipher_conf *conf, const void *key, int key_len);
 
 typedef struct sqlite3 sqlite3;
 typedef struct sqliterk_master_info sqliterk_master_info;
@@ -64,9 +62,7 @@ typedef struct sqliterk_master_info sqliterk_master_info;
 #define SQLITERK_OUTPUT_ALL_TABLES 0x0002
 #define SQLITERK_OUTPUT_CHECK_TABLE_COLUMNS 0x0004
 
-int sqliterk_open(const char *path,
-                  const sqliterk_cipher_conf *cipher,
-                  sqliterk **rk);
+int sqliterk_open(const char *path, const sqliterk_cipher_conf *cipher, sqliterk **rk);
 int sqliterk_parse(sqliterk *rk);
 int sqliterk_parse_page(sqliterk *rk, int pageno);
 int sqliterk_parse_master(sqliterk *rk);
@@ -75,27 +71,16 @@ void *sqliterk_get_user_info(sqliterk *rk);
 void sqliterk_set_user_info(sqliterk *rk, void *userInfo);
 void sqliterk_set_recursive(sqliterk *rk, int recursive);
 
-int sqliterk_output(sqliterk *rk,
-                    sqlite3 *db,
-                    sqliterk_master_info *master,
-                    unsigned int flags);
+int sqliterk_output(sqliterk *rk, sqlite3 *db, sqliterk_master_info *master, unsigned int flags);
 int sqliterk_output_cb(sqliterk *rk,
                        sqlite3 *db,
                        sqliterk_master_info *master,
                        unsigned int flags,
-                       int (*callback)(void *user,
-                                       sqliterk *rk,
-                                       sqliterk_table *table,
-                                       sqliterk_column *column),
+                       int (*callback)(void *user, sqliterk *rk, sqliterk_table *table, sqliterk_column *column),
                        void *user);
 void sqliterk_cancel(sqliterk *rk);
-int sqliterk_make_master(const char **tables,
-                         int num_tables,
-                         sqliterk_master_info **out_master);
-int sqliterk_save_master(sqlite3 *db,
-                         const char *path,
-                         const void *key,
-                         int key_len);
+int sqliterk_make_master(const char **tables, int num_tables, sqliterk_master_info **out_master);
+int sqliterk_save_master(sqlite3 *db, const char *path, const void *key, int key_len);
 int sqliterk_load_master(const char *path,
                          const void *key,
                          int key_len,

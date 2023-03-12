@@ -36,12 +36,8 @@ int sqliterkValuesAddInteger(sqliterk_values *values, int i);
 int sqliterkValuesAddInteger64(sqliterk_values *values, int64_t i);
 int sqliterkValuesAddNumber(sqliterk_values *values, double d);
 int sqliterkValuesAddText(sqliterk_values *values, const char *t);
-int sqliterkValuesAddNoTerminatorText(sqliterk_values *values,
-                                      const char *t,
-                                      const int s);
-int sqliterkValuesAddBinary(sqliterk_values *values,
-                            const void *b,
-                            const int s);
+int sqliterkValuesAddNoTerminatorText(sqliterk_values *values, const char *t, const int s);
+int sqliterkValuesAddBinary(sqliterk_values *values, const void *b, const int s);
 int sqliterkValuesAddNull(sqliterk_values *values);
 
 int sqliterkValuesGetCount(sqliterk_values *values);

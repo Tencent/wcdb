@@ -32,9 +32,7 @@ int sqliterk_register_notify(sqliterk *rk, sqliterk_notify notify)
     return sqliterkSetNotify(rk, notify);
 }
 
-int sqliterk_open(const char *path,
-                  const sqliterk_cipher_conf *cipher,
-                  sqliterk **rk)
+int sqliterk_open(const char *path, const sqliterk_cipher_conf *cipher, sqliterk **rk)
 {
     return sqliterkOpen(path, cipher, rk);
 }
@@ -175,7 +173,7 @@ unsigned int sqliterk_integrity(sqliterk *rk)
     return sqliterkGetIntegrity(rk);
 }
 
-void sqliterk_cipher_conf_set_key(sqliterk_cipher_conf *conf, const void* key, int key_len)
+void sqliterk_cipher_conf_set_key(sqliterk_cipher_conf *conf, const void *key, int key_len)
 {
     if (conf != NULL) {
         conf->key = key;

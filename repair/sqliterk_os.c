@@ -42,8 +42,7 @@ int sqliterkOSReadOnlyOpen(const char *path, sqliterk_file **file)
     sqliterk_file *theFile = sqliterkOSMalloc(sizeof(sqliterk_file));
     if (!theFile) {
         rc = SQLITERK_NOMEM;
-        sqliterkOSError(rc, "Not enough memory, required %zu bytes.",
-                        sizeof(sqliterk_file));
+        sqliterkOSError(rc, "Not enough memory, required %zu bytes.", sizeof(sqliterk_file));
         goto sqliterkOSReadOnlyOpen_Failed;
     }
 
@@ -60,8 +59,8 @@ int sqliterkOSReadOnlyOpen(const char *path, sqliterk_file **file)
     theFile->fd = open(theFile->path, O_RDONLY);
     if (theFile->fd < 0) {
         rc = SQLITERK_CANTOPEN;
-        sqliterkOSError(rc, "Cannot open '%s' for reading: %s", theFile->path,
-                        strerror(errno));
+        sqliterkOSError(
+        rc, "Cannot open '%s' for reading: %s", theFile->path, strerror(errno));
         goto sqliterkOSReadOnlyOpen_Failed;
     }
     *file = theFile;
@@ -93,10 +92,7 @@ int sqliterkOSClose(sqliterk_file *file)
     return SQLITERK_OK;
 }
 
-int sqliterkOSRead(sqliterk_file *file,
-                   off_t offset,
-                   unsigned char *data,
-                   size_t *size)
+int sqliterkOSRead(sqliterk_file *file, off_t offset, unsigned char *data, size_t *size)
 {
     if (!file || file->fd < 0) {
         return SQLITERK_MISUSE;
@@ -160,19 +156,15 @@ void sqliterkOSFree(void *p)
     free(p);
 }
 
-static void
-sqliterkDefaultLog(sqliterk_loglevel level, int result, const char *msg)
+static void sqliterkDefaultLog(sqliterk_loglevel level, int result, const char *msg)
 {
     fprintf(stderr, "[%s] %s\n", sqliterkGetResultCodeDescription(result), msg);
 }
 
 #define SQLITERK_CONFIG_MAXLOG 4096
-static sqliterk_os s_os = {sqliterkDefaultLog};
+static sqliterk_os s_os = { sqliterkDefaultLog };
 
-int sqliterkOSLog(sqliterk_loglevel loglevel,
-                  int result,
-                  const char *format,
-                  ...)
+int sqliterkOSLog(sqliterk_loglevel loglevel, int result, const char *format, ...)
 {
     char buf[SQLITERK_CONFIG_MAXLOG];
 

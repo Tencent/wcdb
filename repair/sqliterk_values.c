@@ -135,14 +135,13 @@ static int sqliterkValuesAutoGrow(sqliterk_values *values)
         } else {
             newCapacity = oldCapacity * 2;
         }
-        sqliterk_value *newValues =
-            sqliterkOSMalloc(sizeof(sqliterk_value) * (newCapacity + 1));
+        sqliterk_value *newValues
+        = sqliterkOSMalloc(sizeof(sqliterk_value) * (newCapacity + 1));
         if (!newValues) {
             return SQLITERK_NOMEM;
         }
         if (values->values) {
-            memcpy(newValues, values->values,
-                   sizeof(sqliterk_value) * oldCapacity);
+            memcpy(newValues, values->values, sizeof(sqliterk_value) * oldCapacity);
             sqliterkOSFree(values->values);
         }
         values->values = newValues;
@@ -173,17 +172,17 @@ int64_t sqliterkValuesGetInteger64(sqliterk_values *values, int index)
     if (values && index < sqliterkValuesGetCount(values)) {
         sqliterk_value *value = &values->values[index];
         switch (sqliterkValuesGetType(values, index)) {
-            case sqliterk_value_type_integer:
-                out = (int64_t)(value->any.integer);
-                break;
-            case sqliterk_value_type_number:
-                out = (int64_t)(value->any.number);
-                break;
-            case sqliterk_value_type_text:
-                out = atol(value->any.text.t);
-                break;
-            default:
-                break;
+        case sqliterk_value_type_integer:
+            out = (int64_t) (value->any.integer);
+            break;
+        case sqliterk_value_type_number:
+            out = (int64_t) (value->any.number);
+            break;
+        case sqliterk_value_type_text:
+            out = atol(value->any.text.t);
+            break;
+        default:
+            break;
         }
     }
     return out;
@@ -200,17 +199,17 @@ double sqliterkValuesGetNumber(sqliterk_values *values, int index)
     if (values && index < sqliterkValuesGetCount(values)) {
         sqliterk_value *value = &values->values[index];
         switch (sqliterkValuesGetType(values, index)) {
-            case sqliterk_value_type_integer:
-                out = (double) (value->any.integer);
-                break;
-            case sqliterk_value_type_number:
-                out = (double) (value->any.number);
-                break;
-            case sqliterk_value_type_text:
-                out = atof(value->any.text.t);
-                break;
-            default:
-                break;
+        case sqliterk_value_type_integer:
+            out = (double) (value->any.integer);
+            break;
+        case sqliterk_value_type_number:
+            out = (double) (value->any.number);
+            break;
+        case sqliterk_value_type_text:
+            out = atof(value->any.text.t);
+            break;
+        default:
+            break;
         }
     }
     return out;
@@ -222,11 +221,11 @@ const char *sqliterkValuesGetText(sqliterk_values *values, int index)
     if (values && index < sqliterkValuesGetCount(values)) {
         sqliterk_value *value = &values->values[index];
         switch (value->type) {
-            case sqliterk_value_type_text:
-                out = value->any.text.t;
-                break;
-            default:
-                break;
+        case sqliterk_value_type_text:
+            out = value->any.text.t;
+            break;
+        default:
+            break;
         }
     }
     return out;
@@ -238,11 +237,11 @@ const void *sqliterkValuesGetBinary(sqliterk_values *values, int index)
     if (values && index < sqliterkValuesGetCount(values)) {
         sqliterk_value *value = &values->values[index];
         switch (value->type) {
-            case sqliterk_value_type_binary:
-                out = value->any.binary.b;
-                break;
-            default:
-                break;
+        case sqliterk_value_type_binary:
+            out = value->any.binary.b;
+            break;
+        default:
+            break;
         }
     }
     return out;
@@ -254,14 +253,14 @@ int sqliterkValuesGetBytes(sqliterk_values *values, int index)
     if (values && index < sqliterkValuesGetCount(values)) {
         sqliterk_value *value = &values->values[index];
         switch (value->type) {
-            case sqliterk_value_type_binary:
-                out = value->any.binary.s;
-                break;
-            case sqliterk_value_type_text:
-                out = value->any.text.s;
-                break;
-            default:
-                break;
+        case sqliterk_value_type_binary:
+            out = value->any.binary.s;
+            break;
+        case sqliterk_value_type_text:
+            out = value->any.text.s;
+            break;
+        default:
+            break;
         }
     }
     return out;
@@ -309,9 +308,7 @@ int sqliterkValuesAddText(sqliterk_values *values, const char *t)
     return sqliterkValuesAddNoTerminatorText(values, t, (int) strlen(t));
 }
 
-int sqliterkValuesAddNoTerminatorText(sqliterk_values *values,
-                                      const char *t,
-                                      const int s)
+int sqliterkValuesAddNoTerminatorText(sqliterk_values *values, const char *t, const int s)
 {
     if (!values || !t) {
         return SQLITERK_MISUSE;
@@ -381,20 +378,20 @@ int sqliterkValueClear(sqliterk_value *value)
     }
 
     switch (value->type) {
-        case sqliterk_value_type_text:
-            if (value->any.text.t) {
-                sqliterkOSFree(value->any.text.t);
-                value->any.text.t = NULL;
-            }
-            break;
-        case sqliterk_value_type_binary:
-            if (value->any.binary.b) {
-                sqliterkOSFree(value->any.binary.b);
-                value->any.binary.b = NULL;
-            }
-            break;
-        default:
-            break;
+    case sqliterk_value_type_text:
+        if (value->any.text.t) {
+            sqliterkOSFree(value->any.text.t);
+            value->any.text.t = NULL;
+        }
+        break;
+    case sqliterk_value_type_binary:
+        if (value->any.binary.b) {
+            sqliterkOSFree(value->any.binary.b);
+            value->any.binary.b = NULL;
+        }
+        break;
+    default:
+        break;
     }
 
     value->type = sqliterk_value_type_null;

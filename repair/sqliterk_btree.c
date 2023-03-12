@@ -25,8 +25,8 @@
 #include "sqliterk_pager.h"
 #include "sqliterk_util.h"
 #include "sqliterk_values.h"
-#include <string.h>
 #include <inttypes.h>
+#include <string.h>
 
 // Declarations
 static int sqliterkBtreeParsePage(sqliterk_btree *btree, int pageno);
@@ -57,10 +57,7 @@ struct sqliterk_btree {
     void *userInfo;
 };
 
-int sqliterkBtreeOpen(sqliterk *rk,
-                      sqliterk_pager *pager,
-                      int rootPageno,
-                      sqliterk_btree **btree)
+int sqliterkBtreeOpen(sqliterk *rk, sqliterk_pager *pager, int rootPageno, sqliterk_btree **btree)
 {
     if (!pager || !btree) {
         return SQLITERK_MISUSE;
@@ -78,36 +75,34 @@ int sqliterkBtreeOpen(sqliterk *rk,
         goto sqliterkBtreeOpen_Failed;
     }
     if (rootPageno == 1) {
-        rc = sqliterkBtreeSetMeta(theBtree, "sqlite_master",
-                                  sqliterk_btree_type_master);
+        rc = sqliterkBtreeSetMeta(theBtree, "sqlite_master", sqliterk_btree_type_master);
         if (rc != SQLITERK_OK) {
             goto sqliterkBtreeOpen_Failed;
         }
     } else {
         switch (sqliterkPageGetType(theBtree->rootpage)) {
-            case sqliterk_page_type_interior_index:
-            case sqliterk_page_type_leaf_index:
-                theBtree->type = sqliterk_btree_type_index;
-                break;
-            case sqliterk_page_type_interior_table:
-            case sqliterk_page_type_leaf_table:
-                theBtree->type = sqliterk_btree_type_table;
-                break;
-            default:
-                rc = SQLITERK_DAMAGED;
-                goto sqliterkBtreeOpen_Failed;
+        case sqliterk_page_type_interior_index:
+        case sqliterk_page_type_leaf_index:
+            theBtree->type = sqliterk_btree_type_index;
+            break;
+        case sqliterk_page_type_interior_table:
+        case sqliterk_page_type_leaf_table:
+            theBtree->type = sqliterk_btree_type_table;
+            break;
+        default:
+            rc = SQLITERK_DAMAGED;
+            goto sqliterkBtreeOpen_Failed;
         }
     }
     // Save memory
     sqliterkPageClearData(theBtree->rootpage);
 
-    theBtree->maxLocal =
-        (sqliterkPagerGetUsableSize(theBtree->pager) - 12) * 64 / 255 - 23;
-    theBtree->minLocal =
-        (sqliterkPagerGetUsableSize(theBtree->pager) - 12) * 32 / 255 - 23;
+    theBtree->maxLocal
+    = (sqliterkPagerGetUsableSize(theBtree->pager) - 12) * 64 / 255 - 23;
+    theBtree->minLocal
+    = (sqliterkPagerGetUsableSize(theBtree->pager) - 12) * 32 / 255 - 23;
     theBtree->maxLeaf = sqliterkPagerGetUsableSize(theBtree->pager) - 35;
-    theBtree->minLeaf =
-        (sqliterkPagerGetUsableSize(theBtree->pager) - 12) * 32 / 255 - 23;
+    theBtree->minLeaf = (sqliterkPagerGetUsableSize(theBtree->pager) - 12) * 32 / 255 - 23;
 
     theBtree->rk = rk;
 
@@ -130,8 +125,7 @@ int sqliterkBtreeParse(sqliterk_btree *btree)
     if (btree->notify.onBeginParseBtree) {
         btree->notify.onBeginParseBtree(btree->rk, btree);
     }
-    int rc =
-        sqliterkBtreeParsePage(btree, sqliterkPageGetPageno(btree->rootpage));
+    int rc = sqliterkBtreeParsePage(btree, sqliterkPageGetPageno(btree->rootpage));
     if (btree->notify.onEndParseBtree) {
         btree->notify.onEndParseBtree(btree->rk, btree, rc);
     }
@@ -169,12 +163,9 @@ static int sqliterkBtreeParsePage(sqliterk_btree *btree, int pageno)
         goto sqliterkBtreeParsePage_End;
     }
     sqliterk_page_type type = sqliterkPageGetType(page);
-    if (type != sqliterk_page_type_interior_index &&
-        type != sqliterk_page_type_interior_table &&
-        type != sqliterk_page_type_leaf_index &&
-        type != sqliterk_page_type_leaf_table) {
-        rc = sqliterkOSWarning(SQLITERK_DAMAGED, "Page %d has invalid type",
-                               pageno);
+    if (type != sqliterk_page_type_interior_index && type != sqliterk_page_type_interior_table
+        && type != sqliterk_page_type_leaf_index && type != sqliterk_page_type_leaf_table) {
+        rc = sqliterkOSWarning(SQLITERK_DAMAGED, "Page %d has invalid type", pageno);
         goto sqliterkBtreeParsePage_End;
     }
 
@@ -183,13 +174,11 @@ static int sqliterkBtreeParsePage(sqliterk_btree *btree, int pageno)
     // Parse cell pointer array. For further information, see [cell pointer]
     // at https://www.sqlite.org/fileformat2.html#btree
     const unsigned char *pagedata = sqliterkPageGetData(page);
-    int offsetCellPointerArray =
-        (type == sqliterk_page_type_interior_table) ? 12 : 8;
+    int offsetCellPointerArray = (type == sqliterk_page_type_interior_table) ? 12 : 8;
     int cellsCount;
-    sqliterkParseInt(pagedata, 3 + sqliterkPageHeaderOffset(page), 2,
-                     &cellsCount);
-    if (cellsCount <= 0 || cellsCount * 2 + offsetCellPointerArray >
-                               sqliterkPagerGetSize(btree->pager)) {
+    sqliterkParseInt(pagedata, 3 + sqliterkPageHeaderOffset(page), 2, &cellsCount);
+    if (cellsCount <= 0
+        || cellsCount * 2 + offsetCellPointerArray > sqliterkPagerGetSize(btree->pager)) {
         rc = SQLITERK_DAMAGED;
         goto sqliterkBtreeParsePage_End;
     }
@@ -201,57 +190,52 @@ static int sqliterkBtreeParsePage(sqliterk_btree *btree, int pageno)
 
     for (i = 0; i < cellsCount; i++) {
         int cellPointer;
-        sqliterkParseInt(pagedata,
-                         sqliterkPageHeaderOffset(page) +
-                             offsetCellPointerArray + i * 2,
-                         2, &cellPointer);
+        sqliterkParseInt(
+        pagedata, sqliterkPageHeaderOffset(page) + offsetCellPointerArray + i * 2, 2, &cellPointer);
         cellPointerArray[i] = cellPointer;
     }
 
     switch (type) {
-        case sqliterk_page_type_interior_table:
-        case sqliterk_page_type_interior_index: {
-            int hasRightMostPageno =
-                (type == sqliterk_page_type_interior_table);
-            int pagenosCount = cellsCount + hasRightMostPageno;
-            int *pagenos = sqliterkOSMalloc(sizeof(int) * (pagenosCount + 1));
-            if (!pagenos) {
-                rc = SQLITERK_NOMEM;
-                goto sqliterkBtreeParsePage_End;
-            }
-            for (i = 0; i < cellsCount; i++) {
-                sqliterkParseInt(pagedata, cellPointerArray[i], 4, pagenos + i);
-            }
-            if (hasRightMostPageno) {
-                sqliterkParseInt(pagedata, 8, 4, pagenos + cellsCount);
-            }
-            // All done for page data. Ahead release the page data to avoid memory overflow
-            sqliterkOSFree(cellPointerArray);
-            cellPointerArray = NULL;
-            sqliterkPageClearData(page);
-            // Recursively decode the page
-            for (i = 0; i < pagenosCount; i++) {
-                if (sqliterkBtreeParsePage(btree, pagenos[i]) ==
-                    SQLITERK_CANCELLED)
-                    break;
-            }
-            sqliterkOSFree(pagenos);
-            break;
+    case sqliterk_page_type_interior_table:
+    case sqliterk_page_type_interior_index: {
+        int hasRightMostPageno = (type == sqliterk_page_type_interior_table);
+        int pagenosCount = cellsCount + hasRightMostPageno;
+        int *pagenos = sqliterkOSMalloc(sizeof(int) * (pagenosCount + 1));
+        if (!pagenos) {
+            rc = SQLITERK_NOMEM;
+            goto sqliterkBtreeParsePage_End;
         }
-        case sqliterk_page_type_leaf_table:
-            if (sqliterkBtreeIsSystemType(sqliterkBtreeGetType(btree)) &&
-                btree->type != sqliterk_btree_type_master) {
-                //skip a non-master system table, since its column is generated.
-                goto sqliterkBtreeParsePage_End;
-            }
-            rc = sqliterkBtreeParseCell(btree, page, cellPointerArray,
-                                        cellsCount);
-            break;
-        case sqliterk_page_type_leaf_index:
-            // Just skip it since the column in leaf index make no sense.
-            break;
-        default:
-            break;
+        for (i = 0; i < cellsCount; i++) {
+            sqliterkParseInt(pagedata, cellPointerArray[i], 4, pagenos + i);
+        }
+        if (hasRightMostPageno) {
+            sqliterkParseInt(pagedata, 8, 4, pagenos + cellsCount);
+        }
+        // All done for page data. Ahead release the page data to avoid memory overflow
+        sqliterkOSFree(cellPointerArray);
+        cellPointerArray = NULL;
+        sqliterkPageClearData(page);
+        // Recursively decode the page
+        for (i = 0; i < pagenosCount; i++) {
+            if (sqliterkBtreeParsePage(btree, pagenos[i]) == SQLITERK_CANCELLED)
+                break;
+        }
+        sqliterkOSFree(pagenos);
+        break;
+    }
+    case sqliterk_page_type_leaf_table:
+        if (sqliterkBtreeIsSystemType(sqliterkBtreeGetType(btree))
+            && btree->type != sqliterk_btree_type_master) {
+            //skip a non-master system table, since its column is generated.
+            goto sqliterkBtreeParsePage_End;
+        }
+        rc = sqliterkBtreeParseCell(btree, page, cellPointerArray, cellsCount);
+        break;
+    case sqliterk_page_type_leaf_index:
+        // Just skip it since the column in leaf index make no sense.
+        break;
+    default:
+        break;
     }
 
 sqliterkBtreeParsePage_End:
@@ -295,8 +279,7 @@ static int sqliterkBtreeParseCell(sqliterk_btree *btree,
         // Find payload
         int payloadSizeLength;
         int64_t payloadSize;
-        rc = sqliterkParseVarint64(pagedata, offset, &payloadSizeLength,
-                                 &payloadSize);
+        rc = sqliterkParseVarint64(pagedata, offset, &payloadSizeLength, &payloadSize);
         if (rc != SQLITERK_OK) {
             goto sqliterkBtreeParsePayload_End;
         } else if (payloadSize > 64 * 1024 * 1024) {
@@ -316,8 +299,7 @@ static int sqliterkBtreeParseCell(sqliterk_btree *btree,
         offset += rowidLength;
         sqliterkColumnSetRowId(column, rowid);
 
-        rc =
-            sqliterkBtreeParsePayload(btree, page, offset, payloadSize, column);
+        rc = sqliterkBtreeParsePayload(btree, page, offset, payloadSize, column);
         if (rc != SQLITERK_OK) {
             goto sqliterkBtreeParsePayload_End;
         }
@@ -359,9 +341,9 @@ static int sqliterkBtreeParsePayload(sqliterk_btree *btree,
         // Since it is a leaf-table page, the max local should be equal to max leaf
         int maxPageLocal = btree->maxLeaf;
         int minPageLocal = btree->minLocal;
-        int surplus =
-            minPageLocal + (payloadSize - minPageLocal) %
-                               (sqliterkPagerGetUsableSize(btree->pager) - 4);
+        int surplus = minPageLocal
+                      + (payloadSize - minPageLocal)
+                        % (sqliterkPagerGetUsableSize(btree->pager) - 4);
         if (surplus <= maxPageLocal) {
             local = surplus;
         } else {
@@ -384,19 +366,15 @@ static int sqliterkBtreeParsePayload(sqliterk_btree *btree,
         int overflowPageno;
         const unsigned char *pagedata = sqliterkPageGetData(page);
         sqliterkParseInt(pagedata, offset + local, 4, &overflowPageno);
-        while (sqliterkPagerIsPagenoValid(btree->pager, overflowPageno) ==
-               SQLITERK_OK) {
+        while (sqliterkPagerIsPagenoValid(btree->pager, overflowPageno) == SQLITERK_OK) {
             sqliterkValuesAddInteger(overflowPages, overflowPageno);
             if (btree->notify.onBeginParsePage) {
-                btree->notify.onBeginParsePage(btree->rk, btree,
-                                               overflowPageno);
+                btree->notify.onBeginParsePage(btree->rk, btree, overflowPageno);
             }
             sqliterk_page *page;
-            rc = sqliterkPageAcquireOverflow(btree->pager, overflowPageno,
-                                             &page);
+            rc = sqliterkPageAcquireOverflow(btree->pager, overflowPageno, &page);
             if (btree->notify.onEndParsePage) {
-                btree->notify.onEndParsePage(btree->rk, btree, overflowPageno,
-                                             rc);
+                btree->notify.onEndParsePage(btree->rk, btree, overflowPageno, rc);
             }
             if (rc != SQLITERK_OK) {
                 break;
@@ -422,8 +400,7 @@ static int sqliterkBtreeParsePayload(sqliterk_btree *btree,
 
     int columnOffsetValue = 0;
     int columnOffsetValueLength = 0;
-    rc = sqliterkParseVarint(payloadData, 0, &columnOffsetValueLength,
-                             &columnOffsetValue);
+    rc = sqliterkParseVarint(payloadData, 0, &columnOffsetValueLength, &columnOffsetValue);
     if (rc != SQLITERK_OK) {
         goto sqliterkBtreeParseColumn_End;
     }
@@ -439,8 +416,7 @@ static int sqliterkBtreeParsePayload(sqliterk_btree *btree,
 
     sqliterk_values *values = sqliterkColumnGetValues(column);
     while (offsetValue < endValue || offsetSerialType < endSerialType) {
-        rc = sqliterkParseVarint(payloadData, offsetSerialType,
-                                 &serialTypeLength, &serialType);
+        rc = sqliterkParseVarint(payloadData, offsetSerialType, &serialTypeLength, &serialType);
         if (rc != SQLITERK_OK) {
             goto sqliterkBtreeParseColumn_End;
         }
@@ -461,12 +437,10 @@ static int sqliterkBtreeParsePayload(sqliterk_btree *btree,
             rc = sqliterkValuesAddInteger(values, 1);
         } else if (serialType >= 12) {
             if (serialType % 2 == 0) {
-                rc = sqliterkValuesAddBinary(values, payloadData + offsetValue,
-                                             valueLength);
+                rc = sqliterkValuesAddBinary(values, payloadData + offsetValue, valueLength);
             } else {
                 rc = sqliterkValuesAddNoTerminatorText(
-                    values, (const char *) payloadData + offsetValue,
-                    valueLength);
+                values, (const char *) payloadData + offsetValue, valueLength);
             }
         } else {
             rc = SQLITERK_DAMAGED;
@@ -513,9 +487,7 @@ int sqliterkBtreeClose(sqliterk_btree *btree)
     return SQLITERK_OK;
 }
 
-int sqliterkBtreeSetMeta(sqliterk_btree *btree,
-                         const char *name,
-                         sqliterk_btree_type type)
+int sqliterkBtreeSetMeta(sqliterk_btree *btree, const char *name, sqliterk_btree_type type)
 {
     if (!btree) {
         return SQLITERK_MISUSE;
@@ -533,8 +505,7 @@ int sqliterkBtreeSetMeta(sqliterk_btree *btree,
         strncpy(btree->name, name, length);
         // If it's a system btree name, then setup its b-tree type.
         sqliterk_btree_type i;
-        for (i = sqliterk_btree_type_system_begin;
-             i < sqliterk_btree_type_system_end; i++) {
+        for (i = sqliterk_btree_type_system_begin; i < sqliterk_btree_type_system_end; i++) {
             const char *typename = sqliterkBtreeGetTypeName(i);
             if (strncmp(btree->name, typename, strlen(typename)) == 0) {
                 btree->type = i;
@@ -544,8 +515,7 @@ int sqliterkBtreeSetMeta(sqliterk_btree *btree,
     } else {
         btree->name = NULL;
     }
-    if (!sqliterkBtreeIsSystemType(btree->type) &&
-        type != sqliterk_btree_type_unknown) {
+    if (!sqliterkBtreeIsSystemType(btree->type) && type != sqliterk_btree_type_unknown) {
         btree->type = type;
     }
     return SQLITERK_OK;
@@ -582,15 +552,13 @@ int sqliterkBtreeSetType(sqliterk_btree *btree, sqliterk_btree_type type)
 
 int sqliterkBtreeIsSystemType(sqliterk_btree_type type)
 {
-    if (type >= sqliterk_btree_type_system_begin &&
-        type < sqliterk_btree_type_system_end) {
+    if (type >= sqliterk_btree_type_system_begin && type < sqliterk_btree_type_system_end) {
         return 1;
     }
     return 0;
 }
 
-void sqliterkBtreeSetNotify(sqliterk_btree *btree,
-                            sqliterk_btree_notify *notify)
+void sqliterkBtreeSetNotify(sqliterk_btree *btree, sqliterk_btree_notify *notify)
 {
     if (!btree || !notify) {
         return;
@@ -626,27 +594,27 @@ const char *sqliterkBtreeGetTypeName(sqliterk_btree_type type)
 {
     char *name;
     switch (type) {
-        case sqliterk_btree_type_autoindex:
-            name = "sqlite_autoindex";
-            break;
-        case sqliterk_btree_type_sequence:
-            name = "sqlite_sequence";
-            break;
-        case sqliterk_btree_type_stat:
-            name = "sqlite_stat";
-            break;
-        case sqliterk_btree_type_master:
-            name = "sqlite_master";
-            break;
-        case sqliterk_btree_type_table:
-            name = "table";
-            break;
-        case sqliterk_btree_type_index:
-            name = "index";
-            break;
-        default:
-            name = "unknown";
-            break;
+    case sqliterk_btree_type_autoindex:
+        name = "sqlite_autoindex";
+        break;
+    case sqliterk_btree_type_sequence:
+        name = "sqlite_sequence";
+        break;
+    case sqliterk_btree_type_stat:
+        name = "sqlite_stat";
+        break;
+    case sqliterk_btree_type_master:
+        name = "sqlite_master";
+        break;
+    case sqliterk_btree_type_table:
+        name = "table";
+        break;
+    case sqliterk_btree_type_index:
+        name = "index";
+        break;
+    default:
+        name = "unknown";
+        break;
     }
     return name;
 }
@@ -658,8 +626,8 @@ static int sqliterkBtreeGetLengthForSerialType(int serialType)
     if (serialType < 0) {
         return 0;
     }
-    static int sqliterk_btree_serialtype_fixlengths[12] = {0, 1, 2, 3, 4, 6,
-                                                           8, 8, 0, 0, 0, 0};
+    static int sqliterk_btree_serialtype_fixlengths[12]
+    = { 0, 1, 2, 3, 4, 6, 8, 8, 0, 0, 0, 0 };
     if (serialType < 12) {
         return sqliterk_btree_serialtype_fixlengths[serialType];
     }
