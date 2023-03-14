@@ -73,10 +73,9 @@ class DeleteInterfaceTests: CRUDTestCase {
 
     func testTableDelete() {
         // Give
-        let table: Table<TestObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: TestObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         // When
-        XCTAssertNoThrow(try table!.delete())
+        XCTAssertNoThrow(try table.delete())
         // Then
         let results: [TestObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: TestObject.name))
         XCTAssertEqual(results.count, 0)
@@ -84,10 +83,9 @@ class DeleteInterfaceTests: CRUDTestCase {
 
     func testTableConditionalDelete() {
         // Give
-        let table: Table<TestObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: TestObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         // When
-        XCTAssertNoThrow(try table!.delete(where: TestObject.Properties.variable1 == 2))
+        XCTAssertNoThrow(try table.delete(where: TestObject.Properties.variable1 == 2))
         // Then
         let results: [TestObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: TestObject.name))
         XCTAssertEqual(results.count, 1)
@@ -96,12 +94,11 @@ class DeleteInterfaceTests: CRUDTestCase {
 
     func testTableOrderedDelete() {
         // Give
-        let table: Table<TestObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: TestObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         // Give
         let order = [TestObject.Properties.variable1.order(.descending)]
         // When
-        XCTAssertNoThrow(try table!.delete(orderBy: order, limit: 1))
+        XCTAssertNoThrow(try table.delete(orderBy: order, limit: 1))
         // Then
         let results: [TestObject] = WCDBAssertNoThrowReturned(
             try database.getObjects(fromTable: TestObject.name, orderBy: order)
@@ -112,10 +109,9 @@ class DeleteInterfaceTests: CRUDTestCase {
 
     func testTableLimitedDelete() {
         // Give
-        let table: Table<TestObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: TestObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         // When
-        XCTAssertNoThrow(try table!.delete(limit: 1))
+        XCTAssertNoThrow(try table.delete(limit: 1))
         // Then
         let results: [TestObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: TestObject.name))
         XCTAssertEqual(results.count, 1)
@@ -124,10 +120,9 @@ class DeleteInterfaceTests: CRUDTestCase {
 
     func testTableOffsetDelete() {
         // Give
-        let table: Table<TestObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: TestObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         // When
-        XCTAssertNoThrow(try table!.delete(limit: 1, offset: 1))
+        XCTAssertNoThrow(try table.delete(limit: 1, offset: 1))
         // Then
         let results: [TestObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: TestObject.name))
         XCTAssertEqual(results.count, 1)

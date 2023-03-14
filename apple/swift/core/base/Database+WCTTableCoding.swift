@@ -36,10 +36,7 @@ public extension Database {
     /// - Throws: `Error`
     func getTable<Root: WCTTableCoding>(
         named name: String,
-        of type: Root.Type = Root.self) throws -> Table<Root>? {
-        guard try isTableExists(name) else {
-            return nil
-        }
+        of type: Root.Type = Root.self) -> Table<Root> {
         return Table<Root>(withDatabase: self, named: name)
     }
 }

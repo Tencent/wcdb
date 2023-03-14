@@ -365,17 +365,4 @@ class TableTests: DatabaseTestCase {
         let object = optionalObject!
         XCTAssertEqual(object.sql!, "CREATE INDEX \(indexName) ON \(tableName)(aString, aDouble)")
     }
-
-    func testGetTable() {
-        // Give
-        let tableName = BaselineObject.name
-        var table: Table<BaselineObject>?
-        // When
-        table = WCDBAssertNoThrowReturned(try database.getTable(named: tableName))
-        XCTAssertNil(table)
-        XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
-        // Then
-        table = WCDBAssertNoThrowReturned(try database.getTable(named: tableName))
-        XCTAssertNotNil(table)
-    }
 }

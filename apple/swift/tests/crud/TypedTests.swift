@@ -606,14 +606,11 @@ class TypedTests: CRUDTestCase {
         XCTAssertNoThrow(try database.create(table: OptionalTypedTestObject.name, of: OptionalTypedTestObject.self))
         let object = OptionalTypedTestObject(with: .normal)
         XCTAssertNoThrow(try database.insert(object, intoTable: OptionalTypedTestObject.name))
-        let table = WCDBAssertNoThrowReturned(try database.getTable(named: OptionalTypedTestObject.name,
-                                                                    of: OptionalTypedTestObject.self))
-        XCTAssertNotNil(table)
-        let wrappedTable = table!
+        let table = database.getTable(named: OptionalTypedTestObject.name, of: OptionalTypedTestObject.self)
         // Then
         do {
             do {
-                let result = try wrappedTable.getObject(on: OptionalTypedTestObject.Properties.int)
+                let result = try table.getObject(on: OptionalTypedTestObject.Properties.int)
                 XCTAssertNotNil(object)
                 let wrappedResult = result!
                 XCTAssertEqual(wrappedResult.int, object.int)
@@ -635,7 +632,7 @@ class TypedTests: CRUDTestCase {
                 XCTAssertNil(wrappedResult.bool)
             }
             do {
-                let result = try wrappedTable.getObject(on: OptionalTypedTestObject.Properties.int8)
+                let result = try table.getObject(on: OptionalTypedTestObject.Properties.int8)
                 XCTAssertNotNil(object)
                 let wrappedResult = result!
                 XCTAssertEqual(wrappedResult.int8, object.int8)
@@ -668,16 +665,11 @@ class TypedTests: CRUDTestCase {
         XCTAssertNoThrow(try database.insert(object,
                                              on: [TypedTestObject.Properties.int],
                                              intoTable: TypedTestObject.name))
-        let table = WCDBAssertNoThrowReturned(
-            try database.getTable(named: TypedTestObject.name,
-                                  of: OptionalTypedTestObject.self)
-        )
-        XCTAssertNotNil(table)
-        let wrappedTable = table!
+        let table = database.getTable(named: TypedTestObject.name, of: OptionalTypedTestObject.self)
         // Then
         do {
             do {
-                let result = try wrappedTable.getObject()
+                let result = try table.getObject()
                 XCTAssertNotNil(object)
                 let wrappedResult = result!
                 XCTAssertEqual(wrappedResult.int, object.int)
@@ -710,16 +702,11 @@ class TypedTests: CRUDTestCase {
         XCTAssertNoThrow(try database.insert(object,
                                              on: [OptionalTypedTestObject.Properties.int],
                                              intoTable: OptionalTypedTestObject.name))
-        let table = WCDBAssertNoThrowReturned(
-            try database.getTable(named: OptionalTypedTestObject.name,
-                                  of: OptionalTypedTestObject.self)
-        )
-        XCTAssertNotNil(table)
-        let wrappedTable = table!
+        let table = database.getTable(named: OptionalTypedTestObject.name, of: OptionalTypedTestObject.self)
         // Then
         do {
             do {
-                let result = try wrappedTable.getObject()
+                let result = try table.getObject()
                 XCTAssertNotNil(object)
                 let wrappedResult = result!
                 XCTAssertEqual(wrappedResult.int, object.int)

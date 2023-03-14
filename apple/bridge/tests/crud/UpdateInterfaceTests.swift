@@ -197,12 +197,11 @@ class UpdateInterfaceTests: CRUDTestCase {
         // Give
         let object = CRUDObject()
         object.variable2 = self.name
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         // When
-        XCTAssertNoThrow(try table!.update(on: CRUDObject.variable2(), with: object))
+        XCTAssertNoThrow(try table.update(on: CRUDObject.variable2(), with: object))
         // Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try table!.getObjects())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try table.getObjects())
         XCTAssertEqual(results.map({
             XCTAssertNotNil($0.variable2)
             return $0.variable2!
@@ -213,10 +212,9 @@ class UpdateInterfaceTests: CRUDTestCase {
         // Give
         let object = CRUDObject()
         object.variable2 = self.name
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         // When
-        XCTAssertNoThrow(try table!.update(on: CRUDObject.variable2(),
+        XCTAssertNoThrow(try table.update(on: CRUDObject.variable2(),
                                              with: object,
                                              where: CRUDObject.variable1() == 1))
         // Then
@@ -232,10 +230,9 @@ class UpdateInterfaceTests: CRUDTestCase {
         let object = CRUDObject()
         object.variable2 = self.name
         let order = [CRUDObject.variable1().order(.descending)]
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         // When
-        XCTAssertNoThrow(try table!.update(on: CRUDObject.variable2(),
+        XCTAssertNoThrow(try table.update(on: CRUDObject.variable2(),
                                              with: object,
                                              orderBy: order,
                                              limit: 1))
@@ -251,10 +248,9 @@ class UpdateInterfaceTests: CRUDTestCase {
         // Give
         let object = CRUDObject()
         object.variable2 = self.name
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         // When
-        XCTAssertNoThrow(try table!.update(on: CRUDObject.variable2(),
+        XCTAssertNoThrow(try table.update(on: CRUDObject.variable2(),
                                              with: object,
                                              limit: 1))
         // Then
@@ -267,10 +263,9 @@ class UpdateInterfaceTests: CRUDTestCase {
         // Give
         let object = CRUDObject()
         object.variable2 = self.name
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         // When
-        XCTAssertNoThrow(try table!.update(on: CRUDObject.variable2(),
+        XCTAssertNoThrow(try table.update(on: CRUDObject.variable2(),
                                              with: object,
                                              limit: 1,
                                              offset: 1))
@@ -284,11 +279,10 @@ class UpdateInterfaceTests: CRUDTestCase {
         // Give
         let object = CRUDObject()
         object.variable2 = self.name
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         // When
         XCTAssertNoThrow(
-            try table!.update(on: CRUDObject.variable2(), with: [self.name])
+            try table.update(on: CRUDObject.variable2(), with: [self.name])
         )
         // Then
         let results: [CRUDObject] = WCDBAssertNoThrowReturned(
@@ -305,10 +299,9 @@ class UpdateInterfaceTests: CRUDTestCase {
         // Give
         let object = CRUDObject()
         object.variable2 = self.name
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         // When
-        XCTAssertNoThrow(try table!.update(on: CRUDObject.variable2(),
+        XCTAssertNoThrow(try table.update(on: CRUDObject.variable2(),
                                              with: [self.name],
                                              where: CRUDObject.variable1() == 1))
         // Then
@@ -324,10 +317,9 @@ class UpdateInterfaceTests: CRUDTestCase {
         let object = CRUDObject()
         object.variable2 = self.name
         let order = [CRUDObject.variable1().order(.descending)]
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         // When
-        XCTAssertNoThrow(try table!.update(on: CRUDObject.variable2(),
+        XCTAssertNoThrow(try table.update(on: CRUDObject.variable2(),
                                              with: [self.name],
                                              orderBy: order,
                                              limit: 1))
@@ -343,10 +335,9 @@ class UpdateInterfaceTests: CRUDTestCase {
         // Give
         let object = CRUDObject()
         object.variable2 = self.name
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         // When
-        XCTAssertNoThrow(try table!.update(on: CRUDObject.variable2(),
+        XCTAssertNoThrow(try table.update(on: CRUDObject.variable2(),
                                              with: [self.name],
                                              limit: 1))
         // Then
@@ -359,10 +350,9 @@ class UpdateInterfaceTests: CRUDTestCase {
         // Give
         let object = CRUDObject()
         object.variable2 = self.name
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         // When
-        XCTAssertNoThrow(try table!.update(on: CRUDObject.variable2(),
+        XCTAssertNoThrow(try table.update(on: CRUDObject.variable2(),
                                              with: [self.name],
                                              limit: 1,
                                              offset: 1))

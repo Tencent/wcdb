@@ -81,13 +81,10 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testTableSelect() {
         // Give
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(
-            try database.getTable(named: CRUDObject.name)
-        )
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         // When
         let results: [CRUDObject] = WCDBAssertNoThrowReturned(
-            try table!.getObjects(), whenFailed: [CRUDObject]()
+            try table.getObjects(), whenFailed: [CRUDObject]()
         )
         // Then
         XCTAssertEqual(results.sorted(), preInsertedObjects.sorted())
@@ -337,10 +334,9 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testTableRowSelect() {
         // Give
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         // When
-        let results: MultiRowsValue = WCDBAssertNoThrowReturned(try table!.getRows())
+        let results: MultiRowsValue = WCDBAssertNoThrowReturned(try table.getRows())
         // Then
         XCTAssertEqual(results.count, preInsertedObjects.count)
         XCTAssertEqual(Int(results[row: 0, column: 0].int64Value), preInsertedObjects[0].variable1)
@@ -351,11 +347,10 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testTableRowSelectOne() {
         // Give
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         // When
         let results: OneRowValue = WCDBAssertNoThrowReturned(
-            try table!.getRow()
+            try table.getRow()
         )
         // Then
         XCTAssertEqual(results.count, 2)
@@ -365,11 +360,10 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testTableRowSelectColumn() {
         // Give
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         // When
         let results: OneColumnValue = WCDBAssertNoThrowReturned(
-            try table!.getColumn(on: CRUDObject.variable1())
+            try table.getColumn(on: CRUDObject.variable1())
         )
         // Then
         XCTAssertEqual(Int(results[0].int64Value), preInsertedObjects[0].variable1)
@@ -378,11 +372,10 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testTableConditionalRowSelectColumn() {
         // Give
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         // When
         let results: OneColumnValue = WCDBAssertNoThrowReturned(
-            try table!.getColumn(on: CRUDObject.variable1(), where: CRUDObject.variable1() == 1)
+            try table.getColumn(on: CRUDObject.variable1(), where: CRUDObject.variable1() == 1)
         )
         // Then
         XCTAssertEqual(results.count, 1)
@@ -391,13 +384,12 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testTableOrderedRowSelectColumn() {
         // Give
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         // Give
         let order = [CRUDObject.variable1().order(.descending)]
         // When
         let results: OneColumnValue = WCDBAssertNoThrowReturned(
-            try table!.getColumn(on: CRUDObject.variable1(), orderBy: order)
+            try table.getColumn(on: CRUDObject.variable1(), orderBy: order)
         )
         // Then
         XCTAssertEqual(results.count, preInsertedObjects.count)
@@ -407,11 +399,10 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testTableLimitedRowSelectColumn() {
         // Give
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         // When
         let results: OneColumnValue = WCDBAssertNoThrowReturned(
-            try table!.getColumn(on: CRUDObject.variable1(), limit: 1)
+            try table.getColumn(on: CRUDObject.variable1(), limit: 1)
         )
         // Then
         XCTAssertEqual(results.count, 1)
@@ -420,11 +411,10 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testTableOffsetRowSelectColumn() {
         // Give
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         // When
         let results: OneColumnValue = WCDBAssertNoThrowReturned(
-            try table!.getColumn(on: CRUDObject.variable1(), limit: 1, offset: 1)
+            try table.getColumn(on: CRUDObject.variable1(), limit: 1, offset: 1)
         )
         // Then
         XCTAssertEqual(results.count, 1)
@@ -433,15 +423,14 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testTableRowSelectDistinctColumn() {
         // Give
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         let object1 = CRUDObject()
         object1.variable1 = 3
         object1.variable2 = "object1"
         XCTAssertNoThrow(try database.insert(object1, intoTable: CRUDObject.name))
         // When
         let results: OneColumnValue = WCDBAssertNoThrowReturned(
-            try table!.getDistinctColumn(on: CRUDObject.variable2())
+            try table.getDistinctColumn(on: CRUDObject.variable2())
         )
         // Then
         XCTAssertEqual(results[0].stringValue, preInsertedObjects[0].variable2)
@@ -450,15 +439,14 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testTableConditionalRowSelectDistinctColumn() {
         // Give
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         let object1 = CRUDObject()
         object1.variable1 = 3
         object1.variable2 = "object1"
         XCTAssertNoThrow(try database.insert(object1, intoTable: CRUDObject.name))
         // When
         let results: OneColumnValue = WCDBAssertNoThrowReturned(
-            try table!.getDistinctColumn(on: CRUDObject.variable2(),
+            try table.getDistinctColumn(on: CRUDObject.variable2(),
                                          where: CRUDObject.variable1() == 1)
         )
         // Then
@@ -468,8 +456,7 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testTableOrderedRowSelectDistinctColumn() {
         // Give
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         let object1 = CRUDObject()
         object1.variable1 = 3
         object1.variable2 = "object1"
@@ -478,7 +465,7 @@ class SelectInterfaceTests: CRUDTestCase {
         let order = [CRUDObject.variable2().order(.descending)]
         // When
         let results: OneColumnValue = WCDBAssertNoThrowReturned(
-            try table!.getDistinctColumn(on: CRUDObject.variable2(), orderBy: order)
+            try table.getDistinctColumn(on: CRUDObject.variable2(), orderBy: order)
         )
         // Then
         XCTAssertEqual(results.count, preInsertedObjects.count)
@@ -488,15 +475,14 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testTableLimitedRowSelectDistinctColumn() {
         // Give
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         let object1 = CRUDObject()
         object1.variable1 = 3
         object1.variable2 = "object1"
         XCTAssertNoThrow(try database.insert(object1, intoTable: CRUDObject.name))
         // When
         let results: OneColumnValue = WCDBAssertNoThrowReturned(
-            try table!.getDistinctColumn(on: CRUDObject.variable2(), limit: 1)
+            try table.getDistinctColumn(on: CRUDObject.variable2(), limit: 1)
         )
         // Then
         XCTAssertEqual(results.count, 1)
@@ -505,15 +491,14 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testTableOffsetRowSelectDistinctColumn() {
         // Give
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         let object1 = CRUDObject()
         object1.variable1 = 3
         object1.variable2 = "object1"
         XCTAssertNoThrow(try database.insert(object1, intoTable: CRUDObject.name))
         // When
         let results: OneColumnValue = WCDBAssertNoThrowReturned(
-            try table!.getDistinctColumn(on: CRUDObject.variable2(), limit: 1, offset: 1)
+            try table.getDistinctColumn(on: CRUDObject.variable2(), limit: 1, offset: 1)
         )
         // Then
         XCTAssertEqual(results.count, 1)
@@ -522,11 +507,10 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testTableRowSelectValue() {
         // Give
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         // When
         let result: Value? = WCDBAssertNoThrowReturned(
-            try table!.getValue(on: CRUDObject.variable2())
+            try table.getValue(on: CRUDObject.variable2())
         )
         // Then
         XCTAssertNotNil(result)
@@ -535,11 +519,10 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testTableSelectOne() {
         // Give
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         // When
         let result: CRUDObject? = WCDBAssertNoThrowReturned(
-            try table!.getObject()
+            try table.getObject()
         )
         // Then
         XCTAssertNotNil(result)
@@ -568,18 +551,16 @@ class SelectInterfaceTests: CRUDTestCase {
     func testTableSelectEmpty() {
         // Give
         XCTAssertNoThrow(try database.delete(fromTable: CRUDObject.name))
-        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
-        XCTAssertNotNil(table)
-        let wrappedTable = table!
+        let table: Table<CRUDObject> = database.getTable(named: CRUDObject.name)
         // Then
         do {
-            let row = try wrappedTable.getRow(on: Column.all)
+            let row = try table.getRow(on: Column.all)
             XCTAssertEqual(row.count, 0)
 
-            let distinctValue = try wrappedTable.getDistinctValue(on: Column.all)
+            let distinctValue = try table.getDistinctValue(on: Column.all)
             XCTAssertEqual(distinctValue.type, .null)
 
-            let value = try wrappedTable.getValue(on: Column.all)
+            let value = try table.getValue(on: Column.all)
             XCTAssertEqual(value.type, .null)
         } catch let error {
             XCTFail(error.localizedDescription)

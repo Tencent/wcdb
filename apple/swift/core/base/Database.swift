@@ -471,14 +471,11 @@ public extension Database {
     /// - Parameters:
     ///   - name: The name of the table.
     ///   - type: A class conform to TableCodable protocol.
-    /// - Returns: Nil for a non-existent table.
+    /// - Returns: Table.
     /// - Throws: `Error`
     func getTable<Root: TableCodable>(
         named name: String,
-        of type: Root.Type = Root.self) throws -> Table<Root>? {
-        guard try isTableExists(name) else {
-            return nil
-        }
+        of type: Root.Type = Root.self) -> Table<Root> {
         return Table<Root>(withDatabase: self, named: name)
     }
 

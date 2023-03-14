@@ -98,15 +98,12 @@ class InsertInterfaceTests: CRUDTestCase {
         let object = CRUDObject()
         object.variable1 = preInsertedObjects.count + 1
         object.variable2 = self.name
-        let table = WCDBAssertNoThrowReturned(
-            try database.getTable(named: CRUDObject.name, of: CRUDObject.self)
-        )
-        XCTAssertNotNil(table)
+        let table = database.getTable(named: CRUDObject.name, of: CRUDObject.self)
         // When
-        XCTAssertNoThrow(try table!.insert(object))
+        XCTAssertNoThrow(try table.insert(object))
         // Then
         let result = WCDBAssertNoThrowReturned(
-            try table!.getObject(where: CRUDObject.variable1() == object.variable1)
+            try table.getObject(where: CRUDObject.variable1() == object.variable1)
         )
         XCTAssertNotNil(result)
         XCTAssertEqual(result!, object)
@@ -118,16 +115,13 @@ class InsertInterfaceTests: CRUDTestCase {
         let expectedReplacedRowID = 1
         object.variable1 = expectedReplacedRowID
         object.variable2 = self.name
-        let table = WCDBAssertNoThrowReturned(
-            try database.getTable(named: CRUDObject.name, of: CRUDObject.self)
-        )
-        XCTAssertNotNil(table)
+        let table = database.getTable(named: CRUDObject.name, of: CRUDObject.self)
         // When
-        XCTAssertNoThrow(try table!.insertOrReplace(object))
+        XCTAssertNoThrow(try table.insertOrReplace(object))
         // Then
         let condition = CRUDObject.variable1() == expectedReplacedRowID
         let result: CRUDObject? = WCDBAssertNoThrowReturned(
-            try table!.getObject(where: condition)
+            try table.getObject(where: condition)
         )
         XCTAssertNotNil(result)
         XCTAssertEqual(result!.variable2, self.name)
