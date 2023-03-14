@@ -24,10 +24,10 @@ import WCDB_Private
 /// Chain call for row-selecting
 public final class RowSelect: Selectable {
     init(with handle: Handle,
-         results columnResultConvertibleList: [ResultColumnConvertible],
+         results resultColumnConvertibleList: [ResultColumnConvertible],
          tables: [String],
          isDistinct: Bool) {
-        let statement = StatementSelect().select(distinct: isDistinct, columnResultConvertibleList).from(tables)
+        let statement = StatementSelect().select(distinct: isDistinct, resultColumnConvertibleList).from(tables)
         super.init(with: handle, statement: statement)
     }
 

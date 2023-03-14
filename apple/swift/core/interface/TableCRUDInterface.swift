@@ -64,22 +64,22 @@ public protocol DeleteTableInterface: AnyObject {
 }
 
 public protocol RowSelectTableInterface: AnyObject {
-    func getRows(on columnResultConvertibleList: [ResultColumnConvertible],
+    func getRows(on resultColumnConvertibleList: [ResultColumnConvertible],
                  where condition: Condition?,
                  orderBy orderList: [OrderBy]?,
                  limit: Limit?,
                  offset: Offset?) throws -> MultiRowsValue
-    func getRows(on columnResultConvertibleList: ResultColumnConvertible...,
+    func getRows(on resultColumnConvertibleList: ResultColumnConvertible...,
                  where condition: Condition?,
                  orderBy orderList: [OrderBy]?,
                  limit: Limit?,
                  offset: Offset?) throws -> MultiRowsValue
 
-    func getRow(on columnResultConvertibleList: ResultColumnConvertible...,
+    func getRow(on resultColumnConvertibleList: ResultColumnConvertible...,
                 where condition: Condition?,
                 orderBy orderList: [OrderBy]?,
                 offset: Offset?) throws -> OneRowValue
-    func getRow(on columnResultConvertibleList: [ResultColumnConvertible],
+    func getRow(on resultColumnConvertibleList: [ResultColumnConvertible],
                 where condition: Condition?,
                 orderBy orderList: [OrderBy]?,
                 offset: Offset?) throws -> OneRowValue

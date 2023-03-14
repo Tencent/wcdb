@@ -46,7 +46,7 @@ extension SpecificColumnIndexConvertible {
 }
 
 public protocol ResultColumnConvertible {
-    func asColumnResult() -> ResultColumn
+    func asResultColumn() -> ResultColumn
 }
 
 public protocol SchemaConvertible {
@@ -66,7 +66,7 @@ public protocol ExpressionConvertible: ResultColumnConvertible, OrderingTermConv
 }
 
 extension ExpressionConvertible {
-    public func asColumnResult() -> ResultColumn {
+    public func asResultColumn() -> ResultColumn {
         return ResultColumn(with: asExpression())
     }
     public func asOrder() -> OrderingTerm {

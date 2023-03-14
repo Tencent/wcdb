@@ -47,15 +47,15 @@ public final class StatementSelect: Identifier<CPPStatementSelect>, Statement {
 
     @discardableResult
     public func select(distinct: Bool = false,
-                       _ columnResultConvertibleList: ResultColumnConvertible...) -> StatementSelect {
-        return select(distinct: distinct, columnResultConvertibleList)
+                       _ resultColumnConvertibleList: ResultColumnConvertible...) -> StatementSelect {
+        return select(distinct: distinct, resultColumnConvertibleList)
     }
 
     @discardableResult
     public func select(distinct: Bool = false,
-                       _ columnResultConvertibleList: [ResultColumnConvertible]) -> StatementSelect {
-        let columnResults = columnResultConvertibleList.map { $0.asColumnResult() }
-        withExtendedLifetime(columnResults) {
+                       _ resultColumnConvertibleList: [ResultColumnConvertible]) -> StatementSelect {
+        let resultColumns = resultColumnConvertibleList.map { $0.asResultColumn() }
+        withExtendedLifetime(resultColumns) {
             let cppColumns = $0.map { $0.cppObj }
             cppColumns.withUnsafeBufferPointer {
                 WCDBStatementSelectConfigResultColumns(cppObj, $0.baseAddress, Int32($0.count))

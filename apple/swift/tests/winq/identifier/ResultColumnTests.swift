@@ -23,15 +23,15 @@ import WCDB
 
 class ResultColumnTests: BaseTestCase {
 
-    func generateColumnResult() -> ResultColumn {
+    func generateResultColumn() -> ResultColumn {
         let column = Column(named: "testColumn")
         return ResultColumn(with: column)
     }
 
-    func testColumnResult() {
+    func testResultColumn() {
 
-        WINQAssertEqual(generateColumnResult().`as`("testColumnResult"), "testColumn AS testColumnResult")
+        WINQAssertEqual(generateResultColumn().`as`("testResultColumn"), "testColumn AS testResultColumn")
 
-        WINQAssertEqual(generateColumnResult().asColumnResult(), "testColumn")
+        WINQAssertEqual(generateResultColumn().asResultColumn(), "testColumn")
     }
 }
