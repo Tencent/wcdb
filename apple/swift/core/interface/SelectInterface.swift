@@ -31,7 +31,7 @@ public protocol RowSelectInterface: AnyObject {
     /// Get rows by specific selecting
     ///
     /// - Parameters:
-    ///   - columnResultConvertibleList: WINQ column result list
+    ///   - resultColumnConvertibleList: WINQ column result list
     ///   - table: Table name
     ///   - condition: Expression convertible
     ///   - orderList: Order convertible list
@@ -39,7 +39,7 @@ public protocol RowSelectInterface: AnyObject {
     ///   - offset: Expression convertible
     /// - Returns: `MultiRowsValue`
     /// - Throws: `Error`
-    func getRows(on columnResultConvertibleList: [ResultColumnConvertible],
+    func getRows(on resultColumnConvertibleList: [ResultColumnConvertible],
                  fromTable table: String,
                  where condition: Condition?,
                  orderBy orderList: [OrderBy]?,
@@ -49,7 +49,7 @@ public protocol RowSelectInterface: AnyObject {
     /// Get rows by specific selecting
     ///
     /// - Parameters:
-    ///   - columnResultConvertibleList: WINQ column result list
+    ///   - resultColumnConvertibleList: WINQ column result list
     ///   - table: Table name
     ///   - condition: Expression convertible
     ///   - orderList: Order convertible list
@@ -57,7 +57,7 @@ public protocol RowSelectInterface: AnyObject {
     ///   - offset: Expression convertible
     /// - Returns: `MultiRowsValue`
     /// - Throws: `Error`
-    func getRows(on columnResultConvertibleList: ResultColumnConvertible...,
+    func getRows(on resultColumnConvertibleList: ResultColumnConvertible...,
                  fromTable table: String,
                  where condition: Condition?,
                  orderBy orderList: [OrderBy]?,
@@ -67,14 +67,14 @@ public protocol RowSelectInterface: AnyObject {
     /// Get row by specific selecting
     ///
     /// - Parameters:
-    ///   - columnResultConvertibleList: WINQ column result list
+    ///   - resultColumnConvertibleList: WINQ column result list
     ///   - table: Table name
     ///   - condition: Expression convertible
     ///   - orderList: Order convertible list
     ///   - offset: Expression convertible
     /// - Returns: `OneRowValue`
     /// - Throws: `Error`
-    func getRow(on columnResultConvertibleList: ResultColumnConvertible...,
+    func getRow(on resultColumnConvertibleList: ResultColumnConvertible...,
                 fromTable table: String,
                 where condition: Condition?,
                 orderBy orderList: [OrderBy]?,
@@ -83,14 +83,14 @@ public protocol RowSelectInterface: AnyObject {
     /// Get row by specific selecting
     ///
     /// - Parameters:
-    ///   - columnResultConvertibleList: WINQ column result list
+    ///   - resultColumnConvertibleList: WINQ column result list
     ///   - table: Table name
     ///   - condition: Expression convertible
     ///   - orderList: Order convertible list
     ///   - offset: Expression convertible
     /// - Returns: `OneRowValue`
     /// - Throws: `Error`
-    func getRow(on columnResultConvertibleList: [ResultColumnConvertible],
+    func getRow(on resultColumnConvertibleList: [ResultColumnConvertible],
                 fromTable table: String,
                 where condition: Condition?,
                 orderBy orderList: [OrderBy]?,
@@ -99,7 +99,7 @@ public protocol RowSelectInterface: AnyObject {
     /// Get column by specific selecting
     ///
     /// - Parameters:
-    ///   - columnResultConvertible: WINQ column result
+    ///   - resultColumnConvertible: WINQ column result
     ///   - table: Table name
     ///   - condition: Expression convertible
     ///   - orderList: Order convertible list
@@ -107,7 +107,7 @@ public protocol RowSelectInterface: AnyObject {
     ///   - offset: Expression convertible
     /// - Returns: `OneColumnValue`
     /// - Throws: `Error`
-    func getColumn(on columnResultConvertible: ResultColumnConvertible,
+    func getColumn(on resultColumnConvertible: ResultColumnConvertible,
                    fromTable table: String,
                    where condition: Condition?,
                    orderBy orderList: [OrderBy]?,
@@ -117,7 +117,7 @@ public protocol RowSelectInterface: AnyObject {
     /// Get distinct column by specific selecting
     ///
     /// - Parameters:
-    ///   - columnResultConvertible: WINQ column result
+    ///   - resultColumnConvertible: WINQ column result
     ///   - table: Table name
     ///   - condition: Expression convertible
     ///   - orderList: Order convertible list
@@ -125,7 +125,7 @@ public protocol RowSelectInterface: AnyObject {
     ///   - offset: Expression convertible
     /// - Returns: `OneColumnValue`
     /// - Throws: `Error`
-    func getDistinctColumn(on columnResultConvertible: ResultColumnConvertible,
+    func getDistinctColumn(on resultColumnConvertible: ResultColumnConvertible,
                            fromTable table: String,
                            where condition: Condition?,
                            orderBy orderList: [OrderBy]?,
@@ -135,14 +135,14 @@ public protocol RowSelectInterface: AnyObject {
     /// Get value by specific selecting
     ///
     /// - Parameters:
-    ///   - columnResultConvertible: WINQ column result
+    ///   - resultColumnConvertible: WINQ column result
     ///   - table: Table name
     ///   - condition: Expression convertible
     ///   - orderList: Order convertible list
     ///   - offset: Expression convertible
     /// - Returns: `Value`
     /// - Throws: `Error`
-    func getValue(on columnResultConvertible: ResultColumnConvertible,
+    func getValue(on resultColumnConvertible: ResultColumnConvertible,
                   fromTable table: String,
                   where condition: Condition?,
                   orderBy orderList: [OrderBy]?,
@@ -152,7 +152,7 @@ public protocol RowSelectInterface: AnyObject {
     /// Get distinct value by specific selecting
     ///
     /// - Parameters:
-    ///   - columnResultConvertible: WINQ column result
+    ///   - resultColumnConvertible: WINQ column result
     ///   - table: Table name
     ///   - condition: Expression convertible
     ///   - orderList: Order convertible list
@@ -168,14 +168,14 @@ public protocol RowSelectInterface: AnyObject {
 }
 
 extension RowSelectInterface where Self: HandleRepresentable {
-    public func getRows(on columnResultConvertibleList: [ResultColumnConvertible],
+    public func getRows(on resultColumnConvertibleList: [ResultColumnConvertible],
                         fromTable table: String,
                         where condition: Condition? = nil,
                         orderBy orderList: [OrderBy]? = nil,
                         limit: Limit? = nil,
                         offset: Offset? = nil) throws -> MultiRowsValue {
         let rowSelect = RowSelect(with: try getHandle(),
-                                  results: columnResultConvertibleList,
+                                  results: resultColumnConvertibleList,
                                   tables: [table],
                                   isDistinct: false)
         if condition != nil {
@@ -194,14 +194,14 @@ extension RowSelectInterface where Self: HandleRepresentable {
         return try rowSelect.allRows()
     }
 
-    public func getRows(on columnResultConvertibleList: ResultColumnConvertible...,
+    public func getRows(on resultColumnConvertibleList: ResultColumnConvertible...,
                         fromTable table: String,
                         where condition: Condition? = nil,
                         orderBy orderList: [OrderBy]? = nil,
                         limit: Limit? = nil,
                         offset: Offset? = nil) throws -> MultiRowsValue {
         return try getRows(
-            on: columnResultConvertibleList.isEmpty ? [Column.all] : columnResultConvertibleList,
+            on: resultColumnConvertibleList.isEmpty ? [Column.all] : resultColumnConvertibleList,
             fromTable: table,
             where: condition,
             orderBy: orderList,
@@ -209,25 +209,25 @@ extension RowSelectInterface where Self: HandleRepresentable {
             offset: offset)
     }
 
-    public func getRow(on columnResultConvertibleList: ResultColumnConvertible...,
+    public func getRow(on resultColumnConvertibleList: ResultColumnConvertible...,
                        fromTable table: String,
                        where condition: Condition? = nil,
                        orderBy orderList: [OrderBy]? = nil,
                        offset: Offset? = nil) throws -> OneRowValue {
         return try getRow(
-            on: columnResultConvertibleList.isEmpty ? [Column.all] : columnResultConvertibleList,
+            on: resultColumnConvertibleList.isEmpty ? [Column.all] : resultColumnConvertibleList,
             fromTable: table,
             where: condition,
             orderBy: orderList,
             offset: offset)
     }
 
-    public func getRow(on columnResultConvertibleList: [ResultColumnConvertible],
+    public func getRow(on resultColumnConvertibleList: [ResultColumnConvertible],
                        fromTable table: String,
                        where condition: Condition? = nil,
                        orderBy orderList: [OrderBy]? = nil,
                        offset: Offset? = nil) throws -> OneRowValue {
-        return try getRows(on: columnResultConvertibleList,
+        return try getRows(on: resultColumnConvertibleList,
                            fromTable: table,
                            where: condition,
                            orderBy: orderList,

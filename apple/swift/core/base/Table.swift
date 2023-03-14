@@ -379,20 +379,20 @@ extension Table: RowSelectTableInterface {
     /// Get rows by specific selecting
     ///
     /// - Parameters:
-    ///   - columnResultConvertibleList: WINQ column result list
+    ///   - resultColumnConvertibleList: WINQ column result list
     ///   - condition: Expression convertible
     ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Returns: `MultiRowsValue`
     /// - Throws: `Error`
-    public func getRows(on columnResultConvertibleList: [ResultColumnConvertible],
+    public func getRows(on resultColumnConvertibleList: [ResultColumnConvertible],
                         where condition: Condition? = nil,
                         orderBy orderList: [OrderBy]? = nil,
                         limit: Limit? = nil,
                         offset: Offset? = nil) throws -> MultiRowsValue {
         let rowSelect = RowSelect(with: try self.database.getHandle(),
-                                  results: columnResultConvertibleList,
+                                  results: resultColumnConvertibleList,
                                   tables: [self.name],
                                   isDistinct: false)
         if condition != nil {
@@ -414,19 +414,19 @@ extension Table: RowSelectTableInterface {
     /// Get rows by specific selecting
     ///
     /// - Parameters:
-    ///   - columnResultConvertibleList: WINQ column result list
+    ///   - resultColumnConvertibleList: WINQ column result list
     ///   - condition: Expression convertible
     ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Returns: `MultiRowsValue`
     /// - Throws: `Error`
-    public func getRows(on columnResultConvertibleList: ResultColumnConvertible...,
+    public func getRows(on resultColumnConvertibleList: ResultColumnConvertible...,
                         where condition: Condition? = nil,
                         orderBy orderList: [OrderBy]? = nil,
                         limit: Limit? = nil,
                         offset: Offset? = nil) throws -> MultiRowsValue {
-        return try getRows(on: columnResultConvertibleList.isEmpty ? [Column.all] : columnResultConvertibleList,
+        return try getRows(on: resultColumnConvertibleList.isEmpty ? [Column.all] : resultColumnConvertibleList,
                            where: condition,
                            orderBy: orderList,
                            limit: limit,
@@ -436,17 +436,17 @@ extension Table: RowSelectTableInterface {
     /// Get row by specific selecting
     ///
     /// - Parameters:
-    ///   - columnResultConvertibleList: WINQ column result list
+    ///   - resultColumnConvertibleList: WINQ column result list
     ///   - condition: Expression convertible
     ///   - orderList: Order convertible list
     ///   - offset: Expression convertible
     /// - Returns: `MultiRowsValue`
     /// - Throws: `Error`
-    public func getRow(on columnResultConvertibleList: ResultColumnConvertible...,
+    public func getRow(on resultColumnConvertibleList: ResultColumnConvertible...,
                        where condition: Condition? = nil,
                        orderBy orderList: [OrderBy]? = nil,
                        offset: Offset? = nil) throws -> OneRowValue {
-        return try getRows(on: columnResultConvertibleList.isEmpty ? [Column.all] : columnResultConvertibleList,
+        return try getRows(on: resultColumnConvertibleList.isEmpty ? [Column.all] : resultColumnConvertibleList,
                            where: condition,
                            orderBy: orderList,
                            limit: 1,
@@ -456,17 +456,17 @@ extension Table: RowSelectTableInterface {
     /// Get row by specific selecting
     ///
     /// - Parameters:
-    ///   - columnResultConvertibleList: WINQ column result list
+    ///   - resultColumnConvertibleList: WINQ column result list
     ///   - condition: Expression convertible
     ///   - orderList: Order convertible list
     ///   - offset: Expression convertible
     /// - Returns: `MultiRowsValue`
     /// - Throws: `Error`
-    public func getRow(on columnResultConvertibleList: [ResultColumnConvertible],
+    public func getRow(on resultColumnConvertibleList: [ResultColumnConvertible],
                        where condition: Condition? = nil,
                        orderBy orderList: [OrderBy]? = nil,
                        offset: Offset? = nil) throws -> OneRowValue {
-        return try getRows(on: columnResultConvertibleList,
+        return try getRows(on: resultColumnConvertibleList,
                            where: condition,
                            orderBy: orderList,
                            limit: 1,
@@ -476,7 +476,7 @@ extension Table: RowSelectTableInterface {
     /// Get column by specific selecting
     ///
     /// - Parameters:
-    ///   - columnResultConvertible: WINQ column result
+    ///   - resultColumnConvertible: WINQ column result
     ///   - condition: Expression convertible
     ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
@@ -508,7 +508,7 @@ extension Table: RowSelectTableInterface {
     /// Get distinct column by specific selecting
     ///
     /// - Parameters:
-    ///   - columnResultConvertible: WINQ column result
+    ///   - resultColumnConvertible: WINQ column result
     ///   - condition: Expression convertible
     ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
@@ -540,7 +540,7 @@ extension Table: RowSelectTableInterface {
     /// Get value by specific selecting
     ///
     /// - Parameters:
-    ///   - columnResultConvertible: WINQ column result
+    ///   - resultColumnConvertible: WINQ column result
     ///   - condition: Expression convertible
     ///   - orderList: Order convertible list
     ///   - offset: Expression convertible
@@ -561,7 +561,7 @@ extension Table: RowSelectTableInterface {
     /// Get distinct value by specific selecting
     ///
     /// - Parameters:
-    ///   - columnResultConvertible: WINQ column result
+    ///   - resultColumnConvertible: WINQ column result
     ///   - condition: Expression convertible
     ///   - orderList: Order convertible list
     ///   - offset: Expression convertible

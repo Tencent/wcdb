@@ -40,7 +40,7 @@ class ExpresssionTests: BaseTestCase {
         WINQAssertEqual(boolExpression, "FALSE")
 
         let columnExpression: Expression = Column(named: "testColumn").asExpression()
-        WINQAssertEqual(columnExpression.asColumnResult(), "testColumn")
+        WINQAssertEqual(columnExpression.asResultColumn(), "testColumn")
         WINQAssertEqual(columnExpression.order(.descending), "testColumn DESC")
 
         WINQAssertEqual(Expression(with: BindParameter(1)), "?1")

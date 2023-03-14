@@ -160,78 +160,78 @@ public protocol RowSelectChainCallInterface: AnyObject {
     /// Prepare chain call for row-selecting on specific column results
     ///
     /// - Parameters:
-    ///   - columnResultConvertibleList: `ColumnResult` list
+    ///   - resultColumnConvertibleList: `ResultColumn` list
     ///   - tables: Table name list
     ///   - isDistinct: Is distinct or not
     /// - Returns: `RowSelect`
-    func prepareRowSelect(on columnResultConvertibleList: ResultColumnConvertible...,
+    func prepareRowSelect(on resultColumnConvertibleList: ResultColumnConvertible...,
                           fromTables tables: [String],
                           isDistinct: Bool) throws -> RowSelect
 
     /// Prepare chain call for row-selecting on specific column results
     ///
     /// - Parameters:
-    ///   - columnResultConvertibleList: `ColumnResult` list
+    ///   - resultColumnConvertibleList: `ResultColumn` list
     ///   - tables: Table name list
     ///   - isDistinct: Is distinct or not
     /// - Returns: `RowSelect`
-    func prepareRowSelect(on columnResultConvertibleList: [ResultColumnConvertible],
+    func prepareRowSelect(on resultColumnConvertibleList: [ResultColumnConvertible],
                           fromTables tables: [String],
                           isDistinct: Bool) throws -> RowSelect
 
     /// Prepare chain call for row-selecting on specific column results
     ///
     /// - Parameters:
-    ///   - columnResultConvertibleList: `ColumnResult` list
+    ///   - resultColumnConvertibleList: `ResultColumn` list
     ///   - tables: Table name
     ///   - isDistinct: Is distinct or not
     /// - Returns: `RowSelect`
-    func prepareRowSelect(on columnResultConvertibleList: ResultColumnConvertible...,
+    func prepareRowSelect(on resultColumnConvertibleList: ResultColumnConvertible...,
                           fromTable table: String,
                           isDistinct: Bool) throws -> RowSelect
 
     /// Prepare chain call for row-selecting on specific column results
     ///
     /// - Parameters:
-    ///   - columnResultConvertibleList: `ColumnResult` list
+    ///   - resultColumnConvertibleList: `ResultColumn` list
     ///   - tables: Table name
     ///   - isDistinct: Is distinct or not
     /// - Returns: `RowSelect`
-    func prepareRowSelect(on columnResultConvertibleList: [ResultColumnConvertible],
+    func prepareRowSelect(on resultColumnConvertibleList: [ResultColumnConvertible],
                           fromTable table: String,
                           isDistinct: Bool) throws -> RowSelect
 }
 
 extension RowSelectChainCallInterface where Self: HandleRepresentable {
-    public func prepareRowSelect(on columnResultConvertibleList: ResultColumnConvertible...,
+    public func prepareRowSelect(on resultColumnConvertibleList: ResultColumnConvertible...,
                                  fromTables tables: [String],
                                  isDistinct: Bool = false) throws -> RowSelect {
-        return try prepareRowSelect(on: columnResultConvertibleList.isEmpty ?
-                                    [Column.all] : columnResultConvertibleList,
+        return try prepareRowSelect(on: resultColumnConvertibleList.isEmpty ?
+                                    [Column.all] : resultColumnConvertibleList,
                                     fromTables: tables,
                                     isDistinct: isDistinct)
     }
 
-    public func prepareRowSelect(on columnResultConvertibleList: [ResultColumnConvertible],
+    public func prepareRowSelect(on resultColumnConvertibleList: [ResultColumnConvertible],
                                  fromTables tables: [String],
                                  isDistinct: Bool = false) throws -> RowSelect {
-        return RowSelect(with: try getHandle(), results: columnResultConvertibleList, tables: tables, isDistinct: isDistinct)
+        return RowSelect(with: try getHandle(), results: resultColumnConvertibleList, tables: tables, isDistinct: isDistinct)
     }
 
-    public func prepareRowSelect(on columnResultConvertibleList: ResultColumnConvertible...,
+    public func prepareRowSelect(on resultColumnConvertibleList: ResultColumnConvertible...,
                                  fromTable table: String,
                                  isDistinct: Bool = false) throws -> RowSelect {
-        return try prepareRowSelect(on: columnResultConvertibleList.isEmpty ?
-                                    [Column.all] : columnResultConvertibleList,
+        return try prepareRowSelect(on: resultColumnConvertibleList.isEmpty ?
+                                    [Column.all] : resultColumnConvertibleList,
                                     fromTable: table,
                                     isDistinct: isDistinct)
     }
 
-    public func prepareRowSelect(on columnResultConvertibleList: [ResultColumnConvertible],
+    public func prepareRowSelect(on resultColumnConvertibleList: [ResultColumnConvertible],
                                  fromTable table: String,
                                  isDistinct: Bool = false) throws -> RowSelect {
         return RowSelect(with: try getHandle(),
-                         results: columnResultConvertibleList,
+                         results: resultColumnConvertibleList,
                          tables: [table],
                          isDistinct: isDistinct)
     }

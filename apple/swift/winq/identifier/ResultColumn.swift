@@ -39,7 +39,7 @@ public final class ResultColumn: Identifier<CPPResultColumn> {
 }
 
 extension ResultColumn: ResultColumnConvertible {
-    public func asColumnResult() -> ResultColumn {
+    public func asResultColumn() -> ResultColumn {
         return self
     }
 }
