@@ -45,11 +45,11 @@ public final class Select: Selectable {
         try lazyPrepareStatement()
 #if WCDB_SWIFT_BRIDGE_OBJC
         if properties[0].isSwiftProperty() {
-            let rootType = keys[0].rootType as? TableDecodableBase.Type
-            assert(rootType != nil, "\(keys[0].rootType) must conform to TableDecodable protocol.")
             guard try next() else {
                 return nil
             }
+            let rootType = keys[0].rootType as? TableDecodableBase.Type
+            assert(rootType != nil, "\(keys[0].rootType) must conform to TableDecodable protocol.")
             return try rootType!.init(from: decoder)
         } else {
             guard try next() else {

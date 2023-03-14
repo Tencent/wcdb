@@ -119,17 +119,29 @@ public protocol StatementInterface: AnyObject {
 
     /// The wrapper of `sqlite3_column_*` for getting  a column of values.
     ///
-    /// - Parameters:
-    ///   - index: Begin with 0
     /// - Returns: OneRowValue
     func oneColumnValue(atIndex index: Int) throws -> OneColumnValue
 
     /// The wrapper of `sqlite3_column_*` for getting  multi rows of values.
     ///
-    /// - Parameters:
-    ///   - index: Begin with 0
     /// - Returns: MultiRowsValue
     func multiRowsValue() throws -> MultiRowsValue
+
+    /// The wrapper of `sqlite3_column_*` for getting  an object.
+    ///
+    /// - Parameters:
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - type: Type of table decodable object
+    /// - Returns: Table decodable object.
+    func extractObject<Object: TableDecodable>(on propertyConvertibleList: [PropertyConvertible]?, of type: Object.Type) throws-> Object
+
+    /// The wrapper of `sqlite3_column_*` for getting  all objects.
+    ///
+    /// - Parameters:
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - type: Type of table decodable object
+    /// - Returns: Table decodable objects.
+    func extractAllObjects<Object: TableDecodable>(on propertyConvertibleList: [PropertyConvertible]?, of type: Object.Type) throws-> [Object]
 
     /// Get index by column name.
     ///
@@ -188,11 +200,12 @@ extension StatementInterface where Self: RawStatementmentRepresentable {
 
     @discardableResult
     public func step() throws -> Bool {
-        if !WCDBHandleStatementStep(getRawStatement()) {
-            let cppError = WCDBHandleStatementGetError(getRawStatement())
+        let rawStatment = getRawStatement()
+        if !WCDBHandleStatementStep(rawStatment) {
+            let cppError = WCDBHandleStatementGetError(rawStatment)
             throw ErrorBridge.getErrorFrom(cppError: cppError)
         }
-        return !WCDBHandleStatementIsDone(getRawStatement())
+        return !WCDBHandleStatementIsDone(rawStatment)
     }
 
     public func reset() {
@@ -343,6 +356,22 @@ extension StatementInterface where Self: RawStatementmentRepresentable {
             rows.append(oneRowValue())
         }
         return rows
+    }
+
+    public func extractObject<Object: TableDecodable>(on propertyConvertibleList: [PropertyConvertible]? = nil, of type: Object.Type = Object.self) throws-> Object {
+        let keys: [CodingTableKeyBase] = propertyConvertibleList?.asCodingTableKeys() ?? Object.Properties.all.asCodingTableKeys()
+        let decoder = TableDecoder(keys, on: self)
+        return try Object.init(from: decoder)
+    }
+
+    public func extractAllObjects<Object: TableDecodable>(on propertyConvertibleList: [PropertyConvertible]? = nil, of type: Object.Type = Object.self) throws-> [Object] {
+        let keys: [CodingTableKeyBase] = propertyConvertibleList?.asCodingTableKeys() ?? Object.Properties.all.asCodingTableKeys()
+        let decoder = TableDecoder(keys, on: self)
+        var objects: [Object] = []
+        while try step() {
+            objects.append(try Object.init(from: decoder))
+        }
+        return objects
     }
 
     public func index(byName name: String) -> Int? {
