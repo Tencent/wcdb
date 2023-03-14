@@ -26,7 +26,7 @@
 
 #include <WCDB/AggregateFunction.hpp>
 #include <WCDB/CoreFunction.hpp>
-#include <WCDB/FTS3Function.hpp>
+#include <WCDB/FTSFunction.hpp>
 #include <WCDB/OrderingTerm.hpp>
 #include <WCDB/SQL.hpp>
 
@@ -40,7 +40,7 @@ class Column : public SpecifiedSyntax<Syntax::Column, SQL>,
                public ExpressionCollateOperable,
                public CoreFunctionOperable,
                public AggregateFunctionOperable,
-               public FTS3FunctionOperable {
+               public FTSFunctionOperable {
 public:
     template<typename T, typename Enable = typename std::enable_if<ColumnConvertible<T>::value>::type>
     Column(const T& t) : Column(ColumnConvertible<T>::asColumn(t))

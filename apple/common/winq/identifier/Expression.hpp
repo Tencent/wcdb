@@ -26,7 +26,7 @@
 
 #include <WCDB/AggregateFunction.hpp>
 #include <WCDB/CoreFunction.hpp>
-#include <WCDB/FTS3Function.hpp>
+#include <WCDB/FTSFunction.hpp>
 #include <WCDB/SQL.hpp>
 
 namespace WCDB {
@@ -39,7 +39,7 @@ class Expression final : public SpecifiedSyntax<Syntax::Expression, SQL>,
                          public ExpressionCollateOperable,
                          public CoreFunctionOperable,
                          public AggregateFunctionOperable,
-                         public FTS3FunctionOperable {
+                         public FTSFunctionOperable {
 public:
     using SpecifiedSyntax<Syntax::Expression, SQL>::SpecifiedSyntax;
     ~Expression() override final;

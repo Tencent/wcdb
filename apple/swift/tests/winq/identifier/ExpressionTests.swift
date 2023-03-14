@@ -195,11 +195,17 @@ class ExpresssionTests: BaseTestCase {
             "CASE left WHEN 1 THEN 2 ELSE 3 END"
         )
 
-        WINQExpressionAssertEqual(left.matchinfo(), "MATCHINFO(left)")
+        WINQExpressionAssertEqual(left.matchinfo(), "matchinfo(left)")
 
-        WINQExpressionAssertEqual(left.offsets(), "OFFSETS(left)")
+        WINQExpressionAssertEqual(left.offsets(), "offsets(left)")
 
-        WINQExpressionAssertEqual(left.snippet(), "SNIPPET(left)")
+        WINQExpressionAssertEqual(left.snippet(), "snippet(left)")
+
+        WINQExpressionAssertEqual(left.bm25(), "bm25(left)")
+
+        WINQExpressionAssertEqual(left.highlight(), "highlight(left)")
+
+        WINQExpressionAssertEqual(left.substringMatchInfo(), "\(WCDB.BuiltinAuxiliaryFunction.SubstringMatchInfo)(left)")
 
         WINQExpressionAssertEqual(left.collate("BINARY"), "left COLLATE BINARY")
     }

@@ -373,7 +373,7 @@
                const char *ellipses = "...";
                int columnNumber = -1;
                int approximateNumberOfTokens = 5;
-               return [self.database getColumnFromStatement:WCDB::StatementSelect().select(WCDB::Column(self.tableName).snippet(startMatchText, endMatchText, ellipses, columnNumber, approximateNumberOfTokens)).from(self.tableName).where(FTS3Object.extension.match("e*")).order(WCDB::OrderingTerm::ascendingRowid())];
+               return [self.database getColumnFromStatement:WCDB::StatementSelect().select(WCDB::Column(self.tableName).fts3Snippet(startMatchText, endMatchText, ellipses, columnNumber, approximateNumberOfTokens)).from(self.tableName).where(FTS3Object.extension.match("e*")).order(WCDB::OrderingTerm::ascendingRowid())];
            }];
 }
 

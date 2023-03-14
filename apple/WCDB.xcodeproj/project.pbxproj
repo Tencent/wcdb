@@ -110,7 +110,7 @@
 		037C391B2897E33600328EC8 /* StatementCreateIndex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBC3217DFADC006E9E73 /* StatementCreateIndex.cpp */; };
 		037C391D2897E33600328EC8 /* StatementDetach.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBCF217DFADC006E9E73 /* StatementDetach.cpp */; };
 		037C391F2897E33600328EC8 /* StatementAnalyze.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBBB217DFADC006E9E73 /* StatementAnalyze.cpp */; };
-		037C39212897E33600328EC8 /* FTS3Function.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB73217DFADC006E9E73 /* FTS3Function.cpp */; };
+		037C39212897E33600328EC8 /* FTSFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB73217DFADC006E9E73 /* FTSFunction.cpp */; };
 		037C39222897E33600328EC8 /* RecyclableHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6241EA0D6680021EFA7 /* RecyclableHandle.cpp */; };
 		037C39262897E33600328EC8 /* ResultColumn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBA4217DFADC006E9E73 /* ResultColumn.cpp */; };
 		037C39282897E33600328EC8 /* FullCrawler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B3620AD666900E21AB0 /* FullCrawler.cpp */; };
@@ -320,7 +320,7 @@
 		037C3AB32897E33600328EC8 /* ForeignKey.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB8B217DFADC006E9E73 /* ForeignKey.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		037C3AB62897E33600328EC8 /* Version.h in Headers */ = {isa = PBXBuildFile; fileRef = 23176A8B21B912B10051ACF9 /* Version.h */; };
 		037C3AB82897E33600328EC8 /* StatementDropTrigger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBD6217DFADC006E9E73 /* StatementDropTrigger.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		037C3AB92897E33600328EC8 /* FTS3Function.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB74217DFADC006E9E73 /* FTS3Function.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		037C3AB92897E33600328EC8 /* FTSFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB74217DFADC006E9E73 /* FTSFunction.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		037C3ABF2897E33600328EC8 /* WalRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23593B7C20D3ADF80058B416 /* WalRelated.hpp */; };
 		037C3AC02897E33600328EC8 /* FactoryRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D0C36220C14ACC0001BFAE /* FactoryRelated.hpp */; };
 		037C3AC12897E33600328EC8 /* SyntaxSelectSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDC5E217DFADC006E9E73 /* SyntaxSelectSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -964,7 +964,7 @@
 		234F0598227AA4E200DD65A2 /* TableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0593227AA4E200DD65A2 /* TableTests.mm */; };
 		234F05DD227AA4F600DD65A2 /* StatementAlterTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0599227AA4EC00DD65A2 /* StatementAlterTableTests.mm */; };
 		234F05DE227AA4F600DD65A2 /* FrameSpecTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F059A227AA4ED00DD65A2 /* FrameSpecTests.mm */; };
-		234F05DF227AA4F600DD65A2 /* FTS3FunctionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F059B227AA4ED00DD65A2 /* FTS3FunctionTests.mm */; };
+		234F05DF227AA4F600DD65A2 /* FTSFunctionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F059B227AA4ED00DD65A2 /* FTSFunctionTests.mm */; };
 		234F05E0227AA4F600DD65A2 /* StatementTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F059C227AA4ED00DD65A2 /* StatementTests.mm */; };
 		234F05E1227AA4F600DD65A2 /* StatementPragmaTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F059D227AA4ED00DD65A2 /* StatementPragmaTests.mm */; };
 		234F05E2227AA4F600DD65A2 /* ColumnConstraintTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F059E227AA4ED00DD65A2 /* ColumnConstraintTests.mm */; };
@@ -1285,8 +1285,8 @@
 		23EEDC6E217DFADC006E9E73 /* CoreFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB70217DFADC006E9E73 /* CoreFunction.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23EEDC6F217DFADC006E9E73 /* ExpressionOperable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB71217DFADC006E9E73 /* ExpressionOperable.cpp */; };
 		23EEDC70217DFADC006E9E73 /* ExpressionOperable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB72217DFADC006E9E73 /* ExpressionOperable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		23EEDC71217DFADC006E9E73 /* FTS3Function.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB73217DFADC006E9E73 /* FTS3Function.cpp */; };
-		23EEDC72217DFADC006E9E73 /* FTS3Function.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB74217DFADC006E9E73 /* FTS3Function.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23EEDC71217DFADC006E9E73 /* FTSFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB73217DFADC006E9E73 /* FTSFunction.cpp */; };
+		23EEDC72217DFADC006E9E73 /* FTSFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB74217DFADC006E9E73 /* FTSFunction.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23EEDC73217DFADC006E9E73 /* SyntaxForwardDeclaration.h in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB75217DFADC006E9E73 /* SyntaxForwardDeclaration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23EEDC74217DFADC006E9E73 /* SyntaxList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB76217DFADC006E9E73 /* SyntaxList.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23EEDC77217DFADC006E9E73 /* BindParameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB7A217DFADC006E9E73 /* BindParameter.cpp */; };
@@ -1676,7 +1676,7 @@
 		7521D70C291E9ABB009642EF /* WCTTable.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23F340D9204D32C2007DB8AB /* WCTTable.mm */; };
 		7521D70D291E9ABB009642EF /* StatementDetach.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBCF217DFADC006E9E73 /* StatementDetach.cpp */; };
 		7521D70F291E9ABB009642EF /* StatementAnalyze.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBBB217DFADC006E9E73 /* StatementAnalyze.cpp */; };
-		7521D712291E9ABB009642EF /* FTS3Function.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB73217DFADC006E9E73 /* FTS3Function.cpp */; };
+		7521D712291E9ABB009642EF /* FTSFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB73217DFADC006E9E73 /* FTSFunction.cpp */; };
 		7521D713291E9ABB009642EF /* RecyclableHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6241EA0D6680021EFA7 /* RecyclableHandle.cpp */; };
 		7521D717291E9ABB009642EF /* ResultColumn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBA4217DFADC006E9E73 /* ResultColumn.cpp */; };
 		7521D719291E9ABB009642EF /* FullCrawler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B3620AD666900E21AB0 /* FullCrawler.cpp */; };
@@ -1949,7 +1949,7 @@
 		7521D8C3291E9ABB009642EF /* Version.h in Headers */ = {isa = PBXBuildFile; fileRef = 23176A8B21B912B10051ACF9 /* Version.h */; };
 		7521D8C5291E9ABB009642EF /* WCTHandle+Convenient.h in Headers */ = {isa = PBXBuildFile; fileRef = 23A3CFB3205FB1A800692F94 /* WCTHandle+Convenient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521D8C6291E9ABB009642EF /* StatementDropTrigger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBD6217DFADC006E9E73 /* StatementDropTrigger.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		7521D8C8291E9ABB009642EF /* FTS3Function.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB74217DFADC006E9E73 /* FTS3Function.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		7521D8C8291E9ABB009642EF /* FTSFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB74217DFADC006E9E73 /* FTSFunction.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521D8C9291E9ABB009642EF /* WCTTransaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 234DBD072064DE23000E31E8 /* WCTTransaction.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521D8CA291E9ABB009642EF /* WalRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23593B7C20D3ADF80058B416 /* WalRelated.hpp */; };
 		7521D8CB291E9ABB009642EF /* FactoryRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D0C36220C14ACC0001BFAE /* FactoryRelated.hpp */; };
@@ -2300,7 +2300,7 @@
 		7521DAA4291EA349009642EF /* ColumnConstraintBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75A46BFE284310CE00B58207 /* ColumnConstraintBridge.cpp */; };
 		7521DAA5291EA349009642EF /* StatementAnalyze.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBBB217DFADC006E9E73 /* StatementAnalyze.cpp */; };
 		7521DAA6291EA349009642EF /* IndexConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C44097291CE24900D74EB7 /* IndexConfig.swift */; };
-		7521DAA8291EA349009642EF /* FTS3Function.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB73217DFADC006E9E73 /* FTS3Function.cpp */; };
+		7521DAA8291EA349009642EF /* FTSFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB73217DFADC006E9E73 /* FTSFunction.cpp */; };
 		7521DAA9291EA349009642EF /* RecyclableHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6241EA0D6680021EFA7 /* RecyclableHandle.cpp */; };
 		7521DAAA291EA349009642EF /* ErrorBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C2EAEC27F8382200B41169 /* ErrorBridge.swift */; };
 		7521DAAC291EA349009642EF /* StatementExplain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1659227F42D6500D2C926 /* StatementExplain.swift */; };
@@ -2651,7 +2651,7 @@
 		7521DC57291EA349009642EF /* ForeignKey.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB8B217DFADC006E9E73 /* ForeignKey.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521DC59291EA349009642EF /* Version.h in Headers */ = {isa = PBXBuildFile; fileRef = 23176A8B21B912B10051ACF9 /* Version.h */; };
 		7521DC5C291EA349009642EF /* StatementDropTrigger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBD6217DFADC006E9E73 /* StatementDropTrigger.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		7521DC5E291EA349009642EF /* FTS3Function.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB74217DFADC006E9E73 /* FTS3Function.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		7521DC5E291EA349009642EF /* FTSFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB74217DFADC006E9E73 /* FTSFunction.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521DC60291EA349009642EF /* WalRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23593B7C20D3ADF80058B416 /* WalRelated.hpp */; };
 		7521DC61291EA349009642EF /* FactoryRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D0C36220C14ACC0001BFAE /* FactoryRelated.hpp */; };
 		7521DC62291EA349009642EF /* SyntaxSelectSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDC5E217DFADC006E9E73 /* SyntaxSelectSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -3746,7 +3746,7 @@
 		234F0593227AA4E200DD65A2 /* TableTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableTests.mm; sourceTree = "<group>"; };
 		234F0599227AA4EC00DD65A2 /* StatementAlterTableTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementAlterTableTests.mm; sourceTree = "<group>"; };
 		234F059A227AA4ED00DD65A2 /* FrameSpecTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FrameSpecTests.mm; sourceTree = "<group>"; };
-		234F059B227AA4ED00DD65A2 /* FTS3FunctionTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FTS3FunctionTests.mm; sourceTree = "<group>"; };
+		234F059B227AA4ED00DD65A2 /* FTSFunctionTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FTSFunctionTests.mm; sourceTree = "<group>"; };
 		234F059C227AA4ED00DD65A2 /* StatementTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementTests.mm; sourceTree = "<group>"; };
 		234F059D227AA4ED00DD65A2 /* StatementPragmaTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementPragmaTests.mm; sourceTree = "<group>"; };
 		234F059E227AA4ED00DD65A2 /* ColumnConstraintTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ColumnConstraintTests.mm; sourceTree = "<group>"; };
@@ -4132,8 +4132,8 @@
 		23EEDB70217DFADC006E9E73 /* CoreFunction.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CoreFunction.hpp; sourceTree = "<group>"; };
 		23EEDB71217DFADC006E9E73 /* ExpressionOperable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExpressionOperable.cpp; sourceTree = "<group>"; };
 		23EEDB72217DFADC006E9E73 /* ExpressionOperable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExpressionOperable.hpp; sourceTree = "<group>"; };
-		23EEDB73217DFADC006E9E73 /* FTS3Function.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FTS3Function.cpp; sourceTree = "<group>"; };
-		23EEDB74217DFADC006E9E73 /* FTS3Function.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FTS3Function.hpp; sourceTree = "<group>"; };
+		23EEDB73217DFADC006E9E73 /* FTSFunction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FTSFunction.cpp; sourceTree = "<group>"; };
+		23EEDB74217DFADC006E9E73 /* FTSFunction.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FTSFunction.hpp; sourceTree = "<group>"; };
 		23EEDB75217DFADC006E9E73 /* SyntaxForwardDeclaration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyntaxForwardDeclaration.h; sourceTree = "<group>"; };
 		23EEDB76217DFADC006E9E73 /* SyntaxList.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SyntaxList.hpp; sourceTree = "<group>"; };
 		23EEDB7A217DFADC006E9E73 /* BindParameter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BindParameter.cpp; sourceTree = "<group>"; };
@@ -6018,7 +6018,7 @@
 				234F05BF227AA4F200DD65A2 /* FilterTests.mm */,
 				234F05B9227AA4F100DD65A2 /* ForeignKeyTests.mm */,
 				234F059A227AA4ED00DD65A2 /* FrameSpecTests.mm */,
-				234F059B227AA4ED00DD65A2 /* FTS3FunctionTests.mm */,
+				234F059B227AA4ED00DD65A2 /* FTSFunctionTests.mm */,
 				234F05B0227AA4EF00DD65A2 /* IndexedColumnTests.mm */,
 				234F05AB227AA4EF00DD65A2 /* JoinConstraintTests.mm */,
 				234F05D4227AA4F500DD65A2 /* JoinTests.mm */,
@@ -6775,8 +6775,8 @@
 				23EEDB70217DFADC006E9E73 /* CoreFunction.hpp */,
 				23EEDB71217DFADC006E9E73 /* ExpressionOperable.cpp */,
 				23EEDB72217DFADC006E9E73 /* ExpressionOperable.hpp */,
-				23EEDB73217DFADC006E9E73 /* FTS3Function.cpp */,
-				23EEDB74217DFADC006E9E73 /* FTS3Function.hpp */,
+				23EEDB73217DFADC006E9E73 /* FTSFunction.cpp */,
+				23EEDB74217DFADC006E9E73 /* FTSFunction.hpp */,
 				23EEDB75217DFADC006E9E73 /* SyntaxForwardDeclaration.h */,
 				23EEDB76217DFADC006E9E73 /* SyntaxList.hpp */,
 				03E5CC6D28A3BDF3005353D9 /* Value.hpp */,
@@ -7452,7 +7452,7 @@
 				037C3AB32897E33600328EC8 /* ForeignKey.hpp in Headers */,
 				037C3AB62897E33600328EC8 /* Version.h in Headers */,
 				037C3AB82897E33600328EC8 /* StatementDropTrigger.hpp in Headers */,
-				037C3AB92897E33600328EC8 /* FTS3Function.hpp in Headers */,
+				037C3AB92897E33600328EC8 /* FTSFunction.hpp in Headers */,
 				037C3ABF2897E33600328EC8 /* WalRelated.hpp in Headers */,
 				037C3AC02897E33600328EC8 /* FactoryRelated.hpp in Headers */,
 				037C3AC12897E33600328EC8 /* SyntaxSelectSTMT.hpp in Headers */,
@@ -7757,7 +7757,7 @@
 				75A60AB329345A38009C1B3C /* Cipher.hpp in Headers */,
 				23EEDCD2217DFADC006E9E73 /* StatementDropTrigger.hpp in Headers */,
 				75D99B8128CA441E00BEC8B5 /* BaseOperation.hpp in Headers */,
-				23EEDC72217DFADC006E9E73 /* FTS3Function.hpp in Headers */,
+				23EEDC72217DFADC006E9E73 /* FTSFunction.hpp in Headers */,
 				234DBD092064DE23000E31E8 /* WCTTransaction.h in Headers */,
 				23593B7F20D3ADF80058B416 /* WalRelated.hpp in Headers */,
 				23D0C36520C14ACC0001BFAE /* FactoryRelated.hpp in Headers */,
@@ -8192,7 +8192,7 @@
 				7521D8C3291E9ABB009642EF /* Version.h in Headers */,
 				7521D8C5291E9ABB009642EF /* WCTHandle+Convenient.h in Headers */,
 				7521D8C6291E9ABB009642EF /* StatementDropTrigger.hpp in Headers */,
-				7521D8C8291E9ABB009642EF /* FTS3Function.hpp in Headers */,
+				7521D8C8291E9ABB009642EF /* FTSFunction.hpp in Headers */,
 				7521D8C9291E9ABB009642EF /* WCTTransaction.h in Headers */,
 				7521D8CA291E9ABB009642EF /* WalRelated.hpp in Headers */,
 				7521D8CB291E9ABB009642EF /* FactoryRelated.hpp in Headers */,
@@ -8525,7 +8525,7 @@
 				7521DC57291EA349009642EF /* ForeignKey.hpp in Headers */,
 				7521DC59291EA349009642EF /* Version.h in Headers */,
 				7521DC5C291EA349009642EF /* StatementDropTrigger.hpp in Headers */,
-				7521DC5E291EA349009642EF /* FTS3Function.hpp in Headers */,
+				7521DC5E291EA349009642EF /* FTSFunction.hpp in Headers */,
 				7521DC60291EA349009642EF /* WalRelated.hpp in Headers */,
 				7521DC61291EA349009642EF /* FactoryRelated.hpp in Headers */,
 				7521DC62291EA349009642EF /* SyntaxSelectSTMT.hpp in Headers */,
@@ -9321,7 +9321,7 @@
 				037C391D2897E33600328EC8 /* StatementDetach.cpp in Sources */,
 				03AFD34F28B8C4EB00EF5E56 /* Field.cpp in Sources */,
 				037C391F2897E33600328EC8 /* StatementAnalyze.cpp in Sources */,
-				037C39212897E33600328EC8 /* FTS3Function.cpp in Sources */,
+				037C39212897E33600328EC8 /* FTSFunction.cpp in Sources */,
 				037C39222897E33600328EC8 /* RecyclableHandle.cpp in Sources */,
 				030C987A28D068B0008636DF /* TransactionGuard.cpp in Sources */,
 				7521D39228BD1187009C33D0 /* ChainCall.cpp in Sources */,
@@ -9685,7 +9685,7 @@
 				234F05EB227AA4F600DD65A2 /* BindParameterTests.mm in Sources */,
 				234F070A227AA5A700DD65A2 /* MigrateTestCase.mm in Sources */,
 				751F0FFF2941771200FE67C6 /* MissTwoColumnTableMigrationCompatibleTests.mm in Sources */,
-				234F05DF227AA4F600DD65A2 /* FTS3FunctionTests.mm in Sources */,
+				234F05DF227AA4F600DD65A2 /* FTSFunctionTests.mm in Sources */,
 				39327BA322CF276600AABD4B /* PrototypeFactory.mm in Sources */,
 				234F06DA227AA57D00DD65A2 /* ColumnConstraintUnique.mm in Sources */,
 				39327B5F22CF275200AABD4B /* Signpost.mm in Sources */,
@@ -9981,7 +9981,7 @@
 				23EEDCB7217DFADC006E9E73 /* StatementAnalyze.cpp in Sources */,
 				75C44098291CE24900D74EB7 /* IndexConfig.swift in Sources */,
 				036E50C128116D7A007365CD /* WCTBridgeProperty.swift in Sources */,
-				23EEDC71217DFADC006E9E73 /* FTS3Function.cpp in Sources */,
+				23EEDC71217DFADC006E9E73 /* FTSFunction.cpp in Sources */,
 				2349F7071EA0D6680021EFA7 /* RecyclableHandle.cpp in Sources */,
 				03C2EAED27F8382200B41169 /* ErrorBridge.swift in Sources */,
 				03E165FC27F42D6500D2C926 /* StatementExplain.swift in Sources */,
@@ -10474,7 +10474,7 @@
 				7521D70C291E9ABB009642EF /* WCTTable.mm in Sources */,
 				7521D70D291E9ABB009642EF /* StatementDetach.cpp in Sources */,
 				7521D70F291E9ABB009642EF /* StatementAnalyze.cpp in Sources */,
-				7521D712291E9ABB009642EF /* FTS3Function.cpp in Sources */,
+				7521D712291E9ABB009642EF /* FTSFunction.cpp in Sources */,
 				7521D713291E9ABB009642EF /* RecyclableHandle.cpp in Sources */,
 				7521D717291E9ABB009642EF /* ResultColumn.cpp in Sources */,
 				0D4947D0299DE22D00F9518E /* WCTBridgeProperty.mm in Sources */,
@@ -10779,7 +10779,7 @@
 				7521DAA4291EA349009642EF /* ColumnConstraintBridge.cpp in Sources */,
 				7521DAA5291EA349009642EF /* StatementAnalyze.cpp in Sources */,
 				7521DAA6291EA349009642EF /* IndexConfig.swift in Sources */,
-				7521DAA8291EA349009642EF /* FTS3Function.cpp in Sources */,
+				7521DAA8291EA349009642EF /* FTSFunction.cpp in Sources */,
 				7521DAA9291EA349009642EF /* RecyclableHandle.cpp in Sources */,
 				7521DAAA291EA349009642EF /* ErrorBridge.swift in Sources */,
 				7521DAAC291EA349009642EF /* StatementExplain.swift in Sources */,
