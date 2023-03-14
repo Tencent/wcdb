@@ -151,4 +151,5 @@ extension Handle: UpdateInterface {}
 extension Handle: DeleteInterface {}
 extension Handle: RowSelectInterface {}
 extension Handle: SelectInterface {}
+extension Handle: StatementSelectInterface {}
 extension Handle: TransactionInterface {}

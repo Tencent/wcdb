@@ -159,7 +159,7 @@ final class TableDecoder: Decoder {
             let index: Int = columnIndex(by: key)
             // `key` must conform to ColumnDecodable protocol.
             let decodableType = Object.self as! ColumnDecodable.Type
-            guard let wrappedDecoded = decodableType.init(with: handleStatement.columnValue(atIndex: index)) else {
+            guard let wrappedDecoded = decodableType.init(with: handleStatement.value(atIndex: index)) else {
                 throw WCDBError(level: .Error, code: .Misuse, infos: [
                     .message: ErrorValue("If [\(key)] would be decoded as nil, please make it optional.")
                 ])
@@ -273,7 +273,7 @@ final class TableDecoder: Decoder {
             }
             // `key` must conform to ColumnDecodable protocol.
             let decodableType = Object.self as! ColumnDecodable.Type
-            guard let wrappedDecoded = decodableType.init(with: handleStatement.columnValue(atIndex: index)) else {
+            guard let wrappedDecoded = decodableType.init(with: handleStatement.value(atIndex: index)) else {
                 return nil
             }
             // It should not be failed. If you think it's a bug, please report an issue to us.

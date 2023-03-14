@@ -585,4 +585,40 @@ class SelectInterfaceTests: CRUDTestCase {
             XCTFail(error.localizedDescription)
         }
     }
+
+    func testSelectValue() {
+        let value: Value? = WCDBAssertNoThrowReturned(
+            try database.getValue(from: StatementSelect().select(TestObject.Properties.variable1.max()).from(TestObject.name))
+        )
+        XCTAssertNotNil(value)
+        XCTAssertEqual(value!.int64Value, Int64(preInsertedObjects[1].variable1!))
+    }
+
+    func testSelectOneColumn() {
+        let column: OneColumnValue = WCDBAssertNoThrowReturned(
+            try database.getColumn(from: StatementSelect().select(TestObject.Properties.variable1).from(TestObject.name))
+        )
+        XCTAssertEqual(column.count, preInsertedObjects.count)
+        XCTAssertEqual(column[0].int64Value, Int64(preInsertedObjects[0].variable1!))
+        XCTAssertEqual(column[1].int64Value, Int64(preInsertedObjects[1].variable1!))
+    }
+
+    func testSelectOneRow() {
+        let row: OneRowValue? = WCDBAssertNoThrowReturned(
+            try database.getRow(from: StatementSelect().select(TestObject.Properties.all).from(TestObject.name).limit(1))
+        )
+        XCTAssertNotNil(row)
+        XCTAssertEqual(row!.count, TestObject.Properties.all.count)
+        XCTAssertEqual(row![0].int64Value, Int64(preInsertedObjects[0].variable1!))
+        XCTAssertEqual(row![1].stringValue, preInsertedObjects[0].variable2!)
+    }
+
+    func testSelectMultiRows() {
+        let rows: MultiRowsValue = WCDBAssertNoThrowReturned(
+            try database.getRows(from: StatementSelect().select(TestObject.Properties.all).from(TestObject.name))
+        )
+        XCTAssertEqual(rows.count, preInsertedObjects.count)
+        XCTAssertEqual(rows[0][0].int64Value, Int64(preInsertedObjects[0].variable1!))
+        XCTAssertEqual(rows[1][1].stringValue, preInsertedObjects[1].variable2)
+    }
 }

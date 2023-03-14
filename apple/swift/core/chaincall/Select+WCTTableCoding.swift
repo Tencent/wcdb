@@ -33,6 +33,7 @@ public extension Select {
     /// - Throws: `Error`
     func nextObject<Object: WCTTableCoding>(of type: Object.Type = Object.self) throws -> Object? {
         assert(!properties[0].isSwiftProperty(), "Properties must belong to objc obj.")
+        try lazyPrepareStatement()
         guard try next() else {
             return nil
         }
@@ -46,6 +47,7 @@ public extension Select {
     /// - Throws: `Error`
     func allObjects<Object: WCTTableCoding>(of type: Object.Type = Object.self) throws -> [Object] {
         assert(!properties[0].isSwiftProperty(), "Properties must belong to objc obj.")
+        try lazyPrepareStatement()
         var objects: [Object] = []
         while try next() {
             if let obj = WCTAPIBridge.extractObject(onResultColumns: properties.asWCTBridgeProperties(), from: handle.getRawStatement()) {

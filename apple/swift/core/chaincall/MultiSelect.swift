@@ -113,6 +113,7 @@ public final class MultiSelect: Selectable {
     /// - Returns: Mapping from table name to object. Nil means the end of iteration.
     /// - Throws: `Error`
     public func nextMultiObject() throws -> [String: Any]? {
+        try lazyPrepareStatement()
         guard try next() else {
             return nil
         }
@@ -125,6 +126,7 @@ public final class MultiSelect: Selectable {
     /// - Throws: `Error`
     public func allMultiObjects() throws -> [[String: Any]] {
         var multiObjects: [[String: Any]] = []
+        try lazyPrepareStatement()
         while try next() {
             multiObjects.append(try extractMultiObject())
         }

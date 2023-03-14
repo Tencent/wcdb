@@ -832,5 +832,6 @@ extension Database: UpdateInterface {}
 extension Database: DeleteInterface {}
 extension Database: RowSelectInterface {}
 extension Database: SelectInterface {}
+extension Database: StatementSelectInterface {}
 extension Database: TableInterface {}
 extension Database: TransactionInterface {}

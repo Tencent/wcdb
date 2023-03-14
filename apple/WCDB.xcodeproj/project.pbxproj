@@ -841,6 +841,8 @@
 		0DC98FD328E46049007F3796 /* DBOperationNotifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DC98FD028E46049007F3796 /* DBOperationNotifier.cpp */; };
 		0DC98FD428E46049007F3796 /* DBOperationNotifier.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DC98FD128E46049007F3796 /* DBOperationNotifier.hpp */; };
 		0DC98FD528E46049007F3796 /* DBOperationNotifier.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DC98FD128E46049007F3796 /* DBOperationNotifier.hpp */; };
+		0DF1089629C05559004ED764 /* StatementSelectInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF1089529C05559004ED764 /* StatementSelectInterface.swift */; };
+		0DF1089729C05559004ED764 /* StatementSelectInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF1089529C05559004ED764 /* StatementSelectInterface.swift */; };
 		2304B42822156CD700901953 /* TokenizerModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2304B42622156CD700901953 /* TokenizerModule.cpp */; };
 		2304B42A22156CD700901953 /* TokenizerModule.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2304B42722156CD700901953 /* TokenizerModule.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2304B42E22156E1500901953 /* TokenizerModules.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2304B42C22156E1500901953 /* TokenizerModules.cpp */; };
@@ -3566,6 +3568,7 @@
 		0DAE11D328DC6CC6003FB63A /* WCDB.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCDB.h; sourceTree = "<group>"; };
 		0DC98FD028E46049007F3796 /* DBOperationNotifier.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DBOperationNotifier.cpp; sourceTree = "<group>"; };
 		0DC98FD128E46049007F3796 /* DBOperationNotifier.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DBOperationNotifier.hpp; sourceTree = "<group>"; };
+		0DF1089529C05559004ED764 /* StatementSelectInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatementSelectInterface.swift; sourceTree = "<group>"; };
 		2304B42622156CD700901953 /* TokenizerModule.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TokenizerModule.cpp; sourceTree = "<group>"; };
 		2304B42722156CD700901953 /* TokenizerModule.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TokenizerModule.hpp; sourceTree = "<group>"; };
 		2304B42C22156E1500901953 /* TokenizerModules.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TokenizerModules.cpp; sourceTree = "<group>"; };
@@ -5253,6 +5256,7 @@
 				03E165C827F42D6500D2C926 /* TableCRUDInterface.swift */,
 				7525C15B2920D22300FD34C7 /* TableCRUDInterface+WCTTableCoding.swift */,
 				75C17A9228D0D3DD009C342E /* TransactionInterface.swift */,
+				0DF1089529C05559004ED764 /* StatementSelectInterface.swift */,
 			);
 			path = interface;
 			sourceTree = "<group>";
@@ -9949,6 +9953,7 @@
 				23F70FBE20A055D400CCE3CD /* TokenizerConfig.cpp in Sources */,
 				23D0C35D20C149D80001BFAE /* FactoryRetriever.cpp in Sources */,
 				755391D62403B3DB00036918 /* WCTPreparedStatement.mm in Sources */,
+				0DF1089629C05559004ED764 /* StatementSelectInterface.swift in Sources */,
 				03DCB5EE286C3D8E00CBC75D /* StatementAttachBridge.cpp in Sources */,
 				23EEDCDD217DFADC006E9E73 /* StatementRollback.cpp in Sources */,
 				7521DDF82920A623009642EF /* Database+WCTTableCoding.swift in Sources */,
@@ -10906,6 +10911,7 @@
 				7521DC0A291EA349009642EF /* TableBinding.swift in Sources */,
 				7521DC0B291EA349009642EF /* CodableType.swift in Sources */,
 				7521DC0C291EA349009642EF /* DeprecatedRepairKit.cpp in Sources */,
+				0DF1089729C05559004ED764 /* StatementSelectInterface.swift in Sources */,
 				7521DC0E291EA349009642EF /* BusyRetryConfig.cpp in Sources */,
 				7521DC0F291EA349009642EF /* Property.swift in Sources */,
 				7521DC11291EA349009642EF /* SyntaxSelectSTMT.cpp in Sources */,

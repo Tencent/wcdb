@@ -86,8 +86,6 @@ public protocol StatementInterface: AnyObject {
     func bind(_ value: String, toIndex index: Int)
     func bind(_ value: Data, toIndex index: Int)
 
-    func columnValue(atIndex index: Int) -> Value
-
     /// The wrapper of `sqlite3_column_*` for getting column decodable value.
     ///
     /// - Parameters:
@@ -106,11 +104,32 @@ public protocol StatementInterface: AnyObject {
         byName name: String,
         of type: ColumnDecodableType.Type) -> ColumnDecodableType?
 
-    /// The wrapper of `sqlite3_column_*` for getting fundamentable value.
+    /// The wrapper of `sqlite3_column_*` for getting value.
     ///
     /// - Parameter index: Begin with 0
     /// - Returns: `Int32`, `Int64`, `Double`, `String`, `Data` or `nil` value.
     func value(atIndex index: Int) -> Value
+
+    /// The wrapper of `sqlite3_column_*` for getting  a row of values.
+    ///
+    /// - Parameters:
+    ///   - index: Begin with 0
+    /// - Returns: OneColumnValue
+    func oneRowValue() -> OneRowValue
+
+    /// The wrapper of `sqlite3_column_*` for getting  a column of values.
+    ///
+    /// - Parameters:
+    ///   - index: Begin with 0
+    /// - Returns: OneRowValue
+    func oneColumnValue(atIndex index: Int) throws -> OneColumnValue
+
+    /// The wrapper of `sqlite3_column_*` for getting  multi rows of values.
+    ///
+    /// - Parameters:
+    ///   - index: Begin with 0
+    /// - Returns: MultiRowsValue
+    func multiRowsValue() throws -> MultiRowsValue
 
     /// Get index by column name.
     ///
@@ -260,28 +279,11 @@ extension StatementInterface where Self: RawStatementmentRepresentable {
         }
     }
 
-    public func columnValue(atIndex index: Int) -> Value {
-        switch columnType(atIndex: index) {
-        case .integer32:
-            return Value(columnValue(atIndex: index, of: Int32.self))
-        case .integer64:
-            return Value(columnValue(atIndex: index, of: Int64.self))
-        case .float:
-            return Value(columnValue(atIndex: index, of: Double.self))
-        case .text:
-            return Value(columnValue(atIndex: index, of: String.self))
-        case .BLOB:
-            return Value(columnValue(atIndex: index, of: Data.self))
-        case .null:
-            return Value(nil)
-        }
-    }
-
     public func value(atIndex index: Int, of type: ColumnDecodable.Type) -> ColumnDecodable? {
         guard columnType(atIndex: index) != .null else {
             return nil
         }
-        return type.init(with: columnValue(atIndex: index))
+        return type.init(with: value(atIndex: index))
     }
 
     public func value<ColumnDecodableType: ColumnDecodable>(
@@ -290,7 +292,7 @@ extension StatementInterface where Self: RawStatementmentRepresentable {
         guard columnType(atIndex: index) != .null else {
             return nil
         }
-        return type.init(with: columnValue(atIndex: index))
+        return type.init(with: value(atIndex: index))
     }
 
     public func value(atIndex index: Int) -> Value {
@@ -317,6 +319,30 @@ extension StatementInterface where Self: RawStatementmentRepresentable {
             return nil
         }
         return value(atIndex: index)
+    }
+
+    public func oneRowValue() -> OneRowValue {
+        var row: OneRowValue = []
+        for index in 0..<columnCount() {
+            row.append(value(atIndex: index))
+        }
+        return row
+    }
+
+    public func oneColumnValue(atIndex index: Int) throws -> OneColumnValue {
+        var column: OneColumnValue = []
+        while try step() {
+            column.append(value(atIndex: 0))
+        }
+        return column
+    }
+
+    public func multiRowsValue() throws -> MultiRowsValue {
+        var rows: MultiRowsValue = []
+        while try step() {
+            rows.append(oneRowValue())
+        }
+        return rows
     }
 
     public func index(byName name: String) -> Int? {
