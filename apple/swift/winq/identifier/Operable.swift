@@ -466,10 +466,14 @@ public protocol ExpressionFunctionOperable: ExpressionConvertible {
     func upper() -> Expression
     func round() -> Expression
 
-    // FTS3
+    // FTS3/4
     func matchinfo() -> Expression
     func offsets() -> Expression
     func snippet() -> Expression
+    // FTS5
+    func bm25() -> Expression
+    func highlight() -> Expression
+    func substringMatchInfo() -> Expression
 }
 
 extension ExpressionFunctionOperable {
@@ -555,15 +559,25 @@ extension ExpressionFunctionOperable {
         return Expression.function(named: "ROUND", self)
     }
 
-    // FTS3
+    // FTS3/4
     public func matchinfo() -> Expression {
-        return Expression.function(named: "MATCHINFO", self)
+        return Expression.function(named: "matchinfo", self)
     }
     public func offsets() -> Expression {
-        return Expression.function(named: "OFFSETS", self)
+        return Expression.function(named: "offsets", self)
     }
     public func snippet() -> Expression {
-        return Expression.function(named: "SNIPPET", self)
+        return Expression.function(named: "snippet", self)
+    }
+    // FTS5
+    public func bm25() -> Expression {
+        return Expression.function(named: "bm25", self)
+    }
+    public func highlight() -> Expression {
+        return Expression.function(named: "highlight", self)
+    }
+    public func substringMatchInfo() -> Expression {
+        return Expression.function(named: BuiltinAuxiliaryFunction.SubstringMatchInfo, self)
     }
 }
 

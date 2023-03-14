@@ -728,7 +728,7 @@ public struct BuiltinAuxiliaryFunction {
     /// You can use semicolon and comma as two-level separators to concat your friend's information into "张三;广州,上海;12345,67890",
     /// and save it in a column named "friends" in an fts5 table. Then you can use following code to search your friend:
     ///
-    ///     fts5Table.getColumn(on: Expression.function(BuiltinAuxiliaryFunction.SubstringMatchInfo).invoke().arguments(Column(named: fts5Table.name), 0, ";,"), where: Column(named: "friends").match("州"))
+    ///     fts5Table.getColumn(on: Column(named: fts5Table.name).substringMatchInfo().arguments(0, ";,"), where: Column(named: "friends").match("州"))
     ///
     /// The first argument of SubstringMatchInfo is a column named with table name.
     /// The second argument is the index of the colum you need to search. The index is are numbered starting from 0.

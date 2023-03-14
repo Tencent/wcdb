@@ -33,7 +33,7 @@
 #include <WCDB/Convertible.hpp>
 #include <WCDB/CoreFunction.hpp>
 #include <WCDB/ExpressionOperable.hpp>
-#include <WCDB/FTS3Function.hpp>
+#include <WCDB/FTSFunction.hpp>
 
 #include <WCDB/BindParameter.hpp>
 #include <WCDB/Column.hpp>
