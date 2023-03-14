@@ -44,7 +44,6 @@ public class Selectable {
     @discardableResult
     public final func next() throws -> Bool {
         do {
-            try lazyPrepareStatement()
             return try handle.step()
         } catch let error {
             handle.finalize()

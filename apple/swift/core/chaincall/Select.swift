@@ -42,6 +42,7 @@ public final class Select: Selectable {
     /// - Returns: Table decodable object according to the `CodingTableKey`. Nil means the end of iteration.
     /// - Throws: `Error`
     public func nextObject() throws -> Any? {
+        try lazyPrepareStatement()
 #if WCDB_SWIFT_BRIDGE_OBJC
         if properties[0].isSwiftProperty() {
             let rootType = keys[0].rootType as? TableDecodableBase.Type
@@ -72,6 +73,7 @@ public final class Select: Selectable {
     /// - Returns: Table decodable objects according to the `CodingTableKey`
     /// - Throws: `Error`
     public func allObjects() throws -> [Any] {
+        try lazyPrepareStatement()
         var objects: [Any] = []
 #if WCDB_SWIFT_BRIDGE_OBJC
         if properties[0].isSwiftProperty() {
@@ -105,6 +107,7 @@ public final class Select: Selectable {
     /// - Throws: `Error`
     public func nextObject<Object: TableDecodable>(of type: Object.Type = Object.self) throws -> Object? {
         assert(keys is [Object.CodingKeys], "Properties must belong to \(Object.self).CodingKeys.")
+        try lazyPrepareStatement()
         guard try next() else {
             return nil
         }
@@ -118,6 +121,7 @@ public final class Select: Selectable {
     /// - Throws: `Error`
     public func allObjects<Object: TableDecodable>(of type: Object.Type = Object.self) throws -> [Object] {
         assert(keys is [Object.CodingKeys], "Properties must belong to \(Object.self).CodingKeys.")
+        try lazyPrepareStatement()
         var objects: [Object] = []
         while try next() {
             objects.append(try Object.init(from: decoder))

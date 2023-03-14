@@ -31,33 +31,6 @@ public final class RowSelect: Selectable {
         super.init(with: handle, statement: statement)
     }
 
-    private func extract(atIndex index: Int) throws -> Value {
-        try lazyPrepareStatement()
-        switch handle.columnType(atIndex: index) {
-        case .integer32:
-            return Value(handle.columnValue(atIndex: index, of: Int32.self))
-        case .integer64:
-            return Value(handle.columnValue(atIndex: index, of: Int64.self))
-        case .float:
-            return Value(handle.columnValue(atIndex: index, of: Double.self))
-        case .text:
-            return Value(handle.columnValue(atIndex: index, of: String.self))
-        case .BLOB:
-            return Value(handle.columnValue(atIndex: index, of: Data.self))
-        case .null:
-            return Value(nil)
-        }
-    }
-
-    private func extract() throws -> OneRowValue {
-        var row: OneRowValue = []
-        try lazyPrepareStatement()
-        for index in 0..<handle.columnCount() {
-            row.append(try extract(atIndex: index))
-        }
-        return row
-    }
-
     /// Get next selected row. You can do an iteration using it.
     ///
     ///     while let row = try rowSelect.nextRow() {
@@ -70,10 +43,11 @@ public final class RowSelect: Selectable {
     /// - Returns: Array with `Value`. Nil means the end of iteration.
     /// - Throws: `Error`
     public func nextRow() throws -> OneRowValue? {
+        try lazyPrepareStatement()
         guard try next() else {
             return nil
         }
-        return try extract()
+        return handle.oneRowValue()
     }
 
     /// Get all selected row.
@@ -82,8 +56,9 @@ public final class RowSelect: Selectable {
     /// - Throws: `Error`
     public func allRows() throws -> MultiRowsValue {
         var rows: [[Value]] = []
+        try lazyPrepareStatement()
         while try next() {
-            rows.append(try extract())
+            rows.append(handle.oneRowValue())
         }
         return rows
     }
@@ -97,10 +72,11 @@ public final class RowSelect: Selectable {
     /// - Returns: `Value`. Nil means the end of iteration.
     /// - Throws: `Error`
     public func nextValue() throws -> Value? {
+        try lazyPrepareStatement()
         guard try next() else {
             return nil
         }
-        return try extract(atIndex: 0)
+        return handle.value(atIndex: 0)
     }
 
     /// Get all selected values.
@@ -108,10 +84,7 @@ public final class RowSelect: Selectable {
     /// - Returns: Array with `Value`.
     /// - Throws: `Error`
     public func allValues() throws -> OneColumnValue {
-        var values: [Value] = []
-        while try next() {
-            values.append(try extract(atIndex: 0))
-        }
-        return values
+        try lazyPrepareStatement()
+        return try handle.oneColumnValue(atIndex: 0)
     }
 }
