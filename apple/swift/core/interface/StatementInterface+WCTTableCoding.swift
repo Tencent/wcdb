@@ -57,6 +57,22 @@ public protocol StatementInterfaceForObjc {
     func bind<TableEncodableType: WCTTableCoding>(
         _ propertyConvertibleList: [PropertyConvertible],
         of object: TableEncodableType) throws
+
+    /// The wrapper of `sqlite3_column_*` for getting  an object.
+    ///
+    /// - Parameters:
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - type: Type of table decodable object
+    /// - Returns: Table decodable object.
+    func extractObject<Object: WCTTableCoding>(on propertyConvertibleList: [PropertyConvertible]?, of type: Object.Type) -> Object
+
+    /// The wrapper of `sqlite3_column_*` for getting  all objects.
+    ///
+    /// - Parameters:
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - type: Type of table decodable object
+    /// - Returns: Table decodable objects.
+    func extractAllObjects<Object: WCTTableCoding>(on propertyConvertibleList: [PropertyConvertible]?, of type: Object.Type) throws-> [Object]
 }
 
 extension StatementInterfaceForObjc where Self: RawStatementmentRepresentable {
@@ -80,5 +96,28 @@ extension StatementInterfaceForObjc where Self: RawStatementmentRepresentable {
         _ propertyConvertibleList: [PropertyConvertible],
         of object: TableEncodableType) throws {
         WCTAPIBridge.bindProperties(propertyConvertibleList.asWCTBridgeProperties(), ofObject: object, with: getRawStatement())
+    }
+
+    public func extractObject<Object: WCTTableCoding>(on propertyConvertibleList: [PropertyConvertible]? = nil, of type: Object.Type = Object.self) -> Object {
+        let properties: [WCTBridgeProperty] = propertyConvertibleList?.asWCTBridgeProperties() ?? Object.allProperties()
+        return WCTAPIBridge.extractObject(onResultColumns: properties, from: getRawStatement()) as! Object
+    }
+
+    public func extractAllObjects<Object: WCTTableCoding>(on propertyConvertibleList: [PropertyConvertible]? = nil, of type: Object.Type = Object.self) throws-> [Object] {
+        let properties: [WCTBridgeProperty] = propertyConvertibleList?.asWCTBridgeProperties() ?? Object.allProperties()
+        var objects: [Object] = []
+        let rawStatment = getRawStatement()
+        if !WCDBHandleStatementStep(rawStatment) {
+            let cppError = WCDBHandleStatementGetError(rawStatment)
+            throw ErrorBridge.getErrorFrom(cppError: cppError)
+        }
+        while !WCDBHandleStatementIsDone(rawStatment) {
+            objects.append(WCTAPIBridge.extractObject(onResultColumns: properties, from: getRawStatement()) as! Object)
+            if !WCDBHandleStatementStep(rawStatment) {
+                let cppError = WCDBHandleStatementGetError(rawStatment)
+                throw ErrorBridge.getErrorFrom(cppError: cppError)
+            }
+        }
+        return objects
     }
 }

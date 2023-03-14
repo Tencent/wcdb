@@ -72,6 +72,23 @@ internal extension Array where Element==PropertyConvertible {
 #endif
 }
 
+internal extension Array where Element: PropertyConvertible {
+    func asCodingTableKeys() -> [CodingTableKeyBase] {
+        return reduce(into: [CodingTableKeyBase]()) { (result, element) in
+            assert(element.codingTableKey != nil, "CodingTableKey should not be failed. If you think it's a bug, please report an issue to us.")
+            result.append(element.codingTableKey!)
+        }
+    }
+#if WCDB_SWIFT_BRIDGE_OBJC
+    func asWCTBridgeProperties() -> [WCTBridgeProperty] {
+        return reduce(into: [WCTBridgeProperty]()) { (result, element) in
+            assert(element.wctProperty != nil, "WCTProperty should not be failed. If you think it's a bug, please report an issue to us.")
+            result.append(element.wctProperty!)
+        }
+    }
+#endif
+}
+
 internal extension Array {
     mutating func expand(toNewSize newSize: Int, fillWith value: Iterator.Element) {
         if count < newSize {
