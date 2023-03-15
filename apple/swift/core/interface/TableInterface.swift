@@ -119,7 +119,7 @@ public protocol TableInterface: AnyObject {
     func drop(index name: String) throws
 }
 
-extension TableInterface where Self: Database {
+extension TableInterface where Self: HandleRepresentable {
     public func create<Root: TableDecodable>(
         table name: String,
         of rootType: Root.Type) throws {
@@ -147,15 +147,15 @@ extension TableInterface where Self: Database {
     public func create(table name: String,
                        with columnDefList: [ColumnDef],
                        and constraintList: [TableConstraint]? = nil) throws {
-        try exec(StatementCreateTable().create(table: name).ifNotExists().with(columns: columnDefList).constraint(constraintList))
+        try getHandle().exec(StatementCreateTable().create(table: name).ifNotExists().with(columns: columnDefList).constraint(constraintList))
     }
 
     public func addColumn(with columnDef: ColumnDef, forTable table: String) throws {
-        try exec(StatementAlterTable().alter(table: table).addColumn(with: columnDef))
+        try getHandle().exec(StatementAlterTable().alter(table: table).addColumn(with: columnDef))
     }
 
     public func drop(table name: String) throws {
-        try exec(StatementDropTable().drop(table: name).ifExists())
+        try getHandle().exec(StatementDropTable().drop(table: name).ifExists())
     }
 
     public func create(index name: String,
@@ -167,10 +167,10 @@ extension TableInterface where Self: Database {
     public func create(index name: String,
                        with indexedColumnConvertibleList: [IndexedColumnConvertible],
                        forTable table: String) throws {
-        try exec(StatementCreateIndex().create(index: name).on(table: table).ifNotExists().indexesBy( indexedColumnConvertibleList))
+        try getHandle().exec(StatementCreateIndex().create(index: name).on(table: table).ifNotExists().indexesBy( indexedColumnConvertibleList))
     }
 
     public func drop(index name: String) throws {
-        try exec(StatementDropIndex().drop(index: name).ifExists())
+        try getHandle().exec(StatementDropIndex().drop(index: name).ifExists())
     }
 }
