@@ -31,7 +31,7 @@ class TableConstraintBindingTests: ORMTestCase {
             case variable1
             case variable2
             static let objectRelationalMapping = TableBinding(CodingKeys.self) {
-                BindMultiPrimary(.variable1, .variable2)
+                BindMultiPrimary(variable1, variable2)
             }
         }
     }
@@ -44,7 +44,7 @@ class TableConstraintBindingTests: ORMTestCase {
             case variable1
             case variable2
             static let objectRelationalMapping = TableBinding(CodingKeys.self) {
-                BindMultiPrimary(.variable1, .variable2, onConflict: .Replace)
+                BindMultiPrimary(variable1, variable2, onConflict: .Replace)
             }
         }
     }

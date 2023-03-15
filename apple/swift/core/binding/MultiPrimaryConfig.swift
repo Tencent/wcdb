@@ -27,11 +27,11 @@ import WCDB_Private
 
 public final class MultiPrimaryConfig<CodingTableKeyType: CodingTableKey>: TableConfiguration {
 
-    private let codingKeys: [CodingTableKeyType]
+    private let indexes: [IndexedColumnConvertible]
     private let conflict: ConflictAction?
 
     public func config(with tableBinding: TableBindingBase) {
-        let tableConstraint = TableConstraint().primaryKey().indexed(by: codingKeys)
+        let tableConstraint = TableConstraint().primaryKey().indexed(by: indexes)
         if let wrappedConflict = conflict {
             tableConstraint.onConflict(wrappedConflict)
         }
@@ -40,8 +40,8 @@ public final class MultiPrimaryConfig<CodingTableKeyType: CodingTableKey>: Table
         }
     }
 
-    required public init(_ codingKeys: CodingTableKeyType..., onConflict conflict: ConflictAction? = nil) {
-        self.codingKeys = codingKeys
+    required public init(_ indexes: IndexedColumnConvertible..., onConflict conflict: ConflictAction? = nil) {
+        self.indexes = indexes
         self.conflict = conflict
     }
 }

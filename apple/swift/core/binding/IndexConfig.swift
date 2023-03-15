@@ -26,12 +26,12 @@ import Foundation
 import WCDB_Private
 
 public final class IndexConfig<CodingTableKeyType: CodingTableKey>: TableConfiguration {
-    private let codingKeys: [CodingTableKeyType]
+    private let indexes: [IndexedColumnConvertible]
     private let subfix: String
     private let unique: Bool
 
     public func config(with tableBinding: TableBindingBase) {
-        let statement = StatementCreateIndex().ifNotExists().indexesBy(codingKeys)
+        let statement = StatementCreateIndex().ifNotExists().indexesBy(indexes)
         if unique {
             statement.unique()
         }
@@ -40,9 +40,9 @@ public final class IndexConfig<CodingTableKeyType: CodingTableKey>: TableConfigu
         }
     }
 
-    required public init(_ codingKeys: CodingTableKeyType..., namedWith subfix: String, isUnique: Bool = false) {
+    required public init(_ indexes: IndexedColumnConvertible..., namedWith subfix: String, isUnique: Bool = false) {
         self.subfix = subfix
-        self.codingKeys = codingKeys
+        self.indexes = indexes
         unique = isUnique
     }
 }
