@@ -812,4 +812,68 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertEqual(matchObjects2.count, 1)
         XCTAssertEqual(matchObjects2[0].content, obj.content)
     }
+
+    func testMigration() {
+        let sourceDatabase = Database(at: recommendedPath)
+        XCTAssertNoThrow(try sourceDatabase.create(table: "sourceTable", of: TestObject.self))
+
+        let oldObject1 = TestObject()
+        oldObject1.variable1 = 1
+        oldObject1.variable2 = "oldContent1"
+        let oldObject2 = TestObject()
+        oldObject2.variable1 = 2
+        oldObject2.variable2 = "oldContent2"
+        XCTAssertNoThrow(try sourceDatabase.insert(oldObject1, oldObject2, intoTable: "sourceTable"))
+
+        let targetDatabase = Database(at: recommendedDirectory.appendingPathComponent("targetDB.sqlite3"))
+        targetDatabase.filterMigration({ info in
+            if info.table == "targetTable" {
+                info.sourceDatabase = self.recommendedPath.path
+                info.sourceTable = "sourceTable"
+            }
+        })
+
+        XCTAssertNoThrow(try targetDatabase.create(table: "targetTable", of: TestObject.self))
+
+        XCTAssertNoThrow(try targetDatabase.update(table: "targetTable", on: TestObject.Properties.variable2, with: "newContent2", where: TestObject.Properties.variable1 == 2))
+
+        let objects: [TestObject] = WCDBAssertNoThrowReturned(try targetDatabase.getObjects(fromTable: "targetTable"))
+        XCTAssertEqual(objects.count, 2)
+        XCTAssertEqual(objects[1].variable2, "newContent2")
+
+        XCTAssertNoThrow(try targetDatabase.delete(fromTable: "targetTable", where: TestObject.Properties.variable1 == 2))
+        let count = WCDBAssertNoThrowReturned(try targetDatabase.getValue(on: TestObject.Properties.any.count(), fromTable: "targetTable"))
+        XCTAssertEqual(count?.int32Value ?? 0, 1)
+
+        let newObject = TestObject()
+        newObject.variable1 = 3
+        newObject.variable2 = "newContent3"
+        XCTAssertNoThrow(try targetDatabase.insert(newObject, intoTable: "targetTable"))
+
+        let constents: OneColumnValue = WCDBAssertNoThrowReturned(
+            try targetDatabase.getColumn(on: TestObject.Properties.variable2,
+                                         fromTable: "targetTable",
+                                         orderBy: [TestObject.Properties.variable1.order(.ascending)]))
+        XCTAssertEqual(constents.count, 2)
+        XCTAssertEqual(constents[0].stringValue, "oldContent1")
+        XCTAssertEqual(constents[1].stringValue, "newContent3")
+
+        targetDatabase.close()
+        XCTAssertEqual(targetDatabase.isMigrated(), false)
+
+        var migratedTable: String?
+        targetDatabase.setNotification { _, info in
+            if let sourceTable = info?.sourceTable {
+                migratedTable = sourceTable
+            }
+        }
+
+        repeat {
+            XCTAssertNoThrow(try targetDatabase.stepMigration())
+        } while !targetDatabase.isMigrated()
+
+        XCTAssertEqual(targetDatabase.isMigrated(), true)
+
+        XCTAssertEqual(migratedTable ?? "", "sourceTable")
+    }
 }

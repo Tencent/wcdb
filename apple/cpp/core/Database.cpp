@@ -433,11 +433,14 @@ void Database::setNotificationWhenMigrated(Database::MigratedCallback onMigrated
     if (onMigrated != nullptr) {
         callback = [onMigrated](InnerDatabase* innerDatabase,
                                 const MigrationBaseInfo* baseInfo) {
-            MigrationInfo info;
-            info.table = baseInfo->getTable();
-            info.database = baseInfo->getDatabase();
-            info.sourceTable = baseInfo->getSourceTable();
-            info.sourceDatabase = baseInfo->getSourceDatabase();
+            Optional<MigrationInfo> info;
+            if (baseInfo != nullptr) {
+                info = MigrationInfo();
+                info->table = baseInfo->getTable();
+                info->database = baseInfo->getDatabase();
+                info->sourceTable = baseInfo->getSourceTable();
+                info->sourceDatabase = baseInfo->getSourceDatabase();
+            }
             Database database = Database(innerDatabase);
             onMigrated(database, info);
         };

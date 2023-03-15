@@ -587,9 +587,9 @@ public:
     void enableAutoMigration(bool flag);
 
     /**
-     Triggered when a table is migrated completely.
+     Triggered when a table or a database is migrated completely. When a table is migrated successfully, tableInfo will carry the information of the table. When a database is migrated, tableInfo has no value.
      */
-    typedef std::function<void(Database &database, const MigrationInfo &info)> MigratedCallback;
+    typedef std::function<void(Database &database, Optional<MigrationInfo> tableInfo)> MigratedCallback;
 
     /**
      @brief Register a callback for migration notification. The callback will be called when each table completes the migration.
