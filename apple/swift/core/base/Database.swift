@@ -675,6 +675,116 @@ public extension Database {
     }
 }
 
+// Migration
+public extension Database {
+    struct MigrationInfo {
+        public var database: String = ""        // Target database of migration
+        public var table: String = ""           // Target table of migration
+        public var sourceDatabase: String?      // Source datatase of migration
+        public var sourceTable: String?         // Source table of migration
+    }
+
+    /**
+     Triggered at any time when WCDB needs to know whether a table in the current database needs to migrate data, mainly including creating a new table, reading and writing a table, and starting to migrate a new table. If the current table does not need to migrate data, you need to set the sourceTable and sourceDatabase in `MigrationInfo` to nil.
+     */
+    typealias MigrationFilter = (_ info: inout MigrationInfo) -> Void
+
+    /// Configure which tables in the current database need to migrate data, and the source table they need to migrate data from.
+    ///
+    /// Once configured, you can treat the target table as if it already has all the data of the source table, and can read and write these data through the target table.
+    /// WCDB will internally convert your CRUD operations on the target table into the CRUD operations on both the target table and the source table appropriately.
+    /// You neither need to be aware of the existence of the source table, nor care about the progress of data migration.
+    ///
+    /// The column definition of the target table must be exactly the same as the column definition of the source table.
+    /// The database does not record the state of the migration to disk, so if you have data to migrate, you need to use this function to configure the migration before excuting any statements on current database.
+    ///
+    /// If the source table is not in the current database, the database containing the source table will be attached to the current database before the migration is complete.
+    /// After migration, source tables will be dropped.
+    ///
+    /// - Parameter filter: see `MigrationFilter`.
+    func filterMigration(_ filter: MigrationFilter?) {
+        if let filter = filter {
+            let internalFilter: @convention(block) (UnsafePointer<CChar>, UnsafePointer<CChar>, UnsafeMutablePointer<UnsafeMutablePointer<CChar>>, UnsafeMutablePointer<UnsafeMutablePointer<CChar>>) -> Void = {
+                targetDatabase, targetTable, pSouceDatabase, pSourceTable in
+                var info = MigrationInfo(database: String(cString: targetDatabase), table: String(cString: targetTable))
+                filter(&info)
+                if let sourceTable = info.sourceTable {
+                    let length = sourceTable.lengthOfBytes(using: .utf8) + 1
+                    let buffer = malloc(length)
+                    if let buffer = buffer {
+                        memcpy(buffer, sourceTable.cString, length)
+                        pSourceTable.pointee = buffer.assumingMemoryBound(to: Int8.self)
+                    }
+                    if let sourceDatabase = info.sourceDatabase {
+                        let length = sourceDatabase.lengthOfBytes(using: .utf8) + 1
+                        let buffer = malloc(length)
+                        if let buffer = buffer {
+                            memcpy(buffer, sourceDatabase.cString, length)
+                            pSouceDatabase.pointee = buffer.assumingMemoryBound(to: Int8.self)
+                        }
+                    }
+                }
+            }
+            let internalFilterImp = imp_implementationWithBlock(internalFilter)
+            WCDBDatabaseFilterMigration(database, internalFilterImp)
+        } else {
+            WCDBDatabaseFilterMigration(database, nil)
+        }
+    }
+
+    ///  Manually spend about 0.01 sec. to migrate data.
+    ///  You can call this function periodically until all data is migrated.
+    func stepMigration() throws {
+        if !WCDBDatabaseStepMigration(database) {
+            throw getError()
+        }
+    }
+
+    /// Configure the database to automatically step migration every two seconds.
+    func setAutoMigration(enable flag: Bool) {
+        WCDBDatabaseEnableAutoMigration(database, flag)
+    }
+
+    /// Check if all tables in the database has finished migration.
+    /// It only check an internal flag of database.
+    func isMigrated() -> Bool {
+        return WCDBDatabaseIsMigrated(database)
+    }
+
+    /// Triggered when a table or a database is migrated completely.
+    /// When a table is migrated successfully, tableInfo will carry the information of the table.
+    /// When a database is migrated, tableInfo has no value.
+    typealias MigratedCallback = (_ database: Database, _ tableInfo: MigrationInfo?) -> Void
+
+    /// Register a callback for migration notification.
+    /// The callback will be called when each table completes the migration.
+    ///
+    /// - Parameter callback: see `MigratedCallback`.
+    func setNotification(whenMigrated callback: MigratedCallback?) {
+        if let callback = callback {
+            let internalCallBack: @convention(block) (CPPDatabase, UnsafePointer<CChar>?, UnsafePointer<CChar>?, UnsafePointer<CChar>?, UnsafePointer<CChar>?) -> Void = {
+                cppDatabase, databasePath, tableName, sourceDatabasePath, sourceTableName in
+                let database = Database(with: cppDatabase)
+                var info: MigrationInfo?
+                if let databasePath = databasePath,
+                   let tableName = tableName,
+                   let sourceDatabasePath = sourceDatabasePath,
+                   let sourceTableName = sourceTableName {
+                    info = MigrationInfo(database: String(cString: databasePath),
+                                         table: String(cString: tableName),
+                                         sourceDatabase: String(cString: sourceDatabasePath),
+                                         sourceTable: String(cString: sourceTableName))
+                }
+                callback(database, info)
+            }
+            let internalCallBackImp = imp_implementationWithBlock(internalCallBack)
+            WCDBDatabaseSetNotificationWhenMigrated(database, internalCallBackImp)
+        } else {
+            WCDBDatabaseSetNotificationWhenMigrated(database, nil)
+        }
+    }
+}
+
 // FTS
 public struct BuiltinTokenizer {
     /// The following four are sqlite built-in fts tokenizers.

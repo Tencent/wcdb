@@ -53,6 +53,17 @@ WCDBDefineMultiArgumentSwiftClosureBridgedType(WCDBRetrieveProgress, void, void*
 
 WCDBDefineMultiArgumentSwiftClosureBridgedType(WCDBDatabaseOperationTracer, void, CPPDatabase, long);
 
+WCDBDefineMultiArgumentSwiftClosureBridgedType(
+WCDBDatabaseMigrationFilter, void, const char*, const char*, char**, char**);
+
+WCDBDefineMultiArgumentSwiftClosureBridgedType(WCDBDatabaseMigrationNotification,
+                                               void,
+                                               CPPDatabase,
+                                               const char*,
+                                               const char*,
+                                               const char*,
+                                               const char*);
+
 CPPError WCDBDatabaseGetError(CPPDatabase database)
 {
     WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, CPPError());
@@ -440,4 +451,76 @@ bool WCDBDatabaseTruncateCheckpoint(CPPDatabase database)
 {
     WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, false);
     return cppDatabase->checkpoint(false, WCDB::InnerDatabase::CheckPointMode::Truncate);
+}
+
+void WCDBDatabaseFilterMigration(CPPDatabase database, SwiftClosure* _Nullable filter)
+{
+    WCDBDatabaseMigrationFilter bridgedFilter
+    = WCDBCreateSwiftBridgedClosure(WCDBDatabaseMigrationFilter, filter);
+    WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
+    WCDB::InnerDatabase::MigrationFilter cppFilter = nullptr;
+    if (WCDBGetSwiftClosure(bridgedFilter) != nullptr) {
+        cppFilter = [bridgedFilter](WCDB::MigrationUserInfo& info) {
+            char* sourceDatabase = nullptr;
+            char* sourceTable = nullptr;
+            WCDBSwiftClosureCallWithMultiArgument(bridgedFilter,
+                                                  info.getDatabase().data(),
+                                                  info.getTable().data(),
+                                                  &sourceDatabase,
+                                                  &sourceTable);
+            if (sourceTable != nullptr) {
+                info.setSource(sourceTable, sourceDatabase);
+                free(sourceTable);
+            }
+            if (sourceDatabase != nullptr) {
+                free(sourceDatabase);
+            }
+        };
+    }
+    cppDatabase->filterMigration(cppFilter);
+}
+
+bool WCDBDatabaseStepMigration(CPPDatabase database)
+{
+    WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, false);
+    return (cppDatabase->stepMigration(false)).succeed();
+}
+
+void WCDBDatabaseEnableAutoMigration(CPPDatabase database, bool flag)
+{
+    WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
+    WCDB::Core::shared().enableAutoMigration(cppDatabase, flag);
+}
+
+void WCDBDatabaseSetNotificationWhenMigrated(CPPDatabase database, SwiftClosure* _Nullable onMigrated)
+{
+    WCDBDatabaseMigrationNotification notification
+    = WCDBCreateSwiftBridgedClosure(WCDBDatabaseMigrationNotification, onMigrated);
+    WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
+    WCDB::InnerDatabase::MigratedCallback callback = nullptr;
+    if (onMigrated != nullptr) {
+        callback = [notification](WCDB::InnerDatabase* cppDatabase,
+                                  const WCDB::MigrationBaseInfo* baseInfo) {
+            CPPDatabase database = WCDBCreateUnmanageCPPObject(CPPDatabase, cppDatabase);
+            if (baseInfo != nullptr) {
+                WCDBSwiftClosureCallWithMultiArgument(
+                notification,
+                database,
+                baseInfo->getDatabase().data(),
+                baseInfo->getTable().data(),
+                baseInfo->getSourceDatabase().data(),
+                baseInfo->getSourceTable().data());
+            } else {
+                WCDBSwiftClosureCallWithMultiArgument(
+                notification, database, nullptr, nullptr, nullptr, nullptr);
+            }
+        };
+    }
+    cppDatabase->setNotificationWhenMigrated(callback);
+}
+
+bool WCDBDatabaseIsMigrated(CPPDatabase database)
+{
+    WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, false);
+    return cppDatabase->isMigrated();
 }

@@ -86,4 +86,11 @@ double WCDBDatabaseRetrieve(CPPDatabase database, SwiftClosure* _Nullable onProg
 bool WCDBDatabasePassiveCheckpoint(CPPDatabase database);
 bool WCDBDatabaseTruncateCheckpoint(CPPDatabase database);
 
+void WCDBDatabaseFilterMigration(CPPDatabase database, SwiftClosure* _Nullable filter);
+bool WCDBDatabaseStepMigration(CPPDatabase database);
+void WCDBDatabaseEnableAutoMigration(CPPDatabase database, bool flag);
+void WCDBDatabaseSetNotificationWhenMigrated(CPPDatabase database,
+                                             SwiftClosure* _Nullable onMigrated);
+bool WCDBDatabaseIsMigrated(CPPDatabase database);
+
 WCDB_EXTERN_C_END
