@@ -97,9 +97,6 @@ else ()
             set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unknown-pragmas -Wno-pragmas -Wno-deprecated -Wno-unused-variable")
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-pragmas -Wno-pragmas -Wno-deprecated -Wno-unused-variable -fpermissive")
         endif ()
-    elseif (ANDROID)
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mno-outline-atomics")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mno-outline-atomics")
     endif()
 
     if (APPLE)
@@ -144,7 +141,7 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
         ${WCDB_SRC_DIR}/common/*Filter.hpp
         ${WCDB_SRC_DIR}/common/*ForeignKey.hpp
         ${WCDB_SRC_DIR}/common/*FrameSpec.hpp
-        ${WCDB_SRC_DIR}/common/*FTS3Function.hpp
+        ${WCDB_SRC_DIR}/common/*FTSFunction.hpp
         ${WCDB_SRC_DIR}/common/*FTS5AuxiliaryFunctionTemplate.hpp
         ${WCDB_SRC_DIR}/common/*FTSConst.h
         ${WCDB_SRC_DIR}/common/*FTSError.hpp
