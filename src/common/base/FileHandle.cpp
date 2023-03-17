@@ -32,7 +32,7 @@
 #include <sys/mman.h>
 #include <unistd.h>
 #ifndef __APPLE__
-#include "CrossPlatform.h>
+#include "CrossPlatform.h"
 #endif
 
 namespace WCDB {
