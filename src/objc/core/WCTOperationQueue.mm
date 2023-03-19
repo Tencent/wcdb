@@ -22,30 +22,27 @@
  * limitations under the License.
  */
 
+#import "OperationQueueForMemory.hpp"
 #import <Foundation/Foundation.h>
-#import <WCDB/Macro.h>
-#import <WCDB/OperationQueue.hpp>
 
 #if TARGET_OS_IPHONE && !TARGET_OS_WATCH
 #import <UIKit/UIKit.h>
 
 namespace WCDB {
 
-void *OperationQueue::registerNotificationWhenMemoryWarning()
+void *OperationQueueForMemory::registerNotificationWhenMemoryWarning()
 {
     id observer = [[NSNotificationCenter defaultCenter]
     addObserverForName:UIApplicationDidReceiveMemoryWarningNotification
                 object:nil
                  queue:nil
             usingBlock:^(NSNotification *) {
-                Parameter parameter;
-                parameter.source = Parameter::Source::MemoryWarning;
-                this->asyncPurge(parameter);
+                this->asyncPurgeWhenMemoryWarning();
             }];
     return (void *) CFBridgingRetain(observer);
 }
 
-void OperationQueue::unregisterNotificationWhenMemoryWarning(void *observer)
+void OperationQueueForMemory::unregisterNotificationWhenMemoryWarning(void *observer)
 {
     NSObject *nsObserver = (__bridge NSObject *) observer;
     [[NSNotificationCenter defaultCenter] removeObserver:nsObserver name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
@@ -57,14 +54,13 @@ void OperationQueue::unregisterNotificationWhenMemoryWarning(void *observer)
 
 namespace WCDB {
 
-void *OperationQueue::registerNotificationWhenMemoryWarning()
+void *OperationQueueForMemory::registerNotificationWhenMemoryWarning()
 {
     return nullptr;
 }
 
-void OperationQueue::unregisterNotificationWhenMemoryWarning(void *observer)
+void OperationQueueForMemory::unregisterNotificationWhenMemoryWarning(void *)
 {
-    WCDB_UNUSED(observer)
 }
 
 }
@@ -73,13 +69,13 @@ void OperationQueue::unregisterNotificationWhenMemoryWarning(void *observer)
 
 namespace WCDB {
 
-void *OperationQueue::operationStart()
+void *OperationQueueForMemory::operationStart()
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     return (void *) pool;
 }
 
-void OperationQueue::operationEnd(void *context)
+void OperationQueueForMemory::operationEnd(void *context)
 {
     NSAutoreleasePool *pool = (__bridge NSAutoreleasePool *) context;
     [pool drain];

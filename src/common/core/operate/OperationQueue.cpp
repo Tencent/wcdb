@@ -464,6 +464,13 @@ void OperationQueue::doPurge(const Parameter& parameter)
     m_lastPurge = SteadyClock::now();
 }
 
+void OperationQueue::asyncPurgeWhenMemoryWarning()
+{
+    Parameter parameter;
+    parameter.source = Parameter::Source::MemoryWarning;
+    this->asyncPurge(parameter);
+}
+
 #pragma mark - Check Integrity
 void OperationQueue::asyncCheckIntegrity(const UnsafeStringView& path, uint32_t identifier)
 {

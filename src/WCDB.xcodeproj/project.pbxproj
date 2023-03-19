@@ -2908,6 +2908,15 @@
 		7525C1562920ACD700FD34C7 /* TableInterface+WCTTableCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7525C1552920ACD700FD34C7 /* TableInterface+WCTTableCoding.swift */; };
 		7525C1592920AD7900FD34C7 /* Table+WCTTableCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7525C1582920AD7900FD34C7 /* Table+WCTTableCoding.swift */; };
 		7525C15C2920D22300FD34C7 /* TableCRUDInterface+WCTTableCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7525C15B2920D22300FD34C7 /* TableCRUDInterface+WCTTableCoding.swift */; };
+		75294DA829C74142005E7FC0 /* WCTBridgeProperty+CPP.h in Headers */ = {isa = PBXBuildFile; fileRef = 036E50BA28115BA0007365CD /* WCTBridgeProperty+CPP.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75294DAF29C75058005E7FC0 /* OperationQueueForMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75294DAD29C75058005E7FC0 /* OperationQueueForMemory.cpp */; };
+		75294DB029C75058005E7FC0 /* OperationQueueForMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75294DAD29C75058005E7FC0 /* OperationQueueForMemory.cpp */; };
+		75294DB129C75058005E7FC0 /* OperationQueueForMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75294DAD29C75058005E7FC0 /* OperationQueueForMemory.cpp */; };
+		75294DB229C75058005E7FC0 /* OperationQueueForMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75294DAD29C75058005E7FC0 /* OperationQueueForMemory.cpp */; };
+		75294DB329C75058005E7FC0 /* OperationQueueForMemory.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75294DAE29C75058005E7FC0 /* OperationQueueForMemory.hpp */; };
+		75294DB429C75058005E7FC0 /* OperationQueueForMemory.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75294DAE29C75058005E7FC0 /* OperationQueueForMemory.hpp */; };
+		75294DB529C75058005E7FC0 /* OperationQueueForMemory.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75294DAE29C75058005E7FC0 /* OperationQueueForMemory.hpp */; };
+		75294DB629C75058005E7FC0 /* OperationQueueForMemory.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75294DAE29C75058005E7FC0 /* OperationQueueForMemory.hpp */; };
 		752C7E3D28C8E16800C9FFA6 /* ORMDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 752C7E3C28C8E16800C9FFA6 /* ORMDeleteTests.mm */; };
 		752C7E4028C8E94200C9FFA6 /* ORMInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 752C7E3F28C8E94200C9FFA6 /* ORMInsertTests.mm */; };
 		752CF3F8293A490F009ED8FB /* BindingBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 752CF3F6293A490F009ED8FB /* BindingBridge.cpp */; };
@@ -4447,6 +4456,8 @@
 		7525C1552920ACD700FD34C7 /* TableInterface+WCTTableCoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TableInterface+WCTTableCoding.swift"; sourceTree = "<group>"; };
 		7525C1582920AD7900FD34C7 /* Table+WCTTableCoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Table+WCTTableCoding.swift"; sourceTree = "<group>"; };
 		7525C15B2920D22300FD34C7 /* TableCRUDInterface+WCTTableCoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TableCRUDInterface+WCTTableCoding.swift"; sourceTree = "<group>"; };
+		75294DAD29C75058005E7FC0 /* OperationQueueForMemory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OperationQueueForMemory.cpp; sourceTree = "<group>"; };
+		75294DAE29C75058005E7FC0 /* OperationQueueForMemory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OperationQueueForMemory.hpp; sourceTree = "<group>"; };
 		752C7E3C28C8E16800C9FFA6 /* ORMDeleteTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ORMDeleteTests.mm; sourceTree = "<group>"; };
 		752C7E3F28C8E94200C9FFA6 /* ORMInsertTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ORMInsertTests.mm; sourceTree = "<group>"; };
 		752CF3F6293A490F009ED8FB /* BindingBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BindingBridge.cpp; sourceTree = "<group>"; };
@@ -6577,6 +6588,8 @@
 				3934DAEA229B6659008A6AEC /* OperationQueue.hpp */,
 				39D3C74622A8B8C600C93DC0 /* OperationHandle.cpp */,
 				39D3C74722A8B8C600C93DC0 /* OperationHandle.hpp */,
+				75294DAE29C75058005E7FC0 /* OperationQueueForMemory.hpp */,
+				75294DAD29C75058005E7FC0 /* OperationQueueForMemory.cpp */,
 			);
 			path = operate;
 			sourceTree = "<group>";
@@ -7553,6 +7566,7 @@
 				037C3BF12897E33600328EC8 /* Lock.hpp in Headers */,
 				037C3BF22897E33600328EC8 /* FactoryRetriever.hpp in Headers */,
 				037C3BF52897E33600328EC8 /* AutoCheckpointConfig.hpp in Headers */,
+				75294DB529C75058005E7FC0 /* OperationQueueForMemory.hpp in Headers */,
 				7596162328BFB05100AE86BA /* CPPDeclaration.h in Headers */,
 				037C3BF92897E33600328EC8 /* SyntaxVacuumSTMT.hpp in Headers */,
 				037C3BFA2897E33600328EC8 /* Material.hpp in Headers */,
@@ -7635,6 +7649,7 @@
 				23EEDD56217DFADC006E9E73 /* SyntaxSelectSTMT.hpp in Headers */,
 				755391E12403CB9E00036918 /* WCTPreparedStatement+Private.h in Headers */,
 				2360A60920D78F2C00E4A311 /* PerformanceTraceConfig.hpp in Headers */,
+				75294DB329C75058005E7FC0 /* OperationQueueForMemory.hpp in Headers */,
 				237B47B121FEEA200059227A /* ColumnMeta.hpp in Headers */,
 				23EABBE6206D08EC00241F3B /* WCTHandle+Table.h in Headers */,
 				752CF3FA293A490F009ED8FB /* BindingBridge.h in Headers */,
@@ -8161,6 +8176,7 @@
 				7521D931291E9ABB009642EF /* Page.hpp in Headers */,
 				7521D932291E9ABB009642EF /* SyntaxFilter.hpp in Headers */,
 				7521D933291E9ABB009642EF /* StatementRollback.hpp in Headers */,
+				75294DA829C74142005E7FC0 /* WCTBridgeProperty+CPP.h in Headers */,
 				7521D934291E9ABB009642EF /* StatementAlterTable.hpp in Headers */,
 				7521D935291E9ABB009642EF /* StatementPragma.hpp in Headers */,
 				7521D936291E9ABB009642EF /* RecyclableHandle.hpp in Headers */,
@@ -8207,6 +8223,7 @@
 				7521D965291E9ABB009642EF /* WCTDatabase+Migration.h in Headers */,
 				7521D966291E9ABB009642EF /* WCTDatabase+Convenient.h in Headers */,
 				7521D968291E9ABB009642EF /* WCTSelect.h in Headers */,
+				75294DB429C75058005E7FC0 /* OperationQueueForMemory.hpp in Headers */,
 				7521D969291E9ABB009642EF /* StatementCreateVirtualTable.hpp in Headers */,
 				7521D96A291E9ABB009642EF /* SQLiteFTS3Tokenizer.h in Headers */,
 				7521D96B291E9ABB009642EF /* WCTUpdate.h in Headers */,
@@ -8407,6 +8424,7 @@
 				7521DC6A291EA349009642EF /* Progress.hpp in Headers */,
 				7521DC6B291EA349009642EF /* SyntaxForeignKeyClause.hpp in Headers */,
 				7521DC6C291EA349009642EF /* SyntaxAssertion.hpp in Headers */,
+				75294DB629C75058005E7FC0 /* OperationQueueForMemory.hpp in Headers */,
 				7521DC6E291EA349009642EF /* SyntaxSelectCore.hpp in Headers */,
 				7521DC6F291EA349009642EF /* SyntaxTableConstraint.hpp in Headers */,
 				7521DC70291EA349009642EF /* ThreadedErrors.hpp in Headers */,
@@ -9291,6 +9309,7 @@
 				037C3A112897E33600328EC8 /* Frame.cpp in Sources */,
 				75B698D5290AD4C0006E1F8F /* BaseTokenizerUtil.cpp in Sources */,
 				037C3A132897E33600328EC8 /* Path.cpp in Sources */,
+				75294DB129C75058005E7FC0 /* OperationQueueForMemory.cpp in Sources */,
 				037C3A142897E33600328EC8 /* CommonTableExpression.cpp in Sources */,
 				037C3A162897E33600328EC8 /* PerformanceTraceConfig.cpp in Sources */,
 				0D5363EA290A65390026A4DC /* Master.cpp in Sources */,
@@ -10083,6 +10102,7 @@
 				39C70CC72313E20F002D773C /* Assemble.cpp in Sources */,
 				23775B8220AD666900E21AB0 /* Cell.cpp in Sources */,
 				03E822912844E1AB0072CA57 /* RaiseFunctionBridge.cpp in Sources */,
+				75294DAF29C75058005E7FC0 /* OperationQueueForMemory.cpp in Sources */,
 				7543DD8E271C360E00B533B4 /* AuxiliaryFunctionConfig.cpp in Sources */,
 				03E1665827F42D6600D2C926 /* Optional.swift in Sources */,
 				236BACE321BF9F6400C8B4D9 /* WCTDatabase+Migration.mm in Sources */,
@@ -10279,6 +10299,7 @@
 				7521D70C291E9ABB009642EF /* WCTTable.mm in Sources */,
 				7521D70D291E9ABB009642EF /* StatementDetach.cpp in Sources */,
 				7521D70F291E9ABB009642EF /* StatementAnalyze.cpp in Sources */,
+				75294DB029C75058005E7FC0 /* OperationQueueForMemory.cpp in Sources */,
 				7521D712291E9ABB009642EF /* FTSFunction.cpp in Sources */,
 				7521D713291E9ABB009642EF /* RecyclableHandle.cpp in Sources */,
 				7521D717291E9ABB009642EF /* ResultColumn.cpp in Sources */,
@@ -10577,6 +10598,7 @@
 				7521DA98291EA349009642EF /* OrderingTerm.swift in Sources */,
 				7521DA99291EA349009642EF /* Progress.cpp in Sources */,
 				7521DA9A291EA349009642EF /* Mechanic.cpp in Sources */,
+				75294DB229C75058005E7FC0 /* OperationQueueForMemory.cpp in Sources */,
 				7521DA9D291EA349009642EF /* SyntaxUpdateSTMT.cpp in Sources */,
 				7521DA9E291EA349009642EF /* StatementReindexBridge.cpp in Sources */,
 				7521DA9F291EA349009642EF /* Selectable.swift in Sources */,

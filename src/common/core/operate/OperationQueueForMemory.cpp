@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by 陈秋文 on 2023/3/19.
 //
 
 /*
@@ -22,19 +22,8 @@
  * limitations under the License.
  */
 
-#ifdef __cplusplus
-#if __cplusplus < 201402L
-#error `CLANG_CXX_LANGUAGE_STANDARD = gnu++14` and `CLANG_CXX_LIBRARY = libc++` build settings are required.
-#endif
-#else // __cplusplus
-#error Objective-C++ environment is required. (By changing suffix of those files including <WCDB/WCDBObjc.h> from `.m` to `.mm`.
-#endif // __cplusplus
+#include "OperationQueueForMemory.hpp"
 
-// WCDB may fail to compile since there are few frameworks that define `offset` as a macro.
-#ifdef offset
-#error Symbol `offset` should not be defined as a macro since it's a common used word.
-#endif
-
-#import <WCDB/Interface.h>
-#import <WCDB/WCTBuiltin.h>
-#import <WCDB/WINQ.h>
+namespace WCDB {
+OperationQueueForMemory::~OperationQueueForMemory() = default;
+}

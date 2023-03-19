@@ -23,27 +23,27 @@
  */
 
 #include "Macro.h"
-#include "OperationQueue.hpp"
+#include "OperationQueueForMemory.hpp"
 #include <stdio.h>
 
 namespace WCDB {
 
-void *OperationQueue::registerNotificationWhenMemoryWarning()
+void *OperationQueueForMemory::registerNotificationWhenMemoryWarning()
 {
     return nullptr;
 }
 
-void OperationQueue::unregisterNotificationWhenMemoryWarning(void *observer)
+void OperationQueueForMemory::unregisterNotificationWhenMemoryWarning(void *observer)
 {
     WCDB_UNUSED(observer)
 }
 
-void *OperationQueue::operationStart()
+void *OperationQueueForMemory::operationStart()
 {
     return nullptr;
 }
 
-void OperationQueue::operationEnd(void *context)
+void OperationQueueForMemory::operationEnd(void *context)
 {
     WCDB_UNUSED(context)
 }
