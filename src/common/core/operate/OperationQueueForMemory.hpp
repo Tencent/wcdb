@@ -1,5 +1,5 @@
 //
-// Created by qiuwenchen on 2022/8/1.
+// Created by 陈秋文 on 2023/3/19.
 //
 
 /*
@@ -22,30 +22,16 @@
  * limitations under the License.
  */
 
-#include "Macro.h"
-#include "OperationQueueForMemory.hpp"
-#include <stdio.h>
-
 namespace WCDB {
 
-void *OperationQueueForMemory::registerNotificationWhenMemoryWarning()
-{
-    return nullptr;
-}
-
-void OperationQueueForMemory::unregisterNotificationWhenMemoryWarning(void *observer)
-{
-    WCDB_UNUSED(observer)
-}
-
-void *OperationQueueForMemory::operationStart()
-{
-    return nullptr;
-}
-
-void OperationQueueForMemory::operationEnd(void *context)
-{
-    WCDB_UNUSED(context)
-}
+class OperationQueueForMemory {
+public:
+    virtual ~OperationQueueForMemory() = 0;
+    void* registerNotificationWhenMemoryWarning();
+    void unregisterNotificationWhenMemoryWarning(void* observer);
+    void* operationStart();
+    void operationEnd(void* context);
+    virtual void asyncPurgeWhenMemoryWarning() = 0;
+};
 
 } // namespace WCDB

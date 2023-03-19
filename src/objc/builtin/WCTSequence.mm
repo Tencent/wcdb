@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCDB.h>
+#import <WCDB/WCDBObjc.h>
 #import <WCDB/WCTSequence+WCTTableCoding.h>
 
 @implementation WCTSequence

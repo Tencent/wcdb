@@ -27,7 +27,7 @@
 #error `CLANG_CXX_LANGUAGE_STANDARD = gnu++14` and `CLANG_CXX_LIBRARY = libc++` build settings are required.
 #endif
 #else // __cplusplus
-#error Objective-C++ environment is required. (By changing suffix of those files including <WCDB/WCDB.h> from `.m` to `.mm`.
+#error Objective-C++ environment is required. (By changing suffix of those files including <WCDB/WCDBObjc.h> from `.m` to `.mm`.
 #endif // __cplusplus
 
 // WCDB may fail to compile since there are few frameworks that define `offset` as a macro.
