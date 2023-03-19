@@ -36,6 +36,7 @@
 #include "AutoCheckpointConfig.hpp"
 #include "AutoMergeFTSIndexConfig.hpp"
 #include "AutoMigrateConfig.hpp"
+#include "OperationQueueForMemory.hpp"
 #include "Optional.hpp"
 
 namespace WCDB {
@@ -60,6 +61,7 @@ protected:
 };
 
 class OperationQueue final : public AsyncQueue,
+                             public OperationQueueForMemory,
                              public AutoMigrateOperator,
                              public AutoBackupOperator,
                              public AutoMergeFTSIndexOperator,
@@ -192,14 +194,10 @@ protected:
 
     static int maxAllowedNumberOfFileDescriptors();
 
-    void* registerNotificationWhenMemoryWarning();
-    void unregisterNotificationWhenMemoryWarning(void* observer);
+    void asyncPurgeWhenMemoryWarning() override;
 
-    void* operationStart();
-    void operationEnd(void* context);
-
-    void* m_observerForMemoryWarning;
     SteadyClock m_lastPurge;
+    void* m_observerForMemoryWarning;
 
 #pragma mark - Integrity
 protected:
