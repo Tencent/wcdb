@@ -78,7 +78,7 @@ case "$key" in
 esac
 done
 
-project="$root"/apple/WCDB.xcodeproj
+project="$root"/src/WCDB.xcodeproj
 derivedData="$destination"/derivedData
 products="$derivedData"/Build/Products
 

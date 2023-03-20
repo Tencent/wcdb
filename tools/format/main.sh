@@ -2,7 +2,7 @@
 
 root=`git rev-parse --show-toplevel`
 
-paths=(apple common repair tools/templates)
+paths=(src common repair tools/templates)
 format=$root/tools/format/code.sh
 
 for path in ${paths[@]}; do
