@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/InnerHandle.hpp>
-#include <WCDB/TransactionGuard.hpp>
+#include "TransactionGuard.hpp"
+#include "Assertion.hpp"
+#include "InnerHandle.hpp"
 
 namespace WCDB {
 

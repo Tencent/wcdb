@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/AutoMergeFTSIndexConfig.hpp>
-#include <WCDB/InnerHandle.hpp>
-#include <WCDB/StringView.hpp>
+#include "AutoMergeFTSIndexConfig.hpp"
+#include "Assertion.hpp"
+#include "InnerHandle.hpp"
+#include "StringView.hpp"
 
 namespace WCDB {
 

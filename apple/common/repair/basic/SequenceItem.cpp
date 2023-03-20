@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/SequenceItem.hpp>
+#include "SequenceItem.hpp"
 
 namespace WCDB {
 

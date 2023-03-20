@@ -22,15 +22,15 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assemble.hpp>
-#include <WCDB/Assertion.hpp>
-#include <WCDB/FullCrawler.hpp>
-#include <WCDB/MasterItem.hpp>
-#include <WCDB/Page.hpp>
-#include <WCDB/SequenceCrawler.hpp>
-#include <WCDB/SequenceItem.hpp>
-#include <WCDB/StringView.hpp>
-#include <WCDB/SyntaxCommonConst.hpp>
+#include "FullCrawler.hpp"
+#include "Assemble.hpp"
+#include "Assertion.hpp"
+#include "MasterItem.hpp"
+#include "Page.hpp"
+#include "SequenceCrawler.hpp"
+#include "SequenceItem.hpp"
+#include "StringView.hpp"
+#include "SyntaxCommonConst.hpp"
 
 namespace WCDB {
 

@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include <WCDB/Config.hpp>
-#include <WCDB/WINQ.h>
+#include "Config.hpp"
+#include "WINQ.h"
 
 namespace WCDB {
 

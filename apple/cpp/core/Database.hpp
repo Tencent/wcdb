@@ -23,13 +23,13 @@
  */
 
 #pragma once
-#include <WCDB/AuxiliaryFunctionModule.hpp>
-#include <WCDB/Error.hpp>
-#include <WCDB/FTSTokenizerUtil.hpp>
-#include <WCDB/Handle.hpp>
-#include <WCDB/HandleORMOperation.hpp>
-#include <WCDB/Statement.hpp>
-#include <WCDB/TokenizerModule.hpp>
+#include "AuxiliaryFunctionModule.hpp"
+#include "Error.hpp"
+#include "FTSTokenizerUtil.hpp"
+#include "Handle.hpp"
+#include "HandleORMOperation.hpp"
+#include "Statement.hpp"
+#include "TokenizerModule.hpp"
 
 namespace WCDB {
 

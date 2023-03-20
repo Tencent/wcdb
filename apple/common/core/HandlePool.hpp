@@ -24,11 +24,11 @@
 
 #pragma once
 
-#include <WCDB/CoreConst.h>
-#include <WCDB/ErrorProne.hpp>
-#include <WCDB/Lock.hpp>
-#include <WCDB/RecyclableHandle.hpp>
-#include <WCDB/ThreadedErrors.hpp>
+#include "CoreConst.h"
+#include "ErrorProne.hpp"
+#include "Lock.hpp"
+#include "RecyclableHandle.hpp"
+#include "ThreadedErrors.hpp"
 #include <array>
 #include <list>
 

@@ -24,14 +24,14 @@
 
 #pragma once
 
-#include <WCDB/Assemble.hpp>
-#include <WCDB/Cipher.hpp>
-#include <WCDB/Crawlable.hpp>
-#include <WCDB/ErrorProne.hpp>
-#include <WCDB/Optional.hpp>
-#include <WCDB/Progress.hpp>
-#include <WCDB/Scoreable.hpp>
-#include <WCDB/UpgradeableErrorProne.hpp>
+#include "Assemble.hpp"
+#include "Cipher.hpp"
+#include "Crawlable.hpp"
+#include "ErrorProne.hpp"
+#include "Optional.hpp"
+#include "Progress.hpp"
+#include "Scoreable.hpp"
+#include "UpgradeableErrorProne.hpp"
 #include <list>
 
 namespace WCDB {

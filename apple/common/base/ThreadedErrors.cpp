@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/CoreConst.h>
-#include <WCDB/Macro.h>
-#include <WCDB/ThreadedErrors.hpp>
+#include "ThreadedErrors.hpp"
+#include "CoreConst.h"
+#include "Macro.h"
 
 namespace WCDB {
 

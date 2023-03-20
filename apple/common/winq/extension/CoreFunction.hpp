@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include <WCDB/ExpressionOperable.hpp>
-#include <WCDB/SQL.hpp>
+#include "ExpressionOperable.hpp"
+#include "SQL.hpp"
 
 namespace WCDB {
 

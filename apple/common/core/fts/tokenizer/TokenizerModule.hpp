@@ -23,7 +23,7 @@
  */
 
 #pragma once
-#include <WCDB/FTSError.hpp>
+#include "FTSError.hpp"
 #include <memory>
 
 namespace WCDB {

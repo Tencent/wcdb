@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/Initializeable.hpp>
+#include "Initializeable.hpp"
 
 namespace WCDB {
 

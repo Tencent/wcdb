@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/FTSConst.h>
-#include <WCDB/WINQ.h>
+#include "FTSConst.h"
+#include "WINQ.h"
 
 namespace WCDB {
 

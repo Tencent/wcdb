@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/Crawlable.hpp>
+#include "Crawlable.hpp"
 
 namespace WCDB {
 

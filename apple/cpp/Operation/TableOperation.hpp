@@ -23,8 +23,8 @@
  */
 
 #pragma once
-#include <WCDB/BaseOperation.hpp>
-#include <WCDB/Value.hpp>
+#include "BaseOperation.hpp"
+#include "Value.hpp"
 
 namespace WCDB {
 

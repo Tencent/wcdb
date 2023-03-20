@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/FTSConst.h>
-#include <WCDB/FTSError.hpp>
-#include <WCDB/OneOrBinaryTokenizer.hpp>
+#include "OneOrBinaryTokenizer.hpp"
+#include "Assertion.hpp"
+#include "FTSConst.h"
+#include "FTSError.hpp"
 #include <algorithm>
 
 extern "C" {

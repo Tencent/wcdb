@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Notifier.hpp>
-#include <WCDB/StringView.hpp>
-#include <WCDB/ThreadedErrors.hpp>
-#include <WCDB/Time.hpp>
+#include "Time.hpp"
+#include "Notifier.hpp"
+#include "StringView.hpp"
+#include "ThreadedErrors.hpp"
 #include <iomanip>
 #include <sstream>
 

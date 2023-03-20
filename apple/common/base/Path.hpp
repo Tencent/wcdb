@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/StringView.hpp>
+#include "StringView.hpp"
 
 // TODO std::filesystem is available since C++17 + Clang with Xcode 11.
 

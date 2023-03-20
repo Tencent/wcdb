@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/Assertion.hpp>
+#include "Assertion.hpp"
 #include <list>
 #include <unordered_map>
 

@@ -24,15 +24,15 @@
 
 #pragma once
 
-#include <WCDB/Configs.hpp>
-#include <WCDB/Factory.hpp>
-#include <WCDB/HandlePool.hpp>
-#include <WCDB/MergeFTSIndexLogic.hpp>
-#include <WCDB/Migration.hpp>
-#include <WCDB/Tag.hpp>
-#include <WCDB/ThreadLocal.hpp>
-#include <WCDB/TransactionGuard.hpp>
-#include <WCDB/WINQ.h>
+#include "Configs.hpp"
+#include "Factory.hpp"
+#include "HandlePool.hpp"
+#include "MergeFTSIndexLogic.hpp"
+#include "Migration.hpp"
+#include "Tag.hpp"
+#include "ThreadLocal.hpp"
+#include "TransactionGuard.hpp"
+#include "WINQ.h"
 
 namespace WCDB {
 

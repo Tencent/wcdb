@@ -24,11 +24,11 @@
 
 #pragma once
 
-#include <WCDB/SyntaxColumn.hpp>
-#include <WCDB/SyntaxExpression.hpp>
-#include <WCDB/SyntaxForeignKeyClause.hpp>
-#include <WCDB/SyntaxIdentifier.hpp>
-#include <WCDB/SyntaxIndexedColumn.hpp>
+#include "SyntaxColumn.hpp"
+#include "SyntaxExpression.hpp"
+#include "SyntaxForeignKeyClause.hpp"
+#include "SyntaxIdentifier.hpp"
+#include "SyntaxIndexedColumn.hpp"
 
 namespace WCDB {
 

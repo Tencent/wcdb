@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/AuxiliaryFunctionModule.hpp>
+#include "AuxiliaryFunctionModule.hpp"
 #include <vector>
 
 namespace WCDB {

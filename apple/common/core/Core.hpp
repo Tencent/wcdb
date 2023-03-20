@@ -24,19 +24,19 @@
 
 #pragma once
 
-#include <WCDB/OperationQueue.hpp>
+#include "OperationQueue.hpp"
 
-#include <WCDB/Config.hpp>
-#include <WCDB/Configs.hpp>
-#include <WCDB/PerformanceTraceConfig.hpp>
-#include <WCDB/SQLTraceConfig.hpp>
+#include "Config.hpp"
+#include "Configs.hpp"
+#include "PerformanceTraceConfig.hpp"
+#include "SQLTraceConfig.hpp"
 
-#include <WCDB/DatabasePool.hpp>
+#include "DatabasePool.hpp"
 
-#include <WCDB/AuxiliaryFunctionModules.hpp>
-#include <WCDB/TokenizerModules.hpp>
+#include "AuxiliaryFunctionModules.hpp"
+#include "TokenizerModules.hpp"
 
-#include <WCDB/Notifier.hpp>
+#include "Notifier.hpp"
 
 namespace WCDB {
 

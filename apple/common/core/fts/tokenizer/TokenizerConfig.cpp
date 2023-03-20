@@ -22,11 +22,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/InnerHandle.hpp>
-#include <WCDB/SQLite.h>
-#include <WCDB/TokenizerConfig.hpp>
-#include <WCDB/TokenizerModules.hpp>
+#include "TokenizerConfig.hpp"
+#include "Assertion.hpp"
+#include "InnerHandle.hpp"
+#include "SQLite.h"
+#include "TokenizerModules.hpp"
 #include <cstring>
 
 namespace WCDB {

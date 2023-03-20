@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Core.hpp>
-#include <WCDB/CoreConst.h>
-#include <WCDB/Error.hpp>
-#include <WCDB/MergeFTSIndexLogic.hpp>
-#include <WCDB/Notifier.hpp>
+#include "MergeFTSIndexLogic.hpp"
+#include "Assertion.hpp"
+#include "Core.hpp"
+#include "CoreConst.h"
+#include "Error.hpp"
+#include "Notifier.hpp"
 #include <cmath>
 #include <unistd.h>
 

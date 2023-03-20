@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/SQL.hpp>
+#include "SQL.hpp"
+#include "Assertion.hpp"
 #include <atomic>
 
 namespace WCDB {

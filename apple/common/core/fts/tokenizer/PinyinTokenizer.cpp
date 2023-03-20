@@ -22,11 +22,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/FTSConst.h>
-#include <WCDB/FTSError.hpp>
-#include <WCDB/PinyinTokenizer.hpp>
-#include <WCDB/SQLite.h>
+#include "PinyinTokenizer.hpp"
+#include "Assertion.hpp"
+#include "FTSConst.h"
+#include "FTSError.hpp"
+#include "SQLite.h"
 #include <algorithm>
 
 namespace WCDB {

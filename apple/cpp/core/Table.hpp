@@ -23,7 +23,7 @@
  */
 
 #pragma once
-#include <WCDB/TableORMOperation.hpp>
+#include "TableORMOperation.hpp"
 
 namespace WCDB {
 

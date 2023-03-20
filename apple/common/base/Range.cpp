@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Range.hpp>
+#include "Range.hpp"
+#include "Assertion.hpp"
 #include <algorithm>
 
 namespace WCDB {

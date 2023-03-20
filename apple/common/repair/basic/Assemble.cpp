@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assemble.hpp>
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Cell.hpp>
+#include "Assemble.hpp"
+#include "Assertion.hpp"
+#include "Cell.hpp"
 
 namespace WCDB {
 

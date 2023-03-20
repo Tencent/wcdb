@@ -22,14 +22,14 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assemble.hpp>
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Factory.hpp>
-#include <WCDB/FileManager.hpp>
-#include <WCDB/Material.hpp>
-#include <WCDB/Path.hpp>
-#include <WCDB/StringView.hpp>
-#include <WCDB/Time.hpp>
+#include "Factory.hpp"
+#include "Assemble.hpp"
+#include "Assertion.hpp"
+#include "FileManager.hpp"
+#include "Material.hpp"
+#include "Path.hpp"
+#include "StringView.hpp"
+#include "Time.hpp"
 
 namespace WCDB {
 

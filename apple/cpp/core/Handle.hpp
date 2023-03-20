@@ -23,10 +23,10 @@
  */
 
 #pragma once
-#include <WCDB/HandleORMOperation.hpp>
-#include <WCDB/HandleOperation.hpp>
-#include <WCDB/PreparedStatement.hpp>
-#include <WCDB/Statement.hpp>
+#include "HandleORMOperation.hpp"
+#include "HandleOperation.hpp"
+#include "PreparedStatement.hpp"
+#include "Statement.hpp"
 
 namespace WCDB {
 

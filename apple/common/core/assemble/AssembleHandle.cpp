@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/AssembleHandle.hpp>
-#include <WCDB/CoreConst.h>
+#include "AssembleHandle.hpp"
+#include "CoreConst.h"
 
 namespace WCDB {
 

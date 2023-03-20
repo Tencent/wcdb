@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/HighWater.hpp>
+#include "HighWater.hpp"
 
 namespace WCDB {
 

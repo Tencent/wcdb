@@ -22,11 +22,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Lock.hpp>
+#include "Lock.hpp"
+#include "Assertion.hpp"
 #include <condition_variable>
 #ifndef __APPLE__
-#include <WCDB/CrossPlatform.h>
+#include "CrossPlatform.h>
 #endif
 
 namespace WCDB {

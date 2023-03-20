@@ -22,6 +22,6 @@
  * limitations under the License.
  */
 
-#include <WCDB/DeprecatedRepairKit.hpp>
+#include "DeprecatedRepairKit.hpp"
 
 #warning TODO compatible for old repair kit

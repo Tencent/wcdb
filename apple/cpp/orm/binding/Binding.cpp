@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Accessor.hpp>
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Binding.hpp>
-#include <WCDB/Field.hpp>
+#include "Binding.hpp"
+#include "Accessor.hpp"
+#include "Assertion.hpp"
+#include "Field.hpp"
 
 namespace WCDB {
 

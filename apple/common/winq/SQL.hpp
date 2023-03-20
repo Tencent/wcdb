@@ -24,12 +24,12 @@
 
 #pragma once
 
-#include <WCDB/ColumnType.hpp>
-#include <WCDB/Convertible.hpp>
-#include <WCDB/StringView.hpp>
-#include <WCDB/Syntax.h>
-#include <WCDB/SyntaxForwardDeclaration.h>
-#include <WCDB/SyntaxList.hpp>
+#include "ColumnType.hpp"
+#include "Convertible.hpp"
+#include "StringView.hpp"
+#include "Syntax.h"
+#include "SyntaxForwardDeclaration.h"
+#include "SyntaxList.hpp"
 #include <memory>
 
 namespace WCDB {

@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/SQLite.h>
-#include <WCDB/SQLiteFTS3Tokenizer.h>
-#include <WCDB/TokenizerModule.hpp>
+#include "TokenizerModule.hpp"
+#include "Assertion.hpp"
+#include "SQLite.h"
+#include "SQLiteFTS3Tokenizer.h"
 #include <cstring>
 #include <memory>
 

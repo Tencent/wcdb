@@ -26,8 +26,8 @@
 
 #if WCDB_USE_BUILTIN_SQLITE_REPAIR
 
-#include <WCDB/ErrorProne.hpp>
-#include <WCDB/StringView.hpp>
+#include "ErrorProne.hpp"
+#include "StringView.hpp"
 
 // repair/sqlite are optional. Ones can implement their own tools.
 

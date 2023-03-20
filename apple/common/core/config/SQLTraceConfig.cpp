@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/SQLTraceConfig.hpp>
-#include <WCDB/StringView.hpp>
+#include "SQLTraceConfig.hpp"
+#include "Assertion.hpp"
+#include "StringView.hpp"
 
 namespace WCDB {
 

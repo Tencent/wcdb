@@ -23,9 +23,9 @@
  */
 
 #pragma once
-#include <WCDB/ColumnType.hpp>
-#include <WCDB/Optional.hpp>
-#include <WCDB/ValueArray.hpp>
+#include "ColumnType.hpp"
+#include "Optional.hpp"
+#include "ValueArray.hpp"
 
 namespace WCDB {
 

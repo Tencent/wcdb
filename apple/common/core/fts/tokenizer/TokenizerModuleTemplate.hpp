@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/TokenizerModule.hpp>
+#include "TokenizerModule.hpp"
 #include <cstring>
 #include <type_traits>
 

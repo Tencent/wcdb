@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/MasterItem.hpp>
-#include <WCDB/StringView.hpp>
+#include "MasterItem.hpp"
+#include "StringView.hpp"
 
 namespace WCDB {
 

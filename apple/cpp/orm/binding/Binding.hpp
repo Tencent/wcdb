@@ -24,9 +24,9 @@
 
 #pragma once
 
-#include <WCDB/BaseBinding.hpp>
-#include <WCDB/CPPDeclaration.h>
-#include <WCDB/Field.hpp>
+#include "BaseBinding.hpp"
+#include "CPPDeclaration.h"
+#include "Field.hpp"
 #include <map>
 
 namespace WCDB {

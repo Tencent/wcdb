@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/Syntax.h>
-#include <WCDB/SyntaxAssertion.hpp>
-#include <WCDB/SyntaxEnum.hpp>
+#include "Syntax.h"
+#include "SyntaxAssertion.hpp"
+#include "SyntaxEnum.hpp"
 
 namespace WCDB {
 

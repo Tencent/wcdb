@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/Exiting.hpp>
-#include <WCDB/Macro.h>
+#include "Exiting.hpp"
+#include "Macro.h"
 #include <atomic>
 #include <stdlib.h>
 

@@ -24,14 +24,14 @@
 
 #pragma once
 
-#include <WCDB/Assemble.hpp>
-#include <WCDB/FactoryBackup.hpp>
-#include <WCDB/FactoryRelated.hpp>
-#include <WCDB/Optional.hpp>
-#include <WCDB/Progress.hpp>
-#include <WCDB/Scoreable.hpp>
-#include <WCDB/Time.hpp>
-#include <WCDB/UpgradeableErrorProne.hpp>
+#include "Assemble.hpp"
+#include "FactoryBackup.hpp"
+#include "FactoryRelated.hpp"
+#include "Optional.hpp"
+#include "Progress.hpp"
+#include "Scoreable.hpp"
+#include "Time.hpp"
+#include "UpgradeableErrorProne.hpp"
 
 namespace WCDB {
 

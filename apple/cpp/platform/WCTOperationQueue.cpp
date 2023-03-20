@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/Macro.h>
-#include <WCDB/OperationQueue.hpp>
+#include "Macro.h"
+#include "OperationQueue.hpp"
 #include <stdio.h>
 
 namespace WCDB {

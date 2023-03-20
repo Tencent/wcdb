@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Pager.hpp>
-#include <WCDB/PagerRelated.hpp>
+#include "PagerRelated.hpp"
+#include "Assertion.hpp"
+#include "Pager.hpp"
 
 namespace WCDB {
 

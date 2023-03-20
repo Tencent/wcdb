@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include <WCDB/ErrorProne.hpp>
-#include <WCDB/FactoryRelated.hpp>
+#include "ErrorProne.hpp"
+#include "FactoryRelated.hpp"
 
 namespace WCDB {
 

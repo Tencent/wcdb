@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/Statement.hpp>
+#include "Statement.hpp"
 
 namespace WCDB {
 

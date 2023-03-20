@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/StringView.hpp>
-#include <WCDB/SyntaxCommonConst.hpp>
+#include "SyntaxCommonConst.hpp"
+#include "StringView.hpp"
 
 namespace WCDB {
 

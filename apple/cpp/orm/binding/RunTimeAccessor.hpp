@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/Accessor.hpp>
+#include "Accessor.hpp"
 
 namespace WCDB {
 

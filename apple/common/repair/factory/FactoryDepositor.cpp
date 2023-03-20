@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Factory.hpp>
-#include <WCDB/FactoryDepositor.hpp>
-#include <WCDB/FileManager.hpp>
-#include <WCDB/Path.hpp>
+#include "FactoryDepositor.hpp"
+#include "Factory.hpp"
+#include "FileManager.hpp"
+#include "Path.hpp"
 
 namespace WCDB {
 

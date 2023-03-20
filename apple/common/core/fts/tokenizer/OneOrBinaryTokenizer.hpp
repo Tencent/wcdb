@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/BaseTokenizerUtil.hpp>
-#include <WCDB/TokenizerModuleTemplate.hpp>
+#include "BaseTokenizerUtil.hpp"
+#include "TokenizerModuleTemplate.hpp"
 
 namespace WCDB {
 

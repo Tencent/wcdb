@@ -24,10 +24,10 @@
 
 #pragma once
 
-#include <WCDB/AbstractHandle.hpp>
-#include <WCDB/Configs.hpp>
-#include <WCDB/CoreConst.h>
-#include <WCDB/TransactionGuard.hpp>
+#include "AbstractHandle.hpp"
+#include "Configs.hpp"
+#include "CoreConst.h"
+#include "TransactionGuard.hpp"
 
 namespace WCDB {
 

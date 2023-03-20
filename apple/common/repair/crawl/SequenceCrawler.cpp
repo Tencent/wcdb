@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Cell.hpp>
-#include <WCDB/Page.hpp>
-#include <WCDB/SequenceCrawler.hpp>
-#include <WCDB/SequenceItem.hpp>
-#include <WCDB/StringView.hpp>
+#include "SequenceCrawler.hpp"
+#include "Assertion.hpp"
+#include "Cell.hpp"
+#include "Page.hpp"
+#include "SequenceItem.hpp"
+#include "StringView.hpp"
 
 namespace WCDB {
 

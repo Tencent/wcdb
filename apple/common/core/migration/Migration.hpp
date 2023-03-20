@@ -24,10 +24,10 @@
 
 #pragma once
 
-#include <WCDB/Lock.hpp>
-#include <WCDB/MigrationInfo.hpp>
-#include <WCDB/Optional.hpp>
-#include <WCDB/Recyclable.hpp>
+#include "Lock.hpp"
+#include "MigrationInfo.hpp"
+#include "Optional.hpp"
+#include "Recyclable.hpp"
 #include <functional>
 #include <map>
 #include <set>

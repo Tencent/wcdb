@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/Config.hpp>
-#include <WCDB/Macro.h>
+#include "Config.hpp"
+#include "Macro.h"
 
 namespace WCDB {
 

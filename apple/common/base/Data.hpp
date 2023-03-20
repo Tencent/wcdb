@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/UnsafeData.hpp>
+#include "UnsafeData.hpp"
 #include <memory>
 
 namespace WCDB {

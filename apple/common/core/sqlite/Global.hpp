@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include <WCDB/Lock.hpp>
-#include <WCDB/StringView.hpp>
+#include "Lock.hpp"
+#include "StringView.hpp"
 #include <map>
 
 namespace WCDB {

@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/FTSConst.h>
-#include <WCDB/Syntax.h>
-#include <WCDB/SyntaxAssertion.hpp>
+#include "FTSConst.h"
+#include "Syntax.h"
+#include "SyntaxAssertion.hpp"
 
 namespace WCDB {
 

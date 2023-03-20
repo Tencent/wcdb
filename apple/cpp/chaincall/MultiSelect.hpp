@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include <WCDB/ChainCall.hpp>
-#include <WCDB/MultiObject.hpp>
+#include "ChainCall.hpp"
+#include "MultiObject.hpp"
 
 namespace WCDB {
 

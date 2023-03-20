@@ -24,9 +24,9 @@
 
 #pragma once
 
-#include <WCDB/Config.hpp>
-#include <WCDB/Lock.hpp>
-#include <WCDB/StringView.hpp>
+#include "Config.hpp"
+#include "Lock.hpp"
+#include "StringView.hpp"
 #include <map>
 #include <memory>
 

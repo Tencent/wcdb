@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/DatabasePool.hpp>
+#include "DatabasePool.hpp"
+#include "Assertion.hpp"
 
 namespace WCDB {
 

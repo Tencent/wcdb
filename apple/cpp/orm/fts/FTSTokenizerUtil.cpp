@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/FTSTokenizerUtil.hpp>
-#include <WCDB/StatementCreateVirtualTable.hpp>
+#include "FTSTokenizerUtil.hpp"
+#include "StatementCreateVirtualTable.hpp"
 #include <cstdarg>
 
 namespace WCDB {

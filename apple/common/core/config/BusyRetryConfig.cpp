@@ -22,11 +22,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/BusyRetryConfig.hpp>
-#include <WCDB/CoreConst.h>
-#include <WCDB/InnerHandle.hpp>
-#include <WCDB/Time.hpp>
+#include "BusyRetryConfig.hpp"
+#include "Assertion.hpp"
+#include "CoreConst.h"
+#include "InnerHandle.hpp"
+#include "Time.hpp"
 
 namespace WCDB {
 

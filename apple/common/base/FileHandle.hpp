@@ -24,10 +24,10 @@
 
 #pragma once
 
-#include <WCDB/Data.hpp>
-#include <WCDB/MappedData.hpp>
-#include <WCDB/SharedThreadedErrorProne.hpp>
-#include <WCDB/StringView.hpp>
+#include "Data.hpp"
+#include "MappedData.hpp"
+#include "SharedThreadedErrorProne.hpp"
+#include "StringView.hpp"
 #include <stdio.h>
 
 namespace WCDB {

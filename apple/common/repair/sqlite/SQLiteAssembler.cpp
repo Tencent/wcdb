@@ -24,11 +24,11 @@
 
 #if WCDB_USE_BUILTIN_SQLITE_REPAIR
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Cell.hpp>
-#include <WCDB/SQLite.h>
-#include <WCDB/SQLiteAssembler.hpp>
-#include <WCDB/StringView.hpp>
+#include "SQLiteAssembler.hpp"
+#include "Assertion.hpp"
+#include "Cell.hpp"
+#include "SQLite.h"
+#include "StringView.hpp"
 #include <sstream>
 
 namespace WCDB {

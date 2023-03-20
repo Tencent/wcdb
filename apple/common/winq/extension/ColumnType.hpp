@@ -24,10 +24,10 @@
 
 #pragma once
 
-#include <WCDB/Data.hpp>
-#include <WCDB/StringView.hpp>
-#include <WCDB/Syntax.h>
-#include <WCDB/SyntaxForwardDeclaration.h>
+#include "Data.hpp"
+#include "StringView.hpp"
+#include "Syntax.h"
+#include "SyntaxForwardDeclaration.h"
 #include <cstdint>
 #include <type_traits>
 #include <vector>

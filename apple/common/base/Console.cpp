@@ -22,13 +22,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/Console.hpp>
-#include <WCDB/CoreConst.h>
-#include <WCDB/Error.hpp>
-#include <WCDB/Notifier.hpp>
-#include <WCDB/Version.h>
+#include "Console.hpp"
+#include "CoreConst.h"
+#include "Error.hpp"
+#include "Notifier.hpp"
+#include "Version.h"
 #ifndef __APPLE__
-#include <WCDB/CrossPlatform.h>
+#include "CrossPlatform.h>
 #endif
 #ifndef __ANDROID__
 #include <execinfo.h>

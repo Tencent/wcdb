@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include <WCDB/SyntaxColumnConstraint.hpp>
-#include <WCDB/SyntaxIdentifier.hpp>
+#include "SyntaxColumnConstraint.hpp"
+#include "SyntaxIdentifier.hpp"
 
 namespace WCDB {
 

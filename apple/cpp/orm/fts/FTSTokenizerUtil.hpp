@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include <WCDB/BaseTokenizerUtil.hpp>
-#include <WCDB/FTSConst.h>
+#include "BaseTokenizerUtil.hpp"
+#include "FTSConst.h"
 
 namespace WCDB {
 

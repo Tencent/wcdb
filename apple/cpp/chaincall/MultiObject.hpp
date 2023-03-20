@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/CPPORM.h>
+#include "CPPORM.h"
 
 namespace WCDB {
 

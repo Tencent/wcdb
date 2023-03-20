@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/SharedThreadedErrorProne.hpp>
-#include <WCDB/ThreadedErrors.hpp>
+#include "SharedThreadedErrorProne.hpp"
+#include "ThreadedErrors.hpp"
 
 namespace WCDB {
 

@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/Accessor.hpp>
-#include <WCDB/Notifier.hpp>
+#include "Accessor.hpp"
+#include "Notifier.hpp"
 
 namespace WCDB {
 

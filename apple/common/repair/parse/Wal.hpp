@@ -24,10 +24,10 @@
 
 #pragma once
 
-#include <WCDB/FileHandle.hpp>
-#include <WCDB/Initializeable.hpp>
-#include <WCDB/PagerRelated.hpp>
-#include <WCDB/Shm.hpp>
+#include "FileHandle.hpp"
+#include "Initializeable.hpp"
+#include "PagerRelated.hpp"
+#include "Shm.hpp"
 #include <map>
 #include <set>
 

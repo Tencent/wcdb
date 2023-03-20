@@ -24,14 +24,14 @@
 
 #pragma once
 
-#include <WCDB/Database.hpp>
-#include <WCDB/Handle.hpp>
-#include <WCDB/PreparedStatement.hpp>
-#include <WCDB/Table.hpp>
-#include <WCDB/Tag.hpp>
+#include "Database.hpp"
+#include "Handle.hpp"
+#include "PreparedStatement.hpp"
+#include "Table.hpp"
+#include "Tag.hpp"
 
-#include <WCDB/Delete.hpp>
-#include <WCDB/Insert.hpp>
-#include <WCDB/MultiSelect.hpp>
-#include <WCDB/Select.hpp>
-#include <WCDB/Update.hpp>
+#include "Delete.hpp"
+#include "Insert.hpp"
+#include "MultiSelect.hpp"
+#include "Select.hpp"
+#include "Update.hpp"

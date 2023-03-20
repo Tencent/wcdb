@@ -22,13 +22,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/AsyncQueue.hpp>
-#include <WCDB/CoreConst.h>
-#include <WCDB/Error.hpp>
-#include <WCDB/Exiting.hpp>
-#include <WCDB/Notifier.hpp>
-#include <WCDB/StringView.hpp>
+#include "AsyncQueue.hpp"
+#include "Assertion.hpp"
+#include "CoreConst.h"
+#include "Error.hpp"
+#include "Exiting.hpp"
+#include "Notifier.hpp"
+#include "StringView.hpp"
 #include <atomic>
 #include <thread>
 

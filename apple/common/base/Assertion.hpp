@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/Console.hpp>
+#include "Console.hpp"
 
 // Assert is for WCDB debugging only, which will be removed when released. It ensures that the correctness of WCDB's code.
 // Remedial assertion is used to ensure that the app does not crash due to incorrect usage by developers.

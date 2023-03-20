@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/CrossPlatform.h>
+#include "CrossPlatform.h>
 #include <errno.h>
 #include <unistd.h>
 #if __GLIBC__ == 2 && __GLIBC_MINOR__ < 30

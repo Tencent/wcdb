@@ -22,17 +22,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Backup.hpp>
-#include <WCDB/Cell.hpp>
-#include <WCDB/CoreConst.h>
-#include <WCDB/FileManager.hpp>
-#include <WCDB/MasterItem.hpp>
-#include <WCDB/Notifier.hpp>
-#include <WCDB/Page.hpp>
-#include <WCDB/SequenceItem.hpp>
-#include <WCDB/StringView.hpp>
-#include <WCDB/SyntaxCommonConst.hpp>
+#include "Backup.hpp"
+#include "Assertion.hpp"
+#include "Cell.hpp"
+#include "CoreConst.h"
+#include "FileManager.hpp"
+#include "MasterItem.hpp"
+#include "Notifier.hpp"
+#include "Page.hpp"
+#include "SequenceItem.hpp"
+#include "StringView.hpp"
+#include "SyntaxCommonConst.hpp"
 
 namespace WCDB {
 

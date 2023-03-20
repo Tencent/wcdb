@@ -24,9 +24,9 @@
 
 #pragma once
 
-#include <WCDB/Accessor.hpp>
-#include <WCDB/CPPDeclaration.h>
-#include <WCDB/MemberPointer.hpp>
+#include "Accessor.hpp"
+#include "CPPDeclaration.h"
+#include "MemberPointer.hpp"
 
 namespace WCDB {
 

@@ -24,7 +24,8 @@
 
 #pragma once
 
-#include <WCDB/Error.hpp>
+#include "Error.hpp"
+#include "MappedData.hpp"
 
 namespace WCDB {
 

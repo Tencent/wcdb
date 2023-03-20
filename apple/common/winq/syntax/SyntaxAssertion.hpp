@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/Assertion.hpp>
+#include "Assertion.hpp"
 
 #define WCTSyntaxRemedialAssert(cond)                                          \
     WCTRemedialAssert(cond, "Invalid syntax detected.", return false;)

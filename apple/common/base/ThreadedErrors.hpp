@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include <WCDB/Error.hpp>
-#include <WCDB/ThreadLocal.hpp>
+#include "Error.hpp"
+#include "ThreadLocal.hpp"
 
 namespace WCDB {
 

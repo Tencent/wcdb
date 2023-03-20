@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/Fraction.hpp>
+#include "Fraction.hpp"
 
 namespace WCDB {
 

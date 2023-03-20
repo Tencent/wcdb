@@ -24,30 +24,30 @@
 
 #pragma once
 
-#include <WCDB/Core.hpp>
-#include <WCDB/CoreConst.h>
+#include "Core.hpp"
+#include "CoreConst.h"
 
-#include <WCDB/AsyncQueue.hpp>
-#include <WCDB/OperationQueue.hpp>
+#include "AsyncQueue.hpp"
+#include "OperationQueue.hpp"
 
-#include <WCDB/AuxiliaryFunctionConfig.hpp>
-#include <WCDB/BasicConfig.hpp>
-#include <WCDB/CipherConfig.hpp>
-#include <WCDB/Config.hpp>
-#include <WCDB/Configs.hpp>
-#include <WCDB/CustomConfig.hpp>
-#include <WCDB/PerformanceTraceConfig.hpp>
-#include <WCDB/SQLTraceConfig.hpp>
-#include <WCDB/TokenizerConfig.hpp>
+#include "AuxiliaryFunctionConfig.hpp"
+#include "BasicConfig.hpp"
+#include "CipherConfig.hpp"
+#include "Config.hpp"
+#include "Configs.hpp"
+#include "CustomConfig.hpp"
+#include "PerformanceTraceConfig.hpp"
+#include "SQLTraceConfig.hpp"
+#include "TokenizerConfig.hpp"
 
-#include <WCDB/DatabasePool.hpp>
-#include <WCDB/InnerDatabase.hpp>
-#include <WCDB/RecyclableHandle.hpp>
+#include "DatabasePool.hpp"
+#include "InnerDatabase.hpp"
+#include "RecyclableHandle.hpp"
 
-#include <WCDB/TokenizerModule.hpp>
-#include <WCDB/TokenizerModules.hpp>
+#include "TokenizerModule.hpp"
+#include "TokenizerModules.hpp"
 
-#include <WCDB/AuxiliaryFunctionModule.hpp>
-#include <WCDB/AuxiliaryFunctionModules.hpp>
+#include "AuxiliaryFunctionModule.hpp"
+#include "AuxiliaryFunctionModules.hpp"
 
-#include <WCDB/MigrationInfo.hpp>
+#include "MigrationInfo.hpp"

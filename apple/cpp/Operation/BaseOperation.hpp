@@ -23,8 +23,8 @@
  */
 
 #pragma once
-#include <WCDB/CPPDeclaration.h>
-#include <WCDB/RecyclableHandle.hpp>
+#include "CPPDeclaration.h"
+#include "RecyclableHandle.hpp"
 
 namespace WCDB {
 

@@ -23,9 +23,9 @@
  */
 
 #pragma once
-#include <WCDB/ColumnType.hpp>
-#include <WCDB/Error.hpp>
-#include <WCDB/MemberPointer.hpp>
+#include "ColumnType.hpp"
+#include "Error.hpp"
+#include "MemberPointer.hpp"
 
 namespace WCDB {
 

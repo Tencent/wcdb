@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/CoreConst.h>
-#include <WCDB/Mechanic.hpp>
-#include <WCDB/Notifier.hpp>
-#include <WCDB/Page.hpp>
-#include <WCDB/StringView.hpp>
+#include "Mechanic.hpp"
+#include "Assertion.hpp"
+#include "CoreConst.h"
+#include "Notifier.hpp"
+#include "Page.hpp"
+#include "StringView.hpp"
 
 namespace WCDB {
 

@@ -23,9 +23,9 @@
  */
 
 #pragma once
-#include <WCDB/CPPDeclaration.h>
-#include <WCDB/Statement.hpp>
-#include <WCDB/StatementOperation.hpp>
+#include "CPPDeclaration.h"
+#include "Statement.hpp"
+#include "StatementOperation.hpp"
 
 namespace WCDB {
 

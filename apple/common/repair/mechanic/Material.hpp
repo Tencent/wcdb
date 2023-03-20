@@ -24,10 +24,10 @@
 
 #pragma once
 
-#include <WCDB/Cipher.hpp>
-#include <WCDB/Optional.hpp>
-#include <WCDB/Serialization.hpp>
-#include <WCDB/StringView.hpp>
+#include "Cipher.hpp"
+#include "Optional.hpp"
+#include "Serialization.hpp"
+#include "StringView.hpp"
 #include <list>
 #include <map>
 #include <stdlib.h>

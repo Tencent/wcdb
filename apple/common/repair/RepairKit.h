@@ -24,16 +24,16 @@
 
 #pragma once
 
-#include <WCDB/Factory.hpp>
-#include <WCDB/FactoryBackup.hpp>
-#include <WCDB/FactoryDepositor.hpp>
-#include <WCDB/FactoryRenewer.hpp>
-#include <WCDB/FactoryRetriever.hpp>
+#include "Factory.hpp"
+#include "FactoryBackup.hpp"
+#include "FactoryDepositor.hpp"
+#include "FactoryRenewer.hpp"
+#include "FactoryRetriever.hpp"
 
-#include <WCDB/Assemble.hpp>
-#include <WCDB/Cell.hpp>
+#include "Assemble.hpp"
+#include "Cell.hpp"
 
 #if WCDB_USE_BUILTIN_SQLITE_REPAIR
-#include <WCDB/SQLiteAssembler.hpp>
-#include <WCDB/SQLiteLocker.hpp>
+#include "SQLiteAssembler.hpp"
+#include "SQLiteLocker.hpp"
 #endif /* WCDB_USE_BUILTIN_SQLITE_REPAIR */

@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include <WCDB/CPPORM.h>
-#include <WCDB/ChainCall.hpp>
+#include "CPPORM.h"
+#include "ChainCall.hpp"
 
 namespace WCDB {
 

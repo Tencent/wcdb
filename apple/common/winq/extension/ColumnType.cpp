@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/ColumnType.hpp>
+#include "ColumnType.hpp"
 #include <cstring>
 
 namespace WCDB {

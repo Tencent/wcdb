@@ -24,10 +24,10 @@
 
 #pragma once
 
-#include <WCDB/InnerDatabase.hpp>
-#include <WCDB/Lock.hpp>
-#include <WCDB/Path.hpp>
-#include <WCDB/Tag.hpp>
+#include "InnerDatabase.hpp"
+#include "Lock.hpp"
+#include "Path.hpp"
+#include "Tag.hpp"
 
 namespace WCDB {
 

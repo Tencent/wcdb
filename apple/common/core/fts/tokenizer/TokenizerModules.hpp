@@ -24,11 +24,11 @@
 
 #pragma once
 
-#include <WCDB/Lock.hpp>
-#include <WCDB/StringView.hpp>
-#include <WCDB/TokenizerModule.hpp>
-#include <WCDB/TokenizerModuleTemplate.hpp>
-#include <WCDB/UnsafeData.hpp>
+#include "Lock.hpp"
+#include "StringView.hpp"
+#include "TokenizerModule.hpp"
+#include "TokenizerModuleTemplate.hpp"
+#include "UnsafeData.hpp"
 #include <list>
 
 namespace WCDB {

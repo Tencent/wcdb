@@ -24,9 +24,9 @@
 
 #pragma once
 
-#include <WCDB/Binding.hpp>
-#include <WCDB/FTSTokenizerUtil.hpp>
-#include <WCDB/Field.hpp>
-#include <WCDB/MemberPointer.hpp>
-#include <WCDB/ResultField.hpp>
-#include <WCDB/RunTimeAccessor.hpp>
+#include "Binding.hpp"
+#include "FTSTokenizerUtil.hpp"
+#include "Field.hpp"
+#include "MemberPointer.hpp"
+#include "ResultField.hpp"
+#include "RunTimeAccessor.hpp"

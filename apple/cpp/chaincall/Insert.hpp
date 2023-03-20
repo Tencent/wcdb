@@ -24,10 +24,10 @@
 
 #pragma once
 
-#include <WCDB/CPPORM.h>
-#include <WCDB/CaseInsensiveList.hpp>
-#include <WCDB/ChainCall.hpp>
-#include <WCDB/ValueArray.hpp>
+#include "CPPORM.h"
+#include "CaseInsensiveList.hpp"
+#include "ChainCall.hpp"
+#include "ValueArray.hpp"
 
 namespace WCDB {
 

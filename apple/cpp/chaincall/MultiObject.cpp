@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/MultiObject.hpp>
+#include "MultiObject.hpp"
+#include "Assertion.hpp"
 
 namespace WCDB {
 

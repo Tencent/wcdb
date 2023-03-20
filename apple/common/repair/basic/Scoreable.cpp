@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Console.hpp>
-#include <WCDB/Scoreable.hpp>
+#include "Scoreable.hpp"
+#include "Assertion.hpp"
+#include "Console.hpp"
 #include <cmath>
 
 namespace WCDB {
