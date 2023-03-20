@@ -22,14 +22,14 @@
  * limitations under the License.
  */
 
-#include <WCDB/CipherConfig.hpp>
-#include <WCDB/Core.hpp>
-#include <WCDB/CustomConfig.hpp>
-#include <WCDB/DBOperationNotifier.hpp>
-#include <WCDB/Database.hpp>
-#include <WCDB/FileManager.hpp>
-#include <WCDB/InnerDatabase.hpp>
-#include <WCDB/Version.h>
+#include "Database.hpp"
+#include "CipherConfig.hpp"
+#include "Core.hpp"
+#include "CustomConfig.hpp"
+#include "DBOperationNotifier.hpp"
+#include "FileManager.hpp"
+#include "InnerDatabase.hpp"
+#include "Version.h"
 #include <errno.h>
 #include <stdlib.h>
 #include <unistd.h>

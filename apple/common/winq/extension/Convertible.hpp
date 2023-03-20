@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include <WCDB/ColumnType.hpp>
-#include <WCDB/SyntaxForwardDeclaration.h>
+#include "ColumnType.hpp"
+#include "SyntaxForwardDeclaration.h"
 
 namespace WCDB {
 

@@ -22,16 +22,16 @@
  * limitations under the License.
  */
 
-#include <WCDB/AbstractHandle.hpp>
-#include <WCDB/Assertion.hpp>
-#include <WCDB/BaseBinding.hpp>
-#include <WCDB/Core.hpp>
-#include <WCDB/HandleStatement.hpp>
-#include <WCDB/InnerHandle.hpp>
-#include <WCDB/MigratingHandle.hpp>
-#include <WCDB/MigrationInfo.hpp>
-#include <WCDB/SQLite.h>
-#include <WCDB/WINQ.h>
+#include "HandleStatement.hpp"
+#include "AbstractHandle.hpp"
+#include "Assertion.hpp"
+#include "BaseBinding.hpp"
+#include "Core.hpp"
+#include "InnerHandle.hpp"
+#include "MigratingHandle.hpp"
+#include "MigrationInfo.hpp"
+#include "SQLite.h"
+#include "WINQ.h"
 #include <string.h>
 
 namespace WCDB {

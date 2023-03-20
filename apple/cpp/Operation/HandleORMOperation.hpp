@@ -23,10 +23,10 @@
  */
 
 #pragma once
-#include <WCDB/CPPORM.h>
-#include <WCDB/Error.hpp>
-#include <WCDB/HandleOperation.hpp>
-#include <WCDB/MultiObject.hpp>
+#include "CPPORM.h"
+#include "Error.hpp"
+#include "HandleOperation.hpp"
+#include "MultiObject.hpp"
 
 namespace WCDB {
 

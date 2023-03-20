@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/CustomConfig.hpp>
+#include "CustomConfig.hpp"
+#include "Assertion.hpp"
 
 namespace WCDB {
 

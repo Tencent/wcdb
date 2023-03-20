@@ -24,13 +24,13 @@
 
 #pragma once
 
-#include <WCDB/SyntaxBindParameter.hpp>
-#include <WCDB/SyntaxFilter.hpp>
-#include <WCDB/SyntaxIdentifier.hpp>
-#include <WCDB/SyntaxLiteralValue.hpp>
-#include <WCDB/SyntaxRaiseFunction.hpp>
-#include <WCDB/SyntaxSchema.hpp>
-#include <WCDB/SyntaxWindowDef.hpp>
+#include "SyntaxBindParameter.hpp"
+#include "SyntaxFilter.hpp"
+#include "SyntaxIdentifier.hpp"
+#include "SyntaxLiteralValue.hpp"
+#include "SyntaxRaiseFunction.hpp"
+#include "SyntaxSchema.hpp"
+#include "SyntaxWindowDef.hpp"
 
 namespace WCDB {
 

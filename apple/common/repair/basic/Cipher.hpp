@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include <WCDB/Error.hpp>
-#include <WCDB/StringView.hpp>
+#include "Error.hpp"
+#include "StringView.hpp"
 
 namespace WCDB {
 

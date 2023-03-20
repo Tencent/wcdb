@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/Macro.h>
+#include "Macro.h"
 
 #define __WCDB_CPP_VIRTUAL_TABLE_BEGIN()                                       \
     {                                                                          \

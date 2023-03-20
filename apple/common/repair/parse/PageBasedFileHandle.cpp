@@ -22,11 +22,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/CoreConst.h>
-#include <WCDB/Error.hpp>
-#include <WCDB/Notifier.hpp>
-#include <WCDB/PageBasedFileHandle.hpp>
+#include "PageBasedFileHandle.hpp"
+#include "Assertion.hpp"
+#include "CoreConst.h"
+#include "Error.hpp"
+#include "Notifier.hpp"
 #include <unistd.h>
 
 namespace WCDB {

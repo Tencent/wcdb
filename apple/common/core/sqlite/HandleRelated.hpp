@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include <WCDB/SQLiteDeclaration.h>
-#include <WCDB/StringView.hpp>
+#include "SQLiteDeclaration.h"
+#include "StringView.hpp"
 
 namespace WCDB {
 

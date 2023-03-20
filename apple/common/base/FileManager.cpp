@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
-#include <WCDB/CoreConst.h>
-#include <WCDB/FileManager.hpp>
-#include <WCDB/Notifier.hpp>
-#include <WCDB/Path.hpp>
-#include <WCDB/StringView.hpp>
-#include <WCDB/UnsafeData.hpp>
+#include "FileManager.hpp"
+#include "CoreConst.h"
+#include "Notifier.hpp"
+#include "Path.hpp"
+#include "StringView.hpp"
+#include "UnsafeData.hpp"
 #include <cstring>
 #include <dirent.h>
 #include <errno.h>
@@ -36,7 +36,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #ifndef __APPLE__
-#include <WCDB/CrossPlatform.h>
+#include "CrossPlatform.h>
 #endif
 
 namespace WCDB {

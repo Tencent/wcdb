@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/ChainCall.hpp>
-#include <WCDB/Handle.hpp>
-#include <WCDB/InnerHandle.hpp>
+#include "ChainCall.hpp"
+#include "Assertion.hpp"
+#include "Handle.hpp"
+#include "InnerHandle.hpp"
 
 namespace WCDB {
 

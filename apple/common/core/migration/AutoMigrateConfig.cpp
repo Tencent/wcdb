@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/AutoMigrateConfig.hpp>
-#include <WCDB/InnerHandle.hpp>
+#include "AutoMigrateConfig.hpp"
+#include "Assertion.hpp"
+#include "InnerHandle.hpp"
 
 namespace WCDB {
 

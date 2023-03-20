@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/Optional.hpp>
+#include "Optional.hpp"
 
 namespace WCDB {
 

@@ -24,11 +24,11 @@
 
 #pragma once
 
-#include <WCDB/Macro.h>
-#include <WCDB/Optional.hpp>
-#include <WCDB/Shadow.hpp>
-#include <WCDB/StringView.hpp>
-#include <WCDB/SyntaxCommonConst.hpp>
+#include "Macro.h"
+#include "Optional.hpp"
+#include "Shadow.hpp"
+#include "StringView.hpp"
+#include "SyntaxCommonConst.hpp"
 #include <functional>
 #include <list>
 #include <sstream>

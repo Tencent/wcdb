@@ -24,9 +24,9 @@
 
 #pragma once
 
-#include <WCDB/Config.hpp>
-#include <WCDB/InnerHandle.hpp>
-#include <WCDB/Lock.hpp>
+#include "Config.hpp"
+#include "InnerHandle.hpp"
+#include "Lock.hpp"
 
 namespace WCDB {
 

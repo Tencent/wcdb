@@ -26,9 +26,9 @@
 
 #if WCDB_USE_BUILTIN_SQLITE_REPAIR
 
-#include <WCDB/Assembler.hpp>
-#include <WCDB/Optional.hpp>
-#include <WCDB/SQLiteBase.hpp>
+#include "Assembler.hpp"
+#include "Optional.hpp"
+#include "SQLiteBase.hpp"
 #include <list>
 
 namespace WCDB {

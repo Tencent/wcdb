@@ -23,12 +23,12 @@
  */
 
 #pragma once
-#include <WCDB/CPPDeclaration.h>
-#include <WCDB/CPPORM.h>
-#include <WCDB/Delete.hpp>
-#include <WCDB/RecyclableHandle.hpp>
-#include <WCDB/TableOperation.hpp>
-#include <WCDB/Value.hpp>
+#include "CPPDeclaration.h"
+#include "CPPORM.h"
+#include "Delete.hpp"
+#include "RecyclableHandle.hpp"
+#include "TableOperation.hpp"
+#include "Value.hpp"
 
 namespace WCDB {
 

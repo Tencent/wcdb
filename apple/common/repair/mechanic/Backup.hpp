@@ -24,10 +24,10 @@
 
 #pragma once
 
-#include <WCDB/Cipher.hpp>
-#include <WCDB/MasterCrawler.hpp>
-#include <WCDB/Material.hpp>
-#include <WCDB/SequenceCrawler.hpp>
+#include "Cipher.hpp"
+#include "MasterCrawler.hpp"
+#include "Material.hpp"
+#include "SequenceCrawler.hpp"
 #include <vector>
 
 namespace WCDB {

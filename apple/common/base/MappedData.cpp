@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/MappedData.hpp>
-#include <WCDB/Notifier.hpp>
+#include "MappedData.hpp"
+#include "Notifier.hpp"
 #include <sys/mman.h>
 
 namespace WCDB {

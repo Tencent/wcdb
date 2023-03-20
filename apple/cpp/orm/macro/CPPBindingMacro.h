@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/Macro.h>
+#include "Macro.h"
 #include <mutex>
 
 #define __WCDB_CPP_ORM_COMMON_DECLARATION(className)                               \

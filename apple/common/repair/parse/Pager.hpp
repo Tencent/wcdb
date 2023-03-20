@@ -24,12 +24,12 @@
 
 #pragma once
 
-#include <WCDB/Error.hpp>
-#include <WCDB/ErrorProne.hpp>
-#include <WCDB/HighWater.hpp>
-#include <WCDB/Initializeable.hpp>
-#include <WCDB/PageBasedFileHandle.hpp>
-#include <WCDB/Wal.hpp>
+#include "Error.hpp"
+#include "ErrorProne.hpp"
+#include "HighWater.hpp"
+#include "Initializeable.hpp"
+#include "PageBasedFileHandle.hpp"
+#include "Wal.hpp"
 
 namespace WCDB {
 

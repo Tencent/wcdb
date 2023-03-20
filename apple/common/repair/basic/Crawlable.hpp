@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/Pager.hpp>
+#include "Pager.hpp"
 #include <set>
 
 namespace WCDB {

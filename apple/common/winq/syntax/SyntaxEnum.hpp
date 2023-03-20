@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include <WCDB/Enum.hpp>
-#include <WCDB/SyntaxCommonConst.hpp>
+#include "Enum.hpp"
+#include "SyntaxCommonConst.hpp"
 
 namespace WCDB {
 

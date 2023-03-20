@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/ColumnMeta.hpp>
+#include "ColumnMeta.hpp"
 
 namespace WCDB {
 

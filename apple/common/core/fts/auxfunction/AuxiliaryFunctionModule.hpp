@@ -24,8 +24,8 @@
 
 #pragma once
 
-#import <WCDB/FTSError.hpp>
-#import <WCDB/StringView.hpp>
+#include "FTSError.hpp"
+#include "StringView.hpp"
 #include <functional>
 
 typedef struct FTS5AuxiliaryFunctionValue FTS5AuxiliaryFunctionValue;

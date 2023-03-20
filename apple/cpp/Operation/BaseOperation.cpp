@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/BaseOperation.hpp>
-#include <WCDB/InnerDatabase.hpp>
-#include <WCDB/InnerHandle.hpp>
+#include "BaseOperation.hpp"
+#include "InnerDatabase.hpp"
+#include "InnerHandle.hpp"
 
 namespace WCDB {
 

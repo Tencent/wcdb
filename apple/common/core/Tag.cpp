@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/CoreConst.h>
-#include <WCDB/Tag.hpp>
+#include "Tag.hpp"
+#include "Assertion.hpp"
+#include "CoreConst.h"
 
 namespace WCDB {
 

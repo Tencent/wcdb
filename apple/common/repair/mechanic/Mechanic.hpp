@@ -24,10 +24,10 @@
 
 #pragma once
 
-#include <WCDB/Assemble.hpp>
-#include <WCDB/Crawlable.hpp>
-#include <WCDB/Material.hpp>
-#include <WCDB/Repairman.hpp>
+#include "Assemble.hpp"
+#include "Crawlable.hpp"
+#include "Material.hpp"
+#include "Repairman.hpp"
 
 namespace WCDB {
 

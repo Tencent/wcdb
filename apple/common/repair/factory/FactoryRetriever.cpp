@@ -22,20 +22,20 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/CoreConst.h>
-#include <WCDB/Data.hpp>
-#include <WCDB/Factory.hpp>
-#include <WCDB/FactoryBackup.hpp>
-#include <WCDB/FactoryRetriever.hpp>
-#include <WCDB/FileHandle.hpp>
-#include <WCDB/FileManager.hpp>
-#include <WCDB/FullCrawler.hpp>
-#include <WCDB/Mechanic.hpp>
-#include <WCDB/Notifier.hpp>
-#include <WCDB/Path.hpp>
-#include <WCDB/SQLite.h>
-#include <WCDB/ThreadedErrors.hpp>
+#include "FactoryRetriever.hpp"
+#include "Assertion.hpp"
+#include "CoreConst.h"
+#include "Data.hpp"
+#include "Factory.hpp"
+#include "FactoryBackup.hpp"
+#include "FileHandle.hpp"
+#include "FileManager.hpp"
+#include "FullCrawler.hpp"
+#include "Mechanic.hpp"
+#include "Notifier.hpp"
+#include "Path.hpp"
+#include "SQLite.h"
+#include "ThreadedErrors.hpp"
 #include <cstring>
 #include <numeric>
 

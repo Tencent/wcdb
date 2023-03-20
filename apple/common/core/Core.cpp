@@ -22,18 +22,18 @@
  * limitations under the License.
  */
 
-#include <WCDB/AutoMigrateConfig.hpp>
-#include <WCDB/BusyRetryConfig.hpp>
-#include <WCDB/Core.h>
-#include <WCDB/FTS5AuxiliaryFunctionTemplate.hpp>
-#include <WCDB/FTSConst.h>
-#include <WCDB/FileManager.hpp>
-#include <WCDB/Global.hpp>
-#include <WCDB/Notifier.hpp>
-#include <WCDB/OneOrBinaryTokenizer.hpp>
-#include <WCDB/PinyinTokenizer.hpp>
-#include <WCDB/StringView.hpp>
-#include <WCDB/SubstringMatchInfo.hpp>
+#include "Core.h"
+#include "AutoMigrateConfig.hpp"
+#include "BusyRetryConfig.hpp"
+#include "FTS5AuxiliaryFunctionTemplate.hpp"
+#include "FTSConst.h"
+#include "FileManager.hpp"
+#include "Global.hpp"
+#include "Notifier.hpp"
+#include "OneOrBinaryTokenizer.hpp"
+#include "PinyinTokenizer.hpp"
+#include "StringView.hpp"
+#include "SubstringMatchInfo.hpp"
 
 namespace WCDB {
 

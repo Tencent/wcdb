@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/Syntax.h>
-#include <WCDB/SyntaxAssertion.hpp>
+#include "Syntax.h"
+#include "SyntaxAssertion.hpp"
 
 namespace WCDB {
 

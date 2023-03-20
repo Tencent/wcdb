@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/CoreConst.h>
-#include <WCDB/MigrateHandle.hpp>
-#include <WCDB/Time.hpp>
+#include "MigrateHandle.hpp"
+#include "Assertion.hpp"
+#include "CoreConst.h"
+#include "Time.hpp"
 #include <cmath>
 
 namespace WCDB {

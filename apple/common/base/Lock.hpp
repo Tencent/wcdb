@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include <WCDB/Thread.hpp>
-#include <WCDB/ThreadLocal.hpp>
+#include "Thread.hpp"
+#include "ThreadLocal.hpp"
 #include <atomic>
 #include <condition_variable>
 #include <functional>

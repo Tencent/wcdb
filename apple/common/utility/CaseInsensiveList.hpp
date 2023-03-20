@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/StringView.hpp>
+#include "StringView.hpp"
 #include <algorithm>
 #include <functional>
 #include <list>

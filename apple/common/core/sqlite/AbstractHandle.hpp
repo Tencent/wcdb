@@ -24,13 +24,13 @@
 
 #pragma once
 
-#include <WCDB/ColumnMeta.hpp>
-#include <WCDB/ErrorProne.hpp>
-#include <WCDB/HandleNotification.hpp>
-#include <WCDB/HandleStatement.hpp>
-#include <WCDB/Optional.hpp>
-#include <WCDB/StringView.hpp>
-#include <WCDB/WINQ.h>
+#include "ColumnMeta.hpp"
+#include "ErrorProne.hpp"
+#include "HandleNotification.hpp"
+#include "HandleStatement.hpp"
+#include "Optional.hpp"
+#include "StringView.hpp"
+#include "WINQ.h"
 #include <set>
 #include <vector>
 

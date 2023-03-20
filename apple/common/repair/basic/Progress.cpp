@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Progress.hpp>
+#include "Progress.hpp"
+#include "Assertion.hpp"
 
 namespace WCDB {
 

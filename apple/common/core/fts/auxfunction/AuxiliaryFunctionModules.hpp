@@ -24,9 +24,9 @@
 
 #pragma once
 
-#include <WCDB/AuxiliaryFunctionModule.hpp>
-#include <WCDB/Lock.hpp>
-#include <WCDB/StringView.hpp>
+#include "AuxiliaryFunctionModule.hpp"
+#include "Lock.hpp"
+#include "StringView.hpp"
 #include <list>
 
 namespace WCDB {

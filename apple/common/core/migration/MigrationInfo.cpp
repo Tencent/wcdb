@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/MigrationInfo.hpp>
-#include <WCDB/StringView.hpp>
+#include "MigrationInfo.hpp"
+#include "Assertion.hpp"
+#include "StringView.hpp"
 
 namespace WCDB {
 

@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include <WCDB/InnerHandle.hpp>
-#include <WCDB/Migration.hpp>
+#include "InnerHandle.hpp"
+#include "Migration.hpp"
 #include <array>
 
 namespace WCDB {

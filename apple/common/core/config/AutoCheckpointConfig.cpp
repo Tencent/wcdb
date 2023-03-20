@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/AutoCheckpointConfig.hpp>
-#include <WCDB/Global.hpp>
-#include <WCDB/InnerHandle.hpp>
-#include <WCDB/StatementPragma.hpp>
-#include <WCDB/StringView.hpp>
+#include "AutoCheckpointConfig.hpp"
+#include "Assertion.hpp"
+#include "Global.hpp"
+#include "InnerHandle.hpp"
+#include "StatementPragma.hpp"
+#include "StringView.hpp"
 #include <regex>
 
 namespace WCDB {

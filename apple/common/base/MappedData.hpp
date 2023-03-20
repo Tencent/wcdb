@@ -24,10 +24,10 @@
 
 #pragma once
 
-#include <WCDB/HighWater.hpp>
-#include <WCDB/Recyclable.hpp>
-#include <WCDB/SharedThreadedErrorProne.hpp>
-#include <WCDB/UnsafeData.hpp>
+#include "HighWater.hpp"
+#include "Recyclable.hpp"
+#include "SharedThreadedErrorProne.hpp"
+#include "UnsafeData.hpp"
 
 namespace WCDB {
 

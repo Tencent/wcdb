@@ -22,15 +22,15 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/CoreConst.h>
-#include <WCDB/Error.hpp>
-#include <WCDB/SQLite.h>
-#include <WCDB/StringView.hpp>
+#include "Error.hpp"
+#include "Assertion.hpp"
+#include "CoreConst.h"
+#include "SQLite.h"
+#include "StringView.hpp"
 #include <cstring>
 #include <sstream>
 #ifndef __APPLE__
-#include <WCDB/CrossPlatform.h>
+#include "CrossPlatform.h>
 #endif
 
 namespace WCDB {

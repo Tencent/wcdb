@@ -22,5 +22,5 @@
  * limitations under the License.
  */
 
-#include <WCDB/Master.hpp>
-#include <WCDB/Sequence.hpp>
+#include "Master.hpp"
+#include "Sequence.hpp"

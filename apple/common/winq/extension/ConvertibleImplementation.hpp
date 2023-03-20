@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include <WCDB/Convertible.hpp>
-#include <WCDB/Value.hpp>
+#include "Convertible.hpp"
+#include "Value.hpp"
 
 namespace WCDB {
 

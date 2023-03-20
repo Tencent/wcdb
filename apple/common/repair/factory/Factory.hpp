@@ -24,13 +24,13 @@
 
 #pragma once
 
-#include <WCDB/FactoryBackup.hpp>
-#include <WCDB/FactoryDepositor.hpp>
-#include <WCDB/FactoryRenewer.hpp>
-#include <WCDB/FactoryRetriever.hpp>
-#include <WCDB/Optional.hpp>
-#include <WCDB/StringView.hpp>
-#include <WCDB/Time.hpp>
+#include "FactoryBackup.hpp"
+#include "FactoryDepositor.hpp"
+#include "FactoryRenewer.hpp"
+#include "FactoryRetriever.hpp"
+#include "Optional.hpp"
+#include "StringView.hpp"
+#include "Time.hpp"
 #include <future>
 #include <list>
 

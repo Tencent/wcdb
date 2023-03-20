@@ -24,11 +24,11 @@
 
 #pragma once
 
-#include <WCDB/ColumnType.hpp>
-#include <WCDB/HandleRelated.hpp>
-#include <WCDB/SQLiteDeclaration.h>
-#include <WCDB/Statement.hpp>
-#include <WCDB/Value.hpp>
+#include "ColumnType.hpp"
+#include "HandleRelated.hpp"
+#include "SQLiteDeclaration.h"
+#include "Statement.hpp"
+#include "Value.hpp"
 
 namespace WCDB {
 

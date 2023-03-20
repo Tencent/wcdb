@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/SubstringMatchInfo.hpp>
+#include "SubstringMatchInfo.hpp"
+#include "Assertion.hpp"
 #include <cstring>
 
 namespace WCDB {

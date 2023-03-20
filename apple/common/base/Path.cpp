@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/Path.hpp>
+#include "Path.hpp"
 #include <libgen.h>
 #include <pwd.h>
 #include <unistd.h>

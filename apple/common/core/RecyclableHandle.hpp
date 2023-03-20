@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/Recyclable.hpp>
+#include "Recyclable.hpp"
 
 namespace WCDB {
 

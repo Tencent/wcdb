@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Global.hpp>
-#include <WCDB/Notifier.hpp>
-#include <WCDB/SQLite.h>
+#include "Global.hpp"
+#include "Assertion.hpp"
+#include "Notifier.hpp"
+#include "SQLite.h"
 #include <fcntl.h>
 
 namespace WCDB {

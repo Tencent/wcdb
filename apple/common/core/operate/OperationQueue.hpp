@@ -24,19 +24,19 @@
 
 #pragma once
 
-#include <WCDB/AsyncQueue.hpp>
-#include <WCDB/Lock.hpp>
-#include <WCDB/StringView.hpp>
-#include <WCDB/Time.hpp>
-#include <WCDB/TimedQueue.hpp>
+#include "AsyncQueue.hpp"
+#include "Lock.hpp"
+#include "StringView.hpp"
+#include "Time.hpp"
+#include "TimedQueue.hpp"
 #include <map>
 #include <set>
 
-#include <WCDB/AutoBackupConfig.hpp>
-#include <WCDB/AutoCheckpointConfig.hpp>
-#include <WCDB/AutoMergeFTSIndexConfig.hpp>
-#include <WCDB/AutoMigrateConfig.hpp>
-#include <WCDB/Optional.hpp>
+#include "AutoBackupConfig.hpp"
+#include "AutoCheckpointConfig.hpp"
+#include "AutoMergeFTSIndexConfig.hpp"
+#include "AutoMigrateConfig.hpp"
+#include "Optional.hpp"
 
 namespace WCDB {
 

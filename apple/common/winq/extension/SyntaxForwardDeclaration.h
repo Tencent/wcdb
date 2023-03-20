@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/Syntax.h>
+#include "Syntax.h"
 
 namespace WCDB {
 

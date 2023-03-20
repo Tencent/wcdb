@@ -24,10 +24,10 @@
 
 #pragma once
 
-#include <WCDB/Initializeable.hpp>
-#include <WCDB/Optional.hpp>
-#include <WCDB/Page.hpp>
-#include <WCDB/WalRelated.hpp>
+#include "Initializeable.hpp"
+#include "Optional.hpp"
+#include "Page.hpp"
+#include "WalRelated.hpp"
 #include <utility>
 
 namespace WCDB {

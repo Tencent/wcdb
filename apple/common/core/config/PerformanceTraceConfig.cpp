@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/PerformanceTraceConfig.hpp>
-#include <WCDB/StringView.hpp>
+#include "PerformanceTraceConfig.hpp"
+#include "Assertion.hpp"
+#include "StringView.hpp"
 
 namespace WCDB {
 

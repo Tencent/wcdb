@@ -24,10 +24,10 @@
 
 #pragma once
 
-#include <WCDB/FileHandle.hpp>
-#include <WCDB/LRUCache.hpp>
-#include <WCDB/MappedData.hpp>
-#include <WCDB/Range.hpp>
+#include "FileHandle.hpp"
+#include "LRUCache.hpp"
+#include "MappedData.hpp"
+#include "Range.hpp"
 
 namespace WCDB {
 

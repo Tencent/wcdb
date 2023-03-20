@@ -24,7 +24,8 @@
 
 #pragma once
 
-#include <WCDB/Data.hpp>
+#include "Data.hpp"
+#include "StringView.hpp"
 
 namespace WCDB {
 

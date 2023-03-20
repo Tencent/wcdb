@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/Macro.h>
+#include "Macro.h"
 
 #pragma mark - errno
 

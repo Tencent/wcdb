@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/HandleStatement.hpp>
-#include <WCDB/PreparedStatement.hpp>
+#include "PreparedStatement.hpp"
+#include "HandleStatement.hpp"
 
 namespace WCDB {
 

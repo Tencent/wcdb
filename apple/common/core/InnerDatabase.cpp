@@ -22,23 +22,23 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Error.hpp>
-#include <WCDB/FileManager.hpp>
-#include <WCDB/InnerDatabase.hpp>
-#include <WCDB/Notifier.hpp>
-#include <WCDB/Path.hpp>
-#include <WCDB/RepairKit.h>
-#include <WCDB/StringView.hpp>
+#include "InnerDatabase.hpp"
+#include "Assertion.hpp"
+#include "Error.hpp"
+#include "FileManager.hpp"
+#include "Notifier.hpp"
+#include "Path.hpp"
+#include "RepairKit.h"
+#include "StringView.hpp"
 
-#include <WCDB/AssembleHandle.hpp>
-#include <WCDB/BusyRetryConfig.hpp>
-#include <WCDB/Core.hpp>
-#include <WCDB/DBOperationNotifier.hpp>
-#include <WCDB/MigrateHandle.hpp>
-#include <WCDB/MigratingHandle.hpp>
-#include <WCDB/OperationHandle.hpp>
-#include <WCDB/SQLite.h>
+#include "AssembleHandle.hpp"
+#include "BusyRetryConfig.hpp"
+#include "Core.hpp"
+#include "DBOperationNotifier.hpp"
+#include "MigrateHandle.hpp"
+#include "MigratingHandle.hpp"
+#include "OperationHandle.hpp"
+#include "SQLite.h"
 
 namespace WCDB {
 

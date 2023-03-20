@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include <WCDB/StringView.hpp>
-#include <WCDB/Tag.hpp>
+#include "StringView.hpp"
+#include "Tag.hpp"
 #include <map>
 
 namespace WCDB {

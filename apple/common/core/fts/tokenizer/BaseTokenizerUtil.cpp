@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/BaseTokenizerUtil.hpp>
-#include <WCDB/FTSError.hpp>
+#include "BaseTokenizerUtil.hpp"
+#include "Assertion.hpp"
+#include "FTSError.hpp"
 
 namespace WCDB {
 

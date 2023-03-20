@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Delete.hpp>
-#include <WCDB/Handle.hpp>
-#include <WCDB/HandleORMOperation.hpp>
-#include <WCDB/MultiSelect.hpp>
+#include "HandleORMOperation.hpp"
+#include "Delete.hpp"
+#include "Handle.hpp"
+#include "MultiSelect.hpp"
 
 namespace WCDB {
 

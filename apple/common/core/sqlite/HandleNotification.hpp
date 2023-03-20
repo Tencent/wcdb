@@ -24,10 +24,10 @@
 
 #pragma once
 
-#include <WCDB/HandleRelated.hpp>
-#include <WCDB/Lock.hpp>
-#include <WCDB/SQLiteDeclaration.h>
-#include <WCDB/UniqueList.hpp>
+#include "HandleRelated.hpp"
+#include "Lock.hpp"
+#include "SQLiteDeclaration.h"
+#include "UniqueList.hpp"
 #include <functional>
 #include <map>
 

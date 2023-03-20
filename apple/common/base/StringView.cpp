@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/Macro.h>
-#include <WCDB/StringView.hpp>
-#include <WCDB/UnsafeData.hpp>
+#include "StringView.hpp"
+#include "Macro.h"
+#include "UnsafeData.hpp"
 #include <cstring>
 #include <iomanip>
 #include <numeric>

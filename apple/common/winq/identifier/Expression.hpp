@@ -24,10 +24,10 @@
 
 #pragma once
 
-#include <WCDB/AggregateFunction.hpp>
-#include <WCDB/CoreFunction.hpp>
-#include <WCDB/FTSFunction.hpp>
-#include <WCDB/SQL.hpp>
+#include "AggregateFunction.hpp"
+#include "CoreFunction.hpp"
+#include "FTSFunction.hpp"
+#include "SQL.hpp"
 
 namespace WCDB {
 

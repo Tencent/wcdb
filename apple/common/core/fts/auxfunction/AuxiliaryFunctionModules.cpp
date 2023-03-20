@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/AuxiliaryFunctionModules.hpp>
-#include <WCDB/Error.hpp>
+#include "AuxiliaryFunctionModules.hpp"
+#include "Assertion.hpp"
+#include "Error.hpp"
 
 namespace WCDB {
 

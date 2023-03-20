@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/ErrorProne.hpp>
+#include "ErrorProne.hpp"
 
 namespace WCDB {
 

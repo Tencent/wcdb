@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Cell.hpp>
-#include <WCDB/Page.hpp>
-#include <WCDB/Pager.hpp>
-#include <WCDB/Serialization.hpp>
-#include <WCDB/StringView.hpp>
+#include "Page.hpp"
+#include "Assertion.hpp"
+#include "Cell.hpp"
+#include "Pager.hpp"
+#include "Serialization.hpp"
+#include "StringView.hpp"
 
 namespace WCDB {
 

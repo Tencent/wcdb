@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/Cipher.hpp>
+#include "Cipher.hpp"
 #include <map>
 
 namespace WCDB {

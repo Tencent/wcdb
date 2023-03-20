@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/WCDBCpp.h>
+#include "WCDBCpp.h>
 
 class CPPIndexObject {
     int index_;

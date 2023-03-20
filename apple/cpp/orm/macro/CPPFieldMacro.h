@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/Macro.h>
+#include "Macro.h"
 
 #define __WCDB_CPP_SYNTHESIZE_IMP(fieldName, columnName)                                                        \
     auto _mp_##fieldName = &WCDBORMType::fieldName;                                                             \

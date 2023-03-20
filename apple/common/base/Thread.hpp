@@ -24,9 +24,9 @@
 
 #pragma once
 
-#include <WCDB/Macro.h>
-#include <WCDB/SharedThreadedErrorProne.hpp>
-#include <WCDB/StringView.hpp>
+#include "Macro.h"
+#include "SharedThreadedErrorProne.hpp"
+#include "StringView.hpp"
 #include <cstddef>
 #include <pthread.h>
 

@@ -24,11 +24,11 @@
 
 #pragma once
 
-#include <WCDB/Initializeable.hpp>
-#include <WCDB/MappedData.hpp>
-#include <WCDB/Optional.hpp>
-#include <WCDB/PagerRelated.hpp>
-#include <WCDB/Serialization.hpp>
+#include "Initializeable.hpp"
+#include "MappedData.hpp"
+#include "Optional.hpp"
+#include "PagerRelated.hpp"
+#include "Serialization.hpp"
 
 namespace WCDB {
 

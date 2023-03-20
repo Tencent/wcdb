@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/FTSError.hpp>
-#include <WCDB/SQLite.h>
+#include "FTSError.hpp"
+#include "SQLite.h"
 
 namespace WCDB {
 int FTSError::OK()

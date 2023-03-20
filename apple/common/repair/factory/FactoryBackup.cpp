@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
-#include <WCDB/CoreConst.h>
-#include <WCDB/Data.hpp>
-#include <WCDB/Factory.hpp>
-#include <WCDB/FactoryBackup.hpp>
-#include <WCDB/FileManager.hpp>
-#include <WCDB/Notifier.hpp>
+#include "FactoryBackup.hpp"
+#include "CoreConst.h"
+#include "Data.hpp"
+#include "Factory.hpp"
+#include "FileManager.hpp"
+#include "Notifier.hpp"
 
 namespace WCDB {
 

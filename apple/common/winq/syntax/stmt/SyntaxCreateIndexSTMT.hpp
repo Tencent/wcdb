@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include <WCDB/SyntaxIdentifier.hpp>
-#include <WCDB/SyntaxSchema.hpp>
+#include "SyntaxIdentifier.hpp"
+#include "SyntaxSchema.hpp"
 
 namespace WCDB {
 

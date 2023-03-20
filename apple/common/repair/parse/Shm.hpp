@@ -24,9 +24,9 @@
 
 #pragma once
 
-#include <WCDB/FileHandle.hpp>
-#include <WCDB/Initializeable.hpp>
-#include <WCDB/WalRelated.hpp>
+#include "FileHandle.hpp"
+#include "Initializeable.hpp"
+#include "WalRelated.hpp"
 
 namespace WCDB {
 

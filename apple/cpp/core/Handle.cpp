@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Handle.hpp>
-#include <WCDB/InnerDatabase.hpp>
-#include <WCDB/InnerHandle.hpp>
-#include <WCDB/RecyclableHandle.hpp>
+#include "Handle.hpp"
+#include "InnerDatabase.hpp"
+#include "InnerHandle.hpp"
+#include "RecyclableHandle.hpp"
 
 #define GetInnerHandleOrReturnValue(value)                                     \
     InnerHandle* handle = getOrGenerateHandle();                               \

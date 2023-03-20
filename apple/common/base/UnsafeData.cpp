@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/UnsafeData.hpp>
+#include "UnsafeData.hpp"
+#include "Assertion.hpp"
 #include <zlib.h>
 
 namespace WCDB {

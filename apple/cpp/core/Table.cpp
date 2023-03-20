@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Handle.hpp>
-#include <WCDB/InnerDatabase.hpp>
-#include <WCDB/StatementDropIndex.hpp>
-#include <WCDB/Table.hpp>
+#include "Table.hpp"
+#include "Handle.hpp"
+#include "InnerDatabase.hpp"
+#include "StatementDropIndex.hpp"
 
 namespace WCDB {
 

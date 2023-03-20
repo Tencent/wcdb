@@ -22,17 +22,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/CoreConst.h>
-#include <WCDB/FileHandle.hpp>
-#include <WCDB/FileManager.hpp>
-#include <WCDB/Notifier.hpp>
+#include "FileHandle.hpp"
+#include "Assertion.hpp"
+#include "CoreConst.h"
+#include "FileManager.hpp"
+#include "Notifier.hpp"
 #include <errno.h>
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <unistd.h>
 #ifndef __APPLE__
-#include <WCDB/CrossPlatform.h>
+#include "CrossPlatform.h>
 #endif
 
 namespace WCDB {

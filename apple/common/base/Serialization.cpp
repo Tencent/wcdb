@@ -22,11 +22,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/FileHandle.hpp>
-#include <WCDB/FileManager.hpp>
-#include <WCDB/Serialization.hpp>
-#include <WCDB/StringView.hpp>
+#include "Serialization.hpp"
+#include "Assertion.hpp"
+#include "FileHandle.hpp"
+#include "FileManager.hpp"
+#include "StringView.hpp"
 #include <cstring>
 
 namespace WCDB {

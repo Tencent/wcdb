@@ -22,14 +22,14 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/CoreConst.h>
-#include <WCDB/FileManager.hpp>
-#include <WCDB/HandlePool.hpp>
-#include <WCDB/InnerHandle.hpp>
-#include <WCDB/Notifier.hpp>
-#include <WCDB/Path.hpp>
-#include <WCDB/Serialization.hpp>
+#include "HandlePool.hpp"
+#include "Assertion.hpp"
+#include "CoreConst.h"
+#include "FileManager.hpp"
+#include "InnerHandle.hpp"
+#include "Notifier.hpp"
+#include "Path.hpp"
+#include "Serialization.hpp"
 #include <algorithm>
 #include <map>
 

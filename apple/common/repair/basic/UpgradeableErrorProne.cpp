@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/ThreadedErrors.hpp>
-#include <WCDB/UpgradeableErrorProne.hpp>
+#include "UpgradeableErrorProne.hpp"
+#include "Assertion.hpp"
+#include "ThreadedErrors.hpp"
 
 namespace WCDB {
 

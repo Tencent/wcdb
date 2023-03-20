@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/HandleStatement.hpp>
-#include <WCDB/MultiObject.hpp>
-#include <WCDB/StatementOperation.hpp>
+#include "StatementOperation.hpp"
+#include "HandleStatement.hpp"
+#include "MultiObject.hpp"
 
 #define GetHandleStatementOrReturn                                             \
     auto handleStatement = getInnerHandleStatement();                          \

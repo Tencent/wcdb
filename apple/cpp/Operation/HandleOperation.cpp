@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/CoreConst.h>
-#include <WCDB/Handle.hpp>
-#include <WCDB/HandleOperation.hpp>
-#include <WCDB/InnerHandle.hpp>
-#include <WCDB/Notifier.hpp>
+#include "HandleOperation.hpp"
+#include "Assertion.hpp"
+#include "CoreConst.h"
+#include "Handle.hpp"
+#include "InnerHandle.hpp"
+#include "Notifier.hpp"
 
 #define GetHandleOrReturnValue(value)                                          \
     RecyclableHandle handle = getHandleHolder();                               \

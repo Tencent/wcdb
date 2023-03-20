@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/Error.hpp>
+#include "Error.hpp"
 
 namespace WCDB {
 

@@ -22,13 +22,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/Error.hpp>
-#include <WCDB/Notifier.hpp>
-#include <WCDB/Thread.hpp>
+#include "Thread.hpp"
+#include "Error.hpp"
+#include "Notifier.hpp"
 #include <cstring>
 #include <pthread.h>
 #ifndef __APPLE__
-#include <WCDB/CrossPlatform.h>
+#include "CrossPlatform.h>
 #endif
 
 namespace WCDB {

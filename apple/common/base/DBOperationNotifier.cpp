@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/DBOperationNotifier.hpp>
-#include <WCDB/InnerDatabase.hpp>
+#include "DBOperationNotifier.hpp"
+#include "Assertion.hpp"
+#include "InnerDatabase.hpp"
 
 namespace WCDB {
 

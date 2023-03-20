@@ -24,10 +24,10 @@
 
 #pragma once
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Exiting.hpp>
-#include <WCDB/Time.hpp>
-#include <WCDB/UniqueList.hpp>
+#include "Assertion.hpp"
+#include "Exiting.hpp"
+#include "Time.hpp"
+#include "UniqueList.hpp"
 #include <condition_variable>
 #include <list>
 #include <stdio.h>

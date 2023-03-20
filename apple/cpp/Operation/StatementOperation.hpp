@@ -23,11 +23,11 @@
  */
 
 #pragma once
-#include <WCDB/CPPDeclaration.h>
-#include <WCDB/CPPORM.h>
-#include <WCDB/MultiObject.hpp>
-#include <WCDB/Statement.hpp>
-#include <WCDB/Value.hpp>
+#include "CPPDeclaration.h"
+#include "CPPORM.h"
+#include "MultiObject.hpp"
+#include "Statement.hpp"
+#include "Value.hpp"
 
 namespace WCDB {
 

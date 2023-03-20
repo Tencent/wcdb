@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/Factory.hpp>
-#include <WCDB/FactoryRelated.hpp>
+#include "FactoryRelated.hpp"
+#include "Factory.hpp"
 
 namespace WCDB {
 

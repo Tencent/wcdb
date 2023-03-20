@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/Core.hpp>
-#include <WCDB/FileManager.hpp>
+#include "Core.hpp"
+#include "FileManager.hpp"
 #include <stdio.h>
 namespace WCDB {
 

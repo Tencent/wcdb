@@ -22,14 +22,14 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/CoreConst.h>
-#include <WCDB/Factory.hpp>
-#include <WCDB/FactoryBackup.hpp>
-#include <WCDB/FactoryRenewer.hpp>
-#include <WCDB/FileManager.hpp>
-#include <WCDB/Notifier.hpp>
-#include <WCDB/Path.hpp>
+#include "FactoryRenewer.hpp"
+#include "Assertion.hpp"
+#include "CoreConst.h"
+#include "Factory.hpp"
+#include "FactoryBackup.hpp"
+#include "FileManager.hpp"
+#include "Notifier.hpp"
+#include "Path.hpp"
 
 namespace WCDB {
 

@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include <WCDB/StringView.hpp>
-#include <WCDB/WINQ.h>
+#include "StringView.hpp"
+#include "WINQ.h"
 #include <set>
 
 namespace WCDB {

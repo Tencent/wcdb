@@ -24,12 +24,12 @@
 
 #pragma once
 
-#include <WCDB/Config.hpp>
-#include <WCDB/Global.hpp>
-#include <WCDB/Lock.hpp>
-#include <WCDB/StringView.hpp>
-#include <WCDB/ThreadLocal.hpp>
-#include <WCDB/UniqueList.hpp>
+#include "Config.hpp"
+#include "Global.hpp"
+#include "Lock.hpp"
+#include "StringView.hpp"
+#include "ThreadLocal.hpp"
+#include "UniqueList.hpp"
 
 namespace WCDB {
 

@@ -24,13 +24,13 @@
 
 #pragma once
 
-#include <WCDB/CPPBindingMacro.h>
-#include <WCDB/CPPColumnConstraintMacro.h>
-#include <WCDB/CPPFieldMacro.h>
-#include <WCDB/CPPIndexMacro.h>
-#include <WCDB/CPPTableConstraintMacro.h>
-#include <WCDB/CPPVirtualTableMacro.h>
-#include <WCDB/Macro.h>
+#include "CPPBindingMacro.h"
+#include "CPPColumnConstraintMacro.h"
+#include "CPPFieldMacro.h"
+#include "CPPIndexMacro.h"
+#include "CPPTableConstraintMacro.h"
+#include "CPPVirtualTableMacro.h"
+#include "Macro.h"
 
 #define WCDB_FIELD(memberPointer) WCDB::Field(&memberPointer)
 

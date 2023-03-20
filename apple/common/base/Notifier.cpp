@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Notifier.hpp>
+#include "Notifier.hpp"
+#include "Assertion.hpp"
 
 namespace WCDB {
 

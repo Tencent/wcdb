@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Data.hpp>
-#include <WCDB/HighWater.hpp>
-#include <WCDB/Notifier.hpp>
+#include "Data.hpp"
+#include "Assertion.hpp"
+#include "HighWater.hpp"
+#include "Notifier.hpp"
 #include <cstring>
 #include <zlib.h>
 

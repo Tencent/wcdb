@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Recyclable.hpp>
+#include "Recyclable.hpp"
+#include "Assertion.hpp"
 #include <atomic>
 
 namespace WCDB {

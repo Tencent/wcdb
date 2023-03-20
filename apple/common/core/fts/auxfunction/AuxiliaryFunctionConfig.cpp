@@ -22,11 +22,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/AuxiliaryFunctionConfig.hpp>
-#include <WCDB/AuxiliaryFunctionModules.hpp>
-#include <WCDB/InnerHandle.hpp>
-#include <WCDB/SQLite.h>
+#include "AuxiliaryFunctionConfig.hpp"
+#include "Assertion.hpp"
+#include "AuxiliaryFunctionModules.hpp"
+#include "InnerHandle.hpp"
+#include "SQLite.h"
 
 namespace WCDB {
 

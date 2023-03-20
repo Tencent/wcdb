@@ -22,11 +22,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Handle.hpp>
-#include <WCDB/MultiObject.hpp>
-#include <WCDB/MultiSelect.hpp>
-#include <WCDB/ResultField.hpp>
+#include "MultiSelect.hpp"
+#include "Assertion.hpp"
+#include "Handle.hpp"
+#include "MultiObject.hpp"
+#include "ResultField.hpp"
 
 namespace WCDB {
 

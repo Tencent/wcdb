@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/Value.hpp>
+#include "Value.hpp"
 #include <cstring>
 #include <math.h>
 

@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/ErrorProne.hpp>
+#include "ErrorProne.hpp"
 #include <limits>
 
 namespace WCDB {

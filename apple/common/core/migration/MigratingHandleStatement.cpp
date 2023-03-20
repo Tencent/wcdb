@@ -22,13 +22,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Core.hpp>
-#include <WCDB/MigratingHandle.hpp>
-#include <WCDB/MigratingHandleStatement.hpp>
-#include <WCDB/SQLite.h>
-#include <WCDB/StringView.hpp>
-#include <WCDB/WINQ.h>
+#include "MigratingHandleStatement.hpp"
+#include "Assertion.hpp"
+#include "Core.hpp"
+#include "MigratingHandle.hpp"
+#include "SQLite.h"
+#include "StringView.hpp"
+#include "WINQ.h"
 
 namespace WCDB {
 MigratingHandleStatement::MigratingHandleStatement(MigratingHandleStatement&& other)

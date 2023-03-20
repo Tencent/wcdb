@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include <WCDB/Recyclable.hpp>
-#include <WCDB/SharedThreadedErrorProne.hpp>
+#include "Recyclable.hpp"
+#include "SharedThreadedErrorProne.hpp"
 #include <memory>
 #include <stdio.h>
 #include <stdlib.h>

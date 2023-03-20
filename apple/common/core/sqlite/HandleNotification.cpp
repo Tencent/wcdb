@@ -22,11 +22,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/AbstractHandle.hpp>
-#include <WCDB/Assertion.hpp>
-#include <WCDB/HandleNotification.hpp>
-#include <WCDB/SQLite.h>
-#include <WCDB/StringView.hpp>
+#include "HandleNotification.hpp"
+#include "AbstractHandle.hpp"
+#include "Assertion.hpp"
+#include "SQLite.h"
+#include "StringView.hpp"
 
 namespace WCDB {
 

@@ -22,15 +22,15 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/CoreConst.h>
-#include <WCDB/FileManager.hpp>
-#include <WCDB/Notifier.hpp>
-#include <WCDB/Pager.hpp>
-#include <WCDB/SQLite.h>
-#include <WCDB/Serialization.hpp>
-#include <WCDB/StringView.hpp>
-#include <WCDB/ThreadedErrors.hpp>
+#include "Pager.hpp"
+#include "Assertion.hpp"
+#include "CoreConst.h"
+#include "FileManager.hpp"
+#include "Notifier.hpp"
+#include "SQLite.h"
+#include "Serialization.hpp"
+#include "StringView.hpp"
+#include "ThreadedErrors.hpp"
 #include <cstring>
 
 namespace WCDB {

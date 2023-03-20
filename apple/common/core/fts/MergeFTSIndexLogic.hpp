@@ -24,12 +24,12 @@
 
 #pragma once
 
-#include <WCDB/AsyncQueue.hpp>
-#include <WCDB/InnerHandle.hpp>
-#include <WCDB/Lock.hpp>
-#include <WCDB/RecyclableHandle.hpp>
-#include <WCDB/StringView.hpp>
-#include <WCDB/TimedQueue.hpp>
+#include "AsyncQueue.hpp"
+#include "InnerHandle.hpp"
+#include "Lock.hpp"
+#include "RecyclableHandle.hpp"
+#include "StringView.hpp"
+#include "TimedQueue.hpp"
 #include <array>
 
 namespace WCDB {

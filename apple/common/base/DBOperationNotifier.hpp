@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <WCDB/Lock.hpp>
+#include "Lock.hpp"
 
 namespace WCDB {
 

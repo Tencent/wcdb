@@ -24,9 +24,9 @@
 
 #pragma once
 
-#include <WCDB/CoreConst.h>
-#include <WCDB/InnerHandle.hpp>
-#include <WCDB/RepairKit.h>
+#include "CoreConst.h"
+#include "InnerHandle.hpp"
+#include "RepairKit.h"
 
 namespace WCDB {
 
