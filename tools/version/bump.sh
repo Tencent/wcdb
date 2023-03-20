@@ -37,7 +37,7 @@ echo "$version" > "$root"/VERSION
 git add "$root"/VERSION
 
 # Xcconfig
-sed -i '' "s/MARKETING_VERSION = .*/MARKETING_VERSION = $version/" "$root"/apple/support/WCDB.xcconfig
-git add "$root"/apple/support/WCDB.xcconfig
+sed -i '' "s/MARKETING_VERSION = .*/MARKETING_VERSION = $version/" "$root"/src/support/WCDB.xcconfig
+git add "$root"/src/support/WCDB.xcconfig
 
 git commit -m "Bump $version"
