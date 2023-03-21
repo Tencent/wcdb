@@ -30,7 +30,7 @@
 #include <cstring>
 #include <sstream>
 #ifndef __APPLE__
-#include "CrossPlatform.h>
+#include "CrossPlatform.h"
 #endif
 
 namespace WCDB {

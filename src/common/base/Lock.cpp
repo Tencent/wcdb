@@ -26,7 +26,7 @@
 #include "Assertion.hpp"
 #include <condition_variable>
 #ifndef __APPLE__
-#include "CrossPlatform.h>
+#include "CrossPlatform.h"
 #endif
 
 namespace WCDB {
