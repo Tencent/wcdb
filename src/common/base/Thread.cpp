@@ -28,7 +28,7 @@
 #include <cstring>
 #include <pthread.h>
 #ifndef __APPLE__
-#include "CrossPlatform.h>
+#include "CrossPlatform.h"
 #endif
 
 namespace WCDB {

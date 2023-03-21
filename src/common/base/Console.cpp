@@ -28,7 +28,7 @@
 #include "Notifier.hpp"
 #include "Version.h"
 #ifndef __APPLE__
-#include "CrossPlatform.h>
+#include "CrossPlatform.h"
 #endif
 #ifndef __ANDROID__
 #include <execinfo.h>
