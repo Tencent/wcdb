@@ -24,7 +24,7 @@
 
 #pragma once
 
-#import <WCDB/WINQ.h>
+#include "WINQ.h"
 
 #define WCDB_CPP_ORM_STATIC_ASSERT_FOR_OBJECT_TYPE                                             \
     static_assert(ObjectType::isObjectRelationMapped, "This class has no ORM configuration."); \
