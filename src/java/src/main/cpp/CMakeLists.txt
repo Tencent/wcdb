@@ -4,7 +4,7 @@
 
 # Sets the minimum version of CMake required to build the native library.
 
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.13)
 
 # Declares and names the project.
 
@@ -46,6 +46,7 @@ target_link_libraries( # Specifies the target library.
 
                        #wcdb-cpp
                        wcdb-common
+                       sqlcipher
                        # Links the target library to the log library
                        # included in the NDK.
                        ${log-lib}

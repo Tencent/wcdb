@@ -65,6 +65,10 @@ if(ANDROID)
     list(APPEND SQLCIPHER_COMMON_PRIVATE_DEFS USE_PREAD64=1)
 endif()
 
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    list(APPEND SQLCIPHER_COMMON_DEFS SQLITE_INT64_TYPE=long)
+endif()
+
 set(SQLCIPHER_SRC
     ${SQLCIPHER_ROOT}/src/alter.c
     ${SQLCIPHER_ROOT}/src/analyze.c
@@ -242,6 +246,7 @@ set(SQLCIPHER_MISC_SRC
 set(SQLCIPHER_INSTALL_HEADERS 
     ${SQLCIPHER_ROOT}/sqlite3.h
     ${SQLCIPHER_ROOT}/src/sqlite3_wcdb.h
+    ${SQLCIPHER_ROOT}/ext/fts3/fts3_tokenizer.h
 )
 file(COPY ${SQLCIPHER_INSTALL_HEADERS} DESTINATION ${SQLCIPHER_INSTALL_HEADER_DIR}/sqlcipher)
 
@@ -272,3 +277,16 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 else()
     target_compile_definitions(sqlcipher PRIVATE NDEBUG)
 endif()
+
+# Prebuilt OpenSSL Library
+if(ANDROID)
+    set(PREBUILT_CRYPTO_LIB 
+        ${CMAKE_CURRENT_LIST_DIR}/../prebuilt/android/${CMAKE_ANDROID_ARCH}/lib
+    )
+    set(PREBUILT_CRYPTO_INCLUDE 
+        ${CMAKE_CURRENT_LIST_DIR}/../prebuilt/android/${CMAKE_ANDROID_ARCH}/include
+    )
+endif()
+target_include_directories(sqlcipher PUBLIC ${PREBUILT_CRYPTO_INCLUDE})
+target_link_directories(sqlcipher PUBLIC ${PREBUILT_CRYPTO_LIB})
+target_link_libraries(sqlcipher PRIVATE crypto)
