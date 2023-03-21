@@ -1133,7 +1133,7 @@ public final class SQLiteConnectionPool implements Closeable {
         SQLiteDatabase db = mDB.get();
         SQLiteTrace trace = mTraceCallback;
 
-        if (trace == null || db == null)
+        if (trace == null || db == null || sql == null)
             return;
         trace.onSQLExecuted(db, sql, type, time);
     }

@@ -5,6 +5,7 @@
 		Java_*;
 		sqlcipher_*;
 		sqlite3_*;
+		sqlite3Codec;
 		sqliterk_*;
 		mm_backup_*;
 		mm_recover_*;

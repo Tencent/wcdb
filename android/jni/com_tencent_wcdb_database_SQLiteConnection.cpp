@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <limits.h>
 
 #include <algorithm>
 #include <map>
@@ -860,7 +861,7 @@ static jlong nativeExecuteForLastInsertedRowId(JNIEnv *env,
     int err = executeNonQuery(env, conn, stmt);
     return err == SQLITE_DONE && sqlite3_changes(conn->db) > 0
                ? sqlite3_last_insert_rowid(conn->db)
-               : -1;
+               : LONG_MIN;
 }
 
 static int executeOneRowQuery(JNIEnv *env,
@@ -1134,9 +1135,7 @@ static jlong nativeExecuteForCursorWindow(JNIEnv *env,
     return result;
 }
 
-static jlong
-nativeGetDbLookaside(JNIEnv *env, jobject clazz, jlong connectionPtr)
-{
+static jint nativeGetDbLookaside(JNIEnv *env, jclass clazz, jlong connectionPtr) {
     SQLiteConnection *connection =
         (SQLiteConnection *) (intptr_t) connectionPtr;
 
@@ -1147,15 +1146,14 @@ nativeGetDbLookaside(JNIEnv *env, jobject clazz, jlong connectionPtr)
     return cur;
 }
 
-static void nativeCancel(JNIEnv *env, jobject clazz, jlong connectionPtr)
-{
+static void nativeCancel(JNIEnv *env, jclass clazz, jlong connectionPtr) {
     SQLiteConnection *connection =
         (SQLiteConnection *) (intptr_t) connectionPtr;
     connection->canceled = true;
 }
 
 static void nativeResetCancel(JNIEnv *env,
-                              jobject clazz,
+                              jclass clazz,
                               jlong connectionPtr,
                               jboolean cancelable)
 {
@@ -1171,7 +1169,7 @@ static void nativeResetCancel(JNIEnv *env,
     }
 }
 
-static void nativeSetWalHook(JNIEnv *env, jobject clazz, jlong connectionPtr)
+static void nativeSetWalHook(JNIEnv *env, jclass clazz, jlong connectionPtr)
 {
     SQLiteConnection *connection =
         (SQLiteConnection *) (intptr_t) connectionPtr;
@@ -1180,7 +1178,7 @@ static void nativeSetWalHook(JNIEnv *env, jobject clazz, jlong connectionPtr)
 }
 
 static jlong nativeWalCheckpoint(JNIEnv *env,
-                                 jobject clazz,
+                                 jclass clazz,
                                  jlong connectionPtr,
                                  jstring dbNameStr)
 {
@@ -1205,7 +1203,7 @@ static jlong nativeWalCheckpoint(JNIEnv *env,
 }
 
 static jlong nativeSQLiteHandle(JNIEnv *env,
-                                jobject clazz,
+                                jclass clazz,
                                 jlong connectionPtr,
                                 jboolean acquire)
 {

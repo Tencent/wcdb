@@ -18,9 +18,10 @@
  * limitations under the License.
  */
 
-#include "../SQLiteRepairKit.h"
+#include <SQLiteRepairKit.h>
 #include <sqlite3.h>
 #include <stdio.h>
+#include <string.h>
 #include <getopt.h>
 
 static char g_verbose = 0;
@@ -38,6 +39,8 @@ static size_t g_filter_capacity = 0;
 extern void sqlcipher_set_default_kdf_iter(int iter);
 extern void sqlcipher_set_default_use_hmac(int use);
 extern void sqlcipher_set_default_pagesize(int page_size);
+extern int sqlcipher_set_default_hmac_algorithm(int algorithm);
+extern int sqlcipher_set_default_kdf_algorithm(int algorithm);
 
 
 static const struct option g_options[] =
@@ -103,6 +106,8 @@ static void parse_options(int argc, char *argv[])
 	// default to SQLCipher version 1, for compatibility to KKDB.
 	sqlcipher_set_default_kdf_iter(4000);
 	sqlcipher_set_default_use_hmac(0);
+	sqlcipher_set_default_hmac_algorithm(0);
+	sqlcipher_set_default_kdf_algorithm(0);
 	
 	g_cipher_conf.use_hmac = -1;
 
@@ -200,6 +205,9 @@ static void parse_options(int argc, char *argv[])
 	}
 }
 
+static uint8_t MASTER_KEY[] = { 0xdc, 0x1c, 0xbb, 0x92, 0xa1, 0xb1, 0xcb, 0x5b, 
+	0x06, 0x5b, 0xf0, 0x5e, 0x05, 0x0e, 0xd9, 0x36 };
+
 int main(int argc, char *argv[])
 {
 	int ret;
@@ -230,7 +238,7 @@ int main(int argc, char *argv[])
 		unsigned char salt[16];
 		if (g_load_master)
 		{
-			ret = sqliterk_load_master(g_load_master, NULL, 0, g_filter, g_num_filter,
+			ret = sqliterk_load_master(g_load_master, MASTER_KEY, sizeof(MASTER_KEY), g_filter, g_num_filter,
 				&master, salt);
 			g_cipher_conf.kdf_salt = salt;
 		}

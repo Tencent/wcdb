@@ -76,7 +76,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
 
     static {
         // Ensure libwcdb.so is loaded.
-        SQLiteGlobal.loadLib();
+        SQLiteGlobal.initialize();
     }
 
     // Stores reference to all databases opened in the current process.

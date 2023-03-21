@@ -36,8 +36,8 @@ import android.os.StatFs;
 public final class SQLiteGlobal {
     private static final String TAG = "WCDB.SQLiteGlobal";
 
+    private static native void nativeInitialize(int pageSize);
     private static native int nativeReleaseMemory();
-    private static native void nativeSetDefaultCipherSettings(int pageSize);
 
     /** Default page size to use when creating a database. */
     public static final int defaultPageSize;
@@ -74,11 +74,20 @@ public final class SQLiteGlobal {
             pageSize = 4096;
         }
         defaultPageSize = pageSize;
-        nativeSetDefaultCipherSettings(pageSize);
     }
     // Dummy static method to trigger class initialization.
     // See [JLS 12.4.1](http://docs.oracle.com/javase/specs/jls/se7/html/jls-12.html#jls-12.4.1)
     public static void loadLib() {}
+    public static void initialize() {
+        Initializer.init();
+    }
+
+    private static class Initializer {
+        static {
+            nativeInitialize(defaultPageSize);
+        }
+        static void init() {}
+    }
 
     private SQLiteGlobal() {}
 
@@ -91,14 +100,13 @@ public final class SQLiteGlobal {
     public static int releaseMemory() {
         return nativeReleaseMemory();
     }
-
 }
 
 /**
  * Probe class to detect whether "libwcdb.so" is loaded.
  * It's set to true in JNI initialization routine.
  */
-class WCDBInitializationProbe {
+final class WCDBInitializationProbe {
     static boolean libLoaded = false;
     static volatile long apiEnv = 0L;
     private WCDBInitializationProbe() {}

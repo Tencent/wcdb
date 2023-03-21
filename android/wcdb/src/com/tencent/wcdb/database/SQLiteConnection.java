@@ -1566,7 +1566,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
                 elapsedTimeMillis = operation.mEndTime - operation.mStartTime;
             }
 
-            if (!"prepare".equals(kind))
+            if (!"prepare".equals(kind) && mAcquiredThread != null)
                 mPool.traceExecute(sql, type, elapsedTimeMillis);
         }
 
@@ -1589,7 +1589,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
                 elapsedTimeMillis = operation.mEndTime - operation.mStartTime;
             }
 
-            if (!"prepare".equals(kind))
+            if (!"prepare".equals(kind) && mAcquiredThread != null)
                 mPool.traceExecute(sql, type, elapsedTimeMillis);
             return result;
         }
