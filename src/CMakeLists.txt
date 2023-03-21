@@ -145,12 +145,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_library(wcdb-common STATIC ${SRC_WCDB_COMMON})
-target_link_libraries(wcdb-common PRIVATE sqlcipher)
-target_include_directories(wcdb-common PRIVATE ${INCLUDES_WCDB_COMMON})
+target_link_libraries(wcdb-common PUBLIC sqlcipher)
+target_include_directories(wcdb-common PUBLIC ${INCLUDES_WCDB_COMMON})
 
 add_library(wcdb-cpp STATIC ${SRC_WCDB_CPP})
 target_link_libraries(wcdb-cpp PUBLIC wcdb-common)
-target_include_directories(wcdb-cpp PRIVATE ${INCLUDES_WCDB_COMMON} ${INCLUDES_WCDB_CPP})
+target_include_directories(wcdb-cpp PUBLIC ${INCLUDES_WCDB_CPP})
 
 #add_library(${TARGET_NAME} SHARED)
 #target_link_libraries(${TARGET_NAME} PRIVATE wcdb-cpp wcdb-common)
