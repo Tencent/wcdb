@@ -147,3 +147,7 @@ linux-arm64-gcc-linaro-7.5.0:
 
 mips-loongson-linux-gnu:
   <<: *linux_config
+
+loongarch64-linux-gnu:
+  <<: *linux_config
+
