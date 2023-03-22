@@ -25,15 +25,16 @@
 #include "LiteralValueBridge.h"
 #include "LiteralValue.hpp"
 #include "ObjectBridge.hpp"
+#include <cstdint>
 
 CPPLiteralValue WCDBLiteralValueCreateWithInt64(long long value)
 {
-    return WCDBCreateCPPBridgedObject(CPPLiteralValue, new WCDB::LiteralValue(value));
+    return WCDBCreateCPPBridgedObject(CPPLiteralValue, new WCDB::LiteralValue((int64_t)value));
 }
 
 CPPLiteralValue WCDBLiteralValueCreateWithUInt64(unsigned long long value)
 {
-    return WCDBCreateCPPBridgedObject(CPPLiteralValue, new WCDB::LiteralValue(value));
+    return WCDBCreateCPPBridgedObject(CPPLiteralValue, new WCDB::LiteralValue((uint64_t)value));
 }
 
 CPPLiteralValue WCDBLiteralValueCreateWithDouble(double value)
