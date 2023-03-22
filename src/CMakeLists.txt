@@ -24,10 +24,15 @@ file(GLOB_RECURSE SRC_WCDB_CPP
 list(FILTER SRC_WCDB_CPP EXCLUDE REGEX "(.*/tests/.*)")
 recursive_subdirs(INCLUDES_WCDB_CPP ${WCDB_SRC_DIR}/cpp)
 
-set(ALL_SRCS
-    ${SRC_WCDB_COMMON}
-    ${SRC_WCDB_CPP}
+file(GLOB_RECURSE SRC_WCDB_BRIDGE
+    ${WCDB_SRC_DIR}/bridge/base/*.[ch]
+    ${WCDB_SRC_DIR}/bridge/base/*.[ch]pp
+    ${WCDB_SRC_DIR}/bridge/cppbridge/*.[ch]
+    ${WCDB_SRC_DIR}/bridge/cppbridge/*.[ch]pp
+    ${WCDB_SRC_DIR}/bridge/winqbridge/*.[ch]
+    ${WCDB_SRC_DIR}/bridge/winqbridge/*.[ch]pp
 )
+recursive_subdirs(INCLUDES_WCDB_BRIDGE ${WCDB_SRC_DIR}/bridge)
 
 
 set(WCONAN_CMAKE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../WeChat/wconan.cmake)
@@ -151,6 +156,10 @@ target_include_directories(wcdb-common PUBLIC ${INCLUDES_WCDB_COMMON})
 add_library(wcdb-cpp STATIC ${SRC_WCDB_CPP})
 target_link_libraries(wcdb-cpp PUBLIC wcdb-common)
 target_include_directories(wcdb-cpp PUBLIC ${INCLUDES_WCDB_CPP})
+
+add_library(wcdb-bridge STATIC ${SRC_WCDB_BRIDGE})
+target_link_libraries(wcdb-bridge PUBLIC wcdb-common)
+target_include_directories(wcdb-bridge PUBLIC ${INCLUDES_WCDB_BRIDGE})
 
 #add_library(${TARGET_NAME} SHARED)
 #target_link_libraries(${TARGET_NAME} PRIVATE wcdb-cpp wcdb-common)
