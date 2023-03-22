@@ -366,6 +366,22 @@ target_sources(${LIB_SQLCIPHER} PRIVATE
 
 add_library(${TARGET_NAME} ${ALL_SRCS})
 
+MACRO(HEADER_DIRECTORIES return_list)
+    SET(dir_list "")
+    FOREACH(file_path ${WCDB_ALL_HEADERS})
+        GET_FILENAME_COMPONENT(dir_path ${file_path} PATH)
+        SET(dir_list ${dir_list} ${dir_path})
+    ENDFOREACH()
+    LIST(REMOVE_DUPLICATES dir_list)
+    SET(${return_list} ${dir_list})
+ENDMACRO()
+
+set(ALL_INCLUDE_DIRECTORY)
+HEADER_DIRECTORIES(ALL_INCLUDE_DIRECTORY)
+
+target_include_directories(${TARGET_NAME} PRIVATE
+        ${ALL_INCLUDE_DIRECTORY})
+
 target_include_directories(${TARGET_NAME} PRIVATE
         ${CMAKE_CURRENT_BINARY_DIR}/include)
 
