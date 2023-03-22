@@ -85,12 +85,14 @@ public:
 public:
     uint32_t hash() const;
 
-#pragma mark - UnsafeStringView - Modifiers
+#pragma mark - UnsafeStringView - Memory Management
 public:
     void clear();
 
 protected:
-    void tryFreeContent();
+    void ensureNewSpace(size_t newSize);
+    void createNewSpace(size_t newSize);
+    void tryClearSpace();
 
 private:
 #pragma mark - UnsafeStringView - Convertible
@@ -127,7 +129,6 @@ public:
     static StringView makeConstant(const char* string);
 
 protected:
-    void constructString(const char* content, size_t length);
     void assignString(const char* content, size_t length);
 };
 

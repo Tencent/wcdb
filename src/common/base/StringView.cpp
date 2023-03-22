@@ -66,7 +66,11 @@ UnsafeStringView::UnsafeStringView(UnsafeStringView&& other)
 
 UnsafeStringView::~UnsafeStringView()
 {
-    tryFreeContent();
+    if ((uint64_t) m_referenceCount <= ConstanceReference) {
+        return;
+    }
+    (*m_referenceCount)--;
+    tryClearSpace();
 };
 
 UnsafeStringView& UnsafeStringView::operator=(const UnsafeStringView& other)
@@ -223,21 +227,52 @@ size_t UnsafeStringView::find(const UnsafeStringView& other) const
     return ret - m_data;
 }
 
-#pragma mark - UnsafeStringView - Modifier
+#pragma mark - UnsafeStringView - Memory Management
 void UnsafeStringView::clear()
 {
-    tryFreeContent();
-    m_referenceCount = nullptr;
+    ensureNewSpace(0);
     m_data = "";
-    m_length = 0;
 }
 
-void UnsafeStringView::tryFreeContent()
+void UnsafeStringView::ensureNewSpace(size_t newSize)
 {
     if ((uint64_t) m_referenceCount <= ConstanceReference) {
-        return;
+        if (newSize > 0) {
+            createNewSpace(newSize);
+        } else {
+            m_referenceCount = nullptr;
+        }
+    } else {
+        (*m_referenceCount)--;
+        if (newSize > m_length || newSize == 0) {
+            tryClearSpace();
+            if (newSize > 0) {
+                createNewSpace(newSize);
+            } else {
+                m_referenceCount = nullptr;
+            }
+        } else {
+            if (*m_referenceCount > 0) {
+                createNewSpace(newSize);
+            } else {
+                *m_referenceCount = 1;
+            }
+        }
     }
-    (*m_referenceCount)--;
+    m_length = newSize;
+}
+
+void UnsafeStringView::createNewSpace(size_t newSize)
+{
+    constexpr int referenceSize = sizeof(std::atomic<int>);
+    m_referenceCount = (std::atomic<int>*) malloc(referenceSize + newSize + 1);
+    if (m_referenceCount != nullptr) {
+        new (m_referenceCount) std::atomic<int>(1);
+    }
+}
+
+void UnsafeStringView::tryClearSpace()
+{
     if (*m_referenceCount == 0) {
         m_referenceCount->~atomic<int>();
         free(m_referenceCount);
@@ -247,73 +282,42 @@ void UnsafeStringView::tryFreeContent()
 #pragma mark - StringView - Constructor
 StringView::StringView() = default;
 
-void StringView::constructString(const char* content, size_t length)
-{
-    if (content == nullptr) {
-        return;
-    }
-    if (length == 0) {
-        length = strlen(content);
-    }
-    constexpr int referenceSize = sizeof(std::atomic<int>);
-    m_referenceCount = (std::atomic<int>*) malloc(referenceSize + length + 1);
-    if (m_referenceCount == nullptr) {
-        return;
-    }
-    new (m_referenceCount) std::atomic<int>(1);
-    char* data = (char*) (m_referenceCount + 1);
-    memcpy(data, (void*) content, length);
-    data[length] = '\0';
-    m_data = data;
-    m_length = length;
-}
-
 void StringView::assignString(const char* content, size_t length)
 {
-    if (content == nullptr) {
-        clear();
-        return;
-    }
-    if (length == 0) {
+    if (length == 0 && content != nullptr) {
         length = strlen(content);
     }
-
-    constexpr int referenceSize = sizeof(std::atomic<int>);
-    m_referenceCount = (std::atomic<int>*) malloc(referenceSize + length + 1);
-    if (m_referenceCount == nullptr) {
-        clear();
+    ensureNewSpace(length);
+    if (content == nullptr || length == 0 || m_referenceCount == nullptr) {
+        m_data = "";
         return;
-    } else {
-        tryFreeContent();
     }
-    new (m_referenceCount) std::atomic<int>(1);
     char* data = (char*) (m_referenceCount + 1);
     memcpy(data, (void*) content, length);
     data[length] = '\0';
     m_data = data;
-    m_length = length;
 }
 
 StringView::StringView(const char* string) : UnsafeStringView()
 {
-    constructString(string, 0);
+    assignString(string, 0);
 }
 
 StringView::StringView(const char* string, size_t length) : UnsafeStringView()
 {
-    constructString(string, length);
+    assignString(string, length);
 }
 
 StringView::StringView(std::string&& string) : UnsafeStringView()
 {
-    constructString(string.data(), string.length());
+    assignString(string.data(), string.length());
 }
 
 StringView::StringView(const UnsafeStringView& other)
 : UnsafeStringView(other.m_referenceCount != nullptr ? other : UnsafeStringView())
 {
     if (other.m_referenceCount == nullptr) {
-        constructString(other.m_data, other.m_length);
+        assignString(other.m_data, other.m_length);
     }
 }
 
@@ -321,7 +325,7 @@ StringView::StringView(UnsafeStringView&& other)
 : UnsafeStringView(other.m_referenceCount != nullptr ? std::move(other) : UnsafeStringView())
 {
     if (other.m_referenceCount == nullptr) {
-        constructString(other.m_data, other.m_length);
+        assignString(other.m_data, other.m_length);
     }
 }
 
