@@ -27,6 +27,7 @@
 #include "Assertion.hpp"
 #include "ObjectBridge.h"
 #include "Recyclable.hpp"
+#include <stdlib.h>
 
 #define __WCDBGetObjectOrReturn(rawObj, objType, typedObjName, action)            \
     objType* typedObjName                                                         \

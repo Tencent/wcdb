@@ -837,6 +837,10 @@
 		0DC98FD328E46049007F3796 /* DBOperationNotifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DC98FD028E46049007F3796 /* DBOperationNotifier.cpp */; };
 		0DC98FD428E46049007F3796 /* DBOperationNotifier.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DC98FD128E46049007F3796 /* DBOperationNotifier.hpp */; };
 		0DC98FD528E46049007F3796 /* DBOperationNotifier.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DC98FD128E46049007F3796 /* DBOperationNotifier.hpp */; };
+		0DE08A2029CBE79C009A7CA3 /* CrossPlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = 0DE08A1B29CBE79C009A7CA3 /* CrossPlatform.h */; };
+		0DE08A2429CBE79C009A7CA3 /* CrossPlatform.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DE08A1D29CBE79C009A7CA3 /* CrossPlatform.c */; };
+		0DE08A2629CBE79C009A7CA3 /* WCTOperationQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DE08A1E29CBE79C009A7CA3 /* WCTOperationQueue.cpp */; };
+		0DE08A2B29CBEB4E009A7CA3 /* WCTFileManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DE08A1C29CBE79C009A7CA3 /* WCTFileManager.cpp */; };
 		0DF1089629C05559004ED764 /* StatementSelectInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF1089529C05559004ED764 /* StatementSelectInterface.swift */; };
 		0DF1089729C05559004ED764 /* StatementSelectInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF1089529C05559004ED764 /* StatementSelectInterface.swift */; };
 		2304B42822156CD700901953 /* TokenizerModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2304B42622156CD700901953 /* TokenizerModule.cpp */; };
@@ -3569,6 +3573,10 @@
 		0DAE11D328DC6CC6003FB63A /* WCDB.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCDB.h; sourceTree = "<group>"; };
 		0DC98FD028E46049007F3796 /* DBOperationNotifier.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DBOperationNotifier.cpp; sourceTree = "<group>"; };
 		0DC98FD128E46049007F3796 /* DBOperationNotifier.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DBOperationNotifier.hpp; sourceTree = "<group>"; };
+		0DE08A1B29CBE79C009A7CA3 /* CrossPlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossPlatform.h; sourceTree = "<group>"; };
+		0DE08A1C29CBE79C009A7CA3 /* WCTFileManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCTFileManager.cpp; sourceTree = "<group>"; };
+		0DE08A1D29CBE79C009A7CA3 /* CrossPlatform.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CrossPlatform.c; sourceTree = "<group>"; };
+		0DE08A1E29CBE79C009A7CA3 /* WCTOperationQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCTOperationQueue.cpp; sourceTree = "<group>"; };
 		0DF1089529C05559004ED764 /* StatementSelectInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatementSelectInterface.swift; sourceTree = "<group>"; };
 		2304B42622156CD700901953 /* TokenizerModule.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TokenizerModule.cpp; sourceTree = "<group>"; };
 		2304B42722156CD700901953 /* TokenizerModule.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TokenizerModule.hpp; sourceTree = "<group>"; };
@@ -5068,6 +5076,7 @@
 				7521D38F28BD1133009C33D0 /* chaincall */,
 				03D3A2A428A605110064D4D4 /* operation */,
 				0D5363E7290A64320026A4DC /* builtin */,
+				0DE08A1A29CBE79C009A7CA3 /* platform */,
 			);
 			path = cpp;
 			sourceTree = "<group>";
@@ -5537,6 +5546,17 @@
 				0D5363EE290A75F20026A4DC /* Sequence.cpp */,
 			);
 			path = builtin;
+			sourceTree = "<group>";
+		};
+		0DE08A1A29CBE79C009A7CA3 /* platform */ = {
+			isa = PBXGroup;
+			children = (
+				0DE08A1B29CBE79C009A7CA3 /* CrossPlatform.h */,
+				0DE08A1C29CBE79C009A7CA3 /* WCTFileManager.cpp */,
+				0DE08A1D29CBE79C009A7CA3 /* CrossPlatform.c */,
+				0DE08A1E29CBE79C009A7CA3 /* WCTOperationQueue.cpp */,
+			);
+			path = platform;
 			sourceTree = "<group>";
 		};
 		2321243920172865008146EF /* Products */ = {
@@ -7433,6 +7453,7 @@
 				037C3B2F2897E33600328EC8 /* RecyclableHandle.hpp in Headers */,
 				037C3B302897E33600328EC8 /* SyntaxSchema.hpp in Headers */,
 				03A15DF928AA636A0031A50A /* ValueArray.hpp in Headers */,
+				0DE08A2029CBE79C009A7CA3 /* CrossPlatform.h in Headers */,
 				037C3B322897E33600328EC8 /* SyntaxLiteralValue.hpp in Headers */,
 				037C3B332897E33600328EC8 /* StatementReindex.hpp in Headers */,
 				037C3B342897E33600328EC8 /* SyntaxList.hpp in Headers */,
@@ -9158,6 +9179,7 @@
 				037C38F02897E33600328EC8 /* SyntaxDeleteSTMT.cpp in Sources */,
 				037C38F12897E33600328EC8 /* SyntaxCommitSTMT.cpp in Sources */,
 				037C38F42897E33600328EC8 /* Notifier.cpp in Sources */,
+				0DE08A2429CBE79C009A7CA3 /* CrossPlatform.c in Sources */,
 				037C38F62897E33600328EC8 /* SyntaxDropViewSTMT.cpp in Sources */,
 				037C38F92897E33600328EC8 /* OrderingTerm.cpp in Sources */,
 				037C38FB2897E33600328EC8 /* ColumnType.cpp in Sources */,
@@ -9184,6 +9206,7 @@
 				03AFD34F28B8C4EB00EF5E56 /* Field.cpp in Sources */,
 				037C391F2897E33600328EC8 /* StatementAnalyze.cpp in Sources */,
 				037C39212897E33600328EC8 /* FTSFunction.cpp in Sources */,
+				0DE08A2629CBE79C009A7CA3 /* WCTOperationQueue.cpp in Sources */,
 				037C39222897E33600328EC8 /* RecyclableHandle.cpp in Sources */,
 				030C987A28D068B0008636DF /* TransactionGuard.cpp in Sources */,
 				7521D39228BD1187009C33D0 /* ChainCall.cpp in Sources */,
@@ -9339,6 +9362,7 @@
 				037C3A392897E33600328EC8 /* MigrationInfo.cpp in Sources */,
 				037C3A3A2897E33600328EC8 /* Material.cpp in Sources */,
 				037C3A3B2897E33600328EC8 /* ForeignKey.cpp in Sources */,
+				0DE08A2B29CBEB4E009A7CA3 /* WCTFileManager.cpp in Sources */,
 				037C3A3D2897E33600328EC8 /* Crawlable.cpp in Sources */,
 				037C3A3E2897E33600328EC8 /* OperationHandle.cpp in Sources */,
 				037C3A402897E33600328EC8 /* AggregateFunction.cpp in Sources */,
