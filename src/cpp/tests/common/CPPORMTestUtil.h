@@ -24,7 +24,7 @@
 
 #import "TestCaseAssertion.h"
 #import <WCDB/CPPORM.h>
-#import <WCDB/Value.hpp"
+#import <WCDB/Value.hpp>
 
 @class CPPTableTestCase;
 
