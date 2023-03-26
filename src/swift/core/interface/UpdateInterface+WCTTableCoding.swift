@@ -22,6 +22,8 @@
  * limitations under the License.
  */
 
+#if WCDB_SWIFT_BRIDGE_OBJC
+
 import Foundation
 import WCDB_Private
 
@@ -112,3 +114,5 @@ extension UpdateInterface where Self: HandleRepresentable {
                           offset: offset)
     }
 }
+
+#endif

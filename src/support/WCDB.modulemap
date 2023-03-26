@@ -19,3 +19,12 @@ framework module WCDB {
 		export *
 	}
 }
+
+framework module WCDB_Private {
+    requires objc
+
+    module BridgeHeader [extern_c] {
+        umbrella header "WCDBBridging.h"
+        export *
+    }
+}
