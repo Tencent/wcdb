@@ -24,7 +24,7 @@
 
 #import "CPPTestCaseObject.h"
 #import "Random.h"
-#import <WCDB/Value.hpp"
+#import <WCDB/Value.hpp>
 
 @interface Random (CPPTestObject)
 
