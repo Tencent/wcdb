@@ -1,3 +1,6 @@
+framework module WCDB {
+}
+
 framework module WCDB_Private {
     requires objc
 

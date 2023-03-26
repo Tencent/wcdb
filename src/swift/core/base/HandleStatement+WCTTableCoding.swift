@@ -22,6 +22,10 @@
  * limitations under the License.
  */
 
+#if WCDB_SWIFT_BRIDGE_OBJC
+
 import Foundation
 
 extension PreparedStatement: StatementInterfaceForObjc {}
+
+#endif

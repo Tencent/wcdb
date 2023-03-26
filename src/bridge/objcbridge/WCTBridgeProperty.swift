@@ -22,6 +22,8 @@
  * limitations under the License.
  */
 
+#if WCDB_SWIFT_BRIDGE_OBJC
+
 import Foundation
 import WCDB_Private
 
@@ -71,3 +73,5 @@ public extension Array where Element==WCTBridgeProperty {
         return Column.all
     }
 }
+
+#endif

@@ -1598,14 +1598,12 @@
 		39D3C74A22A8B8C600C93DC0 /* OperationHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39D3C74722A8B8C600C93DC0 /* OperationHandle.hpp */; };
 		750080D92920DCFF009C0F38 /* WCTFileManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2316D93521058B5500707AFC /* WCTFileManager.mm */; };
 		750080DA2920DD1B009C0F38 /* WCTOperationQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 232C6F00229C0A280046742F /* WCTOperationQueue.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		750080DC2920DDE9009C0F38 /* WCTBridgeProperty.mm in Sources */ = {isa = PBXBuildFile; fileRef = 036E50B828115B1D007365CD /* WCTBridgeProperty.mm */; };
 		750080E22920E4A1009C0F38 /* WCTFTSTokenizerUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23577F781F74F4E800D31C05 /* WCTFTSTokenizerUtil.mm */; };
 		750080EC2920EDA2009C0F38 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		750080EF2920EDC0009C0F38 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		750080F32920F3D5009C0F38 /* WCTFoundation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39A3341822B0DD9F008EA5D5 /* WCTFoundation.mm */; };
 		750080F42920F4E9009C0F38 /* WCTFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 39A3341722B0DD9F008EA5D5 /* WCTFoundation.h */; };
 		7500828C29222A93009C0F38 /* WCTAPIBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75CE3EFF2812E1A400E132F6 /* WCTAPIBridge.mm */; };
-		7500828D29222C5A009C0F38 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		7500829329223463009C0F38 /* WCTBridgeMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 7500829229223463009C0F38 /* WCTBridgeMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75067CC1293F82B4005DA25B /* AutoAddColumnTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75067CC0293F82B4005DA25B /* AutoAddColumnTests.swift */; };
 		75067CC3293F8300005DA25B /* DatabaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75067CC2293F8300005DA25B /* DatabaseTestCase.swift */; };
@@ -2982,6 +2980,7 @@
 		7543DD92271C601F00B533B4 /* SubstringMatchInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7543DD90271C601F00B533B4 /* SubstringMatchInfo.cpp */; };
 		7543DD93271C601F00B533B4 /* SubstringMatchInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543DD91271C601F00B533B4 /* SubstringMatchInfo.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7543EDE3293B49CB00336DA9 /* ORMTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7543EDE2293B49CB00336DA9 /* ORMTestCase.swift */; };
+		7546D45629D02BB6001B5611 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		7547A3CD290D28A200AFA132 /* OneOrBinaryTokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03450DB22738BBF000C4DC1B /* OneOrBinaryTokenizer.cpp */; };
 		7547A3CF290D2B2600AFA132 /* CPPFTS3Tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7547A3CE290D2B2600AFA132 /* CPPFTS3Tests.mm */; };
 		75535243290E620F008376AB /* CPPFTS5Object.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75535242290E620F008376AB /* CPPFTS5Object.mm */; };
@@ -3272,13 +3271,6 @@
 			remoteGlobalIDString = 239326601E836D7300D677CC;
 			remoteInfo = WCDB;
 		};
-		7500828E29222C61009C0F38 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 239326601E836D7300D677CC;
-			remoteInfo = WCDB;
-		};
 		7521D6C0291E9ABB009642EF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 23A747BE20039675003CECFA /* sqlcipher.preprocessed.xcodeproj */;
@@ -3292,6 +3284,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 23F5BBCF20887FAB000CCD37;
 			remoteInfo = "sqlcipher static";
+		};
+		7546D45429D02BAE001B5611 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239326601E836D7300D677CC;
+			remoteInfo = WCDB;
 		};
 		7575F7AE280679C7006259E2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -4494,7 +4493,7 @@
 		75204AEA283FD7410002E40C /* SchemaBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SchemaBridge.h; sourceTree = "<group>"; };
 		7521D39028BD1187009C33D0 /* ChainCall.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ChainCall.cpp; sourceTree = "<group>"; };
 		7521D39128BD1187009C33D0 /* ChainCall.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ChainCall.hpp; sourceTree = "<group>"; };
-		7521D6B6291E6DFC009642EF /* WCDB.private.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = WCDB.private.modulemap; sourceTree = "<group>"; };
+		7521D6B6291E6DFC009642EF /* WCDBSwift.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = WCDBSwift.modulemap; sourceTree = "<group>"; };
 		7521DA47291E9ABB009642EF /* WCDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7521DA49291E9D9E009642EF /* WCDBCpp.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = WCDBCpp.modulemap; sourceTree = "<group>"; };
 		7521DA4A291E9D9E009642EF /* WCDBObjc.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = WCDBObjc.modulemap; sourceTree = "<group>"; };
@@ -4769,7 +4768,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7500828D29222C5A009C0F38 /* WCDB.framework in Frameworks */,
+				7546D45629D02BB6001B5611 /* WCDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7067,7 +7066,7 @@
 				234F036E227A9E3D00DD65A2 /* WCDB.modulemap */,
 				7521DA49291E9D9E009642EF /* WCDBCpp.modulemap */,
 				7521DA4A291E9D9E009642EF /* WCDBObjc.modulemap */,
-				7521D6B6291E6DFC009642EF /* WCDB.private.modulemap */,
+				7521D6B6291E6DFC009642EF /* WCDBSwift.modulemap */,
 			);
 			path = support;
 			sourceTree = "<group>";
@@ -8928,7 +8927,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				7500828F29222C61009C0F38 /* PBXTargetDependency */,
+				7546D45529D02BAE001B5611 /* PBXTargetDependency */,
 				7575F7AF280679C7006259E2 /* PBXTargetDependency */,
 			);
 			name = SwiftTests;
@@ -10764,7 +10763,6 @@
 				7521DA77291EA349009642EF /* UpdateInterface.swift in Sources */,
 				7521DA78291EA349009642EF /* StatementCreateViewBridge.cpp in Sources */,
 				7521DA79291EA349009642EF /* TableCodable.swift in Sources */,
-				750080DC2920DDE9009C0F38 /* WCTBridgeProperty.mm in Sources */,
 				7521DA7A291EA349009642EF /* Notifier.cpp in Sources */,
 				7521DA7B291EA349009642EF /* StatementInsert.swift in Sources */,
 				7521DA7C291EA349009642EF /* SyntaxDropViewSTMT.cpp in Sources */,
@@ -11189,11 +11187,6 @@
 			target = 239326601E836D7300D677CC /* WCDB */;
 			targetProxy = 750080ED2920EDBA009C0F38 /* PBXContainerItemProxy */;
 		};
-		7500828F29222C61009C0F38 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 239326601E836D7300D677CC /* WCDB */;
-			targetProxy = 7500828E29222C61009C0F38 /* PBXContainerItemProxy */;
-		};
 		7521D6BF291E9ABB009642EF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "sqlcipher static";
@@ -11203,6 +11196,11 @@
 			isa = PBXTargetDependency;
 			name = "sqlcipher static";
 			targetProxy = 7521DA56291EA349009642EF /* PBXContainerItemProxy */;
+		};
+		7546D45529D02BAE001B5611 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239326601E836D7300D677CC /* WCDB */;
+			targetProxy = 7546D45429D02BAE001B5611 /* PBXContainerItemProxy */;
 		};
 		7575F7AF280679C7006259E2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -11314,9 +11312,9 @@
 					"ZLIB_CONST=1",
 					"SQLITE_WCDB=1",
 					"WCDB_SWIFT_BRIDGE_OBJC=1",
+					"WCDB_TESTS=1",
 				);
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDB.modulemap";
-				MODULEMAP_PRIVATE_FILE = "$(SRCROOT)/support/WCDB.private.modulemap";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "WCDB_SWIFT_BRIDGE_OBJC WCDB_QUICK_TESTS";
 			};
 			name = Debug;
@@ -11334,7 +11332,6 @@
 					"WCDB_SWIFT_BRIDGE_OBJC=1",
 				);
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDB.modulemap";
-				MODULEMAP_PRIVATE_FILE = "$(SRCROOT)/support/WCDB.private.modulemap";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = WCDB_SWIFT_BRIDGE_OBJC;
 			};
 			name = Release;
@@ -11439,7 +11436,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */;
 			buildSettings = {
-				MODULEMAP_PRIVATE_FILE = "$(SRCROOT)/support/WCDB.private.modulemap";
+				MODULEMAP_FILE = "$(SRCROOT)/support/WCDBSwift.modulemap";
 				PRODUCT_NAME = WCDB;
 			};
 			name = Debug;
@@ -11448,7 +11445,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */;
 			buildSettings = {
-				MODULEMAP_PRIVATE_FILE = "$(SRCROOT)/support/WCDB.private.modulemap";
+				MODULEMAP_FILE = "$(SRCROOT)/support/WCDBSwift.modulemap";
 				PRODUCT_NAME = WCDB;
 			};
 			name = Release;

@@ -22,6 +22,8 @@
  * limitations under the License.
  */
 
+#if WCDB_SWIFT_BRIDGE_OBJC
+
 import Foundation
 import WCDB_Private
 
@@ -79,3 +81,5 @@ extension SelectChainCallInterfaceForObjc where Self: HandleRepresentable {
         return Select(with: try getHandle(), on: cls.allProperties(), table: table, isDistinct: isDistinct)
     }
 }
+
+#endif
