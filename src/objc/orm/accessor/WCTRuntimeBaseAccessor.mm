@@ -22,11 +22,11 @@
  * limitations under the License.
  */
 
-#import <WCDB/Assertion.hpp>
-#import <WCDB/Console.hpp>
-#import <WCDB/Core.h>
-#import <WCDB/StringView.hpp>
-#import <WCDB/WCTRuntimeBaseAccessor.h>
+#import "WCTRuntimeBaseAccessor.h"
+#import "Assertion.hpp"
+#import "Console.hpp"
+#import "Core.h"
+#import "StringView.hpp"
 #import <objc/runtime.h>
 
 WCTRuntimeBaseAccessor::WCTRuntimeBaseAccessor(Class cls, const WCDB::UnsafeStringView &propertyName)

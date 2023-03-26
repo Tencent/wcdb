@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
-#import <WCDB/Assertion.hpp>
-#import <WCDB/Core.h>
-#import <WCDB/Error.hpp>
-#import <WCDB/Notifier.hpp>
-#import <WCDB/StringView.hpp>
-#import <WCDB/WCTRuntimeObjCAccessor.h>
+#import "WCTRuntimeObjCAccessor.h"
+#import "Assertion.hpp"
+#import "Core.h"
+#import "Error.hpp"
+#import "Notifier.hpp"
+#import "StringView.hpp"
 
 WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, const WCDB::UnsafeStringView &propertyName, Class propCls)
 : WCTRuntimeAccessor<id>(instanceClass, propertyName)

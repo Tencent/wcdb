@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
+#import "Optional.hpp"
+#import "WCTConvertible.h"
 #import <Foundation/Foundation.h>
-#import <WCDB/Optional.hpp>
-#import <WCDB/WCTConvertible.h>
 #import <type_traits>
 
 template<typename T>

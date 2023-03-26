@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTCommon.h>
+#import "WCTCommon.h"
 
 typedef NS_ENUM(int, WCTAccessorType) {
     WCTAccessorCpp,

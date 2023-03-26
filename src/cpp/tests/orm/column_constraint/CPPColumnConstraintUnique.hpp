@@ -22,7 +22,13 @@
  * limitations under the License.
  */
 
+#if TEST_WCDB_OBJC
+#import <WCDBOBjc/WCDBCpp.h>
+#elif TEST_WCDB_CPP
+#import <WCDBCpp/WCDBCpp.h>
+#else
 #import <WCDB/WCDBCpp.h>
+#endif
 
 class CPPColumnConstraintUnique {
     int value;

@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTBaseAccessor.h>
+#import "WCTBaseAccessor.h"
 
 template<WCDB::ColumnType t>
 class WCTCppAccessor : public WCTBaseAccessor {

@@ -23,7 +23,13 @@
  */
 
 #import "WINQAssertion.h"
+#if TEST_WCDB_OBJC
+#import <WCDBOBjc/WCTFTSTokenizerUtil.h>
+#elif TEST_WCDB_CPP
+#import <WCDBCpp/WCTFTSTokenizerUtil.h>
+#else
 #import <WCDB/WCTFTSTokenizerUtil.h>
+#endif
 
 @interface StatementCreateVirtualTableTests : BaseTestCase
 

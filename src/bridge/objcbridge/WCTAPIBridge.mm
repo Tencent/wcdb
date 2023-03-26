@@ -22,21 +22,21 @@
  * limitations under the License.
  */
 
+#import "WCTAPIBridge.h"
+#import "HandleStatement.hpp"
+#import "ObjectBridge.hpp"
+#import "WCTFTSTokenizerUtil.h"
 #import <Foundation/Foundation.h>
-#import <WCDB/HandleStatement.hpp>
-#import <WCDB/ObjectBridge.hpp>
-#import <WCDB/WCTAPIBridge.h>
-#import <WCDB/WCTFTSTokenizerUtil.h>
 #ifdef WCDB_SWIFT_BRIDGE_OBJC
-#import <WCDB/WCTBridgeProperty+CPP.h>
-#import <WCDB/WCTDeclaration.h>
-#import <WCDB/WCTHandle+ChainCall.h>
-#import <WCDB/WCTHandle+Private.h>
-#import <WCDB/WCTHandle+Table.h>
-#import <WCDB/WCTInsert.h>
-#import <WCDB/WCTPreparedStatement+Private.h>
-#import <WCDB/WCTResultColumn.h>
-#import <WCDB/WCTTableCoding.h>
+#import "WCTBridgeProperty+CPP.h"
+#import "WCTDeclaration.h"
+#import "WCTHandle+ChainCall.h"
+#import "WCTHandle+Private.h"
+#import "WCTHandle+Table.h"
+#import "WCTInsert.h"
+#import "WCTPreparedStatement+Private.h"
+#import "WCTResultColumn.h"
+#import "WCTTableCoding.h"
 #endif
 
 @implementation WCTAPIBridge

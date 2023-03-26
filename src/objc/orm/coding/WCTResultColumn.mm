@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#import <WCDB/Core.h>
-#import <WCDB/WCTORM.h>
-#import <WCDB/WCTProperty.h>
-#import <WCDB/WCTResultColumn.h>
+#import "WCTResultColumn.h"
+#import "Core.h"
+#import "WCTORM.h"
+#import "WCTProperty.h"
 
 WCTResultColumn::WCTResultColumn() = default;
 

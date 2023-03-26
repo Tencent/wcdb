@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTCommon.h>
-#import <WCDB/WCTRuntimeCppAccessor.h>
-#import <WCDB/WCTRuntimeObjCAccessor.h>
+#import "WCTCommon.h"
+#import "WCTRuntimeCppAccessor.h"
+#import "WCTRuntimeObjCAccessor.h"
 
 class WCTColumnBinding final {
 public:

@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#import <WCDB/Assertion.hpp>
-#import <WCDB/WCTChainCall+Private.h>
-#import <WCDB/WCTTryDisposeGuard.h>
+#import "WCTTryDisposeGuard.h"
+#import "Assertion.hpp"
+#import "WCTChainCall+Private.h"
 
 WCTTryDisposeGuard::WCTTryDisposeGuard(WCTChainCall* chaincall)
 : m_chaincall(chaincall)

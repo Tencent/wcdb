@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTChainCall.h>
-#import <WCDB/WCTTable.h>
+#import "WCTChainCall.h"
+#import "WCTTable.h"
 
 /**
  Thread-safe

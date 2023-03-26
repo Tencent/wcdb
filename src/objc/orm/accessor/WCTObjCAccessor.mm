@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTObjCAccessor.h>
+#import "WCTObjCAccessor.h"
 
 WCTObjCAccessor::~WCTObjCAccessor() = default;
 

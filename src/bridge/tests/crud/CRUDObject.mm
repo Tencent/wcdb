@@ -23,7 +23,13 @@
  */
 
 #import "CRUDObject.h"
+#if TEST_WCDB_OBJC
+#import <WCDBOBjc/WCDB.h>
+#elif TEST_WCDB_CPP
+#import <WCDBCpp/WCDB.h>
+#else
 #import <WCDB/WCDB.h>
+#endif
 
 @implementation CRUDObject
 - (BOOL)isEqual:(CRUDObject*)object

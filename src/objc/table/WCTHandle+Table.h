@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTHandle.h>
-#import <WCDB/WCTTable.h>
-#import <WCDB/WCTTableProtocol.h>
+#import "WCTHandle.h"
+#import "WCTTable.h"
+#import "WCTTableProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

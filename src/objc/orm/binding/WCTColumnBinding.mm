@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTColumnBinding.h>
-#import <WCDB/WCTResultColumn.h>
+#import "WCTColumnBinding.h"
+#import "WCTResultColumn.h"
 
 WCTColumnBinding::WCTColumnBinding(Class cls,
                                    const std::shared_ptr<const WCTBaseAccessor> accessor,

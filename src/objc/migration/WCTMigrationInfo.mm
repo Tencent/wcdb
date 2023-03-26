@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTFoundation.h>
-#import <WCDB/WCTMigrationInfo+Private.h>
-#import <WCDB/WCTMigrationInfo.h>
+#import "WCTMigrationInfo.h"
+#import "WCTFoundation.h"
+#import "WCTMigrationInfo+Private.h"
 
 @implementation WCTMigrationBaseInfo
 

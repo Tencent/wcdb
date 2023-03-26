@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
-#import <WCDB/CoreConst.h>
-#import <WCDB/WCTConvertible.h>
-#import <WCDB/WCTDatabase+Monitor.h>
-#import <WCDB/WCTError+Private.h>
-#import <WCDB/WCTError.h>
-#import <WCDB/WCTFoundation.h>
+#import "WCTError.h"
+#import "CoreConst.h"
+#import "WCTConvertible.h"
+#import "WCTDatabase+Monitor.h"
+#import "WCTError+Private.h"
+#import "WCTFoundation.h"
 
 NSErrorDomain const WCTErrorDomain = @"WCDB";
 

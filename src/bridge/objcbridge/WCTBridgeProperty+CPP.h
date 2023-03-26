@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTBridgeProperty.h>
-#import <WCDB/WCTProperty.h>
+#import "WCTBridgeProperty.h"
+#import "WCTProperty.h"
 
 @interface WCTBridgeProperty (CPP)
 

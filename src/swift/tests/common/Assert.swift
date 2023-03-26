@@ -19,7 +19,11 @@
  */
 
 import XCTest
+#if TEST_WCDB_SWIFT
+import WCDBSwift
+#else
 import WCDB
+#endif
 
 func XCTAssertEqual(_ expression1: @autoclosure () -> String,
                     _ expression2: @autoclosure () -> String,
@@ -55,7 +59,7 @@ func WCDBAssertNoThrowReturned<T>(_ expression: @autoclosure () throws -> T,
                                   whenFailed failedValue: @autoclosure () -> T) -> T {
     do {
         return try expression()
-    } catch let error as WCDB.WCDBError {
+    } catch let error as WCDBError {
         XCTFail(error.description)
     } catch {
         XCTFail(error.localizedDescription)
@@ -68,7 +72,7 @@ func WCDBAssertNoThrowReturned<T>(_ expression: @autoclosure () throws -> T,
                                   line: UInt = #line) -> T? {
     do {
         return try expression()
-    } catch let error as WCDB.WCDBError {
+    } catch let error as WCDBError {
         XCTFail(error.description)
     } catch {
         XCTFail(error.localizedDescription)

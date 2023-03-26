@@ -22,16 +22,16 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTChainCall+Private.h>
-#import <WCDB/WCTDelete.h>
-#import <WCDB/WCTHandle+ChainCall.h>
-#import <WCDB/WCTHandle+Private.h>
-#import <WCDB/WCTInsert.h>
-#import <WCDB/WCTMultiSelect.h>
-#import <WCDB/WCTORM.h>
-#import <WCDB/WCTSelect.h>
-#import <WCDB/WCTSelectable+Private.h>
-#import <WCDB/WCTUpdate.h>
+#import "WCTChainCall+Private.h"
+#import "WCTDelete.h"
+#import "WCTHandle+ChainCall.h"
+#import "WCTHandle+Private.h"
+#import "WCTInsert.h"
+#import "WCTMultiSelect.h"
+#import "WCTORM.h"
+#import "WCTSelect.h"
+#import "WCTSelectable+Private.h"
+#import "WCTUpdate.h"
 
 @implementation WCTHandle (Convenient)
 #pragma mark - Get Object

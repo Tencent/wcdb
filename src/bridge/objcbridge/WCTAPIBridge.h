@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
+#import "HandleBridge.h"
 #import <Foundation/Foundation.h>
-#import <WCDB/HandleBridge.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

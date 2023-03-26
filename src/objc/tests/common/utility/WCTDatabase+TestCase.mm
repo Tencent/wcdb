@@ -25,7 +25,13 @@
 #import "CoreConst.h"
 #import "TestCaseLog.h"
 #import "WCTDatabase+TestCase.h"
+#if TEST_WCDB_OBJC
+#import <WCDBOBjc/WCTDatabase+Test.h>
+#elif TEST_WCDB_CPP
+#import <WCDBCpp/WCTDatabase+Test.h>
+#else
 #import <WCDB/WCTDatabase+Test.h>
+#endif
 
 @implementation WCTDatabase (TestCase)
 

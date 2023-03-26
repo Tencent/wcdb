@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
-#import <WCDB/NSData+WCTColumnCoding.h>
-#import <WCDB/NSDate+WCTColumnCoding.h>
-#import <WCDB/NSNull+WCTColumnCoding.h>
-#import <WCDB/NSNumber+WCTColumnCoding.h>
-#import <WCDB/NSObject+WCTColumnCoding.h>
-#import <WCDB/NSString+WCTColumnCoding.h>
+#import "NSData+WCTColumnCoding.h"
+#import "NSDate+WCTColumnCoding.h"
+#import "NSNull+WCTColumnCoding.h"
+#import "NSNumber+WCTColumnCoding.h"
+#import "NSObject+WCTColumnCoding.h"
+#import "NSString+WCTColumnCoding.h"
 
-#import <WCDB/WCTMaster+WCTTableCoding.h>
-#import <WCDB/WCTSequence+WCTTableCoding.h>
+#import "WCTMaster+WCTTableCoding.h"
+#import "WCTSequence+WCTTableCoding.h"

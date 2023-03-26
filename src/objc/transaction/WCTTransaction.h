@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#import <WCDB/Macro.h>
-#import <WCDB/WCTDeclaration.h>
+#import "Macro.h"
+#import "WCTDeclaration.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
+#import "WCTBridgeProperty+CPP.h"
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTBridgeProperty+CPP.h>
 
 @interface WCTBridgeProperty () {
     const WCTProperty* m_innerProperty;

@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTHandle.h>
-#import <WCDB/WCTTransaction.h>
+#import "WCTHandle.h"
+#import "WCTTransaction.h"
 
 @interface WCTHandle (Transaction) <WCTTransactionProtocol>
 

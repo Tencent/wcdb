@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDatabase+Handle.h>
-#import <WCDB/WCTDatabase+Private.h>
-#import <WCDB/WCTHandle+Private.h>
+#import "WCTDatabase+Handle.h"
+#import "WCTDatabase+Private.h"
+#import "WCTHandle+Private.h"
 
 WCTScopedHandle::WCTScopedHandle(WCTHandle *handle)
 : m_handle(handle)

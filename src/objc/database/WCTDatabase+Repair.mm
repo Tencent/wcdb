@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
-#import <WCDB/Assertion.hpp>
-#import <WCDB/Core.h>
-#import <WCDB/WCTCommon.h>
-#import <WCDB/WCTDatabase+Private.h>
-#import <WCDB/WCTDatabase+Repair.h>
-#import <WCDB/WCTFoundation.h>
+#import "Assertion.hpp"
+#import "Core.h"
+#import "WCTCommon.h"
+#import "WCTDatabase+Private.h"
+#import "WCTDatabase+Repair.h"
+#import "WCTFoundation.h"
 
 @implementation WCTDatabase (Repair)
 

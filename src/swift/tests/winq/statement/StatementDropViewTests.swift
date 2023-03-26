@@ -23,7 +23,11 @@
  */
 
 import XCTest
+#if TEST_WCDB_SWIFT
+import WCDBSwift
+#else
 import WCDB
+#endif
 
 class StatementDropViewTests: BaseTestCase {
 

@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
-#import <WCDB/Assertion.hpp>
-#import <WCDB/WCTBinding.h>
-#import <WCDB/WCTColumnBinding.h>
-#import <WCDB/WCTProperty.h>
-#import <WCDB/WCTResultColumn.h>
-#import <WCDB/WCTTableCoding.h>
+#import "WCTProperty.h"
+#import "Assertion.hpp"
+#import "WCTBinding.h"
+#import "WCTColumnBinding.h"
+#import "WCTResultColumn.h"
+#import "WCTTableCoding.h"
 
 #pragma mark - WCTProperty
 

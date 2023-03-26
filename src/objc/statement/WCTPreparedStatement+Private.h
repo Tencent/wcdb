@@ -21,9 +21,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#import <WCDB/Core.h>
-#import <WCDB/WCTHandle.h>
-#import <WCDB/WCTPreparedStatement.h>
+#import "Core.h"
+#import "WCTHandle.h"
+#import "WCTPreparedStatement.h"
 
 @interface WCTPreparedStatement () {
 @private

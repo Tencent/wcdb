@@ -25,7 +25,13 @@
 #import "TestCase.h"
 #import "WINQAssertion.h"
 #import <Foundation/Foundation.h>
+#if TEST_WCDB_OBJC
+#import <WCDBOBjc/Value.hpp>
+#elif TEST_WCDB_CPP
+#import <WCDBCpp/Value.hpp>
+#else
 #import <WCDB/Value.hpp>
+#endif
 
 @interface ValueTests : BaseTestCase
 

@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#import <WCDB/Assertion.hpp>
-#import <WCDB/Console.hpp>
-#import <WCDB/NSObject+WCTColumnCoding.h>
+#import "Assertion.hpp"
+#import "Console.hpp"
+#import "NSObject+WCTColumnCoding.h"
 
 @implementation NSObject (WCTColumnCoding)
 

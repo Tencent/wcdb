@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTMaster+WCTTableCoding.h>
-#import <WCDB/WCTMaster.h>
+#import "WCTMaster.h"
+#import "WCTMaster+WCTTableCoding.h"
 
 @implementation WCTMaster
 

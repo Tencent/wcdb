@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/Interface.h>
+#import "Interface.h"
 
 @interface NSData (WCTColumnCoding) <WCTColumnCoding>
 

@@ -23,7 +23,11 @@
  */
 
 import XCTest
+#if TEST_WCDB_SWIFT
+import WCDBSwift
+#else
 import WCDB
+#endif
 
 class TokenizerTests: DatabaseTestCase {
 
@@ -62,7 +66,7 @@ class TokenizerTests: DatabaseTestCase {
                        piStart: UnsafeMutablePointer<Int32>,
                        piEnd: UnsafeMutablePointer<Int32>,
                        pFlags: UnsafeMutablePointer<Int32>?,
-                       piPosition: UnsafeMutablePointer<Int32>?) -> WCDB.TokenizerErrorCode {
+                       piPosition: UnsafeMutablePointer<Int32>?) -> TokenizerErrorCode {
             guard hasCheckParameter, inputLength > lastLocation, let input = input else {
                 return .Done
             }

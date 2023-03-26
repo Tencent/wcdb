@@ -22,7 +22,13 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCDB.h>
+#if TEST_WCDB_OBJC
+#import <WCDBOBjc/WCDBObjc.h>
+#elif TEST_WCDB_CPP
+#import <WCDBCpp/WCDBCpp.h>
+#else
+#import <WCDB/WCDBObjc.h>
+#endif
 
 NS_ASSUME_NONNULL_BEGIN
 
