@@ -22,6 +22,8 @@
  * limitations under the License.
  */
 
+#if WCDB_SWIFT_BRIDGE_OBJC
+
 import Foundation
 import WCDB_Private
 
@@ -326,3 +328,5 @@ extension Table: SelectTableInterfaceForObjc where Root: WCTTableCoding {
                               offset: offset).first
     }
 }
+
+#endif

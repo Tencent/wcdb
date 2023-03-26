@@ -22,6 +22,8 @@
  * limitations under the License.
  */
 
+#if WCDB_SWIFT_BRIDGE_OBJC
+
 import Foundation
 import WCDB_Private
 
@@ -48,3 +50,5 @@ extension Database: InsertInterfaceForObjc {}
 extension Database: UpdateInterfaceForObjc {}
 extension Database: SelectInterfaceForObjc {}
 extension Database: TableInterfaceForObjc {}
+
+#endif

@@ -22,6 +22,8 @@
  * limitations under the License.
  */
 
+#if WCDB_SWIFT_BRIDGE_OBJC
+
 import Foundation
 
 extension Handle: StatementInterfaceForObjc {}
@@ -32,3 +34,5 @@ extension Handle: SelectChainCallInterfaceForObjc {}
 extension Handle: InsertInterfaceForObjc {}
 extension Handle: UpdateInterfaceForObjc {}
 extension Handle: SelectInterfaceForObjc {}
+
+#endif
