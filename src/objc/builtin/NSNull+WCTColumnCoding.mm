@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/NSNull+WCTColumnCoding.h>
+#import "NSNull+WCTColumnCoding.h"
 
 @implementation NSNull (WCTColumnCoding)
 

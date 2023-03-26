@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTTable.h>
+#import "WCTTable.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

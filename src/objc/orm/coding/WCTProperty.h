@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTColumnBinding.h>
-#import <WCDB/WCTCommon.h>
+#import "WCTColumnBinding.h"
+#import "WCTCommon.h"
 
 class WCTProperty final : public WCDB::Column, public WCTColumnBindingHolder {
 public:

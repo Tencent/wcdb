@@ -22,18 +22,18 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTChainCall+Private.h>
-#import <WCDB/WCTDatabase+Convenient.h>
-#import <WCDB/WCTDelete.h>
-#import <WCDB/WCTInsert.h>
-#import <WCDB/WCTMultiSelect.h>
-#import <WCDB/WCTORM.h>
-#import <WCDB/WCTSelect.h>
-#import <WCDB/WCTSelectable+Private.h>
-#import <WCDB/WCTTable+ChainCall.h>
-#import <WCDB/WCTTable+Convenient.h>
-#import <WCDB/WCTTable+Private.h>
-#import <WCDB/WCTUpdate.h>
+#import "WCTChainCall+Private.h"
+#import "WCTDatabase+Convenient.h"
+#import "WCTDelete.h"
+#import "WCTInsert.h"
+#import "WCTMultiSelect.h"
+#import "WCTORM.h"
+#import "WCTSelect.h"
+#import "WCTSelectable+Private.h"
+#import "WCTTable+ChainCall.h"
+#import "WCTTable+Convenient.h"
+#import "WCTTable+Private.h"
+#import "WCTUpdate.h"
 
 @implementation WCTTable (Convenient)
 

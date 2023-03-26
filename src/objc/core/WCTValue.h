@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDeclaration.h>
+#import "WCTDeclaration.h"
 
 //It's tricky here. You can use `WCTValue` as any of `NSNumber`/`NSString`/`NSData`/`NSNull`, but it actually is a `NSProxy<WCTValueProtocol>` proxy.
 //Ones have no need to understand this difference unless he/she needs to go deep into these fundamental classes.

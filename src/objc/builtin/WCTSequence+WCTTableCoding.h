@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTMacro.h>
-#import <WCDB/WCTSequence.h>
-#import <WCDB/WCTTableCoding.h>
+#import "WCTMacro.h"
+#import "WCTSequence.h"
+#import "WCTTableCoding.h"
 
 @interface WCTSequence (WCTTableCoding) <WCTTableCoding>
 

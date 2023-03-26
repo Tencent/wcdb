@@ -22,11 +22,11 @@
  * limitations under the License.
  */
 
-#import <WCDB/Assertion.hpp>
-#import <WCDB/WCTChainCall+Private.h>
-#import <WCDB/WCTDelete.h>
-#import <WCDB/WCTHandle.h>
-#import <WCDB/WCTTryDisposeGuard.h>
+#import "WCTDelete.h"
+#import "Assertion.hpp"
+#import "WCTChainCall+Private.h"
+#import "WCTHandle.h"
+#import "WCTTryDisposeGuard.h"
 
 @implementation WCTDelete {
     WCDB::StatementDelete _statement;

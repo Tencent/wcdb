@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDatabase.h>
-#import <WCDB/WCTTable.h>
-#import <WCDB/WCTTableProtocol.h>
+#import "WCTDatabase.h"
+#import "WCTTable.h"
+#import "WCTTableProtocol.h"
 
 @interface WCTDatabase (Table) <WCTTableProtocol>
 

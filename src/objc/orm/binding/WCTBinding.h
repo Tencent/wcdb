@@ -22,13 +22,13 @@
  * limitations under the License.
  */
 
-#import <WCDB/BaseBinding.hpp>
-#import <WCDB/CaseInsensiveList.hpp>
-#import <WCDB/StringView.hpp>
-#import <WCDB/WCTColumnCoding.h>
-#import <WCDB/WCTCommon.h>
-#import <WCDB/WCTProperty.h>
-#import <WCDB/WCTTableCoding.h>
+#import "BaseBinding.hpp"
+#import "CaseInsensiveList.hpp"
+#import "StringView.hpp"
+#import "WCTColumnCoding.h"
+#import "WCTCommon.h"
+#import "WCTProperty.h"
+#import "WCTTableCoding.h"
 #import <map>
 
 class WCTBinding final : public WCDB::BaseBinding {

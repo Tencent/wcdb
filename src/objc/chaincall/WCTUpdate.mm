@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
-#import <WCDB/Assertion.hpp>
-#import <WCDB/WCTChainCall+Private.h>
-#import <WCDB/WCTHandle.h>
-#import <WCDB/WCTORM.h>
-#import <WCDB/WCTTryDisposeGuard.h>
-#import <WCDB/WCTUpdate.h>
+#import "WCTUpdate.h"
+#import "Assertion.hpp"
+#import "WCTChainCall+Private.h"
+#import "WCTHandle.h"
+#import "WCTORM.h"
+#import "WCTTryDisposeGuard.h"
 
 typedef NS_ENUM(NSUInteger, WCTUpdateType) {
     WCTUpdateTypeObject,

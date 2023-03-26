@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDatabase.h>
-#import <WCDB/WCTTransaction.h>
+#import "WCTDatabase.h"
+#import "WCTTransaction.h"
 
 @interface WCTDatabase (Transaction) <WCTTransactionProtocol>
 

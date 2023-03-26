@@ -23,7 +23,11 @@
  */
 
 import Foundation
+#if TEST_WCDB_SWIFT
+import WCDBSwift
+#else
 import WCDB
+#endif
 
 class CommonTableExpressionTests: BaseTestCase {
 

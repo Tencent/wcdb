@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#import <WCDB/Core.h>
-#import <WCDB/WCTHandle.h>
-#import <WCDB/WCTTransaction.h>
+#import "Core.h"
+#import "WCTHandle.h"
+#import "WCTTransaction.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

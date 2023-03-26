@@ -19,7 +19,11 @@
  */
 
 import Foundation
+#if TEST_WCDB_SWIFT
+import WCDBSwift
+#else
 import WCDB
+#endif
 
 protocol Named {
     static var name: String {get}

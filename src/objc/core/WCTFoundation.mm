@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTFoundation.h>
+#import "WCTFoundation.h"
 
 @implementation NSString (WCDB)
 

@@ -25,7 +25,13 @@
 #import "FTS3Object.h"
 #import "FTS3Object+WCTTableCoding.h"
 #import "TestCase.h"
-#import <WCDB/WCDB.h>
+#if TEST_WCDB_OBJC
+#import <WCDBOBjc/WCDBObjc.h>
+#elif TEST_WCDB_CPP
+#import <WCDBCpp/WCDBCpp.h>
+#else
+#import <WCDB/WCDBObjc.h>
+#endif
 
 @implementation FTS3Object
 

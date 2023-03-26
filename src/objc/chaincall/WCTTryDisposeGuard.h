@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTChainCall.h>
+#import "WCTChainCall.h"
 
 class WCTTryDisposeGuard final {
 public:

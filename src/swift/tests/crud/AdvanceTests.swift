@@ -19,7 +19,11 @@
  */
 
 import XCTest
+#if TEST_WCDB_SWIFT
+import WCDBSwift
+#else
 import WCDB
+#endif
 
 class AdvanceTests: CRUDTestCase {
 
@@ -440,7 +444,7 @@ class AdvanceTests: CRUDTestCase {
         queue.async(group: group, execute: {
             var i = 0
             var write1Begin = Date()
-            let transaction: WCDB.TransactionInterface.PauseableTransactionClosure = { handle, stop, isNewTransaction in
+            let transaction: TransactionInterface.PauseableTransactionClosure = { handle, stop, isNewTransaction in
                 XCTAssertTrue(handle.isInTransaction)
                 if isNewTransaction {
                     pauseTimes += 1
@@ -465,7 +469,7 @@ class AdvanceTests: CRUDTestCase {
             }
             do {
                 return try self.database.run(pauseableTransaction: transaction)
-            } catch let error as WCDB.WCDBError {
+            } catch let error as WCDBError {
                 XCTFail(error.description)
             } catch {
                 XCTFail(error.localizedDescription)

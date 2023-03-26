@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#import <WCDB/Assertion.hpp>
-#import <WCDB/WCTConvertible.h>
+#import "WCTConvertible.h"
+#import "Assertion.hpp"
 
 namespace WCDB {
 

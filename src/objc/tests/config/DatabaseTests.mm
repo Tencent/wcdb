@@ -23,7 +23,13 @@
  */
 
 #import "TestCase.h"
+#if TEST_WCDB_OBJC
+#import <WCDBOBjc/WCTDatabase+Monitor.h>
+#elif TEST_WCDB_CPP
+#import <WCDBCpp/WCTDatabase+Monitor.h>
+#else
 #import <WCDB/WCTDatabase+Monitor.h>
+#endif
 
 @interface DatabaseTests : DatabaseTestCase
 

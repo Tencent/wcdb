@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCDBObjc.h>
+#import "WCDBObjc.h"
 
 typedef NS_OPTIONS(NSUInteger, WCTSimulateIOErrorOptions) {
     WCTSimulateNoneIOError = 0,

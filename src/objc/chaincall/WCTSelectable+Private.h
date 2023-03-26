@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTSelectable.h>
+#import "WCTSelectable.h"
 
 @interface WCTSelectable () {
 @protected

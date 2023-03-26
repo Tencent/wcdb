@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTValue.h>
+#import "WCTValue.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

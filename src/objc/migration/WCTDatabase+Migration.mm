@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#import <WCDB/CoreConst.h>
-#import <WCDB/WCTDatabase+Migration.h>
-#import <WCDB/WCTDatabase+Private.h>
-#import <WCDB/WCTMigrationInfo+Private.h>
+#import "CoreConst.h"
+#import "WCTDatabase+Migration.h"
+#import "WCTDatabase+Private.h"
+#import "WCTMigrationInfo+Private.h"
 
 @implementation WCTDatabase (Migration)
 

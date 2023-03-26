@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
+#import "Macro.h"
+#import "WCTTag.h"
 #import <Foundation/Foundation.h>
-#import <WCDB/Macro.h>
-#import <WCDB/WCTTag.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

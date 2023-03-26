@@ -22,11 +22,11 @@
  * limitations under the License.
  */
 
-#import <WCDB/Assertion.hpp>
-#import <WCDB/Core.h>
-#import <WCDB/WCTDatabase.h>
-#import <WCDB/WCTError+Private.h>
-#import <WCDB/WCTTable+Private.h>
+#import "Assertion.hpp"
+#import "Core.h"
+#import "WCTDatabase.h"
+#import "WCTError+Private.h"
+#import "WCTTable+Private.h"
 
 @implementation WCTTable
 

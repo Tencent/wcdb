@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
-#import <WCDB/Assertion.hpp>
-#import <WCDB/Core.h>
-#import <WCDB/SQLite.h>
-#import <WCDB/WCTDatabase+Config.h>
-#import <WCDB/WCTDatabase+Private.h>
-#import <WCDB/WCTHandle+Private.h>
+#import "Assertion.hpp"
+#import "Core.h"
+#import "SQLite.h"
+#import "WCTDatabase+Config.h"
+#import "WCTDatabase+Private.h"
+#import "WCTHandle+Private.h"
 
 static_assert((int) WCTConfigPriorityHigh == (int) WCDB::Configs::Priority::High, "");
 static_assert((int) WCTConfigPriorityDefault == (int) WCDB::Configs::Priority::Default, "");

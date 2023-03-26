@@ -22,7 +22,8 @@
  * limitations under the License.
  */
 
-#import <WCDB/BaseTokenizerUtil.hpp>
+#import "BaseTokenizerUtil.hpp"
+#import <Foundation/Foundation.h>
 
 class WCTFTSTokenizerUtil final : public WCDB::BaseTokenizerUtil {
 public:

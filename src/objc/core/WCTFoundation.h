@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
+#import "StringView.hpp"
 #import <Foundation/Foundation.h>
-#import <WCDB/StringView.hpp>
 
 NS_ASSUME_NONNULL_BEGIN
 

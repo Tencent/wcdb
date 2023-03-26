@@ -22,18 +22,18 @@
  * limitations under the License.
  */
 
-#import <WCDB/Assertion.hpp>
-#import <WCDB/WCTChainCall+Private.h>
-#import <WCDB/WCTDatabase+ChainCall.h>
-#import <WCDB/WCTDatabase+Convenient.h>
-#import <WCDB/WCTDatabase+Handle.h>
-#import <WCDB/WCTDelete.h>
-#import <WCDB/WCTHandle.h>
-#import <WCDB/WCTInsert.h>
-#import <WCDB/WCTMultiSelect.h>
-#import <WCDB/WCTORM.h>
-#import <WCDB/WCTSelect.h>
-#import <WCDB/WCTUpdate.h>
+#import "Assertion.hpp"
+#import "WCTChainCall+Private.h"
+#import "WCTDatabase+ChainCall.h"
+#import "WCTDatabase+Convenient.h"
+#import "WCTDatabase+Handle.h"
+#import "WCTDelete.h"
+#import "WCTHandle.h"
+#import "WCTInsert.h"
+#import "WCTMultiSelect.h"
+#import "WCTORM.h"
+#import "WCTSelect.h"
+#import "WCTUpdate.h"
 
 @implementation WCTDatabase (Convenient)
 #pragma mark - Get Object

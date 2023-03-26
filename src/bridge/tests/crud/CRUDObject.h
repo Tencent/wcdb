@@ -23,8 +23,20 @@
  */
 
 #import <Foundation/Foundation.h>
+#if TEST_WCDB_OBJC
+#import <WCDBOBjc/WCTMacro.h>
+#elif TEST_WCDB_CPP
+#import <WCDBCpp/WCTMacro.h>
+#else
 #import <WCDB/WCTMacro.h>
+#endif
+#if TEST_WCDB_OBJC
+#import <WCDBOBjc/WCTTableCoding.h>
+#elif TEST_WCDB_CPP
+#import <WCDBCpp/WCTTableCoding.h>
+#else
 #import <WCDB/WCTTableCoding.h>
+#endif
 
 @interface CRUDObject : NSObject <WCTTableCoding>
 

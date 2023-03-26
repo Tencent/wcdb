@@ -22,15 +22,15 @@
  * limitations under the License.
  */
 
+#import "CoreConst.h"
+#import "Enum.hpp"
+#import "Error.hpp"
+#import "FileManager.hpp"
+#import "Notifier.hpp"
+#import "StringView.hpp"
+#import "ThreadedErrors.hpp"
+#import "WCTFoundation.h"
 #import <Foundation/Foundation.h>
-#import <WCDB/CoreConst.h>
-#import <WCDB/Enum.hpp>
-#import <WCDB/Error.hpp>
-#import <WCDB/FileManager.hpp>
-#import <WCDB/Notifier.hpp>
-#import <WCDB/StringView.hpp>
-#import <WCDB/ThreadedErrors.hpp>
-#import <WCDB/WCTFoundation.h>
 
 namespace WCDB {
 

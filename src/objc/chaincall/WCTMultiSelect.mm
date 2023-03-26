@@ -22,14 +22,14 @@
  * limitations under the License.
  */
 
-#import <WCDB/Assertion.hpp>
-#import <WCDB/WCTChainCall+Private.h>
-#import <WCDB/WCTHandle+Private.h>
-#import <WCDB/WCTHandle.h>
-#import <WCDB/WCTMultiSelect.h>
-#import <WCDB/WCTORM.h>
-#import <WCDB/WCTSelectable+Private.h>
-#import <WCDB/WCTTryDisposeGuard.h>
+#import "WCTMultiSelect.h"
+#import "Assertion.hpp"
+#import "WCTChainCall+Private.h"
+#import "WCTHandle+Private.h"
+#import "WCTHandle.h"
+#import "WCTORM.h"
+#import "WCTSelectable+Private.h"
+#import "WCTTryDisposeGuard.h"
 
 @implementation WCTMultiSelect {
     WCTResultColumns _resultColumns;

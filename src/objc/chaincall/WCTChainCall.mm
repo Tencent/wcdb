@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#import <WCDB/Assertion.hpp>
-#import <WCDB/WCTChainCall+Private.h>
-#import <WCDB/WCTChainCall.h>
-#import <WCDB/WCTHandle.h>
+#import "WCTChainCall.h"
+#import "Assertion.hpp"
+#import "WCTChainCall+Private.h"
+#import "WCTHandle.h"
 
 @implementation WCTChainCall
 

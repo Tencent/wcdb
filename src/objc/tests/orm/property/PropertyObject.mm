@@ -24,7 +24,13 @@
 
 #import "PropertyObject.h"
 #import "PropertyObject+WCTTableCoding.h"
-#import <WCDB/WCDB.h>
+#if TEST_WCDB_OBJC
+#import <WCDBOBjc/WCDBObjc.h>
+#elif TEST_WCDB_CPP
+#import <WCDBCpp/WCDBCpp.h>
+#else
+#import <WCDB/WCDBObjc.h>
+#endif
 
 @implementation PropertyObject
 

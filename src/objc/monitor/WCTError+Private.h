@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#import <WCDB/Core.h>
-#import <WCDB/CoreConst.h>
-#import <WCDB/WCTError.h>
+#import "Core.h"
+#import "CoreConst.h"
+#import "WCTError.h"
 
 @interface WCTError ()
 

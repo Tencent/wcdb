@@ -3326,7 +3326,7 @@
 		0373310B289A94E00030C113 /* PreparedStatement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PreparedStatement.hpp; sourceTree = "<group>"; };
 		0373310E289A94F00030C113 /* Handle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Handle.cpp; sourceTree = "<group>"; };
 		0373310F289A94F10030C113 /* Handle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Handle.hpp; sourceTree = "<group>"; };
-		037C3C0C2897E33600328EC8 /* WCDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		037C3C0C2897E33600328EC8 /* WCDBCpp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDBCpp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0393BEDB27F6ED860058B295 /* ErrorBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ErrorBridge.h; sourceTree = "<group>"; };
 		0393BEDF27F6EDAC0058B295 /* ErrorBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ErrorBridge.cpp; sourceTree = "<group>"; };
 		0393BEE327F715180058B295 /* HandleBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HandleBridge.h; sourceTree = "<group>"; };
@@ -4440,10 +4440,10 @@
 		7521D39028BD1187009C33D0 /* ChainCall.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ChainCall.cpp; sourceTree = "<group>"; };
 		7521D39128BD1187009C33D0 /* ChainCall.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ChainCall.hpp; sourceTree = "<group>"; };
 		7521D6B6291E6DFC009642EF /* WCDBSwift.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = WCDBSwift.modulemap; sourceTree = "<group>"; };
-		7521DA47291E9ABB009642EF /* WCDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7521DA47291E9ABB009642EF /* WCDBObjc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDBObjc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7521DA49291E9D9E009642EF /* WCDBCpp.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = WCDBCpp.modulemap; sourceTree = "<group>"; };
 		7521DA4A291E9D9E009642EF /* WCDBObjc.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = WCDBObjc.modulemap; sourceTree = "<group>"; };
-		7521DDDD291EA349009642EF /* WCDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7521DDDD291EA349009642EF /* WCDBSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDBSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7521DDE429209B8D009642EF /* ChainCall+WCTTableCoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChainCall+WCTTableCoding.swift"; sourceTree = "<group>"; };
 		7521DDE729209C90009642EF /* Handle+WCTTableCoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Handle+WCTTableCoding.swift"; sourceTree = "<group>"; };
 		7521DDEA29209D04009642EF /* Insert+WCTTableCoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Insert+WCTTableCoding.swift"; sourceTree = "<group>"; };
@@ -6638,10 +6638,10 @@
 				234F8AD4227B0B5400791E45 /* SwiftTests.xctest */,
 				0333100228167ECC0094CFCF /* SwiftBridgeObjcTest.xctest */,
 				03BF4B1F2888F87C00A30500 /* BenchmarkTest.xctest */,
-				037C3C0C2897E33600328EC8 /* WCDB.framework */,
+				037C3C0C2897E33600328EC8 /* WCDBCpp.framework */,
 				03E5CC4928A38CCA005353D9 /* CppTests.xctest */,
-				7521DA47291E9ABB009642EF /* WCDB.framework */,
-				7521DDDD291EA349009642EF /* WCDB.framework */,
+				7521DA47291E9ABB009642EF /* WCDBObjc.framework */,
+				7521DDDD291EA349009642EF /* WCDBSwift.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -8744,7 +8744,7 @@
 			);
 			name = WCDBCpp;
 			productName = "WCDB framework";
-			productReference = 037C3C0C2897E33600328EC8 /* WCDB.framework */;
+			productReference = 037C3C0C2897E33600328EC8 /* WCDBCpp.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		03BF4AB72888F87C00A30500 /* BenchmarkTest */ = {
@@ -8877,7 +8877,7 @@
 			);
 			name = WCDBObjc;
 			productName = "WCDB framework";
-			productReference = 7521DA47291E9ABB009642EF /* WCDB.framework */;
+			productReference = 7521DA47291E9ABB009642EF /* WCDBObjc.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		7521DA54291EA349009642EF /* WCDBSwift */ = {
@@ -8897,7 +8897,7 @@
 			);
 			name = WCDBSwift;
 			productName = "WCDB framework";
-			productReference = 7521DDDD291EA349009642EF /* WCDB.framework */;
+			productReference = 7521DDDD291EA349009642EF /* WCDBSwift.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -11046,7 +11046,6 @@
 			baseConfigurationReference = 234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */;
 			buildSettings = {
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDBCpp.modulemap";
-				PRODUCT_NAME = WCDB;
 			};
 			name = Debug;
 		};
@@ -11055,7 +11054,6 @@
 			baseConfigurationReference = 234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */;
 			buildSettings = {
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDBCpp.modulemap";
-				PRODUCT_NAME = WCDB;
 			};
 			name = Release;
 		};
@@ -11218,7 +11216,6 @@
 			baseConfigurationReference = 234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */;
 			buildSettings = {
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDBObjc.modulemap";
-				PRODUCT_NAME = WCDB;
 			};
 			name = Debug;
 		};
@@ -11227,7 +11224,6 @@
 			baseConfigurationReference = 234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */;
 			buildSettings = {
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDBObjc.modulemap";
-				PRODUCT_NAME = WCDB;
 			};
 			name = Release;
 		};
@@ -11236,7 +11232,6 @@
 			baseConfigurationReference = 234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */;
 			buildSettings = {
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDBSwift.modulemap";
-				PRODUCT_NAME = WCDB;
 			};
 			name = Debug;
 		};
@@ -11245,7 +11240,6 @@
 			baseConfigurationReference = 234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */;
 			buildSettings = {
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDBSwift.modulemap";
-				PRODUCT_NAME = WCDB;
 			};
 			name = Release;
 		};

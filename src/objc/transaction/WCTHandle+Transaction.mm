@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#import <WCDB/Assertion.hpp>
-#import <WCDB/Macro.h>
-#import <WCDB/WCTHandle+Private.h>
-#import <WCDB/WCTHandle+Transaction.h>
+#import "Assertion.hpp"
+#import "Macro.h"
+#import "WCTHandle+Private.h"
+#import "WCTHandle+Transaction.h"
 
 @implementation WCTHandle (Transaction)
 

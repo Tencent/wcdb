@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDatabase+File.h>
-#import <WCDB/WCTDatabase+Private.h>
-#import <WCDB/WCTFoundation.h>
+#import "WCTDatabase+File.h"
+#import "WCTDatabase+Private.h"
+#import "WCTFoundation.h"
 
 @implementation WCTDatabase (File)
 

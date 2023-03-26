@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTChainCall.h>
-#import <WCDB/WCTDatabase.h>
+#import "WCTChainCall.h"
+#import "WCTDatabase.h"
 
 @interface WCTDatabase (ChainCall) <WCTCrossTableChainCallProtocol>
 
