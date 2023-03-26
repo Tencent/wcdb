@@ -22,6 +22,8 @@
  * limitations under the License.
  */
 
+#import "WCTMacroUtility.h"
+#import "WCTTag.h"
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN

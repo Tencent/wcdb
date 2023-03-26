@@ -19,7 +19,11 @@
  */
 
 import XCTest
+#if TEST_WCDB_SWIFT
+import WCDBSwift
+#else
 import WCDB
+#endif
 
 extension Dictionary where Key==String, Value: TestObjectBase {
     static func == (lhs: [Key: Value], rhs: [Key: Value]) -> Bool {

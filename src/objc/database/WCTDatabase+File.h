@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDatabase.h>
-#import <WCDB/WCTOptional.h>
+#import "WCTDatabase.h"
+#import "WCTOptional.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

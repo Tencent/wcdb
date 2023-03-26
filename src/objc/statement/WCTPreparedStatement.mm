@@ -22,12 +22,12 @@
  * limitations under the License.
  */
 
+#import "WCTPreparedStatement.h"
+#import "WCTFoundation.h"
+#import "WCTHandle+Private.h"
+#import "WCTORM.h"
+#import "WCTPreparedStatement+Private.h"
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTFoundation.h>
-#import <WCDB/WCTHandle+Private.h>
-#import <WCDB/WCTORM.h>
-#import <WCDB/WCTPreparedStatement+Private.h>
-#import <WCDB/WCTPreparedStatement.h>
 
 #define WCTPreparedStatementAssert(remedial) WCTRemedialAssert(_handleStatement != nullptr, "handleStatement is null", remedial;)
 

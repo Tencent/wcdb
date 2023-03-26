@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTBaseAccessor.h>
-#import <WCDB/WCTCommon.h>
+#import "WCTBaseAccessor.h"
+#import "WCTCommon.h"
 #import <functional>
 #import <type_traits>
 

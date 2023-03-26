@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTObjCAccessor.h>
-#import <WCDB/WCTRuntimeBaseAccessor.h>
+#import "WCTObjCAccessor.h"
+#import "WCTRuntimeBaseAccessor.h"
 #import <objc/runtime.h>
 
 class WCTRuntimeObjCAccessor final : public WCTRuntimeAccessor<id>,

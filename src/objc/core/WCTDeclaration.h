@@ -26,9 +26,9 @@
 
 #ifdef __cplusplus
 
-#import <WCDB/WCTOptional.h>
-#import <WCDB/WCTTag.h>
-#import <WCDB/WINQ.h>
+#import "WCTOptional.h"
+#import "WCTTag.h"
+#import "WINQ.h"
 
 #endif // __cplusplus
 

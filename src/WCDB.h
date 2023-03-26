@@ -22,5 +22,5 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCDBCpp.h>
-#import <WCDB/WCDBObjc.h>
+#import "WCDBCpp.h"
+#import "WCDBObjc.h"

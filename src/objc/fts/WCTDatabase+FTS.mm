@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-#import <WCDB/Assertion.hpp>
-#import <WCDB/FTSConst.h>
-#import <WCDB/WCTDatabase+FTS.h>
-#import <WCDB/WCTDatabase+Private.h>
+#import "Assertion.hpp"
+#import "FTSConst.h"
+#import "WCTDatabase+FTS.h"
+#import "WCTDatabase+Private.h"
 
 NSString* const WCTTokenizerSimple = [NSString stringWithUTF8String:WCDB::BuiltinTokenizer::Simple];
 NSString* const WCTTokenizerPorter = [NSString stringWithUTF8String:WCDB::BuiltinTokenizer::Porter];

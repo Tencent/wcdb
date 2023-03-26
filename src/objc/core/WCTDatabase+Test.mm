@@ -22,15 +22,15 @@
  * limitations under the License.
  */
 
-#import <WCDB/Core.hpp>
-#import <WCDB/CoreConst.h>
-#import <WCDB/FileHandle.hpp>
-#import <WCDB/Notifier.hpp>
-#import <WCDB/SQLite.h>
-#import <WCDB/WCTConvertible.h>
-#import <WCDB/WCTDatabase+Convenient.h>
-#import <WCDB/WCTDatabase+Private.h>
-#import <WCDB/WCTDatabase+Test.h>
+#import "Core.hpp"
+#import "CoreConst.h"
+#import "FileHandle.hpp"
+#import "Notifier.hpp"
+#import "SQLite.h"
+#import "WCTConvertible.h"
+#import "WCTDatabase+Convenient.h"
+#import "WCTDatabase+Private.h"
+#import "WCTDatabase+Test.h"
 #include <iomanip>
 
 static std::atomic<WCTSimulateIOErrorOptions> &simulateIOErrorOptions()

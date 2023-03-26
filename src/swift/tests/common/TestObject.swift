@@ -19,7 +19,11 @@
  */
 
 import Foundation
+#if TEST_WCDB_SWIFT
+import WCDBSwift
+#else
 import WCDB
+#endif
 
 class TestObjectBase: Named, Hashable, Comparable, CustomDebugStringConvertible {
     func hash(into hasher: inout Hasher) {

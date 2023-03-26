@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
+#import "WCTFTSTokenizerUtil.h"
+#import "WCTCommon.h"
 #import <CoreFoundation/CoreFoundation.h>
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTCommon.h>
-#import <WCDB/WCTFTSTokenizerUtil.h>
 
 WCDB::StringView WCTFTSTokenizerUtil::tokenize(NSString* name, ...)
 {

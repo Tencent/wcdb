@@ -260,21 +260,23 @@ extension Array: ColumnCodable, ColumnCodableBase where Element: Codable {
     }
 }
 
+public typealias FundamentalValue = Value
+
 extension Dictionary: ColumnCodable, ColumnCodableBase where Key: Codable, Value: Codable {
     public static var columnType: ColumnType {
         return .BLOB
     }
-    public init?(with value: WCDB.Value) {
+    public init?(with value: FundamentalValue) {
         guard let decodable = try? JSONDecoder().decode(Dictionary.self, from: value.dataValue) else {
             return nil
         }
         self = decodable
     }
-    public func archivedValue() -> WCDB.Value {
+    public func archivedValue() -> FundamentalValue {
         guard let encoded = try? JSONEncoder().encode(self) else {
-            return WCDB.Value(nil)
+            return FundamentalValue(nil)
         }
-        return WCDB.Value(encoded)
+        return FundamentalValue(encoded)
     }
 }
 

@@ -19,7 +19,11 @@
  */
 
 import XCTest
+#if TEST_WCDB_SWIFT
+import WCDBSwift
+#else
 import WCDB
+#endif
 
 func tick(_ block: () -> Void) -> TimeInterval {
     let before: TimeInterval = ProcessInfo.processInfo.systemUptime

@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/NSDate+WCTColumnCoding.h>
+#import "NSDate+WCTColumnCoding.h"
 
 @implementation NSDate (WCTColumnCoding)
 

@@ -24,13 +24,13 @@
 
 #ifdef WCDB_SWIFT
 
-#import <WCDB/WCTBridgeProperty.h>
+#import "WCTBridgeProperty.h"
 
 #elif __cplusplus
 
-#import <WCDB/WCTBridgeProperty+CPP.h>
-#import <WCDB/WCTCommon.h>
-#import <WCDB/WCTProperty.h>
+#import "WCTBridgeProperty+CPP.h"
+#import "WCTCommon.h"
+#import "WCTProperty.h"
 
 #endif
 

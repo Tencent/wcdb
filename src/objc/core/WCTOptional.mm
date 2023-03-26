@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTOptional.h>
+#import "WCTOptional.h"
 
 WCTOptionalBool::WCTOptionalBool(WCDB::Optional<bool>&& optional)
 : Super(optional.succeed() ? WCDB::Optional<BOOL>((BOOL) optional.value()) :

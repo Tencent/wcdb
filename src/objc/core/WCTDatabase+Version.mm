@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#import <WCDB/Macro.h>
-#import <WCDB/Version.h>
-#import <WCDB/WCTDatabase+Version.h>
+#import "Macro.h"
+#import "Version.h"
+#import "WCTDatabase+Version.h"
 
 @implementation WCTDatabase (Version)
 

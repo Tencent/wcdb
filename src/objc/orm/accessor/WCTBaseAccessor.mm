@@ -22,6 +22,6 @@
  * limitations under the License.
  */
 
-#include <WCDB/WCTBaseAccessor.h>
+#include "WCTBaseAccessor.h"
 
 WCTBaseAccessor::~WCTBaseAccessor() = default;

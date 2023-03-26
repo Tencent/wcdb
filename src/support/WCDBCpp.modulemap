@@ -1,4 +1,4 @@
-framework module WCDB {
+framework module WCDBCpp {
     requires objc
 
 	module All {

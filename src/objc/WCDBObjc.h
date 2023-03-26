@@ -35,8 +35,8 @@
 #error Symbol `offset` should not be defined as a macro since it's a common used word.
 #endif
 
-#import <WCDB/Interface.h>
-#import <WCDB/WCTBuiltin.h>
-#import <WCDB/WINQ.h>
+#import "Interface.h"
+#import "WCTBuiltin.h"
+#import "WINQ.h"
 
-#import <WCDB/WCTDatabase+Test.h>
+#import "WCTDatabase+Test.h"

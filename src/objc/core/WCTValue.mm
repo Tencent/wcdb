@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#import <WCDB/Assertion.hpp>
-#import <WCDB/Core.h>
-#import <WCDB/WCTValue.h>
+#import "WCTValue.h"
+#import "Assertion.hpp"
+#import "Core.h"
 
 @implementation NSNumber (WCTValue)
 

@@ -19,7 +19,11 @@
  */
 
 import XCTest
+#if TEST_WCDB_SWIFT
+import WCDBSwift
+#else
 import WCDB
+#endif
 
 class TracerTests: BaseTestCase {
 
@@ -71,7 +75,7 @@ class TracerTests: BaseTestCase {
 
         // Then
         var `catch` = false
-        Database.globalTrace { (error: WCDB.WCDBError) in
+        Database.globalTrace { (error: WCDBError) in
             let tag = error.tag
             XCTAssertNotNil(tag)
             XCTAssertEqual(tag!, expectedTag)
@@ -132,7 +136,7 @@ class TracerTests: BaseTestCase {
 
         // Then
         var `catch` = false
-        database.trace { (error: WCDB.WCDBError) in
+        database.trace { (error: WCDBError) in
             let tag = error.tag
             XCTAssertNotNil(tag)
             XCTAssertEqual(tag!, expectedTag)

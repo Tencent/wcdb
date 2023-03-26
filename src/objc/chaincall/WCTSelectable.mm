@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTChainCall+Private.h>
-#import <WCDB/WCTHandle.h>
-#import <WCDB/WCTSelectable+Private.h>
+#import "WCTChainCall+Private.h"
+#import "WCTHandle.h"
+#import "WCTSelectable+Private.h"
 
 @implementation WCTSelectable
 

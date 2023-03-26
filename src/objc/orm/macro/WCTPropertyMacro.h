@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/Macro.h>
+#include "Macro.h"
 
 // Property
 #define WCDB_ORM_TYPER __wcdbtyper

@@ -176,13 +176,13 @@
 
 - (void)testOpenFail
 {
-    auto database = WCDB::Database(self.directory);
+    auto database = WCDB::Database(self.directory.UTF8String);
     TestCaseAssertFalse(database.canOpen());
     TestCaseAssertFalse(database.selectValue(WCDB::Column::all().count(), WCDB::Master::tableName).succeed());
     WCDB::Handle handle = database.getHandle();
     TestCaseAssertFalse(handle.selectValue(WCDB::Column::all().count(), WCDB::Master::tableName).succeed());
     TestCaseAssertFalse(database.createTable<CPPTestCaseObject>(self.tableName.UTF8String));
-    WCDB::Table<CPPTestCaseObject> table = database.getTable<CPPTestCaseObject>(self.tableName);
+    WCDB::Table<CPPTestCaseObject> table = database.getTable<CPPTestCaseObject>(self.tableName.UTF8String);
     TestCaseAssertFalse(table.selectValue(WCDB::Column::all().count()).succeed());
 }
 

@@ -19,7 +19,11 @@
  */
 
 import XCTest
+#if TEST_WCDB_SWIFT
+import WCDBSwift
+#else
 import WCDB
+#endif
 
 class ExpresssionTests: BaseTestCase {
 
@@ -205,7 +209,7 @@ class ExpresssionTests: BaseTestCase {
 
         WINQExpressionAssertEqual(left.highlight(), "highlight(left)")
 
-        WINQExpressionAssertEqual(left.substringMatchInfo(), "\(WCDB.BuiltinAuxiliaryFunction.SubstringMatchInfo)(left)")
+        WINQExpressionAssertEqual(left.substringMatchInfo(), "\(BuiltinAuxiliaryFunction.SubstringMatchInfo)(left)")
 
         WINQExpressionAssertEqual(left.collate("BINARY"), "left COLLATE BINARY")
     }

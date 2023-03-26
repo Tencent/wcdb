@@ -22,14 +22,14 @@
  * limitations under the License.
  */
 
-#import <WCDB/Assertion.hpp>
-#import <WCDB/Console.hpp>
-#import <WCDB/Core.hpp>
-#import <WCDB/DBOperationNotifier.hpp>
-#import <WCDB/WCTDatabase+Monitor.h>
-#import <WCDB/WCTDatabase+Private.h>
-#import <WCDB/WCTError+Private.h>
-#import <WCDB/WCTFoundation.h>
+#import "Assertion.hpp"
+#import "Console.hpp"
+#import "Core.hpp"
+#import "DBOperationNotifier.hpp"
+#import "WCTDatabase+Monitor.h"
+#import "WCTDatabase+Private.h"
+#import "WCTError+Private.h"
+#import "WCTFoundation.h"
 
 namespace WCDB {
 

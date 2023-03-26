@@ -22,14 +22,14 @@
  * limitations under the License.
  */
 
-#import <WCDB/Global.hpp>
-#import <WCDB/ThreadedErrors.hpp>
-#import <WCDB/WCTDatabase+FTS.h>
-#import <WCDB/WCTDatabase+Memory.h>
-#import <WCDB/WCTDatabase+Private.h>
-#import <WCDB/WCTError+Private.h>
-#import <WCDB/WCTFoundation.h>
-#import <WCDB/WCTHandle+Private.h>
+#import "Global.hpp"
+#import "ThreadedErrors.hpp"
+#import "WCTDatabase+FTS.h"
+#import "WCTDatabase+Memory.h"
+#import "WCTDatabase+Private.h"
+#import "WCTError+Private.h"
+#import "WCTFoundation.h"
+#import "WCTHandle+Private.h"
 
 @implementation WCTDatabase
 

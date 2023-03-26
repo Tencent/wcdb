@@ -23,8 +23,20 @@
  */
 
 #import "TestCaseAssertion.h"
+#if TEST_WCDB_OBJC
+#import <WCDBOBjc/CPPORM.h>
+#elif TEST_WCDB_CPP
+#import <WCDBCpp/CPPORM.h>
+#else
 #import <WCDB/CPPORM.h>
+#endif
+#if TEST_WCDB_OBJC
+#import <WCDBOBjc/Value.hpp>
+#elif TEST_WCDB_CPP
+#import <WCDBCpp/Value.hpp>
+#else
 #import <WCDB/Value.hpp>
+#endif
 
 @class CPPTableTestCase;
 

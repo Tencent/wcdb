@@ -22,15 +22,15 @@
  * limitations under the License.
  */
 
-#import <WCDB/Macro.h>
+#import "Macro.h"
 
-#import <WCDB/WCTMacroUtility.h>
+#import "WCTMacroUtility.h"
 
-#import <WCDB/WCTColumnConstraintMacro.h>
-#import <WCDB/WCTIndexMacro.h>
-#import <WCDB/WCTPropertyMacro.h>
-#import <WCDB/WCTTableConstraintMacro.h>
-#import <WCDB/WCTVirtualTableMacro.h>
+#import "WCTColumnConstraintMacro.h"
+#import "WCTIndexMacro.h"
+#import "WCTPropertyMacro.h"
+#import "WCTTableConstraintMacro.h"
+#import "WCTVirtualTableMacro.h"
 
 #define WCDB_IMPLEMENTATION(className)                                               \
     +(const WCTBinding &) objectRelationalMapping                                    \

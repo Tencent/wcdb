@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
+#import "WCTConvertible.h"
+#import "WCTDeclaration.h"
+#import "WCTValue.h"
+#import "WINQ.h"
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTConvertible.h>
-#import <WCDB/WCTDeclaration.h>
-#import <WCDB/WCTValue.h>
-#import <WCDB/WINQ.h>

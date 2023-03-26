@@ -1,4 +1,7 @@
-framework module WCDB {
+framework module WCDBSwift {
+    module All {
+        export *
+    }
 }
 
 framework module WCDB_Private {

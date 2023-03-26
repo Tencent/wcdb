@@ -22,15 +22,15 @@
  * limitations under the License.
  */
 
-#import <WCDB/Assertion.hpp>
-#import <WCDB/CaseInsensiveList.hpp>
-#import <WCDB/WCTChainCall+Private.h>
-#import <WCDB/WCTHandle+Private.h>
-#import <WCDB/WCTHandle+Transaction.h>
-#import <WCDB/WCTHandle.h>
-#import <WCDB/WCTInsert.h>
-#import <WCDB/WCTORM.h>
-#import <WCDB/WCTTryDisposeGuard.h>
+#import "WCTInsert.h"
+#import "Assertion.hpp"
+#import "CaseInsensiveList.hpp"
+#import "WCTChainCall+Private.h"
+#import "WCTHandle+Private.h"
+#import "WCTHandle+Transaction.h"
+#import "WCTHandle.h"
+#import "WCTORM.h"
+#import "WCTTryDisposeGuard.h"
 
 @implementation WCTInsert {
     WCTProperties _properties;

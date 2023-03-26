@@ -22,45 +22,45 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDatabase+ChainCall.h>
-#import <WCDB/WCTHandle+ChainCall.h>
-#import <WCDB/WCTTable+ChainCall.h>
+#import "WCTDatabase+ChainCall.h"
+#import "WCTHandle+ChainCall.h"
+#import "WCTTable+ChainCall.h"
 
-#import <WCDB/WCTDelete.h>
-#import <WCDB/WCTInsert.h>
-#import <WCDB/WCTMultiSelect.h>
-#import <WCDB/WCTSelect.h>
-#import <WCDB/WCTUpdate.h>
+#import "WCTDelete.h"
+#import "WCTInsert.h"
+#import "WCTMultiSelect.h"
+#import "WCTSelect.h"
+#import "WCTUpdate.h"
 
-#import <WCDB/WCTDatabase+Config.h>
-#import <WCDB/WCTDatabase+FTS.h>
-#import <WCDB/WCTDatabase+File.h>
-#import <WCDB/WCTDatabase+Memory.h>
-#import <WCDB/WCTDatabase+Migration.h>
-#import <WCDB/WCTDatabase+Repair.h>
-#import <WCDB/WCTDatabase+Version.h>
+#import "WCTDatabase+Config.h"
+#import "WCTDatabase+FTS.h"
+#import "WCTDatabase+File.h"
+#import "WCTDatabase+Memory.h"
+#import "WCTDatabase+Migration.h"
+#import "WCTDatabase+Repair.h"
+#import "WCTDatabase+Version.h"
 
-#import <WCDB/WCTDatabase+Handle.h>
-#import <WCDB/WCTDatabase.h>
-#import <WCDB/WCTHandle.h>
-#import <WCDB/WCTPreparedStatement.h>
+#import "WCTDatabase+Handle.h"
+#import "WCTDatabase.h"
+#import "WCTHandle.h"
+#import "WCTPreparedStatement.h"
 
-#import <WCDB/WCTORM.h>
+#import "WCTORM.h"
 
-#import <WCDB/WCTDatabase+Transaction.h>
-#import <WCDB/WCTHandle+Transaction.h>
+#import "WCTDatabase+Transaction.h"
+#import "WCTHandle+Transaction.h"
 
-#import <WCDB/WCTDatabase+Convenient.h>
-#import <WCDB/WCTHandle+Convenient.h>
-#import <WCDB/WCTTable+Convenient.h>
+#import "WCTDatabase+Convenient.h"
+#import "WCTHandle+Convenient.h"
+#import "WCTTable+Convenient.h"
 
-#import <WCDB/WCTDatabase+Table.h>
-#import <WCDB/WCTHandle+Table.h>
-#import <WCDB/WCTTable+Table.h>
-#import <WCDB/WCTTable.h>
-#import <WCDB/WCTTableProtocol.h>
+#import "WCTDatabase+Table.h"
+#import "WCTHandle+Table.h"
+#import "WCTTable+Table.h"
+#import "WCTTable.h"
+#import "WCTTableProtocol.h"
 
-#import <WCDB/WCTBridgeProperty+CPP.h>
-#import <WCDB/WCTDatabase+Monitor.h>
-#import <WCDB/WCTError.h>
-#import <WCDB/WCTTag.h>
+#import "WCTBridgeProperty+CPP.h"
+#import "WCTDatabase+Monitor.h"
+#import "WCTError.h"
+#import "WCTTag.h"

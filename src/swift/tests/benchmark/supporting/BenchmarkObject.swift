@@ -19,7 +19,11 @@
  */
 
 import Foundation
+#if TEST_WCDB_SWIFT
+import WCDBSwift
+#else
 import WCDB
+#endif
 
 final class BenchmarkObject: TableCodable, Named {
     var key: Int = 0

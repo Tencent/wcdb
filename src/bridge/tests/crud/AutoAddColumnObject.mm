@@ -24,7 +24,13 @@
 
 #import "AutoAddColumnObject.h"
 #import <Foundation/Foundation.h>
+#if TEST_WCDB_OBJC
+#import <WCDBOBjc/WCDB.h>
+#elif TEST_WCDB_CPP
+#import <WCDBCpp/WCDB.h>
+#else
 #import <WCDB/WCDB.h>
+#endif
 
 @implementation AutoAddColumnObject
 
