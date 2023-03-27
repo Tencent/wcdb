@@ -2928,6 +2928,7 @@
 		7521DDF62920A12E009642EF /* InsertInterface+WCTTableCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7521DDF52920A12E009642EF /* InsertInterface+WCTTableCoding.swift */; };
 		7521DDF82920A623009642EF /* Database+WCTTableCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7521DDF72920A623009642EF /* Database+WCTTableCoding.swift */; };
 		7521DDFA2920A680009642EF /* UpdateInterface+WCTTableCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7521DDF92920A680009642EF /* UpdateInterface+WCTTableCoding.swift */; };
+		7524940A29D1F10000493FF9 /* WCTBridgeProperty.h in Headers */ = {isa = PBXBuildFile; fileRef = 036E50B628115AB8007365CD /* WCTBridgeProperty.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		752594932851FCEF0068A602 /* RaiseFunctionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752594922851FCEF0068A602 /* RaiseFunctionTests.swift */; };
 		752594E228521AA00068A602 /* FilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752594E128521AA00068A602 /* FilterTests.swift */; };
 		752594E5285226C00068A602 /* FrameSpecBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 752594E3285226C00068A602 /* FrameSpecBridge.cpp */; };
@@ -8369,6 +8370,7 @@
 				7521D975291E9ABB009642EF /* WCDBObjc.h in Headers */,
 				7521D976291E9ABB009642EF /* Enum.hpp in Headers */,
 				7521D977291E9ABB009642EF /* SyntaxDetachSTMT.hpp in Headers */,
+				7524940A29D1F10000493FF9 /* WCTBridgeProperty.h in Headers */,
 				7521D978291E9ABB009642EF /* ColumnType.hpp in Headers */,
 				7521D979291E9ABB009642EF /* WCTOptional.h in Headers */,
 				7521D97A291E9ABB009642EF /* WCTMultiSelect.h in Headers */,
