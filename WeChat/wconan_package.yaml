@@ -44,7 +44,7 @@ ios:
     system: custom
     # Build static lib. Add one more line with "ObjC" replaced by "Swift" to build swift version
     script: |-
-      ../tools/version/build.sh -p iOS -l ObjC -c Release -d wconan_build/ios/release/static --wechat --disable-bitcode --static-framework
+      ../tools/version/build.sh -p iOS -l All -c Release -d wconan_build/ios/release/static --wechat --disable-bitcode --static-framework
 
   dependencies:
 
@@ -73,7 +73,9 @@ macos:
     pre_build: 'rm -r ${yaml_dir}/wconan_build/macos/release'
     post_build: |-
       mkdir -p ${yaml_dir}/wconan_build/macos/release/static/output && \
-      mv ${yaml_dir}/wconan_build/macos/release/static/WCDB.framework ${yaml_dir}/wconan_build/macos/release/static/output/
+      mv ${yaml_dir}/wconan_build/macos/release/static/WCDBCpp.framework ${yaml_dir}/wconan_build/macos/release/static/output/
+      mv ${yaml_dir}/wconan_build/macos/release/static/output/WCDBCpp.framework ${yaml_dir}/wconan_build/macos/release/static/output/WCDB.framework
+      mv ${yaml_dir}/wconan_build/macos/release/static/output/WCDB.framework/WCDBCpp ${yaml_dir}/wconan_build/macos/release/static/output/WCDB.framework/WCDB
 
   outputs:
     release_static:
@@ -86,7 +88,7 @@ watchos:
     system: custom
     # build static lib
     script: |-
-      ../tools/version/build.sh -p watchOS -l ObjC -c Release -d wconan_build/watchos/release/static --wechat --static-framework
+      ../tools/version/build.sh -p watchOS -l All -c Release -d wconan_build/watchos/release/static --wechat --static-framework
 
   dependencies:
 
@@ -116,9 +118,13 @@ macos-all:
     pre_build: 'rm -r ${yaml_dir}/wconan_build/macos-all/release'
     post_build: |-
       mkdir -p ${yaml_dir}/wconan_build/macos-all/release/shared/output && \
-      mv ${yaml_dir}/wconan_build/macos-all/release/shared/WCDB.framework ${yaml_dir}/wconan_build/macos-all/release/shared/output/ && \
+      mv ${yaml_dir}/wconan_build/macos-all/release/shared/WCDBCpp.framework ${yaml_dir}/wconan_build/macos-all/release/shared/output/ && \
+      mv ${yaml_dir}/wconan_build/macos-all/release/shared/output/WCDBCpp.framework ${yaml_dir}/wconan_build/macos-all/release/shared/output/WCDB.framework && \
+      mv ${yaml_dir}/wconan_build/macos-all/release/shared/output/WCDB.framework/WCDBCpp ${yaml_dir}/wconan_build/macos-all/release/shared/output/WCDB.framework/WCDB && \
       mkdir -p ${yaml_dir}/wconan_build/macos-all/release/static/output && \
-      mv ${yaml_dir}/wconan_build/macos-all/release/static/WCDB.framework ${yaml_dir}/wconan_build/macos-all/release/static/output/
+      mv ${yaml_dir}/wconan_build/macos-all/release/static/WCDB.framework ${yaml_dir}/wconan_build/macos-all/release/static/output/ && \
+      mv ${yaml_dir}/wconan_build/macos-all/release/static/output/WCDBCpp.framework ${yaml_dir}/wconan_build/macos-all/release/static/output/WCDB.framework && \
+      mv ${yaml_dir}/wconan_build/macos-all/release/static/output/WCDB.framework/WCDBCpp ${yaml_dir}/wconan_build/macos-all/release/static/output/WCDB.framework/WCDB
 
   outputs:
     release_shared:

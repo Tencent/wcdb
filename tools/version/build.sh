@@ -4,7 +4,7 @@ showUsage() {
     echo """\
   USAGE: bash $0 
        -p/--platform iOS/macOS/watchOS
-       -l/--language ObjC/Swift/Cpp
+       -l/--language All/ObjC/Swift/Cpp
        [-c/--configuration Debug/Release]: Default to Release.
        [-d/--destination destination]: Default to current directory.
        [--test]: Enable test.
@@ -94,12 +94,6 @@ project="$root"/src/WCDB.xcodeproj
 derivedData="$destination"/derivedData
 products="$derivedData"/Build/Products
 
-if $static_framework; then
-    if [ "$language" != "ObjC" -a "$language" != "Cpp" ] || [ "$platform" != "iOS" -a "$platform" != "watchOS" -a "$platform" != "macOS" ]; then
-        echo 'Static library is only supported with iOS/macOS/watchOS + ObjC/Cpp.'
-        exit 1
-    fi
-fi
 if $universal; then
     if [ "$platform" != "macOS" ]; then
         echo 'Universal library is only supported with watchOS.'
@@ -123,20 +117,24 @@ settings=`bash $ScriptDir/settings.sh $settingsPrameter`
 declare target
 declare scheme
 case "$language" in
-    ObjC)
+    All)
         target=WCDB
         scheme=WCDB
+    ;;
+    ObjC)
+        target=WCDBObjc
+        scheme=WCDBObjc
     ;;
     Swift)
         target=WCDBSwift
         scheme=WCDBSwift
     ;;
     Cpp)
-        target=WCDB
+        target=WCDBCpp
         scheme=WCDBCpp
     ;;
     *)
-        echo 'Language should be ObjC/Swift/Cpp.'
+        echo 'Language should be All/ObjC/Swift/Cpp.'
         showUsage
         exit 1
     ;;
