@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7521DA54291EA349009642EF"
-               BuildableName = "WCDB.framework"
+               BuildableName = "WCDBSwift.framework"
                BlueprintName = "WCDBSwift"
                ReferencedContainer = "container:WCDB.xcodeproj">
             </BuildableReference>
@@ -51,7 +51,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7521DA54291EA349009642EF"
-            BuildableName = "WCDB.framework"
+            BuildableName = "WCDBSwift.framework"
             BlueprintName = "WCDBSwift"
             ReferencedContainer = "container:WCDB.xcodeproj">
          </BuildableReference>
