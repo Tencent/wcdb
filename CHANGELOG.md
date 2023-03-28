@@ -1,3 +1,12 @@
+## v2.0.0
+
+* Add WCDB C++
+* New implementation of WCDB Swift
+* New implementation of Winq
+* New implementation of database repair
+* Support data migration
+* Support FTS5
+
 ## v1.1.0
 
 #### iOS/macOS
