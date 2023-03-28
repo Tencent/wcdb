@@ -11187,10 +11187,6 @@
 				DEAD_CODE_STRIPPING = YES;
 				SWIFT_ENFORCE_EXCLUSIVE_ACCESS = "debug-only";
 				SWIFT_VERSION = 5.0;
-				VALID_ARCHS = "arm64e arm64 x86_64";
-				"VALID_ARCHS[sdk=watchos*]" = "arm64_32 armv7k";
-				"VALID_ARCHS[sdk=watchsimulator*]" = i386;
-				WATCHOS_DEPLOYMENT_TARGET = 3.0;
 			};
 			name = Debug;
 		};
@@ -11206,10 +11202,6 @@
 				DEAD_CODE_STRIPPING = YES;
 				SWIFT_ENFORCE_EXCLUSIVE_ACCESS = "debug-only";
 				SWIFT_VERSION = 5.0;
-				VALID_ARCHS = "arm64e arm64 x86_64";
-				"VALID_ARCHS[sdk=watchos*]" = "arm64_32 armv7k";
-				"VALID_ARCHS[sdk=watchsimulator*]" = i386;
-				WATCHOS_DEPLOYMENT_TARGET = 3.0;
 			};
 			name = Release;
 		};
