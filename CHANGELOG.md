@@ -1,3 +1,19 @@
+## v2.0.0
+
+* Add WCDB C++
+* New implementation of WCDB Swift
+* New implementation of Winq
+* New implementation of database repair
+* Support data migration
+* Support FTS5
+
+## v1.1.0
+
+#### iOS/macOS
+* Support Swift 5 for Xcode 14.
+* Fix compile error for SQLCipher 4.1.0.
+* Fix some bug.
+
 ## v1.0.8.2
 
 #### iOS/macOS
