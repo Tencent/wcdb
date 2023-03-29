@@ -74,7 +74,7 @@ WCDB summarizes common problems in practice to provide a more complete developme
 
 WCDB has interfaces in three languages: C++, Swift, and Objc. Interfaces in different languages share the same underlying logic. The code structure of WCDB is shown in the figure below:
 
-<div align=center><img style="display:inline-block" src="https://raw.githubusercontent.com/wiki/Tencent/wcdb/assets/common/CodeStructure.png" width = 600/></div>
+<div align=center><img style="display:inline-block" src="https://raw.githubusercontent.com/wiki/Tencent/wcdb/assets/common/CodeStructure-English.png" width = 600/></div>
 
 Under such architecture, WCDB in different languages can have the same interface structure and interface capabilities. In one project, you can write database code in different languages with one WCDB. Database logic in different languages will not conflict. Some global interfaces such as error monitoring can work on database logic in different languages at the same time. 
 
