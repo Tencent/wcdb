@@ -41,7 +41,7 @@ SerializeIteration::~SerializeIteration() = default;
 void SerializeIteration::seek(off_t position)
 {
     if (position < 0) {
-        m_cursor = std::min((off_t) capacity(), (off_t) capacity() + position + 1);
+        m_cursor = std::max((off_t) 0, (off_t) capacity() + position + 1);
     } else {
         m_cursor = std::min((off_t) capacity(), position);
     }
