@@ -63,21 +63,30 @@ enum WCDBExpressionBinaryOperatorType {
     WCDBExpressionBinaryOperatorType_RegExp,
     WCDBExpressionBinaryOperatorType_Match,
 };
-CPPExpression
-WCDBExpressionBinaryOperate(CPPExpression left,
-                            CPPExpression right,
-                            enum WCDBExpressionBinaryOperatorType operatorType);
+CPPExpression WCDBExpressionBinaryOperate(CPPExpression left,
+                                          CPPExpression right,
+                                          enum WCDBExpressionBinaryOperatorType operatorType,
+                                          bool isNot);
 
-CPPExpression
-WCDBExpressionBinaryNonOperableOperate(CPPExpression left,
-                                       CPPExpression right,
-                                       enum WCDBExpressionBinaryOperatorType operatorType,
-                                       bool isNot);
+CPPExpression WCDBExpressionBinaryOperateBool(CPPExpression left,
+                                              bool right,
+                                              enum WCDBExpressionBinaryOperatorType operatorType,
+                                              bool isNot);
 
-CPPExpression WCDBExpressionBetweenOperate(CPPExpression operand,
-                                           CPPExpression left,
-                                           CPPExpression right,
-                                           bool isNot);
+CPPExpression WCDBExpressionBinaryOperateLong(CPPExpression left,
+                                              long long right,
+                                              enum WCDBExpressionBinaryOperatorType operatorType,
+                                              bool isNot);
+
+CPPExpression WCDBExpressionBinaryOperateDouble(CPPExpression left,
+                                                double right,
+                                                enum WCDBExpressionBinaryOperatorType operatorType,
+                                                bool isNot);
+
+CPPExpression WCDBExpressionBinaryOperateString(CPPExpression left,
+                                                const char* _Nullable right,
+                                                enum WCDBExpressionBinaryOperatorType operatorType,
+                                                bool isNot);
 
 CPPExpression WCDBExpressionBetweenOperate(CPPExpression operand,
                                            CPPExpression left,
@@ -93,6 +102,27 @@ CPPExpression WCDBExpressionInExpressionOperate(CPPExpression operand,
                                                 const CPPExpression* _Nullable expressions,
                                                 int num,
                                                 bool isNot);
+
+CPPExpression WCDBExpressionInIntOperate(CPPExpression operand,
+                                         const int* _Nullable expressions,
+                                         int num,
+                                         bool isNot);
+
+CPPExpression WCDBExpressionInLongOperate(CPPExpression operand,
+                                          const int* _Nullable expressions,
+                                          int num,
+                                          bool isNot);
+
+CPPExpression WCDBExpressionInDoubleOperate(CPPExpression operand,
+                                            const double* _Nullable expressions,
+                                            int num,
+                                            bool isNot);
+
+CPPExpression WCDBExpressionInStringOperate(CPPExpression operand,
+                                            const char* _Nullable* _Nullable expressions,
+                                            int num,
+                                            bool isNot);
+
 CPPExpression
 WCDBExpressionInFunctionOperate(CPPExpression operand, const char* _Nullable func, bool isNot);
 

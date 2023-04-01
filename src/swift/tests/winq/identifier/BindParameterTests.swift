@@ -33,13 +33,13 @@ class BindParameterTests: BaseTestCase {
 
     func testBindParameter() {
         WINQAssertEqual(BindParameter(1), "?1")
-        
+
         WINQAssertEqual(BindParameter("testName"), ":testName")
-        
+
         WINQAssertEqual(BindParameter.at(named: "testName"), "@testName")
-        
+
         WINQAssertEqual(BindParameter.dollar(named: "testName"), "$testName")
-        
+
         WINQAssertEqual(BindParameter.colon(named: "testName"), ":testName")
     }
 }

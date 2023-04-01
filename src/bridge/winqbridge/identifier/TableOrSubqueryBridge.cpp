@@ -60,8 +60,7 @@ CPPTableOrSubquery WCDBTableOrSubqueryCreateWithSelection(CPPStatementSelect sel
 CPPTableOrSubquery
 WCDBTableOrSubqueryCreateWithTableOrSubqueries(const CPPTableOrSubquery* queries, int queryNum)
 {
-    WCDBGetCPPSyntaxListOrReturnValue(
-    WCDB::TableOrSubquery, cppQueries, queries, queryNum, CPPTableOrSubquery());
+    WCDBGetCPPSyntaxList(WCDB::TableOrSubquery, cppQueries, queries, queryNum);
     return WCDBCreateCPPBridgedObject(CPPTableOrSubquery,
                                       new WCDB::TableOrSubquery(cppQueries));
 }
