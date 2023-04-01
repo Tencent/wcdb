@@ -27,18 +27,15 @@
 #include "SyntaxList.hpp"
 #include "WinqBridge.h"
 
-#define __WCDBGetCPPSyntaxList(CPPObjType, cppList, rawList, rawCount, action) \
+#define WCDBGetCPPSyntaxList(CPPObjType, cppList, rawList, rawCount)           \
     WCDB::SyntaxList<CPPObjType> cppList                                       \
-    = WCDB::WinqBridge::createSyntaxList<CPPObjType>(rawList, rawCount);       \
-    if (cppList.size() <= 0) {                                                 \
-        action;                                                                \
+    = WCDB::WinqBridge::createSyntaxList<CPPObjType>(rawList, rawCount);
+
+#define WCDBGetCPPSyntaxListOrReturn(CPPObjType, cppList, rawList, rawCount)              \
+    WCDBGetCPPSyntaxList(CPPObjType, cppList, rawList, rawCount) if (cppList.size() <= 0) \
+    {                                                                                     \
+        return;                                                                           \
     }
-
-#define WCDBGetCPPSyntaxListOrReturn(CPPObjType, cppList, rawList, rawCount)   \
-    __WCDBGetCPPSyntaxList(CPPObjType, cppList, rawList, rawCount, return )
-
-#define WCDBGetCPPSyntaxListOrReturnValue(CPPObjType, cppList, rawList, rawCount, result) \
-    __WCDBGetCPPSyntaxList(CPPObjType, cppList, rawList, rawCount, return result)
 
 namespace WCDB {
 

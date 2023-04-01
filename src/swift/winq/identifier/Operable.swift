@@ -596,12 +596,12 @@ extension ExpressionConvertible {
         let rightExp = right.asExpression()
         if let isNot = isNot {
             let cppExpression = ObjectBridge.extendLifetime(leftExp, rightExp) {
-                WCDBExpressionBinaryNonOperableOperate(leftExp.cppObj, rightExp.cppObj, `operator`.cValue, isNot)
+                WCDBExpressionBinaryOperate(leftExp.cppObj, rightExp.cppObj, `operator`.cValue, isNot)
             }
             return Expression(with: cppExpression)
         } else {
             let cppExpression = ObjectBridge.extendLifetime(leftExp, rightExp) {
-                WCDBExpressionBinaryOperate(leftExp.cppObj, rightExp.cppObj, `operator`.cValue)
+                WCDBExpressionBinaryOperate(leftExp.cppObj, rightExp.cppObj, `operator`.cValue, false)
             }
             return Expression(with: cppExpression)
         }

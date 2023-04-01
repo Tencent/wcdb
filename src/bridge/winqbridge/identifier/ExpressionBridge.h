@@ -28,6 +28,10 @@
 
 WCDB_EXTERN_C_BEGIN
 
+CPPExpression WCDBExpressionCreateWithBool(bool value);
+CPPExpression WCDBExpressionCreateWithLong(long long value);
+CPPExpression WCDBExpressionCreateWithDouble(double value);
+CPPExpression WCDBExpressionCreateWithString(const char* _Nullable value);
 CPPExpression WCDBExpressionCreateWithLiteralValue(CPPLiteralValue value);
 CPPExpression WCDBExpressionCreateWithBindParameter(CPPBindParameter value);
 CPPExpression WCDBExpressionCreateWithColumn(CPPColumn column);
@@ -38,6 +42,7 @@ CPPExpression WCDBExpressionCreateWithExistStatement(CPPStatementSelect select);
 CPPExpression WCDBExpressionCreateWithNotExistStatement(CPPStatementSelect select);
 
 void WCDBExpressionSetWithSchema(CPPExpression expression, CPPSchema schema);
+void WCDBExpressionSetArgument(CPPExpression expression, CPPExpression argument);
 void WCDBExpressionSetArguments(CPPExpression expression,
                                 const CPPExpression* _Nullable arguments,
                                 int num);
