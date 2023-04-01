@@ -35,34 +35,58 @@
 #include "WindowDef.hpp"
 #include "WinqBridge.hpp"
 
+CPPExpression WCDBExpressionCreateWithBool(bool value)
+{
+    return WCDBCreateCPPBridgedObject(
+    CPPExpression, new WCDB::Expression(WCDB::LiteralValue(value)));
+}
+
+CPPExpression WCDBExpressionCreateWithLong(long long value)
+{
+    return WCDBCreateCPPBridgedObject(
+    CPPExpression, new WCDB::Expression(WCDB::LiteralValue((int64_t) value)));
+}
+
+CPPExpression WCDBExpressionCreateWithDouble(double value)
+{
+    return WCDBCreateCPPBridgedObject(
+    CPPExpression, new WCDB::Expression(WCDB::LiteralValue(value)));
+}
+
+CPPExpression WCDBExpressionCreateWithString(const char* _Nullable value)
+{
+    return WCDBCreateCPPBridgedObject(
+    CPPExpression, new WCDB::Expression(WCDB::LiteralValue(value)));
+}
+
 CPPExpression WCDBExpressionCreateWithLiteralValue(CPPLiteralValue value)
 {
-    WCDBGetObjectOrReturnValue(value, WCDB::LiteralValue, cppValue, CPPExpression()) return WCDBCreateCPPBridgedObject(
-    CPPExpression, new WCDB::Expression(*cppValue));
+    WCDBGetObjectOrReturnValue(value, WCDB::LiteralValue, cppValue, CPPExpression());
+    return WCDBCreateCPPBridgedObject(CPPExpression, new WCDB::Expression(*cppValue));
 }
 
 CPPExpression WCDBExpressionCreateWithBindParameter(CPPBindParameter value)
 {
-    WCDBGetObjectOrReturnValue(value, WCDB::BindParameter, cppValue, CPPExpression()) return WCDBCreateCPPBridgedObject(
-    CPPExpression, new WCDB::Expression(*cppValue));
+    WCDBGetObjectOrReturnValue(value, WCDB::BindParameter, cppValue, CPPExpression());
+    return WCDBCreateCPPBridgedObject(CPPExpression, new WCDB::Expression(*cppValue));
 }
 
 CPPExpression WCDBExpressionCreateWithColumn(CPPColumn column)
 {
-    WCDBGetObjectOrReturnValue(column, WCDB::Column, cppColumn, CPPExpression()) return WCDBCreateCPPBridgedObject(
-    CPPExpression, new WCDB::Expression(*cppColumn));
+    WCDBGetObjectOrReturnValue(column, WCDB::Column, cppColumn, CPPExpression());
+    return WCDBCreateCPPBridgedObject(CPPExpression, new WCDB::Expression(*cppColumn));
 }
 
 CPPExpression WCDBExpressionCreateWithSelection(CPPStatementSelect select)
 {
-    WCDBGetObjectOrReturnValue(select, WCDB::StatementSelect, cppSelect, CPPExpression()) return WCDBCreateCPPBridgedObject(
-    CPPExpression, new WCDB::Expression(*cppSelect));
+    WCDBGetObjectOrReturnValue(select, WCDB::StatementSelect, cppSelect, CPPExpression());
+    return WCDBCreateCPPBridgedObject(CPPExpression, new WCDB::Expression(*cppSelect));
 }
 
 CPPExpression WCDBExpressionCreateWithRaiseFunction(CPPRaiseFunction function)
 {
-    WCDBGetObjectOrReturnValue(function, WCDB::RaiseFunction, cppFunction, CPPExpression()) return WCDBCreateCPPBridgedObject(
-    CPPExpression, new WCDB::Expression(*cppFunction));
+    WCDBGetObjectOrReturnValue(function, WCDB::RaiseFunction, cppFunction, CPPExpression());
+    return WCDBCreateCPPBridgedObject(CPPExpression, new WCDB::Expression(*cppFunction));
 }
 
 CPPExpression WCDBExpressionCreateWithFunction(const char* _Nullable funcName)
@@ -87,6 +111,13 @@ void WCDBExpressionSetWithSchema(CPPExpression expression, CPPSchema schema)
     WCDBGetObjectOrReturn(expression, WCDB::Expression, cppExpression);
     WCDBGetObjectOrReturn(schema, WCDB::Schema, cppSchema);
     cppExpression->schema(*cppSchema);
+}
+
+void WCDBExpressionSetArgument(CPPExpression expression, CPPExpression argument)
+{
+    WCDBGetObjectOrReturn(expression, WCDB::Expression, cppExpression);
+    WCDBGetObjectOrReturn(argument, WCDB::Expression, cppArgument);
+    cppExpression->argument(*cppArgument);
 }
 
 void WCDBExpressionSetArguments(CPPExpression expression, const CPPExpression* arguments, int num)

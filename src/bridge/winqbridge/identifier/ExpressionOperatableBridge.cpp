@@ -25,6 +25,7 @@
 #include "ExpressionOperatableBridge.h"
 #include "Assertion.hpp"
 #include "Expression.hpp"
+#include "LiteralValue.hpp"
 #include "ObjectBridge.hpp"
 #include "StatementSelect.hpp"
 #include "WinqBridge.hpp"
@@ -69,12 +70,9 @@ CPPExpression WCDBExpressionNullOperate(CPPExpression expression, bool isNot)
     return WCDBCreateCPPBridgedObject(CPPExpression, newExpression);
 }
 
-CPPExpression WCDBExpressionBinaryOperate(CPPExpression left,
-                                          CPPExpression right,
-                                          enum WCDBExpressionBinaryOperatorType operatorType)
+WCDB::Expression::SyntaxType::BinaryOperator
+WCDBCastOperatorType(enum WCDBExpressionBinaryOperatorType operatorType)
 {
-    WCDBGetObjectOrReturnValue(left, WCDB::Expression, cppLeft, CPPExpression());
-    WCDBGetObjectOrReturnValue(right, WCDB::Expression, cppRight, CPPExpression());
     WCDB::Expression::SyntaxType::BinaryOperator cppOperatorType;
     switch (operatorType) {
     case WCDBExpressionBinaryOperatorType_Concatenate:
@@ -147,24 +145,92 @@ CPPExpression WCDBExpressionBinaryOperate(CPPExpression left,
         cppOperatorType = WCDB::Expression::SyntaxType::BinaryOperator::Match;
         break;
     }
+    return cppOperatorType;
+}
+
+CPPExpression WCDBExpressionBinaryOperate(CPPExpression left,
+                                          CPPExpression right,
+                                          enum WCDBExpressionBinaryOperatorType operatorType,
+                                          bool isNot)
+{
+    WCDBGetObjectOrReturnValue(left, WCDB::Expression, cppLeft, CPPExpression());
+    WCDBGetObjectOrReturnValue(right, WCDB::Expression, cppRight, CPPExpression());
+
     WCDB::Expression* newExpression = new WCDB::Expression();
     newExpression->syntax().switcher = WCDB::Expression::SyntaxType::Switch::BinaryOperation;
-    newExpression->syntax().binaryOperator = cppOperatorType;
+    newExpression->syntax().binaryOperator = WCDBCastOperatorType(operatorType);
     newExpression->syntax().expressions.push_back(*cppLeft);
     newExpression->syntax().expressions.push_back(*cppRight);
+    newExpression->syntax().isNot = isNot;
     return WCDBCreateCPPBridgedObject(CPPExpression, newExpression);
 }
 
-CPPExpression
-WCDBExpressionBinaryNonOperableOperate(CPPExpression left,
-                                       CPPExpression right,
-                                       enum WCDBExpressionBinaryOperatorType operatorType,
-                                       bool isNot)
+CPPExpression WCDBExpressionBinaryOperateBool(CPPExpression left,
+                                              bool right,
+                                              enum WCDBExpressionBinaryOperatorType operatorType,
+                                              bool isNot)
 {
-    CPPExpression result = WCDBExpressionBinaryOperate(left, right, operatorType);
-    WCDBGetObjectOrReturnValue(result, WCDB::Expression, cppResult, CPPExpression());
-    cppResult->syntax().isNot = isNot;
-    return result;
+    WCDBGetObjectOrReturnValue(left, WCDB::Expression, cppLeft, CPPExpression());
+
+    WCDB::Expression* newExpression = new WCDB::Expression();
+    newExpression->syntax().switcher = WCDB::Expression::SyntaxType::Switch::BinaryOperation;
+    newExpression->syntax().binaryOperator = WCDBCastOperatorType(operatorType);
+    newExpression->syntax().expressions.push_back(*cppLeft);
+    newExpression->syntax().expressions.emplace_back(
+    WCDB::Expression(WCDB::LiteralValue(right)));
+    newExpression->syntax().isNot = isNot;
+    return WCDBCreateCPPBridgedObject(CPPExpression, newExpression);
+}
+
+CPPExpression WCDBExpressionBinaryOperateLong(CPPExpression left,
+                                              long long right,
+                                              enum WCDBExpressionBinaryOperatorType operatorType,
+                                              bool isNot)
+{
+    WCDBGetObjectOrReturnValue(left, WCDB::Expression, cppLeft, CPPExpression());
+
+    WCDB::Expression* newExpression = new WCDB::Expression();
+    newExpression->syntax().switcher = WCDB::Expression::SyntaxType::Switch::BinaryOperation;
+    newExpression->syntax().binaryOperator = WCDBCastOperatorType(operatorType);
+    newExpression->syntax().expressions.push_back(*cppLeft);
+    newExpression->syntax().expressions.emplace_back(
+    WCDB::Expression(WCDB::LiteralValue((int64_t) right)));
+    newExpression->syntax().isNot = isNot;
+    return WCDBCreateCPPBridgedObject(CPPExpression, newExpression);
+}
+
+CPPExpression WCDBExpressionBinaryOperateDouble(CPPExpression left,
+                                                double right,
+                                                enum WCDBExpressionBinaryOperatorType operatorType,
+                                                bool isNot)
+{
+    WCDBGetObjectOrReturnValue(left, WCDB::Expression, cppLeft, CPPExpression());
+
+    WCDB::Expression* newExpression = new WCDB::Expression();
+    newExpression->syntax().switcher = WCDB::Expression::SyntaxType::Switch::BinaryOperation;
+    newExpression->syntax().binaryOperator = WCDBCastOperatorType(operatorType);
+    newExpression->syntax().expressions.push_back(*cppLeft);
+    newExpression->syntax().expressions.emplace_back(
+    WCDB::Expression(WCDB::LiteralValue(right)));
+    newExpression->syntax().isNot = isNot;
+    return WCDBCreateCPPBridgedObject(CPPExpression, newExpression);
+}
+
+CPPExpression WCDBExpressionBinaryOperateString(CPPExpression left,
+                                                const char* _Nullable right,
+                                                enum WCDBExpressionBinaryOperatorType operatorType,
+                                                bool isNot)
+{
+    WCDBGetObjectOrReturnValue(left, WCDB::Expression, cppLeft, CPPExpression());
+
+    WCDB::Expression* newExpression = new WCDB::Expression();
+    newExpression->syntax().switcher = WCDB::Expression::SyntaxType::Switch::BinaryOperation;
+    newExpression->syntax().binaryOperator = WCDBCastOperatorType(operatorType);
+    newExpression->syntax().expressions.push_back(*cppLeft);
+    newExpression->syntax().expressions.push_back(
+    WCDB::Expression(WCDB::LiteralValue(right)));
+    newExpression->syntax().isNot = isNot;
+    return WCDBCreateCPPBridgedObject(CPPExpression, newExpression);
 }
 
 CPPExpression
@@ -232,8 +298,94 @@ CPPExpression WCDBExpressionInExpressionOperate(CPPExpression operand,
     newExpression->syntax().expressions.push_back(*cppOperand);
     newExpression->syntax().inSwitcher = WCDB::Expression::SyntaxType::SwitchIn::Expressions;
     newExpression->syntax().isNot = isNot;
-    WCDBGetCPPSyntaxListOrReturnValue(
-    WCDB::Expression, cppExpressions, expressions, num, CPPExpression());
+    WCDBGetCPPSyntaxList(WCDB::Expression, cppExpressions, expressions, num);
+    newExpression->syntax().expressions.splice(
+    newExpression->syntax().expressions.end(), cppExpressions);
+    return WCDBCreateCPPBridgedObject(CPPExpression, newExpression);
+}
+
+CPPExpression
+WCDBExpressionInIntOperate(CPPExpression operand, const int* _Nullable expressions, int num, bool isNot)
+{
+    WCDBGetObjectOrReturnValue(operand, WCDB::Expression, cppOperand, CPPExpression());
+    WCDB::Expression* newExpression = new WCDB::Expression();
+    newExpression->syntax().switcher = WCDB::Expression::SyntaxType::Switch::In;
+    newExpression->syntax().expressions.push_back(*cppOperand);
+    newExpression->syntax().inSwitcher = WCDB::Expression::SyntaxType::SwitchIn::Expressions;
+    newExpression->syntax().isNot = isNot;
+    WCDB::Expressions cppExpressions;
+    for (int i = 0; i < num; i++) {
+        cppExpressions.emplace_back(WCDB::LiteralValue((int64_t) expressions[i]));
+    }
+    newExpression->syntax().expressions.splice(
+    newExpression->syntax().expressions.end(), cppExpressions);
+    return WCDBCreateCPPBridgedObject(CPPExpression, newExpression);
+}
+
+CPPExpression WCDBExpressionInLongOperate(CPPExpression operand,
+                                          const long long* _Nullable expressions,
+                                          int num,
+                                          bool isNot)
+{
+    WCDBGetObjectOrReturnValue(operand, WCDB::Expression, cppOperand, CPPExpression());
+    if (expressions == nullptr || num <= 0) {
+        return CPPExpression();
+    }
+    WCDB::Expression* newExpression = new WCDB::Expression();
+    newExpression->syntax().switcher = WCDB::Expression::SyntaxType::Switch::In;
+    newExpression->syntax().expressions.push_back(*cppOperand);
+    newExpression->syntax().inSwitcher = WCDB::Expression::SyntaxType::SwitchIn::Expressions;
+    newExpression->syntax().isNot = isNot;
+    WCDB::Expressions cppExpressions;
+    for (int i = 0; i < num; i++) {
+        cppExpressions.emplace_back(WCDB::LiteralValue((int64_t) expressions[i]));
+    }
+    newExpression->syntax().expressions.splice(
+    newExpression->syntax().expressions.end(), cppExpressions);
+    return WCDBCreateCPPBridgedObject(CPPExpression, newExpression);
+}
+
+CPPExpression WCDBExpressionInDoubleOperate(CPPExpression operand,
+                                            const double* _Nullable expressions,
+                                            int num,
+                                            bool isNot)
+{
+    WCDBGetObjectOrReturnValue(operand, WCDB::Expression, cppOperand, CPPExpression());
+    if (expressions == nullptr || num <= 0) {
+        return CPPExpression();
+    }
+    WCDB::Expression* newExpression = new WCDB::Expression();
+    newExpression->syntax().switcher = WCDB::Expression::SyntaxType::Switch::In;
+    newExpression->syntax().expressions.push_back(*cppOperand);
+    newExpression->syntax().inSwitcher = WCDB::Expression::SyntaxType::SwitchIn::Expressions;
+    newExpression->syntax().isNot = isNot;
+    WCDB::Expressions cppExpressions;
+    for (int i = 0; i < num; i++) {
+        cppExpressions.emplace_back(WCDB::LiteralValue(expressions[i]));
+    }
+    newExpression->syntax().expressions.splice(
+    newExpression->syntax().expressions.end(), cppExpressions);
+    return WCDBCreateCPPBridgedObject(CPPExpression, newExpression);
+}
+
+CPPExpression WCDBExpressionInStringOperate(CPPExpression operand,
+                                            const char** _Nullable expressions,
+                                            int num,
+                                            bool isNot)
+{
+    WCDBGetObjectOrReturnValue(operand, WCDB::Expression, cppOperand, CPPExpression());
+    if (expressions == nullptr || num <= 0) {
+        return CPPExpression();
+    }
+    WCDB::Expression* newExpression = new WCDB::Expression();
+    newExpression->syntax().switcher = WCDB::Expression::SyntaxType::Switch::In;
+    newExpression->syntax().expressions.push_back(*cppOperand);
+    newExpression->syntax().inSwitcher = WCDB::Expression::SyntaxType::SwitchIn::Expressions;
+    newExpression->syntax().isNot = isNot;
+    WCDB::Expressions cppExpressions;
+    for (int i = 0; i < num; i++) {
+        cppExpressions.emplace_back(WCDB::LiteralValue(expressions[i]));
+    }
     newExpression->syntax().expressions.splice(
     newExpression->syntax().expressions.end(), cppExpressions);
     return WCDBCreateCPPBridgedObject(CPPExpression, newExpression);
