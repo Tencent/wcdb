@@ -162,7 +162,7 @@ public final class Expression: Identifier<CPPExpression> {
     }
 
     @discardableResult
-    public func excape(_ expressionConvertible: ExpressionConvertible) -> Expression {
+    public func escape(_ expressionConvertible: ExpressionConvertible) -> Expression {
         let expression = expressionConvertible.asExpression()
         withExtendedLifetime(expression) {
             WCDBExpressionEscapeWith(cppObj, $0.cppObj)

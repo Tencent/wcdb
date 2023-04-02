@@ -105,21 +105,21 @@ class ExpresssionTests: BaseTestCase {
 
         WINQExpressionAssertEqual(left.notRegexp(right), "left NOT REGEXP right")
 
-        WINQExpressionAssertEqual(left.like(right).excape(2), "left LIKE right ESCAPE 2")
+        WINQExpressionAssertEqual(left.like(right).escape(2), "left LIKE right ESCAPE 2")
 
-        WINQExpressionAssertEqual(left.glob(right).excape(2), "left GLOB right ESCAPE 2")
+        WINQExpressionAssertEqual(left.glob(right).escape(2), "left GLOB right ESCAPE 2")
 
-        WINQExpressionAssertEqual(left.match(right).excape(2), "left MATCH right ESCAPE 2")
+        WINQExpressionAssertEqual(left.match(right).escape(2), "left MATCH right ESCAPE 2")
 
-        WINQExpressionAssertEqual(left.regexp(right).excape(2), "left REGEXP right ESCAPE 2")
+        WINQExpressionAssertEqual(left.regexp(right).escape(2), "left REGEXP right ESCAPE 2")
 
-        WINQExpressionAssertEqual(left.notLike(right).excape(2), "left NOT LIKE right ESCAPE 2")
+        WINQExpressionAssertEqual(left.notLike(right).escape(2), "left NOT LIKE right ESCAPE 2")
 
-        WINQExpressionAssertEqual(left.notGlob(right).excape(2), "left NOT GLOB right ESCAPE 2")
+        WINQExpressionAssertEqual(left.notGlob(right).escape(2), "left NOT GLOB right ESCAPE 2")
 
-        WINQExpressionAssertEqual(left.notMatch(right).excape(2), "left NOT MATCH right ESCAPE 2")
+        WINQExpressionAssertEqual(left.notMatch(right).escape(2), "left NOT MATCH right ESCAPE 2")
 
-        WINQExpressionAssertEqual(left.notRegexp(right).excape(2), "left NOT REGEXP right ESCAPE 2")
+        WINQExpressionAssertEqual(left.notRegexp(right).escape(2), "left NOT REGEXP right ESCAPE 2")
 
         WINQExpressionAssertEqual(left.isNull(), "left ISNULL")
 
