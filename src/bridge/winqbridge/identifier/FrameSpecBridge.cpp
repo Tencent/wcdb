@@ -29,7 +29,7 @@
 
 CPPFrameSpec WCDBFrameSpecCreate()
 {
-    return WCDBCreateCPPBridgedObject(CPPFrameSpec, new WCDB::FrameSpec());
+    return WCDBCreateCPPBridgedObject(CPPFrameSpec, WCDB::FrameSpec);
 }
 void WCDBFrameSpecConfigRange(CPPFrameSpec frameSpec)
 {

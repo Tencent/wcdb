@@ -33,7 +33,8 @@
 
 CPPTableConstraint WCDBTableConstraintCreate(const char* _Nullable name)
 {
-    return WCDBCreateCPPBridgedObject(CPPTableConstraint, new WCDB::TableConstraint(name));
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPTableConstraint, WCDB::TableConstraint, name);
 }
 
 void WCDBTableConstraintConfigPrimaryKey(CPPTableConstraint constraint)

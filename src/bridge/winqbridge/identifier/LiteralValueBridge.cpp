@@ -29,49 +29,54 @@
 
 CPPLiteralValue WCDBLiteralValueCreateWithInt64(long long value)
 {
-    return WCDBCreateCPPBridgedObject(CPPLiteralValue,
-                                      new WCDB::LiteralValue((int64_t) value));
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPLiteralValue, WCDB::LiteralValue, (int64_t) value);
 }
 
 CPPLiteralValue WCDBLiteralValueCreateWithUInt64(unsigned long long value)
 {
-    return WCDBCreateCPPBridgedObject(CPPLiteralValue,
-                                      new WCDB::LiteralValue((uint64_t) value));
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPLiteralValue, WCDB::LiteralValue, (uint64_t) value);
 }
 
 CPPLiteralValue WCDBLiteralValueCreateWithDouble(double value)
 {
-    return WCDBCreateCPPBridgedObject(CPPLiteralValue, new WCDB::LiteralValue(value));
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPLiteralValue, WCDB::LiteralValue, value);
 }
 
 CPPLiteralValue WCDBLiteralValueCreateWithNull()
 {
-    return WCDBCreateCPPBridgedObject(CPPLiteralValue, new WCDB::LiteralValue(nullptr));
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPLiteralValue, WCDB::LiteralValue, nullptr);
 }
 
 CPPLiteralValue WCDBLiteralValueCreateWithBool(bool value)
 {
-    return WCDBCreateCPPBridgedObject(CPPLiteralValue, new WCDB::LiteralValue(value));
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPLiteralValue, WCDB::LiteralValue, value);
 }
 
 CPPLiteralValue WCDBLiteralValueCreateWithString(const char* _Nullable value)
 {
-    return WCDBCreateCPPBridgedObject(
-    CPPLiteralValue, new WCDB::LiteralValue(WCDB::StringView(value)));
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPLiteralValue, WCDB::LiteralValue, WCDB::StringView(value));
 }
 
 CPPLiteralValue WCDBLiteralValueCreateWithCurrentTime()
 {
-    return WCDBCreateCPPBridgedObject(CPPLiteralValue, WCDB::LiteralValue::currentTime());
+    return WCDBCreateCPPBridgedObjectByCopy(CPPLiteralValue,
+                                            WCDB::LiteralValue::currentTime());
 }
 
 CPPLiteralValue WCDBLiteralValueCreateWithCurrentDate()
 {
-    return WCDBCreateCPPBridgedObject(CPPLiteralValue, WCDB::LiteralValue::currentDate());
+    return WCDBCreateCPPBridgedObjectByCopy(CPPLiteralValue,
+                                            WCDB::LiteralValue::currentDate());
 }
 
 CPPLiteralValue WCDBLiteralValueCreateWithCurrentTimestamp()
 {
-    return WCDBCreateCPPBridgedObject(CPPLiteralValue,
-                                      WCDB::LiteralValue::currentTimestamp());
+    return WCDBCreateCPPBridgedObjectByCopy(
+    CPPLiteralValue, WCDB::LiteralValue::currentTimestamp());
 }

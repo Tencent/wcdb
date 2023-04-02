@@ -28,7 +28,8 @@
 
 CPPQualifiedTable WCDBQualifiedTableCreateWithTable(const char* _Nullable name)
 {
-    return WCDBCreateCPPBridgedObject(CPPQualifiedTable, new WCDB::QualifiedTable(name));
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPQualifiedTable, WCDB::QualifiedTable, name);
 }
 
 void WCDBQualifiedTableConfigSchema(CPPQualifiedTable table, CPPSchema schema)

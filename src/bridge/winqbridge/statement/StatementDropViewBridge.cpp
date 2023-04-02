@@ -29,7 +29,7 @@
 
 CPPStatementDropView WCDBStatementDropViewCreate(void)
 {
-    return WCDBCreateCPPBridgedObject(CPPStatementDropView, new WCDB::StatementDropView());
+    return WCDBCreateCPPBridgedObject(CPPStatementDropView, WCDB::StatementDropView);
 }
 
 void WCDBStatementDropViewConfigSchema(CPPStatementDropView dropViewStatement, CPPSchema schema)

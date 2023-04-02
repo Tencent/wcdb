@@ -68,7 +68,7 @@ CPPError WCDBDatabaseGetError(CPPDatabase database)
 {
     WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, CPPError());
     const WCDB::Error& error = cppDatabase->getThreadedError();
-    return WCDBCreateUnmanageCPPObject(CPPError, &error);
+    return WCDBCreateUnmanagedCPPObject(CPPError, &error);
 }
 
 long WCDBDatabaseGetTag(CPPDatabase database)
@@ -196,13 +196,13 @@ void WCDBDatabaseConfig(CPPDatabase database,
     WCDB::CustomConfig::Invocation cppInvocation
     = [bridgeInvocation](WCDB::InnerHandle* handle) -> bool {
         return WCDBSwiftClosureCallWithOneArgument(
-        bridgeInvocation, WCDBCreateUnmanageCPPObject(CPPHandle, handle));
+        bridgeInvocation, WCDBCreateUnmanagedCPPObject(CPPHandle, handle));
     };
     WCDB::CustomConfig::Invocation cppUninvocation = nullptr;
     if (WCDBGetSwiftClosure(bridgeUninvocation) != nullptr) {
         cppUninvocation = [bridgeUninvocation](WCDB::InnerHandle* handle) -> bool {
             return WCDBSwiftClosureCallWithOneArgument(
-            bridgeUninvocation, WCDBCreateUnmanageCPPObject(CPPHandle, handle));
+            bridgeUninvocation, WCDBCreateUnmanagedCPPObject(CPPHandle, handle));
         };
     }
     cppDatabase->setConfig(
@@ -293,7 +293,7 @@ void WCDBDatabaseGlobalTraceError(SwiftClosure* _Nullable tracer)
     if (WCDBGetSwiftClosure(bridgedTracer) != nullptr) {
         WCDB::Core::shared().setNotificationWhenErrorTraced(
         [bridgedTracer](const WCDB::Error& error) {
-            CPPError cppError = WCDBCreateUnmanageCPPObject(CPPError, &error);
+            CPPError cppError = WCDBCreateUnmanagedCPPObject(CPPError, &error);
             WCDBSwiftClosureCallWithOneArgument(bridgedTracer, cppError);
         });
     } else {
@@ -307,7 +307,7 @@ void WCDBDatabaseTraceError(const char* _Nonnull path, SwiftClosure* _Nullable t
     if (WCDBGetSwiftClosure(bridgedTracer) != nullptr) {
         WCDB::Core::shared().setNotificationWhenErrorTraced(
         path, [bridgedTracer](const WCDB::Error& error) {
-            CPPError cppError = WCDBCreateUnmanageCPPObject(CPPError, &error);
+            CPPError cppError = WCDBCreateUnmanagedCPPObject(CPPError, &error);
             WCDBSwiftClosureCallWithOneArgument(bridgedTracer, cppError);
         });
     } else {
@@ -322,7 +322,7 @@ void WCDBDatabaseGlobalTraceOperation(SwiftClosure* _Nullable tracer)
     if (WCDBGetSwiftClosure(bridgeTracer) != nullptr) {
         WCDB::DBOperationNotifier::shared().setNotification(
         [=](WCDB::InnerDatabase* database, WCDB::DBOperationNotifier::Operation operation) {
-            CPPDatabase cppDatabase = WCDBCreateUnmanageCPPObject(CPPDatabase, database);
+            CPPDatabase cppDatabase = WCDBCreateUnmanagedCPPObject(CPPDatabase, database);
             WCDBSwiftClosureCallWithMultiArgument(bridgeTracer, cppDatabase, (long) operation);
         });
     } else {
@@ -362,7 +362,7 @@ void WCDBDatabaseSetNotificationWhenCorrupted(CPPDatabase database, SwiftClosure
     WCDB::Core::CorruptedNotification cppNotification = nullptr;
     if (WCDBGetSwiftClosure(notification) != nullptr) {
         cppNotification = [notification](WCDB::InnerDatabase* cppDatabase) {
-            CPPDatabase database = WCDBCreateUnmanageCPPObject(CPPDatabase, cppDatabase);
+            CPPDatabase database = WCDBCreateUnmanagedCPPObject(CPPDatabase, cppDatabase);
             WCDBSwiftClosureCallWithOneArgument(notification, database);
         };
     }
@@ -501,7 +501,7 @@ void WCDBDatabaseSetNotificationWhenMigrated(CPPDatabase database, SwiftClosure*
     if (onMigrated != nullptr) {
         callback = [notification](WCDB::InnerDatabase* cppDatabase,
                                   const WCDB::MigrationBaseInfo* baseInfo) {
-            CPPDatabase database = WCDBCreateUnmanageCPPObject(CPPDatabase, cppDatabase);
+            CPPDatabase database = WCDBCreateUnmanagedCPPObject(CPPDatabase, cppDatabase);
             if (baseInfo != nullptr) {
                 WCDBSwiftClosureCallWithMultiArgument(
                 notification,

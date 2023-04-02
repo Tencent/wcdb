@@ -29,7 +29,7 @@
 
 CPPStatementVacuum WCDBStatementVacuumCreate(void)
 {
-    return WCDBCreateCPPBridgedObject(CPPStatementVacuum, new WCDB::StatementVacuum());
+    return WCDBCreateCPPBridgedObject(CPPStatementVacuum, WCDB::StatementVacuum);
 }
 
 void WCDBStatementVacuumConfigAll(CPPStatementVacuum vacuum)

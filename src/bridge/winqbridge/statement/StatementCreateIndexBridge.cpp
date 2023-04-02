@@ -31,8 +31,7 @@
 
 CPPStatementCreateIndex WCDBStatementCreatIndexCreate()
 {
-    return WCDBCreateCPPBridgedObject(CPPStatementCreateIndex,
-                                      new WCDB::StatementCreateIndex());
+    return WCDBCreateCPPBridgedObject(CPPStatementCreateIndex, WCDB::StatementCreateIndex);
 }
 
 void WCDBStatementCreatIndexConfigIndexName(CPPStatementCreateIndex creatIndex,

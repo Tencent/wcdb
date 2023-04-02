@@ -30,16 +30,15 @@
 
 CPPColumnDef WCDBColumnDefCreateWithoutType(CPPColumn column)
 {
-    WCDBGetObjectOrReturnValue(column, WCDB::Column, cppColumn, CPPColumnDef()) return WCDBCreateCPPBridgedObject(
-    CPPColumnDef, new WCDB::ColumnDef(*cppColumn));
+    WCDBGetObjectOrReturnValue(column, WCDB::Column, cppColumn, CPPColumnDef());
+    return WCDBCreateCPPBridgedObjectWithParameters(CPPColumnDef, WCDB::ColumnDef, *cppColumn);
 }
 
 CPPColumnDef WCDBColumnDefCreateWithType(CPPColumn column, enum WCDBSyntaxColumnType type)
 {
     WCDBGetObjectOrReturnValue(column, WCDB::Column, cppColumn, CPPColumnDef());
-    return WCDBCreateCPPBridgedObject(
-    CPPColumnDef,
-    new WCDB::ColumnDef(*cppColumn, WCDB::WinqBridge::changeColumnType(type)));
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPColumnDef, WCDB::ColumnDef, *cppColumn, WCDB::WinqBridge::changeColumnType(type));
 }
 
 void WCDBColumnDefConfigConstraint(CPPColumnDef columnDef, CPPColumnConstraint constraint)

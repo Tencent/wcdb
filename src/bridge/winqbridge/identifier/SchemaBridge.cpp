@@ -28,15 +28,15 @@
 
 CPPSchema WCDBSchemaCreateWithName(const char* _Nullable name)
 {
-    return WCDBCreateCPPBridgedObject(CPPSchema, new WCDB::Schema(name));
+    return WCDBCreateCPPBridgedObjectWithParameters(CPPSchema, WCDB::Schema, name);
 }
 
 CPPSchema WCDBSchemaMain()
 {
-    return WCDBCreateCPPBridgedObject(CPPSchema, WCDB::Schema::main());
+    return WCDBCreateCPPBridgedObjectByCopy(CPPSchema, WCDB::Schema::main());
 }
 
 CPPSchema WCDBSchemaTemp()
 {
-    return WCDBCreateCPPBridgedObject(CPPSchema, WCDB::Schema::temp());
+    return WCDBCreateCPPBridgedObjectByCopy(CPPSchema, WCDB::Schema::temp());
 }

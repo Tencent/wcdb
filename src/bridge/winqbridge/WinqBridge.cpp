@@ -38,7 +38,7 @@ CPPStatement WCDBGetUnmangedStatement(CPPObject* _Nonnull statement)
 {
     WCDB::Statement* cppStatement
     = WCDB::ObjectBridge::extractOriginalCPPObject<WCDB::Statement>(statement);
-    return WCDBCreateUnmanageCPPObject(CPPStatement, cppStatement);
+    return WCDBCreateUnmanagedCPPObject(CPPStatement, cppStatement);
 }
 
 namespace WCDB {

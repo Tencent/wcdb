@@ -32,7 +32,7 @@
 
 CPPStatementDelete WCDBStatementDeleteCreate(void)
 {
-    return WCDBCreateCPPBridgedObject(CPPStatementDelete, new WCDB::StatementDelete());
+    return WCDBCreateCPPBridgedObject(CPPStatementDelete, WCDB::StatementDelete);
 }
 
 void WCDBStatementDeleteConfigWith(CPPStatementDelete deleteStatement,

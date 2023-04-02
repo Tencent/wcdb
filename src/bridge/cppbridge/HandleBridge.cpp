@@ -35,7 +35,7 @@ CPPError WCDBHandleGetError(CPPHandle handle)
 {
     WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, CPPError());
     const WCDB::Error& error = cppHandle->getError();
-    return WCDBCreateUnmanageCPPObject(CPPError, &error);
+    return WCDBCreateUnmanagedCPPObject(CPPError, &error);
 }
 
 bool WCDBHandleCheckValid(CPPHandle handle)
@@ -54,7 +54,7 @@ CPPHandleStatement WCDBHandleGetMainStatement(CPPHandle handle)
 {
     WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, CPPHandleStatement());
     WCDB::HandleStatement* stmt = WCDB::GetMainHandleStatement(cppHandle);
-    return WCDBCreateUnmanageCPPObject(CPPHandleStatement, stmt);
+    return WCDBCreateUnmanagedCPPObject(CPPHandleStatement, stmt);
 }
 
 CPPHandleStatement
@@ -64,7 +64,7 @@ WCDBHandleGetOrCreatePreparedStatement(CPPHandle handle, CPPStatement statement)
     WCDBGetObjectOrReturnValue(
     statement, WCDB::Statement, cppStatement, CPPHandleStatement());
     WCDB::HandleStatement* stmt = cppHandle->getOrCreatePreparedStatement(*cppStatement);
-    return WCDBCreateUnmanageCPPObject(CPPHandleStatement, stmt);
+    return WCDBCreateUnmanagedCPPObject(CPPHandleStatement, stmt);
 }
 
 void WCDBHandleFinalizeStatements(CPPHandle handle)
@@ -153,7 +153,7 @@ bool WCDBHandleRunTransaction(CPPHandle handle, SwiftClosure* _Nullable transact
     WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
     if (WCDBGetSwiftClosure(bridgeTransaction) != nullptr) {
         return cppHandle->runTransaction([bridgeTransaction](WCDB::InnerHandle* innerHandle) {
-            CPPHandle bridgeHandle = WCDBCreateUnmanageCPPObject(CPPHandle, innerHandle);
+            CPPHandle bridgeHandle = WCDBCreateUnmanagedCPPObject(CPPHandle, innerHandle);
             return WCDBSwiftClosureCallWithOneArgument(bridgeTransaction, bridgeHandle);
         });
     } else {
@@ -168,7 +168,7 @@ bool WCDBHandleRunNestedTransaction(CPPHandle handle, SwiftClosure* _Nullable ne
     WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
     if (WCDBGetSwiftClosure(bridgeTransaction) != nullptr) {
         return cppHandle->runNestedTransaction([bridgeTransaction](WCDB::InnerHandle* innerHandle) {
-            CPPHandle bridgeHandle = WCDBCreateUnmanageCPPObject(CPPHandle, innerHandle);
+            CPPHandle bridgeHandle = WCDBCreateUnmanagedCPPObject(CPPHandle, innerHandle);
             return WCDBSwiftClosureCallWithOneArgument(bridgeTransaction, bridgeHandle);
         });
     } else {
@@ -183,7 +183,7 @@ bool WCDBHandleRunPauseableTransaction(CPPHandle handle, SwiftClosure* _Nullable
     if (WCDBGetSwiftClosure(bridgeTransaction) != nullptr) {
         return cppHandle->runPauseableTransactionWithOneLoop(
         [bridgeTransaction](WCDB::InnerHandle* innerHandle, bool& stop, bool isNewTransaction) {
-            CPPHandle bridgeHandle = WCDBCreateUnmanageCPPObject(CPPHandle, innerHandle);
+            CPPHandle bridgeHandle = WCDBCreateUnmanagedCPPObject(CPPHandle, innerHandle);
             return WCDBSwiftClosureCallWithMultiArgument(
             bridgeTransaction, bridgeHandle, &stop, isNewTransaction);
         });

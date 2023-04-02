@@ -29,7 +29,7 @@
 
 CPPStatementAnalyze WCDBStatementAnalyzeCreate(void)
 {
-    return WCDBCreateCPPBridgedObject(CPPStatementAnalyze, new WCDB::StatementAnalyze());
+    return WCDBCreateCPPBridgedObject(CPPStatementAnalyze, WCDB::StatementAnalyze);
 }
 
 void WCDBStatementAnalyzeToAnalyze(CPPStatementAnalyze analyze)

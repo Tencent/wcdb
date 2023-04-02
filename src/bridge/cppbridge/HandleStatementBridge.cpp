@@ -37,7 +37,7 @@ CPPError WCDBHandleStatementGetError(CPPHandleStatement handleStatement)
         return CPPError();
     }
     const WCDB::Error& error = cppHandle->getError();
-    return WCDBCreateUnmanageCPPObject(CPPError, &error);
+    return WCDBCreateUnmanagedCPPObject(CPPError, &error);
 }
 
 bool WCDBHandleStatementPrepare(CPPHandleStatement handleStatement, CPPStatement statement)

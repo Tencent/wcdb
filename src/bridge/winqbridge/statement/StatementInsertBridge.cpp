@@ -34,7 +34,7 @@
 
 CPPStatementInsert WCDBStatementInsertCreate(void)
 {
-    return WCDBCreateCPPBridgedObject(CPPStatementInsert, new WCDB::StatementInsert());
+    return WCDBCreateCPPBridgedObject(CPPStatementInsert, WCDB::StatementInsert);
 }
 
 void WCDBStatementInsertConfigWith(CPPStatementInsert insert,

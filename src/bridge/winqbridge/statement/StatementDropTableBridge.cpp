@@ -29,7 +29,7 @@
 
 CPPStatementDropTable WCDBStatementDropTableCreate(void)
 {
-    return WCDBCreateCPPBridgedObject(CPPStatementDropTable, new WCDB::StatementDropTable());
+    return WCDBCreateCPPBridgedObject(CPPStatementDropTable, WCDB::StatementDropTable);
 }
 
 void WCDBStatementDropTableConfigSchema(CPPStatementDropTable dropTableStatement, CPPSchema schema)

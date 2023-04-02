@@ -30,20 +30,18 @@
 
 CPPColumn WCDBColumnCreateAll()
 {
-    return WCDBCreateCPPBridgedObject(CPPColumn, WCDB::Column::all());
+    return WCDBCreateCPPBridgedObjectByCopy(CPPColumn, WCDB::Column::all());
 }
 
 CPPColumn WCDBColumnCreateRowId()
 {
-    return WCDBCreateCPPBridgedObject(CPPColumn, WCDB::Column::rowid());
+    return WCDBCreateCPPBridgedObjectByCopy(CPPColumn, WCDB::Column::rowid());
 }
 
 CPPColumn WCDBColumnCreateWithName(const char* _Nullable name, const void* _Nullable binding)
 {
-    return WCDBCreateCPPBridgedObject(
-    CPPColumn,
-    new WCDB::Column(WCDB::UnsafeStringView(name),
-                     static_cast<const WCDB::BaseBinding*>(binding)));
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPColumn, WCDB::Column, name, static_cast<const WCDB::BaseBinding*>(binding));
 }
 
 void WCDBColumnInTable(CPPColumn column, const char* _Nullable table)
@@ -62,5 +60,6 @@ void WCDBColumnOfSchema(CPPColumn column, CPPSchema schema)
 CPPExpression WCDBColumnAsExpressionOperand(CPPColumn column)
 {
     WCDBGetObjectOrReturnValue(column, WCDB::Column, cppColumn, CPPExpression());
-    return WCDBCreateCPPBridgedObject(CPPExpression, new WCDB::Expression(*cppColumn));
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPExpression, WCDB::Expression, *cppColumn);
 }

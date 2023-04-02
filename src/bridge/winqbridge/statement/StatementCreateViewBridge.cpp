@@ -31,8 +31,7 @@
 
 CPPStatementCreateView WCDBStatementCreateViewCreate(void)
 {
-    return WCDBCreateCPPBridgedObject(CPPStatementCreateView,
-                                      new WCDB::StatementCreateView());
+    return WCDBCreateCPPBridgedObject(CPPStatementCreateView, WCDB::StatementCreateView);
 }
 
 void WCDBStatementCreateViewConfigView(CPPStatementCreateView createView,

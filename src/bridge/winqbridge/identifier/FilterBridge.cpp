@@ -29,7 +29,7 @@
 
 CPPFilter WCDBFilterCreate()
 {
-    return WCDBCreateCPPBridgedObject(CPPFilter, new WCDB::Filter());
+    return WCDBCreateCPPBridgedObject(CPPFilter, WCDB::Filter);
 }
 
 void WCDBFilterConfigWhere(CPPFilter filter, CPPExpression where)
