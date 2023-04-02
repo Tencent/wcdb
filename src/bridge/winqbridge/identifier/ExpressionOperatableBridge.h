@@ -109,7 +109,7 @@ CPPExpression WCDBExpressionInIntOperate(CPPExpression operand,
                                          bool isNot);
 
 CPPExpression WCDBExpressionInLongOperate(CPPExpression operand,
-                                          const int* _Nullable expressions,
+                                          const long long* _Nullable expressions,
                                           int num,
                                           bool isNot);
 
