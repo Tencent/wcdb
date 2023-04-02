@@ -31,7 +31,7 @@
 
 CPPStatementPragma WCDBStatementPragmaCreate(void)
 {
-    return WCDBCreateCPPBridgedObject(CPPStatementPragma, new WCDB::StatementPragma());
+    return WCDBCreateCPPBridgedObject(CPPStatementPragma, WCDB::StatementPragma);
 }
 
 void WCDBStatementPragmaConfigPragma(CPPStatementPragma statment, CPPPragma pragma)

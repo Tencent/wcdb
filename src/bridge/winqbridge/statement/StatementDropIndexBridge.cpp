@@ -29,7 +29,7 @@
 
 CPPStatementDropIndex WCDBStatementDropIndexCreate(void)
 {
-    return WCDBCreateCPPBridgedObject(CPPStatementDropIndex, new WCDB::StatementDropIndex());
+    return WCDBCreateCPPBridgedObject(CPPStatementDropIndex, WCDB::StatementDropIndex);
 }
 
 void WCDBStatementDropIndexConfigSchema(CPPStatementDropIndex dropIndexStatement, CPPSchema schema)

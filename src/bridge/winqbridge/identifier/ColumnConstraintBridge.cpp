@@ -30,8 +30,8 @@
 
 CPPColumnConstraint WCDBColumnConstraintCreate(const char* _Nullable name)
 {
-    return WCDBCreateCPPBridgedObject(CPPColumnConstraint,
-                                      new WCDB::ColumnConstraint(name));
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPColumnConstraint, WCDB::ColumnConstraint, name);
 }
 
 void WCDBColumnConstraintConfigPrimaryKey(CPPColumnConstraint constraint)

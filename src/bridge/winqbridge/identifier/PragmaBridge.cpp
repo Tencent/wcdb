@@ -28,5 +28,5 @@
 
 CPPPragma WCDBPragmaCreateWithName(const char* _Nullable name)
 {
-    return WCDBCreateCPPBridgedObject(CPPPragma, new WCDB::Pragma(name));
+    return WCDBCreateCPPBridgedObjectWithParameters(CPPPragma, WCDB::Pragma, name);
 }

@@ -29,7 +29,7 @@
 CPPStatementBegin WCDBStatementBeginCreate()
 {
     CPPStatementBegin begin
-    = WCDBCreateCPPBridgedObject(CPPStatementBegin, new WCDB::StatementBegin());
+    = WCDBCreateCPPBridgedObject(CPPStatementBegin, WCDB::StatementBegin);
     WCDBStatementBeginConfigType(begin, WCDBSyntaxTransactionType_Deferred);
     return begin;
 }

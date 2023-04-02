@@ -32,8 +32,7 @@
 
 CPPStatementCreateTable WCDBStatementCreateTableCreate(void)
 {
-    return WCDBCreateCPPBridgedObject(CPPStatementCreateTable,
-                                      new WCDB::StatementCreateTable());
+    return WCDBCreateCPPBridgedObject(CPPStatementCreateTable, WCDB::StatementCreateTable);
 }
 
 void WCDBStatementCreateTableConfigTable(CPPStatementCreateTable createTable,

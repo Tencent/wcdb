@@ -49,7 +49,7 @@ public:
 
 CPPBinding WCDBBindingCreate()
 {
-    return WCDBCreateCPPBridgedObject(CPPBinding, new WCDB::SwiftBinding());
+    return WCDBCreateCPPBridgedObject(CPPBinding, WCDB::SwiftBinding);
 }
 
 void WCDBBindingAddColumnDef(CPPBinding binding, const char* _Nullable columnName, CPPColumnDef columnDef)

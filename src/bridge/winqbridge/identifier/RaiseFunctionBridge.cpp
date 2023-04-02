@@ -28,7 +28,7 @@
 
 CPPRaiseFunction WCDBRaiseFunctionCreate()
 {
-    return WCDBCreateCPPBridgedObject(CPPRaiseFunction, new WCDB::RaiseFunction());
+    return WCDBCreateCPPBridgedObject(CPPRaiseFunction, WCDB::RaiseFunction);
 }
 void WCDBRaiseFunctionSetAction(CPPRaiseFunction function,
                                 enum WCDBSyntaxRaiseAction action,

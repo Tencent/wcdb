@@ -29,8 +29,7 @@
 
 CPPStatementDropTrigger WCDBStatementDropTriggerCreate(void)
 {
-    return WCDBCreateCPPBridgedObject(CPPStatementDropTrigger,
-                                      new WCDB::StatementDropTrigger());
+    return WCDBCreateCPPBridgedObject(CPPStatementDropTrigger, WCDB::StatementDropTrigger);
 }
 
 void WCDBStatementDropTriggerConfigSchema(CPPStatementDropTrigger dropTriggerStatement,

@@ -32,15 +32,16 @@
 CPPIndexedColumn WCDBIndexedColumnCreateWithColumn(CPPColumn column)
 {
     WCDBGetObjectOrReturnValue(column, WCDB::Column, cppColumn, CPPIndexedColumn());
-    return WCDBCreateCPPBridgedObject(CPPIndexedColumn, new WCDB::IndexedColumn(*cppColumn));
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPIndexedColumn, WCDB::IndexedColumn, *cppColumn);
 }
 
 CPPIndexedColumn WCDBIndexedColumnCreateWithExpression(CPPExpression expression)
 {
     WCDBGetObjectOrReturnValue(
     expression, WCDB::Expression, cppExpression, CPPIndexedColumn());
-    return WCDBCreateCPPBridgedObject(CPPIndexedColumn,
-                                      new WCDB::IndexedColumn(*cppExpression));
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPIndexedColumn, WCDB::IndexedColumn, *cppExpression);
 }
 
 void WCDBIndexedColumnConfigCollation(CPPIndexedColumn indexedColumn, const char* _Nullable collation)

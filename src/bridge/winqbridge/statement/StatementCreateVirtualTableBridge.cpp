@@ -30,7 +30,7 @@
 CPPStatementCreateVirtualTable WCDBStatementCreateVirtualTableCreate(void)
 {
     return WCDBCreateCPPBridgedObject(CPPStatementCreateVirtualTable,
-                                      new WCDB::StatementCreateVirtualTable());
+                                      WCDB::StatementCreateVirtualTable);
 }
 
 void WCDBStatementCreateVirtualTableConfigTable(CPPStatementCreateVirtualTable createTable,

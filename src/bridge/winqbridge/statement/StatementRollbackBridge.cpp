@@ -29,7 +29,7 @@
 CPPStatementRollback WCDBStatementRollbackCreate(void)
 {
     CPPStatementRollback rollback
-    = WCDBCreateCPPBridgedObject(CPPStatementRollback, new WCDB::StatementRollback());
+    = WCDBCreateCPPBridgedObject(CPPStatementRollback, WCDB::StatementRollback);
     WCDBStatementRollbackConfigSavepoint(rollback, nullptr);
     return rollback;
 }

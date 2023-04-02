@@ -28,7 +28,7 @@
 
 CPPStatementSavepoint WCDBStatementSavepointCreate(void)
 {
-    return WCDBCreateCPPBridgedObject(CPPStatementSavepoint, new WCDB::StatementSavepoint());
+    return WCDBCreateCPPBridgedObject(CPPStatementSavepoint, WCDB::StatementSavepoint);
 }
 
 void WCDBStatementSavepointConfigName(CPPStatementSavepoint savepoint, const char* _Nullable name)

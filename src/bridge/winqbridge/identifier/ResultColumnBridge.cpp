@@ -31,7 +31,8 @@ CPPResultColumn WCDBResultColumnCreateWithExpression(CPPExpression expression)
 {
     WCDBGetObjectOrReturnValue(
     expression, WCDB::Expression, cppExpression, CPPResultColumn());
-    return WCDBCreateCPPBridgedObject(CPPResultColumn, new WCDB::ResultColumn(*cppExpression));
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPResultColumn, WCDB::ResultColumn, *cppExpression);
 }
 
 void WCDBResultColumnConfigAlias(CPPResultColumn column, const char* _Nullable alias)

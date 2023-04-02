@@ -29,7 +29,7 @@
 CPPStatementCommit WCDBStatementCommitCreate()
 {
     CPPStatementCommit commit
-    = WCDBCreateCPPBridgedObject(CPPStatementCommit, new WCDB::StatementCommit());
+    = WCDBCreateCPPBridgedObject(CPPStatementCommit, WCDB::StatementCommit);
     WCDBGetObjectOrReturnValue(
     commit, WCDB::StatementCommit, cppCommit, CPPStatementCommit());
     cppCommit->commit();
