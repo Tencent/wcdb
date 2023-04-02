@@ -32,7 +32,7 @@
 
 CPPUpsert WCDBUpsertCreate()
 {
-    return WCDBCreateCPPBridgedObject(CPPUpsert, new WCDB::Upsert());
+    return WCDBCreateCPPBridgedObject(CPPUpsert, WCDB::Upsert);
 }
 
 void WCDBUpsertConfigIndexdColumn(CPPUpsert upsert,

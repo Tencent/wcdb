@@ -30,8 +30,8 @@
 
 CPPCommonTableExpression WCDBCommonTableExpressionCreate(const char* _Nullable tableName)
 {
-    return WCDBCreateCPPBridgedObject(CPPCommonTableExpression,
-                                      WCDB::CommonTableExpression(tableName));
+    return WCDBCreateCPPBridgedObjectByCopy(
+    CPPCommonTableExpression, WCDB::CommonTableExpression(tableName));
 }
 
 void WCDBCommonTableExpressionAddColumn(CPPCommonTableExpression expression, CPPColumn column)

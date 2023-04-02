@@ -33,7 +33,7 @@
 
 CPPStatementUpdate WCDBStatementUpdateCreate(void)
 {
-    return WCDBCreateCPPBridgedObject(CPPStatementUpdate, new WCDB::StatementUpdate());
+    return WCDBCreateCPPBridgedObject(CPPStatementUpdate, WCDB::StatementUpdate);
 }
 
 void WCDBStatementUpdateConfigWith(CPPStatementUpdate update,

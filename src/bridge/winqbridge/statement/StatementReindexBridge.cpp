@@ -29,7 +29,7 @@
 
 CPPStatementReIndex WCDBStatementReIndexCreate(void)
 {
-    return WCDBCreateCPPBridgedObject(CPPStatementReIndex, new WCDB::StatementReindex());
+    return WCDBCreateCPPBridgedObject(CPPStatementReIndex, WCDB::StatementReindex);
 }
 
 void WCDBStatementReIndexConfigColllation(CPPStatementReIndex statment,

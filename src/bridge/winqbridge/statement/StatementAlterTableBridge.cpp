@@ -31,8 +31,7 @@
 
 CPPStatementAlterTable WCDBStatementAlterTableCreate()
 {
-    return WCDBCreateCPPBridgedObject(CPPStatementAlterTable,
-                                      new WCDB::StatementAlterTable());
+    return WCDBCreateCPPBridgedObject(CPPStatementAlterTable, WCDB::StatementAlterTable);
 }
 
 void WCDBStatementAlterTableConfigTable(CPPStatementAlterTable alterTable,

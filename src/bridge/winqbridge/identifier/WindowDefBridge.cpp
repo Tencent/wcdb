@@ -31,7 +31,7 @@
 
 CPPWindowDef WCDBWindowDefCreate(void)
 {
-    return WCDBCreateCPPBridgedObject(CPPWindowDef, new WCDB::WindowDef());
+    return WCDBCreateCPPBridgedObject(CPPWindowDef, WCDB::WindowDef);
 }
 
 void WCDBWindowDefConfigPartition(CPPWindowDef def, const CPPExpression* partitions, int partitionNum)

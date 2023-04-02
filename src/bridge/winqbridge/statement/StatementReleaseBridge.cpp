@@ -28,7 +28,7 @@
 
 CPPStatementRelease WCDBStatementReleaseCreate(void)
 {
-    return WCDBCreateCPPBridgedObject(CPPStatementRelease, new WCDB::StatementRelease());
+    return WCDBCreateCPPBridgedObject(CPPStatementRelease, WCDB::StatementRelease);
 }
 
 void WCDBStatementReleaseConfigSavepoint(CPPStatementRelease release, const char* _Nullable savepoint)

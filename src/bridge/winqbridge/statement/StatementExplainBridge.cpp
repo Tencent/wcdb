@@ -29,7 +29,7 @@
 
 CPPStatementExplain WCDBStatementExplainCreate(void)
 {
-    return WCDBCreateCPPBridgedObject(CPPStatementExplain, new WCDB::StatementExplain());
+    return WCDBCreateCPPBridgedObject(CPPStatementExplain, WCDB::StatementExplain);
 }
 
 void WCDBStatementExplain(CPPStatementExplain explain, CPPStatement statement, bool queryPlan)

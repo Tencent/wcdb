@@ -34,7 +34,7 @@
 
 CPPStatementSelect WCDBStatementSelectCreate()
 {
-    return WCDBCreateCPPBridgedObject(CPPStatementSelect, new WCDB::StatementSelect());
+    return WCDBCreateCPPBridgedObject(CPPStatementSelect, WCDB::StatementSelect);
 }
 
 void WCDBStatementSelectConfigWith(CPPStatementSelect select,

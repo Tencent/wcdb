@@ -28,20 +28,24 @@
 
 CPPBindParameter WCDBBindparameterCreateQuestionSignType(int num)
 {
-    return WCDBCreateCPPBridgedObject(CPPBindParameter, new WCDB::BindParameter(num));
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPBindParameter, WCDB::BindParameter, num);
 }
 
 CPPBindParameter WCDBBindparameterCreateAtSignType(const char* _Nullable name)
 {
-    return WCDBCreateCPPBridgedObject(CPPBindParameter, WCDB::BindParameter::at(name));
+    return WCDBCreateCPPBridgedObjectByCopy(CPPBindParameter,
+                                            WCDB::BindParameter::at(name));
 }
 
 CPPBindParameter WCDBBindparameterCreateColonSignType(const char* _Nullable name)
 {
-    return WCDBCreateCPPBridgedObject(CPPBindParameter, WCDB::BindParameter::colon(name));
+    return WCDBCreateCPPBridgedObjectByCopy(CPPBindParameter,
+                                            WCDB::BindParameter::colon(name));
 }
 
 CPPBindParameter WCDBBindparameterCreateDollarSignType(const char* _Nullable name)
 {
-    return WCDBCreateCPPBridgedObject(CPPBindParameter, WCDB::BindParameter::dollar(name));
+    return WCDBCreateCPPBridgedObjectByCopy(CPPBindParameter,
+                                            WCDB::BindParameter::dollar(name));
 }

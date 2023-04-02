@@ -32,9 +32,10 @@
 CPPJoin WCDBJoinCreateWithTableOrSubquery(CPPTableOrSubquery query)
 {
     WCDBGetObjectOrReturnValue(query, WCDB::TableOrSubquery, cppQuery, CPPJoin());
-    WCDB::Join* join = new WCDB::Join();
+    CPPJoin ret = WCDBCreateCPPBridgedObject(CPPJoin, WCDB::Join);
+    WCDBGetObjectOrReturnValue(ret, WCDB::Join, join, CPPJoin());
     join->table(*cppQuery);
-    return WCDBCreateCPPBridgedObject(CPPJoin, join);
+    return ret;
 }
 
 void WCDBJoinWith(CPPJoin join, CPPTableOrSubquery query)

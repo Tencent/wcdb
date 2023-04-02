@@ -32,37 +32,37 @@
 
 CPPTableOrSubquery WCDBTableOrSubqueryCreateWithTable(const char* _Nullable tableName)
 {
-    return WCDBCreateCPPBridgedObject(
-    CPPTableOrSubquery, new WCDB::TableOrSubquery(WCDB::UnsafeStringView(tableName)));
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPTableOrSubquery, WCDB::TableOrSubquery, WCDB::UnsafeStringView(tableName));
 }
 
 CPPTableOrSubquery WCDBTableOrSubqueryCreateWithFunction(const char* _Nullable functionName)
 {
-    return WCDBCreateCPPBridgedObject(
+    return WCDBCreateCPPBridgedObjectByCopy(
     CPPTableOrSubquery, WCDB::TableOrSubquery::function(functionName));
 }
 
 CPPTableOrSubquery WCDBTableOrSubqueryCreateWithJoin(CPPJoin join)
 {
     WCDBGetObjectOrReturnValue(join, WCDB::Join, cppJoin, CPPTableOrSubquery());
-    return WCDBCreateCPPBridgedObject(CPPTableOrSubquery,
-                                      new WCDB::TableOrSubquery(*cppJoin));
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPTableOrSubquery, WCDB::TableOrSubquery, *cppJoin);
 }
 
 CPPTableOrSubquery WCDBTableOrSubqueryCreateWithSelection(CPPStatementSelect select)
 {
     WCDBGetObjectOrReturnValue(
     select, WCDB::StatementSelect, cppSelect, CPPTableOrSubquery());
-    return WCDBCreateCPPBridgedObject(CPPTableOrSubquery,
-                                      new WCDB::TableOrSubquery(*cppSelect));
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPTableOrSubquery, WCDB::TableOrSubquery, *cppSelect);
 }
 
 CPPTableOrSubquery
 WCDBTableOrSubqueryCreateWithTableOrSubqueries(const CPPTableOrSubquery* queries, int queryNum)
 {
     WCDBGetCPPSyntaxList(WCDB::TableOrSubquery, cppQueries, queries, queryNum);
-    return WCDBCreateCPPBridgedObject(CPPTableOrSubquery,
-                                      new WCDB::TableOrSubquery(cppQueries));
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPTableOrSubquery, WCDB::TableOrSubquery, cppQueries);
 }
 
 void WCDBTableOrSubqueryConfigSchema(CPPTableOrSubquery tableOrSubquery, CPPSchema schema)

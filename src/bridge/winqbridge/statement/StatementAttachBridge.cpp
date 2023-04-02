@@ -30,7 +30,7 @@
 
 CPPStatementAttach WCDBStatementAttachCreate()
 {
-    return WCDBCreateCPPBridgedObject(CPPStatementAttach, new WCDB::StatementAttach());
+    return WCDBCreateCPPBridgedObject(CPPStatementAttach, WCDB::StatementAttach);
 }
 
 void WCDBStatementAttachConfigPath(CPPStatementAttach attach, CPPExpression path)

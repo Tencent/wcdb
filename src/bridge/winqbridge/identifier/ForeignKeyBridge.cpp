@@ -30,7 +30,7 @@
 
 CPPForeignKey WCDBForeignKeyCreate()
 {
-    return WCDBCreateCPPBridgedObject(CPPForeignKey, new WCDB::ForeignKey());
+    return WCDBCreateCPPBridgedObject(CPPForeignKey, WCDB::ForeignKey);
 }
 void WCDBForeignKeyConfigReferencesTable(CPPForeignKey foreignKey, const char* _Nullable table)
 {

@@ -43,17 +43,25 @@
 #define WCDBGetObjectOrReturnValue(rawObj, objType, typedObjName, value)       \
     __WCDBGetObjectOrReturn(rawObj, objType, typedObjName, return value)
 
-#define WCDBCreateCPPBridgedObject(objType, originObj)                         \
+#define WCDBCreateCPPBridgedObjectByCopy(objType, originObj)                   \
     WCDB::ObjectBridge::createCPPBridgedObject<objType>(                       \
-    WCDB::ObjectBridge::createCPPObject(originObj))
+    WCDB::ObjectBridge::copyCPPObject(originObj))
 
 #define WCDBCreateRecylableCPPObject(objType, originObj)                       \
     WCDB::ObjectBridge::createCPPBridgedObject<objType>(                       \
-    WCDB::ObjectBridge::createCPPObject(originObj, true, true))
+    WCDB::ObjectBridge::copyCPPObject(originObj, true))
 
-#define WCDBCreateUnmanageCPPObject(objType, originObj)                        \
+#define WCDBCreateCPPBridgedObject(objType, cppObjType)                        \
     WCDB::ObjectBridge::createCPPBridgedObject<objType>(                       \
-    WCDB::ObjectBridge::createCPPObject(originObj, false))
+    WCDB::ObjectBridge::createCPPObject<cppObjType>())
+
+#define WCDBCreateCPPBridgedObjectWithParameters(objType, cppObjType, ...)     \
+    WCDB::ObjectBridge::createCPPBridgedObject<objType>(                       \
+    WCDB::ObjectBridge::createCPPObject<cppObjType>(__VA_ARGS__))
+
+#define WCDBCreateUnmanagedCPPObject(objType, originObj)                       \
+    WCDB::ObjectBridge::createCPPBridgedObject<objType>(                       \
+    WCDB::ObjectBridge::createUnmanagedCPPObject(originObj))
 
 #define WCDBCreateSwiftBridgedObject(objType, originObj)                       \
     WCDB::ObjectBridge::createRecyclableSwiftObject<objType>(originObj)
@@ -99,59 +107,39 @@ public:
     }
 
     template<typename T>
-    static CPPObject* _Nonnull createCPPObject(T* _Nonnull obj,
-                                               bool autoRelease = true,
-                                               bool isRecyclable = false)
+    static CPPObject* _Nonnull createUnmanagedCPPObject(T* _Nonnull obj)
     {
         static_assert(!std::is_same<T, CPPObject>::value, "");
         CPPObject* cppObj = (CPPObject*) malloc(sizeof(CPPObject));
         cppObj->realValue = (void*) obj;
-        cppObj->isRecyclableObj = isRecyclable;
-        if (autoRelease) {
-            cppObj->deleter = releaseCPPObject<T>;
-        } else {
-            cppObj->deleter = nullptr;
-        }
+        cppObj->isRecyclableObj = false;
+        cppObj->deleter = nullptr;
         return cppObj;
     }
 
     template<typename T>
-    static CPPObject* _Nonnull createCPPObject(const T& obj,
-                                               bool autoRelease = true,
-                                               bool isRecyclable = false)
+    static CPPObject* _Nonnull copyCPPObject(T&& obj, bool isRecyclable = false)
     {
         static_assert(!std::is_same<T, CPPObject>::value, "");
         static_assert(std::is_copy_constructible<T>::value, "");
-        assert(autoRelease == true);
-        CPPObject* cppObj = (CPPObject*) malloc(sizeof(CPPObject) + sizeof(T));
+        CPPObject* cppObj
+        = (CPPObject*) malloc(sizeof(CPPObject) + sizeof(std::remove_reference_t<T>));
         cppObj->realValue = cppObj + 1;
-        new (cppObj->realValue) T(obj);
+        new (cppObj->realValue) std::remove_reference_t<T>(std::forward<T>(obj));
         cppObj->isRecyclableObj = isRecyclable;
-        if (autoRelease) {
-            cppObj->deleter = releaseCPPObject<T>;
-        } else {
-            cppObj->deleter = nullptr;
-        }
+        cppObj->deleter = releaseCPPObject<std::remove_reference_t<T>>;
         return cppObj;
     }
 
-    template<typename T>
-    static CPPObject* _Nonnull createCPPObject(const T&& obj,
-                                               bool autoRelease = true,
-                                               bool isRecyclable = false)
+    template<typename T, typename... Args>
+    static CPPObject* _Nonnull createCPPObject(const Args&... args)
     {
         static_assert(!std::is_same<T, CPPObject>::value, "");
-        static_assert(std::is_copy_constructible<T>::value, "");
-        assert(autoRelease == true);
         CPPObject* cppObj = (CPPObject*) malloc(sizeof(CPPObject) + sizeof(T));
         cppObj->realValue = cppObj + 1;
-        new (cppObj->realValue) T(std::move(obj));
-        cppObj->isRecyclableObj = isRecyclable;
-        if (autoRelease) {
-            cppObj->deleter = releaseCPPObject<T>;
-        } else {
-            cppObj->deleter = nullptr;
-        }
+        new (cppObj->realValue) T(args...);
+        cppObj->isRecyclableObj = false;
+        cppObj->deleter = releaseCPPObject<T>;
         return cppObj;
     }
 

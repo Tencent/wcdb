@@ -29,7 +29,7 @@
 
 CPPStatementDetach WCDBStatementDetachCreate(void)
 {
-    return WCDBCreateCPPBridgedObject(CPPStatementDetach, new WCDB::StatementDetach());
+    return WCDBCreateCPPBridgedObject(CPPStatementDetach, WCDB::StatementDetach);
 }
 
 void WCDBStatementDetachConfigSchema(CPPStatementDetach detachStatement, CPPSchema schema)

@@ -34,8 +34,7 @@
 
 CPPStatementCreateTrigger WCDBStatementCreateTriggerCreate(void)
 {
-    return WCDBCreateCPPBridgedObject(CPPStatementCreateTrigger,
-                                      new WCDB::StatementCreateTrigger());
+    return WCDBCreateCPPBridgedObject(CPPStatementCreateTrigger, WCDB::StatementCreateTrigger);
 }
 
 void WCDBStatementCreateTriggerConfigTrigger(CPPStatementCreateTrigger createTrigger,
