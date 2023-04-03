@@ -20,7 +20,7 @@ Pod::Spec.new do |wcdb|
   wcdb.osx.deployment_target = "10.13"
   wcdb.watchos.deployment_target = "7.0"
   wcdb.tvos.deployment_target = "12.4"
-  wcdb.source       = { :git => "https://github.com/Tencent/wcdb.git", :commit => "4de08a99287300f008053d09cffffe61cc8f4ed4" }
+  wcdb.source       = { :git => "https://github.com/Tencent/wcdb.git":tag => "v#{wcdb.version}" }
   wcdb.public_header_files = "src/cpp/WCDBCpp.h", "src/cpp/**/*.{h,hpp}", "src/common/winq/*.{h,hpp}", "src/common/winq/**/*.{h,hpp}", "src/common/utility/Shadow.hpp", "src/common/utility/Macro.h", "src/common/utility/CaseInsensiveList.hpp", "src/common/core/fts/FTSConst.h", "src/common/core/fts/tokenizer/TokenizerModule.hpp", "src/common/core/fts/tokenizer/TokenizerModuleTemplate.hpp", "src/common/core/fts/tokenizer/BaseTokenizerUtil.hpp", "src/common/core/fts/tokenizer/PinyinTokenizer.hpp", "src/common/core/fts/tokenizer/OneOrBinaryTokenizer.hpp", "src/common/core/fts/auxfunction/FTS5AuxiliaryFunctionTemplate.hpp", "src/common/core/fts/auxfunction/AuxiliaryFunctionModule.hpp", "src/common/core/fts/auxfunction/SubstringMatchInfo.hpp", "src/common/core/fts/FTSError.hpp", "src/common/core/RecyclableHandle.hpp", "src/common/core/Tag.hpp", "src/common/base/Recyclable.hpp", "src/common/base/SharedThreadedErrorProne.hpp", "src/common/base/StringView.hpp", "src/common/base/Optional.hpp", "src/common/base/Error.hpp", "src/common/base/Data.hpp", "src/common/base/UnsafeData.hpp"
   wcdb.source_files  = "src/common/**/*.{h,hpp,c,cpp}", "src/cpp/**/*.{h,hpp,c,cpp}"
   wcdb.exclude_files = "src/cpp/tests/**/*.{h,hpp,c,cpp}"
