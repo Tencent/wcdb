@@ -48,7 +48,7 @@ version=`cat $root/VERSION`
 preprocessor="\$\(inherited\)"
 preprocessor+="\ WCDB_VERSION=\\\"\"${version}\\\"\""
 if $wechat; then
-    preprocessor+="\ WCDB_WECHAT=1"
+    preprocessor+="\ WCDB_WECHAT_IOS=1"
 fi
 preprocessor+="\ WCDB_BUILD=\\\"\"${timestamp}\\\"\""
 

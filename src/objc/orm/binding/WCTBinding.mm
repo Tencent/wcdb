@@ -87,7 +87,7 @@ WCTBinding::WCTBinding(Class cls)
         [m_cls additionalObjectRelationalMapping:*this];
     }
 
-#if WCDB_WECHAT
+#if WCDB_WECHAT_IOS
     // 兼容微信
     m_columnDefs.alphabeticallyCaseInsensiveSort();
 #endif
