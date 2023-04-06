@@ -154,7 +154,7 @@ case "$platform" in
     ;;
     watchOS)
         platformBasedParameters+=('product="$products/$configuration-watchos/$target.framework" sdk=watchos arch="armv7k -arch arm64_32"')
-        platformBasedParameters+=('product="$products/$configuration-watchsimulator/$target.framework" sdk=watchsimulator arch=x86_64')
+        platformBasedParameters+=('product="$products/$configuration-watchsimulator/$target.framework" sdk=watchsimulator arch=i386')
     ;;
     *)
         echo 'Platform should be either iOS, macOS or watchOS.'
