@@ -53,7 +53,7 @@ UnsafeStringView::UnsafeStringView(const char* string, size_t length)
 UnsafeStringView::UnsafeStringView(const UnsafeStringView& other)
 : m_data(other.m_data), m_length(other.m_length), m_referenceCount(other.m_referenceCount)
 {
-    if ((int64_t) m_referenceCount > ConstanceReference) {
+    if ((uint64_t) m_referenceCount > ConstanceReference) {
         (*m_referenceCount)++;
     }
 }
