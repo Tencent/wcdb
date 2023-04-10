@@ -47,6 +47,11 @@
     [self doTestInsertOrReplace];
 }
 
+- (void)test_insert_or_ignore
+{
+    [self doTestInsertOrIgnore];
+}
+
 - (void)test_insert_failed_with_conflict
 {
     [self doTestInsertFailedWithConflict];

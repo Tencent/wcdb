@@ -440,6 +440,10 @@ bool MigratingHandleStatement::isMigratedPrepared()
 
 bool MigratingHandleStatement::stepMigration(const int64_t& rowid)
 {
+    // The content inserting to source table is ignored.
+    if (rowid == 0 && getHandle()->getChanges() == 0) {
+        return true;
+    }
     WCTAssert(isMigratedPrepared());
     m_removeMigratedStatement->bindInteger(rowid, 1);
     if (m_rowidIndexOfMigratingStatement > 0) {
