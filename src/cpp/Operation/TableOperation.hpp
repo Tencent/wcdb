@@ -46,6 +46,14 @@ public:
      */
     bool insertOrReplaceRows(const MultiRowsValue &rows, const Columns &columns);
 
+    /**
+     @brief Execute inserting with multi rows of values.
+     It will ignore the row while there already exists the same primary key or row id in current table.
+     @note  It will run embedded transaction while rows.size>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     @return True if no error occurs.
+     */
+    bool insertOrIgnoreRows(const MultiRowsValue &rows, const Columns &columns);
+
 #pragma mark - Update
 public:
     /**

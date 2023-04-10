@@ -321,6 +321,16 @@
     return [[[[self prepareInsert] orReplace] values:objects] execute];
 }
 
+- (BOOL)insertOrIgnoreObject:(WCTObject *)object
+{
+    return [[[[self prepareInsert] orIgnore] value:object] execute];
+}
+
+- (BOOL)insertOrIgnoreObjects:(NSArray<WCTObject *> *)objects
+{
+    return [[[[self prepareInsert] orIgnore] values:objects] execute];
+}
+
 - (BOOL)insertObject:(WCTObject *)object onProperties:(const WCTProperties &)properties
 {
     return [[[[self prepareInsert] onProperties:properties] value:object] execute];
@@ -339,6 +349,16 @@
 - (BOOL)insertOrReplaceObjects:(NSArray<WCTObject *> *)objects onProperties:(const WCTProperties &)properties
 {
     return [[[[[self prepareInsert] orReplace] onProperties:properties] values:objects] execute];
+}
+
+- (BOOL)insertOrIgnoreObject:(WCTObject *)object onProperties:(const WCTProperties &)properties
+{
+    return [[[[[self prepareInsert] orIgnore] onProperties:properties] value:object] execute];
+}
+
+- (BOOL)insertOrIgnoreObjects:(NSArray<WCTObject *> *)objects onProperties:(const WCTProperties &)properties
+{
+    return [[[[[self prepareInsert] orIgnore] onProperties:properties] values:objects] execute];
 }
 
 #pragma mark - Update Properties To Object

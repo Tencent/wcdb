@@ -30,7 +30,7 @@ import WCDB_Private
 /// ChainCall interface for inserting
 public protocol InsertChainCallInterfaceForObjc: AnyObject {
 
-    /// Prepare chain call for inserting of `TableEncodable` object
+    /// Prepare chain call for inserting of `WCTTableCoding` object
     ///
     /// - Parameters:
     ///   - cls: Type of table object
@@ -38,24 +38,38 @@ public protocol InsertChainCallInterfaceForObjc: AnyObject {
     /// - Returns: `Insert`
     func prepareInsert<Root: WCTTableCoding>(of cls: Root.Type, intoTable table: String) throws -> Insert
 
-    /// Prepare chain call for inserting or replacing of `TableEncodable` object
+    /// Prepare chain call for inserting or replacing of `WCTTableCoding` object
     ///
     /// - Parameters:
     ///   - cls: Type of table object
     ///   - table: Table name
     /// - Returns: `Insert`
     func prepareInsertOrReplace<Root: WCTTableCoding>(of cls: Root.Type, intoTable table: String) throws -> Insert
+
+    /// Prepare chain call for inserting or ignoring of `WCTTableCoding` object
+    ///
+    /// - Parameters:
+    ///   - cls: Type of table object
+    ///   - table: Table name
+    /// - Returns: `Insert`
+    func prepareInsertOrIgnore<Root: WCTTableCoding>(of cls: Root.Type, intoTable table: String) throws -> Insert
 }
 
 extension InsertChainCallInterfaceForObjc where Self: HandleRepresentable {
     public func prepareInsert<Root: WCTTableCoding>(of cls: Root.Type, intoTable table: String) throws -> Insert {
-        return Insert(with: try getHandle(), named: table, on: cls.allProperties(), isReplace: false)
+        return Insert(with: try getHandle(), named: table, on: cls.allProperties())
     }
 
     public func prepareInsertOrReplace<Root: WCTTableCoding>(
         of cls: Root.Type,
         intoTable table: String) throws -> Insert {
-        return Insert(with: try getHandle(), named: table, on: cls.allProperties(), isReplace: true)
+            return Insert(with: try getHandle(), named: table, on: cls.allProperties(), onConflict: .Replace)
+    }
+
+    public func prepareInsertOrIgnore<Root: WCTTableCoding>(
+        of cls: Root.Type,
+        intoTable table: String) throws -> Insert {
+            return Insert(with: try getHandle(), named: table, on: cls.allProperties(), onConflict: .Ignore)
     }
 }
 

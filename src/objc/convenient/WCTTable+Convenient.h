@@ -175,6 +175,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)insertOrReplaceObjects:(NSArray<ObjectType> *)objects;
 
+- (BOOL)insertOrIgnoreObject:(ObjectType)object;
+
+- (BOOL)insertOrIgnoreObjects:(NSArray<ObjectType> *)objects;
+
 - (BOOL)insertObject:(ObjectType)object onProperties:(const WCTProperties &)properties;
 
 - (BOOL)insertObjects:(NSArray<ObjectType> *)objects onProperties:(const WCTProperties &)properties;
@@ -182,6 +186,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)insertOrReplaceObject:(ObjectType)object onProperties:(const WCTProperties &)properties;
 
 - (BOOL)insertOrReplaceObjects:(NSArray<ObjectType> *)objects onProperties:(const WCTProperties &)properties;
+
+- (BOOL)insertOrIgnoreObject:(ObjectType)object onProperties:(const WCTProperties &)properties;
+
+- (BOOL)insertOrIgnoreObjects:(NSArray<ObjectType> *)objects onProperties:(const WCTProperties &)properties;
 
 #pragma mark - Update Properties To Object
 - (BOOL)updateProperties:(const WCTProperties &)properties

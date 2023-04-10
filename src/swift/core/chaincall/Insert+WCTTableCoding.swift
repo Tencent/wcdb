@@ -39,7 +39,8 @@ public extension Insert {
         }
         if !WCTAPIBridge.insertObjects(objects, intoTable: name,
                                        withProperties: properties?.asWCTBridgeProperties(),
-                                       orReplace: isReplace,
+                                       orReplace: conflict != nil ? conflict! == .Replace : false,
+                                       orIgnore: conflict != nil ? conflict! == .Ignore : false,
                                        with: handle.cppHandle) {
             throw handle.getError()
         }

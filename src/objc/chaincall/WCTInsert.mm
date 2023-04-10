@@ -49,6 +49,12 @@
     return self;
 }
 
+- (instancetype)orIgnore
+{
+    _statement.orIgnore();
+    return self;
+}
+
 - (instancetype)intoTable:(NSString *)tableName
 {
     _statement.insertIntoTable(tableName);

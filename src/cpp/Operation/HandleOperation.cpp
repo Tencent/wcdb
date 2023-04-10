@@ -115,6 +115,44 @@ bool HandleOperation::insertOrReplaceRows(const MultiRowsValue &rows,
     }
 }
 
+bool HandleOperation::insertOrIgnoreRows(const MultiRowsValue &rows,
+                                         const Columns &columns,
+                                         const UnsafeStringView &table)
+{
+    auto insertAction = [&](Handle &handle) {
+        StatementInsert insert
+        = StatementInsert().insertIntoTable(table).orIgnore().columns(columns).values(
+        BindParameter::bindParameters(columns.size()));
+        if (!handle.prepare(insert)) {
+            assignErrorToDatabase(handle.getError());
+            return false;
+        }
+        for (const OneRowValue &row : rows) {
+            WCTRemedialAssert(columns.size() == row.size(),
+                              "Number of values is not equal to number of columns",
+                              handle.finalize();
+                              return false;) handle.reset();
+            handle.bindRow(row);
+            if (!handle.step()) {
+                handle.finalize();
+                assignErrorToDatabase(handle.getError());
+                return false;
+            }
+        }
+        handle.finalize();
+        return true;
+    };
+    if (rows.size() == 0) {
+        return true;
+    } else if (rows.size() == 1) {
+        GetHandleOrReturnValue(false);
+        Handle newHandle = Handle(handle);
+        return insertAction(newHandle);
+    } else {
+        return lazyRunTransaction(insertAction);
+    }
+}
+
 bool HandleOperation::updateRow(const OneRowValue &row,
                                 const Columns &columns,
                                 const UnsafeStringView &table,

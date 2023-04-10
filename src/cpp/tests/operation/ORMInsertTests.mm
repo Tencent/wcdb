@@ -131,6 +131,27 @@
          }];
 }
 
+#pragma mark - Database - Insert or Ignore
+- (void)test_database_insert_or_ignore_object
+{
+    [self doTestObjects:{ self.object1, self.object2 }
+              andNumber:1
+           ofInsertSQLs:@"INSERT OR IGNORE INTO testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             return self.database->insertOrIgnoreObjects<CPPTestCaseObject>(self.renewedObject1, self.tableName.UTF8String);
+         }];
+}
+
+- (void)test_database_insert_or_ignore_objects
+{
+    [self doTestObjects:{ self.object1, self.object2 }
+              andNumber:2
+           ofInsertSQLs:@"INSERT OR IGNORE INTO testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             return self.database->insertOrIgnoreObjects<CPPTestCaseObject>({ self.renewedObject1, self.renewedObject2 }, self.tableName.UTF8String);
+         }];
+}
+
 #pragma mark - Database - Partial Insert
 - (void)test_database_insert_object_on_properties
 {
@@ -170,6 +191,27 @@
            ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return self.database->insertOrReplaceObjects<CPPTestCaseObject>({ self.object1, self.object2 }, self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier));
+         }];
+}
+
+#pragma mark - Database - Partial Insert or Ignore
+- (void)test_database_insert_or_ignore_object_on_properties
+{
+    [self doTestObjects:{ self.object1, self.object2 }
+              andNumber:1
+           ofInsertSQLs:@"INSERT OR IGNORE INTO testTable(identifier) VALUES(?1)"
+         afterInsertion:^BOOL {
+             return self.database->insertOrIgnoreObjects<CPPTestCaseObject>(self.object1, self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier));
+         }];
+}
+
+- (void)test_database_insert_or_ignore_objects_on_properties
+{
+    [self doTestObjects:{ self.object1, self.object2 }
+              andNumber:2
+           ofInsertSQLs:@"INSERT OR IGNORE INTO testTable(identifier) VALUES(?1)"
+         afterInsertion:^BOOL {
+             return self.database->insertOrIgnoreObjects<CPPTestCaseObject>({ self.object1, self.object2 }, self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier));
          }];
 }
 
@@ -215,6 +257,27 @@
          }];
 }
 
+#pragma mark - Table - Insert or Ignore
+- (void)test_table_insert_or_ignore_object
+{
+    [self doTestObjects:{ self.object1, self.object2 }
+              andNumber:1
+           ofInsertSQLs:@"INSERT OR IGNORE INTO testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             return self.table.insertOrIgnoreObjects(self.renewedObject1);
+         }];
+}
+
+- (void)test_table_insert_or_ignore_objects
+{
+    [self doTestObjects:{ self.object1, self.object2 }
+              andNumber:2
+           ofInsertSQLs:@"INSERT OR IGNORE INTO testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             return self.table.insertOrIgnoreObjects({ self.renewedObject1, self.renewedObject2 });
+         }];
+}
+
 #pragma mark - Table - Partial Insert
 - (void)test_table_insert_object_on_properties
 {
@@ -254,6 +317,27 @@
            ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return self.table.insertOrReplaceObjects({ self.object1, self.object2 }, WCDB_FIELD(CPPTestCaseObject::identifier));
+         }];
+}
+
+#pragma mark - Table - Partial Insert or Ignore
+- (void)test_table_insert_or_ignore_object_on_properties
+{
+    [self doTestObjects:{ self.object1, self.object2 }
+              andNumber:1
+           ofInsertSQLs:@"INSERT OR IGNORE INTO testTable(identifier) VALUES(?1)"
+         afterInsertion:^BOOL {
+             return self.table.insertOrIgnoreObjects(self.object1, WCDB_FIELD(CPPTestCaseObject::identifier));
+         }];
+}
+
+- (void)test_table_insert_or_ignore_objects_on_properties
+{
+    [self doTestObjects:{ self.object1, self.object2 }
+              andNumber:2
+           ofInsertSQLs:@"INSERT OR IGNORE INTO testTable(identifier) VALUES(?1)"
+         afterInsertion:^BOOL {
+             return self.table.insertOrIgnoreObjects({ self.object1, self.object2 }, WCDB_FIELD(CPPTestCaseObject::identifier));
          }];
 }
 
@@ -299,6 +383,27 @@
          }];
 }
 
+#pragma mark - Handle - Insert or Ignore
+- (void)test_handle_insert_or_ignore_object
+{
+    [self doTestObjects:{ self.object1, self.object2 }
+              andNumber:1
+           ofInsertSQLs:@"INSERT OR IGNORE INTO testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             return self.database->getHandle().insertOrIgnoreObjects<CPPTestCaseObject>(self.renewedObject1, self.tableName.UTF8String);
+         }];
+}
+
+- (void)test_handle_insert_or_ignore_objects
+{
+    [self doTestObjects:{ self.object1, self.object2 }
+              andNumber:2
+           ofInsertSQLs:@"INSERT OR IGNORE INTO testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             return self.database->getHandle().insertOrIgnoreObjects<CPPTestCaseObject>({ self.renewedObject1, self.renewedObject2 }, self.tableName.UTF8String);
+         }];
+}
+
 #pragma mark - Handle - Partial Insert
 - (void)test_handle_insert_object_on_properties
 {
@@ -338,6 +443,27 @@
            ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return self.database->getHandle().insertOrReplaceObjects<CPPTestCaseObject>({ self.object1, self.object2 }, self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier));
+         }];
+}
+
+#pragma mark - Handle - Partial Insert or Ignore
+- (void)test_handle_insert_or_ignore_object_on_properties
+{
+    [self doTestObjects:{ self.object1, self.object2 }
+              andNumber:1
+           ofInsertSQLs:@"INSERT OR IGNORE INTO testTable(identifier) VALUES(?1)"
+         afterInsertion:^BOOL {
+             return self.database->getHandle().insertOrIgnoreObjects<CPPTestCaseObject>(self.object1, self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier));
+         }];
+}
+
+- (void)test_handle_insert_or_ignore_objects_on_properties
+{
+    [self doTestObjects:{ self.object1, self.object2 }
+              andNumber:2
+           ofInsertSQLs:@"INSERT OR IGNORE INTO testTable(identifier) VALUES(?1)"
+         afterInsertion:^BOOL {
+             return self.database->getHandle().insertOrIgnoreObjects<CPPTestCaseObject>({ self.object1, self.object2 }, self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier));
          }];
 }
 

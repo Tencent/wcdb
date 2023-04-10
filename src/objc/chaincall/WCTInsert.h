@@ -46,6 +46,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  @brief WINQ interface for SQL.
+ @return self
+ */
+- (instancetype)orIgnore;
+
+/**
+ @brief WINQ interface for SQL.
  @param tableName The name of the table to insert objects to.
  @return self
  */

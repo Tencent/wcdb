@@ -24,7 +24,7 @@ import WCDB_Private
 /// Chain call for deleting
 public final class Delete {
     private var handle: Handle
-    private let statement = StatementDelete()
+    public final let statement = StatementDelete()
 
     /// The number of changed rows in the most recent call.
     /// It should be called after executing successfully

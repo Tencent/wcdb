@@ -37,8 +37,8 @@ extension Table {
 
 internal extension Table {
 
-    func internalInsert(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil, isReplace: Bool) throws where Object: WCTTableCoding {
-        let insert = Insert(with: try self.database.getHandle(), named: self.name, on: propertyConvertibleList, isReplace: isReplace)
+    func internalInsert(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil, onConflict action: ConflictAction? = nil) throws where Object: WCTTableCoding {
+        let insert = Insert(with: try self.database.getHandle(), named: self.name, on: propertyConvertibleList, onConflict: action)
         return try insert.execute(with: objects)
     }
 
@@ -93,7 +93,7 @@ internal extension Table {
 
 extension Table: InsertTableInterfaceForObjc where Root: WCTTableCoding {
 
-    /// Execute inserting with `TableCodable` object on specific(or all) properties
+    /// Execute inserting with `WCTTableCoding` object on specific(or all) properties
     ///
     /// Note that it will run embedded transaction while objects.count>1.
     /// The embedded transaction means that it will run a transaction if it's not in other transaction,
@@ -104,10 +104,10 @@ extension Table: InsertTableInterfaceForObjc where Root: WCTTableCoding {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     /// - Throws: `Error`
     public func insert(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: WCTTableCoding {
-        try internalInsert(objects, on: propertyConvertibleList, isReplace: false)
+        try internalInsert(objects, on: propertyConvertibleList)
     }
 
-    /// Execute inserting or replacing with `TableCodable` object on specific(or all) properties.
+    /// Execute inserting or replacing with `WCTTableCoding` object on specific(or all) properties.
     /// It will replace the original row while they have same primary key or row id.
     ///
     /// Note that it will run embedded transaction while objects.count>1.
@@ -119,10 +119,25 @@ extension Table: InsertTableInterfaceForObjc where Root: WCTTableCoding {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     /// - Throws: `Error`
     public func insertOrReplace(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: WCTTableCoding {
-        try internalInsert(objects, on: propertyConvertibleList, isReplace: true)
+        try internalInsert(objects, on: propertyConvertibleList, onConflict: .Replace)
     }
 
-    /// Execute inserting with `TableCodable` object on specific(or all) properties
+    /// Execute inserting or ignoring with `WCTTableCoding` object on specific(or all) properties.
+    /// It will ignore the object while there already exists the same primary key or row id in current table.
+    ///
+    /// Note that it will run embedded transaction while objects.count>1.
+    /// The embedded transaction means that it will run a transaction if it's not in other transaction,
+    /// otherwise it will be executed within the existing transaction.
+    ///
+    /// - Parameters:
+    ///   - objects: Table encodable object
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    /// - Throws: `Error`
+    public func insertOrIgnore(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: WCTTableCoding {
+        try internalInsert(objects, on: propertyConvertibleList, onConflict: .Ignore)
+    }
+
+    /// Execute inserting with `WCTTableCoding` object on specific(or all) properties
     ///
     /// Note that it will run embedded transaction while objects.count>1.
     /// The embedded transaction means that it will run a transaction if it's not in other transaction,
@@ -133,10 +148,10 @@ extension Table: InsertTableInterfaceForObjc where Root: WCTTableCoding {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     /// - Throws: `Error`
     public func insert(_ objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: WCTTableCoding {
-        try internalInsert(objects, on: propertyConvertibleList, isReplace: false)
+        try internalInsert(objects, on: propertyConvertibleList)
     }
 
-    /// Execute inserting or replacing with `TableCodable` object on specific(or all) properties.
+    /// Execute inserting or replacing with `WCTTableCoding` object on specific(or all) properties.
     /// It will replace the original row while they have same primary key or row id.
     ///
     /// Note that it will run embedded transaction while objects.count>1.
@@ -148,13 +163,28 @@ extension Table: InsertTableInterfaceForObjc where Root: WCTTableCoding {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     /// - Throws: `Error`
     public func insertOrReplace(_ objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: WCTTableCoding {
-        try internalInsert(objects, on: propertyConvertibleList, isReplace: true)
+        try internalInsert(objects, on: propertyConvertibleList, onConflict: .Replace)
+    }
+
+    /// Execute inserting or ignoring with `WCTTableCoding` object on specific(or all) properties.
+    /// It will ignore the object while there already exists the same primary key or row id in current table.
+    ///
+    /// Note that it will run embedded transaction while objects.count>1.
+    /// The embedded transaction means that it will run a transaction if it's not in other transaction,
+    /// otherwise it will be executed within the existing transaction.
+    ///
+    /// - Parameters:
+    ///   - objects: Table encodable object
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    /// - Throws: `Error`
+    public func insertOrIgnore(_ objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws where Object: WCTTableCoding {
+        try internalInsert(objects, on: propertyConvertibleList, onConflict: .Ignore)
     }
 }
 
 extension Table: UpdateTableInterfaceForObjc where Root: WCTTableCoding {
 
-    /// Execute updating with `TableCodable` object on specific(or all) properties.
+    /// Execute updating with `WCTTableCoding` object on specific(or all) properties.
     ///
     /// - Parameters:
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
@@ -173,7 +203,7 @@ extension Table: UpdateTableInterfaceForObjc where Root: WCTTableCoding {
         return try internalUpdate(on: propertyConvertibleList, with: object, where: condition, orderBy: orderList, limit: limit, offset: offset)
     }
 
-    /// Execute updating with `TableCodable` object on specific(or all) properties.
+    /// Execute updating with `WCTTableCoding` object on specific(or all) properties.
     ///
     /// - Parameters:
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list

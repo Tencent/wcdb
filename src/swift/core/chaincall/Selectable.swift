@@ -23,7 +23,7 @@ import WCDB_Private
 
 public class Selectable {
     internal final var handle: Handle
-    final var statement: StatementSelect
+    public final let statement: StatementSelect
 
     init(with handle: Handle, statement: StatementSelect) {
         self.statement = statement

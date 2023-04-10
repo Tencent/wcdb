@@ -24,7 +24,7 @@ import WCDB_Private
 /// The chain call for updating
 public final class Update {
     internal var handle: Handle
-    internal let statement = StatementUpdate()
+    public final let statement = StatementUpdate()
     internal let properties: [PropertyConvertible]
     private lazy var keys: [CodingTableKeyBase] = {
         self.properties.asCodingTableKeys()

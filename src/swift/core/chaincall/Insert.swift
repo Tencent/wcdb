@@ -26,23 +26,19 @@ public final class Insert {
     internal let handle: Handle
     internal var properties: [PropertyConvertible]?
     internal let name: String
-    internal let isReplace: Bool
+    internal var conflict: ConflictAction?
 
     init(with handle: Handle,
          named name: String,
          on propertyConvertibleList: [PropertyConvertible]?,
-         isReplace: Bool = false) {
+         onConflict action: ConflictAction? = nil) {
         self.name = name
         self.properties = propertyConvertibleList
-        self.isReplace = isReplace
+        self.conflict = action
         self.handle = handle
     }
 
-    private var conflict: ConflictAction? {
-        return isReplace ? ConflictAction.Replace : nil
-    }
-
-    private lazy var statement: StatementInsert = StatementInsert()
+    public final lazy var statement: StatementInsert = StatementInsert()
         .insert(intoTable: name).columns(properties!).onConflict(self.conflict)
         .values(BindParameter.bindParameters(properties!.count))
 
@@ -75,6 +71,7 @@ public final class Insert {
             properties = properties ?? Object.Properties.all
             try handle.prepare(statement)
             let encoder = TableEncoder(properties!.asCodingTableKeys(), on: handle)
+            let isReplace = conflict != nil ? conflict! == .Replace : false
             if !isReplace {
                 encoder.primaryKeyHash = orm.getPrimaryKey()?.stringValue.hashValue
             }

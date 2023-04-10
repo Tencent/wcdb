@@ -50,8 +50,8 @@ public final class Table<Root: AnyObject> {
 
 internal extension Table {
 
-    func internalInsert(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil, isReplace: Bool) throws where Object: TableEncodable {
-        let insert = Insert(with: try self.database.getHandle(), named: self.name, on: propertyConvertibleList, isReplace: isReplace)
+    func internalInsert(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil, onConlict action: ConflictAction? = nil) throws where Object: TableEncodable {
+        let insert = Insert(with: try self.database.getHandle(), named: self.name, on: propertyConvertibleList, onConflict: action)
         return try insert.execute(with: objects)
     }
 
@@ -117,7 +117,7 @@ extension Table: InsertTableInterface where Root: TableCodable {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     /// - Throws: `Error`
     public func insert(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws {
-        try internalInsert(objects, on: propertyConvertibleList, isReplace: false)
+        try internalInsert(objects, on: propertyConvertibleList)
     }
 
     /// Execute inserting or replacing with `TableCodable` object on specific(or all) properties.  
@@ -132,7 +132,22 @@ extension Table: InsertTableInterface where Root: TableCodable {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     /// - Throws: `Error`
     public func insertOrReplace(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws {
-        try internalInsert(objects, on: propertyConvertibleList, isReplace: true)
+        try internalInsert(objects, on: propertyConvertibleList, onConlict: .Replace)
+    }
+
+    /// Execute inserting or ignoring with `TableEncodable` object on specific(or all) properties.
+    /// It will ignore the object while there already exists the same primary key or row id in current table.
+    ///
+    /// Note that it will run embedded transaction while objects.count>1.
+    /// The embedded transaction means that it will run a transaction if it's not in other transaction,
+    /// otherwise it will be executed within the existing transaction.
+    ///
+    /// - Parameters:
+    ///   - objects: Table encodable object
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    /// - Throws: `Error`
+    public func insertOrIgnore(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws {
+        try internalInsert(objects, on: propertyConvertibleList, onConlict: .Ignore)
     }
 
     /// Execute inserting with `TableCodable` object on specific(or all) properties
@@ -146,7 +161,7 @@ extension Table: InsertTableInterface where Root: TableCodable {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     /// - Throws: `Error`
     public func insert(_ objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws {
-        try internalInsert(objects, on: propertyConvertibleList, isReplace: false)
+        try internalInsert(objects, on: propertyConvertibleList)
     }
 
     /// Execute inserting or replacing with `TableCodable` object on specific(or all) properties.  
@@ -161,7 +176,22 @@ extension Table: InsertTableInterface where Root: TableCodable {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     /// - Throws: `Error`
     public func insertOrReplace(_ objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws {
-        try internalInsert(objects, on: propertyConvertibleList, isReplace: true)
+        try internalInsert(objects, on: propertyConvertibleList, onConlict: .Replace)
+    }
+
+    /// Execute inserting or ignoring with `TableEncodable` object on specific(or all) properties.
+    /// It will ignore the object while there already exists the same primary key or row id in current table.
+    ///
+    /// Note that it will run embedded transaction while objects.count>1.
+    /// The embedded transaction means that it will run a transaction if it's not in other transaction,
+    /// otherwise it will be executed within the existing transaction.
+    ///
+    /// - Parameters:
+    ///   - objects: Table encodable object
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    /// - Throws: `Error`
+    public func insertOrIgnore(_ objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws {
+        try internalInsert(objects, on: propertyConvertibleList, onConlict: .Ignore)
     }
 }
 
