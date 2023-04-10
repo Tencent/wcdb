@@ -28,7 +28,7 @@ import Foundation
 import WCDB_Private
 
 public protocol InsertInterfaceForObjc {
-    /// Execute inserting with `TableEncodable` object on specific(or all) properties
+    /// Execute inserting with `WCTTableCoding` object on specific(or all) properties
     ///
     /// Note that it will run embedded transaction while objects.count>1.
     /// The embedded transaction means that it will run a transaction if it's not in other transaction,
@@ -44,7 +44,7 @@ public protocol InsertInterfaceForObjc {
         on propertyConvertibleList: [PropertyConvertible]?,
         intoTable table: String) throws
 
-    /// Execute inserting with `TableEncodable` object on specific(or all) properties
+    /// Execute inserting with `WCTTableCoding` object on specific(or all) properties
     ///
     /// Note that it will run embedded transaction while objects.count>1.
     /// The embedded transaction means that it will run a transaction if it's not in other transaction,
@@ -60,7 +60,7 @@ public protocol InsertInterfaceForObjc {
         on propertyConvertibleList: [PropertyConvertible]?,
         intoTable table: String) throws
 
-    /// Execute inserting or replacing with `TableEncodable` object on specific(or all) properties.
+    /// Execute inserting or replacing with `WCTTableCoding` object on specific(or all) properties.
     /// It will replace the original row while they have same primary key or row id.
     ///
     /// Note that it will run embedded transaction while objects.count>1.
@@ -77,7 +77,7 @@ public protocol InsertInterfaceForObjc {
         on propertyConvertibleList: [PropertyConvertible]?,
         intoTable table: String) throws
 
-    /// Execute inserting or replacing with `TableEncodable` object on specific(or all) properties.
+    /// Execute inserting or replacing with `WCTTableCoding` object on specific(or all) properties.
     /// It will replace the original row while they have same primary key or row id.
     ///
     /// Note that it will run embedded transaction while objects.count>1.
@@ -90,6 +90,40 @@ public protocol InsertInterfaceForObjc {
     ///   - table: Table name
     /// - Throws: `Error`
     func insertOrReplace<Object: WCTTableCoding>(
+        _ objects: [Object],
+        on propertyConvertibleList: [PropertyConvertible]?,
+        intoTable table: String) throws
+
+    /// Execute inserting or ignoring with `WCTTableCoding` object on specific(or all) properties.
+    /// It will ignore the object while there already exists the same primary key or row id in current table.
+    ///
+    /// Note that it will run embedded transaction while objects.count>1.
+    /// The embedded transaction means that it will run a transaction if it's not in other transaction,
+    /// otherwise it will be executed within the existing transaction.
+    ///
+    /// - Parameters:
+    ///   - objects: Table encodable object
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - table: Table name
+    /// - Throws: `Error`
+    func insertOrIgnore<Object: WCTTableCoding>(
+        _ objects: Object...,
+        on propertyConvertibleList: [PropertyConvertible]?,
+        intoTable table: String) throws
+
+    /// Execute inserting or ignoring with `WCTTableCoding` object on specific(or all) properties.
+    /// It will ignore the object while there already exists the same primary key or row id in current table.
+    ///
+    /// Note that it will run embedded transaction while objects.count>1.
+    /// The embedded transaction means that it will run a transaction if it's not in other transaction,
+    /// otherwise it will be executed within the existing transaction.
+    ///
+    /// - Parameters:
+    ///   - objects: Table encodable object
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - table: Table name
+    /// - Throws: `Error`
+    func insertOrIgnore<Object: WCTTableCoding>(
         _ objects: [Object],
         on propertyConvertibleList: [PropertyConvertible]?,
         intoTable table: String) throws
@@ -100,7 +134,7 @@ extension InsertInterfaceForObjc where Self: HandleRepresentable {
         _ objects: [Object],
         on propertyConvertibleList: [PropertyConvertible]? = nil,
         intoTable table: String) throws {
-        let insert = Insert(with: try getHandle(), named: table, on: propertyConvertibleList, isReplace: false)
+        let insert = Insert(with: try getHandle(), named: table, on: propertyConvertibleList)
         return try insert.execute(with: objects)
     }
 
@@ -108,7 +142,15 @@ extension InsertInterfaceForObjc where Self: HandleRepresentable {
         _ objects: [Object],
         on propertyConvertibleList: [PropertyConvertible]? = nil,
         intoTable table: String) throws {
-        let insert = Insert(with: try getHandle(), named: table, on: propertyConvertibleList, isReplace: true)
+            let insert = Insert(with: try getHandle(), named: table, on: propertyConvertibleList, onConflict: .Replace)
+        return try insert.execute(with: objects)
+    }
+
+    public func insertOrIgnore<Object: WCTTableCoding>(
+        _ objects: [Object],
+        on propertyConvertibleList: [PropertyConvertible]? = nil,
+        intoTable table: String) throws {
+            let insert = Insert(with: try getHandle(), named: table, on: propertyConvertibleList, onConflict: .Ignore)
         return try insert.execute(with: objects)
     }
 
@@ -124,6 +166,13 @@ extension InsertInterfaceForObjc where Self: HandleRepresentable {
         on propertyConvertibleList: [PropertyConvertible]? = nil,
         intoTable table: String) throws {
         return try insertOrReplace(objects, on: propertyConvertibleList, intoTable: table)
+    }
+
+    public func insertOrIgnore<Object: WCTTableCoding>(
+        _ objects: Object...,
+        on propertyConvertibleList: [PropertyConvertible]? = nil,
+        intoTable table: String) throws {
+        return try insertOrIgnore(objects, on: propertyConvertibleList, intoTable: table)
     }
 }
 

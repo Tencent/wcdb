@@ -75,6 +75,23 @@ class InsertInterfaceTests: CRUDTestCase {
         XCTAssertEqual(result!.variable2, self.name)
     }
 
+    func testInsertOrIgnore() {
+        // Give
+        let object = CRUDObject()
+        let expectedReplacedRowID = 1
+        object.variable1 = expectedReplacedRowID
+        object.variable2 = self.name
+        // When
+        XCTAssertNoThrow(try database.insertOrIgnore(object, intoTable: CRUDObject.name))
+        // Then
+        let condition = CRUDObject.variable1() == expectedReplacedRowID
+        let result: CRUDObject? = WCDBAssertNoThrowReturned(
+            try database.getObject(fromTable: CRUDObject.name, where: condition)
+        )
+        XCTAssertNotNil(result)
+        XCTAssertNotEqual(result!.variable2, self.name)
+    }
+
     func testPartialInsert() {
         // Give
         let object = CRUDObject()
@@ -125,6 +142,24 @@ class InsertInterfaceTests: CRUDTestCase {
         )
         XCTAssertNotNil(result)
         XCTAssertEqual(result!.variable2, self.name)
+    }
+
+    func testTableInsertOrIgnore() {
+        // Give
+        let object = CRUDObject()
+        let expectedReplacedRowID = 1
+        object.variable1 = expectedReplacedRowID
+        object.variable2 = self.name
+        let table = database.getTable(named: CRUDObject.name, of: CRUDObject.self)
+        // When
+        XCTAssertNoThrow(try table.insertOrIgnore(object))
+        // Then
+        let condition = CRUDObject.variable1() == expectedReplacedRowID
+        let result: CRUDObject? = WCDBAssertNoThrowReturned(
+            try table.getObject(where: condition)
+        )
+        XCTAssertNotNil(result)
+        XCTAssertNotEqual(result!.variable2, self.name)
     }
 
 }

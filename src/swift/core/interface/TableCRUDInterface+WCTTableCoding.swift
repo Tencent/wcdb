@@ -34,6 +34,8 @@ public protocol InsertTableInterfaceForObjc: AnyObject {
     func insert(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]?) throws
     func insertOrReplace(_ objects: Object..., on propertyConvertibleList: [PropertyConvertible]?) throws
     func insertOrReplace(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]?) throws
+    func insertOrIgnore(_ objects: Object..., on propertyConvertibleList: [PropertyConvertible]?) throws
+    func insertOrIgnore(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]?) throws
 }
 
 public protocol UpdateTableInterfaceForObjc: AnyObject {

@@ -157,6 +157,28 @@ public:
         return insert.execute();
     }
 
+    /**
+     @brief Execute inserting with multi objects on specific(or all) fields.
+     It will ignore the object while there already exists the same primary key or row id in current table.
+     @note  It will run embedded transaction while objs.size>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     @return True if no error occurs.
+     */
+    template<class ObjectType>
+    bool insertOrIgnoreObjects(const ValueArray<ObjectType> &objs,
+                               const UnsafeStringView &table,
+                               const Fields &fields = Fields())
+    {
+        if (objs.size() == 0) {
+            return true;
+        }
+        auto insert
+        = prepareInsert<ObjectType>().orIgnore().intoTable(table).values(objs);
+        if (fields.size() > 0) {
+            insert.onFields(fields);
+        }
+        return insert.execute();
+    }
+
 #pragma mark - Delete
     /**
      @brief Execute deleting.
