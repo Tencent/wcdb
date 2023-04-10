@@ -123,6 +123,23 @@
       }];
 }
 
+- (void)doTestInsertOrIgnore
+{
+    MigrationObject* newObject = [Random.shared migrationObjectWithIdentifier:self.objects.lastObject.identifier];
+    NSMutableArray<MigrationObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
+
+    NSMutableArray<NSString*>* sqls = [NSMutableArray array];
+    [sqls addObject:@"BEGIN IMMEDIATE"];
+    [sqls addObject:[NSString stringWithFormat:@"INSERT OR IGNORE INTO %@%@(identifier, content) VALUES(?1, ?2)", self.schemaName, self.sourceTable]];
+    [sqls addObject:@"COMMIT"];
+
+    [self doTestObjects:expectedObjects
+                andSQLs:sqls
+      afterModification:^BOOL {
+          return [self.table insertOrIgnoreObject:newObject];
+      }];
+}
+
 - (void)doTestInsertFailedWithConflict
 {
     MigrationObject* newObject = [Random.shared migrationObjectWithIdentifier:self.objects.lastObject.identifier];

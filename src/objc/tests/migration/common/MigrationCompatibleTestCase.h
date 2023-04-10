@@ -32,6 +32,8 @@
 
 - (void)doTestInsertOrReplace;
 
+- (void)doTestInsertOrIgnore;
+
 - (void)doTestInsertFailedWithConflict;
 
 - (void)doTestLimitedDelete;
