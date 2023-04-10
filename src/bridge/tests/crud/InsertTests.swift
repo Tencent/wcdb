@@ -92,6 +92,28 @@ class InsertTests: CRUDTestCase {
         XCTAssertEqual(result!.variable2, self.name)
     }
 
+    func testInsertOrIgnore() {
+        // Give
+        let object = CRUDObject()
+        let expectedReplacedRowID = 1
+        object.variable1 = expectedReplacedRowID
+        object.variable2 = self.name
+        let optionalInsert = WCDBAssertNoThrowReturned(
+            try database.prepareInsertOrIgnore(of: CRUDObject.self, intoTable: CRUDObject.name)
+        )
+        XCTAssertNotNil(optionalInsert)
+        insert = optionalInsert!
+        // When
+        XCTAssertNoThrow(try insert.execute(with: object))
+        // Then
+        let condition = CRUDObject.variable1() == expectedReplacedRowID
+        let result: CRUDObject? = WCDBAssertNoThrowReturned(
+            try database.getObject(fromTable: CRUDObject.name, where: condition)
+        )
+        XCTAssertNotNil(result)
+        XCTAssertNotEqual(result!.variable2, self.name)
+    }
+
     func testPartialInsert() {
         // Give
         let object = CRUDObject()

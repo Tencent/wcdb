@@ -237,6 +237,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)insertOrReplaceObjects:(NSArray<WCTObject *> *)objects
                      intoTable:(NSString *)tableName;
 
+#pragma mark - Insert or Ignore
+- (BOOL)insertOrIgnoreObject:(WCTObject *)object
+                   intoTable:(NSString *)tableName;
+
+- (BOOL)insertOrIgnoreObjects:(NSArray<WCTObject *> *)objects
+                    intoTable:(NSString *)tableName;
+
 #pragma mark - Partial Insert
 - (BOOL)insertObject:(WCTObject *)object
         onProperties:(const WCTProperties &)properties
@@ -254,6 +261,15 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)insertOrReplaceObjects:(NSArray<WCTObject *> *)objects
                   onProperties:(const WCTProperties &)properties
                      intoTable:(NSString *)tableName;
+
+#pragma mark - Partial Insert or Ignore
+- (BOOL)insertOrIgnoreObject:(WCTObject *)object
+                onProperties:(const WCTProperties &)properties
+                   intoTable:(NSString *)tableName;
+
+- (BOOL)insertOrIgnoreObjects:(NSArray<WCTObject *> *)objects
+                 onProperties:(const WCTProperties &)properties
+                    intoTable:(NSString *)tableName;
 
 #pragma mark - Update Properties To Object
 - (BOOL)updateTable:(NSString *)tableName

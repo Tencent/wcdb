@@ -69,6 +69,16 @@
     TestCaseAssertTrue([self allRowsCount] == 2);
 }
 
+- (void)test_handle_insert_or_ignore_row
+{
+    WCDB::OneRowValue row = [Random.shared testCaseValuesWithCount:1 startingFromIdentifier:[self nextIdentifier] - 1][0];
+    [self doTestSQLs:@[ @"INSERT OR IGNORE INTO testTable(identifier, content) VALUES(?1, ?2)" ]
+         inOperation:^BOOL {
+             return self.handle->insertOrIgnoreRows(row, self.columns, self.tableName.UTF8String);
+         }];
+    TestCaseAssertTrue([self allRowsCount] == 2);
+}
+
 - (void)test_handle_insert_multi_rows
 {
     WCDB::MultiRowsValue rows = [Random.shared testCaseValuesWithCount:2 startingFromIdentifier:[self nextIdentifier]];
@@ -91,6 +101,19 @@
                         @"COMMIT" ]
          inOperation:^BOOL {
              return self.handle->insertOrReplaceRows(rows, self.columns, self.tableName.UTF8String);
+         }];
+    TestCaseAssertTrue([self allRowsCount] == 2);
+}
+
+- (void)test_handle_insert_or_ignore_multi_rows
+{
+    WCDB::MultiRowsValue rows = [Random.shared testCaseValuesWithCount:2 startingFromIdentifier:[self nextIdentifier] - 2];
+    self.expectMode = DatabaseTestCaseExpectSomeSQLs;
+    [self doTestSQLs:@[ @"BEGIN IMMEDIATE",
+                        @"INSERT OR IGNORE INTO testTable(identifier, content) VALUES(?1, ?2)",
+                        @"COMMIT" ]
+         inOperation:^BOOL {
+             return self.handle->insertOrIgnoreRows(rows, self.columns, self.tableName.UTF8String);
          }];
     TestCaseAssertTrue([self allRowsCount] == 2);
 }
@@ -251,6 +274,16 @@
     TestCaseAssertTrue([self allRowsCount] == 2);
 }
 
+- (void)test_database_insert_or_ignore_row
+{
+    WCDB::OneRowValue row = [Random.shared testCaseValuesWithCount:1 startingFromIdentifier:[self nextIdentifier] - 1][0];
+    [self doTestSQLs:@[ @"INSERT OR IGNORE INTO testTable(identifier, content) VALUES(?1, ?2)" ]
+         inOperation:^BOOL {
+             return self.database->insertOrIgnoreRows(row, self.columns, self.tableName.UTF8String);
+         }];
+    TestCaseAssertTrue([self allRowsCount] == 2);
+}
+
 - (void)test_database_insert_multi_rows
 {
     WCDB::MultiRowsValue rows = [Random.shared testCaseValuesWithCount:2 startingFromIdentifier:[self nextIdentifier]];
@@ -273,6 +306,19 @@
                         @"COMMIT" ]
          inOperation:^BOOL {
              return self.database->insertOrReplaceRows(rows, self.columns, self.tableName.UTF8String);
+         }];
+    TestCaseAssertTrue([self allRowsCount] == 2);
+}
+
+- (void)test_database_insert_or_ignore_multi_rows
+{
+    WCDB::MultiRowsValue rows = [Random.shared testCaseValuesWithCount:2 startingFromIdentifier:[self nextIdentifier] - 2];
+    self.expectMode = DatabaseTestCaseExpectSomeSQLs;
+    [self doTestSQLs:@[ @"BEGIN IMMEDIATE",
+                        @"INSERT OR IGNORE INTO testTable(identifier, content) VALUES(?1, ?2)",
+                        @"COMMIT" ]
+         inOperation:^BOOL {
+             return self.database->insertOrIgnoreRows(rows, self.columns, self.tableName.UTF8String);
          }];
     TestCaseAssertTrue([self allRowsCount] == 2);
 }

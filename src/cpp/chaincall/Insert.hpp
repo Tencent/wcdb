@@ -53,6 +53,16 @@ public:
 
     /**
      @brief WINQ interface for SQL.
+     @return this
+     */
+    Insert<ObjectType>& orIgnore()
+    {
+        m_statement.orIgnore();
+        return *this;
+    }
+
+    /**
+     @brief WINQ interface for SQL.
      @param table The name of the table to insert objects to.
      @return this
      */

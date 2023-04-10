@@ -48,6 +48,7 @@ typedef NSArray<WCTBridgeProperty *> WCTBridgeProperties;
             intoTable:(NSString *)name
        withProperties:(WCTBridgeProperties *_Nullable)properties
             orReplace:(BOOL)replace
+             orIgnore:(BOOL)ignore
            withHandle:(CPPHandle)handle;
 
 + (void)bindProperties:(WCTBridgeProperties *)properties

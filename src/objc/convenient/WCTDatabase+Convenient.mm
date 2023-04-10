@@ -378,6 +378,19 @@
     return [[[[[self prepareInsert] orReplace] intoTable:tableName] values:objects] execute];
 }
 
+#pragma mark - Insert or Ignore
+- (BOOL)insertOrIgnoreObject:(WCTObject *)object
+                   intoTable:(NSString *)tableName
+{
+    return [[[[[self prepareInsert] orIgnore] intoTable:tableName] value:object] execute];
+}
+
+- (BOOL)insertOrIgnoreObjects:(NSArray<WCTObject *> *)objects
+                    intoTable:(NSString *)tableName
+{
+    return [[[[[self prepareInsert] orIgnore] intoTable:tableName] values:objects] execute];
+}
+
 #pragma mark - Partial Insert
 - (BOOL)insertObject:(WCTObject *)object
         onProperties:(const WCTProperties &)properties
@@ -400,6 +413,17 @@
 - (BOOL)insertOrReplaceObjects:(NSArray<WCTObject *> *)objects onProperties:(const WCTProperties &)properties intoTable:(NSString *)tableName
 {
     return [[[[[[self prepareInsert] orReplace] intoTable:tableName] onProperties:properties] values:objects] execute];
+}
+
+#pragma mark - Partial Insert or Ignore
+- (BOOL)insertOrIgnoreObject:(WCTObject *)object onProperties:(const WCTProperties &)properties intoTable:(NSString *)tableName
+{
+    return [[[[[[self prepareInsert] orIgnore] intoTable:tableName] onProperties:properties] value:object] execute];
+}
+
+- (BOOL)insertOrIgnoreObjects:(NSArray<WCTObject *> *)objects onProperties:(const WCTProperties &)properties intoTable:(NSString *)tableName
+{
+    return [[[[[[self prepareInsert] orIgnore] intoTable:tableName] onProperties:properties] values:objects] execute];
 }
 
 #pragma mark - Update Properties To Object

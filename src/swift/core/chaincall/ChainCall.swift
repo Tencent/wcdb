@@ -40,6 +40,14 @@ public protocol InsertChainCallInterface: AnyObject {
     /// - Returns: `Insert`
     func prepareInsertOrReplace<Root: TableEncodable>(of cls: Root.Type, intoTable table: String) throws -> Insert
 
+    /// Prepare chain call for inserting or ignoring of `TableEncodable` object
+    ///
+    /// - Parameters:
+    ///   - cls: Type of table object
+    ///   - table: Table name
+    /// - Returns: `Insert`
+    func prepareInsertOrIgnore<Root: TableEncodable>(of cls: Root.Type, intoTable table: String) throws -> Insert
+
     /// Prepare chain call for inserting on specific properties
     ///
     /// - Parameters:
@@ -55,6 +63,15 @@ public protocol InsertChainCallInterface: AnyObject {
     ///   - table: Table name
     /// - Returns: `Insert`
     func prepareInsertOrReplace(on propertyConvertibleList: PropertyConvertible...,
+                                intoTable table: String) throws -> Insert
+
+    /// Prepare chain call for inserting or ignoring on specific properties
+    ///
+    /// - Parameters:
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - table: Table name
+    /// - Returns: `Insert`
+    func prepareInsertOrIgnore(on propertyConvertibleList: PropertyConvertible...,
                                 intoTable table: String) throws -> Insert
 
     /// Prepare chain call for inserting on specific properties
@@ -74,17 +91,32 @@ public protocol InsertChainCallInterface: AnyObject {
     /// - Returns: `Insert`
     func prepareInsertOrReplace(on propertyConvertibleList: [PropertyConvertible],
                                 intoTable table: String) throws -> Insert
+
+    /// Prepare chain call for inserting or ignoring on specific properties
+    ///
+    /// - Parameters:
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - table: Table name
+    /// - Returns: `Insert`
+    func prepareInsertOrIgnore(on propertyConvertibleList: [PropertyConvertible],
+                                intoTable table: String) throws -> Insert
 }
 
 extension InsertChainCallInterface where Self: HandleRepresentable {
     public func prepareInsert<Root: TableEncodable>(of cls: Root.Type, intoTable table: String) throws -> Insert {
-        return Insert(with: try getHandle(), named: table, on: cls.Properties.all, isReplace: false)
+        return Insert(with: try getHandle(), named: table, on: cls.Properties.all)
     }
 
     public func prepareInsertOrReplace<Root: TableEncodable>(
         of cls: Root.Type,
         intoTable table: String) throws -> Insert {
-        return Insert(with: try getHandle(), named: table, on: cls.Properties.all, isReplace: true)
+            return Insert(with: try getHandle(), named: table, on: cls.Properties.all, onConflict: .Replace)
+    }
+
+    public func prepareInsertOrIgnore<Root: TableEncodable>(
+        of cls: Root.Type,
+        intoTable table: String) throws -> Insert {
+            return Insert(with: try getHandle(), named: table, on: cls.Properties.all, onConflict: .Ignore)
     }
 
     public func prepareInsert(on propertyConvertibleList: PropertyConvertible...,
@@ -97,14 +129,24 @@ extension InsertChainCallInterface where Self: HandleRepresentable {
         return try prepareInsertOrReplace(on: propertyConvertibleList, intoTable: table)
     }
 
+    public func prepareInsertOrIgnore(on propertyConvertibleList: PropertyConvertible...,
+                                       intoTable table: String) throws -> Insert {
+        return try prepareInsertOrIgnore(on: propertyConvertibleList, intoTable: table)
+    }
+
     public func prepareInsert(on propertyConvertibleList: [PropertyConvertible],
                               intoTable table: String) throws -> Insert {
-        return Insert(with: try getHandle(), named: table, on: propertyConvertibleList, isReplace: false)
+        return Insert(with: try getHandle(), named: table, on: propertyConvertibleList)
     }
 
     public func prepareInsertOrReplace(on propertyConvertibleList: [PropertyConvertible],
                                        intoTable table: String) throws -> Insert {
-        return Insert(with: try getHandle(), named: table, on: propertyConvertibleList, isReplace: true)
+        return Insert(with: try getHandle(), named: table, on: propertyConvertibleList, onConflict: .Replace)
+    }
+
+    public func prepareInsertOrIgnore(on propertyConvertibleList: [PropertyConvertible],
+                                       intoTable table: String) throws -> Insert {
+        return Insert(with: try getHandle(), named: table, on: propertyConvertibleList, onConflict: .Ignore)
     }
 }
 

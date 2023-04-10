@@ -65,6 +65,7 @@
             intoTable:(NSString*)name
        withProperties:(WCTBridgeProperties*)properties
             orReplace:(BOOL)replace
+             orIgnore:(BOOL)ignore
            withHandle:(CPPHandle)handle
 {
     if (objects.count == 0) {
@@ -84,6 +85,8 @@
     [[[insert values:objects] intoTable:name] onProperties:wctProperties];
     if (replace) {
         [insert orReplace];
+    } else if (ignore) {
+        [insert orIgnore];
     }
     return [insert execute];
 }
