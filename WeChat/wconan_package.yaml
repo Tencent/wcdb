@@ -27,7 +27,7 @@ default: &default_config
 
 android:
   options:
-    auto_synthesis_aar: true
+    auto_synthesis_aar: false
 
   build: &android_build_config
     <<: *default_build_config
