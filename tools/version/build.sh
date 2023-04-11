@@ -96,7 +96,7 @@ products="$derivedData"/Build/Products
 
 if $universal; then
     if [ "$platform" != "macOS" ]; then
-        echo 'Universal library is only supported with watchOS.'
+        echo 'Universal library is only supported with macOS.'
         exit 1
     fi
 fi
