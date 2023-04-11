@@ -38,3 +38,32 @@ void WCDBReleaseCPPObject(CPPObject* _Nonnull obj)
     }
     free(obj);
 }
+
+namespace WCDB {
+
+CPPObject* _Nonnull ObjectBridge::createUnmanagedCPPObject(void* _Nonnull obj)
+{
+    CPPObject* cppObj = (CPPObject*) malloc(sizeof(CPPObject));
+    cppObj->realValue = obj;
+    cppObj->isRecyclableObj = false;
+    cppObj->deleter = nullptr;
+    return cppObj;
+}
+
+void* _Nullable ObjectBridge::extractOriginalCPPObject(const CPPObject* _Nonnull obj)
+{
+    if (obj == nullptr) {
+        return nullptr;
+    }
+    WCTAssert(obj->realValue != nullptr);
+    void* typedObj = nullptr;
+    if (!obj->isRecyclableObj) {
+        typedObj = (void*) obj->realValue;
+    } else {
+        WCDB::Recyclable<void*>* recyclableObj = (WCDB::Recyclable<void*>*) obj->realValue;
+        typedObj = recyclableObj->get();
+    }
+    return typedObj;
+}
+
+} // namespace WCDB
