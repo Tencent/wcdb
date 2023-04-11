@@ -402,8 +402,10 @@ if (ANDROID)
     find_library(z-lib z)
     target_link_libraries(${TARGET_NAME} PRIVATE
             ${LINK_LIBRARIES}
-            ${z-lib}
-            crypto)
+            ${z-lib})
+    if (NOT FLAVOR_AMMDEV)
+        target_link_libraries(${TARGET_NAME} PRIVATE crypto)
+    endif ()
 elseif (LINUX)
     message(STATUS "---- BUILD FOR LINUX ----")
     target_link_libraries(${TARGET_NAME} PRIVATE
