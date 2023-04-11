@@ -26,7 +26,6 @@ default: &default_config
 
 
 android:
-  build_types: static
   options:
     auto_synthesis_aar: true
 
