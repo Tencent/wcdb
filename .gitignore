@@ -34,3 +34,5 @@ WeChat/wconan_package.lock
 WeChat/wconan_publish.py
 WeChat/cmake-build-*/
 WeChat/compile.log
+WeChat/apple_build/
+WeChat/export_headers/
