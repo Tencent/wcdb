@@ -30,11 +30,11 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#define __WCDBGetObjectOrReturn(rawObj, objType, typedObjName, action)            \
-    objType* typedObjName                                                         \
-    = WCDB::ObjectBridge::extractOriginalCPPObject<objType>((rawObj).innerValue); \
-    if (typedObjName == nullptr) {                                                \
-        action;                                                                   \
+#define __WCDBGetObjectOrReturn(rawObj, objType, typedObjName, action)              \
+    objType* typedObjName                                                           \
+    = (objType*) WCDB::ObjectBridge::extractOriginalCPPObject((rawObj).innerValue); \
+    if (typedObjName == nullptr) {                                                  \
+        action;                                                                     \
     }
 
 #define WCDBGetObjectOrReturn(rawObj, objType, typedObjName)                   \
@@ -61,7 +61,7 @@
 
 #define WCDBCreateUnmanagedCPPObject(objType, originObj)                       \
     WCDB::ObjectBridge::createCPPBridgedObject<objType>(                       \
-    WCDB::ObjectBridge::createUnmanagedCPPObject(originObj))
+    WCDB::ObjectBridge::createUnmanagedCPPObject((void*) originObj))
 
 #define WCDBCreateSwiftBridgedObject(objType, originObj)                       \
     WCDB::ObjectBridge::createRecyclableSwiftObject<objType>(originObj)
@@ -106,16 +106,7 @@ public:
         });
     }
 
-    template<typename T>
-    static CPPObject* _Nonnull createUnmanagedCPPObject(T* _Nonnull obj)
-    {
-        static_assert(!std::is_same<T, CPPObject>::value, "");
-        CPPObject* cppObj = (CPPObject*) malloc(sizeof(CPPObject));
-        cppObj->realValue = (void*) obj;
-        cppObj->isRecyclableObj = false;
-        cppObj->deleter = nullptr;
-        return cppObj;
-    }
+    static CPPObject* _Nonnull createUnmanagedCPPObject(void* _Nonnull obj);
 
     template<typename T>
     static CPPObject* _Nonnull copyCPPObject(T&& obj, bool isRecyclable = false)
@@ -167,22 +158,7 @@ public:
         }
     }
 
-    template<typename T>
-    static T* _Nullable extractOriginalCPPObject(const CPPObject* _Nonnull obj)
-    {
-        if (obj == nullptr) {
-            return nullptr;
-        }
-        WCTAssert(obj->realValue != nullptr);
-        T* typedObj = nullptr;
-        if (!obj->isRecyclableObj) {
-            typedObj = (T*) obj->realValue;
-        } else {
-            WCDB::Recyclable<T*>* recyclableObj = (WCDB::Recyclable<T*>*) obj->realValue;
-            typedObj = recyclableObj->get();
-        }
-        return typedObj;
-    }
+    static void* _Nullable extractOriginalCPPObject(const CPPObject* _Nonnull obj);
 };
 
 } //namespace WCDB
