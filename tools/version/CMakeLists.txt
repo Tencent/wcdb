@@ -339,39 +339,14 @@ set(ALL_SRCS
 set(SQLCIPHER_COMPILE_DEFS)
 set(SQLCIPHER_SRC_ROOT)
 set(LIB_SQLCIPHER sqlcipher)
-include(sqlcipher.cmake)
-
-set(SQLCIPHER_SYSTEM_DEFS)
-set(SQLCIPHER_SYSTEM_SRC)
-
-if (ANDROID OR LINUX)
-    list(APPEND SQLCIPHER_SYSTEM_DEFS
-            SQLCIPHER_CRYPTO_OPENSSL=1
-            SQLITE_OS_UNIX=1)
-    list(APPEND SQLCIPHER_SYSTEM_SRC
-            ${SQLCIPHER_SRC_ROOT}/src/crypto.c
-            ${SQLCIPHER_SRC_ROOT}/src/crypto_impl.c
-            ${SQLCIPHER_SRC_ROOT}/src/crypto_openssl.c
-            ${SQLCIPHER_SRC_ROOT}/src/mutex_unix.c
-            ${SQLCIPHER_SRC_ROOT}/src/os_unix.c)
-elseif (WIN32)
-    list(APPEND SQLCIPHER_SYSTEM_DEFS
-            SQLCIPHER_CRYPTO_OPENSSL=1
-            SQLITE_OS_WIN=1)
-    list(APPEND SQLCIPHER_SYSTEM_SRC
-            ${SQLCIPHER_SRC_ROOT}/src/crypto.c
-            ${SQLCIPHER_SRC_ROOT}/src/crypto_impl.c
-            ${SQLCIPHER_SRC_ROOT}/src/crypto_openssl.c
-            ${SQLCIPHER_SRC_ROOT}/src/mutex_w32.c
-            ${SQLCIPHER_SRC_ROOT}/src/os_win.c)
-endif ()
-
-target_compile_definitions(${LIB_SQLCIPHER} PRIVATE
-        ${SQLCIPHER_SYSTEM_DEFS})
-target_sources(${LIB_SQLCIPHER} PRIVATE
-        ${SQLCIPHER_SYSTEM_SRC})
 
 add_library(${TARGET_NAME} ${ALL_SRCS})
+
+if (WCONAN_MODE AND ANDROID)
+    include(${CMAKE_CURRENT_SOURCE_DIR}/../../WeChat/android_sqlcipher.cmake)
+else ()
+    include(sqlcipher.cmake)
+endif ()
 
 MACRO(HEADER_DIRECTORIES return_list)
     SET(dir_list "")
@@ -389,6 +364,7 @@ HEADER_DIRECTORIES(ALL_INCLUDE_DIRECTORY)
 target_include_directories(${TARGET_NAME} PRIVATE
         ${ALL_INCLUDE_DIRECTORY})
 
+# include sqlcipher public header
 target_include_directories(${TARGET_NAME} PRIVATE
         ${CMAKE_CURRENT_BINARY_DIR}/include)
 
@@ -400,8 +376,13 @@ if (WCONAN_MODE)
             WCONAN_LIB_DIR
             wconan_libs
     )
-    target_include_directories(${LIB_SQLCIPHER} PUBLIC ${WCONAN_LIB_DIR}/include)
-    target_link_directories(${LIB_SQLCIPHER} PUBLIC ${WCONAN_LIB_DIR}/libs)
+    if (ANDROID)
+        target_include_directories(${TARGET_NAME} PRIVATE ${WCONAN_LIB_DIR}/include)
+        target_link_directories(${TARGET_NAME} PRIVATE ${WCONAN_LIB_DIR}/libs)
+    else ()
+        target_include_directories(${LIB_SQLCIPHER} PUBLIC ${WCONAN_LIB_DIR}/include)
+        target_link_directories(${LIB_SQLCIPHER} PUBLIC ${WCONAN_LIB_DIR}/libs)
+    endif ()
 else ()
     if(ANDROID)
         target_include_directories(${LIB_SQLCIPHER} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../prebuild/openssl/include)

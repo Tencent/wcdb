@@ -162,11 +162,40 @@ if (CMAKE_SIZEOF_VOID_P EQUAL 8)
     list(APPEND COMPILE_DEFS SQLITE_INT64_TYPE=long)
 endif ()
 
-set(SQLCIPHER_COMPILE_DEFS COMPILE_DEFS)
+set(SQLCIPHER_COMPILE_DEFS ${COMPILE_DEFS})
+
+set(SQLCIPHER_SYSTEM_DEFS "")
+set(SQLCIPHER_SYSTEM_SRC "")
+
+if (ANDROID OR LINUX)
+    list(APPEND SQLCIPHER_SYSTEM_DEFS
+            SQLCIPHER_CRYPTO_OPENSSL=1
+            SQLITE_OS_UNIX=1)
+    list(APPEND SQLCIPHER_SYSTEM_SRC
+            ${SQLCIPHER_SRC_ROOT}/src/crypto.c
+            ${SQLCIPHER_SRC_ROOT}/src/crypto_impl.c
+            ${SQLCIPHER_SRC_ROOT}/src/crypto_openssl.c
+            ${SQLCIPHER_SRC_ROOT}/src/mutex_unix.c
+            ${SQLCIPHER_SRC_ROOT}/src/os_unix.c)
+elseif (WIN32)
+    list(APPEND SQLCIPHER_SYSTEM_DEFS
+            SQLCIPHER_CRYPTO_OPENSSL=1
+            SQLITE_OS_WIN=1)
+    list(APPEND SQLCIPHER_SYSTEM_SRC
+            ${SQLCIPHER_SRC_ROOT}/src/crypto.c
+            ${SQLCIPHER_SRC_ROOT}/src/crypto_impl.c
+            ${SQLCIPHER_SRC_ROOT}/src/crypto_openssl.c
+            ${SQLCIPHER_SRC_ROOT}/src/mutex_w32.c
+            ${SQLCIPHER_SRC_ROOT}/src/os_win.c)
+endif ()
 
 target_compile_definitions(sqlcipher PUBLIC
-        ${COMPILE_DEFS}
-        )
+        ${SQLCIPHER_COMPILE_DEFS})
+target_compile_definitions(sqlcipher PRIVATE
+        ${SQLCIPHER_SYSTEM_DEFS})
+
+target_sources(sqlcipher PRIVATE
+        ${SQLCIPHER_SYSTEM_SRC})
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_definitions(sqlcipher PRIVATE
