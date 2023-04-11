@@ -26,13 +26,22 @@ default: &default_config
 
 
 android:
+  build_types: static
   options:
     auto_synthesis_aar: true
 
-  build:
+  build: &android_build_config
     <<: *default_build_config
     api_level: 21
 
+  product_flavors:
+    generic:
+      is_default: true
+    ammdev:
+      version_suffix: '-ammdev'
+      build:
+        <<: *android_build_config
+        arguments: '-DFLAVOR_AMMDEV=ON'
 
 ios:
   build_types: static

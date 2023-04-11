@@ -342,7 +342,7 @@ set(LIB_SQLCIPHER sqlcipher)
 
 add_library(${TARGET_NAME} ${ALL_SRCS})
 
-if (WCONAN_MODE AND ANDROID)
+if (WCONAN_MODE AND ANDROID AND FLAVOR_AMMDEV)
     include(${CMAKE_CURRENT_SOURCE_DIR}/../../WeChat/android_sqlcipher.cmake)
 else ()
     include(sqlcipher.cmake)
@@ -376,7 +376,7 @@ if (WCONAN_MODE)
             WCONAN_LIB_DIR
             wconan_libs
     )
-    if (ANDROID)
+    if (ANDROID AND FLAVOR_AMMDEV)
         target_include_directories(${TARGET_NAME} PRIVATE ${WCONAN_LIB_DIR}/include)
         target_link_directories(${TARGET_NAME} PRIVATE ${WCONAN_LIB_DIR}/libs)
     else ()
