@@ -1,8 +1,6 @@
 set(SQLCIPHER_ANDROID_LIB_PATH)
 
-wconan_get_libraries_dir(SQLCIPHER_ANDROID_LIB_PATH android_sqlcipher)
-
-message(STATUS "SQLCIPHER_ANDROID_LIB_PATH: ${SQLCIPHER_ANDROID_LIB_PATH}/include")
+wconan_get_libraries_dir(SQLCIPHER_ANDROID_LIB_PATH wconan_libs)
 
 target_include_directories(${TARGET_NAME} PRIVATE
         ${SQLCIPHER_ANDROID_LIB_PATH}/include)

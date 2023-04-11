@@ -29,10 +29,25 @@ android:
   options:
     auto_synthesis_aar: true
 
-  build:
+  build: &android_build_config
     <<: *default_build_config
     api_level: 21
 
+  product_flavors:
+    generic:
+      is_default: true
+    ammdev:
+      dependencies:
+        <<: *default_dependencies
+        wcdb-android: 1.0.0
+      dependency_options: &default_dependency_options
+        shared:
+          default: false
+          wcdb-android: true
+      version_suffix: '-ammdev'
+      build:
+        <<: *android_build_config
+        arguments: '-DFLAVOR_AMMDEV=ON'
 
 ios:
   build_types: static
