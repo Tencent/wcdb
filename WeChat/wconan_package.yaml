@@ -38,6 +38,13 @@ android:
     generic:
       is_default: true
     ammdev:
+      dependencies:
+        <<: *default_dependencies
+        wcdb-android: 1.0.0
+      dependency_options: &default_dependency_options
+        shared:
+          default: false
+          wcdb-android: true
       version_suffix: '-ammdev'
       build:
         <<: *android_build_config
