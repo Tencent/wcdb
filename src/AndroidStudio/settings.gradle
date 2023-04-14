@@ -1,2 +1,2 @@
-include ':java'
-project(':java').projectDir = file('../java')
+include ':main'
+project(':main').projectDir = file('../java/main')
