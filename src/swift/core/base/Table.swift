@@ -22,7 +22,7 @@ import Foundation
 import WCDB_Private
 
 /// Convenient table interface
-public final class Table<Root: AnyObject> {
+public final class Table<Root: Any> {
     internal let database: Database
     public typealias Object = Root
 
