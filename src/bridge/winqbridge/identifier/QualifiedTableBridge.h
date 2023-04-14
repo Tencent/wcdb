@@ -27,6 +27,7 @@
 WCDB_EXTERN_C_BEGIN
 
 CPPQualifiedTable WCDBQualifiedTableCreateWithTable(const char* _Nullable name);
+void WCDBQualifiedTableConfigSchema2(CPPQualifiedTable table, CPPCommonValue schema);
 void WCDBQualifiedTableConfigSchema(CPPQualifiedTable table, CPPSchema schema);
 void WCDBQualifiedTableConfigAliasName(CPPQualifiedTable table, const char* _Nullable alias);
 void WCDBQualifiedTableConfigIndexName(CPPQualifiedTable table, const char* _Nullable indexName);

@@ -35,30 +35,6 @@
 #include "WindowDef.hpp"
 #include "WinqBridge.hpp"
 
-CPPExpression WCDBExpressionCreateWithBool(bool value)
-{
-    return WCDBCreateCPPBridgedObjectWithParameters(
-    CPPExpression, WCDB::Expression, WCDB::LiteralValue(value));
-}
-
-CPPExpression WCDBExpressionCreateWithLong(long long value)
-{
-    return WCDBCreateCPPBridgedObjectWithParameters(
-    CPPExpression, WCDB::Expression, WCDB::LiteralValue((int64_t) value));
-}
-
-CPPExpression WCDBExpressionCreateWithDouble(double value)
-{
-    return WCDBCreateCPPBridgedObjectWithParameters(
-    CPPExpression, WCDB::Expression, WCDB::LiteralValue(value));
-}
-
-CPPExpression WCDBExpressionCreateWithString(const char* _Nullable value)
-{
-    return WCDBCreateCPPBridgedObjectWithParameters(
-    CPPExpression, WCDB::Expression, WCDB::LiteralValue(value));
-}
-
 CPPExpression WCDBExpressionCreateWithLiteralValue(CPPLiteralValue value)
 {
     WCDBGetObjectOrReturnValue(value, WCDB::LiteralValue, cppValue, CPPExpression());
@@ -100,6 +76,49 @@ CPPExpression WCDBExpressionCreateWithFunction(const char* _Nullable funcName)
     CPPExpression, WCDB::Expression::function(funcName));
 }
 
+CPPExpression WCDBExpressionCreate(CPPCommonValue value)
+{
+    switch (value.type) {
+    case WCDBBridgedType_Null:
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPExpression, WCDB::Expression, WCDB::LiteralValue(nullptr));
+    case WCDBBridgedType_Bool:
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPExpression, WCDB::Expression, WCDB::LiteralValue((bool) value.intValue));
+    case WCDBBridgedType_Int:
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPExpression, WCDB::Expression, WCDB::LiteralValue((int64_t) value.intValue));
+    case WCDBBridgedType_UInt:
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPExpression, WCDB::Expression, WCDB::LiteralValue((uint64_t) value.intValue));
+    case WCDBBridgedType_Double:
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPExpression, WCDB::Expression, WCDB::LiteralValue(value.doubleValue));
+    case WCDBBridgedType_String:
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPExpression, WCDB::Expression, WCDB::LiteralValue((const char*) value.intValue));
+    case WCDBBridgedType_Column:
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPExpression, WCDB::Expression, WCDBGetBridgedData(WCDB::Column, value));
+    case WCDBBridgedType_LiteralValue:
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPExpression, WCDB::Expression, WCDBGetBridgedData(WCDB::LiteralValue, value));
+    case WCDBBridgedType_BindParameter:
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPExpression, WCDB::Expression, WCDBGetBridgedData(WCDB::BindParameter, value));
+    case WCDBBridgedType_SelectSTMT:
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPExpression, WCDB::Expression, WCDBGetBridgedData(WCDB::StatementSelect, value));
+    case WCDBBridgedType_RaiseFunction:
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPExpression, WCDB::Expression, WCDBGetBridgedData(WCDB::RaiseFunction, value));
+    default:
+        assert(0);
+        break;
+    }
+    return CPPExpression();
+}
+
 CPPExpression WCDBExpressionCreateWithExistStatement(CPPStatementSelect select)
 {
     WCDBGetObjectOrReturnValue(select, WCDB::StatementSelect, cppSelect, CPPExpression());
@@ -121,11 +140,10 @@ void WCDBExpressionSetWithSchema(CPPExpression expression, CPPSchema schema)
     cppExpression->schema(*cppSchema);
 }
 
-void WCDBExpressionSetArgument(CPPExpression expression, CPPExpression argument)
+void WCDBExpressionSetArgument(CPPExpression expression, CPPCommonValue argument)
 {
     WCDBGetObjectOrReturn(expression, WCDB::Expression, cppExpression);
-    WCDBGetObjectOrReturn(argument, WCDB::Expression, cppArgument);
-    cppExpression->argument(*cppArgument);
+    cppExpression->argument(WCDBCreateExpressionFromCommonValue(argument));
 }
 
 void WCDBExpressionSetArguments(CPPExpression expression, const CPPExpression* arguments, int num)
@@ -204,6 +222,12 @@ void WCDBExpressionEscapeWith(CPPExpression expression, CPPExpression operand)
     WCDBGetObjectOrReturn(expression, WCDB::Expression, cppExpression);
     WCDBGetObjectOrReturn(operand, WCDB::Expression, cppOperand);
     cppExpression->escape(*cppOperand);
+}
+
+void WCDBExpressionEscapeWith2(CPPExpression expression, const char* operand)
+{
+    WCDBGetObjectOrReturn(expression, WCDB::Expression, cppExpression);
+    cppExpression->escape(WCDB::LiteralValue(WCDB::UnsafeStringView(operand)));
 }
 
 CPPExpression WCDBExpressionCreateWithWindowFunction(const char* _Nullable funcName)

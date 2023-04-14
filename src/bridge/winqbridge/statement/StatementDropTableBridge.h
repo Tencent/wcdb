@@ -31,6 +31,8 @@ WCDB_EXTERN_C_BEGIN
 CPPStatementDropTable WCDBStatementDropTableCreate(void);
 void WCDBStatementDropTableConfigSchema(CPPStatementDropTable dropTableStatement,
                                         CPPSchema schema);
+void WCDBStatementDropTableConfigSchema2(CPPStatementDropTable dropTableStatement,
+                                         CPPCommonValue schema);
 void WCDBStatementDropTableConfigTable(CPPStatementDropTable dropTableStatement,
                                        const char* _Nullable name);
 void WCDBStatementDropTableConfigIfExists(CPPStatementDropTable dropTableStatement);

@@ -29,6 +29,7 @@
 WCDB_EXTERN_C_BEGIN
 
 CPPOrderingTerm WCDBOrderingTermCreate(CPPExpression expression);
+CPPOrderingTerm WCDBOrderingTermCreate2(CPPCommonValue expression);
 void WCDBOrderingTermConfigCollation(CPPOrderingTerm orderingTerm,
                                      const char* _Nullable collation);
 void WCDBOrderingTermConfigOrder(CPPOrderingTerm orderingTerm, enum WCDBSyntaxOrder order);

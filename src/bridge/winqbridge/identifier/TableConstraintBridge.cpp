@@ -58,6 +58,35 @@ void WCDBTableConstraintConfigIndexedColumn(CPPTableConstraint constraint,
     cppConstraint->syntax().indexedColumns = cppColumns;
 }
 
+void WCDBTableConstraintConfigIndexedColumn2(CPPTableConstraint constraint, CPPCommonArray columns)
+{
+    WCDBGetObjectOrReturn(constraint, WCDB::TableConstraint, cppTableConstraint);
+    WCDB::IndexedColumns indexedColumns;
+    for (int i = 0; i < columns.length; i++) {
+        switch (columns.type) {
+        case WCDBBridgedType_String:
+            indexedColumns.emplace_back(WCDB::UnsafeStringView(
+            WCDBGetCommonArrayLiteralValue(const char*, columns, i)));
+            break;
+        case WCDBBridgedType_Column:
+            indexedColumns.emplace_back(WCDBGetCommonArrayObject(WCDB::Column, columns, i));
+            break;
+        case WCDBBridgedType_Expression:
+            indexedColumns.emplace_back(
+            WCDBGetCommonArrayObject(WCDB::Expression, columns, i));
+            break;
+        case WCDBBridgedType_IndexedColumn:
+            indexedColumns.push_back(
+            WCDBGetCommonArrayObject(WCDB::IndexedColumn, columns, i));
+            break;
+        default:
+            assert(0);
+            break;
+        }
+    }
+    cppTableConstraint->syntax().indexedColumns = indexedColumns;
+}
+
 void WCDBTableConstraintConfigConfliction(CPPTableConstraint constraint,
                                           enum WCDBSyntaxConflictAction conflict)
 {
@@ -80,5 +109,28 @@ void WCDBTableConstraintConfigForeignKey(CPPTableConstraint constraint,
     WCDBGetObjectOrReturn(constraint, WCDB::TableConstraint, cppConstraint);
     WCDBGetObjectOrReturn(foreignKey, WCDB::ForeignKey, cppForeignKey);
     WCDBGetCPPSyntaxListOrReturn(WCDB::Column, cppColumns, columns, colNum);
+    cppConstraint->foreignKey(cppColumns, *cppForeignKey);
+}
+
+void WCDBTableConstraintConfigForeignKey2(CPPTableConstraint constraint,
+                                          CPPCommonArray columns,
+                                          CPPForeignKey foreignKey)
+{
+    WCDBGetObjectOrReturn(constraint, WCDB::TableConstraint, cppConstraint);
+    WCDBGetObjectOrReturn(foreignKey, WCDB::ForeignKey, cppForeignKey);
+    WCDB::Columns cppColumns;
+    for (int i = 0; i < columns.length; i++) {
+        switch (columns.type) {
+        case WCDBBridgedType_String:
+            cppColumns.emplace_back(WCDBGetCommonArrayLiteralValue(const char*, columns, i));
+            break;
+        case WCDBBridgedType_Column:
+            cppColumns.push_back(WCDBGetCommonArrayObject(WCDB::Column, columns, i));
+            break;
+        default:
+            assert(0);
+            break;
+        }
+    }
     cppConstraint->foreignKey(cppColumns, *cppForeignKey);
 }

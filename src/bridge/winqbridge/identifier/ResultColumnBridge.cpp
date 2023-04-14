@@ -23,9 +23,27 @@
  */
 
 #include "ResultColumnBridge.h"
+#include "Column.hpp"
 #include "Expression.hpp"
 #include "ObjectBridge.hpp"
 #include "ResultColumn.hpp"
+#include "WinqBridge.hpp"
+
+CPPResultColumn WCDBResultColumnCreate(CPPCommonValue expression)
+{
+    if (expression.type == WCDBBridgedType_String) {
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPResultColumn,
+        WCDB::ResultColumn,
+        WCDB::Column((const char*) expression.intValue));
+    } else if (expression.type == WCDBBridgedType_ResultColumn) {
+        return WCDBCreateCPPBridgedObjectByCopy(
+        CPPResultColumn, WCDBGetBridgedData(WCDB::ResultColumn, expression));
+    } else {
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPResultColumn, WCDB::ResultColumn, WCDBCreateExpressionFromCommonValue(expression));
+    }
+}
 
 CPPResultColumn WCDBResultColumnCreateWithExpression(CPPExpression expression)
 {

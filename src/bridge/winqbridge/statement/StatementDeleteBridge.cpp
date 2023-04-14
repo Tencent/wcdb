@@ -58,6 +58,18 @@ void WCDBStatementDeleteConfigDeleteFrom(CPPStatementDelete deleteStatement, CPP
     cppDelete->deleteFrom(*cppTable);
 }
 
+void WCDBStatementDeleteConfigDeleteFrom2(CPPStatementDelete deleteStatement, CPPCommonValue table)
+{
+    WCDBGetObjectOrReturn(deleteStatement, WCDB::StatementDelete, cppDelete);
+    if (table.type == WCDBBridgedType_String) {
+        cppDelete->deleteFrom(WCDB::UnsafeStringView((const char*) table.intValue));
+    } else if (table.type == WCDBBridgedType_QualifiedTableName) {
+        cppDelete->deleteFrom(WCDBGetBridgedData(WCDB::QualifiedTable, table));
+    } else {
+        assert(0);
+    }
+}
+
 void WCDBStatementDeleteConfigWhere(CPPStatementDelete deleteStatement, CPPExpression expression)
 {
     WCDBGetObjectOrReturn(deleteStatement, WCDB::StatementDelete, cppDelete);
@@ -96,4 +108,25 @@ void WCDBStatementDeleteConfigOffset(CPPStatementDelete deleteStatement, CPPExpr
     WCDBGetObjectOrReturn(deleteStatement, WCDB::StatementDelete, cppDelete);
     WCDBGetObjectOrReturn(offset, WCDB::Expression, cppOffset);
     cppDelete->offset(*cppOffset);
+}
+
+void WCDBStatementDeleteConfigLimitRange2(CPPStatementDelete deleteStatement,
+                                          CPPCommonValue from,
+                                          CPPCommonValue to)
+{
+    WCDBGetObjectOrReturn(deleteStatement, WCDB::StatementDelete, cppDelete);
+    cppDelete->limit(WCDBCreateExpressionFromCommonValue(from),
+                     WCDBCreateExpressionFromCommonValue(to));
+}
+
+void WCDBStatementDeleteConfigLimitCount2(CPPStatementDelete deleteStatement, CPPCommonValue limit)
+{
+    WCDBGetObjectOrReturn(deleteStatement, WCDB::StatementDelete, cppDelete);
+    cppDelete->limit(WCDBCreateExpressionFromCommonValue(limit));
+}
+
+void WCDBStatementDeleteConfigOffset2(CPPStatementDelete deleteStatement, CPPCommonValue offset)
+{
+    WCDBGetObjectOrReturn(deleteStatement, WCDB::StatementDelete, cppDelete);
+    cppDelete->offset(WCDBCreateExpressionFromCommonValue(offset));
 }

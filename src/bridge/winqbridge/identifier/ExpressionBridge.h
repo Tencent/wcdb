@@ -28,10 +28,6 @@
 
 WCDB_EXTERN_C_BEGIN
 
-CPPExpression WCDBExpressionCreateWithBool(bool value);
-CPPExpression WCDBExpressionCreateWithLong(long long value);
-CPPExpression WCDBExpressionCreateWithDouble(double value);
-CPPExpression WCDBExpressionCreateWithString(const char* _Nullable value);
 CPPExpression WCDBExpressionCreateWithLiteralValue(CPPLiteralValue value);
 CPPExpression WCDBExpressionCreateWithBindParameter(CPPBindParameter value);
 CPPExpression WCDBExpressionCreateWithColumn(CPPColumn column);
@@ -41,8 +37,10 @@ CPPExpression WCDBExpressionCreateWithFunction(const char* _Nullable funcName);
 CPPExpression WCDBExpressionCreateWithExistStatement(CPPStatementSelect select);
 CPPExpression WCDBExpressionCreateWithNotExistStatement(CPPStatementSelect select);
 
+CPPExpression WCDBExpressionCreate(CPPCommonValue value);
+
 void WCDBExpressionSetWithSchema(CPPExpression expression, CPPSchema schema);
-void WCDBExpressionSetArgument(CPPExpression expression, CPPExpression argument);
+void WCDBExpressionSetArgument(CPPExpression expression, CPPCommonValue argument);
 void WCDBExpressionSetArguments(CPPExpression expression,
                                 const CPPExpression* _Nullable arguments,
                                 int num);
@@ -62,6 +60,7 @@ void WCDBExpressionSetWithThenExp(CPPExpression expression, CPPExpression then);
 void WCDBExpressionSetWithElseExp(CPPExpression expression, CPPExpression else_);
 
 void WCDBExpressionEscapeWith(CPPExpression expression, CPPExpression operand);
+void WCDBExpressionEscapeWith2(CPPExpression expression, const char* _Nullable operand);
 
 CPPExpression WCDBExpressionCreateWithWindowFunction(const char* _Nullable funcName);
 void WCDBExpressionFilter(CPPExpression expression, CPPFilter filter);

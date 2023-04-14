@@ -26,6 +26,8 @@
 
 WCDB_EXTERN_C_BEGIN
 
+CPPTableOrSubquery WCDBTableOrSubqueryCreate(CPPCommonValue value);
+
 CPPTableOrSubquery WCDBTableOrSubqueryCreateWithTable(const char* _Nullable tableName);
 CPPTableOrSubquery WCDBTableOrSubqueryCreateWithFunction(const char* _Nullable functionName);
 CPPTableOrSubquery WCDBTableOrSubqueryCreateWithJoin(CPPJoin join);
@@ -33,6 +35,11 @@ CPPTableOrSubquery WCDBTableOrSubqueryCreateWithSelection(CPPStatementSelect sel
 CPPTableOrSubquery
 WCDBTableOrSubqueryCreateWithTableOrSubqueries(const CPPTableOrSubquery* _Nullable queries,
                                                int queryNum);
+
+CPPTableOrSubquery
+WCDBTableOrSubqueryCreateWithTableOrSubqueries2(CPPCommonArray tableOrSubqueries);
+
+void WCDBTableOrSubqueryConfigSchema2(CPPTableOrSubquery tableOrSubquery, CPPCommonValue schema);
 
 void WCDBTableOrSubqueryConfigSchema(CPPTableOrSubquery tableOrSubquery, CPPSchema schema);
 void WCDBTableOrSubqueryConfigAs(CPPTableOrSubquery tableOrSubquery,
@@ -43,5 +50,8 @@ void WCDBTableOrSubqueryConfigIndexName(CPPTableOrSubquery tableOrSubquery,
 void WCDBTableOrSubqueryConfigArguments(CPPTableOrSubquery tableOrSubquery,
                                         const CPPExpression* _Nullable args,
                                         int argNum);
+
+void WCDBTableOrSubqueryConfigArgument(CPPTableOrSubquery tableOrSubquery,
+                                       CPPCommonValue expression);
 
 WCDB_EXTERN_C_END

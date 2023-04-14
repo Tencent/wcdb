@@ -28,6 +28,40 @@
 #include "ObjectBridge.hpp"
 #include "WinqBridge.hpp"
 
+CPPColumnDef WCDBColumnDefCreateWithoutType2(CPPCommonValue column)
+{
+    if (column.type == WCDBBridgedType_String) {
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPColumnDef, WCDB::ColumnDef, WCDB::StringView((const char*) column.intValue));
+    } else if (column.type == WCDBBridgedType_Column) {
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPColumnDef, WCDB::ColumnDef, WCDBGetBridgedData(WCDB::Column, column));
+    } else {
+        assert(0);
+    }
+    return CPPColumnDef();
+}
+
+CPPColumnDef WCDBColumnDefCreateWithType2(CPPCommonValue column, enum WCDBSyntaxColumnType type)
+{
+    if (column.type == WCDBBridgedType_String) {
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPColumnDef,
+        WCDB::ColumnDef,
+        WCDB::StringView((const char*) column.intValue),
+        WCDB::WinqBridge::changeColumnType(type));
+    } else if (column.type == WCDBBridgedType_Column) {
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPColumnDef,
+        WCDB::ColumnDef,
+        WCDBGetBridgedData(WCDB::Column, column),
+        WCDB::WinqBridge::changeColumnType(type));
+    } else {
+        assert(0);
+    }
+    return CPPColumnDef();
+}
+
 CPPColumnDef WCDBColumnDefCreateWithoutType(CPPColumn column)
 {
     WCDBGetObjectOrReturnValue(column, WCDB::Column, cppColumn, CPPColumnDef());
@@ -46,21 +80,4 @@ void WCDBColumnDefConfigConstraint(CPPColumnDef columnDef, CPPColumnConstraint c
     WCDBGetObjectOrReturn(columnDef, WCDB::ColumnDef, cppColumnDef);
     WCDBGetObjectOrReturn(constraint, WCDB::ColumnConstraint, cppColumnConstraint);
     cppColumnDef->constraint(*cppColumnConstraint);
-}
-
-const char* _Nonnull WCDBColumnDefGetColumnName(CPPColumnDef columnDef)
-{
-    WCDBGetObjectOrReturnValue(columnDef, WCDB::ColumnDef, cppColumnDef, "");
-    return cppColumnDef->syntax().column.getOrCreate().name.data();
-}
-
-bool WCDBColumnDefIsNotIndexed(CPPColumnDef columnDef)
-{
-    WCDBGetObjectOrReturnValue(columnDef, WCDB::ColumnDef, cppColumnDef, false);
-    for (auto constrain : cppColumnDef->syntax().constraints) {
-        if (constrain.switcher == WCDB::Syntax::ColumnConstraint::Switch::UnIndexed) {
-            return true;
-        }
-    }
-    return false;
 }

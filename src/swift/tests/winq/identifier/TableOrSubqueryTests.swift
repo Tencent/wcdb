@@ -46,8 +46,6 @@ class TableOrSubqueryTests: BaseTestCase {
 
         WINQAssertEqual(TableOrSubquery(with: "testTable1", "testTable2"), "(testTable1, testTable2)")
 
-        WINQAssertEqual(TableOrSubquery(with: "testTable1", "testTable2"), "(testTable1, testTable2)")
-
         WINQAssertEqual(TableOrSubquery.master(), "sqlite_master")
 
         // Give

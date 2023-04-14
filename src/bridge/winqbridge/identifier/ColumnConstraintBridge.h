@@ -40,6 +40,8 @@ void WCDBColumnConstraintConfigUnique(CPPColumnConstraint constraint);
 void WCDBColumnConstraintConfigCheck(CPPColumnConstraint constraint, CPPExpression expression);
 void WCDBColumnConstraintConfigDefaultValue(CPPColumnConstraint constraint,
                                             CPPExpression expression);
+void WCDBColumnConstraintConfigDefaultValue2(CPPColumnConstraint constraint,
+                                             CPPCommonValue expression);
 void WCDBColumnConstraintConfigCollation(CPPColumnConstraint constraint,
                                          const char* _Nullable collation);
 void WCDBColumnConstraintConfigForeignKey(CPPColumnConstraint constraint,

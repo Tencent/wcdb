@@ -36,6 +36,7 @@ void WCDBStatementUpdateConfigWith(CPPStatementUpdate update,
 void WCDBStatementUpdateConfigRecursive(CPPStatementUpdate update);
 
 void WCDBStatementUpdateConfigTable(CPPStatementUpdate update, CPPQualifiedTable table);
+void WCDBStatementUpdateConfigTable2(CPPStatementUpdate update, CPPCommonValue table);
 
 void WCDBStatementUpdateConfigConfiction(CPPStatementUpdate update,
                                          enum WCDBSyntaxConflictAction action);
@@ -43,16 +44,29 @@ void WCDBStatementUpdateConfigConfiction(CPPStatementUpdate update,
 void WCDBStatementUpdateConfigColumns(CPPStatementUpdate update,
                                       const CPPColumn* _Nullable columns,
                                       int colNum);
+void WCDBStatementUpdateConfigColumns2(CPPStatementUpdate update, CPPCommonArray columns);
 void WCDBStatementUpdateConfigValue(CPPStatementUpdate update, CPPExpression expression);
+void WCDBStatementUpdateConfigValue2(CPPStatementUpdate update, CPPCommonValue expression);
+void WCDBStatementUpdateConfigColumnsToValues(CPPStatementUpdate update,
+                                              CPPCommonArray columns,
+                                              CPPMultiTypeArray values);
+void WCDBStatementUpdateConfigColumnsToBindParameters(CPPStatementUpdate update,
+                                                      CPPCommonArray columns);
 void WCDBStatementUpdateConfigCondition(CPPStatementUpdate update, CPPExpression expression);
 
 void WCDBStatementUpdateConfigOrders(CPPStatementUpdate update,
                                      const CPPOrderingTerm* _Nullable orders,
                                      int orderNum);
-void WCDBStatementUpdateConfigLimitFromTo(CPPStatementUpdate update,
-                                          CPPExpression from,
-                                          CPPExpression to);
-void WCDBStatementUpdateConfigLimitFrom(CPPStatementUpdate update, CPPExpression limit);
+void WCDBStatementUpdateConfigLimitRange(CPPStatementUpdate update,
+                                         CPPExpression from,
+                                         CPPExpression to);
+void WCDBStatementUpdateConfigLimitCount(CPPStatementUpdate update, CPPExpression limit);
 void WCDBStatementUpdateConfigLimitOffset(CPPStatementUpdate update, CPPExpression offset);
+
+void WCDBStatementUpdateConfigLimitRange2(CPPStatementUpdate update,
+                                          CPPCommonValue from,
+                                          CPPCommonValue to);
+void WCDBStatementUpdateConfigLimitCount2(CPPStatementUpdate update, CPPCommonValue limit);
+void WCDBStatementUpdateConfigOffset2(CPPStatementUpdate update, CPPCommonValue offset);
 
 WCDB_EXTERN_C_END

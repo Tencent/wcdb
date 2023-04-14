@@ -3,6 +3,7 @@ plugins {id 'com.android.library'}
 android {
     namespace 'com.tencent.wcdb'
     compileSdk 33
+    ndkVersion '21.4.7075529'
 
     defaultConfig {
         minSdk 21

@@ -28,6 +28,7 @@
 
 WCDB_EXTERN_C_BEGIN
 
+CPPIndexedColumn WCDBIndexedColumnCreate(CPPCommonValue value);
 CPPIndexedColumn WCDBIndexedColumnCreateWithColumn(CPPColumn column);
 CPPIndexedColumn WCDBIndexedColumnCreateWithExpression(CPPExpression expression);
 void WCDBIndexedColumnConfigCollation(CPPIndexedColumn indexedColumn,

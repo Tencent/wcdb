@@ -29,6 +29,23 @@
 #include "ObjectBridge.hpp"
 #include "WinqBridge.hpp"
 
+CPPIndexedColumn WCDBIndexedColumnCreate(CPPCommonValue value)
+{
+    if (value.type == WCDBBridgedType_Column) {
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPIndexedColumn, WCDB::IndexedColumn, WCDBGetBridgedData(WCDB::Column, value));
+    } else if (value.type == WCDBBridgedType_IndexedColumn) {
+        return WCDBCreateCPPBridgedObjectByCopy(
+        CPPIndexedColumn, WCDBGetBridgedData(WCDB::IndexedColumn, value));
+    } else if (value.type == WCDBBridgedType_String) {
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPIndexedColumn, WCDB::IndexedColumn, WCDB::Column((const char*) value.intValue));
+    } else {
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPIndexedColumn, WCDB::IndexedColumn, WCDBCreateExpressionFromCommonValue(value));
+    }
+}
+
 CPPIndexedColumn WCDBIndexedColumnCreateWithColumn(CPPColumn column)
 {
     WCDBGetObjectOrReturnValue(column, WCDB::Column, cppColumn, CPPIndexedColumn());

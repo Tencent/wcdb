@@ -48,6 +48,12 @@ void WCDBStatementPragmaConfigSchema(CPPStatementPragma statment, CPPSchema sche
     cppStatement->schema(*cppSchema);
 }
 
+void WCDBStatementPragmaConfigSchema2(CPPStatementPragma statment, const char* schemaName)
+{
+    WCDBGetObjectOrReturn(statment, WCDB::StatementPragma, cppStatement);
+    cppStatement->schema(WCDB::UnsafeStringView(schemaName));
+}
+
 void WCDBStatementPragmaConfigToValue(CPPStatementPragma statment, CPPLiteralValue value)
 {
     WCDBGetObjectOrReturn(statment, WCDB::StatementPragma, cppStatement);
@@ -60,4 +66,16 @@ void WCDBStatementPragmaConfigWithValue(CPPStatementPragma statment, CPPLiteralV
     WCDBGetObjectOrReturn(statment, WCDB::StatementPragma, cppStatement);
     WCDBGetObjectOrReturn(value, WCDB::LiteralValue, cppValue);
     cppStatement->with(*cppValue);
+}
+
+void WCDBStatementPragmaConfigToValue2(CPPStatementPragma statment, CPPCommonValue value)
+{
+    WCDBGetObjectOrReturn(statment, WCDB::StatementPragma, cppStatement);
+    cppStatement->to(WCDBCreateLiteralValueFromCommonValue(value));
+}
+
+void WCDBStatementPragmaConfigWithValue2(CPPStatementPragma statment, CPPCommonValue value)
+{
+    WCDBGetObjectOrReturn(statment, WCDB::StatementPragma, cppStatement);
+    cppStatement->with(WCDBCreateLiteralValueFromCommonValue(value));
 }

@@ -26,9 +26,34 @@
 #include "Expression.hpp"
 #include "Join.hpp"
 #include "ObjectBridge.hpp"
+#include "Schema.hpp"
 #include "StatementSelect.hpp"
 #include "TableOrSubquery.hpp"
 #include "WinqBridge.hpp"
+
+CPPTableOrSubquery WCDBTableOrSubqueryCreate(CPPCommonValue value)
+{
+    if (value.type == WCDBBridgedType_String) {
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPTableOrSubquery,
+        WCDB::TableOrSubquery,
+        WCDB::UnsafeStringView((const char*) value.intValue));
+    } else if (value.type == WCDBBridgedType_TableOrSubquery) {
+        return WCDBCreateCPPBridgedObjectByCopy(
+        CPPTableOrSubquery, WCDBGetBridgedData(WCDB::TableOrSubquery, value));
+    } else if (value.type == WCDBBridgedType_SelectSTMT) {
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPTableOrSubquery,
+        WCDB::TableOrSubquery,
+        WCDBGetBridgedData(WCDB::StatementSelect, value));
+    } else if (value.type == WCDBBridgedType_JoinClause) {
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPTableOrSubquery, WCDB::TableOrSubquery, WCDBGetBridgedData(WCDB::Join, value));
+    } else {
+        assert(0);
+    }
+    return CPPTableOrSubquery();
+}
 
 CPPTableOrSubquery WCDBTableOrSubqueryCreateWithTable(const char* _Nullable tableName)
 {
@@ -65,6 +90,39 @@ WCDBTableOrSubqueryCreateWithTableOrSubqueries(const CPPTableOrSubquery* queries
     CPPTableOrSubquery, WCDB::TableOrSubquery, cppQueries);
 }
 
+CPPTableOrSubquery
+WCDBTableOrSubqueryCreateWithTableOrSubqueries2(CPPCommonArray tableOrSubqueries)
+{
+    WCDB::TablesOrSubqueries cppTableOrSubqueries;
+    for (int i = 0; i < tableOrSubqueries.length; i++) {
+        switch (tableOrSubqueries.type) {
+        case WCDBBridgedType_String:
+            cppTableOrSubqueries.emplace_back(WCDB::UnsafeStringView(
+            WCDBGetCommonArrayLiteralValue(const char*, tableOrSubqueries, i)));
+            break;
+        case WCDBBridgedType_SelectSTMT:
+            cppTableOrSubqueries.emplace_back(WCDBGetCommonArrayObject(
+            WCDB::StatementSelect, tableOrSubqueries, i));
+            break;
+        case WCDBBridgedType_JoinClause:
+            cppTableOrSubqueries.emplace_back(
+            WCDBGetCommonArrayObject(WCDB::Join, tableOrSubqueries, i));
+            break;
+        default:
+            assert(0);
+            break;
+        }
+    }
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPTableOrSubquery, WCDB::TableOrSubquery, cppTableOrSubqueries);
+}
+
+void WCDBTableOrSubqueryConfigSchema2(CPPTableOrSubquery tableOrSubquery, CPPCommonValue schema)
+{
+    WCDBGetObjectOrReturn(tableOrSubquery, WCDB::TableOrSubquery, cppTableOrSubquery);
+    cppTableOrSubquery->schema(WCDBCreateSchemaFromCommonValue(schema));
+}
+
 void WCDBTableOrSubqueryConfigSchema(CPPTableOrSubquery tableOrSubquery, CPPSchema schema)
 {
     WCDBGetObjectOrReturn(tableOrSubquery, WCDB::TableOrSubquery, cppTableOrSubquery);
@@ -98,4 +156,10 @@ void WCDBTableOrSubqueryConfigArguments(CPPTableOrSubquery tableOrSubquery,
     WCDBGetObjectOrReturn(tableOrSubquery, WCDB::TableOrSubquery, cppTableOrSubquery);
     WCDBGetCPPSyntaxListOrReturn(WCDB::Expression, cppArgs, args, argNum);
     cppTableOrSubquery->arguments(cppArgs);
+}
+
+void WCDBTableOrSubqueryConfigArgument(CPPTableOrSubquery tableOrSubquery, CPPCommonValue expression)
+{
+    WCDBGetObjectOrReturn(tableOrSubquery, WCDB::TableOrSubquery, cppTableOrSubquery);
+    cppTableOrSubquery->argument(WCDBCreateExpressionFromCommonValue(expression));
 }

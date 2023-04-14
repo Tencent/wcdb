@@ -28,10 +28,12 @@
 
 WCDB_EXTERN_C_BEGIN
 
+CPPColumnDef WCDBColumnDefCreateWithoutType2(CPPCommonValue commonValue);
+CPPColumnDef
+WCDBColumnDefCreateWithType2(CPPCommonValue column, enum WCDBSyntaxColumnType type);
+
 CPPColumnDef WCDBColumnDefCreateWithoutType(CPPColumn column);
 CPPColumnDef WCDBColumnDefCreateWithType(CPPColumn column, enum WCDBSyntaxColumnType type);
 void WCDBColumnDefConfigConstraint(CPPColumnDef columnDef, CPPColumnConstraint constraint);
-const char* _Nonnull WCDBColumnDefGetColumnName(CPPColumnDef columnDef);
-bool WCDBColumnDefIsNotIndexed(CPPColumnDef columnDef);
 
 WCDB_EXTERN_C_END

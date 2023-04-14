@@ -23,27 +23,27 @@ import WCDB_Private
 
 public final class StatementCreateIndex: Identifier<CPPStatementCreateIndex>, Statement {
     public init() {
-        super.init(with: WCDBStatementCreatIndexCreate())
+        super.init(with: WCDBStatementCreateIndexCreate())
     }
 
     @discardableResult
     public func create(index: String, isUnique: Bool = false) -> StatementCreateIndex {
-        WCDBStatementCreatIndexConfigIndexName(cppObj, index.cString)
+        WCDBStatementCreateIndexConfigIndexName(cppObj, index.cString)
         if isUnique {
-            WCDBStatementCreatIndexConfigUniqe(cppObj)
+            WCDBStatementCreateIndexConfigUniqe(cppObj)
         }
         return self
     }
 
     @discardableResult
     public func unique() -> StatementCreateIndex {
-        WCDBStatementCreatIndexConfigUniqe(cppObj)
+        WCDBStatementCreateIndexConfigUniqe(cppObj)
         return self
     }
 
     @discardableResult
     public func ifNotExists() -> StatementCreateIndex {
-        WCDBStatementCreatIndexConfigIfNotExist(cppObj)
+        WCDBStatementCreateIndexConfigIfNotExist(cppObj)
         return self
     }
 
@@ -51,14 +51,14 @@ public final class StatementCreateIndex: Identifier<CPPStatementCreateIndex>, St
     public func of(schema schemaConvertible: SchemaConvertible) -> StatementCreateIndex {
         let schema = schemaConvertible.asSchema()
         withExtendedLifetime(schema) {
-            WCDBStatementCreatIndexConfigSchema(cppObj, $0.cppObj)
+            WCDBStatementCreateIndexConfigSchema(cppObj, $0.cppObj)
         }
         return self
     }
 
     @discardableResult
     public func on(table: String) -> StatementCreateIndex {
-        WCDBStatementCreatIndexConfigTable(cppObj, table.cString)
+        WCDBStatementCreateIndexConfigTable(cppObj, table.cString)
         return self
     }
 
@@ -73,7 +73,7 @@ public final class StatementCreateIndex: Identifier<CPPStatementCreateIndex>, St
         withExtendedLifetime(indexedColumns) {
             let cppIndexedColumns = $0.map { $0.cppObj }
             cppIndexedColumns.withUnsafeBufferPointer {
-                WCDBStatementCreatIndexConfigIndexColumns(cppObj, $0.baseAddress, Int32($0.count))
+                WCDBStatementCreateIndexConfigIndexColumns(cppObj, $0.baseAddress, Int32($0.count))
             }
         }
         return self
@@ -83,7 +83,7 @@ public final class StatementCreateIndex: Identifier<CPPStatementCreateIndex>, St
     public func `where`(_ expressionConvertible: ExpressionConvertible) -> StatementCreateIndex {
         let expression = expressionConvertible.asExpression()
         withExtendedLifetime(expression) {
-            WCDBStatementCreatIndexConfigWhere(cppObj, $0.cppObj)
+            WCDBStatementCreateIndexConfigWhere(cppObj, $0.cppObj)
         }
         return self
     }

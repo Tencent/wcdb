@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include "Column.hpp"
 #include "SQL.hpp"
 
 namespace WCDB {
@@ -31,6 +32,18 @@ namespace WCDB {
 class ColumnDef final : public SpecifiedSyntax<Syntax::ColumnDef, SQL> {
 public:
     using SpecifiedSyntax<Syntax::ColumnDef, SQL>::SpecifiedSyntax;
+
+    template<typename T, typename Enable = typename std::enable_if<ColumnConvertible<T>::value>::type>
+    ColumnDef(const T& t) : ColumnDef(ColumnConvertible<T>::asColumn(t))
+    {
+    }
+
+    template<typename T, typename Enable = typename std::enable_if<ColumnConvertible<T>::value>::type>
+    ColumnDef(const T& t, const ColumnType& type)
+    : ColumnDef(ColumnConvertible<T>::asColumn(t), type)
+    {
+    }
+
     ColumnDef();
     ColumnDef(const Column& column);
     ColumnDef(const Column& column, const ColumnType& type);

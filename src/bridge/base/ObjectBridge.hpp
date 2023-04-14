@@ -78,6 +78,19 @@
 #define WCDBSwiftClosureCallWithMultiArgument(typedObj, firstArgument, ...)    \
     WCDBGetSwiftClosure(typedObj)(firstArgument, nullptr, __VA_ARGS__)
 
+#define WCDBGetBridgedData(type, data)                                         \
+    (*((type*) WCDB::ObjectBridge::extractOriginalCPPObject((CPPObject*) data.intValue)))
+
+#define WCDBGetCommonArrayLiteralValue(type, array, i) ((type*) array.buffer)[i]
+
+#define WCDBGetCommonArrayObject(type, array, i)                               \
+    (*((type*) WCDB::ObjectBridge::extractOriginalCPPObject(                   \
+    (CPPObject*) ((long long*) array.buffer)[i])))
+
+#define WCDBGetMultiTypeArrayObject(type, array, i)                            \
+    (*((type*) WCDB::ObjectBridge::extractOriginalCPPObject(                   \
+    (CPPObject*) (array.intValues[i]))))
+
 namespace WCDB {
 
 class ObjectBridge {

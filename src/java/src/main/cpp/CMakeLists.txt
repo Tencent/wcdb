@@ -10,6 +10,14 @@ cmake_minimum_required(VERSION 3.13)
 
 project(WCDB_Android)
 
+include(../../../../utility.cmake)
+
+set(WCDB_JAVA_SRC_DIR ${CMAKE_CURRENT_LIST_DIR})
+
+file(GLOB_RECURSE SRC_WCDB_JAVA
+    ${WCDB_JAVA_SRC_DIR}/*.c
+    ${WCDB_JAVA_SRC_DIR}/*.h)
+
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
 # You can define multiple libraries, and CMake builds them for you.
@@ -22,7 +30,10 @@ add_library( # Sets the name of the library.
              SHARED
 
              # Provides a relative path to your source file(s).
-             java.cpp )
+             ${SRC_WCDB_JAVA})
+
+recursive_subdirs(INCLUDES_WCDB_JAVA ${WCDB_JAVA_SRC_DIR})
+target_include_directories(wcdb-android PUBLIC ${INCLUDES_WCDB_JAVA})
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -49,7 +60,6 @@ target_link_libraries( # Specifies the target library.
                        wcdb-common
                        # Links the target library to the log library
                        # included in the NDK.
-                       ${log-lib}
-        )
+                       ${log-lib} )
 
 add_subdirectory(../../../.. ${CMAKE_CURRENT_BINARY_DIR}/wcdb)

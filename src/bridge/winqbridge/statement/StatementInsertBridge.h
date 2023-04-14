@@ -37,6 +37,7 @@ void WCDBStatementInsertConfigRecursive(CPPStatementInsert insert);
 
 void WCDBStatementInsertConfigTable(CPPStatementInsert insert, const char* _Nullable name);
 void WCDBStatementInsertConfigSchema(CPPStatementInsert insert, CPPSchema schema);
+void WCDBStatementInsertConfigSchema2(CPPStatementInsert insert, CPPCommonValue schema);
 
 void WCDBStatementInsertConfigConfiction(CPPStatementInsert insert,
                                          enum WCDBSyntaxConflictAction action);
@@ -46,9 +47,14 @@ void WCDBStatementInsertConfigAlias(CPPStatementInsert insert, const char* _Null
 void WCDBStatementInsertConfigColumns(CPPStatementInsert insert,
                                       const CPPColumn* _Nullable columns,
                                       int colNum);
+void WCDBStatementInsertConfigColumns2(CPPStatementInsert insert, CPPCommonArray columns);
 void WCDBStatementInsertConfigValues(CPPStatementInsert insert,
                                      const CPPExpression* _Nullable exps,
                                      int expNum);
+void WCDBStatementInsertConfigValuesWithMultiTypeArray(CPPStatementInsert insert,
+                                                       CPPMultiTypeArray values);
+void WCDBStatementInsertConfigValuesWithBindParameters(CPPStatementInsert insert,
+                                                       int parametersCount);
 void WCDBStatementInsertConfigSelect(CPPStatementInsert insert, CPPStatementSelect select);
 
 void WCDBStatementInsertConfigDefaultValues(CPPStatementInsert insert);

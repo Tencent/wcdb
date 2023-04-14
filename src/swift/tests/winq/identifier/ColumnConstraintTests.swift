@@ -54,7 +54,7 @@ class ColumnConstraintTests: BaseTestCase {
 
         WINQAssertEqual(ColumnConstraint(named: name).unique().conflict(action: .Abort), "CONSTRAINT \(name) UNIQUE ON CONFLICT ABORT")
 
-        WINQAssertEqual(ColumnConstraint(named: name).unique().collate(with: "BINARY"), "CONSTRAINT \(name) COLLATE BINARY")
+        WINQAssertEqual(ColumnConstraint(named: name).collate(with: "BINARY"), "CONSTRAINT \(name) COLLATE BINARY")
 
     }
 }

@@ -31,6 +31,8 @@ WCDB_EXTERN_C_BEGIN
 CPPStatementCreateTable WCDBStatementCreateTableCreate(void);
 void WCDBStatementCreateTableConfigTable(CPPStatementCreateTable createTable,
                                          const char* _Nullable name);
+void WCDBStatementCreateTableConfigSchema2(CPPStatementCreateTable createTable,
+                                           CPPCommonValue schema);
 void WCDBStatementCreateTableConfigSchema(CPPStatementCreateTable createTable, CPPSchema schema);
 void WCDBStatementCreateTableConfigTemp(CPPStatementCreateTable createTable);
 void WCDBStatementCreateTableConfigIfNotExist(CPPStatementCreateTable createTable);

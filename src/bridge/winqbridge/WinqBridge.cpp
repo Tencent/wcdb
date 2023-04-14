@@ -23,9 +23,12 @@
  */
 
 #include "WinqBridge.hpp"
+#include "Expression.hpp"
+#include "LiteralValue.hpp"
 #include "ObjectBridge.hpp"
 #include "Recyclable.hpp"
 #include "SQL.hpp"
+#include "Schema.hpp"
 #include "Statement.hpp"
 
 const char* _Nonnull WCDBWinqGetDescription(CPPObject* statement)
@@ -37,7 +40,7 @@ const char* _Nonnull WCDBWinqGetDescription(CPPObject* statement)
 CPPStatement WCDBGetUnmangedStatement(CPPObject* _Nonnull statement)
 {
     WCDB::Statement* cppStatement
-    = WCDB::ObjectBridge::extractOriginalCPPObject<WCDB::Statement>(statement);
+    = (WCDB::Statement*) WCDB::ObjectBridge::extractOriginalCPPObject(statement);
     return WCDBCreateUnmanagedCPPObject(CPPStatement, cppStatement);
 }
 
@@ -167,6 +170,70 @@ ColumnType WinqBridge::changeColumnType(enum WCDBSyntaxColumnType type)
     case WCDBSyntaxColumnType_BLOB:
         return ColumnType::BLOB;
     }
+}
+
+Schema WinqBridge::createSchema(CPPCommonValue schema)
+{
+    if (schema.type == WCDBBridgedType_String) {
+        return Schema((const char*) schema.intValue);
+    } else if (schema.type == WCDBBridgedType_Schema) {
+        return WCDBGetBridgedData(WCDB::Schema, schema);
+    } else {
+        assert(0);
+    }
+    return Schema();
+}
+
+LiteralValue WinqBridge::createLiteralValue(CPPCommonValue data)
+{
+    switch (data.type) {
+    case WCDBBridgedType_Null:
+        return LiteralValue(nullptr);
+    case WCDBBridgedType_Bool:
+        return LiteralValue((bool) data.intValue);
+    case WCDBBridgedType_Int:
+        return LiteralValue((int64_t) data.intValue);
+    case WCDBBridgedType_UInt:
+        return LiteralValue((uint64_t) data.intValue);
+    case WCDBBridgedType_Double:
+        return LiteralValue(data.doubleValue);
+    case WCDBBridgedType_String:
+        return LiteralValue(StringView((const char*) data.intValue));
+    default:
+        assert(0);
+    }
+    return LiteralValue(nullptr);
+}
+
+Expression WinqBridge::createExpression(CPPCommonValue exp)
+{
+    switch (exp.type) {
+    case WCDBBridgedType_Null:
+        return LiteralValue(nullptr);
+    case WCDBBridgedType_Bool:
+        return LiteralValue((bool) exp.intValue);
+    case WCDBBridgedType_Int:
+        return LiteralValue((int64_t) exp.intValue);
+    case WCDBBridgedType_UInt:
+        return LiteralValue((uint64_t) exp.intValue);
+    case WCDBBridgedType_Double:
+        return LiteralValue(exp.doubleValue);
+    case WCDBBridgedType_String:
+        return LiteralValue(StringView((const char*) exp.intValue));
+    case WCDBBridgedType_Column:
+        return WCDBGetBridgedData(WCDB::Column, exp);
+    case WCDBBridgedType_BindParameter:
+        return WCDBGetBridgedData(WCDB::BindParameter, exp);
+    case WCDBBridgedType_LiteralValue:
+        return WCDBGetBridgedData(WCDB::LiteralValue, exp);
+    case WCDBBridgedType_Expression:
+        return WCDBGetBridgedData(WCDB::Expression, exp);
+        break;
+    default:
+        assert(0);
+        break;
+    }
+    return Expression();
 }
 
 } // namespace WCDB

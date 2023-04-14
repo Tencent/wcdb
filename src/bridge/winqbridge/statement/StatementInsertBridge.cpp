@@ -23,9 +23,11 @@
  */
 
 #include "StatementInsertBridge.h"
+#include "BindParameter.hpp"
 #include "Column.hpp"
 #include "CommonTableExpression.hpp"
 #include "Expression.hpp"
+#include "LiteralValue.hpp"
 #include "Schema.hpp"
 #include "StatementInsert.hpp"
 #include "StatementSelect.hpp"
@@ -65,6 +67,12 @@ void WCDBStatementInsertConfigSchema(CPPStatementInsert insert, CPPSchema schema
     cppInsert->schema(*cppSchema);
 }
 
+void WCDBStatementInsertConfigSchema2(CPPStatementInsert insert, CPPCommonValue schema)
+{
+    WCDBGetObjectOrReturn(insert, WCDB::StatementInsert, cppInsert);
+    cppInsert->schema(WCDBCreateSchemaFromCommonValue(schema));
+}
+
 void WCDBStatementInsertConfigConfiction(CPPStatementInsert insert,
                                          enum WCDBSyntaxConflictAction action)
 {
@@ -85,6 +93,89 @@ void WCDBStatementInsertConfigColumns(CPPStatementInsert insert,
     WCDBGetObjectOrReturn(insert, WCDB::StatementInsert, cppInsert);
     WCDBGetCPPSyntaxListOrReturn(WCDB::Column, cppColumns, columns, colNum);
     cppInsert->columns(cppColumns);
+}
+
+void WCDBStatementInsertConfigColumns2(CPPStatementInsert insert, CPPCommonArray columns)
+{
+    WCDBGetObjectOrReturn(insert, WCDB::StatementInsert, cppInsert);
+    WCDB::Columns cppColumns;
+    for (int i = 0; i < columns.length; i++) {
+        switch (columns.type) {
+        case WCDBBridgedType_String:
+            cppColumns.emplace_back(
+            WCDB::Column(WCDBGetCommonArrayLiteralValue(const char*, columns, i)));
+            break;
+        case WCDBBridgedType_Column:
+            cppColumns.emplace_back(WCDBGetCommonArrayObject(WCDB::Column, columns, i));
+            break;
+        default:
+            assert(0);
+            break;
+        }
+    }
+    cppInsert->columns(cppColumns);
+}
+
+void WCDBStatementInsertConfigValuesWithMultiTypeArray(CPPStatementInsert insert,
+                                                       CPPMultiTypeArray values)
+{
+    WCDBGetObjectOrReturn(insert, WCDB::StatementInsert, cppInsert);
+    int intIndex = 0;
+    int doubleIndex = 0;
+    int stringIndex = 0;
+    for (int i = 0; i < values.totalLength; i++) {
+        switch (values.types[i]) {
+        case WCDBBridgedType_Null: {
+            cppInsert->value(WCDB::LiteralValue(nullptr));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_Bool: {
+            cppInsert->value(WCDB::LiteralValue((bool) values.intValues[intIndex]));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_Int: {
+            cppInsert->value(WCDB::LiteralValue((int64_t) values.intValues[intIndex]));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_UInt: {
+            cppInsert->value(WCDB::LiteralValue((uint64_t) values.intValues[intIndex]));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_Double: {
+            cppInsert->value(WCDB::LiteralValue(values.doubleValues[doubleIndex]));
+            doubleIndex++;
+        } break;
+        case WCDBBridgedType_String: {
+            cppInsert->value(WCDB::LiteralValue(
+            WCDB::UnsafeStringView(values.stringValues[stringIndex])));
+            stringIndex++;
+        } break;
+        case WCDBBridgedType_Column: {
+            cppInsert->value(WCDBGetMultiTypeArrayObject(WCDB::Column, values, intIndex));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_LiteralValue: {
+            cppInsert->value(WCDBGetMultiTypeArrayObject(WCDB::LiteralValue, values, intIndex));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_BindParameter: {
+            cppInsert->value(WCDBGetMultiTypeArrayObject(WCDB::BindParameter, values, intIndex));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_Expression: {
+            cppInsert->value(WCDBGetMultiTypeArrayObject(WCDB::Expression, values, intIndex));
+            intIndex++;
+        } break;
+        default:
+            break;
+        }
+    }
+}
+
+void WCDBStatementInsertConfigValuesWithBindParameters(CPPStatementInsert insert, int parametersCount)
+{
+    WCDBGetObjectOrReturn(insert, WCDB::StatementInsert, cppInsert);
+    cppInsert->values(WCDB::BindParameter::bindParameters(parametersCount));
 }
 
 void WCDBStatementInsertConfigValues(CPPStatementInsert insert,

@@ -149,8 +149,9 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+find_library(z-lib z)
 add_library(wcdb-common STATIC ${SRC_WCDB_COMMON})
-target_link_libraries(wcdb-common PUBLIC sqlcipher)
+target_link_libraries(wcdb-common PUBLIC sqlcipher ${z-lib})
 target_include_directories(wcdb-common PUBLIC ${INCLUDES_WCDB_COMMON})
 
 add_library(wcdb-cpp STATIC ${SRC_WCDB_CPP})

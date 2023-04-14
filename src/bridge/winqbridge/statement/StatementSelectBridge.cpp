@@ -23,14 +23,17 @@
  */
 
 #include "StatementSelectBridge.h"
+#include "Column.hpp"
 #include "CommonTableExpression.hpp"
 #include "Expression.hpp"
+#include "LiteralValue.hpp"
 #include "OrderingTerm.hpp"
 #include "ResultColumn.hpp"
 #include "StatementSelect.hpp"
 #include "TableOrSubquery.hpp"
 #include "WindowDef.hpp"
 #include "WinqBridge.hpp"
+#include "Join.hpp"
 
 CPPStatementSelect WCDBStatementSelectCreate()
 {
@@ -61,6 +64,72 @@ void WCDBStatementSelectConfigResultColumns(CPPStatementSelect select,
     cppSelect->select(cppColumns);
 }
 
+void WCDBStatementSelectConfigResultColumns2(CPPStatementSelect select, CPPMultiTypeArray resultColumns)
+{
+    WCDBGetObjectOrReturn(select, WCDB::StatementSelect, cppSelect);
+    WCDB::ResultColumns cppResultColumns;
+    int intIndex = 0;
+    int doubleIndex = 0;
+    int stringIndex = 0;
+    for (int i = 0; i < resultColumns.totalLength; i++) {
+        switch (resultColumns.types[i]) {
+        case WCDBBridgedType_Null: {
+            cppResultColumns.emplace_back(WCDB::LiteralValue(nullptr));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_Bool: {
+            cppResultColumns.emplace_back(
+            WCDB::LiteralValue((bool) resultColumns.intValues[intIndex]));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_Int: {
+            cppResultColumns.emplace_back(
+            WCDB::LiteralValue((int64_t) resultColumns.intValues[intIndex]));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_UInt: {
+            cppResultColumns.emplace_back(
+            WCDB::LiteralValue((uint64_t) resultColumns.intValues[intIndex]));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_Double: {
+            cppResultColumns.emplace_back(
+            WCDB::LiteralValue(resultColumns.doubleValues[doubleIndex]));
+            doubleIndex++;
+        } break;
+        case WCDBBridgedType_String: {
+            cppResultColumns.emplace_back(WCDB::Column(
+            WCDB::UnsafeStringView(resultColumns.stringValues[stringIndex])));
+            stringIndex++;
+        } break;
+        case WCDBBridgedType_Column: {
+            cppResultColumns.emplace_back(
+            WCDBGetMultiTypeArrayObject(WCDB::Column, resultColumns, intIndex));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_LiteralValue: {
+            cppResultColumns.emplace_back(WCDBGetMultiTypeArrayObject(
+            WCDB::LiteralValue, resultColumns, intIndex));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_Expression: {
+            cppResultColumns.emplace_back(WCDBGetMultiTypeArrayObject(
+            WCDB::Expression, resultColumns, intIndex));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_ResultColumn: {
+            cppResultColumns.push_back(WCDBGetMultiTypeArrayObject(
+            WCDB::ResultColumn, resultColumns, intIndex));
+            intIndex++;
+        } break;
+        default:
+            assert(0);
+            break;
+        }
+    }
+    cppSelect->select(cppResultColumns);
+}
+
 void WCDBStatementSelectConfigDistinct(CPPStatementSelect select)
 {
     WCDBGetObjectOrReturn(select, WCDB::StatementSelect, cppSelect);
@@ -77,6 +146,43 @@ void WCDBStatementSelectConfigFromTableOrSubqueries(CPPStatementSelect select,
     cppSelect->from(cppQueries);
 }
 
+void WCDBStatementSelectConfigFromTableOrSubqueries2(CPPStatementSelect select,
+                                                     CPPMultiTypeArray tableOrSubqueries)
+{
+    WCDBGetObjectOrReturn(select, WCDB::StatementSelect, cppSelect);
+    WCDB::TablesOrSubqueries cppTableOrSubqueries;
+    int intIndex = 0;
+    int stringIndex = 0;
+    for (int i = 0; i < tableOrSubqueries.totalLength; i++) {
+        switch (tableOrSubqueries.types[i]) {
+        case WCDBBridgedType_String: {
+            cppTableOrSubqueries.emplace_back(
+            WCDB::UnsafeStringView(tableOrSubqueries.stringValues[stringIndex]));
+            stringIndex++;
+        } break;
+        case WCDBBridgedType_TableOrSubquery: {
+            cppTableOrSubqueries.push_back(WCDBGetMultiTypeArrayObject(
+            WCDB::TableOrSubquery, tableOrSubqueries, intIndex));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_SelectSTMT: {
+            cppTableOrSubqueries.emplace_back(WCDBGetMultiTypeArrayObject(
+            WCDB::StatementSelect, tableOrSubqueries, intIndex));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_JoinClause: {
+            cppTableOrSubqueries.emplace_back(WCDBGetMultiTypeArrayObject(
+            WCDB::Join, tableOrSubqueries, intIndex));
+            intIndex++;
+        } break;
+        default:
+            assert(0);
+            break;
+        }
+    }
+    cppSelect->from(cppTableOrSubqueries);
+}
+
 void WCDBStatementSelectConfigWhere(CPPStatementSelect select, CPPExpression condition)
 {
     WCDBGetObjectOrReturn(select, WCDB::StatementSelect, cppSelect);
@@ -88,6 +194,34 @@ void WCDBStatementSelectConfigGroups(CPPStatementSelect select, const CPPExpress
 {
     WCDBGetObjectOrReturn(select, WCDB::StatementSelect, cppSelect);
     WCDBGetCPPSyntaxListOrReturn(WCDB::Expression, cppExps, exps, expNum);
+    cppSelect->groups(cppExps);
+}
+
+void WCDBStatementSelectConfigGroups2(CPPStatementSelect select, CPPMultiTypeArray groups)
+{
+    WCDBGetObjectOrReturn(select, WCDB::StatementSelect, cppSelect);
+    WCDB::Expressions cppExps;
+    int intIndex = 0;
+    int stringIndex = 0;
+    for (int i = 0; i < groups.totalLength; i++) {
+        switch (groups.types[i]) {
+        case WCDBBridgedType_String: {
+            cppExps.emplace_back(WCDB::Column(groups.stringValues[stringIndex]));
+            stringIndex++;
+        } break;
+        case WCDBBridgedType_Column: {
+            cppExps.emplace_back(WCDBGetMultiTypeArrayObject(WCDB::Column, groups, intIndex));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_Expression: {
+            cppExps.push_back(WCDBGetMultiTypeArrayObject(WCDB::Expression, groups, intIndex));
+            intIndex++;
+        } break;
+        default:
+            assert(0);
+            break;
+        }
+    }
     cppSelect->groups(cppExps);
 }
 
@@ -151,7 +285,7 @@ void WCDBStatementSelectConfigOrders(CPPStatementSelect select,
     cppSelect->orders(cppOrders);
 }
 
-void WCDBStatementSelectConfigLimitFromTo(CPPStatementSelect select, CPPExpression from, CPPExpression to)
+void WCDBStatementSelectConfigLimitRange(CPPStatementSelect select, CPPExpression from, CPPExpression to)
 {
     WCDBGetObjectOrReturn(select, WCDB::StatementSelect, cppSelect);
     WCDBGetObjectOrReturn(from, WCDB::Expression, cppFrom);
@@ -159,7 +293,7 @@ void WCDBStatementSelectConfigLimitFromTo(CPPStatementSelect select, CPPExpressi
     cppSelect->limit(*cppFrom, *cppTo);
 }
 
-void WCDBStatementSelectConfigLimitFrom(CPPStatementSelect select, CPPExpression limit)
+void WCDBStatementSelectConfigLimitCount(CPPStatementSelect select, CPPExpression limit)
 {
     WCDBGetObjectOrReturn(select, WCDB::StatementSelect, cppSelect);
     WCDBGetObjectOrReturn(limit, WCDB::Expression, cppLimit);
@@ -171,4 +305,25 @@ void WCDBStatementSelectConfigLimitOffset(CPPStatementSelect select, CPPExpressi
     WCDBGetObjectOrReturn(select, WCDB::StatementSelect, cppSelect);
     WCDBGetObjectOrReturn(offset, WCDB::Expression, cppOffset);
     cppSelect->offset(*cppOffset);
+}
+
+void WCDBStatementSelectConfigLimitRange2(CPPStatementSelect select,
+                                          CPPCommonValue from,
+                                          CPPCommonValue to)
+{
+    WCDBGetObjectOrReturn(select, WCDB::StatementSelect, cppSelect);
+    cppSelect->limit(WCDBCreateExpressionFromCommonValue(from),
+                     WCDBCreateExpressionFromCommonValue(to));
+}
+
+void WCDBStatementSelectConfigLimitCount2(CPPStatementSelect select, CPPCommonValue limit)
+{
+    WCDBGetObjectOrReturn(select, WCDB::StatementSelect, cppSelect);
+    cppSelect->limit(WCDBCreateExpressionFromCommonValue(limit));
+}
+
+void WCDBStatementSelectConfigOffset2(CPPStatementSelect select, CPPCommonValue offset)
+{
+    WCDBGetObjectOrReturn(select, WCDB::StatementSelect, cppSelect);
+    cppSelect->offset(WCDBCreateExpressionFromCommonValue(offset));
 }

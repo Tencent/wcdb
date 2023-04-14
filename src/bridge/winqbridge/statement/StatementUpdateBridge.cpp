@@ -23,9 +23,11 @@
  */
 
 #include "StatementUpdateBridge.h"
+#include "BindParameter.hpp"
 #include "Column.hpp"
 #include "CommonTableExpression.hpp"
 #include "Expression.hpp"
+#include "LiteralValue.hpp"
 #include "OrderingTerm.hpp"
 #include "QualifiedTable.hpp"
 #include "StatementUpdate.hpp"
@@ -58,6 +60,16 @@ void WCDBStatementUpdateConfigTable(CPPStatementUpdate update, CPPQualifiedTable
     cppUpdate->update(*cppTable);
 }
 
+void WCDBStatementUpdateConfigTable2(CPPStatementUpdate update, CPPCommonValue table)
+{
+    WCDBGetObjectOrReturn(update, WCDB::StatementUpdate, cppUpdate);
+    if (table.type == WCDBBridgedType_String) {
+        cppUpdate->update(WCDB::UnsafeStringView((const char*) table.intValue));
+    } else if (table.type == WCDBBridgedType_QualifiedTableName) {
+        cppUpdate->update(WCDBGetBridgedData(WCDB::QualifiedTable, table));
+    }
+}
+
 void WCDBStatementUpdateConfigConfiction(CPPStatementUpdate update,
                                          enum WCDBSyntaxConflictAction action)
 {
@@ -74,11 +86,121 @@ void WCDBStatementUpdateConfigColumns(CPPStatementUpdate update,
     cppUpdate->set(cppColumns);
 }
 
+void WCDBStatementUpdateConfigColumns2(CPPStatementUpdate update, CPPCommonArray columns)
+{
+    WCDBGetObjectOrReturn(update, WCDB::StatementUpdate, cppUpdate);
+    WCDB::Columns cppColumns;
+    if (columns.type == WCDBBridgedType_String) {
+        for (int i = 0; i < columns.length; i++) {
+            cppColumns.emplace_back(WCDBGetCommonArrayLiteralValue(const char*, columns, i));
+        }
+    } else if (columns.type == WCDBBridgedType_Column) {
+        for (int i = 0; i < columns.length; i++) {
+            cppColumns.push_back(WCDBGetCommonArrayObject(WCDB::Column, columns, i));
+        }
+    } else {
+        assert(0);
+    }
+    cppUpdate->set(cppColumns);
+}
+
 void WCDBStatementUpdateConfigValue(CPPStatementUpdate update, CPPExpression expression)
 {
     WCDBGetObjectOrReturn(update, WCDB::StatementUpdate, cppUpdate);
     WCDBGetObjectOrReturn(expression, WCDB::Expression, cppExpression);
     cppUpdate->to(*cppExpression);
+}
+
+void WCDBStatementUpdateConfigValue2(CPPStatementUpdate update, CPPCommonValue expression)
+{
+    WCDBGetObjectOrReturn(update, WCDB::StatementUpdate, cppUpdate);
+    cppUpdate->to(WCDBCreateExpressionFromCommonValue(expression));
+}
+
+void WCDBStatementUpdateConfigColumnsToValues(CPPStatementUpdate update,
+                                              CPPCommonArray columns,
+                                              CPPMultiTypeArray values)
+{
+    WCDBGetObjectOrReturn(update, WCDB::StatementUpdate, cppUpdate);
+    int totalLength
+    = columns.length > values.totalLength ? values.totalLength : columns.length;
+    int intIndex = 0;
+    int doubleIndex = 0;
+    int stringIndex = 0;
+    for (int i = 0; i < totalLength; i++) {
+        if (columns.type == WCDBBridgedType_String) {
+            cppUpdate->set(
+            WCDB::Column(WCDBGetCommonArrayLiteralValue(const char*, columns, i)));
+        } else if (columns.type == WCDBBridgedType_Column) {
+            cppUpdate->set(WCDBGetCommonArrayObject(WCDB::Column, columns, i));
+        } else {
+            assert(0);
+        }
+        switch (values.types[i]) {
+        case WCDBBridgedType_Null: {
+            cppUpdate->to(WCDB::LiteralValue(nullptr));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_Bool: {
+            cppUpdate->to(WCDB::LiteralValue((bool) values.intValues[intIndex]));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_Int: {
+            cppUpdate->to(WCDB::LiteralValue((int64_t) values.intValues[intIndex]));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_UInt: {
+            cppUpdate->to(WCDB::LiteralValue((uint64_t) values.intValues[intIndex]));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_Double: {
+            cppUpdate->to(WCDB::LiteralValue(values.doubleValues[doubleIndex]));
+            doubleIndex++;
+        } break;
+        case WCDBBridgedType_String: {
+            cppUpdate->to(WCDB::LiteralValue(
+            WCDB::UnsafeStringView(values.stringValues[stringIndex])));
+            stringIndex++;
+        } break;
+        case WCDBBridgedType_Column: {
+            cppUpdate->to(WCDBGetMultiTypeArrayObject(WCDB::Column, values, intIndex));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_LiteralValue: {
+            cppUpdate->to(WCDBGetMultiTypeArrayObject(WCDB::LiteralValue, values, intIndex));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_BindParameter: {
+            cppUpdate->to(WCDBGetMultiTypeArrayObject(WCDB::BindParameter, values, intIndex));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_Expression: {
+            cppUpdate->to(WCDBGetMultiTypeArrayObject(WCDB::Expression, values, intIndex));
+            intIndex++;
+        } break;
+        default:
+            break;
+        }
+    }
+}
+
+void WCDBStatementUpdateConfigColumnsToBindParameters(CPPStatementUpdate update,
+                                                      CPPCommonArray columns)
+{
+    WCDBGetObjectOrReturn(update, WCDB::StatementUpdate, cppUpdate);
+    if (columns.type == WCDBBridgedType_String) {
+        for (int i = 0; i < columns.length; i++) {
+            cppUpdate->set(WCDBGetCommonArrayLiteralValue(const char*, columns, i));
+            cppUpdate->to(WCDB::BindParameter(i + 1));
+        }
+    } else if (columns.type == WCDBBridgedType_Column) {
+        for (int i = 0; i < columns.length; i++) {
+            cppUpdate->set(WCDBGetCommonArrayObject(WCDB::Column, columns, i));
+            cppUpdate->to(WCDB::BindParameter(i + 1));
+        }
+    } else {
+        assert(0);
+    }
 }
 
 void WCDBStatementUpdateConfigCondition(CPPStatementUpdate update, CPPExpression expression)
@@ -97,7 +219,7 @@ void WCDBStatementUpdateConfigOrders(CPPStatementUpdate update,
     cppUpdate->orders(cppOrders);
 }
 
-void WCDBStatementUpdateConfigLimitFromTo(CPPStatementUpdate update, CPPExpression from, CPPExpression to)
+void WCDBStatementUpdateConfigLimitRange(CPPStatementUpdate update, CPPExpression from, CPPExpression to)
 {
     WCDBGetObjectOrReturn(update, WCDB::StatementUpdate, cppUpdate);
     WCDBGetObjectOrReturn(from, WCDB::Expression, cppFrom);
@@ -105,7 +227,7 @@ void WCDBStatementUpdateConfigLimitFromTo(CPPStatementUpdate update, CPPExpressi
     cppUpdate->limit(*cppFrom, *cppTo);
 }
 
-void WCDBStatementUpdateConfigLimitFrom(CPPStatementUpdate update, CPPExpression limit)
+void WCDBStatementUpdateConfigLimitCount(CPPStatementUpdate update, CPPExpression limit)
 {
     WCDBGetObjectOrReturn(update, WCDB::StatementUpdate, cppUpdate);
     WCDBGetObjectOrReturn(limit, WCDB::Expression, cppLimit);
@@ -117,4 +239,25 @@ void WCDBStatementUpdateConfigLimitOffset(CPPStatementUpdate update, CPPExpressi
     WCDBGetObjectOrReturn(update, WCDB::StatementUpdate, cppUpdate);
     WCDBGetObjectOrReturn(offset, WCDB::Expression, cppOffset);
     cppUpdate->offset(*cppOffset);
+}
+
+void WCDBStatementUpdateConfigLimitRange2(CPPStatementUpdate update,
+                                          CPPCommonValue from,
+                                          CPPCommonValue to)
+{
+    WCDBGetObjectOrReturn(update, WCDB::StatementUpdate, cppSelect);
+    cppSelect->limit(WCDBCreateExpressionFromCommonValue(from),
+                     WCDBCreateExpressionFromCommonValue(to));
+}
+
+void WCDBStatementUpdateConfigLimitCount2(CPPStatementUpdate update, CPPCommonValue limit)
+{
+    WCDBGetObjectOrReturn(update, WCDB::StatementUpdate, cppSelect);
+    cppSelect->limit(WCDBCreateExpressionFromCommonValue(limit));
+}
+
+void WCDBStatementUpdateConfigOffset2(CPPStatementUpdate update, CPPCommonValue offset)
+{
+    WCDBGetObjectOrReturn(update, WCDB::StatementUpdate, cppSelect);
+    cppSelect->offset(WCDBCreateExpressionFromCommonValue(offset));
 }

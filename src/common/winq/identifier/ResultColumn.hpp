@@ -28,8 +28,6 @@
 
 namespace WCDB {
 
-class ResultColumnAll;
-
 class ResultColumn : public SpecifiedSyntax<Syntax::ResultColumn, SQL> {
 public:
     using SpecifiedSyntax<Syntax::ResultColumn, SQL>::SpecifiedSyntax;

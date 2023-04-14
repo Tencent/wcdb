@@ -31,11 +31,18 @@
     WCDB::SyntaxList<CPPObjType> cppList                                       \
     = WCDB::WinqBridge::createSyntaxList<CPPObjType>(rawList, rawCount);
 
-#define WCDBGetCPPSyntaxListOrReturn(CPPObjType, cppList, rawList, rawCount)              \
-    WCDBGetCPPSyntaxList(CPPObjType, cppList, rawList, rawCount) if (cppList.size() <= 0) \
-    {                                                                                     \
-        return;                                                                           \
+#define WCDBGetCPPSyntaxListOrReturn(CPPObjType, cppList, rawList, rawCount)   \
+    WCDBGetCPPSyntaxList(CPPObjType, cppList, rawList, rawCount);              \
+    if (cppList.size() <= 0) {                                                 \
+        return;                                                                \
     }
+
+#define WCDBCreateSchemaFromCommonValue(data)                                  \
+    WCDB::WinqBridge::createSchema(data)
+#define WCDBCreateLiteralValueFromCommonValue(data)                            \
+    WCDB::WinqBridge::createLiteralValue(data)
+#define WCDBCreateExpressionFromCommonValue(data)                              \
+    WCDB::WinqBridge::createExpression(data)
 
 namespace WCDB {
 
@@ -63,7 +70,7 @@ public:
         for (int i = 0; i < itemCount; i++) {
             const U& item = itemArr[i];
             T* typedObjName
-            = WCDB::ObjectBridge::extractOriginalCPPObject<T>(item.innerValue);
+            = (T*) WCDB::ObjectBridge::extractOriginalCPPObject(item.innerValue);
             if (typedObjName == nullptr) {
                 return result;
             }
@@ -71,6 +78,10 @@ public:
         }
         return result;
     }
+
+    static Schema createSchema(CPPCommonValue schema);
+    static LiteralValue createLiteralValue(CPPCommonValue data);
+    static Expression createExpression(CPPCommonValue exp);
 };
 
 } // namespace WCDB
