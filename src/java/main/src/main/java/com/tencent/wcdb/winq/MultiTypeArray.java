@@ -122,28 +122,29 @@ class MultiTypeArray {
     }
 
     protected static ObjectType getObjectType(Object obj) {
-        ObjectType dataType = ObjectType.Unknown;
         if (obj == null) {
-            dataType = ObjectType.Null;
+            return ObjectType.Null;
         } else if (obj instanceof Identifier) {
-            dataType = ObjectType.Identifier;
-        } else if(obj instanceof String) {
-            dataType = ObjectType.String;
-        } else if (obj instanceof Integer) {
-            dataType = ObjectType.Int;
-        } else if (obj instanceof Float) {
-            dataType = ObjectType.Float;
-        } else if (obj instanceof Double) {
-            dataType = ObjectType.Double;
-        } else if (obj instanceof Boolean) {
-            dataType = ObjectType.Bool;
-        } else if (obj instanceof Short) {
-            dataType = ObjectType.Short;
-        } else if (obj instanceof Long) {
-            dataType = ObjectType.Long;
-        } else if (obj instanceof Character) {
-            dataType = ObjectType.Char;
+            return ObjectType.Identifier;
         }
-        return dataType;
+        Class cls = obj.getClass();
+        if(cls == String.class) {
+            return ObjectType.String;
+        } else if (cls == Integer.class) {
+            return ObjectType.Int;
+        } else if (cls == Float.class) {
+            return ObjectType.Float;
+        } else if (cls == Double.class) {
+            return ObjectType.Double;
+        } else if (cls == Boolean.class) {
+            return ObjectType.Bool;
+        } else if (cls == Short.class) {
+            return ObjectType.Short;
+        } else if (cls == Long.class) {
+            return ObjectType.Long;
+        } else if (cls == Character.class) {
+            return ObjectType.Char;
+        }
+        return ObjectType.Unknown;
     }
 }
