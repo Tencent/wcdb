@@ -29,7 +29,7 @@ public class QualifiedTable extends Identifier {
         return CPPType.QualifiedTableName;
     }
 
-    QualifiedTable(String tableName) {
+    public QualifiedTable(String tableName) {
         cppObj = createCppObj(tableName);
     }
 
