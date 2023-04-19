@@ -114,6 +114,12 @@ Pragma Pragma::cipherDefaultPageSize()
     return Pragma(StringView::makeConstant(string));
 }
 
+Pragma Pragma::cipherPlainTextHeaderSize()
+{
+    static const char* string = "cipher_plaintext_header_size";
+    return Pragma(StringView::makeConstant(string));
+}
+
 Pragma Pragma::cipherDefaultUseHmac()
 {
     static const char* string = "cipher_default_use_hmac";

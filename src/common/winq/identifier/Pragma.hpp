@@ -113,6 +113,7 @@ public:
     static Pragma cipherDefaultPageSize();
     static Pragma cipherPageSize();
     static Pragma cipherSalt();
+    static Pragma cipherPlainTextHeaderSize();
     static Pragma cipherDefaultUseHmac();
     static Pragma cipherMigrate();
     static Pragma cipherProfile();
