@@ -23,7 +23,7 @@ import WCDB_Private
 
 public final class Pragma: Identifier<CPPPragma> {
 
-    fileprivate init(named name: String) {
+    public init(named name: String) {
         super.init(with: WCDBPragmaCreateWithName(name.cString))
     }
 
@@ -48,6 +48,8 @@ public final class Pragma: Identifier<CPPPragma> {
     public static let cipherUseHmac = Pragma(named: "cipher_use_hmac")
     public static let cipherVersion = Pragma(named: "cipher_version")
     public static let cipherPageSize = Pragma(named: "cipher_page_size")
+    public static let cipherSalt = Pragma(named: "cipher_salt")
+    public static let cipherPlainTextHeaderSize = Pragma(named: "cipher_plaintext_header_size")
     public static let collationList = Pragma(named: "collation_list")
     public static let compileOptions = Pragma(named: "compile_options")
     public static let countChanges = Pragma(named: "count_changes")
