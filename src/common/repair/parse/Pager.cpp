@@ -311,14 +311,6 @@ void Pager::tryPurgeCache()
     if (m_highWater->getCurrent() <= allowedSize) {
         return;
     }
-    Error error(Error::Code::Notice, Error::Level::Notice, "Mapped memory exceeds.");
-    error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.insert_or_assign(ErrorStringKeyAssociatePath, getPath());
-    error.infos.insert_or_assign("CurrentSize", m_highWater->getCurrent());
-    error.infos.insert_or_assign("HighWater", m_highWater->getHighWater());
-    error.infos.insert_or_assign("AllowedHighWater", allowedSize);
-    Notifier::shared().notify(error);
-
     if (m_pCodec != nullptr) {
         m_fileHandle.purgeAll();
         while (!m_cache.empty() && m_highWater->getCurrent() > allowedSize) {
