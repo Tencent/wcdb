@@ -63,7 +63,7 @@ public:
         for (int i = 0; i < itemCount; i++) {
             const U& item = itemArr[i];
             T* typedObjName
-            = WCDB::ObjectBridge::extractOriginalCPPObject<T>(item.innerValue);
+            = (T*) WCDB::ObjectBridge::extractOriginalCPPObject(item.innerValue);
             if (typedObjName == nullptr) {
                 return result;
             }

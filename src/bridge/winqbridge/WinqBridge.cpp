@@ -37,7 +37,7 @@ const char* _Nonnull WCDBWinqGetDescription(CPPObject* statement)
 CPPStatement WCDBGetUnmangedStatement(CPPObject* _Nonnull statement)
 {
     WCDB::Statement* cppStatement
-    = WCDB::ObjectBridge::extractOriginalCPPObject<WCDB::Statement>(statement);
+    = (WCDB::Statement*) WCDB::ObjectBridge::extractOriginalCPPObject(statement);
     return WCDBCreateUnmanagedCPPObject(CPPStatement, cppStatement);
 }
 
