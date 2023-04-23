@@ -132,7 +132,7 @@ macos-all:
       mv ${yaml_dir}/apple_build/macos-all/release/shared/output/WCDBCpp.framework ${yaml_dir}/apple_build/macos-all/release/shared/output/WCDB.framework && \
       mv ${yaml_dir}/apple_build/macos-all/release/shared/output/WCDB.framework/WCDBCpp ${yaml_dir}/apple_build/macos-all/release/shared/output/WCDB.framework/WCDB && \
       mkdir -p ${yaml_dir}/apple_build/macos-all/release/static/output && \
-      mv ${yaml_dir}/apple_build/macos-all/release/static/WCDB.framework ${yaml_dir}/apple_build/macos-all/release/static/output/ && \
+      mv ${yaml_dir}/apple_build/macos-all/release/static/WCDBCpp.framework ${yaml_dir}/apple_build/macos-all/release/static/output/ && \
       mv ${yaml_dir}/apple_build/macos-all/release/static/output/WCDBCpp.framework ${yaml_dir}/apple_build/macos-all/release/static/output/WCDB.framework && \
       mv ${yaml_dir}/apple_build/macos-all/release/static/output/WCDB.framework/WCDBCpp ${yaml_dir}/apple_build/macos-all/release/static/output/WCDB.framework/WCDB
 
