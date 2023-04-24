@@ -252,10 +252,10 @@ class TracerTests: BaseTestCase {
         let template = TracerObject()
         template.isAutoIncrement = true
         let objects = [TracerObject](repeating: template, count: 100000)
-        XCTAssertNoThrow(try database.run { (_) -> Bool in
+        XCTAssertNoThrow(try database.run(controllableTransaction: { (_) -> Bool in
             try database.insert(objects, intoTable: tableName)
             return false
-        })
+        }))
         XCTAssertNoThrow(database.close())
 
         XCTAssertTrue(catchInsert && catchRollback)
