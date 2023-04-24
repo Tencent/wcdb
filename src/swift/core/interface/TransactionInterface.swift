@@ -86,11 +86,12 @@ public protocol TransactionInterface {
     ///
     ///     try database.run(nestedTransaction: { () throws -> Bool in
     ///         try database.insert(objects, intoTable: table)
+    ///         return true // return true to commit transaction and return false to rollback transaction.
     ///     })
     ///
     /// - Parameter transaction: Operation inside transaction
     /// - Throws: `Error`
-    func run(nestedTransaction: @escaping TransactionClosure) throws
+    func run(nestedTransaction: @escaping ControlableTransactionClosure) throws
 
     typealias PauseableTransactionClosure = (Handle, inout Bool, Bool) throws -> Void
     /// Run a pauseable transaction in block.
@@ -207,17 +208,18 @@ extension TransactionInterface where Self: HandleRepresentable {
         }
     }
 
-    public func run(nestedTransaction: @escaping TransactionClosure) throws {
+    public func run(nestedTransaction: @escaping ControlableTransactionClosure) throws {
+        var transactionRet = true
         let transactionBlock: @convention(block) (CPPHandle) -> Bool = {
             cppHandle in
             let handle = Handle(withCPPHandle: cppHandle)
             var ret = true
             do {
-                try nestedTransaction(handle)
+                transactionRet = try nestedTransaction(handle)
             } catch {
                 ret = false
             }
-            return ret
+            return ret && transactionRet
         }
         let transactionBlockImp = imp_implementationWithBlock(transactionBlock)
         let handle = try getHandle()
