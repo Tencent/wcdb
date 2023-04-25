@@ -32,6 +32,11 @@ CPPDatabase WCDBCoreCreateDatabase(const char* _Nonnull path)
     return WCDBCreateRecylableCPPObject(CPPDatabase, database);
 }
 
+void WCDBCoreSetDefaultCipherConfig(int version)
+{
+    WCDB::Core::shared().setDefaultCipherConfiguration(version);
+}
+
 void WCDBCorePurgeAllDatabase(void)
 {
     WCDB::Core::shared().purgeDatabasePool();

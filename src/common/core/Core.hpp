@@ -157,6 +157,8 @@ public:
     void removeABTestConfig(const UnsafeStringView configName);
     Optional<UnsafeStringView> getABTestConfig(UnsafeStringView configName);
 
+    void setDefaultCipherConfiguration(int version);
+
 protected:
     Configs m_configs;
     mutable SharedLock m_memory;

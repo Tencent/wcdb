@@ -27,6 +27,20 @@
 #if SQLITE_WCDB
 #include <sqlcipher/sqlite3.h>
 #include <sqlcipher/sqlite3_wcdb.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+int sqlcipher_set_default_hmac_algorithm(int algorithm);
+int sqlcipher_set_default_kdf_algorithm(int algorithm);
+void sqlcipher_set_default_kdf_iter(int iter);
+void sqlcipher_set_default_use_hmac(int use);
+
+#ifdef __cplusplus
+}
+#endif
+
 #else
 #include <sqlite3.h>
 #endif

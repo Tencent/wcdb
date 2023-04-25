@@ -166,4 +166,29 @@
     TestCaseAssertFalse(self.database->canOpen());
 }
 
+- (void)test_cipher_with_diferent_version
+{
+    NSData* cipher = Random.shared.data;
+    int pageSize = 4096;
+    self.database->setCipherKey(WCDB::UnsafeData((unsigned char*) cipher.bytes, cipher.length), pageSize, WCDB::Database::CipherVersion::Version3);
+    TestCaseAssertTrue(self.database->canOpen());
+
+    self.database->close();
+    self.database->setCipherKey(WCDB::UnsafeData((unsigned char*) cipher.bytes, cipher.length), pageSize);
+    TestCaseAssertFalse(self.database->canOpen());
+
+    WCDB::Database::setDefaultCipherConfiguration(WCDB::Database::CipherVersion::Version3);
+    TestCaseAssertTrue(self.database->canOpen());
+
+    self.database->removeFiles();
+    self.database->setCipherKey(WCDB::UnsafeData((unsigned char*) cipher.bytes, cipher.length), pageSize, WCDB::Database::CipherVersion::Version4);
+    TestCaseAssertTrue(self.database->canOpen());
+    self.database->close();
+
+    self.database->setCipherKey(WCDB::UnsafeData((unsigned char*) cipher.bytes, cipher.length), pageSize);
+    TestCaseAssertFalse(self.database->canOpen());
+    WCDB::Database::setDefaultCipherConfiguration(WCDB::Database::CipherVersion::Version4);
+    TestCaseAssertTrue(self.database->canOpen());
+}
+
 @end
