@@ -48,6 +48,7 @@ public:
                            const ColumnDef &column) override final;
     bool rebindUnionView(const UnsafeStringView &table, const Columns &columns);
     bool checkSourceTable(const UnsafeStringView &table, const UnsafeStringView &sourceTable);
+    bool executeAttach(const StatementAttach &attach);
 
 #pragma mark - Binder
 protected:

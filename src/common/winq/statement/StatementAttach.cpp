@@ -42,4 +42,10 @@ StatementAttach& StatementAttach::as(const Schema& schema)
     return *this;
 }
 
+StatementAttach& StatementAttach::key(const Expression& key)
+{
+    syntax().key = key;
+    return *this;
+}
+
 } // namespace WCDB

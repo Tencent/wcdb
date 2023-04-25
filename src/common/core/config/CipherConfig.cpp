@@ -40,4 +40,9 @@ bool CipherConfig::invoke(InnerHandle *handle)
     return handle->setCipherKey(m_key) && handle->setCipherPageSize(m_pageSize);
 }
 
+UnsafeData CipherConfig::getCipherKey()
+{
+    return m_key;
+}
+
 } //namespace WCDB

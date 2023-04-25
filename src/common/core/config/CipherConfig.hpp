@@ -36,6 +36,7 @@ public:
     ~CipherConfig() override final;
 
     bool invoke(InnerHandle *handle) override final;
+    UnsafeData getCipherKey();
 
 protected:
     const Data m_key;

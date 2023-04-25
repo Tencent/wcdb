@@ -36,6 +36,7 @@ public:
 
     StatementAttach& attach(const Expression& expression);
     StatementAttach& as(const Schema& schema);
+    StatementAttach& key(const Expression& key);
 };
 
 } // namespace WCDB

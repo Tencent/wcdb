@@ -163,6 +163,24 @@ bool MigratingHandle::checkSourceTable(const UnsafeStringView& table,
     return info.value()->getSourceTable().compare(sourceTable) == 0;
 }
 
+bool MigratingHandle::executeAttach(const StatementAttach& attach)
+{
+    UnsafeData cipherKey = getCipherKey();
+    if (cipherKey.size() == 0) {
+        return executeStatement(attach);
+    }
+    StatementAttach newAttach = attach;
+    newAttach.key(WCDB::BindParameter(1));
+    HandleStatement handleStatement(this);
+    bool succeed = handleStatement.prepare(newAttach);
+    if (succeed) {
+        handleStatement.bindBLOB(cipherKey);
+        succeed = handleStatement.step();
+        handleStatement.finalize();
+    }
+    return succeed;
+}
+
 #pragma mark - Info Initializer
 Optional<std::pair<bool, std::set<StringView>>>
 MigratingHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
@@ -199,7 +217,7 @@ Optional<bool> MigratingHandle::sourceTableExists(const MigrationUserInfo& userI
         }
         std::set<StringView>& attacheds = optionalAttacheds.value();
         if (attacheds.find(schema.getDescription()) == attacheds.end()) {
-            if (!executeStatement(userInfo.getStatementForAttachingSchema())
+            if (!executeAttach(userInfo.getStatementForAttachingSchema())
                 || !trySynchronousTransactionAfterAttached()) {
                 return NullOpt;
             }
@@ -298,7 +316,7 @@ bool MigratingHandle::rebindSchemas(const StringViewMap<const MigrationInfo*>& m
     bool attached = false;
     // attach all needed schemas
     for (const auto& iter : schemas2MigratingInfos) {
-        if (!executeStatement(iter.second->getStatementForAttachingSchema())) {
+        if (!executeAttach(iter.second->getStatementForAttachingSchema())) {
             return false;
         }
         attached = true;

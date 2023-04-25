@@ -39,6 +39,7 @@ public:
 
     Expression expression;
     Schema schema;
+    Expression key;
 
     bool isValid() const override final;
 

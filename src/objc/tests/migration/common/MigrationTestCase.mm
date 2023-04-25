@@ -35,6 +35,12 @@
 {
     [super setUp];
 
+    NSData* cipherKey;
+    if (self.needCipher) {
+        cipherKey = [[Random shared] data];
+        [self.sourceDatabase setCipherKey:cipherKey];
+    }
+
     _toMigrate = [NSMutableDictionary<NSString*, NSString*> dictionaryWithObject:self.sourceTable forKey:self.tableName];
 
     TestCaseAssertTrue([self.sourceDatabase execute:[MigrationObject statementForCreatingSourceTable:self.sourceTable withMode:self.mode]]);
@@ -47,6 +53,10 @@
     }
 
     [self.sourceDatabase close];
+
+    if (self.needCipher) {
+        [self.database setCipherKey:cipherKey];
+    }
 
     TestCaseAssertTrue(self.database.isMigrated);
 
