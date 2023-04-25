@@ -408,6 +408,7 @@ public extension Database {
     }
 
     enum ConfigPriority: Int32 {
+        case highest = -2147483648 // Only For cipher config
         case high = -100
         case `default` = 0
         case low = 100
@@ -418,6 +419,8 @@ public extension Database {
     ///
     /// Since WCDB is a multi-handle database, an executing handle will not apply this config immediately.  
     /// Instead, all handles will run this config before its next operation.
+    ///
+    /// If you want to add cipher config, please use `ConfigPriority.highest`.
     ///
     ///     database.setConfig(named: "demo", withInvocation: { (handle: Handle) throws in
     ///         try handle.exec(StatementPragma().pragma(.secureDelete).to(true))
