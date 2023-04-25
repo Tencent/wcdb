@@ -45,6 +45,9 @@ Identifier::Type AttachSTMT::getType() const
 bool AttachSTMT::describle(std::ostream& stream) const
 {
     stream << "ATTACH " << expression << " AS " << schema;
+    if (key.isValid()) {
+        stream << " KEY " << key;
+    }
     return true;
 }
 
@@ -53,6 +56,7 @@ void AttachSTMT::iterate(const Iterator& iterator, bool& stop)
     Identifier::iterate(iterator, stop);
     recursiveIterate(expression, iterator, stop);
     recursiveIterate(schema, iterator, stop);
+    recursiveIterate(key, iterator, stop);
 }
 
 } // namespace Syntax

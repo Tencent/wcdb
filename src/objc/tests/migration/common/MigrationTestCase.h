@@ -37,6 +37,8 @@
 
 @property (readonly, nonatomic) NSString* sourcePath;
 
+@property (assign, nonatomic) BOOL needCipher;
+
 @property (readonly, nonatomic) WCTDatabase* sourceDatabase;
 
 @property (readonly, nonatomic) NSArray<MigrationObject*>* objects;

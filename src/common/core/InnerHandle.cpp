@@ -25,6 +25,7 @@
 #include "InnerHandle.hpp"
 #include "Assertion.hpp"
 #include "BusyRetryConfig.hpp"
+#include "CipherConfig.hpp"
 #include "CoreConst.h"
 #include <unistd.h>
 
@@ -143,6 +144,17 @@ bool InnerHandle::configure()
         m_pendings = m_invokeds;
     }
     return true;
+}
+
+UnsafeData InnerHandle::getCipherKey()
+{
+    for (const auto &element : m_invokeds) {
+        if (element.key().caseInsensiveEqual(CipherConfigName)) {
+            CipherConfig *config = dynamic_cast<CipherConfig *>(element.value().get());
+            return config->getCipherKey();
+        }
+    }
+    return UnsafeData();
 }
 
 #pragma mark - Statement
