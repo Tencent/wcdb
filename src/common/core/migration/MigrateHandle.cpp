@@ -67,7 +67,20 @@ bool MigrateHandle::attach(const UnsafeStringView& newPath, const Schema& newSch
 
     bool succeed = true;
     if (!newSchema.syntax().isMain()) {
-        succeed = execute(WCDB::StatementAttach().attach(newPath).as(newSchema));
+        UnsafeData cipherKey = getCipherKey();
+        StatementAttach attach = StatementAttach().attach(newPath).as(newSchema);
+        if (cipherKey.size() == 0) {
+            succeed = executeStatement(attach);
+        } else {
+            attach.key(WCDB::BindParameter(1));
+            HandleStatement handleStatement(this);
+            succeed = handleStatement.prepare(attach);
+            if (succeed) {
+                handleStatement.bindBLOB(cipherKey);
+                succeed = handleStatement.step();
+                handleStatement.finalize();
+            }
+        }
         if (succeed) {
             m_attached = newSchema;
         }
