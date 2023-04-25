@@ -348,6 +348,45 @@ class AdvanceTests: CRUDTestCase {
         }
     }
 
+    func testDefaultCipherConfiguration() {
+        // Give
+        XCTAssertNoThrow(try database.close {
+            try self.database.removeFiles()
+        })
+        let password = "password".data(using: .ascii)!
+        let pageSize = 4096
+        // When
+        database.setCipher(key: password, pageSize: pageSize, cipherVersion: .version3)
+        // Then
+        XCTAssertTrue(database.canOpen)
+
+        // When
+        database.close()
+        database.setCipher(key: password, pageSize: pageSize)
+        // Then
+        XCTAssertFalse(database.canOpen)
+
+        // When
+        Database.setDefaultCipherConfiguration(.version3)
+        // Then
+        XCTAssertTrue(database.canOpen)
+
+        XCTAssertNoThrow(try database.removeFiles())
+        database.setCipher(key: password, pageSize: pageSize, cipherVersion: .version4)
+        // Then
+        XCTAssertTrue(database.canOpen)
+
+        // When
+        database.close()
+        database.setCipher(key: password, pageSize: pageSize)
+        // Then
+        XCTAssertFalse(database.canOpen)
+        // When
+        Database.setDefaultCipherConfiguration(.version4)
+        // Then
+        XCTAssertTrue(database.canOpen)
+    }
+
     func testOrderedConfig() {
         // Then
         do {

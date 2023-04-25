@@ -170,14 +170,18 @@ void WCDBDatabasePurge(CPPDatabase database)
     cppDatabase->purge();
 }
 
-void WCDBDatabaseConfigCipher(CPPDatabase database, const unsigned char* cipherKey, int keyLength, int pageSize)
+void WCDBDatabaseConfigCipher(CPPDatabase database,
+                              const unsigned char* cipherKey,
+                              int keyLength,
+                              int pageSize,
+                              int cipherVersion)
 {
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     if (cipherKey) {
         cppDatabase->setConfig(
         WCDB::CipherConfigName,
         std::static_pointer_cast<WCDB::Config>(std::make_shared<WCDB::CipherConfig>(
-        WCDB::UnsafeData::immutable(cipherKey, (size_t) keyLength), pageSize)),
+        WCDB::UnsafeData::immutable(cipherKey, (size_t) keyLength), pageSize, cipherVersion)),
         WCDB::Configs::Priority::Highest);
     } else {
         cppDatabase->removeConfig(WCDB::CipherConfigName);

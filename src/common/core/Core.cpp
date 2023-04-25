@@ -32,6 +32,7 @@
 #include "Notifier.hpp"
 #include "OneOrBinaryTokenizer.hpp"
 #include "PinyinTokenizer.hpp"
+#include "SQLite.h"
 #include "StringView.hpp"
 #include "SubstringMatchInfo.hpp"
 
@@ -422,6 +423,39 @@ Optional<UnsafeStringView> Core::getABTestConfig(UnsafeStringView configName)
         return m_abtestConfig[configName];
     }
     return NullOpt;
+}
+
+void Core::setDefaultCipherConfiguration(int version)
+{
+    switch (version) {
+    case 1:
+        sqlcipher_set_default_hmac_algorithm(0);
+        sqlcipher_set_default_kdf_algorithm(0);
+        sqlcipher_set_default_kdf_iter(4000);
+        sqlcipher_set_default_use_hmac(0);
+        break;
+
+    case 2:
+        sqlcipher_set_default_hmac_algorithm(0);
+        sqlcipher_set_default_kdf_algorithm(0);
+        sqlcipher_set_default_kdf_iter(4000);
+        sqlcipher_set_default_use_hmac(1);
+        break;
+
+    case 3:
+        sqlcipher_set_default_hmac_algorithm(0);
+        sqlcipher_set_default_kdf_algorithm(0);
+        sqlcipher_set_default_kdf_iter(64000);
+        sqlcipher_set_default_use_hmac(1);
+        break;
+
+    default:
+        sqlcipher_set_default_hmac_algorithm(2);
+        sqlcipher_set_default_kdf_algorithm(2);
+        sqlcipher_set_default_kdf_iter(256000);
+        sqlcipher_set_default_use_hmac(1);
+        break;
+    }
 }
 
 } // namespace WCDB

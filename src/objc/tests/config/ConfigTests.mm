@@ -189,6 +189,31 @@
     TestCaseAssertFalse([self.database canOpen]);
 }
 
+- (void)test_cipher_with_diferent_version
+{
+    NSData* cipher = Random.shared.data;
+    int pageSize = 4096;
+    [self.database setCipherKey:cipher andCipherPageSize:pageSize andCipherViersion:WCTCipherVersion3];
+    TestCaseAssertTrue([self.database canOpen]);
+
+    [self.database close];
+    [self.database setCipherKey:cipher andCipherPageSize:pageSize];
+    TestCaseAssertFalse([self.database canOpen]);
+
+    [WCTDatabase setDefaultCipherConfiguration:WCTCipherVersion3];
+    TestCaseAssertTrue([self.database canOpen]);
+
+    [self.database removeFiles];
+    [self.database setCipherKey:cipher andCipherPageSize:pageSize andCipherViersion:WCTCipherVersion4];
+    TestCaseAssertTrue([self.database canOpen]);
+    [self.database close];
+
+    [self.database setCipherKey:cipher andCipherPageSize:pageSize];
+    TestCaseAssertFalse([self.database canOpen]);
+    [WCTDatabase setDefaultCipherConfiguration:WCTCipherVersion4];
+    TestCaseAssertTrue([self.database canOpen]);
+}
+
 - (void)test_abtest_config
 {
     NSMutableDictionary* abtestDic = [[NSMutableDictionary alloc] init];

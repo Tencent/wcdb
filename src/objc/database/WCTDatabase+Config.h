@@ -27,6 +27,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(int, WCTCipherVersion) {
+    WCTCipherVersionDefault = 0,
+    WCTCipherVersion1,
+    WCTCipherVersion2,
+    WCTCipherVersion3,
+    WCTCipherVersion4,
+};
+
 typedef NS_ENUM(int, WCTConfigPriority) {
     WCTConfigPriorityHighest = INT32_MIN, // Only For cipher config
     WCTConfigPriorityHigh = -100,
@@ -48,14 +56,34 @@ typedef BOOL (^WCTConfigBlock)(WCTHandle* _Nonnull);
 - (void)setCipherKey:(NSData* _Nullable)cipherKey;
 
 /**
- @brief Set cipher key for a database. 
- For an encrypted database, you must call it before all other operation.
- The cipher page size defaults to 4096 in WCDB, but it defaults to 1024 in other databases. So for an existing database created by other database framework, you should set it to 1024. Otherwise, you'd better to use cipher page size with 4096 or simply call setCipherKey: interface to get better performance.
+ @brief This interface is equivalent to `-[WCTDatabase setCipherKey:cipherKey andCipherPageSize:4096 andCipherViersion:WCTCipherVersionDefault]`;
  @param cipherKey Cipher key.
  @param cipherPageSize Cipher Page Size
  */
 - (void)setCipherKey:(NSData* _Nullable)cipherKey
    andCipherPageSize:(int)cipherPageSize;
+
+/**
+ @brief Set cipher key for a database.
+ For an encrypted database, you must call it before all other operation.
+ The cipher page size defaults to 4096 in WCDB, but it defaults to 1024 in other databases. So for an existing database created by other database framework, you should set it to 1024.
+ Otherwise, you'd better to use cipher page size with 4096 or simply call setCipherKey: interface to get better performance.
+ @note  If your database is created with the default configuration of WCDB 1.0.x, please set cipherVersion to WCTCipherVersion3.
+ @param cipherKey Cipher key.
+ @param cipherPageSize Cipher Page Size
+ @param cipherVersion Use the default configuration of a specific version of sqlcipher
+ */
+- (void)setCipherKey:(NSData* _Nullable)cipherKey
+   andCipherPageSize:(int)cipherPageSize
+   andCipherViersion:(WCTCipherVersion)cipherVersion;
+
+/**
+ @brief Force SQLCipher to operate with the default settings consistent with that major version number as the default.
+ @note  It works the same as `PRAGMA cipher_default_compatibility`.
+ 
+ @param version The specified sqlcipher major version.
+ */
++ (void)setDefaultCipherConfiguration:(WCTCipherVersion)version;
 
 /**
  @brief Set config for this database.  

@@ -29,6 +29,7 @@
 WCDB_EXTERN_C_BEGIN
 
 CPPDatabase WCDBCoreCreateDatabase(const char* _Nonnull path);
+void WCDBCoreSetDefaultCipherConfig(int version);
 void WCDBCorePurgeAllDatabase(void);
 
 WCDB_EXTERN_C_END
