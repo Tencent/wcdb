@@ -1,3 +1,9 @@
+## v2.0.1
+
+* Support databases created by old versions of sqlcipher
+* Fix crash of WCDB Swift in x86 emulator
+* Support insertOrIgnore
+
 ## v2.0.0
 
 * Add WCDB C++
