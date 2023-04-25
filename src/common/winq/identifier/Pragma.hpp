@@ -109,16 +109,19 @@ public:
 public:
     static Pragma cipher();
     static Pragma cipherAddRandom();
+    static Pragma cipherCompatibility();
     static Pragma cipherDefaultKdfIter();
     static Pragma cipherDefaultPageSize();
+    static Pragma cipherHmacAlgorithm();
+    static Pragma cipherKdfAlgorithm();
     static Pragma cipherPageSize();
-    static Pragma cipherSalt();
     static Pragma cipherPlainTextHeaderSize();
     static Pragma cipherDefaultUseHmac();
     static Pragma cipherMigrate();
     static Pragma cipherProfile();
     static Pragma cipherProvider();
     static Pragma cipherProviderVersion();
+    static Pragma cipherSalt();
     static Pragma cipherUseHmac();
     static Pragma cipherVersion();
     static Pragma key();

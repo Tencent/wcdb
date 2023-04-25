@@ -51,7 +51,8 @@ void WCDBDatabasePurge(CPPDatabase database);
 void WCDBDatabaseConfigCipher(CPPDatabase database,
                               const unsigned char* _Nullable cipherKey,
                               int keyLength,
-                              int pageSize);
+                              int pageSize,
+                              int cipherVersion);
 void WCDBDatabaseConfig(CPPDatabase database,
                         const char* _Nonnull name,
                         SwiftClosure* _Nonnull invocation,

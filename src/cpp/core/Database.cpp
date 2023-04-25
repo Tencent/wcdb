@@ -356,16 +356,22 @@ double Database::retrieve(Database::ProgressUpdateCallback onProgressUpdated)
     return m_innerDatabase->retrieve(onProgressUpdated);
 }
 
-void Database::setCipherKey(const UnsafeData& cipherKey, int cipherPageSize)
+void Database::setCipherKey(const UnsafeData& cipherKey, int cipherPageSize, CipherVersion cipherVersion)
 {
     if (cipherKey.size() > 0) {
         m_innerDatabase->setConfig(
         CipherConfigName,
-        std::static_pointer_cast<Config>(std::make_shared<CipherConfig>(cipherKey, cipherPageSize)),
+        std::static_pointer_cast<Config>(std::make_shared<CipherConfig>(
+        cipherKey, cipherPageSize, cipherVersion)),
         Configs::Priority::Highest);
     } else {
         m_innerDatabase->removeConfig(CipherConfigName);
     }
+}
+
+void Database::setDefaultCipherConfiguration(CipherVersion version)
+{
+    Core::shared().setDefaultCipherConfiguration(version);
 }
 
 void Database::setConfig(const UnsafeStringView& name,

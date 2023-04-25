@@ -102,6 +102,12 @@ Pragma Pragma::cipherAddRandom()
     return Pragma(StringView::makeConstant(string));
 }
 
+Pragma Pragma::cipherCompatibility()
+{
+    static const char* string = "cipher_compatibility";
+    return Pragma(StringView::makeConstant(string));
+}
+
 Pragma Pragma::cipherDefaultKdfIter()
 {
     static const char* string = "cipher_default_kdf_iter";
@@ -111,6 +117,18 @@ Pragma Pragma::cipherDefaultKdfIter()
 Pragma Pragma::cipherDefaultPageSize()
 {
     static const char* string = "cipher_default_page_size";
+    return Pragma(StringView::makeConstant(string));
+}
+
+Pragma Pragma::cipherHmacAlgorithm()
+{
+    static const char* string = "cipher_hmac_algorithm";
+    return Pragma(StringView::makeConstant(string));
+}
+
+Pragma Pragma::cipherKdfAlgorithm()
+{
+    static const char* string = "cipher_kdf_algorithm";
     return Pragma(StringView::makeConstant(string));
 }
 
@@ -150,6 +168,12 @@ Pragma Pragma::cipherProviderVersion()
     return Pragma(StringView::makeConstant(string));
 }
 
+Pragma Pragma::cipherSalt()
+{
+    static const char* string = "cipher_salt";
+    return Pragma(StringView::makeConstant(string));
+}
+
 Pragma Pragma::cipherUseHmac()
 {
     static const char* string = "cipher_use_hmac";
@@ -165,12 +189,6 @@ Pragma Pragma::cipherVersion()
 Pragma Pragma::cipherPageSize()
 {
     static const char* string = "cipher_page_size";
-    return Pragma(StringView::makeConstant(string));
-}
-
-Pragma Pragma::cipherSalt()
-{
-    static const char* string = "cipher_salt";
     return Pragma(StringView::makeConstant(string));
 }
 
