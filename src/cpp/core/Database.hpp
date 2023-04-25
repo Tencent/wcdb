@@ -530,13 +530,15 @@ public:
      */
     using Invocation = std::function<bool(Handle &)>;
     enum Priority : int {
+        Highest = std::numeric_limits<int>::min(), // Only for cipher config
         High = -100,
         Default = 0,
         Low = 100,
     };
     /**
      @brief Set config for this database.
-     @warning Since WCDB is a multi-handle database, an executing handle will not apply this config immediately. Instead, all handles will run this config before its next operation.
+     @note Since WCDB is a multi-handle database, an executing handle will not apply this config immediately. Instead, all handles will run this config before its next operation.
+     @warning If you want to add cipher config, please use `Priority::Highest`.
      
          database.setConfig("demo", [](WCDB::Handle &handle){
              return handle.execute(WCDB::StatementPragma().pragma(WCDB::Pragma::secureDelete()).to(true));

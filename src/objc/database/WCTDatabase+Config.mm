@@ -29,6 +29,7 @@
 #import "WCTDatabase+Private.h"
 #import "WCTHandle+Private.h"
 
+static_assert((int) WCTConfigPriorityHighest == (int) WCDB::Configs::Priority::Highest, "");
 static_assert((int) WCTConfigPriorityHigh == (int) WCDB::Configs::Priority::High, "");
 static_assert((int) WCTConfigPriorityDefault == (int) WCDB::Configs::Priority::Default, "");
 static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, "");
