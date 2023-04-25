@@ -28,6 +28,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(int, WCTConfigPriority) {
+    WCTConfigPriorityHighest = INT32_MIN, // Only For cipher config
     WCTConfigPriorityHigh = -100,
     WCTConfigPriorityDefault = 0,
     WCTConfigPriorityLow = 100,
@@ -58,11 +59,12 @@ typedef BOOL (^WCTConfigBlock)(WCTHandle* _Nonnull);
 
 /**
  @brief Set config for this database.  
- @warning Since WCDB is a multi-handle database, an executing handle will not apply this config immediately. Instead, all handles will run this config before its next operation.  
+ @warning Since WCDB is a multi-handle database, an executing handle will not apply this config immediately. Instead, all handles will run this config before its next operation.
+ @warning If you want to add cipher config, please use `WCTConfigPriorityHighest`.
  
-     [database setConfig:^BOOL(std::shared_ptr<WCDB::Handle> &handle, WCDB::Error& error) {
-        return handle->execute(WCDB::StatementPragma().pragma(WCDB::Pragma::secureDelete()).to(true));
-     } forName:@"demo" withPriority:WCTConfigPriorityDefault];
+     [database setConfig:^BOOL(WCTHandle* handle) {
+        return [handle execute: WCDB::StatementPragma().pragma(WCDB::Pragma::secureDelete()).to(true)];
+     } withUninvocation:nil forName:@"demo" withPriority:WCTConfigPriorityDefault];
  */
 - (void)setConfig:(WCDB_ESCAPE WCTConfigBlock)invocation
  withUninvocation:(nullable WCDB_ESCAPE WCTConfigBlock)uninvocation
@@ -70,7 +72,7 @@ typedef BOOL (^WCTConfigBlock)(WCTHandle* _Nonnull);
      withPriority:(WCTConfigPriority)priority;
 
 /**
- @brief This interface is equivalent to `-[WCTDatabase setConfig:config forName:name withPriority:INT_MAX]`;
+ @brief This interface is equivalent to `-[WCTDatabase setConfig:config withUninvocation:uninvocation forName:name withPriority:WCTConfigPriorityDefault]`;
  */
 - (void)setConfig:(WCDB_ESCAPE WCTConfigBlock)invocation
  withUninvocation:(nullable WCDB_ESCAPE WCTConfigBlock)uninvocation
