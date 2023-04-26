@@ -197,6 +197,4 @@ SWIFT_VERSION = 5.0
 
 // User-Defined
 ENABLE_BITCODE = NO
-ENABLE_BITCODE[sdk=iphone*] = YES
-ENABLE_BITCODE[sdk=watch*] = YES
 ENABLE_BITCODE[sdk=appletv*] = YES
