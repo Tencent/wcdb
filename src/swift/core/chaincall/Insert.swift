@@ -71,8 +71,8 @@ public final class Insert {
             properties = properties ?? Object.Properties.all
             try handle.prepare(statement)
             let encoder = TableEncoder(properties!.asCodingTableKeys(), on: handle)
-            let isReplace = conflict != nil ? conflict! == .Replace : false
-            if !isReplace {
+            let useConfliction = conflict != nil
+            if !useConfliction {
                 encoder.primaryKeyHash = orm.getPrimaryKey()?.stringValue.hashValue
             }
 
@@ -81,7 +81,9 @@ public final class Insert {
                 encoder.isPrimaryKeyEncoded = !isAutoIncrement
                 try object.encode(to: encoder)
                 try handle.step()
-                if !isReplace && isAutoIncrement {
+                assert(!useConfliction || !isAutoIncrement,
+                       "Auto-increment inserts do not support conflict action!")
+                if !useConfliction && isAutoIncrement {
                     object.lastInsertedRowID = handle.lastInsertedRowID
                 }
                 handle.reset()

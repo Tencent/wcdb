@@ -29,7 +29,7 @@
 
 #define __WCDB_CPP_ORM_COMMON_DECLARATION(className)                               \
     std::shared_ptr<long long> lastInsertedRowID = std::make_shared<long long>(0); \
-    bool isAutoIncrement;                                                          \
+    bool isAutoIncrement = false;                                                  \
     using WCDBORMType = className;                                                 \
     constexpr static bool isObjectRelationMapped = true;
 

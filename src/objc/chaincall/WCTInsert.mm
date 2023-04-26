@@ -112,7 +112,7 @@
     }
 
     std::vector<BOOL> autoIncrementsOfDefinitions;
-    if (_statement.syntax().conflictAction != WCDB::Syntax::ConflictAction::Replace) {
+    if (!_statement.syntax().conflictActionValid()) {
         const auto &columnDefs = [cls objectRelationalMapping].getColumnDefs();
         for (const WCTProperty &property : _properties) {
             // auto increment?
@@ -150,7 +150,8 @@
                     if (respondsToIsAutoIncrement.value()) {
                         isAutoIncrement = value.isAutoIncrement;
                     }
-
+                    NSAssert(!isAutoIncrement || !_statement.syntax().conflictActionValid(),
+                             @"Auto-increment inserts do not support conflict action!");
                     if (isAutoIncrement) {
                         [_handle bindNullToIndex:index];
                     } else {
