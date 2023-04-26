@@ -509,11 +509,4 @@
          }];
 }
 
-- (void)test_cipher_version
-{
-    WCTDatabase* db = [[WCTDatabase alloc] initWithPath:@"/Users/qiuwenchen/Desktop/test.db"];
-    [db setCipherKey:[@"abc" dataUsingEncoding:NSUTF8StringEncoding] andCipherPageSize:4096 andCipherViersion:WCTCipherVersion3];
-    TestCaseAssertTrue([db canOpen]);
-}
-
 @end
