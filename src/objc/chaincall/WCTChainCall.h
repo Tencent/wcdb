@@ -59,8 +59,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)init UNAVAILABLE_ATTRIBUTE;
 
 /**
- @brief It should be called after executing successfully.
- @return the number of changes in the most recent call.
+ @brief Get the number of changed rows in the most recent call.
+ It should be called after executing successfully.
  */
 - (int)getChanges;
 

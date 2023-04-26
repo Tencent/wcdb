@@ -56,6 +56,11 @@ const Error& BaseChainCall::getError()
     return m_handle->getError();
 }
 
+void BaseChainCall::assignChanges()
+{
+    m_changes = m_handle->getChanges();
+}
+
 void BaseChainCall::assertError(const UnsafeStringView& message)
 {
     WCTRemedialAssert(false, message, return;);

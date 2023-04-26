@@ -79,7 +79,7 @@ public:
      */
     bool execute();
 
-protected:
+private:
     Delete(Recyclable<InnerDatabase *> databaseHolder);
 };
 

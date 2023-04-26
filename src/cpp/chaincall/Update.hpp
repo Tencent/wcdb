@@ -159,6 +159,7 @@ public:
                     m_handle->bindRow(m_row.value());
                 }
                 result = m_handle->step();
+                assignChanges();
                 m_handle->finalize();
             }
         }
