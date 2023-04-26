@@ -68,30 +68,6 @@ ios:
     release_static:
       all: apple_build/ios/release/static/output
 
-
-macos:
-  build_types: static
-  build:
-    system: custom
-    # build static lib
-    script: |-
-      ../tools/version/build.sh -p macOS -l Cpp -c Release -d apple_build/macos/release/static --wechat --disable-bitcode --static-framework
-
-  dependencies:
-
-  scripts:
-    pre_build: 'rm -r ${yaml_dir}/apple_build/macos/release'
-    post_build: |-
-      mkdir -p ${yaml_dir}/apple_build/macos/release/static/output && \
-      mv ${yaml_dir}/apple_build/macos/release/static/WCDBCpp.framework ${yaml_dir}/apple_build/macos/release/static/output/
-      mv ${yaml_dir}/apple_build/macos/release/static/output/WCDBCpp.framework ${yaml_dir}/apple_build/macos/release/static/output/WCDB.framework
-      mv ${yaml_dir}/apple_build/macos/release/static/output/WCDB.framework/WCDBCpp ${yaml_dir}/apple_build/macos/release/static/output/WCDB.framework/WCDB
-
-  outputs:
-    release_static:
-      all: apple_build/macos/release/static/output
-
-
 watchos:
   build_types: static
   build:
