@@ -28,6 +28,7 @@
 #include "CaseInsensiveList.hpp"
 #include "ChainCall.hpp"
 #include "ValueArray.hpp"
+#include <assert.h>
 
 namespace WCDB {
 
@@ -135,7 +136,7 @@ private:
             BindParameter::bindParameters(m_fields.size()));
         }
         std::vector<bool> autoIncrementsOfDefinitions;
-        if (m_statement.syntax().conflictAction != Syntax::ConflictAction::Replace) {
+        if (!m_statement.syntax().conflictActionValid()) {
             const CaseInsensiveList<ColumnDef>& columnDefs
             = ObjectType::getObjectRelationBinding().getColumnDefs();
             for (const Field& field : m_fields) {
@@ -155,7 +156,8 @@ private:
             for (ObjectType& value : m_values) {
                 m_handle->reset();
                 int index = 1;
-
+                assert(!value.isAutoIncrement
+                       || !m_statement.syntax().conflictActionValid());
                 for (const Field& field : m_fields) {
                     if (autoIncrementsOfDefinitions.empty()
                         || !autoIncrementsOfDefinitions[index - 1] || !value.isAutoIncrement) {
