@@ -4,7 +4,7 @@
 # pod trunk push --verbose --allow-warnings WCDB.swift.podspec
 Pod::Spec.new do |wcdb|
   wcdb.name         = "WCDB.swift"
-  wcdb.version      = "2.0.0"
+  wcdb.version      = "2.0.1"
   wcdb.summary      = "WCDB is a cross-platform database framework developed by WeChat."
   wcdb.description  = <<-DESC
                       The WeChat Database, for Swift. (If you want to use WCDB for Objective-C or C++, see the "WCDB.objc" pod or "WCDB.cpp" pod. If you want to use WCDB for C++/Objc/Swift in one project, see the "WCDB" pod)
@@ -13,14 +13,14 @@ Pod::Spec.new do |wcdb|
                       It can be a replacement for Core Data, SQLite & FMDB.
                       DESC
   wcdb.homepage     = "https://github.com/Tencent/wcdb"
-  wcdb.module_name = "WCDBSwift"
+  wcdb.module_name  = "WCDBSwift"
   wcdb.license      = { :type => "BSD", :file => "LICENSE" }
-  wcdb.author             = { "Qiuwen-Chen" => "qwchen2008@163.com" }
+  wcdb.author       = { "Qiuwen-Chen" => "qwchen2008@163.com" }
   wcdb.ios.deployment_target = "12.4"
   wcdb.osx.deployment_target = "10.13"
   wcdb.watchos.deployment_target = "7.0"
   wcdb.tvos.deployment_target = "12.4"
-  wcdb.source       = { :git => "https://github.com/Tencent/wcdb.git", :commit => "4de08a99287300f008053d09cffffe61cc8f4ed4" }
+  wcdb.source       = { :git => "https://github.com/Tencent/wcdb.git", :tag => "v#{wcdb.version}" }
   wcdb.private_header_files = "src/bridge/**/*.{h}"
   wcdb.source_files  = "src/swift/**/*.{swift}", "src/bridge/**/*.{swift,h,hpp,c,cpp,m,mm}", "src/common/**/*.{swift,h,hpp,c,cpp,m,mm}", "src/objc/core/WCTFileManager.mm", "src/objc/core/WCTFoundation.h", "src/objc/core/WCTFoundation.mm", "src/objc/fts/WCTFTSTokenizerUtil.h", "src/objc/fts/WCTFTSTokenizerUtil.mm", "src/objc/core/WCTDeclaration.h", "src/objc/core/WCTValue.h", "src/objc/orm/coding/WCTColumnCoding.h", "src/objc/orm/macro/WCTPropertyMacro.h", "src/objc/orm/coding/WCTTableCoding.h", "src/objc/core/WCTConvertible.h", "src/objc/core/WCTCommon.h", "src/objc/core/WCTOptional.h", "src/objc/core/WCTTag.h"
   wcdb.exclude_files = "src/swift/tests/**/*.{swift,h,hpp,c,cpp,m,mm}", "src/bridge/tests/**/*.{swift,h,hpp,c,cpp,m,mm}", "src/common/core/operate/OperationQueueForMemory.cpp", "src/bridge/objcbridge/WCTBridgeProperty+CPP.h", "src/bridge/objcbridge/WCTBridgeProperty.mm"
