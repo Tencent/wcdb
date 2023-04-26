@@ -59,7 +59,7 @@ ios:
   dependencies:
 
   scripts:
-    pre_build: 'rm -r ${yaml_dir}/apple_build/ios/release'
+    pre_build: 'rm -rf ${yaml_dir}/apple_build/ios/release'
     post_build: |-
       mkdir -p ${yaml_dir}/apple_build/ios/release/static/output && \
       mv ${yaml_dir}/apple_build/ios/release/static/WCDB.framework ${yaml_dir}/apple_build/ios/release/static/output/
@@ -79,7 +79,7 @@ watchos:
   dependencies:
 
   scripts:
-    pre_build: 'rm -r ${yaml_dir}/apple_build/watchos/release'
+    pre_build: 'rm -rf ${yaml_dir}/apple_build/watchos/release'
     post_build: |-
       mkdir -p ${yaml_dir}/apple_build/watchos/release/static/output && \
       mv ${yaml_dir}/apple_build/watchos/release/static/WCDB.framework ${yaml_dir}/apple_build/watchos/release/static/output/
@@ -101,7 +101,7 @@ macos-all:
   dependencies:
 
   scripts:
-    pre_build: 'rm -r ${yaml_dir}/apple_build/macos-all/release'
+    pre_build: 'rm -rf ${yaml_dir}/apple_build/macos-all/release'
     post_build: |-
       mkdir -p ${yaml_dir}/apple_build/macos-all/release/shared/output && \
       mv ${yaml_dir}/apple_build/macos-all/release/shared/WCDBCpp.framework ${yaml_dir}/apple_build/macos-all/release/shared/output/ && \
