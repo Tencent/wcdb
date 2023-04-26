@@ -129,15 +129,14 @@ int Handle::getTotalChange()
 
 const Error& Handle::getError()
 {
-    auto handle = getOrGenerateHandle();
-    if (handle == nullptr) {
-        if (m_databaseHolder != nullptr) {
-            return m_databaseHolder->getThreadedError();
-        }
-        static Error* error = new Error();
-        return *error;
+    if (m_innerHandle != nullptr) {
+        return m_innerHandle->getError();
     }
-    return handle->getError();
+    if (m_databaseHolder != nullptr) {
+        return m_databaseHolder->getThreadedError();
+    }
+    static Error* error = new Error();
+    return *error;
 }
 
 OptionalPreparedStatement Handle::getOrCreatePreparedStatement(const Statement& statement)
