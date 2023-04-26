@@ -171,6 +171,7 @@ private:
                 }
                 *value.lastInsertedRowID = m_handle->getLastInsertedRowID();
             }
+            assignChanges();
             m_handle->finalize();
         }
         return succeed;

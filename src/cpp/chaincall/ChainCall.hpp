@@ -47,10 +47,18 @@ public:
      */
     const Error &getError();
 
+    /**
+     @brief Get the number of changed rows in the most recent call.
+     It should be called after executing successfully.
+     */
+    int getChanges();
+
 protected:
+    void assignChanges();
     void assertError(const UnsafeStringView &message);
     BaseChainCall(Recyclable<InnerDatabase *> databaseHolder);
     std::shared_ptr<Handle> m_handle;
+    int m_changes;
 };
 
 template<class StatementType>
