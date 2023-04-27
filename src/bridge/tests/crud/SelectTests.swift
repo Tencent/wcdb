@@ -36,6 +36,12 @@ class SelectTests: CRUDTestCase {
         XCTAssertEqual(results.sorted(), preInsertedObjects.sorted())
     }
 
+    func testTableSelect() {
+        select = WCDBAssertNoThrowReturned(try table.prepareSelect(of: CRUDObject.self))
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try select.allObjects(), whenFailed: [CRUDObject]())
+        XCTAssertEqual(results.sorted(), preInsertedObjects.sorted())
+    }
+
     func testConditionalSelect() {
         let results: [CRUDObject] = WCDBAssertNoThrowReturned(
             try select.where(CRUDObject.variable1() == 2).allObjects(),
@@ -74,6 +80,22 @@ class SelectTests: CRUDTestCase {
 
     func testPartialSelect() {
         let select = WCDBAssertNoThrowReturned(try database.prepareSelect(on: CRUDObject.variable2().asProperty(), fromTable: CRUDObject.name))!
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(
+            try select.allObjects(),
+            whenFailed: [CRUDObject]()
+        )
+        XCTAssertEqual(results.map({ (object) -> String in
+            XCTAssertTrue(object.variable1 == 0)
+            XCTAssertNotNil(object.variable2)
+            return object.variable2!
+        }), preInsertedObjects.map({
+            XCTAssertNotNil($0.variable2)
+            return $0.variable2!
+        }))
+    }
+
+    func testTablePartialSelect() {
+        let select = WCDBAssertNoThrowReturned(try table.prepareSelect(on: CRUDObject.variable2().asProperty()))!
         let results: [CRUDObject] = WCDBAssertNoThrowReturned(
             try select.allObjects(),
             whenFailed: [CRUDObject]()

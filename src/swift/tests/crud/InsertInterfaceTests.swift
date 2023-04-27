@@ -119,7 +119,6 @@ class InsertInterfaceTests: CRUDTestCase {
         let object = TestObject()
         object.variable1 = preInsertedObjects.count + 1
         object.variable2 = self.name
-        let table = database.getTable(named: TestObject.name, of: TestObject.self)
         // When
         XCTAssertNoThrow(try table.insert(object))
         // Then
@@ -136,7 +135,6 @@ class InsertInterfaceTests: CRUDTestCase {
         let expectedReplacedRowID = 1
         object.variable1 = expectedReplacedRowID
         object.variable2 = self.name
-        let table = database.getTable(named: TestObject.name, of: TestObject.self)
         // When
         XCTAssertNoThrow(try table.insertOrReplace(object))
         // Then
@@ -154,7 +152,6 @@ class InsertInterfaceTests: CRUDTestCase {
         let expectedReplacedRowID = 1
         object.variable1 = expectedReplacedRowID
         object.variable2 = self.name
-        let table = database.getTable(named: TestObject.name, of: TestObject.self)
         // When
         XCTAssertNoThrow(try table.insertOrIgnore(object))
         // Then

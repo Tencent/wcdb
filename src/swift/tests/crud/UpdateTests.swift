@@ -56,6 +56,28 @@ class UpdateTests: CRUDTestCase {
         }))
     }
 
+    func testTableUpdate() {
+        // Give
+        let optionalUpdate = WCDBAssertNoThrowReturned(
+            try table.prepareUpdate(on: TestObject.Properties.variable2)
+        )
+        XCTAssertNotNil(optionalUpdate)
+        update = optionalUpdate!
+        let object = TestObject()
+        object.variable2 = self.name
+        // When
+        XCTAssertNoThrow(try update.execute(with: object))
+        // Then
+        let results: [TestObject] = WCDBAssertNoThrowReturned(
+            try table.getObjects(),
+            whenFailed: [TestObject]()
+        )
+        XCTAssertEqual(Array(repeating: self.name, count: preInsertedObjects.count), results.map({
+            XCTAssertNotNil($0.variable2)
+            return $0.variable2!
+        }))
+    }
+
     func testConditionalUpdate() {
         // Give
         let object = TestObject()

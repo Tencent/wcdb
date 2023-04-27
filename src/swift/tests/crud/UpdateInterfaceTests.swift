@@ -201,7 +201,6 @@ class UpdateInterfaceTests: CRUDTestCase {
         // Give
         let object = TestObject()
         object.variable2 = self.name
-        let table: Table<TestObject> = database.getTable(named: TestObject.name)
         // When
         XCTAssertNoThrow(try table.update(on: TestObject.Properties.variable2, with: object))
         // Then
@@ -216,7 +215,6 @@ class UpdateInterfaceTests: CRUDTestCase {
         // Give
         let object = TestObject()
         object.variable2 = self.name
-        let table: Table<TestObject> = database.getTable(named: TestObject.name)
         // When
         XCTAssertNoThrow(try table.update(on: TestObject.Properties.variable2,
                                              with: object,
@@ -234,7 +232,6 @@ class UpdateInterfaceTests: CRUDTestCase {
         let object = TestObject()
         object.variable2 = self.name
         let order = [TestObject.Properties.variable1.order(.descending)]
-        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         // When
         XCTAssertNoThrow(try table.update(on: TestObject.Properties.variable2,
                                              with: object,
@@ -252,7 +249,6 @@ class UpdateInterfaceTests: CRUDTestCase {
         // Give
         let object = TestObject()
         object.variable2 = self.name
-        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         // When
         XCTAssertNoThrow(try table.update(on: TestObject.Properties.variable2,
                                              with: object,
@@ -267,7 +263,6 @@ class UpdateInterfaceTests: CRUDTestCase {
         // Give
         let object = TestObject()
         object.variable2 = self.name
-        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         // When
         XCTAssertNoThrow(try table.update(on: TestObject.Properties.variable2,
                                              with: object,
@@ -283,7 +278,6 @@ class UpdateInterfaceTests: CRUDTestCase {
         // Give
         let object = TestObject()
         object.variable2 = self.name
-        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         // When
         XCTAssertNoThrow(
             try table.update(on: TestObject.Properties.variable2, with: [self.name])
@@ -303,7 +297,6 @@ class UpdateInterfaceTests: CRUDTestCase {
         // Give
         let object = TestObject()
         object.variable2 = self.name
-        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         // When
         XCTAssertNoThrow(try table.update(on: TestObject.Properties.variable2,
                                              with: [self.name],
@@ -321,7 +314,6 @@ class UpdateInterfaceTests: CRUDTestCase {
         let object = TestObject()
         object.variable2 = self.name
         let order = [TestObject.Properties.variable1.order(.descending)]
-        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         // When
         XCTAssertNoThrow(try table.update(on: TestObject.Properties.variable2,
                                              with: [self.name],
@@ -339,7 +331,6 @@ class UpdateInterfaceTests: CRUDTestCase {
         // Give
         let object = TestObject()
         object.variable2 = self.name
-        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         // When
         XCTAssertNoThrow(try table.update(on: TestObject.Properties.variable2,
                                              with: [self.name],
@@ -354,7 +345,6 @@ class UpdateInterfaceTests: CRUDTestCase {
         // Give
         let object = TestObject()
         object.variable2 = self.name
-        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         // When
         XCTAssertNoThrow(try table.update(on: TestObject.Properties.variable2,
                                              with: [self.name],

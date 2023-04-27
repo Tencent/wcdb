@@ -32,6 +32,10 @@ class CRUDTestCase: DatabaseTestCase {
         return [object1, object2]
     }()
 
+    lazy var table: Table<CRUDObject> = {
+        database.getTable(named: CRUDObject.name)
+    }()
+
     override func setUp() {
         super.setUp()
         XCTAssertNoThrow(try database.create(table: CRUDObject.name, of: CRUDObject.self))

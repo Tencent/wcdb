@@ -37,6 +37,10 @@ class CRUDTestCase: DatabaseTestCase {
         return [object1, object2]
     }()
 
+    lazy var table: Table<TestObject> = {
+        database.getTable(named: TestObject.name)
+    }()
+
     override func setUp() {
         super.setUp()
 

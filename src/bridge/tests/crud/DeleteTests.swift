@@ -38,6 +38,20 @@ class DeleteTests: CRUDTestCase {
         XCTAssertEqual(results.count, 0)
     }
 
+    func testTableDelete() {
+        // Give
+        let optionalDelete = WCDBAssertNoThrowReturned(
+            try table.prepareDelete()
+        )
+        XCTAssertNotNil(optionalDelete)
+        delete = optionalDelete!
+        // When
+        XCTAssertNoThrow(try delete.execute())
+        // Then
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try table.getObjects())
+        XCTAssertEqual(results.count, 0)
+    }
+
     func testConditionalDelete() {
         // When
         XCTAssertNoThrow(try delete.where(CRUDObject.variable1() == 2).execute())
