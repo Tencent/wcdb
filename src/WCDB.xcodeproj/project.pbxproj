@@ -833,6 +833,9 @@
 		0D5363F3290A75F20026A4DC /* Sequence.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D5363EF290A75F20026A4DC /* Sequence.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		0D5F8BC929F77CD800939603 /* CipherDatabaseMigratingCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D5F8BC829F77CD800939603 /* CipherDatabaseMigratingCompatibleTests.mm */; };
 		0D5F8BCB29F77D2F00939603 /* CipherDatabaseMigrationCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D5F8BCA29F77D2F00939603 /* CipherDatabaseMigrationCompatibleTests.mm */; };
+		0DAD93C129FA2A1200E5788C /* TableChainCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DAD93C029FA2A1200E5788C /* TableChainCall.swift */; };
+		0DAD93C229FA2A1200E5788C /* TableChainCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DAD93C029FA2A1200E5788C /* TableChainCall.swift */; };
+		0DAD93C429FA2C4800E5788C /* TableChainCall+WCTTableCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DAD93C329FA2C4800E5788C /* TableChainCall+WCTTableCoding.swift */; };
 		0DAE11D428DC6CC6003FB63A /* WCDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 0DAE11D328DC6CC6003FB63A /* WCDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0DAE11D528DC6D85003FB63A /* WCDBCpp.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E5CB0028A3513C005353D9 /* WCDBCpp.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0DC98FD228E46049007F3796 /* DBOperationNotifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DC98FD028E46049007F3796 /* DBOperationNotifier.cpp */; };
@@ -3618,6 +3621,8 @@
 		0D5363EF290A75F20026A4DC /* Sequence.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Sequence.hpp; sourceTree = "<group>"; };
 		0D5F8BC829F77CD800939603 /* CipherDatabaseMigratingCompatibleTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CipherDatabaseMigratingCompatibleTests.mm; sourceTree = "<group>"; };
 		0D5F8BCA29F77D2F00939603 /* CipherDatabaseMigrationCompatibleTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CipherDatabaseMigrationCompatibleTests.mm; sourceTree = "<group>"; };
+		0DAD93C029FA2A1200E5788C /* TableChainCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableChainCall.swift; sourceTree = "<group>"; };
+		0DAD93C329FA2C4800E5788C /* TableChainCall+WCTTableCoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TableChainCall+WCTTableCoding.swift"; sourceTree = "<group>"; };
 		0DAE11D328DC6CC6003FB63A /* WCDB.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCDB.h; sourceTree = "<group>"; };
 		0DC98FD028E46049007F3796 /* DBOperationNotifier.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DBOperationNotifier.cpp; sourceTree = "<group>"; };
 		0DC98FD128E46049007F3796 /* DBOperationNotifier.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DBOperationNotifier.hpp; sourceTree = "<group>"; };
@@ -7360,6 +7365,8 @@
 				7521DDEF29209E4E009642EF /* Select+WCTTableCoding.swift */,
 				03E165CC27F42D6500D2C926 /* MultiSelect.swift */,
 				03E165C327F42D6500D2C926 /* RowSelect.swift */,
+				0DAD93C029FA2A1200E5788C /* TableChainCall.swift */,
+				0DAD93C329FA2C4800E5788C /* TableChainCall+WCTTableCoding.swift */,
 			);
 			path = chaincall;
 			sourceTree = "<group>";
@@ -10221,6 +10228,7 @@
 				2370B12521914ED500D3227C /* NSData+WCTColumnCoding.mm in Sources */,
 				23EEDD0B217DFADC006E9E73 /* SyntaxLiteralValue.cpp in Sources */,
 				03EE3DAE28816DA800C8F0B3 /* StatementUpdateBridge.cpp in Sources */,
+				0DAD93C429FA2C4800E5788C /* TableChainCall+WCTTableCoding.swift in Sources */,
 				235EE9C722B6321A008F6658 /* StringView.cpp in Sources */,
 				03E1661327F42D6500D2C926 /* LiteralValue.swift in Sources */,
 				03F54824287D87F9007BCA3E /* StatementDropIndexBridge.cpp in Sources */,
@@ -10283,6 +10291,7 @@
 				039760A827F563F00071FA8F /* ObjectBridge.swift in Sources */,
 				23B35C7820BFE39500425033 /* Path.cpp in Sources */,
 				23EEDC7F217DFADC006E9E73 /* CommonTableExpression.cpp in Sources */,
+				0DAD93C129FA2A1200E5788C /* TableChainCall.swift in Sources */,
 				75204AEB283FD7410002E40C /* SchemaBridge.cpp in Sources */,
 				2360A60720D78F2C00E4A311 /* PerformanceTraceConfig.cpp in Sources */,
 				23EEDCBD217DFADC006E9E73 /* StatementCommit.cpp in Sources */,
@@ -11006,6 +11015,7 @@
 				7521DB90291EA349009642EF /* Core.cpp in Sources */,
 				7521DB91291EA349009642EF /* SyntaxIndexedColumn.cpp in Sources */,
 				75A60AB229345A38009C1B3C /* Cipher.cpp in Sources */,
+				0DAD93C229FA2A1200E5788C /* TableChainCall.swift in Sources */,
 				7521DB92291EA349009642EF /* TableConstraint.swift in Sources */,
 				7521DB93291EA349009642EF /* Pager.cpp in Sources */,
 				7521DB94291EA349009642EF /* StatementInterface.swift in Sources */,

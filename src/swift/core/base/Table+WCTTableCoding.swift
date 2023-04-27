@@ -359,4 +359,25 @@ extension Table: SelectTableInterfaceForObjc where Root: WCTTableCoding {
     }
 }
 
+extension Table: TableInsertChainCallInterfaceForObjc {
+    public func prepareInsert<Root: WCTTableCoding>(of cls: Root.Type) throws -> Insert {
+        return Insert(with: try self.database.getHandle(), named: name, on: cls.allProperties())
+    }
+
+    public func prepareInsertOrReplace<Root: WCTTableCoding>(of cls: Root.Type) throws -> Insert {
+            return Insert(with: try self.database.getHandle(), named: name, on: cls.allProperties(), onConflict: .Replace)
+    }
+
+    public func prepareInsertOrIgnore<Root: WCTTableCoding>(of cls: Root.Type) throws -> Insert {
+            return Insert(with: try self.database.getHandle(), named: name, on: cls.allProperties(), onConflict: .Ignore)
+    }
+}
+
+extension Table: TableSelectChainCallInterfaceForObjc {
+    public func prepareSelect<Root: WCTTableCoding>(of cls: Root.Type,
+                                                    isDistinct: Bool = false) throws -> Select {
+        return Select(with: try self.database.getHandle(), on: cls.allProperties(), table: name, isDistinct: isDistinct)
+    }
+}
+
 #endif
