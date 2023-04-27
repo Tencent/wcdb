@@ -30,7 +30,7 @@ namespace WCDB {
 
 Value::Value() : m_type(Type::Null)
 {
-    m_value.intValue = 0;
+    m_intValue = 0;
 }
 
 Value::Value(const Value &other)
@@ -52,16 +52,16 @@ Value::~Value()
 
 Value &Value::operator=(const Value &other)
 {
-    clearValue();
     m_type = other.m_type;
+    clearValue();
     copyValue(other);
     return *this;
 }
 
 Value &Value::operator=(Value &&other)
 {
-    clearValue();
     m_type = other.m_type;
+    clearValue();
     moveValue(other);
     return *this;
 }
@@ -75,18 +75,17 @@ bool Value::operator==(const Value &other) const
     case Type::Null:
         return true;
     case Type::Integer:
-        return m_value.intValue == other.m_value.intValue;
+        return m_intValue == other.m_intValue;
     case Type::Float:
-        return m_value.floatValue == other.m_value.floatValue;
+        return m_floatValue == other.m_floatValue;
     case Type::Text:
-        return (*m_value.textValue).compare(*other.m_value.textValue) == 0;
+        return (m_textValue).compare(other.m_textValue) == 0;
     case Type::BLOB: {
-        if (m_value.blobValue->size() != other.m_value.blobValue->size()) {
+        if (m_blobValue.size() != other.m_blobValue.size()) {
             return false;
         }
-        return memcmp(m_value.blobValue->buffer(),
-                      other.m_value.blobValue->buffer(),
-                      m_value.blobValue->size())
+        return memcmp(
+               m_blobValue.buffer(), other.m_blobValue.buffer(), m_blobValue.size())
                == 0;
     }
     }
@@ -122,22 +121,16 @@ void Value::clearValue()
 {
     switch (m_type) {
     case Type::Integer: {
-        m_value.intValue = 0;
+        m_intValue = 0;
     } break;
     case Type::Float: {
-        m_value.floatValue = 0;
+        m_floatValue = 0;
     } break;
     case Type::Text: {
-        if (m_value.textValue) {
-            delete m_value.textValue;
-            m_value.textValue = nullptr;
-        }
+        m_textValue.~StringView();
     } break;
     case Type::BLOB: {
-        if (m_value.blobValue) {
-            delete m_value.blobValue;
-            m_value.blobValue = nullptr;
-        }
+        m_blobValue.~Data();
     } break;
     case Type::Null: {
         return;
@@ -149,20 +142,16 @@ void Value::copyValue(const Value &other)
 {
     switch (other.m_type) {
     case Type::Integer: {
-        m_value.intValue = other.m_value.intValue;
+        m_intValue = other.m_intValue;
     } break;
     case Type::Float: {
-        m_value.floatValue = other.m_value.floatValue;
+        m_floatValue = other.m_floatValue;
     } break;
     case Type::Text: {
-        if (other.m_value.textValue) {
-            m_value.textValue = new StringView(*other.m_value.textValue);
-        }
+        new ((void *) std::addressof(m_textValue)) StringView(other.m_textValue);
     } break;
     case Type::BLOB: {
-        if (other.m_value.blobValue) {
-            m_value.blobValue = new Data(*other.m_value.blobValue);
-        }
+        new ((void *) std::addressof(m_blobValue)) Data(other.m_blobValue);
     } break;
     case Type::Null: {
         return;
@@ -174,18 +163,17 @@ void Value::moveValue(Value &other)
 {
     switch (other.m_type) {
     case Type::Integer: {
-        m_value.intValue = other.m_value.intValue;
+        m_intValue = other.m_intValue;
     } break;
     case Type::Float: {
-        m_value.floatValue = other.m_value.floatValue;
+        m_floatValue = other.m_floatValue;
     } break;
     case Type::Text: {
-        m_value.textValue = other.m_value.textValue;
-        other.m_value.textValue = nullptr;
+        new ((void *) std::addressof(m_textValue))
+        StringView(std::move(other.m_textValue));
     } break;
     case Type::BLOB: {
-        m_value.blobValue = other.m_value.blobValue;
-        other.m_value.blobValue = nullptr;
+        new ((void *) std::addressof(m_blobValue)) Data(std::move(other.m_blobValue));
     } break;
     case Type::Null: {
         return;
@@ -207,19 +195,19 @@ int64_t Value::intValue() const
 {
     switch (m_type) {
     case Type::Integer:
-        return m_value.intValue;
+        return m_intValue;
     case Type::Float:
-        return (int64_t) m_value.floatValue;
+        return (int64_t) m_floatValue;
     case Type::Text: {
-        if (m_value.textValue != nullptr && m_value.textValue->size() > 0) {
-            return atoll(m_value.textValue->data());
+        if (m_textValue.size() > 0) {
+            return atoll(m_textValue.data());
         } else {
             return 0;
         }
     }
     case Type::BLOB: {
-        if (m_value.blobValue != nullptr && m_value.blobValue->size() > 0) {
-            return atoll((const char *) m_value.blobValue->buffer());
+        if (m_blobValue.size() > 0) {
+            return atoll((const char *) m_blobValue.buffer());
         } else {
             return 0;
         }
@@ -233,12 +221,12 @@ double Value::floatValue() const
 {
     switch (m_type) {
     case Type::Integer:
-        return m_value.intValue;
+        return m_intValue;
     case Type::Float:
-        return m_value.floatValue;
+        return m_floatValue;
     case Type::Text: {
-        if (m_value.textValue != nullptr && m_value.textValue->size() > 0) {
-            double num = atof(m_value.textValue->data());
+        if (m_textValue.size() > 0) {
+            double num = atof(m_textValue.data());
             if (isnan(num) || isinf(num)) return 0;
             return num;
         } else {
@@ -246,8 +234,8 @@ double Value::floatValue() const
         }
     }
     case Type::BLOB: {
-        if (m_value.blobValue != nullptr && m_value.blobValue->size() > 0) {
-            double num = atof((const char *) m_value.blobValue->buffer());
+        if (m_blobValue.size() > 0) {
+            double num = atof((const char *) m_blobValue.buffer());
             if (isnan(num) || isinf(num)) return 0;
             return num;
         } else {
@@ -264,21 +252,14 @@ StringView Value::textValue() const
 {
     switch (m_type) {
     case Type::Integer:
-        return StringView::formatted("%lld", m_value.intValue);
+        return StringView::formatted("%lld", m_intValue);
     case Type::Float:
-        return StringView::formatted("%f", m_value.floatValue);
+        return StringView::formatted("%f", m_floatValue);
     case Type::Text: {
-        if (m_value.textValue == nullptr || m_value.textValue->length() == 0) {
-            return StringView();
-        }
-        return *m_value.textValue;
+        return m_textValue;
     }
     case Type::BLOB: {
-        if (m_value.blobValue == nullptr || m_value.blobValue->size() == 0) {
-            return StringView();
-        }
-        return StringView((const char *) m_value.blobValue->buffer(),
-                          m_value.blobValue->size());
+        return StringView((const char *) m_blobValue.buffer(), m_blobValue.size());
     }
     case Type::Null: {
         return StringView();
@@ -290,25 +271,18 @@ Data Value::blobValue() const
 {
     switch (m_type) {
     case Type::Integer: {
-        StringView string = StringView::formatted("%lld", m_value.intValue);
+        StringView string = StringView::formatted("%lld", m_intValue);
         return Data((const unsigned char *) string.data(), string.length());
     }
     case Type::Float: {
-        StringView string = StringView::formatted("%f", m_value.floatValue);
+        StringView string = StringView::formatted("%f", m_floatValue);
         return Data((const unsigned char *) string.data(), string.length());
     }
     case Type::Text: {
-        if (m_value.textValue == nullptr || m_value.textValue->size() == 0) {
-            return Data();
-        }
-        return Data((const unsigned char *) m_value.textValue->data(),
-                    m_value.textValue->length());
+        return Data((const unsigned char *) m_textValue.data(), m_textValue.length());
     }
     case Type::BLOB: {
-        if (m_value.blobValue == nullptr || m_value.blobValue->size() == 0) {
-            return Data();
-        }
-        return *m_value.blobValue;
+        return m_blobValue;
     }
     case Type::Null: {
         return Data();
@@ -325,13 +299,13 @@ bool Value::isEmpty() const
 {
     switch (m_type) {
     case Type::Integer:
-        return m_value.intValue == 0;
+        return m_intValue == 0;
     case Type::Float:
-        return m_value.floatValue == 0;
+        return m_floatValue == 0;
     case Type::Text:
-        return m_value.textValue->length() == 0;
+        return m_textValue.length() == 0;
     case Type::BLOB:
-        return m_value.blobValue->size() == 0;
+        return m_blobValue.size() == 0;
     case Type::Null:
         return true;
     }
