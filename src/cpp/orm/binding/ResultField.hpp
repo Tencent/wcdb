@@ -38,7 +38,7 @@ public:
     ResultField() = delete;
 
     ResultField(const Field& field);
-    ResultField(const ResultColumn& resultColumn, std::shared_ptr<BaseAccessor> assessor);
+    ResultField(const ResultColumn& resultColumn, const BaseAccessor* assessor);
     ~ResultField() override final;
 
     template<class ORMType, typename FieldType>
@@ -60,38 +60,38 @@ public:
         switch (m_accessor->getColumnType()) {
         case ColumnType::Integer: {
             auto intAccessor
-            = static_cast<Accessor<ObjectType, ColumnType::Integer>*>(m_accessor.get());
+            = static_cast<const Accessor<ObjectType, ColumnType::Integer>*>(m_accessor);
             intAccessor->setValue(obj, value.intValue());
         } break;
         case ColumnType::Float: {
             auto floatAccessor
-            = static_cast<Accessor<ObjectType, ColumnType::Float>*>(m_accessor.get());
+            = static_cast<const Accessor<ObjectType, ColumnType::Float>*>(m_accessor);
             floatAccessor->setValue(obj, value.floatValue());
         } break;
         case ColumnType::Text: {
             auto textAccessor
-            = static_cast<Accessor<ObjectType, ColumnType::Text>*>(m_accessor.get());
+            = static_cast<const Accessor<ObjectType, ColumnType::Text>*>(m_accessor);
             textAccessor->setValue(obj, value.textValue());
         } break;
         case ColumnType::BLOB: {
             auto blobAccessor
-            = static_cast<Accessor<ObjectType, ColumnType::BLOB>*>(m_accessor.get());
+            = static_cast<const Accessor<ObjectType, ColumnType::BLOB>*>(m_accessor);
             blobAccessor->setValue(obj, value.blobValue());
         } break;
         case ColumnType::Null: {
             auto nullAccessor
-            = static_cast<Accessor<ObjectType, ColumnType::Null>*>(m_accessor.get());
+            = static_cast<const Accessor<ObjectType, ColumnType::Null>*>(m_accessor);
             nullAccessor->setValue(obj, nullptr);
         } break;
         }
     }
 
 protected:
-    std::shared_ptr<BaseAccessor> getAccessor() const;
+    const BaseAccessor* getAccessor() const;
 
 private:
     void configWithBinding(const Binding& binding, void* memberPointer);
-    std::shared_ptr<BaseAccessor> m_accessor;
+    const BaseAccessor* m_accessor;
 };
 
 template<>

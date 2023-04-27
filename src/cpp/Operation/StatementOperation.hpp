@@ -136,26 +136,26 @@ public:
     void bindObject(const ObjectType& obj, const Field& field, int index = 1)
     {
         WCDB_CPP_ORM_STATIC_ASSERT_FOR_OBJECT_TYPE
-        std::shared_ptr<BaseAccessor> accessor = field.getAccessor();
+        const BaseAccessor* accessor = field.getAccessor();
         switch (accessor->getColumnType()) {
         case ColumnType::Integer: {
             auto intAccessor
-            = static_cast<Accessor<ObjectType, ColumnType::Integer>*>(accessor.get());
+            = static_cast<const Accessor<ObjectType, ColumnType::Integer>*>(accessor);
             bindInteger(intAccessor->getValue(obj), index);
         } break;
         case ColumnType::Float: {
             auto floatAccessor
-            = static_cast<Accessor<ObjectType, ColumnType::Float>*>(accessor.get());
+            = static_cast<const Accessor<ObjectType, ColumnType::Float>*>(accessor);
             bindDouble(floatAccessor->getValue(obj), index);
         } break;
         case ColumnType::Text: {
             auto textAccessor
-            = static_cast<Accessor<ObjectType, ColumnType::Text>*>(accessor.get());
+            = static_cast<const Accessor<ObjectType, ColumnType::Text>*>(accessor);
             bindText(textAccessor->getValue(obj), index);
         } break;
         case ColumnType::BLOB: {
             auto blobAccessor
-            = static_cast<Accessor<ObjectType, ColumnType::BLOB>*>(accessor.get());
+            = static_cast<const Accessor<ObjectType, ColumnType::BLOB>*>(accessor);
             bindBLOB(blobAccessor->getValue(obj), index);
         } break;
         case ColumnType::Null: {
@@ -247,32 +247,31 @@ public:
         ObjectType obj;
         int index = 0;
         for (const ResultField& field : resultFields) {
-            std::shared_ptr<BaseAccessor> accessor = field.getAccessor();
+            const BaseAccessor* accessor = field.getAccessor();
             switch (accessor->getColumnType()) {
             case ColumnType::Integer: {
                 auto intAccessor
-                = static_cast<Accessor<ObjectType, ColumnType::Integer>*>(
-                accessor.get());
+                = static_cast<const Accessor<ObjectType, ColumnType::Integer>*>(accessor);
                 intAccessor->setValue(obj, getInteger(index));
             } break;
             case ColumnType::Float: {
                 auto floatAccessor
-                = static_cast<Accessor<ObjectType, ColumnType::Float>*>(accessor.get());
+                = static_cast<const Accessor<ObjectType, ColumnType::Float>*>(accessor);
                 floatAccessor->setValue(obj, getDouble(index));
             } break;
             case ColumnType::Text: {
                 auto textAccessor
-                = static_cast<Accessor<ObjectType, ColumnType::Text>*>(accessor.get());
+                = static_cast<const Accessor<ObjectType, ColumnType::Text>*>(accessor);
                 textAccessor->setValue(obj, getText(index));
             } break;
             case ColumnType::BLOB: {
                 auto blobAccessor
-                = static_cast<Accessor<ObjectType, ColumnType::BLOB>*>(accessor.get());
+                = static_cast<const Accessor<ObjectType, ColumnType::BLOB>*>(accessor);
                 blobAccessor->setValue(obj, getBLOB(index));
             } break;
             case ColumnType::Null: {
                 auto nullAccessor
-                = static_cast<Accessor<ObjectType, ColumnType::Null>*>(accessor.get());
+                = static_cast<const Accessor<ObjectType, ColumnType::Null>*>(accessor);
                 nullAccessor->setValue(obj, nullptr);
             } break;
             }
