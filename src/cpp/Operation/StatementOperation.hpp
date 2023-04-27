@@ -24,7 +24,6 @@
 
 #pragma once
 #include "CPPDeclaration.h"
-#include "CPPORM.h"
 #include "MultiObject.hpp"
 #include "Statement.hpp"
 #include "Value.hpp"
@@ -136,7 +135,33 @@ public:
     template<class ObjectType>
     void bindObject(const ObjectType& obj, const Field& field, int index = 1)
     {
-        bindValue(field.getValue<ObjectType>(obj), index);
+        WCDB_CPP_ORM_STATIC_ASSERT_FOR_OBJECT_TYPE
+        std::shared_ptr<BaseAccessor> accessor = field.getAccessor();
+        switch (accessor->getColumnType()) {
+        case ColumnType::Integer: {
+            auto intAccessor
+            = static_cast<Accessor<ObjectType, ColumnType::Integer>*>(accessor.get());
+            bindInteger(intAccessor->getValue(obj), index);
+        } break;
+        case ColumnType::Float: {
+            auto floatAccessor
+            = static_cast<Accessor<ObjectType, ColumnType::Float>*>(accessor.get());
+            bindDouble(floatAccessor->getValue(obj), index);
+        } break;
+        case ColumnType::Text: {
+            auto textAccessor
+            = static_cast<Accessor<ObjectType, ColumnType::Text>*>(accessor.get());
+            bindText(textAccessor->getValue(obj), index);
+        } break;
+        case ColumnType::BLOB: {
+            auto blobAccessor
+            = static_cast<Accessor<ObjectType, ColumnType::BLOB>*>(accessor.get());
+            bindBLOB(blobAccessor->getValue(obj), index);
+        } break;
+        case ColumnType::Null: {
+            bindNull(index);
+        } break;
+        }
     }
 
     /**
@@ -148,7 +173,7 @@ public:
     {
         int index = 1;
         for (const Field& field : fields) {
-            bindValue(field.getValue<ObjectType>(obj), index);
+            bindObject(obj, field, index);
             index++;
         }
     }
@@ -218,10 +243,39 @@ public:
     template<class ObjectType>
     ObjectType extractOneObject(const ResultFields& resultFields)
     {
+        WCDB_CPP_ORM_STATIC_ASSERT_FOR_OBJECT_TYPE
         ObjectType obj;
         int index = 0;
         for (const ResultField& field : resultFields) {
-            field.setValue<ObjectType>(obj, getValue(index));
+            std::shared_ptr<BaseAccessor> accessor = field.getAccessor();
+            switch (accessor->getColumnType()) {
+            case ColumnType::Integer: {
+                auto intAccessor
+                = static_cast<Accessor<ObjectType, ColumnType::Integer>*>(
+                accessor.get());
+                intAccessor->setValue(obj, getInteger(index));
+            } break;
+            case ColumnType::Float: {
+                auto floatAccessor
+                = static_cast<Accessor<ObjectType, ColumnType::Float>*>(accessor.get());
+                floatAccessor->setValue(obj, getDouble(index));
+            } break;
+            case ColumnType::Text: {
+                auto textAccessor
+                = static_cast<Accessor<ObjectType, ColumnType::Text>*>(accessor.get());
+                textAccessor->setValue(obj, getText(index));
+            } break;
+            case ColumnType::BLOB: {
+                auto blobAccessor
+                = static_cast<Accessor<ObjectType, ColumnType::BLOB>*>(accessor.get());
+                blobAccessor->setValue(obj, getBLOB(index));
+            } break;
+            case ColumnType::Null: {
+                auto nullAccessor
+                = static_cast<Accessor<ObjectType, ColumnType::Null>*>(accessor.get());
+                nullAccessor->setValue(obj, nullptr);
+            } break;
+            }
             index++;
         }
         return obj;

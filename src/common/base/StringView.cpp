@@ -33,10 +33,7 @@
 namespace WCDB {
 
 #pragma mark - UnsafeStringView - Constructor
-UnsafeStringView::UnsafeStringView()
-: m_data(""), m_length(0), m_referenceCount(nullptr)
-{
-}
+UnsafeStringView::UnsafeStringView() = default;
 
 UnsafeStringView::UnsafeStringView(const char* string)
 : m_data(string != nullptr ? string : "")

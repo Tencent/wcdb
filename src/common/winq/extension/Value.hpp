@@ -34,32 +34,34 @@ public:
     template<class T, std::enable_if_t<ColumnIsIntegerType<T>::value, int> = 0>
     Value(const T& value) : m_type(Type::Integer)
     {
-        m_value.intValue = ColumnIsIntegerType<T>::asUnderlyingType(value);
+        m_intValue = ColumnIsIntegerType<T>::asUnderlyingType(value);
     }
 
     template<class T, std::enable_if_t<ColumnIsFloatType<T>::value, int> = 0>
     Value(const T& value) : m_type(Type::Float)
     {
-        m_value.floatValue = ColumnIsFloatType<T>::asUnderlyingType(value);
+        m_floatValue = ColumnIsFloatType<T>::asUnderlyingType(value);
     }
 
     template<class T, std::enable_if_t<ColumnIsTextType<T>::value, int> = 0>
     Value(const T& value) : m_type(Type::Text)
     {
-        m_value.textValue = new StringView(ColumnIsTextType<T>::asUnderlyingType(value));
+        new ((void*) std::addressof(m_textValue))
+        StringView(ColumnIsTextType<T>::asUnderlyingType(value));
     }
 
     template<class T, std::enable_if_t<ColumnIsBLOBType<T>::value, int> = 0>
     Value(const T& value) : m_type(Type::BLOB)
     {
-        m_value.blobValue = new Data(ColumnIsBLOBType<T>::asUnderlyingType(value));
+        new ((void*) std::addressof(m_blobValue))
+        Data(ColumnIsBLOBType<T>::asUnderlyingType(value));
     }
 
     template<class T, std::enable_if_t<ColumnIsNullType<T>::value, int> = 0>
     Value(const T& value) : m_type(Type::Null)
     {
         WCDB_UNUSED(value);
-        m_value.intValue = 0;
+        m_intValue = 0;
     }
 
     Value();
@@ -113,11 +115,11 @@ public:
 private:
     Type m_type;
     union {
-        int64_t intValue;
-        double floatValue;
-        StringView* textValue;
-        Data* blobValue;
-    } m_value;
+        int64_t m_intValue;
+        double m_floatValue;
+        StringView m_textValue;
+        Data m_blobValue;
+    };
 
     void clearValue();
     void copyValue(const Value& other);
