@@ -50,6 +50,22 @@ class RowSelectTests: CRUDTestCase {
         XCTAssertEqual(results[row: 1, column: 1].stringValue, preInsertedObjects[1].variable2)
     }
 
+    func testTableRowSelect() {
+        let optionalRowSelect = WCDBAssertNoThrowReturned(
+            try table.prepareRowSelect()
+        )
+        XCTAssertNotNil(optionalRowSelect)
+        rowSelect = optionalRowSelect!
+        // When
+        let results: MultiRowsValue = WCDBAssertNoThrowReturned(try rowSelect.allRows())
+        // Then
+        XCTAssertEqual(results.count, preInsertedObjects.count)
+        XCTAssertEqual(Int(results[row: 0, column: 0].int64Value), preInsertedObjects[0].variable1)
+        XCTAssertEqual(results[row: 0, column: 1].stringValue, preInsertedObjects[0].variable2)
+        XCTAssertEqual(Int(results[row: 1, column: 0].int64Value), preInsertedObjects[1].variable1)
+        XCTAssertEqual(results[row: 1, column: 1].stringValue, preInsertedObjects[1].variable2)
+    }
+
     func testConditionalRowSelect() {
         // When
         let results: MultiRowsValue = WCDBAssertNoThrowReturned(
@@ -120,10 +136,57 @@ class RowSelectTests: CRUDTestCase {
         XCTAssertEqual(results[1].int32Value, 2)
     }
 
+    func testTableGroupByRowSelect() {
+        // Give
+        var optionalRowSelect = WCDBAssertNoThrowReturned(
+            try table.prepareRowSelect()
+        )
+        XCTAssertNotNil(optionalRowSelect)
+        rowSelect = optionalRowSelect!
+        let preInsertedObjects: [TestObject] = {
+            let object1 = TestObject()
+            object1.variable1 = 3
+            object1.variable2 = "object1"
+            let object2 = TestObject()
+            object2.variable1 = 4
+            object2.variable2 = "object2"
+            return [object1, object2]
+        }()
+        XCTAssertNoThrow(try table.insert(preInsertedObjects))
+
+        optionalRowSelect = WCDBAssertNoThrowReturned(
+            try table.prepareRowSelect(on: Column.all.count())
+        )
+        XCTAssertNotNil(optionalRowSelect)
+        rowSelect = optionalRowSelect!
+        rowSelect.group(by: TestObject.Properties.variable2).having(TestObject.Properties.variable1 > 0)
+        // When
+        let results: OneColumnValue = WCDBAssertNoThrowReturned(try rowSelect.allValues())
+        // Then
+        XCTAssertEqual(results.count, 2)
+        XCTAssertEqual(results[0].int32Value, 2)
+        XCTAssertEqual(results[1].int32Value, 2)
+    }
+
     func testPartialRowSelect() {
         // Give
         let optionalRowSelect = WCDBAssertNoThrowReturned(
             try database.prepareRowSelect(on: TestObject.Properties.variable2, fromTable: TestObject.name)
+        )
+        XCTAssertNotNil(optionalRowSelect)
+        rowSelect = optionalRowSelect!
+        // When
+        let results: MultiRowsValue = WCDBAssertNoThrowReturned(try rowSelect.allRows())
+        // Then
+        XCTAssertEqual(results.count, preInsertedObjects.count)
+        XCTAssertEqual(results[row: 0, column: 0].stringValue, preInsertedObjects[0].variable2)
+        XCTAssertEqual(results[row: 1, column: 0].stringValue, preInsertedObjects[1].variable2)
+    }
+
+    func testTablePartialRowSelect() {
+        // Give
+        let optionalRowSelect = WCDBAssertNoThrowReturned(
+            try table.prepareRowSelect(on: TestObject.Properties.variable2)
         )
         XCTAssertNotNil(optionalRowSelect)
         rowSelect = optionalRowSelect!
@@ -232,10 +295,29 @@ class RowSelectTests: CRUDTestCase {
     func testRowSelectFailed() {
         XCTAssertNoThrow(try database.prepareRowSelect(fromTables: []))
     }
+
     func testRowSelectType() {
         // Give
         let optionalRowSelect = WCDBAssertNoThrowReturned(
             try database.prepareRowSelect(on: 1, 2.0, "3", fromTable: TestObject.name)
+        )
+        XCTAssertNotNil(optionalRowSelect)
+        rowSelect = optionalRowSelect!
+
+        // When
+        let results: OneRowValue? = WCDBAssertNoThrowReturned(try rowSelect.nextRow())
+        XCTAssertNotNil(results)
+        XCTAssertEqual(results!.count, 3)
+        // Then
+        XCTAssertEqual(results![0].int32Value, 1)
+        XCTAssertEqual(results![1].doubleValue, 2.0)
+        XCTAssertEqual(results![2].stringValue, "3")
+    }
+
+    func testTableRowSelectType() {
+        // Give
+        let optionalRowSelect = WCDBAssertNoThrowReturned(
+            try table.prepareRowSelect(on: 1, 2.0, "3")
         )
         XCTAssertNotNil(optionalRowSelect)
         rowSelect = optionalRowSelect!

@@ -337,8 +337,6 @@ class SelectInterfaceTests: CRUDTestCase {
     }
 
     func testTableRowSelect() {
-        // Give
-        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         // When
         let results: MultiRowsValue = WCDBAssertNoThrowReturned(try table.getRows())
         // Then
@@ -350,8 +348,6 @@ class SelectInterfaceTests: CRUDTestCase {
     }
 
     func testTableRowSelectOne() {
-        // Give
-        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         // When
         let results: OneRowValue = WCDBAssertNoThrowReturned(
             try table.getRow()
@@ -363,8 +359,6 @@ class SelectInterfaceTests: CRUDTestCase {
     }
 
     func testTableRowSelectColumn() {
-        // Give
-        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         // When
         let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try table.getColumn(on: TestObject.Properties.variable1)
@@ -375,8 +369,6 @@ class SelectInterfaceTests: CRUDTestCase {
     }
 
     func testTableConditionalRowSelectColumn() {
-        // Give
-        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         // When
         let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try table.getColumn(on: TestObject.Properties.variable1, where: TestObject.Properties.variable1 == 1)
@@ -387,8 +379,6 @@ class SelectInterfaceTests: CRUDTestCase {
     }
 
     func testTableOrderedRowSelectColumn() {
-        // Give
-        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         // Give
         let order = [TestObject.Properties.variable1.order(.descending)]
         // When
@@ -402,8 +392,6 @@ class SelectInterfaceTests: CRUDTestCase {
     }
 
     func testTableLimitedRowSelectColumn() {
-        // Give
-        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         // When
         let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try table.getColumn(on: TestObject.Properties.variable1, limit: 1)
@@ -414,8 +402,6 @@ class SelectInterfaceTests: CRUDTestCase {
     }
 
     func testTableOffsetRowSelectColumn() {
-        // Give
-        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         // When
         let results: OneColumnValue = WCDBAssertNoThrowReturned(
             try table.getColumn(on: TestObject.Properties.variable1, limit: 1, offset: 1)
@@ -426,8 +412,6 @@ class SelectInterfaceTests: CRUDTestCase {
     }
 
     func testTableRowSelectDistinctColumn() {
-        // Give
-        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         let object1 = TestObject()
         object1.variable1 = 3
         object1.variable2 = "object1"
@@ -442,8 +426,6 @@ class SelectInterfaceTests: CRUDTestCase {
     }
 
     func testTableConditionalRowSelectDistinctColumn() {
-        // Give
-        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         let object1 = TestObject()
         object1.variable1 = 3
         object1.variable2 = "object1"
@@ -459,8 +441,6 @@ class SelectInterfaceTests: CRUDTestCase {
     }
 
     func testTableOrderedRowSelectDistinctColumn() {
-        // Give
-        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         let object1 = TestObject()
         object1.variable1 = 3
         object1.variable2 = "object1"
@@ -478,8 +458,6 @@ class SelectInterfaceTests: CRUDTestCase {
     }
 
     func testTableLimitedRowSelectDistinctColumn() {
-        // Give
-        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         let object1 = TestObject()
         object1.variable1 = 3
         object1.variable2 = "object1"
@@ -494,8 +472,6 @@ class SelectInterfaceTests: CRUDTestCase {
     }
 
     func testTableOffsetRowSelectDistinctColumn() {
-        // Give
-        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         let object1 = TestObject()
         object1.variable1 = 3
         object1.variable2 = "object1"
@@ -510,8 +486,6 @@ class SelectInterfaceTests: CRUDTestCase {
     }
 
     func testTableRowSelectValue() {
-        // Give
-        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         // When
         let result: Value? = WCDBAssertNoThrowReturned(
             try table.getValue(on: TestObject.Properties.variable2)
@@ -522,8 +496,6 @@ class SelectInterfaceTests: CRUDTestCase {
     }
 
     func testTableSelectOne() {
-        // Give
-        let table: Table<TestObject> =  database.getTable(named: TestObject.name)
         // When
         let result: TestObject? = WCDBAssertNoThrowReturned(
             try table.getObject()

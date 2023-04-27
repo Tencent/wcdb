@@ -605,3 +605,94 @@ extension Table: RowSelectTableInterface {
         return (try getDistinctColumn(on: result).first) ?? Value(nil)
     }
 }
+
+extension Table: TableInsertChainCallInterface {
+    public func prepareInsert<Root: TableEncodable>(of cls: Root.Type) throws -> Insert {
+        return Insert(with: try self.database.getHandle(), named: name, on: cls.Properties.all)
+    }
+
+    public func prepareInsertOrReplace<Root: TableEncodable>(
+        of cls: Root.Type) throws -> Insert {
+            return Insert(with: try self.database.getHandle(), named: name, on: cls.Properties.all, onConflict: .Replace)
+    }
+
+    public func prepareInsertOrIgnore<Root: TableEncodable>(
+        of cls: Root.Type) throws -> Insert {
+            return Insert(with: try self.database.getHandle(), named: name, on: cls.Properties.all, onConflict: .Ignore)
+    }
+
+    public func prepareInsert(on propertyConvertibleList: PropertyConvertible...) throws -> Insert {
+        return try prepareInsert(on: propertyConvertibleList)
+    }
+
+    public func prepareInsertOrReplace(on propertyConvertibleList: PropertyConvertible...) throws -> Insert {
+        return try prepareInsertOrReplace(on: propertyConvertibleList)
+    }
+
+    public func prepareInsertOrIgnore(on propertyConvertibleList: PropertyConvertible...) throws -> Insert {
+        return try prepareInsertOrIgnore(on: propertyConvertibleList)
+    }
+
+    public func prepareInsert(on propertyConvertibleList: [PropertyConvertible]) throws -> Insert {
+        return Insert(with: try self.database.getHandle(), named: name, on: propertyConvertibleList)
+    }
+
+    public func prepareInsertOrReplace(on propertyConvertibleList: [PropertyConvertible]) throws -> Insert {
+        return Insert(with: try self.database.getHandle(), named: name, on: propertyConvertibleList, onConflict: .Replace)
+    }
+
+    public func prepareInsertOrIgnore(on propertyConvertibleList: [PropertyConvertible]) throws -> Insert {
+        return Insert(with: try self.database.getHandle(), named: name, on: propertyConvertibleList, onConflict: .Ignore)
+    }
+}
+
+extension Table: TableDeleteChainCallInterface {
+    public func prepareDelete() throws -> Delete {
+        return Delete(with: try self.database.getHandle(), andTableName: name)
+    }
+}
+
+extension Table: TableUpdateChainCallInterface {
+    public func prepareUpdate(on propertyConvertibleList: PropertyConvertible...) throws -> Update {
+        return try prepareUpdate(on: propertyConvertibleList)
+    }
+
+    public func prepareUpdate(on propertyConvertibleList: [PropertyConvertible]) throws -> Update {
+        return Update(with: try self.database.getHandle(), on: propertyConvertibleList, andTable: name)
+    }
+}
+
+extension Table: TableRowSelectChainCallInterface {
+    public func prepareRowSelect(on resultColumnConvertibleList: ResultColumnConvertible...,
+                                 isDistinct: Bool = false) throws -> RowSelect {
+        return try prepareRowSelect(on: resultColumnConvertibleList.isEmpty ?
+                                    [Column.all] : resultColumnConvertibleList,
+                                    isDistinct: isDistinct)
+    }
+
+    public func prepareRowSelect(on resultColumnConvertibleList: [ResultColumnConvertible],
+                                 isDistinct: Bool = false) throws -> RowSelect {
+        return RowSelect(with: try self.database.getHandle(),
+                         results: resultColumnConvertibleList,
+                         tables: [name],
+                         isDistinct: isDistinct)
+    }
+}
+
+extension Table: TableSelectChainCallInterface {
+    public func prepareSelect<Root: TableDecodable>(of cls: Root.Type,
+                                                    isDistinct: Bool = false) throws -> Select {
+        return Select(with: try self.database.getHandle(), on: cls.Properties.all, table: name, isDistinct: isDistinct)
+    }
+
+    public func prepareSelect(on propertyConvertibleList: PropertyConvertible...,
+                              isDistinct: Bool = false) throws -> Select {
+        return try prepareSelect(on: propertyConvertibleList,
+                                 isDistinct: isDistinct)
+    }
+
+    public func prepareSelect(on propertyConvertibleList: [PropertyConvertible],
+                              isDistinct: Bool = false) throws -> Select {
+        return Select(with: try self.database.getHandle(), on: propertyConvertibleList, table: name, isDistinct: isDistinct)
+    }
+}
