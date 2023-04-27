@@ -32,6 +32,7 @@ namespace WCDB {
 
 class ResultField final : public ResultColumn {
     friend class SyntaxList<ResultField>;
+    friend class StatementOperation;
 
 public:
     ResultField() = delete;

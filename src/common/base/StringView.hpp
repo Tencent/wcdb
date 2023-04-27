@@ -64,9 +64,9 @@ public:
 private:
     friend class StringView;
     static constexpr int ConstanceReference = 1;
-    const char* m_data;
-    size_t m_length;
-    std::atomic<int>* m_referenceCount;
+    const char* m_data = "";
+    size_t m_length = 0;
+    std::atomic<int>* m_referenceCount = nullptr;
 
 #pragma mark - UnsafeStringView - Comparison
 public:
