@@ -39,7 +39,7 @@ class Field final : public Column {
 
 public:
     Field() = delete;
-    Field(const UnsafeStringView& name, const std::shared_ptr<BaseAccessor> accessor);
+    Field(const UnsafeStringView& name, const BaseAccessor* accessor);
     ~Field() override final;
 
     template<class ORMType, typename FieldType>
@@ -64,22 +64,22 @@ public:
         switch (m_accessor->getColumnType()) {
         case ColumnType::Integer: {
             auto intAccessor
-            = static_cast<Accessor<ObjectType, ColumnType::Integer>*>(m_accessor.get());
+            = static_cast<const Accessor<ObjectType, ColumnType::Integer>*>(m_accessor);
             return intAccessor->getValue(obj);
         } break;
         case ColumnType::Float: {
             auto floatAccessor
-            = static_cast<Accessor<ObjectType, ColumnType::Float>*>(m_accessor.get());
+            = static_cast<const Accessor<ObjectType, ColumnType::Float>*>(m_accessor);
             return floatAccessor->getValue(obj);
         } break;
         case ColumnType::Text: {
             auto textAccessor
-            = static_cast<Accessor<ObjectType, ColumnType::Text>*>(m_accessor.get());
+            = static_cast<const Accessor<ObjectType, ColumnType::Text>*>(m_accessor);
             return textAccessor->getValue(obj);
         } break;
         case ColumnType::BLOB: {
             auto blobAccessor
-            = static_cast<Accessor<ObjectType, ColumnType::BLOB>*>(m_accessor.get());
+            = static_cast<const Accessor<ObjectType, ColumnType::BLOB>*>(m_accessor);
             return blobAccessor->getValue(obj);
         } break;
         case ColumnType::Null: {
@@ -90,12 +90,12 @@ public:
     }
 
 protected:
-    std::shared_ptr<BaseAccessor> getAccessor() const;
+    const BaseAccessor* getAccessor() const;
 
 private:
-    Field(const std::shared_ptr<BaseAccessor> accessor, const Column& column);
+    Field(const BaseAccessor* accessor, const Column& column);
     void configWithBinding(const Binding& binding, void* memberPointer);
-    std::shared_ptr<BaseAccessor> m_accessor;
+    const BaseAccessor* m_accessor;
 };
 
 #pragma mark - Fields

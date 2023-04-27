@@ -35,7 +35,7 @@ ResultField::ResultField(const Field& field)
 {
 }
 
-ResultField::ResultField(const ResultColumn& resultColumn, std::shared_ptr<BaseAccessor> assessor)
+ResultField::ResultField(const ResultColumn& resultColumn, const BaseAccessor* assessor)
 : ResultColumn(resultColumn), m_accessor(assessor)
 {
 }
@@ -48,7 +48,7 @@ void ResultField::configWithBinding(const Binding& binding, void* memberPointer)
     m_accessor = binding.getAccessor(memberPointer);
 }
 
-std::shared_ptr<BaseAccessor> ResultField::getAccessor() const
+const BaseAccessor* ResultField::getAccessor() const
 {
     return m_accessor;
 }
@@ -72,7 +72,7 @@ ResultFields& ResultFields::addingNewResultColumns(const ResultFields& resultCol
 
 bool ResultFields::isEqual(const ResultField& left, const ResultField& right)
 {
-    return left.getAccessor().get() == right.getAccessor().get()
+    return left.getAccessor() == right.getAccessor()
            && left.getDescription().compare(right.getDescription()) == 0;
 }
 

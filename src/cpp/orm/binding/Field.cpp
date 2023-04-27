@@ -32,19 +32,19 @@ namespace WCDB {
 
 #pragma mark - Field
 
-Field::Field(const UnsafeStringView& name, const std::shared_ptr<BaseAccessor> accessor)
+Field::Field(const UnsafeStringView& name, const BaseAccessor* accessor)
 : Column(name), m_accessor(accessor)
 {
 }
 
-Field::Field(const std::shared_ptr<BaseAccessor> accessor, const Column& column)
+Field::Field(const BaseAccessor* accessor, const Column& column)
 : Column(column), m_accessor(accessor)
 {
 }
 
 Field::~Field() = default;
 
-std::shared_ptr<BaseAccessor> Field::getAccessor() const
+const BaseAccessor* Field::getAccessor() const
 {
     return m_accessor;
 }
@@ -123,7 +123,7 @@ Fields& Fields::addingNewFields(const Fields& fields)
 
 bool Fields::isEqual(const Field& left, const Field& right)
 {
-    return left.getAccessor().get() == right.getAccessor().get()
+    return left.getAccessor() == right.getAccessor()
            && left.getDescription() == right.getDescription();
 }
 

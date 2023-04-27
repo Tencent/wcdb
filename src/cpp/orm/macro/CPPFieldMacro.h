@@ -26,14 +26,14 @@
 
 #include "Macro.h"
 
-#define __WCDB_CPP_SYNTHESIZE_IMP(fieldName, columnName)                                                        \
-    auto _mp_##fieldName = &WCDBORMType::fieldName;                                                             \
-    constexpr bool has_synthesized_##fieldName = true;                                                          \
-    static const char* _columnName_##fieldName = columnName;                                                    \
-    WCDB_UNUSED(has_synthesized_##fieldName);                                                                   \
-    auto& _field_##fieldName = g_binding->registerField(                                                        \
-    WCDB::castMemberPointer(_mp_##fieldName),                                                                   \
-    WCDB::StringView::makeConstant(_columnName_##fieldName),                                                    \
-    std::make_shared<WCDB::RuntimeAccessor<WCDBORMType, WCDB::getMemberType<decltype(_mp_##fieldName)>::type>>( \
-    _mp_##fieldName));                                                                                          \
+#define __WCDB_CPP_SYNTHESIZE_IMP(fieldName, columnName)                                          \
+    auto _mp_##fieldName = &WCDBORMType::fieldName;                                               \
+    constexpr bool has_synthesized_##fieldName = true;                                            \
+    static const char* _columnName_##fieldName = columnName;                                      \
+    WCDB_UNUSED(has_synthesized_##fieldName);                                                     \
+    auto& _field_##fieldName = g_binding->registerField(                                          \
+    WCDB::castMemberPointer(_mp_##fieldName),                                                     \
+    WCDB::StringView::makeConstant(_columnName_##fieldName),                                      \
+    new WCDB::RuntimeAccessor<WCDBORMType, WCDB::getMemberType<decltype(_mp_##fieldName)>::type>( \
+    _mp_##fieldName));                                                                            \
     WCDB_UNUSED(_field_##fieldName);

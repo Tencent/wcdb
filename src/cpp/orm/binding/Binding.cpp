@@ -35,9 +35,8 @@ Binding::~Binding(){};
 
 #pragma mark - Field
 
-const Field &Binding::registerField(void *memberPointer,
-                                    const UnsafeStringView &name,
-                                    std::shared_ptr<BaseAccessor> accessor)
+const Field &
+Binding::registerField(void *memberPointer, const UnsafeStringView &name, BaseAccessor *accessor)
 {
     m_fieldMap[memberPointer] = std::make_pair(name, accessor);
     m_columnDefs.emplace_back(
@@ -54,7 +53,7 @@ const StringView &Binding::getColumnName(void *memberPointer) const
     return iter->second.first;
 }
 
-std::shared_ptr<BaseAccessor> Binding::getAccessor(void *memberPointer) const
+const BaseAccessor *Binding::getAccessor(void *memberPointer) const
 {
     auto iter = m_fieldMap.find(memberPointer);
     WCTAssert(iter != m_fieldMap.end());

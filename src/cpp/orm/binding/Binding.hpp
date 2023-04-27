@@ -38,16 +38,14 @@ public:
 
 #pragma mark - Field
 public:
-    const Field& registerField(void* memberPointer,
-                               const UnsafeStringView& name,
-                               std::shared_ptr<BaseAccessor> accessor);
+    const Field&
+    registerField(void* memberPointer, const UnsafeStringView& name, BaseAccessor* accessor);
     const StringView& getColumnName(void* memberPointer) const;
-    std::shared_ptr<BaseAccessor> getAccessor(void* memberPointer) const;
+    const BaseAccessor* getAccessor(void* memberPointer) const;
     const Fields& allFields() const;
 
 private:
-    using FieldMap
-    = std::map<void*, std::pair<StringView, std::shared_ptr<BaseAccessor>>>;
+    using FieldMap = std::map<void*, std::pair<StringView, BaseAccessor*>>;
     FieldMap m_fieldMap;
     Fields m_fields;
 
