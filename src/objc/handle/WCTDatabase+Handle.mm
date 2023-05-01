@@ -34,6 +34,7 @@ WCTScopedHandle::WCTScopedHandle(WCTHandle *handle)
 WCTScopedHandle::~WCTScopedHandle()
 {
     if (m_handle != nil) {
+        [m_handle finalizeStatement];
         [m_handle invalidate];
     }
 }

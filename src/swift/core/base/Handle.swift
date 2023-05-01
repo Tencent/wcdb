@@ -34,10 +34,6 @@ public final class Handle {
         self.cppHandle = cppHandle
     }
 
-    deinit {
-        finalizeAllStatement()
-    }
-
     internal func getError() -> WCDBError {
         let cppError = WCDBHandleGetError(cppHandle)
         return ErrorBridge.getErrorFrom(cppError: cppError)
@@ -113,6 +109,10 @@ extension Handle: HandleRepresentable {
 }
 
 extension Handle: RawStatementmentRepresentable {
+    public func finalizeWhenError() -> Bool {
+        return true
+    }
+
     public func getRawStatement() -> CPPHandleStatement {
         return recycleMainStatement.raw
     }
@@ -133,11 +133,6 @@ extension Handle: RawStatementmentRepresentable {
     /// Check if current statement is prepared
     public var isPrepared: Bool {
         WCDBHandleStatementCheckPrepared(getRawStatement())
-    }
-
-    /// The wrapper of `sqlite3_finalize`
-    public func finalize() {
-        WCDBHandleStatementFinalize(getRawStatement())
     }
 }
 

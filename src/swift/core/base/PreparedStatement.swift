@@ -26,19 +26,19 @@ public final class PreparedStatement {
     internal init(with stmt: CPPHandleStatement) {
         self.recyclableStmt = ObjectBridge.createRecyclableCPPObject(stmt)
     }
-
-    deinit {
-        WCDBHandleStatementFinalize(getRawStatement())
-    }
 }
 
 public protocol RawStatementmentRepresentable {
     func getRawStatement() -> CPPHandleStatement
+    func finalizeWhenError() -> Bool
 }
 
 extension PreparedStatement: RawStatementmentRepresentable {
     public func getRawStatement() -> CPPHandleStatement {
         return self.recyclableStmt.raw
+    }
+    public func finalizeWhenError() -> Bool {
+        return false
     }
 }
 

@@ -107,7 +107,6 @@
 
 - (void)invalidate
 {
-    [self finalizeAllStatements];
     _database = nil;
     _handle = nullptr;
     _handleHolder = nullptr;
