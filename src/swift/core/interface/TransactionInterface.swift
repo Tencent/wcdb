@@ -93,8 +93,8 @@ public protocol TransactionInterface {
     /// - Throws: `Error`
     func run(nestedTransaction: @escaping ControlableTransactionClosure) throws
 
-    typealias PauseableTransactionClosure = (Handle, inout Bool, Bool) throws -> Void
-    /// Run a pauseable transaction in block.
+    typealias PausableTransactionClosure = (Handle, inout Bool, Bool) throws -> Void
+    /// Run a pausable transaction in block.
     ///
     /// Firstly, WCDB will begin a transaction and call the block.
     /// After the block is finished, WCDB will check whether the main thread is suspended due to the current transaction.
@@ -102,7 +102,7 @@ public protocol TransactionInterface {
     /// Once database operations in main thread are finished, WCDB will rebegin a new transaction in the current thread and call the block.
     /// This process will be repeated until the second parameter of the block is specified as true, or some error occurs during the transaction.
     ///
-    ///     try self.database.run(pauseableTransaction: { (handle, stop, isNewTransaction) in
+    ///     try self.database.run(pausableTransaction: { (handle, stop, isNewTransaction) in
     ///         if (isNewTraction) {
     ///             // Do some initialization for new transaction.
     ///         }
@@ -114,9 +114,9 @@ public protocol TransactionInterface {
     ///         }
     ///     }
     ///
-    /// - Parameter pauseableTransaction: Operation inside transaction for one loop.
+    /// - Parameter pausableTransaction: Operation inside transaction for one loop.
     /// - Throws: `Error`
-    func run(pauseableTransaction: @escaping PauseableTransactionClosure) throws
+    func run(pausableTransaction: @escaping PausableTransactionClosure) throws
 }
 
 extension TransactionInterface where Self: HandleRepresentable {
@@ -228,14 +228,14 @@ extension TransactionInterface where Self: HandleRepresentable {
         }
     }
 
-    public func run(pauseableTransaction: @escaping PauseableTransactionClosure) throws {
+    public func run(pausableTransaction: @escaping PausableTransactionClosure) throws {
         let handle = try getHandle()
         let transactionBlock: @convention(block) (CPPHandle, UnsafeMutablePointer<Bool>, Bool) -> Bool = {
             _, cStop, isNewTransaction in
             var ret = true
             var stop = false
             do {
-                try pauseableTransaction(handle, &stop, isNewTransaction)
+                try pausableTransaction(handle, &stop, isNewTransaction)
                 cStop.pointee = stop
             } catch {
                 ret = false
@@ -243,7 +243,7 @@ extension TransactionInterface where Self: HandleRepresentable {
             return ret
         }
         let transactionBlockImp = imp_implementationWithBlock(transactionBlock)
-        if !WCDBHandleRunPauseableTransaction(handle.cppHandle, transactionBlockImp) {
+        if !WCDBHandleRunPausableTransaction(handle.cppHandle, transactionBlockImp) {
             throw handle.getError()
         }
     }

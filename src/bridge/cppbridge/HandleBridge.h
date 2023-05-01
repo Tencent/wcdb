@@ -56,6 +56,6 @@ void WCDBHandleRollbackNestedTransaction(CPPHandle handle);
 
 bool WCDBHandleRunTransaction(CPPHandle handle, SwiftClosure* _Nullable transaction);
 bool WCDBHandleRunNestedTransaction(CPPHandle handle, SwiftClosure* _Nullable nestedTransaction);
-bool WCDBHandleRunPauseableTransaction(CPPHandle handle, SwiftClosure* _Nullable pauseableTransaction);
+bool WCDBHandleRunPausableTransaction(CPPHandle handle, SwiftClosure* _Nullable pausableTransaction);
 
 WCDB_EXTERN_C_END

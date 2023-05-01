@@ -473,7 +473,7 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertEqual(optionalObject!.variable1, preInsertedObjects[0].variable1)
     }
 
-    func testPauseableTransaction() {
+    func testPausableTransaction() {
         XCTAssertNoThrow(try database.drop(table: TestObject.name))
         XCTAssertNoThrow(try database.create(table: TestObject.name, of: TestObject.self))
         var identifier = 0
@@ -483,7 +483,7 @@ class AdvanceTests: CRUDTestCase {
         queue.async(group: group, execute: {
             var i = 0
             var write1Begin = Date()
-            let transaction: TransactionInterface.PauseableTransactionClosure = { handle, stop, isNewTransaction in
+            let transaction: TransactionInterface.PausableTransactionClosure = { handle, stop, isNewTransaction in
                 XCTAssertTrue(handle.isInTransaction)
                 if isNewTransaction {
                     pauseTimes += 1
@@ -507,7 +507,7 @@ class AdvanceTests: CRUDTestCase {
                 write1Begin = Date()
             }
             do {
-                return try self.database.run(pauseableTransaction: transaction)
+                return try self.database.run(pausableTransaction: transaction)
             } catch let error as WCDBError {
                 XCTFail(error.description)
             } catch {
