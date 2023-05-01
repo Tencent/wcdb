@@ -111,6 +111,9 @@ extension StatementInterfaceForObjc where Self: RawStatementmentRepresentable {
         let rawStatment = getRawStatement()
         if !WCDBHandleStatementStep(rawStatment) {
             let cppError = WCDBHandleStatementGetError(rawStatment)
+            if finalizeWhenError() {
+                WCDBHandleStatementFinalize(getRawStatement())
+            }
             throw ErrorBridge.getErrorFrom(cppError: cppError)
         }
         while !WCDBHandleStatementIsDone(rawStatment) {

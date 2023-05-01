@@ -69,13 +69,17 @@ extension StatementSelectInterface where Self: HandleRepresentable {
         guard try handle.step() else {
             return nil
         }
-        return handle.value(atIndex: 0)
+        let result = handle.value(atIndex: 0)
+        handle.finalize()
+        return result
     }
 
     public func getColumn(from statement: Statement) throws -> OneColumnValue {
         let handle = try getHandle()
         try handle.prepare(statement)
-        return try handle.oneColumnValue(atIndex: 0)
+        let result = try handle.oneColumnValue(atIndex: 0)
+        handle.finalize()
+        return result
     }
 
     public func getRow(from statement: Statement) throws -> OneRowValue? {
@@ -84,12 +88,16 @@ extension StatementSelectInterface where Self: HandleRepresentable {
         guard try handle.step() else {
             return nil
         }
-        return handle.oneRowValue()
+        let result = handle.oneRowValue()
+        handle.finalize()
+        return result
     }
 
     public func getRows(from statement: Statement) throws -> MultiRowsValue {
         let handle = try getHandle()
         try handle.prepare(statement)
-        return try handle.multiRowsValue()
+        let result = try handle.multiRowsValue()
+        handle.finalize()
+        return result
     }
 }
