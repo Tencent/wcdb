@@ -32,10 +32,11 @@ CPPStatementExplain WCDBStatementExplainCreate(void)
     return WCDBCreateCPPBridgedObject(CPPStatementExplain, WCDB::StatementExplain);
 }
 
-void WCDBStatementExplain(CPPStatementExplain explain, CPPStatement statement, bool queryPlan)
+void WCDBStatementExplain(CPPStatementExplain explain, CPPObject* statement, bool queryPlan)
 {
     WCDBGetObjectOrReturn(explain, WCDB::StatementExplain, cppExplain);
-    WCDBGetObjectOrReturn(statement, WCDB::Statement, cppStatement);
+    WCDB::Statement* cppStatement
+    = (WCDB::Statement*) WCDB::ObjectBridge::extractOriginalCPPObject(statement);
     cppExplain->syntax().queryPlan = queryPlan;
     cppExplain->syntax().stmt = cppStatement->syntax();
 }

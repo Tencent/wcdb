@@ -34,13 +34,6 @@ const char* _Nonnull WCDBWinqGetDescription(CPPObject* statement)
     return innerValue->getDescription().data();
 }
 
-CPPStatement WCDBGetUnmangedStatement(CPPObject* _Nonnull statement)
-{
-    WCDB::Statement* cppStatement
-    = (WCDB::Statement*) WCDB::ObjectBridge::extractOriginalCPPObject(statement);
-    return WCDBCreateUnmanagedCPPObject(CPPStatement, cppStatement);
-}
-
 namespace WCDB {
 
 Order WinqBridge::changeOrder(enum WCDBSyntaxOrder order)
