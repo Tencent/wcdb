@@ -123,7 +123,7 @@ public:
     bool commitOrRollbackTransaction();
     void rollbackTransaction();
     bool runTransaction(const TransactionCallback &transaction);
-    bool runPauseableTransactionWithOneLoop(const TransactionCallbackForOneLoop &transaction);
+    bool runPausableTransactionWithOneLoop(const TransactionCallbackForOneLoop &transaction);
 
     bool beginNestedTransaction();
     bool commitOrRollbackNestedTransaction();

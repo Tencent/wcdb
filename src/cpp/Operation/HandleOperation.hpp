@@ -179,11 +179,11 @@ public:
     typedef std::function<bool(Handle &, bool &, bool)> TransactionCallbackForOneLoop;
 
     /**
-     @brief Run a pauseable transaction in block.
+     @brief Run a pausable transaction in block.
      Firstly, WCDB will begin a transaction and call the block. After the block is finished, WCDB will check whether the main thread is suspended due to the current transaction. If not, it will call the block again; if it is, it will temporarily commit the current transaction. Once database operations in main thread are finished, WCDB will rebegin a new transaction in the current thread and call the block. This process will be repeated until the second parameter of the block is specified as YES, or some error occurs during the transaction.
-     You can use pauseable transaction to do some long term database operations, such as data cleaning or data migration, and avoid to block the main thread.
+     You can use pausable transaction to do some long term database operations, such as data cleaning or data migration, and avoid to block the main thread.
      
-         database.runPauseableTransactionWithOneLoop([&](Handle& handle, bool &stop, bool isNewTraction) {
+         database.runPausableTransactionWithOneLoop([&](Handle& handle, bool &stop, bool isNewTraction) {
              if(isNewTraction) {
                  // Do some initialization for new transaction.
              }
@@ -203,7 +203,7 @@ public:
      @see   `TransactionCallbackForOneLoop`
      @return True only if all transactions are committed.
      */
-    bool runPauseableTransactionWithOneLoop(TransactionCallbackForOneLoop inTransaction);
+    bool runPausableTransactionWithOneLoop(TransactionCallbackForOneLoop inTransaction);
 
     /**
      @brief Run a transaction in block.

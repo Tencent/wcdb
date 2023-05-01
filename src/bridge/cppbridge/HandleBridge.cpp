@@ -29,7 +29,7 @@
 
 WCDBDefineOneArgumentSwiftClosureBridgedType(WCDBTransaction, bool, CPPHandle)
 
-WCDBDefineMultiArgumentSwiftClosureBridgedType(WCDBPauseableTransaction, bool, CPPHandle, bool*, bool)
+WCDBDefineMultiArgumentSwiftClosureBridgedType(WCDBPausableTransaction, bool, CPPHandle, bool*, bool)
 
 CPPError WCDBHandleGetError(CPPHandle handle)
 {
@@ -175,13 +175,13 @@ bool WCDBHandleRunNestedTransaction(CPPHandle handle, SwiftClosure* _Nullable ne
         return false;
     }
 }
-bool WCDBHandleRunPauseableTransaction(CPPHandle handle, SwiftClosure* _Nullable pauseableTransaction)
+bool WCDBHandleRunPausableTransaction(CPPHandle handle, SwiftClosure* _Nullable pausableTransaction)
 {
-    WCDBPauseableTransaction bridgeTransaction
-    = WCDBCreateSwiftBridgedClosure(WCDBPauseableTransaction, pauseableTransaction);
+    WCDBPausableTransaction bridgeTransaction
+    = WCDBCreateSwiftBridgedClosure(WCDBPausableTransaction, pausableTransaction);
     WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
     if (WCDBGetSwiftClosure(bridgeTransaction) != nullptr) {
-        return cppHandle->runPauseableTransactionWithOneLoop(
+        return cppHandle->runPausableTransactionWithOneLoop(
         [bridgeTransaction](WCDB::InnerHandle* innerHandle, bool& stop, bool isNewTransaction) {
             CPPHandle bridgeHandle = WCDBCreateUnmanagedCPPObject(CPPHandle, innerHandle);
             return WCDBSwiftClosureCallWithMultiArgument(
