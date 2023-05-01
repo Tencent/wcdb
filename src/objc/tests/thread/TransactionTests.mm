@@ -658,7 +658,7 @@
     TestCaseAssertFalse(succeed);
 }
 
-- (void)test_pauseable_transaction
+- (void)test_pausable_transaction
 {
     TestCaseAssertTrue([self dropTable]);
     TestCaseAssertTrue([self createTable]);
@@ -667,7 +667,7 @@
     [self.dispatch async:^{
         __block int i = 0;
         __block NSDate* write1Begin = [NSDate date];
-        BOOL ret = [self.database runPauseableTransactionWithOneLoop:^BOOL(WCTHandle* _Nonnull handle, BOOL* _Nonnull stop, BOOL isNewTransaction) {
+        BOOL ret = [self.database runPausableTransactionWithOneLoop:^BOOL(WCTHandle* _Nonnull handle, BOOL* _Nonnull stop, BOOL isNewTransaction) {
             TestCaseAssertTrue(handle.isInTransaction);
             if (isNewTransaction) pauseTimes++;
 
@@ -707,7 +707,7 @@
     TestCaseAssertTrue(pauseTimes > 1);
 }
 
-- (void)test_pauseable_transaction2
+- (void)test_pausable_transaction2
 {
     TestCaseAssertTrue([self dropTable]);
     TestCaseAssertTrue([self createTable]);
@@ -717,7 +717,7 @@
         __block int i = 0;
         __block NSDate* write1Begin = [NSDate date];
         WCTHandle* handle = self.database.getHandle;
-        [handle runPauseableTransactionWithOneLoop:^BOOL(WCTHandle* _Nonnull, BOOL* _Nonnull stop, BOOL isNewTransaction) {
+        [handle runPausableTransactionWithOneLoop:^BOOL(WCTHandle* _Nonnull, BOOL* _Nonnull stop, BOOL isNewTransaction) {
             TestCaseAssertTrue(handle.isInTransaction);
             if (isNewTransaction) pauseTime++;
             double beginInterval = [[NSDate date] timeIntervalSinceDate:write1Begin];
@@ -755,7 +755,7 @@
     TestCaseAssertTrue(pauseTime > 1);
 }
 
-- (void)test_pauseable_transaction3
+- (void)test_pausable_transaction3
 {
     TestCaseAssertTrue([self dropTable]);
     TestCaseAssertTrue([self createTable]);
@@ -763,7 +763,7 @@
     for (int loopCount = 0; loopCount < 5; loopCount++) {
         [self.dispatch async:^{
             __block int i = 0;
-            BOOL ret = [self.database runPauseableTransactionWithOneLoop:^BOOL(WCTHandle* _Nonnull handle, BOOL* _Nonnull stop, BOOL) {
+            BOOL ret = [self.database runPausableTransactionWithOneLoop:^BOOL(WCTHandle* _Nonnull handle, BOOL* _Nonnull stop, BOOL) {
                 TestCaseAssertTrue(handle.isInTransaction);
                 WCTProperties properties = [self.tableClass allProperties];
                 WCTPreparedStatement* handleStament = [handle getOrCreatePreparedStatement:WCDB::StatementInsert().insertIntoTable(self.tableName).columns(properties).values(WCDB::BindParameter::bindParameters(properties.size()))];

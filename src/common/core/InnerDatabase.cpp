@@ -411,12 +411,12 @@ bool InnerDatabase::runTransaction(const TransactionCallback &transaction)
     return true;
 }
 
-bool InnerDatabase::runPauseableTransactionWithOneLoop(const TransactionCallbackForOneLoop &transaction)
+bool InnerDatabase::runPausableTransactionWithOneLoop(const TransactionCallbackForOneLoop &transaction)
 {
     // get threaded handle
     RecyclableHandle handle = getHandle();
     if (handle == nullptr) return false;
-    if (!handle->runPauseableTransactionWithOneLoop(transaction)) {
+    if (!handle->runPausableTransactionWithOneLoop(transaction)) {
         setThreadedError(handle->getError());
         return false;
     }

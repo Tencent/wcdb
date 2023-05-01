@@ -85,7 +85,7 @@
     return succeed;
 }
 
-- (BOOL)runPauseableTransactionWithOneLoop:(WCDB_NO_ESCAPE WCTTransactionBlockForOneLoop)inTransaction
+- (BOOL)runPausableTransactionWithOneLoop:(WCDB_NO_ESCAPE WCTTransactionBlockForOneLoop)inTransaction
 {
     WCTRemedialAssert(inTransaction, "Transaction block can't be null.", return NO;);
     WCDB::InnerHandle *handle = [self getOrGenerateHandle];
@@ -93,7 +93,7 @@
         return NO;
     }
     BOOL ocStop = NO;
-    bool ret = handle->runPauseableTransactionWithOneLoop([&inTransaction, self, ocStop](WCDB::InnerHandle *, bool &stop, bool isNewTransaction) mutable -> bool {
+    bool ret = handle->runPausableTransactionWithOneLoop([&inTransaction, self, ocStop](WCDB::InnerHandle *, bool &stop, bool isNewTransaction) mutable -> bool {
         @autoreleasepool {
             BOOL result = inTransaction(self, &ocStop, isNewTransaction);
             stop = ocStop;

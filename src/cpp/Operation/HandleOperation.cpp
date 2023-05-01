@@ -346,14 +346,14 @@ bool HandleOperation::lazyRunTransaction(TransactionCallback inTransaction)
     }
 }
 
-bool HandleOperation::runPauseableTransactionWithOneLoop(TransactionCallbackForOneLoop inTransaction)
+bool HandleOperation::runPausableTransactionWithOneLoop(TransactionCallbackForOneLoop inTransaction)
 {
     Handle newHandle = Handle(getDatabaseHolder());
     auto handleHolder = newHandle.getHandleHolder();
     if (handleHolder == nullptr) {
         return false;
     }
-    bool succeed = handleHolder->runPauseableTransactionWithOneLoop(
+    bool succeed = handleHolder->runPausableTransactionWithOneLoop(
     [&](InnerHandle *, bool &stop, bool isNewTransaction) {
         return inTransaction(newHandle, stop, isNewTransaction);
     });

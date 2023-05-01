@@ -61,12 +61,12 @@
     });
 }
 
-- (BOOL)runPauseableTransactionWithOneLoop:(WCDB_NO_ESCAPE WCTTransactionBlockForOneLoop)inTransaction
+- (BOOL)runPausableTransactionWithOneLoop:(WCDB_NO_ESCAPE WCTTransactionBlockForOneLoop)inTransaction
 {
     WCTRemedialAssert(inTransaction, "Transaction block can't be null.", return NO;);
     WCTHandle *transactionHandle = nil;
     BOOL ocStop = NO;
-    bool ret = _database->runPauseableTransactionWithOneLoop([&inTransaction, self, transactionHandle, ocStop](WCDB::InnerHandle *handle, bool &stop, bool isNewTransaction) mutable -> bool {
+    bool ret = _database->runPausableTransactionWithOneLoop([&inTransaction, self, transactionHandle, ocStop](WCDB::InnerHandle *handle, bool &stop, bool isNewTransaction) mutable -> bool {
         @autoreleasepool {
             if (!transactionHandle) {
                 transactionHandle = [[WCTHandle alloc] initWithDatabase:self andUnsafeHandle:handle];

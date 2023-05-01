@@ -411,7 +411,7 @@ bool InnerHandle::runTransaction(const TransactionCallback &transaction)
     return false;
 }
 
-bool InnerHandle::runPauseableTransactionWithOneLoop(const TransactionCallbackForOneLoop &transaction)
+bool InnerHandle::runPausableTransactionWithOneLoop(const TransactionCallbackForOneLoop &transaction)
 {
     bool stop = false;
     bool needBegin = true;
