@@ -38,9 +38,9 @@ bool WCDBHandleCheckValid(CPPHandle handle);
 
 CPPHandleStatement WCDBHandleGetMainStatement(CPPHandle handle);
 CPPHandleStatement
-WCDBHandleGetOrCreatePreparedStatement(CPPHandle handle, CPPStatement statement);
+WCDBHandleGetOrCreatePreparedStatement(CPPHandle handle, CPPObject* _Nonnull statement);
 void WCDBHandleFinalizeStatements(CPPHandle handle);
-bool WCDBHandleExecute(CPPHandle handle, CPPStatement statement);
+bool WCDBHandleExecute(CPPHandle handle, CPPObject* _Nonnull statement);
 
 int WCDBHandleGetChange(CPPHandle handle);
 int WCDBHandleGetTotalChange(CPPHandle handle);

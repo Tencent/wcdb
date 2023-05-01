@@ -28,7 +28,7 @@ public final class StatementExplain: Identifier<CPPStatementExplain>, Statement 
     @discardableResult
     public func explain(_ statement: Statement) -> StatementExplain {
         withExtendedLifetime(statement) {
-            WCDBStatementExplain(cppObj, $0.unmanagedCPPStatement, false)
+            WCDBStatementExplain(cppObj, $0.rawCPPObj, false)
         }
         return self
     }
@@ -36,7 +36,7 @@ public final class StatementExplain: Identifier<CPPStatementExplain>, Statement 
     @discardableResult
     public func explainQueryPlan(_ statement: Statement) -> StatementExplain {
         withExtendedLifetime(statement) {
-            WCDBStatementExplain(cppObj, $0.unmanagedCPPStatement, true)
+            WCDBStatementExplain(cppObj, $0.rawCPPObj, true)
         }
         return self
     }

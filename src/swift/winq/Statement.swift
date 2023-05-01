@@ -22,11 +22,5 @@ import Foundation
 import WCDB_Private
 
 public protocol Statement: AnyObject, CustomStringConvertible {
-    var unmanagedCPPStatement: CPPStatement { get }
-}
-
-public extension Statement where Self: RawCPPObjectRepresentable {
-    var unmanagedCPPStatement: CPPStatement {
-        WCDBGetUnmangedStatement(rawCPPObj)
-    }
+    var rawCPPObj: UnsafeMutablePointer<CPPObject> { get }
 }

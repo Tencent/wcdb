@@ -58,11 +58,11 @@ CPPHandleStatement WCDBHandleGetMainStatement(CPPHandle handle)
 }
 
 CPPHandleStatement
-WCDBHandleGetOrCreatePreparedStatement(CPPHandle handle, CPPStatement statement)
+WCDBHandleGetOrCreatePreparedStatement(CPPHandle handle, CPPObject* statement)
 {
     WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, CPPHandleStatement());
-    WCDBGetObjectOrReturnValue(
-    statement, WCDB::Statement, cppStatement, CPPHandleStatement());
+    WCDB::Statement* cppStatement
+    = (WCDB::Statement*) WCDB::ObjectBridge::extractOriginalCPPObject(statement);
     WCDB::HandleStatement* stmt = cppHandle->getOrCreatePreparedStatement(*cppStatement);
     return WCDBCreateUnmanagedCPPObject(CPPHandleStatement, stmt);
 }
@@ -73,10 +73,11 @@ void WCDBHandleFinalizeStatements(CPPHandle handle)
     cppHandle->finalizeStatements();
 }
 
-bool WCDBHandleExecute(CPPHandle handle, CPPStatement statement)
+bool WCDBHandleExecute(CPPHandle handle, CPPObject* statement)
 {
     WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
-    WCDBGetObjectOrReturnValue(statement, WCDB::Statement, cppStatement, false);
+    WCDB::Statement* cppStatement
+    = (WCDB::Statement*) WCDB::ObjectBridge::extractOriginalCPPObject(statement);
     return cppHandle->execute(*cppStatement);
 }
 
