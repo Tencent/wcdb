@@ -104,7 +104,6 @@ Recyclable<InnerDatabase*> Handle::getDatabaseHolder()
 
 void Handle::invalidate()
 {
-    finalizeAllStatement();
     m_innerHandle = nullptr;
     m_handleHolder = nullptr;
 }

@@ -32,6 +32,7 @@ class AdvanceTests: CRUDTestCase {
         let handle = WCDBAssertNoThrowReturned(try database.getHandle())!
 
         WCDBAssertNoThrowReturned(try handle.prepare(statement))
+        handle.finalize()
     }
 
     func testHandleStatementRead() {
@@ -202,6 +203,7 @@ class AdvanceTests: CRUDTestCase {
             let v6: Value = handle.value(atIndex: 5)
             XCTAssertEqual(v6.type, .null)
         }
+        handle.finalize()
     }
 
     func testFundamentalValue() {
@@ -273,6 +275,7 @@ class AdvanceTests: CRUDTestCase {
         handle.bind(expectedVariable2, toIndex: 2)
         XCTAssertNoThrow(try handle.step())
         XCTAssertNoThrow(try handle.step())
+        handle.finalize()
     }
 
     func testExecFailed() {

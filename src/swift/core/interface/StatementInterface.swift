@@ -26,6 +26,8 @@ import Foundation
 import WCDB_Private
 
 public protocol StatementInterface: AnyObject {
+    /// The wrapper of `sqlite3_finalize`
+    func finalize()
 
     /// The wrapper of `sqlite3_step`
     ///
@@ -198,11 +200,18 @@ public protocol StatementInterface: AnyObject {
 
 extension StatementInterface where Self: RawStatementmentRepresentable {
 
+    public func finalize() {
+        WCDBHandleStatementFinalize(getRawStatement())
+    }
+
     @discardableResult
     public func step() throws -> Bool {
         let rawStatment = getRawStatement()
         if !WCDBHandleStatementStep(rawStatment) {
             let cppError = WCDBHandleStatementGetError(rawStatment)
+            if finalizeWhenError() {
+                finalize()
+            }
             throw ErrorBridge.getErrorFrom(cppError: cppError)
         }
         return !WCDBHandleStatementIsDone(rawStatment)

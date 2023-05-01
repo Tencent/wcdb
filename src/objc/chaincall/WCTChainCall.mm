@@ -76,9 +76,10 @@
     case WCTChainCallDisposeActionFinalizeStatement:
         [_handle finalizeStatement];
         break;
-    case WCTChainCallDisposeActionInvalidate:
+    case WCTChainCallDisposeActionInvalidate: {
+        [_handle finalizeStatement];
         [_handle invalidate];
-        break;
+    } break;
     }
 }
 
