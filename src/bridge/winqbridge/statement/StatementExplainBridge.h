@@ -29,6 +29,6 @@
 WCDB_EXTERN_C_BEGIN
 
 CPPStatementExplain WCDBStatementExplainCreate(void);
-void WCDBStatementExplain(CPPStatementExplain explain, CPPStatement statement, bool queryPlan);
+void WCDBStatementExplain(CPPStatementExplain explain, CPPObject* statement, bool queryPlan);
 
 WCDB_EXTERN_C_END

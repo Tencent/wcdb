@@ -41,7 +41,8 @@ enum WCDBColumnValueType {
 
 CPPError WCDBHandleStatementGetError(CPPHandleStatement handleStatement);
 
-bool WCDBHandleStatementPrepare(CPPHandleStatement handleStatement, CPPStatement statement);
+bool WCDBHandleStatementPrepare(CPPHandleStatement handleStatement,
+                                CPPObject* _Nonnull statement);
 bool WCDBHandleStatementCheckPrepared(CPPHandleStatement handleStatement);
 bool WCDBHandleStatementStep(CPPHandleStatement handleStatement);
 void WCDBHandleStatementReset(CPPHandleStatement handleStatement);

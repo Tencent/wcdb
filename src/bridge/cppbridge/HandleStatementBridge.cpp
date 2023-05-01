@@ -40,11 +40,12 @@ CPPError WCDBHandleStatementGetError(CPPHandleStatement handleStatement)
     return WCDBCreateUnmanagedCPPObject(CPPError, &error);
 }
 
-bool WCDBHandleStatementPrepare(CPPHandleStatement handleStatement, CPPStatement statement)
+bool WCDBHandleStatementPrepare(CPPHandleStatement handleStatement, CPPObject* statement)
 {
     WCDBGetObjectOrReturnValue(
     handleStatement, WCDB::HandleStatement, cppHandleStatement, false);
-    WCDBGetObjectOrReturnValue(statement, WCDB::Statement, cppStatement, true);
+    WCDB::Statement* cppStatement
+    = (WCDB::Statement*) WCDB::ObjectBridge::extractOriginalCPPObject(statement);
     return cppHandleStatement->prepare(*cppStatement);
 }
 

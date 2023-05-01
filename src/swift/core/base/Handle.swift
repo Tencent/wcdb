@@ -23,6 +23,10 @@ import WCDB_Private
 
 public final class Handle {
     private let recyclableHandle: RecyclableCPPHandle
+    private lazy var recycleMainStatement = {
+        ObjectBridge.createRecyclableCPPObject(WCDBHandleGetMainStatement(self.cppHandle))
+    }()
+
     internal let cppHandle: CPPHandle
 
     internal init(withCPPHandle cppHandle: CPPHandle) {
@@ -45,7 +49,7 @@ public final class Handle {
     /// - Throws: `Error`
     public func exec(_ statement: Statement) throws {
         let executed = withExtendedLifetime(statement) {
-            WCDBHandleExecute(cppHandle, $0.unmanagedCPPStatement)
+            WCDBHandleExecute(cppHandle, $0.rawCPPObj)
         }
         if !executed {
             let cppError = WCDBHandleGetError(cppHandle)
@@ -68,7 +72,7 @@ public final class Handle {
     /// - Parameter statement: the statement to prepare.
     /// - Throws: `Error`
     public func getOrCreatePreparedStatement(with statement: Statement) throws -> PreparedStatement {
-        let cppHandleStatement = withExtendedLifetime(statement) { WCDBHandleGetOrCreatePreparedStatement(cppHandle, $0.unmanagedCPPStatement)
+        let cppHandleStatement = withExtendedLifetime(statement) { WCDBHandleGetOrCreatePreparedStatement(cppHandle, $0.rawCPPObj)
         }
         let preparedStatement = PreparedStatement(with: cppHandleStatement)
         if !WCDBHandleStatementCheckPrepared(cppHandleStatement) {
@@ -110,7 +114,7 @@ extension Handle: HandleRepresentable {
 
 extension Handle: RawStatementmentRepresentable {
     public func getRawStatement() -> CPPHandleStatement {
-        return WCDBHandleGetMainStatement(cppHandle)
+        return recycleMainStatement.raw
     }
 
     /// The wrapper of `sqlite3_prepare`
@@ -118,7 +122,7 @@ extension Handle: RawStatementmentRepresentable {
     /// - Throws: `Error`
     public func prepare(_ statement: Statement) throws {
         let succeed = withExtendedLifetime(statement) {
-            WCDBHandleStatementPrepare(getRawStatement(), $0.unmanagedCPPStatement)
+            WCDBHandleStatementPrepare(getRawStatement(), $0.rawCPPObj)
         }
         if !succeed {
             let cppError = WCDBHandleStatementGetError(getRawStatement())
