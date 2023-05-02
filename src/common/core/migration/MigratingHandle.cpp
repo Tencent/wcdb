@@ -185,7 +185,7 @@ bool MigratingHandle::executeAttach(const StatementAttach& attach)
 Optional<std::pair<bool, std::set<StringView>>>
 MigratingHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
 {
-    auto exists = tableExists(Schema(), userInfo.getTable());
+    auto exists = tableExists(Schema::main(), userInfo.getTable());
     if (!exists.succeed()) {
         return NullOpt;
     }
@@ -193,7 +193,7 @@ MigratingHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
     bool integerPrimary = false;
     std::set<StringView> names;
     if (exists.value()) {
-        auto optionalMetas = getTableMeta(Schema(), userInfo.getTable());
+        auto optionalMetas = getTableMeta(Schema::main(), userInfo.getTable());
         if (!optionalMetas.succeed()) {
             return NullOpt;
         }
