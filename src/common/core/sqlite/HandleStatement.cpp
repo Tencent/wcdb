@@ -294,10 +294,10 @@ bool HandleStatement::tryExtractColumnInfo(const Statement &statement,
             size_t prefixLength = strlen(MigrationInfo::getUnionedViewPrefix());
             curTableName = StringView(curTableName.data() + prefixLength,
                                       curTableName.length() - prefixLength);
-            curSchema = Schema();
+            curSchema = Schema::main();
         }
         if (curSchema.name.hasPrefix(MigrationInfo::getSchemaPrefix())) {
-            curSchema = Schema();
+            curSchema = Schema::main();
         }
 
         if (!tableSpecified) {

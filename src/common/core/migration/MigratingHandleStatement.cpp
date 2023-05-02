@@ -186,7 +186,7 @@ Optional<std::list<Statement>> MigratingHandleStatement::process(const Statement
                 Syntax::UpdateSTMT& stmt
                 = static_cast<Syntax::UpdateSTMT&>(statements.back().syntax());
                 stmt.table.table = migratedTableName;
-                stmt.table.schema = Schema();
+                stmt.table.schema = Schema::main();
             }
         } break;
         case Syntax::Identifier::Type::DeleteSTMT: {
@@ -209,7 +209,7 @@ Optional<std::list<Statement>> MigratingHandleStatement::process(const Statement
                 Syntax::DeleteSTMT& stmt
                 = static_cast<Syntax::DeleteSTMT&>(statements.back().syntax());
                 stmt.table.table = migratedTableName;
-                stmt.table.schema = Schema();
+                stmt.table.schema = Schema::main();
             }
         } break;
         case Syntax::Identifier::Type::DropTableSTMT: {
@@ -220,6 +220,9 @@ Optional<std::list<Statement>> MigratingHandleStatement::process(const Statement
             statements.push_back(originStatement);
             if (!migratedSTMT.isTargetingSameTable(falledBackSTMT)) {
                 // Don't drop source table. Instead, delete all contents from source table and wait the stepper do the dropping work.
+                Syntax::DropTableSTMT& stmt
+                = static_cast<Syntax::DropTableSTMT&>(statements.back().syntax());
+                stmt.schema = Schema::main();
                 const MigrationInfo* info
                 = migratingHandle->getBoundInfo(migratedSTMT.table);
                 WCTAssert(info != nullptr);
@@ -234,6 +237,9 @@ Optional<std::list<Statement>> MigratingHandleStatement::process(const Statement
             = static_cast<const Syntax::AlterTableSTMT&>(falledBackStatement.syntax());
             if (!migratedSTMT.isTargetingSameTable(falledBackSTMT)) {
                 statements.push_back(originStatement);
+                Syntax::AlterTableSTMT& stmt
+                = static_cast<Syntax::AlterTableSTMT&>(statements.back().syntax());
+                stmt.schema = Schema::main();
             }
         } break;
         default:

@@ -277,7 +277,7 @@ Optional<bool> AbstractHandle::ft3TokenizerExists(const UnsafeStringView &tokeni
 
 Optional<bool> AbstractHandle::tableExists(const UnsafeStringView &table)
 {
-    return tableExists(Schema(), table);
+    return tableExists(Schema::main(), table);
 }
 
 Optional<bool>
@@ -325,7 +325,7 @@ bool AbstractHandle::addColumn(const Schema &schema,
 
 Optional<std::set<StringView>> AbstractHandle::getColumns(const UnsafeStringView &table)
 {
-    return getColumns(Schema(), table);
+    return getColumns(Schema::main(), table);
 }
 
 Optional<std::set<StringView>>
