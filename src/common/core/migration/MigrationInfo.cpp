@@ -111,7 +111,7 @@ Schema MigrationUserInfo::getSchemaForSourceDatabase() const
     if (isCrossDatabase()) {
         return getSchemaForDatabase(getSourceDatabase());
     }
-    return Schema();
+    return Schema::main();
 }
 
 #pragma mark - MigrationInfo
@@ -130,7 +130,7 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
         m_statementForAttachingSchema
         = StatementAttach().attach(getSourceDatabase()).as(m_schemaForSourceDatabase);
     } else {
-        m_schemaForSourceDatabase = Schema();
+        m_schemaForSourceDatabase = Schema::main();
     }
 
     Column rowid = Column::rowid();
@@ -300,7 +300,7 @@ StatementInsert MigrationInfo::getStatementForMigrating(const Syntax::InsertSTMT
     StatementInsert statement(stmt);
 
     auto& syntax = statement.syntax();
-    syntax.schema = Schema();
+    syntax.schema = Schema::main();
     syntax.table = getTable();
     WCTAssert(!syntax.isMultiWrite());
 

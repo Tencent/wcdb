@@ -51,7 +51,7 @@
             if (self.isCrossDatabaseMigration) {
                 _schemaName = [NSString stringWithFormat:@"wcdb_migration_%u.", WCDB::UnsafeStringView(self.sourcePath).hash()];
             } else {
-                _schemaName = @"";
+                _schemaName = @"main.";
             }
         }
         return _schemaName;
@@ -69,9 +69,9 @@
     [sqls addObject:[NSString stringWithFormat:@"INSERT INTO %@%@(identifier, content) VALUES(?1, ?2)", self.schemaName, self.sourceTable]];
     [sqls addObject:[NSString stringWithFormat:@"DELETE FROM %@%@ WHERE rowid == ?1", self.schemaName, self.sourceTable]];
     if (self.mode == MigrationObjectORMModeNormal || self.mode == MigrationObjectORMModeMissOneColumn || self.mode == MigrationObjectORMModeMissTwoColumn) {
-        [sqls addObject:@"INSERT INTO testTable(rowid, identifier, content) VALUES((SELECT max(rowid) + 1 FROM temp.wcdb_union_testTable), ?1, ?2)"];
+        [sqls addObject:@"INSERT INTO main.testTable(rowid, identifier, content) VALUES((SELECT max(rowid) + 1 FROM temp.wcdb_union_testTable), ?1, ?2)"];
     } else {
-        [sqls addObject:[NSString stringWithFormat:@"INSERT INTO testTable(rowid, identifier, content) VALUES(?%d, ?1, ?2)", SQLITE_MAX_VARIABLE_NUMBER]];
+        [sqls addObject:[NSString stringWithFormat:@"INSERT INTO main.testTable(rowid, identifier, content) VALUES(?%d, ?1, ?2)", SQLITE_MAX_VARIABLE_NUMBER]];
     }
     [sqls addObject:@"COMMIT"];
 
@@ -92,7 +92,7 @@
     [sqls addObject:@"BEGIN IMMEDIATE"];
     [sqls addObject:[NSString stringWithFormat:@"INSERT INTO %@%@(identifier, content) VALUES(?1, ?2)", self.schemaName, self.sourceTable]];
     [sqls addObject:[NSString stringWithFormat:@"DELETE FROM %@%@ WHERE rowid == ?1", self.schemaName, self.sourceTable]];
-    [sqls addObject:[NSString stringWithFormat:@"INSERT INTO testTable(rowid, identifier, content) VALUES(?%d, ?1, ?2)", SQLITE_MAX_VARIABLE_NUMBER]];
+    [sqls addObject:[NSString stringWithFormat:@"INSERT INTO main.testTable(rowid, identifier, content) VALUES(?%d, ?1, ?2)", SQLITE_MAX_VARIABLE_NUMBER]];
     [sqls addObject:@"COMMIT"];
 
     [self doTestObjects:expectedObjects
@@ -113,7 +113,7 @@
     [sqls addObject:@"BEGIN IMMEDIATE"];
     [sqls addObject:[NSString stringWithFormat:@"INSERT OR REPLACE INTO %@%@(identifier, content) VALUES(?1, ?2)", self.schemaName, self.sourceTable]];
     [sqls addObject:[NSString stringWithFormat:@"DELETE FROM %@%@ WHERE rowid == ?1", self.schemaName, self.sourceTable]];
-    [sqls addObject:[NSString stringWithFormat:@"INSERT OR REPLACE INTO testTable(rowid, identifier, content) VALUES(?%d, ?1, ?2)", SQLITE_MAX_VARIABLE_NUMBER]];
+    [sqls addObject:[NSString stringWithFormat:@"INSERT OR REPLACE INTO main.testTable(rowid, identifier, content) VALUES(?%d, ?1, ?2)", SQLITE_MAX_VARIABLE_NUMBER]];
     [sqls addObject:@"COMMIT"];
 
     [self doTestObjects:expectedObjects
@@ -154,7 +154,7 @@
 
     NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE",
                                   [NSString stringWithFormat:@"DELETE FROM %@%@ WHERE rowid IN(SELECT rowid FROM temp.wcdb_union_testTable WHERE identifier > 1 ORDER BY identifier ASC LIMIT 1 OFFSET 1)", self.schemaName, self.sourceTable],
-                                  @"DELETE FROM testTable WHERE rowid IN(SELECT rowid FROM temp.wcdb_union_testTable WHERE identifier > 1 ORDER BY identifier ASC LIMIT 1 OFFSET 1)",
+                                  @"DELETE FROM main.testTable WHERE rowid IN(SELECT rowid FROM temp.wcdb_union_testTable WHERE identifier > 1 ORDER BY identifier ASC LIMIT 1 OFFSET 1)",
                                   @"COMMIT" ];
 
     [self doTestObjects:expectedObjects
@@ -173,7 +173,7 @@
 
     NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE",
                                   [NSString stringWithFormat:@"UPDATE %@%@ SET content = ?1 WHERE rowid IN(SELECT rowid FROM temp.wcdb_union_testTable WHERE identifier > 1 ORDER BY identifier ASC LIMIT 1 OFFSET 1)", self.schemaName, self.sourceTable],
-                                  @"UPDATE testTable SET content = ?1 WHERE rowid IN(SELECT rowid FROM temp.wcdb_union_testTable WHERE identifier > 1 ORDER BY identifier ASC LIMIT 1 OFFSET 1)",
+                                  @"UPDATE main.testTable SET content = ?1 WHERE rowid IN(SELECT rowid FROM temp.wcdb_union_testTable WHERE identifier > 1 ORDER BY identifier ASC LIMIT 1 OFFSET 1)",
                                   @"COMMIT" ];
 
     [self doTestObjects:expectedObjects
@@ -198,7 +198,7 @@
 {
     {
         NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE",
-                                      @"DROP TABLE IF EXISTS testTable",
+                                      @"DROP TABLE IF EXISTS main.testTable",
                                       [NSString stringWithFormat:@"DELETE FROM %@%@", self.schemaName, self.sourceTable],
                                       @"COMMIT" ];
 
@@ -216,7 +216,7 @@
 
     NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE",
                                   [NSString stringWithFormat:@"DELETE FROM %@%@ WHERE rowid IN(SELECT rowid FROM temp.wcdb_union_testTable WHERE temp.wcdb_union_testTable.identifier IN(SELECT max(identifier) FROM temp.wcdb_union_testTable))", self.schemaName, self.sourceTable],
-                                  @"DELETE FROM testTable WHERE rowid IN(SELECT rowid FROM temp.wcdb_union_testTable WHERE temp.wcdb_union_testTable.identifier IN(SELECT max(identifier) FROM temp.wcdb_union_testTable))",
+                                  @"DELETE FROM main.testTable WHERE rowid IN(SELECT rowid FROM temp.wcdb_union_testTable WHERE temp.wcdb_union_testTable.identifier IN(SELECT max(identifier) FROM temp.wcdb_union_testTable))",
                                   @"COMMIT" ];
 
     [self doTestObjects:expectedObjects
@@ -235,7 +235,7 @@
 
     NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE",
                                   [NSString stringWithFormat:@"UPDATE %@%@ SET content = ?1 WHERE rowid IN(SELECT rowid FROM temp.wcdb_union_testTable WHERE temp.wcdb_union_testTable.identifier IN(SELECT max(identifier) FROM temp.wcdb_union_testTable))", self.schemaName, self.sourceTable],
-                                  @"UPDATE testTable SET content = ?1 WHERE rowid IN(SELECT rowid FROM temp.wcdb_union_testTable WHERE temp.wcdb_union_testTable.identifier IN(SELECT max(identifier) FROM temp.wcdb_union_testTable))",
+                                  @"UPDATE main.testTable SET content = ?1 WHERE rowid IN(SELECT rowid FROM temp.wcdb_union_testTable WHERE temp.wcdb_union_testTable.identifier IN(SELECT max(identifier) FROM temp.wcdb_union_testTable))",
                                   @"COMMIT" ];
 
     [self doTestObjects:expectedObjects
