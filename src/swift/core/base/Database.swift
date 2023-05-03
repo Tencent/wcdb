@@ -210,11 +210,15 @@ public class Database {
     /// - Throws: `Error`
     public func getHandle() throws -> Handle {
         let cppHandle = WCDBDatabaseGetHandle(database)
-        let handle = Handle(withCPPHandle: cppHandle)
+        let handle = Handle(withCPPHandle: cppHandle, database: self)
         if !WCDBHandleCheckValid(cppHandle) {
             throw getError()
         }
         return handle
+    }
+
+    public func getDatabase() -> Database {
+        return self
     }
 
     /// Exec a specific sql.  
@@ -456,7 +460,7 @@ public extension Database {
                    withPriority priority: ConfigPriority = ConfigPriority.default) {
         let invocationBlock: @convention(block) (CPPHandle) -> Bool = {
             cppHandle in
-            let handle = Handle(withCPPHandle: cppHandle)
+            let handle = Handle(withCPPHandle: cppHandle, database: self)
             var ret = true
             do {
                 try invocation(handle)
@@ -470,7 +474,7 @@ public extension Database {
         if let uninvocation = uninvocation {
             let uninvocationBlock: @convention(block) (CPPHandle) -> Bool = {
                 cppHandle in
-                let handle = Handle(withCPPHandle: cppHandle)
+                let handle = Handle(withCPPHandle: cppHandle, database: self)
                 var ret = true
                 do {
                     try uninvocation(handle)
@@ -482,36 +486,6 @@ public extension Database {
             uninvocationImp = imp_implementationWithBlock(uninvocationBlock)
         }
         WCDBDatabaseConfig(database, name, invocationImp, uninvocationImp, priority.rawValue)
-    }
-}
-
-// Table
-public extension Database {
-    /// Get a wrapper from an existing table.
-    ///
-    /// - Parameters:
-    ///   - name: The name of the table.
-    ///   - type: A class conform to TableCodable protocol.
-    /// - Returns: Table.
-    /// - Throws: `Error`
-    func getTable<Root: TableCodable>(
-        named name: String,
-        of type: Root.Type = Root.self) -> Table<Root> {
-        return Table<Root>(withDatabase: self, named: name)
-    }
-
-    /// Check the existence of the table.
-    ///
-    /// - Parameter table: The name of the table.
-    /// - Returns: false for a non-existent table.
-    /// - Throws: `Error`
-    func isTableExists(_ table: String) throws -> Bool {
-        let ret = WCDBDatabaseExistTable(database, table)
-        if !ret.hasValue {
-            let error = WCDBDatabaseGetError(database)
-            throw ErrorBridge.getErrorFrom(cppError: error)
-        }
-        return ret.value
     }
 }
 

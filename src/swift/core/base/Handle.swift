@@ -29,9 +29,12 @@ public final class Handle {
 
     internal let cppHandle: CPPHandle
 
-    internal init(withCPPHandle cppHandle: CPPHandle) {
+    internal let database: Database
+
+    internal init(withCPPHandle cppHandle: CPPHandle, database: Database) {
         self.recyclableHandle = ObjectBridge.createRecyclableCPPObject(cppHandle)
         self.cppHandle = cppHandle
+        self.database = database
     }
 
     internal func getError() -> WCDBError {
@@ -100,11 +103,16 @@ public final class Handle {
 
 public protocol HandleRepresentable {
     func getHandle() throws -> Handle
+    func getDatabase() -> Database
 }
 
 extension Handle: HandleRepresentable {
     public func getHandle() throws -> Handle {
         return self
+    }
+
+    public func getDatabase() -> Database {
+        return database
     }
 }
 
