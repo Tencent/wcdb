@@ -110,18 +110,6 @@ CPPHandle WCDBDatabaseGetHandle(CPPDatabase database)
     return WCDBCreateRecylableCPPObject(CPPHandle, cppHandle);
 }
 
-OptionalBool WCDBDatabaseExistTable(CPPDatabase database, const char* tableName)
-{
-    OptionalBool ret = { false, false };
-    WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, ret);
-    auto exist = cppDatabase->tableExists(WCDB::UnsafeStringView(tableName));
-    if (exist.succeed()) {
-        ret.hasValue = exist.succeed();
-        ret.value = exist.value();
-    }
-    return ret;
-}
-
 bool WCDBDatabaseCanOpen(CPPDatabase database)
 {
     WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, false);

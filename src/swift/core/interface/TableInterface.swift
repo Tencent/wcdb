@@ -76,6 +76,24 @@ public protocol TableInterface: AnyObject {
     /// - Throws: `Error`
     func create(table name: String, with columnDefList: ColumnDef..., and constraintList: [TableConstraint]?) throws
 
+    /// Get a wrapper from an existing table.
+    ///
+    /// - Parameters:
+    ///   - name: The name of the table.
+    ///   - type: A class conform to TableCodable protocol.
+    /// - Returns: Table.
+    /// - Throws: `Error`
+    func getTable<Root: TableCodable>(
+        named name: String,
+        of type: Root.Type) -> Table<Root>
+
+    /// Check the existence of the table.
+    ///
+    /// - Parameter table: The name of the table.
+    /// - Returns: false for a non-existent table.
+    /// - Throws: `Error`
+    func isTableExists(_ table: String) throws -> Bool
+
     /// Create new column
     ///
     /// - Parameters:
@@ -148,6 +166,22 @@ extension TableInterface where Self: HandleRepresentable {
                        with columnDefList: [ColumnDef],
                        and constraintList: [TableConstraint]? = nil) throws {
         try getHandle().exec(StatementCreateTable().create(table: name).ifNotExists().with(columns: columnDefList).constraint(constraintList))
+    }
+
+    public func getTable<Root: TableCodable>(
+        named name: String,
+        of type: Root.Type = Root.self) -> Table<Root> {
+        return Table<Root>(withDatabase: getDatabase(), named: name)
+    }
+
+    public func isTableExists(_ table: String) throws -> Bool {
+        let handle = try getHandle()
+        let ret = WCDBHandleExistTable(handle.cppHandle, table)
+        if !ret.hasValue {
+            let error = WCDBHandleGetError(handle.cppHandle)
+            throw ErrorBridge.getErrorFrom(cppError: error)
+        }
+        return ret.value
     }
 
     public func addColumn(with columnDef: ColumnDef, forTable table: String) throws {

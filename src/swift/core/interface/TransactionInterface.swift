@@ -173,7 +173,7 @@ extension TransactionInterface where Self: HandleRepresentable {
         }
         let transactionBlock: @convention(block) (CPPHandle) -> Bool = {
             cppHandle in
-            let handle = Handle(withCPPHandle: cppHandle)
+            let handle = Handle(withCPPHandle: cppHandle, database: getDatabase())
             var ret = true
             do {
                 try transaction(handle)
@@ -192,7 +192,7 @@ extension TransactionInterface where Self: HandleRepresentable {
         var transactionRet = true
         let transactionBlock: @convention(block) (CPPHandle) -> Bool = {
             cppHandle in
-            let handle = Handle(withCPPHandle: cppHandle)
+            let handle = Handle(withCPPHandle: cppHandle, database: getDatabase())
             var ret = true
             do {
                 transactionRet = try controllableTransaction(handle)
@@ -212,7 +212,7 @@ extension TransactionInterface where Self: HandleRepresentable {
         var transactionRet = true
         let transactionBlock: @convention(block) (CPPHandle) -> Bool = {
             cppHandle in
-            let handle = Handle(withCPPHandle: cppHandle)
+            let handle = Handle(withCPPHandle: cppHandle, database: getDatabase())
             var ret = true
             do {
                 transactionRet = try nestedTransaction(handle)
