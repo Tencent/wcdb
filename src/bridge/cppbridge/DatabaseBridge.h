@@ -38,8 +38,6 @@ const char* _Nullable WCDBDatabaseGetPath(CPPDatabase database);
 void WCDBDatabaseGetPaths(CPPDatabase database, SwiftClosure* _Nonnull enumerator);
 CPPHandle WCDBDatabaseGetHandle(CPPDatabase database);
 
-OptionalBool WCDBDatabaseExistTable(CPPDatabase database, const char* _Nonnull tableName);
-
 bool WCDBDatabaseCanOpen(CPPDatabase database);
 bool WCDBDatabaseIsOpened(CPPDatabase database);
 bool WCDBDatabaseIsBlockaded(CPPDatabase database);

@@ -81,6 +81,18 @@ bool WCDBHandleExecute(CPPHandle handle, CPPObject* statement)
     return cppHandle->execute(*cppStatement);
 }
 
+OptionalBool WCDBHandleExistTable(CPPHandle handle, const char* _Nonnull tableName)
+{
+    OptionalBool ret = { false, false };
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, ret);
+    auto exist = cppHandle->tableExists(WCDB::UnsafeStringView(tableName));
+    if (exist.succeed()) {
+        ret.hasValue = exist.succeed();
+        ret.value = exist.value();
+    }
+    return ret;
+}
+
 int WCDBHandleGetChange(CPPHandle handle)
 {
     WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, 0);

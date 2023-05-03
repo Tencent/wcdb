@@ -41,7 +41,7 @@ CPPHandleStatement
 WCDBHandleGetOrCreatePreparedStatement(CPPHandle handle, CPPObject* _Nonnull statement);
 void WCDBHandleFinalizeStatements(CPPHandle handle);
 bool WCDBHandleExecute(CPPHandle handle, CPPObject* _Nonnull statement);
-
+OptionalBool WCDBHandleExistTable(CPPHandle handle, const char* _Nonnull tableName);
 int WCDBHandleGetChange(CPPHandle handle);
 int WCDBHandleGetTotalChange(CPPHandle handle);
 signed long long WCDBHandleGetLastInsertedRowID(CPPHandle handle);
