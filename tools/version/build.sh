@@ -212,13 +212,6 @@ if ! cp -R "$template" "$destination"; then
     exit 1
 fi
 
-swiftHeader="$output"/"Headers/$target-Swift.h"
-if [ `grep -c "unsupported Swift architecture" $swiftHeader` -ne '0' ];then
-    lineNum=$(sed -n '$=' $swiftHeader)
-    sed -n '3,'$((lineNum-3))'p' $swiftHeader | sed -n 'w'$swiftHeader
-    echo "Strip swift header $swiftHeader"
-fi
-
 if (( ${#machos[@]} > 1 )); then
     if ! xcrun lipo -create "${machos[@]}" -output "$output/$target"; then
         echo "Lipo mach-o failed."
