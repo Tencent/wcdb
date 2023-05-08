@@ -42,7 +42,7 @@ extension WCTBridgeProperty: PropertyOperable {
     }
 
     public func asProperty() -> Property {
-        var property = Property(named: propertyName, with: codingTableKey, with: wctProperty)
+        let property = Property(named: propertyName, with: codingTableKey, with: wctProperty)
         property.tableBinding = tableBinding()
         return property
     }
