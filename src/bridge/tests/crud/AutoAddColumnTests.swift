@@ -86,8 +86,8 @@ class AutoAddColumnTests: DatabaseTestCase {
             _ = try multiSelect.allMultiObjects()
         }
 
-        doTestAutoAdd(column: AutoAddColumnObject.primeryValue(), is: false) {
-            _ = try self.database.getColumn(on: AutoAddColumnObject.primeryValue(), fromTable: tableName)
+        doTestAutoAdd(column: AutoAddColumnObject.primaryValue(), is: false) {
+            _ = try self.database.getColumn(on: AutoAddColumnObject.primaryValue(), fromTable: tableName)
         }
 
         doTestAutoAdd(column: AutoAddColumnObject.uniqueValue(), is: false) {

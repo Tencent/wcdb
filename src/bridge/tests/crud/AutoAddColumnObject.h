@@ -40,7 +40,7 @@
 
 @interface AutoAddColumnObject : NSObject <WCTTableCoding>
 
-@property (nonatomic, assign) int primeryValue;
+@property (nonatomic, assign) int primaryValue;
 @property (nonatomic, assign) int uniqueValue;
 @property (nonatomic, assign) int insertValue;
 @property (nonatomic, assign) int updateValue;
@@ -49,7 +49,7 @@
 @property (nonatomic, assign) int deleteValue;
 @property (nonatomic, assign) int indexValue;
 
-WCDB_PROPERTY(primeryValue)
+WCDB_PROPERTY(primaryValue)
 WCDB_PROPERTY(uniqueValue)
 WCDB_PROPERTY(insertValue)
 WCDB_PROPERTY(updateValue)

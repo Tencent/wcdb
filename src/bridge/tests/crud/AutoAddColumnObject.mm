@@ -35,7 +35,7 @@
 @implementation AutoAddColumnObject
 
 WCDB_IMPLEMENTATION(AutoAddColumnObject)
-WCDB_SYNTHESIZE(primeryValue)
+WCDB_SYNTHESIZE(primaryValue)
 WCDB_SYNTHESIZE(uniqueValue)
 WCDB_SYNTHESIZE(insertValue)
 WCDB_SYNTHESIZE(updateValue)
@@ -43,7 +43,7 @@ WCDB_SYNTHESIZE(selectValue)
 WCDB_SYNTHESIZE(multiSelectValue)
 WCDB_SYNTHESIZE(deleteValue)
 
-WCDB_PRIMARY(primeryValue)
+WCDB_PRIMARY(primaryValue)
 WCDB_UNIQUE(uniqueValue)
 
 @end

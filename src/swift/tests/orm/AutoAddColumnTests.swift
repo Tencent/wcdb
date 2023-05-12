@@ -32,7 +32,7 @@ import WCDB
 class AutoAddColumnTests: DatabaseTestCase {
 
     final class AutoAddColumnObject: TableCodable, Named {
-        var primeryValue: Int = 0
+        var primaryValue: Int = 0
         var uniqueValue: Int = 0
         var insertValue: Int = 0
         var updateValue: Int = 0
@@ -42,7 +42,7 @@ class AutoAddColumnTests: DatabaseTestCase {
         var indexValue: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = AutoAddColumnObject
-            case primeryValue
+            case primaryValue
             case uniqueValue
             case insertValue
             case updateValue
@@ -50,7 +50,7 @@ class AutoAddColumnTests: DatabaseTestCase {
             case multiSelectValue
             case deleteValue
             static let objectRelationalMapping = TableBinding(CodingKeys.self) {
-                BindColumnConstraint(.primeryValue, isPrimary: true)
+                BindColumnConstraint(.primaryValue, isPrimary: true)
                 BindColumnConstraint(.uniqueValue, isUnique: true)
             }
         }
@@ -115,8 +115,8 @@ class AutoAddColumnTests: DatabaseTestCase {
             _ = try multiSelect.allMultiObjects()
         }
 
-        doTestAutoAdd(column: AutoAddColumnObject.Properties.primeryValue, is: false) {
-            _ = try self.database.getColumn(on: AutoAddColumnObject.Properties.primeryValue, fromTable: tableName)
+        doTestAutoAdd(column: AutoAddColumnObject.Properties.primaryValue, is: false) {
+            _ = try self.database.getColumn(on: AutoAddColumnObject.Properties.primaryValue, fromTable: tableName)
         }
 
         doTestAutoAdd(column: AutoAddColumnObject.Properties.uniqueValue, is: false) {
