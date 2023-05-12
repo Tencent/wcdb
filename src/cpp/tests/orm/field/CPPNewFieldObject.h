@@ -32,7 +32,7 @@
 
 class CPPNewFieldObject {
 public:
-    int primeryValue;
+    int primaryValue;
     int uniqueValue;
     int insertValue;
     int updateValue;
@@ -41,14 +41,14 @@ public:
     int deleteValue;
     int indexValue;
     WCDB_CPP_ORM_DECLARE_AND_START_IMPLEMENT(CPPNewFieldObject)
-    WCDB_CPP_SYNTHESIZE(primeryValue)
+    WCDB_CPP_SYNTHESIZE(primaryValue)
     WCDB_CPP_SYNTHESIZE(uniqueValue)
     WCDB_CPP_SYNTHESIZE(insertValue)
     WCDB_CPP_SYNTHESIZE(updateValue)
     WCDB_CPP_SYNTHESIZE(selectValue)
     WCDB_CPP_SYNTHESIZE(multiSelectValue)
     WCDB_CPP_SYNTHESIZE(deleteValue)
-    WCDB_CPP_PRIMARY(primeryValue)
+    WCDB_CPP_PRIMARY(primaryValue)
     WCDB_CPP_UNIQUE(uniqueValue)
     WCDB_CPP_ORM_IMPLEMENTATION_END
 };

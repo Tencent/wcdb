@@ -462,10 +462,10 @@
                       return select.allMultiObjects != nil;
                   }];
 
-    [self testAutoAddColumn:NewPropertyObject.primeryValue
+    [self testAutoAddColumn:NewPropertyObject.primaryValue
                   isSucceed:NO
                   byExecute:^bool {
-                      return [self.database getColumnOnResultColumn:NewPropertyObject.primeryValue fromTable:self.tableName] != nil;
+                      return [self.database getColumnOnResultColumn:NewPropertyObject.primaryValue fromTable:self.tableName] != nil;
                   }];
 
     [self testAutoAddColumn:NewPropertyObject.uniqueValue
