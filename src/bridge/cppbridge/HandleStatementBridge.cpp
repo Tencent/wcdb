@@ -118,6 +118,14 @@ void WCDBHandleStatementBindNull(CPPHandleStatement handleStatement, int index)
     cppHandleStatement->bindNull(index);
 }
 
+int WCDBHandleStatementBindParameterIndex(CPPHandleStatement handleStatement,
+                                          const char* parameterName)
+{
+    WCDBGetObjectOrReturnValue(
+    handleStatement, WCDB::HandleStatement, cppHandleStatement, 0);
+    return cppHandleStatement->bindParameterIndex(parameterName);
+}
+
 WCDBColumnValueType
 WCDBHandleStatementGetColumnType(CPPHandleStatement handleStatement, int index)
 {
