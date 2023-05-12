@@ -398,10 +398,10 @@
                       return multiSelect.allMultiObjects().succeed();
                   }];
 
-    [self testAutoAddColumn:WCDB_FIELD(CPPNewFieldObject::primeryValue)
+    [self testAutoAddColumn:WCDB_FIELD(CPPNewFieldObject::primaryValue)
                   isSucceed:NO
                   byExecute:^bool {
-                      return self.database->selectOneColumn(WCDB_FIELD(CPPNewFieldObject::insertValue), self.tableName.UTF8String, WCDB_FIELD(CPPNewFieldObject::primeryValue) == 1).succeed();
+                      return self.database->selectOneColumn(WCDB_FIELD(CPPNewFieldObject::insertValue), self.tableName.UTF8String, WCDB_FIELD(CPPNewFieldObject::primaryValue) == 1).succeed();
                   }];
 
     [self testAutoAddColumn:WCDB_FIELD(CPPNewFieldObject::uniqueValue)
