@@ -151,6 +151,11 @@ public protocol StatementInterface: AnyObject {
     /// - Returns: Index of given column name. Nil will be returned if no such a column.
     func index(byName name: String) -> Int?
 
+    /// The wrapper of `sqlite3_bind_parameter_index*`.
+    ///
+    /// - Returns: index of a given bind parameter
+    func indexOf(bindParameter: String) -> Int
+
     func columnValue(atIndex index: Int) -> Int32
     func columnValue(atIndex index: Int, of type: Int32.Type) -> Int32
     func columnValue(atIndex index: Int) -> Int64
@@ -390,6 +395,10 @@ extension StatementInterface where Self: RawStatementmentRepresentable {
             }
         }
         return nil
+    }
+
+    public func indexOf(bindParameter: String) -> Int {
+        return Int(WCDBHandleStatementBindParameterIndex(getRawStatement(), bindParameter.cString))
     }
 
     public func columnValue(atIndex index: Int) -> Int32 {
