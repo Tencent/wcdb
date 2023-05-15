@@ -86,6 +86,7 @@ public class Handle extends HandleORMOperation {
     native void finalizeAllStatements(long self);
 
     public void invalidate() {
+        mainStatement = null;
         if(cppObj != 0) {
             releaseCPPObject(cppObj);
             cppObj = 0;

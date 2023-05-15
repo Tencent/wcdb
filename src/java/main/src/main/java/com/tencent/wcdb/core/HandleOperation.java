@@ -102,7 +102,7 @@ public abstract class HandleOperation extends CppObject {
             preparedStatement.bindRow(row);
             preparedStatement.step();
         }
-        preparedStatement.finalize();
+        preparedStatement.finalizeStatement();
     }
 
     public void updateValue(long value, Column column, String tableName) throws WCDBException {
@@ -273,7 +273,7 @@ public abstract class HandleOperation extends CppObject {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(update);
             preparedStatement.bindRow(row);
             preparedStatement.step();
-            preparedStatement.finalize();
+            preparedStatement.finalizeStatement();
         } finally {
             if(autoInvalidateHandle()) {
                 handle.invalidate();
@@ -443,7 +443,7 @@ public abstract class HandleOperation extends CppObject {
             if(!preparedStatement.isDone()) {
                 ret = preparedStatement.getValue(0);
             }
-            preparedStatement.finalize();
+            preparedStatement.finalizeStatement();
         } finally {
             if(autoInvalidateHandle()) {
                 handle.invalidate();
@@ -461,7 +461,7 @@ public abstract class HandleOperation extends CppObject {
             if(!preparedStatement.isDone()) {
                 ret = preparedStatement.getOneRow();
             }
-            preparedStatement.finalize();
+            preparedStatement.finalizeStatement();
         } finally {
             if(autoInvalidateHandle()) {
                 handle.invalidate();
@@ -476,7 +476,7 @@ public abstract class HandleOperation extends CppObject {
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumn();
-            preparedStatement.finalize();
+            preparedStatement.finalizeStatement();
         } finally {
             if(autoInvalidateHandle()) {
                 handle.invalidate();
@@ -491,7 +491,7 @@ public abstract class HandleOperation extends CppObject {
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getMultiRows();
-            preparedStatement.finalize();
+            preparedStatement.finalizeStatement();
         } finally {
             if(autoInvalidateHandle()) {
                 handle.invalidate();

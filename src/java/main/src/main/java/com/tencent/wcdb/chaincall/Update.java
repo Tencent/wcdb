@@ -140,7 +140,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
             }
             preparedStatement.step();
             updateChanges();
-            preparedStatement.finalize();
+            preparedStatement.finalizeStatement();
         } finally {
             invalidateHandle();
         }

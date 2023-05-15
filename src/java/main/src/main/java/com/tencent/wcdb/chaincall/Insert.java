@@ -119,7 +119,7 @@ public class Insert<T> extends ChainCall<StatementInsert> {
             }
         }
         updateChanges();
-        preparedStatement.finalize();
+        preparedStatement.finalizeStatement();
     }
 
 }

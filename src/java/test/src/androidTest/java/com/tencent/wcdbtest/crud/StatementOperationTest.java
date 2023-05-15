@@ -83,7 +83,7 @@ public class StatementOperationTest extends ValueCRUDTestCase {
                 preparedStatement.bindRow(RandomTool.testRowWithId(4));
                 preparedStatement.step();
                 assertTrue(preparedStatement.isDone());
-                preparedStatement.finalize();
+                preparedStatement.finalizeStatement();
             }
         });
     }
@@ -94,7 +94,7 @@ public class StatementOperationTest extends ValueCRUDTestCase {
         PreparedStatement statement2 = handle.getOrCreatePreparedStatement(new StatementPragma().pragma(Pragma.userVersion()).toValue(123));
         assertTrue(statement1.isReadOnly());
         assertFalse(statement2.isReadOnly());
-        statement1.finalize();
+        statement1.finalizeStatement();
     }
 
     @Test
@@ -117,7 +117,7 @@ public class StatementOperationTest extends ValueCRUDTestCase {
         preparedInsert.bindInteger(value, 1);
         preparedInsert.step();
         assertTrue(preparedInsert.isDone());
-        preparedInsert.finalize();
+        preparedInsert.finalizeStatement();
 
         PreparedStatement prepareSelect = handle.getOrCreatePreparedStatement(select);
         prepareSelect.step();
@@ -132,7 +132,7 @@ public class StatementOperationTest extends ValueCRUDTestCase {
         preparedInsert.bindValue(value, 1);
         preparedInsert.step();
         assertTrue(preparedInsert.isDone());
-        preparedInsert.finalize();
+        preparedInsert.finalizeStatement();
 
         PreparedStatement prepareSelect = handle.getOrCreatePreparedStatement(select);
         prepareSelect.step();
@@ -147,7 +147,7 @@ public class StatementOperationTest extends ValueCRUDTestCase {
         preparedInsert.bindDouble(value, 1);
         preparedInsert.step();
         assertTrue(preparedInsert.isDone());
-        preparedInsert.finalize();
+        preparedInsert.finalizeStatement();
 
         PreparedStatement prepareSelect = handle.getOrCreatePreparedStatement(select);
         prepareSelect.step();
@@ -162,7 +162,7 @@ public class StatementOperationTest extends ValueCRUDTestCase {
         preparedInsert.bindValue(value, 1);
         preparedInsert.step();
         assertTrue(preparedInsert.isDone());
-        preparedInsert.finalize();
+        preparedInsert.finalizeStatement();
 
         PreparedStatement prepareSelect = handle.getOrCreatePreparedStatement(select);
         prepareSelect.step();
@@ -176,7 +176,7 @@ public class StatementOperationTest extends ValueCRUDTestCase {
         preparedInsert.bindNull(1);
         preparedInsert.step();
         assertTrue(preparedInsert.isDone());
-        preparedInsert.finalize();
+        preparedInsert.finalizeStatement();
 
         PreparedStatement prepareSelect = handle.getOrCreatePreparedStatement(select);
         prepareSelect.step();
@@ -191,7 +191,7 @@ public class StatementOperationTest extends ValueCRUDTestCase {
         preparedInsert.bindValue(value, 1);
         preparedInsert.step();
         assertTrue(preparedInsert.isDone());
-        preparedInsert.finalize();
+        preparedInsert.finalizeStatement();
 
         PreparedStatement prepareSelect = handle.getOrCreatePreparedStatement(select);
         prepareSelect.step();
@@ -206,7 +206,7 @@ public class StatementOperationTest extends ValueCRUDTestCase {
         preparedInsert.bindText(value, 1);
         preparedInsert.step();
         assertTrue(preparedInsert.isDone());
-        preparedInsert.finalize();
+        preparedInsert.finalizeStatement();
 
         PreparedStatement prepareSelect = handle.getOrCreatePreparedStatement(select);
         prepareSelect.step();
@@ -221,7 +221,7 @@ public class StatementOperationTest extends ValueCRUDTestCase {
         preparedInsert.bindValue(value, 1);
         preparedInsert.step();
         assertTrue(preparedInsert.isDone());
-        preparedInsert.finalize();
+        preparedInsert.finalizeStatement();
 
         PreparedStatement prepareSelect = handle.getOrCreatePreparedStatement(select);
         prepareSelect.step();
@@ -236,7 +236,7 @@ public class StatementOperationTest extends ValueCRUDTestCase {
         preparedInsert.bindBLOB(value, 1);
         preparedInsert.step();
         assertTrue(preparedInsert.isDone());
-        preparedInsert.finalize();
+        preparedInsert.finalizeStatement();
 
         PreparedStatement prepareSelect = handle.getOrCreatePreparedStatement(select);
         prepareSelect.step();
@@ -251,7 +251,7 @@ public class StatementOperationTest extends ValueCRUDTestCase {
         preparedInsert.bindValue(value, 1);
         preparedInsert.step();
         assertTrue(preparedInsert.isDone());
-        preparedInsert.finalize();
+        preparedInsert.finalizeStatement();
 
         PreparedStatement prepareSelect = handle.getOrCreatePreparedStatement(select);
         prepareSelect.step();
@@ -269,11 +269,11 @@ public class StatementOperationTest extends ValueCRUDTestCase {
         PreparedStatement preparedInsert = handle.getOrCreatePreparedStatement(insert);
         preparedInsert.bindText(value, preparedInsert.bindParameterIndex(parameter.getDescription()));
         preparedInsert.step();
-        preparedInsert.finalize();
+        preparedInsert.finalizeStatement();
 
         PreparedStatement prepareSelect = handle.getOrCreatePreparedStatement(select);
         prepareSelect.step();
         assertEquals(prepareSelect.getText(0), value);
-        prepareSelect.finalize();
+        prepareSelect.finalizeStatement();
     }
 }

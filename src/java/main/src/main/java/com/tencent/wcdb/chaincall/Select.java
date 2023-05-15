@@ -101,7 +101,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
             if(!preparedStatement.isDone()) {
                 ret = preparedStatement.getOneObject(fields);
             }
-            preparedStatement.finalize();
+            preparedStatement.finalizeStatement();
         } finally {
             invalidateHandle();
         }
@@ -113,7 +113,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
         try {
             PreparedStatement preparedStatement = prepareStatement();
             ret = preparedStatement.getAllObjects(fields);
-            preparedStatement.finalize();
+            preparedStatement.finalizeStatement();
         } finally {
             invalidateHandle();
         }

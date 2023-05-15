@@ -61,7 +61,7 @@ public class PreparedStatement extends CppObject {
     public void step() throws WCDBException {
         if(!step(cppObj)) {
             if(autoFinalize) {
-                finalize();
+                finalizeStatement();
             }
             throw createException();
         }
@@ -75,7 +75,7 @@ public class PreparedStatement extends CppObject {
 
     private native void reset(long self);
 
-    public void finalize() {
+    public void finalizeStatement() {
         finalize(cppObj);
     }
 
