@@ -59,11 +59,12 @@ public class CRUDTestCase extends TableTestCase {
     }
 
     @After
-    public void tearDown() {
+    public void teardown() {
         if(handle != null) {
             handle.invalidate();
             handle = null;
         }
+        super.teardown();
     }
 
     public void insertPresetObjects() throws WCDBException {

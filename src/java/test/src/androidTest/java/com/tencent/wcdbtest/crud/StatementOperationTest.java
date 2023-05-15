@@ -25,7 +25,6 @@ package com.tencent.wcdbtest.crud;
 
 import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.base.WCDBException;
-import com.tencent.wcdb.core.Handle;
 import com.tencent.wcdb.core.PreparedStatement;
 import com.tencent.wcdb.winq.BindParameter;
 import com.tencent.wcdb.winq.Column;
@@ -34,10 +33,9 @@ import com.tencent.wcdb.winq.StatementDelete;
 import com.tencent.wcdb.winq.StatementInsert;
 import com.tencent.wcdb.winq.StatementPragma;
 import com.tencent.wcdb.winq.StatementSelect;
-import com.tencent.wcdbtest.base.CRUDTestCase;
 import com.tencent.wcdbtest.base.RandomTool;
+import com.tencent.wcdbtest.base.ValueCRUDTestCase;
 
-import org.junit.After;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,8 +43,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.Random;
 
-public class StatementOperationTest extends CRUDTestCase {
-    Handle handle;
+public class StatementOperationTest extends ValueCRUDTestCase {
     StatementSelect select;
     StatementInsert insert;
 
@@ -55,16 +52,6 @@ public class StatementOperationTest extends CRUDTestCase {
         super.setup();
         insert = new StatementInsert().insertInto(tableName).columns(columns()).values(new Object[]{3, new BindParameter(1)});
         select = new StatementSelect().select(new Column("content")).from(tableName).where(new Column("id").eq(3));
-        handle = database.getHandle();
-        insertPresetRows();
-    }
-
-    @After
-    public void tearDown() {
-        if(handle != null) {
-            handle.invalidate();
-            handle = null;
-        }
     }
 
     @Test

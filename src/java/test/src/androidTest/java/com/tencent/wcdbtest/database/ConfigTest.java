@@ -37,8 +37,9 @@ import org.junit.Test;
 public class ConfigTest extends DatabaseTestCase {
     String configName = "testConfig";
     @After
-    public void removeConfig() {
+    public void teardown() {
         database.setConfig(configName, null);
+        super.teardown();
     }
 
     @Test

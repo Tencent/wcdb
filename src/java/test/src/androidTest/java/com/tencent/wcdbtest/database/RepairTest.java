@@ -139,8 +139,10 @@ public class RepairTest extends TableTestCase {
                 // 2.
                 database.backup();
                 database.deposit();
+
                 long num2 = table.getValue(Column.all().count()).getInteger();
                 assertEquals(num2, 0);
+
                 newObject.id = 0;
                 table.insertObject(newObject);
                 rowId += 1;
@@ -148,6 +150,7 @@ public class RepairTest extends TableTestCase {
 
                 assertTrue(FileTool.fileExist(factoryPath()));
                 assertTrue(database.containDepositedFiles());
+
                 database.removeDepositedFiles();
                 assertFalse(database.containDepositedFiles());
                 assertFalse(FileTool.fileExist(factoryPath()));

@@ -26,6 +26,7 @@ package com.tencent.wcdbtest.base;
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.core.Database;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 
@@ -54,6 +55,12 @@ public class DatabaseTestCase extends BaseTestCase {
         path = Paths.get(currentDirectory, fileName).toString();
         database = new Database(path);
         database.setTag(10001);
+    }
+
+    @After
+    public void teardown() {
+        database.close();
+        database = null;
     }
 
     public interface TestOperation {
