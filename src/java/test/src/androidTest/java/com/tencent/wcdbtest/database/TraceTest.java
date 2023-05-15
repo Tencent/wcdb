@@ -105,7 +105,6 @@ public class TraceTest extends TableTestCase {
 
     @Test
     public void testGlobalTracePerformance() {
-        createTable();
         Database.globalTracePerformance(null);
         ArrayList<String> sqls = new ArrayList<String>(){{
             add("BEGIN IMMEDIATE");
@@ -120,6 +119,7 @@ public class TraceTest extends TableTestCase {
                 }
             }
         });
+        createTable();
         database.insertObjects(RandomTool.autoIncrementTestCaseObjects(10000), DBTestObject.allFields(), tableName);
         assertEquals(sqls.size(), 0);
         Database.globalTracePerformance(null);
