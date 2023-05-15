@@ -55,7 +55,7 @@ public class ColumnConstraint extends Identifier {
     private native void configOrder(long self, int order);
 
     public ColumnConstraint conflict(ConflictAction action) {
-        configConflictAction(cppObj, action.ordinal() + 1);
+        configConflictAction(cppObj, action.ordinal());
         return this;
     }
 

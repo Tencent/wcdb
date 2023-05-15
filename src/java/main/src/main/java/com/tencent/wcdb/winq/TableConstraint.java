@@ -92,7 +92,7 @@ public class TableConstraint extends Identifier {
                                             String[] columnNames);
 
     public TableConstraint onConflict(ConflictAction action) {
-        configConfliction(cppObj, action.ordinal() + 1);
+        configConfliction(cppObj, action.ordinal());
         return this;
     }
 

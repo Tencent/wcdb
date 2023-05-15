@@ -48,27 +48,27 @@ public class StatementUpdate extends Statement {
     private native void configTable(long self, int type, long table, String tableName);
 
     public StatementUpdate orReplace() {
-        configConflictAction(cppObj, ConflictAction.Replace.ordinal() + 1);
+        configConflictAction(cppObj, ConflictAction.Replace.ordinal());
         return this;
     }
 
     public StatementUpdate orRollback() {
-        configConflictAction(cppObj, ConflictAction.Rollback.ordinal() + 1);
+        configConflictAction(cppObj, ConflictAction.Rollback.ordinal());
         return this;
     }
 
     public StatementUpdate orAbort() {
-        configConflictAction(cppObj, ConflictAction.Abort.ordinal() + 1);
+        configConflictAction(cppObj, ConflictAction.Abort.ordinal());
         return this;
     }
 
     public StatementUpdate orFail() {
-        configConflictAction(cppObj, ConflictAction.Fail.ordinal() + 1);
+        configConflictAction(cppObj, ConflictAction.Fail.ordinal());
         return this;
     }
 
     public StatementUpdate orIgnore() {
-        configConflictAction(cppObj, ConflictAction.Ignore.ordinal() + 1);
+        configConflictAction(cppObj, ConflictAction.Ignore.ordinal());
         return this;
     }
     private native void configConflictAction(long self, int action);
