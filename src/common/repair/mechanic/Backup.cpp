@@ -239,8 +239,8 @@ void Backup::onMasterCellCrawled(const Cell &cell, const MasterItem &master)
                && !MasterItem::isReservedTableName(master.tableName)
                && !MasterItem::isReservedTableName(master.name)) {
         Material::Content &content = getOrCreateContent(master.tableName);
-        if (master.type.caseInsensiveEqual("table")
-            && master.name.caseInsensiveEqual(master.tableName)) {
+        if (master.type.caseInsensitiveEqual("table")
+            && master.name.caseInsensitiveEqual(master.tableName)) {
             if (!crawl(master.rootpage)) {
                 return;
             }

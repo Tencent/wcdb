@@ -89,7 +89,7 @@ WCTBinding::WCTBinding(Class cls)
 
 #if WCDB_WECHAT_IOS
     // 兼容微信
-    m_columnDefs.alphabeticallyCaseInsensiveSort();
+    m_columnDefs.alphabeticallyCaseInsensitiveSort();
 #endif
 }
 

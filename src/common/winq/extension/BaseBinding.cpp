@@ -36,7 +36,7 @@ BaseBinding::BaseBinding() = default;
 BaseBinding::~BaseBinding() = default;
 
 #pragma mark - Column Def
-const CaseInsensiveList<ColumnDef> &BaseBinding::getColumnDefs() const
+const CaseInsensitiveList<ColumnDef> &BaseBinding::getColumnDefs() const
 {
     return m_columnDefs;
 }
@@ -44,7 +44,7 @@ const CaseInsensiveList<ColumnDef> &BaseBinding::getColumnDefs() const
 ColumnDef *BaseBinding::getColumnDef(const UnsafeStringView &columnName)
 {
     ColumnDef *columnDef = nullptr;
-    auto iter = m_columnDefs.caseInsensiveFind(columnName);
+    auto iter = m_columnDefs.caseInsensitiveFind(columnName);
     if (iter != m_columnDefs.end()) {
         columnDef = &iter->second;
     }
@@ -136,7 +136,7 @@ BaseBinding::generateCreateVirtualTableStatement(const UnsafeStringView &tableNa
     StatementCreateVirtualTable statement = statementVirtualTable;
     statement.createVirtualTable(tableName).ifNotExists();
     std::list<StringView> &arguments = statement.syntax().arguments;
-    bool isFTS5 = statement.syntax().module.caseInsensiveEqual("fts5");
+    bool isFTS5 = statement.syntax().module.caseInsensitiveEqual("fts5");
     for (const auto &iter : m_columnDefs) {
         if (isFTS5) {
             bool added = false;
@@ -167,7 +167,7 @@ bool BaseBinding::tryRecoverColumn(const UnsafeStringView &columnName,
                                    const UnsafeStringView &sql,
                                    InnerHandle *handle) const
 {
-    if (m_columnDefs.caseInsensiveFind(columnName) == m_columnDefs.end()) {
+    if (m_columnDefs.caseInsensitiveFind(columnName) == m_columnDefs.end()) {
         return false;
     }
     auto exist = handle->tableExists(schemaName, tableName);

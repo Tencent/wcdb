@@ -132,7 +132,7 @@
              return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS3Object::content).match("WeChat")).value());
          }];
 
-    // case insensive
+    // case insensitive
     [self doTestRows:{ CPPOneRowValueExtract(object) }
               andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'DATABASE' ORDER BY rowid ASC"
          bySelecting:^WCDB::OptionalMultiRows {

@@ -31,11 +31,11 @@ namespace Syntax {
 
 bool isIntegerColumnType(const UnsafeStringView& type)
 {
-    return type.caseInsensiveEqual("INTEGER") || type.caseInsensiveEqual("INT")
-           || type.caseInsensiveEqual("TINYINT") || type.caseInsensiveEqual("SMALLINT")
-           || type.caseInsensiveEqual("MEDIUMINT") || type.caseInsensiveEqual("BIGINT")
-           || type.caseInsensiveEqual("UNSIGNED BIG INT")
-           || type.caseInsensiveEqual("INT2") || type.caseInsensiveEqual("INT8");
+    return type.caseInsensitiveEqual("INTEGER") || type.caseInsensitiveEqual("INT")
+           || type.caseInsensitiveEqual("TINYINT") || type.caseInsensitiveEqual("SMALLINT")
+           || type.caseInsensitiveEqual("MEDIUMINT") || type.caseInsensitiveEqual("BIGINT")
+           || type.caseInsensitiveEqual("UNSIGNED BIG INT")
+           || type.caseInsensitiveEqual("INT2") || type.caseInsensitiveEqual("INT8");
 }
 
 const char* masterTableString = "sqlite_master";

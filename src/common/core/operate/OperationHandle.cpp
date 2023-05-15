@@ -63,7 +63,7 @@ void OperationHandle::checkIntegrity()
         WCTAssert(integrityMessages.size() == 1);
         if (integrityMessages.size() > 0) {
             auto integrityMessage = *integrityMessages.begin();
-            if (!integrityMessage.caseInsensiveEqual("ok")) {
+            if (!integrityMessage.caseInsensitiveEqual("ok")) {
                 Error error(Error::Code::Corrupt, Error::Level::Error, integrityMessage);
                 error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
                 error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeIntegrity);
