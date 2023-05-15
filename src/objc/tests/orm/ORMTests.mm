@@ -319,7 +319,7 @@
     // remap
     {
         self.tableClass = NewRemapObject.class;
-        NSArray<NSString*>* expected = @[ @"PRAGMA table_info('test@Table')", @"ALTER TABLE 'test@Table' ADD COLUMN newValue INTEGER", @"CREATE INDEX IF NOT EXISTS 'test@Table_index' ON 'test@Table'(value)" ];
+        NSArray<NSString*>* expected = @[ @"PRAGMA main.table_info('test@Table')", @"ALTER TABLE main.'test@Table' ADD COLUMN newValue INTEGER", @"CREATE INDEX IF NOT EXISTS 'test@Table_index' ON 'test@Table'(value)" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected];
     }
     [self dropTable];
@@ -332,7 +332,7 @@
     // remap
     {
         self.tableClass = NewRemapObject.class;
-        NSArray<NSString*>* expected = @[ @"PRAGMA table_info('testTable')", @"ALTER TABLE testTable ADD COLUMN newValue INTEGER", @"CREATE INDEX IF NOT EXISTS testTable_index ON testTable(value)" ];
+        NSArray<NSString*>* expected = @[ @"PRAGMA main.table_info('testTable')", @"ALTER TABLE main.testTable ADD COLUMN newValue INTEGER", @"CREATE INDEX IF NOT EXISTS testTable_index ON testTable(value)" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected];
     }
 }
@@ -347,7 +347,7 @@
     // remap
     {
         self.tableClass = NewlyCreatedTableIndexObject.class;
-        NSArray<NSString*>* expected = @[ @"PRAGMA table_info('testTable')", @"ALTER TABLE testTable ADD COLUMN newValue INTEGER" ];
+        NSArray<NSString*>* expected = @[ @"PRAGMA main.table_info('testTable')", @"ALTER TABLE main.testTable ADD COLUMN newValue INTEGER" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected];
     }
     TestCaseAssertTrue([self dropTable]);
@@ -363,7 +363,7 @@
     // drop index
     {
         self.tableClass = DropIndexObject.class;
-        NSArray<NSString*>* expected = @[ @"PRAGMA table_info('testTable')", @"DROP INDEX IF EXISTS testTable_index" ];
+        NSArray<NSString*>* expected = @[ @"PRAGMA main.table_info('testTable')", @"DROP INDEX IF EXISTS testTable_index" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected];
     }
 }
