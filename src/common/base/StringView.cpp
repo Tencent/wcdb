@@ -409,13 +409,16 @@ StringView StringView::createConstant(const char* string)
 {
     StringView ret;
     if (string != nullptr) {
-        ret.m_length = strlen(string);
-        ret.m_data = (char*) malloc(ret.length() * sizeof(char));
-        if (ret.m_data != nullptr) {
-            memcpy((void*) ret.data(), (void*) string, ret.m_length);
+        size_t length = strlen(string);
+        char* data = (char*) malloc((length + 1) * sizeof(char));
+        if (data != nullptr) {
+            memcpy((void*) data, (void*) string, length);
+            data[length] = '\0';
         } else {
-            ret.m_length = 0;
+            length = 0;
         }
+        ret.m_data = data;
+        ret.m_length = length;
         ret.m_referenceCount = (std::atomic<int>*) ConstanceReference;
     }
     return ret;
