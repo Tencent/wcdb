@@ -165,8 +165,8 @@ void FullCrawler::onMasterCellCrawled(const Cell &cell, const MasterItem &master
     }
     markCellAsCounted(cell);
     if (master.name == Syntax::sequenceTable) {
-        WCTAssert(master.type.caseInsensiveEqual("table"));
-        WCTAssert(master.tableName.caseInsensiveEqual(master.name));
+        WCTAssert(master.type.caseInsensitiveEqual("table"));
+        WCTAssert(master.tableName.caseInsensitiveEqual(master.name));
         m_sequenceCrawler.work(master.rootpage, this);
     } else if (!filter(master.tableName)
                || MasterItem::isReservedTableName(master.name)
@@ -174,8 +174,8 @@ void FullCrawler::onMasterCellCrawled(const Cell &cell, const MasterItem &master
         //Skip no backup table and sqlite reserved table
         return;
     } else {
-        if (master.type.caseInsensiveEqual("table")) {
-            WCTAssert(master.tableName.caseInsensiveEqual(master.name));
+        if (master.type.caseInsensitiveEqual("table")) {
+            WCTAssert(master.tableName.caseInsensitiveEqual(master.name));
             if (assembleTable(master.name, master.sql)) {
                 crawl(master.rootpage);
             }

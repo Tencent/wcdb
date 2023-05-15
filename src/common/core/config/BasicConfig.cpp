@@ -93,7 +93,7 @@ bool BasicConfig::lazySetJournalModeWAL(InnerHandle* handle)
     int remainingNumberOfBusyRetryTimes = BasicConfigBusyRetryMaxAllowedNumberOfTimes;
     do {
         succeed = getOrSetPragmaBegin(handle, m_getJournalMode);
-        if (succeed && !handle->getText(0).caseInsensiveEqual("WAL")) {
+        if (succeed && !handle->getText(0).caseInsensitiveEqual("WAL")) {
             if (!handle->canWriteMainDB()) {
                 handle->finalize();
                 succeed = false;

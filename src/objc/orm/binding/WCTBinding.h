@@ -23,7 +23,7 @@
  */
 
 #import "BaseBinding.hpp"
-#import "CaseInsensiveList.hpp"
+#import "CaseInsensitiveList.hpp"
 #import "StringView.hpp"
 #import "WCTColumnCoding.h"
 #import "WCTCommon.h"

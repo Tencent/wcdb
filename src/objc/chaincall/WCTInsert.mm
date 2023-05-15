@@ -24,7 +24,7 @@
 
 #import "WCTInsert.h"
 #import "Assertion.hpp"
-#import "CaseInsensiveList.hpp"
+#import "CaseInsensitiveList.hpp"
 #import "WCTChainCall+Private.h"
 #import "WCTHandle+Private.h"
 #import "WCTHandle+Transaction.h"
@@ -116,7 +116,7 @@
         const auto &columnDefs = [cls objectRelationalMapping].getColumnDefs();
         for (const WCTProperty &property : _properties) {
             // auto increment?
-            auto iter = columnDefs.caseInsensiveFind(property.getDescription());
+            auto iter = columnDefs.caseInsensitiveFind(property.getDescription());
             WCTRemedialAssert(iter != columnDefs.end(), "Related property is not found.", return NO;);
             autoIncrementsOfDefinitions.push_back(iter->second.syntax().isAutoIncrement());
         }

@@ -70,8 +70,8 @@ private:
 
 #pragma mark - UnsafeStringView - Comparison
 public:
-    int caseInsensiveCompare(const UnsafeStringView& other) const;
-    bool caseInsensiveEqual(const UnsafeStringView& other) const;
+    int caseInsensitiveCompare(const UnsafeStringView& other) const;
+    bool caseInsensitiveEqual(const UnsafeStringView& other) const;
 
     bool hasPrefix(const UnsafeStringView& target) const;
     bool hasSuffix(const UnsafeStringView& target) const;

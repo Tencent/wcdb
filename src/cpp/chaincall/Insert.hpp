@@ -25,7 +25,7 @@
 #pragma once
 
 #include "CPPORM.h"
-#include "CaseInsensiveList.hpp"
+#include "CaseInsensitiveList.hpp"
 #include "ChainCall.hpp"
 #include "ValueArray.hpp"
 #include <assert.h>
@@ -137,11 +137,11 @@ private:
         }
         std::vector<bool> autoIncrementsOfDefinitions;
         if (!m_statement.syntax().conflictActionValid()) {
-            const CaseInsensiveList<ColumnDef>& columnDefs
+            const CaseInsensitiveList<ColumnDef>& columnDefs
             = ObjectType::getObjectRelationBinding().getColumnDefs();
             for (const Field& field : m_fields) {
                 // auto increment?
-                auto iter = columnDefs.caseInsensiveFind(field.getDescription());
+                auto iter = columnDefs.caseInsensitiveFind(field.getDescription());
                 if (iter == columnDefs.end()) {
                     assertError("Related field is not found.");
                     return false;

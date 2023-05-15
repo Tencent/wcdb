@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "CaseInsensiveList.hpp"
+#include "CaseInsensitiveList.hpp"
 #include "WINQ.h"
 
 namespace WCDB {
@@ -37,11 +37,11 @@ public:
     virtual ~BaseBinding() = 0;
 #pragma mark - Column Def
 public:
-    const CaseInsensiveList<ColumnDef> &getColumnDefs() const;
+    const CaseInsensitiveList<ColumnDef> &getColumnDefs() const;
     ColumnDef *getColumnDef(const UnsafeStringView &columnName);
 
 protected:
-    CaseInsensiveList<ColumnDef> m_columnDefs;
+    CaseInsensitiveList<ColumnDef> m_columnDefs;
 
 #pragma mark - Table
 public:
