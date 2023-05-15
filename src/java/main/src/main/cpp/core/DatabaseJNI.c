@@ -398,8 +398,9 @@ jboolean WCDBJNIDatabaseObjectMethod(moveFile, jlong self, jstring destination)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBJNIGetString(destination);
-    WCDBDatabaseMoveFile(selfStruct, destinationString);
+    jboolean ret = WCDBDatabaseMoveFile(selfStruct, destinationString);
     WCDBJNIReleaseString(destination);
+    return ret;
 }
 
 jlong WCDBJNIDatabaseObjectMethod(getFileSize, jlong self)
