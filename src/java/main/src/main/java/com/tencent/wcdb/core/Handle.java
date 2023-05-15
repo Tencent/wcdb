@@ -22,8 +22,13 @@
  */
 package com.tencent.wcdb.core;
 
-import com.tencent.wcdb.base.CppObject;
+import com.tencent.wcdb.base.WCDBException;
+import com.tencent.wcdb.winq.Statement;
 
-public class Handle extends CppObject {
+public class Handle extends HandleORMOperation {
+    private PreparedStatement mainStatement = null;
 
+    public PreparedStatement preparedWithMainStatement(Statement statement) throws WCDBException {
+        return mainStatement;
+    }
 }
