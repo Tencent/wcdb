@@ -129,7 +129,8 @@ bool InnerHandle::configure()
         WCTAssert(m_invokeds.empty());
         for (const auto &element : m_pendings) {
             if (!element.value()->invoke(this)) {
-                if (element.key().caseInsensiveEqual(BasicConfigName) && !canWriteMainDB()) {
+                if (element.key().caseInsensitiveEqual(BasicConfigName)
+                    && !canWriteMainDB()) {
                     //Setting the WAL journal mode requires writing the main DB.
                     enableWriteMainDB(true);
                     close();
@@ -149,7 +150,7 @@ bool InnerHandle::configure()
 UnsafeData InnerHandle::getCipherKey()
 {
     for (const auto &element : m_invokeds) {
-        if (element.key().caseInsensiveEqual(CipherConfigName)) {
+        if (element.key().caseInsensitiveEqual(CipherConfigName)) {
             CipherConfig *config = dynamic_cast<CipherConfig *>(element.value().get());
             return config->getCipherKey();
         }
@@ -451,7 +452,7 @@ bool InnerHandle::openPureCipherDB()
     if (AbstractHandle::open()) {
         succeed = true;
         for (const auto &element : m_pendings) {
-            if (element.key().caseInsensiveEqual(CipherConfigName)) {
+            if (element.key().caseInsensitiveEqual(CipherConfigName)) {
                 if ((succeed = element.value()->invoke(this))) {
                     m_invokeds.insert(element.key(), element.value(), element.order());
                 }
@@ -468,12 +469,12 @@ bool InnerHandle::openPureCipherDB()
 bool InnerHandle::isCipherDB() const
 {
     for (const auto &element : m_pendings) {
-        if (element.key().caseInsensiveEqual(CipherConfigName)) {
+        if (element.key().caseInsensitiveEqual(CipherConfigName)) {
             return true;
         }
     }
     for (const auto &element : m_invokeds) {
-        if (element.key().caseInsensiveEqual(CipherConfigName)) {
+        if (element.key().caseInsensitiveEqual(CipherConfigName)) {
             return true;
         }
     }

@@ -32,37 +32,40 @@
 namespace WCDB {
 
 template<typename T>
-class CaseInsensiveList : public std::list<std::pair<StringView, T>> {
+class CaseInsensitiveList : public std::list<std::pair<StringView, T>> {
 public:
-    auto caseInsensiveFind(const UnsafeStringView& key)
+    auto caseInsensitiveFind(const UnsafeStringView& key)
     {
         return std::find_if(
         this->begin(),
         this->end(),
-        std::bind(&CaseInsensiveList::caseInsensiveEqual, key, std::placeholders::_1));
+        std::bind(&CaseInsensitiveList::caseInsensitiveEqual, key, std::placeholders::_1));
     }
 
-    auto caseInsensiveFind(const UnsafeStringView& key) const
+    auto caseInsensitiveFind(const UnsafeStringView& key) const
     {
         return std::find_if(
         this->begin(),
         this->end(),
-        std::bind(&CaseInsensiveList::caseInsensiveEqual, key, std::placeholders::_1));
+        std::bind(&CaseInsensitiveList::caseInsensitiveEqual, key, std::placeholders::_1));
     }
 
-    void alphabeticallyCaseInsensiveSort() { this->sort(caseInsensiveLess); }
+    void alphabeticallyCaseInsensitiveSort()
+    {
+        this->sort(caseInsensitiveLess);
+    }
 
 protected:
-    static bool caseInsensiveEqual(const UnsafeStringView& key,
-                                   const std::pair<StringView, T>& element)
+    static bool caseInsensitiveEqual(const UnsafeStringView& key,
+                                     const std::pair<StringView, T>& element)
     {
-        return key.caseInsensiveEqual(element.first);
+        return key.caseInsensitiveEqual(element.first);
     }
 
-    static bool caseInsensiveLess(const std::pair<StringView, T>& left,
-                                  const std::pair<StringView, T>& right)
+    static bool caseInsensitiveLess(const std::pair<StringView, T>& left,
+                                    const std::pair<StringView, T>& right)
     {
-        return left.first.caseInsensiveCompare(right.first) < 0;
+        return left.first.caseInsensitiveCompare(right.first) < 0;
     }
 };
 

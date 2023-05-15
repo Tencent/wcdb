@@ -53,7 +53,7 @@ bool CreateVirtualTableSTMT::describle(std::ostream& stream) const
         stream << schema << ".";
     }
     stream << table << " USING " << module;
-    bool isFTS5 = module.caseInsensiveEqual(Module::FTS5);
+    bool isFTS5 = module.caseInsensitiveEqual(Module::FTS5);
     StringView tokenizerPrefix = tokenizerPreFix();
     if (!arguments.empty()) {
         stream << "(";

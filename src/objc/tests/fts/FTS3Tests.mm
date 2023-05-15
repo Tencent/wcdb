@@ -118,7 +118,7 @@
                return [self.table getObjectsWhere:FTS3Object.content.match("WeChat")];
            }];
 
-    // case insensive
+    // case insensitive
     [self doTestObject:object
                 andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'DATABASE' ORDER BY rowid ASC"
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {

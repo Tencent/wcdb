@@ -149,7 +149,7 @@ const char& UnsafeStringView::at(off_t off) const
 }
 
 #pragma mark - UnsafeStringView - Comparison
-int UnsafeStringView::caseInsensiveCompare(const UnsafeStringView& other) const
+int UnsafeStringView::caseInsensitiveCompare(const UnsafeStringView& other) const
 {
     if (m_data == other.m_data && m_length == other.m_length) {
         return 0;
@@ -167,7 +167,7 @@ int UnsafeStringView::caseInsensiveCompare(const UnsafeStringView& other) const
     }
 }
 
-bool UnsafeStringView::caseInsensiveEqual(const UnsafeStringView& other) const
+bool UnsafeStringView::caseInsensitiveEqual(const UnsafeStringView& other) const
 {
     if (length() != other.length()) {
         return false;
