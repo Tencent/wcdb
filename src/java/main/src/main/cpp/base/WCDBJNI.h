@@ -283,6 +283,42 @@
     WCDBJNIReleaseDoubleArray(parameter##_doubleValues);                       \
     WCDBJNIReleaseStringArray(parameter##_stringValues);
 
+#define WCDBJNICreateStringAndReturn(action)                                   \
+    const char *textValue = action;                                            \
+    if (textValue == NULL) {                                                   \
+        return NULL;                                                           \
+    }                                                                          \
+    return (*env)->NewStringUTF(env, textValue);
+
+#define WCDBJNICreateJavaString(value)                                         \
+    jstring j##value = NULL;                                                   \
+    if (value != NULL) {                                                       \
+        j##value = (*env)->NewStringUTF(env, value);                           \
+    }
+
+#define WCDBJNIFindClass(valueName, signature, action)                         \
+    static jclass valueName = NULL;                                            \
+    if (valueName == NULL) {                                                   \
+        valueName = (*env)->FindClass(env, signature);                         \
+        WCDBJNICreateGlobalRel(valueName);                                     \
+    }                                                                          \
+    assert(valueName != NULL);                                                 \
+    if (valueName == NULL) {                                                   \
+        action;                                                                \
+    }
+
+#define WCDBJNIGetObjectMethodId(valueName, class, methodName, signature)      \
+    static jmethodID valueName = NULL;                                         \
+    if (valueName == NULL) {                                                   \
+        valueName = (*env)->GetMethodID(env, class, methodName, signature);    \
+    }                                                                          \
+    assert(valueName != NULL);
+
+#define WCDBJNICreateGlobalRel(value)                                          \
+    if (value != NULL) {                                                       \
+        value = (*env)->NewGlobalRef(env, value);                              \
+    }
+
 void WCDBJNIClassMethod(Base, releaseObject, long long cppObject);
 
 void __WCDBJNIGetStringArray(JNIEnv *env,

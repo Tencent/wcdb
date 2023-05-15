@@ -781,5 +781,145 @@ public abstract class HandleOperation extends CppObject {
     }
 
     public void execute(Statement statement) throws WCDBException {
+        Handle handle = getHandle();
+        WCDBException exception = null;
+        if(!handle.execute(handle.getCppObj(), statement.getCppObj())) {
+            exception = handle.createException();
+        }
+        if(autoInvalidateHandle()) {
+            handle.invalidate();
+        }
+        if (exception != null) {
+            throw exception;
+        }
+    }
+
+    public boolean isInTransaction() throws WCDBException{
+        Handle handle = getHandle();
+        return handle.isInTransaction(handle.getCppObj());
+    }
+
+    public void beginTransaction() throws WCDBException {
+        Handle handle = getHandle();
+        WCDBException exception = null;
+        if(!handle.isInTransaction(handle.getCppObj())) {
+            exception = handle.createException();
+        }
+        if(autoInvalidateHandle()) {
+            handle.invalidate();
+        }
+        if(exception != null) {
+            throw exception;
+        }
+    }
+
+    public void commitTransaction() throws WCDBException {
+        Handle handle = getHandle();
+        WCDBException exception = null;
+        if(!handle.commitTransaction(handle.getCppObj())) {
+            exception = handle.createException();
+        }
+        if(autoInvalidateHandle()) {
+            handle.invalidate();
+        }
+        if(exception != null) {
+            throw exception;
+        }
+    }
+
+    public void rollbackTransaction() {
+        Handle handle = getHandle();
+        WCDBException exception = null;
+        handle.rollbackTransaction(handle.getCppObj());
+        if(autoInvalidateHandle()) {
+            handle.invalidate();
+        }
+    }
+
+    public void beginNestedTransaction() throws WCDBException {
+        Handle handle = getHandle();
+        WCDBException exception = null;
+        if(!handle.beginNestedTransaction(handle.getCppObj())) {
+            exception = handle.createException();
+        }
+        if(autoInvalidateHandle()) {
+            handle.invalidate();
+        }
+        if(exception != null) {
+            throw exception;
+        }
+    }
+
+    public void commitNestedTransaction() throws WCDBException {
+        Handle handle = getHandle();
+        WCDBException exception = null;
+        if(!handle.commitNestedTransaction(handle.getCppObj())) {
+            exception = handle.createException();
+        }
+        if(autoInvalidateHandle()) {
+            handle.invalidate();
+        }
+        if(exception != null) {
+            throw exception;
+        }
+    }
+
+    public void rollbackNestedTransaction() {
+        Handle handle = getHandle();
+        WCDBException exception = null;
+        handle.rollbackNestedTransaction(handle.getCppObj());
+        if(autoInvalidateHandle()) {
+            handle.invalidate();
+        }
+    }
+
+    public interface Transaction {
+        boolean insideTransaction(Handle handle) throws WCDBException;
+    }
+
+    public void runTransaction(Transaction transaction) throws WCDBException {
+        Handle handle = getHandle();
+        WCDBException exception = null;
+        if(!handle.runTransaction(handle.getCppObj(), transaction)) {
+            exception = handle.createException();
+        }
+        if(autoInvalidateHandle()) {
+            handle.invalidate();
+        }
+        if(exception != null) {
+            throw exception;
+        }
+    }
+
+    public void runNestedTransaction(Transaction transaction) {
+        Handle handle = getHandle();
+        WCDBException exception = null;
+        if(!handle.runNestedTransaction(handle.getCppObj(), transaction)) {
+            exception = handle.createException();
+        }
+        if(autoInvalidateHandle()) {
+            handle.invalidate();
+        }
+        if(exception != null) {
+            throw exception;
+        }
+    }
+
+    public interface PausableTransaction {
+        boolean insideTransaction(Handle handle, boolean isNewTransaction) throws WCDBException;
+    }
+
+    public void runPausableTransaction(PausableTransaction transaction) throws WCDBException {
+        Handle handle = getHandle();
+        WCDBException exception = null;
+        if(!handle.runPausableTransaction(handle.getCppObj(), transaction)) {
+            exception = handle.createException();
+        }
+        if(autoInvalidateHandle()) {
+            handle.invalidate();
+        }
+        if(exception != null) {
+            throw exception;
+        }
     }
 }

@@ -108,11 +108,6 @@ public class Database {
         return WCDBDatabaseIsOpened(database)
     }
 
-    /// Check whether database is blockaded.
-    public var isBlockaded: Bool {
-        return WCDBDatabaseIsBlockaded(database)
-    }
-
     public typealias OnClosed = () throws -> Void
 
     /// Close the database.  
@@ -172,12 +167,17 @@ public class Database {
 
     /// Blockade the database.
     public func blockade() {
-        WCDBDatabaseBlockaded(database)
+        WCDBDatabaseBlockade(database)
     }
 
     /// Unblockade the database.
     public func unblockade() {
-        WCDBDatabaseUnblockaded(database)
+        WCDBDatabaseUnblockade(database)
+    }
+
+    /// Check whether database is blockaded.
+    public var isBlockaded: Bool {
+        return WCDBDatabaseIsBlockaded(database)
     }
 
     /// Purge all unused memory of this database.  
@@ -272,19 +272,78 @@ public extension Database {
         WCDBCoreSetDefaultCipherConfig(version.rawValue)
     }
 
+    enum ConfigPriority: Int32 {
+        case highest = -2147483648 // Only For cipher config
+        case high = -100
+        case `default` = 0
+        case low = 100
+    }
+
+    typealias Config = (Handle) throws -> Void
+    /// Set config for this database.
+    ///
+    /// Since WCDB is a multi-handle database, an executing handle will not apply this config immediately.  
+    /// Instead, all handles will run this config before its next operation.
+    ///
+    /// If you want to add cipher config, please use `ConfigPriority.highest`.
+    ///
+    ///     database.setConfig(named: "demo", withInvocation: { (handle: Handle) throws in
+    ///         try handle.exec(StatementPragma().pragma(.secureDelete).to(true))
+    ///     }, withUninvocation: { (handle: Handle) throws in
+    ///         try handle.exec(StatementPragma().pragma(.secureDelete).to(false))
+    ///     }, withPriority: .high)
+    ///
+    /// - Parameters:
+    ///   - name: The Identifier for this config
+    ///   - callback: config
+    ///   - order: The smaller number is called first
+    func setConfig(named name: String,
+                   withInvocation invocation: @escaping Config,
+                   withUninvocation uninvocation: Config? = nil,
+                   withPriority priority: ConfigPriority = ConfigPriority.default) {
+        let invocationBlock: @convention(block) (CPPHandle) -> Bool = {
+            cppHandle in
+            let handle = Handle(withCPPHandle: cppHandle, database: self)
+            var ret = true
+            do {
+                try invocation(handle)
+            } catch {
+                ret = false
+            }
+            return ret
+        }
+        let invocationImp = imp_implementationWithBlock(invocationBlock)
+        var uninvocationImp: IMP?
+        if let uninvocation = uninvocation {
+            let uninvocationBlock: @convention(block) (CPPHandle) -> Bool = {
+                cppHandle in
+                let handle = Handle(withCPPHandle: cppHandle, database: self)
+                var ret = true
+                do {
+                    try uninvocation(handle)
+                } catch {
+                    ret = false
+                }
+                return ret
+            }
+            uninvocationImp = imp_implementationWithBlock(uninvocationBlock)
+        }
+        WCDBDatabaseConfig(database, name, invocationImp, uninvocationImp, priority.rawValue)
+    }
+
     typealias PerformanceTracer = (String, UInt64, String, Double) -> Void // Path, handleIdentifier, SQL, cost
     typealias SQLTracer = (String, UInt64, String) -> Void // Path, handleIdentifier, SQL
 
-    /// You can register a tracer to monitor the performance of all SQLs.  
-    /// It returns  
+    /// You can register a tracer to monitor the performance of all SQLs.
+    /// It returns
     /// 1. Every SQL executed by the database.
     /// 2. Time consuming in seconds.
     /// 3. Path of database.
     /// 4. The id of the handle executing this SQL.
     ///
-    /// Note that:  
-    /// 1. You should register trace before all db operations.   
-    /// 2. Global tracer will be recovered by db tracer.  
+    /// Note that:
+    /// 1. You should register trace before all db operations.
+    /// 2. Global tracer will be recovered by db tracer.
     ///
     ///     Database.globalTrace(ofPerformance: { (path, handleId, sql, cost) in
     ///         print("Path: \(path)")
@@ -395,10 +454,10 @@ public extension Database {
             errorReporter(error)
         }
         let imp = imp_implementationWithBlock(callback)
-        WCDBDatabaseTraceError(path, imp)
+        WCDBDatabaseTraceError(database, imp)
     }
     func trace(ofError: Void?) {
-        WCDBDatabaseTraceError(path, nil)
+        WCDBDatabaseTraceError(database, nil)
     }
 
     enum Operation: Int {
@@ -427,65 +486,6 @@ public extension Database {
 
     static func globalTrace(ofDatabaseOperation trace: Void?) {
         WCDBDatabaseGlobalTraceOperation(nil)
-    }
-
-    enum ConfigPriority: Int32 {
-        case highest = -2147483648 // Only For cipher config
-        case high = -100
-        case `default` = 0
-        case low = 100
-    }
-
-    typealias Config = (Handle) throws -> Void
-    /// Set config for this database.
-    ///
-    /// Since WCDB is a multi-handle database, an executing handle will not apply this config immediately.  
-    /// Instead, all handles will run this config before its next operation.
-    ///
-    /// If you want to add cipher config, please use `ConfigPriority.highest`.
-    ///
-    ///     database.setConfig(named: "demo", withInvocation: { (handle: Handle) throws in
-    ///         try handle.exec(StatementPragma().pragma(.secureDelete).to(true))
-    ///     }, withUninvocation: { (handle: Handle) throws in
-    ///         try handle.exec(StatementPragma().pragma(.secureDelete).to(false))
-    ///     }, withPriority: .high)
-    ///
-    /// - Parameters:
-    ///   - name: The Identifier for this config
-    ///   - callback: config
-    ///   - order: The smaller number is called first
-    func setConfig(named name: String,
-                   withInvocation invocation: @escaping Config,
-                   withUninvocation uninvocation: Config? = nil,
-                   withPriority priority: ConfigPriority = ConfigPriority.default) {
-        let invocationBlock: @convention(block) (CPPHandle) -> Bool = {
-            cppHandle in
-            let handle = Handle(withCPPHandle: cppHandle, database: self)
-            var ret = true
-            do {
-                try invocation(handle)
-            } catch {
-                ret = false
-            }
-            return ret
-        }
-        let invocationImp = imp_implementationWithBlock(invocationBlock)
-        var uninvocationImp: IMP?
-        if let uninvocation = uninvocation {
-            let uninvocationBlock: @convention(block) (CPPHandle) -> Bool = {
-                cppHandle in
-                let handle = Handle(withCPPHandle: cppHandle, database: self)
-                var ret = true
-                do {
-                    try uninvocation(handle)
-                } catch {
-                    ret = false
-                }
-                return ret
-            }
-            uninvocationImp = imp_implementationWithBlock(uninvocationBlock)
-        }
-        WCDBDatabaseConfig(database, name, invocationImp, uninvocationImp, priority.rawValue)
     }
 }
 

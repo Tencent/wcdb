@@ -34,8 +34,10 @@ typedef void (^WCTMigrationFilterBlock)(WCTMigrationUserInfo*);
 
 /**
  Triggered when a table is migrated completely.
+ When a table is migrated successfully, tableInfo will carry the information of the table.
+ When a database is migrated, tableInfo will .
  */
-typedef void (^WCTMigratedNotificationBlock)(WCTDatabase* _Nonnull, WCTMigrationBaseInfo* _Nullable);
+typedef void (^WCTMigratedNotificationBlock)(WCTDatabase* _Nonnull database, WCTMigrationBaseInfo* _Nullable tableInfo);
 
 @interface WCTDatabase (Migration)
 

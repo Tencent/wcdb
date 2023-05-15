@@ -26,9 +26,12 @@
 #include "ColumnConstraintJNI.h"
 #include "ColumnDefJNI.h"
 #include "ColumnJNI.h"
+#include "CoreJNI.h"
+#include "DatabaseJNI.h"
 #include "ErrorJNI.h"
 #include "ExpressionJNI.h"
 #include "ExpressionOperableJNI.h"
+#include "HandleJNI.h"
 #include "HandleStatementJNI.h"
 #include "IndexedColumnJNI.h"
 #include "LiteralValueJNI.h"
@@ -461,6 +464,111 @@ static const JNINativeMethod g_handleStatementMethods[] = {
     { "isReadOnly", "(J)Z", (void *) WCDBJNIHandleStatementFuncName(isReadOnly) },
 };
 
+static const JNINativeMethod g_handleMethods[] = {
+    { "getError", "(J)J", (void *) WCDBJNIHandleFuncName(getError) },
+    { "checkValid", "(J)Z", (void *) WCDBJNIHandleFuncName(checkValid) },
+    { "getOrCreatePreparedStatement", "(JJ)J", (void *) WCDBJNIHandleFuncName(getOrCreatePreparedStatement) },
+    { "getMainStatement", "(J)J", (void *) WCDBJNIHandleFuncName(getMainStatement) },
+    { "finalizeAllStatements", "(J)V", (void *) WCDBJNIHandleFuncName(finalizeAllStatements) },
+    { "execute", "(JJ)Z", (void *) WCDBJNIHandleFuncName(execute) },
+    { "tableExist", "(J" WCDBJNIStringSignature ")I", (void *) WCDBJNIHandleFuncName(tableExist) },
+    { "getChanges", "(J)I", (void *) WCDBJNIHandleFuncName(getChanges) },
+    { "getTotalChanges", "(J)I", (void *) WCDBJNIHandleFuncName(getTotalChanges) },
+    { "getLastInsertedRowId", "(J)J", (void *) WCDBJNIHandleFuncName(getLastInsertRowid) },
+    { "isInTransaction", "(J)Z", (void *) WCDBJNIHandleFuncName(isInTransaction) },
+    { "beginTransaction", "(J)Z", (void *) WCDBJNIHandleFuncName(beginTransaction) },
+    { "commitTransaction", "(J)Z", (void *) WCDBJNIHandleFuncName(commitTransaction) },
+    { "rollbackTransaction", "(J)V", (void *) WCDBJNIHandleFuncName(rollbackTransaction) },
+    { "beginNestedTransaction", "(J)Z", (void *) WCDBJNIHandleFuncName(beginNestedTransaction) },
+    { "commitNestedTransaction", "(J)Z", (void *) WCDBJNIHandleFuncName(commitNestedTransaction) },
+    { "rollbackNestedTransaction", "(J)V", (void *) WCDBJNIHandleFuncName(rollbackNestedTransaction) },
+    { "runTransaction",
+      "(JLcom/tencent/wcdb/core/HandleOperation$Transaction;)Z",
+      (void *) WCDBJNIHandleFuncName(runTransaction) },
+    { "runNestedTransaction",
+      "(JLcom/tencent/wcdb/core/HandleOperation$Transaction;)Z",
+      (void *) WCDBJNIHandleFuncName(runNestedTransaction) },
+    { "runPausableTransaction",
+      "(JLcom/tencent/wcdb/core/HandleOperation$PausableTransaction;)Z",
+      (void *) WCDBJNIHandleFuncName(runPausableTransaction) },
+};
+
+static const JNINativeMethod g_databaseMethods[]
+= { { "createDatabase", "(" WCDBJNIStringSignature ")J", (void *) WCDBJNICoreFuncName(createDatabase) },
+    { "setDefaultCipherVersion", "(I)V", (void *) WCDBJNICoreFuncName(setDefaultCipherConfig) },
+    { "purgeAll", "()V", (void *) WCDBJNICoreFuncName(purgeAllDatabase) },
+    { "getError", "(J)J", (void *) WCDBJNIDatabaseFuncName(getError) },
+    { "getPath", "(J)" WCDBJNIStringSignature, (void *) WCDBJNIDatabaseFuncName(getPath) },
+    { "getPaths", "(J)Ljava/util/ArrayList;", (void *) WCDBJNIDatabaseFuncName(getPaths) },
+    { "setTag", "(JJ)V", (void *) WCDBJNIDatabaseFuncName(setTag) },
+    { "getTag", "(J)J", (void *) WCDBJNIDatabaseFuncName(getTag) },
+    { "canOpen", "(J)Z", (void *) WCDBJNIDatabaseFuncName(canOpen) },
+    { "isOpened", "(J)Z", (void *) WCDBJNIDatabaseFuncName(isOpened) },
+    { "close",
+      "(J" WCDBJNIDatabaseSignature "$CloseCallBack;)V",
+      (void *) WCDBJNIDatabaseFuncName(close) },
+    { "blockade", "(J)V", (void *) WCDBJNIDatabaseFuncName(blockade) },
+    { "unblockade", "(J)V", (void *) WCDBJNIDatabaseFuncName(unblockade) },
+    { "isBlockaded", "(J)Z", (void *) WCDBJNIDatabaseFuncName(isBlockaded) },
+    { "purge", "(J)V", (void *) WCDBJNIDatabaseFuncName(purge) },
+    { "getHandle", "(J)J", (void *) WCDBJNIDatabaseFuncName(getHandle) },
+    { "setCipherKey", "(J[BII)V", (void *) WCDBJNIDatabaseFuncName(configCipher) },
+    { "setConfig",
+      "(J" WCDBJNIStringSignature WCDBJNIDatabaseSignature
+      "$Config;" WCDBJNIDatabaseSignature "$Config;I)V",
+      (void *) WCDBJNIDatabaseFuncName(config) },
+    { "globalTracePerformance",
+      "(" WCDBJNIDatabaseSignature "$PerformanceTracer;)V",
+      (void *) WCDBJNIDatabaseFuncName(globalTracePerformance) },
+    { "tracePerformance",
+      "(J" WCDBJNIDatabaseSignature "$PerformanceTracer;)V",
+      (void *) WCDBJNIDatabaseFuncName(tracePerformance) },
+    { "globalTraceSQL",
+      "(" WCDBJNIDatabaseSignature "$SQLTracer;)V",
+      (void *) WCDBJNIDatabaseFuncName(globalTraceSQL) },
+    { "traceSQL",
+      "(J" WCDBJNIDatabaseSignature "$SQLTracer;)V",
+      (void *) WCDBJNIDatabaseFuncName(traceSQL) },
+    { "globalTraceException",
+      "(" WCDBJNIDatabaseSignature "$ExceptionTracer;)V",
+      (void *) WCDBJNIDatabaseFuncName(globalTraceError) },
+    { "traceException",
+      "(J" WCDBJNIDatabaseSignature "$ExceptionTracer;)V",
+      (void *) WCDBJNIDatabaseFuncName(traceError) },
+    { "globalTraceDatabaseOperation",
+      "(" WCDBJNIDatabaseSignature "$OperationTracer;)V",
+      (void *) WCDBJNIDatabaseFuncName(globalTraceOperation) },
+    { "removeFiles", "(J)Z", (void *) WCDBJNIDatabaseFuncName(removeFiles) },
+    { "moveFile", "(J" WCDBJNIStringSignature ")Z", (void *) WCDBJNIDatabaseFuncName(moveFile) },
+    { "getFileSize", "(J)J", (void *) WCDBJNIDatabaseFuncName(getFileSize) },
+    { "setNotificationWhenCorrupted",
+      "(J" WCDBJNIDatabaseSignature "$CorruptionNotification;)V",
+      (void *) WCDBJNIDatabaseFuncName(setNotificationWhenCorrupted) },
+    { "checkIfCorrupted", "(J)Z", (void *) WCDBJNIDatabaseFuncName(checkIfCorrupted) },
+    { "checkIfIsAlreadyCorrupted", "(J)Z", (void *) WCDBJNIDatabaseFuncName(checkIfIsAlreadyCorrupted) },
+    { "enableAutoBackup", "(JZ)V", (void *) WCDBJNIDatabaseFuncName(enableAutoBackup) },
+    { "backup", "(J)Z", (void *) WCDBJNIDatabaseFuncName(backup) },
+    { "filterBackup",
+      "(J" WCDBJNIDatabaseSignature "$BackupFilter;)V",
+      (void *) WCDBJNIDatabaseFuncName(filterBackup) },
+    { "retrieve",
+      "(J" WCDBJNIDatabaseSignature "$RetrieveProgressMonitor;)D",
+      (void *) WCDBJNIDatabaseFuncName(retrieve) },
+    { "deposit", "(J)Z", (void *) WCDBJNIDatabaseFuncName(deposit) },
+    { "removeDepositedFiles", "(J)Z", (void *) WCDBJNIDatabaseFuncName(removeDepositedFiles) },
+    { "containDepositedFiles", "(J)Z", (void *) WCDBJNIDatabaseFuncName(containDepositedFiles) },
+    { "passiveCheckpoint", "(J)Z", (void *) WCDBJNIDatabaseFuncName(passiveCheckpoint) },
+    { "truncateCheckpoint", "(J)Z", (void *) WCDBJNIDatabaseFuncName(truncateCheckpoint) },
+    { "filterMigration",
+      "(J" WCDBJNIDatabaseSignature "$MigrationFilter;)V",
+      (void *) WCDBJNIDatabaseFuncName(filterMigration) },
+    { "stepMigration", "(J)Z", (void *) WCDBJNIDatabaseFuncName(stepMigration) },
+    { "enableAutoMigration", "(JZ)V", (void *) WCDBJNIDatabaseFuncName(enableAutoMigration) },
+    { "setNotificationWhenMigrated",
+      "(J" WCDBJNIDatabaseSignature "$MigrationNotification;)V",
+      (void *) WCDBJNIDatabaseFuncName(setNotificationWhenMigrated) },
+    { "isMigrated", "(J)Z", (void *) WCDBJNIDatabaseFuncName(isMigrated) } };
+
 static const JNIBinding g_bindingInfo[] = {
     WCDBJNIRegister("com/tencent/wcdb/base/CppObject", g_objectBridgeMethods),
     WCDBJNIRegister("com/tencent/wcdb/winq/Identifier", g_winqBridgeMethods),
@@ -492,6 +600,8 @@ static const JNIBinding g_bindingInfo[] = {
     WCDBJNIRegister("com/tencent/wcdb/orm/Binding", g_tableBindingMethods),
     WCDBJNIRegister("com/tencent/wcdb/base/WCDBException", g_exceptionMethods),
     WCDBJNIRegister("com/tencent/wcdb/core/PreparedStatement", g_handleStatementMethods),
+    WCDBJNIRegister("com/tencent/wcdb/core/Handle", g_handleMethods),
+    WCDBJNIRegister("com/tencent/wcdb/core/Database", g_databaseMethods),
 };
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *unused)

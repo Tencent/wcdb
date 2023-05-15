@@ -174,6 +174,17 @@ bool WCDBHandleRunTransaction(CPPHandle handle, SwiftClosure* _Nullable transact
     }
 }
 
+bool WCDBHandleRunTransaction2(CPPHandle handle,
+                               void* _Nonnull context,
+                               TransactionCallback _Nonnull transaction)
+{
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
+    return cppHandle->runTransaction([transaction, context](WCDB::InnerHandle* innerHandle) {
+        CPPHandle bridgeHandle = WCDBCreateUnmanagedCPPObject(CPPHandle, innerHandle);
+        return transaction(context, bridgeHandle);
+    });
+}
+
 bool WCDBHandleRunNestedTransaction(CPPHandle handle, SwiftClosure* _Nullable nestedTransaction)
 {
     WCDBTransaction bridgeTransaction
@@ -188,6 +199,19 @@ bool WCDBHandleRunNestedTransaction(CPPHandle handle, SwiftClosure* _Nullable ne
         return false;
     }
 }
+
+bool WCDBHandleRunNestedTransaction2(CPPHandle handle,
+                                     void* _Nonnull context,
+                                     TransactionCallback _Nonnull nestedTransaction)
+{
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
+    return cppHandle->runNestedTransaction(
+    [nestedTransaction, context](WCDB::InnerHandle* innerHandle) {
+        CPPHandle bridgeHandle = WCDBCreateUnmanagedCPPObject(CPPHandle, innerHandle);
+        return nestedTransaction(context, bridgeHandle);
+    });
+}
+
 bool WCDBHandleRunPausableTransaction(CPPHandle handle, SwiftClosure* _Nullable pausableTransaction)
 {
     WCDBPausableTransaction bridgeTransaction
@@ -203,4 +227,16 @@ bool WCDBHandleRunPausableTransaction(CPPHandle handle, SwiftClosure* _Nullable 
     } else {
         return false;
     }
+}
+
+bool WCDBHandleRunPausableTransaction2(CPPHandle handle,
+                                       void* _Nonnull context,
+                                       PausableTransaction _Nonnull pausableTransaction)
+{
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
+    return cppHandle->runPausableTransactionWithOneLoop(
+    [pausableTransaction, context](WCDB::InnerHandle* innerHandle, bool& stop, bool isNewTransaction) {
+        CPPHandle bridgeHandle = WCDBCreateUnmanagedCPPObject(CPPHandle, innerHandle);
+        return pausableTransaction(context, bridgeHandle, &stop, isNewTransaction);
+    });
 }

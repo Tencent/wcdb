@@ -30,33 +30,33 @@
 #include "InnerDatabase.hpp"
 #include "ObjectBridge.hpp"
 
-WCDBDefineNoArgumentSwiftClosureBridgedType(WCDBDatabaseCloseCallback, void)
+WCDBDefineNoArgumentSwiftClosureBridgedType(WCDBSwiftDatabaseCloseCallback, void)
 
 WCDBDefineMultiArgumentSwiftClosureBridgedType(
-WCDBPerformanceTracer, void, const char*, uint64_t, const char*, double);
+WCDBSwiftPerformanceTracer, void, const char*, uint64_t, const char*, double);
 
-WCDBDefineMultiArgumentSwiftClosureBridgedType(WCDBSQLTracer, void, const char*, uint64_t, const char*)
+WCDBDefineMultiArgumentSwiftClosureBridgedType(WCDBSwiftSQLTracer, void, const char*, uint64_t, const char*)
 
-WCDBDefineOneArgumentSwiftClosureBridgedType(WCDBErrorTracer, void, CPPError)
+WCDBDefineOneArgumentSwiftClosureBridgedType(WCDBSwiftErrorTracer, void, CPPError)
 
-WCDBDefineOneArgumentSwiftClosureBridgedType(WCDBConfig, bool, CPPHandle)
+WCDBDefineOneArgumentSwiftClosureBridgedType(WCDBSwiftConfig, bool, CPPHandle)
 
 WCDBDefineOneArgumentSwiftClosureBridgedType(WCDBPathEnumerator, void, const char*)
 
-WCDBDefineNoArgumentSwiftClosureBridgedType(WCDBDatabaseCloseCallback, void)
+WCDBDefineNoArgumentSwiftClosureBridgedType(WCDBSwiftDatabaseCloseCallback, void)
 
-WCDBDefineOneArgumentSwiftClosureBridgedType(WCDBCorruptedNotification, void, CPPDatabase)
+WCDBDefineOneArgumentSwiftClosureBridgedType(WCDBSwiftCorruptedNotification, void, CPPDatabase)
 
-WCDBDefineOneArgumentSwiftClosureBridgedType(WCDBBackupFilter, bool, const char*)
+WCDBDefineOneArgumentSwiftClosureBridgedType(WCDBSwiftBackupFilter, bool, const char*)
 
-WCDBDefineMultiArgumentSwiftClosureBridgedType(WCDBRetrieveProgress, void, void*, double, double)
+WCDBDefineMultiArgumentSwiftClosureBridgedType(WCDBSwiftRetrieveProgress, void, void*, double, double)
 
-WCDBDefineMultiArgumentSwiftClosureBridgedType(WCDBDatabaseOperationTracer, void, CPPDatabase, long);
+WCDBDefineMultiArgumentSwiftClosureBridgedType(WCDBSwiftDatabaseOperationTracer, void, CPPDatabase, long);
 
 WCDBDefineMultiArgumentSwiftClosureBridgedType(
-WCDBDatabaseMigrationFilter, void, const char*, const char*, char**, char**);
+WCDBSwiftDatabaseMigrationFilter, void, const char*, const char*, char**, char**);
 
-WCDBDefineMultiArgumentSwiftClosureBridgedType(WCDBDatabaseMigrationNotification,
+WCDBDefineMultiArgumentSwiftClosureBridgedType(WCDBSwiftDatabaseMigrationNotification,
                                                void,
                                                CPPDatabase,
                                                const char*,
@@ -98,8 +98,19 @@ void WCDBDatabaseGetPaths(CPPDatabase database, SwiftClosure* _Nonnull enumerato
     = WCDBCreateSwiftBridgedClosure(WCDBPathEnumerator, enumerator);
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     std::list<WCDB::StringView> paths = cppDatabase->getPaths();
-    for (auto path : paths) {
+    for (const auto& path : paths) {
         WCDBSwiftClosureCallWithOneArgument(bridgeEnumerator, path.data());
+    }
+}
+
+void WCDBDatabaseGetPaths2(CPPDatabase database,
+                           void* _Nullable context,
+                           WCDBStringEnumerater _Nonnull enumerater)
+{
+    WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
+    std::list<WCDB::StringView> paths = cppDatabase->getPaths();
+    for (const auto& path : paths) {
+        enumerater(context, path.data());
     }
 }
 
@@ -130,8 +141,8 @@ bool WCDBDatabaseIsBlockaded(CPPDatabase database)
 
 void WCDBDatabaseClose(CPPDatabase database, SwiftClosure* callback)
 {
-    WCDBDatabaseCloseCallback closeCallback
-    = WCDBCreateSwiftBridgedClosure(WCDBDatabaseCloseCallback, callback);
+    WCDBSwiftDatabaseCloseCallback closeCallback
+    = WCDBCreateSwiftBridgedClosure(WCDBSwiftDatabaseCloseCallback, callback);
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     cppDatabase->close([closeCallback]() {
         if (WCDBGetSwiftClosure(closeCallback) != nullptr) {
@@ -140,13 +151,23 @@ void WCDBDatabaseClose(CPPDatabase database, SwiftClosure* callback)
     });
 }
 
-void WCDBDatabaseBlockaded(CPPDatabase database)
+void WCDBDatabaseClose2(CPPDatabase database, void* context, WCDBDatabaseCloseCallback callback)
+{
+    WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
+    cppDatabase->close([callback, context]() {
+        if (callback != nullptr) {
+            callback(context);
+        }
+    });
+}
+
+void WCDBDatabaseBlockade(CPPDatabase database)
 {
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     cppDatabase->blockade();
 }
 
-void WCDBDatabaseUnblockaded(CPPDatabase database)
+void WCDBDatabaseUnblockade(CPPDatabase database)
 {
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     cppDatabase->unblockade();
@@ -182,8 +203,10 @@ void WCDBDatabaseConfig(CPPDatabase database,
                         SwiftClosure* _Nullable uninvocation,
                         int priority)
 {
-    WCDBConfig bridgeInvocation = WCDBCreateSwiftBridgedClosure(WCDBConfig, invocation);
-    WCDBConfig bridgeUninvocation = WCDBCreateSwiftBridgedClosure(WCDBConfig, uninvocation);
+    WCDBSwiftConfig bridgeInvocation
+    = WCDBCreateSwiftBridgedClosure(WCDBSwiftConfig, invocation);
+    WCDBSwiftConfig bridgeUninvocation
+    = WCDBCreateSwiftBridgedClosure(WCDBSwiftConfig, uninvocation);
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     WCDB::CustomConfig::Invocation cppInvocation
     = [bridgeInvocation](WCDB::InnerHandle* handle) -> bool {
@@ -204,10 +227,49 @@ void WCDBDatabaseConfig(CPPDatabase database,
     priority);
 }
 
+void WCDBDatabaseConfig2(CPPDatabase database,
+                         const char* _Nonnull name,
+                         WCDBConfigCallback _Nonnull invocation,
+                         void* _Nonnull invocationContext,
+                         WCDBConfigCallback _Nullable unInvocation,
+                         void* _Nullable unInvocationContext,
+                         int priority,
+                         WCDBContextDestructor _Nonnull destructor)
+{
+    WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
+    if (invocation == NULL) {
+        cppDatabase->removeConfig(name);
+        return;
+    }
+    WCDB::Recyclable<void*> recyclableInvocationContext(invocationContext, destructor);
+
+    WCDB::CustomConfig::Invocation cppInvocation
+    = [invocation, recyclableInvocationContext](WCDB::InnerHandle* handle) -> bool {
+        return invocation(recyclableInvocationContext.get(),
+                          WCDBCreateUnmanagedCPPObject(CPPHandle, handle));
+    };
+
+    WCDB::CustomConfig::Invocation cppUninvocation = nullptr;
+    if (unInvocation != nullptr) {
+        assert(unInvocationContext != nullptr);
+        WCDB::Recyclable<void*> recyclableUnInvocationContext(unInvocationContext, destructor);
+        cppUninvocation
+        = [unInvocation, recyclableUnInvocationContext](WCDB::InnerHandle* handle) -> bool {
+            return unInvocation(recyclableUnInvocationContext.get(),
+                                WCDBCreateUnmanagedCPPObject(CPPHandle, handle));
+        };
+    }
+    cppDatabase->setConfig(
+    WCDB::UnsafeStringView(name),
+    std::static_pointer_cast<WCDB::Config>(
+    std::make_shared<WCDB::CustomConfig>(cppInvocation, cppUninvocation)),
+    priority);
+}
+
 void WCDBDatabaseGlobalTracePerformance(SwiftClosure* _Nullable tracer)
 {
-    WCDBPerformanceTracer bridgedTracer
-    = WCDBCreateSwiftBridgedClosure(WCDBPerformanceTracer, tracer);
+    WCDBSwiftPerformanceTracer bridgedTracer
+    = WCDBCreateSwiftBridgedClosure(WCDBSwiftPerformanceTracer, tracer);
     WCDB::InnerHandle::PerformanceNotification callback = nullptr;
     if (WCDBGetSwiftClosure(bridgedTracer) != nullptr) {
         callback = [bridgedTracer](const WCDB::UnsafeStringView& path,
@@ -223,8 +285,8 @@ void WCDBDatabaseGlobalTracePerformance(SwiftClosure* _Nullable tracer)
 
 void WCDBDatabaseTracePerformance(CPPDatabase database, SwiftClosure* _Nullable tracer)
 {
-    WCDBPerformanceTracer bridgedTracer
-    = WCDBCreateSwiftBridgedClosure(WCDBPerformanceTracer, tracer);
+    WCDBSwiftPerformanceTracer bridgedTracer
+    = WCDBCreateSwiftBridgedClosure(WCDBSwiftPerformanceTracer, tracer);
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     if (WCDBGetSwiftClosure(bridgedTracer) != nullptr) {
         WCDB::InnerHandle::PerformanceNotification callback
@@ -243,9 +305,60 @@ void WCDBDatabaseTracePerformance(CPPDatabase database, SwiftClosure* _Nullable 
         cppDatabase->removeConfig(WCDB::PerformanceTraceConfigName);
     }
 }
+
+void WCDBDatabaseGlobalTracePerformance2(WCDBPerformanceTracer _Nullable tracer,
+                                         void* _Nullable context,
+                                         WCDBContextDestructor _Nullable destructor)
+{
+    WCDB::InnerHandle::PerformanceNotification callback = nullptr;
+    if (tracer != nullptr) {
+        WCDB::Recyclable<void*> recyclableContext(context, destructor);
+        callback = [recyclableContext, tracer](const WCDB::UnsafeStringView& path,
+                                               const WCDB::UnsafeStringView& sql,
+                                               double cost,
+                                               const void* handle) {
+            tracer(recyclableContext.get(),
+                   path.data(),
+                   (unsigned long long) handle,
+                   sql.data(),
+                   cost);
+        };
+    }
+    WCDB::Core::shared().setNotificationWhenPerformanceGlobalTraced(callback);
+}
+
+void WCDBDatabaseTracePerformance2(CPPDatabase database,
+                                   WCDBPerformanceTracer _Nullable tracer,
+                                   void* _Nullable context,
+                                   WCDBContextDestructor _Nullable destructor)
+{
+    WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
+    if (tracer != nullptr) {
+        WCDB::Recyclable<void*> recyclableContext(context, destructor);
+        WCDB::InnerHandle::PerformanceNotification callback
+        = [recyclableContext, tracer](const WCDB::UnsafeStringView& path,
+                                      const WCDB::UnsafeStringView& sql,
+                                      double cost,
+                                      const void* handle) {
+              tracer(recyclableContext.get(),
+                     path.data(),
+                     (unsigned long long) handle,
+                     sql.data(),
+                     cost);
+          };
+        cppDatabase->setConfig(WCDB::PerformanceTraceConfigName,
+                               std::static_pointer_cast<WCDB::Config>(
+                               std::make_shared<WCDB::PerformanceTraceConfig>(callback)),
+                               WCDB::Configs::Priority::Highest);
+    } else {
+        cppDatabase->removeConfig(WCDB::PerformanceTraceConfigName);
+    }
+}
+
 void WCDBDatabaseGlobalTraceSQL(SwiftClosure* _Nullable tracer)
 {
-    WCDBSQLTracer bridgedTracer = WCDBCreateSwiftBridgedClosure(WCDBSQLTracer, tracer);
+    WCDBSwiftSQLTracer bridgedTracer
+    = WCDBCreateSwiftBridgedClosure(WCDBSwiftSQLTracer, tracer);
     WCDB::InnerHandle::SQLNotification callback = nullptr;
     if (WCDBGetSwiftClosure(bridgedTracer) != nullptr) {
         callback = [bridgedTracer](const WCDB::UnsafeStringView& path,
@@ -260,7 +373,8 @@ void WCDBDatabaseGlobalTraceSQL(SwiftClosure* _Nullable tracer)
 
 void WCDBDatabaseTraceSQL(CPPDatabase database, SwiftClosure* _Nullable tracer)
 {
-    WCDBSQLTracer bridgedTracer = WCDBCreateSwiftBridgedClosure(WCDBSQLTracer, tracer);
+    WCDBSwiftSQLTracer bridgedTracer
+    = WCDBCreateSwiftBridgedClosure(WCDBSwiftSQLTracer, tracer);
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     if (WCDBGetSwiftClosure(bridgedTracer) != nullptr) {
         WCDB::InnerHandle::SQLNotification callback
@@ -279,9 +393,50 @@ void WCDBDatabaseTraceSQL(CPPDatabase database, SwiftClosure* _Nullable tracer)
     }
 }
 
+void WCDBDatabaseGlobalTraceSQL2(WCDBSQLTracer _Nullable tracer,
+                                 void* _Nullable context,
+                                 WCDBContextDestructor _Nullable destructor)
+{
+    WCDB::InnerHandle::SQLNotification callback = nullptr;
+    if (tracer != nullptr) {
+        WCDB::Recyclable<void*> recyclableContext(context, destructor);
+        callback = [recyclableContext, tracer](const WCDB::UnsafeStringView& path,
+                                               const WCDB::UnsafeStringView& sql,
+                                               const void* handle) {
+            tracer(recyclableContext.get(), path.data(), (uint64_t) handle, sql.data());
+        };
+    }
+    WCDB::Core::shared().setNotificationForSQLGLobalTraced(callback);
+}
+
+void WCDBDatabaseTraceSQL2(CPPDatabase database,
+                           WCDBSQLTracer _Nullable tracer,
+                           void* _Nullable context,
+                           WCDBContextDestructor _Nullable destructor)
+{
+    WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
+    if (tracer != nullptr) {
+        WCDB::Recyclable<void*> recyclableContext(context, destructor);
+        WCDB::InnerHandle::SQLNotification callback
+        = [recyclableContext, tracer](const WCDB::UnsafeStringView& path,
+                                      const WCDB::UnsafeStringView& sql,
+                                      const void* handle) {
+              tracer(
+              recyclableContext.get(), path.data(), (uint64_t) handle, sql.data());
+          };
+        cppDatabase->setConfig(WCDB::SQLTraceConfigName,
+                               std::static_pointer_cast<WCDB::Config>(
+                               std::make_shared<WCDB::SQLTraceConfig>(callback)),
+                               WCDB::Configs::Priority::Highest);
+    } else {
+        cppDatabase->removeConfig(WCDB::SQLTraceConfigName);
+    }
+}
+
 void WCDBDatabaseGlobalTraceError(SwiftClosure* _Nullable tracer)
 {
-    WCDBErrorTracer bridgedTracer = WCDBCreateSwiftBridgedClosure(WCDBErrorTracer, tracer);
+    WCDBSwiftErrorTracer bridgedTracer
+    = WCDBCreateSwiftBridgedClosure(WCDBSwiftErrorTracer, tracer);
     if (WCDBGetSwiftClosure(bridgedTracer) != nullptr) {
         WCDB::Core::shared().setNotificationWhenErrorTraced(
         [bridgedTracer](const WCDB::Error& error) {
@@ -293,9 +448,11 @@ void WCDBDatabaseGlobalTraceError(SwiftClosure* _Nullable tracer)
     }
 }
 
-void WCDBDatabaseTraceError(const char* _Nonnull path, SwiftClosure* _Nullable tracer)
+void WCDBDatabaseTraceError(CPPDatabase database, SwiftClosure* _Nullable tracer)
 {
-    WCDBErrorTracer bridgedTracer = WCDBCreateSwiftBridgedClosure(WCDBErrorTracer, tracer);
+    const char* path = WCDBDatabaseGetPath(database);
+    WCDBSwiftErrorTracer bridgedTracer
+    = WCDBCreateSwiftBridgedClosure(WCDBSwiftErrorTracer, tracer);
     if (WCDBGetSwiftClosure(bridgedTracer) != nullptr) {
         WCDB::Core::shared().setNotificationWhenErrorTraced(
         path, [bridgedTracer](const WCDB::Error& error) {
@@ -307,15 +464,63 @@ void WCDBDatabaseTraceError(const char* _Nonnull path, SwiftClosure* _Nullable t
     }
 }
 
+void WCDBDatabaseGlobalTraceError2(WCDBErrorTracer _Nullable tracer,
+                                   void* _Nullable context,
+                                   WCDBContextDestructor _Nullable destructor)
+{
+    if (tracer != nullptr) {
+        WCDB::Recyclable<void*> recyclableContext(context, destructor);
+        WCDB::Core::shared().setNotificationWhenErrorTraced(
+        [recyclableContext, tracer](const WCDB::Error& error) {
+            tracer(recyclableContext.get(), WCDBCreateUnmanagedCPPObject(CPPError, &error));
+        });
+    } else {
+        WCDB::Core::shared().setNotificationWhenErrorTraced(nullptr);
+    }
+}
+
+void WCDBDatabaseTraceError2(CPPDatabase database,
+                             WCDBErrorTracer _Nullable tracer,
+                             void* _Nullable context,
+                             WCDBContextDestructor _Nullable destructor)
+{
+    const char* path = WCDBDatabaseGetPath(database);
+    if (tracer != nullptr) {
+        WCDB::Recyclable<void*> recyclableContext(context, destructor);
+        WCDB::Core::shared().setNotificationWhenErrorTraced(
+        path, [recyclableContext, tracer](const WCDB::Error& error) {
+            tracer(recyclableContext.get(), WCDBCreateUnmanagedCPPObject(CPPError, &error));
+        });
+    } else {
+        WCDB::Core::shared().setNotificationWhenErrorTraced(path, nullptr);
+    }
+}
+
 void WCDBDatabaseGlobalTraceOperation(SwiftClosure* _Nullable tracer)
 {
-    WCDBDatabaseOperationTracer bridgeTracer
-    = WCDBCreateSwiftBridgedClosure(WCDBDatabaseOperationTracer, tracer);
+    WCDBSwiftDatabaseOperationTracer bridgeTracer
+    = WCDBCreateSwiftBridgedClosure(WCDBSwiftDatabaseOperationTracer, tracer);
     if (WCDBGetSwiftClosure(bridgeTracer) != nullptr) {
         WCDB::DBOperationNotifier::shared().setNotification(
         [=](WCDB::InnerDatabase* database, WCDB::DBOperationNotifier::Operation operation) {
             CPPDatabase cppDatabase = WCDBCreateUnmanagedCPPObject(CPPDatabase, database);
             WCDBSwiftClosureCallWithMultiArgument(bridgeTracer, cppDatabase, (long) operation);
+        });
+    } else {
+        WCDB::DBOperationNotifier::shared().setNotification(nullptr);
+    }
+}
+
+void WCDBDatabaseGlobalTraceOperation2(WCDBOperationTracer _Nullable tracer,
+                                       void* _Nullable context,
+                                       WCDBContextDestructor _Nullable destructor)
+{
+    if (tracer != nullptr) {
+        WCDB::Recyclable<void*> recyclableContext(context, destructor);
+        WCDB::DBOperationNotifier::shared().setNotification(
+        [=](WCDB::InnerDatabase* database, WCDB::DBOperationNotifier::Operation operation) {
+            CPPDatabase cppDatabase = WCDBCreateUnmanagedCPPObject(CPPDatabase, database);
+            tracer(recyclableContext.get(), cppDatabase, operation);
         });
     } else {
         WCDB::DBOperationNotifier::shared().setNotification(nullptr);
@@ -348,14 +553,32 @@ OptionalUInt64 WCDBDatabaseGetFileSize(CPPDatabase database)
 
 void WCDBDatabaseSetNotificationWhenCorrupted(CPPDatabase database, SwiftClosure* _Nullable onCorrupted)
 {
-    WCDBCorruptedNotification notification
-    = WCDBCreateSwiftBridgedClosure(WCDBCorruptedNotification, onCorrupted);
+    WCDBSwiftCorruptedNotification notification
+    = WCDBCreateSwiftBridgedClosure(WCDBSwiftCorruptedNotification, onCorrupted);
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     WCDB::Core::CorruptedNotification cppNotification = nullptr;
     if (WCDBGetSwiftClosure(notification) != nullptr) {
         cppNotification = [notification](WCDB::InnerDatabase* cppDatabase) {
             CPPDatabase database = WCDBCreateUnmanagedCPPObject(CPPDatabase, cppDatabase);
             WCDBSwiftClosureCallWithOneArgument(notification, database);
+        };
+    }
+    WCDB::Core::shared().setNotificationWhenDatabaseCorrupted(
+    cppDatabase->getPath(), cppNotification);
+}
+
+void WCDBDatabaseSetNotificationWhenCorrupted2(CPPDatabase database,
+                                               WCDBCorruptioNotification _Nullable notification,
+                                               void* _Nullable context,
+                                               WCDBContextDestructor _Nullable destructor)
+{
+    WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
+    WCDB::Core::CorruptedNotification cppNotification = nullptr;
+    if (notification != nullptr) {
+        WCDB::Recyclable<void*> recyclableContext(context, destructor);
+        cppNotification = [notification, recyclableContext](WCDB::InnerDatabase* cppDatabase) {
+            notification(recyclableContext.get(),
+                         WCDBCreateUnmanagedCPPObject(CPPDatabase, cppDatabase));
         };
     }
     WCDB::Core::shared().setNotificationWhenDatabaseCorrupted(
@@ -389,8 +612,8 @@ bool WCDBDatabaseBackup(CPPDatabase database)
 
 void WCDBDatabaseFilterBackup(CPPDatabase database, SwiftClosure* _Nullable tableShouldBeBackedUp)
 {
-    WCDBBackupFilter backupFilter
-    = WCDBCreateSwiftBridgedClosure(WCDBBackupFilter, tableShouldBeBackedUp);
+    WCDBSwiftBackupFilter backupFilter
+    = WCDBCreateSwiftBridgedClosure(WCDBSwiftBackupFilter, tableShouldBeBackedUp);
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     WCDB::InnerDatabase::BackupFilter filter = nullptr;
     if (WCDBGetSwiftClosure(backupFilter) != nullptr) {
@@ -399,6 +622,23 @@ void WCDBDatabaseFilterBackup(CPPDatabase database, SwiftClosure* _Nullable tabl
         };
     }
     cppDatabase->filterBackup(filter);
+}
+
+void WCDBDatabaseFilterBackup2(CPPDatabase database,
+                               WCDBBackupFilter _Nullable filter,
+                               void* _Nullable context,
+                               WCDBContextDestructor _Nullable destructor)
+{
+    WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
+    WCDB::InnerDatabase::BackupFilter cppFilter = nullptr;
+    if (filter != nullptr) {
+        WCDB::Recyclable<void*> recyclableContext(context, destructor);
+        cppFilter
+        = [filter, recyclableContext](const WCDB::UnsafeStringView& tableName) -> bool {
+            return filter(recyclableContext.get(), tableName.data());
+        };
+    }
+    cppDatabase->filterBackup(cppFilter);
 }
 
 bool WCDBDatabaseDeposit(CPPDatabase database)
@@ -421,13 +661,29 @@ bool WCDBDatabaseContainDepositedFiles(CPPDatabase database)
 
 double WCDBDatabaseRetrieve(CPPDatabase database, SwiftClosure* _Nullable onProgressUpdated)
 {
-    WCDBRetrieveProgress progress
-    = WCDBCreateSwiftBridgedClosure(WCDBRetrieveProgress, onProgressUpdated);
+    WCDBSwiftRetrieveProgress progress
+    = WCDBCreateSwiftBridgedClosure(WCDBSwiftRetrieveProgress, onProgressUpdated);
     WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, false);
     WCDB::InnerDatabase::RetrieveProgressCallback callback = nullptr;
     if (WCDBGetSwiftClosure(progress) != nullptr) {
         callback = [progress](double percentage, double increment) {
             WCDBSwiftClosureCallWithMultiArgument(progress, nullptr, percentage, increment);
+        };
+    }
+    return cppDatabase->retrieve(callback);
+}
+
+double WCDBDatabaseRetrieve2(CPPDatabase database,
+                             WCDBRetrieveProgressMonitor _Nullable monitor,
+                             void* _Nullable context,
+                             WCDBContextDestructor _Nullable destructor)
+{
+    WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, false);
+    WCDB::InnerDatabase::RetrieveProgressCallback callback = nullptr;
+    if (monitor != nullptr) {
+        WCDB::Recyclable<void*> recyclableContext(context, destructor);
+        callback = [monitor, recyclableContext](double percentage, double increment) {
+            monitor(recyclableContext.get(), percentage, increment);
         };
     }
     return cppDatabase->retrieve(callback);
@@ -447,8 +703,8 @@ bool WCDBDatabaseTruncateCheckpoint(CPPDatabase database)
 
 void WCDBDatabaseFilterMigration(CPPDatabase database, SwiftClosure* _Nullable filter)
 {
-    WCDBDatabaseMigrationFilter bridgedFilter
-    = WCDBCreateSwiftBridgedClosure(WCDBDatabaseMigrationFilter, filter);
+    WCDBSwiftDatabaseMigrationFilter bridgedFilter
+    = WCDBCreateSwiftBridgedClosure(WCDBSwiftDatabaseMigrationFilter, filter);
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     WCDB::InnerDatabase::MigrationFilter cppFilter = nullptr;
     if (WCDBGetSwiftClosure(bridgedFilter) != nullptr) {
@@ -472,6 +728,38 @@ void WCDBDatabaseFilterMigration(CPPDatabase database, SwiftClosure* _Nullable f
     cppDatabase->filterMigration(cppFilter);
 }
 
+void WCDBMigrationInfoSetterImp(WCDB::MigrationUserInfo* info,
+                                const char* sourceTable,
+                                const char* sourceDatabase)
+{
+    info->setSource(sourceTable, sourceDatabase);
+}
+
+void WCDBDatabaseFilterMigration2(CPPDatabase database,
+                                  WCDBMigrationFilter _Nullable filter,
+                                  void* _Nullable context,
+                                  WCDBContextDestructor _Nullable destructor)
+{
+    WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
+    WCDB::InnerDatabase::MigrationFilter cppFilter = nullptr;
+    if (filter != nullptr) {
+        WCDB::Recyclable<void*> recyclableContext(context, destructor);
+        cppFilter = [recyclableContext, filter](WCDB::MigrationUserInfo& info) {
+            const char* sourceDatabase = nullptr;
+            const char* sourceTable = nullptr;
+            filter(recyclableContext.get(),
+                   info.getDatabase().data(),
+                   info.getTable().data(),
+                   &info,
+                   (WCDBMigrationInfoSetter) WCDBMigrationInfoSetterImp);
+            if (sourceTable != nullptr) {
+                info.setSource(sourceTable, sourceDatabase);
+            }
+        };
+    }
+    cppDatabase->filterMigration(cppFilter);
+}
+
 bool WCDBDatabaseStepMigration(CPPDatabase database)
 {
     WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, false);
@@ -486,8 +774,8 @@ void WCDBDatabaseEnableAutoMigration(CPPDatabase database, bool flag)
 
 void WCDBDatabaseSetNotificationWhenMigrated(CPPDatabase database, SwiftClosure* _Nullable onMigrated)
 {
-    WCDBDatabaseMigrationNotification notification
-    = WCDBCreateSwiftBridgedClosure(WCDBDatabaseMigrationNotification, onMigrated);
+    WCDBSwiftDatabaseMigrationNotification notification
+    = WCDBCreateSwiftBridgedClosure(WCDBSwiftDatabaseMigrationNotification, onMigrated);
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     WCDB::InnerDatabase::MigratedCallback callback = nullptr;
     if (onMigrated != nullptr) {
@@ -505,6 +793,34 @@ void WCDBDatabaseSetNotificationWhenMigrated(CPPDatabase database, SwiftClosure*
             } else {
                 WCDBSwiftClosureCallWithMultiArgument(
                 notification, database, nullptr, nullptr, nullptr, nullptr);
+            }
+        };
+    }
+    cppDatabase->setNotificationWhenMigrated(callback);
+}
+
+void WCDBDatabaseSetNotificationWhenMigrated2(CPPDatabase database,
+                                              WCDBMigrationNotification _Nullable notification,
+                                              void* _Nullable context,
+                                              WCDBContextDestructor _Nullable destructor)
+{
+    WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
+    WCDB::InnerDatabase::MigratedCallback callback = nullptr;
+    if (notification != nullptr) {
+        WCDB::Recyclable<void*> recyclableContext(context, destructor);
+        callback = [notification, recyclableContext](
+                   WCDB::InnerDatabase* cppDatabase, const WCDB::MigrationBaseInfo* baseInfo) {
+            CPPDatabase database = WCDBCreateUnmanagedCPPObject(CPPDatabase, cppDatabase);
+            if (baseInfo != nullptr) {
+                notification(recyclableContext.get(),
+                             database,
+                             baseInfo->getDatabase().data(),
+                             baseInfo->getTable().data(),
+                             baseInfo->getSourceDatabase().data(),
+                             baseInfo->getSourceTable().data());
+            } else {
+                notification(
+                recyclableContext.get(), database, nullptr, nullptr, nullptr, nullptr);
             }
         };
     }
