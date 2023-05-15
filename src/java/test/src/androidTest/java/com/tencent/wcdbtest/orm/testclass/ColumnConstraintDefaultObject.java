@@ -23,7 +23,7 @@
 package com.tencent.wcdbtest.orm.testclass;
 import com.tencent.wcdb.*;
 
-@WCDBTableCoding(tableName = "testTable")
+@WCDBTableCoding
 public class ColumnConstraintDefaultObject {
     @WCDBField(defaultIntValue = 1)
     int intValue;

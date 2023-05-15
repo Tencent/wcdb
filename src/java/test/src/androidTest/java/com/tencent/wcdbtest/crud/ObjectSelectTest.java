@@ -53,7 +53,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(object1, "SELECT id, content FROM testTable", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return Arrays.asList(database.getFirstObject(DBTestObject.allFields()));
+                return Arrays.asList(database.getFirstObject(DBTestObject.allFields(), tableName));
             }
         });
     }
@@ -63,7 +63,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(object2, "SELECT id, content FROM testTable WHERE id == 2", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return Arrays.asList(database.getFirstObject(DBTestObject.allFields(), DBTestObject.id.eq(2)));
+                return Arrays.asList(database.getFirstObject(DBTestObject.allFields(), tableName, DBTestObject.id.eq(2)));
             }
         });
     }
@@ -73,7 +73,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(object2, "SELECT id, content FROM testTable WHERE id > 0 ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return Arrays.asList(database.getFirstObject(DBTestObject.allFields(), DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc)));
+                return Arrays.asList(database.getFirstObject(DBTestObject.allFields(), tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc)));
             }
         });
     }
@@ -83,7 +83,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(object1, "SELECT id, content FROM testTable WHERE id > 0 ORDER BY id DESC LIMIT 1 OFFSET 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return Arrays.asList(database.getFirstObject(DBTestObject.allFields(), DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1));
+                return Arrays.asList(database.getFirstObject(DBTestObject.allFields(), tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1));
             }
         });
     }
@@ -93,7 +93,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(object2, "SELECT id, content FROM testTable ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return Arrays.asList(database.getFirstObject(DBTestObject.allFields(), DBTestObject.id.order(Order.Desc)));
+                return Arrays.asList(database.getFirstObject(DBTestObject.allFields(), tableName, DBTestObject.id.order(Order.Desc)));
             }
         });
     }
@@ -103,7 +103,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(object1, "SELECT id, content FROM testTable ORDER BY id DESC LIMIT 1 OFFSET 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return Arrays.asList(database.getFirstObject(DBTestObject.allFields(), DBTestObject.id.order(Order.Desc), 1));
+                return Arrays.asList(database.getFirstObject(DBTestObject.allFields(), tableName, DBTestObject.id.order(Order.Desc), 1));
             }
         });
     }
@@ -113,7 +113,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(objects, "SELECT id, content FROM testTable", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return database.getAllObjects(DBTestObject.allFields());
+                return database.getAllObjects(DBTestObject.allFields(), tableName);
             }
         });
     }
@@ -123,7 +123,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(object1, "SELECT id, content FROM testTable WHERE id == 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return database.getAllObjects(DBTestObject.allFields(), DBTestObject.id.eq(1));
+                return database.getAllObjects(DBTestObject.allFields(), tableName, DBTestObject.id.eq(1));
             }
         });
     }
@@ -133,7 +133,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(new TestObject[]{object2, object1}, "SELECT id, content FROM testTable WHERE id > 0 ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return database.getAllObjects(DBTestObject.allFields(), DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc));
+                return database.getAllObjects(DBTestObject.allFields(), tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc));
             }
         });
     }
@@ -143,7 +143,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(object2, "SELECT id, content FROM testTable WHERE id > 0 ORDER BY id DESC LIMIT 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return database.getAllObjects(DBTestObject.allFields(), DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1);
+                return database.getAllObjects(DBTestObject.allFields(), tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1);
             }
         });
     }
@@ -153,7 +153,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(object1, "SELECT id, content FROM testTable WHERE id > 0 ORDER BY id DESC LIMIT 1 OFFSET 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return database.getAllObjects(DBTestObject.allFields(), DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1, 1);
+                return database.getAllObjects(DBTestObject.allFields(), tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1, 1);
             }
         });
     }
@@ -163,7 +163,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(new TestObject[]{object2, object1}, "SELECT id, content FROM testTable ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return database.getAllObjects(DBTestObject.allFields(), DBTestObject.id.order(Order.Desc));
+                return database.getAllObjects(DBTestObject.allFields(), tableName, DBTestObject.id.order(Order.Desc));
             }
         });
     }
@@ -173,7 +173,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(object2, "SELECT id, content FROM testTable ORDER BY id DESC LIMIT 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return database.getAllObjects(DBTestObject.allFields(), DBTestObject.id.order(Order.Desc), 1);
+                return database.getAllObjects(DBTestObject.allFields(), tableName, DBTestObject.id.order(Order.Desc), 1);
             }
         });
     }
@@ -183,7 +183,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(object1, "SELECT id, content FROM testTable ORDER BY id DESC LIMIT 1 OFFSET 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return database.getAllObjects(DBTestObject.allFields(), DBTestObject.id.order(Order.Desc), 1, 1);
+                return database.getAllObjects(DBTestObject.allFields(), tableName, DBTestObject.id.order(Order.Desc), 1, 1);
             }
         });
     }
@@ -193,7 +193,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject1, "SELECT id FROM testTable", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return Arrays.asList(database.getFirstObject(new Field[]{DBTestObject.id}));
+                return Arrays.asList(database.getFirstObject(new Field[]{DBTestObject.id}, tableName));
             }
         });
     }
@@ -203,7 +203,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject2, "SELECT id FROM testTable WHERE id == 2", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return Arrays.asList(database.getFirstObject(new Field[]{DBTestObject.id}, DBTestObject.id.eq(2)));
+                return Arrays.asList(database.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.eq(2)));
             }
         });
     }
@@ -213,7 +213,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject2, "SELECT id FROM testTable WHERE id > 0 ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return Arrays.asList(database.getFirstObject(new Field[]{DBTestObject.id}, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc)));
+                return Arrays.asList(database.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc)));
             }
         });
     }
@@ -223,7 +223,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject1, "SELECT id FROM testTable WHERE id > 0 ORDER BY id DESC LIMIT 1 OFFSET 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return Arrays.asList(database.getFirstObject(new Field[]{DBTestObject.id}, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1));
+                return Arrays.asList(database.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1));
             }
         });
     }
@@ -233,7 +233,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject2, "SELECT id FROM testTable ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return Arrays.asList(database.getFirstObject(new Field[]{DBTestObject.id}, DBTestObject.id.order(Order.Desc)));
+                return Arrays.asList(database.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.order(Order.Desc)));
             }
         });
     }
@@ -243,7 +243,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject1, "SELECT id FROM testTable ORDER BY id DESC LIMIT 1 OFFSET 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return Arrays.asList(database.getFirstObject(new Field[]{DBTestObject.id}, DBTestObject.id.order(Order.Desc), 1));
+                return Arrays.asList(database.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.order(Order.Desc), 1));
             }
         });
     }
@@ -253,7 +253,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObjects, "SELECT id FROM testTable", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return database.getAllObjects(new Field[]{DBTestObject.id});
+                return database.getAllObjects(new Field[]{DBTestObject.id}, tableName);
             }
         });
     }
@@ -263,7 +263,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject1, "SELECT id FROM testTable WHERE id == 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return database.getAllObjects(new Field[]{DBTestObject.id}, DBTestObject.id.eq(1));
+                return database.getAllObjects(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.eq(1));
             }
         });
     }
@@ -273,7 +273,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(new TestObject[]{partialObject2, partialObject1}, "SELECT id FROM testTable WHERE id > 0 ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return database.getAllObjects(new Field[]{DBTestObject.id}, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc));
+                return database.getAllObjects(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc));
             }
         });
     }
@@ -283,7 +283,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject2, "SELECT id FROM testTable WHERE id > 0 ORDER BY id DESC LIMIT 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return database.getAllObjects(new Field[]{DBTestObject.id}, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1);
+                return database.getAllObjects(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1);
             }
         });
     }
@@ -293,7 +293,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject1, "SELECT id FROM testTable WHERE id > 0 ORDER BY id DESC LIMIT 1 OFFSET 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return database.getAllObjects(new Field[]{DBTestObject.id}, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1, 1);
+                return database.getAllObjects(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1, 1);
             }
         });
     }
@@ -303,7 +303,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(new TestObject[]{partialObject2, partialObject1}, "SELECT id FROM testTable ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return database.getAllObjects(new Field[]{DBTestObject.id}, DBTestObject.id.order(Order.Desc));
+                return database.getAllObjects(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.order(Order.Desc));
             }
         });
     }
@@ -313,7 +313,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject2, "SELECT id FROM testTable ORDER BY id DESC LIMIT 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return database.getAllObjects(new Field[]{DBTestObject.id}, DBTestObject.id.order(Order.Desc), 1);
+                return database.getAllObjects(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.order(Order.Desc), 1);
             }
         });
     }
@@ -323,7 +323,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject1, "SELECT id FROM testTable ORDER BY id DESC LIMIT 1 OFFSET 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return database.getAllObjects(new Field[]{DBTestObject.id}, DBTestObject.id.order(Order.Desc), 1, 1);
+                return database.getAllObjects(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.order(Order.Desc), 1, 1);
             }
         });
     }
@@ -753,7 +753,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(object1, "SELECT id, content FROM testTable", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return Arrays.asList(handle.getFirstObject(DBTestObject.allFields()));
+                return Arrays.asList(handle.getFirstObject(DBTestObject.allFields(), tableName));
             }
         });
     }
@@ -763,7 +763,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(object2, "SELECT id, content FROM testTable WHERE id == 2", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return Arrays.asList(handle.getFirstObject(DBTestObject.allFields(), DBTestObject.id.eq(2)));
+                return Arrays.asList(handle.getFirstObject(DBTestObject.allFields(), tableName, DBTestObject.id.eq(2)));
             }
         });
     }
@@ -773,7 +773,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(object2, "SELECT id, content FROM testTable WHERE id > 0 ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return Arrays.asList(handle.getFirstObject(DBTestObject.allFields(), DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc)));
+                return Arrays.asList(handle.getFirstObject(DBTestObject.allFields(), tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc)));
             }
         });
     }
@@ -783,7 +783,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(object1, "SELECT id, content FROM testTable WHERE id > 0 ORDER BY id DESC LIMIT 1 OFFSET 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return Arrays.asList(handle.getFirstObject(DBTestObject.allFields(), DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1));
+                return Arrays.asList(handle.getFirstObject(DBTestObject.allFields(), tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1));
             }
         });
     }
@@ -793,7 +793,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(object2, "SELECT id, content FROM testTable ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return Arrays.asList(handle.getFirstObject(DBTestObject.allFields(), DBTestObject.id.order(Order.Desc)));
+                return Arrays.asList(handle.getFirstObject(DBTestObject.allFields(), tableName, DBTestObject.id.order(Order.Desc)));
             }
         });
     }
@@ -803,7 +803,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(object1, "SELECT id, content FROM testTable ORDER BY id DESC LIMIT 1 OFFSET 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return Arrays.asList(handle.getFirstObject(DBTestObject.allFields(), DBTestObject.id.order(Order.Desc), 1));
+                return Arrays.asList(handle.getFirstObject(DBTestObject.allFields(), tableName, DBTestObject.id.order(Order.Desc), 1));
             }
         });
     }
@@ -813,7 +813,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(objects, "SELECT id, content FROM testTable", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return handle.getAllObjects(DBTestObject.allFields());
+                return handle.getAllObjects(DBTestObject.allFields(), tableName);
             }
         });
     }
@@ -823,7 +823,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(object1, "SELECT id, content FROM testTable WHERE id == 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return handle.getAllObjects(DBTestObject.allFields(), DBTestObject.id.eq(1));
+                return handle.getAllObjects(DBTestObject.allFields(), tableName, DBTestObject.id.eq(1));
             }
         });
     }
@@ -833,7 +833,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(new TestObject[]{object2, object1}, "SELECT id, content FROM testTable WHERE id > 0 ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return handle.getAllObjects(DBTestObject.allFields(), DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc));
+                return handle.getAllObjects(DBTestObject.allFields(), tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc));
             }
         });
     }
@@ -843,7 +843,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(object2, "SELECT id, content FROM testTable WHERE id > 0 ORDER BY id DESC LIMIT 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return handle.getAllObjects(DBTestObject.allFields(), DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1);
+                return handle.getAllObjects(DBTestObject.allFields(), tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1);
             }
         });
     }
@@ -853,7 +853,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(object1, "SELECT id, content FROM testTable WHERE id > 0 ORDER BY id DESC LIMIT 1 OFFSET 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return handle.getAllObjects(DBTestObject.allFields(), DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1, 1);
+                return handle.getAllObjects(DBTestObject.allFields(), tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1, 1);
             }
         });
     }
@@ -863,7 +863,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(new TestObject[]{object2, object1}, "SELECT id, content FROM testTable ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return handle.getAllObjects(DBTestObject.allFields(), DBTestObject.id.order(Order.Desc));
+                return handle.getAllObjects(DBTestObject.allFields(), tableName, DBTestObject.id.order(Order.Desc));
             }
         });
     }
@@ -873,7 +873,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(object2, "SELECT id, content FROM testTable ORDER BY id DESC LIMIT 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return handle.getAllObjects(DBTestObject.allFields(), DBTestObject.id.order(Order.Desc), 1);
+                return handle.getAllObjects(DBTestObject.allFields(), tableName, DBTestObject.id.order(Order.Desc), 1);
             }
         });
     }
@@ -883,7 +883,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(object1, "SELECT id, content FROM testTable ORDER BY id DESC LIMIT 1 OFFSET 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return handle.getAllObjects(DBTestObject.allFields(), DBTestObject.id.order(Order.Desc), 1, 1);
+                return handle.getAllObjects(DBTestObject.allFields(), tableName, DBTestObject.id.order(Order.Desc), 1, 1);
             }
         });
     }
@@ -893,7 +893,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject1, "SELECT id FROM testTable", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return Arrays.asList(handle.getFirstObject(new Field[]{DBTestObject.id}));
+                return Arrays.asList(handle.getFirstObject(new Field[]{DBTestObject.id}, tableName));
             }
         });
     }
@@ -903,7 +903,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject2, "SELECT id FROM testTable WHERE id == 2", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return Arrays.asList(handle.getFirstObject(new Field[]{DBTestObject.id}, DBTestObject.id.eq(2)));
+                return Arrays.asList(handle.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.eq(2)));
             }
         });
     }
@@ -913,7 +913,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject2, "SELECT id FROM testTable WHERE id > 0 ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return Arrays.asList(handle.getFirstObject(new Field[]{DBTestObject.id}, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc)));
+                return Arrays.asList(handle.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc)));
             }
         });
     }
@@ -923,7 +923,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject1, "SELECT id FROM testTable WHERE id > 0 ORDER BY id DESC LIMIT 1 OFFSET 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return Arrays.asList(handle.getFirstObject(new Field[]{DBTestObject.id}, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1));
+                return Arrays.asList(handle.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1));
             }
         });
     }
@@ -933,7 +933,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject2, "SELECT id FROM testTable ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return Arrays.asList(handle.getFirstObject(new Field[]{DBTestObject.id}, DBTestObject.id.order(Order.Desc)));
+                return Arrays.asList(handle.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.order(Order.Desc)));
             }
         });
     }
@@ -943,7 +943,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject1, "SELECT id FROM testTable ORDER BY id DESC LIMIT 1 OFFSET 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return Arrays.asList(handle.getFirstObject(new Field[]{DBTestObject.id}, DBTestObject.id.order(Order.Desc), 1));
+                return Arrays.asList(handle.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.order(Order.Desc), 1));
             }
         });
     }
@@ -953,7 +953,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObjects, "SELECT id FROM testTable", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return handle.getAllObjects(new Field[]{DBTestObject.id});
+                return handle.getAllObjects(new Field[]{DBTestObject.id}, tableName);
             }
         });
     }
@@ -963,7 +963,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject1, "SELECT id FROM testTable WHERE id == 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return handle.getAllObjects(new Field[]{DBTestObject.id}, DBTestObject.id.eq(1));
+                return handle.getAllObjects(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.eq(1));
             }
         });
     }
@@ -973,7 +973,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(new TestObject[]{partialObject2, partialObject1}, "SELECT id FROM testTable WHERE id > 0 ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return handle.getAllObjects(new Field[]{DBTestObject.id}, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc));
+                return handle.getAllObjects(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc));
             }
         });
     }
@@ -983,7 +983,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject2, "SELECT id FROM testTable WHERE id > 0 ORDER BY id DESC LIMIT 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return handle.getAllObjects(new Field[]{DBTestObject.id}, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1);
+                return handle.getAllObjects(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1);
             }
         });
     }
@@ -993,7 +993,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject1, "SELECT id FROM testTable WHERE id > 0 ORDER BY id DESC LIMIT 1 OFFSET 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return handle.getAllObjects(new Field[]{DBTestObject.id}, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1, 1);
+                return handle.getAllObjects(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1, 1);
             }
         });
     }
@@ -1003,7 +1003,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(new TestObject[]{partialObject2, partialObject1}, "SELECT id FROM testTable ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return handle.getAllObjects(new Field[]{DBTestObject.id}, DBTestObject.id.order(Order.Desc));
+                return handle.getAllObjects(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.order(Order.Desc));
             }
         });
     }
@@ -1013,7 +1013,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject2, "SELECT id FROM testTable ORDER BY id DESC LIMIT 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return handle.getAllObjects(new Field[]{DBTestObject.id}, DBTestObject.id.order(Order.Desc), 1);
+                return handle.getAllObjects(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.order(Order.Desc), 1);
             }
         });
     }
@@ -1023,7 +1023,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject1, "SELECT id FROM testTable ORDER BY id DESC LIMIT 1 OFFSET 1", new SelectingObjectOperation() {
             @Override
             public List execute() {
-                return handle.getAllObjects(new Field[]{DBTestObject.id}, DBTestObject.id.order(Order.Desc), 1, 1);
+                return handle.getAllObjects(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.order(Order.Desc), 1, 1);
             }
         });
     }

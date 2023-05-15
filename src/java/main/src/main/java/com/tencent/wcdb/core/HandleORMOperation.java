@@ -40,10 +40,6 @@ import java.util.concurrent.locks.Condition;
 public abstract class HandleORMOperation extends HandleOperation{
     abstract Database getDatabase();
 
-    public <T> void createTable(TableBinding<T> binding) throws WCDBException {
-        createTable(binding.bindingTableName(), binding);
-    }
-
     public <T> void createTable(String tableName, TableBinding<T> binding) throws WCDBException {
         Handle handle = getHandle();
         try {
@@ -55,10 +51,6 @@ public abstract class HandleORMOperation extends HandleOperation{
                 handle.invalidate();
             }
         }
-    }
-
-    public <T> void createVirtualTable(TableBinding<T> binding) throws WCDBException {
-        createVirtualTable(binding.bindingTableName(), binding);
     }
 
     public <T> void createVirtualTable(String tableName, TableBinding<T> binding) throws WCDBException {
@@ -94,10 +86,6 @@ public abstract class HandleORMOperation extends HandleOperation{
         return new Table<T>(tableName, binding, getDatabase());
     }
 
-    public <T> Table<T> getTable(TableBinding<T> binding) {
-        return new Table<T>(binding, getDatabase());
-    }
-
     public void dropTable(String tableName) throws WCDBException {
         execute(new StatementDropTable().dropTable(tableName));
     }
@@ -130,48 +118,24 @@ public abstract class HandleORMOperation extends HandleOperation{
         return delete;
     }
 
-    public <T> void insertObject(T object, Field<T>[] fields) throws WCDBException {
-        this.<T>prepareInsert().value(object).onFields(fields).execute();
-    }
-
     public <T> void insertObject(T object, Field<T>[] fields, String tableName) throws WCDBException {
         this.<T>prepareInsert().intoTable(tableName).value(object).onFields(fields).execute();
-    }
-
-    public <T> void insertOrReplaceObject(T object, Field<T>[] fields) throws WCDBException {
-        this.<T>prepareInsert().orReplace().value(object).onFields(fields).execute();
     }
 
     public <T> void insertOrReplaceObject(T object, Field<T>[] fields, String tableName) throws WCDBException {
         this.<T>prepareInsert().orReplace().intoTable(tableName).value(object).onFields(fields).execute();
     }
 
-    public <T> void insertOrIgnoreObject(T object, Field<T>[] fields) throws WCDBException {
-        this.<T>prepareInsert().orIgnore().value(object).onFields(fields).execute();
-    }
-
     public <T> void insertOrIgnoreObject(T object, Field<T>[] fields, String tableName) throws WCDBException {
         this.<T>prepareInsert().orIgnore().intoTable(tableName).value(object).onFields(fields).execute();
-    }
-
-    public <T> void insertObjects(T[] objects, Field<T>[] fields) throws WCDBException {
-        this.<T>prepareInsert().values(objects).onFields(fields).execute();
     }
 
     public <T> void insertObjects(T[] objects, Field<T>[] fields, String tableName) throws WCDBException {
         this.<T>prepareInsert().intoTable(tableName).values(objects).onFields(fields).execute();
     }
 
-    public <T> void insertOrReplaceObjects(T[] objects, Field<T>[] fields) throws WCDBException {
-        this.<T>prepareInsert().orReplace().values(objects).onFields(fields).execute();
-    }
-
     public <T> void insertOrReplaceObjects(T[] objects, Field<T>[] fields, String tableName) throws WCDBException {
         this.<T>prepareInsert().orReplace().intoTable(tableName).values(objects).onFields(fields).execute();
-    }
-
-    public <T> void insertOrIgnoreObjects(T[] objects, Field<T>[] fields) throws WCDBException {
-        this.<T>prepareInsert().orIgnore().values(objects).onFields(fields).execute();
     }
 
     public <T> void insertOrIgnoreObjects(T[] objects, Field<T>[] fields, String tableName) throws WCDBException {
@@ -202,30 +166,6 @@ public abstract class HandleORMOperation extends HandleOperation{
         prepareDelete().fromTable(tableName).orderBy(order).limit(limit).offset(offset).execute();
     }
 
-    public <T> void updateObject(T object, Field<T> field) throws WCDBException {
-        this.<T>prepareUpdate().set(field).toObject(object).execute();
-    }
-
-    public <T> void updateObject(T object, Field<T> field, Expression condition) throws WCDBException {
-        this.<T>prepareUpdate().set(field).toObject(object).where(condition).execute();
-    }
-
-    public <T> void updateObject(T object, Field<T> field, Expression condition, OrderingTerm order, long limit) throws WCDBException {
-        this.<T>prepareUpdate().set(field).toObject(object).where(condition).orderBy(order).limit(limit).execute();
-    }
-
-    public <T> void updateObject(T object, Field<T> field, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
-        this.<T>prepareUpdate().set(field).toObject(object).where(condition).orderBy(order).limit(limit).offset(offset).execute();
-    }
-
-    public <T> void updateObject(T object, Field<T> field, OrderingTerm order, long limit) throws WCDBException {
-        this.<T>prepareUpdate().set(field).toObject(object).orderBy(order).limit(limit).execute();
-    }
-
-    public <T> void updateObject(T object, Field<T> field, OrderingTerm order, long limit, long offset) throws WCDBException {
-        this.<T>prepareUpdate().set(field).toObject(object).orderBy(order).limit(limit).offset(offset).execute();
-    }
-
     public <T> void updateObject(T object, Field<T> field, String tableName) throws WCDBException {
         this.<T>prepareUpdate().table(tableName).set(field).toObject(object).execute();
     }
@@ -248,30 +188,6 @@ public abstract class HandleORMOperation extends HandleOperation{
 
     public <T> void updateObject(T object, Field<T> field, String tableName, OrderingTerm order, long limit, long offset) throws WCDBException {
         this.<T>prepareUpdate().table(tableName).set(field).toObject(object).orderBy(order).limit(limit).offset(offset).execute();
-    }
-
-    public <T> void updateObject(T object, Field<T>[] fields) throws WCDBException {
-        this.<T>prepareUpdate().set(fields).toObject(object).execute();
-    }
-
-    public <T> void updateObject(T object, Field<T>[] fields, Expression condition) throws WCDBException {
-        this.<T>prepareUpdate().set(fields).toObject(object).where(condition).execute();
-    }
-
-    public <T> void updateObject(T object, Field<T>[] fields, Expression condition, OrderingTerm order, long limit) throws WCDBException {
-        this.<T>prepareUpdate().set(fields).toObject(object).where(condition).orderBy(order).limit(limit).execute();
-    }
-
-    public <T> void updateObject(T object, Field<T>[] fields, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
-        this.<T>prepareUpdate().set(fields).toObject(object).where(condition).orderBy(order).limit(limit).offset(offset).execute();
-    }
-
-    public <T> void updateObject(T object, Field<T>[] fields, OrderingTerm order, long limit) throws WCDBException {
-        this.<T>prepareUpdate().set(fields).toObject(object).orderBy(order).limit(limit).execute();
-    }
-
-    public <T> void updateObject(T object, Field<T>[] fields, OrderingTerm order, long limit, long offset) throws WCDBException {
-        this.<T>prepareUpdate().set(fields).toObject(object).orderBy(order).limit(limit).offset(offset).execute();
     }
 
     public <T> void updateObject(T object, Field<T>[] fields, String tableName) throws WCDBException {
@@ -298,30 +214,6 @@ public abstract class HandleORMOperation extends HandleOperation{
         this.<T>prepareUpdate().table(tableName).set(fields).toObject(object).orderBy(order).limit(limit).offset(offset).execute();
     }
 
-    public <T> T getFirstObject(Field<T>[] fields) throws WCDBException {
-        return this.<T>prepareSelect().select(fields).firstObject();
-    }
-
-    public <T> T getFirstObject(Field<T>[] fields, Expression condition) throws WCDBException {
-        return this.<T>prepareSelect().select(fields).where(condition).firstObject();
-    }
-
-    public <T> T getFirstObject(Field<T>[] fields, Expression condition, OrderingTerm order) throws WCDBException {
-        return this.<T>prepareSelect().select(fields).where(condition).orderBy(order).firstObject();
-    }
-
-    public <T> T getFirstObject(Field<T>[] fields, Expression condition, OrderingTerm order, long offset) throws WCDBException {
-        return this.<T>prepareSelect().select(fields).where(condition).orderBy(order).limit(1).offset(offset).firstObject();
-    }
-
-    public <T> T getFirstObject(Field<T>[] fields, OrderingTerm order) throws WCDBException {
-        return this.<T>prepareSelect().select(fields).orderBy(order).firstObject();
-    }
-
-    public <T> T getFirstObject(Field<T>[] fields, OrderingTerm order, long offset) throws WCDBException {
-        return this.<T>prepareSelect().select(fields).orderBy(order).limit(1).offset(offset).firstObject();
-    }
-
     public <T> T getFirstObject(Field<T>[] fields, String tableName) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).firstObject();
     }
@@ -344,38 +236,6 @@ public abstract class HandleORMOperation extends HandleOperation{
 
     public <T> T getFirstObject(Field<T>[] fields, String tableName, OrderingTerm order, long offset) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).limit(1).offset(offset).firstObject();
-    }
-
-    public <T> ArrayList<T> getAllObjects(Field<T>[] fields) throws WCDBException {
-        return this.<T>prepareSelect().select(fields).allObjects();
-    }
-
-    public <T> ArrayList<T> getAllObjects(Field<T>[] fields, Expression condition) throws WCDBException {
-        return this.<T>prepareSelect().select(fields).where(condition).allObjects();
-    }
-
-    public <T> ArrayList<T> getAllObjects(Field<T>[] fields, Expression condition, OrderingTerm order) throws WCDBException {
-        return this.<T>prepareSelect().select(fields).where(condition).orderBy(order).allObjects();
-    }
-
-    public <T> ArrayList<T> getAllObjects(Field<T>[] fields, Expression condition, OrderingTerm order, long limit) throws WCDBException {
-        return this.<T>prepareSelect().select(fields).where(condition).orderBy(order).limit(limit).allObjects();
-    }
-
-    public <T> ArrayList<T> getAllObjects(Field<T>[] fields, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
-        return this.<T>prepareSelect().select(fields).where(condition).orderBy(order).limit(limit).offset(offset).allObjects();
-    }
-
-    public <T> ArrayList<T> getAllObjects(Field<T>[] fields, OrderingTerm order) throws WCDBException {
-        return this.<T>prepareSelect().select(fields).orderBy(order).allObjects();
-    }
-
-    public <T> ArrayList<T> getAllObjects(Field<T>[] fields, OrderingTerm order, long limit) throws WCDBException {
-        return this.<T>prepareSelect().select(fields).orderBy(order).limit(limit).allObjects();
-    }
-
-    public <T> ArrayList<T> getAllObjects(Field<T>[] fields, OrderingTerm order, long limit, long offset) throws WCDBException {
-        return this.<T>prepareSelect().select(fields).orderBy(order).limit(limit).offset(offset).allObjects();
     }
 
     public <T> ArrayList<T> getAllObjects(Field<T>[] fields, String tableName) throws WCDBException {

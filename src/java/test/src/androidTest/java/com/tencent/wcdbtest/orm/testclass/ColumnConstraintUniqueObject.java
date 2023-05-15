@@ -24,7 +24,7 @@
 package com.tencent.wcdbtest.orm.testclass;
 import com.tencent.wcdb.*;
 
-@WCDBTableCoding(tableName = "testTable")
+@WCDBTableCoding
 public class ColumnConstraintUniqueObject {
     @WCDBField(isUnique = true)
     int value;

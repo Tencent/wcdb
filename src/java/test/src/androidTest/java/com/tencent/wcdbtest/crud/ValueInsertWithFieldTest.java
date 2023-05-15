@@ -41,7 +41,7 @@ public class ValueInsertWithFieldTest extends ObjectCRUDTestCase {
                 new TestOperation() {
                     @Override
                     public void execute() throws WCDBException {
-                        database.insertRow(row, DBTestObject.allFields());
+                        database.insertRow(row, DBTestObject.allFields(), tableName);
                     }
                 });
         assertEquals(allRowsCount(), 3);
@@ -54,7 +54,7 @@ public class ValueInsertWithFieldTest extends ObjectCRUDTestCase {
                 new TestOperation() {
                     @Override
                     public void execute() throws WCDBException {
-                        database.insertOrReplaceRow(row, DBTestObject.allFields());
+                        database.insertOrReplaceRow(row, DBTestObject.allFields(), tableName);
                     }
                 });
         assertEquals(allRowsCount(), 2);
@@ -67,7 +67,7 @@ public class ValueInsertWithFieldTest extends ObjectCRUDTestCase {
                 new TestOperation() {
                     @Override
                     public void execute() throws WCDBException {
-                        database.insertOrIgnoreRow(row, DBTestObject.allFields());
+                        database.insertOrIgnoreRow(row, DBTestObject.allFields(), tableName);
                     }
                 });
         assertEquals(allRowsCount(), 2);
@@ -85,7 +85,7 @@ public class ValueInsertWithFieldTest extends ObjectCRUDTestCase {
                 new TestOperation() {
                     @Override
                     public void execute() throws WCDBException {
-                        database.insertRows(rows, DBTestObject.allFields());
+                        database.insertRows(rows, DBTestObject.allFields(), tableName);
                     }
                 });
         assertEquals(allRowsCount(), 4);
@@ -103,7 +103,7 @@ public class ValueInsertWithFieldTest extends ObjectCRUDTestCase {
                 new TestOperation() {
                     @Override
                     public void execute() throws WCDBException {
-                        database.insertOrReplaceRows(rows, DBTestObject.allFields());
+                        database.insertOrReplaceRows(rows, DBTestObject.allFields(), tableName);
                     }
                 });
         assertEquals(allRowsCount(), 2);
@@ -121,7 +121,7 @@ public class ValueInsertWithFieldTest extends ObjectCRUDTestCase {
                 new TestOperation() {
                     @Override
                     public void execute() throws WCDBException {
-                        database.insertOrIgnoreRows(rows, DBTestObject.allFields());
+                        database.insertOrIgnoreRows(rows, DBTestObject.allFields(), tableName);
                     }
                 });
         assertEquals(allRowsCount(), 2);
@@ -227,7 +227,7 @@ public class ValueInsertWithFieldTest extends ObjectCRUDTestCase {
                 new TestOperation() {
                     @Override
                     public void execute() throws WCDBException {
-                        handle.insertRow(row, DBTestObject.allFields());
+                        handle.insertRow(row, DBTestObject.allFields(), tableName);
                     }
                 });
         assertEquals(allRowsCount(), 3);
@@ -240,7 +240,7 @@ public class ValueInsertWithFieldTest extends ObjectCRUDTestCase {
                 new TestOperation() {
                     @Override
                     public void execute() throws WCDBException {
-                        handle.insertOrReplaceRow(row, DBTestObject.allFields());
+                        handle.insertOrReplaceRow(row, DBTestObject.allFields(), tableName);
                     }
                 });
         assertEquals(allRowsCount(), 2);
@@ -253,7 +253,7 @@ public class ValueInsertWithFieldTest extends ObjectCRUDTestCase {
                 new TestOperation() {
                     @Override
                     public void execute() throws WCDBException {
-                        handle.insertOrIgnoreRow(row, DBTestObject.allFields());
+                        handle.insertOrIgnoreRow(row, DBTestObject.allFields(), tableName);
                     }
                 });
         assertEquals(allRowsCount(), 2);
@@ -271,7 +271,7 @@ public class ValueInsertWithFieldTest extends ObjectCRUDTestCase {
                 new TestOperation() {
                     @Override
                     public void execute() throws WCDBException {
-                        handle.insertRows(rows, DBTestObject.allFields());
+                        handle.insertRows(rows, DBTestObject.allFields(), tableName);
                     }
                 });
         assertEquals(allRowsCount(), 4);
@@ -289,7 +289,7 @@ public class ValueInsertWithFieldTest extends ObjectCRUDTestCase {
                 new TestOperation() {
                     @Override
                     public void execute() throws WCDBException {
-                        handle.insertOrReplaceRows(rows, DBTestObject.allFields());
+                        handle.insertOrReplaceRows(rows, DBTestObject.allFields(), tableName);
                     }
                 });
         assertEquals(allRowsCount(), 2);
@@ -307,7 +307,7 @@ public class ValueInsertWithFieldTest extends ObjectCRUDTestCase {
                 new TestOperation() {
                     @Override
                     public void execute() throws WCDBException {
-                        handle.insertOrIgnoreRows(rows, DBTestObject.allFields());
+                        handle.insertOrIgnoreRows(rows, DBTestObject.allFields(), tableName);
                     }
                 });
         assertEquals(allRowsCount(), 2);

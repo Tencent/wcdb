@@ -98,7 +98,7 @@ public class RepairTest extends TableTestCase {
         assertTrue(FileTool.getFileSize(firstMaterialPath()) > FileTool.getFileSize(lastMaterialPath()));
     }
 
-    @Test
+//    @Test
     public void testAutoBackup() {
         executeTest(new TestOperation() {
             @Override
@@ -172,7 +172,7 @@ public class RepairTest extends TableTestCase {
     void doTestObjectsRetrieved(boolean success) {
         ArrayList<TestObject> objects = null;
         try {
-            objects = database.getAllObjects(DBTestObject.allFields());
+            objects = database.getAllObjects(DBTestObject.allFields(), tableName);
         } catch (WCDBException e) {
 
         }

@@ -37,7 +37,6 @@ import java.util.ArrayList;
 
 public class Select<T> extends ChainCall<StatementSelect> {
     private Field<T>[] fields = null;
-    private boolean hasTable = false;
 
     public Select(Handle handle) {
         super(handle);
@@ -90,7 +89,6 @@ public class Select<T> extends ChainCall<StatementSelect> {
     }
 
     public Select<T> from(String tableName) {
-        hasTable = tableName != null && tableName.length() > 0;
         statement.from(tableName);
         return this;
     }
@@ -123,9 +121,6 @@ public class Select<T> extends ChainCall<StatementSelect> {
     }
 
     private PreparedStatement prepareStatement() throws WCDBException {
-        if(!hasTable) {
-            statement.from(Field.getTableName(fields));
-        }
         return handle.preparedWithMainStatement(statement);
     }
 }

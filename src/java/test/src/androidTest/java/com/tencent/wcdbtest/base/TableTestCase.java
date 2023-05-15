@@ -46,12 +46,11 @@ public class TableTestCase extends DatabaseTestCase {
 
     public void createTable() throws WCDBException {
         if (!isVirtualTable) {
-            database.createTable(tableBinding);
+            database.createTable(tableName, tableBinding);
         } else {
-            database.createVirtualTable(tableBinding);
+            database.createVirtualTable(tableName, tableBinding);
         }
-        table = database.getTable(tableBinding);
-        assert tableBinding.bindingTableName().equals(tableName);
+        table = database.getTable(tableName, tableBinding);
     }
 
     public void createValueTable() {
@@ -66,8 +65,8 @@ public class TableTestCase extends DatabaseTestCase {
     }
 
     public void createVirtualTable() throws WCDBException {
-        database.createVirtualTable(tableBinding);
-        table = database.getTable(tableBinding);
+        database.createVirtualTable(tableName, tableBinding);
+        table = database.getTable(tableName, tableBinding);
     }
 
     public void dropTable() throws WCDBException {

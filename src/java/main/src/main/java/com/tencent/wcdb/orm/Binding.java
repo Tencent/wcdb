@@ -25,7 +25,6 @@ package com.tencent.wcdb.orm;
 
 import com.tencent.wcdb.base.CppObject;
 import com.tencent.wcdb.core.Handle;
-import com.tencent.wcdb.winq.ColumnConstraint;
 import com.tencent.wcdb.winq.ColumnDef;
 import com.tencent.wcdb.winq.StatementCreateIndex;
 import com.tencent.wcdb.winq.TableConstraint;

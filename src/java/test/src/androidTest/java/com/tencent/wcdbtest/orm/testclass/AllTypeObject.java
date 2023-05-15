@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Random;
 
-@WCDBTableCoding(tableName = "testTable")
+@WCDBTableCoding
 public class AllTypeObject {
     @WCDBField
     public

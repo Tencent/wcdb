@@ -32,7 +32,6 @@ import com.tencent.wcdb.winq.BindParameter;
 import com.tencent.wcdb.winq.StatementInsert;
 
 public class Insert<T> extends ChainCall<StatementInsert> {
-    private boolean hasTable = false;
     private boolean hasConflictAction = false;
     private Field<T>[] fields = null;
     private T[] values = null;
@@ -55,7 +54,6 @@ public class Insert<T> extends ChainCall<StatementInsert> {
     }
 
     public Insert<T> intoTable(String table) {
-        hasTable = table != null && table.length() > 0;
         statement.insertInto(table);
         return this;
     }
@@ -100,9 +98,6 @@ public class Insert<T> extends ChainCall<StatementInsert> {
 
     private void realExecute() throws WCDBException {
         TableBinding<T> binding = Field.getBinding(fields);
-        if(!hasTable && binding != null) {
-            statement.insertInto(binding.bindingTableName());
-        }
         PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
         if(binding != null) {
             for(T object : values) {

@@ -25,7 +25,7 @@ package com.tencent.wcdbtest.orm.testclass;
 
 import com.tencent.wcdb.*;
 
-@WCDBTableCoding(tableName = "testTable",
+@WCDBTableCoding(
         multiPrimaries = @MultiPrimary(columns = {"multiPrimary1", "multiPrimary2", "multiPrimary3"}),
         multiUnique = @MultiUnique(columns = {"multiUnique1", "multiUnique2", "multiUnique3"}),
         multiIndexes = @MultiIndexes(nameSuffix = "_multi_index", columns = {"multiIndex1", "multiIndex2", "multiIndex3"})

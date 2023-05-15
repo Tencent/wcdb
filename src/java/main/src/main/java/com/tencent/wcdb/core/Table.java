@@ -34,15 +34,5 @@ public class Table <T> extends TableORMOperation<T>{
         assert binding != null;
         assert database != null;
     }
-
-    Table(TableBinding<T> binding, Database database)  {
-        super();
-        this.binding = binding;
-        this.tableName = binding.bindingTableName();
-        this.database = database;
-        assert tableName != null && tableName.length() > 0;
-        assert binding != null;
-        assert database != null;
-    }
 }
 

@@ -24,7 +24,7 @@
 package com.tencent.wcdbtest.orm.testclass;
 import com.tencent.wcdb.*;
 
-@WCDBTableCoding(tableName = "testTable")
+@WCDBTableCoding
 public class ColumnConstraintAutoIncrementObject {
     @WCDBField(isPrimary = true, isAutoIncrement = true)
     int value;

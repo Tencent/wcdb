@@ -28,7 +28,7 @@ import androidx.annotation.Nullable;
 import com.tencent.wcdb.*;
 import java.util.Objects;
 
-@WCDBTableCoding(tableName = "testTable")
+@WCDBTableCoding
 public class TestObject {
     @WCDBField(isPrimary = true, isAutoIncrement = true)
     public int id;

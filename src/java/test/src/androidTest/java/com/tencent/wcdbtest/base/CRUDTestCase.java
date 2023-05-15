@@ -55,7 +55,7 @@ public class CRUDTestCase extends TableTestCase {
         row2 = RandomTool.testRowWithId(2);
         rows = new Value[][]{row1, row2};
         handle = database.getHandle();
-        table = database.getTable(DBTestObject.INSTANCE);
+        table = database.getTable(tableName, DBTestObject.INSTANCE);
     }
 
     @After

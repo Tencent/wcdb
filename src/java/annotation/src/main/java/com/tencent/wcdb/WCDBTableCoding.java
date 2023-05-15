@@ -32,7 +32,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
 public @interface WCDBTableCoding {
-    String tableName() default "";
     MultiIndexes[] multiIndexes() default {};
     MultiPrimary[] multiPrimaries() default {};
     MultiUnique[] multiUnique() default {};

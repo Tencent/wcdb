@@ -29,8 +29,6 @@ public interface TableBinding<T> {
 
     public Field<T>[] allBindingFields();
 
-    public String bindingTableName();
-
     public Binding baseBinding();
 
     public T extractObject(Field<T>[] fields, PreparedStatement preparedStatement);

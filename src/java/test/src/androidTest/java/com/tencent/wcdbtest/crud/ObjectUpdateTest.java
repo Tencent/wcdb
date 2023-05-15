@@ -53,7 +53,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
                 new TestOperation() {
                     @Override
                     public void execute() throws WCDBException {
-                        database.updateObject(renewObject, DBTestObject.content);
+                        database.updateObject(renewObject, DBTestObject.content, tableName);
                     }
                 });
     }
@@ -65,7 +65,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
                 new TestOperation() {
                     @Override
                     public void execute() throws WCDBException {
-                        database.updateObject(renewObject, DBTestObject.content, DBTestObject.id.eq(1));
+                        database.updateObject(renewObject, DBTestObject.content, tableName, DBTestObject.id.eq(1));
                     }
                 });
     }
@@ -79,6 +79,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
                     public void execute() throws WCDBException {
                         database.updateObject(renewObject,
                                 DBTestObject.content,
+                                tableName,
                                 DBTestObject.id.gt(0),
                                 DBTestObject.id.order(Order.Desc), 1);
                     }
@@ -94,6 +95,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
                     public void execute() throws WCDBException {
                         database.updateObject(renewObject,
                                 DBTestObject.content,
+                                tableName,
                                 DBTestObject.id.gt(0),
                                 DBTestObject.id.order(Order.Desc), 1, 1);
                     }
@@ -109,6 +111,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
                     public void execute() throws WCDBException {
                         database.updateObject(renewObject,
                                 DBTestObject.content,
+                                tableName,
                                 DBTestObject.id.order(Order.Desc), 1);
                     }
                 });
@@ -123,6 +126,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
                     public void execute() throws WCDBException {
                         database.updateObject(renewObject,
                                 DBTestObject.content,
+                                tableName,
                                 DBTestObject.id.order(Order.Desc), 1, 1);
                     }
                 });
@@ -217,7 +221,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
                 new TestOperation() {
                     @Override
                     public void execute() throws WCDBException {
-                        handle.updateObject(renewObject, DBTestObject.content);
+                        handle.updateObject(renewObject, DBTestObject.content, tableName);
                     }
                 });
     }
@@ -229,7 +233,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
                 new TestOperation() {
                     @Override
                     public void execute() throws WCDBException {
-                        handle.updateObject(renewObject, DBTestObject.content, DBTestObject.id.eq(1));
+                        handle.updateObject(renewObject, DBTestObject.content, tableName, DBTestObject.id.eq(1));
                     }
                 });
     }
@@ -243,6 +247,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
                     public void execute() throws WCDBException {
                         handle.updateObject(renewObject,
                                 DBTestObject.content,
+                                tableName,
                                 DBTestObject.id.gt(0),
                                 DBTestObject.id.order(Order.Desc), 1);
                     }
@@ -258,6 +263,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
                     public void execute() throws WCDBException {
                         handle.updateObject(renewObject,
                                 DBTestObject.content,
+                                tableName,
                                 DBTestObject.id.gt(0),
                                 DBTestObject.id.order(Order.Desc), 1, 1);
                     }
@@ -273,6 +279,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
                     public void execute() throws WCDBException {
                         handle.updateObject(renewObject,
                                 DBTestObject.content,
+                                tableName,
                                 DBTestObject.id.order(Order.Desc), 1);
                     }
                 });
@@ -287,6 +294,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
                     public void execute() throws WCDBException {
                         handle.updateObject(renewObject,
                                 DBTestObject.content,
+                                tableName,
                                 DBTestObject.id.order(Order.Desc), 1, 1);
                     }
                 });

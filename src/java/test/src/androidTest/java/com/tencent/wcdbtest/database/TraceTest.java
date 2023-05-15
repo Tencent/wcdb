@@ -98,7 +98,7 @@ public class TraceTest extends TableTestCase {
                 }
             }
         });
-        database.insertObjects(RandomTool.autoIncrementTestCaseObjects(10000), DBTestObject.allFields());
+        database.insertObjects(RandomTool.autoIncrementTestCaseObjects(10000), DBTestObject.allFields(), tableName);
         assertEquals(sqls.size(), 0);
         database.tracePerformance(null);
     }
@@ -120,7 +120,7 @@ public class TraceTest extends TableTestCase {
                 }
             }
         });
-        database.insertObjects(RandomTool.autoIncrementTestCaseObjects(10000), DBTestObject.allFields());
+        database.insertObjects(RandomTool.autoIncrementTestCaseObjects(10000), DBTestObject.allFields(), tableName);
         assertEquals(sqls.size(), 0);
         Database.globalTracePerformance(null);
     }
@@ -201,8 +201,8 @@ public class TraceTest extends TableTestCase {
         });
         Database newDatabase = new Database(Paths.get(currentDirectory, "testDatabase2").toString());
         newDatabase.setTag(10000);
-        newDatabase.createTable(DBTestObject.INSTANCE);
-        newDatabase.insertObjects(RandomTool.autoIncrementTestCaseObjects(10), DBTestObject.allFields());
+        newDatabase.createTable(tableName, DBTestObject.INSTANCE);
+        newDatabase.insertObjects(RandomTool.autoIncrementTestCaseObjects(10), DBTestObject.allFields(), tableName);
         assertEquals(tag.intValue, newDatabase.getTag());
         assertEquals(path.stringValue, newDatabase.getPath());
         assertEquals(openHandleCount.intValue, 1);

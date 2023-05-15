@@ -68,7 +68,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.insertObject(autoIncrementObject, DBTestObject.allFields());
+                database.insertObject(autoIncrementObject, DBTestObject.allFields(), tableName);
             }
         });
         assertTrue(autoIncrementObject.equals(object3));
@@ -82,7 +82,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.insertObject(autoIncrementObject, new Field[]{DBTestObject.content});
+                database.insertObject(autoIncrementObject, new Field[]{DBTestObject.content}, tableName);
             }
         });
         assertTrue(autoIncrementObject.equals(object3));
@@ -95,7 +95,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.insertObject(object3, DBTestObject.allFields());
+                database.insertObject(object3, DBTestObject.allFields(), tableName);
             }
         });
     }
@@ -108,7 +108,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.insertObjects(new TestObject[]{object3, object4}, DBTestObject.allFields());
+                database.insertObjects(new TestObject[]{object3, object4}, DBTestObject.allFields(), tableName);
             }
         });
     }
@@ -120,7 +120,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.insertOrReplaceObject(renewObject1, DBTestObject.allFields());
+                database.insertOrReplaceObject(renewObject1, DBTestObject.allFields(), tableName);
             }
         });
     }
@@ -133,7 +133,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.insertOrReplaceObjects(new TestObject[]{renewObject1, renewObject2}, DBTestObject.allFields());
+                database.insertOrReplaceObjects(new TestObject[]{renewObject1, renewObject2}, DBTestObject.allFields(), tableName);
             }
         });
     }
@@ -145,7 +145,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.insertOrIgnoreObject(renewObject1, DBTestObject.allFields());
+                database.insertOrIgnoreObject(renewObject1, DBTestObject.allFields(), tableName);
             }
         });
     }
@@ -158,7 +158,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.insertOrIgnoreObjects(new TestObject[]{renewObject1, renewObject2}, DBTestObject.allFields());
+                database.insertOrIgnoreObjects(new TestObject[]{renewObject1, renewObject2}, DBTestObject.allFields(), tableName);
             }
         });
     }
@@ -170,7 +170,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.insertObject(object3, new Field[]{DBTestObject.id});
+                database.insertObject(object3, new Field[]{DBTestObject.id}, tableName);
             }
         });
     }
@@ -183,7 +183,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.insertObjects(new TestObject[]{object3, object4}, new Field[]{DBTestObject.id});
+                database.insertObjects(new TestObject[]{object3, object4}, new Field[]{DBTestObject.id}, tableName);
             }
         });
     }
@@ -195,7 +195,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.insertOrReplaceObject(object1, new Field[]{DBTestObject.id});
+                database.insertOrReplaceObject(object1, new Field[]{DBTestObject.id}, tableName);
             }
         });
     }
@@ -208,7 +208,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.insertOrReplaceObjects(new TestObject[]{object1, object2}, new Field[]{DBTestObject.id});
+                database.insertOrReplaceObjects(new TestObject[]{object1, object2}, new Field[]{DBTestObject.id}, tableName);
             }
         });
     }
@@ -220,7 +220,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.insertOrIgnoreObject(object1, new Field[]{DBTestObject.id});
+                database.insertOrIgnoreObject(object1, new Field[]{DBTestObject.id}, tableName);
             }
         });
     }
@@ -233,7 +233,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.insertOrIgnoreObjects(new TestObject[]{object1, object2}, new Field[]{DBTestObject.id});
+                database.insertOrIgnoreObjects(new TestObject[]{object1, object2}, new Field[]{DBTestObject.id}, tableName);
             }
         });
     }
@@ -424,7 +424,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.insertObject(autoIncrementObject, DBTestObject.allFields());
+                handle.insertObject(autoIncrementObject, DBTestObject.allFields(), tableName);
             }
         });
         assertTrue(autoIncrementObject.equals(object3));
@@ -438,7 +438,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.insertObject(autoIncrementObject, new Field[]{DBTestObject.content});
+                handle.insertObject(autoIncrementObject, new Field[]{DBTestObject.content}, tableName);
             }
         });
         assertTrue(autoIncrementObject.equals(object3));
@@ -451,7 +451,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.insertObject(object3, DBTestObject.allFields());
+                handle.insertObject(object3, DBTestObject.allFields(), tableName);
             }
         });
     }
@@ -464,7 +464,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.insertObjects(new TestObject[]{object3, object4}, DBTestObject.allFields());
+                handle.insertObjects(new TestObject[]{object3, object4}, DBTestObject.allFields(), tableName);
             }
         });
     }
@@ -476,7 +476,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.insertOrReplaceObject(renewObject1, DBTestObject.allFields());
+                handle.insertOrReplaceObject(renewObject1, DBTestObject.allFields(), tableName);
             }
         });
     }
@@ -489,7 +489,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.insertOrReplaceObjects(new TestObject[]{renewObject1, renewObject2}, DBTestObject.allFields());
+                handle.insertOrReplaceObjects(new TestObject[]{renewObject1, renewObject2}, DBTestObject.allFields(), tableName);
             }
         });
     }
@@ -501,7 +501,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.insertOrIgnoreObject(renewObject1, DBTestObject.allFields());
+                handle.insertOrIgnoreObject(renewObject1, DBTestObject.allFields(), tableName);
             }
         });
     }
@@ -514,7 +514,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.insertOrIgnoreObjects(new TestObject[]{renewObject1, renewObject2}, DBTestObject.allFields());
+                handle.insertOrIgnoreObjects(new TestObject[]{renewObject1, renewObject2}, DBTestObject.allFields(), tableName);
             }
         });
     }
@@ -526,7 +526,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.insertObject(object3, new Field[]{DBTestObject.id});
+                handle.insertObject(object3, new Field[]{DBTestObject.id}, tableName);
             }
         });
     }
@@ -539,7 +539,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.insertObjects(new TestObject[]{object3, object4}, new Field[]{DBTestObject.id});
+                handle.insertObjects(new TestObject[]{object3, object4}, new Field[]{DBTestObject.id}, tableName);
             }
         });
     }
@@ -551,7 +551,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.insertOrReplaceObject(object1, new Field[]{DBTestObject.id});
+                handle.insertOrReplaceObject(object1, new Field[]{DBTestObject.id}, tableName);
             }
         });
     }
@@ -564,7 +564,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.insertOrReplaceObjects(new TestObject[]{object1, object2}, new Field[]{DBTestObject.id});
+                handle.insertOrReplaceObjects(new TestObject[]{object1, object2}, new Field[]{DBTestObject.id}, tableName);
             }
         });
     }
@@ -576,7 +576,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.insertOrIgnoreObject(object1, new Field[]{DBTestObject.id});
+                handle.insertOrIgnoreObject(object1, new Field[]{DBTestObject.id}, tableName);
             }
         });
     }
@@ -589,7 +589,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.insertOrIgnoreObjects(new TestObject[]{object1, object2}, new Field[]{DBTestObject.id});
+                handle.insertOrIgnoreObjects(new TestObject[]{object1, object2}, new Field[]{DBTestObject.id}, tableName);
             }
         });
     }

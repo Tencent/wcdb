@@ -37,7 +37,6 @@ public class Update<T> extends ChainCall<StatementUpdate> {
     private Field<T>[] fields = null;
     private T object = null;
     private Value[] row = null;
-    private boolean hasTable = false;
 
 
     public Update(Handle handle) {
@@ -46,7 +45,6 @@ public class Update<T> extends ChainCall<StatementUpdate> {
     }
 
     public Update<T> table(String table) {
-        hasTable = table != null && table.length() > 0;
         statement.update(table);
         return this;
     }
@@ -133,9 +131,6 @@ public class Update<T> extends ChainCall<StatementUpdate> {
     public void execute() throws WCDBException {
         assert object != null || row != null;
         TableBinding<T> binding = Field.getBinding(fields);
-        if(!hasTable && binding != null) {
-            statement.update(binding.bindingTableName());
-        }
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
             if(object != null) {

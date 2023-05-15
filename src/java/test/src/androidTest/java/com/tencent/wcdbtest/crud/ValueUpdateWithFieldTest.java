@@ -42,10 +42,10 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
         doTestSQL("UPDATE testTable SET content = ?1", new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.updateValue("newContent", DBTestObject.content);
+                database.updateValue("newContent", DBTestObject.content, tableName);
             }
         });
-        assertEquals(database.getValue(DBTestObject.content).getText(), "newContent");
+        assertEquals(database.getValue(DBTestObject.content, tableName).getText(), "newContent");
     }
 
     @Test
@@ -56,12 +56,12 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.updateValue("newContent", DBTestObject.content, DBTestObject.id.eq(1));
-                database.updateValue(nextId, DBTestObject.id, DBTestObject.content.eq("newContent"));
+                database.updateValue("newContent", DBTestObject.content, tableName, DBTestObject.id.eq(1));
+                database.updateValue(nextId, DBTestObject.id, tableName, DBTestObject.content.eq("newContent"));
             }
         });
-        assertEquals(database.getValue(DBTestObject.content, DBTestObject.id.eq(nextId)).getText(), "newContent");
-        assertEquals(database.getValue(DBTestObject.id, DBTestObject.content.eq("newContent")).getInteger(), nextId);
+        assertEquals(database.getValue(DBTestObject.content, tableName, DBTestObject.id.eq(nextId)).getText(), "newContent");
+        assertEquals(database.getValue(DBTestObject.id, tableName, DBTestObject.content.eq("newContent")).getInteger(), nextId);
     }
 
     @Test
@@ -72,8 +72,8 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.updateValue("newContent", DBTestObject.content, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Asc), 1);
-                database.updateValue(nextId, DBTestObject.id, DBTestObject.content.order(Order.Asc), 1);
+                database.updateValue("newContent", DBTestObject.content, tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Asc), 1);
+                database.updateValue(nextId, DBTestObject.id, tableName, DBTestObject.content.order(Order.Asc), 1);
             }
         });
         assertEquals(database.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getInteger(), 1);
@@ -88,8 +88,8 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.updateValue("newContent", DBTestObject.content, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Asc), 1, 1);
-                database.updateValue(nextId, DBTestObject.id, DBTestObject.content.order(Order.Asc), 1, 1);
+                database.updateValue("newContent", DBTestObject.content, tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Asc), 1, 1);
+                database.updateValue(nextId, DBTestObject.id, tableName, DBTestObject.content.order(Order.Asc), 1, 1);
             }
         });
         assertEquals(database.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getInteger(), 1);
@@ -101,10 +101,10 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
         doTestSQL("UPDATE testTable SET id = ?1, content = ?2 WHERE id != 1", new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.updateRow(new Value[]{new Value(nextId), new Value("newContent")}, DBTestObject.allFields(), DBTestObject.id.notEq(1));
+                database.updateRow(new Value[]{new Value(nextId), new Value("newContent")}, DBTestObject.allFields(), tableName, DBTestObject.id.notEq(1));
             }
         });
-        assertEquals(database.getValue(DBTestObject.content, DBTestObject.id.eq(nextId)).getText(), "newContent");
+        assertEquals(database.getValue(DBTestObject.content, tableName, DBTestObject.id.eq(nextId)).getText(), "newContent");
     }
 
     @Test
@@ -115,8 +115,8 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.updateRow(new Value[]{new Value(nextId), new Value("newContent")}, DBTestObject.allFields(), DBTestObject.id.lt(nextId), DBTestObject.id.order(Order.Desc), 1);
-                database.updateRow(new Value[]{new Value(nextId + 1), new Value("newContent2")}, DBTestObject.allFields(), DBTestObject.content.order(Order.Desc), 1);
+                database.updateRow(new Value[]{new Value(nextId), new Value("newContent")}, DBTestObject.allFields(), tableName, DBTestObject.id.lt(nextId), DBTestObject.id.order(Order.Desc), 1);
+                database.updateRow(new Value[]{new Value(nextId + 1), new Value("newContent2")}, DBTestObject.allFields(), tableName, DBTestObject.content.order(Order.Desc), 1);
             }
         });
         assertTrue(database.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getInteger() +
@@ -133,8 +133,8 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.updateRow(new Value[]{new Value(nextId), new Value("newContent")}, DBTestObject.allFields(), DBTestObject.id.lt(nextId), DBTestObject.id.order(Order.Desc), 1, 1);
-                database.updateRow(new Value[]{new Value(nextId + 1), new Value("newContent2")}, DBTestObject.allFields(), DBTestObject.content.order(Order.Desc), 1, 1);
+                database.updateRow(new Value[]{new Value(nextId), new Value("newContent")}, DBTestObject.allFields(), tableName, DBTestObject.id.lt(nextId), DBTestObject.id.order(Order.Desc), 1, 1);
+                database.updateRow(new Value[]{new Value(nextId + 1), new Value("newContent2")}, DBTestObject.allFields(), tableName, DBTestObject.content.order(Order.Desc), 1, 1);
             }
         });
         assertTrue(database.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getInteger() +
@@ -254,10 +254,10 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
         doTestSQL("UPDATE testTable SET content = ?1", new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.updateValue("newContent", DBTestObject.content);
+                handle.updateValue("newContent", DBTestObject.content, tableName);
             }
         });
-        assertEquals(handle.getValue(DBTestObject.content).getText(), "newContent");
+        assertEquals(handle.getValue(DBTestObject.content, tableName).getText(), "newContent");
     }
 
     @Test
@@ -268,12 +268,12 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.updateValue("newContent", DBTestObject.content, DBTestObject.id.eq(1));
-                handle.updateValue(nextId, DBTestObject.id, DBTestObject.content.eq("newContent"));
+                handle.updateValue("newContent", DBTestObject.content, tableName, DBTestObject.id.eq(1));
+                handle.updateValue(nextId, DBTestObject.id, tableName, DBTestObject.content.eq("newContent"));
             }
         });
-        assertEquals(handle.getValue(DBTestObject.content, DBTestObject.id.eq(nextId)).getText(), "newContent");
-        assertEquals(handle.getValue(DBTestObject.id, DBTestObject.content.eq("newContent")).getInteger(), nextId);
+        assertEquals(handle.getValue(DBTestObject.content, tableName, DBTestObject.id.eq(nextId)).getText(), "newContent");
+        assertEquals(handle.getValue(DBTestObject.id, tableName, DBTestObject.content.eq("newContent")).getInteger(), nextId);
     }
 
     @Test
@@ -284,8 +284,8 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.updateValue("newContent", DBTestObject.content, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Asc), 1);
-                handle.updateValue(nextId, DBTestObject.id, DBTestObject.content.order(Order.Asc), 1);
+                handle.updateValue("newContent", DBTestObject.content, tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Asc), 1);
+                handle.updateValue(nextId, DBTestObject.id, tableName, DBTestObject.content.order(Order.Asc), 1);
             }
         });
         assertEquals(handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getInteger(), 1);
@@ -300,8 +300,8 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.updateValue("newContent", DBTestObject.content, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Asc), 1, 1);
-                handle.updateValue(nextId, DBTestObject.id, DBTestObject.content.order(Order.Asc), 1, 1);
+                handle.updateValue("newContent", DBTestObject.content, tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Asc), 1, 1);
+                handle.updateValue(nextId, DBTestObject.id, tableName, DBTestObject.content.order(Order.Asc), 1, 1);
             }
         });
         assertEquals(handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getInteger(), 1);
@@ -313,10 +313,10 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
         doTestSQL("UPDATE testTable SET id = ?1, content = ?2 WHERE id != 1", new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.updateRow(new Value[]{new Value(nextId), new Value("newContent")}, DBTestObject.allFields(), DBTestObject.id.notEq(1));
+                handle.updateRow(new Value[]{new Value(nextId), new Value("newContent")}, DBTestObject.allFields(), tableName, DBTestObject.id.notEq(1));
             }
         });
-        assertEquals(handle.getValue(DBTestObject.content, DBTestObject.id.eq(nextId)).getText(), "newContent");
+        assertEquals(handle.getValue(DBTestObject.content, tableName, DBTestObject.id.eq(nextId)).getText(), "newContent");
     }
 
     @Test
@@ -327,8 +327,8 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.updateRow(new Value[]{new Value(nextId), new Value("newContent")}, DBTestObject.allFields(), DBTestObject.id.lt(nextId), DBTestObject.id.order(Order.Desc), 1);
-                handle.updateRow(new Value[]{new Value(nextId + 1), new Value("newContent2")}, DBTestObject.allFields(), DBTestObject.content.order(Order.Desc), 1);
+                handle.updateRow(new Value[]{new Value(nextId), new Value("newContent")}, DBTestObject.allFields(), tableName, DBTestObject.id.lt(nextId), DBTestObject.id.order(Order.Desc), 1);
+                handle.updateRow(new Value[]{new Value(nextId + 1), new Value("newContent2")}, DBTestObject.allFields(), tableName, DBTestObject.content.order(Order.Desc), 1);
             }
         });
         assertTrue(handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getInteger() +
@@ -345,8 +345,8 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.updateRow(new Value[]{new Value(nextId), new Value("newContent")}, DBTestObject.allFields(), DBTestObject.id.lt(nextId), DBTestObject.id.order(Order.Desc), 1, 1);
-                handle.updateRow(new Value[]{new Value(nextId + 1), new Value("newContent2")}, DBTestObject.allFields(), DBTestObject.content.order(Order.Desc), 1, 1);
+                handle.updateRow(new Value[]{new Value(nextId), new Value("newContent")}, DBTestObject.allFields(), tableName, DBTestObject.id.lt(nextId), DBTestObject.id.order(Order.Desc), 1, 1);
+                handle.updateRow(new Value[]{new Value(nextId + 1), new Value("newContent2")}, DBTestObject.allFields(), tableName, DBTestObject.content.order(Order.Desc), 1, 1);
             }
         });
         assertTrue(handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getInteger() +

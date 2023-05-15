@@ -55,6 +55,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ORMTest extends DatabaseTestCase {
+    String tableName = "testTable";
     @Before
     public void setup() {
         super.setup();
@@ -76,7 +77,7 @@ public class ORMTest extends DatabaseTestCase {
         doTestCreateTableAndIndexSQLsAsExpected(new String[]{"CREATE TABLE IF NOT EXISTS testTable(field INTEGER, differentName INTEGER)"}, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.createTable(DBFieldObject.INSTANCE);
+                database.createTable(tableName, DBFieldObject.INSTANCE);
             }
         });
         doTestCreateTableAndIndexSQLsAsExpected(new String[]{"CREATE TABLE IF NOT EXISTS newTable(field INTEGER, differentName INTEGER)"}, new TestOperation() {
@@ -110,10 +111,10 @@ public class ORMTest extends DatabaseTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.createTable(DBAllTypeObject.INSTANCE);
+                database.createTable(tableName, DBAllTypeObject.INSTANCE);
             }
         });
-        Table<AllTypeObject> table = database.getTable(DBAllTypeObject.INSTANCE);
+        Table<AllTypeObject> table = database.getTable(tableName, DBAllTypeObject.INSTANCE);
         AllTypeObject max = AllTypeObject.maxObject();
         AllTypeObject min = AllTypeObject.minObject();
         AllTypeObject random = AllTypeObject.randomObject();
@@ -134,7 +135,7 @@ public class ORMTest extends DatabaseTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.createTable(DBColumnConstraintPrimaryObject.INSTANCE);
+                database.createTable(tableName, DBColumnConstraintPrimaryObject.INSTANCE);
                 database.dropTable("testTable");
             }
         });
@@ -144,7 +145,7 @@ public class ORMTest extends DatabaseTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.createTable(DBColumnConstraintAutoIncrementObject.INSTANCE);
+                database.createTable(tableName, DBColumnConstraintAutoIncrementObject.INSTANCE);
                 database.dropTable("testTable");
             }
         });
@@ -154,7 +155,7 @@ public class ORMTest extends DatabaseTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.createTable(DBColumnConstraintUniqueObject.INSTANCE);
+                database.createTable(tableName, DBColumnConstraintUniqueObject.INSTANCE);
                 database.dropTable("testTable");
             }
         });
@@ -164,7 +165,7 @@ public class ORMTest extends DatabaseTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.createTable(DBColumnConstraintDefaultObject.INSTANCE);
+                database.createTable(tableName, DBColumnConstraintDefaultObject.INSTANCE);
                 database.dropTable("testTable");
             }
         });
@@ -174,7 +175,7 @@ public class ORMTest extends DatabaseTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.createTable(DBColumnConstraintNotNullObject.INSTANCE);
+                database.createTable(tableName, DBColumnConstraintNotNullObject.INSTANCE);
                 database.dropTable("testTable");
             }
         });
@@ -192,7 +193,7 @@ public class ORMTest extends DatabaseTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.createTable(DBTableConstraintObject.INSTANCE);
+                database.createTable(tableName, DBTableConstraintObject.INSTANCE);
             }
         });
     }
@@ -228,7 +229,7 @@ public class ORMTest extends DatabaseTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.createTable(DBIndexObject.INSTANCE);
+                database.createTable(tableName, DBIndexObject.INSTANCE);
             }
         });
     }
@@ -236,21 +237,20 @@ public class ORMTest extends DatabaseTestCase {
     @Test
     public void testAutoAddColumn() {
         String fakeTable = "fakeTable";
-        String tableName = DBAutoAddColumnObject.tableName;
         String fakeSchema = "notExistSchema";
         database.createTable(fakeTable, DBAutoAddColumnObject.INSTANCE);
 
         doTestAutoAddColumn(DBAutoAddColumnObject.insertValue, true, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.insertObject(new AutoAddColumnObject(), DBAutoAddColumnObject.allFields());
+                database.insertObject(new AutoAddColumnObject(), DBAutoAddColumnObject.allFields(), tableName);
             }
         });
 
         doTestAutoAddColumn(DBAutoAddColumnObject.updateValue, true, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.updateValue(1, DBAutoAddColumnObject.updateValue);
+                database.updateValue(1, DBAutoAddColumnObject.updateValue, tableName);
             }
         });
 
@@ -285,62 +285,61 @@ public class ORMTest extends DatabaseTestCase {
         doTestAutoAddColumn(DBAutoAddColumnObject.selectValue, true, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.getOneColumn(DBAutoAddColumnObject.selectValue);
+                database.getOneColumn(DBAutoAddColumnObject.selectValue, tableName);
             }
         });
 
         doTestAutoAddColumn(DBAutoAddColumnObject.selectValue, true, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.getOneColumn(DBAutoAddColumnObject.insertValue, DBAutoAddColumnObject.selectValue.eq(1));
+                database.getOneColumn(DBAutoAddColumnObject.insertValue, tableName, DBAutoAddColumnObject.selectValue.eq(1));
             }
         });
 
         doTestAutoAddColumn(DBAutoAddColumnObject.selectValue, true, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.getOneColumn(DBAutoAddColumnObject.insertValue, DBAutoAddColumnObject.selectValue.order(Order.Asc));
+                database.getOneColumn(DBAutoAddColumnObject.insertValue, tableName, DBAutoAddColumnObject.selectValue.order(Order.Asc));
             }
         });
 
         doTestAutoAddColumn(DBAutoAddColumnObject.selectValue, true, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.getOneColumn(DBAutoAddColumnObject.insertValue, DBAutoAddColumnObject.selectValue.table(tableName).order(Order.Asc));
+                database.getOneColumn(DBAutoAddColumnObject.insertValue, tableName, DBAutoAddColumnObject.selectValue.table(tableName).order(Order.Asc));
             }
         });
 
         doTestAutoAddColumn(DBAutoAddColumnObject.selectValue, false, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.getOneColumn(DBAutoAddColumnObject.insertValue, DBAutoAddColumnObject.selectValue.table(fakeTable).order(Order.Asc));
+                database.getOneColumn(DBAutoAddColumnObject.insertValue, tableName, DBAutoAddColumnObject.selectValue.table(fakeTable).order(Order.Asc));
             }
         });
 
         doTestAutoAddColumn(DBAutoAddColumnObject.selectValue, false, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.getOneColumn(DBAutoAddColumnObject.insertValue, DBAutoAddColumnObject.selectValue.table(tableName).of(fakeSchema).order(Order.Asc));
+                database.getOneColumn(DBAutoAddColumnObject.insertValue, tableName, DBAutoAddColumnObject.selectValue.table(tableName).of(fakeSchema).order(Order.Asc));
             }
         });
 
         doTestAutoAddColumn(DBAutoAddColumnObject.primaryValue, false, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.getOneColumn(DBAutoAddColumnObject.primaryValue);
+                database.getOneColumn(DBAutoAddColumnObject.primaryValue, tableName);
             }
         });
 
         doTestAutoAddColumn(DBAutoAddColumnObject.uniqueValue, false, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.getOneColumn(DBAutoAddColumnObject.uniqueValue);
+                database.getOneColumn(DBAutoAddColumnObject.uniqueValue, tableName);
             }
         });
     }
 
     void doTestAutoAddColumn(Field<AutoAddColumnObject> removeField, boolean succeed, TestOperation operation) {
-        String tableName = removeField.getTableBinding().bindingTableName();
         String columnName = removeField.getName();
         StatementCreateTable createTable = new StatementCreateTable().createTable(tableName);
         ArrayList<ColumnDef> columnDefs = new ArrayList<>();

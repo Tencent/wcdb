@@ -180,7 +180,7 @@ public class StatementOperationTest extends CRUDTestCase {
         PreparedStatement prepareSelect = handle.getOrCreatePreparedStatement(select);
         prepareSelect.step();
         assertFalse(prepareSelect.isDone());
-        assertTrue(prepareSelect.getValue(0).equals(value));
+        assertTrue(value.equals(prepareSelect.getValue(0)));
     }
 
     @Test

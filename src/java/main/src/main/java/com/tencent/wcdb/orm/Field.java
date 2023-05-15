@@ -94,21 +94,6 @@ public class Field<T> extends Column {
         return field;
     }
 
-    public static String getTableName(Field field) {
-        assert field != null;
-        if(field != null) {
-            assert field.getTableBinding().bindingTableName() != null;
-            return field.getTableBinding().bindingTableName();
-        }
-        return null;
-    }
-
-    public static String getTableName(Field[] fields) {
-        assert fields != null && fields.length > 0;
-        Field field = fields[0];
-        return getTableName(field);
-    }
-
     public static <T> TableBinding<T> getBinding(Field<T> field) {
         assert field != null;
         if(field != null) {

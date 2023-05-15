@@ -44,14 +44,6 @@ public abstract class HandleOperation extends CppObject {
 
     abstract boolean autoInvalidateHandle();
 
-    public void insertRow(Value[] row, Field[] fields) throws WCDBException {
-        insertRows(new Value[][]{row}, fields);
-    }
-
-    public void insertRows(Value[][] rows, Field[] fields) throws WCDBException {
-        insertRows(rows, fields, Field.getTableName(fields), ConflictAction.None);
-    }
-
     public void insertRow(Value[] row, Column[] columns, String tableName) throws WCDBException {
         insertRows(new Value[][]{row}, columns, tableName);
     }
@@ -60,28 +52,12 @@ public abstract class HandleOperation extends CppObject {
         insertRows(rows, columns, tableName, ConflictAction.None);
     }
 
-    public void insertOrReplaceRow(Value[] row, Field[] fields) throws WCDBException {
-        insertOrReplaceRows(new Value[][]{row}, fields);
-    }
-
-    public void insertOrReplaceRows(Value[][] rows, Field[] fields) throws WCDBException {
-        insertRows(rows, fields, Field.getTableName(fields), ConflictAction.Replace);
-    }
-
     public void insertOrReplaceRow(Value[] row, Column[] columns, String tableName) throws WCDBException {
         insertOrReplaceRows(new Value[][]{row}, columns, tableName);
     }
 
     public void insertOrReplaceRows(Value[][] rows, Column[] columns, String tableName) throws WCDBException {
         insertRows(rows, columns, tableName, ConflictAction.Replace);
-    }
-
-    public void insertOrIgnoreRow(Value[] row, Field[] fields) throws WCDBException {
-        insertOrIgnoreRows(new Value[][]{row}, fields);
-    }
-
-    public void insertOrIgnoreRows(Value[][] rows, Field[] fields) throws WCDBException {
-        insertRows(rows, fields, Field.getTableName(fields), ConflictAction.Ignore);
     }
 
     public void insertOrIgnoreRow(Value[] row, Column[] columns, String tableName) throws WCDBException {
@@ -129,200 +105,100 @@ public abstract class HandleOperation extends CppObject {
         preparedStatement.finalize();
     }
 
-    public void updateValue(long value, Field field) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field));
-    }
-
     public void updateValue(long value, Column column, String tableName) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, tableName);
-    }
-
-    public void updateValue(long value, Field field, Expression condition) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), condition);
     }
 
     public void updateValue(long value, Column column, String tableName, Expression condition) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, tableName, condition);
     }
 
-    public void updateValue(long value, Field field, Expression condition, OrderingTerm order, long limit) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), condition, order, limit);
-    }
-
     public void updateValue(long value, Column column, String tableName, Expression condition, OrderingTerm order, long limit) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, tableName, condition, order, limit);
-    }
-
-    public void updateValue(long value, Field field, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), condition, order, limit, offset);
     }
 
     public void updateValue(long value, Column column, String tableName, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, tableName, condition, order, limit, offset);
     }
 
-    public void updateValue(long value, Field field, OrderingTerm order, long limit) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), order, limit);
-    }
-
     public void updateValue(long value, Column column, String tableName, OrderingTerm order, long limit) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, tableName, order, limit);
-    }
-
-    public void updateValue(long value, Field field, OrderingTerm order, long limit, long offset) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), order, limit, offset);
     }
 
     public void updateValue(long value, Column column, String tableName, OrderingTerm order, long limit, long offset) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, tableName, order, limit, offset);
     }
 
-    public void updateValue(double value, Field field) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field));
-    }
-
     public void updateValue(double value, Column column, String tableName) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, tableName);
-    }
-
-    public void updateValue(double value, Field field, Expression condition) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), condition);
     }
 
     public void updateValue(double value, Column column, String tableName, Expression condition) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, tableName, condition);
     }
 
-    public void updateValue(double value, Field field, Expression condition, OrderingTerm order, long limit) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), condition, order, limit);
-    }
-
     public void updateValue(double value, Column column, String tableName, Expression condition, OrderingTerm order, long limit) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, tableName, condition, order, limit);
-    }
-
-    public void updateValue(double value, Field field, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), condition, order, limit, offset);
     }
 
     public void updateValue(double value, Column column, String tableName, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, tableName, condition, order, limit, offset);
     }
 
-    public void updateValue(double value, Field field, OrderingTerm order, long limit) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), order, limit);
-    }
-
     public void updateValue(double value, Column column, String tableName, OrderingTerm order, long limit) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, tableName, order, limit);
-    }
-
-    public void updateValue(double value, Field field, OrderingTerm order, long limit, long offset) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), order, limit, offset);
     }
 
     public void updateValue(double value, Column column, String tableName, OrderingTerm order, long limit, long offset) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, tableName, order, limit, offset);
     }
 
-    public void updateValue(String value, Field field) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field));
-    }
-
     public void updateValue(String value, Column column, String tableName) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, tableName);
-    }
-
-    public void updateValue(String value, Field field, Expression condition) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), condition);
     }
 
     public void updateValue(String value, Column column, String tableName, Expression condition) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, tableName, condition);
     }
 
-    public void updateValue(String value, Field field, Expression condition, OrderingTerm order, long limit) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), condition, order, limit);
-    }
-
     public void updateValue(String value, Column column, String tableName, Expression condition, OrderingTerm order, long limit) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, tableName, condition, order, limit);
-    }
-
-    public void updateValue(String value, Field field, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), condition, order, limit, offset);
     }
 
     public void updateValue(String value, Column column, String tableName, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, tableName, condition, order, limit, offset);
     }
 
-    public void updateValue(String value, Field field, OrderingTerm order, long limit) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), order, limit);
-    }
-
     public void updateValue(String value, Column column, String tableName, OrderingTerm order, long limit) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, tableName, order, limit);
-    }
-
-    public void updateValue(String value, Field field, OrderingTerm order, long limit, long offset) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), order, limit, offset);
     }
 
     public void updateValue(String value, Column column, String tableName, OrderingTerm order, long limit, long offset) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, tableName, order, limit, offset);
     }
 
-    public void updateValue(byte[] value, Field field) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field));
-    }
-
     public void updateValue(byte[] value, Column column, String tableName) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, tableName);
-    }
-
-    public void updateValue(byte[] value, Field field, Expression condition) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), condition);
     }
 
     public void updateValue(byte[] value, Column column, String tableName, Expression condition) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, tableName, condition);
     }
 
-    public void updateValue(byte[] value, Field field, Expression condition, OrderingTerm order, long limit) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), condition, order, limit);
-    }
-
     public void updateValue(byte[] value, Column column, String tableName, Expression condition, OrderingTerm order, long limit) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, tableName, condition, order, limit);
-    }
-
-    public void updateValue(byte[] value, Field field, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), condition, order, limit, offset);
     }
 
     public void updateValue(byte[] value, Column column, String tableName, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, tableName, condition, order, limit, offset);
     }
 
-    public void updateValue(byte[] value, Field field, OrderingTerm order, long limit) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), order, limit);
-    }
-
     public void updateValue(byte[] value, Column column, String tableName, OrderingTerm order, long limit) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, tableName, order, limit);
     }
 
-    public void updateValue(byte[] value, Field field, OrderingTerm order, long limit, long offset) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), order, limit, offset);
-    }
-
     public void updateValue(byte[] value, Column column, String tableName, OrderingTerm order, long limit, long offset) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, tableName, order, limit, offset);
-    }
-
-    public void updateValue(Value value, Field field) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field));
     }
 
     public void updateValue(Value value, Column column, String tableName) throws WCDBException {
@@ -332,19 +208,11 @@ public abstract class HandleOperation extends CppObject {
         updateRow(new Value[]{value}, new Column[]{column}, tableName);
     }
 
-    public void updateValue(Value value, Field field, Expression condition) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), condition);
-    }
-
     public void updateValue(Value value, Column column, String tableName, Expression condition) throws WCDBException {
         if(value == null) {
             value = new Value();
         }
         updateRow(new Value[]{value}, new Column[]{column}, tableName, condition);
-    }
-
-    public void updateValue(Value value, Field field, Expression condition, OrderingTerm order, long limit) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), condition, order, limit);
     }
 
     public void updateValue(Value value, Column column, String tableName, Expression condition, OrderingTerm order, long limit) throws WCDBException {
@@ -354,16 +222,8 @@ public abstract class HandleOperation extends CppObject {
         updateRow(new Value[]{value}, new Column[]{column}, tableName, condition, order, limit);
     }
 
-    public void updateValue(Value value, Field field, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), condition, order, limit, offset);
-    }
-
     public void updateValue(Value value, Column column, String tableName, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
         updateRow(new Value[]{value}, new Column[]{column}, tableName, condition, order, limit, offset);
-    }
-
-    public void updateValue(Value value, Field field, OrderingTerm order, long limit) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), order, limit);
     }
 
     public void updateValue(Value value, Column column, String tableName, OrderingTerm order, long limit) throws WCDBException {
@@ -373,16 +233,8 @@ public abstract class HandleOperation extends CppObject {
         updateRow(new Value[]{value}, new Column[]{column}, tableName, order, limit);
     }
 
-    public void updateValue(Value value, Field field, OrderingTerm order, long limit, long offset) throws WCDBException {
-        updateValue(value, field, Field.getTableName(field), order, limit, offset);
-    }
-
     public void updateValue(Value value, Column column, String tableName, OrderingTerm order, long limit, long offset) throws WCDBException {
         updateRow(new Value[]{value}, new Column[]{column}, tableName, order, limit, offset);
-    }
-
-    public void updateRow(Value[] row, Field[] fields) throws WCDBException {
-        updateRow(row, fields, Field.getTableName(fields));
     }
 
     public void updateRow(Value[] row, Column[] columns, String tableName) throws WCDBException {
@@ -390,17 +242,9 @@ public abstract class HandleOperation extends CppObject {
         updateRow(row, update);
     }
 
-    public void updateRow(Value[] row, Field[] fields, Expression condition) throws WCDBException {
-        updateRow(row, fields, Field.getTableName(fields), condition);
-    }
-
     public void updateRow(Value[] row, Column[] columns, String tableName, Expression condition) throws WCDBException {
         StatementUpdate update = new StatementUpdate().update(tableName).setColumnsToBindParameters(columns).where(condition);
         updateRow(row, update);
-    }
-
-    public void updateRow(Value[] row, Field[] fields, Expression condition, OrderingTerm order, long limit) throws WCDBException {
-        updateRow(row, fields, Field.getTableName(fields), condition, order, limit);
     }
 
     public void updateRow(Value[] row, Column[] columns, String tableName, Expression condition, OrderingTerm order, long limit) throws WCDBException {
@@ -408,26 +252,14 @@ public abstract class HandleOperation extends CppObject {
         updateRow(row, update);
     }
 
-    public void updateRow(Value[] row, Field[] fields, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
-        updateRow(row, fields, Field.getTableName(fields), condition, order, limit, offset);
-    }
-
     public void updateRow(Value[] row, Column[] columns, String tableName, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
         StatementUpdate update = new StatementUpdate().update(tableName).setColumnsToBindParameters(columns).where(condition).orderBy(order).limit(limit).offset(offset);
         updateRow(row, update);
     }
 
-    public void updateRow(Value[] row, Field[] fields, OrderingTerm order, long limit) throws WCDBException {
-        updateRow(row, fields, Field.getTableName(fields), order, limit);
-    }
-
     public void updateRow(Value[] row, Column[] columns, String tableName, OrderingTerm order, long limit) throws WCDBException {
         StatementUpdate update = new StatementUpdate().update(tableName).setColumnsToBindParameters(columns).orderBy(order).limit(limit);
         updateRow(row, update);
-    }
-
-    public void updateRow(Value[] row, Field[] fields, OrderingTerm order, long limit, long offset) throws WCDBException {
-        updateRow(row, fields, Field.getTableName(fields), order, limit, offset);
     }
 
     public void updateRow(Value[] row, Column[] columns, String tableName, OrderingTerm order, long limit, long offset) throws WCDBException {
@@ -490,30 +322,6 @@ public abstract class HandleOperation extends CppObject {
         }
     }
 
-    public Value getValue(Field field) throws WCDBException {
-        return getValueFromStatement(new StatementSelect().select(field).from(Field.getTableName(field)));
-    }
-
-    public Value getValue(Field field, Expression condition) throws WCDBException {
-        return getValueFromStatement(new StatementSelect().select(field).from(Field.getTableName(field)).where(condition));
-    }
-
-    public Value getValue(Field field, Expression condition, OrderingTerm order) throws WCDBException {
-        return getValueFromStatement(new StatementSelect().select(field).from(Field.getTableName(field)).where(condition).orderBy(order));
-    }
-
-    public Value getValue(Field field, Expression condition, OrderingTerm order, long offset) throws WCDBException {
-        return getValueFromStatement(new StatementSelect().select(field).from(Field.getTableName(field)).where(condition).orderBy(order).limit(1).offset(offset));
-    }
-
-    public Value getValue(Field field, OrderingTerm order) throws WCDBException {
-        return getValueFromStatement(new StatementSelect().select(field).from(Field.getTableName(field)).orderBy(order));
-    }
-
-    public Value getValue(Field field, OrderingTerm order, long offset) throws WCDBException {
-        return getValueFromStatement(new StatementSelect().select(field).from(Field.getTableName(field)).orderBy(order).limit(1).offset(offset));
-    }
-
     public Value getValue(ResultColumnConvertible column, String tableName) throws WCDBException {
         return getValueFromStatement(new StatementSelect().select(column).from(tableName));
     }
@@ -536,38 +344,6 @@ public abstract class HandleOperation extends CppObject {
 
     public Value getValue(ResultColumnConvertible column, String tableName, OrderingTerm order, long offset) throws WCDBException {
         return getValueFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(1).offset(offset));
-    }
-
-    public ArrayList<Value> getOneColumn(Field field) throws WCDBException {
-        return getOneColumnFromStatement(new StatementSelect().select(field).from(Field.getTableName(field)));
-    }
-
-    public ArrayList<Value> getOneColumn(Field field, Expression condition) throws WCDBException {
-        return getOneColumnFromStatement(new StatementSelect().select(field).from(Field.getTableName(field)).where(condition));
-    }
-
-    public ArrayList<Value> getOneColumn(Field field, Expression condition, OrderingTerm order) throws WCDBException {
-        return getOneColumnFromStatement(new StatementSelect().select(field).from(Field.getTableName(field)).where(condition).orderBy(order));
-    }
-
-    public ArrayList<Value> getOneColumn(Field field, Expression condition, OrderingTerm order, long limit) throws WCDBException {
-        return getOneColumnFromStatement(new StatementSelect().select(field).from(Field.getTableName(field)).where(condition).orderBy(order).limit(limit));
-    }
-
-    public ArrayList<Value> getOneColumn(Field field, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
-        return getOneColumnFromStatement(new StatementSelect().select(field).from(Field.getTableName(field)).where(condition).orderBy(order).limit(limit).offset(offset));
-    }
-
-    public ArrayList<Value> getOneColumn(Field field, OrderingTerm order) throws WCDBException {
-        return getOneColumnFromStatement(new StatementSelect().select(field).from(Field.getTableName(field)).orderBy(order));
-    }
-
-    public ArrayList<Value> getOneColumn(Field field, OrderingTerm order, long limit) throws WCDBException {
-        return getOneColumnFromStatement(new StatementSelect().select(field).from(Field.getTableName(field)).orderBy(order).limit(limit));
-    }
-
-    public ArrayList<Value> getOneColumn(Field field, OrderingTerm order, long limit, long offset) throws WCDBException {
-        return getOneColumnFromStatement(new StatementSelect().select(field).from(Field.getTableName(field)).orderBy(order).limit(limit).offset(offset));
     }
 
     public ArrayList<Value> getOneColumn(ResultColumnConvertible column, String tableName) throws WCDBException {
@@ -602,30 +378,6 @@ public abstract class HandleOperation extends CppObject {
         return getOneColumnFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit).offset(offset));
     }
 
-    public Value[] getOneRow(Field[] fields) {
-        return getOneRowFromStatement(new StatementSelect().select(fields).from(Field.getTableName(fields)));
-    }
-
-    public Value[] getOneRow(Field[] fields, Expression condition) {
-        return getOneRowFromStatement(new StatementSelect().select(fields).from(Field.getTableName(fields)).where(condition));
-    }
-
-    public Value[] getOneRow(Field[] fields, Expression condition, OrderingTerm orderingTerm) {
-        return getOneRowFromStatement(new StatementSelect().select(fields).from(Field.getTableName(fields)).where(condition).orderBy(orderingTerm));
-    }
-
-    public Value[] getOneRow(Field[] fields, Expression condition, OrderingTerm orderingTerm, long offset) {
-        return getOneRowFromStatement(new StatementSelect().select(fields).from(Field.getTableName(fields)).where(condition).orderBy(orderingTerm).limit(1).offset(offset));
-    }
-
-    public Value[] getOneRow(Field[] fields, OrderingTerm orderingTerm) {
-        return getOneRowFromStatement(new StatementSelect().select(fields).from(Field.getTableName(fields)).orderBy(orderingTerm));
-    }
-
-    public Value[] getOneRow(Field[] fields, OrderingTerm orderingTerm, long offset) {
-        return getOneRowFromStatement(new StatementSelect().select(fields).from(Field.getTableName(fields)).orderBy(orderingTerm).limit(1).offset(offset));
-    }
-
     public Value[] getOneRow(ResultColumnConvertible[] columns, String tableName) {
         return getOneRowFromStatement(new StatementSelect().select(columns).from(tableName));
     }
@@ -648,38 +400,6 @@ public abstract class HandleOperation extends CppObject {
 
     public Value[] getOneRow(ResultColumnConvertible[] columns, String tableName, OrderingTerm orderingTerm, long offset) {
         return getOneRowFromStatement(new StatementSelect().select(columns).from(tableName).orderBy(orderingTerm).limit(1).offset(offset));
-    }
-
-    public ArrayList<Value[]> getAllRows(Field[] fields) {
-        return getAllRowsFromStatement(new StatementSelect().select(fields).from(Field.getTableName(fields)));
-    }
-
-    public ArrayList<Value[]> getAllRows(Field[] fields, Expression condition) {
-        return getAllRowsFromStatement(new StatementSelect().select(fields).from(Field.getTableName(fields)).where(condition));
-    }
-
-    public ArrayList<Value[]> getAllRows(Field[] fields, Expression condition, OrderingTerm order) {
-        return getAllRowsFromStatement(new StatementSelect().select(fields).from(Field.getTableName(fields)).where(condition).orderBy(order));
-    }
-
-    public ArrayList<Value[]> getAllRows(Field[] fields, Expression condition, OrderingTerm order, long limit) {
-        return getAllRowsFromStatement(new StatementSelect().select(fields).from(Field.getTableName(fields)).where(condition).orderBy(order).limit(limit));
-    }
-
-    public ArrayList<Value[]> getAllRows(Field[] fields, Expression condition, OrderingTerm order, long limit, long offset) {
-        return getAllRowsFromStatement(new StatementSelect().select(fields).from(Field.getTableName(fields)).where(condition).orderBy(order).limit(limit).offset(offset));
-    }
-
-    public ArrayList<Value[]> getAllRows(Field[] fields, OrderingTerm order) {
-        return getAllRowsFromStatement(new StatementSelect().select(fields).from(Field.getTableName(fields)).orderBy(order));
-    }
-
-    public ArrayList<Value[]> getAllRows(Field[] fields, OrderingTerm order, long limit) {
-        return getAllRowsFromStatement(new StatementSelect().select(fields).from(Field.getTableName(fields)).orderBy(order).limit(limit));
-    }
-
-    public ArrayList<Value[]> getAllRows(Field[] fields, OrderingTerm order, long limit, long offset) {
-        return getAllRowsFromStatement(new StatementSelect().select(fields).from(Field.getTableName(fields)).orderBy(order).limit(limit).offset(offset));
     }
 
     public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns, String tableName) {

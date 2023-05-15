@@ -229,18 +229,12 @@ public class AnnotationProcessor extends AbstractProcessor {
 
             writer.write("public class " + ormClassName + " implements TableBinding<" + className + "> {\n");
             writer.write(TAB + "private static Binding baseBinding;\n");
-            if(config.tableName() != null && config.tableName().length() > 0) {
-                writer.write(TAB + "public static String tableName;\n");
-            }
             writer.write(TAB + "public static " + ormClassName + " INSTANCE;\n\n");
 
             writeFields(writer, className, fields);
 
             writer.write(TAB + "\nstatic {\n\n");
             writer.write(TAB + TAB + "baseBinding = new Binding();\n");
-            if(config.tableName() != null && config.tableName().length() > 0) {
-                writer.write(TAB + TAB + "tableName = \"" + config.tableName() + "\";\n");
-            }
             writer.write(TAB + TAB + "INSTANCE = new " + ormClassName + "();\n\n");
             writeColumns(writer, fields);
             writeTableConfig(writer, config);
@@ -248,7 +242,6 @@ public class AnnotationProcessor extends AbstractProcessor {
 
             writeBindingType(writer, className);
             writeBindingFields(writer, className, fields);
-            writeBindingTableName(writer, config);
             writeBaseBinding(writer);
 
             writeExtractObject(writer, className, fields);
@@ -397,17 +390,6 @@ public class AnnotationProcessor extends AbstractProcessor {
             writer.write(field + ", ");
         }
         writer.write("};\n" + TAB + "}\n\n");
-    }
-
-    private void writeBindingTableName(BufferedWriter writer, WCDBTableCoding config) throws IOException {
-        writer.write(TAB + "@Override\n");
-        writer.write(TAB + "public String bindingTableName() {\n");
-        String tableName = "null";
-        if(config.tableName() != null && config.tableName().length() > 0) {
-            tableName = "\"" + config.tableName() + "\"";
-        }
-        writer.write(TAB + TAB + "return " + tableName + ";\n");
-        writer.write(TAB + "}\n\n");
     }
 
     private void writeBaseBinding(BufferedWriter writer) throws IOException {
