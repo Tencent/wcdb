@@ -240,7 +240,7 @@
     }
     // remap
     {
-        NSArray<NSString*>* expected = @[ @"PRAGMA table_info('testTable')", @"ALTER TABLE testTable ADD COLUMN newValue INTEGER", @"CREATE INDEX IF NOT EXISTS testTable_index ON testTable(value)" ];
+        NSArray<NSString*>* expected = @[ @"PRAGMA table_info('testTable')", @"ALTER TABLE main.testTable ADD COLUMN newValue INTEGER", @"CREATE INDEX IF NOT EXISTS testTable_index ON testTable(value)" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected
                                           inOperation:^BOOL {
                                               return CPPTestTableCreate<CPPNewRemapObject>(self);

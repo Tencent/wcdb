@@ -23,14 +23,53 @@
 
 package com.tencent.wcdbtest.base;
 
-import com.tencent.wcdb.*;
+import androidx.annotation.Nullable;
 
-@WCDBTableCoding(tableName = "TestObject")
+import com.tencent.wcdb.*;
+import java.util.Objects;
+
+@WCDBTableCoding(tableName = "testTable")
 public class TestObject {
-    @WCDBField
+    @WCDBField(isPrimary = true, isAutoIncrement = true)
     public int id;
     @WCDBField
     public String content;
 
-    public String debugContent;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, content);
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj instanceof TestObject) {
+            TestObject testObject = (TestObject) obj;
+            return testObject.id == id &&
+                    ((testObject.content == null && (content == null || content.length() == 0)) ||
+                            (testObject.content.length() == 0 && (content == null || content.length() == 0)) ||
+                            testObject.content.equals(content));
+        } else {
+            return super.equals(obj);
+        }
+    }
+
+    public static TestObject createObject(int id, String content) {
+        TestObject obj = new TestObject();
+        obj.id = id;
+        obj.content = content;
+        return obj;
+    }
+
+    public static TestObject createPartialObject(int id) {
+        TestObject obj = new TestObject();
+        obj.id = id;
+        return obj;
+    }
+
+    public static TestObject createAutoIncrementObject(String content) {
+        TestObject obj = new TestObject();
+        obj.id = 0;
+        obj.content = content;
+        return obj;
+    }
 }

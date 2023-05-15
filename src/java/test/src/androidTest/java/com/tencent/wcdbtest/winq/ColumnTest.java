@@ -23,7 +23,7 @@ package com.tencent.wcdbtest.winq;// Created by qiuwenchen on 2023/3/31.
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.tencent.wcdb.winq.*;
-import static com.tencent.wcdbtest.base.TestTool.winqEqual;
+import static com.tencent.wcdbtest.base.WinqTool.winqEqual;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,8 +35,8 @@ public class ColumnTest {
         winqEqual(Column.all(), "*");
         winqEqual(Column.rowId(), "rowid");
         winqEqual(new Column("testColumn"), "testColumn");
-        winqEqual(new Column("testColumn").in("testTable"), "testTable.testColumn");
-        winqEqual(new Column("testColumn").in("testTable").of("testSchema"), "testSchema.testTable.testColumn");
-        winqEqual(new Column("testColumn").in("testTable").of(new Schema("testSchema")), "testSchema.testTable.testColumn");
+        winqEqual(new Column("testColumn").table("testTable"), "testTable.testColumn");
+        winqEqual(new Column("testColumn").table("testTable").of("testSchema"), "testSchema.testTable.testColumn");
+        winqEqual(new Column("testColumn").table("testTable").of(new Schema("testSchema")), "testSchema.testTable.testColumn");
     }
 }

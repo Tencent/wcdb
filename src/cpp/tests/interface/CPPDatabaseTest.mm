@@ -143,13 +143,13 @@
 
 - (void)testCheckpoint
 {
-    WCDB::MultiRowsValue rows = [Random.shared autoIncrementTestCaseValuesWithCount:2000];
+    WCDB::MultiRowsValue rows = [Random.shared autoIncrementTestCaseValuesWithCount:100];
 
     TestCaseAssertTrue([self createValueTable]);
 
     unsigned long walFrameNum = 0;
     for (int i = 0; i < 100; i++) {
-        auto value = self.database->getValueFromStatement(WCDB::StatementSelect().select(WCDB::Expression::function("count").invokeAll()).from(self.tableName.UTF8String));
+        auto value = self.database->getValueFromStatement(WCDB::StatementSelect().select(WCDB::Column::all().count()).from(self.tableName.UTF8String));
         TestCaseAssertTrue(value.succeed() && value.value().intValue() == i);
         TestCaseAssertTrue(self.database->insertRows(rows[i], self.columns, self.tableName.UTF8String));
         self.database->passiveCheckpoint();
