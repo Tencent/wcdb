@@ -24,5 +24,5 @@
 package com.tencent.wcdb.winq;
 
 public enum ConflictAction {
-    Replace, Rollback, Abort, Fail, Ignore
+    None, Replace, Rollback, Abort, Fail, Ignore
 }

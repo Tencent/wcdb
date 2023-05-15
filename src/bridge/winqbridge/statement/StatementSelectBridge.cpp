@@ -26,6 +26,7 @@
 #include "Column.hpp"
 #include "CommonTableExpression.hpp"
 #include "Expression.hpp"
+#include "Join.hpp"
 #include "LiteralValue.hpp"
 #include "OrderingTerm.hpp"
 #include "ResultColumn.hpp"
@@ -33,7 +34,6 @@
 #include "TableOrSubquery.hpp"
 #include "WindowDef.hpp"
 #include "WinqBridge.hpp"
-#include "Join.hpp"
 
 CPPStatementSelect WCDBStatementSelectCreate()
 {

@@ -37,6 +37,8 @@ jlong WCDBJNIColumnClassMethodWithNoArg(createRowId);
 
 jlong WCDBJNIColumnObjectMethod(createWithName, jstring name, jlong binding);
 
+jlong WCDBJNIColumnObjectMethod(copy, jlong column);
+
 void WCDBJNIColumnObjectMethod(inTable, jlong column, jstring table);
 
 void WCDBJNIColumnObjectMethod(inSchema, jlong column, jlong schema);

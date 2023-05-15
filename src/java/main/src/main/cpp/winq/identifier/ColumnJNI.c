@@ -38,9 +38,15 @@ jlong WCDBJNIColumnObjectMethod(createWithName, jstring name, jlong binding)
 {
     WCDBJNIGetString(name);
     jlong ret
-    = (jlong) WCDBColumnCreateWithName(nameString, (const void *) binding).innerValue;
+    = (jlong) WCDBColumnCreateWithName2(nameString, (const void *) binding).innerValue;
     WCDBJNIReleaseString(name);
     return ret;
+}
+
+jlong WCDBJNIColumnObjectMethod(copy, jlong column)
+{
+    WCDBJNIBridgeStruct(CPPColumn, column);
+    return (jlong) WCDBColumnCopy(columnStruct).innerValue;
 }
 
 void WCDBJNIColumnObjectMethod(inTable, jlong column, jstring table)

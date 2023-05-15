@@ -44,6 +44,26 @@ CPPColumn WCDBColumnCreateWithName(const char* _Nullable name, const void* _Null
     CPPColumn, WCDB::Column, name, static_cast<const WCDB::BaseBinding*>(binding));
 }
 
+CPPColumn WCDBColumnCopy(CPPColumn column)
+{
+    WCDBGetObjectOrReturnValue(column, WCDB::Column, cppColumn, CPPColumn());
+    return WCDBCreateCPPBridgedObjectByCopy(CPPColumn, *cppColumn);
+}
+
+CPPColumn WCDBColumnCreateWithName2(const char* _Nullable name, const void* _Nullable binding)
+{
+    if (binding == nullptr) {
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPColumn, WCDB::Column, name, static_cast<const WCDB::BaseBinding*>(binding));
+    } else {
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPColumn,
+        WCDB::Column,
+        WCDB::StringView::createConstant(name),
+        static_cast<const WCDB::BaseBinding*>(binding));
+    }
+}
+
 void WCDBColumnInTable(CPPColumn column, const char* _Nullable table)
 {
     WCDBGetObjectOrReturn(column, WCDB::Column, cppColumn);

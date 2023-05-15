@@ -41,7 +41,7 @@ public class QualifiedTable extends Identifier {
     }
 
     public QualifiedTable of(Schema schema) {
-        schema(cppObj, schema.getCppType().ordinal(), schema.cppObj, null);
+        schema(cppObj, schema.getCppType().ordinal(), schema.getCppObj(), null);
         return this;
     }
 

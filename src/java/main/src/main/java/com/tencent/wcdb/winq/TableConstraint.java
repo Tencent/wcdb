@@ -57,7 +57,7 @@ public class TableConstraint extends Identifier {
         configIndexedColumn(
                 cppObj,
                 indexedColumn.asIdentifier().getCppType().ordinal(),
-                new long[] {indexedColumn.asIdentifier().cppObj}, null);
+                new long[] {indexedColumn.asIdentifier().getCppObj()}, null);
         return this;
     }
 
@@ -67,7 +67,7 @@ public class TableConstraint extends Identifier {
         }
         long[] columns = new long[indexedColumns.length];
         for(int i = 0; i < indexedColumns.length; i++) {
-            columns[i] = indexedColumns[i].asIdentifier().cppObj;
+            columns[i] = indexedColumns[i].asIdentifier().getCppObj();
         }
         configIndexedColumn(
                 cppObj,
@@ -99,7 +99,7 @@ public class TableConstraint extends Identifier {
     private native void configConfliction(long self, int action);
 
     public TableConstraint check(Expression expression) {
-        configCheckExpression(cppObj, expression.cppObj);
+        configCheckExpression(cppObj, expression.getCppObj());
         return this;
     }
 
@@ -111,21 +111,21 @@ public class TableConstraint extends Identifier {
                 CPPType.String.ordinal(),
                 null,
                 columns,
-                foreignKey.cppObj);
+                foreignKey.getCppObj());
         return this;
     }
 
     public TableConstraint foreignKey(Column[] columns, ForeignKey foreignKey) {
         long[] cppObjs = new long[columns.length];
         for(int i = 0; i < columns.length; i++) {
-            cppObjs[i] = columns[i].cppObj;
+            cppObjs[i] = columns[i].getCppObj();
         }
         configForeignKey(
                 cppObj,
                 CPPType.Column.ordinal(),
                 cppObjs,
                 null,
-                foreignKey.cppObj);
+                foreignKey.getCppObj());
         return this;
     }
 

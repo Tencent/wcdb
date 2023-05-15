@@ -107,7 +107,7 @@ class MultiTypeArray {
                 case Identifier:
                     Identifier identifier = (Identifier)obj;
                     types[i] = identifier.getCppType().ordinal();
-                    longValues[longIndex] = identifier.cppObj;
+                    longValues[longIndex] = identifier.getCppObj();
                     longIndex++;
                     break;
             }

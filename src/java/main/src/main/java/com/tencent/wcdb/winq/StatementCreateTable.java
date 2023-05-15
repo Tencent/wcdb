@@ -62,23 +62,25 @@ public class StatementCreateTable extends Statement {
     }
 
     public StatementCreateTable of(Schema schema) {
-        configSchema(cppObj, CPPType.Schema.ordinal(), schema.cppObj, null);
+        configSchema(cppObj, CPPType.Schema.ordinal(), schema.getCppObj(), null);
         return this;
     }
 
     private native void configSchema(long self, int type, long schema, String schemaName);
 
     public StatementCreateTable as(StatementSelect select) {
-        configAs(cppObj, select.cppObj);
+        configAs(cppObj, select.getCppObj());
         return this;
     }
 
     private native void configAs(long self, long select);
 
     public StatementCreateTable define(ColumnDef column) {
-        configColumns(cppObj, new long[]{column.cppObj});
+        configColumn(cppObj, column.getCppObj());
         return this;
     }
+
+    private native void configColumn(long self, long column);
 
     public StatementCreateTable define(ColumnDef[] columns) {
         if(columns == null || columns.length == 0) {
@@ -86,7 +88,7 @@ public class StatementCreateTable extends Statement {
         }
         long[] cppColumns = new long[columns.length];
         for(int i = 0; i < columns.length; i++) {
-            cppColumns[i] = columns[i].cppObj;
+            cppColumns[i] = columns[i].getCppObj();
         }
         configColumns(cppObj, cppColumns);
         return this;
@@ -100,14 +102,14 @@ public class StatementCreateTable extends Statement {
         }
         long[] cppConstraints = new long[constraints.length];
         for(int i = 0; i < constraints.length; i++) {
-            cppConstraints[i] = constraints[i].cppObj;
+            cppConstraints[i] = constraints[i].getCppObj();
         }
         configConstraints(cppObj, cppConstraints);
         return this;
     }
 
     public StatementCreateTable constraint(TableConstraint constraint) {
-        configConstraints(cppObj, new long[]{constraint.cppObj});
+        configConstraints(cppObj, new long[]{constraint.getCppObj()});
         return this;
     }
 

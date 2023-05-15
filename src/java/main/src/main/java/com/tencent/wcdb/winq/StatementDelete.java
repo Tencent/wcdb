@@ -41,21 +41,21 @@ public class StatementDelete extends Statement {
     }
 
     public StatementDelete deleteFrom(QualifiedTable table) {
-        configTable(cppObj, table.getCppType().ordinal(), table.cppObj, null);
+        configTable(cppObj, table.getCppType().ordinal(), table.getCppObj(), null);
         return this;
     }
 
     private native void configTable(long self, int type, long table, String tableName);
 
     public StatementDelete where(Expression condition) {
-        configCondition(cppObj, condition.cppObj);
+        configCondition(cppObj, condition.getCppObj());
         return this;
     }
 
     private native void configCondition(long self, long condition);
 
     public StatementDelete orderBy(OrderingTerm order) {
-        configOrders(cppObj, new long[]{order.cppObj});
+        configOrders(cppObj, new long[]{order.getCppObj()});
         return this;
     }
 
@@ -65,7 +65,7 @@ public class StatementDelete extends Statement {
         }
         long[] cppOrders = new long[orders.length];
         for(int i = 0; i < orders.length; i++) {
-            cppOrders[i] = orders[i].cppObj;
+            cppOrders[i] = orders[i].getCppObj();
         }
         configOrders(cppObj, cppOrders);
         return this;
@@ -79,17 +79,17 @@ public class StatementDelete extends Statement {
     }
 
     public StatementDelete limit(long from, ExpressionConvertible to) {
-        configLimitRange(cppObj, CPPType.Int.ordinal(), from, to.asIdentifier().getCppType().ordinal(), to.asIdentifier().cppObj);
+        configLimitRange(cppObj, CPPType.Int.ordinal(), from, to.asIdentifier().getCppType().ordinal(), to.asIdentifier().getCppObj());
         return this;
     }
 
     public StatementDelete limit(ExpressionConvertible from, ExpressionConvertible to) {
-        configLimitRange(cppObj, from.asIdentifier().getCppType().ordinal(), from.asIdentifier().cppObj, to.asIdentifier().getCppType().ordinal(), to.asIdentifier().cppObj);
+        configLimitRange(cppObj, from.asIdentifier().getCppType().ordinal(), from.asIdentifier().getCppObj(), to.asIdentifier().getCppType().ordinal(), to.asIdentifier().getCppObj());
         return this;
     }
 
     public StatementDelete limit(ExpressionConvertible from, long to) {
-        configLimitRange(cppObj, from.asIdentifier().getCppType().ordinal(), from.asIdentifier().cppObj, CPPType.Int.ordinal(), to);
+        configLimitRange(cppObj, from.asIdentifier().getCppType().ordinal(), from.asIdentifier().getCppObj(), CPPType.Int.ordinal(), to);
         return this;
     }
 
@@ -101,7 +101,7 @@ public class StatementDelete extends Statement {
     }
 
     public StatementDelete limit(ExpressionConvertible count) {
-        configLimitCount(cppObj, count.asIdentifier().getCppType().ordinal(), count.asIdentifier().cppObj);
+        configLimitCount(cppObj, count.asIdentifier().getCppType().ordinal(), count.asIdentifier().getCppObj());
         return this;
     }
 
@@ -113,7 +113,7 @@ public class StatementDelete extends Statement {
     }
 
     public StatementDelete offset(ExpressionConvertible offset) {
-        configOffset(cppObj, offset.asIdentifier().getCppType().ordinal(), offset.asIdentifier().cppObj);
+        configOffset(cppObj, offset.asIdentifier().getCppType().ordinal(), offset.asIdentifier().getCppObj());
         return this;
     }
 

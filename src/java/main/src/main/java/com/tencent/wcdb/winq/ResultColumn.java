@@ -31,7 +31,7 @@ public class ResultColumn extends Identifier implements ResultColumnConvertible 
 
 
     public ResultColumn(ResultColumnConvertible resultColumnConvertible) {
-        cppObj = createCppObj(resultColumnConvertible.asIdentifier().getCppType().ordinal(), resultColumnConvertible.asIdentifier().cppObj, null);
+        cppObj = createCppObj(resultColumnConvertible.asIdentifier().getCppType().ordinal(), resultColumnConvertible.asIdentifier().getCppObj(), null);
     }
 
     public ResultColumn(String columnName) {

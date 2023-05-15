@@ -31,7 +31,7 @@ public class OrderingTerm extends Identifier{
 
     public OrderingTerm(ExpressionConvertible expression) {
         cppObj = createCppObj(expression.asIdentifier().getCppType().ordinal(),
-                expression.asIdentifier().cppObj);
+                expression.asIdentifier().getCppObj());
     }
 
     private native long createCppObj(int type, long expression);

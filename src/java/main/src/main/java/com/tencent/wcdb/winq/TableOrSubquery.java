@@ -34,7 +34,7 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
 
     public TableOrSubquery(TableOrSubqueryConvertible tableOrSubqueryConvertible) {
         cppObj = createCppObj(tableOrSubqueryConvertible.asIdentifier().getCppType().ordinal(),
-                tableOrSubqueryConvertible.asIdentifier().cppObj,
+                tableOrSubqueryConvertible.asIdentifier().getCppObj(),
                 null);
     }
 
@@ -51,7 +51,7 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
         }
         long[] array = new long[tableOrSubqueries.length];
         for(int i = 0; i < tableOrSubqueries.length; i++) {
-            array[i] = tableOrSubqueries[i].asIdentifier().cppObj;
+            array[i] = tableOrSubqueries[i].asIdentifier().getCppObj();
         }
         cppObj = createCppObj(tableOrSubqueries[0].asIdentifier().getCppType().ordinal(), array, null);
     }
@@ -68,7 +68,7 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
     }
 
     public TableOrSubquery schema(Schema schema) {
-        schema(cppObj, schema.getCppType().ordinal(), schema.cppObj, null);
+        schema(cppObj, schema.getCppType().ordinal(), schema.getCppObj(), null);
         return this;
     }
 
@@ -131,7 +131,7 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
         if( arg != null ) {
             argument(cppObj,
                     arg.asIdentifier().getCppType().ordinal(),
-                    arg.asIdentifier().cppObj,
+                    arg.asIdentifier().getCppObj(),
                     0,
                     null);
         } else {

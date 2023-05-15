@@ -86,6 +86,13 @@ void WCDBStatementCreateTableConfigColumns(CPPStatementCreateTable createTable,
     cppCreateTable->syntax().columnDefs = cppColumns;
 }
 
+void WCDBStatementCreateTableConfigColumn(CPPStatementCreateTable createTable, CPPColumnDef column)
+{
+    WCDBGetObjectOrReturn(createTable, WCDB::StatementCreateTable, cppCreateTable);
+    WCDBGetObjectOrReturn(column, WCDB::ColumnDef, cppColumn);
+    cppCreateTable->define(*cppColumn);
+}
+
 void WCDBStatementCreateTableConfigTableConstraints(CPPStatementCreateTable createTable,
                                                     const CPPTableConstraint* _Nullable constraints,
                                                     int constraintNum)

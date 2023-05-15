@@ -48,7 +48,7 @@ public class StatementDropTable extends Statement {
     }
 
     public StatementDropTable of(Schema schema) {
-        configSchema(cppObj, CPPType.Schema.ordinal(), schema.cppObj, null);
+        configSchema(cppObj, CPPType.Schema.ordinal(), schema.getCppObj(), null);
         return this;
     }
 

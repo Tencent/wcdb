@@ -49,6 +49,17 @@ long WCDBErrorGetLevel(CPPError obj);
 long WCDBErrorGetCode(CPPError obj);
 const char* _Nonnull WCDBErrorGetMsg(CPPError obj);
 void WCDBErrorEnumerateAllInfo(CPPError obj, SwiftClosure* _Nonnull callback);
+
+typedef void (*ErrorInfoEnumerator)(void* _Nonnull context,
+                                    const char* _Nullable,
+                                    enum WCDBErrorValueType,
+                                    long long,
+                                    double,
+                                    const char* _Nullable);
+
+void WCDBErrorEnumerateAllInfo2(CPPError error,
+                                void* _Nonnull context,
+                                ErrorInfoEnumerator _Nonnull callback);
 void WCDBErrorReport(enum WCDBErrorLevel level,
                      long code,
                      const char* _Nullable content,

@@ -41,6 +41,8 @@ void WCDBStatementCreateTableConfigAs(CPPStatementCreateTable createTable,
 void WCDBStatementCreateTableConfigColumns(CPPStatementCreateTable createTable,
                                            const CPPColumnDef* _Nullable columns,
                                            int columnNum);
+void WCDBStatementCreateTableConfigColumn(CPPStatementCreateTable createTable,
+                                          CPPColumnDef column);
 void WCDBStatementCreateTableConfigTableConstraints(CPPStatementCreateTable createTable,
                                                     const CPPTableConstraint* _Nullable constraints,
                                                     int constraintNum);

@@ -30,7 +30,7 @@ public class IndexedColumn extends Identifier implements IndexedColumnConvertibl
     }
 
     public IndexedColumn(IndexedColumnConvertible indexedColumnConvertible) {
-        cppObj = createCppObj(indexedColumnConvertible.asIdentifier().getCppType().ordinal(), indexedColumnConvertible.asIdentifier().cppObj, null);
+        cppObj = createCppObj(indexedColumnConvertible.asIdentifier().getCppType().ordinal(), indexedColumnConvertible.asIdentifier().getCppObj(), null);
     }
 
     public IndexedColumn(String columnName) {

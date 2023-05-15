@@ -24,9 +24,30 @@
 package com.tencent.wcdb.winq;
 
 public enum ColumnType {
-    Null,
-    Integer,
-    Float,
-    Text,
-    BLOB,
+    Null(0),
+    Integer(1),
+    Float(2),
+    Text(3),
+    BLOB(4);
+
+    private int value;
+
+    private ColumnType(int value) {
+        this.value = value;
+    }
+
+    public static ColumnType valueOf(int value) {
+        switch (value) {
+            case 1:
+                return Integer;
+            case 2:
+                return Float;
+            case 3:
+                return Text;
+            case 4:
+                return BLOB;
+            default:
+                return Null;
+        }
+    }
 }

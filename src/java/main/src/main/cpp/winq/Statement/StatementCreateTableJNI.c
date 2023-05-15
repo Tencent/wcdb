@@ -66,6 +66,13 @@ void WCDBJNIStatementCreateTableObjectMethod(configAs, jlong self, jlong select)
     WCDBStatementCreateTableConfigAs(selfStruct, selectStruct);
 }
 
+void WCDBJNIStatementCreateTableObjectMethod(configColumn, jlong self, jlong column)
+{
+    WCDBJNIBridgeStruct(CPPStatementCreateTable, self);
+    WCDBJNIBridgeStruct(CPPColumnDef, column);
+    WCDBStatementCreateTableConfigColumn(selfStruct, columnStruct);
+}
+
 void WCDBJNIStatementCreateTableObjectMethod(configColumns, jlong self, jlongArray columns)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTable, self);

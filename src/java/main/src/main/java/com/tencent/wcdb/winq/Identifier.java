@@ -22,7 +22,7 @@
  */
 package com.tencent.wcdb.winq;
 
-import com.tencent.wcdb.util.CPPBridge;
+import com.tencent.wcdb.base.CppObject;
 
 enum CPPType {
     Invalid,
@@ -86,20 +86,9 @@ enum CPPType {
     ExplainSTMT,
 }
 
-public class Identifier {
-    static {
-        System.loadLibrary("wcdb-android");
-    }
-    protected long cppObj;
-
+public class Identifier extends CppObject {
     protected CPPType getCppType() {
         return CPPType.Invalid;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        CPPBridge.releaseCPPObject(cppObj);
-        super.finalize();
     }
 
     public Identifier asIdentifier() {

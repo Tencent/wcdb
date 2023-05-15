@@ -392,6 +392,22 @@ StringView StringView::makeConstant(const char* string)
     return ret;
 }
 
+StringView StringView::createConstant(const char* string)
+{
+    StringView ret;
+    if (string != nullptr) {
+        ret.m_length = strlen(string);
+        ret.m_data = (char*) malloc(ret.length() * sizeof(char));
+        if (ret.m_data != nullptr) {
+            memcpy((void*) ret.data(), (void*) string, ret.m_length);
+        } else {
+            ret.m_length = 0;
+        }
+        ret.m_referenceCount = (std::atomic<int>*) ConstanceReference;
+    }
+    return ret;
+}
+
 bool StringViewComparator::operator()(const StringView& lhs, const StringView& rhs) const
 {
     return lhs.compare(rhs) < 0;

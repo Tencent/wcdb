@@ -27,6 +27,8 @@
 #include <jni.h>
 #include <stdlib.h>
 
+#define WCDBJNIStringSignature "Ljava/lang/String;"
+
 #define WCDBJNI(className, funcName) WCDBJNI##className##_##funcName
 
 #define WCDBJNIObjectMethodWithNoArg(className, funcName)                      \
@@ -71,6 +73,19 @@
 #define WCDBJNIReleaseString(value)                                            \
     if (value##String != NULL) {                                               \
         (*env)->ReleaseStringUTFChars(env, value, value##String);              \
+    }
+
+#define WCDBJNIGetByteArray(value)                                             \
+    const jbyte *value##Array = NULL;                                          \
+    int value##Length = 0;                                                     \
+    if (value != NULL) {                                                       \
+        value##Array = (*env)->GetByteArrayElements(env, value, NULL);         \
+        value##Length = (*env)->GetArrayLength(env, value);                    \
+    }
+
+#define WCDBJNIReleaseByteArray(value)                                           \
+    if (value##Array != NULL) {                                                  \
+        (*env)->ReleaseByteArrayElements(env, value, (jbyte *) value##Array, 0); \
     }
 
 #define WCDBJNIGetLongArray(value)                                             \

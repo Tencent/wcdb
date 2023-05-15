@@ -22,11 +22,14 @@
  */
 
 #include "BindParameterJNI.h"
+#include "BindingJNI.h"
 #include "ColumnConstraintJNI.h"
 #include "ColumnDefJNI.h"
 #include "ColumnJNI.h"
+#include "ErrorJNI.h"
 #include "ExpressionJNI.h"
 #include "ExpressionOperableJNI.h"
+#include "HandleStatementJNI.h"
 #include "IndexedColumnJNI.h"
 #include "LiteralValueJNI.h"
 #include "OrderingTermJNI.h"
@@ -48,7 +51,6 @@
 #include "TableOrSubqueryJNI.h"
 #include "WinqJNI.h"
 
-#define WCDBJNIStringSignature "Ljava/lang/String;"
 #define WCDBJNIMultiTypeSignature "IJDLjava/lang/String;"
 #define WCDBJNIObjectOrStringSignature "IJLjava/lang/String;"
 #define WCDBJNICommonArraySignature "I[J[D[Ljava/lang/String;"
@@ -90,6 +92,7 @@ static const JNINativeMethod g_schemaMethods[] = {
 
 static const JNINativeMethod g_columnMethods[] = {
     { "createCppObj", "(" WCDBJNIStringSignature "J)J", (void *) WCDBJNIColumnFuncName(createWithName) },
+    { "copy", "(J)J", (void *) WCDBJNIColumnFuncName(copy) },
     { "inTable", "(J" WCDBJNIStringSignature ")V", (void *) WCDBJNIColumnFuncName(inTable) },
     { "inSchema", "(JJ)V", (void *) WCDBJNIColumnFuncName(inSchema) },
     { "allColumn", "()J", (void *) WCDBJNIColumnFuncName(createAll) },
@@ -282,6 +285,7 @@ static const JNINativeMethod g_statementCreateTableMethods[] = {
       "(J" WCDBJNIObjectOrStringSignature ")V",
       (void *) WCDBJNIStatementCreateTableFuncName(configSchema) },
     { "configAs", "(JJ)V", (void *) WCDBJNIStatementCreateTableFuncName(configAs) },
+    { "configColumn", "(JJ)V", (void *) WCDBJNIStatementCreateTableFuncName(configColumn) },
     { "configColumns", "(J[J)V", (void *) WCDBJNIStatementCreateTableFuncName(configColumns) },
     { "configConstraints", "(J[J)V", (void *) WCDBJNIStatementCreateTableFuncName(configConstraints) },
     { "configWithoutRowid", "(J)V", (void *) WCDBJNIStatementCreateTableFuncName(configWithoutRowid) },
@@ -395,8 +399,70 @@ static const JNINativeMethod g_statementUpdateMethods[] = {
     { "configOffset", "(JIJ)V", (void *) WCDBJNIStatementUpdateFuncName(configOffset) },
 };
 
+static const JNINativeMethod g_tableBindingMethods[] = {
+    { "createCppObj", "()J", (void *) WCDBJNIBindingFuncName(create) },
+    { "addColumnDef", "(JJ)V", (void *) WCDBJNIBindingFuncName(addColumnDef) },
+    { "addIndex", "(J" WCDBJNIStringSignature "J)V", (void *) WCDBJNIBindingFuncName(addIndex) },
+    { "addTableConstraint", "(JJ)V", (void *) WCDBJNIBindingFuncName(addTableConstraint) },
+    { "configVirtualModule",
+      "(J" WCDBJNIStringSignature ")V",
+      (void *) WCDBJNIBindingFuncName(configVirtualModule) },
+    { "configVirtualModuleArgument",
+      "(J" WCDBJNIStringSignature ")V",
+      (void *) WCDBJNIBindingFuncName(configVirtualModuleArgument) },
+    { "createTable", "(J" WCDBJNIStringSignature "J)Z", (void *) WCDBJNIBindingFuncName(createTable) },
+    { "createVirtualTable",
+      "(J" WCDBJNIStringSignature "J)Z",
+      (void *) WCDBJNIBindingFuncName(createVirtualTable) },
+    { "getBaseBinding", "(J)J", (void *) WCDBJNIBindingFuncName(getBaseBinding) },
+};
+
+static const JNINativeMethod g_exceptionMethods[] = {
+    { "getLevel", "(J)I", (void *) WCDBJNIErrorFuncName(getLevel) },
+    { "getCode", "(J)I", (void *) WCDBJNIErrorFuncName(getCode) },
+    { "getMessage", "(J)" WCDBJNIStringSignature, (void *) WCDBJNIErrorFuncName(getMessage) },
+    { "enumerateInfo", "(J)V", (void *) WCDBJNIErrorFuncName(enumerateInfo) },
+};
+
+static const JNINativeMethod g_handleStatementMethods[] = {
+    { "getError", "(J)J", (void *) WCDBJNIHandleStatementFuncName(getError) },
+    { "prepare", "(JJ)Z", (void *) WCDBJNIHandleStatementFuncName(prepare) },
+    { "checkPrepared", "(J)Z", (void *) WCDBJNIHandleStatementFuncName(checkPrepared) },
+    { "step", "(J)Z", (void *) WCDBJNIHandleStatementFuncName(step) },
+    { "reset", "(J)V", (void *) WCDBJNIHandleStatementFuncName(reset) },
+    { "finalize", "(J)V", (void *) WCDBJNIHandleStatementFuncName(finalize) },
+    { "isDone", "(J)Z", (void *) WCDBJNIHandleStatementFuncName(isDone) },
+    { "bindInteger", "(JJI)V", (void *) WCDBJNIHandleStatementFuncName(bindInteger) },
+    { "bindDouble", "(JDI)V", (void *) WCDBJNIHandleStatementFuncName(bindDouble) },
+    { "bindText", "(J" WCDBJNIStringSignature "I)V", (void *) WCDBJNIHandleStatementFuncName(bindText) },
+    { "bindBLOB", "(J[BI)V", (void *) WCDBJNIHandleStatementFuncName(bindBLOB) },
+    { "bindNull", "(JI)V", (void *) WCDBJNIHandleStatementFuncName(bindNull) },
+    { "getColumnType", "(JI)I", (void *) WCDBJNIHandleStatementFuncName(getColumnType) },
+    { "getInteger", "(JI)J", (void *) WCDBJNIHandleStatementFuncName(getInteger) },
+    { "getDouble", "(JI)D", (void *) WCDBJNIHandleStatementFuncName(getDouble) },
+    { "getText", "(JI)" WCDBJNIStringSignature, (void *) WCDBJNIHandleStatementFuncName(getText) },
+    { "getBLOB", "(JI)[B", (void *) WCDBJNIHandleStatementFuncName(getBLOB) },
+    { "getColumnCount", "(J)I", (void *) WCDBJNIHandleStatementFuncName(getColumnCount) },
+    { "bindParameterIndex",
+      "(J" WCDBJNIStringSignature ")I",
+      (void *) WCDBJNIHandleStatementFuncName(bindParameterIndex) },
+    { "getColumnName",
+      "(JI)" WCDBJNIStringSignature,
+      (void *) WCDBJNIHandleStatementFuncName(getColumnName) },
+    { "getOriginalColumnName",
+      "(JI)" WCDBJNIStringSignature,
+      (void *) WCDBJNIHandleStatementFuncName(getOriginalColumnName) },
+    { "getColumnTableName",
+      "(JI)" WCDBJNIStringSignature,
+      (void *) WCDBJNIHandleStatementFuncName(getColumnTableName) },
+    { "getColumnName",
+      "(JI)" WCDBJNIStringSignature,
+      (void *) WCDBJNIHandleStatementFuncName(getColumnName) },
+    { "isReadOnly", "(J)Z", (void *) WCDBJNIHandleStatementFuncName(isReadOnly) },
+};
+
 static const JNIBinding g_bindingInfo[] = {
-    WCDBJNIRegister("com/tencent/wcdb/util/CPPBridge", g_objectBridgeMethods),
+    WCDBJNIRegister("com/tencent/wcdb/base/CppObject", g_objectBridgeMethods),
     WCDBJNIRegister("com/tencent/wcdb/winq/Identifier", g_winqBridgeMethods),
     WCDBJNIRegister("com/tencent/wcdb/winq/LiteralValue", g_literalValueMethods),
     WCDBJNIRegister("com/tencent/wcdb/winq/Schema", g_schemaMethods),
@@ -423,6 +489,9 @@ static const JNIBinding g_bindingInfo[] = {
     WCDBJNIRegister("com/tencent/wcdb/winq/StatementPragma", g_statementPragmaMethods),
     WCDBJNIRegister("com/tencent/wcdb/winq/StatementSelect", g_statementSelectMethods),
     WCDBJNIRegister("com/tencent/wcdb/winq/StatementUpdate", g_statementUpdateMethods),
+    WCDBJNIRegister("com/tencent/wcdb/orm/Binding", g_tableBindingMethods),
+    WCDBJNIRegister("com/tencent/wcdb/base/WCDBException", g_exceptionMethods),
+    WCDBJNIRegister("com/tencent/wcdb/core/PreparedStatement", g_handleStatementMethods),
 };
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *unused)

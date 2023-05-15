@@ -50,34 +50,34 @@ public class StatementInsert extends Statement {
     }
 
     public StatementInsert of(Schema schema) {
-        configSchema(cppObj, CPPType.Schema.ordinal(), schema.cppObj, null);
+        configSchema(cppObj, CPPType.Schema.ordinal(), schema.getCppObj(), null);
         return this;
     }
 
     private native void configSchema(long self, int type, long schema, String schemaName);
 
     public StatementInsert orReplace() {
-        configConflictAction(cppObj, ConflictAction.Replace.ordinal() + 1);
+        configConflictAction(cppObj, ConflictAction.Replace.ordinal());
         return this;
     }
 
     public StatementInsert orRollback() {
-        configConflictAction(cppObj, ConflictAction.Rollback.ordinal() + 1);
+        configConflictAction(cppObj, ConflictAction.Rollback.ordinal());
         return this;
     }
 
     public StatementInsert orAbort() {
-        configConflictAction(cppObj, ConflictAction.Abort.ordinal() + 1);
+        configConflictAction(cppObj, ConflictAction.Abort.ordinal());
         return this;
     }
 
     public StatementInsert orFail() {
-        configConflictAction(cppObj, ConflictAction.Fail.ordinal() + 1);
+        configConflictAction(cppObj, ConflictAction.Fail.ordinal());
         return this;
     }
 
     public StatementInsert orIgnore() {
-        configConflictAction(cppObj, ConflictAction.Ignore.ordinal() + 1);
+        configConflictAction(cppObj, ConflictAction.Ignore.ordinal());
         return this;
     }
     private native void configConflictAction(long self, int action);
@@ -95,7 +95,7 @@ public class StatementInsert extends Statement {
         }
         long[] cppColumns = new long[columns.length];
         for(int i = 0; i < columns.length; i++) {
-            cppColumns[i] = columns[i].cppObj;
+            cppColumns[i] = columns[i].getCppObj();
         }
         configColumns(cppObj, CPPType.Column.ordinal(), cppColumns, null);
         return this;
@@ -132,7 +132,7 @@ public class StatementInsert extends Statement {
     private native void configValues(long self, int[] types, long[] longValues, double[] doubleValues, String[] stringValues);
 
     public StatementInsert values(StatementSelect select) {
-        configValues(cppObj, select.cppObj);
+        configValues(cppObj, select.getCppObj());
         return this;
     }
 

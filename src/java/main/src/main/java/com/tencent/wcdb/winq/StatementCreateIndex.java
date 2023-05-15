@@ -62,7 +62,7 @@ public class StatementCreateIndex extends Statement {
     }
 
     public StatementCreateIndex of(Schema schema) {
-        configSchema(cppObj, CPPType.Schema.ordinal(), schema.cppObj, null);
+        configSchema(cppObj, CPPType.Schema.ordinal(), schema.getCppObj(), null);
         return this;
     }
 
@@ -81,7 +81,7 @@ public class StatementCreateIndex extends Statement {
         }
         long[] columns = new long[indexedColumnConvertible.length];
         for(int i = 0; i < indexedColumnConvertible.length; i++) {
-            columns[i] = indexedColumnConvertible[i].asIdentifier().cppObj;
+            columns[i] = indexedColumnConvertible[i].asIdentifier().getCppObj();
         }
         configIndexedColumns(
                 cppObj,
@@ -94,7 +94,7 @@ public class StatementCreateIndex extends Statement {
         configIndexedColumns(
                 cppObj,
                 indexedColumnConvertible.asIdentifier().getCppType().ordinal(),
-                new long[]{indexedColumnConvertible.asIdentifier().cppObj},
+                new long[]{indexedColumnConvertible.asIdentifier().getCppObj()},
                 null);
         return this;
     }
@@ -112,7 +112,7 @@ public class StatementCreateIndex extends Statement {
     private native void configIndexedColumns(long self, int type, long[] columns, String[] columnNames);
 
     public StatementCreateIndex where(Expression condition) {
-        configCondition(cppObj, condition.cppObj);
+        configCondition(cppObj, condition.getCppObj());
         return this;
     }
 

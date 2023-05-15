@@ -35,7 +35,7 @@ public class ColumnDef extends Identifier{
 
     public ColumnDef(Column column) {
         if(column != null) {
-            cppObj = createCppObj(column.getCppType().ordinal(), column.cppObj, null, 0);
+            cppObj = createCppObj(column.getCppType().ordinal(), column.getCppObj(), null, 0);
         } else {
             cppObj = createCppObj(CPPType.String.ordinal(), 0, null, 0);
         }
@@ -47,16 +47,16 @@ public class ColumnDef extends Identifier{
 
     public ColumnDef(Column column, ColumnType columnType) {
         if(column != null) {
-            cppObj = createCppObj(column.getCppType().ordinal(), column.cppObj, null, columnType.ordinal());
+            cppObj = createCppObj(column.getCppType().ordinal(), column.getCppObj(), null, columnType.ordinal());
         } else {
-            cppObj = createCppObj(column.getCppType().ordinal(), column.cppObj, null, columnType.ordinal());
+            cppObj = createCppObj(column.getCppType().ordinal(), column.getCppObj(), null, columnType.ordinal());
         }
     }
 
     private native long createCppObj(int type, long column, String columnName, int columnType);
 
     public ColumnDef constraint(ColumnConstraint constraint) {
-        constraint(cppObj, constraint.cppObj);
+        constraint(cppObj, constraint.getCppObj());
         return this;
     }
 

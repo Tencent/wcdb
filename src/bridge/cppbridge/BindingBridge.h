@@ -33,7 +33,7 @@ WCDB_EXTERN_C_BEGIN
 WCDBDefineCPPBridgedType(CPPBinding)
 
 CPPBinding WCDBBindingCreate();
-void WCDBBindingAddColumnDef(CPPBinding binding, const char* _Nullable columnName, CPPColumnDef columnDef);
+void WCDBBindingAddColumnDef(CPPBinding binding, CPPColumnDef columnDef);
 void WCDBBindingAddColumnConstraint(CPPBinding binding,
                                     const char* _Nullable columnName,
                                     CPPColumnConstraint constraint);

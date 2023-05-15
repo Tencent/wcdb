@@ -38,7 +38,7 @@ public class StatementPragma extends Statement {
     private native long createCppObj();
 
     public StatementPragma pragma(Pragma pragma){
-        configPragma(cppObj, pragma.cppObj);
+        configPragma(cppObj, pragma.getCppObj());
         return this;
     }
 

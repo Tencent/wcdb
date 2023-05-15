@@ -42,6 +42,7 @@ void WCDBJNIStatementCreateTableObjectMethod(configSchema,
 void WCDBJNIStatementCreateTableObjectMethod(configTemp, jlong self);
 void WCDBJNIStatementCreateTableObjectMethod(configIfNotExist, jlong self);
 void WCDBJNIStatementCreateTableObjectMethod(configAs, jlong self, jlong select);
+void WCDBJNIStatementCreateTableObjectMethod(configColumn, jlong self, jlong column);
 void WCDBJNIStatementCreateTableObjectMethod(configColumns, jlong self, jlongArray columns);
 void WCDBJNIStatementCreateTableObjectMethod(configConstraints, jlong self, jlongArray constraints);
 void WCDBJNIStatementCreateTableObjectMethod(configWithoutRowid, jlong self);

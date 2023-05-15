@@ -83,7 +83,7 @@ public class ColumnConstraint extends Identifier {
     private native void configUnique(long self);
 
     public ColumnConstraint check(Expression expression) {
-        configCheck(cppObj, expression.cppObj);
+        configCheck(cppObj, expression.getCppObj());
         return this;
     }
 
@@ -116,7 +116,7 @@ public class ColumnConstraint extends Identifier {
 
     public ColumnConstraint defaultTo(ExpressionConvertible value) {
         if(value != null) {
-            defaultTo(cppObj, value.asIdentifier().getCppType().ordinal(), value.asIdentifier().cppObj, 0, null);
+            defaultTo(cppObj, value.asIdentifier().getCppType().ordinal(), value.asIdentifier().getCppObj(), 0, null);
         } else {
             defaultTo(cppObj, CPPType.Null.ordinal(), 0, 0, null);
         }
@@ -133,7 +133,7 @@ public class ColumnConstraint extends Identifier {
     private native void configCollate(long self, String collation);
 
     public ColumnConstraint foreignKey(ForeignKey foreignKey) {
-        configForeignKey(cppObj, foreignKey.cppObj);
+        configForeignKey(cppObj, foreignKey.getCppObj());
         return this;
     }
 

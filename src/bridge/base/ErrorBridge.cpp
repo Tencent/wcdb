@@ -97,6 +97,37 @@ void WCDBErrorEnumerateAllInfo(CPPError error, SwiftClosure* _Nonnull callback)
     }
 }
 
+void WCDBErrorEnumerateAllInfo2(CPPError error, void* _Nonnull context, ErrorInfoEnumerator callback)
+{
+    WCDBGetObjectOrReturn(error, WCDB::Error, cppError);
+    for (const auto& info : cppError->infos) {
+        switch (info.second.underlyingType()) {
+        case WCDB::Error::InfoValue::UnderlyingType::String:
+            callback(context,
+                     info.first.data(),
+                     WCDBErrorValueTypeString,
+                     0,
+                     0,
+                     info.second.stringValue().data());
+            break;
+        case WCDB::Error::InfoValue::UnderlyingType::Integer:
+            callback(context,
+                     info.first.data(),
+                     WCDBErrorValueTypeInterger,
+                     info.second.integerValue(),
+                     0,
+                     nullptr);
+            break;
+        case WCDB::Error::InfoValue::UnderlyingType::Float:
+            callback(
+            context, info.first.data(), WCDBErrorValueTypeFloat, 0, info.second.floatValue(), nullptr);
+            break;
+        default:
+            break;
+        }
+    }
+}
+
 void WCDBErrorReport(WCDBErrorLevel level, long code, const char* content, const char* _Nullable path, long tag)
 {
     WCDB::Error::Level cppLevel;

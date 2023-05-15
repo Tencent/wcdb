@@ -40,27 +40,28 @@ public class Column extends ExpressionOperable implements IndexedColumnConvertib
 
     private native long createCppObj(String name, long tableBinding);
 
-    public Column in(String table) {
+    protected native long copy(long self);
+
+    public Column table(String table) {
         inTable(cppObj, table);
         return this;
     }
 
-    private native void inTable(long column, String table);
+    protected native void inTable(long column, String table);
 
     public Column of(Schema schema) {
-        inSchema(cppObj, schema.cppObj);
+        inSchema(cppObj, schema.getCppObj());
         return this;
     }
-
-    private native void inSchema(long column, long schema);
 
     public Column of(String schema) {
         return of(new Schema(schema));
     }
 
-    private Column() {
-    }
+    protected native void inSchema(long column, long schema);
 
+    protected Column() {
+    }
 
     public static Column all() {
         Column ret = new Column();

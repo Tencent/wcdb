@@ -127,6 +127,7 @@ public:
     static StringView formatted(const char* format, ...);
     static StringView hexString(const UnsafeData& data);
     static StringView makeConstant(const char* string);
+    static StringView createConstant(const char* string);
 
 protected:
     void assignString(const char* content, size_t length);
