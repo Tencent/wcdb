@@ -151,7 +151,20 @@ const char& UnsafeStringView::at(off_t off) const
 #pragma mark - UnsafeStringView - Comparison
 int UnsafeStringView::caseInsensiveCompare(const UnsafeStringView& other) const
 {
-    return strcasecmp(data(), other.data());
+    if (m_data == other.m_data && m_length == other.m_length) {
+        return 0;
+    }
+    int ret = strncasecmp(m_data, other.m_data, std::min(m_length, other.m_length));
+    if (ret != 0) {
+        return ret;
+    }
+    if (m_length > other.m_length) {
+        return 1;
+    } else if (m_length < other.m_length) {
+        return -1;
+    } else {
+        return 0;
+    }
 }
 
 bool UnsafeStringView::caseInsensiveEqual(const UnsafeStringView& other) const
@@ -159,20 +172,20 @@ bool UnsafeStringView::caseInsensiveEqual(const UnsafeStringView& other) const
     if (length() != other.length()) {
         return false;
     }
-    return strcasecmp(data(), other.data()) == 0;
+    return strncasecmp(data(), other.data(), m_length) == 0;
 }
 
 #pragma mark - UnsafeStringView - Operations
 uint32_t UnsafeStringView::hash() const
 {
-    return (uint32_t) crc32(0, (const unsigned char*) data(), (uint32_t) length());
+    return (uint32_t) crc32(0, (const unsigned char*) data(), (uint32_t) m_length);
 }
 
 bool UnsafeStringView::hasPrefix(const UnsafeStringView& target) const
 {
     bool has = false;
     if (length() >= target.length()) {
-        has = strncmp(data(), target.data(), target.length()) == 0;
+        has = strncmp(data(), target.data(), target.m_length) == 0;
     }
     return has;
 }
@@ -180,8 +193,8 @@ bool UnsafeStringView::hasPrefix(const UnsafeStringView& target) const
 bool UnsafeStringView::hasSuffix(const UnsafeStringView& target) const
 {
     bool has = false;
-    if (length() >= target.length()) {
-        has = strncmp(data() + length() - target.length(), target.data(), target.length()) == 0;
+    if (m_length >= target.m_length) {
+        has = strncmp(data() + m_length - target.m_length, target.data(), target.m_length) == 0;
     }
     return has;
 }
