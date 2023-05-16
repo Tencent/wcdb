@@ -441,7 +441,7 @@ public class AnnotationProcessor extends AbstractProcessor {
             assert info != null;
 
             writer.write(TAB + TAB + TAB + "case " + index + ":\n");
-            if(type.startsWith("java.lang.")) {
+            if(type.startsWith("java.lang.") && !type.equals("java.lang.String")) {
                 writer.write(TAB + TAB + TAB + TAB + "if ( object." + field + " != null ) {\n");
                 writer.write(TAB + TAB + TAB + TAB + TAB + "preparedStatement." + info.fieldGetter + "(object." + field + ", index);\n");
                 writer.write(TAB + TAB + TAB + TAB + "} else {\n");
