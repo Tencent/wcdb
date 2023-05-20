@@ -116,7 +116,7 @@ public class AnnotationProcessor extends AbstractProcessor {
                 if (verbose) {
                     msg.printMessage(Diagnostic.Kind.NOTE, "WCDB Processing: " + element.toString());
                 }
-                ArrayList<Element> fields = new ArrayList<>();
+                ArrayList<Element> fields = new ArrayList();
                 primaryKeyCount = 0;
                 autoIncrementElement = null;
                 for(Element enclosedElement : element.getEnclosedElements()) {
@@ -294,7 +294,7 @@ public class AnnotationProcessor extends AbstractProcessor {
             if( columnName == null || columnName.length() == 0 ) {
                 columnName = field.toString();
             }
-            writer.write(TAB + TAB + field + " = new Field<>(\"" + columnName + "\", INSTANCE, " + fieldId + ", " + (config.isPrimary() && config.isAutoIncrement()) + ");\n");
+            writer.write(TAB + TAB + field + " = new Field(\"" + columnName + "\", INSTANCE, " + fieldId + ", " + (config.isPrimary() && config.isAutoIncrement()) + ");\n");
             fieldId++;
             writer.write(TAB + TAB + "ColumnDef " + field + "Def = new ColumnDef(" + field + ", ColumnType." + info.columnType + ");\n");
 

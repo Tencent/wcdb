@@ -159,8 +159,8 @@ public class RepairTest extends TableTestCase {
     }
 
     void doTestRetrieve(boolean success) {
-        WrappedValue lastPercentage = new WrappedValue();
-        WrappedValue sanity = new WrappedValue();
+        final WrappedValue lastPercentage = new WrappedValue();
+        final WrappedValue sanity = new WrappedValue();
         double score = database.retrieve(new Database.RetrieveProgressMonitor() {
             @Override
             public void onProgressUpdate(double percentage, double increment) {

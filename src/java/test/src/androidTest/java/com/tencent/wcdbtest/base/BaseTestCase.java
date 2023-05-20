@@ -31,6 +31,7 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 
@@ -55,7 +56,7 @@ public class BaseTestCase {
 
     @Before
     public void setup() {
-        currentDirectory = Paths.get(tempFolder.getRoot().getPath(), getClass().getSimpleName()).toString();
+        currentDirectory = tempFolder.getRoot().getPath() + File.separator + getClass().getSimpleName();
         logInfo("Current directory: " + currentDirectory);
     }
 

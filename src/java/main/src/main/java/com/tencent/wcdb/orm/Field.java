@@ -60,7 +60,7 @@ public class Field<T> extends Column {
     }
 
     protected Field<T> copySelf() {
-        Field<T> field = new Field<>();
+        Field<T> field = new Field();
         field.cppObj = copy(cppObj);
         field.name = name;
         field.fieldId = fieldId;

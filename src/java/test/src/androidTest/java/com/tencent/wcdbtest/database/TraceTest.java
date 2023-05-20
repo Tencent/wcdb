@@ -39,16 +39,16 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.nio.file.Paths;
+import java.io.File;
 import java.util.ArrayList;
 
 @RunWith(AndroidJUnit4.class)
 public class TraceTest extends TableTestCase {
     @Test
     public void testTraceSQL() {
-        StatementPragma statement = new StatementPragma().pragma(Pragma.userVersion());
+        final StatementPragma statement = new StatementPragma().pragma(Pragma.userVersion());
 
-        WrappedValue tested = new WrappedValue();
+        final WrappedValue tested = new WrappedValue();
         database.traceSQL(new Database.SQLTracer() {
             @Override
             public void onTrace(String path, long handleId, String sql) {
@@ -64,9 +64,9 @@ public class TraceTest extends TableTestCase {
 
     @Test
     public void testGlobalTraceSQL() {
-        StatementPragma statement = new StatementPragma().pragma(Pragma.userVersion());
+        final StatementPragma statement = new StatementPragma().pragma(Pragma.userVersion());
 
-        WrappedValue tested = new WrappedValue();
+        final WrappedValue tested = new WrappedValue();
         Database.globalTraceSQL(null);
         Database.globalTraceSQL(new Database.SQLTracer() {
             @Override
@@ -85,7 +85,7 @@ public class TraceTest extends TableTestCase {
     public void testTracePerformance() {
         createTable();
         database.tracePerformance(null);
-        ArrayList<String> sqls = new ArrayList<String>(){{
+        final ArrayList<String> sqls = new ArrayList<String>(){{
             add("BEGIN IMMEDIATE");
             add("INSERT INTO testTable(id, content) VALUES(?1, ?2)");
             add("COMMIT");
@@ -106,7 +106,7 @@ public class TraceTest extends TableTestCase {
     @Test
     public void testGlobalTracePerformance() {
         Database.globalTracePerformance(null);
-        ArrayList<String> sqls = new ArrayList<String>(){{
+        final ArrayList<String> sqls = new ArrayList<String>(){{
             add("BEGIN IMMEDIATE");
             add("INSERT INTO testTable(id, content) VALUES(?1, ?2)");
             add("COMMIT");
@@ -127,7 +127,7 @@ public class TraceTest extends TableTestCase {
 
     @Test
     public void testTraceError() {
-        WrappedValue tested = new WrappedValue();
+        final WrappedValue tested = new WrappedValue();
         database.traceException(new Database.ExceptionTracer() {
             @Override
             public void onTrace(WCDBException exception) {
@@ -153,7 +153,7 @@ public class TraceTest extends TableTestCase {
 
     @Test
     public void testGlobalTraceError() {
-        WrappedValue tested = new WrappedValue();
+        final WrappedValue tested = new WrappedValue();
         Database.globalTraceException(null);
         Database.globalTraceException(new Database.ExceptionTracer() {
             @Override
@@ -180,9 +180,9 @@ public class TraceTest extends TableTestCase {
 
     @Test
     public void testTraceDBOperation() {
-        WrappedValue tag = new WrappedValue();
-        WrappedValue path = new WrappedValue();
-        WrappedValue openHandleCount = new WrappedValue();
+        final WrappedValue tag = new WrappedValue();
+        final WrappedValue path = new WrappedValue();
+        final WrappedValue openHandleCount = new WrappedValue();
         Database.globalTraceDatabaseOperation(new Database.OperationTracer() {
             @Override
             public void onTrace(Database database, Database.Operation operation) {
@@ -199,7 +199,7 @@ public class TraceTest extends TableTestCase {
                 }
             }
         });
-        Database newDatabase = new Database(Paths.get(currentDirectory, "testDatabase2").toString());
+        Database newDatabase = new Database(currentDirectory + File.separator + "testDatabase2");
         newDatabase.setTag(10000);
         newDatabase.createTable(tableName, DBTestObject.INSTANCE);
         newDatabase.insertObjects(RandomTool.autoIncrementTestCaseObjects(10), DBTestObject.allFields(), tableName);

@@ -41,7 +41,7 @@ public class TableORMOperation<T> extends TableOperation {
         super();
     }
     public Insert<T> prepareInsert() throws WCDBException {
-        Insert<T> insert = new Insert<>(database.getHandle());
+        Insert<T> insert = new Insert(database.getHandle());
         insert.autoInvalidateHandle = true;
         insert.needChanges = false;
         insert.intoTable(tableName);
@@ -49,7 +49,7 @@ public class TableORMOperation<T> extends TableOperation {
     }
 
     public Update<T> prepareUpdate() throws WCDBException {
-        Update<T> update = new Update<>(database.getHandle());
+        Update<T> update = new Update(database.getHandle());
         update.autoInvalidateHandle = true;
         update.needChanges = false;
         update.table(tableName);
@@ -57,7 +57,7 @@ public class TableORMOperation<T> extends TableOperation {
     }
 
     public Select<T> prepareSelect() throws WCDBException {
-        Select<T> select = new Select<>(database.getHandle());
+        Select<T> select = new Select(database.getHandle());
         select.autoInvalidateHandle = true;
         select.needChanges = false;
         select.from(tableName);

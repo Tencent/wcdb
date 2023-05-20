@@ -75,7 +75,7 @@ public class TableTestCase extends DatabaseTestCase {
 
     public void doTestObjectsAfterInsert(Object[] objects, int insertCount, String[] sqls, TestOperation operation) {
         if(insertCount > 1) {
-            ArrayList<String> list = new ArrayList<>(Arrays.asList(sqls));
+            ArrayList<String> list = new ArrayList(Arrays.asList(sqls));
             list.add(0, "BEGIN IMMEDIATE");
             list.add("COMMIT");
             sqls = list.toArray(new String[list.size()]);
@@ -111,8 +111,8 @@ public class TableTestCase extends DatabaseTestCase {
         doTestObjectBySelecting(objects, new String[]{sql}, operation);
     }
 
-    public void doTestObjectBySelecting(Object[] objects, String[] sqls, SelectingObjectOperation operation) {
-        ArrayList selecting = new ArrayList();
+    public void doTestObjectBySelecting(Object[] objects, String[] sqls, final SelectingObjectOperation operation) {
+        final ArrayList selecting = new ArrayList();
         doTestSQLs(sqls, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
@@ -133,7 +133,7 @@ public class TableTestCase extends DatabaseTestCase {
     }
 
     public void doTestColumnBySelecting(List<Value> column, String sql, SelectingRowsOperation operation) {
-        ArrayList<Value[]> rows = new ArrayList<>();
+        ArrayList<Value[]> rows = new ArrayList();
         for(Value value : column) {
             rows.add(new Value[]{value});
         }
@@ -148,8 +148,8 @@ public class TableTestCase extends DatabaseTestCase {
         doTestRowsBySelecting(rows, new String[]{sql}, operation);
     }
 
-    public void doTestRowsBySelecting(List<Value[]> rows, String[] sqls, SelectingRowsOperation operation) {
-        ArrayList selecting = new ArrayList();
+    public void doTestRowsBySelecting(List<Value[]> rows, String[] sqls, final SelectingRowsOperation operation) {
+        final ArrayList selecting = new ArrayList();
         doTestSQLs(sqls, new TestOperation() {
             @Override
             public void execute() throws WCDBException {

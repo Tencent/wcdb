@@ -44,10 +44,10 @@ public class ConfigTest extends DatabaseTestCase {
 
     @Test
     public void testConfig() {
-        StatementPragma setSecureDelete = new StatementPragma().pragma(Pragma.secureDelete()).toValue(true);
-        StatementPragma unsetSecureDelete = new StatementPragma().pragma(Pragma.secureDelete()).toValue(false);
-        StatementPragma getSecureDelete = new StatementPragma().pragma(Pragma.secureDelete());
-        WrappedValue uninvoked = new WrappedValue();
+        final StatementPragma setSecureDelete = new StatementPragma().pragma(Pragma.secureDelete()).toValue(true);
+        final StatementPragma unsetSecureDelete = new StatementPragma().pragma(Pragma.secureDelete()).toValue(false);
+        final StatementPragma getSecureDelete = new StatementPragma().pragma(Pragma.secureDelete());
+        final WrappedValue uninvoked = new WrappedValue();
         database.setConfig(configName, new Database.Config() {
             @Override
             public void onInvocation(Handle handle) throws WCDBException {
@@ -108,7 +108,7 @@ public class ConfigTest extends DatabaseTestCase {
         String config1 = configName + "_1";
         String config2 = configName + "_2";
         String config3 = configName + "_3";
-        WrappedValue step = new WrappedValue();
+        final WrappedValue step = new WrappedValue();
         database.setConfig(config1, new Database.Config() {
             @Override
             public void onInvocation(Handle handle) throws WCDBException {

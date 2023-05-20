@@ -37,21 +37,22 @@ import com.tencent.wcdbtest.base.WrappedValue;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
+import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class MigrationTest extends BaseTestCase {
     @Test
     public void testMigration() {
-        Database sourceDatabase = new Database(Paths.get(currentDirectory, "sourceDatabase.sqlite3").toString());
+        final Database sourceDatabase = new Database(currentDirectory + File.separator + "sourceDatabase.sqlite3");
         sourceDatabase.createTable("sourceTable", DBTestObject.INSTANCE);
 
         TestObject oldObject1 = TestObject.createObject(1, "oldContent1");
         TestObject oldObject2 = TestObject.createObject(2, "oldContent2");
         sourceDatabase.insertObjects(new TestObject[]{oldObject1, oldObject2}, DBTestObject.allFields(), "sourceTable");
 
-        Database targetDatabase = new Database(Paths.get(currentDirectory, "targetDatabase.sqlite3").toString());
-        String tableName = "targetTable";
+        Database targetDatabase = new Database(currentDirectory + File.separator + "targetDatabase.sqlite3");
+        final String tableName = "targetTable";
         targetDatabase.filterMigration(new Database.MigrationFilter() {
             @Override
             public void filterMigrate(Database.MigrationInfo info) {
@@ -85,7 +86,7 @@ public class MigrationTest extends BaseTestCase {
         targetDatabase.close();
         assertFalse(targetDatabase.isMigrated());
 
-        WrappedValue migratedTable = new WrappedValue();
+        final WrappedValue migratedTable = new WrappedValue();
         targetDatabase.setNotificationWhenMigrated(new Database.MigrationNotification() {
             @Override
             public void onMigrated(Database database, Database.MigrationInfo info) {

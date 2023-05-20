@@ -431,7 +431,7 @@ public class WCDBException extends RuntimeException{
         level = Level.valueOf(getLevel(cppError));
         code = Code.valueOf(getCode(cppError));
         String message = getMessage(cppError);
-        infos = new HashMap<>();
+        infos = new HashMap();
         infos.put(Key.message.value, message);
         enumerateInfo(cppError);
     }

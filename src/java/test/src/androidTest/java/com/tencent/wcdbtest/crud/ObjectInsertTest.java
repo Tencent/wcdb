@@ -62,7 +62,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
 
     @Test
     public void testDatabaseAutoIncrement() {
-        TestObject autoIncrementObject = TestObject.createAutoIncrementObject(object3.content);
+        final TestObject autoIncrementObject = TestObject.createAutoIncrementObject(object3.content);
         doTestObjectsAfterInsert(new Object[]{object1, object2, object3}, 1, new String[]{
                 "INSERT INTO testTable(id, content) VALUES(?1, ?2)"
         }, new TestOperation() {
@@ -76,7 +76,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
 
     @Test
     public void testDatabaseAutoIncrementWithPartialInsert() {
-        TestObject autoIncrementObject = TestObject.createAutoIncrementObject(object3.content);
+        final TestObject autoIncrementObject = TestObject.createAutoIncrementObject(object3.content);
         doTestObjectsAfterInsert(new Object[]{object1, object2, object3}, 1, new String[]{
                 "INSERT INTO testTable(content) VALUES(?1)"
         }, new TestOperation() {
@@ -240,7 +240,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
 
     @Test
     public void testTableAutoIncrement() {
-        TestObject autoIncrementObject = TestObject.createAutoIncrementObject(object3.content);
+        final TestObject autoIncrementObject = TestObject.createAutoIncrementObject(object3.content);
         doTestObjectsAfterInsert(new Object[]{object1, object2, object3}, 1, new String[]{
                 "INSERT INTO testTable(id, content) VALUES(?1, ?2)"
         }, new TestOperation() {
@@ -254,7 +254,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
 
     @Test
     public void testTableAutoIncrementWithPartialInsert() {
-        TestObject autoIncrementObject = TestObject.createAutoIncrementObject(object3.content);
+        final TestObject autoIncrementObject = TestObject.createAutoIncrementObject(object3.content);
         doTestObjectsAfterInsert(new Object[]{object1, object2, object3}, 1, new String[]{
                 "INSERT INTO testTable(content) VALUES(?1)"
         }, new TestOperation() {
@@ -418,7 +418,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
 
     @Test
     public void testHandleAutoIncrement() {
-        TestObject autoIncrementObject = TestObject.createAutoIncrementObject(object3.content);
+        final TestObject autoIncrementObject = TestObject.createAutoIncrementObject(object3.content);
         doTestObjectsAfterInsert(new Object[]{object1, object2, object3}, 1, new String[]{
                 "INSERT INTO testTable(id, content) VALUES(?1, ?2)"
         }, new TestOperation() {
@@ -432,7 +432,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
 
     @Test
     public void testHandleAutoIncrementWithPartialInsert() {
-        TestObject autoIncrementObject = TestObject.createAutoIncrementObject(object3.content);
+        final TestObject autoIncrementObject = TestObject.createAutoIncrementObject(object3.content);
         doTestObjectsAfterInsert(new Object[]{object1, object2, object3}, 1, new String[]{
                 "INSERT INTO testTable(content) VALUES(?1)"
         }, new TestOperation() {

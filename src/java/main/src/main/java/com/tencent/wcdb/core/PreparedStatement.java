@@ -265,7 +265,7 @@ public class PreparedStatement extends CppObject {
     }
 
     public ArrayList<Value> getOneColumn() throws WCDBException{
-        ArrayList<Value> column = new ArrayList<>();
+        ArrayList<Value> column = new ArrayList();
         step();
         while (!isDone(cppObj)) {
             column.add(getValue(0));
@@ -275,7 +275,7 @@ public class PreparedStatement extends CppObject {
     }
 
     public ArrayList<Value[]> getMultiRows() throws WCDBException{
-        ArrayList<Value[]> rows = new ArrayList<>();
+        ArrayList<Value[]> rows = new ArrayList();
         step();
         while (!isDone(cppObj)) {
             rows.add(getOneRow());
@@ -293,7 +293,7 @@ public class PreparedStatement extends CppObject {
     }
 
     public <T> ArrayList<T> getAllObjects(Field<T>[] fields) throws WCDBException {
-        ArrayList<T> objs = new ArrayList<>();
+        ArrayList<T> objs = new ArrayList();
         step();
         while (!isDone(cppObj)) {
             objs.add(getOneObject(fields));

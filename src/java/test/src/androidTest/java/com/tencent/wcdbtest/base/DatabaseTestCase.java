@@ -52,7 +52,7 @@ public class DatabaseTestCase extends BaseTestCase {
         super.setup();
         expectMode = Expect.AllSQLs;
         fileName = "testDatabase";
-        path = Paths.get(currentDirectory, fileName).toString();
+        path = currentDirectory + File.separator + fileName;
         database = new Database(path);
         database.setTag(10001);
     }
@@ -75,10 +75,10 @@ public class DatabaseTestCase extends BaseTestCase {
         Assert.assertNotNull(sqls);
         Assert.assertNotNull(operation);
         do {
-            WrappedValue trace = new WrappedValue();
+            final WrappedValue trace = new WrappedValue();
             trace.boolValue = false;
-            ArrayList<String> expectedSQLs = new ArrayList<>(Arrays.asList(sqls));
-            Thread thread = Thread.currentThread();
+            final ArrayList<String> expectedSQLs = new ArrayList<String>(Arrays.asList(sqls));
+            final Thread thread = Thread.currentThread();
             database.traceSQL(new Database.SQLTracer() {
                 @Override
                 public void onTrace(String path, long handleId, String sql) {

@@ -91,21 +91,21 @@ public abstract class HandleORMOperation extends HandleOperation{
     }
 
     public <T> Insert<T> prepareInsert() throws WCDBException {
-        Insert<T> insert = new Insert<>(getHandle());
+        Insert<T> insert = new Insert(getHandle());
         insert.autoInvalidateHandle = autoInvalidateHandle();
         insert.needChanges = false;
         return insert;
     }
 
     public <T> Update<T> prepareUpdate() throws WCDBException {
-        Update<T> update = new Update<>(getHandle());
+        Update<T> update = new Update(getHandle());
         update.autoInvalidateHandle = autoInvalidateHandle();
         update.needChanges = false;
         return update;
     }
 
     public <T> Select<T> prepareSelect() throws WCDBException {
-        Select<T> select = new Select<>(getHandle());
+        Select<T> select = new Select(getHandle());
         select.autoInvalidateHandle = autoInvalidateHandle();
         select.needChanges = false;
         return select;

@@ -65,7 +65,7 @@ public class ORMTest extends DatabaseTestCase {
     void doTestCreateTableAndIndexSQLsAsExpected(String[] sqls, TestOperation operation) {
         assertNotNull(sqls);
         assertNotNull(operation);
-        ArrayList<String> newSqls = new ArrayList<>();
+        ArrayList<String> newSqls = new ArrayList();
         newSqls.add("BEGIN IMMEDIATE");
         newSqls.addAll(Arrays.asList(sqls));
         newSqls.add("COMMIT");
@@ -236,8 +236,8 @@ public class ORMTest extends DatabaseTestCase {
 
     @Test
     public void testAutoAddColumn() {
-        String fakeTable = "fakeTable";
-        String fakeSchema = "notExistSchema";
+        final String fakeTable = "fakeTable";
+        final String fakeSchema = "notExistSchema";
         database.createTable(fakeTable, DBAutoAddColumnObject.INSTANCE);
 
         doTestAutoAddColumn(DBAutoAddColumnObject.insertValue, true, new TestOperation() {
@@ -340,9 +340,9 @@ public class ORMTest extends DatabaseTestCase {
     }
 
     void doTestAutoAddColumn(Field<AutoAddColumnObject> removeField, boolean succeed, TestOperation operation) {
-        String columnName = removeField.getName();
-        StatementCreateTable createTable = new StatementCreateTable().createTable(tableName);
-        ArrayList<ColumnDef> columnDefs = new ArrayList<>();
+        final String columnName = removeField.getName();
+        final StatementCreateTable createTable = new StatementCreateTable().createTable(tableName);
+        ArrayList<ColumnDef> columnDefs = new ArrayList();
         for(Field field: DBAutoAddColumnObject.allFields()) {
             if(!field.getDescription().equals(columnName)) {
                 columnDefs.add(new ColumnDef(field, ColumnType.Integer));
@@ -351,7 +351,7 @@ public class ORMTest extends DatabaseTestCase {
 
         createTable.define(columnDefs.toArray(new ColumnDef[columnDefs.size()]));
         database.execute(createTable);
-        WrappedValue added = new WrappedValue();
+        final WrappedValue added = new WrappedValue();
         database.traceException(new Database.ExceptionTracer() {
             @Override
             public void onTrace(WCDBException exception) {

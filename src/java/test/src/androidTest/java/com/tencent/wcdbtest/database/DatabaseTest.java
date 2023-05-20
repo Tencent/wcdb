@@ -69,7 +69,7 @@ public class DatabaseTest extends TableTestCase {
     @Test
     public void testBlockade() throws InterruptedException {
         database.blockade();
-        WrappedValue time = new WrappedValue();
+        final WrappedValue time = new WrappedValue();
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -87,9 +87,9 @@ public class DatabaseTest extends TableTestCase {
 
     @Test
     public void testBlockadeAndClose() throws InterruptedException {
-        WrappedValue main = WrappedValue.currentTime();
-        WrappedValue subThread = WrappedValue.currentTime();
-        Thread thread = new Thread(new Runnable() {
+        final WrappedValue main = WrappedValue.currentTime();
+        final WrappedValue subThread = WrappedValue.currentTime();
+        final Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 assertTrue(database.canOpen());
@@ -176,7 +176,7 @@ public class DatabaseTest extends TableTestCase {
     public void testCheckPoint() {
         createTable();
         TestObject[] objects = RandomTool.autoIncrementTestCaseObjects(100);
-        WrappedValue walFrameNum = new WrappedValue();
+        final WrappedValue walFrameNum = new WrappedValue();
         for(int i = 0; i < 100; i++) {
             assertEquals(table.getValue(Column.all().count()).getInteger(), i);
             table.insertObject(objects[i]);

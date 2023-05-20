@@ -69,8 +69,8 @@ public class TableOperation {
         insertRows(rows, columns, ConflictAction.Ignore);
     }
 
-    private void insertRows(Value[][] rows, Column[] columns, ConflictAction action) throws WCDBException {
-        StatementInsert insert = new StatementInsert().insertInto(tableName).columns(columns).valuesWithBindParameters(columns.length);
+    private void insertRows(final Value[][] rows, Column[] columns, ConflictAction action) throws WCDBException {
+        final StatementInsert insert = new StatementInsert().insertInto(tableName).columns(columns).valuesWithBindParameters(columns.length);
         if(action == ConflictAction.Replace) {
             insert.orReplace();
         } else if (action == ConflictAction.Ignore) {

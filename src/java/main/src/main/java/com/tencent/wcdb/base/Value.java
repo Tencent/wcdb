@@ -23,13 +23,9 @@
 
 package com.tencent.wcdb.base;
 
-import androidx.annotation.Nullable;
-
-import com.tencent.wcdb.core.Database;
 import com.tencent.wcdb.winq.ColumnType;
 
 import java.util.Arrays;
-import java.util.Objects;
 
 public class Value {
     public Value() {
@@ -79,7 +75,7 @@ public class Value {
             case Float:
                 return (long) doubleValue;
             case Text:
-                return Long.valueOf(textValue);
+                return Long.parseLong(textValue);
             default:
                 return 0;
         }
@@ -92,7 +88,7 @@ public class Value {
             case Integer:
                 return intValue;
             case Text:
-                return Double.valueOf(textValue);
+                return Double.parseDouble(textValue);
             default:
                 return 0;
         }
@@ -123,7 +119,7 @@ public class Value {
     }
 
     @Override
-    public boolean equals(@Nullable Object obj) {
+    public boolean equals(Object obj) {
         if(obj instanceof Value) {
             Value value = (Value) obj;
             switch (type) {
@@ -161,13 +157,13 @@ public class Value {
             case Null:
                 return 0;
             case Integer:
-                return Objects.hashCode(intValue);
+                return Long.valueOf(intValue).hashCode();
             case Float:
-                return Objects.hashCode(doubleValue);
+                return Double.valueOf(doubleValue).hashCode();
             case Text:
-                return Objects.hashCode(textValue);
+                return textValue.hashCode();
             case BLOB:
-                return Objects.hashCode(blobValue);
+                return Arrays.hashCode(blobValue);
         }
         return 0;
     }

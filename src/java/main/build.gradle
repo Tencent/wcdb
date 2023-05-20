@@ -26,8 +26,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_6
+        targetCompatibility JavaVersion.VERSION_1_6
     }
 
     externalNativeBuild {
@@ -35,9 +35,4 @@ android {
             version '3.18.1'
         }
     }
-}
-
-dependencies {
-    implementation 'androidx.annotation:annotation:1.6.0'
-    implementation 'org.jetbrains:annotations:13.0'
 }

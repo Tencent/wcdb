@@ -23,8 +23,6 @@
 
 package com.tencent.wcdb.winq;
 
-import androidx.annotation.ReturnThis;
-
 public class StatementPragma extends Statement {
     @Override
     protected CPPType getCppType() {
