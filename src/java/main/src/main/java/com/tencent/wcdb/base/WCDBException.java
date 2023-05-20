@@ -25,7 +25,7 @@ package com.tencent.wcdb.base;
 import java.util.HashMap;
 import java.util.Map;
 
-public class WCDBException extends RuntimeException{
+public class WCDBException extends Exception {
     public enum Level{
         Ignore,
         Debug,

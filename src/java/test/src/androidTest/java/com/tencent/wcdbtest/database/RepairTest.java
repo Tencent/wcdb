@@ -43,14 +43,17 @@ public class RepairTest extends TableTestCase {
 
     void executeTest(TestOperation operation) {
         database.setCipherKey(null);
-        createTable();
-        table.insertObjects(preInsertObjects);
-        operation.execute();
-        database.removeFiles();
-        database.setCipherKey("123".getBytes());
-        createTable();
-        table.insertObjects(preInsertObjects);
-        operation.execute();
+        try {
+            table.insertObjects(preInsertObjects);
+            operation.execute();
+            database.removeFiles();
+            database.setCipherKey("123".getBytes());
+            createTable();
+            table.insertObjects(preInsertObjects);
+            operation.execute();
+        } catch (WCDBException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
@@ -75,7 +78,7 @@ public class RepairTest extends TableTestCase {
     }
 
     @Test
-    public void testBackupWithFilter() {
+    public void testBackupWithFilter() throws WCDBException {
         createTable();
         table.insertObjects(preInsertObjects);
         database.filterBackup(null);
@@ -158,7 +161,7 @@ public class RepairTest extends TableTestCase {
         });
     }
 
-    void doTestRetrieve(boolean success) {
+    void doTestRetrieve(boolean success) throws WCDBException {
         final WrappedValue lastPercentage = new WrappedValue();
         final WrappedValue sanity = new WrappedValue();
         double score = database.retrieve(new Database.RetrieveProgressMonitor() {

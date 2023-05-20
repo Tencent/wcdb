@@ -53,7 +53,7 @@ public class TableTestCase extends DatabaseTestCase {
         table = database.getTable(tableName, tableBinding);
     }
 
-    public void createValueTable() {
+    public void createValueTable() throws WCDBException {
         StatementCreateTable createTable = new StatementCreateTable().createTable(tableName);
         createTable.define(new ColumnDef("id", ColumnType.Integer).makePrimary(true));
         createTable.define(new ColumnDef("content", ColumnType.Text));
@@ -93,14 +93,19 @@ public class TableTestCase extends DatabaseTestCase {
 
     public void doTestObjectsAfterOperation(Object[] objects, String[] sqls, TestOperation operation) {
         doTestSQLs(sqls, operation);
-        ArrayList<TestObject> allObjects = getAllObjects();
+        ArrayList<TestObject> allObjects = null;
+        try {
+            allObjects = getAllObjects();
+        } catch (WCDBException e) {
+            throw new RuntimeException(e);
+        }
         Assert.assertTrue(((objects == null || objects.length == 0) &&
                 (allObjects == null || allObjects.size() == 0)) ||
                 Arrays.equals(objects, allObjects.toArray()));
     }
 
     public interface SelectingObjectOperation {
-        List execute();
+        List execute() throws WCDBException;
     }
 
     public void doTestObjectBySelecting(Object object, String sql, SelectingObjectOperation operation) {

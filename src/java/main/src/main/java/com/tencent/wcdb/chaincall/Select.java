@@ -108,7 +108,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
         return ret;
     }
 
-    public ArrayList<T> allObjects() {
+    public ArrayList<T> allObjects() throws WCDBException {
         ArrayList<T> ret = null;
         try {
             PreparedStatement preparedStatement = prepareStatement();

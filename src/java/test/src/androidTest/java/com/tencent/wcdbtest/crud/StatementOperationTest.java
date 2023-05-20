@@ -40,7 +40,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.Random;
 
 public class StatementOperationTest extends ValueCRUDTestCase {
@@ -48,7 +47,7 @@ public class StatementOperationTest extends ValueCRUDTestCase {
     StatementInsert insert;
 
     @Before
-    public void setup() {
+    public void setup() throws WCDBException {
         super.setup();
         insert = new StatementInsert().insertInto(tableName).columns(columns()).values(new Object[]{3, new BindParameter(1)});
         select = new StatementSelect().select(new Column("content")).from(tableName).where(new Column("id").eq(3));
@@ -89,7 +88,7 @@ public class StatementOperationTest extends ValueCRUDTestCase {
     }
 
     @Test
-    public void testReadOnly() {
+    public void testReadOnly() throws WCDBException {
         PreparedStatement statement1 = handle.preparedWithMainStatement(new StatementPragma().pragma(Pragma.userVersion()));
         PreparedStatement statement2 = handle.getOrCreatePreparedStatement(new StatementPragma().pragma(Pragma.userVersion()).toValue(123));
         assertTrue(statement1.isReadOnly());
@@ -98,20 +97,20 @@ public class StatementOperationTest extends ValueCRUDTestCase {
     }
 
     @Test
-    public void testGetChanges() {
+    public void testGetChanges() throws WCDBException {
         handle.execute(new StatementDelete().deleteFrom(tableName));
         assertEquals(handle.getChanges(), rows.length);
     }
 
     @Test
-    public void testGetLastInsertRowId() {
+    public void testGetLastInsertRowId() throws WCDBException {
         StatementInsert insert = new StatementInsert().insertInto(tableName).columns(columns()).values(new Object[]{null, RandomTool.string()});
         handle.execute(insert);
         assertEquals(handle.getLastInsertedRowId(), nextId);
     }
 
     @Test
-    public void testInteger() {
+    public void testInteger() throws WCDBException {
         long value = new Random().nextLong();
         PreparedStatement preparedInsert = handle.getOrCreatePreparedStatement(insert);
         preparedInsert.bindInteger(value, 1);
@@ -126,7 +125,7 @@ public class StatementOperationTest extends ValueCRUDTestCase {
     }
 
     @Test
-    public void testIntegerValue() {
+    public void testIntegerValue() throws WCDBException {
         Value value = new Value(new Random().nextLong());
         PreparedStatement preparedInsert = handle.getOrCreatePreparedStatement(insert);
         preparedInsert.bindValue(value, 1);
@@ -137,11 +136,11 @@ public class StatementOperationTest extends ValueCRUDTestCase {
         PreparedStatement prepareSelect = handle.getOrCreatePreparedStatement(select);
         prepareSelect.step();
         assertFalse(prepareSelect.isDone());
-        assertTrue(prepareSelect.getValue(0).equals(value));
+        assertEquals(prepareSelect.getValue(0), value);
     }
 
     @Test
-    public void testDouble() {
+    public void testDouble() throws WCDBException {
         double value = new Random().nextDouble();
         PreparedStatement preparedInsert = handle.getOrCreatePreparedStatement(insert);
         preparedInsert.bindDouble(value, 1);
@@ -156,7 +155,7 @@ public class StatementOperationTest extends ValueCRUDTestCase {
     }
 
     @Test
-    public void testDoubleValue() {
+    public void testDoubleValue() throws WCDBException {
         Value value = new Value(1.2D);
         PreparedStatement preparedInsert = handle.getOrCreatePreparedStatement(insert);
         preparedInsert.bindValue(value, 1);
@@ -167,11 +166,11 @@ public class StatementOperationTest extends ValueCRUDTestCase {
         PreparedStatement prepareSelect = handle.getOrCreatePreparedStatement(select);
         prepareSelect.step();
         assertFalse(prepareSelect.isDone());
-        assertTrue(value.equals(prepareSelect.getValue(0)));
+        assertEquals(value, prepareSelect.getValue(0));
     }
 
     @Test
-    public void testNull() {
+    public void testNull() throws WCDBException {
         PreparedStatement preparedInsert = handle.getOrCreatePreparedStatement(insert);
         preparedInsert.bindNull(1);
         preparedInsert.step();
@@ -181,11 +180,11 @@ public class StatementOperationTest extends ValueCRUDTestCase {
         PreparedStatement prepareSelect = handle.getOrCreatePreparedStatement(select);
         prepareSelect.step();
         assertFalse(prepareSelect.isDone());
-        assertEquals(prepareSelect.getValue(0), null);
+        assertNull(prepareSelect.getValue(0));
     }
 
     @Test
-    public void testNullValue() {
+    public void testNullValue() throws WCDBException {
         Value value = new Value();
         PreparedStatement preparedInsert = handle.getOrCreatePreparedStatement(insert);
         preparedInsert.bindValue(value, 1);
@@ -196,11 +195,11 @@ public class StatementOperationTest extends ValueCRUDTestCase {
         PreparedStatement prepareSelect = handle.getOrCreatePreparedStatement(select);
         prepareSelect.step();
         assertFalse(prepareSelect.isDone());
-        assertTrue(prepareSelect.getValue(0).equals(value));
+        assertEquals(prepareSelect.getValue(0), value);
     }
 
     @Test
-    public void testString() {
+    public void testString() throws WCDBException {
         String value = RandomTool.string();
         PreparedStatement preparedInsert = handle.getOrCreatePreparedStatement(insert);
         preparedInsert.bindText(value, 1);
@@ -215,7 +214,7 @@ public class StatementOperationTest extends ValueCRUDTestCase {
     }
 
     @Test
-    public void testStringValue() {
+    public void testStringValue() throws WCDBException {
         Value value = new Value(RandomTool.string());
         PreparedStatement preparedInsert = handle.getOrCreatePreparedStatement(insert);
         preparedInsert.bindValue(value, 1);
@@ -226,11 +225,11 @@ public class StatementOperationTest extends ValueCRUDTestCase {
         PreparedStatement prepareSelect = handle.getOrCreatePreparedStatement(select);
         prepareSelect.step();
         assertFalse(prepareSelect.isDone());
-        assertTrue(prepareSelect.getValue(0).equals(value));
+        assertEquals(prepareSelect.getValue(0), value);
     }
 
     @Test
-    public void testBLOB() {
+    public void testBLOB() throws WCDBException {
         byte[] value = RandomTool.bytes();
         PreparedStatement preparedInsert = handle.getOrCreatePreparedStatement(insert);
         preparedInsert.bindBLOB(value, 1);
@@ -241,11 +240,11 @@ public class StatementOperationTest extends ValueCRUDTestCase {
         PreparedStatement prepareSelect = handle.getOrCreatePreparedStatement(select);
         prepareSelect.step();
         assertFalse(prepareSelect.isDone());
-        assertTrue(Arrays.equals(prepareSelect.getBLOB(0), value));
+        assertArrayEquals(prepareSelect.getBLOB(0), value);
     }
 
     @Test
-    public void testBLOBValue() {
+    public void testBLOBValue() throws WCDBException {
         Value value = new Value(RandomTool.bytes());
         PreparedStatement preparedInsert = handle.getOrCreatePreparedStatement(insert);
         preparedInsert.bindValue(value, 1);
@@ -256,11 +255,11 @@ public class StatementOperationTest extends ValueCRUDTestCase {
         PreparedStatement prepareSelect = handle.getOrCreatePreparedStatement(select);
         prepareSelect.step();
         assertFalse(prepareSelect.isDone());
-        assertTrue(prepareSelect.getValue(0).equals(value));
+        assertEquals(prepareSelect.getValue(0), value);
     }
 
     @Test
-    public void testBindIndex() {
+    public void testBindIndex() throws WCDBException {
         String value = RandomTool.string();
         BindParameter parameter = BindParameter.colon("data");
         StatementInsert insert = new StatementInsert().insertInto(tableName)

@@ -45,7 +45,7 @@ import java.util.ArrayList;
 @RunWith(AndroidJUnit4.class)
 public class TraceTest extends TableTestCase {
     @Test
-    public void testTraceSQL() {
+    public void testTraceSQL() throws WCDBException {
         final StatementPragma statement = new StatementPragma().pragma(Pragma.userVersion());
 
         final WrappedValue tested = new WrappedValue();
@@ -63,7 +63,7 @@ public class TraceTest extends TableTestCase {
     }
 
     @Test
-    public void testGlobalTraceSQL() {
+    public void testGlobalTraceSQL() throws WCDBException {
         final StatementPragma statement = new StatementPragma().pragma(Pragma.userVersion());
 
         final WrappedValue tested = new WrappedValue();
@@ -82,7 +82,7 @@ public class TraceTest extends TableTestCase {
     }
 
     @Test
-    public void testTracePerformance() {
+    public void testTracePerformance() throws WCDBException {
         createTable();
         database.tracePerformance(null);
         final ArrayList<String> sqls = new ArrayList<String>(){{
@@ -104,7 +104,7 @@ public class TraceTest extends TableTestCase {
     }
 
     @Test
-    public void testGlobalTracePerformance() {
+    public void testGlobalTracePerformance() throws WCDBException {
         Database.globalTracePerformance(null);
         final ArrayList<String> sqls = new ArrayList<String>(){{
             add("BEGIN IMMEDIATE");
@@ -179,7 +179,7 @@ public class TraceTest extends TableTestCase {
     }
 
     @Test
-    public void testTraceDBOperation() {
+    public void testTraceDBOperation() throws WCDBException {
         final WrappedValue tag = new WrappedValue();
         final WrappedValue path = new WrappedValue();
         final WrappedValue openHandleCount = new WrappedValue();

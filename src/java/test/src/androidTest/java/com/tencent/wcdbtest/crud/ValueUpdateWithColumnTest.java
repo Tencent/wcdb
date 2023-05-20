@@ -34,7 +34,7 @@ import org.junit.Test;
 
 public class ValueUpdateWithColumnTest extends ValueCRUDTestCase {
     @Test
-    public void testDatabaseUpdateValue() {
+    public void testDatabaseUpdateValue() throws WCDBException {
         doTestSQL("UPDATE testTable SET content = ?1", new TestOperation() {
             @Override
             public void execute() throws WCDBException {
@@ -45,7 +45,7 @@ public class ValueUpdateWithColumnTest extends ValueCRUDTestCase {
     }
 
     @Test
-    public void testDatabaseUpdateValueWhere() {
+    public void testDatabaseUpdateValueWhere() throws WCDBException {
         doTestSQLs(new String[] {
                 "UPDATE testTable SET content = ?1 WHERE id == 1",
                 "UPDATE testTable SET id = ?1 WHERE content == 'newContent'"
@@ -61,7 +61,7 @@ public class ValueUpdateWithColumnTest extends ValueCRUDTestCase {
     }
 
     @Test
-    public void testDatabaseUpdateValueWhereOrderLimit() {
+    public void testDatabaseUpdateValueWhereOrderLimit() throws WCDBException {
         doTestSQLs(new String[] {
                 "UPDATE testTable SET content = ?1 WHERE id > 0 ORDER BY id ASC LIMIT 1",
                 "UPDATE testTable SET id = ?1 ORDER BY content ASC LIMIT 1"
@@ -77,7 +77,7 @@ public class ValueUpdateWithColumnTest extends ValueCRUDTestCase {
     }
 
     @Test
-    public void testDatabaseUpdateValueWhereOrderLimitOffset() {
+    public void testDatabaseUpdateValueWhereOrderLimitOffset() throws WCDBException {
         doTestSQLs(new String[] {
                 "UPDATE testTable SET content = ?1 WHERE id > 0 ORDER BY id ASC LIMIT 1 OFFSET 1",
                 "UPDATE testTable SET id = ?1 ORDER BY content ASC LIMIT 1 OFFSET 1"
@@ -93,7 +93,7 @@ public class ValueUpdateWithColumnTest extends ValueCRUDTestCase {
     }
 
     @Test
-    public void testDatabaseUpdateRowWhere() {
+    public void testDatabaseUpdateRowWhere() throws WCDBException {
         doTestSQL("UPDATE testTable SET id = ?1, content = ?2 WHERE id != 1", new TestOperation() {
             @Override
             public void execute() throws WCDBException {
@@ -104,7 +104,7 @@ public class ValueUpdateWithColumnTest extends ValueCRUDTestCase {
     }
 
     @Test
-    public void testDatabaseUpdateRowWhereOrderLimit() {
+    public void testDatabaseUpdateRowWhereOrderLimit() throws WCDBException {
         doTestSQLs(new String[] {
                 "UPDATE testTable SET id = ?1, content = ?2 WHERE id < 3 ORDER BY id DESC LIMIT 1",
                 "UPDATE testTable SET id = ?1, content = ?2 ORDER BY content DESC LIMIT 1",
@@ -122,7 +122,7 @@ public class ValueUpdateWithColumnTest extends ValueCRUDTestCase {
     }
 
     @Test
-    public void testDatabaseUpdateRowWhereOrderLimitOffset() {
+    public void testDatabaseUpdateRowWhereOrderLimitOffset() throws WCDBException {
         doTestSQLs(new String[] {
                 "UPDATE testTable SET id = ?1, content = ?2 WHERE id < 3 ORDER BY id DESC LIMIT 1 OFFSET 1",
                 "UPDATE testTable SET id = ?1, content = ?2 ORDER BY content DESC LIMIT 1 OFFSET 1",
@@ -140,7 +140,7 @@ public class ValueUpdateWithColumnTest extends ValueCRUDTestCase {
     }
 
     @Test
-    public void testHandleUpdateValue() {
+    public void testHandleUpdateValue() throws WCDBException {
         doTestSQL("UPDATE testTable SET content = ?1", new TestOperation() {
             @Override
             public void execute() throws WCDBException {
@@ -151,7 +151,7 @@ public class ValueUpdateWithColumnTest extends ValueCRUDTestCase {
     }
 
     @Test
-    public void testHandleUpdateValueWhere() {
+    public void testHandleUpdateValueWhere() throws WCDBException {
         doTestSQLs(new String[] {
                 "UPDATE testTable SET content = ?1 WHERE id == 1",
                 "UPDATE testTable SET id = ?1 WHERE content == 'newContent'"
@@ -167,7 +167,7 @@ public class ValueUpdateWithColumnTest extends ValueCRUDTestCase {
     }
 
     @Test
-    public void testHandleUpdateValueWhereOrderLimit() {
+    public void testHandleUpdateValueWhereOrderLimit() throws WCDBException {
         doTestSQLs(new String[] {
                 "UPDATE testTable SET content = ?1 WHERE id > 0 ORDER BY id ASC LIMIT 1",
                 "UPDATE testTable SET id = ?1 ORDER BY content ASC LIMIT 1"
@@ -183,7 +183,7 @@ public class ValueUpdateWithColumnTest extends ValueCRUDTestCase {
     }
 
     @Test
-    public void testHandleUpdateValueWhereOrderLimitOffset() {
+    public void testHandleUpdateValueWhereOrderLimitOffset() throws WCDBException {
         doTestSQLs(new String[] {
                 "UPDATE testTable SET content = ?1 WHERE id > 0 ORDER BY id ASC LIMIT 1 OFFSET 1",
                 "UPDATE testTable SET id = ?1 ORDER BY content ASC LIMIT 1 OFFSET 1"
@@ -199,7 +199,7 @@ public class ValueUpdateWithColumnTest extends ValueCRUDTestCase {
     }
 
     @Test
-    public void testHandleUpdateRowWhere() {
+    public void testHandleUpdateRowWhere() throws WCDBException {
         doTestSQL("UPDATE testTable SET id = ?1, content = ?2 WHERE id != 1", new TestOperation() {
             @Override
             public void execute() throws WCDBException {
@@ -210,7 +210,7 @@ public class ValueUpdateWithColumnTest extends ValueCRUDTestCase {
     }
 
     @Test
-    public void testHandleUpdateRowWhereOrderLimit() {
+    public void testHandleUpdateRowWhereOrderLimit() throws WCDBException {
         doTestSQLs(new String[] {
                 "UPDATE testTable SET id = ?1, content = ?2 WHERE id < 3 ORDER BY id DESC LIMIT 1",
                 "UPDATE testTable SET id = ?1, content = ?2 ORDER BY content DESC LIMIT 1",
@@ -228,7 +228,7 @@ public class ValueUpdateWithColumnTest extends ValueCRUDTestCase {
     }
 
     @Test
-    public void testHandleUpdateRowWhereOrderLimitOffset() {
+    public void testHandleUpdateRowWhereOrderLimitOffset() throws WCDBException {
         doTestSQLs(new String[] {
                 "UPDATE testTable SET id = ?1, content = ?2 WHERE id < 3 ORDER BY id DESC LIMIT 1 OFFSET 1",
                 "UPDATE testTable SET id = ?1, content = ?2 ORDER BY content DESC LIMIT 1 OFFSET 1",

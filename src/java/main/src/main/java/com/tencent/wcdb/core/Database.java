@@ -284,7 +284,7 @@ public class Database extends HandleORMOperation {
 
     private native boolean removeFiles(long self);
 
-    public void moveFile(String destination) {
+    public void moveFile(String destination) throws WCDBException{
         if(!moveFile(cppObj, destination)) {
             throw createException();
         }

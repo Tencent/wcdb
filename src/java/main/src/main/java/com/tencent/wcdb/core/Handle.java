@@ -27,7 +27,7 @@ import com.tencent.wcdb.winq.Statement;
 
 public class Handle extends HandleORMOperation {
     private PreparedStatement mainStatement = null;
-    private Database database = null;
+    private final Database database;
 
     Handle(Database database) {
         this.database = database;
@@ -38,8 +38,7 @@ public class Handle extends HandleORMOperation {
         this.database = database;
     }
 
-    @Override
-    public long getCppObj() throws WCDBException {
+    public long getCppHandle() throws WCDBException {
         if(cppObj == 0) {
             assert database != null;
             cppObj = database.getHandle(database.getCppObj());
@@ -51,7 +50,7 @@ public class Handle extends HandleORMOperation {
     }
 
     WCDBException createException() {
-        return new WCDBException(getError(getCppObj()));
+        return new WCDBException(getError(cppObj));
     }
 
     native long getError(long self);
@@ -59,7 +58,7 @@ public class Handle extends HandleORMOperation {
     static native boolean checkValid(long self);
 
     public PreparedStatement getOrCreatePreparedStatement(Statement statement) throws WCDBException {
-        PreparedStatement preparedStatement = new PreparedStatement(getOrCreatePreparedStatement(getCppObj(), statement.getCppObj()));
+        PreparedStatement preparedStatement = new PreparedStatement(getOrCreatePreparedStatement(getCppHandle(), statement.getCppObj()));
         if(!preparedStatement.checkPrepared()) {
             throw createException();
         }
@@ -70,7 +69,7 @@ public class Handle extends HandleORMOperation {
 
     public PreparedStatement preparedWithMainStatement(Statement statement) throws WCDBException {
         if(mainStatement == null) {
-            mainStatement = new PreparedStatement(getMainStatement(getCppObj()));
+            mainStatement = new PreparedStatement(getMainStatement(getCppHandle()));
             mainStatement.autoFinalize = true;
         }
         mainStatement.prepare(statement);
@@ -80,7 +79,9 @@ public class Handle extends HandleORMOperation {
     native long getMainStatement(long self);
 
     public void finalizeAllStatements() {
-        finalizeAllStatements(getCppObj());
+        if(cppObj > 0){
+            finalizeAllStatements(cppObj);
+        }
     }
 
     native void finalizeAllStatements(long self);
@@ -97,20 +98,20 @@ public class Handle extends HandleORMOperation {
 
     native boolean execute(long self, long statement);
 
-    public int getChanges() {
-        return getChanges(getCppObj());
+    public int getChanges() throws WCDBException {
+        return getChanges(getCppHandle());
     }
 
     native int getChanges(long self);
 
-    public int getTotalChanges() {
-        return getTotalChanges(getCppObj());
+    public int getTotalChanges() throws WCDBException {
+        return getTotalChanges(getCppHandle());
     }
 
     native int getTotalChanges(long self);
 
-    public long getLastInsertedRowId() {
-        return getLastInsertedRowId(getCppObj());
+    public long getLastInsertedRowId() throws WCDBException {
+        return getLastInsertedRowId(getCppHandle());
     }
 
     native long getLastInsertedRowId(long self);

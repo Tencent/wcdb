@@ -43,7 +43,7 @@ public class ConfigTest extends DatabaseTestCase {
     }
 
     @Test
-    public void testConfig() {
+    public void testConfig() throws WCDBException {
         final StatementPragma setSecureDelete = new StatementPragma().pragma(Pragma.secureDelete()).toValue(true);
         final StatementPragma unsetSecureDelete = new StatementPragma().pragma(Pragma.secureDelete()).toValue(false);
         final StatementPragma getSecureDelete = new StatementPragma().pragma(Pragma.secureDelete());
@@ -160,7 +160,7 @@ public class ConfigTest extends DatabaseTestCase {
     }
 
     @Test
-    public void testCipherWithDifferentVersion() {
+    public void testCipherWithDifferentVersion() throws WCDBException {
         byte[] cipher = "123".getBytes();
         int pageSize = 4096;
         database.setCipherKey(cipher, pageSize, Database.CipherVersion.version3);

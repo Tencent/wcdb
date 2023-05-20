@@ -57,7 +57,7 @@ import java.util.Arrays;
 public class ORMTest extends DatabaseTestCase {
     String tableName = "testTable";
     @Before
-    public void setup() {
+    public void setup() throws WCDBException {
         super.setup();
         expectMode = Expect.SomeSQLs;
     }
@@ -96,7 +96,7 @@ public class ORMTest extends DatabaseTestCase {
     }
 
     @Test
-    public void testAllType() {
+    public void testAllType() throws WCDBException {
         doTestCreateTableAndIndexSQLsAsExpected(new String[]{
                 "CREATE TABLE IF NOT EXISTS testTable(type TEXT, " +
                         "aBoolean INTEGER, aBoolean2 INTEGER, " +
@@ -235,7 +235,7 @@ public class ORMTest extends DatabaseTestCase {
     }
 
     @Test
-    public void testAutoAddColumn() {
+    public void testAutoAddColumn() throws WCDBException {
         final String fakeTable = "fakeTable";
         final String fakeSchema = "notExistSchema";
         database.createTable(fakeTable, DBAutoAddColumnObject.INSTANCE);
@@ -339,7 +339,7 @@ public class ORMTest extends DatabaseTestCase {
         });
     }
 
-    void doTestAutoAddColumn(Field<AutoAddColumnObject> removeField, boolean succeed, TestOperation operation) {
+    void doTestAutoAddColumn(Field<AutoAddColumnObject> removeField, boolean succeed, TestOperation operation) throws WCDBException {
         final String columnName = removeField.getName();
         final StatementCreateTable createTable = new StatementCreateTable().createTable(tableName);
         ArrayList<ColumnDef> columnDefs = new ArrayList();

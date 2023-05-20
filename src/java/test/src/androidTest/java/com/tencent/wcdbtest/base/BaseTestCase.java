@@ -55,7 +55,7 @@ public class BaseTestCase {
     }
 
     @Before
-    public void setup() {
+    public void setup() throws WCDBException {
         currentDirectory = tempFolder.getRoot().getPath() + File.separator + getClass().getSimpleName();
         logInfo("Current directory: " + currentDirectory);
     }

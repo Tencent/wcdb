@@ -24,6 +24,7 @@
 package com.tencent.wcdb.orm;
 
 import com.tencent.wcdb.base.CppObject;
+import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.core.Handle;
 import com.tencent.wcdb.winq.ColumnDef;
 import com.tencent.wcdb.winq.StatementCreateIndex;
@@ -68,14 +69,14 @@ public class Binding extends CppObject {
 
     private native void configVirtualModuleArgument(long self, String argument);
 
-    public boolean createTable(String tableName, Handle handle) {
-        return createTable(cppObj, tableName, handle.getCppObj());
+    public boolean createTable(String tableName, Handle handle) throws WCDBException {
+        return createTable(cppObj, tableName, handle.getCppHandle());
     }
 
     private native boolean createTable(long self, String tableName, long handle);
 
-    public boolean createVirtualTable(String tableName, Handle handle) {
-        return createVirtualTable(cppObj, tableName, handle.getCppObj());
+    public boolean createVirtualTable(String tableName, Handle handle) throws WCDBException {
+        return createVirtualTable(cppObj, tableName, handle.getCppHandle());
     }
 
     private native boolean createVirtualTable(long self, String tableName, long handle);

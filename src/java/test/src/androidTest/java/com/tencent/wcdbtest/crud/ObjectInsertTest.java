@@ -48,7 +48,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     TestObject partialObject4;
 
     @Before
-    public void setup() {
+    public void setup() throws WCDBException {
         super.setup();
         renewObject1 = RandomTool.testObjectWithId(1);
         renewObject2 = RandomTool.testObjectWithId(2);

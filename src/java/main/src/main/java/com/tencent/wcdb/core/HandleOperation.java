@@ -24,7 +24,6 @@ package com.tencent.wcdb.core;
 
 import com.tencent.wcdb.base.CppObject;
 import com.tencent.wcdb.base.Value;
-import com.tencent.wcdb.orm.Field;
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.winq.Column;
 import com.tencent.wcdb.winq.ConflictAction;
@@ -378,59 +377,59 @@ public abstract class HandleOperation extends CppObject {
         return getOneColumnFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit).offset(offset));
     }
 
-    public Value[] getOneRow(ResultColumnConvertible[] columns, String tableName) {
+    public Value[] getOneRow(ResultColumnConvertible[] columns, String tableName) throws WCDBException {
         return getOneRowFromStatement(new StatementSelect().select(columns).from(tableName));
     }
 
-    public Value[] getOneRow(ResultColumnConvertible[] columns, String tableName, Expression condition) {
+    public Value[] getOneRow(ResultColumnConvertible[] columns, String tableName, Expression condition) throws WCDBException {
         return getOneRowFromStatement(new StatementSelect().select(columns).from(tableName).where(condition));
     }
 
-    public Value[] getOneRow(ResultColumnConvertible[] columns, String tableName, Expression condition, OrderingTerm orderingTerm) {
+    public Value[] getOneRow(ResultColumnConvertible[] columns, String tableName, Expression condition, OrderingTerm orderingTerm) throws WCDBException {
         return getOneRowFromStatement(new StatementSelect().select(columns).from(tableName).where(condition).orderBy(orderingTerm));
     }
 
-    public Value[] getOneRow(ResultColumnConvertible[] columns, String tableName, Expression condition, OrderingTerm orderingTerm, long offset) {
+    public Value[] getOneRow(ResultColumnConvertible[] columns, String tableName, Expression condition, OrderingTerm orderingTerm, long offset) throws WCDBException {
         return getOneRowFromStatement(new StatementSelect().select(columns).from(tableName).where(condition).orderBy(orderingTerm).limit(1).offset(offset));
     }
 
-    public Value[] getOneRow(ResultColumnConvertible[] columns, String tableName, OrderingTerm orderingTerm) {
+    public Value[] getOneRow(ResultColumnConvertible[] columns, String tableName, OrderingTerm orderingTerm) throws WCDBException {
         return getOneRowFromStatement(new StatementSelect().select(columns).from(tableName).orderBy(orderingTerm));
     }
 
-    public Value[] getOneRow(ResultColumnConvertible[] columns, String tableName, OrderingTerm orderingTerm, long offset) {
+    public Value[] getOneRow(ResultColumnConvertible[] columns, String tableName, OrderingTerm orderingTerm, long offset) throws WCDBException {
         return getOneRowFromStatement(new StatementSelect().select(columns).from(tableName).orderBy(orderingTerm).limit(1).offset(offset));
     }
 
-    public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns, String tableName) {
+    public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns, String tableName) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName));
     }
 
-    public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns, String tableName, Expression condition) {
+    public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns, String tableName, Expression condition) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName).where(condition));
     }
 
-    public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns, String tableName, Expression condition, OrderingTerm order) {
+    public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns, String tableName, Expression condition, OrderingTerm order) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName).where(condition).orderBy(order));
     }
 
-    public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns, String tableName, Expression condition, OrderingTerm order, long limit) {
+    public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns, String tableName, Expression condition, OrderingTerm order, long limit) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName).where(condition).orderBy(order).limit(limit));
     }
 
-    public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns, String tableName, Expression condition, OrderingTerm order, long limit, long offset) {
+    public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns, String tableName, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName).where(condition).orderBy(order).limit(limit).offset(offset));
     }
 
-    public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns, String tableName, OrderingTerm order) {
+    public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns, String tableName, OrderingTerm order) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName).orderBy(order));
     }
 
-    public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns, String tableName, OrderingTerm order, long limit) {
+    public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns, String tableName, OrderingTerm order, long limit) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName).orderBy(order).limit(limit));
     }
 
-    public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns, String tableName, OrderingTerm order, long limit, long offset) {
+    public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns, String tableName, OrderingTerm order, long limit, long offset) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName).orderBy(order).limit(limit).offset(offset));
     }
 
@@ -503,7 +502,7 @@ public abstract class HandleOperation extends CppObject {
     public void execute(Statement statement) throws WCDBException {
         Handle handle = getHandle();
         WCDBException exception = null;
-        if(!handle.execute(handle.getCppObj(), statement.getCppObj())) {
+        if(!handle.execute(handle.getCppHandle(), statement.getCppObj())) {
             exception = handle.createException();
         }
         if(autoInvalidateHandle()) {
@@ -516,13 +515,13 @@ public abstract class HandleOperation extends CppObject {
 
     public boolean isInTransaction() throws WCDBException{
         Handle handle = getHandle();
-        return handle.isInTransaction(handle.getCppObj());
+        return handle.isInTransaction(handle.getCppHandle());
     }
 
     public void beginTransaction() throws WCDBException {
         Handle handle = getHandle();
         WCDBException exception = null;
-        if(!handle.isInTransaction(handle.getCppObj())) {
+        if(!handle.isInTransaction(handle.getCppHandle())) {
             exception = handle.createException();
         }
         if(autoInvalidateHandle()) {
@@ -536,7 +535,7 @@ public abstract class HandleOperation extends CppObject {
     public void commitTransaction() throws WCDBException {
         Handle handle = getHandle();
         WCDBException exception = null;
-        if(!handle.commitTransaction(handle.getCppObj())) {
+        if(!handle.commitTransaction(handle.getCppHandle())) {
             exception = handle.createException();
         }
         if(autoInvalidateHandle()) {
@@ -547,10 +546,9 @@ public abstract class HandleOperation extends CppObject {
         }
     }
 
-    public void rollbackTransaction() {
+    public void rollbackTransaction() throws WCDBException {
         Handle handle = getHandle();
-        WCDBException exception = null;
-        handle.rollbackTransaction(handle.getCppObj());
+        handle.rollbackTransaction(handle.getCppHandle());
         if(autoInvalidateHandle()) {
             handle.invalidate();
         }
@@ -559,7 +557,7 @@ public abstract class HandleOperation extends CppObject {
     public void beginNestedTransaction() throws WCDBException {
         Handle handle = getHandle();
         WCDBException exception = null;
-        if(!handle.beginNestedTransaction(handle.getCppObj())) {
+        if(!handle.beginNestedTransaction(handle.getCppHandle())) {
             exception = handle.createException();
         }
         if(autoInvalidateHandle()) {
@@ -573,7 +571,7 @@ public abstract class HandleOperation extends CppObject {
     public void commitNestedTransaction() throws WCDBException {
         Handle handle = getHandle();
         WCDBException exception = null;
-        if(!handle.commitNestedTransaction(handle.getCppObj())) {
+        if(!handle.commitNestedTransaction(handle.getCppHandle())) {
             exception = handle.createException();
         }
         if(autoInvalidateHandle()) {
@@ -584,10 +582,10 @@ public abstract class HandleOperation extends CppObject {
         }
     }
 
-    public void rollbackNestedTransaction() {
+    public void rollbackNestedTransaction() throws WCDBException {
         Handle handle = getHandle();
         WCDBException exception = null;
-        handle.rollbackNestedTransaction(handle.getCppObj());
+        handle.rollbackNestedTransaction(handle.getCppHandle());
         if(autoInvalidateHandle()) {
             handle.invalidate();
         }
@@ -600,7 +598,7 @@ public abstract class HandleOperation extends CppObject {
     public void runTransaction(Transaction transaction) throws WCDBException {
         Handle handle = getHandle();
         WCDBException exception = null;
-        if(!handle.runTransaction(handle.getCppObj(), transaction)) {
+        if(!handle.runTransaction(handle.getCppHandle(), transaction)) {
             exception = handle.createException();
         }
         if(autoInvalidateHandle()) {
@@ -611,10 +609,10 @@ public abstract class HandleOperation extends CppObject {
         }
     }
 
-    public void runNestedTransaction(Transaction transaction) {
+    public void runNestedTransaction(Transaction transaction) throws WCDBException {
         Handle handle = getHandle();
         WCDBException exception = null;
-        if(!handle.runNestedTransaction(handle.getCppObj(), transaction)) {
+        if(!handle.runNestedTransaction(handle.getCppHandle(), transaction)) {
             exception = handle.createException();
         }
         if(autoInvalidateHandle()) {
@@ -632,7 +630,7 @@ public abstract class HandleOperation extends CppObject {
     public void runPausableTransaction(PausableTransaction transaction) throws WCDBException {
         Handle handle = getHandle();
         WCDBException exception = null;
-        if(!handle.runPausableTransaction(handle.getCppObj(), transaction)) {
+        if(!handle.runPausableTransaction(handle.getCppHandle(), transaction)) {
             exception = handle.createException();
         }
         if(autoInvalidateHandle()) {

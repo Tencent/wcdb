@@ -24,6 +24,7 @@
 package com.tencent.wcdbtest.database;
 
 import com.tencent.wcdb.base.Value;
+import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.core.Database;
 import com.tencent.wcdb.winq.Column;
 import com.tencent.wcdb.winq.Expression;
@@ -43,7 +44,7 @@ import java.util.ArrayList;
 
 public class MigrationTest extends BaseTestCase {
     @Test
-    public void testMigration() {
+    public void testMigration() throws WCDBException {
         final Database sourceDatabase = new Database(currentDirectory + File.separator + "sourceDatabase.sqlite3");
         sourceDatabase.createTable("sourceTable", DBTestObject.INSTANCE);
 

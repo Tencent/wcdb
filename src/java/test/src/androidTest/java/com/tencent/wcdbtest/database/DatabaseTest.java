@@ -109,7 +109,7 @@ public class DatabaseTest extends TableTestCase {
     }
 
     @Test
-    public void testReadOnly() {
+    public void testReadOnly() throws WCDBException {
         createTable();
         table.insertObject(TestObject.createAutoIncrementObject(RandomTool.string()));
 
@@ -157,7 +157,7 @@ public class DatabaseTest extends TableTestCase {
     }
 
     @Test
-    public void testPurge() {
+    public void testPurge() throws WCDBException {
         database.execute(new StatementPragma().pragma(Pragma.userVersion()).toValue(123));
         assertTrue(database.isOpened());
         database.purge();
@@ -165,7 +165,7 @@ public class DatabaseTest extends TableTestCase {
     }
 
     @Test
-    public void testPurgeAll() {
+    public void testPurgeAll() throws WCDBException {
         database.execute(new StatementPragma().pragma(Pragma.userVersion()).toValue(123));
         assertTrue(database.isOpened());
         Database.purgeAll();
@@ -173,7 +173,7 @@ public class DatabaseTest extends TableTestCase {
     }
 
     @Test
-    public void testCheckPoint() {
+    public void testCheckPoint() throws WCDBException {
         createTable();
         TestObject[] objects = RandomTool.autoIncrementTestCaseObjects(100);
         final WrappedValue walFrameNum = new WrappedValue();

@@ -23,6 +23,7 @@
 
 package com.tencent.wcdb.chaincall;
 
+import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.core.Handle;
 import com.tencent.wcdb.winq.Statement;
 
@@ -39,7 +40,7 @@ public class ChainCall<T extends Statement> {
         this.autoInvalidateHandle = autoInvalidateHandle;
     }
 
-    protected void updateChanges() {
+    protected void updateChanges() throws WCDBException {
         if(needChanges) {
             changes = handle.getChanges();
         }

@@ -46,7 +46,7 @@ public class CRUDTestCase extends TableTestCase {
     protected Handle handle;
 
     @Before
-    public void setup() {
+    public void setup() throws WCDBException {
         super.setup();
         object1 = RandomTool.testObjectWithId(1);
         object2 = RandomTool.testObjectWithId(2);
@@ -78,6 +78,10 @@ public class CRUDTestCase extends TableTestCase {
     }
 
     public long allRowsCount() {
-        return database.getValue(Column.all().count(), tableName).getInteger();
+        try {
+            return database.getValue(Column.all().count(), tableName).getInteger();
+        } catch (WCDBException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

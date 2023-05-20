@@ -24,12 +24,13 @@
 package com.tencent.wcdbtest.base;
 
 import com.tencent.wcdb.base.Value;
+import com.tencent.wcdb.base.WCDBException;
 
 import org.junit.Before;
 
 public class ValueCRUDTestCase extends CRUDTestCase{
     @Before
-    public void setup() {
+    public void setup() throws WCDBException {
         super.setup();
         insertPresetRows();
     }

@@ -44,7 +44,7 @@ import java.io.IOException;
 public class FileTest extends DatabaseTestCase {
     static String[] dummyPaths;
     @Before
-    public void setup() {
+    public void setup() throws WCDBException {
         super.setup();
         dummyPaths = allDummyPath(path);
     }

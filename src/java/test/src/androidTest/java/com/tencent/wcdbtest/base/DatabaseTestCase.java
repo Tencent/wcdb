@@ -34,13 +34,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class DatabaseTestCase extends BaseTestCase {
     public enum Expect {
-        AllSQLs, FirstFewSQLs, SomeSQLs;
+        AllSQLs, FirstFewSQLs, SomeSQLs
     }
     public String path;
     public String fileName;
@@ -48,7 +47,7 @@ public class DatabaseTestCase extends BaseTestCase {
     public Expect expectMode;
 
     @Before
-    public void setup() {
+    public void setup() throws WCDBException {
         super.setup();
         expectMode = Expect.AllSQLs;
         fileName = "testDatabase";
@@ -98,10 +97,14 @@ public class DatabaseTestCase extends BaseTestCase {
                 }
             }
             trace.boolValue = true;
-            operation.execute();
+            try {
+                operation.execute();
+            } catch (WCDBException e) {
+                throw new RuntimeException(e);
+            }
 
             if(expectedSQLs.size() != 0) {
-                logError("Reminding: " + expectedSQLs.toString());
+                logError("Reminding: " + expectedSQLs);
                 Assert.fail();
                 break;
             }
