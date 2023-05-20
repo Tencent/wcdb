@@ -27,11 +27,9 @@ import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.core.Database;
 import com.tencent.wcdb.winq.Column;
-import com.tencent.wcdb.winq.Expression;
 import com.tencent.wcdb.winq.Order;
 import com.tencent.wcdbtest.base.BaseTestCase;
 import com.tencent.wcdbtest.base.DBTestObject;
-import com.tencent.wcdbtest.base.DatabaseTestCase;
 import com.tencent.wcdbtest.base.TestObject;
 import com.tencent.wcdbtest.base.WrappedValue;
 
@@ -39,7 +37,6 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import java.io.File;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class MigrationTest extends BaseTestCase {

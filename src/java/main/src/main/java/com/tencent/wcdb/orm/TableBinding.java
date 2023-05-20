@@ -25,17 +25,17 @@ package com.tencent.wcdb.orm;
 import com.tencent.wcdb.core.PreparedStatement;
 
 public interface TableBinding<T> {
-    public Class<T> bindingType();
+    Class<T> bindingType();
 
-    public Field<T>[] allBindingFields();
+    Field<T>[] allBindingFields();
 
-    public Binding baseBinding();
+    Binding baseBinding();
 
-    public T extractObject(Field<T>[] fields, PreparedStatement preparedStatement);
+    T extractObject(Field<T>[] fields, PreparedStatement preparedStatement);
 
-    public void bindField(T object, Field<T> field, int index, PreparedStatement preparedStatement);
+    void bindField(T object, Field<T> field, int index, PreparedStatement preparedStatement);
 
-    public boolean isAutoIncrement(T object);
+    boolean isAutoIncrement(T object);
 
-    public void setLastInsertRowId(T object, long lastInsertRowId);
+    void setLastInsertRowId(T object, long lastInsertRowId);
 }

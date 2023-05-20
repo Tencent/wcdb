@@ -32,8 +32,6 @@ import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Paths;
 
 public class BaseTestCase {
     public String currentDirectory;
@@ -80,7 +78,7 @@ public class BaseTestCase {
         try {
             Thread.sleep(millisecond);
         } catch (InterruptedException e) {
-            BaseTestCase.logError("sleep fail with error " + e.toString());
+            BaseTestCase.logError("sleep fail with error " + e);
         }
     }
 

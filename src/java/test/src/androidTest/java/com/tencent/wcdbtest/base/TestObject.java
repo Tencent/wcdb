@@ -26,7 +26,6 @@ package com.tencent.wcdbtest.base;
 import androidx.annotation.Nullable;
 
 import com.tencent.wcdb.*;
-import java.util.Objects;
 
 @WCDBTableCoding
 public class TestObject {
@@ -36,18 +35,18 @@ public class TestObject {
     public String content;
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, content);
-    }
-
-    @Override
     public boolean equals(@Nullable Object obj) {
         if (obj instanceof TestObject) {
             TestObject testObject = (TestObject) obj;
-            return testObject.id == id &&
-                    ((testObject.content == null && (content == null || content.length() == 0)) ||
-                            (testObject.content.length() == 0 && (content == null || content.length() == 0)) ||
-                            testObject.content.equals(content));
+            if(testObject.id != id) {
+                return false;
+            }
+            if(content == null) {
+                return testObject.content == null || testObject.content.length() <= 0;
+            } else if(testObject.content == null) {
+                return content.length() <= 0;
+            }
+            return testObject.content.equals(content);
         } else {
             return super.equals(obj);
         }

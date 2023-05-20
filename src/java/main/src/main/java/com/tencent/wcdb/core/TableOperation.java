@@ -25,7 +25,6 @@ package com.tencent.wcdb.core;
 
 import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.base.WCDBException;
-import com.tencent.wcdb.orm.Field;
 import com.tencent.wcdb.winq.Column;
 import com.tencent.wcdb.winq.ConflictAction;
 import com.tencent.wcdb.winq.Expression;
@@ -418,7 +417,7 @@ public class TableOperation {
     }
 
     public Value getValueFromStatement(Statement statement) throws WCDBException {
-        Handle handle = database.getHandle();;
+        Handle handle = database.getHandle();
         Value ret = null;
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
@@ -450,8 +449,8 @@ public class TableOperation {
     }
 
     public ArrayList<Value> getOneColumnFromStatement(Statement statement) throws WCDBException {
-        Handle handle = database.getHandle();;
-        ArrayList<Value> ret = null;
+        Handle handle = database.getHandle();
+        ArrayList<Value> ret;
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumn();
@@ -463,8 +462,8 @@ public class TableOperation {
     }
 
     public ArrayList<Value[]> getAllRowsFromStatement(Statement statement) throws WCDBException {
-        Handle handle = database.getHandle();;
-        ArrayList<Value[]> ret = null;
+        Handle handle = database.getHandle();
+        ArrayList<Value[]> ret;
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getMultiRows();

@@ -24,5 +24,5 @@
 package com.tencent.wcdb.winq;
 
 public enum Order {
-    Asc, Desc;
+    Asc, Desc
 }

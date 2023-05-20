@@ -22,7 +22,6 @@
  */
 package com.tencent.wcdbtest.base;
 
-import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.core.Table;
 import com.tencent.wcdb.orm.TableBinding;
@@ -35,7 +34,6 @@ import org.junit.Assert;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class TableTestCase extends DatabaseTestCase {
@@ -75,16 +73,12 @@ public class TableTestCase extends DatabaseTestCase {
 
     public void doTestObjectsAfterInsert(Object[] objects, int insertCount, String[] sqls, TestOperation operation) {
         if(insertCount > 1) {
-            ArrayList<String> list = new ArrayList(Arrays.asList(sqls));
+            ArrayList<String> list = new ArrayList<String>(Arrays.asList(sqls));
             list.add(0, "BEGIN IMMEDIATE");
             list.add("COMMIT");
-            sqls = list.toArray(new String[list.size()]);
+            sqls = list.toArray(new String[0]);
         }
         doTestObjectsAfterOperation(objects, sqls, operation);
-    }
-
-    public void doTestObjectAfterOperation(Object object, String sql, TestOperation operation) {
-        doTestObjectsAfterOperation(new Object[]{object}, new String[]{sql}, operation);
     }
 
     public void doTestObjectsAfterOperation(Object[] objects, String sql, TestOperation operation) {
@@ -93,7 +87,7 @@ public class TableTestCase extends DatabaseTestCase {
 
     public void doTestObjectsAfterOperation(Object[] objects, String[] sqls, TestOperation operation) {
         doTestSQLs(sqls, operation);
-        ArrayList<TestObject> allObjects = null;
+        ArrayList<TestObject> allObjects;
         try {
             allObjects = getAllObjects();
         } catch (WCDBException e) {
@@ -105,19 +99,19 @@ public class TableTestCase extends DatabaseTestCase {
     }
 
     public interface SelectingObjectOperation {
-        List execute() throws WCDBException;
+        List<TestObject> execute() throws WCDBException;
     }
 
-    public void doTestObjectBySelecting(Object object, String sql, SelectingObjectOperation operation) {
-        doTestObjectBySelecting(new Object[]{object}, new String[]{sql}, operation);
+    public void doTestObjectBySelecting(TestObject object, String sql, SelectingObjectOperation operation) {
+        doTestObjectBySelecting(new TestObject[]{object}, new String[]{sql}, operation);
     }
 
-    public void doTestObjectBySelecting(Object[] objects, String sql, SelectingObjectOperation operation) {
+    public void doTestObjectBySelecting(TestObject[] objects, String sql, SelectingObjectOperation operation) {
         doTestObjectBySelecting(objects, new String[]{sql}, operation);
     }
 
-    public void doTestObjectBySelecting(Object[] objects, String[] sqls, final SelectingObjectOperation operation) {
-        final ArrayList selecting = new ArrayList();
+    public void doTestObjectBySelecting(TestObject[] objects, String[] sqls, final SelectingObjectOperation operation) {
+        final ArrayList<TestObject> selecting = new ArrayList<TestObject>();
         doTestSQLs(sqls, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
@@ -125,45 +119,8 @@ public class TableTestCase extends DatabaseTestCase {
             }
         });
         Assert.assertTrue(((objects == null || objects.length == 0) &&
-                (selecting == null || selecting.size() == 0)) ||
+                selecting.size() == 0) ||
                 Arrays.equals(objects, selecting.toArray()));
-    }
-
-    public interface SelectingRowsOperation {
-        ArrayList<Value[]> execute();
-    }
-
-    public void doTestValueBySelecting(Value value, String sql, SelectingRowsOperation operation) {
-        doTestRowsBySelecting(Collections.singletonList(new Value[]{value}), sql, operation);
-    }
-
-    public void doTestColumnBySelecting(List<Value> column, String sql, SelectingRowsOperation operation) {
-        ArrayList<Value[]> rows = new ArrayList();
-        for(Value value : column) {
-            rows.add(new Value[]{value});
-        }
-        doTestRowsBySelecting(rows, new String[]{sql}, operation);
-    }
-
-    public void doTestRowBySelecting(Value[] row, String sql, SelectingRowsOperation operation) {
-        doTestRowsBySelecting(Collections.singletonList(row), new String[]{sql}, operation);
-    }
-
-    public void doTestRowsBySelecting(List<Value[]> rows, String sql, SelectingRowsOperation operation) {
-        doTestRowsBySelecting(rows, new String[]{sql}, operation);
-    }
-
-    public void doTestRowsBySelecting(List<Value[]> rows, String[] sqls, final SelectingRowsOperation operation) {
-        final ArrayList selecting = new ArrayList();
-        doTestSQLs(sqls, new TestOperation() {
-            @Override
-            public void execute() throws WCDBException {
-                selecting.addAll(Arrays.asList(operation.execute()));
-            }
-        });
-        Assert.assertTrue(((rows == null || rows.size() == 0) &&
-                (selecting == null || selecting.size() == 0)) ||
-                Arrays.equals(rows.toArray(), selecting.toArray()));
     }
 
     public ArrayList<TestObject> getAllObjects() throws WCDBException {

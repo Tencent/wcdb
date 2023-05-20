@@ -119,7 +119,7 @@ public class DatabaseTest extends TableTestCase {
                 for(String path: database.getPaths()) {
                     File file = new File(path);
                     if(file.exists()) {
-                        file.setReadOnly();
+                        assertTrue(file.setReadOnly());
                     }
                 }
             }
@@ -138,7 +138,7 @@ public class DatabaseTest extends TableTestCase {
         for(String path: database.getPaths()) {
             File file = new File(path);
             if(file.exists()) {
-                file.setReadOnly();
+                assertTrue(file.setReadOnly());
             }
         }
     }
@@ -205,7 +205,7 @@ public class DatabaseTest extends TableTestCase {
     @Test
     public void testOpenFail() {
         File folder = new File(currentDirectory);
-        folder.mkdirs();
+        assertTrue(folder.mkdirs());
         Database newDatabase = new Database(currentDirectory);
         assertFalse(newDatabase.canOpen());
     }

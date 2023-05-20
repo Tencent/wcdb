@@ -23,6 +23,8 @@
 
 package com.tencent.wcdbtest.base;
 
+import static org.junit.Assert.*;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -32,10 +34,11 @@ public class FileTool {
         if(file.exists()) {
             return;
         }
-        if(!file.getParentFile().exists()) {
-            file.getParentFile().mkdirs();
+        File parentFile = file.getParentFile();
+        if(parentFile != null && !parentFile.exists()) {
+            assertTrue(parentFile.mkdirs());
         }
-        file.createNewFile();
+        assertTrue(file.createNewFile());
     }
 
     public static boolean fileExist(String path) {

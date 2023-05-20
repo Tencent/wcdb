@@ -273,9 +273,9 @@
     CPPMultiTypeArray parameter##Array;                                             \
     parameter##Array.totalLength = parameter##_typesLength;                         \
     parameter##Array.types = (const enum WCDBBridgedType *) parameter##_typesArray; \
-    parameter##Array.intValues = parameter##_longValuesArray;                       \
-    parameter##Array.doubleValues = parameter##_doubleValuesArray;                  \
-    parameter##Array.stringValues = parameter##_stringValuesCharArray;
+    parameter##Array.intValues = (const long long *) parameter##_longValuesArray;   \
+    parameter##Array.doubleValues = (const double *) parameter##_doubleValuesArray; \
+    parameter##Array.stringValues = (const char **) parameter##_stringValuesCharArray;
 
 #define WCDBJNIReleaseMultiTypeArray(parameter)                                \
     WCDBJNIReleaseIntArray(parameter##_types);                                 \

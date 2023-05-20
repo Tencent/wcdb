@@ -27,7 +27,6 @@ import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.core.Handle;
 import com.tencent.wcdb.core.PreparedStatement;
 import com.tencent.wcdb.orm.Field;
-import com.tencent.wcdb.orm.TableBinding;
 import com.tencent.wcdb.winq.Expression;
 import com.tencent.wcdb.winq.ExpressionConvertible;
 import com.tencent.wcdb.winq.OrderingTerm;
@@ -109,7 +108,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
     }
 
     public ArrayList<T> allObjects() throws WCDBException {
-        ArrayList<T> ret = null;
+        ArrayList<T> ret;
         try {
             PreparedStatement preparedStatement = prepareStatement();
             ret = preparedStatement.getAllObjects(fields);

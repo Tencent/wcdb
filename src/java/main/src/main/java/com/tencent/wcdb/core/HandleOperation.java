@@ -434,7 +434,7 @@ public abstract class HandleOperation extends CppObject {
     }
 
     public Value getValueFromStatement(Statement statement) throws WCDBException {
-        Handle handle = getHandle();;
+        Handle handle = getHandle();
         Value ret = null;
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
@@ -470,8 +470,8 @@ public abstract class HandleOperation extends CppObject {
     }
 
     public ArrayList<Value> getOneColumnFromStatement(Statement statement) throws WCDBException {
-        Handle handle = getHandle();;
-        ArrayList<Value> ret = null;
+        Handle handle = getHandle();
+        ArrayList<Value> ret;
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumn();
@@ -485,8 +485,8 @@ public abstract class HandleOperation extends CppObject {
     }
 
     public ArrayList<Value[]> getAllRowsFromStatement(Statement statement) throws WCDBException {
-        Handle handle = getHandle();;
-        ArrayList<Value[]> ret = null;
+        Handle handle = getHandle();
+        ArrayList<Value[]> ret;
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getMultiRows();

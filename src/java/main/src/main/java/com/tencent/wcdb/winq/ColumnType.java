@@ -30,9 +30,9 @@ public enum ColumnType {
     Text(3),
     BLOB(4);
 
-    private int value;
+    private final int value;
 
-    private ColumnType(int value) {
+    ColumnType(int value) {
         this.value = value;
     }
 

@@ -31,8 +31,6 @@ import com.tencent.wcdb.winq.Column;
 import org.junit.After;
 import org.junit.Before;
 
-import java.util.ArrayList;
-
 public class CRUDTestCase extends TableTestCase {
     protected TestObject object1;
     protected TestObject object2;

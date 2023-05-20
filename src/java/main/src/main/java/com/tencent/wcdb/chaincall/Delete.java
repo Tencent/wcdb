@@ -30,8 +30,6 @@ import com.tencent.wcdb.winq.ExpressionConvertible;
 import com.tencent.wcdb.winq.OrderingTerm;
 import com.tencent.wcdb.winq.StatementDelete;
 
-import java.time.chrono.MinguoDate;
-
 public class Delete extends ChainCall<StatementDelete>{
     public Delete(Handle handle) {
         super(handle);

@@ -71,7 +71,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
                 database.insertObject(autoIncrementObject, DBTestObject.allFields(), tableName);
             }
         });
-        assertTrue(autoIncrementObject.equals(object3));
+        assertEquals(autoIncrementObject, object3);
     }
 
     @Test
@@ -85,7 +85,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
                 database.insertObject(autoIncrementObject, new Field[]{DBTestObject.content}, tableName);
             }
         });
-        assertTrue(autoIncrementObject.equals(object3));
+        assertEquals(autoIncrementObject, object3);
     }
 
     @Test
@@ -249,7 +249,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
                 table.insertObject(autoIncrementObject);
             }
         });
-        assertTrue(autoIncrementObject.equals(object3));
+        assertEquals(autoIncrementObject, object3);
     }
 
     @Test
@@ -263,7 +263,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
                 table.insertObject(autoIncrementObject, new Field[]{DBTestObject.content});
             }
         });
-        assertTrue(autoIncrementObject.equals(object3));
+        assertEquals(autoIncrementObject, object3);
     }
 
     @Test
@@ -427,7 +427,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
                 handle.insertObject(autoIncrementObject, DBTestObject.allFields(), tableName);
             }
         });
-        assertTrue(autoIncrementObject.equals(object3));
+        assertEquals(autoIncrementObject, object3);
     }
 
     @Test
@@ -441,7 +441,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
                 handle.insertObject(autoIncrementObject, new Field[]{DBTestObject.content}, tableName);
             }
         });
-        assertTrue(autoIncrementObject.equals(object3));
+        assertEquals(autoIncrementObject, object3);
     }
 
     @Test

@@ -25,8 +25,6 @@ package com.tencent.wcdb.orm;
 import com.tencent.wcdb.winq.Column;
 import com.tencent.wcdb.winq.Schema;
 
-import java.io.File;
-
 public class Field<T> extends Column {
     protected TableBinding<T> binding = null;
 
@@ -60,7 +58,7 @@ public class Field<T> extends Column {
     }
 
     protected Field<T> copySelf() {
-        Field<T> field = new Field();
+        Field<T> field = new Field<T>();
         field.cppObj = copy(cppObj);
         field.name = name;
         field.fieldId = fieldId;
@@ -105,7 +103,7 @@ public class Field<T> extends Column {
 
     public static <T> TableBinding<T> getBinding(Field<T>[] fields) {
         assert fields != null && fields.length > 0;
-        Field field = fields[0];
+        Field<T> field = fields[0];
         return getBinding(field);
     }
 }

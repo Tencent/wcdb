@@ -28,7 +28,7 @@ import com.tencent.wcdb.core.Handle;
 import com.tencent.wcdb.winq.Statement;
 
 public class ChainCall<T extends Statement> {
-    Handle handle = null;
+    Handle handle;
     int changes = 0;
     T statement;
     public boolean needChanges = true;
@@ -37,7 +37,6 @@ public class ChainCall<T extends Statement> {
     public ChainCall(Handle handle) {
         assert handle != null;
         this.handle = handle;
-        this.autoInvalidateHandle = autoInvalidateHandle;
     }
 
     protected void updateChanges() throws WCDBException {

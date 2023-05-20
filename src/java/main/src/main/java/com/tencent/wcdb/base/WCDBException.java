@@ -51,6 +51,8 @@ public class WCDBException extends Exception {
             }
             return Unknown;
         }
+
+        @Override
         public String toString() {
             switch (this) {
                 case Ignore:
@@ -103,9 +105,9 @@ public class WCDBException extends Exception {
         Row(100),
         Done(101),
         Unknown(-1);
-        private int value = 0;
+        private final int value;
 
-        private Code(int value) {
+        Code(int value) {
             this.value = value;
         }
 
@@ -251,9 +253,9 @@ public class WCDBException extends Exception {
         AuthorizationUser(279),         // Code.Authorization | (2 << 8)
         OKLoadPermanently(256),         // Code.OK | (2 << 8)
         Unknown(-1);
-        private int value = 0;
+        private final int value;
 
-        private ExtendCode(int value) {
+        ExtendCode(int value) {
             this.value = value;
         }
 
@@ -411,8 +413,8 @@ public class WCDBException extends Exception {
         extendedCode("ExtCode"),
         message("Message");
 
-        private String value;
-        private Key(String value) {
+        private final String value;
+        Key(String value) {
             this.value = value;
         }
         String getValue() {
@@ -431,7 +433,7 @@ public class WCDBException extends Exception {
         level = Level.valueOf(getLevel(cppError));
         code = Code.valueOf(getCode(cppError));
         String message = getMessage(cppError);
-        infos = new HashMap();
+        infos = new HashMap<String, Object>();
         infos.put(Key.message.value, message);
         enumerateInfo(cppError);
     }
@@ -480,6 +482,7 @@ public class WCDBException extends Exception {
         return (String) infos.get(Key.path.getValue());
     }
 
+    @Override
     public String toString() {
         StringBuilder des = new StringBuilder("[WCDB] [" + level + "] Code: " + code.value());
         for (Map.Entry<String, Object> entry : infos.entrySet()) {

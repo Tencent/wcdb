@@ -147,7 +147,7 @@ public class Handle extends HandleORMOperation {
 
     private boolean onTransaction(long cppHandle, Transaction transaction) {
         Handle handle = new Handle(cppHandle, database);
-        boolean ret = false;
+        boolean ret;
         try {
             ret = transaction.insideTransaction(handle);
         } catch (WCDBException e) {
@@ -162,7 +162,7 @@ public class Handle extends HandleORMOperation {
 
     private int onPausableTransaction(long cppHandle, PausableTransaction transaction, boolean isNewTransaction) {
         Handle handle = new Handle(cppHandle, database);
-        int ret = 0;
+        int ret;
         try {
             ret = transaction.insideTransaction(handle, isNewTransaction) ? 1 : 0;
         } catch (WCDBException e) {

@@ -30,7 +30,6 @@ import com.tencent.wcdb.orm.Field;
 import com.tencent.wcdb.orm.TableBinding;
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.winq.Expression;
-import com.tencent.wcdb.winq.ExpressionConvertible;
 import com.tencent.wcdb.winq.OrderingTerm;
 
 import java.util.ArrayList;
@@ -40,24 +39,24 @@ public class TableORMOperation<T> extends TableOperation {
     TableORMOperation() {
         super();
     }
-    public Insert<T> prepareInsert() throws WCDBException {
-        Insert<T> insert = new Insert(database.getHandle());
+    public Insert<T> prepareInsert() {
+        Insert<T> insert = new Insert<T>(database.getHandle());
         insert.autoInvalidateHandle = true;
         insert.needChanges = false;
         insert.intoTable(tableName);
         return insert;
     }
 
-    public Update<T> prepareUpdate() throws WCDBException {
-        Update<T> update = new Update(database.getHandle());
+    public Update<T> prepareUpdate() {
+        Update<T> update = new Update<T>(database.getHandle());
         update.autoInvalidateHandle = true;
         update.needChanges = false;
         update.table(tableName);
         return update;
     }
 
-    public Select<T> prepareSelect() throws WCDBException {
-        Select<T> select = new Select(database.getHandle());
+    public Select<T> prepareSelect() {
+        Select<T> select = new Select<T>(database.getHandle());
         select.autoInvalidateHandle = true;
         select.needChanges = false;
         select.from(tableName);

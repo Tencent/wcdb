@@ -118,13 +118,13 @@ void WCDBJNIHandleObjectMethod(rollbackTransaction, jlong self)
 jboolean WCDBJNIHandleObjectMethod(beginNestedTransaction, jlong self)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);
-    WCDBHandleBeginNestedTransaction(selfStruct);
+    return WCDBHandleBeginNestedTransaction(selfStruct);
 }
 
 jboolean WCDBJNIHandleObjectMethod(commitNestedTransaction, jlong self)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);
-    WCDBHandleCommitNestedTransaction(selfStruct);
+    return WCDBHandleCommitNestedTransaction(selfStruct);
 }
 
 void WCDBJNIHandleObjectMethod(rollbackNestedTransaction, jlong self)

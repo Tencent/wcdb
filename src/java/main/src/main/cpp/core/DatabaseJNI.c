@@ -21,8 +21,6 @@
  * limitations under the License.
  */
 
-#pragma once
-
 #include "DatabaseJNI.h"
 #include "DatabaseBridge.h"
 #include <assert.h>

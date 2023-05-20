@@ -28,10 +28,6 @@ import com.tencent.wcdb.base.Value;
 import java.util.Random;
 
 public class RandomTool {
-    public static int anInt() {
-        Random random = new Random();
-        return random.nextInt();
-    }
 
     public static String string() {
         return string(100);
@@ -40,12 +36,12 @@ public class RandomTool {
     public static String string(int length) {
         String str="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         Random random = new Random();
-        StringBuffer sb=new StringBuffer(length);
+        StringBuilder stringBuffer = new StringBuilder(length);
         for(int i = 0; i < length; i++){
             int number=random.nextInt(62);
-            sb.append(str.charAt(number));
+            stringBuffer.append(str.charAt(number));
         }
-        return sb.toString();
+        return stringBuffer.toString();
     }
 
     public static byte[] bytes() {

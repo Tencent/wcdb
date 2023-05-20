@@ -186,16 +186,6 @@ public class DatabaseTestCase extends BaseTestCase {
         return path + ".factory";
     }
 
-    public String journalPath()
-    {
-        return path + "-journal";
-    }
-
-    public String shmPath()
-    {
-        return path + "-shm";
-    }
-
     public void corruptHeader() {
         database.close(new Database.CloseCallBack() {
             @Override
@@ -204,12 +194,12 @@ public class DatabaseTestCase extends BaseTestCase {
                 File file = new File(database.getPath());
                 try {
                     RandomAccessFile accessFile = new RandomAccessFile(file, "rw");
-                    accessFile.seek(0l);
-                    accessFile.write(new byte[100]);
+                    accessFile.seek(0L);
+                    accessFile.write(new byte[headerSize()]);
                 } catch (FileNotFoundException e) {
-                    logError("File not founded: " + e.toString());
+                    logError("File not founded: " + e);
                 } catch (IOException e) {
-                    logError("IO Error: " + e.toString());
+                    logError("IO Error: " + e);
                 }
             }
         });

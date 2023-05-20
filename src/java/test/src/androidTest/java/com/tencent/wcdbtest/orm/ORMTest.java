@@ -65,11 +65,11 @@ public class ORMTest extends DatabaseTestCase {
     void doTestCreateTableAndIndexSQLsAsExpected(String[] sqls, TestOperation operation) {
         assertNotNull(sqls);
         assertNotNull(operation);
-        ArrayList<String> newSqls = new ArrayList();
+        ArrayList<String> newSqls = new ArrayList<String>();
         newSqls.add("BEGIN IMMEDIATE");
         newSqls.addAll(Arrays.asList(sqls));
         newSqls.add("COMMIT");
-        doTestSQLs(newSqls.toArray(new String[newSqls.size()]), operation);
+        doTestSQLs(newSqls.toArray(new String[0]), operation);
     }
 
     @Test
@@ -121,10 +121,10 @@ public class ORMTest extends DatabaseTestCase {
         AllTypeObject empty = AllTypeObject.emptyObject();
         table.insertObjects(new AllTypeObject[]{ max, min, random, empty});
 
-        assertTrue(max.equals(table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq(max.type))));
-        assertTrue(min.equals(table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq(min.type))));
-        assertTrue(empty.equals(table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq(empty.type))));
-        assertTrue(random.equals(table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq(random.type))));
+        assertEquals(max, table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq(max.type)));
+        assertEquals(min, table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq(min.type)));
+        assertEquals(empty, table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq(empty.type)));
+        assertEquals(random, table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq(random.type)));
 
     }
 
@@ -342,14 +342,14 @@ public class ORMTest extends DatabaseTestCase {
     void doTestAutoAddColumn(Field<AutoAddColumnObject> removeField, boolean succeed, TestOperation operation) throws WCDBException {
         final String columnName = removeField.getName();
         final StatementCreateTable createTable = new StatementCreateTable().createTable(tableName);
-        ArrayList<ColumnDef> columnDefs = new ArrayList();
-        for(Field field: DBAutoAddColumnObject.allFields()) {
+        ArrayList<ColumnDef> columnDefs = new ArrayList<ColumnDef>();
+        for(Field<AutoAddColumnObject> field: DBAutoAddColumnObject.allFields()) {
             if(!field.getDescription().equals(columnName)) {
                 columnDefs.add(new ColumnDef(field, ColumnType.Integer));
             }
         }
 
-        createTable.define(columnDefs.toArray(new ColumnDef[columnDefs.size()]));
+        createTable.define(columnDefs.toArray(new ColumnDef[0]));
         database.execute(createTable);
         final WrappedValue added = new WrappedValue();
         database.traceException(new Database.ExceptionTracer() {

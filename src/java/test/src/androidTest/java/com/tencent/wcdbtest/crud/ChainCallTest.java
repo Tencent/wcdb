@@ -57,55 +57,55 @@ public class ChainCallTest extends ObjectCRUDTestCase {
 
     @Test
     public void testDatabaseInsert() throws WCDBException {
-        Insert insert = database.<TestObject>prepareInsert().intoTable(tableName).onFields(DBTestObject.allFields());
+        Insert<TestObject> insert = database.<TestObject>prepareInsert().intoTable(tableName).onFields(DBTestObject.allFields());
         winqEqual(insert.getStatement(), "INSERT INTO testTable(id, content) VALUES(?1, ?2)");
     }
 
     @Test
     public void testTableInsert() throws WCDBException {
-        Insert insert = table.prepareInsert().onFields(DBTestObject.allFields());
+        Insert<TestObject> insert = table.prepareInsert().onFields(DBTestObject.allFields());
         winqEqual(insert.getStatement(), "INSERT INTO testTable(id, content) VALUES(?1, ?2)");
     }
 
     @Test
     public void testHandleInsert() throws WCDBException {
-        Insert insert = handle.<TestObject>prepareInsert().intoTable(tableName).onFields(DBTestObject.allFields());
+        Insert<TestObject> insert = handle.<TestObject>prepareInsert().intoTable(tableName).onFields(DBTestObject.allFields());
         winqEqual(insert.getStatement(), "INSERT INTO testTable(id, content) VALUES(?1, ?2)");
     }
 
     @Test
     public void testDatabaseUpdate() throws WCDBException {
-        Update update = database.<TestObject>prepareUpdate().table(tableName).set(DBTestObject.content);
+        Update<TestObject> update = database.<TestObject>prepareUpdate().table(tableName).set(DBTestObject.content);
         winqEqual(update.getStatement(), "UPDATE testTable SET content = ?1");
     }
 
     @Test
     public void testTableUpdate() throws WCDBException {
-        Update update = table.prepareUpdate().set(DBTestObject.content);
+        Update<TestObject> update = table.prepareUpdate().set(DBTestObject.content);
         winqEqual(update.getStatement(), "UPDATE testTable SET content = ?1");
     }
 
     @Test
     public void testHandleUpdate() throws WCDBException {
-        Update update = handle.<TestObject>prepareUpdate().table(tableName).set(DBTestObject.content);
+        Update<TestObject> update = handle.<TestObject>prepareUpdate().table(tableName).set(DBTestObject.content);
         winqEqual(update.getStatement(), "UPDATE testTable SET content = ?1");
     }
 
     @Test
     public void testDatabaseSelect() throws WCDBException {
-        Select select = database.<TestObject>prepareSelect().select(DBTestObject.allFields()).from(tableName).where(DBTestObject.id.eq(1));
+        Select<TestObject> select = database.<TestObject>prepareSelect().select(DBTestObject.allFields()).from(tableName).where(DBTestObject.id.eq(1));
         winqEqual(select.getStatement(), "SELECT id, content FROM testTable WHERE id == 1");
     }
 
     @Test
     public void testTableSelect() throws WCDBException {
-        Select select = table.prepareSelect().select(DBTestObject.allFields()).where(DBTestObject.id.eq(1));
+        Select<TestObject> select = table.prepareSelect().select(DBTestObject.allFields()).where(DBTestObject.id.eq(1));
         winqEqual(select.getStatement(), "SELECT id, content FROM testTable WHERE id == 1");
     }
 
     @Test
     public void testHandleSelect() throws WCDBException {
-        Select select = handle.<TestObject>prepareSelect().select(DBTestObject.allFields()).from(tableName).where(DBTestObject.id.eq(1));
+        Select<TestObject> select = handle.<TestObject>prepareSelect().select(DBTestObject.allFields()).from(tableName).where(DBTestObject.id.eq(1));
         winqEqual(select.getStatement(), "SELECT id, content FROM testTable WHERE id == 1");
     }
 }

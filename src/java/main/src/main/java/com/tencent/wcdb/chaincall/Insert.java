@@ -28,7 +28,6 @@ import com.tencent.wcdb.core.Handle;
 import com.tencent.wcdb.core.PreparedStatement;
 import com.tencent.wcdb.orm.Field;
 import com.tencent.wcdb.orm.TableBinding;
-import com.tencent.wcdb.winq.BindParameter;
 import com.tencent.wcdb.winq.StatementInsert;
 
 public class Insert<T> extends ChainCall<StatementInsert> {

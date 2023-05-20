@@ -23,6 +23,7 @@
 
 package com.tencent.wcdbtest.crud;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.tencent.wcdb.base.WCDBException;
@@ -47,9 +48,9 @@ public class ValueSelectWithColumnTest extends ValueCRUDTestCase {
             public void execute() throws WCDBException {
                 assertTrue(database.getValue(content, tableName).getText().length() > 0);
                 assertTrue(database.getValue(content, tableName, id.eq(1)).getText().length() > 0);
-                assertTrue(database.getValue(content.count(), tableName, content.order(Order.Asc)).getInteger() == 2);
+                assertEquals(2, database.getValue(content.count(), tableName, content.order(Order.Asc)).getInteger());
                 assertTrue(database.getValue(id.sum(), tableName, content.order(Order.Asc), 0).getInteger() > 0);
-                assertTrue(database.getValue(content.count(), tableName, id.eq(2), content.order(Order.Asc)).getInteger() == 1);
+                assertEquals(1, database.getValue(content.count(), tableName, id.eq(2), content.order(Order.Asc)).getInteger());
                 assertTrue(database.getValue(id.sum(), tableName, id.eq(2), content.order(Order.Asc), 0).getInteger() > 0);
             }
         });
@@ -69,14 +70,14 @@ public class ValueSelectWithColumnTest extends ValueCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                assertTrue(database.getOneColumn(content, tableName).size() == 2);
+                assertEquals(2, database.getOneColumn(content, tableName).size());
                 assertTrue(database.getOneColumn(content, tableName, id.eq(1)).get(0).getText().length() > 0);
-                assertTrue(database.getOneColumn(id, tableName, content.order(Order.Asc)).size() == 2);
-                assertTrue(database.getOneColumn(id, tableName, content.order(Order.Asc), 1).size() == 1);
-                assertTrue(database.getOneColumn(id, tableName, content.order(Order.Asc), 1, 1).size() == 1);
-                assertTrue(database.getOneColumn(content, tableName, id.eq(2), content.order(Order.Asc)).size() == 1);
-                assertTrue(database.getOneColumn(content, tableName, id.eq(2), content.order(Order.Asc), 1).size() == 1);
-                assertTrue(database.getOneColumn(content, tableName, id.eq(2), content.order(Order.Asc), 1, 1).size() == 0);
+                assertEquals(2, database.getOneColumn(id, tableName, content.order(Order.Asc)).size());
+                assertEquals(1, database.getOneColumn(id, tableName, content.order(Order.Asc), 1).size());
+                assertEquals(1, database.getOneColumn(id, tableName, content.order(Order.Asc), 1, 1).size());
+                assertEquals(1, database.getOneColumn(content, tableName, id.eq(2), content.order(Order.Asc)).size());
+                assertEquals(1, database.getOneColumn(content, tableName, id.eq(2), content.order(Order.Asc), 1).size());
+                assertEquals(0, database.getOneColumn(content, tableName, id.eq(2), content.order(Order.Asc), 1, 1).size());
             }
         });
     }
@@ -93,11 +94,11 @@ public class ValueSelectWithColumnTest extends ValueCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                assertTrue(database.getOneRow(columns(), tableName).length == 2);
-                assertTrue(database.getOneRow(columns(), tableName, id.eq(1))[0].getInteger() == 1);
-                assertTrue(database.getOneRow(new ResultColumnConvertible[]{id, content.count()}, tableName, content.order(Order.Asc))[1].getInteger() == 2);
+                assertEquals(2, database.getOneRow(columns(), tableName).length);
+                assertEquals(1, database.getOneRow(columns(), tableName, id.eq(1))[0].getInteger());
+                assertEquals(2, database.getOneRow(new ResultColumnConvertible[]{id, content.count()}, tableName, content.order(Order.Asc))[1].getInteger());
                 assertTrue(database.getOneRow(new ResultColumnConvertible[]{id.sum(), content}, tableName, content.order(Order.Asc), 0)[0].getInteger() > 0);
-                assertTrue(database.getOneRow(new ResultColumnConvertible[]{id, content.count()}, tableName, id.eq(2), content.order(Order.Asc))[1].getInteger() == 1);
+                assertEquals(1, database.getOneRow(new ResultColumnConvertible[]{id, content.count()}, tableName, id.eq(2), content.order(Order.Asc))[1].getInteger());
                 assertTrue(database.getOneRow(new ResultColumnConvertible[]{id.sum(), content}, tableName, id.eq(2), content.order(Order.Asc), 0)[0].getInteger() > 0);
             }
         });
@@ -117,14 +118,14 @@ public class ValueSelectWithColumnTest extends ValueCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                assertTrue(database.getAllRows(columns(), tableName).size() == 2);
+                assertEquals(2, database.getAllRows(columns(), tableName).size());
                 assertTrue(database.getAllRows(columns(), tableName, id.eq(1)).get(0)[1].getText().length() > 0);
-                assertTrue(database.getAllRows(columns(), tableName, content.order(Order.Asc)).size() == 2);
-                assertTrue(database.getAllRows(columns(), tableName, content.order(Order.Asc), 1).size() == 1);
-                assertTrue(database.getAllRows(columns(), tableName, content.order(Order.Asc), 1, 1).size() == 1);
-                assertTrue(database.getAllRows(columns(), tableName, id.eq(2), content.order(Order.Asc)).size() == 1);
-                assertTrue(database.getAllRows(columns(), tableName, id.eq(2), content.order(Order.Asc), 1).size() == 1);
-                assertTrue(database.getAllRows(columns(), tableName, id.eq(2), content.order(Order.Asc), 1, 1).size() == 0);
+                assertEquals(2, database.getAllRows(columns(), tableName, content.order(Order.Asc)).size());
+                assertEquals(1, database.getAllRows(columns(), tableName, content.order(Order.Asc), 1).size());
+                assertEquals(1, database.getAllRows(columns(), tableName, content.order(Order.Asc), 1, 1).size());
+                assertEquals(1, database.getAllRows(columns(), tableName, id.eq(2), content.order(Order.Asc)).size());
+                assertEquals(1, database.getAllRows(columns(), tableName, id.eq(2), content.order(Order.Asc), 1).size());
+                assertEquals(0, database.getAllRows(columns(), tableName, id.eq(2), content.order(Order.Asc), 1, 1).size());
             }
         });
     }
@@ -143,9 +144,9 @@ public class ValueSelectWithColumnTest extends ValueCRUDTestCase {
             public void execute() throws WCDBException {
                 assertTrue(handle.getValue(content, tableName).getText().length() > 0);
                 assertTrue(handle.getValue(content, tableName, id.eq(1)).getText().length() > 0);
-                assertTrue(handle.getValue(content.count(), tableName, content.order(Order.Asc)).getInteger() == 2);
+                assertEquals(2, handle.getValue(content.count(), tableName, content.order(Order.Asc)).getInteger());
                 assertTrue(handle.getValue(id.sum(), tableName, content.order(Order.Asc), 0).getInteger() > 0);
-                assertTrue(handle.getValue(content.count(), tableName, id.eq(2), content.order(Order.Asc)).getInteger() == 1);
+                assertEquals(1, handle.getValue(content.count(), tableName, id.eq(2), content.order(Order.Asc)).getInteger());
                 assertTrue(handle.getValue(id.sum(), tableName, id.eq(2), content.order(Order.Asc), 0).getInteger() > 0);
             }
         });
@@ -165,14 +166,14 @@ public class ValueSelectWithColumnTest extends ValueCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                assertTrue(handle.getOneColumn(content, tableName).size() == 2);
+                assertEquals(2, handle.getOneColumn(content, tableName).size());
                 assertTrue(handle.getOneColumn(content, tableName, id.eq(1)).get(0).getText().length() > 0);
-                assertTrue(handle.getOneColumn(id, tableName, content.order(Order.Asc)).size() == 2);
-                assertTrue(handle.getOneColumn(id, tableName, content.order(Order.Asc), 1).size() == 1);
-                assertTrue(handle.getOneColumn(id, tableName, content.order(Order.Asc), 1, 1).size() == 1);
-                assertTrue(handle.getOneColumn(content, tableName, id.eq(2), content.order(Order.Asc)).size() == 1);
-                assertTrue(handle.getOneColumn(content, tableName, id.eq(2), content.order(Order.Asc), 1).size() == 1);
-                assertTrue(handle.getOneColumn(content, tableName, id.eq(2), content.order(Order.Asc), 1, 1).size() == 0);
+                assertEquals(2, handle.getOneColumn(id, tableName, content.order(Order.Asc)).size());
+                assertEquals(1, handle.getOneColumn(id, tableName, content.order(Order.Asc), 1).size());
+                assertEquals(1, handle.getOneColumn(id, tableName, content.order(Order.Asc), 1, 1).size());
+                assertEquals(1, handle.getOneColumn(content, tableName, id.eq(2), content.order(Order.Asc)).size());
+                assertEquals(1, handle.getOneColumn(content, tableName, id.eq(2), content.order(Order.Asc), 1).size());
+                assertEquals(0, handle.getOneColumn(content, tableName, id.eq(2), content.order(Order.Asc), 1, 1).size());
             }
         });
     }
@@ -189,11 +190,11 @@ public class ValueSelectWithColumnTest extends ValueCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                assertTrue(handle.getOneRow(columns(), tableName).length == 2);
-                assertTrue(handle.getOneRow(columns(), tableName, id.eq(1))[0].getInteger() == 1);
-                assertTrue(handle.getOneRow(new ResultColumnConvertible[]{id, content.count()}, tableName, content.order(Order.Asc))[1].getInteger() == 2);
+                assertEquals(2, handle.getOneRow(columns(), tableName).length);
+                assertEquals(1, handle.getOneRow(columns(), tableName, id.eq(1))[0].getInteger());
+                assertEquals(2, handle.getOneRow(new ResultColumnConvertible[]{id, content.count()}, tableName, content.order(Order.Asc))[1].getInteger());
                 assertTrue(handle.getOneRow(new ResultColumnConvertible[]{id.sum(), content}, tableName, content.order(Order.Asc), 0)[0].getInteger() > 0);
-                assertTrue(handle.getOneRow(new ResultColumnConvertible[]{id, content.count()}, tableName, id.eq(2), content.order(Order.Asc))[1].getInteger() == 1);
+                assertEquals(1, handle.getOneRow(new ResultColumnConvertible[]{id, content.count()}, tableName, id.eq(2), content.order(Order.Asc))[1].getInteger());
                 assertTrue(handle.getOneRow(new ResultColumnConvertible[]{id.sum(), content}, tableName, id.eq(2), content.order(Order.Asc), 0)[0].getInteger() > 0);
             }
         });
@@ -213,14 +214,14 @@ public class ValueSelectWithColumnTest extends ValueCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                assertTrue(handle.getAllRows(columns(), tableName).size() == 2);
+                assertEquals(2, handle.getAllRows(columns(), tableName).size());
                 assertTrue(handle.getAllRows(columns(), tableName, id.eq(1)).get(0)[1].getText().length() > 0);
-                assertTrue(handle.getAllRows(columns(), tableName, content.order(Order.Asc)).size() == 2);
-                assertTrue(handle.getAllRows(columns(), tableName, content.order(Order.Asc), 1).size() == 1);
-                assertTrue(handle.getAllRows(columns(), tableName, content.order(Order.Asc), 1, 1).size() == 1);
-                assertTrue(handle.getAllRows(columns(), tableName, id.eq(2), content.order(Order.Asc)).size() == 1);
-                assertTrue(handle.getAllRows(columns(), tableName, id.eq(2), content.order(Order.Asc), 1).size() == 1);
-                assertTrue(handle.getAllRows(columns(), tableName, id.eq(2), content.order(Order.Asc), 1, 1).size() == 0);
+                assertEquals(2, handle.getAllRows(columns(), tableName, content.order(Order.Asc)).size());
+                assertEquals(1, handle.getAllRows(columns(), tableName, content.order(Order.Asc), 1).size());
+                assertEquals(1, handle.getAllRows(columns(), tableName, content.order(Order.Asc), 1, 1).size());
+                assertEquals(1, handle.getAllRows(columns(), tableName, id.eq(2), content.order(Order.Asc)).size());
+                assertEquals(1, handle.getAllRows(columns(), tableName, id.eq(2), content.order(Order.Asc), 1).size());
+                assertEquals(0, handle.getAllRows(columns(), tableName, id.eq(2), content.order(Order.Asc), 1, 1).size());
             }
         });
     }

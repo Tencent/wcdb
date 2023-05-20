@@ -23,8 +23,6 @@
 
 package com.tencent.wcdb.winq;
 
-import java.util.Arrays;
-
 public class StatementInsert extends Statement {
     @Override
     protected CPPType getCppType() {

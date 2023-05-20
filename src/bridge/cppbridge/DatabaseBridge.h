@@ -51,7 +51,7 @@ bool WCDBDatabaseIsBlockaded(CPPDatabase database);
 void WCDBDatabaseClose(CPPDatabase database, SwiftClosure* _Nullable callback);
 typedef void (*WCDBDatabaseCloseCallback)(void* _Nonnull context);
 void WCDBDatabaseClose2(CPPDatabase database,
-                        void* _Nonnull context,
+                        void* _Nullable context,
                         WCDBDatabaseCloseCallback _Nullable callback);
 void WCDBDatabaseBlockade(CPPDatabase database);
 void WCDBDatabaseUnblockade(CPPDatabase database);

@@ -23,6 +23,7 @@
 
 package com.tencent.wcdbtest.crud;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.tencent.wcdb.base.WCDBException;
@@ -48,9 +49,9 @@ public class ValueSelectWithFieldTest extends ObjectCRUDTestCase {
             public void execute() throws WCDBException {
                 assertTrue(database.getValue(DBTestObject.content, tableName).getText().length() > 0);
                 assertTrue(database.getValue(DBTestObject.content, tableName, DBTestObject.id.eq(1)).getText().length() > 0);
-                assertTrue(database.getValue(DBTestObject.content.count(), tableName, DBTestObject.content.order(Order.Asc)).getInteger() == 2);
+                assertEquals(2, database.getValue(DBTestObject.content.count(), tableName, DBTestObject.content.order(Order.Asc)).getInteger());
                 assertTrue(database.getValue(DBTestObject.id.sum(), tableName, DBTestObject.content.order(Order.Asc), 0).getInteger() > 0);
-                assertTrue(database.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc)).getInteger() == 1);
+                assertEquals(1, database.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc)).getInteger());
                 assertTrue(database.getValue(DBTestObject.id.sum(), tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 0).getInteger() > 0);
             }
         });
@@ -70,14 +71,14 @@ public class ValueSelectWithFieldTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                assertTrue(database.getOneColumn(DBTestObject.content, tableName).size() == 2);
+                assertEquals(2, database.getOneColumn(DBTestObject.content, tableName).size());
                 assertTrue(database.getOneColumn(DBTestObject.content, tableName, DBTestObject.id.eq(1)).get(0).getText().length() > 0);
-                assertTrue(database.getOneColumn(DBTestObject.id, tableName, DBTestObject.content.order(Order.Asc)).size() == 2);
-                assertTrue(database.getOneColumn(DBTestObject.id, tableName, DBTestObject.content.order(Order.Asc), 1).size() == 1);
-                assertTrue(database.getOneColumn(DBTestObject.id, tableName, DBTestObject.content.order(Order.Asc), 1, 1).size() == 1);
-                assertTrue(database.getOneColumn(DBTestObject.content, tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc)).size() == 1);
-                assertTrue(database.getOneColumn(DBTestObject.content, tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 1).size() == 1);
-                assertTrue(database.getOneColumn(DBTestObject.content, tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 1, 1).size() == 0);
+                assertEquals(2, database.getOneColumn(DBTestObject.id, tableName, DBTestObject.content.order(Order.Asc)).size());
+                assertEquals(1, database.getOneColumn(DBTestObject.id, tableName, DBTestObject.content.order(Order.Asc), 1).size());
+                assertEquals(1, database.getOneColumn(DBTestObject.id, tableName, DBTestObject.content.order(Order.Asc), 1, 1).size());
+                assertEquals(1, database.getOneColumn(DBTestObject.content, tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc)).size());
+                assertEquals(1, database.getOneColumn(DBTestObject.content, tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 1).size());
+                assertEquals(0, database.getOneColumn(DBTestObject.content, tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 1, 1).size());
             }
         });
     }
@@ -94,11 +95,11 @@ public class ValueSelectWithFieldTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                assertTrue(database.getOneRow(DBTestObject.allFields(), tableName).length == 2);
-                assertTrue(database.getOneRow(DBTestObject.allFields(), tableName, DBTestObject.id.eq(1))[0].getInteger() == 1);
-                assertTrue(database.getOneRow(new ResultColumnConvertible[]{DBTestObject.id, DBTestObject.content.count()}, tableName, DBTestObject.content.order(Order.Asc))[1].getInteger() == 2);
+                assertEquals(2, database.getOneRow(DBTestObject.allFields(), tableName).length);
+                assertEquals(1, database.getOneRow(DBTestObject.allFields(), tableName, DBTestObject.id.eq(1))[0].getInteger());
+                assertEquals(2, database.getOneRow(new ResultColumnConvertible[]{DBTestObject.id, DBTestObject.content.count()}, tableName, DBTestObject.content.order(Order.Asc))[1].getInteger());
                 assertTrue(database.getOneRow(new ResultColumnConvertible[]{DBTestObject.id.sum(), DBTestObject.content}, tableName, DBTestObject.content.order(Order.Asc), 0)[0].getInteger() > 0);
-                assertTrue(database.getOneRow(new ResultColumnConvertible[]{DBTestObject.id, DBTestObject.content.count()}, tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc))[1].getInteger() == 1);
+                assertEquals(1, database.getOneRow(new ResultColumnConvertible[]{DBTestObject.id, DBTestObject.content.count()}, tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc))[1].getInteger());
                 assertTrue(database.getOneRow(new ResultColumnConvertible[]{DBTestObject.id.sum(), DBTestObject.content}, tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 0)[0].getInteger() > 0);
             }
         });
@@ -118,14 +119,14 @@ public class ValueSelectWithFieldTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                assertTrue(database.getAllRows(DBTestObject.allFields(), tableName).size() == 2);
+                assertEquals(2, database.getAllRows(DBTestObject.allFields(), tableName).size());
                 assertTrue(database.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.id.eq(1)).get(0)[1].getText().length() > 0);
-                assertTrue(database.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.content.order(Order.Asc)).size() == 2);
-                assertTrue(database.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.content.order(Order.Asc), 1).size() == 1);
-                assertTrue(database.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.content.order(Order.Asc), 1, 1).size() == 1);
-                assertTrue(database.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc)).size() == 1);
-                assertTrue(database.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 1).size() == 1);
-                assertTrue(database.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 1, 1).size() == 0);
+                assertEquals(2, database.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.content.order(Order.Asc)).size());
+                assertEquals(1, database.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.content.order(Order.Asc), 1).size());
+                assertEquals(1, database.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.content.order(Order.Asc), 1, 1).size());
+                assertEquals(1, database.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc)).size());
+                assertEquals(1, database.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 1).size());
+                assertEquals(0, database.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 1, 1).size());
             }
         });
     }
@@ -144,9 +145,9 @@ public class ValueSelectWithFieldTest extends ObjectCRUDTestCase {
             public void execute() throws WCDBException {
                 assertTrue(table.getValue(DBTestObject.content).getText().length() > 0);
                 assertTrue(table.getValue(DBTestObject.content, DBTestObject.id.eq(1)).getText().length() > 0);
-                assertTrue(table.getValue(DBTestObject.content.count(), DBTestObject.content.order(Order.Asc)).getInteger() == 2);
+                assertEquals(2, table.getValue(DBTestObject.content.count(), DBTestObject.content.order(Order.Asc)).getInteger());
                 assertTrue(table.getValue(DBTestObject.id.sum(), DBTestObject.content.order(Order.Asc), 0).getInteger() > 0);
-                assertTrue(table.getValue(DBTestObject.content.count(), DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc)).getInteger() == 1);
+                assertEquals(1, table.getValue(DBTestObject.content.count(), DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc)).getInteger());
                 assertTrue(table.getValue(DBTestObject.id.sum(), DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 0).getInteger() > 0);
             }
         });
@@ -166,14 +167,14 @@ public class ValueSelectWithFieldTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                assertTrue(table.getOneColumn(DBTestObject.content).size() == 2);
+                assertEquals(2, table.getOneColumn(DBTestObject.content).size());
                 assertTrue(table.getOneColumn(DBTestObject.content, DBTestObject.id.eq(1)).get(0).getText().length() > 0);
-                assertTrue(table.getOneColumn(DBTestObject.id, DBTestObject.content.order(Order.Asc)).size() == 2);
-                assertTrue(table.getOneColumn(DBTestObject.id, DBTestObject.content.order(Order.Asc), 1).size() == 1);
-                assertTrue(table.getOneColumn(DBTestObject.id, DBTestObject.content.order(Order.Asc), 1, 1).size() == 1);
-                assertTrue(table.getOneColumn(DBTestObject.content, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc)).size() == 1);
-                assertTrue(table.getOneColumn(DBTestObject.content, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 1).size() == 1);
-                assertTrue(table.getOneColumn(DBTestObject.content, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 1, 1).size() == 0);
+                assertEquals(2, table.getOneColumn(DBTestObject.id, DBTestObject.content.order(Order.Asc)).size());
+                assertEquals(1, table.getOneColumn(DBTestObject.id, DBTestObject.content.order(Order.Asc), 1).size());
+                assertEquals(1, table.getOneColumn(DBTestObject.id, DBTestObject.content.order(Order.Asc), 1, 1).size());
+                assertEquals(1, table.getOneColumn(DBTestObject.content, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc)).size());
+                assertEquals(1, table.getOneColumn(DBTestObject.content, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 1).size());
+                assertEquals(0, table.getOneColumn(DBTestObject.content, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 1, 1).size());
             }
         });
     }
@@ -190,11 +191,11 @@ public class ValueSelectWithFieldTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                assertTrue(table.getOneRow(DBTestObject.allFields()).length == 2);
-                assertTrue(table.getOneRow(DBTestObject.allFields(), DBTestObject.id.eq(1))[0].getInteger() == 1);
-                assertTrue(table.getOneRow(new ResultColumnConvertible[]{DBTestObject.id, DBTestObject.content.count()}, DBTestObject.content.order(Order.Asc))[1].getInteger() == 2);
+                assertEquals(2, table.getOneRow(DBTestObject.allFields()).length);
+                assertEquals(1, table.getOneRow(DBTestObject.allFields(), DBTestObject.id.eq(1))[0].getInteger());
+                assertEquals(2, table.getOneRow(new ResultColumnConvertible[]{DBTestObject.id, DBTestObject.content.count()}, DBTestObject.content.order(Order.Asc))[1].getInteger());
                 assertTrue(table.getOneRow(new ResultColumnConvertible[]{DBTestObject.id.sum(), DBTestObject.content}, DBTestObject.content.order(Order.Asc), 0)[0].getInteger() > 0);
-                assertTrue(table.getOneRow(new ResultColumnConvertible[]{DBTestObject.id, DBTestObject.content.count()}, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc))[1].getInteger() == 1);
+                assertEquals(1, table.getOneRow(new ResultColumnConvertible[]{DBTestObject.id, DBTestObject.content.count()}, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc))[1].getInteger());
                 assertTrue(table.getOneRow(new ResultColumnConvertible[]{DBTestObject.id.sum(), DBTestObject.content}, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 0)[0].getInteger() > 0);
             }
         });
@@ -214,14 +215,14 @@ public class ValueSelectWithFieldTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                assertTrue(table.getAllRows(DBTestObject.allFields()).size() == 2);
+                assertEquals(2, table.getAllRows(DBTestObject.allFields()).size());
                 assertTrue(table.getAllRows(DBTestObject.allFields(), DBTestObject.id.eq(1)).get(0)[1].getText().length() > 0);
-                assertTrue(table.getAllRows(DBTestObject.allFields(), DBTestObject.content.order(Order.Asc)).size() == 2);
-                assertTrue(table.getAllRows(DBTestObject.allFields(), DBTestObject.content.order(Order.Asc), 1).size() == 1);
-                assertTrue(table.getAllRows(DBTestObject.allFields(), DBTestObject.content.order(Order.Asc), 1, 1).size() == 1);
-                assertTrue(table.getAllRows(DBTestObject.allFields(), DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc)).size() == 1);
-                assertTrue(table.getAllRows(DBTestObject.allFields(), DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 1).size() == 1);
-                assertTrue(table.getAllRows(DBTestObject.allFields(), DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 1, 1).size() == 0);
+                assertEquals(2, table.getAllRows(DBTestObject.allFields(), DBTestObject.content.order(Order.Asc)).size());
+                assertEquals(1, table.getAllRows(DBTestObject.allFields(), DBTestObject.content.order(Order.Asc), 1).size());
+                assertEquals(1, table.getAllRows(DBTestObject.allFields(), DBTestObject.content.order(Order.Asc), 1, 1).size());
+                assertEquals(1, table.getAllRows(DBTestObject.allFields(), DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc)).size());
+                assertEquals(1, table.getAllRows(DBTestObject.allFields(), DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 1).size());
+                assertEquals(0, table.getAllRows(DBTestObject.allFields(), DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 1, 1).size());
             }
         });
     }
@@ -240,9 +241,9 @@ public class ValueSelectWithFieldTest extends ObjectCRUDTestCase {
             public void execute() throws WCDBException {
                 assertTrue(handle.getValue(DBTestObject.content, tableName).getText().length() > 0);
                 assertTrue(handle.getValue(DBTestObject.content, tableName, DBTestObject.id.eq(1)).getText().length() > 0);
-                assertTrue(handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.content.order(Order.Asc)).getInteger() == 2);
+                assertEquals(2, handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.content.order(Order.Asc)).getInteger());
                 assertTrue(handle.getValue(DBTestObject.id.sum(), tableName, DBTestObject.content.order(Order.Asc), 0).getInteger() > 0);
-                assertTrue(handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc)).getInteger() == 1);
+                assertEquals(1, handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc)).getInteger());
                 assertTrue(handle.getValue(DBTestObject.id.sum(), tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 0).getInteger() > 0);
             }
         });
@@ -262,14 +263,14 @@ public class ValueSelectWithFieldTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                assertTrue(handle.getOneColumn(DBTestObject.content, tableName).size() == 2);
+                assertEquals(2, handle.getOneColumn(DBTestObject.content, tableName).size());
                 assertTrue(handle.getOneColumn(DBTestObject.content, tableName, DBTestObject.id.eq(1)).get(0).getText().length() > 0);
-                assertTrue(handle.getOneColumn(DBTestObject.id, tableName, DBTestObject.content.order(Order.Asc)).size() == 2);
-                assertTrue(handle.getOneColumn(DBTestObject.id, tableName, DBTestObject.content.order(Order.Asc), 1).size() == 1);
-                assertTrue(handle.getOneColumn(DBTestObject.id, tableName, DBTestObject.content.order(Order.Asc), 1, 1).size() == 1);
-                assertTrue(handle.getOneColumn(DBTestObject.content, tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc)).size() == 1);
-                assertTrue(handle.getOneColumn(DBTestObject.content, tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 1).size() == 1);
-                assertTrue(handle.getOneColumn(DBTestObject.content, tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 1, 1).size() == 0);
+                assertEquals(2, handle.getOneColumn(DBTestObject.id, tableName, DBTestObject.content.order(Order.Asc)).size());
+                assertEquals(1, handle.getOneColumn(DBTestObject.id, tableName, DBTestObject.content.order(Order.Asc), 1).size());
+                assertEquals(1, handle.getOneColumn(DBTestObject.id, tableName, DBTestObject.content.order(Order.Asc), 1, 1).size());
+                assertEquals(1, handle.getOneColumn(DBTestObject.content, tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc)).size());
+                assertEquals(1, handle.getOneColumn(DBTestObject.content, tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 1).size());
+                assertEquals(0, handle.getOneColumn(DBTestObject.content, tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 1, 1).size());
             }
         });
     }
@@ -286,11 +287,11 @@ public class ValueSelectWithFieldTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                assertTrue(handle.getOneRow(DBTestObject.allFields(), tableName).length == 2);
-                assertTrue(handle.getOneRow(DBTestObject.allFields(), tableName, DBTestObject.id.eq(1))[0].getInteger() == 1);
-                assertTrue(handle.getOneRow(new ResultColumnConvertible[]{DBTestObject.id, DBTestObject.content.count()}, tableName, DBTestObject.content.order(Order.Asc))[1].getInteger() == 2);
+                assertEquals(2, handle.getOneRow(DBTestObject.allFields(), tableName).length);
+                assertEquals(1, handle.getOneRow(DBTestObject.allFields(), tableName, DBTestObject.id.eq(1))[0].getInteger());
+                assertEquals(2, handle.getOneRow(new ResultColumnConvertible[]{DBTestObject.id, DBTestObject.content.count()}, tableName, DBTestObject.content.order(Order.Asc))[1].getInteger());
                 assertTrue(handle.getOneRow(new ResultColumnConvertible[]{DBTestObject.id.sum(), DBTestObject.content}, tableName, DBTestObject.content.order(Order.Asc), 0)[0].getInteger() > 0);
-                assertTrue(handle.getOneRow(new ResultColumnConvertible[]{DBTestObject.id, DBTestObject.content.count()}, tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc))[1].getInteger() == 1);
+                assertEquals(1, handle.getOneRow(new ResultColumnConvertible[]{DBTestObject.id, DBTestObject.content.count()}, tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc))[1].getInteger());
                 assertTrue(handle.getOneRow(new ResultColumnConvertible[]{DBTestObject.id.sum(), DBTestObject.content}, tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 0)[0].getInteger() > 0);
             }
         });
@@ -310,14 +311,14 @@ public class ValueSelectWithFieldTest extends ObjectCRUDTestCase {
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                assertTrue(handle.getAllRows(DBTestObject.allFields(), tableName).size() == 2);
+                assertEquals(2, handle.getAllRows(DBTestObject.allFields(), tableName).size());
                 assertTrue(handle.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.id.eq(1)).get(0)[1].getText().length() > 0);
-                assertTrue(handle.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.content.order(Order.Asc)).size() == 2);
-                assertTrue(handle.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.content.order(Order.Asc), 1).size() == 1);
-                assertTrue(handle.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.content.order(Order.Asc), 1, 1).size() == 1);
-                assertTrue(handle.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc)).size() == 1);
-                assertTrue(handle.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 1).size() == 1);
-                assertTrue(handle.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 1, 1).size() == 0);
+                assertEquals(2, handle.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.content.order(Order.Asc)).size());
+                assertEquals(1, handle.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.content.order(Order.Asc), 1).size());
+                assertEquals(1, handle.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.content.order(Order.Asc), 1, 1).size());
+                assertEquals(1, handle.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc)).size());
+                assertEquals(1, handle.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 1).size());
+                assertEquals(0, handle.getAllRows(DBTestObject.allFields(), tableName, DBTestObject.id.eq(2), DBTestObject.content.order(Order.Asc), 1, 1).size());
             }
         });
     }

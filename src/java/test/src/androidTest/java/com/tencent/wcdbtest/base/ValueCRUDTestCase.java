@@ -23,7 +23,6 @@
 
 package com.tencent.wcdbtest.base;
 
-import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.base.WCDBException;
 
 import org.junit.Before;

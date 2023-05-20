@@ -21,7 +21,6 @@ package com.tencent.wcdb.core;// Created by chenqiuwen on 2023/5/2.
  * limitations under the License.
  */
 
-import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.chaincall.Delete;
 import com.tencent.wcdb.chaincall.Insert;
@@ -30,12 +29,10 @@ import com.tencent.wcdb.chaincall.Update;
 import com.tencent.wcdb.orm.Field;
 import com.tencent.wcdb.orm.TableBinding;
 import com.tencent.wcdb.winq.Expression;
-import com.tencent.wcdb.winq.ExpressionConvertible;
 import com.tencent.wcdb.winq.OrderingTerm;
 import com.tencent.wcdb.winq.StatementDropTable;
 
 import java.util.ArrayList;
-import java.util.concurrent.locks.Condition;
 
 public abstract class HandleORMOperation extends HandleOperation{
     abstract Database getDatabase();
@@ -90,28 +87,28 @@ public abstract class HandleORMOperation extends HandleOperation{
         execute(new StatementDropTable().dropTable(tableName));
     }
 
-    public <T> Insert<T> prepareInsert() throws WCDBException {
-        Insert<T> insert = new Insert(getHandle());
+    public <T> Insert<T> prepareInsert() {
+        Insert<T> insert = new Insert<T>(getHandle());
         insert.autoInvalidateHandle = autoInvalidateHandle();
         insert.needChanges = false;
         return insert;
     }
 
-    public <T> Update<T> prepareUpdate() throws WCDBException {
-        Update<T> update = new Update(getHandle());
+    public <T> Update<T> prepareUpdate() {
+        Update<T> update = new Update<T>(getHandle());
         update.autoInvalidateHandle = autoInvalidateHandle();
         update.needChanges = false;
         return update;
     }
 
-    public <T> Select<T> prepareSelect() throws WCDBException {
-        Select<T> select = new Select(getHandle());
+    public <T> Select<T> prepareSelect() {
+        Select<T> select = new Select<T>(getHandle());
         select.autoInvalidateHandle = autoInvalidateHandle();
         select.needChanges = false;
         return select;
     }
 
-    public Delete prepareDelete() throws WCDBException {
+    public Delete prepareDelete() {
         Delete delete = new Delete(getHandle());
         delete.autoInvalidateHandle = autoInvalidateHandle();
         delete.needChanges = false;

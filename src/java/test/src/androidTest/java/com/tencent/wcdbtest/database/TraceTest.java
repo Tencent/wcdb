@@ -145,7 +145,7 @@ public class TraceTest extends TableTestCase {
         try {
             database.execute(new StatementSelect().select("1").from("dummy"));
         } catch (WCDBException e) {
-
+            assertTrue(tested.boolValue);
         } finally {
             assertTrue(tested.boolValue);
         }
@@ -172,7 +172,7 @@ public class TraceTest extends TableTestCase {
         try {
             database.execute(new StatementSelect().select("1").from("dummy"));
         } catch (WCDBException e) {
-
+            assertTrue(tested.boolValue);
         } finally {
             assertTrue(tested.boolValue);
         }

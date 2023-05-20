@@ -44,6 +44,7 @@ public class RepairTest extends TableTestCase {
     void executeTest(TestOperation operation) {
         database.setCipherKey(null);
         try {
+            createTable();
             table.insertObjects(preInsertObjects);
             operation.execute();
             database.removeFiles();
@@ -163,7 +164,6 @@ public class RepairTest extends TableTestCase {
 
     void doTestRetrieve(boolean success) throws WCDBException {
         final WrappedValue lastPercentage = new WrappedValue();
-        final WrappedValue sanity = new WrappedValue();
         double score = database.retrieve(new Database.RetrieveProgressMonitor() {
             @Override
             public void onProgressUpdate(double percentage, double increment) {
@@ -183,7 +183,7 @@ public class RepairTest extends TableTestCase {
 
         }
         if( success ) {
-            assertTrue(objects != null);
+            assertNotNull(objects);
             assertArrayEquals(objects.toArray(), preInsertObjects);
         } else {
             assertTrue(objects == null || objects.size() == 0);

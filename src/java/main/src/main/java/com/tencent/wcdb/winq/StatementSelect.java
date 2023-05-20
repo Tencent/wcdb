@@ -23,8 +23,6 @@
 
 package com.tencent.wcdb.winq;
 
-import com.tencent.wcdb.winq.Statement;
-
 import java.util.Arrays;
 
 public class StatementSelect extends Statement implements TableOrSubqueryConvertible {

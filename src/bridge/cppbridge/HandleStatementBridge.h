@@ -63,7 +63,7 @@ void WCDBHandleStatementBindBlob(CPPHandleStatement handleStatement,
 void WCDBHandleStatementBindNull(CPPHandleStatement handleStatement, int index);
 
 int WCDBHandleStatementBindParameterIndex(CPPHandleStatement handleStatement,
-                                          const char* parameterName);
+                                          const char* _Nonnull parameterName);
 
 enum WCDBColumnValueType
 WCDBHandleStatementGetColumnType(CPPHandleStatement handleStatement, int index);

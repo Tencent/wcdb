@@ -21,8 +21,6 @@
  * limitations under the License.
  */
 
-#pragma once
-
 #include "CoreJNI.h"
 #include "CoreBridge.h"
 

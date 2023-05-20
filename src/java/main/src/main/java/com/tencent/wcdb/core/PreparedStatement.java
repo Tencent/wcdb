@@ -149,7 +149,6 @@ public class PreparedStatement extends CppObject {
                 return;
             case Null:
                 bindNull(index);
-                return;
         }
     }
 
@@ -210,7 +209,7 @@ public class PreparedStatement extends CppObject {
     private native int getColumnType(long self, int index);
 
     public boolean getBool(int index) {
-        return getInteger(cppObj, index) > 0 ? true : false;
+        return getInteger(cppObj, index) > 0;
     }
 
     public long getInteger(int index) {
@@ -265,7 +264,7 @@ public class PreparedStatement extends CppObject {
     }
 
     public ArrayList<Value> getOneColumn() throws WCDBException{
-        ArrayList<Value> column = new ArrayList();
+        ArrayList<Value> column = new ArrayList<Value>();
         step();
         while (!isDone(cppObj)) {
             column.add(getValue(0));
@@ -275,7 +274,7 @@ public class PreparedStatement extends CppObject {
     }
 
     public ArrayList<Value[]> getMultiRows() throws WCDBException{
-        ArrayList<Value[]> rows = new ArrayList();
+        ArrayList<Value[]> rows = new ArrayList<Value[]>();
         step();
         while (!isDone(cppObj)) {
             rows.add(getOneRow());
@@ -293,7 +292,7 @@ public class PreparedStatement extends CppObject {
     }
 
     public <T> ArrayList<T> getAllObjects(Field<T>[] fields) throws WCDBException {
-        ArrayList<T> objs = new ArrayList();
+        ArrayList<T> objs = new ArrayList<T>();
         step();
         while (!isDone(cppObj)) {
             objs.add(getOneObject(fields));

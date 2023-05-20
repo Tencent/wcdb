@@ -22,8 +22,6 @@
  */
 package com.tencent.wcdb.winq;
 
-import com.tencent.wcdb.winq.Identifier;
-
 public class ColumnConstraint extends Identifier {
     @Override
     protected CPPType getCppType() {

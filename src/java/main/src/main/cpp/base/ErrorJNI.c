@@ -21,8 +21,6 @@
  * limitations under the License.
  */
 
-#pragma once
-
 #include "ErrorJNI.h"
 #include "ErrorBridge.h"
 #include "assert.h"

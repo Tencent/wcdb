@@ -24,7 +24,6 @@ package com.tencent.wcdb.core;
 
 import com.tencent.wcdb.base.WCDBException;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 public class Database extends HandleORMOperation {
@@ -132,7 +131,7 @@ public class Database extends HandleORMOperation {
     native long getHandle(long self);
 
     public enum CipherVersion {
-        defaultVersion, version1, version2, version3, version4;
+        defaultVersion, version1, version2, version3, version4
     }
 
     public void setCipherKey(byte[] key) {
@@ -171,7 +170,7 @@ public class Database extends HandleORMOperation {
     }
 
     public enum ConfigPriority {
-        low, default_, high, highest;
+        low, default_, high, highest
     }
 
     public void setConfig(String configName, Config invocation) {
@@ -187,9 +186,6 @@ public class Database extends HandleORMOperation {
         switch (priority) {
             case low:
                 cppPriority = 100;
-                break;
-            case default_:
-                cppPriority = 0;
                 break;
             case high:
                 cppPriority = -100;
@@ -252,7 +248,7 @@ public class Database extends HandleORMOperation {
     private native void traceException(long self, ExceptionTracer tracer);
 
     public enum Operation {
-        Create, SetTag, OpenHandle;
+        Create, SetTag, OpenHandle
     }
 
     public interface OperationTracer {
