@@ -123,7 +123,8 @@ public class DatabaseTestCase extends BaseTestCase {
                 }
             }break;
             case FirstFewSQLs:{
-                if(expectedSQLs.get(0).equals(sql)) {
+
+                if(expectedSQLs.size() > 0 && expectedSQLs.get(0).equals(sql)) {
                     expectedSQLs.remove(0);
                 } else if(expectedSQLs.size() != 0){
                     Assert.assertEquals(expectedSQLs.get(0), sql);

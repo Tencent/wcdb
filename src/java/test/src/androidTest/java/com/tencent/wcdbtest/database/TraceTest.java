@@ -114,7 +114,7 @@ public class TraceTest extends TableTestCase {
         Database.globalTracePerformance(new Database.PerformanceTracer() {
             @Override
             public void onTrace(String path, long handleId, String sql, double time) {
-                if(sql.equals(sqls.get(0))) {
+                if(sqls.size() > 0 && sql.equals(sqls.get(0))) {
                     sqls.remove(0);
                 }
             }
