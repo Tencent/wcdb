@@ -1,4 +1,4 @@
-package com.tencent.wcdb.core;// Created by chenqiuwen on 2023/5/2.
+// Created by chenqiuwen on 2023/5/2.
 //
 
 /*
@@ -20,7 +20,7 @@ package com.tencent.wcdb.core;// Created by chenqiuwen on 2023/5/2.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+package com.tencent.wcdb.core;
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.chaincall.Delete;
 import com.tencent.wcdb.chaincall.Insert;

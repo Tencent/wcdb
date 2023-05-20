@@ -1,4 +1,4 @@
-package com.tencent.wcdbtest.winq;// Created by qiuwenchen on 2023/3/31.
+// Created by qiuwenchen on 2023/3/31.
 //
 
 /*
@@ -20,6 +20,8 @@ package com.tencent.wcdbtest.winq;// Created by qiuwenchen on 2023/3/31.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package com.tencent.wcdbtest.winq;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.tencent.wcdb.winq.*;
