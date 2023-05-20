@@ -28,7 +28,7 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
         return CPPType.Expression;
     }
 
-    public Expression(){
+    Expression(){
     }
 
     public Expression(LiteralValue value) {
