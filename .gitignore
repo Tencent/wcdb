@@ -19,5 +19,8 @@ xcuserdata/*
 *.xcworkspace
 DerivedData
 
+#CMake
+tools/version/build/
+
 # WCDB
 WCDB.framework
