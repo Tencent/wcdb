@@ -38,9 +38,11 @@
 jlong WCDBJNIHandleObjectMethod(getError, jlong self);
 jboolean WCDBJNIHandleClassMethod(checkValid, jlong self);
 jlong WCDBJNIHandleObjectMethod(getOrCreatePreparedStatement, jlong self, jlong statement);
+jlong WCDBJNIHandleObjectMethod(getOrCreatePreparedStatementWithSQL, jlong self, jstring sql);
 jlong WCDBJNIHandleObjectMethod(getMainStatement, jlong self);
 void WCDBJNIHandleObjectMethod(finalizeAllStatements, jlong self);
 jboolean WCDBJNIHandleObjectMethod(execute, jlong self, jlong statement);
+jboolean WCDBJNIHandleObjectMethod(executeSQL, jlong self, jstring sql);
 jint WCDBJNIHandleObjectMethod(tableExist, jlong self, jstring table);
 
 jint WCDBJNIHandleObjectMethod(getChanges, jlong self);

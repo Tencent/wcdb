@@ -451,11 +451,47 @@ public abstract class HandleOperation extends CppObject {
         return ret;
     }
 
+    public Value getValueFromSQL(String sql) throws WCDBException {
+        Handle handle = getHandle();
+        Value ret = null;
+        try {
+            PreparedStatement preparedStatement = handle.preparedWithMainStatement(sql);
+            preparedStatement.step();
+            if(!preparedStatement.isDone()) {
+                ret = preparedStatement.getValue(0);
+            }
+            preparedStatement.finalizeStatement();
+        } finally {
+            if(autoInvalidateHandle()) {
+                handle.invalidate();
+            }
+        }
+        return ret;
+    }
+
     public Value[] getOneRowFromStatement(Statement statement) throws WCDBException {
         Handle handle = getHandle();
         Value[] ret = null;
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
+            preparedStatement.step();
+            if(!preparedStatement.isDone()) {
+                ret = preparedStatement.getOneRow();
+            }
+            preparedStatement.finalizeStatement();
+        } finally {
+            if(autoInvalidateHandle()) {
+                handle.invalidate();
+            }
+        }
+        return ret;
+    }
+
+    public Value[] getOneRowFromSQL(String sql) throws WCDBException {
+        Handle handle = getHandle();
+        Value[] ret = null;
+        try {
+            PreparedStatement preparedStatement = handle.preparedWithMainStatement(sql);
             preparedStatement.step();
             if(!preparedStatement.isDone()) {
                 ret = preparedStatement.getOneRow();
@@ -484,6 +520,21 @@ public abstract class HandleOperation extends CppObject {
         return ret;
     }
 
+    public ArrayList<Value> getOneColumnFromSQL(String sql) throws WCDBException {
+        Handle handle = getHandle();
+        ArrayList<Value> ret;
+        try {
+            PreparedStatement preparedStatement = handle.preparedWithMainStatement(sql);
+            ret = preparedStatement.getOneColumn();
+            preparedStatement.finalizeStatement();
+        } finally {
+            if(autoInvalidateHandle()) {
+                handle.invalidate();
+            }
+        }
+        return ret;
+    }
+
     public ArrayList<Value[]> getAllRowsFromStatement(Statement statement) throws WCDBException {
         Handle handle = getHandle();
         ArrayList<Value[]> ret;
@@ -499,10 +550,39 @@ public abstract class HandleOperation extends CppObject {
         return ret;
     }
 
+    public ArrayList<Value[]> getAllRowsFromSQL(String sql) throws WCDBException {
+        Handle handle = getHandle();
+        ArrayList<Value[]> ret;
+        try {
+            PreparedStatement preparedStatement = handle.preparedWithMainStatement(sql);
+            ret = preparedStatement.getMultiRows();
+            preparedStatement.finalizeStatement();
+        } finally {
+            if(autoInvalidateHandle()) {
+                handle.invalidate();
+            }
+        }
+        return ret;
+    }
+
     public void execute(Statement statement) throws WCDBException {
         Handle handle = getHandle();
         WCDBException exception = null;
         if(!handle.execute(handle.getCppHandle(), statement.getCppObj())) {
+            exception = handle.createException();
+        }
+        if(autoInvalidateHandle()) {
+            handle.invalidate();
+        }
+        if (exception != null) {
+            throw exception;
+        }
+    }
+
+    public void execute(String sql) throws WCDBException {
+        Handle handle = getHandle();
+        WCDBException exception = null;
+        if(!handle.executeSQL(handle.getCppHandle(), sql)) {
             exception = handle.createException();
         }
         if(autoInvalidateHandle()) {

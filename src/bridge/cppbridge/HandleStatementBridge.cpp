@@ -49,6 +49,13 @@ bool WCDBHandleStatementPrepare(CPPHandleStatement handleStatement, CPPObject* s
     return cppHandleStatement->prepare(*cppStatement);
 }
 
+bool WCDBHandleStatementPrepareSQL(CPPHandleStatement handleStatement, const char* _Nonnull sql)
+{
+    WCDBGetObjectOrReturnValue(
+    handleStatement, WCDB::HandleStatement, cppHandleStatement, false);
+    return cppHandleStatement->prepare(WCDB::UnsafeStringView(sql));
+}
+
 bool WCDBHandleStatementCheckPrepared(CPPHandleStatement handleStatement)
 {
     WCDBGetObjectOrReturnValue(

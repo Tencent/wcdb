@@ -93,9 +93,11 @@ public:
     virtual void resetAllStatements();
     virtual void finalizeStatements();
     HandleStatement *getOrCreatePreparedStatement(const Statement &statement);
+    HandleStatement *getOrCreatePreparedStatement(const UnsafeStringView &sql);
     void returnAllPreparedStatement();
 
 private:
+    HandleStatement *getOrCreateStatement(const UnsafeStringView &sql);
     std::list<HandleStatement> m_handleStatements;
     StringViewMap<HandleStatement *> m_preparedStatements;
 

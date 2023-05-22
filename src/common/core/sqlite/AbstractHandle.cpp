@@ -229,6 +229,28 @@ void AbstractHandle::finalizeStatements()
 HandleStatement *AbstractHandle::getOrCreatePreparedStatement(const Statement &statement)
 {
     const StringView &sql = statement.getDescription();
+    HandleStatement *preparedStatement = getOrCreateStatement(sql);
+
+    if (preparedStatement == nullptr
+        || (!preparedStatement->isPrepared() && !preparedStatement->prepare(statement))) {
+        return nullptr;
+    }
+    return preparedStatement;
+}
+
+HandleStatement *AbstractHandle::getOrCreatePreparedStatement(const UnsafeStringView &sql)
+{
+    HandleStatement *preparedStatement = getOrCreateStatement(sql);
+
+    if (preparedStatement == nullptr
+        || (!preparedStatement->isPrepared() && !preparedStatement->prepare(sql))) {
+        return nullptr;
+    }
+    return preparedStatement;
+}
+
+HandleStatement *AbstractHandle::getOrCreateStatement(const UnsafeStringView &sql)
+{
     if (sql.length() == 0) {
         m_error.setCode(Error::Code::Error, "invalid statement");
         m_error.level = Error::Level::Error;
@@ -236,18 +258,15 @@ HandleStatement *AbstractHandle::getOrCreatePreparedStatement(const Statement &s
         return nullptr;
     }
     auto iter = m_preparedStatements.find(sql);
-    HandleStatement *preparedStatement;
+    HandleStatement *handleStatement;
     if (iter == m_preparedStatements.end()) {
-        preparedStatement = getStatement();
-        m_preparedStatements[sql] = preparedStatement;
+        handleStatement = getStatement();
+        m_preparedStatements[sql] = handleStatement;
     } else {
-        preparedStatement = iter->second;
+        handleStatement = iter->second;
     }
-    WCTAssert(preparedStatement != nullptr);
-    if (!preparedStatement->isPrepared() && !preparedStatement->prepare(statement)) {
-        return nullptr;
-    }
-    return preparedStatement;
+    WCTAssert(handleStatement != nullptr);
+    return handleStatement;
 }
 
 void AbstractHandle::returnAllPreparedStatement()

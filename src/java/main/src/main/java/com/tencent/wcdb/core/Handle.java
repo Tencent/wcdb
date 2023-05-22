@@ -67,12 +67,31 @@ public class Handle extends HandleORMOperation {
 
     native long getOrCreatePreparedStatement(long self, long statement);
 
+    public PreparedStatement getOrCreatePreparedStatement(String sql) throws WCDBException {
+        PreparedStatement preparedStatement = new PreparedStatement(getOrCreatePreparedStatementWithSQL(getCppHandle(), sql));
+        if(!preparedStatement.checkPrepared()) {
+            throw createException();
+        }
+        return preparedStatement;
+    }
+
+    native long getOrCreatePreparedStatementWithSQL(long self, String sql);
+
     public PreparedStatement preparedWithMainStatement(Statement statement) throws WCDBException {
         if(mainStatement == null) {
             mainStatement = new PreparedStatement(getMainStatement(getCppHandle()));
             mainStatement.autoFinalize = true;
         }
         mainStatement.prepare(statement);
+        return mainStatement;
+    }
+
+    public PreparedStatement preparedWithMainStatement(String sql) throws WCDBException {
+        if(mainStatement == null) {
+            mainStatement = new PreparedStatement(getMainStatement(getCppHandle()));
+            mainStatement.autoFinalize = true;
+        }
+        mainStatement.prepare(sql);
         return mainStatement;
     }
 
@@ -97,6 +116,8 @@ public class Handle extends HandleORMOperation {
     native int tableExist(long self, String tableName);
 
     native boolean execute(long self, long statement);
+
+    native boolean executeSQL(long self, String sql);
 
     public int getChanges() throws WCDBException {
         return getChanges(getCppHandle());

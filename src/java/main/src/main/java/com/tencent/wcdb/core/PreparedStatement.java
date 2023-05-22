@@ -52,6 +52,14 @@ public class PreparedStatement extends CppObject {
 
     private native boolean prepare(long self, long statement);
 
+    void prepare(String sql) throws WCDBException {
+        if(!prepareSQL(cppObj, sql)) {
+            throw createException();
+        }
+    }
+
+    private native boolean prepareSQL(long self, String sql);
+
     public boolean checkPrepared() {
         return checkPrepared(cppObj);
     }

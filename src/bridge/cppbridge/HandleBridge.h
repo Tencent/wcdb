@@ -39,8 +39,11 @@ bool WCDBHandleCheckValid(CPPHandle handle);
 CPPHandleStatement WCDBHandleGetMainStatement(CPPHandle handle);
 CPPHandleStatement
 WCDBHandleGetOrCreatePreparedStatement(CPPHandle handle, CPPObject* _Nonnull statement);
+CPPHandleStatement
+WCDBHandleGetOrCreatePreparedSQL(CPPHandle handle, const char* _Nonnull sql);
 void WCDBHandleFinalizeStatements(CPPHandle handle);
 bool WCDBHandleExecute(CPPHandle handle, CPPObject* _Nonnull statement);
+bool WCDBHandleExecuteSQL(CPPHandle handle, const char* _Nonnull sql);
 OptionalBool WCDBHandleExistTable(CPPHandle handle, const char* _Nonnull tableName);
 int WCDBHandleGetChange(CPPHandle handle);
 int WCDBHandleGetTotalChange(CPPHandle handle);

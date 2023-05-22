@@ -36,6 +36,15 @@ jboolean WCDBJNIHandleStatementObjectMethod(prepare, jlong self, jlong statement
     return WCDBHandleStatementPrepare(selfStruct, (CPPObject*) statement);
 }
 
+jboolean WCDBJNIHandleStatementObjectMethod(prepareSQL, jlong self, jstring sql)
+{
+    WCDBJNIBridgeStruct(CPPHandleStatement, self);
+    WCDBJNIGetString(sql);
+    jboolean ret = WCDBHandleStatementPrepareSQL(selfStruct, sqlString);
+    WCDBJNIReleaseString(sql);
+    return ret;
+}
+
 jboolean WCDBJNIHandleStatementObjectMethod(checkPrepared, jlong self)
 {
     WCDBJNIBridgeStruct(CPPHandleStatement, self);

@@ -46,10 +46,19 @@ jlong WCDBJNIHandleObjectMethod(getOrCreatePreparedStatement, jlong self, jlong 
     .innerValue;
 }
 
+jlong WCDBJNIHandleObjectMethod(getOrCreatePreparedStatementWithSQL, jlong self, jstring sql)
+{
+    WCDBJNIBridgeStruct(CPPHandle, self);
+    WCDBJNIGetString(sql);
+    jlong ret = (jlong) WCDBHandleGetOrCreatePreparedSQL(selfStruct, sqlString).innerValue;
+    WCDBJNIReleaseString(sql);
+    return ret;
+}
+
 jlong WCDBJNIHandleObjectMethod(getMainStatement, jlong self)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);
-    return (long) WCDBHandleGetMainStatement(selfStruct).innerValue;
+    return (jlong) WCDBHandleGetMainStatement(selfStruct).innerValue;
 }
 
 void WCDBJNIHandleObjectMethod(finalizeAllStatements, jlong self)
@@ -62,6 +71,15 @@ jboolean WCDBJNIHandleObjectMethod(execute, jlong self, jlong statement)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);
     return WCDBHandleExecute(selfStruct, (CPPObject *) statement);
+}
+
+jboolean WCDBJNIHandleObjectMethod(executeSQL, jlong self, jstring sql)
+{
+    WCDBJNIBridgeStruct(CPPHandle, self);
+    WCDBJNIGetString(sql);
+    jlong ret = (jlong) WCDBHandleExecuteSQL(selfStruct, sqlString);
+    WCDBJNIReleaseString(sql);
+    return ret;
 }
 
 jint WCDBJNIHandleObjectMethod(tableExist, jlong self, jstring table)

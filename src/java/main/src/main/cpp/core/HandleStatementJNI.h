@@ -36,6 +36,7 @@
 
 jlong WCDBJNIHandleStatementObjectMethod(getError, jlong self);
 jboolean WCDBJNIHandleStatementObjectMethod(prepare, jlong self, jlong statement);
+jboolean WCDBJNIHandleStatementObjectMethod(prepareSQL, jlong self, jstring sql);
 jboolean WCDBJNIHandleStatementObjectMethod(checkPrepared, jlong self);
 jboolean WCDBJNIHandleStatementObjectMethod(step, jlong self);
 void WCDBJNIHandleStatementObjectMethod(reset, jlong self);
