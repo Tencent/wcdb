@@ -205,13 +205,6 @@ public:
      */
     bool runPausableTransactionWithOneLoop(TransactionCallbackForOneLoop inTransaction);
 
-    /**
-     @brief Run a transaction in block.
-     @param inTransaction Operation inside transaction.
-     @return True only if current nest transaction is committed successfully.
-     */
-    bool runNestedTransaction(TransactionCallback inTransaction);
-
 protected:
     bool lazyRunTransaction(TransactionCallback inTransaction);
 

@@ -82,32 +82,4 @@
     return ret;
 }
 
-- (BOOL)beginNestedTransaction
-{
-    return _database->beginNestedTransaction();
-}
-
-- (BOOL)commitOrRollbackNestedTransaction
-{
-    return _database->commitOrRollbackNestedTransaction();
-}
-
-- (void)rollbackNestedTransaction
-{
-    return _database->rollbackNestedTransaction();
-}
-
-- (BOOL)runNestedTransaction:(WCDB_NO_ESCAPE WCTTransactionBlock)inTransaction
-{
-    WCTRemedialAssert(inTransaction, "Transaction block can't be null.", return NO;);
-    return _database->runNestedTransaction([&inTransaction, self](WCDB::InnerHandle *handle) -> bool {
-        @autoreleasepool {
-            WCTHandle *transactionHandle = [[WCTHandle alloc] initWithDatabase:self andUnsafeHandle:handle];
-            BOOL result = inTransaction(transactionHandle);
-            [transactionHandle invalidate];
-            return result;
-        }
-    });
-}
-
 @end

@@ -50,12 +50,8 @@ bool WCDBHandleIsInTransaction(CPPHandle handle);
 bool WCDBHandleBeginTransaction(CPPHandle handle);
 bool WCDBHandleCommitTransaction(CPPHandle handle);
 void WCDBHandleRollbackTransaction(CPPHandle handle);
-bool WCDBHandleBeginNestedTransaction(CPPHandle handle);
-bool WCDBHandleCommitNestedTransaction(CPPHandle handle);
-void WCDBHandleRollbackNestedTransaction(CPPHandle handle);
 
 bool WCDBHandleRunTransaction(CPPHandle handle, SwiftClosure* _Nullable transaction);
-bool WCDBHandleRunNestedTransaction(CPPHandle handle, SwiftClosure* _Nullable nestedTransaction);
 bool WCDBHandleRunPausableTransaction(CPPHandle handle, SwiftClosure* _Nullable pausableTransaction);
 
 WCDB_EXTERN_C_END

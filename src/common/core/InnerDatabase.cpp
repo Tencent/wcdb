@@ -423,52 +423,6 @@ bool InnerDatabase::runPausableTransactionWithOneLoop(const TransactionCallbackF
     return true;
 }
 
-bool InnerDatabase::beginNestedTransaction()
-{
-    RecyclableHandle handle = getHandle();
-    if (handle != nullptr) {
-        if (handle->beginNestedTransaction()) {
-            return true;
-        }
-        setThreadedError(handle->getError());
-    }
-    return false;
-}
-
-bool InnerDatabase::commitOrRollbackNestedTransaction()
-{
-    RecyclableHandle handle = getHandle();
-    WCTRemedialAssert(handle != nullptr,
-                      "Commit or rollback nested transaction should not be called without begin.",
-                      return false;);
-    if (handle->commitOrRollbackNestedTransaction()) {
-        return true;
-    }
-    setThreadedError(handle->getError());
-    return false;
-}
-
-void InnerDatabase::rollbackNestedTransaction()
-{
-    RecyclableHandle handle = getHandle();
-    WCTRemedialAssert(handle != nullptr,
-                      "Rollback nested transaction should not be called without begin.",
-                      return;);
-    handle->rollbackNestedTransaction();
-}
-
-bool InnerDatabase::runNestedTransaction(const TransactionCallback &transaction)
-{
-    // get threaded handle
-    RecyclableHandle handle = getHandle();
-    if (handle == nullptr) return false;
-    if (!handle->runNestedTransaction(transaction)) {
-        setThreadedError(handle->getError());
-        return false;
-    }
-    return true;
-}
-
 #pragma mark - File
 bool InnerDatabase::removeFiles()
 {
