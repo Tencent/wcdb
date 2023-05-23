@@ -44,22 +44,7 @@ public protocol TransactionInterface {
     /// Check whether the current database has begun a transaction in the current thread.
     var isInTransaction: Bool { get }
 
-    /// Separate interface of `run(nestedTransaction:)`
-    /// You should call `beginNestedTransaction`, `commitNestedTransaction`, `rollbackNestedTransaction` and all other operations in same thread.
-    /// - Throws: `Error`
-    func beginNestedTransaction() throws
-
-    /// Separate interface of `run(nestedTransaction:)`
-    /// You should call `beginNestedTransaction`, `commitNestedTransaction`, `rollbackNestedTransaction` and all other operations in same thread.
-    /// - Throws: `Error`
-    func commitNestedTransaction() throws
-
-    /// Separate interface of `run(nestedTransaction:)`
-    /// You should call `beginNestedTransaction`, `commitNestedTransaction`, `rollbackNestedTransaction` and all other operations in same thread.
-    /// Throws: `Error`
-    func rollbackNestedTransaction() throws
-
-    /// Run a  transaction in closure
+    /// Run a transaction in closure. Transaction supports nesting.
     ///
     ///     try database.run(transaction: { _ in
     ///         try database.insert(objects, intoTable: table)
@@ -81,17 +66,6 @@ public protocol TransactionInterface {
     /// - Throws: `Error`
     typealias ControlableTransactionClosure = (Handle) throws -> Bool
     func run(controllableTransaction: @escaping ControlableTransactionClosure) throws
-
-    /// Run a  nested transaction in closure
-    ///
-    ///     try database.run(nestedTransaction: { () throws -> Bool in
-    ///         try database.insert(objects, intoTable: table)
-    ///         return true // return true to commit transaction and return false to rollback transaction.
-    ///     })
-    ///
-    /// - Parameter transaction: Operation inside transaction
-    /// - Throws: `Error`
-    func run(nestedTransaction: @escaping ControlableTransactionClosure) throws
 
     typealias PausableTransactionClosure = (Handle, inout Bool, Bool) throws -> Void
     /// Run a pausable transaction in block.
@@ -146,25 +120,6 @@ extension TransactionInterface where Self: HandleRepresentable {
         return WCDBHandleIsInTransaction(handle.cppHandle)
     }
 
-    public func beginNestedTransaction() throws {
-        let handle = try getHandle()
-        if !WCDBHandleBeginNestedTransaction(handle.cppHandle) {
-            throw handle.getError()
-        }
-    }
-
-    public func commitNestedTransaction() throws {
-        let handle = try getHandle()
-        if !WCDBHandleCommitNestedTransaction(handle.cppHandle) {
-            throw handle.getError()
-        }
-    }
-
-    public func rollbackNestedTransaction() throws {
-        let handle = try getHandle()
-        WCDBHandleRollbackNestedTransaction(handle.cppHandle)
-    }
-
     public func run(transaction: @escaping TransactionClosure) throws {
         let handle = try getHandle()
         if handle.isInTransaction {
@@ -204,26 +159,6 @@ extension TransactionInterface where Self: HandleRepresentable {
         let transactionBlockImp = imp_implementationWithBlock(transactionBlock)
         let handle = try getHandle()
         if !WCDBHandleRunTransaction(handle.cppHandle, transactionBlockImp) && transactionRet {
-            throw handle.getError()
-        }
-    }
-
-    public func run(nestedTransaction: @escaping ControlableTransactionClosure) throws {
-        var transactionRet = true
-        let transactionBlock: @convention(block) (CPPHandle) -> Bool = {
-            cppHandle in
-            let handle = Handle(withCPPHandle: cppHandle, database: getDatabase())
-            var ret = true
-            do {
-                transactionRet = try nestedTransaction(handle)
-            } catch {
-                ret = false
-            }
-            return ret && transactionRet
-        }
-        let transactionBlockImp = imp_implementationWithBlock(transactionBlock)
-        let handle = try getHandle()
-        if !WCDBHandleRunNestedTransaction(handle.cppHandle, transactionBlockImp) {
             throw handle.getError()
         }
     }

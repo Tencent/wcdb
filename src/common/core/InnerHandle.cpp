@@ -379,18 +379,6 @@ bool InnerHandle::checkHasBusyRetry()
     return config->checkHasBusyRetry(getPath());
 }
 
-bool InnerHandle::runNestedTransaction(const TransactionCallback &transaction)
-{
-    if (beginNestedTransaction()) {
-        if (transaction(this)) {
-            return commitOrRollbackNestedTransaction();
-        } else {
-            rollbackNestedTransaction();
-        }
-    }
-    return false;
-}
-
 bool InnerHandle::runTransactionIfNotInTransaction(const TransactionCallback &transaction)
 {
     if (isInTransaction()) {

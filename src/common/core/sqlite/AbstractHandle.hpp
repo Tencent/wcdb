@@ -125,10 +125,6 @@ public:
     bool commitOrRollbackTransaction();
     virtual void rollbackTransaction();
 
-    bool beginNestedTransaction();
-    bool commitOrRollbackNestedTransaction();
-    void rollbackNestedTransaction();
-
     void markErrorNotAllowedWithinTransaction();
     bool isErrorAllowedWithinTransaction() const;
     bool checkMainThreadBusyRetry() const;

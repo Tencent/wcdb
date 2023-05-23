@@ -53,19 +53,12 @@ bool WCDBHandleIsInTransaction(CPPHandle handle);
 bool WCDBHandleBeginTransaction(CPPHandle handle);
 bool WCDBHandleCommitTransaction(CPPHandle handle);
 void WCDBHandleRollbackTransaction(CPPHandle handle);
-bool WCDBHandleBeginNestedTransaction(CPPHandle handle);
-bool WCDBHandleCommitNestedTransaction(CPPHandle handle);
-void WCDBHandleRollbackNestedTransaction(CPPHandle handle);
 
 bool WCDBHandleRunTransaction(CPPHandle handle, SwiftClosure* _Nullable transaction);
 typedef bool (*TransactionCallback)(void* _Nonnull context, CPPHandle handle);
 bool WCDBHandleRunTransaction2(CPPHandle handle,
                                void* _Nonnull context,
                                TransactionCallback _Nonnull transaction);
-bool WCDBHandleRunNestedTransaction(CPPHandle handle, SwiftClosure* _Nullable nestedTransaction);
-bool WCDBHandleRunNestedTransaction2(CPPHandle handle,
-                                     void* _Nonnull context,
-                                     TransactionCallback _Nonnull nestedTransaction);
 bool WCDBHandleRunPausableTransaction(CPPHandle handle, SwiftClosure* _Nullable pausableTransaction);
 typedef bool (*PausableTransaction)(void* _Nonnull context, CPPHandle, bool* _Nonnull, bool);
 bool WCDBHandleRunPausableTransaction2(CPPHandle handle,

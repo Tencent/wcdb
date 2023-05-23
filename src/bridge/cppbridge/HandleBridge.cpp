@@ -156,24 +156,6 @@ void WCDBHandleRollbackTransaction(CPPHandle handle)
     cppHandle->rollbackTransaction();
 }
 
-bool WCDBHandleBeginNestedTransaction(CPPHandle handle)
-{
-    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
-    return cppHandle->beginNestedTransaction();
-}
-
-bool WCDBHandleCommitNestedTransaction(CPPHandle handle)
-{
-    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
-    return cppHandle->commitOrRollbackNestedTransaction();
-}
-
-void WCDBHandleRollbackNestedTransaction(CPPHandle handle)
-{
-    WCDBGetObjectOrReturn(handle, WCDB::InnerHandle, cppHandle);
-    cppHandle->rollbackNestedTransaction();
-}
-
 bool WCDBHandleRunTransaction(CPPHandle handle, SwiftClosure* _Nullable transaction)
 {
     WCDBTransaction bridgeTransaction
@@ -197,33 +179,6 @@ bool WCDBHandleRunTransaction2(CPPHandle handle,
     return cppHandle->runTransaction([transaction, context](WCDB::InnerHandle* innerHandle) {
         CPPHandle bridgeHandle = WCDBCreateUnmanagedCPPObject(CPPHandle, innerHandle);
         return transaction(context, bridgeHandle);
-    });
-}
-
-bool WCDBHandleRunNestedTransaction(CPPHandle handle, SwiftClosure* _Nullable nestedTransaction)
-{
-    WCDBTransaction bridgeTransaction
-    = WCDBCreateSwiftBridgedClosure(WCDBTransaction, nestedTransaction);
-    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
-    if (WCDBGetSwiftClosure(bridgeTransaction) != nullptr) {
-        return cppHandle->runNestedTransaction([bridgeTransaction](WCDB::InnerHandle* innerHandle) {
-            CPPHandle bridgeHandle = WCDBCreateUnmanagedCPPObject(CPPHandle, innerHandle);
-            return WCDBSwiftClosureCallWithOneArgument(bridgeTransaction, bridgeHandle);
-        });
-    } else {
-        return false;
-    }
-}
-
-bool WCDBHandleRunNestedTransaction2(CPPHandle handle,
-                                     void* _Nonnull context,
-                                     TransactionCallback _Nonnull nestedTransaction)
-{
-    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, false);
-    return cppHandle->runNestedTransaction(
-    [nestedTransaction, context](WCDB::InnerHandle* innerHandle) {
-        CPPHandle bridgeHandle = WCDBCreateUnmanagedCPPObject(CPPHandle, innerHandle);
-        return nestedTransaction(context, bridgeHandle);
     });
 }
 

@@ -125,11 +125,6 @@ public:
     bool runTransaction(const TransactionCallback &transaction);
     bool runPausableTransactionWithOneLoop(const TransactionCallbackForOneLoop &transaction);
 
-    bool beginNestedTransaction();
-    bool commitOrRollbackNestedTransaction();
-    void rollbackNestedTransaction();
-    bool runNestedTransaction(const TransactionCallback &transaction);
-
 #pragma mark - File
 public:
     const StringView &getPath() const override;

@@ -324,7 +324,7 @@ bool MigratingHandleStatement::step()
     if (m_additionalStatement->isPrepared() || isMigratedPrepared()) {
         MigratingHandle* migratingHandle = dynamic_cast<MigratingHandle*>(getHandle());
         WCTAssert(migratingHandle != nullptr);
-        return migratingHandle->runNestedTransaction(
+        return migratingHandle->runTransaction(
         [this](InnerHandle*) -> bool { return realStep(); });
     }
     return realStep();
