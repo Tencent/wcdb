@@ -77,7 +77,7 @@ public abstract class HandleOperation extends CppObject {
         Handle handle = getHandle();
         try {
             if(rows.length > 1) {
-                handle.runTransaction(new Handle.Transaction() {
+                handle.runTransaction(new Transaction() {
                     @Override
                     public boolean insideTransaction(Handle handle) throws WCDBException {
                         insertRows(rows, insert, handle);
@@ -634,47 +634,6 @@ public abstract class HandleOperation extends CppObject {
         }
     }
 
-    public void beginNestedTransaction() throws WCDBException {
-        Handle handle = getHandle();
-        WCDBException exception = null;
-        if(!handle.beginNestedTransaction(handle.getCppHandle())) {
-            exception = handle.createException();
-        }
-        if(autoInvalidateHandle()) {
-            handle.invalidate();
-        }
-        if(exception != null) {
-            throw exception;
-        }
-    }
-
-    public void commitNestedTransaction() throws WCDBException {
-        Handle handle = getHandle();
-        WCDBException exception = null;
-        if(!handle.commitNestedTransaction(handle.getCppHandle())) {
-            exception = handle.createException();
-        }
-        if(autoInvalidateHandle()) {
-            handle.invalidate();
-        }
-        if(exception != null) {
-            throw exception;
-        }
-    }
-
-    public void rollbackNestedTransaction() throws WCDBException {
-        Handle handle = getHandle();
-        WCDBException exception = null;
-        handle.rollbackNestedTransaction(handle.getCppHandle());
-        if(autoInvalidateHandle()) {
-            handle.invalidate();
-        }
-    }
-
-    public interface Transaction {
-        boolean insideTransaction(Handle handle) throws WCDBException;
-    }
-
     public void runTransaction(Transaction transaction) throws WCDBException {
         Handle handle = getHandle();
         WCDBException exception = null;
@@ -687,24 +646,6 @@ public abstract class HandleOperation extends CppObject {
         if(exception != null) {
             throw exception;
         }
-    }
-
-    public void runNestedTransaction(Transaction transaction) throws WCDBException {
-        Handle handle = getHandle();
-        WCDBException exception = null;
-        if(!handle.runNestedTransaction(handle.getCppHandle(), transaction)) {
-            exception = handle.createException();
-        }
-        if(autoInvalidateHandle()) {
-            handle.invalidate();
-        }
-        if(exception != null) {
-            throw exception;
-        }
-    }
-
-    public interface PausableTransaction {
-        boolean insideTransaction(Handle handle, boolean isNewTransaction) throws WCDBException;
     }
 
     public void runPausableTransaction(PausableTransaction transaction) throws WCDBException {

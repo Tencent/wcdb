@@ -143,12 +143,6 @@ public class Handle extends HandleORMOperation {
 
     native void rollbackTransaction(long self);
 
-    native boolean beginNestedTransaction(long self);
-
-    native boolean commitNestedTransaction(long self);
-
-    native void rollbackNestedTransaction(long self);
-
     @Override
     Handle getHandle() {
         return this;
@@ -176,8 +170,6 @@ public class Handle extends HandleORMOperation {
     }
 
     native boolean runTransaction(long self, Transaction transaction);
-
-    native boolean runNestedTransaction(long self, Transaction transaction);
 
     private int onPausableTransaction(long cppHandle, PausableTransaction transaction, boolean isNewTransaction) {
         Handle handle = new Handle(cppHandle, database);

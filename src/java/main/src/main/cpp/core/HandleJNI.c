@@ -127,24 +127,6 @@ void WCDBJNIHandleObjectMethod(rollbackTransaction, jlong self)
     return WCDBHandleRollbackTransaction(selfStruct);
 }
 
-jboolean WCDBJNIHandleObjectMethod(beginNestedTransaction, jlong self)
-{
-    WCDBJNIBridgeStruct(CPPHandle, self);
-    return WCDBHandleBeginNestedTransaction(selfStruct);
-}
-
-jboolean WCDBJNIHandleObjectMethod(commitNestedTransaction, jlong self)
-{
-    WCDBJNIBridgeStruct(CPPHandle, self);
-    return WCDBHandleCommitNestedTransaction(selfStruct);
-}
-
-void WCDBJNIHandleObjectMethod(rollbackNestedTransaction, jlong self)
-{
-    WCDBJNIBridgeStruct(CPPHandle, self);
-    WCDBHandleRollbackNestedTransaction(selfStruct);
-}
-
 typedef struct TransactionContext {
     JNIEnv *env;
     jobject handle;
@@ -166,7 +148,7 @@ bool WCDBJNIHanldeTransactionCallBack(TransactionContext *context, CPPHandle han
     static jmethodID g_methodId = NULL;
     if (g_methodId == NULL) {
         g_methodId = (*env)->GetMethodID(
-        env, g_handleClass, "onTransaction", "(JLcom/tencent/wcdb/core/HandleOperation$Transaction;)Z");
+        env, g_handleClass, "onTransaction", "(JLcom/tencent/wcdb/core/Transaction;)Z");
         if (g_methodId == NULL) {
             assert(0);
             return false;
@@ -184,16 +166,6 @@ jboolean WCDBJNIHandleObjectMethod(runTransaction, jlong self, jobject transacti
     context.handle = obj;
     context.transaction = transaction;
     return WCDBHandleRunTransaction2(selfStruct, &context, WCDBJNIHanldeTransactionCallBack);
-}
-
-jboolean WCDBJNIHandleObjectMethod(runNestedTransaction, jlong self, jobject transaction)
-{
-    WCDBJNIBridgeStruct(CPPHandle, self);
-    TransactionContext context;
-    context.env = env;
-    context.handle = obj;
-    context.transaction = transaction;
-    return WCDBHandleRunNestedTransaction2(selfStruct, &context, WCDBJNIHanldeTransactionCallBack);
 }
 
 bool WCDBJNIHanldePausableTransactionCallBack(TransactionContext *context,
@@ -214,7 +186,7 @@ bool WCDBJNIHanldePausableTransactionCallBack(TransactionContext *context,
     static jmethodID g_methodId = NULL;
     if (g_methodId == NULL) {
         g_methodId = (*env)->GetMethodID(
-        env, g_handleClass, "onPausableTransaction", "(JLcom/tencent/wcdb/core/HandleOperation$PausableTransaction;Z)I");
+        env, g_handleClass, "onPausableTransaction", "(JLcom/tencent/wcdb/core/PausableTransaction;Z)I");
         if (g_methodId == NULL) {
             assert(0);
             return false;

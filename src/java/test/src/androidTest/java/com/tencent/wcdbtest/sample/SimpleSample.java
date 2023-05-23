@@ -29,6 +29,7 @@ import com.tencent.wcdb.core.Handle;
 import com.tencent.wcdb.core.HandleOperation;
 import com.tencent.wcdb.core.PreparedStatement;
 import com.tencent.wcdb.core.Table;
+import com.tencent.wcdb.core.Transaction;
 import com.tencent.wcdb.winq.Column;
 import com.tencent.wcdb.winq.Order;
 import com.tencent.wcdb.winq.Pragma;
@@ -81,7 +82,7 @@ public class SimpleSample extends CRUDTestCase {
         ArrayList<TestObject> objects = table.getAllObjects(DBTestObject.id.gt(100), DBTestObject.id.order(Order.Asc), 10);
 
         //执行事务
-        database.runTransaction(new HandleOperation.Transaction() {
+        database.runTransaction(new Transaction() {
             @Override
             public boolean insideTransaction(Handle handle) throws WCDBException {
                 //上面那些接口都能用，也可以用一些高阶接口，直接拼sql对象，来使用全部的sql能力

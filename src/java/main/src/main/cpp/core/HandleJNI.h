@@ -52,10 +52,6 @@ jboolean WCDBJNIHandleObjectMethod(isInTransaction, jlong self);
 jboolean WCDBJNIHandleObjectMethod(beginTransaction, jlong self);
 jboolean WCDBJNIHandleObjectMethod(commitTransaction, jlong self);
 void WCDBJNIHandleObjectMethod(rollbackTransaction, jlong self);
-jboolean WCDBJNIHandleObjectMethod(beginNestedTransaction, jlong self);
-jboolean WCDBJNIHandleObjectMethod(commitNestedTransaction, jlong self);
-void WCDBJNIHandleObjectMethod(rollbackNestedTransaction, jlong self);
 
 jboolean WCDBJNIHandleObjectMethod(runTransaction, jlong self, jobject transaction);
-jboolean WCDBJNIHandleObjectMethod(runNestedTransaction, jlong self, jobject transaction);
 jboolean WCDBJNIHandleObjectMethod(runPausableTransaction, jlong self, jobject transaction);

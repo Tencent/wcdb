@@ -78,7 +78,7 @@ public class TableOperation {
         Handle handle = database.getHandle();
         try {
             if(rows.length > 1) {
-                handle.runTransaction(new Handle.Transaction() {
+                handle.runTransaction(new Transaction() {
                     @Override
                     public boolean insideTransaction(Handle handle) throws WCDBException {
                         insertRows(rows, insert, handle);

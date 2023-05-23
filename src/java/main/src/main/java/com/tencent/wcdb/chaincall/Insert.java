@@ -26,6 +26,7 @@ package com.tencent.wcdb.chaincall;
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.core.Handle;
 import com.tencent.wcdb.core.PreparedStatement;
+import com.tencent.wcdb.core.Transaction;
 import com.tencent.wcdb.orm.Field;
 import com.tencent.wcdb.orm.TableBinding;
 import com.tencent.wcdb.winq.StatementInsert;
@@ -80,7 +81,7 @@ public class Insert<T> extends ChainCall<StatementInsert> {
         assert fields != null && fields.length > 0;
         try {
             if (values.length > 1) {
-                handle.runTransaction(new Handle.Transaction() {
+                handle.runTransaction(new Transaction() {
                     @Override
                     public boolean insideTransaction(Handle handle) throws WCDBException {
                         realExecute();
