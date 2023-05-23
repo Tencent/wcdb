@@ -42,7 +42,7 @@ public class Handle extends HandleORMOperation {
         if(cppObj == 0) {
             assert database != null;
             cppObj = database.getHandle(database.getCppObj());
-            if(!checkValid(cppObj)) {
+            if(cppObj == 0) {
                 throw database.createException();
             }
         }
@@ -55,24 +55,22 @@ public class Handle extends HandleORMOperation {
 
     native long getError(long self);
 
-    static native boolean checkValid(long self);
-
     public PreparedStatement getOrCreatePreparedStatement(Statement statement) throws WCDBException {
-        PreparedStatement preparedStatement = new PreparedStatement(getOrCreatePreparedStatement(getCppHandle(), statement.getCppObj()));
-        if(!preparedStatement.checkPrepared()) {
+        long cppPreparedStatement = getOrCreatePreparedStatement(getCppHandle(), statement.getCppObj());
+        if(cppPreparedStatement == 0) {
             throw createException();
         }
-        return preparedStatement;
+        return new PreparedStatement(cppPreparedStatement);
     }
 
     native long getOrCreatePreparedStatement(long self, long statement);
 
     public PreparedStatement getOrCreatePreparedStatement(String sql) throws WCDBException {
-        PreparedStatement preparedStatement = new PreparedStatement(getOrCreatePreparedStatementWithSQL(getCppHandle(), sql));
-        if(!preparedStatement.checkPrepared()) {
+        long cppPreparedStatement = getOrCreatePreparedStatementWithSQL(getCppHandle(), sql);
+        if(cppPreparedStatement == 0) {
             throw createException();
         }
-        return preparedStatement;
+        return new PreparedStatement(cppPreparedStatement);
     }
 
     native long getOrCreatePreparedStatementWithSQL(long self, String sql);

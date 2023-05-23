@@ -467,7 +467,6 @@ static const JNINativeMethod g_handleStatementMethods[] = {
 
 static const JNINativeMethod g_handleMethods[] = {
     { "getError", "(J)J", (void *) WCDBJNIHandleFuncName(getError) },
-    { "checkValid", "(J)Z", (void *) WCDBJNIHandleFuncName(checkValid) },
     { "getOrCreatePreparedStatement", "(JJ)J", (void *) WCDBJNIHandleFuncName(getOrCreatePreparedStatement) },
     { "getOrCreatePreparedStatementWithSQL",
       "(J" WCDBJNIStringSignature ")J",

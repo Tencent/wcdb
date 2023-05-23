@@ -118,6 +118,11 @@ CPPHandle WCDBDatabaseGetHandle(CPPDatabase database)
 {
     WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, CPPHandle());
     WCDB::RecyclableHandle cppHandle = cppDatabase->getHandle();
+    if (cppHandle == nullptr) {
+        CPPHandle invalidHandle;
+        invalidHandle.innerValue = NULL;
+        return invalidHandle;
+    }
     return WCDBCreateRecylableCPPObject(CPPHandle, cppHandle);
 }
 

@@ -36,7 +36,6 @@
     WCDBJNIClassMethod(Handle, funcName, __VA_ARGS__)
 
 jlong WCDBJNIHandleObjectMethod(getError, jlong self);
-jboolean WCDBJNIHandleClassMethod(checkValid, jlong self);
 jlong WCDBJNIHandleObjectMethod(getOrCreatePreparedStatement, jlong self, jlong statement);
 jlong WCDBJNIHandleObjectMethod(getOrCreatePreparedStatementWithSQL, jlong self, jstring sql);
 jlong WCDBJNIHandleObjectMethod(getMainStatement, jlong self);

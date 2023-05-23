@@ -119,7 +119,7 @@ public:
         });
     }
 
-    static CPPObject* _Nonnull createUnmanagedCPPObject(void* _Nonnull obj);
+    static CPPObject* _Nullable createUnmanagedCPPObject(void* _Nullable obj);
 
     template<typename T>
     static CPPObject* _Nonnull copyCPPObject(T&& obj, bool isRecyclable = false)

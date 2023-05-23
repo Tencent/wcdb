@@ -33,12 +33,6 @@ jlong WCDBJNIHandleObjectMethod(getError, jlong self)
     return (jlong) WCDBHandleGetError(selfStruct).innerValue;
 }
 
-jboolean WCDBJNIHandleClassMethod(checkValid, jlong self)
-{
-    WCDBJNIBridgeStruct(CPPHandle, self);
-    return WCDBHandleCheckValid(selfStruct);
-}
-
 jlong WCDBJNIHandleObjectMethod(getOrCreatePreparedStatement, jlong self, jlong statement)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);

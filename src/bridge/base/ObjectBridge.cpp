@@ -41,8 +41,11 @@ void WCDBReleaseCPPObject(CPPObject* _Nonnull obj)
 
 namespace WCDB {
 
-CPPObject* _Nonnull ObjectBridge::createUnmanagedCPPObject(void* _Nonnull obj)
+CPPObject* _Nullable ObjectBridge::createUnmanagedCPPObject(void* _Nullable obj)
 {
+    if (obj == nullptr) {
+        return nullptr;
+    }
     CPPObject* cppObj = (CPPObject*) malloc(sizeof(CPPObject));
     cppObj->realValue = obj;
     cppObj->isRecyclableObj = false;
