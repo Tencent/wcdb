@@ -363,20 +363,6 @@ bool HandleOperation::runPausableTransactionWithOneLoop(TransactionCallbackForOn
     return succeed;
 }
 
-bool HandleOperation::runNestedTransaction(TransactionCallback inTransaction)
-{
-    GetHandleOrReturnValue(false);
-    bool succeed
-    = handle->runNestedTransaction([inTransaction, this](InnerHandle *innerHandle) {
-          Handle handle = Handle(getDatabaseHolder(), innerHandle);
-          return inTransaction(handle);
-      });
-    if (!succeed) {
-        assignErrorToDatabase(handle->getError());
-    }
-    return succeed;
-}
-
 Optional<bool> HandleOperation::tableExists(const UnsafeStringView &tableName)
 {
     Optional<bool> result;

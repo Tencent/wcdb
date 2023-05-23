@@ -67,7 +67,7 @@ typedef BOOL (^WCTTransactionBlockForOneLoop)(WCTHandle* /*handle*/, BOOL* /*sto
 - (void)rollbackTransaction;
 
 /**
- @brief Run a transaction in block.
+ @brief Run a transaction in block. Transaction supports nesting.
  @param inTransaction Operation inside transaction.
  @return YES only if current transaction is committed successfully.
  */
@@ -99,34 +99,6 @@ typedef BOOL (^WCTTransactionBlockForOneLoop)(WCTHandle* /*handle*/, BOOL* /*sto
  @return YES only if all transactions are committed.
  */
 - (BOOL)runPausableTransactionWithOneLoop:(WCDB_NO_ESCAPE WCTTransactionBlockForOneLoop)inTransaction;
-
-/**
- @brief Separate interface of `-[WCTTransactionProtocol runNestedTransaction:]`.
- @warning You should call `beginNestedTransaction`, `commitOrRollbackNestedTransaction`, `rollbackNestedTransaction` and all other operations in same thread.
- @return YES only if no error occurs.
- */
-- (BOOL)beginNestedTransaction;
-
-/**
- @brief Separate interface of `-[WCTTransactionProtocol runNestedTransaction:]`.
- It will commit current nest transaction if no error occurs during the nest transaction, otherwise it will rollback current nest transaction.
- @warning You should call `beginNestedTransaction`, `commitOrRollbackNestedTransaction`, `rollbackNestedTransaction` and all other operations in same thread.
- @return YES only if current nest transaction is committed successfully.
- */
-- (BOOL)commitOrRollbackNestedTransaction;
-
-/**
- @brief Separate interface of `-[WCTTransactionProtocol runNestedTransaction:]`.
- @warning You should call `beginNestedTransaction`, `commitOrRollbackNestedTransaction`, `rollbackNestedTransaction` and all other operations in same thread.
- */
-- (void)rollbackNestedTransaction;
-
-/**
- @brief Run a transaction in block.
- @param inTransaction Operation inside transaction.
- @return YES only if current nest transaction is committed successfully.
- */
-- (BOOL)runNestedTransaction:(WCDB_NO_ESCAPE WCTTransactionBlock)inTransaction;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -122,7 +122,6 @@ public:
     bool checkHasBusyRetry();
     bool runTransaction(const TransactionCallback &transaction);
     bool runTransactionIfNotInTransaction(const TransactionCallback &transaction);
-    bool runNestedTransaction(const TransactionCallback &transaction);
     bool runPausableTransactionWithOneLoop(const TransactionCallbackForOneLoop &transaction);
 
     void configTransactionEvent(TransactionEvent *event);

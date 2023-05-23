@@ -411,14 +411,17 @@ StringView AbstractHandle::getSavepointName(int transactionLevel)
     return StringView::formatted("wcdb_lv_%d", transactionLevel);
 }
 
-bool AbstractHandle::beginNestedTransaction()
+bool AbstractHandle::beginTransaction()
 {
     bool succeed = true;
     if (isInTransaction()) {
         if (m_transactionLevel == 0) {
             m_transactionLevel = 1;
         }
-
+    } else {
+        m_transactionLevel = 0;
+    }
+    if (m_transactionLevel > 0) {
         if (m_transactionError == TransactionError::Allowed) {
             succeed = executeStatement(
             StatementSavepoint().savepoint(getSavepointName(m_transactionLevel + 1)));
@@ -426,66 +429,16 @@ bool AbstractHandle::beginNestedTransaction()
         if (succeed) {
             ++m_transactionLevel;
         }
+        return succeed;
     } else {
-        succeed = beginTransaction();
-    }
-    return succeed;
-}
-
-bool AbstractHandle::commitOrRollbackNestedTransaction()
-{
-    bool succeed = true;
-    if (isInTransaction()) {
-        if (m_transactionLevel == 1) {
-            succeed = commitOrRollbackTransaction();
-        } else {
-            if (m_transactionError == TransactionError::Allowed) {
-                succeed = executeStatement(
-                StatementRelease().release(getSavepointName(m_transactionLevel)));
-            }
-            if (succeed) {
-                --m_transactionLevel;
-            } else {
-                rollbackNestedTransaction();
-            }
+        static const StatementBegin *s_beginImmediate
+        = new StatementBegin(StatementBegin().beginImmediate());
+        succeed = executeStatement(*s_beginImmediate);
+        if (succeed) {
+            m_transactionLevel = 1;
         }
+        return succeed;
     }
-    return succeed;
-}
-
-void AbstractHandle::rollbackNestedTransaction()
-{
-    if (isInTransaction()) {
-        if (m_transactionLevel == 1) {
-            rollbackTransaction();
-        } else {
-            bool succeed = true;
-            if (m_transactionError == TransactionError::Allowed) {
-                sqlite3_unimpeded(m_handle, true);
-                succeed = executeStatement(StatementRollback().rollbackToSavepoint(
-                getSavepointName(m_transactionLevel)));
-                sqlite3_unimpeded(m_handle, false);
-            }
-            if (succeed) {
-                --m_transactionLevel;
-            }
-        }
-    }
-}
-
-bool AbstractHandle::beginTransaction()
-{
-    WCTRemedialAssert(!isInTransaction(),
-                      "Last transaction is not committed or rollbacked.",
-                      rollbackTransaction(););
-
-    static const StatementBegin *s_beginImmediate
-    = new StatementBegin(StatementBegin().beginImmediate());
-    bool succeed = executeStatement(*s_beginImmediate);
-    if (succeed) {
-        m_transactionLevel = 1;
-    }
-    return succeed;
 }
 
 bool AbstractHandle::commitOrRollbackTransaction()
@@ -506,6 +459,17 @@ bool AbstractHandle::commitOrRollbackTransaction()
 
 bool AbstractHandle::commitTransaction()
 {
+    bool succeed = true;
+    if (m_transactionLevel > 1) {
+        if (m_transactionError == TransactionError::Allowed && isInTransaction()) {
+            succeed = executeStatement(
+            StatementRelease().release(getSavepointName(m_transactionLevel)));
+        }
+        if (succeed) {
+            --m_transactionLevel;
+        }
+        return succeed;
+    }
     /*
     All statements must be reset before commit or rollback,
     because sqlite will downgrade handle to a read-only transaction state
@@ -513,7 +477,6 @@ bool AbstractHandle::commitTransaction()
     Please see the comment of btreeEndTransaction for more information.
     */
     resetAllStatements();
-    bool succeed = true;
     // Transaction can be removed automatically in some case. e.g. interrupt step
     if (isInTransaction()) {
         static const StatementCommit *s_commit
@@ -530,6 +493,19 @@ bool AbstractHandle::commitTransaction()
 
 void AbstractHandle::rollbackTransaction()
 {
+    bool succeed = true;
+    if (m_transactionLevel > 1) {
+        if (m_transactionError == TransactionError::Allowed && isInTransaction()) {
+            sqlite3_unimpeded(m_handle, true);
+            succeed = executeStatement(StatementRollback().rollbackToSavepoint(
+            getSavepointName(m_transactionLevel)));
+            sqlite3_unimpeded(m_handle, false);
+        }
+        if (succeed) {
+            --m_transactionLevel;
+        }
+        return;
+    }
     /*
     All statements must be reset before commit or rollback,
     because sqlite will downgrade handle to a read-only transaction state
@@ -537,7 +513,6 @@ void AbstractHandle::rollbackTransaction()
     Please see the comment of btreeEndTransaction for more information.
     */
     resetAllStatements();
-    bool succeed = true;
     // Transaction can be removed automatically in some case. e.g. interrupt step
     if (isInTransaction()) {
         static const StatementRollback *s_rollback

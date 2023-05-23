@@ -103,43 +103,4 @@
     return ret;
 }
 
-- (BOOL)beginNestedTransaction
-{
-    BOOL succeed = NO;
-    WCDB::InnerHandle *handle = [self getOrGenerateHandle];
-    if (handle != nullptr) {
-        succeed = handle->beginNestedTransaction();
-    }
-    return succeed;
-}
-
-- (BOOL)commitOrRollbackNestedTransaction
-{
-    WCDB::InnerHandle *handle = [self getOrGenerateHandle];
-    WCTRemedialAssert(handle != nullptr && handle->isInTransaction(), "Commit or rollback transaction should be called only after beginTransaction called.", return NO;);
-    return handle->commitOrRollbackNestedTransaction();
-}
-
-- (void)rollbackNestedTransaction
-{
-    WCDB::InnerHandle *handle = [self getOrGenerateHandle];
-    WCTRemedialAssert(handle != nullptr && handle->isInTransaction(), "Rollback transaction should be called only after beginTransaction called.", return;);
-    return handle->rollbackNestedTransaction();
-}
-
-- (BOOL)runNestedTransaction:(WCDB_NO_ESCAPE WCTTransactionBlock)inTransaction
-{
-    WCTRemedialAssert(inTransaction, "Transaction block can't be null.", return NO;);
-    BOOL succeed = NO;
-    WCDB::InnerHandle *handle = [self getOrGenerateHandle];
-    if (handle != nullptr) {
-        succeed = handle->runNestedTransaction([&inTransaction, self](WCDB::InnerHandle *) -> bool {
-            @autoreleasepool {
-                return inTransaction(self);
-            }
-        });
-    }
-    return succeed;
-}
-
 @end
