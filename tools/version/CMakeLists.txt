@@ -297,10 +297,17 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
             ${WCDB_SRC_DIR}/cpp/*/Update.hpp
             ${WCDB_SRC_DIR}/cpp/WCDBCpp.h
         )
+
+if (WCONAN_MODE)
+    set(EXPORT_PUBLIC_HEADERS_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../WeChat/export_headers)
+else ()
+    set(EXPORT_PUBLIC_HEADERS_PATH ${CMAKE_CURRENT_BINARY_DIR}/export_headers)
+endif()
+
 # export public headers
-file(REMOVE_RECURSE ${CMAKE_CURRENT_BINARY_DIR}/export_headers)
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/export_headers/WCDB)
-file(COPY ${WCDB_PUBLIC_HEADERS} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/export_headers/WCDB)
+file(REMOVE_RECURSE ${EXPORT_PUBLIC_HEADERS_PATH})
+file(MAKE_DIRECTORY ${EXPORT_PUBLIC_HEADERS_PATH}/WCDB)
+file(COPY ${WCDB_PUBLIC_HEADERS} DESTINATION ${EXPORT_PUBLIC_HEADERS_PATH}/WCDB)
 
 # copy all headers to include
 file(GLOB_RECURSE WCDB_COMMON_HEADERS
@@ -344,36 +351,6 @@ set(SQLCIPHER_COMPILE_DEFS)
 set(SQLCIPHER_SRC_ROOT)
 set(LIB_SQLCIPHER sqlcipher)
 include(sqlcipher.cmake)
-
-set(SQLCIPHER_SYSTEM_DEFS)
-set(SQLCIPHER_SYSTEM_SRC)
-
-if (ANDROID OR LINUX)
-    list(APPEND SQLCIPHER_SYSTEM_DEFS
-            SQLCIPHER_CRYPTO_OPENSSL=1
-            SQLITE_OS_UNIX=1)
-    list(APPEND SQLCIPHER_SYSTEM_SRC
-            ${SQLCIPHER_SRC_ROOT}/src/crypto.c
-            ${SQLCIPHER_SRC_ROOT}/src/crypto_impl.c
-            ${SQLCIPHER_SRC_ROOT}/src/crypto_openssl.c
-            ${SQLCIPHER_SRC_ROOT}/src/mutex_unix.c
-            ${SQLCIPHER_SRC_ROOT}/src/os_unix.c)
-elseif (WIN32)
-    list(APPEND SQLCIPHER_SYSTEM_DEFS
-            SQLCIPHER_CRYPTO_OPENSSL=1
-            SQLITE_OS_WIN=1)
-    list(APPEND SQLCIPHER_SYSTEM_SRC
-            ${SQLCIPHER_SRC_ROOT}/src/crypto.c
-            ${SQLCIPHER_SRC_ROOT}/src/crypto_impl.c
-            ${SQLCIPHER_SRC_ROOT}/src/crypto_openssl.c
-            ${SQLCIPHER_SRC_ROOT}/src/mutex_w32.c
-            ${SQLCIPHER_SRC_ROOT}/src/os_win.c)
-endif ()
-
-target_compile_definitions(${LIB_SQLCIPHER} PRIVATE
-        ${SQLCIPHER_SYSTEM_DEFS})
-target_sources(${LIB_SQLCIPHER} PRIVATE
-        ${SQLCIPHER_SYSTEM_SRC})
 
 add_library(${TARGET_NAME} ${WCDB_ALL_SRCS})
 
