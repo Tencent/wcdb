@@ -28,7 +28,10 @@
 #include "SharedThreadedErrorProne.hpp"
 #include "StringView.hpp"
 #include <cstddef>
+#include <thread>
+#if defined(__APPLE__) || defined(__linux__) || defined(__ANDROID__)
 #include <pthread.h>
+#endif
 
 namespace WCDB {
 
@@ -40,27 +43,33 @@ public:
     Thread& operator=(const std::nullptr_t&);
 
 private:
-    Thread(pthread_t id);
+    Thread(std::thread::id id
+#if defined(__APPLE__)
+           ,
+           pthread_t pthreadId
+#endif
+    );
     friend class Conditional;
-    pthread_t m_id;
+    std::thread::id m_id;
+#if defined(__APPLE__)
+    pthread_t m_pthreadId;
+#endif
+    static std::thread::id m_uiThreadId;
 
 #pragma mark - Which
 public:
     static Thread current();
     static bool isMain();
+    static void setUIThreadId(std::thread::id threadId);
     bool isCurrentThread() const;
 
     bool equal(const Thread& other) const;
     bool operator==(const Thread& other) const;
 
 private:
-    static bool pthreadEqual(pthread_t left, pthread_t right);
-
 #pragma mark - Name
 public:
     static void setName(const UnsafeStringView& name);
-    StringView getName();
-    uint64_t getIdentifier();
 
 private:
     static constexpr int maxLengthOfAllowedThreadName();

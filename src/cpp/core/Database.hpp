@@ -30,6 +30,7 @@
 #include "HandleORMOperation.hpp"
 #include "Statement.hpp"
 #include "TokenizerModule.hpp"
+#include <thread>
 
 namespace WCDB {
 
@@ -153,6 +154,14 @@ public:
      @brief Checkpoint the current database with passive mode.
      */
     bool passiveCheckpoint();
+
+#if defined(_WIN32)
+    /**
+     @brief Config the id of UI thread.
+     When multiple threads compete for the lock of the database, the UI thread can acquire the lock with high priority.
+     */
+    static void setUIThreadId(std::thread::id uiThreadId);
+#endif
 
 #pragma mark - Monitor
 public:

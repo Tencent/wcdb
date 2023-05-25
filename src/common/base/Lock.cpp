@@ -47,7 +47,7 @@ bool Conditional::wait_for(std::unique_lock<std::mutex> &lockGuard, double secon
 #ifdef __APPLE__
 void Conditional::notify(const Thread &thread)
 {
-    pthread_cond_signal_thread_np(native_handle(), thread.m_id);
+    pthread_cond_signal_thread_np(native_handle(), thread.m_pthreadId);
 }
 #endif
 
