@@ -36,9 +36,15 @@ import java.util.ArrayList;
 
 public class TableORMOperation<T> extends TableOperation {
     TableBinding<T> binding = null;
+
     TableORMOperation() {
         super();
     }
+
+    public TableBinding<T> getBinding() {
+        return binding;
+    }
+
     public Insert<T> prepareInsert() {
         Insert<T> insert = new Insert<T>(database.getHandle());
         insert.autoInvalidateHandle = true;

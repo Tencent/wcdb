@@ -44,6 +44,14 @@ public class TableOperation {
     TableOperation(){
     }
 
+    public String getTableName() {
+        return tableName;
+    }
+
+    public Database getDatabase() {
+        return database;
+    }
+
     public void insertRow(Value[] row, Column[] columns) throws WCDBException {
         insertRows(new Value[][]{row}, columns);
     }
