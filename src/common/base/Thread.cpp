@@ -26,28 +26,41 @@
 #include "Error.hpp"
 #include "Notifier.hpp"
 #include <cstring>
-#include <pthread.h>
-#ifndef __APPLE__
+#if !defined(__APPLE__) && !defined(_WIN32)
 #include "CrossPlatform.h"
 #endif
 
 namespace WCDB {
 
 #pragma mark - Initialize
-Thread::Thread(pthread_t id) : m_id(id)
-{
-}
-
-// pthread_t in linux/android is a typedef of long
-// use NULL to keep compatability
-Thread::Thread() : Thread(NULL)
+Thread::Thread(std::thread::id threadId
+#if defined(__APPLE__)
+               ,
+               pthread_t pthreadId
+#endif
+               )
+: m_id(threadId)
+#if defined(__APPLE__)
+, m_pthreadId(pthreadId)
+#endif
 {
 }
 
 Thread& Thread::operator=(const std::nullptr_t&)
 {
-    m_id = NULL;
+    m_id = std::thread::id();
+#if defined(__APPLE__)
+    m_pthreadId = nullptr;
+#endif
     return *this;
+}
+
+Thread::Thread()
+: m_id()
+#if defined(__APPLE__)
+, m_pthreadId(nullptr)
+#endif
+{
 }
 
 Thread::~Thread() = default;
@@ -55,22 +68,32 @@ Thread::~Thread() = default;
 #pragma mark - Which
 Thread Thread::current()
 {
-    return Thread(pthread_self());
+#if defined(__APPLE__)
+    return Thread(std::this_thread::get_id(), pthread_self());
+#else
+    return Thread(std::this_thread::get_id());
+#endif
 }
 
 bool Thread::isMain()
 {
+#if defined(__APPLE__) || defined(__linux__) || defined(__ANDROID__)
     return pthread_main_np() != 0;
+#elif defined(_WIN32)
+    return std::this_thread::get_id() == m_uiThreadId;
+#else
+    return false;
+#endif
 }
 
 bool Thread::isCurrentThread() const
 {
-    return pthreadEqual(m_id, pthread_self());
+    return m_id == std::this_thread::get_id();
 }
 
 bool Thread::equal(const Thread& other) const
 {
-    return pthreadEqual(m_id, other.m_id);
+    return m_id == other.m_id;
 }
 
 bool Thread::operator==(const Thread& other) const
@@ -78,9 +101,11 @@ bool Thread::operator==(const Thread& other) const
     return equal(other);
 }
 
-bool Thread::pthreadEqual(pthread_t left, pthread_t right)
+std::thread::id Thread::m_uiThreadId;
+
+void Thread::setUIThreadId(std::thread::id threadId)
 {
-    return pthread_equal(left, right) != 0;
+    m_uiThreadId = threadId;
 }
 
 #pragma mark - Name
@@ -91,31 +116,14 @@ constexpr int Thread::maxLengthOfAllowedThreadName()
 
 void Thread::setName(const UnsafeStringView& name)
 {
+#if defined(__APPLE__) || defined(__linux__) || defined(__ANDROID__)
     char buffer[maxLengthOfAllowedThreadName()];
     memset(buffer, 0, maxLengthOfAllowedThreadName());
     memcpy(buffer, name.data(), name.length());
     if (pthread_setname_np(buffer) != 0) {
         setThreadedError();
     }
-}
-
-StringView Thread::getName()
-{
-    char buffer[maxLengthOfAllowedThreadName()];
-    memset(buffer, 0, maxLengthOfAllowedThreadName());
-    if (pthread_getname_np(m_id, buffer, maxLengthOfAllowedThreadName()) != 0) {
-        setThreadedError();
-    }
-    return StringView(buffer);
-}
-
-uint64_t Thread::getIdentifier()
-{
-    uint64_t identifier = 0;
-    if (pthread_threadid_np(m_id, &identifier) != 0) {
-        setThreadedError();
-    }
-    return identifier;
+#endif
 }
 
 #pragma mark - Error
