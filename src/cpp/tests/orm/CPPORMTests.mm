@@ -240,7 +240,7 @@
     }
     // remap
     {
-        NSArray<NSString*>* expected = @[ @"PRAGMA table_info('testTable')", @"ALTER TABLE main.testTable ADD COLUMN newValue INTEGER", @"CREATE INDEX IF NOT EXISTS testTable_index ON testTable(value)" ];
+        NSArray<NSString*>* expected = @[ @"PRAGMA main.table_info('testTable')", @"ALTER TABLE main.testTable ADD COLUMN newValue INTEGER", @"CREATE INDEX IF NOT EXISTS testTable_index ON testTable(value)" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected
                                           inOperation:^BOOL {
                                               return CPPTestTableCreate<CPPNewRemapObject>(self);
@@ -259,7 +259,7 @@
     }
     // remap
     {
-        NSArray<NSString*>* expected = @[ @"PRAGMA table_info('testTable')", @"ALTER TABLE testTable ADD COLUMN newValue INTEGER" ];
+        NSArray<NSString*>* expected = @[ @"PRAGMA main.table_info('testTable')", @"ALTER TABLE main.testTable ADD COLUMN newValue INTEGER" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected
                                           inOperation:^BOOL {
                                               return CPPTestTableCreate<CPPNewlyCreatedTableIndexObject>(self);
@@ -276,7 +276,7 @@
     }
     // drop index
     {
-        NSArray<NSString*>* expected = @[ @"PRAGMA table_info('testTable')", @"DROP INDEX IF EXISTS testTable_index" ];
+        NSArray<NSString*>* expected = @[ @"PRAGMA main.table_info('testTable')", @"DROP INDEX IF EXISTS testTable_index" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected
                                           inOperation:^BOOL {
                                               return CPPTestTableCreate<CPPDropIndexObject>(self);
