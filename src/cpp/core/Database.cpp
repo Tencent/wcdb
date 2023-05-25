@@ -161,6 +161,13 @@ bool Database::passiveCheckpoint()
     return m_innerDatabase->checkpoint(false, InnerDatabase::CheckPointMode::Passive);
 }
 
+#if defined(_WIN32)
+void Database::setUIThreadId(std::thread::id uiThreadId)
+{
+    Thread::setUIThreadId(uiThreadId);
+}
+#endif
+
 void Database::globalTraceError(Database::ErrorNotification trace)
 {
     Core::shared().setNotificationWhenErrorTraced(trace);
