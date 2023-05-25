@@ -405,6 +405,17 @@ else ()
         target_link_directories(${LIB_SQLCIPHER} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../prebuild/zlib/linux/x86_64)
         target_link_directories(${LIB_SQLCIPHER} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../prebuild/openssl/linux/arm64)
         target_link_directories(${LIB_SQLCIPHER} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../prebuild/openssl/linux/x86_64)
+    elseif(WIN32)
+        target_include_directories(${LIB_SQLCIPHER} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../prebuild/openssl/include)
+        target_include_directories(${LIB_SQLCIPHER} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../prebuild/zlib/include)
+        if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+            target_link_directories(${LIB_SQLCIPHER} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../prebuild/zlib/windows/win64)
+            target_link_directories(${LIB_SQLCIPHER} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../prebuild/openssl/windows/win64)
+        else ()
+            target_link_directories(${LIB_SQLCIPHER} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../prebuild/zlib/windows/win32)
+            target_link_directories(${LIB_SQLCIPHER} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../prebuild/openssl/windows/win32)
+        endif()
+
     endif()
 endif ()
 
@@ -426,8 +437,10 @@ elseif (WIN32)
     message(STATUS "---- BUILD FOR WINDOWS ----")
     target_link_libraries(${TARGET_NAME} PRIVATE
             ${LINK_LIBRARIES}
-            crypto
-            z)
+            libcrypto
+            zlibstatic
+            Crypt32
+            Ws2_32)
 else ()
     message(FATAL_ERROR "Unsupported platform!")
 endif ()
