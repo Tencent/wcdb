@@ -1,6 +1,9 @@
 # Visual Studio Code
 .vscode
 
+# Visual Studio
+.vs
+
 # Android Studio, Gradle
 *.iml
 .gradle
