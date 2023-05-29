@@ -155,12 +155,6 @@ std::ostream& operator<<(std::ostream& stream, const std::list<T>& identifiers)
     return stream;
 }
 
-#define __WCDB_SYNTAX_ENUM(Type, ...)                                          \
-    enum class Type : signed char {                                            \
-        WCDB_FIRST_ARG(__VA_ARGS__) = 1,                                       \
-        WCDB_NON_FIRST_ARGS(__VA_ARGS__)                                       \
-    };
-
 // The value of Type should always be positive.
 #define __WCDB_SYNTAX_UNION_ENUM(Type, nameOfType, nameOfValid)                \
     static_assert(sizeof(Type) == sizeof(Valid), "");                          \
@@ -176,20 +170,20 @@ std::ostream& operator<<(std::ostream& stream, const std::list<T>& identifiers)
         return __##nameOfType##Valid >= 0;                                     \
     }
 
-#define WCDB_SYNTAX_UNION_ENUM(Type, nameOfType, ...)                          \
-    __WCDB_SYNTAX_ENUM(Type, __VA_ARGS__);                                     \
+#define WCDB_SYNTAX_UNION_ENUM(Type, nameOfType, First, ...)                   \
+    enum class Type : signed char { First = 1, __VA_ARGS__ };                  \
     __WCDB_SYNTAX_UNION_ENUM(Type, nameOfType, __##nameOfType##Valid);         \
     bool nameOfType##Valid() const                                             \
     {                                                                          \
         return __##nameOfType##Valid >= 0;                                     \
     }
 
-#define WCDB_SYNTAX_MAIN_UNION_ENUM(...)                                       \
-    __WCDB_SYNTAX_ENUM(Switch, __VA_ARGS__);                                   \
-    __WCDB_SYNTAX_UNION_ENUM(Switch, switcher, __valid);                       \
+#define WCDB_SYNTAX_MAIN_UNION_ENUM(First, ...)                                \
+    enum class Switch : signed char { First = 1, __VA_ARGS__ };                \
+    __WCDB_SYNTAX_UNION_ENUM(Switch, switcher, __is_valid);                    \
     bool isValid() const override final                                        \
     {                                                                          \
-        return __valid >= 0;                                                   \
+        return __is_valid >= 0;                                                \
     }
 
 #define WCDB_SYNTAX_UNION_MEMBER_IMPLEMENT(NameSpace, MemberTag, Type, name)   \
