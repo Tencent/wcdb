@@ -27,12 +27,11 @@
 #include "Error.hpp"
 #include "Notifier.hpp"
 #include "Version.h"
-#ifndef __APPLE__
-#include "CrossPlatform.h"
-#endif
-#ifndef __ANDROID__
+
+#if !defined(__ANDROID__) && !defined(_WIN32)
 #include <execinfo.h>
 #endif
+
 #include <stdlib.h>
 
 namespace WCDB {
@@ -76,8 +75,13 @@ Optional<StringView> Console::callstacks()
 {
     constexpr const int size = 100;
     void* buffer[size];
+#if !defined(__ANDROID__) && !defined(_WIN32)
     int depth = backtrace(buffer, size);
     char** symbols = backtrace_symbols(buffer, depth);
+#else
+    int depth = 0;
+    char** symbols = nullptr;
+#endif
     if (symbols == nullptr) {
         return NullOpt;
     }

@@ -140,7 +140,7 @@ int FTS5AuxiliaryFunctionAPI::getColumnCount()
 
 int FTS5AuxiliaryFunctionAPI::getRowCount(int64_t* rowCount)
 {
-    return ((Fts5ExtensionApi*) m_ptr)->xRowCount((Fts5Context*) m_functionContext, rowCount);
+    return ((Fts5ExtensionApi*) m_ptr)->xRowCount((Fts5Context*) m_functionContext, (sqlite3_int64*) rowCount);
 }
 
 int64_t FTS5AuxiliaryFunctionAPI::getRowid()
@@ -155,7 +155,8 @@ int FTS5AuxiliaryFunctionAPI::getColumnSize(int column, int* columnSize)
 
 int FTS5AuxiliaryFunctionAPI::getColumnTotalSize(int column, int64_t* columnTotalSize)
 {
-    return ((Fts5ExtensionApi*) m_ptr)->xColumnTotalSize((Fts5Context*) m_functionContext, column, columnTotalSize);
+    return ((Fts5ExtensionApi*) m_ptr)
+    ->xColumnTotalSize((Fts5Context*) m_functionContext, column, (sqlite3_int64*) columnTotalSize);
 }
 
 int FTS5AuxiliaryFunctionAPI::getPhraseCount()

@@ -59,7 +59,7 @@ FileHandle::~FileHandle()
 FileHandle &FileHandle::operator=(FileHandle &&other)
 {
     WCTAssert(path == other.path);
-    m_fd = std::move(other.m_fd);
+    m_fd = other.m_fd;
     other.m_fd = -1;
     other.m_mode = Mode::None;
     return *this;

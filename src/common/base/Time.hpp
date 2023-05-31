@@ -28,6 +28,7 @@
 #include "SharedThreadedErrorProne.hpp"
 #include "StringView.hpp"
 #include <chrono>
+#include <ctime>
 
 namespace WCDB {
 

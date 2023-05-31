@@ -72,8 +72,17 @@
 #define WCDB_NO_ESCAPE __attribute__((noescape))
 #define WCDB_ESCAPE
 
+#if !defined(_WIN32)
 #define WCDB_NO_INLINE __attribute__((noinline))
+#else
+#define WCDB_NO_INLINE
+#endif
+
+#if !defined(_WIN32)
 #define WCDB_USED __attribute__((__used__))
+#else
+#define WCDB_USED
+#endif
 
 #if defined(__cplusplus)
 #define WCDB_EXTERN extern "C"
@@ -88,7 +97,11 @@
 #define WCDB_FIRST_ARG(N, ...) N
 #define WCDB_NON_FIRST_ARGS(N, ...) __VA_ARGS__
 
+#if !defined(_WIN32)
 #define WCDB_UNUSED(variable) _Pragma(WCDB_STRINGIFY(unused(variable)))
+#else
+#define WCDB_UNUSED(variable)
+#endif
 
 // It doesn't seems to work as expected.
 // #define WCDB_NO_DESTROY [[clang::no_destroy]]

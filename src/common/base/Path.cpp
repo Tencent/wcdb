@@ -23,9 +23,6 @@
  */
 
 #include "Path.hpp"
-#include <libgen.h>
-#include <pwd.h>
-#include <unistd.h>
 
 // TODO std::filesystem is supported since C++17 and Clang with Xcode 11
 
@@ -40,12 +37,19 @@ StringView addExtention(const UnsafeStringView &base, const UnsafeStringView &ex
     return StringView(stream.str());
 }
 
+const char kPathSeparator =
+#if defined _WIN32
+'\\';
+#else
+'/';
+#endif
+
 StringView addComponent(const UnsafeStringView &base, const UnsafeStringView &component)
 {
     std::ostringstream stream;
     stream << base;
-    if (base.empty() || base[base.length() - 1] != '/') {
-        stream << "/";
+    if (base.empty() || base[base.length() - 1] != kPathSeparator) {
+        stream << kPathSeparator;
     }
     stream << component;
     return StringView(stream.str());
@@ -54,24 +58,30 @@ StringView addComponent(const UnsafeStringView &base, const UnsafeStringView &co
 StringView getFileName(const UnsafeStringView &base)
 {
     std::string file = base.data();
-    file = basename(&(*file.begin()));
-    return StringView(std::move(file));
+    int64_t found = file.find_last_of(kPathSeparator);
+    return StringView(file.substr(found + 1));
 }
 
 StringView getDirectoryName(const UnsafeStringView &base)
 {
     std::string dir = base.data();
-    dir = dirname(&(*dir.begin()));
-    return StringView(std::move(dir));
+    int64_t found = dir.find_last_of(kPathSeparator);
+    return StringView(dir.substr(0, found));
 }
 
 StringView normalize(const UnsafeStringView &path)
 {
     std::string normalized = path.data();
-    // replace '//' with '/'
     std::size_t found;
-    while ((found = normalized.find("//")) != std::string::npos) {
-        normalized.replace(found, 2, "/");
+#if defined _WIN32
+    const char *doublePathSeparator = "\\\\";
+    const char *singlePathSeparator = "\\";
+#else
+    const char *doublePathSeparator = "//";
+    const char *singlePathSeparator = "/";
+#endif
+    while ((found = normalized.find(doublePathSeparator)) != std::string::npos) {
+        normalized.replace(found, 2, singlePathSeparator);
     }
     return StringView(std::move(normalized));
 }
