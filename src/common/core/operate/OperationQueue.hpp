@@ -73,8 +73,9 @@ public:
 protected:
     void main() override final;
     void handleError(const Error& error);
+#ifndef _WIN32
     void observatedThatFileOpened(int fd, const char* path, int flags, int mode);
-
+#endif
 private:
     OperationEvent* m_event;
     mutable SharedLock m_lock;
@@ -108,8 +109,10 @@ protected:
         enum class Source {
             Other = -1,
             MemoryWarning,
+#ifndef _WIN32
             FileDescriptorsWarning,
             OutOfMaxAllowedFileDescriptors,
+#endif
         } source;
 
         int frames;

@@ -66,11 +66,13 @@ Global::Global()
     }
 
     {
+#ifndef _WIN32
         sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
         WCTAssert(vfs != nullptr);
         int rc = vfs->xSetSystemCall(vfs, "open", (sqlite3_syscall_ptr) Global::open);
         WCTAssert(rc == SQLITE_OK);
         staticAPIExit(rc);
+#endif
     }
 }
 
@@ -110,6 +112,7 @@ void Global::log(void *parameter, int rc, const char *message)
     global->postLogNotification(rc, message);
 }
 
+#ifndef _WIN32
 #pragma mark - File Opened
 void Global::setNotificationWhenFileOpened(const UnsafeStringView &name,
                                            const FileOpenedNotification &notification)
@@ -137,7 +140,7 @@ void Global::postFileOpenedNotification(int fd, const char *path, int flags, int
         iter.second(fd, path, flags, mode);
     }
 }
-
+#endif
 #pragma mark - Lock
 void Global::setNotificationForLockEvent(const UnsafeStringView &name,
                                          const WillLockNotification &willLock,
