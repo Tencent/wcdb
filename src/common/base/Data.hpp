@@ -76,9 +76,7 @@ public:
 
 #pragma mark - Opaque
 protected:
-    using UnsafeData::subdata;
     using UnsafeData::immutable;
-    using UnsafeData::null;
 };
 
 } //namespace WCDB

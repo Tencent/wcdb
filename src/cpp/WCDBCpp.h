@@ -23,7 +23,7 @@
  */
 
 #ifdef __cplusplus
-#if __cplusplus < 201402L
+#if __cplusplus < 201402L && !defined(_WIN32)
 #error `CLANG_CXX_LANGUAGE_STANDARD = gnu++14` and `CLANG_CXX_LIBRARY = libc++` build settings are required.
 #endif
 #else // __cplusplus

@@ -25,6 +25,7 @@
 #pragma once
 
 #include "SyntaxIdentifier.hpp"
+#include <ostream>
 
 namespace WCDB {
 

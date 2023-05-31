@@ -28,19 +28,10 @@
 
 #pragma mark - errno
 
-#if defined(__linux__) || defined(__ANDROID__)
+#ifndef EAUTH
 // Magic number, something unique to avoid being matched
-#define EAUTH 0x5c69e1c6
-#endif /* defined(__linux__) || defined(__ANDROID__) */
-
-#pragma mark - execinfo
-
-#ifdef __ANDROID__
-WCDB_EXTERN_C_BEGIN
-int backtrace(void**, int);
-char** backtrace_symbols(void* const*, int);
-WCDB_EXTERN_C_END
-#endif /* __ANDROID__ */
+#define EAUTH 1550442950 //0x5c69e1c6
+#endif
 
 #pragma mark - mman
 
@@ -77,7 +68,11 @@ WCDB_EXTERN_C_END
 #define st_atimespec st_atim
 #define st_mtimespec st_mtim
 #define st_ctimespec st_ctim
-#endif /* __ANDROID__ */
+#elif defined(_WIN32)
+#define st_atimespec st_atime
+#define st_mtimespec st_mtime
+#define st_ctimespec st_ctime
+#endif
 
 #pragma mark - uinstd
 

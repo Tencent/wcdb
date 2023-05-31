@@ -49,6 +49,7 @@
 #include "SyntaxResultColumn.hpp"
 #include "SyntaxSchema.hpp"
 #include "SyntaxSelectCore.hpp"
+#include "SyntaxSelectSTMT.hpp"
 #include "SyntaxTableConstraint.hpp"
 #include "SyntaxTableOrSubquery.hpp"
 #include "SyntaxUpsertClause.hpp"
