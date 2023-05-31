@@ -27,7 +27,6 @@
 #include "BusyRetryConfig.hpp"
 #include "CipherConfig.hpp"
 #include "CoreConst.h"
-#include <unistd.h>
 
 namespace WCDB {
 
@@ -421,7 +420,7 @@ bool InnerHandle::runPausableTransactionWithOneLoop(const TransactionCallbackFor
             }
             if (!stop) {
                 needBegin = true;
-                usleep(100);
+                std::this_thread::sleep_for(std::chrono::microseconds(100));
             }
         }
     } while (!stop);
