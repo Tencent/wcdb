@@ -29,7 +29,6 @@
 #include "Error.hpp"
 #include "Notifier.hpp"
 #include <cmath>
-#include <unistd.h>
 
 namespace WCDB {
 
@@ -247,7 +246,8 @@ bool MergeFTSIndexLogic::mergeTable(InnerHandle &handle, const StringView &table
         } else {
             handle.reset();
         }
-        usleep(1229); //Use prime numbers to reduce the probability of collision with external logic
+        //Use prime numbers to reduce the probability of collision with external logic
+        std::this_thread::sleep_for(std::chrono::microseconds(1229));
     } while (handle.getTotalChange() - preChangeCount > 1);
     handle.finalize();
     delete[] callbackPointer;
