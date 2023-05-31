@@ -204,7 +204,6 @@
 		037C39E72897E33600328EC8 /* SyntaxFrameSpec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC06217DFADC006E9E73 /* SyntaxFrameSpec.cpp */; };
 		037C39E92897E33600328EC8 /* SyntaxTableOrSubquery.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC28217DFADC006E9E73 /* SyntaxTableOrSubquery.cpp */; };
 		037C39EC2897E33600328EC8 /* Time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23567D7920CA93C5005F1C35 /* Time.cpp */; };
-		037C39EE2897E33600328EC8 /* DeprecatedBackup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B3920AD666900E21AB0 /* DeprecatedBackup.cpp */; };
 		037C39F02897E33600328EC8 /* StatementVacuum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBE9217DFADC006E9E73 /* StatementVacuum.cpp */; };
 		037C39F12897E33600328EC8 /* AbstractHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2347378D21CBB3A800AD5E41 /* AbstractHandle.cpp */; };
 		037C39F52897E33600328EC8 /* StatementExplain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3960D89D2319288C00EF05D1 /* StatementExplain.cpp */; };
@@ -272,7 +271,6 @@
 		037C3A672897E33600328EC8 /* MasterCrawler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D07CE220BE87360043F4D4 /* MasterCrawler.cpp */; };
 		037C3A682897E33600328EC8 /* StatementReindex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBDD217DFADC006E9E73 /* StatementReindex.cpp */; };
 		037C3A6C2897E33600328EC8 /* Wal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EB91DC20CA1EBE00ECF668 /* Wal.cpp */; };
-		037C3A702897E33600328EC8 /* DeprecatedRepairKit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B3B20AD666900E21AB0 /* DeprecatedRepairKit.cpp */; };
 		037C3A722897E33600328EC8 /* BusyRetryConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237A8D5D21EDBB2E003AF5BB /* BusyRetryConfig.cpp */; };
 		037C3A742897E33600328EC8 /* SyntaxSelectSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC5D217DFADC006E9E73 /* SyntaxSelectSTMT.cpp */; };
 		037C3A752897E33600328EC8 /* InnerHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 39B524DC2304F9A2001DF52D /* InnerHandle.cpp */; };
@@ -289,7 +287,6 @@
 		037C3A882897E33600328EC8 /* WINQ.h in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBEB217DFADC006E9E73 /* WINQ.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		037C3A8A2897E33600328EC8 /* UnsafeData.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23759460210081AA00DBB721 /* UnsafeData.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		037C3A8C2897E33600328EC8 /* Core.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 234591F5204432E400DC7D34 /* Core.hpp */; };
-		037C3A8D2897E33600328EC8 /* DeprecatedRepairKit.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3C20AD666900E21AB0 /* DeprecatedRepairKit.hpp */; };
 		037C3A8F2897E33600328EC8 /* Pragma.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB9D217DFADC006E9E73 /* Pragma.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		037C3A902897E33600328EC8 /* SequenceItem.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AD52DC20DB56D200664B62 /* SequenceItem.hpp */; };
 		037C3A912897E33600328EC8 /* MappedData.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D92B21057CA600707AFC /* MappedData.hpp */; };
@@ -337,7 +334,6 @@
 		037C3ACE2897E33600328EC8 /* TableConstraint.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBAB217DFADC006E9E73 /* TableConstraint.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		037C3ACF2897E33600328EC8 /* AuxiliaryFunctionConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543DD8D271C360E00B533B4 /* AuxiliaryFunctionConfig.hpp */; };
 		037C3AD12897E33600328EC8 /* SQL.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBA9217DFADC006E9E73 /* SQL.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		037C3AD22897E33600328EC8 /* DeprecatedBackup.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3A20AD666900E21AB0 /* DeprecatedBackup.hpp */; };
 		037C3AD32897E33600328EC8 /* SequenceCrawler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D07CE920BE873E0043F4D4 /* SequenceCrawler.hpp */; };
 		037C3AD42897E33600328EC8 /* PageBasedFileHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D9422105D19500707AFC /* PageBasedFileHandle.hpp */; };
 		037C3AD52897E33600328EC8 /* SQLTraceConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2360A60020D78F2B00E4A311 /* SQLTraceConfig.hpp */; };
@@ -1159,10 +1155,6 @@
 		23775B6820AD666900E21AB0 /* Notifier.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3320AD666900E21AB0 /* Notifier.hpp */; };
 		23775B6A20AD666900E21AB0 /* FullCrawler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B3620AD666900E21AB0 /* FullCrawler.cpp */; };
 		23775B6C20AD666900E21AB0 /* FullCrawler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3720AD666900E21AB0 /* FullCrawler.hpp */; };
-		23775B6E20AD666900E21AB0 /* DeprecatedBackup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B3920AD666900E21AB0 /* DeprecatedBackup.cpp */; };
-		23775B7020AD666900E21AB0 /* DeprecatedBackup.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3A20AD666900E21AB0 /* DeprecatedBackup.hpp */; };
-		23775B7220AD666900E21AB0 /* DeprecatedRepairKit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B3B20AD666900E21AB0 /* DeprecatedRepairKit.cpp */; };
-		23775B7420AD666900E21AB0 /* DeprecatedRepairKit.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3C20AD666900E21AB0 /* DeprecatedRepairKit.hpp */; };
 		23775B7620AD666900E21AB0 /* Backup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B3E20AD666900E21AB0 /* Backup.cpp */; };
 		23775B7820AD666900E21AB0 /* Backup.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3F20AD666900E21AB0 /* Backup.hpp */; };
 		23775B7A20AD666900E21AB0 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B4020AD666900E21AB0 /* Material.cpp */; };
@@ -1780,7 +1772,6 @@
 		7521D7ED291E9ABB009642EF /* TransactionGuard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 030C987828D068B0008636DF /* TransactionGuard.cpp */; };
 		7521D7F0291E9ABB009642EF /* Time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23567D7920CA93C5005F1C35 /* Time.cpp */; };
 		7521D7F1291E9ABB009642EF /* WCTTable+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F65A1EA0D6680021EFA7 /* WCTTable+Convenient.mm */; };
-		7521D7F2291E9ABB009642EF /* DeprecatedBackup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B3920AD666900E21AB0 /* DeprecatedBackup.cpp */; };
 		7521D7F3291E9ABB009642EF /* WCTHandle+Transaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD022064DE04000E31E8 /* WCTHandle+Transaction.mm */; };
 		7521D7F4291E9ABB009642EF /* StatementVacuum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBE9217DFADC006E9E73 /* StatementVacuum.cpp */; };
 		7521D7F5291E9ABB009642EF /* AbstractHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2347378D21CBB3A800AD5E41 /* AbstractHandle.cpp */; };
@@ -1864,7 +1855,6 @@
 		7521D871291E9ABB009642EF /* WCTTable+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6521EA0D6680021EFA7 /* WCTTable+ChainCall.mm */; };
 		7521D872291E9ABB009642EF /* Wal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EB91DC20CA1EBE00ECF668 /* Wal.cpp */; };
 		7521D873291E9ABB009642EF /* WCTFTSTokenizerUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23577F781F74F4E800D31C05 /* WCTFTSTokenizerUtil.mm */; };
-		7521D876291E9ABB009642EF /* DeprecatedRepairKit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B3B20AD666900E21AB0 /* DeprecatedRepairKit.cpp */; };
 		7521D877291E9ABB009642EF /* WCTDelete.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6411EA0D6680021EFA7 /* WCTDelete.mm */; };
 		7521D878291E9ABB009642EF /* BusyRetryConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237A8D5D21EDBB2E003AF5BB /* BusyRetryConfig.cpp */; };
 		7521D87B291E9ABB009642EF /* SyntaxSelectSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC5D217DFADC006E9E73 /* SyntaxSelectSTMT.cpp */; };
@@ -1887,7 +1877,6 @@
 		7521D896291E9ABB009642EF /* UnsafeData.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23759460210081AA00DBB721 /* UnsafeData.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521D898291E9ABB009642EF /* WCTDeclaration.h in Headers */ = {isa = PBXBuildFile; fileRef = 23DF0A0D219028E900F0B2B6 /* WCTDeclaration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521D899291E9ABB009642EF /* Core.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 234591F5204432E400DC7D34 /* Core.hpp */; };
-		7521D89A291E9ABB009642EF /* DeprecatedRepairKit.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3C20AD666900E21AB0 /* DeprecatedRepairKit.hpp */; };
 		7521D89C291E9ABB009642EF /* WCTHandle+ChainCall.h in Headers */ = {isa = PBXBuildFile; fileRef = 233A05892062698E00F1A212 /* WCTHandle+ChainCall.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521D89E291E9ABB009642EF /* Pragma.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB9D217DFADC006E9E73 /* Pragma.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521D89F291E9ABB009642EF /* SequenceItem.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AD52DC20DB56D200664B62 /* SequenceItem.hpp */; };
@@ -1946,7 +1935,6 @@
 		7521D8DB291E9ABB009642EF /* TableConstraint.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBAB217DFADC006E9E73 /* TableConstraint.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521D8DC291E9ABB009642EF /* AuxiliaryFunctionConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543DD8D271C360E00B533B4 /* AuxiliaryFunctionConfig.hpp */; };
 		7521D8DD291E9ABB009642EF /* SQL.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBA9217DFADC006E9E73 /* SQL.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		7521D8DE291E9ABB009642EF /* DeprecatedBackup.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3A20AD666900E21AB0 /* DeprecatedBackup.hpp */; };
 		7521D8DF291E9ABB009642EF /* SequenceCrawler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D07CE920BE873E0043F4D4 /* SequenceCrawler.hpp */; };
 		7521D8E0291E9ABB009642EF /* PageBasedFileHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D9422105D19500707AFC /* PageBasedFileHandle.hpp */; };
 		7521D8E1291E9ABB009642EF /* SQLTraceConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2360A60020D78F2B00E4A311 /* SQLTraceConfig.hpp */; };
@@ -2457,7 +2445,6 @@
 		7521DB84291EA349009642EF /* StatementAttach.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165AE27F42D6500D2C926 /* StatementAttach.swift */; };
 		7521DB85291EA349009642EF /* Expression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1659127F42D6500D2C926 /* Expression.swift */; };
 		7521DB86291EA349009642EF /* Time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23567D7920CA93C5005F1C35 /* Time.cpp */; };
-		7521DB88291EA349009642EF /* DeprecatedBackup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B3920AD666900E21AB0 /* DeprecatedBackup.cpp */; };
 		7521DB8A291EA349009642EF /* StatementVacuum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBE9217DFADC006E9E73 /* StatementVacuum.cpp */; };
 		7521DB8B291EA349009642EF /* AbstractHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2347378D21CBB3A800AD5E41 /* AbstractHandle.cpp */; };
 		7521DB8F291EA349009642EF /* StatementExplain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3960D89D2319288C00EF05D1 /* StatementExplain.cpp */; };
@@ -2571,7 +2558,6 @@
 		7521DC08291EA349009642EF /* Wal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EB91DC20CA1EBE00ECF668 /* Wal.cpp */; };
 		7521DC0A291EA349009642EF /* TableBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165DC27F42D6500D2C926 /* TableBinding.swift */; };
 		7521DC0B291EA349009642EF /* CodableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165BE27F42D6500D2C926 /* CodableType.swift */; };
-		7521DC0C291EA349009642EF /* DeprecatedRepairKit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B3B20AD666900E21AB0 /* DeprecatedRepairKit.cpp */; };
 		7521DC0E291EA349009642EF /* BusyRetryConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237A8D5D21EDBB2E003AF5BB /* BusyRetryConfig.cpp */; };
 		7521DC0F291EA349009642EF /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165D727F42D6500D2C926 /* Property.swift */; };
 		7521DC11291EA349009642EF /* SyntaxSelectSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC5D217DFADC006E9E73 /* SyntaxSelectSTMT.cpp */; };
@@ -2595,7 +2581,6 @@
 		7521DC2B291EA349009642EF /* WINQ.h in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBEB217DFADC006E9E73 /* WINQ.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521DC2C291EA349009642EF /* UnsafeData.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23759460210081AA00DBB721 /* UnsafeData.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521DC2F291EA349009642EF /* Core.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 234591F5204432E400DC7D34 /* Core.hpp */; };
-		7521DC30291EA349009642EF /* DeprecatedRepairKit.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3C20AD666900E21AB0 /* DeprecatedRepairKit.hpp */; };
 		7521DC34291EA349009642EF /* Pragma.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB9D217DFADC006E9E73 /* Pragma.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521DC35291EA349009642EF /* SequenceItem.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AD52DC20DB56D200664B62 /* SequenceItem.hpp */; };
 		7521DC36291EA349009642EF /* MappedData.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D92B21057CA600707AFC /* MappedData.hpp */; };
@@ -2645,7 +2630,6 @@
 		7521DC71291EA349009642EF /* TableConstraint.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBAB217DFADC006E9E73 /* TableConstraint.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521DC72291EA349009642EF /* AuxiliaryFunctionConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543DD8D271C360E00B533B4 /* AuxiliaryFunctionConfig.hpp */; };
 		7521DC73291EA349009642EF /* SQL.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBA9217DFADC006E9E73 /* SQL.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		7521DC74291EA349009642EF /* DeprecatedBackup.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3A20AD666900E21AB0 /* DeprecatedBackup.hpp */; };
 		7521DC75291EA349009642EF /* SequenceCrawler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D07CE920BE873E0043F4D4 /* SequenceCrawler.hpp */; };
 		7521DC76291EA349009642EF /* PageBasedFileHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D9422105D19500707AFC /* PageBasedFileHandle.hpp */; };
 		7521DC77291EA349009642EF /* SQLTraceConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2360A60020D78F2B00E4A311 /* SQLTraceConfig.hpp */; };
@@ -3970,10 +3954,6 @@
 		23775B3320AD666900E21AB0 /* Notifier.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Notifier.hpp; sourceTree = "<group>"; };
 		23775B3620AD666900E21AB0 /* FullCrawler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FullCrawler.cpp; sourceTree = "<group>"; };
 		23775B3720AD666900E21AB0 /* FullCrawler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FullCrawler.hpp; sourceTree = "<group>"; };
-		23775B3920AD666900E21AB0 /* DeprecatedBackup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DeprecatedBackup.cpp; sourceTree = "<group>"; };
-		23775B3A20AD666900E21AB0 /* DeprecatedBackup.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DeprecatedBackup.hpp; sourceTree = "<group>"; };
-		23775B3B20AD666900E21AB0 /* DeprecatedRepairKit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DeprecatedRepairKit.cpp; sourceTree = "<group>"; };
-		23775B3C20AD666900E21AB0 /* DeprecatedRepairKit.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DeprecatedRepairKit.hpp; sourceTree = "<group>"; };
 		23775B3E20AD666900E21AB0 /* Backup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Backup.cpp; sourceTree = "<group>"; };
 		23775B3F20AD666900E21AB0 /* Backup.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Backup.hpp; sourceTree = "<group>"; };
 		23775B4020AD666900E21AB0 /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = "<group>"; };
@@ -6473,7 +6453,6 @@
 				23D0C34820C149D80001BFAE /* factory */,
 				23D0C30B20C125420001BFAE /* sqlite */,
 				23775B3520AD666900E21AB0 /* crawl */,
-				23775B3820AD666900E21AB0 /* deprecated */,
 				23775B3D20AD666900E21AB0 /* mechanic */,
 				23775B4420AD666900E21AB0 /* parse */,
 				23775B4D20AD666900E21AB0 /* basic */,
@@ -6493,17 +6472,6 @@
 				23D07CE920BE873E0043F4D4 /* SequenceCrawler.hpp */,
 			);
 			path = crawl;
-			sourceTree = "<group>";
-		};
-		23775B3820AD666900E21AB0 /* deprecated */ = {
-			isa = PBXGroup;
-			children = (
-				23775B3920AD666900E21AB0 /* DeprecatedBackup.cpp */,
-				23775B3A20AD666900E21AB0 /* DeprecatedBackup.hpp */,
-				23775B3B20AD666900E21AB0 /* DeprecatedRepairKit.cpp */,
-				23775B3C20AD666900E21AB0 /* DeprecatedRepairKit.hpp */,
-			);
-			path = deprecated;
 			sourceTree = "<group>";
 		};
 		23775B3D20AD666900E21AB0 /* mechanic */ = {
@@ -7337,7 +7305,6 @@
 				7521DDDF291EA729009642EF /* StatementOperation.hpp in Headers */,
 				037C3A8A2897E33600328EC8 /* UnsafeData.hpp in Headers */,
 				037C3A8C2897E33600328EC8 /* Core.hpp in Headers */,
-				037C3A8D2897E33600328EC8 /* DeprecatedRepairKit.hpp in Headers */,
 				037C3A8F2897E33600328EC8 /* Pragma.hpp in Headers */,
 				037C3A902897E33600328EC8 /* SequenceItem.hpp in Headers */,
 				037C3A912897E33600328EC8 /* MappedData.hpp in Headers */,
@@ -7387,7 +7354,6 @@
 				037C3ACE2897E33600328EC8 /* TableConstraint.hpp in Headers */,
 				037C3ACF2897E33600328EC8 /* AuxiliaryFunctionConfig.hpp in Headers */,
 				037C3AD12897E33600328EC8 /* SQL.hpp in Headers */,
-				037C3AD22897E33600328EC8 /* DeprecatedBackup.hpp in Headers */,
 				758D9D0328BA7265001B3D2D /* CPPTableConstraintMacro.h in Headers */,
 				037C3AD32897E33600328EC8 /* SequenceCrawler.hpp in Headers */,
 				037C3AD42897E33600328EC8 /* PageBasedFileHandle.hpp in Headers */,
@@ -7627,7 +7593,6 @@
 				03E3180F28A21B0000540CB1 /* Handle.hpp in Headers */,
 				23DF0A0E219029DB00F0B2B6 /* WCTDeclaration.h in Headers */,
 				234591F6204433E200DC7D34 /* Core.hpp in Headers */,
-				23775B7420AD666900E21AB0 /* DeprecatedRepairKit.hpp in Headers */,
 				03D077F728C1F951009A3B18 /* HandleORMOperation.hpp in Headers */,
 				233A058B2062698E00F1A212 /* WCTHandle+ChainCall.h in Headers */,
 				75F32F0A28B9CE8E00A72697 /* CPPORMMacro.h in Headers */,
@@ -7698,7 +7663,6 @@
 				23EEDCA8217DFADC006E9E73 /* TableConstraint.hpp in Headers */,
 				7543DD8F271C360E00B533B4 /* AuxiliaryFunctionConfig.hpp in Headers */,
 				23EEDCA6217DFADC006E9E73 /* SQL.hpp in Headers */,
-				23775B7020AD666900E21AB0 /* DeprecatedBackup.hpp in Headers */,
 				23D07CEC20BE873E0043F4D4 /* SequenceCrawler.hpp in Headers */,
 				2316D9452105D19500707AFC /* PageBasedFileHandle.hpp in Headers */,
 				2360A60520D78F2C00E4A311 /* SQLTraceConfig.hpp in Headers */,
@@ -8070,7 +8034,6 @@
 				7521D896291E9ABB009642EF /* UnsafeData.hpp in Headers */,
 				7521D898291E9ABB009642EF /* WCTDeclaration.h in Headers */,
 				7521D899291E9ABB009642EF /* Core.hpp in Headers */,
-				7521D89A291E9ABB009642EF /* DeprecatedRepairKit.hpp in Headers */,
 				7521D89C291E9ABB009642EF /* WCTHandle+ChainCall.h in Headers */,
 				7521D89E291E9ABB009642EF /* Pragma.hpp in Headers */,
 				7521D89F291E9ABB009642EF /* SequenceItem.hpp in Headers */,
@@ -8131,7 +8094,6 @@
 				7521D8DB291E9ABB009642EF /* TableConstraint.hpp in Headers */,
 				7521D8DC291E9ABB009642EF /* AuxiliaryFunctionConfig.hpp in Headers */,
 				7521D8DD291E9ABB009642EF /* SQL.hpp in Headers */,
-				7521D8DE291E9ABB009642EF /* DeprecatedBackup.hpp in Headers */,
 				7521D8DF291E9ABB009642EF /* SequenceCrawler.hpp in Headers */,
 				7521D8E0291E9ABB009642EF /* PageBasedFileHandle.hpp in Headers */,
 				7521D8E1291E9ABB009642EF /* SQLTraceConfig.hpp in Headers */,
@@ -8411,7 +8373,6 @@
 				7521DC2B291EA349009642EF /* WINQ.h in Headers */,
 				7521DC2C291EA349009642EF /* UnsafeData.hpp in Headers */,
 				7521DC2F291EA349009642EF /* Core.hpp in Headers */,
-				7521DC30291EA349009642EF /* DeprecatedRepairKit.hpp in Headers */,
 				7521DC34291EA349009642EF /* Pragma.hpp in Headers */,
 				7521DC35291EA349009642EF /* SequenceItem.hpp in Headers */,
 				7521DC36291EA349009642EF /* MappedData.hpp in Headers */,
@@ -8464,7 +8425,6 @@
 				7521DC71291EA349009642EF /* TableConstraint.hpp in Headers */,
 				7521DC72291EA349009642EF /* AuxiliaryFunctionConfig.hpp in Headers */,
 				7521DC73291EA349009642EF /* SQL.hpp in Headers */,
-				7521DC74291EA349009642EF /* DeprecatedBackup.hpp in Headers */,
 				7521DC75291EA349009642EF /* SequenceCrawler.hpp in Headers */,
 				7521DC76291EA349009642EF /* PageBasedFileHandle.hpp in Headers */,
 				7521DC77291EA349009642EF /* SQLTraceConfig.hpp in Headers */,
@@ -9324,7 +9284,6 @@
 				037C39E72897E33600328EC8 /* SyntaxFrameSpec.cpp in Sources */,
 				037C39E92897E33600328EC8 /* SyntaxTableOrSubquery.cpp in Sources */,
 				037C39EC2897E33600328EC8 /* Time.cpp in Sources */,
-				037C39EE2897E33600328EC8 /* DeprecatedBackup.cpp in Sources */,
 				037C39F02897E33600328EC8 /* StatementVacuum.cpp in Sources */,
 				037C39F12897E33600328EC8 /* AbstractHandle.cpp in Sources */,
 				037C39F52897E33600328EC8 /* StatementExplain.cpp in Sources */,
@@ -9404,7 +9363,6 @@
 				037C3A682897E33600328EC8 /* StatementReindex.cpp in Sources */,
 				7537E58528B91F510077D92B /* Accessor.cpp in Sources */,
 				037C3A6C2897E33600328EC8 /* Wal.cpp in Sources */,
-				037C3A702897E33600328EC8 /* DeprecatedRepairKit.cpp in Sources */,
 				037C3A722897E33600328EC8 /* BusyRetryConfig.cpp in Sources */,
 				037C3A742897E33600328EC8 /* SyntaxSelectSTMT.cpp in Sources */,
 				037C3A752897E33600328EC8 /* InnerHandle.cpp in Sources */,
@@ -10110,7 +10068,6 @@
 				03E165FB27F42D6500D2C926 /* Expression.swift in Sources */,
 				23567D7B20CA93C5005F1C35 /* Time.cpp in Sources */,
 				2349F7391EA0D6680021EFA7 /* WCTTable+Convenient.mm in Sources */,
-				23775B6E20AD666900E21AB0 /* DeprecatedBackup.cpp in Sources */,
 				234DBD062064DE04000E31E8 /* WCTHandle+Transaction.mm in Sources */,
 				23EEDCE5217DFADC006E9E73 /* StatementVacuum.cpp in Sources */,
 				2347378F21CBB3A800AD5E41 /* AbstractHandle.cpp in Sources */,
@@ -10249,7 +10206,6 @@
 				23577F7A1F74F4E800D31C05 /* WCTFTSTokenizerUtil.mm in Sources */,
 				03E1664127F42D6600D2C926 /* TableBinding.swift in Sources */,
 				03E1662727F42D6500D2C926 /* CodableType.swift in Sources */,
-				23775B7220AD666900E21AB0 /* DeprecatedRepairKit.cpp in Sources */,
 				2349F7211EA0D6680021EFA7 /* WCTDelete.mm in Sources */,
 				237A8D5F21EDBB2E003AF5BB /* BusyRetryConfig.cpp in Sources */,
 				03E1663C27F42D6600D2C926 /* Property.swift in Sources */,
@@ -10471,7 +10427,6 @@
 				7521D7ED291E9ABB009642EF /* TransactionGuard.cpp in Sources */,
 				7521D7F0291E9ABB009642EF /* Time.cpp in Sources */,
 				7521D7F1291E9ABB009642EF /* WCTTable+Convenient.mm in Sources */,
-				7521D7F2291E9ABB009642EF /* DeprecatedBackup.cpp in Sources */,
 				7521D7F3291E9ABB009642EF /* WCTHandle+Transaction.mm in Sources */,
 				7521D7F4291E9ABB009642EF /* StatementVacuum.cpp in Sources */,
 				7521D7F5291E9ABB009642EF /* AbstractHandle.cpp in Sources */,
@@ -10556,7 +10511,6 @@
 				7521D871291E9ABB009642EF /* WCTTable+ChainCall.mm in Sources */,
 				7521D872291E9ABB009642EF /* Wal.cpp in Sources */,
 				7521D873291E9ABB009642EF /* WCTFTSTokenizerUtil.mm in Sources */,
-				7521D876291E9ABB009642EF /* DeprecatedRepairKit.cpp in Sources */,
 				7521D877291E9ABB009642EF /* WCTDelete.mm in Sources */,
 				7521D878291E9ABB009642EF /* BusyRetryConfig.cpp in Sources */,
 				7521D87B291E9ABB009642EF /* SyntaxSelectSTMT.cpp in Sources */,
@@ -10831,7 +10785,6 @@
 				7521DB84291EA349009642EF /* StatementAttach.swift in Sources */,
 				7521DB85291EA349009642EF /* Expression.swift in Sources */,
 				7521DB86291EA349009642EF /* Time.cpp in Sources */,
-				7521DB88291EA349009642EF /* DeprecatedBackup.cpp in Sources */,
 				7521DB8A291EA349009642EF /* StatementVacuum.cpp in Sources */,
 				7521DB8B291EA349009642EF /* AbstractHandle.cpp in Sources */,
 				7521DB8F291EA349009642EF /* StatementExplain.cpp in Sources */,
@@ -10948,7 +10901,6 @@
 				7521DC08291EA349009642EF /* Wal.cpp in Sources */,
 				7521DC0A291EA349009642EF /* TableBinding.swift in Sources */,
 				7521DC0B291EA349009642EF /* CodableType.swift in Sources */,
-				7521DC0C291EA349009642EF /* DeprecatedRepairKit.cpp in Sources */,
 				0DF1089729C05559004ED764 /* StatementSelectInterface.swift in Sources */,
 				7521DC0E291EA349009642EF /* BusyRetryConfig.cpp in Sources */,
 				7521DC0F291EA349009642EF /* Property.swift in Sources */,

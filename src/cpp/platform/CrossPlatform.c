@@ -23,28 +23,16 @@
  */
 
 #include "CrossPlatform.h"
+
+#if defined(__linux__) || defined(__ANDROID__)
 #include <errno.h>
 #include <unistd.h>
+
 #if __GLIBC__ == 2 && __GLIBC_MINOR__ < 30
 #include <sys/syscall.h>
 #define gettid() syscall(SYS_gettid)
 #endif
 
-#ifdef __ANDROID__
-int backtrace(void** buffer, int size)
-{
-    // TODO: replace with <utils/CallStack.h>
-    return 0;
-}
-
-char** backtrace_symbols(void* const* buffer, int depth)
-{
-    // TODO: replace with <utils/CallStack.h>
-    return 0;
-}
-#endif /* __ANDROID__ */
-
-#if defined(__linux__) || defined(__ANDROID__)
 int pthread_main_np()
 {
     int pid = getpid();
@@ -77,8 +65,6 @@ int pthread_getname_np(pthread_t thread, char* name, size_t size)
 }
 #endif /* defined(__ANDROID__) && __ANDROID_API__ < 26 */
 
-#endif /* defined(__linux__) || defined(__ANDROID__) */
-
 #ifdef __ANDROID__
 #include <sys/sysconf.h>
 
@@ -87,3 +73,5 @@ int getdtablesize()
     return (int) sysconf(_SC_OPEN_MAX);
 }
 #endif /* __ANDROID__ */
+
+#endif /* defined(__linux__) || defined(__ANDROID__) */

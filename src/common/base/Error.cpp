@@ -32,6 +32,7 @@
 #ifndef __APPLE__
 #include "CrossPlatform.h"
 #endif
+#include <system_error>
 
 namespace WCDB {
 
@@ -224,6 +225,7 @@ void Error::setCode(Code code, const UnsafeStringView& message)
 void Error::setSystemCode(int systemCode, Code codeIfUnresolved, const UnsafeStringView& message)
 {
     Code code;
+#ifndef _WIN32
     switch (systemCode) {
     case EIO:
         code = Code::IOError;
@@ -250,7 +252,10 @@ void Error::setSystemCode(int systemCode, Code codeIfUnresolved, const UnsafeStr
         code = codeIfUnresolved;
         break;
     }
-    setCode(code, message.empty() ? strerror(systemCode) : message);
+#else
+    code = codeIfUnresolved;
+#endif
+    setCode(code, message.empty() ? StringView(std::system_category().message(systemCode)) : message);
     infos.insert_or_assign(ErrorStringKeySource, ErrorSourceSystem);
     infos.insert_or_assign(ErrorIntKeyExtCode, systemCode);
 }

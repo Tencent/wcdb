@@ -25,6 +25,7 @@
 #include "StringView.hpp"
 #include "Macro.h"
 #include "UnsafeData.hpp"
+#include <algorithm>
 #include <cstring>
 #include <iomanip>
 #include <numeric>
@@ -154,7 +155,11 @@ int UnsafeStringView::caseInsensitiveCompare(const UnsafeStringView& other) cons
     if (m_data == other.m_data && m_length == other.m_length) {
         return 0;
     }
+#ifndef _WIN32
     int ret = strncasecmp(m_data, other.m_data, std::min(m_length, other.m_length));
+#else
+    int ret = _strnicmp(m_data, other.m_data, std::min(m_length, other.m_length));
+#endif
     if (ret != 0) {
         return ret;
     }
@@ -172,7 +177,11 @@ bool UnsafeStringView::caseInsensitiveEqual(const UnsafeStringView& other) const
     if (length() != other.length()) {
         return false;
     }
+#ifndef _WIN32
     return strncasecmp(data(), other.data(), m_length) == 0;
+#else
+    return _strnicmp(data(), other.data(), m_length) == 0;
+#endif
 }
 
 #pragma mark - UnsafeStringView - Operations

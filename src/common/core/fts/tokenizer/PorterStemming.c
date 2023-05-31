@@ -38,6 +38,7 @@
  steps after step1ab unless k > k0.
  */
 
+#include <stdint.h>
 #include <string.h> /* for memmove */
 
 #define TRUE 1
