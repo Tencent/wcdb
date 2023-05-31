@@ -56,6 +56,7 @@ private:
     void postLogNotification(int rc, const char* message);
     StringViewMap<LogNotification> m_logNotifications;
 
+#ifndef _WIN32
 #pragma mark - File Opened
 public:
     typedef std::function<void(int /* fd */, const char* /* path */, int /* flags */, int /* mode */)> FileOpenedNotification;
@@ -66,6 +67,7 @@ private:
     static int open(const char* path, int flags, int mode);
     void postFileOpenedNotification(int fd, const char* path, int flags, int mode);
     StringViewMap<FileOpenedNotification> m_fileOpenedNotifications;
+#endif
 
 #pragma mark - Lock
 public:

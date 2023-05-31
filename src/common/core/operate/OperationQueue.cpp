@@ -30,7 +30,9 @@
 #include "Global.hpp"
 #include "Notifier.hpp"
 #include <fcntl.h>
+#ifndef _WIN32
 #include <unistd.h>
+#endif
 #ifndef __APPLE__
 #include "CrossPlatform.h"
 #endif
@@ -46,7 +48,7 @@ OperationQueue::OperationQueue(const UnsafeStringView& name, OperationEvent* eve
 {
     Notifier::shared().setNotification(
     0, name, std::bind(&OperationQueue::handleError, this, std::placeholders::_1));
-
+#ifndef _WIN32
     Global::shared().setNotificationWhenFileOpened(
     name,
     std::bind(&OperationQueue::observatedThatFileOpened,
@@ -55,12 +57,14 @@ OperationQueue::OperationQueue(const UnsafeStringView& name, OperationEvent* eve
               std::placeholders::_2,
               std::placeholders::_3,
               std::placeholders::_4));
+#endif
 }
 
 OperationQueue::~OperationQueue()
 {
+#ifndef _WIN32
     Global::shared().setNotificationWhenFileOpened(name, nullptr);
-
+#endif
     Notifier::shared().unsetNotification(name);
 
     unregisterNotificationWhenMemoryWarning(m_observerForMemoryWarning);
@@ -118,7 +122,7 @@ void OperationQueue::handleError(const Error& error)
         asyncCheckIntegrity(path, identifier);
     }
 }
-
+#ifndef _WIN32
 void OperationQueue::observatedThatFileOpened(int fd, const char* path, int flags, int mode)
 {
     WCDB_UNUSED(mode);
@@ -142,6 +146,7 @@ void OperationQueue::observatedThatFileOpened(int fd, const char* path, int flag
         asyncPurge(parameter);
     }
 }
+#endif
 
 #pragma mark - Operation
 OperationQueue::Operation::Operation(Type type_) : type(type_)
@@ -414,11 +419,13 @@ void OperationQueue::doCheckpoint(const UnsafeStringView& path)
 }
 
 #pragma mark - Purge
+#ifndef _WIN32
 int OperationQueue::maxAllowedNumberOfFileDescriptors()
 {
     const int s_maxAllowedNumberOfFileDescriptors = std::max(getdtablesize(), 1024);
     return s_maxAllowedNumberOfFileDescriptors;
 }
+#endif
 
 void OperationQueue::asyncPurge(const Parameter& parameter)
 {
@@ -439,6 +446,7 @@ void OperationQueue::doPurge(const Parameter& parameter)
         Error error(Error::Code::Warning, Error::Level::Warning, "Purge due to memory warning.");
         Notifier::shared().notify(error);
     } break;
+#ifndef _WIN32
     case Parameter::Source::FileDescriptorsWarning: {
         Error error(Error::Code::Warning, Error::Level::Warning, "Purge due to file descriptors warning.");
         error.infos.insert_or_assign("MaxAllowedFileDescriptors",
@@ -455,6 +463,7 @@ void OperationQueue::doPurge(const Parameter& parameter)
                                      maxAllowedNumberOfFileDescriptors());
         Notifier::shared().notify(error);
     } break;
+#endif
     }
 
     m_event->purgeShouldBeOperated();
