@@ -548,7 +548,6 @@
 		03AFD33B28B8A6BD00EF5E56 /* MemberPointer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 03AFD33928B8A6BD00EF5E56 /* MemberPointer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		03AFD34228B8B21B00EF5E56 /* Field.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 03AFD34128B8B21B00EF5E56 /* Field.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		03AFD34328B8B21B00EF5E56 /* Field.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 03AFD34128B8B21B00EF5E56 /* Field.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		03AFD34428B8B22600EF5E56 /* WCTBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6841EA0D6680021EFA7 /* WCTBinding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		03AFD34628B8B57600EF5E56 /* Binding.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 03AFD34528B8B57600EF5E56 /* Binding.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		03AFD34728B8B57600EF5E56 /* Binding.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 03AFD34528B8B57600EF5E56 /* Binding.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		03AFD34928B8B88300EF5E56 /* CPPORM.h in Headers */ = {isa = PBXBuildFile; fileRef = 03AFD34828B8B88300EF5E56 /* CPPORM.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -7395,7 +7394,6 @@
 				037C3AD52897E33600328EC8 /* SQLTraceConfig.hpp in Headers */,
 				037C3AD62897E33600328EC8 /* Data.hpp in Headers */,
 				037C3AD82897E33600328EC8 /* Assertion.hpp in Headers */,
-				03AFD34428B8B22600EF5E56 /* WCTBinding.h in Headers */,
 				037C3ADB2897E33600328EC8 /* Filter.hpp in Headers */,
 				037C3ADC2897E33600328EC8 /* SyntaxDropViewSTMT.hpp in Headers */,
 				037C3ADD2897E33600328EC8 /* Scoreable.hpp in Headers */,
