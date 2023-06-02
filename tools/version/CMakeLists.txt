@@ -310,36 +310,48 @@ file(MAKE_DIRECTORY ${EXPORT_PUBLIC_HEADERS_PATH}/WCDB)
 file(COPY ${WCDB_PUBLIC_HEADERS} DESTINATION ${EXPORT_PUBLIC_HEADERS_PATH}/WCDB)
 
 # copy all headers to include
-file(GLOB_RECURSE WCDB_ALL_HEADERS
-        ${WCDB_SRC_DIR}/*.hpp
-        ${WCDB_SRC_DIR}/*.h
+file(GLOB_RECURSE WCDB_COMMON_HEADERS
+        ${WCDB_SRC_DIR}/cpp/*.hpp
+        ${WCDB_SRC_DIR}/cpp/*.h
         )
+file(GLOB_RECURSE WCDB_CPP_HEADERS
+        ${WCDB_SRC_DIR}/common/*.hpp
+        ${WCDB_SRC_DIR}/common/*.h
+        )
+list(FILTER WCDB_CPP_HEADERS EXCLUDE REGEX
+        "(.*/tests/.*)"
+        )
+set(WCDB_ALL_HEADERS
+        ${WCDB_COMMON_HEADERS}
+        ${WCDB_CPP_HEADERS}
+        )
+
 file(REMOVE_RECURSE ${CMAKE_CURRENT_BINARY_DIR}/include)
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include)
 file(COPY ${WCDB_ALL_HEADERS} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/include)
 
-file(GLOB_RECURSE SRC_WCDB_COMMON
+file(GLOB_RECURSE WCDB_COMMON_SRC
         ${WCDB_SRC_DIR}/common/*.cpp
         ${WCDB_SRC_DIR}/common/*.c
         )
-file(GLOB_RECURSE SRC_WCDB_CPP
+file(GLOB_RECURSE WCDB_CPP_SRC
         ${WCDB_SRC_DIR}/cpp/*.cpp
         ${WCDB_SRC_DIR}/cpp/*.c
         )
-list(FILTER SRC_WCDB_CPP EXCLUDE REGEX
+list(FILTER WCDB_CPP_SRC EXCLUDE REGEX
         "(.*/tests/.*)"
         )
 
-set(ALL_SRCS
-        ${SRC_WCDB_COMMON}
-        ${SRC_WCDB_CPP}
+set(WCDB_ALL_SRCS
+        ${WCDB_COMMON_SRC}
+        ${WCDB_CPP_SRC}
         )
 
 set(SQLCIPHER_COMPILE_DEFS)
 set(SQLCIPHER_SRC_ROOT)
 set(LIB_SQLCIPHER sqlcipher)
 
-add_library(${TARGET_NAME} ${ALL_SRCS})
+add_library(${TARGET_NAME} ${WCDB_ALL_SRCS})
 
 if (WCONAN_MODE AND ANDROID AND FLAVOR_AMMDEV)
     include(${CMAKE_CURRENT_SOURCE_DIR}/../../WeChat/android_sqlcipher.cmake)
