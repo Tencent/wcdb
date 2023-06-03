@@ -44,8 +44,9 @@ public:
     };
 
     template<typename T, typename Enable = typename std::enable_if<Convertible<T>::value>::type>
-    UnsafeData(const T &t) : UnsafeData(Convertible<T>::asUnsafeData(t))
+    UnsafeData(const T &t)
     {
+        *this = Convertible<T>::asUnsafeData(t);
     }
 
     UnsafeData();

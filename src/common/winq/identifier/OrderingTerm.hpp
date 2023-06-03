@@ -36,8 +36,8 @@ public:
 
     template<typename T, typename Enable = typename std::enable_if<OrderingTermConvertible<T>::value>::type>
     OrderingTerm(const T& t)
-    : OrderingTerm(OrderingTermConvertible<T>::asOrderingTerm(t))
     {
+        *this = OrderingTermConvertible<T>::asOrderingTerm(t);
     }
 
     OrderingTerm(const Expression& expression);

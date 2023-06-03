@@ -36,8 +36,8 @@ public:
 
     template<typename T, typename Enable = typename std::enable_if<ResultColumnConvertible<T>::value>::type>
     ResultColumn(const T& t)
-    : ResultColumn(ResultColumnConvertible<T>::asResultColumn(t))
     {
+        *this = ResultColumnConvertible<T>::asResultColumn(t);
     }
 
     ResultColumn(const Expression& expression);

@@ -43,8 +43,9 @@ class Column : public SpecifiedSyntax<Syntax::Column, SQL>,
                public FTSFunctionOperable {
 public:
     template<typename T, typename Enable = typename std::enable_if<ColumnConvertible<T>::value>::type>
-    Column(const T& t) : Column(ColumnConvertible<T>::asColumn(t))
+    Column(const T& t)
     {
+        *this = ColumnConvertible<T>::asColumn(t);
     }
     Column();
     Column(const UnsafeStringView& name);
