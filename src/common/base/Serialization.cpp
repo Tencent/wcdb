@@ -636,7 +636,7 @@ bool Serializable::serialize(const UnsafeStringView &path) const
     if (!fileHandle.open(FileHandle::Mode::OverWrite)) {
         return false;
     }
-    bool succeed = fileHandle.write(0, data);
+    bool succeed = fileHandle.write(data);
     fileHandle.close();
     FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
     return succeed;

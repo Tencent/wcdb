@@ -24,7 +24,11 @@
 
 #include "MappedData.hpp"
 #include "Notifier.hpp"
+#ifndef _WIN32
 #include <sys/mman.h>
+#else
+#include <windows.h>
+#endif
 
 namespace WCDB {
 
@@ -55,6 +59,7 @@ MappedData::~MappedData() = default;
 
 void MappedData::unmapData(SharedData& data)
 {
+#ifndef _WIN32
     if (munmap(data.buffer, data.size) != 0) {
         Error error;
         error.level = Error::Level::Error;
@@ -63,6 +68,16 @@ void MappedData::unmapData(SharedData& data)
         Notifier::shared().notify(error);
         SharedThreadedErrorProne::setThreadedError(std::move(error));
     }
+#else
+    if (!UnmapViewOfFile(data.buffer)) {
+        Error error;
+        error.level = Error::Level::Error;
+        error.setWinSystemCode(GetLastError(), Error::Code::IOError);
+        error.infos.insert_or_assign("MunmapSize", data.size);
+        Notifier::shared().notify(error);
+        SharedThreadedErrorProne::setThreadedError(std::move(error));
+    }
+#endif
 }
 
 MappedData::MappedData(const MappedData& other) : UnsafeData(other)

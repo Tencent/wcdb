@@ -29,8 +29,14 @@
 #include "Notifier.hpp"
 #include <errno.h>
 #include <fcntl.h>
+#ifndef _WIN32
 #include <sys/mman.h>
 #include <unistd.h>
+#else
+#define NOMINMAX
+#include <io.h>
+#include <windows.h>
+#endif
 #ifndef __APPLE__
 #include "CrossPlatform.h"
 #endif
@@ -39,12 +45,26 @@ namespace WCDB {
 
 #pragma mark - Initialize
 FileHandle::FileHandle(const UnsafeStringView &path_)
-: path(path_), m_fd(-1), m_mode(Mode::None), m_errorIgnorable(false)
+: path(path_)
+, m_fd(-1)
+#ifdef _WIN32
+, m_mapHandle(INVALID_HANDLE_VALUE)
+#endif
+, m_mode(Mode::None)
+, m_errorIgnorable(false)
+, m_fileSize(-1)
 {
 }
 
 FileHandle::FileHandle(FileHandle &&other)
-: path(std::move(other.path)), m_fd(other.m_fd), m_mode(other.m_mode)
+: path(std::move(other.path))
+, m_fd(other.m_fd)
+#ifdef _WIN32
+, m_mapHandle(other.m_mapHandle)
+#endif
+, m_mode(other.m_mode)
+, m_errorIgnorable(false)
+, m_fileSize(other.m_fileSize)
 {
     other.m_fd = -1;
     other.m_mode = Mode::None;
@@ -71,14 +91,23 @@ bool FileHandle::open(Mode mode)
     WCTAssert(!isOpened());
     switch (mode) {
     case Mode::OverWrite: {
+#ifndef _WIN32
         constexpr const int mask = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
         static_assert(mask == 0644, "");
         m_fd = ::open(path.data(), O_CREAT | O_WRONLY | O_TRUNC, mask);
+#else
+        m_fd = ::_open(
+        path.data(), _O_BINARY | _O_CREAT | _O_WRONLY | _O_TRUNC, _S_IREAD | _S_IWRITE);
+#endif
         break;
     }
     default:
         WCTAssert(mode == Mode::ReadOnly);
+#ifndef _WIN32
         m_fd = ::open(path.data(), O_RDONLY);
+#else
+        m_fd = ::_open(path.data(), _O_BINARY | _O_RDONLY);
+#endif
         break;
     }
     if (m_fd == -1) {
@@ -96,31 +125,67 @@ bool FileHandle::isOpened() const
 
 void FileHandle::close()
 {
+#ifdef _WIN32
+    if (m_mapHandle != INVALID_HANDLE_VALUE) {
+        bool ret = CloseHandle(m_mapHandle);
+        WCTAssert(ret);
+        m_mapHandle = INVALID_HANDLE_VALUE;
+    }
+#endif
     if (m_fd != -1) {
-        ::close(m_fd);
+#ifndef _WIN32
+        int ret = ::close(m_fd);
+#else
+        int ret = ::_close(m_fd);
+#endif
+        WCTAssert(ret == 0);
         m_fd = -1;
     }
 }
 
 ssize_t FileHandle::size()
 {
-    WCTAssert(isOpened());
-    return (ssize_t) lseek(m_fd, 0, SEEK_END);
+    if (m_mode == Mode::ReadOnly && m_fileSize >= 0) {
+        return m_fileSize;
+    }
+    auto fileSize = FileManager::getFileSize(path);
+    if (fileSize.succeed()) {
+        m_fileSize = fileSize.value();
+    }
+    return m_fileSize;
 }
 
-Data FileHandle::read(off_t offset, size_t size)
+Data FileHandle::read(size_t size)
 {
+    if (size == 0) {
+        return Data::null();
+    }
     WCTAssert(isOpened());
     Data data(size);
     if (data.empty()) {
         return Data::null();
     }
+    off_t offset =
+#ifndef _WIN32
+    (off_t) lseek(m_fd, 0, SEEK_SET);
+#else
+    (off_t) _lseeki64(m_fd, 0, SEEK_SET);
+#endif
+    if (offset != 0) {
+        setThreadedError();
+        return Data::null();
+    }
     ssize_t got;
     size_t prior = 0;
+    size_t readSize = size;
     unsigned char *buffer = data.buffer();
     do {
-        got = pread(m_fd, buffer, size, offset);
-        if (got == size) {
+#ifndef _WIN32
+        got = ::read(m_fd, buffer, readSize);
+#else
+        got = ::_read(m_fd, buffer, readSize);
+#endif
+        if (got == readSize) {
             break;
         }
         if (got < 0) {
@@ -132,8 +197,7 @@ Data FileHandle::read(off_t offset, size_t size)
             setThreadedError();
             break;
         } else if (got > 0) {
-            size -= got;
-            offset += got;
+            readSize -= got;
             prior += got;
             buffer = got + buffer;
         }
@@ -150,15 +214,29 @@ Data FileHandle::read(off_t offset, size_t size)
     return data.subdata(got + prior);
 }
 
-bool FileHandle::write(off_t offset, const UnsafeData &unsafeData)
+bool FileHandle::write(const UnsafeData &unsafeData)
 {
     WCTAssert(isOpened());
     ssize_t wrote;
     ssize_t prior = 0;
     size_t size = unsafeData.size();
     const unsigned char *buffer = unsafeData.buffer();
+    off_t offset =
+#ifndef _WIN32
+    (off_t) lseek(m_fd, 0, SEEK_SET);
+#else
+    (off_t) _lseeki64(m_fd, 0, SEEK_SET);
+#endif
+    if (offset != 0) {
+        setThreadedError();
+        return false;
+    }
     do {
-        wrote = pwrite(m_fd, buffer, size, offset);
+#ifndef _WIN32
+        wrote = ::write(m_fd, buffer, size);
+#else
+        wrote = ::_write(m_fd, buffer, size);
+#endif
         if (wrote == size) {
             break;
         }
@@ -171,14 +249,15 @@ bool FileHandle::write(off_t offset, const UnsafeData &unsafeData)
             break;
         } else if (wrote > 0) {
             size -= wrote;
-            offset += wrote;
             prior += wrote;
             buffer = wrote + buffer;
         }
     } while (wrote > 0);
-    if (wrote + prior == size) {
+    if (wrote + prior == unsafeData.size()) {
+        m_fileSize = unsafeData.size();
         return true;
     }
+    m_fileSize = -1;
     Error error;
     error.level = m_errorIgnorable ? Error::Level::Warning : Error::Level::Error;
     error.setSystemCode(EIO, Error::Code::IOError, "Short write.");
@@ -189,16 +268,28 @@ bool FileHandle::write(off_t offset, const UnsafeData &unsafeData)
 }
 
 #pragma mark - Memory map
-MappedData FileHandle::map(off_t offset, size_t size, SharedHighWater highWater)
+MappedData FileHandle::map(off_t offset, size_t length, SharedHighWater highWater)
 {
     WCTRemedialAssert(m_mode == Mode::ReadOnly,
                       "Map is only supported in Readonly mode.",
                       return MappedData::null(););
-    WCTAssert(size > 0);
-    static int s_pagesize = getpagesize();
-    int alignment = offset % s_pagesize;
-    off_t roundedOffset = offset - alignment;
-    size_t roundedSize = size + alignment;
+    WCTAssert(length > 0);
+    size_t fileSize = size();
+    size_t pageSize = memoryPageSize();
+    off_t offsetAlignment = offset % pageSize;
+    off_t roundedOffset = offset - offsetAlignment;
+    WCTAssert(roundedOffset < fileSize);
+
+    size_t roundedSize = length + offsetAlignment;
+    size_t sizeAlignment = roundedSize % pageSize;
+    if (sizeAlignment != 0) {
+        roundedSize += pageSize - sizeAlignment;
+    }
+    if (roundedSize + roundedOffset > fileSize) {
+        roundedSize = fileSize - roundedOffset;
+    }
+
+#ifndef _WIN32
     void *mapped = mmap(
     nullptr, roundedSize, PROT_READ, MAP_SHARED | MAP_NOEXTEND | MAP_NORESERVE, m_fd, roundedOffset);
     if (mapped == MAP_FAILED) {
@@ -212,7 +303,50 @@ MappedData FileHandle::map(off_t offset, size_t size, SharedHighWater highWater)
         return MappedData::null();
     }
     return MappedData(reinterpret_cast<unsigned char *>(mapped), roundedSize, highWater)
-    .subdata(alignment, size);
+    .subdata(offsetAlignment, std::min(length, roundedSize));
+#else
+    if (m_mapHandle == INVALID_HANDLE_VALUE) {
+        HANDLE handle = (HANDLE) _get_osfhandle(m_fd);
+        if (handle == INVALID_HANDLE_VALUE) {
+            Error error;
+            error.level = m_errorIgnorable ? Error::Level::Warning : Error::Level::Error;
+            error.setSystemCode(errno, Error::Code::IOError);
+            error.infos.insert_or_assign(ErrorStringKeyAssociatePath, path);
+            error.infos.insert_or_assign("MmapSize", roundedSize);
+            Notifier::shared().notify(error);
+            SharedThreadedErrorProne::setThreadedError(std::move(error));
+            return MappedData::null();
+        }
+        m_mapHandle = CreateFileMappingA(handle, NULL, PAGE_READONLY, 0, 0, NULL);
+        if (m_mapHandle == INVALID_HANDLE_VALUE) {
+            Error error;
+            error.level = m_errorIgnorable ? Error::Level::Warning : Error::Level::Error;
+            error.setWinSystemCode(GetLastError(), Error::Code::IOError);
+            error.infos.insert_or_assign(ErrorStringKeyAssociatePath, path);
+            error.infos.insert_or_assign("MmapSize", roundedSize);
+            Notifier::shared().notify(error);
+            SharedThreadedErrorProne::setThreadedError(std::move(error));
+            return MappedData::null();
+        }
+    }
+    WCTAssert(m_mapHandle != INVALID_HANDLE_VALUE);
+    uint32_t offsetLow = roundedOffset & 0xffffffff;
+    uint32_t offsetHigh = roundedOffset >> 32;
+    void *mapped
+    = MapViewOfFile(m_mapHandle, FILE_MAP_READ, offsetHigh, offsetLow, roundedSize);
+    if (mapped == NULL) {
+        Error error;
+        error.level = m_errorIgnorable ? Error::Level::Warning : Error::Level::Error;
+        error.setWinSystemCode(GetLastError(), Error::Code::IOError);
+        error.infos.insert_or_assign(ErrorStringKeyAssociatePath, path);
+        error.infos.insert_or_assign("MmapSize", roundedSize);
+        Notifier::shared().notify(error);
+        SharedThreadedErrorProne::setThreadedError(std::move(error));
+        return MappedData::null();
+    }
+    return MappedData(reinterpret_cast<unsigned char *>(mapped), roundedSize, highWater)
+    .subdata(offsetAlignment, std::min(length, roundedSize));
+#endif
 }
 
 UnsafeData FileHandle::mapOrReadAllData()
@@ -229,12 +363,28 @@ UnsafeData FileHandle::mapOrReadAllData()
         if (data.size() == fileSize) {
             return data;
         }
-        data = read(0, fileSize);
+        data = read(fileSize);
         if (data.size() == fileSize) {
             return data;
         }
     } while (false);
     return UnsafeData::null();
+}
+
+const size_t &FileHandle::memoryPageSize()
+{
+#ifndef _WIN32
+    static size_t s_memoryPageSize = getpagesize();
+#else
+    static size_t s_memoryPageSize = 0;
+    if (s_memoryPageSize == 0) {
+        SYSTEM_INFO system_info;
+        GetSystemInfo(&system_info);
+        s_memoryPageSize
+        = std::max(system_info.dwPageSize, system_info.dwAllocationGranularity);
+    }
+#endif
+    return s_memoryPageSize;
 }
 
 #pragma mark - Error
