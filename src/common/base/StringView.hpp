@@ -106,8 +106,8 @@ public:
 
     template<typename T, typename Enable = typename std::enable_if<Convertible<T>::value>::type>
     UnsafeStringView(const T& t)
-    : UnsafeStringView(Convertible<T>::asUnsafeStringView(t))
     {
+        *this = Convertible<T>::asUnsafeStringView(t);
     }
 };
 

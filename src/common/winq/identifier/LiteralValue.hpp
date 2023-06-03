@@ -44,8 +44,8 @@ public:
 
     template<typename T, typename Enable = typename std::enable_if<LiteralValueConvertible<T>::value>::type>
     LiteralValue(const T& t)
-    : LiteralValue(LiteralValueConvertible<T>::asLiteralValue(t))
     {
+        *this = LiteralValueConvertible<T>::asLiteralValue(t);
     }
 
     static LiteralValue currentTime();

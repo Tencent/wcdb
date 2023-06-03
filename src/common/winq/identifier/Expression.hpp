@@ -46,8 +46,8 @@ public:
 
     template<typename T, typename Enable = typename std::enable_if<ExpressionConvertible<T>::value>::type>
     Expression(const T& t)
-    : Expression(ExpressionConvertible<T>::asExpression(t))
     {
+        *this = ExpressionConvertible<T>::asExpression(t);
     }
 
     Expression();
