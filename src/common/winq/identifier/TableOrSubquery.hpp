@@ -36,8 +36,8 @@ public:
 
     template<typename T, typename Enable = typename std::enable_if<TableOrSubqueryConvertible<T>::value>::type>
     TableOrSubquery(const T& t)
-    : TableOrSubquery(TableOrSubqueryConvertible<T>::asTableOrSubquery(t))
     {
+        *this = TableOrSubqueryConvertible<T>::asTableOrSubquery(t);
     }
 
     TableOrSubquery(const UnsafeStringView& table);

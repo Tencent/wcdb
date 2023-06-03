@@ -78,8 +78,9 @@ public:
     };
 
     template<typename V, typename Enable = typename std::enable_if<Convertible<V>::value>::type>
-    _SyntaxList(const V& v) : _SyntaxList(Convertible<V>::asSyntaxList(v))
+    _SyntaxList(const V& v)
     {
+        *this = Convertible<V>::asSyntaxList(v);
     }
 #endif
 

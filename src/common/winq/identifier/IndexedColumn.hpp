@@ -36,8 +36,8 @@ public:
 
     template<typename T, typename Enable = typename std::enable_if<IndexedColumnConvertible<T>::value>::type>
     IndexedColumn(const T& t)
-    : IndexedColumn(IndexedColumnConvertible<T>::asIndexedColumn(t))
     {
+        *this = IndexedColumnConvertible<T>::asIndexedColumn(t);
     }
 
     IndexedColumn(const Column& column);

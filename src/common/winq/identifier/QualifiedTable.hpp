@@ -36,8 +36,8 @@ public:
 
     template<typename T, typename Enable = typename std::enable_if<QualifiedTableConvertible<T>::value>::type>
     QualifiedTable(const T& t)
-    : QualifiedTable(QualifiedTableConvertible<T>::asQualifiedTable(t))
     {
+        *this = QualifiedTableConvertible<T>::asQualifiedTable(t);
     }
 
     QualifiedTable(const UnsafeStringView& table);
