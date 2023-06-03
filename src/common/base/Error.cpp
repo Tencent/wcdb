@@ -29,10 +29,13 @@
 #include "StringView.hpp"
 #include <cstring>
 #include <sstream>
+#include <system_error>
 #ifndef __APPLE__
 #include "CrossPlatform.h"
 #endif
-#include <system_error>
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 namespace WCDB {
 
@@ -259,7 +262,7 @@ void Error::setSystemCode(int systemCode, Code codeIfUnresolved, const UnsafeStr
 #ifdef _WIN32
 void Error::setWinSystemCode(int systemCode, Code code, const UnsafeStringView& message)
 {
-    setCode(code, message.empty() ? StringView(std::system_category().message(systemCode)) : message);
+    setCode(code, message.empty() ? std::system_category().message(systemCode).data() : message);
     infos.insert_or_assign(ErrorStringKeySource, ErrorSourceSystem);
     infos.insert_or_assign(ErrorIntKeyExtCode, systemCode);
 }
@@ -276,8 +279,15 @@ void Error::setSQLiteCode(int rc, const UnsafeStringView& message)
     }
     infos.insert_or_assign(ErrorStringKeySource, ErrorSourceSQLite);
     if (code == Code::CantOpen || code == Code::IOError) {
+#ifndef _WIN32
         infos.insert_or_assign("SystemErrno", errno);
         infos.insert_or_assign("SystemErrMsg", strerror(errno));
+#else
+        int err = GetLastError();
+        infos.insert_or_assign("SystemErrno", err);
+        infos.insert_or_assign("SystemErrMsg",
+                               std::system_category().message(err).data());
+#endif
     }
 }
 
