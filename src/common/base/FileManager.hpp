@@ -60,7 +60,6 @@ public:
 #endif
     static bool createDirectory(const UnsafeStringView &path);
     static Optional<Time> getFileModifiedTime(const UnsafeStringView &path);
-    static Optional<Time> getFileCreatedTime(const UnsafeStringView &path);
     static Optional<uint32_t> getFileIdentifier(const UnsafeStringView &path);
     static bool createFile(const UnsafeStringView &path);
 
@@ -101,6 +100,10 @@ public:
 protected:
     static void setThreadedError(const UnsafeStringView &path);
     static void setThreadedError(Error::Code codeIfUnresolved);
+#ifdef _WIN32
+    static void setThreadedWinError(const UnsafeStringView &path);
+    static void setThreadedWinError(Error::Code codeIfUnresolved);
+#endif
 };
 
 } //namespace WCDB

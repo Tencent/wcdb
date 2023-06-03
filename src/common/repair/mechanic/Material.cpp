@@ -167,7 +167,7 @@ bool Material::encryptedSerialize(const UnsafeStringView &path,
     if (!fileHandle.open(FileHandle::Mode::OverWrite)) {
         return false;
     }
-    bool succeed = fileHandle.write(0, encryptData);
+    bool succeed = fileHandle.write(encryptData);
     fileHandle.close();
     FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
     return succeed;

@@ -188,6 +188,11 @@ public:
     void setSystemCode(int systemCode,
                        Code codeIfUnresolved,
                        const UnsafeStringView &message = UnsafeStringView());
+#ifdef _WIN32
+    void setWinSystemCode(int systemCode,
+                          Code code,
+                          const UnsafeStringView &message = UnsafeStringView());
+#endif
     void setSQLiteCode(int code, const UnsafeStringView &message = UnsafeStringView());
     void setCode(Code code, const UnsafeStringView &message = UnsafeStringView());
 

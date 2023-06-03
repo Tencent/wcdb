@@ -39,6 +39,7 @@ public:
     Time(const Super &super);
     Time(Super &&super);
     Time(const struct timespec &ts);
+    Time(const uint64_t &second);
     ~Time() override final;
 
     static Time now();
