@@ -276,7 +276,7 @@ FactoryRetriever::tryGetCiperSaltFromPath(const UnsafeStringView &databasePath)
         setCriticalErrorWithSharedThreadedError();
         return result;
     }
-    Data saltData = handle.read(0, saltLength);
+    Data saltData = handle.read(saltLength);
     if (saltData.size() != saltLength) {
         setCriticalErrorWithSharedThreadedError();
         return result;

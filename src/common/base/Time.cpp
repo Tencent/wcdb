@@ -48,6 +48,12 @@ std::chrono::seconds{ ts.tv_sec } + std::chrono::nanoseconds{ ts.tv_nsec }) })
 {
 }
 
+Time::Time(const uint64_t &second)
+: Super(std::chrono::system_clock::time_point{
+std::chrono::duration_cast<std::chrono::system_clock::duration>(std::chrono::seconds{ second }) })
+{
+}
+
 Time::~Time() = default;
 
 Time Time::now()
@@ -79,10 +85,17 @@ Optional<StringView> Time::stringify() const
       .count();
     std::time_t secondsPart = nanoseconds / (int) 1E9;
     struct tm tm;
+    int err = 0;
+#ifndef _WIN32
     if (localtime_r(&secondsPart, &tm) == nullptr) {
+        err = errno;
+#else
+    err = localtime_s(&tm, &secondsPart);
+    if (err) {
+#endif
         Error error;
         error.level = Error::Level::Error;
-        error.setSystemCode(errno, Error::Code::Error);
+        error.setSystemCode(err, Error::Code::Error);
         Notifier::shared().notify(error);
         setThreadedError(std::move(error));
         return NullOpt;

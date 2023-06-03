@@ -47,6 +47,9 @@ public:
 
 protected:
     int m_fd;
+#ifdef _WIN32
+    void *m_mapHandle;
+#endif
 
 #pragma mark - Basic
 public:
@@ -59,20 +62,26 @@ public:
     bool isOpened() const;
     void close();
     ssize_t size();
-    Data read(off_t offset, size_t size);
-    bool write(off_t offset, const UnsafeData &unsafeData);
-    void markErrorAsIgnorable(bool flag = true);
+    Data read(size_t size);
+    bool write(const UnsafeData &unsafeData);
 
 protected:
     int m_mode;
     bool m_errorIgnorable;
+    ssize_t m_fileSize;
 
 #pragma mark - Memory map
 public:
     MappedData map(off_t offset, size_t size, SharedHighWater highWater = nullptr);
     UnsafeData mapOrReadAllData();
 
+protected:
+    static const size_t &memoryPageSize();
+
 #pragma mark - Error
+public:
+    void markErrorAsIgnorable(bool flag = true);
+
 protected:
     //    void markAsMisuse(const char *message);
     void setThreadedError();

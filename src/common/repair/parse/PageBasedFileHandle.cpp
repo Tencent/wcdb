@@ -27,7 +27,6 @@
 #include "CoreConst.h"
 #include "Error.hpp"
 #include "Notifier.hpp"
-#include <unistd.h>
 
 namespace WCDB {
 
@@ -125,12 +124,6 @@ MappedData PageBasedFileHandle::mapPage(int pageno, SharedHighWater highWater)
 {
     WCTAssert(pageno > 0);
     return mapPage(pageno, 0, m_pageSize, highWater);
-}
-
-const size_t& PageBasedFileHandle::memoryPageSize()
-{
-    static size_t s_memoryPageSize = getpagesize();
-    return s_memoryPageSize;
 }
 
 size_t PageBasedFileHandle::cachePagePerRange() const

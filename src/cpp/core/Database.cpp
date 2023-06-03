@@ -32,7 +32,12 @@
 #include "Version.h"
 #include <errno.h>
 #include <stdlib.h>
+#ifndef _WIN32
 #include <unistd.h>
+#else
+#include <conio.h>
+#include <direct.h>
+#endif
 
 namespace WCDB {
 
@@ -43,6 +48,7 @@ Database::Database(const UnsafeStringView& path)
         m_innerDatabase = m_databaseHolder.get();
         return;
     }
+#ifndef _WIN32
     const char* resolvePath = realpath(path.data(), nullptr);
     if (resolvePath == nullptr && errno == ENOENT) {
         FileManager::createFile(path);
@@ -64,7 +70,15 @@ Database::Database(const UnsafeStringView& path)
 #endif
         m_databaseHolder = Core::shared().getOrCreateDatabase(newPath);
         free((void*) resolvePath);
-    } else {
+    }
+#else
+    char resolvePath[_MAX_PATH];
+    if (_fullpath(resolvePath, path.data(), _MAX_PATH) != NULL) {
+        UnsafeStringView newPath = UnsafeStringView(resolvePath);
+        m_databaseHolder = Core::shared().getOrCreateDatabase(newPath);
+    }
+#endif
+    else {
         Error error;
         error.level = Error::Level::Error;
         error.setSystemCode(errno, Error::Code::IOError);

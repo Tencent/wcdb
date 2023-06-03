@@ -23,18 +23,27 @@
  */
 
 #include "FileManager.hpp"
+#include "Assertion.hpp"
 #include "CoreConst.h"
 #include "Notifier.hpp"
 #include "Path.hpp"
 #include "StringView.hpp"
 #include "UnsafeData.hpp"
 #include <cstring>
-#include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+
+#ifndef _WIN32
+#include <dirent.h>
 #include <unistd.h>
+#else
+#include <direct.h>
+#include <io.h>
+#include <windows.h>
+#endif
+
 #ifndef __APPLE__
 #include "CrossPlatform.h"
 #endif
@@ -60,8 +69,13 @@ Optional<std::pair<bool, bool>> FileManager::itemExists(const UnsafeStringView &
 
 Optional<size_t> FileManager::getFileSize(const UnsafeStringView &file)
 {
+#ifndef _WIN32
     struct stat temp;
     if (stat(file.data(), &temp) == 0) {
+#else
+    struct _stat64 temp;
+    if (_stat64(file.data(), &temp) == 0) {
+#endif
         return (size_t) temp.st_size;
     } else if (errno == ENOENT) {
         return 0;
@@ -94,6 +108,7 @@ bool FileManager::enumerateDirectory(
 const UnsafeStringView &directory,
 const std::function<bool(const UnsafeStringView &, const UnsafeStringView &, bool)> &enumeration)
 {
+#ifndef _WIN32
     DIR *dir = opendir(directory.data());
     if (dir == NULL) {
         if (errno == ENOENT) {
@@ -112,22 +127,67 @@ const std::function<bool(const UnsafeStringView &, const UnsafeStringView &, boo
         }
     }
     closedir(dir);
+#else
+    StringView searchDir = Path::addComponent(directory, "*.*");
+    uint32_t status = 0;
+    WIN32_FIND_DATA findFileData;
+    HANDLE findHandle = FindFirstFile(searchDir.data(), &findFileData);
+    if (findHandle == INVALID_HANDLE_VALUE) {
+        if (GetLastError() == ERROR_PATH_NOT_FOUND) {
+            return true;
+        }
+        setThreadedWinError(directory);
+        return false;
+    }
+    bool isBreak = false;
+    do {
+        if (strcmp(findFileData.cFileName, ".") != 0
+            && strcmp(findFileData.cFileName, "..") != 0) {
+            if (!enumeration(directory,
+                             findFileData.cFileName,
+                             (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)) {
+                isBreak = true;
+                break;
+            }
+        }
+    } while (FindNextFile(findHandle, &findFileData) != 0);
+    if (!isBreak && GetLastError() != ERROR_NO_MORE_FILES) {
+        setThreadedWinError(directory);
+        bool ret = FindClose(findHandle);
+        WCTAssert(ret);
+        return false;
+    }
+    bool ret = FindClose(findHandle);
+    WCTAssert(ret);
+#endif
 
     return true;
 }
 #ifndef __ANDROID__
 bool FileManager::createFileHardLink(const UnsafeStringView &from, const UnsafeStringView &to)
 {
+#ifndef _WIN32
     if (link(from.data(), to.data()) == 0) {
         return true;
     }
     setThreadedError(to);
     return false;
+#else
+    if (CreateHardLink(to.data(), from.data(), NULL)) {
+        return true;
+    }
+    setThreadedWinError(to);
+    return false;
+#endif
 }
 
 bool FileManager::removeFileHardLink(const UnsafeStringView &path)
 {
+#ifndef _WIN32
     if (unlink(path.data()) == 0 || errno == ENOENT) {
+#else
+    if (_unlink(path.data()) == 0 || errno == ENOENT) {
+#endif
         return true;
     }
     setThreadedError(path);
@@ -146,6 +206,7 @@ bool FileManager::removeFile(const UnsafeStringView &file)
 
 bool FileManager::removeDirectory(const UnsafeStringView &directory)
 {
+#ifndef _WIN32
     DIR *dir = opendir(directory.data());
     if (dir == NULL) {
         if (errno == ENOENT) {
@@ -179,10 +240,55 @@ bool FileManager::removeDirectory(const UnsafeStringView &directory)
         return false;
     }
     return true;
+#else
+    StringView searchDir = Path::addComponent(directory, "*.*");
+    uint32_t status = 0;
+    WIN32_FIND_DATA findFileData;
+    HANDLE findHandle = FindFirstFile(searchDir.data(), &findFileData);
+    if (findHandle == INVALID_HANDLE_VALUE) {
+        if (GetLastError() == ERROR_PATH_NOT_FOUND) {
+            return true;
+        }
+        setThreadedWinError(directory);
+        return false;
+    }
+    bool result;
+    do {
+        if (strcmp(findFileData.cFileName, ".") != 0
+            && strcmp(findFileData.cFileName, "..") != 0) {
+            StringView currentPath = Path::addComponent(directory, findFileData.cFileName);
+            if ((findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) {
+                result = removeDirectory(currentPath);
+            } else {
+                result = removeFile(currentPath);
+            }
+            if (!result) {
+                setThreadedWinError(directory);
+                bool ret = FindClose(findHandle);
+                WCTAssert(ret);
+                return false;
+            }
+        }
+    } while (FindNextFile(findHandle, &findFileData) != 0);
+    if (GetLastError() != ERROR_NO_MORE_FILES) {
+        setThreadedWinError(directory);
+        bool ret = FindClose(findHandle);
+        WCTAssert(ret);
+        return false;
+    }
+    bool ret = FindClose(findHandle);
+    WCTAssert(ret);
+    if (!RemoveDirectoryA(directory.data())) {
+        setThreadedWinError(directory);
+        return false;
+    }
+    return true;
+#endif
 }
 
 bool FileManager::createDirectory(const UnsafeStringView &path)
 {
+#ifndef _WIN32
     constexpr const int mask = S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH;
     static_assert(mask == 0755, "");
     if (mkdir(path.data(), mask) == 0) {
@@ -190,6 +296,13 @@ bool FileManager::createDirectory(const UnsafeStringView &path)
     }
     setThreadedError(path);
     return false;
+#else
+    if (_mkdir(path.data()) == 0) {
+        return true;
+    }
+    setThreadedError(path);
+    return false;
+#endif
 }
 
 Optional<Time> FileManager::getFileModifiedTime(const UnsafeStringView &path)
@@ -202,31 +315,26 @@ Optional<Time> FileManager::getFileModifiedTime(const UnsafeStringView &path)
     return NullOpt;
 }
 
-Optional<Time> FileManager::getFileCreatedTime(const UnsafeStringView &path)
-{
-    struct stat result;
-    if (stat(path.data(), &result) == 0) {
-        return Time(result.st_ctimespec);
-    }
-    setThreadedError(path);
-    return NullOpt;
-}
-
 Optional<uint32_t> FileManager::getFileIdentifier(const UnsafeStringView &path)
 {
+#ifndef _WIN32
     struct stat result;
     if (stat(path.data(), &result) == 0) {
-        int size = sizeof(result.st_dev) + sizeof(result.st_ino);
+        constexpr int size = sizeof(result.st_dev) + sizeof(result.st_ino);
         unsigned char buffer[size];
         memcpy(buffer, &result.st_dev, sizeof(result.st_dev));
         memcpy(buffer + sizeof(result.st_dev), &result.st_ino, sizeof(result.st_ino));
         return UnsafeData(buffer, size).hash();
     }
     return NullOpt;
+#else
+    return path.hash();
+#endif
 }
 
 bool FileManager::createFile(const UnsafeStringView &path)
 {
+#ifndef _WIN32
     constexpr const int mask = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
     static_assert(mask == 0644, "");
     int fd = open(path.data(), O_CREAT | O_RDWR, mask);
@@ -234,6 +342,13 @@ bool FileManager::createFile(const UnsafeStringView &path)
         close(fd);
         return true;
     }
+#else
+    int fd = _open(path.data(), _O_CREAT | _O_RDWR, _S_IREAD | _S_IWRITE);
+    if (fd != -1) {
+        _close(fd);
+        return true;
+    }
+#endif
     setThreadedError(path);
     return false;
 }
@@ -459,5 +574,26 @@ void FileManager::setThreadedError(Error::Code codeIfUnresolved)
     Notifier::shared().notify(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
 }
+
+#ifdef _WIN32
+void FileManager::setThreadedWinError(const UnsafeStringView &path)
+{
+    Error error;
+    error.level = Error::Level::Error;
+    error.setWinSystemCode(GetLastError(), Error::Code::IOError);
+    error.infos.insert_or_assign(ErrorStringKeyAssociatePath, path);
+    Notifier::shared().notify(error);
+    SharedThreadedErrorProne::setThreadedError(std::move(error));
+}
+
+void FileManager::setThreadedWinError(Error::Code codeIfUnresolved)
+{
+    Error error;
+    error.level = Error::Level::Error;
+    error.setWinSystemCode(GetLastError(), codeIfUnresolved);
+    Notifier::shared().notify(error);
+    SharedThreadedErrorProne::setThreadedError(std::move(error));
+}
+#endif
 
 } //namespace WCDB

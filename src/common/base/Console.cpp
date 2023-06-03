@@ -73,15 +73,11 @@ void Console::fatal(const UnsafeStringView& message)
 
 Optional<StringView> Console::callstacks()
 {
+#if !defined(__ANDROID__) && !defined(_WIN32)
     constexpr const int size = 100;
     void* buffer[size];
-#if !defined(__ANDROID__) && !defined(_WIN32)
     int depth = backtrace(buffer, size);
     char** symbols = backtrace_symbols(buffer, depth);
-#else
-    int depth = 0;
-    char** symbols = nullptr;
-#endif
     if (symbols == nullptr) {
         return NullOpt;
     }
@@ -96,6 +92,9 @@ Optional<StringView> Console::callstacks()
     }
     free(symbols);
     return StringView(stream.str());
+#else
+    return NullOpt;
+#endif
 }
 
 } // namespace WCDB
