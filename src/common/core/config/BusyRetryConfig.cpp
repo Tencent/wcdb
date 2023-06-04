@@ -314,7 +314,6 @@ bool BusyRetryConfig::State::checkHasBusyRetry()
 
 void BusyRetryConfig::State::tryNotify()
 {
-#ifdef __APPLE__
     for (auto iter = m_waitings.begin(); iter != m_waitings.end();) {
         if (shouldWait(iter->value())) {
             if (iter->order() == Exclusivity::Must) {
@@ -323,15 +322,15 @@ void BusyRetryConfig::State::tryNotify()
             }
             ++iter;
         } else {
+#ifdef __APPLE__
             m_conditional.notify(iter->key());
             iter = m_waitings.erase(iter);
+#else
+            m_conditional.notify_all();
+            return;
+#endif
         }
     }
-#else
-    if (m_mainThreadBusyTrying == nullptr || !shouldWait(*m_mainThreadBusyTrying)) {
-        m_conditional.notify_all();
-    }
-#endif
 }
 
 #pragma mark - Trying
