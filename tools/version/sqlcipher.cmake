@@ -206,7 +206,7 @@ else()
             )
 endif ()
 
-if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+if (!WIN32 AND CMAKE_SIZEOF_VOID_P EQUAL 8)
     message(STATUS "Detected LP64 System, SQLite int64 set to long")
     list(APPEND COMPILE_DEFS SQLITE_INT64_TYPE=long)
 endif ()
