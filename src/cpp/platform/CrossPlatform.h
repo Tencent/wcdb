@@ -42,11 +42,13 @@
 #endif /* ndef MAP_NOEXTEND */
 #endif /* defined(__linux__) || defined(__ANDROID__) */
 
-#if defined(__linux__) || defined(__ANDROID__)
-
 #pragma mark - pthread
 
+#ifndef _WIN32
 #include <pthread.h>
+#endif
+
+#if defined(__linux__) || defined(__ANDROID__)
 
 WCDB_EXTERN_C_BEGIN
 int pthread_main_np();
@@ -64,6 +66,14 @@ WCDB_EXTERN_C_END
 
 #pragma mark - stat
 
+#ifndef _WIN32
+#define StatType struct stat
+#define StatFunc stat
+#else
+#define StatType struct _stat64
+#define StatFunc _stat64
+#endif
+
 #if defined(__linux__) || defined(__ANDROID__)
 #define st_atimespec st_atim
 #define st_mtimespec st_mtim
@@ -76,8 +86,37 @@ WCDB_EXTERN_C_END
 
 #pragma mark - uinstd
 
+#ifndef _WIN32
+#include <unistd.h>
+#else
+#include <io.h>
+#endif
+
+#ifndef O_BINARY
+#define O_BINARY 0
+#endif
+
 #ifdef __ANDROID__
 WCDB_EXTERN_C_BEGIN
 int getdtablesize();
 WCDB_EXTERN_C_END
 #endif /* __ANDROID__ */
+
+#ifdef _WIN32
+
+#define FileFullAccess S_IREAD | S_IWRITE
+#define lseek _lseeki64
+#define DirFullAccess 0
+#define mkdir(path, mask) _mkdir(path)
+#else
+
+#define FileFullAccess S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH
+#define DirFullAccess S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH
+
+#endif
+
+#pragma mark - string
+
+#ifdef _WIN32
+#define strncasecmp _strnicmp
+#endif
