@@ -251,6 +251,7 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
             ${WCDB_SRC_DIR}/common/*/Tag.hpp
             ${WCDB_SRC_DIR}/common/*/TokenizerModule.hpp
             ${WCDB_SRC_DIR}/common/*/TokenizerModuleTemplate.hpp
+            ${WCDB_SRC_DIR}/common/*/Types.h
             ${WCDB_SRC_DIR}/common/*/UnsafeData.hpp
             ${WCDB_SRC_DIR}/common/*/Upsert.hpp
             ${WCDB_SRC_DIR}/common/*/Value.hpp
@@ -294,7 +295,6 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
             ${WCDB_SRC_DIR}/cpp/*/Table.hpp
             ${WCDB_SRC_DIR}/cpp/*/TableOperation.hpp
             ${WCDB_SRC_DIR}/cpp/*/TableORMOperation.hpp
-            ${WCDB_SRC_DIR}/cpp/*/Types.h
             ${WCDB_SRC_DIR}/cpp/*/Update.hpp
             ${WCDB_SRC_DIR}/cpp/WCDBCpp.h
         )
