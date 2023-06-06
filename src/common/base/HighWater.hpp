@@ -24,8 +24,8 @@
 
 #pragma once
 
+#include "CrossPlatform.h"
 #include "Lock.hpp"
-#include <sys/types.h>
 
 namespace WCDB {
 
