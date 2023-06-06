@@ -35,7 +35,6 @@
 #define NOMINMAX
 #include <windows.h>
 #endif
-#include "CrossPlatform.h"
 
 namespace WCDB {
 

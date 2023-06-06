@@ -26,14 +26,11 @@
 #include "Assertion.hpp"
 #include "Core.hpp"
 #include "CoreConst.h"
+#include "CrossPlatform.h"
 #include "FileManager.hpp"
 #include "Global.hpp"
 #include "Notifier.hpp"
 #include <fcntl.h>
-#ifndef _WIN32
-#include <unistd.h>
-#endif
-#include "CrossPlatform.h"
 
 namespace WCDB {
 
