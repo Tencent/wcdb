@@ -40,31 +40,6 @@ int pthread_main_np()
     return pid == tid ? 1 : 0;
 }
 
-int pthread_threadid_np(pthread_t thread, __uint64_t* thread_id)
-{
-    int res = 0;
-    pthread_t self = pthread_self();
-
-    if (thread_id == NULL) {
-        return EINVAL;
-    }
-
-    if (thread == NULL || thread == self) {
-        *thread_id = self;
-    } else {
-        *thread_id = thread;
-    }
-    return res;
-}
-
-#if defined(__ANDROID__) && __ANDROID_API__ < 26
-int pthread_getname_np(pthread_t thread, char* name, size_t size)
-{
-    // TODO: Temporarily return 0 but do nothing
-    return 0;
-}
-#endif /* defined(__ANDROID__) && __ANDROID_API__ < 26 */
-
 #ifdef __ANDROID__
 #include <sys/sysconf.h>
 
