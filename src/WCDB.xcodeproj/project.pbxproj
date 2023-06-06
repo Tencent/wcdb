@@ -5069,7 +5069,6 @@
 				7521D38F28BD1133009C33D0 /* chaincall */,
 				03D3A2A428A605110064D4D4 /* operation */,
 				0D5363E7290A64320026A4DC /* builtin */,
-				0DE08A1A29CBE79C009A7CA3 /* platform */,
 			);
 			path = cpp;
 			sourceTree = "<group>";
@@ -5193,6 +5192,7 @@
 				2349F5D61EA0D6680021EFA7 /* winq */,
 				23775B3420AD666900E21AB0 /* repair */,
 				23775B2E20AD666900E21AB0 /* base */,
+				0DE08A1A29CBE79C009A7CA3 /* platform */,
 			);
 			path = common;
 			sourceTree = "<group>";
