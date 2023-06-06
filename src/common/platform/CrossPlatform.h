@@ -52,15 +52,8 @@
 
 WCDB_EXTERN_C_BEGIN
 int pthread_main_np();
-int pthread_threadid_np(pthread_t, __uint64_t*);
 WCDB_EXTERN_C_END
 #define pthread_setname_np(CHAR) pthread_setname_np(pthread_self(), CHAR)
-
-#if defined(__ANDROID__) && __ANDROID_API__ < 26
-WCDB_EXTERN_C_BEGIN
-int pthread_getname_np(pthread_t, char*, size_t);
-WCDB_EXTERN_C_END
-#endif /* defined(__ANDROID__) && __ANDROID_API__ < 26 */
 
 #endif /* defined(_linux__) || defined(__ANDROID__) */
 
