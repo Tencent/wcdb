@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include "CrossPlatform.h"
 #include "Data.hpp"
 #include "MappedData.hpp"
 #include "SharedThreadedErrorProne.hpp"
