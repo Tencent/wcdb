@@ -33,9 +33,7 @@
 #ifndef _WIN32
 #include <unistd.h>
 #endif
-#ifndef __APPLE__
 #include "CrossPlatform.h"
-#endif
 
 namespace WCDB {
 

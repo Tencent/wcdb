@@ -31,15 +31,11 @@
 #include <fcntl.h>
 #ifndef _WIN32
 #include <sys/mman.h>
-#include <unistd.h>
 #else
 #define NOMINMAX
-#include <io.h>
 #include <windows.h>
 #endif
-#ifndef __APPLE__
 #include "CrossPlatform.h"
-#endif
 
 namespace WCDB {
 
@@ -91,23 +87,12 @@ bool FileHandle::open(Mode mode)
     WCTAssert(!isOpened());
     switch (mode) {
     case Mode::OverWrite: {
-#ifndef _WIN32
-        constexpr const int mask = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
-        static_assert(mask == 0644, "");
-        m_fd = ::open(path.data(), O_CREAT | O_WRONLY | O_TRUNC, mask);
-#else
-        m_fd = ::_open(
-        path.data(), _O_BINARY | _O_CREAT | _O_WRONLY | _O_TRUNC, _S_IREAD | _S_IWRITE);
-#endif
+        m_fd = ::open(path.data(), O_BINARY | O_CREAT | O_WRONLY | O_TRUNC, FileFullAccess);
         break;
     }
     default:
         WCTAssert(mode == Mode::ReadOnly);
-#ifndef _WIN32
-        m_fd = ::open(path.data(), O_RDONLY);
-#else
-        m_fd = ::_open(path.data(), _O_BINARY | _O_RDONLY);
-#endif
+        m_fd = ::open(path.data(), O_RDONLY | O_BINARY);
         break;
     }
     if (m_fd == -1) {
@@ -133,11 +118,7 @@ void FileHandle::close()
     }
 #endif
     if (m_fd != -1) {
-#ifndef _WIN32
         int ret = ::close(m_fd);
-#else
-        int ret = ::_close(m_fd);
-#endif
         WCTAssert(ret == 0);
         m_fd = -1;
     }
@@ -165,12 +146,7 @@ Data FileHandle::read(size_t size)
     if (data.empty()) {
         return Data::null();
     }
-    off_t offset =
-#ifndef _WIN32
-    (off_t) lseek(m_fd, 0, SEEK_SET);
-#else
-    (off_t) _lseeki64(m_fd, 0, SEEK_SET);
-#endif
+    off_t offset = (off_t) lseek(m_fd, 0, SEEK_SET);
     if (offset != 0) {
         setThreadedError();
         return Data::null();
@@ -180,11 +156,7 @@ Data FileHandle::read(size_t size)
     size_t readSize = size;
     unsigned char *buffer = data.buffer();
     do {
-#ifndef _WIN32
         got = ::read(m_fd, buffer, readSize);
-#else
-        got = ::_read(m_fd, buffer, readSize);
-#endif
         if (got == readSize) {
             break;
         }
@@ -221,22 +193,13 @@ bool FileHandle::write(const UnsafeData &unsafeData)
     ssize_t prior = 0;
     size_t size = unsafeData.size();
     const unsigned char *buffer = unsafeData.buffer();
-    off_t offset =
-#ifndef _WIN32
-    (off_t) lseek(m_fd, 0, SEEK_SET);
-#else
-    (off_t) _lseeki64(m_fd, 0, SEEK_SET);
-#endif
+    off_t offset = (off_t) lseek(m_fd, 0, SEEK_SET);
     if (offset != 0) {
         setThreadedError();
         return false;
     }
     do {
-#ifndef _WIN32
         wrote = ::write(m_fd, buffer, size);
-#else
-        wrote = ::_write(m_fd, buffer, size);
-#endif
         if (wrote == size) {
             break;
         }

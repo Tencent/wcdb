@@ -23,12 +23,10 @@
  */
 
 #include "Thread.hpp"
+#include "CrossPlatform.h"
 #include "Error.hpp"
 #include "Notifier.hpp"
 #include <cstring>
-#if !defined(__APPLE__) && !defined(_WIN32)
-#include "CrossPlatform.h"
-#endif
 
 namespace WCDB {
 
@@ -77,12 +75,10 @@ Thread Thread::current()
 
 bool Thread::isMain()
 {
-#if defined(__APPLE__) || defined(__linux__) || defined(__ANDROID__)
+#ifndef _WIN32
     return pthread_main_np() != 0;
-#elif defined(_WIN32)
-    return std::this_thread::get_id() == m_uiThreadId;
 #else
-    return false;
+    return std::this_thread::get_id() == m_uiThreadId;
 #endif
 }
 
@@ -116,7 +112,7 @@ constexpr int Thread::maxLengthOfAllowedThreadName()
 
 void Thread::setName(const UnsafeStringView& name)
 {
-#if defined(__APPLE__) || defined(__linux__) || defined(__ANDROID__)
+#ifndef _WIN32
     char buffer[maxLengthOfAllowedThreadName()];
     memset(buffer, 0, maxLengthOfAllowedThreadName());
     memcpy(buffer, name.data(), name.length());

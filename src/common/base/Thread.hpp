@@ -24,14 +24,12 @@
 
 #pragma once
 
+#include "CrossPlatform.h"
 #include "Macro.h"
 #include "SharedThreadedErrorProne.hpp"
 #include "StringView.hpp"
 #include <cstddef>
 #include <thread>
-#if defined(__APPLE__) || defined(__linux__) || defined(__ANDROID__)
-#include <pthread.h>
-#endif
 
 namespace WCDB {
 

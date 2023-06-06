@@ -34,27 +34,21 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-
 #ifndef _WIN32
 #include <dirent.h>
-#include <unistd.h>
 #else
 #include <direct.h>
-#include <io.h>
 #include <windows.h>
 #endif
-
-#ifndef __APPLE__
 #include "CrossPlatform.h"
-#endif
 
 namespace WCDB {
 
 #pragma mark - Basic
 Optional<std::pair<bool, bool>> FileManager::itemExists(const UnsafeStringView &path)
 {
-    struct stat s;
-    if (stat(path.data(), &s) == 0) {
+    StatType s;
+    if (StatFunc(path.data(), &s) == 0) {
         if ((s.st_mode & S_IFMT) == S_IFDIR) {
             return std::make_pair(true, true);
         } else {
@@ -69,13 +63,8 @@ Optional<std::pair<bool, bool>> FileManager::itemExists(const UnsafeStringView &
 
 Optional<size_t> FileManager::getFileSize(const UnsafeStringView &file)
 {
-#ifndef _WIN32
-    struct stat temp;
-    if (stat(file.data(), &temp) == 0) {
-#else
-    struct _stat64 temp;
-    if (_stat64(file.data(), &temp) == 0) {
-#endif
+    StatType temp;
+    if (StatFunc(file.data(), &temp) == 0) {
         return (size_t) temp.st_size;
     } else if (errno == ENOENT) {
         return 0;
@@ -183,11 +172,7 @@ bool FileManager::createFileHardLink(const UnsafeStringView &from, const UnsafeS
 
 bool FileManager::removeFileHardLink(const UnsafeStringView &path)
 {
-#ifndef _WIN32
     if (unlink(path.data()) == 0 || errno == ENOENT) {
-#else
-    if (_unlink(path.data()) == 0 || errno == ENOENT) {
-#endif
         return true;
     }
     setThreadedError(path);
@@ -288,27 +273,17 @@ bool FileManager::removeDirectory(const UnsafeStringView &directory)
 
 bool FileManager::createDirectory(const UnsafeStringView &path)
 {
-#ifndef _WIN32
-    constexpr const int mask = S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH;
-    static_assert(mask == 0755, "");
-    if (mkdir(path.data(), mask) == 0) {
+    if (mkdir(path.data(), DirFullAccess) == 0) {
         return true;
     }
     setThreadedError(path);
     return false;
-#else
-    if (_mkdir(path.data()) == 0) {
-        return true;
-    }
-    setThreadedError(path);
-    return false;
-#endif
 }
 
 Optional<Time> FileManager::getFileModifiedTime(const UnsafeStringView &path)
 {
-    struct stat result;
-    if (stat(path.data(), &result) == 0) {
+    StatType result;
+    if (StatFunc(path.data(), &result) == 0) {
         return Time(result.st_mtimespec);
     }
     setThreadedError(path);
@@ -318,8 +293,8 @@ Optional<Time> FileManager::getFileModifiedTime(const UnsafeStringView &path)
 Optional<uint32_t> FileManager::getFileIdentifier(const UnsafeStringView &path)
 {
 #ifndef _WIN32
-    struct stat result;
-    if (stat(path.data(), &result) == 0) {
+    StatType result;
+    if (StatFunc(path.data(), &result) == 0) {
         constexpr int size = sizeof(result.st_dev) + sizeof(result.st_ino);
         unsigned char buffer[size];
         memcpy(buffer, &result.st_dev, sizeof(result.st_dev));
@@ -334,21 +309,11 @@ Optional<uint32_t> FileManager::getFileIdentifier(const UnsafeStringView &path)
 
 bool FileManager::createFile(const UnsafeStringView &path)
 {
-#ifndef _WIN32
-    constexpr const int mask = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
-    static_assert(mask == 0644, "");
-    int fd = open(path.data(), O_CREAT | O_RDWR, mask);
+    int fd = open(path.data(), O_CREAT | O_RDWR | O_BINARY, FileFullAccess);
     if (fd != -1) {
         close(fd);
         return true;
     }
-#else
-    int fd = _open(path.data(), _O_CREAT | _O_RDWR, _S_IREAD | _S_IWRITE);
-    if (fd != -1) {
-        _close(fd);
-        return true;
-    }
-#endif
     setThreadedError(path);
     return false;
 }
@@ -356,8 +321,8 @@ bool FileManager::createFile(const UnsafeStringView &path)
 #pragma mark - Combination
 Optional<size_t> FileManager::getItemSize(const UnsafeStringView &path)
 {
-    struct stat temp;
-    if (stat(path.data(), &temp) == 0) {
+    StatType temp;
+    if (StatFunc(path.data(), &temp) == 0) {
         if ((temp.st_mode & S_IFMT) == S_IFDIR) {
             return getDirectorySize(path);
         }
@@ -407,8 +372,8 @@ Optional<size_t> FileManager::getItemsSize(const std::list<StringView> &paths)
 
 bool FileManager::removeItem(const UnsafeStringView &path)
 {
-    struct stat temp;
-    if (stat(path.data(), &temp) == 0) {
+    StatType temp;
+    if (StatFunc(path.data(), &temp) == 0) {
         if ((temp.st_mode & S_IFMT) == S_IFDIR) {
             return removeDirectory(path);
         }

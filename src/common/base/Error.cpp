@@ -25,14 +25,12 @@
 #include "Error.hpp"
 #include "Assertion.hpp"
 #include "CoreConst.h"
+#include "CrossPlatform.h"
 #include "SQLite.h"
 #include "StringView.hpp"
 #include <cstring>
 #include <sstream>
 #include <system_error>
-#ifndef __APPLE__
-#include "CrossPlatform.h"
-#endif
 #ifdef _WIN32
 #include <windows.h>
 #endif

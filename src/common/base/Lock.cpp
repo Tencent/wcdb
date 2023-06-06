@@ -24,10 +24,8 @@
 
 #include "Lock.hpp"
 #include "Assertion.hpp"
-#include <condition_variable>
-#ifndef __APPLE__
 #include "CrossPlatform.h"
-#endif
+#include <condition_variable>
 
 namespace WCDB {
 
