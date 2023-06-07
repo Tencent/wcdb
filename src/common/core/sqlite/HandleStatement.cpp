@@ -189,9 +189,9 @@ bool HandleStatement::tryExtractColumnInfo(const Statement &statement,
         columnInfo[index] = StringView(msgStr + i, preLocation - i);
     } else {
         isInsert = true;
-        off_t firstLoc = msg.find(" has no column named ");
+        offset_t firstLoc = msg.find(" has no column named ");
         const UnsafeStringView tablePart(msgStr + 6, firstLoc - 6);
-        off_t secondLoc = tablePart.find(".");
+        offset_t secondLoc = tablePart.find(".");
         if (secondLoc == UnsafeStringView::npos) {
             columnInfo[1] = tablePart;
         } else {

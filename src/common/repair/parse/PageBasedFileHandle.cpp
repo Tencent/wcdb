@@ -57,7 +57,7 @@ Range PageBasedFileHandle::restrictedRange(Range::Location base,
 }
 
 MappedData PageBasedFileHandle::mapPage(int pageno,
-                                        off_t offsetWithinPage,
+                                        offset_t offsetWithinPage,
                                         size_t sizeWithinPage,
                                         SharedHighWater highWater)
 {
@@ -67,8 +67,8 @@ MappedData PageBasedFileHandle::mapPage(int pageno,
     WCTAssert(sizeWithinPage <= m_pageSize && sizeWithinPage > 0);
     WCTAssert(m_cachePageSize >= m_pageSize);
 
-    off_t offset = (pageno - 1) * m_pageSize + offsetWithinPage;
-    off_t cachePageno = offset / m_cachePageSize;
+    offset_t offset = (pageno - 1) * m_pageSize + offsetWithinPage;
+    offset_t cachePageno = offset / m_cachePageSize;
 
     // assert same cache page
     WCTAssert(cachePageno == (offset + sizeWithinPage - 1) / m_cachePageSize);
@@ -78,7 +78,7 @@ MappedData PageBasedFileHandle::mapPage(int pageno,
     std::tie(gap, cachedData) = m_cache.find(cachePageno);
     if (cachedData != nullptr) {
         WCTAssert(gap.contains(cachePageno));
-        off_t offsetWithinCache = offset - gap.location * m_cachePageSize;
+        offset_t offsetWithinCache = offset - gap.location * m_cachePageSize;
         WCTAssert(offsetWithinCache < gap.length * m_cachePageSize);
         return cachedData->subdata(offsetWithinCache, sizeWithinPage);
     }
@@ -101,7 +101,7 @@ MappedData PageBasedFileHandle::mapPage(int pageno,
 
         if (!mappedData.empty()) {
             m_cache.insert(range, mappedData);
-            off_t offsetWithinCache = offset - range.location * m_cachePageSize;
+            offset_t offsetWithinCache = offset - range.location * m_cachePageSize;
             WCTAssert(offsetWithinCache < range.length * m_cachePageSize);
             return mappedData.subdata(offsetWithinCache, sizeWithinPage);
         } else if (cuttable) {

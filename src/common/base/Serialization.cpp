@@ -38,16 +38,16 @@ SerializeIteration::SerializeIteration() : m_cursor(0)
 
 SerializeIteration::~SerializeIteration() = default;
 
-void SerializeIteration::seek(off_t position)
+void SerializeIteration::seek(offset_t position)
 {
     if (position < 0) {
-        m_cursor = std::max((off_t) 0, (off_t) capacity() + position + 1);
+        m_cursor = std::max((offset_t) 0, (offset_t) capacity() + position + 1);
     } else {
-        m_cursor = std::min((off_t) capacity(), position);
+        m_cursor = std::min((offset_t) capacity(), position);
     }
 }
 
-void SerializeIteration::advance(off_t offset)
+void SerializeIteration::advance(offset_t offset)
 {
     seek(m_cursor + offset);
 }
@@ -64,7 +64,7 @@ bool SerializeIteration::canAdvance(size_t size) const
 
 bool SerializeIteration::ended() const
 {
-    return m_cursor == (off_t) capacity();
+    return m_cursor == (offset_t) capacity();
 }
 
 const unsigned char *SerializeIteration::pointee() const
@@ -116,7 +116,7 @@ unsigned char *Serialization::base()
 #pragma mark - Put
 bool Serialization::putSizedString(const UnsafeStringView &string)
 {
-    off_t cursor = m_cursor;
+    offset_t cursor = m_cursor;
     bool succeed = false;
     do {
         size_t size = string.size();
@@ -139,7 +139,7 @@ bool Serialization::putSizedString(const UnsafeStringView &string)
 
 bool Serialization::putSizedData(const UnsafeData &data)
 {
-    off_t cursor = m_cursor;
+    offset_t cursor = m_cursor;
     bool succeed = false;
     do {
         size_t size = data.size();
@@ -176,7 +176,7 @@ bool Serialization::put4BytesUInt(uint32_t value)
 
 bool Serialization::put8BytesUInt(uint64_t value)
 {
-    off_t cursor = m_cursor;
+    offset_t cursor = m_cursor;
     if (!put4BytesUInt((uint32_t) (value >> 32)) || !put4BytesUInt((uint32_t) value)) {
         seek(cursor);
         return false;
@@ -347,7 +347,7 @@ uint32_t Deserialization::advance4BytesUInt()
     return value;
 }
 
-std::pair<size_t, StringView> Deserialization::getSizedString(off_t offset) const
+std::pair<size_t, StringView> Deserialization::getSizedString(offset_t offset) const
 {
     size_t lengthOfSize;
     uint64_t size;
@@ -358,7 +358,7 @@ std::pair<size_t, StringView> Deserialization::getSizedString(off_t offset) cons
     return { lengthOfSize + size, getString((size_t) offset + lengthOfSize, (size_t) size) };
 }
 
-std::pair<size_t, const UnsafeData> Deserialization::getSizedData(off_t offset) const
+std::pair<size_t, const UnsafeData> Deserialization::getSizedData(offset_t offset) const
 {
     size_t lengthOfSize;
     uint64_t size;
@@ -369,7 +369,7 @@ std::pair<size_t, const UnsafeData> Deserialization::getSizedData(off_t offset) 
     return { lengthOfSize + size, getData((size_t) offset + lengthOfSize, (size_t) size) };
 }
 
-std::pair<size_t, uint64_t> Deserialization::getVarint(off_t offset) const
+std::pair<size_t, uint64_t> Deserialization::getVarint(offset_t offset) const
 {
     if (!isEnough((size_t) offset + 1)) {
         return { 0, 0 };
@@ -539,7 +539,7 @@ std::pair<size_t, uint64_t> Deserialization::getVarint(off_t offset) const
     return { 9, ((uint64_t) s) << 32 | a };
 }
 
-StringView Deserialization::getString(off_t offset, size_t size) const
+StringView Deserialization::getString(offset_t offset, size_t size) const
 {
     if (size == 0) {
         return StringView();
@@ -548,13 +548,13 @@ StringView Deserialization::getString(off_t offset, size_t size) const
     return StringView(reinterpret_cast<const char *>(base() + offset), size);
 }
 
-const UnsafeData Deserialization::getData(off_t offset, size_t size) const
+const UnsafeData Deserialization::getData(offset_t offset, size_t size) const
 {
     WCTAssert(isEnough((size_t) offset + size));
     return UnsafeData::immutable(base() + offset, size);
 }
 
-int64_t Deserialization::get8BytesInt(off_t offset) const
+int64_t Deserialization::get8BytesInt(offset_t offset) const
 {
     WCTAssert(isEnough((size_t) offset + 8));
     uint64_t x = get4BytesUInt(offset);
@@ -563,40 +563,40 @@ int64_t Deserialization::get8BytesInt(off_t offset) const
     return *(int64_t *) &x;
 }
 
-int64_t Deserialization::get6BytesInt(off_t offset) const
+int64_t Deserialization::get6BytesInt(offset_t offset) const
 {
     WCTAssert(isEnough((size_t) offset + 6));
     return get4BytesInt(offset + 2) + (((int64_t) 1) << 32) * get2BytesInt(offset);
 }
 
-int32_t Deserialization::get4BytesInt(off_t offset) const
+int32_t Deserialization::get4BytesInt(offset_t offset) const
 {
     WCTAssert(isEnough((size_t) offset + 4));
     const unsigned char *p = base() + offset;
     return (16777216 * (int8_t) (p[0]) | (p[1] << 16) | (p[2] << 8) | p[3]);
 }
 
-int32_t Deserialization::get3BytesInt(off_t offset) const
+int32_t Deserialization::get3BytesInt(offset_t offset) const
 {
     WCTAssert(isEnough((size_t) offset + 3));
     const unsigned char *p = base() + offset;
     return (65536 * (int8_t) (p[0]) | (p[1] << 8) | p[2]);
 }
 
-int32_t Deserialization::get2BytesInt(off_t offset) const
+int32_t Deserialization::get2BytesInt(offset_t offset) const
 {
     WCTAssert(isEnough((size_t) offset + 2));
     const unsigned char *p = base() + offset;
     return (256 * (int8_t) (p[0]) | p[1]);
 }
 
-int32_t Deserialization::get1ByteInt(off_t offset) const
+int32_t Deserialization::get1ByteInt(offset_t offset) const
 {
     WCTAssert(isEnough((size_t) offset + 1));
     return (int8_t) (base() + offset)[0];
 }
 
-double Deserialization::get8BytesDouble(off_t offset) const
+double Deserialization::get8BytesDouble(offset_t offset) const
 {
     WCTAssert(isEnough((size_t) offset + 8));
     uint64_t x = get4BytesUInt(offset);
@@ -607,7 +607,7 @@ double Deserialization::get8BytesDouble(off_t offset) const
     return d;
 }
 
-uint32_t Deserialization::get4BytesUInt(off_t offset) const
+uint32_t Deserialization::get4BytesUInt(offset_t offset) const
 {
     WCTAssert(isEnough((size_t) offset + 4));
     const unsigned char *p = base() + offset;

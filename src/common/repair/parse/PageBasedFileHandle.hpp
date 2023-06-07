@@ -38,7 +38,7 @@ public:
     ~PageBasedFileHandle() override final;
 
     MappedData
-    mapPage(int pageno, off_t offset, size_t size, SharedHighWater highWater = nullptr);
+    mapPage(int pageno, offset_t offset, size_t size, SharedHighWater highWater = nullptr);
     MappedData mapPage(int pageno, SharedHighWater highWater = nullptr);
 
 protected:

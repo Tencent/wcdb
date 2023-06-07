@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2018/07/25
+// Created by qiuwenchen on 2023/6/6.
 //
 
 /*
@@ -23,36 +23,22 @@
  */
 
 #pragma once
-
-#include "CrossPlatform.h"
-#include "Types.h"
+#include <sys/types.h>
+#ifdef _WIN32
+#include <BaseTsd.h>
+#endif
 
 namespace WCDB {
 
-class Range final {
-public:
-    using Location = offset_t;
-    using Length = size_t;
+#ifndef _WIN32
 
-    static const Range& notFound();
+typedef off_t offset_t;
 
-    Range();
-    Range(Location location, Length length);
+#else
 
-    Location location;
-    Length length;
+typedef SSIZE_T ssize_t;
+typedef SSIZE_T offset_t;
 
-    void expandToEdge(Location edge);
-    void shiftToLocation(Location location);
-    void shiftToEdge(Location edge);
-    Location edge() const;
+#endif //_WIN32
 
-    bool contains(Location location_) const;
-    bool contains(const Range& other) const;
-
-    bool operator<(const Range& other) const;
-    bool operator==(const Range& other) const;
-    bool operator!=(const Range& other) const;
-};
-
-} // namespace WCDB
+} //namespace WCDB
