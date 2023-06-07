@@ -51,7 +51,7 @@ protected:
     using SharedData = UnsafeData::SharedData;
     using SharedBuffer = UnsafeData::SharedBuffer;
     Data(unsigned char* buffer, size_t size, const SharedBuffer& sharedBuffer);
-    off_t getCurrentOffset() const;
+    offset_t getCurrentOffset() const;
     size_t getSharedSize() const;
 
 #pragma mark - Reset
@@ -68,7 +68,7 @@ protected:
 #pragma mark - Subdata
 public:
     Data subdata(size_t size) const;
-    Data subdata(off_t offset, size_t size) const;
+    Data subdata(offset_t offset, size_t size) const;
 
 #pragma mark - Empty
 public:

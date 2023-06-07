@@ -26,6 +26,7 @@
 
 #include "Recyclable.hpp"
 #include "SharedThreadedErrorProne.hpp"
+#include "Types.h"
 #include <memory>
 #include <stdio.h>
 #include <stdlib.h>
@@ -85,7 +86,7 @@ protected:
 #pragma mark - Subdata
 public:
     UnsafeData subdata(size_t size) const;
-    UnsafeData subdata(off_t offset, size_t size) const;
+    UnsafeData subdata(offset_t offset, size_t size) const;
 
 #pragma mark - Empty
 public:

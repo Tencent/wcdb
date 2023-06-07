@@ -43,7 +43,7 @@ public:
     ~MappedData() override final;
 
     MappedData subdata(size_t size) const;
-    MappedData subdata(off_t offset, size_t size) const;
+    MappedData subdata(offset_t offset, size_t size) const;
 
     static const MappedData& null();
 

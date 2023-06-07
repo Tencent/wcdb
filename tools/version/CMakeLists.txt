@@ -294,6 +294,7 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
             ${WCDB_SRC_DIR}/cpp/*/Table.hpp
             ${WCDB_SRC_DIR}/cpp/*/TableOperation.hpp
             ${WCDB_SRC_DIR}/cpp/*/TableORMOperation.hpp
+            ${WCDB_SRC_DIR}/cpp/*/Types.h
             ${WCDB_SRC_DIR}/cpp/*/Update.hpp
             ${WCDB_SRC_DIR}/cpp/WCDBCpp.h
         )

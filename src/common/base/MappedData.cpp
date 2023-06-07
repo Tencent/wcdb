@@ -109,7 +109,7 @@ MappedData MappedData::subdata(size_t size) const
     return MappedData(UnsafeData::subdata(size));
 }
 
-MappedData MappedData::subdata(off_t offset, size_t size) const
+MappedData MappedData::subdata(offset_t offset, size_t size) const
 {
     return MappedData(UnsafeData::subdata(offset, size));
 }

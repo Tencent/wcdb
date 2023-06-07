@@ -107,7 +107,7 @@ UnsafeData Pager::acquirePageData(int number)
     return acquirePageData(number, 0, m_pageSize);
 }
 
-UnsafeData Pager::acquirePageData(int number, off_t offset, size_t size)
+UnsafeData Pager::acquirePageData(int number, offset_t offset, size_t size)
 {
     WCTAssert(isInitialized());
     WCTAssert(number > 0);

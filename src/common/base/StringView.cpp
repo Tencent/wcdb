@@ -112,7 +112,7 @@ bool UnsafeStringView::operator>(const UnsafeStringView& other) const
     return compare(other) > 0;
 }
 
-const char& UnsafeStringView::operator[](off_t off) const
+const char& UnsafeStringView::operator[](offset_t off) const
 {
     return m_data[off];
 }
@@ -145,7 +145,7 @@ bool UnsafeStringView::empty() const
     return m_length == 0;
 }
 
-const char& UnsafeStringView::at(off_t off) const
+const char& UnsafeStringView::at(offset_t off) const
 {
     return m_data[off];
 }

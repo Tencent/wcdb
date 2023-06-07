@@ -145,7 +145,7 @@ Data FileHandle::read(size_t size)
     if (data.empty()) {
         return Data::null();
     }
-    off_t offset = (off_t) lseek(m_fd, 0, SEEK_SET);
+    offset_t offset = (offset_t) lseek(m_fd, 0, SEEK_SET);
     if (offset != 0) {
         setThreadedError();
         return Data::null();
@@ -192,7 +192,7 @@ bool FileHandle::write(const UnsafeData &unsafeData)
     ssize_t prior = 0;
     size_t size = unsafeData.size();
     const unsigned char *buffer = unsafeData.buffer();
-    off_t offset = (off_t) lseek(m_fd, 0, SEEK_SET);
+    offset_t offset = (offset_t) lseek(m_fd, 0, SEEK_SET);
     if (offset != 0) {
         setThreadedError();
         return false;
@@ -230,7 +230,7 @@ bool FileHandle::write(const UnsafeData &unsafeData)
 }
 
 #pragma mark - Memory map
-MappedData FileHandle::map(off_t offset, size_t length, SharedHighWater highWater)
+MappedData FileHandle::map(offset_t offset, size_t length, SharedHighWater highWater)
 {
     WCTRemedialAssert(m_mode == Mode::ReadOnly,
                       "Map is only supported in Readonly mode.",
@@ -238,8 +238,8 @@ MappedData FileHandle::map(off_t offset, size_t length, SharedHighWater highWate
     WCTAssert(length > 0);
     size_t fileSize = size();
     size_t pageSize = memoryPageSize();
-    off_t offsetAlignment = offset % pageSize;
-    off_t roundedOffset = offset - offsetAlignment;
+    offset_t offsetAlignment = offset % pageSize;
+    offset_t roundedOffset = offset - offsetAlignment;
     WCTAssert(roundedOffset < fileSize);
 
     size_t roundedSize = length + offsetAlignment;
