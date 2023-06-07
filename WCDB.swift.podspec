@@ -4,7 +4,7 @@
 # pod trunk push --verbose --allow-warnings WCDB.swift.podspec
 Pod::Spec.new do |wcdb|
   wcdb.name         = "WCDB.swift"
-  wcdb.version      = "2.0.1"
+  wcdb.version      = "2.0.2"
   wcdb.summary      = "WCDB is a cross-platform database framework developed by WeChat."
   wcdb.description  = <<-DESC
                       The WeChat Database, for Swift. (If you want to use WCDB for Objective-C or C++, see the "WCDB.objc" pod or "WCDB.cpp" pod. If you want to use WCDB for C++/Objc/Swift in one project, see the "WCDB" pod)
@@ -16,7 +16,7 @@ Pod::Spec.new do |wcdb|
   wcdb.module_name  = "WCDBSwift"
   wcdb.license      = { :type => "BSD", :file => "LICENSE" }
   wcdb.author       = { "Qiuwen-Chen" => "qwchen2008@163.com" }
-  wcdb.ios.deployment_target = "12.4"
+  wcdb.ios.deployment_target = "11.0"
   wcdb.osx.deployment_target = "10.13"
   wcdb.watchos.deployment_target = "7.0"
   wcdb.tvos.deployment_target = "12.4"
@@ -34,7 +34,7 @@ Pod::Spec.new do |wcdb|
     sna.source_files = "src/objc/core/WCTOperationQueue.mm", "src/common/core/operate/OperationQueueForMemory.cpp", "src/common/core/operate/OperationQueueForMemory.hpp"
   end
   wcdb.pod_target_xcconfig = { 
-    "GCC_PREPROCESSOR_DEFINITIONS" => "SQLITE_WCDB=1 SQLITE_WCDB_LOCK_HOOK=1 SQLITE_WCDB_CHECKPOINT_HANDLER=1 SQLITE_WCDB_SUSPEND=1 SQLITE_HAS_CODEC SQLITE_DEFAULT_PAGE_SIZE=4096 SQLITE_MAX_VARIABLE_NUMBER=99 SQLITE_DEFAULT_SYNCHRONOUS=1 SQLITE_DEFAULT_WAL_SYNCHRONOUS=1 SQLITE_DEFAULT_LOCKING_MODE=0 SQLITE_DEFAULT_WAL_AUTOCHECKPOINT=0",
+    "GCC_PREPROCESSOR_DEFINITIONS" => "SQLITE_WCDB=1 SQLITE_WCDB_LOCK_HOOK=1 SQLITE_WCDB_CHECKPOINT_HANDLER=1 SQLITE_WCDB_SUSPEND=1 SQLITE_WCDB_IMPROVED_CHECKPOINT=1 SQLITE_HAS_CODEC SQLITE_DEFAULT_PAGE_SIZE=4096 SQLITE_MAX_VARIABLE_NUMBER=99 SQLITE_DEFAULT_SYNCHRONOUS=1 SQLITE_DEFAULT_WAL_SYNCHRONOUS=1 SQLITE_DEFAULT_LOCKING_MODE=0 SQLITE_DEFAULT_WAL_AUTOCHECKPOINT=0",
     'SWIFT_WHOLE_MODULE_OPTIMIZATION' => 'YES',
     'APPLICATION_EXTENSION_API_ONLY' => 'YES',
     "HEADER_SEARCH_PATHS" => "${PODS_ROOT}/WCDBSwift",
@@ -48,10 +48,10 @@ Pod::Spec.new do |wcdb|
     "CLANG_CXX_LIBRARY" => "libc++",
     "GCC_C_LANGUAGE_STANDARD" => "gnu11",
     "VALID_ARCHS" => "arm64e arm64 x86_64",
-    "VALID_ARCHS[sdk=watchos*]" => "arm64_32 armv7k i386",
+    "VALID_ARCHS[sdk=watchos*]" => "arm64_32 arm64 x86_64",
     "OTHER_CFLAGS" => "-fvisibility-inlines-hidden",
     "OTHER_CPLUSPLUSFLAGS" => "-fvisibility-inlines-hidden",
   }
   wcdb.swift_versions = '5'
-  wcdb.dependency 'WCDBOptimizedSQLCipher', '~> 1.4.0'
+  wcdb.dependency 'WCDBOptimizedSQLCipher', '~> 1.4.1'
 end
