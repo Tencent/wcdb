@@ -1,3 +1,9 @@
+## v2.0.2
+
+* WCDB C++ supports Windows
+* Optimizing C++ ORM performance
+* Downgrade the minimum supported system version for iPhone and Apple watch
+
 ## v2.0.1
 
 * Support databases created by old versions of sqlcipher
