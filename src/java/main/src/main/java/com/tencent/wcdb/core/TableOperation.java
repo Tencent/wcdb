@@ -36,7 +36,7 @@ import com.tencent.wcdb.winq.StatementInsert;
 import com.tencent.wcdb.winq.StatementSelect;
 import com.tencent.wcdb.winq.StatementUpdate;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class TableOperation {
     String tableName = null;
@@ -336,35 +336,35 @@ public class TableOperation {
         return getValueFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(1).offset(offset));
     }
 
-    public ArrayList<Value> getOneColumn(ResultColumnConvertible column) throws WCDBException {
+    public List<Value> getOneColumn(ResultColumnConvertible column) throws WCDBException {
         return getOneColumnFromStatement(new StatementSelect().select(column).from(tableName));
     }
 
-    public ArrayList<Value> getOneColumn(ResultColumnConvertible column, Expression condition) throws WCDBException {
+    public List<Value> getOneColumn(ResultColumnConvertible column, Expression condition) throws WCDBException {
         return getOneColumnFromStatement(new StatementSelect().select(column).from(tableName).where(condition));
     }
 
-    public ArrayList<Value> getOneColumn(ResultColumnConvertible column, Expression condition, OrderingTerm order) throws WCDBException {
+    public List<Value> getOneColumn(ResultColumnConvertible column, Expression condition, OrderingTerm order) throws WCDBException {
         return getOneColumnFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order));
     }
 
-    public ArrayList<Value> getOneColumn(ResultColumnConvertible column, Expression condition, OrderingTerm order, long limit) throws WCDBException {
+    public List<Value> getOneColumn(ResultColumnConvertible column, Expression condition, OrderingTerm order, long limit) throws WCDBException {
         return getOneColumnFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit));
     }
 
-    public ArrayList<Value> getOneColumn(ResultColumnConvertible column, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
+    public List<Value> getOneColumn(ResultColumnConvertible column, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
         return getOneColumnFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit).offset(offset));
     }
 
-    public ArrayList<Value> getOneColumn(ResultColumnConvertible column, OrderingTerm order) throws WCDBException {
+    public List<Value> getOneColumn(ResultColumnConvertible column, OrderingTerm order) throws WCDBException {
         return getOneColumnFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order));
     }
 
-    public ArrayList<Value> getOneColumn(ResultColumnConvertible column, OrderingTerm order, long limit) throws WCDBException {
+    public List<Value> getOneColumn(ResultColumnConvertible column, OrderingTerm order, long limit) throws WCDBException {
         return getOneColumnFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit));
     }
 
-    public ArrayList<Value> getOneColumn(ResultColumnConvertible column, OrderingTerm order, long limit, long offset) throws WCDBException {
+    public List<Value> getOneColumn(ResultColumnConvertible column, OrderingTerm order, long limit, long offset) throws WCDBException {
         return getOneColumnFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit).offset(offset));
     }
 
@@ -392,35 +392,35 @@ public class TableOperation {
         return getOneRowFromStatement(new StatementSelect().select(columns).from(tableName).orderBy(orderingTerm).limit(1).offset(offset));
     }
 
-    public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns) throws WCDBException {
+    public List<Value[]> getAllRows(ResultColumnConvertible[] columns) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName));
     }
 
-    public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns, Expression condition) throws WCDBException {
+    public List<Value[]> getAllRows(ResultColumnConvertible[] columns, Expression condition) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName).where(condition));
     }
 
-    public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns, Expression condition, OrderingTerm order) throws WCDBException {
+    public List<Value[]> getAllRows(ResultColumnConvertible[] columns, Expression condition, OrderingTerm order) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName).where(condition).orderBy(order));
     }
 
-    public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns, Expression condition, OrderingTerm order, long limit) throws WCDBException {
+    public List<Value[]> getAllRows(ResultColumnConvertible[] columns, Expression condition, OrderingTerm order, long limit) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName).where(condition).orderBy(order).limit(limit));
     }
 
-    public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
+    public List<Value[]> getAllRows(ResultColumnConvertible[] columns, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName).where(condition).orderBy(order).limit(limit).offset(offset));
     }
 
-    public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns, OrderingTerm order) throws WCDBException {
+    public List<Value[]> getAllRows(ResultColumnConvertible[] columns, OrderingTerm order) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName).orderBy(order));
     }
 
-    public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns, OrderingTerm order, long limit) throws WCDBException {
+    public List<Value[]> getAllRows(ResultColumnConvertible[] columns, OrderingTerm order, long limit) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName).orderBy(order).limit(limit));
     }
 
-    public ArrayList<Value[]> getAllRows(ResultColumnConvertible[] columns, OrderingTerm order, long limit, long offset) throws WCDBException {
+    public List<Value[]> getAllRows(ResultColumnConvertible[] columns, OrderingTerm order, long limit, long offset) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName).orderBy(order).limit(limit).offset(offset));
     }
 
@@ -456,9 +456,9 @@ public class TableOperation {
         return ret;
     }
 
-    public ArrayList<Value> getOneColumnFromStatement(Statement statement) throws WCDBException {
+    public List<Value> getOneColumnFromStatement(Statement statement) throws WCDBException {
         Handle handle = database.getHandle();
-        ArrayList<Value> ret;
+        List<Value> ret;
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumn();
@@ -469,9 +469,9 @@ public class TableOperation {
         return ret;
     }
 
-    public ArrayList<Value[]> getAllRowsFromStatement(Statement statement) throws WCDBException {
+    public List<Value[]> getAllRowsFromStatement(Statement statement) throws WCDBException {
         Handle handle = database.getHandle();
-        ArrayList<Value[]> ret;
+        List<Value[]> ret;
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getMultiRows();

@@ -45,6 +45,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SimpleSample extends CRUDTestCase {
     @Test
@@ -79,7 +80,7 @@ public class SimpleSample extends CRUDTestCase {
         table.deleteObjects(DBTestObject.id.order(Order.Desc), 10);
         // 读取
         TestObject object = table.getFirstObject(DBTestObject.id.eq(1));
-        ArrayList<TestObject> objects = table.getAllObjects(DBTestObject.id.gt(100), DBTestObject.id.order(Order.Asc), 10);
+        List<TestObject> objects = table.getAllObjects(DBTestObject.id.gt(100), DBTestObject.id.order(Order.Asc), 10);
 
         //执行事务
         database.runTransaction(new Transaction() {
@@ -101,7 +102,7 @@ public class SimpleSample extends CRUDTestCase {
 
                 PreparedStatement select = handle.getOrCreatePreparedStatement(new StatementSelect().select(DBTestObject.allFields())
                         .from("testTable").where(DBTestObject.content.notNull()));
-                ArrayList<TestObject> result = new ArrayList();
+                List<TestObject> result = new ArrayList<TestObject>();
                 select.step();
                 while(!select.isDone()) {
                     result.add(select.getOneObject(DBTestObject.allFields()));

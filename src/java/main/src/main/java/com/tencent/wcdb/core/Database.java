@@ -24,7 +24,7 @@ package com.tencent.wcdb.core;
 
 import com.tencent.wcdb.base.WCDBException;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Database extends HandleORMOperation {
     private Database() {
@@ -42,11 +42,11 @@ public class Database extends HandleORMOperation {
 
     private native String getPath(long self);
 
-    public ArrayList<String> getPaths() {
+    public List<String> getPaths() {
         return getPaths(cppObj);
     }
 
-    private native ArrayList<String> getPaths(long self);
+    private native List<String> getPaths(long self);
 
     public void setTag(long tag) {
         setTag(cppObj, tag);

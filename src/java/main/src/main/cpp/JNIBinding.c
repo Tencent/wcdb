@@ -497,7 +497,7 @@ static const JNINativeMethod g_databaseMethods[]
     { "purgeAll", "()V", (void *) WCDBJNICoreFuncName(purgeAllDatabase) },
     { "getError", "(J)J", (void *) WCDBJNIDatabaseFuncName(getError) },
     { "getPath", "(J)" WCDBJNIStringSignature, (void *) WCDBJNIDatabaseFuncName(getPath) },
-    { "getPaths", "(J)Ljava/util/ArrayList;", (void *) WCDBJNIDatabaseFuncName(getPaths) },
+    { "getPaths", "(J)Ljava/util/List;", (void *) WCDBJNIDatabaseFuncName(getPaths) },
     { "setTag", "(JJ)V", (void *) WCDBJNIDatabaseFuncName(setTag) },
     { "getTag", "(J)J", (void *) WCDBJNIDatabaseFuncName(getTag) },
     { "canOpen", "(J)Z", (void *) WCDBJNIDatabaseFuncName(canOpen) },

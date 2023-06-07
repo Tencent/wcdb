@@ -30,9 +30,9 @@ import static com.tencent.wcdbtest.base.WinqTool.winqEqual;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
+import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Set;
 
 @RunWith(AndroidJUnit4.class)

@@ -31,6 +31,7 @@ import com.tencent.wcdb.winq.ColumnType;
 import com.tencent.wcdb.winq.Statement;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PreparedStatement extends CppObject {
     boolean autoFinalize = false;
@@ -271,8 +272,8 @@ public class PreparedStatement extends CppObject {
         return row;
     }
 
-    public ArrayList<Value> getOneColumn() throws WCDBException{
-        ArrayList<Value> column = new ArrayList<Value>();
+    public List<Value> getOneColumn() throws WCDBException{
+        List<Value> column = new ArrayList<Value>();
         step();
         while (!isDone(cppObj)) {
             column.add(getValue(0));
@@ -281,8 +282,8 @@ public class PreparedStatement extends CppObject {
         return column;
     }
 
-    public ArrayList<Value[]> getMultiRows() throws WCDBException{
-        ArrayList<Value[]> rows = new ArrayList<Value[]>();
+    public List<Value[]> getMultiRows() throws WCDBException{
+        List<Value[]> rows = new ArrayList<Value[]>();
         step();
         while (!isDone(cppObj)) {
             rows.add(getOneRow());
@@ -299,8 +300,8 @@ public class PreparedStatement extends CppObject {
         return fields[0].getTableBinding().extractObject(fields, this);
     }
 
-    public <T> ArrayList<T> getAllObjects(Field<T>[] fields) throws WCDBException {
-        ArrayList<T> objs = new ArrayList<T>();
+    public <T> List<T> getAllObjects(Field<T>[] fields) throws WCDBException {
+        List<T> objs = new ArrayList<T>();
         step();
         while (!isDone(cppObj)) {
             objs.add(getOneObject(fields));

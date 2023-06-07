@@ -32,9 +32,9 @@ import com.tencent.wcdb.winq.StatementCreateTable;
 
 import org.junit.Assert;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Arrays;
+import java.util.ArrayList;
 
 public class TableTestCase extends DatabaseTestCase {
     public String tableName = "testTable";
@@ -73,7 +73,7 @@ public class TableTestCase extends DatabaseTestCase {
 
     public void doTestObjectsAfterInsert(Object[] objects, int insertCount, String[] sqls, TestOperation operation) {
         if(insertCount > 1) {
-            ArrayList<String> list = new ArrayList<String>(Arrays.asList(sqls));
+            List<String> list = new ArrayList<String>(Arrays.asList(sqls));
             list.add(0, "BEGIN IMMEDIATE");
             list.add("COMMIT");
             sqls = list.toArray(new String[0]);
@@ -87,7 +87,7 @@ public class TableTestCase extends DatabaseTestCase {
 
     public void doTestObjectsAfterOperation(Object[] objects, String[] sqls, TestOperation operation) {
         doTestSQLs(sqls, operation);
-        ArrayList<TestObject> allObjects;
+        List<TestObject> allObjects;
         try {
             allObjects = getAllObjects();
         } catch (WCDBException e) {
@@ -111,7 +111,7 @@ public class TableTestCase extends DatabaseTestCase {
     }
 
     public void doTestObjectBySelecting(TestObject[] objects, String[] sqls, final SelectingObjectOperation operation) {
-        final ArrayList<TestObject> selecting = new ArrayList<TestObject>();
+        final List<TestObject> selecting = new ArrayList<TestObject>();
         doTestSQLs(sqls, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
@@ -123,7 +123,7 @@ public class TableTestCase extends DatabaseTestCase {
                 Arrays.equals(objects, selecting.toArray()));
     }
 
-    public ArrayList<TestObject> getAllObjects() throws WCDBException {
+    public List<TestObject> getAllObjects() throws WCDBException {
         return table.getAllObjects();
     }
 }

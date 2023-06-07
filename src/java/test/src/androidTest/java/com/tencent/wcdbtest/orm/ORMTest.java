@@ -51,8 +51,9 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Arrays;
+import java.util.ArrayList;
 
 public class ORMTest extends DatabaseTestCase {
     String tableName = "testTable";
@@ -65,7 +66,7 @@ public class ORMTest extends DatabaseTestCase {
     void doTestCreateTableAndIndexSQLsAsExpected(String[] sqls, TestOperation operation) {
         assertNotNull(sqls);
         assertNotNull(operation);
-        ArrayList<String> newSqls = new ArrayList<String>();
+        List<String> newSqls = new ArrayList<String>();
         newSqls.add("BEGIN IMMEDIATE");
         newSqls.addAll(Arrays.asList(sqls));
         newSqls.add("COMMIT");
@@ -342,7 +343,7 @@ public class ORMTest extends DatabaseTestCase {
     void doTestAutoAddColumn(Field<AutoAddColumnObject> removeField, boolean succeed, TestOperation operation) throws WCDBException {
         final String columnName = removeField.getName();
         final StatementCreateTable createTable = new StatementCreateTable().createTable(tableName);
-        ArrayList<ColumnDef> columnDefs = new ArrayList<ColumnDef>();
+        List<ColumnDef> columnDefs = new ArrayList<ColumnDef>();
         for(Field<AutoAddColumnObject> field: DBAutoAddColumnObject.allFields()) {
             if(!field.getDescription().equals(columnName)) {
                 columnDefs.add(new ColumnDef(field, ColumnType.Integer));

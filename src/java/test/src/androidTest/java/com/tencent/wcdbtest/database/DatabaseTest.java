@@ -41,7 +41,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class DatabaseTest extends TableTestCase {
@@ -126,7 +126,7 @@ public class DatabaseTest extends TableTestCase {
         });
 
         assertTrue(database.canOpen());
-        ArrayList<TestObject> objects = table.getAllObjects();
+        List<TestObject> objects = table.getAllObjects();
         assertEquals(objects.size(), 1);
         boolean failed = false;
         try {

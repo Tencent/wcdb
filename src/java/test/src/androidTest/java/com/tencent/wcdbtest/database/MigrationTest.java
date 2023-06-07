@@ -37,7 +37,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.List;
 
 public class MigrationTest extends BaseTestCase {
     @Test
@@ -64,7 +64,7 @@ public class MigrationTest extends BaseTestCase {
         targetDatabase.createTable(tableName, DBTestObject.INSTANCE);
         targetDatabase.updateValue("newContent2", DBTestObject.content, tableName, DBTestObject.id.eq(2));
 
-        ArrayList<TestObject> objects = targetDatabase.getAllObjects(DBTestObject.allFields(), tableName);
+        List<TestObject> objects = targetDatabase.getAllObjects(DBTestObject.allFields(), tableName);
         assertNotNull(objects);
         assertEquals(objects.size(), 2);
         assertEquals(objects.get(1).content, "newContent2");
@@ -75,7 +75,7 @@ public class MigrationTest extends BaseTestCase {
         TestObject newObject = TestObject.createObject(3, "newContent3");
         targetDatabase.insertObject(newObject, DBTestObject.allFields(), tableName);
 
-        ArrayList<Value> contents = targetDatabase.getOneColumn(DBTestObject.content, tableName, DBTestObject.id.order(Order.Asc));
+        List<Value> contents = targetDatabase.getOneColumn(DBTestObject.content, tableName, DBTestObject.id.order(Order.Asc));
         assertNotNull(contents);
         assertEquals(contents.size(), 2);
         assertEquals(contents.get(0).getText(), "oldContent1");

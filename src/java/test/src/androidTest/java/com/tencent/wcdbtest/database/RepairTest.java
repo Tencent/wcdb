@@ -36,7 +36,7 @@ import com.tencent.wcdbtest.base.WrappedValue;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class RepairTest extends TableTestCase {
     TestObject[] preInsertObjects = RandomTool.autoIncrementTestCaseObjects(2);
@@ -176,7 +176,7 @@ public class RepairTest extends TableTestCase {
     }
 
     void doTestObjectsRetrieved(boolean success) {
-        ArrayList<TestObject> objects = null;
+        List<TestObject> objects = null;
         try {
             objects = database.getAllObjects(DBTestObject.allFields(), tableName);
         } catch (WCDBException e) {

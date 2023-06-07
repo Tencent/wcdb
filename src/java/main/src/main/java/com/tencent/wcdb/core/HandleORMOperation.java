@@ -32,7 +32,7 @@ import com.tencent.wcdb.winq.Expression;
 import com.tencent.wcdb.winq.OrderingTerm;
 import com.tencent.wcdb.winq.StatementDropTable;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public abstract class HandleORMOperation extends HandleOperation{
     abstract Database getDatabase();
@@ -235,35 +235,35 @@ public abstract class HandleORMOperation extends HandleOperation{
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).limit(1).offset(offset).firstObject();
     }
 
-    public <T> ArrayList<T> getAllObjects(Field<T>[] fields, String tableName) throws WCDBException {
+    public <T> List<T> getAllObjects(Field<T>[] fields, String tableName) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).allObjects();
     }
 
-    public <T> ArrayList<T> getAllObjects(Field<T>[] fields, String tableName, Expression condition) throws WCDBException {
+    public <T> List<T> getAllObjects(Field<T>[] fields, String tableName, Expression condition) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).allObjects();
     }
 
-    public <T> ArrayList<T> getAllObjects(Field<T>[] fields, String tableName, Expression condition, OrderingTerm order) throws WCDBException {
+    public <T> List<T> getAllObjects(Field<T>[] fields, String tableName, Expression condition, OrderingTerm order) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).orderBy(order).allObjects();
     }
 
-    public <T> ArrayList<T> getAllObjects(Field<T>[] fields, String tableName, Expression condition, OrderingTerm order, long limit) throws WCDBException {
+    public <T> List<T> getAllObjects(Field<T>[] fields, String tableName, Expression condition, OrderingTerm order, long limit) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).orderBy(order).limit(limit).allObjects();
     }
 
-    public <T> ArrayList<T> getAllObjects(Field<T>[] fields, String tableName, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
+    public <T> List<T> getAllObjects(Field<T>[] fields, String tableName, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).orderBy(order).limit(limit).offset(offset).allObjects();
     }
 
-    public <T> ArrayList<T> getAllObjects(Field<T>[] fields, String tableName, OrderingTerm order) throws WCDBException {
+    public <T> List<T> getAllObjects(Field<T>[] fields, String tableName, OrderingTerm order) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).allObjects();
     }
 
-    public <T> ArrayList<T> getAllObjects(Field<T>[] fields, String tableName, OrderingTerm order, long limit) throws WCDBException {
+    public <T> List<T> getAllObjects(Field<T>[] fields, String tableName, OrderingTerm order, long limit) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).limit(limit).allObjects();
     }
 
-    public <T> ArrayList<T> getAllObjects(Field<T>[] fields, String tableName, OrderingTerm order, long limit, long offset) throws WCDBException {
+    public <T> List<T> getAllObjects(Field<T>[] fields, String tableName, OrderingTerm order, long limit, long offset) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).limit(limit).offset(offset).allObjects();
     }
 }

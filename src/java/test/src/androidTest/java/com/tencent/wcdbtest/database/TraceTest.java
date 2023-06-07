@@ -41,6 +41,7 @@ import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class TraceTest extends TableTestCase {
@@ -85,7 +86,7 @@ public class TraceTest extends TableTestCase {
     public void testTracePerformance() throws WCDBException {
         createTable();
         database.tracePerformance(null);
-        final ArrayList<String> sqls = new ArrayList<String>(){{
+        final List<String> sqls = new ArrayList<String>(){{
             add("BEGIN IMMEDIATE");
             add("INSERT INTO testTable(id, content) VALUES(?1, ?2)");
             add("COMMIT");
@@ -106,7 +107,7 @@ public class TraceTest extends TableTestCase {
     @Test
     public void testGlobalTracePerformance() throws WCDBException {
         Database.globalTracePerformance(null);
-        final ArrayList<String> sqls = new ArrayList<String>(){{
+        final List<String> sqls = new ArrayList<String>(){{
             add("BEGIN IMMEDIATE");
             add("INSERT INTO testTable(id, content) VALUES(?1, ?2)");
             add("COMMIT");

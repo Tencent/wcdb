@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -76,7 +77,7 @@ public class DatabaseTestCase extends BaseTestCase {
         do {
             final WrappedValue trace = new WrappedValue();
             trace.boolValue = false;
-            final ArrayList<String> expectedSQLs = new ArrayList<String>(Arrays.asList(sqls));
+            final List<String> expectedSQLs = new ArrayList<String>(Arrays.asList(sqls));
             final Thread thread = Thread.currentThread();
             database.traceSQL(new Database.SQLTracer() {
                 @Override
@@ -113,7 +114,7 @@ public class DatabaseTestCase extends BaseTestCase {
         database.traceSQL(null);
     }
 
-    private void doTestSQLAsExpected(ArrayList<String> expectedSQLs, String sql) {
+    private void doTestSQLAsExpected(List<String> expectedSQLs, String sql) {
         switch (expectMode) {
             case AllSQLs:{
                 if(expectedSQLs.get(0).equals(sql)) {

@@ -32,7 +32,7 @@ import com.tencent.wcdb.winq.ExpressionConvertible;
 import com.tencent.wcdb.winq.OrderingTerm;
 import com.tencent.wcdb.winq.StatementSelect;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Select<T> extends ChainCall<StatementSelect> {
     private Field<T>[] fields = null;
@@ -107,8 +107,8 @@ public class Select<T> extends ChainCall<StatementSelect> {
         return ret;
     }
 
-    public ArrayList<T> allObjects() throws WCDBException {
-        ArrayList<T> ret;
+    public List<T> allObjects() throws WCDBException {
+        List<T> ret;
         try {
             PreparedStatement preparedStatement = prepareStatement();
             ret = preparedStatement.getAllObjects(fields);
