@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include "Types.h"
 #include <atomic>
 #include <map>
 #include <memory>
@@ -51,7 +52,7 @@ public:
     bool operator!=(const UnsafeStringView& other) const;
     bool operator<(const UnsafeStringView& other) const;
     bool operator>(const UnsafeStringView& other) const;
-    const char& operator[](off_t off) const;
+    const char& operator[](offset_t off) const;
     operator std::string() const;
 
     ~UnsafeStringView();
@@ -60,7 +61,7 @@ public:
     size_t length() const;
     size_t size() const;
     bool empty() const;
-    const char& at(off_t off) const;
+    const char& at(offset_t off) const;
 
 private:
     friend class StringView;

@@ -103,29 +103,17 @@ WCDB_EXTERN_C_END
 #endif /* __ANDROID__ */
 
 #ifdef _WIN32
-
 #define FileFullAccess S_IREAD | S_IWRITE
 #define lseek _lseeki64
 #define DirFullAccess 0
 #define mkdir(path, mask) _mkdir(path)
 #else
-
 #define FileFullAccess S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH
 #define DirFullAccess S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH
-
 #endif //_WIN32
 
 #pragma mark - string
 
 #ifdef _WIN32
 #define strncasecmp _strnicmp
-#endif //_WIN32
-
-#pragma mark - types
-#include <sys/types.h>
-
-#ifdef _WIN32
-#include <BaseTsd.h>
-typedef SSIZE_T ssize_t;
-typedef SSIZE_T off_t;
 #endif //_WIN32

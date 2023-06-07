@@ -87,7 +87,7 @@ Data& Data::operator=(UnsafeData&& unsafeData)
     return *this;
 }
 
-off_t Data::getCurrentOffset() const
+offset_t Data::getCurrentOffset() const
 {
     WCTAssert(m_sharedBuffer != nullptr);
     return m_buffer - m_sharedBuffer.get().buffer;
@@ -172,7 +172,7 @@ Data Data::subdata(size_t size) const
     return subdata(0, size);
 }
 
-Data Data::subdata(off_t offset, size_t size) const
+Data Data::subdata(offset_t offset, size_t size) const
 {
     if (size == 0) {
         return null();

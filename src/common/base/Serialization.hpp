@@ -35,8 +35,8 @@ public:
     SerializeIteration();
     virtual ~SerializeIteration() = 0;
 
-    void seek(off_t position);
-    void advance(off_t offset);
+    void seek(offset_t position);
+    void advance(offset_t offset);
     bool canAdvance(size_t size) const;
     bool isEnough(size_t size) const;
     bool ended() const;
@@ -47,7 +47,7 @@ protected:
     const unsigned char *base() const;
     size_t capacity() const;
 
-    off_t m_cursor;
+    offset_t m_cursor;
 };
 
 class Serialization final : public SerializeIteration {
@@ -112,21 +112,21 @@ public:
 #pragma mark - Get
 public:
     //return 0 size to indicate failure
-    std::pair<size_t, StringView> getSizedString(off_t offset) const;
-    std::pair<size_t, const UnsafeData> getSizedData(off_t offset) const;
-    std::pair<size_t, uint64_t> getVarint(off_t offset) const;
+    std::pair<size_t, StringView> getSizedString(offset_t offset) const;
+    std::pair<size_t, const UnsafeData> getSizedData(offset_t offset) const;
+    std::pair<size_t, uint64_t> getVarint(offset_t offset) const;
 
     // For the following types with specified size, `isEnough` should be called first.
-    StringView getString(off_t offset, size_t size) const;
-    const UnsafeData getData(off_t offset, size_t size) const;
-    int64_t get8BytesInt(off_t offset) const;
-    int64_t get6BytesInt(off_t offset) const;
-    int32_t get4BytesInt(off_t offset) const;
-    int32_t get3BytesInt(off_t offset) const;
-    int32_t get2BytesInt(off_t offset) const;
-    int32_t get1ByteInt(off_t offset) const;
-    double get8BytesDouble(off_t offset) const;
-    uint32_t get4BytesUInt(off_t offset) const;
+    StringView getString(offset_t offset, size_t size) const;
+    const UnsafeData getData(offset_t offset, size_t size) const;
+    int64_t get8BytesInt(offset_t offset) const;
+    int64_t get6BytesInt(offset_t offset) const;
+    int32_t get4BytesInt(offset_t offset) const;
+    int32_t get3BytesInt(offset_t offset) const;
+    int32_t get2BytesInt(offset_t offset) const;
+    int32_t get1ByteInt(offset_t offset) const;
+    double get8BytesDouble(offset_t offset) const;
+    uint32_t get4BytesUInt(offset_t offset) const;
 };
 
 #pragma mark - Serializable

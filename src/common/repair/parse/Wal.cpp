@@ -59,7 +59,7 @@ const StringView &Wal::getPath() const
     return m_fileHandle.path;
 }
 
-MappedData Wal::acquireData(off_t offset, size_t size, SharedHighWater highWater)
+MappedData Wal::acquireData(offset_t offset, size_t size, SharedHighWater highWater)
 {
     WCTAssert(m_fileHandle.isOpened());
     MappedData data = m_fileHandle.map(offset, size, highWater);
@@ -88,7 +88,7 @@ MappedData Wal::acquirePageData(int pageno, SharedHighWater highWater)
     return acquirePageData(pageno, 0, getPageSize(), highWater);
 }
 
-MappedData Wal::acquirePageData(int pageno, off_t offset, size_t size, SharedHighWater highWater)
+MappedData Wal::acquirePageData(int pageno, offset_t offset, size_t size, SharedHighWater highWater)
 {
     WCTAssert(isInitialized());
     WCTAssert(containsPage(pageno));

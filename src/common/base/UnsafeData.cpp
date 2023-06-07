@@ -95,7 +95,7 @@ UnsafeData UnsafeData::subdata(size_t size) const
     return subdata(0, size);
 }
 
-UnsafeData UnsafeData::subdata(off_t offset, size_t size) const
+UnsafeData UnsafeData::subdata(offset_t offset, size_t size) const
 {
     if (size == 0) {
         return null();

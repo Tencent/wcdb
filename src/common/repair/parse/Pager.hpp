@@ -58,7 +58,7 @@ protected:
 public:
     int getNumberOfPages() const;
     UnsafeData acquirePageData(int number);
-    UnsafeData acquirePageData(int number, off_t offset, size_t size);
+    UnsafeData acquirePageData(int number, offset_t offset, size_t size);
 
     int getUsableSize() const;
     int getPageSize() const;
