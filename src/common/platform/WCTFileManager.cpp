@@ -25,6 +25,8 @@
 #include "Core.hpp"
 #include "FileManager.hpp"
 #include <stdio.h>
+
+#ifndef __APPLE__
 namespace WCDB {
 
 void Core::print(const UnsafeStringView &message)
@@ -53,3 +55,5 @@ FileManager::getFileProtection(const WCDB::UnsafeStringView &path)
 }
 
 } // namespace WCDB
+
+#endif
