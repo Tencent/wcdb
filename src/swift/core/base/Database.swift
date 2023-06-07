@@ -330,6 +330,18 @@ public extension Database {
         }
         WCDBDatabaseConfig(database, name, invocationImp, uninvocationImp, priority.rawValue)
     }
+    
+    /// Set the default directory for temporary database files.
+    /// If not set, an existing directory will be selected as the temporary database files directory in the following order:
+    ///     1. TMPDIR environment value;
+    ///     2. /Var/tmp;
+    ///     3. /usr/tmp;
+    ///     4. /tmp;
+    ///     5. The current working directory (".")
+    /// Please see: https://www.sqlite.org/tempfiles.html
+    static func setDefaultTemporaryDirectory(_ dir: String) {
+        setenv("SQLITE_TMPDIR".cString, dir.cString, 1)
+    }
 
     typealias PerformanceTracer = (String, UInt64, String, Double) -> Void // Path, handleIdentifier, SQL, cost
     typealias SQLTracer = (String, UInt64, String) -> Void // Path, handleIdentifier, SQL

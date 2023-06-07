@@ -61,7 +61,8 @@ NS_ASSUME_NONNULL_BEGIN
     2. /Var/tmp;
     3. /usr/tmp;
     4. /tmp;
-    5. the current directory;
+    5. The current working directory (".")
+ Please see: https://www.sqlite.org/tempfiles.html
 */
 + (BOOL)setDefaultTemporaryDatabaseFileDirectory:(NSString *)dir;
 
