@@ -584,6 +584,17 @@ public:
      */
     void removeConfig(const UnsafeStringView &name);
 
+    /**
+    @brief Set the default directory for temporary database files. If not set, an existing directory will be selected as the temporary database files directory in the following order:
+        1. TMPDIR environment value;
+        2. /Var/tmp;
+        3. /usr/tmp;
+        4. /tmp;
+        5. The current working directory (".")
+    Please see: https://www.sqlite.org/tempfiles.html
+    */
+    static void setDefaultTemporaryDirectory(UnsafeStringView dir);
+
 #pragma mark - Migration
     typedef struct MigrationInfo {
         StringView database;       // Target database of migration
