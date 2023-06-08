@@ -41,3 +41,8 @@ void WCDBCorePurgeAllDatabase(void)
 {
     WCDB::Core::shared().purgeDatabasePool();
 }
+
+bool WCDBCoreSetDefaultTemporaryDirectory(const char* _Nullable dir)
+{
+    return WCDB::Core::shared().setDefaultTemporaryDirectory(dir);
+}

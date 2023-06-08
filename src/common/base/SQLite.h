@@ -32,6 +32,8 @@
 extern "C" {
 #endif
 
+extern char *sqlite3_temp_directory;
+
 int sqlcipher_set_default_hmac_algorithm(int algorithm);
 int sqlcipher_set_default_kdf_algorithm(int algorithm);
 void sqlcipher_set_default_kdf_iter(int iter);

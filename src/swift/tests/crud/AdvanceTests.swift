@@ -922,4 +922,19 @@ class AdvanceTests: CRUDTestCase {
 
         XCTAssertEqual(migratedTable ?? "", "sourceTable")
     }
+
+    func testDefaultTemporaryDirectory() {
+        XCTAssertFalse(Database.setDefaultTemporaryDirectory("wrongDir"))
+
+        let tempDir = NSTemporaryDirectory().appending("/dbTempDir")
+        XCTAssertTrue(Database.setDefaultTemporaryDirectory(tempDir))
+
+        let getDirStatement = StatementPragma().pragma(Pragma(named: "temp_store_directory"))
+        var dir = WCDBAssertNoThrowReturned(try database.getValue(from: getDirStatement))
+        XCTAssertTrue(dir != nil && dir!.stringValue == tempDir)
+
+        XCTAssertTrue(Database.setDefaultTemporaryDirectory(""))
+        dir = WCDBAssertNoThrowReturned(try database.getValue(from: getDirStatement))
+        XCTAssertTrue(dir != nil && dir!.stringValue == "")
+    }
 }

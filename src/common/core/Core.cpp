@@ -404,19 +404,19 @@ void Core::setNotificationWhenErrorTraced(const UnsafeStringView& path,
 }
 
 #pragma mark - Config
-void Core::setABTestConfig(const UnsafeStringView configName, const UnsafeStringView configValue)
+void Core::setABTestConfig(const UnsafeStringView& configName, const UnsafeStringView& configValue)
 {
     LockGuard memoryGuard(m_memory);
     m_abtestConfig[configName] = configValue;
 }
 
-void Core::removeABTestConfig(const UnsafeStringView configName)
+void Core::removeABTestConfig(const UnsafeStringView& configName)
 {
     LockGuard memoryGuard(m_memory);
     m_abtestConfig.erase(configName);
 }
 
-Optional<UnsafeStringView> Core::getABTestConfig(UnsafeStringView configName)
+Optional<UnsafeStringView> Core::getABTestConfig(const UnsafeStringView& configName)
 {
     SharedLockGuard memoryGuard(m_memory);
     if (m_abtestConfig.find(configName) != m_abtestConfig.end()) {
@@ -456,6 +456,17 @@ void Core::setDefaultCipherConfiguration(int version)
         sqlcipher_set_default_use_hmac(1);
         break;
     }
+}
+
+bool Core::setDefaultTemporaryDirectory(const UnsafeStringView& dir)
+{
+    if (dir.length() > 0) {
+        if (!FileManager::createDirectoryWithIntermediateDirectories(dir)) {
+            return false;
+        }
+    }
+    sqlite3_temp_directory = (char*) StringView::createConstant(dir.data()).data();
+    return true;
 }
 
 } // namespace WCDB
