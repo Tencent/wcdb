@@ -63,8 +63,10 @@ NS_ASSUME_NONNULL_BEGIN
     4. /tmp;
     5. The current working directory (".")
  Please see: https://www.sqlite.org/tempfiles.html
+ @param directory a global temporary directory.
+ @return YES if directory exists or create directory success.
 */
-+ (BOOL)setDefaultTemporaryDatabaseFileDirectory:(NSString *)dir;
++ (BOOL)setDefaultTemporaryDatabaseFileDirectory:(NSString *_Nullable)directory;
 
 @end
 

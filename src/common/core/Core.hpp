@@ -153,11 +153,13 @@ protected:
 
 #pragma mark - Config
 public:
-    void setABTestConfig(const UnsafeStringView configName, const UnsafeStringView configValue);
-    void removeABTestConfig(const UnsafeStringView configName);
-    Optional<UnsafeStringView> getABTestConfig(UnsafeStringView configName);
+    void setABTestConfig(const UnsafeStringView& configName,
+                         const UnsafeStringView& configValue);
+    void removeABTestConfig(const UnsafeStringView& configName);
+    Optional<UnsafeStringView> getABTestConfig(const UnsafeStringView& configName);
 
     void setDefaultCipherConfiguration(int version);
+    bool setDefaultTemporaryDirectory(const UnsafeStringView& dir);
 
 protected:
     Configs m_configs;

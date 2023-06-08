@@ -339,8 +339,10 @@ public extension Database {
     ///     4. /tmp;
     ///     5. The current working directory (".")
     /// Please see: https://www.sqlite.org/tempfiles.html
-    static func setDefaultTemporaryDirectory(_ dir: String) {
-        setenv("SQLITE_TMPDIR".cString, dir.cString, 1)
+    /// - Parameter directory a global temporary directory.
+    /// - Returns: true if directory exists or create directory success.
+    static func setDefaultTemporaryDirectory(_ directory: String) -> Bool {
+        return WCDBCoreSetDefaultTemporaryDirectory(directory.cString)
     }
 
     typealias PerformanceTracer = (String, UInt64, String, Double) -> Void // Path, handleIdentifier, SQL, cost

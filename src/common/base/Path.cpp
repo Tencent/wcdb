@@ -66,7 +66,11 @@ StringView getDirectoryName(const UnsafeStringView &base)
 {
     std::string dir = base.data();
     int64_t found = dir.find_last_of(kPathSeparator);
-    return StringView(dir.substr(0, found));
+    if (found >= 0) {
+        return StringView(dir.substr(0, found));
+    } else {
+        return StringView();
+    }
 }
 
 StringView normalize(const UnsafeStringView &path)
