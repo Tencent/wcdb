@@ -592,8 +592,10 @@ public:
         4. /tmp;
         5. The current working directory (".")
     Please see: https://www.sqlite.org/tempfiles.html
+    @param directory a global temporary directory.
+    @return true if directory exists or create directory success.
     */
-    static void setDefaultTemporaryDirectory(UnsafeStringView dir);
+    static bool setDefaultTemporaryDirectory(const UnsafeStringView &directory);
 
 #pragma mark - Migration
     typedef struct MigrationInfo {

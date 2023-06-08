@@ -31,5 +31,6 @@ WCDB_EXTERN_C_BEGIN
 CPPDatabase WCDBCoreCreateDatabase(const char* _Nonnull path);
 void WCDBCoreSetDefaultCipherConfig(int version);
 void WCDBCorePurgeAllDatabase(void);
+bool WCDBCoreSetDefaultTemporaryDirectory(const char* _Nullable dir);
 
 WCDB_EXTERN_C_END

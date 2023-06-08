@@ -424,9 +424,9 @@ void Database::removeConfig(const UnsafeStringView& name)
     m_innerDatabase->removeConfig(name);
 }
 
-void Database::setDefaultTemporaryDirectory(UnsafeStringView dir)
+bool Database::setDefaultTemporaryDirectory(const UnsafeStringView& directory)
 {
-    setenv("SQLITE_TMPDIR", dir.data(), 1);
+    return Core::shared().setDefaultTemporaryDirectory(directory);
 }
 
 void Database::filterMigration(MigrationFilter filter)

@@ -237,4 +237,21 @@
     }];
 }
 
+- (void)testSetTemporaryDirectory
+{
+    NSString* wrongDir = @"wrongDir";
+    TestCaseAssertFalse([WCTDatabase setDefaultTemporaryDatabaseFileDirectory:wrongDir]);
+
+    NSString* tempDir = [NSTemporaryDirectory() stringByAppendingPathComponent:@"dbTempDir"];
+    TestCaseAssertTrue([WCTDatabase setDefaultTemporaryDatabaseFileDirectory:tempDir]);
+
+    WCDB::StatementPragma getDirStatement = WCDB::StatementPragma().pragma(WCDB::Pragma("temp_store_directory"));
+    WCTValue* dir = [self.database getValueFromStatement:getDirStatement];
+    TestCaseAssertTrue(dir != nil && [dir.stringValue isEqualToString:tempDir]);
+
+    TestCaseAssertTrue([WCTDatabase setDefaultTemporaryDatabaseFileDirectory:nil]);
+    dir = [self.database getValueFromStatement:getDirStatement];
+    TestCaseAssertTrue(dir != nil && [dir.stringValue isEqualToString:@""]);
+}
+
 @end
