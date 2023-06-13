@@ -4,7 +4,7 @@
 # pod trunk push WCDB.cpp.podspec --verbose --skip-import-validation --allow-warnings
 Pod::Spec.new do |wcdb|
   wcdb.name         = "WCDB.cpp"
-  wcdb.version      = "2.0.2"
+  wcdb.version      = "2.0.2.5"
   wcdb.summary      = "WCDB is a cross-platform database framework developed by WeChat."
   wcdb.description  = <<-DESC
                       The WeChat Database, for C++. (If you want to use WCDB for Swift or Objective-C, see the "WCDB.swift" pod or "WCDB.objc" pod. If you want to use WCDB for C++/Objc/Swift in one project, see the "WCDB" pod)
@@ -20,8 +20,8 @@ Pod::Spec.new do |wcdb|
   wcdb.osx.deployment_target = "10.13"
   wcdb.watchos.deployment_target = "6.0"
   wcdb.tvos.deployment_target = "12.4"
-  wcdb.source       = { :git => "https://github.com/Tencent/wcdb.git", :commit => "4b8244ee171088b12a66c1bf0b2a26abab0ad77f" }
-  wcdb.public_header_files = "src/cpp/WCDBCpp.h", "src/cpp/**/*.{h,hpp}", "src/common/winq/*.{h,hpp}", "src/common/winq/**/*.{h,hpp}", "src/common/platform/Types.h", "src/common/utility/Shadow.hpp", "src/common/utility/Macro.h", "src/common/utility/CaseInsensiveList.hpp", "src/common/core/fts/FTSConst.h", "src/common/core/fts/tokenizer/TokenizerModule.hpp", "src/common/core/fts/tokenizer/TokenizerModuleTemplate.hpp", "src/common/core/fts/tokenizer/BaseTokenizerUtil.hpp", "src/common/core/fts/tokenizer/PinyinTokenizer.hpp", "src/common/core/fts/tokenizer/OneOrBinaryTokenizer.hpp", "src/common/core/fts/auxfunction/FTS5AuxiliaryFunctionTemplate.hpp", "src/common/core/fts/auxfunction/AuxiliaryFunctionModule.hpp", "src/common/core/fts/auxfunction/SubstringMatchInfo.hpp", "src/common/core/fts/FTSError.hpp", "src/common/core/RecyclableHandle.hpp", "src/common/core/Tag.hpp", "src/common/base/Recyclable.hpp", "src/common/base/SharedThreadedErrorProne.hpp", "src/common/base/StringView.hpp", "src/common/base/Optional.hpp", "src/common/base/Error.hpp", "src/common/base/Data.hpp", "src/common/base/UnsafeData.hpp"
+  wcdb.source       = { :git => "https://github.com/Tencent/wcdb.git", :tag => "v#{wcdb.version}" }
+  wcdb.public_header_files = "src/cpp/WCDBCpp.h", "src/cpp/**/*.{h,hpp}", "src/common/winq/*.{h,hpp}", "src/common/winq/**/*.{h,hpp}", "src/common/platform/SysTypes.h", "src/common/utility/Shadow.hpp", "src/common/utility/Macro.h", "src/common/utility/CaseInsensitiveList.hpp", "src/common/core/fts/FTSConst.h", "src/common/core/fts/tokenizer/TokenizerModule.hpp", "src/common/core/fts/tokenizer/TokenizerModuleTemplate.hpp", "src/common/core/fts/tokenizer/BaseTokenizerUtil.hpp", "src/common/core/fts/tokenizer/PinyinTokenizer.hpp", "src/common/core/fts/tokenizer/OneOrBinaryTokenizer.hpp", "src/common/core/fts/auxfunction/FTS5AuxiliaryFunctionTemplate.hpp", "src/common/core/fts/auxfunction/AuxiliaryFunctionModule.hpp", "src/common/core/fts/auxfunction/SubstringMatchInfo.hpp", "src/common/core/fts/FTSError.hpp", "src/common/core/RecyclableHandle.hpp", "src/common/core/Tag.hpp", "src/common/base/Recyclable.hpp", "src/common/base/SharedThreadedErrorProne.hpp", "src/common/base/StringView.hpp", "src/common/base/Optional.hpp", "src/common/base/Error.hpp", "src/common/base/Data.hpp", "src/common/base/UnsafeData.hpp"
   wcdb.source_files  = "src/common/**/*.{h,hpp,c,cpp}", "src/cpp/**/*.{h,hpp,c,cpp}", "src/objc/core/WCTFileManager.mm", "src/objc/core/WCTOperationQueue.mm", "src/objc/core/WCTFoundation.h", "src/objc/core/WCTFoundation.mm"
   wcdb.exclude_files = "src/cpp/tests/**/*.{h,hpp,c,cpp}", "src/objc/core/WCTOperationQueue.mm", "src/common/core/operate/OperationQueueForMemory.cpp"
   wcdb.subspec 'no-arc' do |sna|
