@@ -251,7 +251,7 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
             ${WCDB_SRC_DIR}/common/*/Tag.hpp
             ${WCDB_SRC_DIR}/common/*/TokenizerModule.hpp
             ${WCDB_SRC_DIR}/common/*/TokenizerModuleTemplate.hpp
-            ${WCDB_SRC_DIR}/common/*/Types.h
+            ${WCDB_SRC_DIR}/common/*/SysTypes.h
             ${WCDB_SRC_DIR}/common/*/UnsafeData.hpp
             ${WCDB_SRC_DIR}/common/*/Upsert.hpp
             ${WCDB_SRC_DIR}/common/*/Value.hpp

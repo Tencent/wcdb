@@ -816,10 +816,10 @@
 		0D249BC92542B90600B43BD9 /* MergeFTSIndexLogic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D249BC82542B90600B43BD9 /* MergeFTSIndexLogic.cpp */; };
 		0D3AE53825416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D3AE53725416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp */; };
 		0D3AE54025416DB4007B9D0E /* AutoMergeFTSIndexConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D3AE53F25416DB4007B9D0E /* AutoMergeFTSIndexConfig.cpp */; };
-		0D3FFA462A2F2911002DF7CD /* Types.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D3FFA452A2F2911002DF7CD /* Types.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0D3FFA472A2F2911002DF7CD /* Types.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D3FFA452A2F2911002DF7CD /* Types.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0D3FFA482A2F2911002DF7CD /* Types.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D3FFA452A2F2911002DF7CD /* Types.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0D3FFA492A2F2911002DF7CD /* Types.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D3FFA452A2F2911002DF7CD /* Types.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0D3FFA462A2F2911002DF7CD /* SysTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D3FFA452A2F2911002DF7CD /* SysTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0D3FFA472A2F2911002DF7CD /* SysTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D3FFA452A2F2911002DF7CD /* SysTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0D3FFA482A2F2911002DF7CD /* SysTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D3FFA452A2F2911002DF7CD /* SysTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0D3FFA492A2F2911002DF7CD /* SysTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D3FFA452A2F2911002DF7CD /* SysTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0D4947D0299DE22D00F9518E /* WCTBridgeProperty.mm in Sources */ = {isa = PBXBuildFile; fileRef = 036E50B828115B1D007365CD /* WCTBridgeProperty.mm */; };
 		0D4FE5EF29482F4D0061C3CA /* Builtin.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D4FE5EE29482F4D0061C3CA /* Builtin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0D5363EA290A65390026A4DC /* Master.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D5363E8290A65390026A4DC /* Master.cpp */; };
@@ -3557,7 +3557,7 @@
 		0D249BC82542B90600B43BD9 /* MergeFTSIndexLogic.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MergeFTSIndexLogic.cpp; sourceTree = "<group>"; };
 		0D3AE53725416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AutoMergeFTSIndexConfig.hpp; sourceTree = "<group>"; };
 		0D3AE53F25416DB4007B9D0E /* AutoMergeFTSIndexConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AutoMergeFTSIndexConfig.cpp; sourceTree = "<group>"; };
-		0D3FFA452A2F2911002DF7CD /* Types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Types.h; sourceTree = "<group>"; };
+		0D3FFA452A2F2911002DF7CD /* SysTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SysTypes.h; sourceTree = "<group>"; };
 		0D4FE5EE29482F4D0061C3CA /* Builtin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Builtin.h; sourceTree = "<group>"; };
 		0D5363E8290A65390026A4DC /* Master.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Master.cpp; sourceTree = "<group>"; };
 		0D5363E9290A65390026A4DC /* Master.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Master.hpp; sourceTree = "<group>"; };
@@ -5548,7 +5548,7 @@
 				0DE08A1C29CBE79C009A7CA3 /* WCTFileManager.cpp */,
 				0DE08A1D29CBE79C009A7CA3 /* CrossPlatform.c */,
 				0DE08A1E29CBE79C009A7CA3 /* WCTOperationQueue.cpp */,
-				0D3FFA452A2F2911002DF7CD /* Types.h */,
+				0D3FFA452A2F2911002DF7CD /* SysTypes.h */,
 			);
 			path = platform;
 			sourceTree = "<group>";
@@ -7429,7 +7429,7 @@
 				039D724A28BF773D00990803 /* Delete.hpp in Headers */,
 				037C3B282897E33600328EC8 /* Page.hpp in Headers */,
 				037C3B2A2897E33600328EC8 /* SyntaxFilter.hpp in Headers */,
-				0D3FFA482A2F2911002DF7CD /* Types.h in Headers */,
+				0D3FFA482A2F2911002DF7CD /* SysTypes.h in Headers */,
 				037C3B2B2897E33600328EC8 /* StatementRollback.hpp in Headers */,
 				037C3B2D2897E33600328EC8 /* StatementAlterTable.hpp in Headers */,
 				037C3B2E2897E33600328EC8 /* StatementPragma.hpp in Headers */,
@@ -8015,7 +8015,7 @@
 				3934DB26229B951C008A6AEC /* AutoCheckpointConfig.hpp in Headers */,
 				3932B9FD25232E490094F3F8 /* WCTColumnCoding.h in Headers */,
 				23EEDD5A217DFADC006E9E73 /* SyntaxVacuumSTMT.hpp in Headers */,
-				0D3FFA462A2F2911002DF7CD /* Types.h in Headers */,
+				0D3FFA462A2F2911002DF7CD /* SysTypes.h in Headers */,
 				23775B7C20AD666900E21AB0 /* Material.hpp in Headers */,
 				23EEDD4A217DFADC006E9E73 /* SyntaxInsertSTMT.hpp in Headers */,
 				23EEDC67217DFADC006E9E73 /* AggregateFunction.hpp in Headers */,
@@ -8218,7 +8218,7 @@
 				75D567022951B90F00098DD9 /* WCTSequence+WCTTableCoding.h in Headers */,
 				7521D95E291E9ABB009642EF /* PagerRelated.hpp in Headers */,
 				7521D95F291E9ABB009642EF /* WCTColumnBinding.h in Headers */,
-				0D3FFA472A2F2911002DF7CD /* Types.h in Headers */,
+				0D3FFA472A2F2911002DF7CD /* SysTypes.h in Headers */,
 				7521D961291E9ABB009642EF /* Tag.hpp in Headers */,
 				7521D962291E9ABB009642EF /* SQLite.h in Headers */,
 				7521D963291E9ABB009642EF /* SyntaxPragma.hpp in Headers */,
@@ -8395,7 +8395,7 @@
 				7521DC42291EA349009642EF /* HandleNotification.hpp in Headers */,
 				7521DC43291EA349009642EF /* SyntaxCreateTableSTMT.hpp in Headers */,
 				7521DC44291EA349009642EF /* SyntaxDropTriggerSTMT.hpp in Headers */,
-				0D3FFA492A2F2911002DF7CD /* Types.h in Headers */,
+				0D3FFA492A2F2911002DF7CD /* SysTypes.h in Headers */,
 				7521DC45291EA349009642EF /* TokenizerModuleTemplate.hpp in Headers */,
 				7521DC46291EA349009642EF /* Convertible.hpp in Headers */,
 				7521DC47291EA349009642EF /* Initializeable.hpp in Headers */,
