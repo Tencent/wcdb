@@ -41,7 +41,27 @@ void WCDBForeignKeyConfigReferencesTable(CPPForeignKey foreignKey, const char* _
 void WCDBForeignKeyAddColumn(CPPForeignKey foreignKey, CPPColumn column)
 {
     WCDBGetObjectOrReturn(foreignKey, WCDB::ForeignKey, cppObj);
-    WCDBGetObjectOrReturn(column, WCDB::Column, cppColumn) cppObj->column(*cppColumn);
+    WCDBGetObjectOrReturn(column, WCDB::Column, cppColumn);
+    cppObj->column(*cppColumn);
+}
+
+void WCDBForeignKeyAddColumn2(CPPForeignKey foreignKey, CPPCommonArray columns)
+{
+    WCDBGetObjectOrReturn(foreignKey, WCDB::ForeignKey, cppObj);
+    for (int i = 0; i < columns.length; i++) {
+        switch (columns.type) {
+        case WCDBBridgedType_String:
+            cppObj->column(WCDB::StringView(
+            WCDBGetCommonArrayLiteralValue(const char*, columns, i)));
+            break;
+        case WCDBBridgedType_Column:
+            cppObj->column(WCDBGetCommonArrayObject(WCDB::Column, columns, i));
+            break;
+        default:
+            assert(0);
+            break;
+        }
+    }
 }
 
 void WCDBForeignKeyConfigOnDeleteSetNull(CPPForeignKey foreignKey)

@@ -35,6 +35,10 @@
     WCDBJNIClassMethodWithNoArg(StatementSelect, funcName)
 
 jlong WCDBJNIStatementSelectObjectMethodWithNoArg(create);
+
+void WCDBJNIStatementSelectObjectMethod(configWith, jlong self, jlongArray expressions);
+void WCDBJNIStatementSelectObjectMethod(configRecursive, jlong self);
+
 void WCDBJNIStatementSelectObjectMethod(configResultColumns,
                                         jlong self,
                                         WCDBJNIMultiTypeArrayParameter(resultColumns));

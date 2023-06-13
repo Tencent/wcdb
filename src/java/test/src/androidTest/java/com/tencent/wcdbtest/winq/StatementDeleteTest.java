@@ -37,30 +37,37 @@ public class StatementDeleteTest {
         Column column1 = new Column("column1");
         Column column2 = new Column("column2");
 
-        winqEqual(genStatmentDelete().where(column1.gt(1)),
+        winqEqual(genStatementDelete().where(column1.gt(1)),
                 "DELETE FROM testTable WHERE column1 > 1");
 
         winqEqual(new StatementDelete().deleteFrom(new QualifiedTable("testTable").of("testSchema"))
                 .where(column1.gt(1)),
                 "DELETE FROM testSchema.testTable WHERE column1 > 1");
 
-        winqEqual(genStatmentDelete().orderBy(
+        winqEqual(genStatementDelete().orderBy(
                 new OrderingTerm[]{column1.order(Order.Asc), column2.order(Order.Desc)}),
                 "DELETE FROM testTable ORDER BY column1 ASC, column2 DESC");
 
-        winqEqual(genStatmentDelete().limit(1), "DELETE FROM testTable LIMIT 1");
+        winqEqual(genStatementDelete().limit(1), "DELETE FROM testTable LIMIT 1");
 
-        winqEqual(genStatmentDelete().limit(1, 2), "DELETE FROM testTable LIMIT 1, 2");
+        winqEqual(genStatementDelete().limit(1, 2), "DELETE FROM testTable LIMIT 1, 2");
 
-        winqEqual(genStatmentDelete().limit(1).offset(3), "DELETE FROM testTable LIMIT 1 OFFSET 3");
+        winqEqual(genStatementDelete().limit(1).offset(3), "DELETE FROM testTable LIMIT 1 OFFSET 3");
 
-        winqEqual(genStatmentDelete().where(column1.gt(1))
+        winqEqual(genStatementDelete().where(column1.gt(1))
                 .orderBy(new OrderingTerm[]{column1.order(Order.Asc), column2.order(Order.Desc)})
                         .limit(1).offset(2),
                 "DELETE FROM testTable WHERE column1 > 1 ORDER BY column1 ASC, column2 DESC LIMIT 1 OFFSET 2");
+
+        CommonTableExpression cte = new CommonTableExpression("tempTable")
+                .as(new StatementSelect().select("testColumn").from("table1"));
+        winqEqual(new StatementDelete().with(cte).deleteFrom("table2"),
+                "WITH tempTable AS(SELECT testColumn FROM table1) DELETE FROM table2");
+        winqEqual(new StatementDelete().withRecursive(cte).deleteFrom("table2"),
+                "WITH RECURSIVE tempTable AS(SELECT testColumn FROM table1) DELETE FROM table2");
     }
 
-    private StatementDelete genStatmentDelete() {
+    private StatementDelete genStatementDelete() {
         return new StatementDelete().deleteFrom("testTable");
     }
 }

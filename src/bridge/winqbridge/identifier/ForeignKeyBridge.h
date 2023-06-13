@@ -31,6 +31,7 @@ WCDB_EXTERN_C_BEGIN
 CPPForeignKey WCDBForeignKeyCreate(void);
 void WCDBForeignKeyConfigReferencesTable(CPPForeignKey foreignKey, const char* _Nullable table);
 void WCDBForeignKeyAddColumn(CPPForeignKey foreignKey, CPPColumn column);
+void WCDBForeignKeyAddColumn2(CPPForeignKey foreignKey, CPPCommonArray columns);
 
 void WCDBForeignKeyConfigOnDeleteSetNull(CPPForeignKey foreignKey);
 void WCDBForeignKeyConfigOnDeleteSetDefault(CPPForeignKey foreignKey);

@@ -38,3 +38,9 @@ void WCDBStatementDetachConfigSchema(CPPStatementDetach detachStatement, CPPSche
     WCDBGetObjectOrReturn(schema, WCDB::Schema, cppSchema);
     cppDetachStatement->detach(*cppSchema);
 }
+
+void WCDBStatementDetachConfigSchema2(CPPStatementDetach detachStatement, CPPCommonValue schema)
+{
+    WCDBGetObjectOrReturn(detachStatement, WCDB::StatementDetach, cppDetachStatement);
+    cppDetachStatement->detach(WCDBCreateSchemaFromCommonValue(schema));
+}

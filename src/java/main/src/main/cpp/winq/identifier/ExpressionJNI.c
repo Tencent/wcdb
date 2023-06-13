@@ -41,13 +41,13 @@ jlong WCDBJNIExpressionClassMethod(createWithFunction, jstring funcName)
     return ret;
 }
 
-jlong WCDBJNIExpressionObjectMethod(createWithExistStatement, jlong select)
+jlong WCDBJNIExpressionClassMethod(createWithExistStatement, jlong select)
 {
     WCDBJNIBridgeStruct(CPPStatementSelect, select);
     return (jlong) WCDBExpressionCreateWithExistStatement(selectStruct).innerValue;
 }
 
-jlong WCDBJNIExpressionObjectMethod(createWithNotExistStatement, jlong select)
+jlong WCDBJNIExpressionClassMethod(createWithNotExistStatement, jlong select)
 {
     WCDBJNIBridgeStruct(CPPStatementSelect, select);
     return (jlong) WCDBExpressionCreateWithNotExistStatement(selectStruct).innerValue;
@@ -86,10 +86,12 @@ void WCDBJNIExpressionObjectMethod(distinct, jlong expression)
     WCDBExpressionDistinct(expressionStruct);
 }
 
-void WCDBJNIExpressionObjectMethod(cast, jlong expression)
+jlong WCDBJNIExpressionClassMethod(cast, WCDBJNIObjectOrStringParameter(expression))
 {
-    WCDBJNIBridgeStruct(CPPExpression, expression);
-    WCDBExpressionCast(expressionStruct);
+    WCDBJNICreateObjectOrStringCommonValue(expression);
+    jlong ret = (jlong) WCDBExpressionCast2(expression_common).innerValue;
+    WCDBJNITryReleaseStringInCommonValue(expression);
+    return ret;
 }
 
 void WCDBJNIExpressionObjectMethod(as, jlong expression, jint type)
@@ -98,10 +100,15 @@ void WCDBJNIExpressionObjectMethod(as, jlong expression, jint type)
     WCDBExpressionAs(expressionStruct, type);
 }
 
-jlong WCDBJNIExpressionObjectMethod(caseWithExp, jlong expression)
+jlong WCDBJNIExpressionClassMethod(caseWithExp, WCDBJNIObjectOrStringParameter(expression))
 {
-    WCDBJNIBridgeStruct(CPPExpression, expression);
-    return (jlong) WCDBExpressionCaseWithExp(expressionStruct).innerValue;
+    if (expression_type == 0) {
+        return (jlong) WCDBExpressionCase().innerValue;
+    }
+    WCDBJNICreateObjectOrStringCommonValue(expression);
+    jlong ret = (jlong) WCDBExpressionCaseWithExp2(expression_common).innerValue;
+    WCDBJNITryReleaseStringInCommonValue(expression);
+    return ret;
 }
 
 jlong WCDBJNIExpressionClassMethodWithNoArg(case_)
@@ -109,25 +116,34 @@ jlong WCDBJNIExpressionClassMethodWithNoArg(case_)
     return (jlong) WCDBExpressionCase().innerValue;
 }
 
-void WCDBJNIExpressionObjectMethod(setWithWhenExp, jlong expression, jlong when)
+void WCDBJNIExpressionObjectMethod(setWithWhenExp,
+                                   jlong expression,
+                                   WCDBJNICommonValueParameter(when))
 {
     WCDBJNIBridgeStruct(CPPExpression, expression);
-    WCDBJNIBridgeStruct(CPPExpression, when);
-    WCDBExpressionSetWithWhenExp(expressionStruct, whenStruct);
+    WCDBJNICreateCommonValue(when);
+    WCDBExpressionSetWithWhenExp2(expressionStruct, when_common);
+    WCDBJNITryReleaseStringInCommonValue(when);
 }
 
-void WCDBJNIExpressionObjectMethod(setWithThenExp, jlong expression, jlong then)
+void WCDBJNIExpressionObjectMethod(setWithThenExp,
+                                   jlong expression,
+                                   WCDBJNICommonValueParameter(then))
 {
     WCDBJNIBridgeStruct(CPPExpression, expression);
-    WCDBJNIBridgeStruct(CPPExpression, then);
-    WCDBExpressionSetWithThenExp(expressionStruct, thenStruct);
+    WCDBJNICreateCommonValue(then);
+    WCDBExpressionSetWithThenExp2(expressionStruct, then_common);
+    WCDBJNITryReleaseStringInCommonValue(then);
 }
 
-void WCDBJNIExpressionObjectMethod(setWithElseExp, jlong expression, jlong else_)
+void WCDBJNIExpressionObjectMethod(setWithElseExp,
+                                   jlong expression,
+                                   WCDBJNICommonValueParameter(else_))
 {
     WCDBJNIBridgeStruct(CPPExpression, expression);
-    WCDBJNIBridgeStruct(CPPExpression, else_);
-    WCDBExpressionSetWithElseExp(expressionStruct, else_Struct);
+    WCDBJNICreateCommonValue(else_);
+    WCDBExpressionSetWithElseExp2(expressionStruct, else__common);
+    WCDBJNITryReleaseStringInCommonValue(else_);
 }
 
 void WCDBJNIExpressionObjectMethod(escapeWith, jlong expression, jstring content)
@@ -146,11 +162,11 @@ jlong WCDBJNIExpressionObjectMethod(createWithWindowFunction, jstring funcName)
     return ret;
 }
 
-void WCDBJNIExpressionObjectMethod(filter, jlong expression, jlong filter)
+void WCDBJNIExpressionObjectMethod(filter, jlong expression, jlong condition)
 {
     WCDBJNIBridgeStruct(CPPExpression, expression);
-    WCDBJNIBridgeStruct(CPPFilter, filter);
-    WCDBExpressionFilter(expressionStruct, filterStruct);
+    WCDBJNIBridgeStruct(CPPExpression, condition);
+    WCDBExpressionFilter(expressionStruct, conditionStruct);
 }
 
 void WCDBJNIExpressionObjectMethod(overWindowDef, jlong expression, jlong def)

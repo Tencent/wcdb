@@ -68,7 +68,7 @@ public final class StatementCreateTrigger: Identifier<CPPStatementCreateTrigger>
 
     @discardableResult
     public func insteadOf() -> StatementCreateTrigger {
-        WCDBStatementCreateTriggerConfigInsteadof(cppObj)
+        WCDBStatementCreateTriggerConfigInsteadOf(cppObj)
         return self
     }
 

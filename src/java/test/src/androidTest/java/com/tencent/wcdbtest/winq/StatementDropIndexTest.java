@@ -1,5 +1,4 @@
-//
-// Created by qiuwenchen on 2022/5/31.
+// Created by chenqiuwen on 2023/6/11.
 //
 
 /*
@@ -22,21 +21,21 @@
  * limitations under the License.
  */
 
-import Foundation
-import WCDB_Private
+package com.tencent.wcdbtest.winq;
 
-public final class Filter: Identifier<CPPFilter> {
+import org.junit.Test;
+import static com.tencent.wcdbtest.base.WinqTool.winqEqual;
 
-    public init() {
-        super.init(with: WCDBFilterCreate())
-    }
+import com.tencent.wcdb.winq.StatementDropIndex;
 
-    @discardableResult
-    public func `where`(_ condition: ExpressionConvertible) -> Filter {
-        let expression = condition.asExpression()
-        withExtendedLifetime(expression) {
-            WCDBFilterConfigWhere(cppObj, $0.cppObj)
-        }
-        return self
+public class StatementDropIndexTest {
+    @Test
+    public void test() {
+        winqEqual(new StatementDropIndex().dropIndex("testIndex"),
+                "DROP INDEX testIndex");
+        winqEqual(new StatementDropIndex().dropIndex("testIndex").ifExist(),
+                "DROP INDEX IF EXISTS testIndex");
+        winqEqual(new StatementDropIndex().dropIndex("testIndex").of("testSchema"),
+                "DROP INDEX testSchema.testIndex");
     }
 }

@@ -35,6 +35,10 @@
     WCDBJNIClassMethodWithNoArg(StatementDelete, funcName)
 
 jlong WCDBJNIStatementDeleteObjectMethodWithNoArg(create);
+
+void WCDBJNIStatementDeleteObjectMethod(configWith, jlong self, jlongArray expressions);
+void WCDBJNIStatementDeleteObjectMethod(configRecursive, jlong self);
+
 void WCDBJNIStatementDeleteObjectMethod(configTable,
                                         jlong self,
                                         WCDBJNIObjectOrStringParameter(table));

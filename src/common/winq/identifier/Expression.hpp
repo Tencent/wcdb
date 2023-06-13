@@ -83,7 +83,7 @@ public:
     Expression& escape(const Expression& operand);
 
     static Expression windowFunction(const UnsafeStringView& function);
-    Expression& filter(const Filter& filter);
+    Expression& filter(const Expression& condition);
     Expression& over(const WindowDef& windowDef);
     Expression& over(const UnsafeStringView& window);
 

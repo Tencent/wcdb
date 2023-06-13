@@ -29,6 +29,21 @@ jlong WCDBJNIStatementInsertObjectMethodWithNoArg(create)
     return (jlong) WCDBStatementInsertCreate().innerValue;
 }
 
+void WCDBJNIStatementInsertObjectMethod(configWith, jlong self, jlongArray expressions)
+{
+    WCDBJNIBridgeStruct(CPPStatementInsert, self);
+    WCDBJNIGetCppPointerArray(expressions);
+    WCDBStatementInsertConfigWith(
+    selfStruct, (const CPPCommonTableExpression*) expressionsArray, expressionsLength);
+    WCDBJNIReleaseCppPointerArray(expressions);
+}
+
+void WCDBJNIStatementInsertObjectMethod(configRecursive, jlong self)
+{
+    WCDBJNIBridgeStruct(CPPStatementInsert, self);
+    WCDBStatementInsertConfigRecursive(selfStruct);
+}
+
 void WCDBJNIStatementInsertObjectMethod(configTableName, jlong self, jstring tableName)
 {
     WCDBJNIBridgeStruct(CPPStatementInsert, self);
@@ -91,4 +106,17 @@ void WCDBJNIStatementInsertObjectMethod(configSelect, jlong self, jlong select)
     WCDBJNIBridgeStruct(CPPStatementInsert, self);
     WCDBJNIBridgeStruct(CPPStatementSelect, select);
     WCDBStatementInsertConfigSelect(selfStruct, selectStruct);
+}
+
+void WCDBJNIStatementInsertObjectMethod(configDefaultValues, jlong self)
+{
+    WCDBJNIBridgeStruct(CPPStatementInsert, self);
+    WCDBStatementInsertConfigDefaultValues(selfStruct);
+}
+
+void WCDBJNIStatementInsertObjectMethod(configUpsert, jlong self, jlong upsert)
+{
+    WCDBJNIBridgeStruct(CPPStatementInsert, self);
+    WCDBJNIBridgeStruct(CPPUpsert, upsert);
+    WCDBStatementInsertConfigUpsert(selfStruct, upsertStruct);
 }

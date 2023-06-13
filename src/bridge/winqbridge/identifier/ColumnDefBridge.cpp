@@ -30,36 +30,17 @@
 
 CPPColumnDef WCDBColumnDefCreateWithoutType2(CPPCommonValue column)
 {
-    if (column.type == WCDBBridgedType_String) {
-        return WCDBCreateCPPBridgedObjectWithParameters(
-        CPPColumnDef, WCDB::ColumnDef, WCDB::StringView((const char*) column.intValue));
-    } else if (column.type == WCDBBridgedType_Column) {
-        return WCDBCreateCPPBridgedObjectWithParameters(
-        CPPColumnDef, WCDB::ColumnDef, WCDBGetBridgedData(WCDB::Column, column));
-    } else {
-        assert(0);
-    }
-    return CPPColumnDef();
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPColumnDef, WCDB::ColumnDef, WCDBCreateColumnFromCommonValue(column));
 }
 
 CPPColumnDef WCDBColumnDefCreateWithType2(CPPCommonValue column, enum WCDBSyntaxColumnType type)
 {
-    if (column.type == WCDBBridgedType_String) {
-        return WCDBCreateCPPBridgedObjectWithParameters(
-        CPPColumnDef,
-        WCDB::ColumnDef,
-        WCDB::StringView((const char*) column.intValue),
-        WCDB::WinqBridge::changeColumnType(type));
-    } else if (column.type == WCDBBridgedType_Column) {
-        return WCDBCreateCPPBridgedObjectWithParameters(
-        CPPColumnDef,
-        WCDB::ColumnDef,
-        WCDBGetBridgedData(WCDB::Column, column),
-        WCDB::WinqBridge::changeColumnType(type));
-    } else {
-        assert(0);
-    }
-    return CPPColumnDef();
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPColumnDef,
+    WCDB::ColumnDef,
+    WCDBCreateColumnFromCommonValue(column),
+    WCDB::WinqBridge::changeColumnType(type));
 }
 
 CPPColumnDef WCDBColumnDefCreateWithoutType(CPPColumn column)

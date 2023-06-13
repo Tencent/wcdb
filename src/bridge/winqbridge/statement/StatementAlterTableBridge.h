@@ -32,13 +32,19 @@ CPPStatementAlterTable WCDBStatementAlterTableCreate();
 void WCDBStatementAlterTableConfigTable(CPPStatementAlterTable alterTable,
                                         const char* _Nullable name);
 void WCDBStatementAlterTableConfigSchema(CPPStatementAlterTable alterTable, CPPSchema schema);
+void WCDBStatementAlterTableConfigSchema2(CPPStatementAlterTable alterTable,
+                                          CPPCommonValue schema);
 void WCDBStatementAlterTableConfigRenameToTable(CPPStatementAlterTable alterTable,
                                                 const char* _Nullable name);
 void WCDBStatementAlterTableConfigRenameColumn(CPPStatementAlterTable alterTable,
                                                CPPColumn column);
+void WCDBStatementAlterTableConfigRenameColumn2(CPPStatementAlterTable alterTable,
+                                                CPPCommonValue column);
 void WCDBStatementAlterTableConfigRenameToColumn(CPPStatementAlterTable alterTable,
                                                  CPPColumn column);
-void WCDBStatementAlterTableConfigRenameAddColumn(CPPStatementAlterTable alterTable,
-                                                  CPPColumnDef columndef);
+void WCDBStatementAlterTableConfigRenameToColumn2(CPPStatementAlterTable alterTable,
+                                                  CPPCommonValue column);
+void WCDBStatementAlterTableConfigAddColumn(CPPStatementAlterTable alterTable,
+                                            CPPColumnDef columndef);
 
 WCDB_EXTERN_C_END

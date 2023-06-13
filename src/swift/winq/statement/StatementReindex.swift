@@ -27,7 +27,7 @@ public final class StatementReindex: Identifier<CPPStatementReIndex>, Statement 
 
     @discardableResult
     public func reindex(collation: String) -> StatementReindex {
-        WCDBStatementReIndexConfigColllation(cppObj, collation.cString)
+        WCDBStatementReIndexConfigCollation(cppObj, collation.cString)
         return self
     }
 

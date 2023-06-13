@@ -523,7 +523,6 @@
 		039760A827F563F00071FA8F /* ObjectBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039760A727F563F00071FA8F /* ObjectBridge.swift */; };
 		039760AB27F5C0DD0071FA8F /* DatabaseBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 039760AA27F5C0DD0071FA8F /* DatabaseBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		039760AE27F5C1CA0071FA8F /* DatabaseBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 039760AC27F5C1CA0071FA8F /* DatabaseBridge.cpp */; };
-		039BD3962845CB4200C58BE2 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039BD3952845CB4200C58BE2 /* Filter.swift */; };
 		039BD3982845CB7C00C58BE2 /* WindowDef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039BD3972845CB7C00C58BE2 /* WindowDef.swift */; };
 		039BD4362846113D00C58BE2 /* ExpressionOperatableBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 039BD4342846113D00C58BE2 /* ExpressionOperatableBridge.cpp */; };
 		039BD4372846113D00C58BE2 /* ExpressionOperatableBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 039BD4352846113D00C58BE2 /* ExpressionOperatableBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -2413,7 +2412,6 @@
 		7521DB31291EA349009642EF /* FrameSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752594E728522A4A0068A602 /* FrameSpec.swift */; };
 		7521DB32291EA349009642EF /* Recyclable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165E827F42D6500D2C926 /* Recyclable.swift */; };
 		7521DB33291EA349009642EF /* HandlePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6221EA0D6680021EFA7 /* HandlePool.cpp */; };
-		7521DB34291EA349009642EF /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039BD3952845CB4200C58BE2 /* Filter.swift */; };
 		7521DB35291EA349009642EF /* SyntaxWindowDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC2C217DFADC006E9E73 /* SyntaxWindowDef.cpp */; };
 		7521DB3A291EA349009642EF /* PagerRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23567D5720CA823C005F1C35 /* PagerRelated.cpp */; };
 		7521DB3B291EA349009642EF /* Statement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165B727F42D6500D2C926 /* Statement.swift */; };
@@ -2511,7 +2509,6 @@
 		7521DBAE291EA349009642EF /* SchemaBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75204AE9283FD7410002E40C /* SchemaBridge.cpp */; };
 		7521DBAF291EA349009642EF /* PerformanceTraceConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2360A60120D78F2B00E4A311 /* PerformanceTraceConfig.cpp */; };
 		7521DBB0291EA349009642EF /* StatementCommit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBC1217DFADC006E9E73 /* StatementCommit.cpp */; };
-		7521DBB2291EA349009642EF /* FilterBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C1033C28450CC50006BBCB /* FilterBridge.cpp */; };
 		7521DBB3291EA349009642EF /* AutoCheckpointConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F70FB620A055CF00CCE3CD /* AutoCheckpointConfig.cpp */; };
 		7521DBB4291EA349009642EF /* ColumnDef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165B427F42D6500D2C926 /* ColumnDef.swift */; };
 		7521DBB5291EA349009642EF /* ObjectBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0397605727F54FA10071FA8F /* ObjectBridge.cpp */; };
@@ -2819,7 +2816,6 @@
 		7521DD59291EA349009642EF /* ErrorBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 0393BEDB27F6ED860058B295 /* ErrorBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		7521DD5A291EA349009642EF /* ColumnDefBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E8227F28447B940072CA57 /* ColumnDefBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		7521DD5B291EA349009642EF /* StatementReleaseBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F4DE422883FD6A00760DC3 /* StatementReleaseBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		7521DD5C291EA349009642EF /* FilterBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C1033D28450CC50006BBCB /* FilterBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		7521DD5D291EA349009642EF /* StatementCreateViewBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75EB1A09287F0BDA00AA62F7 /* StatementCreateViewBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		7521DD5E291EA349009642EF /* ColumnBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 032613B5283F8D7E00836E0F /* ColumnBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		7521DD5F291EA349009642EF /* OrderingTermBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A46C0C2843B3BC00B58207 /* OrderingTermBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -2922,7 +2918,6 @@
 		7521DDFA2920A680009642EF /* UpdateInterface+WCTTableCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7521DDF92920A680009642EF /* UpdateInterface+WCTTableCoding.swift */; };
 		7524940A29D1F10000493FF9 /* WCTBridgeProperty.h in Headers */ = {isa = PBXBuildFile; fileRef = 036E50B628115AB8007365CD /* WCTBridgeProperty.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		752594932851FCEF0068A602 /* RaiseFunctionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752594922851FCEF0068A602 /* RaiseFunctionTests.swift */; };
-		752594E228521AA00068A602 /* FilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752594E128521AA00068A602 /* FilterTests.swift */; };
 		752594E5285226C00068A602 /* FrameSpecBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 752594E3285226C00068A602 /* FrameSpecBridge.cpp */; };
 		752594E6285226C00068A602 /* FrameSpecBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 752594E4285226C00068A602 /* FrameSpecBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		752594E828522A4A0068A602 /* FrameSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752594E728522A4A0068A602 /* FrameSpec.swift */; };
@@ -3051,8 +3046,6 @@
 		75B698D6290AD4C0006E1F8F /* BaseTokenizerUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75B698D3290AD4C0006E1F8F /* BaseTokenizerUtil.cpp */; };
 		75B698D7290AD4C0006E1F8F /* BaseTokenizerUtil.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75B698D4290AD4C0006E1F8F /* BaseTokenizerUtil.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		75B698D8290AD4C0006E1F8F /* BaseTokenizerUtil.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75B698D4290AD4C0006E1F8F /* BaseTokenizerUtil.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		75C1033E28450CC50006BBCB /* FilterBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C1033C28450CC50006BBCB /* FilterBridge.cpp */; };
-		75C1033F28450CC50006BBCB /* FilterBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C1033D28450CC50006BBCB /* FilterBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75C1034228450D840006BBCB /* WindowDefBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C1034028450D840006BBCB /* WindowDefBridge.cpp */; };
 		75C1034328450D840006BBCB /* WindowDefBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C1034128450D840006BBCB /* WindowDefBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75C10345284530BF0006BBCB /* RaiseFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C10344284530BF0006BBCB /* RaiseFunction.swift */; };
@@ -3372,7 +3365,6 @@
 		039760A727F563F00071FA8F /* ObjectBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectBridge.swift; sourceTree = "<group>"; };
 		039760AA27F5C0DD0071FA8F /* DatabaseBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DatabaseBridge.h; sourceTree = "<group>"; };
 		039760AC27F5C1CA0071FA8F /* DatabaseBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DatabaseBridge.cpp; sourceTree = "<group>"; };
-		039BD3952845CB4200C58BE2 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
 		039BD3972845CB7C00C58BE2 /* WindowDef.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowDef.swift; sourceTree = "<group>"; };
 		039BD4342846113D00C58BE2 /* ExpressionOperatableBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ExpressionOperatableBridge.cpp; sourceTree = "<group>"; };
 		039BD4352846113D00C58BE2 /* ExpressionOperatableBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExpressionOperatableBridge.h; sourceTree = "<group>"; };
@@ -4503,7 +4495,6 @@
 		7521DDF72920A623009642EF /* Database+WCTTableCoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Database+WCTTableCoding.swift"; sourceTree = "<group>"; };
 		7521DDF92920A680009642EF /* UpdateInterface+WCTTableCoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UpdateInterface+WCTTableCoding.swift"; sourceTree = "<group>"; };
 		752594922851FCEF0068A602 /* RaiseFunctionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RaiseFunctionTests.swift; sourceTree = "<group>"; };
-		752594E128521AA00068A602 /* FilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterTests.swift; sourceTree = "<group>"; };
 		752594E3285226C00068A602 /* FrameSpecBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FrameSpecBridge.cpp; sourceTree = "<group>"; };
 		752594E4285226C00068A602 /* FrameSpecBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FrameSpecBridge.h; sourceTree = "<group>"; };
 		752594E728522A4A0068A602 /* FrameSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameSpec.swift; sourceTree = "<group>"; };
@@ -4612,8 +4603,6 @@
 		75AF6AF92856303700A7C43D /* PragmaBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PragmaBridge.h; sourceTree = "<group>"; };
 		75B698D3290AD4C0006E1F8F /* BaseTokenizerUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BaseTokenizerUtil.cpp; sourceTree = "<group>"; };
 		75B698D4290AD4C0006E1F8F /* BaseTokenizerUtil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BaseTokenizerUtil.hpp; sourceTree = "<group>"; };
-		75C1033C28450CC50006BBCB /* FilterBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FilterBridge.cpp; sourceTree = "<group>"; };
-		75C1033D28450CC50006BBCB /* FilterBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FilterBridge.h; sourceTree = "<group>"; };
 		75C1034028450D840006BBCB /* WindowDefBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WindowDefBridge.cpp; sourceTree = "<group>"; };
 		75C1034128450D840006BBCB /* WindowDefBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WindowDefBridge.h; sourceTree = "<group>"; };
 		75C10344284530BF0006BBCB /* RaiseFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RaiseFunction.swift; sourceTree = "<group>"; };
@@ -4862,7 +4851,6 @@
 				03E165B427F42D6500D2C926 /* ColumnDef.swift */,
 				03E8228B2844BEFF0072CA57 /* CommonTableExpression.swift */,
 				03E1659127F42D6500D2C926 /* Expression.swift */,
-				039BD3952845CB4200C58BE2 /* Filter.swift */,
 				03E1659D27F42D6500D2C926 /* ForeignKey.swift */,
 				752594E728522A4A0068A602 /* FrameSpec.swift */,
 				03E165A227F42D6500D2C926 /* IndexedColumn.swift */,
@@ -4943,8 +4931,6 @@
 				03E822822844B8760072CA57 /* CommonTableExpressionBridge.cpp */,
 				03E822902844E1AB0072CA57 /* RaiseFunctionBridge.h */,
 				03E8228F2844E1AB0072CA57 /* RaiseFunctionBridge.cpp */,
-				75C1033D28450CC50006BBCB /* FilterBridge.h */,
-				75C1033C28450CC50006BBCB /* FilterBridge.cpp */,
 				75C1034128450D840006BBCB /* WindowDefBridge.h */,
 				75C1034028450D840006BBCB /* WindowDefBridge.cpp */,
 				752594E4285226C00068A602 /* FrameSpecBridge.h */,
@@ -5173,7 +5159,6 @@
 				03E1674627F434E800D2C926 /* ColumnTypeTests.swift */,
 				03E8228D2844C0E70072CA57 /* CommonTableExpressionTests.swift */,
 				03E1673D27F434E800D2C926 /* ExpressionTests.swift */,
-				752594E128521AA00068A602 /* FilterTests.swift */,
 				03E1673727F434E800D2C926 /* ForeignKeyTests.swift */,
 				75195E802852454700EC8C1F /* FrameSpecTests.swift */,
 				03E1674227F434E800D2C926 /* IndexedColumnTests.swift */,
@@ -8015,7 +8000,6 @@
 				0393BEDC27F6ED860058B295 /* ErrorBridge.h in Headers */,
 				03E8228128447B940072CA57 /* ColumnDefBridge.h in Headers */,
 				75F4DE442883FD6A00760DC3 /* StatementReleaseBridge.h in Headers */,
-				75C1033F28450CC50006BBCB /* FilterBridge.h in Headers */,
 				75EB1A0B287F0BDA00AA62F7 /* StatementCreateViewBridge.h in Headers */,
 				032613B7283F8D7E00836E0F /* ColumnBridge.h in Headers */,
 				75A46C0E2843B3BC00B58207 /* OrderingTermBridge.h in Headers */,
@@ -8706,7 +8690,6 @@
 				7521DD59291EA349009642EF /* ErrorBridge.h in Headers */,
 				7521DD5A291EA349009642EF /* ColumnDefBridge.h in Headers */,
 				7521DD5B291EA349009642EF /* StatementReleaseBridge.h in Headers */,
-				7521DD5C291EA349009642EF /* FilterBridge.h in Headers */,
 				7521DD5D291EA349009642EF /* StatementCreateViewBridge.h in Headers */,
 				7521DD5E291EA349009642EF /* ColumnBridge.h in Headers */,
 				7521DD5F291EA349009642EF /* OrderingTermBridge.h in Headers */,
@@ -9848,7 +9831,6 @@
 				03A57F16284089B800D2A4C3 /* SchemaTests.swift in Sources */,
 				03E1678527F434E900D2C926 /* TableOrSubqueryTests.swift in Sources */,
 				03E167A227F434E900D2C926 /* TypedTests.swift in Sources */,
-				752594E228521AA00068A602 /* FilterTests.swift in Sources */,
 				03E167AD27F434E900D2C926 /* VirtualTableBindingTests.swift in Sources */,
 				75EB1A10287F0EB900AA62F7 /* StatementCreateViewTests.swift in Sources */,
 				03E1677A27F434E900D2C926 /* StatementUpdateTests.swift in Sources */,
@@ -10131,7 +10113,6 @@
 				752594E828522A4A0068A602 /* FrameSpec.swift in Sources */,
 				03E1664A27F42D6600D2C926 /* Recyclable.swift in Sources */,
 				2349F7051EA0D6680021EFA7 /* HandlePool.cpp in Sources */,
-				039BD3962845CB4200C58BE2 /* Filter.swift in Sources */,
 				23EEDD25217DFADC006E9E73 /* SyntaxWindowDef.cpp in Sources */,
 				23F70F7D209FF0EC00CCE3CD /* WCTValue.mm in Sources */,
 				2349F7491EA0D6680021EFA7 /* WCTDatabase+File.mm in Sources */,
@@ -10261,7 +10242,6 @@
 				2360A60720D78F2C00E4A311 /* PerformanceTraceConfig.cpp in Sources */,
 				23EEDCBD217DFADC006E9E73 /* StatementCommit.cpp in Sources */,
 				2349F7301EA0D6680021EFA7 /* WCTSelectable.mm in Sources */,
-				75C1033E28450CC50006BBCB /* FilterBridge.cpp in Sources */,
 				23F70FB820A055CF00CCE3CD /* AutoCheckpointConfig.cpp in Sources */,
 				03E1661E27F42D6500D2C926 /* ColumnDef.swift in Sources */,
 				0397605827F54FA10071FA8F /* ObjectBridge.cpp in Sources */,
@@ -10906,7 +10886,6 @@
 				750080F32920F3D5009C0F38 /* WCTFoundation.mm in Sources */,
 				7521DB32291EA349009642EF /* Recyclable.swift in Sources */,
 				7521DB33291EA349009642EF /* HandlePool.cpp in Sources */,
-				7521DB34291EA349009642EF /* Filter.swift in Sources */,
 				7521DB35291EA349009642EF /* SyntaxWindowDef.cpp in Sources */,
 				7521DB3A291EA349009642EF /* PagerRelated.cpp in Sources */,
 				7521DB3B291EA349009642EF /* Statement.swift in Sources */,
@@ -11007,7 +10986,6 @@
 				7521DBAE291EA349009642EF /* SchemaBridge.cpp in Sources */,
 				7521DBAF291EA349009642EF /* PerformanceTraceConfig.cpp in Sources */,
 				7521DBB0291EA349009642EF /* StatementCommit.cpp in Sources */,
-				7521DBB2291EA349009642EF /* FilterBridge.cpp in Sources */,
 				7521DBB3291EA349009642EF /* AutoCheckpointConfig.cpp in Sources */,
 				7521DBB4291EA349009642EF /* ColumnDef.swift in Sources */,
 				7521DBB5291EA349009642EF /* ObjectBridge.cpp in Sources */,

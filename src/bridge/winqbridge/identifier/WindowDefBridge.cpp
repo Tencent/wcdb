@@ -23,7 +23,9 @@
  */
 
 #include "WindowDefBridge.h"
+#include "Column.hpp"
 #include "Expression.hpp"
+#include "LiteralValue.hpp"
 #include "ObjectBridge.hpp"
 #include "OrderingTerm.hpp"
 #include "WindowDef.hpp"
@@ -38,6 +40,42 @@ void WCDBWindowDefConfigPartition(CPPWindowDef def, const CPPExpression* partiti
 {
     WCDBGetObjectOrReturn(def, WCDB::WindowDef, cppDef);
     WCDBGetCPPSyntaxListOrReturn(WCDB::Expression, cppPartitions, partitions, partitionNum);
+    cppDef->partition(cppPartitions);
+}
+
+void WCDBWindowDefConfigPartition2(CPPWindowDef def, CPPMultiTypeArray partitions)
+{
+    WCDBGetObjectOrReturn(def, WCDB::WindowDef, cppDef);
+    WCDB::Expressions cppPartitions;
+    int intIndex = 0;
+    int stringIndex = 0;
+    for (int i = 0; i < partitions.totalLength; i++) {
+        switch (partitions.types[i]) {
+        case WCDBBridgedType_String: {
+            cppPartitions.emplace_back(WCDB::Column(
+            WCDB::UnsafeStringView(partitions.stringValues[stringIndex])));
+            stringIndex++;
+        } break;
+        case WCDBBridgedType_Column: {
+            cppPartitions.emplace_back(
+            WCDBGetMultiTypeArrayObject(WCDB::Column, partitions, intIndex));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_LiteralValue: {
+            cppPartitions.emplace_back(
+            WCDBGetMultiTypeArrayObject(WCDB::LiteralValue, partitions, i));
+            intIndex++;
+        } break;
+        case WCDBBridgedType_Expression: {
+            cppPartitions.emplace_back(
+            WCDBGetMultiTypeArrayObject(WCDB::Expression, partitions, i));
+            intIndex++;
+        } break;
+        default:
+            assert(0);
+            break;
+        }
+    }
     cppDef->partition(cppPartitions);
 }
 

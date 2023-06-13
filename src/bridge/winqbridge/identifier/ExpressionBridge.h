@@ -50,20 +50,25 @@ void WCDBExpressionInvokeAll(CPPExpression expression);
 void WCDBExpressionDistinct(CPPExpression expression);
 
 CPPExpression WCDBExpressionCast(CPPExpression expression);
+CPPExpression WCDBExpressionCast2(CPPCommonValue expression);
 void WCDBExpressionAs(CPPExpression expression, enum WCDBSyntaxColumnType type);
 
 CPPExpression WCDBExpressionCaseWithExp(CPPExpression expression);
+CPPExpression WCDBExpressionCaseWithExp2(CPPCommonValue expression);
 CPPExpression WCDBExpressionCase(void);
 
 void WCDBExpressionSetWithWhenExp(CPPExpression expression, CPPExpression when);
+void WCDBExpressionSetWithWhenExp2(CPPExpression expression, CPPCommonValue when);
 void WCDBExpressionSetWithThenExp(CPPExpression expression, CPPExpression then);
+void WCDBExpressionSetWithThenExp2(CPPExpression expression, CPPCommonValue then);
 void WCDBExpressionSetWithElseExp(CPPExpression expression, CPPExpression else_);
+void WCDBExpressionSetWithElseExp2(CPPExpression expression, CPPCommonValue else_);
 
 void WCDBExpressionEscapeWith(CPPExpression expression, CPPExpression operand);
 void WCDBExpressionEscapeWith2(CPPExpression expression, const char* _Nullable operand);
 
 CPPExpression WCDBExpressionCreateWithWindowFunction(const char* _Nullable funcName);
-void WCDBExpressionFilter(CPPExpression expression, CPPFilter filter);
+void WCDBExpressionFilter(CPPExpression expression, CPPExpression condition);
 void WCDBExpressionOverWindowDef(CPPExpression expression, CPPWindowDef def);
 void WCDBExpressionOverWindow(CPPExpression expression, const char* _Nullable window);
 

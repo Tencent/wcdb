@@ -30,6 +30,10 @@ WCDB_EXTERN_C_BEGIN
 
 CPPStatementAttach WCDBStatementAttachCreate();
 void WCDBStatementAttachConfigPath(CPPStatementAttach attach, CPPExpression path);
+void WCDBStatementAttachConfigPath2(CPPStatementAttach attach, CPPCommonValue path);
 void WCDBStatementAttachConfigSchema(CPPStatementAttach attach, CPPSchema schema);
+void WCDBStatementAttachConfigSchema2(CPPStatementAttach attach, CPPCommonValue schema);
+void WCDBStatementAttachConfigKey(CPPStatementAttach attach, CPPExpression key);
+void WCDBStatementAttachConfigKey2(CPPStatementAttach attach, CPPCommonValue key);
 
 WCDB_EXTERN_C_END

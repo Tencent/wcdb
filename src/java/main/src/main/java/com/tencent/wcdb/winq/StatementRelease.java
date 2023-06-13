@@ -1,5 +1,4 @@
-//
-// Created by qiuwenchen on 2022/6/9.
+// Created by qiuwenchen on 2023/6/12.
 //
 
 /*
@@ -22,16 +21,24 @@
  * limitations under the License.
  */
 
-import Foundation
-#if TEST_WCDB_SWIFT
-import WCDBSwift
-#else
-import WCDB
-#endif
+package com.tencent.wcdb.winq;
 
-class FilterTests: BaseTestCase {
-
-    func testFilter() {
-        WINQAssertEqual(Filter().where(1), "FILTER(WHERE 1)")
+public class StatementRelease extends Identifier {
+    @Override
+    protected CPPType getCppType() {
+        return CPPType.ReleaseSTMT;
     }
+
+    public StatementRelease() {
+        cppObj = createCppObj();
+    }
+
+    private native long createCppObj();
+
+    public StatementRelease release(String savepoint) {
+        configSavepoint(cppObj, savepoint);
+        return this;
+    }
+
+    private native void configSavepoint(long self, String savepoint);
 }

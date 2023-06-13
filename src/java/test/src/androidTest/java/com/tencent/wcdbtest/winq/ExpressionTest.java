@@ -39,13 +39,51 @@ import java.util.Set;
 public class ExpressionTest {
     @Test
     public void testExpression() {
+        Column column = new Column("testColumn");
         winqEqual(new Expression(new LiteralValue(1)), "1");
         winqEqual(new Expression(new LiteralValue(1.1)), "1.1000000000000001");
         winqEqual(new Expression(new LiteralValue("abc")), "'abc'");
         winqEqual(new Expression(new LiteralValue(false)), "FALSE");
         winqEqual(new Expression(new LiteralValue(true)), "TRUE");
-        winqEqual(new Expression(new Column("testColumn")), "testColumn");
+        winqEqual(new Expression(column), "testColumn");
         winqEqual(new Expression(new BindParameter(1)), "?1");
+
+        winqEqual(Expression.exists(new StatementSelect().select(new Column("testColumn"))),
+                "EXISTS(SELECT testColumn)");
+        winqEqual(Expression.notExists(new StatementSelect().select(new Column("testColumn"))),
+                "NOT EXISTS(SELECT testColumn)");
+
+        winqEqual(Expression.cast("testColumn").as(ColumnType.Integer),
+                "CAST(testColumn AS INTEGER)");
+        winqEqual(Expression.cast(column).as(ColumnType.Integer),
+                "CAST(testColumn AS INTEGER)");
+
+        winqEqual(Expression.case_().when(column.eq(1)).then("a")
+                .when(column.eq(2)).then("b").else_("c"),
+                "CASE WHEN testColumn == 1 THEN 'a' WHEN testColumn == 2 THEN 'b' ELSE 'c' END");
+        winqEqual(Expression.case_().when(column.eq("a")).then(1)
+                        .when(column.eq("b")).then(2).else_(3),
+                "CASE WHEN testColumn == 'a' THEN 1 WHEN testColumn == 'b' THEN 2 ELSE 3 END");
+        winqEqual(Expression.case_(column).when("a").then(1)
+                        .when("b").then(2).else_(3),
+                "CASE testColumn WHEN 'a' THEN 1 WHEN 'b' THEN 2 ELSE 3 END");
+        winqEqual(Expression.case_(column).when(1).then("a")
+                        .when(2).then("b").else_("c"),
+                "CASE testColumn WHEN 1 THEN 'a' WHEN 2 THEN 'b' ELSE 'c' END");
+
+        winqEqual(Expression.windowFunction("testWindowFunction")
+                        .invoke().argument(column)
+                        .filter(column.notEq(0)),
+                "testWindowFunction(testColumn) FILTER(WHERE testColumn != 0)");
+        winqEqual(Expression.windowFunction("testWindowFunction")
+                        .invoke().argument(column)
+                        .filter(column.notEq(0)).over("testWindow"),
+                "testWindowFunction(testColumn) FILTER(WHERE testColumn != 0) OVER testWindow");
+        winqEqual(Expression.windowFunction("testWindowFunction")
+                        .invoke().argument(column)
+                        .filter(column.notEq(0))
+                        .over(new WindowDef().partitionBy(column)),
+                "testWindowFunction(testColumn) FILTER(WHERE testColumn != 0) OVER(PARTITION BY testColumn)");
     }
 
     @Test

@@ -49,7 +49,7 @@ public class StatementCreateTableTest {
         winqEqual(new StatementCreateTable().createTable(table1).define(new ColumnDef[]{def1, def2}),
                 "CREATE TABLE table1(column1 INTEGER, column2 TEXT)");
 
-        winqEqual(new StatementCreateTable().createTable(table1).temp().define(new ColumnDef[]{def1, def2}),
+        winqEqual(new StatementCreateTable().createTempTable(table1).define(new ColumnDef[]{def1, def2}),
                 "CREATE TEMP TABLE table1(column1 INTEGER, column2 TEXT)");
 
         winqEqual(new StatementCreateTable().createTable(table1).define(new ColumnDef[]{def1, def2}).withoutRowid(),

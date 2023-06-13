@@ -46,7 +46,7 @@
     WCDB::Expressions expressions;
     WCDB::RaiseFunction raiseFunction;
     NSString* windowFunction;
-    WCDB::Filter filter;
+    WCDB::Expression filter;
     WCDB::WindowDef windowDef;
     NSString* window;
 }
@@ -74,7 +74,7 @@
     };
     raiseFunction = WCDB::RaiseFunction().ignore();
     windowFunction = @"testWindowFunction";
-    filter = WCDB::Filter().where(1);
+    filter = 1;
     windowDef = WCDB::WindowDef().partition(expressions);
     window = @"testWindow";
 }

@@ -29,10 +29,11 @@
 WCDB_EXTERN_C_BEGIN
 
 CPPStatementReIndex WCDBStatementReIndexCreate(void);
-void WCDBStatementReIndexConfigColllation(CPPStatementReIndex statment,
-                                          const char* _Nullable collation);
+void WCDBStatementReIndexConfigCollation(CPPStatementReIndex statment,
+                                         const char* _Nullable collation);
 void WCDBStatementReIndexConfigTable(CPPStatementReIndex statment, const char* _Nullable name);
 void WCDBStatementReIndexConfigIndex(CPPStatementReIndex statment, const char* _Nullable name);
 void WCDBStatementReIndexConfigSchema(CPPStatementReIndex statment, CPPSchema schema);
+void WCDBStatementReIndexConfigSchema2(CPPStatementReIndex statment, CPPCommonValue schema);
 
 WCDB_EXTERN_C_END

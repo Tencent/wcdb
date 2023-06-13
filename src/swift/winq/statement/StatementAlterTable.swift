@@ -60,7 +60,7 @@ public final class StatementAlterTable: Identifier<CPPStatementAlterTable>, Stat
     @discardableResult
     public func addColumn(with columnDef: ColumnDef) -> StatementAlterTable {
         withExtendedLifetime(columnDef) {
-            WCDBStatementAlterTableConfigRenameAddColumn(cppObj, columnDef.cppObj)
+            WCDBStatementAlterTableConfigAddColumn(cppObj, columnDef.cppObj)
         }
         return self
     }

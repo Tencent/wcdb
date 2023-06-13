@@ -35,6 +35,8 @@
     WCDBJNIClassMethodWithNoArg(StatementInsert, funcName)
 
 jlong WCDBJNIStatementInsertObjectMethodWithNoArg(create);
+void WCDBJNIStatementInsertObjectMethod(configWith, jlong self, jlongArray expressions);
+void WCDBJNIStatementInsertObjectMethod(configRecursive, jlong self);
 void WCDBJNIStatementInsertObjectMethod(configTableName, jlong self, jstring tableName);
 void WCDBJNIStatementInsertObjectMethod(configSchema,
                                         jlong self,
@@ -49,3 +51,5 @@ void WCDBJNIStatementInsertObjectMethod(configValues,
                                         WCDBJNIMultiTypeArrayParameter(value));
 void WCDBJNIStatementInsertObjectMethod(configValuesWithBindParameters, jlong self, jint count);
 void WCDBJNIStatementInsertObjectMethod(configSelect, jlong self, jlong select);
+void WCDBJNIStatementInsertObjectMethod(configDefaultValues, jlong self);
+void WCDBJNIStatementInsertObjectMethod(configUpsert, jlong self, jlong upsert);

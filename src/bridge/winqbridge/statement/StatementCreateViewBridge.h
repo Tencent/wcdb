@@ -32,6 +32,8 @@ CPPStatementCreateView WCDBStatementCreateViewCreate(void);
 void WCDBStatementCreateViewConfigView(CPPStatementCreateView createView,
                                        const char* _Nullable name);
 void WCDBStatementCreateViewConfigSchema(CPPStatementCreateView createView, CPPSchema schema);
+void WCDBStatementCreateViewConfigSchema2(CPPStatementCreateView createView,
+                                          CPPCommonValue schema);
 void WCDBStatementCreateViewConfigTemp(CPPStatementCreateView createView);
 void WCDBStatementCreateViewConfigIfNotExist(CPPStatementCreateView createView);
 void WCDBStatementCreateViewConfigAs(CPPStatementCreateView createView,
@@ -39,5 +41,7 @@ void WCDBStatementCreateViewConfigAs(CPPStatementCreateView createView,
 void WCDBStatementCreateViewConfigColumns(CPPStatementCreateView createView,
                                           const CPPColumn* _Nullable columns,
                                           int columnNum);
+void WCDBStatementCreateViewConfigColumns2(CPPStatementCreateView createView,
+                                           CPPCommonArray columns);
 
 WCDB_EXTERN_C_END

@@ -26,36 +26,58 @@
 #include "ColumnConstraintJNI.h"
 #include "ColumnDefJNI.h"
 #include "ColumnJNI.h"
+#include "CommonTableExpressionJNI.h"
 #include "CoreJNI.h"
 #include "DatabaseJNI.h"
 #include "ErrorJNI.h"
 #include "ExpressionJNI.h"
 #include "ExpressionOperableJNI.h"
+#include "ForeignKeyJNI.h"
+#include "FrameSpecJNI.h"
 #include "HandleJNI.h"
 #include "HandleStatementJNI.h"
 #include "IndexedColumnJNI.h"
+#include "JoinJNI.h"
 #include "LiteralValueJNI.h"
 #include "OrderingTermJNI.h"
 #include "PragmaJNI.h"
 #include "QualifiedTableJNI.h"
+#include "RaiseFunctionJNI.h"
 #include "ResultColumnJNI.h"
 #include "SchemaJNI.h"
+#include "StatementAlterTableJNI.h"
+#include "StatementAnalyzeJNI.h"
+#include "StatementAttachJNI.h"
 #include "StatementBeginJNI.h"
 #include "StatementCommitJNI.h"
 #include "StatementCreateTableJNI.h"
+#include "StatementCreateTriggerJNI.h"
+#include "StatementCreateViewJNI.h"
 #include "StatementCreateindexJNI.h"
 #include "StatementDeleteJNI.h"
+#include "StatementDetachJNI.h"
+#include "StatementDropIndexJNI.h"
 #include "StatementDropTableJNI.h"
+#include "StatementDropTriggerJNI.h"
+#include "StatementDropViewJNI.h"
+#include "StatementExplainJNI.h"
 #include "StatementInsertJNI.h"
 #include "StatementPragmaJNI.h"
+#include "StatementReindexJNI.h"
+#include "StatementReleaseJNI.h"
+#include "StatementRollbackJNI.h"
 #include "StatementSelectJNI.h"
 #include "StatementUpdateJNI.h"
+#include "StatementVacuumJNI.h"
 #include "TableConstraintJNI.h"
 #include "TableOrSubqueryJNI.h"
+#include "UpsertJNI.h"
+#include "WindowDefJNI.h"
 #include "WinqJNI.h"
 
 #define WCDBJNIMultiTypeSignature "IJDLjava/lang/String;"
 #define WCDBJNIObjectOrStringSignature "IJLjava/lang/String;"
+#define WCDBJNIObjectOrIntegerSignature "IJ"
 #define WCDBJNICommonArraySignature "I[J[D[Ljava/lang/String;"
 #define WCDBJNIObjectOrStringArraySignature "I[J[Ljava/lang/String;"
 #define WCDBJNIMultiTypeArraySignature "[I[J[D[Ljava/lang/String;"
@@ -127,6 +149,29 @@ static const JNINativeMethod g_expressionMethods[] = {
     { "invokeAll", "(J)V", (void *) WCDBJNIExpressionFuncName(invokeAll) },
     { "argument", "(J" WCDBJNIMultiTypeSignature ")V", (void *) WCDBJNIExpressionFuncName(setArgument) },
     { "escape", "(J" WCDBJNIStringSignature ")V", (void *) WCDBJNIExpressionFuncName(escapeWith) },
+    { "createWithExistStatement", "(J)J", (void *) WCDBJNIExpressionFuncName(createWithExistStatement) },
+    { "createWithNotExistStatement", "(J)J", (void *) WCDBJNIExpressionFuncName(createWithNotExistStatement) },
+    { "cast", "(" WCDBJNIObjectOrStringSignature ")J", (void *) WCDBJNIExpressionFuncName(cast) },
+    { "as", "(JI)V", (void *) WCDBJNIExpressionFuncName(as) },
+    { "caseWithExp",
+      "(" WCDBJNIObjectOrStringSignature ")J",
+      (void *) WCDBJNIExpressionFuncName(caseWithExp) },
+    { "setWithWhenExp",
+      "(J" WCDBJNIMultiTypeSignature ")V",
+      (void *) WCDBJNIExpressionFuncName(setWithWhenExp) },
+    { "setWithThenExp",
+      "(J" WCDBJNIMultiTypeSignature ")V",
+      (void *) WCDBJNIExpressionFuncName(setWithThenExp) },
+    { "setWithElseExp",
+      "(J" WCDBJNIMultiTypeSignature ")V",
+      (void *) WCDBJNIExpressionFuncName(setWithElseExp) },
+    { "createWithWindowFunction",
+      "(" WCDBJNIStringSignature ")J",
+      (void *) WCDBJNIExpressionFuncName(createWithWindowFunction) },
+    { "filter", "(JJ)V", (void *) WCDBJNIExpressionFuncName(filter) },
+    { "overWindowDef", "(JJ)V", (void *) WCDBJNIExpressionFuncName(overWindowDef) },
+    { "overWindow", "(J" WCDBJNIStringSignature ")V", (void *) WCDBJNIExpressionFuncName(overWindow) },
+
 };
 
 static const JNINativeMethod g_expressionOperationMethods[] = {
@@ -250,6 +295,121 @@ static const JNINativeMethod g_pragmaMethods[] = {
     { "createCppObj", "(" WCDBJNIStringSignature ")J", (void *) WCDBJNIPragmaFuncName(create) },
 };
 
+static const JNINativeMethod g_commonTableExpressionMethods[] = {
+    { "createCPPObject",
+      "(" WCDBJNIStringSignature ")J",
+      (void *) WCDBJNICommonTableExpressionFuncName(createWithTable) },
+    { "configColumn", "(JJ)V", (void *) WCDBJNICommonTableExpressionFuncName(configColumn) },
+    { "configSelect", "(JJ)V", (void *) WCDBJNICommonTableExpressionFuncName(configSelectStatement) },
+};
+
+static const JNINativeMethod g_foreignKeyMethods[] = {
+    { "createCPPObj", "()J", (void *) WCDBJNIForeignKeyFuncName(createCppObject) },
+    { "configReference",
+      "(J" WCDBJNIStringSignature ")V",
+      (void *) WCDBJNIForeignKeyFuncName(configReferencesTable) },
+    { "configColumns",
+      "(J" WCDBJNIObjectOrStringArraySignature ")V",
+      (void *) WCDBJNIForeignKeyFuncName(configColumns) },
+    { "configOnDeleteAction", "(JI)V", (void *) WCDBJNIForeignKeyFuncName(configOnDeleteAction) },
+    { "configOnUpdateAction", "(JI)V", (void *) WCDBJNIForeignKeyFuncName(configOnUpdateAction) },
+    { "configMatch", "(JI)V", (void *) WCDBJNIForeignKeyFuncName(configMatch) },
+    { "configDeferrable", "(JI)V", (void *) WCDBJNIForeignKeyFuncName(configDeferrable) },
+    { "configNotDeferrable", "(JI)V", (void *) WCDBJNIForeignKeyFuncName(configNotDeferrable) },
+};
+
+static const JNINativeMethod g_frameSpecMethods[] = {
+    { "createCppObj", "()J", (void *) WCDBJNIFrameSpecFuncName(createCppObj) },
+    { "configRange", "(J)V", (void *) WCDBJNIFrameSpecFuncName(configRange) },
+    { "configRows", "(J)V", (void *) WCDBJNIFrameSpecFuncName(configRows) },
+    { "configUnboundedPreceding", "(J)V", (void *) WCDBJNIFrameSpecFuncName(configUnboundedPreceding) },
+    { "configPreceding",
+      "(J" WCDBJNIObjectOrIntegerSignature ")V",
+      (void *) WCDBJNIFrameSpecFuncName(configPreceding) },
+    { "configCurrentRow", "(J)V", (void *) WCDBJNIFrameSpecFuncName(configCurrentRow) },
+    { "configBetweenUnboundedPreceding",
+      "(J)V",
+      (void *) WCDBJNIFrameSpecFuncName(configBetweenUnboundedPreceding) },
+    { "configBetweenPreceding",
+      "(J" WCDBJNIObjectOrIntegerSignature ")V",
+      (void *) WCDBJNIFrameSpecFuncName(configBetweenPreceding) },
+    { "configBetweenCurrentRow", "(J)V", (void *) WCDBJNIFrameSpecFuncName(configBetweenCurrentRow) },
+    { "configBetweenFollowing",
+      "(J" WCDBJNIObjectOrIntegerSignature ")V",
+      (void *) WCDBJNIFrameSpecFuncName(configBetweenFollowing) },
+    { "configAndPreceding", "(JIJ)V", (void *) WCDBJNIFrameSpecFuncName(configAndPreceding) },
+    { "configAndUnboundedFollowing", "(J)V", (void *) WCDBJNIFrameSpecFuncName(configAndUnboundedFollowing) },
+    { "configAndFollowing",
+      "(J" WCDBJNIObjectOrIntegerSignature ")V",
+      (void *) WCDBJNIFrameSpecFuncName(configAndFollowing) },
+    { "configAndCurrentRow", "(J)V", (void *) WCDBJNIFrameSpecFuncName(configAndCurrentRow) },
+};
+
+static const JNINativeMethod g_joinMethods[] = {
+    { "createCppObj", "(" WCDBJNIObjectOrStringSignature ")J", (void *) WCDBJNIJoinFuncName(createCppObj) },
+    { "configWith", "(J" WCDBJNIObjectOrStringSignature ")V", (void *) WCDBJNIJoinFuncName(configWith) },
+    { "configJoin", "(J" WCDBJNIObjectOrStringSignature ")V", (void *) WCDBJNIJoinFuncName(configWithJoin) },
+    { "configWithLeftOuterJoin",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIJoinFuncName(configWithLeftOuterJoin) },
+    { "configWithLeftJoin",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIJoinFuncName(configWithLeftJoin) },
+    { "configWithInnerJoin",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIJoinFuncName(configWithInnerJoin) },
+    { "configWithCrossJoin",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIJoinFuncName(configWithCrossJoin) },
+    { "configWithNaturalJoin",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIJoinFuncName(configWithNaturalJoin) },
+    { "configWithNaturalLeftOuterJoin",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIJoinFuncName(configWithNaturalLeftOuterJoin) },
+    { "configWithNaturalLeftJoin",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIJoinFuncName(configWithNaturalLeftJoin) },
+    { "configWithNaturalInnerJoin",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIJoinFuncName(configWithNaturalInnerJoin) },
+    { "configWithNaturalCrossJoin",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIJoinFuncName(configWithNaturalCrossJoin) },
+    { "configOn", "(JJ)V", (void *) WCDBJNIJoinFuncName(configOn) },
+    { "configUsingColumn",
+      "(J" WCDBJNIObjectOrStringArraySignature ")V",
+      (void *) WCDBJNIJoinFuncName(configUsingColumn) },
+};
+
+static const JNINativeMethod g_raiseFunctionMethods[] = {
+    { "createCppObj", "()J", (void *) WCDBJNIRaiseFunctionFuncName(createCppObj) },
+    { "setAction", "(JI" WCDBJNIStringSignature ")V", (void *) WCDBJNIRaiseFunctionFuncName(setAction) },
+};
+
+static const JNINativeMethod g_upsertMethods[] = {
+    { "createCppObj", "()J", (void *) WCDBJNIUpsertFuncName(createCppObj) },
+    { "configIndexedColumn",
+      "(J" WCDBJNIObjectOrStringArraySignature ")V",
+      (void *) WCDBJNIUpsertFuncName(configIndexedColumn) },
+    { "configWhere", "(JJ)V", (void *) WCDBJNIUpsertFuncName(configWhere) },
+    { "configDoNothing", "(J)V", (void *) WCDBJNIUpsertFuncName(configDoNothing) },
+    { "configDoUpdate", "(J)V", (void *) WCDBJNIUpsertFuncName(configDoUpdate) },
+    { "configSetColumns",
+      "(J" WCDBJNIObjectOrStringArraySignature ")V",
+      (void *) WCDBJNIUpsertFuncName(configSetColumns) },
+    { "configToValue", "(J" WCDBJNIMultiTypeSignature ")V", (void *) WCDBJNIUpsertFuncName(configToValue) },
+};
+
+static const JNINativeMethod g_windowDefMethods[] = {
+    { "createCppObj", "()J", (void *) WCDBJNIWindowDefFuncName(createCppObj) },
+    { "configPartitions",
+      "(J" WCDBJNIMultiTypeArraySignature ")V",
+      (void *) WCDBJNIWindowDefFuncName(configPartitions) },
+    { "configOrders", "(J[J)V", (void *) WCDBJNIWindowDefFuncName(configOrders) },
+    { "configFrameSpec", "(JJ)V", (void *) WCDBJNIWindowDefFuncName(configFrameSpec) },
+};
+
 static const JNINativeMethod g_statementBeginMethods[] = {
     { "createCppObj", "(I)J", (void *) WCDBJNIStatementBeginFuncName(create) },
 };
@@ -296,6 +456,8 @@ static const JNINativeMethod g_statementCreateTableMethods[] = {
 
 static const JNINativeMethod g_statementDeleteMethods[] = {
     { "createCppObj", "()J", (void *) WCDBJNIStatementDeleteFuncName(create) },
+    { "configWith", "(J[J)V", (void *) WCDBJNIStatementDeleteFuncName(configWith) },
+    { "configRecursive", "(J)V", (void *) WCDBJNIStatementDeleteFuncName(configRecursive) },
     { "configTable",
       "(J" WCDBJNIObjectOrStringSignature ")V",
       (void *) WCDBJNIStatementDeleteFuncName(configTable) },
@@ -319,6 +481,8 @@ static const JNINativeMethod g_statementDropTableMethods[] = {
 
 static const JNINativeMethod g_statementInsertMethods[] = {
     { "createCppObj", "()J", (void *) WCDBJNIStatementInsertFuncName(create) },
+    { "configWith", "(J[J)V", (void *) WCDBJNIStatementInsertFuncName(configWith) },
+    { "configRecursive", "(J)V", (void *) WCDBJNIStatementInsertFuncName(configRecursive) },
     { "configSchema",
       "(J" WCDBJNIObjectOrStringSignature ")V",
       (void *) WCDBJNIStatementInsertFuncName(configSchema) },
@@ -337,6 +501,8 @@ static const JNINativeMethod g_statementInsertMethods[] = {
       "(J" WCDBJNIMultiTypeArraySignature ")V",
       (void *) WCDBJNIStatementInsertFuncName(configValues) },
     { "configValues", "(JJ)V", (void *) WCDBJNIStatementInsertFuncName(configSelect) },
+    { "configDefaultValues", "(J)V", (void *) WCDBJNIStatementInsertFuncName(configDefaultValues) },
+    { "configUpsert", "(JJ)V", (void *) WCDBJNIStatementInsertFuncName(configUpsert) },
 };
 
 static const JNINativeMethod g_statementPragmaMethods[] = {
@@ -355,6 +521,8 @@ static const JNINativeMethod g_statementPragmaMethods[] = {
 
 static const JNINativeMethod g_statementSelectMethods[] = {
     { "createCppObj", "()J", (void *) WCDBJNIStatementSelectFuncName(create) },
+    { "configWith", "(J[J)V", (void *) WCDBJNIStatementSelectFuncName(configWith) },
+    { "configRecursive", "(J)V", (void *) WCDBJNIStatementSelectFuncName(configRecursive) },
     { "configResultColumns",
       "(J" WCDBJNIMultiTypeArraySignature ")V",
       (void *) WCDBJNIStatementSelectFuncName(configResultColumns) },
@@ -379,6 +547,8 @@ static const JNINativeMethod g_statementSelectMethods[] = {
 
 static const JNINativeMethod g_statementUpdateMethods[] = {
     { "createCppObj", "()J", (void *) WCDBJNIStatementUpdateFuncName(create) },
+    { "configWith", "(J[J)V", (void *) WCDBJNIStatementUpdateFuncName(configWith) },
+    { "configRecursive", "(J)V", (void *) WCDBJNIStatementUpdateFuncName(configRecursive) },
     { "configTable",
       "(J" WCDBJNIObjectOrStringSignature ")V",
       (void *) WCDBJNIStatementUpdateFuncName(configTable) },
@@ -400,6 +570,184 @@ static const JNINativeMethod g_statementUpdateMethods[] = {
     { "configLimitRange", "(JIJIJ)V", (void *) WCDBJNIStatementUpdateFuncName(configLimitRange) },
     { "configLimitCount", "(JIJ)V", (void *) WCDBJNIStatementUpdateFuncName(configLimitCount) },
     { "configOffset", "(JIJ)V", (void *) WCDBJNIStatementUpdateFuncName(configOffset) },
+};
+
+static const JNINativeMethod g_statementAlterTableMethods[] = {
+    { "createCppObj", "()J", (void *) WCDBJNIStatementAlterTableFuncName(createCppObj) },
+    { "configTable",
+      "(J" WCDBJNIStringSignature ")V",
+      (void *) WCDBJNIStatementAlterTableFuncName(configTable) },
+    { "configSchema",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIStatementAlterTableFuncName(configSchema) },
+    { "configRenameToTable",
+      "(J" WCDBJNIStringSignature ")V",
+      (void *) WCDBJNIStatementAlterTableFuncName(configRenameToTable) },
+    { "configRenameColumn",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIStatementAlterTableFuncName(configRenameColumn) },
+    { "configRenameToColumn",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIStatementAlterTableFuncName(configRenameToColumn) },
+    { "configAddColumn", "(JJ)V", (void *) WCDBJNIStatementAlterTableFuncName(configAddColumn) },
+};
+
+static const JNINativeMethod g_statementAnalyzeMethods[] = {
+    { "createCppObj", "()J", (void *) WCDBJNIStatementAnalyzeFuncName(createCppObj) },
+    { "configToAnalyze", "(J)V", (void *) WCDBJNIStatementAnalyzeFuncName(toAnalyze) },
+    { "configSchema",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIStatementAnalyzeFuncName(configSchema) },
+    { "configTable",
+      "(J" WCDBJNIStringSignature ")V",
+      (void *) WCDBJNIStatementAnalyzeFuncName(configTable) },
+    { "configIndex",
+      "(J" WCDBJNIStringSignature ")V",
+      (void *) WCDBJNIStatementAnalyzeFuncName(configIndex) },
+};
+
+static const JNINativeMethod g_statementAttachMethods[] = {
+    { "createCppObj", "()J", (void *) WCDBJNIStatementAttachFuncName(createCppObj) },
+    { "configPath",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIStatementAttachFuncName(configPath) },
+    { "configSchema",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIStatementAttachFuncName(configSchema) },
+    { "configKey",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIStatementAttachFuncName(configKey) },
+};
+
+static const JNINativeMethod g_statementDetachMethods[] = {
+    { "createCppObj", "()J", (void *) WCDBJNIStatementDetachFuncName(createCppObj) },
+    { "configSchema",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIStatementDetachFuncName(configSchema) },
+};
+
+static const JNINativeMethod g_statementCreateTriggerMethods[] = {
+    { "createCppObj", "()J", (void *) WCDBJNIStatementCreateTriggerFuncName(createCppObj) },
+    { "configTrigger",
+      "(J" WCDBJNIStringSignature ")V",
+      (void *) WCDBJNIStatementCreateTriggerFuncName(configTrigger) },
+    { "configSchema",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIStatementCreateTriggerFuncName(configSchema) },
+    { "configTemp", "(J)V", (void *) WCDBJNIStatementCreateTriggerFuncName(configTemp) },
+    { "configIfNotExist", "(J)V", (void *) WCDBJNIStatementCreateTriggerFuncName(configIfNotExist) },
+    { "configBefore", "(J)V", (void *) WCDBJNIStatementCreateTriggerFuncName(configBefore) },
+    { "configAfter", "(J)V", (void *) WCDBJNIStatementCreateTriggerFuncName(configAfter) },
+    { "configInsteadOf", "(J)V", (void *) WCDBJNIStatementCreateTriggerFuncName(configInsteadOf) },
+    { "configDelete", "(J)V", (void *) WCDBJNIStatementCreateTriggerFuncName(configDelete) },
+    { "configInsert", "(J)V", (void *) WCDBJNIStatementCreateTriggerFuncName(configInsert) },
+    { "configUpdate", "(J)V", (void *) WCDBJNIStatementCreateTriggerFuncName(configUpdate) },
+    { "configColumns",
+      "(J" WCDBJNIObjectOrStringArraySignature ")V",
+      (void *) WCDBJNIStatementCreateTriggerFuncName(configColumns) },
+    { "configTable",
+      "(J" WCDBJNIStringSignature ")V",
+      (void *) WCDBJNIStatementCreateTriggerFuncName(configTable) },
+    { "configDelete", "(J)V", (void *) WCDBJNIStatementCreateTriggerFuncName(configDelete) },
+    { "configInsert", "(J)V", (void *) WCDBJNIStatementCreateTriggerFuncName(configInsert) },
+    { "configUpdate", "(J)V", (void *) WCDBJNIStatementCreateTriggerFuncName(configUpdate) },
+    { "configForEachRow", "(J)V", (void *) WCDBJNIStatementCreateTriggerFuncName(configForEachRow) },
+    { "configWhen", "(JJ)V", (void *) WCDBJNIStatementCreateTriggerFuncName(configWhen) },
+    { "executeInsert", "(JJ)V", (void *) WCDBJNIStatementCreateTriggerFuncName(executeInsert) },
+    { "executeUpdate", "(JJ)V", (void *) WCDBJNIStatementCreateTriggerFuncName(executeUpdate) },
+    { "executeDelete", "(JJ)V", (void *) WCDBJNIStatementCreateTriggerFuncName(executeDelete) },
+    { "executeSelect", "(JJ)V", (void *) WCDBJNIStatementCreateTriggerFuncName(executeSelect) },
+};
+
+static const JNINativeMethod g_statementCreateViewMethods[] = {
+    { "createCppObj", "()J", (void *) WCDBJNIStatementCreateViewFuncName(createCppObj) },
+    { "configView",
+      "(J" WCDBJNIStringSignature ")V",
+      (void *) WCDBJNIStatementCreateViewFuncName(configView) },
+    { "configSchema",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIStatementCreateViewFuncName(configSchema) },
+    { "configTemp", "(J)V", (void *) WCDBJNIStatementCreateViewFuncName(configTemp) },
+    { "configIfNotExist", "(J)V", (void *) WCDBJNIStatementCreateViewFuncName(configIfNotExist) },
+    { "configColumns",
+      "(J" WCDBJNIObjectOrStringArraySignature ")V",
+      (void *) WCDBJNIStatementCreateViewFuncName(configColumns) },
+    { "configAs", "(JJ)V", (void *) WCDBJNIStatementCreateViewFuncName(configAs) },
+};
+
+static const JNINativeMethod g_statementDropIndexMethods[] = {
+    { "createCppObj", "()J", (void *) WCDBJNIStatementDropIndexFuncName(createCppObj) },
+    { "configIndex",
+      "(J" WCDBJNIStringSignature ")V",
+      (void *) WCDBJNIStatementDropIndexFuncName(configIndex) },
+    { "configSchema",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIStatementDropIndexFuncName(configSchema) },
+    { "configIfExist", "(J)V", (void *) WCDBJNIStatementDropIndexFuncName(configIfExist) },
+};
+
+static const JNINativeMethod g_statementDropTriggerMethods[] = {
+    { "createCppObj", "()J", (void *) WCDBJNIStatementDropTriggerFuncName(createCppObj) },
+    { "configTrigger",
+      "(J" WCDBJNIStringSignature ")V",
+      (void *) WCDBJNIStatementDropTriggerFuncName(configTrigger) },
+    { "configSchema",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIStatementDropTriggerFuncName(configSchema) },
+    { "configIfExist", "(J)V", (void *) WCDBJNIStatementDropTriggerFuncName(configIfExist) },
+};
+
+static const JNINativeMethod g_statementDropViewMethods[] = {
+    { "createCppObj", "()J", (void *) WCDBJNIStatementDropViewFuncName(createCppObj) },
+    { "configView",
+      "(J" WCDBJNIStringSignature ")V",
+      (void *) WCDBJNIStatementDropViewFuncName(configView) },
+    { "configSchema",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIStatementDropViewFuncName(configSchema) },
+    { "configIfExist", "(J)V", (void *) WCDBJNIStatementDropViewFuncName(configIfExist) },
+};
+
+static const JNINativeMethod g_statementExplainMethods[] = {
+    { "createCppObj", "()J", (void *) WCDBJNIStatementExplainFuncName(createCppObj) },
+    { "explain", "(JJZ)V", (void *) WCDBJNIStatementExplainFuncName(explain) },
+};
+
+static const JNINativeMethod g_statementReindexMethods[] = {
+    { "createCppObj", "()J", (void *) WCDBJNIStatementReindexFuncName(createCppObj) },
+    { "configCollation",
+      "(J" WCDBJNIStringSignature ")V",
+      (void *) WCDBJNIStatementReindexFuncName(configCollation) },
+    { "configTable",
+      "(J" WCDBJNIStringSignature ")V",
+      (void *) WCDBJNIStatementReindexFuncName(configTable) },
+    { "configIndex",
+      "(J" WCDBJNIStringSignature ")V",
+      (void *) WCDBJNIStatementReindexFuncName(configIndex) },
+    { "configSchema",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIStatementReindexFuncName(configSchema) },
+};
+
+static const JNINativeMethod g_statementReleaseMethods[] = {
+    { "createCppObj", "()J", (void *) WCDBJNIStatementReleaseFuncName(createCppObj) },
+    { "configSavepoint",
+      "(J" WCDBJNIStringSignature ")V",
+      (void *) WCDBJNIStatementReleaseFuncName(configSavepoint) },
+};
+
+static const JNINativeMethod g_statementRollbackMethods[] = {
+    { "createCppObj", "()J", (void *) WCDBJNIStatementRollbackFuncName(createCppObj) },
+    { "configSavepoint",
+      "(J" WCDBJNIStringSignature ")V",
+      (void *) WCDBJNIStatementRollbackFuncName(configSavepoint) },
+};
+
+static const JNINativeMethod g_statementVacuumMethods[] = {
+    { "createCppObj", "()J", (void *) WCDBJNIStatementVacuumFuncName(createCppObj) },
+    { "configSchema",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIStatementVacuumFuncName(configSchema) },
 };
 
 static const JNINativeMethod g_tableBindingMethods[] = {
@@ -585,16 +933,37 @@ static const JNIBinding g_bindingInfo[] = {
     WCDBJNIRegister("com/tencent/wcdb/winq/ResultColumn", g_resultColumnMethods),
     WCDBJNIRegister("com/tencent/wcdb/winq/TableConstraint", g_tableConstraintMethods),
     WCDBJNIRegister("com/tencent/wcdb/winq/Pragma", g_pragmaMethods),
+    WCDBJNIRegister("com/tencent/wcdb/winq/CommonTableExpression", g_commonTableExpressionMethods),
+    WCDBJNIRegister("com/tencent/wcdb/winq/ForeignKey", g_foreignKeyMethods),
+    WCDBJNIRegister("com/tencent/wcdb/winq/FrameSpec", g_frameSpecMethods),
+    WCDBJNIRegister("com/tencent/wcdb/winq/Join", g_joinMethods),
+    WCDBJNIRegister("com/tencent/wcdb/winq/RaiseFunction", g_raiseFunctionMethods),
+    WCDBJNIRegister("com/tencent/wcdb/winq/Upsert", g_upsertMethods),
+    WCDBJNIRegister("com/tencent/wcdb/winq/WindowDef", g_windowDefMethods),
+    WCDBJNIRegister("com/tencent/wcdb/winq/StatementAlterTable", g_statementAlterTableMethods),
+    WCDBJNIRegister("com/tencent/wcdb/winq/StatementAnalyze", g_statementAnalyzeMethods),
+    WCDBJNIRegister("com/tencent/wcdb/winq/StatementAttach", g_statementAttachMethods),
     WCDBJNIRegister("com/tencent/wcdb/winq/StatementBegin", g_statementBeginMethods),
     WCDBJNIRegister("com/tencent/wcdb/winq/StatementCommit", g_statementCommitMethods),
     WCDBJNIRegister("com/tencent/wcdb/winq/StatementCreateIndex", g_statementCreateIndexMethods),
     WCDBJNIRegister("com/tencent/wcdb/winq/StatementCreateTable", g_statementCreateTableMethods),
+    WCDBJNIRegister("com/tencent/wcdb/winq/StatementCreateTrigger", g_statementCreateTriggerMethods),
+    WCDBJNIRegister("com/tencent/wcdb/winq/StatementCreateView", g_statementCreateViewMethods),
     WCDBJNIRegister("com/tencent/wcdb/winq/StatementDelete", g_statementDeleteMethods),
+    WCDBJNIRegister("com/tencent/wcdb/winq/StatementDetach", g_statementDetachMethods),
+    WCDBJNIRegister("com/tencent/wcdb/winq/StatementDropIndex", g_statementDropIndexMethods),
     WCDBJNIRegister("com/tencent/wcdb/winq/StatementDropTable", g_statementDropTableMethods),
+    WCDBJNIRegister("com/tencent/wcdb/winq/StatementDropTrigger", g_statementDropTriggerMethods),
+    WCDBJNIRegister("com/tencent/wcdb/winq/StatementDropView", g_statementDropViewMethods),
+    WCDBJNIRegister("com/tencent/wcdb/winq/StatementExplain", g_statementExplainMethods),
     WCDBJNIRegister("com/tencent/wcdb/winq/StatementInsert", g_statementInsertMethods),
     WCDBJNIRegister("com/tencent/wcdb/winq/StatementPragma", g_statementPragmaMethods),
+    WCDBJNIRegister("com/tencent/wcdb/winq/StatementReindex", g_statementReindexMethods),
+    WCDBJNIRegister("com/tencent/wcdb/winq/StatementRelease", g_statementReleaseMethods),
+    WCDBJNIRegister("com/tencent/wcdb/winq/StatementRollback", g_statementRollbackMethods),
     WCDBJNIRegister("com/tencent/wcdb/winq/StatementSelect", g_statementSelectMethods),
     WCDBJNIRegister("com/tencent/wcdb/winq/StatementUpdate", g_statementUpdateMethods),
+    WCDBJNIRegister("com/tencent/wcdb/winq/StatementVacuum", g_statementVacuumMethods),
     WCDBJNIRegister("com/tencent/wcdb/orm/Binding", g_tableBindingMethods),
     WCDBJNIRegister("com/tencent/wcdb/base/WCDBException", g_exceptionMethods),
     WCDBJNIRegister("com/tencent/wcdb/core/PreparedStatement", g_handleStatementMethods),

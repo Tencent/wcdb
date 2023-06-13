@@ -36,8 +36,8 @@
 jlong WCDBJNIExpressionObjectMethod(create, int type, jlong object);
 
 jlong WCDBJNIExpressionClassMethod(createWithFunction, jstring func);
-jlong WCDBJNIExpressionObjectMethod(createWithExistStatement, jlong select);
-jlong WCDBJNIExpressionObjectMethod(createWithNotExistStatement, jlong select);
+jlong WCDBJNIExpressionClassMethod(createWithExistStatement, jlong select);
+jlong WCDBJNIExpressionClassMethod(createWithNotExistStatement, jlong select);
 
 void WCDBJNIExpressionObjectMethod(setWithSchema, jlong expression, jlong schema);
 void WCDBJNIExpressionObjectMethod(setArgument,
@@ -49,19 +49,23 @@ void WCDBJNIExpressionObjectMethod(invokeAll, jlong expression);
 
 void WCDBJNIExpressionObjectMethod(distinct, jlong expression);
 
-void WCDBJNIExpressionObjectMethod(cast, jlong expression);
+jlong WCDBJNIExpressionClassMethod(cast, WCDBJNIObjectOrStringParameter(expression));
 void WCDBJNIExpressionObjectMethod(as, jlong expression, jint type);
 
-jlong WCDBJNIExpressionObjectMethod(caseWithExp, jlong expression);
-jlong WCDBJNIExpressionClassMethodWithNoArg(case_);
-
-void WCDBJNIExpressionObjectMethod(setWithWhenExp, jlong expression, jlong when);
-void WCDBJNIExpressionObjectMethod(setWithThenExp, jlong expression, jlong then);
-void WCDBJNIExpressionObjectMethod(setWithElseExp, jlong expression, jlong else_);
+jlong WCDBJNIExpressionClassMethod(caseWithExp, WCDBJNIObjectOrStringParameter(expression));
+void WCDBJNIExpressionObjectMethod(setWithWhenExp,
+                                   jlong expression,
+                                   WCDBJNICommonValueParameter(when));
+void WCDBJNIExpressionObjectMethod(setWithThenExp,
+                                   jlong expression,
+                                   WCDBJNICommonValueParameter(then));
+void WCDBJNIExpressionObjectMethod(setWithElseExp,
+                                   jlong expression,
+                                   WCDBJNICommonValueParameter(else_));
 
 void WCDBJNIExpressionObjectMethod(escapeWith, jlong expression, jstring content);
 
 jlong WCDBJNIExpressionObjectMethod(createWithWindowFunction, jstring func);
-void WCDBJNIExpressionObjectMethod(filter, jlong expression, jlong filter);
+void WCDBJNIExpressionObjectMethod(filter, jlong expression, jlong condition);
 void WCDBJNIExpressionObjectMethod(overWindowDef, jlong expression, jlong def);
 void WCDBJNIExpressionObjectMethod(overWindow, jlong expression, jstring window);

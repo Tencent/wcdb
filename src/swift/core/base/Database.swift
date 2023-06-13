@@ -330,7 +330,7 @@ public extension Database {
         }
         WCDBDatabaseConfig(database, name, invocationImp, uninvocationImp, priority.rawValue)
     }
-    
+
     /// Set the default directory for temporary database files.
     /// If not set, an existing directory will be selected as the temporary database files directory in the following order:
     ///     1. TMPDIR environment value;

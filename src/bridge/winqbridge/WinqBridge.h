@@ -72,7 +72,7 @@ enum WCDBSyntaxLimitParameterType {
 enum WCDBSyntaxMatchType {
     WCDBSyntaxMatchType_Simple = 1,
     WCDBSyntaxMatchType_Full,
-    WCDBSyntaxMatchType_Patial,
+    WCDBSyntaxMatchType_Partial,
 };
 
 enum WCDBSyntaxColumnType {

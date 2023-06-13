@@ -29,6 +29,21 @@ jlong WCDBJNIStatementUpdateObjectMethodWithNoArg(create)
     return (jlong) WCDBStatementUpdateCreate().innerValue;
 }
 
+void WCDBJNIStatementUpdateObjectMethod(configWith, jlong self, jlongArray expressions)
+{
+    WCDBJNIBridgeStruct(CPPStatementUpdate, self);
+    WCDBJNIGetCppPointerArray(expressions);
+    WCDBStatementUpdateConfigWith(
+    selfStruct, (const CPPCommonTableExpression*) expressionsArray, expressionsLength);
+    WCDBJNIReleaseCppPointerArray(expressions);
+}
+
+void WCDBJNIStatementUpdateObjectMethod(configRecursive, jlong self)
+{
+    WCDBJNIBridgeStruct(CPPStatementUpdate, self);
+    WCDBStatementUpdateConfigRecursive(selfStruct);
+}
+
 void WCDBJNIStatementUpdateObjectMethod(configTable, jlong self, WCDBJNIObjectOrStringParameter(table))
 {
     WCDBJNIBridgeStruct(CPPStatementUpdate, self);
@@ -91,9 +106,10 @@ void WCDBJNIStatementUpdateObjectMethod(configCondition, jlong self, jlong condi
 void WCDBJNIStatementUpdateObjectMethod(configOrders, jlong self, jlongArray orders)
 {
     WCDBJNIBridgeStruct(CPPStatementUpdate, self);
-    WCDBJNIGetObjectArray(orders);
+    WCDBJNIGetCppPointerArray(orders);
     WCDBStatementUpdateConfigOrders(
-    selfStruct, (const CPPOrderingTerm*) ordersObjectArray, ordersLength);
+    selfStruct, (const CPPOrderingTerm*) ordersArray, ordersLength);
+    WCDBJNIReleaseCppPointerArray(orders);
 }
 
 void WCDBJNIStatementUpdateObjectMethod(

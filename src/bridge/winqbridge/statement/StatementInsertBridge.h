@@ -58,6 +58,6 @@ void WCDBStatementInsertConfigValuesWithBindParameters(CPPStatementInsert insert
 void WCDBStatementInsertConfigSelect(CPPStatementInsert insert, CPPStatementSelect select);
 
 void WCDBStatementInsertConfigDefaultValues(CPPStatementInsert insert);
-void WCDBStatementInsertConfigDefaultUpsert(CPPStatementInsert insert, CPPUpsert upsert);
+void WCDBStatementInsertConfigUpsert(CPPStatementInsert insert, CPPUpsert upsert);
 
 WCDB_EXTERN_C_END

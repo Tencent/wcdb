@@ -1,5 +1,4 @@
-//
-// Created by qiuwenchen on 2022/5/30.
+// Created by qiuwenchen on 2023/6/12.
 //
 
 /*
@@ -22,19 +21,22 @@
  * limitations under the License.
  */
 
-#include "FilterBridge.h"
-#include "Expression.hpp"
-#include "Filter.hpp"
-#include "ObjectBridge.hpp"
+package com.tencent.wcdbtest.winq;
 
-CPPFilter WCDBFilterCreate()
-{
-    return WCDBCreateCPPBridgedObject(CPPFilter, WCDB::Filter);
-}
 
-void WCDBFilterConfigWhere(CPPFilter filter, CPPExpression where)
-{
-    WCDBGetObjectOrReturn(filter, WCDB::Filter, cppFilter);
-    WCDBGetObjectOrReturn(where, WCDB::Expression, cppWhere);
-    cppFilter->where(*cppWhere);
+import com.tencent.wcdb.winq.StatementExplain;
+import com.tencent.wcdb.winq.StatementSelect;
+import static com.tencent.wcdbtest.base.WinqTool.winqEqual;
+
+import org.junit.Test;
+
+public class StatementExplainTest {
+    @Test
+    public void test() {
+        StatementSelect select = new StatementSelect().select("testColumn").from("testTable");
+        winqEqual(new StatementExplain().explain(select),
+                "EXPLAIN SELECT testColumn FROM testTable");
+        winqEqual(new StatementExplain().explainQueryPlan(select),
+                "EXPLAIN QUERY PLAN SELECT testColumn FROM testTable");
+    }
 }

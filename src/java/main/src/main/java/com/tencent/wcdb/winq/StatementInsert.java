@@ -35,6 +35,45 @@ public class StatementInsert extends Statement {
 
     private native long createCppObj();
 
+    public StatementInsert with(CommonTableExpression expression) {
+        return with(new CommonTableExpression[]{expression});
+    }
+
+    public StatementInsert with(CommonTableExpression[] expressions) {
+        assert expressions != null && expressions.length > 0;
+        if(expressions == null || expressions.length == 0) {
+            return this;
+        }
+        long[] cppExps = new long[expressions.length];
+        for(int i = 0; i < expressions.length; i++) {
+            cppExps[i] = expressions[i].getCppObj();
+        }
+        configWith(cppObj, cppExps);
+        return this;
+    }
+
+    public StatementInsert withRecursive(CommonTableExpression expression) {
+        return withRecursive(new CommonTableExpression[]{expression});
+    }
+
+    public StatementInsert withRecursive(CommonTableExpression[] expressions) {
+        assert expressions != null && expressions.length > 0;
+        if(expressions == null || expressions.length == 0) {
+            return this;
+        }
+        long[] cppExps = new long[expressions.length];
+        for(int i = 0; i < expressions.length; i++) {
+            cppExps[i] = expressions[i].getCppObj();
+        }
+        configWith(cppObj, cppExps);
+        configRecursive(cppObj);
+        return this;
+    }
+
+    private native void configWith(long self, long[] expressions);
+
+    private native void configRecursive(long self);
+
     public StatementInsert insertInto(String tableName) {
         configTableName(cppObj, tableName);
         return this;
@@ -87,6 +126,22 @@ public class StatementInsert extends Statement {
 
     private native void configAlias(long self, String alias);
 
+    public StatementInsert column(Column column) {
+        assert column != null;
+        if(column == null) {
+            return this;
+        }
+        return columns(new Column[]{column});
+    }
+
+    public StatementInsert column(String columnName) {
+        assert columnName != null && columnName.length() > 0;
+        if(columnName == null || columnName.length() == 0) {
+            return this;
+        }
+        return columns(new String[]{columnName});
+    }
+
     public StatementInsert columns(Column[] columns) {
         if(columns == null || columns.length == 0) {
             return this;
@@ -116,6 +171,10 @@ public class StatementInsert extends Statement {
 
     private native void configValuesWithBindParameters(long self, int parametersCount);
 
+    public StatementInsert value(Object value) {
+        return values(new Object[]{value});
+    }
+
     public StatementInsert values(Object[] values) {
         if(values == null || values.length == 0) {
             return this;
@@ -135,4 +194,18 @@ public class StatementInsert extends Statement {
     }
 
     private native void configValues(long self, long select);
+
+    public StatementInsert defaultValues() {
+        configDefaultValues(cppObj);
+        return this;
+    }
+
+    private native void configDefaultValues(long self);
+
+    public StatementInsert upsert(Upsert upsert) {
+        configUpsert(cppObj, upsert.getCppObj());
+        return this;
+    }
+
+    private native void configUpsert(long self, long upsert);
 }

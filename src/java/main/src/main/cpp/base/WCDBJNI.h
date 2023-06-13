@@ -101,6 +101,28 @@
         (*env)->ReleaseLongArrayElements(env, value, (jlong *) value##Array, 0); \
     }
 
+#define WCDBJNIGetCppPointerArray(value)                                       \
+    const void **value##Array = NULL;                                          \
+    jlong *value##LongArray = NULL;                                            \
+    int value##Length = 0;                                                     \
+    if (value != NULL) {                                                       \
+        value##LongArray = (*env)->GetLongArrayElements(env, value, NULL);     \
+        value##Length = (*env)->GetArrayLength(env, value);                    \
+        if (sizeof(void *) == sizeof(jlong) || value##Length == 0) {           \
+            value##Array = value##LongArray;                                   \
+        } else {                                                               \
+            value##Array = alloca(sizeof(void *) * value##Length);             \
+            for (int i = 0; i < value##Length; i++) {                          \
+                value##Array[i] = (void *) value##LongArray[i];                \
+            }                                                                  \
+        }                                                                      \
+    }
+
+#define WCDBJNIReleaseCppPointerArray(value)                                         \
+    if (value##LongArray != NULL) {                                                  \
+        (*env)->ReleaseLongArrayElements(env, value, (jlong *) value##LongArray, 0); \
+    }
+
 #define WCDBJNIGetIntArray(value)                                              \
     const jint *value##Array = NULL;                                           \
     int value##Length = 0;                                                     \
@@ -213,6 +235,14 @@
     } else {                                                                   \
         parameter##_common.intValue = parameter##_long;                        \
     }
+
+#define WCDBJNIObjectOrIntegerParameter(parameter)                             \
+    jint parameter##_type, jlong parameter##_long
+
+#define WCDBJNICreateObjectOrIntegerCommonValue(parameter)                     \
+    CPPCommonValue parameter##_common;                                         \
+    parameter##_common.type = parameter##_type;                                \
+    parameter##_common.intValue = parameter##_long;
 
 #define WCDBJNICommonArrayParameter(parameter)                                 \
     jint parameter##_type, jlongArray parameter##_longArray,                   \

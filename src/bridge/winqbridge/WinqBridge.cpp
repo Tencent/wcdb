@@ -23,6 +23,7 @@
  */
 
 #include "WinqBridge.hpp"
+#include "Column.hpp"
 #include "Expression.hpp"
 #include "LiteralValue.hpp"
 #include "ObjectBridge.hpp"
@@ -30,6 +31,7 @@
 #include "SQL.hpp"
 #include "Schema.hpp"
 #include "Statement.hpp"
+#include "TableOrSubquery.hpp"
 
 const char* _Nonnull WCDBWinqGetDescription(CPPObject* statement)
 {
@@ -144,7 +146,7 @@ MatchType WinqBridge::changeMatchType(enum WCDBSyntaxMatchType type)
         return MatchType::Full;
     case WCDBSyntaxMatchType_Simple:
         return MatchType::Simple;
-    case WCDBSyntaxMatchType_Patial:
+    case WCDBSyntaxMatchType_Partial:
         return MatchType::Partial;
     }
 }
@@ -219,6 +221,8 @@ Expression WinqBridge::createExpression(CPPCommonValue exp)
         return WCDBGetBridgedData(WCDB::BindParameter, exp);
     case WCDBBridgedType_LiteralValue:
         return WCDBGetBridgedData(WCDB::LiteralValue, exp);
+    case WCDBBridgedType_RaiseFunction:
+        return WCDBGetBridgedData(WCDB::RaiseFunction, exp);
     case WCDBBridgedType_Expression:
         return WCDBGetBridgedData(WCDB::Expression, exp);
         break;
@@ -227,6 +231,38 @@ Expression WinqBridge::createExpression(CPPCommonValue exp)
         break;
     }
     return Expression();
+}
+
+TableOrSubquery WinqBridge::createTableOrSubquery(CPPCommonValue tableOrSubquery)
+{
+    switch (tableOrSubquery.type) {
+    case WCDBBridgedType_String:
+        return StringView((const char*) tableOrSubquery.intValue);
+    case WCDBBridgedType_TableOrSubquery:
+        return WCDBGetBridgedData(TableOrSubquery, tableOrSubquery);
+    case WCDBBridgedType_SelectSTMT:
+        return WCDBGetBridgedData(StatementSelect, tableOrSubquery);
+    case WCDBBridgedType_JoinClause:
+        return WCDBGetBridgedData(Join, tableOrSubquery);
+
+    default:
+        assert(0);
+        break;
+    }
+    return TableOrSubquery();
+}
+
+Column WinqBridge::createColumn(CPPCommonValue column)
+{
+    switch (column.type) {
+    case WCDBBridgedType_String:
+        return StringView((const char*) column.intValue);
+    case WCDBBridgedType_Column:
+        return WCDBGetBridgedData(WCDB::Column, column);
+    default:
+        assert(0);
+        return Column();
+    }
 }
 
 } // namespace WCDB

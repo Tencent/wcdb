@@ -1,5 +1,4 @@
-//
-// Created by qiuwenchen on 2022/5/30.
+// Created by chenqiuwen on 2023/6/11.
 //
 
 /*
@@ -22,13 +21,21 @@
  * limitations under the License.
  */
 
-#pragma once
+package com.tencent.wcdbtest.winq;
 
-#include "WinqBridge.h"
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import static com.tencent.wcdbtest.base.WinqTool.winqEqual;
 
-WCDB_EXTERN_C_BEGIN
+import com.tencent.wcdb.winq.StatementDetach;
 
-CPPFilter WCDBFilterCreate(void);
-void WCDBFilterConfigWhere(CPPFilter filter, CPPExpression where);
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-WCDB_EXTERN_C_END
+@RunWith(AndroidJUnit4.class)
+public class StatementDetachTest {
+    @Test
+    public void test() {
+        winqEqual(new StatementDetach().detach("testSchema"),
+                "DETACH testSchema");
+    }
+}

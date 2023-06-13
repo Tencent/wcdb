@@ -37,7 +37,6 @@
 #include "CommonTableExpressionBridge.h"
 #include "ExpressionBridge.h"
 #include "ExpressionOperatableBridge.h"
-#include "FilterBridge.h"
 #include "ForeignKeyBridge.h"
 #include "FrameSpecBridge.h"
 #include "IndexedColumnBridge.h"

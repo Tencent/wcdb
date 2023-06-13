@@ -29,6 +29,21 @@ jlong WCDBJNIStatementDeleteObjectMethodWithNoArg(create)
     return (jlong) WCDBStatementDeleteCreate().innerValue;
 }
 
+void WCDBJNIStatementDeleteObjectMethod(configWith, jlong self, jlongArray expressions)
+{
+    WCDBJNIBridgeStruct(CPPStatementDelete, self);
+    WCDBJNIGetCppPointerArray(expressions);
+    WCDBStatementDeleteConfigWith(
+    selfStruct, (const CPPCommonTableExpression *) expressionsArray, expressionsLength);
+    WCDBJNIReleaseCppPointerArray(expressions);
+}
+
+void WCDBJNIStatementDeleteObjectMethod(configRecursive, jlong self)
+{
+    WCDBJNIBridgeStruct(CPPStatementDelete, self);
+    WCDBStatementDeleteConfigRecursive(selfStruct);
+}
+
 void WCDBJNIStatementDeleteObjectMethod(configTable, jlong self, WCDBJNIObjectOrStringParameter(table))
 {
     WCDBJNIBridgeStruct(CPPStatementDelete, self);
@@ -47,10 +62,10 @@ void WCDBJNIStatementDeleteObjectMethod(configCondition, jlong self, jlong condi
 void WCDBJNIStatementDeleteObjectMethod(configOrders, jlong self, jlongArray orders)
 {
     WCDBJNIBridgeStruct(CPPStatementDelete, self);
-    WCDBJNIGetObjectArray(orders);
+    WCDBJNIGetCppPointerArray(orders);
     WCDBStatementDeleteConfigOrder(
-    selfStruct, (const CPPOrderingTerm *) ordersObjectArray, ordersLength);
-    WCDBJNIReleaseObjectArray(orders);
+    selfStruct, (const CPPOrderingTerm *) ordersArray, ordersLength);
+    WCDBJNIReleaseCppPointerArray(orders);
 }
 
 void WCDBJNIStatementDeleteObjectMethod(

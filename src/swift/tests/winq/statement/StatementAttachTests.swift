@@ -29,5 +29,6 @@ class StatementAttachTests: BaseTestCase {
 
     func testStatementAttach() {
         WINQAssertEqual(StatementAttach().attach("attach1").as("schema1"), "ATTACH 'attach1' AS schema1")
+        WINQAssertEqual(StatementAttach().attach("attach1").as("schema1").key("abc"), "ATTACH 'attach1' AS schema1 KEY 'abc'")
     }
 }

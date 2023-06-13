@@ -31,6 +31,7 @@ WCDB_EXTERN_C_BEGIN
 CPPStatementAnalyze WCDBStatementAnalyzeCreate(void);
 void WCDBStatementAnalyzeToAnalyze(CPPStatementAnalyze analyze);
 void WCDBStatementAnalyzeConfigSchema(CPPStatementAnalyze analyze, CPPSchema schema);
+void WCDBStatementAnalyzeConfigSchema2(CPPStatementAnalyze analyze, CPPCommonValue schema);
 void WCDBStatementAnalyzeConfigTable(CPPStatementAnalyze analyze, const char* _Nullable table);
 void WCDBStatementAnalyzeConfigIndex(CPPStatementAnalyze analyze, const char* _Nullable index);
 

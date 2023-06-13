@@ -200,7 +200,7 @@ void WCDBStatementInsertConfigDefaultValues(CPPStatementInsert insert)
     cppInsert->defaultValues();
 }
 
-void WCDBStatementInsertConfigDefaultUpsert(CPPStatementInsert insert, CPPUpsert upsert)
+void WCDBStatementInsertConfigUpsert(CPPStatementInsert insert, CPPUpsert upsert)
 {
     WCDBGetObjectOrReturn(insert, WCDB::StatementInsert, cppInsert);
     WCDBGetObjectOrReturn(upsert, WCDB::Upsert, cppUpsert);

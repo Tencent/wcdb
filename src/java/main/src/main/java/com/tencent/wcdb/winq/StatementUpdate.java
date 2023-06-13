@@ -35,6 +35,45 @@ public class StatementUpdate extends Statement {
 
     private native long createCppObj();
 
+    public StatementUpdate with(CommonTableExpression expression) {
+        return with(new CommonTableExpression[]{expression});
+    }
+
+    public StatementUpdate with(CommonTableExpression[] expressions) {
+        assert expressions != null && expressions.length > 0;
+        if(expressions == null || expressions.length == 0) {
+            return this;
+        }
+        long[] cppExps = new long[expressions.length];
+        for(int i = 0; i < expressions.length; i++) {
+            cppExps[i] = expressions[i].getCppObj();
+        }
+        configWith(cppObj, cppExps);
+        return this;
+    }
+
+    public StatementUpdate withRecursive(CommonTableExpression expression) {
+        return withRecursive(new CommonTableExpression[]{expression});
+    }
+
+    public StatementUpdate withRecursive(CommonTableExpression[] expressions) {
+        assert expressions != null && expressions.length > 0;
+        if(expressions == null || expressions.length == 0) {
+            return this;
+        }
+        long[] cppExps = new long[expressions.length];
+        for(int i = 0; i < expressions.length; i++) {
+            cppExps[i] = expressions[i].getCppObj();
+        }
+        configWith(cppObj, cppExps);
+        configRecursive(cppObj);
+        return this;
+    }
+
+    private native void configWith(long self, long[] expressions);
+
+    private native void configRecursive(long self);
+
     public StatementUpdate update(String tableName) {
         configTable(cppObj, CPPType.String.ordinal(), 0, tableName);
         return this;

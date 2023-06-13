@@ -103,6 +103,12 @@ public class StatementSelectTest {
         winqEqual(new StatementSelect().select(column1).from(table1).except().select(column2).from(table2),
                 "SELECT column1 FROM table1 EXCEPT SELECT column2 FROM table2");
 
+        CommonTableExpression cte = new CommonTableExpression("tempTable")
+                .as(new StatementSelect().select("testColumn").from("table1"));
+        winqEqual(new StatementSelect().with(cte).select("testColumn").from("tempTable"),
+                "WITH tempTable AS(SELECT testColumn FROM table1) SELECT testColumn FROM tempTable");
+        winqEqual(new StatementSelect().withRecursive(cte).select("testColumn").from("tempTable"),
+                "WITH RECURSIVE tempTable AS(SELECT testColumn FROM table1) SELECT testColumn FROM tempTable");
 
     }
 }

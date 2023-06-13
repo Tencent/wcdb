@@ -60,5 +60,21 @@ public class StatementInsertTest {
         winqEqual(new StatementInsert().insertInto("testTable").orReplace()
                         .values(new Object[]{1, new BindParameter(1)}),
                 "INSERT OR REPLACE INTO testTable VALUES(1, ?1)");
+
+        CommonTableExpression cte = new CommonTableExpression("tempTable")
+                .as(new StatementSelect().select("testColumn").from("table1"));
+        winqEqual(new StatementInsert().with(cte).insertInto("table2")
+                        .column(new Column("testColumn")).value(1),
+                "WITH tempTable AS(SELECT testColumn FROM table1) INSERT INTO table2(testColumn) VALUES(1)");
+        winqEqual(new StatementInsert().withRecursive(cte).insertInto("table2")
+                        .column(new Column("testColumn")).value(1),
+                "WITH RECURSIVE tempTable AS(SELECT testColumn FROM table1) INSERT INTO table2(testColumn) VALUES(1)");
+
+        winqEqual(new StatementInsert().insertInto("testTable").column(new Column("testColumn")).defaultValues(),
+                "INSERT INTO testTable(testColumn) DEFAULT VALUES");
+
+        winqEqual(new StatementInsert().insertInto("testTable").column(new Column("testColumn")).value(1)
+                .upsert(new Upsert().onConflict().doNoThing()),
+                "INSERT INTO testTable(testColumn) VALUES(1) ON CONFLICT DO NOTHING");
     }
 }

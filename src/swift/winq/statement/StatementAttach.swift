@@ -42,4 +42,13 @@ public final class StatementAttach: Identifier<CPPStatementAttach>, Statement {
         }
         return self
     }
+
+    @discardableResult
+    public func key(_ expressionConvertible: ExpressionConvertible) -> StatementAttach {
+        let path = expressionConvertible.asExpression()
+        withExtendedLifetime(path) {
+            WCDBStatementAttachConfigKey(cppObj, $0.cppObj)
+        }
+        return self
+    }
 }

@@ -40,12 +40,13 @@ public class StatementCreateTable extends Statement {
         return this;
     }
 
-    private native void configTableName(long self, String tableName);
-
-    public StatementCreateTable temp(){
+    public StatementCreateTable createTempTable(String tableName) {
+        configTableName(cppObj, tableName);
         configTemp(cppObj);
         return this;
     }
+
+    private native void configTableName(long self, String tableName);
 
     private native void configTemp(long self);
 

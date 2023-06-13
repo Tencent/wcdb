@@ -32,8 +32,8 @@ CPPStatementReIndex WCDBStatementReIndexCreate(void)
     return WCDBCreateCPPBridgedObject(CPPStatementReIndex, WCDB::StatementReindex);
 }
 
-void WCDBStatementReIndexConfigColllation(CPPStatementReIndex statment,
-                                          const char* _Nullable collation)
+void WCDBStatementReIndexConfigCollation(CPPStatementReIndex statment,
+                                         const char* _Nullable collation)
 {
     WCDBGetObjectOrReturn(statment, WCDB::StatementReindex, cppStatement);
     cppStatement->collation(collation);
@@ -56,4 +56,10 @@ void WCDBStatementReIndexConfigSchema(CPPStatementReIndex statment, CPPSchema sc
     WCDBGetObjectOrReturn(statment, WCDB::StatementReindex, cppStatement);
     WCDBGetObjectOrReturn(schema, WCDB::Schema, cppSchema);
     cppStatement->schema(*cppSchema);
+}
+
+void WCDBStatementReIndexConfigSchema2(CPPStatementReIndex statment, CPPCommonValue schema)
+{
+    WCDBGetObjectOrReturn(statment, WCDB::StatementReindex, cppStatement);
+    cppStatement->schema(WCDBCreateSchemaFromCommonValue(schema));
 }

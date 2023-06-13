@@ -117,6 +117,11 @@ void WCDBStatementSelectConfigResultColumns2(CPPStatementSelect select, CPPMulti
             WCDB::Expression, resultColumns, intIndex));
             intIndex++;
         } break;
+        case WCDBBridgedType_RaiseFunction: {
+            cppResultColumns.emplace_back(WCDBGetMultiTypeArrayObject(
+            WCDB::RaiseFunction, resultColumns, intIndex));
+            intIndex++;
+        } break;
         case WCDBBridgedType_ResultColumn: {
             cppResultColumns.push_back(WCDBGetMultiTypeArrayObject(
             WCDB::ResultColumn, resultColumns, intIndex));

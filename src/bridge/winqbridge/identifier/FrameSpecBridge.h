@@ -33,14 +33,19 @@ void WCDBFrameSpecConfigRange(CPPFrameSpec frameSpec);
 void WCDBFrameSpecConfigRows(CPPFrameSpec frameSpec);
 void WCDBFrameSpecConfigUnboundedPreceding(CPPFrameSpec frameSpec);
 void WCDBFrameSpecConfigPreceding(CPPFrameSpec frameSpec, CPPExpression expression);
+void WCDBFrameSpecConfigPreceding2(CPPFrameSpec frameSpec, CPPCommonValue expression);
 void WCDBFrameSpecConfigCurrentRow(CPPFrameSpec frameSpec);
 void WCDBFrameSpecConfigBetweenUnboundedPreceding(CPPFrameSpec frameSpec);
 void WCDBFrameSpecConfigBetweenPreceding(CPPFrameSpec frameSpec, CPPExpression expression);
+void WCDBFrameSpecConfigBetweenPreceding2(CPPFrameSpec frameSpec, CPPCommonValue expression);
 void WCDBFrameSpecConfigBetweenCurrentRow(CPPFrameSpec frameSpec);
 void WCDBFrameSpecConfigBetweenFollowing(CPPFrameSpec frameSpec, CPPExpression expression);
+void WCDBFrameSpecConfigBetweenFollowing2(CPPFrameSpec frameSpec, CPPCommonValue expression);
 void WCDBFrameSpecConfigAndPreceding(CPPFrameSpec frameSpec, CPPExpression expression);
+void WCDBFrameSpecConfigAndPreceding2(CPPFrameSpec frameSpec, CPPCommonValue expression);
 void WCDBFrameSpecConfigAndCurrentRow(CPPFrameSpec frameSpec);
 void WCDBFrameSpecConfigAndFollowing(CPPFrameSpec frameSpec, CPPExpression expression);
+void WCDBFrameSpecConfigAndFollowing2(CPPFrameSpec frameSpec, CPPCommonValue expression);
 void WCDBFrameSpecConfigAndUnboundedFollowing(CPPFrameSpec frameSpec);
 
 WCDB_EXTERN_C_END

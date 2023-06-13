@@ -28,6 +28,7 @@
 #include "ObjectBridge.hpp"
 #include "Schema.hpp"
 #include "StatementAlterTable.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementAlterTable WCDBStatementAlterTableCreate()
 {
@@ -48,6 +49,12 @@ void WCDBStatementAlterTableConfigSchema(CPPStatementAlterTable alterTable, CPPS
     cppAlterTable->schema(*cppSchema);
 }
 
+void WCDBStatementAlterTableConfigSchema2(CPPStatementAlterTable alterTable, CPPCommonValue schema)
+{
+    WCDBGetObjectOrReturn(alterTable, WCDB::StatementAlterTable, cppAlterTable);
+    cppAlterTable->schema(WCDBCreateSchemaFromCommonValue(schema));
+}
+
 void WCDBStatementAlterTableConfigRenameToTable(CPPStatementAlterTable alterTable,
                                                 const char* _Nullable name)
 {
@@ -62,6 +69,13 @@ void WCDBStatementAlterTableConfigRenameColumn(CPPStatementAlterTable alterTable
     cppAlterTable->renameColumn(*cppColumn);
 }
 
+void WCDBStatementAlterTableConfigRenameColumn2(CPPStatementAlterTable alterTable,
+                                                CPPCommonValue column)
+{
+    WCDBGetObjectOrReturn(alterTable, WCDB::StatementAlterTable, cppAlterTable);
+    cppAlterTable->renameColumn(WCDBCreateColumnFromCommonValue(column));
+}
+
 void WCDBStatementAlterTableConfigRenameToColumn(CPPStatementAlterTable alterTable, CPPColumn column)
 {
     WCDBGetObjectOrReturn(alterTable, WCDB::StatementAlterTable, cppAlterTable);
@@ -69,8 +83,14 @@ void WCDBStatementAlterTableConfigRenameToColumn(CPPStatementAlterTable alterTab
     cppAlterTable->toColumn(*cppColumn);
 }
 
-void WCDBStatementAlterTableConfigRenameAddColumn(CPPStatementAlterTable alterTable,
-                                                  CPPColumnDef columndef)
+void WCDBStatementAlterTableConfigRenameToColumn2(CPPStatementAlterTable alterTable,
+                                                  CPPCommonValue column)
+{
+    WCDBGetObjectOrReturn(alterTable, WCDB::StatementAlterTable, cppAlterTable);
+    cppAlterTable->toColumn(WCDBCreateColumnFromCommonValue(column));
+}
+
+void WCDBStatementAlterTableConfigAddColumn(CPPStatementAlterTable alterTable, CPPColumnDef columndef)
 {
     WCDBGetObjectOrReturn(alterTable, WCDB::StatementAlterTable, cppAlterTable);
     WCDBGetObjectOrReturn(columndef, WCDB::ColumnDef, cppColumnDef);

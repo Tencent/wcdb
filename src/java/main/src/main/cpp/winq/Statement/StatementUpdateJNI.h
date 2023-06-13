@@ -35,6 +35,10 @@
     WCDBJNIClassMethodWithNoArg(StatementUpdate, funcName)
 
 jlong WCDBJNIStatementUpdateObjectMethodWithNoArg(create);
+
+void WCDBJNIStatementUpdateObjectMethod(configWith, jlong self, jlongArray expressions);
+void WCDBJNIStatementUpdateObjectMethod(configRecursive, jlong self);
+
 void WCDBJNIStatementUpdateObjectMethod(configTable,
                                         jlong self,
                                         WCDBJNIObjectOrStringParameter(table));
