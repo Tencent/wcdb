@@ -1,7 +1,11 @@
+## v2.0.2.5
+
+* Fix compile issue caused by header
+
 ## v2.0.2
 
 * WCDB C++ supports Windows
-* Optimizing C++ ORM performance
+* Optimizie C++ ORM performance
 * Downgrade the minimum supported system version for iPhone and Apple watch
 
 ## v2.0.1
