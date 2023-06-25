@@ -39,6 +39,7 @@ void WCDBJNIBindingObjectMethod(addIndex, jlong self, jstring indexSubfix, jlong
 void WCDBJNIBindingObjectMethod(addTableConstraint, jlong self, jlong constraint);
 void WCDBJNIBindingObjectMethod(configVirtualModule, jlong self, jstring moduleName);
 void WCDBJNIBindingObjectMethod(configVirtualModuleArgument, jlong self, jstring argument);
+void WCDBJNIBindingObjectMethod(configWithoutRowId, jlong self);
 jboolean WCDBJNIBindingObjectMethod(createTable, jlong self, jstring tableName, jlong handle);
 jboolean
 WCDBJNIBindingObjectMethod(createVirtualTable, jlong self, jstring tableName, jlong handle);

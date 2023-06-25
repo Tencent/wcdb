@@ -68,6 +68,12 @@ void WCDBJNIBindingObjectMethod(configVirtualModuleArgument, jlong self, jstring
     WCDBJNIReleaseString(argument);
 }
 
+void WCDBJNIBindingObjectMethod(configWithoutRowId, jlong self)
+{
+    WCDBJNIBridgeStruct(CPPBinding, self);
+    WCDBBindingConfigWithoutRowId(selfStruct);
+}
+
 jboolean WCDBJNIBindingObjectMethod(createTable, jlong self, jstring tableName, jlong handle)
 {
     WCDBJNIBridgeStruct(CPPBinding, self);

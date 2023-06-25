@@ -69,6 +69,12 @@ public class Binding extends CppObject {
 
     private native void configVirtualModuleArgument(long self, String argument);
 
+    public void configWithoutRowId() {
+        configWithoutRowId(cppObj);
+    }
+
+    private native void configWithoutRowId(long self);
+
     public boolean createTable(String tableName, Handle handle) throws WCDBException {
         return createTable(cppObj, tableName, handle.getCppHandle());
     }

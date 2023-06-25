@@ -122,6 +122,12 @@ bool WCDBBindingCreateVirtualTable(CPPBinding binding, const char* _Nullable tab
     return cppBinding->createVirtualTable(tableName, cppHandle);
 }
 
+void WCDBBindingConfigWithoutRowId(CPPBinding binding)
+{
+    WCDBGetObjectOrReturn(binding, WCDB::BridgedBinding, cppBinding);
+    cppBinding->statementTable.withoutRowID();
+}
+
 const void* _Nullable WCDBBindingGetBaseBinding(CPPBinding binding)
 {
     WCDBGetObjectOrReturnValue(binding, WCDB::BridgedBinding, cppBinding, nullptr);

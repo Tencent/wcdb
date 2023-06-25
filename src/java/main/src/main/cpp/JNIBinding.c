@@ -761,6 +761,7 @@ static const JNINativeMethod g_tableBindingMethods[] = {
     { "configVirtualModuleArgument",
       "(J" WCDBJNIStringSignature ")V",
       (void *) WCDBJNIBindingFuncName(configVirtualModuleArgument) },
+    { "configWithoutRowId", "(J)V", (void *) WCDBJNIBindingFuncName(configWithoutRowId) },
     { "createTable", "(J" WCDBJNIStringSignature "J)Z", (void *) WCDBJNIBindingFuncName(createTable) },
     { "createVirtualTable",
       "(J" WCDBJNIStringSignature "J)Z",
