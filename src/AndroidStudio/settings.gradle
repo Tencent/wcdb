@@ -1,10 +1,13 @@
 include ':main'
+
+rootProject.name = 'WCDB'
+
 project(':main').projectDir = file('../java/main')
-include ':test'
-project(':test').projectDir = file('../java/test')
 include ':annotation'
 project(':annotation').projectDir = file('../java/annotation')
 include ':compiler'
 project(':compiler').projectDir = file('../java/compiler')
-
-rootProject.name = 'WCDB'
+include ':java-test'
+project(':java-test').projectDir = file('../java/test')
+include ':kotlin-test'
+project(':kotlin-test').projectDir = file('../kotlin/test')
