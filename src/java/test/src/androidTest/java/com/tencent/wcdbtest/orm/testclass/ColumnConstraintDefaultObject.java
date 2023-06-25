@@ -31,6 +31,6 @@ public class ColumnConstraintDefaultObject {
     @WCDBField(defaultDoubleValue = 1.1)
     float floatValue;
 
-    @WCDBField(defaultStringValue = "abc")
+    @WCDBField(defaultTextValue = "abc")
     String stringValue;
 }
