@@ -100,14 +100,98 @@ public class PreparedStatement extends CppObject {
         bindInteger(cppObj, value ? 1 : 0, index);
     }
 
+    public void bindBool(Boolean value, int index) {
+        if (value != null) {
+            bindInteger(cppObj, value ? 1 : 0, index);
+        } else {
+            bindNull(index);
+        }
+    }
+
+    public void bindInteger(char value, int index) {
+        bindInteger(cppObj, value, index);
+    }
+
+    public void bindInteger(Character value, int index) {
+        if (value != null) {
+            bindInteger(cppObj, value, index);
+        } else {
+            bindNull(index);
+        }
+    }
+
+    public void bindInteger(byte value, int index) {
+        bindInteger(cppObj, value, index);
+    }
+
+    public void bindInteger(Byte value, int index) {
+        if (value != null) {
+            bindInteger(cppObj, value, index);
+        } else {
+            bindNull(index);
+        }
+    }
+
+    public void bindInteger(short value, int index) {
+        bindInteger(cppObj, value, index);
+    }
+
+    public void bindInteger(Short value, int index) {
+        if (value != null) {
+            bindInteger(cppObj, value, index);
+        } else {
+            bindNull(index);
+        }
+    }
+
+    public void bindInteger(int value, int index) {
+        bindInteger(cppObj, value, index);
+    }
+
+    public void bindInteger(Integer value, int index) {
+        if (value != null) {
+            bindInteger(cppObj, value, index);
+        } else {
+            bindNull(index);
+        }
+    }
+
     public void bindInteger(long value, int index) {
         bindInteger(cppObj, value, index);
     }
 
+    public void bindInteger(Long value, int index) {
+        if (value != null) {
+            bindInteger(cppObj, value, index);
+        } else {
+            bindNull(index);
+        }
+    }
+
     private native void bindInteger(long self, long value, int index);
+
+    public void bindDouble(float value, int index) {
+        bindDouble(cppObj, value, index);
+    }
+
+    public void bindDouble(Float value, int index) {
+        if (value != null) {
+            bindDouble(cppObj, value, index);
+        } else {
+            bindNull(index);
+        }
+    }
 
     public void bindDouble(double value, int index) {
         bindDouble(cppObj, value, index);
+    }
+
+    public void bindDouble(Double value, int index) {
+        if (value != null) {
+            bindDouble(cppObj, value, index);
+        } else {
+            bindNull(index);
+        }
     }
 
     private native void bindDouble(long self, double value, int index);

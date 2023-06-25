@@ -1,5 +1,7 @@
 plugins {
     id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.google.devtools.ksp' version '1.7.10-1.0.6'
 }
 
 android {
@@ -16,24 +18,23 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_6
-        targetCompatibility JavaVersion.VERSION_1_6
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    sourceSets {
+        androidTest.kotlin.srcDirs += 'build/generated/ap_generated_sources/debugAndroidTest/out'
+        androidTest.kotlin.srcDirs += 'build/generated/ksp/debugAndroidTest/kotlin'
+        androidTest.kotlin.srcDirs += 'build/generated/ksp/debugAndroidTest/java'
     }
 }
 
 dependencies {
-
-    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation project(path: ':main')
     implementation project(path: ':annotation')
-    androidTestAnnotationProcessor project(':compiler')
+//    androidTestAnnotationProcessor project(':compiler')
+    kspAndroidTest project(path: ':compiler')
 }
