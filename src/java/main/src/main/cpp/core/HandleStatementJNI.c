@@ -147,7 +147,7 @@ jbyteArray WCDBJNIHandleStatementObjectMethod(getBLOB, jlong self, jint index)
     jbyte* buffer = WCDBHandleStatementGetBlob(selfStruct, index);
     jsize size = WCDBHandleStatementGetColumnSize(selfStruct, index);
     if (buffer == NULL || size == 0) {
-        return NULL;
+        return (*env)->NewByteArray(env, 0);
     }
     jbyteArray array = (*env)->NewByteArray(env, size);
     (*env)->SetByteArrayRegion(env, array, 0, size, buffer);

@@ -315,9 +315,6 @@
 
 #define WCDBJNICreateStringAndReturn(action)                                   \
     const char *textValue = action;                                            \
-    if (textValue == NULL) {                                                   \
-        return NULL;                                                           \
-    }                                                                          \
     return (*env)->NewStringUTF(env, textValue);
 
 #define WCDBJNICreateJavaString(value)                                         \

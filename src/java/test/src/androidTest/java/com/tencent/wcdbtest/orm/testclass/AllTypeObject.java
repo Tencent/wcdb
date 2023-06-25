@@ -181,7 +181,7 @@ public class AllTypeObject {
                 aDouble == other.aDouble &&
                 getDoubleValue(aDouble2) == getDoubleValue(other.aDouble2) &&
                 stringCompare(string, other.string) &&
-                Arrays.equals(bytes, other.bytes);
+                blobCompare(bytes, other.bytes);
     }
 
     long getIntegerValue(Object object) {
@@ -225,5 +225,18 @@ public class AllTypeObject {
             return true;
         }
         return obj1.equals(obj2);
+    }
+
+    boolean blobCompare(byte[] obj1, byte[] obj2) {
+        if(obj1 == obj2) {
+            return true;
+        }
+        if(obj1 == null && obj2.length == 0) {
+            return true;
+        }
+        if(obj2 == null && obj1.length == 0) {
+            return true;
+        }
+        return Arrays.equals(obj1, obj2);
     }
 }
