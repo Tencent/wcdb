@@ -149,7 +149,7 @@ void Core::preprocessError(Error& error)
     if (iter != infos.end() && iter->second.getType() == Value::Type::Text) {
         auto tag = m_databasePool.getTag(iter->second.textValue());
         if (tag.isValid()) {
-            error.infos.insert_or_assign(ErrorIntKeyTag, tag);
+            error.infos.insert_or_assign(ErrorIntKeyTag, (long) tag);
         }
     }
 }
