@@ -150,7 +150,7 @@ void Core::preprocessError(Error& error)
         && iter->second.underlyingType() == Error::InfoValue::UnderlyingType::String) {
         auto tag = m_databasePool.getTag(iter->second.stringValue());
         if (tag.isValid()) {
-            error.infos.insert_or_assign(ErrorIntKeyTag, tag);
+            error.infos.insert_or_assign(ErrorIntKeyTag, (long) tag);
         }
     }
 }
