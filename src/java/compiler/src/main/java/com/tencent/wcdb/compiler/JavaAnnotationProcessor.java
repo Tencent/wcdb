@@ -131,14 +131,15 @@ public class JavaAnnotationProcessor extends AbstractProcessor {
                     if(fieldAnnotation == null) {
                         continue;
                     }
-                    if (!checkFieldElement(enclosedElement, fieldAnnotation)) {
+                    WCDBDefault defaultValueAnnotation = enclosedElement.getAnnotation(WCDBDefault.class);
+                    if (!checkFieldElement(enclosedElement, fieldAnnotation, defaultValueAnnotation)) {
                         allFieldInfo.clear();
                         break;
                     }
                     verboseLog("Found WCDBField: " + enclosedElement
                             + " " + enclosedElement.asType().toString());
                     WCDBIndex indexAnnotation = enclosedElement.getAnnotation(WCDBIndex.class);
-                    allFieldInfo.add(ColumnInfo.Companion.resolve(enclosedElement, fieldAnnotation, indexAnnotation));
+                    allFieldInfo.add(ColumnInfo.Companion.resolve(enclosedElement, fieldAnnotation, indexAnnotation, defaultValueAnnotation));
                 }
                 if(allFieldInfo.size() > 0) {
                     createORMFile((TypeElement) element);
@@ -181,7 +182,7 @@ public class JavaAnnotationProcessor extends AbstractProcessor {
         return true;
     }
 
-    private boolean checkFieldElement(Element element, WCDBField fieldAnnotation) {
+    private boolean checkFieldElement(Element element, WCDBField fieldAnnotation, WCDBDefault defaultValueAnnotation) {
         if(element.getModifiers().contains(Modifier.PRIVATE) || element.getModifiers().contains(Modifier.PROTECTED)) {
             msg.printMessage(Diagnostic.Kind.ERROR,
                     "The field with annotation @WCDBField can not be private or protected", element);
@@ -214,6 +215,22 @@ public class JavaAnnotationProcessor extends AbstractProcessor {
             String info = "Only the primary key can be configured as auto-increment";
             msg.printMessage(Diagnostic.Kind.ERROR, info, element);
             return false;
+        }
+        if (defaultValueAnnotation != null) {
+            int valueCount = 0;
+            if (defaultValueAnnotation.intValue() != 0) {
+                valueCount++;
+            }
+            if (defaultValueAnnotation.doubleValue() != 0) {
+                valueCount++;
+            }
+            if (defaultValueAnnotation.textValue().length() > 0) {
+                valueCount++;
+            }
+            if (valueCount > 1) {
+                msg.printMessage(Diagnostic.Kind.ERROR, "Only one default value can be configured for a field", element);
+                return false;
+            }
         }
         return true;
     }

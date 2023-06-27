@@ -1,4 +1,4 @@
-// Created by qiuwenchen on 2023/5/12.
+// Created by qiuwenchen on 2023/6/27.
 //
 
 /*
@@ -20,24 +20,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.tencent.wcdbtest.orm.testclass;
-import com.tencent.wcdb.*;
 
-@WCDBTableCoding
-public class ColumnConstraintDefaultObject {
-    @WCDBField
-    @WCDBDefault(intValue = 0)
-    int intValue;
+package com.tencent.wcdb;
 
-    @WCDBField
-    @WCDBDefault(intValue = 1)
-    int intValue2;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-    @WCDBField
-    @WCDBDefault(doubleValue = 1.1)
-    float floatValue;
-
-    @WCDBField
-    @WCDBDefault(textValue = "abc")
-    String stringValue;
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.SOURCE)
+public @interface WCDBDefault {
+    long intValue() default 0;
+    double doubleValue() default 0;
+    String textValue() default "";
 }

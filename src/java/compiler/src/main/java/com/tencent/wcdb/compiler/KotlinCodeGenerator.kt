@@ -99,12 +99,14 @@ class KotlinCodeGenerator {
                 builder.append(constraintPrefix).append(".primaryKey()")
                     .append(if (columnInfo.isAutoIncrement) ".autoIncrement()\n$TAB$TAB)\n" else "\n$TAB$TAB)\n")
             }
-            if (columnInfo.defaultIntValue != 0) {
-                builder.append(constraintPrefix).append(".defaultTo(${columnInfo.defaultIntValue})\n$TAB$TAB)\n")
-            } else if (columnInfo.defaultDoubleValue != 0.0) {
-                builder.append(constraintPrefix).append(".defaultTo(${columnInfo.defaultDoubleValue})\n$TAB$TAB)\n")
-            } else if (columnInfo.defaultTextValue.isNotEmpty()) {
-                builder.append(constraintPrefix).append(".defaultTo(\"${columnInfo.defaultTextValue}\")\n$TAB$TAB)\n")
+            if (columnInfo.defaultValue != null) {
+                if (columnInfo.defaultValue!!.doubleValue != 0.0) {
+                    builder.append(constraintPrefix).append(".defaultTo(${columnInfo.defaultValue!!.doubleValue})\n$TAB$TAB)\n")
+                } else if (columnInfo.defaultValue!!.textValue.isNotEmpty()) {
+                    builder.append(constraintPrefix).append(".defaultTo(\"${columnInfo.defaultValue!!.textValue}\")\n$TAB$TAB)\n")
+                } else {
+                    builder.append(constraintPrefix).append(".defaultTo(${columnInfo.defaultValue!!.intValue})\n$TAB$TAB)\n")
+                }
             }
             if (columnInfo.isUnique) {
                 builder.append(constraintPrefix).append(".unique()\n)\n")

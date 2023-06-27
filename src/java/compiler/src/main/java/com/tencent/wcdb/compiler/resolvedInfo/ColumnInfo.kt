@@ -25,6 +25,7 @@ package com.tencent.wcdb.compiler.resolvedInfo
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSPropertyDeclaration
+import com.tencent.wcdb.WCDBDefault
 import com.tencent.wcdb.WCDBField
 import com.tencent.wcdb.WCDBIndex
 import javax.lang.model.element.Element
@@ -35,9 +36,7 @@ data class ColumnInfo(
     var columnName: String = "",
     var isPrimary: Boolean = false,
     var isAutoIncrement: Boolean = false,
-    var defaultIntValue: Int = 0,
-    var defaultDoubleValue: Double = 0.0,
-    var defaultTextValue: String = "",
+    var defaultValue: DefaultValueInfo? = null,
     var isUnique: Boolean = false,
     var isNotNull: Boolean = false,
     var indexNameSuffix: String = "",
@@ -45,8 +44,9 @@ data class ColumnInfo(
 ) {
     companion object {
         fun resolve(propertyDeclaration: KSPropertyDeclaration,
-                    fieldAnnotation: KSAnnotation?,
+                    fieldAnnotation: KSAnnotation,
                     indexAnnotation: KSAnnotation?,
+                    defaultValueAnnotation: KSAnnotation?,
                     logger: KSPLogger): ColumnInfo?{
             if(fieldAnnotation == null) {
                 return null
@@ -60,9 +60,6 @@ data class ColumnInfo(
                     "columnName" -> resolvedInfo.columnName = value as String
                     "isPrimary" -> resolvedInfo.isPrimary = value as Boolean
                     "isAutoIncrement" -> resolvedInfo.isAutoIncrement = value as Boolean
-                    "defaultIntValue" -> resolvedInfo.defaultIntValue = value as Int
-                    "defaultDoubleValue" -> resolvedInfo.defaultDoubleValue = value as Double
-                    "defaultTextValue" -> resolvedInfo.defaultTextValue = value as String
                     "isUnique" -> resolvedInfo.isUnique = value as Boolean
                     "isNotNull" -> resolvedInfo.isNotNull = value as Boolean
                     else -> {
@@ -71,38 +68,41 @@ data class ColumnInfo(
                     }
                 }
             }
-            if(indexAnnotation == null) {
-                return resolvedInfo
-            }
-            for(argument in indexAnnotation.arguments) {
-                val value = argument.value ?: continue
-                when (argument.name?.asString()) {
-                    "nameSuffix" -> resolvedInfo.indexNameSuffix = value as String
-                    "isUnique" -> resolvedInfo.indexIsUnique = value as Boolean
-                    else -> {
-                        logger.error("Unrecognized field ${argument.name?.asString()} in WCDBIndex")
-                        return null
+            if(indexAnnotation != null) {
+                for(argument in indexAnnotation.arguments) {
+                    val value = argument.value ?: continue
+                    when (argument.name?.asString()) {
+                        "nameSuffix" -> resolvedInfo.indexNameSuffix = value as String
+                        "isUnique" -> resolvedInfo.indexIsUnique = value as Boolean
+                        else -> {
+                            logger.error("Unrecognized field ${argument.name?.asString()} in WCDBIndex")
+                            return null
+                        }
                     }
                 }
             }
+            if(defaultValueAnnotation != null) {
+                resolvedInfo.defaultValue = DefaultValueInfo.resolve(defaultValueAnnotation, logger);
+            }
+
             return resolvedInfo
         }
 
-        fun resolve(fieldElement: Element, fieldAnnotation: WCDBField, indexAnnotation: WCDBIndex?): ColumnInfo {
+        fun resolve(fieldElement: Element, fieldAnnotation: WCDBField, indexAnnotation: WCDBIndex?, defaultValue: WCDBDefault?): ColumnInfo {
             val resolvedInfo = ColumnInfo()
             resolvedInfo.propertyName = fieldElement.toString()
             resolvedInfo.propertyType = fieldElement.asType().toString()
             resolvedInfo.columnName = fieldAnnotation.columnName
             resolvedInfo.isPrimary = fieldAnnotation.isPrimary
             resolvedInfo.isAutoIncrement = fieldAnnotation.isAutoIncrement
-            resolvedInfo.defaultIntValue = fieldAnnotation.defaultIntValue
-            resolvedInfo.defaultDoubleValue = fieldAnnotation.defaultDoubleValue
-            resolvedInfo.defaultTextValue = fieldAnnotation.defaultTextValue
             resolvedInfo.isUnique = fieldAnnotation.isUnique
             resolvedInfo.isNotNull = fieldAnnotation.isNotNull
             if(indexAnnotation != null) {
                 resolvedInfo.indexNameSuffix = indexAnnotation.nameSuffix
                 resolvedInfo.indexIsUnique = indexAnnotation.isUnique
+            }
+            if (defaultValue != null) {
+                resolvedInfo.defaultValue = DefaultValueInfo.resolve(defaultValue)
             }
             return resolvedInfo
         }

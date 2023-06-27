@@ -33,9 +33,6 @@ public @interface WCDBField {
     String columnName() default "";
     boolean isPrimary() default false;
     boolean isAutoIncrement() default false;
-    int defaultIntValue() default 0;
-    double defaultDoubleValue() default 0;
-    String defaultTextValue() default "";
     boolean isUnique() default false;
     boolean isNotNull() default false;
 }

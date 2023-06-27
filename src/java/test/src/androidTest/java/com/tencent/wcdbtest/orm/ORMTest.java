@@ -149,7 +149,7 @@ public class ORMTest extends DatabaseTestCase {
         });
 
         doTestCreateTableAndIndexSQLsAsExpected(new String[]{
-                "CREATE TABLE IF NOT EXISTS testTable(intValue INTEGER DEFAULT 1, floatValue REAL DEFAULT 1.1000000000000001, stringValue TEXT DEFAULT 'abc')"
+                "CREATE TABLE IF NOT EXISTS testTable(intValue INTEGER DEFAULT 0, intValue2 INTEGER DEFAULT 1, floatValue REAL DEFAULT 1.1000000000000001, stringValue TEXT DEFAULT 'abc')"
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {

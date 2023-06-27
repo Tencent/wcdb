@@ -26,6 +26,7 @@ package com.tencent.wcdb.compiler
 import com.google.devtools.ksp.processing.*
 import com.google.devtools.ksp.symbol.*
 import com.google.devtools.ksp.validate
+import com.tencent.wcdb.WCDBDefault
 import com.tencent.wcdb.WCDBField
 import com.tencent.wcdb.WCDBIndex
 import com.tencent.wcdb.WCDBTableCoding
@@ -86,12 +87,14 @@ internal class KotlinAnnotationProcessor(private val environment: SymbolProcesso
 
             val fieldAnnotation = getAnnotation(property, WCDBField::class) ?: continue
             val indexAnnotation = getAnnotation(property, WCDBIndex::class)
+            val defaultValueAnnotation = getAnnotation(property, WCDBDefault::class)
 
             val resolvedColumnInfo =
                 ColumnInfo.resolve(
                     property,
                     fieldAnnotation,
                     indexAnnotation,
+                    defaultValueAnnotation,
                     environment.logger)
                     ?: return
 
@@ -195,6 +198,25 @@ internal class KotlinAnnotationProcessor(private val environment: SymbolProcesso
                 declaration
             )
             return false
+        }
+        if (columnInfo.defaultValue != null) {
+            var valueCount = 0
+            if (columnInfo.defaultValue!!.intValue != 0L) {
+                valueCount++
+            }
+            if (columnInfo.defaultValue!!.doubleValue != 0.0) {
+                valueCount++
+            }
+            if (columnInfo.defaultValue!!.textValue.isNotEmpty()) {
+                valueCount++
+            }
+            if (valueCount > 1) {
+                environment.logger.error(
+                    "Only one default value can be configured for a field",
+                    declaration
+                )
+                return false
+            }
         }
         return true
     }

@@ -118,12 +118,14 @@ public class JavaCodeGenerator {
                 builder.append(constraintPrefix).append(".primaryKey()").append(columnInfo.isAutoIncrement() ? ".autoIncrement());\n" : ");\n");
             }
 
-            if(columnInfo.getDefaultIntValue() != 0) {
-                builder.append(constraintPrefix).append(".defaultTo(").append(columnInfo.getDefaultIntValue()).append("));\n");
-            } else if (columnInfo.getDefaultDoubleValue() != 0) {
-                builder.append(constraintPrefix).append(".defaultTo(").append(columnInfo.getDefaultDoubleValue()).append("));\n");
-            } else if (columnInfo.getDefaultTextValue().length() > 0) {
-                builder.append(constraintPrefix).append(".defaultTo(\"").append(columnInfo.getDefaultTextValue()).append("\"));\n");
+            if(columnInfo.getDefaultValue() != null) {
+                if (columnInfo.getDefaultValue().getDoubleValue() != 0.0) {
+                    builder.append(constraintPrefix).append(".defaultTo(").append(columnInfo.getDefaultValue().getDoubleValue()).append("));\n");
+                } else if (columnInfo.getDefaultValue().getTextValue().length() > 0) {
+                    builder.append(constraintPrefix).append(".defaultTo(\"").append(columnInfo.getDefaultValue().getTextValue()).append("\"));\n");
+                } else {
+                    builder.append(constraintPrefix).append(".defaultTo(").append(columnInfo.getDefaultValue().getIntValue()).append("));\n");
+                }
             }
 
             if(columnInfo.isUnique()) {

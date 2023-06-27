@@ -23,17 +23,25 @@
 
 package com.tencent.wcdbtest.orm.testclass
 
+import com.tencent.wcdb.WCDBDefault
 import com.tencent.wcdb.WCDBField
 import com.tencent.wcdb.WCDBTableCoding
 
 @WCDBTableCoding
 class ColumnConstraintDefaultObject {
-    @WCDBField(defaultIntValue = 1)
+    @WCDBField
+    @WCDBDefault(intValue = 0)
     var intValue = 0
 
-    @WCDBField(defaultDoubleValue = 1.1)
+    @WCDBField
+    @WCDBDefault(intValue = 1)
+    var intValue2 = 0
+
+    @WCDBField
+    @WCDBDefault(doubleValue = 1.1)
     var floatValue = 0f
 
-    @WCDBField(defaultTextValue = "abc")
+    @WCDBField
+    @WCDBDefault(textValue = "abc")
     var stringValue: String? = null
 }

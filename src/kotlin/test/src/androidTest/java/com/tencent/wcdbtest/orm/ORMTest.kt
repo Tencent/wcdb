@@ -40,7 +40,7 @@ import org.junit.Test
 import java.util.*
 
 class ORMTest : DatabaseTestCase() {
-    var tableName = "testTable"
+    private var tableName = "testTable"
     @Before
     @Throws(WCDBException::class)
     override fun setup() {
@@ -146,7 +146,7 @@ class ORMTest : DatabaseTestCase() {
         }
         doTestCreateTableAndIndexSQLsAsExpected(
             arrayOf(
-                "CREATE TABLE IF NOT EXISTS testTable(intValue INTEGER DEFAULT 1, floatValue REAL DEFAULT 1.1000000000000001, stringValue TEXT DEFAULT 'abc')"
+                "CREATE TABLE IF NOT EXISTS testTable(intValue INTEGER DEFAULT 0, intValue2 INTEGER DEFAULT 1, floatValue REAL DEFAULT 1.1000000000000001, stringValue TEXT DEFAULT 'abc')"
             )
         ) {
             database.createTable(tableName, DBColumnConstraintDefaultObject)
