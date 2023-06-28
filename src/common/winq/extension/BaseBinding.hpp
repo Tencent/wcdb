@@ -74,17 +74,19 @@ protected:
 #pragma mark - Index
 public:
     struct Index {
-        Index(const UnsafeStringView &suffix);
-        const StringView suffix;
+        Index(const UnsafeStringView &nameOrSuffix, bool isFullName = false);
+        const StringView nameOrSuffix;
+        bool isFullName;
         enum class Action {
             Create,
             CreateForNewlyCreatedTableOnly, // create if and only if the table is newly created by createTable:withClass:
             Drop,
         } action;
         StatementCreateIndex statement;
+        StringView getIndexName(const UnsafeStringView &tableName);
     };
     typedef struct Index Index;
-    Index &getOrCreateIndex(const UnsafeStringView &suffix);
+    Index &getOrCreateIndex(const UnsafeStringView &nameOrSuffix, bool isFullName = false);
 
     std::pair<std::list<StatementCreateIndex>, std::list<StatementDropIndex>>
     generateIndexStatements(const UnsafeStringView &tableName, bool isTableNewlyCreated) const;

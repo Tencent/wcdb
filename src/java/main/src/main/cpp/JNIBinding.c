@@ -753,7 +753,7 @@ static const JNINativeMethod g_statementVacuumMethods[] = {
 static const JNINativeMethod g_tableBindingMethods[] = {
     { "createCppObj", "()J", (void *) WCDBJNIBindingFuncName(create) },
     { "addColumnDef", "(JJ)V", (void *) WCDBJNIBindingFuncName(addColumnDef) },
-    { "addIndex", "(J" WCDBJNIStringSignature "J)V", (void *) WCDBJNIBindingFuncName(addIndex) },
+    { "addIndex", "(J" WCDBJNIStringSignature "ZJ)V", (void *) WCDBJNIBindingFuncName(addIndex) },
     { "addTableConstraint", "(JJ)V", (void *) WCDBJNIBindingFuncName(addTableConstraint) },
     { "configVirtualModule",
       "(J" WCDBJNIStringSignature ")V",

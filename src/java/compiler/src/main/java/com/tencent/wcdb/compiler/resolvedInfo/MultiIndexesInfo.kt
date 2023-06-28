@@ -28,7 +28,7 @@ import com.google.devtools.ksp.symbol.KSAnnotation
 import com.tencent.wcdb.MultiIndexes
 
 data class MultiIndexesInfo(
-    var nameSuffix: String = "",
+    var name: String = "",
     var columns: MutableList<String> = mutableListOf()
 ) {
     companion object {
@@ -41,8 +41,8 @@ data class MultiIndexesInfo(
             for(argument in annotation.arguments) {
                 val value = argument.value ?: continue
                 when (argument.name?.asString()) {
-                    "nameSuffix" -> {
-                        resolvedInfo.nameSuffix = value as String
+                    "name" -> {
+                        resolvedInfo.name = value as String
                     }
                     "columns" -> {
                         if(!resolveValueToList(value, String::class, resolvedInfo.columns)) {
@@ -62,7 +62,7 @@ data class MultiIndexesInfo(
 
         fun resolve(multiIndexes: MultiIndexes): MultiIndexesInfo {
             val resolvedInfo = MultiIndexesInfo()
-            resolvedInfo.nameSuffix = multiIndexes.nameSuffix
+            resolvedInfo.name = multiIndexes.name
             resolvedInfo.columns.addAll(multiIndexes.columns)
             return resolvedInfo
         }

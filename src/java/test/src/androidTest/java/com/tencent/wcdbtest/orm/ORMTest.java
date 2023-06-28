@@ -177,7 +177,8 @@ public class ORMTest extends DatabaseTestCase {
                         "multiIndex1 INTEGER, multiIndex2 INTEGER, multiIndex3 INTEGER, " +
                         "PRIMARY KEY(multiPrimary1, multiPrimary2, multiPrimary3), " +
                         "UNIQUE(multiUnique1, multiUnique2, multiUnique3))",
-                "CREATE INDEX IF NOT EXISTS testTable_multi_index ON testTable(multiIndex1, multiIndex2, multiIndex3)"
+                "CREATE INDEX IF NOT EXISTS specifiedNameIndex ON testTable(multiIndex1, multiIndex2, multiIndex3)",
+                "CREATE INDEX IF NOT EXISTS testTable_multiIndex1_multiIndex2_index ON testTable(multiIndex1, multiIndex2)"
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
@@ -199,7 +200,7 @@ public class ORMTest extends DatabaseTestCase {
         doTestCreateTableAndIndexSQLsAsExpected(new String[]{
                 "PRAGMA main.table_info('testTable')",
                 "ALTER TABLE main.testTable ADD COLUMN newValue INTEGER",
-                "CREATE INDEX IF NOT EXISTS testTable_index ON testTable(value)"
+                "CREATE INDEX IF NOT EXISTS testTable_value_index ON testTable(value)"
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
@@ -212,8 +213,8 @@ public class ORMTest extends DatabaseTestCase {
     public void testIndex() {
         doTestCreateTableAndIndexSQLsAsExpected(new String[]{
                 "CREATE TABLE IF NOT EXISTS testTable(index_ INTEGER, uniqueIndex INTEGER)",
-                "CREATE INDEX IF NOT EXISTS testTable_index ON testTable(index_)",
-                "CREATE UNIQUE INDEX IF NOT EXISTS testTable_unique_index ON testTable(uniqueIndex)"
+                "CREATE INDEX IF NOT EXISTS testTable_index__index ON testTable(index_)",
+                "CREATE UNIQUE INDEX IF NOT EXISTS specifiedNameIndex ON testTable(uniqueIndex)"
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {

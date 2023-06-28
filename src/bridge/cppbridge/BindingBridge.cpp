@@ -71,11 +71,14 @@ void WCDBBindingAddColumnConstraint(CPPBinding binding,
     columnDef->constraint(*cppConstraint);
 }
 
-void WCDBBindingAddIndex(CPPBinding binding, const char* _Nullable indexSubfix, CPPStatementCreateIndex createIndex)
+void WCDBBindingAddIndex(CPPBinding binding,
+                         const char* _Nullable indexSuffix,
+                         bool isFullName,
+                         CPPStatementCreateIndex createIndex)
 {
     WCDBGetObjectOrReturn(binding, WCDB::BridgedBinding, cppBinding);
     WCDBGetObjectOrReturn(createIndex, WCDB::StatementCreateIndex, cppCreateIndex);
-    WCDB::BaseBinding::Index& index = cppBinding->getOrCreateIndex(indexSubfix);
+    WCDB::BaseBinding::Index& index = cppBinding->getOrCreateIndex(indexSuffix, isFullName);
     index.action = WCDB::BaseBinding::Index::Action::Create;
     index.statement = *cppCreateIndex;
 }

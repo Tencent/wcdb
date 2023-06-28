@@ -116,10 +116,16 @@ class KotlinCodeGenerator {
             }
             builder.append("$TAB${TAB}baseBinding.addColumnDef(${propertyName}Def)\n\n")
 
-            if (columnInfo.indexNameSuffix.isEmpty()) {
+            if (!columnInfo.hasIndex) {
                 continue
             }
-            builder.append("$TAB${TAB}baseBinding.addIndex(\"${columnInfo.indexNameSuffix}\" , StatementCreateIndex().ifNotExist()")
+            var indexName = columnInfo.indexName
+            var isFullName = true
+            if (indexName.isEmpty()) {
+                indexName = "_${columnName}_index"
+                isFullName = false
+            }
+            builder.append("$TAB${TAB}baseBinding.addIndex(\"$indexName\" , $isFullName, StatementCreateIndex().ifNotExist()")
             if (columnInfo.indexIsUnique) {
                 builder.append(".unique()")
             }
@@ -128,8 +134,14 @@ class KotlinCodeGenerator {
     }
 
     private fun generateTableConfig() {
-        for ((nameSuffix, columns) in tableConstraintInfo.multiIndexes) {
-            builder.append("$TAB${TAB}baseBinding.addIndex(\"$nameSuffix\", StatementCreateIndex().ifNotExist().indexedBy(arrayOf(\n$TAB$TAB$TAB")
+        for ((name, columns) in tableConstraintInfo.multiIndexes) {
+            var indexName = name
+            var isFullName = true
+            if (indexName.isEmpty()) {
+                indexName = columns.joinToString( "_", "_", "_index")
+                isFullName = false
+            }
+            builder.append("$TAB${TAB}baseBinding.addIndex(\"$indexName\", $isFullName, StatementCreateIndex().ifNotExist().indexedBy(arrayOf(\n$TAB$TAB$TAB")
             for (column in columns) {
                 builder.append(column).append(", ")
             }

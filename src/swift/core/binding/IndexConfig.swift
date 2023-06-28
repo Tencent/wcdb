@@ -27,7 +27,7 @@ import WCDB_Private
 
 public final class IndexConfig<CodingTableKeyType: CodingTableKey>: TableConfiguration {
     private let indexes: [IndexedColumnConvertible]
-    private let subfix: String
+    private let suffix: String
     private let unique: Bool
 
     public func config(with tableBinding: TableBindingBase) {
@@ -36,12 +36,12 @@ public final class IndexConfig<CodingTableKeyType: CodingTableKey>: TableConfigu
             statement.unique()
         }
         withExtendedLifetime(statement) {
-            WCDBBindingAddIndex(tableBinding.cppBinding, subfix.cString, $0.cppObj)
+            WCDBBindingAddIndex(tableBinding.cppBinding, suffix.cString, false, $0.cppObj)
         }
     }
 
-    required public init(_ indexes: IndexedColumnConvertible..., namedWith subfix: String, isUnique: Bool = false) {
-        self.subfix = subfix
+    required public init(_ indexes: IndexedColumnConvertible..., namedWith suffix: String, isUnique: Bool = false) {
+        self.suffix = suffix
         self.indexes = indexes
         unique = isUnique
     }

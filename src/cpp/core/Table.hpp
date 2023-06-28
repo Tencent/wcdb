@@ -50,7 +50,7 @@ public:
     const StringView &getTableName() const;
 
     /**
-     @brief Drop index with name tableName + subfix.
+     @brief Drop index with name tableName + suffix.
      */
     bool dropIndexWithSuffix(const UnsafeStringView &suffix);
 

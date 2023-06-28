@@ -238,18 +238,48 @@ TableConstraint &BaseBinding::getOrCreateTableConstraint(const UnsafeStringView 
 
 #pragma mark - Index
 
-BaseBinding::Index::Index(const UnsafeStringView &suffix_)
-: suffix(suffix_), action(Action::Create)
+BaseBinding::Index::Index(const UnsafeStringView &suffix_, bool isFullName)
+: nameOrSuffix(suffix_), isFullName(isFullName), action(Action::Create)
 {
 }
 
-BaseBinding::Index &BaseBinding::getOrCreateIndex(const UnsafeStringView &suffix)
+StringView BaseBinding::Index::getIndexName(const UnsafeStringView &tableName)
 {
-    auto iter = m_indexes.find(suffix);
-    if (iter == m_indexes.end()) {
-        iter = m_indexes.emplace(suffix, Index(suffix)).first;
+    if (!isFullName) {
+        StringView closingQuotation;
+        if (tableName.length() > 2) {
+            if (tableName.hasPrefix("'") && tableName.hasSuffix("'")) {
+                closingQuotation = "'";
+            } else if (tableName.hasPrefix("\"") && tableName.hasSuffix("\"")) {
+                closingQuotation = "\"";
+            } else if (tableName.hasPrefix("[") && tableName.hasSuffix("]")) {
+                closingQuotation = "]";
+            } else if (tableName.hasPrefix("`") && tableName.hasSuffix("`")) {
+                closingQuotation = "`";
+            }
+        }
+        std::ostringstream stream;
+        if (closingQuotation.length() == 0) {
+            stream << tableName << nameOrSuffix;
+        } else {
+            stream << UnsafeStringView(tableName.data(), tableName.length() - 1);
+            stream << nameOrSuffix;
+            stream << closingQuotation;
+        }
+        return stream.str();
+    } else {
+        return nameOrSuffix;
     }
-    WCTAssert(iter->first == iter->second.suffix);
+}
+
+BaseBinding::Index &
+BaseBinding::getOrCreateIndex(const UnsafeStringView &nameOrSuffix, bool isFullName)
+{
+    auto iter = m_indexes.find(nameOrSuffix);
+    if (iter == m_indexes.end()) {
+        iter = m_indexes.emplace(nameOrSuffix, Index(nameOrSuffix, isFullName)).first;
+    }
+    WCTAssert(iter->first == iter->second.nameOrSuffix);
     return iter->second;
 }
 
@@ -257,21 +287,8 @@ std::pair<std::list<StatementCreateIndex>, std::list<StatementDropIndex>>
 BaseBinding::generateIndexStatements(const UnsafeStringView &tableName, bool isTableNewlyCreated) const
 {
     std::pair<std::list<StatementCreateIndex>, std::list<StatementDropIndex>> pairs;
-    StringView closingQuotation;
-    if (tableName.length() > 2) {
-        if (tableName.hasPrefix("'") && tableName.hasSuffix("'")) {
-            closingQuotation = "'";
-        } else if (tableName.hasPrefix("\"") && tableName.hasSuffix("\"")) {
-            closingQuotation = "\"";
-        } else if (tableName.hasPrefix("[") && tableName.hasSuffix("]")) {
-            closingQuotation = "]";
-        } else if (tableName.hasPrefix("`") && tableName.hasSuffix("`")) {
-            closingQuotation = "`";
-        }
-    }
-
     for (const auto &iter : m_indexes) {
-        WCTAssert(iter.first == iter.second.suffix);
+        WCTAssert(iter.first == iter.second.nameOrSuffix);
         Index index = iter.second;
         switch (index.action) {
         case Index::Action::CreateForNewlyCreatedTableOnly:
@@ -281,23 +298,13 @@ BaseBinding::generateIndexStatements(const UnsafeStringView &tableName, bool isT
             // fallthrough
         case Index::Action::Create: {
             StatementCreateIndex statement = index.statement;
-            std::ostringstream stream;
-            if (closingQuotation.length() == 0) {
-                stream << tableName << index.suffix;
-            } else {
-                stream << UnsafeStringView(tableName.data(), tableName.length() - 1);
-                stream << index.suffix;
-                stream << closingQuotation;
-            }
-            statement.createIndex(StringView(stream.str())).ifNotExists().table(tableName);
+            statement.createIndex(index.getIndexName(tableName)).ifNotExists().table(tableName);
             pairs.first.push_back(statement);
         } break;
         default:
             WCTAssert(index.action == Index::Action::Drop);
-            std::ostringstream stream;
-            stream << tableName << index.suffix;
             StatementDropIndex statement
-            = StatementDropIndex().dropIndex(StringView(stream.str())).ifExists();
+            = StatementDropIndex().dropIndex(index.getIndexName(tableName)).ifExists();
             pairs.second.push_back(statement);
             break;
         }

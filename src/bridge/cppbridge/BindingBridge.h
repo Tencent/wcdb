@@ -38,7 +38,8 @@ void WCDBBindingAddColumnConstraint(CPPBinding binding,
                                     const char* _Nullable columnName,
                                     CPPColumnConstraint constraint);
 void WCDBBindingAddIndex(CPPBinding binding,
-                         const char* _Nullable indexSubfix,
+                         const char* _Nullable indexNameOrSuffix,
+                         bool isFullName,
                          CPPStatementCreateIndex createIndex);
 void WCDBBindingAddTableConstraint(CPPBinding binding, CPPTableConstraint tableConstraint);
 void WCDBBindingConfigVirtualModule(CPPBinding binding, const char* _Nullable moduleName);

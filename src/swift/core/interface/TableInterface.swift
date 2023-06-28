@@ -30,7 +30,7 @@ public protocol TableInterface: AnyObject {
     /// Create table, related indexes and constraints with specific type
     ///
     /// Note that it will create defined indexes automatically.
-    /// The name of index is `"\(tableName)\(indexSubfixName)"` while `indexSubfixName` is defined by `IndexBinding`.
+    /// The name of index is `"\(tableName)\(indexSuffixName)"` while `indexSuffixName` is defined by `IndexBinding`.
     /// BUT, it will not drop the undefined indexes. You should drop it manually.
     ///
     /// Note that it will add the newly defined column automatically.

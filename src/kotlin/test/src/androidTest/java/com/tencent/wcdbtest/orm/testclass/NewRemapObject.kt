@@ -30,7 +30,7 @@ import com.tencent.wcdb.WCDBTableCoding
 @WCDBTableCoding
 class NewRemapObject {
     @WCDBField(columnName = "value")
-    @WCDBIndex(nameSuffix = "_index")
+    @WCDBIndex
     var renamedValue = 0
 
     @WCDBField

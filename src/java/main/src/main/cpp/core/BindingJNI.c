@@ -36,13 +36,13 @@ void WCDBJNIBindingObjectMethod(addColumnDef, jlong self, jlong columnDef)
     WCDBBindingAddColumnDef(selfStruct, columnDefStruct);
 }
 
-void WCDBJNIBindingObjectMethod(addIndex, jlong self, jstring indexSubfix, jlong createIndex)
+void WCDBJNIBindingObjectMethod(addIndex, jlong self, jstring indexNameOrSuffix, jboolean isFullName, jlong createIndex)
 {
     WCDBJNIBridgeStruct(CPPBinding, self);
     WCDBJNIBridgeStruct(CPPStatementCreateIndex, createIndex);
-    WCDBJNIGetString(indexSubfix);
-    WCDBBindingAddIndex(selfStruct, indexSubfixString, createIndexStruct);
-    WCDBJNIReleaseString(indexSubfix);
+    WCDBJNIGetString(indexNameOrSuffix);
+    WCDBBindingAddIndex(selfStruct, indexNameOrSuffixString, isFullName, createIndexStruct);
+    WCDBJNIReleaseString(indexNameOrSuffix);
 }
 
 void WCDBJNIBindingObjectMethod(addTableConstraint, jlong self, jlong constraint)

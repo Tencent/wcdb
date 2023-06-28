@@ -30,6 +30,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
 public @interface MultiIndexes {
-    String nameSuffix();
+    String name() default "";
     String[] columns();
 }

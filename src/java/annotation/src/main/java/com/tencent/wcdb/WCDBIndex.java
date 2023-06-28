@@ -30,6 +30,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.SOURCE)
 public @interface WCDBIndex {
-    String nameSuffix();
+    String name() default  "";
     boolean isUnique() default false;
 }

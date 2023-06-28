@@ -39,7 +39,8 @@ data class ColumnInfo(
     var defaultValue: DefaultValueInfo? = null,
     var isUnique: Boolean = false,
     var isNotNull: Boolean = false,
-    var indexNameSuffix: String = "",
+    var hasIndex: Boolean = false,
+    var indexName: String = "",
     var indexIsUnique: Boolean = false,
 ) {
     companion object {
@@ -48,9 +49,6 @@ data class ColumnInfo(
                     indexAnnotation: KSAnnotation?,
                     defaultValueAnnotation: KSAnnotation?,
                     logger: KSPLogger): ColumnInfo?{
-            if(fieldAnnotation == null) {
-                return null
-            }
             val resolvedInfo = ColumnInfo()
             resolvedInfo.propertyName = propertyDeclaration.simpleName.asString()
             resolvedInfo.propertyType = propertyDeclaration.type.resolve().declaration.qualifiedName!!.asString()
@@ -69,10 +67,11 @@ data class ColumnInfo(
                 }
             }
             if(indexAnnotation != null) {
+                resolvedInfo.hasIndex = true
                 for(argument in indexAnnotation.arguments) {
                     val value = argument.value ?: continue
                     when (argument.name?.asString()) {
-                        "nameSuffix" -> resolvedInfo.indexNameSuffix = value as String
+                        "name" -> resolvedInfo.indexName = value as String
                         "isUnique" -> resolvedInfo.indexIsUnique = value as Boolean
                         else -> {
                             logger.error("Unrecognized field ${argument.name?.asString()} in WCDBIndex")
@@ -98,7 +97,8 @@ data class ColumnInfo(
             resolvedInfo.isUnique = fieldAnnotation.isUnique
             resolvedInfo.isNotNull = fieldAnnotation.isNotNull
             if(indexAnnotation != null) {
-                resolvedInfo.indexNameSuffix = indexAnnotation.nameSuffix
+                resolvedInfo.hasIndex = true
+                resolvedInfo.indexName = indexAnnotation.name
                 resolvedInfo.indexIsUnique = indexAnnotation.isUnique
             }
             if (defaultValue != null) {

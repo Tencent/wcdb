@@ -132,13 +132,13 @@ public class JavaAnnotationProcessor extends AbstractProcessor {
                         continue;
                     }
                     WCDBDefault defaultValueAnnotation = enclosedElement.getAnnotation(WCDBDefault.class);
-                    if (!checkFieldElement(enclosedElement, fieldAnnotation, defaultValueAnnotation)) {
+                    WCDBIndex indexAnnotation = enclosedElement.getAnnotation(WCDBIndex.class);
+                    if (!checkFieldElement(enclosedElement, fieldAnnotation, indexAnnotation, defaultValueAnnotation)) {
                         allFieldInfo.clear();
                         break;
                     }
                     verboseLog("Found WCDBField: " + enclosedElement
                             + " " + enclosedElement.asType().toString());
-                    WCDBIndex indexAnnotation = enclosedElement.getAnnotation(WCDBIndex.class);
                     allFieldInfo.add(ColumnInfo.Companion.resolve(enclosedElement, fieldAnnotation, indexAnnotation, defaultValueAnnotation));
                 }
                 if(allFieldInfo.size() > 0) {
@@ -182,7 +182,7 @@ public class JavaAnnotationProcessor extends AbstractProcessor {
         return true;
     }
 
-    private boolean checkFieldElement(Element element, WCDBField fieldAnnotation, WCDBDefault defaultValueAnnotation) {
+    private boolean checkFieldElement(Element element, WCDBField fieldAnnotation, WCDBIndex indexAnnotation, WCDBDefault defaultValueAnnotation) {
         if(element.getModifiers().contains(Modifier.PRIVATE) || element.getModifiers().contains(Modifier.PROTECTED)) {
             msg.printMessage(Diagnostic.Kind.ERROR,
                     "The field with annotation @WCDBField can not be private or protected", element);
@@ -210,6 +210,12 @@ public class JavaAnnotationProcessor extends AbstractProcessor {
                     msg.printMessage(Diagnostic.Kind.ERROR, info, element);
                     return false;
                 }
+            }
+            if (indexAnnotation != null) {
+                String info = element.getEnclosingElement().getSimpleName() +
+                        " is confined as primary key, so it does not need to configure @WCDBIndex";
+                msg.printMessage(Diagnostic.Kind.ERROR, info, element);
+                return false;
             }
         } else if (fieldAnnotation.isAutoIncrement()) {
             String info = "Only the primary key can be configured as auto-increment";

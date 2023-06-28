@@ -29,10 +29,10 @@ import com.tencent.wcdb.WCDBTableCoding
 @WCDBTableCoding
 class IndexObject{
     @WCDBField
-    @WCDBIndex(nameSuffix = "_index")
+    @WCDBIndex
     var index_: Int = 0
 
     @WCDBField
-    @WCDBIndex(nameSuffix = "_unique_index", isUnique = true)
+    @WCDBIndex(name = "specifiedNameIndex", isUnique = true)
     var uniqueIndex: Int = 0
 }

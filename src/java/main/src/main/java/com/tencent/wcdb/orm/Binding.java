@@ -44,11 +44,11 @@ public class Binding extends CppObject {
 
     private native void addColumnDef(long self, long columnDef);
 
-    public void addIndex(String indexPrefix, StatementCreateIndex createIndex) {
-        addIndex(cppObj, indexPrefix, createIndex.getCppObj());
+    public void addIndex(String indexNameOrSuffix, boolean isFullName, StatementCreateIndex createIndex) {
+        addIndex(cppObj, indexNameOrSuffix, isFullName, createIndex.getCppObj());
     }
 
-    private native void addIndex(long self, String indexPrefix, long createIndex);
+    private native void addIndex(long self, String indexNameOrSuffix, boolean isFullName, long createIndex);
 
     public void addTableConstraint(TableConstraint constraint) {
         addTableConstraint(cppObj, constraint.getCppObj());

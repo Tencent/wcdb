@@ -138,13 +138,19 @@ public class JavaCodeGenerator {
 
             builder.append(TAB + TAB + "baseBinding.addColumnDef(").append(propertyName).append("Def);\n\n");
 
-            if(columnInfo.getIndexNameSuffix().length() == 0) {
+            if(!columnInfo.getHasIndex()) {
                 continue;
+            }
+            String indexName = columnInfo.getIndexName();
+            boolean isFullName = true;
+            if(indexName.length() == 0) {
+                isFullName = false;
+                indexName = "_" + columnName + "_index";
             }
 
             builder.append(TAB + TAB + "baseBinding.addIndex(\"")
-                    .append(columnInfo.getIndexNameSuffix())
-                    .append("\", new StatementCreateIndex().ifNotExist()");
+                    .append(indexName).append("\", ").append(isFullName)
+                    .append(", new StatementCreateIndex().ifNotExist()");
 
             if(columnInfo.getIndexIsUnique()) {
                 builder.append(".unique()");
@@ -156,8 +162,14 @@ public class JavaCodeGenerator {
     private void generateTableConfig() {
 
         for(MultiIndexesInfo indexes : tableConstraintInfo.getMultiIndexes()) {
-            builder.append(TAB + TAB + "baseBinding.addIndex(\"").append(indexes.getNameSuffix())
-                    .append("\", new StatementCreateIndex().ifNotExist().indexedBy(new Column[]{\n" + TAB + TAB + TAB);
+            String indexName = indexes.getName();
+            boolean isFullName = true;
+            if(indexName.length() == 0) {
+                isFullName = false;
+                indexName = "_" + String.join("_", indexes.getColumns()) + "_index";
+            }
+            builder.append(TAB + TAB + "baseBinding.addIndex(\"").append(indexName).append("\", ").append(isFullName)
+                    .append(", new StatementCreateIndex().ifNotExist().indexedBy(new Column[]{\n" + TAB + TAB + TAB);
             for(String column : indexes.getColumns()) {
                 builder.append(column).append(", ");
             }

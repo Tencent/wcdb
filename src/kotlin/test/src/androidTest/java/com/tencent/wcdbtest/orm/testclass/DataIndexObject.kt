@@ -26,14 +26,15 @@ package com.tencent.wcdbtest.orm.testclass
 import com.tencent.wcdb.WCDBField
 import com.tencent.wcdb.WCDBIndex
 import com.tencent.wcdb.WCDBTableCoding
+import java.util.jar.Attributes.Name
 
 @WCDBTableCoding
 data class DataIndexObject(
     @WCDBField
-    @WCDBIndex(nameSuffix = "_index")
+    @WCDBIndex
     var index_: Int = 0,
 
     @WCDBField
-    @WCDBIndex(nameSuffix = "_unique_index", isUnique = true)
+    @WCDBIndex(name = "specifiedNameIndex", isUnique = true)
     var uniqueIndex: Int = 0) {
 }

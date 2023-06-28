@@ -192,6 +192,10 @@ internal class KotlinAnnotationProcessor(private val environment: SymbolProcesso
                     return false
                 }
             }
+            if (columnInfo.hasIndex) {
+                environment.logger.error("${declaration.simpleName.asString()} is confined as primary key, so it does not need to configure @WCDBIndex", declaration)
+                return false
+            }
         } else if (columnInfo.isAutoIncrement) {
             environment.logger.error(
                 "Only the primary key can be configured as auto-increment",

@@ -27,7 +27,7 @@ import com.tencent.wcdb.*;
 @WCDBTableCoding
 public class NewRemapObject {
     @WCDBField(columnName = "value")
-    @WCDBIndex(nameSuffix = "_index")
+    @WCDBIndex
     int renamedValue;
     @WCDBField()
     int newValue;

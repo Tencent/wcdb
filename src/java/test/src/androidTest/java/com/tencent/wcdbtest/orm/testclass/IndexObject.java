@@ -27,10 +27,10 @@ import com.tencent.wcdb.*;
 @WCDBTableCoding
 public class IndexObject {
     @WCDBField
-    @WCDBIndex(nameSuffix = "_index")
+    @WCDBIndex
     int index_;
 
     @WCDBField
-    @WCDBIndex(nameSuffix = "_unique_index", isUnique = true)
+    @WCDBIndex(name = "specifiedNameIndex", isUnique = true)
     int uniqueIndex;
 }
