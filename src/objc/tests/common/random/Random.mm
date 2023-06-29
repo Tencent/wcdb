@@ -36,7 +36,7 @@
     std::shared_ptr<std::uniform_int_distribution<int16_t>> _uniformInt16;
     std::shared_ptr<std::uniform_int_distribution<int64_t>> _uniformInt64;
     std::shared_ptr<std::uniform_int_distribution<int32_t>> _uniformInt32;
-    std::shared_ptr<std::uniform_int_distribution<bool>> _uniformBool;
+    std::shared_ptr<std::uniform_int_distribution<int8_t>> _uniformBool;
     std::shared_ptr<std::uniform_real_distribution<double>> _uniformDouble;
     std::shared_ptr<std::uniform_real_distribution<float>> _uniformFloat;
     std::shared_ptr<std::uniform_real_distribution<float>> _uniformFloat_0_1;
@@ -165,11 +165,11 @@
         return _uniformInt32;
     }
 }
-- (std::shared_ptr<std::uniform_int_distribution<bool>> &)uniformBool
+- (std::shared_ptr<std::uniform_int_distribution<int8_t>> &)uniformBool
 {
     @synchronized(self) {
         if (_uniformBool == nullptr) {
-            _uniformBool = std::make_shared<std::uniform_int_distribution<bool>>(std::numeric_limits<bool>::min(), std::numeric_limits<bool>::max());
+            _uniformBool = std::make_shared<std::uniform_int_distribution<int8_t>>(std::numeric_limits<bool>::min(), std::numeric_limits<bool>::max());
         }
         return _uniformBool;
     }
