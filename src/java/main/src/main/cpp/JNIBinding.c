@@ -994,6 +994,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *unused)
         }
         (*env)->DeleteLocalRef(env, clazz);
     }
+    WCDBJNIInitJClasses(env);
     result = JNI_VERSION_1_6;
     return result;
 }

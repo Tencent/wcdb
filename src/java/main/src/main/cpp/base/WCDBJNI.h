@@ -83,9 +83,9 @@
         value##Length = (*env)->GetArrayLength(env, value);                    \
     }
 
-#define WCDBJNIReleaseByteArray(value)                                           \
-    if (value##Array != NULL) {                                                  \
-        (*env)->ReleaseByteArrayElements(env, value, (jbyte *) value##Array, 0); \
+#define WCDBJNIReleaseByteArray(value)                                                   \
+    if (value##Array != NULL) {                                                          \
+        (*env)->ReleaseByteArrayElements(env, value, (jbyte *) value##Array, JNI_ABORT); \
     }
 
 #define WCDBJNIGetLongArray(value)                                             \
@@ -96,9 +96,9 @@
         value##Length = (*env)->GetArrayLength(env, value);                    \
     }
 
-#define WCDBJNIReleaseLongArray(value)                                           \
-    if (value##Array != NULL) {                                                  \
-        (*env)->ReleaseLongArrayElements(env, value, (jlong *) value##Array, 0); \
+#define WCDBJNIReleaseLongArray(value)                                                   \
+    if (value##Array != NULL) {                                                          \
+        (*env)->ReleaseLongArrayElements(env, value, (jlong *) value##Array, JNI_ABORT); \
     }
 
 #define WCDBJNIGetCppPointerArray(value)                                       \
@@ -118,9 +118,9 @@
         }                                                                      \
     }
 
-#define WCDBJNIReleaseCppPointerArray(value)                                         \
-    if (value##LongArray != NULL) {                                                  \
-        (*env)->ReleaseLongArrayElements(env, value, (jlong *) value##LongArray, 0); \
+#define WCDBJNIReleaseCppPointerArray(value)                                                 \
+    if (value##LongArray != NULL) {                                                          \
+        (*env)->ReleaseLongArrayElements(env, value, (jlong *) value##LongArray, JNI_ABORT); \
     }
 
 #define WCDBJNIGetIntArray(value)                                              \
@@ -131,9 +131,9 @@
         value##Length = (*env)->GetArrayLength(env, value);                    \
     }
 
-#define WCDBJNIReleaseIntArray(value)                                          \
-    if (value##Array != NULL) {                                                \
-        (*env)->ReleaseIntArrayElements(env, value, (jint *) value##Array, 0); \
+#define WCDBJNIReleaseIntArray(value)                                                  \
+    if (value##Array != NULL) {                                                        \
+        (*env)->ReleaseIntArrayElements(env, value, (jint *) value##Array, JNI_ABORT); \
     }
 
 #define WCDBJNIGetDoubleArray(value)                                           \
@@ -144,9 +144,9 @@
         value##Length = (*env)->GetArrayLength(env, value);                    \
     }
 
-#define WCDBJNIReleaseDoubleArray(value)                                             \
-    if (value##Array != NULL) {                                                      \
-        (*env)->ReleaseDoubleArrayElements(env, value, (jdouble *) value##Array, 0); \
+#define WCDBJNIReleaseDoubleArray(value)                                                     \
+    if (value##Array != NULL) {                                                              \
+        (*env)->ReleaseDoubleArrayElements(env, value, (jdouble *) value##Array, JNI_ABORT); \
     }
 
 #define WCDBJNIGetStringArray(value)                                                    \
@@ -158,7 +158,7 @@
         value##Length = (*env)->GetArrayLength(env, value);                             \
         if (value##Length > 0) {                                                        \
             value##CharArray = alloca(value##Length * sizeof(const char *));            \
-            if (value##Length <= 500) {                                                 \
+            if (value##Length <= 16) {                                                  \
                 value##JString = alloca(value##Length * sizeof(jstring));               \
                 for (int i = 0; i < value##Length; i++) {                               \
                     value##JString[i]                                                   \
@@ -347,6 +347,12 @@
     }
 
 void WCDBJNIClassMethod(Base, releaseObject, long long cppObject);
+
+void WCDBJNIInitJClasses(JNIEnv *env);
+
+jclass WCDBJNIGetDatabaseClass();
+jclass WCDBJNIGetHandleClass();
+jclass WCDBJNIGetExceptionClass();
 
 void __WCDBJNIGetStringArray(JNIEnv *env,
                              jobjectArray stringArray,

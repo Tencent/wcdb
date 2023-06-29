@@ -23,11 +23,46 @@
 
 #include "WCDBJNI.h"
 #include "ObjectBridge.h"
+#include "assert.h"
 #include <string.h>
 
 void WCDBJNIClassMethod(Base, releaseObject, long long cppObject)
 {
     WCDBReleaseCPPObject((CPPObject *) cppObject);
+}
+
+jclass g_databaseClass = NULL;
+jclass g_handleClass = NULL;
+jclass g_exceptionClass = NULL;
+
+void WCDBJNIInitJClasses(JNIEnv *env)
+{
+    g_databaseClass = (*env)->FindClass(env, "com/tencent/wcdb/core/Database");
+    WCDBJNICreateGlobalRel(g_databaseClass);
+    assert(g_databaseClass != NULL);
+
+    g_handleClass = (*env)->FindClass(env, "com/tencent/wcdb/core/Handle");
+    WCDBJNICreateGlobalRel(g_handleClass);
+    assert(g_handleClass != NULL);
+
+    g_exceptionClass = (*env)->FindClass(env, "com/tencent/wcdb/base/WCDBException");
+    WCDBJNICreateGlobalRel(g_exceptionClass);
+    assert(g_exceptionClass != NULL);
+}
+
+jclass WCDBJNIGetDatabaseClass()
+{
+    return g_databaseClass;
+}
+
+jclass WCDBJNIGetHandleClass()
+{
+    return g_handleClass;
+}
+
+jclass WCDBJNIGetExceptionClass()
+{
+    return g_exceptionClass;
 }
 
 void __WCDBJNIGetStringArray(JNIEnv *env,

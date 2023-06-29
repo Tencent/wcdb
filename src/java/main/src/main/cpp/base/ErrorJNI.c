@@ -56,18 +56,10 @@ void WCDBJNIErrorEnumerateInfoCallback(JNIContext *context,
                                        const char *stringValue)
 {
     JNIEnv *env = context->env;
-    static jclass g_errorClass = NULL;
-    if (g_errorClass == NULL) {
-        g_errorClass = (*env)->FindClass(env, "com/tencent/wcdb/base/WCDBException");
-        if (g_errorClass == NULL) {
-            assert(0);
-            return;
-        }
-    }
     static jmethodID g_methodId = NULL;
     if (g_methodId == NULL) {
         g_methodId = (*env)->GetMethodID(
-        env, g_errorClass, "addInfo", "(Ljava/lang/String;IJDLjava/lang/String;)V");
+        env, WCDBJNIGetExceptionClass(), "addInfo", "(Ljava/lang/String;IJDLjava/lang/String;)V");
         if (g_methodId == NULL) {
             assert(0);
             return;

@@ -25,7 +25,6 @@
 #include "DatabaseBridge.h"
 #include <assert.h>
 
-static jclass g_databaseClass = NULL;
 static JavaVM* g_vm;
 
 #define WCDBJNITryGetVM                                                        \
@@ -51,22 +50,15 @@ static JavaVM* g_vm;
         (*g_vm)->DetachCurrentThread(g_vm);                                    \
     }
 
-#define WCDBJNITryGetDatabaseMethodId(name, signature, action)                         \
-    if (g_databaseClass == NULL) {                                                     \
-        g_databaseClass = (*env)->FindClass(env, "com/tencent/wcdb/core/Database");    \
-        WCDBJNICreateGlobalRel(g_databaseClass);                                       \
-        if (g_databaseClass == NULL) {                                                 \
-            assert(0);                                                                 \
-            action;                                                                    \
-        }                                                                              \
-    }                                                                                  \
-    static jmethodID g_methodId = NULL;                                                \
-    if (g_methodId == NULL) {                                                          \
-        g_methodId = (*env)->GetStaticMethodID(env, g_databaseClass, name, signature); \
-        if (g_methodId == NULL) {                                                      \
-            assert(0);                                                                 \
-            action;                                                                    \
-        }                                                                              \
+#define WCDBJNITryGetDatabaseMethodId(name, signature, action)                        \
+    static jmethodID g_methodId = NULL;                                               \
+    if (g_methodId == NULL) {                                                         \
+        g_methodId                                                                    \
+        = (*env)->GetStaticMethodID(env, WCDBJNIGetDatabaseClass(), name, signature); \
+        if (g_methodId == NULL) {                                                     \
+            assert(0);                                                                \
+            action;                                                                   \
+        }                                                                             \
     }
 
 jlong WCDBJNIDatabaseObjectMethod(getError, jlong self)
@@ -158,8 +150,8 @@ void WCDBJNIDatabaseCloseCallback(CloseDatabaseContext* context)
     JNIEnv* env = context->env;
     WCDBJNITryGetDatabaseMethodId(
     "onClose", "(" WCDBJNIDatabaseSignature "$CloseCallBack;)V", return );
-    return (*env)->CallStaticVoidMethod(
-    env, g_databaseClass, g_methodId, context->callback);
+    (*env)->CallStaticVoidMethod(
+    env, WCDBJNIGetDatabaseClass(), g_methodId, context->callback);
 }
 
 void WCDBJNIDatabaseObjectMethod(close, jlong self, jobject callback)
@@ -215,7 +207,10 @@ bool WCDBJNIDatabaseConfig(jobject config, CPPHandle handle)
     WCDBJNITryGetDatabaseMethodId(
     "onConfig", "(J" WCDBJNIDatabaseSignature "$Config;)Z", return false);
     jboolean ret = (*env)->CallStaticBooleanMethod(
-    env, g_databaseClass, g_methodId, (jlong) handle.innerValue, config);
+    env, WCDBJNIGetDatabaseClass(), g_methodId, (jlong) handle.innerValue, config);
+    if ((*env)->ExceptionCheck(env)) {
+        ret = false;
+    }
     WCDBJNITryDetach;
     return ret;
 }
@@ -259,7 +254,7 @@ void WCDBJNIDatabasePerformanceTrace(jobject tracer,
     WCDBJNICreateJavaString(path);
     WCDBJNICreateJavaString(sql);
     (*env)->CallStaticVoidMethod(
-    env, g_databaseClass, g_methodId, tracer, jpath, (jlong) handleId, jsql, (jdouble) cost);
+    env, WCDBJNIGetDatabaseClass(), g_methodId, tracer, jpath, (jlong) handleId, jsql, (jdouble) cost);
     WCDBJNITryDetach;
 }
 
@@ -302,7 +297,7 @@ void WCDBJNIDatabaseSQLTrace(jobject tracer,
     WCDBJNICreateJavaString(path);
     WCDBJNICreateJavaString(sql);
     (*env)->CallStaticVoidMethod(
-    env, g_databaseClass, g_methodId, tracer, jpath, (jlong) handleId, jsql);
+    env, WCDBJNIGetDatabaseClass(), g_methodId, tracer, jpath, (jlong) handleId, jsql);
     WCDBJNITryDetach;
 }
 
@@ -336,7 +331,7 @@ void WCDBJNIDatabaseErrorTrace(jobject tracer, CPPError error)
     WCDBJNITryGetDatabaseMethodId(
     "onTraceException", "(" WCDBJNIDatabaseSignature "$ExceptionTracer;J)V", return );
     (*env)->CallStaticVoidMethod(
-    env, g_databaseClass, g_methodId, tracer, (jlong) error.innerValue);
+    env, WCDBJNIGetDatabaseClass(), g_methodId, tracer, (jlong) error.innerValue);
     WCDBJNITryDetach;
 }
 
@@ -373,7 +368,7 @@ void WCDBJNIDatabaseOperationTrace(jobject tracer, CPPDatabase database, int ope
     WCDBJNITryGetDatabaseMethodId(
     "onTraceOperation", "(" WCDBJNIDatabaseSignature "$OperationTracer;JI)V", return );
     (*env)->CallStaticVoidMethod(
-    env, g_databaseClass, g_methodId, tracer, (jlong) database.innerValue, (jint) operation);
+    env, WCDBJNIGetDatabaseClass(), g_methodId, tracer, (jlong) database.innerValue, (jint) operation);
     WCDBJNITryDetach;
 }
 
@@ -421,7 +416,7 @@ void WCDBJNIDatabaseCorrupted(jobject notification, CPPDatabase database)
     WCDBJNITryGetDatabaseMethodId(
     "onCorrupted", "(" WCDBJNIDatabaseSignature "$CorruptionNotification;J)V", return );
     (*env)->CallStaticVoidMethod(
-    env, g_databaseClass, g_methodId, notification, (jlong) database.innerValue);
+    env, WCDBJNIGetDatabaseClass(), g_methodId, notification, (jlong) database.innerValue);
     WCDBJNITryDetach;
 }
 
@@ -477,7 +472,10 @@ bool WCDBJNIDatabaseTableShouldBeBackup(jobject filter, const char* table)
                                   return false);
     WCDBJNICreateJavaString(table);
     bool ret = (*env)->CallStaticBooleanMethod(
-    env, g_databaseClass, g_methodId, filter, jtable);
+    env, WCDBJNIGetDatabaseClass(), g_methodId, filter, jtable);
+    if ((*env)->ExceptionCheck(env)) {
+        ret = false;
+    }
     WCDBJNITryDetach;
     return ret;
 }
@@ -526,7 +524,7 @@ void WCDBJNIDatabaseOnRetrievePorgressUpdate(jobject monitor, double percentage,
                                   "(" WCDBJNIDatabaseSignature "$RetrieveProgressMonitor;DD)V",
                                   return );
     (*env)->CallStaticVoidMethod(
-    env, g_databaseClass, g_methodId, monitor, (jdouble) percentage, (jdouble) increment);
+    env, WCDBJNIGetDatabaseClass(), g_methodId, monitor, (jdouble) percentage, (jdouble) increment);
     WCDBJNITryDetach;
 }
 
@@ -576,7 +574,10 @@ void WCDBJNIDatabaseFilterMigrate(jobject filter,
     WCDBJNICreateJavaString(database);
     WCDBJNICreateJavaString(table);
     jobjectArray ret = (*env)->CallStaticObjectMethod(
-    env, g_databaseClass, g_methodId, filter, jdatabase, jtable);
+    env, WCDBJNIGetDatabaseClass(), g_methodId, filter, jdatabase, jtable);
+    if ((*env)->ExceptionCheck(env)) {
+        ret = NULL;
+    }
     WCDBJNIGetStringArray(ret);
     if (retLength == 2) {
         setter(info, retCharArray[1], retCharArray[0]);
@@ -633,7 +634,7 @@ void WCDBJNIDatabaseOnTableMigrate(jobject notification,
     WCDBJNICreateJavaString(sourceDatabase);
     WCDBJNICreateJavaString(sourceTable);
     (*env)->CallStaticVoidMethod(env,
-                                 g_databaseClass,
+                                 WCDBJNIGetDatabaseClass(),
                                  g_methodId,
                                  notification,
                                  (jlong) database.innerValue,

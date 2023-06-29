@@ -25,8 +25,6 @@
 #include "HandleBridge.h"
 #include "assert.h"
 
-static jclass g_handleClass = NULL;
-
 jlong WCDBJNIHandleObjectMethod(getError, jlong self)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);
@@ -136,26 +134,22 @@ typedef struct TransactionContext {
 bool WCDBJNIHanldeTransactionCallBack(TransactionContext *context, CPPHandle handle)
 {
     JNIEnv *env = context->env;
-    if (g_handleClass == NULL) {
-        g_handleClass = (*env)->FindClass(env, "com/tencent/wcdb/core/Handle");
-        WCDBJNICreateGlobalRel(g_handleClass);
-        if (g_handleClass == NULL) {
-            assert(0);
-            return false;
-        }
-    }
 
     static jmethodID g_methodId = NULL;
     if (g_methodId == NULL) {
         g_methodId = (*env)->GetMethodID(
-        env, g_handleClass, "onTransaction", "(JLcom/tencent/wcdb/core/Transaction;)Z");
+        env, WCDBJNIGetHandleClass(), "onTransaction", "(JLcom/tencent/wcdb/core/Transaction;)Z");
         if (g_methodId == NULL) {
             assert(0);
             return false;
         }
     }
-    return (*env)->CallBooleanMethod(
+    jboolean ret = (*env)->CallBooleanMethod(
     env, context->handle, g_methodId, (jlong) handle.innerValue, context->transaction);
+    if ((*env)->ExceptionCheck(env)) {
+        ret = false;
+    }
+    return ret;
 }
 
 jboolean WCDBJNIHandleObjectMethod(runTransaction, jlong self, jobject transaction)
@@ -174,19 +168,11 @@ bool WCDBJNIHanldePausableTransactionCallBack(TransactionContext *context,
                                               bool isNewTransaction)
 {
     JNIEnv *env = context->env;
-    if (g_handleClass == NULL) {
-        g_handleClass = (*env)->FindClass(env, "com/tencent/wcdb/core/Handle");
-        WCDBJNICreateGlobalRel(g_handleClass);
-        if (g_handleClass == NULL) {
-            assert(0);
-            return false;
-        }
-    }
 
     static jmethodID g_methodId = NULL;
     if (g_methodId == NULL) {
         g_methodId = (*env)->GetMethodID(
-        env, g_handleClass, "onPausableTransaction", "(JLcom/tencent/wcdb/core/PausableTransaction;Z)I");
+        env, WCDBJNIGetHandleClass(), "onPausableTransaction", "(JLcom/tencent/wcdb/core/PausableTransaction;Z)I");
         if (g_methodId == NULL) {
             assert(0);
             return false;
@@ -194,6 +180,9 @@ bool WCDBJNIHanldePausableTransactionCallBack(TransactionContext *context,
     }
     jint ret = (*env)->CallIntMethod(
     env, context->handle, g_methodId, (jlong) handle.innerValue, context->transaction, isNewTransaction);
+    if ((*env)->ExceptionCheck(env)) {
+        ret = 2;
+    }
     if (ret == 2) {
         return false;
     } else {
