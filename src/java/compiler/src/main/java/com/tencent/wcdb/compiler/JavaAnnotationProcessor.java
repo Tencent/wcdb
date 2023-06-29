@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -47,6 +48,9 @@ import javax.tools.JavaFileObject;
 
 import com.tencent.wcdb.*;
 import com.tencent.wcdb.compiler.resolvedInfo.ColumnInfo;
+import com.tencent.wcdb.compiler.resolvedInfo.MultiIndexesInfo;
+import com.tencent.wcdb.compiler.resolvedInfo.MultiPrimaryInfo;
+import com.tencent.wcdb.compiler.resolvedInfo.MultiUniqueInfo;
 import com.tencent.wcdb.compiler.resolvedInfo.TableConstraintInfo;
 
 @SupportedOptions(value = {"verbose"})
@@ -141,6 +145,11 @@ public class JavaAnnotationProcessor extends AbstractProcessor {
                             + " " + enclosedElement.asType().toString());
                     allFieldInfo.add(ColumnInfo.Companion.resolve(enclosedElement, fieldAnnotation, indexAnnotation, defaultValueAnnotation));
                 }
+
+                if(!checkColumnInTableConstraint(element)) {
+                    return false;
+                }
+
                 if(allFieldInfo.size() > 0) {
                     createORMFile((TypeElement) element);
                 }
@@ -238,6 +247,47 @@ public class JavaAnnotationProcessor extends AbstractProcessor {
                 return false;
             }
         }
+        return true;
+    }
+
+    private boolean checkColumnInTableConstraint(Element element) {
+        if (tableConstraintInfo.getMultiIndexes().isEmpty() &&
+                tableConstraintInfo.getMultiPrimaries().isEmpty() &&
+                tableConstraintInfo.getMultiUnique().isEmpty()) {
+            return true;
+        }
+        Set<String> allColumns = new HashSet<>();
+        for(ColumnInfo columnInfo : allFieldInfo) {
+            allColumns.add(columnInfo.getColumnName().isEmpty() ? columnInfo.getPropertyName() : columnInfo.getColumnName());
+        }
+
+        for(MultiIndexesInfo multiIndexes : tableConstraintInfo.getMultiIndexes()) {
+            for(String column : multiIndexes.getColumns()) {
+                if (!allColumns.contains(column)) {
+                    msg.printMessage(Diagnostic.Kind.ERROR, "Can't find column \""+ column + "\" in class orm config.", element);
+                    return false;
+                }
+            }
+        }
+
+        for(MultiPrimaryInfo multiPrimary : tableConstraintInfo.getMultiPrimaries()) {
+            for(String column : multiPrimary.getColumns()) {
+                if (!allColumns.contains(column)) {
+                    msg.printMessage(Diagnostic.Kind.ERROR, "Can't find column \""+ column + "\" in class orm config.", element);
+                    return false;
+                }
+            }
+        }
+
+        for(MultiUniqueInfo multiUnique : tableConstraintInfo.getMultiUnique()) {
+            for(String column : multiUnique.getColumns()) {
+                if (!allColumns.contains(column)) {
+                    msg.printMessage(Diagnostic.Kind.ERROR, "Can't find column \""+ column + "\" in class orm config.", element);
+                    return false;
+                }
+            }
+        }
+
         return true;
     }
 

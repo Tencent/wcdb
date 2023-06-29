@@ -104,6 +104,10 @@ internal class KotlinAnnotationProcessor(private val environment: SymbolProcesso
             allPropertyInfo.add(resolvedColumnInfo)
         }
 
+        if (!checkColumnInTableConstraint(classDeclaration)) {
+            return
+        }
+
         if (allPropertyInfo.isNotEmpty()) {
             createORMFile(classDeclaration)
         }
@@ -220,6 +224,55 @@ internal class KotlinAnnotationProcessor(private val environment: SymbolProcesso
                     declaration
                 )
                 return false
+            }
+        }
+        return true
+    }
+
+    private fun checkColumnInTableConstraint(classDeclaration: KSClassDeclaration): Boolean {
+        if (tableConstraintInfo!!.multiIndexes.isEmpty() &&
+                tableConstraintInfo!!.multiPrimaries.isEmpty() &&
+                tableConstraintInfo!!.multiUnique.isEmpty()) {
+            return true;
+        }
+
+        val allColumns = allPropertyInfo.map { columnInfo ->
+            if (columnInfo.columnName.isEmpty()) columnInfo.propertyName else columnInfo.columnName
+        }.toSet()
+
+        for(multiIndexes in tableConstraintInfo!!.multiIndexes) {
+            for(column in multiIndexes.columns) {
+                if (!allColumns.contains(column)) {
+                    environment.logger.error(
+                        "Can't find column \"$column\" in class orm config.",
+                        classDeclaration
+                    )
+                    return false
+                }
+            }
+        }
+
+        for(multiPrimaries in tableConstraintInfo!!.multiPrimaries) {
+            for(column in multiPrimaries.columns) {
+                if (!allColumns.contains(column)) {
+                    environment.logger.error(
+                        "Can't find column \"$column\" in class orm config.",
+                        classDeclaration
+                    )
+                    return false
+                }
+            }
+        }
+
+        for(multiUnique in tableConstraintInfo!!.multiUnique) {
+            for(column in multiUnique.columns) {
+                if (!allColumns.contains(column)) {
+                    environment.logger.error(
+                        "Can't find column \"$column\" in class orm config.",
+                        classDeclaration
+                    )
+                    return false
+                }
             }
         }
         return true
