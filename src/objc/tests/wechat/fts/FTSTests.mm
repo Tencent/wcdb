@@ -276,7 +276,7 @@
     int tkId = [self getTokenizerIdWithNeedBinary:NO needPinyin:NO needSymbol:YES];
     testCase = [self genTestCaseConfigDataType:FTSDataType_Contact tableCount:1 tokenizerId:tkId quality:10000 optimizeLevel:2 querylevel:2 queryTimes:10 queryType:5 needMultiThread:NO];
     [testCases addObject:testCase];
-    [self.database traceSQL:^(NSString* sql, const void* _Nonnull) {
+    [self.database traceSQL:^(NSString*, uint64_t, NSString* sql) {
         NSLog(@"execute: %@", sql);
     }];
 
@@ -449,7 +449,7 @@
     [self setUpDatabase];
 
     [self.database execute:WCDB::StatementCreateVirtualTable().createVirtualTable(@"indexView").usingModule(@"fts5vocab").argument([self indexTableNameOfId:0]).argument(@"instance")];
-    WCTColumnsXRows* indexInfo = [self.database getRowsFromStatement:WCDB::StatementSelect().select(WCDB::ResultColumn().all()).from(@"indexView")];
+    WCTColumnsXRows* indexInfo = [self.database getRowsFromStatement:WCDB::StatementSelect().select(WCDB::Column().all()).from(@"indexView")];
     for (NSArray<WCTValue*>* array in indexInfo) {
         NSLog(@"%@, %d, %@, %d", array[0].stringValue, array[1].numberValue.intValue, array[2].stringValue, array[3].numberValue.intValue);
     }

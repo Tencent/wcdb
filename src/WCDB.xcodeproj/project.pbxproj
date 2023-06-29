@@ -811,6 +811,11 @@
 		03F54829287D93A7007BCA3E /* StatementDropTableBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03F54827287D93A7007BCA3E /* StatementDropTableBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		0D0D56C1254ABEAA000F16A6 /* FTS5Object.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D0D56C0254ABEAA000F16A6 /* FTS5Object.mm */; };
 		0D0D56CA254AC0F0000F16A6 /* FTS5Test.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D0D56C9254AC0F0000F16A6 /* FTS5Test.mm */; };
+		0D1297C02A4D63B4006052AE /* Message.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D1297BF2A4D63B4006052AE /* Message.mm */; };
+		0D1297C32A4D78EF006052AE /* ImgInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D1297C22A4D78EF006052AE /* ImgInfo.mm */; };
+		0D1297C62A4D7AA1006052AE /* VideoInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D1297C52A4D7AA1006052AE /* VideoInfo.mm */; };
+		0D1297C92A4D7AE9006052AE /* AppAttach.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D1297C82A4D7AE9006052AE /* AppAttach.mm */; };
+		0D1297CB2A4D81CB006052AE /* AndroidDBTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D1297CA2A4D81CB006052AE /* AndroidDBTest.mm */; };
 		0D249BC12542B8E900B43BD9 /* MergeFTSIndexLogic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D249BC02542B8E900B43BD9 /* MergeFTSIndexLogic.hpp */; };
 		0D249BC92542B90600B43BD9 /* MergeFTSIndexLogic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D249BC82542B90600B43BD9 /* MergeFTSIndexLogic.cpp */; };
 		0D3AE53825416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D3AE53725416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp */; };
@@ -3591,6 +3596,16 @@
 		0D0D56BF254ABE9B000F16A6 /* FTS5Object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FTS5Object.h; sourceTree = "<group>"; };
 		0D0D56C0254ABEAA000F16A6 /* FTS5Object.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FTS5Object.mm; sourceTree = "<group>"; };
 		0D0D56C9254AC0F0000F16A6 /* FTS5Test.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FTS5Test.mm; sourceTree = "<group>"; };
+		0D1297BE2A4D6390006052AE /* Message.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
+		0D1297BF2A4D63B4006052AE /* Message.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Message.mm; sourceTree = "<group>"; };
+		0D1297C12A4D78EF006052AE /* ImgInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImgInfo.h; sourceTree = "<group>"; };
+		0D1297C22A4D78EF006052AE /* ImgInfo.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ImgInfo.mm; sourceTree = "<group>"; };
+		0D1297C42A4D7A5A006052AE /* VideoInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoInfo.h; sourceTree = "<group>"; };
+		0D1297C52A4D7AA1006052AE /* VideoInfo.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = VideoInfo.mm; sourceTree = "<group>"; };
+		0D1297C72A4D7AD3006052AE /* AppAttach.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppAttach.h; sourceTree = "<group>"; };
+		0D1297C82A4D7AE9006052AE /* AppAttach.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppAttach.mm; sourceTree = "<group>"; };
+		0D1297CA2A4D81CB006052AE /* AndroidDBTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AndroidDBTest.mm; sourceTree = "<group>"; };
+		0D1297CC2A4D81E9006052AE /* AndroidDBTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AndroidDBTest.h; sourceTree = "<group>"; };
 		0D249BC02542B8E900B43BD9 /* MergeFTSIndexLogic.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MergeFTSIndexLogic.hpp; sourceTree = "<group>"; };
 		0D249BC82542B90600B43BD9 /* MergeFTSIndexLogic.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MergeFTSIndexLogic.cpp; sourceTree = "<group>"; };
 		0D3AE53725416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AutoMergeFTSIndexConfig.hpp; sourceTree = "<group>"; };
@@ -5591,6 +5606,23 @@
 			path = interface;
 			sourceTree = "<group>";
 		};
+		0D1297BD2A4D60B9006052AE /* AndroidDB */ = {
+			isa = PBXGroup;
+			children = (
+				0D1297BE2A4D6390006052AE /* Message.h */,
+				0D1297BF2A4D63B4006052AE /* Message.mm */,
+				0D1297C12A4D78EF006052AE /* ImgInfo.h */,
+				0D1297C22A4D78EF006052AE /* ImgInfo.mm */,
+				0D1297C42A4D7A5A006052AE /* VideoInfo.h */,
+				0D1297C52A4D7AA1006052AE /* VideoInfo.mm */,
+				0D1297C72A4D7AD3006052AE /* AppAttach.h */,
+				0D1297C82A4D7AE9006052AE /* AppAttach.mm */,
+				0D1297CC2A4D81E9006052AE /* AndroidDBTest.h */,
+				0D1297CA2A4D81CB006052AE /* AndroidDBTest.mm */,
+			);
+			path = AndroidDB;
+			sourceTree = "<group>";
+		};
 		0D5363E7290A64320026A4DC /* builtin */ = {
 			isa = PBXGroup;
 			children = (
@@ -7145,6 +7177,7 @@
 		398B4765239E2426008CF7C5 /* wechat */ = {
 			isa = PBXGroup;
 			children = (
+				0D1297BD2A4D60B9006052AE /* AndroidDB */,
 				75835E3324FBD52D00FA82AA /* fts */,
 				75835E3124FBD4F800FA82AA /* MMDB */,
 			);
@@ -10392,19 +10425,24 @@
 				75835E6F24FBF18700FA82AA /* FTSTests.mm in Sources */,
 				398B46DE239E22F4008CF7C5 /* ObjectsBasedFactory.mm in Sources */,
 				398B46E9239E22F4008CF7C5 /* PrototypeFactory.mm in Sources */,
+				0D1297C62A4D7AA1006052AE /* VideoInfo.mm in Sources */,
 				398B46EB239E22F4008CF7C5 /* Signpost.mm in Sources */,
 				398B47B0239E34E6008CF7C5 /* MMDBMigrationTests.mm in Sources */,
 				398B46ED239E22F4008CF7C5 /* WCTDatabase+TestCase.mm in Sources */,
 				398B46F2239E22F4008CF7C5 /* NSObject+TestCase.mm in Sources */,
 				398B46F3239E22F4008CF7C5 /* CRUDTestCase.mm in Sources */,
+				0D1297C32A4D78EF006052AE /* ImgInfo.mm in Sources */,
 				398B46FF239E22F4008CF7C5 /* Random.mm in Sources */,
 				75835E6C24FBE4FC00FA82AA /* FTSFactory.mm in Sources */,
 				398B47A2239E248D008CF7C5 /* MMDBTests.mm in Sources */,
+				0D1297CB2A4D81CB006052AE /* AndroidDBTest.mm in Sources */,
 				75835E6624FBD7F300FA82AA /* FTSData.mm in Sources */,
 				398B4701239E22F4008CF7C5 /* TablesBasedFactory.mm in Sources */,
+				0D1297C02A4D63B4006052AE /* Message.mm in Sources */,
 				398B4707239E22F4008CF7C5 /* TestCaseLog.mm in Sources */,
 				398B470A239E22F4008CF7C5 /* BaseTestCase.mm in Sources */,
 				398B470C239E22F4008CF7C5 /* Benchmark.mm in Sources */,
+				0D1297C92A4D7AE9006052AE /* AppAttach.mm in Sources */,
 				398B47A8239E2E89008CF7C5 /* Random+MMDBMainData.mm in Sources */,
 				398B47A0239E2470008CF7C5 /* MMDBMainData.mm in Sources */,
 				398B4711239E22F4008CF7C5 /* SizeBasedFactory.mm in Sources */,

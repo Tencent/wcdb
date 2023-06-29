@@ -81,4 +81,90 @@
     [self doTestGetMaxTime];
 }
 
+- (void)testCreateTable
+{
+    NSDate* start = [NSDate date];
+    TestCaseLog(@"Database path: %@", self.database.path);
+    for (int i = 0; i < 10000; i++) {
+        if (i % 100 == 0 && i > 0) {
+            TestCaseLog(@"CreateTableTime: %lld, %d", (UInt64) [[NSDate date] timeIntervalSinceDate:start], i);
+            start = [NSDate date];
+        }
+
+        if (i % 1000 == 0 && i > 0) {
+            [self.database close:^{
+                [self.database truncateCheckpoint];
+            }];
+        }
+
+        NSString* userName = [Random.shared stringWithLength:30];
+
+        TestCaseAssertTrue([self.database createTable:[@"Chat_" stringByAppendingString:userName] withClass:DBMessage.class]);
+
+        TestCaseAssertTrue([self.database createTable:[@"ChatExt_" stringByAppendingString:userName] withClass:DBMessageExt.class]);
+    }
+    [self.database close:^{
+        [self.database truncateCheckpoint];
+    }];
+    sleep(100000);
+}
+
+- (void)testCreateCipherTable
+{
+    NSDate* start = [NSDate date];
+    TestCaseLog(@"Database path: %@", self.database.path);
+    NSData* cipher = [@"abc" dataUsingEncoding:NSUTF8StringEncoding];
+    [self.database setCipherKey:cipher andCipherPageSize:4096 andCipherViersion:WCTCipherVersion2];
+    for (int i = 0; i < 10000; i++) {
+        if (i % 100 == 0 && i > 0) {
+            TestCaseLog(@"CreateTableTime: %lld, %d", (UInt64) [[NSDate date] timeIntervalSinceDate:start], i);
+            start = [NSDate date];
+        }
+
+        if (i % 1000 == 0 && i > 0) {
+            [self.database close:^{
+                [self.database truncateCheckpoint];
+            }];
+        }
+
+        NSString* userName = [Random.shared stringWithLength:30];
+
+        TestCaseAssertTrue([self.database createTable:[@"Chat_" stringByAppendingString:userName] withClass:DBMessage.class]);
+
+        TestCaseAssertTrue([self.database createTable:[@"ChatExt_" stringByAppendingString:userName] withClass:DBMessageExt.class]);
+    }
+    [self.database close:^{
+        [self.database truncateCheckpoint];
+    }];
+    sleep(100000);
+}
+
+- (void)testOpenDatabase
+{
+    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:@"/Users/qiuwenchen/Desktop/AndroidDBTest/testDatabase"];
+    [self
+    doMeasure:^{
+        [database canOpen];
+    }
+    setUp:nil
+    tearDown:^{
+        [database close];
+    }
+    checkCorrectness:nil];
+}
+
+- (void)testMemory
+{
+    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:@"/Users/qiuwenchen/Desktop/iOSDBTest/testDatabase"];
+    for (int i = 0; i < 32; i++) {
+        [self.dispatch async:^{
+            WCTHandle* handle = [database getHandle];
+            [handle tableExists:@"abc"];
+            sleep(10);
+        }];
+    }
+    [self.dispatch waitUntilDone];
+    sleep(100000);
+}
+
 @end

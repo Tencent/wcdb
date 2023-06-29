@@ -11,3 +11,5 @@ include ':java-test'
 project(':java-test').projectDir = file('../java/test')
 include ':kotlin-test'
 project(':kotlin-test').projectDir = file('../kotlin/test')
+include ':wechat-test'
+project(':wechat-test').projectDir = file('../java/wechat-test')
