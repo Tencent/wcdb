@@ -36,6 +36,9 @@ android:
   product_flavors:
     generic:
       is_default: true
+      build:
+        <<: *android_build_config 
+        api_level: 19
     ammdev:
       dependencies:
         wcdb-android: 1.0.0
