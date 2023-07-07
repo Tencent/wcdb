@@ -11293,6 +11293,7 @@
 					"WCDB_TESTS=1",
 				);
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDB.modulemap";
+				OTHER_SWIFT_FLAGS = "-no-verify-emitted-module-interface";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "WCDB_SWIFT_BRIDGE_OBJC WCDB_QUICK_TESTS";
 			};
 			name = Debug;
@@ -11310,6 +11311,7 @@
 					"WCDB_SWIFT_BRIDGE_OBJC=1",
 				);
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDB.modulemap";
+				OTHER_SWIFT_FLAGS = "-no-verify-emitted-module-interface";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = WCDB_SWIFT_BRIDGE_OBJC;
 			};
 			name = Release;
