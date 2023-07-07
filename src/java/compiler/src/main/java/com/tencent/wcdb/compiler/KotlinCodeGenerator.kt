@@ -109,12 +109,16 @@ class KotlinCodeGenerator {
                 }
             }
             if (columnInfo.isUnique) {
-                builder.append(constraintPrefix).append(".unique()\n)\n")
+                builder.append(constraintPrefix).append(".unique()\n$TAB$TAB)\n")
             }
             if (columnInfo.isNotNull) {
-                builder.append(constraintPrefix).append(".notNull()\n)\n")
+                builder.append(constraintPrefix).append(".notNull()\n$TAB$TAB)\n")
             }
-            builder.append("$TAB${TAB}baseBinding.addColumnDef(${propertyName}Def)\n\n")
+            builder.append("$TAB${TAB}baseBinding.addColumnDef(${propertyName}Def)\n")
+
+            if (columnInfo.enableAutoIncrementForExistingTable) {
+                builder.append("$TAB${TAB}baseBinding.enableAutoIncrementForExistingTable()\n")
+            }
 
             if (!columnInfo.hasIndex) {
                 continue

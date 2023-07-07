@@ -36,6 +36,7 @@ data class ColumnInfo(
     var columnName: String = "",
     var isPrimary: Boolean = false,
     var isAutoIncrement: Boolean = false,
+    var enableAutoIncrementForExistingTable: Boolean = false,
     var defaultValue: DefaultValueInfo? = null,
     var isUnique: Boolean = false,
     var isNotNull: Boolean = false,
@@ -58,6 +59,7 @@ data class ColumnInfo(
                     "columnName" -> resolvedInfo.columnName = value as String
                     "isPrimary" -> resolvedInfo.isPrimary = value as Boolean
                     "isAutoIncrement" -> resolvedInfo.isAutoIncrement = value as Boolean
+                    "enableAutoIncrementForExistingTable" -> resolvedInfo.enableAutoIncrementForExistingTable = value as Boolean
                     "isUnique" -> resolvedInfo.isUnique = value as Boolean
                     "isNotNull" -> resolvedInfo.isNotNull = value as Boolean
                     else -> {
@@ -94,6 +96,7 @@ data class ColumnInfo(
             resolvedInfo.columnName = fieldAnnotation.columnName
             resolvedInfo.isPrimary = fieldAnnotation.isPrimary
             resolvedInfo.isAutoIncrement = fieldAnnotation.isAutoIncrement
+            resolvedInfo.enableAutoIncrementForExistingTable = fieldAnnotation.enableAutoIncrementForExistingTable
             resolvedInfo.isUnique = fieldAnnotation.isUnique
             resolvedInfo.isNotNull = fieldAnnotation.isNotNull
             if(indexAnnotation != null) {

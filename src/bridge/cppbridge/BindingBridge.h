@@ -34,6 +34,7 @@ WCDBDefineCPPBridgedType(CPPBinding)
 
 CPPBinding WCDBBindingCreate();
 void WCDBBindingAddColumnDef(CPPBinding binding, CPPColumnDef columnDef);
+void WCDBBindingEnableAutoIncrementForExistingTable(CPPBinding binding);
 void WCDBBindingAddColumnConstraint(CPPBinding binding,
                                     const char* _Nullable columnName,
                                     CPPColumnConstraint constraint);

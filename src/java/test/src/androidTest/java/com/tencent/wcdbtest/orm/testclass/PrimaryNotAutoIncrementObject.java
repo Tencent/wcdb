@@ -1,4 +1,4 @@
-// Created by qiuwenchen on 2023/3/30.
+// Created by qiuwenchen on 2023/7/7.
 //
 
 /*
@@ -20,20 +20,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.tencent.wcdb;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package com.tencent.wcdbtest.orm.testclass;
+import com.tencent.wcdb.*;
 
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.SOURCE)
-public @interface WCDBField {
-    String columnName() default "";
-    boolean isPrimary() default false;
-    boolean isAutoIncrement() default false;
-    boolean enableAutoIncrementForExistingTable() default false;
-    boolean isUnique() default false;
-    boolean isNotNull() default false;
+@WCDBTableCoding
+public class PrimaryNotAutoIncrementObject {
+    @WCDBField(isPrimary = true)
+    public int id;
 }

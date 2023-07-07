@@ -399,6 +399,20 @@ AbstractHandle::getValues(const Statement &statement, int index)
     return values;
 }
 
+bool AbstractHandle::getTableConfig(const UnsafeStringView &tableName,
+                                    int *isAutoincrement,
+                                    int *isWithoutRowid,
+                                    const char **integerPrimaryKey)
+{
+    return APIExit(sqlite3_table_meta(
+    m_handle, tableName.data(), isAutoincrement, isWithoutRowid, integerPrimaryKey));
+}
+
+bool AbstractHandle::configAutoIncrement(const UnsafeStringView &tableName)
+{
+    return APIExit(sqlite3_table_config_auto_increment(m_handle, tableName.data()));
+}
+
 #pragma mark - Transaction
 void AbstractHandle::markErrorNotAllowedWithinTransaction()
 {

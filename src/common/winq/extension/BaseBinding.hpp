@@ -39,9 +39,21 @@ public:
 public:
     const CaseInsensitiveList<ColumnDef> &getColumnDefs() const;
     ColumnDef *getColumnDef(const UnsafeStringView &columnName);
+    void enableAutoIncrementForExistingTable();
 
 protected:
     CaseInsensitiveList<ColumnDef> m_columnDefs;
+    bool m_enableAutoIncrementForExistingTable = false;
+
+private:
+    bool configAutoincrementIfNeed(const UnsafeStringView &tableName, InnerHandle *handle) const;
+    bool updateMasterTable(const UnsafeStringView &tableName, InnerHandle *handle) const;
+    bool updateSequeceTable(const UnsafeStringView &tableName,
+                            const UnsafeStringView &integerPrimaryKey,
+                            InnerHandle *handle) const;
+    void reportSqlParseFail(const UnsafeStringView &sql,
+                            const UnsafeStringView &tableName,
+                            InnerHandle *handle) const;
 
 #pragma mark - Table
 public:

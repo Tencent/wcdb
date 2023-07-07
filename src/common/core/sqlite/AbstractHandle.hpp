@@ -32,6 +32,7 @@
 #include "StringView.hpp"
 #include "WINQ.h"
 #include <set>
+#include <tuple>
 #include <vector>
 
 namespace WCDB {
@@ -118,6 +119,11 @@ public:
     Optional<std::vector<ColumnMeta>>
     getTableMeta(const Schema &schema, const UnsafeStringView &table);
     Optional<std::set<StringView>> getValues(const Statement &statement, int index);
+    bool getTableConfig(const UnsafeStringView &tableName,
+                        int *isAutoincrement,
+                        int *isWithoutRowid,
+                        const char **integerPrimaryKey);
+    bool configAutoIncrement(const UnsafeStringView &tableName);
 
 #pragma mark - Transaction
 public:

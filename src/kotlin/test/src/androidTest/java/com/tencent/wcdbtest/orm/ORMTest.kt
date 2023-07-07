@@ -348,4 +348,19 @@ class ORMTest : DatabaseTestCase() {
         database.dropTable(tableName)
         database.traceException(null)
     }
+
+    @Test
+    @Throws(WCDBException::class)
+    fun testPrimaryEnableAutoIncrementForExistingTable() {
+        database.createTable(tableName, DBPrimaryNotAutoIncrementObject)
+        val obj1 = PrimaryNotAutoIncrementObject();
+        obj1.id = 1
+        database.insertObject(obj1, DBPrimaryNotAutoIncrementObject.allFields(), tableName)
+
+        database.createTable(tableName, DBPrimaryEnableAutoIncrementObject)
+
+        val obj2 = PrimaryEnableAutoIncrementObject()
+        database.insertObject(obj2, DBPrimaryEnableAutoIncrementObject.allFields(), tableName)
+        Assert.assertEquals(obj2.id, 2)
+    }
 }

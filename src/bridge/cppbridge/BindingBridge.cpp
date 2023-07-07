@@ -60,6 +60,12 @@ void WCDBBindingAddColumnDef(CPPBinding binding, CPPColumnDef columnDef)
     cppBinding->addColumnDef(*cppColumnDef);
 }
 
+void WCDBBindingEnableAutoIncrementForExistingTable(CPPBinding binding)
+{
+    WCDBGetObjectOrReturn(binding, WCDB::BridgedBinding, cppBinding);
+    cppBinding->enableAutoIncrementForExistingTable();
+}
+
 void WCDBBindingAddColumnConstraint(CPPBinding binding,
                                     const char* _Nullable columnName,
                                     CPPColumnConstraint constraint)

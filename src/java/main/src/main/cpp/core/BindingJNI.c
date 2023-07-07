@@ -36,6 +36,12 @@ void WCDBJNIBindingObjectMethod(addColumnDef, jlong self, jlong columnDef)
     WCDBBindingAddColumnDef(selfStruct, columnDefStruct);
 }
 
+void WCDBJNIBindingObjectMethod(enableAutoIncrementForExistingTable, jlong self)
+{
+    WCDBJNIBridgeStruct(CPPBinding, self);
+    WCDBBindingEnableAutoIncrementForExistingTable(selfStruct);
+}
+
 void WCDBJNIBindingObjectMethod(addIndex, jlong self, jstring indexNameOrSuffix, jboolean isFullName, jlong createIndex)
 {
     WCDBJNIBridgeStruct(CPPBinding, self);

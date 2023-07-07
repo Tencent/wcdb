@@ -136,7 +136,11 @@ public class JavaCodeGenerator {
                 builder.append(constraintPrefix).append(".notNull()").append(");\n");
             }
 
-            builder.append(TAB + TAB + "baseBinding.addColumnDef(").append(propertyName).append("Def);\n\n");
+            builder.append(TAB + TAB + "baseBinding.addColumnDef(").append(propertyName).append("Def);\n");
+
+            if(columnInfo.getEnableAutoIncrementForExistingTable()) {
+                builder.append(TAB + TAB + "baseBinding.enableAutoIncrementForExistingTable();\n");
+            }
 
             if(!columnInfo.getHasIndex()) {
                 continue;

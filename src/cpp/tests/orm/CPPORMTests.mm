@@ -26,6 +26,7 @@
 #import "CPPColumnConstraintAutoIncrement.hpp"
 #import "CPPColumnConstraintAutoIncrementAsc.hpp"
 #import "CPPColumnConstraintDefault.hpp"
+#import "CPPColumnConstraintEnablePrimaryAutoIncrement.hpp"
 #import "CPPColumnConstraintPrimary.hpp"
 #import "CPPColumnConstraintPrimaryAsc.hpp"
 #import "CPPColumnConstraintPrimaryDesc.hpp"
@@ -207,6 +208,25 @@
                                       inOperation:^BOOL {
                                           return CPPTestTableCreate<CPPColumnConstraintDefault>(self);
                                       }];
+}
+
+- (void)test_column_constraint_primary_enable_auto_increment_for_existing_table
+{
+    TestCaseAssertTrue(self.database->createTable<CPPColumnConstraintPrimaryNotAutoIncrement>(self.tableName.UTF8String));
+    CPPColumnConstraintPrimaryNotAutoIncrement obj;
+    obj.id = 1;
+    obj.isAutoIncrement = true;
+    TestCaseAssertTrue(self.database->insertObjects<CPPColumnConstraintPrimaryNotAutoIncrement>(obj, self.tableName.UTF8String));
+    TestCaseAssertTrue(*obj.lastInsertedRowID == 1LL);
+
+    TestCaseAssertTrue(self.database->createTable<CPPColumnConstraintEnablePrimaryAutoIncrement>(self.tableName.UTF8String));
+
+    TestCaseAssertTrue(self.database->deleteObjects(self.tableName.UTF8String));
+
+    CPPColumnConstraintEnablePrimaryAutoIncrement obj2;
+    obj2.isAutoIncrement = true;
+    TestCaseAssertTrue(self.database->insertObjects<CPPColumnConstraintEnablePrimaryAutoIncrement>(obj2, self.tableName.UTF8String));
+    TestCaseAssertTrue(*obj2.lastInsertedRowID == 2LL);
 }
 
 #pragma mark - index

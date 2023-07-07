@@ -44,6 +44,12 @@ public class Binding extends CppObject {
 
     private native void addColumnDef(long self, long columnDef);
 
+    public void enableAutoIncrementForExistingTable() {
+        enableAutoIncrementForExistingTable(cppObj);
+    }
+
+    private native void enableAutoIncrementForExistingTable(long self);
+
     public void addIndex(String indexNameOrSuffix, boolean isFullName, StatementCreateIndex createIndex) {
         addIndex(cppObj, indexNameOrSuffix, isFullName, createIndex.getCppObj());
     }

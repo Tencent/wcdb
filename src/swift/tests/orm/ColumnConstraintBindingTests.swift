@@ -134,7 +134,7 @@ class ColumnConstraintBindingTests: ORMTestCase {
         }
     }
 
-    final  class DefaultTextValueTestObject: TableCodable {
+    final class DefaultTextValueTestObject: TableCodable {
         var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = DefaultTextValueTestObject
@@ -244,5 +244,49 @@ class ColumnConstraintBindingTests: ORMTestCase {
             DefaultBLOBValueTestObject.self,
             "CREATE TABLE IF NOT EXISTS DefaultBLOBValueTestObject(defaultValueVariable INTEGER DEFAULT 'defaultData')"
         )
+    }
+
+    final class EnablePrimaryAutoIncrement: TableCodable {
+        var id: Int = 0
+
+        var isAutoIncrement: Bool = false
+        var lastInsertedRowID: Int64 = 0
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = EnablePrimaryAutoIncrement
+            case id
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindColumnConstraint(id, isPrimary: true,
+                                     isAutoIncrement: true,
+                                     enableAutoIncrementForExistingTable: true)
+            }
+        }
+    }
+
+    final class PrimaryNotAutoIncrement: TableCodable {
+        var id: Int = 0
+        var lastInsertedRowID: Int64 = 0
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = PrimaryNotAutoIncrement
+            case id
+            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+                BindColumnConstraint(id, isPrimary: true)
+            }
+        }
+    }
+
+    func testPrimaryEnableAutoIncrementForExistingTable() {
+        XCTAssertNoThrow(try database.create(table: "testTable", of: PrimaryNotAutoIncrement.self))
+        let obj1 = PrimaryNotAutoIncrement()
+        obj1.id = 1
+        XCTAssertNoThrow(try database.insert(obj1, intoTable: "testTable"))
+
+        XCTAssertNoThrow(try database.create(table: "testTable", of: EnablePrimaryAutoIncrement.self))
+
+        XCTAssertNoThrow(try database.delete(fromTable: "testTable"))
+
+        let obj2 = EnablePrimaryAutoIncrement()
+        obj2.isAutoIncrement = true
+        XCTAssertNoThrow(try database.insert(obj2, intoTable: "testTable"))
+        XCTAssertEqual(obj2.lastInsertedRowID, 2)
     }
 }

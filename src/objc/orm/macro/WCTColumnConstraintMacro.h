@@ -49,6 +49,12 @@
     WCDB_IF(autoIncrement_, columnConstraint.autoIncrement()); \
     __WCDB_COLUMN_CONSTRAINT_END(propertyName)
 
+#define __WCDB_PRIMARY_ENABLE_AUTOINCREMENT_FOR_EXISTING_TABLE \
+    +(void) WCDB_ORM_UNIQUE(WCDB_ORM_TYPE_COLUMN_CONSTRAINT)   \
+    {                                                          \
+        binding.enableAutoIncrementForExistingTable();         \
+    }
+
 // not null
 #define __WCDB_NOT_NULL_IMP(propertyName)        \
     __WCDB_COLUMN_CONSTRAINT_BEGIN(propertyName) \

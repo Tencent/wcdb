@@ -28,10 +28,14 @@ import WCDB_Private
 public final class ColumnConstraintConfig<CodingTableKeyType: CodingTableKey>: TableConfiguration {
     let codingKey: CodingTableKeyType
     private var columnConstraints: [ColumnConstraint] = []
+    private let enableAutoIncrementForExistingTable: Bool
 
     public func config(with tableBinding: TableBindingBase) {
         for constraint in columnConstraints {
             WCDBBindingAddColumnConstraint(tableBinding.cppBinding, codingKey.rawValue.cString, constraint.cppObj)
+        }
+        if enableAutoIncrementForExistingTable {
+            WCDBBindingEnableAutoIncrementForExistingTable(tableBinding.cppBinding)
         }
     }
 
@@ -39,6 +43,7 @@ public final class ColumnConstraintConfig<CodingTableKeyType: CodingTableKey>: T
                 isPrimary: Bool = false,
                 orderBy term: Order? = nil,
                 isAutoIncrement: Bool = false,
+                enableAutoIncrementForExistingTable: Bool = false,
                 onConflict conflict: ConflictAction? = nil,
                 isNotNull: Bool = false,
                 isUnique: Bool = false,
@@ -71,6 +76,7 @@ public final class ColumnConstraintConfig<CodingTableKeyType: CodingTableKey>: T
         if isNotIndexed {
             columnConstraints.append(ColumnConstraint().unIndexed())
         }
+        self.enableAutoIncrementForExistingTable = enableAutoIncrementForExistingTable
     }
 
     public convenience init<T: ColumnEncodable>(
@@ -78,6 +84,7 @@ public final class ColumnConstraintConfig<CodingTableKeyType: CodingTableKey>: T
         isPrimary: Bool = false,
         orderBy term: Order? = nil,
         isAutoIncrement: Bool = false,
+        enableAutoIncrementForExistingTable: Bool = false,
         onConflict conflict: ConflictAction? = nil,
         isNotNull: Bool = false,
         isUnique: Bool = false,

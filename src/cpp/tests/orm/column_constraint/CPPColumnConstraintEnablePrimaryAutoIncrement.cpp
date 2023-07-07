@@ -1,4 +1,5 @@
-// Created by qiuwenchen on 2023/3/30.
+//
+// Created by qiuwenchen on 2023/7/6.
 //
 
 /*
@@ -20,20 +21,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.tencent.wcdb;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+#include "CPPColumnConstraintEnablePrimaryAutoIncrement.hpp"
 
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.SOURCE)
-public @interface WCDBField {
-    String columnName() default "";
-    boolean isPrimary() default false;
-    boolean isAutoIncrement() default false;
-    boolean enableAutoIncrementForExistingTable() default false;
-    boolean isUnique() default false;
-    boolean isNotNull() default false;
-}
+WCDB_CPP_ORM_IMPLEMENTATION_BEGIN(CPPColumnConstraintEnablePrimaryAutoIncrement)
+WCDB_CPP_SYNTHESIZE(id)
+WCDB_CPP_PRIMARY_AUTO_INCREMENT(id)
+WCDB_CPP_PRIMARY_ENABLE_AUTOINCREMENT_FOR_EXISTING_TABLE
+WCDB_CPP_ORM_IMPLEMENTATION_END
+
+WCDB_CPP_ORM_IMPLEMENTATION_BEGIN(CPPColumnConstraintPrimaryNotAutoIncrement)
+WCDB_CPP_SYNTHESIZE(id)
+WCDB_CPP_PRIMARY(id)
+WCDB_CPP_ORM_IMPLEMENTATION_END

@@ -363,4 +363,18 @@ public class ORMTest extends DatabaseTestCase {
         database.dropTable(tableName);
         database.traceException(null);
     }
+
+    @Test
+    public void testPrimaryKeyEnableAutoIncrementForExistingTable() throws WCDBException {
+        database.createTable(tableName, DBPrimaryNotAutoIncrementObject.INSTANCE);
+        PrimaryNotAutoIncrementObject obj1 = new PrimaryNotAutoIncrementObject();
+        obj1.id = 1;
+        database.insertObject(obj1, DBPrimaryNotAutoIncrementObject.allFields(), tableName);
+
+        database.createTable(tableName, DBPrimaryEnableAutoIncrementObject.INSTANCE);
+
+        PrimaryEnableAutoIncrementObject obj2 = new PrimaryEnableAutoIncrementObject();
+        database.insertObject(obj2, DBPrimaryEnableAutoIncrementObject.allFields(), tableName);
+        assertEquals(obj2.id, 2);
+    }
 }

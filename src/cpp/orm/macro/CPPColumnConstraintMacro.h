@@ -51,6 +51,9 @@
     WCDB_IF(autoIncrement_, columnConstraint.autoIncrement());                 \
     __WCDB_CPP_COLUMN_CONSTRAINT_END(fieldName)
 
+#define __WCDB_CPP_PRIMARY_ENABLE_AUTOINCREMENT_FOR_EXISTING_TABLE             \
+    g_binding->enableAutoIncrementForExistingTable();
+
 // not null
 #define __WCDB_CPP_NOT_NULL_IMP(fieldName)                                     \
     __WCDB_CPP_COLUMN_CONSTRAINT_BEGIN(fieldName)                              \

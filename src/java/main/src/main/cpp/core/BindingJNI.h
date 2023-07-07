@@ -35,6 +35,7 @@
 
 jlong WCDBJNIBindingObjectMethodWithNoArg(create);
 void WCDBJNIBindingObjectMethod(addColumnDef, jlong self, jlong columnDef);
+void WCDBJNIBindingObjectMethod(enableAutoIncrementForExistingTable, jlong self);
 void WCDBJNIBindingObjectMethod(
 addIndex, jlong self, jstring indexNameOrSuffix, jboolean isFullName, jlong createIndex);
 void WCDBJNIBindingObjectMethod(addTableConstraint, jlong self, jlong constraint);

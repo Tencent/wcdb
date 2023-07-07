@@ -831,6 +831,8 @@
 		0D5363F3290A75F20026A4DC /* Sequence.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D5363EF290A75F20026A4DC /* Sequence.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		0D5F8BC929F77CD800939603 /* CipherDatabaseMigratingCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D5F8BC829F77CD800939603 /* CipherDatabaseMigratingCompatibleTests.mm */; };
 		0D5F8BCB29F77D2F00939603 /* CipherDatabaseMigrationCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D5F8BCA29F77D2F00939603 /* CipherDatabaseMigrationCompatibleTests.mm */; };
+		0D81CDAB2A569FAB0051FF8E /* ColumnConstraintEnablePrimaryAutoIncrement.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D81CDA92A569CE40051FF8E /* ColumnConstraintEnablePrimaryAutoIncrement.mm */; };
+		0D81CDAE2A56DA070051FF8E /* CPPColumnConstraintEnablePrimaryAutoIncrement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D81CDAC2A56DA070051FF8E /* CPPColumnConstraintEnablePrimaryAutoIncrement.cpp */; };
 		0DAD93C129FA2A1200E5788C /* TableChainCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DAD93C029FA2A1200E5788C /* TableChainCall.swift */; };
 		0DAD93C229FA2A1200E5788C /* TableChainCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DAD93C029FA2A1200E5788C /* TableChainCall.swift */; };
 		0DAD93C429FA2C4800E5788C /* TableChainCall+WCTTableCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DAD93C329FA2C4800E5788C /* TableChainCall+WCTTableCoding.swift */; };
@@ -3601,6 +3603,11 @@
 		0D5363EF290A75F20026A4DC /* Sequence.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Sequence.hpp; sourceTree = "<group>"; };
 		0D5F8BC829F77CD800939603 /* CipherDatabaseMigratingCompatibleTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CipherDatabaseMigratingCompatibleTests.mm; sourceTree = "<group>"; };
 		0D5F8BCA29F77D2F00939603 /* CipherDatabaseMigrationCompatibleTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CipherDatabaseMigrationCompatibleTests.mm; sourceTree = "<group>"; };
+		0D81CDA82A569CB40051FF8E /* ColumnConstraintEnablePrimaryAutoIncrement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColumnConstraintEnablePrimaryAutoIncrement.h; sourceTree = "<group>"; };
+		0D81CDA92A569CE40051FF8E /* ColumnConstraintEnablePrimaryAutoIncrement.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ColumnConstraintEnablePrimaryAutoIncrement.mm; sourceTree = "<group>"; };
+		0D81CDAA2A569CFC0051FF8E /* ColumnConstraintEnablePrimaryAutoIncrement+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ColumnConstraintEnablePrimaryAutoIncrement+WCTTableCoding.h"; sourceTree = "<group>"; };
+		0D81CDAC2A56DA070051FF8E /* CPPColumnConstraintEnablePrimaryAutoIncrement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CPPColumnConstraintEnablePrimaryAutoIncrement.cpp; sourceTree = "<group>"; };
+		0D81CDAD2A56DA070051FF8E /* CPPColumnConstraintEnablePrimaryAutoIncrement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CPPColumnConstraintEnablePrimaryAutoIncrement.hpp; sourceTree = "<group>"; };
 		0DAD93C029FA2A1200E5788C /* TableChainCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableChainCall.swift; sourceTree = "<group>"; };
 		0DAD93C329FA2C4800E5788C /* TableChainCall+WCTTableCoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TableChainCall+WCTTableCoding.swift"; sourceTree = "<group>"; };
 		0DAE11D328DC6CC6003FB63A /* WCDB.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCDB.h; sourceTree = "<group>"; };
@@ -6248,6 +6255,9 @@
 				234F06BB227AA57A00DD65A2 /* ColumnConstraintUnique.h */,
 				234F06CD227AA57D00DD65A2 /* ColumnConstraintUnique.mm */,
 				234F06CE227AA57D00DD65A2 /* ColumnConstraintUnique+WCTTableCoding.h */,
+				0D81CDA82A569CB40051FF8E /* ColumnConstraintEnablePrimaryAutoIncrement.h */,
+				0D81CDA92A569CE40051FF8E /* ColumnConstraintEnablePrimaryAutoIncrement.mm */,
+				0D81CDAA2A569CFC0051FF8E /* ColumnConstraintEnablePrimaryAutoIncrement+WCTTableCoding.h */,
 			);
 			path = column_constraint;
 			sourceTree = "<group>";
@@ -7250,6 +7260,8 @@
 				75882C8B28C7C6CF00F95947 /* CPPColumnConstraintUnique.cpp */,
 				75882C8F28C7C78200F95947 /* CPPColumnConstraintDefault.hpp */,
 				75882C8E28C7C78200F95947 /* CPPColumnConstraintDefault.cpp */,
+				0D81CDAC2A56DA070051FF8E /* CPPColumnConstraintEnablePrimaryAutoIncrement.cpp */,
+				0D81CDAD2A56DA070051FF8E /* CPPColumnConstraintEnablePrimaryAutoIncrement.hpp */,
 			);
 			path = column_constraint;
 			sourceTree = "<group>";
@@ -9582,6 +9594,7 @@
 				75882C8428C7C4A300F95947 /* CPPColumnConstraintPrimaryDesc.cpp in Sources */,
 				752C7E4028C8E94200C9FFA6 /* ORMInsertTests.mm in Sources */,
 				75D4834228A79AD3004FDD3C /* CPPTraceTest.mm in Sources */,
+				0D81CDAE2A56DA070051FF8E /* CPPColumnConstraintEnablePrimaryAutoIncrement.cpp in Sources */,
 				75CD724F290D2449008583A3 /* CPPFTS3Object.mm in Sources */,
 				032E112428C8511E00BCACE0 /* CPPIndexObject.cpp in Sources */,
 				758D9D0128BA6AF8001B3D2D /* HandleOperationTests.mm in Sources */,
@@ -9648,6 +9661,7 @@
 				234F05DE227AA4F600DD65A2 /* FrameSpecTests.mm in Sources */,
 				75C1374424BAF7C5001C0D5E /* MissOneColumnDatabaseMigrationCompatibleTests.mm in Sources */,
 				234F0603227AA4F600DD65A2 /* StatementSelectTests.mm in Sources */,
+				0D81CDAB2A569FAB0051FF8E /* ColumnConstraintEnablePrimaryAutoIncrement.mm in Sources */,
 				234F06D2227AA57D00DD65A2 /* ColumnConstraintAutoIncrement.mm in Sources */,
 				234F071E227AA5B700DD65A2 /* TableMigrateTests.mm in Sources */,
 				234F0722227AA5B700DD65A2 /* DatabaseMigrateTests.mm in Sources */,
