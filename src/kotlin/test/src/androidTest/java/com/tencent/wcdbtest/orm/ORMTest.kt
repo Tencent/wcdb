@@ -358,6 +358,7 @@ class ORMTest : DatabaseTestCase() {
         database.insertObject(obj1, DBPrimaryNotAutoIncrementObject.allFields(), tableName)
 
         database.createTable(tableName, DBPrimaryEnableAutoIncrementObject)
+        database.deleteObjects(tableName)
 
         val obj2 = PrimaryEnableAutoIncrementObject()
         database.insertObject(obj2, DBPrimaryEnableAutoIncrementObject.allFields(), tableName)

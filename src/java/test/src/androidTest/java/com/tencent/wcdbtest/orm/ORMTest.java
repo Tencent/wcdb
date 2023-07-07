@@ -372,6 +372,7 @@ public class ORMTest extends DatabaseTestCase {
         database.insertObject(obj1, DBPrimaryNotAutoIncrementObject.allFields(), tableName);
 
         database.createTable(tableName, DBPrimaryEnableAutoIncrementObject.INSTANCE);
+        database.deleteObjects(tableName);
 
         PrimaryEnableAutoIncrementObject obj2 = new PrimaryEnableAutoIncrementObject();
         database.insertObject(obj2, DBPrimaryEnableAutoIncrementObject.allFields(), tableName);
