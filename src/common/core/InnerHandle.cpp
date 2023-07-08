@@ -126,6 +126,7 @@ bool InnerHandle::configure()
             m_invokeds.pop_back();
         }
         WCTAssert(m_invokeds.empty());
+        std::shared_ptr<Config> cipherConfig = nullptr;
         for (const auto &element : m_pendings) {
             if (!element.value()->invoke(this)) {
                 if (element.key().caseInsensitiveEqual(BasicConfigName)
@@ -140,21 +141,20 @@ bool InnerHandle::configure()
                 return false;
             }
             m_invokeds.insert(element.key(), element.value(), element.order());
+            if (element.key().compare(CipherConfigName) == 0) {
+                cipherConfig = element.value();
+            }
         }
         m_pendings = m_invokeds;
-    }
-    return true;
-}
-
-UnsafeData InnerHandle::getCipherKey()
-{
-    for (const auto &element : m_invokeds) {
-        if (element.key().caseInsensitiveEqual(CipherConfigName)) {
-            CipherConfig *config = dynamic_cast<CipherConfig *>(element.value().get());
-            return config->getCipherKey();
+        if (cipherConfig != nullptr) {
+            CipherConfig *convertedConfig
+            = dynamic_cast<CipherConfig *>(cipherConfig.get());
+            if (convertedConfig != nullptr) {
+                convertedConfig->trySaveRawKey(this);
+            }
         }
     }
-    return UnsafeData();
+    return true;
 }
 
 #pragma mark - Statement

@@ -763,6 +763,18 @@ bool AbstractHandle::setCipherKey(const UnsafeData &data)
     return APIExit(sqlite3_key(m_handle, data.buffer(), (int) data.size()));
 }
 
+Data AbstractHandle::getRawCipherKey()
+{
+    void *rawCipher = NULL;
+    int rawCipherSize = 0;
+    sqlite3CodecGetKey(m_handle, 0, &rawCipher, &rawCipherSize);
+    if (rawCipher == NULL || rawCipherSize == 0) {
+        return Data();
+    }
+    WCTAssert(rawCipherSize == 99);
+    return Data((unsigned char *) rawCipher, rawCipherSize);
+}
+
 bool AbstractHandle::setCipherPageSize(int pageSize)
 {
     WCTAssert(isOpened());

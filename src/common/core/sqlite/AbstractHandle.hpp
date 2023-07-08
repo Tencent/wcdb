@@ -232,6 +232,7 @@ public:
     size_t getCipherPageSize();
     void *getCipherContext();
     bool setCipherKey(const UnsafeData &data);
+    Data getRawCipherKey();
     bool setCipherPageSize(int pageSize);
     StringView getCipherSalt();
     bool setCipherSalt(const UnsafeStringView &salt);
