@@ -213,7 +213,7 @@ bool BaseBinding::updateSequeceTable(const UnsafeStringView &tableName,
     if (hasContent) {
         StatementInsert insert = StatementInsert().insertIntoTable(Syntax::sequenceTable);
         insert.column("name").column("seq");
-        insert.value(tableName).value(std::max(maxRowid, 0LL));
+        insert.value(tableName).value(std::max(maxRowid, (int64_t)0));
         return handle->execute(insert);
     }
     return true;
