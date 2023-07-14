@@ -5,7 +5,6 @@ buildscript {
         kotlin_version = '1.7.10'
     }
     repositories {
-        jcenter()
         mavenCentral()
         google()
     }
@@ -23,7 +22,6 @@ allprojects {
     group 'com.tencent.wcdb'
 
     repositories {
-        jcenter()
         mavenCentral()
         google()
     }

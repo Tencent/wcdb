@@ -4,3 +4,4 @@
 .cxx
 local.properties
 .DS_Store
+/java/build

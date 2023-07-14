@@ -1,0 +1,18 @@
+plugins {
+    id 'groovy'
+    id 'java-gradle-plugin'
+}
+
+gradlePlugin {
+    plugins {
+        wcdbPlugin {
+            id = 'com.tencent.wcdb.gradle'
+            implementationClass = 'com.tencent.wcdb.gradle.WCDBPlugin'
+        }
+    }
+}
+
+dependencies {
+    implementation project(':compiler')
+    compileOnly 'com.android.tools.build:gradle:7.4.2'
+}
