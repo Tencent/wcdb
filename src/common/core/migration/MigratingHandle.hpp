@@ -80,6 +80,7 @@ public:
     virtual void returnStatement(HandleStatement *handleStatement) override final;
     void finalize() override final;
     void resetAllStatements() override final;
+    void returnAllPreparedStatement() override final;
 
 protected:
     virtual void finalizeStatements() override final;

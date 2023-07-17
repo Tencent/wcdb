@@ -95,7 +95,7 @@ public:
     virtual void finalizeStatements();
     HandleStatement *getOrCreatePreparedStatement(const Statement &statement);
     HandleStatement *getOrCreatePreparedStatement(const UnsafeStringView &sql);
-    void returnAllPreparedStatement();
+    virtual void returnAllPreparedStatement();
 
 private:
     HandleStatement *getOrCreateStatement(const UnsafeStringView &sql);

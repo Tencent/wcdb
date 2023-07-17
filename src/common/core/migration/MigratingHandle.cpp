@@ -382,6 +382,13 @@ bool MigratingHandle::trySynchronousTransactionAfterAttached()
 void MigratingHandle::finalize()
 {
     Super::finalize();
+    for (auto iter = m_migratingHandleStatements.begin();
+         iter != m_migratingHandleStatements.end();
+         ++iter) {
+        if (iter->isPrepared()) {
+            return;
+        }
+    }
     stopReferenced();
 }
 
@@ -411,6 +418,15 @@ void MigratingHandle::finalizeStatements()
 {
     for (auto& handleStatement : m_migratingHandleStatements) {
         handleStatement.finalize();
+    }
+    stopReferenced();
+}
+
+void MigratingHandle::returnAllPreparedStatement()
+{
+    Super::returnAllPreparedStatement();
+    if (!m_mainStatement->isPrepared()) {
+        stopReferenced();
     }
 }
 
