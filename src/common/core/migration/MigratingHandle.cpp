@@ -31,7 +31,7 @@ namespace WCDB {
 
 #pragma mark - Initialize
 MigratingHandle::MigratingHandle(Migration& migration)
-: InnerHandle(), Migration::Binder(migration)
+: InnerHandle(), Migration::Binder(migration), m_createdNewViewInTransaction(false)
 {
     Super::returnStatement(m_mainStatement);
     m_mainStatement = getStatement();
@@ -47,14 +47,20 @@ MigratingHandle::~MigratingHandle()
 
 Optional<const MigrationInfo*> MigratingHandle::getBindingInfo(const UnsafeStringView& table)
 {
+    const MigrationInfo* boundInfo = getBoundInfo(table);
+    if (boundInfo != nullptr) {
+        return boundInfo;
+    }
     Optional<const MigrationInfo*> result;
 
     startBinding();
 
     result = bindTable(table);
 
-    bool success = stopBinding(true);
-    if (!success) {
+    bool needBinding = result.hasValue() && result.value() != nullptr;
+
+    bool success = stopBinding(needBinding);
+    if (needBinding && !success) {
         return Optional<const MigrationInfo*>();
     }
 
@@ -269,11 +275,16 @@ bool MigratingHandle::rebindViews(const StringViewMap<const MigrationInfo*>& mig
         }
     }
 
+    bool hasNewView = false;
     // create all needed views
     for (const auto& iter : views2MigratingInfos) {
         if (!executeStatement(iter.second->getStatementForCreatingUnionedView())) {
             return false;
         }
+        hasNewView = true;
+    }
+    if (hasNewView && isInTransaction()) {
+        m_createdNewViewInTransaction = true;
     }
     return true;
 }
@@ -325,6 +336,24 @@ bool MigratingHandle::rebindSchemas(const StringViewMap<const MigrationInfo*>& m
         return trySynchronousTransactionAfterAttached();
     }
     return true;
+}
+
+bool MigratingHandle::commitTransaction()
+{
+    bool ret = Super::commitTransaction();
+    if (ret && !isInTransaction()) {
+        m_createdNewViewInTransaction = false;
+    }
+    return ret;
+}
+
+void MigratingHandle::rollbackTransaction()
+{
+    Super::rollbackTransaction();
+    if (m_createdNewViewInTransaction) {
+        setNeedRebind();
+        m_createdNewViewInTransaction = false;
+    }
 }
 
 bool MigratingHandle::bindInfos(const StringViewMap<const MigrationInfo*>& migratings)
