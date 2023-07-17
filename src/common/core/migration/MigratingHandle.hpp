@@ -52,6 +52,9 @@ public:
 
 #pragma mark - Binder
 protected:
+    bool commitTransaction() override final;
+    void rollbackTransaction() override final;
+
     bool bindInfos(const StringViewMap<const MigrationInfo *> &migratings) override final;
     Optional<const MigrationInfo *> getBindingInfo(const UnsafeStringView &table);
 
@@ -60,6 +63,8 @@ private:
     bool rebindSchemas(const StringViewMap<const MigrationInfo *> &migratings);
 
     bool trySynchronousTransactionAfterAttached();
+
+    bool m_createdNewViewInTransaction;
 
 #pragma mark - Info Initializer
 protected:

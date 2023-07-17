@@ -273,6 +273,12 @@ bool Migration::Binder::stopBinding(bool succeed)
     return succeed;
 }
 
+void Migration::Binder::setNeedRebind()
+{
+    m_bounds.clear();
+    m_rebind = true;
+}
+
 void Migration::Binder::stopReferenced()
 {
     m_referenceds.clear();

@@ -115,7 +115,7 @@ public:
     typedef std::function<bool(InnerHandle *)> TransactionCallback;
     typedef std::function<bool(InnerHandle *, bool &, bool)> TransactionCallbackForOneLoop;
     bool beginTransaction() override final;
-    void rollbackTransaction() override final;
+    void rollbackTransaction() override;
 
     bool checkMainThreadBusyRetry();
     bool checkHasBusyRetry();
@@ -126,7 +126,7 @@ public:
     void configTransactionEvent(TransactionEvent *event);
 
 protected:
-    bool commitTransaction() override final;
+    bool commitTransaction() override;
 
 private:
     TransactionEvent *m_transactionEvent;
