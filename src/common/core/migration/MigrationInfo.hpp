@@ -24,38 +24,77 @@
 
 #pragma once
 
+#include "Lock.hpp"
 #include "StringView.hpp"
 #include "WINQ.h"
 #include <set>
 
 namespace WCDB {
 
+class MigrationUserInfo;
+
+#pragma mark - MigrationDatabaseInfo
+class MigrationDatabaseInfo {
+public:
+    typedef std::function<void(MigrationUserInfo&)> TableFilter;
+
+    MigrationDatabaseInfo(const UnsafeStringView& path,
+                          const UnsafeData& cipher,
+                          const TableFilter& filter);
+
+    bool isCrossDatabase() const;
+
+    static const char* getSchemaPrefix();
+    const StringView& getSourceDatabase() const;
+
+    Data getCipher() const;
+    void setRawCipher(const UnsafeData& rawCipher) const;
+    bool needRawCipher() const;
+
+    const TableFilter& getFilter() const;
+
+    const Schema& getSchemaForSourceDatabase() const;
+    const StatementAttach& getStatementForAttachingSchema() const;
+
+private:
+    StringView m_sourcePath;
+    mutable Data m_cipher;
+    TableFilter m_filter;
+
+    mutable bool m_needRawCipher;
+    mutable SharedLock m_lock;
+
+    // wcdb_migration_ + hash(m_sourcePath)
+    Schema m_schema;
+    StatementAttach m_statementForAttachingSchema;
+};
+
 #pragma mark - MigrationBaseInfo
 class MigrationBaseInfo {
 public:
     MigrationBaseInfo();
-    MigrationBaseInfo(const UnsafeStringView& database, const UnsafeStringView& table);
+    MigrationBaseInfo(MigrationDatabaseInfo& databaseInfo, const UnsafeStringView& table);
     virtual ~MigrationBaseInfo() = 0;
 
     const StringView& getTable() const;
-    const StringView& getDatabase() const;
     const StringView& getSourceTable() const;
-    const StringView& getSourceDatabase() const;
 
     bool shouldMigrate() const;
     bool isCrossDatabase() const;
+    const StringView& getSourceDatabase() const;
 
-    // wcdb_migration_
-    static const char* getSchemaPrefix();
+    Data getSourceCipher() const;
+    void setRawSourceCipher(const UnsafeData& rawCipher) const;
+    bool needRawSourceCipher() const;
+
+    const Schema& getSchemaForSourceDatabase() const;
+    const StatementAttach& getStatementForAttachingSchema() const;
 
 protected:
-    static Schema getSchemaForDatabase(const UnsafeStringView& database);
-    void setSource(const UnsafeStringView& table, const UnsafeStringView& database = "");
+    void setSource(const UnsafeStringView& table);
 
-private:
-    StringView m_database;
+    MigrationDatabaseInfo& m_databaseInfo;
     StringView m_table;
-    StringView m_sourceDatabase;
     StringView m_sourceTable;
 };
 
@@ -66,14 +105,6 @@ public:
     ~MigrationUserInfo() override final;
 
     using MigrationBaseInfo::setSource;
-
-    /*
-     ATTACH [sourceDatabase]
-     AS [schemaForSourceDatabase]
-     */
-    StatementAttach getStatementForAttachingSchema() const;
-
-    Schema getSchemaForSourceDatabase() const;
 };
 
 #pragma mark - MigrationInfo
@@ -89,15 +120,6 @@ protected:
 
 #pragma mark - Schema
 public:
-    // Schema
-    const Schema& getSchemaForSourceDatabase() const;
-
-    /*
-     ATTACH [sourceDatabase]
-     AS [schemaForSourceDatabase]
-     */
-    const StatementAttach& getStatementForAttachingSchema() const;
-
     /*
      DETACH [schemaForSourceDatabase]
      */
@@ -107,11 +129,6 @@ public:
      PRAGMA main.database_list
      */
     static StatementPragma getStatementForSelectingDatabaseList();
-
-protected:
-    // wcdb_migration_ + hash([sourceDatabase])
-    Schema m_schemaForSourceDatabase;
-    StatementAttach m_statementForAttachingSchema;
 
 #pragma mark - View
 public:

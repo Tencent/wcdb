@@ -32,9 +32,7 @@
 {
     if (self = [super init]) {
         _table = [NSString stringWithView:info.getTable()];
-        _database = [NSString stringWithView:info.getDatabase()];
         _sourceTable = [NSString stringWithView:info.getSourceTable()];
-        _sourceDatabase = [NSString stringWithView:info.getSourceDatabase()];
     }
     return self;
 }
@@ -46,11 +44,6 @@
 - (void)setSourceTable:(NSString *)table
 {
     _sourceTable = table;
-}
-
-- (void)setSourceDatabase:(NSString *)database
-{
-    _sourceDatabase = [database wcdb_stringByStandardizingPath];
 }
 
 @end

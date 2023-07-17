@@ -156,8 +156,10 @@ private:
 
 #pragma mark - Migration
 public:
-    typedef Migration::Filter MigrationFilter;
-    void filterMigration(const MigrationFilter &filter);
+    typedef Migration::TableFilter TableFilter;
+    void addMigration(const UnsafeStringView &sourcePath,
+                      const UnsafeData &sourceCipher,
+                      const TableFilter &filter);
 
     typedef std::function<void(InnerDatabase *, const MigrationBaseInfo *)> MigratedCallback;
     void setNotificationWhenMigrated(const MigratedCallback &callback);

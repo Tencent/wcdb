@@ -221,7 +221,7 @@ bool HandleStatement::tryExtractColumnInfo(const Statement &statement,
                                    tableName.length() - prefixLength);
             schemaName = "";
             schemaSpecified = false;
-        } else if (schemaName.hasPrefix(MigrationInfo::getSchemaPrefix())) {
+        } else if (schemaName.hasPrefix(MigrationDatabaseInfo::getSchemaPrefix())) {
             schemaName = "";
             schemaSpecified = false;
         }
@@ -296,7 +296,7 @@ bool HandleStatement::tryExtractColumnInfo(const Statement &statement,
                                       curTableName.length() - prefixLength);
             curSchema = Schema::main();
         }
-        if (curSchema.name.hasPrefix(MigrationInfo::getSchemaPrefix())) {
+        if (curSchema.name.hasPrefix(MigrationDatabaseInfo::getSchemaPrefix())) {
             curSchema = Schema::main();
         }
 

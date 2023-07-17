@@ -92,7 +92,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  @brief Execute a sql string directly.
  @warning You should no use this method to access or modify the data in a migrating table and you should firstly use `-[WCTHandle finalizeStatement]` to finalize the previous statement prepared by `-[WCTHandle prepare:]`.
- @see   `-[WCTDatabase filterMigration:]`
+ @see   `-[WCTDatabase addMigration:withFilter:]`
  @return YES if no error occurs.
  */
 - (BOOL)rawExecute:(NSString *)sql;
@@ -108,7 +108,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  @brief Use `sqlite3_prepare` internally to prepare a sql string.
  @warning You should no use this method to access or modify the data in a migrating table and you should firstly use `-[WCTHandle finalizeStatement]` to finalize the previous statement prepared by `-[WCTHandle prepare:]`.
- @see   `-[WCTDatabase filterMigration:]`
+ @see   `-[WCTDatabase addMigration:withFilter:]`
  @return YES if no error occurs.
  */
 - (BOOL)rawPrepare:(NSString *)sql;

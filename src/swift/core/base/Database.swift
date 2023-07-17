@@ -687,14 +687,12 @@ public extension Database {
 // Migration
 public extension Database {
     struct MigrationInfo {
-        public var database: String = ""        // Target database of migration
         public var table: String = ""           // Target table of migration
-        public var sourceDatabase: String?      // Source datatase of migration
         public var sourceTable: String?         // Source table of migration
     }
 
     /**
-     Triggered at any time when WCDB needs to know whether a table in the current database needs to migrate data, mainly including creating a new table, reading and writing a table, and starting to migrate a new table. If the current table does not need to migrate data, you need to set the sourceTable and sourceDatabase in `MigrationInfo` to nil.
+     Triggered at any time when WCDB needs to know whether a table in the current database needs to migrate data, mainly including creating a new table, reading and writing a table, and starting to migrate a new table. If the current table does not need to migrate data, you need to set the sourceTable in `MigrationInfo` to nil.
      */
     typealias MigrationFilter = (_ info: inout MigrationInfo) -> Void
 
@@ -710,12 +708,14 @@ public extension Database {
     /// If the source table is not in the current database, the database containing the source table will be attached to the current database before the migration is complete.
     /// After migration, source tables will be dropped.
     ///
+    /// - Parameter sourcePath: path of source database.
+    /// - Parameter sourceCipher: cipher of source database. It is optional.
     /// - Parameter filter: see `MigrationFilter`.
-    func filterMigration(_ filter: MigrationFilter?) {
+    func addMigration(sourcePath: String?, sourceCipher: Data? = nil, _ filter: MigrationFilter?) {
         if let filter = filter {
-            let internalFilter: @convention(block) (UnsafePointer<CChar>, UnsafePointer<CChar>, UnsafeMutablePointer<UnsafeMutablePointer<CChar>>, UnsafeMutablePointer<UnsafeMutablePointer<CChar>>) -> Void = {
-                targetDatabase, targetTable, pSouceDatabase, pSourceTable in
-                var info = MigrationInfo(database: String(cString: targetDatabase), table: String(cString: targetTable))
+            let internalFilter: @convention(block) ( UnsafePointer<CChar>, UnsafeMutablePointer<UnsafeMutablePointer<CChar>>) -> Void = {
+                targetTable, pSourceTable in
+                var info = MigrationInfo(table: String(cString: targetTable))
                 filter(&info)
                 if let sourceTable = info.sourceTable {
                     let length = sourceTable.lengthOfBytes(using: .utf8) + 1
@@ -724,20 +724,18 @@ public extension Database {
                         memcpy(buffer, sourceTable.cString, length)
                         pSourceTable.pointee = buffer.assumingMemoryBound(to: Int8.self)
                     }
-                    if let sourceDatabase = info.sourceDatabase {
-                        let length = sourceDatabase.lengthOfBytes(using: .utf8) + 1
-                        let buffer = malloc(length)
-                        if let buffer = buffer {
-                            memcpy(buffer, sourceDatabase.cString, length)
-                            pSouceDatabase.pointee = buffer.assumingMemoryBound(to: Int8.self)
-                        }
-                    }
                 }
             }
             let internalFilterImp = imp_implementationWithBlock(internalFilter)
-            WCDBDatabaseFilterMigration(database, internalFilterImp)
+            if let sourceCipher = sourceCipher {
+                sourceCipher.withUnsafeBytes { (buffer: UnsafeRawBufferPointer) in
+                    WCDBDatabaseAddMigration(database, sourcePath?.cString, buffer.bindMemory(to: UInt8.self).baseAddress, Int32(buffer.count), internalFilterImp)
+                }
+            } else {
+                WCDBDatabaseAddMigration(database, sourcePath?.cString, nil, 0, internalFilterImp)
+            }
         } else {
-            WCDBDatabaseFilterMigration(database, nil)
+            WCDBDatabaseAddMigration(database, sourcePath?.cString, nil, 0, nil)
         }
     }
 
@@ -771,17 +769,13 @@ public extension Database {
     /// - Parameter callback: see `MigratedCallback`.
     func setNotification(whenMigrated callback: MigratedCallback?) {
         if let callback = callback {
-            let internalCallBack: @convention(block) (CPPDatabase, UnsafePointer<CChar>?, UnsafePointer<CChar>?, UnsafePointer<CChar>?, UnsafePointer<CChar>?) -> Void = {
-                cppDatabase, databasePath, tableName, sourceDatabasePath, sourceTableName in
+            let internalCallBack: @convention(block) (CPPDatabase, UnsafePointer<CChar>?, UnsafePointer<CChar>?) -> Void = {
+                cppDatabase, tableName, sourceTableName in
                 let database = Database(with: cppDatabase)
                 var info: MigrationInfo?
-                if let databasePath = databasePath,
-                   let tableName = tableName,
-                   let sourceDatabasePath = sourceDatabasePath,
+                if let tableName = tableName,
                    let sourceTableName = sourceTableName {
-                    info = MigrationInfo(database: String(cString: databasePath),
-                                         table: String(cString: tableName),
-                                         sourceDatabase: String(cString: sourceDatabasePath),
+                    info = MigrationInfo(table: String(cString: tableName),
                                          sourceTable: String(cString: sourceTableName))
                 }
                 callback(database, info)

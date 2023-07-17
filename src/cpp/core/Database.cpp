@@ -429,23 +429,23 @@ bool Database::setDefaultTemporaryDirectory(const UnsafeStringView& directory)
     return Core::shared().setDefaultTemporaryDirectory(directory);
 }
 
-void Database::filterMigration(MigrationFilter filter)
+void Database::addMigration(const UnsafeStringView& sourcePath,
+                            const UnsafeData& sourceCipher,
+                            const TableFilter& filter)
 {
-    InnerDatabase::MigrationFilter callback = nullptr;
+    InnerDatabase::TableFilter callback = nullptr;
     if (filter != nullptr) {
         callback = [filter](MigrationUserInfo& userInfo) {
             MigrationInfo info;
             info.table = userInfo.getTable();
-            info.database = userInfo.getDatabase();
             info.sourceTable = userInfo.getSourceTable();
-            info.sourceDatabase = userInfo.getSourceDatabase();
             filter(info);
             if (info.sourceTable.length() > 0) {
-                userInfo.setSource(info.sourceTable, info.sourceDatabase);
+                userInfo.setSource(info.sourceTable);
             }
         };
     }
-    m_innerDatabase->filterMigration(callback);
+    m_innerDatabase->addMigration(sourcePath, sourceCipher, callback);
 }
 
 bool Database::stepMigration()
@@ -469,9 +469,7 @@ void Database::setNotificationWhenMigrated(Database::MigratedCallback onMigrated
             if (baseInfo != nullptr) {
                 info = MigrationInfo();
                 info->table = baseInfo->getTable();
-                info->database = baseInfo->getDatabase();
                 info->sourceTable = baseInfo->getSourceTable();
-                info->sourceDatabase = baseInfo->getSourceDatabase();
             }
             Database database = Database(innerDatabase);
             onMigrated(database, info);

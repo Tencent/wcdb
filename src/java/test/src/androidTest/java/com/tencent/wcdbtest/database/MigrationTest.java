@@ -51,12 +51,11 @@ public class MigrationTest extends BaseTestCase {
 
         Database targetDatabase = new Database(currentDirectory + File.separator + "targetDatabase.sqlite3");
         final String tableName = "targetTable";
-        targetDatabase.filterMigration(new Database.MigrationFilter() {
+        targetDatabase.addMigrationSource(sourceDatabase.getPath(), new Database.MigrationFilter() {
             @Override
             public void filterMigrate(Database.MigrationInfo info) {
                 if(info.table.equals(tableName)) {
                     info.sourceTable = "sourceTable";
-                    info.sourceDatabase = sourceDatabase.getPath();
                 }
             }
         });

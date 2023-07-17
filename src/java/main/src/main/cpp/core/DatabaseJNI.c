@@ -559,41 +559,39 @@ void WCDBJNIDestructMigrationFilterContext(jobject filter)
     WCDBJNITryDetach;
 }
 
-void WCDBJNIDatabaseFilterMigrate(jobject filter,
-                                  const char* database,
-                                  const char* table,
-                                  void* info,
-                                  WCDBMigrationInfoSetter setter)
+void WCDBJNIDatabaseFilterMigrate(jobject filter, const char* table, void* info, WCDBMigrationInfoSetter setter)
 {
     WCDBJNITryGetEnvOr(return );
     WCDBJNITryGetDatabaseMethodId("filterMigrate",
-                                  "(" WCDBJNIDatabaseSignature
-                                  "$MigrationFilter;" WCDBJNIStringSignature WCDBJNIStringSignature
-                                  ")[" WCDBJNIStringSignature,
+                                  "(" WCDBJNIDatabaseSignature "$MigrationFilter;" WCDBJNIStringSignature
+                                  ")" WCDBJNIStringSignature,
                                   return );
-    WCDBJNICreateJavaString(database);
     WCDBJNICreateJavaString(table);
-    jobjectArray ret = (*env)->CallStaticObjectMethod(
-    env, WCDBJNIGetDatabaseClass(), g_methodId, filter, jdatabase, jtable);
+    jstring ret = (*env)->CallStaticObjectMethod(
+    env, WCDBJNIGetDatabaseClass(), g_methodId, filter, jtable);
     if ((*env)->ExceptionCheck(env)) {
         ret = NULL;
     }
-    WCDBJNIGetStringArray(ret);
-    if (retLength == 2) {
-        setter(info, retCharArray[1], retCharArray[0]);
-    }
-    WCDBJNIReleaseStringArray(ret);
+    WCDBJNIGetString(ret);
+    setter(info, retString);
+    WCDBJNIReleaseString(ret);
     WCDBJNITryDetach;
 }
 
-void WCDBJNIDatabaseObjectMethod(filterMigration, jlong self, jobject filter)
+void WCDBJNIDatabaseObjectMethod(
+addMigrationSource, jlong self, jstring sourcePath, jbyteArray cipherKey, jobject filter)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBJNICreateGlobalRel(filter);
-    WCDBDatabaseFilterMigration2(selfStruct,
-                                 filter != NULL ? WCDBJNIDatabaseFilterMigrate : NULL,
-                                 filter,
-                                 WCDBJNIDestructMigrationFilterContext);
+    WCDBJNIGetString(sourcePath);
+    WCDBJNIGetByteArray(cipherKey);
+    WCDBDatabaseAddMigration2(selfStruct,
+                              sourcePathString,
+                              cipherKeyArray,
+                              cipherKeyLength,
+                              filter != NULL ? WCDBJNIDatabaseFilterMigrate : NULL,
+                              filter,
+                              WCDBJNIDestructMigrationFilterContext);
 }
 
 jboolean WCDBJNIDatabaseObjectMethod(stepMigration, jlong self)
@@ -617,31 +615,19 @@ void WCDBJNIDestructMigrationNotificationContext(jobject notification)
 
 void WCDBJNIDatabaseOnTableMigrate(jobject notification,
                                    CPPDatabase database,
-                                   const char* databasePath,
                                    const char* table,
-                                   const char* sourceDatabase,
                                    const char* sourceTable)
 {
     WCDBJNITryGetEnvOr(return );
     WCDBJNITryGetDatabaseMethodId(
     "onTableMigrated",
     "(" WCDBJNIDatabaseSignature
-    "$MigrationNotification;J" WCDBJNIStringSignature WCDBJNIStringSignature WCDBJNIStringSignature WCDBJNIStringSignature
-    ")V",
+    "$MigrationNotification;J" WCDBJNIStringSignature WCDBJNIStringSignature ")V",
     return );
-    WCDBJNICreateJavaString(databasePath);
     WCDBJNICreateJavaString(table);
-    WCDBJNICreateJavaString(sourceDatabase);
     WCDBJNICreateJavaString(sourceTable);
-    (*env)->CallStaticVoidMethod(env,
-                                 WCDBJNIGetDatabaseClass(),
-                                 g_methodId,
-                                 notification,
-                                 (jlong) database.innerValue,
-                                 jdatabasePath,
-                                 jtable,
-                                 jsourceDatabase,
-                                 jsourceTable);
+    (*env)->CallStaticVoidMethod(
+    env, WCDBJNIGetDatabaseClass(), g_methodId, notification, (jlong) database.innerValue, jtable, jsourceTable);
     WCDBJNITryDetach;
 }
 

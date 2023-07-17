@@ -52,9 +52,11 @@ class Migration final {
 public:
     Migration(MigrationEvent* event);
 
-    typedef std::function<void(MigrationUserInfo&)> Filter;
-    // filter should be called at the very beginning.
-    void filterTable(const Filter& filter);
+    using TableFilter = MigrationDatabaseInfo::TableFilter;
+    // addMigration should be called at the very beginning.
+    void addMigration(const UnsafeStringView& sourcePath,
+                      const UnsafeData& sourceCipher,
+                      const TableFilter& filter);
 
     bool shouldMigrate() const;
 
@@ -114,7 +116,7 @@ private:
 
     mutable SharedLock m_lock;
 
-    Filter m_filter;
+    StringViewMap<std::shared_ptr<MigrationDatabaseInfo>> m_migrationInfo;
 
 #pragma mark - Bind
 public:

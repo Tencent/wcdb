@@ -53,16 +53,13 @@ WCDBDefineMultiArgumentSwiftClosureBridgedType(WCDBSwiftRetrieveProgress, void, 
 
 WCDBDefineMultiArgumentSwiftClosureBridgedType(WCDBSwiftDatabaseOperationTracer, void, CPPDatabase, long);
 
-WCDBDefineMultiArgumentSwiftClosureBridgedType(
-WCDBSwiftDatabaseMigrationFilter, void, const char*, const char*, char**, char**);
-
-WCDBDefineMultiArgumentSwiftClosureBridgedType(WCDBSwiftDatabaseMigrationNotification,
+WCDBDefineMultiArgumentSwiftClosureBridgedType(WCDBSwiftDatabaseMigrationFilter,
                                                void,
-                                               CPPDatabase,
                                                const char*,
-                                               const char*,
-                                               const char*,
-                                               const char*);
+                                               char**);
+
+WCDBDefineMultiArgumentSwiftClosureBridgedType(
+WCDBSwiftDatabaseMigrationNotification, void, CPPDatabase, const char*, const char*);
 
 CPPError WCDBDatabaseGetError(CPPDatabase database)
 {
@@ -706,63 +703,57 @@ bool WCDBDatabaseTruncateCheckpoint(CPPDatabase database)
     return cppDatabase->checkpoint(false, WCDB::InnerDatabase::CheckPointMode::Truncate);
 }
 
-void WCDBDatabaseFilterMigration(CPPDatabase database, SwiftClosure* _Nullable filter)
+void WCDBDatabaseAddMigration(CPPDatabase database,
+                              const char* _Nullable sourcePath,
+                              const unsigned char* _Nullable sourceCipher,
+                              int cipherLength,
+                              SwiftClosure* _Nullable filter)
 {
     WCDBSwiftDatabaseMigrationFilter bridgedFilter
     = WCDBCreateSwiftBridgedClosure(WCDBSwiftDatabaseMigrationFilter, filter);
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
-    WCDB::InnerDatabase::MigrationFilter cppFilter = nullptr;
+    WCDB::InnerDatabase::TableFilter cppFilter = nullptr;
     if (WCDBGetSwiftClosure(bridgedFilter) != nullptr) {
         cppFilter = [bridgedFilter](WCDB::MigrationUserInfo& info) {
-            char* sourceDatabase = nullptr;
             char* sourceTable = nullptr;
-            WCDBSwiftClosureCallWithMultiArgument(bridgedFilter,
-                                                  info.getDatabase().data(),
-                                                  info.getTable().data(),
-                                                  &sourceDatabase,
-                                                  &sourceTable);
+            WCDBSwiftClosureCallWithMultiArgument(
+            bridgedFilter, info.getTable().data(), &sourceTable);
             if (sourceTable != nullptr) {
-                info.setSource(sourceTable, sourceDatabase);
+                info.setSource(sourceTable);
                 free(sourceTable);
-            }
-            if (sourceDatabase != nullptr) {
-                free(sourceDatabase);
             }
         };
     }
-    cppDatabase->filterMigration(cppFilter);
+    cppDatabase->addMigration(
+    sourcePath, WCDB::UnsafeData::immutable(sourceCipher, (size_t) cipherLength), cppFilter);
 }
 
-void WCDBMigrationInfoSetterImp(WCDB::MigrationUserInfo* info,
-                                const char* sourceTable,
-                                const char* sourceDatabase)
+void WCDBMigrationInfoSetterImp(WCDB::MigrationUserInfo* info, const char* sourceTable)
 {
-    info->setSource(sourceTable, sourceDatabase);
+    info->setSource(sourceTable);
 }
 
-void WCDBDatabaseFilterMigration2(CPPDatabase database,
-                                  WCDBMigrationFilter _Nullable filter,
-                                  void* _Nullable context,
-                                  WCDBContextDestructor _Nullable destructor)
+void WCDBDatabaseAddMigration2(CPPDatabase database,
+                               const char* _Nullable sourcePath,
+                               const unsigned char* _Nullable sourceCipher,
+                               int cipherLength,
+                               WCDBMigrationFilter _Nullable filter,
+                               void* _Nullable context,
+                               WCDBContextDestructor _Nullable destructor)
 {
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
-    WCDB::InnerDatabase::MigrationFilter cppFilter = nullptr;
+    WCDB::InnerDatabase::TableFilter cppFilter = nullptr;
     if (filter != nullptr) {
         WCDB::Recyclable<void*> recyclableContext(context, destructor);
         cppFilter = [recyclableContext, filter](WCDB::MigrationUserInfo& info) {
-            const char* sourceDatabase = nullptr;
-            const char* sourceTable = nullptr;
             filter(recyclableContext.get(),
-                   info.getDatabase().data(),
                    info.getTable().data(),
                    &info,
                    (WCDBMigrationInfoSetter) WCDBMigrationInfoSetterImp);
-            if (sourceTable != nullptr) {
-                info.setSource(sourceTable, sourceDatabase);
-            }
         };
     }
-    cppDatabase->filterMigration(cppFilter);
+    cppDatabase->addMigration(
+    sourcePath, WCDB::UnsafeData::immutable(sourceCipher, (size_t) cipherLength), cppFilter);
 }
 
 bool WCDBDatabaseStepMigration(CPPDatabase database)
@@ -788,16 +779,12 @@ void WCDBDatabaseSetNotificationWhenMigrated(CPPDatabase database, SwiftClosure*
                                   const WCDB::MigrationBaseInfo* baseInfo) {
             CPPDatabase database = WCDBCreateUnmanagedCPPObject(CPPDatabase, cppDatabase);
             if (baseInfo != nullptr) {
-                WCDBSwiftClosureCallWithMultiArgument(
-                notification,
-                database,
-                baseInfo->getDatabase().data(),
-                baseInfo->getTable().data(),
-                baseInfo->getSourceDatabase().data(),
-                baseInfo->getSourceTable().data());
+                WCDBSwiftClosureCallWithMultiArgument(notification,
+                                                      database,
+                                                      baseInfo->getTable().data(),
+                                                      baseInfo->getSourceTable().data());
             } else {
-                WCDBSwiftClosureCallWithMultiArgument(
-                notification, database, nullptr, nullptr, nullptr, nullptr);
+                WCDBSwiftClosureCallWithMultiArgument(notification, database, nullptr, nullptr);
             }
         };
     }
@@ -819,13 +806,10 @@ void WCDBDatabaseSetNotificationWhenMigrated2(CPPDatabase database,
             if (baseInfo != nullptr) {
                 notification(recyclableContext.get(),
                              database,
-                             baseInfo->getDatabase().data(),
                              baseInfo->getTable().data(),
-                             baseInfo->getSourceDatabase().data(),
                              baseInfo->getSourceTable().data());
             } else {
-                notification(
-                recyclableContext.get(), database, nullptr, nullptr, nullptr, nullptr);
+                notification(recyclableContext.get(), database, nullptr, nullptr);
             }
         };
     }

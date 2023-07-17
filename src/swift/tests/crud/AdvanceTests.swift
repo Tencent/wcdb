@@ -872,9 +872,8 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertNoThrow(try sourceDatabase.insert(oldObject1, oldObject2, intoTable: "sourceTable"))
 
         let targetDatabase = Database(at: recommendedDirectory.appendingPathComponent("targetDB.sqlite3"))
-        targetDatabase.filterMigration({ info in
+        targetDatabase.addMigration(sourcePath: self.recommendedPath.path, { info in
             if info.table == "targetTable" {
-                info.sourceDatabase = self.recommendedPath.path
                 info.sourceTable = "sourceTable"
             }
         })

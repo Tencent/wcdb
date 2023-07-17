@@ -28,37 +28,90 @@
 
 namespace WCDB {
 
-#pragma mark - MigrationBaseInfo
-MigrationBaseInfo::MigrationBaseInfo() = default;
-
-MigrationBaseInfo::MigrationBaseInfo(const UnsafeStringView& database,
-                                     const UnsafeStringView& table)
-: m_database(database), m_table(table)
+const char* MigrationDatabaseInfo::getSchemaPrefix()
 {
-    WCTAssert(!m_database.empty());
+    static const char* s_schemaPrefix = "wcdb_migration_";
+    return s_schemaPrefix;
+}
+
+#pragma mark - MigrationDatabaseInfo
+MigrationDatabaseInfo::MigrationDatabaseInfo(const UnsafeStringView& path,
+                                             const UnsafeData& cipher,
+                                             const TableFilter& filter)
+: m_sourcePath(path)
+, m_cipher(cipher)
+, m_filter(filter)
+, m_needRawCipher(!cipher.empty())
+{
+    if (!m_sourcePath.empty()) {
+        std::ostringstream stream;
+        stream << getSchemaPrefix() << m_sourcePath.hash();
+        m_schema = stream.str();
+        m_statementForAttachingSchema = StatementAttach().attach(m_sourcePath).as(m_schema);
+        if (!cipher.empty()) {
+            m_statementForAttachingSchema.key(BindParameter(1));
+        }
+    } else {
+        m_schema = Schema::main();
+    }
+}
+
+bool MigrationDatabaseInfo::isCrossDatabase() const
+{
+    return !m_sourcePath.empty();
+}
+
+const StringView& MigrationDatabaseInfo::getSourceDatabase() const
+{
+    return m_sourcePath;
+}
+
+Data MigrationDatabaseInfo::getCipher() const
+{
+    SharedLockGuard lockGoard(m_lock);
+    return m_cipher;
+}
+
+void MigrationDatabaseInfo::setRawCipher(const UnsafeData& rawCipher) const
+{
+    LockGuard lockGuard(m_lock);
+    m_cipher = rawCipher;
+    m_needRawCipher = false;
+}
+
+bool MigrationDatabaseInfo::needRawCipher() const
+{
+    return m_needRawCipher;
+}
+
+const MigrationDatabaseInfo::TableFilter& MigrationDatabaseInfo::getFilter() const
+{
+    return m_filter;
+}
+
+const Schema& MigrationDatabaseInfo::getSchemaForSourceDatabase() const
+{
+    return m_schema;
+}
+
+const StatementAttach& MigrationDatabaseInfo::getStatementForAttachingSchema() const
+{
+    return m_statementForAttachingSchema;
+}
+
+#pragma mark - MigrationBaseInfo
+MigrationBaseInfo::MigrationBaseInfo(MigrationDatabaseInfo& databaseInfo,
+                                     const UnsafeStringView& table)
+: m_databaseInfo(databaseInfo), m_table(table)
+{
     WCTAssert(!m_table.empty());
 }
 
 MigrationBaseInfo::~MigrationBaseInfo() = default;
 
-bool MigrationBaseInfo::shouldMigrate() const
-{
-    return !m_table.empty() && !m_sourceTable.empty();
-}
-
-bool MigrationBaseInfo::isCrossDatabase() const
-{
-    return m_sourceDatabase != m_database;
-}
-
 const StringView& MigrationBaseInfo::getTable() const
 {
     return m_table;
-}
-
-const StringView& MigrationBaseInfo::getDatabase() const
-{
-    return m_database;
 }
 
 const StringView& MigrationBaseInfo::getSourceTable() const
@@ -66,53 +119,56 @@ const StringView& MigrationBaseInfo::getSourceTable() const
     return m_sourceTable;
 }
 
-const StringView& MigrationBaseInfo::getSourceDatabase() const
+const Schema& MigrationBaseInfo::getSchemaForSourceDatabase() const
 {
-    return m_sourceDatabase;
+    return m_databaseInfo.getSchemaForSourceDatabase();
 }
 
-const char* MigrationBaseInfo::getSchemaPrefix()
+const StatementAttach& MigrationBaseInfo::getStatementForAttachingSchema() const
 {
-    static const char* s_schemaPrefix = "wcdb_migration_";
-    return s_schemaPrefix;
+    return m_databaseInfo.getStatementForAttachingSchema();
 }
 
-Schema MigrationBaseInfo::getSchemaForDatabase(const UnsafeStringView& database)
+void MigrationBaseInfo::setSource(const UnsafeStringView& table)
 {
-    std::ostringstream stream;
-    stream << getSchemaPrefix() << database.hash();
-    return stream.str();
-}
-
-void MigrationBaseInfo::setSource(const UnsafeStringView& table, const UnsafeStringView& database)
-{
-    WCTRemedialAssert(!table.empty() && (table != m_table || database != m_database),
+    WCTRemedialAssert(!table.empty() && (table != m_table || isCrossDatabase()),
                       "Invalid migration source.",
                       return;);
     m_sourceTable = table;
-    if (!database.empty()) {
-        m_sourceDatabase = database;
-    } else {
-        m_sourceDatabase = m_database;
-    }
+}
+
+bool MigrationBaseInfo::shouldMigrate() const
+{
+    return !m_sourceTable.empty();
+}
+
+bool MigrationBaseInfo::isCrossDatabase() const
+{
+    return m_databaseInfo.isCrossDatabase();
+}
+
+const StringView& MigrationBaseInfo::getSourceDatabase() const
+{
+    return m_databaseInfo.getSourceDatabase();
+}
+
+Data MigrationBaseInfo::getSourceCipher() const
+{
+    return m_databaseInfo.getCipher();
+}
+
+void MigrationBaseInfo::setRawSourceCipher(const UnsafeData& rawCipher) const
+{
+    return m_databaseInfo.setRawCipher(rawCipher);
+}
+
+bool MigrationBaseInfo::needRawSourceCipher() const
+{
+    return m_databaseInfo.needRawCipher();
 }
 
 #pragma mark - MigrationUserInfo
 MigrationUserInfo::~MigrationUserInfo() = default;
-
-StatementAttach MigrationUserInfo::getStatementForAttachingSchema() const
-{
-    WCTAssert(isCrossDatabase());
-    return StatementAttach().attach(getSourceDatabase()).as(getSchemaForDatabase(getSourceDatabase()));
-}
-
-Schema MigrationUserInfo::getSchemaForSourceDatabase() const
-{
-    if (isCrossDatabase()) {
-        return getSchemaForDatabase(getSourceDatabase());
-    }
-    return Schema::main();
-}
 
 #pragma mark - MigrationInfo
 MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
@@ -120,18 +176,7 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
                              bool integerPrimaryKey)
 : MigrationBaseInfo(userInfo), m_integerPrimaryKey(integerPrimaryKey)
 {
-    WCTAssert(shouldMigrate());
     WCTAssert(!uniqueColumns.empty());
-
-    // Schema
-    if (isCrossDatabase()) {
-        m_schemaForSourceDatabase = getSchemaForDatabase(getSourceDatabase());
-
-        m_statementForAttachingSchema
-        = StatementAttach().attach(getSourceDatabase()).as(m_schemaForSourceDatabase);
-    } else {
-        m_schemaForSourceDatabase = Schema::main();
-    }
 
     Column rowid = Column::rowid();
     Columns columns;
@@ -141,10 +186,12 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
     ResultColumns resultColumns;
     resultColumns.insert(resultColumns.begin(), columns.begin(), columns.end());
 
+    const Schema& sourceSchema = m_databaseInfo.getSchemaForSourceDatabase();
+
     TableOrSubquery sourceTableQuery
-    = TableOrSubquery(getSourceTable()).schema(m_schemaForSourceDatabase);
+    = TableOrSubquery(getSourceTable()).schema(sourceSchema);
     QualifiedTable qualifiedSourceTable
-    = QualifiedTable(getSourceTable()).schema(m_schemaForSourceDatabase);
+    = QualifiedTable(getSourceTable()).schema(sourceSchema);
 
     // View
     {
@@ -197,35 +244,23 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
         m_statementForDeletingSpecifiedRow
         = StatementDelete().deleteFrom(qualifiedSourceTable).where(rowid == BindParameter(1));
 
-        m_statementForDroppingSourceTable = StatementDropTable()
-                                            .dropTable(getSourceTable())
-                                            .schema(m_schemaForSourceDatabase)
-                                            .ifExists();
+        m_statementForDroppingSourceTable
+        = StatementDropTable().dropTable(getSourceTable()).schema(sourceSchema).ifExists();
     }
 }
 
 MigrationInfo::~MigrationInfo() = default;
 
 #pragma mark - Schema
-const Schema& MigrationInfo::getSchemaForSourceDatabase() const
-{
-    return m_schemaForSourceDatabase;
-}
 
 const StringView& MigrationInfo::getUnionedView() const
 {
     return m_unionedView;
 }
 
-const StatementAttach& MigrationInfo::getStatementForAttachingSchema() const
-{
-    WCTAssert(isCrossDatabase());
-    return m_statementForAttachingSchema;
-}
-
 StatementDetach MigrationInfo::getStatementForDetachingSchema(const Schema& schema)
 {
-    WCTAssert(schema.getDescription().hasPrefix(getSchemaPrefix()));
+    WCTAssert(schema.getDescription().hasPrefix(MigrationDatabaseInfo::getSchemaPrefix()));
     return StatementDetach().detach(schema);
 }
 

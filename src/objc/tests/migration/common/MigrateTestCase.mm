@@ -32,11 +32,13 @@
     WCTDatabase *filter = [[WCTDatabase alloc] initWithPath:[self.path stringByAppendingString:@"_filter"]];
     __block int tested = 0;
     NSString *expectedTableName = self.tableName;
-    [filter filterMigration:^(WCTMigrationUserInfo *userInfo) {
-        if ([userInfo.table isEqualToString:expectedTableName]) {
-            ++tested;
-        }
-    }];
+    [filter addMigration:nil
+        withSourceCipher:nil
+              withFilter:^(WCTMigrationUserInfo *userInfo) {
+                  if ([userInfo.table isEqualToString:expectedTableName]) {
+                      ++tested;
+                  }
+              }];
     TestCaseAssertTrue([filter getObjectOfClass:MigrationObject.class fromTable:self.tableName] == nil);
     TestCaseAssertTrue([filter getObjectOfClass:MigrationObject.class fromTable:self.tableName] == nil);
     TestCaseAssertTrue(tested == 1);

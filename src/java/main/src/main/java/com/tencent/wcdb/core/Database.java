@@ -411,9 +411,7 @@ public class Database extends HandleORMOperation {
     private native boolean truncateCheckpoint(long self);
 
     public static class MigrationInfo {
-        public String database;
         public String table;
-        public String sourceDatabase;
         public String sourceTable;
     }
 
@@ -421,23 +419,22 @@ public class Database extends HandleORMOperation {
         void filterMigrate(MigrationInfo info);
     }
 
-    private static String[] filterMigrate(MigrationFilter filter, String database, String table) {
+    private static String filterMigrate(MigrationFilter filter, String table) {
         MigrationInfo info = new MigrationInfo();
-        info.database = database;
         info.table = table;
         filter.filterMigrate(info);
-        if(info.sourceTable != null && info.sourceTable.length() > 0 &&
-                info.sourceDatabase != null && info.sourceDatabase.length() > 0) {
-            return new String[]{info.sourceDatabase, info.sourceTable};
-        }
-        return null;
+        return info.sourceTable;
     }
 
-    public void filterMigration(MigrationFilter filter) {
-        filterMigration(cppObj, filter);
+    public void addMigrationSource(String sourcePath, MigrationFilter filter) {
+        addMigrationSource(sourcePath, null, filter);
     }
 
-    private native void filterMigration(long self, MigrationFilter filter);
+    public void addMigrationSource(String sourcePath, byte[] sourceCipher, MigrationFilter filter) {
+        addMigrationSource(cppObj, sourcePath, sourceCipher, filter);
+    }
+
+    private native void addMigrationSource(long self, String sourcePath, byte[] sourceCipher, MigrationFilter filter);
 
     public void stepMigration() throws WCDBException {
         if(!stepMigration(cppObj)) {
@@ -457,16 +454,14 @@ public class Database extends HandleORMOperation {
         void onMigrated(Database database, MigrationInfo info);
     }
 
-    private static void onTableMigrated(MigrationNotification notification, long cppDatabase, String databasePath, String table, String sourceDatabase, String sourceTable) {
+    private static void onTableMigrated(MigrationNotification notification, long cppDatabase, String table, String sourceTable) {
         Database database = new Database();
         database.cppObj = cppDatabase;
         MigrationInfo info = null;
-        if(databasePath != null && databasePath.length() > 0) {
+        if(table != null && table.length() > 0) {
             info = new MigrationInfo();
-            info.database = databasePath;
             info.table = table;
             info.sourceTable = sourceTable;
-            info.sourceDatabase = sourceDatabase;
         }
         notification.onMigrated(database, info);
     }

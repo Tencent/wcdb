@@ -29,19 +29,27 @@
 
 @implementation WCTDatabase (Migration)
 
-- (void)filterMigration:(WCTMigrationFilterBlock)filter
+- (void)addMigration:(nullable NSString*)sourceDatabasePath
+          withFilter:(nonnull WCDB_ESCAPE WCTMigrationFilterBlock)filter
 {
-    WCDB::InnerDatabase::MigrationFilter callback = nullptr;
+    [self addMigration:sourceDatabasePath withSourceCipher:nil withFilter:filter];
+}
+
+- (void)addMigration:(nullable NSString*)sourceDatabasePath
+    withSourceCipher:(nullable NSData*)cipher
+          withFilter:(nonnull WCDB_ESCAPE WCTMigrationFilterBlock)filter
+{
+    WCDB::InnerDatabase::TableFilter callback = nullptr;
     if (filter != nil) {
         callback = [filter](WCDB::MigrationUserInfo& userInfo) {
             WCTMigrationUserInfo* nsUserInfo = [[WCTMigrationUserInfo alloc] initWithBaseInfo:userInfo];
             filter(nsUserInfo);
             if (nsUserInfo.sourceTable.length > 0) {
-                userInfo.setSource(nsUserInfo.sourceTable, nsUserInfo.sourceDatabase);
+                userInfo.setSource(nsUserInfo.sourceTable);
             }
         };
     }
-    _database->filterMigration(callback);
+    _database->addMigration(sourceDatabasePath, cipher, callback);
 }
 
 - (BOOL)stepMigration

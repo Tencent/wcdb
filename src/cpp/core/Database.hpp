@@ -599,25 +599,26 @@ public:
 
 #pragma mark - Migration
     typedef struct MigrationInfo {
-        StringView database;       // Target database of migration
-        StringView table;          // Target table of migration
-        StringView sourceDatabase; // Source datatase of migration
-        StringView sourceTable;    // Source table of migration
+        StringView table;       // Target table of migration
+        StringView sourceTable; // Source table of migration
     } MigrationInfo;
 
     /**
-     Triggered at any time when WCDB needs to know whether a table in the current database needs to migrate data, mainly including creating a new table, reading and writing a table, and starting to migrate a new table. If the current table does not need to migrate data, you need to set the sourceTable and sourceDatabase in `WCDB::Database::MigrationInfo` to nil.
+     Triggered at any time when WCDB needs to know whether a table in the current database needs to migrate data, mainly including creating a new table, reading and writing a table, and starting to migrate a new table. If the current table does not need to migrate data, you need to set the sourceTable in `WCDB::Database::MigrationInfo` to empty string.
      */
-    typedef std::function<void(MigrationInfo &)> MigrationFilter;
+    typedef std::function<void(MigrationInfo &)> TableFilter;
 
     /**
      @brief Configure which tables in the current database need to migrate data, and the source table they need to migrate data from.
      Once configured, you can treat the target table as if it already has all the data of the source table, and can read and write these data through the target table. WCDB will internally convert your CRUD operations on the target table into the CRUD operations on both the target table and the source table appropriately. You neither need to be aware of the existence of the source table, nor care about the progress of data migration.
      @warning  The column definition of the target table must be exactly the same as the column definition of the source table. The database does not record the state of the migration to disk, so if you have data to migrate, you need to use this function to configure the migration before excuting any statements on current database.
+     @note  If the source table is in the current database, you can set sourcePath to empty string.
      @note  If the source table is not in the current database, the database containing the source table will be attached to the current database before the migration is complete. After migration, source tables will be dropped.
      @see   `MigrationFilter`
      */
-    void filterMigration(MigrationFilter filter);
+    void addMigration(const UnsafeStringView &sourcePath,
+                      const UnsafeData &sourceCipher,
+                      const TableFilter &filter);
 
     /**
      @brief Manually spend about 0.01 sec. to migrate data. You can call this function periodically until all data is migrated.

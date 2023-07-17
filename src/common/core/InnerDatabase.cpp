@@ -846,9 +846,16 @@ void InnerDatabase::setNotificationWhenMigrated(const MigratedCallback &callback
     m_migratedCallback = callback;
 }
 
-void InnerDatabase::filterMigration(const MigrationFilter &filter)
+void InnerDatabase::addMigration(const UnsafeStringView &sourcePath,
+                                 const UnsafeData &sourceCipher,
+                                 const TableFilter &filter)
 {
-    close(std::bind(&Migration::filterTable, &m_migration, filter));
+    StringView sourceDatabase;
+    if (sourcePath.compare(getPath()) != 0) {
+        sourceDatabase = sourcePath;
+    }
+    close(
+    [=]() { m_migration.addMigration(sourceDatabase, sourceCipher, filter); });
 }
 
 bool InnerDatabase::isMigrated() const

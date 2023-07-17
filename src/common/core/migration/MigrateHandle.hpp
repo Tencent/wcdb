@@ -41,8 +41,8 @@ public:
 
 #pragma mark - Schema
 protected:
-    bool reAttach(const UnsafeStringView& newPath, const Schema& newSchema);
-    bool attach(const UnsafeStringView& newPath, const Schema& newSchema);
+    bool reAttach(const MigrationBaseInfo* info);
+    bool attach(const MigrationBaseInfo* info);
     bool detach();
 
 private:

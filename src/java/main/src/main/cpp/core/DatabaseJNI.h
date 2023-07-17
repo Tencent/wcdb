@@ -85,7 +85,11 @@ jdouble WCDBJNIDatabaseObjectMethod(retrieve, jlong self, jobject onProgressUpda
 jboolean WCDBJNIDatabaseObjectMethod(passiveCheckpoint, jlong self);
 jboolean WCDBJNIDatabaseObjectMethod(truncateCheckpoint, jlong self);
 
-void WCDBJNIDatabaseObjectMethod(filterMigration, jlong self, jobject filter);
+void WCDBJNIDatabaseObjectMethod(addMigrationSource,
+                                 jlong self,
+                                 jstring sourcePath,
+                                 jbyteArray cipherKey,
+                                 jobject filter);
 jboolean WCDBJNIDatabaseObjectMethod(stepMigration, jlong self);
 void WCDBJNIDatabaseObjectMethod(enableAutoMigration, jlong self, jboolean flag);
 void WCDBJNIDatabaseObjectMethod(setNotificationWhenMigrated, jlong self, jobject onMigrated);

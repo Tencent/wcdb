@@ -35,11 +35,11 @@
 {
     [super setUp];
 
-    NSData* cipherKey;
+    NSData* cipherKey = nil;
     if (self.needCipher) {
         cipherKey = [[Random shared] data];
-        [self.sourceDatabase setCipherKey:cipherKey];
     }
+    [self.sourceDatabase setCipherKey:cipherKey];
 
     _toMigrate = [NSMutableDictionary<NSString*, NSString*> dictionaryWithObject:self.sourceTable forKey:self.tableName];
 
@@ -54,23 +54,22 @@
 
     [self.sourceDatabase close];
 
-    if (self.needCipher) {
-        [self.database setCipherKey:cipherKey];
-    }
+    [self.database setCipherKey:cipherKey];
 
     TestCaseAssertTrue(self.database.isMigrated);
 
     // It's not a good practice to retain self in this escapable block.
     {
         weakify(self);
-        [self.database filterMigration:^(WCTMigrationUserInfo* userInfo) {
-            strongify_or_return(self);
-            NSString* sourceTable = [self.toMigrate objectForKey:userInfo.table];
-            if (sourceTable != nil) {
-                userInfo.sourceTable = sourceTable;
-                userInfo.sourceDatabase = self.sourcePath;
-            }
-        }];
+        [self.database addMigration:self.sourcePath
+                   withSourceCipher:cipherKey
+                         withFilter:^(WCTMigrationUserInfo* userInfo) {
+                             strongify_or_return(self);
+                             NSString* sourceTable = [self.toMigrate objectForKey:userInfo.table];
+                             if (sourceTable != nil) {
+                                 userInfo.sourceTable = sourceTable;
+                             }
+                         }];
     }
 
     TestCaseAssertFalse(self.database.isMigrated);

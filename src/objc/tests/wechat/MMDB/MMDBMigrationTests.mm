@@ -58,13 +58,12 @@
     NSString* sourceTableName = tableName;
     NSString* sourcePath = self.sourcePath;
     self.tableName = tableName;
-    [self.database filterMigration:^(WCTMigrationUserInfo* info) {
-        if ([info.table isEqualToString:tableName]
-            && [info.database isEqualToString:path]) {
-            info.sourceTable = sourceTableName;
-            info.sourceDatabase = sourcePath;
-        }
-    }];
+    [self.database addMigration:sourcePath
+                     withFilter:^(WCTMigrationUserInfo* info) {
+                         if ([info.table isEqualToString:tableName]) {
+                             info.sourceTable = sourceTableName;
+                         }
+                     }];
 
     TestCaseAssertTrue([self.database createTable:self.tableName withClass:DBMessage.class]);
     TestCaseAssertTrue([self.database stepMigration]);

@@ -763,11 +763,13 @@ bool AbstractHandle::setCipherKey(const UnsafeData &data)
     return APIExit(sqlite3_key(m_handle, data.buffer(), (int) data.size()));
 }
 
-Data AbstractHandle::getRawCipherKey()
+Data AbstractHandle::getRawCipherKey(const Schema &schema)
 {
     void *rawCipher = NULL;
     int rawCipherSize = 0;
-    sqlite3CodecGetKey(m_handle, 0, &rawCipher, &rawCipherSize);
+    int index = sqlcipher_find_db_index(m_handle, schema.syntax().name.data());
+    sqlite3CodecGetKey(m_handle, index, &rawCipher, &rawCipherSize);
+
     if (rawCipher == NULL || rawCipherSize == 0) {
         return Data();
     }
