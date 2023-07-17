@@ -93,7 +93,7 @@ public:
     virtual void resetAllStatements();
     virtual void finalizeStatements();
     HandleStatement *getOrCreatePreparedStatement(const Statement &statement);
-    void returnAllPreparedStatement();
+    virtual void returnAllPreparedStatement();
 
 private:
     std::list<HandleStatement> m_handleStatements;
