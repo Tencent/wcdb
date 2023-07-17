@@ -119,7 +119,8 @@ public:
     Optional<std::vector<ColumnMeta>>
     getTableMeta(const Schema &schema, const UnsafeStringView &table);
     Optional<std::set<StringView>> getValues(const Statement &statement, int index);
-    bool getTableConfig(const UnsafeStringView &tableName,
+    bool getTableConfig(const Schema &schema,
+                        const UnsafeStringView &tableName,
                         int *isAutoincrement,
                         int *isWithoutRowid,
                         const char **integerPrimaryKey);

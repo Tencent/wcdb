@@ -64,7 +64,8 @@ bool BaseBinding::configAutoincrementIfNeed(const UnsafeStringView &tableName,
     int isAutoincrement = false;
     int isWithoutRowid = false;
     const char *integerPrimaryKey = NULL;
-    if (!handle->getTableConfig(tableName, &isAutoincrement, &isWithoutRowid, &integerPrimaryKey)) {
+    if (!handle->getTableConfig(
+        Schema::main(), tableName, &isAutoincrement, &isWithoutRowid, &integerPrimaryKey)) {
         return false;
     }
     if (isAutoincrement) {

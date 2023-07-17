@@ -399,13 +399,14 @@ AbstractHandle::getValues(const Statement &statement, int index)
     return values;
 }
 
-bool AbstractHandle::getTableConfig(const UnsafeStringView &tableName,
+bool AbstractHandle::getTableConfig(const Schema &schema,
+                                    const UnsafeStringView &tableName,
                                     int *isAutoincrement,
                                     int *isWithoutRowid,
                                     const char **integerPrimaryKey)
 {
-    return APIExit(sqlite3_table_meta(
-    m_handle, tableName.data(), isAutoincrement, isWithoutRowid, integerPrimaryKey));
+    return APIExit(sqlite3_table_config(
+    m_handle, schema.syntax().name.data(), tableName.data(), isAutoincrement, isWithoutRowid, integerPrimaryKey));
 }
 
 bool AbstractHandle::configAutoIncrement(const UnsafeStringView &tableName)
