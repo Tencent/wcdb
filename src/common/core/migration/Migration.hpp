@@ -128,6 +128,7 @@ public:
         void startBinding();
         bool stopBinding(bool succeed);
         void stopReferenced();
+        void setNeedRebind();
 
         Optional<const MigrationInfo*> bindTable(const UnsafeStringView& table);
         bool hintThatTableWillBeCreated(const UnsafeStringView& table);
