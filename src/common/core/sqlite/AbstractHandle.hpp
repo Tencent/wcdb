@@ -121,8 +121,8 @@ public:
     Optional<std::set<StringView>> getValues(const Statement &statement, int index);
     bool getTableConfig(const Schema &schema,
                         const UnsafeStringView &tableName,
-                        int *isAutoincrement,
-                        int *isWithoutRowid,
+                        bool &autoincrement,
+                        bool &withoutRowid,
                         const char **integerPrimaryKey);
     bool configAutoIncrement(const UnsafeStringView &tableName);
 
@@ -203,6 +203,7 @@ private:
 
 #pragma mark - Error
 public:
+    void notifyError(int rc, const char *sql, const char *msg = nullptr);
     // call it as push/pop in stack structure.
     void markErrorAsIgnorable(Error::Code ignorableCode);
     void markErrorAsUnignorable(int count = 1);
@@ -213,8 +214,6 @@ private:
     bool APIExit(int rc);
     bool APIExit(int rc, const UnsafeStringView &sql);
     bool APIExit(int rc, const char *sql);
-
-    void notifyError(int rc, const char *sql);
 
     std::vector<int> m_ignorableCodes;
 

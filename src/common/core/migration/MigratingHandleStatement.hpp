@@ -25,10 +25,12 @@
 #pragma once
 
 #include "HandleStatement.hpp"
+#include <list>
 
 namespace WCDB {
 
 class MigratingHandle;
+class MigrationInfo;
 
 class MigratingHandleStatement final : public HandleStatement {
     friend class MigratingHandle;
@@ -87,25 +89,30 @@ protected:
     bool tryFallbackToUnionedView(Syntax::Schema &schema, StringView &table);
     bool tryFallbackToSourceTable(Syntax::Schema &schema, StringView &table);
     bool m_processing;
-    std::shared_ptr<HandleStatement> m_additionalStatement;
+
+    using StatementType = Syntax::Identifier::Type;
+    StatementType m_currentStatementType;
+    std::list<HandleStatement> m_additionalStatements;
 
 protected:
     MigratingHandleStatement(MigratingHandle *handle);
 
-#pragma mark - Migrate
+#pragma mark - Insert
 protected:
-    // For Insert Statement Only
-    bool isMigratedPrepared();
-    bool prepareMigrate(const Syntax::InsertSTMT &migrated,
-                        const Syntax::InsertSTMT &falledBack);
-    bool stepMigration(const int64_t &rowid);
-    void finalizeMigrate();
-    void resetMigrate();
+    void genInsertStatements(const Syntax::InsertSTMT &migrated,
+                             const Syntax::InsertSTMT &falledBack,
+                             std::list<Statement> &statements);
+    bool stepInsert(const int64_t &rowid);
+    void clearMigrateStatus();
 
 private:
-    std::shared_ptr<HandleStatement> m_migrateStatement;
-    std::shared_ptr<HandleStatement> m_removeMigratedStatement;
-    int m_rowidIndexOfMigratingStatement;
+    const MigrationInfo *m_migratingInfo;
+    Optional<int64_t> m_assignedPrimaryKey;
+    int m_primaryKeyIndex;
+
+#pragma mark - Update/Delete
+protected:
+    bool stepUpdateOrDelete();
 };
 
 } //namespace WCDB

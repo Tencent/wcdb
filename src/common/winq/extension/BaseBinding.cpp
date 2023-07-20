@@ -61,17 +61,17 @@ void BaseBinding::enableAutoIncrementForExistingTable()
 bool BaseBinding::configAutoincrementIfNeed(const UnsafeStringView &tableName,
                                             InnerHandle *handle) const
 {
-    int isAutoincrement = false;
-    int isWithoutRowid = false;
+    bool autoincrement = false;
+    bool withoutRowid = false;
     const char *integerPrimaryKey = NULL;
     if (!handle->getTableConfig(
-        Schema::main(), tableName, &isAutoincrement, &isWithoutRowid, &integerPrimaryKey)) {
+        Schema::main(), tableName, autoincrement, withoutRowid, &integerPrimaryKey)) {
         return false;
     }
-    if (isAutoincrement) {
+    if (autoincrement) {
         return true;
     }
-    if (isWithoutRowid) {
+    if (withoutRowid) {
         Error error(Error::Code::Error,
                     Error::Level::Error,
                     "Without rowid table can not be configed as autoincrement");

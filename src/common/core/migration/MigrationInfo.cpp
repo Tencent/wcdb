@@ -173,8 +173,11 @@ MigrationUserInfo::~MigrationUserInfo() = default;
 #pragma mark - MigrationInfo
 MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
                              const std::set<StringView>& uniqueColumns,
-                             bool integerPrimaryKey)
-: MigrationBaseInfo(userInfo), m_integerPrimaryKey(integerPrimaryKey)
+                             bool autoincrement,
+                             const UnsafeStringView& integerPrimaryKey)
+: MigrationBaseInfo(userInfo)
+, m_autoincrement(autoincrement)
+, m_integerPrimaryKey(integerPrimaryKey)
 {
     WCTAssert(!uniqueColumns.empty());
 
@@ -214,7 +217,9 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
 
     // Migrate
     {
-        OrderingTerm descendingRowid = OrderingTerm(rowid).order(Order::DESC);
+        OrderingTerm migrateOrder = m_integerPrimaryKey.empty() ?
+                                    OrderingTerm(rowid).order(Order::DESC) :
+                                    OrderingTerm(m_integerPrimaryKey).order(Order::DESC);
 
         m_statementForMigratingOneRow = StatementInsert()
                                         .insertIntoTable(getTable())
@@ -223,21 +228,26 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
                                         .values(StatementSelect()
                                                 .select(resultColumns)
                                                 .from(sourceTableQuery)
-                                                .order(descendingRowid)
+                                                .order(migrateOrder)
                                                 .limit(1));
 
         m_statementForDeletingMigratedOneRow = StatementDelete()
                                                .deleteFrom(qualifiedSourceTable)
-                                               .orders(descendingRowid)
+                                               .orders(migrateOrder)
                                                .limit(1);
     }
 
     // Compatible
     {
-        if (!m_integerPrimaryKey) {
-            m_statementForSelectingMaxRowID
+        if (m_integerPrimaryKey.empty()) {
+            m_statementForSelectingMaxID
             = StatementSelect()
               .select(rowid.max() + 1)
+              .from(TableOrSubquery(m_table).schema(Schema::main()));
+        } else if (!autoincrement) {
+            m_statementForSelectingMaxID
+            = StatementSelect()
+              .select(Column(m_integerPrimaryKey).max() + 1)
               .from(TableOrSubquery(m_unionedView).schema(Schema::temp()));
         }
 
@@ -250,6 +260,16 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
 }
 
 MigrationInfo::~MigrationInfo() = default;
+
+bool MigrationInfo::isAutoIncrement() const
+{
+    return m_autoincrement;
+}
+
+const StringView& MigrationInfo::getIntegerPrimaryKey() const
+{
+    return m_integerPrimaryKey;
+}
 
 #pragma mark - Schema
 
@@ -338,7 +358,9 @@ StatementInsert MigrationInfo::getStatementForMigrating(const Syntax::InsertSTMT
     syntax.schema = Schema::main();
     syntax.table = getTable();
     WCTAssert(!syntax.isMultiWrite());
-
+    if (m_autoincrement) {
+        return statement;
+    }
     auto& columns = syntax.columns;
     WCTAssert(!columns.empty());
     columns.insert(columns.begin(), Column("rowid"));
@@ -347,37 +369,36 @@ StatementInsert MigrationInfo::getStatementForMigrating(const Syntax::InsertSTMT
         auto& expressions = syntax.expressionsValues;
         WCTAssert(expressions.size() == 1);
         auto& values = *expressions.begin();
-        int rowidIndexOfMigratingStatement = getRowIDIndexOfMigratingStatement();
-        Expression rowid;
-        if (rowidIndexOfMigratingStatement > 0) {
-            rowid = BindParameter(rowidIndexOfMigratingStatement);
-        } else {
-            rowid = m_statementForSelectingMaxRowID;
-        }
+        Expression rowid = BindParameter(getIndexOfRowIdOrPrimaryKey());
         values.insert(values.begin(), rowid);
     }
     return statement;
 }
 
-int MigrationInfo::getRowIDIndexOfMigratingStatement() const
+const StatementSelect& MigrationInfo::getStatementForSelectingMaxID() const
 {
-    if (m_integerPrimaryKey) {
-        return SQLITE_MAX_VARIABLE_NUMBER;
-    }
-    return 0;
+    return m_statementForSelectingMaxID;
 }
 
-StatementUpdate
-MigrationInfo::getStatementForLimitedUpdatingTable(const Statement& sourceStatement) const
+int MigrationInfo::getIndexOfRowIdOrPrimaryKey()
+{
+    return SQLITE_MAX_VARIABLE_NUMBER;
+}
+
+std::pair<StatementSelect, StatementUpdate>
+MigrationInfo::getStatementsForLimitedUpdatingTable(const Statement& sourceStatement) const
 {
     WCTAssert(sourceStatement.getType() == Syntax::Identifier::Type::UpdateSTMT);
     StatementUpdate statementUpdate((const StatementUpdate&) sourceStatement);
 
     Syntax::UpdateSTMT& updateSyntax = statementUpdate.syntax();
     StatementSelect select
-    = StatementSelect()
-      .select(Column::rowid())
-      .from(TableOrSubquery(getUnionedView()).schema(Schema::temp()));
+    = StatementSelect().from(TableOrSubquery(getUnionedView()).schema(Schema::temp()));
+    if (m_integerPrimaryKey.empty()) {
+        select.select(Column::rowid());
+    } else {
+        select.select(m_integerPrimaryKey);
+    }
 
     Syntax::SelectSTMT& selectSyntax = select.syntax();
     Syntax::SelectCore& coreSyntax = selectSyntax.select.getOrCreate();
@@ -393,22 +414,31 @@ MigrationInfo::getStatementForLimitedUpdatingTable(const Statement& sourceStatem
     selectSyntax.limitParameter = updateSyntax.limitParameter;
     updateSyntax.limit.getOrCreate().__is_valid = Syntax::Identifier::invalid;
 
-    statementUpdate.where(Column::rowid().in(select));
+    if (m_integerPrimaryKey.empty()) {
+        statementUpdate.where(Column::rowid()
+                              == BindParameter(getIndexOfRowIdOrPrimaryKey()));
+    } else {
+        statementUpdate.where(Column(m_integerPrimaryKey)
+                              == BindParameter(getIndexOfRowIdOrPrimaryKey()));
+    }
 
-    return statementUpdate;
+    return { select, statementUpdate };
 }
 
-StatementDelete
-MigrationInfo::getStatementForLimitedDeletingFromTable(const Statement& sourceStatement) const
+std::pair<StatementSelect, StatementDelete>
+MigrationInfo::getStatementsForLimitedDeletingFromTable(const Statement& sourceStatement) const
 {
     WCTAssert(sourceStatement.getType() == Syntax::Identifier::Type::DeleteSTMT);
     StatementDelete statementDelete((const StatementDelete&) sourceStatement);
 
     Syntax::DeleteSTMT& deleteSyntax = statementDelete.syntax();
     StatementSelect select
-    = StatementSelect()
-      .select(Column::rowid())
-      .from(TableOrSubquery(getUnionedView()).schema(Schema::temp()));
+    = StatementSelect().from(TableOrSubquery(getUnionedView()).schema(Schema::temp()));
+    if (m_integerPrimaryKey.empty()) {
+        select.select(Column::rowid());
+    } else {
+        select.select(m_integerPrimaryKey);
+    }
 
     Syntax::SelectSTMT& selectSyntax = select.syntax();
     Syntax::SelectCore& coreSyntax = selectSyntax.select.getOrCreate();
@@ -426,7 +456,15 @@ MigrationInfo::getStatementForLimitedDeletingFromTable(const Statement& sourceSt
 
     statementDelete.where(Column::rowid().in(select));
 
-    return statementDelete;
+    if (m_integerPrimaryKey.empty()) {
+        statementDelete.where(Column::rowid()
+                              == BindParameter(getIndexOfRowIdOrPrimaryKey()));
+    } else {
+        statementDelete.where(Column(m_integerPrimaryKey)
+                              == BindParameter(getIndexOfRowIdOrPrimaryKey()));
+    }
+
+    return { select, statementDelete };
 }
 
 StatementDelete

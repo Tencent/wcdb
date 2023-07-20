@@ -186,47 +186,28 @@ bool MigratingHandle::attachDatabase(const MigrationBaseInfo* attachInfo)
 }
 
 #pragma mark - Info Initializer
-Optional<std::pair<bool, std::set<StringView>>>
-MigratingHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
-{
-    auto exists = tableExists(Schema::main(), userInfo.getTable());
-    if (!exists.succeed()) {
-        return NullOpt;
-    }
-
-    bool integerPrimary = false;
-    std::set<StringView> names;
-    if (exists.value()) {
-        auto optionalMetas = getTableMeta(Schema::main(), userInfo.getTable());
-        if (!optionalMetas.succeed()) {
-            return NullOpt;
-        }
-        auto& metas = optionalMetas.value();
-        integerPrimary = ColumnMeta::getIndexOfIntegerPrimary(metas) >= 0;
-        for (const auto& meta : metas) {
-            names.emplace(meta.name);
-        }
-    }
-    return std::make_pair(integerPrimary, names);
-}
-
-Optional<bool> MigratingHandle::sourceTableExists(const MigrationUserInfo& userInfo)
+bool MigratingHandle::attachSourceDatabase(const MigrationUserInfo& userInfo)
 {
     const Schema& schema = userInfo.getSchemaForSourceDatabase();
     if (!schema.syntax().isMain()) {
         auto optionalAttacheds
         = getValues(MigrationInfo::getStatementForSelectingDatabaseList(), 1);
         if (!optionalAttacheds.succeed()) {
-            return NullOpt;
+            return false;
         }
         std::set<StringView>& attacheds = optionalAttacheds.value();
         if (attacheds.find(schema.getDescription()) == attacheds.end()) {
             if (!attachDatabase(&userInfo) || !trySynchronousTransactionAfterAttached()) {
-                return NullOpt;
+                return false;
             }
         }
     }
-    return tableExists(schema, userInfo.getSourceTable());
+    return true;
+}
+
+InnerHandle* MigratingHandle::getCurrentHandle()
+{
+    return this;
 }
 
 const StringView& MigratingHandle::getDatabasePath() const

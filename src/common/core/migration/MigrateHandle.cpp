@@ -249,36 +249,14 @@ double MigrateHandle::calculateTimeIntervalWithinTransaction() const
 }
 
 #pragma mark - Info Initializer
-Optional<bool> MigrateHandle::sourceTableExists(const MigrationUserInfo& userInfo)
+bool MigrateHandle::attachSourceDatabase(const MigrationUserInfo& userInfo)
 {
-    Schema schema = userInfo.getSchemaForSourceDatabase();
-    if (!reAttach(&userInfo)) {
-        return NullOpt;
-    }
-    return tableExists(schema, userInfo.getSourceTable());
+    return reAttach(&userInfo);
 }
 
-Optional<std::pair<bool, std::set<StringView>>>
-MigrateHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
+InnerHandle* MigrateHandle::getCurrentHandle()
 {
-    auto exists = tableExists(Schema::main(), userInfo.getTable());
-    if (!exists.succeed()) {
-        return NullOpt;
-    }
-    bool integerPrimary = false;
-    std::set<StringView> names;
-    if (exists.value()) {
-        auto optionalMetas = getTableMeta(Schema::main(), userInfo.getTable());
-        if (!optionalMetas.succeed()) {
-            return NullOpt;
-        }
-        auto& metas = optionalMetas.value();
-        integerPrimary = ColumnMeta::getIndexOfIntegerPrimary(metas) >= 0;
-        for (const auto& meta : metas) {
-            names.emplace(meta.name);
-        }
-    }
-    return std::make_pair(integerPrimary, names);
+    return this;
 }
 
 const StringView& MigrateHandle::getDatabasePath() const

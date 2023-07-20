@@ -90,6 +90,7 @@ public:
     virtual const UnsafeStringView getOriginColumnName(int index);
     virtual const UnsafeStringView getColumnName(int index);
     virtual const UnsafeStringView getColumnTableName(int index);
+    int getBindParameterCount();
 
     virtual bool isReadOnly();
     void enableAutoAddColumn();

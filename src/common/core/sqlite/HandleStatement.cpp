@@ -412,6 +412,12 @@ const UnsafeStringView HandleStatement::getColumnTableName(int index)
     return sqlite3_column_table_name(m_stmt, index);
 }
 
+int HandleStatement::getBindParameterCount()
+{
+    WCTAssert(isPrepared());
+    return sqlite3_bind_parameter_count(m_stmt);
+}
+
 ColumnType HandleStatement::getType(int index)
 {
     WCTAssert(isPrepared());

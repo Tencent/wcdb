@@ -35,6 +35,7 @@
 namespace WCDB {
 
 typedef Recyclable<const MigrationInfo*> RecyclableMigrationInfo;
+class InnerHandle;
 
 class MigrationEvent {
 public:
@@ -72,12 +73,18 @@ protected:
         virtual ~InfoInitializer() = 0;
 
     protected:
-        virtual Optional<bool> sourceTableExists(const MigrationUserInfo& userInfo) = 0;
-        // When succeed, empty column indicates that table does not exist.
-        // succeed, contains integer primary key, columns
-        virtual Optional<std::pair<bool, std::set<StringView>>>
-        getColumnsOfUserInfo(const MigrationUserInfo& userInfo) = 0;
+        virtual bool attachSourceDatabase(const MigrationUserInfo& userInfo) = 0;
+        virtual InnerHandle* getCurrentHandle() = 0;
         virtual const StringView& getDatabasePath() const = 0;
+
+        Optional<bool> checkSourceTableExistsAndHasRowid(const MigrationUserInfo& userInfo);
+        bool getTargetTableInfo(const MigrationUserInfo& userInfo,
+                                bool& exists,
+                                std::set<StringView>& columns,
+                                bool& autoincrement,
+                                const char** integerPrimaryKey);
+        bool tryUpdateSequence(const MigrationUserInfo& userInfo,
+                               const UnsafeStringView& primaryKey);
     };
 
     bool initInfo(InfoInitializer& initializer, const UnsafeStringView& table);

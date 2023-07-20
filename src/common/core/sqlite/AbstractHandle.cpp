@@ -253,6 +253,7 @@ HandleStatement *AbstractHandle::getOrCreateStatement(const UnsafeStringView &sq
 {
     if (sql.length() == 0) {
         m_error.setCode(Error::Code::Error, "invalid statement");
+        m_error.infos.erase(ErrorStringKeySQL);
         m_error.level = Error::Level::Error;
         Notifier::shared().notify(m_error);
         return nullptr;
@@ -401,12 +402,19 @@ AbstractHandle::getValues(const Statement &statement, int index)
 
 bool AbstractHandle::getTableConfig(const Schema &schema,
                                     const UnsafeStringView &tableName,
-                                    int *isAutoincrement,
-                                    int *isWithoutRowid,
+                                    bool &autoincrement,
+                                    bool &withoutRowid,
                                     const char **integerPrimaryKey)
 {
-    return APIExit(sqlite3_table_config(
-    m_handle, schema.syntax().name.data(), tableName.data(), isAutoincrement, isWithoutRowid, integerPrimaryKey));
+    int isAutoincrement = 0;
+    int isWithoutRowid = 0;
+    bool ret = APIExit(sqlite3_table_config(
+    m_handle, schema.syntax().name.data(), tableName.data(), &isAutoincrement, &isWithoutRowid, integerPrimaryKey));
+    if (ret) {
+        autoincrement = isAutoincrement > 0;
+        withoutRowid = isWithoutRowid > 0;
+    }
+    return ret;
 }
 
 bool AbstractHandle::configAutoIncrement(const UnsafeStringView &tableName)
@@ -682,10 +690,11 @@ bool AbstractHandle::APIExit(int rc, const char *sql)
     return result;
 }
 
-void AbstractHandle::notifyError(int rc, const char *sql)
+void AbstractHandle::notifyError(int rc, const char *sql, const char *msg)
 {
     WCTAssert(Error::isError(rc));
-    if (Error::rc2c(rc) != Error::Code::Misuse && sqlite3_errcode(m_handle) == rc) {
+    if (Error::rc2c(rc) != Error::Code::Misuse
+        && sqlite3_errcode(m_handle) == rc && msg == nullptr) {
         m_error.setSQLiteCode(rc, sqlite3_errmsg(m_handle));
     } else {
         // extended error code/message will not be set in some case for misuse error
@@ -700,7 +709,11 @@ void AbstractHandle::notifyError(int rc, const char *sql)
     } else {
         m_error.level = Error::Level::Ignore;
     }
-    m_error.infos.insert_or_assign(ErrorStringKeySQL, sql);
+    if (sql != nullptr) {
+        m_error.infos.insert_or_assign(ErrorStringKeySQL, sql);
+    } else {
+        m_error.infos.erase(ErrorStringKeySQL);
+    }
     Notifier::shared().notify(m_error);
 }
 

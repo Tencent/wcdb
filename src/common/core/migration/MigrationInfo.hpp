@@ -112,11 +112,16 @@ class MigrationInfo final : public MigrationBaseInfo {
 public:
     MigrationInfo(const MigrationUserInfo& userInfo,
                   const std::set<StringView>& columns,
-                  bool integerPrimaryKey);
+                  bool autoincrement,
+                  const UnsafeStringView& integerPrimaryKey);
     ~MigrationInfo() override final;
 
+    bool isAutoIncrement() const;
+    const StringView& getIntegerPrimaryKey() const;
+
 protected:
-    bool m_integerPrimaryKey;
+    bool m_autoincrement;
+    StringView m_integerPrimaryKey;
 
 #pragma mark - Schema
 public:
@@ -173,44 +178,60 @@ public:
      DELETE FROM [schemaForSourceDatabase].[sourceTable] WHERE rowid == ?1
      */
     const StatementDelete& getStatementForDeletingSpecifiedRow() const;
+    static int getIndexOfRowIdOrPrimaryKey();
 
     /*
-     INSERT rowid, [columns]
-     ...
-     VALUES (?rowidIndex, ...)
+     1. For the tables with autoincrement integer primary key:
      
-     Note that newRowid is
-     1. rowid in source table when it's an integer primary key table
-     2. SELECT max(rowid)+1 FROM temp.[unionedView] when the table does not contain an integer primary key
+         INSERT [columns]
+         ...
+         VALUES (...)
+     
+     2. For the tables with integer primary key:
+     
+         INSERT rowid, [columns]
+         ...
+         VALUES (?rowidIndex, ...)
+     
+         Note that newRowid is
+         (1) the primmay key assigned from statement
+         (2) or SELECT max(primary key)+1 FROM temp.[unionedView]
+     
+     3. For the tables with normal primary key or no primary key:
+     
+         INSERT rowid, [columns]
+         ...
+         VALUES (?rowidIndex, ...)
+     
+         Note that newRowid is SELECT max(rowid)+1 FROM temp.[unionedView]
      */
     StatementInsert getStatementForMigrating(const Syntax::InsertSTMT& stmt) const;
 
-    int getRowIDIndexOfMigratingStatement() const;
+    const StatementSelect& getStatementForSelectingMaxID() const;
 
     /*
-     UPDATE ...
-     SET ...
-     WHERE rowid IN(
-     SELECT rowid FROM temp.[unionedView] WHERE ... ORDER BY ... LIMIT ... OFFSET ...
-     )
+     SELECT [rowid/primary key] FROM temp.[unionedView] WHERE ... ORDER BY ... LIMIT ... OFFSET ...
+     UPDATE ... SET ... TO ... WHERE [rowid/primary key] == ?index
+     
+     For the tables with integer primary key, it uses primary key. For the other tables, it uses rowid.
      */
-    StatementUpdate
-    getStatementForLimitedUpdatingTable(const Statement& sourceStatement) const;
+    std::pair<StatementSelect, StatementUpdate>
+    getStatementsForLimitedUpdatingTable(const Statement& sourceStatement) const;
 
     /*
-     DELETE FROM ...
-     WHERE rowid IN(
-     SELECT rowid FROM temp.[unionedView] WHERE ... ORDER BY ... LIMIT ... OFFSET ...
-     )
+     SELECT [rowid/primary key] FROM temp.[unionedView] WHERE ... ORDER BY ... LIMIT ... OFFSET ...
+     DELETE FROM ... WHERE [rowid/primary key] == ?index
+     
+     For the tables with integer primary key, it uses primary key. For the other tables, it uses rowid.
      */
-    StatementDelete
-    getStatementForLimitedDeletingFromTable(const Statement& sourceStatement) const;
+    std::pair<StatementSelect, StatementDelete>
+    getStatementsForLimitedDeletingFromTable(const Statement& sourceStatement) const;
 
     StatementDelete getStatementForDeletingFromTable(const Statement& sourceStatement) const;
 
 protected:
     StatementDelete m_statementForDeletingSpecifiedRow;
-    StatementSelect m_statementForSelectingMaxRowID;
+    StatementSelect m_statementForSelectingMaxID;
 
 #pragma mark - Migrate
 public:

@@ -81,9 +81,8 @@ private:
 
 #pragma mark - Info Initializer
 protected:
-    Optional<bool> sourceTableExists(const MigrationUserInfo& userInfo) override final;
-    Optional<std::pair<bool, std::set<StringView>>>
-    getColumnsOfUserInfo(const MigrationUserInfo& userInfo) override final;
+    bool attachSourceDatabase(const MigrationUserInfo& userInfo) override final;
+    InnerHandle* getCurrentHandle() override final;
     const StringView& getDatabasePath() const override final;
 };
 
