@@ -306,7 +306,7 @@ StatementInsert MigrationInfo::getStatementForMigrating(const Syntax::InsertSTMT
 
     auto& columns = syntax.columns;
     WCTAssert(!columns.empty());
-    columns.insert(columns.begin(), Column("rowid"));
+    columns.insert(columns.end(), Column("rowid"));
 
     if (!syntax.expressionsValues.empty()) {
         auto& expressions = syntax.expressionsValues;
@@ -319,7 +319,7 @@ StatementInsert MigrationInfo::getStatementForMigrating(const Syntax::InsertSTMT
         } else {
             rowid = m_statementForSelectingMaxRowID;
         }
-        values.insert(values.begin(), rowid);
+        values.insert(values.end(), rowid);
     }
     return statement;
 }
