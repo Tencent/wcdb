@@ -363,14 +363,14 @@ StatementInsert MigrationInfo::getStatementForMigrating(const Syntax::InsertSTMT
     }
     auto& columns = syntax.columns;
     WCTAssert(!columns.empty());
-    columns.insert(columns.begin(), Column("rowid"));
+    columns.insert(columns.end(), Column("rowid"));
 
     if (!syntax.expressionsValues.empty()) {
         auto& expressions = syntax.expressionsValues;
         WCTAssert(expressions.size() == 1);
         auto& values = *expressions.begin();
         Expression rowid = BindParameter(getIndexOfRowIdOrPrimaryKey());
-        values.insert(values.begin(), rowid);
+        values.insert(values.end(), rowid);
     }
     return statement;
 }
