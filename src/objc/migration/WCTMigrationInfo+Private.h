@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protected
     NSString* _sourceTable;
     NSString* _sourceDatabase;
+    WCDB::Expression _filterCondition;
 }
 
 - (instancetype)initWithBaseInfo:(const WCDB::MigrationBaseInfo&)info;

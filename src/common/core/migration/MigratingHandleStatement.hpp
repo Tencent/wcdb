@@ -99,9 +99,6 @@ protected:
 
 #pragma mark - Insert
 protected:
-    void genInsertStatements(const Syntax::InsertSTMT &migrated,
-                             const Syntax::InsertSTMT &falledBack,
-                             std::list<Statement> &statements);
     bool stepInsert(const int64_t &rowid);
     void clearMigrateStatus();
 

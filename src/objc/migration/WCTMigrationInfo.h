@@ -34,6 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSString* table;
 // Source table of migration
 @property (nonatomic, readonly) NSString* sourceTable;
+// Filter condition of source table
+@property (nonatomic, readonly) WCDB::Expression filterCondition;
 
 @end
 
@@ -41,6 +43,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 // Set new value to sourceTable in WCTMigrationBaseInfo.
 - (void)setSourceTable:(NSString*)table;
+// Set new value to filterCondition in WCTMigrationBaseInfo.
+- (void)setFilterCondition:(const WCDB::Expression&)condition;
 
 @end
 

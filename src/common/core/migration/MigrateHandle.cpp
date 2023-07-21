@@ -118,12 +118,23 @@ Optional<std::set<StringView>> MigrateHandle::getAllTables()
 bool MigrateHandle::dropSourceTable(const MigrationInfo* info)
 {
     WCTAssert(info != nullptr);
-    bool succeed = false;
-    if (reAttach(info)) {
-        m_migratingInfo = info;
-        succeed = execute(m_migratingInfo->getStatementForDroppingSourceTable());
+    if (!reAttach(info)) {
+        return false;
     }
-    return succeed;
+    m_migratingInfo = info;
+    if (!prepare(m_migratingInfo->getStatementForSelectingAnyRowFromSourceTable())) {
+        return false;
+    }
+    if (!step()) {
+        finalize();
+        return false;
+    }
+    bool hasContent = !done();
+    finalize();
+    if (!hasContent) {
+        return execute(m_migratingInfo->getStatementForDroppingSourceTable());
+    }
+    return true;
 }
 
 Optional<bool> MigrateHandle::migrateRows(const MigrationInfo* info)

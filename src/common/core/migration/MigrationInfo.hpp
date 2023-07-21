@@ -78,6 +78,7 @@ public:
 
     const StringView& getTable() const;
     const StringView& getSourceTable() const;
+    const Expression& getFilterCondition() const;
 
     bool shouldMigrate() const;
     bool isCrossDatabase() const;
@@ -91,11 +92,12 @@ public:
     const StatementAttach& getStatementForAttachingSchema() const;
 
 protected:
-    void setSource(const UnsafeStringView& table);
+    void setSource(const UnsafeStringView& table, Expression filterCondition = Expression());
 
     MigrationDatabaseInfo& m_databaseInfo;
     StringView m_table;
     StringView m_sourceTable;
+    Expression m_filterCondition;
 };
 
 #pragma mark - MigrationUserInfo
@@ -174,58 +176,58 @@ protected:
 
 #pragma mark - Compatible
 public:
+    static const int indexOfRowIdOrPrimaryKey = SQLITE_MAX_VARIABLE_NUMBER;
+
     /*
+     Firstly,
+     
+     INSERT INTO [schemaForSourceDatabase].[sourceTable]([columns]) VALUES (...)
      DELETE FROM [schemaForSourceDatabase].[sourceTable] WHERE rowid == ?1
+     
+     And then
+     
+     1. for the tables with autoincrement integer primary key:
+     
+        INSERT INTO main.targetTable([columns]) VALUES (...)
+     
+     2. for the tables with integer primary key:
+     
+        INSERT INTO main.targetTable([columns], rowid) VALUES (..., ?rowidIndex)
+     
+        Note that newRowid is
+        (1) the primmay key assigned from statement
+        (2) or SELECT max(primary key)+1 FROM temp.[unionedView]
+     
+     3. for the tables with normal primary key or no primary key:
+     
+        INSERT INTO main.targetTable([columns], rowid) VALUES (..., ?rowidIndex)
+     
+        Note that newRowid is SELECT max(rowid)+1 FROM temp.[unionedView]
      */
-    const StatementDelete& getStatementForDeletingSpecifiedRow() const;
-    static int getIndexOfRowIdOrPrimaryKey();
-
-    /*
-     1. For the tables with autoincrement integer primary key:
-     
-         INSERT [columns]
-         ...
-         VALUES (...)
-     
-     2. For the tables with integer primary key:
-     
-         INSERT rowid, [columns]
-         ...
-         VALUES (?rowidIndex, ...)
-     
-         Note that newRowid is
-         (1) the primmay key assigned from statement
-         (2) or SELECT max(primary key)+1 FROM temp.[unionedView]
-     
-     3. For the tables with normal primary key or no primary key:
-     
-         INSERT rowid, [columns]
-         ...
-         VALUES (?rowidIndex, ...)
-     
-         Note that newRowid is SELECT max(rowid)+1 FROM temp.[unionedView]
-     */
-    StatementInsert getStatementForMigrating(const Syntax::InsertSTMT& stmt) const;
-
-    const StatementSelect& getStatementForSelectingMaxID() const;
+    void generateStatementsForInsertMigrating(const Statement& sourceStatement,
+                                              std::list<Statement>& statements,
+                                              int& primaryKeyIndex,
+                                              Optional<int64_t>& assignedPrimaryKey) const;
 
     /*
      SELECT [rowid/primary key] FROM temp.[unionedView] WHERE ... ORDER BY ... LIMIT ... OFFSET ...
-     UPDATE ... SET ... TO ... WHERE [rowid/primary key] == ?index
+     UPDATE [schemaForSourceDatabase].[sourceTable] SET ... TO ... WHERE [rowid/primary key] == ?index
+     UPDATE main.targetTable SET ... TO ... WHERE [rowid/primary key] == ?index
      
      For the tables with integer primary key, it uses primary key. For the other tables, it uses rowid.
      */
-    std::pair<StatementSelect, StatementUpdate>
-    getStatementsForLimitedUpdatingTable(const Statement& sourceStatement) const;
+    void generateStatementsForUpdateMigrating(const Statement& sourceStatement,
+                                              std::list<Statement>& statements) const;
 
     /*
      SELECT [rowid/primary key] FROM temp.[unionedView] WHERE ... ORDER BY ... LIMIT ... OFFSET ...
-     DELETE FROM ... WHERE [rowid/primary key] == ?index
+     DELETE FROM [schemaForSourceDatabase].[sourceTable] WHERE [rowid/primary key] == ?index
+     DELETE FROM main.targetTable WHERE [rowid/primary key] == ?index
      
      For the tables with integer primary key, it uses primary key. For the other tables, it uses rowid.
      */
-    std::pair<StatementSelect, StatementDelete>
-    getStatementsForLimitedDeletingFromTable(const Statement& sourceStatement) const;
+    void generateStatementsForDeleteMigrating(const Statement& sourceStatement,
+                                              std::list<Statement>& statements) const;
 
     StatementDelete getStatementForDeletingFromTable(const Statement& sourceStatement) const;
 
@@ -253,6 +255,11 @@ public:
     const StatementDelete& getStatementForDeletingMigratedOneRow() const;
 
     /*
+     SELECT * FROM [schemaForSourceDatabase].[sourceTable] LIMIT 1
+     */
+    const StatementSelect& getStatementForSelectingAnyRowFromSourceTable() const;
+
+    /*
      DROP TABLE IF EXISTS [schemaForSourceDatabase].[sourceTable]
      */
     const StatementDropTable& getStatementForDroppingSourceTable() const;
@@ -261,6 +268,7 @@ protected:
     StatementInsert m_statementForMigratingOneRow;
     StatementDelete m_statementForDeletingMigratedOneRow;
     StatementDropTable m_statementForDroppingSourceTable;
+    StatementSelect m_statementForSelectingAnyRowFromSourceTable;
 };
 
 } // namespace WCDB

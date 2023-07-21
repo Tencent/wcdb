@@ -33,6 +33,7 @@
     if (self = [super init]) {
         _table = [NSString stringWithView:info.getTable()];
         _sourceTable = [NSString stringWithView:info.getSourceTable()];
+        _filterCondition = info.getFilterCondition();
     }
     return self;
 }
@@ -44,6 +45,11 @@
 - (void)setSourceTable:(NSString *)table
 {
     _sourceTable = table;
+}
+
+- (void)setFilterCondition:(const WCDB::Expression &)condition
+{
+    _filterCondition = condition;
 }
 
 @end

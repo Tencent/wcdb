@@ -162,7 +162,6 @@ Optional<std::list<Statement>> MigratingHandleStatement::process(const Statement
 
         switch (originStatement.getType()) {
         case Syntax::Identifier::Type::InsertSTMT: {
-            statements.push_back(falledBackStatement);
             const Syntax::InsertSTMT& migratedInsertSTMT
             = static_cast<const Syntax::InsertSTMT&>(originStatement.syntax());
             const Syntax::InsertSTMT& falledBackSTMT
@@ -175,9 +174,16 @@ Optional<std::list<Statement>> MigratingHandleStatement::process(const Statement
                               "Insert statement that contains multiple values is not supported while using migration feature.",
                               succeed = false;
                               break;);
-            if (!migratedInsertSTMT.isTargetingSameTable(falledBackSTMT)) {
-                // it's safe to use origin statement since Conflict Action will not be changed during tampering.
-                genInsertStatements(migratedInsertSTMT, falledBackSTMT, statements);
+            if (migratedInsertSTMT.isTargetingSameTable(falledBackSTMT)) {
+                statements.push_back(falledBackStatement);
+            } else {
+                clearMigrateStatus();
+                const MigrationInfo* info
+                = migratingHandle->getBoundInfo(migratedInsertSTMT.table);
+                WCTAssert(info != nullptr);
+                m_migratingInfo = info;
+                info->generateStatementsForInsertMigrating(
+                falledBackStatement, statements, m_primaryKeyIndex, m_assignedPrimaryKey);
                 sqlite3_revertCommitOrder(getRawHandle());
             }
         } break;
@@ -193,18 +199,7 @@ Optional<std::list<Statement>> MigratingHandleStatement::process(const Statement
                 const UnsafeStringView& migratedTableName = migratedTable.table;
                 const MigrationInfo* info = migratingHandle->getBoundInfo(migratedTableName);
                 WCTAssert(info != nullptr);
-                auto updateStatements
-                = info->getStatementsForLimitedUpdatingTable(falledBackStatement);
-                // statement for selecting id
-                statements.push_back(updateStatements.first);
-                // statement for source table
-                statements.push_back(updateStatements.second);
-                // statement for migrated table
-                statements.push_back(statements.back());
-                Syntax::UpdateSTMT& stmt
-                = static_cast<Syntax::UpdateSTMT&>(statements.back().syntax());
-                stmt.table.table = migratedTableName;
-                stmt.table.schema = Schema::main();
+                info->generateStatementsForUpdateMigrating(falledBackStatement, statements);
             }
         } break;
         case Syntax::Identifier::Type::DeleteSTMT: {
@@ -219,18 +214,7 @@ Optional<std::list<Statement>> MigratingHandleStatement::process(const Statement
                 const UnsafeStringView& migratedTableName = migratedTable.table;
                 const MigrationInfo* info = migratingHandle->getBoundInfo(migratedTableName);
                 WCTAssert(info != nullptr);
-                auto deleteStatements
-                = info->getStatementsForLimitedDeletingFromTable(falledBackStatement);
-                // statement for selecting id
-                statements.push_back(deleteStatements.first);
-                // statement for source table
-                statements.push_back(deleteStatements.second);
-                // statement for migrated table
-                statements.push_back(statements.back());
-                Syntax::DeleteSTMT& stmt
-                = static_cast<Syntax::DeleteSTMT&>(statements.back().syntax());
-                stmt.table.table = migratedTableName;
-                stmt.table.schema = Schema::main();
+                info->generateStatementsForDeleteMigrating(falledBackStatement, statements);
             }
         } break;
         case Syntax::Identifier::Type::DropTableSTMT: {
@@ -397,7 +381,7 @@ void MigratingHandleStatement::reset()
 
 void MigratingHandleStatement::bindInteger(const Integer& value, int index)
 {
-    WCTRemedialAssert(index != MigrationInfo::getIndexOfRowIdOrPrimaryKey(),
+    WCTRemedialAssert(index != MigrationInfo::indexOfRowIdOrPrimaryKey,
                       "Binding index is out of range",
                       return;);
     if (getBindParameterCount() >= index) {
@@ -416,7 +400,7 @@ void MigratingHandleStatement::bindInteger(const Integer& value, int index)
 
 void MigratingHandleStatement::bindDouble(const Float& value, int index)
 {
-    WCTRemedialAssert(index != MigrationInfo::getIndexOfRowIdOrPrimaryKey(),
+    WCTRemedialAssert(index != MigrationInfo::indexOfRowIdOrPrimaryKey,
                       "Binding index is out of range",
                       return;);
     if (getBindParameterCount() >= index) {
@@ -431,7 +415,7 @@ void MigratingHandleStatement::bindDouble(const Float& value, int index)
 
 void MigratingHandleStatement::bindText(const Text& value, int index)
 {
-    WCTRemedialAssert(index != MigrationInfo::getIndexOfRowIdOrPrimaryKey(),
+    WCTRemedialAssert(index != MigrationInfo::indexOfRowIdOrPrimaryKey,
                       "Binding index is out of range",
                       return;);
     if (getBindParameterCount() >= index) {
@@ -446,7 +430,7 @@ void MigratingHandleStatement::bindText(const Text& value, int index)
 
 void MigratingHandleStatement::bindBLOB(const BLOB& value, int index)
 {
-    WCTRemedialAssert(index != MigrationInfo::getIndexOfRowIdOrPrimaryKey(),
+    WCTRemedialAssert(index != MigrationInfo::indexOfRowIdOrPrimaryKey,
                       "Binding index is out of range",
                       return;);
     if (getBindParameterCount() >= index) {
@@ -461,7 +445,7 @@ void MigratingHandleStatement::bindBLOB(const BLOB& value, int index)
 
 void MigratingHandleStatement::bindNull(int index)
 {
-    WCTRemedialAssert(index != MigrationInfo::getIndexOfRowIdOrPrimaryKey(),
+    WCTRemedialAssert(index != MigrationInfo::indexOfRowIdOrPrimaryKey,
                       "Binding index is out of range",
                       return;);
     if (getBindParameterCount() >= index) {
@@ -483,7 +467,7 @@ void MigratingHandleStatement::bindPointer(void* ptr,
                                            const Text& type,
                                            void (*destructor)(void*))
 {
-    WCTRemedialAssert(index != MigrationInfo::getIndexOfRowIdOrPrimaryKey(),
+    WCTRemedialAssert(index != MigrationInfo::indexOfRowIdOrPrimaryKey,
                       "Binding index is out of range",
                       return;);
     if (getBindParameterCount() >= index) {
@@ -497,64 +481,6 @@ void MigratingHandleStatement::bindPointer(void* ptr,
 }
 
 #pragma mark - Insert
-void MigratingHandleStatement::genInsertStatements(const Syntax::InsertSTMT& migrated,
-                                                   const Syntax::InsertSTMT& falledBack,
-                                                   std::list<Statement>& statements)
-{
-    clearMigrateStatus();
-    MigratingHandle* migratingHandle = dynamic_cast<MigratingHandle*>(getHandle());
-    WCTAssert(migratingHandle != nullptr);
-    const MigrationInfo* info = migratingHandle->getBoundInfo(migrated.table);
-    WCTAssert(info != nullptr);
-    m_migratingInfo = info;
-    statements.push_back(info->getStatementForDeletingSpecifiedRow());
-    statements.push_back(info->getStatementForMigrating(falledBack));
-    if (info->isAutoIncrement()) {
-        return;
-    }
-    const StringView& integerPrimeryKey = info->getIntegerPrimaryKey();
-    if (integerPrimeryKey.empty()) {
-        statements.push_back(info->getStatementForSelectingMaxID());
-        return;
-    }
-
-    WCTAssert(migrated.columns.size() > 0
-              && migrated.expressionsValues.front().size() == migrated.columns.size());
-    int index = -1;
-    int i = 0;
-    for (const auto& iter : migrated.columns) {
-        if (iter.name.caseInsensitiveEqual(integerPrimeryKey)) {
-            index = i;
-            break;
-        }
-        i++;
-    }
-
-    if (index >= 0) {
-        auto valueIter = migrated.expressionsValues.front().begin();
-        std::advance(valueIter, index);
-        if (valueIter->switcher == Syntax::Expression::Switch::BindParameter) {
-            m_primaryKeyIndex = valueIter->bindParameter().n;
-        } else {
-            WCTAssert(valueIter->switcher == Syntax::Expression::Switch::LiteralValue);
-            if (valueIter->literalValue().switcher == Syntax::LiteralValue::Switch::Integer) {
-                m_assignedPrimaryKey = valueIter->literalValue().integerValue;
-            } else if (valueIter->literalValue().switcher
-                       == Syntax::LiteralValue::Switch::UnsignedInteger) {
-                m_assignedPrimaryKey = valueIter->literalValue().unsignedIntegerValue;
-            } else {
-                WCTAssert(valueIter->literalValue().switcher
-                          == Syntax::LiteralValue::Switch::Null)
-            }
-        }
-    }
-
-    if (!m_assignedPrimaryKey.hasValue()) {
-        statements.push_back(info->getStatementForSelectingMaxID());
-        return;
-    }
-}
-
 bool MigratingHandleStatement::stepInsert(const int64_t& rowid)
 {
     // The content inserting to source table is ignored.
@@ -604,7 +530,7 @@ bool MigratingHandleStatement::stepInsert(const int64_t& rowid)
             maxId = std::max(maxId, iter->getInteger());
         }
     }
-    migrateStatement.bindInteger(maxId, MigrationInfo::getIndexOfRowIdOrPrimaryKey());
+    migrateStatement.bindInteger(maxId, MigrationInfo::indexOfRowIdOrPrimaryKey);
     if (!migrateStatement.step()) {
         if (getHandle()->getError().code() == Error::Code::Constraint) {
             Error error = Error(
@@ -635,11 +561,11 @@ bool MigratingHandleStatement::stepUpdateOrDelete()
     HandleStatement& targetStatement = *iter;
     while (!done()) {
         int64_t rowid = getInteger();
-        sourceStatement.bindInteger(rowid, MigrationInfo::getIndexOfRowIdOrPrimaryKey());
+        sourceStatement.bindInteger(rowid, MigrationInfo::indexOfRowIdOrPrimaryKey);
         if (!sourceStatement.step()) {
             return false;
         }
-        targetStatement.bindInteger(rowid, MigrationInfo::getIndexOfRowIdOrPrimaryKey());
+        targetStatement.bindInteger(rowid, MigrationInfo::indexOfRowIdOrPrimaryKey);
         if (!targetStatement.step()) {
             return false;
         }
