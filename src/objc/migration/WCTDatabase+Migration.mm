@@ -30,14 +30,14 @@
 @implementation WCTDatabase (Migration)
 
 - (void)addMigration:(nullable NSString*)sourceDatabasePath
-          withFilter:(nonnull WCDB_ESCAPE WCTMigrationFilterBlock)filter
+          withFilter:(nullable WCDB_ESCAPE WCTMigrationFilterBlock)filter
 {
     [self addMigration:sourceDatabasePath withSourceCipher:nil withFilter:filter];
 }
 
 - (void)addMigration:(nullable NSString*)sourceDatabasePath
     withSourceCipher:(nullable NSData*)cipher
-          withFilter:(nonnull WCDB_ESCAPE WCTMigrationFilterBlock)filter
+          withFilter:(nullable WCDB_ESCAPE WCTMigrationFilterBlock)filter
 {
     WCDB::InnerDatabase::TableFilter callback = nullptr;
     if (filter != nil) {

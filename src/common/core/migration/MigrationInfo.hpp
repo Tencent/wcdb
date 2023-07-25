@@ -242,15 +242,19 @@ public:
      INTO rowid, main.[table]
      SELECT rowid, [columns]
      FROM [schemaForSourceDatabase].[sourceTable]
-     ORDER BY rowid DESC
+     ORDER BY [rowid/primary key] DESC
      LIMIT 1
+     
+     For the tables with integer primary key, it uses primary key. For the other tables, it uses rowid.
      */
     const StatementInsert& getStatementForMigratingOneRow() const;
 
     /*
      DELETE FROM [schemaForSourceDatabase].[sourceTable]
-     ORDER BY rowid DESC
+     ORDER BY [rowid/primary key] DESC
      LIMIT 1
+     
+     For the tables with integer primary key, it uses primary key. For the other tables, it uses rowid.
      */
     const StatementDelete& getStatementForDeletingMigratedOneRow() const;
 

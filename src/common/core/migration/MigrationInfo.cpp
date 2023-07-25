@@ -224,13 +224,14 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
 
     // Migrate
     {
-        OrderingTerm migrateOrder = m_integerPrimaryKey.empty() ?
-                                    OrderingTerm(rowid).order(Order::DESC) :
-                                    OrderingTerm(m_integerPrimaryKey).order(Order::DESC);
+        OrderingTerm migrateOrder
+        = m_integerPrimaryKey.empty() ?
+          OrderingTerm(rowid).order(Order::DESC) :
+          OrderingTerm(Column(m_integerPrimaryKey)).order(Order::DESC);
 
         m_statementForMigratingOneRow = StatementInsert()
                                         .insertIntoTable(getTable())
-                                        .orReplace()
+                                        .orIgnore()
                                         .columns(columns)
                                         .values(StatementSelect()
                                                 .select(resultColumns)
@@ -239,14 +240,14 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
                                                 .order(migrateOrder)
                                                 .limit(1));
 
-        m_statementForSelectingAnyRowFromSourceTable
-        = StatementSelect().select(Column::all()).from(sourceTableQuery).limit(1);
-
         m_statementForDeletingMigratedOneRow = StatementDelete()
                                                .deleteFrom(qualifiedSourceTable)
                                                .where(m_filterCondition)
                                                .orders(migrateOrder)
                                                .limit(1);
+
+        m_statementForSelectingAnyRowFromSourceTable
+        = StatementSelect().select(Column::all()).from(sourceTableQuery).limit(1);
     }
 
     // Compatible
@@ -458,7 +459,7 @@ void MigrationInfo::generateStatementsForUpdateMigrating(const Statement& source
         select.select(Column::rowid());
         update.where(Column::rowid() == BindParameter(indexOfRowIdOrPrimaryKey));
     } else {
-        select.select(m_integerPrimaryKey);
+        select.select(Column(m_integerPrimaryKey));
         update.where(Column(m_integerPrimaryKey) == BindParameter(indexOfRowIdOrPrimaryKey));
     }
 
@@ -497,7 +498,7 @@ void MigrationInfo::generateStatementsForDeleteMigrating(const Statement& source
         select.select(Column::rowid());
         delete_.where(Column::rowid() == BindParameter(indexOfRowIdOrPrimaryKey));
     } else {
-        select.select(m_integerPrimaryKey);
+        select.select(Column(m_integerPrimaryKey));
         delete_.where(Column(m_integerPrimaryKey) == BindParameter(indexOfRowIdOrPrimaryKey));
     }
 

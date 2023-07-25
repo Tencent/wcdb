@@ -484,7 +484,7 @@ void MigratingHandleStatement::bindPointer(void* ptr,
 bool MigratingHandleStatement::stepInsert(const int64_t& rowid)
 {
     // The content inserting to source table is ignored.
-    if (rowid == 0 && getHandle()->getChanges() == 0) {
+    if (getHandle()->getChanges() == 0) {
         return true;
     }
     WCTAssert(m_additionalStatements.size() >= 2);
@@ -559,7 +559,7 @@ bool MigratingHandleStatement::stepUpdateOrDelete()
     HandleStatement& sourceStatement = *iter;
     iter++;
     HandleStatement& targetStatement = *iter;
-    while (!done()) {
+    while (!Super::done()) {
         int64_t rowid = getInteger();
         sourceStatement.bindInteger(rowid, MigrationInfo::indexOfRowIdOrPrimaryKey);
         if (!sourceStatement.step()) {
@@ -569,7 +569,7 @@ bool MigratingHandleStatement::stepUpdateOrDelete()
         if (!targetStatement.step()) {
             return false;
         }
-        if (!step()) {
+        if (!Super::step()) {
             return false;
         }
     }

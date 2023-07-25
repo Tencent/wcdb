@@ -50,11 +50,11 @@ typedef void (^WCTMigratedNotificationBlock)(WCTDatabase* _Nonnull database, WCT
  @see   `WCTMigrationFilterBlock`
  */
 - (void)addMigration:(nullable NSString*)sourceDatabasePath
-          withFilter:(nonnull WCDB_ESCAPE WCTMigrationFilterBlock)filter;
+          withFilter:(nullable WCDB_ESCAPE WCTMigrationFilterBlock)filter;
 
 - (void)addMigration:(nullable NSString*)sourceDatabasePath
     withSourceCipher:(nullable NSData*)cipher
-          withFilter:(nonnull WCDB_ESCAPE WCTMigrationFilterBlock)filter;
+          withFilter:(nullable WCDB_ESCAPE WCTMigrationFilterBlock)filter;
 
 /**
  @brief Manually spend about 0.01 sec. to migrate data. You can call this method periodically until all data is migrated.
