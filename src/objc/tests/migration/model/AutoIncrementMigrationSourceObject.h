@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by 陈秋文 on 2023/7/23.
 //
 
 /*
@@ -22,30 +22,8 @@
  * limitations under the License.
  */
 
-#import "MigrationTestCase.h"
+#import "MigrationTestSourceObject.h"
 
-@interface MigrationCompatibleTestCase : MigrationTestCase
-
-- (void)doTestInsert;
-
-- (void)doTestInsertAutoIncrement;
-
-- (void)doTestInsertOrReplace;
-
-- (void)doTestInsertOrIgnore;
-
-- (void)doTestInsertFailedWithConflict;
-
-- (void)doTestLimitedDelete;
-
-- (void)doTestLimitedUpdate;
-
-- (void)doTestSelect;
-
-- (void)doTestDropTable;
-
-- (void)doTestSubqueryWithinDelete;
-
-- (void)doTestSubqueryWithinUpdate;
+@interface AutoIncrementMigrationSourceObject : MigrationTestObjectBase <MigrationTestSourceObject>
 
 @end

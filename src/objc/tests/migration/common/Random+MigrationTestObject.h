@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by 陈秋文 on 2023/7/23.
 //
 
 /*
@@ -22,25 +22,19 @@
  * limitations under the License.
  */
 
+#import "MigrationTestObject.h"
 #import "TestCase.h"
 
-typedef NS_ENUM(NSUInteger, MigrationObjectORMMode) {
-    MigrationObjectORMModeNormal = 0,
-    MigrationObjectORMModePrimaryKey,
-    MigrationObjectORMModeAutoIncrement,
-    MigrationObjectORMModeMissOneColumn,
-    MigrationObjectORMModeMissTwoColumn,
-};
+@interface Random (MigrationTestObject)
 
-@interface MigrationObject : NSObject
+- (NSObject<MigrationTestObject>*)autoIncrementMigrationObjectWithClass:(Class<MigrationTestObject>)objectClass;
 
-@property (nonatomic, assign) int identifier;
-@property (nonatomic, retain) NSString *content;
+- (NSObject<MigrationTestObject>*)migrationObjectWithClass:(Class<MigrationTestObject>)objectClass
+                                             andIdentifier:(int)identifier;
 
-+ (WCDB::StatementCreateTable)statementForCreatingTargetTable:(NSString *)tableName withMode:(MigrationObjectORMMode)mode;
-
-+ (WCDB::StatementCreateTable)statementForCreatingSourceTable:(NSString *)tableName withMode:(MigrationObjectORMMode)mode;
-
-+ (instancetype)objectWithIdentifier:(int)identifier andContent:(NSString *)content;
+- (NSArray<NSObject<MigrationTestObject>*>*)migrationObjectsWithClass:(Class<MigrationTestObject>)objectClass
+                                                             andCount:(int)count
+                                               startingFromIdentifier:(int)identifier
+                                                       withoutContent:(bool)noContent;
 
 @end

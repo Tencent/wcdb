@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by 陈秋文 on 2023/7/23.
 //
 
 /*
@@ -23,60 +23,49 @@
  */
 
 #import "MigrationTestCase.h"
+#import "AutoIncrementMigrationObject.h"
+#import "AutoIncrementMigrationSourceObject.h"
+#import "IntegerPrimaryKeyMigrationObject.h"
+#import "IntegerPrimaryKeyMigrationSourceObject.h"
+#import "NormalMigrationObject.h"
+#import "NormalMigrationSourceObject.h"
+#import "Random+MigrationTestObject.h"
+#import <Foundation/Foundation.h>
 
-@implementation MigrationTestCase {
+@interface MigrationTestCase () {
     NSString* _sourcePath;
-    NSString* _sourceTable;
+    NSString* _sourceTableName;
     WCTDatabase* _sourceDatabase;
-    NSArray<MigrationObject*>* _objects;
+    WCTTable* _sourceTable;
+    NSString* _schemaName;
+
+    NSArray<NSObject<MigrationTestSourceObject>*>* _objects;
+    NSArray<NSObject<MigrationTestObject>*>* _filterObjects;
+    NSData* _sourceCipher;
+    NSData* _targetCipher;
+}
+@end
+
+@implementation MigrationTestCase
+
++ (NSArray<Class<MigrationTestObject>>*)allClasses
+{
+    static NSArray* g_allClasses = @[
+        NormalMigrationObject.class,
+        IntegerPrimaryKeyMigrationObject.class,
+        AutoIncrementMigrationObject.class,
+    ];
+    return g_allClasses;
 }
 
-- (void)setUp
++ (NSArray<Class<MigrationTestSourceObject>>*)allSourceClasses
 {
-    [super setUp];
-
-    NSData* cipherKey = nil;
-    if (self.needCipher) {
-        cipherKey = [[Random shared] data];
-    }
-    [self.sourceDatabase setCipherKey:cipherKey];
-
-    _toMigrate = [NSMutableDictionary<NSString*, NSString*> dictionaryWithObject:self.sourceTable forKey:self.tableName];
-
-    TestCaseAssertTrue([self.sourceDatabase execute:[MigrationObject statementForCreatingSourceTable:self.sourceTable withMode:self.mode]]);
-    if (self.mode != MigrationObjectORMModeMissOneColumn && self.mode != MigrationObjectORMModeMissTwoColumn) {
-        TestCaseAssertTrue([self.sourceDatabase insertObjects:self.objects intoTable:self.sourceTable]);
-    } else {
-        WCTProperties properties;
-        properties.push_back(MigrationObject.identifier);
-        TestCaseAssertTrue([self.sourceDatabase insertObjects:self.objects onProperties:properties intoTable:self.sourceTable]);
-    }
-
-    [self.sourceDatabase close];
-
-    [self.database setCipherKey:cipherKey];
-
-    TestCaseAssertTrue(self.database.isMigrated);
-
-    // It's not a good practice to retain self in this escapable block.
-    {
-        weakify(self);
-        [self.database addMigration:self.sourcePath
-                   withSourceCipher:cipherKey
-                         withFilter:^(WCTMigrationUserInfo* userInfo) {
-                             strongify_or_return(self);
-                             NSString* sourceTable = [self.toMigrate objectForKey:userInfo.table];
-                             if (sourceTable != nil) {
-                                 userInfo.sourceTable = sourceTable;
-                             }
-                         }];
-    }
-
-    TestCaseAssertFalse(self.database.isMigrated);
-    self.tableClass = MigrationObject.class;
-    TestCaseAssertTrue([self.database execute:[MigrationObject statementForCreatingTargetTable:self.tableName withMode:self.mode]]);
-    self.table = [self.database getTable:self.tableName withClass:self.tableClass];
-    [self.database close];
+    static NSArray* g_allSourceClasses = @[
+        NormalMigrationSourceObject.class,
+        IntegerPrimaryKeyMigrationSourceObject.class,
+        AutoIncrementMigrationSourceObject.class,
+    ];
+    return g_allSourceClasses;
 }
 
 - (NSString*)sourcePath
@@ -93,15 +82,26 @@
     }
 }
 
-- (NSString*)sourceTable
+- (NSString*)sourceTableName
+{
+    @synchronized(self) {
+        if (_sourceTableName == nil) {
+            if (self.isCrossDatabaseMigration) {
+                _sourceTableName = self.tableName;
+            } else {
+                _sourceTableName = @"testSourceTable";
+            }
+        }
+        return _sourceTableName;
+    }
+}
+
+- (WCTTable*)sourceTable
 {
     @synchronized(self) {
         if (_sourceTable == nil) {
-            if (self.isCrossDatabaseMigration) {
-                _sourceTable = self.tableName;
-            } else {
-                _sourceTable = @"testSourceTable";
-            }
+            _sourceTable = [self.sourceDatabase getTable:self.sourceTableName
+                                               withClass:self.sourceClass];
         }
         return _sourceTable;
     }
@@ -111,32 +111,172 @@
 {
     @synchronized(self) {
         if (_sourceDatabase == nil) {
-            _sourceDatabase = [[WCTDatabase alloc] initWithPath:self.sourcePath];
+            if (_isCrossDatabaseMigration) {
+                _sourceDatabase = [[WCTDatabase alloc] initWithPath:self.sourcePath];
+            } else {
+                _sourceDatabase = self.database;
+            }
         }
         return _sourceDatabase;
     }
 }
 
-- (NSArray<MigrationObject*>*)objects
+- (NSString*)schemaName
+{
+    @synchronized(self) {
+        if (_schemaName == nil) {
+            if (self.isCrossDatabaseMigration) {
+                _schemaName = [NSString stringWithFormat:@"wcdb_migration_%u.", WCDB::UnsafeStringView(self.sourcePath).hash()];
+            } else {
+                _schemaName = @"main.";
+            }
+        }
+        return _schemaName;
+    }
+}
+
+- (NSArray<id<MigrationTestSourceObject>>*)objects
 {
     @synchronized(self) {
         if (_objects == nil) {
-            _objects = [Random.shared migrationObjectsWithCount:10000 startingFromIdentifier:1 withoutContent:self.mode == MigrationObjectORMModeMissOneColumn || self.mode == MigrationObjectORMModeMissTwoColumn];
+            _objects = (NSArray<NSObject<MigrationTestSourceObject>*>*)
+            [[Random shared] migrationObjectsWithClass:self.sourceClass
+                                              andCount:2000
+                                startingFromIdentifier:1
+                                        withoutContent:self.missColumnCount > 0];
         }
         return _objects;
     }
 }
 
+- (NSArray<id<MigrationTestObject>>*)filterObjects
+{
+    @synchronized(self) {
+        if (_filterObjects == nil) {
+            NSMutableArray* filterObjects = [[NSMutableArray alloc] init];
+            for (NSObject<MigrationTestSourceObject>* sourceObject in self.objects) {
+                if (!_needFilter || sourceObject.classification == MigrationClassificationB) {
+                    id<MigrationTestObject> object = [[(Class) self.targetClass alloc] init];
+                    object.identifier = sourceObject.identifier;
+                    object.content = sourceObject.content;
+                    [filterObjects addObject:object];
+                }
+            }
+            _filterObjects = filterObjects;
+        }
+        return _filterObjects;
+    }
+}
+
 - (void)tearDown
 {
-    [_sourceDatabase close];
-    _sourceDatabase = nil;
+    [self clearData];
     [super tearDown];
 }
 
-- (BOOL)isMigrating
+- (void)configMigration
 {
-    return !self.database.isMigrated;
+    [self clearData];
+
+    NSData* sourceCipher = nil;
+    NSData* targetCipher = nil;
+    if (_needCipher) {
+        if (_sourceCipher == nil) {
+            _sourceCipher = [Random.shared data];
+        }
+        if (_targetCipher == nil) {
+            _targetCipher = [Random.shared data];
+        }
+        sourceCipher = _sourceCipher;
+        targetCipher = _targetCipher;
+    }
+    [self.database setCipherKey:targetCipher];
+    [self.sourceDatabase setCipherKey:sourceCipher];
+
+    [self createTables];
+
+    TestCaseAssertTrue([self.sourceTable insertObjects:self.objects.reversedArray]);
+    [self.sourceDatabase close:^() {
+        TestCaseAssertTrue([self.sourceDatabase truncateCheckpoint]);
+    }];
+    self.table = [self.database getTable:self.tableName withClass:self.targetClass];
+
+    [self.database addMigration:self.sourcePath
+               withSourceCipher:sourceCipher
+                     withFilter:^(WCTMigrationUserInfo* info) {
+                         if ([info.table isEqualToString:self.tableName]) {
+                             [info setSourceTable:self.sourceTableName];
+                             if (self.needFilter) {
+                                 [info setFilterCondition:[self.sourceClass classification] == MigrationClassificationB];
+                             }
+                         }
+                     }];
+    TestCaseAssertTrue([self.database canOpen]);
+
+    if (_startMigration) {
+        TestCaseAssertTrue([self.database stepMigration]);
+    }
+    TestCaseAssertFalse([self.database isMigrated]);
+
+    NSArray* filterObjects = self.filterObjects;
+    NSArray* dbObjects = [self.table getObjectsOrders:[self.targetClass identifier].asOrder(WCTOrderedAscending)];
+    TestCaseAssertTrue([dbObjects isEqualToArray:filterObjects]);
+}
+
+- (void)clearData
+{
+    TestCaseAssertTrue([self.database removeFiles]);
+    TestCaseAssertTrue([self.sourceDatabase removeFiles]);
+    [self.database addMigration:self.sourcePath withFilter:nil];
+    _sourceTable = nil;
+    _sourceTableName = nil;
+    _sourcePath = nil;
+    _sourceDatabase = nil;
+    _objects = nil;
+    _filterObjects = nil;
+    _schemaName = nil;
+    self.table = nil;
+}
+
+- (void)createTables
+{
+    if (_missColumnCount == 0) {
+        TestCaseAssertTrue([self.sourceDatabase createTable:self.sourceTableName
+                                                  withClass:self.sourceClass]);
+    } else {
+        WCDB::StatementCreateTable createTable = [self.sourceClass objectRelationalMapping].generateCreateTableStatement(self.sourceTableName);
+        auto iterater = createTable.syntax().columnDefs.begin();
+        while (iterater != createTable.syntax().columnDefs.end()) {
+            if (iterater->column.getOrCreate().name == [self.sourceClass content].getDescription()) {
+                createTable.syntax().columnDefs.erase(iterater);
+                break;
+            }
+            iterater++;
+        }
+        TestCaseAssertTrue([self.sourceDatabase execute:createTable]);
+        WCDB::StatementCreateIndex createIndex = WCDB::StatementCreateIndex().createIndex("classification_index").ifNotExists().indexed([self.sourceClass classification]).table(self.sourceTableName);
+        TestCaseAssertTrue([self.sourceDatabase execute:createIndex]);
+    }
+    if (_missColumnCount < 2) {
+        TestCaseAssertTrue([self.database createTable:self.tableName
+                                            withClass:self.targetClass]);
+    } else {
+        WCDB::StatementCreateTable createTable = [self.targetClass objectRelationalMapping].generateCreateTableStatement(self.tableName);
+        auto iterater = createTable.syntax().columnDefs.begin();
+        while (iterater != createTable.syntax().columnDefs.end()) {
+            if (iterater->column.getOrCreate().name == [self.targetClass content].getDescription()) {
+                createTable.syntax().columnDefs.erase(iterater);
+                break;
+            }
+            iterater++;
+        }
+        TestCaseAssertTrue([self.database execute:createTable]);
+    }
+}
+
+- (NSArray<NSObject<WCTTableCoding>*>*)getAllObjects
+{
+    return [self.table getObjectsOrders:[self.targetClass identifier].asOrder(WCTOrderedAscending)];
 }
 
 @end

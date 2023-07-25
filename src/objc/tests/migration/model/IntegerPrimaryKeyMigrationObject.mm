@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by 陈秋文 on 2023/7/23.
 //
 
 /*
@@ -22,18 +22,25 @@
  * limitations under the License.
  */
 
-#import "MigrationObject.h"
-#if TEST_WCDB_OBJC
-#import <WCDBOBjc/WCDBObjc.h>
-#elif TEST_WCDB_CPP
-#import <WCDBCpp/WCDBCpp.h>
-#else
-#import <WCDB/WCDBObjc.h>
-#endif
+#import "IntegerPrimaryKeyMigrationObject.h"
+#import <Foundation/Foundation.h>
 
-@interface MigrationObject (WCTTableCoding) <WCTTableCoding>
+@implementation IntegerPrimaryKeyMigrationObject
 
-WCDB_PROPERTY(identifier)
-WCDB_PROPERTY(content)
+WCDB_IMPLEMENTATION(IntegerPrimaryKeyMigrationObject)
+WCDB_SYNTHESIZE(identifier)
+WCDB_SYNTHESIZE(content)
+
+WCDB_PRIMARY(identifier)
+
++ (BOOL)hasIntegerPrimaryKey
+{
+    return YES;
+}
+
++ (BOOL)isAutoIncrement
+{
+    return NO;
+}
 
 @end

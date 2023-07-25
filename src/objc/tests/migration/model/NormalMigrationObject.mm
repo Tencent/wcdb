@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by 陈秋文 on 2023/7/23.
 //
 
 /*
@@ -22,24 +22,23 @@
  * limitations under the License.
  */
 
-#import "MigrationTestCase.h"
+#import "NormalMigrationObject.h"
+#import <Foundation/Foundation.h>
 
-@interface MigrateTestCase : MigrationTestCase
+@implementation NormalMigrationObject
 
-- (void)doTestFilter;
+WCDB_IMPLEMENTATION(NormalMigrationObject)
+WCDB_SYNTHESIZE(identifier)
+WCDB_SYNTHESIZE(content)
 
-- (void)doTestStepMigrate;
++ (BOOL)hasIntegerPrimaryKey
+{
+    return NO;
+}
 
-- (void)doTestMigrate;
-
-- (void)doTestNotification;
-
-- (void)doTestAutoMigrate;
-
-- (void)doTestFeatureClosedDatabaseWillNotPerformAutoMigrate;
-
-- (void)doTestFeatureAutoMigrateWillStopDueToError;
-
-- (void)doTestFeatureMigrateNewlyCreatedTableAfterMigrated;
++ (BOOL)isAutoIncrement
+{
+    return NO;
+}
 
 @end

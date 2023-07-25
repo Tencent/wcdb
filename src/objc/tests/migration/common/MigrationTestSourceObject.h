@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by 陈秋文 on 2023/7/23.
 //
 
 /*
@@ -22,16 +22,11 @@
  * limitations under the License.
  */
 
-#import "MigrationObject+WCTTableCoding.h"
-#import "MigrationObject.h"
-#import "TestCase.h"
+#import "MigrationTestObject.h"
 
-@interface Random (MigrationObject)
+@protocol MigrationTestSourceObject <MigrationTestObject>
 
-- (MigrationObject*)autoIncrementMigrationObjectWithIdentifier:(int)identifier;
-
-- (MigrationObject*)migrationObjectWithIdentifier:(int)identifier;
-
-- (NSArray<MigrationObject*>*)migrationObjectsWithCount:(NSUInteger)count startingFromIdentifier:(int)identifier withoutContent:(bool)noContent;
+@property (nonatomic, assign) MigrationClassification classification;
+WCDB_PROPERTY(classification)
 
 @end
