@@ -703,43 +703,22 @@ bool WCDBDatabaseTruncateCheckpoint(CPPDatabase database)
     return cppDatabase->checkpoint(false, WCDB::InnerDatabase::CheckPointMode::Truncate);
 }
 
+void WCDBMigrationInfoSetterImp(WCDB::MigrationUserInfo* info,
+                                const char* sourceTable,
+                                CPPExpression expression)
+{
+    info->setSource(sourceTable);
+    WCDBGetObjectOrReturn(expression, WCDB::Expression, cppExpression);
+    info->setFilter(*cppExpression);
+}
+
 void WCDBDatabaseAddMigration(CPPDatabase database,
                               const char* _Nullable sourcePath,
                               const unsigned char* _Nullable sourceCipher,
                               int cipherLength,
-                              SwiftClosure* _Nullable filter)
-{
-    WCDBSwiftDatabaseMigrationFilter bridgedFilter
-    = WCDBCreateSwiftBridgedClosure(WCDBSwiftDatabaseMigrationFilter, filter);
-    WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
-    WCDB::InnerDatabase::TableFilter cppFilter = nullptr;
-    if (WCDBGetSwiftClosure(bridgedFilter) != nullptr) {
-        cppFilter = [bridgedFilter](WCDB::MigrationUserInfo& info) {
-            char* sourceTable = nullptr;
-            WCDBSwiftClosureCallWithMultiArgument(
-            bridgedFilter, info.getTable().data(), &sourceTable);
-            if (sourceTable != nullptr) {
-                info.setSource(sourceTable);
-                free(sourceTable);
-            }
-        };
-    }
-    cppDatabase->addMigration(
-    sourcePath, WCDB::UnsafeData::immutable(sourceCipher, (size_t) cipherLength), cppFilter);
-}
-
-void WCDBMigrationInfoSetterImp(WCDB::MigrationUserInfo* info, const char* sourceTable)
-{
-    info->setSource(sourceTable);
-}
-
-void WCDBDatabaseAddMigration2(CPPDatabase database,
-                               const char* _Nullable sourcePath,
-                               const unsigned char* _Nullable sourceCipher,
-                               int cipherLength,
-                               WCDBMigrationFilter _Nullable filter,
-                               void* _Nullable context,
-                               WCDBContextDestructor _Nullable destructor)
+                              WCDBMigrationFilter _Nullable filter,
+                              void* _Nullable context,
+                              WCDBContextDestructor _Nullable destructor)
 {
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     WCDB::InnerDatabase::TableFilter cppFilter = nullptr;

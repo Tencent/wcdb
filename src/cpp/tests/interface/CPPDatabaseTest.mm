@@ -141,7 +141,7 @@
     TestCaseAssertFalse(self.database->isOpened());
 }
 
-- (void)testCheckpoint
+- (void)test_checkpoint
 {
     WCDB::MultiRowsValue rows = [Random.shared autoIncrementTestCaseValuesWithCount:100];
 
@@ -174,7 +174,7 @@
     }
 }
 
-- (void)testOpenFail
+- (void)test_open_fail
 {
     auto database = WCDB::Database(self.directory.UTF8String);
     TestCaseAssertFalse(database.canOpen());
@@ -184,6 +184,72 @@
     TestCaseAssertFalse(database.createTable<CPPTestCaseObject>(self.tableName.UTF8String));
     WCDB::Table<CPPTestCaseObject> table = database.getTable<CPPTestCaseObject>(self.tableName.UTF8String);
     TestCaseAssertFalse(table.selectValue(WCDB::Column::all().count()).succeed());
+}
+
+- (void)test_migration
+{
+    CPPTestCaseObject oldObject1 = CPPTestCaseObject(1, "a");
+    CPPTestCaseObject oldObject2 = CPPTestCaseObject(2, "b");
+    CPPTestCaseObject oldObject3 = CPPTestCaseObject(3, "c");
+
+    NSData* sourceCipher = [Random.shared dataWithLength:101];
+    NSData* targetCipher = [Random.shared dataWithLength:101];
+
+    WCDB::Database sourceDatabase([self.path stringByAppendingString:@"_source"].UTF8String);
+    sourceDatabase.setCipherKey(WCDB::UnsafeData((unsigned char*) sourceCipher.bytes, sourceCipher.length));
+
+    NSString* sourceTableName = @"sourceTable";
+    TestCaseAssertTrue(sourceDatabase.createTable<CPPTestCaseObject>(sourceTableName.UTF8String));
+    WCDB::Table<CPPTestCaseObject> sourceTable = sourceDatabase.getTable<CPPTestCaseObject>(sourceTableName.UTF8String);
+
+    TestCaseAssertTrue(sourceTable.insertObjects({ oldObject1, oldObject2, oldObject3 }));
+
+    WCDB::Database targetDatabase(self.path.UTF8String);
+    targetDatabase.setCipherKey(WCDB::UnsafeData((unsigned char*) targetCipher.bytes, targetCipher.length));
+
+    targetDatabase.addMigration(sourceDatabase.getPath(),
+                                WCDB::UnsafeData((unsigned char*) sourceCipher.bytes, sourceCipher.length),
+                                [=](WCDB::Database::MigrationInfo& info) {
+                                    if (info.table.compare(self.tableName.UTF8String) == 0) {
+                                        info.sourceTable = sourceTableName.UTF8String;
+                                        info.filterCondition = WCDB_FIELD(CPPTestCaseObject::identifier) > 2;
+                                    }
+                                });
+
+    TestCaseAssertTrue(targetDatabase.createTable<CPPTestCaseObject>(self.tableName.UTF8String));
+    WCDB::Table<CPPTestCaseObject> targetTable = targetDatabase.getTable<CPPTestCaseObject>(self.tableName.UTF8String);
+
+    TestCaseAssertTrue(targetTable.selectValue(WCDB::Column::all().count()).value() == 1);
+
+    TestCaseAssertTrue(targetTable.deleteObjects(WCDB_FIELD(CPPTestCaseObject::identifier) == 2));
+    TestCaseAssertTrue(sourceTable.selectValue(WCDB::Column::all().count()).value() == 3);
+
+    TestCaseAssertTrue(targetTable.updateRow({ "newContent" }, WCDB_FIELD(CPPTestCaseObject::content), WCDB_FIELD(CPPTestCaseObject::identifier) == 3));
+    TestCaseAssertCPPStringEqual(targetTable.selectValue(WCDB_FIELD(CPPTestCaseObject::content), WCDB_FIELD(CPPTestCaseObject::identifier) == 3).value().textValue().data(), "newContent");
+
+    TestCaseAssertTrue(targetTable.deleteObjects(WCDB_FIELD(CPPTestCaseObject::identifier) == 3));
+    TestCaseAssertTrue(targetTable.selectValue(WCDB::Column::all().count()).value() == 0);
+    TestCaseAssertTrue(sourceTable.selectValue(WCDB::Column::all().count()).value() == 2);
+
+    TestCaseAssertTrue(targetTable.insertObjects(CPPTestCaseObject(4, "d")));
+    auto newObject = targetTable.getFirstObject(WCDB_FIELD(CPPTestCaseObject::identifier) == 4);
+    TestCaseAssertTrue(newObject.hasValue() && newObject.value().content.compare("d") == 0);
+    TestCaseAssertTrue(sourceTable.selectValue(WCDB::Column::all().count()).value() == 2);
+    TestCaseAssertTrue(targetTable.selectValue(WCDB::Column::all().count()).value() == 1);
+
+    targetDatabase.close();
+    TestCaseAssertFalse(targetDatabase.isMigrated());
+
+    WCDB::StringView migratedTable;
+    targetDatabase.setNotificationWhenMigrated([&migratedTable, self](WCDB::Database&, WCDB::Optional<WCDB::Database::MigrationInfo> info) {
+        if (info.hasValue() && info.value().table.compare(self.tableName.UTF8String) == 0) {
+            migratedTable = info.value().sourceTable;
+        }
+    });
+    while (!targetDatabase.isMigrated()) {
+        TestCaseAssertTrue(targetDatabase.stepMigration());
+    }
+    TestCaseAssertCPPStringEqual(migratedTable.data(), sourceTableName.UTF8String);
 }
 
 @end

@@ -51,14 +51,16 @@ internal final class ObjectBridge {
         return Unmanaged<AnyObject>.passRetained(obj).toOpaque()
     }
 
+    static let objectDestructor: @convention(c) (UnsafeMutableRawPointer) -> Void = { obj in
+        Unmanaged<AnyObject>.fromOpaque(obj).release()
+    }
+
     static func releaseSwiftObject(_ obj: UnsafeMutableRawPointer) {
         Unmanaged<AnyObject>.fromOpaque(obj).release()
     }
 
     static func initializeCPPAPI() {
-        WCDBReleaseSwiftObject = { (obj: UnsafeMutableRawPointer) -> Void in
-            Unmanaged<AnyObject>.fromOpaque(obj).release()
-        }
+        WCDBReleaseSwiftObject = objectDestructor
         WCDBReleaseSwiftClosure = { (closure: IMP) -> Void in
             imp_removeBlock(closure)
         }

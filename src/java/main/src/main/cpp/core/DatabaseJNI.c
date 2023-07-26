@@ -466,18 +466,12 @@ void WCDBJNIDatabaseFilterMigrate(jobject filter, const char* table, void* info,
 {
     WCDBJNITryGetEnvOr(return );
     WCDBJNITryGetDatabaseMethodId("filterMigrate",
-                                  "(" WCDBJNIDatabaseSignature "$MigrationFilter;" WCDBJNIStringSignature
-                                  ")" WCDBJNIStringSignature,
+                                  "(" WCDBJNIDatabaseSignature
+                                  "$MigrationFilter;JJ" WCDBJNIStringSignature ")V",
                                   return );
     WCDBJNICreateJavaString(table);
-    jstring ret = (*env)->CallStaticObjectMethod(
-    env, WCDBJNIGetDatabaseClass(), g_methodId, filter, jtable);
-    if ((*env)->ExceptionCheck(env)) {
-        ret = NULL;
-    }
-    WCDBJNIGetString(ret);
-    setter(info, retString);
-    WCDBJNIReleaseString(ret);
+    (*env)->CallStaticVoidMethod(
+    env, WCDBJNIGetDatabaseClass(), g_methodId, filter, (jlong) setter, (jlong) info, jtable);
     WCDBJNITryDetach;
 }
 
@@ -488,13 +482,21 @@ addMigrationSource, jlong self, jstring sourcePath, jbyteArray cipherKey, jobjec
     WCDBJNICreateGlobalRel(filter);
     WCDBJNIGetString(sourcePath);
     WCDBJNIGetByteArray(cipherKey);
-    WCDBDatabaseAddMigration2(selfStruct,
-                              sourcePathString,
-                              cipherKeyArray,
-                              cipherKeyLength,
-                              filter != NULL ? WCDBJNIDatabaseFilterMigrate : NULL,
-                              filter,
-                              WCDBJNIDestructContext);
+    WCDBDatabaseAddMigration(selfStruct,
+                             sourcePathString,
+                             cipherKeyArray,
+                             cipherKeyLength,
+                             filter != NULL ? WCDBJNIDatabaseFilterMigrate : NULL,
+                             filter,
+                             WCDBJNIDestructContext);
+}
+
+void WCDBJNIDatabaseClassMethod(setMigrationInfo, jlong infoSetter, jlong info, jstring sourceTable, jlong filterCondition)
+{
+    WCDBJNIGetString(sourceTable);
+    WCDBJNIBridgeStruct(CPPExpression, filterCondition);
+    ((WCDBMigrationInfoSetter) infoSetter)((void*) info, sourceTableString, filterConditionStruct);
+    WCDBJNIReleaseString(sourceTable);
 }
 
 jboolean WCDBJNIDatabaseObjectMethod(stepMigration, jlong self)

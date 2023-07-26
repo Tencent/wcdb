@@ -26,10 +26,12 @@ package com.tencent.wcdbtest.database;
 import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.core.Database;
+import com.tencent.wcdb.core.Table;
 import com.tencent.wcdb.winq.Column;
 import com.tencent.wcdb.winq.Order;
 import com.tencent.wcdbtest.base.BaseTestCase;
 import com.tencent.wcdbtest.base.DBTestObject;
+import com.tencent.wcdbtest.base.RandomTool;
 import com.tencent.wcdbtest.base.TestObject;
 import com.tencent.wcdbtest.base.WrappedValue;
 
@@ -38,67 +40,73 @@ import org.junit.Test;
 
 import java.io.File;
 import java.util.List;
+import java.util.Random;
 
 public class MigrationTest extends BaseTestCase {
     @Test
     public void testMigration() throws WCDBException {
-        final Database sourceDatabase = new Database(currentDirectory + File.separator + "sourceDatabase.sqlite3");
-        sourceDatabase.createTable("sourceTable", DBTestObject.INSTANCE);
+        TestObject oldObject1 = TestObject.createObject(1, "a");
+        TestObject oldObject2 = TestObject.createObject(2, "b");
+        TestObject oldObject3 = TestObject.createObject(3, "c");
 
-        TestObject oldObject1 = TestObject.createObject(1, "oldContent1");
-        TestObject oldObject2 = TestObject.createObject(2, "oldContent2");
-        sourceDatabase.insertObjects(new TestObject[]{oldObject1, oldObject2}, DBTestObject.allFields(), "sourceTable");
+        byte[] sourceCipher = RandomTool.bytes();
+        byte[] targetCipher = RandomTool.bytes();
+
+        final Database sourceDatabase = new Database(currentDirectory + File.separator + "sourceDatabase.sqlite3");
+        sourceDatabase.setCipherKey(sourceCipher);
+
+        final String sourceTableName = "sourceTable";
+        sourceDatabase.createTable(sourceTableName, DBTestObject.INSTANCE);
+        Table<TestObject> sourceTable = sourceDatabase.getTable(sourceTableName, DBTestObject.INSTANCE);
+        sourceTable.insertObjects(new TestObject[]{oldObject1, oldObject2, oldObject3});
 
         Database targetDatabase = new Database(currentDirectory + File.separator + "targetDatabase.sqlite3");
-        final String tableName = "targetTable";
-        targetDatabase.addMigrationSource(sourceDatabase.getPath(), new Database.MigrationFilter() {
+        targetDatabase.setCipherKey(targetCipher);
+
+        final String targetTableName = "targetTable";
+        targetDatabase.addMigrationSource(sourceDatabase.getPath(), sourceCipher, new Database.MigrationFilter() {
             @Override
             public void filterMigrate(Database.MigrationInfo info) {
-                if(info.table.equals(tableName)) {
-                    info.sourceTable = "sourceTable";
+                if(info.table.equals(targetTableName)) {
+                    info.sourceTable = sourceTableName;
+                    info.filterCondition = DBTestObject.id.gt(2);
                 }
             }
         });
 
-        targetDatabase.createTable(tableName, DBTestObject.INSTANCE);
-        targetDatabase.updateValue("newContent2", DBTestObject.content, tableName, DBTestObject.id.eq(2));
+        targetDatabase.createTable(targetTableName, DBTestObject.INSTANCE);
+        Table<TestObject> targetTable = targetDatabase.getTable(targetTableName, DBTestObject.INSTANCE);
 
-        List<TestObject> objects = targetDatabase.getAllObjects(DBTestObject.allFields(), tableName);
-        assertNotNull(objects);
-        assertEquals(objects.size(), 2);
-        assertEquals(objects.get(1).content, "newContent2");
+        assertEquals(targetTable.getValue(Column.all().count()).getInteger(), 1);
+        assertEquals(sourceTable.getValue(Column.all().count()).getInteger(), 3);
 
-        targetDatabase.deleteObjects(tableName, DBTestObject.id.eq(2));
-        assertEquals(targetDatabase.getValue(Column.all().count(), tableName).getInteger(), 1);
+        targetTable.updateValue("newContent", DBTestObject.content, DBTestObject.id.eq(3));
+        assertEquals(targetTable.getValue(DBTestObject.content, DBTestObject.id.eq(3)).getText(), "newContent");
 
-        TestObject newObject = TestObject.createObject(3, "newContent3");
-        targetDatabase.insertObject(newObject, DBTestObject.allFields(), tableName);
+        targetTable.deleteObjects(DBTestObject.id.eq(3));
+        assertEquals(targetTable.getValue(Column.all().count()).getInteger(), 0);
+        assertEquals(sourceTable.getValue(Column.all().count()).getInteger(), 2);
 
-        List<Value> contents = targetDatabase.getOneColumn(DBTestObject.content, tableName, DBTestObject.id.order(Order.Asc));
-        assertNotNull(contents);
-        assertEquals(contents.size(), 2);
-        assertEquals(contents.get(0).getText(), "oldContent1");
-        assertEquals(contents.get(1).getText(), "newContent3");
+        targetTable.insertObject(TestObject.createObject(4, "d"));
+        assertEquals(targetTable.getValue(DBTestObject.content, DBTestObject.id.eq(4)).getText(), "d");
+        assertEquals(targetTable.getValue(Column.all().count()).getInteger(), 1);
+        assertEquals(sourceTable.getValue(Column.all().count()).getInteger(), 2);
 
         targetDatabase.close();
-        assertFalse(targetDatabase.isMigrated());
-
-        final WrappedValue migratedTable = new WrappedValue();
+        final WrappedValue migrateTable = new WrappedValue();
         targetDatabase.setNotificationWhenMigrated(new Database.MigrationNotification() {
             @Override
             public void onMigrated(Database database, Database.MigrationInfo info) {
-                if(info != null && info.sourceTable.equals("sourceTable")) {
-                    migratedTable.stringValue = info.sourceTable;
+                if(info != null && info.table.equals(targetTableName)) {
+                    migrateTable.stringValue = info.sourceTable;
                 }
             }
         });
 
         do {
             targetDatabase.stepMigration();
-        } while (!targetDatabase.isMigrated());
+        }while(!targetDatabase.isMigrated());
 
-        assertTrue(targetDatabase.isMigrated());
-        assertEquals(migratedTable.stringValue, "sourceTable");
-
+        assertEquals(migrateTable.stringValue, sourceTableName);
     }
 }

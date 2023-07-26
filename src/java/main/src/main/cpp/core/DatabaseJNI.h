@@ -90,6 +90,11 @@ void WCDBJNIDatabaseObjectMethod(addMigrationSource,
                                  jstring sourcePath,
                                  jbyteArray cipherKey,
                                  jobject filter);
+void WCDBJNIDatabaseClassMethod(setMigrationInfo,
+                                jlong infoSetter,
+                                jlong info,
+                                jstring sourceTable,
+                                jlong filterCondition);
 jboolean WCDBJNIDatabaseObjectMethod(stepMigration, jlong self);
 void WCDBJNIDatabaseObjectMethod(enableAutoMigration, jlong self, jboolean flag);
 void WCDBJNIDatabaseObjectMethod(setNotificationWhenMigrated, jlong self, jobject onMigrated);

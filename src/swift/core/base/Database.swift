@@ -689,12 +689,13 @@ public extension Database {
     struct MigrationInfo {
         public var table: String = ""           // Target table of migration
         public var sourceTable: String?         // Source table of migration
+        public var filterCondition: Expression? // Filter condition of source table
     }
 
     /**
      Triggered at any time when WCDB needs to know whether a table in the current database needs to migrate data, mainly including creating a new table, reading and writing a table, and starting to migrate a new table. If the current table does not need to migrate data, you need to set the sourceTable in `MigrationInfo` to nil.
      */
-    typealias MigrationFilter = (_ info: inout MigrationInfo) -> Void
+    typealias TableFilter = (_ info: inout MigrationInfo) -> Void
 
     /// Configure which tables in the current database need to migrate data, and the source table they need to migrate data from.
     ///
@@ -710,32 +711,37 @@ public extension Database {
     ///
     /// - Parameter sourcePath: path of source database.
     /// - Parameter sourceCipher: cipher of source database. It is optional.
-    /// - Parameter filter: see `MigrationFilter`.
-    func addMigration(sourcePath: String?, sourceCipher: Data? = nil, _ filter: MigrationFilter?) {
+    /// - Parameter filter: see `TableFilter`.
+    func addMigration(sourcePath: String?, sourceCipher: Data? = nil, _ filter: TableFilter?) {
         if let filter = filter {
-            let internalFilter: @convention(block) ( UnsafePointer<CChar>, UnsafeMutablePointer<UnsafeMutablePointer<CChar>>) -> Void = {
-                targetTable, pSourceTable in
-                var info = MigrationInfo(table: String(cString: targetTable))
-                filter(&info)
-                if let sourceTable = info.sourceTable {
-                    let length = sourceTable.lengthOfBytes(using: .utf8) + 1
-                    let buffer = malloc(length)
-                    if let buffer = buffer {
-                        memcpy(buffer, sourceTable.cString, length)
-                        pSourceTable.pointee = buffer.assumingMemoryBound(to: Int8.self)
+            let filterWrap = ValueWrap(filter)
+            let filterPointer = ObjectBridge.getUntypeSwiftObject(filterWrap)
+            let cppFilter: @convention(c) (UnsafeMutableRawPointer?, UnsafePointer<CChar>, UnsafeMutableRawPointer, @convention(c) (UnsafeMutableRawPointer, UnsafePointer<CChar>?, CPPExpression) -> Void) -> Void  = {
+                filter, table, cppInfo, setter in
+                let filterWrap: ValueWrap<TableFilter>? = ObjectBridge.extractTypedSwiftObject(filter)
+                if let filterWrap = filterWrap {
+                    var info = MigrationInfo(table: String(cString: table))
+                    filterWrap.value(&info)
+                    if let sourceTable = info.sourceTable {
+                        if let filtercCondition = info.filterCondition {
+                            withExtendedLifetime(filtercCondition) {
+                                setter(cppInfo, sourceTable.cString, $0.cppObj)
+                            }
+                        } else {
+                            setter(cppInfo, sourceTable.cString, CPPExpression())
+                        }
                     }
                 }
             }
-            let internalFilterImp = imp_implementationWithBlock(internalFilter)
             if let sourceCipher = sourceCipher {
                 sourceCipher.withUnsafeBytes { (buffer: UnsafeRawBufferPointer) in
-                    WCDBDatabaseAddMigration(database, sourcePath?.cString, buffer.bindMemory(to: UInt8.self).baseAddress, Int32(buffer.count), internalFilterImp)
+                    WCDBDatabaseAddMigration(database, sourcePath?.cString, buffer.bindMemory(to: UInt8.self).baseAddress, Int32(buffer.count), cppFilter, filterPointer, ObjectBridge.objectDestructor)
                 }
             } else {
-                WCDBDatabaseAddMigration(database, sourcePath?.cString, nil, 0, internalFilterImp)
+                WCDBDatabaseAddMigration(database, sourcePath?.cString, nil, 0, cppFilter, filterPointer, ObjectBridge.objectDestructor)
             }
         } else {
-            WCDBDatabaseAddMigration(database, sourcePath?.cString, nil, 0, nil)
+            WCDBDatabaseAddMigration(database, sourcePath?.cString, nil, 0, nil, nil, nil)
         }
     }
 

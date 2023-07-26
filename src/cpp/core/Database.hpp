@@ -599,8 +599,9 @@ public:
 
 #pragma mark - Migration
     typedef struct MigrationInfo {
-        StringView table;       // Target table of migration
-        StringView sourceTable; // Source table of migration
+        StringView table;           // Target table of migration
+        StringView sourceTable;     // Source table of migration
+        Expression filterCondition; // Filter condition of source table
     } MigrationInfo;
 
     /**

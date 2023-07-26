@@ -442,6 +442,7 @@ void Database::addMigration(const UnsafeStringView& sourcePath,
             filter(info);
             if (info.sourceTable.length() > 0) {
                 userInfo.setSource(info.sourceTable);
+                userInfo.setFilter(info.filterCondition);
             }
         };
     }

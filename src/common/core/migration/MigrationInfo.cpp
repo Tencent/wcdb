@@ -134,13 +134,61 @@ const StatementAttach& MigrationBaseInfo::getStatementForAttachingSchema() const
     return m_databaseInfo.getStatementForAttachingSchema();
 }
 
-void MigrationBaseInfo::setSource(const UnsafeStringView& table, Expression filterCondition)
+void MigrationBaseInfo::setSource(const UnsafeStringView& table)
 {
     WCTRemedialAssert(!table.empty() && (table != m_table || isCrossDatabase()),
                       "Invalid migration source.",
                       return;);
     m_sourceTable = table;
+}
+
+void MigrationBaseInfo::setFilter(Expression filterCondition)
+{
+    filterCondition.iterate([this](Syntax::Identifier& identifier, bool&) {
+        switch (identifier.getType()) {
+        case Syntax::Identifier::Type::TableOrSubquery: {
+            // main.table -> temp.unionedView
+            Syntax::TableOrSubquery& syntax = (Syntax::TableOrSubquery&) identifier;
+            if (syntax.switcher == Syntax::TableOrSubquery::Switch::Table) {
+                tryFallbackToSourceTable(syntax.schema, syntax.tableOrFunction);
+            }
+        } break;
+        case Syntax::Identifier::Type::QualifiedTableName: {
+            // main.table -> schemaForSourceDatabase.sourceTable
+            Syntax::QualifiedTableName& syntax = (Syntax::QualifiedTableName&) identifier;
+            tryFallbackToSourceTable(syntax.schema, syntax.table);
+        } break;
+        case Syntax::Identifier::Type::Expression: {
+            // main.table -> temp.unionedView
+            Syntax::Expression& syntax = (Syntax::Expression&) identifier;
+            switch (syntax.switcher) {
+            case Syntax::Expression::Switch::Column:
+                tryFallbackToSourceTable(syntax.column().schema, syntax.column().table);
+                break;
+            case Syntax::Expression::Switch::In:
+                if (syntax.inSwitcher == Syntax::Expression::SwitchIn::Table) {
+                    tryFallbackToSourceTable(syntax.schema(), syntax.table());
+                }
+                break;
+            default:
+                break;
+            }
+        } break;
+        default:
+            break;
+        }
+    });
     m_filterCondition = filterCondition;
+}
+
+void MigrationBaseInfo::tryFallbackToSourceTable(Syntax::Schema& schema, StringView& table) const
+{
+    if (schema.isMain()) {
+        schema = getSchemaForSourceDatabase();
+        if (table.empty()) {
+            table = m_sourceTable;
+        }
+    }
 }
 
 bool MigrationBaseInfo::shouldMigrate() const

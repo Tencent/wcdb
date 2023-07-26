@@ -860,48 +860,64 @@ class AdvanceTests: CRUDTestCase {
     }
 
     func testMigration() {
-        let sourceDatabase = Database(at: recommendedPath)
-        XCTAssertNoThrow(try sourceDatabase.create(table: "sourceTable", of: TestObject.self))
-
         let oldObject1 = TestObject()
         oldObject1.variable1 = 1
         oldObject1.variable2 = "oldContent1"
         let oldObject2 = TestObject()
         oldObject2.variable1 = 2
         oldObject2.variable2 = "oldContent2"
-        XCTAssertNoThrow(try sourceDatabase.insert(oldObject1, oldObject2, intoTable: "sourceTable"))
+        let oldObject3 = TestObject()
+        oldObject3.variable1 = 3
+        oldObject3.variable2 = "oldContent3"
+
+        let sourceCipher = RandomData(withSeed: 0).data(withLength: 100)
+        let targetCipher = RandomData(withSeed: 1).data(withLength: 100)
+
+        let sourceDatabase = Database(at: recommendedDirectory.appendingPathComponent("sourceDB.sqlite3"))
+        sourceDatabase.setCipher(key: sourceCipher)
+
+        let sourceTableName = "sourceTable"
+        XCTAssertNoThrow(try sourceDatabase.create(table: sourceTableName, of: TestObject.self))
+        let sourceTable = sourceDatabase.getTable(named: sourceTableName, of: TestObject.self)
+
+        XCTAssertNoThrow(try sourceTable.insert(oldObject1, oldObject2, oldObject3))
 
         let targetDatabase = Database(at: recommendedDirectory.appendingPathComponent("targetDB.sqlite3"))
-        targetDatabase.addMigration(sourcePath: self.recommendedPath.path, { info in
-            if info.table == "targetTable" {
-                info.sourceTable = "sourceTable"
+        targetDatabase.setCipher(key: targetCipher)
+        let targetTableName = "targetTable"
+
+        targetDatabase.addMigration(sourcePath: sourceDatabase.path, sourceCipher: sourceCipher) { info in
+            if info.table == targetTableName {
+                info.sourceTable = sourceTableName
+                info.filterCondition = TestObject.Properties.variable1 > 2
             }
-        })
+        }
 
-        XCTAssertNoThrow(try targetDatabase.create(table: "targetTable", of: TestObject.self))
+        XCTAssertNoThrow(try targetDatabase.create(table: targetTableName, of: TestObject.self))
+        let targetTable = targetDatabase.getTable(named: targetTableName, of: TestObject.self)
 
-        XCTAssertNoThrow(try targetDatabase.update(table: "targetTable", on: TestObject.Properties.variable2, with: "newContent2", where: TestObject.Properties.variable1 == 2))
+        XCTAssertEqual(try? targetTable.getValue(on: Column.all.count()).int64Value, 1)
 
-        let objects: [TestObject] = WCDBAssertNoThrowReturned(try targetDatabase.getObjects(fromTable: "targetTable"))
-        XCTAssertEqual(objects.count, 2)
-        XCTAssertEqual(objects[1].variable2, "newContent2")
+        XCTAssertNoThrow(try targetTable.delete(where: TestObject.Properties.variable1 == 2))
+        XCTAssertEqual(try? sourceTable.getValue(on: Column.all.count()).int64Value, 3)
 
-        XCTAssertNoThrow(try targetDatabase.delete(fromTable: "targetTable", where: TestObject.Properties.variable1 == 2))
-        let count = WCDBAssertNoThrowReturned(try targetDatabase.getValue(on: TestObject.Properties.any.count(), fromTable: "targetTable"))
-        XCTAssertEqual(count?.int32Value ?? 0, 1)
+        XCTAssertNoThrow(try targetTable.update(on: TestObject.Properties.variable2, with: ["newContent"], where: TestObject.Properties.variable1 == 3))
+
+        XCTAssertEqual(try? targetTable.getValue(on: TestObject.Properties.variable2, where: TestObject.Properties.variable1 == 3).stringValue, "newContent")
+
+        XCTAssertNoThrow(try targetTable.delete(where: TestObject.Properties.variable1 == 3))
+        XCTAssertEqual(try? sourceTable.getValue(on: Column.all.count()).int64Value, 2)
+        XCTAssertEqual(try? targetTable.getValue(on: Column.all.count()).int64Value, 0)
 
         let newObject = TestObject()
-        newObject.variable1 = 3
-        newObject.variable2 = "newContent3"
-        XCTAssertNoThrow(try targetDatabase.insert(newObject, intoTable: "targetTable"))
+        newObject.variable1 = 4
+        newObject.variable2 = "d"
+        XCTAssertNoThrow(try targetTable.insert(newObject))
 
-        let constents: OneColumnValue = WCDBAssertNoThrowReturned(
-            try targetDatabase.getColumn(on: TestObject.Properties.variable2,
-                                         fromTable: "targetTable",
-                                         orderBy: [TestObject.Properties.variable1.order(.ascending)]))
-        XCTAssertEqual(constents.count, 2)
-        XCTAssertEqual(constents[0].stringValue, "oldContent1")
-        XCTAssertEqual(constents[1].stringValue, "newContent3")
+        let dbNewObject = WCDBAssertNoThrowReturned(try targetTable.getObject(on: TestObject.Properties.all, where: TestObject.Properties.variable1 == 4))
+        XCTAssertTrue(dbNewObject != nil && dbNewObject!.variable2 == "d")
+        XCTAssertEqual(try? sourceTable.getValue(on: Column.all.count()).int64Value, 2)
+        XCTAssertEqual(try? targetTable.getValue(on: Column.all.count()).int64Value, 1)
 
         targetDatabase.close()
         XCTAssertEqual(targetDatabase.isMigrated(), false)
@@ -919,7 +935,7 @@ class AdvanceTests: CRUDTestCase {
 
         XCTAssertEqual(targetDatabase.isMigrated(), true)
 
-        XCTAssertEqual(migratedTable ?? "", "sourceTable")
+        XCTAssertEqual(migratedTable ?? "", sourceTableName)
     }
 
     func testDefaultTemporaryDirectory() {

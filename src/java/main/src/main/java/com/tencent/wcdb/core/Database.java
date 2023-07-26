@@ -23,6 +23,7 @@
 package com.tencent.wcdb.core;
 
 import com.tencent.wcdb.base.WCDBException;
+import com.tencent.wcdb.winq.Expression;
 
 import java.util.List;
 
@@ -413,18 +414,25 @@ public class Database extends HandleORMOperation {
     public static class MigrationInfo {
         public String table;
         public String sourceTable;
+        public Expression filterCondition;
     }
 
     public interface MigrationFilter {
         void filterMigrate(MigrationInfo info);
     }
 
-    private static String filterMigrate(MigrationFilter filter, String table) {
+    private static void filterMigrate(MigrationFilter filter, long cppInfoSetter, long cppInfo, String table) {
         MigrationInfo info = new MigrationInfo();
         info.table = table;
         filter.filterMigrate(info);
-        return info.sourceTable;
+        long cppFilterCondition = 0;
+        if(info.filterCondition != null) {
+            cppFilterCondition = info.filterCondition.getCppObj();
+        }
+        setMigrationInfo(cppInfoSetter, cppInfo, info.sourceTable, cppFilterCondition);
     }
+
+    private static native void setMigrationInfo(long cppInfoSetter, long cppInfo, String sourceTable, long filterCondition);
 
     public void addMigrationSource(String sourcePath, MigrationFilter filter) {
         addMigrationSource(sourcePath, null, filter);

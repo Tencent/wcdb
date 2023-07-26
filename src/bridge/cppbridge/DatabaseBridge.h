@@ -171,24 +171,20 @@ double WCDBDatabaseRetrieve2(CPPDatabase database,
 bool WCDBDatabasePassiveCheckpoint(CPPDatabase database);
 bool WCDBDatabaseTruncateCheckpoint(CPPDatabase database);
 
-void WCDBDatabaseAddMigration(CPPDatabase database,
-                              const char* _Nullable sourcePath,
-                              const unsigned char* _Nullable sourceCipher,
-                              int cipherLength,
-                              SwiftClosure* _Nullable filter);
-
-typedef void (*WCDBMigrationInfoSetter)(void* _Nonnull context, const char* _Nonnull sourceTable);
+typedef void (*WCDBMigrationInfoSetter)(void* _Nonnull context,
+                                        const char* _Nullable sourceTable,
+                                        CPPExpression filterCondition);
 typedef void (*WCDBMigrationFilter)(void* _Nullable context,
                                     const char* _Nonnull table,
                                     void* _Nonnull info,
                                     WCDBMigrationInfoSetter _Nonnull setter);
-void WCDBDatabaseAddMigration2(CPPDatabase database,
-                               const char* _Nullable sourcePath,
-                               const unsigned char* _Nullable sourceCipher,
-                               int cipherLength,
-                               WCDBMigrationFilter _Nullable filter,
-                               void* _Nullable context,
-                               WCDBContextDestructor _Nullable destructor);
+void WCDBDatabaseAddMigration(CPPDatabase database,
+                              const char* _Nullable sourcePath,
+                              const unsigned char* _Nullable sourceCipher,
+                              int cipherLength,
+                              WCDBMigrationFilter _Nullable filter,
+                              void* _Nullable context,
+                              WCDBContextDestructor _Nullable destructor);
 
 bool WCDBDatabaseStepMigration(CPPDatabase database);
 void WCDBDatabaseEnableAutoMigration(CPPDatabase database, bool flag);
