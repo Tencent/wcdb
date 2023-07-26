@@ -45,7 +45,8 @@
             WCTMigrationUserInfo* nsUserInfo = [[WCTMigrationUserInfo alloc] initWithBaseInfo:userInfo];
             filter(nsUserInfo);
             if (nsUserInfo.sourceTable.length > 0) {
-                userInfo.setSource(nsUserInfo.sourceTable, nsUserInfo.filterCondition);
+                userInfo.setSource(nsUserInfo.sourceTable);
+                userInfo.setFilter(nsUserInfo.filterCondition);
             }
         };
     }

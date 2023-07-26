@@ -92,7 +92,9 @@ public:
     const StatementAttach& getStatementForAttachingSchema() const;
 
 protected:
-    void setSource(const UnsafeStringView& table, Expression filterCondition = Expression());
+    void setSource(const UnsafeStringView& table);
+    void setFilter(Expression filterCondition);
+    void tryFallbackToSourceTable(Syntax::Schema& schema, StringView& table) const;
 
     MigrationDatabaseInfo& m_databaseInfo;
     StringView m_table;
@@ -107,6 +109,7 @@ public:
     ~MigrationUserInfo() override final;
 
     using MigrationBaseInfo::setSource;
+    using MigrationBaseInfo::setFilter;
 };
 
 #pragma mark - MigrationInfo

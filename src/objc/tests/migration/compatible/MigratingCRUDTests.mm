@@ -360,7 +360,7 @@
         NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE",
                                       @"DROP TABLE IF EXISTS main.testTable",
                                       self.needFilter ?
-                                      [NSString stringWithFormat:@"DELETE FROM %@%@ WHERE classification == 1", self.schemaName, self.sourceTableName] :
+                                      [NSString stringWithFormat:@"DELETE FROM %@%@ WHERE %@%@.classification == 1", self.schemaName, self.sourceTableName, self.schemaName, self.sourceTableName] :
                                       [NSString stringWithFormat:@"DELETE FROM %@%@", self.schemaName, self.sourceTableName],
                                       @"COMMIT" ];
 
