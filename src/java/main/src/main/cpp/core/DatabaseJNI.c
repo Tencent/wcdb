@@ -87,7 +87,7 @@ jobject WCDBJNIDatabaseObjectMethod(getPaths, jlong self)
     context.env = env;
     context.array = arrayList;
     context.arrayClass = g_arrayClass;
-    WCDBDatabaseGetPaths2(selfStruct, &context, WCDBJNIStringEnumerator);
+    WCDBDatabaseGetPaths2(selfStruct, &context, (WCDBStringEnumerater) WCDBJNIStringEnumerator);
     return arrayList;
 }
 
@@ -136,7 +136,8 @@ void WCDBJNIDatabaseObjectMethod(close, jlong self, jobject callback)
         CloseDatabaseContext context;
         context.env = env;
         context.callback = callback;
-        WCDBDatabaseClose2(selfStruct, &context, WCDBJNIDatabaseCloseCallback);
+        WCDBDatabaseClose2(
+        selfStruct, &context, (WCDBDatabaseCloseCallback) WCDBJNIDatabaseCloseCallback);
     } else {
         WCDBDatabaseClose2(selfStruct, NULL, NULL);
     }
@@ -312,7 +313,9 @@ void WCDBJNIDatabaseClassMethod(globalTraceOperation, jobject tracer)
     WCDBJNITryGetVM;
     WCDBJNICreateGlobalRel(tracer);
     WCDBDatabaseGlobalTraceOperation2(
-    tracer != NULL ? WCDBJNIDatabaseOperationTrace : NULL, tracer, WCDBJNIDestructContext);
+    (tracer != NULL ? (WCDBOperationTracer) WCDBJNIDatabaseOperationTrace : NULL),
+    tracer,
+    WCDBJNIDestructContext);
 }
 
 jboolean WCDBJNIDatabaseObjectMethod(removeFiles, jlong self)
@@ -443,11 +446,12 @@ jdouble WCDBJNIDatabaseObjectMethod(retrieve, jlong self, jobject onProgressUpda
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBJNITryGetVM;
     WCDBJNICreateGlobalRel(onProgressUpdate);
-    return WCDBDatabaseRetrieve2(
-    selfStruct,
-    onProgressUpdate != NULL ? WCDBJNIDatabaseOnRetrievePorgressUpdate : NULL,
-    onProgressUpdate,
-    WCDBJNIDestructContext);
+    return WCDBDatabaseRetrieve2(selfStruct,
+                                 onProgressUpdate != NULL ?
+                                 (WCDBRetrieveProgressMonitor) WCDBJNIDatabaseOnRetrievePorgressUpdate :
+                                 NULL,
+                                 onProgressUpdate,
+                                 WCDBJNIDestructContext);
 }
 
 jboolean WCDBJNIDatabaseObjectMethod(passiveCheckpoint, jlong self)

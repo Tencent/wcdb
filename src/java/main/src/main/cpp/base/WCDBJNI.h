@@ -75,12 +75,13 @@
         (*env)->ReleaseStringUTFChars(env, value, value##String);              \
     }
 
-#define WCDBJNIGetByteArray(value)                                             \
-    const jbyte *value##Array = NULL;                                          \
-    int value##Length = 0;                                                     \
-    if (value != NULL) {                                                       \
-        value##Array = (*env)->GetByteArrayElements(env, value, NULL);         \
-        value##Length = (*env)->GetArrayLength(env, value);                    \
+#define WCDBJNIGetByteArray(value)                                                \
+    const unsigned char *value##Array = NULL;                                     \
+    int value##Length = 0;                                                        \
+    if (value != NULL) {                                                          \
+        value##Array                                                              \
+        = (const unsigned char *) (*env)->GetByteArrayElements(env, value, NULL); \
+        value##Length = (*env)->GetArrayLength(env, value);                       \
     }
 
 #define WCDBJNIReleaseByteArray(value)                                                   \
@@ -103,7 +104,7 @@
 
 #define WCDBJNIGetCppPointerArray(value)                                       \
     const void **value##Array = NULL;                                          \
-    jlong *value##LongArray = NULL;                                            \
+    const jlong *value##LongArray = NULL;                                      \
     int value##Length = 0;                                                     \
     if (value != NULL) {                                                       \
         value##LongArray = (*env)->GetLongArrayElements(env, value, NULL);     \

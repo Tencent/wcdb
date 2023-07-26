@@ -144,7 +144,7 @@ jstring WCDBJNIHandleStatementObjectMethod(getText, jlong self, jint index)
 jbyteArray WCDBJNIHandleStatementObjectMethod(getBLOB, jlong self, jint index)
 {
     WCDBJNIBridgeStruct(CPPHandleStatement, self);
-    jbyte* buffer = WCDBHandleStatementGetBlob(selfStruct, index);
+    jbyte* buffer = (jbyte*) WCDBHandleStatementGetBlob(selfStruct, index);
     jsize size = WCDBHandleStatementGetColumnSize(selfStruct, index);
     if (buffer == NULL || size == 0) {
         return (*env)->NewByteArray(env, 0);

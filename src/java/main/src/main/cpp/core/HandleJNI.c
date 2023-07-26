@@ -159,7 +159,8 @@ jboolean WCDBJNIHandleObjectMethod(runTransaction, jlong self, jobject transacti
     context.env = env;
     context.handle = obj;
     context.transaction = transaction;
-    return WCDBHandleRunTransaction2(selfStruct, &context, WCDBJNIHanldeTransactionCallBack);
+    return WCDBHandleRunTransaction2(
+    selfStruct, &context, (TransactionCallback) WCDBJNIHanldeTransactionCallBack);
 }
 
 bool WCDBJNIHanldePausableTransactionCallBack(TransactionContext *context,
@@ -199,5 +200,5 @@ jboolean WCDBJNIHandleObjectMethod(runPausableTransaction, jlong self, jobject t
     context.handle = obj;
     context.transaction = transaction;
     return WCDBHandleRunPausableTransaction2(
-    selfStruct, &context, WCDBJNIHanldePausableTransactionCallBack);
+    selfStruct, &context, (PausableTransaction) WCDBJNIHanldePausableTransactionCallBack);
 }

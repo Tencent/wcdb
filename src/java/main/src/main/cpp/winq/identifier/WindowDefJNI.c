@@ -21,8 +21,6 @@
  * limitations under the License.
  */
 
-#pragma once
-
 #include "WindowDefJNI.h"
 #include "WindowDefBridge.h"
 

@@ -21,8 +21,6 @@
  * limitations under the License.
  */
 
-#pragma once
-
 #include "StatementCreateViewJNI.h"
 #include "StatementCreateViewBridge.h"
 
