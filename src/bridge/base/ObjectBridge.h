@@ -38,7 +38,7 @@
 
 WCDB_EXTERN_C_BEGIN
 
-typedef struct SwiftObject SwiftObject;
+typedef void SwiftObject;
 extern void (*_Nullable WCDBReleaseSwiftObject)(SwiftObject* _Nonnull obj);
 
 typedef struct SwiftClosure SwiftClosure;
