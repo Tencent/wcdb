@@ -209,20 +209,44 @@ internal class KotlinAnnotationProcessor(private val environment: SymbolProcesso
         }
         if (columnInfo.defaultValue != null) {
             var valueCount = 0
+            val columnType = AllKotlinPropertyORMInfo[columnInfo.propertyType]!!.columnType
+            var typeMissMatch = false
             if (columnInfo.defaultValue!!.intValue != 0L) {
                 valueCount++
+                if (columnType != "Integer") {
+                    typeMissMatch = true
+                }
             }
             if (columnInfo.defaultValue!!.doubleValue != 0.0) {
                 valueCount++
+                if (columnType != "Float") {
+                    typeMissMatch = true
+                }
             }
             if (columnInfo.defaultValue!!.textValue.isNotEmpty()) {
                 valueCount++
+                if (columnType != "Text") {
+                    typeMissMatch = true
+                }
             }
             if (valueCount > 1) {
                 environment.logger.error(
                     "Only one default value can be configured for a field",
                     declaration
                 )
+                return false
+            } else if (typeMissMatch) {
+                if (columnType == "BLOB'") {
+                    environment.logger.error(
+                        "Assigning a default value to BLOB is unsupported",
+                        declaration
+                    )
+                } else {
+                    environment.logger.error(
+                        "Default value should be a $columnType",
+                        declaration
+                    )
+                }
                 return false
             }
         }

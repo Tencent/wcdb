@@ -1,4 +1,4 @@
-// Created by qiuwenchen on 2023/5/12.
+// Created by chenqiuwen on 2023/7/26.
 //
 
 /*
@@ -20,20 +20,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.tencent.wcdbtest.orm.testclass;
-import com.tencent.wcdb.*;
+
+package com.tencent.wcdbtest.orm.testclass
+
+import com.tencent.wcdb.WCDBDefault
+import com.tencent.wcdb.WCDBField
+import com.tencent.wcdb.WCDBTableCoding
 
 @WCDBTableCoding
-public class ColumnConstraintDefaultObject {
+class ColumnConstraintDefaultZeroObject {
     @WCDBField
-    @WCDBDefault(intValue = 1)
-    int intValue;
+    @WCDBDefault(intValue = 0)
+    var intValue = 0
 
     @WCDBField
-    @WCDBDefault(doubleValue = 1.1)
-    float floatValue;
+    @WCDBDefault(doubleValue = 0.0)
+    var floatValue = 0f
 
     @WCDBField
-    @WCDBDefault(textValue = "abc")
-    String stringValue;
+    @WCDBDefault(textValue = "")
+    var stringValue: String? = null
 }

@@ -100,12 +100,12 @@ class KotlinCodeGenerator {
                     .append(if (columnInfo.isAutoIncrement) ".autoIncrement()\n$TAB$TAB)\n" else "\n$TAB$TAB)\n")
             }
             if (columnInfo.defaultValue != null) {
-                if (columnInfo.defaultValue!!.doubleValue != 0.0) {
-                    builder.append(constraintPrefix).append(".defaultTo(${columnInfo.defaultValue!!.doubleValue})\n$TAB$TAB)\n")
-                } else if (columnInfo.defaultValue!!.textValue.isNotEmpty()) {
-                    builder.append(constraintPrefix).append(".defaultTo(\"${columnInfo.defaultValue!!.textValue}\")\n$TAB$TAB)\n")
-                } else {
+                if (ormInfo.columnType == "Integer") {
                     builder.append(constraintPrefix).append(".defaultTo(${columnInfo.defaultValue!!.intValue})\n$TAB$TAB)\n")
+                } else if (ormInfo.columnType == "Float") {
+                    builder.append(constraintPrefix).append(".defaultTo(${columnInfo.defaultValue!!.doubleValue})\n$TAB$TAB)\n")
+                } else {
+                    builder.append(constraintPrefix).append(".defaultTo(\"${columnInfo.defaultValue!!.textValue}\")\n$TAB$TAB)\n")
                 }
             }
             if (columnInfo.isUnique) {

@@ -233,17 +233,35 @@ public class JavaAnnotationProcessor extends AbstractProcessor {
         }
         if (defaultValueAnnotation != null) {
             int valueCount = 0;
+            boolean typeMissMatch = false;
+            String columnType = JavaFieldORMInfo.allInfo.get(type).columnType;
             if (defaultValueAnnotation.intValue() != 0) {
                 valueCount++;
+                if (!columnType.equals("Integer")) {
+                    typeMissMatch = true;
+                }
             }
             if (defaultValueAnnotation.doubleValue() != 0) {
                 valueCount++;
+                if (!columnType.equals("Float")) {
+                    typeMissMatch = true;
+                }
             }
             if (defaultValueAnnotation.textValue().length() > 0) {
                 valueCount++;
+                if (!columnType.equals("Text")) {
+                    typeMissMatch = true;
+                }
             }
             if (valueCount > 1) {
                 msg.printMessage(Diagnostic.Kind.ERROR, "Only one default value can be configured for a field", element);
+                return false;
+            } else if (typeMissMatch) {
+                if (columnType.equals("BLOB") ) {
+                    msg.printMessage(Diagnostic.Kind.ERROR, "Assigning a default value to BLOB is unsupported", element);
+                } else {
+                    msg.printMessage(Diagnostic.Kind.ERROR, "Default value should be a " + columnType, element);
+                }
                 return false;
             }
         }

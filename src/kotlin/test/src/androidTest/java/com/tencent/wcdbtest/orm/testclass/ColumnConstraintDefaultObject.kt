@@ -30,12 +30,8 @@ import com.tencent.wcdb.WCDBTableCoding
 @WCDBTableCoding
 class ColumnConstraintDefaultObject {
     @WCDBField
-    @WCDBDefault(intValue = 0)
-    var intValue = 0
-
-    @WCDBField
     @WCDBDefault(intValue = 1)
-    var intValue2 = 0
+    var intValue = 0
 
     @WCDBField
     @WCDBDefault(doubleValue = 1.1)

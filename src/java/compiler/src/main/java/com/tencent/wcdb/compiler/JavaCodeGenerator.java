@@ -119,12 +119,12 @@ public class JavaCodeGenerator {
             }
 
             if(columnInfo.getDefaultValue() != null) {
-                if (columnInfo.getDefaultValue().getDoubleValue() != 0.0) {
-                    builder.append(constraintPrefix).append(".defaultTo(").append(columnInfo.getDefaultValue().getDoubleValue()).append("));\n");
-                } else if (columnInfo.getDefaultValue().getTextValue().length() > 0) {
-                    builder.append(constraintPrefix).append(".defaultTo(\"").append(columnInfo.getDefaultValue().getTextValue()).append("\"));\n");
-                } else {
+                if (ormInfo.columnType.equals("Integer")) {
                     builder.append(constraintPrefix).append(".defaultTo(").append(columnInfo.getDefaultValue().getIntValue()).append("));\n");
+                } else if (ormInfo.columnType.equals("Float")) {
+                    builder.append(constraintPrefix).append(".defaultTo(").append(columnInfo.getDefaultValue().getDoubleValue()).append("));\n");
+                } else {
+                    builder.append(constraintPrefix).append(".defaultTo(\"").append(columnInfo.getDefaultValue().getTextValue()).append("\"));\n");
                 }
             }
 
