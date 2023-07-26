@@ -25,31 +25,6 @@
 #include "DatabaseBridge.h"
 #include <assert.h>
 
-static JavaVM* g_vm;
-
-#define WCDBJNITryGetVM                                                        \
-    if (g_vm == NULL) {                                                        \
-        (*env)->GetJavaVM(env, &g_vm);                                         \
-        assert(g_vm != NULL);                                                  \
-    }
-
-#define WCDBJNITryGetEnvOr(action)                                             \
-    JNIEnv* env;                                                               \
-    int getEnvStat = (*g_vm)->GetEnv(g_vm, (void**) &env, JNI_VERSION_1_6);    \
-    bool needDetach = false;                                                   \
-    if (getEnvStat == JNI_EDETACHED) {                                         \
-        if ((*g_vm)->AttachCurrentThread(g_vm, &env, NULL) != 0) {             \
-            assert(0);                                                         \
-            action;                                                            \
-        }                                                                      \
-        needDetach = JNI_TRUE;                                                 \
-    }
-
-#define WCDBJNITryDetach                                                       \
-    if (needDetach) {                                                          \
-        (*g_vm)->DetachCurrentThread(g_vm);                                    \
-    }
-
 #define WCDBJNITryGetDatabaseMethodId(name, signature, action)                        \
     static jmethodID g_methodId = NULL;                                               \
     if (g_methodId == NULL) {                                                         \
@@ -194,13 +169,6 @@ void WCDBJNIDatabaseObjectMethod(configCipher, jlong self, jbyteArray cipherKey,
     WCDBJNIReleaseByteArray(cipherKey);
 }
 
-void WCDBJNIDestructConfigContext(jobject config)
-{
-    WCDBJNITryGetEnvOr(return );
-    (*env)->DeleteGlobalRef(env, config);
-    WCDBJNITryDetach;
-}
-
 bool WCDBJNIDatabaseConfig(jobject config, CPPHandle handle)
 {
     WCDBJNITryGetEnvOr(return false);
@@ -230,14 +198,7 @@ config, jlong self, jstring name, jobject invocation, jobject unInvocation, jint
                         unInvocation != NULL ? WCDBJNIDatabaseConfig : NULL,
                         unInvocation,
                         priority,
-                        WCDBJNIDestructConfigContext);
-}
-
-void WCDBJNIDestructPerformanceTracerContext(jobject tracer)
-{
-    WCDBJNITryGetEnvOr(return );
-    (*env)->DeleteGlobalRef(env, tracer);
-    WCDBJNITryDetach;
+                        WCDBJNIDestructContext);
 }
 
 void WCDBJNIDatabasePerformanceTrace(jobject tracer,
@@ -263,7 +224,7 @@ void WCDBJNIDatabaseClassMethod(globalTracePerformance, jobject tracer)
     WCDBJNITryGetVM;
     WCDBJNICreateGlobalRel(tracer);
     WCDBDatabaseGlobalTracePerformance2(
-    tracer != NULL ? WCDBJNIDatabasePerformanceTrace : NULL, tracer, WCDBJNIDestructPerformanceTracerContext);
+    tracer != NULL ? WCDBJNIDatabasePerformanceTrace : NULL, tracer, WCDBJNIDestructContext);
 }
 
 void WCDBJNIDatabaseObjectMethod(tracePerformance, jlong self, jobject tracer)
@@ -271,17 +232,8 @@ void WCDBJNIDatabaseObjectMethod(tracePerformance, jlong self, jobject tracer)
     WCDBJNITryGetVM;
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBJNICreateGlobalRel(tracer);
-    WCDBDatabaseTracePerformance2(selfStruct,
-                                  tracer != NULL ? WCDBJNIDatabasePerformanceTrace : NULL,
-                                  tracer,
-                                  WCDBJNIDestructPerformanceTracerContext);
-}
-
-void WCDBJNIDestructSQLTracerContext(jobject tracer)
-{
-    WCDBJNITryGetEnvOr(return );
-    (*env)->DeleteGlobalRef(env, tracer);
-    WCDBJNITryDetach;
+    WCDBDatabaseTracePerformance2(
+    selfStruct, tracer != NULL ? WCDBJNIDatabasePerformanceTrace : NULL, tracer, WCDBJNIDestructContext);
 }
 
 void WCDBJNIDatabaseSQLTrace(jobject tracer,
@@ -306,7 +258,7 @@ void WCDBJNIDatabaseClassMethod(globalTraceSQL, jobject tracer)
     WCDBJNITryGetVM;
     WCDBJNICreateGlobalRel(tracer);
     WCDBDatabaseGlobalTraceSQL2(
-    tracer != NULL ? WCDBJNIDatabaseSQLTrace : NULL, tracer, WCDBJNIDestructSQLTracerContext);
+    tracer != NULL ? WCDBJNIDatabaseSQLTrace : NULL, tracer, WCDBJNIDestructContext);
 }
 
 void WCDBJNIDatabaseObjectMethod(traceSQL, jlong self, jobject tracer)
@@ -315,14 +267,7 @@ void WCDBJNIDatabaseObjectMethod(traceSQL, jlong self, jobject tracer)
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBJNICreateGlobalRel(tracer);
     WCDBDatabaseTraceSQL2(
-    selfStruct, tracer != NULL ? WCDBJNIDatabaseSQLTrace : NULL, tracer, WCDBJNIDestructSQLTracerContext);
-}
-
-void WCDBJNIDestructErrorTracerContext(jobject tracer)
-{
-    WCDBJNITryGetEnvOr(return );
-    (*env)->DeleteGlobalRef(env, tracer);
-    WCDBJNITryDetach;
+    selfStruct, tracer != NULL ? WCDBJNIDatabaseSQLTrace : NULL, tracer, WCDBJNIDestructContext);
 }
 
 void WCDBJNIDatabaseErrorTrace(jobject tracer, CPPError error)
@@ -339,9 +284,8 @@ void WCDBJNIDatabaseClassMethod(globalTraceError, jobject tracer)
 {
     WCDBJNITryGetVM;
     WCDBJNICreateGlobalRel(tracer);
-    WCDBDatabaseGlobalTraceError2(tracer != NULL ? WCDBJNIDatabaseErrorTrace : NULL,
-                                  tracer,
-                                  WCDBJNIDestructErrorTracerContext);
+    WCDBDatabaseGlobalTraceError2(
+    tracer != NULL ? WCDBJNIDatabaseErrorTrace : NULL, tracer, WCDBJNIDestructContext);
 }
 
 void WCDBJNIDatabaseObjectMethod(traceError, jlong self, jobject tracer)
@@ -349,17 +293,8 @@ void WCDBJNIDatabaseObjectMethod(traceError, jlong self, jobject tracer)
     WCDBJNITryGetVM;
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBJNICreateGlobalRel(tracer);
-    WCDBDatabaseTraceError2(selfStruct,
-                            tracer != NULL ? WCDBJNIDatabaseErrorTrace : NULL,
-                            tracer,
-                            WCDBJNIDestructErrorTracerContext);
-}
-
-void WCDBJNIDestructOperationTracerContext(jobject config)
-{
-    WCDBJNITryGetEnvOr(return );
-    (*env)->DeleteGlobalRef(env, config);
-    WCDBJNITryDetach;
+    WCDBDatabaseTraceError2(
+    selfStruct, tracer != NULL ? WCDBJNIDatabaseErrorTrace : NULL, tracer, WCDBJNIDestructContext);
 }
 
 void WCDBJNIDatabaseOperationTrace(jobject tracer, CPPDatabase database, int operation)
@@ -376,9 +311,8 @@ void WCDBJNIDatabaseClassMethod(globalTraceOperation, jobject tracer)
 {
     WCDBJNITryGetVM;
     WCDBJNICreateGlobalRel(tracer);
-    WCDBDatabaseGlobalTraceOperation2(tracer != NULL ? WCDBJNIDatabaseOperationTrace : NULL,
-                                      tracer,
-                                      WCDBJNIDestructOperationTracerContext);
+    WCDBDatabaseGlobalTraceOperation2(
+    tracer != NULL ? WCDBJNIDatabaseOperationTrace : NULL, tracer, WCDBJNIDestructContext);
 }
 
 jboolean WCDBJNIDatabaseObjectMethod(removeFiles, jlong self)
@@ -403,13 +337,6 @@ jlong WCDBJNIDatabaseObjectMethod(getFileSize, jlong self)
     return size.hasValue ? size.value : -1;
 }
 
-void WCDBJNIDestructCorruptionNotificationContext(jobject config)
-{
-    WCDBJNITryGetEnvOr(return );
-    (*env)->DeleteGlobalRef(env, config);
-    WCDBJNITryDetach;
-}
-
 void WCDBJNIDatabaseCorrupted(jobject notification, CPPDatabase database)
 {
     WCDBJNITryGetEnvOr(return );
@@ -426,10 +353,7 @@ void WCDBJNIDatabaseObjectMethod(setNotificationWhenCorrupted, jlong self, jobje
     WCDBJNITryGetVM;
     WCDBJNICreateGlobalRel(notification);
     WCDBDatabaseSetNotificationWhenCorrupted2(
-    selfStruct,
-    notification != NULL ? WCDBJNIDatabaseCorrupted : NULL,
-    notification,
-    WCDBJNIDestructCorruptionNotificationContext);
+    selfStruct, notification != NULL ? WCDBJNIDatabaseCorrupted : NULL, notification, WCDBJNIDestructContext);
 }
 
 jboolean WCDBJNIDatabaseObjectMethod(checkIfCorrupted, jlong self)
@@ -454,13 +378,6 @@ jboolean WCDBJNIDatabaseObjectMethod(backup, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     return WCDBDatabaseBackup(selfStruct);
-}
-
-void WCDBJNIDestructBackupFilterContext(jobject filter)
-{
-    WCDBJNITryGetEnvOr(return );
-    (*env)->DeleteGlobalRef(env, filter);
-    WCDBJNITryDetach;
 }
 
 bool WCDBJNIDatabaseTableShouldBeBackup(jobject filter, const char* table)
@@ -489,7 +406,7 @@ void WCDBJNIDatabaseObjectMethod(filterBackup, jlong self, jobject tableShouldBe
     selfStruct,
     tableShouldBeBackup != NULL ? WCDBJNIDatabaseTableShouldBeBackup : NULL,
     tableShouldBeBackup,
-    WCDBJNIDestructBackupFilterContext);
+    WCDBJNIDestructContext);
 }
 
 jboolean WCDBJNIDatabaseObjectMethod(deposit, jlong self)
@@ -508,13 +425,6 @@ jboolean WCDBJNIDatabaseObjectMethod(containDepositedFiles, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     return WCDBDatabaseContainDepositedFiles(selfStruct);
-}
-
-void WCDBJNIDestructRetrieveProgressMonitorContext(jobject monitor)
-{
-    WCDBJNITryGetEnvOr(return );
-    (*env)->DeleteGlobalRef(env, monitor);
-    WCDBJNITryDetach;
 }
 
 void WCDBJNIDatabaseOnRetrievePorgressUpdate(jobject monitor, double percentage, double increment)
@@ -537,7 +447,7 @@ jdouble WCDBJNIDatabaseObjectMethod(retrieve, jlong self, jobject onProgressUpda
     selfStruct,
     onProgressUpdate != NULL ? WCDBJNIDatabaseOnRetrievePorgressUpdate : NULL,
     onProgressUpdate,
-    WCDBJNIDestructRetrieveProgressMonitorContext);
+    WCDBJNIDestructContext);
 }
 
 jboolean WCDBJNIDatabaseObjectMethod(passiveCheckpoint, jlong self)
@@ -550,13 +460,6 @@ jboolean WCDBJNIDatabaseObjectMethod(truncateCheckpoint, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     return WCDBDatabaseTruncateCheckpoint(selfStruct);
-}
-
-void WCDBJNIDestructMigrationFilterContext(jobject filter)
-{
-    WCDBJNITryGetEnvOr(return );
-    (*env)->DeleteGlobalRef(env, filter);
-    WCDBJNITryDetach;
 }
 
 void WCDBJNIDatabaseFilterMigrate(jobject filter, const char* table, void* info, WCDBMigrationInfoSetter setter)
@@ -591,7 +494,7 @@ addMigrationSource, jlong self, jstring sourcePath, jbyteArray cipherKey, jobjec
                               cipherKeyLength,
                               filter != NULL ? WCDBJNIDatabaseFilterMigrate : NULL,
                               filter,
-                              WCDBJNIDestructMigrationFilterContext);
+                              WCDBJNIDestructContext);
 }
 
 jboolean WCDBJNIDatabaseObjectMethod(stepMigration, jlong self)
@@ -604,13 +507,6 @@ void WCDBJNIDatabaseObjectMethod(enableAutoMigration, jlong self, jboolean flag)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBDatabaseEnableAutoMigration(selfStruct, flag);
-}
-
-void WCDBJNIDestructMigrationNotificationContext(jobject notification)
-{
-    WCDBJNITryGetEnvOr(return );
-    (*env)->DeleteGlobalRef(env, notification);
-    WCDBJNITryDetach;
 }
 
 void WCDBJNIDatabaseOnTableMigrate(jobject notification,
@@ -637,10 +533,7 @@ void WCDBJNIDatabaseObjectMethod(setNotificationWhenMigrated, jlong self, jobjec
     WCDBJNITryGetVM;
     WCDBJNICreateGlobalRel(onMigrated);
     WCDBDatabaseSetNotificationWhenMigrated2(
-    selfStruct,
-    onMigrated != NULL ? WCDBJNIDatabaseOnTableMigrate : NULL,
-    onMigrated,
-    WCDBJNIDestructMigrationNotificationContext);
+    selfStruct, onMigrated != NULL ? WCDBJNIDatabaseOnTableMigrate : NULL, onMigrated, WCDBJNIDestructContext);
 }
 
 jboolean WCDBJNIDatabaseObjectMethod(isMigrated, jlong self)

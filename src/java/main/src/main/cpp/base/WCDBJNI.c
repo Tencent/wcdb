@@ -26,6 +26,15 @@
 #include "assert.h"
 #include <string.h>
 
+JavaVM *g_vm = NULL;
+
+void WCDBJNIDestructContext(jobject config)
+{
+    WCDBJNITryGetEnvOr(return );
+    (*env)->DeleteGlobalRef(env, config);
+    WCDBJNITryDetach;
+}
+
 void WCDBJNIClassMethod(Base, releaseObject, long long cppObject)
 {
     WCDBReleaseCPPObject((CPPObject *) cppObject);

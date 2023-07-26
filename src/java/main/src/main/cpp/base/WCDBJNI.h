@@ -346,6 +346,33 @@
         value = (*env)->NewGlobalRef(env, value);                              \
     }
 
+extern JavaVM *g_vm;
+
+#define WCDBJNITryGetVM                                                        \
+    if (g_vm == NULL) {                                                        \
+        (*env)->GetJavaVM(env, &g_vm);                                         \
+        assert(g_vm != NULL);                                                  \
+    }
+
+#define WCDBJNITryGetEnvOr(action)                                             \
+    JNIEnv *env;                                                               \
+    int getEnvStat = (*g_vm)->GetEnv(g_vm, (void **) &env, JNI_VERSION_1_6);   \
+    bool needDetach = false;                                                   \
+    if (getEnvStat == JNI_EDETACHED) {                                         \
+        if ((*g_vm)->AttachCurrentThread(g_vm, &env, NULL) != 0) {             \
+            assert(0);                                                         \
+            action;                                                            \
+        }                                                                      \
+        needDetach = JNI_TRUE;                                                 \
+    }
+
+#define WCDBJNITryDetach                                                       \
+    if (needDetach) {                                                          \
+        (*g_vm)->DetachCurrentThread(g_vm);                                    \
+    }
+
+void WCDBJNIDestructContext(jobject config);
+
 void WCDBJNIClassMethod(Base, releaseObject, long long cppObject);
 
 void WCDBJNIInitJClasses(JNIEnv *env);
