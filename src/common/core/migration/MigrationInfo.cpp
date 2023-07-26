@@ -518,7 +518,7 @@ MigrationInfo::getStatementForDeletingFromTable(const Statement& sourceStatement
     WCDB::QualifiedTable table(dropTableSyntax.table);
     table.syntax().schema = dropTableSyntax.schema;
 
-    return StatementDelete().deleteFrom(table);
+    return StatementDelete().deleteFrom(table).where(m_filterCondition);
 }
 
 const StatementSelect& MigrationInfo::getStatementForSelectingAnyRowFromSourceTable() const

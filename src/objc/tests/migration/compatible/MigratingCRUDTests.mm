@@ -359,13 +359,18 @@
     [self doTestMigration:^{
         NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE",
                                       @"DROP TABLE IF EXISTS main.testTable",
+                                      self.needFilter ?
+                                      [NSString stringWithFormat:@"DELETE FROM %@%@ WHERE classification == 1", self.schemaName, self.sourceTableName] :
                                       [NSString stringWithFormat:@"DELETE FROM %@%@", self.schemaName, self.sourceTableName],
                                       @"COMMIT" ];
 
-        [self doTestSQLs:sqls
-             inOperation:^BOOL {
-                 return [self.database dropTable:self.tableName];
-             }];
+        if (!self.needCipher)
+
+            [self doTestSQLs:sqls
+                 inOperation:^BOOL {
+                     return [self.database dropTable:self.tableName];
+                 }];
+        TestCaseAssertEqual([self.sourceTable getValueOnResultColumn:WCDB::Column::all().count()].numberValue.intValue, self.objects.count - self.filterObjects.count);
     }];
 }
 
