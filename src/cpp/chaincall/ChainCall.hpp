@@ -25,8 +25,8 @@
 #pragma once
 
 #include "CPPDeclaration.h"
-#include "Error.hpp"
 #include "Recyclable.hpp"
+#include "WCDBError.hpp"
 
 namespace WCDB {
 

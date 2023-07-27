@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "Optional.hpp"
+#include "WCDBOptional.hpp"
 #include "SharedThreadedErrorProne.hpp"
 #include "StringView.hpp"
 #include <chrono>

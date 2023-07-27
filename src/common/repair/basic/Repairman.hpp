@@ -28,7 +28,7 @@
 #include "Cipher.hpp"
 #include "Crawlable.hpp"
 #include "ErrorProne.hpp"
-#include "Optional.hpp"
+#include "WCDBOptional.hpp"
 #include "Progress.hpp"
 #include "Scoreable.hpp"
 #include "UpgradeableErrorProne.hpp"

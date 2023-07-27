@@ -25,7 +25,7 @@
 #pragma once
 
 #include "Macro.h"
-#include "Optional.hpp"
+#include "WCDBOptional.hpp"
 #include "StringView.hpp"
 
 namespace WCDB {

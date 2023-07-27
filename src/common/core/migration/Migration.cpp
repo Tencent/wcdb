@@ -24,8 +24,8 @@
 
 #include "Migration.hpp"
 #include "Assertion.hpp"
-#include "Error.hpp"
 #include "StringView.hpp"
+#include "WCDBError.hpp"
 
 namespace WCDB {
 

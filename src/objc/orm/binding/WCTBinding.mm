@@ -24,7 +24,7 @@
 
 #import "WCTBinding.h"
 #import "Assertion.hpp"
-#import "Error.hpp"
+#import "WCDBError.hpp"
 #import "WCTColumnBinding.h"
 #import "WCTColumnCoding.h"
 #import "WCTMacro.h"

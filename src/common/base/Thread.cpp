@@ -24,8 +24,8 @@
 
 #include "Thread.hpp"
 #include "CrossPlatform.h"
-#include "Error.hpp"
 #include "Notifier.hpp"
+#include "WCDBError.hpp"
 #include <cstring>
 
 namespace WCDB {

@@ -25,7 +25,7 @@
 #pragma once
 
 #include "Cipher.hpp"
-#include "Optional.hpp"
+#include "WCDBOptional.hpp"
 #include "Serialization.hpp"
 #include "StringView.hpp"
 #include <list>

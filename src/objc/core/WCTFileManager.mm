@@ -24,7 +24,7 @@
 
 #import "CoreConst.h"
 #import "Enum.hpp"
-#import "Error.hpp"
+#import "WCDBError.hpp"
 #import "FileManager.hpp"
 #import "Notifier.hpp"
 #import "StringView.hpp"
