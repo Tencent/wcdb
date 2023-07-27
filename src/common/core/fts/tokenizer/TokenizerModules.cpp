@@ -24,8 +24,8 @@
 
 #include "TokenizerModules.hpp"
 #include "Assertion.hpp"
-#include "Error.hpp"
 #include "SQLiteFTS3Tokenizer.h"
+#include "WCDBError.hpp"
 
 namespace WCDB {
 

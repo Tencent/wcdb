@@ -25,10 +25,10 @@
 #include "AsyncQueue.hpp"
 #include "Assertion.hpp"
 #include "CoreConst.h"
-#include "Error.hpp"
 #include "Exiting.hpp"
 #include "Notifier.hpp"
 #include "StringView.hpp"
+#include "WCDBError.hpp"
 #include <atomic>
 #include <thread>
 

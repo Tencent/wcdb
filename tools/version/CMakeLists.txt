@@ -135,7 +135,7 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
             ${WCDB_SRC_DIR}/common/*/ConvertibleImplementation.hpp
             ${WCDB_SRC_DIR}/common/*/CoreFunction.hpp
             ${WCDB_SRC_DIR}/common/*/Data.hpp
-            ${WCDB_SRC_DIR}/common/*/Error.hpp
+            ${WCDB_SRC_DIR}/common/*/WCDBError.hpp
             ${WCDB_SRC_DIR}/common/*/Expression.hpp
             ${WCDB_SRC_DIR}/common/*/ExpressionOperable.hpp
             ${WCDB_SRC_DIR}/common/*/Filter.hpp
@@ -258,7 +258,7 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
             ${WCDB_SRC_DIR}/common/*/ValueArray.hpp
             ${WCDB_SRC_DIR}/common/*/WindowDef.hpp
             ${WCDB_SRC_DIR}/common/*/WINQ.h
-            ${WCDB_SRC_DIR}/common/*/Optional.hpp
+            ${WCDB_SRC_DIR}/common/*/WCDBOptional.hpp
             ${WCDB_SRC_DIR}/cpp/*/Accessor.hpp
             ${WCDB_SRC_DIR}/cpp/*/BaseOperation.hpp
             ${WCDB_SRC_DIR}/cpp/*/Binding.hpp

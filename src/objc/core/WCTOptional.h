@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#import "Optional.hpp"
+#import "WCDBOptional.hpp"
 #import "WCTConvertible.h"
 #import <Foundation/Foundation.h>
 #import <type_traits>

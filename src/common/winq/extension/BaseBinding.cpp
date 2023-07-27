@@ -24,10 +24,10 @@
 
 #include "BaseBinding.hpp"
 #include "Assertion.hpp"
-#include "Error.hpp"
 #include "InnerHandle.hpp"
 #include "MigratingHandle.hpp"
 #include "Notifier.hpp"
+#include "WCDBError.hpp"
 
 namespace WCDB {
 

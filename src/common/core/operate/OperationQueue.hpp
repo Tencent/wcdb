@@ -37,7 +37,7 @@
 #include "AutoMergeFTSIndexConfig.hpp"
 #include "AutoMigrateConfig.hpp"
 #include "OperationQueueForMemory.hpp"
-#include "Optional.hpp"
+#include "WCDBOptional.hpp"
 
 namespace WCDB {
 

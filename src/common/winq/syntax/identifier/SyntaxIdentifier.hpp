@@ -25,7 +25,7 @@
 #pragma once
 
 #include "Macro.h"
-#include "Optional.hpp"
+#include "WCDBOptional.hpp"
 #include "Shadow.hpp"
 #include "StringView.hpp"
 #include "SyntaxCommonConst.hpp"
