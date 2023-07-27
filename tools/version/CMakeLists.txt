@@ -82,7 +82,7 @@ if (WIN32)
         add_definitions(-D_WIN64 -DWIN64)
     endif ()
 
-    if (BUILD_SHARED_LIBS) 
+    if (BUILD_SHARED_LIBS)
         add_definitions(-DWCDB_DLL -DWCDB_BUILD_DLL)
     endif ()
 

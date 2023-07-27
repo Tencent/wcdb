@@ -125,6 +125,12 @@ macos-all:
 
 
 # windows:
+windows:
+  build_types: static
+  build_archs: x86, x64
+  dependencies:
+    <<: *default_dependencies
+    zlib: 1.2.13
 
 #linux
 linux-x86_64-gcc-5.4.0: &linux_config
