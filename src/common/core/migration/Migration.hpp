@@ -26,7 +26,7 @@
 
 #include "Lock.hpp"
 #include "MigrationInfo.hpp"
-#include "Optional.hpp"
+#include "WCDBOptional.hpp"
 #include "Recyclable.hpp"
 #include <functional>
 #include <map>

@@ -26,8 +26,8 @@
 #include "Assertion.hpp"
 #include "Core.hpp"
 #include "CoreConst.h"
-#include "Error.hpp"
 #include "Notifier.hpp"
+#include "WCDBError.hpp"
 #include <cmath>
 
 namespace WCDB {

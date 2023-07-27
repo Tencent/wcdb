@@ -26,7 +26,7 @@
 
 #include "Initializeable.hpp"
 #include "MappedData.hpp"
-#include "Optional.hpp"
+#include "WCDBOptional.hpp"
 #include "PagerRelated.hpp"
 #include "Serialization.hpp"
 

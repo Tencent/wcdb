@@ -24,11 +24,11 @@
 
 #include "Migration.hpp"
 #include "Assertion.hpp"
-#include "Error.hpp"
 #include "HandleStatement.hpp"
 #include "InnerHandle.hpp"
 #include "Notifier.hpp"
 #include "StringView.hpp"
+#include "WCDBError.hpp"
 
 namespace WCDB {
 

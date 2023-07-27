@@ -24,9 +24,9 @@
 
 #pragma once
 
-#include "Error.hpp"
 #include "Lock.hpp"
 #include "UniqueList.hpp"
+#include "WCDBError.hpp"
 
 namespace WCDB {
 

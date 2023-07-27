@@ -24,9 +24,9 @@
 
 #pragma once
 #include "CPPORM.h"
-#include "Error.hpp"
 #include "HandleOperation.hpp"
 #include "MultiObject.hpp"
+#include "WCDBError.hpp"
 
 namespace WCDB {
 

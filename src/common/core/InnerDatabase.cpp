@@ -24,12 +24,12 @@
 
 #include "InnerDatabase.hpp"
 #include "Assertion.hpp"
-#include "Error.hpp"
 #include "FileManager.hpp"
 #include "Notifier.hpp"
 #include "Path.hpp"
 #include "RepairKit.h"
 #include "StringView.hpp"
+#include "WCDBError.hpp"
 
 #include "AssembleHandle.hpp"
 #include "BusyRetryConfig.hpp"

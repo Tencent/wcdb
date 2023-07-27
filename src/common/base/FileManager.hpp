@@ -24,11 +24,11 @@
 
 #pragma once
 
-#include "Error.hpp"
-#include "Optional.hpp"
+#include "WCDBOptional.hpp"
 #include "SharedThreadedErrorProne.hpp"
 #include "StringView.hpp"
 #include "Time.hpp"
+#include "WCDBError.hpp"
 #include <functional>
 #include <list>
 

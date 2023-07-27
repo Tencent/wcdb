@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#include "Error.hpp"
+#include "WCDBError.hpp"
 #include "Assertion.hpp"
 #include "CoreConst.h"
 #include "CrossPlatform.h"

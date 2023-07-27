@@ -24,12 +24,12 @@
 
 #pragma once
 #include "AuxiliaryFunctionModule.hpp"
-#include "Error.hpp"
 #include "FTSTokenizerUtil.hpp"
 #include "Handle.hpp"
 #include "HandleORMOperation.hpp"
 #include "Statement.hpp"
 #include "TokenizerModule.hpp"
+#include "WCDBError.hpp"
 #include <thread>
 
 namespace WCDB {

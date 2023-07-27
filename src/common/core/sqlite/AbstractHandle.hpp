@@ -28,7 +28,7 @@
 #include "ErrorProne.hpp"
 #include "HandleNotification.hpp"
 #include "HandleStatement.hpp"
-#include "Optional.hpp"
+#include "WCDBOptional.hpp"
 #include "StringView.hpp"
 #include "WINQ.h"
 #include <set>

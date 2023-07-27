@@ -25,7 +25,7 @@
 #pragma once
 
 #include "Initializeable.hpp"
-#include "Optional.hpp"
+#include "WCDBOptional.hpp"
 #include "Page.hpp"
 #include "WalRelated.hpp"
 #include <utility>

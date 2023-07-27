@@ -24,7 +24,7 @@
 
 #include "AuxiliaryFunctionModules.hpp"
 #include "Assertion.hpp"
-#include "Error.hpp"
+#include "WCDBError.hpp"
 
 namespace WCDB {
 

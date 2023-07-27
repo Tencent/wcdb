@@ -27,7 +27,7 @@
 #include "Assemble.hpp"
 #include "FactoryBackup.hpp"
 #include "FactoryRelated.hpp"
-#include "Optional.hpp"
+#include "WCDBOptional.hpp"
 #include "Progress.hpp"
 #include "Scoreable.hpp"
 #include "Time.hpp"

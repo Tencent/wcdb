@@ -25,8 +25,8 @@
 #include "PageBasedFileHandle.hpp"
 #include "Assertion.hpp"
 #include "CoreConst.h"
-#include "Error.hpp"
 #include "Notifier.hpp"
+#include "WCDBError.hpp"
 
 namespace WCDB {
 
