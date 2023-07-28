@@ -4,7 +4,7 @@
 # pod trunk push --verbose --allow-warnings WCDB.swift.podspec
 Pod::Spec.new do |wcdb|
   wcdb.name         = "WCDB.swift"
-  wcdb.version      = "2.0.2.5"
+  wcdb.version      = "2.0.3"
   wcdb.summary      = "WCDB is a cross-platform database framework developed by WeChat."
   wcdb.description  = <<-DESC
                       The WeChat Database, for Swift. (If you want to use WCDB for Objective-C or C++, see the "WCDB.objc" pod or "WCDB.cpp" pod. If you want to use WCDB for C++/Objc/Swift in one project, see the "WCDB" pod)
@@ -23,7 +23,7 @@ Pod::Spec.new do |wcdb|
   wcdb.source       = { :git => "https://github.com/Tencent/wcdb.git", :tag => "v#{wcdb.version}" }
   wcdb.private_header_files = "src/bridge/**/*.{h}"
   wcdb.source_files  = "src/swift/**/*.{swift}", "src/bridge/**/*.{swift,h,hpp,c,cpp,m,mm}", "src/common/**/*.{swift,h,hpp,c,cpp,m,mm}", "src/objc/core/WCTFileManager.mm", "src/objc/core/WCTFoundation.h", "src/objc/core/WCTFoundation.mm", "src/objc/fts/WCTFTSTokenizerUtil.h", "src/objc/fts/WCTFTSTokenizerUtil.mm", "src/objc/core/WCTDeclaration.h", "src/objc/core/WCTValue.h", "src/objc/orm/coding/WCTColumnCoding.h", "src/objc/orm/macro/WCTPropertyMacro.h", "src/objc/orm/coding/WCTTableCoding.h", "src/objc/core/WCTConvertible.h", "src/objc/core/WCTCommon.h", "src/objc/core/WCTOptional.h", "src/objc/core/WCTTag.h"
-  wcdb.exclude_files = "src/swift/tests/**/*.{swift,h,hpp,c,cpp,m,mm}", "src/bridge/tests/**/*.{swift,h,hpp,c,cpp,m,mm}", "src/common/core/operate/OperationQueueForMemory.cpp", "src/bridge/objcbridge/WCTBridgeProperty+CPP.h", "src/bridge/objcbridge/WCTBridgeProperty.mm"
+  wcdb.exclude_files = "src/swift/tests/**/*.{swift,h,hpp,c,cpp,m,mm}", "src/bridge/tests/**/*.{swift,h,hpp,c,cpp,m,mm}", "src/common/platform/WCTFileManager.cpp", "src/common/platform/WCTOperationQueue.cpp", "src/common/core/operate/OperationQueueForMemory.cpp", "src/bridge/objcbridge/WCTBridgeProperty+CPP.h", "src/bridge/objcbridge/WCTBridgeProperty.mm"
   wcdb.requires_arc = true
   wcdb.preserve_path = "src/support/WCDBSwift.modulemap"
   wcdb.module_map = "src/support/WCDBSwift.modulemap"
