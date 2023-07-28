@@ -60,7 +60,7 @@ watchos:
     system: custom
     # build static lib
     script: |-
-      ../tools/version/build.sh -p watchOS -l All -c Release -d apple_build/watchos/release/static --wechat --static-framework
+      ../tools/version/build.sh -p watchOS -l ObjC -c Release -d apple_build/watchos/release/static --wechat --static-framework
 
   dependencies:
 
@@ -68,7 +68,9 @@ watchos:
     pre_build: 'rm -rf ${yaml_dir}/apple_build/watchos/release'
     post_build: |-
       mkdir -p ${yaml_dir}/apple_build/watchos/release/static/output && \
-      mv ${yaml_dir}/apple_build/watchos/release/static/WCDB.framework ${yaml_dir}/apple_build/watchos/release/static/output/
+      mv ${yaml_dir}/apple_build/watchos/release/static/WCDBObjc.framework ${yaml_dir}/apple_build/watchos/release/static/output && \
+      mv ${yaml_dir}/apple_build/watchos/release/static/output/WCDBObjc.framework ${yaml_dir}/apple_build/watchos/release/static/output/WCDB.framework && \
+      mv ${yaml_dir}/apple_build/watchos/release/static/output/WCDB.framework/WCDBObjc ${yaml_dir}/apple_build/watchos/release/static/output/WCDB.framework/WCDB
 
   outputs:
     release_static:
