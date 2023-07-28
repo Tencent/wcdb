@@ -26,8 +26,6 @@
 #include "OperationQueueForMemory.hpp"
 #include <stdio.h>
 
-#ifndef __APPLE__
-
 namespace WCDB {
 
 void *OperationQueueForMemory::registerNotificationWhenMemoryWarning()
@@ -51,5 +49,3 @@ void OperationQueueForMemory::operationEnd(void *context)
 }
 
 } // namespace WCDB
-
-#endif
