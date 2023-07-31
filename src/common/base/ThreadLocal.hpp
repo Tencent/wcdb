@@ -26,6 +26,7 @@
 
 #include <atomic>
 #include <map>
+#include <memory>
 
 namespace WCDB {
 
