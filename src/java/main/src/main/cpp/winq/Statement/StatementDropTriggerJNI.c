@@ -42,9 +42,9 @@ void WCDBJNIStatementDropTriggerObjectMethod(configSchema,
 void WCDBJNIStatementDropTriggerObjectMethod(configTrigger, jlong self, jstring triggerName)
 {
     WCDBJNIBridgeStruct(CPPStatementDropTrigger, self);
-    WCDBJNIGetString(triggerName);
+    WCDBJNIGetStringCritical(triggerName);
     WCDBStatementDropTriggerConfigTrigger(selfStruct, triggerNameString);
-    WCDBJNIReleaseString(triggerName);
+    WCDBJNIReleaseStringCritical(triggerName);
 }
 
 void WCDBJNIStatementDropTriggerObjectMethod(configIfExist, jlong self)

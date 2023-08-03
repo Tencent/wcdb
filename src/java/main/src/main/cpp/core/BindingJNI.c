@@ -46,9 +46,9 @@ void WCDBJNIBindingObjectMethod(addIndex, jlong self, jstring indexNameOrSuffix,
 {
     WCDBJNIBridgeStruct(CPPBinding, self);
     WCDBJNIBridgeStruct(CPPStatementCreateIndex, createIndex);
-    WCDBJNIGetString(indexNameOrSuffix);
+    WCDBJNIGetStringCritical(indexNameOrSuffix);
     WCDBBindingAddIndex(selfStruct, indexNameOrSuffixString, isFullName, createIndexStruct);
-    WCDBJNIReleaseString(indexNameOrSuffix);
+    WCDBJNIReleaseStringCritical(indexNameOrSuffix);
 }
 
 void WCDBJNIBindingObjectMethod(addTableConstraint, jlong self, jlong constraint)
@@ -61,17 +61,17 @@ void WCDBJNIBindingObjectMethod(addTableConstraint, jlong self, jlong constraint
 void WCDBJNIBindingObjectMethod(configVirtualModule, jlong self, jstring moduleName)
 {
     WCDBJNIBridgeStruct(CPPBinding, self);
-    WCDBJNIGetString(moduleName);
+    WCDBJNIGetStringCritical(moduleName);
     WCDBBindingConfigVirtualModule(selfStruct, moduleNameString);
-    WCDBJNIReleaseString(moduleName);
+    WCDBJNIReleaseStringCritical(moduleName);
 }
 
 void WCDBJNIBindingObjectMethod(configVirtualModuleArgument, jlong self, jstring argument)
 {
     WCDBJNIBridgeStruct(CPPBinding, self);
-    WCDBJNIGetString(argument);
+    WCDBJNIGetStringCritical(argument);
     WCDBBindingConfigVirtualModuleArgument(selfStruct, argumentString);
-    WCDBJNIReleaseString(argument);
+    WCDBJNIReleaseStringCritical(argument);
 }
 
 void WCDBJNIBindingObjectMethod(configWithoutRowId, jlong self)

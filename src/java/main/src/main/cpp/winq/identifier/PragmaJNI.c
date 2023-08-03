@@ -26,8 +26,8 @@
 
 jlong WCDBJNIPragmaObjectMethod(create, jstring name)
 {
-    WCDBJNIGetString(name);
+    WCDBJNIGetStringCritical(name);
     jlong ret = (jlong) WCDBPragmaCreateWithName(nameString).innerValue;
-    WCDBJNIReleaseString(name);
+    WCDBJNIReleaseStringCritical(name);
     return ret;
 }

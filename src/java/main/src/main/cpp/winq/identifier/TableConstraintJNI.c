@@ -26,9 +26,9 @@
 
 jlong WCDBJNITableConstraintObjectMethod(create, jstring name)
 {
-    WCDBJNIGetString(name);
+    WCDBJNIGetStringCritical(name);
     jlong ret = (jlong) WCDBTableConstraintCreate(nameString).innerValue;
-    WCDBJNIReleaseString(name);
+    WCDBJNIReleaseStringCritical(name);
     return ret;
 }
 

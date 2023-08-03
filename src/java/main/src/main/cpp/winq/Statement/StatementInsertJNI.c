@@ -47,9 +47,9 @@ void WCDBJNIStatementInsertObjectMethod(configRecursive, jlong self)
 void WCDBJNIStatementInsertObjectMethod(configTableName, jlong self, jstring tableName)
 {
     WCDBJNIBridgeStruct(CPPStatementInsert, self);
-    WCDBJNIGetString(tableName);
+    WCDBJNIGetStringCritical(tableName);
     WCDBStatementInsertConfigTable(selfStruct, tableNameString);
-    WCDBJNIReleaseString(tableName);
+    WCDBJNIReleaseStringCritical(tableName);
 }
 
 void WCDBJNIStatementInsertObjectMethod(configSchema,
@@ -71,9 +71,9 @@ void WCDBJNIStatementInsertObjectMethod(configConfliction, jlong self, jint acti
 void WCDBJNIStatementInsertObjectMethod(configAs, jlong self, jstring alias)
 {
     WCDBJNIBridgeStruct(CPPStatementInsert, self);
-    WCDBJNIGetString(alias);
+    WCDBJNIGetStringCritical(alias);
     WCDBStatementInsertConfigAlias(selfStruct, aliasString);
-    WCDBJNIReleaseString(alias);
+    WCDBJNIReleaseStringCritical(alias);
 }
 
 void WCDBJNIStatementInsertObjectMethod(configColumns,

@@ -32,9 +32,9 @@ jlong WCDBJNIStatementCreateIndexObjectMethodWithNoArg(create)
 void WCDBJNIStatementCreateIndexObjectMethod(configIndex, jlong self, jstring name)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateIndex, self);
-    WCDBJNIGetString(name);
+    WCDBJNIGetStringCritical(name);
     WCDBStatementCreateIndexConfigIndexName(selfStruct, nameString);
-    WCDBJNIReleaseString(name);
+    WCDBJNIReleaseStringCritical(name);
 }
 
 void WCDBJNIStatementCreateIndexObjectMethod(configSchema,
@@ -62,9 +62,9 @@ void WCDBJNIStatementCreateIndexObjectMethod(configIfNotExist, jlong self)
 void WCDBJNIStatementCreateIndexObjectMethod(configTable, jlong self, jstring tableName)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateIndex, self);
-    WCDBJNIGetString(tableName);
+    WCDBJNIGetStringCritical(tableName);
     WCDBStatementCreateIndexConfigTable(selfStruct, tableNameString);
-    WCDBJNIReleaseString(tableName);
+    WCDBJNIReleaseStringCritical(tableName);
 }
 
 void WCDBJNIStatementCreateIndexObjectMethod(configIndexedColumns,

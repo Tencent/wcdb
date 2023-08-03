@@ -42,9 +42,9 @@ void WCDBJNIStatementDropTableObjectMethod(configSchema,
 void WCDBJNIStatementDropTableObjectMethod(configTableName, jlong self, jstring tableName)
 {
     WCDBJNIBridgeStruct(CPPStatementDropTable, self);
-    WCDBJNIGetString(tableName);
+    WCDBJNIGetStringCritical(tableName);
     WCDBStatementDropTableConfigTable(selfStruct, tableNameString);
-    WCDBJNIReleaseString(tableName);
+    WCDBJNIReleaseStringCritical(tableName);
 }
 
 void WCDBJNIStatementDropTableObjectMethod(configIfExist, jlong self)

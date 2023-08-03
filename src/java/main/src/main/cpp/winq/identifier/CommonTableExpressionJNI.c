@@ -26,9 +26,9 @@
 
 jlong WCDBJNICommonTableExpressionClassMethod(createWithTable, jstring tableName)
 {
-    WCDBJNIGetString(tableName);
+    WCDBJNIGetStringCritical(tableName);
     jlong ret = (jlong) WCDBCommonTableExpressionCreate(tableNameString).innerValue;
-    WCDBJNIReleaseString(tableName);
+    WCDBJNIReleaseStringCritical(tableName);
     return ret;
 }
 

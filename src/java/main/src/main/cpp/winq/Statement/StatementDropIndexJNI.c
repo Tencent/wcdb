@@ -42,9 +42,9 @@ void WCDBJNIStatementDropIndexObjectMethod(configSchema,
 void WCDBJNIStatementDropIndexObjectMethod(configIndex, jlong self, jstring indexName)
 {
     WCDBJNIBridgeStruct(CPPStatementDropIndex, self);
-    WCDBJNIGetString(indexName);
+    WCDBJNIGetStringCritical(indexName);
     WCDBStatementDropIndexConfigIndex(selfStruct, indexNameString);
-    WCDBJNIReleaseString(indexName);
+    WCDBJNIReleaseStringCritical(indexName);
 }
 
 void WCDBJNIStatementDropIndexObjectMethod(configIfExist, jlong self)

@@ -49,9 +49,9 @@ jlong WCDBJNILiteralValueObjectMethod(createWithDouble, jdouble value)
 
 jlong WCDBJNILiteralValueObjectMethod(createWithString, jstring value)
 {
-    WCDBJNIGetString(value);
+    WCDBJNIGetStringCritical(value);
     jlong result = (jlong) WCDBLiteralValueCreateWithString(valueString).innerValue;
-    WCDBJNIReleaseString(value);
+    WCDBJNIReleaseStringCritical(value);
     return result;
 }
 

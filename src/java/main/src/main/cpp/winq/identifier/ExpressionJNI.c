@@ -35,9 +35,9 @@ jlong WCDBJNIExpressionObjectMethod(create, int type, jlong object)
 
 jlong WCDBJNIExpressionClassMethod(createWithFunction, jstring funcName)
 {
-    WCDBJNIGetString(funcName);
+    WCDBJNIGetStringCritical(funcName);
     jlong ret = (jlong) WCDBExpressionCreateWithFunction(funcNameString).innerValue;
-    WCDBJNIReleaseString(funcName);
+    WCDBJNIReleaseStringCritical(funcName);
     return ret;
 }
 
@@ -149,16 +149,16 @@ void WCDBJNIExpressionObjectMethod(setWithElseExp,
 void WCDBJNIExpressionObjectMethod(escapeWith, jlong expression, jstring content)
 {
     WCDBJNIBridgeStruct(CPPExpression, expression);
-    WCDBJNIGetString(content);
+    WCDBJNIGetStringCritical(content);
     WCDBExpressionEscapeWith2(expressionStruct, contentString);
-    WCDBJNIReleaseString(content);
+    WCDBJNIReleaseStringCritical(content);
 }
 
 jlong WCDBJNIExpressionObjectMethod(createWithWindowFunction, jstring funcName)
 {
-    WCDBJNIGetString(funcName);
+    WCDBJNIGetStringCritical(funcName);
     jlong ret = (jlong) WCDBExpressionCreateWithWindowFunction(funcNameString).innerValue;
-    WCDBJNIReleaseString(funcName);
+    WCDBJNIReleaseStringCritical(funcName);
     return ret;
 }
 
@@ -179,7 +179,7 @@ void WCDBJNIExpressionObjectMethod(overWindowDef, jlong expression, jlong def)
 void WCDBJNIExpressionObjectMethod(overWindow, jlong expression, jstring window)
 {
     WCDBJNIBridgeStruct(CPPExpression, expression);
-    WCDBJNIGetString(window);
+    WCDBJNIGetStringCritical(window);
     WCDBExpressionOverWindow(expressionStruct, windowString);
-    WCDBJNIReleaseString(window);
+    WCDBJNIReleaseStringCritical(window);
 }

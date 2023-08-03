@@ -31,9 +31,9 @@ jlong WCDBJNIStatementPragmaObjectMethodWithNoArg(create)
 void WCDBJNIStatementPragmaObjectMethod(configSchema, jlong self, jstring schemaName)
 {
     WCDBJNIBridgeStruct(CPPStatementPragma, self);
-    WCDBJNIGetString(schemaName);
+    WCDBJNIGetStringCritical(schemaName);
     WCDBStatementPragmaConfigSchema2(selfStruct, schemaNameString);
-    WCDBJNIReleaseString(schemaName);
+    WCDBJNIReleaseStringCritical(schemaName);
 }
 
 void WCDBJNIStatementPragmaObjectMethod(configPragma, jlong self, jlong pragma)

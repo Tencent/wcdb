@@ -46,32 +46,25 @@
 #define WCDBJNIBridgeStruct(type, value)                                       \
     type value##Struct = { (CPPObject *) value }
 
-#define WCDBJNIGetObjectArray(value)                                           \
-    void **value##ObjectArray = NULL;                                          \
-    int value##Length = (*env)->GetArrayLength(env, value);                    \
-    jlong *value##LongArray = (*env)->GetLongArrayElements(env, value, NULL);  \
-    if (sizeof(void *) == sizeof(jlong)) {                                     \
-        value##ObjectArray = (void **) value##LongArray;                       \
-    } else {                                                                   \
-        value##ObjectArray = alloca(sizeof(void *) * value##Length);           \
-        for (int i = 0; i < value##Length; i++) {                              \
-            value##ObjectArray[i] = (void *) value##LongArray[i];              \
-        }                                                                      \
-    }
-
-#define WCDBJNIReleaseObjectArray(value)                                             \
-    if (value##LongArray != NULL) {                                                  \
-        (*env)->ReleaseLongArrayElements(env, value, (jlong *) value##LongArray, 0); \
-    }
-
 #define WCDBJNIGetString(value)                                                \
     char *value##String = NULL;                                                \
     const jchar *value##_utf16String = NULL;                                   \
-    WCDBJNIGetUTF8String(env, value, &value##String, &value##_utf16String);
+    WCDBJNIGetUTF8String(env, value, &value##String, &value##_utf16String, false);
 
 #define WCDBJNIReleaseString(value)                                            \
     if (value##_utf16String != NULL) {                                         \
         (*env)->ReleaseStringChars(env, value, value##_utf16String);           \
+    }                                                                          \
+    WCDBClearAllPreAllocatedMemory();
+
+#define WCDBJNIGetStringCritical(value)                                        \
+    char *value##String = NULL;                                                \
+    const jchar *value##_utf16String = NULL;                                   \
+    WCDBJNIGetUTF8String(env, value, &value##String, &value##_utf16String, true);
+
+#define WCDBJNIReleaseStringCritical(value)                                    \
+    if (value##_utf16String != NULL) {                                         \
+        (*env)->ReleaseStringCritical(env, value, value##_utf16String);        \
     }                                                                          \
     WCDBClearAllPreAllocatedMemory();
 
@@ -161,26 +154,29 @@
     jint parameter##_type, jlong parameter##_long, jdouble parameter##_double, \
     jstring parameter##_string
 
-#define WCDBJNICreateCommonValue(parameter)                                                         \
-    CPPCommonValue parameter##_common;                                                              \
-    parameter##_common.type = parameter##_type;                                                     \
-    const jchar *parameter##_utf16String = NULL;                                                    \
-    switch (parameter##_type) {                                                                     \
-    case WCDBBridgedType_Bool:                                                                      \
-    case WCDBBridgedType_UInt:                                                                      \
-    case WCDBBridgedType_Int:                                                                       \
-        parameter##_common.intValue = parameter##_long;                                             \
-        break;                                                                                      \
-    case WCDBBridgedType_Double:                                                                    \
-        parameter##_common.doubleValue = parameter##_double;                                        \
-        break;                                                                                      \
-    case WCDBBridgedType_String:                                                                    \
-        WCDBJNIGetUTF8String(                                                                       \
-        env, parameter##_string, (char **) &parameter##_common.intValue, &parameter##_utf16String); \
-        break;                                                                                      \
-    default:                                                                                        \
-        parameter##_common.intValue = parameter##_long;                                             \
-        break;                                                                                      \
+#define WCDBJNICreateCommonValue(parameter)                                    \
+    CPPCommonValue parameter##_common;                                         \
+    parameter##_common.type = parameter##_type;                                \
+    const jchar *parameter##_utf16String = NULL;                               \
+    switch (parameter##_type) {                                                \
+    case WCDBBridgedType_Bool:                                                 \
+    case WCDBBridgedType_UInt:                                                 \
+    case WCDBBridgedType_Int:                                                  \
+        parameter##_common.intValue = parameter##_long;                        \
+        break;                                                                 \
+    case WCDBBridgedType_Double:                                               \
+        parameter##_common.doubleValue = parameter##_double;                   \
+        break;                                                                 \
+    case WCDBBridgedType_String:                                               \
+        WCDBJNIGetUTF8String(env,                                              \
+                             parameter##_string,                               \
+                             (char **) &parameter##_common.intValue,           \
+                             &parameter##_utf16String,                         \
+                             false);                                           \
+        break;                                                                 \
+    default:                                                                   \
+        parameter##_common.intValue = parameter##_long;                        \
+        break;                                                                 \
     }
 
 #define WCDBJNITryReleaseStringInCommonValue(parameter)                               \
@@ -192,15 +188,18 @@
 #define WCDBJNIObjectOrStringParameter(parameter)                              \
     jint parameter##_type, jlong parameter##_long, jstring parameter##_string
 
-#define WCDBJNICreateObjectOrStringCommonValue(parameter)                                           \
-    CPPCommonValue parameter##_common;                                                              \
-    parameter##_common.type = parameter##_type;                                                     \
-    const jchar *parameter##_utf16String = NULL;                                                    \
-    if (parameter##_type == WCDBBridgedType_String) {                                               \
-        WCDBJNIGetUTF8String(                                                                       \
-        env, parameter##_string, (char **) &parameter##_common.intValue, &parameter##_utf16String); \
-    } else {                                                                                        \
-        parameter##_common.intValue = parameter##_long;                                             \
+#define WCDBJNICreateObjectOrStringCommonValue(parameter)                      \
+    CPPCommonValue parameter##_common;                                         \
+    parameter##_common.type = parameter##_type;                                \
+    const jchar *parameter##_utf16String = NULL;                               \
+    if (parameter##_type == WCDBBridgedType_String) {                          \
+        WCDBJNIGetUTF8String(env,                                              \
+                             parameter##_string,                               \
+                             (char **) &parameter##_common.intValue,           \
+                             &parameter##_utf16String,                         \
+                             false);                                           \
+    } else {                                                                   \
+        parameter##_common.intValue = parameter##_long;                        \
     }
 
 #define WCDBJNIObjectOrIntegerParameter(parameter)                             \
@@ -344,6 +343,7 @@ jclass WCDBJNIGetDatabaseClass();
 jclass WCDBJNIGetHandleClass();
 jclass WCDBJNIGetExceptionClass();
 
-void WCDBJNIGetUTF8String(JNIEnv *env, jstring value, char **utf8String, const jchar **utf16String);
+void WCDBJNIGetUTF8String(
+JNIEnv *env, jstring value, char **utf8String, const jchar **utf16String, bool critical);
 void WCDBJNIGetUTF8StringArray(JNIEnv *env, jobjectArray value, char ***stringArray, int *length);
 jstring WCDBJNICreateJString(JNIEnv *env, const char *utf8String);

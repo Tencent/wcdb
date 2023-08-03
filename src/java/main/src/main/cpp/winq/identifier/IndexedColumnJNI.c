@@ -35,9 +35,9 @@ jlong WCDBJNIIndexedColumnObjectMethod(create, WCDBJNIObjectOrStringParameter(co
 void WCDBJNIIndexedColumnObjectMethod(configCollation, jlong indexedColumn, jstring collation)
 {
     WCDBJNIBridgeStruct(CPPIndexedColumn, indexedColumn);
-    WCDBJNIGetString(collation);
+    WCDBJNIGetStringCritical(collation);
     WCDBIndexedColumnConfigCollation(indexedColumnStruct, collationString);
-    WCDBJNIReleaseString(collation);
+    WCDBJNIReleaseStringCritical(collation);
 }
 
 void WCDBJNIIndexedColumnObjectMethod(configOrder, jlong indexedColumn, jint order)

@@ -32,7 +32,7 @@ jlong WCDBJNIStatementRollbackObjectMethodWithNoArg(createCppObj)
 void WCDBJNIStatementRollbackObjectMethod(configSavepoint, jlong self, jstring savepoint)
 {
     WCDBJNIBridgeStruct(CPPStatementRollback, self);
-    WCDBJNIGetString(savepoint);
+    WCDBJNIGetStringCritical(savepoint);
     WCDBStatementRollbackConfigSavepoint(selfStruct, savepointString);
-    WCDBJNIReleaseString(savepoint);
+    WCDBJNIReleaseStringCritical(savepoint);
 }

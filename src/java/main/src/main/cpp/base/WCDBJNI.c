@@ -82,7 +82,7 @@ static void utf16_to_utf8(const jchar* src, jsize src_len, char* dst, jsize dst_
 static jsize utf8_to_utf16_length(const char* u8str, jsize u8len);
 static jchar* utf8_to_utf16(const char* u8str, jsize u8len, jchar* u16str, jsize u16len);
 
-void WCDBJNIGetUTF8String(JNIEnv* env, jstring value, char** utf8String, const jchar** utf16String)
+void WCDBJNIGetUTF8String(JNIEnv* env, jstring value, char** utf8String, const jchar** utf16String, bool critical)
 {
     if (UNLIKELY(value == NULL)) {
         *utf8String = NULL;
@@ -93,7 +93,11 @@ void WCDBJNIGetUTF8String(JNIEnv* env, jstring value, char** utf8String, const j
         *utf8String = NULL;
         return;
     }
-    *utf16String = (*env)->GetStringChars(env, value, 0);
+    if (LIKELY(critical)) {
+        *utf16String = (*env)->GetStringCritical(env, value, 0);
+    } else {
+        *utf16String = (*env)->GetStringChars(env, value, 0);
+    }
     jsize utf8Length = utf16_to_utf8_length(*utf16String, utf16Length);
     char** preAllocSlot = WCDBPreAllocStringMemorySlot(1);
     if (UNLIKELY(preAllocSlot == NULL)) {

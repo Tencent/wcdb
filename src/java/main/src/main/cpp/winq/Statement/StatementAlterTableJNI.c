@@ -32,9 +32,9 @@ jlong WCDBJNIStatementAlterTableClassMethodWithNoArg(createCppObj)
 void WCDBJNIStatementAlterTableObjectMethod(configTable, jlong self, jstring table)
 {
     WCDBJNIBridgeStruct(CPPStatementAlterTable, self);
-    WCDBJNIGetString(table);
+    WCDBJNIGetStringCritical(table);
     WCDBStatementAlterTableConfigTable(selfStruct, tableString);
-    WCDBJNIReleaseString(table);
+    WCDBJNIReleaseStringCritical(table);
 }
 
 void WCDBJNIStatementAlterTableObjectMethod(configSchema,
@@ -50,9 +50,9 @@ void WCDBJNIStatementAlterTableObjectMethod(configSchema,
 void WCDBJNIStatementAlterTableObjectMethod(configRenameToTable, jlong self, jstring table)
 {
     WCDBJNIBridgeStruct(CPPStatementAlterTable, self);
-    WCDBJNIGetString(table);
+    WCDBJNIGetStringCritical(table);
     WCDBStatementAlterTableConfigRenameToTable(selfStruct, tableString);
-    WCDBJNIReleaseString(table);
+    WCDBJNIReleaseStringCritical(table);
 }
 
 void WCDBJNIStatementAlterTableObjectMethod(configRenameColumn,

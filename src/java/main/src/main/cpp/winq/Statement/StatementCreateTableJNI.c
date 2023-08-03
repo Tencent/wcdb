@@ -32,9 +32,9 @@ jlong WCDBJNIStatementCreateTableObjectMethodWithNoArg(create)
 void WCDBJNIStatementCreateTableObjectMethod(configTableName, jlong self, jstring tableName)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTable, self);
-    WCDBJNIGetString(tableName);
+    WCDBJNIGetStringCritical(tableName);
     WCDBStatementCreateTableConfigTable(selfStruct, tableNameString);
-    WCDBJNIReleaseString(tableName);
+    WCDBJNIReleaseStringCritical(tableName);
 }
 
 void WCDBJNIStatementCreateTableObjectMethod(configSchema,

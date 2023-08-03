@@ -35,9 +35,9 @@ jlong WCDBJNIOrderingTermObjectMethod(create, jint type, jlong expression)
 void WCDBJNIOrderingTermObjectMethod(configCollation, jlong object, jstring collation)
 {
     WCDBJNIBridgeStruct(CPPOrderingTerm, object);
-    WCDBJNIGetString(collation);
+    WCDBJNIGetStringCritical(collation);
     WCDBOrderingTermConfigCollation(objectStruct, collationString);
-    WCDBJNIReleaseString(collation);
+    WCDBJNIReleaseStringCritical(collation);
 }
 
 void WCDBJNIOrderingTermObjectMethod(configOrder, jlong object, jint order)

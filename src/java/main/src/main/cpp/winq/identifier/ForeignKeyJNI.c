@@ -31,10 +31,10 @@ jlong WCDBJNIForeignKeyClassMethodWithNoArg(createCppObject)
 
 void WCDBJNIForeignKeyObjectMethod(configReferencesTable, jlong self, jstring table)
 {
-    WCDBJNIGetString(table);
+    WCDBJNIGetStringCritical(table);
     WCDBJNIBridgeStruct(CPPForeignKey, self);
     WCDBForeignKeyConfigReferencesTable(selfStruct, tableString);
-    WCDBJNIReleaseString(table);
+    WCDBJNIReleaseStringCritical(table);
 }
 
 void WCDBJNIForeignKeyObjectMethod(configColumns,

@@ -32,7 +32,7 @@ jlong WCDBJNIStatementReleaseObjectMethodWithNoArg(createCppObj)
 void WCDBJNIStatementReleaseObjectMethod(configSavepoint, jlong self, jstring savepoint)
 {
     WCDBJNIBridgeStruct(CPPStatementRelease, self);
-    WCDBJNIGetString(savepoint);
+    WCDBJNIGetStringCritical(savepoint);
     WCDBStatementReleaseConfigSavepoint(selfStruct, savepointString);
-    WCDBJNIReleaseString(savepoint);
+    WCDBJNIReleaseStringCritical(savepoint);
 }

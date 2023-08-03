@@ -34,9 +34,9 @@ jlong WCDBJNITableOrSubqueryObjectMethod(create, WCDBJNIObjectOrStringParameter(
 
 jlong WCDBJNITableOrSubqueryClassMethod(createWithFunction, jstring funcName)
 {
-    WCDBJNIGetString(funcName);
+    WCDBJNIGetStringCritical(funcName);
     jlong ret = (jlong) WCDBTableOrSubqueryCreateWithFunction(funcNameString).innerValue;
-    WCDBJNIReleaseString(funcName);
+    WCDBJNIReleaseStringCritical(funcName);
     return ret;
 }
 
@@ -63,9 +63,9 @@ void WCDBJNITableOrSubqueryObjectMethod(configSchema,
 void WCDBJNITableOrSubqueryObjectMethod(configAlias, jlong tableOrSubquery, jstring alias)
 {
     WCDBJNIBridgeStruct(CPPTableOrSubquery, tableOrSubquery);
-    WCDBJNIGetString(alias);
+    WCDBJNIGetStringCritical(alias);
     WCDBTableOrSubqueryConfigAs(tableOrSubqueryStruct, aliasString);
-    WCDBJNIReleaseString(alias);
+    WCDBJNIReleaseStringCritical(alias);
 }
 
 void WCDBJNITableOrSubqueryObjectMethod(configNotIndexed, jlong tableOrSubquery)
@@ -77,9 +77,9 @@ void WCDBJNITableOrSubqueryObjectMethod(configNotIndexed, jlong tableOrSubquery)
 void WCDBJNITableOrSubqueryObjectMethod(configIndexName, jlong tableOrSubquery, jstring index)
 {
     WCDBJNIBridgeStruct(CPPTableOrSubquery, tableOrSubquery);
-    WCDBJNIGetString(index);
+    WCDBJNIGetStringCritical(index);
     WCDBTableOrSubqueryConfigIndexName(tableOrSubqueryStruct, indexString);
-    WCDBJNIReleaseString(index);
+    WCDBJNIReleaseStringCritical(index);
 }
 
 void WCDBJNITableOrSubqueryObjectMethod(argument,

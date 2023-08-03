@@ -42,9 +42,9 @@ void WCDBJNIStatementDropViewObjectMethod(configSchema,
 void WCDBJNIStatementDropViewObjectMethod(configView, jlong self, jstring viewName)
 {
     WCDBJNIBridgeStruct(CPPStatementDropView, self);
-    WCDBJNIGetString(viewName);
+    WCDBJNIGetStringCritical(viewName);
     WCDBStatementDropViewConfigView(selfStruct, viewNameString);
-    WCDBJNIReleaseString(viewName);
+    WCDBJNIReleaseStringCritical(viewName);
 }
 
 void WCDBJNIStatementDropViewObjectMethod(configIfExist, jlong self)

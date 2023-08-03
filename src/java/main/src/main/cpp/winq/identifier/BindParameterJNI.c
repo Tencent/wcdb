@@ -31,25 +31,25 @@ jlong WCDBJNIBindParameterObjectMethod(createQuestionSignType, jint num)
 
 jlong WCDBJNIBindParameterObjectMethod(createAtSignType, jstring name)
 {
-    WCDBJNIGetString(name);
+    WCDBJNIGetStringCritical(name);
     jlong ret = (jlong) WCDBBindparameterCreateAtSignType(nameString).innerValue;
-    WCDBJNIReleaseString(name);
+    WCDBJNIReleaseStringCritical(name);
     return ret;
 }
 
 jlong WCDBJNIBindParameterObjectMethod(createColonSignType, jstring name)
 {
-    WCDBJNIGetString(name);
+    WCDBJNIGetStringCritical(name);
     jlong ret = (jlong) WCDBBindparameterCreateColonSignType(nameString).innerValue;
-    WCDBJNIReleaseString(name);
+    WCDBJNIReleaseStringCritical(name);
     return ret;
 }
 
 jlong WCDBJNIBindParameterObjectMethod(createDollarSignType, jstring name)
 {
-    WCDBJNIGetString(name);
+    WCDBJNIGetStringCritical(name);
     jlong ret = (jlong) WCDBBindparameterCreateDollarSignType(nameString).innerValue;
-    WCDBJNIReleaseString(name);
+    WCDBJNIReleaseStringCritical(name);
     return ret;
 }
 

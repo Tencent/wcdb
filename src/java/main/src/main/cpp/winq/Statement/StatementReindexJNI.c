@@ -32,25 +32,25 @@ jlong WCDBJNIStatementReindexObjectMethodWithNoArg(createCppObj)
 void WCDBJNIStatementReindexObjectMethod(configCollation, jlong self, jstring collation)
 {
     WCDBJNIBridgeStruct(CPPStatementReIndex, self);
-    WCDBJNIGetString(collation);
+    WCDBJNIGetStringCritical(collation);
     WCDBStatementReIndexConfigCollation(selfStruct, collationString);
-    WCDBJNIReleaseString(collation);
+    WCDBJNIReleaseStringCritical(collation);
 }
 
 void WCDBJNIStatementReindexObjectMethod(configTable, jlong self, jstring name)
 {
     WCDBJNIBridgeStruct(CPPStatementReIndex, self);
-    WCDBJNIGetString(name);
+    WCDBJNIGetStringCritical(name);
     WCDBStatementReIndexConfigTable(selfStruct, nameString);
-    WCDBJNIReleaseString(name);
+    WCDBJNIReleaseStringCritical(name);
 }
 
 void WCDBJNIStatementReindexObjectMethod(configIndex, jlong self, jstring name)
 {
     WCDBJNIBridgeStruct(CPPStatementReIndex, self);
-    WCDBJNIGetString(name);
+    WCDBJNIGetStringCritical(name);
     WCDBStatementReIndexConfigIndex(selfStruct, nameString);
-    WCDBJNIReleaseString(name);
+    WCDBJNIReleaseStringCritical(name);
 }
 
 void WCDBJNIStatementReindexObjectMethod(configSchema,

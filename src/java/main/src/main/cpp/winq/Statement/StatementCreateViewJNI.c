@@ -32,9 +32,9 @@ jlong WCDBJNIStatementCreateViewObjectMethodWithNoArg(createCppObj)
 void WCDBJNIStatementCreateViewObjectMethod(configView, jlong self, jstring name)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateView, self);
-    WCDBJNIGetString(name);
+    WCDBJNIGetStringCritical(name);
     WCDBStatementCreateViewConfigView(selfStruct, nameString);
-    WCDBJNIReleaseString(name);
+    WCDBJNIReleaseStringCritical(name);
 }
 
 void WCDBJNIStatementCreateViewObjectMethod(configSchema,

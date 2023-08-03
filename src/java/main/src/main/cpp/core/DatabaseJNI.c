@@ -500,10 +500,10 @@ addMigrationSource, jlong self, jstring sourcePath, jbyteArray cipherKey, jobjec
 
 void WCDBJNIDatabaseClassMethod(setMigrationInfo, jlong infoSetter, jlong info, jstring sourceTable, jlong filterCondition)
 {
-    WCDBJNIGetString(sourceTable);
+    WCDBJNIGetStringCritical(sourceTable);
     WCDBJNIBridgeStruct(CPPExpression, filterCondition);
     ((WCDBMigrationInfoSetter) infoSetter)((void*) info, sourceTableString, filterConditionStruct);
-    WCDBJNIReleaseString(sourceTable);
+    WCDBJNIReleaseStringCritical(sourceTable);
 }
 
 jboolean WCDBJNIDatabaseObjectMethod(stepMigration, jlong self)

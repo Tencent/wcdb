@@ -94,10 +94,10 @@ inTableOperate, jint operandType, jlong operand, jstring table, jboolean isNot)
     CPPCommonValue operand_common;
     operand_common.type = operandType;
     operand_common.intValue = operand;
-    WCDBJNIGetString(table);
+    WCDBJNIGetStringCritical(table);
     jlong ret
     = (jlong) WCDBExpressionInTableOperate2(operand_common, tableString, isNot).innerValue;
-    WCDBJNIReleaseString(table);
+    WCDBJNIReleaseStringCritical(table);
     return ret;
 }
 
@@ -107,10 +107,10 @@ inFunctionOperate, jint operandType, jlong operand, jstring func, jboolean isNot
     CPPCommonValue operand_common;
     operand_common.type = operandType;
     operand_common.intValue = operand;
-    WCDBJNIGetString(func);
+    WCDBJNIGetStringCritical(func);
     jlong ret = (jlong) WCDBExpressionInFunctionOperate2(operand_common, funcString, isNot)
                 .innerValue;
-    WCDBJNIReleaseString(func);
+    WCDBJNIReleaseStringCritical(func);
     return ret;
 }
 
@@ -130,9 +130,9 @@ jlong WCDBJNIExpressionOperableObjectMethod(collateOperate, jint operandType, jl
     CPPCommonValue operand_common;
     operand_common.type = operandType;
     operand_common.intValue = operand;
-    WCDBJNIGetString(collation);
+    WCDBJNIGetStringCritical(collation);
     jlong ret
     = (jlong) WCDBExpressionCollateOperate2(operand_common, collationString).innerValue;
-    WCDBJNIReleaseString(collation);
+    WCDBJNIReleaseStringCritical(collation);
     return ret;
 }

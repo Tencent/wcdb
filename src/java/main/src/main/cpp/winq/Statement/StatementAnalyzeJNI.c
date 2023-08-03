@@ -48,15 +48,15 @@ void WCDBJNIStatementAnalyzeObjectMethod(configSchema,
 void WCDBJNIStatementAnalyzeObjectMethod(configTable, jlong analyze, jstring table)
 {
     WCDBJNIBridgeStruct(CPPStatementAnalyze, analyze);
-    WCDBJNIGetString(table);
+    WCDBJNIGetStringCritical(table);
     WCDBStatementAnalyzeConfigTable(analyzeStruct, tableString);
-    WCDBJNIReleaseString(table);
+    WCDBJNIReleaseStringCritical(table);
 }
 
 void WCDBJNIStatementAnalyzeObjectMethod(configIndex, jlong analyze, jstring index)
 {
     WCDBJNIBridgeStruct(CPPStatementAnalyze, analyze);
-    WCDBJNIGetString(index);
+    WCDBJNIGetStringCritical(index);
     WCDBStatementAnalyzeConfigIndex(analyzeStruct, indexString);
-    WCDBJNIReleaseString(index);
+    WCDBJNIReleaseStringCritical(index);
 }

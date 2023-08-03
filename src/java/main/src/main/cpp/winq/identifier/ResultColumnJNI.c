@@ -35,7 +35,7 @@ jlong WCDBJNIResultColumnObjectMethod(create, WCDBJNIObjectOrStringParameter(col
 void WCDBJNIResultColumnObjectMethod(configAlias, jlong object, jstring alias)
 {
     WCDBJNIBridgeStruct(CPPResultColumn, object);
-    WCDBJNIGetString(alias);
+    WCDBJNIGetStringCritical(alias);
     WCDBResultColumnConfigAlias(objectStruct, aliasString);
-    WCDBJNIReleaseString(alias);
+    WCDBJNIReleaseStringCritical(alias);
 }

@@ -36,10 +36,10 @@ jlong WCDBJNIColumnClassMethodWithNoArg(createRowId)
 
 jlong WCDBJNIColumnObjectMethod(createWithName, jstring name, jlong binding)
 {
-    WCDBJNIGetString(name);
+    WCDBJNIGetStringCritical(name);
     jlong ret
     = (jlong) WCDBColumnCreateWithName2(nameString, (const void *) binding).innerValue;
-    WCDBJNIReleaseString(name);
+    WCDBJNIReleaseStringCritical(name);
     return ret;
 }
 
@@ -51,10 +51,10 @@ jlong WCDBJNIColumnObjectMethod(copy, jlong column)
 
 void WCDBJNIColumnObjectMethod(inTable, jlong column, jstring table)
 {
-    WCDBJNIGetString(table);
+    WCDBJNIGetStringCritical(table);
     WCDBJNIBridgeStruct(CPPColumn, column);
     WCDBColumnInTable(columnStruct, tableString);
-    WCDBJNIReleaseString(table);
+    WCDBJNIReleaseStringCritical(table);
 }
 
 void WCDBJNIColumnObjectMethod(inSchema, jlong column, jlong schema)

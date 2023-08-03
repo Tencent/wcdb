@@ -32,9 +32,9 @@ jlong WCDBJNIStatementCreateTriggerObjectMethodWithNoArg(createCppObj)
 void WCDBJNIStatementCreateTriggerObjectMethod(configTrigger, jlong self, jstring name)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTrigger, self);
-    WCDBJNIGetString(name);
+    WCDBJNIGetStringCritical(name);
     WCDBStatementCreateTriggerConfigTrigger(selfStruct, nameString);
-    WCDBJNIReleaseString(name);
+    WCDBJNIReleaseStringCritical(name);
 }
 
 void WCDBJNIStatementCreateTriggerObjectMethod(configSchema,
@@ -107,9 +107,9 @@ void WCDBJNIStatementCreateTriggerObjectMethod(configColumns,
 void WCDBJNIStatementCreateTriggerObjectMethod(configTable, jlong self, jstring table)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTrigger, self);
-    WCDBJNIGetString(table);
+    WCDBJNIGetStringCritical(table);
     WCDBStatementCreateTriggerConfigTable(selfStruct, tableString);
-    WCDBJNIReleaseString(table);
+    WCDBJNIReleaseStringCritical(table);
 }
 
 void WCDBJNIStatementCreateTriggerObjectMethod(configForEachRow, jlong self)

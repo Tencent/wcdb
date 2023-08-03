@@ -26,9 +26,9 @@
 
 jlong WCDBJNIQualifiedTableObjectMethod(create, jstring tableName)
 {
-    WCDBJNIGetString(tableName);
+    WCDBJNIGetStringCritical(tableName);
     jlong ret = (jlong) WCDBQualifiedTableCreateWithTable(tableNameString).innerValue;
-    WCDBJNIReleaseString(tableName);
+    WCDBJNIReleaseStringCritical(tableName);
     return ret;
 }
 
@@ -45,17 +45,17 @@ void WCDBJNIQualifiedTableObjectMethod(configSchema,
 void WCDBJNIQualifiedTableObjectMethod(configAlias, jlong self, jstring alias)
 {
     WCDBJNIBridgeStruct(CPPQualifiedTable, self);
-    WCDBJNIGetString(alias);
+    WCDBJNIGetStringCritical(alias);
     WCDBQualifiedTableConfigAliasName(selfStruct, aliasString);
-    WCDBJNIReleaseString(alias);
+    WCDBJNIReleaseStringCritical(alias);
 }
 
 void WCDBJNIQualifiedTableObjectMethod(configIndex, jlong self, jstring index)
 {
     WCDBJNIBridgeStruct(CPPQualifiedTable, self);
-    WCDBJNIGetString(index);
+    WCDBJNIGetStringCritical(index);
     WCDBQualifiedTableConfigIndexName(selfStruct, indexString);
-    WCDBJNIReleaseString(index);
+    WCDBJNIReleaseStringCritical(index);
 }
 
 void WCDBJNIQualifiedTableObjectMethod(configNotIndexed, jlong self)

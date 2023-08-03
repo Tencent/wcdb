@@ -26,9 +26,9 @@
 
 jlong WCDBJNIColumnConstraintObjectMethod(create, jstring name)
 {
-    WCDBJNIGetString(name);
+    WCDBJNIGetStringCritical(name);
     jlong ret = (jlong) WCDBColumnConstraintCreate(nameString).innerValue;
-    WCDBJNIReleaseString(name);
+    WCDBJNIReleaseStringCritical(name);
     return ret;
 }
 
@@ -88,9 +88,9 @@ void WCDBJNIColumnConstraintObjectMethod(configDefaultValue,
 void WCDBJNIColumnConstraintObjectMethod(configCollation, jlong constraint, jstring collation)
 {
     WCDBJNIBridgeStruct(CPPColumnConstraint, constraint);
-    WCDBJNIGetString(collation);
+    WCDBJNIGetStringCritical(collation);
     WCDBColumnConstraintConfigCollation(constraintStruct, collationString);
-    WCDBJNIReleaseString(collation);
+    WCDBJNIReleaseStringCritical(collation);
 }
 
 void WCDBJNIColumnConstraintObjectMethod(configForeignKey, jlong constraint, jlong foreignKey)
