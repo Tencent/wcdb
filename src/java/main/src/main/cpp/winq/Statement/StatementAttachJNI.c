@@ -32,7 +32,7 @@ jlong WCDBJNIStatementAttachClassMethodWithNoArg(createCppObj)
 void WCDBJNIStatementAttachObjectMethod(configPath, jlong self, WCDBJNIObjectOrStringParameter(path))
 {
     WCDBJNIBridgeStruct(CPPStatementAttach, self);
-    WCDBJNICreateObjectOrStringCommonValue(path);
+    WCDBJNICreateObjectOrStringCommonValue(path, true);
     WCDBStatementAttachConfigPath2(selfStruct, path_common);
     WCDBJNITryReleaseStringInCommonValue(path);
 }
@@ -42,7 +42,7 @@ void WCDBJNIStatementAttachObjectMethod(configSchema,
                                         WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementAttach, self);
-    WCDBJNICreateObjectOrStringCommonValue(schema);
+    WCDBJNICreateObjectOrStringCommonValue(schema, true);
     WCDBStatementAttachConfigSchema2(selfStruct, schema_common);
     WCDBJNITryReleaseStringInCommonValue(schema);
 }
@@ -50,7 +50,7 @@ void WCDBJNIStatementAttachObjectMethod(configSchema,
 void WCDBJNIStatementAttachObjectMethod(configKey, jlong self, WCDBJNIObjectOrStringParameter(key))
 {
     WCDBJNIBridgeStruct(CPPStatementAttach, self);
-    WCDBJNICreateObjectOrStringCommonValue(key);
+    WCDBJNICreateObjectOrStringCommonValue(key, true);
     WCDBStatementAttachConfigKey2(selfStruct, key_common);
     WCDBJNITryReleaseStringInCommonValue(key);
 }

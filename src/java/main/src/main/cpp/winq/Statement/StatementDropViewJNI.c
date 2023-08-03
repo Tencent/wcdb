@@ -34,7 +34,7 @@ void WCDBJNIStatementDropViewObjectMethod(configSchema,
                                           WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementDropView, self);
-    WCDBJNICreateObjectOrStringCommonValue(schema);
+    WCDBJNICreateObjectOrStringCommonValue(schema, true);
     WCDBStatementDropViewConfigSchema2(selfStruct, schema_common);
     WCDBJNITryReleaseStringInCommonValue(schema);
 }

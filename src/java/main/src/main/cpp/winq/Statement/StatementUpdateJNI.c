@@ -32,10 +32,10 @@ jlong WCDBJNIStatementUpdateObjectMethodWithNoArg(create)
 void WCDBJNIStatementUpdateObjectMethod(configWith, jlong self, jlongArray expressions)
 {
     WCDBJNIBridgeStruct(CPPStatementUpdate, self);
-    WCDBJNIGetCppPointerArray(expressions);
+    WCDBJNIGetCppPointerArrayCritical(expressions);
     WCDBStatementUpdateConfigWith(
     selfStruct, (const CPPCommonTableExpression*) expressionsArray, expressionsLength);
-    WCDBJNIReleaseCppPointerArray(expressions);
+    WCDBJNIReleaseCppPointerArrayCritical(expressions);
 }
 
 void WCDBJNIStatementUpdateObjectMethod(configRecursive, jlong self)
@@ -47,7 +47,7 @@ void WCDBJNIStatementUpdateObjectMethod(configRecursive, jlong self)
 void WCDBJNIStatementUpdateObjectMethod(configTable, jlong self, WCDBJNIObjectOrStringParameter(table))
 {
     WCDBJNIBridgeStruct(CPPStatementUpdate, self);
-    WCDBJNICreateObjectOrStringCommonValue(table);
+    WCDBJNICreateObjectOrStringCommonValue(table, true);
     WCDBStatementUpdateConfigTable2(selfStruct, table_common);
     WCDBJNITryReleaseStringInCommonValue(table);
 }
@@ -63,14 +63,14 @@ void WCDBJNIStatementUpdateObjectMethod(configColumns,
                                         WCDBJNIObjectOrStringArrayParameter(columns))
 {
     WCDBJNIBridgeStruct(CPPStatementUpdate, self);
-    WCDBJNICreateObjectOrStringArrayWithAction(
+    WCDBJNICreateObjectOrStringArrayCriticalWithAction(
     columns, WCDBStatementUpdateConfigColumns2(selfStruct, columns_commonArray));
 }
 
 void WCDBJNIStatementUpdateObjectMethod(configValue, jlong self, WCDBJNICommonValueParameter(value))
 {
     WCDBJNIBridgeStruct(CPPStatementUpdate, self);
-    WCDBJNICreateCommonValue(value);
+    WCDBJNICreateCommonValue(value, true);
     WCDBStatementUpdateConfigValue2(selfStruct, value_common);
     WCDBJNITryReleaseStringInCommonValue(value);
 }
@@ -82,7 +82,7 @@ void WCDBJNIStatementUpdateObjectMethod(configColumnsToValues,
 {
     WCDBJNIBridgeStruct(CPPStatementUpdate, self);
     WCDBJNICreateMultiTypeArray(values);
-    WCDBJNICreateObjectOrStringArrayWithAction(
+    WCDBJNICreateObjectOrStringArrayCriticalWithAction(
     columns, WCDBStatementUpdateConfigColumnsToValues(selfStruct, columns_commonArray, valuesArray));
     WCDBJNIReleaseMultiTypeArray(values);
 }
@@ -92,7 +92,7 @@ void WCDBJNIStatementUpdateObjectMethod(configColumnsWithBindParameter,
                                         WCDBJNIObjectOrStringArrayParameter(columns))
 {
     WCDBJNIBridgeStruct(CPPStatementUpdate, self);
-    WCDBJNICreateObjectOrStringArrayWithAction(
+    WCDBJNICreateObjectOrStringArrayCriticalWithAction(
     columns, WCDBStatementUpdateConfigColumnsToBindParameters(selfStruct, columns_commonArray));
 }
 
@@ -106,10 +106,10 @@ void WCDBJNIStatementUpdateObjectMethod(configCondition, jlong self, jlong condi
 void WCDBJNIStatementUpdateObjectMethod(configOrders, jlong self, jlongArray orders)
 {
     WCDBJNIBridgeStruct(CPPStatementUpdate, self);
-    WCDBJNIGetCppPointerArray(orders);
+    WCDBJNIGetCppPointerArrayCritical(orders);
     WCDBStatementUpdateConfigOrders(
     selfStruct, (const CPPOrderingTerm*) ordersArray, ordersLength);
-    WCDBJNIReleaseCppPointerArray(orders);
+    WCDBJNIReleaseCppPointerArrayCritical(orders);
 }
 
 void WCDBJNIStatementUpdateObjectMethod(

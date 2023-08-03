@@ -34,7 +34,7 @@ void WCDBJNIStatementDropIndexObjectMethod(configSchema,
                                            WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementDropIndex, self);
-    WCDBJNICreateObjectOrStringCommonValue(schema);
+    WCDBJNICreateObjectOrStringCommonValue(schema, true);
     WCDBStatementDropIndexConfigSchema2(selfStruct, schema_common);
     WCDBJNITryReleaseStringInCommonValue(schema);
 }

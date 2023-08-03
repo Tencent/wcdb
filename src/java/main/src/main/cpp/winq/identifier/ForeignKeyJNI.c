@@ -42,7 +42,7 @@ void WCDBJNIForeignKeyObjectMethod(configColumns,
                                    WCDBJNIObjectOrStringArrayParameter(column))
 {
     WCDBJNIBridgeStruct(CPPForeignKey, self);
-    WCDBJNICreateObjectOrStringArrayWithAction(
+    WCDBJNICreateObjectOrStringArrayCriticalWithAction(
     column, WCDBForeignKeyAddColumn2(selfStruct, column_commonArray);)
 }
 

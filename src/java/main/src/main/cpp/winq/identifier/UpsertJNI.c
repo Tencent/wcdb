@@ -34,7 +34,7 @@ void WCDBJNIUpsertObjectMethod(configIndexedColumn,
                                WCDBJNIObjectOrStringArrayParameter(columns))
 {
     WCDBJNIBridgeStruct(CPPUpsert, upsert);
-    WCDBJNICreateObjectOrStringArrayWithAction(
+    WCDBJNICreateObjectOrStringArrayCriticalWithAction(
     columns, WCDBUpsertConfigIndexdColumn2(upsertStruct, columns_commonArray));
 }
 
@@ -62,14 +62,14 @@ void WCDBJNIUpsertObjectMethod(configSetColumns,
                                WCDBJNIObjectOrStringArrayParameter(columns))
 {
     WCDBJNIBridgeStruct(CPPUpsert, upsert);
-    WCDBJNICreateObjectOrStringArrayWithAction(
+    WCDBJNICreateObjectOrStringArrayCriticalWithAction(
     columns, WCDBUpsertConfigSetColumns2(upsertStruct, columns_commonArray));
 }
 
 void WCDBJNIUpsertObjectMethod(configToValue, jlong upsert, WCDBJNICommonValueParameter(expression))
 {
     WCDBJNIBridgeStruct(CPPUpsert, upsert);
-    WCDBJNICreateCommonValue(expression);
+    WCDBJNICreateCommonValue(expression, true);
     WCDBUpsertConfigToValue2(upsertStruct, expression_common);
     WCDBJNITryReleaseStringInCommonValue(expression);
 }

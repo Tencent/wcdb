@@ -42,7 +42,7 @@ void WCDBJNIStatementCreateTriggerObjectMethod(configSchema,
                                                WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTrigger, self);
-    WCDBJNICreateObjectOrStringCommonValue(schema);
+    WCDBJNICreateObjectOrStringCommonValue(schema, true);
     WCDBStatementCreateTriggerConfigSchema2(selfStruct, schema_common);
     WCDBJNITryReleaseStringInCommonValue(schema);
 }
@@ -100,7 +100,7 @@ void WCDBJNIStatementCreateTriggerObjectMethod(configColumns,
                                                WCDBJNIObjectOrStringArrayParameter(columns))
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTrigger, self);
-    WCDBJNICreateObjectOrStringArrayWithAction(
+    WCDBJNICreateObjectOrStringArrayCriticalWithAction(
     columns, WCDBStatementCreateTriggerConfigColumns2(selfStruct, columns_commonArray));
 }
 

@@ -26,7 +26,7 @@
 
 jlong WCDBJNIJoinClassMethod(createCppObj, WCDBJNIObjectOrStringParameter(query))
 {
-    WCDBJNICreateObjectOrStringCommonValue(query);
+    WCDBJNICreateObjectOrStringCommonValue(query, true);
     jlong ret = (jlong) WCDBJoinCreateWithTableOrSubquery2(query_common).innerValue;
     WCDBJNITryReleaseStringInCommonValue(query);
     return ret;
@@ -35,7 +35,7 @@ jlong WCDBJNIJoinClassMethod(createCppObj, WCDBJNIObjectOrStringParameter(query)
 void WCDBJNIJoinObjectMethod(configWith, jlong join, WCDBJNIObjectOrStringParameter(query))
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
-    WCDBJNICreateObjectOrStringCommonValue(query);
+    WCDBJNICreateObjectOrStringCommonValue(query, true);
     WCDBJoinWith2(joinStruct, query_common);
     WCDBJNITryReleaseStringInCommonValue(query);
 }
@@ -43,7 +43,7 @@ void WCDBJNIJoinObjectMethod(configWith, jlong join, WCDBJNIObjectOrStringParame
 void WCDBJNIJoinObjectMethod(configWithJoin, jlong join, WCDBJNIObjectOrStringParameter(query))
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
-    WCDBJNICreateObjectOrStringCommonValue(query);
+    WCDBJNICreateObjectOrStringCommonValue(query, true);
     WCDBJoinWithJoin2(joinStruct, query_common);
     WCDBJNITryReleaseStringInCommonValue(query);
 }
@@ -53,7 +53,7 @@ void WCDBJNIJoinObjectMethod(configWithLeftOuterJoin,
                              WCDBJNIObjectOrStringParameter(query))
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
-    WCDBJNICreateObjectOrStringCommonValue(query);
+    WCDBJNICreateObjectOrStringCommonValue(query, true);
     WCDBJoinWithLeftOuterJoin2(joinStruct, query_common);
     WCDBJNITryReleaseStringInCommonValue(query);
 }
@@ -61,7 +61,7 @@ void WCDBJNIJoinObjectMethod(configWithLeftOuterJoin,
 void WCDBJNIJoinObjectMethod(configWithLeftJoin, jlong join, WCDBJNIObjectOrStringParameter(query))
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
-    WCDBJNICreateObjectOrStringCommonValue(query);
+    WCDBJNICreateObjectOrStringCommonValue(query, true);
     WCDBJoinWithLeftJoin2(joinStruct, query_common);
     WCDBJNITryReleaseStringInCommonValue(query);
 }
@@ -69,7 +69,7 @@ void WCDBJNIJoinObjectMethod(configWithLeftJoin, jlong join, WCDBJNIObjectOrStri
 void WCDBJNIJoinObjectMethod(configWithInnerJoin, jlong join, WCDBJNIObjectOrStringParameter(query))
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
-    WCDBJNICreateObjectOrStringCommonValue(query);
+    WCDBJNICreateObjectOrStringCommonValue(query, true);
     WCDBJoinWithInnerJoin2(joinStruct, query_common);
     WCDBJNITryReleaseStringInCommonValue(query);
 }
@@ -77,7 +77,7 @@ void WCDBJNIJoinObjectMethod(configWithInnerJoin, jlong join, WCDBJNIObjectOrStr
 void WCDBJNIJoinObjectMethod(configWithCrossJoin, jlong join, WCDBJNIObjectOrStringParameter(query))
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
-    WCDBJNICreateObjectOrStringCommonValue(query);
+    WCDBJNICreateObjectOrStringCommonValue(query, true);
     WCDBJoinWithCrossJoin2(joinStruct, query_common);
     WCDBJNITryReleaseStringInCommonValue(query);
 }
@@ -85,7 +85,7 @@ void WCDBJNIJoinObjectMethod(configWithCrossJoin, jlong join, WCDBJNIObjectOrStr
 void WCDBJNIJoinObjectMethod(configWithNaturalJoin, jlong join, WCDBJNIObjectOrStringParameter(query))
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
-    WCDBJNICreateObjectOrStringCommonValue(query);
+    WCDBJNICreateObjectOrStringCommonValue(query, true);
     WCDBJoinWithNaturalJoin2(joinStruct, query_common);
     WCDBJNITryReleaseStringInCommonValue(query);
 }
@@ -95,7 +95,7 @@ void WCDBJNIJoinObjectMethod(configWithNaturalLeftOuterJoin,
                              WCDBJNIObjectOrStringParameter(query))
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
-    WCDBJNICreateObjectOrStringCommonValue(query);
+    WCDBJNICreateObjectOrStringCommonValue(query, true);
     WCDBJoinWithNaturalLeftOuterJoin2(joinStruct, query_common);
     WCDBJNITryReleaseStringInCommonValue(query);
 }
@@ -105,7 +105,7 @@ void WCDBJNIJoinObjectMethod(configWithNaturalLeftJoin,
                              WCDBJNIObjectOrStringParameter(query))
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
-    WCDBJNICreateObjectOrStringCommonValue(query);
+    WCDBJNICreateObjectOrStringCommonValue(query, true);
     WCDBJoinWithNaturalLeftJoin2(joinStruct, query_common);
     WCDBJNITryReleaseStringInCommonValue(query);
 }
@@ -115,7 +115,7 @@ void WCDBJNIJoinObjectMethod(configWithNaturalInnerJoin,
                              WCDBJNIObjectOrStringParameter(query))
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
-    WCDBJNICreateObjectOrStringCommonValue(query);
+    WCDBJNICreateObjectOrStringCommonValue(query, true);
     WCDBJoinWithNaturalInnerJoin2(joinStruct, query_common);
     WCDBJNITryReleaseStringInCommonValue(query);
 }
@@ -125,7 +125,7 @@ void WCDBJNIJoinObjectMethod(configWithNaturalCrossJoin,
                              WCDBJNIObjectOrStringParameter(query))
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
-    WCDBJNICreateObjectOrStringCommonValue(query);
+    WCDBJNICreateObjectOrStringCommonValue(query, true);
     WCDBJoinWithNaturalCrossJoin2(joinStruct, query_common);
     WCDBJNITryReleaseStringInCommonValue(query);
 }
@@ -142,6 +142,6 @@ void WCDBJNIJoinObjectMethod(configUsingColumn,
                              WCDBJNIObjectOrStringArrayParameter(columns))
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
-    WCDBJNICreateObjectOrStringArrayWithAction(
+    WCDBJNICreateObjectOrStringArrayCriticalWithAction(
     columns, WCDBJoinConfigUsingColumn2(joinStruct, columns_commonArray));
 }

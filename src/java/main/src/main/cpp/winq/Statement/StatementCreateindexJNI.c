@@ -42,7 +42,7 @@ void WCDBJNIStatementCreateIndexObjectMethod(configSchema,
                                              WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementCreateIndex, self);
-    WCDBJNICreateObjectOrStringCommonValue(schema);
+    WCDBJNICreateObjectOrStringCommonValue(schema, true);
     WCDBStatementCreateIndexConfigSchema2(selfStruct, schema_common);
     WCDBJNITryReleaseStringInCommonValue(schema);
 }
@@ -72,7 +72,7 @@ void WCDBJNIStatementCreateIndexObjectMethod(configIndexedColumns,
                                              WCDBJNIObjectOrStringArrayParameter(indexColumns))
 {
     WCDBJNIBridgeStruct(CPPStatementCreateIndex, self);
-    WCDBJNICreateObjectOrStringArrayWithAction(
+    WCDBJNICreateObjectOrStringArrayCriticalWithAction(
     indexColumns, WCDBStatementCreateIndexConfigIndexColumns2(selfStruct, indexColumns_commonArray));
 }
 

@@ -26,7 +26,7 @@
 
 jlong WCDBJNILiteralValueObjectMethod(create, WCDBJNICommonValueParameter(value))
 {
-    WCDBJNICreateCommonValue(value);
+    WCDBJNICreateCommonValue(value, true);
     jlong ret = (jlong) WCDBLiteralValueCreate(value_common).innerValue;
     WCDBJNITryReleaseStringInCommonValue(value);
     return ret;

@@ -80,7 +80,7 @@ void WCDBJNIColumnConstraintObjectMethod(configDefaultValue,
                                          WCDBJNICommonValueParameter(value))
 {
     WCDBJNIBridgeStruct(CPPColumnConstraint, constraint);
-    WCDBJNICreateCommonValue(value);
+    WCDBJNICreateCommonValue(value, true);
     WCDBColumnConstraintConfigDefaultValue2(constraintStruct, value_common);
     WCDBJNITryReleaseStringInCommonValue(value);
 }

@@ -42,7 +42,7 @@ void WCDBJNIStatementCreateTableObjectMethod(configSchema,
                                              WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTable, self);
-    WCDBJNICreateObjectOrStringCommonValue(schema);
+    WCDBJNICreateObjectOrStringCommonValue(schema, true);
     WCDBStatementCreateTableConfigSchema2(selfStruct, schema_common);
     WCDBJNITryReleaseStringInCommonValue(schema);
 }
@@ -76,19 +76,19 @@ void WCDBJNIStatementCreateTableObjectMethod(configColumn, jlong self, jlong col
 void WCDBJNIStatementCreateTableObjectMethod(configColumns, jlong self, jlongArray columns)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTable, self);
-    WCDBJNIGetCppPointerArray(columns);
+    WCDBJNIGetCppPointerArrayCritical(columns);
     WCDBStatementCreateTableConfigColumns(
     selfStruct, (const CPPColumnDef*) columnsArray, columnsLength);
-    WCDBJNIReleaseCppPointerArray(columns);
+    WCDBJNIReleaseCppPointerArrayCritical(columns);
 }
 
 void WCDBJNIStatementCreateTableObjectMethod(configConstraints, jlong self, jlongArray constraints)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTable, self);
-    WCDBJNIGetCppPointerArray(constraints);
+    WCDBJNIGetCppPointerArrayCritical(constraints);
     WCDBStatementCreateTableConfigTableConstraints(
     selfStruct, (const CPPTableConstraint*) constraintsArray, constraintsLength);
-    WCDBJNIReleaseCppPointerArray(constraints)
+    WCDBJNIReleaseCppPointerArrayCritical(constraints)
 }
 
 void WCDBJNIStatementCreateTableObjectMethod(configWithoutRowid, jlong self)

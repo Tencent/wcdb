@@ -26,7 +26,7 @@
 
 jlong WCDBJNIColumnDefObjectMethod(create, WCDBJNIObjectOrStringParameter(column), jint columnType)
 {
-    WCDBJNICreateObjectOrStringCommonValue(column);
+    WCDBJNICreateObjectOrStringCommonValue(column, true);
     jlong ret = 0;
     if (columnType != 0) {
         ret = (jlong) WCDBColumnDefCreateWithType2(column_common, columnType).innerValue;

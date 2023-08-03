@@ -26,7 +26,7 @@
 
 jlong WCDBJNIIndexedColumnObjectMethod(create, WCDBJNIObjectOrStringParameter(column))
 {
-    WCDBJNICreateObjectOrStringCommonValue(column);
+    WCDBJNICreateObjectOrStringCommonValue(column, true);
     jlong ret = (jlong) WCDBIndexedColumnCreate(column_common).innerValue;
     WCDBJNITryReleaseStringInCommonValue(column);
     return ret;

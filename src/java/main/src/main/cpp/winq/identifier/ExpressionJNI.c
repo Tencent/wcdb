@@ -63,7 +63,7 @@ void WCDBJNIExpressionObjectMethod(setWithSchema, jlong expression, jlong schema
 void WCDBJNIExpressionObjectMethod(setArgument, jlong expression, WCDBJNICommonValueParameter(argument))
 {
     WCDBJNIBridgeStruct(CPPExpression, expression);
-    WCDBJNICreateCommonValue(argument);
+    WCDBJNICreateCommonValue(argument, true);
     WCDBExpressionSetArgument(expressionStruct, argument_common);
     WCDBJNITryReleaseStringInCommonValue(argument);
 }
@@ -88,7 +88,7 @@ void WCDBJNIExpressionObjectMethod(distinct, jlong expression)
 
 jlong WCDBJNIExpressionClassMethod(cast, WCDBJNIObjectOrStringParameter(expression))
 {
-    WCDBJNICreateObjectOrStringCommonValue(expression);
+    WCDBJNICreateObjectOrStringCommonValue(expression, true);
     jlong ret = (jlong) WCDBExpressionCast2(expression_common).innerValue;
     WCDBJNITryReleaseStringInCommonValue(expression);
     return ret;
@@ -105,7 +105,7 @@ jlong WCDBJNIExpressionClassMethod(caseWithExp, WCDBJNIObjectOrStringParameter(e
     if (expression_type == 0) {
         return (jlong) WCDBExpressionCase().innerValue;
     }
-    WCDBJNICreateObjectOrStringCommonValue(expression);
+    WCDBJNICreateObjectOrStringCommonValue(expression, true);
     jlong ret = (jlong) WCDBExpressionCaseWithExp2(expression_common).innerValue;
     WCDBJNITryReleaseStringInCommonValue(expression);
     return ret;
@@ -121,7 +121,7 @@ void WCDBJNIExpressionObjectMethod(setWithWhenExp,
                                    WCDBJNICommonValueParameter(when))
 {
     WCDBJNIBridgeStruct(CPPExpression, expression);
-    WCDBJNICreateCommonValue(when);
+    WCDBJNICreateCommonValue(when, true);
     WCDBExpressionSetWithWhenExp2(expressionStruct, when_common);
     WCDBJNITryReleaseStringInCommonValue(when);
 }
@@ -131,7 +131,7 @@ void WCDBJNIExpressionObjectMethod(setWithThenExp,
                                    WCDBJNICommonValueParameter(then))
 {
     WCDBJNIBridgeStruct(CPPExpression, expression);
-    WCDBJNICreateCommonValue(then);
+    WCDBJNICreateCommonValue(then, true);
     WCDBExpressionSetWithThenExp2(expressionStruct, then_common);
     WCDBJNITryReleaseStringInCommonValue(then);
 }
@@ -141,7 +141,7 @@ void WCDBJNIExpressionObjectMethod(setWithElseExp,
                                    WCDBJNICommonValueParameter(else_))
 {
     WCDBJNIBridgeStruct(CPPExpression, expression);
-    WCDBJNICreateCommonValue(else_);
+    WCDBJNICreateCommonValue(else_, true);
     WCDBExpressionSetWithElseExp2(expressionStruct, else__common);
     WCDBJNITryReleaseStringInCommonValue(else_);
 }

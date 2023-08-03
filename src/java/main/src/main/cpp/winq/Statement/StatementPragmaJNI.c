@@ -46,7 +46,7 @@ void WCDBJNIStatementPragmaObjectMethod(configPragma, jlong self, jlong pragma)
 void WCDBJNIStatementPragmaObjectMethod(configToValue, jlong self, WCDBJNICommonValueParameter(value))
 {
     WCDBJNIBridgeStruct(CPPStatementPragma, self);
-    WCDBJNICreateCommonValue(value);
+    WCDBJNICreateCommonValue(value, true);
     WCDBStatementPragmaConfigToValue2(selfStruct, value_common);
     WCDBJNITryReleaseStringInCommonValue(value);
 }
@@ -56,7 +56,7 @@ void WCDBJNIStatementPragmaObjectMethod(configWithValue,
                                         WCDBJNICommonValueParameter(value))
 {
     WCDBJNIBridgeStruct(CPPStatementPragma, self);
-    WCDBJNICreateCommonValue(value);
+    WCDBJNICreateCommonValue(value, true);
     WCDBStatementPragmaConfigWithValue2(selfStruct, value_common);
     WCDBJNITryReleaseStringInCommonValue(value);
 }

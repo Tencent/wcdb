@@ -42,7 +42,7 @@ void WCDBJNIStatementCreateViewObjectMethod(configSchema,
                                             WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementCreateView, self);
-    WCDBJNICreateObjectOrStringCommonValue(schema);
+    WCDBJNICreateObjectOrStringCommonValue(schema, true);
     WCDBStatementCreateViewConfigSchema2(selfStruct, schema_common);
     WCDBJNITryReleaseStringInCommonValue(schema);
 }
@@ -71,6 +71,6 @@ void WCDBJNIStatementCreateViewObjectMethod(configColumns,
                                             WCDBJNIObjectOrStringArrayParameter(columns))
 {
     WCDBJNIBridgeStruct(CPPStatementCreateView, self);
-    WCDBJNICreateObjectOrStringArrayWithAction(
+    WCDBJNICreateObjectOrStringArrayCriticalWithAction(
     columns, WCDBStatementCreateViewConfigColumns2(selfStruct, columns_commonArray));
 }

@@ -32,10 +32,10 @@ jlong WCDBJNIStatementSelectObjectMethodWithNoArg(create)
 void WCDBJNIStatementSelectObjectMethod(configWith, jlong self, jlongArray expressions)
 {
     WCDBJNIBridgeStruct(CPPStatementSelect, self);
-    WCDBJNIGetCppPointerArray(expressions);
+    WCDBJNIGetCppPointerArrayCritical(expressions);
     WCDBStatementSelectConfigWith(
     selfStruct, (const CPPCommonTableExpression*) expressionsArray, expressionsLength);
-    WCDBJNIReleaseCppPointerArray(expressions);
+    WCDBJNIReleaseCppPointerArrayCritical(expressions);
 }
 
 void WCDBJNIStatementSelectObjectMethod(configRecursive, jlong self)
@@ -121,10 +121,10 @@ void WCDBJNIStatementSelectObjectMethod(configExcept, jlong self)
 void WCDBJNIStatementSelectObjectMethod(configOrders, jlong self, jlongArray orders)
 {
     WCDBJNIBridgeStruct(CPPStatementSelect, self);
-    WCDBJNIGetCppPointerArray(orders);
+    WCDBJNIGetCppPointerArrayCritical(orders);
     WCDBStatementSelectConfigOrders(
     selfStruct, (const CPPOrderingTerm*) ordersArray, ordersLength);
-    WCDBJNIReleaseCppPointerArray(orders);
+    WCDBJNIReleaseCppPointerArrayCritical(orders);
 }
 
 void WCDBJNIStatementSelectObjectMethod(

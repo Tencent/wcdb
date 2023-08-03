@@ -43,7 +43,7 @@ jlong WCDBJNIExpressionOperableObjectMethod(binaryOperate,
     CPPCommonValue left_common;
     left_common.type = leftType;
     left_common.intValue = left;
-    WCDBJNICreateCommonValue(right);
+    WCDBJNICreateCommonValue(right, true);
     jlong ret = (jlong) WCDBExpressionBinaryOperate2(
                 left_common, right_common, operatorType, isNot)
                 .innerValue;
@@ -61,8 +61,8 @@ jlong WCDBJNIExpressionOperableObjectMethod(betweenOperate,
     CPPCommonValue operand_common;
     operand_common.type = operandType;
     operand_common.intValue = operand;
-    WCDBJNICreateCommonValue(left);
-    WCDBJNICreateCommonValue(right);
+    WCDBJNICreateCommonValue(left, false);
+    WCDBJNICreateCommonValue(right, false);
     jlong ret = (jlong) WCDBExpressionBetweenOperate2(
                 operand_common, left_common, right_common, isNot)
                 .innerValue;

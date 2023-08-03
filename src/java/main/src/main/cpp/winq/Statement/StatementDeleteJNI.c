@@ -32,10 +32,10 @@ jlong WCDBJNIStatementDeleteObjectMethodWithNoArg(create)
 void WCDBJNIStatementDeleteObjectMethod(configWith, jlong self, jlongArray expressions)
 {
     WCDBJNIBridgeStruct(CPPStatementDelete, self);
-    WCDBJNIGetCppPointerArray(expressions);
+    WCDBJNIGetCppPointerArrayCritical(expressions);
     WCDBStatementDeleteConfigWith(
     selfStruct, (const CPPCommonTableExpression *) expressionsArray, expressionsLength);
-    WCDBJNIReleaseCppPointerArray(expressions);
+    WCDBJNIReleaseCppPointerArrayCritical(expressions);
 }
 
 void WCDBJNIStatementDeleteObjectMethod(configRecursive, jlong self)
@@ -47,7 +47,7 @@ void WCDBJNIStatementDeleteObjectMethod(configRecursive, jlong self)
 void WCDBJNIStatementDeleteObjectMethod(configTable, jlong self, WCDBJNIObjectOrStringParameter(table))
 {
     WCDBJNIBridgeStruct(CPPStatementDelete, self);
-    WCDBJNICreateObjectOrStringCommonValue(table);
+    WCDBJNICreateObjectOrStringCommonValue(table, true);
     WCDBStatementDeleteConfigDeleteFrom2(selfStruct, table_common);
     WCDBJNITryReleaseStringInCommonValue(table);
 }
@@ -62,10 +62,10 @@ void WCDBJNIStatementDeleteObjectMethod(configCondition, jlong self, jlong condi
 void WCDBJNIStatementDeleteObjectMethod(configOrders, jlong self, jlongArray orders)
 {
     WCDBJNIBridgeStruct(CPPStatementDelete, self);
-    WCDBJNIGetCppPointerArray(orders);
+    WCDBJNIGetCppPointerArrayCritical(orders);
     WCDBStatementDeleteConfigOrder(
     selfStruct, (const CPPOrderingTerm *) ordersArray, ordersLength);
-    WCDBJNIReleaseCppPointerArray(orders);
+    WCDBJNIReleaseCppPointerArrayCritical(orders);
 }
 
 void WCDBJNIStatementDeleteObjectMethod(

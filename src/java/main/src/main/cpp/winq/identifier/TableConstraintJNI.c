@@ -49,7 +49,7 @@ void WCDBJNITableConstraintObjectMethod(configIndexedColumn,
                                         WCDBJNIObjectOrStringArrayParameter(indexedColumns))
 {
     WCDBJNIBridgeStruct(CPPTableConstraint, constraint);
-    WCDBJNICreateObjectOrStringArrayWithAction(
+    WCDBJNICreateObjectOrStringArrayCriticalWithAction(
     indexedColumns,
     WCDBTableConstraintConfigIndexedColumn2(constraintStruct, indexedColumns_commonArray));
 }
@@ -74,6 +74,6 @@ void WCDBJNITableConstraintObjectMethod(configForeignKey,
 {
     WCDBJNIBridgeStruct(CPPTableConstraint, constraint);
     WCDBJNIBridgeStruct(CPPForeignKey, foreignKey);
-    WCDBJNICreateObjectOrStringArrayWithAction(
+    WCDBJNICreateObjectOrStringArrayCriticalWithAction(
     columns, WCDBTableConstraintConfigForeignKey2(constraintStruct, columns_commonArray, foreignKeyStruct));
 }

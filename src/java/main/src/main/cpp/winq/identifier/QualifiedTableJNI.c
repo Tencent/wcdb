@@ -37,7 +37,7 @@ void WCDBJNIQualifiedTableObjectMethod(configSchema,
                                        WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPQualifiedTable, self);
-    WCDBJNICreateObjectOrStringCommonValue(schema);
+    WCDBJNICreateObjectOrStringCommonValue(schema, true);
     WCDBQualifiedTableConfigSchema2(selfStruct, schema_common);
     WCDBJNITryReleaseStringInCommonValue(schema);
 }

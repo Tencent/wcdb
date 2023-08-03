@@ -95,15 +95,16 @@
         (*env)->ReleaseLongArrayElements(env, value, (jlong *) value##Array, JNI_ABORT); \
     }
 
-#define WCDBJNIGetCppPointerArray(value)                                       \
+#define WCDBJNIGetCppPointerArrayCritical(value)                               \
     const void **value##Array = NULL;                                          \
     const jlong *value##LongArray = NULL;                                      \
     int value##Length = 0;                                                     \
     if (value != NULL) {                                                       \
-        value##LongArray = (*env)->GetLongArrayElements(env, value, NULL);     \
         value##Length = (*env)->GetArrayLength(env, value);                    \
+        value##LongArray                                                       \
+        = (const jlong *) (*env)->GetPrimitiveArrayCritical(env, value, NULL); \
         if (sizeof(void *) == sizeof(jlong) || value##Length == 0) {           \
-            value##Array = value##LongArray;                                   \
+            value##Array = (const void **) value##LongArray;                   \
         } else {                                                               \
             value##Array = alloca(sizeof(void *) * value##Length);             \
             for (int i = 0; i < value##Length; i++) {                          \
@@ -112,9 +113,9 @@
         }                                                                      \
     }
 
-#define WCDBJNIReleaseCppPointerArray(value)                                                 \
-    if (value##LongArray != NULL) {                                                          \
-        (*env)->ReleaseLongArrayElements(env, value, (jlong *) value##LongArray, JNI_ABORT); \
+#define WCDBJNIReleaseCppPointerArrayCritical(value)                                     \
+    if (value##LongArray != NULL) {                                                      \
+        (*env)->ReleasePrimitiveArrayCritical(env, value, (void *) value##LongArray, 0); \
     }
 
 #define WCDBJNIGetIntArray(value)                                              \
@@ -154,9 +155,10 @@
     jint parameter##_type, jlong parameter##_long, jdouble parameter##_double, \
     jstring parameter##_string
 
-#define WCDBJNICreateCommonValue(parameter)                                    \
+#define WCDBJNICreateCommonValue(parameter, isCritical)                        \
     CPPCommonValue parameter##_common;                                         \
     parameter##_common.type = parameter##_type;                                \
+    const bool parameter##_isCritical = isCritical;                            \
     const jchar *parameter##_utf16String = NULL;                               \
     switch (parameter##_type) {                                                \
     case WCDBBridgedType_Bool:                                                 \
@@ -172,32 +174,37 @@
                              parameter##_string,                               \
                              (char **) &parameter##_common.intValue,           \
                              &parameter##_utf16String,                         \
-                             false);                                           \
+                             parameter##_isCritical);                          \
         break;                                                                 \
     default:                                                                   \
         parameter##_common.intValue = parameter##_long;                        \
         break;                                                                 \
     }
 
-#define WCDBJNITryReleaseStringInCommonValue(parameter)                               \
-    if (parameter##_type == WCDBBridgedType_String                                    \
-        && parameter##_common.intValue != 0 && parameter##_utf16String != NULL) {     \
-        (*env)->ReleaseStringChars(env, parameter##_string, parameter##_utf16String); \
+#define WCDBJNITryReleaseStringInCommonValue(parameter)                                      \
+    if (parameter##_type == WCDBBridgedType_String                                           \
+        && parameter##_common.intValue != 0 && parameter##_utf16String != NULL) {            \
+        if (parameter##_isCritical) {                                                        \
+            (*env)->ReleaseStringCritical(env, parameter##_string, parameter##_utf16String); \
+        } else {                                                                             \
+            (*env)->ReleaseStringChars(env, parameter##_string, parameter##_utf16String);    \
+        }                                                                                    \
     }
 
 #define WCDBJNIObjectOrStringParameter(parameter)                              \
     jint parameter##_type, jlong parameter##_long, jstring parameter##_string
 
-#define WCDBJNICreateObjectOrStringCommonValue(parameter)                      \
+#define WCDBJNICreateObjectOrStringCommonValue(parameter, isCritical)          \
     CPPCommonValue parameter##_common;                                         \
     parameter##_common.type = parameter##_type;                                \
     const jchar *parameter##_utf16String = NULL;                               \
+    const bool parameter##_isCritical = isCritical;                            \
     if (parameter##_type == WCDBBridgedType_String) {                          \
         WCDBJNIGetUTF8String(env,                                              \
                              parameter##_string,                               \
                              (char **) &parameter##_common.intValue,           \
                              &parameter##_utf16String,                         \
-                             false);                                           \
+                             parameter##_isCritical);                          \
     } else {                                                                   \
         parameter##_common.intValue = parameter##_long;                        \
     }
@@ -240,15 +247,25 @@
 #define WCDBJNIObjectOrStringArrayParameter(parameter)                         \
     jint parameter##_type, jlongArray parameter##_longArray, jobjectArray parameter##_stringArray
 
-#define WCDBJNICreateObjectOrStringArrayWithAction(parameter, action)                             \
+#define WCDBJNICreateObjectOrStringArrayCriticalWithAction(parameter, action)                     \
     CPPCommonArray parameter##_commonArray;                                                       \
     parameter##_commonArray.type = parameter##_type;                                              \
     if (parameter##_type < WCDBBridgedType_Double || parameter##_type > WCDBBridgedType_String) { \
-        WCDBJNIGetLongArray(parameter##_longArray);                                               \
+        const jlong *parameter##_longArrayArray = NULL;                                           \
+        int parameter##_longArrayLength = 0;                                                      \
+        if (parameter##_longArray != NULL) {                                                      \
+            parameter##_longArrayLength                                                           \
+            = (*env)->GetArrayLength(env, parameter##_longArray);                                 \
+            parameter##_longArrayArray                                                            \
+            = (*env)->GetPrimitiveArrayCritical(env, parameter##_longArray, NULL);                \
+        }                                                                                         \
         parameter##_commonArray.length = parameter##_longArrayLength;                             \
         parameter##_commonArray.buffer = (const void **) parameter##_longArrayArray;              \
         action;                                                                                   \
-        WCDBJNIReleaseLongArray(parameter##_longArray);                                           \
+        if (parameter##_longArrayArray != NULL) {                                                 \
+            (*env)->ReleasePrimitiveArrayCritical(                                                \
+            env, parameter##_longArray, (void *) parameter##_longArrayArray, 0);                  \
+        }                                                                                         \
     } else if (parameter##_type == WCDBBridgedType_String) {                                      \
         WCDBJNIGetStringArray(parameter##_stringArray);                                           \
         parameter##_commonArray.length = parameter##_stringArrayLength;                           \

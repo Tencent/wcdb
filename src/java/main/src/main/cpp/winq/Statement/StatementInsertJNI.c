@@ -32,10 +32,10 @@ jlong WCDBJNIStatementInsertObjectMethodWithNoArg(create)
 void WCDBJNIStatementInsertObjectMethod(configWith, jlong self, jlongArray expressions)
 {
     WCDBJNIBridgeStruct(CPPStatementInsert, self);
-    WCDBJNIGetCppPointerArray(expressions);
+    WCDBJNIGetCppPointerArrayCritical(expressions);
     WCDBStatementInsertConfigWith(
     selfStruct, (const CPPCommonTableExpression*) expressionsArray, expressionsLength);
-    WCDBJNIReleaseCppPointerArray(expressions);
+    WCDBJNIReleaseCppPointerArrayCritical(expressions);
 }
 
 void WCDBJNIStatementInsertObjectMethod(configRecursive, jlong self)
@@ -57,7 +57,7 @@ void WCDBJNIStatementInsertObjectMethod(configSchema,
                                         WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementInsert, self);
-    WCDBJNICreateObjectOrStringCommonValue(schema);
+    WCDBJNICreateObjectOrStringCommonValue(schema, true);
     WCDBStatementInsertConfigSchema2(selfStruct, schema_common);
     WCDBJNITryReleaseStringInCommonValue(schema);
 }
@@ -81,7 +81,7 @@ void WCDBJNIStatementInsertObjectMethod(configColumns,
                                         WCDBJNIObjectOrStringArrayParameter(columns))
 {
     WCDBJNIBridgeStruct(CPPStatementInsert, self);
-    WCDBJNICreateObjectOrStringArrayWithAction(
+    WCDBJNICreateObjectOrStringArrayCriticalWithAction(
     columns, WCDBStatementInsertConfigColumns2(selfStruct, columns_commonArray));
 }
 

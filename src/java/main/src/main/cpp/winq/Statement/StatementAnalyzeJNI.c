@@ -40,7 +40,7 @@ void WCDBJNIStatementAnalyzeObjectMethod(configSchema,
                                          WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementAnalyze, analyze);
-    WCDBJNICreateObjectOrStringCommonValue(schema);
+    WCDBJNICreateObjectOrStringCommonValue(schema, true);
     WCDBStatementAnalyzeConfigSchema2(analyzeStruct, schema_common);
     WCDBJNITryReleaseStringInCommonValue(schema);
 }

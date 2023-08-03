@@ -42,7 +42,7 @@ void WCDBJNIStatementAlterTableObjectMethod(configSchema,
                                             WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementAlterTable, self);
-    WCDBJNICreateObjectOrStringCommonValue(schema);
+    WCDBJNICreateObjectOrStringCommonValue(schema, true);
     WCDBStatementAlterTableConfigSchema2(selfStruct, schema_common);
     WCDBJNITryReleaseStringInCommonValue(schema);
 }
@@ -60,7 +60,7 @@ void WCDBJNIStatementAlterTableObjectMethod(configRenameColumn,
                                             WCDBJNIObjectOrStringParameter(column))
 {
     WCDBJNIBridgeStruct(CPPStatementAlterTable, self);
-    WCDBJNICreateObjectOrStringCommonValue(column);
+    WCDBJNICreateObjectOrStringCommonValue(column, true);
     WCDBStatementAlterTableConfigRenameColumn2(selfStruct, column_common);
     WCDBJNITryReleaseStringInCommonValue(column);
 }
@@ -70,7 +70,7 @@ void WCDBJNIStatementAlterTableObjectMethod(configRenameToColumn,
                                             WCDBJNIObjectOrStringParameter(column))
 {
     WCDBJNIBridgeStruct(CPPStatementAlterTable, self);
-    WCDBJNICreateObjectOrStringCommonValue(column);
+    WCDBJNICreateObjectOrStringCommonValue(column, true);
     WCDBStatementAlterTableConfigRenameToColumn2(selfStruct, column_common);
     WCDBJNITryReleaseStringInCommonValue(column);
 }

@@ -26,7 +26,7 @@
 
 jlong WCDBJNITableOrSubqueryObjectMethod(create, WCDBJNIObjectOrStringParameter(tableOrSubquery))
 {
-    WCDBJNICreateObjectOrStringCommonValue(tableOrSubquery);
+    WCDBJNICreateObjectOrStringCommonValue(tableOrSubquery, true);
     jlong ret = (jlong) WCDBTableOrSubqueryCreate(tableOrSubquery_common).innerValue;
     WCDBJNITryReleaseStringInCommonValue(tableOrSubquery);
     return ret;
@@ -44,7 +44,7 @@ jlong WCDBJNITableOrSubqueryObjectMethod(createWithTableOrSubqueries,
                                          WCDBJNIObjectOrStringArrayParameter(subquaries))
 {
     jlong ret = 0;
-    WCDBJNICreateObjectOrStringArrayWithAction(
+    WCDBJNICreateObjectOrStringArrayCriticalWithAction(
     subquaries,
     ret = (jlong) WCDBTableOrSubqueryCreateWithTableOrSubqueries2(subquaries_commonArray)
           .innerValue) return ret;
@@ -55,7 +55,7 @@ void WCDBJNITableOrSubqueryObjectMethod(configSchema,
                                         WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPTableOrSubquery, tableOrSubquery);
-    WCDBJNICreateObjectOrStringCommonValue(schema);
+    WCDBJNICreateObjectOrStringCommonValue(schema, true);
     WCDBTableOrSubqueryConfigSchema2(tableOrSubqueryStruct, schema_common);
     WCDBJNITryReleaseStringInCommonValue(schema);
 }
@@ -87,7 +87,7 @@ void WCDBJNITableOrSubqueryObjectMethod(argument,
                                         WCDBJNICommonValueParameter(argument))
 {
     WCDBJNIBridgeStruct(CPPTableOrSubquery, tableOrSubquery);
-    WCDBJNICreateCommonValue(argument);
+    WCDBJNICreateCommonValue(argument, true);
     WCDBTableOrSubqueryConfigArgument(tableOrSubqueryStruct, argument_common);
     WCDBJNITryReleaseStringInCommonValue(argument);
 }
