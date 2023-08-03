@@ -24,11 +24,11 @@
 
 #import "CoreConst.h"
 #import "Enum.hpp"
-#import "WCDBError.hpp"
 #import "FileManager.hpp"
 #import "Notifier.hpp"
 #import "StringView.hpp"
 #import "ThreadedErrors.hpp"
+#import "WCDBError.hpp"
 #import "WCTFoundation.h"
 #import <Foundation/Foundation.h>
 

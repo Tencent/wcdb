@@ -25,9 +25,9 @@
 #pragma once
 
 #include "Cipher.hpp"
-#include "WCDBOptional.hpp"
 #include "Serialization.hpp"
 #include "StringView.hpp"
+#include "WCDBOptional.hpp"
 #include <list>
 #include <map>
 #include <stdlib.h>

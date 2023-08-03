@@ -25,10 +25,10 @@
 #pragma once
 
 #include "Macro.h"
-#include "WCDBOptional.hpp"
 #include "Shadow.hpp"
 #include "StringView.hpp"
 #include "SyntaxCommonConst.hpp"
+#include "WCDBOptional.hpp"
 #include <functional>
 #include <list>
 #include <sstream>

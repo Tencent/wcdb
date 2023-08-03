@@ -28,8 +28,8 @@
 #include "ErrorProne.hpp"
 #include "HandleNotification.hpp"
 #include "HandleStatement.hpp"
-#include "WCDBOptional.hpp"
 #include "StringView.hpp"
+#include "WCDBOptional.hpp"
 #include "WINQ.h"
 #include <set>
 #include <vector>

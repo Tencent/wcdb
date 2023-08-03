@@ -28,9 +28,9 @@
 #include "FactoryDepositor.hpp"
 #include "FactoryRenewer.hpp"
 #include "FactoryRetriever.hpp"
-#include "WCDBOptional.hpp"
 #include "StringView.hpp"
 #include "Time.hpp"
+#include "WCDBOptional.hpp"
 #include <future>
 #include <list>
 
