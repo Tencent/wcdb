@@ -111,11 +111,11 @@ void WCDBHandleStatementBindText(CPPHandleStatement handleStatement, int index, 
 
 void WCDBHandleStatementBindText16(CPPHandleStatement handleStatement,
                                    int index,
-                                   const char16_t* _Nullable text,
+                                   const short* _Nullable text,
                                    int textLength)
 {
     WCDBGetObjectOrReturn(handleStatement, WCDB::HandleStatement, cppHandleStatement);
-    cppHandleStatement->bindText16(text, textLength, index);
+    cppHandleStatement->bindText16((const char16_t*) text, textLength, index);
 }
 
 void WCDBHandleStatementBindBlob(CPPHandleStatement handleStatement,
@@ -182,11 +182,11 @@ const char* _Nullable WCDBHandleStatementGetText(CPPHandleStatement handleStatem
     return cppHandleStatement->getText(index).data();
 }
 
-const char16_t* _Nullable WCDBHandleStatementGetText16(CPPHandleStatement handleStatement, int index)
+const short* _Nullable WCDBHandleStatementGetText16(CPPHandleStatement handleStatement, int index)
 {
     WCDBGetObjectOrReturnValue(
     handleStatement, WCDB::HandleStatement, cppHandleStatement, nullptr);
-    return cppHandleStatement->getText16(index);
+    return (const short*) cppHandleStatement->getText16(index);
 }
 
 int WCDBHandleStatementGetText16Length(CPPHandleStatement handleStatement, int index)

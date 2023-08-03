@@ -348,7 +348,6 @@ void UnsafeStringView::allocStringMemory(char** slot, int size)
 void UnsafeStringView::clearAllocatedMemory(int count)
 {
     char** memory = g_preAllocatedMemory.memory;
-    int clearNum = 0;
     for (int i = g_preAllocatedMemory.usedCount - count;
          i < g_preAllocatedMemory.usedCount;
          i++) {
@@ -521,12 +520,14 @@ StringView StringView::createConstant(const char* string)
     StringView ret;
     if (string != nullptr) {
         size_t length = strlen(string);
+#ifdef __ANDROID__
         if (tryRetrievePreAllocatedMemory(string)) {
             ret.m_data = string;
             ret.m_length = length;
             ret.m_referenceCount = (std::atomic<int>*) ConstanceReference;
             return ret;
         }
+#endif
         char* data = (char*) malloc((length + 1) * sizeof(char));
         if (data != nullptr) {
             memcpy((void*) data, (void*) string, length);

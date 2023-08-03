@@ -26,7 +26,6 @@
 #include "ErrorBridge.h"
 #include "ObjectBridge.h"
 #include "WinqBridge.h"
-#include <uchar.h>
 
 WCDB_EXTERN_C_BEGIN
 
@@ -61,7 +60,7 @@ void WCDBHandleStatementBindText(CPPHandleStatement handleStatement,
                                  const char* _Nonnull text);
 void WCDBHandleStatementBindText16(CPPHandleStatement handleStatement,
                                    int index,
-                                   const char16_t* _Nullable text,
+                                   const short* _Nullable text,
                                    int textLength);
 void WCDBHandleStatementBindBlob(CPPHandleStatement handleStatement,
                                  int index,
@@ -78,8 +77,8 @@ signed long long
 WCDBHandleStatementGetInteger(CPPHandleStatement handleStatement, int index);
 double WCDBHandleStatementGetDouble(CPPHandleStatement handleStatement, int index);
 const char* _Nullable WCDBHandleStatementGetText(CPPHandleStatement handleStatement, int index);
-const char16_t* _Nullable WCDBHandleStatementGetText16(CPPHandleStatement handleStatement,
-                                                       int index);
+const short* _Nullable WCDBHandleStatementGetText16(CPPHandleStatement handleStatement,
+                                                    int index);
 int WCDBHandleStatementGetText16Length(CPPHandleStatement handleStatement, int index);
 const unsigned char* _Nullable WCDBHandleStatementGetBlob(CPPHandleStatement handleStatement,
                                                           int index);

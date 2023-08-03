@@ -96,7 +96,8 @@ void WCDBJNIHandleStatementObjectMethod(bindText, jlong self, jstring value, jin
         valueLength = (*env)->GetStringLength(env, value);
         valueUTF16String = (*env)->GetStringCritical(env, value, 0);
     }
-    WCDBHandleStatementBindText16(selfStruct, index, valueUTF16String, valueLength);
+    WCDBHandleStatementBindText16(
+    selfStruct, index, (const short *) valueUTF16String, valueLength);
     if (valueUTF16String != NULL) {
         (*env)->ReleaseStringCritical(env, value, valueUTF16String);
     }
@@ -146,7 +147,8 @@ jdouble WCDBJNIHandleStatementObjectMethod(getDouble, jlong self, jint index)
 jstring WCDBJNIHandleStatementObjectMethod(getText, jlong self, jint index)
 {
     WCDBJNIBridgeStruct(CPPHandleStatement, self);
-    const jchar *utf16Value = WCDBHandleStatementGetText16(selfStruct, index);
+    const jchar *utf16Value
+    = (const jchar *) WCDBHandleStatementGetText16(selfStruct, index);
     jsize utf16ValueLength = WCDBHandleStatementGetText16Length(selfStruct, index);
     return (*env)->NewString(env, utf16Value, utf16ValueLength);
 }
