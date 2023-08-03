@@ -25,9 +25,9 @@
 #import "WCTRuntimeObjCAccessor.h"
 #import "Assertion.hpp"
 #import "Core.h"
-#import "WCDBError.hpp"
 #import "Notifier.hpp"
 #import "StringView.hpp"
+#import "WCDBError.hpp"
 
 WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, const WCDB::UnsafeStringView &propertyName, Class propCls)
 : WCTRuntimeAccessor<id>(instanceClass, propertyName)

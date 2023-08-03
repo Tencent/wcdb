@@ -28,10 +28,10 @@
 #include "Cipher.hpp"
 #include "Crawlable.hpp"
 #include "ErrorProne.hpp"
-#include "WCDBOptional.hpp"
 #include "Progress.hpp"
 #include "Scoreable.hpp"
 #include "UpgradeableErrorProne.hpp"
+#include "WCDBOptional.hpp"
 #include <list>
 
 namespace WCDB {
