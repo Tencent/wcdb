@@ -331,7 +331,24 @@ bool Migration::InfoInitializer::tryUpdateSequence(const MigrationUserInfo& user
     = StatementSelect().select(name).from(sequenceTable).where(name == targetTable);
     auto tableNames = handle->getValues(selectTable, 1);
     if (!tableNames.hasValue()) {
-        return false;
+        if (handle->getError().getMessage().compare("no such table: main.sqlite_sequence") == 0) {
+            bool ret = handle->execute(
+            StatementPragma().pragma(Pragma::writableSchema()).to(true));
+            StatementCreateTable createSeq
+            = StatementCreateTable().createTable(Syntax::sequenceTable).ifNotExists();
+            createSeq.define(ColumnDef("name"));
+            createSeq.define(ColumnDef("seq"));
+            ret = ret && handle->execute(createSeq);
+            ret = ret
+                  && handle->execute(
+                  StatementPragma().pragma(Pragma::writableSchema()).to(false));
+            if (!ret) {
+                return false;
+            }
+            tableNames = std::set<StringView>();
+        } else {
+            return false;
+        }
     }
     if (tableNames.value().size() > 0) {
         return true;

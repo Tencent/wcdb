@@ -191,8 +191,8 @@ bool BaseBinding::updateSequeceTable(const UnsafeStringView &tableName,
 {
     StatementCreateTable createSeq
     = StatementCreateTable().createTable(Syntax::sequenceTable).ifNotExists();
-    createSeq.define(ColumnDef("name", ColumnType::Text));
-    createSeq.define(ColumnDef("seq", ColumnType::Integer));
+    createSeq.define(ColumnDef("name"));
+    createSeq.define(ColumnDef("seq"));
     if (!handle->execute(createSeq)) {
         return false;
     }
