@@ -27,11 +27,11 @@
 #include "Assemble.hpp"
 #include "FactoryBackup.hpp"
 #include "FactoryRelated.hpp"
-#include "WCDBOptional.hpp"
 #include "Progress.hpp"
 #include "Scoreable.hpp"
 #include "Time.hpp"
 #include "UpgradeableErrorProne.hpp"
+#include "WCDBOptional.hpp"
 
 namespace WCDB {
 
