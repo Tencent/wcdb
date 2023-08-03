@@ -110,6 +110,28 @@ public:
     {
         *this = Convertible<T>::asUnsafeStringView(t);
     }
+
+#ifdef __ANDROID__
+
+#pragma mark - UnsafeStringView - PreAllocMemory
+public:
+    static char** preAllocStringMemorySlot(int count);
+    static void allocStringMemory(char** slot, int size);
+    static void clearAllocatedMemory(int count);
+    static void clearAllPreAllocatedMemory();
+
+protected:
+    static bool tryRetrievePreAllocatedMemory(const char* string);
+
+private:
+    typedef struct PreAllocatedMemory {
+        char** memory;
+        int totalCount;
+        int usedCount;
+    } PreAllocatedMemory;
+    thread_local static PreAllocatedMemory g_preAllocatedMemory;
+
+#endif
 };
 
 class StringView final : public UnsafeStringView {

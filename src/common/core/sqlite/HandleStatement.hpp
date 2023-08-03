@@ -64,6 +64,7 @@ public:
     virtual void bindInteger(const Integer &value, int index = 1);
     virtual void bindDouble(const Float &value, int index = 1);
     virtual void bindText(const Text &value, int index = 1);
+    virtual void bindText16(const char16_t *value, size_t valueLength, int index = 1);
     virtual void bindBLOB(const BLOB &value, int index = 1);
     virtual void bindNull(int index = 1);
     virtual void
@@ -80,6 +81,8 @@ public:
     virtual Integer getInteger(int index = 0);
     virtual Float getDouble(int index = 0);
     virtual Text getText(int index = 0);
+    virtual const char16_t *getText16(int index = 0);
+    virtual size_t getText16Length(int index = 0);
     virtual const BLOB getBLOB(int index = 0);
 
     virtual Value getValue(int index = 0);

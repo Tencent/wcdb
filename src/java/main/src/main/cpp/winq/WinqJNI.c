@@ -26,6 +26,5 @@
 
 jstring WCDBJNIObjectMethod(Winq, getDescription, long long statement)
 {
-    const char* des = WCDBWinqGetDescription((CPPObject*) statement);
-    return (*env)->NewStringUTF(env, des);
+    WCDBJNICreateJStringAndReturn(WCDBWinqGetDescription((CPPObject*) statement));
 }

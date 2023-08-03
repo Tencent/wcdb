@@ -23,6 +23,7 @@
  */
 
 #include "StringView.hpp"
+#include "Assertion.hpp"
 #include "CrossPlatform.h"
 #include "Macro.h"
 #include "UnsafeData.hpp"
@@ -34,6 +35,8 @@
 
 namespace WCDB {
 
+constexpr int kReferenceSize = sizeof(std::atomic<int>) / sizeof(char);
+
 #pragma mark - UnsafeStringView - Constructor
 UnsafeStringView::UnsafeStringView() = default;
 
@@ -42,6 +45,12 @@ UnsafeStringView::UnsafeStringView(const char* string)
 , m_length(string != nullptr ? (int) strlen(string) : 0)
 , m_referenceCount(nullptr)
 {
+#ifdef __ANDROID__
+    if (tryRetrievePreAllocatedMemory(string)) {
+        m_referenceCount = (std::atomic<int>*) (string - kReferenceSize);
+        new (m_referenceCount) std::atomic<int>(1);
+    }
+#endif
 }
 
 UnsafeStringView::UnsafeStringView(const char* string, size_t length)
@@ -276,8 +285,7 @@ void UnsafeStringView::ensureNewSpace(size_t newSize)
 
 void UnsafeStringView::createNewSpace(size_t newSize)
 {
-    constexpr int referenceSize = sizeof(std::atomic<int>);
-    m_referenceCount = (std::atomic<int>*) malloc(referenceSize + newSize + 1);
+    m_referenceCount = (std::atomic<int>*) malloc(kReferenceSize + newSize + 1);
     if (m_referenceCount != nullptr) {
         new (m_referenceCount) std::atomic<int>(1);
     }
@@ -290,6 +298,98 @@ void UnsafeStringView::tryClearSpace()
         free(m_referenceCount);
     }
 }
+
+#ifdef __ANDROID__
+
+#pragma mark - UnsafeStringView - PreAllocMemory
+
+thread_local UnsafeStringView::PreAllocatedMemory UnsafeStringView::g_preAllocatedMemory
+= { nullptr, 0, 0 };
+
+char** UnsafeStringView::preAllocStringMemorySlot(int count)
+{
+    if (count == 0) {
+        return nullptr;
+    }
+    if (g_preAllocatedMemory.totalCount - g_preAllocatedMemory.usedCount < count) {
+        int neededCount = g_preAllocatedMemory.usedCount + count;
+        int newCount = 1;
+        while (newCount < neededCount) {
+            newCount = newCount << 1;
+        }
+        char** newMemory
+        = (char**) realloc(g_preAllocatedMemory.memory, newCount * sizeof(char*));
+        if (newMemory == nullptr) {
+            return nullptr;
+        }
+        memset(newMemory + g_preAllocatedMemory.totalCount,
+               0,
+               sizeof(char*) * (newCount - g_preAllocatedMemory.totalCount));
+        g_preAllocatedMemory.memory = newMemory;
+        g_preAllocatedMemory.totalCount = newCount;
+    }
+    char** ret = g_preAllocatedMemory.memory + g_preAllocatedMemory.usedCount;
+    g_preAllocatedMemory.usedCount += count;
+    return ret;
+}
+
+void UnsafeStringView::allocStringMemory(char** slot, int size)
+{
+    if (size == 0 || slot == nullptr) {
+        return;
+    }
+    char* buffer = (char*) malloc((size + 1 + kReferenceSize) * sizeof(char));
+    if (buffer == nullptr) {
+        return;
+    }
+    *slot = buffer + kReferenceSize;
+}
+
+void UnsafeStringView::clearAllocatedMemory(int count)
+{
+    char** memory = g_preAllocatedMemory.memory;
+    int clearNum = 0;
+    for (int i = g_preAllocatedMemory.usedCount - count;
+         i < g_preAllocatedMemory.usedCount;
+         i++) {
+        if (memory[i] == nullptr) {
+            continue;
+        }
+        free(memory[i] - kReferenceSize);
+        memory[i] = nullptr;
+    }
+    g_preAllocatedMemory.usedCount -= count;
+}
+
+void UnsafeStringView::clearAllPreAllocatedMemory()
+{
+    WCTAssert(g_preAllocatedMemory.usedCount == 0);
+    clearAllocatedMemory(g_preAllocatedMemory.usedCount);
+}
+
+bool UnsafeStringView::tryRetrievePreAllocatedMemory(const char* string)
+{
+    if (string == nullptr) {
+        return false;
+    }
+    for (int i = 0; i < g_preAllocatedMemory.usedCount; i++) {
+        if (g_preAllocatedMemory.memory[i] != string) {
+            continue;
+        }
+        g_preAllocatedMemory.memory[i] = nullptr;
+        if (g_preAllocatedMemory.usedCount == i + 1) {
+            int j = i - 1;
+            for (; j >= 0 && g_preAllocatedMemory.memory[j] == nullptr; j--)
+                ;
+            g_preAllocatedMemory.usedCount = j + 1;
+        }
+        WCTAssert(g_preAllocatedMemory.usedCount >= 0);
+        return true;
+    }
+    return false;
+}
+
+#endif
 
 #pragma mark - StringView - Constructor
 StringView::StringView() = default;
@@ -312,6 +412,15 @@ void StringView::assignString(const char* content, size_t length)
 
 StringView::StringView(const char* string) : UnsafeStringView()
 {
+#ifdef __ANDROID__
+    if (tryRetrievePreAllocatedMemory(string)) {
+        m_referenceCount = (std::atomic<int>*) (string - kReferenceSize);
+        new (m_referenceCount) std::atomic<int>(1);
+        m_data = string;
+        m_length = strlen(string);
+        return;
+    }
+#endif
     assignString(string, 0);
 }
 
@@ -412,6 +521,12 @@ StringView StringView::createConstant(const char* string)
     StringView ret;
     if (string != nullptr) {
         size_t length = strlen(string);
+        if (tryRetrievePreAllocatedMemory(string)) {
+            ret.m_data = string;
+            ret.m_length = length;
+            ret.m_referenceCount = (std::atomic<int>*) ConstanceReference;
+            return ret;
+        }
         char* data = (char*) malloc((length + 1) * sizeof(char));
         if (data != nullptr) {
             memcpy((void*) data, (void*) string, length);

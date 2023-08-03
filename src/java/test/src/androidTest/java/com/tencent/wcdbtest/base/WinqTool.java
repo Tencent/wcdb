@@ -6,6 +6,6 @@ import org.junit.Assert;
 
 public class WinqTool {
      public static void winqEqual(Identifier winq, String sql) {
-          Assert.assertEquals(winq.getDescription(), sql);
+          Assert.assertEquals(sql, winq.getDescription());
      }
 }

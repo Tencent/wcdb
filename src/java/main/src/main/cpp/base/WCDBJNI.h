@@ -65,28 +65,28 @@
     }
 
 #define WCDBJNIGetString(value)                                                \
-    const char *value##String = NULL;                                          \
-    if (value != NULL) {                                                       \
-        value##String = (*env)->GetStringUTFChars(env, value, 0);              \
-    }
+    char *value##String = NULL;                                                \
+    const jchar *value##_utf16String = NULL;                                   \
+    WCDBJNIGetUTF8String(env, value, &value##String, &value##_utf16String);
 
 #define WCDBJNIReleaseString(value)                                            \
-    if (value##String != NULL) {                                               \
-        (*env)->ReleaseStringUTFChars(env, value, value##String);              \
+    if (value##_utf16String != NULL) {                                         \
+        (*env)->ReleaseStringChars(env, value, value##_utf16String);           \
+    }                                                                          \
+    WCDBClearAllPreAllocatedMemory();
+
+#define WCDBJNIGetByteArrayCritical(value)                                             \
+    const unsigned char *value##Array = NULL;                                          \
+    int value##Length = 0;                                                             \
+    if (value != NULL) {                                                               \
+        value##Length = (*env)->GetArrayLength(env, value);                            \
+        value##Array                                                                   \
+        = (const unsigned char *) (*env)->GetPrimitiveArrayCritical(env, value, NULL); \
     }
 
-#define WCDBJNIGetByteArray(value)                                                \
-    const unsigned char *value##Array = NULL;                                     \
-    int value##Length = 0;                                                        \
-    if (value != NULL) {                                                          \
-        value##Array                                                              \
-        = (const unsigned char *) (*env)->GetByteArrayElements(env, value, NULL); \
-        value##Length = (*env)->GetArrayLength(env, value);                       \
-    }
-
-#define WCDBJNIReleaseByteArray(value)                                                   \
-    if (value##Array != NULL) {                                                          \
-        (*env)->ReleaseByteArrayElements(env, value, (jbyte *) value##Array, JNI_ABORT); \
+#define WCDBJNIReleaseByteArrayCritical(value)                                        \
+    if (value##Array != NULL) {                                                       \
+        (*env)->ReleasePrimitiveArrayCritical(env, value, (jbyte *) value##Array, 0); \
     }
 
 #define WCDBJNIGetLongArray(value)                                             \
@@ -150,91 +150,57 @@
         (*env)->ReleaseDoubleArrayElements(env, value, (jdouble *) value##Array, JNI_ABORT); \
     }
 
-#define WCDBJNIGetStringArray(value)                                                    \
-    int value##Length = 0;                                                              \
-    jstring *value##JString = NULL;                                                     \
-    const char **value##CharArray = NULL;                                               \
-    char *value##StringBuffer = NULL;                                                   \
-    if (value != NULL) {                                                                \
-        value##Length = (*env)->GetArrayLength(env, value);                             \
-        if (value##Length > 0) {                                                        \
-            value##CharArray = alloca(value##Length * sizeof(const char *));            \
-            if (value##Length <= 16) {                                                  \
-                value##JString = alloca(value##Length * sizeof(jstring));               \
-                for (int i = 0; i < value##Length; i++) {                               \
-                    value##JString[i]                                                   \
-                    = (jstring) (*env)->GetObjectArrayElement(env, value, i);           \
-                    if (value##JString[i] != NULL) {                                    \
-                        value##CharArray[i] = (const char *) (*env)->GetStringUTFChars( \
-                        env, value##JString[i], NULL);                                  \
-                    } else {                                                            \
-                        value##CharArray[i] = NULL;                                     \
-                    }                                                                   \
-                }                                                                       \
-            } else {                                                                    \
-                __WCDBJNIGetStringArray(                                                \
-                env, value, &value##Length, value##CharArray, &value##StringBuffer);    \
-            }                                                                           \
-        }                                                                               \
-    }
+#define WCDBJNIGetStringArray(value)                                           \
+    int value##Length = 0;                                                     \
+    char **value##CharArray = NULL;                                            \
+    WCDBJNIGetUTF8StringArray(env, value, &value##CharArray, &value##Length);
 
-#define WCDBJNIReleaseStringArray(value)                                       \
-    if (value##Length <= 500) {                                                \
-        for (int i = 0; i < value##Length; i++) {                              \
-            if (value##CharArray[i] != NULL) {                                 \
-                (*env)->ReleaseStringUTFChars(                                 \
-                env, value##JString[i], value##CharArray[i]);                  \
-                if (value##JString[i] != NULL) {                               \
-                    (*env)->DeleteLocalRef(env, value##JString[i]);            \
-                }                                                              \
-            }                                                                  \
-        }                                                                      \
-    } else if (value##StringBuffer != NULL) {                                  \
-        free(value##StringBuffer);                                             \
-    }
+#define WCDBJNIReleaseStringArray(value) WCDBClearAllPreAllocatedMemory();
 
 #define WCDBJNICommonValueParameter(parameter)                                 \
     jint parameter##_type, jlong parameter##_long, jdouble parameter##_double, \
     jstring parameter##_string
 
-#define WCDBJNICreateCommonValue(parameter)                                    \
-    CPPCommonValue parameter##_common;                                         \
-    parameter##_common.type = parameter##_type;                                \
-    switch (parameter##_type) {                                                \
-    case WCDBBridgedType_Bool:                                                 \
-    case WCDBBridgedType_UInt:                                                 \
-    case WCDBBridgedType_Int:                                                  \
-        parameter##_common.intValue = parameter##_long;                        \
-        break;                                                                 \
-    case WCDBBridgedType_Double:                                               \
-        parameter##_common.doubleValue = parameter##_double;                   \
-        break;                                                                 \
-    case WCDBBridgedType_String:                                               \
-        parameter##_common.intValue                                            \
-        = (long long) (*env)->GetStringUTFChars(env, parameter##_string, 0);   \
-        break;                                                                 \
-    default:                                                                   \
-        parameter##_common.intValue = parameter##_long;                        \
-        break;                                                                 \
+#define WCDBJNICreateCommonValue(parameter)                                                         \
+    CPPCommonValue parameter##_common;                                                              \
+    parameter##_common.type = parameter##_type;                                                     \
+    const jchar *parameter##_utf16String = NULL;                                                    \
+    switch (parameter##_type) {                                                                     \
+    case WCDBBridgedType_Bool:                                                                      \
+    case WCDBBridgedType_UInt:                                                                      \
+    case WCDBBridgedType_Int:                                                                       \
+        parameter##_common.intValue = parameter##_long;                                             \
+        break;                                                                                      \
+    case WCDBBridgedType_Double:                                                                    \
+        parameter##_common.doubleValue = parameter##_double;                                        \
+        break;                                                                                      \
+    case WCDBBridgedType_String:                                                                    \
+        WCDBJNIGetUTF8String(                                                                       \
+        env, parameter##_string, (char **) &parameter##_common.intValue, &parameter##_utf16String); \
+        break;                                                                                      \
+    default:                                                                                        \
+        parameter##_common.intValue = parameter##_long;                                             \
+        break;                                                                                      \
     }
 
-#define WCDBJNITryReleaseStringInCommonValue(parameter)                                   \
-    if (parameter##_type == WCDBBridgedType_String && parameter##_common.intValue != 0) { \
-        (*env)->ReleaseStringUTFChars(                                                    \
-        env, parameter##_string, (const char *) parameter##_common.intValue);             \
+#define WCDBJNITryReleaseStringInCommonValue(parameter)                               \
+    if (parameter##_type == WCDBBridgedType_String                                    \
+        && parameter##_common.intValue != 0 && parameter##_utf16String != NULL) {     \
+        (*env)->ReleaseStringChars(env, parameter##_string, parameter##_utf16String); \
     }
 
 #define WCDBJNIObjectOrStringParameter(parameter)                              \
     jint parameter##_type, jlong parameter##_long, jstring parameter##_string
 
-#define WCDBJNICreateObjectOrStringCommonValue(parameter)                      \
-    CPPCommonValue parameter##_common;                                         \
-    parameter##_common.type = parameter##_type;                                \
-    if (parameter##_type == WCDBBridgedType_String) {                          \
-        parameter##_common.intValue                                            \
-        = (long long) (*env)->GetStringUTFChars(env, parameter##_string, 0);   \
-    } else {                                                                   \
-        parameter##_common.intValue = parameter##_long;                        \
+#define WCDBJNICreateObjectOrStringCommonValue(parameter)                                           \
+    CPPCommonValue parameter##_common;                                                              \
+    parameter##_common.type = parameter##_type;                                                     \
+    const jchar *parameter##_utf16String = NULL;                                                    \
+    if (parameter##_type == WCDBBridgedType_String) {                                               \
+        WCDBJNIGetUTF8String(                                                                       \
+        env, parameter##_string, (char **) &parameter##_common.intValue, &parameter##_utf16String); \
+    } else {                                                                                        \
+        parameter##_common.intValue = parameter##_long;                                             \
     }
 
 #define WCDBJNIObjectOrIntegerParameter(parameter)                             \
@@ -314,15 +280,11 @@
     WCDBJNIReleaseDoubleArray(parameter##_doubleValues);                       \
     WCDBJNIReleaseStringArray(parameter##_stringValues);
 
-#define WCDBJNICreateStringAndReturn(action)                                   \
-    const char *textValue = action;                                            \
-    return (*env)->NewStringUTF(env, textValue);
+#define WCDBJNICreateJStringAndReturn(action)                                  \
+    return WCDBJNICreateJString(env, action)
 
 #define WCDBJNICreateJavaString(value)                                         \
-    jstring j##value = NULL;                                                   \
-    if (value != NULL) {                                                       \
-        j##value = (*env)->NewStringUTF(env, value);                           \
-    }
+    jstring j##value = WCDBJNICreateJString(env, value)
 
 #define WCDBJNIFindClass(valueName, signature, action)                         \
     static jclass valueName = NULL;                                            \
@@ -382,8 +344,6 @@ jclass WCDBJNIGetDatabaseClass();
 jclass WCDBJNIGetHandleClass();
 jclass WCDBJNIGetExceptionClass();
 
-void __WCDBJNIGetStringArray(JNIEnv *env,
-                             jobjectArray stringArray,
-                             int *length,
-                             const char **charArray,
-                             char **charBuffer);
+void WCDBJNIGetUTF8String(JNIEnv *env, jstring value, char **utf8String, const jchar **utf16String);
+void WCDBJNIGetUTF8StringArray(JNIEnv *env, jobjectArray value, char ***stringArray, int *length);
+jstring WCDBJNICreateJString(JNIEnv *env, const char *utf8String);

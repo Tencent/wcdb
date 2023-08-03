@@ -109,6 +109,15 @@ void WCDBHandleStatementBindText(CPPHandleStatement handleStatement, int index, 
     cppHandleStatement->bindText(WCDB::UnsafeStringView(text), index);
 }
 
+void WCDBHandleStatementBindText16(CPPHandleStatement handleStatement,
+                                   int index,
+                                   const char16_t* _Nullable text,
+                                   int textLength)
+{
+    WCDBGetObjectOrReturn(handleStatement, WCDB::HandleStatement, cppHandleStatement);
+    cppHandleStatement->bindText16(text, textLength, index);
+}
+
 void WCDBHandleStatementBindBlob(CPPHandleStatement handleStatement,
                                  int index,
                                  const unsigned char* _Nonnull buffer,
@@ -168,11 +177,23 @@ double WCDBHandleStatementGetDouble(CPPHandleStatement handleStatement, int inde
 
 const char* _Nullable WCDBHandleStatementGetText(CPPHandleStatement handleStatement, int index)
 {
-    {
-        WCDBGetObjectOrReturnValue(
-        handleStatement, WCDB::HandleStatement, cppHandleStatement, nullptr);
-        return cppHandleStatement->getText(index).data();
-    }
+    WCDBGetObjectOrReturnValue(
+    handleStatement, WCDB::HandleStatement, cppHandleStatement, nullptr);
+    return cppHandleStatement->getText(index).data();
+}
+
+const char16_t* _Nullable WCDBHandleStatementGetText16(CPPHandleStatement handleStatement, int index)
+{
+    WCDBGetObjectOrReturnValue(
+    handleStatement, WCDB::HandleStatement, cppHandleStatement, nullptr);
+    return cppHandleStatement->getText16(index);
+}
+
+int WCDBHandleStatementGetText16Length(CPPHandleStatement handleStatement, int index)
+{
+    WCDBGetObjectOrReturnValue(
+    handleStatement, WCDB::HandleStatement, cppHandleStatement, 0);
+    return (int) cppHandleStatement->getText16Length(index);
 }
 
 const unsigned char*

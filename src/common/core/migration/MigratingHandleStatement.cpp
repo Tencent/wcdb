@@ -428,6 +428,21 @@ void MigratingHandleStatement::bindText(const Text& value, int index)
     }
 }
 
+void MigratingHandleStatement::bindText16(const char16_t* value, size_t valueLength, int index)
+{
+    WCTRemedialAssert(index != MigrationInfo::indexOfRowIdOrPrimaryKey,
+                      "Binding index is out of range",
+                      return;);
+    if (getBindParameterCount() >= index) {
+        Super::bindText16(value, valueLength, index);
+    }
+    for (auto& handleStatement : m_additionalStatements) {
+        if (handleStatement.getBindParameterCount() >= index) {
+            handleStatement.bindText16(value, valueLength, index);
+        }
+    }
+}
+
 void MigratingHandleStatement::bindBLOB(const BLOB& value, int index)
 {
     WCTRemedialAssert(index != MigrationInfo::indexOfRowIdOrPrimaryKey,

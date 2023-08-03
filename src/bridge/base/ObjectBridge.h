@@ -176,4 +176,13 @@ typedef struct CPPMultiTypeArray {
     const char* _Nonnull* _Nullable stringValues;
 } CPPMultiTypeArray;
 
+#ifdef __ANDROID__
+
+char* _Nullable* _Nullable WCDBPreAllocStringMemorySlot(int count);
+void WCDBAllocStringMemory(char* _Nullable* _Nullable slot, int size);
+void WCDBClearAllocatedMemory(int count);
+void WCDBClearAllPreAllocatedMemory();
+
+#endif
+
 WCDB_EXTERN_C_END

@@ -40,7 +40,7 @@ jlong WCDBJNIErrorObjectMethod(getCode, jlong error)
 jstring WCDBJNIErrorObjectMethod(getMessage, jlong error)
 {
     WCDBJNIBridgeStruct(CPPError, error);
-    return (*env)->NewStringUTF(env, WCDBErrorGetMsg(errorStruct));
+    WCDBJNICreateJStringAndReturn(WCDBErrorGetMsg(errorStruct));
 }
 
 typedef struct JNIContext {
@@ -65,13 +65,10 @@ void WCDBJNIErrorEnumerateInfoCallback(JNIContext *context,
             return;
         }
     }
-    jstring jkey = (*env)->NewStringUTF(env, key);
-    jstring jStringValue = NULL;
-    if (stringValue != NULL) {
-        jStringValue = (*env)->NewStringUTF(env, stringValue);
-    }
+    WCDBJNICreateJavaString(key);
+    WCDBJNICreateJavaString(stringValue);
     (*env)->CallVoidMethod(
-    env, context->object, g_methodId, jkey, type, intValue, doubleValue, jStringValue);
+    env, context->object, g_methodId, jkey, type, intValue, doubleValue, jstringValue);
 }
 
 void WCDBJNIErrorObjectMethod(enumerateInfo, jlong error)

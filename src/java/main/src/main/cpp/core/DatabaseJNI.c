@@ -57,7 +57,7 @@ void WCDBJNIDatabaseObjectMethod(setTag, jlong self, jlong tag)
 jstring WCDBJNIDatabaseObjectMethod(getPath, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
-    WCDBJNICreateStringAndReturn(WCDBDatabaseGetPath(selfStruct));
+    WCDBJNICreateJStringAndReturn(WCDBDatabaseGetPath(selfStruct));
 }
 
 typedef struct StringEnumeratorContext {
@@ -164,10 +164,10 @@ void WCDBJNIDatabaseObjectMethod(purge, jlong self)
 void WCDBJNIDatabaseObjectMethod(configCipher, jlong self, jbyteArray cipherKey, jint pageSize, jint cipherVersion)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
-    WCDBJNIGetByteArray(cipherKey);
+    WCDBJNIGetByteArrayCritical(cipherKey);
     WCDBDatabaseConfigCipher(
     selfStruct, cipherKeyArray, cipherKeyLength, pageSize, cipherVersion);
-    WCDBJNIReleaseByteArray(cipherKey);
+    WCDBJNIReleaseByteArrayCritical(cipherKey);
 }
 
 bool WCDBJNIDatabaseConfig(jobject config, CPPHandle handle)
@@ -200,6 +200,7 @@ config, jlong self, jstring name, jobject invocation, jobject unInvocation, jint
                         unInvocation,
                         priority,
                         WCDBJNIDestructContext);
+    WCDBJNIReleaseString(name);
 }
 
 void WCDBJNIDatabasePerformanceTrace(jobject tracer,
@@ -485,7 +486,7 @@ addMigrationSource, jlong self, jstring sourcePath, jbyteArray cipherKey, jobjec
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBJNICreateGlobalRel(filter);
     WCDBJNIGetString(sourcePath);
-    WCDBJNIGetByteArray(cipherKey);
+    WCDBJNIGetByteArrayCritical(cipherKey);
     WCDBDatabaseAddMigration(selfStruct,
                              sourcePathString,
                              cipherKeyArray,
@@ -493,6 +494,8 @@ addMigrationSource, jlong self, jstring sourcePath, jbyteArray cipherKey, jobjec
                              filter != NULL ? WCDBJNIDatabaseFilterMigrate : NULL,
                              filter,
                              WCDBJNIDestructContext);
+    WCDBJNIReleaseByteArrayCritical(cipherKey);
+    WCDBJNIReleaseString(sourcePath);
 }
 
 void WCDBJNIDatabaseClassMethod(setMigrationInfo, jlong infoSetter, jlong info, jstring sourceTable, jlong filterCondition)

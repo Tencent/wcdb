@@ -58,6 +58,7 @@ public:
     void bindInteger(const Integer &value, int index = 1) override final;
     void bindDouble(const Float &value, int index = 1) override final;
     void bindText(const Text &value, int index = 1) override final;
+    void bindText16(const char16_t *value, size_t valueLength, int index = 1) override final;
     void bindBLOB(const BLOB &value, int index = 1) override final;
     void bindNull(int index) override final;
     void bindPointer(void *ptr, int index, const Text &type, void (*destructor)(void *)) override final;
@@ -68,6 +69,8 @@ public:
     using Super::getInteger;
     using Super::getDouble;
     using Super::getText;
+    using Super::getText16;
+    using Super::getText16Length;
     using Super::getBLOB;
 
     using Super::getValue;

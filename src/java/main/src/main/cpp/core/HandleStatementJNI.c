@@ -33,7 +33,7 @@ jlong WCDBJNIHandleStatementObjectMethod(getError, jlong self)
 jboolean WCDBJNIHandleStatementObjectMethod(prepare, jlong self, jlong statement)
 {
     WCDBJNIBridgeStruct(CPPHandleStatement, self);
-    return WCDBHandleStatementPrepare(selfStruct, (CPPObject*) statement);
+    return WCDBHandleStatementPrepare(selfStruct, (CPPObject *) statement);
 }
 
 jboolean WCDBJNIHandleStatementObjectMethod(prepareSQL, jlong self, jstring sql)
@@ -90,16 +90,24 @@ void WCDBJNIHandleStatementObjectMethod(bindDouble, jlong self, jdouble value, j
 void WCDBJNIHandleStatementObjectMethod(bindText, jlong self, jstring value, jint index)
 {
     WCDBJNIBridgeStruct(CPPHandleStatement, self);
-    WCDBJNIGetString(value);
-    WCDBHandleStatementBindText(selfStruct, index, valueString);
+    int valueLength = 0;
+    const jchar *valueUTF16String = NULL;
+    if (value != NULL) {
+        valueLength = (*env)->GetStringLength(env, value);
+        valueUTF16String = (*env)->GetStringCritical(env, value, 0);
+    }
+    WCDBHandleStatementBindText16(selfStruct, index, valueUTF16String, valueLength);
+    if (valueUTF16String != NULL) {
+        (*env)->ReleaseStringCritical(env, value, valueUTF16String);
+    }
 }
 
 void WCDBJNIHandleStatementObjectMethod(bindBLOB, jlong self, jbyteArray value, jint index)
 {
     WCDBJNIBridgeStruct(CPPHandleStatement, self);
-    WCDBJNIGetByteArray(value);
+    WCDBJNIGetByteArrayCritical(value);
     WCDBHandleStatementBindBlob(selfStruct, index, valueArray, valueLength);
-    WCDBJNIReleaseByteArray(value);
+    WCDBJNIReleaseByteArrayCritical(value);
 }
 
 void WCDBJNIHandleStatementObjectMethod(bindNull, jlong self, jint index)
@@ -138,14 +146,16 @@ jdouble WCDBJNIHandleStatementObjectMethod(getDouble, jlong self, jint index)
 jstring WCDBJNIHandleStatementObjectMethod(getText, jlong self, jint index)
 {
     WCDBJNIBridgeStruct(CPPHandleStatement, self);
-    WCDBJNICreateStringAndReturn(WCDBHandleStatementGetText(selfStruct, index));
+    const jchar *utf16Value = WCDBHandleStatementGetText16(selfStruct, index);
+    jsize utf16ValueLength = WCDBHandleStatementGetText16Length(selfStruct, index);
+    return (*env)->NewString(env, utf16Value, utf16ValueLength);
 }
 
 jbyteArray WCDBJNIHandleStatementObjectMethod(getBLOB, jlong self, jint index)
 {
     WCDBJNIBridgeStruct(CPPHandleStatement, self);
-    jbyte* buffer = (jbyte*) WCDBHandleStatementGetBlob(selfStruct, index);
-    jsize size = WCDBHandleStatementGetColumnSize(selfStruct, index);
+    jbyte *buffer = (jbyte *) WCDBHandleStatementGetBlob(selfStruct, index);
+    jsize size = (jsize) WCDBHandleStatementGetColumnSize(selfStruct, index);
     if (buffer == NULL || size == 0) {
         return (*env)->NewByteArray(env, 0);
     }
@@ -163,19 +173,19 @@ jint WCDBJNIHandleStatementObjectMethod(getColumnCount, jlong self)
 jstring WCDBJNIHandleStatementObjectMethod(getColumnName, jlong self, jint index)
 {
     WCDBJNIBridgeStruct(CPPHandleStatement, self);
-    WCDBJNICreateStringAndReturn(WCDBHandleStatementGetColumnName(selfStruct, index));
+    WCDBJNICreateJStringAndReturn(WCDBHandleStatementGetColumnName(selfStruct, index));
 }
 
 jstring WCDBJNIHandleStatementObjectMethod(getOriginalColumnName, jlong self, jint index)
 {
     WCDBJNIBridgeStruct(CPPHandleStatement, self);
-    WCDBJNICreateStringAndReturn(WCDBHandleStatementGetOriginalColumnName(selfStruct, index));
+    WCDBJNICreateJStringAndReturn(WCDBHandleStatementGetOriginalColumnName(selfStruct, index));
 }
 
 jstring WCDBJNIHandleStatementObjectMethod(getColumnTableName, jlong self, jint index)
 {
     WCDBJNIBridgeStruct(CPPHandleStatement, self);
-    WCDBJNICreateStringAndReturn(WCDBHandleStatementGetColumnTableName(selfStruct, index));
+    WCDBJNICreateJStringAndReturn(WCDBHandleStatementGetColumnTableName(selfStruct, index));
 }
 
 jboolean WCDBJNIHandleStatementObjectMethod(isReadOnly, jlong self)
