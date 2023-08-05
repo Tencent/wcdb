@@ -1,3 +1,9 @@
+## v2.0.3
+
+* Transaction supports nesting
+* Some bug fix for data migration
+* Fix compile error in new Xcode
+
 ## v2.0.2.5
 
 * Fix compile issue caused by header
