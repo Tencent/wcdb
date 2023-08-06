@@ -313,7 +313,9 @@ void WCDBDatabaseGlobalTraceOperation(SwiftClosure* _Nullable tracer)
     = WCDBCreateSwiftBridgedClosure(WCDBDatabaseOperationTracer, tracer);
     if (WCDBGetSwiftClosure(bridgeTracer) != nullptr) {
         WCDB::DBOperationNotifier::shared().setNotification(
-        [=](WCDB::InnerDatabase* database, WCDB::DBOperationNotifier::Operation operation) {
+        [=](WCDB::InnerDatabase* database,
+            WCDB::DBOperationNotifier::Operation operation,
+            WCDB::StringViewMap<WCDB::Value>) {
             CPPDatabase cppDatabase = WCDBCreateUnmanagedCPPObject(CPPDatabase, database);
             WCDBSwiftClosureCallWithMultiArgument(bridgeTracer, cppDatabase, (long) operation);
         });

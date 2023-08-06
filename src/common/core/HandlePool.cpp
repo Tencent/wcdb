@@ -160,6 +160,13 @@ const std::set<std::shared_ptr<InnerHandle>> &HandlePool::getHandlesOfSlot(Handl
     return m_handles[slot];
 }
 
+size_t HandlePool::numberOfAliveHandlesInSlot(HandleSlot slot) const
+{
+    SharedLockGuard concurrencyGuard(m_concurrency);
+    SharedLockGuard memoryGuard(m_memory);
+    return m_handles[slot].size();
+}
+
 RecyclableHandle HandlePool::flowOut(HandleType type)
 {
     HandleSlot slot = slotOfHandleType(type);

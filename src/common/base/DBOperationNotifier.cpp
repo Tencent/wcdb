@@ -45,11 +45,13 @@ void DBOperationNotifier::setNotification(const Callback &callback)
     m_notification = callback;
 }
 
-void DBOperationNotifier::notifyOperation(InnerDatabase *database, Operation operation)
+void DBOperationNotifier::notifyOperation(InnerDatabase *database,
+                                          Operation operation,
+                                          StringViewMap<Value> &info) const
 {
     SharedLockGuard lockGuard(m_lock);
     if (m_notification) {
-        m_notification(database, operation);
+        m_notification(database, operation, info);
     }
 }
 
