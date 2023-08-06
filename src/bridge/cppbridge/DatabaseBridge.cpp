@@ -522,7 +522,9 @@ void WCDBDatabaseGlobalTraceOperation2(WCDBOperationTracer _Nullable tracer,
     if (tracer != nullptr) {
         WCDB::Recyclable<void*> recyclableContext(context, destructor);
         WCDB::DBOperationNotifier::shared().setNotification(
-        [=](WCDB::InnerDatabase* database, WCDB::DBOperationNotifier::Operation operation) {
+        [=](WCDB::InnerDatabase* database,
+            WCDB::DBOperationNotifier::Operation operation,
+            WCDB::StringViewMap<WCDB::Value>) {
             CPPDatabase cppDatabase = WCDBCreateUnmanagedCPPObject(CPPDatabase, database);
             tracer(recyclableContext.get(), cppDatabase, operation);
         });

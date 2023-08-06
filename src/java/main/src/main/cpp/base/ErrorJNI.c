@@ -48,15 +48,25 @@ typedef struct JNIContext {
     jobject object;
 } JNIContext;
 
-void WCDBJNIErrorEnumerateInfoCallback(JNIContext *context,
-                                       const char *key,
-                                       int type,
-                                       jlong intValue,
-                                       double doubleValue,
-                                       const char *stringValue)
+void WCDBJNIErrorEnumerateInfoCallback(JNIContext *context, const char *key, CPPCommonValue value)
 {
     JNIEnv *env = context->env;
     static jmethodID g_methodId = NULL;
+    jlong intValue = 0;
+    double doubleValue = 0;
+    const char *stringValue = NULL;
+    switch (value.type) {
+    case WCDBBridgedType_Int:
+        intValue = (jlong) value.intValue;
+        break;
+    case WCDBBridgedType_Double:
+        doubleValue = value.doubleValue;
+        break;
+    case WCDBBridgedType_String:
+        stringValue = (const char *) value.intValue;
+        break;
+    }
+
     if (g_methodId == NULL) {
         g_methodId = (*env)->GetMethodID(
         env, WCDBJNIGetExceptionClass(), "addInfo", "(Ljava/lang/String;IJDLjava/lang/String;)V");
@@ -68,7 +78,7 @@ void WCDBJNIErrorEnumerateInfoCallback(JNIContext *context,
     WCDBJNICreateJavaString(key);
     WCDBJNICreateJavaString(stringValue);
     (*env)->CallVoidMethod(
-    env, context->object, g_methodId, jkey, type, intValue, doubleValue, jstringValue);
+    env, context->object, g_methodId, jkey, (int) value.type, intValue, doubleValue, jstringValue);
 }
 
 void WCDBJNIErrorObjectMethod(enumerateInfo, jlong error)
@@ -77,6 +87,6 @@ void WCDBJNIErrorObjectMethod(enumerateInfo, jlong error)
     JNIContext context;
     context.env = env;
     context.object = obj;
-    WCDBErrorEnumerateAllInfo2(
-    errorStruct, (void *) &context, (ErrorInfoEnumerator) &WCDBJNIErrorEnumerateInfoCallback);
+    WCDBErrorEnumerateAllInfo(
+    errorStruct, (void *) &context, (StringViewMapEnumerator) &WCDBJNIErrorEnumerateInfoCallback);
 }

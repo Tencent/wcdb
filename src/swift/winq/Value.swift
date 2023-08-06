@@ -60,6 +60,21 @@ public struct Value {
         self = encodedValue.archivedValue()
     }
 
+    public var intValue: Int {
+        switch type {
+        case .integer32:
+            return Int(base as! Int32)
+        case .integer64:
+            return Int(truncatingIfNeeded: base as! Int64)
+        case .float:
+            return Int(base as! Double)
+        case .text:
+            return Int(base as! String) ?? 0
+        default:
+            return 0
+        }
+    }
+
     public var int32Value: Int32 {
         switch type {
         case .integer32:

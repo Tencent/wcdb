@@ -26,7 +26,7 @@ import Foundation
 import WCDB_Private
 
 internal final class ValueWrap<T> {
-    let value: T
+    var value: T
     init(_ value: T) {
         self.value = value
     }

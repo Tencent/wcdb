@@ -1,5 +1,5 @@
 //
-// Created by qiuwenchen on 2022/4/1.
+// Created by 陈秋文 on 2023/8/6.
 //
 
 /*
@@ -24,34 +24,15 @@
 
 #pragma once
 
-#include "ContainerBridge.h"
 #include "ObjectBridge.h"
 
 WCDB_EXTERN_C_BEGIN
 
-WCDBDefineCPPBridgedType(CPPError)
-
-enum WCDBErrorLevel {
-    WCDBErrorLevel_Ignore = 1,
-    WCDBErrorLevel_Debug,
-    WCDBErrorLevel_Warming,
-    WCDBErrorLevel_Notice,
-    WCDBErrorLevel_Error,
-    WCDBErrorLevel_Fatal,
-};
-
-long WCDBErrorGetLevel(CPPError obj);
-long WCDBErrorGetCode(CPPError obj);
-const char* _Nonnull WCDBErrorGetMsg(CPPError obj);
-
-void WCDBErrorEnumerateAllInfo(CPPError error,
-                               void* _Nonnull context,
-                               StringViewMapEnumerator _Nonnull callback);
-
-void WCDBErrorReport(enum WCDBErrorLevel level,
-                     long code,
-                     const char* _Nullable content,
-                     const char* _Nullable path,
-                     long tag);
+typedef void (*StringViewMapEnumerator)(void* _Nonnull context,
+                                        const char* _Nonnull key,
+                                        CPPCommonValue value);
+void WCDBEnumerateStringViewMap(void* _Nonnull map,
+                                void* _Nonnull context,
+                                StringViewMapEnumerator _Nonnull enumerator);
 
 WCDB_EXTERN_C_END

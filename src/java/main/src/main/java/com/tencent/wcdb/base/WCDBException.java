@@ -445,11 +445,11 @@ public class WCDBException extends Exception {
     private native void enumerateInfo(long cppError);
 
     private void addInfo(String key, int valueType, long intValue, double doubleValue, String stringValue) {
-        if(valueType == 1) {
+        if(valueType == 3) {
             infos.put(key, intValue);
-        } else if (valueType == 2) {
+        } else if (valueType == 5) {
             infos.put(key, doubleValue);
-        } else {
+        } else if (valueType == 6)  {
             infos.put(key, stringValue);
         }
     }

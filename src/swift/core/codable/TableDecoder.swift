@@ -161,7 +161,7 @@ final class TableDecoder: Decoder {
             let decodableType = Object.self as! ColumnDecodable.Type
             guard let wrappedDecoded = decodableType.init(with: handleStatement.value(atIndex: index)) else {
                 throw WCDBError(level: .Error, code: .Misuse, infos: [
-                    .message: ErrorValue("If [\(key)] would be decoded as nil, please make it optional.")
+                    .message: Value("If [\(key)] would be decoded as nil, please make it optional.")
                 ])
             }
             // It should not be failed. If you think it's a bug, please report an issue to us.

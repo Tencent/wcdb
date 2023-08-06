@@ -23,6 +23,7 @@
 #include "ObjectBridge.h"
 
 #include "BindingBridge.h"
+#include "ContainerBridge.h"
 #include "CoreBridge.h"
 #include "DatabaseBridge.h"
 #include "ErrorBridge.h"

@@ -31,54 +31,40 @@ internal final class ErrorBridge {
         let level = WCDBError.Level(rawValue: Int(WCDBErrorGetLevel(recycleError.raw)))
         let code = WCDBError.Code(rawValue: WCDBErrorGetCode(recycleError.raw))
         let message = String(cString: WCDBErrorGetMsg(recycleError.raw))
-        var infos = WCDBError.Infos()
-        var extInfos = WCDBError.ExtInfos()
-        infos[WCDBError.Key.message] = ErrorValue(message)
-        let enumerator: @convention(block) (UnsafePointer<Int8>, WCDBErrorValueType, Int, Double, UnsafePointer<Int8>) -> Void = {
-            (ckey, valueType, intValue, doubleValue, stringValue) in
-            let stringKey = String(cString: ckey)
-            var value: ErrorValue
-            switch valueType {
-            case WCDBErrorValueTypeInterger:
-                value = ErrorValue(intValue)
-            case WCDBErrorValueTypeFloat:
-                value = ErrorValue(doubleValue)
-            case WCDBErrorValueTypeString:
-                value = ErrorValue(String(cString: stringValue))
+        let valueWrap: ValueWrap<[String: Value]> = ValueWrap([:])
+        let valueWrapPointer = ObjectBridge.getUntypeSwiftObject(valueWrap)
+
+        let enumerator: @convention(c) (UnsafeMutableRawPointer, UnsafePointer<CChar>, CPPCommonValue) -> Void = {
+            valueWrapPointer, key, value in
+            let valueWrap: ValueWrap<[String: Value]>? = ObjectBridge.extractTypedSwiftObject(valueWrapPointer)
+            guard let valueWrap = valueWrap else {
+                return
+            }
+            switch value.type {
+            case WCDBBridgedType_Int:
+                valueWrap.value[String(cString: key)] = Value(value.intValue)
+            case WCDBBridgedType_Double:
+                valueWrap.value[String(cString: key)] = Value(value.doubleValue)
+            case WCDBBridgedType_String:
+                valueWrap.value[String(cString: key)] = Value(String(cString: unsafeBitCast(value.intValue, to: UnsafePointer<CChar>.self)))
             default:
                 return
             }
-            let key = WCDBError.Key(stringKey: stringKey)
-            if key != .invalidKey {
-                infos[key] = value
+        }
+        WCDBErrorEnumerateAllInfo(error, valueWrapPointer, enumerator)
+
+        var infos = WCDBError.Infos()
+        var extInfos = WCDBError.ExtInfos()
+        for (key, value) in valueWrap.value {
+            let errorKey = WCDBError.Key(stringKey: key)
+            if errorKey != .invalidKey {
+                infos[errorKey] = value
             } else {
-                extInfos[stringKey] = value
+                extInfos[key] = value
             }
         }
-        let imp = imp_implementationWithBlock(enumerator)
-        WCDBErrorEnumerateAllInfo(recycleError.raw, imp)
+        ObjectBridge.releaseSwiftObject(valueWrapPointer)
+        infos[WCDBError.Key.message] = Value(message)
         return WCDBError(level: level ?? .Error, code: code ?? .Error, infos: infos, extInfos: extInfos)
-    }
-
-    @discardableResult
-    static internal func report(level: WCDBError.Level, code: WCDBError.Code, infos: WCDBError.Infos) -> WCDBError {
-        var cppLevel: WCDBErrorLevel = WCDBErrorLevel_Ignore
-        switch level {
-        case .Ignore:
-            cppLevel = WCDBErrorLevel_Ignore
-        case .Debug:
-            cppLevel = WCDBErrorLevel_Debug
-        case .Warning:
-            cppLevel = WCDBErrorLevel_Warming
-        case .Notice:
-            cppLevel = WCDBErrorLevel_Notice
-        case .Error:
-            cppLevel = WCDBErrorLevel_Error
-        case .Fatal:
-            cppLevel = WCDBErrorLevel_Fatal
-        }
-        let error = WCDBError(level: level, code: code, infos: infos)
-        WCDBErrorReport(cppLevel, error.code.rawValue, error.message, error.path, error.tag ?? 0)
-        return error
     }
 }

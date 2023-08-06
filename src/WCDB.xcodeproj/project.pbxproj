@@ -3086,6 +3086,10 @@
 		75E0A5C12A7F4EEE00D4FE9A /* CoreConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E0A5BF2A7F4EEE00D4FE9A /* CoreConst.cpp */; };
 		75E0A5C22A7F4EEE00D4FE9A /* CoreConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E0A5BF2A7F4EEE00D4FE9A /* CoreConst.cpp */; };
 		75E0A5C32A7F4EEE00D4FE9A /* CoreConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E0A5BF2A7F4EEE00D4FE9A /* CoreConst.cpp */; };
+		75E0A5D62A7FE2A200D4FE9A /* ContainerBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E0A5D42A7FE2A200D4FE9A /* ContainerBridge.cpp */; };
+		75E0A5D72A7FE2A200D4FE9A /* ContainerBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E0A5D42A7FE2A200D4FE9A /* ContainerBridge.cpp */; };
+		75E0A5D82A7FE2A200D4FE9A /* ContainerBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75E0A5D52A7FE2A200D4FE9A /* ContainerBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		75E0A5D92A7FE2A200D4FE9A /* ContainerBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75E0A5D52A7FE2A200D4FE9A /* ContainerBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75E50A0B29067BC800B73E62 /* MultiObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E50A0929067BC800B73E62 /* MultiObject.cpp */; };
 		75E50A0C29067BC800B73E62 /* MultiObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E50A0929067BC800B73E62 /* MultiObject.cpp */; };
 		75E50A0D29067BC800B73E62 /* MultiObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75E50A0A29067BC800B73E62 /* MultiObject.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -4640,6 +4644,8 @@
 		75D99B7F28CA441E00BEC8B5 /* BaseOperation.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BaseOperation.hpp; sourceTree = "<group>"; };
 		75D99B8228CA46A400BEC8B5 /* BaseOperation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BaseOperation.cpp; sourceTree = "<group>"; };
 		75E0A5BF2A7F4EEE00D4FE9A /* CoreConst.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CoreConst.cpp; sourceTree = "<group>"; };
+		75E0A5D42A7FE2A200D4FE9A /* ContainerBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ContainerBridge.cpp; sourceTree = "<group>"; };
+		75E0A5D52A7FE2A200D4FE9A /* ContainerBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContainerBridge.h; sourceTree = "<group>"; };
 		75E50A0929067BC800B73E62 /* MultiObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MultiObject.cpp; sourceTree = "<group>"; };
 		75E50A0A29067BC800B73E62 /* MultiObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MultiObject.hpp; sourceTree = "<group>"; };
 		75E50A2B2907921600B73E62 /* MultiSelect.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MultiSelect.cpp; sourceTree = "<group>"; };
@@ -5534,6 +5540,8 @@
 				0393BEDB27F6ED860058B295 /* ErrorBridge.h */,
 				0393BEDF27F6EDAC0058B295 /* ErrorBridge.cpp */,
 				03C2EAEC27F8382200B41169 /* ErrorBridge.swift */,
+				75E0A5D52A7FE2A200D4FE9A /* ContainerBridge.h */,
+				75E0A5D42A7FE2A200D4FE9A /* ContainerBridge.cpp */,
 			);
 			path = base;
 			sourceTree = "<group>";
@@ -7866,6 +7874,7 @@
 				23EEDCC6217DFADC006E9E73 /* StatementCreateView.hpp in Headers */,
 				23EEDD3C217DFADC006E9E73 /* SyntaxCreateVirtualTableSTMT.hpp in Headers */,
 				23EEDD61217DFB17006E9E73 /* Shadow.hpp in Headers */,
+				75E0A5D82A7FE2A200D4FE9A /* ContainerBridge.h in Headers */,
 				2349F7651EA0D6680021EFA7 /* WCTTableCoding.h in Headers */,
 				03AFD33528B883E700EF5E56 /* Accessor.hpp in Headers */,
 				2349F7231EA0D6680021EFA7 /* WCTInsert.h in Headers */,
@@ -8569,6 +8578,7 @@
 				7521DCB2291EA349009642EF /* StatementDropView.hpp in Headers */,
 				7521DCB3291EA349009642EF /* StatementExplain.hpp in Headers */,
 				7521DCB4291EA349009642EF /* Backup.hpp in Headers */,
+				75E0A5D92A7FE2A200D4FE9A /* ContainerBridge.h in Headers */,
 				7521DCB5291EA349009642EF /* MasterItem.hpp in Headers */,
 				7521DCB7291EA349009642EF /* BindParameter.hpp in Headers */,
 				7521DCB8291EA349009642EF /* Join.hpp in Headers */,
@@ -9959,6 +9969,7 @@
 				75F4DE472884032600760DC3 /* StatementRollbackBridge.cpp in Sources */,
 				23775B6A20AD666900E21AB0 /* FullCrawler.cpp in Sources */,
 				23EEDD59217DFADC006E9E73 /* SyntaxVacuumSTMT.cpp in Sources */,
+				75E0A5D62A7FE2A200D4FE9A /* ContainerBridge.cpp in Sources */,
 				03E1660727F42D6500D2C926 /* ForeignKey.swift in Sources */,
 				03E1662F27F42D6600D2C926 /* TableCRUDInterface.swift in Sources */,
 				23EEDCC1217DFADC006E9E73 /* StatementCreateTable.cpp in Sources */,
@@ -10834,6 +10845,7 @@
 				7521DB00291EA349009642EF /* StatementCreateTrigger.cpp in Sources */,
 				7521DB01291EA349009642EF /* DatabasePool.cpp in Sources */,
 				7521DB02291EA349009642EF /* IndexedColumnBridge.cpp in Sources */,
+				75E0A5D72A7FE2A200D4FE9A /* ContainerBridge.cpp in Sources */,
 				7521DB04291EA349009642EF /* TokenizerModules.cpp in Sources */,
 				7521DB05291EA349009642EF /* MultiSelect.swift in Sources */,
 				7521DB06291EA349009642EF /* StatementUpdate.swift in Sources */,
