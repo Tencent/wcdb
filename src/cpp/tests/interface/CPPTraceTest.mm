@@ -146,7 +146,11 @@
     long tag = 0;
     WCDB::StringView path;
     int openHandleCount = 0;
-    WCDB::Database::globalTraceDatabaseOperation([&](WCDB::Database &database, WCDB::Database::Operation operation) {
+    int tableCount = 0;
+    int indexCount = 0;
+    WCDB::Database::globalTraceDatabaseOperation([&](WCDB::Database &database,
+                                                     WCDB::Database::Operation operation,
+                                                     WCDB::StringViewMap<WCDB::Value> &info) {
         switch (operation) {
         case WCDB::Database::Operation::Create:
             path = database.getPath();
@@ -154,16 +158,33 @@
         case WCDB::Database::Operation::SetTag:
             tag = database.getTag();
             break;
-        case WCDB::Database::Operation::OpenHandle:
+        case WCDB::Database::Operation::OpenHandle: {
             openHandleCount++;
-            break;
+            TestCaseAssertTrue(info[WCDB::Database::MonitorInfoKeyHandleCount].intValue() == 1);
+            TestCaseAssertTrue(info[WCDB::Database::MonitorInfoKeyHandleOpenTime].intValue() > 0);
+            TestCaseAssertTrue(info[WCDB::Database::MonitorInfoKeySchemaUsage].intValue() > 0);
+            TestCaseAssertTrue(info[WCDB::Database::MonitorInfoKeyTriggerCount].intValue() == 0);
+            tableCount = (int) info[WCDB::Database::MonitorInfoKeyTableCount].intValue();
+            indexCount = (int) info[WCDB::Database::MonitorInfoKeyIndexCount].intValue();
+        } break;
         }
     });
     TestCaseAssertTrue([self createValueTable]);
-    TestCaseAssertTrue(self.database->insertRows([Random.shared autoIncrementTestCaseValuesWithCount:10], self.columns, self.tableName.UTF8String));
+    TestCaseAssertTrue(self.database->execute(WCDB::StatementCreateIndex()
+                                              .createIndex("testIndex")
+                                              .table(self.tableName)
+                                              .indexed(WCDB_FIELD(CPPTestCaseObject::content))));
+
     TestCaseAssertTrue(tag = self.database->getTag());
     TestCaseAssertCPPStringEqual(path.data(), self.database->getPath().data());
     TestCaseAssertTrue(openHandleCount == 1);
+
+    self.database->close();
+    TestCaseAssertTrue(self.database->insertRows([Random.shared autoIncrementTestCaseValuesWithCount:10], self.columns, self.tableName.UTF8String));
+
+    TestCaseAssertTrue(openHandleCount == 2);
+    TestCaseAssertTrue(tableCount == 4);
+    TestCaseAssertTrue(indexCount == 1);
     WCDB::Database::globalTraceDatabaseOperation(nullptr);
 }
 

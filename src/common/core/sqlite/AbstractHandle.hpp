@@ -117,6 +117,8 @@ public:
     getTableMeta(const Schema &schema, const UnsafeStringView &table);
     Optional<std::set<StringView>> getValues(const Statement &statement, int index);
 
+    bool getSchemaInfo(int &memoryUsed, int &tableCount, int &indexCount, int &triggerCount);
+
 #pragma mark - Transaction
 public:
     virtual bool beginTransaction();

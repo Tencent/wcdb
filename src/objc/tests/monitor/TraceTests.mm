@@ -159,7 +159,11 @@
     __block long tag = 0;
     __block NSString* path = nil;
     __block int openHandleCount = 0;
-    [WCTDatabase globalTraceDatabaseOperation:^(WCTDatabase* database, WCTDatabaseOperation operation) {
+    __block int tableCount = 0;
+    __block int indexCount = 0;
+    [WCTDatabase globalTraceDatabaseOperation:^(WCTDatabase* database,
+                                                WCTDatabaseOperation operation,
+                                                NSDictionary* info) {
         switch (operation) {
         case WCTDatabaseOperation_Create:
             path = database.path;
@@ -167,16 +171,34 @@
         case WCTDatabaseOperation_SetTag:
             tag = database.tag;
             break;
-        case WCTDatabaseOperation_OpenHandle:
+        case WCTDatabaseOperation_OpenHandle: {
             openHandleCount++;
-            break;
+            TestCaseAssertTrue(((NSNumber*) info[WCTDatabaseMonitorInfoKeyHandleCount]).intValue == 1);
+            TestCaseAssertTrue(((NSNumber*) info[WCTDatabaseMonitorInfoKeyHandleOpenTime]).intValue > 0);
+            TestCaseAssertTrue(((NSNumber*) info[WCTDatabaseMonitorInfoKeySchemaUsage]).intValue > 0);
+            TestCaseAssertTrue(((NSNumber*) info[WCTDatabaseMonitorInfoKeyTriggerCount]).intValue == 0);
+            tableCount = ((NSNumber*) info[WCTDatabaseMonitorInfoKeyTableCount]).intValue;
+            indexCount = ((NSNumber*) info[WCTDatabaseMonitorInfoKeyIndexCount]).intValue;
+        } break;
         }
     }];
+
     TestCaseAssertTrue([self createTable]);
-    TestCaseAssertTrue([self.database insertObjects:[Random.shared autoIncrementTestCaseObjectsWithCount:10] intoTable:self.tableName]);
+    TestCaseAssertTrue([self.database execute:WCDB::StatementCreateIndex()
+                                              .createIndex("testIndex")
+                                              .table(self.tableName)
+                                              .indexed(TestCaseObject.content)]);
+
     TestCaseAssertTrue(tag == self.database.tag);
     TestCaseAssertStringEqual(path, self.database.path);
     TestCaseAssertTrue(openHandleCount == 1);
+
+    [self.database close];
+    TestCaseAssertTrue([self.database insertObjects:[Random.shared autoIncrementTestCaseObjectsWithCount:10] intoTable:self.tableName]);
+    TestCaseAssertTrue(openHandleCount == 2);
+    TestCaseAssertTrue(tableCount == 4);
+    TestCaseAssertTrue(indexCount == 1);
+    [WCTDatabase globalTraceDatabaseOperation:nil];
 }
 
 @end

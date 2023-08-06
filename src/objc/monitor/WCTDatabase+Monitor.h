@@ -51,7 +51,23 @@ typedef NS_ENUM(NSUInteger, WCTDatabaseOperation) {
 /**
  Triggered when a specific event of database occurs.
  */
-typedef void (^WCTDatabaseOperationTraceBlock)(WCTDatabase* /* database */, WCTDatabaseOperation /* type of operation*/);
+typedef void (^WCTDatabaseOperationTraceBlock)(WCTDatabase* /* database */, WCTDatabaseOperation /* type of operation*/, NSDictionary* /* infos about current operation */);
+
+/**
+ The following are the keys in the infos from the callback of database operation monitoring.
+ */
+// The number of alive handles to the current database
+WCDB_EXTERN NSString* const WCTDatabaseMonitorInfoKeyHandleCount;
+// The time in microseconds spent to open and config the current handle.
+WCDB_EXTERN NSString* const WCTDatabaseMonitorInfoKeyHandleOpenTime;
+// The memory in bytes used to store the schema in sqlite handle.
+WCDB_EXTERN NSString* const WCTDatabaseMonitorInfoKeySchemaUsage;
+// The number of tables in the current database.
+WCDB_EXTERN NSString* const WCTDatabaseMonitorInfoKeyTableCount;
+// The number of indexes in the current database.
+WCDB_EXTERN NSString* const WCTDatabaseMonitorInfoKeyIndexCount;
+// The number of triggers in the current database.
+WCDB_EXTERN NSString* const WCTDatabaseMonitorInfoKeyTriggerCount;
 
 @interface WCTDatabase (Monitor)
 

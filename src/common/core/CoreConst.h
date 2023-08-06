@@ -176,6 +176,14 @@ static constexpr const char* ErrorTypeBackup = "Backup";
 static constexpr const char* ErrorTypeAssemble = "Assemble";
 static constexpr const char* ErrorTypeMergeIndex = "MergeIndex";
 
+#pragma mark - Moniter
+static constexpr const char* MonitorInfoKeyHandleCount = "HandleCount";
+static constexpr const char* MonitorInfoKeyHandleOpenTime = "OpenTime";
+static constexpr const char* MonitorInfoKeySchemaUsage = "SchemaUsage";
+static constexpr const char* MonitorInfoKeyTableCount = "TableCount";
+static constexpr const char* MonitorInfoKeyIndexCount = "IndexCount";
+static constexpr const char* MonitorInfoKeyTriggerCount = "TriggerCount";
+
 #pragma mark - Tag
 static constexpr const int TagInvalidValue = 0;
 

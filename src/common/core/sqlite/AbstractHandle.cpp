@@ -380,6 +380,14 @@ AbstractHandle::getValues(const Statement &statement, int index)
     return values;
 }
 
+bool AbstractHandle::getSchemaInfo(int &memoryUsed, int &tableCount, int &indexCount, int &triggerCount)
+{
+    int highWater;
+    return APIExit(sqlite3_db_status(
+           m_handle, SQLITE_DBSTATUS_SCHEMA_USED, &memoryUsed, &highWater, false))
+           && APIExit(sqlite3_schema_info(m_handle, &tableCount, &indexCount, &triggerCount));
+}
+
 #pragma mark - Transaction
 void AbstractHandle::markErrorNotAllowedWithinTransaction()
 {

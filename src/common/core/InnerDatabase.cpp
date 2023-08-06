@@ -40,6 +40,8 @@
 #include "OperationHandle.hpp"
 #include "SQLite.h"
 
+#include <ctime>
+
 namespace WCDB {
 
 #pragma mark - Initializer
@@ -55,8 +57,9 @@ InnerDatabase::InnerDatabase(const UnsafeStringView &path)
 , m_sharedInMemoryHandle(nullptr)
 , m_mergeLogic(this)
 {
+    StringViewMap<Value> info;
     DBOperationNotifier::shared().notifyOperation(
-    this, DBOperationNotifier::Operation::Create);
+    this, DBOperationNotifier::Operation::Create, info);
 }
 
 InnerDatabase::~InnerDatabase() = default;
@@ -66,8 +69,9 @@ void InnerDatabase::setTag(const Tag &tag)
 {
     LockGuard memoryGuard(m_memory);
     m_tag = tag;
+    StringViewMap<Value> info;
     DBOperationNotifier::shared().notifyOperation(
-    this, DBOperationNotifier::Operation::SetTag);
+    this, DBOperationNotifier::Operation::SetTag, info);
 }
 
 Tag InnerDatabase::getTag() const
@@ -296,10 +300,6 @@ std::shared_ptr<InnerHandle> InnerDatabase::generateSlotedHandle(HandleType type
     if (!setupHandle(type, handle.get())) {
         return nullptr;
     }
-    if (slot == HandleSlotNormal || slot == HandleSlotMigrating) {
-        DBOperationNotifier::shared().notifyOperation(
-        this, DBOperationNotifier::Operation::OpenHandle);
-    }
     return handle;
 }
 
@@ -329,9 +329,27 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
 
     if (slot != HandleSlotAssemble && category != HandleCategoryCipher) {
         handle->setPath(path);
+        bool hasOpened = handle->isOpened();
+        std::clock_t start = std::clock();
         if (!handle->open()) {
             setThreadedError(handle->getError());
             return false;
+        }
+        if (!hasOpened && (slot == HandleSlotNormal || slot == HandleSlotMigrating)) {
+            std::clock_t openTime = (std::clock() - start) / (CLOCKS_PER_SEC / 1000000);
+            int memoryUsed, tableCount, indexCount, triggerCount;
+            if (handle->getSchemaInfo(memoryUsed, tableCount, indexCount, triggerCount)) {
+                StringViewMap<Value> info;
+                info.insert_or_assign(MonitorInfoKeyHandleOpenTime, openTime);
+                info.insert_or_assign(MonitorInfoKeySchemaUsage, memoryUsed);
+                info.insert_or_assign(MonitorInfoKeyTableCount, tableCount);
+                info.insert_or_assign(MonitorInfoKeyIndexCount, indexCount);
+                info.insert_or_assign(MonitorInfoKeyTriggerCount, triggerCount);
+                info.insert_or_assign(MonitorInfoKeyHandleCount,
+                                      numberOfAliveHandlesInSlot(slot) + 1);
+                DBOperationNotifier::shared().notifyOperation(
+                this, DBOperationNotifier::Operation::OpenHandle, info);
+            }
         }
     } else {
         handle->clearPath();

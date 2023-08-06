@@ -79,6 +79,7 @@ public:
     RecyclableHandle flowOut(HandleType type);
     void purge();
     size_t numberOfAliveHandles() const;
+    size_t numberOfAliveHandlesInSlot(HandleSlot slot) const;
     bool isAliving() const;
 
 protected:
