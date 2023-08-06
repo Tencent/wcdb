@@ -84,8 +84,7 @@ void OperationHandle::checkIntegrity()
             StatementInsert().insertIntoTable(ftsTable).column(Column(ftsTable)).value("integrity-check"))) {
             continue;
         }
-        if (Error::rc2ec((int) m_error.infos.at(ErrorIntKeyExtCode).integerValue())
-            == Error::ExtCode::CorruptVirtualTable) {
+        if (Error::rc2ec((int) m_error.getExtCode()) == Error::ExtCode::CorruptVirtualTable) {
             Error error(Error::Code::Corrupt, Error::Level::Error, m_error.getMessage());
             error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
             error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeIntegrity);

@@ -315,66 +315,12 @@ const StringView& Error::getMessage() const
     return m_message;
 }
 
-#pragma mark - Info
-Error::InfoValue::InfoValue(const char* string)
-: m_floatValue(0)
-, m_intValue(0)
-, m_stringValue(String(string))
-, m_underlyingType(UnderlyingType::String)
-{
-}
-
-Error::InfoValue::InfoValue(const UnsafeStringView& string)
-: m_floatValue(0)
-, m_intValue(0)
-, m_stringValue(String(string))
-, m_underlyingType(UnderlyingType::String)
-{
-}
-
-Error::InfoValue::InfoValue(String&& string)
-: m_floatValue(0)
-, m_intValue(0)
-, m_stringValue(std::move(string))
-, m_underlyingType(UnderlyingType::String)
-{
-}
-
-Error::InfoValue::String Error::InfoValue::stringValue() const
-{
-    if (underlyingType() == UnderlyingType::String) {
-        return m_stringValue;
-    }
-    return String();
-}
-
-Error::InfoValue::Integer Error::InfoValue::integerValue() const
-{
-    if (underlyingType() == UnderlyingType::Integer) {
-        return m_intValue;
-    }
-    return 0;
-}
-
-Error::InfoValue::Float Error::InfoValue::floatValue() const
-{
-    if (underlyingType() == UnderlyingType::Float) {
-        return m_floatValue;
-    }
-    return 0;
-}
-
-Error::InfoValue::UnderlyingType Error::InfoValue::underlyingType() const
-{
-    return m_underlyingType;
-}
-
 #pragma mark - Common Info
 UnsafeStringView Error::getPath() const
 {
     auto iter = infos.find(ErrorStringKeyPath);
     if (iter != infos.end()) {
-        return iter->second.stringValue();
+        return iter->second.textValue();
     }
     return UnsafeStringView();
 }
@@ -383,7 +329,7 @@ UnsafeStringView Error::getAssociatePath() const
 {
     auto iter = infos.find(ErrorStringKeyAssociatePath);
     if (iter != infos.end()) {
-        return iter->second.stringValue();
+        return iter->second.textValue();
     }
     return UnsafeStringView();
 }
@@ -392,7 +338,7 @@ UnsafeStringView Error::getSQL() const
 {
     auto iter = infos.find(ErrorStringKeySQL);
     if (iter != infos.end()) {
-        return iter->second.stringValue();
+        return iter->second.textValue();
     }
     return UnsafeStringView();
 }
@@ -401,7 +347,7 @@ Tag Error::getTag() const
 {
     auto iter = infos.find(ErrorIntKeyTag);
     if (iter != infos.end()) {
-        return iter->second.integerValue();
+        return iter->second.intValue();
     }
     return Tag::invalid();
 }
@@ -410,7 +356,7 @@ Error::ExtCode Error::getExtCode() const
 {
     auto iter = infos.find(ErrorIntKeyExtCode);
     if (iter != infos.end()) {
-        return rc2ec((int) iter->second.integerValue());
+        return rc2ec((int) iter->second.intValue());
     }
     return rc2ec(0);
 }
@@ -425,14 +371,14 @@ StringView Error::getDescription() const
 
     for (const auto& info : infos) {
         stream << ", " << info.first;
-        switch (info.second.underlyingType()) {
-        case InfoValue::UnderlyingType::String:
-            stream << ":" << info.second.stringValue();
+        switch (info.second.getType()) {
+        case Value::Type::Text:
+            stream << ":" << info.second.textValue();
             break;
-        case InfoValue::UnderlyingType::Integer:
-            stream << ":" << info.second.integerValue();
+        case Value::Type::Integer:
+            stream << ":" << info.second.intValue();
             break;
-        case InfoValue::UnderlyingType::Float:
+        case Value::Type::Float:
             stream << ":" << info.second.floatValue();
             break;
         default:
