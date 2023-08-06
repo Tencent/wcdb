@@ -146,9 +146,8 @@ void Core::preprocessError(Error& error)
     }
 
     auto iter = infos.find(UnsafeStringView(ErrorStringKeyPath));
-    if (iter != infos.end()
-        && iter->second.underlyingType() == Error::InfoValue::UnderlyingType::String) {
-        auto tag = m_databasePool.getTag(iter->second.stringValue());
+    if (iter != infos.end() && iter->second.getType() == Value::Type::Text) {
+        auto tag = m_databasePool.getTag(iter->second.textValue());
         if (tag.isValid()) {
             error.infos.insert_or_assign(ErrorIntKeyTag, (long) tag);
         }
