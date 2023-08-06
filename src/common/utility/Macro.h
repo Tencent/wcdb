@@ -103,6 +103,12 @@
 #define WCDB_UNUSED(variable)
 #endif
 
+#define WCDBLiteralStringDefine(name) extern const StringView& name;
+
+#define WCDBLiteralStringImpletement(name, value)                              \
+    static constexpr const char* k##name = value;                              \
+    const StringView& name = *(new StringView(StringView::makeConstant(k##name)));
+
 // It doesn't seems to work as expected.
 // #define WCDB_NO_DESTROY [[clang::no_destroy]]
 // #define WCDB_STATIC_VARIABLE WCDB_NO_DESTROY static

@@ -43,12 +43,12 @@ void Core::print(const UnsafeStringView& message)
 
 }
 
-NSString* const WCTDatabaseMonitorInfoKeyHandleCount = [NSString stringWithUTF8String:WCDB::MonitorInfoKeyHandleCount];
-NSString* const WCTDatabaseMonitorInfoKeyHandleOpenTime = [NSString stringWithUTF8String:WCDB::MonitorInfoKeyHandleOpenTime];
-NSString* const WCTDatabaseMonitorInfoKeySchemaUsage = [NSString stringWithUTF8String:WCDB::MonitorInfoKeySchemaUsage];
-NSString* const WCTDatabaseMonitorInfoKeyTableCount = [NSString stringWithUTF8String:WCDB::MonitorInfoKeyTableCount];
-NSString* const WCTDatabaseMonitorInfoKeyIndexCount = [NSString stringWithUTF8String:WCDB::MonitorInfoKeyIndexCount];
-NSString* const WCTDatabaseMonitorInfoKeyTriggerCount = [NSString stringWithUTF8String:WCDB::MonitorInfoKeyTriggerCount];
+NSString* const WCTDatabaseMonitorInfoKeyHandleCount = [NSString stringWithUTF8String:WCDB::MonitorInfoKeyHandleCount.data()];
+NSString* const WCTDatabaseMonitorInfoKeyHandleOpenTime = [NSString stringWithUTF8String:WCDB::MonitorInfoKeyHandleOpenTime.data()];
+NSString* const WCTDatabaseMonitorInfoKeySchemaUsage = [NSString stringWithUTF8String:WCDB::MonitorInfoKeySchemaUsage.data()];
+NSString* const WCTDatabaseMonitorInfoKeyTableCount = [NSString stringWithUTF8String:WCDB::MonitorInfoKeyTableCount.data()];
+NSString* const WCTDatabaseMonitorInfoKeyIndexCount = [NSString stringWithUTF8String:WCDB::MonitorInfoKeyIndexCount.data()];
+NSString* const WCTDatabaseMonitorInfoKeyTriggerCount = [NSString stringWithUTF8String:WCDB::MonitorInfoKeyTriggerCount.data()];
 
 @implementation WCTDatabase (Monitor)
 
