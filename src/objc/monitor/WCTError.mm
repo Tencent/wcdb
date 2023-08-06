@@ -57,16 +57,19 @@ NSErrorUserInfoKey const WCTErrorKeyExtendedCode = @WCDB_ERROR_INT_KEY_EXTCODE;
     NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
     if (error.infos.size() > 0) {
         for (const auto &info : error.infos) {
-            switch (info.second.underlyingType()) {
-            case WCDB::Error::InfoValue::UnderlyingType::String:
-                [userInfo setObject:[NSString stringWithView:info.second.stringValue()]
+            switch (info.second.getType()) {
+            case WCDB::Value::Type::Text:
+                [userInfo setObject:[NSString stringWithView:info.second.textValue()]
                              forKey:[NSString stringWithView:info.first]];
                 break;
-            case WCDB::Error::InfoValue::UnderlyingType::Float:
+            case WCDB::Value::Type::Float:
                 [userInfo setObject:[NSNumber numberWithDouble:info.second.floatValue()] forKey:[NSString stringWithView:info.first]];
                 break;
-            case WCDB::Error::InfoValue::UnderlyingType::Integer:
-                [userInfo setObject:[NSNumber numberWithLongLong:info.second.integerValue()] forKey:[NSString stringWithView:info.first]];
+            case WCDB::Value::Type::Integer:
+                [userInfo setObject:[NSNumber numberWithLongLong:info.second.intValue()] forKey:[NSString stringWithView:info.first]];
+                break;
+            case WCDB::Value::Type::BLOB:
+                [userInfo setObject:[NSData dataWithBytes:info.second.blobValue().buffer() length:info.second.blobValue().size()] forKey:[NSString stringWithView:info.first]];
                 break;
             default:
                 [userInfo setObject:[NSNull null] forKey:[NSString stringWithView:info.first]];

@@ -447,8 +447,8 @@
             return;
         }
         autoAdded = YES;
-        TestCaseAssertTrue(error.infos.at("Table").stringValue().compare(self.tableName.UTF8String) == 0);
-        TestCaseAssertTrue(error.infos.at("Column").stringValue().compare(propertyName.UTF8String) == 0);
+        TestCaseAssertTrue(error.infos.at("Table").textValue().compare(self.tableName.UTF8String) == 0);
+        TestCaseAssertTrue(error.infos.at("Column").textValue().compare(propertyName.UTF8String) == 0);
     });
     TestCaseAssertTrue(block() == isSucceed);
     TestCaseAssertTrue(autoAdded || !isSucceed);

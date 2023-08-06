@@ -26,6 +26,7 @@
 
 #include "StringView.hpp"
 #include "Tag.hpp"
+#include "Value.hpp"
 #include <map>
 
 namespace WCDB {
@@ -282,54 +283,7 @@ protected:
 
 #pragma mark - Info
 public:
-    class InfoValue {
-    public:
-        typedef int64_t Integer;
-        typedef double Float;
-        typedef StringView String;
-
-        template<typename T>
-        InfoValue(const T &value,
-                  typename std::enable_if<std::is_floating_point<T>::value>::type * = nullptr)
-        : m_floatValue((Float) value)
-        , m_intValue(0)
-        , m_stringValue()
-        , m_underlyingType(UnderlyingType::Float)
-        {
-        }
-
-        template<typename T>
-        InfoValue(const T &value,
-                  typename std::enable_if<std::is_integral<T>::value>::type * = nullptr)
-        : m_floatValue(0)
-        , m_intValue((Integer) value)
-        , m_stringValue()
-        , m_underlyingType(UnderlyingType::Integer)
-        {
-        }
-
-        InfoValue(const char *string);
-        InfoValue(const UnsafeStringView &string);
-        InfoValue(String &&string);
-
-        String stringValue() const;
-        Integer integerValue() const;
-        Float floatValue() const;
-        enum class UnderlyingType {
-            None,
-            String,
-            Integer,
-            Float,
-        };
-        UnderlyingType underlyingType() const;
-
-    private:
-        Float m_floatValue;
-        Integer m_intValue;
-        String m_stringValue;
-        UnderlyingType m_underlyingType;
-    };
-    StringViewMap<InfoValue> infos;
+    StringViewMap<Value> infos;
 
 #pragma mark - Common Info
 public:
