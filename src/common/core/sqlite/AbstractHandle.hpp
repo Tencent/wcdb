@@ -126,6 +126,8 @@ public:
                         const char **integerPrimaryKey);
     bool configAutoIncrement(const UnsafeStringView &tableName);
 
+    bool getSchemaInfo(int &memoryUsed, int &tableCount, int &indexCount, int &triggerCount);
+
 #pragma mark - Transaction
 public:
     virtual bool beginTransaction();

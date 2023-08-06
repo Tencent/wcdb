@@ -226,13 +226,27 @@ void Database::traceSQL(Database::SQLNotification trace)
     }
 }
 
+const StringView& Database::MonitorInfoKeyHandleCount
+= *(new StringView(WCDB::MonitorInfoKeyHandleCount));
+const StringView& Database::MonitorInfoKeyHandleOpenTime
+= *(new StringView(WCDB::MonitorInfoKeyHandleOpenTime));
+const StringView& Database::MonitorInfoKeySchemaUsage
+= *(new StringView(WCDB::MonitorInfoKeySchemaUsage));
+const StringView& Database::MonitorInfoKeyTableCount
+= *(new StringView(WCDB::MonitorInfoKeyTableCount));
+const StringView& Database::MonitorInfoKeyIndexCount
+= *(new StringView(WCDB::MonitorInfoKeyIndexCount));
+const StringView& Database::MonitorInfoKeyTriggerCount
+= *(new StringView(WCDB::MonitorInfoKeyTriggerCount));
+
 void Database::globalTraceDatabaseOperation(DBOperationTrace trace)
 {
     if (trace != nullptr) {
-        DBOperationNotifier::shared().setNotification(
-        [=](InnerDatabase* innerDatabase, DBOperationNotifier::Operation operation) {
+        DBOperationNotifier::shared().setNotification([=](InnerDatabase* innerDatabase,
+                                                          DBOperationNotifier::Operation operation,
+                                                          StringViewMap<Value>& info) {
             Database database = Database(innerDatabase);
-            trace(database, (Operation) operation);
+            trace(database, (Operation) operation, info);
         });
     } else {
         DBOperationNotifier::shared().setNotification(nullptr);

@@ -25,6 +25,7 @@
 #pragma once
 
 #include "Lock.hpp"
+#include "Value.hpp"
 
 namespace WCDB {
 
@@ -40,9 +41,12 @@ public:
         OpenHandle = 2,
     };
 
-    void notifyOperation(InnerDatabase *database, Operation operation);
+    void notifyOperation(InnerDatabase *database,
+                         Operation operation,
+                         StringViewMap<Value> &info) const;
 
-    typedef std::function<void(InnerDatabase *database, Operation operation)> Callback;
+    typedef std::function<void(InnerDatabase *database, Operation operation, StringViewMap<Value> &info)> Callback;
+
     void setNotification(const Callback &callback);
 
 protected:

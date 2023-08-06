@@ -272,7 +272,27 @@ public:
     /**
      Triggered when a specific event of database occurs.
      */
-    typedef std::function<void(Database &database, Operation operation)> DBOperationTrace;
+    typedef std::function<void(Database &,            /* database */
+                               Operation,             /* type of operation*/
+                               StringViewMap<Value> & /* infos about current operation */
+                               )>
+    DBOperationTrace;
+
+    /**
+     The following are the keys in the infos from the callback of database operation monitoring.
+     */
+    // The number of alive handles to the current database.
+    static const StringView &MonitorInfoKeyHandleCount;
+    // The time in microseconds spent to open and config the handle.
+    static const StringView &MonitorInfoKeyHandleOpenTime;
+    // The memory in bytes used to store the schema in sqlite handle.
+    static const StringView &MonitorInfoKeySchemaUsage;
+    // Number of tables in current database.
+    static const StringView &MonitorInfoKeyTableCount;
+    // Number of indexes in current database.
+    static const StringView &MonitorInfoKeyIndexCount;
+    // Number of triggers in current database.
+    static const StringView &MonitorInfoKeyTriggerCount;
 
     /**
      @brief You can register a tracer to these database events:
