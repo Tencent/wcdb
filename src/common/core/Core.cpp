@@ -388,7 +388,7 @@ void Core::setNotificationWhenErrorTraced(const UnsafeStringView& path,
                                           const Notifier::Callback& notification)
 {
     StringView notifierKey
-    = StringView::formatted("%s_%s", NotifierLoggerName, path.data());
+    = StringView::formatted("%s_%s", NotifierLoggerName.data(), path.data());
     if (notification != nullptr) {
         StringView catchedPath = StringView(path);
         Notifier::Callback realNotification = [=](const Error& error) {
