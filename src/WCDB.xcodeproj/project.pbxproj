@@ -3067,6 +3067,10 @@
 		75D99B8128CA441E00BEC8B5 /* BaseOperation.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75D99B7F28CA441E00BEC8B5 /* BaseOperation.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		75D99B8328CA46A400BEC8B5 /* BaseOperation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75D99B8228CA46A400BEC8B5 /* BaseOperation.cpp */; };
 		75D99B8428CA46A400BEC8B5 /* BaseOperation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75D99B8228CA46A400BEC8B5 /* BaseOperation.cpp */; };
+		75E0A5C02A7F4EEE00D4FE9A /* CoreConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E0A5BF2A7F4EEE00D4FE9A /* CoreConst.cpp */; };
+		75E0A5C12A7F4EEE00D4FE9A /* CoreConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E0A5BF2A7F4EEE00D4FE9A /* CoreConst.cpp */; };
+		75E0A5C22A7F4EEE00D4FE9A /* CoreConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E0A5BF2A7F4EEE00D4FE9A /* CoreConst.cpp */; };
+		75E0A5C32A7F4EEE00D4FE9A /* CoreConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E0A5BF2A7F4EEE00D4FE9A /* CoreConst.cpp */; };
 		75E50A0B29067BC800B73E62 /* MultiObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E50A0929067BC800B73E62 /* MultiObject.cpp */; };
 		75E50A0C29067BC800B73E62 /* MultiObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E50A0929067BC800B73E62 /* MultiObject.cpp */; };
 		75E50A0D29067BC800B73E62 /* MultiObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75E50A0A29067BC800B73E62 /* MultiObject.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -4590,6 +4594,7 @@
 		75D567002951B80B00098DD9 /* WCTSequence+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTSequence+WCTTableCoding.h"; sourceTree = "<group>"; };
 		75D99B7F28CA441E00BEC8B5 /* BaseOperation.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BaseOperation.hpp; sourceTree = "<group>"; };
 		75D99B8228CA46A400BEC8B5 /* BaseOperation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BaseOperation.cpp; sourceTree = "<group>"; };
+		75E0A5BF2A7F4EEE00D4FE9A /* CoreConst.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CoreConst.cpp; sourceTree = "<group>"; };
 		75E50A0929067BC800B73E62 /* MultiObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MultiObject.cpp; sourceTree = "<group>"; };
 		75E50A0A29067BC800B73E62 /* MultiObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MultiObject.hpp; sourceTree = "<group>"; };
 		75E50A2B2907921600B73E62 /* MultiSelect.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MultiSelect.cpp; sourceTree = "<group>"; };
@@ -5644,6 +5649,7 @@
 				234591F5204432E400DC7D34 /* Core.hpp */,
 				23B4DCBB2112A9C800954D71 /* Core.cpp */,
 				237C900621D45E6700EE6E44 /* CoreConst.h */,
+				75E0A5BF2A7F4EEE00D4FE9A /* CoreConst.cpp */,
 				391F7C83225DE8FD0095E82D /* Core.h */,
 			);
 			path = core;
@@ -9263,6 +9269,7 @@
 				037C39AD2897E33600328EC8 /* WindowDef.cpp in Sources */,
 				037C39AE2897E33600328EC8 /* FileManager.cpp in Sources */,
 				037C39AF2897E33600328EC8 /* SyntaxColumn.cpp in Sources */,
+				75E0A5C22A7F4EEE00D4FE9A /* CoreConst.cpp in Sources */,
 				037C39B02897E33600328EC8 /* SyntaxFilter.cpp in Sources */,
 				037C39B12897E33600328EC8 /* StatementDelete.cpp in Sources */,
 				037C39B32897E33600328EC8 /* ErrorProne.cpp in Sources */,
@@ -9767,6 +9774,7 @@
 				23E7EB1D2123D58D0056B5D8 /* HighWater.cpp in Sources */,
 				23EEDC6B217DFADC006E9E73 /* ConvertibleImplementation.cpp in Sources */,
 				2376CB1B20DA5D3B00A68DB5 /* Scoreable.cpp in Sources */,
+				75E0A5C02A7F4EEE00D4FE9A /* CoreConst.cpp in Sources */,
 				23EEDCC5217DFADC006E9E73 /* StatementCreateView.cpp in Sources */,
 				2316D93321057CA700707AFC /* MappedData.cpp in Sources */,
 				23775B7620AD666900E21AB0 /* Backup.cpp in Sources */,
@@ -10410,6 +10418,7 @@
 				7521D7BD291E9ABB009642EF /* SharedThreadedErrorProne.cpp in Sources */,
 				7521D7BE291E9ABB009642EF /* LiteralValue.cpp in Sources */,
 				7521D7C3291E9ABB009642EF /* SyntaxCreateIndexSTMT.cpp in Sources */,
+				75E0A5C12A7F4EEE00D4FE9A /* CoreConst.cpp in Sources */,
 				7521D7C7291E9ABB009642EF /* WCTInsert.mm in Sources */,
 				7521D7C8291E9ABB009642EF /* WCTColumnBinding.mm in Sources */,
 				7521D7C9291E9ABB009642EF /* WCTSelect.mm in Sources */,
@@ -10823,6 +10832,7 @@
 				7521DBA4291EA349009642EF /* Cell.cpp in Sources */,
 				7521DBA5291EA349009642EF /* RaiseFunctionBridge.cpp in Sources */,
 				7521DBA6291EA349009642EF /* AuxiliaryFunctionConfig.cpp in Sources */,
+				75E0A5C32A7F4EEE00D4FE9A /* CoreConst.cpp in Sources */,
 				7521DBA7291EA349009642EF /* Optional.swift in Sources */,
 				7521DBA9291EA349009642EF /* RowSelect.swift in Sources */,
 				7521DBAA291EA349009642EF /* Frame.cpp in Sources */,

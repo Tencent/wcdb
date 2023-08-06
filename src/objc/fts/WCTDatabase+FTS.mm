@@ -56,7 +56,7 @@ NSString* const WCTAuxiliaryFunction_SubstringMatchInfo = [NSString stringWithUT
 - (void)addTokenizer:(NSString*)tokenizerName
 {
     WCTFTSTokenizerUtil::configDefaultSymbolDetectorAndUnicodeNormalizer();
-    WCDB::StringView configName = WCDB::StringView::formatted("%s%s", WCDB::TokenizeConfigPrefix, tokenizerName.UTF8String);
+    WCDB::StringView configName = WCDB::StringView::formatted("%s%s", WCDB::TokenizeConfigPrefix.data(), tokenizerName.UTF8String);
     _database->setConfig(configName, WCDB::Core::shared().tokenizerConfig(tokenizerName), WCDB::Configs::Priority::Higher);
 }
 
@@ -78,7 +78,7 @@ NSString* const WCTAuxiliaryFunction_SubstringMatchInfo = [NSString stringWithUT
 
 - (void)addAuxiliaryFunction:(NSString*)auxiliaryFunctionName
 {
-    WCDB::StringView configName = WCDB::StringView::formatted("%s%s", WCDB::AuxiliaryFunctionConfigPrefix, auxiliaryFunctionName.UTF8String);
+    WCDB::StringView configName = WCDB::StringView::formatted("%s%s", WCDB::AuxiliaryFunctionConfigPrefix.data(), auxiliaryFunctionName.UTF8String);
     _database->setConfig(configName, WCDB::Core::shared().auxiliaryFunctionConfig(auxiliaryFunctionName), WCDB::Configs::Priority::Higher);
 }
 

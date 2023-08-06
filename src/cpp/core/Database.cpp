@@ -226,18 +226,12 @@ void Database::traceSQL(Database::SQLNotification trace)
     }
 }
 
-const StringView& Database::MonitorInfoKeyHandleCount
-= *(new StringView(WCDB::MonitorInfoKeyHandleCount));
-const StringView& Database::MonitorInfoKeyHandleOpenTime
-= *(new StringView(WCDB::MonitorInfoKeyHandleOpenTime));
-const StringView& Database::MonitorInfoKeySchemaUsage
-= *(new StringView(WCDB::MonitorInfoKeySchemaUsage));
-const StringView& Database::MonitorInfoKeyTableCount
-= *(new StringView(WCDB::MonitorInfoKeyTableCount));
-const StringView& Database::MonitorInfoKeyIndexCount
-= *(new StringView(WCDB::MonitorInfoKeyIndexCount));
-const StringView& Database::MonitorInfoKeyTriggerCount
-= *(new StringView(WCDB::MonitorInfoKeyTriggerCount));
+const StringView& Database::MonitorInfoKeyHandleCount = WCDB::MonitorInfoKeyHandleCount;
+const StringView& Database::MonitorInfoKeySchemaUsage = WCDB::MonitorInfoKeySchemaUsage;
+const StringView& Database::MonitorInfoKeyHandleOpenTime = WCDB::MonitorInfoKeyHandleOpenTime;
+const StringView& Database::MonitorInfoKeyTableCount = WCDB::MonitorInfoKeyTableCount;
+const StringView& Database::MonitorInfoKeyIndexCount = WCDB::MonitorInfoKeyIndexCount;
+const StringView& Database::MonitorInfoKeyTriggerCount = WCDB::MonitorInfoKeyTriggerCount;
 
 void Database::globalTraceDatabaseOperation(DBOperationTrace trace)
 {
@@ -281,7 +275,7 @@ void Database::enableAutoMergeFTS5Index(bool flag)
 void Database::addTokenizer(const UnsafeStringView& tokenize)
 {
     StringView configName
-    = StringView::formatted("%s%s", TokenizeConfigPrefix, tokenize.data());
+    = StringView::formatted("%s%s", TokenizeConfigPrefix.data(), tokenize.data());
     m_innerDatabase->setConfig(
     configName, Core::shared().tokenizerConfig(tokenize), Configs::Priority::Higher);
 }
@@ -294,7 +288,7 @@ void Database::registerTokenizer(const UnsafeStringView& name, const TokenizerMo
 void Database::addAuxiliaryFunction(const UnsafeStringView& functionName)
 {
     StringView configName = StringView::formatted(
-    "%s%s", AuxiliaryFunctionConfigPrefix, functionName.data());
+    "%s%s", AuxiliaryFunctionConfigPrefix.data(), functionName.data());
     m_innerDatabase->setConfig(configName,
                                Core::shared().auxiliaryFunctionConfig(functionName),
                                Configs::Priority::Higher);
