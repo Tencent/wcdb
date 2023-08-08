@@ -103,10 +103,10 @@ public class ORMTest extends DatabaseTestCase {
             }
         });
         Table<AllTypeObject> table = database.getTable(tableName, DBAllTypeObject.INSTANCE);
-        AllTypeObject max = AllTypeObject.maxObject();
-        AllTypeObject min = AllTypeObject.minObject();
-        AllTypeObject random = AllTypeObject.randomObject();
-        AllTypeObject empty = AllTypeObject.emptyObject();
+        AllTypeObject max = AllTypeObjectHelper.maxObject();
+        AllTypeObject min = AllTypeObjectHelper.minObject();
+        AllTypeObject random = AllTypeObjectHelper.randomObject();
+        AllTypeObject empty = AllTypeObjectHelper.emptyObject();
         table.insertObjects(new AllTypeObject[]{ max, min, random, empty});
 
         assertEquals(max, table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq(max.type)));

@@ -2,28 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.devtools.ksp' version '1.7.10-1.0.6'
-}
-
-sourceSets {
-    wcdb { java { srcDir 'src/wcdb' } }
-}
-
-configurations {
-    wcdbOrm
-    wcdbOrmAnnotationProcessor
-}
-
-dependencies {
-    wcdbOrm project(':compiler')
-    wcdbOrmAnnotationProcessor project(':compiler')
-}
-
-task generateWcdbOrm(type: JavaCompile) {
-    source = sourceSets.wcdb.allJava
-    classpath = configurations.wcdbOrm.asFileTree
-    destinationDir = new File(project.buildDir, "generated/source/wcdb")
-    options.annotationProcessorPath = configurations.wcdbOrmAnnotationProcessor.asFileTree
-    options.compilerArgs.addAll(["-proc:only", "-implicit:none"])
+    id 'com.tencent.wcdb.gradle'
 }
 
 android {
@@ -58,5 +37,5 @@ dependencies {
     implementation project(path: ':main')
     implementation project(path: ':annotation')
 //    androidTestAnnotationProcessor project(':compiler')
-    kspAndroidTest project(path: ':compiler')
+    //kspAndroidTest project(path: ':compiler')
 }

@@ -1,0 +1,12 @@
+pluginManagement {
+    includeBuild './builder'
+}
+
+rootProject.name = 'WCDB'
+
+include ':main'
+include ':annotation'
+include ':test'
+//include ':kotlin-test'
+//project(':kotlin-test').projectDir = file('../kotlin/test')
+//include ':wechat-test'

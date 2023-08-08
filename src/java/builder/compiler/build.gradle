@@ -10,7 +10,6 @@ java {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(path: ':annotation')
-    implementation project(':annotation')
+    implementation project(':builder-annotation')
     implementation 'com.google.devtools.ksp:symbol-processing-api:1.7.10-1.0.6'
 }

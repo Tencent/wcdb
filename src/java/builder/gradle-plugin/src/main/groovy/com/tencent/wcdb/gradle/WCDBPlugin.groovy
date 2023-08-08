@@ -14,12 +14,8 @@ class WCDBPlugin implements Plugin<Project> {
             throw new GradleException("WCDBPlugin: Android application or library plugin required.")
         }
 
-        project.sourceSets {
-            wcdb { java { srcDir 'src/wcdb' } }
-        }
-
-        project.task("generateWcdbOrm", type: JavaCompile) {
-            source = sourceSets.wcdb.allJava
+        def generateTask = project.task("generateWcdbOrm", type: JavaCompile) {
+            source = project.file('src/wcdb')
             classpath = project.buildscript.configurations.classpath
             options.annotationProcessorPath = project.buildscript.configurations.classpath
             options.compilerArgs.addAll(["-proc:only", "-implicit:none"])
@@ -36,11 +32,11 @@ class WCDBPlugin implements Plugin<Project> {
 
         if (project.plugins.hasPlugin(AppPlugin)) {
             android.applicationVariants.all { variant ->
-                variant.registerJavaGeneratingTask(generateWcdbOrm, new File(project.buildDir, "generated/source/wcdb"))
+                variant.registerJavaGeneratingTask(generateTask, new File(project.buildDir, "generated/source/wcdb"))
             }
         } else {
             android.libraryVariants.all { variant ->
-                variant.registerJavaGeneratingTask(generateWcdbOrm, new File(project.buildDir, "generated/source/wcdb"))
+                variant.registerJavaGeneratingTask(generateTask, new File(project.buildDir, "generated/source/wcdb"))
             }
         }
     }

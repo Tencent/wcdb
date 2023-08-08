@@ -57,6 +57,7 @@ import com.tencent.wcdb.compiler.resolvedInfo.TableConstraintInfo;
 public class JavaAnnotationProcessor extends AbstractProcessor {
 
     public static final String OPTION_VERBOSE = "verbose";
+    private static final String TAB = "    ";
     Filer filer;
     Messager msg;
     Types typeUtil;

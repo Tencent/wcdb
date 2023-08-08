@@ -7,3 +7,6 @@
 /.idea/assetWizardSettings.xml
 /build
 /captures
+*.iml
+.gradle
+.externalNativeBuild
