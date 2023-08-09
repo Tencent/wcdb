@@ -39,7 +39,7 @@ android {
 dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    implementation project(path: ':main')
-    implementation project(path: ':annotation')
-    kspAndroidTest project(path: ':compiler')
+    implementation project(':main')
+    implementation project(':annotation')
+    kspAndroidTest "com.tencent.wcdb:compiler:${project.version}"
 }

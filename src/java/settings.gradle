@@ -1,5 +1,5 @@
 pluginManagement {
-    includeBuild './builder'
+    includeBuild 'builder'
 }
 
 rootProject.name = 'WCDB'
@@ -7,6 +7,11 @@ rootProject.name = 'WCDB'
 include ':main'
 include ':annotation'
 include ':test'
-//include ':kotlin-test'
-//project(':kotlin-test').projectDir = file('../kotlin/test')
-//include ':wechat-test'
+include ':kotlin-test'
+include ':wechat-test'
+
+includeBuild('builder') {
+    dependencySubstitution {
+        substitute module('com.tencent.wcdb:compiler') using project(':compiler')
+    }
+}
