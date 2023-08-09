@@ -121,13 +121,22 @@ void WCDBDatabaseTraceError2(CPPDatabase database,
                              WCDBErrorTracer _Nullable tracer,
                              void* _Nullable context,
                              WCDBContextDestructor _Nullable destructor);
+#ifndef __ANDROID__
+extern const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyHandleCount;
+extern const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyHandleOpenTime;
+extern const char* _Nonnull WCDBDatabaseOperationTracerInfoKeySchemaUsage;
+extern const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyTableCount;
+extern const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyIndexCount;
+extern const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyTriggerCount;
+#endif
 
-void WCDBDatabaseGlobalTraceOperation(SwiftClosure* _Nullable tracer);
-
-typedef void (*WCDBOperationTracer)(void* _Nullable context, CPPDatabase database, long operation);
-void WCDBDatabaseGlobalTraceOperation2(WCDBOperationTracer _Nullable tracer,
-                                       void* _Nullable context,
-                                       WCDBContextDestructor _Nullable destructor);
+typedef void (*WCDBOperationTracer)(void* _Nullable context,
+                                    CPPDatabase database,
+                                    long operation,
+                                    const void* _Nonnull info);
+void WCDBDatabaseGlobalTraceOperation(WCDBOperationTracer _Nullable tracer,
+                                      void* _Nullable context,
+                                      WCDBContextDestructor _Nullable destructor);
 
 bool WCDBDatabaseRemoveFile(CPPDatabase database);
 bool WCDBDatabaseMoveFile(CPPDatabase database, const char* _Nonnull destination);

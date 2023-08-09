@@ -65,6 +65,8 @@ void WCDBJNIErrorEnumerateInfoCallback(JNIContext *context, const char *key, CPP
     case WCDBBridgedType_String:
         stringValue = (const char *) value.intValue;
         break;
+    default:
+        break;
     }
 
     if (g_methodId == NULL) {

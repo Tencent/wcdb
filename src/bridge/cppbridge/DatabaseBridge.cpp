@@ -51,8 +51,6 @@ WCDBDefineOneArgumentSwiftClosureBridgedType(WCDBSwiftBackupFilter, bool, const 
 
 WCDBDefineMultiArgumentSwiftClosureBridgedType(WCDBSwiftRetrieveProgress, void, void*, double, double)
 
-WCDBDefineMultiArgumentSwiftClosureBridgedType(WCDBSwiftDatabaseOperationTracer, void, CPPDatabase, long);
-
 WCDBDefineMultiArgumentSwiftClosureBridgedType(WCDBSwiftDatabaseMigrationFilter,
                                                void,
                                                const char*,
@@ -498,35 +496,33 @@ void WCDBDatabaseTraceError2(CPPDatabase database,
     }
 }
 
-void WCDBDatabaseGlobalTraceOperation(SwiftClosure* _Nullable tracer)
-{
-    WCDBSwiftDatabaseOperationTracer bridgeTracer
-    = WCDBCreateSwiftBridgedClosure(WCDBSwiftDatabaseOperationTracer, tracer);
-    if (WCDBGetSwiftClosure(bridgeTracer) != nullptr) {
-        WCDB::DBOperationNotifier::shared().setNotification(
-        [=](WCDB::InnerDatabase* database,
-            WCDB::DBOperationNotifier::Operation operation,
-            WCDB::StringViewMap<WCDB::Value>) {
-            CPPDatabase cppDatabase = WCDBCreateUnmanagedCPPObject(CPPDatabase, database);
-            WCDBSwiftClosureCallWithMultiArgument(bridgeTracer, cppDatabase, (long) operation);
-        });
-    } else {
-        WCDB::DBOperationNotifier::shared().setNotification(nullptr);
-    }
-}
+#ifndef __ANDROID__
+const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyHandleCount
+= WCDB::MonitorInfoKeyHandleCount.data();
+const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyHandleOpenTime
+= WCDB::MonitorInfoKeyHandleOpenTime.data();
+const char* _Nonnull WCDBDatabaseOperationTracerInfoKeySchemaUsage
+= WCDB::MonitorInfoKeySchemaUsage.data();
+const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyTableCount
+= WCDB::MonitorInfoKeyTableCount.data();
+const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyIndexCount
+= WCDB::MonitorInfoKeyIndexCount.data();
+const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyTriggerCount
+= WCDB::MonitorInfoKeyTriggerCount.data();
+#endif
 
-void WCDBDatabaseGlobalTraceOperation2(WCDBOperationTracer _Nullable tracer,
-                                       void* _Nullable context,
-                                       WCDBContextDestructor _Nullable destructor)
+void WCDBDatabaseGlobalTraceOperation(WCDBOperationTracer _Nullable tracer,
+                                      void* _Nullable context,
+                                      WCDBContextDestructor _Nullable destructor)
 {
     if (tracer != nullptr) {
         WCDB::Recyclable<void*> recyclableContext(context, destructor);
         WCDB::DBOperationNotifier::shared().setNotification(
         [=](WCDB::InnerDatabase* database,
             WCDB::DBOperationNotifier::Operation operation,
-            WCDB::StringViewMap<WCDB::Value>) {
+            const WCDB::StringViewMap<WCDB::Value>& info) {
             CPPDatabase cppDatabase = WCDBCreateUnmanagedCPPObject(CPPDatabase, database);
-            tracer(recyclableContext.get(), cppDatabase, operation);
+            tracer(recyclableContext.get(), cppDatabase, operation, &info);
         });
     } else {
         WCDB::DBOperationNotifier::shared().setNotification(nullptr);

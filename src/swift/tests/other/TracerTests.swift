@@ -265,8 +265,10 @@ class TracerTests: BaseTestCase {
         var tag = 0
         var path = ""
         var openCount = 0
+        var tableCount = 0
+        var indexCount = 0
         Database.globalTrace(ofDatabaseOperation: {
-            (database, operation) in
+            (database, operation, info) in
             switch operation {
             case .Create:
                 path = database.path
@@ -274,6 +276,12 @@ class TracerTests: BaseTestCase {
                 tag = database.tag ?? 0
             case .OpenHandle:
                 openCount += 1
+                XCTAssertEqual(info[Database.OperationInfoKeyHandleCount]?.intValue, 1)
+                XCTAssertTrue(info[Database.OperationInfoKeyHandleOpenTime]?.intValue ?? 0 > 0)
+                XCTAssertTrue(info[Database.OperationInfoKeySchemaUsage]?.intValue ?? 0 > 0)
+                XCTAssertEqual(info[Database.OperationInfoKeyTriggerCount]?.intValue, 0)
+                tableCount = info[Database.OperationInfoKeyTableCount]?.intValue ?? 0
+                indexCount = info[Database.OperationInfoKeyIndexCount]?.intValue ?? 0
             @unknown default:
                 fatalError()
             }
@@ -282,12 +290,22 @@ class TracerTests: BaseTestCase {
         database.tag = self.recommendTag
         XCTAssertNoThrow(database)
         XCTAssertNoThrow(try database.create(table: TracerObject.name, of: TracerObject.self))
+        XCTAssertNoThrow(try database.exec(StatementCreateIndex().create(index: "testIndex").on(table: TracerObject.name).indexesBy(TracerObject.Properties.variable)))
+
+        XCTAssertTrue(tag == database.tag)
+        XCTAssertTrue(path == database.path)
+        XCTAssertTrue(openCount == 1)
+
+        database.close()
+
         let template = TracerObject()
         template.isAutoIncrement = true
         let objects = [TracerObject](repeating: template, count: 10)
         XCTAssertNoThrow(try database.insert(objects, intoTable: TracerObject.name))
-        XCTAssertTrue(tag == database.tag)
-        XCTAssertTrue(path == database.path)
-        XCTAssertTrue(openCount == 1)
+
+        XCTAssertTrue(openCount == 2)
+        XCTAssertTrue(tableCount == 4)
+        XCTAssertTrue(indexCount == 1)
+        Database.globalTrace(ofPerformance: nil)
     }
 }

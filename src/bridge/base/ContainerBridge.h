@@ -31,7 +31,7 @@ WCDB_EXTERN_C_BEGIN
 typedef void (*StringViewMapEnumerator)(void* _Nonnull context,
                                         const char* _Nonnull key,
                                         CPPCommonValue value);
-void WCDBEnumerateStringViewMap(void* _Nonnull map,
+void WCDBEnumerateStringViewMap(const void* _Nonnull map,
                                 void* _Nonnull context,
                                 StringViewMapEnumerator _Nonnull enumerator);
 

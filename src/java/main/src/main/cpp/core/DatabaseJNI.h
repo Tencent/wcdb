@@ -65,6 +65,7 @@ void WCDBJNIDatabaseClassMethod(globalTraceError, jobject tracer);
 void WCDBJNIDatabaseObjectMethod(traceError, jlong self, jobject tracer);
 
 void WCDBJNIDatabaseClassMethod(globalTraceOperation, jobject tracer);
+void WCDBJNIDatabaseClassMethod(enumerateInfo, jobject javaInfo, jlong cppInfo);
 
 jboolean WCDBJNIDatabaseObjectMethod(removeFiles, jlong self);
 jboolean WCDBJNIDatabaseObjectMethod(moveFile, jlong self, jstring destination);

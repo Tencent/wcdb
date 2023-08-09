@@ -299,13 +299,18 @@ void WCDBJNIDatabaseObjectMethod(traceError, jlong self, jobject tracer)
     selfStruct, tracer != NULL ? WCDBJNIDatabaseErrorTrace : NULL, tracer, WCDBJNIDestructContext);
 }
 
-void WCDBJNIDatabaseOperationTrace(jobject tracer, CPPDatabase database, int operation)
+void WCDBJNIDatabaseOperationTrace(jobject tracer, CPPDatabase database, long operation, const void* info)
 {
     WCDBJNITryGetEnvOr(return );
     WCDBJNITryGetDatabaseMethodId(
-    "onTraceOperation", "(" WCDBJNIDatabaseSignature "$OperationTracer;JI)V", return );
-    (*env)->CallStaticVoidMethod(
-    env, WCDBJNIGetDatabaseClass(), g_methodId, tracer, (jlong) database.innerValue, (jint) operation);
+    "onTraceOperation", "(" WCDBJNIDatabaseSignature "$OperationTracer;JIJ)V", return );
+    (*env)->CallStaticVoidMethod(env,
+                                 WCDBJNIGetDatabaseClass(),
+                                 g_methodId,
+                                 tracer,
+                                 (jlong) database.innerValue,
+                                 (jint) operation,
+                                 (jlong) info);
     WCDBJNITryDetach;
 }
 
@@ -313,10 +318,63 @@ void WCDBJNIDatabaseClassMethod(globalTraceOperation, jobject tracer)
 {
     WCDBJNITryGetVM;
     WCDBJNICreateGlobalRel(tracer);
-    WCDBDatabaseGlobalTraceOperation2(
+    WCDBDatabaseGlobalTraceOperation(
     (tracer != NULL ? (WCDBOperationTracer) WCDBJNIDatabaseOperationTrace : NULL),
     tracer,
     WCDBJNIDestructContext);
+}
+
+typedef struct JNIEnumerateInfoContext {
+    JNIEnv* env;
+    jobject object;
+} JNIEnumerateInfoContext;
+
+void WCDBJNIDatabaseEnumerateInfoCallback(JNIEnumerateInfoContext* context,
+                                          const char* key,
+                                          CPPCommonValue value)
+{
+    JNIEnv* env = context->env;
+    jlong intValue = 0;
+    double doubleValue = 0;
+    const char* stringValue = NULL;
+    switch (value.type) {
+    case WCDBBridgedType_Int:
+        intValue = (jlong) value.intValue;
+        break;
+    case WCDBBridgedType_Double:
+        doubleValue = value.doubleValue;
+        break;
+    case WCDBBridgedType_String:
+        stringValue = (const char*) value.intValue;
+        break;
+    default:
+        break;
+    }
+    WCDBJNITryGetDatabaseMethodId("onEnumerateInfo",
+                                  "(Ljava/util/HashMap;" WCDBJNIStringSignature
+                                  "IJD" WCDBJNIStringSignature ")V",
+                                  return );
+    WCDBJNICreateJavaString(key);
+    WCDBJNICreateJavaString(stringValue);
+    (*env)->CallStaticVoidMethod(env,
+                                 WCDBJNIGetDatabaseClass(),
+                                 g_methodId,
+                                 context->object,
+                                 jkey,
+                                 (int) value.type,
+                                 intValue,
+                                 doubleValue,
+                                 jstringValue);
+}
+
+void WCDBJNIDatabaseClassMethod(enumerateInfo, jobject javaInfo, jlong cppInfo)
+{
+    JNIEnumerateInfoContext context;
+    context.object = javaInfo;
+    context.env = env;
+    WCDBEnumerateStringViewMap((const void*) cppInfo,
+                               (void*) &context,
+                               (StringViewMapEnumerator) WCDBJNIDatabaseEnumerateInfoCallback);
 }
 
 jboolean WCDBJNIDatabaseObjectMethod(removeFiles, jlong self)

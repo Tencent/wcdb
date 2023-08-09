@@ -480,7 +480,18 @@ public extension Database {
         case OpenHandle = 2
     }
 
-    typealias OperationTracer = (Database, Database.Operation) -> Void
+    /// The following are the keys in the infos from the callback of database operation monitoring.
+    static let OperationInfoKeyHandleCount = String(cString: WCDBDatabaseOperationTracerInfoKeyHandleCount)
+    static let OperationInfoKeyHandleOpenTime = String(cString: WCDBDatabaseOperationTracerInfoKeyHandleOpenTime)
+    static let OperationInfoKeySchemaUsage = String(cString: WCDBDatabaseOperationTracerInfoKeySchemaUsage)
+    static let OperationInfoKeyTableCount = String(cString: WCDBDatabaseOperationTracerInfoKeyTableCount)
+    static let OperationInfoKeyIndexCount = String(cString: WCDBDatabaseOperationTracerInfoKeyIndexCount)
+    static let OperationInfoKeyTriggerCount = String(cString: WCDBDatabaseOperationTracerInfoKeyTriggerCount)
+
+    typealias OperationTracer = (Database,/* database */
+                                 Database.Operation,/* type of operation*/
+                                 [String: Value]/* infos about current operation */
+    ) -> Void
 
     /// You can register a tracer to these database events:
     /// 1. creating a database object for the first time;
@@ -489,17 +500,44 @@ public extension Database {
     ///
     /// - Parameter trace: trace. Nil to disable error trace.
     static func globalTrace(ofDatabaseOperation trace: @escaping OperationTracer) {
-        let callback: @convention(block) (CPPDatabase, Int) -> Void = {
-            (cppDatabase, operation) in
+        let tracerWrap = ValueWrap(trace)
+        let tracerWrapPointer = ObjectBridge.getUntypeSwiftObject(tracerWrap)
+        let callback: @convention(c) (UnsafeMutableRawPointer?, CPPDatabase, Int, UnsafeRawPointer) -> Void = {
+            ctx, cppDatabase, type, info in
+            let tracerWrap: ValueWrap<OperationTracer>? = ObjectBridge.extractTypedSwiftObject(ctx)
+            guard let tracerWrap = tracerWrap else {
+                return
+            }
             let database = Database(with: cppDatabase)
-            trace(database, Operation(rawValue: operation) ?? .Create)
+            let operation = Operation(rawValue: type) ?? .Create
+            let wrapInfo: ValueWrap<[String: Value]> = ValueWrap([:])
+            let wrapInfoPointer = ObjectBridge.getUntypeSwiftObject(wrapInfo)
+            let enumerator: @convention(c) (UnsafeMutableRawPointer, UnsafePointer<CChar>, CPPCommonValue) -> Void = {
+                valueWrapPointer, key, value in
+                let valueWrap: ValueWrap<[String: Value]>? = ObjectBridge.extractTypedSwiftObject(valueWrapPointer)
+                guard let valueWrap = valueWrap else {
+                    return
+                }
+                switch value.type {
+                case WCDBBridgedType_Int:
+                    valueWrap.value[String(cString: key)] = Value(value.intValue)
+                case WCDBBridgedType_Double:
+                    valueWrap.value[String(cString: key)] = Value(value.doubleValue)
+                case WCDBBridgedType_String:
+                    valueWrap.value[String(cString: key)] = Value(String(cString: unsafeBitCast(value.intValue, to: UnsafePointer<CChar>.self)))
+                default:
+                    return
+                }
+            }
+            WCDBEnumerateStringViewMap(info, wrapInfoPointer, enumerator)
+            tracerWrap.value(database, operation, wrapInfo.value)
+            ObjectBridge.releaseSwiftObject(wrapInfoPointer)
         }
-        let imp = imp_implementationWithBlock(callback)
-        WCDBDatabaseGlobalTraceOperation(imp)
+        WCDBDatabaseGlobalTraceOperation(callback, tracerWrapPointer, ObjectBridge.objectDestructor)
     }
 
     static func globalTrace(ofDatabaseOperation trace: Void?) {
-        WCDBDatabaseGlobalTraceOperation(nil)
+        WCDBDatabaseGlobalTraceOperation(nil, nil, nil)
     }
 }
 

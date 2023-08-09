@@ -25,9 +25,11 @@ package com.tencent.wcdbtest.database;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.core.Database;
 import com.tencent.wcdb.winq.Pragma;
+import com.tencent.wcdb.winq.StatementCreateIndex;
 import com.tencent.wcdb.winq.StatementPragma;
 import com.tencent.wcdb.winq.StatementSelect;
 import com.tencent.wcdbtest.base.WrappedValue;
@@ -41,6 +43,7 @@ import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
@@ -184,9 +187,11 @@ public class TraceTest extends TableTestCase {
         final WrappedValue tag = new WrappedValue();
         final WrappedValue path = new WrappedValue();
         final WrappedValue openHandleCount = new WrappedValue();
+        final WrappedValue tableCount = new WrappedValue();
+        final WrappedValue indexCount = new WrappedValue();
         Database.globalTraceDatabaseOperation(new Database.OperationTracer() {
             @Override
-            public void onTrace(Database database, Database.Operation operation) {
+            public void onTrace(Database database, Database.Operation operation, HashMap<String, Value> infos) {
                 switch (operation) {
                     case Create:
                         path.stringValue = database.getPath();
@@ -196,6 +201,12 @@ public class TraceTest extends TableTestCase {
                         break;
                     case OpenHandle:
                         openHandleCount.intValue++;
+                        assertEquals(infos.get(Database.OperationInfoKeyHandleCount).getInteger(), 1);
+                        assertTrue(infos.get(Database.OperationInfoKeyOpenTime).getInteger() > 0);
+                        assertTrue(infos.get(Database.OperationInfoKeySchemaUsage).getInteger() > 0);
+                        assertEquals(infos.get(Database.OperationInfoKeyTriggerCount).getInteger(), 0);
+                        tableCount.intValue = infos.get(Database.OperationInfoKeyTableCount).getInteger();
+                        indexCount.intValue = infos.get(Database.OperationInfoKeyIndexCount).getInteger();
                         break;
                 }
             }
@@ -203,10 +214,19 @@ public class TraceTest extends TableTestCase {
         Database newDatabase = new Database(currentDirectory + File.separator + "testDatabase2");
         newDatabase.setTag(10000);
         newDatabase.createTable(tableName, DBTestObject.INSTANCE);
-        newDatabase.insertObjects(RandomTool.autoIncrementTestCaseObjects(10), DBTestObject.allFields(), tableName);
+        newDatabase.execute(new StatementCreateIndex().createIndex("testIndex").on(tableName).indexedBy(DBTestObject.content));
+
         assertEquals(tag.intValue, newDatabase.getTag());
         assertEquals(path.stringValue, newDatabase.getPath());
         assertEquals(openHandleCount.intValue, 1);
+
+        newDatabase.close();
+
+        newDatabase.insertObjects(RandomTool.autoIncrementTestCaseObjects(10), DBTestObject.allFields(), tableName);
+
+        assertEquals(tableCount.intValue, 4);
+        assertEquals(indexCount.intValue, 1);
+        assertEquals(openHandleCount.intValue, 2);
         Database.globalTraceDatabaseOperation(null);
     }
 

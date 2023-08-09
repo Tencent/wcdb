@@ -306,7 +306,7 @@ internal class KotlinAnnotationProcessor(private val environment: SymbolProcesso
         val className = classDeclaration.simpleName.asString()
         val ormClassName = "DB${className}"
         val packageName = classDeclaration.containingFile!!.packageName.asString()
-        var code: String
+        val code: String
 
         if (isKotlin) {
             val codeGenerator = KotlinCodeGenerator()

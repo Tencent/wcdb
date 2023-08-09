@@ -888,6 +888,7 @@ static const JNINativeMethod g_databaseMethods[]
     { "globalTraceDatabaseOperation",
       "(" WCDBJNIDatabaseSignature "$OperationTracer;)V",
       (void *) WCDBJNIDatabaseFuncName(globalTraceOperation) },
+    { "enumerateInfo", "(Ljava/util/HashMap;J)V", (void *) WCDBJNIDatabaseFuncName(enumerateInfo) },
     { "removeFiles", "(J)Z", (void *) WCDBJNIDatabaseFuncName(removeFiles) },
     { "moveFile", "(J" WCDBJNIStringSignature ")Z", (void *) WCDBJNIDatabaseFuncName(moveFile) },
     { "getFileSize", "(J)J", (void *) WCDBJNIDatabaseFuncName(getFileSize) },

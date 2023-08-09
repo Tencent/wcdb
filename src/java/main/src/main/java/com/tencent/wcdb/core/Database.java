@@ -22,9 +22,11 @@
  */
 package com.tencent.wcdb.core;
 
+import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.winq.Expression;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class Database extends HandleORMOperation {
@@ -253,10 +255,17 @@ public class Database extends HandleORMOperation {
     }
 
     public interface OperationTracer {
-        void onTrace(Database database, Operation operation);
+        void onTrace(Database database, Operation operation, HashMap<String, Value> info);
     }
 
-    private static void onTraceOperation(OperationTracer tracer, long cppDatabase, int cppOperation) {
+    public static String OperationInfoKeyHandleCount = "HandleCount";
+    public static String OperationInfoKeyOpenTime = "OpenTime";
+    public static String OperationInfoKeySchemaUsage = "SchemaUsage";
+    public static String OperationInfoKeyTableCount = "TableCount";
+    public static String OperationInfoKeyIndexCount = "IndexCount";
+    public static String OperationInfoKeyTriggerCount = "TriggerCount";
+
+    private static void onTraceOperation(OperationTracer tracer, long cppDatabase, int cppOperation, long info) {
         Database database = new Database();
         database.cppObj = cppDatabase;
         Operation operation = Operation.Create;
@@ -268,7 +277,25 @@ public class Database extends HandleORMOperation {
                 operation = Operation.OpenHandle;
                 break;
         }
-        tracer.onTrace(database, operation);
+        HashMap<String, Value> javaInfo = new HashMap();
+        enumerateInfo(javaInfo, info);
+        tracer.onTrace(database, operation, javaInfo);
+    }
+
+    private static native void enumerateInfo(HashMap<String, Value> javaInfo, long cppInfo);
+    private static void onEnumerateInfo(HashMap<String, Value> javaInfo,
+                                        String key,
+                                        int type,
+                                        long intValue,
+                                        double doubleValue,
+                                        String stringValue) {
+        if(type == 3) {
+            javaInfo.put(key, new Value(intValue));
+        } else if (type == 5) {
+            javaInfo.put(key, new Value(doubleValue));
+        } else if (type == 6)  {
+            javaInfo.put(key, new Value(stringValue));
+        }
     }
 
     public static native void globalTraceDatabaseOperation(OperationTracer tracer);

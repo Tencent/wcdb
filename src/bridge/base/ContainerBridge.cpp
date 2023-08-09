@@ -49,12 +49,12 @@ CPPCommonValue WCDBCreateCommonValue(const WCDB::Value& value)
     return commonValue;
 }
 
-void WCDBEnumerateStringViewMap(void* _Nonnull map,
+void WCDBEnumerateStringViewMap(const void* _Nonnull map,
                                 void* _Nonnull context,
                                 StringViewMapEnumerator _Nonnull enumerator)
 {
-    WCDB::StringViewMap<WCDB::Value>* cppMap
-    = static_cast<WCDB::StringViewMap<WCDB::Value>*>(map);
+    const WCDB::StringViewMap<WCDB::Value>* cppMap
+    = static_cast<const WCDB::StringViewMap<WCDB::Value>*>(map);
     for (auto iter = cppMap->begin(); iter != cppMap->end(); iter++) {
         enumerator(context, iter->first.data(), WCDBCreateCommonValue(iter->second));
     }
