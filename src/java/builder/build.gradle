@@ -20,4 +20,9 @@ def myVersion = file('../../../VERSION')
 allprojects {
     group 'com.tencent.wcdb'
     version myVersion
+
+    repositories {
+        mavenCentral()
+        google()
+    }
 }
