@@ -16,7 +16,7 @@ buildscript {
     }
 }
 
-def myVersion = file('../../../VERSION')
+def myVersion = file('../../../VERSION').text
 allprojects {
     group 'com.tencent.wcdb'
     version myVersion
