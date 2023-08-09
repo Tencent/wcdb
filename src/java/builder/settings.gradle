@@ -1,7 +1,8 @@
-rootProject.name = 'WCDB-Builder'
-
-include ':builder-annotation'
-project(':builder-annotation').projectDir = file('../annotation')
+includeBuild('../annotation') {
+    dependencySubstitution {
+        substitute module('com.tencent.wcdb:annotation') using project(':')
+    }
+}
 
 include ':compiler'
 include ':gradle-plugin'

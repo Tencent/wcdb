@@ -28,3 +28,19 @@ allprojects {
         google()
     }
 }
+
+tasks.register('publishAllToMavenLocal') {
+    group = 'publishing'
+    dependsOn gradle.includedBuild('annotation').task(':publishToMavenLocal')
+    dependsOn gradle.includedBuild('builder').task(':compiler:publishToMavenLocal')
+    dependsOn gradle.includedBuild('builder').task(':gradle-plugin:publishToMavenLocal')
+    dependsOn tasks.findByPath(':main:publishToMavenLocal')
+}
+
+tasks.register('publishAll') {
+    group = 'publishing'
+    dependsOn gradle.includedBuild('annotation').task(':publish')
+    dependsOn gradle.includedBuild('builder').task(':compiler:publish')
+    dependsOn gradle.includedBuild('builder').task(':gradle-plugin:publish')
+    dependsOn tasks.findByPath(':main:publish')
+}

@@ -2,6 +2,7 @@ plugins {
     id 'groovy'
     id 'java-gradle-plugin'
 }
+apply from: rootProject.file('../gradle/WeChatPublish.gradle')
 
 gradlePlugin {
     plugins {

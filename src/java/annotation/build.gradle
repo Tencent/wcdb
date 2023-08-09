@@ -1,6 +1,10 @@
 plugins {
     id 'java-library'
 }
+apply from: file('../gradle/WeChatPublish.gradle')
+
+group 'com.tencent.wcdb'
+version file('../../../VERSION').text
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_7
