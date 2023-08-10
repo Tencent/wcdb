@@ -297,7 +297,7 @@ class WeChatJavaLibraryPublishExtension extends WeChatPublishExtension {
         if (printModules) {
             def anchorTask = project.tasks.findByName('compileJava')
             def printTask = project.task('printPublishArtifactInfo').doFirst {
-                println "@@@WeChatPublish@@@ ${artifactId}: ${fullVersion}"
+                println "@@@WeChatPublish@@@ ${groupId}:${artifactId}:${fullVersion}"
             }
             anchorTask.dependsOn printTask
         }
