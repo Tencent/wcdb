@@ -5,6 +5,7 @@ plugins {
 apply from: rootProject.file('../gradle/WeChatPublish.gradle')
 
 gradlePlugin {
+    automatedPublishing false
     plugins {
         wcdbPlugin {
             id = 'com.tencent.wcdb.gradle'

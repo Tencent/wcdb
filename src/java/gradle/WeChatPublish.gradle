@@ -1,12 +1,16 @@
-def extensionClass
+Class extensionClass
 
 // Detect supported plugin modules
 if (plugins.hasPlugin('com.android.library')) {
     // Android library mode
-    extensionClass = WeChatAndroidLibraryPublishExtension.class
+    extensionClass = WeChatAndroidLibraryPublishExtension
 } else if (plugins.hasPlugin('java')) {
     // Java library mode
-    extensionClass = WeChatJavaLibraryPublishExtension.class
+    if (plugins.hasPlugin('java-gradle-plugin')) {
+        extensionClass = WeChatGradlePluginPublishExtension
+    } else {
+        extensionClass = WeChatJavaLibraryPublishExtension
+    }
 } else {
     // TODO: Support more languages
     throw new GradleException('This plugin must be applied after "java" or "com.android.library" plugin')
@@ -334,36 +338,66 @@ class WeChatJavaLibraryPublishExtension extends WeChatPublishExtension {
         def javadocJarTask = project.tasks.register('javadocJar', Jar) {
             dependsOn javadocTask
             classifier = 'javadoc'
-            from javadocTask.destinationDir
+            from javadocTask.get().destinationDir
         }
         // TODO: upload javadoc to documentation site
 
-        project.publishing.publications {
-            "${publicationName}" (MavenPublication) {
-                from project.components.java
+        project.publishing.publications.create(publicationName, MavenPublication) {
+            from project.components.java
 
-                groupId this.groupId
-                artifactId this.artifactId
-                version this.fullVersion
+            groupId this.groupId
+            artifactId this.artifactId
+            version this.fullVersion
 
-                validateArtifactNotExists(project, groupId, artifactId, version)
+            validateArtifactNotExists(project, groupId, artifactId, version)
 
-                // Emit sourcesJar task
-                if (withSources) {
-                    artifact sourcesJarTask
-                }
-
-                // Emit javadocJar task
-                if (withJavadoc) {
-                    artifact javadocJarTask
-                }
+            // Emit sourcesJar task
+            if (withSources) {
+                artifact sourcesJarTask
             }
+
+            // Emit javadocJar task
+            if (withJavadoc) {
+                artifact javadocJarTask
+            }
+
+            pomClosures.each { pom it }
+        }
+    }
+}
+
+class WeChatGradlePluginPublishExtension extends WeChatJavaLibraryPublishExtension {
+    WeChatGradlePluginPublishExtension(Project project) {
+        super(project)
+    }
+
+    @Override
+    protected void emitPublicationDSL(Project project) {
+        PublicationContainer publications = project.publishing.publications
+        def pluginExtension = project.extensions.getByType(GradlePluginDevelopmentExtension)
+        if (pluginExtension.automatedPublishing) {
+            // Publications are added by the plugin, nothing to do.
+            // Version to publish may be wrong.
+            return
         }
 
-        pomClosures.each { cl ->
-            project.publishing.publications {
-                "${publicationName}"(MavenPublication) {
-                    pom cl
+        super.emitPublicationDSL(project)
+        def mainPublication = publications.getByName(publicationName) as MavenPublication
+        for (plugin in pluginExtension.plugins) {
+            publications.create("${plugin.name}PluginMarkerMaven", MavenPublication) {
+                alias true
+                artifactId "${plugin.id}.gradle.plugin"
+                groupId plugin.id
+                version this.fullVersion
+                pom {
+                    name.set(plugin.displayName)
+                    description.set(plugin.description)
+                    withXml {
+                        def node = asNode().appendNode('dependencies').appendNode('dependency')
+                        node.appendNode('groupId', mainPublication.groupId)
+                        node.appendNode('artifactId', mainPublication.artifactId)
+                        node.appendNode('version', mainPublication.version)
+                    }
                 }
             }
         }
