@@ -5,10 +5,15 @@ pluginManagement {
 rootProject.name = 'WCDB'
 
 include ':main'
-include ':annotation'
 include ':test'
 include ':kotlin-test'
 include ':wechat-test'
+
+includeBuild('annotation') {
+    dependencySubstitution {
+        substitute module('com.tencent.wcdb:annotation') using project(':')
+    }
+}
 
 includeBuild('builder') {
     dependencySubstitution {
