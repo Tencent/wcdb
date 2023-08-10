@@ -111,6 +111,7 @@ enum HandleCategory : unsigned int {
     HandleCategoryIntegrity,
     HandleCategoryAssemble,
     HandleCategoryCipher,
+    HandleCategoryMergeIndex,
     HandleCategoryCount,
 };
 enum class HandleType : unsigned int {
@@ -126,6 +127,7 @@ enum class HandleType : unsigned int {
     AssembleCipher = (HandleCategoryCipher << 8) | HandleSlotAssemble,
     AssembleBackupRead = (HandleCategoryBackupRead << 8) | HandleSlotAssemble,
     AssembleBackupWrite = (HandleCategoryBackupWrite << 8) | HandleSlotAssemble,
+    MergeIndex = (HandleCategoryMergeIndex << 8) | HandleSlotOperation,
 };
 static constexpr HandleSlot slotOfHandleType(HandleType type)
 {
