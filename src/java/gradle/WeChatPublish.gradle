@@ -22,7 +22,7 @@ class WeChatPublishExtension {
     private String versionSuffix = ''
     protected boolean printModules = false
 
-    boolean withJavadoc = false
+    boolean withJavadoc = true
     boolean withSources = true
     boolean withNativeSymbols = true
     boolean withDependencies = true
@@ -302,7 +302,7 @@ class WeChatJavaLibraryPublishExtension extends WeChatPublishExtension {
     @Override
     protected void emitPublicationDSL(Project project) {
 
-        def sourcesJarTask = project.task('sourcesJar', type: Jar) {
+        def sourcesJarTask = project.tasks.register('sourcesJar', Jar) {
             classifier = 'sources'
 
             def srcDirs = []
@@ -315,7 +315,8 @@ class WeChatJavaLibraryPublishExtension extends WeChatPublishExtension {
             from srcDirs
         }
 
-        def javadocTask = (project.tasks.findByName('javadoc') as Javadoc).with {
+        def javadocTask = project.tasks.named('javadoc', Javadoc)
+        javadocTask.configure {
             title = null
             options {
                 memberLevel = JavadocMemberLevel.PUBLIC
@@ -329,7 +330,8 @@ class WeChatJavaLibraryPublishExtension extends WeChatPublishExtension {
             }
             it
         }
-        def javadocJarTask = project.task('javadocJar', type: Jar) {
+
+        def javadocJarTask = project.tasks.register('javadocJar', Jar) {
             dependsOn javadocTask
             classifier = 'javadoc'
             from javadocTask.destinationDir
@@ -407,18 +409,17 @@ class WeChatAndroidLibraryPublishExtension extends WeChatPublishExtension {
             if (!publishAllFlavors && !flavorName.empty && !publishFlavors.contains(flavorName))
                 return
 
-            def generateSourcesTask = project.tasks.findByName("generate${cVariantName}Sources")
+            def generateSourcesTask = project.tasks.named("generate${cVariantName}Sources")
 
-            def javadocTask = project.task("javadoc${cVariantName}", type: Javadoc) {
+            def javadocTask = project.tasks.register("javadoc${cVariantName}", Javadoc) {
                 group = 'documentation'
                 title = null
 
                 def classpathFiles = project.files(android.getBootClasspath().join(File.pathSeparator))
-                classpathFiles += project.files(project.configurations.api)
-                classpathFiles += project.files(project.configurations.implementation)
+                classpathFiles += project.files(project.configurations.named("${variantName}RuntimeClasspath"))
                 doFirst { classpath += classpathFiles }
 
-                source = variant.javaCompile.source
+                source = variant.javaCompileProvider.get().source
                 options {
                     memberLevel = JavadocMemberLevel.PUBLIC
 
@@ -437,13 +438,13 @@ class WeChatAndroidLibraryPublishExtension extends WeChatPublishExtension {
                 dependsOn generateSourcesTask
             }
 
-            def javadocJarTask = project.task("javadocJar${cVariantName}", type: Jar) {
+            def javadocJarTask = project.tasks.register("javadocJar${cVariantName}", Jar) {
                 classifier = 'javadoc'
-                from javadocTask.destinationDir
+                from javadocTask.get().destinationDir
                 dependsOn javadocTask
             }
 
-            def sourcesJarTask = project.task("sourcesJar${cVariantName}", type: Jar) {
+            def sourcesJarTask = project.tasks.register("sourcesJar${cVariantName}", Jar) {
                 classifier = 'sources'
 
                 def srcDirs = []
@@ -458,33 +459,44 @@ class WeChatAndroidLibraryPublishExtension extends WeChatPublishExtension {
                 dependsOn generateSourcesTask
             }
 
-            def externalNativeBuildTask = project.tasks.findByName(
-                    "externalNativeBuild${cVariantName}")
-            Zip nativeSymbolZipTask = null
-            if (externalNativeBuildTask != null) {
-                nativeSymbolZipTask = project.task("nativeSymbolZip${cVariantName}", type: Zip) {
+            TaskProvider<Zip> nativeSymbolZipTask = null
+            try {
+                def externalNativeBuildTask = project.tasks.named("externalNativeBuild${cVariantName}")
+
+                nativeSymbolZipTask = project.tasks.register("nativeSymbolZip${cVariantName}", Zip) {
                     classifier = "${variantOnlyName}Symbols"
-                    from externalNativeBuildTask.objFolder
+                    def objFolder = externalNativeBuildTask.get().objFolder.asFile.get()
+                    if (new File(objFolder, 'obj').isDirectory()) {
+                        objFolder = new File(objFolder, 'obj')
+                    }
+                    from objFolder
                     include '*/*.so'
                     dependsOn externalNativeBuildTask
                 }
 
-                externalNativeBuildTask.doLast {
-                    // If externalNativeBuild generates no shared library files,
-                    // remove symbols artifact from the publication.
-                    if (nativeSymbolZipTask.inputs.sourceFiles.empty) {
-                        def publication = project.publishing.publications
-                                .getByName("${publicationName}${cFlavorName}")
-                        publication.artifacts.removeIf {
-                            it.file == nativeSymbolZipTask.archivePath
+                externalNativeBuildTask.configure {
+                    doLast {
+                        // If externalNativeBuild generates no shared library files,
+                        // remove symbols artifact from the publication.
+                        if (nativeSymbolZipTask.get().inputs.sourceFiles.empty) {
+                            def publication = project.publishing.publications
+                                    .getByName("${publicationName}${cFlavorName}")
+                            publication.artifacts.removeIf {
+                                it.file == nativeSymbolZipTask.get().archivePath
+                            }
                         }
                     }
                 }
+            } catch (UnknownTaskException e) {
+                // no external build task, okay
             }
 
-            def bundleTask = project.tasks.findByName("bundle${cVariantName}Aar")
-            if (bundleTask == null)
-                bundleTask = project.tasks.findByName("bundle${cVariantName}")
+            TaskProvider<Task> bundleTask
+            try {
+                bundleTask = project.tasks.named("bundle${cVariantName}Aar")
+            } catch (UnknownTaskException e) {
+                bundleTask = project.tasks.named("bundle${cVariantName}")
+            }
 
             project.publishing.publications {
                 "${publicationName}${cFlavorName}"(MavenPublication) {
