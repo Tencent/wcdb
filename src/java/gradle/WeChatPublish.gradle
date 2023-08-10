@@ -500,11 +500,13 @@ class WeChatAndroidLibraryPublishExtension extends WeChatPublishExtension {
                 nativeSymbolZipTask = project.tasks.register("nativeSymbolZip${cVariantName}", Zip) {
                     classifier = "${variantOnlyName}Symbols"
                     def objFolder = externalNativeBuildTask.get().objFolder.asFile.get()
-                    if (new File(objFolder, 'obj').isDirectory()) {
-                        objFolder = new File(objFolder, 'obj')
+                    from(objFolder) {
+                        include '*/*.so'
+                        exclude 'obj'
                     }
-                    from objFolder
-                    include '*/*.so'
+                    from("${objFolder}/obj") {
+                        include '*/*.so'
+                    }
                     dependsOn externalNativeBuildTask
                 }
 
