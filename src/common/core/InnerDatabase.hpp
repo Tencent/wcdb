@@ -82,7 +82,7 @@ protected:
 
 #pragma mark - Handle
 public:
-    RecyclableHandle getHandle() override;
+    RecyclableHandle getHandle();
     bool execute(const Statement &statement);
     bool execute(const UnsafeStringView &sql);
     Optional<bool> tableExists(const UnsafeStringView &table);
@@ -196,6 +196,7 @@ public:
     using TableArray = std::shared_ptr<std::vector<StringView>>;
     Optional<bool> mergeFTSIndex(TableArray newTables, TableArray modifiedTables);
     void proccessMerge();
+    RecyclableHandle getMergeIndexHandle() override final;
 
 private:
     MergeFTSIndexLogic m_mergeLogic;

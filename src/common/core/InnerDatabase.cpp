@@ -959,4 +959,9 @@ void InnerDatabase::proccessMerge()
     return m_mergeLogic.proccessMerge();
 }
 
+RecyclableHandle InnerDatabase::getMergeIndexHandle()
+{
+    return flowOut(HandleType::MergeIndex);
+}
+
 } //namespace WCDB
