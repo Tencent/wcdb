@@ -577,7 +577,10 @@ OptionalOneColumn HandleStatement::getOneColumn(int index)
         }
         result->push_back(getValue(index));
     }
-    return succeed && !result.hasValue() ? OneColumnValue() : result;
+    if (!succeed) {
+        return NullOpt;
+    }
+    return !result.hasValue() ? OneColumnValue() : result;
 }
 
 OneRowValue HandleStatement::getOneRow()
@@ -600,7 +603,10 @@ OptionalMultiRows HandleStatement::getAllRows()
         }
         result->push_back(getOneRow());
     }
-    return succeed && !result.hasValue() ? MultiRowsValue() : result;
+    if (!succeed) {
+        return NullOpt;
+    }
+    return !result.hasValue() ? MultiRowsValue() : result;
 }
 
 signed long long HandleStatement::getColumnSize(int index)
