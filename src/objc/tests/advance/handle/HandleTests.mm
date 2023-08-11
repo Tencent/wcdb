@@ -320,4 +320,31 @@
     }
 }
 
+- (void)test_cancellation_signal
+{
+    NSArray* objects = [Random.shared testCaseObjectsWithCount:10000 startingFromIdentifier:3];
+    TestCaseAssertTrue([self.database insertObjects:objects intoTable:self.tableName]);
+
+    __block BOOL hasTestInterrupt = NO;
+    [self.database traceError:^(WCTError* error) {
+        if (error.level != WCTErrorLevelError) {
+            return;
+        }
+        XCTAssertTrue(error.code == WCTErrorCodeInterrupt);
+        hasTestInterrupt = YES;
+    }];
+    WCTCancellationSignal* signal = [[WCTCancellationSignal alloc] init];
+    [self.dispatch async:^{
+        [self.handle attachCancellationSignal:signal];
+        NSArray* allObjects = [self.handle getObjectsOfClass:TestCaseObject.class fromTable:self.tableName];
+        XCTAssertNil(allObjects);
+        [self.handle invalidate];
+    }];
+    usleep(10000);
+    [signal cancel];
+    [self.dispatch waitUntilDone];
+    TestCaseAssertTrue(hasTestInterrupt);
+    [self.database traceError:nil];
+}
+
 @end

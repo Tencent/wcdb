@@ -172,3 +172,28 @@ bool WCDBHandleRunPausableTransaction(CPPHandle handle, SwiftClosure* _Nullable 
         return false;
     }
 }
+
+CPPCancellationSignal WCDBCancellationSignalCreate()
+{
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPCancellationSignal, WCDB::InnerHandle::CancellationSignal, new bool(false));
+}
+
+void WCDBCancellationSignalCancel(CPPCancellationSignal signal)
+{
+    WCDBGetObjectOrReturn(signal, WCDB::InnerHandle::CancellationSignal, cppSignal);
+    **cppSignal = true;
+}
+
+void WCDBHandleAttachCancellationSignal(CPPHandle handle, CPPCancellationSignal signal)
+{
+    WCDBGetObjectOrReturn(handle, WCDB::InnerHandle, cppHandle);
+    WCDBGetObjectOrReturn(signal, WCDB::InnerHandle::CancellationSignal, cppSignal);
+    cppHandle->attachCancellationSignal(*cppSignal);
+}
+
+void WCDBHandleDettachCancellationSignal(CPPHandle handle)
+{
+    WCDBGetObjectOrReturn(handle, WCDB::InnerHandle, cppHandle);
+    cppHandle->detachCancellationSignal();
+}

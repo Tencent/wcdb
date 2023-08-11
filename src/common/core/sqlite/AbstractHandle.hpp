@@ -221,6 +221,16 @@ protected:
 private:
     std::atomic<bool> m_canBeSuspended;
 
+#pragma mark - Cancellation Signal
+public:
+    typedef std::shared_ptr<volatile bool> CancellationSignal;
+    void attachCancellationSignal(CancellationSignal signal);
+    void detachCancellationSignal();
+
+private:
+    static int progressHandlerCallback(void *ctx);
+    CancellationSignal m_cancelSignal;
+
 #pragma mark - Cipher
 public:
     size_t getCipherPageSize();
