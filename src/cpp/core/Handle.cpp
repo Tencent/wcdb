@@ -155,4 +155,26 @@ void Handle::finalizeAllStatement()
     handle->finalizeStatements();
 }
 
+void Handle::attachCancellationSignal(const CancellationSignal& signal)
+{
+    GetInnerHandleOrReturn;
+    handle->attachCancellationSignal(signal.m_signal);
+}
+
+void Handle::detachCancellationSignal()
+{
+    GetInnerHandleOrReturn;
+    handle->detachCancellationSignal();
+}
+
+Handle::CancellationSignal::CancellationSignal()
+: m_signal(std::make_shared<bool>(false)){};
+
+Handle::CancellationSignal::~CancellationSignal() = default;
+
+void Handle::CancellationSignal::cancel()
+{
+    *m_signal = true;
+}
+
 } //namespace WCDB

@@ -24,6 +24,7 @@
 
 #import "Assertion.hpp"
 #import "Notifier.hpp"
+#import "WCTCancellationSignal+Private.h"
 #import "WCTDatabase+Private.h"
 #import "WCTError+Private.h"
 #import "WCTFoundation.h"
@@ -611,6 +612,20 @@
         [multiObjects addObject:[self extractMultiObjectOnResultColumns:resultColumns]];
     }
     return succeed ? multiObjects : nil;
+}
+
+#pragma mark - Cancellation signal
+- (void)attachCancellationSignal:(WCTCancellationSignal *)signal
+{
+    [self getOrGenerateHandle];
+    WCTHandleAssert(return;);
+    _handle->attachCancellationSignal([signal getInnerSignal]);
+}
+
+- (void)detachCancellationSignal
+{
+    WCTHandleAssert(return;);
+    _handle->detachCancellationSignal();
 }
 
 #pragma mark - Error

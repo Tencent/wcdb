@@ -22,6 +22,7 @@
  * limitations under the License.
  */
 
+#import "WCTCancellationSignal.h"
 #import "WCTCommon.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -372,6 +373,34 @@ NS_ASSUME_NONNULL_BEGIN
  @return An array of WCTMultiObject, or nil if error occurs.
  */
 - (nullable NSArray<WCTMultiObject *> *)allMultiObjectsOnResultColumns:(const WCTResultColumns &)resultColumns;
+
+#pragma mark - Cancellation signal
+/**
+ @brief The wrapper of `sqlite3_progress_handler`.
+ 
+ You can asynchronously cancel all operations on the current handle through `WCTCancellationSignal`.
+ 
+        WCTCancellationSignal *signal = [[WCTCancellationSignal alloc] init];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            WCTHandle* handle = [database getHandle];
+            [handle attachCancellationSignal:signal];
+ 
+            // Do some time-consuming database operations.
+ 
+            [handle detachCancellationSignal];
+        });
+        [signal cancel];
+ 
+ @warning Note that you can use `WCTCancellationSignal` in multiple threads,
+ but you can only use the current handle in the thread that you got it.
+ */
+- (void)attachCancellationSignal:(WCTCancellationSignal *)signal;
+
+/**
+ @brief Detach the attached `WCTCancellationSignal`.
+        `WCTCancellationSignal` can be automatically detached when the current handle deconstruct.
+ */
+- (void)detachCancellationSignal;
 
 #pragma mark - Error
 /**

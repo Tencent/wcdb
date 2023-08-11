@@ -120,6 +120,9 @@ bool AbstractHandle::isOpened() const
 void AbstractHandle::close()
 {
     if (isOpened()) {
+        if (m_cancelSignal != nullptr) {
+            sqlite3_progress_handler(m_handle, 0, nullptr, nullptr);
+        }
         finalizeStatements();
         m_transactionLevel = 0;
         m_notification.purge();
@@ -756,6 +759,30 @@ void AbstractHandle::doSuspend(bool suspend)
     if (isOpened()) {
         sqlite3_suspend(m_handle, suspend);
     }
+}
+
+#pragma mark - Cancellation Signal
+void AbstractHandle::attachCancellationSignal(CancellationSignal signal)
+{
+    WCTAssert(isOpened());
+    m_cancelSignal = signal;
+    sqlite3_progress_handler(m_handle, 4, AbstractHandle::progressHandlerCallback, this);
+}
+
+void AbstractHandle::detachCancellationSignal()
+{
+    if (m_cancelSignal == nullptr) {
+        return;
+    }
+    sqlite3_progress_handler(m_handle, 0, nullptr, nullptr);
+    m_cancelSignal = nullptr;
+}
+
+int AbstractHandle::progressHandlerCallback(void *ctx)
+{
+    AbstractHandle *handle = static_cast<AbstractHandle *>(ctx);
+    WCTAssert(handle->m_cancelSignal != nullptr);
+    return *(handle->m_cancelSignal);
 }
 
 #pragma mark - Cipher

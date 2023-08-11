@@ -110,7 +110,7 @@ void InnerDatabase::close(const ClosedCallback &onClosed)
     {
         SharedLockGuard concurrencyGuard(m_concurrency);
         SharedLockGuard memoryGuard(m_memory);
-        // suspend auto checkpoint/backup/integrity check/migrate
+        // suspend auto checkpoint/backup/integrity check/migrate/merge fts5 index
         for (auto &handle : getHandlesOfSlot(HandleSlot::HandleSlotOperation)) {
             handle->suspend(true);
         }
