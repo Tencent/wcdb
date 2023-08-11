@@ -346,7 +346,7 @@ Optional<bool> FileManager::fileExists(const UnsafeStringView &file)
 
 Optional<bool> FileManager::directoryExists(const UnsafeStringView &directory)
 {
-    auto result = itemExists(directory);
+    auto result = itemExists(Path::addBackslash(directory));
     if (result.succeed()) {
         bool exists, isDirectory;
         std::tie(exists, isDirectory) = result.value();

@@ -55,6 +55,16 @@ StringView addComponent(const UnsafeStringView &base, const UnsafeStringView &co
     return StringView(stream.str());
 }
 
+WCDB::StringView addBackslash(const UnsafeStringView &base)
+{
+    std::ostringstream stream;
+    stream << base;
+    if (base.empty() || base[base.length() - 1] != kPathSeparator) {
+        stream << kPathSeparator;
+    }
+    return StringView(stream.str());
+}
+
 StringView getFileName(const UnsafeStringView &base)
 {
     std::string file = base.data();

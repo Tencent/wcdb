@@ -34,6 +34,7 @@ namespace Path {
 
 StringView addExtention(const UnsafeStringView &base, const UnsafeStringView &extention);
 StringView addComponent(const UnsafeStringView &base, const UnsafeStringView &component);
+StringView addBackslash(const UnsafeStringView &base);
 StringView getFileName(const UnsafeStringView &base);
 StringView getDirectoryName(const UnsafeStringView &base);
 
