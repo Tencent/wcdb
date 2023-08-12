@@ -841,6 +841,10 @@ static const JNINativeMethod g_handleMethods[] = {
     { "runPausableTransaction",
       "(JLcom/tencent/wcdb/core/PausableTransaction;)Z",
       (void *) WCDBJNIHandleFuncName(runPausableTransaction) },
+    { "createCancellationSignal", "()J", (void *) WCDBJNIHandleFuncName(createCancellationSignal) },
+    { "cancelSignal", "(J)V", (void *) WCDBJNIHandleFuncName(cancelSignal) },
+    { "attachCancellationSignal", "(JJ)V", (void *) WCDBJNIHandleFuncName(attachCancellationSignal) },
+    { "detachCancellationSignal", "(J)V", (void *) WCDBJNIHandleFuncName(detachCancellationSignal) },
 };
 
 static const JNINativeMethod g_databaseMethods[]

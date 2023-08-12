@@ -22,6 +22,7 @@
  */
 package com.tencent.wcdb.core;
 
+import com.tencent.wcdb.base.CppObject;
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.winq.Statement;
 
@@ -179,9 +180,44 @@ public class Handle extends HandleORMOperation {
         } catch (WCDBException e) {
             ret = 2;
         }
+        CancellationSignal signal = new CancellationSignal();
         return ret;
     }
 
     native boolean runPausableTransaction(long self, PausableTransaction transaction);
+
+    public static class CancellationSignal extends CppObject {
+        public CancellationSignal() {
+            cppObj = createCancellationSignal();
+        }
+
+        public void cancel() {
+            cancelSignal(cppObj);
+        }
+    }
+
+    private static native long createCancellationSignal();
+    private static native void cancelSignal(long signal);
+
+    public void attachCancellationSignal(CancellationSignal signal) throws WCDBException {
+        if(signal == null) {
+            return;
+        }
+        long cppSignal = signal.getCppObj();
+        if(cppSignal == 0){
+            return;
+        }
+        attachCancellationSignal(getCppHandle(), cppSignal);
+    }
+
+    private native void attachCancellationSignal(long self, long signal);
+
+    public void detachCancellationSignal() {
+        if(cppObj != 0) {
+            detachCancellationSignal(cppObj);
+        }
+    }
+
+    private native void detachCancellationSignal(long self);
 
 }

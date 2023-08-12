@@ -55,3 +55,9 @@ void WCDBJNIHandleObjectMethod(rollbackTransaction, jlong self);
 
 jboolean WCDBJNIHandleObjectMethod(runTransaction, jlong self, jobject transaction);
 jboolean WCDBJNIHandleObjectMethod(runPausableTransaction, jlong self, jobject transaction);
+
+jlong WCDBJNIHandleClassMethodWithNoArg(createCancellationSignal);
+void WCDBJNIHandleClassMethod(cancelSignal, jlong signal);
+
+void WCDBJNIHandleObjectMethod(attachCancellationSignal, jlong self, jlong signal);
+void WCDBJNIHandleObjectMethod(detachCancellationSignal, jlong self);
