@@ -26,68 +26,62 @@
 
 namespace WCDB {
 
-WCDBLiteralStringImpletement(OperationQueueName, "com.Tencent.WCDB.Queue.Operation")
+WCDBLiteralStringImplement(OperationQueueName)
 
-WCDBLiteralStringImpletement(AutoCheckpointConfigName, "com.Tencent.WCDB.Config.AutoCheckpoint")
+WCDBLiteralStringImplement(AutoCheckpointConfigName)
 
-WCDBLiteralStringImpletement(AutoBackupConfigName, "com.Tencent.WCDB.Config.AutoBackup")
+WCDBLiteralStringImplement(AutoBackupConfigName)
 
-WCDBLiteralStringImpletement(AutoMigrateConfigName, "com.Tencent.WCDB.Config.AutoMigrate")
+WCDBLiteralStringImplement(AutoMigrateConfigName)
 
-WCDBLiteralStringImpletement(AutoMergeFTSIndexConfigName, "com.Tencent.WCDB.Config.AutoMergeFTSIndex")
+WCDBLiteralStringImplement(AutoMergeFTSIndexConfigName)
 
-WCDBLiteralStringImpletement(AutoMergeFTSIndexQueueName, "com.Tencent.WCDB.Queue.MergeIndex")
+WCDBLiteralStringImplement(AutoMergeFTSIndexQueueName)
 
-WCDBLiteralStringImpletement(BasicConfigName, "com.Tencent.WCDB.Config.Basic")
+WCDBLiteralStringImplement(BasicConfigName)
 
-WCDBLiteralStringImpletement(BusyRetryConfigName, "com.Tencent.WCDB.Config.BusyRetry")
+WCDBLiteralStringImplement(BusyRetryConfigName)
 
-WCDBLiteralStringImpletement(CipherConfigName, "com.Tencent.WCDB.Config.Cipher")
+WCDBLiteralStringImplement(CipherConfigName)
 
-WCDBLiteralStringImpletement(GlobalSQLTraceConfigName, "com.Tencent.WCDB.Config.GlobalSQLTrace")
+WCDBLiteralStringImplement(GlobalSQLTraceConfigName)
 
-WCDBLiteralStringImpletement(GlobalPerformanceTraceConfigName,
-                             "com.Tencent.WCDB.Config.GlobalPerformanceTrace")
+WCDBLiteralStringImplement(GlobalPerformanceTraceConfigName)
 
-WCDBLiteralStringImpletement(PerformanceTraceConfigName, "com.Tencent.WCDB.Config.PerformanceTrace")
+WCDBLiteralStringImplement(PerformanceTraceConfigName)
 
-WCDBLiteralStringImpletement(SQLTraceConfigName, "com.Tencent.WCDB.Config.SQLTrace")
+WCDBLiteralStringImplement(SQLTraceConfigName)
 
-WCDBLiteralStringImpletement(TokenizeConfigPrefix, "com.Tencent.WCDB.Config.Tokenize.")
+WCDBLiteralStringImplement(TokenizeConfigPrefix)
 
-WCDBLiteralStringImpletement(AuxiliaryFunctionConfigPrefix, "com.Tencent.WCDB.Config.AuxiliaryFunction.")
+WCDBLiteralStringImplement(AuxiliaryFunctionConfigPrefix)
 
-WCDBLiteralStringImpletement(NotifierPreprocessorName, "com.Tencent.WCDB.Notifier.PreprocessTag")
+WCDBLiteralStringImplement(NotifierPreprocessorName)
 
-WCDBLiteralStringImpletement(NotifierLoggerName, "com.Tencent.WCDB.Notifier.Log")
+WCDBLiteralStringImplement(NotifierLoggerName)
 
-WCDBLiteralStringImpletement(ErrorStringKeyType, "Type")
-WCDBLiteralStringImpletement(ErrorStringKeySource, "Source")
-WCDBLiteralStringImpletement(ErrorStringKeyPath, WCDB_ERROR_STRING_KEY_PATH)
-WCDBLiteralStringImpletement(ErrorStringKeyAssociatePath, WCDB_ERROR_STRING_KEY_ASSOCIATE_PATH)
-WCDBLiteralStringImpletement(ErrorStringKeySQL, WCDB_ERROR_STRING_KEY_SQL)
-WCDBLiteralStringImpletement(ErrorIntKeyTag, WCDB_ERROR_INT_KEY_TAG)
-WCDBLiteralStringImpletement(ErrorIntKeyExtCode, WCDB_ERROR_INT_KEY_EXTCODE)
+WCDBLiteralStringImplement(ErrorStringKeyType)
+WCDBLiteralStringImplement(ErrorStringKeySource)
+WCDBLiteralStringImplement(ErrorStringKeyPath)
+WCDBLiteralStringImplement(ErrorStringKeyAssociatePath)
+WCDBLiteralStringImplement(ErrorStringKeySQL) WCDBLiteralStringImplement(ErrorIntKeyTag)
+WCDBLiteralStringImplement(ErrorIntKeyExtCode)
 
-WCDBLiteralStringImpletement(ErrorSourceSQLite, "SQLite")
-WCDBLiteralStringImpletement(ErrorSourceRepair, "Repair")
-WCDBLiteralStringImpletement(ErrorSourceSystem, "System")
-WCDBLiteralStringImpletement(ErrorSourceAssertion, "Assertion")
-WCDBLiteralStringImpletement(ErrorSourceNative, "Native")
-WCDBLiteralStringImpletement(ErrorSourceSwift, "Swift")
+WCDBLiteralStringImplement(ErrorSourceSQLite)
+WCDBLiteralStringImplement(ErrorSourceRepair) WCDBLiteralStringImplement(ErrorSourceSystem)
+WCDBLiteralStringImplement(ErrorSourceAssertion)
+WCDBLiteralStringImplement(ErrorSourceNative) WCDBLiteralStringImplement(ErrorSourceSwift)
 
-WCDBLiteralStringImpletement(ErrorTypeMigrate, "Migrate")
-WCDBLiteralStringImpletement(ErrorTypeCheckpoint, "Checkpoint")
-WCDBLiteralStringImpletement(ErrorTypeIntegrity, "Integrity")
-WCDBLiteralStringImpletement(ErrorTypeBackup, "Backup")
-WCDBLiteralStringImpletement(ErrorTypeAssemble, "Assemble")
-WCDBLiteralStringImpletement(ErrorTypeMergeIndex, "MergeIndex")
+WCDBLiteralStringImplement(ErrorTypeMigrate) WCDBLiteralStringImplement(ErrorTypeCheckpoint)
+WCDBLiteralStringImplement(ErrorTypeIntegrity)
+WCDBLiteralStringImplement(ErrorTypeBackup) WCDBLiteralStringImplement(ErrorTypeAssemble)
+WCDBLiteralStringImplement(ErrorTypeMergeIndex)
 
-WCDBLiteralStringImpletement(MonitorInfoKeyHandleCount, "HandleCount")
-WCDBLiteralStringImpletement(MonitorInfoKeyHandleOpenTime, "OpenTime")
-WCDBLiteralStringImpletement(MonitorInfoKeySchemaUsage, "SchemaUsage")
-WCDBLiteralStringImpletement(MonitorInfoKeyTableCount, "TableCount")
-WCDBLiteralStringImpletement(MonitorInfoKeyIndexCount, "IndexCount")
-WCDBLiteralStringImpletement(MonitorInfoKeyTriggerCount, "TriggerCount")
+WCDBLiteralStringImplement(MonitorInfoKeyHandleCount)
+WCDBLiteralStringImplement(MonitorInfoKeyHandleOpenTime)
+WCDBLiteralStringImplement(MonitorInfoKeySchemaUsage)
+WCDBLiteralStringImplement(MonitorInfoKeyTableCount)
+WCDBLiteralStringImplement(MonitorInfoKeyIndexCount)
+WCDBLiteralStringImplement(MonitorInfoKeyTriggerCount)
 
 };

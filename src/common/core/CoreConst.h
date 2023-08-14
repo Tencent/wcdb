@@ -33,7 +33,8 @@ namespace WCDB {
 static constexpr const double AsyncQueueTimeOutForExiting = 10.0;
 
 #pragma mark - Operation Queue
-WCDBLiteralStringDefine(OperationQueueName) static constexpr double OperationQueueTimeIntervalForRetringAfterFailure = 5.0;
+WCDBLiteralStringDefine(OperationQueueName, "com.Tencent.WCDB.Queue.Operation");
+static constexpr double OperationQueueTimeIntervalForRetringAfterFailure = 5.0;
 #pragma mark - Operation Queue - Migration
 static constexpr const double OperationQueueTimeIntervalForMigration = 2.0;
 static constexpr const int OperationQueueTolerableFailuresForMigration = 5;
@@ -53,42 +54,44 @@ static constexpr const double OperationQueueTimeIntervalForMergeFTSIndex
 = 1.871; //Use prime numbers to reduce the probability of collision with external logic
 
 #pragma mark - Config - Auto Checkpoint
-WCDBLiteralStringDefine(AutoCheckpointConfigName)
+WCDBLiteralStringDefine(AutoCheckpointConfigName, "com.Tencent.WCDB.Config.AutoCheckpoint");
 #pragma mark - Config - Auto Backup
-WCDBLiteralStringDefine(AutoBackupConfigName)
+WCDBLiteralStringDefine(AutoBackupConfigName, "com.Tencent.WCDB.Config.AutoBackup");
 #pragma mark - Config - Auto Migrate
-WCDBLiteralStringDefine(AutoMigrateConfigName)
+WCDBLiteralStringDefine(AutoMigrateConfigName, "com.Tencent.WCDB.Config.AutoMigrate");
 #pragma mark - Config - Auto Merge
-WCDBLiteralStringDefine(AutoMergeFTSIndexConfigName)
-WCDBLiteralStringDefine(AutoMergeFTSIndexQueueName) static constexpr const
-int AutoMergeFTS5IndexMinSegmentCount = 4;
+WCDBLiteralStringDefine(AutoMergeFTSIndexConfigName, "com.Tencent.WCDB.Config.AutoMergeFTSIndex");
+WCDBLiteralStringDefine(AutoMergeFTSIndexQueueName, "com.Tencent.WCDB.Queue.MergeIndex");
+static constexpr const int AutoMergeFTS5IndexMinSegmentCount = 4;
 static constexpr const double AutoMergeFTSIndexMaxExpectingDuration = 0.02;
 static constexpr const double AutoMergeFTSIndexMaxInitializeDuration = 0.005;
 #pragma mark - Config - Basic
-WCDBLiteralStringDefine(BasicConfigName) static constexpr const
-int BasicConfigBusyRetryMaxAllowedNumberOfTimes = 3;
+WCDBLiteralStringDefine(BasicConfigName, "com.Tencent.WCDB.Config.Basic");
+static constexpr const int BasicConfigBusyRetryMaxAllowedNumberOfTimes = 3;
 #pragma mark - Config - Busy Retry
-WCDBLiteralStringDefine(BusyRetryConfigName) static constexpr const
-double BusyRetryTimeOut = 10.0;
+WCDBLiteralStringDefine(BusyRetryConfigName, "com.Tencent.WCDB.Config.BusyRetry");
+static constexpr const double BusyRetryTimeOut = 10.0;
 #pragma mark - Config - Cipher
-WCDBLiteralStringDefine(CipherConfigName) static constexpr const
-int CipherConfigDefaultPageSize = SQLITE_DEFAULT_PAGE_SIZE;
+WCDBLiteralStringDefine(CipherConfigName, "com.Tencent.WCDB.Config.Cipher");
+static constexpr const int CipherConfigDefaultPageSize = SQLITE_DEFAULT_PAGE_SIZE;
 #pragma mark - Config - Global SQL Trace
-WCDBLiteralStringDefine(GlobalSQLTraceConfigName)
+WCDBLiteralStringDefine(GlobalSQLTraceConfigName, "com.Tencent.WCDB.Config.GlobalSQLTrace");
 #pragma mark - Config - Global Performance Trace
-WCDBLiteralStringDefine(GlobalPerformanceTraceConfigName)
+WCDBLiteralStringDefine(GlobalPerformanceTraceConfigName,
+                        "com.Tencent.WCDB.Config.GlobalPerformanceTrace");
 #pragma mark - Config - Performance Trace
-WCDBLiteralStringDefine(PerformanceTraceConfigName)
+WCDBLiteralStringDefine(PerformanceTraceConfigName, "com.Tencent.WCDB.Config.PerformanceTrace");
 #pragma mark - Config - SQL Trace
-WCDBLiteralStringDefine(SQLTraceConfigName)
+WCDBLiteralStringDefine(SQLTraceConfigName, "com.Tencent.WCDB.Config.SQLTrace");
 #pragma mark - Config - Tokenize
-WCDBLiteralStringDefine(TokenizeConfigPrefix)
+WCDBLiteralStringDefine(TokenizeConfigPrefix, "com.Tencent.WCDB.Config.Tokenize.");
 #pragma mark - Config - AuxiliaryFunction
-WCDBLiteralStringDefine(AuxiliaryFunctionConfigPrefix)
+WCDBLiteralStringDefine(AuxiliaryFunctionConfigPrefix,
+                        "com.Tencent.WCDB.Config.AuxiliaryFunction.");
 
 #pragma mark - Notifier
-WCDBLiteralStringDefine(NotifierPreprocessorName)
-WCDBLiteralStringDefine(NotifierLoggerName)
+WCDBLiteralStringDefine(NotifierPreprocessorName, "com.Tencent.WCDB.Notifier.PreprocessTag");
+WCDBLiteralStringDefine(NotifierLoggerName, "com.Tencent.WCDB.Notifier.Log");
 
 #pragma mark - Handle Pool
 static constexpr const int HandlePoolMaxAllowedNumberOfHandles = 32;
@@ -140,40 +143,47 @@ static constexpr HandleCategory categoryOfHandleType(HandleType type)
 static constexpr const double MigrateMaxExpectingDuration = 0.01;
 static constexpr const double MigrateMaxInitializeDuration = 0.005;
 
-WCDBLiteralStringDefine(ErrorStringKeyType) WCDBLiteralStringDefine(ErrorStringKeySource)
+WCDBLiteralStringDefine(ErrorStringKeyType, "Type");
+WCDBLiteralStringDefine(ErrorStringKeySource, "Source")
 
 #define WCDB_ERROR_STRING_KEY_PATH "Path"
-WCDBLiteralStringDefine(ErrorStringKeyPath)
+WCDBLiteralStringDefine(ErrorStringKeyPath, WCDB_ERROR_STRING_KEY_PATH);
 
 #define WCDB_ERROR_STRING_KEY_ASSOCIATE_PATH "AssociatePath"
-WCDBLiteralStringDefine(ErrorStringKeyAssociatePath)
+WCDBLiteralStringDefine(ErrorStringKeyAssociatePath, WCDB_ERROR_STRING_KEY_ASSOCIATE_PATH);
 
 #define WCDB_ERROR_STRING_KEY_SQL "SQL"
-WCDBLiteralStringDefine(ErrorStringKeySQL)
+WCDBLiteralStringDefine(ErrorStringKeySQL, WCDB_ERROR_STRING_KEY_SQL);
 
 #define WCDB_ERROR_INT_KEY_TAG "Tag"
-WCDBLiteralStringDefine(ErrorIntKeyTag)
+WCDBLiteralStringDefine(ErrorIntKeyTag, WCDB_ERROR_INT_KEY_TAG);
 
 #define WCDB_ERROR_INT_KEY_EXTCODE "ExtCode"
-WCDBLiteralStringDefine(ErrorIntKeyExtCode)
+WCDBLiteralStringDefine(ErrorIntKeyExtCode, WCDB_ERROR_INT_KEY_EXTCODE);
 
 #pragma mark - Error - Source
-WCDBLiteralStringDefine(ErrorSourceSQLite) WCDBLiteralStringDefine(ErrorSourceRepair)
-WCDBLiteralStringDefine(ErrorSourceSystem) WCDBLiteralStringDefine(ErrorSourceAssertion)
-WCDBLiteralStringDefine(ErrorSourceNative) WCDBLiteralStringDefine(ErrorSourceSwift)
+WCDBLiteralStringDefine(ErrorSourceSQLite, "SQLite");
+WCDBLiteralStringDefine(ErrorSourceRepair, "Repair");
+WCDBLiteralStringDefine(ErrorSourceSystem, "System");
+WCDBLiteralStringDefine(ErrorSourceAssertion, "Assertion");
+WCDBLiteralStringDefine(ErrorSourceNative, "Native");
+WCDBLiteralStringDefine(ErrorSourceSwift, "Swift");
 
 #pragma mark - Error - Type
-WCDBLiteralStringDefine(ErrorTypeMigrate) WCDBLiteralStringDefine(ErrorTypeCheckpoint)
-WCDBLiteralStringDefine(ErrorTypeIntegrity) WCDBLiteralStringDefine(ErrorTypeBackup)
-WCDBLiteralStringDefine(ErrorTypeAssemble) WCDBLiteralStringDefine(ErrorTypeMergeIndex)
+WCDBLiteralStringDefine(ErrorTypeMigrate, "Migrate");
+WCDBLiteralStringDefine(ErrorTypeCheckpoint, "Checkpoint");
+WCDBLiteralStringDefine(ErrorTypeIntegrity, "Integrity");
+WCDBLiteralStringDefine(ErrorTypeBackup, "Backup")
+WCDBLiteralStringDefine(ErrorTypeAssemble, "Assemble");
+WCDBLiteralStringDefine(ErrorTypeMergeIndex, "MergeIndex")
 
 #pragma mark - Moniter
-WCDBLiteralStringDefine(MonitorInfoKeyHandleCount)
-WCDBLiteralStringDefine(MonitorInfoKeyHandleOpenTime)
-WCDBLiteralStringDefine(MonitorInfoKeySchemaUsage)
-WCDBLiteralStringDefine(MonitorInfoKeyTableCount)
-WCDBLiteralStringDefine(MonitorInfoKeyIndexCount)
-WCDBLiteralStringDefine(MonitorInfoKeyTriggerCount)
+WCDBLiteralStringDefine(MonitorInfoKeyHandleCount, "HandleCount");
+WCDBLiteralStringDefine(MonitorInfoKeyHandleOpenTime, "OpenTime");
+WCDBLiteralStringDefine(MonitorInfoKeySchemaUsage, "SchemaUsage");
+WCDBLiteralStringDefine(MonitorInfoKeyTableCount, "TableCount");
+WCDBLiteralStringDefine(MonitorInfoKeyIndexCount, "IndexCount");
+WCDBLiteralStringDefine(MonitorInfoKeyTriggerCount, "TriggerCount");
 
 #pragma mark - Tag
 static constexpr const int TagInvalidValue = 0;
