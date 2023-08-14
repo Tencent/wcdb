@@ -11,6 +11,6 @@ java {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "com.tencent.wcdb:annotation:${project.version}"
+    implementation "com.tencent.wcdb:annotation:${project.getFullVersion()}"
     implementation 'com.google.devtools.ksp:symbol-processing-api:1.7.10-1.0.6'
 }
