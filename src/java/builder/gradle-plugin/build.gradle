@@ -16,5 +16,6 @@ gradlePlugin {
 
 dependencies {
     implementation project(':compiler')
+    compileOnly gradleApi()
     compileOnly 'com.android.tools.build:gradle:7.4.2'
 }
