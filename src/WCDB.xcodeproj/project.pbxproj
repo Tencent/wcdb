@@ -3065,6 +3065,14 @@
 		75C6E41929A0C2F0002579A5 /* WCDBOptional.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C6E41629A0C2F0002579A5 /* WCDBOptional.cpp */; };
 		75C6E41A29A0C2F0002579A5 /* WCDBOptional.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C6E41629A0C2F0002579A5 /* WCDBOptional.cpp */; };
 		75C6E41B29A124B4002579A5 /* WCDBOptional.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75C6E412299E80D3002579A5 /* WCDBOptional.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		75CB08CB2A88B9A300429364 /* HandleCounter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75CB08C92A88B9A300429364 /* HandleCounter.cpp */; };
+		75CB08CC2A88B9A300429364 /* HandleCounter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75CB08C92A88B9A300429364 /* HandleCounter.cpp */; };
+		75CB08CD2A88B9A300429364 /* HandleCounter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75CB08C92A88B9A300429364 /* HandleCounter.cpp */; };
+		75CB08CE2A88B9A300429364 /* HandleCounter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75CB08C92A88B9A300429364 /* HandleCounter.cpp */; };
+		75CB08CF2A88B9A300429364 /* HandleCounter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75CB08CA2A88B9A300429364 /* HandleCounter.hpp */; };
+		75CB08D02A88B9A300429364 /* HandleCounter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75CB08CA2A88B9A300429364 /* HandleCounter.hpp */; };
+		75CB08D12A88B9A300429364 /* HandleCounter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75CB08CA2A88B9A300429364 /* HandleCounter.hpp */; };
+		75CB08D22A88B9A300429364 /* HandleCounter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75CB08CA2A88B9A300429364 /* HandleCounter.hpp */; };
 		75CD026128CECD610071B6C3 /* StatementInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75CD026028CECD610071B6C3 /* StatementInterface.swift */; };
 		75CD026928CF8DC00071B6C3 /* InsertInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75CD026828CF8DC00071B6C3 /* InsertInterface.swift */; };
 		75CD026B28CF8EF90071B6C3 /* UpdateInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75CD026A28CF8EF90071B6C3 /* UpdateInterface.swift */; };
@@ -4632,6 +4640,8 @@
 		75C440A1291D116C00D74EB7 /* VirtualTableConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualTableConfig.swift; sourceTree = "<group>"; };
 		75C6E412299E80D3002579A5 /* WCDBOptional.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WCDBOptional.hpp; sourceTree = "<group>"; };
 		75C6E41629A0C2F0002579A5 /* WCDBOptional.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WCDBOptional.cpp; sourceTree = "<group>"; };
+		75CB08C92A88B9A300429364 /* HandleCounter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HandleCounter.cpp; sourceTree = "<group>"; };
+		75CB08CA2A88B9A300429364 /* HandleCounter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HandleCounter.hpp; sourceTree = "<group>"; };
 		75CD026028CECD610071B6C3 /* StatementInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatementInterface.swift; sourceTree = "<group>"; };
 		75CD026828CF8DC00071B6C3 /* InsertInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertInterface.swift; sourceTree = "<group>"; };
 		75CD026A28CF8EF90071B6C3 /* UpdateInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateInterface.swift; sourceTree = "<group>"; };
@@ -5733,6 +5743,8 @@
 				23F70F9D20A055A400CCE3CD /* config */,
 				2349F61B1EA0D6680021EFA7 /* InnerDatabase.cpp */,
 				2349F61C1EA0D6680021EFA7 /* InnerDatabase.hpp */,
+				75CB08CA2A88B9A300429364 /* HandleCounter.hpp */,
+				75CB08C92A88B9A300429364 /* HandleCounter.cpp */,
 				2349F6221EA0D6680021EFA7 /* HandlePool.cpp */,
 				2349F6231EA0D6680021EFA7 /* HandlePool.hpp */,
 				23D96B902050DED700DB5E93 /* DatabasePool.cpp */,
@@ -7602,6 +7614,7 @@
 				030C987C28D068B0008636DF /* TransactionGuard.hpp in Headers */,
 				037C3B7D2897E33600328EC8 /* AuxiliaryFunctionModules.hpp in Headers */,
 				037C3B7E2897E33600328EC8 /* FullCrawler.hpp in Headers */,
+				75CB08D12A88B9A300429364 /* HandleCounter.hpp in Headers */,
 				037C3B802897E33600328EC8 /* SQLiteAssembler.hpp in Headers */,
 				03D077F328C1F611009A3B18 /* TableORMOperation.hpp in Headers */,
 				037C3B842897E33600328EC8 /* StatementAttach.hpp in Headers */,
@@ -8100,6 +8113,7 @@
 				23EEDCBE217DFADC006E9E73 /* StatementCommit.hpp in Headers */,
 				23EEDCF4217DFADC006E9E73 /* SyntaxColumnDef.hpp in Headers */,
 				2316D94B2105D21500707AFC /* LRUCache.hpp in Headers */,
+				75CB08CF2A88B9A300429364 /* HandleCounter.hpp in Headers */,
 				234DBCF72064DD0C000E31E8 /* WCTHandle+Private.h in Headers */,
 				0D8084212A861E8500C81BBF /* WCTCancellationSignal.h in Headers */,
 				23EEDCE6217DFADC006E9E73 /* StatementVacuum.hpp in Headers */,
@@ -8460,6 +8474,7 @@
 				7521DA22291E9ABB009642EF /* DatabasePool.hpp in Headers */,
 				7521DA23291E9ABB009642EF /* SyntaxWindowDef.hpp in Headers */,
 				7521DA24291E9ABB009642EF /* WCTMaster.h in Headers */,
+				75CB08D02A88B9A300429364 /* HandleCounter.hpp in Headers */,
 				7521DA25291E9ABB009642EF /* TableOrSubquery.hpp in Headers */,
 				7521DA26291E9ABB009642EF /* NSDate+WCTColumnCoding.h in Headers */,
 				7521DA27291E9ABB009642EF /* Statement.hpp in Headers */,
@@ -8502,6 +8517,7 @@
 				7521DC2F291EA349009642EF /* Core.hpp in Headers */,
 				7521DC34291EA349009642EF /* Pragma.hpp in Headers */,
 				7521DC35291EA349009642EF /* SequenceItem.hpp in Headers */,
+				75CB08D22A88B9A300429364 /* HandleCounter.hpp in Headers */,
 				7521DC36291EA349009642EF /* MappedData.hpp in Headers */,
 				7521DC37291EA349009642EF /* SyntaxCommitSTMT.hpp in Headers */,
 				7521DC39291EA349009642EF /* Syntax.h in Headers */,
@@ -9369,6 +9385,7 @@
 				037C39592897E33600328EC8 /* StatementDropTable.cpp in Sources */,
 				037C395B2897E33600328EC8 /* MigratingHandleStatement.cpp in Sources */,
 				037C395C2897E33600328EC8 /* SyntaxExpression.cpp in Sources */,
+				75CB08CD2A88B9A300429364 /* HandleCounter.cpp in Sources */,
 				037C395D2897E33600328EC8 /* StatementCreateVirtualTable.cpp in Sources */,
 				037C395E2897E33600328EC8 /* SyntaxCommonConst.cpp in Sources */,
 				037C395F2897E33600328EC8 /* StatementSavepoint.cpp in Sources */,
@@ -10234,6 +10251,7 @@
 				75F4DE4B288405DD00760DC3 /* StatementSavepointBridge.cpp in Sources */,
 				03E1662527F42D6500D2C926 /* Handle.swift in Sources */,
 				233A8532215E7CFE00BB8D4F /* Console.cpp in Sources */,
+				75CB08CB2A88B9A300429364 /* HandleCounter.cpp in Sources */,
 				03E1660C27F42D6500D2C926 /* IndexedColumn.swift in Sources */,
 				23EEDCAB217DFADC006E9E73 /* Upsert.cpp in Sources */,
 				23AD52D620DB4A3C00664B62 /* MasterItem.cpp in Sources */,
@@ -10610,6 +10628,7 @@
 				7521D7E4291E9ABB009642EF /* WCTBinding.mm in Sources */,
 				7521D7E5291E9ABB009642EF /* WCTDatabase+Convenient.mm in Sources */,
 				7521D7E8291E9ABB009642EF /* FactoryRenewer.cpp in Sources */,
+				75CB08CC2A88B9A300429364 /* HandleCounter.cpp in Sources */,
 				7521D7E9291E9ABB009642EF /* TokenizerModule.cpp in Sources */,
 				7521D7EA291E9ABB009642EF /* SyntaxFrameSpec.cpp in Sources */,
 				7521D7EB291E9ABB009642EF /* WCTDatabase+Handle.mm in Sources */,
@@ -10778,6 +10797,7 @@
 				7521DA95291EA349009642EF /* SyntaxResultColumn.cpp in Sources */,
 				7521DA96291EA349009642EF /* Initializeable.cpp in Sources */,
 				7521DA97291EA349009642EF /* PageBasedFileHandle.cpp in Sources */,
+				75CB08CE2A88B9A300429364 /* HandleCounter.cpp in Sources */,
 				7521DA98291EA349009642EF /* OrderingTerm.swift in Sources */,
 				7521DA99291EA349009642EF /* Progress.cpp in Sources */,
 				7521DA9A291EA349009642EF /* Mechanic.cpp in Sources */,

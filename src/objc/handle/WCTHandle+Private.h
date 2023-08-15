@@ -35,6 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
     WCTDatabase *_database;
     WCDB::InnerHandle *_handle;
     WCDB::RecyclableHandle _handleHolder;
+    BOOL _writeHint;
 }
 
 #pragma mark - LifeCycle
@@ -47,6 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithUnsafeHandle:(WCDB::InnerHandle *)handle NS_DESIGNATED_INITIALIZER;
 
 - (nullable WCDB::InnerHandle *)getOrGenerateHandle;
+- (void)setWriteHint:(BOOL)writeHint;
 
 - (BOOL)lazyRunTransaction:(WCTTransactionBlock)transaction;
 

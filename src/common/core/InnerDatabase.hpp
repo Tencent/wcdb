@@ -82,7 +82,7 @@ protected:
 
 #pragma mark - Handle
 public:
-    RecyclableHandle getHandle();
+    RecyclableHandle getHandle(bool writeHint = false);
     bool execute(const Statement &statement);
     bool execute(const UnsafeStringView &sql);
     Optional<bool> tableExists(const UnsafeStringView &table);

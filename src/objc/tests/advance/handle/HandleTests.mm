@@ -340,7 +340,7 @@
         XCTAssertNil(allObjects);
         [self.handle invalidate];
     }];
-    usleep(10000);
+    usleep(1000);
     [signal cancel];
     [self.dispatch waitUntilDone];
     TestCaseAssertTrue(hasTestInterrupt);
