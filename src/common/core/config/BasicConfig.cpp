@@ -56,7 +56,9 @@ bool BasicConfig::invoke(InnerHandle* handle)
     if (!handle->isReadonly()) {
         handle->setWALFilePersist(true);
         succeed = lazySetJournalModeWAL(handle) && handle->execute(m_enableFullfsync);
+#ifndef __ANDROID__
         succeed &= handle->execute(m_setTempStore);
+#endif
     }
     return succeed;
 }
