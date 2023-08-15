@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by 陈秋文 on 2023/8/13.
 //
 
 /*
@@ -22,26 +22,30 @@
  * limitations under the License.
  */
 
-#import "Core.h"
-#import "WCTDatabase.h"
+#include "CoreConst.h"
+#include "Lock.hpp"
+#include "Thread.hpp"
 
-NS_ASSUME_NONNULL_BEGIN
+namespace WCDB {
 
-@interface WCTDatabase () {
-@private
-    // Holder can be null in some case using temporary database object. e.g. inside the non-escape block
-    WCDB::RecyclableDatabase _databaseHolder;
-    BOOL m_isInMemory;
-@protected
-    WCDB::InnerDatabase *_database;
-}
+class HandleCounter {
+public:
+    HandleCounter();
+    ~HandleCounter();
+    HandleCounter(const HandleCounter &) = delete;
+    HandleCounter &operator=(const HandleCounter &) = delete;
 
-- (instancetype)init NS_DESIGNATED_INITIALIZER;
+    bool tryIncreaseHandleCount(HandleType type, bool writeHint);
+    void decreaseHandleCount(bool writeHint);
 
-- (instancetype)initWithUnsafeDatabase:(WCDB::InnerDatabase *)database NS_DESIGNATED_INITIALIZER;
+private:
+    mutable std::mutex m_lock;
+    Conditional m_conditionalNormals;
+    Conditional m_conditionalWriters;
+    std::queue<Thread> m_pendingNormals;
+    std::queue<Thread> m_pendingWriters;
+    int m_writerCount = 0;
+    int m_totalCount = 0;
+};
 
-- (WCDB::RecyclableHandle)generateHandle:(BOOL)writeHint;
-
-@end
-
-NS_ASSUME_NONNULL_END
+} // namespace WCDB

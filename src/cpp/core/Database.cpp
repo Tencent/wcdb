@@ -104,9 +104,9 @@ Database::Database(InnerDatabase* database) : m_innerDatabase(database)
     m_databaseHolder = RecyclableDatabase(m_innerDatabase, nullptr);
 }
 
-RecyclableHandle Database::getHandleHolder()
+RecyclableHandle Database::getHandleHolder(bool writeHint)
 {
-    return m_databaseHolder->getHandle();
+    return m_databaseHolder->getHandle(writeHint);
 }
 
 Recyclable<InnerDatabase*> Database::getDatabaseHolder()

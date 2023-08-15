@@ -44,6 +44,7 @@
         _database = database;
         _handle = handle;
         _handleHolder = nullptr;
+        _writeHint = NO;
     }
     return self;
 }
@@ -53,6 +54,7 @@
     WCTAssert(database != nil);
     if (self = [super init]) {
         _database = database;
+        _writeHint = NO;
     }
     return self;
 }
@@ -63,6 +65,7 @@
     if (self = [super init]) {
         _handle = handle;
         _handleHolder = nullptr;
+        _writeHint = NO;
     }
     return self;
 }
@@ -70,12 +73,19 @@
 - (WCDB::InnerHandle *)getOrGenerateHandle
 {
     if (_handle == nullptr) {
-        _handleHolder = [_database generateHandle];
+        _handleHolder = [_database generateHandle:_writeHint];
         if (_handleHolder != nullptr) {
             _handle = _handleHolder.get();
         }
     }
     return _handle;
+}
+
+- (void)setWriteHint:(BOOL)writeHint
+{
+    if (_handle == nullptr) {
+        _writeHint = writeHint;
+    }
 }
 
 #pragma mark - Statement
@@ -111,6 +121,7 @@
     _database = nil;
     _handle = nullptr;
     _handleHolder = nullptr;
+    _writeHint = NO;
 }
 
 - (BOOL)isValidated

@@ -38,6 +38,14 @@
     NSArray<WCTObject *> *_values;
 }
 
+- (instancetype)initWithHandle:(WCTHandle *)handle
+{
+    if (self = [super initWithHandle:handle]) {
+        [handle setWriteHint:YES];
+    }
+    return self;
+}
+
 - (WCDB::StatementInsert &)statement
 {
     return _statement;

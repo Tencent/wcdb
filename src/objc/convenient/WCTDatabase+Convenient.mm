@@ -28,6 +28,7 @@
 #import "WCTDatabase+Convenient.h"
 #import "WCTDatabase+Handle.h"
 #import "WCTDelete.h"
+#import "WCTHandle+Private.h"
 #import "WCTHandle.h"
 #import "WCTInsert.h"
 #import "WCTMultiSelect.h"
@@ -1095,6 +1096,7 @@
 {
     WCTValue *result = nil;
     WCTHandle *handle = [self getHandle];
+    [handle setWriteHint:NO];
     if ([handle prepare:statement]) {
         if ([handle step]) {
             result = [handle extractValueAtIndex:0];
@@ -1109,6 +1111,7 @@
 {
     WCTOneRow *result = nil;
     WCTHandle *handle = [self getHandle];
+    [handle setWriteHint:NO];
     if ([handle prepare:statement]) {
         if ([handle step]) {
             result = [handle extractRow];
@@ -1123,6 +1126,7 @@
 {
     WCTOneColumn *result = nil;
     WCTHandle *handle = [self getHandle];
+    [handle setWriteHint:NO];
     if ([handle prepare:statement]) {
         result = [handle allValues];
         [handle finalizeStatement];
@@ -1135,6 +1139,7 @@
 {
     WCTColumnsXRows *result = nil;
     WCTHandle *handle = [self getHandle];
+    [handle setWriteHint:NO];
     if ([handle prepare:statement]) {
         result = [handle allRows];
         [handle finalizeStatement];

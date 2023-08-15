@@ -68,10 +68,10 @@ Handle::~Handle()
     invalidate();
 };
 
-InnerHandle* Handle::getOrGenerateHandle()
+InnerHandle* Handle::getOrGenerateHandle(bool writeHint)
 {
     if (m_innerHandle == nullptr) {
-        m_handleHolder = m_databaseHolder->getHandle();
+        m_handleHolder = m_databaseHolder->getHandle(writeHint);
         if (m_handleHolder != nullptr) {
             m_innerHandle = m_handleHolder.get();
         }
@@ -85,9 +85,9 @@ HandleStatement* Handle::getInnerHandleStatement()
     return handle->m_mainStatement;
 }
 
-RecyclableHandle Handle::getHandleHolder()
+RecyclableHandle Handle::getHandleHolder(bool)
 {
-    getOrGenerateHandle();
+    getOrGenerateHandle(false);
     if (m_handleHolder != nullptr) {
         return m_handleHolder;
     } else {
