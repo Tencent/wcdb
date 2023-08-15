@@ -25,11 +25,20 @@
 #import "WCTDelete.h"
 #import "Assertion.hpp"
 #import "WCTChainCall+Private.h"
+#import "WCTHandle+Private.h"
 #import "WCTHandle.h"
 #import "WCTTryDisposeGuard.h"
 
 @implementation WCTDelete {
     WCDB::StatementDelete _statement;
+}
+
+- (instancetype)initWithHandle:(WCTHandle *)handle
+{
+    if (self = [super initWithHandle:handle]) {
+        [handle setWriteHint:YES];
+    }
+    return self;
 }
 
 - (WCDB::StatementDelete &)statement

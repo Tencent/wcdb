@@ -82,7 +82,7 @@ HandleORMOperation::getAllMultiObjects(const ValueArray<StringView> tables,
 
 bool HandleORMOperation::createTable(const UnsafeStringView &tableName, const Binding &binding)
 {
-    auto handle = getHandleHolder();
+    auto handle = getHandleHolder(true);
     if (handle == nullptr) {
         return false;
     }
@@ -92,7 +92,7 @@ bool HandleORMOperation::createTable(const UnsafeStringView &tableName, const Bi
 bool HandleORMOperation::createVirtualTable(const UnsafeStringView &tableName,
                                             const Binding &binding)
 {
-    auto handle = getHandleHolder();
+    auto handle = getHandleHolder(true);
     if (handle == nullptr) {
         return false;
     }

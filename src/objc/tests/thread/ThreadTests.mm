@@ -234,8 +234,6 @@
 
     while (counter.value != WCDB::HandlePoolMaxAllowedNumberOfHandles) {
     }
-
-    TestCaseAssertFalse([[self.database getHandle] validate]);
     [condition broadcast];
     [self.dispatch waitUntilDone];
     TestCaseAssertEqual(counter.value, 0);
@@ -283,6 +281,131 @@
     [tested makeYES];
     [self.database rollbackTransaction];
     [self.dispatch waitUntilDone];
+}
+
+- (void)test_write_with_handle_count_limit
+{
+    __block int maxHandleCount = 0;
+    [WCTDatabase globalTraceDatabaseOperation:^(WCTDatabase*, WCTDatabaseOperation operation, NSDictionary* info) {
+        if (operation != WCTDatabaseOperation_OpenHandle) {
+            return;
+        }
+        maxHandleCount = MAX(maxHandleCount, ((NSNumber*) info[WCTDatabaseMonitorInfoKeyHandleCount]).intValue);
+    }];
+    TestCaseAssertTrue([self createTable]);
+    for (int i = 0; i < 40; i++) {
+        [self.dispatch async:^{
+            switch (i % 4) {
+            case 0: {
+                NSArray* objects = [[Random shared] testCaseObjectsWithCount:100 startingFromIdentifier:i * 100];
+                TestCaseAssertTrue([self.table insertObjects:objects]);
+            } break;
+            case 1: {
+                TestCaseAssertTrue([self.table updateProperty:TestCaseObject.content toValue:@"abc" where:TestCaseObject.identifier > (i - 1) * 100 && TestCaseObject.identifier <= i * 100]);
+            } break;
+            case 2: {
+                TestCaseAssertTrue([self.table deleteObjectsWhere:TestCaseObject.identifier > ((i - 2) * 100 + 50) && TestCaseObject.identifier <= i * 100]);
+            } break;
+            case 3: {
+                TestCaseAssertTrue([self.database runTransaction:^BOOL(WCTHandle*) {
+                    return [self.table updateProperty:TestCaseObject.content toValue:@"abc2" where:TestCaseObject.identifier > (i - 1) * 100 && TestCaseObject.identifier <= i * 100];
+                }]);
+            } break;
+
+            default:
+                break;
+            }
+            usleep(100000);
+        }];
+    }
+    [self.dispatch waitUntilDone];
+    TestCaseAssertTrue(maxHandleCount <= 4);
+    [WCTDatabase globalTraceDatabaseOperation:nil];
+}
+
+- (void)test_read_with_handle_count_limit
+{
+    __block int maxHandleCount = 0;
+    [WCTDatabase globalTraceDatabaseOperation:^(WCTDatabase*, WCTDatabaseOperation operation, NSDictionary* info) {
+        if (operation != WCTDatabaseOperation_OpenHandle) {
+            return;
+        }
+        maxHandleCount = MAX(maxHandleCount, ((NSNumber*) info[WCTDatabaseMonitorInfoKeyHandleCount]).intValue);
+    }];
+
+    TestCaseAssertTrue([self createTable]);
+    NSArray* objects = [Random.shared testCaseObjectsWithCount:32000 startingFromIdentifier:0];
+    TestCaseAssertTrue([self.table insertObjects:objects]);
+
+    for (int i = 0; i < 320; i++) {
+        [self.dispatch async:^{
+            switch (i % 5) {
+            case 0: {
+                NSArray* ret = [self.table getObjectsOffset:i * 100 limit:100];
+                TestCaseAssertTrue([ret count] == 100);
+            } break;
+            case 1: {
+                WCTValue* value = [self.database getValueFromStatement:WCDB::StatementSelect().select(TestCaseObject.allProperties.count()).from(self.tableName)];
+                TestCaseAssertTrue(value.numberValue.intValue == 32000);
+            } break;
+            case 2: {
+                WCTOneColumn* colums = [self.table getColumnOnResultColumn:TestCaseObject.content limit:100 offset:i * 100];
+                TestCaseAssertTrue(colums.count == 100);
+            } break;
+            case 3: {
+                WCTColumnsXRows* rows = [self.table getRowsOnResultColumns:TestCaseObject.allProperties limit:100 offset:i * 100];
+                TestCaseAssertTrue(rows.count == 100);
+            } break;
+            case 4: {
+                WCTOneRow* row = [self.table getRowOnResultColumns:TestCaseObject.allProperties orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
+                TestCaseAssertTrue(row.count == 2);
+            } break;
+
+            default:
+                break;
+            }
+
+            usleep(100000);
+        }];
+    }
+    [self.dispatch waitUntilDone];
+    TestCaseAssertTrue(maxHandleCount > 4 && maxHandleCount <= 32);
+    [WCTDatabase globalTraceDatabaseOperation:nil];
+}
+
+- (void)test_read_write_with_handle_count_limit
+{
+    __block int maxHandleCount = 0;
+    [WCTDatabase globalTraceDatabaseOperation:^(WCTDatabase*, WCTDatabaseOperation operation, NSDictionary* info) {
+        if (operation != WCTDatabaseOperation_OpenHandle) {
+            return;
+        }
+        maxHandleCount = MAX(maxHandleCount, ((NSNumber*) info[WCTDatabaseMonitorInfoKeyHandleCount]).intValue);
+    }];
+
+    TestCaseAssertTrue([self createTable]);
+    NSArray* objects = [Random.shared testCaseObjectsWithCount:32000 startingFromIdentifier:0];
+    TestCaseAssertTrue([self.table insertObjects:objects]);
+
+    for (int i = 0; i < 320; i++) {
+        if (i % 8 == 0) {
+            [self.dispatch async:^{
+                NSArray* newObjects = [[Random shared] testCaseObjectsWithCount:100 startingFromIdentifier:i * 100 + 32000];
+                TestCaseAssertTrue([self.table insertObjects:newObjects]);
+                usleep(100000);
+            }];
+        } else {
+            [self.dispatch async:^{
+                NSArray* ret = [self.table getObjectsOffset:i * 10 limit:1000];
+                TestCaseAssertTrue([ret count] == 1000);
+                usleep(100000);
+            }];
+        }
+    }
+
+    [self.dispatch waitUntilDone];
+    TestCaseAssertTrue(maxHandleCount > 4 && maxHandleCount <= 32);
+    [WCTDatabase globalTraceDatabaseOperation:nil];
 }
 
 @end

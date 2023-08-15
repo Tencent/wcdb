@@ -51,7 +51,7 @@ bool HandlePool::isNumberOfHandlesAllowed() const
 {
     WCTAssert(m_concurrency.readSafety());
     WCTAssert(m_memory.readSafety());
-    return numberOfAliveHandles() < HandlePoolMaxAllowedNumberOfHandles;
+    return numberOfAliveHandles() <= HandlePoolMaxAllowedNumberOfHandles;
 }
 
 void HandlePool::blockade()
@@ -167,7 +167,7 @@ size_t HandlePool::numberOfAliveHandlesInSlot(HandleSlot slot) const
     return m_handles[slot].size();
 }
 
-RecyclableHandle HandlePool::flowOut(HandleType type)
+RecyclableHandle HandlePool::flowOut(HandleType type, bool writeHint)
 {
     HandleSlot slot = slotOfHandleType(type);
     WCTAssert(slot < HandleSlotCount);
@@ -187,6 +187,17 @@ RecyclableHandle HandlePool::flowOut(HandleType type)
         }
     }
 
+    if (!m_counter.tryIncreaseHandleCount(type, writeHint)) {
+        Error error(Error::Code::Exceed,
+                    Error::Level::Error,
+                    "The operating count of database exceeds the maximum allowed.");
+        error.infos.insert_or_assign("MaxAllowed", HandlePoolMaxAllowedNumberOfHandles);
+        error.infos.insert_or_assign(ErrorStringKeyPath, path);
+        Notifier::shared().notify(error);
+        setThreadedError(std::move(error));
+        return nullptr;
+    }
+
     SharedLockGuard concurrencyGuard(m_concurrency);
     std::shared_ptr<InnerHandle> handle;
     {
@@ -196,58 +207,40 @@ RecyclableHandle HandlePool::flowOut(HandleType type)
             handle = freeSlot.back();
             WCTAssert(handle != nullptr);
             freeSlot.pop_back();
-        } else if (!isNumberOfHandlesAllowed()) {
-            // auto purge to remove unused handles
-            purge();
-            if (!isNumberOfHandlesAllowed()) {
-                // handle count reachs the limitation.
-                Error error(Error::Code::Exceed,
-                            Error::Level::Error,
-                            "The operating count of database exceeds the maximum allowed.");
-                error.infos.insert_or_assign("MaxAllowed", HandlePoolMaxAllowedNumberOfHandles);
-                error.infos.insert_or_assign(ErrorStringKeyPath, path);
-                Notifier::shared().notify(error);
-                setThreadedError(std::move(error));
-                return nullptr;
-            }
         }
     }
 
     if (handle == nullptr) {
         handle = generateSlotedHandle(type);
         if (handle == nullptr) {
+            m_counter.decreaseHandleCount(writeHint);
             return nullptr;
         }
 
         LockGuard memoryGuard(m_memory);
-        // re-check handle count limitation since all lock free code above
-        if (!isNumberOfHandlesAllowed()) {
-            purge();
-            if (!isNumberOfHandlesAllowed()) {
-                // the number fof handles reachs the limitation.
-                Error error(Error::Code::Exceed,
-                            Error::Level::Error,
-                            "The operating count of database exceeds the maximum allowed.");
-                error.infos.insert_or_assign("MaxAllowed", HandlePoolMaxAllowedNumberOfHandles);
-                error.infos.insert_or_assign(ErrorStringKeyPath, path);
-                Notifier::shared().notify(error);
-                setThreadedError(std::move(error));
-                return nullptr;
-            }
-        }
         WCTAssert(m_handles[slot].find(handle) == m_handles[slot].end());
         m_handles[slot].emplace(handle);
+
+        // Clean free handles of the other slots.
+        if (!isNumberOfHandlesAllowed()) {
+            purge();
+            WCTAssert(isNumberOfHandlesAllowed());
+        }
     } else {
         if (!willReuseSlotedHandle(type, handle.get())) {
             handle->close();
-            LockGuard memoryGuard(m_memory);
-            // remove if the exists handle fails in handles
-            m_handles[slot].erase(handle);
+            {
+                LockGuard memoryGuard(m_memory);
+                // remove if the exists handle fails in handles
+                m_handles[slot].erase(handle);
+            }
+            m_counter.decreaseHandleCount(writeHint);
             return nullptr;
         }
     }
 
     WCTAssert(handle != nullptr);
+    handle->setWriteHint(writeHint);
 
     m_concurrency.lockShared();
     WCTAssert(referencedHandle.handle == nullptr && referencedHandle.reference == 0);
@@ -282,6 +275,8 @@ void HandlePool::flowBack(HandleType type, const std::shared_ptr<InnerHandle> &h
             m_frees[slot].push_back(handle);
         }
         m_concurrency.unlockShared();
+        m_counter.decreaseHandleCount(handle->getWriteHint());
+        handle->setWriteHint(false);
     }
 }
 

@@ -59,4 +59,145 @@
     self.database->traceSQL(nullptr);
 }
 
+- (void)test_write_with_handle_count_limit
+{
+    int maxHandleCount = 0;
+    WCDB::Database::globalTraceDatabaseOperation([&](WCDB::Database &,
+                                                     WCDB::Database::Operation operationType,
+                                                     WCDB::StringViewMap<WCDB::Value> &info) {
+        if (operationType != WCDB::Database::Operation::OpenHandle) {
+            return;
+        }
+        auto iter = info.find(WCDB::Database::MonitorInfoKeyHandleCount);
+        if (iter != info.end()) {
+            maxHandleCount = std::max(maxHandleCount, (int) iter->second.intValue());
+        }
+    });
+    TestCaseAssertTrue([self createObjectTable]);
+    auto table = self.table;
+    for (int i = 0; i < 40; i++) {
+        [self.dispatch async:^{
+            switch (i % 4) {
+            case 0: {
+                auto objects = [Random.shared testCaseObjectsWithCount:100 startingFromIdentifier:i * 100];
+                TestCaseAssertTrue(self.table.insertObjects(objects));
+            } break;
+            case 1: {
+                TestCaseAssertTrue(self.table.updateRow("abc", WCDB_FIELD(CPPTestCaseObject::content), WCDB_FIELD(CPPTestCaseObject::identifier) > (i - 1) * 100 && WCDB_FIELD(CPPTestCaseObject::identifier) <= i * 100));
+            } break;
+            case 2: {
+                TestCaseAssertTrue(self.table.deleteObjects(WCDB_FIELD(CPPTestCaseObject::identifier) > ((i - 2) * 100 + 50) && WCDB_FIELD(CPPTestCaseObject::identifier) <= i * 100));
+            } break;
+            case 3: {
+                TestCaseAssertTrue(self.database->runTransaction([&](WCDB::Handle &) {
+                    return self.table.updateRow("abc2", WCDB_FIELD(CPPTestCaseObject::content), WCDB_FIELD(CPPTestCaseObject::identifier) > (i - 1) * 100 && WCDB_FIELD(CPPTestCaseObject::identifier) <= i * 100);
+                }));
+            } break;
+
+            default:
+                break;
+            }
+            usleep(100000);
+        }];
+    }
+    [self.dispatch waitUntilDone];
+    TestCaseAssertTrue(maxHandleCount <= 4);
+    WCDB::Database::globalTraceDatabaseOperation(nullptr);
+}
+
+- (void)test_read_with_handle_count_limit
+{
+    int maxHandleCount = 0;
+    WCDB::Database::globalTraceDatabaseOperation([&](WCDB::Database &,
+                                                     WCDB::Database::Operation operationType,
+                                                     WCDB::StringViewMap<WCDB::Value> &info) {
+        if (operationType != WCDB::Database::Operation::OpenHandle) {
+            return;
+        }
+        auto iter = info.find(WCDB::Database::MonitorInfoKeyHandleCount);
+        if (iter != info.end()) {
+            maxHandleCount = std::max(maxHandleCount, (int) iter->second.intValue());
+        }
+    });
+    TestCaseAssertTrue([self createObjectTable]);
+    auto objects = [Random.shared testCaseObjectsWithCount:32000 startingFromIdentifier:0];
+    TestCaseAssertTrue(self.table.insertObjects(objects));
+
+    for (int i = 0; i < 320; i++) {
+        [self.dispatch async:^{
+            switch (i % 5) {
+            case 0: {
+                auto ret = self.table.getAllObjects(WCDB::Expression(), WCDB::OrderingTerms(), 100, i * 100);
+                TestCaseAssertTrue(ret.hasValue() && ret.value().size() == 100);
+            } break;
+            case 1: {
+                auto value = self.database->getValueFromStatement(WCDB::StatementSelect().select(CPPTestCaseObject::allFields().count()).from(self.tableName.UTF8String));
+                TestCaseAssertTrue(value.hasValue() && value.value().intValue() == 32000);
+            } break;
+            case 2: {
+                auto column = self.table.selectOneColumn(WCDB_FIELD(CPPTestCaseObject::content), WCDB::Expression(), WCDB::OrderingTerms(), 100, i * 100);
+                TestCaseAssertTrue(column.hasValue() && column.value().size() == 100);
+            } break;
+            case 3: {
+                auto rows = self.table.selectAllRow(CPPTestCaseObject::allFields(), WCDB::Expression(), WCDB::OrderingTerms(), 100, i * 100);
+                TestCaseAssertTrue(rows.hasValue() && rows.value().size() == 100);
+            } break;
+            case 4: {
+                auto row = self.table.selectOneRow(CPPTestCaseObject::allFields(), WCDB::Expression(), WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC));
+                TestCaseAssertTrue(row.hasValue() && row.value().size() == 2);
+            } break;
+
+            default:
+                break;
+            }
+
+            usleep(100000);
+        }];
+    }
+
+    [self.dispatch waitUntilDone];
+    TestCaseAssertTrue(maxHandleCount > 4 && maxHandleCount <= 32);
+    WCDB::Database::globalTraceDatabaseOperation(nullptr);
+}
+
+- (void)test_read_write_with_handle_count_limit
+{
+    int maxHandleCount = 0;
+    WCDB::Database::globalTraceDatabaseOperation([&](WCDB::Database &,
+                                                     WCDB::Database::Operation operationType,
+                                                     WCDB::StringViewMap<WCDB::Value> &info) {
+        if (operationType != WCDB::Database::Operation::OpenHandle) {
+            return;
+        }
+        auto iter = info.find(WCDB::Database::MonitorInfoKeyHandleCount);
+        if (iter != info.end()) {
+            maxHandleCount = std::max(maxHandleCount, (int) iter->second.intValue());
+        }
+    });
+
+    TestCaseAssertTrue([self createObjectTable]);
+    auto objects = [Random.shared testCaseObjectsWithCount:32000 startingFromIdentifier:0];
+    TestCaseAssertTrue(self.table.insertObjects(objects));
+
+    for (int i = 0; i < 320; i++) {
+        if (i % 8 == 0) {
+            [self.dispatch async:^{
+                auto newObjects = [Random.shared testCaseObjectsWithCount:100 startingFromIdentifier:i * 100 + 32000];
+                TestCaseAssertTrue(self.table.insertObjects(newObjects));
+                usleep(100000);
+            }];
+        } else {
+            [self.dispatch async:^{
+                auto ret = self.table.getAllObjects(WCDB::Expression(), WCDB::OrderingTerms(), 100, i * 100);
+                TestCaseAssertTrue(ret.hasValue() && ret.value().size() == 100);
+                usleep(100000);
+            }];
+        }
+    }
+
+    [self.dispatch waitUntilDone];
+    TestCaseAssertTrue(maxHandleCount > 4 && maxHandleCount <= 32);
+    WCDB::Database::globalTraceDatabaseOperation(nullptr);
+}
+
 @end

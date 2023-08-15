@@ -35,6 +35,7 @@ class Handle final : public StatementOperation, public HandleORMOperation {
     friend class HandleOperation;
     friend class TableOperation;
     friend class BaseChainCall;
+    friend class Delete;
 
 #pragma mark - Basic
 protected:
@@ -46,9 +47,9 @@ protected:
     Handle(Recyclable<InnerDatabase*> database);
     Handle(Recyclable<InnerDatabase*> database, InnerHandle* handle);
 
-    InnerHandle* getOrGenerateHandle();
+    InnerHandle* getOrGenerateHandle(bool writeHint = false);
     HandleStatement* getInnerHandleStatement() override final;
-    RecyclableHandle getHandleHolder() override final;
+    RecyclableHandle getHandleHolder(bool writeHint) override final;
     Recyclable<InnerDatabase*> getDatabaseHolder() override final;
 
 private:

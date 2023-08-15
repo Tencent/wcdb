@@ -199,13 +199,14 @@ void InnerDatabase::removeConfig(const UnsafeStringView &name)
 }
 
 #pragma mark - Handle
-RecyclableHandle InnerDatabase::getHandle()
+RecyclableHandle InnerDatabase::getHandle(bool writeHint)
 {
+    HandleType type
+    = m_migration.shouldMigrate() ? HandleType::Migrating : HandleType::Normal;
     if (m_isInMemory) {
         InitializedGuard initializedGuard = initialize();
         if (m_sharedInMemoryHandle == nullptr) {
-            m_sharedInMemoryHandle = generateSlotedHandle(
-            m_migration.shouldMigrate() ? HandleType::Migrating : HandleType::Normal);
+            m_sharedInMemoryHandle = generateSlotedHandle(type);
         }
         return RecyclableHandle(m_sharedInMemoryHandle, nullptr);
     }
@@ -220,7 +221,7 @@ RecyclableHandle InnerDatabase::getHandle()
     if (!initializedGuard.valid()) {
         return nullptr;
     }
-    handle = flowOut(m_migration.shouldMigrate() ? HandleType::Migrating : HandleType::Normal);
+    handle = flowOut(type, writeHint);
     if (handle != nullptr) {
         handle->configTransactionEvent(this);
     }
@@ -229,7 +230,7 @@ RecyclableHandle InnerDatabase::getHandle()
 
 bool InnerDatabase::execute(const Statement &statement)
 {
-    RecyclableHandle handle = getHandle();
+    RecyclableHandle handle = getHandle(statement.isWriteStatement());
     if (handle != nullptr) {
         if (handle->execute(statement)) {
             return true;
@@ -385,7 +386,7 @@ bool InnerDatabase::isInTransaction()
 
 bool InnerDatabase::beginTransaction()
 {
-    RecyclableHandle handle = getHandle();
+    RecyclableHandle handle = getHandle(true);
     if (handle == nullptr) {
         return false;
     }
@@ -420,7 +421,7 @@ void InnerDatabase::rollbackTransaction()
 
 bool InnerDatabase::runTransaction(const TransactionCallback &transaction)
 {
-    RecyclableHandle handle = getHandle();
+    RecyclableHandle handle = getHandle(true);
     if (handle == nullptr) return false;
     if (!handle->runTransaction(transaction)) {
         setThreadedError(handle->getError());
@@ -432,7 +433,7 @@ bool InnerDatabase::runTransaction(const TransactionCallback &transaction)
 bool InnerDatabase::runPausableTransactionWithOneLoop(const TransactionCallbackForOneLoop &transaction)
 {
     // get threaded handle
-    RecyclableHandle handle = getHandle();
+    RecyclableHandle handle = getHandle(true);
     if (handle == nullptr) return false;
     if (!handle->runPausableTransactionWithOneLoop(transaction)) {
         setThreadedError(handle->getError());

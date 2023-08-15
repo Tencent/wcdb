@@ -26,6 +26,7 @@
 
 #include "CoreConst.h"
 #include "ErrorProne.hpp"
+#include "HandleCounter.hpp"
 #include "Lock.hpp"
 #include "RecyclableHandle.hpp"
 #include "ThreadedErrors.hpp"
@@ -76,7 +77,7 @@ private:
 #pragma mark - Handle
 public:
     typedef unsigned int Slot;
-    RecyclableHandle flowOut(HandleType type);
+    RecyclableHandle flowOut(HandleType type, bool writeHint = false);
     void purge();
     size_t numberOfAliveHandles() const;
     size_t numberOfAliveHandlesInSlot(HandleSlot slot) const;
@@ -94,6 +95,7 @@ private:
 
     std::array<std::set<std::shared_ptr<InnerHandle>>, HandleSlotCount> m_handles;
     std::array<std::list<std::shared_ptr<InnerHandle>>, HandleSlotCount> m_frees;
+    HandleCounter m_counter;
 
 #pragma mark - Threaded
 private:
