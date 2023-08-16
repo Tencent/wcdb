@@ -76,12 +76,13 @@ public class Delete extends ChainCall<StatementDelete>{
         return this;
     }
 
-    public void execute() throws WCDBException {
+    public Delete execute() throws WCDBException {
         try {
             handle.execute(statement);
         } finally {
             updateChanges();
             invalidateHandle();
         }
+        return this;
     }
 }

@@ -74,9 +74,9 @@ public class Insert<T> extends ChainCall<StatementInsert> {
         return this;
     }
 
-    public void execute() throws WCDBException {
+    public Insert<T> execute() throws WCDBException {
         if(values == null || values.length == 0) {
-            return;
+            return this;
         }
         assert fields != null && fields.length > 0;
         try {
@@ -94,6 +94,7 @@ public class Insert<T> extends ChainCall<StatementInsert> {
         } finally {
             invalidateHandle();
         }
+        return this;
     }
 
     private void realExecute() throws WCDBException {

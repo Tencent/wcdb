@@ -128,7 +128,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
         return this;
     }
 
-    public void execute() throws WCDBException {
+    public Update<T> execute() throws WCDBException {
         assert object != null || row != null;
         TableBinding<T> binding = Field.getBinding(fields);
         try {
@@ -144,5 +144,6 @@ public class Update<T> extends ChainCall<StatementUpdate> {
         } finally {
             invalidateHandle();
         }
+        return this;
     }
 }
