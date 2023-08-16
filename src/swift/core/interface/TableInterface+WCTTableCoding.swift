@@ -65,7 +65,7 @@ extension TableInterfaceForObjc where Self: Database {
     public func create<Root: WCTTableCoding>(
         table name: String,
         of rootType: Root.Type) throws {
-            let handle = try getHandle()
+            let handle = try getHandle(writeHint: true)
             try withExtendedLifetime(handle) {
                 if !WCTAPIBridge.createTable(name, withClass: rootType, with: $0.cppHandle) {
                     throw handle.getError()
@@ -74,7 +74,7 @@ extension TableInterfaceForObjc where Self: Database {
         }
 
     public func create<Root: WCTTableCoding>(virtualTable name: String, of rootType: Root.Type) throws {
-        let handle = try getHandle()
+        let handle = try getHandle(writeHint: true)
         if !WCTAPIBridge.createVirtualTable(name, withClass: rootType, with: handle.cppHandle) {
             throw handle.getError()
         }

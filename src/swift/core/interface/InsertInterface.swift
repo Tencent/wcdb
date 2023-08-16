@@ -134,7 +134,7 @@ extension InsertInterface where Self: HandleRepresentable {
         _ objects: [Object],
         on propertyConvertibleList: [PropertyConvertible]? = nil,
         intoTable table: String) throws {
-        let insert = Insert(with: try getHandle(), named: table, on: propertyConvertibleList)
+        let insert = Insert(with: try getHandle(writeHint: true), named: table, on: propertyConvertibleList)
         return try insert.execute(with: objects)
     }
 
@@ -142,7 +142,7 @@ extension InsertInterface where Self: HandleRepresentable {
         _ objects: [Object],
         on propertyConvertibleList: [PropertyConvertible]? = nil,
         intoTable table: String) throws {
-            let insert = Insert(with: try getHandle(), named: table, on: propertyConvertibleList, onConflict: .Replace)
+            let insert = Insert(with: try getHandle(writeHint: true), named: table, on: propertyConvertibleList, onConflict: .Replace)
         return try insert.execute(with: objects)
     }
 
@@ -150,7 +150,7 @@ extension InsertInterface where Self: HandleRepresentable {
         _ objects: [Object],
         on propertyConvertibleList: [PropertyConvertible]? = nil,
         intoTable table: String) throws {
-            let insert = Insert(with: try getHandle(), named: table, on: propertyConvertibleList, onConflict: .Ignore)
+            let insert = Insert(with: try getHandle(writeHint: true), named: table, on: propertyConvertibleList, onConflict: .Ignore)
         return try insert.execute(with: objects)
     }
 

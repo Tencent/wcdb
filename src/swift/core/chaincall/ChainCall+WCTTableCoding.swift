@@ -57,19 +57,19 @@ public protocol InsertChainCallInterfaceForObjc: AnyObject {
 
 extension InsertChainCallInterfaceForObjc where Self: HandleRepresentable {
     public func prepareInsert<Root: WCTTableCoding>(of cls: Root.Type, intoTable table: String) throws -> Insert {
-        return Insert(with: try getHandle(), named: table, on: cls.allProperties())
+        return Insert(with: try getHandle(writeHint: true), named: table, on: cls.allProperties())
     }
 
     public func prepareInsertOrReplace<Root: WCTTableCoding>(
         of cls: Root.Type,
         intoTable table: String) throws -> Insert {
-            return Insert(with: try getHandle(), named: table, on: cls.allProperties(), onConflict: .Replace)
+            return Insert(with: try getHandle(writeHint: true), named: table, on: cls.allProperties(), onConflict: .Replace)
     }
 
     public func prepareInsertOrIgnore<Root: WCTTableCoding>(
         of cls: Root.Type,
         intoTable table: String) throws -> Insert {
-            return Insert(with: try getHandle(), named: table, on: cls.allProperties(), onConflict: .Ignore)
+            return Insert(with: try getHandle(writeHint: true), named: table, on: cls.allProperties(), onConflict: .Ignore)
     }
 }
 
@@ -92,7 +92,7 @@ extension SelectChainCallInterfaceForObjc where Self: HandleRepresentable {
     public func prepareSelect<Root: WCTTableCoding>(of cls: Root.Type,
                                                     fromTable table: String,
                                                     isDistinct: Bool = false) throws -> Select {
-        return Select(with: try getHandle(), on: cls.allProperties(), table: table, isDistinct: isDistinct)
+        return Select(with: try getHandle(writeHint: false), on: cls.allProperties(), table: table, isDistinct: isDistinct)
     }
 }
 

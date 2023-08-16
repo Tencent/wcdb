@@ -30,8 +30,11 @@ public class Handle extends HandleORMOperation {
     private PreparedStatement mainStatement = null;
     private final Database database;
 
-    Handle(Database database) {
+    private boolean writeHint = false;
+
+    Handle(Database database, boolean writeHint) {
         this.database = database;
+        this.writeHint = writeHint;
     }
 
     Handle(long cppObj, Database database) {
@@ -42,7 +45,7 @@ public class Handle extends HandleORMOperation {
     public long getCppHandle() throws WCDBException {
         if(cppObj == 0) {
             assert database != null;
-            cppObj = database.getHandle(database.getCppObj());
+            cppObj = database.getHandle(database.getCppObj(), writeHint);
             if(cppObj == 0) {
                 throw database.createException();
             }
@@ -109,6 +112,7 @@ public class Handle extends HandleORMOperation {
         if(cppObj != 0) {
             releaseCPPObject(cppObj);
             cppObj = 0;
+            writeHint = false;
         }
     }
 
@@ -145,7 +149,7 @@ public class Handle extends HandleORMOperation {
     native void rollbackTransaction(long self);
 
     @Override
-    Handle getHandle() {
+    Handle getHandle(boolean writeHint) {
         return this;
     }
 

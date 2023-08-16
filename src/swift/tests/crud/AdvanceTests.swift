@@ -525,9 +525,6 @@ class AdvanceTests: CRUDTestCase {
             XCTAssertNoThrow(try self.database.begin())
             XCTAssertTrue(self.database.isInTransaction)
             let beginInterval = Date().timeIntervalSince(write2Begin)
-            if beginInterval >= 1 {
-
-            }
             XCTAssertTrue(beginInterval < 1)
             identifier += 1
             let obj = TestObject()
@@ -870,8 +867,8 @@ class AdvanceTests: CRUDTestCase {
         oldObject3.variable1 = 3
         oldObject3.variable2 = "oldContent3"
 
-        let sourceCipher = RandomData(withSeed: 0).data(withLength: 100)
-        let targetCipher = RandomData(withSeed: 1).data(withLength: 100)
+        let sourceCipher = Random.data(withLength: 100)
+        let targetCipher = Random.data(withLength: 100, andSeed: 1)
 
         let sourceDatabase = Database(at: recommendedDirectory.appendingPathComponent("sourceDB.sqlite3"))
         sourceDatabase.setCipher(key: sourceCipher)

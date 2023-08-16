@@ -39,7 +39,7 @@ import com.tencent.wcdb.winq.StatementUpdate;
 import java.util.List;
 
 public abstract class HandleOperation extends CppObject {
-    abstract Handle getHandle();
+    abstract Handle getHandle(boolean writeHint);
 
     abstract boolean autoInvalidateHandle();
 
@@ -74,7 +74,7 @@ public abstract class HandleOperation extends CppObject {
         } else if (action == ConflictAction.Ignore) {
             insert.orIgnore();
         }
-        Handle handle = getHandle();
+        Handle handle = getHandle(true);
         try {
             if(rows.length > 1) {
                 handle.runTransaction(new Transaction() {
@@ -267,7 +267,7 @@ public abstract class HandleOperation extends CppObject {
     }
 
     private void updateRow(Value[] row, StatementUpdate update) throws WCDBException {
-        Handle handle = getHandle();
+        Handle handle = getHandle(true);
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(update);
             preparedStatement.bindRow(row);
@@ -311,7 +311,7 @@ public abstract class HandleOperation extends CppObject {
     }
 
     private void deleteValue(StatementDelete delete) throws WCDBException {
-        Handle handle = getHandle();
+        Handle handle = getHandle(true);
         try {
             handle.execute(delete);
         } finally {
@@ -434,7 +434,7 @@ public abstract class HandleOperation extends CppObject {
     }
 
     public Value getValueFromStatement(Statement statement) throws WCDBException {
-        Handle handle = getHandle();
+        Handle handle = getHandle(false);
         Value ret = null;
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
@@ -452,7 +452,7 @@ public abstract class HandleOperation extends CppObject {
     }
 
     public Value getValueFromSQL(String sql) throws WCDBException {
-        Handle handle = getHandle();
+        Handle handle = getHandle(false);
         Value ret = null;
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(sql);
@@ -470,7 +470,7 @@ public abstract class HandleOperation extends CppObject {
     }
 
     public Value[] getOneRowFromStatement(Statement statement) throws WCDBException {
-        Handle handle = getHandle();
+        Handle handle = getHandle(false);
         Value[] ret = null;
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
@@ -488,7 +488,7 @@ public abstract class HandleOperation extends CppObject {
     }
 
     public Value[] getOneRowFromSQL(String sql) throws WCDBException {
-        Handle handle = getHandle();
+        Handle handle = getHandle(false);
         Value[] ret = null;
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(sql);
@@ -506,7 +506,7 @@ public abstract class HandleOperation extends CppObject {
     }
 
     public List<Value> getOneColumnFromStatement(Statement statement) throws WCDBException {
-        Handle handle = getHandle();
+        Handle handle = getHandle(false);
         List<Value> ret;
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
@@ -521,7 +521,7 @@ public abstract class HandleOperation extends CppObject {
     }
 
     public List<Value> getOneColumnFromSQL(String sql) throws WCDBException {
-        Handle handle = getHandle();
+        Handle handle = getHandle(false);
         List<Value> ret;
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(sql);
@@ -536,7 +536,7 @@ public abstract class HandleOperation extends CppObject {
     }
 
     public List<Value[]> getAllRowsFromStatement(Statement statement) throws WCDBException {
-        Handle handle = getHandle();
+        Handle handle = getHandle(false);
         List<Value[]> ret;
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
@@ -551,7 +551,7 @@ public abstract class HandleOperation extends CppObject {
     }
 
     public List<Value[]> getAllRowsFromSQL(String sql) throws WCDBException {
-        Handle handle = getHandle();
+        Handle handle = getHandle(false);
         List<Value[]> ret;
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(sql);
@@ -566,7 +566,7 @@ public abstract class HandleOperation extends CppObject {
     }
 
     public void execute(Statement statement) throws WCDBException {
-        Handle handle = getHandle();
+        Handle handle = getHandle(statement.isWriteStatement());
         WCDBException exception = null;
         if(!handle.execute(handle.getCppHandle(), statement.getCppObj())) {
             exception = handle.createException();
@@ -580,7 +580,7 @@ public abstract class HandleOperation extends CppObject {
     }
 
     public void execute(String sql) throws WCDBException {
-        Handle handle = getHandle();
+        Handle handle = getHandle(false);
         WCDBException exception = null;
         if(!handle.executeSQL(handle.getCppHandle(), sql)) {
             exception = handle.createException();
@@ -594,12 +594,12 @@ public abstract class HandleOperation extends CppObject {
     }
 
     public boolean isInTransaction() throws WCDBException{
-        Handle handle = getHandle();
+        Handle handle = getHandle(false);
         return handle.isInTransaction(handle.getCppHandle());
     }
 
     public void beginTransaction() throws WCDBException {
-        Handle handle = getHandle();
+        Handle handle = getHandle(true);
         WCDBException exception = null;
         if(!handle.isInTransaction(handle.getCppHandle())) {
             exception = handle.createException();
@@ -613,7 +613,7 @@ public abstract class HandleOperation extends CppObject {
     }
 
     public void commitTransaction() throws WCDBException {
-        Handle handle = getHandle();
+        Handle handle = getHandle(true);
         WCDBException exception = null;
         if(!handle.commitTransaction(handle.getCppHandle())) {
             exception = handle.createException();
@@ -627,7 +627,7 @@ public abstract class HandleOperation extends CppObject {
     }
 
     public void rollbackTransaction() throws WCDBException {
-        Handle handle = getHandle();
+        Handle handle = getHandle(true);
         handle.rollbackTransaction(handle.getCppHandle());
         if(autoInvalidateHandle()) {
             handle.invalidate();
@@ -635,7 +635,7 @@ public abstract class HandleOperation extends CppObject {
     }
 
     public void runTransaction(Transaction transaction) throws WCDBException {
-        Handle handle = getHandle();
+        Handle handle = getHandle(true);
         WCDBException exception = null;
         if(!handle.runTransaction(handle.getCppHandle(), transaction)) {
             exception = handle.createException();
@@ -649,7 +649,7 @@ public abstract class HandleOperation extends CppObject {
     }
 
     public void runPausableTransaction(PausableTransaction transaction) throws WCDBException {
-        Handle handle = getHandle();
+        Handle handle = getHandle(true);
         WCDBException exception = null;
         if(!handle.runPausableTransaction(handle.getCppHandle(), transaction)) {
             exception = handle.createException();

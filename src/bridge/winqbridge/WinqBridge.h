@@ -89,6 +89,8 @@ enum WCDBSyntaxTransactionType {
     WCDBSyntaxTransactionType_Exclusive,
 };
 
+bool WCDBStatementNeedToWrite(CPPObject* _Nonnull statement);
+
 WCDBDefineCPPBridgedType(CPPBindParameter);
 WCDBDefineCPPBridgedType(CPPColumn);
 WCDBDefineCPPBridgedType(CPPColumnConstraint);

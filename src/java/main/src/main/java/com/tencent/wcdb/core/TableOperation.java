@@ -83,7 +83,7 @@ public class TableOperation {
         } else if (action == ConflictAction.Ignore) {
             insert.orIgnore();
         }
-        Handle handle = database.getHandle();
+        Handle handle = database.getHandle(true);
         try {
             if(rows.length > 1) {
                 handle.runTransaction(new Transaction() {
@@ -262,7 +262,7 @@ public class TableOperation {
     }
 
     private void updateRow(Value[] row, StatementUpdate update) throws WCDBException {
-        Handle handle = database.getHandle();
+        Handle handle = database.getHandle(true);
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(update);
             preparedStatement.bindRow(row);
@@ -304,7 +304,7 @@ public class TableOperation {
     }
 
     private void deleteValue(StatementDelete delete) throws WCDBException {
-        Handle handle = database.getHandle();
+        Handle handle = database.getHandle(true);
         try {
             handle.execute(delete);
         } finally {
@@ -425,7 +425,7 @@ public class TableOperation {
     }
 
     public Value getValueFromStatement(Statement statement) throws WCDBException {
-        Handle handle = database.getHandle();
+        Handle handle = database.getHandle(false);
         Value ret = null;
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
@@ -441,7 +441,7 @@ public class TableOperation {
     }
 
     public Value[] getOneRowFromStatement(Statement statement) throws WCDBException {
-        Handle handle = database.getHandle();
+        Handle handle = database.getHandle(false);
         Value[] ret = null;
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
@@ -457,7 +457,7 @@ public class TableOperation {
     }
 
     public List<Value> getOneColumnFromStatement(Statement statement) throws WCDBException {
-        Handle handle = database.getHandle();
+        Handle handle = database.getHandle(false);
         List<Value> ret;
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
@@ -470,7 +470,7 @@ public class TableOperation {
     }
 
     public List<Value[]> getAllRowsFromStatement(Statement statement) throws WCDBException {
-        Handle handle = database.getHandle();
+        Handle handle = database.getHandle(false);
         List<Value[]> ret;
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);

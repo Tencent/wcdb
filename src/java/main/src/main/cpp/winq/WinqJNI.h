@@ -25,3 +25,4 @@
 #include "WCDBJNI.h"
 
 jstring WCDBJNIObjectMethod(Winq, getDescription, long long statement);
+jboolean WCDBJNIObjectMethod(Winq, isWriteStatement, long long statement);

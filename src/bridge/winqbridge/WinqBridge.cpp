@@ -39,6 +39,12 @@ const char* _Nonnull WCDBWinqGetDescription(CPPObject* statement)
     return innerValue->getDescription().data();
 }
 
+bool WCDBStatementNeedToWrite(CPPObject* _Nonnull statement)
+{
+    WCDB::Statement* innerValue = (WCDB::Statement*) statement->realValue;
+    return innerValue->isWriteStatement();
+}
+
 namespace WCDB {
 
 Order WinqBridge::changeOrder(enum WCDBSyntaxOrder order)

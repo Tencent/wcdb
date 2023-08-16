@@ -205,11 +205,11 @@ public class Database {
     /// and the sqlite db handle is lazy initialized and will not be actually generated until the first operation on current handle takes place.
     /// Note that all `Handle` created by the current database in the current thread will share the same sqlite db handle internally,
     /// so it can avoid the deadlock between different sqlite db handles in some extreme cases.
-    ///
+    /// - Parameter writeHint: A hint as to whether the handle will be used to update content in the database. It doesn't need to be precise.
     /// - Returns: A new `Handle`.
     /// - Throws: `Error`
-    public func getHandle() throws -> Handle {
-        let cppHandle = WCDBDatabaseGetHandle(database)
+    public func getHandle(writeHint: Bool = false) throws -> Handle {
+        let cppHandle = WCDBDatabaseGetHandle(database, writeHint)
         let handle = Handle(withCPPHandle: cppHandle, database: self)
         if !WCDBHandleCheckValid(cppHandle) {
             throw getError()
@@ -227,7 +227,10 @@ public class Database {
     /// - Parameter statement: WINQ statement
     /// - Throws: `Error`
     public func exec(_ statement: Statement) throws {
-        return try getHandle().exec(statement)
+        let hint = withExtendedLifetime(statement) {
+            WCDBStatementNeedToWrite($0.rawCPPObj)
+        }
+        return try getHandle(writeHint: hint).exec(statement)
     }
 }
 

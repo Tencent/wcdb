@@ -91,10 +91,10 @@ jobject WCDBJNIDatabaseObjectMethod(getPaths, jlong self)
     return arrayList;
 }
 
-jlong WCDBJNIDatabaseObjectMethod(getHandle, jlong self)
+jlong WCDBJNIDatabaseObjectMethod(getHandle, jlong self, jboolean writeHint)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
-    return (jlong) WCDBDatabaseGetHandle(selfStruct).innerValue;
+    return (jlong) WCDBDatabaseGetHandle(selfStruct, writeHint).innerValue;
 }
 
 jboolean WCDBJNIDatabaseObjectMethod(canOpen, jlong self)

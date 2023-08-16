@@ -837,12 +837,15 @@
 		0D5363F1290A75F20026A4DC /* Sequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D5363EE290A75F20026A4DC /* Sequence.cpp */; };
 		0D5363F2290A75F20026A4DC /* Sequence.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D5363EF290A75F20026A4DC /* Sequence.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		0D5363F3290A75F20026A4DC /* Sequence.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D5363EF290A75F20026A4DC /* Sequence.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		0D81CDAB2A569FAB0051FF8E /* ColumnConstraintEnablePrimaryAutoIncrement.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D81CDA92A569CE40051FF8E /* ColumnConstraintEnablePrimaryAutoIncrement.mm */; };
-		0D81CDAE2A56DA070051FF8E /* CPPColumnConstraintEnablePrimaryAutoIncrement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D81CDAC2A56DA070051FF8E /* CPPColumnConstraintEnablePrimaryAutoIncrement.cpp */; };
+		0D71F9342A8B377100F7B4F6 /* Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D71F9332A8B377100F7B4F6 /* Random.swift */; };
+		0D71F9352A8B377100F7B4F6 /* Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D71F9332A8B377100F7B4F6 /* Random.swift */; };
+		0D71F9362A8B659400F7B4F6 /* RandomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1671827F434E800D2C926 /* RandomData.swift */; };
 		0D8084212A861E8500C81BBF /* WCTCancellationSignal.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D8084202A861E8500C81BBF /* WCTCancellationSignal.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0D8084222A861E8500C81BBF /* WCTCancellationSignal.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D8084202A861E8500C81BBF /* WCTCancellationSignal.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0D8084242A861E9500C81BBF /* WCTCancellationSignal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D8084232A861E9500C81BBF /* WCTCancellationSignal.mm */; };
 		0D8084252A861E9500C81BBF /* WCTCancellationSignal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D8084232A861E9500C81BBF /* WCTCancellationSignal.mm */; };
+		0D81CDAB2A569FAB0051FF8E /* ColumnConstraintEnablePrimaryAutoIncrement.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D81CDA92A569CE40051FF8E /* ColumnConstraintEnablePrimaryAutoIncrement.mm */; };
+		0D81CDAE2A56DA070051FF8E /* CPPColumnConstraintEnablePrimaryAutoIncrement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D81CDAC2A56DA070051FF8E /* CPPColumnConstraintEnablePrimaryAutoIncrement.cpp */; };
 		0DAD93C129FA2A1200E5788C /* TableChainCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DAD93C029FA2A1200E5788C /* TableChainCall.swift */; };
 		0DAD93C229FA2A1200E5788C /* TableChainCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DAD93C029FA2A1200E5788C /* TableChainCall.swift */; };
 		0DAD93C429FA2C4800E5788C /* TableChainCall+WCTTableCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DAD93C329FA2C4800E5788C /* TableChainCall+WCTTableCoding.swift */; };
@@ -3020,7 +3023,6 @@
 		75A60AB429345A38009C1B3C /* Cipher.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75A60AAE29345A38009C1B3C /* Cipher.hpp */; };
 		75A60AB529345A38009C1B3C /* Cipher.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75A60AAE29345A38009C1B3C /* Cipher.hpp */; };
 		75A60AB629345A38009C1B3C /* Cipher.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75A60AAE29345A38009C1B3C /* Cipher.hpp */; };
-		75A60AB72934EC65009C1B3C /* RandomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1671827F434E800D2C926 /* RandomData.swift */; };
 		75AF6AD728544C8800A7C43D /* TableOrSubqueryBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75AF6AD528544C8800A7C43D /* TableOrSubqueryBridge.cpp */; };
 		75AF6AD828544C8800A7C43D /* TableOrSubqueryBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AF6AD628544C8800A7C43D /* TableOrSubqueryBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75AF6ADB2854C5ED00A7C43D /* JoinBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75AF6AD92854C5ED00A7C43D /* JoinBridge.cpp */; };
@@ -3626,14 +3628,15 @@
 		0D5363E9290A65390026A4DC /* Master.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Master.hpp; sourceTree = "<group>"; };
 		0D5363EE290A75F20026A4DC /* Sequence.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sequence.cpp; sourceTree = "<group>"; };
 		0D5363EF290A75F20026A4DC /* Sequence.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Sequence.hpp; sourceTree = "<group>"; };
+		0D71F9332A8B377100F7B4F6 /* Random.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Random.swift; sourceTree = "<group>"; };
+		0D8084202A861E8500C81BBF /* WCTCancellationSignal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTCancellationSignal.h; sourceTree = "<group>"; };
+		0D8084232A861E9500C81BBF /* WCTCancellationSignal.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTCancellationSignal.mm; sourceTree = "<group>"; };
+		0D8084262A861FDB00C81BBF /* WCTCancellationSignal+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTCancellationSignal+Private.h"; sourceTree = "<group>"; };
 		0D81CDA82A569CB40051FF8E /* ColumnConstraintEnablePrimaryAutoIncrement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColumnConstraintEnablePrimaryAutoIncrement.h; sourceTree = "<group>"; };
 		0D81CDA92A569CE40051FF8E /* ColumnConstraintEnablePrimaryAutoIncrement.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ColumnConstraintEnablePrimaryAutoIncrement.mm; sourceTree = "<group>"; };
 		0D81CDAA2A569CFC0051FF8E /* ColumnConstraintEnablePrimaryAutoIncrement+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ColumnConstraintEnablePrimaryAutoIncrement+WCTTableCoding.h"; sourceTree = "<group>"; };
 		0D81CDAC2A56DA070051FF8E /* CPPColumnConstraintEnablePrimaryAutoIncrement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CPPColumnConstraintEnablePrimaryAutoIncrement.cpp; sourceTree = "<group>"; };
 		0D81CDAD2A56DA070051FF8E /* CPPColumnConstraintEnablePrimaryAutoIncrement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CPPColumnConstraintEnablePrimaryAutoIncrement.hpp; sourceTree = "<group>"; };
-		0D8084202A861E8500C81BBF /* WCTCancellationSignal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTCancellationSignal.h; sourceTree = "<group>"; };
-		0D8084232A861E9500C81BBF /* WCTCancellationSignal.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTCancellationSignal.mm; sourceTree = "<group>"; };
-		0D8084262A861FDB00C81BBF /* WCTCancellationSignal+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTCancellationSignal+Private.h"; sourceTree = "<group>"; };
 		0DAD93C029FA2A1200E5788C /* TableChainCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableChainCall.swift; sourceTree = "<group>"; };
 		0DAD93C329FA2C4800E5788C /* TableChainCall+WCTTableCoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TableChainCall+WCTTableCoding.swift"; sourceTree = "<group>"; };
 		0DAE11D328DC6CC6003FB63A /* WCDB.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCDB.h; sourceTree = "<group>"; };
@@ -5535,6 +5538,7 @@
 				03E1676327F434E800D2C926 /* Convenience.swift */,
 				03E1675227F434E800D2C926 /* TestObject.swift */,
 				7534735F2935C1E400911FCA /* DatabaseTestCase.swift */,
+				0D71F9332A8B377100F7B4F6 /* Random.swift */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -9576,6 +9580,7 @@
 				03BF4B2C2888F91800A30500 /* RandomData.swift in Sources */,
 				03BF4B4D2888FA7C00A30500 /* NSObject+TestCase.mm in Sources */,
 				03BF4B3D2888FA3000A30500 /* Benchmark.mm in Sources */,
+				0D71F9352A8B377100F7B4F6 /* Random.swift in Sources */,
 				03BF4B332888F95800A30500 /* Convenience.swift in Sources */,
 				03BF4B522888FA8900A30500 /* WCTDatabase+TestCase.mm in Sources */,
 				03BF4B3A2888F99200A30500 /* MigrationBenchmark.mm in Sources */,
@@ -9837,6 +9842,7 @@
 				75A46C0B2843709500B58207 /* ColumnConstraintTests.swift in Sources */,
 				03E1678027F434E900D2C926 /* StatementAlterTableTests.swift in Sources */,
 				75EB196B287F08A300AA62F7 /* StatementDropTriggerTests.swift in Sources */,
+				0D71F9362A8B659400F7B4F6 /* RandomData.swift in Sources */,
 				03E1679527F434E900D2C926 /* StatementInsertTests.swift in Sources */,
 				03E167AC27F434E900D2C926 /* TableConstraintBindingTests.swift in Sources */,
 				03BFC5392852E9CB00673AE4 /* WindowDefTests.swift in Sources */,
@@ -9872,7 +9878,6 @@
 				75EB1A07287F0AFA00AA62F7 /* StatementDropViewTests.swift in Sources */,
 				03E1679A27F434E900D2C926 /* TableTests.swift in Sources */,
 				03E167A827F434E900D2C926 /* DeleteInterfaceTests.swift in Sources */,
-				75A60AB72934EC65009C1B3C /* RandomData.swift in Sources */,
 				75CFB5DC293F30A200F97FA5 /* AutoAddColumnTests.swift in Sources */,
 				03E1678627F434E900D2C926 /* StatementReindexTests.swift in Sources */,
 				03E1677527F434E900D2C926 /* FileTests.swift in Sources */,
@@ -9893,6 +9898,7 @@
 				03E167A327F434E900D2C926 /* TestObject.swift in Sources */,
 				03E1678C27F434E900D2C926 /* ColumnTests.swift in Sources */,
 				75AF6AF62855D21000A7C43D /* UpsertTests.swift in Sources */,
+				0D71F9342A8B377100F7B4F6 /* Random.swift in Sources */,
 				03E1677827F434E900D2C926 /* StatementSelectTests.swift in Sources */,
 				03DCB5EB286C35A600CBC75D /* StatementAnalyzeTests.swift in Sources */,
 				75195E812852454700EC8C1F /* FrameSpecTests.swift in Sources */,

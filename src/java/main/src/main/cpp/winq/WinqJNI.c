@@ -28,3 +28,8 @@ jstring WCDBJNIObjectMethod(Winq, getDescription, long long statement)
 {
     WCDBJNICreateJStringAndReturn(WCDBWinqGetDescription((CPPObject*) statement));
 }
+
+jboolean WCDBJNIObjectMethod(Winq, isWriteStatement, long long statement)
+{
+    return WCDBStatementNeedToWrite((CPPObject*) statement);
+}

@@ -99,5 +99,6 @@ public class Identifier extends CppObject {
         return getDescription(cppObj);
     }
 
+    native boolean isWriteStatement(long obj);
     private native String getDescription(long obj);
 }

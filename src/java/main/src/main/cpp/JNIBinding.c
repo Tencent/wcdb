@@ -100,6 +100,7 @@ static const JNINativeMethod g_objectBridgeMethods[] = {
 
 static const JNINativeMethod g_winqBridgeMethods[] = {
     { "getDescription", "(J)" WCDBJNIStringSignature "", (void *) WCDBJNI(Winq, getDescription) },
+    { "isWriteStatement", "(J)Z", (void *) WCDBJNI(Winq, isWriteStatement) },
 };
 
 static const JNINativeMethod g_literalValueMethods[] = {
@@ -865,7 +866,7 @@ static const JNINativeMethod g_databaseMethods[]
     { "unblockade", "(J)V", (void *) WCDBJNIDatabaseFuncName(unblockade) },
     { "isBlockaded", "(J)Z", (void *) WCDBJNIDatabaseFuncName(isBlockaded) },
     { "purge", "(J)V", (void *) WCDBJNIDatabaseFuncName(purge) },
-    { "getHandle", "(J)J", (void *) WCDBJNIDatabaseFuncName(getHandle) },
+    { "getHandle", "(JZ)J", (void *) WCDBJNIDatabaseFuncName(getHandle) },
     { "setCipherKey", "(J[BII)V", (void *) WCDBJNIDatabaseFuncName(configCipher) },
     { "setConfig",
       "(J" WCDBJNIStringSignature WCDBJNIDatabaseSignature
