@@ -40,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithUnsafeDatabase:(WCDB::InnerDatabase *)database NS_DESIGNATED_INITIALIZER;
 
-- (WCDB::RecyclableHandle)generateHandle;
+- (WCDB::RecyclableHandle)generateHandle:(BOOL)writeHint;
 
 @end
 

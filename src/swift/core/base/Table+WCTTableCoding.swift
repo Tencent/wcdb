@@ -38,7 +38,7 @@ extension Table {
 internal extension Table {
 
     func internalInsert(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil, onConflict action: ConflictAction? = nil) throws where Object: WCTTableCoding {
-        let insert = Insert(with: try self.database.getHandle(), named: self.name, on: propertyConvertibleList, onConflict: action)
+        let insert = Insert(with: try self.database.getHandle(writeHint: true), named: self.name, on: propertyConvertibleList, onConflict: action)
         return try insert.execute(with: objects)
     }
 
@@ -48,7 +48,7 @@ internal extension Table {
                         orderBy orderList: [OrderBy]? = nil,
                         limit: Limit? = nil,
                         offset: Offset? = nil) throws where Object: WCTTableCoding {
-        let update = Update(with: try self.database.getHandle(), on: propertyConvertibleList, andTable: self.name)
+        let update = Update(with: try self.database.getHandle(writeHint: true), on: propertyConvertibleList, andTable: self.name)
         if condition != nil {
             update.where(condition!)
         }
@@ -70,7 +70,7 @@ internal extension Table {
                            orderBy orderList: [OrderBy]? = nil,
                            limit: Limit? = nil,
                            offset: Offset? = nil) throws -> [Object] where Object: WCTTableCoding {
-        let select = Select(with: try self.database.getHandle(),
+        let select = Select(with: try self.database.getHandle(writeHint: false),
                             on: propertyConvertibleList.isEmpty ? Object.allProperties() : propertyConvertibleList,
                             table: self.name,
                             isDistinct: false)
@@ -262,7 +262,7 @@ extension Table: UpdateTableInterfaceForObjc where Root: WCTTableCoding {
                        orderBy orderList: [OrderBy]? = nil,
                        limit: Limit? = nil,
                        offset: Offset? = nil) throws {
-        let update = Update(with: try self.database.getHandle(), on: propertyConvertibleList, andTable: self.name)
+        let update = Update(with: try self.database.getHandle(writeHint: true), on: propertyConvertibleList, andTable: self.name)
         if condition != nil {
             update.where(condition!)
         }
@@ -361,22 +361,22 @@ extension Table: SelectTableInterfaceForObjc where Root: WCTTableCoding {
 
 extension Table: TableInsertChainCallInterfaceForObjc {
     public func prepareInsert<Root: WCTTableCoding>(of cls: Root.Type) throws -> Insert {
-        return Insert(with: try self.database.getHandle(), named: name, on: cls.allProperties())
+        return Insert(with: try self.database.getHandle(writeHint: true), named: name, on: cls.allProperties())
     }
 
     public func prepareInsertOrReplace<Root: WCTTableCoding>(of cls: Root.Type) throws -> Insert {
-            return Insert(with: try self.database.getHandle(), named: name, on: cls.allProperties(), onConflict: .Replace)
+            return Insert(with: try self.database.getHandle(writeHint: true), named: name, on: cls.allProperties(), onConflict: .Replace)
     }
 
     public func prepareInsertOrIgnore<Root: WCTTableCoding>(of cls: Root.Type) throws -> Insert {
-            return Insert(with: try self.database.getHandle(), named: name, on: cls.allProperties(), onConflict: .Ignore)
+            return Insert(with: try self.database.getHandle(writeHint: true), named: name, on: cls.allProperties(), onConflict: .Ignore)
     }
 }
 
 extension Table: TableSelectChainCallInterfaceForObjc {
     public func prepareSelect<Root: WCTTableCoding>(of cls: Root.Type,
                                                     isDistinct: Bool = false) throws -> Select {
-        return Select(with: try self.database.getHandle(), on: cls.allProperties(), table: name, isDistinct: isDistinct)
+        return Select(with: try self.database.getHandle(writeHint: false), on: cls.allProperties(), table: name, isDistinct: isDistinct)
     }
 }
 

@@ -1,4 +1,5 @@
-// Created by qiuwenchen on 2023/3/30.
+//
+// Created by qiuwenchen on 2023/8/11.
 //
 
 /*
@@ -21,8 +22,13 @@
  * limitations under the License.
  */
 
-#pragma once
-#include "WCDBJNI.h"
+#import "WCTCommon.h"
 
-jstring WCDBJNIObjectMethod(Winq, getDescription, long long statement);
-jboolean WCDBJNIObjectMethod(Winq, isWriteStatement, long long statement);
+@interface WCTCancellationSignal : NSObject
+/**
+ @brief Cancel all operations of the attached handle.
+ @see   `-[WCTHandle attachCancellationSignal:]`
+ */
+- (void)cancel;
+
+@end

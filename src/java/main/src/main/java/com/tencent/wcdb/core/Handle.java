@@ -22,6 +22,7 @@
  */
 package com.tencent.wcdb.core;
 
+import com.tencent.wcdb.base.CppObject;
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.winq.Statement;
 
@@ -29,8 +30,11 @@ public class Handle extends HandleORMOperation {
     private PreparedStatement mainStatement = null;
     private final Database database;
 
-    Handle(Database database) {
+    private boolean writeHint = false;
+
+    Handle(Database database, boolean writeHint) {
         this.database = database;
+        this.writeHint = writeHint;
     }
 
     Handle(long cppObj, Database database) {
@@ -41,7 +45,7 @@ public class Handle extends HandleORMOperation {
     public long getCppHandle() throws WCDBException {
         if(cppObj == 0) {
             assert database != null;
-            cppObj = database.getHandle(database.getCppObj());
+            cppObj = database.getHandle(database.getCppObj(), writeHint);
             if(cppObj == 0) {
                 throw database.createException();
             }
@@ -108,6 +112,7 @@ public class Handle extends HandleORMOperation {
         if(cppObj != 0) {
             releaseCPPObject(cppObj);
             cppObj = 0;
+            writeHint = false;
         }
     }
 
@@ -144,7 +149,7 @@ public class Handle extends HandleORMOperation {
     native void rollbackTransaction(long self);
 
     @Override
-    Handle getHandle() {
+    Handle getHandle(boolean writeHint) {
         return this;
     }
 
@@ -179,9 +184,44 @@ public class Handle extends HandleORMOperation {
         } catch (WCDBException e) {
             ret = 2;
         }
+        CancellationSignal signal = new CancellationSignal();
         return ret;
     }
 
     native boolean runPausableTransaction(long self, PausableTransaction transaction);
+
+    public static class CancellationSignal extends CppObject {
+        public CancellationSignal() {
+            cppObj = createCancellationSignal();
+        }
+
+        public void cancel() {
+            cancelSignal(cppObj);
+        }
+    }
+
+    private static native long createCancellationSignal();
+    private static native void cancelSignal(long signal);
+
+    public void attachCancellationSignal(CancellationSignal signal) throws WCDBException {
+        if(signal == null) {
+            return;
+        }
+        long cppSignal = signal.getCppObj();
+        if(cppSignal == 0){
+            return;
+        }
+        attachCancellationSignal(getCppHandle(), cppSignal);
+    }
+
+    private native void attachCancellationSignal(long self, long signal);
+
+    public void detachCancellationSignal() {
+        if(cppObj != 0) {
+            detachCancellationSignal(cppObj);
+        }
+    }
+
+    private native void detachCancellationSignal(long self);
 
 }

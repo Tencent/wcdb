@@ -43,7 +43,7 @@ typedef void (*WCDBStringEnumerater)(void* _Nullable context, const char* _Nonnu
 void WCDBDatabaseGetPaths2(CPPDatabase database,
                            void* _Nullable context,
                            WCDBStringEnumerater _Nonnull enumerater);
-CPPHandle WCDBDatabaseGetHandle(CPPDatabase database);
+CPPHandle WCDBDatabaseGetHandle(CPPDatabase database, bool writeHint);
 
 bool WCDBDatabaseCanOpen(CPPDatabase database);
 bool WCDBDatabaseIsOpened(CPPDatabase database);

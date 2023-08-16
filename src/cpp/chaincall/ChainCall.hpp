@@ -54,6 +54,7 @@ public:
     int getChanges();
 
 protected:
+    bool checkHandle(bool writeHint);
     void assignChanges();
     void assertError(const UnsafeStringView &message);
     BaseChainCall(Recyclable<InnerDatabase *> databaseHolder);

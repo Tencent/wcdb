@@ -41,7 +41,7 @@ jlong WCDBJNIDatabaseObjectMethod(getTag, jlong self);
 void WCDBJNIDatabaseObjectMethod(setTag, jlong self, jlong tag);
 jstring WCDBJNIDatabaseObjectMethod(getPath, jlong self);
 jobject WCDBJNIDatabaseObjectMethod(getPaths, jlong self);
-jlong WCDBJNIDatabaseObjectMethod(getHandle, jlong self);
+jlong WCDBJNIDatabaseObjectMethod(getHandle, jlong self, jboolean writeHint);
 
 jboolean WCDBJNIDatabaseObjectMethod(canOpen, jlong self);
 jboolean WCDBJNIDatabaseObjectMethod(isOpened, jlong self);

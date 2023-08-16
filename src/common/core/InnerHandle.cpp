@@ -31,8 +31,9 @@
 namespace WCDB {
 
 InnerHandle::InnerHandle()
-: m_mainStatement(getStatement()), m_transactionEvent(nullptr)
+: m_writeHint(false), m_mainStatement(nullptr), m_transactionEvent(nullptr)
 {
+    m_mainStatement = getStatement();
 }
 
 InnerHandle::~InnerHandle()
@@ -67,6 +68,16 @@ void InnerHandle::setType(HandleType type)
         m_error.infos.erase(ErrorStringKeyType);
         break;
     }
+}
+
+bool InnerHandle::getWriteHint()
+{
+    return m_writeHint;
+}
+
+void InnerHandle::setWriteHint(bool hint)
+{
+    m_writeHint = hint;
 }
 
 void InnerHandle::setErrorType(const UnsafeStringView &type)

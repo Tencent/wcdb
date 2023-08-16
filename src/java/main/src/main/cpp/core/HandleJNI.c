@@ -202,3 +202,28 @@ jboolean WCDBJNIHandleObjectMethod(runPausableTransaction, jlong self, jobject t
     return WCDBHandleRunPausableTransaction2(
     selfStruct, &context, (PausableTransaction) WCDBJNIHanldePausableTransactionCallBack);
 }
+
+jlong WCDBJNIHandleClassMethodWithNoArg(createCancellationSignal)
+{
+    jlong ret = (jlong) WCDBCancellationSignalCreate().innerValue;
+    return ret;
+}
+
+void WCDBJNIHandleClassMethod(cancelSignal, jlong signal)
+{
+    WCDBJNIBridgeStruct(CPPCancellationSignal, signal);
+    WCDBCancellationSignalCancel(signalStruct);
+}
+
+void WCDBJNIHandleObjectMethod(attachCancellationSignal, jlong self, jlong signal)
+{
+    WCDBJNIBridgeStruct(CPPHandle, self);
+    WCDBJNIBridgeStruct(CPPCancellationSignal, signal);
+    WCDBHandleAttachCancellationSignal(selfStruct, signalStruct);
+}
+
+void WCDBJNIHandleObjectMethod(detachCancellationSignal, jlong self)
+{
+    WCDBJNIBridgeStruct(CPPHandle, self);
+    WCDBHandleDettachCancellationSignal(selfStruct);
+}

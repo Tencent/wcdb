@@ -97,9 +97,11 @@ enum class MatchType : signed char {
     Partial,
 };
 
-WCDBLiteralStringDefine(masterTable) WCDBLiteralStringDefine(sequenceTable)
-WCDBLiteralStringDefine(mainSchema) WCDBLiteralStringDefine(tempSchema)
-WCDBLiteralStringDefine(builtinTablePrefix)
+WCDBLiteralStringDefine(masterTable, "sqlite_master");
+WCDBLiteralStringDefine(sequenceTable, "sqlite_sequence");
+WCDBLiteralStringDefine(mainSchema, "main");
+WCDBLiteralStringDefine(tempSchema, "temp");
+WCDBLiteralStringDefine(builtinTablePrefix, "sqlite_");
 
 } // namespace Syntax
 

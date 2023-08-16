@@ -1,3 +1,7 @@
+//
+// Created by qiuwenchen on 2023/8/15.
+//
+
 /*
  * Tencent is pleased to support the open source community by making
  * WCDB available.
@@ -20,35 +24,32 @@
 
 import Foundation
 
-class RandomData {
-    private var position = 0
-    private let capacity = 1024 * 1024
-    private lazy var data: Data = {
-        var data = Data(capacity: capacity)
-        while data.count < capacity {
+class Random {
+    public static func string(withLength length: Int) -> String {
+        let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        return String((0..<length).map { _ in letters.randomElement()! })
+    }
+
+    public static func data(withLength length: Int, andSeed seed: Int = 0) -> Data {
+        srandom(UInt32(seed))
+        var data = Data(capacity: length)
+        while data.count < length {
             var value = arc4random()
             withUnsafePointer(to: &value) {
                 data.append(UnsafeBufferPointer(start: $0, count: 1))
             }
         }
         return data
-    }()
-
-    init(withSeed seed: Int) {
-        srandom(UInt32(seed))
     }
 
-    func data(withLength length: Int) -> Data {
-        guard length < capacity else {
-            fatalError()
+    public static func testObjects(startWith id: Int, count: Int) -> [TestObject] {
+        var objects: [TestObject] = []
+        for i in 0..<count {
+            let object = TestObject()
+            object.variable1 = id + i
+            object.variable2 = string(withLength: 100)
+            objects.append(object)
         }
-        if position + length > data.count {
-            position = 0
-        }
-        let begin = data.startIndex.advanced(by: position)
-        let end = begin.advanced(by: length)
-        let subData = data.subdata(in: begin..<end)
-        position += length
-        return subData
+        return objects
     }
 }

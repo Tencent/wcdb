@@ -27,8 +27,8 @@
 #include "Handle.hpp"
 #include "InnerHandle.hpp"
 
-#define GetHandleOrReturnValue(value)                                          \
-    RecyclableHandle handle = getHandleHolder();                               \
+#define GetHandleOrReturnValue(writeHint, value)                               \
+    RecyclableHandle handle = getHandleHolder(writeHint);                      \
     if (handle == nullptr) {                                                   \
         return value;                                                          \
     }
@@ -63,7 +63,7 @@ bool TableOperation::insertRows(const MultiRowsValue &rows, const Columns &colum
         handle.finalize();
         return true;
     };
-    GetHandleOrReturnValue(false);
+    GetHandleOrReturnValue(true, false);
     Handle newHandle = Handle(handle);
     if (rows.size() == 0) {
         return true;
@@ -105,7 +105,7 @@ bool TableOperation::insertOrReplaceRows(const MultiRowsValue &rows, const Colum
         handle.finalize();
         return true;
     };
-    GetHandleOrReturnValue(false);
+    GetHandleOrReturnValue(true, false);
     Handle newHandle = Handle(handle);
     if (rows.size() == 0) {
         return true;
@@ -147,7 +147,7 @@ bool TableOperation::insertOrIgnoreRows(const MultiRowsValue &rows, const Column
         handle.finalize();
         return true;
     };
-    GetHandleOrReturnValue(false);
+    GetHandleOrReturnValue(true, false);
     Handle newHandle = Handle(handle);
     if (rows.size() == 0) {
         return true;
@@ -178,7 +178,7 @@ bool TableOperation::updateRow(const OneRowValue &row,
         update.set(columns[i]).to(WCDB::BindParameter(i + 1));
     }
     configStatement(update, where, orders, limit, offset);
-    GetHandleOrReturnValue(false);
+    GetHandleOrReturnValue(true, false);
     bool succeed = false;
     if ((succeed = handle->prepare(update))) {
         handle->bindRow(row);
@@ -198,7 +198,7 @@ bool TableOperation::deleteValues(const Expression &where,
 {
     StatementDelete delete_ = StatementDelete().deleteFrom(getTableName());
     configStatement(delete_, where, orders, limit, offset);
-    GetHandleOrReturnValue(false);
+    GetHandleOrReturnValue(true, false);
     bool succeed = handle->execute(delete_);
     if (!succeed) {
         assignErrorToDatabase(handle->getError());
@@ -251,7 +251,7 @@ OptionalMultiRows TableOperation::selectAllRow(const ResultColumns &columns,
 OptionalValue TableOperation::getValueFromStatement(const Statement &statement, int index)
 {
     OptionalValue result;
-    GetHandleOrReturnValue(result);
+    GetHandleOrReturnValue(false, result);
     if (!handle->prepare(statement)) {
         assignErrorToDatabase(handle->getError());
         return result;
@@ -271,7 +271,7 @@ OptionalOneColumn
 TableOperation::getOneColumnFromStatement(const Statement &statement, int index)
 {
     OptionalOneColumn result;
-    GetHandleOrReturnValue(result);
+    GetHandleOrReturnValue(false, result);
 
     if (!handle->prepare(statement)) {
         assignErrorToDatabase(handle->getError());
@@ -288,7 +288,7 @@ TableOperation::getOneColumnFromStatement(const Statement &statement, int index)
 OptionalOneRow TableOperation::getOneRowFromStatement(const Statement &statement)
 {
     OptionalOneRow result;
-    GetHandleOrReturnValue(result);
+    GetHandleOrReturnValue(false, result);
     if (!handle->prepare(statement)) {
         assignErrorToDatabase(handle->getError());
         return result;
@@ -307,7 +307,7 @@ OptionalOneRow TableOperation::getOneRowFromStatement(const Statement &statement
 OptionalMultiRows TableOperation::getAllRowsFromStatement(const Statement &statement)
 {
     OptionalMultiRows result;
-    GetHandleOrReturnValue(false);
+    GetHandleOrReturnValue(false, false);
     if (!handle->prepare(statement)) {
         assignErrorToDatabase(handle->getError());
         return result;

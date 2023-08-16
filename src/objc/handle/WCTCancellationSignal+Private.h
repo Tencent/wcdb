@@ -1,4 +1,5 @@
-// Created by qiuwenchen on 2023/3/30.
+//
+// Created by qiuwenchen on 2023/8/11.
 //
 
 /*
@@ -21,8 +22,11 @@
  * limitations under the License.
  */
 
-#pragma once
-#include "WCDBJNI.h"
+#import "WCTCancellationSignal.h"
+#include <memory>
 
-jstring WCDBJNIObjectMethod(Winq, getDescription, long long statement);
-jboolean WCDBJNIObjectMethod(Winq, isWriteStatement, long long statement);
+@interface WCTCancellationSignal () {
+    std::shared_ptr<volatile bool> m_signal;
+}
+- (std::shared_ptr<volatile bool>)getInnerSignal;
+@end

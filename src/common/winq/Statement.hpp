@@ -42,6 +42,7 @@ public:
     Statement(Statement&& sql);
     Statement& operator=(const Statement& other);
     Statement& operator=(Statement&& other);
+    bool isWriteStatement() const;
 
 private:
     Shadow<Syntax::Identifier> m_syntax;

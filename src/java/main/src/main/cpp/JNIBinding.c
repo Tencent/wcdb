@@ -100,6 +100,7 @@ static const JNINativeMethod g_objectBridgeMethods[] = {
 
 static const JNINativeMethod g_winqBridgeMethods[] = {
     { "getDescription", "(J)" WCDBJNIStringSignature "", (void *) WCDBJNI(Winq, getDescription) },
+    { "isWriteStatement", "(J)Z", (void *) WCDBJNI(Winq, isWriteStatement) },
 };
 
 static const JNINativeMethod g_literalValueMethods[] = {
@@ -841,6 +842,10 @@ static const JNINativeMethod g_handleMethods[] = {
     { "runPausableTransaction",
       "(JLcom/tencent/wcdb/core/PausableTransaction;)Z",
       (void *) WCDBJNIHandleFuncName(runPausableTransaction) },
+    { "createCancellationSignal", "()J", (void *) WCDBJNIHandleFuncName(createCancellationSignal) },
+    { "cancelSignal", "(J)V", (void *) WCDBJNIHandleFuncName(cancelSignal) },
+    { "attachCancellationSignal", "(JJ)V", (void *) WCDBJNIHandleFuncName(attachCancellationSignal) },
+    { "detachCancellationSignal", "(J)V", (void *) WCDBJNIHandleFuncName(detachCancellationSignal) },
 };
 
 static const JNINativeMethod g_databaseMethods[]
@@ -861,7 +866,7 @@ static const JNINativeMethod g_databaseMethods[]
     { "unblockade", "(J)V", (void *) WCDBJNIDatabaseFuncName(unblockade) },
     { "isBlockaded", "(J)Z", (void *) WCDBJNIDatabaseFuncName(isBlockaded) },
     { "purge", "(J)V", (void *) WCDBJNIDatabaseFuncName(purge) },
-    { "getHandle", "(J)J", (void *) WCDBJNIDatabaseFuncName(getHandle) },
+    { "getHandle", "(JZ)J", (void *) WCDBJNIDatabaseFuncName(getHandle) },
     { "setCipherKey", "(J[BII)V", (void *) WCDBJNIDatabaseFuncName(configCipher) },
     { "setConfig",
       "(J" WCDBJNIStringSignature WCDBJNIDatabaseSignature

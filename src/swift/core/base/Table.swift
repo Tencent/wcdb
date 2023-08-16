@@ -51,7 +51,7 @@ public final class Table<Root: Any> {
 internal extension Table {
 
     func internalInsert(_ objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil, onConlict action: ConflictAction? = nil) throws where Object: TableEncodable {
-        let insert = Insert(with: try self.database.getHandle(), named: self.name, on: propertyConvertibleList, onConflict: action)
+        let insert = Insert(with: try self.database.getHandle(writeHint: true), named: self.name, on: propertyConvertibleList, onConflict: action)
         return try insert.execute(with: objects)
     }
 
@@ -61,7 +61,7 @@ internal extension Table {
                         orderBy orderList: [OrderBy]? = nil,
                         limit: Limit? = nil,
                         offset: Offset? = nil) throws where Object: TableEncodable {
-        let update = Update(with: try self.database.getHandle(), on: propertyConvertibleList, andTable: self.name)
+        let update = Update(with: try self.database.getHandle(writeHint: true), on: propertyConvertibleList, andTable: self.name)
         if condition != nil {
             update.where(condition!)
         }
@@ -83,7 +83,7 @@ internal extension Table {
                            orderBy orderList: [OrderBy]? = nil,
                            limit: Limit? = nil,
                            offset: Offset? = nil) throws -> [Object] where Object: TableDecodable {
-        let select = Select(with: try self.database.getHandle(),
+        let select = Select(with: try self.database.getHandle(writeHint: false),
                             on: propertyConvertibleList.isEmpty ? Object.Properties.all : propertyConvertibleList,
                             table: self.name,
                             isDistinct: false)
@@ -275,7 +275,7 @@ extension Table: UpdateTableInterface where Root: TableEncodable {
                        orderBy orderList: [OrderBy]? = nil,
                        limit: Limit? = nil,
                        offset: Offset? = nil) throws {
-        let update = Update(with: try self.database.getHandle(), on: propertyConvertibleList, andTable: self.name)
+        let update = Update(with: try self.database.getHandle(writeHint: true), on: propertyConvertibleList, andTable: self.name)
         if condition != nil {
             update.where(condition!)
         }
@@ -307,7 +307,7 @@ extension Table: DeleteTableInterface {
                        orderBy orderList: [OrderBy]? = nil,
                        limit: Limit? = nil,
                        offset: Offset? = nil) throws {
-        let delete = Delete(with: try self.database.getHandle(), andTableName: self.name)
+        let delete = Delete(with: try self.database.getHandle(writeHint: true), andTableName: self.name)
         if condition != nil {
             delete.where(condition!)
         }
@@ -421,7 +421,7 @@ extension Table: RowSelectTableInterface {
                         orderBy orderList: [OrderBy]? = nil,
                         limit: Limit? = nil,
                         offset: Offset? = nil) throws -> MultiRowsValue {
-        let rowSelect = RowSelect(with: try self.database.getHandle(),
+        let rowSelect = RowSelect(with: try self.database.getHandle(writeHint: false),
                                   results: resultColumnConvertibleList,
                                   tables: [self.name],
                                   isDistinct: false)
@@ -518,7 +518,7 @@ extension Table: RowSelectTableInterface {
                           orderBy orderList: [OrderBy]? = nil,
                           limit: Limit? = nil,
                           offset: Offset? = nil) throws -> OneColumnValue {
-        let rowSelect = RowSelect(with: try self.database.getHandle(), results: [result], tables: [self.name], isDistinct: false)
+        let rowSelect = RowSelect(with: try self.database.getHandle(writeHint: false), results: [result], tables: [self.name], isDistinct: false)
         if condition != nil {
             rowSelect.where(condition!)
         }
@@ -550,7 +550,7 @@ extension Table: RowSelectTableInterface {
                                   orderBy orderList: [OrderBy]? = nil,
                                   limit: Limit? = nil,
                                   offset: Offset? = nil) throws -> OneColumnValue {
-        let rowSelect = RowSelect(with: try self.database.getHandle(), results: [result], tables: [self.name], isDistinct: true)
+        let rowSelect = RowSelect(with: try self.database.getHandle(writeHint: false), results: [result], tables: [self.name], isDistinct: true)
         if condition != nil {
             rowSelect.where(condition!)
         }
@@ -608,17 +608,17 @@ extension Table: RowSelectTableInterface {
 
 extension Table: TableInsertChainCallInterface {
     public func prepareInsert<Root: TableEncodable>(of cls: Root.Type) throws -> Insert {
-        return Insert(with: try self.database.getHandle(), named: name, on: cls.Properties.all)
+        return Insert(with: try self.database.getHandle(writeHint: true), named: name, on: cls.Properties.all)
     }
 
     public func prepareInsertOrReplace<Root: TableEncodable>(
         of cls: Root.Type) throws -> Insert {
-            return Insert(with: try self.database.getHandle(), named: name, on: cls.Properties.all, onConflict: .Replace)
+            return Insert(with: try self.database.getHandle(writeHint: true), named: name, on: cls.Properties.all, onConflict: .Replace)
     }
 
     public func prepareInsertOrIgnore<Root: TableEncodable>(
         of cls: Root.Type) throws -> Insert {
-            return Insert(with: try self.database.getHandle(), named: name, on: cls.Properties.all, onConflict: .Ignore)
+            return Insert(with: try self.database.getHandle(writeHint: true), named: name, on: cls.Properties.all, onConflict: .Ignore)
     }
 
     public func prepareInsert(on propertyConvertibleList: PropertyConvertible...) throws -> Insert {
@@ -634,21 +634,21 @@ extension Table: TableInsertChainCallInterface {
     }
 
     public func prepareInsert(on propertyConvertibleList: [PropertyConvertible]) throws -> Insert {
-        return Insert(with: try self.database.getHandle(), named: name, on: propertyConvertibleList)
+        return Insert(with: try self.database.getHandle(writeHint: true), named: name, on: propertyConvertibleList)
     }
 
     public func prepareInsertOrReplace(on propertyConvertibleList: [PropertyConvertible]) throws -> Insert {
-        return Insert(with: try self.database.getHandle(), named: name, on: propertyConvertibleList, onConflict: .Replace)
+        return Insert(with: try self.database.getHandle(writeHint: true), named: name, on: propertyConvertibleList, onConflict: .Replace)
     }
 
     public func prepareInsertOrIgnore(on propertyConvertibleList: [PropertyConvertible]) throws -> Insert {
-        return Insert(with: try self.database.getHandle(), named: name, on: propertyConvertibleList, onConflict: .Ignore)
+        return Insert(with: try self.database.getHandle(writeHint: true), named: name, on: propertyConvertibleList, onConflict: .Ignore)
     }
 }
 
 extension Table: TableDeleteChainCallInterface {
     public func prepareDelete() throws -> Delete {
-        return Delete(with: try self.database.getHandle(), andTableName: name)
+        return Delete(with: try self.database.getHandle(writeHint: true), andTableName: name)
     }
 }
 
@@ -658,7 +658,7 @@ extension Table: TableUpdateChainCallInterface {
     }
 
     public func prepareUpdate(on propertyConvertibleList: [PropertyConvertible]) throws -> Update {
-        return Update(with: try self.database.getHandle(), on: propertyConvertibleList, andTable: name)
+        return Update(with: try self.database.getHandle(writeHint: true), on: propertyConvertibleList, andTable: name)
     }
 }
 
@@ -672,7 +672,7 @@ extension Table: TableRowSelectChainCallInterface {
 
     public func prepareRowSelect(on resultColumnConvertibleList: [ResultColumnConvertible],
                                  isDistinct: Bool = false) throws -> RowSelect {
-        return RowSelect(with: try self.database.getHandle(),
+        return RowSelect(with: try self.database.getHandle(writeHint: false),
                          results: resultColumnConvertibleList,
                          tables: [name],
                          isDistinct: isDistinct)
@@ -682,7 +682,7 @@ extension Table: TableRowSelectChainCallInterface {
 extension Table: TableSelectChainCallInterface {
     public func prepareSelect<Root: TableDecodable>(of cls: Root.Type,
                                                     isDistinct: Bool = false) throws -> Select {
-        return Select(with: try self.database.getHandle(), on: cls.Properties.all, table: name, isDistinct: isDistinct)
+        return Select(with: try self.database.getHandle(writeHint: false), on: cls.Properties.all, table: name, isDistinct: isDistinct)
     }
 
     public func prepareSelect(on propertyConvertibleList: PropertyConvertible...,
@@ -693,6 +693,6 @@ extension Table: TableSelectChainCallInterface {
 
     public func prepareSelect(on propertyConvertibleList: [PropertyConvertible],
                               isDistinct: Bool = false) throws -> Select {
-        return Select(with: try self.database.getHandle(), on: propertyConvertibleList, table: name, isDistinct: isDistinct)
+        return Select(with: try self.database.getHandle(writeHint: false), on: propertyConvertibleList, table: name, isDistinct: isDistinct)
     }
 }

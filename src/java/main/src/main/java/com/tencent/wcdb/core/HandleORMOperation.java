@@ -38,7 +38,7 @@ public abstract class HandleORMOperation extends HandleOperation{
     abstract Database getDatabase();
 
     public <T> void createTable(String tableName, TableBinding<T> binding) throws WCDBException {
-        Handle handle = getHandle();
+        Handle handle = getHandle(true);
         try {
             if(!binding.baseBinding().createTable(tableName, handle)) {
                 throw handle.createException();
@@ -51,7 +51,7 @@ public abstract class HandleORMOperation extends HandleOperation{
     }
 
     public <T> void createVirtualTable(String tableName, TableBinding<T> binding) throws WCDBException {
-        Handle handle = getHandle();
+        Handle handle = getHandle(true);
         try {
             if(!binding.baseBinding().createVirtualTable(tableName, handle)) {
                 throw handle.createException();
@@ -64,7 +64,7 @@ public abstract class HandleORMOperation extends HandleOperation{
     }
 
     public boolean tableExist(String tableName) throws WCDBException {
-        Handle handle = getHandle();
+        Handle handle = getHandle(false);
         int ret = handle.tableExist(handle.cppObj, tableName);
         WCDBException exception = null;
         if(ret > 1) {
@@ -88,28 +88,28 @@ public abstract class HandleORMOperation extends HandleOperation{
     }
 
     public <T> Insert<T> prepareInsert() {
-        Insert<T> insert = new Insert<T>(getHandle());
+        Insert<T> insert = new Insert<T>(getHandle(true));
         insert.autoInvalidateHandle = autoInvalidateHandle();
         insert.needChanges = false;
         return insert;
     }
 
     public <T> Update<T> prepareUpdate() {
-        Update<T> update = new Update<T>(getHandle());
+        Update<T> update = new Update<T>(getHandle(true));
         update.autoInvalidateHandle = autoInvalidateHandle();
         update.needChanges = false;
         return update;
     }
 
     public <T> Select<T> prepareSelect() {
-        Select<T> select = new Select<T>(getHandle());
+        Select<T> select = new Select<T>(getHandle(false));
         select.autoInvalidateHandle = autoInvalidateHandle();
         select.needChanges = false;
         return select;
     }
 
     public Delete prepareDelete() {
-        Delete delete = new Delete(getHandle());
+        Delete delete = new Delete(getHandle(true));
         delete.autoInvalidateHandle = autoInvalidateHandle();
         delete.needChanges = false;
         return delete;

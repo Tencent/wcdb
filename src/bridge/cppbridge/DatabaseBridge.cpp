@@ -97,22 +97,21 @@ void WCDBDatabaseGetPaths(CPPDatabase database, SwiftClosure* _Nonnull enumerato
         WCDBSwiftClosureCallWithOneArgument(bridgeEnumerator, path.data());
     }
 }
-
 void WCDBDatabaseGetPaths2(CPPDatabase database,
                            void* _Nullable context,
-                           WCDBStringEnumerater _Nonnull enumerater)
+                           WCDBStringEnumerater _Nonnull enumerator)
 {
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     std::list<WCDB::StringView> paths = cppDatabase->getPaths();
     for (const auto& path : paths) {
-        enumerater(context, path.data());
+        enumerator(context, path.data());
     }
 }
 
-CPPHandle WCDBDatabaseGetHandle(CPPDatabase database)
+CPPHandle WCDBDatabaseGetHandle(CPPDatabase database, bool writeHint)
 {
     WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, CPPHandle());
-    WCDB::RecyclableHandle cppHandle = cppDatabase->getHandle();
+    WCDB::RecyclableHandle cppHandle = cppDatabase->getHandle(writeHint);
     if (cppHandle == nullptr) {
         CPPHandle invalidHandle;
         invalidHandle.innerValue = NULL;

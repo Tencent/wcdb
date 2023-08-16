@@ -125,13 +125,16 @@ public class Database extends HandleORMOperation {
 
     private native long getError(long self);
 
-
-    @Override
     public Handle getHandle() {
-        return new Handle(this);
+        return new Handle(this, false);
     }
 
-    native long getHandle(long self);
+    @Override
+    Handle getHandle(boolean writeHint) {
+        return new Handle(this, writeHint);
+    }
+
+    native long getHandle(long self, boolean writeHint);
 
     public enum CipherVersion {
         defaultVersion, version1, version2, version3, version4

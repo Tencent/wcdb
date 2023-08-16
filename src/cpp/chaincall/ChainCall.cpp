@@ -56,6 +56,11 @@ const Error& BaseChainCall::getError()
     return m_handle->getError();
 }
 
+bool BaseChainCall::checkHandle(bool writeHint)
+{
+    return m_handle->getOrGenerateHandle(writeHint) != nullptr;
+}
+
 void BaseChainCall::assignChanges()
 {
     m_changes = m_handle->getChanges();

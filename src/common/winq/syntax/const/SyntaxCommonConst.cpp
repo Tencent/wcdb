@@ -38,11 +38,9 @@ bool isIntegerColumnType(const UnsafeStringView& type)
            || type.caseInsensitiveEqual("INT2") || type.caseInsensitiveEqual("INT8");
 }
 
-WCDBLiteralStringImpletement(masterTable, "sqlite_master")
-WCDBLiteralStringImpletement(sequenceTable, "sqlite_sequence")
-WCDBLiteralStringImpletement(mainSchema, "main")
-WCDBLiteralStringImpletement(tempSchema, "temp")
-WCDBLiteralStringImpletement(builtinTablePrefix, "sqlite_")
+WCDBLiteralStringImplement(masterTable) WCDBLiteralStringImplement(sequenceTable)
+WCDBLiteralStringImplement(mainSchema) WCDBLiteralStringImplement(tempSchema)
+WCDBLiteralStringImplement(builtinTablePrefix)
 
 } // namespace Syntax
 

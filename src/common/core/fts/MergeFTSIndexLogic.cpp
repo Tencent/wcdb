@@ -113,7 +113,7 @@ bool MergeFTSIndexLogic::tryConfigUserMerge(InnerHandle &handle,
 
 Optional<bool> MergeFTSIndexLogic::triggerMerge(TableArray newTables, TableArray modifiedTables)
 {
-    RecyclableHandle recyclableHandle = m_handleProvider->getHandle();
+    RecyclableHandle recyclableHandle = m_handleProvider->getMergeIndexHandle();
     if (recyclableHandle == nullptr) {
         return false;
     }
@@ -184,7 +184,7 @@ void MergeFTSIndexLogic::proccessMerge()
         }
         table = *m_mergingTables.begin();
     }
-    RecyclableHandle recyclableHandle = m_handleProvider->getHandle();
+    RecyclableHandle recyclableHandle = m_handleProvider->getMergeIndexHandle();
     if (recyclableHandle == nullptr) {
         return;
     }

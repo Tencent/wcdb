@@ -44,7 +44,12 @@ public:
     virtual ~InnerHandle() override = 0;
 
     void setType(HandleType type);
+    bool getWriteHint();
+    void setWriteHint(bool hint);
     void setErrorType(const UnsafeStringView &type);
+
+private:
+    bool m_writeHint;
 
 #pragma mark - Config
 public:
