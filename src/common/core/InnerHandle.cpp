@@ -31,8 +31,9 @@
 namespace WCDB {
 
 InnerHandle::InnerHandle()
-: m_writeHint(false), m_mainStatement(getStatement()), m_transactionEvent(nullptr)
+: m_writeHint(false), m_mainStatement(nullptr), m_transactionEvent(nullptr)
 {
+    m_mainStatement = getStatement();
 }
 
 InnerHandle::~InnerHandle()
