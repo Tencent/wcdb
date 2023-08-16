@@ -23,7 +23,7 @@
 
 package com.tencent.wcdb.winq;
 
-public class StatementRollback extends Identifier {
+public class StatementRollback extends Statement {
     @Override
     protected CPPType getCppType() {
         return CPPType.RollbackSTMT;

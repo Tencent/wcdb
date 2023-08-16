@@ -23,7 +23,7 @@
 
 package com.tencent.wcdb.winq;
 
-public class StatementDropTrigger extends Identifier {
+public class StatementDropTrigger extends Statement {
     @Override
     protected CPPType getCppType() {
         return CPPType.DropTriggerSTMT;

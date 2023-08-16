@@ -23,7 +23,7 @@
 
 package com.tencent.wcdb.winq;
 
-public class StatementReindex extends Identifier {
+public class StatementReindex extends Statement {
     @Override
     protected CPPType getCppType() {
         return CPPType.ReindexSTMT;

@@ -23,7 +23,7 @@
 
 package com.tencent.wcdb.winq;
 
-public class StatementAnalyze extends Identifier {
+public class StatementAnalyze extends Statement {
     @Override
     protected CPPType getCppType() {
         return CPPType.AnalyzeSTMT;

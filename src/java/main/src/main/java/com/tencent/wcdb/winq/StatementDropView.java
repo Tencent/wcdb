@@ -23,7 +23,7 @@
 
 package com.tencent.wcdb.winq;
 
-public class StatementDropView extends Identifier {
+public class StatementDropView extends Statement {
     @Override
     protected CPPType getCppType() {
         return CPPType.DropViewSTMT;

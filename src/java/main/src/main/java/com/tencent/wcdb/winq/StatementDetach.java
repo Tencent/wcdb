@@ -23,7 +23,7 @@
 
 package com.tencent.wcdb.winq;
 
-public class StatementDetach extends Identifier {
+public class StatementDetach extends Statement {
     @Override
     protected CPPType getCppType() {
         return CPPType.DetachSTMT;

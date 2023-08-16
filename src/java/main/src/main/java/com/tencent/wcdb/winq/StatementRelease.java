@@ -23,7 +23,7 @@
 
 package com.tencent.wcdb.winq;
 
-public class StatementRelease extends Identifier {
+public class StatementRelease extends Statement {
     @Override
     protected CPPType getCppType() {
         return CPPType.ReleaseSTMT;

@@ -23,7 +23,7 @@
 
 package com.tencent.wcdb.winq;
 
-public class StatementExplain extends Identifier {
+public class StatementExplain extends Statement {
     @Override
     protected CPPType getCppType() {
         return CPPType.ExplainSTMT;

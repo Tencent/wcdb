@@ -23,7 +23,7 @@
 
 package com.tencent.wcdb.winq;
 
-public class StatementDropIndex extends Identifier {
+public class StatementDropIndex extends Statement {
     @Override
     protected CPPType getCppType() {
         return CPPType.DropIndexSTMT;

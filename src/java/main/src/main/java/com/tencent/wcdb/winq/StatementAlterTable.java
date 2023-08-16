@@ -23,7 +23,7 @@
 
 package com.tencent.wcdb.winq;
 
-public class StatementAlterTable extends Identifier {
+public class StatementAlterTable extends Statement {
     @Override
     protected CPPType getCppType() {
         return CPPType.AlterTableSTMT;

@@ -23,7 +23,7 @@
 
 package com.tencent.wcdb.winq;
 
-public class StatementCreateTrigger extends Identifier {
+public class StatementCreateTrigger extends Statement {
     @Override
     protected CPPType getCppType() {
         return CPPType.CreateTriggerSTMT;
