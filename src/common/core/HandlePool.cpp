@@ -266,6 +266,7 @@ void HandlePool::flowBack(HandleType type, const std::shared_ptr<InnerHandle> &h
     if (--referencedHandle.reference == 0) {
         handle->configTransactionEvent(nullptr);
         referencedHandle.handle = nullptr;
+        bool writeHint = handle->getWriteHint();
         WCTRemedialAssert(
         !handle->isPrepared(), "Statement is not finalized.", handle->finalize(););
         handle->detachCancellationSignal();
@@ -273,10 +274,10 @@ void HandlePool::flowBack(HandleType type, const std::shared_ptr<InnerHandle> &h
         {
             LockGuard memoryGuard(m_memory);
             m_frees[slot].push_back(handle);
+            handle->setWriteHint(false);
         }
         m_concurrency.unlockShared();
-        m_counter.decreaseHandleCount(handle->getWriteHint());
-        handle->setWriteHint(false);
+        m_counter.decreaseHandleCount(writeHint);
     }
 }
 
