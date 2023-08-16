@@ -88,8 +88,8 @@ public class HandleTest extends TableTestCase {
                 }
                 Value value = info.get(Database.OperationInfoKeyHandleCount);
                 assert value != null;
-                if(value.getInteger() > maxHandleCount.intValue) {
-                    maxHandleCount.intValue = value.getInteger();
+                if(value.getLong() > maxHandleCount.intValue) {
+                    maxHandleCount.intValue = value.getLong();
                 }
             }
         });
@@ -174,8 +174,8 @@ public class HandleTest extends TableTestCase {
                 }
                 Value value = info.get(Database.OperationInfoKeyHandleCount);
                 assert value != null;
-                if(value.getInteger() > maxHandleCount.intValue) {
-                    maxHandleCount.intValue = value.getInteger();
+                if(value.getLong() > maxHandleCount.intValue) {
+                    maxHandleCount.intValue = value.getLong();
                 }
             }
         });
@@ -196,7 +196,7 @@ public class HandleTest extends TableTestCase {
                             }break;
                             case 1: {
                                 Value count = database.getValueFromStatement(new StatementSelect().select(Column.all().count()).from(tableName));
-                                assertEquals(count.getInteger(), 64000);
+                                assertEquals(count.getLong(), 64000);
                             }break;
                             case 2: {
                                 List<Value> column = table.getOneColumn(DBTestObject.content, DBTestObject.id.order(Order.Desc), 100, finalI * 100);
@@ -254,8 +254,8 @@ public class HandleTest extends TableTestCase {
                 }
                 Value value = info.get(Database.OperationInfoKeyHandleCount);
                 assert value != null;
-                if(value.getInteger() > maxHandleCount.intValue) {
-                    maxHandleCount.intValue = value.getInteger();
+                if(value.getLong() > maxHandleCount.intValue) {
+                    maxHandleCount.intValue = value.getLong();
                 }
             }
         });

@@ -48,10 +48,10 @@ public class ValueSelectWithColumnTest extends ValueCRUDTestCase {
             public void execute() throws WCDBException {
                 assertTrue(database.getValue(content, tableName).getText().length() > 0);
                 assertTrue(database.getValue(content, tableName, id.eq(1)).getText().length() > 0);
-                assertEquals(2, database.getValue(content.count(), tableName, content.order(Order.Asc)).getInteger());
-                assertTrue(database.getValue(id.sum(), tableName, content.order(Order.Asc), 0).getInteger() > 0);
-                assertEquals(1, database.getValue(content.count(), tableName, id.eq(2), content.order(Order.Asc)).getInteger());
-                assertTrue(database.getValue(id.sum(), tableName, id.eq(2), content.order(Order.Asc), 0).getInteger() > 0);
+                assertEquals(2, database.getValue(content.count(), tableName, content.order(Order.Asc)).getLong());
+                assertTrue(database.getValue(id.sum(), tableName, content.order(Order.Asc), 0).getLong() > 0);
+                assertEquals(1, database.getValue(content.count(), tableName, id.eq(2), content.order(Order.Asc)).getLong());
+                assertTrue(database.getValue(id.sum(), tableName, id.eq(2), content.order(Order.Asc), 0).getLong() > 0);
             }
         });
     }
@@ -95,11 +95,11 @@ public class ValueSelectWithColumnTest extends ValueCRUDTestCase {
             @Override
             public void execute() throws WCDBException {
                 assertEquals(2, database.getOneRow(columns(), tableName).length);
-                assertEquals(1, database.getOneRow(columns(), tableName, id.eq(1))[0].getInteger());
-                assertEquals(2, database.getOneRow(new ResultColumnConvertible[]{id, content.count()}, tableName, content.order(Order.Asc))[1].getInteger());
-                assertTrue(database.getOneRow(new ResultColumnConvertible[]{id.sum(), content}, tableName, content.order(Order.Asc), 0)[0].getInteger() > 0);
-                assertEquals(1, database.getOneRow(new ResultColumnConvertible[]{id, content.count()}, tableName, id.eq(2), content.order(Order.Asc))[1].getInteger());
-                assertTrue(database.getOneRow(new ResultColumnConvertible[]{id.sum(), content}, tableName, id.eq(2), content.order(Order.Asc), 0)[0].getInteger() > 0);
+                assertEquals(1, database.getOneRow(columns(), tableName, id.eq(1))[0].getLong());
+                assertEquals(2, database.getOneRow(new ResultColumnConvertible[]{id, content.count()}, tableName, content.order(Order.Asc))[1].getLong());
+                assertTrue(database.getOneRow(new ResultColumnConvertible[]{id.sum(), content}, tableName, content.order(Order.Asc), 0)[0].getLong() > 0);
+                assertEquals(1, database.getOneRow(new ResultColumnConvertible[]{id, content.count()}, tableName, id.eq(2), content.order(Order.Asc))[1].getLong());
+                assertTrue(database.getOneRow(new ResultColumnConvertible[]{id.sum(), content}, tableName, id.eq(2), content.order(Order.Asc), 0)[0].getLong() > 0);
             }
         });
     }
@@ -144,10 +144,10 @@ public class ValueSelectWithColumnTest extends ValueCRUDTestCase {
             public void execute() throws WCDBException {
                 assertTrue(handle.getValue(content, tableName).getText().length() > 0);
                 assertTrue(handle.getValue(content, tableName, id.eq(1)).getText().length() > 0);
-                assertEquals(2, handle.getValue(content.count(), tableName, content.order(Order.Asc)).getInteger());
-                assertTrue(handle.getValue(id.sum(), tableName, content.order(Order.Asc), 0).getInteger() > 0);
-                assertEquals(1, handle.getValue(content.count(), tableName, id.eq(2), content.order(Order.Asc)).getInteger());
-                assertTrue(handle.getValue(id.sum(), tableName, id.eq(2), content.order(Order.Asc), 0).getInteger() > 0);
+                assertEquals(2, handle.getValue(content.count(), tableName, content.order(Order.Asc)).getLong());
+                assertTrue(handle.getValue(id.sum(), tableName, content.order(Order.Asc), 0).getLong() > 0);
+                assertEquals(1, handle.getValue(content.count(), tableName, id.eq(2), content.order(Order.Asc)).getLong());
+                assertTrue(handle.getValue(id.sum(), tableName, id.eq(2), content.order(Order.Asc), 0).getLong() > 0);
             }
         });
     }
@@ -191,11 +191,11 @@ public class ValueSelectWithColumnTest extends ValueCRUDTestCase {
             @Override
             public void execute() throws WCDBException {
                 assertEquals(2, handle.getOneRow(columns(), tableName).length);
-                assertEquals(1, handle.getOneRow(columns(), tableName, id.eq(1))[0].getInteger());
-                assertEquals(2, handle.getOneRow(new ResultColumnConvertible[]{id, content.count()}, tableName, content.order(Order.Asc))[1].getInteger());
-                assertTrue(handle.getOneRow(new ResultColumnConvertible[]{id.sum(), content}, tableName, content.order(Order.Asc), 0)[0].getInteger() > 0);
-                assertEquals(1, handle.getOneRow(new ResultColumnConvertible[]{id, content.count()}, tableName, id.eq(2), content.order(Order.Asc))[1].getInteger());
-                assertTrue(handle.getOneRow(new ResultColumnConvertible[]{id.sum(), content}, tableName, id.eq(2), content.order(Order.Asc), 0)[0].getInteger() > 0);
+                assertEquals(1, handle.getOneRow(columns(), tableName, id.eq(1))[0].getLong());
+                assertEquals(2, handle.getOneRow(new ResultColumnConvertible[]{id, content.count()}, tableName, content.order(Order.Asc))[1].getLong());
+                assertTrue(handle.getOneRow(new ResultColumnConvertible[]{id.sum(), content}, tableName, content.order(Order.Asc), 0)[0].getLong() > 0);
+                assertEquals(1, handle.getOneRow(new ResultColumnConvertible[]{id, content.count()}, tableName, id.eq(2), content.order(Order.Asc))[1].getLong());
+                assertTrue(handle.getOneRow(new ResultColumnConvertible[]{id.sum(), content}, tableName, id.eq(2), content.order(Order.Asc), 0)[0].getLong() > 0);
             }
         });
     }

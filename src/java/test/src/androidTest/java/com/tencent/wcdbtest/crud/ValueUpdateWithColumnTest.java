@@ -57,7 +57,7 @@ public class ValueUpdateWithColumnTest extends ValueCRUDTestCase {
             }
         });
         assertEquals(database.getValue(content, tableName, id.eq(nextId)).getText(), "newContent");
-        assertEquals(database.getValue(id, tableName, content.eq("newContent")).getInteger(), nextId);
+        assertEquals(database.getValue(id, tableName, content.eq("newContent")).getLong(), nextId);
     }
 
     @Test
@@ -72,8 +72,8 @@ public class ValueUpdateWithColumnTest extends ValueCRUDTestCase {
                 database.updateValue(nextId, id, tableName, content.order(Order.Asc), 1);
             }
         });
-        assertEquals(database.getValue(content.count(), tableName, id.eq(nextId)).getInteger(), 1);
-        assertEquals(database.getValue(id.count(), tableName, content.eq("newContent")).getInteger(), 1);
+        assertEquals(database.getValue(content.count(), tableName, id.eq(nextId)).getLong(), 1);
+        assertEquals(database.getValue(id.count(), tableName, content.eq("newContent")).getLong(), 1);
     }
 
     @Test
@@ -88,8 +88,8 @@ public class ValueUpdateWithColumnTest extends ValueCRUDTestCase {
                 database.updateValue(nextId, id, tableName, content.order(Order.Asc), 1, 1);
             }
         });
-        assertEquals(database.getValue(content.count(), tableName, id.eq(nextId)).getInteger(), 1);
-        assertEquals(database.getValue(id.count(), tableName, content.eq("newContent")).getInteger(), 1);
+        assertEquals(database.getValue(content.count(), tableName, id.eq(nextId)).getLong(), 1);
+        assertEquals(database.getValue(id.count(), tableName, content.eq("newContent")).getLong(), 1);
     }
 
     @Test
@@ -115,10 +115,10 @@ public class ValueUpdateWithColumnTest extends ValueCRUDTestCase {
                 database.updateRow(new Value[]{new Value(nextId + 1), new Value("newContent2")}, columns(), tableName, content.order(Order.Desc), 1);
             }
         });
-        assertTrue(database.getValue(content.count(), tableName, id.eq(nextId)).getInteger() +
-                database.getValue(content.count(), tableName, id.eq(nextId+1)).getInteger() >= 1);
-        assertTrue(database.getValue(id.count(), tableName, content.eq("newContent")).getInteger() +
-                database.getValue(id.count(), tableName, content.eq("newContent2")).getInteger() >= 1);
+        assertTrue(database.getValue(content.count(), tableName, id.eq(nextId)).getLong() +
+                database.getValue(content.count(), tableName, id.eq(nextId+1)).getLong() >= 1);
+        assertTrue(database.getValue(id.count(), tableName, content.eq("newContent")).getLong() +
+                database.getValue(id.count(), tableName, content.eq("newContent2")).getLong() >= 1);
     }
 
     @Test
@@ -133,10 +133,10 @@ public class ValueUpdateWithColumnTest extends ValueCRUDTestCase {
                 database.updateRow(new Value[]{new Value(nextId + 1), new Value("newContent2")}, columns(), tableName, content.order(Order.Desc), 1, 1);
             }
         });
-        assertTrue(database.getValue(content.count(), tableName, id.eq(nextId)).getInteger() +
-                database.getValue(content.count(), tableName, id.eq(nextId+1)).getInteger() >= 1);
-        assertTrue(database.getValue(id.count(), tableName, content.eq("newContent")).getInteger() +
-                database.getValue(id.count(), tableName, content.eq("newContent2")).getInteger() >= 1);
+        assertTrue(database.getValue(content.count(), tableName, id.eq(nextId)).getLong() +
+                database.getValue(content.count(), tableName, id.eq(nextId+1)).getLong() >= 1);
+        assertTrue(database.getValue(id.count(), tableName, content.eq("newContent")).getLong() +
+                database.getValue(id.count(), tableName, content.eq("newContent2")).getLong() >= 1);
     }
 
     @Test
@@ -163,7 +163,7 @@ public class ValueUpdateWithColumnTest extends ValueCRUDTestCase {
             }
         });
         assertEquals(handle.getValue(content, tableName, id.eq(nextId)).getText(), "newContent");
-        assertEquals(handle.getValue(id, tableName, content.eq("newContent")).getInteger(), nextId);
+        assertEquals(handle.getValue(id, tableName, content.eq("newContent")).getLong(), nextId);
     }
 
     @Test
@@ -178,8 +178,8 @@ public class ValueUpdateWithColumnTest extends ValueCRUDTestCase {
                 handle.updateValue(nextId, id, tableName, content.order(Order.Asc), 1);
             }
         });
-        assertEquals(handle.getValue(content.count(), tableName, id.eq(nextId)).getInteger(), 1);
-        assertEquals(handle.getValue(id.count(), tableName, content.eq("newContent")).getInteger(), 1);
+        assertEquals(handle.getValue(content.count(), tableName, id.eq(nextId)).getLong(), 1);
+        assertEquals(handle.getValue(id.count(), tableName, content.eq("newContent")).getLong(), 1);
     }
 
     @Test
@@ -194,8 +194,8 @@ public class ValueUpdateWithColumnTest extends ValueCRUDTestCase {
                 handle.updateValue(nextId, id, tableName, content.order(Order.Asc), 1, 1);
             }
         });
-        assertEquals(handle.getValue(content.count(), tableName, id.eq(nextId)).getInteger(), 1);
-        assertEquals(handle.getValue(id.count(), tableName, content.eq("newContent")).getInteger(), 1);
+        assertEquals(handle.getValue(content.count(), tableName, id.eq(nextId)).getLong(), 1);
+        assertEquals(handle.getValue(id.count(), tableName, content.eq("newContent")).getLong(), 1);
     }
 
     @Test
@@ -221,10 +221,10 @@ public class ValueUpdateWithColumnTest extends ValueCRUDTestCase {
                 handle.updateRow(new Value[]{new Value(nextId + 1), new Value("newContent2")}, columns(), tableName, content.order(Order.Desc), 1);
             }
         });
-        assertTrue(handle.getValue(content.count(), tableName, id.eq(nextId)).getInteger() +
-                handle.getValue(content.count(), tableName, id.eq(nextId+1)).getInteger() >= 1);
-        assertTrue(handle.getValue(id.count(), tableName, content.eq("newContent")).getInteger() +
-                handle.getValue(id.count(), tableName, content.eq("newContent2")).getInteger() >= 1);
+        assertTrue(handle.getValue(content.count(), tableName, id.eq(nextId)).getLong() +
+                handle.getValue(content.count(), tableName, id.eq(nextId+1)).getLong() >= 1);
+        assertTrue(handle.getValue(id.count(), tableName, content.eq("newContent")).getLong() +
+                handle.getValue(id.count(), tableName, content.eq("newContent2")).getLong() >= 1);
     }
 
     @Test
@@ -239,9 +239,9 @@ public class ValueUpdateWithColumnTest extends ValueCRUDTestCase {
                 handle.updateRow(new Value[]{new Value(nextId + 1), new Value("newContent2")}, columns(), tableName, content.order(Order.Desc), 1, 1);
             }
         });
-        assertTrue(handle.getValue(content.count(), tableName, id.eq(nextId)).getInteger() +
-                handle.getValue(content.count(), tableName, id.eq(nextId+1)).getInteger() >= 1);
-        assertTrue(handle.getValue(id.count(), tableName, content.eq("newContent")).getInteger() +
-                handle.getValue(id.count(), tableName, content.eq("newContent2")).getInteger() >= 1);
+        assertTrue(handle.getValue(content.count(), tableName, id.eq(nextId)).getLong() +
+                handle.getValue(content.count(), tableName, id.eq(nextId+1)).getLong() >= 1);
+        assertTrue(handle.getValue(id.count(), tableName, content.eq("newContent")).getLong() +
+                handle.getValue(id.count(), tableName, content.eq("newContent2")).getLong() >= 1);
     }
 }

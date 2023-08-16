@@ -229,7 +229,7 @@ public class PreparedStatement extends CppObject {
         }
         switch (value.getType()) {
             case Integer:
-                bindInteger(value.getInteger(), index);
+                bindInteger(value.getLong(), index);
                 return;
             case Float:
                 bindDouble(value.getDouble(), index);

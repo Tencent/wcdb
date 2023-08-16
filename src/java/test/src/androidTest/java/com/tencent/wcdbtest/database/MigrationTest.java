@@ -23,12 +23,10 @@
 
 package com.tencent.wcdbtest.database;
 
-import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.core.Database;
 import com.tencent.wcdb.core.Table;
 import com.tencent.wcdb.winq.Column;
-import com.tencent.wcdb.winq.Order;
 import com.tencent.wcdbtest.base.BaseTestCase;
 import com.tencent.wcdbtest.base.DBTestObject;
 import com.tencent.wcdbtest.base.RandomTool;
@@ -39,8 +37,6 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.List;
-import java.util.Random;
 
 public class MigrationTest extends BaseTestCase {
     @Test
@@ -77,20 +73,20 @@ public class MigrationTest extends BaseTestCase {
         targetDatabase.createTable(targetTableName, DBTestObject.INSTANCE);
         Table<TestObject> targetTable = targetDatabase.getTable(targetTableName, DBTestObject.INSTANCE);
 
-        assertEquals(targetTable.getValue(Column.all().count()).getInteger(), 1);
-        assertEquals(sourceTable.getValue(Column.all().count()).getInteger(), 3);
+        assertEquals(targetTable.getValue(Column.all().count()).getLong(), 1);
+        assertEquals(sourceTable.getValue(Column.all().count()).getLong(), 3);
 
         targetTable.updateValue("newContent", DBTestObject.content, DBTestObject.id.eq(3));
         assertEquals(targetTable.getValue(DBTestObject.content, DBTestObject.id.eq(3)).getText(), "newContent");
 
         targetTable.deleteObjects(DBTestObject.id.eq(3));
-        assertEquals(targetTable.getValue(Column.all().count()).getInteger(), 0);
-        assertEquals(sourceTable.getValue(Column.all().count()).getInteger(), 2);
+        assertEquals(targetTable.getValue(Column.all().count()).getLong(), 0);
+        assertEquals(sourceTable.getValue(Column.all().count()).getLong(), 2);
 
         targetTable.insertObject(TestObject.createObject(4, "d"));
         assertEquals(targetTable.getValue(DBTestObject.content, DBTestObject.id.eq(4)).getText(), "d");
-        assertEquals(targetTable.getValue(Column.all().count()).getInteger(), 1);
-        assertEquals(sourceTable.getValue(Column.all().count()).getInteger(), 2);
+        assertEquals(targetTable.getValue(Column.all().count()).getLong(), 1);
+        assertEquals(sourceTable.getValue(Column.all().count()).getLong(), 2);
 
         targetDatabase.close();
         final WrappedValue migrateTable = new WrappedValue();

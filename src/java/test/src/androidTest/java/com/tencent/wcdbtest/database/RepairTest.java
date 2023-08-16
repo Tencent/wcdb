@@ -124,7 +124,7 @@ public class RepairTest extends TableTestCase {
             @Override
             public void execute() throws WCDBException {
                 // 0.
-                long num0 = table.getValue(Column.all().count()).getInteger();
+                long num0 = table.getValue(Column.all().count()).getLong();
                 assertTrue(num0 > 0);
                 long rowId = num0;
 
@@ -132,7 +132,7 @@ public class RepairTest extends TableTestCase {
                 database.backup();
                 database.deposit();
 
-                long num1 = table.getValue(Column.all().count()).getInteger();
+                long num1 = table.getValue(Column.all().count()).getLong();
                 assertEquals(num1, 0);
 
                 TestObject newObject = TestObject.createAutoIncrementObject("newObject");
@@ -144,7 +144,7 @@ public class RepairTest extends TableTestCase {
                 database.backup();
                 database.deposit();
 
-                long num2 = table.getValue(Column.all().count()).getInteger();
+                long num2 = table.getValue(Column.all().count()).getLong();
                 assertEquals(num2, 0);
 
                 newObject.id = 0;

@@ -77,7 +77,7 @@ public class CRUDTestCase extends TableTestCase {
 
     public long allRowsCount() {
         try {
-            return database.getValue(Column.all().count(), tableName).getInteger();
+            return database.getValue(Column.all().count(), tableName).getLong();
         } catch (WCDBException e) {
             throw new RuntimeException(e);
         }

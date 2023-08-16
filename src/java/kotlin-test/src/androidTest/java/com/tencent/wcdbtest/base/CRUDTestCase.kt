@@ -23,7 +23,6 @@
 
 package com.tencent.wcdbtest.base
 
-import com.tencent.wcdb.base.Value
 import com.tencent.wcdb.base.WCDBException
 import com.tencent.wcdb.core.Handle
 import com.tencent.wcdb.winq.Column
@@ -63,7 +62,7 @@ open class CRUDTestCase : TableTestCase() {
 
     fun allRowsCount(): Long {
         return try {
-            database.getValue(Column.all().count(), tableName).integer
+            database.getValue(Column.all().count(), tableName).long
         } catch (e: WCDBException) {
             throw RuntimeException(e)
         }

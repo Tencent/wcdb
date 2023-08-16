@@ -26,7 +26,6 @@ package com.tencent.wcdbtest.sample;
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.core.Database;
 import com.tencent.wcdb.core.Handle;
-import com.tencent.wcdb.core.HandleOperation;
 import com.tencent.wcdb.core.PreparedStatement;
 import com.tencent.wcdb.core.Table;
 import com.tencent.wcdb.core.Transaction;
@@ -98,7 +97,7 @@ public class SimpleSample extends CRUDTestCase {
                     obj.id = (int)handle.getLastInsertedRowId();
                 }
                 // select count(*) from testTable
-                int count = (int)handle.getValueFromStatement(new StatementSelect().select(Column.all().count()).from("testTable")).getInteger();
+                int count = (int)handle.getValueFromStatement(new StatementSelect().select(Column.all().count()).from("testTable")).getLong();
 
                 PreparedStatement select = handle.getOrCreatePreparedStatement(new StatementSelect().select(DBTestObject.allFields())
                         .from("testTable").where(DBTestObject.content.notNull()));

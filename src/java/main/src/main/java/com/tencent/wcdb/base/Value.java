@@ -65,10 +65,14 @@ public class Value {
     }
 
     public boolean getBool() {
-        return getInteger() > 0;
+        return getLong() > 0;
     }
 
-    public long getInteger(){
+    public int getInt(){
+        return (int) getLong();
+    }
+
+    public long getLong(){
         switch (type) {
             case Integer:
                 return intValue;
@@ -124,9 +128,9 @@ public class Value {
             Value value = (Value) obj;
             switch (type) {
                 case Null:
-                    return value.getInteger() == 0;
+                    return value.getLong() == 0;
                 case Integer:
-                    return intValue == value.getInteger();
+                    return intValue == value.getLong();
                 case Float:
                     return doubleValue == value.getDouble();
                 case Text:

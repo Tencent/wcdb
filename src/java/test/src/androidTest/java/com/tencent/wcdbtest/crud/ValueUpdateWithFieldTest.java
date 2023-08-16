@@ -61,7 +61,7 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
             }
         });
         assertEquals(database.getValue(DBTestObject.content, tableName, DBTestObject.id.eq(nextId)).getText(), "newContent");
-        assertEquals(database.getValue(DBTestObject.id, tableName, DBTestObject.content.eq("newContent")).getInteger(), nextId);
+        assertEquals(database.getValue(DBTestObject.id, tableName, DBTestObject.content.eq("newContent")).getLong(), nextId);
     }
 
     @Test
@@ -76,8 +76,8 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
                 database.updateValue(nextId, DBTestObject.id, tableName, DBTestObject.content.order(Order.Asc), 1);
             }
         });
-        assertEquals(database.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getInteger(), 1);
-        assertEquals(database.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent")).getInteger(), 1);
+        assertEquals(database.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getLong(), 1);
+        assertEquals(database.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent")).getLong(), 1);
     }
 
     @Test
@@ -92,8 +92,8 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
                 database.updateValue(nextId, DBTestObject.id, tableName, DBTestObject.content.order(Order.Asc), 1, 1);
             }
         });
-        assertEquals(database.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getInteger(), 1);
-        assertEquals(database.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent")).getInteger(), 1);
+        assertEquals(database.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getLong(), 1);
+        assertEquals(database.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent")).getLong(), 1);
     }
 
     @Test
@@ -119,10 +119,10 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
                 database.updateRow(new Value[]{new Value(nextId + 1), new Value("newContent2")}, DBTestObject.allFields(), tableName, DBTestObject.content.order(Order.Desc), 1);
             }
         });
-        assertTrue(database.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getInteger() +
-                database.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId+1)).getInteger() >= 1);
-        assertTrue(database.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent")).getInteger() +
-                database.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent2")).getInteger() >= 1);
+        assertTrue(database.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getLong() +
+                database.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId+1)).getLong() >= 1);
+        assertTrue(database.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent")).getLong() +
+                database.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent2")).getLong() >= 1);
     }
 
     @Test
@@ -137,10 +137,10 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
                 database.updateRow(new Value[]{new Value(nextId + 1), new Value("newContent2")}, DBTestObject.allFields(), tableName, DBTestObject.content.order(Order.Desc), 1, 1);
             }
         });
-        assertTrue(database.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getInteger() +
-                database.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId+1)).getInteger() >= 1);
-        assertTrue(database.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent")).getInteger() +
-                database.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent2")).getInteger() >= 1);
+        assertTrue(database.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getLong() +
+                database.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId+1)).getLong() >= 1);
+        assertTrue(database.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent")).getLong() +
+                database.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent2")).getLong() >= 1);
     }
 
     @Test
@@ -167,7 +167,7 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
             }
         });
         assertEquals(table.getValue(DBTestObject.content, DBTestObject.id.eq(nextId)).getText(), "newContent");
-        assertEquals(table.getValue(DBTestObject.id, DBTestObject.content.eq("newContent")).getInteger(), nextId);
+        assertEquals(table.getValue(DBTestObject.id, DBTestObject.content.eq("newContent")).getLong(), nextId);
     }
 
     @Test
@@ -182,8 +182,8 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
                 table.updateValue(nextId, DBTestObject.id, DBTestObject.content.order(Order.Asc), 1);
             }
         });
-        assertEquals(table.getValue(DBTestObject.content.count(), DBTestObject.id.eq(nextId)).getInteger(), 1);
-        assertEquals(table.getValue(DBTestObject.id.count(), DBTestObject.content.eq("newContent")).getInteger(), 1);
+        assertEquals(table.getValue(DBTestObject.content.count(), DBTestObject.id.eq(nextId)).getLong(), 1);
+        assertEquals(table.getValue(DBTestObject.id.count(), DBTestObject.content.eq("newContent")).getLong(), 1);
     }
 
     @Test
@@ -198,8 +198,8 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
                 table.updateValue(nextId, DBTestObject.id, DBTestObject.content.order(Order.Asc), 1, 1);
             }
         });
-        assertEquals(table.getValue(DBTestObject.content.count(), DBTestObject.id.eq(nextId)).getInteger(), 1);
-        assertEquals(table.getValue(DBTestObject.id.count(), DBTestObject.content.eq("newContent")).getInteger(), 1);
+        assertEquals(table.getValue(DBTestObject.content.count(), DBTestObject.id.eq(nextId)).getLong(), 1);
+        assertEquals(table.getValue(DBTestObject.id.count(), DBTestObject.content.eq("newContent")).getLong(), 1);
     }
 
     @Test
@@ -225,10 +225,10 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
                 table.updateRow(new Value[]{new Value(nextId + 1), new Value("newContent2")}, DBTestObject.allFields(), DBTestObject.content.order(Order.Desc), 1);
             }
         });
-        assertTrue(table.getValue(DBTestObject.content.count(), DBTestObject.id.eq(nextId)).getInteger() +
-                table.getValue(DBTestObject.content.count(), DBTestObject.id.eq(nextId+1)).getInteger() >= 1);
-        assertTrue(table.getValue(DBTestObject.id.count(), DBTestObject.content.eq("newContent")).getInteger() +
-                table.getValue(DBTestObject.id.count(), DBTestObject.content.eq("newContent2")).getInteger() >= 1);
+        assertTrue(table.getValue(DBTestObject.content.count(), DBTestObject.id.eq(nextId)).getLong() +
+                table.getValue(DBTestObject.content.count(), DBTestObject.id.eq(nextId+1)).getLong() >= 1);
+        assertTrue(table.getValue(DBTestObject.id.count(), DBTestObject.content.eq("newContent")).getLong() +
+                table.getValue(DBTestObject.id.count(), DBTestObject.content.eq("newContent2")).getLong() >= 1);
     }
 
     @Test
@@ -243,10 +243,10 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
                 table.updateRow(new Value[]{new Value(nextId + 1), new Value("newContent2")}, DBTestObject.allFields(), DBTestObject.content.order(Order.Desc), 1, 1);
             }
         });
-        assertTrue(table.getValue(DBTestObject.content.count(), DBTestObject.id.eq(nextId)).getInteger() +
-                table.getValue(DBTestObject.content.count(), DBTestObject.id.eq(nextId+1)).getInteger() >= 1);
-        assertTrue(table.getValue(DBTestObject.id.count(), DBTestObject.content.eq("newContent")).getInteger() +
-                table.getValue(DBTestObject.id.count(), DBTestObject.content.eq("newContent2")).getInteger() >= 1);
+        assertTrue(table.getValue(DBTestObject.content.count(), DBTestObject.id.eq(nextId)).getLong() +
+                table.getValue(DBTestObject.content.count(), DBTestObject.id.eq(nextId+1)).getLong() >= 1);
+        assertTrue(table.getValue(DBTestObject.id.count(), DBTestObject.content.eq("newContent")).getLong() +
+                table.getValue(DBTestObject.id.count(), DBTestObject.content.eq("newContent2")).getLong() >= 1);
     }
 
     @Test
@@ -273,7 +273,7 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
             }
         });
         assertEquals(handle.getValue(DBTestObject.content, tableName, DBTestObject.id.eq(nextId)).getText(), "newContent");
-        assertEquals(handle.getValue(DBTestObject.id, tableName, DBTestObject.content.eq("newContent")).getInteger(), nextId);
+        assertEquals(handle.getValue(DBTestObject.id, tableName, DBTestObject.content.eq("newContent")).getLong(), nextId);
     }
 
     @Test
@@ -288,8 +288,8 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
                 handle.updateValue(nextId, DBTestObject.id, tableName, DBTestObject.content.order(Order.Asc), 1);
             }
         });
-        assertEquals(handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getInteger(), 1);
-        assertEquals(handle.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent")).getInteger(), 1);
+        assertEquals(handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getLong(), 1);
+        assertEquals(handle.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent")).getLong(), 1);
     }
 
     @Test
@@ -304,8 +304,8 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
                 handle.updateValue(nextId, DBTestObject.id, tableName, DBTestObject.content.order(Order.Asc), 1, 1);
             }
         });
-        assertEquals(handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getInteger(), 1);
-        assertEquals(handle.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent")).getInteger(), 1);
+        assertEquals(handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getLong(), 1);
+        assertEquals(handle.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent")).getLong(), 1);
     }
 
     @Test
@@ -331,10 +331,10 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
                 handle.updateRow(new Value[]{new Value(nextId + 1), new Value("newContent2")}, DBTestObject.allFields(), tableName, DBTestObject.content.order(Order.Desc), 1);
             }
         });
-        assertTrue(handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getInteger() +
-                handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId+1)).getInteger() >= 1);
-        assertTrue(handle.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent")).getInteger() +
-                handle.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent2")).getInteger() >= 1);
+        assertTrue(handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getLong() +
+                handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId+1)).getLong() >= 1);
+        assertTrue(handle.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent")).getLong() +
+                handle.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent2")).getLong() >= 1);
     }
 
     @Test
@@ -349,9 +349,9 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
                 handle.updateRow(new Value[]{new Value(nextId + 1), new Value("newContent2")}, DBTestObject.allFields(), tableName, DBTestObject.content.order(Order.Desc), 1, 1);
             }
         });
-        assertTrue(handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getInteger() +
-                handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId+1)).getInteger() >= 1);
-        assertTrue(handle.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent")).getInteger() +
-                handle.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent2")).getInteger() >= 1);
+        assertTrue(handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getLong() +
+                handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId+1)).getLong() >= 1);
+        assertTrue(handle.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent")).getLong() +
+                handle.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent2")).getLong() >= 1);
     }
 }

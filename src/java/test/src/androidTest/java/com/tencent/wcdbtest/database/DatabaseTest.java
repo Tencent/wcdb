@@ -178,7 +178,7 @@ public class DatabaseTest extends TableTestCase {
         TestObject[] objects = RandomTool.autoIncrementTestCaseObjects(100);
         final WrappedValue walFrameNum = new WrappedValue();
         for(int i = 0; i < 100; i++) {
-            assertEquals(table.getValue(Column.all().count()).getInteger(), i);
+            assertEquals(table.getValue(Column.all().count()).getLong(), i);
             table.insertObject(objects[i]);
             database.passiveCheckpoint();
             database.close(new Database.CloseCallBack() {
