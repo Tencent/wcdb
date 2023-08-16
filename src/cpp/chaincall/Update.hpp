@@ -151,6 +151,9 @@ public:
     {
         bool result = true;
         if (m_row.succeed() || m_obj.succeed()) {
+            if (!checkHandle(true)) {
+                return false;
+            }
             result = false;
             if (m_handle->prepare(m_statement)) {
                 if (m_obj.succeed()) {

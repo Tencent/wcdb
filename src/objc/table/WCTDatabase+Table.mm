@@ -27,6 +27,7 @@
 #import "WCTDatabase+Private.h"
 #import "WCTDatabase+Transaction.h"
 #import "WCTError+Private.h"
+#import "WCTHandle+Private.h"
 #import "WCTHandle+Table.h"
 #import "WCTORM.h"
 #import "WCTTable+Private.h"
@@ -43,6 +44,7 @@
 {
     WCTRemedialAssert(tableName != nil && cls != nil, "Class or table name can't be null.", return NO;);
     WCTHandle *handle = [self getHandle];
+    [handle setWriteHint:YES];
     BOOL result = [handle remapTable:tableName toClass:cls];
     [handle invalidate];
     return result;
@@ -60,6 +62,7 @@
 {
     WCTRemedialAssert(tableName != nil && tableClass != nil, "Class or table name can't be null.", return NO;);
     WCTHandle *handle = [self getHandle];
+    [handle setWriteHint:YES];
     BOOL result = [handle createVirtualTable:tableName withClass:tableClass];
     [handle invalidate];
     return result;

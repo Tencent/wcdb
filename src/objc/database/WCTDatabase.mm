@@ -104,9 +104,9 @@
     return [[WCTError alloc] initWithError:_database->getThreadedError()];
 }
 
-- (WCDB::RecyclableHandle)generateHandle
+- (WCDB::RecyclableHandle)generateHandle:(BOOL)writeHint
 {
-    return _database->getHandle();
+    return _database->getHandle(writeHint);
 }
 
 @end

@@ -23,10 +23,19 @@
  */
 
 #import "WCTChainCall+Private.h"
+#import "WCTHandle+Private.h"
 #import "WCTHandle.h"
 #import "WCTSelectable+Private.h"
 
 @implementation WCTSelectable
+
+- (instancetype)initWithHandle:(WCTHandle *)handle
+{
+    if (self = [super initWithHandle:handle]) {
+        [handle setWriteHint:NO];
+    }
+    return self;
+}
 
 - (WCDB::StatementSelect &)statement
 {

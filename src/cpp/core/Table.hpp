@@ -56,7 +56,7 @@ public:
 
 protected:
     BaseTable(Recyclable<InnerDatabase *> database, const UnsafeStringView &tableName);
-    RecyclableHandle getHandle();
+    RecyclableHandle getHandle(bool writeHint);
     StringView getIndexNameWithSuffix(const UnsafeStringView &suffix) const;
 
     StringView m_tableName;
@@ -81,7 +81,10 @@ private:
     {
         return m_tableName;
     }
-    RecyclableHandle getHandleHolder() override final { return getHandle(); }
+    RecyclableHandle getHandleHolder(bool writeHint) override final
+    {
+        return getHandle(writeHint);
+    }
     Recyclable<InnerDatabase *> getDatabaseHolder() override final
     {
         return m_databaseHolder;

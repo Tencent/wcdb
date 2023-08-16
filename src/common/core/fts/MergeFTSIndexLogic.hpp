@@ -40,7 +40,7 @@ public:
 
 protected:
     friend class MergeFTSIndexLogic;
-    virtual RecyclableHandle getHandle() = 0;
+    virtual RecyclableHandle getMergeIndexHandle() = 0;
     virtual const StringView& getPath() const = 0;
 };
 

@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by qiuwenchen on 2023/8/11.
 //
 
 /*
@@ -22,26 +22,27 @@
  * limitations under the License.
  */
 
-#import "Core.h"
-#import "WCTDatabase.h"
+#import "WCTCancellationSignal+Private.h"
+#import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
+@implementation WCTCancellationSignal
 
-@interface WCTDatabase () {
-@private
-    // Holder can be null in some case using temporary database object. e.g. inside the non-escape block
-    WCDB::RecyclableDatabase _databaseHolder;
-    BOOL m_isInMemory;
-@protected
-    WCDB::InnerDatabase *_database;
+- (instancetype)init
+{
+    if (self = [super init]) {
+        m_signal = std::make_shared<bool>(false);
+    }
+    return self;
 }
 
-- (instancetype)init NS_DESIGNATED_INITIALIZER;
+- (std::shared_ptr<volatile bool>)getInnerSignal
+{
+    return m_signal;
+}
 
-- (instancetype)initWithUnsafeDatabase:(WCDB::InnerDatabase *)database NS_DESIGNATED_INITIALIZER;
-
-- (WCDB::RecyclableHandle)generateHandle:(BOOL)writeHint;
+- (void)cancel
+{
+    (*m_signal) = true;
+}
 
 @end
-
-NS_ASSUME_NONNULL_END

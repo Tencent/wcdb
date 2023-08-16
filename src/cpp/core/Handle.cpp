@@ -68,10 +68,10 @@ Handle::~Handle()
     invalidate();
 };
 
-InnerHandle* Handle::getOrGenerateHandle()
+InnerHandle* Handle::getOrGenerateHandle(bool writeHint)
 {
     if (m_innerHandle == nullptr) {
-        m_handleHolder = m_databaseHolder->getHandle();
+        m_handleHolder = m_databaseHolder->getHandle(writeHint);
         if (m_handleHolder != nullptr) {
             m_innerHandle = m_handleHolder.get();
         }
@@ -85,9 +85,9 @@ HandleStatement* Handle::getInnerHandleStatement()
     return handle->m_mainStatement;
 }
 
-RecyclableHandle Handle::getHandleHolder()
+RecyclableHandle Handle::getHandleHolder(bool)
 {
-    getOrGenerateHandle();
+    getOrGenerateHandle(false);
     if (m_handleHolder != nullptr) {
         return m_handleHolder;
     } else {
@@ -153,6 +153,28 @@ void Handle::finalizeAllStatement()
 {
     GetInnerHandleOrReturn;
     handle->finalizeStatements();
+}
+
+void Handle::attachCancellationSignal(const CancellationSignal& signal)
+{
+    GetInnerHandleOrReturn;
+    handle->attachCancellationSignal(signal.m_signal);
+}
+
+void Handle::detachCancellationSignal()
+{
+    GetInnerHandleOrReturn;
+    handle->detachCancellationSignal();
+}
+
+Handle::CancellationSignal::CancellationSignal()
+: m_signal(std::make_shared<bool>(false)){};
+
+Handle::CancellationSignal::~CancellationSignal() = default;
+
+void Handle::CancellationSignal::cancel()
+{
+    *m_signal = true;
 }
 
 } //namespace WCDB

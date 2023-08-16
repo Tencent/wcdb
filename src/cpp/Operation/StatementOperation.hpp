@@ -315,7 +315,10 @@ public:
             }
             result->push_back(extractOneObject<ObjectType>(resultFields));
         }
-        return succeed && !result.hasValue() ? ValueArray<ObjectType>() : result;
+        if (!succeed) {
+            return NullOpt;
+        }
+        return !result.hasValue() ? ValueArray<ObjectType>() : result;
     }
 
     /**

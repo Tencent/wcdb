@@ -99,6 +99,49 @@ public final class Handle {
     public var lastInsertedRowID: Int64 {
         return WCDBHandleGetLastInsertedRowID(cppHandle)
     }
+
+    public final class CancellatiionSignal {
+        private let m_signal: Recyclable<CPPCancellationSignal>
+        public init() {
+            m_signal = ObjectBridge.createRecyclableCPPObject(WCDBCancellationSignalCreate())
+        }
+
+        /// Cancel all operations of the attached handle.
+        public func cancel() {
+            WCDBCancellationSignalCancel(m_signal.raw)
+        }
+
+        internal func getInnerSignal() -> CPPCancellationSignal {
+            return m_signal.raw
+        }
+    }
+
+    /// The wrapper of `sqlite3_progress_handler`.
+    ///
+    /// You can asynchronously cancel all operations on the current handle through `CancellationSignal`.
+    ///
+    ///     let signal = CancellatiionSignal()
+    ///     DispatchQueue(label: "test").async {
+    ///         let handle = database.getHandle()
+    ///         handle.attach(cancellationSignal: signal)
+    ///
+    ///         // Do some time-consuming database operations.
+    ///
+    ///         handle.detachCancellationSignal()
+    ///     }
+    ///     signal.cancel()
+    ///
+    /// Note that you can use `CancellationSignal` in multiple threads,
+    /// but you can only use the current handle in the thread that you got it.
+    public func attach(cancellationSignal: CancellatiionSignal) {
+        WCDBHandleAttachCancellationSignal(cppHandle, cancellationSignal.getInnerSignal())
+    }
+
+    /// Detach the attached `CancellationSignal`.
+    /// `CancellationSignal` can be automatically detached when the current handle deconstruct.
+    public func detachCancellationSignal() {
+        WCDBHandleDettachCancellationSignal(cppHandle)
+    }
 }
 
 public protocol HandleRepresentable {

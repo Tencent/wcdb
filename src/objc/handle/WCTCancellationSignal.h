@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by qiuwenchen on 2023/8/11.
 //
 
 /*
@@ -22,26 +22,13 @@
  * limitations under the License.
  */
 
-#import "Core.h"
-#import "WCTDatabase.h"
+#import "WCTCommon.h"
 
-NS_ASSUME_NONNULL_BEGIN
-
-@interface WCTDatabase () {
-@private
-    // Holder can be null in some case using temporary database object. e.g. inside the non-escape block
-    WCDB::RecyclableDatabase _databaseHolder;
-    BOOL m_isInMemory;
-@protected
-    WCDB::InnerDatabase *_database;
-}
-
-- (instancetype)init NS_DESIGNATED_INITIALIZER;
-
-- (instancetype)initWithUnsafeDatabase:(WCDB::InnerDatabase *)database NS_DESIGNATED_INITIALIZER;
-
-- (WCDB::RecyclableHandle)generateHandle:(BOOL)writeHint;
+@interface WCTCancellationSignal : NSObject
+/**
+ @brief Cancel all operations of the attached handle.
+ @see   `-[WCTHandle attachCancellationSignal:]`
+ */
+- (void)cancel;
 
 @end
-
-NS_ASSUME_NONNULL_END

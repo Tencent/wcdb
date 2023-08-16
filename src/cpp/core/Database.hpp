@@ -50,7 +50,7 @@ public:
 
 private:
     Database(InnerDatabase *database);
-    RecyclableHandle getHandleHolder() override final;
+    RecyclableHandle getHandleHolder(bool writeHint) override final;
     Recyclable<InnerDatabase *> getDatabaseHolder() override final;
     Recyclable<InnerDatabase *> m_databaseHolder;
     InnerDatabase *m_innerDatabase;

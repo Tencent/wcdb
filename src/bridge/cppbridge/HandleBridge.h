@@ -31,7 +31,7 @@
 
 WCDB_EXTERN_C_BEGIN
 
-WCDBDefineCPPBridgedType(CPPHandle)
+WCDBDefineCPPBridgedType(CPPHandle) WCDBDefineCPPBridgedType(CPPCancellationSignal)
 
 CPPError WCDBHandleGetError(CPPHandle handle);
 bool WCDBHandleCheckValid(CPPHandle handle);
@@ -64,5 +64,11 @@ typedef bool (*PausableTransaction)(void* _Nonnull context, CPPHandle, bool* _No
 bool WCDBHandleRunPausableTransaction2(CPPHandle handle,
                                        void* _Nonnull context,
                                        PausableTransaction _Nonnull pausableTransaction);
+
+CPPCancellationSignal WCDBCancellationSignalCreate();
+void WCDBCancellationSignalCancel(CPPCancellationSignal signal);
+
+void WCDBHandleAttachCancellationSignal(CPPHandle handle, CPPCancellationSignal signal);
+void WCDBHandleDettachCancellationSignal(CPPHandle handle);
 
 WCDB_EXTERN_C_END

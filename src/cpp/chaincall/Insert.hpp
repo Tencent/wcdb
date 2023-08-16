@@ -106,6 +106,9 @@ public:
     {
         bool succeed = true;
         if (m_values.size() > 0) {
+            if (!checkHandle(true)) {
+                return false;
+            }
             if (m_values.size() > 1) {
                 succeed = m_handle->runTransaction([&](Handle& handle) {
                     WCDB_UNUSED(handle);

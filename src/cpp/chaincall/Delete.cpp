@@ -66,6 +66,9 @@ Delete &Delete::offset(const Expression &offset)
 
 bool Delete::execute()
 {
+    if (!checkHandle(true)) {
+        return false;
+    }
     bool result = m_handle->execute(m_statement);
     assignChanges();
     m_handle->invalidate();
