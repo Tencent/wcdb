@@ -25,6 +25,7 @@
 #import "WCTUpdate.h"
 #import "Assertion.hpp"
 #import "WCTChainCall+Private.h"
+#import "WCTHandle+Private.h"
 #import "WCTHandle.h"
 #import "WCTORM.h"
 #import "WCTTryDisposeGuard.h"
@@ -41,6 +42,14 @@ typedef NS_ENUM(NSUInteger, WCTUpdateType) {
 
     WCTUpdateType _type;
     NSObject *_value;
+}
+
+- (instancetype)initWithHandle:(WCTHandle *)handle
+{
+    if (self = [super initWithHandle:handle]) {
+        [handle setWriteHint:YES];
+    }
+    return self;
 }
 
 - (WCDB::StatementUpdate &)statement

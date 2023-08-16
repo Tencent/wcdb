@@ -35,6 +35,7 @@ class Handle final : public StatementOperation, public HandleORMOperation {
     friend class HandleOperation;
     friend class TableOperation;
     friend class BaseChainCall;
+    friend class Delete;
 
 #pragma mark - Basic
 protected:
@@ -46,9 +47,9 @@ protected:
     Handle(Recyclable<InnerDatabase*> database);
     Handle(Recyclable<InnerDatabase*> database, InnerHandle* handle);
 
-    InnerHandle* getOrGenerateHandle();
+    InnerHandle* getOrGenerateHandle(bool writeHint = false);
     HandleStatement* getInnerHandleStatement() override final;
-    RecyclableHandle getHandleHolder() override final;
+    RecyclableHandle getHandleHolder(bool writeHint) override final;
     Recyclable<InnerDatabase*> getDatabaseHolder() override final;
 
 private:
@@ -76,6 +77,48 @@ public:
      @brief The wrapper of `sqlite3_changes`.
      */
     int getChanges();
+
+    class CancellationSignal {
+        friend class Handle;
+
+    public:
+        CancellationSignal();
+        ~CancellationSignal();
+        /**
+         @brief Cancel all operations of the attached handle.
+         */
+        void cancel();
+
+    private:
+        std::shared_ptr<volatile bool> m_signal;
+    };
+
+    /**
+     @brief The wrapper of `sqlite3_progress_handler`.
+     
+     You can asynchronously cancel all operations on the current handle through `CancellationSignal`.
+     
+         WCDB::Handle::CancellationSignal signal;
+         std::async(std::launch::async, [=](){
+            WCDB::Handle handle = database.getHandle();
+            handle.attachCancellationSignal(signal);
+     
+            // Do some time-consuming database operations.
+     
+            handle.detachCancellationSignal();
+         });
+         signal.cancel();
+     
+     @warning Note that you can use `CancellationSignal` in multiple threads,
+     but you can only use the current handle in the thread that you got it.
+     */
+    void attachCancellationSignal(const CancellationSignal& signal);
+
+    /**
+     @brief Detach the attached `CancellationSignal`.
+            `CancellationSignal` can be automatically detached when the current handle deconstruct.
+     */
+    void detachCancellationSignal();
 
     /**
      @brief The wrapper of `sqlite3_total_changes`.

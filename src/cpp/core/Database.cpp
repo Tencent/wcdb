@@ -51,9 +51,18 @@ Database::Database(const UnsafeStringView& path)
 #ifndef _WIN32
     const char* resolvePath = realpath(path.data(), nullptr);
     if (resolvePath == nullptr && errno == ENOENT) {
-        FileManager::createFile(path);
-        resolvePath = realpath(path.data(), nullptr);
-        FileManager::removeItem(path);
+        if (FileManager::createDirectoryWithIntermediateDirectories(Path::getDirectoryName(path))
+            && FileManager::createFile(path)) {
+            resolvePath = realpath(path.data(), nullptr);
+            if (resolvePath == NULL) {
+                Error error;
+                error.level = Error::Level::Error;
+                error.setSystemCode(errno, Error::Code::IOError);
+                error.infos.insert_or_assign(ErrorStringKeyPath, path);
+                Notifier::shared().notify(error);
+            }
+            FileManager::removeItem(path);
+        }
     }
     if (resolvePath != nullptr) {
         UnsafeStringView newPath = UnsafeStringView(resolvePath);
@@ -79,11 +88,6 @@ Database::Database(const UnsafeStringView& path)
     }
 #endif
     else {
-        Error error;
-        error.level = Error::Level::Error;
-        error.setSystemCode(errno, Error::Code::IOError);
-        error.infos.insert_or_assign(ErrorStringKeyPath, path);
-        Notifier::shared().notify(error);
         m_databaseHolder = Core::shared().getOrCreateDatabase(path);
     }
     m_innerDatabase = m_databaseHolder.get();
@@ -100,9 +104,9 @@ Database::Database(InnerDatabase* database) : m_innerDatabase(database)
     m_databaseHolder = RecyclableDatabase(m_innerDatabase, nullptr);
 }
 
-RecyclableHandle Database::getHandleHolder()
+RecyclableHandle Database::getHandleHolder(bool writeHint)
 {
-    return m_databaseHolder->getHandle();
+    return m_databaseHolder->getHandle(writeHint);
 }
 
 Recyclable<InnerDatabase*> Database::getDatabaseHolder()

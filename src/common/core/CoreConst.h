@@ -95,7 +95,9 @@ WCDBLiteralStringDefine(NotifierLoggerName, "com.Tencent.WCDB.Notifier.Log");
 
 #pragma mark - Handle Pool
 static constexpr const int HandlePoolMaxAllowedNumberOfHandles = 32;
-enum HandleSlot : unsigned int {
+static constexpr const int HandlePoolMaxAllowedNumberOfWriters = 4;
+
+enum HandleSlot : unsigned char {
     HandleSlotNormal = 0,
     HandleSlotMigrating,
     HandleSlotMigrate,
@@ -104,7 +106,7 @@ enum HandleSlot : unsigned int {
     HandleSlotAssemble,
     HandleSlotCount,
 };
-enum HandleCategory : unsigned int {
+enum HandleCategory : unsigned char {
     HandleCategoryNormal = 0,
     HandleCategoryMigrating,
     HandleCategoryMigrate,
@@ -114,8 +116,10 @@ enum HandleCategory : unsigned int {
     HandleCategoryIntegrity,
     HandleCategoryAssemble,
     HandleCategoryCipher,
+    HandleCategoryMergeIndex,
     HandleCategoryCount,
 };
+
 enum class HandleType : unsigned int {
     Normal = (HandleCategoryNormal << 8) | HandleSlotNormal,
     Migrating = (HandleCategoryMigrating << 8) | HandleSlotMigrating,
@@ -129,6 +133,7 @@ enum class HandleType : unsigned int {
     AssembleCipher = (HandleCategoryCipher << 8) | HandleSlotAssemble,
     AssembleBackupRead = (HandleCategoryBackupRead << 8) | HandleSlotAssemble,
     AssembleBackupWrite = (HandleCategoryBackupWrite << 8) | HandleSlotAssemble,
+    MergeIndex = (HandleCategoryMergeIndex << 8) | HandleSlotOperation,
 };
 static constexpr HandleSlot slotOfHandleType(HandleType type)
 {
@@ -137,6 +142,11 @@ static constexpr HandleSlot slotOfHandleType(HandleType type)
 static constexpr HandleCategory categoryOfHandleType(HandleType type)
 {
     return HandleCategory(((unsigned int) type >> 8) & 0xff);
+}
+static constexpr bool handleShouldWaitWhenFull(HandleType type)
+{
+    HandleSlot slot = slotOfHandleType(type);
+    return slot == HandleSlotNormal || slot == HandleSlotMigrating;
 }
 
 #pragma mark - Migrate

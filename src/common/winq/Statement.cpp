@@ -78,4 +78,29 @@ const Syntax::Identifier& Statement::syntax() const
     return SQL::syntax();
 }
 
+bool Statement::isWriteStatement() const
+{
+    Syntax::Identifier::Type type = syntax().getType();
+    switch (type) {
+    case Syntax::Identifier::Type::AlterTableSTMT:
+    case Syntax::Identifier::Type::CreateIndexSTMT:
+    case Syntax::Identifier::Type::CreateTableSTMT:
+    case Syntax::Identifier::Type::CreateTriggerSTMT:
+    case Syntax::Identifier::Type::InsertSTMT:
+    case Syntax::Identifier::Type::DeleteSTMT:
+    case Syntax::Identifier::Type::UpdateSTMT:
+    case Syntax::Identifier::Type::CreateViewSTMT:
+    case Syntax::Identifier::Type::CreateVirtualTableSTMT:
+    case Syntax::Identifier::Type::DropIndexSTMT:
+    case Syntax::Identifier::Type::DropTableSTMT:
+    case Syntax::Identifier::Type::DropViewSTMT:
+    case Syntax::Identifier::Type::ReindexSTMT:
+    case Syntax::Identifier::Type::VacuumSTMT:
+        return true;
+    default:
+        return false;
+    }
+    return true;
+}
+
 } //namespace WCDB
