@@ -14,8 +14,29 @@ gradlePlugin {
     }
 }
 
+def genVersionTask = tasks.register('generateVersionProperties') {
+    def propFile = file("$buildDir/generated/wcdb-gradle-plugin.properties")
+    outputs.file propFile
+    outputs.upToDateWhen { false }
+    doLast {
+        mkdir propFile.parentFile
+        propFile.text = "version=${project.getFullVersion()}"
+        println "writeProp: ${propFile.text}"
+    }
+}
+
+processResources {
+    from genVersionTask
+}
+
 dependencies {
-    implementation project(':compiler')
+    implementation "com.tencent.wcdb:compiler:${project.getFullVersion()}"
     compileOnly gradleApi()
     compileOnly 'com.android.tools.build:gradle:7.4.2'
+}
+
+configurations.all {
+    resolutionStrategy.dependencySubstitution {
+        substitute module('com.tencent.wcdb:compiler') using project(':compiler')
+    }
 }

@@ -11,7 +11,6 @@ import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.internal.file.DefaultSourceDirectorySet
-import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.compile.JavaCompile
 
 class WCDBPlugin implements Plugin<Project> {
@@ -20,6 +19,10 @@ class WCDBPlugin implements Plugin<Project> {
         if (!project.plugins.hasPlugin(AppPlugin) && !project.plugins.hasPlugin(LibraryPlugin)) {
             throw new GradleException("WCDBPlugin: Android application or library plugin required.")
         }
+
+        project.configurations.maybeCreate("wcdbOrmClasspath")
+        project.dependencies.add("wcdbOrmClasspath", "com.tencent.wcdb:annotation:${pluginVersion}")
+        project.dependencies.add("wcdbOrmClasspath", "com.tencent.wcdb:compiler:${pluginVersion}")
 
         final CommonExtension android = (project.plugins.hasPlugin(AppPlugin) || project.plugins.hasPlugin(LibraryPlugin)) ?
             project.extensions.getByName('android') : null
@@ -50,8 +53,8 @@ class WCDBPlugin implements Plugin<Project> {
                         ss.setIncludes(['**/*.java'])
                         source(ss)
                     }
-                    classpath = project.buildscript.configurations.classpath
-                    options.annotationProcessorPath = classpath
+                    classpath = project.configurations.wcdbOrmClasspath
+                    options.annotationProcessorPath = project.configurations.wcdbOrmClasspath
                     options.compilerArgs.addAll(["-proc:only", "-implicit:none"])
                     destinationDirectory = destDir
                 }
@@ -71,5 +74,15 @@ class WCDBPlugin implements Plugin<Project> {
         } else {
             return ((LibraryExtension) android).libraryVariants
         }
+    }
+
+    private String myVersion = null
+    private String getPluginVersion() {
+        if (myVersion == null) {
+            def prop = new Properties()
+            prop.load(getClass().getClassLoader().getResourceAsStream('wcdb-gradle-plugin.properties'))
+            myVersion = prop.getProperty('version')
+        }
+        return myVersion
     }
 }
