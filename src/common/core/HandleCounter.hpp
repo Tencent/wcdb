@@ -28,6 +28,22 @@
 
 namespace WCDB {
 
+/*
+ * When obtaining a database handle, you can indicate whether
+ * this handle will be used to write new data to the database.
+ *
+ * The handle counter is used to limit the number of handles in two ways:
+ * 1. Only 4 handles can exist for writing at the same time.
+ *    Because it is difficult to accurately distinguish whether the handle is used for writing,
+ *    and there is still a little time between getting the handle and writing data,
+ *    let the four handles fully compete.
+ * 2. Only up to 32 handles can exist at the same time.
+ *    Too many handles not only take up memory, but generally imply inappropriate usage.
+ *
+ * When the number limit is exceeded, the handle counter will let the thread
+ * that acquires the handle wait in place until other handles are recycled.
+ */
+
 class HandleCounter {
 public:
     HandleCounter();
