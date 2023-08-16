@@ -403,21 +403,26 @@ AbstractHandle::getValues(const Statement &statement, int index)
     return values;
 }
 
-bool AbstractHandle::getTableConfig(const Schema &schema,
-                                    const UnsafeStringView &tableName,
-                                    bool &autoincrement,
-                                    bool &withoutRowid,
-                                    const char **integerPrimaryKey)
+Optional<TableAttribute>
+AbstractHandle::getTableAttribute(const Schema &schema, const UnsafeStringView &tableName)
 {
     int isAutoincrement = 0;
     int isWithoutRowid = 0;
+    const char *integerPrimaryKey = nullptr;
     bool ret = APIExit(sqlite3_table_config(
-    m_handle, schema.syntax().name.data(), tableName.data(), &isAutoincrement, &isWithoutRowid, integerPrimaryKey));
-    if (ret) {
-        autoincrement = isAutoincrement > 0;
-        withoutRowid = isWithoutRowid > 0;
+    m_handle, schema.syntax().name.data(), tableName.data(), &isAutoincrement, &isWithoutRowid, &integerPrimaryKey));
+    if (!ret) {
+        if (integerPrimaryKey != nullptr) {
+            free((void *) integerPrimaryKey);
+        }
+        return NullOpt;
     }
-    return ret;
+    TableAttribute config(
+    isAutoincrement > 0, isWithoutRowid > 0, StringView(integerPrimaryKey));
+    if (integerPrimaryKey != nullptr) {
+        free((void *) integerPrimaryKey);
+    }
+    return config;
 }
 
 bool AbstractHandle::configAutoIncrement(const UnsafeStringView &tableName)

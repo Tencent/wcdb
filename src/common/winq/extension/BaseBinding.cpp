@@ -61,17 +61,14 @@ void BaseBinding::enableAutoIncrementForExistingTable()
 bool BaseBinding::configAutoincrementIfNeed(const UnsafeStringView &tableName,
                                             InnerHandle *handle) const
 {
-    bool autoincrement = false;
-    bool withoutRowid = false;
-    const char *integerPrimaryKey = NULL;
-    if (!handle->getTableConfig(
-        Schema::main(), tableName, autoincrement, withoutRowid, &integerPrimaryKey)) {
+    auto tableConfig = handle->getTableAttribute(Schema::main(), tableName);
+    if (!tableConfig.succeed()) {
         return false;
     }
-    if (autoincrement) {
+    if (tableConfig.value().autoincrement) {
         return true;
     }
-    if (withoutRowid) {
+    if (tableConfig.value().withoutRowid) {
         Error error(Error::Code::Error,
                     Error::Level::Error,
                     "Without rowid table can not be configed as autoincrement");
@@ -80,7 +77,8 @@ bool BaseBinding::configAutoincrementIfNeed(const UnsafeStringView &tableName,
         Notifier::shared().notify(error);
         return false;
     }
-    if (integerPrimaryKey == NULL) {
+    const StringView &integerPrimaryKey = tableConfig.value().integerPrimaryKey;
+    if (integerPrimaryKey.length() == 0) {
         Error error(Error::Code::Error, Error::Level::Error, "No integer primary key found");
         error.infos.insert_or_assign("Table", tableName);
         error.infos.insert_or_assign(ErrorStringKeyPath, handle->getPath());

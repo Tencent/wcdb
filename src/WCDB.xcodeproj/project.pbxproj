@@ -3023,6 +3023,14 @@
 		75A60AB429345A38009C1B3C /* Cipher.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75A60AAE29345A38009C1B3C /* Cipher.hpp */; };
 		75A60AB529345A38009C1B3C /* Cipher.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75A60AAE29345A38009C1B3C /* Cipher.hpp */; };
 		75A60AB629345A38009C1B3C /* Cipher.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75A60AAE29345A38009C1B3C /* Cipher.hpp */; };
+		75ADC5642A8D1C2D00D0AC47 /* TableAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75ADC5622A8D1C2D00D0AC47 /* TableAttribute.cpp */; };
+		75ADC5652A8D1C2D00D0AC47 /* TableAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75ADC5622A8D1C2D00D0AC47 /* TableAttribute.cpp */; };
+		75ADC5662A8D1C2D00D0AC47 /* TableAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75ADC5622A8D1C2D00D0AC47 /* TableAttribute.cpp */; };
+		75ADC5672A8D1C2D00D0AC47 /* TableAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75ADC5622A8D1C2D00D0AC47 /* TableAttribute.cpp */; };
+		75ADC5682A8D1C2D00D0AC47 /* TableAttribute.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75ADC5632A8D1C2D00D0AC47 /* TableAttribute.hpp */; };
+		75ADC5692A8D1C2D00D0AC47 /* TableAttribute.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75ADC5632A8D1C2D00D0AC47 /* TableAttribute.hpp */; };
+		75ADC56A2A8D1C2D00D0AC47 /* TableAttribute.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75ADC5632A8D1C2D00D0AC47 /* TableAttribute.hpp */; };
+		75ADC56B2A8D1C2D00D0AC47 /* TableAttribute.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75ADC5632A8D1C2D00D0AC47 /* TableAttribute.hpp */; };
 		75AF6AD728544C8800A7C43D /* TableOrSubqueryBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75AF6AD528544C8800A7C43D /* TableOrSubqueryBridge.cpp */; };
 		75AF6AD828544C8800A7C43D /* TableOrSubqueryBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AF6AD628544C8800A7C43D /* TableOrSubqueryBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75AF6ADB2854C5ED00A7C43D /* JoinBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75AF6AD92854C5ED00A7C43D /* JoinBridge.cpp */; };
@@ -4607,6 +4615,8 @@
 		75A46C102843B73C00B58207 /* WinqBridge.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WinqBridge.hpp; sourceTree = "<group>"; };
 		75A60AAD29345A38009C1B3C /* Cipher.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Cipher.cpp; sourceTree = "<group>"; };
 		75A60AAE29345A38009C1B3C /* Cipher.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Cipher.hpp; sourceTree = "<group>"; };
+		75ADC5622A8D1C2D00D0AC47 /* TableAttribute.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TableAttribute.cpp; sourceTree = "<group>"; };
+		75ADC5632A8D1C2D00D0AC47 /* TableAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TableAttribute.hpp; sourceTree = "<group>"; };
 		75AF6AD528544C8800A7C43D /* TableOrSubqueryBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TableOrSubqueryBridge.cpp; sourceTree = "<group>"; };
 		75AF6AD628544C8800A7C43D /* TableOrSubqueryBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TableOrSubqueryBridge.h; sourceTree = "<group>"; };
 		75AF6AD92854C5ED00A7C43D /* JoinBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = JoinBridge.cpp; sourceTree = "<group>"; };
@@ -6413,6 +6423,8 @@
 				237B47AF21FEEA200059227A /* ColumnMeta.hpp */,
 				235FBE9322914E0D005C7723 /* Global.cpp */,
 				235FBE9422914E0D005C7723 /* Global.hpp */,
+				75ADC5622A8D1C2D00D0AC47 /* TableAttribute.cpp */,
+				75ADC5632A8D1C2D00D0AC47 /* TableAttribute.hpp */,
 			);
 			path = sqlite;
 			sourceTree = "<group>";
@@ -7482,6 +7494,7 @@
 				032E113528C88C3C00BCACE0 /* RunTimeAccessor.hpp in Headers */,
 				037C3AC42897E33600328EC8 /* ColumnMeta.hpp in Headers */,
 				037C3AC62897E33600328EC8 /* Macro.h in Headers */,
+				75ADC56A2A8D1C2D00D0AC47 /* TableAttribute.hpp in Headers */,
 				037C3AC72897E33600328EC8 /* BusyRetryConfig.hpp in Headers */,
 				037C3AC82897E33600328EC8 /* Progress.hpp in Headers */,
 				037C3AC92897E33600328EC8 /* SyntaxForeignKeyClause.hpp in Headers */,
@@ -7899,6 +7912,7 @@
 				0D5363F3290A75F20026A4DC /* Sequence.hpp in Headers */,
 				23EEDCDA217DFADC006E9E73 /* StatementReindex.hpp in Headers */,
 				23EEDC74217DFADC006E9E73 /* SyntaxList.hpp in Headers */,
+				75ADC5682A8D1C2D00D0AC47 /* TableAttribute.hpp in Headers */,
 				2349F76C1EA0D6680021EFA7 /* WCTTableConstraintMacro.h in Headers */,
 				23EEDC7C217DFADC006E9E73 /* ColumnConstraint.hpp in Headers */,
 				237A8D5821ED88DF003AF5BB /* SQLiteDeclaration.h in Headers */,
@@ -8391,6 +8405,7 @@
 				7521D986291E9ABB009642EF /* WCTRuntimeObjCAccessor.h in Headers */,
 				7521D987291E9ABB009642EF /* PinyinTokenizer.hpp in Headers */,
 				7521D988291E9ABB009642EF /* StatementAttach.hpp in Headers */,
+				75ADC5692A8D1C2D00D0AC47 /* TableAttribute.hpp in Headers */,
 				7521D989291E9ABB009642EF /* ColumnDef.hpp in Headers */,
 				7521D98A291E9ABB009642EF /* WCTRuntimeCppAccessor.h in Headers */,
 				7521D98B291E9ABB009642EF /* WCTTableProtocol.h in Headers */,
@@ -8651,6 +8666,7 @@
 				7521DCE0291EA349009642EF /* JoinConstraint.hpp in Headers */,
 				7521DCE1291EA349009642EF /* SyntaxReleaseSTMT.hpp in Headers */,
 				7521DCE2291EA349009642EF /* Serialization.hpp in Headers */,
+				75ADC56B2A8D1C2D00D0AC47 /* TableAttribute.hpp in Headers */,
 				7521DCE5291EA349009642EF /* SyntaxColumn.hpp in Headers */,
 				7521DCE6291EA349009642EF /* InnerDatabase.hpp in Headers */,
 				7521DCE9291EA349009642EF /* MergeFTSIndexLogic.hpp in Headers */,
@@ -9364,6 +9380,7 @@
 				037C39282897E33600328EC8 /* FullCrawler.cpp in Sources */,
 				037C39292897E33600328EC8 /* SyntaxVacuumSTMT.cpp in Sources */,
 				75401478290BE51400EA8D33 /* PinyinTokenizer.cpp in Sources */,
+				75ADC5662A8D1C2D00D0AC47 /* TableAttribute.cpp in Sources */,
 				037C392C2897E33600328EC8 /* StatementCreateTable.cpp in Sources */,
 				037C392D2897E33600328EC8 /* HandleNotification.cpp in Sources */,
 				037C392E2897E33600328EC8 /* SequenceItem.cpp in Sources */,
@@ -9985,6 +10002,7 @@
 				03E165FE27F42D6500D2C926 /* StatementDetach.swift in Sources */,
 				23C7559120DCF90F00031A93 /* SQLiteLocker.cpp in Sources */,
 				03E1660E27F42D6500D2C926 /* PreparedStatement.swift in Sources */,
+				75ADC5642A8D1C2D00D0AC47 /* TableAttribute.cpp in Sources */,
 				2370B11E21914ED500D3227C /* NSNumber+WCTColumnCoding.mm in Sources */,
 				03E1661027F42D6500D2C926 /* Column.swift in Sources */,
 				23EEDCE3217DFADC006E9E73 /* StatementUpdate.cpp in Sources */,
@@ -10481,6 +10499,7 @@
 				7521D6DC291E9ABB009642EF /* WCTOperationQueue.mm in Sources */,
 				7521D6DD291E9ABB009642EF /* Tag.cpp in Sources */,
 				7521D6DE291E9ABB009642EF /* SyntaxSavepointSTMT.cpp in Sources */,
+				75ADC5652A8D1C2D00D0AC47 /* TableAttribute.cpp in Sources */,
 				7521D6DF291E9ABB009642EF /* SyntaxDeleteSTMT.cpp in Sources */,
 				7521D6E0291E9ABB009642EF /* SyntaxCommitSTMT.cpp in Sources */,
 				7521D6E4291E9ABB009642EF /* Notifier.cpp in Sources */,
@@ -10871,6 +10890,7 @@
 				7521DAE2291EA349009642EF /* SyntaxCommonTableExpression.cpp in Sources */,
 				7521DAE3291EA349009642EF /* StatementCreateVirtualTable.swift in Sources */,
 				7521DAE4291EA349009642EF /* StatementDropTable.cpp in Sources */,
+				75ADC5672A8D1C2D00D0AC47 /* TableAttribute.cpp in Sources */,
 				7521DAE5291EA349009642EF /* Insert.swift in Sources */,
 				7521DAE6291EA349009642EF /* MigratingHandleStatement.cpp in Sources */,
 				7521DAE7291EA349009642EF /* SyntaxExpression.cpp in Sources */,

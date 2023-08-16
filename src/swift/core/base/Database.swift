@@ -491,8 +491,8 @@ public extension Database {
     static let OperationInfoKeyIndexCount = String(cString: WCDBDatabaseOperationTracerInfoKeyIndexCount)
     static let OperationInfoKeyTriggerCount = String(cString: WCDBDatabaseOperationTracerInfoKeyTriggerCount)
 
-    typealias OperationTracer = (Database,/* database */
-                                 Database.Operation,/* type of operation*/
+    typealias OperationTracer = (Database, /* database */
+                                 Database.Operation, /* type of operation*/
                                  [String: Value]/* infos about current operation */
     ) -> Void
 

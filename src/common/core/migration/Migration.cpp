@@ -122,9 +122,9 @@ bool Migration::initInfo(InfoInitializer& initializer, const UnsafeStringView& t
 
         bool targetTableExsits, autoincrement;
         std::set<StringView> columns;
-        const char* integerPrimaryKey = NULL;
+        StringView integerPrimaryKey;
         if (!initializer.getTargetTableInfo(
-            userInfo, targetTableExsits, columns, autoincrement, &integerPrimaryKey)) {
+            userInfo, targetTableExsits, columns, autoincrement, integerPrimaryKey)) {
             return false;
         }
 
@@ -267,11 +267,11 @@ Migration::InfoInitializer::checkSourceTableExistsAndHasRowid(const MigrationUse
     if (!optionalExists.hasValue() || !optionalExists.value()) {
         return optionalExists;
     }
-    bool autoincrement, withoutRowid;
-    if (!handle->getTableConfig(schema, tableName, autoincrement, withoutRowid, nullptr)) {
+    auto tableConfig = handle->getTableAttribute(schema, tableName);
+    if (!tableConfig.succeed()) {
         return NullOpt;
     }
-    if (withoutRowid) {
+    if (tableConfig.value().withoutRowid) {
         StringView msg = StringView::formatted(
         "Does not support migrating data from the table without rowid: %s",
         tableName.data());
@@ -285,7 +285,7 @@ bool Migration::InfoInitializer::getTargetTableInfo(const MigrationUserInfo& use
                                                     bool& exists,
                                                     std::set<StringView>& columns,
                                                     bool& autoincrement,
-                                                    const char** integerPrimaryKey)
+                                                    StringView& integerPrimaryKey)
 {
     const StringView& tableName = userInfo.getTable();
     InnerHandle* handle = getCurrentHandle();
@@ -305,18 +305,19 @@ bool Migration::InfoInitializer::getTargetTableInfo(const MigrationUserInfo& use
     for (const auto& meta : metas) {
         columns.emplace(meta.name);
     }
-    bool withoutRowid;
-    if (!handle->getTableConfig(
-        Schema::main(), tableName, autoincrement, withoutRowid, integerPrimaryKey)) {
+    auto tableConfig = handle->getTableAttribute(Schema::main(), tableName);
+    if (!tableConfig.succeed()) {
         return false;
     }
-    if (withoutRowid) {
+    if (tableConfig.value().withoutRowid) {
         StringView msg = StringView::formatted(
         "Does not support migrating data to the table without rowid: %s",
         tableName.data());
         handle->notifyError((int) Error::Code::Error, nullptr, msg.data());
         return false;
     }
+    autoincrement = tableConfig.value().autoincrement;
+    integerPrimaryKey = tableConfig.value().integerPrimaryKey;
     return true;
 }
 

@@ -82,7 +82,7 @@ protected:
                                 bool& exists,
                                 std::set<StringView>& columns,
                                 bool& autoincrement,
-                                const char** integerPrimaryKey);
+                                StringView& integerPrimaryKey);
         bool tryUpdateSequence(const MigrationUserInfo& userInfo,
                                const UnsafeStringView& primaryKey);
     };

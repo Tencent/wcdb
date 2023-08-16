@@ -29,6 +29,7 @@
 #include "HandleNotification.hpp"
 #include "HandleStatement.hpp"
 #include "StringView.hpp"
+#include "TableAttribute.hpp"
 #include "WCDBOptional.hpp"
 #include "WINQ.h"
 #include <set>
@@ -119,11 +120,8 @@ public:
     Optional<std::vector<ColumnMeta>>
     getTableMeta(const Schema &schema, const UnsafeStringView &table);
     Optional<std::set<StringView>> getValues(const Statement &statement, int index);
-    bool getTableConfig(const Schema &schema,
-                        const UnsafeStringView &tableName,
-                        bool &autoincrement,
-                        bool &withoutRowid,
-                        const char **integerPrimaryKey);
+    Optional<TableAttribute>
+    getTableAttribute(const Schema &schema, const UnsafeStringView &tableName);
     bool configAutoIncrement(const UnsafeStringView &tableName);
 
     bool getSchemaInfo(int &memoryUsed, int &tableCount, int &indexCount, int &triggerCount);
