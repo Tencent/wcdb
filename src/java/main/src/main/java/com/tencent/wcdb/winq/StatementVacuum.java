@@ -23,7 +23,7 @@
 
 package com.tencent.wcdb.winq;
 
-public class StatementVacuum extends Identifier {
+public class StatementVacuum extends Statement {
     @Override
     protected CPPType getCppType() {
         return CPPType.VacuumSTMT;
