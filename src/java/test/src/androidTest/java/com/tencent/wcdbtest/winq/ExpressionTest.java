@@ -314,8 +314,8 @@ public class ExpressionTest {
         winqEqual(column.in(stringList), "testColumn IN('abc', 'def', 'ghi')");
 
         winqEqual(column.inTable("testTable"), "testColumn IN testTable");
-        winqEqual(column.inTable("testTable").schema(Schema.temp()), "testColumn IN temp.testTable");
-        winqEqual(column.inFunction("testFunction").schema(Schema.main()).argument(1).argument("abc"), "testColumn IN main.testFunction(1, 'abc')");
+        winqEqual(column.inTable("testTable").schema(Schema.temp), "testColumn IN temp.testTable");
+        winqEqual(column.inFunction("testFunction").schema(Schema.main).argument(1).argument("abc"), "testColumn IN main.testFunction(1, 'abc')");
     }
 
     @Test
@@ -413,8 +413,8 @@ public class ExpressionTest {
         winqEqual(column.notIn(stringList), "testColumn NOT IN('abc', 'def', 'ghi')");
 
         winqEqual(column.notInTable("testTable"), "testColumn NOT IN testTable");
-        winqEqual(column.notInTable("testTable").schema(Schema.temp()), "testColumn NOT IN temp.testTable");
-        winqEqual(column.notInFunction("testFunction").schema(Schema.main()).argument(1).argument("abc"), "testColumn NOT IN main.testFunction(1, 'abc')");
+        winqEqual(column.notInTable("testTable").schema(Schema.temp), "testColumn NOT IN temp.testTable");
+        winqEqual(column.notInFunction("testFunction").schema(Schema.main).argument(1).argument("abc"), "testColumn NOT IN main.testFunction(1, 'abc')");
     }
 
     @Test

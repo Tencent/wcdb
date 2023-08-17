@@ -33,24 +33,17 @@ public class Schema extends Identifier {
         cppObj = createCppObj(name);
     }
 
-    private Schema() {
+    protected Schema(long cppObj) {
+        this.cppObj = cppObj;
     }
 
     private native long createCppObj(String name);
 
-    public static Schema main() {
-        Schema schema = new Schema();
-        schema.cppObj = createMainCppObj();
-        return schema;
-    }
+    public static final Schema main = new Schema(createMainCppObj());
 
     private static native long createMainCppObj();
 
-    public static Schema temp() {
-        Schema schema = new Schema();
-        schema.cppObj = createTempCppObj();
-        return schema;
-    }
+    public static final Schema temp = new Schema(createTempCppObj());
 
     private static native long createTempCppObj();
 }

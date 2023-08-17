@@ -33,8 +33,8 @@ import org.junit.runner.RunWith;
 public class SchemaTest {
     @Test
     public void test() {
-        winqEqual(Schema.main(), "main");
-        winqEqual(Schema.temp(), "temp");
+        winqEqual(Schema.main, "main");
+        winqEqual(Schema.temp, "temp");
         winqEqual(new Schema("testSchema"), "testSchema");
     }
 }
