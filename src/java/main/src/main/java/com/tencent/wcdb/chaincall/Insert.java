@@ -35,6 +35,7 @@ public class Insert<T> extends ChainCall<StatementInsert> {
     private boolean hasConflictAction = false;
     private Field<T>[] fields = null;
     private T[] values = null;
+    private long lastInsertRowId = 0;
 
     public Insert(Handle handle) {
         super(handle);
@@ -97,9 +98,14 @@ public class Insert<T> extends ChainCall<StatementInsert> {
         return this;
     }
 
+    public long getLastInsertRowId() {
+        return lastInsertRowId;
+    }
+
     private void realExecute() throws WCDBException {
         TableBinding<T> binding = Field.getBinding(fields);
         PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
+        lastInsertRowId = 0;
         if(binding != null) {
             for(T object : values) {
                 preparedStatement.reset();
@@ -117,6 +123,9 @@ public class Insert<T> extends ChainCall<StatementInsert> {
                 if(isAutoIncrement) {
                     binding.setLastInsertRowId(object, handle.getLastInsertedRowId());
                 }
+            }
+            if(values.length > 0) {
+                lastInsertRowId = handle.getLastInsertedRowId();
             }
         }
         updateChanges();
