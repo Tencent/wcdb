@@ -426,20 +426,38 @@ public class WCDBException extends RuntimeException {
     public Code code;
     public HashMap<String, Object> infos;
 
-    public WCDBException(){
-    }
-
-    public WCDBException(long cppError) {
-        level = Level.valueOf(getLevel(cppError));
-        code = Code.valueOf(getCode(cppError));
-        String message = getMessage(cppError);
+    WCDBException(Level level, Code code, long cppObj){
+        this.level = level;
+        this.code = code;
+        String message = getMessage(cppObj);
         infos = new HashMap<String, Object>();
         infos.put(Key.message.value, message);
-        enumerateInfo(cppError);
+        enumerateInfo(cppObj);
     }
 
-    private native int getLevel(long error);
-    private native int getCode(long error);
+    public static WCDBException createException(long cppObj) {
+        Level level = Level.valueOf(getLevel(cppObj));
+        Code code = Code.valueOf(getCode(cppObj));
+        if(level != Level.Error) {
+            return new WCDBNormalException(level, code, cppObj);
+        }
+        if (code == Code.Interrupt) {
+            return new WCDBInterruptException(level, code, cppObj);
+        } else if (code == Code.Permission ||
+                code == Code.Readonly ||
+                code == Code.IOError ||
+                code == Code.Corrupt ||
+                code == Code.Full ||
+                code == Code.CantOpen ||
+                code == Code.NotADatabase) {
+            return new WCDBCorruptOrIOException(level, code, cppObj);
+        } else {
+            return new WCDBNormalException(level, code, cppObj);
+        }
+    }
+
+    private static native int getLevel(long error);
+    private static native int getCode(long error);
     private native String getMessage(long error);
 
     private native void enumerateInfo(long cppError);

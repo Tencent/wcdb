@@ -54,7 +54,7 @@ public class Handle extends HandleORMOperation {
     }
 
     WCDBException createException() {
-        return new WCDBException(getError(cppObj));
+        return WCDBException.createException(getError(cppObj));
     }
 
     native long getError(long self);

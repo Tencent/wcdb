@@ -40,7 +40,7 @@ public class PreparedStatement extends CppObject {
     }
 
     private WCDBException createException() {
-        return new WCDBException(getError(cppObj));
+        return WCDBException.createException(getError(cppObj));
     }
 
     private native long getError(long self);

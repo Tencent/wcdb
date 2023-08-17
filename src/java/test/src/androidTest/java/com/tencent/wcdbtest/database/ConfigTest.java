@@ -27,6 +27,7 @@ import com.tencent.wcdb.core.Database;
 import com.tencent.wcdb.core.Handle;
 import com.tencent.wcdb.winq.Pragma;
 import com.tencent.wcdb.winq.StatementPragma;
+import com.tencent.wcdb.winq.StatementSelect;
 import com.tencent.wcdbtest.base.WrappedValue;
 import com.tencent.wcdbtest.base.DatabaseTestCase;
 
@@ -80,7 +81,7 @@ public class ConfigTest extends DatabaseTestCase {
         database.setConfig(configName, new Database.Config() {
             @Override
             public void onInvocation(Handle handle) throws WCDBException {
-                throw new WCDBException();
+                handle.execute(new StatementSelect().select("testColumn").from("testTable"));
             }
         });
         assertFalse(database.canOpen());
@@ -95,7 +96,7 @@ public class ConfigTest extends DatabaseTestCase {
         }, new Database.Config() {
             @Override
             public void onInvocation(Handle handle) throws WCDBException {
-                throw new WCDBException();
+                handle.execute(new StatementSelect().select("testColumn").from("testTable"));
             }
         }, Database.ConfigPriority.low);
         assertTrue(database.canOpen());

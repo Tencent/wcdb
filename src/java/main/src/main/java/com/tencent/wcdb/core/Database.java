@@ -120,7 +120,7 @@ public class Database extends HandleORMOperation {
     public static native void purgeAll();
 
     WCDBException createException() {
-        return new WCDBException(getError(cppObj));
+        return WCDBException.createException(getError(cppObj));
     }
 
     private native long getError(long self);
@@ -242,7 +242,7 @@ public class Database extends HandleORMOperation {
     }
 
     private static void onTraceException(ExceptionTracer tracer, long cppError) {
-        tracer.onTrace(new WCDBException(cppError));
+        tracer.onTrace(WCDBException.createException(cppError));
     }
 
     public static native void globalTraceException(ExceptionTracer tracer);
