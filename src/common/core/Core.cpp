@@ -402,6 +402,13 @@ void Core::setNotificationWhenErrorTraced(const UnsafeStringView& path,
     }
 }
 
+#pragma mark - Integrity
+
+void Core::skipIntegrityCheck(const UnsafeStringView& path)
+{
+    m_operationQueue->skipIntegrityCheck(path);
+}
+
 #pragma mark - Config
 void Core::setABTestConfig(const UnsafeStringView& configName, const UnsafeStringView& configValue)
 {
