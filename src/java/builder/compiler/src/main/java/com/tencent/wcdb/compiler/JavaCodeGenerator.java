@@ -47,8 +47,8 @@ public class JavaCodeGenerator {
         generateImport();
 
         builder.append("public class ").append(ormClassName).append(" implements TableBinding<").append(className).append("> {\n");
-        builder.append(TAB + "private static Binding baseBinding;\n");
-        builder.append(TAB + "public static ").append(ormClassName).append(" INSTANCE;\n\n");
+        builder.append(TAB + "private static final Binding baseBinding;\n");
+        builder.append(TAB + "public static final ").append(ormClassName).append(" INSTANCE;\n\n");
 
         generateFields();
 
@@ -85,7 +85,7 @@ public class JavaCodeGenerator {
 
     private void generateFields() {
         for(ColumnInfo info : allColumnInfo) {
-            builder.append(TAB + "public static Field<").append(className).append("> ")
+            builder.append(TAB + "public static final Field<").append(className).append("> ")
                     .append(info.getPropertyName()).append(";\n");
         }
     }

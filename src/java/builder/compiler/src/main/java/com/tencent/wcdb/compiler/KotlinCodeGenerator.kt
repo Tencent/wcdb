@@ -42,7 +42,7 @@ class KotlinCodeGenerator {
         generateImport()
         builder.append("object $ormClassName: TableBinding<$className> {\n")
 
-        builder.append("${TAB}private var baseBinding: Binding\n")
+        builder.append("${TAB}private final var baseBinding: Binding\n")
         generateFields()
         builder.append("\n${TAB}init {\n")
         builder.append("$TAB${TAB}baseBinding = Binding()\n")
@@ -74,7 +74,7 @@ class KotlinCodeGenerator {
     private fun generateFields() {
         for ((propertyName) in allColumnInfo) {
             builder.append("${TAB}@JvmField\n")
-            builder.append("${TAB}var $propertyName : Field<$className>\n")
+            builder.append("${TAB}final var $propertyName : Field<$className>\n")
         }
     }
 
