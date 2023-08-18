@@ -151,6 +151,10 @@ public:
 protected:
     std::shared_ptr<Config> m_AutoMergeFTSConfig;
 
+#pragma mark - Integrity
+public:
+    void skipIntegrityCheck(const UnsafeStringView& path);
+
 #pragma mark - Config
 public:
     void setABTestConfig(const UnsafeStringView& configName,

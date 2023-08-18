@@ -90,6 +90,10 @@ void OperationQueue::handleError(const Error& error)
         return;
     }
 
+    if (path.compare(m_skipIntegrityCheckPath.getOrCreate()) == 0) {
+        return;
+    }
+
     auto optionalIdentifier = FileManager::getFileIdentifier(path);
     if (!optionalIdentifier.succeed()) {
         return;
@@ -475,6 +479,11 @@ void OperationQueue::asyncPurgeWhenMemoryWarning()
 }
 
 #pragma mark - Check Integrity
+void OperationQueue::skipIntegrityCheck(const UnsafeStringView& path)
+{
+    m_skipIntegrityCheckPath.getOrCreate() = path;
+}
+
 void OperationQueue::asyncCheckIntegrity(const UnsafeStringView& path, uint32_t identifier)
 {
     WCTAssert(!path.empty());

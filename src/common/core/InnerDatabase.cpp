@@ -82,7 +82,10 @@ Tag InnerDatabase::getTag() const
 
 bool InnerDatabase::canOpen()
 {
-    return getHandle() != nullptr;
+    Core::shared().skipIntegrityCheck(getPath());
+    auto handle = getHandle();
+    Core::shared().skipIntegrityCheck(nullptr);
+    return handle != nullptr;
 }
 
 void InnerDatabase::didDrain()
