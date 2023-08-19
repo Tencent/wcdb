@@ -27,6 +27,7 @@
 #include "HandleRelated.hpp"
 #include "Lock.hpp"
 #include "SQLiteDeclaration.h"
+#include "Tag.hpp"
 #include "UniqueList.hpp"
 #include <functional>
 #include <map>
@@ -48,26 +49,28 @@ private:
 
 #pragma mark - SQL
 public:
-    typedef std::function<void(const UnsafeStringView &path, const UnsafeStringView &sql, const void *handle)> SQLNotification;
+    typedef std::function<void(const Tag &tag, const UnsafeStringView &path, const UnsafeStringView &sql, const void *handle)> SQLNotification;
     void setNotificationWhenSQLTraced(const UnsafeStringView &name,
                                       const SQLNotification &onTraced);
 
 private:
     bool areSQLTraceNotificationsSet() const;
-    void postSQLTraceNotification(const UnsafeStringView &path,
+    void postSQLTraceNotification(const Tag &tag,
+                                  const UnsafeStringView &path,
                                   const UnsafeStringView &sql,
                                   const void *handle);
     StringViewMap<SQLNotification> m_sqlNotifications;
 
 #pragma mark - Performance
 public:
-    typedef std::function<void(const UnsafeStringView &path, const UnsafeStringView &sql, double cost, const void *handle)> PerformanceNotification;
+    typedef std::function<void(const Tag &tag, const UnsafeStringView &path, const UnsafeStringView &sql, double cost, const void *handle)> PerformanceNotification;
     void setNotificationWhenPerformanceTraced(const UnsafeStringView &name,
                                               const PerformanceNotification &onTraced);
 
 private:
     bool arePerformanceTraceNotificationsSet() const;
-    void postPerformanceTraceNotification(const UnsafeStringView &path,
+    void postPerformanceTraceNotification(const Tag &tag,
+                                          const UnsafeStringView &path,
                                           const UnsafeStringView &sql,
                                           const int64_t &cost,
                                           const void *handle);

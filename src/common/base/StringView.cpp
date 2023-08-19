@@ -209,6 +209,11 @@ bool UnsafeStringView::contain(const UnsafeStringView& target) const
     return strstr(m_data, target.m_data) != nullptr;
 }
 
+bool UnsafeStringView::equal(const UnsafeStringView& other) const
+{
+    return compare(other) == 0;
+}
+
 int UnsafeStringView::compare(const UnsafeStringView& other) const
 {
     if (m_data == other.m_data && m_length == other.m_length) {
