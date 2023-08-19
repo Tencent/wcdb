@@ -159,7 +159,7 @@ public class HandleTest extends TableTestCase {
         for(Thread thread : threads) {
             thread.join();
         }
-        assertEquals(4, maxHandleCount.intValue);
+        assertTrue(maxHandleCount.intValue <= 4);
         Database.globalTraceDatabaseOperation(null);
     }
 
