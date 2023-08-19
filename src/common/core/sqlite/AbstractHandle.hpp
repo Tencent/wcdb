@@ -30,6 +30,7 @@
 #include "HandleStatement.hpp"
 #include "StringView.hpp"
 #include "TableAttribute.hpp"
+#include "Tag.hpp"
 #include "WCDBOptional.hpp"
 #include "WINQ.h"
 #include <set>
@@ -83,10 +84,14 @@ public:
     bool isReadonly();
     bool isInTransaction();
 
+    void setTag(Tag tag);
+    Tag getTag();
+
 protected:
     bool executeSQL(const UnsafeStringView &sql);
     bool executeStatement(const Statement &statement);
     int m_customOpenFlag;
+    Tag m_tag;
 
 #pragma mark - Statement
 public:

@@ -79,6 +79,7 @@ public:
     bool hasSuffix(const UnsafeStringView& target) const;
     bool contain(const UnsafeStringView& target) const;
     int compare(const UnsafeStringView& other) const;
+    bool equal(const UnsafeStringView& other) const;
 
     static constexpr size_t npos = -1;
     size_t find(const UnsafeStringView& other) const;

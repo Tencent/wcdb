@@ -192,21 +192,24 @@ public:
     /**
      Triggered when a transaction or a normal sql ends.
      */
-    typedef std::function<void(const UnsafeStringView &path, const UnsafeStringView &sql, double cost, const void *handleIdentifier)> PerformanceNotification;
+    typedef std::function<void(long tag, const UnsafeStringView &path, const UnsafeStringView &sql, double cost, const void *handleIdentifier)> PerformanceNotification;
 
     /**
      @brief You can register a tracer to monitor the performance of all SQLs.
      It returns
          1. Every SQL executed by the database.
          2. Time consuming in seconds.
-         3. Path of database.
-         4. The id of the handle executing this SQL.
+         3. Tag of database.
+         4. Path of database.
+         5. The id of the handle executing this SQL.
      @note  You should register trace before all db operations. Global tracer and db tracer do not interfere with each other.
      
-         WCDB::Database::globalTracePerformance([](const WCDB::UnsafeStringView &path,
+         WCDB::Database::globalTracePerformance([](long tag,
+                                                   const WCDB::UnsafeStringView &path,
                                                    const WCDB::UnsafeStringView &sql,
                                                    double cost,
                                                    const void *handleIdentifier) {
+             printf("Tag: %ld", tag);
              printf("Path: %s", path.data());
              printf("The handle with id %p took %f seconds to execute %s",
                     handleIdentifier,
@@ -229,20 +232,23 @@ public:
     /**
      Triggered when a SQL is executed.
      */
-    typedef std::function<void(const UnsafeStringView &path, const UnsafeStringView &sql, const void *handleIdentifier)> SQLNotification;
+    typedef std::function<void(long tag, const UnsafeStringView &path, const UnsafeStringView &sql, const void *handleIdentifier)> SQLNotification;
 
     /**
      @brief You can register a tracer to monitor the execution of all SQLs.
      It returns:
          1. Every SQL executed by the database.
-         2. Path of database.
-         3. The id of the handle executing this SQL.
+         2. Tag of database.
+         3. Path of database.
+         4. The id of the handle executing this SQL.
      
      @note  You should register trace before all db operations. Global tracer and db tracer do not interfere with each other.
      
-         WCDB::Database::globalTraceSQL([](const WCDB::UnsafeStringView &path,
+         WCDB::Database::globalTraceSQL([](long tag,
+                                           const WCDB::UnsafeStringView &path,
                                            const WCDB::UnsafeStringView &sql,
                                            const void *handleIdentifier) {
+             printf("Tag: %ld", tag);
              printf("Path: %s", path.data());
              printf("The handle with id %p executed %s",
                     handleIdentifier,

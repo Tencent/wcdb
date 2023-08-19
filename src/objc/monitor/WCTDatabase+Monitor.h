@@ -35,12 +35,12 @@ typedef void (^WCTErrorTraceBlock)(WCTError*);
 /**
  Triggered when a transaction or a normal sql ends.
  */
-typedef void (^WCTPerformanceTraceBlock)(NSString* /* path */, uint64_t /*handleIdentifier*/, NSString* /* sql */, double /* cost */);
+typedef void (^WCTPerformanceTraceBlock)(WCTTag /*tag*/, NSString* /* path */, uint64_t /*handleIdentifier*/, NSString* /* sql */, double /* cost */);
 
 /**
  Triggered when a SQL is executed.
  */
-typedef void (^WCTSQLTraceBlock)(NSString* /* path */, uint64_t /*handleIdentifier*/, NSString* /* sql */);
+typedef void (^WCTSQLTraceBlock)(WCTTag /*tag*/, NSString* /* path */, uint64_t /*handleIdentifier*/, NSString* /* sql */);
 
 typedef NS_ENUM(NSUInteger, WCTDatabaseOperation) {
     WCTDatabaseOperation_Create = 0,
@@ -95,13 +95,15 @@ WCDB_EXTERN NSString* const WCTDatabaseMonitorInfoKeyTriggerCount;
  It returns:
      1. Every SQL executed by the database.
      2. Time consuming in seconds.
-     3. Path of database.
-     4. The id of the handle executing this SQL.
+     3. Tag of database.
+     4. Path of database.
+     5. The id of the handle executing this SQL.
  
  @note  You should register trace before all db operations. Global tracer and db tracer do not interfere with each other.
  
-     [WCTDatabase globalTracePerformance:^(NSString* path,  uint64_t handleIdentifier, NSString* sql , double cost) {
-        NSLog(@"Path: %%@", path);
+     [WCTDatabase globalTracePerformance:^(WCTTag tag, NSString* path,  uint64_t handleIdentifier, NSString* sql , double cost) {
+        NSLog(@"Tag: %ld", tag);
+        NSLog(@"Path: %@", path);
         NSLog(@"The handle with id %llu took %f seconds to execute %@",  handleIdentifier, cost, sql);
      }];
  
@@ -123,12 +125,14 @@ WCDB_EXTERN NSString* const WCTDatabaseMonitorInfoKeyTriggerCount;
  @brief You can register a tracer to monitor the execution of all SQLs.
  It returns:
      1. Every SQL executed by the database.
-     2. Path of database.
-     3. The id of the handle executing this SQL.
+     2. Tag of database.
+     3. Path of database.
+     4. The id of the handle executing this SQL.
  
  @note  You should register trace before all db operations. Global tracer and db tracer do not interfere with each other.
  
-     [WCTDatabase globalTraceSQL:^(NSString* path,  uint64_t handleIdentifier, NSString* sql , double cost) {
+     [WCTDatabase globalTraceSQL:^(WCTTag tag, NSString* path,  uint64_t handleIdentifier, NSString* sql , double cost) {
+        NSLog(@"Tag: %ld", tag);
         NSLog(@"Path: %%@", path);
         NSLog(@"The handle with id %llu executed %@",  handleIdentifier, sql);
      }];
