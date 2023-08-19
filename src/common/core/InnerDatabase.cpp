@@ -301,6 +301,8 @@ std::shared_ptr<InnerHandle> InnerDatabase::generateSlotedHandle(HandleType type
         return nullptr;
     }
 
+    handle->setTag(getTag());
+
     if (!setupHandle(type, handle.get())) {
         return nullptr;
     }

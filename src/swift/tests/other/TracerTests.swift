@@ -25,7 +25,7 @@ import WCDBSwift
 import WCDB
 #endif
 
-class TracerTests: BaseTestCase {
+class TracerTests: DatabaseTestCase {
 
     func reset() {
         Database.globalTrace(ofPerformance: nil)
@@ -49,14 +49,15 @@ class TracerTests: BaseTestCase {
 
         // Then
         var pass = false
-        Database.globalTrace { (_, _, sql) in
+        Database.globalTrace { (tag, path, _, sql) in
+            guard path == self.database.path else {
+                return
+            }
+            XCTAssertEqual(tag, self.database.tag)
             if sql == expectedSQL {
                 pass = true
             }
         }
-
-        // Give
-        let database = Database(at: self.recommendedPath)
 
         // When
         XCTAssertNoThrow(try database.getRows(on: Master.Properties.any, fromTable: Master.builtinTableName))
@@ -67,11 +68,11 @@ class TracerTests: BaseTestCase {
     func testGlobalTraceError() {
         // Give
         let tableName = "nonexistentTable"
-        let expectedTag = self.recommendTag
+        let expectedTag = self.database.tag
         let expectedErrorCode = 1
         let expectedErrorMessage = "no such table: \(tableName)"
         let expectedSQL = "SELECT * FROM \(tableName)"
-        let expectedPath = self.recommendedPath
+        let expectedPath = self.database.path
 
         // Then
         var `catch` = false
@@ -93,13 +94,13 @@ class TracerTests: BaseTestCase {
 
             let path = error.path
             XCTAssertNotNil(path)
-            XCTAssertEqual(path!, expectedPath.path)
+            XCTAssertEqual(path!, expectedPath)
 
             XCTAssertNil(error.extendedCode)
 
             let wrongStringType = error.infos[.tag]?.stringValue
             XCTAssertNotNil(wrongStringType)
-            XCTAssertEqual(wrongStringType, String(expectedTag))
+            XCTAssertEqual(wrongStringType, String(expectedTag!))
 
             let wrongIntType = error.infos[.path]?.intValue
             XCTAssertNotNil(wrongIntType)
@@ -108,10 +109,6 @@ class TracerTests: BaseTestCase {
             `catch` = true
             print(error)
         }
-
-        // Give
-        let database = Database(at: expectedPath)
-        database.tag = expectedTag
 
         // When
         XCTAssertThrowsError(
@@ -124,15 +121,11 @@ class TracerTests: BaseTestCase {
     func testTraceError() {
         // Give
         let tableName = "nonexistentTable"
-        let expectedTag = self.recommendTag
+        let expectedTag = self.database.tag
         let expectedErrorCode = 1
         let expectedErrorMessage = "no such table: \(tableName)"
         let expectedSQL = "SELECT * FROM \(tableName)"
-        let expectedPath = self.recommendedPath
-
-        // Give
-        let database = Database(at: expectedPath)
-        database.tag = expectedTag
+        let expectedPath = self.database.path
 
         // Then
         var `catch` = false
@@ -154,13 +147,13 @@ class TracerTests: BaseTestCase {
 
             let path = error.path
             XCTAssertNotNil(path)
-            XCTAssertEqual(path!, expectedPath.path)
+            XCTAssertEqual(path!, expectedPath)
 
             XCTAssertNil(error.extendedCode)
 
             let wrongStringType = error.infos[.tag]?.stringValue
             XCTAssertNotNil(wrongStringType)
-            XCTAssertEqual(wrongStringType, String(expectedTag))
+            XCTAssertEqual(wrongStringType, String(expectedTag!))
 
             let wrongIntType = error.infos[.path]?.intValue
             XCTAssertNotNil(wrongIntType)
@@ -193,13 +186,18 @@ class TracerTests: BaseTestCase {
     func testGlobalTracePerformanceCommit() {
         // Give
         let tableName = TracerObject.name
-        let expectedPath = self.recommendedPath.path
+        let expectedTag = self.database.tag
+        let expectedPath = self.database.path
         let expectedSQL = "INSERT INTO \(tableName)(variable) VALUES(?1)"
 
         // Then
         var `catch` = false
-        Database.globalTrace { (path, _, sql, cost) in
-            if path == expectedPath && sql == expectedSQL && cost > 0 {
+        Database.globalTrace { (tag, path, _, sql, cost) in
+            guard path == self.database.path else {
+                return
+            }
+            XCTAssertEqual(tag, expectedTag)
+            if sql == expectedSQL && cost > 0 {
                 `catch` = true
             }
         }
@@ -225,27 +223,30 @@ class TracerTests: BaseTestCase {
     func testTraceRollback() {
         // Give
         let tableName = TracerObject.name
-        let expectedPath = self.recommendedPath.path
+        let expectedTag = self.database.tag
+        let expectedPath = self.database.path
         let expectedSQL = "INSERT INTO \(tableName)(variable) VALUES(?1)"
         let expectedRollback = "ROLLBACK"
 
         // Then
         var catchInsert = false
         var catchRollback = false
-        Database.globalTrace { (path, _, sql, _) in
-            if path == expectedPath && sql == expectedSQL {
+        Database.globalTrace { (tag, path, _, sql, _) in
+            guard path == self.database.path else {
+                return
+            }
+            XCTAssertEqual(tag, expectedTag)
+            if sql == expectedSQL {
                 catchInsert = true
-            } else if path == expectedPath && sql == expectedRollback {
+            } else if sql == expectedRollback {
                 catchRollback = true
             }
         }
 
         // Give
-        let database = Database(at: self.recommendedPath)
         XCTAssertNoThrow(try database.close {
-            try database.removeFiles()
+            try self.database.removeFiles()
         })
-        database.tag = self.recommendTag
 
         // When
         XCTAssertNoThrow(try database.create(table: tableName, of: TracerObject.self))
@@ -253,7 +254,7 @@ class TracerTests: BaseTestCase {
         template.isAutoIncrement = true
         let objects = [TracerObject](repeating: template, count: 100000)
         XCTAssertNoThrow(try database.run(controllableTransaction: { (_) -> Bool in
-            try database.insert(objects, intoTable: tableName)
+            try self.database.insert(objects, intoTable: tableName)
             return false
         }))
         XCTAssertNoThrow(database.close())
@@ -278,9 +279,8 @@ class TracerTests: BaseTestCase {
                 fatalError()
             }
         })
-        let database = Database(at: self.recommendedPath)
+        let database = Database(at: "\(self.recommendedPath.path)_testOperation")
         database.tag = self.recommendTag
-        XCTAssertNoThrow(database)
         XCTAssertNoThrow(try database.create(table: TracerObject.name, of: TracerObject.self))
         let template = TracerObject()
         template.isAutoIncrement = true

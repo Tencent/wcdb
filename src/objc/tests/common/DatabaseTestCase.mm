@@ -92,7 +92,7 @@
 // For debugging only
 + (void)enableSQLTrace
 {
-    [WCTDatabase globalTraceSQL:^(NSString*, UInt64, NSString* sql) {
+    [WCTDatabase globalTraceSQL:^(WCTTag, NSString*, UInt64, NSString* sql) {
         NSThread* currentThread = [NSThread currentThread];
         NSString* threadName = currentThread.name;
         if (threadName.length == 0) {
@@ -109,7 +109,7 @@
 
 + (void)enablePerformanceTrace
 {
-    [WCTDatabase globalTracePerformance:^(NSString*, UInt64, NSString* sql, double cost) {
+    [WCTDatabase globalTracePerformance:^(WCTTag, NSString*, UInt64, NSString* sql, double cost) {
         NSThread* currentThread = [NSThread currentThread];
         NSString* threadName = currentThread.name;
         if (threadName.length == 0) {
@@ -135,7 +135,7 @@
         TestCaseResult* trace = [TestCaseResult no];
         NSMutableArray<NSString*>* expectedSQLs = [NSMutableArray arrayWithArray:testSQLs];
         NSThread* tracedThread = [NSThread currentThread];
-        [self.database traceSQL:^(NSString*, UInt64, NSString* sql) {
+        [self.database traceSQL:^(WCTTag, NSString*, UInt64, NSString* sql) {
             if (!self.expectSQLsInAllThreads && tracedThread != [NSThread currentThread]) {
                 // skip other thread sqls due to the setting
                 return;
