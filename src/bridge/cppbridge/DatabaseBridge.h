@@ -83,6 +83,7 @@ void WCDBDatabaseGlobalTracePerformance(SwiftClosure* _Nullable tracer);
 void WCDBDatabaseTracePerformance(CPPDatabase database, SwiftClosure* _Nullable tracer);
 
 typedef void (*WCDBPerformanceTracer)(void* _Nullable context,
+                                      long tag,
                                       const char* _Nonnull path,
                                       unsigned long long handleId,
                                       const char* _Nonnull sql,
@@ -99,6 +100,7 @@ void WCDBDatabaseGlobalTraceSQL(SwiftClosure* _Nullable tracer);
 void WCDBDatabaseTraceSQL(CPPDatabase database, SwiftClosure* _Nullable tracer);
 
 typedef void (*WCDBSQLTracer)(void* _Nullable context,
+                              long tag,
                               const char* _Nonnull path,
                               unsigned long long handleId,
                               const char* _Nonnull sql);

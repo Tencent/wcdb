@@ -35,7 +35,8 @@ WCDBDefineNoArgumentSwiftClosureBridgedType(WCDBSwiftDatabaseCloseCallback, void
 WCDBDefineMultiArgumentSwiftClosureBridgedType(
 WCDBSwiftPerformanceTracer, void, long, const char*, uint64_t, const char*, double);
 
-WCDBDefineMultiArgumentSwiftClosureBridgedType(WCDBSwiftSQLTracer, void, long, const char*, uint64_t, const char*)
+WCDBDefineMultiArgumentSwiftClosureBridgedType(
+WCDBSwiftSQLTracer, void, long, const char*, uint64_t, const char*)
 
 WCDBDefineOneArgumentSwiftClosureBridgedType(WCDBSwiftErrorTracer, void, CPPError)
 
@@ -314,11 +315,13 @@ void WCDBDatabaseGlobalTracePerformance2(WCDBPerformanceTracer _Nullable tracer,
     WCDB::InnerHandle::PerformanceNotification callback = nullptr;
     if (tracer != nullptr) {
         WCDB::Recyclable<void*> recyclableContext(context, destructor);
-        callback = [recyclableContext, tracer](const WCDB::UnsafeStringView& path,
+        callback = [recyclableContext, tracer](const WCDB::Tag& tag,
+                                               const WCDB::UnsafeStringView& path,
                                                const WCDB::UnsafeStringView& sql,
                                                double cost,
                                                const void* handle) {
             tracer(recyclableContext.get(),
+                   tag,
                    path.data(),
                    (unsigned long long) handle,
                    sql.data(),
@@ -337,11 +340,13 @@ void WCDBDatabaseTracePerformance2(CPPDatabase database,
     if (tracer != nullptr) {
         WCDB::Recyclable<void*> recyclableContext(context, destructor);
         WCDB::InnerHandle::PerformanceNotification callback
-        = [recyclableContext, tracer](const WCDB::UnsafeStringView& path,
+        = [recyclableContext, tracer](const WCDB::Tag& tag,
+                                      const WCDB::UnsafeStringView& path,
                                       const WCDB::UnsafeStringView& sql,
                                       double cost,
                                       const void* handle) {
               tracer(recyclableContext.get(),
+                     tag,
                      path.data(),
                      (unsigned long long) handle,
                      sql.data(),
@@ -403,10 +408,12 @@ void WCDBDatabaseGlobalTraceSQL2(WCDBSQLTracer _Nullable tracer,
     WCDB::InnerHandle::SQLNotification callback = nullptr;
     if (tracer != nullptr) {
         WCDB::Recyclable<void*> recyclableContext(context, destructor);
-        callback = [recyclableContext, tracer](const WCDB::UnsafeStringView& path,
+        callback = [recyclableContext, tracer](const WCDB::Tag& tag,
+                                               const WCDB::UnsafeStringView& path,
                                                const WCDB::UnsafeStringView& sql,
                                                const void* handle) {
-            tracer(recyclableContext.get(), path.data(), (uint64_t) handle, sql.data());
+            tracer(
+            recyclableContext.get(), tag, path.data(), (uint64_t) handle, sql.data());
         };
     }
     WCDB::Core::shared().setNotificationForSQLGLobalTraced(callback);
@@ -421,11 +428,12 @@ void WCDBDatabaseTraceSQL2(CPPDatabase database,
     if (tracer != nullptr) {
         WCDB::Recyclable<void*> recyclableContext(context, destructor);
         WCDB::InnerHandle::SQLNotification callback
-        = [recyclableContext, tracer](const WCDB::UnsafeStringView& path,
+        = [recyclableContext, tracer](const WCDB::Tag& tag,
+                                      const WCDB::UnsafeStringView& path,
                                       const WCDB::UnsafeStringView& sql,
                                       const void* handle) {
               tracer(
-              recyclableContext.get(), path.data(), (uint64_t) handle, sql.data());
+              recyclableContext.get(), tag, path.data(), (uint64_t) handle, sql.data());
           };
         cppDatabase->setConfig(WCDB::SQLTraceConfigName,
                                std::static_pointer_cast<WCDB::Config>(

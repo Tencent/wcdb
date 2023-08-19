@@ -204,6 +204,7 @@ config, jlong self, jstring name, jobject invocation, jobject unInvocation, jint
 }
 
 void WCDBJNIDatabasePerformanceTrace(jobject tracer,
+                                     long tag,
                                      const char* path,
                                      unsigned long long handleId,
                                      const char* sql,
@@ -211,13 +212,13 @@ void WCDBJNIDatabasePerformanceTrace(jobject tracer,
 {
     WCDBJNITryGetEnvOr(return );
     WCDBJNITryGetDatabaseMethodId("onTracePerformance",
-                                  "(" WCDBJNIDatabaseSignature "$PerformanceTracer;" WCDBJNIStringSignature
+                                  "(" WCDBJNIDatabaseSignature "$PerformanceTracer;J" WCDBJNIStringSignature
                                   "J" WCDBJNIStringSignature "D)V",
                                   return );
     WCDBJNICreateJavaString(path);
     WCDBJNICreateJavaString(sql);
     (*env)->CallStaticVoidMethod(
-    env, WCDBJNIGetDatabaseClass(), g_methodId, tracer, jpath, (jlong) handleId, jsql, (jdouble) cost);
+    env, WCDBJNIGetDatabaseClass(), g_methodId, tracer, (jlong) tag, jpath, (jlong) handleId, jsql, (jdouble) cost);
     WCDBJNITryDetach;
 }
 
@@ -238,20 +239,18 @@ void WCDBJNIDatabaseObjectMethod(tracePerformance, jlong self, jobject tracer)
     selfStruct, tracer != NULL ? WCDBJNIDatabasePerformanceTrace : NULL, tracer, WCDBJNIDestructContext);
 }
 
-void WCDBJNIDatabaseSQLTrace(jobject tracer,
-                             const char* path,
-                             unsigned long long handleId,
-                             const char* sql)
+void WCDBJNIDatabaseSQLTrace(
+jobject tracer, long tag, const char* path, unsigned long long handleId, const char* sql)
 {
     WCDBJNITryGetEnvOr(return );
     WCDBJNITryGetDatabaseMethodId("onTraceSQL",
-                                  "(" WCDBJNIDatabaseSignature "$SQLTracer;" WCDBJNIStringSignature
+                                  "(" WCDBJNIDatabaseSignature "$SQLTracer;J" WCDBJNIStringSignature
                                   "J" WCDBJNIStringSignature ")V",
                                   return );
     WCDBJNICreateJavaString(path);
     WCDBJNICreateJavaString(sql);
     (*env)->CallStaticVoidMethod(
-    env, WCDBJNIGetDatabaseClass(), g_methodId, tracer, jpath, (jlong) handleId, jsql);
+    env, WCDBJNIGetDatabaseClass(), g_methodId, tracer, (jlong) tag, jpath, (jlong) handleId, jsql);
     WCDBJNITryDetach;
 }
 

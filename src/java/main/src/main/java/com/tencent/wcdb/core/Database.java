@@ -206,11 +206,11 @@ public class Database extends HandleORMOperation {
     private native void setConfig(long self, String configName, Config invocation, Config unInvocation, int priority);
 
     public interface PerformanceTracer {
-        void onTrace(String path, long handleId, String sql, double time);
+        void onTrace(long tag, String path, long handleId, String sql, double time);
     }
 
-    private static void onTracePerformance(PerformanceTracer tracer, String path, long handleId, String sql, double time) {
-        tracer.onTrace(path, handleId, sql, time);
+    private static void onTracePerformance(PerformanceTracer tracer, long tag, String path, long handleId, String sql, double time) {
+        tracer.onTrace(tag, path, handleId, sql, time);
     }
 
     public static native void globalTracePerformance(PerformanceTracer tracer);
@@ -222,11 +222,11 @@ public class Database extends HandleORMOperation {
     private native void tracePerformance(long self, PerformanceTracer tracer);
 
     public interface SQLTracer {
-        void onTrace(String path, long handleId, String sql);
+        void onTrace(long tag, String path, long handleId, String sql);
     }
 
-    private static void onTraceSQL(SQLTracer tracer, String path, long handleId, String sql) {
-        tracer.onTrace(path, handleId, sql);
+    private static void onTraceSQL(SQLTracer tracer, long tag,  String path, long handleId, String sql) {
+        tracer.onTrace(tag, path, handleId, sql);
     }
 
     public static native void globalTraceSQL(SQLTracer tracer);

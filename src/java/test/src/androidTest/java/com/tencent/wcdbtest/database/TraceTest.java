@@ -55,7 +55,9 @@ public class TraceTest extends TableTestCase {
         final WrappedValue tested = new WrappedValue();
         database.traceSQL(new Database.SQLTracer() {
             @Override
-            public void onTrace(String path, long handleId, String sql) {
+            public void onTrace(long tag, String path, long handleId, String sql) {
+                assertEquals(tag, database.getTag());
+                assertEquals(path, database.getPath());
                 if(sql.equals(statement.getDescription())) {
                     tested.boolValue = true;
                 }
@@ -74,7 +76,11 @@ public class TraceTest extends TableTestCase {
         Database.globalTraceSQL(null);
         Database.globalTraceSQL(new Database.SQLTracer() {
             @Override
-            public void onTrace(String path, long handleId, String sql) {
+            public void onTrace(long tag, String path, long handleId, String sql) {
+                if(!database.getPath().equals(path)) {
+                    return;
+                }
+                assertEquals(tag, database.getTag());
                 if(sql.equals(statement.getDescription())) {
                     tested.boolValue = true;
                 }
@@ -96,7 +102,10 @@ public class TraceTest extends TableTestCase {
         }};
         database.tracePerformance(new Database.PerformanceTracer() {
             @Override
-            public void onTrace(String path, long handleId, String sql, double time) {
+            public void onTrace(long tag, String path, long handleId, String sql, double time) {
+                assertEquals(tag, database.getTag());
+                assertEquals(path, database.getPath());
+                assertTrue(time >= 0);
                 if(sql.equals(sqls.get(0))) {
                     sqls.remove(0);
                 }
@@ -117,7 +126,12 @@ public class TraceTest extends TableTestCase {
         }};
         Database.globalTracePerformance(new Database.PerformanceTracer() {
             @Override
-            public void onTrace(String path, long handleId, String sql, double time) {
+            public void onTrace(long tag, String path, long handleId, String sql, double time) {
+                if(!database.getPath().equals(path)) {
+                    return;
+                }
+                assertEquals(tag, database.getTag());
+                assertTrue(time >= 0);
                 if(sqls.size() > 0 && sql.equals(sqls.get(0))) {
                     sqls.remove(0);
                 }
