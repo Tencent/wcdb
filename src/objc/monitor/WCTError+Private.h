@@ -26,7 +26,7 @@
 #import "CoreConst.h"
 #import "WCTError.h"
 
-@interface WCTError ()
+WCDB_API @interface WCTError()
 
 - (instancetype)initWithError:(const WCDB::Error &)error;
 

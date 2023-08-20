@@ -27,7 +27,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-class WCTScopedHandle {
+class WCDB_API WCTScopedHandle {
 public:
     WCTScopedHandle(WCTHandle *handle = nil);
     ~WCTScopedHandle();
@@ -37,7 +37,7 @@ private:
     WCTHandle *m_handle;
 };
 
-@interface WCTDatabase (Handle)
+WCDB_API @interface WCTDatabase(Handle)
 /**
  @brief Create a `WCTHandle` for current database.
  WCTHandle is a wrapper for sqlite db handle of type `sqlite3*`, and the sqlite db handle is lazy initialized and will not be actually generated until the first operation on current handle takes place.

@@ -29,7 +29,7 @@
 
 namespace WCDB {
 
-class SubstringMatchInfo : public AbstractFTS5AuxiliaryFunctionObject {
+class WCDB_API SubstringMatchInfo : public AbstractFTS5AuxiliaryFunctionObject {
 public:
     SubstringMatchInfo(int nVal,
                        FTS5AuxiliaryFunctionValue **apVal,

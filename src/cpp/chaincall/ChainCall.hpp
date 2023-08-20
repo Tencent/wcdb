@@ -30,7 +30,7 @@
 
 namespace WCDB {
 
-class BaseChainCall {
+class WCDB_API BaseChainCall {
 public:
     BaseChainCall() = delete;
     BaseChainCall(const BaseChainCall &);

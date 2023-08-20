@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class StatementCreateTrigger final
+class WCDB_API StatementCreateTrigger final
 : public SpecifiedSyntax<Syntax::CreateTriggerSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::CreateTriggerSTMT, Statement>::SpecifiedSyntax;

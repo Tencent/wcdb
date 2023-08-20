@@ -28,7 +28,8 @@
 
 namespace WCDB {
 
-class ColumnConstraint final : public SpecifiedSyntax<Syntax::ColumnConstraint, SQL> {
+class WCDB_API ColumnConstraint final
+: public SpecifiedSyntax<Syntax::ColumnConstraint, SQL> {
 public:
     ColumnConstraint();
     explicit ColumnConstraint(const UnsafeStringView& name);

@@ -25,7 +25,7 @@
 #import "BaseTokenizerUtil.hpp"
 #import <Foundation/Foundation.h>
 
-class WCTFTSTokenizerUtil final : public WCDB::BaseTokenizerUtil {
+class WCDB_API WCTFTSTokenizerUtil final : public WCDB::BaseTokenizerUtil {
 public:
     //Parameters should end with nullptr
     static WCDB::StringView tokenize(NSString* name, ...);

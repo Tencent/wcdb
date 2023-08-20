@@ -28,7 +28,8 @@
 
 namespace WCDB {
 
-class StatementReindex final : public SpecifiedSyntax<Syntax::ReindexSTMT, Statement> {
+class WCDB_API StatementReindex final
+: public SpecifiedSyntax<Syntax::ReindexSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::ReindexSTMT, Statement>::SpecifiedSyntax;
     StatementReindex();

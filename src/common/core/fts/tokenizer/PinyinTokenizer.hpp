@@ -27,7 +27,7 @@
 
 namespace WCDB {
 
-class PinyinTokenizer final : public AbstractFTSTokenizer {
+class WCDB_API PinyinTokenizer final : public AbstractFTSTokenizer {
 public:
     PinyinTokenizer(const char *const *azArg, int nArg, void *pCtx);
     void loadInput(const char *pText, int nText, int flags) override;

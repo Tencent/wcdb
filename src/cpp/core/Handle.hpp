@@ -30,7 +30,7 @@
 
 namespace WCDB {
 
-class Handle final : public StatementOperation, public HandleORMOperation {
+class WCDB_API Handle final : public StatementOperation, public HandleORMOperation {
     friend class Database;
     friend class HandleOperation;
     friend class TableOperation;

@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class BindParameter final : public Identifier {
+class WCDB_API BindParameter final : public Identifier {
 #pragma mark - Lang
 public:
     ~BindParameter() override final;

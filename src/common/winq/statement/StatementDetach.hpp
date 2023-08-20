@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class StatementDetach final : public SpecifiedSyntax<Syntax::DetachSTMT, Statement> {
+class WCDB_API StatementDetach final : public SpecifiedSyntax<Syntax::DetachSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::DetachSTMT, Statement>::SpecifiedSyntax;
     StatementDetach();

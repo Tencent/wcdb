@@ -31,26 +31,26 @@ namespace WCDB {
 
 namespace Syntax {
 
-class Expression;
+class WCDB_API Expression;
 
-class FrameSpec final : public Identifier {
+class WCDB_API FrameSpec final : public Identifier {
 #pragma mark - Lang
 public:
     ~FrameSpec() override final;
 
     WCDB_SYNTAX_MAIN_UNION_ENUM(Range, Rows, );
 
-    enum class Event : signed char {
+    enum class WCDB_API Event : signed char {
         Single = 1,
         Between,
     } event;
-    enum class FirstEvent : signed char {
+    enum class WCDB_API FirstEvent : signed char {
         UnboundedPreceding = 1,
         Preceding,
         Following,
         CurrentRow,
     } firstEvent;
-    enum class SecondEvent : signed char {
+    enum class WCDB_API SecondEvent : signed char {
         UnboundedFollowing = 1,
         Preceding,
         Following,

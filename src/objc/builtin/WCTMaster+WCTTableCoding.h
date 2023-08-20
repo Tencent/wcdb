@@ -25,7 +25,7 @@
 #import "Interface.h"
 #import "WCTMaster.h"
 
-@interface WCTMaster (TableCoding) <WCTTableCoding>
+WCDB_API @interface WCTMaster(TableCoding)<WCTTableCoding>
 
 WCDB_PROPERTY(type)
 WCDB_PROPERTY(name)

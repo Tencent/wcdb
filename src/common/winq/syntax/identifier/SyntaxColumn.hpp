@@ -29,11 +29,11 @@
 
 namespace WCDB {
 
-class BaseBinding;
+class WCDB_API BaseBinding;
 
 namespace Syntax {
 
-class Column final : public Identifier {
+class WCDB_API Column final : public Identifier {
 #pragma mark - Syntax
 public:
     ~Column() override final;

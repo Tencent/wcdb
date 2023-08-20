@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class StatementBegin final : public SpecifiedSyntax<Syntax::BeginSTMT, Statement> {
+class WCDB_API StatementBegin final : public SpecifiedSyntax<Syntax::BeginSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::BeginSTMT, Statement>::SpecifiedSyntax;
     StatementBegin();

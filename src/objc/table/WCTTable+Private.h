@@ -25,7 +25,7 @@
 #import "WCTDeclaration.h"
 #import "WCTTable.h"
 
-@interface WCTTable () {
+WCDB_API @interface WCTTable() {
 @protected
     WCTDatabase *_database;
     Class _tableClass;

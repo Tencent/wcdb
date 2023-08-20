@@ -24,7 +24,7 @@
 
 #import "WCTSelectable.h"
 
-@interface WCTSelectable () {
+WCDB_API @interface WCTSelectable() {
 @protected
     WCDB::StatementSelect _statement;
 }

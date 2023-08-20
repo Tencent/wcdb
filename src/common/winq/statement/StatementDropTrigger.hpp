@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class StatementDropTrigger final
+class WCDB_API StatementDropTrigger final
 : public SpecifiedSyntax<Syntax::DropTriggerSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::DropTriggerSTMT, Statement>::SpecifiedSyntax;

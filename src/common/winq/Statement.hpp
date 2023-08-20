@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class Statement : public SQL {
+class WCDB_API Statement : public SQL {
 public:
     virtual ~Statement() override;
     Statement(const Shadow<Syntax::Identifier>& syntax);

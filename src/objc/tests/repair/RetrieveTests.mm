@@ -282,7 +282,7 @@
 - (void)test_backup_huge_database
 {
     [self
-    testBackup:^{
+    executeTest:^{
         SizeBasedFactory* factory = [[SizeBasedFactory alloc] initWithDirectory:self.class.cacheRoot];
         factory.quality = 6LL * 1024 * 1024 * 1024; // 6GB > 4GB
         factory.tolerance = 0.02;
@@ -309,7 +309,7 @@
 - (void)test_retrieve_huge_database
 {
     [self
-    testBackup:^{
+    executeTest:^{
         SizeBasedFactory* factory = [[SizeBasedFactory alloc] initWithDirectory:self.class.cacheRoot];
         factory.quality = 6LL * 1024 * 1024 * 1024; // 6GB > 4GB
         factory.tolerance = 0.02;

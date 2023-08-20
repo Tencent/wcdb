@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class OrderingTerm final : public SpecifiedSyntax<Syntax::OrderingTerm, SQL> {
+class WCDB_API OrderingTerm final : public SpecifiedSyntax<Syntax::OrderingTerm, SQL> {
 public:
     using SpecifiedSyntax<Syntax::OrderingTerm, SQL>::SpecifiedSyntax;
     OrderingTerm();

@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class ReindexSTMT final : public Identifier {
+class WCDB_API ReindexSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     ~ReindexSTMT() override final;

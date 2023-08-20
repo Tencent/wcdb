@@ -32,10 +32,10 @@ namespace WCDB {
 
 namespace Syntax {
 
-class CommonTableExpression;
-class OrderingTerm;
+class WCDB_API CommonTableExpression;
+class WCDB_API OrderingTerm;
 
-class SelectSTMT final : public Identifier {
+class WCDB_API SelectSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     ~SelectSTMT() override final;

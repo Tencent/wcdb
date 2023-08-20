@@ -34,7 +34,7 @@
 
 namespace WCDB {
 
-class SQL {
+class WCDB_API SQL {
 public:
     SQL();
     virtual ~SQL();

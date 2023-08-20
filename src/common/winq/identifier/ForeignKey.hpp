@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class ForeignKey final : public SpecifiedSyntax<Syntax::ForeignKeyClause, SQL> {
+class WCDB_API ForeignKey final : public SpecifiedSyntax<Syntax::ForeignKeyClause, SQL> {
 public:
     ForeignKey();
     ~ForeignKey() override final;

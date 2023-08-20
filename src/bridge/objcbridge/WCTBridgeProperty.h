@@ -22,9 +22,10 @@
  * limitations under the License.
  */
 
+#import "Macro.h"
 #import <Foundation/Foundation.h>
 
-@interface WCTBridgeProperty : NSObject
+WCDB_API @interface WCTBridgeProperty : NSObject
 
 @property (nonatomic, strong, readonly) NSString* _Nonnull propertyName;
 
