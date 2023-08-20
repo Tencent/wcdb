@@ -32,15 +32,15 @@
 
 namespace WCDB {
 
-class Column : public SpecifiedSyntax<Syntax::Column, SQL>,
-               public ExpressionUnaryOperable,
-               public ExpressionBinaryOperable,
-               public ExpressionInOperable,
-               public ExpressionBetweenOperable,
-               public ExpressionCollateOperable,
-               public CoreFunctionOperable,
-               public AggregateFunctionOperable,
-               public FTSFunctionOperable {
+class WCDB_API Column : public SpecifiedSyntax<Syntax::Column, SQL>,
+                        public ExpressionUnaryOperable,
+                        public ExpressionBinaryOperable,
+                        public ExpressionInOperable,
+                        public ExpressionBetweenOperable,
+                        public ExpressionCollateOperable,
+                        public CoreFunctionOperable,
+                        public AggregateFunctionOperable,
+                        public FTSFunctionOperable {
 public:
     template<typename T, typename Enable = typename std::enable_if<ColumnConvertible<T>::value>::type>
     Column(const T& t)

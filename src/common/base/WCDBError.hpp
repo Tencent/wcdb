@@ -31,7 +31,7 @@
 
 namespace WCDB {
 
-class Error final {
+class WCDB_API Error final {
 #pragma mark - Initialize
 public:
     enum class Level;

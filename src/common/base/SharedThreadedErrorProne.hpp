@@ -24,11 +24,13 @@
 
 #pragma once
 
+#include "Macro.h"
+
 namespace WCDB {
 
 class Error;
 
-class SharedThreadedErrorProne {
+class WCDB_API SharedThreadedErrorProne {
 public:
     virtual ~SharedThreadedErrorProne() = 0;
 

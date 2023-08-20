@@ -31,7 +31,7 @@
 
 namespace WCDB {
 
-class Binding final : public BaseBinding {
+class WCDB_API Binding final : public BaseBinding {
 public:
     Binding();
     ~Binding() override final;

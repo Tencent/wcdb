@@ -30,14 +30,14 @@ namespace WCDB {
 
 namespace Syntax {
 
-class ForeignKeyClause final : public Identifier {
+class WCDB_API ForeignKeyClause final : public Identifier {
 #pragma mark - Lang
 public:
     ~ForeignKeyClause() override final;
 
     StringView foreignTable;
     std::list<Column> columns;
-    enum class Switch : signed char {
+    enum class WCDB_API Switch : signed char {
         OnDeleteSetNull = 1,
         OnDeleteSetDefault,
         OnDeleteCascade,

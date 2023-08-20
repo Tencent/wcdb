@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class AbstractFTSTokenizer {
+class WCDB_API AbstractFTSTokenizer {
 public:
     AbstractFTSTokenizer(const char *const *azArg, int nArg, void *pCtx /* pCtx is only used in FTS5 */);
     virtual ~AbstractFTSTokenizer() = 0;
@@ -48,7 +48,7 @@ public:
 typedef struct FTS3TokenizerWrap FTS3TokenizerWrap;
 typedef struct FTS3TokenizeCursorWrap FTS3TokenizeCursorWrap;
 
-class AbstractFTS3TokenizerModuleTemplate {
+class WCDB_API AbstractFTS3TokenizerModuleTemplate {
 public:
     AbstractFTS3TokenizerModuleTemplate() = delete;
     AbstractFTS3TokenizerModuleTemplate(const AbstractFTS3TokenizerModuleTemplate &) = delete;
@@ -67,7 +67,7 @@ protected:
     static void deleteCursor(FTS3TokenizeCursorWrap *pCursor);
 };
 
-class FTS3TokenizerModule final {
+class WCDB_API FTS3TokenizerModule final {
 public:
     typedef int (*Create)(int argc, const char *const *argv, FTS3TokenizerWrap **ppTokenizer);
     typedef int (*Destroy)(FTS3TokenizerWrap *pTokenizer);
@@ -106,7 +106,7 @@ private:
 
 #pragma mark - fts5
 
-class AbstractFTS5TokenizerModuleTemplate {
+class WCDB_API AbstractFTS5TokenizerModuleTemplate {
 public:
     AbstractFTS5TokenizerModuleTemplate() = delete;
     AbstractFTS5TokenizerModuleTemplate(const AbstractFTS5TokenizerModuleTemplate &) = delete;
@@ -115,7 +115,7 @@ public:
     = delete;
 };
 
-class FTS5TokenizerModule final {
+class WCDB_API FTS5TokenizerModule final {
 public:
     typedef int (*Create)(void *, const char *const *azArg, int nArg, AbstractFTSTokenizer **ppTokenizer);
     typedef int (*Destroy)(AbstractFTSTokenizer *pTokenizer);
@@ -147,7 +147,7 @@ private:
 
 #pragma mark - fts module wrapper
 
-class TokenizerModule {
+class WCDB_API TokenizerModule {
 public:
     TokenizerModule(std::shared_ptr<FTS3TokenizerModule> fts3Module);
     TokenizerModule(std::shared_ptr<FTS5TokenizerModule> fts3Module);

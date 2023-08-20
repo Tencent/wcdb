@@ -27,7 +27,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCTDatabase () {
+WCDB_API @interface WCTDatabase() {
 @private
     // Holder can be null in some case using temporary database object. e.g. inside the non-escape block
     WCDB::RecyclableDatabase _databaseHolder;

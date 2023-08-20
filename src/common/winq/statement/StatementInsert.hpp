@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class StatementInsert final : public SpecifiedSyntax<Syntax::InsertSTMT, Statement> {
+class WCDB_API StatementInsert final : public SpecifiedSyntax<Syntax::InsertSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::InsertSTMT, Statement>::SpecifiedSyntax;
     StatementInsert();

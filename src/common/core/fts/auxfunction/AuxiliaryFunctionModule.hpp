@@ -37,7 +37,7 @@ namespace WCDB {
 
 class AbstractFTS5AuxiliaryFunctionObject;
 
-class FTS5AuxiliaryFunctionAPI {
+class WCDB_API FTS5AuxiliaryFunctionAPI {
 public:
     FTS5AuxiliaryFunctionAPI(const FTS5AuxiliaryFunctionAPIPointer* ptr,
                              FTS5SQLiteContext* sqliteContext,
@@ -91,7 +91,7 @@ private:
     std::function<int(const FTS5AuxiliaryFunctionAPI*)> m_queryCallback;
 };
 
-class AbstractFTS5AuxiliaryFunctionObject {
+class WCDB_API AbstractFTS5AuxiliaryFunctionObject {
 public:
     AbstractFTS5AuxiliaryFunctionObject(int nVal,
                                         FTS5AuxiliaryFunctionValue** apVal,
@@ -101,7 +101,7 @@ public:
     virtual void process(FTS5AuxiliaryFunctionAPI* apiObj) = 0;
 };
 
-class FTS5AuxiliaryFunctionModule final {
+class WCDB_API FTS5AuxiliaryFunctionModule final {
 public:
     typedef void (*AuxiliaryFunction)(const FTS5AuxiliaryFunctionAPIPointer* pApi,
                                       FTS5AuxiliaryFunctionContext* pFts,

@@ -27,7 +27,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCTMigrationBaseInfo () {
+WCDB_API @interface WCTMigrationBaseInfo() {
 @protected
     NSString* _sourceTable;
     NSString* _sourceDatabase;

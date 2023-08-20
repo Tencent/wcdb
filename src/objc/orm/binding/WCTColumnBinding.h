@@ -26,7 +26,7 @@
 #import "WCTRuntimeCppAccessor.h"
 #import "WCTRuntimeObjCAccessor.h"
 
-class WCTColumnBinding final {
+class WCDB_API WCTColumnBinding final {
 public:
     template<typename T>
     static WCTColumnBinding generate(Class cls, const WCDB::UnsafeStringView& propertyName)
@@ -76,7 +76,7 @@ protected:
     std::shared_ptr<const WCTBaseAccessor> m_accessor;
 };
 
-class WCTColumnBindingHolder {
+class WCDB_API WCTColumnBindingHolder {
 public:
     WCTColumnBindingHolder();
     WCTColumnBindingHolder(const WCTColumnBinding& columnBinding);

@@ -28,7 +28,7 @@
 #import <type_traits>
 
 template<typename T>
-class WCTIncompleteOptional {
+class WCDB_API WCTIncompleteOptional {
 public:
     virtual ~WCTIncompleteOptional() = default;
 
@@ -96,7 +96,7 @@ protected:
     }
 };
 
-class WCTOptionalBool final : public WCTFundamentalOptional<BOOL, NO> {
+class WCDB_API WCTOptionalBool final : public WCTFundamentalOptional<BOOL, NO> {
     using Super = WCTFundamentalOptional<BOOL, NO>;
 
 public:
@@ -106,7 +106,7 @@ public:
     ~WCTOptionalBool() override final;
 };
 
-class WCTOptionalSize final : public WCTFundamentalOptional<NSUInteger, 0> {
+class WCDB_API WCTOptionalSize final : public WCTFundamentalOptional<NSUInteger, 0> {
     using Super = WCTFundamentalOptional<NSUInteger, 0>;
 
 public:

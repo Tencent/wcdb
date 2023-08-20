@@ -28,7 +28,8 @@
 
 namespace WCDB {
 
-class StatementCreateView final : public SpecifiedSyntax<Syntax::CreateViewSTMT, Statement> {
+class WCDB_API StatementCreateView final
+: public SpecifiedSyntax<Syntax::CreateViewSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::CreateViewSTMT, Statement>::SpecifiedSyntax;
     StatementCreateView();

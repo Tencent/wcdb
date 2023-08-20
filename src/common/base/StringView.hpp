@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include "Macro.h"
 #include "SysTypes.h"
 #include <atomic>
 #include <map>
@@ -36,7 +37,7 @@ namespace WCDB {
 
 class UnsafeData;
 
-class UnsafeStringView {
+class WCDB_API UnsafeStringView {
 #pragma mark - UnsafeStringView - Constructor
 public:
     UnsafeStringView();
@@ -135,7 +136,7 @@ private:
 #endif
 };
 
-class StringView final : public UnsafeStringView {
+class WCDB_API StringView final : public UnsafeStringView {
 #pragma mark - StringView - Constructor
 public:
     explicit StringView();
@@ -158,7 +159,7 @@ protected:
     void assignString(const char* content, size_t length);
 };
 
-struct StringViewComparator {
+struct WCDB_API StringViewComparator {
     using is_transparent = std::true_type;
 
     bool operator()(const StringView& lhs, const StringView& rhs) const;
@@ -234,7 +235,7 @@ public:
     }
 };
 
-class StringViewSet final : public std::set<StringView, StringViewComparator> {
+class WCDB_API StringViewSet final : public std::set<StringView, StringViewComparator> {
 private:
     using Super = std::set<StringView, StringViewComparator>;
 
@@ -247,4 +248,5 @@ public:
 
 } // namespace WCDB
 
-std::ostream& operator<<(std::ostream& stream, const WCDB::UnsafeStringView& string);
+WCDB_API std::ostream&
+operator<<(std::ostream& stream, const WCDB::UnsafeStringView& string);

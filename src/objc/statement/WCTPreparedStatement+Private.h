@@ -25,7 +25,7 @@
 #import "WCTHandle.h"
 #import "WCTPreparedStatement.h"
 
-@interface WCTPreparedStatement () {
+WCDB_API @interface WCTPreparedStatement() {
 @private
     WCDB::HandleStatement* _handleStatement;
 }

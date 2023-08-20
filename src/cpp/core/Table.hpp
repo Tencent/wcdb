@@ -27,7 +27,7 @@
 
 namespace WCDB {
 
-class BaseTable {
+class WCDB_API BaseTable {
 public:
     BaseTable() = delete;
     BaseTable(const BaseTable &);

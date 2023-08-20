@@ -69,7 +69,7 @@ WCDB_EXTERN NSString* const WCTDatabaseMonitorInfoKeyIndexCount;
 // The number of triggers in the current database.
 WCDB_EXTERN NSString* const WCTDatabaseMonitorInfoKeyTriggerCount;
 
-@interface WCTDatabase (Monitor)
+WCDB_API @interface WCTDatabase(Monitor)
 
 /**
  @brief You can register a reporter to monitor all errors.

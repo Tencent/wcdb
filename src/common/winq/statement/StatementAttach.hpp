@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class StatementAttach final : public SpecifiedSyntax<Syntax::AttachSTMT, Statement> {
+class WCDB_API StatementAttach final : public SpecifiedSyntax<Syntax::AttachSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::AttachSTMT, Statement>::SpecifiedSyntax;
     StatementAttach();

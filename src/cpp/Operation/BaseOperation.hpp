@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class BaseOperation {
+class WCDB_API BaseOperation {
 protected:
     virtual ~BaseOperation() = 0;
     virtual RecyclableHandle getHandleHolder(bool writeHint) = 0;

@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class CommitSTMT final : public Identifier {
+class WCDB_API CommitSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     ~CommitSTMT() override final;

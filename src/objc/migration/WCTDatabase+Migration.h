@@ -39,7 +39,7 @@ typedef void (^WCTMigrationFilterBlock)(WCTMigrationUserInfo*);
  */
 typedef void (^WCTMigratedNotificationBlock)(WCTDatabase* _Nonnull database, WCTMigrationBaseInfo* _Nullable tableInfo);
 
-@interface WCTDatabase (Migration)
+WCDB_API @interface WCTDatabase(Migration)
 
 /**
  @brief Configure which tables in the current database need to migrate data, and the source table they need to migrate data from.

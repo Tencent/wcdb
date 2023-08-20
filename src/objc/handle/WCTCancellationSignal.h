@@ -24,7 +24,7 @@
 
 #import "WCTCommon.h"
 
-@interface WCTCancellationSignal : NSObject
+WCDB_API @interface WCTCancellationSignal : NSObject
 /**
  @brief Cancel all operations of the attached handle.
  @see   `-[WCTHandle attachCancellationSignal:]`

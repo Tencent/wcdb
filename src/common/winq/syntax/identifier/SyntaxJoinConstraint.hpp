@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class JoinConstraint final : public Identifier {
+class WCDB_API JoinConstraint final : public Identifier {
 #pragma mark - Lang
 public:
     ~JoinConstraint() override final;

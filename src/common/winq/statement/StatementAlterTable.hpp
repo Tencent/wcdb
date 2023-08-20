@@ -28,7 +28,8 @@
 
 namespace WCDB {
 
-class StatementAlterTable final : public SpecifiedSyntax<Syntax::AlterTableSTMT, Statement> {
+class WCDB_API StatementAlterTable final
+: public SpecifiedSyntax<Syntax::AlterTableSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::AlterTableSTMT, Statement>::SpecifiedSyntax;
     StatementAlterTable();

@@ -26,7 +26,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCTMigrationBaseInfo : NSObject
+WCDB_API @interface WCTMigrationBaseInfo : NSObject
 
 - (instancetype)init UNAVAILABLE_ATTRIBUTE;
 
@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface WCTMigrationUserInfo : WCTMigrationBaseInfo
+WCDB_API @interface WCTMigrationUserInfo : WCTMigrationBaseInfo
 
 // Set new value to sourceTable in WCTMigrationBaseInfo.
 - (void)setSourceTable:(NSString*)table;

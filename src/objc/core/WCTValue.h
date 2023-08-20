@@ -22,6 +22,7 @@
  * limitations under the License.
  */
 
+#import "Macro.h"
 #import "WCTDeclaration.h"
 
 //It's tricky here. You can use `WCTValue` as any of `NSNumber`/`NSString`/`NSData`/`NSNull`, but it actually is a `NSProxy<WCTValueProtocol>` proxy.
@@ -39,19 +40,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface NSNumber (WCTValue) <WCTValueProtocol>
+WCDB_API @interface NSNumber(WCTValue)<WCTValueProtocol>
 
 @end
 
-@interface NSData (WCTValue) <WCTValueProtocol>
+WCDB_API @interface NSData(WCTValue)<WCTValueProtocol>
 
 @end
 
-@interface NSString (WCTValue) <WCTValueProtocol>
+WCDB_API @interface NSString(WCTValue)<WCTValueProtocol>
 
 @end
 
-@interface NSNull (WCTValue) <WCTValueProtocol>
+WCDB_API @interface NSNull(WCTValue)<WCTValueProtocol>
 
 @end
 

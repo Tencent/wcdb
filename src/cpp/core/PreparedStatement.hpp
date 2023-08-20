@@ -29,7 +29,7 @@
 
 namespace WCDB {
 
-class PreparedStatement final : public StatementOperation {
+class WCDB_API PreparedStatement final : public StatementOperation {
     friend class Handle;
 
 public:

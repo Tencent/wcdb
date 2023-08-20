@@ -29,7 +29,7 @@
 
 namespace WCDB {
 
-class AggregateFunction final {
+class WCDB_API AggregateFunction final {
 public:
     AggregateFunction() = delete;
     AggregateFunction(const AggregateFunction&) = delete;
@@ -46,7 +46,7 @@ public:
     static Expression total(const Expression& expression);
 };
 
-class AggregateFunctionOperable : virtual public ExpressionOperable {
+class WCDB_API AggregateFunctionOperable : virtual public ExpressionOperable {
 public:
     virtual ~AggregateFunctionOperable() override = 0;
     Expression avg() const;

@@ -34,7 +34,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class TableConstraint final : public Identifier {
+class WCDB_API TableConstraint final : public Identifier {
 #pragma mark - Lang
 public:
     ~TableConstraint() override final;

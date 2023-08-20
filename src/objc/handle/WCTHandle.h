@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
  This class is a wrapper for sqlite db handle of type `sqlite3*`
  @warning Not Thread-safe.
  */
-@interface WCTHandle : NSObject
+WCDB_API @interface WCTHandle : NSObject
 
 /**
  You should use `WCDB_GET_SCOPED_HANDLE` or `-[WCTDatabase getHandle]` to obtain WCTHandle.

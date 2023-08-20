@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class CreateViewSTMT final : public Identifier {
+class WCDB_API CreateViewSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     ~CreateViewSTMT() override final;

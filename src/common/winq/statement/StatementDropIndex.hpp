@@ -28,7 +28,8 @@
 
 namespace WCDB {
 
-class StatementDropIndex final : public SpecifiedSyntax<Syntax::DropIndexSTMT, Statement> {
+class WCDB_API StatementDropIndex final
+: public SpecifiedSyntax<Syntax::DropIndexSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::DropIndexSTMT, Statement>::SpecifiedSyntax;
     StatementDropIndex();

@@ -29,7 +29,7 @@
 
 namespace WCDB {
 
-class ColumnDef final : public SpecifiedSyntax<Syntax::ColumnDef, SQL> {
+class WCDB_API ColumnDef final : public SpecifiedSyntax<Syntax::ColumnDef, SQL> {
 public:
     using SpecifiedSyntax<Syntax::ColumnDef, SQL>::SpecifiedSyntax;
 

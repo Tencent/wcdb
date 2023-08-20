@@ -29,7 +29,7 @@
 
 namespace WCDB {
 
-class BaseAccessor {
+class WCDB_API BaseAccessor {
 public:
     BaseAccessor();
     virtual ~BaseAccessor() = 0;
