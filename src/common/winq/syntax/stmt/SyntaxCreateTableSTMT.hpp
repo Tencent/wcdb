@@ -34,7 +34,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class CreateTableSTMT final : public Identifier {
+class WCDB_API CreateTableSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     ~CreateTableSTMT() override final;

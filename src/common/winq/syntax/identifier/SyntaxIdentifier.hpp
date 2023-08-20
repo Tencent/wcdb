@@ -37,11 +37,11 @@ namespace WCDB {
 
 namespace Syntax {
 
-class Identifier : public Cloneable<Identifier> {
+class WCDB_API Identifier : public Cloneable<Identifier> {
 public:
     virtual ~Identifier() override = 0;
 
-    enum class Type : signed char {
+    enum class WCDB_API Type : signed char {
         Invalid = 0,
         Column,
         Schema,
@@ -171,7 +171,7 @@ std::ostream& operator<<(std::ostream& stream, const std::list<T>& identifiers)
     }
 
 #define WCDB_SYNTAX_UNION_ENUM(Type, nameOfType, First, ...)                   \
-    enum class Type : signed char { First = 1, __VA_ARGS__ };                  \
+    enum class WCDB_API Type : signed char { First = 1, __VA_ARGS__ };         \
     __WCDB_SYNTAX_UNION_ENUM(Type, nameOfType, __##nameOfType##Valid);         \
     bool nameOfType##Valid() const                                             \
     {                                                                          \
@@ -179,7 +179,7 @@ std::ostream& operator<<(std::ostream& stream, const std::list<T>& identifiers)
     }
 
 #define WCDB_SYNTAX_MAIN_UNION_ENUM(First, ...)                                \
-    enum class Switch : signed char { First = 1, __VA_ARGS__ };                \
+    enum class WCDB_API Switch : signed char { First = 1, __VA_ARGS__ };       \
     __WCDB_SYNTAX_UNION_ENUM(Switch, switcher, __is_valid);                    \
     bool isValid() const override final                                        \
     {                                                                          \

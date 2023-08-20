@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class OrderingTerm final : public Identifier {
+class WCDB_API OrderingTerm final : public Identifier {
 #pragma mark - Lang
 public:
     ~OrderingTerm() override final;

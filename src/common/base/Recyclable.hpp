@@ -24,13 +24,14 @@
 
 #pragma once
 
+#include "Macro.h"
 #include <atomic>
 #include <functional>
 #include <memory>
 
 namespace WCDB {
 
-class Referenced {
+class WCDB_API Referenced {
 public:
     Referenced();
     Referenced(const std::nullptr_t &);

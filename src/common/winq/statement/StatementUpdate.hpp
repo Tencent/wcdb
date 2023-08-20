@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class StatementUpdate final : public SpecifiedSyntax<Syntax::UpdateSTMT, Statement> {
+class WCDB_API StatementUpdate final : public SpecifiedSyntax<Syntax::UpdateSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::UpdateSTMT, Statement>::SpecifiedSyntax;
     StatementUpdate();

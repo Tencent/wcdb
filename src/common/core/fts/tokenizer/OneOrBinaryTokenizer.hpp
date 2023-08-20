@@ -27,7 +27,7 @@
 
 namespace WCDB {
 
-class OneOrBinaryTokenizer final : public AbstractFTSTokenizer {
+class WCDB_API OneOrBinaryTokenizer final : public AbstractFTSTokenizer {
 public:
     OneOrBinaryTokenizer(const char *const *azArg, int nArg, void *pCtx);
     ~OneOrBinaryTokenizer();

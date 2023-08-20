@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class RaiseFunction final : public Identifier {
+class WCDB_API RaiseFunction final : public Identifier {
 #pragma mark - Lang
 public:
     ~RaiseFunction() override final;

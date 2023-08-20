@@ -26,7 +26,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCTTable (Table)
+WCDB_API @interface WCTTable(Table)
 
 - (NSString *)indexWithSuffix:(NSString *)indexSuffix;
 

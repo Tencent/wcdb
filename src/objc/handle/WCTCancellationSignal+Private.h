@@ -25,7 +25,7 @@
 #import "WCTCancellationSignal.h"
 #include <memory>
 
-@interface WCTCancellationSignal () {
+WCDB_API @interface WCTCancellationSignal() {
     std::shared_ptr<volatile bool> m_signal;
 }
 - (std::shared_ptr<volatile bool>)getInnerSignal;

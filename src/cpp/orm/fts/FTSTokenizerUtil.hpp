@@ -29,7 +29,7 @@
 
 namespace WCDB {
 
-class FTSTokenizerUtil final : public BaseTokenizerUtil {
+class WCDB_API FTSTokenizerUtil final : public BaseTokenizerUtil {
 public:
     static StringView tokenize(const char* name, ...);
 };

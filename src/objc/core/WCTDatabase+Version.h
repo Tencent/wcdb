@@ -26,7 +26,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCTDatabase (Version)
+WCDB_API @interface WCTDatabase(Version)
 
 /**
  Version of WCDB.

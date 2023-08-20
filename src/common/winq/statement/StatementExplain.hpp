@@ -28,7 +28,8 @@
 
 namespace WCDB {
 
-class StatementExplain final : public SpecifiedSyntax<Syntax::ExplainSTMT, Statement> {
+class WCDB_API StatementExplain final
+: public SpecifiedSyntax<Syntax::ExplainSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::ExplainSTMT, Statement>::SpecifiedSyntax;
     StatementExplain();

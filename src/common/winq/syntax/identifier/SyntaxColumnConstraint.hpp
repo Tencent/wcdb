@@ -33,7 +33,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class ColumnConstraint final : public Identifier {
+class WCDB_API ColumnConstraint final : public Identifier {
 #pragma mark - Lang
 public:
     ~ColumnConstraint() override final;

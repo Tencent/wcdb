@@ -31,7 +31,7 @@ namespace WCDB {
 
 class InnerHandle;
 
-class BaseBinding {
+class WCDB_API BaseBinding {
 public:
     BaseBinding();
     virtual ~BaseBinding() = 0;

@@ -26,7 +26,7 @@
 #import <functional>
 #import <objc/runtime.h>
 
-class WCTRuntimeBaseAccessor {
+class WCDB_API WCTRuntimeBaseAccessor {
 public:
     WCTRuntimeBaseAccessor(Class cls, const WCDB::UnsafeStringView &propertyName);
 

@@ -30,7 +30,7 @@
 namespace WCDB {
 
 template<>
-class LiteralValueConvertible<bool> final : public std::true_type {
+class WCDB_API LiteralValueConvertible<bool> final : public std::true_type {
 public:
     static LiteralValue asLiteralValue(const bool& t);
 };
@@ -108,7 +108,7 @@ public:
 };
 
 template<>
-class LiteralValueConvertible<Value> final : public std::true_type {
+class WCDB_API LiteralValueConvertible<Value> final : public std::true_type {
 public:
     static LiteralValue asLiteralValue(const Value& value);
 };
@@ -124,37 +124,37 @@ public:
 };
 
 template<>
-class ExpressionConvertible<Column> final : public std::true_type {
+class WCDB_API ExpressionConvertible<Column> final : public std::true_type {
 public:
     static Expression asExpression(const Column& column);
 };
 
 template<>
-class ExpressionConvertible<BindParameter> final : public std::true_type {
+class WCDB_API ExpressionConvertible<BindParameter> final : public std::true_type {
 public:
     static Expression asExpression(const BindParameter& bindParameter);
 };
 
 template<>
-class ExpressionConvertible<LiteralValue> final : public std::true_type {
+class WCDB_API ExpressionConvertible<LiteralValue> final : public std::true_type {
 public:
     static Expression asExpression(const LiteralValue& literalValue);
 };
 
 template<>
-class ExpressionConvertible<Value> final : public std::true_type {
+class WCDB_API ExpressionConvertible<Value> final : public std::true_type {
 public:
     static Expression asExpression(const Value& value);
 };
 
 template<>
-class ExpressionConvertible<RaiseFunction> final : public std::true_type {
+class WCDB_API ExpressionConvertible<RaiseFunction> final : public std::true_type {
 public:
     static Expression asExpression(const RaiseFunction& raiseFunction);
 };
 
 template<>
-class ExpressionConvertible<StatementSelect> final : public std::true_type {
+class WCDB_API ExpressionConvertible<StatementSelect> final : public std::true_type {
 public:
     static Expression asExpression(const StatementSelect& statementSelect);
 };
@@ -170,13 +170,13 @@ public:
 };
 
 template<>
-class IndexedColumnConvertible<Column> final : public std::true_type {
+class WCDB_API IndexedColumnConvertible<Column> final : public std::true_type {
 public:
     static IndexedColumn asIndexedColumn(const Column& column);
 };
 
 template<>
-class IndexedColumnConvertible<Expression> final : public std::true_type {
+class WCDB_API IndexedColumnConvertible<Expression> final : public std::true_type {
 public:
     static IndexedColumn asIndexedColumn(const Expression& expression);
 };
@@ -202,7 +202,7 @@ public:
 };
 
 template<>
-class ResultColumnConvertible<Expression> final : public std::true_type {
+class WCDB_API ResultColumnConvertible<Expression> final : public std::true_type {
 public:
     static ResultColumn asResultColumn(const Expression& expression);
 };
@@ -228,7 +228,7 @@ public:
 };
 
 template<>
-class OrderingTermConvertible<Expression> final : public std::true_type {
+class WCDB_API OrderingTermConvertible<Expression> final : public std::true_type {
 public:
     static OrderingTerm asOrderingTerm(const Expression& expression);
 };
@@ -244,13 +244,13 @@ public:
 };
 
 template<>
-class TableOrSubqueryConvertible<Join> final : public std::true_type {
+class WCDB_API TableOrSubqueryConvertible<Join> final : public std::true_type {
 public:
     static TableOrSubquery asTableOrSubquery(const Join& join);
 };
 
 template<>
-class TableOrSubqueryConvertible<StatementSelect> final : public std::true_type {
+class WCDB_API TableOrSubqueryConvertible<StatementSelect> final : public std::true_type {
 public:
     static TableOrSubquery asTableOrSubquery(const StatementSelect& select);
 };

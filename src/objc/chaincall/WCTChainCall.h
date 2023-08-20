@@ -54,7 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (WCTMultiSelect *)prepareMultiSelect;
 @end
 
-@interface WCTChainCall : NSObject
+WCDB_API @interface WCTChainCall : NSObject
 
 - (instancetype)init UNAVAILABLE_ATTRIBUTE;
 

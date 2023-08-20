@@ -41,7 +41,7 @@ typedef BOOL (^WCTBackupFilterBlock)(NSString * /* table */);
  */
 typedef void (^WCTRetrieveProgressUpdateBlock)(double /* percentage */, double /* increment */);
 
-@interface WCTDatabase (Repair)
+WCDB_API @interface WCTDatabase(Repair)
 
 /**
  @brief Register database corruption notification callback.

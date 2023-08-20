@@ -29,7 +29,7 @@
 
 namespace WCDB {
 
-class MultiSelect : public ChainCall<StatementSelect> {
+class WCDB_API MultiSelect : public ChainCall<StatementSelect> {
     template<class ObjectType>
     friend class TableORMOperation;
     friend class HandleORMOperation;

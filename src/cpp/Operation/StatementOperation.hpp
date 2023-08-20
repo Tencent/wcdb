@@ -30,7 +30,7 @@
 
 namespace WCDB {
 
-class StatementOperation {
+class WCDB_API StatementOperation {
 public:
 #pragma mark - Basic
     /**

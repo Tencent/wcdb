@@ -34,7 +34,7 @@
 
 namespace WCDB {
 
-class Database final : public HandleORMOperation {
+class WCDB_API Database final : public HandleORMOperation {
 public:
     /**
      @brief Init a database from path.

@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class Schema final : public Identifier {
+class WCDB_API Schema final : public Identifier {
 #pragma mark - Syntax
 public:
     Schema();

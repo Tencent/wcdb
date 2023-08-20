@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 typedef void (^WCTCloseBlock)(void);
 
-@interface WCTDatabase : NSObject
+WCDB_API @interface WCTDatabase : NSObject
 
 /**
  @brief Set/Get the tag of the database. Tag is 0 by default.

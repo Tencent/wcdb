@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class StatementCreateIndex final
+class WCDB_API StatementCreateIndex final
 : public SpecifiedSyntax<Syntax::CreateIndexSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::CreateIndexSTMT, Statement>::SpecifiedSyntax;

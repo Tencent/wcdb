@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class DropTriggerSTMT final : public Identifier {
+class WCDB_API DropTriggerSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     ~DropTriggerSTMT() override final;

@@ -32,7 +32,7 @@ typedef NS_OPTIONS(NSUInteger, WCTSimulateIOErrorOptions) {
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCTDatabase (Test)
+WCDB_API @interface WCTDatabase(Test)
 
 // Only for test
 + (void)simulateIOError:(WCTSimulateIOErrorOptions)options;

@@ -31,7 +31,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class ColumnDef final : public Identifier {
+class WCDB_API ColumnDef final : public Identifier {
 #pragma mark - Syntax
 public:
     ~ColumnDef() override final;

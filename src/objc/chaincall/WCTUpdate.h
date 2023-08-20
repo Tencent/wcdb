@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Not Thread-safe
  */
-@interface WCTUpdate<ObjectType> : WCTChainCall
+WCDB_API @interface WCTUpdate<ObjectType> : WCTChainCall
 
 /**
  @brief The statement that `WCTUpdate` will execute.
