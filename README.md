@@ -100,6 +100,12 @@ Tutorials of different languages can be found below:
 
 If you are interested in contributing, check out the [CONTRIBUTING.md], also join our [Tencent OpenSource Plan](https://opensource.tencent.com/contribution).
 
+# 信息公示
+
+* 开发者: 深圳市腾讯计算机系统有限公司
+
+* [WCDB 个人信息保护规则][wcdb-privacy]
+
 [wcdb-wiki]: https://github.com/Tencent/wcdb/wiki
 [wcdb-docs-android]: https://tencent.github.io/wcdb/references/android/index.html
 [room]: https://developer.android.com/topic/libraries/architecture/room
@@ -111,4 +117,5 @@ If you are interested in contributing, check out the [CONTRIBUTING.md], also joi
 [wcdb-swift-tutorials]:https://github.com/Tencent/wcdb/wiki/Swift-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8
 [wcdb-objc-tutorials]:https://github.com/Tencent/wcdb/wiki/Objc-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8
 [Benchmark-iOS]: https://github.com/Tencent/wcdb/wiki/WCDB-iOS-benchmark
+[wcdb-privacy]: https://support.weixin.qq.com/cgi-bin/mmsupportacctnodeweb-bin/pages/GepveGs4q4eAgpoh
 
