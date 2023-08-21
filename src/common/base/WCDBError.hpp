@@ -71,6 +71,8 @@ public:
             return "ERROR";
         case Level::Fatal:
             return "FATAL";
+        default:
+            return "UNKNOWN";
         }
     }
     bool isIgnorable() const;
@@ -178,6 +180,8 @@ public:
             return "Row";
         case Code::Done:
             return "Done";
+        default:
+            return "Unknown";
         }
     }
 

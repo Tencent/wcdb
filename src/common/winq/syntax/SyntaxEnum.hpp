@@ -43,6 +43,8 @@ constexpr const char* Enum::description(const Syntax::ColumnType& columnType)
         return "TEXT";
     case Syntax::ColumnType::BLOB:
         return "BLOB";
+    default:
+        return "";
     }
 }
 
@@ -58,6 +60,8 @@ constexpr const char* Enum::description(const Syntax::CompoundOperator& compound
         return "INTERSECT";
     case Syntax::CompoundOperator::Except:
         return "EXCEPT";
+    default:
+        return "";
     }
 }
 
@@ -75,6 +79,8 @@ constexpr const char* Enum::description(const Syntax::Conflict& conflict)
         return "ON CONFLICT IGNORE";
     case Syntax::Conflict::Replace:
         return "ON CONFLICT REPLACE";
+    default:
+        return "";
     }
 }
 
@@ -104,6 +110,8 @@ constexpr const char* Enum::description(const Syntax::JoinOperator& joinOperator
         return "NATURAL INNER JOIN";
     case Syntax::JoinOperator::NaturalCrossJoin:
         return "NATURAL CROSS JOIN";
+    default:
+        return "";
     }
 }
 
@@ -115,6 +123,8 @@ constexpr const char* Enum::description(const Syntax::Order& order)
         return "ASC";
     case Syntax::Order::DESC:
         return "DESC";
+    default:
+        return "";
     }
 }
 
@@ -132,6 +142,8 @@ constexpr const char* Enum::description(const Syntax::ConflictAction& action)
         return "OR FAIL";
     case Syntax::ConflictAction::Ignore:
         return "OR IGNORE";
+    default:
+        return "";
     }
 }
 
@@ -145,6 +157,8 @@ constexpr const char* Enum::description(const Syntax::MatchType& match)
         return "FULL";
     case Syntax::MatchType::Partial:
         return "PARTIAL";
+    default:
+        return "";
     }
 }
 

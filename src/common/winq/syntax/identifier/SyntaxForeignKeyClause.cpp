@@ -52,6 +52,8 @@ constexpr const char* Enum::description(const Syntax::ForeignKeyClause::Switch& 
         return "ON UPDATE RESTRICT";
     case Syntax::ForeignKeyClause::Switch::OnUpdateNoAction:
         return "ON UPDATE NO ACTION";
+    default:
+        return "";
     }
 }
 
@@ -72,6 +74,8 @@ Enum::description(const Syntax::ForeignKeyClause::Deferrable& deferrable)
         return "NOT DEFERRABLE INITIALLY IMMEDIATE";
     case Syntax::ForeignKeyClause::Deferrable::NotDeferrable:
         return "NOT DEFERRABLE";
+    default:
+        return "";
     }
 }
 

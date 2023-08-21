@@ -36,6 +36,8 @@ constexpr const char* Enum::description(const Syntax::FrameSpec::Switch& switche
         return "RANGE";
     case Syntax::FrameSpec::Switch::Rows:
         return "ROWS";
+    default:
+        return "";
     }
 }
 
@@ -51,6 +53,8 @@ constexpr const char* Enum::description(const Syntax::FrameSpec::FirstEvent& fir
         return "CURRENT ROW";
     case Syntax::FrameSpec::FirstEvent::Following:
         return "FOLLOWING";
+    default:
+        return "";
     }
 }
 
@@ -66,6 +70,8 @@ constexpr const char* Enum::description(const Syntax::FrameSpec::SecondEvent& se
         return "CURRENT ROW";
     case Syntax::FrameSpec::SecondEvent::Following:
         return "FOLLOWING";
+    default:
+        return "";
     }
 }
 
