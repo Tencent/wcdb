@@ -40,6 +40,8 @@ constexpr const char* Enum::description(const Syntax::RaiseFunction::Switch& swi
         return "ABORT";
     case Syntax::RaiseFunction::Switch::Fail:
         return "FAIL";
+    default:
+        return "";
     }
 }
 

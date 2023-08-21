@@ -43,6 +43,8 @@ Enum::description(const Syntax::Expression::UnaryOperator& unaryOperator)
         return "NOT";
     case Syntax::Expression::UnaryOperator::Null:
         return "NULL";
+    default:
+        return "";
     }
 }
 
@@ -97,6 +99,8 @@ Enum::description(const Syntax::Expression::BinaryOperator& binaryOperator)
         return "REGEXP";
     case Syntax::Expression::BinaryOperator::Match:
         return "MATCH";
+    default:
+        return "";
     }
 }
 

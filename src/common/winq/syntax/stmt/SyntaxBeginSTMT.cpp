@@ -38,6 +38,8 @@ constexpr const char* Enum::description(const Syntax::BeginSTMT::Switch& switche
         return "IMMEDIATE";
     case Syntax::BeginSTMT::Switch::Exclusive:
         return "EXCLUSIVE";
+    default:
+        return "";
     }
 }
 

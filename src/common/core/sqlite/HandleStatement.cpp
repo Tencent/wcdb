@@ -564,6 +564,8 @@ Value HandleStatement::getValue(int index)
         return Value(getText(index));
     case ColumnType::BLOB:
         return Value(getBLOB(index));
+    default:
+        return Value(nullptr);
     }
 }
 

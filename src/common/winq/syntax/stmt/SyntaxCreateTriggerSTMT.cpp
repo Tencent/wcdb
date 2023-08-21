@@ -38,6 +38,8 @@ constexpr const char* Enum::description(const Syntax::CreateTriggerSTMT::Timing&
         return "AFTER";
     case Syntax::CreateTriggerSTMT::Timing::InsteadOf:
         return "INSTEAD OF";
+    default:
+        return "";
     }
 }
 
@@ -51,6 +53,8 @@ constexpr const char* Enum::description(const Syntax::CreateTriggerSTMT::Event& 
         return "INSERT";
     case Syntax::CreateTriggerSTMT::Event::Update:
         return "UPDATE";
+    default:
+        return "";
     }
 }
 

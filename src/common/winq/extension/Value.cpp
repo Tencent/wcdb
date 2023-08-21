@@ -88,6 +88,8 @@ bool Value::operator==(const Value &other) const
                m_blobValue.buffer(), other.m_blobValue.buffer(), m_blobValue.size())
                == 0;
     }
+    default:
+        return false;
     }
 }
 
@@ -215,6 +217,8 @@ int64_t Value::intValue() const
     case Type::Null: {
         return 0;
     }
+    default:
+        return 0;
     }
 }
 double Value::floatValue() const
@@ -245,6 +249,8 @@ double Value::floatValue() const
     case Type::Null: {
         return 0;
     }
+    default:
+        return 0;
     }
 }
 
@@ -264,6 +270,8 @@ StringView Value::textValue() const
     case Type::Null: {
         return StringView();
     }
+    default:
+        return StringView();
     }
 }
 
@@ -287,6 +295,8 @@ Data Value::blobValue() const
     case Type::Null: {
         return Data();
     }
+    default:
+        return Data();
     }
 }
 
@@ -307,6 +317,8 @@ bool Value::isEmpty() const
     case Type::BLOB:
         return m_blobValue.size() == 0;
     case Type::Null:
+        return true;
+    default:
         return true;
     }
 }

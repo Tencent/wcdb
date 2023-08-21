@@ -40,6 +40,8 @@ constexpr const char* Enum::description(const Syntax::BindParameter::Switch& swi
         return "$";
     case Syntax::BindParameter::Switch::AtSign:
         return "@";
+    default:
+        return "";
     }
 }
 
