@@ -278,6 +278,12 @@ else()
     target_compile_definitions(sqlcipher PRIVATE NDEBUG)
 endif()
 
+if(MSVC)
+    target_compile_options(sqlcipher PRIVATE /W4)
+else()
+    target_compile_options(sqlcipher PRIVATE -Wall -Wno-unused)
+endif()
+
 # Prebuilt OpenSSL Library
 if(ANDROID)
     set(PREBUILT_CRYPTO_LIB 

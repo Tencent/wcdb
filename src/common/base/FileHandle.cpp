@@ -119,6 +119,7 @@ void FileHandle::close()
     if (m_fd != -1) {
         int ret = ::close(m_fd);
         WCTAssert(ret == 0);
+        (void) ret;
         m_fd = -1;
     }
 }
