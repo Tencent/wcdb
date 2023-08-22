@@ -130,7 +130,7 @@ public class Database extends HandleORMOperation {
     }
 
     @Override
-    Handle getHandle(boolean writeHint) {
+    public Handle getHandle(boolean writeHint) {
         return new Handle(this, writeHint);
     }
 

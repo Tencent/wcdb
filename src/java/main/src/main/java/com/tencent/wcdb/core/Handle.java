@@ -26,7 +26,7 @@ import com.tencent.wcdb.base.CppObject;
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.winq.Statement;
 
-public class Handle extends HandleORMOperation {
+public class Handle extends HandleORMOperation implements AutoCloseable {
     private PreparedStatement mainStatement = null;
     private final Database database;
 
@@ -114,6 +114,11 @@ public class Handle extends HandleORMOperation {
             cppObj = 0;
             writeHint = false;
         }
+    }
+
+    @Override
+    public void close() {
+        invalidate();
     }
 
     native int tableExist(long self, String tableName);
