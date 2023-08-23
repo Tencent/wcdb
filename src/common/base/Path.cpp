@@ -64,10 +64,13 @@ StringView getFileName(const UnsafeStringView &base)
 
 StringView getDirectoryName(const UnsafeStringView &base)
 {
+    if (base.length() <= 2) {
+        return StringView(base);
+    }
     std::string dir = base.data();
-    int64_t found = dir.find_last_of(kPathSeparator);
+    int64_t found = dir.find_last_of(kPathSeparator, base.length() - 2);
     if (found >= 0) {
-        return StringView(dir.substr(0, found));
+        return StringView(dir.substr(0, found + 1));
     } else {
         return StringView();
     }
