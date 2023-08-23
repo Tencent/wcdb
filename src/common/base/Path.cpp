@@ -62,7 +62,7 @@ StringView getFileName(const UnsafeStringView &base)
     WCTAssert(str != nullptr || base.length() == 0);
     for (int i = (int) base.length() - 1; i >= 0; i--) {
         if (str[i] == kPathSeparator) {
-            return StringView(str + i + 1, base.length() - i);
+            return StringView(str + i + 1, base.length() - i - 1);
         }
     }
     return StringView(base);
