@@ -77,7 +77,7 @@ bool FactoryRenewer::work()
 
     std::list<StringView> toMove = Factory::associatedPathsForDatabase(database);
     toMove.reverse();
-    if (!FileManager::moveItems(toMove, Path::getDirectoryName(factory.database))) {
+    if (!FileManager::moveItems(toMove, Path::getDirectory(factory.database))) {
         assignWithSharedThreadedError();
         return false;
     }

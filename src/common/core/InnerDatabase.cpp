@@ -152,8 +152,7 @@ InnerDatabase::InitializedGuard InnerDatabase::initialize()
             m_initialized = true;
             continue;
         }
-        if (!FileManager::createDirectoryWithIntermediateDirectories(
-            Path::getDirectoryName(path))) {
+        if (!FileManager::createDirectoryWithIntermediateDirectories(Path::getDirectory(path))) {
             assignWithSharedThreadedError();
             break;
         }
