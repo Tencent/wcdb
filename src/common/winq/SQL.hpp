@@ -95,8 +95,7 @@ public:
         this->m_syntaxPtr = &m_syntax;
     }
 
-    SpecifiedSyntax(SyntaxType&& syntax)
-    : Super(std::move(syntax)), m_syntax(std::move(syntax))
+    SpecifiedSyntax(SyntaxType&& syntax) : Super(), m_syntax(std::move(syntax))
     {
         this->m_syntaxPtr = &m_syntax;
     }

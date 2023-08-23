@@ -342,7 +342,8 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
             return false;
         }
         if (!hasOpened && (slot == HandleSlotNormal || slot == HandleSlotMigrating)) {
-            std::clock_t openTime = (std::clock() - start) / (CLOCKS_PER_SEC / 1000000);
+            std::clock_t openTime
+            = (std::clock() - start) / ((double) CLOCKS_PER_SEC / 1000000);
             int memoryUsed, tableCount, indexCount, triggerCount;
             if (handle->getSchemaInfo(memoryUsed, tableCount, indexCount, triggerCount)) {
                 StringViewMap<Value> info;

@@ -57,11 +57,11 @@ if (NOT DEFINED CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
 endif ()
 
-if (NOT DEFINED BUILD_SHARED_LIBS)
+if (NOT DEFINED BUILD_SHARED_LIBS AND NOT DEFINED WIN32)
     set(BUILD_SHARED_LIBS ON)
 endif ()
 
-// Hide symbols by default
+# Hide symbols by default
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_C_VISIBILITY_PRESET hidden)
 
@@ -92,6 +92,7 @@ if (WIN32)
             $<$<CONFIG:Release>:/MT> #--|
     )
     add_compile_options(/wd4068)  # Disable unknown pragma warnings
+    add_compile_options(/wd4996)
 else ()
     enable_language(C CXX)
     set(COMM_FLAGS_ "-Wall -g")
