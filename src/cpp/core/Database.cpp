@@ -413,15 +413,16 @@ void Database::setConfig(const UnsafeStringView& name,
                          Priority priority)
 {
     m_innerDatabase->purge();
+    InnerDatabase* database = m_innerDatabase;
     CustomConfig::Invocation configInvocation
-    = [invocation, this](InnerHandle* innerHandle) -> bool {
-        Handle handle = Handle(m_databaseHolder, innerHandle);
+    = [invocation, database](InnerHandle* innerHandle) -> bool {
+        Handle handle = Handle(RecyclableDatabase(database, nullptr), innerHandle);
         return invocation(handle);
     };
     CustomConfig::Invocation configUninvocation = nullptr;
     if (unInvocation != nullptr) {
-        configUninvocation = [unInvocation, this](InnerHandle* innerHandle) -> bool {
-            Handle handle = Handle(m_databaseHolder, innerHandle);
+        configUninvocation = [unInvocation, database](InnerHandle* innerHandle) -> bool {
+            Handle handle = Handle(RecyclableDatabase(database, nullptr), innerHandle);
             return unInvocation(handle);
         };
     }
