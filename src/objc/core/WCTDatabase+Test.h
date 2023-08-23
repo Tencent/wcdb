@@ -30,8 +30,6 @@ typedef NS_OPTIONS(NSUInteger, WCTSimulateIOErrorOptions) {
     WCTSimulateWriteIOError = 1 << 1,
 };
 
-#ifdef WCDB_TESTS
-
 NS_ASSUME_NONNULL_BEGIN
 
 WCDB_API @interface WCTDatabase(Test)
@@ -92,5 +90,3 @@ WCDB_API @interface WCTDatabase(Test)
 @end
 
 NS_ASSUME_NONNULL_END
-
-#endif
