@@ -31,7 +31,7 @@ public interface TableBinding<T> {
 
     Binding baseBinding();
 
-    T extractObject(Field<T>[] fields, PreparedStatement preparedStatement);
+    <R extends T> R extractObject(Field<T>[] fields, PreparedStatement preparedStatement, Class<R> cls) throws ReflectiveOperationException;
 
     void bindField(T object, Field<T> field, int index, PreparedStatement preparedStatement);
 

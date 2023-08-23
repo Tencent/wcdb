@@ -31,6 +31,7 @@ import com.tencent.wcdb.winq.ColumnType;
 import com.tencent.wcdb.winq.Statement;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class PreparedStatement extends CppObject {
@@ -377,19 +378,42 @@ public class PreparedStatement extends CppObject {
     }
 
     public <T> T getOneObject(Field<T>[] fields) {
+        return getOneObject(fields, Field.getBindClass(fields));
+    }
+
+    public <T, R extends T> R getOneObject(Field<T>[] fields, Class<R> cls) {
         assert fields != null && fields.length > 0;
         if(fields == null || fields.length == 0) {
             return null;
         }
-        return fields[0].getTableBinding().extractObject(fields, this);
+
+        try {
+            return fields[0].getTableBinding().extractObject(fields, this, cls);
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public <T> List<T> getAllObjects(Field<T>[] fields) throws WCDBException {
-        List<T> objs = new ArrayList<T>();
+        return getAllObjects(fields, Field.getBindClass(fields));
+    }
+
+    public <T, R extends T> List<R> getAllObjects(Field<T>[] fields, Class<R> cls) throws WCDBException {
+        assert fields != null && fields.length > 0;
+        if(fields == null || fields.length == 0) {
+            return Collections.emptyList();
+        }
+        TableBinding<T> tb = fields[0].getTableBinding();
+
+        List<R> objs = new ArrayList<>();
         step();
-        while (!isDone(cppObj)) {
-            objs.add(getOneObject(fields));
-            step();
+        try {
+            while (!isDone(cppObj)) {
+                objs.add(tb.extractObject(fields, this, cls));
+                step();
+            }
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
         }
         return objs;
     }

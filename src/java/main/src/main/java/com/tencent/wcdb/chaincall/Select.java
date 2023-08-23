@@ -93,12 +93,16 @@ public class Select<T> extends ChainCall<StatementSelect> {
     }
 
     public T firstObject() throws WCDBException {
-        T ret = null;
+        return firstObject(Field.getBindClass(fields));
+    }
+
+    public <R extends T> R firstObject(Class<R> cls) throws WCDBException {
+        R ret = null;
         try {
             PreparedStatement preparedStatement = prepareStatement();
             preparedStatement.step();
             if(!preparedStatement.isDone()) {
-                ret = preparedStatement.getOneObject(fields);
+                ret = preparedStatement.getOneObject(fields, cls);
             }
             preparedStatement.finalizeStatement();
         } finally {
@@ -108,10 +112,14 @@ public class Select<T> extends ChainCall<StatementSelect> {
     }
 
     public List<T> allObjects() throws WCDBException {
-        List<T> ret;
+        return allObjects(Field.getBindClass(fields));
+    }
+
+    public <R extends T> List<R> allObjects(Class<R> cls) throws WCDBException {
+        List<R> ret;
         try {
             PreparedStatement preparedStatement = prepareStatement();
-            ret = preparedStatement.getAllObjects(fields);
+            ret = preparedStatement.getAllObjects(fields, cls);
             preparedStatement.finalizeStatement();
         } finally {
             invalidateHandle();

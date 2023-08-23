@@ -42,7 +42,7 @@ class KotlinCodeGenerator {
         generateImport()
         builder.append("object $ormClassName: TableBinding<$className> {\n")
 
-        builder.append("${TAB}private final var baseBinding: Binding\n")
+        builder.append("${TAB}private final val baseBinding: Binding\n")
         generateFields()
         builder.append("\n${TAB}init {\n")
         builder.append("$TAB${TAB}baseBinding = Binding()\n")
@@ -74,7 +74,7 @@ class KotlinCodeGenerator {
     private fun generateFields() {
         for ((propertyName) in allColumnInfo) {
             builder.append("${TAB}@JvmField\n")
-            builder.append("${TAB}final var $propertyName : Field<$className>\n")
+            builder.append("${TAB}final val $propertyName : Field<$className>\n")
         }
     }
 
@@ -171,40 +171,30 @@ class KotlinCodeGenerator {
     }
 
     private fun generateBindingType() {
-        builder.append("${TAB}override fun bindingType(): Class<$className> {\n")
-        builder.append("$TAB${TAB}return $className::class.java\n")
-        builder.append("$TAB}\n\n")
+        builder.append("${TAB}override fun bindingType() = $className::class.java\n")
     }
 
     private fun generateBindingFields() {
-        builder.append("${TAB}override fun allBindingFields(): Array<Field<$className>> {\n")
-        builder.append("$TAB${TAB}return arrayOf(")
-        for ((propertyName) in allColumnInfo) {
-            builder.append(propertyName).append(", ")
-        }
-        builder.append(")\n$TAB}\n\n")
-
+        builder.append("${TAB}override fun allBindingFields() = allFields()\n")
         builder.append("${TAB}@JvmStatic\n")
-        builder.append("${TAB}fun allFields(): Array<Field<$className>> {\n")
-        builder.append("$TAB${TAB}return arrayOf(")
+        builder.append("${TAB}fun allFields() = arrayOf(")
         for ((propertyName) in allColumnInfo) {
             builder.append(propertyName).append(", ")
         }
-        builder.append(")\n$TAB}\n\n")
+        builder.append(")\n")
     }
 
     private fun generateBaseBinding() {
-        builder.append("${TAB}override fun baseBinding(): Binding {\n")
-        builder.append("$TAB${TAB}return baseBinding\n")
-        builder.append("$TAB}\n\n")
+        builder.append("${TAB}override fun baseBinding() = baseBinding\n")
     }
 
     private fun generateExtractObject() {
-        builder.append("${TAB}override fun extractObject(\n")
+        builder.append("${TAB}override fun <R : $className> extractObject(\n")
         builder.append("$TAB${TAB}fields: Array<Field<$className>>,\n")
-        builder.append("$TAB${TAB}preparedStatement: PreparedStatement\n")
-        builder.append("$TAB): $className  {\n")
-        builder.append("$TAB${TAB}val newOne = $className()\n")
+        builder.append("$TAB${TAB}preparedStatement: PreparedStatement,\n")
+        builder.append("$TAB${TAB}cls: Class<R>\n")
+        builder.append("$TAB): R  {\n")
+        builder.append("$TAB${TAB}val newOne = cls.newInstance()\n")
         builder.append("$TAB${TAB}var index = 0\n")
         builder.append("$TAB${TAB}for (field in fields) {\n")
         builder.append("$TAB$TAB${TAB}when (field.fieldId) {\n")

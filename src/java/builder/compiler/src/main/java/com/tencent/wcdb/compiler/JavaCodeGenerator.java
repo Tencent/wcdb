@@ -52,7 +52,8 @@ public class JavaCodeGenerator {
 
         generateFields();
 
-        builder.append(TAB + "\nstatic {\n\n");
+        builder.append("\n");
+        builder.append(TAB + "static {\n\n");
         builder.append(TAB + TAB + "baseBinding = new Binding();\n");
         builder.append(TAB + TAB + "INSTANCE = new ").append(ormClassName).append("();\n\n");
         generateColumns();
@@ -234,9 +235,9 @@ public class JavaCodeGenerator {
 
     private void generateExtractObject() {
         builder.append(TAB + "@Override\n");
-        builder.append(TAB + "public ").append(className).append(" extractObject(Field<")
-                .append(className).append(">[] fields, PreparedStatement preparedStatement) {\n");
-        builder.append(TAB + TAB).append(className).append(" newOne = new ").append(className).append("();\n");
+        builder.append(TAB + "public <R extends ").append(className).append("> R extractObject(Field<")
+                .append(className).append(">[] fields, PreparedStatement preparedStatement, Class<R> cls) throws ReflectiveOperationException {\n");
+        builder.append(TAB + TAB + "R newOne = cls.newInstance();\n");
         builder.append(TAB + TAB + "int index = 0;\n");
         builder.append(TAB + TAB + "for(Field<").append(className).append("> field : fields) {\n");
         builder.append(TAB + TAB + TAB + "switch (field.getFieldId()) {\n");
