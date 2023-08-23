@@ -477,7 +477,7 @@ bool FileManager::createDirectoryWithIntermediateDirectories(const UnsafeStringV
         return false;
     }
     if (!exists.value()) {
-        return createDirectoryWithIntermediateDirectories(Path::getDirectoryName(directory))
+        return createDirectoryWithIntermediateDirectories(Path::getDirectory(directory))
                && createDirectory(directory);
     }
     return true;

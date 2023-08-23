@@ -51,7 +51,7 @@ Database::Database(const UnsafeStringView& path)
 #ifndef _WIN32
     const char* resolvePath = realpath(path.data(), nullptr);
     if (resolvePath == nullptr && errno == ENOENT) {
-        if (FileManager::createDirectoryWithIntermediateDirectories(Path::getDirectoryName(path))
+        if (FileManager::createDirectoryWithIntermediateDirectories(Path::getDirectory(path))
             && FileManager::createFile(path)) {
             resolvePath = realpath(path.data(), nullptr);
             if (resolvePath == NULL) {
