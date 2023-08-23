@@ -24,9 +24,11 @@
 
 #pragma once
 
+#include "Macro.h"
+
 namespace WCDB {
 
-class FTSError {
+class WCDB_API FTSError {
 public:
     static int OK();
     static int Done();

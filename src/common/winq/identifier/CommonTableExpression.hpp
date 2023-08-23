@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class CommonTableExpression final
+class WCDB_API CommonTableExpression final
 : public SpecifiedSyntax<Syntax::CommonTableExpression, SQL> {
 public:
     using SpecifiedSyntax<Syntax::CommonTableExpression, SQL>::SpecifiedSyntax;

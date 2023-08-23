@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class Upsert final : public SpecifiedSyntax<Syntax::UpsertClause, SQL> {
+class WCDB_API Upsert final : public SpecifiedSyntax<Syntax::UpsertClause, SQL> {
 public:
     Upsert();
     ~Upsert() override final;

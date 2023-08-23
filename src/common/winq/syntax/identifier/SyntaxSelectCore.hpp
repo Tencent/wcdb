@@ -31,10 +31,10 @@ namespace WCDB {
 
 namespace Syntax {
 
-class ResultColumn;
-class TableOrSubquery;
+class WCDB_API ResultColumn;
+class WCDB_API TableOrSubquery;
 
-class SelectCore final : public Identifier {
+class WCDB_API SelectCore final : public Identifier {
 #pragma mark - Lang
 public:
     ~SelectCore() override final;

@@ -30,7 +30,7 @@
 
 namespace WCDB {
 
-class Delete final : public ChainCall<StatementDelete> {
+class WCDB_API Delete final : public ChainCall<StatementDelete> {
     template<class ObjectType>
     friend class TableORMOperation;
     friend class HandleORMOperation;

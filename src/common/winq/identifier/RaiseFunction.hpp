@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class RaiseFunction final : public SpecifiedSyntax<Syntax::RaiseFunction, SQL> {
+class WCDB_API RaiseFunction final : public SpecifiedSyntax<Syntax::RaiseFunction, SQL> {
 public:
     RaiseFunction();
     ~RaiseFunction() override final;

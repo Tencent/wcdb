@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class MultiObject {
+class WCDB_API MultiObject {
     friend class StatementOperation;
 
 public:

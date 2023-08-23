@@ -27,7 +27,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCTDatabase (Convenient) <WCTConvenient>
+WCDB_API @interface WCTDatabase(Convenient)<WCTConvenient>
 
 @end
 

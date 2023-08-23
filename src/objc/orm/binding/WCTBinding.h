@@ -31,7 +31,7 @@
 #import "WCTTableCoding.h"
 #import <map>
 
-class WCTBinding final : public WCDB::BaseBinding {
+class WCDB_API WCTBinding final : public WCDB::BaseBinding {
 #pragma mark - Binding
 public:
     WCTBinding(Class cls);

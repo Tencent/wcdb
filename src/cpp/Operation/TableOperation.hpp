@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class TableOperation : public BaseOperation {
+class WCDB_API TableOperation : public BaseOperation {
 #pragma mark - Insert
 public:
     /**

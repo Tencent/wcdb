@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class JoinConstraint final : public SpecifiedSyntax<Syntax::JoinConstraint, SQL> {
+class WCDB_API JoinConstraint final : public SpecifiedSyntax<Syntax::JoinConstraint, SQL> {
 public:
     JoinConstraint();
     ~JoinConstraint() override final;

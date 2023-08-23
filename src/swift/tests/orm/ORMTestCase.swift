@@ -39,7 +39,7 @@ class ORMTestCase: DatabaseTestCase {
         let type = expression1()
         let className = String(describing: type)
         var description1: String?
-        database.trace { _, _, sql in
+        database.trace {_, _, _, sql in
             if sql.hasPrefix("CREATE TABLE") {
                 description1 = sql
             }
@@ -58,7 +58,7 @@ class ORMTestCase: DatabaseTestCase {
         let type = expression1()
         let className = String(describing: type)
         var description1: String?
-        database.trace { _, _, sql in
+        database.trace {_, _, _, sql in
             if (sql.hasPrefix("CREATE INDEX") ||
                 sql.hasPrefix("CREATE UNIQUE INDEX")) &&
                 description1 == nil {
@@ -79,7 +79,7 @@ class ORMTestCase: DatabaseTestCase {
         let type = expression1()
         let className = String(describing: type)
         var description1: String?
-        database.trace { _, _, sql in
+        database.trace {_, _, _, sql in
             if sql.hasPrefix("CREATE VIRTUAL TABLE") {
                 description1 = sql
             }

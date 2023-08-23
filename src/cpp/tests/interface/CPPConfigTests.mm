@@ -84,6 +84,19 @@
     }
 }
 
+- (void)test_config_out_of_scope
+{
+    [self.dispatch async:^{
+        WCDB::StatementPragma setSecureDelete = WCDB::StatementPragma().pragma(WCDB::Pragma::secureDelete()).to(true);
+        WCDB::Database db1(self.path.UTF8String);
+        db1.setConfig(
+        self.configName.UTF8String, [=](WCDB::Handle& handle) { return handle.execute(setSecureDelete); });
+    }];
+    [self.dispatch waitUntilDone];
+    WCDB::Database db2(self.path.UTF8String);
+    TestCaseAssertTrue(db2.canOpen());
+}
+
 - (void)test_config_failed
 {
     self.database->setConfig(self.configName.UTF8String, [](WCDB::Handle&) {

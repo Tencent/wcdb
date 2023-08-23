@@ -28,7 +28,8 @@
 
 namespace WCDB {
 
-class StatementRelease final : public SpecifiedSyntax<Syntax::ReleaseSTMT, Statement> {
+class WCDB_API StatementRelease final
+: public SpecifiedSyntax<Syntax::ReleaseSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::ReleaseSTMT, Statement>::SpecifiedSyntax;
     StatementRelease();

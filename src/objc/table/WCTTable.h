@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class WCTDatabase;
 @class WCTError;
 
-@interface WCTTable<ObjectType> : NSObject
+WCDB_API @interface WCTTable<ObjectType> : NSObject
 
 /**
  You should use `-[WCTDatabase getTable:withClass:]` or `-[WCTHandle getTable:withClass:]` to obtain `WCTTable`.

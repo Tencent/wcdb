@@ -26,6 +26,6 @@
 #import "WCTTable.h"
 #import "WCTTableProtocol.h"
 
-@interface WCTDatabase (Table) <WCTTableProtocol>
+WCDB_API @interface WCTDatabase(Table)<WCTTableProtocol>
 
 @end

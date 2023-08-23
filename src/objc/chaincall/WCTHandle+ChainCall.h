@@ -27,7 +27,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCTHandle (ChainCall) <WCTCrossTableChainCallProtocol>
+WCDB_API @interface WCTHandle(ChainCall)<WCTCrossTableChainCallProtocol>
 
 @end
 

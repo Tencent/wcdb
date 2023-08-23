@@ -203,6 +203,9 @@ protected:
     void* m_observerForMemoryWarning;
 
 #pragma mark - Integrity
+public:
+    void skipIntegrityCheck(const UnsafeStringView& path);
+
 protected:
     void asyncCheckIntegrity(const UnsafeStringView& path, uint32_t identifier);
 
@@ -211,6 +214,7 @@ protected:
     // identifier of the corrupted database file -> the times of ignored corruption
     // it will be kept forever in memory since the identifier will be changed after removed/recovered
     std::set<uint32_t> m_corrupteds;
+    ThreadLocal<StringView> m_skipIntegrityCheckPath;
 
 #pragma mark - Corrupted
 public:

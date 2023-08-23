@@ -30,7 +30,7 @@
 
 namespace WCDB {
 
-class ResultField final : public ResultColumn {
+class WCDB_API ResultField final : public ResultColumn {
     friend class SyntaxList<ResultField>;
     friend class StatementOperation;
 
@@ -95,7 +95,7 @@ private:
 };
 
 template<>
-class SyntaxList<ResultField> final : public _SyntaxList<ResultField> {
+class WCDB_API SyntaxList<ResultField> final : public _SyntaxList<ResultField> {
 public:
     using _SyntaxList<ResultField>::_SyntaxList;
     ~SyntaxList() override final;

@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Not Thread-safe
  */
-@interface WCTMultiSelect : WCTSelectable
+WCDB_API @interface WCTMultiSelect : WCTSelectable
 
 /**
  @brief WINQ interface for SQL.

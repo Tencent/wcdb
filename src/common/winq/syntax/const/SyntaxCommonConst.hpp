@@ -28,12 +28,12 @@
 
 namespace WCDB {
 
-class UnsafeStringView;
-class StringView;
+class WCDB_API UnsafeStringView;
+class WCDB_API StringView;
 
 namespace Syntax {
 
-enum class ColumnType : signed char {
+enum class WCDB_API ColumnType : signed char {
     Null = 0,
     Integer,
     Float,
@@ -43,14 +43,14 @@ enum class ColumnType : signed char {
 
 bool isIntegerColumnType(const UnsafeStringView& type);
 
-enum class CompoundOperator : signed char {
+enum class WCDB_API CompoundOperator : signed char {
     Union = 1,
     UnionAll,
     Intersect,
     Except,
 };
 
-enum class Conflict : signed char {
+enum class WCDB_API Conflict : signed char {
     Rollback = 1,
     Abort,
     Fail,
@@ -58,7 +58,7 @@ enum class Conflict : signed char {
     Replace,
 };
 
-enum class JoinOperator : signed char {
+enum class WCDB_API JoinOperator : signed char {
     With = 1,
     Join,
     LeftOuterJoin,
@@ -72,18 +72,18 @@ enum class JoinOperator : signed char {
     NaturalCrossJoin,
 };
 
-enum class Order : signed char {
+enum class WCDB_API Order : signed char {
     ASC = 0,
     DESC,
 };
 
-enum class LimitParameterType : signed char {
+enum class WCDB_API LimitParameterType : signed char {
     NotSet = 0,
     Offset,
     End,
 };
 
-enum class ConflictAction : signed char {
+enum class WCDB_API ConflictAction : signed char {
     Replace = 1,
     Rollback,
     Abort,
@@ -91,7 +91,7 @@ enum class ConflictAction : signed char {
     Ignore,
 };
 
-enum class MatchType : signed char {
+enum class WCDB_API MatchType : signed char {
     Simple = 1,
     Full,
     Partial,

@@ -25,7 +25,7 @@
 #import "WCTColumnBinding.h"
 #import "WCTCommon.h"
 
-class WCTProperty final : public WCDB::Column, public WCTColumnBindingHolder {
+class WCDB_API WCTProperty final : public WCDB::Column, public WCTColumnBindingHolder {
 public:
     WCTProperty();
     WCTProperty(const WCTColumnBinding& columnBinding);
@@ -43,7 +43,7 @@ private:
 namespace WCDB {
 
 template<>
-class SyntaxList<WCTProperty> final : public _SyntaxList<WCTProperty> {
+class WCDB_API SyntaxList<WCTProperty> final : public _SyntaxList<WCTProperty> {
 public:
     using _SyntaxList<WCTProperty>::_SyntaxList;
     ~SyntaxList() override final;

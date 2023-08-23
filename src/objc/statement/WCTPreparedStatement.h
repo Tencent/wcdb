@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
  This class is a wrapper for `sqlite3_stmt`.
  @warning Not Thread-safe.
  */
-@interface WCTPreparedStatement : NSObject
+WCDB_API @interface WCTPreparedStatement : NSObject
 
 /**
  You should use `-[WCTHandle getOrCreatePreparedStatement:]` to obtain WCTPreparedStatement.

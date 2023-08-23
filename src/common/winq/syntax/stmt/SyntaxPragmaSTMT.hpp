@@ -30,14 +30,14 @@ namespace WCDB {
 
 namespace Syntax {
 
-class PragmaSTMT final : public Identifier {
+class WCDB_API PragmaSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     ~PragmaSTMT() override final;
 
     Schema schema;
     Pragma pragma;
-    enum class Switch : signed char {
+    enum class WCDB_API Switch : signed char {
         NotSet = 0,
         To,
         With,

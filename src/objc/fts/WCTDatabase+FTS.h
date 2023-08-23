@@ -87,7 +87,7 @@ WCDB_EXTERN NSString* const WCTTokenizerParameter_SkipStemming;
  */
 WCDB_EXTERN NSString* const WCTAuxiliaryFunction_SubstringMatchInfo;
 
-@interface WCTDatabase (FTS)
+WCDB_API @interface WCTDatabase(FTS)
 
 /**
  @brief Enable to automatically merge b-tree segments of fts5 index after modifying the content in fts5 table.

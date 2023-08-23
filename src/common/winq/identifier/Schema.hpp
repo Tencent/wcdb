@@ -29,7 +29,7 @@
 
 namespace WCDB {
 
-class Schema final : public SpecifiedSyntax<Syntax::Schema, SQL> {
+class WCDB_API Schema final : public SpecifiedSyntax<Syntax::Schema, SQL> {
 public:
     Schema();
     ~Schema() override final;

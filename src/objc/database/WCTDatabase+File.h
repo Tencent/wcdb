@@ -27,7 +27,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCTDatabase (File)
+WCDB_API @interface WCTDatabase(File)
 
 /**
  @brief Remove all database-related files.

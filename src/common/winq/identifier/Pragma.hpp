@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class Pragma final : public SpecifiedSyntax<Syntax::Pragma, SQL> {
+class WCDB_API Pragma final : public SpecifiedSyntax<Syntax::Pragma, SQL> {
 #pragma mark - Initializer
 public:
     using SpecifiedSyntax<Syntax::Pragma, SQL>::SpecifiedSyntax;

@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class StatementVacuum final : public SpecifiedSyntax<Syntax::VacuumSTMT, Statement> {
+class WCDB_API StatementVacuum final : public SpecifiedSyntax<Syntax::VacuumSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::VacuumSTMT, Statement>::SpecifiedSyntax;
     StatementVacuum();

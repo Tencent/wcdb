@@ -41,76 +41,76 @@ typename std::enable_if<std::is_convertible<NSObject *, T>::value && std::is_poi
 };
 
 template<>
-struct ColumnIsTextType<NSString *> : public std::true_type {
+struct WCDB_API ColumnIsTextType<NSString *> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
     asUnderlyingType(NSString *text);
 };
 
 template<>
-struct ColumnIsTextType<NSMutableString *> : public std::true_type {
+struct WCDB_API ColumnIsTextType<NSMutableString *> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
     asUnderlyingType(NSMutableString *text);
 };
 
 template<>
-class LiteralValueConvertible<NSString *> final : public std::true_type {
+class WCDB_API LiteralValueConvertible<NSString *> final : public std::true_type {
 public:
     static LiteralValue asLiteralValue(NSString *string);
 };
 
 template<>
-class LiteralValueConvertible<NSMutableString *> final : public std::true_type {
+class WCDB_API LiteralValueConvertible<NSMutableString *> final : public std::true_type {
 public:
     static LiteralValue asLiteralValue(NSMutableString *string);
 };
 
 template<>
-class LiteralValueConvertible<NSNumber *> final : public std::true_type {
+class WCDB_API LiteralValueConvertible<NSNumber *> final : public std::true_type {
 public:
     static LiteralValue asLiteralValue(NSNumber *number);
 };
 
 #if OBJC_BOOL_IS_CHAR
 template<>
-class LiteralValueConvertible<BOOL> final : public std::true_type {
+class WCDB_API LiteralValueConvertible<BOOL> final : public std::true_type {
 public:
     static LiteralValue asLiteralValue(BOOL value);
 };
 #endif // OBJC_BOOL_IS_CHAR
 
 template<>
-struct ColumnIsBLOBType<NSData *> : public std::true_type {
+struct WCDB_API ColumnIsBLOBType<NSData *> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
     asUnderlyingType(NSData *data);
 };
 
 template<>
-struct ColumnIsBLOBType<NSMutableData *> : public std::true_type {
+struct WCDB_API ColumnIsBLOBType<NSMutableData *> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
     asUnderlyingType(NSMutableData *data);
 };
 
 template<>
-class ExpressionConvertible<WCTProperty> final : public std::true_type {
+class WCDB_API ExpressionConvertible<WCTProperty> final : public std::true_type {
 public:
     static Expression asExpression(const WCTProperty &property);
 };
 
 template<>
-class IndexedColumnConvertible<WCTProperty> final : public std::true_type {
+class WCDB_API IndexedColumnConvertible<WCTProperty> final : public std::true_type {
 public:
     static IndexedColumn asIndexedColumn(const WCTProperty &property);
 };
 
-#define WCDB_DEFINE_EXPRESSIONS_CONVERTIBLE(Type)                              \
-    template<>                                                                 \
-    template<>                                                                 \
-    struct _SyntaxList<Expression>::Convertible<Type> final : std::true_type { \
-        static Expressions asSyntaxList(const Type);                           \
+#define WCDB_DEFINE_EXPRESSIONS_CONVERTIBLE(Type)                                       \
+    template<>                                                                          \
+    template<>                                                                          \
+    struct WCDB_API _SyntaxList<Expression>::Convertible<Type> final : std::true_type { \
+        static Expressions asSyntaxList(const Type);                                    \
     };
 
 WCDB_DEFINE_EXPRESSIONS_CONVERTIBLE(NSArray *)

@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class UpsertClause final : public Identifier {
+class WCDB_API UpsertClause final : public Identifier {
 #pragma mark - Lang
 public:
     ~UpsertClause() override final;

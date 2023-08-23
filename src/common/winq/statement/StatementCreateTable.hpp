@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class StatementCreateTable final
+class WCDB_API StatementCreateTable final
 : public SpecifiedSyntax<Syntax::CreateTableSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::CreateTableSTMT, Statement>::SpecifiedSyntax;

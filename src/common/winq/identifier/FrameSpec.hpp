@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class FrameSpec final : public SpecifiedSyntax<Syntax::FrameSpec, SQL> {
+class WCDB_API FrameSpec final : public SpecifiedSyntax<Syntax::FrameSpec, SQL> {
 public:
     FrameSpec();
     ~FrameSpec() override final;

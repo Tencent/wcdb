@@ -34,9 +34,3 @@
 
 #define WCDB_ORM_UNIQUE(ORMType)                                               \
     __WCDB_ORM(ORMType, WCDB_UNIQUE_ID) : (WCTBinding &) binding
-
-#if defined(__cplusplus)
-#define WCDB_EXTERN extern "C"
-#else
-#define WCDB_EXTERN extern
-#endif

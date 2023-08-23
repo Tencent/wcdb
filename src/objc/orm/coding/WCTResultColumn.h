@@ -25,7 +25,7 @@
 #import "WCTColumnBinding.h"
 #import "WCTCommon.h"
 
-class WCTResultColumn final : public WCDB::ResultColumn, public WCTColumnBindingHolder {
+class WCDB_API WCTResultColumn final : public WCDB::ResultColumn, public WCTColumnBindingHolder {
 public:
     WCTResultColumn();
     WCTResultColumn(const WCTProperty& property);
@@ -37,7 +37,7 @@ public:
 namespace WCDB {
 
 template<>
-class SyntaxList<WCTResultColumn> final : public _SyntaxList<WCTResultColumn> {
+class WCDB_API SyntaxList<WCTResultColumn> final : public _SyntaxList<WCTResultColumn> {
 public:
     using _SyntaxList<WCTResultColumn>::_SyntaxList;
     ~SyntaxList() override final;

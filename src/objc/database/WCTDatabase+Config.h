@@ -47,7 +47,7 @@ typedef NS_ENUM(int, WCTConfigPriority) {
  */
 typedef BOOL (^WCTConfigBlock)(WCTHandle* _Nonnull);
 
-@interface WCTDatabase (Config)
+WCDB_API @interface WCTDatabase(Config)
 
 /**
  @brief This interface is equivalent to `-[WCTDatabase setCipherKey:cipherKey andCipherPageSize:4096]`;

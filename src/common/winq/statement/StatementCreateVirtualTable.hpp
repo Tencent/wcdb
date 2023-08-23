@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class StatementCreateVirtualTable
+class WCDB_API StatementCreateVirtualTable
 : public SpecifiedSyntax<Syntax::CreateVirtualTableSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::CreateVirtualTableSTMT, Statement>::SpecifiedSyntax;

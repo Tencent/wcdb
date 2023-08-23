@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class CommonTableExpression final : public Identifier {
+class WCDB_API CommonTableExpression final : public Identifier {
 #pragma mark - Lang
 public:
     ~CommonTableExpression() override final;
