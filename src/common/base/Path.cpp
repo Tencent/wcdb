@@ -70,12 +70,12 @@ StringView getFileName(const UnsafeStringView &base)
 
 StringView getDirectory(const UnsafeStringView &path)
 {
-    if (path.length() <= 1) {
+    if (path.length() <= 2) {
         return StringView(path);
     }
     const char *str = path.data();
     WCTAssert(str != nullptr);
-    for (int i = (int) path.length() - 1; i >= 0; i--) {
+    for (int i = (int) path.length() - 2; i >= 0; i--) {
         if (str[i] == kPathSeparator) {
             return StringView(str, i + 1);
         }
