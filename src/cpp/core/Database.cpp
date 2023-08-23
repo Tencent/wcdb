@@ -402,8 +402,9 @@ void Database::setConfig(const UnsafeStringView& name,
 {
     m_innerDatabase->purge();
     CustomConfig::Invocation configInvocation
-    = [invocation, this](InnerHandle* innerHandle) -> bool {
-        Handle handle = Handle(m_databaseHolder, innerHandle);
+    = [invocation](InnerHandle* innerHandle) -> bool {
+        RecyclableHandle recyclableHandle(std::shared_ptr<InnerHandle>(innerHandle, [](InnerHandle*) {}), nullptr);
+        Handle handle = Handle(recyclableHandle);
         return invocation(handle);
     };
     CustomConfig::Invocation configUninvocation = nullptr;
