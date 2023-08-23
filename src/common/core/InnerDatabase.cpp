@@ -40,6 +40,8 @@
 #include "OperationHandle.hpp"
 #include "SQLite.h"
 
+#include <ctime>
+
 namespace WCDB {
 
 #pragma mark - Initializer
@@ -55,8 +57,9 @@ InnerDatabase::InnerDatabase(const UnsafeStringView &path)
 , m_sharedInMemoryHandle(nullptr)
 , m_mergeLogic(this)
 {
+    StringViewMap<Value> info;
     DBOperationNotifier::shared().notifyOperation(
-    this, DBOperationNotifier::Operation::Create);
+    this, DBOperationNotifier::Operation::Create, info);
 }
 
 InnerDatabase::~InnerDatabase() = default;
@@ -66,8 +69,9 @@ void InnerDatabase::setTag(const Tag &tag)
 {
     LockGuard memoryGuard(m_memory);
     m_tag = tag;
+    StringViewMap<Value> info;
     DBOperationNotifier::shared().notifyOperation(
-    this, DBOperationNotifier::Operation::SetTag);
+    this, DBOperationNotifier::Operation::SetTag, info);
 }
 
 Tag InnerDatabase::getTag() const
@@ -78,7 +82,10 @@ Tag InnerDatabase::getTag() const
 
 bool InnerDatabase::canOpen()
 {
-    return getHandle() != nullptr;
+    Core::shared().skipIntegrityCheck(getPath());
+    auto handle = getHandle();
+    Core::shared().skipIntegrityCheck(nullptr);
+    return handle != nullptr;
 }
 
 void InnerDatabase::didDrain()
@@ -106,7 +113,7 @@ void InnerDatabase::close(const ClosedCallback &onClosed)
     {
         SharedLockGuard concurrencyGuard(m_concurrency);
         SharedLockGuard memoryGuard(m_memory);
-        // suspend auto checkpoint/backup/integrity check/migrate
+        // suspend auto checkpoint/backup/integrity check/migrate/merge fts5 index
         for (auto &handle : getHandlesOfSlot(HandleSlot::HandleSlotOperation)) {
             handle->suspend(true);
         }
@@ -145,8 +152,7 @@ InnerDatabase::InitializedGuard InnerDatabase::initialize()
             m_initialized = true;
             continue;
         }
-        if (!FileManager::createDirectoryWithIntermediateDirectories(
-            Path::getDirectoryName(path))) {
+        if (!FileManager::createDirectoryWithIntermediateDirectories(Path::getDirectory(path))) {
             assignWithSharedThreadedError();
             break;
         }
@@ -195,13 +201,14 @@ void InnerDatabase::removeConfig(const UnsafeStringView &name)
 }
 
 #pragma mark - Handle
-RecyclableHandle InnerDatabase::getHandle()
+RecyclableHandle InnerDatabase::getHandle(bool writeHint)
 {
+    HandleType type
+    = m_migration.shouldMigrate() ? HandleType::Migrating : HandleType::Normal;
     if (m_isInMemory) {
         InitializedGuard initializedGuard = initialize();
         if (m_sharedInMemoryHandle == nullptr) {
-            m_sharedInMemoryHandle = generateSlotedHandle(
-            m_migration.shouldMigrate() ? HandleType::Migrating : HandleType::Normal);
+            m_sharedInMemoryHandle = generateSlotedHandle(type);
         }
         return RecyclableHandle(m_sharedInMemoryHandle, nullptr);
     }
@@ -216,7 +223,7 @@ RecyclableHandle InnerDatabase::getHandle()
     if (!initializedGuard.valid()) {
         return nullptr;
     }
-    handle = flowOut(m_migration.shouldMigrate() ? HandleType::Migrating : HandleType::Normal);
+    handle = flowOut(type, writeHint);
     if (handle != nullptr) {
         handle->configTransactionEvent(this);
     }
@@ -225,7 +232,7 @@ RecyclableHandle InnerDatabase::getHandle()
 
 bool InnerDatabase::execute(const Statement &statement)
 {
-    RecyclableHandle handle = getHandle();
+    RecyclableHandle handle = getHandle(statement.isWriteStatement());
     if (handle != nullptr) {
         if (handle->execute(statement)) {
             return true;
@@ -293,12 +300,10 @@ std::shared_ptr<InnerHandle> InnerDatabase::generateSlotedHandle(HandleType type
         return nullptr;
     }
 
+    handle->setTag(getTag());
+
     if (!setupHandle(type, handle.get())) {
         return nullptr;
-    }
-    if (slot == HandleSlotNormal || slot == HandleSlotMigrating) {
-        DBOperationNotifier::shared().notifyOperation(
-        this, DBOperationNotifier::Operation::OpenHandle);
     }
     return handle;
 }
@@ -329,9 +334,28 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
 
     if (slot != HandleSlotAssemble && category != HandleCategoryCipher) {
         handle->setPath(path);
+        bool hasOpened = handle->isOpened();
+        std::clock_t start = std::clock();
         if (!handle->open()) {
             setThreadedError(handle->getError());
             return false;
+        }
+        if (!hasOpened && (slot == HandleSlotNormal || slot == HandleSlotMigrating)) {
+            std::clock_t openTime
+            = (std::clock() - start) / ((double) CLOCKS_PER_SEC / 1000000);
+            int memoryUsed, tableCount, indexCount, triggerCount;
+            if (handle->getSchemaInfo(memoryUsed, tableCount, indexCount, triggerCount)) {
+                StringViewMap<Value> info;
+                info.insert_or_assign(MonitorInfoKeyHandleOpenTime, openTime);
+                info.insert_or_assign(MonitorInfoKeySchemaUsage, memoryUsed);
+                info.insert_or_assign(MonitorInfoKeyTableCount, tableCount);
+                info.insert_or_assign(MonitorInfoKeyIndexCount, indexCount);
+                info.insert_or_assign(MonitorInfoKeyTriggerCount, triggerCount);
+                info.insert_or_assign(MonitorInfoKeyHandleCount,
+                                      numberOfAliveHandlesInSlot(slot) + 1);
+                DBOperationNotifier::shared().notifyOperation(
+                this, DBOperationNotifier::Operation::OpenHandle, info);
+            }
         }
     } else {
         handle->clearPath();
@@ -367,7 +391,7 @@ bool InnerDatabase::isInTransaction()
 
 bool InnerDatabase::beginTransaction()
 {
-    RecyclableHandle handle = getHandle();
+    RecyclableHandle handle = getHandle(true);
     if (handle == nullptr) {
         return false;
     }
@@ -402,7 +426,7 @@ void InnerDatabase::rollbackTransaction()
 
 bool InnerDatabase::runTransaction(const TransactionCallback &transaction)
 {
-    RecyclableHandle handle = getHandle();
+    RecyclableHandle handle = getHandle(true);
     if (handle == nullptr) return false;
     if (!handle->runTransaction(transaction)) {
         setThreadedError(handle->getError());
@@ -414,7 +438,7 @@ bool InnerDatabase::runTransaction(const TransactionCallback &transaction)
 bool InnerDatabase::runPausableTransactionWithOneLoop(const TransactionCallbackForOneLoop &transaction)
 {
     // get threaded handle
-    RecyclableHandle handle = getHandle();
+    RecyclableHandle handle = getHandle(true);
     if (handle == nullptr) return false;
     if (!handle->runPausableTransactionWithOneLoop(transaction)) {
         setThreadedError(handle->getError());
@@ -939,6 +963,11 @@ void InnerDatabase::proccessMerge()
         return;
     }
     return m_mergeLogic.proccessMerge();
+}
+
+RecyclableHandle InnerDatabase::getMergeIndexHandle()
+{
+    return flowOut(HandleType::MergeIndex);
 }
 
 } //namespace WCDB

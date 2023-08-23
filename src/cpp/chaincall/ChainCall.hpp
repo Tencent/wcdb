@@ -30,7 +30,7 @@
 
 namespace WCDB {
 
-class BaseChainCall {
+class WCDB_API BaseChainCall {
 public:
     BaseChainCall() = delete;
     BaseChainCall(const BaseChainCall &);
@@ -54,6 +54,7 @@ public:
     int getChanges();
 
 protected:
+    bool checkHandle(bool writeHint);
     void assignChanges();
     void assertError(const UnsafeStringView &message);
     BaseChainCall(Recyclable<InnerDatabase *> databaseHolder);

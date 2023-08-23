@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class ExpressionOperable {
+class WCDB_API ExpressionOperable {
 public:
     virtual ~ExpressionOperable() = 0;
 
@@ -36,7 +36,7 @@ protected:
     virtual Expression asExpressionOperand() const = 0;
 };
 
-class ExpressionUnaryOperable : virtual public ExpressionOperable {
+class WCDB_API ExpressionUnaryOperable : virtual public ExpressionOperable {
 public:
     virtual ~ExpressionUnaryOperable() override = 0;
 #ifndef __linux__
@@ -52,7 +52,7 @@ private:
     Expression unaryOperate(const Syntax::Expression::UnaryOperator &op) const;
 };
 
-class ExpressionBinaryOperable : virtual public ExpressionOperable {
+class WCDB_API ExpressionBinaryOperable : virtual public ExpressionOperable {
 public:
     virtual ~ExpressionBinaryOperable() override = 0;
 
@@ -91,7 +91,7 @@ private:
                              const Syntax::Expression::BinaryOperator &op) const;
 };
 
-class ExpressionBetweenOperable : virtual public ExpressionOperable {
+class WCDB_API ExpressionBetweenOperable : virtual public ExpressionOperable {
 public:
     virtual ~ExpressionBetweenOperable() override = 0;
     Expression between(const Expression &left, const Expression &right) const;
@@ -101,7 +101,7 @@ private:
     Expression betweenOperate(const Expression &left, const Expression &right) const;
 };
 
-class ExpressionInOperable : virtual public ExpressionOperable {
+class WCDB_API ExpressionInOperable : virtual public ExpressionOperable {
 public:
     virtual ~ExpressionInOperable() override = 0;
 
@@ -118,7 +118,7 @@ public:
     Expression notInFunction(const UnsafeStringView &tableFunction) const;
 };
 
-class ExpressionCollateOperable : virtual public ExpressionOperable {
+class WCDB_API ExpressionCollateOperable : virtual public ExpressionOperable {
 public:
     virtual ~ExpressionCollateOperable() override = 0;
     Expression collate(const UnsafeStringView &collation) const;

@@ -26,6 +26,10 @@
 #include "CrossPlatform.h"
 #include "Macro.h"
 #include "UnsafeData.hpp"
+#ifdef _WIN32
+#define NOMINMAX
+#include <windows.h>
+#endif
 #include <algorithm>
 #include <cstring>
 #include <iomanip>
@@ -62,6 +66,19 @@ UnsafeStringView::UnsafeStringView(UnsafeStringView&& other)
 {
     other.m_referenceCount = nullptr;
 }
+
+#ifdef _WIN32
+std::wstring UnsafeStringView::getWString() const
+{
+    std::wstring wstring;
+    int wlen = MultiByteToWideChar(CP_UTF8, 0, m_data, m_length, NULL, 0);
+    if (wlen > 0) {
+        wstring.resize(static_cast<size_t>(wlen));
+        MultiByteToWideChar(CP_UTF8, 0, m_data, m_length, &wstring[0], wlen);
+    }
+    return wstring;
+}
+#endif
 
 UnsafeStringView::~UnsafeStringView()
 {
@@ -207,6 +224,11 @@ bool UnsafeStringView::contain(const UnsafeStringView& target) const
         return false;
     }
     return strstr(m_data, target.m_data) != nullptr;
+}
+
+bool UnsafeStringView::equal(const UnsafeStringView& other) const
+{
+    return compare(other) == 0;
 }
 
 int UnsafeStringView::compare(const UnsafeStringView& other) const
@@ -425,6 +447,18 @@ StringView StringView::createConstant(const char* string)
     }
     return ret;
 }
+#ifdef _WIN32
+StringView StringView::createFromWString(const wchar_t* string)
+{
+    int length = WideCharToMultiByte(CP_UTF8, 0, string, -1, NULL, 0, NULL, NULL);
+    if (length <= 1) {
+        return StringView();
+    }
+    char buffer[_MAX_PATH];
+    WideCharToMultiByte(CP_UTF8, 0, string, -1, buffer, length, NULL, NULL);
+    return StringView(buffer, length - 1);
+}
+#endif
 
 bool StringViewComparator::operator()(const StringView& lhs, const StringView& rhs) const
 {

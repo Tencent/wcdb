@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class SavepointSTMT final : public Identifier {
+class WCDB_API SavepointSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     ~SavepointSTMT() override final;

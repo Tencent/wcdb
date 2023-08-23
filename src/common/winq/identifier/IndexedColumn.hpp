@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class IndexedColumn final : public SpecifiedSyntax<Syntax::IndexedColumn, SQL> {
+class WCDB_API IndexedColumn final : public SpecifiedSyntax<Syntax::IndexedColumn, SQL> {
 public:
     using SpecifiedSyntax<Syntax::IndexedColumn, SQL>::SpecifiedSyntax;
     IndexedColumn();

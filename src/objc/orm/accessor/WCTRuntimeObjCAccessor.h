@@ -26,8 +26,8 @@
 #import "WCTRuntimeBaseAccessor.h"
 #import <objc/runtime.h>
 
-class WCTRuntimeObjCAccessor final : public WCTRuntimeAccessor<id>,
-                                     public WCTObjCAccessor {
+class WCDB_API WCTRuntimeObjCAccessor final : public WCTRuntimeAccessor<id>,
+                                              public WCTObjCAccessor {
 protected:
     using InstanceType = WCTObjCAccessor::InstanceType;
     using PropertyType = NSObject *; //NSObject<WCTColumnCoding>*

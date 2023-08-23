@@ -30,7 +30,7 @@
 
 namespace WCDB {
 
-class HandleORMOperation : public HandleOperation {
+class WCDB_API HandleORMOperation : public HandleOperation {
 public:
 #pragma mark - Table
     /**

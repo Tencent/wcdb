@@ -29,6 +29,7 @@
 #include "HandleNotification.hpp"
 #include "HandleStatement.hpp"
 #include "StringView.hpp"
+#include "Tag.hpp"
 #include "WCDBOptional.hpp"
 #include "WINQ.h"
 #include <set>
@@ -81,10 +82,14 @@ public:
     bool isReadonly();
     bool isInTransaction();
 
+    void setTag(Tag tag);
+    Tag getTag();
+
 protected:
     bool executeSQL(const UnsafeStringView &sql);
     bool executeStatement(const Statement &statement);
     int m_customOpenFlag;
+    Tag m_tag;
 
 #pragma mark - Statement
 public:
@@ -116,6 +121,8 @@ public:
     Optional<std::vector<ColumnMeta>>
     getTableMeta(const Schema &schema, const UnsafeStringView &table);
     Optional<std::set<StringView>> getValues(const Statement &statement, int index);
+
+    bool getSchemaInfo(int &memoryUsed, int &tableCount, int &indexCount, int &triggerCount);
 
 #pragma mark - Transaction
 public:
@@ -218,6 +225,16 @@ protected:
 
 private:
     std::atomic<bool> m_canBeSuspended;
+
+#pragma mark - Cancellation Signal
+public:
+    typedef std::shared_ptr<volatile bool> CancellationSignal;
+    void attachCancellationSignal(CancellationSignal signal);
+    void detachCancellationSignal();
+
+private:
+    static int progressHandlerCallback(void *ctx);
+    CancellationSignal m_cancelSignal;
 
 #pragma mark - Cipher
 public:

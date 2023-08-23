@@ -35,7 +35,9 @@
     WCDB::StatementPragma statement = WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion());
 
     __block BOOL tested = NO;
-    [self.database traceSQL:^(NSString*, UInt64, NSString* sql) {
+    [self.database traceSQL:^(WCTTag tag, NSString* path, UInt64, NSString* sql) {
+        XCTAssertEqual(tag, self.database.tag);
+        XCTAssertTrue([path isEqualToString:self.database.path]);
         if ([sql isEqualToString:@(statement.getDescription().data())]) {
             tested = YES;
         }
@@ -57,7 +59,10 @@
                                                                          @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)",
                                                                          @"COMMIT",
                                                                          nil];
-    [self.database tracePerformance:^(NSString*, UInt64, NSString* sql, double) {
+    [self.database tracePerformance:^(WCTTag tag, NSString* path, UInt64, NSString* sql, double cost) {
+        XCTAssertEqual(tag, self.database.tag);
+        XCTAssertTrue([path isEqualToString:self.database.path]);
+        XCTAssertTrue(cost >= 0);
         if ([sql isEqualToString:expectedFootprints.firstObject]) {
             [expectedFootprints removeObjectAtIndex:0];
         }
@@ -73,7 +78,6 @@
     self.tableClass = TestCaseObject.class;
 
     __block BOOL tested = NO;
-    __block BOOL start = NO;
     weakify(self);
     [WCTDatabase globalTraceError:nil];
     [WCTDatabase globalTraceError:^(WCTError* error) {
@@ -89,7 +93,6 @@
 
     TestCaseAssertTrue([self.database canOpen]);
 
-    start = YES;
     TestCaseAssertFalse([self.database execute:WCDB::StatementSelect().select(1).from(@"dummy")]);
 
     TestCaseAssertTrue(tested);
@@ -101,7 +104,6 @@
     self.tableClass = TestCaseObject.class;
 
     __block BOOL tested = NO;
-    __block BOOL start = NO;
     weakify(self);
     [self.database traceError:^(WCTError* error) {
         strongify_or_return(self);
@@ -111,7 +113,6 @@
 
     TestCaseAssertTrue([self.database canOpen]);
 
-    start = YES;
     TestCaseAssertFalse([self.database execute:WCDB::StatementSelect().select(1).from(@"dummy")]);
     TestCaseAssertTrue(tested);
 }
@@ -121,7 +122,11 @@
     WCDB::StatementPragma statement = WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion());
 
     __block BOOL tested = NO;
-    [WCTDatabase globalTraceSQL:^(NSString*, UInt64, NSString* sql) {
+    [WCTDatabase globalTraceSQL:^(WCTTag tag, NSString* path, UInt64, NSString* sql) {
+        if (![path isEqualToString:self.database.path]) {
+            return;
+        }
+        XCTAssertEqual(tag, self.database.tag);
         if ([sql isEqualToString:@(statement.getDescription().data())]) {
             tested = YES;
         }
@@ -141,7 +146,12 @@
                                                                          @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)",
                                                                          @"COMMIT",
                                                                          nil];
-    [WCTDatabase globalTracePerformance:^(NSString*, UInt64, NSString* sql, double) {
+    [WCTDatabase globalTracePerformance:^(WCTTag tag, NSString* path, UInt64, NSString* sql, double cost) {
+        if (![path isEqualToString:self.database.path]) {
+            return;
+        }
+        XCTAssertEqual(tag, self.database.tag);
+        XCTAssertTrue(cost >= 0);
         if ([sql isEqualToString:expectedFootprints.firstObject]) {
             [expectedFootprints removeObjectAtIndex:0];
         }
@@ -159,7 +169,11 @@
     __block long tag = 0;
     __block NSString* path = nil;
     __block int openHandleCount = 0;
-    [WCTDatabase globalTraceDatabaseOperation:^(WCTDatabase* database, WCTDatabaseOperation operation) {
+    __block int tableCount = 0;
+    __block int indexCount = 0;
+    [WCTDatabase globalTraceDatabaseOperation:^(WCTDatabase* database,
+                                                WCTDatabaseOperation operation,
+                                                NSDictionary* info) {
         switch (operation) {
         case WCTDatabaseOperation_Create:
             path = database.path;
@@ -167,16 +181,34 @@
         case WCTDatabaseOperation_SetTag:
             tag = database.tag;
             break;
-        case WCTDatabaseOperation_OpenHandle:
+        case WCTDatabaseOperation_OpenHandle: {
             openHandleCount++;
-            break;
+            TestCaseAssertTrue(((NSNumber*) info[WCTDatabaseMonitorInfoKeyHandleCount]).intValue == 1);
+            TestCaseAssertTrue(((NSNumber*) info[WCTDatabaseMonitorInfoKeyHandleOpenTime]).intValue > 0);
+            TestCaseAssertTrue(((NSNumber*) info[WCTDatabaseMonitorInfoKeySchemaUsage]).intValue > 0);
+            TestCaseAssertTrue(((NSNumber*) info[WCTDatabaseMonitorInfoKeyTriggerCount]).intValue == 0);
+            tableCount = ((NSNumber*) info[WCTDatabaseMonitorInfoKeyTableCount]).intValue;
+            indexCount = ((NSNumber*) info[WCTDatabaseMonitorInfoKeyIndexCount]).intValue;
+        } break;
         }
     }];
+
     TestCaseAssertTrue([self createTable]);
-    TestCaseAssertTrue([self.database insertObjects:[Random.shared autoIncrementTestCaseObjectsWithCount:10] intoTable:self.tableName]);
+    TestCaseAssertTrue([self.database execute:WCDB::StatementCreateIndex()
+                                              .createIndex("testIndex")
+                                              .table(self.tableName)
+                                              .indexed(TestCaseObject.content)]);
+
     TestCaseAssertTrue(tag == self.database.tag);
     TestCaseAssertStringEqual(path, self.database.path);
     TestCaseAssertTrue(openHandleCount == 1);
+
+    [self.database close];
+    TestCaseAssertTrue([self.database insertObjects:[Random.shared autoIncrementTestCaseObjectsWithCount:10] intoTable:self.tableName]);
+    TestCaseAssertTrue(openHandleCount == 2);
+    TestCaseAssertTrue(tableCount == 4);
+    TestCaseAssertTrue(indexCount == 1);
+    [WCTDatabase globalTraceDatabaseOperation:nil];
 }
 
 @end

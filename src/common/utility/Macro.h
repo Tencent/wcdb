@@ -24,6 +24,20 @@
 
 #pragma once
 
+#ifndef _WIN32
+#define WCDB_API __attribute__((visibility("default")))
+#else
+#if defined(WCDB_DLL)
+#if defined(WCDB_BUILD_DLL)
+#define WCDB_API __declspec(dllexport)
+#else
+#define WCDB_API __declspec(dllimport)
+#endif //WCDB_BUILD_DLL
+#else
+#define WCDB_API
+#endif //WCDB_DLL
+#endif //_WIN32
+
 #define WCDB_BOOL_1 1
 #define WCDB_BOOL_0 0
 #define WCDB_BOOL_true 1
@@ -85,11 +99,11 @@
 #endif
 
 #if defined(__cplusplus)
-#define WCDB_EXTERN extern "C"
+#define WCDB_EXTERN extern "C" WCDB_API
 #define WCDB_EXTERN_C_BEGIN extern "C" {
 #define WCDB_EXTERN_C_END }
 #else
-#define WCDB_EXTERN extern
+#define WCDB_EXTERN extern WCDB_API
 #define WCDB_EXTERN_C_BEGIN
 #define WCDB_EXTERN_C_END
 #endif
@@ -103,6 +117,17 @@
 #define WCDB_UNUSED(variable)
 #endif
 
-// It doesn't seems to work as expected.
-// #define WCDB_NO_DESTROY [[clang::no_destroy]]
-// #define WCDB_STATIC_VARIABLE WCDB_NO_DESTROY static
+#ifdef __clang__
+#define WCDB_NO_DESTROY [[clang::no_destroy]]
+#define WCDB_STATIC_VARIABLE WCDB_NO_DESTROY static
+#else
+#define WCDB_NO_DESTROY
+#define WCDB_STATIC_VARIABLE
+#endif
+
+#define WCDBLiteralStringDefine(name, value)                                   \
+    static constexpr const char* k_##name = value;                             \
+    WCDB_EXTERN const StringView name;
+
+#define WCDBLiteralStringImplement(name)                                       \
+    WCDB_NO_DESTROY const StringView name = StringView::makeConstant(k_##name);

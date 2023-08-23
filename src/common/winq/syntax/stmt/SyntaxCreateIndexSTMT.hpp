@@ -31,7 +31,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class CreateIndexSTMT final : public Identifier {
+class WCDB_API CreateIndexSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     ~CreateIndexSTMT() override final;

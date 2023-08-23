@@ -66,24 +66,24 @@ void WCDBErrorEnumerateAllInfo(CPPError error, SwiftClosure* _Nonnull callback)
     }
     WCDBGetObjectOrReturn(error, WCDB::Error, cppError);
     for (const auto& info : cppError->infos) {
-        switch (info.second.underlyingType()) {
-        case WCDB::Error::InfoValue::UnderlyingType::String:
+        switch (info.second.getType()) {
+        case WCDB::Value::Type::Text:
             WCDBSwiftClosureCallWithMultiArgument(enumerator,
                                                   info.first.data(),
                                                   WCDBErrorValueTypeString,
                                                   0,
                                                   0,
-                                                  info.second.stringValue().data());
+                                                  info.second.textValue().data());
             break;
-        case WCDB::Error::InfoValue::UnderlyingType::Integer:
+        case WCDB::Value::Type::Integer:
             WCDBSwiftClosureCallWithMultiArgument(enumerator,
                                                   info.first.data(),
                                                   WCDBErrorValueTypeInterger,
-                                                  info.second.integerValue(),
+                                                  info.second.intValue(),
                                                   0,
                                                   nullptr);
             break;
-        case WCDB::Error::InfoValue::UnderlyingType::Float:
+        case WCDB::Value::Type::Float:
             WCDBSwiftClosureCallWithMultiArgument(enumerator,
                                                   info.first.data(),
                                                   WCDBErrorValueTypeFloat,

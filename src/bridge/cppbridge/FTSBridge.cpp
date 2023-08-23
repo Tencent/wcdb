@@ -190,8 +190,8 @@ void WCDBDatabaseAddTokenizer(CPPDatabase database, const char* _Nullable tokeni
         return;
     }
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
-    WCDB::StringView configName
-    = WCDB::StringView::formatted("%s%s", WCDB::TokenizeConfigPrefix, tokenizer);
+    WCDB::StringView configName = WCDB::StringView::formatted(
+    "%s%s", WCDB::TokenizeConfigPrefix.data(), tokenizer);
     cppDatabase->setConfig(configName,
                            WCDB::Core::shared().tokenizerConfig(tokenizer),
                            WCDB::Configs::Priority::Higher);
@@ -207,7 +207,7 @@ void WCDBDatabaseAddAuxiliaryFunction(CPPDatabase database, const char* _Nullabl
     }
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     WCDB::StringView configName = WCDB::StringView::formatted(
-    "%s%s", WCDB::AuxiliaryFunctionConfigPrefix, auxFunction);
+    "%s%s", WCDB::AuxiliaryFunctionConfigPrefix.data(), auxFunction);
     cppDatabase->setConfig(configName,
                            WCDB::Core::shared().auxiliaryFunctionConfig(auxFunction),
                            WCDB::Configs::Priority::Higher);

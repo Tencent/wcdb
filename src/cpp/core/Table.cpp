@@ -47,9 +47,9 @@ const Error& BaseTable::getError() const
     return m_innerDatabase->getThreadedError();
 }
 
-RecyclableHandle BaseTable::getHandle()
+RecyclableHandle BaseTable::getHandle(bool writeHint)
 {
-    return m_databaseHolder->getHandle();
+    return m_databaseHolder->getHandle(writeHint);
 }
 
 const StringView& BaseTable::getTableName() const

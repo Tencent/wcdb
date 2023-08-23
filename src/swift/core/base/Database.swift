@@ -286,21 +286,23 @@ public extension Database {
         return WCDBCoreSetDefaultTemporaryDirectory(directory.cString)
     }
 
-    typealias PerformanceTracer = (String, UInt64, String, Double) -> Void // Path, handleIdentifier, SQL, cost
-    typealias SQLTracer = (String, UInt64, String) -> Void // Path, handleIdentifier, SQL
+    typealias PerformanceTracer = (Tag, String, UInt64, String, Double) -> Void // Tag, Path, handleIdentifier, SQL, cost
+    typealias SQLTracer = (Tag, String, UInt64, String) -> Void // Tag, Path, handleIdentifier, SQL
 
     /// You can register a tracer to monitor the performance of all SQLs.  
     /// It returns  
     /// 1. Every SQL executed by the database.
     /// 2. Time consuming in seconds.
-    /// 3. Path of database.
-    /// 4. The id of the handle executing this SQL.
+    /// 3. Tag of database.
+    /// 4. Path of database.
+    /// 5. The id of the handle executing this SQL.
     ///
     /// Note that:  
     /// 1. You should register trace before all db operations.   
     /// 2. Global tracer will be recovered by db tracer.  
     ///
-    ///     Database.globalTrace(ofPerformance: { (path, handleId, sql, cost) in
+    ///     Database.globalTrace(ofPerformance: { (tag, path, handleId, sql, cost) in
+    ///         print("Tag: \(tag)")
     ///         print("Path: \(path)")
     ///         print("The handle with id \(handleId) took \(cost) seconds to execute \(sql)")
     ///     })
@@ -309,9 +311,9 @@ public extension Database {
     ///
     /// - Parameter trace: trace. Nil to disable global preformance trace.
     static func globalTrace(ofPerformance trace: @escaping PerformanceTracer) {
-        let callback: @convention(block) (UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>, Double) -> Void = {
-            (path, handleId, sql, cost) in
-            trace(String(cString: path), handleId, String(cString: sql), cost)
+        let callback: @convention(block) (Int, UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>, Double) -> Void = {
+            (tag, path, handleId, sql, cost) in
+            trace(tag, String(cString: path), handleId, String(cString: sql), cost)
         }
         let imp = imp_implementationWithBlock(callback)
         WCDBDatabaseGlobalTracePerformance(imp)
@@ -325,9 +327,9 @@ public extension Database {
     ///
     /// - Parameter trace: trace. Nil to disable preformance trace.
     func trace(ofPerformance trace: @escaping PerformanceTracer) {
-        let callback: @convention(block) (UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>, Double) -> Void = {
-            (path, handleId, sql, cost) in
-            trace(String(cString: path), handleId, String(cString: sql), cost)
+        let callback: @convention(block) (Int, UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>, Double) -> Void = {
+            (tag, path, handleId, sql, cost) in
+            trace(tag, String(cString: path), handleId, String(cString: sql), cost)
         }
         let imp = imp_implementationWithBlock(callback)
         WCDBDatabaseTracePerformance(database, imp)
@@ -339,11 +341,13 @@ public extension Database {
     /// You can register a tracer to monitor the execution of all SQLs.
     /// It returns
     /// 1. Every SQL executed by the database.
-    /// 2. Path of database.
-    /// 3. The id of the handle executing this SQL.
+    /// 2. Tag of database.
+    /// 3. Path of database.
+    /// 4. The id of the handle executing this SQL.
     /// Note that you should register trace before all db operations.
     ///
-    ///     Database.globalTrace(ofSQL: { (path, handleId, sql) in
+    ///     Database.globalTrace(ofSQL: { (tag, path, handleId, sql) in
+    ///         print("Tag: \(tag)")
     ///         print("Path: \(path)")
     ///         print("The handle with id \(handleId) executed \(sql)")
     ///     })
@@ -352,9 +356,9 @@ public extension Database {
     ///
     /// - Parameter trace: trace. Nil to disable global sql trace.
     static func globalTrace(ofSQL trace: @escaping SQLTracer) {
-        let callback: @convention(block) (UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>) -> Void = {
-            (path, handleId, sql) in
-            trace(String(cString: path), handleId, String(cString: sql))
+        let callback: @convention(block) (Int, UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>) -> Void = {
+            (tag, path, handleId, sql) in
+            trace(tag, String(cString: path), handleId, String(cString: sql))
         }
         let imp = imp_implementationWithBlock(callback)
         WCDBDatabaseGlobalTraceSQL(imp)
@@ -368,9 +372,9 @@ public extension Database {
     ///
     /// - Parameter trace: trace. Nil to disable sql trace.
     func trace(ofSQL trace: @escaping SQLTracer) {
-        let callback: @convention(block) (UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>) -> Void = {
-            (path, handleId, sql) in
-            trace(String(cString: path), handleId, String(cString: sql))
+        let callback: @convention(block) (Int, UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>) -> Void = {
+            (tag, path, handleId, sql) in
+            trace(tag, String(cString: path), handleId, String(cString: sql))
         }
         let imp = imp_implementationWithBlock(callback)
         WCDBDatabaseTraceSQL(database, imp)

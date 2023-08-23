@@ -35,7 +35,9 @@
     WCDB::StatementPragma statement = WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion());
 
     BOOL tested = NO;
-    self.database->traceSQL([&](const WCDB::UnsafeStringView &, const WCDB::UnsafeStringView &sql, const void *) {
+    self.database->traceSQL([&](long tag, const WCDB::UnsafeStringView &path, const WCDB::UnsafeStringView &sql, const void *) {
+        XCTAssertEqual(tag, self.database->getTag());
+        XCTAssertTrue(path.equal(self.database->getPath()));
         if (strcmp(sql.data(), statement.getDescription().data()) == 0) {
             tested = YES;
         }
@@ -58,7 +60,10 @@
                                                                              @"COMMIT",
                                                                              nil];
     self.database->tracePerformance(nullptr);
-    self.database->tracePerformance([&](const WCDB::UnsafeStringView &, const WCDB::UnsafeStringView &sql, double, const void *) {
+    self.database->tracePerformance([&](long tag, const WCDB::UnsafeStringView &path, const WCDB::UnsafeStringView &sql, double cost, const void *) {
+        XCTAssertEqual(tag, self.database->getTag());
+        XCTAssertTrue(path.equal(self.database->getPath()));
+        XCTAssertTrue(cost >= 0);
         if (strcmp(sql.data(), expectedFootprints.firstObject.UTF8String) == 0) {
             [expectedFootprints removeObjectAtIndex:0];
         }
@@ -110,7 +115,11 @@
     WCDB::StatementPragma statement = WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion());
 
     BOOL tested = NO;
-    WCDB::Database::globalTraceSQL([&](const WCDB::UnsafeStringView &, const WCDB::UnsafeStringView &sql, const void *) {
+    WCDB::Database::globalTraceSQL([&](long tag, const WCDB::UnsafeStringView &path, const WCDB::UnsafeStringView &sql, const void *) {
+        if (!path.equal(self.database->getPath())) {
+            return;
+        }
+        XCTAssertEqual(tag, self.database->getTag());
         if (strcmp(sql.data(), statement.getDescription().data()) == 0) {
             tested = YES;
         }
@@ -130,7 +139,12 @@
                                                                              @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)",
                                                                              @"COMMIT",
                                                                              nil];
-    WCDB::Database::globalTracePerformance([&](const WCDB::UnsafeStringView &, const WCDB::UnsafeStringView &sql, double, const void *) {
+    WCDB::Database::globalTracePerformance([&](long tag, const WCDB::UnsafeStringView &path, const WCDB::UnsafeStringView &sql, double cost, const void *) {
+        if (!path.equal(self.database->getPath())) {
+            return;
+        }
+        XCTAssertTrue(cost >= 0);
+        XCTAssertEqual(tag, self.database->getTag());
         if (strcmp(sql.data(), expectedFootprints.firstObject.UTF8String) == 0) {
             [expectedFootprints removeObjectAtIndex:0];
         }
@@ -146,7 +160,11 @@
     long tag = 0;
     WCDB::StringView path;
     int openHandleCount = 0;
-    WCDB::Database::globalTraceDatabaseOperation([&](WCDB::Database &database, WCDB::Database::Operation operation) {
+    int tableCount = 0;
+    int indexCount = 0;
+    WCDB::Database::globalTraceDatabaseOperation([&](WCDB::Database &database,
+                                                     WCDB::Database::Operation operation,
+                                                     WCDB::StringViewMap<WCDB::Value> &info) {
         switch (operation) {
         case WCDB::Database::Operation::Create:
             path = database.getPath();
@@ -154,16 +172,33 @@
         case WCDB::Database::Operation::SetTag:
             tag = database.getTag();
             break;
-        case WCDB::Database::Operation::OpenHandle:
+        case WCDB::Database::Operation::OpenHandle: {
             openHandleCount++;
-            break;
+            TestCaseAssertTrue(info[WCDB::Database::MonitorInfoKeyHandleCount].intValue() == 1);
+            TestCaseAssertTrue(info[WCDB::Database::MonitorInfoKeyHandleOpenTime].intValue() > 0);
+            TestCaseAssertTrue(info[WCDB::Database::MonitorInfoKeySchemaUsage].intValue() > 0);
+            TestCaseAssertTrue(info[WCDB::Database::MonitorInfoKeyTriggerCount].intValue() == 0);
+            tableCount = (int) info[WCDB::Database::MonitorInfoKeyTableCount].intValue();
+            indexCount = (int) info[WCDB::Database::MonitorInfoKeyIndexCount].intValue();
+        } break;
         }
     });
     TestCaseAssertTrue([self createValueTable]);
-    TestCaseAssertTrue(self.database->insertRows([Random.shared autoIncrementTestCaseValuesWithCount:10], self.columns, self.tableName.UTF8String));
+    TestCaseAssertTrue(self.database->execute(WCDB::StatementCreateIndex()
+                                              .createIndex("testIndex")
+                                              .table(self.tableName)
+                                              .indexed(WCDB_FIELD(CPPTestCaseObject::content))));
+
     TestCaseAssertTrue(tag = self.database->getTag());
     TestCaseAssertCPPStringEqual(path.data(), self.database->getPath().data());
     TestCaseAssertTrue(openHandleCount == 1);
+
+    self.database->close();
+    TestCaseAssertTrue(self.database->insertRows([Random.shared autoIncrementTestCaseValuesWithCount:10], self.columns, self.tableName.UTF8String));
+
+    TestCaseAssertTrue(openHandleCount == 2);
+    TestCaseAssertTrue(tableCount == 4);
+    TestCaseAssertTrue(indexCount == 1);
     WCDB::Database::globalTraceDatabaseOperation(nullptr);
 }
 

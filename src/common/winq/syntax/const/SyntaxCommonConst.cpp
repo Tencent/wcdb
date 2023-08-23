@@ -38,28 +38,9 @@ bool isIntegerColumnType(const UnsafeStringView& type)
            || type.caseInsensitiveEqual("INT2") || type.caseInsensitiveEqual("INT8");
 }
 
-const char* masterTableString = "sqlite_master";
-const char* sequenceTableString = "sqlite_sequence";
-const char* mainSchemaString = "main";
-const char* tempSchemaString = "temp";
-const char* builtinTablePrefixString = "sqlite_";
-
-const StringView* masterTablePtr
-= new StringView(StringView::makeConstant(masterTableString));
-const StringView* sequenceTablePtr
-= new StringView(StringView::makeConstant(sequenceTableString));
-const StringView* mainSchemaPtr
-= new StringView(StringView::makeConstant(mainSchemaString));
-const StringView* tempSchemaPtr
-= new StringView(StringView::makeConstant(tempSchemaString));
-const StringView* builtinTablePrefixPtr
-= new StringView(StringView::makeConstant(builtinTablePrefixString));
-
-const StringView& masterTable = *masterTablePtr;
-const StringView& sequenceTable = *sequenceTablePtr;
-const StringView& mainSchema = *mainSchemaPtr;
-const StringView& tempSchema = *tempSchemaPtr;
-const StringView& builtinTablePrefix = *builtinTablePrefixPtr;
+WCDBLiteralStringImplement(masterTable) WCDBLiteralStringImplement(sequenceTable)
+WCDBLiteralStringImplement(mainSchema) WCDBLiteralStringImplement(tempSchema)
+WCDBLiteralStringImplement(builtinTablePrefix)
 
 } // namespace Syntax
 

@@ -31,7 +31,7 @@
 
 WCDB_EXTERN_C_BEGIN
 
-WCDBDefineCPPBridgedType(CPPHandle)
+WCDBDefineCPPBridgedType(CPPHandle) WCDBDefineCPPBridgedType(CPPCancellationSignal)
 
 CPPError WCDBHandleGetError(CPPHandle handle);
 bool WCDBHandleCheckValid(CPPHandle handle);
@@ -53,5 +53,11 @@ void WCDBHandleRollbackTransaction(CPPHandle handle);
 
 bool WCDBHandleRunTransaction(CPPHandle handle, SwiftClosure* _Nullable transaction);
 bool WCDBHandleRunPausableTransaction(CPPHandle handle, SwiftClosure* _Nullable pausableTransaction);
+
+CPPCancellationSignal WCDBCancellationSignalCreate();
+void WCDBCancellationSignalCancel(CPPCancellationSignal signal);
+
+void WCDBHandleAttachCancellationSignal(CPPHandle handle, CPPCancellationSignal signal);
+void WCDBHandleDettachCancellationSignal(CPPHandle handle);
 
 WCDB_EXTERN_C_END

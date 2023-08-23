@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class StatementSelect final : public SpecifiedSyntax<Syntax::SelectSTMT, Statement> {
+class WCDB_API StatementSelect final : public SpecifiedSyntax<Syntax::SelectSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::SelectSTMT, Statement>::SpecifiedSyntax;
     StatementSelect();

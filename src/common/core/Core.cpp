@@ -146,9 +146,8 @@ void Core::preprocessError(Error& error)
     }
 
     auto iter = infos.find(UnsafeStringView(ErrorStringKeyPath));
-    if (iter != infos.end()
-        && iter->second.underlyingType() == Error::InfoValue::UnderlyingType::String) {
-        auto tag = m_databasePool.getTag(iter->second.stringValue());
+    if (iter != infos.end() && iter->second.getType() == Value::Type::Text) {
+        auto tag = m_databasePool.getTag(iter->second.textValue());
         if (tag.isValid()) {
             error.infos.insert_or_assign(ErrorIntKeyTag, (long) tag);
         }
@@ -388,7 +387,7 @@ void Core::setNotificationWhenErrorTraced(const UnsafeStringView& path,
                                           const Notifier::Callback& notification)
 {
     StringView notifierKey
-    = StringView::formatted("%s_%s", NotifierLoggerName, path.data());
+    = StringView::formatted("%s_%s", NotifierLoggerName.data(), path.data());
     if (notification != nullptr) {
         StringView catchedPath = StringView(path);
         Notifier::Callback realNotification = [=](const Error& error) {
@@ -401,6 +400,13 @@ void Core::setNotificationWhenErrorTraced(const UnsafeStringView& path,
     } else {
         Notifier::shared().unsetNotification(notifierKey);
     }
+}
+
+#pragma mark - Integrity
+
+void Core::skipIntegrityCheck(const UnsafeStringView& path)
+{
+    m_operationQueue->skipIntegrityCheck(path);
 }
 
 #pragma mark - Config

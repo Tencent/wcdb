@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Not Thread-safe
  */
-@interface WCTInsert<ObjectType> : WCTChainCall
+WCDB_API @interface WCTInsert<ObjectType> : WCTChainCall
 
 /**
  @brief The statement that `WCTInsert` will execute.

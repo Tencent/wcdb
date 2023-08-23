@@ -29,8 +29,8 @@
 #include "InnerHandle.hpp"
 #include "Notifier.hpp"
 
-#define GetHandleOrReturnValue(value)                                          \
-    RecyclableHandle handle = getHandleHolder();                               \
+#define GetHandleOrReturnValue(writeHint, value)                               \
+    RecyclableHandle handle = getHandleHolder(writeHint);                      \
     if (handle == nullptr) {                                                   \
         return value;                                                          \
     }
@@ -69,7 +69,7 @@ bool HandleOperation::insertRows(const MultiRowsValue &rows,
     if (rows.size() == 0) {
         return true;
     } else if (rows.size() == 1) {
-        GetHandleOrReturnValue(false);
+        GetHandleOrReturnValue(true, false);
         Handle newHandle = Handle(handle);
         return insertAction(newHandle);
     } else {
@@ -107,7 +107,7 @@ bool HandleOperation::insertOrReplaceRows(const MultiRowsValue &rows,
     if (rows.size() == 0) {
         return true;
     } else if (rows.size() == 1) {
-        GetHandleOrReturnValue(false);
+        GetHandleOrReturnValue(true, false);
         Handle newHandle = Handle(handle);
         return insertAction(newHandle);
     } else {
@@ -145,7 +145,7 @@ bool HandleOperation::insertOrIgnoreRows(const MultiRowsValue &rows,
     if (rows.size() == 0) {
         return true;
     } else if (rows.size() == 1) {
-        GetHandleOrReturnValue(false);
+        GetHandleOrReturnValue(true, false);
         Handle newHandle = Handle(handle);
         return insertAction(newHandle);
     } else {
@@ -170,7 +170,7 @@ bool HandleOperation::updateRow(const OneRowValue &row,
         update.set(columns[i]).to(WCDB::BindParameter(i + 1));
     }
     configStatement(update, where, orders, limit, offset);
-    GetHandleOrReturnValue(false);
+    GetHandleOrReturnValue(true, false);
     bool succeed = false;
     if ((succeed = handle->prepare(update))) {
         handle->bindRow(row);
@@ -243,7 +243,7 @@ OptionalMultiRows HandleOperation::selectAllRow(const ResultColumns &columns,
 OptionalValue HandleOperation::getValueFromStatement(const Statement &statement, int index)
 {
     OptionalValue result;
-    GetHandleOrReturnValue(result);
+    GetHandleOrReturnValue(false, result);
     if (!handle->prepare(statement)) {
         assignErrorToDatabase(handle->getError());
         return result;
@@ -263,7 +263,7 @@ OptionalOneColumn
 HandleOperation::getOneColumnFromStatement(const Statement &statement, int index)
 {
     OptionalOneColumn result;
-    GetHandleOrReturnValue(result);
+    GetHandleOrReturnValue(false, result);
     if (!handle->prepare(statement)) {
         assignErrorToDatabase(handle->getError());
         return result;
@@ -279,7 +279,7 @@ HandleOperation::getOneColumnFromStatement(const Statement &statement, int index
 OptionalOneRow HandleOperation::getOneRowFromStatement(const Statement &statement)
 {
     OptionalOneRow result;
-    GetHandleOrReturnValue(result);
+    GetHandleOrReturnValue(false, result);
     if (!handle->prepare(statement)) {
         assignErrorToDatabase(handle->getError());
         return result;
@@ -298,7 +298,7 @@ OptionalOneRow HandleOperation::getOneRowFromStatement(const Statement &statemen
 OptionalMultiRows HandleOperation::getAllRowsFromStatement(const Statement &statement)
 {
     OptionalMultiRows result;
-    GetHandleOrReturnValue(result);
+    GetHandleOrReturnValue(false, result);
     if (!handle->prepare(statement)) {
         assignErrorToDatabase(handle->getError());
         return result;
@@ -313,7 +313,7 @@ OptionalMultiRows HandleOperation::getAllRowsFromStatement(const Statement &stat
 
 bool HandleOperation::execute(const Statement &statement)
 {
-    GetHandleOrReturnValue(false);
+    GetHandleOrReturnValue(statement.isWriteStatement(), false);
     bool succeed = handle->execute(statement);
     if (!succeed) {
         assignErrorToDatabase(handle->getError());
@@ -323,7 +323,7 @@ bool HandleOperation::execute(const Statement &statement)
 
 bool HandleOperation::runTransaction(TransactionCallback inTransaction)
 {
-    GetHandleOrReturnValue(false);
+    GetHandleOrReturnValue(true, false);
     bool succeed = handle->runTransaction([inTransaction, this](InnerHandle *innerHandle) {
         Handle handle = Handle(getDatabaseHolder(), innerHandle);
         return inTransaction(handle);
@@ -336,7 +336,7 @@ bool HandleOperation::runTransaction(TransactionCallback inTransaction)
 
 bool HandleOperation::lazyRunTransaction(TransactionCallback inTransaction)
 {
-    GetHandleOrReturnValue(false);
+    GetHandleOrReturnValue(true, false);
     if (handle->isInTransaction()) {
         Handle newHandle = Handle(getDatabaseHolder(), handle.get());
         return inTransaction(newHandle);
@@ -349,7 +349,7 @@ bool HandleOperation::lazyRunTransaction(TransactionCallback inTransaction)
 bool HandleOperation::runPausableTransactionWithOneLoop(TransactionCallbackForOneLoop inTransaction)
 {
     Handle newHandle = Handle(getDatabaseHolder());
-    auto handleHolder = newHandle.getHandleHolder();
+    auto handleHolder = newHandle.getHandleHolder(true);
     if (handleHolder == nullptr) {
         return false;
     }
@@ -366,7 +366,7 @@ bool HandleOperation::runPausableTransactionWithOneLoop(TransactionCallbackForOn
 Optional<bool> HandleOperation::tableExists(const UnsafeStringView &tableName)
 {
     Optional<bool> result;
-    GetHandleOrReturnValue(result);
+    GetHandleOrReturnValue(false, result);
     result = handle->tableExists(tableName);
     if (!result.succeed()) {
         assignErrorToDatabase(handle->getError());
@@ -386,7 +386,7 @@ bool HandleOperation::dropIndex(const UnsafeStringView &indexName)
 
 void HandleOperation::notifyError(Error &error)
 {
-    auto handleHolder = getHandleHolder();
+    auto handleHolder = getHandleHolder(false);
     if (handleHolder != nullptr) {
         error.infos.insert_or_assign(ErrorStringKeyPath, handleHolder->getPath());
     }

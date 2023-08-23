@@ -36,6 +36,7 @@ namespace WCDB {
 AbstractHandle::AbstractHandle()
 : m_handle(nullptr)
 , m_customOpenFlag(0)
+, m_tag(Tag::invalid())
 , m_transactionLevel(0)
 , m_transactionError(TransactionError::Allowed)
 , m_cacheTransactionError(TransactionError::Allowed)
@@ -120,12 +121,25 @@ bool AbstractHandle::isOpened() const
 void AbstractHandle::close()
 {
     if (isOpened()) {
+        if (m_cancelSignal != nullptr) {
+            sqlite3_progress_handler(m_handle, 0, nullptr, nullptr);
+        }
         finalizeStatements();
         m_transactionLevel = 0;
         m_notification.purge();
         APIExit(sqlite3_close_v2(m_handle));
         m_handle = nullptr;
     }
+}
+
+void AbstractHandle::setTag(Tag tag)
+{
+    m_tag = tag;
+}
+
+Tag AbstractHandle::getTag()
+{
+    return m_tag;
 }
 
 bool AbstractHandle::executeSQL(const UnsafeStringView &sql)
@@ -378,6 +392,14 @@ AbstractHandle::getValues(const Statement &statement, int index)
         }
     }
     return values;
+}
+
+bool AbstractHandle::getSchemaInfo(int &memoryUsed, int &tableCount, int &indexCount, int &triggerCount)
+{
+    int highWater;
+    return APIExit(sqlite3_db_status(
+           m_handle, SQLITE_DBSTATUS_SCHEMA_USED, &memoryUsed, &highWater, false))
+           && APIExit(sqlite3_schema_info(m_handle, &tableCount, &indexCount, &triggerCount));
 }
 
 #pragma mark - Transaction
@@ -701,6 +723,30 @@ void AbstractHandle::doSuspend(bool suspend)
     if (isOpened()) {
         sqlite3_suspend(m_handle, suspend);
     }
+}
+
+#pragma mark - Cancellation Signal
+void AbstractHandle::attachCancellationSignal(CancellationSignal signal)
+{
+    WCTAssert(isOpened());
+    m_cancelSignal = signal;
+    sqlite3_progress_handler(m_handle, 4, AbstractHandle::progressHandlerCallback, this);
+}
+
+void AbstractHandle::detachCancellationSignal()
+{
+    if (m_cancelSignal == nullptr) {
+        return;
+    }
+    sqlite3_progress_handler(m_handle, 0, nullptr, nullptr);
+    m_cancelSignal = nullptr;
+}
+
+int AbstractHandle::progressHandlerCallback(void *ctx)
+{
+    AbstractHandle *handle = static_cast<AbstractHandle *>(ctx);
+    WCTAssert(handle->m_cancelSignal != nullptr);
+    return *(handle->m_cancelSignal);
 }
 
 #pragma mark - Cipher

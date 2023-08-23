@@ -29,7 +29,7 @@
 
 namespace WCDB {
 
-class HandleOperation : public BaseOperation {
+class WCDB_API HandleOperation : public BaseOperation {
 #pragma mark - Insert
 public:
     /**

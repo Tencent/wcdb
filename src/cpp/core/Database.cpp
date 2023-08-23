@@ -51,9 +51,18 @@ Database::Database(const UnsafeStringView& path)
 #ifndef _WIN32
     const char* resolvePath = realpath(path.data(), nullptr);
     if (resolvePath == nullptr && errno == ENOENT) {
-        FileManager::createFile(path);
-        resolvePath = realpath(path.data(), nullptr);
-        FileManager::removeItem(path);
+        if (FileManager::createDirectoryWithIntermediateDirectories(Path::getDirectory(path))
+            && FileManager::createFile(path)) {
+            resolvePath = realpath(path.data(), nullptr);
+            if (resolvePath == NULL) {
+                Error error;
+                error.level = Error::Level::Error;
+                error.setSystemCode(errno, Error::Code::IOError);
+                error.infos.insert_or_assign(ErrorStringKeyPath, path);
+                Notifier::shared().notify(error);
+            }
+            FileManager::removeItem(path);
+        }
     }
     if (resolvePath != nullptr) {
         UnsafeStringView newPath = UnsafeStringView(resolvePath);
@@ -72,18 +81,13 @@ Database::Database(const UnsafeStringView& path)
         free((void*) resolvePath);
     }
 #else
-    char resolvePath[_MAX_PATH];
-    if (_fullpath(resolvePath, path.data(), _MAX_PATH) != NULL) {
-        UnsafeStringView newPath = UnsafeStringView(resolvePath);
+    wchar_t resolvePath[_MAX_PATH];
+    if (::_wfullpath(resolvePath, GetPathString(path), _MAX_PATH) != NULL) {
+        StringView newPath = StringView::createFromWString(resolvePath);
         m_databaseHolder = Core::shared().getOrCreateDatabase(newPath);
     }
 #endif
     else {
-        Error error;
-        error.level = Error::Level::Error;
-        error.setSystemCode(errno, Error::Code::IOError);
-        error.infos.insert_or_assign(ErrorStringKeyPath, path);
-        Notifier::shared().notify(error);
         m_databaseHolder = Core::shared().getOrCreateDatabase(path);
     }
     m_innerDatabase = m_databaseHolder.get();
@@ -100,9 +104,9 @@ Database::Database(InnerDatabase* database) : m_innerDatabase(database)
     m_databaseHolder = RecyclableDatabase(m_innerDatabase, nullptr);
 }
 
-RecyclableHandle Database::getHandleHolder()
+RecyclableHandle Database::getHandleHolder(bool writeHint)
 {
-    return m_databaseHolder->getHandle();
+    return m_databaseHolder->getHandle(writeHint);
 }
 
 Recyclable<InnerDatabase*> Database::getDatabaseHolder()
@@ -226,13 +230,21 @@ void Database::traceSQL(Database::SQLNotification trace)
     }
 }
 
+const StringView& Database::MonitorInfoKeyHandleCount = WCDB::MonitorInfoKeyHandleCount;
+const StringView& Database::MonitorInfoKeySchemaUsage = WCDB::MonitorInfoKeySchemaUsage;
+const StringView& Database::MonitorInfoKeyHandleOpenTime = WCDB::MonitorInfoKeyHandleOpenTime;
+const StringView& Database::MonitorInfoKeyTableCount = WCDB::MonitorInfoKeyTableCount;
+const StringView& Database::MonitorInfoKeyIndexCount = WCDB::MonitorInfoKeyIndexCount;
+const StringView& Database::MonitorInfoKeyTriggerCount = WCDB::MonitorInfoKeyTriggerCount;
+
 void Database::globalTraceDatabaseOperation(DBOperationTrace trace)
 {
     if (trace != nullptr) {
-        DBOperationNotifier::shared().setNotification(
-        [=](InnerDatabase* innerDatabase, DBOperationNotifier::Operation operation) {
+        DBOperationNotifier::shared().setNotification([=](InnerDatabase* innerDatabase,
+                                                          DBOperationNotifier::Operation operation,
+                                                          StringViewMap<Value>& info) {
             Database database = Database(innerDatabase);
-            trace(database, (Operation) operation);
+            trace(database, (Operation) operation, info);
         });
     } else {
         DBOperationNotifier::shared().setNotification(nullptr);
@@ -267,7 +279,7 @@ void Database::enableAutoMergeFTS5Index(bool flag)
 void Database::addTokenizer(const UnsafeStringView& tokenize)
 {
     StringView configName
-    = StringView::formatted("%s%s", TokenizeConfigPrefix, tokenize.data());
+    = StringView::formatted("%s%s", TokenizeConfigPrefix.data(), tokenize.data());
     m_innerDatabase->setConfig(
     configName, Core::shared().tokenizerConfig(tokenize), Configs::Priority::Higher);
 }
@@ -280,7 +292,7 @@ void Database::registerTokenizer(const UnsafeStringView& name, const TokenizerMo
 void Database::addAuxiliaryFunction(const UnsafeStringView& functionName)
 {
     StringView configName = StringView::formatted(
-    "%s%s", AuxiliaryFunctionConfigPrefix, functionName.data());
+    "%s%s", AuxiliaryFunctionConfigPrefix.data(), functionName.data());
     m_innerDatabase->setConfig(configName,
                                Core::shared().auxiliaryFunctionConfig(functionName),
                                Configs::Priority::Higher);
@@ -401,15 +413,16 @@ void Database::setConfig(const UnsafeStringView& name,
                          Priority priority)
 {
     m_innerDatabase->purge();
+    InnerDatabase* database = m_innerDatabase;
     CustomConfig::Invocation configInvocation
-    = [invocation, this](InnerHandle* innerHandle) -> bool {
-        Handle handle = Handle(m_databaseHolder, innerHandle);
+    = [invocation, database](InnerHandle* innerHandle) -> bool {
+        Handle handle = Handle(RecyclableDatabase(database, nullptr), innerHandle);
         return invocation(handle);
     };
     CustomConfig::Invocation configUninvocation = nullptr;
     if (unInvocation != nullptr) {
-        configUninvocation = [unInvocation, this](InnerHandle* innerHandle) -> bool {
-            Handle handle = Handle(m_databaseHolder, innerHandle);
+        configUninvocation = [unInvocation, database](InnerHandle* innerHandle) -> bool {
+            Handle handle = Handle(RecyclableDatabase(database, nullptr), innerHandle);
             return unInvocation(handle);
         };
     }

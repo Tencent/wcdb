@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class BindParameter final : public SpecifiedSyntax<Syntax::BindParameter, SQL> {
+class WCDB_API BindParameter final : public SpecifiedSyntax<Syntax::BindParameter, SQL> {
 public:
     using SpecifiedSyntax<Syntax::BindParameter, SQL>::SpecifiedSyntax;
     BindParameter();

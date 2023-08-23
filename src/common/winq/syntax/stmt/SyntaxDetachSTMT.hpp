@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class DetachSTMT final : public Identifier {
+class WCDB_API DetachSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     ~DetachSTMT() override final;

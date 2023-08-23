@@ -28,7 +28,8 @@
 
 namespace WCDB {
 
-class StatementSavepoint final : public SpecifiedSyntax<Syntax::SavepointSTMT, Statement> {
+class WCDB_API StatementSavepoint final
+: public SpecifiedSyntax<Syntax::SavepointSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::SavepointSTMT, Statement>::SpecifiedSyntax;
     StatementSavepoint();

@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Not Thread-safe
  */
-@interface WCTDelete : WCTChainCall
+WCDB_API @interface WCTDelete : WCTChainCall
 
 /**
  @brief The statement that `WCTDelete` will execute.

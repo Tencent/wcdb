@@ -32,7 +32,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class TableOrSubquery final : public Identifier {
+class WCDB_API TableOrSubquery final : public Identifier {
 #pragma mark - Lang
 public:
     ~TableOrSubquery() override final;
@@ -42,7 +42,7 @@ public:
     Schema schema;
     StringView tableOrFunction;
     StringView alias;
-    enum class IndexType : signed char {
+    enum class WCDB_API IndexType : signed char {
         NotSet = 0,
         Indexed,
         NotIndexed,

@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Not Thread-safe
  */
-@interface WCTSelectable : WCTChainCall
+WCDB_API @interface WCTSelectable : WCTChainCall
 
 /**
  The statement will be executed.

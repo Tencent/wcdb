@@ -29,7 +29,7 @@ typedef NS_ENUM(int, WCTAccessorType) {
     WCTAccessorObjC,
 };
 
-class WCTBaseAccessor {
+class WCDB_API WCTBaseAccessor {
 public:
     using InstanceType = id; //NSObject<WCTTableCoding>*
     virtual ~WCTBaseAccessor();

@@ -32,7 +32,7 @@ namespace WCDB {
 class ShareableHighWater;
 typedef std::shared_ptr<ShareableHighWater> SharedHighWater;
 
-class Data final : public UnsafeData {
+class WCDB_API Data final : public UnsafeData {
 #pragma mark - Initialize
 public:
     Data();

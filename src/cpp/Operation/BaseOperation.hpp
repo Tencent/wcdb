@@ -28,10 +28,10 @@
 
 namespace WCDB {
 
-class BaseOperation {
+class WCDB_API BaseOperation {
 protected:
     virtual ~BaseOperation() = 0;
-    virtual RecyclableHandle getHandleHolder() = 0;
+    virtual RecyclableHandle getHandleHolder(bool writeHint) = 0;
     virtual Recyclable<InnerDatabase *> getDatabaseHolder() = 0;
     void assignErrorToDatabase(const Error &error);
 

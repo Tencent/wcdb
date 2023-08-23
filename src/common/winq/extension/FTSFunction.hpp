@@ -29,7 +29,7 @@
 
 namespace WCDB {
 
-class FTSFunction final {
+class WCDB_API FTSFunction final {
 public:
     FTSFunction() = delete;
     FTSFunction(const FTSFunction &) = delete;
@@ -62,7 +62,7 @@ public:
                                          const UnsafeStringView &separators);
 };
 
-class FTSFunctionOperable : virtual public ExpressionOperable {
+class WCDB_API FTSFunctionOperable : virtual public ExpressionOperable {
 public:
     virtual ~FTSFunctionOperable() override = 0;
 

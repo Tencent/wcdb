@@ -26,6 +26,7 @@
 #import "Console.hpp"
 #import "Core.hpp"
 #import "DBOperationNotifier.hpp"
+#import "WCTConvertible.h"
 #import "WCTDatabase+Monitor.h"
 #import "WCTDatabase+Private.h"
 #import "WCTError+Private.h"
@@ -41,6 +42,13 @@ void Core::print(const UnsafeStringView& message)
 }
 
 }
+
+NSString* const WCTDatabaseMonitorInfoKeyHandleCount = [NSString stringWithUTF8String:WCDB::k_MonitorInfoKeyHandleCount];
+NSString* const WCTDatabaseMonitorInfoKeyHandleOpenTime = [NSString stringWithUTF8String:WCDB::k_MonitorInfoKeyHandleOpenTime];
+NSString* const WCTDatabaseMonitorInfoKeySchemaUsage = [NSString stringWithUTF8String:WCDB::k_MonitorInfoKeySchemaUsage];
+NSString* const WCTDatabaseMonitorInfoKeyTableCount = [NSString stringWithUTF8String:WCDB::k_MonitorInfoKeyTableCount];
+NSString* const WCTDatabaseMonitorInfoKeyIndexCount = [NSString stringWithUTF8String:WCDB::k_MonitorInfoKeyIndexCount];
+NSString* const WCTDatabaseMonitorInfoKeyTriggerCount = [NSString stringWithUTF8String:WCDB::k_MonitorInfoKeyTriggerCount];
 
 @implementation WCTDatabase (Monitor)
 
@@ -72,8 +80,8 @@ void Core::print(const UnsafeStringView& message)
 {
     WCDB::InnerHandle::PerformanceNotification callback = nullptr;
     if (trace != nil) {
-        callback = [trace](const WCDB::UnsafeStringView& path, const WCDB::UnsafeStringView& sql, double cost, const void* handle) {
-            trace([NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithUTF8String:sql.data()], cost);
+        callback = [trace](const WCDB::Tag& tag, const WCDB::UnsafeStringView& path, const WCDB::UnsafeStringView& sql, double cost, const void* handle) {
+            trace(tag, [NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithUTF8String:sql.data()], cost);
         };
     }
     WCDB::Core::shared().setNotificationWhenPerformanceGlobalTraced(callback);
@@ -83,8 +91,8 @@ void Core::print(const UnsafeStringView& message)
 {
     WCDB::InnerHandle::SQLNotification callback = nullptr;
     if (trace != nil) {
-        callback = [trace](const WCDB::UnsafeStringView& path, const WCDB::UnsafeStringView& sql, const void* handle) {
-            trace([NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithView:sql]);
+        callback = [trace](const WCDB::Tag& tag, const WCDB::UnsafeStringView& path, const WCDB::UnsafeStringView& sql, const void* handle) {
+            trace(tag, [NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithView:sql]);
         };
     }
     WCDB::Core::shared().setNotificationForSQLGLobalTraced(callback);
@@ -93,8 +101,8 @@ void Core::print(const UnsafeStringView& message)
 - (void)tracePerformance:(WCTPerformanceTraceBlock)trace
 {
     if (trace != nil) {
-        WCDB::InnerHandle::PerformanceNotification callback = [trace](const WCDB::UnsafeStringView& path, const WCDB::UnsafeStringView& sql, double cost, const void* handle) {
-            trace([NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithUTF8String:sql.data()], cost);
+        WCDB::InnerHandle::PerformanceNotification callback = [trace](const WCDB::Tag& tag, const WCDB::UnsafeStringView& path, const WCDB::UnsafeStringView& sql, double cost, const void* handle) {
+            trace(tag, [NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithUTF8String:sql.data()], cost);
         };
         _database->setConfig(WCDB::PerformanceTraceConfigName,
                              std::static_pointer_cast<WCDB::Config>(std::make_shared<WCDB::PerformanceTraceConfig>(callback)),
@@ -107,8 +115,8 @@ void Core::print(const UnsafeStringView& message)
 - (void)traceSQL:(WCTSQLTraceBlock)trace
 {
     if (trace != nil) {
-        WCDB::InnerHandle::SQLNotification callback = [trace](const WCDB::UnsafeStringView& path, const WCDB::UnsafeStringView& sql, const void* handle) {
-            trace([NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithView:sql]);
+        WCDB::InnerHandle::SQLNotification callback = [trace](const WCDB::Tag& tag, const WCDB::UnsafeStringView& path, const WCDB::UnsafeStringView& sql, const void* handle) {
+            trace(tag, [NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithView:sql]);
         };
         _database->setConfig(WCDB::SQLTraceConfigName,
                              std::static_pointer_cast<WCDB::Config>(std::make_shared<WCDB::SQLTraceConfig>(callback)),
@@ -121,9 +129,30 @@ void Core::print(const UnsafeStringView& message)
 + (void)globalTraceDatabaseOperation:(nullable WCDB_ESCAPE WCTDatabaseOperationTraceBlock)trace
 {
     if (trace != nil) {
-        WCDB::DBOperationNotifier::shared().setNotification([=](WCDB::InnerDatabase* innerDatabase, WCDB::DBOperationNotifier::Operation operation) {
+        WCDB::DBOperationNotifier::shared().setNotification([=](WCDB::InnerDatabase* innerDatabase, WCDB::DBOperationNotifier::Operation operation, const WCDB::StringViewMap<WCDB::Value>& info) {
             WCTDatabase* database = [[WCTDatabase alloc] initWithUnsafeDatabase:innerDatabase];
-            trace(database, (WCTDatabaseOperation) operation);
+            NSMutableDictionary* nsInfo = [[NSMutableDictionary alloc] init];
+            for (auto iter = info.begin(); iter != info.end(); iter++) {
+                NSString* key = [NSString stringWithUTF8String:iter->first.data()];
+                switch (iter->second.getType()) {
+                case WCDB::Value::Type::Integer: {
+                    nsInfo[key] = @(iter->second.intValue());
+                } break;
+                case WCDB::Value::Type::Float: {
+                    nsInfo[key] = @(iter->second.floatValue());
+                } break;
+                case WCDB::Value::Type::Text: {
+                    nsInfo[key] = [NSString stringWithUTF8String:iter->second.textValue().data()];
+                } break;
+                case WCDB::Value::Type::BLOB: {
+                    const WCDB::Data& value = iter->second.blobValue();
+                    nsInfo[key] = [NSData dataWithBytes:value.buffer() length:value.size()];
+                } break;
+                default:
+                    break;
+                }
+            }
+            trace(database, (WCTDatabaseOperation) operation, nsInfo);
         });
     } else {
         WCDB::DBOperationNotifier::shared().setNotification(nil);

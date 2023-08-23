@@ -24,12 +24,13 @@
 
 #pragma once
 
+#include "Macro.h"
 #include <cstdint>
 #include <type_traits>
 
 namespace WCDB {
 
-class Tag final {
+class WCDB_API Tag final {
 public:
     static const Tag& invalid();
 
