@@ -93,6 +93,7 @@ if (WIN32)
     )
     add_compile_options(/wd4068)  # Disable unknown pragma warnings
     add_compile_options(/wd4996)
+    add_compile_options(/wd4715)
 else ()
     enable_language(C CXX)
     set(COMM_FLAGS_ "-Wall -g")
