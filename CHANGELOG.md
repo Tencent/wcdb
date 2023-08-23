@@ -1,3 +1,9 @@
+## v2.0.4
+
+* Support to asynchronously interrupt database operations
+* Optimize the handle management mechanism
+* Some bugfix for WCDB C++ in Windows
+
 ## v2.0.3
 
 * Transaction supports nesting
