@@ -36,11 +36,15 @@
 #include <windows.h>
 #endif
 
+#ifndef O_BINARY
+#define O_BINARY 0
+#endif
+
 namespace WCDB {
 
 #pragma mark - Initialize
-FileHandle::FileHandle(const UnsafeStringView &path_)
-: path(path_)
+FileHandle::FileHandle(const UnsafeStringView &path)
+: path(path)
 , m_fd(-1)
 #ifdef _WIN32
 , m_mapHandle(INVALID_HANDLE_VALUE)
@@ -74,6 +78,7 @@ FileHandle::~FileHandle()
 FileHandle &FileHandle::operator=(FileHandle &&other)
 {
     WCTAssert(path == other.path);
+    path == other.path;
     m_fd = other.m_fd;
     other.m_fd = -1;
     other.m_mode = Mode::None;
@@ -86,12 +91,13 @@ bool FileHandle::open(Mode mode)
     WCTAssert(!isOpened());
     switch (mode) {
     case Mode::OverWrite: {
-        m_fd = ::open(path.data(), O_BINARY | O_CREAT | O_WRONLY | O_TRUNC, FileFullAccess);
+        m_fd = wcdb_open(
+        GetPathString(path), O_BINARY | O_CREAT | O_WRONLY | O_TRUNC, FileFullAccess);
         break;
     }
     default:
         WCTAssert(mode == Mode::ReadOnly);
-        m_fd = ::open(path.data(), O_RDONLY | O_BINARY);
+        m_fd = wcdb_open(GetPathString(path), O_RDONLY | O_BINARY);
         break;
     }
     if (m_fd == -1) {
@@ -145,7 +151,7 @@ Data FileHandle::read(size_t size)
     if (data.empty()) {
         return Data::null();
     }
-    offset_t offset = (offset_t) lseek(m_fd, 0, SEEK_SET);
+    offset_t offset = (offset_t) wcdb_lseek(m_fd, 0, SEEK_SET);
     if (offset != 0) {
         setThreadedError();
         return Data::null();
@@ -192,7 +198,7 @@ bool FileHandle::write(const UnsafeData &unsafeData)
     ssize_t prior = 0;
     size_t size = unsafeData.size();
     const unsigned char *buffer = unsafeData.buffer();
-    offset_t offset = (offset_t) lseek(m_fd, 0, SEEK_SET);
+    offset_t offset = (offset_t) wcdb_lseek(m_fd, 0, SEEK_SET);
     if (offset != 0) {
         setThreadedError();
         return false;

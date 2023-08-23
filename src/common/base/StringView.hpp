@@ -47,6 +47,10 @@ public:
     UnsafeStringView(const UnsafeStringView& other);
     UnsafeStringView(UnsafeStringView&& other);
 
+#ifdef _WIN32
+    std::wstring getWString() const;
+#endif
+
     UnsafeStringView& operator=(const UnsafeStringView& other);
     UnsafeStringView& operator=(UnsafeStringView&& other);
     bool operator==(const UnsafeStringView& other) const;
@@ -154,6 +158,9 @@ public:
     static StringView hexString(const UnsafeData& data);
     static StringView makeConstant(const char* string);
     static StringView createConstant(const char* string);
+#ifdef _WIN32
+    static StringView createFromWString(const wchar_t* string);
+#endif
 
 protected:
     void assignString(const char* content, size_t length);
