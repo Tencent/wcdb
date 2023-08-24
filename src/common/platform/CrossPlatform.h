@@ -84,7 +84,7 @@ WCDB_EXTERN_C_END
 #define st_ctimespec st_ctime
 #endif
 
-#pragma mark - uinstd
+#pragma mark - unistd
 
 #ifndef _WIN32
 #include <unistd.h>
