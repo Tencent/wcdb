@@ -4,6 +4,10 @@ project(WCDB)
 include(utility.cmake)
 include(sqlcipher.cmake)
 
+# Hide symbols by default
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_C_VISIBILITY_PRESET hidden)
+
 
 set(WCDB_SRC_DIR ${CMAKE_CURRENT_LIST_DIR})
 
@@ -111,11 +115,17 @@ if (WIN32)
         add_definitions(-D_WIN64 -DWIN64)
     endif ()
 
+    if (BUILD_SHARED_LIBS) 
+        add_definitions(-DWCDB_DLL -DWCDB_BUILD_DLL)
+    endif ()
+
     add_compile_options(
             $<$<CONFIG:>:/MT> #---------|
             $<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
             $<$<CONFIG:Release>:/MT> #--|
     )
+
+    add_compile_options(/wd4068)  # Disable unknown pragma warnings
 else ()
     enable_language(C CXX)
     set(COMM_FLAGS_ "-Wall -g")

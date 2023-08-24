@@ -24,5 +24,5 @@
 #pragma once
 #include "WCDBJNI.h"
 
-jstring WCDBJNIObjectMethod(Winq, getDescription, long long statement);
-jboolean WCDBJNIObjectMethod(Winq, isWriteStatement, long long statement);
+jstring JNIEXPORT WCDBJNIObjectMethod(Winq, getDescription, long long statement);
+jboolean JNIEXPORT WCDBJNIObjectMethod(Winq, isWriteStatement, long long statement);
