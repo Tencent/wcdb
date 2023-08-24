@@ -29,7 +29,7 @@
 
 namespace WCDB {
 
-class WCDB_API BaseBinding;
+class BaseBinding;
 
 namespace Syntax {
 

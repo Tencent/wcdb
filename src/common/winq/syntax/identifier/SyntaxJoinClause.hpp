@@ -30,8 +30,8 @@ namespace WCDB {
 
 namespace Syntax {
 
-class WCDB_API TableOrSubquery;
-class WCDB_API JoinConstraint;
+class TableOrSubquery;
+class JoinConstraint;
 
 class WCDB_API JoinClause final : public Identifier {
 #pragma mark - Lang
