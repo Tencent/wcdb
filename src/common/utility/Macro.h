@@ -98,6 +98,7 @@
 #define WCDB_USED
 #endif
 
+#ifndef WCDB_EXTERN
 #if defined(__cplusplus)
 #define WCDB_EXTERN extern "C" WCDB_API
 #define WCDB_EXTERN_C_BEGIN extern "C" {
@@ -106,6 +107,7 @@
 #define WCDB_EXTERN extern WCDB_API
 #define WCDB_EXTERN_C_BEGIN
 #define WCDB_EXTERN_C_END
+#endif
 #endif
 
 #define WCDB_FIRST_ARG(N, ...) N
