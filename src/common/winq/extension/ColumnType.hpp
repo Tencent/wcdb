@@ -39,7 +39,7 @@ typedef Syntax::ColumnType ColumnType;
 #pragma mark - Column Type Info
 //Null
 template<ColumnType T = ColumnType::Null>
-struct WCDB_API ColumnTypeInfo {
+struct ColumnTypeInfo {
     static constexpr const bool isNull = true;
     static constexpr const bool isFloat = false;
     static constexpr const bool isInteger = false;
@@ -51,7 +51,7 @@ struct WCDB_API ColumnTypeInfo {
 };
 //Float
 template<>
-struct WCDB_API ColumnTypeInfo<ColumnType::Float> {
+struct ColumnTypeInfo<ColumnType::Float> {
     static constexpr const bool isNull = false;
     static constexpr const bool isFloat = true;
     static constexpr const bool isInteger = false;
@@ -63,7 +63,7 @@ struct WCDB_API ColumnTypeInfo<ColumnType::Float> {
 };
 //Integer
 template<>
-struct WCDB_API ColumnTypeInfo<ColumnType::Integer> {
+struct ColumnTypeInfo<ColumnType::Integer> {
     static constexpr const bool isNull = false;
     static constexpr const bool isFloat = false;
     static constexpr const bool isInteger = true;
@@ -75,7 +75,7 @@ struct WCDB_API ColumnTypeInfo<ColumnType::Integer> {
 };
 //Text
 template<>
-struct WCDB_API ColumnTypeInfo<ColumnType::Text> {
+struct ColumnTypeInfo<ColumnType::Text> {
     static constexpr const bool isNull = false;
     static constexpr const bool isFloat = false;
     static constexpr const bool isInteger64 = false;
@@ -87,7 +87,7 @@ struct WCDB_API ColumnTypeInfo<ColumnType::Text> {
 };
 //BLOB
 template<>
-struct WCDB_API ColumnTypeInfo<ColumnType::BLOB> {
+struct ColumnTypeInfo<ColumnType::BLOB> {
     static constexpr const bool isNull = false;
     static constexpr const bool isFloat = false;
     static constexpr const bool isInteger = false;

@@ -28,7 +28,7 @@
 #import <type_traits>
 
 template<typename T>
-class WCDB_API WCTIncompleteOptional {
+class WCTIncompleteOptional {
 public:
     virtual ~WCTIncompleteOptional() = default;
 
