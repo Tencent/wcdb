@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class WCDB_API Expression;
+class Expression;
 
 class WCDB_API Filter final : public Identifier {
 #pragma mark - Lang

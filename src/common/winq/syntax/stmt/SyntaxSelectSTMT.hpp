@@ -32,8 +32,8 @@ namespace WCDB {
 
 namespace Syntax {
 
-class WCDB_API CommonTableExpression;
-class WCDB_API OrderingTerm;
+class CommonTableExpression;
+class OrderingTerm;
 
 class WCDB_API SelectSTMT final : public Identifier {
 #pragma mark - Lang

@@ -31,7 +31,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class WCDB_API Expression;
+class Expression;
 
 class WCDB_API FrameSpec final : public Identifier {
 #pragma mark - Lang
@@ -40,17 +40,17 @@ public:
 
     WCDB_SYNTAX_MAIN_UNION_ENUM(Range, Rows, );
 
-    enum class WCDB_API Event : signed char {
+    enum class Event : signed char {
         Single = 1,
         Between,
     } event;
-    enum class WCDB_API FirstEvent : signed char {
+    enum class FirstEvent : signed char {
         UnboundedPreceding = 1,
         Preceding,
         Following,
         CurrentRow,
     } firstEvent;
-    enum class WCDB_API SecondEvent : signed char {
+    enum class SecondEvent : signed char {
         UnboundedFollowing = 1,
         Preceding,
         Following,

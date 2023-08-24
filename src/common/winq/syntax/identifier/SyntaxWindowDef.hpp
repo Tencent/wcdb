@@ -31,8 +31,8 @@ namespace WCDB {
 
 namespace Syntax {
 
-class WCDB_API Expression;
-class WCDB_API OrderingTerm;
+class Expression;
+class OrderingTerm;
 
 class WCDB_API WindowDef final : public Identifier {
 #pragma mark - Lang
