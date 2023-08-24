@@ -25,6 +25,6 @@
 #import "WCTChainCall.h"
 #import "WCTDatabase.h"
 
-@interface WCTDatabase (ChainCall) <WCTCrossTableChainCallProtocol>
+WCDB_API @interface WCTDatabase(ChainCall)<WCTCrossTableChainCallProtocol>
 
 @end

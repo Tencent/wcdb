@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include "Macro.h"
 #include "SysTypes.h"
 #include <atomic>
 #include <map>
@@ -36,7 +37,7 @@ namespace WCDB {
 
 class UnsafeData;
 
-class UnsafeStringView {
+class WCDB_API UnsafeStringView {
 #pragma mark - UnsafeStringView - Constructor
 public:
     UnsafeStringView();
@@ -45,6 +46,10 @@ public:
 
     UnsafeStringView(const UnsafeStringView& other);
     UnsafeStringView(UnsafeStringView&& other);
+
+#ifdef _WIN32
+    std::wstring getWString() const;
+#endif
 
     UnsafeStringView& operator=(const UnsafeStringView& other);
     UnsafeStringView& operator=(UnsafeStringView&& other);
@@ -79,6 +84,7 @@ public:
     bool hasSuffix(const UnsafeStringView& target) const;
     bool contain(const UnsafeStringView& target) const;
     int compare(const UnsafeStringView& other) const;
+    bool equal(const UnsafeStringView& other) const;
 
     static constexpr size_t npos = -1;
     size_t find(const UnsafeStringView& other) const;
@@ -134,7 +140,7 @@ private:
 #endif
 };
 
-class StringView final : public UnsafeStringView {
+class WCDB_API StringView final : public UnsafeStringView {
 #pragma mark - StringView - Constructor
 public:
     explicit StringView();
@@ -152,12 +158,15 @@ public:
     static StringView hexString(const UnsafeData& data);
     static StringView makeConstant(const char* string);
     static StringView createConstant(const char* string);
+#ifdef _WIN32
+    static StringView createFromWString(const wchar_t* string);
+#endif
 
 protected:
     void assignString(const char* content, size_t length);
 };
 
-struct StringViewComparator {
+struct WCDB_API StringViewComparator {
     using is_transparent = std::true_type;
 
     bool operator()(const StringView& lhs, const StringView& rhs) const;
@@ -233,7 +242,7 @@ public:
     }
 };
 
-class StringViewSet final : public std::set<StringView, StringViewComparator> {
+class WCDB_API StringViewSet final : public std::set<StringView, StringViewComparator> {
 private:
     using Super = std::set<StringView, StringViewComparator>;
 
@@ -246,4 +255,5 @@ public:
 
 } // namespace WCDB
 
-std::ostream& operator<<(std::ostream& stream, const WCDB::UnsafeStringView& string);
+WCDB_API std::ostream&
+operator<<(std::ostream& stream, const WCDB::UnsafeStringView& string);

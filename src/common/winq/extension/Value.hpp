@@ -29,7 +29,7 @@
 
 namespace WCDB {
 
-class Value {
+class WCDB_API Value {
 public:
     template<class T, std::enable_if_t<ColumnIsIntegerType<T>::value, int> = 0>
     Value(const T& value) : m_type(Type::Integer)

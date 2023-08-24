@@ -28,7 +28,8 @@
 
 namespace WCDB {
 
-class StatementDropTable final : public SpecifiedSyntax<Syntax::DropTableSTMT, Statement> {
+class WCDB_API StatementDropTable final
+: public SpecifiedSyntax<Syntax::DropTableSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::DropTableSTMT, Statement>::SpecifiedSyntax;
     StatementDropTable();

@@ -32,7 +32,7 @@ namespace WCDB {
 
 #pragma mark - Field
 
-class Field final : public Column {
+class WCDB_API Field final : public Column {
     friend class ResultField;
     friend class SyntaxList<Field>;
     friend class StatementOperation;
@@ -101,7 +101,7 @@ private:
 #pragma mark - Fields
 
 template<>
-class SyntaxList<Field> final : public _SyntaxList<Field> {
+class WCDB_API SyntaxList<Field> final : public _SyntaxList<Field> {
 public:
     using _SyntaxList<Field>::_SyntaxList;
     ~SyntaxList() override final;
@@ -131,13 +131,13 @@ private:
 #pragma mark - Convertible
 
 template<>
-class ExpressionConvertible<Field> final : public std::true_type {
+class WCDB_API ExpressionConvertible<Field> final : public std::true_type {
 public:
     static Expression asExpression(const Field& field);
 };
 
 template<>
-class IndexedColumnConvertible<Field> final : public std::true_type {
+class WCDB_API IndexedColumnConvertible<Field> final : public std::true_type {
 public:
     static IndexedColumn asIndexedColumn(const Field& field);
 };

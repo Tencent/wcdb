@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class Filter final : public SpecifiedSyntax<Syntax::Filter, SQL> {
+class WCDB_API Filter final : public SpecifiedSyntax<Syntax::Filter, SQL> {
 public:
     using SpecifiedSyntax<Syntax::Filter, SQL>::SpecifiedSyntax;
     ~Filter() override final;

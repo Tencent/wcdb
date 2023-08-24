@@ -26,6 +26,13 @@
 
 #include "Macro.h"
 
+#pragma mark - path
+#ifndef _WIN32
+#define GetPathString(path) path.data()
+#else
+#define GetPathString(path) path.getWString().c_str()
+#endif
+
 #pragma mark - errno
 
 #ifndef EAUTH
@@ -64,7 +71,7 @@ WCDB_EXTERN_C_END
 #define StatFunc stat
 #else
 #define StatType struct _stat64
-#define StatFunc _stat64
+#define StatFunc _wstat64
 #endif
 
 #if defined(__linux__) || defined(__ANDROID__)
@@ -85,22 +92,28 @@ WCDB_EXTERN_C_END
 #include <io.h>
 #endif
 
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
-
 #ifdef __ANDROID__
 WCDB_EXTERN_C_BEGIN
 int getdtablesize();
 WCDB_EXTERN_C_END
 #endif /* __ANDROID__ */
 
+#pragma mark - file api
+
 #ifdef _WIN32
+#define wcdb_open ::_wopen
+#define wcdb_mkdir(path, mask) ::_wmkdir(path)
+#define wcdb_unlink ::_wunlink
+#define wcdb_remove ::_wremove
+#define wcdb_lseek ::_lseeki64
 #define FileFullAccess S_IREAD | S_IWRITE
-#define lseek _lseeki64
 #define DirFullAccess 0
-#define mkdir(path, mask) _mkdir(path)
 #else
+#define wcdb_open ::open
+#define wcdb_mkdir ::mkdir
+#define wcdb_unlink ::unlink
+#define wcdb_remove ::remove
+#define wcdb_lseek ::lseek
 #define FileFullAccess S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH
 #define DirFullAccess S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH
 #endif //_WIN32

@@ -31,7 +31,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class AnalyzeSTMT final : public Identifier {
+class WCDB_API AnalyzeSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     ~AnalyzeSTMT() override final;

@@ -28,7 +28,8 @@
 
 namespace WCDB {
 
-class TableOrSubquery final : public SpecifiedSyntax<Syntax::TableOrSubquery, SQL> {
+class WCDB_API TableOrSubquery final
+: public SpecifiedSyntax<Syntax::TableOrSubquery, SQL> {
 public:
     using SpecifiedSyntax<Syntax::TableOrSubquery, SQL>::SpecifiedSyntax;
     TableOrSubquery();

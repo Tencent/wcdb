@@ -30,7 +30,7 @@
 
 namespace WCDB {
 
-class BaseTokenizerUtil {
+class WCDB_API BaseTokenizerUtil {
 public:
     enum class UnicodeType : unsigned int {
         None = 0,

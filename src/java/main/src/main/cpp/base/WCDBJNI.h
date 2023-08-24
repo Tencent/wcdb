@@ -32,16 +32,16 @@
 #define WCDBJNI(className, funcName) WCDBJNI##className##_##funcName
 
 #define WCDBJNIObjectMethodWithNoArg(className, funcName)                      \
-    WCDBJNI(className, funcName)(JNIEnv * env, jobject object)
+    JNIEXPORT WCDBJNI(className, funcName)(JNIEnv * env, jobject object)
 
 #define WCDBJNIObjectMethod(className, funcName, ...)                          \
-    WCDBJNI(className, funcName)(JNIEnv * env, jobject obj, __VA_ARGS__)
+    JNIEXPORT WCDBJNI(className, funcName)(JNIEnv * env, jobject obj, __VA_ARGS__)
 
 #define WCDBJNIClassMethodWithNoArg(className, funcName)                       \
-    WCDBJNI(className, funcName)(JNIEnv * env, jclass classType)
+    JNIEXPORT WCDBJNI(className, funcName)(JNIEnv * env, jclass classType)
 
 #define WCDBJNIClassMethod(className, funcName, ...)                           \
-    WCDBJNI(className, funcName)(JNIEnv * env, jclass classType, __VA_ARGS__)
+    JNIEXPORT WCDBJNI(className, funcName)(JNIEnv * env, jclass classType, __VA_ARGS__)
 
 #define WCDBJNIBridgeStruct(type, value)                                       \
     type value##Struct = { (CPPObject *) value }

@@ -29,7 +29,7 @@
 
 namespace WCDB {
 
-class CoreFunction final {
+class WCDB_API CoreFunction final {
 public:
     CoreFunction() = delete;
     CoreFunction(const CoreFunction&) = delete;
@@ -85,7 +85,7 @@ public:
     static Expression zeroBLOB(const Expression& expression);
 };
 
-class CoreFunctionOperable : virtual public ExpressionOperable {
+class WCDB_API CoreFunctionOperable : virtual public ExpressionOperable {
 public:
     virtual ~CoreFunctionOperable() override = 0;
     Expression abs() const;

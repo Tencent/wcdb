@@ -26,7 +26,7 @@
 #import "WCTSequence.h"
 #import "WCTTableCoding.h"
 
-@interface WCTSequence (WCTTableCoding) <WCTTableCoding>
+WCDB_API @interface WCTSequence(WCTTableCoding)<WCTTableCoding>
 
 WCDB_PROPERTY(name)
 WCDB_PROPERTY(seq)

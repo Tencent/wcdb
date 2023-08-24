@@ -32,7 +32,7 @@ namespace WCDB {
 /**
  Builtin ORM for `sqlite_master` table. For further information, see https://www.sqlite.org/schematab.html .
  */
-class Master {
+class WCDB_API Master {
 public:
     static const StringView& tableName;
 

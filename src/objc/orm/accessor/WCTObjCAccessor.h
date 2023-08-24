@@ -27,7 +27,7 @@
 #import <functional>
 #import <type_traits>
 
-class WCTObjCAccessor : public WCTBaseAccessor {
+class WCDB_API WCTObjCAccessor : public WCTBaseAccessor {
 public:
     using OCType = id; //NSData*, NSString*, NSNumber*
     virtual ~WCTObjCAccessor() override;

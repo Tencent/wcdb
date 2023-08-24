@@ -41,13 +41,17 @@
 #endif
 #include "CrossPlatform.h"
 
+#ifndef O_BINARY
+#define O_BINARY 0
+#endif
+
 namespace WCDB {
 
 #pragma mark - Basic
 Optional<std::pair<bool, bool>> FileManager::itemExists(const UnsafeStringView &path)
 {
     StatType s;
-    if (StatFunc(path.data(), &s) == 0) {
+    if (StatFunc(GetPathString(path), &s) == 0) {
         if ((s.st_mode & S_IFMT) == S_IFDIR) {
             return std::make_pair(true, true);
         } else {
@@ -63,7 +67,7 @@ Optional<std::pair<bool, bool>> FileManager::itemExists(const UnsafeStringView &
 Optional<size_t> FileManager::getFileSize(const UnsafeStringView &file)
 {
     StatType temp;
-    if (StatFunc(file.data(), &temp) == 0) {
+    if (StatFunc(GetPathString(file), &temp) == 0) {
         return (size_t) temp.st_size;
     } else if (errno == ENOENT) {
         return 0;
@@ -76,9 +80,8 @@ Optional<size_t> FileManager::getDirectorySize(const UnsafeStringView &directory
 {
     Optional<size_t> totalSize = 0;
     if (!enumerateDirectory(
-        directory,
-        [&totalSize](const UnsafeStringView &directory, const UnsafeStringView &subpath, bool isDirectory) {
-            StringView path = Path::addComponent(directory, subpath);
+        directory, [&totalSize](const UnsafeStringView &dir, const UnsafeStringView &subpath, bool isDirectory) {
+            StringView path = Path::addComponent(dir, subpath);
             auto size = isDirectory ? getDirectorySize(path) : getFileSize(path);
             if (!size.succeed()) {
                 totalSize = NullOpt;
@@ -97,7 +100,7 @@ const UnsafeStringView &directory,
 const std::function<bool(const UnsafeStringView &, const UnsafeStringView &, bool)> &enumeration)
 {
 #ifndef _WIN32
-    DIR *dir = opendir(directory.data());
+    DIR *dir = opendir(GetPathString(directory));
     if (dir == NULL) {
         if (errno == ENOENT) {
             return true;
@@ -118,8 +121,8 @@ const std::function<bool(const UnsafeStringView &, const UnsafeStringView &, boo
 #else
     StringView searchDir = Path::addComponent(directory, "*.*");
     uint32_t status = 0;
-    WIN32_FIND_DATA findFileData;
-    HANDLE findHandle = FindFirstFile(searchDir.data(), &findFileData);
+    WIN32_FIND_DATAW findFileData;
+    HANDLE findHandle = FindFirstFileW(GetPathString(searchDir), &findFileData);
     if (findHandle == INVALID_HANDLE_VALUE) {
         if (GetLastError() == ERROR_PATH_NOT_FOUND) {
             return true;
@@ -129,16 +132,16 @@ const std::function<bool(const UnsafeStringView &, const UnsafeStringView &, boo
     }
     bool isBreak = false;
     do {
-        if (strcmp(findFileData.cFileName, ".") != 0
-            && strcmp(findFileData.cFileName, "..") != 0) {
+        StringView subFileName = StringView::createFromWString(findFileData.cFileName);
+        if (strcmp(subFileName.data(), ".") != 0 && strcmp(subFileName.data(), "..") != 0) {
             if (!enumeration(directory,
-                             findFileData.cFileName,
+                             subFileName,
                              (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)) {
                 isBreak = true;
                 break;
             }
         }
-    } while (FindNextFile(findHandle, &findFileData) != 0);
+    } while (FindNextFileW(findHandle, &findFileData) != 0);
     if (!isBreak && GetLastError() != ERROR_NO_MORE_FILES) {
         setThreadedWinError(directory);
         bool ret = FindClose(findHandle);
@@ -155,13 +158,13 @@ const std::function<bool(const UnsafeStringView &, const UnsafeStringView &, boo
 bool FileManager::createFileHardLink(const UnsafeStringView &from, const UnsafeStringView &to)
 {
 #ifndef _WIN32
-    if (link(from.data(), to.data()) == 0) {
+    if (link(GetPathString(from), GetPathString(to)) == 0) {
         return true;
     }
     setThreadedError(to);
     return false;
 #else
-    if (CreateHardLink(to.data(), from.data(), NULL)) {
+    if (CreateHardLinkW(GetPathString(to), GetPathString(from), NULL)) {
         return true;
     }
     setThreadedWinError(to);
@@ -171,7 +174,7 @@ bool FileManager::createFileHardLink(const UnsafeStringView &from, const UnsafeS
 
 bool FileManager::removeFileHardLink(const UnsafeStringView &path)
 {
-    if (unlink(path.data()) == 0 || errno == ENOENT) {
+    if (wcdb_unlink(GetPathString(path)) == 0 || errno == ENOENT) {
         return true;
     }
     setThreadedError(path);
@@ -181,7 +184,7 @@ bool FileManager::removeFileHardLink(const UnsafeStringView &path)
 
 bool FileManager::removeFile(const UnsafeStringView &file)
 {
-    if (remove(file.data()) == 0 || errno == ENOENT) {
+    if (wcdb_remove(GetPathString(file)) == 0 || errno == ENOENT) {
         return true;
     }
     setThreadedError(file);
@@ -191,7 +194,7 @@ bool FileManager::removeFile(const UnsafeStringView &file)
 bool FileManager::removeDirectory(const UnsafeStringView &directory)
 {
 #ifndef _WIN32
-    DIR *dir = opendir(directory.data());
+    DIR *dir = opendir(GetPathString(directory));
     if (dir == NULL) {
         if (errno == ENOENT) {
             return true;
@@ -219,7 +222,7 @@ bool FileManager::removeDirectory(const UnsafeStringView &directory)
     }
     closedir(dir);
 
-    if (remove(directory.data()) != 0) {
+    if (wcdb_remove(GetPathString(directory)) != 0) {
         setThreadedError(directory);
         return false;
     }
@@ -227,8 +230,8 @@ bool FileManager::removeDirectory(const UnsafeStringView &directory)
 #else
     StringView searchDir = Path::addComponent(directory, "*.*");
     uint32_t status = 0;
-    WIN32_FIND_DATA findFileData;
-    HANDLE findHandle = FindFirstFile(searchDir.data(), &findFileData);
+    WIN32_FIND_DATAW findFileData;
+    HANDLE findHandle = FindFirstFileW(GetPathString(searchDir), &findFileData);
     if (findHandle == INVALID_HANDLE_VALUE) {
         if (GetLastError() == ERROR_PATH_NOT_FOUND) {
             return true;
@@ -238,9 +241,9 @@ bool FileManager::removeDirectory(const UnsafeStringView &directory)
     }
     bool result;
     do {
-        if (strcmp(findFileData.cFileName, ".") != 0
-            && strcmp(findFileData.cFileName, "..") != 0) {
-            StringView currentPath = Path::addComponent(directory, findFileData.cFileName);
+        StringView subFileName = StringView::createFromWString(findFileData.cFileName);
+        if (strcmp(subFileName.data(), ".") != 0 && strcmp(subFileName.data(), "..") != 0) {
+            StringView currentPath = Path::addComponent(directory, subFileName);
             if ((findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) {
                 result = removeDirectory(currentPath);
             } else {
@@ -253,7 +256,7 @@ bool FileManager::removeDirectory(const UnsafeStringView &directory)
                 return false;
             }
         }
-    } while (FindNextFile(findHandle, &findFileData) != 0);
+    } while (FindNextFileW(findHandle, &findFileData) != 0);
     if (GetLastError() != ERROR_NO_MORE_FILES) {
         setThreadedWinError(directory);
         bool ret = FindClose(findHandle);
@@ -262,7 +265,7 @@ bool FileManager::removeDirectory(const UnsafeStringView &directory)
     }
     bool ret = FindClose(findHandle);
     WCTAssert(ret);
-    if (!RemoveDirectoryA(directory.data())) {
+    if (!RemoveDirectoryW(GetPathString(directory))) {
         setThreadedWinError(directory);
         return false;
     }
@@ -272,7 +275,7 @@ bool FileManager::removeDirectory(const UnsafeStringView &directory)
 
 bool FileManager::createDirectory(const UnsafeStringView &path)
 {
-    if (mkdir(path.data(), DirFullAccess) == 0) {
+    if (wcdb_mkdir(GetPathString(path), DirFullAccess) == 0) {
         return true;
     }
     setThreadedError(path);
@@ -282,7 +285,7 @@ bool FileManager::createDirectory(const UnsafeStringView &path)
 Optional<Time> FileManager::getFileModifiedTime(const UnsafeStringView &path)
 {
     StatType result;
-    if (StatFunc(path.data(), &result) == 0) {
+    if (StatFunc(GetPathString(path), &result) == 0) {
         return Time(result.st_mtimespec);
     }
     setThreadedError(path);
@@ -308,7 +311,7 @@ Optional<uint32_t> FileManager::getFileIdentifier(const UnsafeStringView &path)
 
 bool FileManager::createFile(const UnsafeStringView &path)
 {
-    int fd = open(path.data(), O_CREAT | O_RDWR | O_BINARY, FileFullAccess);
+    int fd = wcdb_open(GetPathString(path), O_CREAT | O_RDWR | O_BINARY, FileFullAccess);
     if (fd != -1) {
         close(fd);
         return true;
@@ -321,7 +324,7 @@ bool FileManager::createFile(const UnsafeStringView &path)
 Optional<size_t> FileManager::getItemSize(const UnsafeStringView &path)
 {
     StatType temp;
-    if (StatFunc(path.data(), &temp) == 0) {
+    if (StatFunc(GetPathString(path), &temp) == 0) {
         if ((temp.st_mode & S_IFMT) == S_IFDIR) {
             return getDirectorySize(path);
         }
@@ -372,7 +375,7 @@ Optional<size_t> FileManager::getItemsSize(const std::list<StringView> &paths)
 bool FileManager::removeItem(const UnsafeStringView &path)
 {
     StatType temp;
-    if (StatFunc(path.data(), &temp) == 0) {
+    if (StatFunc(GetPathString(path), &temp) == 0) {
         if ((temp.st_mode & S_IFMT) == S_IFDIR) {
             return removeDirectory(path);
         }
@@ -474,7 +477,7 @@ bool FileManager::createDirectoryWithIntermediateDirectories(const UnsafeStringV
         return false;
     }
     if (!exists.value()) {
-        return createDirectoryWithIntermediateDirectories(Path::getDirectoryName(directory))
+        return createDirectoryWithIntermediateDirectories(Path::getDirectory(directory))
                && createDirectory(directory);
     }
     return true;

@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class QualifiedTableName final : public Identifier {
+class WCDB_API QualifiedTableName final : public Identifier {
 #pragma mark - Lang
 public:
     ~QualifiedTableName() override final;
@@ -38,7 +38,7 @@ public:
     Schema schema;
     StringView table;
     StringView alias;
-    enum class Switch : signed char {
+    enum class WCDB_API Switch : signed char {
         NotSet = 0,
         Indexed,
         NotIndexed,

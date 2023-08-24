@@ -28,6 +28,6 @@
 /**
  Thread-safe
  */
-@interface WCTTable (ChainCall) <WCTChainCallProtocol>
+WCDB_API @interface WCTTable(ChainCall)<WCTChainCallProtocol>
 
 @end

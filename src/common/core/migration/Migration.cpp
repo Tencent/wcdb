@@ -120,7 +120,8 @@ bool Migration::initInfo(InfoInitializer& initializer, const UnsafeStringView& t
             return true;
         }
 
-        bool targetTableExsits, autoincrement;
+        bool targetTableExsits = false;
+        bool autoincrement = false;
         std::set<StringView> columns;
         StringView integerPrimaryKey;
         if (!initializer.getTargetTableInfo(
@@ -128,7 +129,8 @@ bool Migration::initInfo(InfoInitializer& initializer, const UnsafeStringView& t
             return false;
         }
 
-        if (autoincrement && !initializer.tryUpdateSequence(userInfo, integerPrimaryKey)) {
+        if (targetTableExsits && autoincrement
+            && !initializer.tryUpdateSequence(userInfo, integerPrimaryKey)) {
             return false;
         }
 

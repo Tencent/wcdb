@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class VacuumSTMT final : public Identifier {
+class WCDB_API VacuumSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     ~VacuumSTMT() override final;

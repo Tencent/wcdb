@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class RollbackSTMT final : public Identifier {
+class WCDB_API RollbackSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     ~RollbackSTMT() override final;

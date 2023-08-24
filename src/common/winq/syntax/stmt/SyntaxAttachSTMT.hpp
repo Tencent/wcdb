@@ -32,7 +32,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class AttachSTMT final : public Identifier {
+class WCDB_API AttachSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     ~AttachSTMT() override final;

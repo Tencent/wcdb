@@ -35,7 +35,9 @@
     WCDB::StatementPragma statement = WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion());
 
     __block BOOL tested = NO;
-    [self.database traceSQL:^(NSString*, UInt64, NSString* sql) {
+    [self.database traceSQL:^(WCTTag tag, NSString* path, UInt64, NSString* sql) {
+        XCTAssertEqual(tag, self.database.tag);
+        XCTAssertTrue([path isEqualToString:self.database.path]);
         if ([sql isEqualToString:@(statement.getDescription().data())]) {
             tested = YES;
         }
@@ -57,7 +59,10 @@
                                                                          @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)",
                                                                          @"COMMIT",
                                                                          nil];
-    [self.database tracePerformance:^(NSString*, UInt64, NSString* sql, double) {
+    [self.database tracePerformance:^(WCTTag tag, NSString* path, UInt64, NSString* sql, double cost) {
+        XCTAssertEqual(tag, self.database.tag);
+        XCTAssertTrue([path isEqualToString:self.database.path]);
+        XCTAssertTrue(cost >= 0);
         if ([sql isEqualToString:expectedFootprints.firstObject]) {
             [expectedFootprints removeObjectAtIndex:0];
         }
@@ -73,7 +78,6 @@
     self.tableClass = TestCaseObject.class;
 
     __block BOOL tested = NO;
-    __block BOOL start = NO;
     weakify(self);
     [WCTDatabase globalTraceError:nil];
     [WCTDatabase globalTraceError:^(WCTError* error) {
@@ -89,7 +93,6 @@
 
     TestCaseAssertTrue([self.database canOpen]);
 
-    start = YES;
     TestCaseAssertFalse([self.database execute:WCDB::StatementSelect().select(1).from(@"dummy")]);
 
     TestCaseAssertTrue(tested);
@@ -101,7 +104,6 @@
     self.tableClass = TestCaseObject.class;
 
     __block BOOL tested = NO;
-    __block BOOL start = NO;
     weakify(self);
     [self.database traceError:^(WCTError* error) {
         strongify_or_return(self);
@@ -111,7 +113,6 @@
 
     TestCaseAssertTrue([self.database canOpen]);
 
-    start = YES;
     TestCaseAssertFalse([self.database execute:WCDB::StatementSelect().select(1).from(@"dummy")]);
     TestCaseAssertTrue(tested);
 }
@@ -121,7 +122,11 @@
     WCDB::StatementPragma statement = WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion());
 
     __block BOOL tested = NO;
-    [WCTDatabase globalTraceSQL:^(NSString*, UInt64, NSString* sql) {
+    [WCTDatabase globalTraceSQL:^(WCTTag tag, NSString* path, UInt64, NSString* sql) {
+        if (![path isEqualToString:self.database.path]) {
+            return;
+        }
+        XCTAssertEqual(tag, self.database.tag);
         if ([sql isEqualToString:@(statement.getDescription().data())]) {
             tested = YES;
         }
@@ -141,7 +146,12 @@
                                                                          @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)",
                                                                          @"COMMIT",
                                                                          nil];
-    [WCTDatabase globalTracePerformance:^(NSString*, UInt64, NSString* sql, double) {
+    [WCTDatabase globalTracePerformance:^(WCTTag tag, NSString* path, UInt64, NSString* sql, double cost) {
+        if (![path isEqualToString:self.database.path]) {
+            return;
+        }
+        XCTAssertEqual(tag, self.database.tag);
+        XCTAssertTrue(cost >= 0);
         if ([sql isEqualToString:expectedFootprints.firstObject]) {
             [expectedFootprints removeObjectAtIndex:0];
         }

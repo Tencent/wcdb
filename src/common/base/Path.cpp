@@ -23,6 +23,7 @@
  */
 
 #include "Path.hpp"
+#include "Assertion.hpp"
 
 // TODO std::filesystem is supported since C++17 and Clang with Xcode 11
 
@@ -57,20 +58,26 @@ StringView addComponent(const UnsafeStringView &base, const UnsafeStringView &co
 
 StringView getFileName(const UnsafeStringView &base)
 {
-    std::string file = base.data();
-    int64_t found = file.find_last_of(kPathSeparator);
-    return StringView(file.substr(found + 1));
+    const char *str = base.data();
+    WCTAssert(str != nullptr || base.length() == 0);
+    for (int i = (int) base.length() - 1; i >= 0; i--) {
+        if (str[i] == kPathSeparator) {
+            return StringView(str + i + 1, base.length() - i - 1);
+        }
+    }
+    return StringView(base);
 }
 
-StringView getDirectoryName(const UnsafeStringView &base)
+StringView getDirectory(const UnsafeStringView &path)
 {
-    std::string dir = base.data();
-    int64_t found = dir.find_last_of(kPathSeparator);
-    if (found >= 0) {
-        return StringView(dir.substr(0, found));
-    } else {
-        return StringView();
+    const char *str = path.data();
+    WCTAssert(str != nullptr);
+    for (int i = (int) path.length() - 2; i >= 0; i--) {
+        if (str[i] == kPathSeparator) {
+            return StringView(str, i + 1);
+        }
     }
+    return StringView();
 }
 
 StringView normalize(const UnsafeStringView &path)

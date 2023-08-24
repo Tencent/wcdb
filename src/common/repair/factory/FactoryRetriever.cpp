@@ -124,7 +124,7 @@ bool FactoryRetriever::work()
         setCriticalError(depositor.getError());
         return exit(false);
     }
-    StringView baseDirectory = Path::getDirectoryName(factory.database);
+    StringView baseDirectory = Path::getDirectory(factory.database);
     succeed = FileManager::moveItems(
     Factory::associatedPathsForDatabase(database), baseDirectory);
     if (!succeed) {

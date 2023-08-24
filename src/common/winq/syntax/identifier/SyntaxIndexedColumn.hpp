@@ -32,7 +32,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class IndexedColumn final : public Identifier {
+class WCDB_API IndexedColumn final : public Identifier {
 #pragma mark - Lang
 public:
     ~IndexedColumn() override final;

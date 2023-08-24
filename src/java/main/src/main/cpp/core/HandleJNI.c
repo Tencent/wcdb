@@ -163,7 +163,7 @@ jboolean WCDBJNIHandleObjectMethod(runTransaction, jlong self, jobject transacti
     selfStruct, &context, (TransactionCallback) WCDBJNIHanldeTransactionCallBack);
 }
 
-bool WCDBJNIHanldePausableTransactionCallBack(TransactionContext *context,
+bool WCDBJNIHandlePausableTransactionCallBack(TransactionContext *context,
                                               CPPHandle handle,
                                               bool *stop,
                                               bool isNewTransaction)
@@ -200,7 +200,7 @@ jboolean WCDBJNIHandleObjectMethod(runPausableTransaction, jlong self, jobject t
     context.handle = obj;
     context.transaction = transaction;
     return WCDBHandleRunPausableTransaction2(
-    selfStruct, &context, (PausableTransaction) WCDBJNIHanldePausableTransactionCallBack);
+    selfStruct, &context, (PausableTransaction) WCDBJNIHandlePausableTransactionCallBack);
 }
 
 jlong WCDBJNIHandleClassMethodWithNoArg(createCancellationSignal)

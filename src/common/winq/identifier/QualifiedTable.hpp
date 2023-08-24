@@ -28,7 +28,8 @@
 
 namespace WCDB {
 
-class QualifiedTable final : public SpecifiedSyntax<Syntax::QualifiedTableName, SQL> {
+class WCDB_API QualifiedTable final
+: public SpecifiedSyntax<Syntax::QualifiedTableName, SQL> {
 public:
     using SpecifiedSyntax<Syntax::QualifiedTableName, SQL>::SpecifiedSyntax;
     QualifiedTable();

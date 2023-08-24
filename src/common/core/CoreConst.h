@@ -33,7 +33,7 @@ namespace WCDB {
 static constexpr const double AsyncQueueTimeOutForExiting = 10.0;
 
 #pragma mark - Operation Queue
-WCDBLiteralStringDefine(OperationQueueName, "com.Tencent.WCDB.Queue.Operation");
+WCDBLiteralStringDefine(OperationQueueName, "WCDB.Operation");
 static constexpr double OperationQueueTimeIntervalForRetringAfterFailure = 5.0;
 #pragma mark - Operation Queue - Migration
 static constexpr const double OperationQueueTimeIntervalForMigration = 2.0;
@@ -61,7 +61,7 @@ WCDBLiteralStringDefine(AutoBackupConfigName, "com.Tencent.WCDB.Config.AutoBacku
 WCDBLiteralStringDefine(AutoMigrateConfigName, "com.Tencent.WCDB.Config.AutoMigrate");
 #pragma mark - Config - Auto Merge
 WCDBLiteralStringDefine(AutoMergeFTSIndexConfigName, "com.Tencent.WCDB.Config.AutoMergeFTSIndex");
-WCDBLiteralStringDefine(AutoMergeFTSIndexQueueName, "com.Tencent.WCDB.Queue.MergeIndex");
+WCDBLiteralStringDefine(AutoMergeFTSIndexQueueName, "WCDB.MergeIndex");
 static constexpr const int AutoMergeFTS5IndexMinSegmentCount = 4;
 static constexpr const double AutoMergeFTSIndexMaxExpectingDuration = 0.02;
 static constexpr const double AutoMergeFTSIndexMaxInitializeDuration = 0.005;

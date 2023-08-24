@@ -30,7 +30,7 @@ namespace WCDB {
 
 class InnerHandle;
 
-class RecyclableHandle final : public Recyclable<std::shared_ptr<InnerHandle>> {
+class WCDB_API RecyclableHandle final : public Recyclable<std::shared_ptr<InnerHandle>> {
 public:
     using Super = Recyclable<std::shared_ptr<InnerHandle>>;
 

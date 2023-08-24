@@ -31,7 +31,7 @@ typedef NS_ENUM(NSUInteger, WCTChainCallDisposeAction) {
     WCTChainCallDisposeActionInvalidate,
 };
 
-@interface WCTChainCall () {
+WCDB_API @interface WCTChainCall() {
 @protected
     WCTHandle* _handle;
 @private

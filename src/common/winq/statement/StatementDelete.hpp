@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class StatementDelete final : public SpecifiedSyntax<Syntax::DeleteSTMT, Statement> {
+class WCDB_API StatementDelete final : public SpecifiedSyntax<Syntax::DeleteSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::DeleteSTMT, Statement>::SpecifiedSyntax;
     StatementDelete();

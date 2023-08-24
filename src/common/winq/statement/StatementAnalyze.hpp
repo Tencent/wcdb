@@ -28,7 +28,8 @@
 
 namespace WCDB {
 
-class StatementAnalyze final : public SpecifiedSyntax<Syntax::AnalyzeSTMT, Statement> {
+class WCDB_API StatementAnalyze final
+: public SpecifiedSyntax<Syntax::AnalyzeSTMT, Statement> {
 public:
     StatementAnalyze();
     using SpecifiedSyntax<Syntax::AnalyzeSTMT, Statement>::SpecifiedSyntax;

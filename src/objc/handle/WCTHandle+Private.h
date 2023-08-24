@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #define WCTHandleAssert(remedial) WCTRemedialAssert(_handle != nullptr, "[prepare:] or [execute:] should be called before this.", remedial)
 
-@interface WCTHandle () {
+WCDB_API @interface WCTHandle() {
 @private
     WCTDatabase *_database;
     WCDB::InnerHandle *_handle;

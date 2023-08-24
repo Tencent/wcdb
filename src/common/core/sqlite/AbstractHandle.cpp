@@ -36,6 +36,7 @@ namespace WCDB {
 AbstractHandle::AbstractHandle()
 : m_handle(nullptr)
 , m_customOpenFlag(0)
+, m_tag(Tag::invalid())
 , m_transactionLevel(0)
 , m_transactionError(TransactionError::Allowed)
 , m_cacheTransactionError(TransactionError::Allowed)
@@ -129,6 +130,16 @@ void AbstractHandle::close()
         APIExit(sqlite3_close_v2(m_handle));
         m_handle = nullptr;
     }
+}
+
+void AbstractHandle::setTag(Tag tag)
+{
+    m_tag = tag;
+}
+
+Tag AbstractHandle::getTag()
+{
+    return m_tag;
 }
 
 bool AbstractHandle::executeSQL(const UnsafeStringView &sql)

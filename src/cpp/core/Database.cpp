@@ -51,7 +51,7 @@ Database::Database(const UnsafeStringView& path)
 #ifndef _WIN32
     const char* resolvePath = realpath(path.data(), nullptr);
     if (resolvePath == nullptr && errno == ENOENT) {
-        if (FileManager::createDirectoryWithIntermediateDirectories(Path::getDirectoryName(path))
+        if (FileManager::createDirectoryWithIntermediateDirectories(Path::getDirectory(path))
             && FileManager::createFile(path)) {
             resolvePath = realpath(path.data(), nullptr);
             if (resolvePath == NULL) {
@@ -81,9 +81,9 @@ Database::Database(const UnsafeStringView& path)
         free((void*) resolvePath);
     }
 #else
-    char resolvePath[_MAX_PATH];
-    if (_fullpath(resolvePath, path.data(), _MAX_PATH) != NULL) {
-        UnsafeStringView newPath = UnsafeStringView(resolvePath);
+    wchar_t resolvePath[_MAX_PATH];
+    if (::_wfullpath(resolvePath, GetPathString(path), _MAX_PATH) != NULL) {
+        StringView newPath = StringView::createFromWString(resolvePath);
         m_databaseHolder = Core::shared().getOrCreateDatabase(newPath);
     }
 #endif
@@ -413,15 +413,16 @@ void Database::setConfig(const UnsafeStringView& name,
                          Priority priority)
 {
     m_innerDatabase->purge();
+    InnerDatabase* database = m_innerDatabase;
     CustomConfig::Invocation configInvocation
-    = [invocation, this](InnerHandle* innerHandle) -> bool {
-        Handle handle = Handle(m_databaseHolder, innerHandle);
+    = [invocation, database](InnerHandle* innerHandle) -> bool {
+        Handle handle = Handle(RecyclableDatabase(database, nullptr), innerHandle);
         return invocation(handle);
     };
     CustomConfig::Invocation configUninvocation = nullptr;
     if (unInvocation != nullptr) {
-        configUninvocation = [unInvocation, this](InnerHandle* innerHandle) -> bool {
-            Handle handle = Handle(m_databaseHolder, innerHandle);
+        configUninvocation = [unInvocation, database](InnerHandle* innerHandle) -> bool {
+            Handle handle = Handle(RecyclableDatabase(database, nullptr), innerHandle);
             return unInvocation(handle);
         };
     }

@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class StatementPragma final : public SpecifiedSyntax<Syntax::PragmaSTMT, Statement> {
+class WCDB_API StatementPragma final : public SpecifiedSyntax<Syntax::PragmaSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::PragmaSTMT, Statement>::SpecifiedSyntax;
     StatementPragma();

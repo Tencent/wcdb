@@ -22,6 +22,7 @@
  * limitations under the License.
  */
 
+#import "Macro.h"
 #import "WCTMacroUtility.h"
 #import "WCTTag.h"
 #import <Foundation/Foundation.h>
@@ -154,7 +155,7 @@ typedef NS_ENUM(NSUInteger, WCTErrorExtendedCode) {
     WCTErrorExtendedCodeOKLoadPermanently = ((NSUInteger) WCTErrorCodeOK | (1 << 8)),              // 256
 };
 
-@interface WCTError : NSError
+WCDB_API @interface WCTError : NSError
 
 - (instancetype)initWithCode:(WCTErrorCode)code
                        level:(WCTErrorLevel)level
@@ -189,7 +190,7 @@ typedef NS_ENUM(NSUInteger, WCTErrorExtendedCode) {
 
 @end
 
-@interface WCTError (Path)
+WCDB_API @interface WCTError(Path)
 
 /**
  * The file path of database that is being manipulated when an error occurs.
@@ -198,7 +199,7 @@ typedef NS_ENUM(NSUInteger, WCTErrorExtendedCode) {
 
 @end
 
-@interface WCTError (Tag)
+WCDB_API @interface WCTError(Tag)
 
 /**
  * The tag of database that is being manipulated when an error occurs.
@@ -207,7 +208,7 @@ typedef NS_ENUM(NSUInteger, WCTErrorExtendedCode) {
 
 @end
 
-@interface WCTError (SQL)
+WCDB_API @interface WCTError(SQL)
 
 /**
  * The SQL is being executed when an error occurs.
@@ -216,7 +217,7 @@ typedef NS_ENUM(NSUInteger, WCTErrorExtendedCode) {
 
 @end
 
-@interface WCTError (ExtendedCode)
+WCDB_API @interface WCTError(ExtendedCode)
 
 /**
  * Extended error code for sqlite. You can check it at http://www.sqlite.org/rescode.html .

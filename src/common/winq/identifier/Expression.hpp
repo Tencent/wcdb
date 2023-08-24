@@ -31,15 +31,15 @@
 
 namespace WCDB {
 
-class Expression final : public SpecifiedSyntax<Syntax::Expression, SQL>,
-                         public ExpressionUnaryOperable,
-                         public ExpressionBinaryOperable,
-                         public ExpressionInOperable,
-                         public ExpressionBetweenOperable,
-                         public ExpressionCollateOperable,
-                         public CoreFunctionOperable,
-                         public AggregateFunctionOperable,
-                         public FTSFunctionOperable {
+class WCDB_API Expression final : public SpecifiedSyntax<Syntax::Expression, SQL>,
+                                  public ExpressionUnaryOperable,
+                                  public ExpressionBinaryOperable,
+                                  public ExpressionInOperable,
+                                  public ExpressionBetweenOperable,
+                                  public ExpressionCollateOperable,
+                                  public CoreFunctionOperable,
+                                  public AggregateFunctionOperable,
+                                  public FTSFunctionOperable {
 public:
     using SpecifiedSyntax<Syntax::Expression, SQL>::SpecifiedSyntax;
     ~Expression() override final;

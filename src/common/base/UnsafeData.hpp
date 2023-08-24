@@ -35,7 +35,7 @@
 
 namespace WCDB {
 
-class UnsafeData : protected SharedThreadedErrorProne {
+class WCDB_API UnsafeData : protected SharedThreadedErrorProne {
 #pragma mark - Initialize
 public:
     template<typename T, typename Enable = void>

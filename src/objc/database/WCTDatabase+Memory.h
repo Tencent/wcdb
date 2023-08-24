@@ -24,7 +24,7 @@
 
 #import "WCTDatabase.h"
 
-@interface WCTDatabase (Memory)
+WCDB_API @interface WCTDatabase(Memory)
 
 /**
  @brief Purge all free memory of this database.

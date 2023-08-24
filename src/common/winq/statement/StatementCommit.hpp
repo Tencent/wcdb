@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class StatementCommit final : public SpecifiedSyntax<Syntax::CommitSTMT, Statement> {
+class WCDB_API StatementCommit final : public SpecifiedSyntax<Syntax::CommitSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::CommitSTMT, Statement>::SpecifiedSyntax;
     StatementCommit();
