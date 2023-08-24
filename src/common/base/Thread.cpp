@@ -23,6 +23,7 @@
  */
 
 #include "Thread.hpp"
+#include "Assertion.hpp"
 #include "CrossPlatform.h"
 #include "Notifier.hpp"
 #include "WCDBError.hpp"
@@ -113,6 +114,7 @@ constexpr int Thread::maxLengthOfAllowedThreadName()
 void Thread::setName(const UnsafeStringView& name)
 {
 #ifndef _WIN32
+    WCTAssert(name.length() <= 16) // Thread name is limited to 16 bytes in linus;
     char buffer[maxLengthOfAllowedThreadName()];
     memset(buffer, 0, maxLengthOfAllowedThreadName());
     memcpy(buffer, name.data(), name.length());
