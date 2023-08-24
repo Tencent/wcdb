@@ -116,20 +116,16 @@ void Thread::setName(const UnsafeStringView& name)
     char buffer[maxLengthOfAllowedThreadName()];
     memset(buffer, 0, maxLengthOfAllowedThreadName());
     memcpy(buffer, name.data(), name.length());
-    if (pthread_setname_np(buffer) != 0) {
-        setThreadedError();
+    int ret = pthread_setname_np(buffer);
+    if (ret != 0) {
+        Error error;
+        error.level = Error::Level::Error;
+        error.setSystemCode(ret, Error::Code::Error);
+        error.infos.insert_or_assign("Operation", "setThreadName");
+        Notifier::shared().notify(error);
+        SharedThreadedErrorProne::setThreadedError(std::move(error));
     }
 #endif
-}
-
-#pragma mark - Error
-void Thread::setThreadedError()
-{
-    Error error;
-    error.level = Error::Level::Error;
-    error.setSystemCode(errno, Error::Code::Error);
-    Notifier::shared().notify(error);
-    SharedThreadedErrorProne::setThreadedError(std::move(error));
 }
 
 } // namespace WCDB
