@@ -70,9 +70,6 @@ StringView getFileName(const UnsafeStringView &base)
 
 StringView getDirectory(const UnsafeStringView &path)
 {
-    if (path.length() <= 2) {
-        return StringView(path);
-    }
     const char *str = path.data();
     WCTAssert(str != nullptr);
     for (int i = (int) path.length() - 2; i >= 0; i--) {
