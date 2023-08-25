@@ -401,6 +401,198 @@ public abstract class HandleOperation extends CppObject {
         return getOneRowFromStatement(new StatementSelect().select(columns).from(tableName).orderBy(orderingTerm).limit(1).offset(offset));
     }
 
+    public List<Integer> getOneColumnInt(ResultColumnConvertible column, String tableName) throws WCDBException {
+        return getOneColumnIntFromStatement(new StatementSelect().select(column).from(tableName));
+    }
+
+    public List<Integer> getOneColumnInt(ResultColumnConvertible column, String tableName, Expression condition) throws WCDBException {
+        return getOneColumnIntFromStatement(new StatementSelect().select(column).from(tableName).where(condition));
+    }
+
+    public List<Integer> getOneColumnInt(ResultColumnConvertible column, String tableName, Expression condition, OrderingTerm order) throws WCDBException {
+        return getOneColumnIntFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order));
+    }
+
+    public List<Integer> getOneColumnInt(ResultColumnConvertible column, String tableName, Expression condition, OrderingTerm order, long limit) throws WCDBException {
+        return getOneColumnIntFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit));
+    }
+
+    public List<Integer> getOneColumnInt(ResultColumnConvertible column, String tableName, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
+        return getOneColumnIntFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit).offset(offset));
+    }
+
+    public List<Integer> getOneColumnInt(ResultColumnConvertible column, String tableName, OrderingTerm order) throws WCDBException {
+        return getOneColumnIntFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order));
+    }
+
+    public List<Integer> getOneColumnInt(ResultColumnConvertible column, String tableName, OrderingTerm order, long limit) throws WCDBException {
+        return getOneColumnIntFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit));
+    }
+
+    public List<Integer> getOneColumnInt(ResultColumnConvertible column, String tableName, OrderingTerm order, long limit, long offset) throws WCDBException {
+        return getOneColumnIntFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit).offset(offset));
+    }
+
+    public List<Long> getOneColumnLong(ResultColumnConvertible column, String tableName) throws WCDBException {
+        return getOneColumnLongFromStatement(new StatementSelect().select(column).from(tableName));
+    }
+
+    public List<Long> getOneColumnLong(ResultColumnConvertible column, String tableName, Expression condition) throws WCDBException {
+        return getOneColumnLongFromStatement(new StatementSelect().select(column).from(tableName).where(condition));
+    }
+
+    public List<Long> getOneColumnLong(ResultColumnConvertible column, String tableName, Expression condition, OrderingTerm order) throws WCDBException {
+        return getOneColumnLongFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order));
+    }
+
+    public List<Long> getOneColumnLong(ResultColumnConvertible column, String tableName, Expression condition, OrderingTerm order, long limit) throws WCDBException {
+        return getOneColumnLongFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit));
+    }
+
+    public List<Long> getOneColumnLong(ResultColumnConvertible column, String tableName, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
+        return getOneColumnLongFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit).offset(offset));
+    }
+
+    public List<Long> getOneColumnLong(ResultColumnConvertible column, String tableName, OrderingTerm order) throws WCDBException {
+        return getOneColumnLongFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order));
+    }
+
+    public List<Long> getOneColumnLong(ResultColumnConvertible column, String tableName, OrderingTerm order, long limit) throws WCDBException {
+        return getOneColumnLongFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit));
+    }
+
+    public List<Long> getOneColumnLong(ResultColumnConvertible column, String tableName, OrderingTerm order, long limit, long offset) throws WCDBException {
+        return getOneColumnLongFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit).offset(offset));
+    }
+
+    public List<Float> getOneColumnFloat(ResultColumnConvertible column, String tableName) throws WCDBException {
+        return getOneColumnFloatFromStatement(new StatementSelect().select(column).from(tableName));
+    }
+
+    public List<Float> getOneColumnFloat(ResultColumnConvertible column, String tableName, Expression condition) throws WCDBException {
+        return getOneColumnFloatFromStatement(new StatementSelect().select(column).from(tableName).where(condition));
+    }
+
+    public List<Float> getOneColumnFloat(ResultColumnConvertible column, String tableName, Expression condition, OrderingTerm order) throws WCDBException {
+        return getOneColumnFloatFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order));
+    }
+
+    public List<Float> getOneColumnFloat(ResultColumnConvertible column, String tableName, Expression condition, OrderingTerm order, long limit) throws WCDBException {
+        return getOneColumnFloatFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit));
+    }
+
+    public List<Float> getOneColumnFloat(ResultColumnConvertible column, String tableName, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
+        return getOneColumnFloatFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit).offset(offset));
+    }
+
+    public List<Float> getOneColumnFloat(ResultColumnConvertible column, String tableName, OrderingTerm order) throws WCDBException {
+        return getOneColumnFloatFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order));
+    }
+
+    public List<Float> getOneColumnFloat(ResultColumnConvertible column, String tableName, OrderingTerm order, long limit) throws WCDBException {
+        return getOneColumnFloatFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit));
+    }
+
+    public List<Float> getOneColumnFloat(ResultColumnConvertible column, String tableName, OrderingTerm order, long limit, long offset) throws WCDBException {
+        return getOneColumnFloatFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit).offset(offset));
+    }
+
+    public List<Double> getOneColumnDouble(ResultColumnConvertible column, String tableName) throws WCDBException {
+        return getOneColumnDoubleFromStatement(new StatementSelect().select(column).from(tableName));
+    }
+
+    public List<Double> getOneColumnDouble(ResultColumnConvertible column, String tableName, Expression condition) throws WCDBException {
+        return getOneColumnDoubleFromStatement(new StatementSelect().select(column).from(tableName).where(condition));
+    }
+
+    public List<Double> getOneColumnDouble(ResultColumnConvertible column, String tableName, Expression condition, OrderingTerm order) throws WCDBException {
+        return getOneColumnDoubleFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order));
+    }
+
+    public List<Double> getOneColumnDouble(ResultColumnConvertible column, String tableName, Expression condition, OrderingTerm order, long limit) throws WCDBException {
+        return getOneColumnDoubleFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit));
+    }
+
+    public List<Double> getOneColumnDouble(ResultColumnConvertible column, String tableName, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
+        return getOneColumnDoubleFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit).offset(offset));
+    }
+
+    public List<Double> getOneColumnDouble(ResultColumnConvertible column, String tableName, OrderingTerm order) throws WCDBException {
+        return getOneColumnDoubleFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order));
+    }
+
+    public List<Double> getOneColumnDouble(ResultColumnConvertible column, String tableName, OrderingTerm order, long limit) throws WCDBException {
+        return getOneColumnDoubleFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit));
+    }
+
+    public List<Double> getOneColumnDouble(ResultColumnConvertible column, String tableName, OrderingTerm order, long limit, long offset) throws WCDBException {
+        return getOneColumnDoubleFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit).offset(offset));
+    }
+
+    public List<String> getOneColumnString(ResultColumnConvertible column, String tableName) throws WCDBException {
+        return getOneColumnStringFromStatement(new StatementSelect().select(column).from(tableName));
+    }
+
+    public List<String> getOneColumnString(ResultColumnConvertible column, String tableName, Expression condition) throws WCDBException {
+        return getOneColumnStringFromStatement(new StatementSelect().select(column).from(tableName).where(condition));
+    }
+
+    public List<String> getOneColumnString(ResultColumnConvertible column, String tableName, Expression condition, OrderingTerm order) throws WCDBException {
+        return getOneColumnStringFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order));
+    }
+
+    public List<String> getOneColumnString(ResultColumnConvertible column, String tableName, Expression condition, OrderingTerm order, long limit) throws WCDBException {
+        return getOneColumnStringFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit));
+    }
+
+    public List<String> getOneColumnString(ResultColumnConvertible column, String tableName, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
+        return getOneColumnStringFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit).offset(offset));
+    }
+
+    public List<String> getOneColumnString(ResultColumnConvertible column, String tableName, OrderingTerm order) throws WCDBException {
+        return getOneColumnStringFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order));
+    }
+
+    public List<String> getOneColumnString(ResultColumnConvertible column, String tableName, OrderingTerm order, long limit) throws WCDBException {
+        return getOneColumnStringFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit));
+    }
+
+    public List<String> getOneColumnString(ResultColumnConvertible column, String tableName, OrderingTerm order, long limit, long offset) throws WCDBException {
+        return getOneColumnStringFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit).offset(offset));
+    }
+
+    public List<byte[]> getOneColumnBLOB(ResultColumnConvertible column, String tableName) throws WCDBException {
+        return getOneColumnBLOBFromStatement(new StatementSelect().select(column).from(tableName));
+    }
+
+    public List<byte[]> getOneColumnBLOB(ResultColumnConvertible column, String tableName, Expression condition) throws WCDBException {
+        return getOneColumnBLOBFromStatement(new StatementSelect().select(column).from(tableName).where(condition));
+    }
+
+    public List<byte[]> getOneColumnBLOB(ResultColumnConvertible column, String tableName, Expression condition, OrderingTerm order) throws WCDBException {
+        return getOneColumnBLOBFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order));
+    }
+
+    public List<byte[]> getOneColumnBLOB(ResultColumnConvertible column, String tableName, Expression condition, OrderingTerm order, long limit) throws WCDBException {
+        return getOneColumnBLOBFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit));
+    }
+
+    public List<byte[]> getOneColumnBLOB(ResultColumnConvertible column, String tableName, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
+        return getOneColumnBLOBFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit).offset(offset));
+    }
+
+    public List<byte[]> getOneColumnBLOB(ResultColumnConvertible column, String tableName, OrderingTerm order) throws WCDBException {
+        return getOneColumnBLOBFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order));
+    }
+
+    public List<byte[]> getOneColumnBLOB(ResultColumnConvertible column, String tableName, OrderingTerm order, long limit) throws WCDBException {
+        return getOneColumnBLOBFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit));
+    }
+
+    public List<byte[]> getOneColumnBLOB(ResultColumnConvertible column, String tableName, OrderingTerm order, long limit, long offset) throws WCDBException {
+        return getOneColumnBLOBFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit).offset(offset));
+    }
+
     public List<Value[]> getAllRows(ResultColumnConvertible[] columns, String tableName) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName));
     }
@@ -511,6 +703,96 @@ public abstract class HandleOperation extends CppObject {
         try {
             PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumn();
+            preparedStatement.finalizeStatement();
+        } finally {
+            if(autoInvalidateHandle()) {
+                handle.invalidate();
+            }
+        }
+        return ret;
+    }
+
+    public List<Integer> getOneColumnIntFromStatement(Statement statement) throws WCDBException {
+        Handle handle = getHandle(false);
+        List<Integer> ret;
+        try {
+            PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
+            ret = preparedStatement.getOneColumnInt();
+            preparedStatement.finalizeStatement();
+        } finally {
+            if(autoInvalidateHandle()) {
+                handle.invalidate();
+            }
+        }
+        return ret;
+    }
+
+    public List<Long> getOneColumnLongFromStatement(Statement statement) throws WCDBException {
+        Handle handle = getHandle(false);
+        List<Long> ret;
+        try {
+            PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
+            ret = preparedStatement.getOneColumnLong();
+            preparedStatement.finalizeStatement();
+        } finally {
+            if(autoInvalidateHandle()) {
+                handle.invalidate();
+            }
+        }
+        return ret;
+    }
+
+    public List<Float> getOneColumnFloatFromStatement(Statement statement) throws WCDBException {
+        Handle handle = getHandle(false);
+        List<Float> ret;
+        try {
+            PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
+            ret = preparedStatement.getOneColumnFloat();
+            preparedStatement.finalizeStatement();
+        } finally {
+            if(autoInvalidateHandle()) {
+                handle.invalidate();
+            }
+        }
+        return ret;
+    }
+
+    public List<Double> getOneColumnDoubleFromStatement(Statement statement) throws WCDBException {
+        Handle handle = getHandle(false);
+        List<Double> ret;
+        try {
+            PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
+            ret = preparedStatement.getOneColumnDouble();
+            preparedStatement.finalizeStatement();
+        } finally {
+            if(autoInvalidateHandle()) {
+                handle.invalidate();
+            }
+        }
+        return ret;
+    }
+
+    public List<String> getOneColumnStringFromStatement(Statement statement) throws WCDBException {
+        Handle handle = getHandle(false);
+        List<String> ret;
+        try {
+            PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
+            ret = preparedStatement.getOneColumnString();
+            preparedStatement.finalizeStatement();
+        } finally {
+            if(autoInvalidateHandle()) {
+                handle.invalidate();
+            }
+        }
+        return ret;
+    }
+
+    public List<byte[]> getOneColumnBLOBFromStatement(Statement statement) throws WCDBException {
+        Handle handle = getHandle(false);
+        List<byte[]> ret;
+        try {
+            PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
+            ret = preparedStatement.getOneColumnBLOB();
             preparedStatement.finalizeStatement();
         } finally {
             if(autoInvalidateHandle()) {

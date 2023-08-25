@@ -367,6 +367,66 @@ public class PreparedStatement extends CppObject {
         return column;
     }
 
+    public List<Integer> getOneColumnInt() throws WCDBException{
+        List<Integer> column = new ArrayList<Integer>();
+        step();
+        while (!isDone(cppObj)) {
+            column.add((int) getInteger(0));
+            step();
+        }
+        return column;
+    }
+
+    public List<Long> getOneColumnLong() throws WCDBException{
+        List<Long> column = new ArrayList<Long>();
+        step();
+        while (!isDone(cppObj)) {
+            column.add(getInteger(0));
+            step();
+        }
+        return column;
+    }
+
+    public List<Float> getOneColumnFloat() throws WCDBException{
+        List<Float> column = new ArrayList<Float>();
+        step();
+        while (!isDone(cppObj)) {
+            column.add((float)getDouble(0));
+            step();
+        }
+        return column;
+    }
+
+    public List<Double> getOneColumnDouble() throws WCDBException{
+        List<Double> column = new ArrayList<Double>();
+        step();
+        while (!isDone(cppObj)) {
+            column.add(getDouble(0));
+            step();
+        }
+        return column;
+    }
+
+    public List<String> getOneColumnString() throws WCDBException{
+        List<String> column = new ArrayList<String>();
+        step();
+        while (!isDone(cppObj)) {
+            column.add(getText(0));
+            step();
+        }
+        return column;
+    }
+
+    public List<byte[]> getOneColumnBLOB() throws WCDBException{
+        List<byte[]> column = new ArrayList<byte[]>();
+        step();
+        while (!isDone(cppObj)) {
+            column.add(getBLOB(0));
+            step();
+        }
+        return column;
+    }
+
     public List<Value[]> getMultiRows() throws WCDBException{
         List<Value[]> rows = new ArrayList<Value[]>();
         step();
