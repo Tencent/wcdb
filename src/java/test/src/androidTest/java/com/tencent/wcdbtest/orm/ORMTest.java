@@ -358,8 +358,8 @@ public class ORMTest extends DatabaseTestCase {
                     return;
                 }
                 added.boolValue = true;
-                assertEquals((String) exception.infos.get("Table"), tableName);
-                assertEquals((String) exception.infos.get("Column"), columnName);
+                assertEquals((String) exception.info.get("Table"), tableName);
+                assertEquals((String) exception.info.get("Column"), columnName);
             }
         });
         boolean hasError = false;

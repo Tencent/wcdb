@@ -22,7 +22,7 @@
  */
 package com.tencent.wcdb.base;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class WCDBException extends RuntimeException {
@@ -422,16 +422,16 @@ public class WCDBException extends RuntimeException {
         }
     }
 
-    public Level level;
-    public Code code;
-    public HashMap<String, Object> infos;
+    public final Level level;
+    public final Code code;
+    public final Map<String, Object> info;
 
     WCDBException(Level level, Code code, long cppObj){
         this.level = level;
         this.code = code;
         String message = getMessage(cppObj);
-        infos = new HashMap<String, Object>();
-        infos.put(Key.message.value, message);
+        info = new LinkedHashMap<>();
+        info.put(Key.message.value, message);
         enumerateInfo(cppObj);
     }
 
@@ -464,16 +464,16 @@ public class WCDBException extends RuntimeException {
 
     private void addInfo(String key, int valueType, long intValue, double doubleValue, String stringValue) {
         if(valueType == 3) {
-            infos.put(key, intValue);
+            info.put(key, intValue);
         } else if (valueType == 5) {
-            infos.put(key, doubleValue);
+            info.put(key, doubleValue);
         } else if (valueType == 6)  {
-            infos.put(key, stringValue);
+            info.put(key, stringValue);
         }
     }
 
     public long tag() {
-        Object tag = infos.get(Key.tag.getValue());
+        Object tag = info.get(Key.tag.getValue());
         if(tag != null) {
             return (Long)tag;
         }
@@ -481,7 +481,7 @@ public class WCDBException extends RuntimeException {
     }
 
     public ExtendCode extendCode() {
-        Object code = infos.get(Key.extendedCode.getValue());
+        Object code = info.get(Key.extendedCode.getValue());
         if(code != null) {
             return ExtendCode.valueOf(((Long)code).intValue());
         }
@@ -489,23 +489,29 @@ public class WCDBException extends RuntimeException {
     }
 
     public String message() {
-        return (String) infos.get(Key.message.getValue());
+        return (String) info.get(Key.message.getValue());
     }
 
     public String sql() {
-        return (String) infos.get(Key.SQL.getValue());
+        return (String) info.get(Key.SQL.getValue());
     }
 
     public String path() {
-        return (String) infos.get(Key.path.getValue());
+        return (String) info.get(Key.path.getValue());
+    }
+
+    @Override
+    public String getMessage() {
+        StringBuilder sb = new StringBuilder(256);
+        sb.append("Code: ").append(code.value());
+        for (Map.Entry<String, Object> entry : info.entrySet()) {
+            sb.append("; ").append(entry.getKey()).append(": ").append(entry.getValue());
+        }
+        return sb.toString();
     }
 
     @Override
     public String toString() {
-        StringBuilder des = new StringBuilder("[WCDB] [" + level + "] Code: " + code.value());
-        for (Map.Entry<String, Object> entry : infos.entrySet()) {
-            des.append(", ").append(entry.getKey()).append(": ").append(entry.getValue());
-        }
-        return des.toString();
+        return "[WCDB] [" + level + "] " + getMessage();
     }
 }
