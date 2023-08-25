@@ -26,155 +26,99 @@ package com.tencent.wcdb.base;
 import com.tencent.wcdb.winq.ColumnType;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class Value {
+
     public Value() {
-        type = ColumnType.Null;
+        this.value = null;
     }
 
     public Value(long value) {
-        intValue = value;
-        type = ColumnType.Integer;
+        this.value = value;
     }
 
     public Value(double value) {
-        doubleValue = value;
-        type = ColumnType.Float;
+        this.value = value;
     }
 
     public Value(String value) {
-        if(value == null) {
-            type = ColumnType.Null;
-        }else{
-            textValue = value;
-            type = ColumnType.Text;
-        }
+        this.value = value;
     }
 
     public Value(byte[] value) {
-        if(value == null) {
-            type = ColumnType.Null;
-        }else{
-            blobValue = value;
-            type = ColumnType.BLOB;
-        }
+        this.value = value;
     }
 
-    public ColumnType getType(){
-        return type;
+    public ColumnType getType() {
+        if (value == null) return ColumnType.Null;
+        Class<?> cls = value.getClass();
+        if (cls == Long.class) return ColumnType.Integer;
+        if (cls == String.class) return ColumnType.Text;
+        if (cls == byte[].class) return ColumnType.BLOB;
+        if (cls == Double.class) return ColumnType.Float;
+        throw new AssertionError();
     }
 
     public boolean getBool() {
-        return getLong() > 0;
+        return getLong() != 0;
     }
 
-    public int getInt(){
+    public int getInt() {
         return (int) getLong();
     }
 
-    public long getLong(){
-        switch (type) {
-            case Integer:
-                return intValue;
-            case Float:
-                return (long) doubleValue;
-            case Text:
-                return Long.parseLong(textValue);
-            default:
-                return 0;
+    public long getLong() {
+        if (value instanceof Long) return (Long) value;
+        if (value instanceof Double) return (long) value;
+        if (value instanceof String) {
+            try { return Long.parseLong((String) value); } catch (NumberFormatException e) {}
         }
+        return 0L;
     }
 
     public double getDouble() {
-        switch (type) {
-            case Float:
-                return doubleValue;
-            case Integer:
-                return intValue;
-            case Text:
-                return Double.parseDouble(textValue);
-            default:
-                return 0;
+        if (value instanceof Double) return (Double) value;
+        if (value instanceof Long) return (double) value;
+        if (value instanceof String) {
+            try { return Double.parseDouble((String) value); } catch (NumberFormatException e) {}
         }
+        return 0.0;
     }
 
     public String getText() {
-        switch (type) {
-            case Text:
-                return textValue;
-            case Integer:
-                return String.valueOf(intValue);
-            case Float:
-                return String.valueOf(doubleValue);
-            default:
-                return null;
-        }
+        if (value instanceof String) return (String) value;
+        if (value instanceof byte[]) return new String((byte[]) value);
+        return (value == null) ? null : value.toString();
     }
 
     public byte[] getBLOB() {
-        switch (type) {
-            case Text:
-                return textValue.getBytes();
-            case BLOB:
-                return blobValue;
-            default:
-                return null;
-        }
+        if (value == null) return null;
+        if (value instanceof byte[]) return (byte[]) value;
+        return value.toString().getBytes();
     }
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof Value) {
-            Value value = (Value) obj;
-            switch (type) {
-                case Null:
-                    return value.getLong() == 0;
-                case Integer:
-                    return intValue == value.getLong();
-                case Float:
-                    return doubleValue == value.getDouble();
-                case Text:
-                    return textValue.equals(value.getText());
-                case BLOB:
-                    return Arrays.equals(blobValue, value.getBLOB());
+        if (obj == this || obj == value) return true;
+        if (obj instanceof Value) {
+            Value v2 = (Value) obj;
+            switch (getType()) {
+                case Null: return v2.getLong() == 0L;
+                case Integer: return ((Long) value) == v2.getLong();
+                case Float: return ((Double) value) == v2.getDouble();
+                case Text: return value.equals(v2.getText());
+                case BLOB: return Arrays.equals((byte[]) value, v2.getBLOB());
             }
-        } else if (obj == null) {
-            switch (type) {
-                case Null:
-                    return true;
-                case Integer:
-                    return intValue == 0;
-                case Float:
-                    return doubleValue == 0;
-                case Text:
-                    return textValue == null || textValue.length() == 0;
-                case BLOB:
-                    return blobValue == null || blobValue.length == 0;
-            }
+            assert false;
         }
-        return super.equals(obj);
+        return Objects.deepEquals(obj, value);
     }
 
     @Override
     public int hashCode() {
-        switch (type) {
-            case Null:
-                return 0;
-            case Integer:
-                return Long.valueOf(intValue).hashCode();
-            case Float:
-                return Double.valueOf(doubleValue).hashCode();
-            case Text:
-                return textValue.hashCode();
-            case BLOB:
-                return Arrays.hashCode(blobValue);
-        }
-        return 0;
+        return (value == null) ? 0 : value.hashCode();
     }
 
-    ColumnType type;
-    long intValue;
-    double doubleValue;
-    String textValue;
-    byte[] blobValue;
+    private final Object value;
 }
