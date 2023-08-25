@@ -21,7 +21,6 @@ def genVersionTask = tasks.register('generateVersionProperties') {
     doLast {
         mkdir propFile.parentFile
         propFile.text = "version=${project.getFullVersion()}"
-        println "writeProp: ${propFile.text}"
     }
 }
 

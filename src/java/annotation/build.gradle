@@ -4,7 +4,7 @@ plugins {
 apply from: file('../gradle/WeChatPublish.gradle')
 
 group 'com.tencent.wcdb'
-version file('../../../VERSION').text
+version file('../../../VERSION').text.trim()
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_7
