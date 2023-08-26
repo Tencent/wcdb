@@ -23,6 +23,5 @@
 
 package com.tencent.wcdb.winq;
 
-public interface TableOrSubqueryConvertible {
-    Identifier asIdentifier();
+public interface TableOrSubqueryConvertible extends IdentifierConvertible {
 }

@@ -23,10 +23,12 @@
 
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class Column extends ExpressionOperable implements IndexedColumnConvertible, ResultColumnConvertible{
 
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.Column;
     }
 
@@ -50,15 +52,24 @@ public class Column extends ExpressionOperable implements IndexedColumnConvertib
     protected native void inTable(long column, String table);
 
     public Column of(Schema schema) {
-        inSchema(cppObj, schema.getCppObj());
+        ofSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 
     public Column of(String schema) {
-        return of(new Schema(schema));
+        ofSchema(cppObj, CPPType.String.ordinal(), 0, schema);
+        return this;
     }
 
-    protected native void inSchema(long column, long schema);
+    protected void ofSchema(Schema schema) {
+        ofSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
+    }
+
+    protected void ofSchema(String schema) {
+        ofSchema(cppObj, CPPType.String.ordinal(), 0, schema);
+    }
+
+    protected native void ofSchema(long column, int type, long schema, String schemaName);
 
     protected Column() {
     }

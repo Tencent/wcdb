@@ -22,7 +22,9 @@
  */
 package com.tencent.wcdb.orm;
 
+import com.tencent.wcdb.base.CppObject;
 import com.tencent.wcdb.winq.Column;
+import com.tencent.wcdb.winq.Identifier;
 import com.tencent.wcdb.winq.Schema;
 
 public class Field<T> extends Column {
@@ -80,15 +82,14 @@ public class Field<T> extends Column {
     @Override
     public Field<T> of(String schema) {
         Field<T> field = copySelf();
-        Schema newSchema = new Schema(schema);
-        field.inSchema(field.cppObj, newSchema.getCppObj());
+        field.ofSchema(schema);
         return field;
     }
 
     @Override
     public Field<T> of(Schema schema) {
         Field<T> field = copySelf();
-        field.inSchema(field.cppObj, schema.getCppObj());
+        field.ofSchema(schema);
         return field;
     }
 

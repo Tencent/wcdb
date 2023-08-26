@@ -22,9 +22,11 @@
  */
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class ColumnConstraint extends Identifier {
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.ColumnConstraint;
     }
 
@@ -81,7 +83,7 @@ public class ColumnConstraint extends Identifier {
     private native void configUnique(long self);
 
     public ColumnConstraint check(Expression expression) {
-        configCheck(cppObj, expression.getCppObj());
+        configCheck(cppObj, CppObject.get(expression));
         return this;
     }
 
@@ -113,11 +115,7 @@ public class ColumnConstraint extends Identifier {
     }
 
     public ColumnConstraint defaultTo(ExpressionConvertible value) {
-        if(value != null) {
-            defaultTo(cppObj, value.asIdentifier().getCppType().ordinal(), value.asIdentifier().getCppObj(), 0, null);
-        } else {
-            defaultTo(cppObj, CPPType.Null.ordinal(), 0, 0, null);
-        }
+        defaultTo(cppObj, Identifier.getCppType(value), CppObject.get(value), 0, null);
         return this;
     }
 
@@ -131,7 +129,7 @@ public class ColumnConstraint extends Identifier {
     private native void configCollate(long self, String collation);
 
     public ColumnConstraint foreignKey(ForeignKey foreignKey) {
-        configForeignKey(cppObj, foreignKey.getCppObj());
+        configForeignKey(cppObj, CppObject.get(foreignKey));
         return this;
     }
 

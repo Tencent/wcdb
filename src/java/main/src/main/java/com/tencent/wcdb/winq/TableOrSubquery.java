@@ -23,9 +23,11 @@
 
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class TableOrSubquery extends Identifier implements TableOrSubqueryConvertible{
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.TableOrSubquery;
     }
 
@@ -33,8 +35,7 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
     }
 
     public TableOrSubquery(TableOrSubqueryConvertible tableOrSubqueryConvertible) {
-        cppObj = createCppObj(tableOrSubqueryConvertible.asIdentifier().getCppType().ordinal(),
-                tableOrSubqueryConvertible.asIdentifier().getCppObj(),
+        cppObj = createCppObj(Identifier.getCppType(tableOrSubqueryConvertible), CppObject.get(tableOrSubqueryConvertible),
                 null);
     }
 
@@ -51,9 +52,9 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
         }
         long[] array = new long[tableOrSubqueries.length];
         for(int i = 0; i < tableOrSubqueries.length; i++) {
-            array[i] = tableOrSubqueries[i].asIdentifier().getCppObj();
+            array[i] = CppObject.get(tableOrSubqueries[i]);
         }
-        cppObj = createCppObj(tableOrSubqueries[0].asIdentifier().getCppType().ordinal(), array, null);
+        cppObj = createCppObj(Identifier.getCppType(tableOrSubqueries[0]), array, null);
     }
 
     public TableOrSubquery(String[] tables) {
@@ -68,7 +69,7 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
     }
 
     public TableOrSubquery schema(Schema schema) {
-        schema(cppObj, schema.getCppType().ordinal(), schema.getCppObj(), null);
+        schema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 
@@ -128,15 +129,11 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
     }
 
     public TableOrSubquery argument(ExpressionConvertible arg) {
-        if( arg != null ) {
-            argument(cppObj,
-                    arg.asIdentifier().getCppType().ordinal(),
-                    arg.asIdentifier().getCppObj(),
-                    0,
-                    null);
-        } else {
-            argument(cppObj, CPPType.Null.ordinal(), 0, 0, null);
-        }
+        argument(cppObj,
+                Identifier.getCppType(arg),
+                CppObject.get(arg),
+                0,
+                null);
         return this;
     }
 

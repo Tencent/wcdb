@@ -23,9 +23,11 @@
 
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class CommonTableExpression extends Identifier {
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.CommonTableExpression;
     }
 
@@ -36,14 +38,14 @@ public class CommonTableExpression extends Identifier {
     private native long createCPPObject(String tableName);
 
     public CommonTableExpression column(Column column) {
-        configColumn(cppObj, column.getCppObj());
+        configColumn(cppObj, CppObject.get(column));
         return this;
     }
 
     private native void configColumn(long self, long column);
 
     public CommonTableExpression as(StatementSelect select) {
-        configSelect(cppObj, select.getCppObj());
+        configSelect(cppObj, CppObject.get(select));
         return this;
     }
 

@@ -45,7 +45,7 @@ public class Handle extends HandleORMOperation implements AutoCloseable {
     public long getCppHandle() throws WCDBException {
         if(cppObj == 0) {
             assert database != null;
-            cppObj = database.getHandle(database.getCppObj(), writeHint);
+            cppObj = database.getHandle(CppObject.get(database), writeHint);
             if(cppObj == 0) {
                 throw database.createException();
             }
@@ -60,7 +60,7 @@ public class Handle extends HandleORMOperation implements AutoCloseable {
     native long getError(long self);
 
     public PreparedStatement getOrCreatePreparedStatement(Statement statement) throws WCDBException {
-        long cppPreparedStatement = getOrCreatePreparedStatement(getCppHandle(), statement.getCppObj());
+        long cppPreparedStatement = getOrCreatePreparedStatement(getCppHandle(), CppObject.get(statement));
         if(cppPreparedStatement == 0) {
             throw createException();
         }
@@ -209,14 +209,7 @@ public class Handle extends HandleORMOperation implements AutoCloseable {
     private static native void cancelSignal(long signal);
 
     public void attachCancellationSignal(CancellationSignal signal) throws WCDBException {
-        if(signal == null) {
-            return;
-        }
-        long cppSignal = signal.getCppObj();
-        if(cppSignal == 0){
-            return;
-        }
-        attachCancellationSignal(getCppHandle(), cppSignal);
+        attachCancellationSignal(getCppHandle(), CppObject.get(signal));
     }
 
     private native void attachCancellationSignal(long self, long signal);

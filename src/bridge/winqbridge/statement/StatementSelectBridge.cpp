@@ -181,7 +181,7 @@ void WCDBStatementSelectConfigFromTableOrSubqueries2(CPPStatementSelect select,
             intIndex++;
         } break;
         default:
-            assert(0);
+            assert(tableOrSubqueries.types[i] == WCDBBridgedType_Invalid);
             break;
         }
     }
@@ -223,7 +223,7 @@ void WCDBStatementSelectConfigGroups2(CPPStatementSelect select, CPPMultiTypeArr
             intIndex++;
         } break;
         default:
-            assert(0);
+            assert(groups.types[i] == WCDBBridgedType_Invalid);
             break;
         }
     }

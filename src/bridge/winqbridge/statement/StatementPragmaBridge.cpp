@@ -48,10 +48,10 @@ void WCDBStatementPragmaConfigSchema(CPPStatementPragma statment, CPPSchema sche
     cppStatement->schema(*cppSchema);
 }
 
-void WCDBStatementPragmaConfigSchema2(CPPStatementPragma statment, const char* schemaName)
+void WCDBStatementPragmaConfigSchema2(CPPStatementPragma statment, CPPCommonValue schema)
 {
     WCDBGetObjectOrReturn(statment, WCDB::StatementPragma, cppStatement);
-    cppStatement->schema(WCDB::UnsafeStringView(schemaName));
+    cppStatement->schema(WCDBCreateSchemaFromCommonValue(schema));
 }
 
 void WCDBStatementPragmaConfigToValue(CPPStatementPragma statment, CPPLiteralValue value)

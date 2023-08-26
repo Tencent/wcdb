@@ -373,7 +373,7 @@ WCDBExpressionInOperate(CPPCommonValue operand, CPPCommonArray valueArray, bool 
             WCDBGetCommonArrayObject(WCDB::Expression, valueArray, i)));
             break;
         default:
-            assert(0);
+            assert(valueArray.type == WCDBBridgedType_Null);
             break;
         }
     }

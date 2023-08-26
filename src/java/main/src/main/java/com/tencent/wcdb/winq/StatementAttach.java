@@ -23,9 +23,11 @@
 
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class StatementAttach extends Statement {
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.AttachSTMT;
     }
 
@@ -41,7 +43,7 @@ public class StatementAttach extends Statement {
     }
 
     public StatementAttach attach(BindParameter bindParameter) {
-        configPath(cppObj, CPPType.BindParameter.ordinal(), bindParameter.getCppObj(), null);
+        configPath(cppObj, Identifier.getCppType(bindParameter), CppObject.get(bindParameter), null);
         return this;
     }
 
@@ -53,7 +55,7 @@ public class StatementAttach extends Statement {
     }
 
     public StatementAttach as(Schema schema) {
-        configSchema(cppObj, CPPType.Schema.ordinal(), schema.getCppObj(), null);
+        configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 
@@ -65,7 +67,7 @@ public class StatementAttach extends Statement {
     }
 
     public StatementAttach key(BindParameter bindParameter) {
-        configKey(cppObj, CPPType.BindParameter.ordinal(), bindParameter.getCppObj(), null);
+        configKey(cppObj, Identifier.getCppType(bindParameter), CppObject.get(bindParameter), null);
         return this;
     }
 

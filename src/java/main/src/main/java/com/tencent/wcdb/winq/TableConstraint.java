@@ -23,9 +23,11 @@
 
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class TableConstraint extends Identifier {
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.TableConstraint;
     }
 
@@ -56,8 +58,8 @@ public class TableConstraint extends Identifier {
     public TableConstraint indexedBy(IndexedColumnConvertible indexedColumn) {
         configIndexedColumn(
                 cppObj,
-                indexedColumn.asIdentifier().getCppType().ordinal(),
-                new long[] {indexedColumn.asIdentifier().getCppObj()}, null);
+                Identifier.getCppType(indexedColumn),
+                new long[] {CppObject.get(indexedColumn)}, null);
         return this;
     }
 
@@ -67,11 +69,11 @@ public class TableConstraint extends Identifier {
         }
         long[] columns = new long[indexedColumns.length];
         for(int i = 0; i < indexedColumns.length; i++) {
-            columns[i] = indexedColumns[i].asIdentifier().getCppObj();
+            columns[i] = CppObject.get(indexedColumns[i]);
         }
         configIndexedColumn(
                 cppObj,
-                indexedColumns[0].asIdentifier().getCppType().ordinal(),
+                Identifier.getCppType(indexedColumns[0]),
                 columns, null);
         return this;
     }
@@ -99,7 +101,7 @@ public class TableConstraint extends Identifier {
     private native void configConfliction(long self, int action);
 
     public TableConstraint check(Expression expression) {
-        configCheckExpression(cppObj, expression.getCppObj());
+        configCheckExpression(cppObj, CppObject.get(expression));
         return this;
     }
 
@@ -111,21 +113,21 @@ public class TableConstraint extends Identifier {
                 CPPType.String.ordinal(),
                 null,
                 columns,
-                foreignKey.getCppObj());
+                CppObject.get(foreignKey));
         return this;
     }
 
     public TableConstraint foreignKey(Column[] columns, ForeignKey foreignKey) {
         long[] cppObjs = new long[columns.length];
         for(int i = 0; i < columns.length; i++) {
-            cppObjs[i] = columns[i].getCppObj();
+            cppObjs[i] = CppObject.get(columns[i]);
         }
         configForeignKey(
                 cppObj,
                 CPPType.Column.ordinal(),
                 cppObjs,
                 null,
-                foreignKey.getCppObj());
+                CppObject.get(foreignKey));
         return this;
     }
 

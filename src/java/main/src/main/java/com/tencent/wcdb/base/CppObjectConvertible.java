@@ -1,4 +1,4 @@
-// Created by qiuwenchen on 2023/3/30.
+// Created by chenqiuwen on 2023/8/26.
 //
 
 /*
@@ -20,7 +20,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.tencent.wcdb.winq;
 
-public interface ExpressionConvertible extends IdentifierConvertible{
+package com.tencent.wcdb.base;
+
+public interface CppObjectConvertible {
+    CppObject asCppObject();
 }

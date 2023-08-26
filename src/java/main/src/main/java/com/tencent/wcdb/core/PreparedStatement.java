@@ -47,7 +47,7 @@ public class PreparedStatement extends CppObject {
     private native long getError(long self);
 
     void prepare(Statement statement) throws WCDBException {
-        if(!prepare(cppObj, statement.getCppObj())) {
+        if(!prepare(cppObj, CppObject.get(statement))) {
             throw createException();
         }
     }

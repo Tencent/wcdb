@@ -23,15 +23,16 @@
 
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class OrderingTerm extends Identifier{
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.OrderingTerm;
     }
 
     public OrderingTerm(ExpressionConvertible expression) {
-        cppObj = createCppObj(expression.asIdentifier().getCppType().ordinal(),
-                expression.asIdentifier().getCppObj());
+        cppObj = createCppObj(Identifier.getCppType(expression), CppObject.get(expression));
     }
 
     private native long createCppObj(int type, long expression);

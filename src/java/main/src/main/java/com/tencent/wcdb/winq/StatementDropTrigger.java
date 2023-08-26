@@ -23,9 +23,11 @@
 
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class StatementDropTrigger extends Statement {
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.DropTriggerSTMT;
     }
 
@@ -48,7 +50,7 @@ public class StatementDropTrigger extends Statement {
     }
 
     public StatementDropTrigger of(Schema schema) {
-        configSchema(cppObj, CPPType.Schema.ordinal(), schema.getCppObj(), null);
+        configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 

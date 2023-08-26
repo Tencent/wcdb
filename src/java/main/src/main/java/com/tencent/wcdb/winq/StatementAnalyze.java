@@ -23,9 +23,11 @@
 
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class StatementAnalyze extends Statement {
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.AnalyzeSTMT;
     }
 
@@ -48,7 +50,7 @@ public class StatementAnalyze extends Statement {
     }
 
     public StatementAnalyze schema(Schema schema) {
-        configSchema(cppObj, CPPType.Schema.ordinal(), schema.getCppObj(), null);
+        configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 

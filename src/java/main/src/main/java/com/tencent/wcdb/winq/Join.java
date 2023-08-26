@@ -22,9 +22,11 @@
  */
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class Join extends Identifier implements TableOrSubqueryConvertible{
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.JoinClause;
     }
 
@@ -33,14 +35,7 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
     }
 
     public Join(TableOrSubqueryConvertible tableOrSubquery) {
-        assert tableOrSubquery != null;
-        if(tableOrSubquery == null) {
-            cppObj = createCppObj(CPPType.String.ordinal(),
-                    0, null);
-            return;
-        }
-        cppObj = createCppObj(tableOrSubquery.asIdentifier().getCppType().ordinal(),
-                tableOrSubquery.asIdentifier().getCppObj(), null);
+        cppObj = createCppObj(Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
     }
 
     private native long createCppObj(int type, long object, String tableName);
@@ -51,12 +46,7 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
     }
 
     public Join with(TableOrSubqueryConvertible tableOrSubquery) {
-        assert tableOrSubquery != null;
-        if(tableOrSubquery == null) {
-            return this;
-        }
-        configWith(cppObj, tableOrSubquery.asIdentifier().getCppType().ordinal(),
-                tableOrSubquery.asIdentifier().getCppObj(), null);
+        configWith(cppObj, Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
         return this;
     }
 
@@ -68,12 +58,7 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
     }
 
     public Join join(TableOrSubqueryConvertible tableOrSubquery) {
-        assert tableOrSubquery != null;
-        if(tableOrSubquery == null) {
-            return this;
-        }
-        configJoin(cppObj, tableOrSubquery.asIdentifier().getCppType().ordinal(),
-                tableOrSubquery.asIdentifier().getCppObj(), null);
+        configJoin(cppObj, Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
         return this;
     }
 
@@ -85,12 +70,7 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
     }
 
     public Join leftOuterJoin(TableOrSubqueryConvertible tableOrSubquery) {
-        assert tableOrSubquery != null;
-        if(tableOrSubquery == null) {
-            return this;
-        }
-        configWithLeftOuterJoin(cppObj, tableOrSubquery.asIdentifier().getCppType().ordinal(),
-                tableOrSubquery.asIdentifier().getCppObj(), null);
+        configWithLeftOuterJoin(cppObj, Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
         return this;
     }
 
@@ -102,12 +82,7 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
     }
 
     public Join leftJoin(TableOrSubqueryConvertible tableOrSubquery) {
-        assert tableOrSubquery != null;
-        if(tableOrSubquery == null) {
-            return this;
-        }
-        configWithLeftJoin(cppObj, tableOrSubquery.asIdentifier().getCppType().ordinal(),
-                tableOrSubquery.asIdentifier().getCppObj(), null);
+        configWithLeftJoin(cppObj, Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
         return this;
     }
 
@@ -119,12 +94,7 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
     }
 
     public Join innerJoin(TableOrSubqueryConvertible tableOrSubquery) {
-        assert tableOrSubquery != null;
-        if(tableOrSubquery == null) {
-            return this;
-        }
-        configWithInnerJoin(cppObj, tableOrSubquery.asIdentifier().getCppType().ordinal(),
-                tableOrSubquery.asIdentifier().getCppObj(), null);
+        configWithInnerJoin(cppObj, Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
         return this;
     }
 
@@ -136,12 +106,7 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
     }
 
     public Join crossJoin(TableOrSubqueryConvertible tableOrSubquery) {
-        assert tableOrSubquery != null;
-        if(tableOrSubquery == null) {
-            return this;
-        }
-        configWithCrossJoin(cppObj, tableOrSubquery.asIdentifier().getCppType().ordinal(),
-                tableOrSubquery.asIdentifier().getCppObj(), null);
+        configWithCrossJoin(cppObj, Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
         return this;
     }
 
@@ -153,12 +118,7 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
     }
 
     public Join naturalJoin(TableOrSubqueryConvertible tableOrSubquery) {
-        assert tableOrSubquery != null;
-        if(tableOrSubquery == null) {
-            return this;
-        }
-        configWithNaturalJoin(cppObj, tableOrSubquery.asIdentifier().getCppType().ordinal(),
-                tableOrSubquery.asIdentifier().getCppObj(), null);
+        configWithNaturalJoin(cppObj, Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
         return this;
     }
 
@@ -170,12 +130,7 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
     }
 
     public Join naturalLeftOuterJoin(TableOrSubqueryConvertible tableOrSubquery) {
-        assert tableOrSubquery != null;
-        if(tableOrSubquery == null) {
-            return this;
-        }
-        configWithNaturalLeftOuterJoin(cppObj, tableOrSubquery.asIdentifier().getCppType().ordinal(),
-                tableOrSubquery.asIdentifier().getCppObj(), null);
+        configWithNaturalLeftOuterJoin(cppObj, Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
         return this;
     }
 
@@ -187,12 +142,7 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
     }
 
     public Join naturalLeftJoin(TableOrSubqueryConvertible tableOrSubquery) {
-        assert tableOrSubquery != null;
-        if(tableOrSubquery == null) {
-            return this;
-        }
-        configWithNaturalLeftJoin(cppObj, tableOrSubquery.asIdentifier().getCppType().ordinal(),
-                tableOrSubquery.asIdentifier().getCppObj(), null);
+        configWithNaturalLeftJoin(cppObj, Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
         return this;
     }
 
@@ -204,12 +154,7 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
     }
 
     public Join naturalInnerJoin(TableOrSubqueryConvertible tableOrSubquery) {
-        assert tableOrSubquery != null;
-        if(tableOrSubquery == null) {
-            return this;
-        }
-        configWithNaturalInnerJoin(cppObj, tableOrSubquery.asIdentifier().getCppType().ordinal(),
-                tableOrSubquery.asIdentifier().getCppObj(), null);
+        configWithNaturalInnerJoin(cppObj, Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
         return this;
     }
 
@@ -221,19 +166,14 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
     }
 
     public Join naturalCrossJoin(TableOrSubqueryConvertible tableOrSubquery) {
-        assert tableOrSubquery != null;
-        if(tableOrSubquery == null) {
-            return this;
-        }
-        configWithNaturalCrossJoin(cppObj, tableOrSubquery.asIdentifier().getCppType().ordinal(),
-                tableOrSubquery.asIdentifier().getCppObj(), null);
+        configWithNaturalCrossJoin(cppObj, Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
         return this;
     }
 
     private native void configWithNaturalCrossJoin(long self, int type, long object, String tableName);
 
     public Join on(Expression expression) {
-        configOn(cppObj, expression.getCppObj());
+        configOn(cppObj, CppObject.get(expression));
         return this;
     }
 
@@ -245,11 +185,7 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
     }
 
     public Join using(Column column) {
-        assert column != null;
-        if(column == null) {
-            return this;
-        }
-        configUsingColumn(cppObj, CPPType.Column.ordinal(), new long[]{column.getCppObj()}, null);
+        configUsingColumn(cppObj, Identifier.getCppType(column), new long[]{CppObject.get(column)}, null);
         return this;
     }
 
@@ -259,13 +195,12 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
     }
 
     public Join using(Column[] columns) {
-        assert columns != null && columns.length > 0;
         if(columns == null || columns.length == 0) {
             return this;
         }
         long[] cppColumns = new long[columns.length];
         for(int i = 0; i < columns.length; i++) {
-            cppColumns[i] = columns[i].getCppObj();
+            cppColumns[i] = CppObject.get(columns[i]);
         }
         configUsingColumn(cppObj, CPPType.Column.ordinal(), cppColumns, null);
         return this;

@@ -25,7 +25,7 @@ package com.tencent.wcdb.winq;
 
 public class LiteralValue extends Identifier implements ExpressionConvertible {
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.LiteralValue;
     }
 

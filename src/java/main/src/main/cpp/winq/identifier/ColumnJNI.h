@@ -41,4 +41,4 @@ jlong WCDBJNIColumnObjectMethod(copy, jlong column);
 
 void WCDBJNIColumnObjectMethod(inTable, jlong column, jstring table);
 
-void WCDBJNIColumnObjectMethod(inSchema, jlong column, jlong schema);
+void WCDBJNIColumnObjectMethod(ofSchema, jlong column, WCDBJNIObjectOrStringParameter(schema));

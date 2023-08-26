@@ -23,9 +23,11 @@
 
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class StatementPragma extends Statement {
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.PragmaSTMT;
     }
 
@@ -36,18 +38,23 @@ public class StatementPragma extends Statement {
     private native long createCppObj();
 
     public StatementPragma pragma(Pragma pragma){
-        configPragma(cppObj, pragma.getCppObj());
+        configPragma(cppObj, CppObject.get(pragma));
         return this;
     }
 
     private native void configPragma(long self, long pragma);
 
     public StatementPragma of(String schemaName) {
-        configSchemaName(cppObj, schemaName);
+        configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
         return this;
     }
 
-    private native void configSchemaName(long self, String schemaName);
+    public StatementPragma of(Schema schema) {
+        configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
+        return this;
+    }
+
+    private native void configSchema(long self, int type, long schema, String schemaName);
 
     public StatementPragma withValue(boolean value) {
         configWithValue(cppObj, CPPType.Bool.ordinal(), value ? 1 : 0, 0, null);

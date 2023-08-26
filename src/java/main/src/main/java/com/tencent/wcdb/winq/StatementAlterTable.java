@@ -23,9 +23,11 @@
 
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class StatementAlterTable extends Statement {
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.AlterTableSTMT;
     }
 
@@ -48,7 +50,7 @@ public class StatementAlterTable extends Statement {
     }
 
     public StatementAlterTable of(Schema schema) {
-        configSchema(cppObj, CPPType.Schema.ordinal(), schema.getCppObj(), null);
+        configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 
@@ -67,7 +69,7 @@ public class StatementAlterTable extends Statement {
     }
 
     public StatementAlterTable renameColumn(Column column) {
-        configRenameColumn(cppObj, CPPType.Column.ordinal(), column.getCppObj(), null);
+        configRenameColumn(cppObj, Identifier.getCppType(column), CppObject.get(column), null);
         return this;
     }
 
@@ -79,14 +81,14 @@ public class StatementAlterTable extends Statement {
     }
 
     public StatementAlterTable toColumn(Column column) {
-        configRenameToColumn(cppObj, CPPType.Column.ordinal(), column.getCppObj(), null);
+        configRenameToColumn(cppObj, Identifier.getCppType(column), CppObject.get(column), null);
         return this;
     }
 
     private native void configRenameToColumn(long self, int type, long object, String schemaName);
 
     public StatementAlterTable addColumn(ColumnDef columnDef) {
-        configAddColumn(cppObj, columnDef.getCppObj());
+        configAddColumn(cppObj, CppObject.get(columnDef));
         return this;
     }
 

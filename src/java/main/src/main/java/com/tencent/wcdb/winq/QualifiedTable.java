@@ -23,9 +23,11 @@
 
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class QualifiedTable extends Identifier {
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.QualifiedTableName;
     }
 
@@ -41,7 +43,7 @@ public class QualifiedTable extends Identifier {
     }
 
     public QualifiedTable of(Schema schema) {
-        schema(cppObj, schema.getCppType().ordinal(), schema.getCppObj(), null);
+        schema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 

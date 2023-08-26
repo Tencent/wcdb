@@ -23,9 +23,11 @@
 
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class StatementUpdate extends Statement {
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.UpdateSTMT;
     }
 
@@ -40,13 +42,12 @@ public class StatementUpdate extends Statement {
     }
 
     public StatementUpdate with(CommonTableExpression[] expressions) {
-        assert expressions != null && expressions.length > 0;
         if(expressions == null || expressions.length == 0) {
             return this;
         }
         long[] cppExps = new long[expressions.length];
         for(int i = 0; i < expressions.length; i++) {
-            cppExps[i] = expressions[i].getCppObj();
+            cppExps[i] = CppObject.get(expressions[i]);
         }
         configWith(cppObj, cppExps);
         return this;
@@ -57,13 +58,12 @@ public class StatementUpdate extends Statement {
     }
 
     public StatementUpdate withRecursive(CommonTableExpression[] expressions) {
-        assert expressions != null && expressions.length > 0;
         if(expressions == null || expressions.length == 0) {
             return this;
         }
         long[] cppExps = new long[expressions.length];
         for(int i = 0; i < expressions.length; i++) {
-            cppExps[i] = expressions[i].getCppObj();
+            cppExps[i] = CppObject.get(expressions[i]);
         }
         configWith(cppObj, cppExps);
         configRecursive(cppObj);
@@ -80,7 +80,7 @@ public class StatementUpdate extends Statement {
     }
 
     public StatementUpdate update(QualifiedTable table) {
-        configTable(cppObj, table.getCppType().ordinal(), table.getCppObj(), null);
+        configTable(cppObj, Identifier.getCppType(table), CppObject.get(table), null);
         return this;
     }
 
@@ -118,7 +118,7 @@ public class StatementUpdate extends Statement {
         }
         long[] cppObjs = new long[columns.length];
         for(int i = 0; i < columns.length; i++) {
-            cppObjs[i] = columns[i].getCppObj();
+            cppObjs[i] = CppObject.get(columns[i]);
         }
         configColumnsToBindParameters(cppObj, CPPType.Column.ordinal(), cppObjs, null);
         return this;
@@ -141,7 +141,7 @@ public class StatementUpdate extends Statement {
 
         long[] cppColumns = new long[columns.length];
         for(int i = 0; i < columns.length; i++) {
-            cppColumns[i] = columns[i].getCppObj();
+            cppColumns[i] = CppObject.get(columns[i]);
         }
 
         MultiTypeArray array = new MultiTypeArray(values);
@@ -175,10 +175,7 @@ public class StatementUpdate extends Statement {
                                               String[] stringValues);
 
     public StatementUpdate set(Column column) {
-        if(column == null) {
-            return this;
-        }
-        configColumns(cppObj, CPPType.Column.ordinal(), new long[]{column.getCppObj()}, null);
+        configColumns(cppObj, Identifier.getCppType(column), new long[]{CppObject.get(column)}, null);
         return this;
     }
 
@@ -188,7 +185,7 @@ public class StatementUpdate extends Statement {
         }
         long[] cppObjs = new long[columns.length];
         for(int i = 0; i < columns.length; i++) {
-            cppObjs[i] = columns[i].getCppObj();
+            cppObjs[i] = CppObject.get(columns[i]);
         }
         configColumns(cppObj, CPPType.Column.ordinal(), cppObjs, null);
         return this;
@@ -237,25 +234,21 @@ public class StatementUpdate extends Statement {
     }
 
     public StatementUpdate to(ExpressionConvertible arg) {
-        if(arg != null) {
-            configToValue(cppObj, arg.asIdentifier().getCppType().ordinal(), arg.asIdentifier().getCppObj(), 0, null);
-        } else {
-            configToValue(cppObj, CPPType.Null.ordinal(), 0, 0, null);
-        }
+        configToValue(cppObj, Identifier.getCppType(arg), CppObject.get(arg), 0, null);
         return this;
     }
 
     private native void configToValue(long self, int type, long intValue, double doubleValue, String stringValue);
 
     public StatementUpdate where(Expression condition) {
-        configCondition(cppObj, condition.getCppObj());
+        configCondition(cppObj, CppObject.get(condition));
         return this;
     }
 
     private native void configCondition(long self, long condition);
 
     public StatementUpdate orderBy(OrderingTerm order) {
-        configOrders(cppObj, new long[]{order.getCppObj()});
+        configOrders(cppObj, new long[]{CppObject.get(order)});
         return this;
     }
 
@@ -265,7 +258,7 @@ public class StatementUpdate extends Statement {
         }
         long[] cppOrders = new long[orders.length];
         for(int i = 0; i < orders.length; i++) {
-            cppOrders[i] = orders[i].getCppObj();
+            cppOrders[i] = CppObject.get(orders[i]);
         }
         configOrders(cppObj, cppOrders);
         return this;
@@ -279,17 +272,17 @@ public class StatementUpdate extends Statement {
     }
 
     public StatementUpdate limit(long from, ExpressionConvertible to) {
-        configLimitRange(cppObj, CPPType.Int.ordinal(), from, to.asIdentifier().getCppType().ordinal(), to.asIdentifier().getCppObj());
+        configLimitRange(cppObj, CPPType.Int.ordinal(), from, Identifier.getCppType(to), CppObject.get(to));
         return this;
     }
 
     public StatementUpdate limit(ExpressionConvertible from, ExpressionConvertible to) {
-        configLimitRange(cppObj, from.asIdentifier().getCppType().ordinal(), from.asIdentifier().getCppObj(), to.asIdentifier().getCppType().ordinal(), to.asIdentifier().getCppObj());
+        configLimitRange(cppObj, Identifier.getCppType(from), CppObject.get(from), Identifier.getCppType(to), CppObject.get(to));
         return this;
     }
 
     public StatementUpdate limit(ExpressionConvertible from, long to) {
-        configLimitRange(cppObj, from.asIdentifier().getCppType().ordinal(), from.asIdentifier().getCppObj(), CPPType.Int.ordinal(), to);
+        configLimitRange(cppObj, Identifier.getCppType(from), CppObject.get(from), CPPType.Int.ordinal(), to);
         return this;
     }
 
@@ -301,7 +294,7 @@ public class StatementUpdate extends Statement {
     }
 
     public StatementUpdate limit(ExpressionConvertible count) {
-        configLimitCount(cppObj, count.asIdentifier().getCppType().ordinal(), count.asIdentifier().getCppObj());
+        configLimitCount(cppObj, Identifier.getCppType(count), CppObject.get(count));
         return this;
     }
 
@@ -313,7 +306,7 @@ public class StatementUpdate extends Statement {
     }
 
     public StatementUpdate offset(ExpressionConvertible offset) {
-        configOffset(cppObj, offset.asIdentifier().getCppType().ordinal(), offset.asIdentifier().getCppObj());
+        configOffset(cppObj, Identifier.getCppType(offset), CppObject.get(offset));
         return this;
     }
 

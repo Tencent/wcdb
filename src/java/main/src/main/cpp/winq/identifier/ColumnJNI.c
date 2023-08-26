@@ -57,9 +57,10 @@ void WCDBJNIColumnObjectMethod(inTable, jlong column, jstring table)
     WCDBJNIReleaseStringCritical(table);
 }
 
-void WCDBJNIColumnObjectMethod(inSchema, jlong column, jlong schema)
+void WCDBJNIColumnObjectMethod(ofSchema, jlong column, WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPColumn, column);
-    WCDBJNIBridgeStruct(CPPSchema, schema);
-    WCDBColumnOfSchema(columnStruct, schemaStruct);
+    WCDBJNICreateObjectOrStringCommonValue(schema, true);
+    WCDBColumnOfSchema2(columnStruct, schema_common);
+    WCDBJNITryReleaseStringInCommonValue(schema);
 }

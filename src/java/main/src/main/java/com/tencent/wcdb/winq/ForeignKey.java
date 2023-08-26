@@ -23,9 +23,11 @@
 
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class ForeignKey extends Identifier {
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.ForeignKeyClause;
     }
 
@@ -43,38 +45,28 @@ public class ForeignKey extends Identifier {
     private native void configReference(long self, String table);
 
     public ForeignKey column(Column column) {
-        assert column != null;
-        if(column == null) {
-            return this;
-        }
-        configColumns(cppObj, CPPType.Column.ordinal(), new long[]{column.getCppObj()}, null);
+        configColumns(cppObj, Identifier.getCppType(column), new long[]{CppObject.get(column)}, null);
         return this;
     }
 
     public ForeignKey column(String column) {
-        assert column != null;
-        if(column == null) {
-            return this;
-        }
         configColumns(cppObj, CPPType.String.ordinal(), null, new String[]{column});
         return this;
     }
 
     public ForeignKey columns(Column[] columns) {
-        assert columns != null && columns.length > 0;
         if(columns == null || columns.length == 0) {
             return this;
         }
         long[] objects = new long[columns.length];
         for(int i = 0; i < columns.length; i++) {
-            objects[i] = columns[i].getCppObj();
+            objects[i] = CppObject.get(columns[i]);
         }
         configColumns(cppObj, CPPType.Column.ordinal(), objects, null);
         return this;
     }
 
     public ForeignKey columns(String[] columns) {
-        assert columns != null && columns.length > 0;
         if(columns == null || columns.length == 0) {
             return this;
         }

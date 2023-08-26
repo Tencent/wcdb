@@ -23,9 +23,11 @@
 
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class StatementCreateTrigger extends Statement {
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.CreateTriggerSTMT;
     }
 
@@ -56,7 +58,7 @@ public class StatementCreateTrigger extends Statement {
     }
 
     public StatementCreateTrigger ofSchema(Schema schema) {
-        configSchema(cppObj, CPPType.Schema.ordinal(), schema.getCppObj(), null);
+        configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 
@@ -112,38 +114,28 @@ public class StatementCreateTrigger extends Statement {
     private native void configUpdate(long self);
 
     public StatementCreateTrigger ofColumn(Column column) {
-        assert column != null;
-        if(column == null) {
-            return this;
-        }
-        configColumns(cppObj, CPPType.Column.ordinal(), new long[]{column.getCppObj()}, null);
+        configColumns(cppObj, Identifier.getCppType(column), new long[]{CppObject.get(column)}, null);
         return this;
     }
 
     public StatementCreateTrigger ofColumn(String columnName) {
-        assert columnName != null;
-        if(columnName == null) {
-            return this;
-        }
         configColumns(cppObj, CPPType.String.ordinal(), null, new String[]{columnName});
         return this;
     }
 
     public StatementCreateTrigger ofColumns(Column[] columns) {
-        assert columns != null && columns.length > 0;
         if(columns == null || columns.length == 0) {
             return this;
         }
         long[] cppObjs = new long[columns.length];
         for(int i = 0; i < columns.length; i++) {
-            cppObjs[i] = columns[i].getCppObj();
+            cppObjs[i] = CppObject.get(columns[i]);
         }
         configColumns(cppObj, CPPType.Column.ordinal(), cppObjs, null);
         return this;
     }
 
     public StatementCreateTrigger ofColumns(String[] columnNames) {
-        assert columnNames != null && columnNames.length > 0;
         if(columnNames == null || columnNames.length == 0) {
             return this;
         }
@@ -168,35 +160,35 @@ public class StatementCreateTrigger extends Statement {
     private native void configForEachRow(long self);
 
     public StatementCreateTrigger when(Expression condition) {
-        configWhen(cppObj, condition.getCppObj());
+        configWhen(cppObj, CppObject.get(condition));
         return this;
     }
 
     private native void configWhen(long self, long condition);
 
     public StatementCreateTrigger execute(StatementInsert insert) {
-        executeInsert(cppObj, insert.getCppObj());
+        executeInsert(cppObj, CppObject.get(insert));
         return this;
     }
 
     private native void executeInsert(long self, long insert);
 
-    public StatementCreateTrigger execute(StatementUpdate insert) {
-        executeUpdate(cppObj, insert.getCppObj());
+    public StatementCreateTrigger execute(StatementUpdate update) {
+        executeUpdate(cppObj, CppObject.get(update));
         return this;
     }
 
     private native void executeUpdate(long self, long insert);
 
-    public StatementCreateTrigger execute(StatementDelete insert) {
-        executeDelete(cppObj, insert.getCppObj());
+    public StatementCreateTrigger execute(StatementDelete delete) {
+        executeDelete(cppObj, CppObject.get(delete));
         return this;
     }
 
     private native void executeDelete(long self, long insert);
 
-    public StatementCreateTrigger execute(StatementSelect insert) {
-        executeSelect(cppObj, insert.getCppObj());
+    public StatementCreateTrigger execute(StatementSelect select) {
+        executeSelect(cppObj, CppObject.get(select));
         return this;
     }
 

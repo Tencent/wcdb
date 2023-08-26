@@ -22,6 +22,7 @@
  */
 package com.tencent.wcdb.core;
 
+import com.tencent.wcdb.base.CppObject;
 import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.winq.Expression;
@@ -455,11 +456,7 @@ public class Database extends HandleORMOperation {
         MigrationInfo info = new MigrationInfo();
         info.table = table;
         filter.filterMigrate(info);
-        long cppFilterCondition = 0;
-        if(info.filterCondition != null) {
-            cppFilterCondition = info.filterCondition.getCppObj();
-        }
-        setMigrationInfo(cppInfoSetter, cppInfo, info.sourceTable, cppFilterCondition);
+        setMigrationInfo(cppInfoSetter, cppInfo, info.sourceTable, CppObject.get(info.filterCondition));
     }
 
     private static native void setMigrationInfo(long cppInfoSetter, long cppInfo, String sourceTable, long filterCondition);

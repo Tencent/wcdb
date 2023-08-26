@@ -37,7 +37,7 @@ public class StatementBegin extends Statement {
     }
 
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.CommitSTMT;
     }
 

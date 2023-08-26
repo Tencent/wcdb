@@ -30,6 +30,7 @@
 #include "LiteralValue.hpp"
 #include "ObjectBridge.hpp"
 #include "RaiseFunction.hpp"
+#include "Schema.hpp"
 #include "StatementSelect.hpp"
 #include "SyntaxForwardDeclaration.h"
 #include "WindowDef.hpp"
@@ -138,6 +139,12 @@ void WCDBExpressionSetWithSchema(CPPExpression expression, CPPSchema schema)
     WCDBGetObjectOrReturn(expression, WCDB::Expression, cppExpression);
     WCDBGetObjectOrReturn(schema, WCDB::Schema, cppSchema);
     cppExpression->schema(*cppSchema);
+}
+
+void WCDBExpressionSetWithSchema2(CPPExpression expression, CPPCommonValue schema)
+{
+    WCDBGetObjectOrReturn(expression, WCDB::Expression, cppExpression);
+    cppExpression->schema(WCDBCreateSchemaFromCommonValue(schema));
 }
 
 void WCDBExpressionSetArgument(CPPExpression expression, CPPCommonValue argument)

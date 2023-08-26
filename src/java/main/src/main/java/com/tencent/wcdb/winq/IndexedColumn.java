@@ -23,14 +23,16 @@
 
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class IndexedColumn extends Identifier implements IndexedColumnConvertible {
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.IndexedColumn;
     }
 
     public IndexedColumn(IndexedColumnConvertible indexedColumnConvertible) {
-        cppObj = createCppObj(indexedColumnConvertible.asIdentifier().getCppType().ordinal(), indexedColumnConvertible.asIdentifier().getCppObj(), null);
+        cppObj = createCppObj(Identifier.getCppType(indexedColumnConvertible), CppObject.get(indexedColumnConvertible), null);
     }
 
     public IndexedColumn(String columnName) {

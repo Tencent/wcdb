@@ -53,11 +53,14 @@ jlong WCDBJNIExpressionClassMethod(createWithNotExistStatement, jlong select)
     return (jlong) WCDBExpressionCreateWithNotExistStatement(selectStruct).innerValue;
 }
 
-void WCDBJNIExpressionObjectMethod(setWithSchema, jlong expression, jlong schema)
+void WCDBJNIExpressionObjectMethod(setWithSchema,
+                                   jlong expression,
+                                   WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPExpression, expression);
-    WCDBJNIBridgeStruct(CPPSchema, schema);
-    WCDBExpressionSetWithSchema(expressionStruct, schemaStruct);
+    WCDBJNICreateObjectOrStringCommonValue(schema, true);
+    WCDBExpressionSetWithSchema2(expressionStruct, schema_common);
+    WCDBJNITryReleaseStringInCommonValue(schema);
 }
 
 void WCDBJNIExpressionObjectMethod(setArgument, jlong expression, WCDBJNICommonValueParameter(argument))

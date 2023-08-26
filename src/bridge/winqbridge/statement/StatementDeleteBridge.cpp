@@ -66,7 +66,7 @@ void WCDBStatementDeleteConfigDeleteFrom2(CPPStatementDelete deleteStatement, CP
     } else if (table.type == WCDBBridgedType_QualifiedTableName) {
         cppDelete->deleteFrom(WCDBGetBridgedData(WCDB::QualifiedTable, table));
     } else {
-        assert(0);
+        assert(table.type == WCDBBridgedType_Null);
     }
 }
 

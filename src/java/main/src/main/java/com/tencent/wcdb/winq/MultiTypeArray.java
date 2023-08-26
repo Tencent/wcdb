@@ -23,6 +23,8 @@
 
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 import java.util.Arrays;
 
 enum ObjectType {
@@ -106,8 +108,8 @@ class MultiTypeArray {
                     break;
                 case Identifier:
                     Identifier identifier = (Identifier)obj;
-                    types[i] = identifier.getCppType().ordinal();
-                    longValues[longIndex] = identifier.getCppObj();
+                    types[i] = Identifier.getCppType(identifier);
+                    longValues[longIndex] = CppObject.get(identifier);
                     longIndex++;
                     break;
             }

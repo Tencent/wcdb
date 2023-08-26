@@ -23,9 +23,11 @@
 
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class FrameSpec extends Identifier {
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.FrameSpec;
     }
 
@@ -62,7 +64,7 @@ public class FrameSpec extends Identifier {
     }
 
     public FrameSpec preceding(ExpressionConvertible offset) {
-        configPreceding(cppObj, offset.asIdentifier().getCppType().ordinal(), offset.asIdentifier().getCppObj());
+        configPreceding(cppObj, Identifier.getCppType(offset), CppObject.get(offset));
         return this;
     }
 
@@ -88,7 +90,7 @@ public class FrameSpec extends Identifier {
     }
 
     public FrameSpec betweenPreceding(ExpressionConvertible offset) {
-        configBetweenPreceding(cppObj, offset.asIdentifier().getCppType().ordinal(), offset.asIdentifier().getCppObj());
+        configBetweenPreceding(cppObj, Identifier.getCppType(offset), CppObject.get(offset));
         return this;
     }
 
@@ -107,7 +109,7 @@ public class FrameSpec extends Identifier {
     }
 
     public FrameSpec betweenFollowing(ExpressionConvertible offset) {
-        configBetweenFollowing(cppObj, offset.asIdentifier().getCppType().ordinal(), offset.asIdentifier().getCppObj());
+        configBetweenFollowing(cppObj, Identifier.getCppType(offset), CppObject.get(offset));
         return this;
     }
 
@@ -126,7 +128,7 @@ public class FrameSpec extends Identifier {
     }
 
     public FrameSpec andPreceding(ExpressionConvertible offset) {
-        configAndPreceding(cppObj, offset.asIdentifier().getCppType().ordinal(), offset.asIdentifier().getCppObj());
+        configAndPreceding(cppObj, Identifier.getCppType(offset), CppObject.get(offset));
         return this;
     }
 
@@ -145,7 +147,7 @@ public class FrameSpec extends Identifier {
     }
 
     public FrameSpec andFollowing(ExpressionConvertible offset) {
-        configAndFollowing(cppObj, offset.asIdentifier().getCppType().ordinal(), offset.asIdentifier().getCppObj());
+        configAndFollowing(cppObj, Identifier.getCppType(offset), CppObject.get(offset));
         return this;
     }
 

@@ -50,7 +50,7 @@ CPPTableOrSubquery WCDBTableOrSubqueryCreate(CPPCommonValue value)
         return WCDBCreateCPPBridgedObjectWithParameters(
         CPPTableOrSubquery, WCDB::TableOrSubquery, WCDBGetBridgedData(WCDB::Join, value));
     } else {
-        assert(0);
+        assert(value.type == WCDBBridgedType_Null);
     }
     return CPPTableOrSubquery();
 }

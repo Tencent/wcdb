@@ -40,6 +40,7 @@ CPPExpression WCDBExpressionCreateWithNotExistStatement(CPPStatementSelect selec
 CPPExpression WCDBExpressionCreate(CPPCommonValue value);
 
 void WCDBExpressionSetWithSchema(CPPExpression expression, CPPSchema schema);
+void WCDBExpressionSetWithSchema2(CPPExpression expression, CPPCommonValue schema);
 void WCDBExpressionSetArgument(CPPExpression expression, CPPCommonValue argument);
 void WCDBExpressionSetArguments(CPPExpression expression,
                                 const CPPExpression* _Nullable arguments,

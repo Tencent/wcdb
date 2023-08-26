@@ -23,9 +23,11 @@
 
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class StatementCreateIndex extends Statement {
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.CreateIndexSTMT;
     }
 
@@ -62,7 +64,7 @@ public class StatementCreateIndex extends Statement {
     }
 
     public StatementCreateIndex of(Schema schema) {
-        configSchema(cppObj, CPPType.Schema.ordinal(), schema.getCppObj(), null);
+        configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 
@@ -81,11 +83,11 @@ public class StatementCreateIndex extends Statement {
         }
         long[] columns = new long[indexedColumnConvertible.length];
         for(int i = 0; i < indexedColumnConvertible.length; i++) {
-            columns[i] = indexedColumnConvertible[i].asIdentifier().getCppObj();
+            columns[i] = CppObject.get(indexedColumnConvertible[i]);
         }
         configIndexedColumns(
                 cppObj,
-                indexedColumnConvertible[0].asIdentifier().getCppType().ordinal(),
+                Identifier.getCppType(indexedColumnConvertible[0]),
                 columns, null);
         return this;
     }
@@ -93,8 +95,8 @@ public class StatementCreateIndex extends Statement {
     public StatementCreateIndex indexedBy(IndexedColumnConvertible indexedColumnConvertible) {
         configIndexedColumns(
                 cppObj,
-                indexedColumnConvertible.asIdentifier().getCppType().ordinal(),
-                new long[]{indexedColumnConvertible.asIdentifier().getCppObj()},
+                Identifier.getCppType(indexedColumnConvertible),
+                new long[]{CppObject.get(indexedColumnConvertible)},
                 null);
         return this;
     }
@@ -112,7 +114,7 @@ public class StatementCreateIndex extends Statement {
     private native void configIndexedColumns(long self, int type, long[] columns, String[] columnNames);
 
     public StatementCreateIndex where(Expression condition) {
-        configCondition(cppObj, condition.getCppObj());
+        configCondition(cppObj, CppObject.get(condition));
         return this;
     }
 

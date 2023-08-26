@@ -39,7 +39,7 @@ public class Binding extends CppObject {
     private native long createCppObj();
 
     public void addColumnDef(ColumnDef def) {
-        addColumnDef(cppObj, def.getCppObj());
+        addColumnDef(cppObj, CppObject.get(def));
     }
 
     private native void addColumnDef(long self, long columnDef);
@@ -51,13 +51,13 @@ public class Binding extends CppObject {
     private native void enableAutoIncrementForExistingTable(long self);
 
     public void addIndex(String indexNameOrSuffix, boolean isFullName, StatementCreateIndex createIndex) {
-        addIndex(cppObj, indexNameOrSuffix, isFullName, createIndex.getCppObj());
+        addIndex(cppObj, indexNameOrSuffix, isFullName, CppObject.get(createIndex));
     }
 
     private native void addIndex(long self, String indexNameOrSuffix, boolean isFullName, long createIndex);
 
     public void addTableConstraint(TableConstraint constraint) {
-        addTableConstraint(cppObj, constraint.getCppObj());
+        addTableConstraint(cppObj, CppObject.get(constraint));
     }
 
     private native void addTableConstraint(long self, long tableConstraint);

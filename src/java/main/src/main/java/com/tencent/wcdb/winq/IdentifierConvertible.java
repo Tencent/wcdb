@@ -1,4 +1,4 @@
-// Created by qiuwenchen on 2023/6/13.
+// Created by chenqiuwen on 2023/8/26.
 //
 
 /*
@@ -23,29 +23,8 @@
 
 package com.tencent.wcdb.winq;
 
-import com.tencent.wcdb.base.CppObject;
+import com.tencent.wcdb.base.CppObjectConvertible;
 
-public class StatementVacuum extends Statement {
-    @Override
-    protected CPPType getType() {
-        return CPPType.VacuumSTMT;
-    }
-
-    public StatementVacuum() {
-        cppObj = createCppObj();
-    }
-
-    private native long createCppObj();
-
-    public StatementVacuum vacuum(String schemaName) {
-        configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
-        return this;
-    }
-
-    public StatementVacuum vacuum(Schema schema) {
-        configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
-        return this;
-    }
-
-    private native void configSchema(long self, int type, long object, String path);
+public interface IdentifierConvertible extends CppObjectConvertible {
+    Identifier asIdentifier();
 }

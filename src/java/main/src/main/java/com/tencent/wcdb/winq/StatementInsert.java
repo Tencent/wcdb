@@ -23,9 +23,11 @@
 
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class StatementInsert extends Statement {
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.InsertSTMT;
     }
 
@@ -40,13 +42,12 @@ public class StatementInsert extends Statement {
     }
 
     public StatementInsert with(CommonTableExpression[] expressions) {
-        assert expressions != null && expressions.length > 0;
         if(expressions == null || expressions.length == 0) {
             return this;
         }
         long[] cppExps = new long[expressions.length];
         for(int i = 0; i < expressions.length; i++) {
-            cppExps[i] = expressions[i].getCppObj();
+            cppExps[i] = CppObject.get(expressions[i]);
         }
         configWith(cppObj, cppExps);
         return this;
@@ -57,13 +58,12 @@ public class StatementInsert extends Statement {
     }
 
     public StatementInsert withRecursive(CommonTableExpression[] expressions) {
-        assert expressions != null && expressions.length > 0;
         if(expressions == null || expressions.length == 0) {
             return this;
         }
         long[] cppExps = new long[expressions.length];
         for(int i = 0; i < expressions.length; i++) {
-            cppExps[i] = expressions[i].getCppObj();
+            cppExps[i] = CppObject.get(expressions[i]);
         }
         configWith(cppObj, cppExps);
         configRecursive(cppObj);
@@ -87,7 +87,7 @@ public class StatementInsert extends Statement {
     }
 
     public StatementInsert of(Schema schema) {
-        configSchema(cppObj, CPPType.Schema.ordinal(), schema.getCppObj(), null);
+        configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 
@@ -127,7 +127,6 @@ public class StatementInsert extends Statement {
     private native void configAlias(long self, String alias);
 
     public StatementInsert column(Column column) {
-        assert column != null;
         if(column == null) {
             return this;
         }
@@ -135,7 +134,6 @@ public class StatementInsert extends Statement {
     }
 
     public StatementInsert column(String columnName) {
-        assert columnName != null && columnName.length() > 0;
         if(columnName == null || columnName.length() == 0) {
             return this;
         }
@@ -148,7 +146,7 @@ public class StatementInsert extends Statement {
         }
         long[] cppColumns = new long[columns.length];
         for(int i = 0; i < columns.length; i++) {
-            cppColumns[i] = columns[i].getCppObj();
+            cppColumns[i] = CppObject.get(columns[i]);
         }
         configColumns(cppObj, CPPType.Column.ordinal(), cppColumns, null);
         return this;
@@ -189,7 +187,7 @@ public class StatementInsert extends Statement {
     private native void configValues(long self, int[] types, long[] longValues, double[] doubleValues, String[] stringValues);
 
     public StatementInsert values(StatementSelect select) {
-        configValues(cppObj, select.getCppObj());
+        configValues(cppObj, CppObject.get(select));
         return this;
     }
 
@@ -203,7 +201,7 @@ public class StatementInsert extends Statement {
     private native void configDefaultValues(long self);
 
     public StatementInsert upsert(Upsert upsert) {
-        configUpsert(cppObj, upsert.getCppObj());
+        configUpsert(cppObj, CppObject.get(upsert));
         return this;
     }
 

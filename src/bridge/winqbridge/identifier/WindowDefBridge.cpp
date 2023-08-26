@@ -72,7 +72,7 @@ void WCDBWindowDefConfigPartition2(CPPWindowDef def, CPPMultiTypeArray partition
             intIndex++;
         } break;
         default:
-            assert(0);
+            assert(partitions.types[i] == WCDBBridgedType_Invalid);
             break;
         }
     }

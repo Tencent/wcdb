@@ -23,9 +23,11 @@
 
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class StatementCreateTable extends Statement {
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.CreateTableSTMT;
     }
 
@@ -63,21 +65,21 @@ public class StatementCreateTable extends Statement {
     }
 
     public StatementCreateTable of(Schema schema) {
-        configSchema(cppObj, CPPType.Schema.ordinal(), schema.getCppObj(), null);
+        configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 
     private native void configSchema(long self, int type, long schema, String schemaName);
 
     public StatementCreateTable as(StatementSelect select) {
-        configAs(cppObj, select.getCppObj());
+        configAs(cppObj, CppObject.get(select));
         return this;
     }
 
     private native void configAs(long self, long select);
 
     public StatementCreateTable define(ColumnDef column) {
-        configColumn(cppObj, column.getCppObj());
+        configColumn(cppObj, CppObject.get(column));
         return this;
     }
 
@@ -89,7 +91,7 @@ public class StatementCreateTable extends Statement {
         }
         long[] cppColumns = new long[columns.length];
         for(int i = 0; i < columns.length; i++) {
-            cppColumns[i] = columns[i].getCppObj();
+            cppColumns[i] = CppObject.get(columns[i]);
         }
         configColumns(cppObj, cppColumns);
         return this;
@@ -103,14 +105,14 @@ public class StatementCreateTable extends Statement {
         }
         long[] cppConstraints = new long[constraints.length];
         for(int i = 0; i < constraints.length; i++) {
-            cppConstraints[i] = constraints[i].getCppObj();
+            cppConstraints[i] = CppObject.get(constraints[i]);
         }
         configConstraints(cppObj, cppConstraints);
         return this;
     }
 
     public StatementCreateTable constraint(TableConstraint constraint) {
-        configConstraints(cppObj, new long[]{constraint.getCppObj()});
+        configConstraints(cppObj, new long[]{CppObject.get(constraint)});
         return this;
     }
 

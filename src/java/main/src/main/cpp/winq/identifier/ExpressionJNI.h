@@ -39,7 +39,9 @@ jlong WCDBJNIExpressionClassMethod(createWithFunction, jstring func);
 jlong WCDBJNIExpressionClassMethod(createWithExistStatement, jlong select);
 jlong WCDBJNIExpressionClassMethod(createWithNotExistStatement, jlong select);
 
-void WCDBJNIExpressionObjectMethod(setWithSchema, jlong expression, jlong schema);
+void WCDBJNIExpressionObjectMethod(setWithSchema,
+                                   jlong expression,
+                                   WCDBJNIObjectOrStringParameter(schema));
 void WCDBJNIExpressionObjectMethod(setArgument,
                                    jlong expression,
                                    WCDBJNICommonValueParameter(argument));

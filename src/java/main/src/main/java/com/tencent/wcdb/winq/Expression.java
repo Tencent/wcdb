@@ -22,9 +22,11 @@
  */
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class Expression extends ExpressionOperable implements IndexedColumnConvertible, ResultColumnConvertible{
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.Expression;
     }
 
@@ -32,19 +34,19 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
     }
 
     public Expression(LiteralValue value) {
-        cppObj = createCppObj(value.getCppType().ordinal(), value.getCppObj());
+        cppObj = createCppObj(Identifier.getCppType(value), CppObject.get(value));
     }
 
     public Expression(BindParameter bindParameter) {
-        cppObj = createCppObj(bindParameter.getCppType().ordinal(), bindParameter.getCppObj());
+        cppObj = createCppObj(Identifier.getCppType(bindParameter), CppObject.get(bindParameter));
     }
 
     public Expression(Column column) {
-        cppObj = createCppObj(column.getCppType().ordinal(), column.getCppObj());
+        cppObj = createCppObj(Identifier.getCppType(column), CppObject.get(column));
     }
 
     public Expression(StatementSelect select) {
-        cppObj = createCppObj(select.getCppType().ordinal(), select.getCppObj());
+        cppObj = createCppObj(Identifier.getCppType(select), CppObject.get(select));
     }
 
     private native long createCppObj(int type, long intValue);
@@ -56,15 +58,16 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
     private static native long createWithFunction(String func);
 
     public Expression schema(String schema) {
-        return schema(new Schema(schema));
-    }
-
-    public Expression schema(Schema schema) {
-        schema(cppObj, schema.getCppObj());
+        schema(cppObj, CPPType.String.ordinal(), 0, schema);
         return this;
     }
 
-    private native void schema(long self, long schema);
+    public Expression schema(Schema schema) {
+        schema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
+        return this;
+    }
+
+    private native void schema(long self, int type, long schema, String schemaName);
 
     public Expression distinct() {
         distinct(cppObj);
@@ -112,12 +115,7 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
     }
 
     public Expression argument(ExpressionConvertible arg) {
-        if(arg != null){
-            argument(cppObj, arg.asIdentifier().getCppType().ordinal(), arg.asIdentifier().getCppObj(), 0, null);
-        } else {
-            argument(cppObj, CPPType.Null.ordinal(), 0, 0, null);
-        }
-
+        argument(cppObj, Identifier.getCppType(arg), CppObject.get(arg), 0, null);
         return this;
     }
 
@@ -133,10 +131,7 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
     public static Expression exists(StatementSelect select) {
         assert select != null;
         Expression exp = new Expression();
-        if(select == null) {
-            return exp;
-        }
-        exp.cppObj = createWithExistStatement(select.getCppObj());
+        exp.cppObj = createWithExistStatement(CppObject.get(select));
         return exp;
     }
 
@@ -145,10 +140,7 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
     public static Expression notExists(StatementSelect select) {
         assert select != null;
         Expression exp = new Expression();
-        if(select == null) {
-            return exp;
-        }
-        exp.cppObj = createWithNotExistStatement(select.getCppObj());
+        exp.cppObj = createWithNotExistStatement(CppObject.get(select));
         return exp;
     }
 
@@ -163,11 +155,7 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
     public static Expression cast(ExpressionConvertible expression) {
         assert expression != null;
         Expression ret = new Expression();
-        if(expression == null) {
-            return ret;
-        }
-        ret.cppObj = cast(expression.asIdentifier().getCppType().ordinal(),
-                expression.asIdentifier().getCppObj(), null);
+        ret.cppObj = cast(Identifier.getCppType(expression), CppObject.get(expression), null);
         return ret;
     }
 
@@ -187,7 +175,6 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
     }
 
     public static Expression case_(String columnName) {
-        assert columnName != null;
         if(columnName == null) {
             return case_();
         }
@@ -197,13 +184,9 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
     }
 
     public static Expression case_(ExpressionConvertible expression) {
-        assert expression != null;
-        if(expression == null) {
-            return case_();
-        }
         Expression ret = new Expression();
-        ret.cppObj = caseWithExp(expression.asIdentifier().getCppType().ordinal(),
-                expression.asIdentifier().getCppObj(), null);
+        ret.cppObj = caseWithExp(Identifier.getCppType(expression),
+                CppObject.get(expression), null);
         return ret;
     }
 
@@ -234,12 +217,7 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
     }
 
     public Expression when(ExpressionConvertible arg) {
-        if(arg != null){
-            setWithWhenExp(cppObj, arg.asIdentifier().getCppType().ordinal(), arg.asIdentifier().getCppObj(), 0, null);
-        } else {
-            setWithWhenExp(cppObj, CPPType.Null.ordinal(), 0, 0, null);
-        }
-
+        setWithWhenExp(cppObj, Identifier.getCppType(arg), CppObject.get(arg), 0, null);
         return this;
     }
 
@@ -270,11 +248,7 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
     }
 
     public Expression then(ExpressionConvertible arg) {
-        if(arg != null){
-            setWithThenExp(cppObj, arg.asIdentifier().getCppType().ordinal(), arg.asIdentifier().getCppObj(), 0, null);
-        } else {
-            setWithThenExp(cppObj, CPPType.Null.ordinal(), 0, 0, null);
-        }
+        setWithThenExp(cppObj, Identifier.getCppType(arg), CppObject.get(arg), 0, null);
 
         return this;
     }
@@ -306,12 +280,7 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
     }
 
     public Expression else_(ExpressionConvertible arg) {
-        if(arg != null){
-            setWithElseExp(cppObj, arg.asIdentifier().getCppType().ordinal(), arg.asIdentifier().getCppObj(), 0, null);
-        } else {
-            setWithElseExp(cppObj, CPPType.Null.ordinal(), 0, 0, null);
-        }
-
+        setWithElseExp(cppObj, Identifier.getCppType(arg), CppObject.get(arg), 0, null);
         return this;
     }
 
@@ -333,7 +302,7 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
     private native void filter(long self, long condition);
 
     public Expression over(WindowDef windowDef) {
-        overWindowDef(cppObj, windowDef.getCppObj());
+        overWindowDef(cppObj, CppObject.get(windowDef));
         return this;
     }
 

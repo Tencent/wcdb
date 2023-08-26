@@ -120,7 +120,7 @@ static const JNINativeMethod g_columnMethods[] = {
     { "createCppObj", "(" WCDBJNIStringSignature "J)J", (void *) WCDBJNIColumnFuncName(createWithName) },
     { "copy", "(J)J", (void *) WCDBJNIColumnFuncName(copy) },
     { "inTable", "(J" WCDBJNIStringSignature ")V", (void *) WCDBJNIColumnFuncName(inTable) },
-    { "inSchema", "(JJ)V", (void *) WCDBJNIColumnFuncName(inSchema) },
+    { "ofSchema", "(J" WCDBJNIObjectOrStringSignature ")V", (void *) WCDBJNIColumnFuncName(ofSchema) },
     { "allColumn", "()J", (void *) WCDBJNIColumnFuncName(createAll) },
     { "rowidColumn", "()J", (void *) WCDBJNIColumnFuncName(createRowId) },
 };
@@ -144,7 +144,7 @@ static const JNINativeMethod g_expressionMethods[] = {
     { "createWithFunction",
       "(" WCDBJNIStringSignature ")J",
       (void *) WCDBJNIExpressionFuncName(createWithFunction) },
-    { "schema", "(JJ)V", (void *) WCDBJNIExpressionFuncName(setWithSchema) },
+    { "schema", "(J" WCDBJNIObjectOrStringSignature ")V", (void *) WCDBJNIExpressionFuncName(setWithSchema) },
     { "distinct", "(J)V", (void *) WCDBJNIExpressionFuncName(distinct) },
     { "invoke", "(J)V", (void *) WCDBJNIExpressionFuncName(invoke) },
     { "invokeAll", "(J)V", (void *) WCDBJNIExpressionFuncName(invokeAll) },
@@ -508,8 +508,8 @@ static const JNINativeMethod g_statementInsertMethods[] = {
 
 static const JNINativeMethod g_statementPragmaMethods[] = {
     { "createCppObj", "()J", (void *) WCDBJNIStatementPragmaFuncName(create) },
-    { "configSchemaName",
-      "(J" WCDBJNIStringSignature ")V",
+    { "configSchema",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
       (void *) WCDBJNIStatementPragmaFuncName(configSchema) },
     { "configPragma", "(JJ)V", (void *) WCDBJNIStatementPragmaFuncName(configPragma) },
     { "configWithValue",

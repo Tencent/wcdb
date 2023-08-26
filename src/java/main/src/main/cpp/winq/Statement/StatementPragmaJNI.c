@@ -28,12 +28,14 @@ jlong WCDBJNIStatementPragmaObjectMethodWithNoArg(create)
 {
     return (jlong) WCDBStatementPragmaCreate().innerValue;
 }
-void WCDBJNIStatementPragmaObjectMethod(configSchema, jlong self, jstring schemaName)
+void WCDBJNIStatementPragmaObjectMethod(configSchema,
+                                        jlong self,
+                                        WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementPragma, self);
-    WCDBJNIGetStringCritical(schemaName);
-    WCDBStatementPragmaConfigSchema2(selfStruct, schemaNameString);
-    WCDBJNIReleaseStringCritical(schemaName);
+    WCDBJNICreateObjectOrStringCommonValue(schema, true);
+    WCDBStatementPragmaConfigSchema2(selfStruct, schema_common);
+    WCDBJNITryReleaseStringInCommonValue(schema);
 }
 
 void WCDBJNIStatementPragmaObjectMethod(configPragma, jlong self, jlong pragma)

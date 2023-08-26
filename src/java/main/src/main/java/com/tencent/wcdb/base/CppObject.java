@@ -22,7 +22,7 @@
  */
 package com.tencent.wcdb.base;
 
-public class CppObject {
+public class CppObject implements CppObjectConvertible {
     static {
         System.loadLibrary("wcdb-android");
     }
@@ -35,9 +35,24 @@ public class CppObject {
     }
     protected long cppObj = 0;
 
-    public long getCppObj() {
-        return cppObj;
+    public static long get(CppObject obj) {
+        if(obj == null) {
+            return 0;
+        }
+        return obj.cppObj;
+    }
+
+    public static long get(CppObjectConvertible obj) {
+        if(obj == null) {
+            return 0;
+        }
+        return obj.asCppObject().cppObj;
     }
 
     protected static native void releaseCPPObject(long obj);
+
+    @Override
+    public CppObject asCppObject() {
+        return this;
+    }
 }

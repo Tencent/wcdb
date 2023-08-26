@@ -23,9 +23,11 @@
 
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class StatementExplain extends Statement {
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.ExplainSTMT;
     }
 
@@ -36,12 +38,12 @@ public class StatementExplain extends Statement {
     private native long createCppObj();
 
     public StatementExplain explain(Statement statement) {
-        explain(cppObj, statement.getCppObj(), false);
+        explain(cppObj, CppObject.get(statement), false);
         return this;
     }
 
     public StatementExplain explainQueryPlan(Statement statement) {
-        explain(cppObj, statement.getCppObj(), true);
+        explain(cppObj, CppObject.get(statement), true);
         return this;
     }
 

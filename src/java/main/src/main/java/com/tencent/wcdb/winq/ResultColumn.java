@@ -23,15 +23,17 @@
 
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class ResultColumn extends Identifier implements ResultColumnConvertible {
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.ResultColumn;
     }
 
 
     public ResultColumn(ResultColumnConvertible resultColumnConvertible) {
-        cppObj = createCppObj(resultColumnConvertible.asIdentifier().getCppType().ordinal(), resultColumnConvertible.asIdentifier().getCppObj(), null);
+        cppObj = createCppObj(Identifier.getCppType(resultColumnConvertible), CppObject.get(resultColumnConvertible), null);
     }
 
     public ResultColumn(String columnName) {

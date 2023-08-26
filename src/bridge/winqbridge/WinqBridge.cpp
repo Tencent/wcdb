@@ -175,14 +175,15 @@ ColumnType WinqBridge::changeColumnType(enum WCDBSyntaxColumnType type)
 
 Schema WinqBridge::createSchema(CPPCommonValue schema)
 {
-    if (schema.type == WCDBBridgedType_String) {
+    switch (schema.type) {
+    case WCDBBridgedType_String:
         return Schema((const char*) schema.intValue);
-    } else if (schema.type == WCDBBridgedType_Schema) {
+    case WCDBBridgedType_Schema:
         return WCDBGetBridgedData(WCDB::Schema, schema);
-    } else {
-        assert(0);
+    default:
+        assert(schema.type == WCDBBridgedType_Null);
+        return Schema();
     }
-    return Schema();
 }
 
 LiteralValue WinqBridge::createLiteralValue(CPPCommonValue data)
@@ -250,11 +251,10 @@ TableOrSubquery WinqBridge::createTableOrSubquery(CPPCommonValue tableOrSubquery
         return WCDBGetBridgedData(StatementSelect, tableOrSubquery);
     case WCDBBridgedType_JoinClause:
         return WCDBGetBridgedData(Join, tableOrSubquery);
-
     default:
-        assert(0);
         break;
     }
+    assert(tableOrSubquery.type == WCDBBridgedType_Null);
     return TableOrSubquery();
 }
 
@@ -266,7 +266,7 @@ Column WinqBridge::createColumn(CPPCommonValue column)
     case WCDBBridgedType_Column:
         return WCDBGetBridgedData(WCDB::Column, column);
     default:
-        assert(0);
+        assert(column.type == WCDBBridgedType_Null);
         return Column();
     }
 }

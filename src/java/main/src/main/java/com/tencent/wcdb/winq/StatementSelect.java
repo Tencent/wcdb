@@ -23,11 +23,13 @@
 
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 import java.util.Arrays;
 
 public class StatementSelect extends Statement implements TableOrSubqueryConvertible {
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.SelectSTMT;
     }
     public StatementSelect() {
@@ -40,13 +42,12 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
     }
 
     public StatementSelect with(CommonTableExpression[] expressions) {
-        assert expressions != null && expressions.length > 0;
         if(expressions == null || expressions.length == 0) {
             return this;
         }
         long[] cppExps = new long[expressions.length];
         for(int i = 0; i < expressions.length; i++) {
-            cppExps[i] = expressions[i].getCppObj();
+            cppExps[i] = CppObject.get(expressions[i]);
         }
         configWith(cppObj, cppExps);
         return this;
@@ -57,13 +58,12 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
     }
 
     public StatementSelect withRecursive(CommonTableExpression[] expressions) {
-        assert expressions != null && expressions.length > 0;
         if(expressions == null || expressions.length == 0) {
             return this;
         }
         long[] cppExps = new long[expressions.length];
         for(int i = 0; i < expressions.length; i++) {
-            cppExps[i] = expressions[i].getCppObj();
+            cppExps[i] = CppObject.get(expressions[i]);
         }
         configWith(cppObj, cppExps);
         configRecursive(cppObj);
@@ -75,8 +75,8 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
     private native void configRecursive(long self);
 
     public StatementSelect select(ResultColumnConvertible resultColumn) {
-        configResultColumns(cppObj, new int[]{resultColumn.asIdentifier().getCppType().ordinal()},
-                new long[]{resultColumn.asIdentifier().getCppObj()}, null, null);
+        configResultColumns(cppObj, new int[]{Identifier.getCppType(resultColumn)},
+                new long[]{CppObject.get(resultColumn)}, null, null);
         return this;
     }
 
@@ -88,8 +88,8 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         int[] types = new int[totalCount];
         long[] cppObjs = new long[totalCount];
         for(int i = 0; i < totalCount; i++) {
-            types[i] = resultColumns[i].asIdentifier().getCppType().ordinal();
-            cppObjs[i] = resultColumns[i].asIdentifier().getCppObj();
+            types[i] = Identifier.getCppType(resultColumns[i]);
+            cppObjs[i] = CppObject.get(resultColumns[i]);
         }
         configResultColumns(cppObj, types, cppObjs, null, null);
         return this;
@@ -128,8 +128,9 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
                 columnNames[stringIndex] = (String) obj;
                 stringIndex++;
             } else if (obj instanceof ResultColumnConvertible) {
-                types[i] = ((ResultColumnConvertible)resultColumns[i]).asIdentifier().getCppType().ordinal();
-                cppObjs[intIndex] = ((ResultColumnConvertible)resultColumns[i]).asIdentifier().getCppObj();
+                ResultColumnConvertible resultColumn = (ResultColumnConvertible)obj;
+                types[i] = Identifier.getCppType(resultColumn);
+                cppObjs[intIndex] = CppObject.get(resultColumn);
                 intIndex++;
             }
         }
@@ -154,8 +155,8 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
     private native void configDistinct(long self);
 
     public StatementSelect from(TableOrSubqueryConvertible tableOrSubquery) {
-        configTableOrSubqueries(cppObj, new int[]{tableOrSubquery.asIdentifier().getCppType().ordinal()},
-                new long[]{tableOrSubquery.asIdentifier().getCppObj()}, null, null);
+        configTableOrSubqueries(cppObj, new int[]{Identifier.getCppType(tableOrSubquery)},
+                new long[]{CppObject.get(tableOrSubquery)}, null, null);
         return this;
     }
 
@@ -167,8 +168,8 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         int[] types = new int[totalCount];
         long[] cppObjs = new long[totalCount];
         for(int i = 0; i < totalCount; i++) {
-            types[i] = tableOrSubqueries[i].asIdentifier().getCppType().ordinal();
-            cppObjs[i] = tableOrSubqueries[i].asIdentifier().getCppObj();
+            types[i] = Identifier.getCppType(tableOrSubqueries[i]);
+            cppObjs[i] = CppObject.get(tableOrSubqueries[i]);
         }
         configTableOrSubqueries(cppObj, types, cppObjs, null, null);
         return this;
@@ -206,8 +207,9 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
                 tablNames[stringIndex] = (String) obj;
                 stringIndex++;
             } else if (obj instanceof TableOrSubqueryConvertible) {
-                types[i] = ((TableOrSubqueryConvertible)tableOrSubqueries[i]).asIdentifier().getCppType().ordinal();
-                cppObjs[intIndex] = ((TableOrSubqueryConvertible)tableOrSubqueries[i]).asIdentifier().getCppObj();
+                TableOrSubqueryConvertible tableOrSubquery = (TableOrSubqueryConvertible)obj;
+                types[i] = Identifier.getCppType(tableOrSubquery);
+                cppObjs[intIndex] = CppObject.get(tableOrSubquery);
                 intIndex++;
             }
         }
@@ -225,15 +227,14 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
     private native void configTableOrSubqueries(long self, int[] types, long[] tableOrSubqueries, double[] unused, String[] tableNames);
 
     public StatementSelect where(Expression condition) {
-        configCondition(cppObj, condition.getCppObj());
+        configCondition(cppObj, CppObject.get(condition));
         return this;
     }
 
     private native void configCondition(long self, long condition);
 
     public StatementSelect groupBy(ExpressionConvertible expression) {
-        configGroups(cppObj, new int[]{expression.asIdentifier().getCppType().ordinal()},
-                new long[]{expression.asIdentifier().getCppObj()}, null, null);
+        configGroups(cppObj, new int[]{Identifier.getCppType(expression)}, new long[]{CppObject.get(expression)}, null, null);
         return this;
     }
 
@@ -245,8 +246,8 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         int[] types = new int[totalCount];
         long[] cppObjs = new long[totalCount];
         for(int i = 0; i < totalCount; i++) {
-            types[i] = expressions[i].asIdentifier().getCppType().ordinal();
-            cppObjs[i] = expressions[i].asIdentifier().getCppObj();
+            types[i] = Identifier.getCppType(expressions[i]);
+            cppObjs[i] = CppObject.get(expressions[i]);
         }
         configGroups(cppObj, types, cppObjs, null, null);
         return this;
@@ -284,8 +285,9 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
                 columnNames[stringIndex] = (String) obj;
                 stringIndex++;
             } else if (obj instanceof ExpressionConvertible) {
-                types[i] = ((ExpressionConvertible)expressions[i]).asIdentifier().getCppType().ordinal();
-                cppObjs[intIndex] = ((ExpressionConvertible)expressions[i]).asIdentifier().getCppObj();
+                ExpressionConvertible expression = (ExpressionConvertible)obj;
+                types[i] = Identifier.getCppType(expression);
+                cppObjs[intIndex] = CppObject.get(expression);
                 intIndex++;
             }
         }
@@ -303,7 +305,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
     private native void configGroups(long self, int[] types, long[] exps, double[] unused, String[] columNames);
 
     public StatementSelect having(Expression expression) {
-        configHaving(cppObj, expression.getCppObj());
+        configHaving(cppObj, CppObject.get(expression));
         return this;
     }
 
@@ -338,7 +340,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
     private native void configExcept(long self);
 
     public StatementSelect orderBy(OrderingTerm order) {
-        configOrders(cppObj, new long[]{order.getCppObj()});
+        configOrders(cppObj, new long[]{CppObject.get(order)});
         return this;
     }
 
@@ -348,7 +350,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         }
         long[] cppOrders = new long[orders.length];
         for(int i = 0; i < orders.length; i++) {
-            cppOrders[i] = orders[i].getCppObj();
+            cppOrders[i] = CppObject.get(orders[i]);
         }
         configOrders(cppObj, cppOrders);
         return this;
@@ -362,17 +364,17 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
     }
 
     public StatementSelect limit(long from, ExpressionConvertible to) {
-        configLimitRange(cppObj, CPPType.Int.ordinal(), from, to.asIdentifier().getCppType().ordinal(), to.asIdentifier().getCppObj());
+        configLimitRange(cppObj, CPPType.Int.ordinal(), from, Identifier.getCppType(to), CppObject.get(to));
         return this;
     }
 
     public StatementSelect limit(ExpressionConvertible from, ExpressionConvertible to) {
-        configLimitRange(cppObj, from.asIdentifier().getCppType().ordinal(), from.asIdentifier().getCppObj(), to.asIdentifier().getCppType().ordinal(), to.asIdentifier().getCppObj());
+        configLimitRange(cppObj, Identifier.getCppType(from), CppObject.get(from), Identifier.getCppType(to), CppObject.get(to));
         return this;
     }
 
     public StatementSelect limit(ExpressionConvertible from, long to) {
-        configLimitRange(cppObj, from.asIdentifier().getCppType().ordinal(), from.asIdentifier().getCppObj(), CPPType.Int.ordinal(), to);
+        configLimitRange(cppObj, Identifier.getCppType(from), CppObject.get(from), CPPType.Int.ordinal(), to);
         return this;
     }
 
@@ -384,7 +386,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
     }
 
     public StatementSelect limit(ExpressionConvertible count) {
-        configLimitCount(cppObj, count.asIdentifier().getCppType().ordinal(), count.asIdentifier().getCppObj());
+        configLimitCount(cppObj, Identifier.getCppType(count), CppObject.get(count));
         return this;
     }
 
@@ -396,7 +398,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
     }
 
     public StatementSelect offset(ExpressionConvertible offset) {
-        configOffset(cppObj, offset.asIdentifier().getCppType().ordinal(), offset.asIdentifier().getCppObj());
+        configOffset(cppObj, Identifier.getCppType(offset), CppObject.get(offset));
         return this;
     }
 

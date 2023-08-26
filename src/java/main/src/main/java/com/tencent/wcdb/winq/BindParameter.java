@@ -25,7 +25,7 @@ package com.tencent.wcdb.winq;
 
 public class BindParameter extends Identifier implements ExpressionConvertible {
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.BindParameter;
     }
 

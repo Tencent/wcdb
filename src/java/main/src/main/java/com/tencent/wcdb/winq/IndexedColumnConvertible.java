@@ -23,6 +23,5 @@
 
 package com.tencent.wcdb.winq;
 
-public interface IndexedColumnConvertible {
-    Identifier asIdentifier();
+public interface IndexedColumnConvertible extends IdentifierConvertible {
 }

@@ -22,6 +22,8 @@
  */
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 import java.util.List;
 import java.util.Set;
 
@@ -266,224 +268,224 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
      */
 
     public Expression between(ExpressionConvertible begin, ExpressionConvertible end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
-                begin.asIdentifier().getCppType().ordinal(), begin.asIdentifier().getCppObj(), 0, null,
-                end.asIdentifier().getCppType().ordinal(), end.asIdentifier().getCppObj(), 0, null,
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
+                Identifier.getCppType(begin), CppObject.get(begin), 0, null,
+                Identifier.getCppType(end), CppObject.get(end), 0, null,
                 false));
     }
 
     public Expression between(ExpressionConvertible begin, long end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
-                begin.asIdentifier().getCppType().ordinal(), begin.asIdentifier().getCppObj(), 0, null,
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
+                Identifier.getCppType(begin), CppObject.get(begin), 0, null,
                 CPPType.Int.ordinal(), end, 0, null,
                 false));
     }
 
     public Expression between(ExpressionConvertible begin, double end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
-                begin.asIdentifier().getCppType().ordinal(), begin.asIdentifier().getCppObj(), 0, null,
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
+                Identifier.getCppType(begin), CppObject.get(begin), 0, null,
                 CPPType.Double.ordinal(), 0, end, null,
                 false));
     }
 
     public Expression between(ExpressionConvertible begin, String end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
-                begin.asIdentifier().getCppType().ordinal(), begin.asIdentifier().getCppObj(), 0, null,
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
+                Identifier.getCppType(begin), CppObject.get(begin), 0, null,
                 CPPType.String.ordinal(), 0, 0, end,
                 false));
     }
 
     public Expression between(long begin, ExpressionConvertible end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Int.ordinal(), begin, 0, null,
-                end.asIdentifier().getCppType().ordinal(), end.asIdentifier().getCppObj(), 0, null,
+                Identifier.getCppType(end), CppObject.get(end), 0, null,
                 false));
     }
 
     public Expression between(long begin, long end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Int.ordinal(), begin, 0, null,
                 CPPType.Int.ordinal(), end, 0, null,
                 false));
     }
 
     public Expression between(long begin, double end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Int.ordinal(), begin, 0, null,
                 CPPType.Double.ordinal(), 0, end, null,
                 false));
     }
 
     public Expression between(long begin, String end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Int.ordinal(), begin, 0, null,
                 CPPType.String.ordinal(), 0, 0, end,
                 false));
     }
 
     public Expression between(double begin, ExpressionConvertible end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Double.ordinal(), 0, begin, null,
-                end.asIdentifier().getCppType().ordinal(), end.asIdentifier().getCppObj(), 0, null,
+                Identifier.getCppType(end), CppObject.get(end), 0, null,
                 false));
     }
 
     public Expression between(double begin, long end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Double.ordinal(), 0, begin, null,
                 CPPType.Int.ordinal(), end, 0, null,
                 false));
     }
 
     public Expression between(double begin, double end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Double.ordinal(), 0, begin, null,
                 CPPType.Double.ordinal(), 0, end, null,
                 false));
     }
 
     public Expression between(double begin, String end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Double.ordinal(), 0, begin, null,
                 CPPType.String.ordinal(), 0, 0, end,
                 false));
     }
 
     public Expression between(String begin, ExpressionConvertible end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.String.ordinal(), 0, 0, begin,
-                end.asIdentifier().getCppType().ordinal(), end.asIdentifier().getCppObj(), 0, null,
+                Identifier.getCppType(end), CppObject.get(end), 0, null,
                 false));
     }
 
     public Expression between(String begin, long end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.String.ordinal(), 0, 0, begin,
                 CPPType.Int.ordinal(), end, 0, null,
                 false));
     }
 
     public Expression between(String begin, double end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.String.ordinal(), 0, 0, begin,
                 CPPType.Double.ordinal(), 0, end, null,
                 false));
     }
 
     public Expression between(String begin, String end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.String.ordinal(), 0, 0, begin,
                 CPPType.String.ordinal(), 0, 0, end,
                 false));
     }
 
     public Expression notBetween(ExpressionConvertible begin, ExpressionConvertible end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
-                begin.asIdentifier().getCppType().ordinal(), begin.asIdentifier().getCppObj(), 0, null,
-                end.asIdentifier().getCppType().ordinal(), end.asIdentifier().getCppObj(), 0, null,
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
+                Identifier.getCppType(begin), CppObject.get(begin), 0, null,
+                Identifier.getCppType(end), CppObject.get(end), 0, null,
                 true));
     }
 
     public Expression notBetween(ExpressionConvertible begin, long end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
-                begin.asIdentifier().getCppType().ordinal(), begin.asIdentifier().getCppObj(), 0, null,
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
+                Identifier.getCppType(begin), CppObject.get(begin), 0, null,
                 CPPType.Int.ordinal(), end, 0, null,
                 true));
     }
 
     public Expression notBetween(ExpressionConvertible begin, double end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
-                begin.asIdentifier().getCppType().ordinal(), begin.asIdentifier().getCppObj(), 0, null,
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
+                Identifier.getCppType(begin), CppObject.get(begin), 0, null,
                 CPPType.Double.ordinal(), 0, end, null,
                 true));
     }
 
     public Expression notBetween(ExpressionConvertible begin, String end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
-                begin.asIdentifier().getCppType().ordinal(), begin.asIdentifier().getCppObj(), 0, null,
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
+                Identifier.getCppType(begin), CppObject.get(begin), 0, null,
                 CPPType.String.ordinal(), 0, 0, end,
                 true));
     }
 
     public Expression notBetween(long begin, ExpressionConvertible end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Int.ordinal(), begin, 0, null,
-                end.asIdentifier().getCppType().ordinal(), end.asIdentifier().getCppObj(), 0, null,
+                Identifier.getCppType(end), CppObject.get(end), 0, null,
                 true));
     }
 
     public Expression notBetween(long begin, long end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Int.ordinal(), begin, 0, null,
                 CPPType.Int.ordinal(), end, 0, null,
                 true));
     }
 
     public Expression notBetween(long begin, double end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Int.ordinal(), begin, 0, null,
                 CPPType.Double.ordinal(), 0, end, null,
                 true));
     }
 
     public Expression notBetween(long begin, String end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Int.ordinal(), begin, 0, null,
                 CPPType.String.ordinal(), 0, 0, end,
                 true));
     }
 
     public Expression notBetween(double begin, ExpressionConvertible end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Double.ordinal(), 0, begin, null,
-                end.asIdentifier().getCppType().ordinal(), end.asIdentifier().getCppObj(), 0, null,
+                Identifier.getCppType(end), CppObject.get(end), 0, null,
                 true));
     }
 
     public Expression notBetween(double begin, long end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Double.ordinal(), 0, begin, null,
                 CPPType.Int.ordinal(), end, 0, null,
                 true));
     }
 
     public Expression notBetween(double begin, double end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Double.ordinal(), 0, begin, null,
                 CPPType.Double.ordinal(), 0, end, null,
                 true));
     }
 
     public Expression notBetween(double begin, String end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Double.ordinal(), 0, begin, null,
                 CPPType.String.ordinal(), 0, 0, end,
                 true));
     }
 
     public Expression notBetween(String begin, ExpressionConvertible end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.String.ordinal(), 0, 0, begin,
-                end.asIdentifier().getCppType().ordinal(), end.asIdentifier().getCppObj(), 0, null,
+                Identifier.getCppType(end), CppObject.get(end), 0, null,
                 true));
     }
 
     public Expression notBetween(String begin, long end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.String.ordinal(), 0, 0, begin,
                 CPPType.Int.ordinal(), end, 0, null,
                 true));
     }
 
     public Expression notBetween(String begin, double end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.String.ordinal(), 0, 0, begin,
                 CPPType.Double.ordinal(), 0, end, null,
                 true));
     }
 
     public Expression notBetween(String begin, String end) {
-        return createExpression(betweenOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(),
+        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.String.ordinal(), 0, 0, begin,
                 CPPType.String.ordinal(), 0, 0, end,
                 true));
@@ -634,7 +636,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
      */
 
     public Expression collate(String collation) {
-        return createExpression(collate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(), collation));
+        return createExpression(collate(Identifier.getCppType(this), CppObject.get(this), collation));
     }
 
     /*
@@ -812,7 +814,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
 
     private Expression nullOperate(boolean isNot) {
         Expression ret = new Expression();
-        ret.cppObj = nullOperate(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(), isNot);
+        ret.cppObj = nullOperate(Identifier.getCppType(this), CppObject.get(this), isNot);
         return ret;
     }
 
@@ -845,10 +847,10 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     }
 
     private Expression binaryOperate(ExpressionConvertible operand, BinaryOperatorType type, boolean isNot) {
-        return createExpression(binaryOperate(asIdentifier().getCppType().ordinal(),
-                asIdentifier().getCppObj(),
-                operand.asIdentifier().getCppType().ordinal(),
-                operand.asIdentifier().getCppObj(),
+        return createExpression(binaryOperate(Identifier.getCppType(this),
+                CppObject.get(this),
+                Identifier.getCppType(operand),
+                CppObject.get(operand),
                 0,
                 null,
                 type.ordinal() +1,
@@ -856,8 +858,8 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     }
 
     private Expression binaryOperate(boolean operand, BinaryOperatorType type, boolean isNot) {
-        return createExpression(binaryOperate(asIdentifier().getCppType().ordinal(),
-                asIdentifier().getCppObj(),
+        return createExpression(binaryOperate(Identifier.getCppType(this),
+                CppObject.get(this),
                 CPPType.Bool.ordinal(),
                 operand ? 1 : 0,
                 0,
@@ -867,8 +869,8 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     }
 
     private Expression binaryOperate(long operand, BinaryOperatorType type, boolean isNot) {
-        return createExpression(binaryOperate(asIdentifier().getCppType().ordinal(),
-                asIdentifier().getCppObj(),
+        return createExpression(binaryOperate(Identifier.getCppType(this),
+                CppObject.get(this),
                 CPPType.Int.ordinal(),
                 operand,
                 0,
@@ -878,8 +880,8 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     }
 
     private Expression binaryOperate(double operand, BinaryOperatorType type, boolean isNot) {
-        return createExpression(binaryOperate(asIdentifier().getCppType().ordinal(),
-                asIdentifier().getCppObj(),
+        return createExpression(binaryOperate(Identifier.getCppType(this),
+                CppObject.get(this),
                 CPPType.Double.ordinal(),
                 0,
                 operand,
@@ -889,8 +891,8 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     }
 
     private Expression binaryOperate(String operand, BinaryOperatorType type, boolean isNot) {
-        return createExpression(binaryOperate(asIdentifier().getCppType().ordinal(),
-                asIdentifier().getCppObj(),
+        return createExpression(binaryOperate(Identifier.getCppType(this),
+                CppObject.get(this),
                 CPPType.String.ordinal(),
                 0,
                 0,
@@ -910,19 +912,43 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
                                        boolean isNot);
 
     private Expression in(long[] operands, boolean isNot) {
-        return createExpression(in(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(), CPPType.Int.ordinal(), operands, null, null, isNot));
+        return createExpression(in(Identifier.getCppType(this),
+                CppObject.get(this),
+                CPPType.Int.ordinal(),
+                operands,
+                null,
+                null,
+                isNot));
     }
 
     private Expression in(int type, long[] operands, boolean isNot) {
-        return createExpression(in(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(), type, operands, null, null, isNot));
+        return createExpression(in(Identifier.getCppType(this),
+                CppObject.get(this),
+                type,
+                operands,
+                null,
+                null,
+                isNot));
     }
 
     private Expression in(double[] operands, boolean isNot) {
-        return createExpression(in(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(), CPPType.Double.ordinal(), null, operands, null, isNot));
+        return createExpression(in(Identifier.getCppType(this),
+                CppObject.get(this),
+                CPPType.Double.ordinal(),
+                null,
+                operands,
+                null,
+                isNot));
     }
 
     private Expression in(String[] operands, boolean isNot) {
-        return createExpression(in(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(), CPPType.String.ordinal(), null, null, operands, isNot));
+        return createExpression(in(Identifier.getCppType(this),
+                CppObject.get(this),
+                CPPType.String.ordinal(),
+                null,
+                null,
+                operands,
+                isNot));
     }
 
     private native long in(int operandType, long operand, int type, long[] longArray, double[] doubleArray, String[] stringArray, boolean isNot);
@@ -936,9 +962,9 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         if(dataType == ObjectType.Identifier) {
             long[] cppObjs = new long[operands.length];
             for(int i = 0; i < operands.length; i++) {
-                cppObjs[i] = ((Identifier) operands[i]).getCppObj();
+                cppObjs[i] = CppObject.get((Identifier) operands[i]);
             }
-            return in(((Identifier) operands[0]).getCppType().ordinal(), cppObjs, isNot);
+            return in(Identifier.getCppType((Identifier) operands[0]), cppObjs, isNot);
         } else if (dataType == ObjectType.String) {
             if(operands instanceof String[]) {
                 return in((String[])operands, isNot);
@@ -990,19 +1016,19 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     }
 
     private Expression inTable(String table, boolean isNot) {
-        return createExpression(inTable(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(), table, isNot));
+        return createExpression(inTable(Identifier.getCppType(this), CppObject.get(this), table, isNot));
     }
 
     private native long inTable(int type, long operand, String table, boolean isNot);
 
     private Expression inFunction(String func, boolean isNot) {
-        return createExpression(inFunction(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(), func, isNot));
+        return createExpression(inFunction(Identifier.getCppType(this), CppObject.get(this), func, isNot));
     }
 
     private native long inFunction(int type, long operand, String func, boolean isNot);
 
     private Expression in(StatementSelect select, boolean isNot) {
-        return createExpression(inSelect(asIdentifier().getCppType().ordinal(), asIdentifier().getCppObj(), select.getCppObj(), isNot));
+        return createExpression(inSelect(Identifier.getCppType(this), CppObject.get(this), CppObject.get(select), isNot));
     }
 
     private native long inSelect(int type, long operand, long select, boolean isNot);

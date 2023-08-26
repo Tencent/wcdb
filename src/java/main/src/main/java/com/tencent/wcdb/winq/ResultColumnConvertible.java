@@ -23,6 +23,5 @@
 
 package com.tencent.wcdb.winq;
 
-public interface ResultColumnConvertible {
-    Identifier asIdentifier();
+public interface ResultColumnConvertible extends IdentifierConvertible {
 }

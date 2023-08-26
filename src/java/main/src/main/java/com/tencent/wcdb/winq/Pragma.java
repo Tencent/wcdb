@@ -25,7 +25,7 @@ package com.tencent.wcdb.winq;
 
 public class Pragma extends Identifier{
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.Pragma;
     }
 

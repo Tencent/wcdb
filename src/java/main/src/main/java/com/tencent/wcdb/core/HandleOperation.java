@@ -850,7 +850,7 @@ public abstract class HandleOperation extends CppObject {
     public void execute(Statement statement) throws WCDBException {
         Handle handle = getHandle(statement.isWriteStatement());
         WCDBException exception = null;
-        if(!handle.execute(handle.getCppHandle(), statement.getCppObj())) {
+        if(!handle.execute(handle.getCppHandle(), CppObject.get(statement))) {
             exception = handle.createException();
         }
         if(autoInvalidateHandle()) {

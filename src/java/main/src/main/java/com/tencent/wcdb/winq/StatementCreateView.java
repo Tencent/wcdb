@@ -23,9 +23,11 @@
 
 package com.tencent.wcdb.winq;
 
+import com.tencent.wcdb.base.CppObject;
+
 public class StatementCreateView extends Statement {
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.CreateViewSTMT;
     }
 
@@ -56,7 +58,7 @@ public class StatementCreateView extends Statement {
     }
 
     public StatementCreateView of(Schema schema) {
-        configSchema(cppObj, CPPType.Schema.ordinal(), schema.getCppObj(), null);
+        configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 
@@ -70,38 +72,28 @@ public class StatementCreateView extends Statement {
     private native void configIfNotExist(long self);
 
     public StatementCreateView withColumn(Column column) {
-        assert column != null;
-        if(column == null) {
-            return this;
-        }
-        configColumns(cppObj, CPPType.Column.ordinal(), new long[]{column.getCppObj()}, null);
+        configColumns(cppObj, Identifier.getCppType(column), new long[]{CppObject.get(column)}, null);
         return this;
     }
 
     public StatementCreateView withColumn(String columnName) {
-        assert columnName != null;
-        if(columnName == null) {
-            return this;
-        }
         configColumns(cppObj, CPPType.String.ordinal(), null, new String[]{columnName});
         return this;
     }
 
     public StatementCreateView withColumns(Column[] columns) {
-        assert columns != null && columns.length > 0;
         if(columns == null || columns.length == 0) {
             return this;
         }
         long[] cppObjs = new long[columns.length];
         for(int i = 0; i < columns.length; i++) {
-            cppObjs[i] = columns[i].getCppObj();
+            cppObjs[i] = CppObject.get(columns[i]);
         }
         configColumns(cppObj, CPPType.Column.ordinal(), cppObjs, null);
         return this;
     }
 
     public StatementCreateView withColumns(String[] columnNames) {
-        assert columnNames != null && columnNames.length > 0;
         if(columnNames == null || columnNames.length == 0) {
             return this;
         }
@@ -112,7 +104,7 @@ public class StatementCreateView extends Statement {
     private native void configColumns(long self, int type, long[] objects, String[] columnNames);
 
     public StatementCreateView as(StatementSelect select) {
-        configAs(cppObj, select.getCppObj());
+        configAs(cppObj, CppObject.get(select));
         return this;
     }
 

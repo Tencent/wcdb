@@ -23,11 +23,11 @@
 
 package com.tencent.wcdb.winq;
 
-import com.tencent.wcdb.chaincall.Update;
+import com.tencent.wcdb.base.CppObject;
 
 public class Upsert extends Identifier{
     @Override
-    protected CPPType getCppType() {
+    protected CPPType getType() {
         return CPPType.UpsertClause;
     }
 
@@ -47,11 +47,7 @@ public class Upsert extends Identifier{
     }
 
     public Upsert indexedBy(IndexedColumnConvertible indexedColumn) {
-        assert indexedColumn != null;
-        if(indexedColumn == null) {
-            return this;
-        }
-        configIndexedColumn(cppObj, indexedColumn.asIdentifier().getCppType().ordinal(), new long[]{indexedColumn.asIdentifier().getCppObj()}, null);
+        configIndexedColumn(cppObj, Identifier.getCppType(indexedColumn), new long[]{CppObject.get(indexedColumn)}, null);
         return this;
     }
 
@@ -61,24 +57,23 @@ public class Upsert extends Identifier{
     }
 
     public Upsert indexedBy(IndexedColumnConvertible[] indexedColumns) {
-        assert indexedColumns != null && indexedColumns.length > 0;
         if (indexedColumns == null || indexedColumns.length == 0) {
             return this;
         }
 
         long[] cppIndexedColumns = new long[indexedColumns.length];
         for(int i = 0; i < indexedColumns.length; i++) {
-            cppIndexedColumns[i] = indexedColumns[i].asIdentifier().getCppObj();
+            cppIndexedColumns[i] = CppObject.get(indexedColumns[i]);
         }
 
-        configIndexedColumn(cppObj, indexedColumns[0].asIdentifier().getCppType().ordinal(), cppIndexedColumns, null);
+        configIndexedColumn(cppObj, Identifier.getCppType(indexedColumns[0]), cppIndexedColumns, null);
         return this;
     }
 
     private native void configIndexedColumn(long self, int type, long[] columns, String[] columnNames);
 
     public Upsert where(Expression condition) {
-        configWhere(cppObj, condition.getCppObj());
+        configWhere(cppObj, CppObject.get(condition));
         return this;
     }
 
@@ -104,11 +99,7 @@ public class Upsert extends Identifier{
     }
 
     public Upsert setColumn(Column column) {
-        assert column != null;
-        if(column == null) {
-            return this;
-        }
-        configSetColumns(cppObj, column.asIdentifier().getCppType().ordinal(), new long[]{column.asIdentifier().getCppObj()}, null);
+        configSetColumns(cppObj, Identifier.getCppType(column), new long[]{CppObject.get(column)}, null);
         return this;
     }
 
@@ -118,17 +109,16 @@ public class Upsert extends Identifier{
     }
 
     public Upsert setColumns(Column[] columns) {
-        assert columns != null && columns.length > 0;
         if (columns == null || columns.length == 0) {
             return this;
         }
 
         long[] cppColumns = new long[columns.length];
         for(int i = 0; i < columns.length; i++) {
-            cppColumns[i] = columns[i].asIdentifier().getCppObj();
+            cppColumns[i] = CppObject.get(columns[i]);
         }
 
-        configSetColumns(cppObj, columns[0].asIdentifier().getCppType().ordinal(), cppColumns, null);
+        configSetColumns(cppObj, Identifier.getCppType(columns[0]), cppColumns, null);
         return this;
     }
 
@@ -159,12 +149,7 @@ public class Upsert extends Identifier{
     }
 
     public Upsert to(ExpressionConvertible value) {
-        if(value != null){
-            configToValue(cppObj, value.asIdentifier().getCppType().ordinal(), value.asIdentifier().getCppObj(), 0, null);
-        } else {
-            configToValue(cppObj, CPPType.Null.ordinal(), 0, 0, null);
-        }
-
+        configToValue(cppObj, Identifier.getCppType(value), CppObject.get(value), 0, null);
         return this;
     }
 

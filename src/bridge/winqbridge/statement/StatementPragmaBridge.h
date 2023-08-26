@@ -31,7 +31,7 @@ WCDB_EXTERN_C_BEGIN
 CPPStatementPragma WCDBStatementPragmaCreate(void);
 void WCDBStatementPragmaConfigPragma(CPPStatementPragma statment, CPPPragma pragma);
 void WCDBStatementPragmaConfigSchema(CPPStatementPragma statment, CPPSchema schema);
-void WCDBStatementPragmaConfigSchema2(CPPStatementPragma statment, const char* schemaName);
+void WCDBStatementPragmaConfigSchema2(CPPStatementPragma statment, CPPCommonValue schema);
 void WCDBStatementPragmaConfigToValue(CPPStatementPragma statment, CPPLiteralValue value);
 void WCDBStatementPragmaConfigWithValue(CPPStatementPragma statment, CPPLiteralValue value);
 

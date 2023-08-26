@@ -35,7 +35,9 @@
     WCDBJNIClassMethodWithNoArg(StatementPragma, funcName)
 
 jlong WCDBJNIStatementPragmaObjectMethodWithNoArg(create);
-void WCDBJNIStatementPragmaObjectMethod(configSchema, jlong self, jstring schemaName);
+void WCDBJNIStatementPragmaObjectMethod(configSchema,
+                                        jlong self,
+                                        WCDBJNIObjectOrStringParameter(schema));
 void WCDBJNIStatementPragmaObjectMethod(configPragma, jlong self, jlong pragma);
 void WCDBJNIStatementPragmaObjectMethod(configToValue,
                                         jlong self,

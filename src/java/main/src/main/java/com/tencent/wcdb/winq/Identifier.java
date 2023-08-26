@@ -86,9 +86,23 @@ enum CPPType {
     ExplainSTMT,
 }
 
-public class Identifier extends CppObject {
-    protected CPPType getCppType() {
+public class Identifier extends CppObject implements IdentifierConvertible {
+    protected CPPType getType() {
         return CPPType.Invalid;
+    }
+
+    protected static int getCppType(Identifier identifier) {
+        if(identifier == null){
+            return CPPType.Null.ordinal();
+        }
+        return identifier.getType().ordinal();
+    }
+
+    protected static int getCppType(IdentifierConvertible identifier) {
+        if(identifier == null){
+            return CPPType.Null.ordinal();
+        }
+        return identifier.asIdentifier().getType().ordinal();
     }
 
     public Identifier asIdentifier() {

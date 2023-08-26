@@ -35,6 +35,7 @@ CPPColumn WCDBColumnCreateWithName2(const char* _Nullable name, const void* _Nul
 CPPColumn WCDBColumnCopy(CPPColumn column);
 void WCDBColumnInTable(CPPColumn column, const char* _Nullable table);
 void WCDBColumnOfSchema(CPPColumn column, CPPSchema schema);
+void WCDBColumnOfSchema2(CPPColumn column, CPPCommonValue schema);
 CPPExpression WCDBColumnAsExpressionOperand(CPPColumn column);
 
 WCDB_EXTERN_C_END
