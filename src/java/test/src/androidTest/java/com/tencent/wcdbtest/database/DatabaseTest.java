@@ -150,7 +150,7 @@ public class DatabaseTest extends TableTestCase {
         database.close(new Database.CloseCallBack() {
             @Override
             public void onClose() throws WCDBException {
-                database.execute(new StatementPragma().pragma(Pragma.userVersion()).toValue(123));
+                database.execute(new StatementPragma().pragma(Pragma.userVersion).toValue(123));
             }
         });
         assertFalse(database.isOpened());
@@ -158,7 +158,7 @@ public class DatabaseTest extends TableTestCase {
 
     @Test
     public void testPurge() throws WCDBException {
-        database.execute(new StatementPragma().pragma(Pragma.userVersion()).toValue(123));
+        database.execute(new StatementPragma().pragma(Pragma.userVersion).toValue(123));
         assertTrue(database.isOpened());
         database.purge();
         assertFalse(database.isOpened());
@@ -166,7 +166,7 @@ public class DatabaseTest extends TableTestCase {
 
     @Test
     public void testPurgeAll() throws WCDBException {
-        database.execute(new StatementPragma().pragma(Pragma.userVersion()).toValue(123));
+        database.execute(new StatementPragma().pragma(Pragma.userVersion).toValue(123));
         assertTrue(database.isOpened());
         Database.purgeAll();
         assertFalse(database.isOpened());

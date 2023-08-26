@@ -50,7 +50,7 @@ import java.util.List;
 public class TraceTest extends TableTestCase {
     @Test
     public void testTraceSQL() throws WCDBException {
-        final StatementPragma statement = new StatementPragma().pragma(Pragma.userVersion());
+        final StatementPragma statement = new StatementPragma().pragma(Pragma.userVersion);
 
         final WrappedValue tested = new WrappedValue();
         database.traceSQL(new Database.SQLTracer() {
@@ -70,7 +70,7 @@ public class TraceTest extends TableTestCase {
 
     @Test
     public void testGlobalTraceSQL() throws WCDBException {
-        final StatementPragma statement = new StatementPragma().pragma(Pragma.userVersion());
+        final StatementPragma statement = new StatementPragma().pragma(Pragma.userVersion);
 
         final WrappedValue tested = new WrappedValue();
         Database.globalTraceSQL(null);

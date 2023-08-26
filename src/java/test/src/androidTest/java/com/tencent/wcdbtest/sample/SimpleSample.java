@@ -58,7 +58,7 @@ public class SimpleSample extends CRUDTestCase {
             @Override
             public void onInvocation(Handle handle) throws WCDBException {
                 // Pragma secure_delete = true
-                handle.execute(new StatementPragma().pragma(Pragma.secureDelete()).toValue(true));
+                handle.execute(new StatementPragma().pragma(Pragma.secureDelete).toValue(true));
             }
         });
 

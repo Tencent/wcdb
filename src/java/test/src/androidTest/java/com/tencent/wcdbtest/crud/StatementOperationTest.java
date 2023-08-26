@@ -59,7 +59,7 @@ public class StatementOperationTest extends ValueCRUDTestCase {
             @Override
             public void execute() throws WCDBException {
                 handle = database.getHandle();
-                handle.execute(new StatementPragma().pragma(Pragma.userVersion()).toValue(123));
+                handle.execute(new StatementPragma().pragma(Pragma.userVersion).toValue(123));
             }
         });
     }
@@ -89,8 +89,8 @@ public class StatementOperationTest extends ValueCRUDTestCase {
 
     @Test
     public void testReadOnly() throws WCDBException {
-        PreparedStatement statement1 = handle.preparedWithMainStatement(new StatementPragma().pragma(Pragma.userVersion()));
-        PreparedStatement statement2 = handle.getOrCreatePreparedStatement(new StatementPragma().pragma(Pragma.userVersion()).toValue(123));
+        PreparedStatement statement1 = handle.preparedWithMainStatement(new StatementPragma().pragma(Pragma.userVersion));
+        PreparedStatement statement2 = handle.getOrCreatePreparedStatement(new StatementPragma().pragma(Pragma.userVersion).toValue(123));
         assertTrue(statement1.isReadOnly());
         assertFalse(statement2.isReadOnly());
         statement1.finalizeStatement();

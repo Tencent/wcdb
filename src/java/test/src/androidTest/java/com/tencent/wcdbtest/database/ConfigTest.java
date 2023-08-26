@@ -45,9 +45,9 @@ public class ConfigTest extends DatabaseTestCase {
 
     @Test
     public void testConfig() throws WCDBException {
-        final StatementPragma setSecureDelete = new StatementPragma().pragma(Pragma.secureDelete()).toValue(true);
-        final StatementPragma unsetSecureDelete = new StatementPragma().pragma(Pragma.secureDelete()).toValue(false);
-        final StatementPragma getSecureDelete = new StatementPragma().pragma(Pragma.secureDelete());
+        final StatementPragma setSecureDelete = new StatementPragma().pragma(Pragma.secureDelete).toValue(true);
+        final StatementPragma unsetSecureDelete = new StatementPragma().pragma(Pragma.secureDelete).toValue(false);
+        final StatementPragma getSecureDelete = new StatementPragma().pragma(Pragma.secureDelete);
         final WrappedValue uninvoked = new WrappedValue();
         database.setConfig(configName, new Database.Config() {
             @Override

@@ -33,17 +33,17 @@ import org.junit.runner.RunWith;
 public class StatementPragmaTest {
     @Test
     public void test() {
-        winqEqual(new StatementPragma().pragma(Pragma.pageSize()), "PRAGMA page_size");
-        winqEqual(new StatementPragma().pragma(Pragma.secureDelete()).toValue(true),
+        winqEqual(new StatementPragma().pragma(Pragma.pageSize), "PRAGMA page_size");
+        winqEqual(new StatementPragma().pragma(Pragma.secureDelete).toValue(true),
                 "PRAGMA secure_delete = TRUE");
-        winqEqual(new StatementPragma().pragma(Pragma.secureDelete()).toValue(1),
+        winqEqual(new StatementPragma().pragma(Pragma.secureDelete).toValue(1),
                 "PRAGMA secure_delete = 1");
-        winqEqual(new StatementPragma().pragma(Pragma.secureDelete()).toValue("abc"),
+        winqEqual(new StatementPragma().pragma(Pragma.secureDelete).toValue("abc"),
                 "PRAGMA secure_delete = 'abc'");
-        winqEqual(new StatementPragma().pragma(Pragma.secureDelete()).toValue(null),
+        winqEqual(new StatementPragma().pragma(Pragma.secureDelete).toValue(null),
                 "PRAGMA secure_delete = NULL");
         winqEqual(new StatementPragma().of("testSchema")
-                        .pragma(Pragma.tableInfo()).withValue("testTable"),
+                        .pragma(Pragma.tableInfo).withValue("testTable"),
                 "PRAGMA testSchema.table_info('testTable')");
     }
 }
