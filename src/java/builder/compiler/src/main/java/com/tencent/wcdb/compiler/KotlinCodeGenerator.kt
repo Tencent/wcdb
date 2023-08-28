@@ -254,7 +254,14 @@ class KotlinCodeGenerator {
         builder.append("${TAB}override fun setLastInsertRowId(`object`: $className, lastInsertRowId: Long) {\n")
         if (autoIncrementColumn != null) {
             val info = AllKotlinPropertyORMInfo[autoIncrementColumn.propertyType]!!
-            builder.append("$TAB${TAB}`object`.${autoIncrementColumn.propertyName} = lastInsertRowId${info.setter.substring(17)}\n")
+            var convert = ""
+            when (autoIncrementColumn.propertyType) {
+                Char::class.qualifiedName!! -> convert = ".toInt().toChar()"
+                Byte::class.qualifiedName!! -> convert = ".toByte()"
+                Short::class.qualifiedName!! -> convert = ".toShort()"
+                Int::class.qualifiedName!! -> convert = ".toInt()"
+            }
+            builder.append("$TAB${TAB}`object`.${autoIncrementColumn.propertyName} = lastInsertRowId$convert\n")
         }
         builder.append("$TAB}\n\n")
     }

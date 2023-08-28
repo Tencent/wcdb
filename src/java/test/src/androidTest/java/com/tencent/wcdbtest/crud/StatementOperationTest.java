@@ -121,7 +121,7 @@ public class StatementOperationTest extends ValueCRUDTestCase {
         PreparedStatement prepareSelect = handle.getOrCreatePreparedStatement(select);
         prepareSelect.step();
         assertFalse(prepareSelect.isDone());
-        assertEquals(prepareSelect.getInteger(0), value);
+        assertEquals(prepareSelect.getLong(0), value);
     }
 
     @Test

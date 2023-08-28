@@ -129,8 +129,33 @@ public class Upsert extends Identifier{
         return this;
     }
 
+    public Upsert to(byte value) {
+        configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
+    public Upsert to(char value) {
+        configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
+    public Upsert to(short value) {
+        configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
+    public Upsert to(int value) {
+        configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
     public Upsert to(long value) {
         configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
+    public Upsert to(float value) {
+        configToValue(cppObj, CPPType.Double.ordinal(), 0, value, null);
         return this;
     }
 

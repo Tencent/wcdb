@@ -68,7 +68,27 @@ public class ColumnDef extends Identifier{
         return constraint(new ColumnConstraint().defaultTo(value));
     }
 
+    public ColumnDef makeDefaultTo(byte value) {
+        return constraint(new ColumnConstraint().defaultTo(value));
+    }
+
+    public ColumnDef makeDefaultTo(char value) {
+        return constraint(new ColumnConstraint().defaultTo(value));
+    }
+
+    public ColumnDef makeDefaultTo(short value) {
+        return constraint(new ColumnConstraint().defaultTo(value));
+    }
+
+    public ColumnDef makeDefaultTo(int value) {
+        return constraint(new ColumnConstraint().defaultTo(value));
+    }
+
     public ColumnDef makeDefaultTo(long value) {
+        return constraint(new ColumnConstraint().defaultTo(value));
+    }
+
+    public ColumnDef makeDefaultTo(float value) {
         return constraint(new ColumnConstraint().defaultTo(value));
     }
 

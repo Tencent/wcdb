@@ -34,8 +34,28 @@ public class Value {
         this.value = null;
     }
 
+    public Value(boolean value) {
+        this.value = (long)(value ? 1 : 0);
+    }
+
+    public Value(byte value) {
+        this.value = (long)value;
+    }
+
+    public Value(char value) {
+        this.value = (long)value;
+    }
+
+    public Value(int value) {
+        this.value = (long)value;
+    }
+
     public Value(long value) {
         this.value = value;
+    }
+
+    public Value(float value) {
+        this.value = (double)value;
     }
 
     public Value(double value) {
@@ -64,6 +84,18 @@ public class Value {
         return getLong() != 0;
     }
 
+    public byte getByte() {
+        return (byte) getLong();
+    }
+
+    public char getChar() {
+        return (char) getLong();
+    }
+
+    public short getShort() {
+        return (short) getLong();
+    }
+
     public int getInt() {
         return (int) getLong();
     }
@@ -75,6 +107,10 @@ public class Value {
             try { return Long.parseLong((String) value); } catch (NumberFormatException e) {}
         }
         return 0L;
+    }
+
+    public float getFloat() {
+        return (float) getDouble();
     }
 
     public double getDouble() {

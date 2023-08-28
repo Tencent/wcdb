@@ -94,8 +94,33 @@ public class ColumnConstraint extends Identifier {
         return this;
     }
 
+    public ColumnConstraint defaultTo(byte value) {
+        defaultTo(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
+    public ColumnConstraint defaultTo(char value) {
+        defaultTo(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
+    public ColumnConstraint defaultTo(short value) {
+        defaultTo(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
+    public ColumnConstraint defaultTo(int value) {
+        defaultTo(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
     public ColumnConstraint defaultTo(long value) {
         defaultTo(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
+    public ColumnConstraint defaultTo(float value) {
+        defaultTo(cppObj, CPPType.Double.ordinal(), 0, value, null);
         return this;
     }
 

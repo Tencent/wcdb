@@ -34,8 +34,28 @@ public class LiteralValue extends Identifier implements ExpressionConvertible {
         return this;
     }
 
+    public LiteralValue(byte value) {
+        cppObj = createCppObj(CPPType.Int.ordinal(), value, 0, null);
+    }
+
+    public LiteralValue(char value) {
+        cppObj = createCppObj(CPPType.Int.ordinal(), value, 0, null);
+    }
+
+    public LiteralValue(short value) {
+        cppObj = createCppObj(CPPType.Int.ordinal(), value, 0, null);
+    }
+
+    public LiteralValue(int value) {
+        cppObj = createCppObj(CPPType.Int.ordinal(), value, 0, null);
+    }
+
     public LiteralValue(long value) {
         cppObj = createCppObj(CPPType.Int.ordinal(), value, 0, null);
+    }
+
+    public LiteralValue(float value) {
+        cppObj = createCppObj(CPPType.Double.ordinal(), 0, value, null);
     }
 
     public LiteralValue(double value) {

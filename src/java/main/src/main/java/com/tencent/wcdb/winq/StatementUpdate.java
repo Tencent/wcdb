@@ -214,8 +214,33 @@ public class StatementUpdate extends Statement {
         return this;
     }
 
+    public StatementUpdate to(byte arg) {
+        configToValue(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
+    public StatementUpdate to(char arg) {
+        configToValue(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
+    public StatementUpdate to(short arg) {
+        configToValue(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
+    public StatementUpdate to(int arg) {
+        configToValue(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
     public StatementUpdate to(long arg) {
         configToValue(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
+    public StatementUpdate to(float arg) {
+        configToValue(cppObj, CPPType.Double.ordinal(), 0, arg, null);
         return this;
     }
 

@@ -95,8 +95,33 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
         return this;
     }
 
+    public Expression argument(char arg) {
+        argument(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
+    public Expression argument(byte arg) {
+        argument(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
+    public Expression argument(short arg) {
+        argument(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
+    public Expression argument(int arg) {
+        argument(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
     public Expression argument(long arg) {
         argument(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
+    public Expression argument(float arg) {
+        argument(cppObj, CPPType.Double.ordinal(), 0, arg, null);
         return this;
     }
 
@@ -197,8 +222,33 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
         return this;
     }
 
+    public Expression when(byte arg) {
+        setWithWhenExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
+    public Expression when(char arg) {
+        setWithWhenExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
+    public Expression when(short arg) {
+        setWithWhenExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
+    public Expression when(int arg) {
+        setWithWhenExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
     public Expression when(long arg) {
         setWithWhenExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
+    public Expression when(float arg) {
+        setWithWhenExp(cppObj, CPPType.Double.ordinal(), 0, arg, null);
         return this;
     }
 
@@ -228,8 +278,33 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
         return this;
     }
 
+    public Expression then(byte arg) {
+        setWithThenExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
+    public Expression then(char arg) {
+        setWithThenExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
+    public Expression then(short arg) {
+        setWithThenExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
+    public Expression then(int arg) {
+        setWithThenExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
     public Expression then(long arg) {
         setWithThenExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
+    public Expression then(float arg) {
+        setWithThenExp(cppObj, CPPType.Double.ordinal(), 0, arg, null);
         return this;
     }
 
@@ -260,8 +335,33 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
         return this;
     }
 
+    public Expression else_(byte arg) {
+        setWithElseExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
+    public Expression else_(char arg) {
+        setWithElseExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
+    public Expression else_(short arg) {
+        setWithElseExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
+    public Expression else_(int arg) {
+        setWithElseExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
     public Expression else_(long arg) {
         setWithElseExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        return this;
+    }
+
+    public Expression else_(float arg) {
+        setWithElseExp(cppObj, CPPType.Double.ordinal(), 0, arg, null);
         return this;
     }
 

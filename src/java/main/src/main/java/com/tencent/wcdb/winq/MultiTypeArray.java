@@ -31,6 +31,7 @@ enum ObjectType {
     Null,
     Bool,
     Char,
+    Byte,
     Short,
     Int,
     Long,
@@ -69,6 +70,11 @@ class MultiTypeArray {
                 case Bool:
                     types[i] = CPPType.Bool.ordinal();
                     longValues[longIndex] = (Boolean)obj ? 1 : 0;
+                    longIndex++;
+                    break;
+                case Byte:
+                    types[i] = CPPType.Int.ordinal();
+                    longValues[longIndex] = (Byte)obj;
                     longIndex++;
                     break;
                 case Char:
@@ -146,6 +152,8 @@ class MultiTypeArray {
             return ObjectType.Long;
         } else if (cls == Character.class) {
             return ObjectType.Char;
+        } else if (cls == Byte.class) {
+            return ObjectType.Byte;
         }
         return ObjectType.Unknown;
     }

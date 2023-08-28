@@ -25,12 +25,12 @@ package com.tencent.wcdb.compiler
 
 internal val AllKotlinPropertyORMInfo = mapOf<String, KotlinPropertyORMInfo>(
     Boolean::class.qualifiedName!! to KotlinPropertyORMInfo("Integer", "bindBool", "getBool(index)"),
-    Byte::class.qualifiedName!! to KotlinPropertyORMInfo("Integer", "bindInteger", "getInteger(index).toByte()"),
-    Char::class.qualifiedName!! to KotlinPropertyORMInfo("Integer", "bindInteger", "getInteger(index).toInt().toChar()"),
-    Short::class.qualifiedName!! to KotlinPropertyORMInfo("Integer", "bindInteger", "getInteger(index).toShort()"),
-    Int::class.qualifiedName!! to KotlinPropertyORMInfo("Integer", "bindInteger", "getInteger(index).toInt()"),
-    Long::class.qualifiedName!! to KotlinPropertyORMInfo("Integer", "bindInteger", "getInteger(index)"),
-    Float::class.qualifiedName!! to KotlinPropertyORMInfo("Float", "bindDouble", "getDouble(index).toFloat()"),
+    Byte::class.qualifiedName!! to KotlinPropertyORMInfo("Integer", "bindInteger", "getByte(index)"),
+    Char::class.qualifiedName!! to KotlinPropertyORMInfo("Integer", "bindInteger", "getChar(index)"),
+    Short::class.qualifiedName!! to KotlinPropertyORMInfo("Integer", "bindInteger", "getShort(index)"),
+    Int::class.qualifiedName!! to KotlinPropertyORMInfo("Integer", "bindInteger", "getInt(index)"),
+    Long::class.qualifiedName!! to KotlinPropertyORMInfo("Integer", "bindInteger", "getLong(index)"),
+    Float::class.qualifiedName!! to KotlinPropertyORMInfo("Float", "bindDouble", "getFloat(index)"),
     Double::class.qualifiedName!! to KotlinPropertyORMInfo("Float", "bindDouble", "getDouble(index)"),
     String::class.qualifiedName!! to KotlinPropertyORMInfo("Text", "bindText", "getText(index)"),
     ByteArray::class.qualifiedName!! to KotlinPropertyORMInfo("BLOB", "bindBLOB", "getBLOB(index)"),

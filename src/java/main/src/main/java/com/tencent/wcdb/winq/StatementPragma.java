@@ -61,8 +61,33 @@ public class StatementPragma extends Statement {
         return this;
     }
 
+    public StatementPragma withValue(byte value) {
+        configWithValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
+    public StatementPragma withValue(char value) {
+        configWithValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
+    public StatementPragma withValue(short value) {
+        configWithValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
+    public StatementPragma withValue(int value) {
+        configWithValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
     public StatementPragma withValue(long value) {
         configWithValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
+    public StatementPragma withValue(float value) {
+        configWithValue(cppObj, CPPType.Double.ordinal(), 0, value, null);
         return this;
     }
 
@@ -87,8 +112,33 @@ public class StatementPragma extends Statement {
         return this;
     }
 
+    public StatementPragma toValue(byte value) {
+        configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
+    public StatementPragma toValue(char value) {
+        configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
+    public StatementPragma toValue(short value) {
+        configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
+    public StatementPragma toValue(int value) {
+        configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
     public StatementPragma toValue(long value) {
         configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
+    public StatementPragma toValue(float value) {
+        configToValue(cppObj, CPPType.Double.ordinal(), 0, value, null);
         return this;
     }
 

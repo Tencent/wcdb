@@ -71,6 +71,22 @@ public class Update<T> extends ChainCall<StatementUpdate> {
         return toRow(new Value[]{value});
     }
 
+    public Update<T> toValue(byte value) {
+        return toRow(new Value[]{new Value(value)});
+    }
+
+    public Update<T> toValue(char value) {
+        return toRow(new Value[]{new Value(value)});
+    }
+
+    public Update<T> toValue(short value) {
+        return toRow(new Value[]{new Value(value)});
+    }
+
+    public Update<T> toValue(int value) {
+        return toRow(new Value[]{new Value(value)});
+    }
+
     public Update<T> toValue(long value) {
         return toRow(new Value[]{new Value(value)});
     }
@@ -81,6 +97,10 @@ public class Update<T> extends ChainCall<StatementUpdate> {
     }
 
     public Update<T> toValue(byte[] value) {
+        return toRow(new Value[]{new Value(value)});
+    }
+
+    public Update<T> toValue(float value) {
         return toRow(new Value[]{new Value(value)});
     }
 
@@ -108,6 +128,16 @@ public class Update<T> extends ChainCall<StatementUpdate> {
         return this;
     }
 
+    public Update<T> limit(short count) {
+        statement.limit(count);
+        return this;
+    }
+
+    public Update<T> limit(int count) {
+        statement.limit(count);
+        return this;
+    }
+
     public Update<T> limit(long count) {
         statement.limit(count);
         return this;
@@ -115,6 +145,16 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     public Update<T> limit(ExpressionConvertible count) {
         statement.limit(count);
+        return this;
+    }
+
+    public Update<T> offset(short offset) {
+        statement.offset(offset);
+        return this;
+    }
+
+    public Update<T> offset(int offset) {
+        statement.offset(offset);
         return this;
     }
 

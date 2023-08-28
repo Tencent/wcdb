@@ -306,11 +306,31 @@ public class PreparedStatement extends CppObject {
         return getInteger(cppObj, index) > 0;
     }
 
-    public long getInteger(int index) {
+    public char getChar(int index) {
+        return (char) getInteger(cppObj, index);
+    }
+
+    public byte getByte(int index) {
+        return (byte) getInteger(cppObj, index);
+    }
+
+    public short getShort(int index) {
+        return (short) getInteger(cppObj, index);
+    }
+
+    public int getInt(int index) {
+        return (int) getInteger(cppObj, index);
+    }
+
+    public long getLong(int index) {
         return getInteger(cppObj, index);
     }
 
     private native long getInteger(long self, int index);
+
+    public float getFloat(int index) {
+        return (float) getDouble(cppObj, index);
+    }
 
     public double getDouble(int index) {
         return getDouble(cppObj, index);
@@ -371,7 +391,7 @@ public class PreparedStatement extends CppObject {
         List<Integer> column = new ArrayList<Integer>();
         step();
         while (!isDone(cppObj)) {
-            column.add((int) getInteger(0));
+            column.add((int) getLong(0));
             step();
         }
         return column;
@@ -381,7 +401,7 @@ public class PreparedStatement extends CppObject {
         List<Long> column = new ArrayList<Long>();
         step();
         while (!isDone(cppObj)) {
-            column.add(getInteger(0));
+            column.add(getLong(0));
             step();
         }
         return column;
