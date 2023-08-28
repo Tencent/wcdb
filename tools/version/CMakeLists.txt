@@ -57,7 +57,7 @@ if (NOT DEFINED CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
 endif ()
 
-if (NOT DEFINED BUILD_SHARED_LIBS AND NOT DEFINED WIN32)
+if (NOT DEFINED BUILD_SHARED_LIBS)
     set(BUILD_SHARED_LIBS ON)
 endif ()
 
@@ -83,7 +83,8 @@ if (WIN32)
     endif ()
 
     if (BUILD_SHARED_LIBS)
-        add_definitions(-DWCDB_DLL -DWCDB_BUILD_DLL)
+        set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+        #add_definitions(-DWCDB_DLL -DWCDB_BUILD_DLL)
     endif ()
 
     add_compile_options(
@@ -94,6 +95,7 @@ if (WIN32)
     add_compile_options(/wd4068)  # Disable unknown pragma warnings
     add_compile_options(/wd4996)
     add_compile_options(/wd4715)
+    add_compile_options(/wd4251)
 else ()
     enable_language(C CXX)
     set(COMM_FLAGS_ "-Wall -g")
