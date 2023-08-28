@@ -31,8 +31,8 @@ namespace WCDB {
 
 namespace Syntax {
 
-class WCDB_API ResultColumn;
-class WCDB_API TableOrSubquery;
+class ResultColumn;
+class TableOrSubquery;
 
 class WCDB_API SelectCore final : public Identifier {
 #pragma mark - Lang

@@ -42,7 +42,7 @@ public:
     Schema schema;
     StringView tableOrFunction;
     StringView alias;
-    enum class WCDB_API IndexType : signed char {
+    enum class IndexType : signed char {
         NotSet = 0,
         Indexed,
         NotIndexed,

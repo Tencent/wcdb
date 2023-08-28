@@ -30,7 +30,7 @@
 
 namespace WCDB {
 
-struct WCDB_API NullOpt_T {
+struct NullOpt_T {
     struct SecretTag {
         explicit SecretTag() = default;
     };

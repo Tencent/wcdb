@@ -30,10 +30,10 @@ namespace WCDB {
 
 namespace Syntax {
 
-class WCDB_API InsertSTMT;
-class WCDB_API DeleteSTMT;
-class WCDB_API UpdateSTMT;
-class WCDB_API SelectSTMT;
+class InsertSTMT;
+class DeleteSTMT;
+class UpdateSTMT;
+class SelectSTMT;
 
 class WCDB_API CreateTriggerSTMT final : public Identifier {
 #pragma mark - Lang
@@ -44,13 +44,13 @@ public:
     bool ifNotExists = false;
     Schema schema;
     StringView trigger;
-    enum class WCDB_API Timing : signed char {
+    enum class Timing : signed char {
         Before = 1,
         After,
         InsteadOf,
     } timing;
     bool specifiedTiming = false;
-    enum class WCDB_API Event : signed char {
+    enum class Event : signed char {
         Delete = 1,
         Insert,
         Update,
@@ -60,7 +60,7 @@ public:
     bool forEachFow = false;
     Optional<Expression> condition;
 
-    enum class WCDB_API STMT : signed char {
+    enum class STMT : signed char {
         Insert = 1,
         Update,
         Delete,
