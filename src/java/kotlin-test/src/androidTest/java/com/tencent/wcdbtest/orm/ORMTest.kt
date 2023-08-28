@@ -342,8 +342,8 @@ class ORMTest : DatabaseTestCase() {
                 return@ExceptionTracer
             }
             added.boolValue = true
-            Assert.assertEquals(exception.infos["Table"] as String?, tableName)
-            Assert.assertEquals(exception.infos["Column"] as String?, columnName)
+            Assert.assertEquals(exception.info["Table"] as String?, tableName)
+            Assert.assertEquals(exception.info["Column"] as String?, columnName)
         })
         var hasError = false
         try {
