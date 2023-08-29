@@ -43,7 +43,7 @@ public class Value {
     }
 
     public Value(char value) {
-        this.value = (long)value;
+        this.value = String.valueOf(value);
     }
 
     public Value(int value) {
@@ -68,6 +68,25 @@ public class Value {
 
     public Value(byte[] value) {
         this.value = value;
+    }
+
+    public Value(Object value) {
+        if (value == null) {
+            this.value = null;
+        } else if (value instanceof Long || value instanceof Integer ||
+                value instanceof Short || value instanceof Byte) {
+            this.value = ((Number) value).longValue();
+        } else if (value instanceof Float || value instanceof Double) {
+            this.value = ((Number) value).doubleValue();
+        } else if (value instanceof byte[]) {
+            this.value = value;
+        } else {
+            this.value = value.toString();
+        }
+    }
+
+    public Value(Value other) {
+        this(other.value);
     }
 
     public ColumnType getType() {
