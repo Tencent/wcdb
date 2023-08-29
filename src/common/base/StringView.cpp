@@ -74,6 +74,8 @@ UnsafeStringView::UnsafeStringView(UnsafeStringView&& other)
 : m_data(other.m_data), m_length(other.m_length), m_referenceCount(other.m_referenceCount)
 {
     other.m_referenceCount = nullptr;
+    other.m_data = "";
+    other.m_length = 0;
 }
 
 #ifdef _WIN32
@@ -94,8 +96,9 @@ UnsafeStringView::~UnsafeStringView()
     if ((uint64_t) m_referenceCount <= ConstanceReference) {
         return;
     }
-    (*m_referenceCount)--;
-    tryClearSpace();
+    if (--(*m_referenceCount) == 0) {
+        clearSpace();
+    }
 };
 
 UnsafeStringView& UnsafeStringView::operator=(const UnsafeStringView& other)
@@ -115,6 +118,8 @@ UnsafeStringView& UnsafeStringView::operator=(UnsafeStringView&& other)
     m_length = other.m_length;
     m_referenceCount = other.m_referenceCount;
     other.m_referenceCount = nullptr;
+    other.m_data = "";
+    other.m_length = 0;
     return *this;
 }
 
@@ -286,16 +291,18 @@ void UnsafeStringView::ensureNewSpace(size_t newSize)
             m_referenceCount = nullptr;
         }
     } else {
-        (*m_referenceCount)--;
+        int count = --(*m_referenceCount);
         if (newSize > m_length || newSize == 0) {
-            tryClearSpace();
+            if (count == 0) {
+                clearSpace();
+            }
             if (newSize > 0) {
                 createNewSpace(newSize);
             } else {
                 m_referenceCount = nullptr;
             }
         } else {
-            if (*m_referenceCount > 0) {
+            if (count > 0) {
                 createNewSpace(newSize);
             } else {
                 *m_referenceCount = 1;
@@ -313,12 +320,11 @@ void UnsafeStringView::createNewSpace(size_t newSize)
     }
 }
 
-void UnsafeStringView::tryClearSpace()
+void UnsafeStringView::clearSpace()
 {
-    if (*m_referenceCount == 0) {
-        m_referenceCount->~atomic<int>();
-        free(m_referenceCount);
-    }
+    m_referenceCount->~atomic<int>();
+    free(m_referenceCount);
+    m_referenceCount = nullptr;
 }
 
 #ifdef __ANDROID__
@@ -458,7 +464,7 @@ StringView::StringView(std::string&& string) : UnsafeStringView()
 StringView::StringView(const UnsafeStringView& other)
 : UnsafeStringView(other.m_referenceCount != nullptr ? other : UnsafeStringView())
 {
-    if (other.m_referenceCount == nullptr) {
+    if (m_referenceCount == nullptr) {
         assignString(other.m_data, other.m_length);
     }
 }
@@ -466,7 +472,7 @@ StringView::StringView(const UnsafeStringView& other)
 StringView::StringView(UnsafeStringView&& other)
 : UnsafeStringView(other.m_referenceCount != nullptr ? std::move(other) : UnsafeStringView())
 {
-    if (other.m_referenceCount == nullptr) {
+    if (m_referenceCount == nullptr) {
         assignString(other.m_data, other.m_length);
     }
 }
