@@ -281,7 +281,8 @@ endif()
 if(MSVC)
     target_compile_options(sqlcipher PRIVATE /W4)
 else()
-    target_compile_options(sqlcipher PRIVATE -Wall -Wno-unused)
+    target_compile_definitions(sqlcipher PRIVATE "SQLITE_API=__attribute__((visibility(\"default\")))")
+    target_compile_options(sqlcipher PRIVATE -Wall -Wno-unused -fvisibility=hidden)
 endif()
 
 # Prebuilt OpenSSL Library
