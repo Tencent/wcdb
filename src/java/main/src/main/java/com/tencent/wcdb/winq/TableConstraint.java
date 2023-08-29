@@ -39,21 +39,21 @@ public class TableConstraint extends Identifier {
         cppObj = createCppObj(name);
     }
 
-    private native long createCppObj(String name);
+    private static native long createCppObj(String name);
 
     public TableConstraint primaryKey() {
         configPrimaryKey(cppObj);
         return this;
     }
 
-    private native void configPrimaryKey(long self);
+    private static native void configPrimaryKey(long self);
 
     public TableConstraint unique() {
         configUnique(cppObj);
         return this;
     }
 
-    private native void configUnique(long self);
+    private static native void configUnique(long self);
 
     public TableConstraint indexedBy(IndexedColumnConvertible indexedColumn) {
         configIndexedColumn(
@@ -88,7 +88,7 @@ public class TableConstraint extends Identifier {
         return this;
     }
 
-    private native void configIndexedColumn(long self,
+    private static native void configIndexedColumn(long self,
                                             int type,
                                             long[] columns,
                                             String[] columnNames);
@@ -98,14 +98,14 @@ public class TableConstraint extends Identifier {
         return this;
     }
 
-    private native void configConfliction(long self, int action);
+    private static native void configConfliction(long self, int action);
 
     public TableConstraint check(Expression expression) {
         configCheckExpression(cppObj, CppObject.get(expression));
         return this;
     }
 
-    private native void configCheckExpression(long self, long expression);
+    private static native void configCheckExpression(long self, long expression);
 
     public TableConstraint foreignKey(String[] columns, ForeignKey foreignKey) {
         configForeignKey(
@@ -131,7 +131,7 @@ public class TableConstraint extends Identifier {
         return this;
     }
 
-    private native void configForeignKey(long self,
+    private static native void configForeignKey(long self,
                                          int type,
                                          long[] columns,
                                          String[] columnNames,

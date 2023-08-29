@@ -35,7 +35,7 @@ public class StatementCreateTrigger extends Statement {
         cppObj = createCppObj();
     }
 
-    private native long createCppObj();
+    private static native long createCppObj();
 
     public StatementCreateTrigger createTrigger(String name) {
         configTrigger(cppObj, name);

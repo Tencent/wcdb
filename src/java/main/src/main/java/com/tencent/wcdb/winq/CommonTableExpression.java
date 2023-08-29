@@ -35,20 +35,20 @@ public class CommonTableExpression extends Identifier {
         cppObj = createCPPObject(tableName);
     }
 
-    private native long createCPPObject(String tableName);
+    private static native long createCPPObject(String tableName);
 
     public CommonTableExpression column(Column column) {
         configColumn(cppObj, CppObject.get(column));
         return this;
     }
 
-    private native void configColumn(long self, long column);
+    private static native void configColumn(long self, long column);
 
     public CommonTableExpression as(StatementSelect select) {
         configSelect(cppObj, CppObject.get(select));
         return this;
     }
 
-    private native void configSelect(long self, long select);
+    private static native void configSelect(long self, long select);
 
 }

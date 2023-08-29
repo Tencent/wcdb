@@ -458,7 +458,7 @@ public class WCDBException extends RuntimeException {
 
     private static native int getLevel(long error);
     private static native int getCode(long error);
-    private native String getMessage(long error);
+    private static native String getMessage(long error);
 
     private native void enumerateInfo(long cppError);
 

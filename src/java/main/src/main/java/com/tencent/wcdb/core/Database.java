@@ -38,43 +38,43 @@ public class Database extends HandleORMOperation {
         cppObj = createDatabase(path);
     }
 
-    private native long createDatabase(String path);
+    private static native long createDatabase(String path);
 
     public String getPath() {
         return getPath(cppObj);
     }
 
-    private native String getPath(long self);
+    private static native String getPath(long self);
 
     public List<String> getPaths() {
         return getPaths(cppObj);
     }
 
-    private native List<String> getPaths(long self);
+    private static native List<String> getPaths(long self);
 
     public void setTag(long tag) {
         setTag(cppObj, tag);
     }
 
-    private native void setTag(long self, long tag);
+    private static native void setTag(long self, long tag);
 
     public long getTag() {
         return getTag(cppObj);
     }
 
-    private native long getTag(long self);
+    private static native long getTag(long self);
 
     public boolean canOpen() {
         return canOpen(cppObj);
     }
 
-    private native boolean canOpen(long self);
+    private static native boolean canOpen(long self);
 
     public boolean isOpened() {
         return isOpened(cppObj);
     }
 
-    private native boolean isOpened(long self);
+    private static native boolean isOpened(long self);
 
     public interface CloseCallBack {
         void onClose() throws WCDBException;
@@ -92,31 +92,31 @@ public class Database extends HandleORMOperation {
         close(cppObj, null);
     }
 
-    private native void close(long self, CloseCallBack callBack);
+    private static native void close(long self, CloseCallBack callBack);
 
     public void blockade() {
         blockade(cppObj);
     }
 
-    private native void blockade(long self);
+    private static native void blockade(long self);
 
     public void unblockade() {
         unblockade(cppObj);
     }
 
-    private native void unblockade(long self);
+    private static native void unblockade(long self);
 
     public boolean isBlockaded() {
         return isBlockaded(cppObj);
     }
 
-    private native boolean isBlockaded(long self);
+    private static native boolean isBlockaded(long self);
 
     public void purge() {
         purge(cppObj);
     }
 
-    private native void purge(long self);
+    private static native void purge(long self);
 
     public static native void purgeAll();
 
@@ -124,7 +124,7 @@ public class Database extends HandleORMOperation {
         return WCDBException.createException(getError(cppObj));
     }
 
-    private native long getError(long self);
+    private static native long getError(long self);
 
     public Handle getHandle() {
         return new Handle(this, false);
@@ -135,7 +135,7 @@ public class Database extends HandleORMOperation {
         return new Handle(this, writeHint);
     }
 
-    native long getHandle(long self, boolean writeHint);
+    static native long getHandle(long self, boolean writeHint);
 
     public enum CipherVersion {
         defaultVersion, version1, version2, version3, version4
@@ -153,7 +153,7 @@ public class Database extends HandleORMOperation {
         setCipherKey(cppObj, key, pageSize, version.ordinal());
     }
 
-    private native void setCipherKey(long self, byte[] key, int pageSize, int version);
+    private static native void setCipherKey(long self, byte[] key, int pageSize, int version);
 
     public static void setDefaultCipherVersion(CipherVersion version) {
         setDefaultCipherVersion(version.ordinal());
@@ -204,7 +204,7 @@ public class Database extends HandleORMOperation {
         setConfig(cppObj, configName, invocation, unInvocation, cppPriority);
     }
 
-    private native void setConfig(long self, String configName, Config invocation, Config unInvocation, int priority);
+    private static native void setConfig(long self, String configName, Config invocation, Config unInvocation, int priority);
 
     public interface PerformanceTracer {
         void onTrace(long tag, String path, long handleId, String sql, double time);

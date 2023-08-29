@@ -40,7 +40,7 @@ public class ResultColumn extends Identifier implements ResultColumnConvertible 
         cppObj = createCppObj(CPPType.String.ordinal(), 0, columnName);
     }
 
-    private native long createCppObj(int type, long convertibleObj, String columnName);
+    private static native long createCppObj(int type, long convertibleObj, String columnName);
 
     public ResultColumn as(String alias) {
         configAlias(cppObj, alias);

@@ -35,7 +35,7 @@ public class StatementDropIndex extends Statement {
         cppObj = createCppObj();
     }
 
-    private native long createCppObj();
+    private static native long createCppObj();
 
     public StatementDropIndex dropIndex(String indexName) {
         configIndex(cppObj, indexName);

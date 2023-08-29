@@ -35,14 +35,14 @@ public class StatementDropView extends Statement {
         cppObj = createCppObj();
     }
 
-    private native long createCppObj();
+    private static native long createCppObj();
 
     public StatementDropView dropView(String viewName) {
         configView(cppObj, viewName);
         return this;
     }
 
-    private native void configView(long self, String viewName);
+    private static native void configView(long self, String viewName);
 
     public StatementDropView of(String schemaName) {
         configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
@@ -54,12 +54,12 @@ public class StatementDropView extends Statement {
         return this;
     }
 
-    private native void configSchema(long self, int type, long object, String path);
+    private static native void configSchema(long self, int type, long object, String path);
 
     public StatementDropView ifExist() {
         configIfExist(cppObj);
         return this;
     }
 
-    private native void configIfExist(long self);
+    private static native void configIfExist(long self);
 }

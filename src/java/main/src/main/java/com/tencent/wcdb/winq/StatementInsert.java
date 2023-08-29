@@ -35,7 +35,7 @@ public class StatementInsert extends Statement {
         cppObj = createCppObj();
     }
 
-    private native long createCppObj();
+    private static native long createCppObj();
 
     public StatementInsert with(CommonTableExpression expression) {
         return with(new CommonTableExpression[]{expression});
@@ -70,16 +70,16 @@ public class StatementInsert extends Statement {
         return this;
     }
 
-    private native void configWith(long self, long[] expressions);
+    private static native void configWith(long self, long[] expressions);
 
-    private native void configRecursive(long self);
+    private static native void configRecursive(long self);
 
     public StatementInsert insertInto(String tableName) {
         configTableName(cppObj, tableName);
         return this;
     }
 
-    private native void configTableName(long self, String tableName);
+    private static native void configTableName(long self, String tableName);
 
     public StatementInsert of(String schemaName) {
         configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
@@ -91,7 +91,7 @@ public class StatementInsert extends Statement {
         return this;
     }
 
-    private native void configSchema(long self, int type, long schema, String schemaName);
+    private static native void configSchema(long self, int type, long schema, String schemaName);
 
     public StatementInsert orReplace() {
         configConflictAction(cppObj, ConflictAction.Replace.ordinal());
@@ -117,14 +117,14 @@ public class StatementInsert extends Statement {
         configConflictAction(cppObj, ConflictAction.Ignore.ordinal());
         return this;
     }
-    private native void configConflictAction(long self, int action);
+    private static native void configConflictAction(long self, int action);
 
     public StatementInsert as(String alias) {
         configAlias(cppObj, alias);
         return this;
     }
 
-    private native void configAlias(long self, String alias);
+    private static native void configAlias(long self, String alias);
 
     public StatementInsert column(Column column) {
         if(column == null) {

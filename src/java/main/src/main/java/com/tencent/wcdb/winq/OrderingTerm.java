@@ -35,7 +35,7 @@ public class OrderingTerm extends Identifier{
         cppObj = createCppObj(Identifier.getCppType(expression), CppObject.get(expression));
     }
 
-    private native long createCppObj(int type, long expression);
+    private static native long createCppObj(int type, long expression);
 
     public OrderingTerm collate(String collation) {
         collate(cppObj, collation);

@@ -35,14 +35,14 @@ public class StatementDropTrigger extends Statement {
         cppObj = createCppObj();
     }
 
-    private native long createCppObj();
+    private static native long createCppObj();
 
     public StatementDropTrigger dropTrigger(String triggerName) {
         configTrigger(cppObj, triggerName);
         return this;
     }
 
-    private native void configTrigger(long self, String triggerName);
+    private static native void configTrigger(long self, String triggerName);
 
     public StatementDropTrigger of(String schemaName) {
         configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
@@ -54,12 +54,12 @@ public class StatementDropTrigger extends Statement {
         return this;
     }
 
-    private native void configSchema(long self, int type, long object, String path);
+    private static native void configSchema(long self, int type, long object, String path);
 
     public StatementDropTrigger ifExist() {
         configIfExist(cppObj);
         return this;
     }
 
-    private native void configIfExist(long self);
+    private static native void configIfExist(long self);
 }

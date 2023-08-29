@@ -35,7 +35,7 @@ public class StatementUpdate extends Statement {
         cppObj = createCppObj();
     }
 
-    private native long createCppObj();
+    private static native long createCppObj();
 
     public StatementUpdate with(CommonTableExpression expression) {
         return with(new CommonTableExpression[]{expression});

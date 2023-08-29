@@ -41,13 +41,13 @@ public class BindParameter extends Identifier implements ExpressionConvertible {
     private BindParameter() {
     }
 
-    private native long createCppObj(int num);
+    private static native long createCppObj(int num);
 
     public BindParameter(String name) {
         cppObj = createCppObj(name);
     }
 
-    private native long createCppObj(String name);
+    private static native long createCppObj(String name);
 
     public static BindParameter at(String name) {
         BindParameter ret = new BindParameter();

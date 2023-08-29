@@ -35,14 +35,14 @@ public class StatementDropTable extends Statement {
         cppObj = createCppObj();
     }
 
-    private native long createCppObj();
+    private static native long createCppObj();
 
     public StatementDropTable dropTable(String tableName) {
         configTableName(cppObj, tableName);
         return this;
     }
 
-    private native void configTableName(long self, String tableName);
+    private static native void configTableName(long self, String tableName);
 
     public StatementDropTable of(String schemaName) {
         configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
@@ -54,13 +54,13 @@ public class StatementDropTable extends Statement {
         return this;
     }
 
-    private native void configSchema(long self, int type, long schema, String schemaName);
+    private static native void configSchema(long self, int type, long schema, String schemaName);
 
     public StatementDropTable ifExist() {
         configIfExist(cppObj);
         return this;
     }
 
-    private native void configIfExist(long self);
+    private static native void configIfExist(long self);
 
 }

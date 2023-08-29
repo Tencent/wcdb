@@ -57,7 +57,7 @@ public class Handle extends HandleORMOperation implements AutoCloseable {
         return WCDBException.createException(getError(cppObj));
     }
 
-    native long getError(long self);
+    static native long getError(long self);
 
     public PreparedStatement getOrCreatePreparedStatement(Statement statement) throws WCDBException {
         long cppPreparedStatement = getOrCreatePreparedStatement(getCppHandle(), CppObject.get(statement));
@@ -67,7 +67,7 @@ public class Handle extends HandleORMOperation implements AutoCloseable {
         return new PreparedStatement(cppPreparedStatement);
     }
 
-    native long getOrCreatePreparedStatement(long self, long statement);
+    static native long getOrCreatePreparedStatement(long self, long statement);
 
     public PreparedStatement getOrCreatePreparedStatement(String sql) throws WCDBException {
         long cppPreparedStatement = getOrCreatePreparedStatementWithSQL(getCppHandle(), sql);
@@ -77,7 +77,7 @@ public class Handle extends HandleORMOperation implements AutoCloseable {
         return new PreparedStatement(cppPreparedStatement);
     }
 
-    native long getOrCreatePreparedStatementWithSQL(long self, String sql);
+    static native long getOrCreatePreparedStatementWithSQL(long self, String sql);
 
     public PreparedStatement preparedWithMainStatement(Statement statement) throws WCDBException {
         if(mainStatement == null) {
@@ -97,7 +97,7 @@ public class Handle extends HandleORMOperation implements AutoCloseable {
         return mainStatement;
     }
 
-    native long getMainStatement(long self);
+    static native long getMainStatement(long self);
 
     public void finalizeAllStatements() {
         if(cppObj > 0){
@@ -105,7 +105,7 @@ public class Handle extends HandleORMOperation implements AutoCloseable {
         }
     }
 
-    native void finalizeAllStatements(long self);
+    static native void finalizeAllStatements(long self);
 
     public void invalidate() {
         mainStatement = null;
@@ -121,37 +121,37 @@ public class Handle extends HandleORMOperation implements AutoCloseable {
         invalidate();
     }
 
-    native int tableExist(long self, String tableName);
+    static native int tableExist(long self, String tableName);
 
-    native boolean execute(long self, long statement);
+    static native boolean execute(long self, long statement);
 
-    native boolean executeSQL(long self, String sql);
+    static native boolean executeSQL(long self, String sql);
 
     public int getChanges() throws WCDBException {
         return getChanges(getCppHandle());
     }
 
-    native int getChanges(long self);
+    static native int getChanges(long self);
 
     public int getTotalChanges() throws WCDBException {
         return getTotalChanges(getCppHandle());
     }
 
-    native int getTotalChanges(long self);
+    static native int getTotalChanges(long self);
 
     public long getLastInsertedRowId() throws WCDBException {
         return getLastInsertedRowId(getCppHandle());
     }
 
-    native long getLastInsertedRowId(long self);
+    static native long getLastInsertedRowId(long self);
 
-    native boolean isInTransaction(long self);
+    static native boolean isInTransaction(long self);
 
-    native boolean beginTransaction(long self);
+    static native boolean beginTransaction(long self);
 
-    native boolean commitTransaction(long self);
+    static native boolean commitTransaction(long self);
 
-    native void rollbackTransaction(long self);
+    static native void rollbackTransaction(long self);
 
     @Override
     Handle getHandle(boolean writeHint) {
@@ -193,7 +193,7 @@ public class Handle extends HandleORMOperation implements AutoCloseable {
         return ret;
     }
 
-    native boolean runPausableTransaction(long self, PausableTransaction transaction);
+    static native boolean runPausableTransaction(long self, PausableTransaction transaction);
 
     public static class CancellationSignal extends CppObject {
         public CancellationSignal() {
@@ -212,7 +212,7 @@ public class Handle extends HandleORMOperation implements AutoCloseable {
         attachCancellationSignal(getCppHandle(), CppObject.get(signal));
     }
 
-    private native void attachCancellationSignal(long self, long signal);
+    private static native void attachCancellationSignal(long self, long signal);
 
     public void detachCancellationSignal() {
         if(cppObj != 0) {
@@ -220,6 +220,6 @@ public class Handle extends HandleORMOperation implements AutoCloseable {
         }
     }
 
-    private native void detachCancellationSignal(long self);
+    private static native void detachCancellationSignal(long self);
 
 }

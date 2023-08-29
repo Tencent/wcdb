@@ -35,7 +35,7 @@ public class StatementVacuum extends Statement {
         cppObj = createCppObj();
     }
 
-    private native long createCppObj();
+    private static native long createCppObj();
 
     public StatementVacuum vacuum(String schemaName) {
         configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
@@ -47,5 +47,5 @@ public class StatementVacuum extends Statement {
         return this;
     }
 
-    private native void configSchema(long self, int type, long object, String path);
+    private static native void configSchema(long self, int type, long object, String path);
 }

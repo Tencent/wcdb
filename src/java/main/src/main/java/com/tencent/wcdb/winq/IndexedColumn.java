@@ -39,19 +39,19 @@ public class IndexedColumn extends Identifier implements IndexedColumnConvertibl
         cppObj = createCppObj(CPPType.String.ordinal(), 0, columnName);
     }
 
-    private native long createCppObj(int type, long object, String columnName);
+    private static native long createCppObj(int type, long object, String columnName);
 
     public IndexedColumn collate(String collation) {
         collate(cppObj, collation);
         return this;
     }
 
-    private native void collate(long indexedColumn, String collation);
+    private static native void collate(long indexedColumn, String collation);
 
     public IndexedColumn order(Order order) {
         order(cppObj, order.ordinal() + 1);
         return this;
     }
 
-    private native void order(long indexedColumn, int order);
+    private static native void order(long indexedColumn, int order);
 }

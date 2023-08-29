@@ -74,7 +74,7 @@ public class LiteralValue extends Identifier implements ExpressionConvertible {
         }
     }
 
-    private native long createCppObj(int type, long intValue, double doubleValue, String stringValue);
+    private static native long createCppObj(int type, long intValue, double doubleValue, String stringValue);
 
     private LiteralValue(){
     }
@@ -85,7 +85,7 @@ public class LiteralValue extends Identifier implements ExpressionConvertible {
         return ret;
     }
 
-    private native static long createCurrentTime();
+    private static native long createCurrentTime();
 
     public static LiteralValue currentDate() {
         LiteralValue ret = new LiteralValue();
@@ -93,7 +93,7 @@ public class LiteralValue extends Identifier implements ExpressionConvertible {
         return ret;
     }
 
-    private native static long createCurrentDate();
+    private static native long createCurrentDate();
 
     public static LiteralValue currentTimeStamp() {
         LiteralValue ret = new LiteralValue();
@@ -101,5 +101,5 @@ public class LiteralValue extends Identifier implements ExpressionConvertible {
         return ret;
     }
 
-    private native static long createCurrentTimeStamp();
+    private static native long createCurrentTimeStamp();
 }

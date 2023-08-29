@@ -35,7 +35,7 @@ public class StatementAnalyze extends Statement {
         cppObj = createCppObj();
     }
 
-    private native long createCppObj();
+    private static native long createCppObj();
 
     public StatementAnalyze analyze() {
         configToAnalyze(cppObj);

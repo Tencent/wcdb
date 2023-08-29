@@ -35,14 +35,14 @@ public class StatementPragma extends Statement {
         cppObj = createCppObj();
     }
 
-    private native long createCppObj();
+    private static native long createCppObj();
 
     public StatementPragma pragma(Pragma pragma){
         configPragma(cppObj, CppObject.get(pragma));
         return this;
     }
 
-    private native void configPragma(long self, long pragma);
+    private static native void configPragma(long self, long pragma);
 
     public StatementPragma of(String schemaName) {
         configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
@@ -54,7 +54,7 @@ public class StatementPragma extends Statement {
         return this;
     }
 
-    private native void configSchema(long self, int type, long schema, String schemaName);
+    private static native void configSchema(long self, int type, long schema, String schemaName);
 
     public StatementPragma withValue(boolean value) {
         configWithValue(cppObj, CPPType.Bool.ordinal(), value ? 1 : 0, 0, null);
@@ -105,7 +105,7 @@ public class StatementPragma extends Statement {
         return this;
     }
 
-    private native void configWithValue(long self, int type, long longValue, double doubleValue, String stringValue);
+    private static native void configWithValue(long self, int type, long longValue, double doubleValue, String stringValue);
 
     public StatementPragma toValue(boolean value) {
         configToValue(cppObj, CPPType.Bool.ordinal(), value ? 1 : 0, 0, null);
@@ -156,5 +156,5 @@ public class StatementPragma extends Statement {
         return this;
     }
 
-    private native void configToValue(long self, int type, long longValue, double doubleValue, String stringValue);
+    private static native void configToValue(long self, int type, long longValue, double doubleValue, String stringValue);
 }

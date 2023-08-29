@@ -35,28 +35,28 @@ public class StatementCreateIndex extends Statement {
         cppObj = createCppObj();
     }
 
-    private native long createCppObj();
+    private static native long createCppObj();
 
     public StatementCreateIndex createIndex(String indexName) {
         createIndex(cppObj, indexName);
         return this;
     }
 
-    private native void createIndex(long self, String indexName);
+    private static native void createIndex(long self, String indexName);
 
     public StatementCreateIndex unique() {
         configUnique(cppObj);
         return this;
     }
 
-    private native void configUnique(long self);
+    private static native void configUnique(long self);
 
     public StatementCreateIndex ifNotExist() {
         configIfNotExist(cppObj);
         return this;
     }
 
-    private native void configIfNotExist(long self);
+    private static native void configIfNotExist(long self);
 
     public StatementCreateIndex of(String schemaName) {
         configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
@@ -68,14 +68,14 @@ public class StatementCreateIndex extends Statement {
         return this;
     }
 
-    private native void configSchema(long self, int type, long schema, String schemaName);
+    private static native void configSchema(long self, int type, long schema, String schemaName);
 
     public StatementCreateIndex on(String tableName) {
         configTableName(cppObj, tableName);
         return this;
     }
 
-    private native void configTableName(long self, String tableName);
+    private static native void configTableName(long self, String tableName);
 
     public StatementCreateIndex indexedBy(IndexedColumnConvertible[] indexedColumnConvertible) {
         if(indexedColumnConvertible == null || indexedColumnConvertible.length == 0) {
@@ -111,12 +111,12 @@ public class StatementCreateIndex extends Statement {
         return this;
     }
 
-    private native void configIndexedColumns(long self, int type, long[] columns, String[] columnNames);
+    private static native void configIndexedColumns(long self, int type, long[] columns, String[] columnNames);
 
     public StatementCreateIndex where(Expression condition) {
         configCondition(cppObj, CppObject.get(condition));
         return this;
     }
 
-    private native void configCondition(long self, long condition);
+    private static native void configCondition(long self, long condition);
 }

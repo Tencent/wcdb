@@ -33,7 +33,7 @@ public class Pragma extends Identifier{
         cppObj = createCppObj(name);
     }
 
-    private native long createCppObj(String name);
+    private static native long createCppObj(String name);
 
     public static final Pragma applicationId = new Pragma("application_id");
 

@@ -43,7 +43,7 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
         cppObj = createCppObj(CPPType.String.ordinal(), 0, tableName);
     }
 
-    private native long createCppObj(int type, long object, String tableName);
+    private static native long createCppObj(int type, long object, String tableName);
 
     public TableOrSubquery(TableOrSubqueryConvertible[] tableOrSubqueries) {
         if(tableOrSubqueries == null || tableOrSubqueries.length == 0) {
@@ -61,7 +61,7 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
         cppObj = createCppObj(CPPType.String.ordinal(), null, tables);
     }
 
-    private native long createCppObj(int type, long[] tableOrSubqueries, String[] tables);
+    private static native long createCppObj(int type, long[] tableOrSubqueries, String[] tables);
 
     public TableOrSubquery schema(String schemaName) {
         schema(cppObj, CPPType.String.ordinal(), 0, schemaName);

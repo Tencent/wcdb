@@ -37,7 +37,7 @@ public class Schema extends Identifier {
         this.cppObj = cppObj;
     }
 
-    private native long createCppObj(String name);
+    private static native long createCppObj(String name);
 
     public static final Schema main = new Schema(createMainCppObj());
 

@@ -35,14 +35,14 @@ public class ForeignKey extends Identifier {
         cppObj = createCPPObj();
     }
 
-    private native long createCPPObj();
+    private static native long createCPPObj();
 
     public ForeignKey references(String table) {
         configReference(cppObj, table);
         return this;
     }
 
-    private native void configReference(long self, String table);
+    private static native void configReference(long self, String table);
 
     public ForeignKey column(Column column) {
         configColumns(cppObj, Identifier.getCppType(column), new long[]{CppObject.get(column)}, null);
@@ -74,7 +74,7 @@ public class ForeignKey extends Identifier {
         return this;
     }
 
-    private native void configColumns(long self, int type, long[] objects, String[] columnNames);
+    private static native void configColumns(long self, int type, long[] objects, String[] columnNames);
 
     public enum Action {
         SetNull, SetDefault, Cascade, Restrict, NoAction
@@ -85,14 +85,14 @@ public class ForeignKey extends Identifier {
         return this;
     }
 
-    private native void configOnDeleteAction(long self, int action);
+    private static native void configOnDeleteAction(long self, int action);
 
     public ForeignKey onUpdate(Action action) {
         configOnUpdateAction(cppObj, action.ordinal());
         return this;
     }
 
-    private native void configOnUpdateAction(long self, int action);
+    private static native void configOnUpdateAction(long self, int action);
 
     public enum Match {
         Simple, Full, Partial
@@ -103,7 +103,7 @@ public class ForeignKey extends Identifier {
         return this;
     }
 
-    private native void configMatch(long self, int match);
+    private static native void configMatch(long self, int match);
 
     public enum Initially {
         Default, Deferred, Immediate
@@ -114,12 +114,12 @@ public class ForeignKey extends Identifier {
         return this;
     }
 
-    private native void configDeferrable(long self, int type);
+    private static native void configDeferrable(long self, int type);
 
     public ForeignKey notDeferrable(Initially initially) {
         configNotDeferrable(cppObj, initially.ordinal());
         return this;
     }
 
-    private native void configNotDeferrable(long self, int type);
+    private static native void configNotDeferrable(long self, int type);
 }

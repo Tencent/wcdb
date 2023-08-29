@@ -37,7 +37,7 @@ public class WindowDef extends Identifier {
         cppObj = createCppObj();
     }
 
-    private native long createCppObj();
+    private static native long createCppObj();
 
     public WindowDef partitionBy(String columnName) {
         assert columnName != null;

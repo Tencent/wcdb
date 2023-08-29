@@ -36,62 +36,62 @@ public class Binding extends CppObject {
         cppObj = createCppObj();
     }
 
-    private native long createCppObj();
+    private static native long createCppObj();
 
     public void addColumnDef(ColumnDef def) {
         addColumnDef(cppObj, CppObject.get(def));
     }
 
-    private native void addColumnDef(long self, long columnDef);
+    private static native void addColumnDef(long self, long columnDef);
 
     public void enableAutoIncrementForExistingTable() {
         enableAutoIncrementForExistingTable(cppObj);
     }
 
-    private native void enableAutoIncrementForExistingTable(long self);
+    private static native void enableAutoIncrementForExistingTable(long self);
 
     public void addIndex(String indexNameOrSuffix, boolean isFullName, StatementCreateIndex createIndex) {
         addIndex(cppObj, indexNameOrSuffix, isFullName, CppObject.get(createIndex));
     }
 
-    private native void addIndex(long self, String indexNameOrSuffix, boolean isFullName, long createIndex);
+    private static native void addIndex(long self, String indexNameOrSuffix, boolean isFullName, long createIndex);
 
     public void addTableConstraint(TableConstraint constraint) {
         addTableConstraint(cppObj, CppObject.get(constraint));
     }
 
-    private native void addTableConstraint(long self, long tableConstraint);
+    private static native void addTableConstraint(long self, long tableConstraint);
 
     public Binding configVirtualModule(String module) {
         configVirtualModule(cppObj, module);
         return this;
     }
 
-    private native void configVirtualModule(long self, String module);
+    private static native void configVirtualModule(long self, String module);
 
     public void configVirtualModuleArgument(String argument) {
         configVirtualModuleArgument(cppObj, argument);
     }
 
-    private native void configVirtualModuleArgument(long self, String argument);
+    private static native void configVirtualModuleArgument(long self, String argument);
 
     public void configWithoutRowId() {
         configWithoutRowId(cppObj);
     }
 
-    private native void configWithoutRowId(long self);
+    private static native void configWithoutRowId(long self);
 
     public boolean createTable(String tableName, Handle handle) throws WCDBException {
         return createTable(cppObj, tableName, handle.getCppHandle());
     }
 
-    private native boolean createTable(long self, String tableName, long handle);
+    private static native boolean createTable(long self, String tableName, long handle);
 
     public boolean createVirtualTable(String tableName, Handle handle) throws WCDBException {
         return createVirtualTable(cppObj, tableName, handle.getCppHandle());
     }
 
-    private native boolean createVirtualTable(long self, String tableName, long handle);
+    private static native boolean createVirtualTable(long self, String tableName, long handle);
 
     long getBaseBinding() {
         if(baseBinding == 0) {
@@ -100,5 +100,5 @@ public class Binding extends CppObject {
         return baseBinding;
     }
 
-    private native long getBaseBinding(long self);
+    private static native long getBaseBinding(long self);
 }

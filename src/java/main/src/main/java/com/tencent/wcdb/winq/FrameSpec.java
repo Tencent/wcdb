@@ -35,28 +35,28 @@ public class FrameSpec extends Identifier {
         cppObj = createCppObj();
     }
 
-    private native long createCppObj();
+    private static native long createCppObj();
 
     public FrameSpec range() {
         configRange(cppObj);
         return this;
     }
 
-    private native void configRange(long self);
+    private static native void configRange(long self);
 
     public FrameSpec rows() {
         configRows(cppObj);
         return this;
     }
 
-    private native void configRows(long self);
+    private static native void configRows(long self);
 
     public FrameSpec unboundedPreceding() {
         configUnboundedPreceding(cppObj);
         return this;
     }
 
-    private native void configUnboundedPreceding(long self);
+    private static native void configUnboundedPreceding(long self);
 
     public FrameSpec preceding(long offset) {
         configPreceding(cppObj, CPPType.Int.ordinal(), offset);
@@ -68,21 +68,21 @@ public class FrameSpec extends Identifier {
         return this;
     }
 
-    private native void configPreceding(long self, int type, long expression);
+    private static native void configPreceding(long self, int type, long expression);
 
     public FrameSpec currentRow() {
         configCurrentRow(cppObj);
         return this;
     }
 
-    private native void configCurrentRow(long self);
+    private static native void configCurrentRow(long self);
 
     public FrameSpec betweenUnboundedPreceding() {
         configBetweenUnboundedPreceding(cppObj);
         return this;
     }
 
-    private native void configBetweenUnboundedPreceding(long self);
+    private static native void configBetweenUnboundedPreceding(long self);
 
     public FrameSpec betweenPreceding(long offset) {
         configBetweenPreceding(cppObj, CPPType.Int.ordinal(), offset);
@@ -94,14 +94,14 @@ public class FrameSpec extends Identifier {
         return this;
     }
 
-    private native void configBetweenPreceding(long self, int type, long expression);
+    private static native void configBetweenPreceding(long self, int type, long expression);
 
     public FrameSpec betweenCurrentRow() {
         configBetweenCurrentRow(cppObj);
         return this;
     }
 
-    private native void configBetweenCurrentRow(long self);
+    private static native void configBetweenCurrentRow(long self);
 
     public FrameSpec betweenFollowing(long offset) {
         configBetweenFollowing(cppObj, CPPType.Int.ordinal(), offset);
@@ -113,14 +113,14 @@ public class FrameSpec extends Identifier {
         return this;
     }
 
-    private native void configBetweenFollowing(long self, int type, long expression);
+    private static native void configBetweenFollowing(long self, int type, long expression);
 
     public FrameSpec andCurrentRow() {
         configAndCurrentRow(cppObj);
         return this;
     }
 
-    private native void configAndCurrentRow(long self);
+    private static native void configAndCurrentRow(long self);
 
     public FrameSpec andPreceding(long offset) {
         configAndPreceding(cppObj, CPPType.Int.ordinal(), offset);
@@ -132,14 +132,14 @@ public class FrameSpec extends Identifier {
         return this;
     }
 
-    private native void configAndPreceding(long self, int type, long expression);
+    private static native void configAndPreceding(long self, int type, long expression);
 
     public FrameSpec andUnboundedFollowing() {
         configAndUnboundedFollowing(cppObj);
         return this;
     }
 
-    private native void configAndUnboundedFollowing(long self);
+    private static native void configAndUnboundedFollowing(long self);
 
     public FrameSpec andFollowing(long offset) {
         configAndFollowing(cppObj, CPPType.Int.ordinal(), offset);

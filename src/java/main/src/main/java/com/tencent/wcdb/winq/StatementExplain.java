@@ -35,7 +35,7 @@ public class StatementExplain extends Statement {
         cppObj = createCppObj();
     }
 
-    private native long createCppObj();
+    private static native long createCppObj();
 
     public StatementExplain explain(Statement statement) {
         explain(cppObj, CppObject.get(statement), false);
@@ -47,5 +47,5 @@ public class StatementExplain extends Statement {
         return this;
     }
 
-    private native void explain(long self, long statement, boolean queryPlan);
+    private static native void explain(long self, long statement, boolean queryPlan);
 }

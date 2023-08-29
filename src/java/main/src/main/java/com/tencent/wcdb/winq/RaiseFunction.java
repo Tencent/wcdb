@@ -33,7 +33,7 @@ public class RaiseFunction extends Identifier implements ExpressionConvertible, 
         cppObj = createCppObj();
     }
 
-    private native long createCppObj();
+    private static native long createCppObj();
 
     public RaiseFunction ignore() {
         setAction(cppObj, 0, null);

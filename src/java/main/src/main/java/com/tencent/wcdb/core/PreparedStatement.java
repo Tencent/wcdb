@@ -44,7 +44,7 @@ public class PreparedStatement extends CppObject {
         return WCDBException.createException(getError(cppObj));
     }
 
-    private native long getError(long self);
+    private static native long getError(long self);
 
     void prepare(Statement statement) throws WCDBException {
         if(!prepare(cppObj, CppObject.get(statement))) {
@@ -52,7 +52,7 @@ public class PreparedStatement extends CppObject {
         }
     }
 
-    private native boolean prepare(long self, long statement);
+    private static native boolean prepare(long self, long statement);
 
     void prepare(String sql) throws WCDBException {
         if(!prepareSQL(cppObj, sql)) {
@@ -60,13 +60,13 @@ public class PreparedStatement extends CppObject {
         }
     }
 
-    private native boolean prepareSQL(long self, String sql);
+    private static native boolean prepareSQL(long self, String sql);
 
     public boolean checkPrepared() {
         return checkPrepared(cppObj);
     }
 
-    private native boolean checkPrepared(long self);
+    private static native boolean checkPrepared(long self);
 
     public void step() throws WCDBException {
         if(!step(cppObj)) {
@@ -77,25 +77,25 @@ public class PreparedStatement extends CppObject {
         }
     }
 
-    private native boolean step(long self);
+    private static native boolean step(long self);
 
     public void reset() {
         reset(cppObj);
     }
 
-    private native void reset(long self);
+    private static native void reset(long self);
 
     public void finalizeStatement() {
         finalize(cppObj);
     }
 
-    private native void finalize(long self);
+    private static native void finalize(long self);
 
     public boolean isDone() {
         return isDone(cppObj);
     }
 
-    private native boolean isDone(long self);
+    private static native boolean isDone(long self);
 
     public void bindBool(boolean value, int index) {
         bindInteger(cppObj, value ? 1 : 0, index);
@@ -169,7 +169,7 @@ public class PreparedStatement extends CppObject {
         }
     }
 
-    private native void bindInteger(long self, long value, int index);
+    private static native void bindInteger(long self, long value, int index);
 
     public void bindDouble(float value, int index) {
         bindDouble(cppObj, value, index);
@@ -195,7 +195,7 @@ public class PreparedStatement extends CppObject {
         }
     }
 
-    private native void bindDouble(long self, double value, int index);
+    private static native void bindDouble(long self, double value, int index);
 
     public void bindText(String value, int index) {
         if(value == null) {
@@ -205,7 +205,7 @@ public class PreparedStatement extends CppObject {
         bindText(cppObj, value, index);
     }
 
-    private native void bindText(long self, String value, int index);
+    private static native void bindText(long self, String value, int index);
 
     public void bindBLOB(byte[] value, int index) {
         if(value == null) {
@@ -215,13 +215,13 @@ public class PreparedStatement extends CppObject {
         bindBLOB(cppObj, value, index);
     }
 
-    private native void bindBLOB(long self, byte[] value, int index);
+    private static native void bindBLOB(long self, byte[] value, int index);
 
     public void bindNull(int index) {
         bindNull(cppObj, index);
     }
 
-    private native void bindNull(long self, int index);
+    private static native void bindNull(long self, int index);
 
     public void bindValue(Value value, int index) {
         if(value == null) {
@@ -294,13 +294,13 @@ public class PreparedStatement extends CppObject {
         return bindParameterIndex(cppObj, parameterName);
     }
 
-    private native int bindParameterIndex(long self, String parameterName);
+    private static native int bindParameterIndex(long self, String parameterName);
 
     public ColumnType getColumnType(int index) {
         return ColumnType.valueOf(getColumnType(cppObj, index));
     }
 
-    private native int getColumnType(long self, int index);
+    private static native int getColumnType(long self, int index);
 
     public boolean getBool(int index) {
         return getInteger(cppObj, index) > 0;
@@ -326,7 +326,7 @@ public class PreparedStatement extends CppObject {
         return getInteger(cppObj, index);
     }
 
-    private native long getInteger(long self, int index);
+    private static native long getInteger(long self, int index);
 
     public float getFloat(int index) {
         return (float) getDouble(cppObj, index);
@@ -336,13 +336,13 @@ public class PreparedStatement extends CppObject {
         return getDouble(cppObj, index);
     }
 
-    private native double getDouble(long self, int index);
+    private static native double getDouble(long self, int index);
 
     public String getText(int index) {
         return getText(cppObj, index);
     }
 
-    private native String getText(long self, int index);
+    private static native String getText(long self, int index);
 
     public byte[] getBLOB(int index) {
         return getBLOB(cppObj, index);

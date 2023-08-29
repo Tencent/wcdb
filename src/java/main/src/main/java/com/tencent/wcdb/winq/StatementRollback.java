@@ -33,13 +33,13 @@ public class StatementRollback extends Statement {
         cppObj = createCppObj();
     }
 
-    private native long createCppObj();
+    private static native long createCppObj();
 
     public StatementRollback rollbackTo(String savepoint) {
         configSavepoint(cppObj, savepoint);
         return this;
     }
 
-    private native void configSavepoint(long self, String savepoint);
+    private static native void configSavepoint(long self, String savepoint);
 
 }
