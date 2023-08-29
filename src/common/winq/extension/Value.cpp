@@ -52,16 +52,16 @@ Value::~Value()
 
 Value &Value::operator=(const Value &other)
 {
-    m_type = other.m_type;
     clearValue();
+    m_type = other.m_type;
     copyValue(other);
     return *this;
 }
 
 Value &Value::operator=(Value &&other)
 {
-    m_type = other.m_type;
     clearValue();
+    m_type = other.m_type;
     moveValue(other);
     return *this;
 }
