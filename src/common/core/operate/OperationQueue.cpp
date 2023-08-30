@@ -405,7 +405,13 @@ void OperationQueue::asyncCheckpoint(const UnsafeStringView& path)
     if (iter != m_records.end() && iter->second.registeredForCheckpoint) {
         Operation operation(Operation::Type::Checkpoint, path);
         Parameter parameter;
-        async(operation, OperationQueueTimeIntervalForCheckpoint, parameter, AsyncMode::ForwardOnly);
+        double checkPointInterval = OperationQueueTimeIntervalForCheckpoint;
+        auto config = Core::shared().getABTestConfig("clicfg_wcdb_checkpoint_interval");
+        if (config.hasValue() && config->length() > 0) {
+            checkPointInterval = std::max(checkPointInterval, atof(config->data()));
+            checkPointInterval = std::min(checkPointInterval, 600.0);
+        }
+        async(operation, checkPointInterval, parameter, AsyncMode::ForwardOnly);
     }
 }
 
