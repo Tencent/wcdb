@@ -24,7 +24,7 @@
 #include "ResultColumnJNI.h"
 #include "ResultColumnBridge.h"
 
-jlong WCDBJNIResultColumnObjectMethod(create, WCDBJNIObjectOrStringParameter(column))
+jlong WCDBJNIResultColumnClassMethod(create, WCDBJNIObjectOrStringParameter(column))
 {
     WCDBJNICreateObjectOrStringCommonValue(column, true);
     jlong ret = (jlong) WCDBResultColumnCreate(column_common).innerValue;
@@ -32,7 +32,7 @@ jlong WCDBJNIResultColumnObjectMethod(create, WCDBJNIObjectOrStringParameter(col
     return ret;
 }
 
-void WCDBJNIResultColumnObjectMethod(configAlias, jlong object, jstring alias)
+void WCDBJNIResultColumnClassMethod(configAlias, jlong object, jstring alias)
 {
     WCDBJNIBridgeStruct(CPPResultColumn, object);
     WCDBJNIGetStringCritical(alias);

@@ -32,6 +32,8 @@
     WCDBJNIObjectMethodWithNoArg(StatementExplain, funcName)
 #define WCDBJNIStatementExplainClassMethodWithNoArg(funcName)                  \
     WCDBJNIClassMethodWithNoArg(StatementExplain, funcName)
+#define WCDBJNIStatementExplainClassMethod(funcName, ...)                      \
+    WCDBJNIClassMethod(StatementExplain, funcName, __VA_ARGS__)
 
-jlong WCDBJNIStatementExplainObjectMethodWithNoArg(createCppObj);
-void WCDBJNIStatementExplainObjectMethod(explain, jlong self, jlong statement, jboolean queryPlan);
+jlong WCDBJNIStatementExplainClassMethodWithNoArg(createCppObj);
+void WCDBJNIStatementExplainClassMethod(explain, jlong self, jlong statement, jboolean queryPlan);

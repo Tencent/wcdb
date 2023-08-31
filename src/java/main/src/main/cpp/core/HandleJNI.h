@@ -35,23 +35,23 @@
 #define WCDBJNIHandleClassMethod(funcName, ...)                                \
     WCDBJNIClassMethod(Handle, funcName, __VA_ARGS__)
 
-jlong WCDBJNIHandleObjectMethod(getError, jlong self);
-jlong WCDBJNIHandleObjectMethod(getOrCreatePreparedStatement, jlong self, jlong statement);
-jlong WCDBJNIHandleObjectMethod(getOrCreatePreparedStatementWithSQL, jlong self, jstring sql);
-jlong WCDBJNIHandleObjectMethod(getMainStatement, jlong self);
-void WCDBJNIHandleObjectMethod(finalizeAllStatements, jlong self);
-jboolean WCDBJNIHandleObjectMethod(execute, jlong self, jlong statement);
-jboolean WCDBJNIHandleObjectMethod(executeSQL, jlong self, jstring sql);
-jint WCDBJNIHandleObjectMethod(tableExist, jlong self, jstring table);
+jlong WCDBJNIHandleClassMethod(getError, jlong self);
+jlong WCDBJNIHandleClassMethod(getOrCreatePreparedStatement, jlong self, jlong statement);
+jlong WCDBJNIHandleClassMethod(getOrCreatePreparedStatementWithSQL, jlong self, jstring sql);
+jlong WCDBJNIHandleClassMethod(getMainStatement, jlong self);
+void WCDBJNIHandleClassMethod(finalizeAllStatements, jlong self);
+jboolean WCDBJNIHandleClassMethod(execute, jlong self, jlong statement);
+jboolean WCDBJNIHandleClassMethod(executeSQL, jlong self, jstring sql);
+jint WCDBJNIHandleClassMethod(tableExist, jlong self, jstring table);
 
-jint WCDBJNIHandleObjectMethod(getChanges, jlong self);
-jint WCDBJNIHandleObjectMethod(getTotalChanges, jlong self);
-jlong WCDBJNIHandleObjectMethod(getLastInsertRowid, jlong self);
+jint WCDBJNIHandleClassMethod(getChanges, jlong self);
+jint WCDBJNIHandleClassMethod(getTotalChanges, jlong self);
+jlong WCDBJNIHandleClassMethod(getLastInsertRowid, jlong self);
 
-jboolean WCDBJNIHandleObjectMethod(isInTransaction, jlong self);
-jboolean WCDBJNIHandleObjectMethod(beginTransaction, jlong self);
-jboolean WCDBJNIHandleObjectMethod(commitTransaction, jlong self);
-void WCDBJNIHandleObjectMethod(rollbackTransaction, jlong self);
+jboolean WCDBJNIHandleClassMethod(isInTransaction, jlong self);
+jboolean WCDBJNIHandleClassMethod(beginTransaction, jlong self);
+jboolean WCDBJNIHandleClassMethod(commitTransaction, jlong self);
+void WCDBJNIHandleClassMethod(rollbackTransaction, jlong self);
 
 jboolean WCDBJNIHandleObjectMethod(runTransaction, jlong self, jobject transaction);
 jboolean WCDBJNIHandleObjectMethod(runPausableTransaction, jlong self, jobject transaction);
@@ -59,5 +59,5 @@ jboolean WCDBJNIHandleObjectMethod(runPausableTransaction, jlong self, jobject t
 jlong WCDBJNIHandleClassMethodWithNoArg(createCancellationSignal);
 void WCDBJNIHandleClassMethod(cancelSignal, jlong signal);
 
-void WCDBJNIHandleObjectMethod(attachCancellationSignal, jlong self, jlong signal);
-void WCDBJNIHandleObjectMethod(detachCancellationSignal, jlong self);
+void WCDBJNIHandleClassMethod(attachCancellationSignal, jlong self, jlong signal);
+void WCDBJNIHandleClassMethod(detachCancellationSignal, jlong self);

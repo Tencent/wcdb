@@ -24,12 +24,12 @@
 #include "StatementCreateTriggerJNI.h"
 #include "StatementCreateTriggerBridge.h"
 
-jlong WCDBJNIStatementCreateTriggerObjectMethodWithNoArg(createCppObj)
+jlong WCDBJNIStatementCreateTriggerClassMethodWithNoArg(createCppObj)
 {
     return (jlong) WCDBStatementCreateTriggerCreate().innerValue;
 }
 
-void WCDBJNIStatementCreateTriggerObjectMethod(configTrigger, jlong self, jstring name)
+void WCDBJNIStatementCreateTriggerClassMethod(configTrigger, jlong self, jstring name)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTrigger, self);
     WCDBJNIGetStringCritical(name);
@@ -37,9 +37,9 @@ void WCDBJNIStatementCreateTriggerObjectMethod(configTrigger, jlong self, jstrin
     WCDBJNIReleaseStringCritical(name);
 }
 
-void WCDBJNIStatementCreateTriggerObjectMethod(configSchema,
-                                               jlong self,
-                                               WCDBJNIObjectOrStringParameter(schema))
+void WCDBJNIStatementCreateTriggerClassMethod(configSchema,
+                                              jlong self,
+                                              WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTrigger, self);
     WCDBJNICreateObjectOrStringCommonValue(schema, true);
@@ -47,64 +47,64 @@ void WCDBJNIStatementCreateTriggerObjectMethod(configSchema,
     WCDBJNITryReleaseStringInCommonValue(schema);
 }
 
-void WCDBJNIStatementCreateTriggerObjectMethod(configTemp, jlong self)
+void WCDBJNIStatementCreateTriggerClassMethod(configTemp, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTrigger, self);
     WCDBStatementCreateTriggerConfigTemp(selfStruct);
 }
 
-void WCDBJNIStatementCreateTriggerObjectMethod(configIfNotExist, jlong self)
+void WCDBJNIStatementCreateTriggerClassMethod(configIfNotExist, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTrigger, self);
     WCDBStatementCreateTriggerConfigIfNotExist(selfStruct);
 }
 
-void WCDBJNIStatementCreateTriggerObjectMethod(configBefore, jlong self)
+void WCDBJNIStatementCreateTriggerClassMethod(configBefore, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTrigger, self);
     WCDBStatementCreateTriggerConfigBefore(selfStruct);
 }
 
-void WCDBJNIStatementCreateTriggerObjectMethod(configAfter, jlong self)
+void WCDBJNIStatementCreateTriggerClassMethod(configAfter, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTrigger, self);
     WCDBStatementCreateTriggerConfigAfter(selfStruct);
 }
 
-void WCDBJNIStatementCreateTriggerObjectMethod(configInsteadOf, jlong self)
+void WCDBJNIStatementCreateTriggerClassMethod(configInsteadOf, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTrigger, self);
     WCDBStatementCreateTriggerConfigInsteadOf(selfStruct);
 }
 
-void WCDBJNIStatementCreateTriggerObjectMethod(configDelete, jlong self)
+void WCDBJNIStatementCreateTriggerClassMethod(configDelete, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTrigger, self);
     WCDBStatementCreateTriggerConfigDelete(selfStruct);
 }
 
-void WCDBJNIStatementCreateTriggerObjectMethod(configInsert, jlong self)
+void WCDBJNIStatementCreateTriggerClassMethod(configInsert, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTrigger, self);
     WCDBStatementCreateTriggerConfigInsert(selfStruct);
 }
 
-void WCDBJNIStatementCreateTriggerObjectMethod(configUpdate, jlong self)
+void WCDBJNIStatementCreateTriggerClassMethod(configUpdate, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTrigger, self);
     WCDBStatementCreateTriggerConfigUpdate(selfStruct);
 }
 
-void WCDBJNIStatementCreateTriggerObjectMethod(configColumns,
-                                               jlong self,
-                                               WCDBJNIObjectOrStringArrayParameter(columns))
+void WCDBJNIStatementCreateTriggerClassMethod(configColumns,
+                                              jlong self,
+                                              WCDBJNIObjectOrStringArrayParameter(columns))
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTrigger, self);
     WCDBJNICreateObjectOrStringArrayCriticalWithAction(
     columns, WCDBStatementCreateTriggerConfigColumns2(selfStruct, columns_commonArray));
 }
 
-void WCDBJNIStatementCreateTriggerObjectMethod(configTable, jlong self, jstring table)
+void WCDBJNIStatementCreateTriggerClassMethod(configTable, jlong self, jstring table)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTrigger, self);
     WCDBJNIGetStringCritical(table);
@@ -112,41 +112,41 @@ void WCDBJNIStatementCreateTriggerObjectMethod(configTable, jlong self, jstring 
     WCDBJNIReleaseStringCritical(table);
 }
 
-void WCDBJNIStatementCreateTriggerObjectMethod(configForEachRow, jlong self)
+void WCDBJNIStatementCreateTriggerClassMethod(configForEachRow, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTrigger, self);
     WCDBStatementCreateTriggerConfigForEachRow(selfStruct);
 }
 
-void WCDBJNIStatementCreateTriggerObjectMethod(configWhen, jlong self, jlong expression)
+void WCDBJNIStatementCreateTriggerClassMethod(configWhen, jlong self, jlong expression)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTrigger, self);
     WCDBJNIBridgeStruct(CPPExpression, expression);
     WCDBStatementCreateTriggerConfigWhen(selfStruct, expressionStruct);
 }
 
-void WCDBJNIStatementCreateTriggerObjectMethod(executeInsert, jlong self, jlong insert)
+void WCDBJNIStatementCreateTriggerClassMethod(executeInsert, jlong self, jlong insert)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTrigger, self);
     WCDBJNIBridgeStruct(CPPStatementInsert, insert);
     WCDBStatementCreateTriggerExecuteInsert(selfStruct, insertStruct);
 }
 
-void WCDBJNIStatementCreateTriggerObjectMethod(executeUpdate, jlong self, jlong update)
+void WCDBJNIStatementCreateTriggerClassMethod(executeUpdate, jlong self, jlong update)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTrigger, self);
     WCDBJNIBridgeStruct(CPPStatementUpdate, update);
     WCDBStatementCreateTriggerExecuteUpdate(selfStruct, updateStruct);
 }
 
-void WCDBJNIStatementCreateTriggerObjectMethod(executeDelete, jlong self, jlong delete_)
+void WCDBJNIStatementCreateTriggerClassMethod(executeDelete, jlong self, jlong delete_)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTrigger, self);
     WCDBJNIBridgeStruct(CPPStatementDelete, delete_);
     WCDBStatementCreateTriggerExecuteDelete(selfStruct, delete_Struct);
 }
 
-void WCDBJNIStatementCreateTriggerObjectMethod(executeSelect, jlong self, jlong select)
+void WCDBJNIStatementCreateTriggerClassMethod(executeSelect, jlong self, jlong select)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTrigger, self);
     WCDBJNIBridgeStruct(CPPStatementSelect, select);

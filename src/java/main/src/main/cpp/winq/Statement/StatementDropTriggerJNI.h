@@ -32,10 +32,12 @@
     WCDBJNIObjectMethodWithNoArg(StatementDropTrigger, funcName)
 #define WCDBJNIStatementDropTriggerClassMethodWithNoArg(funcName)              \
     WCDBJNIClassMethodWithNoArg(StatementDropTrigger, funcName)
+#define WCDBJNIStatementDropTriggerClassMethod(funcName, ...)                  \
+    WCDBJNIClassMethod(StatementDropTrigger, funcName, __VA_ARGS__)
 
-jlong WCDBJNIStatementDropTriggerObjectMethodWithNoArg(createCppObj);
-void WCDBJNIStatementDropTriggerObjectMethod(configSchema,
-                                             jlong self,
-                                             WCDBJNIObjectOrStringParameter(schema));
-void WCDBJNIStatementDropTriggerObjectMethod(configTrigger, jlong self, jstring triggerName);
-void WCDBJNIStatementDropTriggerObjectMethod(configIfExist, jlong self);
+jlong WCDBJNIStatementDropTriggerClassMethodWithNoArg(createCppObj);
+void WCDBJNIStatementDropTriggerClassMethod(configSchema,
+                                            jlong self,
+                                            WCDBJNIObjectOrStringParameter(schema));
+void WCDBJNIStatementDropTriggerClassMethod(configTrigger, jlong self, jstring triggerName);
+void WCDBJNIStatementDropTriggerClassMethod(configIfExist, jlong self);

@@ -34,12 +34,10 @@
     WCDBJNIClassMethod(StatementAttach, funcName, __VA_ARGS__)
 
 jlong WCDBJNIStatementAttachClassMethodWithNoArg(createCppObj);
-void WCDBJNIStatementAttachObjectMethod(configPath,
-                                        jlong self,
-                                        WCDBJNIObjectOrStringParameter(path));
-void WCDBJNIStatementAttachObjectMethod(configSchema,
-                                        jlong self,
-                                        WCDBJNIObjectOrStringParameter(schema));
-void WCDBJNIStatementAttachObjectMethod(configKey,
-                                        jlong self,
-                                        WCDBJNIObjectOrStringParameter(key));
+void WCDBJNIStatementAttachClassMethod(configPath,
+                                       jlong self,
+                                       WCDBJNIObjectOrStringParameter(path));
+void WCDBJNIStatementAttachClassMethod(configSchema,
+                                       jlong self,
+                                       WCDBJNIObjectOrStringParameter(schema));
+void WCDBJNIStatementAttachClassMethod(configKey, jlong self, WCDBJNIObjectOrStringParameter(key));

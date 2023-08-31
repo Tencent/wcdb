@@ -29,15 +29,15 @@ jlong WCDBJNIStatementAnalyzeClassMethodWithNoArg(createCppObj)
     return (jlong) WCDBStatementAnalyzeCreate().innerValue;
 }
 
-void WCDBJNIStatementAnalyzeObjectMethod(toAnalyze, jlong analyze)
+void WCDBJNIStatementAnalyzeClassMethod(toAnalyze, jlong analyze)
 {
     WCDBJNIBridgeStruct(CPPStatementAnalyze, analyze);
     WCDBStatementAnalyzeToAnalyze(analyzeStruct);
 }
 
-void WCDBJNIStatementAnalyzeObjectMethod(configSchema,
-                                         jlong analyze,
-                                         WCDBJNIObjectOrStringParameter(schema))
+void WCDBJNIStatementAnalyzeClassMethod(configSchema,
+                                        jlong analyze,
+                                        WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementAnalyze, analyze);
     WCDBJNICreateObjectOrStringCommonValue(schema, true);
@@ -45,7 +45,7 @@ void WCDBJNIStatementAnalyzeObjectMethod(configSchema,
     WCDBJNITryReleaseStringInCommonValue(schema);
 }
 
-void WCDBJNIStatementAnalyzeObjectMethod(configTable, jlong analyze, jstring table)
+void WCDBJNIStatementAnalyzeClassMethod(configTable, jlong analyze, jstring table)
 {
     WCDBJNIBridgeStruct(CPPStatementAnalyze, analyze);
     WCDBJNIGetStringCritical(table);
@@ -53,7 +53,7 @@ void WCDBJNIStatementAnalyzeObjectMethod(configTable, jlong analyze, jstring tab
     WCDBJNIReleaseStringCritical(table);
 }
 
-void WCDBJNIStatementAnalyzeObjectMethod(configIndex, jlong analyze, jstring index)
+void WCDBJNIStatementAnalyzeClassMethod(configIndex, jlong analyze, jstring index)
 {
     WCDBJNIBridgeStruct(CPPStatementAnalyze, analyze);
     WCDBJNIGetStringCritical(index);

@@ -24,7 +24,7 @@
 #include "CoreJNI.h"
 #include "CoreBridge.h"
 
-jlong WCDBJNICoreObjectMethod(createDatabase, jstring path)
+jlong WCDBJNICoreClassMethod(createDatabase, jstring path)
 {
     WCDBJNIGetString(path);
     jlong ret = (jlong) WCDBCoreCreateDatabase(pathString).innerValue;

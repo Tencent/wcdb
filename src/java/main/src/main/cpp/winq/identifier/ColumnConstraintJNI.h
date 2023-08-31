@@ -34,28 +34,28 @@
 #define WCDBJNIColumnConstraintClassMethod(funcName, ...)                      \
     WCDBJNIClassMethod(ColumnConstraint, funcName, __VA_ARGS__)
 
-jlong WCDBJNIColumnConstraintObjectMethod(create, jstring name);
+jlong WCDBJNIColumnConstraintClassMethod(create, jstring name);
 
-void WCDBJNIColumnConstraintObjectMethod(configPrimaryKey, jlong constraint);
+void WCDBJNIColumnConstraintClassMethod(configPrimaryKey, jlong constraint);
 
-void WCDBJNIColumnConstraintObjectMethod(configOrder, jlong constraint, jint order);
+void WCDBJNIColumnConstraintClassMethod(configOrder, jlong constraint, jint order);
 
-void WCDBJNIColumnConstraintObjectMethod(configConflictAction, jlong constraint, jint conflictAction);
+void WCDBJNIColumnConstraintClassMethod(configConflictAction, jlong constraint, jint conflictAction);
 
-void WCDBJNIColumnConstraintObjectMethod(configAutoIncrement, jlong constraint);
+void WCDBJNIColumnConstraintClassMethod(configAutoIncrement, jlong constraint);
 
-void WCDBJNIColumnConstraintObjectMethod(configNotNull, jlong constraint);
+void WCDBJNIColumnConstraintClassMethod(configNotNull, jlong constraint);
 
-void WCDBJNIColumnConstraintObjectMethod(configUnique, jlong constraint);
+void WCDBJNIColumnConstraintClassMethod(configUnique, jlong constraint);
 
-void WCDBJNIColumnConstraintObjectMethod(configCheck, jlong constraint, jlong expression);
+void WCDBJNIColumnConstraintClassMethod(configCheck, jlong constraint, jlong expression);
 
-void WCDBJNIColumnConstraintObjectMethod(configDefaultValue,
-                                         jlong constraint,
-                                         WCDBJNICommonValueParameter(value));
+void WCDBJNIColumnConstraintClassMethod(configDefaultValue,
+                                        jlong constraint,
+                                        WCDBJNICommonValueParameter(value));
 
-void WCDBJNIColumnConstraintObjectMethod(configCollation, jlong constraint, jstring collation);
+void WCDBJNIColumnConstraintClassMethod(configCollation, jlong constraint, jstring collation);
 
-void WCDBJNIColumnConstraintObjectMethod(configForeignKey, jlong constraint, jlong foreignKey);
+void WCDBJNIColumnConstraintClassMethod(configForeignKey, jlong constraint, jlong foreignKey);
 
-void WCDBJNIColumnConstraintObjectMethod(configUnindexed, jlong constraint);
+void WCDBJNIColumnConstraintClassMethod(configUnindexed, jlong constraint);

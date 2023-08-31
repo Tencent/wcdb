@@ -34,9 +34,9 @@
     WCDBJNIClassMethod(StatementAnalyze, funcName, __VA_ARGS__)
 
 jlong WCDBJNIStatementAnalyzeClassMethodWithNoArg(createCppObj);
-void WCDBJNIStatementAnalyzeObjectMethod(toAnalyze, jlong analyze);
-void WCDBJNIStatementAnalyzeObjectMethod(configSchema,
-                                         jlong analyze,
-                                         WCDBJNIObjectOrStringParameter(schema));
-void WCDBJNIStatementAnalyzeObjectMethod(configTable, jlong analyze, jstring table);
-void WCDBJNIStatementAnalyzeObjectMethod(configIndex, jlong analyze, jstring index);
+void WCDBJNIStatementAnalyzeClassMethod(toAnalyze, jlong analyze);
+void WCDBJNIStatementAnalyzeClassMethod(configSchema,
+                                        jlong analyze,
+                                        WCDBJNIObjectOrStringParameter(schema));
+void WCDBJNIStatementAnalyzeClassMethod(configTable, jlong analyze, jstring table);
+void WCDBJNIStatementAnalyzeClassMethod(configIndex, jlong analyze, jstring index);

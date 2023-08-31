@@ -33,8 +33,10 @@
     WCDBJNIObjectMethodWithNoArg(StatementVacuum, funcName)
 #define WCDBJNIStatementVacuumClassMethodWithNoArg(funcName)                   \
     WCDBJNIClassMethodWithNoArg(StatementVacuum, funcName)
+#define WCDBJNIStatementVacuumClassMethod(funcName, ...)                       \
+    WCDBJNIClassMethod(StatementVacuum, funcName, __VA_ARGS__)
 
-jlong WCDBJNIStatementVacuumObjectMethodWithNoArg(createCppObj);
-void WCDBJNIStatementVacuumObjectMethod(configSchema,
-                                        jlong self,
-                                        WCDBJNIObjectOrStringParameter(schema));
+jlong WCDBJNIStatementVacuumClassMethodWithNoArg(createCppObj);
+void WCDBJNIStatementVacuumClassMethod(configSchema,
+                                       jlong self,
+                                       WCDBJNIObjectOrStringParameter(schema));

@@ -38,7 +38,7 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
         cppObj = createCppObj(Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
     }
 
-    private native long createCppObj(int type, long object, String tableName);
+    private static native long createCppObj(int type, long object, String tableName);
 
     public Join with(String tableName) {
         configWith(cppObj, CPPType.String.ordinal(), 0, tableName);
@@ -50,7 +50,7 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
         return this;
     }
 
-    private native void configWith(long self, int type, long object, String tableName);
+    private static native void configWith(long self, int type, long object, String tableName);
 
     public Join join(String tableName) {
         configJoin(cppObj, CPPType.String.ordinal(), 0, tableName);
@@ -62,7 +62,7 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
         return this;
     }
 
-    private native void configJoin(long self, int type, long object, String tableName);
+    private static native void configJoin(long self, int type, long object, String tableName);
 
     public Join leftOuterJoin(String tableName) {
         configWithLeftOuterJoin(cppObj, CPPType.String.ordinal(), 0, tableName);
@@ -74,7 +74,7 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
         return this;
     }
 
-    private native void configWithLeftOuterJoin(long self, int type, long object, String tableName);
+    private static native void configWithLeftOuterJoin(long self, int type, long object, String tableName);
 
     public Join leftJoin(String tableName) {
         configWithLeftJoin(cppObj, CPPType.String.ordinal(), 0, tableName);
@@ -86,7 +86,7 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
         return this;
     }
 
-    private native void configWithLeftJoin(long self, int type, long object, String tableName);
+    private static native void configWithLeftJoin(long self, int type, long object, String tableName);
 
     public Join innerJoin(String tableName) {
         configWithInnerJoin(cppObj, CPPType.String.ordinal(), 0, tableName);
@@ -98,7 +98,7 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
         return this;
     }
 
-    private native void configWithInnerJoin(long self, int type, long object, String tableName);
+    private static native void configWithInnerJoin(long self, int type, long object, String tableName);
 
     public Join crossJoin(String tableName) {
         configWithCrossJoin(cppObj, CPPType.String.ordinal(), 0, tableName);
@@ -110,7 +110,7 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
         return this;
     }
 
-    private native void configWithCrossJoin(long self, int type, long object, String tableName);
+    private static native void configWithCrossJoin(long self, int type, long object, String tableName);
 
     public Join naturalJoin(String tableName) {
         configWithNaturalJoin(cppObj, CPPType.String.ordinal(), 0, tableName);
@@ -122,7 +122,7 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
         return this;
     }
 
-    private native void configWithNaturalJoin(long self, int type, long object, String tableName);
+    private static native void configWithNaturalJoin(long self, int type, long object, String tableName);
 
     public Join naturalLeftOuterJoin(String tableName) {
         configWithNaturalLeftOuterJoin(cppObj, CPPType.String.ordinal(), 0, tableName);
@@ -134,7 +134,7 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
         return this;
     }
 
-    private native void configWithNaturalLeftOuterJoin(long self, int type, long object, String tableName);
+    private static native void configWithNaturalLeftOuterJoin(long self, int type, long object, String tableName);
 
     public Join naturalLeftJoin(String tableName) {
         configWithNaturalLeftJoin(cppObj, CPPType.String.ordinal(), 0, tableName);
@@ -146,7 +146,7 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
         return this;
     }
 
-    private native void configWithNaturalLeftJoin(long self, int type, long object, String tableName);
+    private static native void configWithNaturalLeftJoin(long self, int type, long object, String tableName);
 
     public Join naturalInnerJoin(String tableName) {
         configWithNaturalInnerJoin(cppObj, CPPType.String.ordinal(), 0, tableName);
@@ -158,7 +158,7 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
         return this;
     }
 
-    private native void configWithNaturalInnerJoin(long self, int type, long object, String tableName);
+    private static native void configWithNaturalInnerJoin(long self, int type, long object, String tableName);
 
     public Join naturalCrossJoin(String tableName) {
         configWithNaturalCrossJoin(cppObj, CPPType.String.ordinal(), 0, tableName);
@@ -170,14 +170,14 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
         return this;
     }
 
-    private native void configWithNaturalCrossJoin(long self, int type, long object, String tableName);
+    private static native void configWithNaturalCrossJoin(long self, int type, long object, String tableName);
 
     public Join on(Expression expression) {
         configOn(cppObj, CppObject.get(expression));
         return this;
     }
 
-    private native void configOn(long self, long expression);
+    private static native void configOn(long self, long expression);
 
     public Join using(String column) {
         configUsingColumn(cppObj, CPPType.String.ordinal(), null, new String[]{column});
@@ -206,5 +206,5 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
         return this;
     }
 
-    private native void configUsingColumn(long self, int type, long[] columns, String[] columnNames);
+    private static native void configUsingColumn(long self, int type, long[] columns, String[] columnNames);
 }

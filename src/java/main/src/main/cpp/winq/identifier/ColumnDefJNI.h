@@ -30,7 +30,9 @@
     WCDBJNIObjectMethod(ColumnDef, funcName, __VA_ARGS__)
 #define WCDBJNIColumnDefClassMethodWithNoArg(funcName)                         \
     WCDBJNIClassMethodWithNoArg(ColumnDef, funcName)
+#define WCDBJNIColumnDefClassMethod(funcName, ...)                             \
+    WCDBJNIClassMethod(ColumnDef, funcName, __VA_ARGS__)
 
-jlong WCDBJNIColumnDefObjectMethod(create, WCDBJNIObjectOrStringParameter(column), jint columnType);
+jlong WCDBJNIColumnDefClassMethod(create, WCDBJNIObjectOrStringParameter(column), jint columnType);
 
-void WCDBJNIColumnDefObjectMethod(configConstraint, jlong columnDef, jlong constraint);
+void WCDBJNIColumnDefClassMethod(configConstraint, jlong columnDef, jlong constraint);

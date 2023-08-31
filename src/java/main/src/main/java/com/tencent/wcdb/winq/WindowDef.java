@@ -78,7 +78,7 @@ public class WindowDef extends Identifier {
         return this;
     }
 
-    private native void configPartitions(long self, int[] types, long[] columns, double[] unused, String[] columnNames);
+    private static native void configPartitions(long self, int[] types, long[] columns, double[] unused, String[] columnNames);
 
     public WindowDef orderBy(OrderingTerm order) {
         configOrders(cppObj, new long[]{CppObject.get(order)});
@@ -97,12 +97,12 @@ public class WindowDef extends Identifier {
         return this;
     }
 
-    private native void configOrders(long self, long[] orders);
+    private static native void configOrders(long self, long[] orders);
 
     public WindowDef frameSpec(FrameSpec frameSpec) {
         configFrameSpec(cppObj, CppObject.get(frameSpec));
         return this;
     }
 
-    private native void configFrameSpec(long self, long frameSpec);
+    private static native void configFrameSpec(long self, long frameSpec);
 }

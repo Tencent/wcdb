@@ -34,15 +34,15 @@
     WCDBJNIClassMethod(StatementAlterTable, funcName, __VA_ARGS__)
 
 jlong WCDBJNIStatementAlterTableClassMethodWithNoArg(createCppObj);
-void WCDBJNIStatementAlterTableObjectMethod(configTable, jlong self, jstring table);
-void WCDBJNIStatementAlterTableObjectMethod(configSchema,
-                                            jlong self,
-                                            WCDBJNIObjectOrStringParameter(schema));
-void WCDBJNIStatementAlterTableObjectMethod(configRenameToTable, jlong self, jstring table);
-void WCDBJNIStatementAlterTableObjectMethod(configRenameColumn,
-                                            jlong self,
-                                            WCDBJNIObjectOrStringParameter(column));
-void WCDBJNIStatementAlterTableObjectMethod(configRenameToColumn,
-                                            jlong self,
-                                            WCDBJNIObjectOrStringParameter(column));
-void WCDBJNIStatementAlterTableObjectMethod(configAddColumn, jlong self, jlong columnDef);
+void WCDBJNIStatementAlterTableClassMethod(configTable, jlong self, jstring table);
+void WCDBJNIStatementAlterTableClassMethod(configSchema,
+                                           jlong self,
+                                           WCDBJNIObjectOrStringParameter(schema));
+void WCDBJNIStatementAlterTableClassMethod(configRenameToTable, jlong self, jstring table);
+void WCDBJNIStatementAlterTableClassMethod(configRenameColumn,
+                                           jlong self,
+                                           WCDBJNIObjectOrStringParameter(column));
+void WCDBJNIStatementAlterTableClassMethod(configRenameToColumn,
+                                           jlong self,
+                                           WCDBJNIObjectOrStringParameter(column));
+void WCDBJNIStatementAlterTableClassMethod(configAddColumn, jlong self, jlong columnDef);

@@ -33,18 +33,20 @@
     WCDBJNIObjectMethodWithNoArg(StatementDelete, funcName)
 #define WCDBJNIStatementDeleteClassMethodWithNoArg(funcName)                   \
     WCDBJNIClassMethodWithNoArg(StatementDelete, funcName)
+#define WCDBJNIStatementDeleteClassMethod(funcName, ...)                       \
+    WCDBJNIClassMethod(StatementDelete, funcName, __VA_ARGS__)
 
-jlong WCDBJNIStatementDeleteObjectMethodWithNoArg(create);
+jlong WCDBJNIStatementDeleteClassMethodWithNoArg(create);
 
-void WCDBJNIStatementDeleteObjectMethod(configWith, jlong self, jlongArray expressions);
-void WCDBJNIStatementDeleteObjectMethod(configRecursive, jlong self);
+void WCDBJNIStatementDeleteClassMethod(configWith, jlong self, jlongArray expressions);
+void WCDBJNIStatementDeleteClassMethod(configRecursive, jlong self);
 
-void WCDBJNIStatementDeleteObjectMethod(configTable,
-                                        jlong self,
-                                        WCDBJNIObjectOrStringParameter(table));
-void WCDBJNIStatementDeleteObjectMethod(configCondition, jlong self, jlong condition);
-void WCDBJNIStatementDeleteObjectMethod(configOrders, jlong self, jlongArray orders);
-void WCDBJNIStatementDeleteObjectMethod(
+void WCDBJNIStatementDeleteClassMethod(configTable,
+                                       jlong self,
+                                       WCDBJNIObjectOrStringParameter(table));
+void WCDBJNIStatementDeleteClassMethod(configCondition, jlong self, jlong condition);
+void WCDBJNIStatementDeleteClassMethod(configOrders, jlong self, jlongArray orders);
+void WCDBJNIStatementDeleteClassMethod(
 configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to);
-void WCDBJNIStatementDeleteObjectMethod(configLimitCount, jlong self, jint type, jlong limit);
-void WCDBJNIStatementDeleteObjectMethod(configOffset, jlong self, jint type, jlong offset);
+void WCDBJNIStatementDeleteClassMethod(configLimitCount, jlong self, jint type, jlong limit);
+void WCDBJNIStatementDeleteClassMethod(configOffset, jlong self, jint type, jlong offset);

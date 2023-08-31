@@ -113,6 +113,6 @@ public class Identifier extends CppObject implements IdentifierConvertible {
         return getDescription(cppObj);
     }
 
-    native boolean isWriteStatement(long obj);
-    private native String getDescription(long obj);
+    static native boolean isWriteStatement(long obj);
+    private static native String getDescription(long obj);
 }

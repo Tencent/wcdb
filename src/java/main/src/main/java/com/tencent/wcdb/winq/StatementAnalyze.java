@@ -42,7 +42,7 @@ public class StatementAnalyze extends Statement {
         return this;
     }
 
-    private native void configToAnalyze(long self);
+    private static native void configToAnalyze(long self);
 
     public StatementAnalyze schema(String schemaName) {
         configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
@@ -54,19 +54,19 @@ public class StatementAnalyze extends Statement {
         return this;
     }
 
-    private native void configSchema(long self, int type, long object, String schemaName);
+    private static native void configSchema(long self, int type, long object, String schemaName);
 
     public StatementAnalyze table(String tableName) {
         configTable(cppObj, tableName);
         return this;
     }
 
-    private native void configTable(long self, String tableName);
+    private static native void configTable(long self, String tableName);
 
     public StatementAnalyze index(String indexName) {
         configIndex(cppObj, indexName);
         return this;
     }
 
-    private native void configIndex(long self, String indexName);
+    private static native void configIndex(long self, String indexName);
 }

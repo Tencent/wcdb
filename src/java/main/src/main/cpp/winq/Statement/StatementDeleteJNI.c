@@ -24,12 +24,12 @@
 #include "StatementDeleteJNI.h"
 #include "StatementDeleteBridge.h"
 
-jlong WCDBJNIStatementDeleteObjectMethodWithNoArg(create)
+jlong WCDBJNIStatementDeleteClassMethodWithNoArg(create)
 {
     return (jlong) WCDBStatementDeleteCreate().innerValue;
 }
 
-void WCDBJNIStatementDeleteObjectMethod(configWith, jlong self, jlongArray expressions)
+void WCDBJNIStatementDeleteClassMethod(configWith, jlong self, jlongArray expressions)
 {
     WCDBJNIBridgeStruct(CPPStatementDelete, self);
     WCDBJNIGetCppPointerArrayCritical(expressions);
@@ -38,13 +38,13 @@ void WCDBJNIStatementDeleteObjectMethod(configWith, jlong self, jlongArray expre
     WCDBJNIReleaseCppPointerArrayCritical(expressions);
 }
 
-void WCDBJNIStatementDeleteObjectMethod(configRecursive, jlong self)
+void WCDBJNIStatementDeleteClassMethod(configRecursive, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementDelete, self);
     WCDBStatementDeleteConfigRecursive(selfStruct);
 }
 
-void WCDBJNIStatementDeleteObjectMethod(configTable, jlong self, WCDBJNIObjectOrStringParameter(table))
+void WCDBJNIStatementDeleteClassMethod(configTable, jlong self, WCDBJNIObjectOrStringParameter(table))
 {
     WCDBJNIBridgeStruct(CPPStatementDelete, self);
     WCDBJNICreateObjectOrStringCommonValue(table, true);
@@ -52,14 +52,14 @@ void WCDBJNIStatementDeleteObjectMethod(configTable, jlong self, WCDBJNIObjectOr
     WCDBJNITryReleaseStringInCommonValue(table);
 }
 
-void WCDBJNIStatementDeleteObjectMethod(configCondition, jlong self, jlong condition)
+void WCDBJNIStatementDeleteClassMethod(configCondition, jlong self, jlong condition)
 {
     WCDBJNIBridgeStruct(CPPStatementDelete, self);
     WCDBJNIBridgeStruct(CPPExpression, condition);
     WCDBStatementDeleteConfigWhere(selfStruct, conditionStruct);
 }
 
-void WCDBJNIStatementDeleteObjectMethod(configOrders, jlong self, jlongArray orders)
+void WCDBJNIStatementDeleteClassMethod(configOrders, jlong self, jlongArray orders)
 {
     WCDBJNIBridgeStruct(CPPStatementDelete, self);
     WCDBJNIGetCppPointerArrayCritical(orders);
@@ -68,7 +68,7 @@ void WCDBJNIStatementDeleteObjectMethod(configOrders, jlong self, jlongArray ord
     WCDBJNIReleaseCppPointerArrayCritical(orders);
 }
 
-void WCDBJNIStatementDeleteObjectMethod(
+void WCDBJNIStatementDeleteClassMethod(
 configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to)
 {
     WCDBJNIBridgeStruct(CPPStatementDelete, self);
@@ -81,7 +81,7 @@ configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to)
     WCDBStatementDeleteConfigLimitRange2(selfStruct, from_common, to_common);
 }
 
-void WCDBJNIStatementDeleteObjectMethod(configLimitCount, jlong self, jint type, jlong limit)
+void WCDBJNIStatementDeleteClassMethod(configLimitCount, jlong self, jint type, jlong limit)
 {
     WCDBJNIBridgeStruct(CPPStatementDelete, self);
     CPPCommonValue limit_common;
@@ -90,7 +90,7 @@ void WCDBJNIStatementDeleteObjectMethod(configLimitCount, jlong self, jint type,
     WCDBStatementDeleteConfigLimitCount2(selfStruct, limit_common);
 }
 
-void WCDBJNIStatementDeleteObjectMethod(configOffset, jlong self, jint type, jlong offset)
+void WCDBJNIStatementDeleteClassMethod(configOffset, jlong self, jint type, jlong offset)
 {
     WCDBJNIBridgeStruct(CPPStatementDelete, self);
     CPPCommonValue offset_common;

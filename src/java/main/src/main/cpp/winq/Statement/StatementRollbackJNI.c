@@ -24,12 +24,12 @@
 #include "StatementRollbackJNI.h"
 #include "StatementRollbackBridge.h"
 
-jlong WCDBJNIStatementRollbackObjectMethodWithNoArg(createCppObj)
+jlong WCDBJNIStatementRollbackClassMethodWithNoArg(createCppObj)
 {
     return (jlong) WCDBStatementRollbackCreate().innerValue;
 }
 
-void WCDBJNIStatementRollbackObjectMethod(configSavepoint, jlong self, jstring savepoint)
+void WCDBJNIStatementRollbackClassMethod(configSavepoint, jlong self, jstring savepoint)
 {
     WCDBJNIBridgeStruct(CPPStatementRollback, self);
     WCDBJNIGetStringCritical(savepoint);

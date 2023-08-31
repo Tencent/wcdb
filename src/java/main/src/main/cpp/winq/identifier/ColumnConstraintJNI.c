@@ -24,7 +24,7 @@
 #include "ColumnConstraintJNI.h"
 #include "ColumnConstraintBridge.h"
 
-jlong WCDBJNIColumnConstraintObjectMethod(create, jstring name)
+jlong WCDBJNIColumnConstraintClassMethod(create, jstring name)
 {
     WCDBJNIGetStringCritical(name);
     jlong ret = (jlong) WCDBColumnConstraintCreate(nameString).innerValue;
@@ -32,52 +32,52 @@ jlong WCDBJNIColumnConstraintObjectMethod(create, jstring name)
     return ret;
 }
 
-void WCDBJNIColumnConstraintObjectMethod(configPrimaryKey, jlong constraint)
+void WCDBJNIColumnConstraintClassMethod(configPrimaryKey, jlong constraint)
 {
     WCDBJNIBridgeStruct(CPPColumnConstraint, constraint);
     WCDBColumnConstraintConfigPrimaryKey(constraintStruct);
 }
 
-void WCDBJNIColumnConstraintObjectMethod(configOrder, jlong constraint, jint order)
+void WCDBJNIColumnConstraintClassMethod(configOrder, jlong constraint, jint order)
 {
     WCDBJNIBridgeStruct(CPPColumnConstraint, constraint);
     WCDBColumnConstraintConfigOrder(constraintStruct, order);
 }
 
-void WCDBJNIColumnConstraintObjectMethod(configConflictAction, jlong constraint, jint conflictAction)
+void WCDBJNIColumnConstraintClassMethod(configConflictAction, jlong constraint, jint conflictAction)
 {
     WCDBJNIBridgeStruct(CPPColumnConstraint, constraint);
     WCDBColumnConstraintConfigCoflictAction(constraintStruct, conflictAction);
 }
 
-void WCDBJNIColumnConstraintObjectMethod(configAutoIncrement, jlong constraint)
+void WCDBJNIColumnConstraintClassMethod(configAutoIncrement, jlong constraint)
 {
     WCDBJNIBridgeStruct(CPPColumnConstraint, constraint);
     WCDBColumnConstraintConfigAutoIncrement(constraintStruct);
 }
 
-void WCDBJNIColumnConstraintObjectMethod(configNotNull, jlong constraint)
+void WCDBJNIColumnConstraintClassMethod(configNotNull, jlong constraint)
 {
     WCDBJNIBridgeStruct(CPPColumnConstraint, constraint);
     WCDBColumnConstraintConfigNotNull(constraintStruct);
 }
 
-void WCDBJNIColumnConstraintObjectMethod(configUnique, jlong constraint)
+void WCDBJNIColumnConstraintClassMethod(configUnique, jlong constraint)
 {
     WCDBJNIBridgeStruct(CPPColumnConstraint, constraint);
     WCDBColumnConstraintConfigUnique(constraintStruct);
 }
 
-void WCDBJNIColumnConstraintObjectMethod(configCheck, jlong constraint, jlong expression)
+void WCDBJNIColumnConstraintClassMethod(configCheck, jlong constraint, jlong expression)
 {
     WCDBJNIBridgeStruct(CPPColumnConstraint, constraint);
     WCDBJNIBridgeStruct(CPPExpression, expression);
     WCDBColumnConstraintConfigCheck(constraintStruct, expressionStruct);
 }
 
-void WCDBJNIColumnConstraintObjectMethod(configDefaultValue,
-                                         jlong constraint,
-                                         WCDBJNICommonValueParameter(value))
+void WCDBJNIColumnConstraintClassMethod(configDefaultValue,
+                                        jlong constraint,
+                                        WCDBJNICommonValueParameter(value))
 {
     WCDBJNIBridgeStruct(CPPColumnConstraint, constraint);
     WCDBJNICreateCommonValue(value, true);
@@ -85,7 +85,7 @@ void WCDBJNIColumnConstraintObjectMethod(configDefaultValue,
     WCDBJNITryReleaseStringInCommonValue(value);
 }
 
-void WCDBJNIColumnConstraintObjectMethod(configCollation, jlong constraint, jstring collation)
+void WCDBJNIColumnConstraintClassMethod(configCollation, jlong constraint, jstring collation)
 {
     WCDBJNIBridgeStruct(CPPColumnConstraint, constraint);
     WCDBJNIGetStringCritical(collation);
@@ -93,14 +93,14 @@ void WCDBJNIColumnConstraintObjectMethod(configCollation, jlong constraint, jstr
     WCDBJNIReleaseStringCritical(collation);
 }
 
-void WCDBJNIColumnConstraintObjectMethod(configForeignKey, jlong constraint, jlong foreignKey)
+void WCDBJNIColumnConstraintClassMethod(configForeignKey, jlong constraint, jlong foreignKey)
 {
     WCDBJNIBridgeStruct(CPPColumnConstraint, constraint);
     WCDBJNIBridgeStruct(CPPForeignKey, foreignKey);
     WCDBColumnConstraintConfigForeignKey(constraintStruct, foreignKeyStruct);
 }
 
-void WCDBJNIColumnConstraintObjectMethod(configUnindexed, jlong constraint)
+void WCDBJNIColumnConstraintClassMethod(configUnindexed, jlong constraint)
 {
     WCDBJNIBridgeStruct(CPPColumnConstraint, constraint);
     WCDBColumnConstraintConfigUnIndexed(constraintStruct);

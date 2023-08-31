@@ -34,10 +34,10 @@
 #define WCDBJNIQualifiedTableClassMethod(funcName, ...)                        \
     WCDBJNIClassMethod(QualifiedTable, funcName, __VA_ARGS__)
 
-jlong WCDBJNIQualifiedTableObjectMethod(create, jstring tableName);
-void WCDBJNIQualifiedTableObjectMethod(configSchema,
-                                       jlong self,
-                                       WCDBJNIObjectOrStringParameter(schema));
-void WCDBJNIQualifiedTableObjectMethod(configAlias, jlong self, jstring alias);
-void WCDBJNIQualifiedTableObjectMethod(configIndex, jlong self, jstring index);
-void WCDBJNIQualifiedTableObjectMethod(configNotIndexed, jlong self);
+jlong WCDBJNIQualifiedTableClassMethod(create, jstring tableName);
+void WCDBJNIQualifiedTableClassMethod(configSchema,
+                                      jlong self,
+                                      WCDBJNIObjectOrStringParameter(schema));
+void WCDBJNIQualifiedTableClassMethod(configAlias, jlong self, jstring alias);
+void WCDBJNIQualifiedTableClassMethod(configIndex, jlong self, jstring index);
+void WCDBJNIQualifiedTableClassMethod(configNotIndexed, jlong self);

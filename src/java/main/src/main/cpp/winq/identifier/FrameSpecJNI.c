@@ -29,94 +29,94 @@ jlong WCDBJNIFrameSpecClassMethodWithNoArg(createCppObj)
     return (jlong) WCDBFrameSpecCreate().innerValue;
 }
 
-void WCDBJNIFrameSpecObjectMethod(configRange, jlong self)
+void WCDBJNIFrameSpecClassMethod(configRange, jlong self)
 {
     WCDBJNIBridgeStruct(CPPFrameSpec, self);
     WCDBFrameSpecConfigRange(selfStruct);
 }
 
-void WCDBJNIFrameSpecObjectMethod(configRows, jlong self)
+void WCDBJNIFrameSpecClassMethod(configRows, jlong self)
 {
     WCDBJNIBridgeStruct(CPPFrameSpec, self);
     WCDBFrameSpecConfigRows(selfStruct);
 }
 
-void WCDBJNIFrameSpecObjectMethod(configUnboundedPreceding, jlong self)
+void WCDBJNIFrameSpecClassMethod(configUnboundedPreceding, jlong self)
 {
     WCDBJNIBridgeStruct(CPPFrameSpec, self);
     WCDBFrameSpecConfigUnboundedPreceding(selfStruct);
 }
 
-void WCDBJNIFrameSpecObjectMethod(configPreceding,
-                                  jlong self,
-                                  WCDBJNIObjectOrIntegerParameter(expression))
+void WCDBJNIFrameSpecClassMethod(configPreceding,
+                                 jlong self,
+                                 WCDBJNIObjectOrIntegerParameter(expression))
 {
     WCDBJNIBridgeStruct(CPPFrameSpec, self);
     WCDBJNICreateObjectOrIntegerCommonValue(expression);
     WCDBFrameSpecConfigPreceding2(selfStruct, expression_common);
 }
 
-void WCDBJNIFrameSpecObjectMethod(configCurrentRow, jlong self)
+void WCDBJNIFrameSpecClassMethod(configCurrentRow, jlong self)
 {
     WCDBJNIBridgeStruct(CPPFrameSpec, self);
     WCDBFrameSpecConfigCurrentRow(selfStruct);
 }
 
-void WCDBJNIFrameSpecObjectMethod(configBetweenUnboundedPreceding, jlong self)
+void WCDBJNIFrameSpecClassMethod(configBetweenUnboundedPreceding, jlong self)
 {
     WCDBJNIBridgeStruct(CPPFrameSpec, self);
     WCDBFrameSpecConfigBetweenUnboundedPreceding(selfStruct);
 }
 
-void WCDBJNIFrameSpecObjectMethod(configBetweenPreceding,
-                                  jlong self,
-                                  WCDBJNIObjectOrIntegerParameter(expression))
+void WCDBJNIFrameSpecClassMethod(configBetweenPreceding,
+                                 jlong self,
+                                 WCDBJNIObjectOrIntegerParameter(expression))
 {
     WCDBJNIBridgeStruct(CPPFrameSpec, self);
     WCDBJNICreateObjectOrIntegerCommonValue(expression);
     WCDBFrameSpecConfigBetweenPreceding2(selfStruct, expression_common);
 }
 
-void WCDBJNIFrameSpecObjectMethod(configBetweenCurrentRow, jlong self)
+void WCDBJNIFrameSpecClassMethod(configBetweenCurrentRow, jlong self)
 {
     WCDBJNIBridgeStruct(CPPFrameSpec, self);
     WCDBFrameSpecConfigBetweenCurrentRow(selfStruct);
 }
 
-void WCDBJNIFrameSpecObjectMethod(configBetweenFollowing,
-                                  jlong self,
-                                  WCDBJNIObjectOrIntegerParameter(expression))
+void WCDBJNIFrameSpecClassMethod(configBetweenFollowing,
+                                 jlong self,
+                                 WCDBJNIObjectOrIntegerParameter(expression))
 {
     WCDBJNIBridgeStruct(CPPFrameSpec, self);
     WCDBJNICreateObjectOrIntegerCommonValue(expression);
     WCDBFrameSpecConfigBetweenFollowing2(selfStruct, expression_common);
 }
 
-void WCDBJNIFrameSpecObjectMethod(configAndPreceding,
-                                  jlong self,
-                                  WCDBJNIObjectOrIntegerParameter(expression))
+void WCDBJNIFrameSpecClassMethod(configAndPreceding,
+                                 jlong self,
+                                 WCDBJNIObjectOrIntegerParameter(expression))
 {
     WCDBJNIBridgeStruct(CPPFrameSpec, self);
     WCDBJNICreateObjectOrIntegerCommonValue(expression);
     WCDBFrameSpecConfigAndPreceding2(selfStruct, expression_common);
 }
 
-void WCDBJNIFrameSpecObjectMethod(configAndCurrentRow, jlong self)
+void WCDBJNIFrameSpecClassMethod(configAndCurrentRow, jlong self)
 {
     WCDBJNIBridgeStruct(CPPFrameSpec, self);
     WCDBFrameSpecConfigAndCurrentRow(selfStruct);
 }
 
-void WCDBJNIFrameSpecObjectMethod(configAndFollowing,
-                                  jlong self,
-                                  WCDBJNIObjectOrIntegerParameter(expression))
+void WCDBJNIFrameSpecClassMethod(configAndFollowing,
+                                 jlong self,
+                                 WCDBJNIObjectOrIntegerParameter(expression))
 {
     WCDBJNIBridgeStruct(CPPFrameSpec, self);
     WCDBJNICreateObjectOrIntegerCommonValue(expression);
     WCDBFrameSpecConfigAndFollowing2(selfStruct, expression_common);
 }
 
-void WCDBJNIFrameSpecObjectMethod(configAndUnboundedFollowing, jlong self)
+void WCDBJNIFrameSpecClassMethod(configAndUnboundedFollowing, jlong self)
 {
     WCDBJNIBridgeStruct(CPPFrameSpec, self);
     WCDBFrameSpecConfigAndUnboundedFollowing(selfStruct);

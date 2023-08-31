@@ -34,4 +34,4 @@
     WCDBJNIClassMethod(RaiseFunction, funcName, __VA_ARGS__)
 
 jlong WCDBJNIRaiseFunctionClassMethodWithNoArg(createCppObj);
-void WCDBJNIRaiseFunctionObjectMethod(setAction, jlong self, jint action, jstring errMsg);
+void WCDBJNIRaiseFunctionClassMethod(setAction, jlong self, jint action, jstring errMsg);

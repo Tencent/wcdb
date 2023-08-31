@@ -35,28 +35,28 @@ public class StatementReindex extends Statement {
         cppObj = createCppObj();
     }
 
-    private native long createCppObj();
+    private static native long createCppObj();
 
     public StatementReindex reindexCollation(String collation) {
         configCollation(cppObj, collation);
         return this;
     }
 
-    private native void configCollation(long self, String collation);
+    private static native void configCollation(long self, String collation);
 
     public StatementReindex reindexTable(String table) {
         configTable(cppObj, table);
         return this;
     }
 
-    private native void configTable(long self, String table);
+    private static native void configTable(long self, String table);
 
     public StatementReindex reindex(String index) {
         configIndex(cppObj, index);
         return this;
     }
 
-    private native void configIndex(long self, String indexName);
+    private static native void configIndex(long self, String indexName);
 
     public StatementReindex of(String schemaName) {
         configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
@@ -68,5 +68,5 @@ public class StatementReindex extends Statement {
         return this;
     }
 
-    private native void configSchema(long self, int type, long object, String path);
+    private static native void configSchema(long self, int type, long object, String path);
 }

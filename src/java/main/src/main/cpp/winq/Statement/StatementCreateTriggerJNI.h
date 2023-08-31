@@ -33,32 +33,34 @@
     WCDBJNIObjectMethodWithNoArg(StatementCreateTrigger, funcName)
 #define WCDBJNIStatementCreateTriggerClassMethodWithNoArg(funcName)            \
     WCDBJNIClassMethodWithNoArg(StatementCreateTrigger, funcName)
+#define WCDBJNIStatementCreateTriggerClassMethod(funcName, ...)                \
+    WCDBJNIClassMethod(StatementCreateTrigger, funcName, __VA_ARGS__)
 
-jlong WCDBJNIStatementCreateTriggerObjectMethodWithNoArg(createCppObj);
+jlong WCDBJNIStatementCreateTriggerClassMethodWithNoArg(createCppObj);
 
-void WCDBJNIStatementCreateTriggerObjectMethod(configTrigger, jlong self, jstring name);
-void WCDBJNIStatementCreateTriggerObjectMethod(configSchema,
-                                               jlong self,
-                                               WCDBJNIObjectOrStringParameter(schema));
-void WCDBJNIStatementCreateTriggerObjectMethod(configTemp, jlong self);
-void WCDBJNIStatementCreateTriggerObjectMethod(configIfNotExist, jlong self);
+void WCDBJNIStatementCreateTriggerClassMethod(configTrigger, jlong self, jstring name);
+void WCDBJNIStatementCreateTriggerClassMethod(configSchema,
+                                              jlong self,
+                                              WCDBJNIObjectOrStringParameter(schema));
+void WCDBJNIStatementCreateTriggerClassMethod(configTemp, jlong self);
+void WCDBJNIStatementCreateTriggerClassMethod(configIfNotExist, jlong self);
 
-void WCDBJNIStatementCreateTriggerObjectMethod(configBefore, jlong self);
-void WCDBJNIStatementCreateTriggerObjectMethod(configAfter, jlong self);
-void WCDBJNIStatementCreateTriggerObjectMethod(configInsteadOf, jlong self);
+void WCDBJNIStatementCreateTriggerClassMethod(configBefore, jlong self);
+void WCDBJNIStatementCreateTriggerClassMethod(configAfter, jlong self);
+void WCDBJNIStatementCreateTriggerClassMethod(configInsteadOf, jlong self);
 
-void WCDBJNIStatementCreateTriggerObjectMethod(configDelete, jlong self);
-void WCDBJNIStatementCreateTriggerObjectMethod(configInsert, jlong self);
-void WCDBJNIStatementCreateTriggerObjectMethod(configUpdate, jlong self);
+void WCDBJNIStatementCreateTriggerClassMethod(configDelete, jlong self);
+void WCDBJNIStatementCreateTriggerClassMethod(configInsert, jlong self);
+void WCDBJNIStatementCreateTriggerClassMethod(configUpdate, jlong self);
 
-void WCDBJNIStatementCreateTriggerObjectMethod(configColumns,
-                                               jlong self,
-                                               WCDBJNIObjectOrStringArrayParameter(columns));
-void WCDBJNIStatementCreateTriggerObjectMethod(configTable, jlong self, jstring table);
-void WCDBJNIStatementCreateTriggerObjectMethod(configForEachRow, jlong self);
-void WCDBJNIStatementCreateTriggerObjectMethod(configWhen, jlong self, jlong expression);
+void WCDBJNIStatementCreateTriggerClassMethod(configColumns,
+                                              jlong self,
+                                              WCDBJNIObjectOrStringArrayParameter(columns));
+void WCDBJNIStatementCreateTriggerClassMethod(configTable, jlong self, jstring table);
+void WCDBJNIStatementCreateTriggerClassMethod(configForEachRow, jlong self);
+void WCDBJNIStatementCreateTriggerClassMethod(configWhen, jlong self, jlong expression);
 
-void WCDBJNIStatementCreateTriggerObjectMethod(executeInsert, jlong self, jlong insert);
-void WCDBJNIStatementCreateTriggerObjectMethod(executeUpdate, jlong self, jlong update);
-void WCDBJNIStatementCreateTriggerObjectMethod(executeDelete, jlong self, jlong delete_);
-void WCDBJNIStatementCreateTriggerObjectMethod(executeSelect, jlong self, jlong select);
+void WCDBJNIStatementCreateTriggerClassMethod(executeInsert, jlong self, jlong insert);
+void WCDBJNIStatementCreateTriggerClassMethod(executeUpdate, jlong self, jlong update);
+void WCDBJNIStatementCreateTriggerClassMethod(executeDelete, jlong self, jlong delete_);
+void WCDBJNIStatementCreateTriggerClassMethod(executeSelect, jlong self, jlong select);

@@ -220,7 +220,7 @@ public class Database extends HandleORMOperation {
         tracePerformance(cppObj, tracer);
     }
 
-    private native void tracePerformance(long self, PerformanceTracer tracer);
+    private static native void tracePerformance(long self, PerformanceTracer tracer);
 
     public interface SQLTracer {
         void onTrace(long tag, String path, long handleId, String sql);
@@ -236,7 +236,7 @@ public class Database extends HandleORMOperation {
         traceSQL(cppObj, tracer);
     }
 
-    private native void traceSQL(long self, SQLTracer tracer);
+    private static native void traceSQL(long self, SQLTracer tracer);
 
     public interface ExceptionTracer {
         void onTrace(WCDBException exception);
@@ -252,7 +252,7 @@ public class Database extends HandleORMOperation {
         traceException(cppObj, tracer);
     }
 
-    private native void traceException(long self, ExceptionTracer tracer);
+    private static native void traceException(long self, ExceptionTracer tracer);
 
     public enum Operation {
         Create, SetTag, OpenHandle
@@ -310,7 +310,7 @@ public class Database extends HandleORMOperation {
         }
     }
 
-    private native boolean removeFiles(long self);
+    private static native boolean removeFiles(long self);
 
     public void moveFile(String destination) throws WCDBException{
         if(!moveFile(cppObj, destination)) {
@@ -318,7 +318,7 @@ public class Database extends HandleORMOperation {
         }
     }
 
-    private native boolean moveFile(long self, String destination);
+    private static native boolean moveFile(long self, String destination);
 
     public long getFileSize() throws WCDBException {
         long ret = getFileSize(cppObj);
@@ -328,7 +328,7 @@ public class Database extends HandleORMOperation {
         return ret;
     }
 
-    private native long getFileSize(long self);
+    private static native long getFileSize(long self);
 
     public interface CorruptionNotification {
         void onCorrupted(Database database);
@@ -344,25 +344,25 @@ public class Database extends HandleORMOperation {
         setNotificationWhenCorrupted(cppObj, monitor);
     }
 
-    private native void setNotificationWhenCorrupted(long self, CorruptionNotification monitor);
+    private static native void setNotificationWhenCorrupted(long self, CorruptionNotification monitor);
 
     public boolean checkIfCorrupted() {
         return checkIfCorrupted(cppObj);
     }
 
-    private native boolean checkIfCorrupted(long self);
+    private static native boolean checkIfCorrupted(long self);
 
     public boolean checkIfIsAlreadyCorrupted() {
         return checkIfIsAlreadyCorrupted(cppObj);
     }
 
-    private native boolean checkIfIsAlreadyCorrupted(long self);
+    private static native boolean checkIfIsAlreadyCorrupted(long self);
 
     public void enableAutoBackup(boolean enable) {
         enableAutoBackup(cppObj, enable);
     }
 
-    private native void enableAutoBackup(long self, boolean enable);
+    private static native void enableAutoBackup(long self, boolean enable);
 
     public void backup() throws WCDBException {
         if(!backup(cppObj)) {
@@ -370,7 +370,7 @@ public class Database extends HandleORMOperation {
         }
     }
 
-    private native boolean backup(long self);
+    private static native boolean backup(long self);
 
     public interface BackupFilter {
         boolean tableShouldBeBackup(String tableName);
@@ -384,7 +384,7 @@ public class Database extends HandleORMOperation {
         filterBackup(cppObj, filter);
     }
 
-    private native void filterBackup(long self, BackupFilter filter);
+    private static native void filterBackup(long self, BackupFilter filter);
 
     public interface RetrieveProgressMonitor {
         void onProgressUpdate(double percentage, double increment);
@@ -402,7 +402,7 @@ public class Database extends HandleORMOperation {
         return score;
     }
 
-    private native double retrieve(long self, RetrieveProgressMonitor monitor);
+    private static native double retrieve(long self, RetrieveProgressMonitor monitor);
 
     public void deposit() throws WCDBException {
         if(!deposit(cppObj)) {
@@ -410,7 +410,7 @@ public class Database extends HandleORMOperation {
         }
     }
 
-    private native boolean deposit(long self);
+    private static native boolean deposit(long self);
 
     public void removeDepositedFiles() throws WCDBException {
         if(!removeDepositedFiles(cppObj)) {
@@ -418,13 +418,13 @@ public class Database extends HandleORMOperation {
         }
     }
 
-    private native boolean removeDepositedFiles(long self);
+    private static native boolean removeDepositedFiles(long self);
 
     public boolean containDepositedFiles() {
         return containDepositedFiles(cppObj);
     }
 
-    private native boolean containDepositedFiles(long self);
+    private static native boolean containDepositedFiles(long self);
 
     public void passiveCheckpoint() throws WCDBException {
         if(!passiveCheckpoint(cppObj)) {
@@ -432,7 +432,7 @@ public class Database extends HandleORMOperation {
         }
     }
 
-    private native boolean passiveCheckpoint(long self);
+    private static native boolean passiveCheckpoint(long self);
 
     public void truncateCheckpoint() throws WCDBException {
         if(!truncateCheckpoint(cppObj)) {
@@ -440,7 +440,7 @@ public class Database extends HandleORMOperation {
         }
     }
 
-    private native boolean truncateCheckpoint(long self);
+    private static native boolean truncateCheckpoint(long self);
 
     public static class MigrationInfo {
         public String table;
@@ -469,7 +469,7 @@ public class Database extends HandleORMOperation {
         addMigrationSource(cppObj, sourcePath, sourceCipher, filter);
     }
 
-    private native void addMigrationSource(long self, String sourcePath, byte[] sourceCipher, MigrationFilter filter);
+    private static native void addMigrationSource(long self, String sourcePath, byte[] sourceCipher, MigrationFilter filter);
 
     public void stepMigration() throws WCDBException {
         if(!stepMigration(cppObj)) {
@@ -477,13 +477,13 @@ public class Database extends HandleORMOperation {
         }
     }
 
-    private native boolean stepMigration(long self);
+    private static native boolean stepMigration(long self);
 
     public void enableAutoMigration(boolean enable) {
         enableAutoMigration(cppObj, enable);
     }
 
-    private native void enableAutoMigration(long self, boolean enable);
+    private static native void enableAutoMigration(long self, boolean enable);
 
     public interface MigrationNotification {
         void onMigrated(Database database, MigrationInfo info);
@@ -505,13 +505,13 @@ public class Database extends HandleORMOperation {
         setNotificationWhenMigrated(cppObj, notification);
     }
 
-    private native void setNotificationWhenMigrated(long self, MigrationNotification notification);
+    private static native void setNotificationWhenMigrated(long self, MigrationNotification notification);
 
     public boolean isMigrated() {
         return isMigrated(cppObj);
     }
 
-    private native boolean isMigrated(long self);
+    private static native boolean isMigrated(long self);
 
     @Override
     boolean autoInvalidateHandle() {

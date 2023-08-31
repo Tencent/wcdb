@@ -33,32 +33,32 @@
     WCDBJNIObjectMethodWithNoArg(StatementUpdate, funcName)
 #define WCDBJNIStatementUpdateClassMethodWithNoArg(funcName)                   \
     WCDBJNIClassMethodWithNoArg(StatementUpdate, funcName)
+#define WCDBJNIStatementUpdateClassMethod(funcName, ...)                       \
+    WCDBJNIClassMethod(StatementUpdate, funcName, __VA_ARGS__)
 
-jlong WCDBJNIStatementUpdateObjectMethodWithNoArg(create);
+jlong WCDBJNIStatementUpdateClassMethodWithNoArg(create);
 
-void WCDBJNIStatementUpdateObjectMethod(configWith, jlong self, jlongArray expressions);
-void WCDBJNIStatementUpdateObjectMethod(configRecursive, jlong self);
+void WCDBJNIStatementUpdateClassMethod(configWith, jlong self, jlongArray expressions);
+void WCDBJNIStatementUpdateClassMethod(configRecursive, jlong self);
 
-void WCDBJNIStatementUpdateObjectMethod(configTable,
-                                        jlong self,
-                                        WCDBJNIObjectOrStringParameter(table));
-void WCDBJNIStatementUpdateObjectMethod(configConfliction, jlong self, jint action);
-void WCDBJNIStatementUpdateObjectMethod(configColumns,
-                                        jlong self,
-                                        WCDBJNIObjectOrStringArrayParameter(columns));
-void WCDBJNIStatementUpdateObjectMethod(configValue,
-                                        jlong self,
-                                        WCDBJNICommonValueParameter(value));
-void WCDBJNIStatementUpdateObjectMethod(configColumnsToValues,
-                                        jlong self,
-                                        WCDBJNIObjectOrStringArrayParameter(columns),
-                                        WCDBJNIMultiTypeArrayParameter(values));
-void WCDBJNIStatementUpdateObjectMethod(configColumnsWithBindParameter,
-                                        jlong self,
-                                        WCDBJNIObjectOrStringArrayParameter(columns));
-void WCDBJNIStatementUpdateObjectMethod(configCondition, jlong self, jlong condition);
-void WCDBJNIStatementUpdateObjectMethod(configOrders, jlong self, jlongArray orders);
-void WCDBJNIStatementUpdateObjectMethod(
+void WCDBJNIStatementUpdateClassMethod(configTable,
+                                       jlong self,
+                                       WCDBJNIObjectOrStringParameter(table));
+void WCDBJNIStatementUpdateClassMethod(configConfliction, jlong self, jint action);
+void WCDBJNIStatementUpdateClassMethod(configColumns,
+                                       jlong self,
+                                       WCDBJNIObjectOrStringArrayParameter(columns));
+void WCDBJNIStatementUpdateClassMethod(configValue, jlong self, WCDBJNICommonValueParameter(value));
+void WCDBJNIStatementUpdateClassMethod(configColumnsToValues,
+                                       jlong self,
+                                       WCDBJNIObjectOrStringArrayParameter(columns),
+                                       WCDBJNIMultiTypeArrayParameter(values));
+void WCDBJNIStatementUpdateClassMethod(configColumnsWithBindParameter,
+                                       jlong self,
+                                       WCDBJNIObjectOrStringArrayParameter(columns));
+void WCDBJNIStatementUpdateClassMethod(configCondition, jlong self, jlong condition);
+void WCDBJNIStatementUpdateClassMethod(configOrders, jlong self, jlongArray orders);
+void WCDBJNIStatementUpdateClassMethod(
 configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to);
-void WCDBJNIStatementUpdateObjectMethod(configLimitCount, jlong self, jint type, jlong limit);
-void WCDBJNIStatementUpdateObjectMethod(configOffset, jlong self, jint type, jlong offset);
+void WCDBJNIStatementUpdateClassMethod(configLimitCount, jlong self, jint type, jlong limit);
+void WCDBJNIStatementUpdateClassMethod(configOffset, jlong self, jint type, jlong offset);

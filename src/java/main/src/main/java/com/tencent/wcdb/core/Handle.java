@@ -193,7 +193,7 @@ public class Handle extends HandleORMOperation implements AutoCloseable {
         return ret;
     }
 
-    static native boolean runPausableTransaction(long self, PausableTransaction transaction);
+    native boolean runPausableTransaction(long self, PausableTransaction transaction);
 
     public static class CancellationSignal extends CppObject {
         public CancellationSignal() {

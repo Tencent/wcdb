@@ -33,16 +33,18 @@
     WCDBJNIObjectMethodWithNoArg(StatementCreateTable, funcName)
 #define WCDBJNIStatementCreateTableClassMethodWithNoArg(funcName)              \
     WCDBJNIClassMethodWithNoArg(StatementCreateTable, funcName)
+#define WCDBJNIStatementCreateTableClassMethod(funcName, ...)                  \
+    WCDBJNIClassMethod(StatementCreateTable, funcName, __VA_ARGS__)
 
-jlong WCDBJNIStatementCreateTableObjectMethodWithNoArg(create);
-void WCDBJNIStatementCreateTableObjectMethod(configTableName, jlong self, jstring tableName);
-void WCDBJNIStatementCreateTableObjectMethod(configSchema,
-                                             jlong self,
-                                             WCDBJNIObjectOrStringParameter(schema));
-void WCDBJNIStatementCreateTableObjectMethod(configTemp, jlong self);
-void WCDBJNIStatementCreateTableObjectMethod(configIfNotExist, jlong self);
-void WCDBJNIStatementCreateTableObjectMethod(configAs, jlong self, jlong select);
-void WCDBJNIStatementCreateTableObjectMethod(configColumn, jlong self, jlong column);
-void WCDBJNIStatementCreateTableObjectMethod(configColumns, jlong self, jlongArray columns);
-void WCDBJNIStatementCreateTableObjectMethod(configConstraints, jlong self, jlongArray constraints);
-void WCDBJNIStatementCreateTableObjectMethod(configWithoutRowid, jlong self);
+jlong WCDBJNIStatementCreateTableClassMethodWithNoArg(create);
+void WCDBJNIStatementCreateTableClassMethod(configTableName, jlong self, jstring tableName);
+void WCDBJNIStatementCreateTableClassMethod(configSchema,
+                                            jlong self,
+                                            WCDBJNIObjectOrStringParameter(schema));
+void WCDBJNIStatementCreateTableClassMethod(configTemp, jlong self);
+void WCDBJNIStatementCreateTableClassMethod(configIfNotExist, jlong self);
+void WCDBJNIStatementCreateTableClassMethod(configAs, jlong self, jlong select);
+void WCDBJNIStatementCreateTableClassMethod(configColumn, jlong self, jlong column);
+void WCDBJNIStatementCreateTableClassMethod(configColumns, jlong self, jlongArray columns);
+void WCDBJNIStatementCreateTableClassMethod(configConstraints, jlong self, jlongArray constraints);
+void WCDBJNIStatementCreateTableClassMethod(configWithoutRowid, jlong self);

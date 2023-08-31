@@ -33,16 +33,18 @@
     WCDBJNIObjectMethodWithNoArg(StatementCreateIndex, funcName)
 #define WCDBJNIStatementCreateIndexClassMethodWithNoArg(funcName)              \
     WCDBJNIClassMethodWithNoArg(StatementCreateIndex, funcName)
+#define WCDBJNIStatementCreateIndexClassMethod(funcName, ...)                  \
+    WCDBJNIClassMethod(StatementCreateIndex, funcName, __VA_ARGS__)
 
-jlong WCDBJNIStatementCreateIndexObjectMethodWithNoArg(create);
-void WCDBJNIStatementCreateIndexObjectMethod(configIndex, jlong self, jstring name);
-void WCDBJNIStatementCreateIndexObjectMethod(configSchema,
-                                             jlong self,
-                                             WCDBJNIObjectOrStringParameter(schema));
-void WCDBJNIStatementCreateIndexObjectMethod(configUnique, jlong self);
-void WCDBJNIStatementCreateIndexObjectMethod(configIfNotExist, jlong self);
-void WCDBJNIStatementCreateIndexObjectMethod(configTable, jlong self, jstring tableName);
-void WCDBJNIStatementCreateIndexObjectMethod(configIndexedColumns,
-                                             jlong self,
-                                             WCDBJNIObjectOrStringArrayParameter(indexColumns));
-void WCDBJNIStatementCreateIndexObjectMethod(configWhere, jlong self, jlong condition);
+jlong WCDBJNIStatementCreateIndexClassMethodWithNoArg(create);
+void WCDBJNIStatementCreateIndexClassMethod(configIndex, jlong self, jstring name);
+void WCDBJNIStatementCreateIndexClassMethod(configSchema,
+                                            jlong self,
+                                            WCDBJNIObjectOrStringParameter(schema));
+void WCDBJNIStatementCreateIndexClassMethod(configUnique, jlong self);
+void WCDBJNIStatementCreateIndexClassMethod(configIfNotExist, jlong self);
+void WCDBJNIStatementCreateIndexClassMethod(configTable, jlong self, jstring tableName);
+void WCDBJNIStatementCreateIndexClassMethod(configIndexedColumns,
+                                            jlong self,
+                                            WCDBJNIObjectOrStringArrayParameter(indexColumns));
+void WCDBJNIStatementCreateIndexClassMethod(configWhere, jlong self, jlong condition);

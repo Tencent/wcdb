@@ -29,7 +29,7 @@ jlong WCDBJNIForeignKeyClassMethodWithNoArg(createCppObject)
     return (jlong) WCDBForeignKeyCreate().innerValue;
 }
 
-void WCDBJNIForeignKeyObjectMethod(configReferencesTable, jlong self, jstring table)
+void WCDBJNIForeignKeyClassMethod(configReferencesTable, jlong self, jstring table)
 {
     WCDBJNIGetStringCritical(table);
     WCDBJNIBridgeStruct(CPPForeignKey, self);
@@ -37,16 +37,16 @@ void WCDBJNIForeignKeyObjectMethod(configReferencesTable, jlong self, jstring ta
     WCDBJNIReleaseStringCritical(table);
 }
 
-void WCDBJNIForeignKeyObjectMethod(configColumns,
-                                   jlong self,
-                                   WCDBJNIObjectOrStringArrayParameter(column))
+void WCDBJNIForeignKeyClassMethod(configColumns,
+                                  jlong self,
+                                  WCDBJNIObjectOrStringArrayParameter(column))
 {
     WCDBJNIBridgeStruct(CPPForeignKey, self);
     WCDBJNICreateObjectOrStringArrayCriticalWithAction(
     column, WCDBForeignKeyAddColumn2(selfStruct, column_commonArray);)
 }
 
-void WCDBJNIForeignKeyObjectMethod(configOnDeleteAction, jlong self, jint action)
+void WCDBJNIForeignKeyClassMethod(configOnDeleteAction, jlong self, jint action)
 {
     WCDBJNIBridgeStruct(CPPForeignKey, self);
     switch (action) {
@@ -68,7 +68,7 @@ void WCDBJNIForeignKeyObjectMethod(configOnDeleteAction, jlong self, jint action
     }
 }
 
-void WCDBJNIForeignKeyObjectMethod(configOnUpdateAction, jlong self, jint action)
+void WCDBJNIForeignKeyClassMethod(configOnUpdateAction, jlong self, jint action)
 {
     WCDBJNIBridgeStruct(CPPForeignKey, self);
     switch (action) {
@@ -90,13 +90,13 @@ void WCDBJNIForeignKeyObjectMethod(configOnUpdateAction, jlong self, jint action
     }
 }
 
-void WCDBJNIForeignKeyObjectMethod(configMatch, jlong self, jint match)
+void WCDBJNIForeignKeyClassMethod(configMatch, jlong self, jint match)
 {
     WCDBJNIBridgeStruct(CPPForeignKey, self);
     WCDBForeignKeyConfigMatch(selfStruct, match);
 }
 
-void WCDBJNIForeignKeyObjectMethod(configDeferrable, jlong self, jint type)
+void WCDBJNIForeignKeyClassMethod(configDeferrable, jlong self, jint type)
 {
     WCDBJNIBridgeStruct(CPPForeignKey, self);
     switch (type) {
@@ -112,7 +112,7 @@ void WCDBJNIForeignKeyObjectMethod(configDeferrable, jlong self, jint type)
     }
 }
 
-void WCDBJNIForeignKeyObjectMethod(configNotDeferrable, jlong self, jint type)
+void WCDBJNIForeignKeyClassMethod(configNotDeferrable, jlong self, jint type)
 {
     WCDBJNIBridgeStruct(CPPForeignKey, self);
     switch (type) {

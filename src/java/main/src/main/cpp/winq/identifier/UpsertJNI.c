@@ -29,44 +29,44 @@ jlong WCDBJNIUpsertClassMethodWithNoArg(createCppObj)
     return (jlong) WCDBUpsertCreate().innerValue;
 }
 
-void WCDBJNIUpsertObjectMethod(configIndexedColumn,
-                               jlong upsert,
-                               WCDBJNIObjectOrStringArrayParameter(columns))
+void WCDBJNIUpsertClassMethod(configIndexedColumn,
+                              jlong upsert,
+                              WCDBJNIObjectOrStringArrayParameter(columns))
 {
     WCDBJNIBridgeStruct(CPPUpsert, upsert);
     WCDBJNICreateObjectOrStringArrayCriticalWithAction(
     columns, WCDBUpsertConfigIndexdColumn2(upsertStruct, columns_commonArray));
 }
 
-void WCDBJNIUpsertObjectMethod(configWhere, jlong upsert, jlong expression)
+void WCDBJNIUpsertClassMethod(configWhere, jlong upsert, jlong expression)
 {
     WCDBJNIBridgeStruct(CPPUpsert, upsert);
     WCDBJNIBridgeStruct(CPPExpression, expression);
     WCDBUpsertConfigWhere(upsertStruct, expressionStruct);
 }
 
-void WCDBJNIUpsertObjectMethod(configDoNothing, jlong upsert)
+void WCDBJNIUpsertClassMethod(configDoNothing, jlong upsert)
 {
     WCDBJNIBridgeStruct(CPPUpsert, upsert);
     WCDBUpsertConfigDoNothing(upsertStruct);
 }
 
-void WCDBJNIUpsertObjectMethod(configDoUpdate, jlong upsert)
+void WCDBJNIUpsertClassMethod(configDoUpdate, jlong upsert)
 {
     WCDBJNIBridgeStruct(CPPUpsert, upsert);
     WCDBUpsertConfigDoUpdate(upsertStruct);
 }
 
-void WCDBJNIUpsertObjectMethod(configSetColumns,
-                               jlong upsert,
-                               WCDBJNIObjectOrStringArrayParameter(columns))
+void WCDBJNIUpsertClassMethod(configSetColumns,
+                              jlong upsert,
+                              WCDBJNIObjectOrStringArrayParameter(columns))
 {
     WCDBJNIBridgeStruct(CPPUpsert, upsert);
     WCDBJNICreateObjectOrStringArrayCriticalWithAction(
     columns, WCDBUpsertConfigSetColumns2(upsertStruct, columns_commonArray));
 }
 
-void WCDBJNIUpsertObjectMethod(configToValue, jlong upsert, WCDBJNICommonValueParameter(expression))
+void WCDBJNIUpsertClassMethod(configToValue, jlong upsert, WCDBJNICommonValueParameter(expression))
 {
     WCDBJNIBridgeStruct(CPPUpsert, upsert);
     WCDBJNICreateCommonValue(expression, true);

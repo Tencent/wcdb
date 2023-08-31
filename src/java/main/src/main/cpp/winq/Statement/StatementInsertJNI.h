@@ -33,23 +33,25 @@
     WCDBJNIObjectMethodWithNoArg(StatementInsert, funcName)
 #define WCDBJNIStatementInsertClassMethodWithNoArg(funcName)                   \
     WCDBJNIClassMethodWithNoArg(StatementInsert, funcName)
+#define WCDBJNIStatementInsertClassMethod(funcName, ...)                       \
+    WCDBJNIClassMethod(StatementInsert, funcName, __VA_ARGS__)
 
-jlong WCDBJNIStatementInsertObjectMethodWithNoArg(create);
-void WCDBJNIStatementInsertObjectMethod(configWith, jlong self, jlongArray expressions);
-void WCDBJNIStatementInsertObjectMethod(configRecursive, jlong self);
-void WCDBJNIStatementInsertObjectMethod(configTableName, jlong self, jstring tableName);
-void WCDBJNIStatementInsertObjectMethod(configSchema,
-                                        jlong self,
-                                        WCDBJNIObjectOrStringParameter(schema));
-void WCDBJNIStatementInsertObjectMethod(configConfliction, jlong self, jint action);
-void WCDBJNIStatementInsertObjectMethod(configAs, jlong self, jstring alias);
-void WCDBJNIStatementInsertObjectMethod(configColumns,
-                                        jlong self,
-                                        WCDBJNIObjectOrStringArrayParameter(columns));
-void WCDBJNIStatementInsertObjectMethod(configValues,
-                                        jlong self,
-                                        WCDBJNIMultiTypeArrayParameter(value));
-void WCDBJNIStatementInsertObjectMethod(configValuesWithBindParameters, jlong self, jint count);
-void WCDBJNIStatementInsertObjectMethod(configSelect, jlong self, jlong select);
-void WCDBJNIStatementInsertObjectMethod(configDefaultValues, jlong self);
-void WCDBJNIStatementInsertObjectMethod(configUpsert, jlong self, jlong upsert);
+jlong WCDBJNIStatementInsertClassMethodWithNoArg(create);
+void WCDBJNIStatementInsertClassMethod(configWith, jlong self, jlongArray expressions);
+void WCDBJNIStatementInsertClassMethod(configRecursive, jlong self);
+void WCDBJNIStatementInsertClassMethod(configTableName, jlong self, jstring tableName);
+void WCDBJNIStatementInsertClassMethod(configSchema,
+                                       jlong self,
+                                       WCDBJNIObjectOrStringParameter(schema));
+void WCDBJNIStatementInsertClassMethod(configConfliction, jlong self, jint action);
+void WCDBJNIStatementInsertClassMethod(configAs, jlong self, jstring alias);
+void WCDBJNIStatementInsertClassMethod(configColumns,
+                                       jlong self,
+                                       WCDBJNIObjectOrStringArrayParameter(columns));
+void WCDBJNIStatementInsertClassMethod(configValues,
+                                       jlong self,
+                                       WCDBJNIMultiTypeArrayParameter(value));
+void WCDBJNIStatementInsertClassMethod(configValuesWithBindParameters, jlong self, jint count);
+void WCDBJNIStatementInsertClassMethod(configSelect, jlong self, jlong select);
+void WCDBJNIStatementInsertClassMethod(configDefaultValues, jlong self);
+void WCDBJNIStatementInsertClassMethod(configUpsert, jlong self, jlong upsert);

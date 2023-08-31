@@ -151,5 +151,5 @@ public class FrameSpec extends Identifier {
         return this;
     }
 
-    private native void configAndFollowing(long self, int type, long expression);
+    private static native void configAndFollowing(long self, int type, long expression);
 }

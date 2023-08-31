@@ -25,7 +25,7 @@
 #include "ExpressionOperatableBridge.h"
 #include <alloca.h>
 
-jlong WCDBJNIExpressionOperableObjectMethod(nullOperate, jint operandType, jlong operand, jboolean isNot)
+jlong WCDBJNIExpressionOperableClassMethod(nullOperate, jint operandType, jlong operand, jboolean isNot)
 {
     CPPCommonValue operand_common;
     operand_common.type = operandType;
@@ -33,12 +33,12 @@ jlong WCDBJNIExpressionOperableObjectMethod(nullOperate, jint operandType, jlong
     return (jlong) WCDBExpressionNullOperate2(operand_common, isNot).innerValue;
 }
 
-jlong WCDBJNIExpressionOperableObjectMethod(binaryOperate,
-                                            jint leftType,
-                                            jlong left,
-                                            WCDBJNICommonValueParameter(right),
-                                            jint operatorType,
-                                            jboolean isNot)
+jlong WCDBJNIExpressionOperableClassMethod(binaryOperate,
+                                           jint leftType,
+                                           jlong left,
+                                           WCDBJNICommonValueParameter(right),
+                                           jint operatorType,
+                                           jboolean isNot)
 {
     CPPCommonValue left_common;
     left_common.type = leftType;
@@ -51,12 +51,12 @@ jlong WCDBJNIExpressionOperableObjectMethod(binaryOperate,
     return ret;
 }
 
-jlong WCDBJNIExpressionOperableObjectMethod(betweenOperate,
-                                            jint operandType,
-                                            jlong operand,
-                                            WCDBJNICommonValueParameter(left),
-                                            WCDBJNICommonValueParameter(right),
-                                            jboolean isNot)
+jlong WCDBJNIExpressionOperableClassMethod(betweenOperate,
+                                           jint operandType,
+                                           jlong operand,
+                                           WCDBJNICommonValueParameter(left),
+                                           WCDBJNICommonValueParameter(right),
+                                           jboolean isNot)
 {
     CPPCommonValue operand_common;
     operand_common.type = operandType;
@@ -71,11 +71,11 @@ jlong WCDBJNIExpressionOperableObjectMethod(betweenOperate,
     return ret;
 }
 
-jlong WCDBJNIExpressionOperableObjectMethod(inOperate,
-                                            jint operandType,
-                                            jlong operand,
-                                            WCDBJNICommonArrayParameter(values),
-                                            jboolean isNot)
+jlong WCDBJNIExpressionOperableClassMethod(inOperate,
+                                           jint operandType,
+                                           jlong operand,
+                                           WCDBJNICommonArrayParameter(values),
+                                           jboolean isNot)
 {
     CPPCommonValue operand_common;
     operand_common.type = operandType;
@@ -88,7 +88,7 @@ jlong WCDBJNIExpressionOperableObjectMethod(inOperate,
     return ret;
 }
 
-jlong WCDBJNIExpressionOperableObjectMethod(
+jlong WCDBJNIExpressionOperableClassMethod(
 inTableOperate, jint operandType, jlong operand, jstring table, jboolean isNot)
 {
     CPPCommonValue operand_common;
@@ -101,7 +101,7 @@ inTableOperate, jint operandType, jlong operand, jstring table, jboolean isNot)
     return ret;
 }
 
-jlong WCDBJNIExpressionOperableObjectMethod(
+jlong WCDBJNIExpressionOperableClassMethod(
 inFunctionOperate, jint operandType, jlong operand, jstring func, jboolean isNot)
 {
     CPPCommonValue operand_common;
@@ -114,7 +114,7 @@ inFunctionOperate, jint operandType, jlong operand, jstring func, jboolean isNot
     return ret;
 }
 
-jlong WCDBJNIExpressionOperableObjectMethod(
+jlong WCDBJNIExpressionOperableClassMethod(
 inSelectionOperate, jint operandType, jlong operand, jlong select, jboolean isNot)
 {
     CPPCommonValue operand_common;
@@ -125,7 +125,7 @@ inSelectionOperate, jint operandType, jlong operand, jlong select, jboolean isNo
     .innerValue;
 }
 
-jlong WCDBJNIExpressionOperableObjectMethod(collateOperate, jint operandType, jlong operand, jstring collation)
+jlong WCDBJNIExpressionOperableClassMethod(collateOperate, jint operandType, jlong operand, jstring collation)
 {
     CPPCommonValue operand_common;
     operand_common.type = operandType;

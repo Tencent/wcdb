@@ -24,12 +24,12 @@
 #include "StatementCreateTableJNI.h"
 #include "StatementCreateTableBridge.h"
 
-jlong WCDBJNIStatementCreateTableObjectMethodWithNoArg(create)
+jlong WCDBJNIStatementCreateTableClassMethodWithNoArg(create)
 {
     return (jlong) WCDBStatementCreateTableCreate().innerValue;
 }
 
-void WCDBJNIStatementCreateTableObjectMethod(configTableName, jlong self, jstring tableName)
+void WCDBJNIStatementCreateTableClassMethod(configTableName, jlong self, jstring tableName)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTable, self);
     WCDBJNIGetStringCritical(tableName);
@@ -37,9 +37,9 @@ void WCDBJNIStatementCreateTableObjectMethod(configTableName, jlong self, jstrin
     WCDBJNIReleaseStringCritical(tableName);
 }
 
-void WCDBJNIStatementCreateTableObjectMethod(configSchema,
-                                             jlong self,
-                                             WCDBJNIObjectOrStringParameter(schema))
+void WCDBJNIStatementCreateTableClassMethod(configSchema,
+                                            jlong self,
+                                            WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTable, self);
     WCDBJNICreateObjectOrStringCommonValue(schema, true);
@@ -47,33 +47,33 @@ void WCDBJNIStatementCreateTableObjectMethod(configSchema,
     WCDBJNITryReleaseStringInCommonValue(schema);
 }
 
-void WCDBJNIStatementCreateTableObjectMethod(configTemp, jlong self)
+void WCDBJNIStatementCreateTableClassMethod(configTemp, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTable, self);
     WCDBStatementCreateTableConfigTemp(selfStruct);
 }
 
-void WCDBJNIStatementCreateTableObjectMethod(configIfNotExist, jlong self)
+void WCDBJNIStatementCreateTableClassMethod(configIfNotExist, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTable, self);
     WCDBStatementCreateTableConfigIfNotExist(selfStruct);
 }
 
-void WCDBJNIStatementCreateTableObjectMethod(configAs, jlong self, jlong select)
+void WCDBJNIStatementCreateTableClassMethod(configAs, jlong self, jlong select)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTable, self);
     WCDBJNIBridgeStruct(CPPStatementSelect, select);
     WCDBStatementCreateTableConfigAs(selfStruct, selectStruct);
 }
 
-void WCDBJNIStatementCreateTableObjectMethod(configColumn, jlong self, jlong column)
+void WCDBJNIStatementCreateTableClassMethod(configColumn, jlong self, jlong column)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTable, self);
     WCDBJNIBridgeStruct(CPPColumnDef, column);
     WCDBStatementCreateTableConfigColumn(selfStruct, columnStruct);
 }
 
-void WCDBJNIStatementCreateTableObjectMethod(configColumns, jlong self, jlongArray columns)
+void WCDBJNIStatementCreateTableClassMethod(configColumns, jlong self, jlongArray columns)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTable, self);
     WCDBJNIGetCppPointerArrayCritical(columns);
@@ -82,7 +82,7 @@ void WCDBJNIStatementCreateTableObjectMethod(configColumns, jlong self, jlongArr
     WCDBJNIReleaseCppPointerArrayCritical(columns);
 }
 
-void WCDBJNIStatementCreateTableObjectMethod(configConstraints, jlong self, jlongArray constraints)
+void WCDBJNIStatementCreateTableClassMethod(configConstraints, jlong self, jlongArray constraints)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTable, self);
     WCDBJNIGetCppPointerArrayCritical(constraints);
@@ -91,7 +91,7 @@ void WCDBJNIStatementCreateTableObjectMethod(configConstraints, jlong self, jlon
     WCDBJNIReleaseCppPointerArrayCritical(constraints)
 }
 
-void WCDBJNIStatementCreateTableObjectMethod(configWithoutRowid, jlong self)
+void WCDBJNIStatementCreateTableClassMethod(configWithoutRowid, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateTable, self);
     WCDBStatementCreateTableConfigWithoutRowId(selfStruct);

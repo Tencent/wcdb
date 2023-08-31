@@ -32,17 +32,19 @@
     WCDBJNIObjectMethodWithNoArg(Binding, funcName)
 #define WCDBJNIBindingClassMethodWithNoArg(funcName)                           \
     WCDBJNIClassMethodWithNoArg(Binding, funcName)
+#define WCDBJNIBindingClassMethod(funcName, ...)                               \
+    WCDBJNIClassMethod(Binding, funcName, __VA_ARGS__)
 
-jlong WCDBJNIBindingObjectMethodWithNoArg(create);
-void WCDBJNIBindingObjectMethod(addColumnDef, jlong self, jlong columnDef);
-void WCDBJNIBindingObjectMethod(enableAutoIncrementForExistingTable, jlong self);
-void WCDBJNIBindingObjectMethod(
+jlong WCDBJNIBindingClassMethodWithNoArg(create);
+void WCDBJNIBindingClassMethod(addColumnDef, jlong self, jlong columnDef);
+void WCDBJNIBindingClassMethod(enableAutoIncrementForExistingTable, jlong self);
+void WCDBJNIBindingClassMethod(
 addIndex, jlong self, jstring indexNameOrSuffix, jboolean isFullName, jlong createIndex);
-void WCDBJNIBindingObjectMethod(addTableConstraint, jlong self, jlong constraint);
-void WCDBJNIBindingObjectMethod(configVirtualModule, jlong self, jstring moduleName);
-void WCDBJNIBindingObjectMethod(configVirtualModuleArgument, jlong self, jstring argument);
-void WCDBJNIBindingObjectMethod(configWithoutRowId, jlong self);
-jboolean WCDBJNIBindingObjectMethod(createTable, jlong self, jstring tableName, jlong handle);
+void WCDBJNIBindingClassMethod(addTableConstraint, jlong self, jlong constraint);
+void WCDBJNIBindingClassMethod(configVirtualModule, jlong self, jstring moduleName);
+void WCDBJNIBindingClassMethod(configVirtualModuleArgument, jlong self, jstring argument);
+void WCDBJNIBindingClassMethod(configWithoutRowId, jlong self);
+jboolean WCDBJNIBindingClassMethod(createTable, jlong self, jstring tableName, jlong handle);
 jboolean
-WCDBJNIBindingObjectMethod(createVirtualTable, jlong self, jstring tableName, jlong handle);
-jlong WCDBJNIBindingObjectMethod(getBaseBinding, jlong self);
+WCDBJNIBindingClassMethod(createVirtualTable, jlong self, jstring tableName, jlong handle);
+jlong WCDBJNIBindingClassMethod(getBaseBinding, jlong self);

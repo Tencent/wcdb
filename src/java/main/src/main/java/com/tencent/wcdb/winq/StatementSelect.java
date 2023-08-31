@@ -35,7 +35,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
     public StatementSelect() {
         cppObj = createCppObj();
     }
-    private native long createCppObj();
+    private static native long createCppObj();
 
     public StatementSelect with(CommonTableExpression expression) {
         return with(new CommonTableExpression[]{expression});
@@ -70,9 +70,9 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return this;
     }
 
-    private native void configWith(long self, long[] expressions);
+    private static native void configWith(long self, long[] expressions);
 
-    private native void configRecursive(long self);
+    private static native void configRecursive(long self);
 
     public StatementSelect select(ResultColumnConvertible resultColumn) {
         configResultColumns(cppObj, new int[]{Identifier.getCppType(resultColumn)},
@@ -145,14 +145,14 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return this;
     }
 
-    private native void configResultColumns(long self, int[] types, long[] columns, double[] unused, String[] columnNames);
+    private static native void configResultColumns(long self, int[] types, long[] columns, double[] unused, String[] columnNames);
 
     public StatementSelect distinct() {
         configDistinct(cppObj);
         return this;
     }
 
-    private native void configDistinct(long self);
+    private static native void configDistinct(long self);
 
     public StatementSelect from(TableOrSubqueryConvertible tableOrSubquery) {
         configTableOrSubqueries(cppObj, new int[]{Identifier.getCppType(tableOrSubquery)},
@@ -224,14 +224,14 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return this;
     }
 
-    private native void configTableOrSubqueries(long self, int[] types, long[] tableOrSubqueries, double[] unused, String[] tableNames);
+    private static native void configTableOrSubqueries(long self, int[] types, long[] tableOrSubqueries, double[] unused, String[] tableNames);
 
     public StatementSelect where(Expression condition) {
         configCondition(cppObj, CppObject.get(condition));
         return this;
     }
 
-    private native void configCondition(long self, long condition);
+    private static native void configCondition(long self, long condition);
 
     public StatementSelect groupBy(ExpressionConvertible expression) {
         configGroups(cppObj, new int[]{Identifier.getCppType(expression)}, new long[]{CppObject.get(expression)}, null, null);
@@ -302,42 +302,42 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return this;
     }
 
-    private native void configGroups(long self, int[] types, long[] exps, double[] unused, String[] columNames);
+    private static native void configGroups(long self, int[] types, long[] exps, double[] unused, String[] columNames);
 
     public StatementSelect having(Expression expression) {
         configHaving(cppObj, CppObject.get(expression));
         return this;
     }
 
-    private native void configHaving(long self, long expression);
+    private static native void configHaving(long self, long expression);
 
     public StatementSelect union() {
         configUnion(cppObj);
         return this;
     }
 
-    private native void configUnion(long self);
+    private static native void configUnion(long self);
 
     public StatementSelect unionAll() {
         configUnionAll(cppObj);
         return this;
     }
 
-    private native void configUnionAll(long self);
+    private static native void configUnionAll(long self);
 
     public StatementSelect intersect() {
         configIntersect(cppObj);
         return this;
     }
 
-    private native void configIntersect(long self);
+    private static native void configIntersect(long self);
 
     public StatementSelect except() {
         configExcept(cppObj);
         return this;
     }
 
-    private native void configExcept(long self);
+    private static native void configExcept(long self);
 
     public StatementSelect orderBy(OrderingTerm order) {
         configOrders(cppObj, new long[]{CppObject.get(order)});
@@ -356,7 +356,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return this;
     }
 
-    private native void configOrders(long self, long[] orders);
+    private static native void configOrders(long self, long[] orders);
 
     public StatementSelect limit(long from, long to) {
         configLimitRange(cppObj, CPPType.Int.ordinal(), from, CPPType.Int.ordinal(), to);
@@ -378,7 +378,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return this;
     }
 
-    private native void configLimitRange(long self, int fromType, long from, int toType, long to);
+    private static native void configLimitRange(long self, int fromType, long from, int toType, long to);
 
     public StatementSelect limit(long count) {
         configLimitCount(cppObj, CPPType.Int.ordinal(), count);
@@ -390,7 +390,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return this;
     }
 
-    private native void configLimitCount(long self, int type, long count);
+    private static native void configLimitCount(long self, int type, long count);
 
     public StatementSelect offset(long offset) {
         configOffset(cppObj, CPPType.Int.ordinal(), offset);
@@ -402,6 +402,6 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return this;
     }
 
-    private native void configOffset(long self, int type, long count);
+    private static native void configOffset(long self, int type, long count);
 }
 

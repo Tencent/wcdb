@@ -24,7 +24,7 @@
 #include "ColumnDefJNI.h"
 #include "ColumnDefBridge.h"
 
-jlong WCDBJNIColumnDefObjectMethod(create, WCDBJNIObjectOrStringParameter(column), jint columnType)
+jlong WCDBJNIColumnDefClassMethod(create, WCDBJNIObjectOrStringParameter(column), jint columnType)
 {
     WCDBJNICreateObjectOrStringCommonValue(column, true);
     jlong ret = 0;
@@ -37,7 +37,7 @@ jlong WCDBJNIColumnDefObjectMethod(create, WCDBJNIObjectOrStringParameter(column
     return ret;
 }
 
-void WCDBJNIColumnDefObjectMethod(configConstraint, jlong columnDef, jlong constraint)
+void WCDBJNIColumnDefClassMethod(configConstraint, jlong columnDef, jlong constraint)
 {
     WCDBJNIBridgeStruct(CPPColumnDef, columnDef);
     WCDBJNIBridgeStruct(CPPColumnConstraint, constraint);

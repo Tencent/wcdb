@@ -40,7 +40,7 @@ public class Column extends ExpressionOperable implements IndexedColumnConvertib
         cppObj = createCppObj(name, tableBinding);
     }
 
-    private native long createCppObj(String name, long tableBinding);
+    private static native long createCppObj(String name, long tableBinding);
 
     protected native long copy(long self);
 

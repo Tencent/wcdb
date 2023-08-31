@@ -34,15 +34,15 @@
 #define WCDBJNITableConstraintClassMethod(funcName, ...)                       \
     WCDBJNIClassMethod(TableConstraint, funcName, __VA_ARGS__)
 
-jlong WCDBJNITableConstraintObjectMethod(create, jstring name);
-void WCDBJNITableConstraintObjectMethod(configPrimaryKey, jlong constraint);
-void WCDBJNITableConstraintObjectMethod(configUnique, jlong constraint);
-void WCDBJNITableConstraintObjectMethod(configIndexedColumn,
-                                        jlong constraint,
-                                        WCDBJNIObjectOrStringArrayParameter(indexedColumns));
-void WCDBJNITableConstraintObjectMethod(configConfliction, jlong constraint, int conflictAction);
-void WCDBJNITableConstraintObjectMethod(configCheckCondition, jlong constraint, jlong expression);
-void WCDBJNITableConstraintObjectMethod(configForeignKey,
-                                        jlong constraint,
-                                        WCDBJNIObjectOrStringArrayParameter(columns),
-                                        jlong foreignKey);
+jlong WCDBJNITableConstraintClassMethod(create, jstring name);
+void WCDBJNITableConstraintClassMethod(configPrimaryKey, jlong constraint);
+void WCDBJNITableConstraintClassMethod(configUnique, jlong constraint);
+void WCDBJNITableConstraintClassMethod(configIndexedColumn,
+                                       jlong constraint,
+                                       WCDBJNIObjectOrStringArrayParameter(indexedColumns));
+void WCDBJNITableConstraintClassMethod(configConfliction, jlong constraint, int conflictAction);
+void WCDBJNITableConstraintClassMethod(configCheckCondition, jlong constraint, jlong expression);
+void WCDBJNITableConstraintClassMethod(configForeignKey,
+                                       jlong constraint,
+                                       WCDBJNIObjectOrStringArrayParameter(columns),
+                                       jlong foreignKey);

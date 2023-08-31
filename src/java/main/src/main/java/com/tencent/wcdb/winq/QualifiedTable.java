@@ -35,7 +35,7 @@ public class QualifiedTable extends Identifier {
         cppObj = createCppObj(tableName);
     }
 
-    private native long createCppObj(String tableName);
+    private static native long createCppObj(String tableName);
 
     public QualifiedTable of(String schema) {
         schema(cppObj, CPPType.String.ordinal(), 0, schema);
@@ -47,27 +47,27 @@ public class QualifiedTable extends Identifier {
         return this;
     }
 
-    private native void schema(long self, int type, long object, String schemaName);
+    private static native void schema(long self, int type, long object, String schemaName);
 
     public QualifiedTable as(String alias) {
         alias(cppObj, alias);
         return this;
     }
 
-    private native void alias(long self, String alias);
+    private static native void alias(long self, String alias);
 
     public QualifiedTable indexed(String indexName) {
         indexed(cppObj, indexName);
         return this;
     }
 
-    private native void indexed(long self, String indexName);
+    private static native void indexed(long self, String indexName);
 
     public QualifiedTable notIndexed() {
         notIndexed(cppObj);
         return this;
     }
 
-    private native void notIndexed(long self);
+    private static native void notIndexed(long self);
 
 }

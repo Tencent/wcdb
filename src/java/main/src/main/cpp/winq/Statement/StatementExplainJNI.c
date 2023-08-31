@@ -24,12 +24,12 @@
 #include "StatementExplainJNI.h"
 #include "StatementExplainBridge.h"
 
-jlong WCDBJNIStatementExplainObjectMethodWithNoArg(createCppObj)
+jlong WCDBJNIStatementExplainClassMethodWithNoArg(createCppObj)
 {
     return (jlong) WCDBStatementExplainCreate().innerValue;
 }
 
-void WCDBJNIStatementExplainObjectMethod(explain, jlong self, jlong statement, jboolean queryPlan)
+void WCDBJNIStatementExplainClassMethod(explain, jlong self, jlong statement, jboolean queryPlan)
 {
     WCDBJNIBridgeStruct(CPPStatementExplain, self);
     WCDBStatementExplain(selfStruct, (CPPObject*) statement, queryPlan);

@@ -35,5 +35,5 @@
     WCDBJNIClassMethod(CommonTableExpression, funcName, __VA_ARGS__)
 
 jlong WCDBJNICommonTableExpressionClassMethod(createWithTable, jstring tableName);
-void WCDBJNICommonTableExpressionObjectMethod(configColumn, jlong self, jlong column);
-void WCDBJNICommonTableExpressionObjectMethod(configSelectStatement, jlong self, jlong select);
+void WCDBJNICommonTableExpressionClassMethod(configColumn, jlong self, jlong column);
+void WCDBJNICommonTableExpressionClassMethod(configSelectStatement, jlong self, jlong select);

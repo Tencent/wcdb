@@ -33,12 +33,14 @@
     WCDBJNIObjectMethodWithNoArg(StatementReindex, funcName)
 #define WCDBJNIStatementReindexClassMethodWithNoArg(funcName)                  \
     WCDBJNIClassMethodWithNoArg(StatementReindex, funcName)
+#define WCDBJNIStatementReindexClassMethod(funcName, ...)                      \
+    WCDBJNIClassMethod(StatementReindex, funcName, __VA_ARGS__)
 
-jlong WCDBJNIStatementReindexObjectMethodWithNoArg(createCppObj);
+jlong WCDBJNIStatementReindexClassMethodWithNoArg(createCppObj);
 
-void WCDBJNIStatementReindexObjectMethod(configCollation, jlong self, jstring collation);
-void WCDBJNIStatementReindexObjectMethod(configTable, jlong self, jstring name);
-void WCDBJNIStatementReindexObjectMethod(configIndex, jlong self, jstring name);
-void WCDBJNIStatementReindexObjectMethod(configSchema,
-                                         jlong self,
-                                         WCDBJNIObjectOrStringParameter(schema));
+void WCDBJNIStatementReindexClassMethod(configCollation, jlong self, jstring collation);
+void WCDBJNIStatementReindexClassMethod(configTable, jlong self, jstring name);
+void WCDBJNIStatementReindexClassMethod(configIndex, jlong self, jstring name);
+void WCDBJNIStatementReindexClassMethod(configSchema,
+                                        jlong self,
+                                        WCDBJNIObjectOrStringParameter(schema));

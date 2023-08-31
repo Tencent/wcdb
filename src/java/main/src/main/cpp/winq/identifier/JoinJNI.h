@@ -34,34 +34,30 @@
     WCDBJNIClassMethod(Join, funcName, __VA_ARGS__)
 
 jlong WCDBJNIJoinClassMethod(createCppObj, WCDBJNIObjectOrStringParameter(query));
-void WCDBJNIJoinObjectMethod(configWith, jlong join, WCDBJNIObjectOrStringParameter(query));
-void WCDBJNIJoinObjectMethod(configWithJoin, jlong join, WCDBJNIObjectOrStringParameter(query));
-void WCDBJNIJoinObjectMethod(configWithLeftOuterJoin,
-                             jlong join,
-                             WCDBJNIObjectOrStringParameter(query));
-void WCDBJNIJoinObjectMethod(configWithLeftJoin, jlong join, WCDBJNIObjectOrStringParameter(query));
-void WCDBJNIJoinObjectMethod(configWithInnerJoin,
-                             jlong join,
-                             WCDBJNIObjectOrStringParameter(query));
-void WCDBJNIJoinObjectMethod(configWithCrossJoin,
-                             jlong join,
-                             WCDBJNIObjectOrStringParameter(query));
-void WCDBJNIJoinObjectMethod(configWithNaturalJoin,
-                             jlong join,
-                             WCDBJNIObjectOrStringParameter(query));
-void WCDBJNIJoinObjectMethod(configWithNaturalLeftOuterJoin,
-                             jlong join,
-                             WCDBJNIObjectOrStringParameter(query));
-void WCDBJNIJoinObjectMethod(configWithNaturalLeftJoin,
-                             jlong join,
-                             WCDBJNIObjectOrStringParameter(query));
-void WCDBJNIJoinObjectMethod(configWithNaturalInnerJoin,
-                             jlong join,
-                             WCDBJNIObjectOrStringParameter(query));
-void WCDBJNIJoinObjectMethod(configWithNaturalCrossJoin,
-                             jlong join,
-                             WCDBJNIObjectOrStringParameter(query));
-void WCDBJNIJoinObjectMethod(configOn, jlong join, jlong expression);
-void WCDBJNIJoinObjectMethod(configUsingColumn,
-                             jlong join,
-                             WCDBJNIObjectOrStringArrayParameter(columns));
+void WCDBJNIJoinClassMethod(configWith, jlong join, WCDBJNIObjectOrStringParameter(query));
+void WCDBJNIJoinClassMethod(configWithJoin, jlong join, WCDBJNIObjectOrStringParameter(query));
+void WCDBJNIJoinClassMethod(configWithLeftOuterJoin,
+                            jlong join,
+                            WCDBJNIObjectOrStringParameter(query));
+void WCDBJNIJoinClassMethod(configWithLeftJoin, jlong join, WCDBJNIObjectOrStringParameter(query));
+void WCDBJNIJoinClassMethod(configWithInnerJoin, jlong join, WCDBJNIObjectOrStringParameter(query));
+void WCDBJNIJoinClassMethod(configWithCrossJoin, jlong join, WCDBJNIObjectOrStringParameter(query));
+void WCDBJNIJoinClassMethod(configWithNaturalJoin,
+                            jlong join,
+                            WCDBJNIObjectOrStringParameter(query));
+void WCDBJNIJoinClassMethod(configWithNaturalLeftOuterJoin,
+                            jlong join,
+                            WCDBJNIObjectOrStringParameter(query));
+void WCDBJNIJoinClassMethod(configWithNaturalLeftJoin,
+                            jlong join,
+                            WCDBJNIObjectOrStringParameter(query));
+void WCDBJNIJoinClassMethod(configWithNaturalInnerJoin,
+                            jlong join,
+                            WCDBJNIObjectOrStringParameter(query));
+void WCDBJNIJoinClassMethod(configWithNaturalCrossJoin,
+                            jlong join,
+                            WCDBJNIObjectOrStringParameter(query));
+void WCDBJNIJoinClassMethod(configOn, jlong join, jlong expression);
+void WCDBJNIJoinClassMethod(configUsingColumn,
+                            jlong join,
+                            WCDBJNIObjectOrStringArrayParameter(columns));

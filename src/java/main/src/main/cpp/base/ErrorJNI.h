@@ -33,7 +33,7 @@
 #define WCDBJNIErrorClassMethod(funcName, ...)                                 \
     WCDBJNIClassMethod(Error, funcName, __VA_ARGS__)
 
-jlong WCDBJNIErrorObjectMethod(getLevel, jlong error);
-jlong WCDBJNIErrorObjectMethod(getCode, jlong error);
-jstring WCDBJNIErrorObjectMethod(getMessage, jlong error);
+jlong WCDBJNIErrorClassMethod(getLevel, jlong error);
+jlong WCDBJNIErrorClassMethod(getCode, jlong error);
+jstring WCDBJNIErrorClassMethod(getMessage, jlong error);
 void WCDBJNIErrorObjectMethod(enumerateInfo, jlong error);

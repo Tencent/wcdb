@@ -33,6 +33,8 @@
     WCDBJNIObjectMethodWithNoArg(StatementRollback, funcName)
 #define WCDBJNIStatementRollbackClassMethodWithNoArg(funcName)                 \
     WCDBJNIClassMethodWithNoArg(StatementRollback, funcName)
+#define WCDBJNIStatementRollbackClassMethod(funcName, ...)                     \
+    WCDBJNIClassMethod(StatementRollback, funcName, __VA_ARGS__)
 
-jlong WCDBJNIStatementRollbackObjectMethodWithNoArg(createCppObj);
-void WCDBJNIStatementRollbackObjectMethod(configSavepoint, jlong self, jstring savepoint);
+jlong WCDBJNIStatementRollbackClassMethodWithNoArg(createCppObj);
+void WCDBJNIStatementRollbackClassMethod(configSavepoint, jlong self, jstring savepoint);

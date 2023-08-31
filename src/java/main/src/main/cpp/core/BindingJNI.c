@@ -24,25 +24,25 @@
 #include "BindingJNI.h"
 #include "BindingBridge.h"
 
-jlong WCDBJNIBindingObjectMethodWithNoArg(create)
+jlong WCDBJNIBindingClassMethodWithNoArg(create)
 {
     return (jlong) WCDBBindingCreate().innerValue;
 }
 
-void WCDBJNIBindingObjectMethod(addColumnDef, jlong self, jlong columnDef)
+void WCDBJNIBindingClassMethod(addColumnDef, jlong self, jlong columnDef)
 {
     WCDBJNIBridgeStruct(CPPBinding, self);
     WCDBJNIBridgeStruct(CPPColumnDef, columnDef);
     WCDBBindingAddColumnDef(selfStruct, columnDefStruct);
 }
 
-void WCDBJNIBindingObjectMethod(enableAutoIncrementForExistingTable, jlong self)
+void WCDBJNIBindingClassMethod(enableAutoIncrementForExistingTable, jlong self)
 {
     WCDBJNIBridgeStruct(CPPBinding, self);
     WCDBBindingEnableAutoIncrementForExistingTable(selfStruct);
 }
 
-void WCDBJNIBindingObjectMethod(addIndex, jlong self, jstring indexNameOrSuffix, jboolean isFullName, jlong createIndex)
+void WCDBJNIBindingClassMethod(addIndex, jlong self, jstring indexNameOrSuffix, jboolean isFullName, jlong createIndex)
 {
     WCDBJNIBridgeStruct(CPPBinding, self);
     WCDBJNIBridgeStruct(CPPStatementCreateIndex, createIndex);
@@ -51,14 +51,14 @@ void WCDBJNIBindingObjectMethod(addIndex, jlong self, jstring indexNameOrSuffix,
     WCDBJNIReleaseStringCritical(indexNameOrSuffix);
 }
 
-void WCDBJNIBindingObjectMethod(addTableConstraint, jlong self, jlong constraint)
+void WCDBJNIBindingClassMethod(addTableConstraint, jlong self, jlong constraint)
 {
     WCDBJNIBridgeStruct(CPPBinding, self);
     WCDBJNIBridgeStruct(CPPTableConstraint, constraint);
     WCDBBindingAddTableConstraint(selfStruct, constraintStruct);
 }
 
-void WCDBJNIBindingObjectMethod(configVirtualModule, jlong self, jstring moduleName)
+void WCDBJNIBindingClassMethod(configVirtualModule, jlong self, jstring moduleName)
 {
     WCDBJNIBridgeStruct(CPPBinding, self);
     WCDBJNIGetStringCritical(moduleName);
@@ -66,7 +66,7 @@ void WCDBJNIBindingObjectMethod(configVirtualModule, jlong self, jstring moduleN
     WCDBJNIReleaseStringCritical(moduleName);
 }
 
-void WCDBJNIBindingObjectMethod(configVirtualModuleArgument, jlong self, jstring argument)
+void WCDBJNIBindingClassMethod(configVirtualModuleArgument, jlong self, jstring argument)
 {
     WCDBJNIBridgeStruct(CPPBinding, self);
     WCDBJNIGetStringCritical(argument);
@@ -74,13 +74,13 @@ void WCDBJNIBindingObjectMethod(configVirtualModuleArgument, jlong self, jstring
     WCDBJNIReleaseStringCritical(argument);
 }
 
-void WCDBJNIBindingObjectMethod(configWithoutRowId, jlong self)
+void WCDBJNIBindingClassMethod(configWithoutRowId, jlong self)
 {
     WCDBJNIBridgeStruct(CPPBinding, self);
     WCDBBindingConfigWithoutRowId(selfStruct);
 }
 
-jboolean WCDBJNIBindingObjectMethod(createTable, jlong self, jstring tableName, jlong handle)
+jboolean WCDBJNIBindingClassMethod(createTable, jlong self, jstring tableName, jlong handle)
 {
     WCDBJNIBridgeStruct(CPPBinding, self);
     WCDBJNIBridgeStruct(CPPHandle, handle);
@@ -90,8 +90,7 @@ jboolean WCDBJNIBindingObjectMethod(createTable, jlong self, jstring tableName, 
     return ret;
 }
 
-jboolean
-WCDBJNIBindingObjectMethod(createVirtualTable, jlong self, jstring tableName, jlong handle)
+jboolean WCDBJNIBindingClassMethod(createVirtualTable, jlong self, jstring tableName, jlong handle)
 {
     WCDBJNIBridgeStruct(CPPBinding, self);
     WCDBJNIBridgeStruct(CPPHandle, handle);
@@ -101,7 +100,7 @@ WCDBJNIBindingObjectMethod(createVirtualTable, jlong self, jstring tableName, jl
     return ret;
 }
 
-jlong WCDBJNIBindingObjectMethod(getBaseBinding, jlong self)
+jlong WCDBJNIBindingClassMethod(getBaseBinding, jlong self)
 {
     WCDBJNIBridgeStruct(CPPBinding, self);
     return (jlong) WCDBBindingGetBaseBinding(selfStruct);

@@ -55,5 +55,5 @@ public class RaiseFunction extends Identifier implements ExpressionConvertible, 
         return this;
     }
 
-    private native void setAction(long self, int action, String errMsg);
+    private static native void setAction(long self, int action, String errMsg);
 }

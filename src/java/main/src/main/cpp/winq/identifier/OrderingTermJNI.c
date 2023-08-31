@@ -24,7 +24,7 @@
 #include "OrderingTermJNI.h"
 #include "OrderingTermBridge.h"
 
-jlong WCDBJNIOrderingTermObjectMethod(create, jint type, jlong expression)
+jlong WCDBJNIOrderingTermClassMethod(create, jint type, jlong expression)
 {
     CPPCommonValue common_expression;
     common_expression.type = type;
@@ -32,7 +32,7 @@ jlong WCDBJNIOrderingTermObjectMethod(create, jint type, jlong expression)
     return (jlong) WCDBOrderingTermCreate2(common_expression).innerValue;
 }
 
-void WCDBJNIOrderingTermObjectMethod(configCollation, jlong object, jstring collation)
+void WCDBJNIOrderingTermClassMethod(configCollation, jlong object, jstring collation)
 {
     WCDBJNIBridgeStruct(CPPOrderingTerm, object);
     WCDBJNIGetStringCritical(collation);
@@ -40,7 +40,7 @@ void WCDBJNIOrderingTermObjectMethod(configCollation, jlong object, jstring coll
     WCDBJNIReleaseStringCritical(collation);
 }
 
-void WCDBJNIOrderingTermObjectMethod(configOrder, jlong object, jint order)
+void WCDBJNIOrderingTermClassMethod(configOrder, jlong object, jint order)
 {
     WCDBJNIBridgeStruct(CPPOrderingTerm, object);
     WCDBOrderingTermConfigOrder(objectStruct, order);

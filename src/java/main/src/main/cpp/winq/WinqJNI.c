@@ -24,12 +24,12 @@
 #include "WinqJNI.h"
 #include "WinqBridge.h"
 
-jstring WCDBJNIObjectMethod(Winq, getDescription, long long statement)
+jstring WCDBJNIClassMethod(Winq, getDescription, long long statement)
 {
     WCDBJNICreateJStringAndReturn(WCDBWinqGetDescription((CPPObject*) statement));
 }
 
-jboolean WCDBJNIObjectMethod(Winq, isWriteStatement, long long statement)
+jboolean WCDBJNIClassMethod(Winq, isWriteStatement, long long statement)
 {
     return WCDBStatementNeedToWrite((CPPObject*) statement);
 }

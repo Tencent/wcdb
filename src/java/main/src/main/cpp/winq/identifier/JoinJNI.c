@@ -32,7 +32,7 @@ jlong WCDBJNIJoinClassMethod(createCppObj, WCDBJNIObjectOrStringParameter(query)
     return ret;
 }
 
-void WCDBJNIJoinObjectMethod(configWith, jlong join, WCDBJNIObjectOrStringParameter(query))
+void WCDBJNIJoinClassMethod(configWith, jlong join, WCDBJNIObjectOrStringParameter(query))
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
     WCDBJNICreateObjectOrStringCommonValue(query, true);
@@ -40,7 +40,7 @@ void WCDBJNIJoinObjectMethod(configWith, jlong join, WCDBJNIObjectOrStringParame
     WCDBJNITryReleaseStringInCommonValue(query);
 }
 
-void WCDBJNIJoinObjectMethod(configWithJoin, jlong join, WCDBJNIObjectOrStringParameter(query))
+void WCDBJNIJoinClassMethod(configWithJoin, jlong join, WCDBJNIObjectOrStringParameter(query))
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
     WCDBJNICreateObjectOrStringCommonValue(query, true);
@@ -48,9 +48,7 @@ void WCDBJNIJoinObjectMethod(configWithJoin, jlong join, WCDBJNIObjectOrStringPa
     WCDBJNITryReleaseStringInCommonValue(query);
 }
 
-void WCDBJNIJoinObjectMethod(configWithLeftOuterJoin,
-                             jlong join,
-                             WCDBJNIObjectOrStringParameter(query))
+void WCDBJNIJoinClassMethod(configWithLeftOuterJoin, jlong join, WCDBJNIObjectOrStringParameter(query))
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
     WCDBJNICreateObjectOrStringCommonValue(query, true);
@@ -58,7 +56,7 @@ void WCDBJNIJoinObjectMethod(configWithLeftOuterJoin,
     WCDBJNITryReleaseStringInCommonValue(query);
 }
 
-void WCDBJNIJoinObjectMethod(configWithLeftJoin, jlong join, WCDBJNIObjectOrStringParameter(query))
+void WCDBJNIJoinClassMethod(configWithLeftJoin, jlong join, WCDBJNIObjectOrStringParameter(query))
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
     WCDBJNICreateObjectOrStringCommonValue(query, true);
@@ -66,7 +64,7 @@ void WCDBJNIJoinObjectMethod(configWithLeftJoin, jlong join, WCDBJNIObjectOrStri
     WCDBJNITryReleaseStringInCommonValue(query);
 }
 
-void WCDBJNIJoinObjectMethod(configWithInnerJoin, jlong join, WCDBJNIObjectOrStringParameter(query))
+void WCDBJNIJoinClassMethod(configWithInnerJoin, jlong join, WCDBJNIObjectOrStringParameter(query))
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
     WCDBJNICreateObjectOrStringCommonValue(query, true);
@@ -74,7 +72,7 @@ void WCDBJNIJoinObjectMethod(configWithInnerJoin, jlong join, WCDBJNIObjectOrStr
     WCDBJNITryReleaseStringInCommonValue(query);
 }
 
-void WCDBJNIJoinObjectMethod(configWithCrossJoin, jlong join, WCDBJNIObjectOrStringParameter(query))
+void WCDBJNIJoinClassMethod(configWithCrossJoin, jlong join, WCDBJNIObjectOrStringParameter(query))
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
     WCDBJNICreateObjectOrStringCommonValue(query, true);
@@ -82,7 +80,7 @@ void WCDBJNIJoinObjectMethod(configWithCrossJoin, jlong join, WCDBJNIObjectOrStr
     WCDBJNITryReleaseStringInCommonValue(query);
 }
 
-void WCDBJNIJoinObjectMethod(configWithNaturalJoin, jlong join, WCDBJNIObjectOrStringParameter(query))
+void WCDBJNIJoinClassMethod(configWithNaturalJoin, jlong join, WCDBJNIObjectOrStringParameter(query))
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
     WCDBJNICreateObjectOrStringCommonValue(query, true);
@@ -90,9 +88,9 @@ void WCDBJNIJoinObjectMethod(configWithNaturalJoin, jlong join, WCDBJNIObjectOrS
     WCDBJNITryReleaseStringInCommonValue(query);
 }
 
-void WCDBJNIJoinObjectMethod(configWithNaturalLeftOuterJoin,
-                             jlong join,
-                             WCDBJNIObjectOrStringParameter(query))
+void WCDBJNIJoinClassMethod(configWithNaturalLeftOuterJoin,
+                            jlong join,
+                            WCDBJNIObjectOrStringParameter(query))
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
     WCDBJNICreateObjectOrStringCommonValue(query, true);
@@ -100,9 +98,9 @@ void WCDBJNIJoinObjectMethod(configWithNaturalLeftOuterJoin,
     WCDBJNITryReleaseStringInCommonValue(query);
 }
 
-void WCDBJNIJoinObjectMethod(configWithNaturalLeftJoin,
-                             jlong join,
-                             WCDBJNIObjectOrStringParameter(query))
+void WCDBJNIJoinClassMethod(configWithNaturalLeftJoin,
+                            jlong join,
+                            WCDBJNIObjectOrStringParameter(query))
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
     WCDBJNICreateObjectOrStringCommonValue(query, true);
@@ -110,9 +108,9 @@ void WCDBJNIJoinObjectMethod(configWithNaturalLeftJoin,
     WCDBJNITryReleaseStringInCommonValue(query);
 }
 
-void WCDBJNIJoinObjectMethod(configWithNaturalInnerJoin,
-                             jlong join,
-                             WCDBJNIObjectOrStringParameter(query))
+void WCDBJNIJoinClassMethod(configWithNaturalInnerJoin,
+                            jlong join,
+                            WCDBJNIObjectOrStringParameter(query))
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
     WCDBJNICreateObjectOrStringCommonValue(query, true);
@@ -120,9 +118,9 @@ void WCDBJNIJoinObjectMethod(configWithNaturalInnerJoin,
     WCDBJNITryReleaseStringInCommonValue(query);
 }
 
-void WCDBJNIJoinObjectMethod(configWithNaturalCrossJoin,
-                             jlong join,
-                             WCDBJNIObjectOrStringParameter(query))
+void WCDBJNIJoinClassMethod(configWithNaturalCrossJoin,
+                            jlong join,
+                            WCDBJNIObjectOrStringParameter(query))
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
     WCDBJNICreateObjectOrStringCommonValue(query, true);
@@ -130,16 +128,16 @@ void WCDBJNIJoinObjectMethod(configWithNaturalCrossJoin,
     WCDBJNITryReleaseStringInCommonValue(query);
 }
 
-void WCDBJNIJoinObjectMethod(configOn, jlong join, jlong expression)
+void WCDBJNIJoinClassMethod(configOn, jlong join, jlong expression)
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
     WCDBJNIBridgeStruct(CPPExpression, expression);
     WCDBJoinConfigOn(joinStruct, expressionStruct);
 }
 
-void WCDBJNIJoinObjectMethod(configUsingColumn,
-                             jlong join,
-                             WCDBJNIObjectOrStringArrayParameter(columns))
+void WCDBJNIJoinClassMethod(configUsingColumn,
+                            jlong join,
+                            WCDBJNIObjectOrStringArrayParameter(columns))
 {
     WCDBJNIBridgeStruct(CPPJoin, join);
     WCDBJNICreateObjectOrStringArrayCriticalWithAction(

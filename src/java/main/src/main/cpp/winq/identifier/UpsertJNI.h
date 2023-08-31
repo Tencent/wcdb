@@ -34,13 +34,13 @@
     WCDBJNIClassMethod(Upsert, funcName, __VA_ARGS__)
 
 jlong WCDBJNIUpsertClassMethodWithNoArg(createCppObj);
-void WCDBJNIUpsertObjectMethod(configIndexedColumn,
-                               jlong upsert,
-                               WCDBJNIObjectOrStringArrayParameter(columns));
-void WCDBJNIUpsertObjectMethod(configWhere, jlong upsert, jlong expression);
-void WCDBJNIUpsertObjectMethod(configDoNothing, jlong upsert);
-void WCDBJNIUpsertObjectMethod(configDoUpdate, jlong upsert);
-void WCDBJNIUpsertObjectMethod(configSetColumns,
-                               jlong upsert,
-                               WCDBJNIObjectOrStringArrayParameter(columns));
-void WCDBJNIUpsertObjectMethod(configToValue, jlong upsert, WCDBJNICommonValueParameter(expression));
+void WCDBJNIUpsertClassMethod(configIndexedColumn,
+                              jlong upsert,
+                              WCDBJNIObjectOrStringArrayParameter(columns));
+void WCDBJNIUpsertClassMethod(configWhere, jlong upsert, jlong expression);
+void WCDBJNIUpsertClassMethod(configDoNothing, jlong upsert);
+void WCDBJNIUpsertClassMethod(configDoUpdate, jlong upsert);
+void WCDBJNIUpsertClassMethod(configSetColumns,
+                              jlong upsert,
+                              WCDBJNIObjectOrStringArrayParameter(columns));
+void WCDBJNIUpsertClassMethod(configToValue, jlong upsert, WCDBJNICommonValueParameter(expression));

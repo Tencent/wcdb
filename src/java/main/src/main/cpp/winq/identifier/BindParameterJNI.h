@@ -30,8 +30,8 @@
 #define WCDBJNIBindParameterClassMethod(funcName, ...)                         \
     WCDBJNIClassMethod(BindParameter, funcName, __VA_ARGS__)
 
-jlong WCDBJNIBindParameterObjectMethod(createQuestionSignType, jint num);
-jlong WCDBJNIBindParameterObjectMethod(createAtSignType, jstring name);
-jlong WCDBJNIBindParameterObjectMethod(createColonSignType, jstring name);
-jlong WCDBJNIBindParameterObjectMethod(createDollarSignType, jstring name);
+jlong WCDBJNIBindParameterClassMethod(createQuestionSignType, jint num);
+jlong WCDBJNIBindParameterClassMethod(createAtSignType, jstring name);
+jlong WCDBJNIBindParameterClassMethod(createColonSignType, jstring name);
+jlong WCDBJNIBindParameterClassMethod(createDollarSignType, jstring name);
 jlongArray WCDBJNIBindParameterClassMethod(bindParameters, jint size);

@@ -30,15 +30,17 @@
     WCDBJNIObjectMethod(Column, funcName, __VA_ARGS__)
 #define WCDBJNIColumnClassMethodWithNoArg(funcName)                            \
     WCDBJNIClassMethodWithNoArg(Column, funcName)
+#define WCDBJNIColumnClassMethod(funcName, ...)                                \
+    WCDBJNIClassMethod(Column, funcName, __VA_ARGS__)
 
 jlong WCDBJNIColumnClassMethodWithNoArg(createAll);
 
 jlong WCDBJNIColumnClassMethodWithNoArg(createRowId);
 
-jlong WCDBJNIColumnObjectMethod(createWithName, jstring name, jlong binding);
+jlong WCDBJNIColumnClassMethod(createWithName, jstring name, jlong binding);
 
-jlong WCDBJNIColumnObjectMethod(copy, jlong column);
+jlong WCDBJNIColumnClassMethod(copy, jlong column);
 
-void WCDBJNIColumnObjectMethod(inTable, jlong column, jstring table);
+void WCDBJNIColumnClassMethod(inTable, jlong column, jstring table);
 
-void WCDBJNIColumnObjectMethod(ofSchema, jlong column, WCDBJNIObjectOrStringParameter(schema));
+void WCDBJNIColumnClassMethod(ofSchema, jlong column, WCDBJNIObjectOrStringParameter(schema));

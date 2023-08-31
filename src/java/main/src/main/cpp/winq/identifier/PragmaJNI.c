@@ -24,7 +24,7 @@
 #include "PragmaJNI.h"
 #include "PragmaBridge.h"
 
-jlong WCDBJNIPragmaObjectMethod(create, jstring name)
+jlong WCDBJNIPragmaClassMethod(create, jstring name)
 {
     WCDBJNIGetStringCritical(name);
     jlong ret = (jlong) WCDBPragmaCreateWithName(nameString).innerValue;

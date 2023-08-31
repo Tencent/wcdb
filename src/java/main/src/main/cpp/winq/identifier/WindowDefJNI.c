@@ -29,9 +29,9 @@ jlong WCDBJNIWindowDefClassMethodWithNoArg(createCppObj)
     return (jlong) WCDBWindowDefCreate().innerValue;
 }
 
-void WCDBJNIWindowDefObjectMethod(configPartitions,
-                                  jlong self,
-                                  WCDBJNIMultiTypeArrayParameter(partitions))
+void WCDBJNIWindowDefClassMethod(configPartitions,
+                                 jlong self,
+                                 WCDBJNIMultiTypeArrayParameter(partitions))
 {
     WCDBJNIBridgeStruct(CPPWindowDef, self);
     WCDBJNICreateMultiTypeArray(partitions);
@@ -39,7 +39,7 @@ void WCDBJNIWindowDefObjectMethod(configPartitions,
     WCDBJNIReleaseMultiTypeArray(partitions);
 }
 
-void WCDBJNIWindowDefObjectMethod(configOrders, jlong self, jlongArray orders)
+void WCDBJNIWindowDefClassMethod(configOrders, jlong self, jlongArray orders)
 {
     WCDBJNIBridgeStruct(CPPWindowDef, self);
     WCDBJNIGetCppPointerArrayCritical(orders);
@@ -47,7 +47,7 @@ void WCDBJNIWindowDefObjectMethod(configOrders, jlong self, jlongArray orders)
     WCDBJNIReleaseCppPointerArrayCritical(orders);
 }
 
-void WCDBJNIWindowDefObjectMethod(configFrameSpec, jlong self, jlong frameSpec)
+void WCDBJNIWindowDefClassMethod(configFrameSpec, jlong self, jlong frameSpec)
 {
     WCDBJNIBridgeStruct(CPPWindowDef, self);
     WCDBJNIBridgeStruct(CPPFrameSpec, frameSpec);

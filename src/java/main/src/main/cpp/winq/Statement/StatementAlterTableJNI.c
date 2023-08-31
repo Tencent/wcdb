@@ -29,7 +29,7 @@ jlong WCDBJNIStatementAlterTableClassMethodWithNoArg(createCppObj)
     return (jlong) WCDBStatementAlterTableCreate().innerValue;
 }
 
-void WCDBJNIStatementAlterTableObjectMethod(configTable, jlong self, jstring table)
+void WCDBJNIStatementAlterTableClassMethod(configTable, jlong self, jstring table)
 {
     WCDBJNIBridgeStruct(CPPStatementAlterTable, self);
     WCDBJNIGetStringCritical(table);
@@ -37,9 +37,9 @@ void WCDBJNIStatementAlterTableObjectMethod(configTable, jlong self, jstring tab
     WCDBJNIReleaseStringCritical(table);
 }
 
-void WCDBJNIStatementAlterTableObjectMethod(configSchema,
-                                            jlong self,
-                                            WCDBJNIObjectOrStringParameter(schema))
+void WCDBJNIStatementAlterTableClassMethod(configSchema,
+                                           jlong self,
+                                           WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementAlterTable, self);
     WCDBJNICreateObjectOrStringCommonValue(schema, true);
@@ -47,7 +47,7 @@ void WCDBJNIStatementAlterTableObjectMethod(configSchema,
     WCDBJNITryReleaseStringInCommonValue(schema);
 }
 
-void WCDBJNIStatementAlterTableObjectMethod(configRenameToTable, jlong self, jstring table)
+void WCDBJNIStatementAlterTableClassMethod(configRenameToTable, jlong self, jstring table)
 {
     WCDBJNIBridgeStruct(CPPStatementAlterTable, self);
     WCDBJNIGetStringCritical(table);
@@ -55,9 +55,9 @@ void WCDBJNIStatementAlterTableObjectMethod(configRenameToTable, jlong self, jst
     WCDBJNIReleaseStringCritical(table);
 }
 
-void WCDBJNIStatementAlterTableObjectMethod(configRenameColumn,
-                                            jlong self,
-                                            WCDBJNIObjectOrStringParameter(column))
+void WCDBJNIStatementAlterTableClassMethod(configRenameColumn,
+                                           jlong self,
+                                           WCDBJNIObjectOrStringParameter(column))
 {
     WCDBJNIBridgeStruct(CPPStatementAlterTable, self);
     WCDBJNICreateObjectOrStringCommonValue(column, true);
@@ -65,9 +65,9 @@ void WCDBJNIStatementAlterTableObjectMethod(configRenameColumn,
     WCDBJNITryReleaseStringInCommonValue(column);
 }
 
-void WCDBJNIStatementAlterTableObjectMethod(configRenameToColumn,
-                                            jlong self,
-                                            WCDBJNIObjectOrStringParameter(column))
+void WCDBJNIStatementAlterTableClassMethod(configRenameToColumn,
+                                           jlong self,
+                                           WCDBJNIObjectOrStringParameter(column))
 {
     WCDBJNIBridgeStruct(CPPStatementAlterTable, self);
     WCDBJNICreateObjectOrStringCommonValue(column, true);
@@ -75,7 +75,7 @@ void WCDBJNIStatementAlterTableObjectMethod(configRenameToColumn,
     WCDBJNITryReleaseStringInCommonValue(column);
 }
 
-void WCDBJNIStatementAlterTableObjectMethod(configAddColumn, jlong self, jlong columnDef)
+void WCDBJNIStatementAlterTableClassMethod(configAddColumn, jlong self, jlong columnDef)
 {
     WCDBJNIBridgeStruct(CPPStatementAlterTable, self);
     WCDBJNIBridgeStruct(CPPColumnDef, columnDef);

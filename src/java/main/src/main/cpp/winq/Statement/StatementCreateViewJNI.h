@@ -33,16 +33,18 @@
     WCDBJNIObjectMethodWithNoArg(StatementCreateView, funcName)
 #define WCDBJNIStatementCreateViewClassMethodWithNoArg(funcName)               \
     WCDBJNIClassMethodWithNoArg(StatementCreateView, funcName)
+#define WCDBJNIStatementCreateViewClassMethod(funcName, ...)                   \
+    WCDBJNIClassMethod(StatementCreateView, funcName, __VA_ARGS__)
 
-jlong WCDBJNIStatementCreateViewObjectMethodWithNoArg(createCppObj);
+jlong WCDBJNIStatementCreateViewClassMethodWithNoArg(createCppObj);
 
-void WCDBJNIStatementCreateViewObjectMethod(configView, jlong self, jstring name);
-void WCDBJNIStatementCreateViewObjectMethod(configSchema,
-                                            jlong self,
-                                            WCDBJNIObjectOrStringParameter(schema));
-void WCDBJNIStatementCreateViewObjectMethod(configTemp, jlong self);
-void WCDBJNIStatementCreateViewObjectMethod(configIfNotExist, jlong self);
-void WCDBJNIStatementCreateViewObjectMethod(configAs, jlong self, jlong select);
-void WCDBJNIStatementCreateViewObjectMethod(configColumns,
-                                            jlong self,
-                                            WCDBJNIObjectOrStringArrayParameter(columns));
+void WCDBJNIStatementCreateViewClassMethod(configView, jlong self, jstring name);
+void WCDBJNIStatementCreateViewClassMethod(configSchema,
+                                           jlong self,
+                                           WCDBJNIObjectOrStringParameter(schema));
+void WCDBJNIStatementCreateViewClassMethod(configTemp, jlong self);
+void WCDBJNIStatementCreateViewClassMethod(configIfNotExist, jlong self);
+void WCDBJNIStatementCreateViewClassMethod(configAs, jlong self, jlong select);
+void WCDBJNIStatementCreateViewClassMethod(configColumns,
+                                           jlong self,
+                                           WCDBJNIObjectOrStringArrayParameter(columns));

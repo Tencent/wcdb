@@ -24,7 +24,7 @@
 #include "LiteralValueJNI.h"
 #include "LiteralValueBridge.h"
 
-jlong WCDBJNILiteralValueObjectMethod(create, WCDBJNICommonValueParameter(value))
+jlong WCDBJNILiteralValueClassMethod(create, WCDBJNICommonValueParameter(value))
 {
     WCDBJNICreateCommonValue(value, true);
     jlong ret = (jlong) WCDBLiteralValueCreate(value_common).innerValue;
@@ -32,22 +32,22 @@ jlong WCDBJNILiteralValueObjectMethod(create, WCDBJNICommonValueParameter(value)
     return ret;
 }
 
-jlong WCDBJNILiteralValueObjectMethod(createWithInt64, jlong value)
+jlong WCDBJNILiteralValueClassMethod(createWithInt64, jlong value)
 {
     return (jlong) WCDBLiteralValueCreateWithInt64(value).innerValue;
 }
 
-jlong WCDBJNILiteralValueObjectMethod(createWithBool, jboolean value)
+jlong WCDBJNILiteralValueClassMethod(createWithBool, jboolean value)
 {
     return (jlong) WCDBLiteralValueCreateWithBool(value).innerValue;
 }
 
-jlong WCDBJNILiteralValueObjectMethod(createWithDouble, jdouble value)
+jlong WCDBJNILiteralValueClassMethod(createWithDouble, jdouble value)
 {
     return (jlong) WCDBLiteralValueCreateWithDouble(value).innerValue;
 }
 
-jlong WCDBJNILiteralValueObjectMethod(createWithString, jstring value)
+jlong WCDBJNILiteralValueClassMethod(createWithString, jstring value)
 {
     WCDBJNIGetStringCritical(value);
     jlong result = (jlong) WCDBLiteralValueCreateWithString(valueString).innerValue;

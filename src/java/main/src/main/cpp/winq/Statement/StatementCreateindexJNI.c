@@ -24,12 +24,12 @@
 #include "StatementCreateindexJNI.h"
 #include "StatementCreateIndexBridge.h"
 
-jlong WCDBJNIStatementCreateIndexObjectMethodWithNoArg(create)
+jlong WCDBJNIStatementCreateIndexClassMethodWithNoArg(create)
 {
     return (jlong) WCDBStatementCreateIndexCreate().innerValue;
 }
 
-void WCDBJNIStatementCreateIndexObjectMethod(configIndex, jlong self, jstring name)
+void WCDBJNIStatementCreateIndexClassMethod(configIndex, jlong self, jstring name)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateIndex, self);
     WCDBJNIGetStringCritical(name);
@@ -37,9 +37,9 @@ void WCDBJNIStatementCreateIndexObjectMethod(configIndex, jlong self, jstring na
     WCDBJNIReleaseStringCritical(name);
 }
 
-void WCDBJNIStatementCreateIndexObjectMethod(configSchema,
-                                             jlong self,
-                                             WCDBJNIObjectOrStringParameter(schema))
+void WCDBJNIStatementCreateIndexClassMethod(configSchema,
+                                            jlong self,
+                                            WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementCreateIndex, self);
     WCDBJNICreateObjectOrStringCommonValue(schema, true);
@@ -47,19 +47,19 @@ void WCDBJNIStatementCreateIndexObjectMethod(configSchema,
     WCDBJNITryReleaseStringInCommonValue(schema);
 }
 
-void WCDBJNIStatementCreateIndexObjectMethod(configUnique, jlong self)
+void WCDBJNIStatementCreateIndexClassMethod(configUnique, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateIndex, self);
     WCDBStatementCreateIndexConfigUniqe(selfStruct);
 }
 
-void WCDBJNIStatementCreateIndexObjectMethod(configIfNotExist, jlong self)
+void WCDBJNIStatementCreateIndexClassMethod(configIfNotExist, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateIndex, self);
     WCDBStatementCreateIndexConfigIfNotExist(selfStruct);
 }
 
-void WCDBJNIStatementCreateIndexObjectMethod(configTable, jlong self, jstring tableName)
+void WCDBJNIStatementCreateIndexClassMethod(configTable, jlong self, jstring tableName)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateIndex, self);
     WCDBJNIGetStringCritical(tableName);
@@ -67,16 +67,16 @@ void WCDBJNIStatementCreateIndexObjectMethod(configTable, jlong self, jstring ta
     WCDBJNIReleaseStringCritical(tableName);
 }
 
-void WCDBJNIStatementCreateIndexObjectMethod(configIndexedColumns,
-                                             jlong self,
-                                             WCDBJNIObjectOrStringArrayParameter(indexColumns))
+void WCDBJNIStatementCreateIndexClassMethod(configIndexedColumns,
+                                            jlong self,
+                                            WCDBJNIObjectOrStringArrayParameter(indexColumns))
 {
     WCDBJNIBridgeStruct(CPPStatementCreateIndex, self);
     WCDBJNICreateObjectOrStringArrayCriticalWithAction(
     indexColumns, WCDBStatementCreateIndexConfigIndexColumns2(selfStruct, indexColumns_commonArray));
 }
 
-void WCDBJNIStatementCreateIndexObjectMethod(configWhere, jlong self, jlong condition)
+void WCDBJNIStatementCreateIndexClassMethod(configWhere, jlong self, jlong condition)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateIndex, self);
     WCDBJNIBridgeStruct(CPPExpression, condition);

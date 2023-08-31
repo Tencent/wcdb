@@ -24,12 +24,12 @@
 #include "BindParameterJNI.h"
 #include "BindParameterBridge.h"
 
-jlong WCDBJNIBindParameterObjectMethod(createQuestionSignType, jint num)
+jlong WCDBJNIBindParameterClassMethod(createQuestionSignType, jint num)
 {
     return (jlong) WCDBBindparameterCreateQuestionSignType(num).innerValue;
 }
 
-jlong WCDBJNIBindParameterObjectMethod(createAtSignType, jstring name)
+jlong WCDBJNIBindParameterClassMethod(createAtSignType, jstring name)
 {
     WCDBJNIGetStringCritical(name);
     jlong ret = (jlong) WCDBBindparameterCreateAtSignType(nameString).innerValue;
@@ -37,7 +37,7 @@ jlong WCDBJNIBindParameterObjectMethod(createAtSignType, jstring name)
     return ret;
 }
 
-jlong WCDBJNIBindParameterObjectMethod(createColonSignType, jstring name)
+jlong WCDBJNIBindParameterClassMethod(createColonSignType, jstring name)
 {
     WCDBJNIGetStringCritical(name);
     jlong ret = (jlong) WCDBBindparameterCreateColonSignType(nameString).innerValue;
@@ -45,7 +45,7 @@ jlong WCDBJNIBindParameterObjectMethod(createColonSignType, jstring name)
     return ret;
 }
 
-jlong WCDBJNIBindParameterObjectMethod(createDollarSignType, jstring name)
+jlong WCDBJNIBindParameterClassMethod(createDollarSignType, jstring name)
 {
     WCDBJNIGetStringCritical(name);
     jlong ret = (jlong) WCDBBindparameterCreateDollarSignType(nameString).innerValue;

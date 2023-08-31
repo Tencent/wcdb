@@ -36,25 +36,25 @@
         }                                                                             \
     }
 
-jlong WCDBJNIDatabaseObjectMethod(getError, jlong self)
+jlong WCDBJNIDatabaseClassMethod(getError, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     return (jlong) WCDBDatabaseGetError(selfStruct).innerValue;
 }
 
-jlong WCDBJNIDatabaseObjectMethod(getTag, jlong self)
+jlong WCDBJNIDatabaseClassMethod(getTag, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     return (jlong) WCDBDatabaseGetTag(selfStruct);
 }
 
-void WCDBJNIDatabaseObjectMethod(setTag, jlong self, jlong tag)
+void WCDBJNIDatabaseClassMethod(setTag, jlong self, jlong tag)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBDatabaseSetTag(selfStruct, tag);
 }
 
-jstring WCDBJNIDatabaseObjectMethod(getPath, jlong self)
+jstring WCDBJNIDatabaseClassMethod(getPath, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBJNICreateJStringAndReturn(WCDBDatabaseGetPath(selfStruct));
@@ -77,7 +77,7 @@ void WCDBJNIStringEnumerator(StringEnumeratorContext* context, const char* strin
     (*env)->CallBooleanMethod(env, context->array, g_addMethod, jstring);
 }
 
-jobject WCDBJNIDatabaseObjectMethod(getPaths, jlong self)
+jobject WCDBJNIDatabaseClassMethod(getPaths, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBJNIFindClass(g_arrayClass, "java/util/ArrayList", return NULL);
@@ -91,25 +91,25 @@ jobject WCDBJNIDatabaseObjectMethod(getPaths, jlong self)
     return arrayList;
 }
 
-jlong WCDBJNIDatabaseObjectMethod(getHandle, jlong self, jboolean writeHint)
+jlong WCDBJNIDatabaseClassMethod(getHandle, jlong self, jboolean writeHint)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     return (jlong) WCDBDatabaseGetHandle(selfStruct, writeHint).innerValue;
 }
 
-jboolean WCDBJNIDatabaseObjectMethod(canOpen, jlong self)
+jboolean WCDBJNIDatabaseClassMethod(canOpen, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     return WCDBDatabaseCanOpen(selfStruct);
 }
 
-jboolean WCDBJNIDatabaseObjectMethod(isOpened, jlong self)
+jboolean WCDBJNIDatabaseClassMethod(isOpened, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     return WCDBDatabaseIsOpened(selfStruct);
 }
 
-jboolean WCDBJNIDatabaseObjectMethod(isBlockaded, jlong self)
+jboolean WCDBJNIDatabaseClassMethod(isBlockaded, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     return WCDBDatabaseIsBlockaded(selfStruct);
@@ -129,7 +129,7 @@ void WCDBJNIDatabaseCloseCallback(CloseDatabaseContext* context)
     env, WCDBJNIGetDatabaseClass(), g_methodId, context->callback);
 }
 
-void WCDBJNIDatabaseObjectMethod(close, jlong self, jobject callback)
+void WCDBJNIDatabaseClassMethod(close, jlong self, jobject callback)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     if (callback != NULL) {
@@ -143,25 +143,25 @@ void WCDBJNIDatabaseObjectMethod(close, jlong self, jobject callback)
     }
 }
 
-void WCDBJNIDatabaseObjectMethod(blockade, jlong self)
+void WCDBJNIDatabaseClassMethod(blockade, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBDatabaseBlockade(selfStruct);
 }
 
-void WCDBJNIDatabaseObjectMethod(unblockade, jlong self)
+void WCDBJNIDatabaseClassMethod(unblockade, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBDatabaseUnblockade(selfStruct);
 }
 
-void WCDBJNIDatabaseObjectMethod(purge, jlong self)
+void WCDBJNIDatabaseClassMethod(purge, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBDatabasePurge(selfStruct);
 }
 
-void WCDBJNIDatabaseObjectMethod(configCipher, jlong self, jbyteArray cipherKey, jint pageSize, jint cipherVersion)
+void WCDBJNIDatabaseClassMethod(configCipher, jlong self, jbyteArray cipherKey, jint pageSize, jint cipherVersion)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBJNIGetByteArrayCritical(cipherKey);
@@ -184,7 +184,7 @@ bool WCDBJNIDatabaseConfig(jobject config, CPPHandle handle)
     return ret;
 }
 
-void WCDBJNIDatabaseObjectMethod(
+void WCDBJNIDatabaseClassMethod(
 config, jlong self, jstring name, jobject invocation, jobject unInvocation, jint priority)
 {
     WCDBJNITryGetVM;
@@ -230,7 +230,7 @@ void WCDBJNIDatabaseClassMethod(globalTracePerformance, jobject tracer)
     tracer != NULL ? WCDBJNIDatabasePerformanceTrace : NULL, tracer, WCDBJNIDestructContext);
 }
 
-void WCDBJNIDatabaseObjectMethod(tracePerformance, jlong self, jobject tracer)
+void WCDBJNIDatabaseClassMethod(tracePerformance, jlong self, jobject tracer)
 {
     WCDBJNITryGetVM;
     WCDBJNIBridgeStruct(CPPDatabase, self);
@@ -262,7 +262,7 @@ void WCDBJNIDatabaseClassMethod(globalTraceSQL, jobject tracer)
     tracer != NULL ? WCDBJNIDatabaseSQLTrace : NULL, tracer, WCDBJNIDestructContext);
 }
 
-void WCDBJNIDatabaseObjectMethod(traceSQL, jlong self, jobject tracer)
+void WCDBJNIDatabaseClassMethod(traceSQL, jlong self, jobject tracer)
 {
     WCDBJNITryGetVM;
     WCDBJNIBridgeStruct(CPPDatabase, self);
@@ -289,7 +289,7 @@ void WCDBJNIDatabaseClassMethod(globalTraceError, jobject tracer)
     tracer != NULL ? WCDBJNIDatabaseErrorTrace : NULL, tracer, WCDBJNIDestructContext);
 }
 
-void WCDBJNIDatabaseObjectMethod(traceError, jlong self, jobject tracer)
+void WCDBJNIDatabaseClassMethod(traceError, jlong self, jobject tracer)
 {
     WCDBJNITryGetVM;
     WCDBJNIBridgeStruct(CPPDatabase, self);
@@ -376,13 +376,13 @@ void WCDBJNIDatabaseClassMethod(enumerateInfo, jobject javaInfo, jlong cppInfo)
                                (StringViewMapEnumerator) WCDBJNIDatabaseEnumerateInfoCallback);
 }
 
-jboolean WCDBJNIDatabaseObjectMethod(removeFiles, jlong self)
+jboolean WCDBJNIDatabaseClassMethod(removeFiles, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     return WCDBDatabaseRemoveFile(selfStruct);
 }
 
-jboolean WCDBJNIDatabaseObjectMethod(moveFile, jlong self, jstring destination)
+jboolean WCDBJNIDatabaseClassMethod(moveFile, jlong self, jstring destination)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBJNIGetString(destination);
@@ -391,7 +391,7 @@ jboolean WCDBJNIDatabaseObjectMethod(moveFile, jlong self, jstring destination)
     return ret;
 }
 
-jlong WCDBJNIDatabaseObjectMethod(getFileSize, jlong self)
+jlong WCDBJNIDatabaseClassMethod(getFileSize, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     OptionalUInt64 size = WCDBDatabaseGetFileSize(selfStruct);
@@ -408,7 +408,7 @@ void WCDBJNIDatabaseCorrupted(jobject notification, CPPDatabase database)
     WCDBJNITryDetach;
 }
 
-void WCDBJNIDatabaseObjectMethod(setNotificationWhenCorrupted, jlong self, jobject notification)
+void WCDBJNIDatabaseClassMethod(setNotificationWhenCorrupted, jlong self, jobject notification)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBJNITryGetVM;
@@ -417,25 +417,25 @@ void WCDBJNIDatabaseObjectMethod(setNotificationWhenCorrupted, jlong self, jobje
     selfStruct, notification != NULL ? WCDBJNIDatabaseCorrupted : NULL, notification, WCDBJNIDestructContext);
 }
 
-jboolean WCDBJNIDatabaseObjectMethod(checkIfCorrupted, jlong self)
+jboolean WCDBJNIDatabaseClassMethod(checkIfCorrupted, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     return WCDBDatabaseCheckIfCorrupted(selfStruct);
 }
 
-jboolean WCDBJNIDatabaseObjectMethod(checkIfIsAlreadyCorrupted, jlong self)
+jboolean WCDBJNIDatabaseClassMethod(checkIfIsAlreadyCorrupted, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     return WCDBDatabaseCheckIsAlreadyCorrupted(selfStruct);
 }
 
-void WCDBJNIDatabaseObjectMethod(enableAutoBackup, jlong self, jboolean enable)
+void WCDBJNIDatabaseClassMethod(enableAutoBackup, jlong self, jboolean enable)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBDatabaseEnableAutoBackup(selfStruct, enable);
 }
 
-jboolean WCDBJNIDatabaseObjectMethod(backup, jlong self)
+jboolean WCDBJNIDatabaseClassMethod(backup, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     return WCDBDatabaseBackup(selfStruct);
@@ -458,7 +458,7 @@ bool WCDBJNIDatabaseTableShouldBeBackup(jobject filter, const char* table)
     return ret;
 }
 
-void WCDBJNIDatabaseObjectMethod(filterBackup, jlong self, jobject tableShouldBeBackup)
+void WCDBJNIDatabaseClassMethod(filterBackup, jlong self, jobject tableShouldBeBackup)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBJNITryGetVM;
@@ -470,19 +470,19 @@ void WCDBJNIDatabaseObjectMethod(filterBackup, jlong self, jobject tableShouldBe
     WCDBJNIDestructContext);
 }
 
-jboolean WCDBJNIDatabaseObjectMethod(deposit, jlong self)
+jboolean WCDBJNIDatabaseClassMethod(deposit, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     return WCDBDatabaseDeposit(selfStruct);
 }
 
-jboolean WCDBJNIDatabaseObjectMethod(removeDepositedFiles, jlong self)
+jboolean WCDBJNIDatabaseClassMethod(removeDepositedFiles, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     return WCDBDatabaseRemoveDepositedFiles(selfStruct);
 }
 
-jboolean WCDBJNIDatabaseObjectMethod(containDepositedFiles, jlong self)
+jboolean WCDBJNIDatabaseClassMethod(containDepositedFiles, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     return WCDBDatabaseContainDepositedFiles(selfStruct);
@@ -499,7 +499,7 @@ void WCDBJNIDatabaseOnRetrievePorgressUpdate(jobject monitor, double percentage,
     WCDBJNITryDetach;
 }
 
-jdouble WCDBJNIDatabaseObjectMethod(retrieve, jlong self, jobject onProgressUpdate)
+jdouble WCDBJNIDatabaseClassMethod(retrieve, jlong self, jobject onProgressUpdate)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBJNITryGetVM;
@@ -512,13 +512,13 @@ jdouble WCDBJNIDatabaseObjectMethod(retrieve, jlong self, jobject onProgressUpda
                                  WCDBJNIDestructContext);
 }
 
-jboolean WCDBJNIDatabaseObjectMethod(passiveCheckpoint, jlong self)
+jboolean WCDBJNIDatabaseClassMethod(passiveCheckpoint, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     return WCDBDatabasePassiveCheckpoint(selfStruct);
 }
 
-jboolean WCDBJNIDatabaseObjectMethod(truncateCheckpoint, jlong self)
+jboolean WCDBJNIDatabaseClassMethod(truncateCheckpoint, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     return WCDBDatabaseTruncateCheckpoint(selfStruct);
@@ -537,7 +537,7 @@ void WCDBJNIDatabaseFilterMigrate(jobject filter, const char* table, void* info,
     WCDBJNITryDetach;
 }
 
-void WCDBJNIDatabaseObjectMethod(
+void WCDBJNIDatabaseClassMethod(
 addMigrationSource, jlong self, jstring sourcePath, jbyteArray cipherKey, jobject filter)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
@@ -563,13 +563,13 @@ void WCDBJNIDatabaseClassMethod(setMigrationInfo, jlong infoSetter, jlong info, 
     WCDBJNIReleaseStringCritical(sourceTable);
 }
 
-jboolean WCDBJNIDatabaseObjectMethod(stepMigration, jlong self)
+jboolean WCDBJNIDatabaseClassMethod(stepMigration, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     return WCDBDatabaseStepMigration(selfStruct);
 }
 
-void WCDBJNIDatabaseObjectMethod(enableAutoMigration, jlong self, jboolean flag)
+void WCDBJNIDatabaseClassMethod(enableAutoMigration, jlong self, jboolean flag)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBDatabaseEnableAutoMigration(selfStruct, flag);
@@ -593,7 +593,7 @@ void WCDBJNIDatabaseOnTableMigrate(jobject notification,
     WCDBJNITryDetach;
 }
 
-void WCDBJNIDatabaseObjectMethod(setNotificationWhenMigrated, jlong self, jobject onMigrated)
+void WCDBJNIDatabaseClassMethod(setNotificationWhenMigrated, jlong self, jobject onMigrated)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBJNITryGetVM;
@@ -602,7 +602,7 @@ void WCDBJNIDatabaseObjectMethod(setNotificationWhenMigrated, jlong self, jobjec
     selfStruct, onMigrated != NULL ? WCDBJNIDatabaseOnTableMigrate : NULL, onMigrated, WCDBJNIDestructContext);
 }
 
-jboolean WCDBJNIDatabaseObjectMethod(isMigrated, jlong self)
+jboolean WCDBJNIDatabaseClassMethod(isMigrated, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     return WCDBDatabaseIsMigrated(selfStruct);

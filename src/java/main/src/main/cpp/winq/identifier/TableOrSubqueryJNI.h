@@ -34,23 +34,23 @@
 #define WCDBJNITableOrSubqueryClassMethod(funcName, ...)                       \
     WCDBJNIClassMethod(TableOrSubquery, funcName, __VA_ARGS__)
 
-jlong WCDBJNITableOrSubqueryObjectMethod(create, WCDBJNIObjectOrStringParameter(tableOrSubquery));
+jlong WCDBJNITableOrSubqueryClassMethod(create, WCDBJNIObjectOrStringParameter(tableOrSubquery));
 
-jlong WCDBJNITableOrSubqueryObjectMethod(createWithTableOrSubqueries,
-                                         WCDBJNIObjectOrStringArrayParameter(subquaries));
+jlong WCDBJNITableOrSubqueryClassMethod(createWithTableOrSubqueries,
+                                        WCDBJNIObjectOrStringArrayParameter(subquaries));
 
 jlong WCDBJNITableOrSubqueryClassMethod(createWithFunction, jstring funcName);
 
-void WCDBJNITableOrSubqueryObjectMethod(configSchema,
-                                        jlong tableOrSubquery,
-                                        WCDBJNIObjectOrStringParameter(schema));
+void WCDBJNITableOrSubqueryClassMethod(configSchema,
+                                       jlong tableOrSubquery,
+                                       WCDBJNIObjectOrStringParameter(schema));
 
-void WCDBJNITableOrSubqueryObjectMethod(configAlias, jlong tableOrSubquery, jstring alias);
+void WCDBJNITableOrSubqueryClassMethod(configAlias, jlong tableOrSubquery, jstring alias);
 
-void WCDBJNITableOrSubqueryObjectMethod(configNotIndexed, jlong tableOrSubquery);
+void WCDBJNITableOrSubqueryClassMethod(configNotIndexed, jlong tableOrSubquery);
 
-void WCDBJNITableOrSubqueryObjectMethod(configIndexName, jlong tableOrSubquery, jstring index);
+void WCDBJNITableOrSubqueryClassMethod(configIndexName, jlong tableOrSubquery, jstring index);
 
-void WCDBJNITableOrSubqueryObjectMethod(argument,
-                                        jlong tableOrSubquery,
-                                        WCDBJNICommonValueParameter(argument));
+void WCDBJNITableOrSubqueryClassMethod(argument,
+                                       jlong tableOrSubquery,
+                                       WCDBJNICommonValueParameter(argument));

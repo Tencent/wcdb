@@ -1172,7 +1172,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return ret;
     }
 
-    private native long nullOperate(int type, long operand, boolean isNot);
+    private static native long nullOperate(int type, long operand, boolean isNot);
 
     private enum BinaryOperatorType {
         Concatenate,
@@ -1255,12 +1255,12 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
                 isNot));
     }
 
-    private native long binaryOperate(int leftType, long left,
+    private static native long binaryOperate(int leftType, long left,
                                       int rightType, long right_long, double right_double, String right_string,
                                       int operatorType,
                                       boolean isNot);
 
-    private native long betweenOperate(int operandType, long operand,
+    private static native long betweenOperate(int operandType, long operand,
                                        int leftType, long left_long, double left_double, String left_string,
                                        int rightType, long right_long, double right_double, String right_string,
                                        boolean isNot);
@@ -1305,7 +1305,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
                 isNot));
     }
 
-    private native long in(int operandType, long operand, int type, long[] longArray, double[] doubleArray, String[] stringArray, boolean isNot);
+    private static native long in(int operandType, long operand, int type, long[] longArray, double[] doubleArray, String[] stringArray, boolean isNot);
 
     private Expression in(Object[] operands, boolean isNot) {
         if(operands == null || operands.length == 0) {
@@ -1373,19 +1373,19 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return createExpression(inTable(Identifier.getCppType(this), CppObject.get(this), table, isNot));
     }
 
-    private native long inTable(int type, long operand, String table, boolean isNot);
+    private static native long inTable(int type, long operand, String table, boolean isNot);
 
     private Expression inFunction(String func, boolean isNot) {
         return createExpression(inFunction(Identifier.getCppType(this), CppObject.get(this), func, isNot));
     }
 
-    private native long inFunction(int type, long operand, String func, boolean isNot);
+    private static native long inFunction(int type, long operand, String func, boolean isNot);
 
     private Expression in(StatementSelect select, boolean isNot) {
         return createExpression(inSelect(Identifier.getCppType(this), CppObject.get(this), CppObject.get(select), isNot));
     }
 
-    private native long inSelect(int type, long operand, long select, boolean isNot);
+    private static native long inSelect(int type, long operand, long select, boolean isNot);
 
-    private native long collate(int type, long operand, String collation);
+    private static native long collate(int type, long operand, String collation);
 }

@@ -24,12 +24,12 @@
 #include "StatementReleaseJNI.h"
 #include "StatementReleaseBridge.h"
 
-jlong WCDBJNIStatementReleaseObjectMethodWithNoArg(createCppObj)
+jlong WCDBJNIStatementReleaseClassMethodWithNoArg(createCppObj)
 {
     return (jlong) WCDBStatementReleaseCreate().innerValue;
 }
 
-void WCDBJNIStatementReleaseObjectMethod(configSavepoint, jlong self, jstring savepoint)
+void WCDBJNIStatementReleaseClassMethod(configSavepoint, jlong self, jstring savepoint)
 {
     WCDBJNIBridgeStruct(CPPStatementRelease, self);
     WCDBJNIGetStringCritical(savepoint);

@@ -70,9 +70,9 @@ public class StatementUpdate extends Statement {
         return this;
     }
 
-    private native void configWith(long self, long[] expressions);
+    private static native void configWith(long self, long[] expressions);
 
-    private native void configRecursive(long self);
+    private static native void configRecursive(long self);
 
     public StatementUpdate update(String tableName) {
         configTable(cppObj, CPPType.String.ordinal(), 0, tableName);
@@ -84,7 +84,7 @@ public class StatementUpdate extends Statement {
         return this;
     }
 
-    private native void configTable(long self, int type, long table, String tableName);
+    private static native void configTable(long self, int type, long table, String tableName);
 
     public StatementUpdate orReplace() {
         configConflictAction(cppObj, ConflictAction.Replace.ordinal());
@@ -110,7 +110,7 @@ public class StatementUpdate extends Statement {
         configConflictAction(cppObj, ConflictAction.Ignore.ordinal());
         return this;
     }
-    private native void configConflictAction(long self, int action);
+    private static native void configConflictAction(long self, int action);
 
     public StatementUpdate setColumnsToBindParameters(Column[] columns) {
         if(columns == null || columns.length == 0) {
@@ -132,7 +132,7 @@ public class StatementUpdate extends Statement {
         return this;
     }
 
-    private native void configColumnsToBindParameters(long self, int type, long[] columns, String[] columnNames);
+    private static native void configColumnsToBindParameters(long self, int type, long[] columns, String[] columnNames);
 
     public StatementUpdate setColumnsToValues(Column[] columns, Object[] values) {
         if(columns == null || columns.length == 0 || values == null || values.length == 0) {
@@ -165,7 +165,7 @@ public class StatementUpdate extends Statement {
         return this;
     }
 
-    private native void configColumnsToValues(long self,
+    private static native void configColumnsToValues(long self,
                                               int columnType,
                                               long[] columns,
                                               String[] columnNames,
@@ -207,7 +207,7 @@ public class StatementUpdate extends Statement {
         return this;
     }
 
-    private native void configColumns(long self, int type, long[] columns, String[] columnNames);
+    private static native void configColumns(long self, int type, long[] columns, String[] columnNames);
 
     public StatementUpdate to(boolean arg) {
         configToValue(cppObj, CPPType.Bool.ordinal(), arg ? 1 : 0, 0, null);
@@ -263,14 +263,14 @@ public class StatementUpdate extends Statement {
         return this;
     }
 
-    private native void configToValue(long self, int type, long intValue, double doubleValue, String stringValue);
+    private static native void configToValue(long self, int type, long intValue, double doubleValue, String stringValue);
 
     public StatementUpdate where(Expression condition) {
         configCondition(cppObj, CppObject.get(condition));
         return this;
     }
 
-    private native void configCondition(long self, long condition);
+    private static native void configCondition(long self, long condition);
 
     public StatementUpdate orderBy(OrderingTerm order) {
         configOrders(cppObj, new long[]{CppObject.get(order)});
@@ -289,7 +289,7 @@ public class StatementUpdate extends Statement {
         return this;
     }
 
-    private native void configOrders(long self, long[] orders);
+    private static native void configOrders(long self, long[] orders);
 
     public StatementUpdate limit(long from, long to) {
         configLimitRange(cppObj, CPPType.Int.ordinal(), from, CPPType.Int.ordinal(), to);
@@ -311,7 +311,7 @@ public class StatementUpdate extends Statement {
         return this;
     }
 
-    private native void configLimitRange(long self, int fromType, long from, int toType, long to);
+    private static native void configLimitRange(long self, int fromType, long from, int toType, long to);
 
     public StatementUpdate limit(long count) {
         configLimitCount(cppObj, CPPType.Int.ordinal(), count);
@@ -323,7 +323,7 @@ public class StatementUpdate extends Statement {
         return this;
     }
 
-    private native void configLimitCount(long self, int type, long count);
+    private static native void configLimitCount(long self, int type, long count);
 
     public StatementUpdate offset(long offset) {
         configOffset(cppObj, CPPType.Int.ordinal(), offset);
@@ -335,5 +335,5 @@ public class StatementUpdate extends Statement {
         return this;
     }
 
-    private native void configOffset(long self, int type, long count);
+    private static native void configOffset(long self, int type, long count);
 }

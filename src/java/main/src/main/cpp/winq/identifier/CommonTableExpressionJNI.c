@@ -32,14 +32,14 @@ jlong WCDBJNICommonTableExpressionClassMethod(createWithTable, jstring tableName
     return ret;
 }
 
-void WCDBJNICommonTableExpressionObjectMethod(configColumn, jlong self, jlong column)
+void WCDBJNICommonTableExpressionClassMethod(configColumn, jlong self, jlong column)
 {
     WCDBJNIBridgeStruct(CPPCommonTableExpression, self);
     WCDBJNIBridgeStruct(CPPColumn, column);
     WCDBCommonTableExpressionAddColumn(selfStruct, columnStruct);
 }
 
-void WCDBJNICommonTableExpressionObjectMethod(configSelectStatement, jlong self, jlong select)
+void WCDBJNICommonTableExpressionClassMethod(configSelectStatement, jlong self, jlong select)
 {
     WCDBJNIBridgeStruct(CPPCommonTableExpression, self);
     WCDBJNIBridgeStruct(CPPStatementSelect, select);

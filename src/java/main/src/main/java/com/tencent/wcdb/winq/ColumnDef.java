@@ -47,14 +47,14 @@ public class ColumnDef extends Identifier{
         cppObj = createCppObj(Identifier.getCppType(column), CppObject.get(column), null, columnType.ordinal());
     }
 
-    private native long createCppObj(int type, long column, String columnName, int columnType);
+    private static native long createCppObj(int type, long column, String columnName, int columnType);
 
     public ColumnDef constraint(ColumnConstraint constraint) {
         constraint(cppObj, CppObject.get(constraint));
         return this;
     }
 
-    private native void constraint(long columnDef, long columnConstraint);
+    private static native void constraint(long columnDef, long columnConstraint);
 
     public ColumnDef makePrimary() {
         return constraint(new ColumnConstraint().primaryKey());

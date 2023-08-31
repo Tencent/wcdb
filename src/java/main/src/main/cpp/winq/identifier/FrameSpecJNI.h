@@ -34,26 +34,26 @@
     WCDBJNIClassMethod(FrameSpec, funcName, __VA_ARGS__)
 
 jlong WCDBJNIFrameSpecClassMethodWithNoArg(createCppObj);
-void WCDBJNIFrameSpecObjectMethod(configRange, jlong self);
-void WCDBJNIFrameSpecObjectMethod(configRows, jlong self);
-void WCDBJNIFrameSpecObjectMethod(configUnboundedPreceding, jlong self);
-void WCDBJNIFrameSpecObjectMethod(configPreceding,
-                                  jlong self,
-                                  WCDBJNIObjectOrIntegerParameter(expression));
-void WCDBJNIFrameSpecObjectMethod(configCurrentRow, jlong self);
-void WCDBJNIFrameSpecObjectMethod(configBetweenUnboundedPreceding, jlong self);
-void WCDBJNIFrameSpecObjectMethod(configBetweenPreceding,
-                                  jlong self,
-                                  WCDBJNIObjectOrIntegerParameter(expression));
-void WCDBJNIFrameSpecObjectMethod(configBetweenCurrentRow, jlong self);
-void WCDBJNIFrameSpecObjectMethod(configBetweenFollowing,
-                                  jlong self,
-                                  WCDBJNIObjectOrIntegerParameter(expression));
-void WCDBJNIFrameSpecObjectMethod(configAndPreceding,
-                                  jlong self,
-                                  WCDBJNIObjectOrIntegerParameter(expression));
-void WCDBJNIFrameSpecObjectMethod(configAndCurrentRow, jlong self);
-void WCDBJNIFrameSpecObjectMethod(configAndFollowing,
-                                  jlong self,
-                                  WCDBJNIObjectOrIntegerParameter(expression));
-void WCDBJNIFrameSpecObjectMethod(configAndUnboundedFollowing, jlong self);
+void WCDBJNIFrameSpecClassMethod(configRange, jlong self);
+void WCDBJNIFrameSpecClassMethod(configRows, jlong self);
+void WCDBJNIFrameSpecClassMethod(configUnboundedPreceding, jlong self);
+void WCDBJNIFrameSpecClassMethod(configPreceding,
+                                 jlong self,
+                                 WCDBJNIObjectOrIntegerParameter(expression));
+void WCDBJNIFrameSpecClassMethod(configCurrentRow, jlong self);
+void WCDBJNIFrameSpecClassMethod(configBetweenUnboundedPreceding, jlong self);
+void WCDBJNIFrameSpecClassMethod(configBetweenPreceding,
+                                 jlong self,
+                                 WCDBJNIObjectOrIntegerParameter(expression));
+void WCDBJNIFrameSpecClassMethod(configBetweenCurrentRow, jlong self);
+void WCDBJNIFrameSpecClassMethod(configBetweenFollowing,
+                                 jlong self,
+                                 WCDBJNIObjectOrIntegerParameter(expression));
+void WCDBJNIFrameSpecClassMethod(configAndPreceding,
+                                 jlong self,
+                                 WCDBJNIObjectOrIntegerParameter(expression));
+void WCDBJNIFrameSpecClassMethod(configAndCurrentRow, jlong self);
+void WCDBJNIFrameSpecClassMethod(configAndFollowing,
+                                 jlong self,
+                                 WCDBJNIObjectOrIntegerParameter(expression));
+void WCDBJNIFrameSpecClassMethod(configAndUnboundedFollowing, jlong self);

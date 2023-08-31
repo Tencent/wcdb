@@ -33,15 +33,17 @@
     WCDBJNIObjectMethodWithNoArg(StatementPragma, funcName)
 #define WCDBJNIStatementPragmaClassMethodWithNoArg(funcName)                   \
     WCDBJNIClassMethodWithNoArg(StatementPragma, funcName)
+#define WCDBJNIStatementPragmaClassMethod(funcName, ...)                       \
+    WCDBJNIClassMethod(StatementPragma, funcName, __VA_ARGS__)
 
-jlong WCDBJNIStatementPragmaObjectMethodWithNoArg(create);
-void WCDBJNIStatementPragmaObjectMethod(configSchema,
-                                        jlong self,
-                                        WCDBJNIObjectOrStringParameter(schema));
-void WCDBJNIStatementPragmaObjectMethod(configPragma, jlong self, jlong pragma);
-void WCDBJNIStatementPragmaObjectMethod(configToValue,
-                                        jlong self,
-                                        WCDBJNICommonValueParameter(value));
-void WCDBJNIStatementPragmaObjectMethod(configWithValue,
-                                        jlong self,
-                                        WCDBJNICommonValueParameter(value));
+jlong WCDBJNIStatementPragmaClassMethodWithNoArg(create);
+void WCDBJNIStatementPragmaClassMethod(configSchema,
+                                       jlong self,
+                                       WCDBJNIObjectOrStringParameter(schema));
+void WCDBJNIStatementPragmaClassMethod(configPragma, jlong self, jlong pragma);
+void WCDBJNIStatementPragmaClassMethod(configToValue,
+                                       jlong self,
+                                       WCDBJNICommonValueParameter(value));
+void WCDBJNIStatementPragmaClassMethod(configWithValue,
+                                       jlong self,
+                                       WCDBJNICommonValueParameter(value));

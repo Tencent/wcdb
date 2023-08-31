@@ -348,7 +348,7 @@ public class PreparedStatement extends CppObject {
         return getBLOB(cppObj, index);
     }
 
-    private native byte[] getBLOB(long self, int index);
+    private static native byte[] getBLOB(long self, int index);
 
     public Value getValue(int index) {
         switch (getColumnType(cppObj, index)) {
@@ -502,30 +502,30 @@ public class PreparedStatement extends CppObject {
         return getColumnCount(cppObj);
     }
 
-    private native int getColumnCount(long self);
+    private static native int getColumnCount(long self);
 
     public String getColumnName(int index) {
         return getColumnName(cppObj, index);
     }
 
-    private native String getColumnName(long self, int index);
+    private static native String getColumnName(long self, int index);
 
     public String getOriginalColumnName(int index) {
         return getOriginalColumnName(cppObj, index);
     }
 
-    private native String getOriginalColumnName(long self, int index);
+    private static native String getOriginalColumnName(long self, int index);
 
     public String getColumnTableName(int index) {
         return getColumnTableName(cppObj, index);
     }
 
-    private native String getColumnTableName(long self, int index);
+    private static native String getColumnTableName(long self, int index);
 
     public boolean isReadOnly() {
         return isReadOnly(cppObj);
     }
 
-    private native boolean isReadOnly(long self);
+    private static native boolean isReadOnly(long self);
 
 }

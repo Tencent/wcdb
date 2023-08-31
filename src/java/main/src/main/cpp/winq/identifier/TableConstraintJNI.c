@@ -24,7 +24,7 @@
 #include "TableConstraintJNI.h"
 #include "TableConstraintBridge.h"
 
-jlong WCDBJNITableConstraintObjectMethod(create, jstring name)
+jlong WCDBJNITableConstraintClassMethod(create, jstring name)
 {
     WCDBJNIGetStringCritical(name);
     jlong ret = (jlong) WCDBTableConstraintCreate(nameString).innerValue;
@@ -32,21 +32,21 @@ jlong WCDBJNITableConstraintObjectMethod(create, jstring name)
     return ret;
 }
 
-void WCDBJNITableConstraintObjectMethod(configPrimaryKey, jlong constraint)
+void WCDBJNITableConstraintClassMethod(configPrimaryKey, jlong constraint)
 {
     WCDBJNIBridgeStruct(CPPTableConstraint, constraint);
     WCDBTableConstraintConfigPrimaryKey(constraintStruct);
 }
 
-void WCDBJNITableConstraintObjectMethod(configUnique, jlong constraint)
+void WCDBJNITableConstraintClassMethod(configUnique, jlong constraint)
 {
     WCDBJNIBridgeStruct(CPPTableConstraint, constraint);
     WCDBTableConstraintConfigUnique(constraintStruct);
 }
 
-void WCDBJNITableConstraintObjectMethod(configIndexedColumn,
-                                        jlong constraint,
-                                        WCDBJNIObjectOrStringArrayParameter(indexedColumns))
+void WCDBJNITableConstraintClassMethod(configIndexedColumn,
+                                       jlong constraint,
+                                       WCDBJNIObjectOrStringArrayParameter(indexedColumns))
 {
     WCDBJNIBridgeStruct(CPPTableConstraint, constraint);
     WCDBJNICreateObjectOrStringArrayCriticalWithAction(
@@ -54,23 +54,23 @@ void WCDBJNITableConstraintObjectMethod(configIndexedColumn,
     WCDBTableConstraintConfigIndexedColumn2(constraintStruct, indexedColumns_commonArray));
 }
 
-void WCDBJNITableConstraintObjectMethod(configConfliction, jlong constraint, int conflictAction)
+void WCDBJNITableConstraintClassMethod(configConfliction, jlong constraint, int conflictAction)
 {
     WCDBJNIBridgeStruct(CPPTableConstraint, constraint);
     WCDBTableConstraintConfigConfliction(constraintStruct, conflictAction);
 }
 
-void WCDBJNITableConstraintObjectMethod(configCheckCondition, jlong constraint, jlong expression)
+void WCDBJNITableConstraintClassMethod(configCheckCondition, jlong constraint, jlong expression)
 {
     WCDBJNIBridgeStruct(CPPTableConstraint, constraint);
     WCDBJNIBridgeStruct(CPPExpression, expression);
     WCDBTableConstraintConfigCheckCondition(constraintStruct, expressionStruct);
 }
 
-void WCDBJNITableConstraintObjectMethod(configForeignKey,
-                                        jlong constraint,
-                                        WCDBJNIObjectOrStringArrayParameter(columns),
-                                        jlong foreignKey)
+void WCDBJNITableConstraintClassMethod(configForeignKey,
+                                       jlong constraint,
+                                       WCDBJNIObjectOrStringArrayParameter(columns),
+                                       jlong foreignKey)
 {
     WCDBJNIBridgeStruct(CPPTableConstraint, constraint);
     WCDBJNIBridgeStruct(CPPForeignKey, foreignKey);

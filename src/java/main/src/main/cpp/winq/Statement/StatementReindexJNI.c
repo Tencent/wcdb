@@ -24,12 +24,12 @@
 #include "StatementReindexJNI.h"
 #include "StatementReindexBridge.h"
 
-jlong WCDBJNIStatementReindexObjectMethodWithNoArg(createCppObj)
+jlong WCDBJNIStatementReindexClassMethodWithNoArg(createCppObj)
 {
     return (jlong) WCDBStatementReIndexCreate().innerValue;
 }
 
-void WCDBJNIStatementReindexObjectMethod(configCollation, jlong self, jstring collation)
+void WCDBJNIStatementReindexClassMethod(configCollation, jlong self, jstring collation)
 {
     WCDBJNIBridgeStruct(CPPStatementReIndex, self);
     WCDBJNIGetStringCritical(collation);
@@ -37,7 +37,7 @@ void WCDBJNIStatementReindexObjectMethod(configCollation, jlong self, jstring co
     WCDBJNIReleaseStringCritical(collation);
 }
 
-void WCDBJNIStatementReindexObjectMethod(configTable, jlong self, jstring name)
+void WCDBJNIStatementReindexClassMethod(configTable, jlong self, jstring name)
 {
     WCDBJNIBridgeStruct(CPPStatementReIndex, self);
     WCDBJNIGetStringCritical(name);
@@ -45,7 +45,7 @@ void WCDBJNIStatementReindexObjectMethod(configTable, jlong self, jstring name)
     WCDBJNIReleaseStringCritical(name);
 }
 
-void WCDBJNIStatementReindexObjectMethod(configIndex, jlong self, jstring name)
+void WCDBJNIStatementReindexClassMethod(configIndex, jlong self, jstring name)
 {
     WCDBJNIBridgeStruct(CPPStatementReIndex, self);
     WCDBJNIGetStringCritical(name);
@@ -53,9 +53,9 @@ void WCDBJNIStatementReindexObjectMethod(configIndex, jlong self, jstring name)
     WCDBJNIReleaseStringCritical(name);
 }
 
-void WCDBJNIStatementReindexObjectMethod(configSchema,
-                                         jlong self,
-                                         WCDBJNIObjectOrStringParameter(schema))
+void WCDBJNIStatementReindexClassMethod(configSchema,
+                                        jlong self,
+                                        WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementReIndex, self);
     WCDBJNICreateObjectOrStringCommonValue(schema, true);

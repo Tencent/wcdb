@@ -24,12 +24,12 @@
 #include "StatementCreateViewJNI.h"
 #include "StatementCreateViewBridge.h"
 
-jlong WCDBJNIStatementCreateViewObjectMethodWithNoArg(createCppObj)
+jlong WCDBJNIStatementCreateViewClassMethodWithNoArg(createCppObj)
 {
     return (jlong) WCDBStatementCreateViewCreate().innerValue;
 }
 
-void WCDBJNIStatementCreateViewObjectMethod(configView, jlong self, jstring name)
+void WCDBJNIStatementCreateViewClassMethod(configView, jlong self, jstring name)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateView, self);
     WCDBJNIGetStringCritical(name);
@@ -37,9 +37,9 @@ void WCDBJNIStatementCreateViewObjectMethod(configView, jlong self, jstring name
     WCDBJNIReleaseStringCritical(name);
 }
 
-void WCDBJNIStatementCreateViewObjectMethod(configSchema,
-                                            jlong self,
-                                            WCDBJNIObjectOrStringParameter(schema))
+void WCDBJNIStatementCreateViewClassMethod(configSchema,
+                                           jlong self,
+                                           WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementCreateView, self);
     WCDBJNICreateObjectOrStringCommonValue(schema, true);
@@ -47,28 +47,28 @@ void WCDBJNIStatementCreateViewObjectMethod(configSchema,
     WCDBJNITryReleaseStringInCommonValue(schema);
 }
 
-void WCDBJNIStatementCreateViewObjectMethod(configTemp, jlong self)
+void WCDBJNIStatementCreateViewClassMethod(configTemp, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateView, self);
     WCDBStatementCreateViewConfigTemp(selfStruct);
 }
 
-void WCDBJNIStatementCreateViewObjectMethod(configIfNotExist, jlong self)
+void WCDBJNIStatementCreateViewClassMethod(configIfNotExist, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateView, self);
     WCDBStatementCreateViewConfigIfNotExist(selfStruct);
 }
 
-void WCDBJNIStatementCreateViewObjectMethod(configAs, jlong self, jlong select)
+void WCDBJNIStatementCreateViewClassMethod(configAs, jlong self, jlong select)
 {
     WCDBJNIBridgeStruct(CPPStatementCreateView, self);
     WCDBJNIBridgeStruct(CPPStatementSelect, select);
     WCDBStatementCreateViewConfigAs(selfStruct, selectStruct);
 }
 
-void WCDBJNIStatementCreateViewObjectMethod(configColumns,
-                                            jlong self,
-                                            WCDBJNIObjectOrStringArrayParameter(columns))
+void WCDBJNIStatementCreateViewClassMethod(configColumns,
+                                           jlong self,
+                                           WCDBJNIObjectOrStringArrayParameter(columns))
 {
     WCDBJNIBridgeStruct(CPPStatementCreateView, self);
     WCDBJNICreateObjectOrStringArrayCriticalWithAction(

@@ -25,19 +25,19 @@
 #include "ErrorBridge.h"
 #include "assert.h"
 
-jlong WCDBJNIErrorObjectMethod(getLevel, jlong error)
+jlong WCDBJNIErrorClassMethod(getLevel, jlong error)
 {
     WCDBJNIBridgeStruct(CPPError, error);
     return WCDBErrorGetLevel(errorStruct);
 }
 
-jlong WCDBJNIErrorObjectMethod(getCode, jlong error)
+jlong WCDBJNIErrorClassMethod(getCode, jlong error)
 {
     WCDBJNIBridgeStruct(CPPError, error);
     return WCDBErrorGetCode(errorStruct);
 }
 
-jstring WCDBJNIErrorObjectMethod(getMessage, jlong error)
+jstring WCDBJNIErrorClassMethod(getMessage, jlong error)
 {
     WCDBJNIBridgeStruct(CPPError, error);
     WCDBJNICreateJStringAndReturn(WCDBErrorGetMsg(errorStruct));

@@ -24,7 +24,7 @@
 #include "QualifiedTableJNI.h"
 #include "QualifiedTableBridge.h"
 
-jlong WCDBJNIQualifiedTableObjectMethod(create, jstring tableName)
+jlong WCDBJNIQualifiedTableClassMethod(create, jstring tableName)
 {
     WCDBJNIGetStringCritical(tableName);
     jlong ret = (jlong) WCDBQualifiedTableCreateWithTable(tableNameString).innerValue;
@@ -32,9 +32,7 @@ jlong WCDBJNIQualifiedTableObjectMethod(create, jstring tableName)
     return ret;
 }
 
-void WCDBJNIQualifiedTableObjectMethod(configSchema,
-                                       jlong self,
-                                       WCDBJNIObjectOrStringParameter(schema))
+void WCDBJNIQualifiedTableClassMethod(configSchema, jlong self, WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPQualifiedTable, self);
     WCDBJNICreateObjectOrStringCommonValue(schema, true);
@@ -42,7 +40,7 @@ void WCDBJNIQualifiedTableObjectMethod(configSchema,
     WCDBJNITryReleaseStringInCommonValue(schema);
 }
 
-void WCDBJNIQualifiedTableObjectMethod(configAlias, jlong self, jstring alias)
+void WCDBJNIQualifiedTableClassMethod(configAlias, jlong self, jstring alias)
 {
     WCDBJNIBridgeStruct(CPPQualifiedTable, self);
     WCDBJNIGetStringCritical(alias);
@@ -50,7 +48,7 @@ void WCDBJNIQualifiedTableObjectMethod(configAlias, jlong self, jstring alias)
     WCDBJNIReleaseStringCritical(alias);
 }
 
-void WCDBJNIQualifiedTableObjectMethod(configIndex, jlong self, jstring index)
+void WCDBJNIQualifiedTableClassMethod(configIndex, jlong self, jstring index)
 {
     WCDBJNIBridgeStruct(CPPQualifiedTable, self);
     WCDBJNIGetStringCritical(index);
@@ -58,7 +56,7 @@ void WCDBJNIQualifiedTableObjectMethod(configIndex, jlong self, jstring index)
     WCDBJNIReleaseStringCritical(index);
 }
 
-void WCDBJNIQualifiedTableObjectMethod(configNotIndexed, jlong self)
+void WCDBJNIQualifiedTableClassMethod(configNotIndexed, jlong self)
 {
     WCDBJNIBridgeStruct(CPPQualifiedTable, self);
     WCDBQualifiedTableConfigNoIndexed(selfStruct);

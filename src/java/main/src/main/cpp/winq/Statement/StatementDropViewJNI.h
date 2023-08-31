@@ -32,10 +32,12 @@
     WCDBJNIObjectMethodWithNoArg(StatementDropView, funcName)
 #define WCDBJNIStatementDropViewClassMethodWithNoArg(funcName)                 \
     WCDBJNIClassMethodWithNoArg(StatementDropView, funcName)
+#define WCDBJNIStatementDropViewClassMethod(funcName, ...)                     \
+    WCDBJNIClassMethod(StatementDropView, funcName, __VA_ARGS__)
 
-jlong WCDBJNIStatementDropViewObjectMethodWithNoArg(createCppObj);
-void WCDBJNIStatementDropViewObjectMethod(configSchema,
-                                          jlong self,
-                                          WCDBJNIObjectOrStringParameter(schema));
-void WCDBJNIStatementDropViewObjectMethod(configView, jlong self, jstring viewName);
-void WCDBJNIStatementDropViewObjectMethod(configIfExist, jlong self);
+jlong WCDBJNIStatementDropViewClassMethodWithNoArg(createCppObj);
+void WCDBJNIStatementDropViewClassMethod(configSchema,
+                                         jlong self,
+                                         WCDBJNIObjectOrStringParameter(schema));
+void WCDBJNIStatementDropViewClassMethod(configView, jlong self, jstring viewName);
+void WCDBJNIStatementDropViewClassMethod(configIfExist, jlong self);

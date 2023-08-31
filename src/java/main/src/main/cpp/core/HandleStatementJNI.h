@@ -33,28 +33,30 @@
     WCDBJNIObjectMethodWithNoArg(HandleStatement, funcName)
 #define WCDBJNIHandleStatementClassMethodWithNoArg(funcName)                   \
     WCDBJNIClassMethodWithNoArg(HandleStatement, funcName)
+#define WCDBJNIHandleStatementClassMethod(funcName, ...)                       \
+    WCDBJNIClassMethod(HandleStatement, funcName, __VA_ARGS__)
 
-jlong WCDBJNIHandleStatementObjectMethod(getError, jlong self);
-jboolean WCDBJNIHandleStatementObjectMethod(prepare, jlong self, jlong statement);
-jboolean WCDBJNIHandleStatementObjectMethod(prepareSQL, jlong self, jstring sql);
-jboolean WCDBJNIHandleStatementObjectMethod(checkPrepared, jlong self);
-jboolean WCDBJNIHandleStatementObjectMethod(step, jlong self);
-void WCDBJNIHandleStatementObjectMethod(reset, jlong self);
-void WCDBJNIHandleStatementObjectMethod(finalize, jlong self);
-jboolean WCDBJNIHandleStatementObjectMethod(isDone, jlong self);
-void WCDBJNIHandleStatementObjectMethod(bindInteger, jlong self, jlong value, jint index);
-void WCDBJNIHandleStatementObjectMethod(bindDouble, jlong self, jdouble value, jint index);
-void WCDBJNIHandleStatementObjectMethod(bindText, jlong self, jstring value, jint index);
-void WCDBJNIHandleStatementObjectMethod(bindBLOB, jlong self, jbyteArray value, jint index);
-void WCDBJNIHandleStatementObjectMethod(bindNull, jlong self, jint index);
-jint WCDBJNIHandleStatementObjectMethod(bindParameterIndex, jlong self, jstring parameterName);
-jint WCDBJNIHandleStatementObjectMethod(getColumnType, jlong self, jint index);
-jlong WCDBJNIHandleStatementObjectMethod(getInteger, jlong self, jint index);
-jdouble WCDBJNIHandleStatementObjectMethod(getDouble, jlong self, jint index);
-jstring WCDBJNIHandleStatementObjectMethod(getText, jlong self, jint index);
-jbyteArray WCDBJNIHandleStatementObjectMethod(getBLOB, jlong self, jint index);
-jint WCDBJNIHandleStatementObjectMethod(getColumnCount, jlong self);
-jstring WCDBJNIHandleStatementObjectMethod(getColumnName, jlong self, jint index);
-jstring WCDBJNIHandleStatementObjectMethod(getOriginalColumnName, jlong self, jint index);
-jstring WCDBJNIHandleStatementObjectMethod(getColumnTableName, jlong self, jint index);
-jboolean WCDBJNIHandleStatementObjectMethod(isReadOnly, jlong self);
+jlong WCDBJNIHandleStatementClassMethod(getError, jlong self);
+jboolean WCDBJNIHandleStatementClassMethod(prepare, jlong self, jlong statement);
+jboolean WCDBJNIHandleStatementClassMethod(prepareSQL, jlong self, jstring sql);
+jboolean WCDBJNIHandleStatementClassMethod(checkPrepared, jlong self);
+jboolean WCDBJNIHandleStatementClassMethod(step, jlong self);
+void WCDBJNIHandleStatementClassMethod(reset, jlong self);
+void WCDBJNIHandleStatementClassMethod(finalize, jlong self);
+jboolean WCDBJNIHandleStatementClassMethod(isDone, jlong self);
+void WCDBJNIHandleStatementClassMethod(bindInteger, jlong self, jlong value, jint index);
+void WCDBJNIHandleStatementClassMethod(bindDouble, jlong self, jdouble value, jint index);
+void WCDBJNIHandleStatementClassMethod(bindText, jlong self, jstring value, jint index);
+void WCDBJNIHandleStatementClassMethod(bindBLOB, jlong self, jbyteArray value, jint index);
+void WCDBJNIHandleStatementClassMethod(bindNull, jlong self, jint index);
+jint WCDBJNIHandleStatementClassMethod(bindParameterIndex, jlong self, jstring parameterName);
+jint WCDBJNIHandleStatementClassMethod(getColumnType, jlong self, jint index);
+jlong WCDBJNIHandleStatementClassMethod(getInteger, jlong self, jint index);
+jdouble WCDBJNIHandleStatementClassMethod(getDouble, jlong self, jint index);
+jstring WCDBJNIHandleStatementClassMethod(getText, jlong self, jint index);
+jbyteArray WCDBJNIHandleStatementClassMethod(getBLOB, jlong self, jint index);
+jint WCDBJNIHandleStatementClassMethod(getColumnCount, jlong self);
+jstring WCDBJNIHandleStatementClassMethod(getColumnName, jlong self, jint index);
+jstring WCDBJNIHandleStatementClassMethod(getOriginalColumnName, jlong self, jint index);
+jstring WCDBJNIHandleStatementClassMethod(getColumnTableName, jlong self, jint index);
+jboolean WCDBJNIHandleStatementClassMethod(isReadOnly, jlong self);

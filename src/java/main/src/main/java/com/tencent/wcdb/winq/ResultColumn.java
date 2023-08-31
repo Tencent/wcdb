@@ -47,5 +47,5 @@ public class ResultColumn extends Identifier implements ResultColumnConvertible 
         return this;
     }
 
-    private native void configAlias(long resultColumn, String alias);
+    private static native void configAlias(long resultColumn, String alias);
 }

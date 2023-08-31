@@ -24,7 +24,7 @@
 #include "SchemaJNI.h"
 #include "SchemaBridge.h"
 
-jlong WCDBJNISchemaObjectMethod(createWithName, jstring name)
+jlong WCDBJNISchemaClassMethod(createWithName, jstring name)
 {
     WCDBJNIGetStringCritical(name);
     jlong ret = (jlong) WCDBSchemaCreateWithName(nameString).innerValue;

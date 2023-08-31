@@ -35,7 +35,7 @@ public class StatementAttach extends Statement {
         cppObj = createCppObj();
     }
 
-    private native long createCppObj();
+    private static native long createCppObj();
 
     public StatementAttach attach(String path) {
         configPath(cppObj, CPPType.String.ordinal(), 0, path);
@@ -47,7 +47,7 @@ public class StatementAttach extends Statement {
         return this;
     }
 
-    private native void configPath(long self, int type, long object, String path);
+    private static native void configPath(long self, int type, long object, String path);
 
     public StatementAttach as(String schemaName) {
         configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
@@ -59,7 +59,7 @@ public class StatementAttach extends Statement {
         return this;
     }
 
-    private native void configSchema(long self, int type, long object, String path);
+    private static native void configSchema(long self, int type, long object, String path);
 
     public StatementAttach key(String key) {
         configKey(cppObj, CPPType.String.ordinal(), 0, key);
@@ -71,5 +71,5 @@ public class StatementAttach extends Statement {
         return this;
     }
 
-    private native void configKey(long self, int type, long object, String path);
+    private static native void configKey(long self, int type, long object, String path);
 }

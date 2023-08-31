@@ -33,6 +33,8 @@
     WCDBJNIObjectMethodWithNoArg(StatementRelease, funcName)
 #define WCDBJNIStatementReleaseClassMethodWithNoArg(funcName)                  \
     WCDBJNIClassMethodWithNoArg(StatementRelease, funcName)
+#define WCDBJNIStatementReleaseClassMethod(funcName, ...)                      \
+    WCDBJNIClassMethod(StatementRelease, funcName, __VA_ARGS__)
 
-jlong WCDBJNIStatementReleaseObjectMethodWithNoArg(createCppObj);
-void WCDBJNIStatementReleaseObjectMethod(configSavepoint, jlong self, jstring savepoint);
+jlong WCDBJNIStatementReleaseClassMethodWithNoArg(createCppObj);
+void WCDBJNIStatementReleaseClassMethod(configSavepoint, jlong self, jstring savepoint);

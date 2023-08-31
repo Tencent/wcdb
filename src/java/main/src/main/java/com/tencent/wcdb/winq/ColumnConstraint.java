@@ -38,56 +38,56 @@ public class ColumnConstraint extends Identifier {
         cppObj = createCppObject(columnName);
     }
 
-    private native long createCppObject(String columnName);
+    private static native long createCppObject(String columnName);
 
     public ColumnConstraint primaryKey() {
         configPrimaryKey(cppObj);
         return this;
     }
 
-    private native void configPrimaryKey(long self);
+    private static native void configPrimaryKey(long self);
 
     public ColumnConstraint order(Order order) {
         configOrder(cppObj, order.ordinal() + 1);
         return this;
     }
 
-    private native void configOrder(long self, int order);
+    private static native void configOrder(long self, int order);
 
     public ColumnConstraint conflict(ConflictAction action) {
         configConflictAction(cppObj, action.ordinal());
         return this;
     }
 
-    private native void configConflictAction(long self, int action);
+    private static native void configConflictAction(long self, int action);
 
     public ColumnConstraint autoIncrement() {
         configAutoIncrement(cppObj);
         return this;
     }
 
-    private native void configAutoIncrement(long self);
+    private static native void configAutoIncrement(long self);
 
     public ColumnConstraint notNull() {
         configNotNull(cppObj);
         return this;
     }
 
-    private native void configNotNull(long self);
+    private static native void configNotNull(long self);
 
     public ColumnConstraint unique() {
         configUnique(cppObj);
         return this;
     }
 
-    private native void configUnique(long self);
+    private static native void configUnique(long self);
 
     public ColumnConstraint check(Expression expression) {
         configCheck(cppObj, CppObject.get(expression));
         return this;
     }
 
-    private native void configCheck(long self, long expression);
+    private static native void configCheck(long self, long expression);
 
     public ColumnConstraint defaultTo(boolean value) {
         defaultTo(cppObj, CPPType.Bool.ordinal(), value ? 1 : 0, 0, null);
@@ -144,26 +144,26 @@ public class ColumnConstraint extends Identifier {
         return this;
     }
 
-    private native void defaultTo(long self, int type, long intValue, double doubleValue, String stringValue);
+    private static native void defaultTo(long self, int type, long intValue, double doubleValue, String stringValue);
 
     public ColumnConstraint collate(String collation) {
         configCollate(cppObj, collation);
         return this;
     }
 
-    private native void configCollate(long self, String collation);
+    private static native void configCollate(long self, String collation);
 
     public ColumnConstraint foreignKey(ForeignKey foreignKey) {
         configForeignKey(cppObj, CppObject.get(foreignKey));
         return this;
     }
 
-    private native void configForeignKey(long self, long foreignKey);
+    private static native void configForeignKey(long self, long foreignKey);
 
     public ColumnConstraint unIndex() {
         configUnIndex(cppObj);
         return this;
     }
 
-    private native void configUnIndex(long self);
+    private static native void configUnIndex(long self);
 }

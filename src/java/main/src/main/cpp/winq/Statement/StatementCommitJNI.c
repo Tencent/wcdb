@@ -24,7 +24,7 @@
 #include "StatementCommitJNI.h"
 #include "StatementCommitBridge.h"
 
-jlong WCDBJNIStatementCommitObjectMethodWithNoArg(create)
+jlong WCDBJNIStatementCommitClassMethodWithNoArg(create)
 {
     return (jlong) WCDBStatementCommitCreate().innerValue;
 }

@@ -49,7 +49,7 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
         cppObj = createCppObj(Identifier.getCppType(select), CppObject.get(select));
     }
 
-    private native long createCppObj(int type, long intValue);
+    private static native long createCppObj(int type, long intValue);
 
     public static Expression function(String funcName) {
         return createExpression(createWithFunction(funcName));
@@ -67,28 +67,28 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
         return this;
     }
 
-    private native void schema(long self, int type, long schema, String schemaName);
+    private static native void schema(long self, int type, long schema, String schemaName);
 
     public Expression distinct() {
         distinct(cppObj);
         return this;
     }
 
-    private native void distinct(long self);
+    private static native void distinct(long self);
 
     public Expression invoke() {
         invoke(cppObj);
         return this;
     }
 
-    private native void invoke(long self);
+    private static native void invoke(long self);
 
     public Expression invokeAll() {
         invokeAll(cppObj);
         return this;
     }
 
-    private native void invokeAll(long self);
+    private static native void invokeAll(long self);
 
     public Expression argument(boolean arg) {
         argument(cppObj, CPPType.Bool.ordinal(), arg ? 1 : 0, 0, null);
@@ -144,14 +144,14 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
         return this;
     }
 
-    private native void argument(long self, int type, long intValue, double doubleValue, String stringValue);
+    private static native void argument(long self, int type, long intValue, double doubleValue, String stringValue);
 
     public Expression escape(String content) {
         escape(cppObj, content);
         return this;
     }
 
-    private native void escape(long self, String stringValue);
+    private static native void escape(long self, String stringValue);
 
     public static Expression exists(StatementSelect select) {
         assert select != null;
@@ -191,7 +191,7 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
         return this;
     }
 
-    private native void as(long self, int type);
+    private static native void as(long self, int type);
 
     public static Expression case_() {
         Expression ret = new Expression();
@@ -271,7 +271,7 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
         return this;
     }
 
-    private native void setWithWhenExp(long self, int type, long intValue, double doubleValue, String stringValue);
+    private static native void setWithWhenExp(long self, int type, long intValue, double doubleValue, String stringValue);
 
     public Expression then(boolean arg) {
         setWithThenExp(cppObj, CPPType.Bool.ordinal(), arg ? 1 : 0, 0, null);
@@ -328,7 +328,7 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
         return this;
     }
 
-    private native void setWithThenExp(long self, int type, long intValue, double doubleValue, String stringValue);
+    private static native void setWithThenExp(long self, int type, long intValue, double doubleValue, String stringValue);
 
     public Expression else_(boolean arg) {
         setWithElseExp(cppObj, CPPType.Bool.ordinal(), arg ? 1 : 0, 0, null);
@@ -384,7 +384,7 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
         return this;
     }
 
-    private native void setWithElseExp(long self, int type, long intValue, double doubleValue, String stringValue);
+    private static native void setWithElseExp(long self, int type, long intValue, double doubleValue, String stringValue);
 
     public static Expression windowFunction(String funcName) {
         Expression ret = new Expression();
@@ -399,19 +399,19 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
         return this;
     }
 
-    private native void filter(long self, long condition);
+    private static native void filter(long self, long condition);
 
     public Expression over(WindowDef windowDef) {
         overWindowDef(cppObj, CppObject.get(windowDef));
         return this;
     }
 
-    private native void overWindowDef(long self, long windowDef);
+    private static native void overWindowDef(long self, long windowDef);
 
     public Expression over(String window) {
         overWindow(cppObj, window);
         return this;
     }
 
-    private native void overWindow(long self, String window);
+    private static native void overWindow(long self, String window);
 }

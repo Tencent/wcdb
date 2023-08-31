@@ -35,14 +35,14 @@ public class StatementAlterTable extends Statement {
         cppObj = createCppObj();
     }
 
-    private native long createCppObj();
+    private static native long createCppObj();
 
     public StatementAlterTable alterTable(String tableName) {
         configTable(cppObj, tableName);
         return this;
     }
 
-    private native void configTable(long self, String tableName);
+    private static native void configTable(long self, String tableName);
 
     public StatementAlterTable of(String schemaName) {
         configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
@@ -54,14 +54,14 @@ public class StatementAlterTable extends Statement {
         return this;
     }
 
-    private native void configSchema(long self, int type, long object, String schemaName);
+    private static native void configSchema(long self, int type, long object, String schemaName);
 
     public StatementAlterTable renameTo(String tableName) {
         configRenameToTable(cppObj, tableName);
         return this;
     }
 
-    private native void configRenameToTable(long self, String tableName);
+    private static native void configRenameToTable(long self, String tableName);
 
     public StatementAlterTable renameColumn(String columnName) {
         configRenameColumn(cppObj, CPPType.String.ordinal(), 0, columnName);
@@ -73,7 +73,7 @@ public class StatementAlterTable extends Statement {
         return this;
     }
 
-    private native void configRenameColumn(long self, int type, long object, String schemaName);
+    private static native void configRenameColumn(long self, int type, long object, String schemaName);
 
     public StatementAlterTable toColumn(String columnName) {
         configRenameToColumn(cppObj, CPPType.String.ordinal(), 0, columnName);
@@ -85,13 +85,13 @@ public class StatementAlterTable extends Statement {
         return this;
     }
 
-    private native void configRenameToColumn(long self, int type, long object, String schemaName);
+    private static native void configRenameToColumn(long self, int type, long object, String schemaName);
 
     public StatementAlterTable addColumn(ColumnDef columnDef) {
         configAddColumn(cppObj, CppObject.get(columnDef));
         return this;
     }
 
-    private native void configAddColumn(long self, long columnDef);
+    private static native void configAddColumn(long self, long columnDef);
 
 }

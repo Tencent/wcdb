@@ -24,7 +24,7 @@
 #include "TableOrSubqueryJNI.h"
 #include "TableOrSubqueryBridge.h"
 
-jlong WCDBJNITableOrSubqueryObjectMethod(create, WCDBJNIObjectOrStringParameter(tableOrSubquery))
+jlong WCDBJNITableOrSubqueryClassMethod(create, WCDBJNIObjectOrStringParameter(tableOrSubquery))
 {
     WCDBJNICreateObjectOrStringCommonValue(tableOrSubquery, true);
     jlong ret = (jlong) WCDBTableOrSubqueryCreate(tableOrSubquery_common).innerValue;
@@ -40,8 +40,8 @@ jlong WCDBJNITableOrSubqueryClassMethod(createWithFunction, jstring funcName)
     return ret;
 }
 
-jlong WCDBJNITableOrSubqueryObjectMethod(createWithTableOrSubqueries,
-                                         WCDBJNIObjectOrStringArrayParameter(subquaries))
+jlong WCDBJNITableOrSubqueryClassMethod(createWithTableOrSubqueries,
+                                        WCDBJNIObjectOrStringArrayParameter(subquaries))
 {
     jlong ret = 0;
     WCDBJNICreateObjectOrStringArrayCriticalWithAction(
@@ -50,9 +50,9 @@ jlong WCDBJNITableOrSubqueryObjectMethod(createWithTableOrSubqueries,
           .innerValue) return ret;
 }
 
-void WCDBJNITableOrSubqueryObjectMethod(configSchema,
-                                        jlong tableOrSubquery,
-                                        WCDBJNIObjectOrStringParameter(schema))
+void WCDBJNITableOrSubqueryClassMethod(configSchema,
+                                       jlong tableOrSubquery,
+                                       WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPTableOrSubquery, tableOrSubquery);
     WCDBJNICreateObjectOrStringCommonValue(schema, true);
@@ -60,7 +60,7 @@ void WCDBJNITableOrSubqueryObjectMethod(configSchema,
     WCDBJNITryReleaseStringInCommonValue(schema);
 }
 
-void WCDBJNITableOrSubqueryObjectMethod(configAlias, jlong tableOrSubquery, jstring alias)
+void WCDBJNITableOrSubqueryClassMethod(configAlias, jlong tableOrSubquery, jstring alias)
 {
     WCDBJNIBridgeStruct(CPPTableOrSubquery, tableOrSubquery);
     WCDBJNIGetStringCritical(alias);
@@ -68,13 +68,13 @@ void WCDBJNITableOrSubqueryObjectMethod(configAlias, jlong tableOrSubquery, jstr
     WCDBJNIReleaseStringCritical(alias);
 }
 
-void WCDBJNITableOrSubqueryObjectMethod(configNotIndexed, jlong tableOrSubquery)
+void WCDBJNITableOrSubqueryClassMethod(configNotIndexed, jlong tableOrSubquery)
 {
     WCDBJNIBridgeStruct(CPPTableOrSubquery, tableOrSubquery);
     WCDBTableOrSubqueryConfigNotIndexed(tableOrSubqueryStruct);
 }
 
-void WCDBJNITableOrSubqueryObjectMethod(configIndexName, jlong tableOrSubquery, jstring index)
+void WCDBJNITableOrSubqueryClassMethod(configIndexName, jlong tableOrSubquery, jstring index)
 {
     WCDBJNIBridgeStruct(CPPTableOrSubquery, tableOrSubquery);
     WCDBJNIGetStringCritical(index);
@@ -82,9 +82,9 @@ void WCDBJNITableOrSubqueryObjectMethod(configIndexName, jlong tableOrSubquery, 
     WCDBJNIReleaseStringCritical(index);
 }
 
-void WCDBJNITableOrSubqueryObjectMethod(argument,
-                                        jlong tableOrSubquery,
-                                        WCDBJNICommonValueParameter(argument))
+void WCDBJNITableOrSubqueryClassMethod(argument,
+                                       jlong tableOrSubquery,
+                                       WCDBJNICommonValueParameter(argument))
 {
     WCDBJNIBridgeStruct(CPPTableOrSubquery, tableOrSubquery);
     WCDBJNICreateCommonValue(argument, true);

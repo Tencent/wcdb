@@ -24,16 +24,16 @@
 #include "StatementVacuumJNI.h"
 #include "StatementVacuumBridge.h"
 
-jlong WCDBJNIStatementVacuumObjectMethodWithNoArg(createCppObj)
+jlong WCDBJNIStatementVacuumClassMethodWithNoArg(createCppObj)
 {
     CPPStatementVacuum vacuum = WCDBStatementVacuumCreate();
     WCDBStatementVacuumConfigAll(vacuum);
     return (jlong) vacuum.innerValue;
 }
 
-void WCDBJNIStatementVacuumObjectMethod(configSchema,
-                                        jlong self,
-                                        WCDBJNIObjectOrStringParameter(schema))
+void WCDBJNIStatementVacuumClassMethod(configSchema,
+                                       jlong self,
+                                       WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementVacuum, self);
     WCDBJNICreateObjectOrStringCommonValue(schema, true);

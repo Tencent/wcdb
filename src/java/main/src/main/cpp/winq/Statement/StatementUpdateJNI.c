@@ -24,12 +24,12 @@
 #include "StatementUpdateJNI.h"
 #include "StatementUpdateBridge.h"
 
-jlong WCDBJNIStatementUpdateObjectMethodWithNoArg(create)
+jlong WCDBJNIStatementUpdateClassMethodWithNoArg(create)
 {
     return (jlong) WCDBStatementUpdateCreate().innerValue;
 }
 
-void WCDBJNIStatementUpdateObjectMethod(configWith, jlong self, jlongArray expressions)
+void WCDBJNIStatementUpdateClassMethod(configWith, jlong self, jlongArray expressions)
 {
     WCDBJNIBridgeStruct(CPPStatementUpdate, self);
     WCDBJNIGetCppPointerArrayCritical(expressions);
@@ -38,13 +38,13 @@ void WCDBJNIStatementUpdateObjectMethod(configWith, jlong self, jlongArray expre
     WCDBJNIReleaseCppPointerArrayCritical(expressions);
 }
 
-void WCDBJNIStatementUpdateObjectMethod(configRecursive, jlong self)
+void WCDBJNIStatementUpdateClassMethod(configRecursive, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementUpdate, self);
     WCDBStatementUpdateConfigRecursive(selfStruct);
 }
 
-void WCDBJNIStatementUpdateObjectMethod(configTable, jlong self, WCDBJNIObjectOrStringParameter(table))
+void WCDBJNIStatementUpdateClassMethod(configTable, jlong self, WCDBJNIObjectOrStringParameter(table))
 {
     WCDBJNIBridgeStruct(CPPStatementUpdate, self);
     WCDBJNICreateObjectOrStringCommonValue(table, true);
@@ -52,22 +52,22 @@ void WCDBJNIStatementUpdateObjectMethod(configTable, jlong self, WCDBJNIObjectOr
     WCDBJNITryReleaseStringInCommonValue(table);
 }
 
-void WCDBJNIStatementUpdateObjectMethod(configConfliction, jlong self, jint action)
+void WCDBJNIStatementUpdateClassMethod(configConfliction, jlong self, jint action)
 {
     WCDBJNIBridgeStruct(CPPStatementUpdate, self);
     WCDBStatementUpdateConfigConfiction(selfStruct, action);
 }
 
-void WCDBJNIStatementUpdateObjectMethod(configColumns,
-                                        jlong self,
-                                        WCDBJNIObjectOrStringArrayParameter(columns))
+void WCDBJNIStatementUpdateClassMethod(configColumns,
+                                       jlong self,
+                                       WCDBJNIObjectOrStringArrayParameter(columns))
 {
     WCDBJNIBridgeStruct(CPPStatementUpdate, self);
     WCDBJNICreateObjectOrStringArrayCriticalWithAction(
     columns, WCDBStatementUpdateConfigColumns2(selfStruct, columns_commonArray));
 }
 
-void WCDBJNIStatementUpdateObjectMethod(configValue, jlong self, WCDBJNICommonValueParameter(value))
+void WCDBJNIStatementUpdateClassMethod(configValue, jlong self, WCDBJNICommonValueParameter(value))
 {
     WCDBJNIBridgeStruct(CPPStatementUpdate, self);
     WCDBJNICreateCommonValue(value, true);
@@ -75,10 +75,10 @@ void WCDBJNIStatementUpdateObjectMethod(configValue, jlong self, WCDBJNICommonVa
     WCDBJNITryReleaseStringInCommonValue(value);
 }
 
-void WCDBJNIStatementUpdateObjectMethod(configColumnsToValues,
-                                        jlong self,
-                                        WCDBJNIObjectOrStringArrayParameter(columns),
-                                        WCDBJNIMultiTypeArrayParameter(values))
+void WCDBJNIStatementUpdateClassMethod(configColumnsToValues,
+                                       jlong self,
+                                       WCDBJNIObjectOrStringArrayParameter(columns),
+                                       WCDBJNIMultiTypeArrayParameter(values))
 {
     WCDBJNIBridgeStruct(CPPStatementUpdate, self);
     WCDBJNICreateMultiTypeArray(values);
@@ -87,23 +87,23 @@ void WCDBJNIStatementUpdateObjectMethod(configColumnsToValues,
     WCDBJNIReleaseMultiTypeArray(values);
 }
 
-void WCDBJNIStatementUpdateObjectMethod(configColumnsWithBindParameter,
-                                        jlong self,
-                                        WCDBJNIObjectOrStringArrayParameter(columns))
+void WCDBJNIStatementUpdateClassMethod(configColumnsWithBindParameter,
+                                       jlong self,
+                                       WCDBJNIObjectOrStringArrayParameter(columns))
 {
     WCDBJNIBridgeStruct(CPPStatementUpdate, self);
     WCDBJNICreateObjectOrStringArrayCriticalWithAction(
     columns, WCDBStatementUpdateConfigColumnsToBindParameters(selfStruct, columns_commonArray));
 }
 
-void WCDBJNIStatementUpdateObjectMethod(configCondition, jlong self, jlong condition)
+void WCDBJNIStatementUpdateClassMethod(configCondition, jlong self, jlong condition)
 {
     WCDBJNIBridgeStruct(CPPStatementUpdate, self);
     WCDBJNIBridgeStruct(CPPExpression, condition);
     WCDBStatementUpdateConfigCondition(selfStruct, conditionStruct);
 }
 
-void WCDBJNIStatementUpdateObjectMethod(configOrders, jlong self, jlongArray orders)
+void WCDBJNIStatementUpdateClassMethod(configOrders, jlong self, jlongArray orders)
 {
     WCDBJNIBridgeStruct(CPPStatementUpdate, self);
     WCDBJNIGetCppPointerArrayCritical(orders);
@@ -112,7 +112,7 @@ void WCDBJNIStatementUpdateObjectMethod(configOrders, jlong self, jlongArray ord
     WCDBJNIReleaseCppPointerArrayCritical(orders);
 }
 
-void WCDBJNIStatementUpdateObjectMethod(
+void WCDBJNIStatementUpdateClassMethod(
 configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to)
 {
     WCDBJNIBridgeStruct(CPPStatementUpdate, self);
@@ -125,7 +125,7 @@ configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to)
     WCDBStatementUpdateConfigLimitRange2(selfStruct, from_common, to_common);
 }
 
-void WCDBJNIStatementUpdateObjectMethod(configLimitCount, jlong self, jint type, jlong limit)
+void WCDBJNIStatementUpdateClassMethod(configLimitCount, jlong self, jint type, jlong limit)
 {
     WCDBJNIBridgeStruct(CPPStatementUpdate, self);
     CPPCommonValue limit_common;
@@ -134,7 +134,7 @@ void WCDBJNIStatementUpdateObjectMethod(configLimitCount, jlong self, jint type,
     WCDBStatementUpdateConfigLimitCount2(selfStruct, limit_common);
 }
 
-void WCDBJNIStatementUpdateObjectMethod(configOffset, jlong self, jint type, jlong offset)
+void WCDBJNIStatementUpdateClassMethod(configOffset, jlong self, jint type, jlong offset)
 {
     WCDBJNIBridgeStruct(CPPStatementUpdate, self);
     CPPCommonValue offset_common;

@@ -42,7 +42,7 @@ public class StatementDropIndex extends Statement {
         return this;
     }
 
-    private native void configIndex(long self, String indexName);
+    private static native void configIndex(long self, String indexName);
 
     public StatementDropIndex of(String schemaName) {
         configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
@@ -54,12 +54,12 @@ public class StatementDropIndex extends Statement {
         return this;
     }
 
-    private native void configSchema(long self, int type, long object, String path);
+    private static native void configSchema(long self, int type, long object, String path);
 
     public StatementDropIndex ifExist() {
         configIfExist(cppObj);
         return this;
     }
 
-    private native void configIfExist(long self);
+    private static native void configIfExist(long self);
 }

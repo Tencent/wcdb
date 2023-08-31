@@ -29,7 +29,7 @@ jlong WCDBJNIRaiseFunctionClassMethodWithNoArg(createCppObj)
     return (jlong) WCDBRaiseFunctionCreate().innerValue;
 }
 
-void WCDBJNIRaiseFunctionObjectMethod(setAction, jlong self, jint action, jstring errMsg)
+void WCDBJNIRaiseFunctionClassMethod(setAction, jlong self, jint action, jstring errMsg)
 {
     WCDBJNIBridgeStruct(CPPRaiseFunction, self);
     WCDBJNIGetStringCritical(errMsg);

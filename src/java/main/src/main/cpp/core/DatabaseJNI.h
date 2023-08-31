@@ -36,67 +36,67 @@
 
 #define WCDBJNIDatabaseSignature "Lcom/tencent/wcdb/core/Database"
 
-jlong WCDBJNIDatabaseObjectMethod(getError, jlong self);
-jlong WCDBJNIDatabaseObjectMethod(getTag, jlong self);
-void WCDBJNIDatabaseObjectMethod(setTag, jlong self, jlong tag);
-jstring WCDBJNIDatabaseObjectMethod(getPath, jlong self);
-jobject WCDBJNIDatabaseObjectMethod(getPaths, jlong self);
-jlong WCDBJNIDatabaseObjectMethod(getHandle, jlong self, jboolean writeHint);
+jlong WCDBJNIDatabaseClassMethod(getError, jlong self);
+jlong WCDBJNIDatabaseClassMethod(getTag, jlong self);
+void WCDBJNIDatabaseClassMethod(setTag, jlong self, jlong tag);
+jstring WCDBJNIDatabaseClassMethod(getPath, jlong self);
+jobject WCDBJNIDatabaseClassMethod(getPaths, jlong self);
+jlong WCDBJNIDatabaseClassMethod(getHandle, jlong self, jboolean writeHint);
 
-jboolean WCDBJNIDatabaseObjectMethod(canOpen, jlong self);
-jboolean WCDBJNIDatabaseObjectMethod(isOpened, jlong self);
-jboolean WCDBJNIDatabaseObjectMethod(isBlockaded, jlong self);
-void WCDBJNIDatabaseObjectMethod(close, jlong self, jobject callback);
-void WCDBJNIDatabaseObjectMethod(blockade, jlong self);
-void WCDBJNIDatabaseObjectMethod(unblockade, jlong self);
-void WCDBJNIDatabaseObjectMethod(purge, jlong self);
+jboolean WCDBJNIDatabaseClassMethod(canOpen, jlong self);
+jboolean WCDBJNIDatabaseClassMethod(isOpened, jlong self);
+jboolean WCDBJNIDatabaseClassMethod(isBlockaded, jlong self);
+void WCDBJNIDatabaseClassMethod(close, jlong self, jobject callback);
+void WCDBJNIDatabaseClassMethod(blockade, jlong self);
+void WCDBJNIDatabaseClassMethod(unblockade, jlong self);
+void WCDBJNIDatabaseClassMethod(purge, jlong self);
 
-void WCDBJNIDatabaseObjectMethod(configCipher, jlong self, jbyteArray cipherKey, jint pageSize, jint cipherVersion);
-void WCDBJNIDatabaseObjectMethod(
+void WCDBJNIDatabaseClassMethod(configCipher, jlong self, jbyteArray cipherKey, jint pageSize, jint cipherVersion);
+void WCDBJNIDatabaseClassMethod(
 config, jlong self, jstring name, jobject invocation, jobject unInvocation, jint priority);
 
 void WCDBJNIDatabaseClassMethod(globalTracePerformance, jobject tracer);
-void WCDBJNIDatabaseObjectMethod(tracePerformance, jlong self, jobject tracer);
+void WCDBJNIDatabaseClassMethod(tracePerformance, jlong self, jobject tracer);
 
 void WCDBJNIDatabaseClassMethod(globalTraceSQL, jobject tracer);
-void WCDBJNIDatabaseObjectMethod(traceSQL, jlong self, jobject tracer);
+void WCDBJNIDatabaseClassMethod(traceSQL, jlong self, jobject tracer);
 
 void WCDBJNIDatabaseClassMethod(globalTraceError, jobject tracer);
-void WCDBJNIDatabaseObjectMethod(traceError, jlong self, jobject tracer);
+void WCDBJNIDatabaseClassMethod(traceError, jlong self, jobject tracer);
 
 void WCDBJNIDatabaseClassMethod(globalTraceOperation, jobject tracer);
 void WCDBJNIDatabaseClassMethod(enumerateInfo, jobject javaInfo, jlong cppInfo);
 
-jboolean WCDBJNIDatabaseObjectMethod(removeFiles, jlong self);
-jboolean WCDBJNIDatabaseObjectMethod(moveFile, jlong self, jstring destination);
+jboolean WCDBJNIDatabaseClassMethod(removeFiles, jlong self);
+jboolean WCDBJNIDatabaseClassMethod(moveFile, jlong self, jstring destination);
 
-jlong WCDBJNIDatabaseObjectMethod(getFileSize, jlong self);
+jlong WCDBJNIDatabaseClassMethod(getFileSize, jlong self);
 
-void WCDBJNIDatabaseObjectMethod(setNotificationWhenCorrupted, jlong self, jobject notification);
-jboolean WCDBJNIDatabaseObjectMethod(checkIfCorrupted, jlong self);
-jboolean WCDBJNIDatabaseObjectMethod(checkIfIsAlreadyCorrupted, jlong self);
-void WCDBJNIDatabaseObjectMethod(enableAutoBackup, jlong self, jboolean enable);
-jboolean WCDBJNIDatabaseObjectMethod(backup, jlong self);
-void WCDBJNIDatabaseObjectMethod(filterBackup, jlong self, jobject tableShouldBeBackup);
-jboolean WCDBJNIDatabaseObjectMethod(deposit, jlong self);
-jboolean WCDBJNIDatabaseObjectMethod(removeDepositedFiles, jlong self);
-jboolean WCDBJNIDatabaseObjectMethod(containDepositedFiles, jlong self);
-jdouble WCDBJNIDatabaseObjectMethod(retrieve, jlong self, jobject onProgressUpdate);
+void WCDBJNIDatabaseClassMethod(setNotificationWhenCorrupted, jlong self, jobject notification);
+jboolean WCDBJNIDatabaseClassMethod(checkIfCorrupted, jlong self);
+jboolean WCDBJNIDatabaseClassMethod(checkIfIsAlreadyCorrupted, jlong self);
+void WCDBJNIDatabaseClassMethod(enableAutoBackup, jlong self, jboolean enable);
+jboolean WCDBJNIDatabaseClassMethod(backup, jlong self);
+void WCDBJNIDatabaseClassMethod(filterBackup, jlong self, jobject tableShouldBeBackup);
+jboolean WCDBJNIDatabaseClassMethod(deposit, jlong self);
+jboolean WCDBJNIDatabaseClassMethod(removeDepositedFiles, jlong self);
+jboolean WCDBJNIDatabaseClassMethod(containDepositedFiles, jlong self);
+jdouble WCDBJNIDatabaseClassMethod(retrieve, jlong self, jobject onProgressUpdate);
 
-jboolean WCDBJNIDatabaseObjectMethod(passiveCheckpoint, jlong self);
-jboolean WCDBJNIDatabaseObjectMethod(truncateCheckpoint, jlong self);
+jboolean WCDBJNIDatabaseClassMethod(passiveCheckpoint, jlong self);
+jboolean WCDBJNIDatabaseClassMethod(truncateCheckpoint, jlong self);
 
-void WCDBJNIDatabaseObjectMethod(addMigrationSource,
-                                 jlong self,
-                                 jstring sourcePath,
-                                 jbyteArray cipherKey,
-                                 jobject filter);
+void WCDBJNIDatabaseClassMethod(addMigrationSource,
+                                jlong self,
+                                jstring sourcePath,
+                                jbyteArray cipherKey,
+                                jobject filter);
 void WCDBJNIDatabaseClassMethod(setMigrationInfo,
                                 jlong infoSetter,
                                 jlong info,
                                 jstring sourceTable,
                                 jlong filterCondition);
-jboolean WCDBJNIDatabaseObjectMethod(stepMigration, jlong self);
-void WCDBJNIDatabaseObjectMethod(enableAutoMigration, jlong self, jboolean flag);
-void WCDBJNIDatabaseObjectMethod(setNotificationWhenMigrated, jlong self, jobject onMigrated);
-jboolean WCDBJNIDatabaseObjectMethod(isMigrated, jlong self);
+jboolean WCDBJNIDatabaseClassMethod(stepMigration, jlong self);
+void WCDBJNIDatabaseClassMethod(enableAutoMigration, jlong self, jboolean flag);
+void WCDBJNIDatabaseClassMethod(setNotificationWhenMigrated, jlong self, jobject onMigrated);
+jboolean WCDBJNIDatabaseClassMethod(isMigrated, jlong self);

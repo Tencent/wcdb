@@ -24,14 +24,14 @@
 #include "StatementDropViewJNI.h"
 #include "StatementDropViewBridge.h"
 
-jlong WCDBJNIStatementDropViewObjectMethodWithNoArg(createCppObj)
+jlong WCDBJNIStatementDropViewClassMethodWithNoArg(createCppObj)
 {
     return (jlong) WCDBStatementDropViewCreate().innerValue;
 }
 
-void WCDBJNIStatementDropViewObjectMethod(configSchema,
-                                          jlong self,
-                                          WCDBJNIObjectOrStringParameter(schema))
+void WCDBJNIStatementDropViewClassMethod(configSchema,
+                                         jlong self,
+                                         WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementDropView, self);
     WCDBJNICreateObjectOrStringCommonValue(schema, true);
@@ -39,7 +39,7 @@ void WCDBJNIStatementDropViewObjectMethod(configSchema,
     WCDBJNITryReleaseStringInCommonValue(schema);
 }
 
-void WCDBJNIStatementDropViewObjectMethod(configView, jlong self, jstring viewName)
+void WCDBJNIStatementDropViewClassMethod(configView, jlong self, jstring viewName)
 {
     WCDBJNIBridgeStruct(CPPStatementDropView, self);
     WCDBJNIGetStringCritical(viewName);
@@ -47,7 +47,7 @@ void WCDBJNIStatementDropViewObjectMethod(configView, jlong self, jstring viewNa
     WCDBJNIReleaseStringCritical(viewName);
 }
 
-void WCDBJNIStatementDropViewObjectMethod(configIfExist, jlong self)
+void WCDBJNIStatementDropViewClassMethod(configIfExist, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementDropView, self);
     WCDBStatementDropViewConfigIfExists(selfStruct);

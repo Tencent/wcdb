@@ -25,20 +25,20 @@
 #include "HandleBridge.h"
 #include "assert.h"
 
-jlong WCDBJNIHandleObjectMethod(getError, jlong self)
+jlong WCDBJNIHandleClassMethod(getError, jlong self)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);
     return (jlong) WCDBHandleGetError(selfStruct).innerValue;
 }
 
-jlong WCDBJNIHandleObjectMethod(getOrCreatePreparedStatement, jlong self, jlong statement)
+jlong WCDBJNIHandleClassMethod(getOrCreatePreparedStatement, jlong self, jlong statement)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);
     return (jlong) WCDBHandleGetOrCreatePreparedStatement(selfStruct, (CPPObject *) statement)
     .innerValue;
 }
 
-jlong WCDBJNIHandleObjectMethod(getOrCreatePreparedStatementWithSQL, jlong self, jstring sql)
+jlong WCDBJNIHandleClassMethod(getOrCreatePreparedStatementWithSQL, jlong self, jstring sql)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);
     WCDBJNIGetString(sql);
@@ -47,25 +47,25 @@ jlong WCDBJNIHandleObjectMethod(getOrCreatePreparedStatementWithSQL, jlong self,
     return ret;
 }
 
-jlong WCDBJNIHandleObjectMethod(getMainStatement, jlong self)
+jlong WCDBJNIHandleClassMethod(getMainStatement, jlong self)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);
     return (jlong) WCDBHandleGetMainStatement(selfStruct).innerValue;
 }
 
-void WCDBJNIHandleObjectMethod(finalizeAllStatements, jlong self)
+void WCDBJNIHandleClassMethod(finalizeAllStatements, jlong self)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);
     WCDBHandleFinalizeStatements(selfStruct);
 }
 
-jboolean WCDBJNIHandleObjectMethod(execute, jlong self, jlong statement)
+jboolean WCDBJNIHandleClassMethod(execute, jlong self, jlong statement)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);
     return WCDBHandleExecute(selfStruct, (CPPObject *) statement);
 }
 
-jboolean WCDBJNIHandleObjectMethod(executeSQL, jlong self, jstring sql)
+jboolean WCDBJNIHandleClassMethod(executeSQL, jlong self, jstring sql)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);
     WCDBJNIGetString(sql);
@@ -74,7 +74,7 @@ jboolean WCDBJNIHandleObjectMethod(executeSQL, jlong self, jstring sql)
     return ret;
 }
 
-jint WCDBJNIHandleObjectMethod(tableExist, jlong self, jstring table)
+jint WCDBJNIHandleClassMethod(tableExist, jlong self, jstring table)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);
     WCDBJNIGetString(table);
@@ -83,43 +83,43 @@ jint WCDBJNIHandleObjectMethod(tableExist, jlong self, jstring table)
     return ret.hasValue ? (jint) ret.value : 2;
 }
 
-jint WCDBJNIHandleObjectMethod(getChanges, jlong self)
+jint WCDBJNIHandleClassMethod(getChanges, jlong self)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);
     return WCDBHandleGetChange(selfStruct);
 }
 
-jint WCDBJNIHandleObjectMethod(getTotalChanges, jlong self)
+jint WCDBJNIHandleClassMethod(getTotalChanges, jlong self)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);
     return WCDBHandleGetTotalChange(selfStruct);
 }
 
-jlong WCDBJNIHandleObjectMethod(getLastInsertRowid, jlong self)
+jlong WCDBJNIHandleClassMethod(getLastInsertRowid, jlong self)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);
     return WCDBHandleGetLastInsertedRowID(selfStruct);
 }
 
-jboolean WCDBJNIHandleObjectMethod(isInTransaction, jlong self)
+jboolean WCDBJNIHandleClassMethod(isInTransaction, jlong self)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);
     return WCDBHandleGetLastInsertedRowID(selfStruct);
 }
 
-jboolean WCDBJNIHandleObjectMethod(beginTransaction, jlong self)
+jboolean WCDBJNIHandleClassMethod(beginTransaction, jlong self)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);
     return WCDBHandleBeginTransaction(selfStruct);
 }
 
-jboolean WCDBJNIHandleObjectMethod(commitTransaction, jlong self)
+jboolean WCDBJNIHandleClassMethod(commitTransaction, jlong self)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);
     return WCDBHandleCommitTransaction(selfStruct);
 }
 
-void WCDBJNIHandleObjectMethod(rollbackTransaction, jlong self)
+void WCDBJNIHandleClassMethod(rollbackTransaction, jlong self)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);
     return WCDBHandleRollbackTransaction(selfStruct);
@@ -215,14 +215,14 @@ void WCDBJNIHandleClassMethod(cancelSignal, jlong signal)
     WCDBCancellationSignalCancel(signalStruct);
 }
 
-void WCDBJNIHandleObjectMethod(attachCancellationSignal, jlong self, jlong signal)
+void WCDBJNIHandleClassMethod(attachCancellationSignal, jlong self, jlong signal)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);
     WCDBJNIBridgeStruct(CPPCancellationSignal, signal);
     WCDBHandleAttachCancellationSignal(selfStruct, signalStruct);
 }
 
-void WCDBJNIHandleObjectMethod(detachCancellationSignal, jlong self)
+void WCDBJNIHandleClassMethod(detachCancellationSignal, jlong self)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);
     WCDBHandleDettachCancellationSignal(selfStruct);

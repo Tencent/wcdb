@@ -34,4 +34,4 @@
 #define WCDBJNIStatementCommitClassMethodWithNoArg(funcName)                   \
     WCDBJNIClassMethodWithNoArg(StatementCommit, funcName)
 
-jlong WCDBJNIStatementCommitObjectMethodWithNoArg(create);
+jlong WCDBJNIStatementCommitClassMethodWithNoArg(create);

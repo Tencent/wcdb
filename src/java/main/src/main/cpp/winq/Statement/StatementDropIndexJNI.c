@@ -24,14 +24,14 @@
 #include "StatementDropIndexJNI.h"
 #include "StatementDropIndexBridge.h"
 
-jlong WCDBJNIStatementDropIndexObjectMethodWithNoArg(createCppObj)
+jlong WCDBJNIStatementDropIndexClassMethodWithNoArg(createCppObj)
 {
     return (jlong) WCDBStatementDropIndexCreate().innerValue;
 }
 
-void WCDBJNIStatementDropIndexObjectMethod(configSchema,
-                                           jlong self,
-                                           WCDBJNIObjectOrStringParameter(schema))
+void WCDBJNIStatementDropIndexClassMethod(configSchema,
+                                          jlong self,
+                                          WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementDropIndex, self);
     WCDBJNICreateObjectOrStringCommonValue(schema, true);
@@ -39,7 +39,7 @@ void WCDBJNIStatementDropIndexObjectMethod(configSchema,
     WCDBJNITryReleaseStringInCommonValue(schema);
 }
 
-void WCDBJNIStatementDropIndexObjectMethod(configIndex, jlong self, jstring indexName)
+void WCDBJNIStatementDropIndexClassMethod(configIndex, jlong self, jstring indexName)
 {
     WCDBJNIBridgeStruct(CPPStatementDropIndex, self);
     WCDBJNIGetStringCritical(indexName);
@@ -47,7 +47,7 @@ void WCDBJNIStatementDropIndexObjectMethod(configIndex, jlong self, jstring inde
     WCDBJNIReleaseStringCritical(indexName);
 }
 
-void WCDBJNIStatementDropIndexObjectMethod(configIfExist, jlong self)
+void WCDBJNIStatementDropIndexClassMethod(configIfExist, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementDropIndex, self);
     WCDBStatementDropIndexConfigIfExists(selfStruct);

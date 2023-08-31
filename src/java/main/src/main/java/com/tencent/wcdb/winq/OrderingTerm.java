@@ -42,14 +42,14 @@ public class OrderingTerm extends Identifier{
         return this;
     }
 
-    private native void collate(long orderingTerm, String collation);
+    private static native void collate(long orderingTerm, String collation);
 
     public OrderingTerm order(Order order) {
         order(cppObj, order.ordinal() + 1);
         return this;
     }
 
-    private native void order(long orderingTerm, int order);
+    private static native void order(long orderingTerm, int order);
 
     static public OrderingTerm ascendingRowid() {
         return Column.rowId().order(Order.Asc);

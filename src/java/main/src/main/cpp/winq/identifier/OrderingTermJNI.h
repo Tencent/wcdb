@@ -32,8 +32,8 @@
 #define WCDBJNIOrderingTermClassMethod(funcName, ...)                          \
     WCDBJNIClassMethod(OrderingTerm, funcName, __VA_ARGS__)
 
-jlong WCDBJNIOrderingTermObjectMethod(create, jint type, jlong expression);
+jlong WCDBJNIOrderingTermClassMethod(create, jint type, jlong expression);
 
-void WCDBJNIOrderingTermObjectMethod(configCollation, jlong object, jstring collation);
+void WCDBJNIOrderingTermClassMethod(configCollation, jlong object, jstring collation);
 
-void WCDBJNIOrderingTermObjectMethod(configOrder, jlong object, jint order);
+void WCDBJNIOrderingTermClassMethod(configOrder, jlong object, jint order);

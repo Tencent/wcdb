@@ -34,7 +34,7 @@ jlong WCDBJNIColumnClassMethodWithNoArg(createRowId)
     return (jlong) WCDBColumnCreateRowId().innerValue;
 }
 
-jlong WCDBJNIColumnObjectMethod(createWithName, jstring name, jlong binding)
+jlong WCDBJNIColumnClassMethod(createWithName, jstring name, jlong binding)
 {
     WCDBJNIGetStringCritical(name);
     jlong ret
@@ -43,13 +43,13 @@ jlong WCDBJNIColumnObjectMethod(createWithName, jstring name, jlong binding)
     return ret;
 }
 
-jlong WCDBJNIColumnObjectMethod(copy, jlong column)
+jlong WCDBJNIColumnClassMethod(copy, jlong column)
 {
     WCDBJNIBridgeStruct(CPPColumn, column);
     return (jlong) WCDBColumnCopy(columnStruct).innerValue;
 }
 
-void WCDBJNIColumnObjectMethod(inTable, jlong column, jstring table)
+void WCDBJNIColumnClassMethod(inTable, jlong column, jstring table)
 {
     WCDBJNIGetStringCritical(table);
     WCDBJNIBridgeStruct(CPPColumn, column);
@@ -57,7 +57,7 @@ void WCDBJNIColumnObjectMethod(inTable, jlong column, jstring table)
     WCDBJNIReleaseStringCritical(table);
 }
 
-void WCDBJNIColumnObjectMethod(ofSchema, jlong column, WCDBJNIObjectOrStringParameter(schema))
+void WCDBJNIColumnClassMethod(ofSchema, jlong column, WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPColumn, column);
     WCDBJNICreateObjectOrStringCommonValue(schema, true);

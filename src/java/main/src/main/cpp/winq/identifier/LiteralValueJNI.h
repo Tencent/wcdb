@@ -33,7 +33,7 @@
 #define WCDBJNILiteralValueClassMethod(funcName, ...)                          \
     WCDBJNIClassMethod(LiteralValue, funcName, __VA_ARGS__)
 
-jlong WCDBJNILiteralValueObjectMethod(create, WCDBJNICommonValueParameter(value));
+jlong WCDBJNILiteralValueClassMethod(create, WCDBJNICommonValueParameter(value));
 
 jlong WCDBJNILiteralValueClassMethodWithNoArg(createWithCurrentTime);
 

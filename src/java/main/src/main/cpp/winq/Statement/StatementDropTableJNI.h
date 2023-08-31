@@ -33,10 +33,12 @@
     WCDBJNIObjectMethodWithNoArg(StatementDropTable, funcName)
 #define WCDBJNIStatementDropTableClassMethodWithNoArg(funcName)                \
     WCDBJNIClassMethodWithNoArg(StatementDropTable, funcName)
+#define WCDBJNIStatementDropTableClassMethod(funcName, ...)                    \
+    WCDBJNIClassMethod(StatementDropTable, funcName, __VA_ARGS__)
 
-jlong WCDBJNIStatementDropTableObjectMethodWithNoArg(create);
-void WCDBJNIStatementDropTableObjectMethod(configSchema,
-                                           jlong self,
-                                           WCDBJNIObjectOrStringParameter(schema));
-void WCDBJNIStatementDropTableObjectMethod(configTableName, jlong self, jstring tableName);
-void WCDBJNIStatementDropTableObjectMethod(configIfExist, jlong self);
+jlong WCDBJNIStatementDropTableClassMethodWithNoArg(create);
+void WCDBJNIStatementDropTableClassMethod(configSchema,
+                                          jlong self,
+                                          WCDBJNIObjectOrStringParameter(schema));
+void WCDBJNIStatementDropTableClassMethod(configTableName, jlong self, jstring tableName);
+void WCDBJNIStatementDropTableClassMethod(configIfExist, jlong self);

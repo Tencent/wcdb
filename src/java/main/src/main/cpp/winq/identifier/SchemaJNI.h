@@ -33,7 +33,7 @@
 #define WCDBJNISchemaClassMethod(funcName, ...)                                \
     WCDBJNIClassMethod(Schema, funcName, __VA_ARGS__)
 
-jlong WCDBJNISchemaObjectMethod(createWithName, jstring name);
+jlong WCDBJNISchemaClassMethod(createWithName, jstring name);
 
 jlong WCDBJNISchemaClassMethodWithNoArg(main);
 

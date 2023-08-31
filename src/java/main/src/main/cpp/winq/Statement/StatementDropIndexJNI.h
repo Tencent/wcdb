@@ -32,10 +32,12 @@
     WCDBJNIObjectMethodWithNoArg(StatementDropIndex, funcName)
 #define WCDBJNIStatementDropIndexClassMethodWithNoArg(funcName)                \
     WCDBJNIClassMethodWithNoArg(StatementDropIndex, funcName)
+#define WCDBJNIStatementDropIndexClassMethod(funcName, ...)                    \
+    WCDBJNIClassMethod(StatementDropIndex, funcName, __VA_ARGS__)
 
-jlong WCDBJNIStatementDropIndexObjectMethodWithNoArg(createCppObj);
-void WCDBJNIStatementDropIndexObjectMethod(configSchema,
-                                           jlong self,
-                                           WCDBJNIObjectOrStringParameter(schema));
-void WCDBJNIStatementDropIndexObjectMethod(configIndex, jlong self, jstring indexName);
-void WCDBJNIStatementDropIndexObjectMethod(configIfExist, jlong self);
+jlong WCDBJNIStatementDropIndexClassMethodWithNoArg(createCppObj);
+void WCDBJNIStatementDropIndexClassMethod(configSchema,
+                                          jlong self,
+                                          WCDBJNIObjectOrStringParameter(schema));
+void WCDBJNIStatementDropIndexClassMethod(configIndex, jlong self, jstring indexName);
+void WCDBJNIStatementDropIndexClassMethod(configIfExist, jlong self);

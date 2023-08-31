@@ -33,8 +33,8 @@
     WCDBJNIClassMethod(WindowDef, funcName, __VA_ARGS__)
 
 jlong WCDBJNIWindowDefClassMethodWithNoArg(createCppObj);
-void WCDBJNIWindowDefObjectMethod(configPartitions,
-                                  jlong self,
-                                  WCDBJNIMultiTypeArrayParameter(partitions));
-void WCDBJNIWindowDefObjectMethod(configOrders, jlong self, jlongArray orders);
-void WCDBJNIWindowDefObjectMethod(configFrameSpec, jlong self, jlong frameSpec);
+void WCDBJNIWindowDefClassMethod(configPartitions,
+                                 jlong self,
+                                 WCDBJNIMultiTypeArrayParameter(partitions));
+void WCDBJNIWindowDefClassMethod(configOrders, jlong self, jlongArray orders);
+void WCDBJNIWindowDefClassMethod(configFrameSpec, jlong self, jlong frameSpec);

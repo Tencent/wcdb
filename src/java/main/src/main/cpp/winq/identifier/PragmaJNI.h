@@ -33,4 +33,4 @@
 #define WCDBJNIPragmaClassMethod(funcName, ...)                                \
     WCDBJNIClassMethod(Pragma, funcName, __VA_ARGS__)
 
-jlong WCDBJNIPragmaObjectMethod(create, jstring name);
+jlong WCDBJNIPragmaClassMethod(create, jstring name);

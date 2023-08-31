@@ -33,30 +33,32 @@
     WCDBJNIObjectMethodWithNoArg(StatementSelect, funcName)
 #define WCDBJNIStatementSelectClassMethodWithNoArg(funcName)                   \
     WCDBJNIClassMethodWithNoArg(StatementSelect, funcName)
+#define WCDBJNIStatementSelectClassMethod(funcName, ...)                       \
+    WCDBJNIClassMethod(StatementSelect, funcName, __VA_ARGS__)
 
-jlong WCDBJNIStatementSelectObjectMethodWithNoArg(create);
+jlong WCDBJNIStatementSelectClassMethodWithNoArg(create);
 
-void WCDBJNIStatementSelectObjectMethod(configWith, jlong self, jlongArray expressions);
-void WCDBJNIStatementSelectObjectMethod(configRecursive, jlong self);
+void WCDBJNIStatementSelectClassMethod(configWith, jlong self, jlongArray expressions);
+void WCDBJNIStatementSelectClassMethod(configRecursive, jlong self);
 
-void WCDBJNIStatementSelectObjectMethod(configResultColumns,
-                                        jlong self,
-                                        WCDBJNIMultiTypeArrayParameter(resultColumns));
-void WCDBJNIStatementSelectObjectMethod(configDistiction, jlong self);
-void WCDBJNIStatementSelectObjectMethod(configTableOrSubqueries,
-                                        jlong self,
-                                        WCDBJNIMultiTypeArrayParameter(tableOrSubqueries));
-void WCDBJNIStatementSelectObjectMethod(configCondition, jlong self, jlong condition);
-void WCDBJNIStatementSelectObjectMethod(configGroups,
-                                        jlong self,
-                                        WCDBJNIMultiTypeArrayParameter(groups));
-void WCDBJNIStatementSelectObjectMethod(configHaving, jlong self, jlong expression);
-void WCDBJNIStatementSelectObjectMethod(configUnion, jlong self);
-void WCDBJNIStatementSelectObjectMethod(configUnionAll, jlong self);
-void WCDBJNIStatementSelectObjectMethod(configIntersect, jlong self);
-void WCDBJNIStatementSelectObjectMethod(configExcept, jlong self);
-void WCDBJNIStatementSelectObjectMethod(configOrders, jlong self, jlongArray orders);
-void WCDBJNIStatementSelectObjectMethod(
+void WCDBJNIStatementSelectClassMethod(configResultColumns,
+                                       jlong self,
+                                       WCDBJNIMultiTypeArrayParameter(resultColumns));
+void WCDBJNIStatementSelectClassMethod(configDistiction, jlong self);
+void WCDBJNIStatementSelectClassMethod(configTableOrSubqueries,
+                                       jlong self,
+                                       WCDBJNIMultiTypeArrayParameter(tableOrSubqueries));
+void WCDBJNIStatementSelectClassMethod(configCondition, jlong self, jlong condition);
+void WCDBJNIStatementSelectClassMethod(configGroups,
+                                       jlong self,
+                                       WCDBJNIMultiTypeArrayParameter(groups));
+void WCDBJNIStatementSelectClassMethod(configHaving, jlong self, jlong expression);
+void WCDBJNIStatementSelectClassMethod(configUnion, jlong self);
+void WCDBJNIStatementSelectClassMethod(configUnionAll, jlong self);
+void WCDBJNIStatementSelectClassMethod(configIntersect, jlong self);
+void WCDBJNIStatementSelectClassMethod(configExcept, jlong self);
+void WCDBJNIStatementSelectClassMethod(configOrders, jlong self, jlongArray orders);
+void WCDBJNIStatementSelectClassMethod(
 configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to);
-void WCDBJNIStatementSelectObjectMethod(configLimitCount, jlong self, jint type, jlong limit);
-void WCDBJNIStatementSelectObjectMethod(configOffset, jlong self, jint type, jlong offset);
+void WCDBJNIStatementSelectClassMethod(configLimitCount, jlong self, jint type, jlong limit);
+void WCDBJNIStatementSelectClassMethod(configOffset, jlong self, jint type, jlong offset);

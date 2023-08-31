@@ -24,13 +24,13 @@
 #include "StatementPragmaJNI.h"
 #include "StatementPragmaBridge.h"
 
-jlong WCDBJNIStatementPragmaObjectMethodWithNoArg(create)
+jlong WCDBJNIStatementPragmaClassMethodWithNoArg(create)
 {
     return (jlong) WCDBStatementPragmaCreate().innerValue;
 }
-void WCDBJNIStatementPragmaObjectMethod(configSchema,
-                                        jlong self,
-                                        WCDBJNIObjectOrStringParameter(schema))
+void WCDBJNIStatementPragmaClassMethod(configSchema,
+                                       jlong self,
+                                       WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementPragma, self);
     WCDBJNICreateObjectOrStringCommonValue(schema, true);
@@ -38,14 +38,14 @@ void WCDBJNIStatementPragmaObjectMethod(configSchema,
     WCDBJNITryReleaseStringInCommonValue(schema);
 }
 
-void WCDBJNIStatementPragmaObjectMethod(configPragma, jlong self, jlong pragma)
+void WCDBJNIStatementPragmaClassMethod(configPragma, jlong self, jlong pragma)
 {
     WCDBJNIBridgeStruct(CPPStatementPragma, self);
     WCDBJNIBridgeStruct(CPPPragma, pragma);
     WCDBStatementPragmaConfigPragma(selfStruct, pragmaStruct);
 }
 
-void WCDBJNIStatementPragmaObjectMethod(configToValue, jlong self, WCDBJNICommonValueParameter(value))
+void WCDBJNIStatementPragmaClassMethod(configToValue, jlong self, WCDBJNICommonValueParameter(value))
 {
     WCDBJNIBridgeStruct(CPPStatementPragma, self);
     WCDBJNICreateCommonValue(value, true);
@@ -53,9 +53,7 @@ void WCDBJNIStatementPragmaObjectMethod(configToValue, jlong self, WCDBJNICommon
     WCDBJNITryReleaseStringInCommonValue(value);
 }
 
-void WCDBJNIStatementPragmaObjectMethod(configWithValue,
-                                        jlong self,
-                                        WCDBJNICommonValueParameter(value))
+void WCDBJNIStatementPragmaClassMethod(configWithValue, jlong self, WCDBJNICommonValueParameter(value))
 {
     WCDBJNIBridgeStruct(CPPStatementPragma, self);
     WCDBJNICreateCommonValue(value, true);

@@ -35,7 +35,7 @@ public class StatementDelete extends Statement {
         cppObj = createCppObj();
     }
 
-    private native long createCppObj();
+    private static native long createCppObj();
 
     public StatementDelete with(CommonTableExpression expression) {
         return with(new CommonTableExpression[]{expression});
@@ -70,9 +70,9 @@ public class StatementDelete extends Statement {
         return this;
     }
 
-    private native void configWith(long self, long[] expressions);
+    private static native void configWith(long self, long[] expressions);
 
-    private native void configRecursive(long self);
+    private static native void configRecursive(long self);
 
     public StatementDelete deleteFrom(String tableName) {
         configTable(cppObj, CPPType.String.ordinal(), 0, tableName);
@@ -84,14 +84,14 @@ public class StatementDelete extends Statement {
         return this;
     }
 
-    private native void configTable(long self, int type, long table, String tableName);
+    private static native void configTable(long self, int type, long table, String tableName);
 
     public StatementDelete where(Expression condition) {
         configCondition(cppObj, CppObject.get(condition));
         return this;
     }
 
-    private native void configCondition(long self, long condition);
+    private static native void configCondition(long self, long condition);
 
     public StatementDelete orderBy(OrderingTerm order) {
         configOrders(cppObj, new long[]{CppObject.get(order)});
@@ -110,7 +110,7 @@ public class StatementDelete extends Statement {
         return this;
     }
 
-    private native void configOrders(long self, long[] orders);
+    private static native void configOrders(long self, long[] orders);
 
     public StatementDelete limit(long from, long to) {
         configLimitRange(cppObj, CPPType.Int.ordinal(), from, CPPType.Int.ordinal(), to);
@@ -132,7 +132,7 @@ public class StatementDelete extends Statement {
         return this;
     }
 
-    private native void configLimitRange(long self, int fromType, long from, int toType, long to);
+    private static native void configLimitRange(long self, int fromType, long from, int toType, long to);
 
     public StatementDelete limit(long count) {
         configLimitCount(cppObj, CPPType.Int.ordinal(), count);
@@ -144,7 +144,7 @@ public class StatementDelete extends Statement {
         return this;
     }
 
-    private native void configLimitCount(long self, int type, long count);
+    private static native void configLimitCount(long self, int type, long count);
 
     public StatementDelete offset(long offset) {
         configOffset(cppObj, CPPType.Int.ordinal(), offset);
@@ -156,5 +156,5 @@ public class StatementDelete extends Statement {
         return this;
     }
 
-    private native void configOffset(long self, int type, long count);
+    private static native void configOffset(long self, int type, long count);
 }

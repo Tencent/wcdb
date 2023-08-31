@@ -24,12 +24,12 @@
 #include "StatementInsertJNI.h"
 #include "StatementInsertBridge.h"
 
-jlong WCDBJNIStatementInsertObjectMethodWithNoArg(create)
+jlong WCDBJNIStatementInsertClassMethodWithNoArg(create)
 {
     return (jlong) WCDBStatementInsertCreate().innerValue;
 }
 
-void WCDBJNIStatementInsertObjectMethod(configWith, jlong self, jlongArray expressions)
+void WCDBJNIStatementInsertClassMethod(configWith, jlong self, jlongArray expressions)
 {
     WCDBJNIBridgeStruct(CPPStatementInsert, self);
     WCDBJNIGetCppPointerArrayCritical(expressions);
@@ -38,13 +38,13 @@ void WCDBJNIStatementInsertObjectMethod(configWith, jlong self, jlongArray expre
     WCDBJNIReleaseCppPointerArrayCritical(expressions);
 }
 
-void WCDBJNIStatementInsertObjectMethod(configRecursive, jlong self)
+void WCDBJNIStatementInsertClassMethod(configRecursive, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementInsert, self);
     WCDBStatementInsertConfigRecursive(selfStruct);
 }
 
-void WCDBJNIStatementInsertObjectMethod(configTableName, jlong self, jstring tableName)
+void WCDBJNIStatementInsertClassMethod(configTableName, jlong self, jstring tableName)
 {
     WCDBJNIBridgeStruct(CPPStatementInsert, self);
     WCDBJNIGetStringCritical(tableName);
@@ -52,9 +52,9 @@ void WCDBJNIStatementInsertObjectMethod(configTableName, jlong self, jstring tab
     WCDBJNIReleaseStringCritical(tableName);
 }
 
-void WCDBJNIStatementInsertObjectMethod(configSchema,
-                                        jlong self,
-                                        WCDBJNIObjectOrStringParameter(schema))
+void WCDBJNIStatementInsertClassMethod(configSchema,
+                                       jlong self,
+                                       WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementInsert, self);
     WCDBJNICreateObjectOrStringCommonValue(schema, true);
@@ -62,13 +62,13 @@ void WCDBJNIStatementInsertObjectMethod(configSchema,
     WCDBJNITryReleaseStringInCommonValue(schema);
 }
 
-void WCDBJNIStatementInsertObjectMethod(configConfliction, jlong self, jint action)
+void WCDBJNIStatementInsertClassMethod(configConfliction, jlong self, jint action)
 {
     WCDBJNIBridgeStruct(CPPStatementInsert, self);
     WCDBStatementInsertConfigConfiction(selfStruct, action);
 }
 
-void WCDBJNIStatementInsertObjectMethod(configAs, jlong self, jstring alias)
+void WCDBJNIStatementInsertClassMethod(configAs, jlong self, jstring alias)
 {
     WCDBJNIBridgeStruct(CPPStatementInsert, self);
     WCDBJNIGetStringCritical(alias);
@@ -76,18 +76,16 @@ void WCDBJNIStatementInsertObjectMethod(configAs, jlong self, jstring alias)
     WCDBJNIReleaseStringCritical(alias);
 }
 
-void WCDBJNIStatementInsertObjectMethod(configColumns,
-                                        jlong self,
-                                        WCDBJNIObjectOrStringArrayParameter(columns))
+void WCDBJNIStatementInsertClassMethod(configColumns,
+                                       jlong self,
+                                       WCDBJNIObjectOrStringArrayParameter(columns))
 {
     WCDBJNIBridgeStruct(CPPStatementInsert, self);
     WCDBJNICreateObjectOrStringArrayCriticalWithAction(
     columns, WCDBStatementInsertConfigColumns2(selfStruct, columns_commonArray));
 }
 
-void WCDBJNIStatementInsertObjectMethod(configValues,
-                                        jlong self,
-                                        WCDBJNIMultiTypeArrayParameter(value))
+void WCDBJNIStatementInsertClassMethod(configValues, jlong self, WCDBJNIMultiTypeArrayParameter(value))
 {
     WCDBJNIBridgeStruct(CPPStatementInsert, self);
     WCDBJNICreateMultiTypeArray(value);
@@ -95,26 +93,26 @@ void WCDBJNIStatementInsertObjectMethod(configValues,
     WCDBJNIReleaseMultiTypeArray(value);
 }
 
-void WCDBJNIStatementInsertObjectMethod(configValuesWithBindParameters, jlong self, jint count)
+void WCDBJNIStatementInsertClassMethod(configValuesWithBindParameters, jlong self, jint count)
 {
     WCDBJNIBridgeStruct(CPPStatementInsert, self);
     WCDBStatementInsertConfigValuesWithBindParameters(selfStruct, count);
 }
 
-void WCDBJNIStatementInsertObjectMethod(configSelect, jlong self, jlong select)
+void WCDBJNIStatementInsertClassMethod(configSelect, jlong self, jlong select)
 {
     WCDBJNIBridgeStruct(CPPStatementInsert, self);
     WCDBJNIBridgeStruct(CPPStatementSelect, select);
     WCDBStatementInsertConfigSelect(selfStruct, selectStruct);
 }
 
-void WCDBJNIStatementInsertObjectMethod(configDefaultValues, jlong self)
+void WCDBJNIStatementInsertClassMethod(configDefaultValues, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementInsert, self);
     WCDBStatementInsertConfigDefaultValues(selfStruct);
 }
 
-void WCDBJNIStatementInsertObjectMethod(configUpsert, jlong self, jlong upsert)
+void WCDBJNIStatementInsertClassMethod(configUpsert, jlong self, jlong upsert)
 {
     WCDBJNIBridgeStruct(CPPStatementInsert, self);
     WCDBJNIBridgeStruct(CPPUpsert, upsert);

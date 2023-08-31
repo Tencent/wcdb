@@ -35,16 +35,16 @@
 
 jlong WCDBJNIForeignKeyClassMethodWithNoArg(createCppObject);
 
-void WCDBJNIForeignKeyObjectMethod(configReferencesTable, jlong self, jstring table);
-void WCDBJNIForeignKeyObjectMethod(configColumns,
-                                   jlong self,
-                                   WCDBJNIObjectOrStringArrayParameter(column));
+void WCDBJNIForeignKeyClassMethod(configReferencesTable, jlong self, jstring table);
+void WCDBJNIForeignKeyClassMethod(configColumns,
+                                  jlong self,
+                                  WCDBJNIObjectOrStringArrayParameter(column));
 
-void WCDBJNIForeignKeyObjectMethod(configOnDeleteAction, jlong self, jint action);
+void WCDBJNIForeignKeyClassMethod(configOnDeleteAction, jlong self, jint action);
 
-void WCDBJNIForeignKeyObjectMethod(configOnUpdateAction, jlong self, jint action);
+void WCDBJNIForeignKeyClassMethod(configOnUpdateAction, jlong self, jint action);
 
-void WCDBJNIForeignKeyObjectMethod(configMatch, jlong self, jint match);
+void WCDBJNIForeignKeyClassMethod(configMatch, jlong self, jint match);
 
-void WCDBJNIForeignKeyObjectMethod(configDeferrable, jlong self, jint type);
-void WCDBJNIForeignKeyObjectMethod(configNotDeferrable, jlong self, jint type);
+void WCDBJNIForeignKeyClassMethod(configDeferrable, jlong self, jint type);
+void WCDBJNIForeignKeyClassMethod(configNotDeferrable, jlong self, jint type);

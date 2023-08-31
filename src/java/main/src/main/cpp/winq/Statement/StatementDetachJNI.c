@@ -24,14 +24,14 @@
 #include "StatementDetachJNI.h"
 #include "StatementDetachBridge.h"
 
-jlong WCDBJNIStatementDetachObjectMethodWithNoArg(createCppObj)
+jlong WCDBJNIStatementDetachClassMethodWithNoArg(createCppObj)
 {
     return (jlong) WCDBStatementDetachCreate().innerValue;
 }
 
-void WCDBJNIStatementDetachObjectMethod(configSchema,
-                                        jlong self,
-                                        WCDBJNIObjectOrStringParameter(schema))
+void WCDBJNIStatementDetachClassMethod(configSchema,
+                                       jlong self,
+                                       WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementDetach, self);
     WCDBJNICreateObjectOrStringCommonValue(schema, true);

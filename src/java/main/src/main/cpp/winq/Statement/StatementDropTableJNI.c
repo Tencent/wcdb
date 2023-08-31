@@ -24,14 +24,14 @@
 #include "StatementDropTableJNI.h"
 #include "StatementDropTableBridge.h"
 
-jlong WCDBJNIStatementDropTableObjectMethodWithNoArg(create)
+jlong WCDBJNIStatementDropTableClassMethodWithNoArg(create)
 {
     return (jlong) WCDBStatementDropTableCreate().innerValue;
 }
 
-void WCDBJNIStatementDropTableObjectMethod(configSchema,
-                                           jlong self,
-                                           WCDBJNIObjectOrStringParameter(schema))
+void WCDBJNIStatementDropTableClassMethod(configSchema,
+                                          jlong self,
+                                          WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementDropTable, self);
     WCDBJNICreateObjectOrStringCommonValue(schema, true);
@@ -39,7 +39,7 @@ void WCDBJNIStatementDropTableObjectMethod(configSchema,
     WCDBJNITryReleaseStringInCommonValue(schema);
 }
 
-void WCDBJNIStatementDropTableObjectMethod(configTableName, jlong self, jstring tableName)
+void WCDBJNIStatementDropTableClassMethod(configTableName, jlong self, jstring tableName)
 {
     WCDBJNIBridgeStruct(CPPStatementDropTable, self);
     WCDBJNIGetStringCritical(tableName);
@@ -47,7 +47,7 @@ void WCDBJNIStatementDropTableObjectMethod(configTableName, jlong self, jstring 
     WCDBJNIReleaseStringCritical(tableName);
 }
 
-void WCDBJNIStatementDropTableObjectMethod(configIfExist, jlong self)
+void WCDBJNIStatementDropTableClassMethod(configIfExist, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementDropTable, self);
     WCDBStatementDropTableConfigIfExists(selfStruct);

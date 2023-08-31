@@ -24,12 +24,12 @@
 #include "StatementSelectJNI.h"
 #include "StatementSelectBridge.h"
 
-jlong WCDBJNIStatementSelectObjectMethodWithNoArg(create)
+jlong WCDBJNIStatementSelectClassMethodWithNoArg(create)
 {
     return (jlong) WCDBStatementSelectCreate().innerValue;
 }
 
-void WCDBJNIStatementSelectObjectMethod(configWith, jlong self, jlongArray expressions)
+void WCDBJNIStatementSelectClassMethod(configWith, jlong self, jlongArray expressions)
 {
     WCDBJNIBridgeStruct(CPPStatementSelect, self);
     WCDBJNIGetCppPointerArrayCritical(expressions);
@@ -38,15 +38,15 @@ void WCDBJNIStatementSelectObjectMethod(configWith, jlong self, jlongArray expre
     WCDBJNIReleaseCppPointerArrayCritical(expressions);
 }
 
-void WCDBJNIStatementSelectObjectMethod(configRecursive, jlong self)
+void WCDBJNIStatementSelectClassMethod(configRecursive, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementSelect, self);
     WCDBStatementSelectConfigRecursive(selfStruct);
 }
 
-void WCDBJNIStatementSelectObjectMethod(configResultColumns,
-                                        jlong self,
-                                        WCDBJNIMultiTypeArrayParameter(resultColumns))
+void WCDBJNIStatementSelectClassMethod(configResultColumns,
+                                       jlong self,
+                                       WCDBJNIMultiTypeArrayParameter(resultColumns))
 {
     WCDBJNIBridgeStruct(CPPStatementSelect, self);
     WCDBJNICreateMultiTypeArray(resultColumns);
@@ -54,15 +54,15 @@ void WCDBJNIStatementSelectObjectMethod(configResultColumns,
     WCDBJNIReleaseMultiTypeArray(resultColumns);
 }
 
-void WCDBJNIStatementSelectObjectMethod(configDistiction, jlong self)
+void WCDBJNIStatementSelectClassMethod(configDistiction, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementSelect, self);
     WCDBStatementSelectConfigDistinct(selfStruct);
 }
 
-void WCDBJNIStatementSelectObjectMethod(configTableOrSubqueries,
-                                        jlong self,
-                                        WCDBJNIMultiTypeArrayParameter(tableOrSubqueries))
+void WCDBJNIStatementSelectClassMethod(configTableOrSubqueries,
+                                       jlong self,
+                                       WCDBJNIMultiTypeArrayParameter(tableOrSubqueries))
 {
     WCDBJNIBridgeStruct(CPPStatementSelect, self);
     WCDBJNICreateMultiTypeArray(tableOrSubqueries);
@@ -70,16 +70,16 @@ void WCDBJNIStatementSelectObjectMethod(configTableOrSubqueries,
     WCDBJNIReleaseMultiTypeArray(tableOrSubqueries);
 }
 
-void WCDBJNIStatementSelectObjectMethod(configCondition, jlong self, jlong condition)
+void WCDBJNIStatementSelectClassMethod(configCondition, jlong self, jlong condition)
 {
     WCDBJNIBridgeStruct(CPPStatementSelect, self);
     WCDBJNIBridgeStruct(CPPExpression, condition);
     WCDBStatementSelectConfigWhere(selfStruct, conditionStruct);
 }
 
-void WCDBJNIStatementSelectObjectMethod(configGroups,
-                                        jlong self,
-                                        WCDBJNIMultiTypeArrayParameter(groups))
+void WCDBJNIStatementSelectClassMethod(configGroups,
+                                       jlong self,
+                                       WCDBJNIMultiTypeArrayParameter(groups))
 {
     WCDBJNIBridgeStruct(CPPStatementSelect, self);
     WCDBJNICreateMultiTypeArray(groups);
@@ -87,38 +87,38 @@ void WCDBJNIStatementSelectObjectMethod(configGroups,
     WCDBJNIReleaseMultiTypeArray(groups);
 }
 
-void WCDBJNIStatementSelectObjectMethod(configHaving, jlong self, jlong expression)
+void WCDBJNIStatementSelectClassMethod(configHaving, jlong self, jlong expression)
 {
     WCDBJNIBridgeStruct(CPPStatementSelect, self);
     WCDBJNIBridgeStruct(CPPExpression, expression);
     WCDBStatementSelectConfigHaving(selfStruct, expressionStruct);
 }
 
-void WCDBJNIStatementSelectObjectMethod(configUnion, jlong self)
+void WCDBJNIStatementSelectClassMethod(configUnion, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementSelect, self);
     WCDBStatementSelectConfigUnion(selfStruct);
 }
 
-void WCDBJNIStatementSelectObjectMethod(configUnionAll, jlong self)
+void WCDBJNIStatementSelectClassMethod(configUnionAll, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementSelect, self);
     WCDBStatementSelectConfigUnionAll(selfStruct);
 }
 
-void WCDBJNIStatementSelectObjectMethod(configIntersect, jlong self)
+void WCDBJNIStatementSelectClassMethod(configIntersect, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementSelect, self);
     WCDBStatementSelectConfigIntersect(selfStruct);
 }
 
-void WCDBJNIStatementSelectObjectMethod(configExcept, jlong self)
+void WCDBJNIStatementSelectClassMethod(configExcept, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementSelect, self);
     WCDBStatementSelectConfigExcept(selfStruct);
 }
 
-void WCDBJNIStatementSelectObjectMethod(configOrders, jlong self, jlongArray orders)
+void WCDBJNIStatementSelectClassMethod(configOrders, jlong self, jlongArray orders)
 {
     WCDBJNIBridgeStruct(CPPStatementSelect, self);
     WCDBJNIGetCppPointerArrayCritical(orders);
@@ -127,7 +127,7 @@ void WCDBJNIStatementSelectObjectMethod(configOrders, jlong self, jlongArray ord
     WCDBJNIReleaseCppPointerArrayCritical(orders);
 }
 
-void WCDBJNIStatementSelectObjectMethod(
+void WCDBJNIStatementSelectClassMethod(
 configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to)
 {
     WCDBJNIBridgeStruct(CPPStatementSelect, self);
@@ -140,7 +140,7 @@ configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to)
     WCDBStatementSelectConfigLimitRange2(selfStruct, from_common, to_common);
 }
 
-void WCDBJNIStatementSelectObjectMethod(configLimitCount, jlong self, jint type, jlong limit)
+void WCDBJNIStatementSelectClassMethod(configLimitCount, jlong self, jint type, jlong limit)
 {
     WCDBJNIBridgeStruct(CPPStatementSelect, self);
     CPPCommonValue limit_common;
@@ -149,7 +149,7 @@ void WCDBJNIStatementSelectObjectMethod(configLimitCount, jlong self, jint type,
     WCDBStatementSelectConfigLimitCount2(selfStruct, limit_common);
 }
 
-void WCDBJNIStatementSelectObjectMethod(configOffset, jlong self, jint type, jlong offset)
+void WCDBJNIStatementSelectClassMethod(configOffset, jlong self, jint type, jlong offset)
 {
     WCDBJNIBridgeStruct(CPPStatementSelect, self);
     CPPCommonValue offset_common;

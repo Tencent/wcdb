@@ -160,14 +160,14 @@ public class StatementInsert extends Statement {
         return this;
     }
 
-    private native void configColumns(long self, int type, long[] columns, String[] columnNames);
+    private static native void configColumns(long self, int type, long[] columns, String[] columnNames);
 
     public StatementInsert valuesWithBindParameters(int parametersCount) {
         configValuesWithBindParameters(cppObj, parametersCount);
         return this;
     }
 
-    private native void configValuesWithBindParameters(long self, int parametersCount);
+    private static native void configValuesWithBindParameters(long self, int parametersCount);
 
     public StatementInsert value(Object value) {
         return values(new Object[]{value});
@@ -184,26 +184,26 @@ public class StatementInsert extends Statement {
         return this;
     }
 
-    private native void configValues(long self, int[] types, long[] longValues, double[] doubleValues, String[] stringValues);
+    private static native void configValues(long self, int[] types, long[] longValues, double[] doubleValues, String[] stringValues);
 
     public StatementInsert values(StatementSelect select) {
         configValues(cppObj, CppObject.get(select));
         return this;
     }
 
-    private native void configValues(long self, long select);
+    private static native void configValues(long self, long select);
 
     public StatementInsert defaultValues() {
         configDefaultValues(cppObj);
         return this;
     }
 
-    private native void configDefaultValues(long self);
+    private static native void configDefaultValues(long self);
 
     public StatementInsert upsert(Upsert upsert) {
         configUpsert(cppObj, CppObject.get(upsert));
         return this;
     }
 
-    private native void configUpsert(long self, long upsert);
+    private static native void configUpsert(long self, long upsert);
 }

@@ -35,7 +35,7 @@ public class StatementCreateTable extends Statement {
         cppObj = createCppObj();
     }
 
-    private native long createCppObj();
+    private static native long createCppObj();
 
     public StatementCreateTable createTable(String tableName) {
         configTableName(cppObj, tableName);
@@ -48,16 +48,16 @@ public class StatementCreateTable extends Statement {
         return this;
     }
 
-    private native void configTableName(long self, String tableName);
+    private static native void configTableName(long self, String tableName);
 
-    private native void configTemp(long self);
+    private static native void configTemp(long self);
 
     public StatementCreateTable ifNotExist() {
         configIfNotExist(cppObj);
         return this;
     }
 
-    private native void configIfNotExist(long self);
+    private static native void configIfNotExist(long self);
 
     public StatementCreateTable of(String schemaName) {
         configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
@@ -69,21 +69,21 @@ public class StatementCreateTable extends Statement {
         return this;
     }
 
-    private native void configSchema(long self, int type, long schema, String schemaName);
+    private static native void configSchema(long self, int type, long schema, String schemaName);
 
     public StatementCreateTable as(StatementSelect select) {
         configAs(cppObj, CppObject.get(select));
         return this;
     }
 
-    private native void configAs(long self, long select);
+    private static native void configAs(long self, long select);
 
     public StatementCreateTable define(ColumnDef column) {
         configColumn(cppObj, CppObject.get(column));
         return this;
     }
 
-    private native void configColumn(long self, long column);
+    private static native void configColumn(long self, long column);
 
     public StatementCreateTable define(ColumnDef[] columns) {
         if(columns == null || columns.length == 0) {
@@ -97,7 +97,7 @@ public class StatementCreateTable extends Statement {
         return this;
     }
 
-    private native void configColumns(long self, long[] columns);
+    private static native void configColumns(long self, long[] columns);
 
     public StatementCreateTable constraint(TableConstraint[] constraints) {
         if(constraints == null || constraints.length == 0) {
@@ -116,12 +116,12 @@ public class StatementCreateTable extends Statement {
         return this;
     }
 
-    private native void configConstraints(long self, long[] constraints);
+    private static native void configConstraints(long self, long[] constraints);
 
     public StatementCreateTable withoutRowid() {
         configWithoutRowid(cppObj);
         return this;
     }
 
-    private native void configWithoutRowid(long self);
+    private static native void configWithoutRowid(long self);
 }

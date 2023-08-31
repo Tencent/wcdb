@@ -73,28 +73,28 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
         return this;
     }
 
-    private native void schema(long self, int type, long schema, String schemaName);
+    private static native void schema(long self, int type, long schema, String schemaName);
 
     public TableOrSubquery as(String alias) {
         as(cppObj, alias);
         return this;
     }
 
-    private native void as(long object, String alias);
+    private static native void as(long object, String alias);
 
     public TableOrSubquery notIndexd() {
         notIndexed(cppObj);
         return this;
     }
 
-    private native void notIndexed(long object);
+    private static native void notIndexed(long object);
 
     public TableOrSubquery indexedBy(String indexName) {
         indexedBy(cppObj, indexName);
         return this;
     }
 
-    private native void indexedBy(long object, String indexName);
+    private static native void indexedBy(long object, String indexName);
 
     public static TableOrSubquery function(String funcName) {
         TableOrSubquery tableOrSubquery = new TableOrSubquery();
@@ -162,7 +162,7 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
         return this;
     }
 
-    private native void argument(long self,
+    private static native void argument(long self,
                                  int type,
                                  long intValue,
                                  double doubleValue,

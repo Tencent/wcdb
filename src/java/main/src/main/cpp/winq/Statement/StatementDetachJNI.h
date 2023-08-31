@@ -33,8 +33,10 @@
     WCDBJNIObjectMethodWithNoArg(StatementDetach, funcName)
 #define WCDBJNIStatementDetachClassMethodWithNoArg(funcName)                   \
     WCDBJNIClassMethodWithNoArg(StatementDetach, funcName)
+#define WCDBJNIStatementDetachClassMethod(funcName, ...)                       \
+    WCDBJNIClassMethod(StatementDetach, funcName, __VA_ARGS__)
 
-jlong WCDBJNIStatementDetachObjectMethodWithNoArg(createCppObj);
-void WCDBJNIStatementDetachObjectMethod(configSchema,
-                                        jlong self,
-                                        WCDBJNIObjectOrStringParameter(schema));
+jlong WCDBJNIStatementDetachClassMethodWithNoArg(createCppObj);
+void WCDBJNIStatementDetachClassMethod(configSchema,
+                                       jlong self,
+                                       WCDBJNIObjectOrStringParameter(schema));

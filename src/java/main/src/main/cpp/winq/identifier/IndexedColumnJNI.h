@@ -30,9 +30,11 @@
     WCDBJNIObjectMethod(IndexedColumn, funcName, __VA_ARGS__)
 #define WCDBJNIIndexedColumnClassMethodWithNoArg(funcName)                     \
     WCDBJNIClassMethodWithNoArg(IndexedColumn, funcName)
+#define WCDBJNIIndexedColumnClassMethod(funcName, ...)                         \
+    WCDBJNIClassMethod(IndexedColumn, funcName, __VA_ARGS__)
 
-jlong WCDBJNIIndexedColumnObjectMethod(create, WCDBJNIObjectOrStringParameter(column));
+jlong WCDBJNIIndexedColumnClassMethod(create, WCDBJNIObjectOrStringParameter(column));
 
-void WCDBJNIIndexedColumnObjectMethod(configCollation, jlong indexedColumn, jstring collation);
+void WCDBJNIIndexedColumnClassMethod(configCollation, jlong indexedColumn, jstring collation);
 
-void WCDBJNIIndexedColumnObjectMethod(configOrder, jlong indexedColumn, jint order);
+void WCDBJNIIndexedColumnClassMethod(configOrder, jlong indexedColumn, jint order);

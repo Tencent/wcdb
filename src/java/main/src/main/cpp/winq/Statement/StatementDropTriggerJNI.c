@@ -24,14 +24,14 @@
 #include "StatementDropTriggerJNI.h"
 #include "StatementDropTriggerBridge.h"
 
-jlong WCDBJNIStatementDropTriggerObjectMethodWithNoArg(createCppObj)
+jlong WCDBJNIStatementDropTriggerClassMethodWithNoArg(createCppObj)
 {
     return (jlong) WCDBStatementDropTriggerCreate().innerValue;
 }
 
-void WCDBJNIStatementDropTriggerObjectMethod(configSchema,
-                                             jlong self,
-                                             WCDBJNIObjectOrStringParameter(schema))
+void WCDBJNIStatementDropTriggerClassMethod(configSchema,
+                                            jlong self,
+                                            WCDBJNIObjectOrStringParameter(schema))
 {
     WCDBJNIBridgeStruct(CPPStatementDropTrigger, self);
     WCDBJNICreateObjectOrStringCommonValue(schema, true);
@@ -39,7 +39,7 @@ void WCDBJNIStatementDropTriggerObjectMethod(configSchema,
     WCDBJNITryReleaseStringInCommonValue(schema);
 }
 
-void WCDBJNIStatementDropTriggerObjectMethod(configTrigger, jlong self, jstring triggerName)
+void WCDBJNIStatementDropTriggerClassMethod(configTrigger, jlong self, jstring triggerName)
 {
     WCDBJNIBridgeStruct(CPPStatementDropTrigger, self);
     WCDBJNIGetStringCritical(triggerName);
@@ -47,7 +47,7 @@ void WCDBJNIStatementDropTriggerObjectMethod(configTrigger, jlong self, jstring 
     WCDBJNIReleaseStringCritical(triggerName);
 }
 
-void WCDBJNIStatementDropTriggerObjectMethod(configIfExist, jlong self)
+void WCDBJNIStatementDropTriggerClassMethod(configIfExist, jlong self)
 {
     WCDBJNIBridgeStruct(CPPStatementDropTrigger, self);
     WCDBStatementDropTriggerConfigIfExists(selfStruct);

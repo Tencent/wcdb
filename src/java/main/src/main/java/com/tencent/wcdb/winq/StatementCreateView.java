@@ -35,7 +35,7 @@ public class StatementCreateView extends Statement {
         cppObj = createCppObj();
     }
 
-    private native long createCppObj();
+    private static native long createCppObj();
 
     public StatementCreateView createView(String name) {
         configView(cppObj, name);
@@ -48,9 +48,9 @@ public class StatementCreateView extends Statement {
         return this;
     }
 
-    private native void configView(long self, String name);
+    private static native void configView(long self, String name);
 
-    private native void configTemp(long self);
+    private static native void configTemp(long self);
 
     public StatementCreateView of(String schemaName) {
         configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
@@ -62,14 +62,14 @@ public class StatementCreateView extends Statement {
         return this;
     }
 
-    private native void configSchema(long self, int type, long object, String path);
+    private static native void configSchema(long self, int type, long object, String path);
 
     public StatementCreateView ifNotExist() {
         configIfNotExist(cppObj);
         return this;
     }
 
-    private native void configIfNotExist(long self);
+    private static native void configIfNotExist(long self);
 
     public StatementCreateView withColumn(Column column) {
         configColumns(cppObj, Identifier.getCppType(column), new long[]{CppObject.get(column)}, null);
@@ -101,12 +101,12 @@ public class StatementCreateView extends Statement {
         return this;
     }
 
-    private native void configColumns(long self, int type, long[] objects, String[] columnNames);
+    private static native void configColumns(long self, int type, long[] objects, String[] columnNames);
 
     public StatementCreateView as(StatementSelect select) {
         configAs(cppObj, CppObject.get(select));
         return this;
     }
 
-    private native void configAs(long self, long select);
+    private static native void configAs(long self, long select);
 }

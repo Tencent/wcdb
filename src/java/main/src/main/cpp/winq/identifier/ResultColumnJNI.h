@@ -33,6 +33,6 @@
 #define WCDBJNIResultColumnClassMethod(funcName, ...)                          \
     WCDBJNIClassMethod(ResultColumn, funcName, __VA_ARGS__)
 
-jlong WCDBJNIResultColumnObjectMethod(create, WCDBJNIObjectOrStringParameter(column));
+jlong WCDBJNIResultColumnClassMethod(create, WCDBJNIObjectOrStringParameter(column));
 
-void WCDBJNIResultColumnObjectMethod(configAlias, jlong object, jstring alias);
+void WCDBJNIResultColumnClassMethod(configAlias, jlong object, jstring alias);

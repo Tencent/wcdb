@@ -24,7 +24,7 @@
 #include "IndexedColumnJNI.h"
 #include "IndexedColumnBridge.h"
 
-jlong WCDBJNIIndexedColumnObjectMethod(create, WCDBJNIObjectOrStringParameter(column))
+jlong WCDBJNIIndexedColumnClassMethod(create, WCDBJNIObjectOrStringParameter(column))
 {
     WCDBJNICreateObjectOrStringCommonValue(column, true);
     jlong ret = (jlong) WCDBIndexedColumnCreate(column_common).innerValue;
@@ -32,7 +32,7 @@ jlong WCDBJNIIndexedColumnObjectMethod(create, WCDBJNIObjectOrStringParameter(co
     return ret;
 }
 
-void WCDBJNIIndexedColumnObjectMethod(configCollation, jlong indexedColumn, jstring collation)
+void WCDBJNIIndexedColumnClassMethod(configCollation, jlong indexedColumn, jstring collation)
 {
     WCDBJNIBridgeStruct(CPPIndexedColumn, indexedColumn);
     WCDBJNIGetStringCritical(collation);
@@ -40,7 +40,7 @@ void WCDBJNIIndexedColumnObjectMethod(configCollation, jlong indexedColumn, jstr
     WCDBJNIReleaseStringCritical(collation);
 }
 
-void WCDBJNIIndexedColumnObjectMethod(configOrder, jlong indexedColumn, jint order)
+void WCDBJNIIndexedColumnClassMethod(configOrder, jlong indexedColumn, jint order)
 {
     WCDBJNIBridgeStruct(CPPIndexedColumn, indexedColumn);
     WCDBIndexedColumnConfigOrder(indexedColumnStruct, order);

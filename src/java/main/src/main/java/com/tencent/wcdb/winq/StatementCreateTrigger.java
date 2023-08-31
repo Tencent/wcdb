@@ -48,9 +48,9 @@ public class StatementCreateTrigger extends Statement {
         return this;
     }
 
-    private native void configTrigger(long self, String name);
+    private static native void configTrigger(long self, String name);
 
-    private native void configTemp(long self);
+    private static native void configTemp(long self);
 
     public StatementCreateTrigger ofSchema(String schemaName) {
         configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
@@ -62,56 +62,56 @@ public class StatementCreateTrigger extends Statement {
         return this;
     }
 
-    private native void configSchema(long self, int type, long object, String path);
+    private static native void configSchema(long self, int type, long object, String path);
 
     public StatementCreateTrigger ifNotExist() {
         configIfNotExist(cppObj);
         return this;
     }
 
-    private native void configIfNotExist(long self);
+    private static native void configIfNotExist(long self);
 
     public StatementCreateTrigger before() {
         configBefore(cppObj);
         return this;
     }
 
-    private native void configBefore(long self);
+    private static native void configBefore(long self);
 
     public StatementCreateTrigger after() {
         configAfter(cppObj);
         return this;
     }
 
-    private native void configAfter(long self);
+    private static native void configAfter(long self);
 
     public StatementCreateTrigger insteadOf() {
         configInsteadOf(cppObj);
         return this;
     }
 
-    private native void configInsteadOf(long self);
+    private static native void configInsteadOf(long self);
 
     public StatementCreateTrigger delete() {
         configDelete(cppObj);
         return this;
     }
 
-    private native void configDelete(long self);
+    private static native void configDelete(long self);
 
     public StatementCreateTrigger insert() {
         configInsert(cppObj);
         return this;
     }
 
-    private native void configInsert(long self);
+    private static native void configInsert(long self);
 
     public StatementCreateTrigger update() {
         configUpdate(cppObj);
         return this;
     }
 
-    private native void configUpdate(long self);
+    private static native void configUpdate(long self);
 
     public StatementCreateTrigger ofColumn(Column column) {
         configColumns(cppObj, Identifier.getCppType(column), new long[]{CppObject.get(column)}, null);
@@ -143,54 +143,54 @@ public class StatementCreateTrigger extends Statement {
         return this;
     }
 
-    private native void configColumns(long self, int type, long[] objects, String[] columnNames);
+    private static native void configColumns(long self, int type, long[] objects, String[] columnNames);
 
     public StatementCreateTrigger onTable(String tableName) {
         configTable(cppObj, tableName);
         return this;
     }
 
-    private native void configTable(long self, String table);
+    private static native void configTable(long self, String table);
 
     public StatementCreateTrigger forEachRow() {
         configForEachRow(cppObj);
         return this;
     }
 
-    private native void configForEachRow(long self);
+    private static native void configForEachRow(long self);
 
     public StatementCreateTrigger when(Expression condition) {
         configWhen(cppObj, CppObject.get(condition));
         return this;
     }
 
-    private native void configWhen(long self, long condition);
+    private static native void configWhen(long self, long condition);
 
     public StatementCreateTrigger execute(StatementInsert insert) {
         executeInsert(cppObj, CppObject.get(insert));
         return this;
     }
 
-    private native void executeInsert(long self, long insert);
+    private static native void executeInsert(long self, long insert);
 
     public StatementCreateTrigger execute(StatementUpdate update) {
         executeUpdate(cppObj, CppObject.get(update));
         return this;
     }
 
-    private native void executeUpdate(long self, long insert);
+    private static native void executeUpdate(long self, long insert);
 
     public StatementCreateTrigger execute(StatementDelete delete) {
         executeDelete(cppObj, CppObject.get(delete));
         return this;
     }
 
-    private native void executeDelete(long self, long insert);
+    private static native void executeDelete(long self, long insert);
 
     public StatementCreateTrigger execute(StatementSelect select) {
         executeSelect(cppObj, CppObject.get(select));
         return this;
     }
 
-    private native void executeSelect(long self, long insert);
+    private static native void executeSelect(long self, long insert);
 }

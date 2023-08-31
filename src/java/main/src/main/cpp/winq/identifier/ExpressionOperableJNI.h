@@ -34,38 +34,35 @@
 #define WCDBJNIExpressionOperableClassMethod(funcName, ...)                    \
     WCDBJNIClassMethod(ExpressionOperable, funcName, __VA_ARGS__)
 
-jlong WCDBJNIExpressionOperableObjectMethod(nullOperate, jint operandType, jlong operand, jboolean isNot);
+jlong WCDBJNIExpressionOperableClassMethod(nullOperate, jint operandType, jlong operand, jboolean isNot);
 
-jlong WCDBJNIExpressionOperableObjectMethod(binaryOperate,
-                                            jint leftType,
-                                            jlong left,
-                                            WCDBJNICommonValueParameter(right),
-                                            jint operatorType,
-                                            jboolean isNot);
+jlong WCDBJNIExpressionOperableClassMethod(binaryOperate,
+                                           jint leftType,
+                                           jlong left,
+                                           WCDBJNICommonValueParameter(right),
+                                           jint operatorType,
+                                           jboolean isNot);
 
-jlong WCDBJNIExpressionOperableObjectMethod(betweenOperate,
-                                            jint operandType,
-                                            jlong operand,
-                                            WCDBJNICommonValueParameter(left),
-                                            WCDBJNICommonValueParameter(right),
-                                            jboolean isNot);
+jlong WCDBJNIExpressionOperableClassMethod(betweenOperate,
+                                           jint operandType,
+                                           jlong operand,
+                                           WCDBJNICommonValueParameter(left),
+                                           WCDBJNICommonValueParameter(right),
+                                           jboolean isNot);
 
-jlong WCDBJNIExpressionOperableObjectMethod(inOperate,
-                                            jint operandType,
-                                            jlong operand,
-                                            WCDBJNICommonArrayParameter(values),
-                                            jboolean isNot);
+jlong WCDBJNIExpressionOperableClassMethod(inOperate,
+                                           jint operandType,
+                                           jlong operand,
+                                           WCDBJNICommonArrayParameter(values),
+                                           jboolean isNot);
 
-jlong WCDBJNIExpressionOperableObjectMethod(
+jlong WCDBJNIExpressionOperableClassMethod(
 inTableOperate, jint operandType, jlong operand, jstring table, jboolean isNot);
 
-jlong WCDBJNIExpressionOperableObjectMethod(
+jlong WCDBJNIExpressionOperableClassMethod(
 inFunctionOperate, jint operandType, jlong operand, jstring func, jboolean isNot);
 
-jlong WCDBJNIExpressionOperableObjectMethod(
+jlong WCDBJNIExpressionOperableClassMethod(
 inSelectionOperate, jint operandType, jlong operand, jlong select, jboolean isNot);
 
-jlong WCDBJNIExpressionOperableObjectMethod(collateOperate,
-                                            jint operandType,
-                                            jlong operand,
-                                            jstring collation);
+jlong WCDBJNIExpressionOperableClassMethod(collateOperate, jint operandType, jlong operand, jstring collation);
