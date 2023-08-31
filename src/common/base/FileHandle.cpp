@@ -78,7 +78,6 @@ FileHandle::~FileHandle()
 FileHandle &FileHandle::operator=(FileHandle &&other)
 {
     WCTAssert(path == other.path);
-    path == other.path;
     m_fd = other.m_fd;
     other.m_fd = -1;
     other.m_mode = Mode::None;
