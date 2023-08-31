@@ -105,7 +105,8 @@ public class JavaCodeGenerator {
 
             builder.append(TAB + TAB).append(propertyName).append(" = new Field(\"")
                     .append(columnName).append("\", INSTANCE, ").append(fieldId).append(", ")
-                    .append(columnInfo.isPrimary() && columnInfo.isAutoIncrement()).append(");\n");
+                    .append(columnInfo.isPrimary() && columnInfo.isAutoIncrement()).append(", ")
+                    .append(columnInfo.isPrimary()).append(");\n");
 
             fieldId++;
 

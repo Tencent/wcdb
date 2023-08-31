@@ -89,7 +89,8 @@ class KotlinCodeGenerator {
             }
 
             builder.append("$TAB$TAB${propertyName} = Field(\"$columnName\", this, " +
-                    "$fieldId, ${columnInfo.isPrimary && columnInfo.isAutoIncrement})\n")
+                    "$fieldId, ${columnInfo.isPrimary && columnInfo.isAutoIncrement}, " +
+                    "${columnInfo.isPrimary})\n")
             fieldId++
 
             builder.append("$TAB${TAB}val ${propertyName}Def = ColumnDef($propertyName, ColumnType.${ormInfo.columnType})\n")

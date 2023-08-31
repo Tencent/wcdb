@@ -29,30 +29,27 @@ import com.tencent.wcdb.winq.Schema;
 
 public class Field<T> extends Column {
     protected TableBinding<T> binding = null;
+    public TableBinding<T> getTableBinding() { return binding; }
 
-    public TableBinding<T> getTableBinding() {
-        return binding;
-    }
-    protected int fieldId = 0;
+    private int fieldId = 0;
+    public int getFieldId() { return fieldId; }
 
-    protected String name;
-
-    public int getFieldId() {
-        return fieldId;
-    }
+    private String name;
+    public String getName() { return name; }
 
     private boolean isAutoIncrement = false;
+    public boolean isAutoIncrement() { return isAutoIncrement; }
 
-    public boolean isAutoIncrement() {
-        return isAutoIncrement;
-    }
+    private boolean isPrimaryKey = false;
+    public boolean isPrimaryKey() { return isPrimaryKey; }
 
-    public Field(String name, TableBinding<T> binding, int fieldId, boolean isAutoIncrement) {
+    public Field(String name, TableBinding<T> binding, int fieldId, boolean isAutoIncrement, boolean isPrimaryKey) {
         super(name, binding.baseBinding().getBaseBinding());
         this.name = name;
         this.binding = binding;
         this.fieldId = fieldId;
         this.isAutoIncrement = isAutoIncrement;
+        this.isPrimaryKey = isPrimaryKey;
     }
 
     protected Field() {
@@ -65,12 +62,9 @@ public class Field<T> extends Column {
         field.name = name;
         field.fieldId = fieldId;
         field.isAutoIncrement = isAutoIncrement;
+        field.isPrimaryKey = isPrimaryKey;
         field.binding = binding;
         return field;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public Field<T> table(String tableName) {
