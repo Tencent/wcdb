@@ -301,7 +301,7 @@ Factory::materialsForDeserializingForDatabase(const UnsafeStringView &database)
 Optional<Time> Factory::getModifiedTimeOr0IfNotExists(const UnsafeStringView &path)
 {
     Optional<Time> modifiedTime;
-    auto exists = FileManager::fileExists(path);
+    auto exists = FileManager::fileExistsAndNotEmpty(path);
     if (exists.succeed()) {
         if (exists.value()) {
             modifiedTime = FileManager::getFileModifiedTime(path);

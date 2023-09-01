@@ -79,6 +79,7 @@ protected:
 #pragma mark - Combination
 public:
     static Optional<bool> fileExists(const UnsafeStringView &file);
+    static Optional<bool> fileExistsAndNotEmpty(const UnsafeStringView &file);
     static Optional<bool> directoryExists(const UnsafeStringView &directory);
     static Optional<size_t> getItemSize(const UnsafeStringView &path);
     static Optional<size_t> getItemsSize(const std::list<StringView> &paths);
