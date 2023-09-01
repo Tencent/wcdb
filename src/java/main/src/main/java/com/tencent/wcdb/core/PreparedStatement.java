@@ -109,18 +109,6 @@ public class PreparedStatement extends CppObject {
         }
     }
 
-    public void bindInteger(char value, int index) {
-        bindInteger(cppObj, value, index);
-    }
-
-    public void bindInteger(Character value, int index) {
-        if (value != null) {
-            bindInteger(cppObj, value, index);
-        } else {
-            bindNull(index);
-        }
-    }
-
     public void bindInteger(byte value, int index) {
         bindInteger(cppObj, value, index);
     }
@@ -304,10 +292,6 @@ public class PreparedStatement extends CppObject {
 
     public boolean getBool(int index) {
         return getInteger(cppObj, index) > 0;
-    }
-
-    public char getChar(int index) {
-        return (char) getInteger(cppObj, index);
     }
 
     public byte getByte(int index) {

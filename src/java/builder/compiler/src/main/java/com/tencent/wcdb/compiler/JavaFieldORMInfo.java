@@ -33,8 +33,6 @@ public final class JavaFieldORMInfo {
             put("java.lang.Boolean", new JavaFieldORMInfo("Integer", "bindBool", "preparedStatement.getBool"));
             put("byte", new JavaFieldORMInfo("Integer", "bindInteger", "preparedStatement.getByte"));
             put("java.lang.Byte", new JavaFieldORMInfo("Integer", "bindInteger", "preparedStatement.getByte"));
-            put("char", new JavaFieldORMInfo("Integer", "bindInteger", "preparedStatement.getChar"));
-            put("java.lang.Character", new JavaFieldORMInfo("Integer", "bindInteger", "preparedStatement.getChar"));
             put("short", new JavaFieldORMInfo("Integer", "bindInteger", "preparedStatement.getShort"));
             put("java.lang.Short", new JavaFieldORMInfo("Integer", "bindInteger", "preparedStatement.getShort"));
             put("int", new JavaFieldORMInfo("Integer", "bindInteger", "preparedStatement.getInt"));

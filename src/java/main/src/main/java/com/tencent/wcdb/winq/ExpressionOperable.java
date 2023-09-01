@@ -59,10 +59,6 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return binaryOperate(operand, BinaryOperatorType.Multiply, false);
     }
 
-    public Expression multiply(char operand) {
-        return binaryOperate(operand, BinaryOperatorType.Multiply, false);
-    }
-
     public Expression multiply(short operand) {
         return binaryOperate(operand, BinaryOperatorType.Multiply, false);
     }
@@ -88,10 +84,6 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     }
 
     public Expression divide(byte operand) {
-        return binaryOperate(operand, BinaryOperatorType.Divide, false);
-    }
-
-    public Expression divide(char operand) {
         return binaryOperate(operand, BinaryOperatorType.Divide, false);
     }
 
@@ -123,10 +115,6 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return binaryOperate(operand, BinaryOperatorType.Modulo, false);
     }
 
-    public Expression mod(char operand) {
-        return binaryOperate(operand, BinaryOperatorType.Modulo, false);
-    }
-
     public Expression mod(short operand) {
         return binaryOperate(operand, BinaryOperatorType.Modulo, false);
     }
@@ -155,10 +143,6 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return binaryOperate(operand, BinaryOperatorType.Plus, false);
     }
 
-    public Expression add(char operand) {
-        return binaryOperate(operand, BinaryOperatorType.Plus, false);
-    }
-
     public Expression add(short operand) {
         return binaryOperate(operand, BinaryOperatorType.Plus, false);
     }
@@ -180,10 +164,6 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     }
 
     public Expression minus(ExpressionConvertible operand) {
-        return binaryOperate(operand, BinaryOperatorType.Minus, false);
-    }
-
-    public Expression minus(char operand) {
         return binaryOperate(operand, BinaryOperatorType.Minus, false);
     }
 
@@ -219,10 +199,6 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return binaryOperate(operand, BinaryOperatorType.LeftShift, false);
     }
 
-    public Expression leftShift(char operand) {
-        return binaryOperate(operand, BinaryOperatorType.LeftShift, false);
-    }
-
     public Expression leftShift(short operand) {
         return binaryOperate(operand, BinaryOperatorType.LeftShift, false);
     }
@@ -240,10 +216,6 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     }
 
     public Expression rightShift(byte operand) {
-        return binaryOperate(operand, BinaryOperatorType.RightShift, false);
-    }
-
-    public Expression rightShift(char operand) {
         return binaryOperate(operand, BinaryOperatorType.RightShift, false);
     }
 
@@ -267,10 +239,6 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return binaryOperate(operand, BinaryOperatorType.BitwiseAnd, false);
     }
 
-    public Expression bitAnd(char operand) {
-        return binaryOperate(operand, BinaryOperatorType.BitwiseAnd, false);
-    }
-
     public Expression bitAnd(short operand) {
         return binaryOperate(operand, BinaryOperatorType.BitwiseAnd, false);
     }
@@ -291,10 +259,6 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return binaryOperate(operand, BinaryOperatorType.BitwiseOr, false);
     }
 
-    public Expression bitOr(char operand) {
-        return binaryOperate(operand, BinaryOperatorType.BitwiseOr, false);
-    }
-
     public Expression bitOr(short operand) {
         return binaryOperate(operand, BinaryOperatorType.BitwiseOr, false);
     }
@@ -312,10 +276,6 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     }
 
     public Expression lt(byte operand) {
-        return binaryOperate(operand, BinaryOperatorType.Less, false);
-    }
-
-    public Expression lt(char operand) {
         return binaryOperate(operand, BinaryOperatorType.Less, false);
     }
 
@@ -347,10 +307,6 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return binaryOperate(operand, BinaryOperatorType.LessOrEqual, false);
     }
 
-    public Expression le(char operand) {
-        return binaryOperate(operand, BinaryOperatorType.LessOrEqual, false);
-    }
-
     public Expression le(short operand) {
         return binaryOperate(operand, BinaryOperatorType.LessOrEqual, false);
     }
@@ -376,10 +332,6 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     }
 
     public Expression gt(ExpressionConvertible operand) {
-        return binaryOperate(operand, BinaryOperatorType.Greater, false);
-    }
-
-    public Expression gt(char operand) {
         return binaryOperate(operand, BinaryOperatorType.Greater, false);
     }
 
@@ -419,10 +371,6 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return binaryOperate(operand, BinaryOperatorType.GreaterOrEqual, false);
     }
 
-    public Expression ge(char operand) {
-        return binaryOperate(operand, BinaryOperatorType.GreaterOrEqual, false);
-    }
-
     public Expression ge(short operand) {
         return binaryOperate(operand, BinaryOperatorType.GreaterOrEqual, false);
     }
@@ -459,10 +407,6 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return binaryOperate(operand, BinaryOperatorType.Equal, false);
     }
 
-    public Expression eq(char operand) {
-        return binaryOperate(operand, BinaryOperatorType.Equal, false);
-    }
-
     public Expression eq(short operand) {
         return binaryOperate(operand, BinaryOperatorType.Equal, false);
     }
@@ -495,10 +439,6 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return binaryOperate(operand, BinaryOperatorType.NotEqual, false);
     }
 
-    public Expression notEq(char operand) {
-        return binaryOperate(operand, BinaryOperatorType.NotEqual, false);
-    }
-
     public Expression notEq(byte operand) {
         return binaryOperate(operand, BinaryOperatorType.NotEqual, false);
     }
@@ -528,10 +468,6 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     }
 
     public Expression concat(byte operand) {
-        return binaryOperate(operand, BinaryOperatorType.Concatenate, false);
-    }
-
-    public Expression concat(char operand) {
         return binaryOperate(operand, BinaryOperatorType.Concatenate, false);
     }
 
@@ -795,14 +731,6 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         In operation
      */
 
-    public Expression in(char[] operands) {
-        long[] values = new long[operands.length];
-        for(int i = 0; i < operands.length; i++) {
-            values[i] = operands[i];
-        }
-        return in(values, false);
-    }
-
     public Expression in(short[] operands) {
         long[] values = new long[operands.length];
         for(int i = 0; i < operands.length; i++) {
@@ -849,14 +777,6 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
 
     public <T> Expression in(List<T> operands) {
         return in(operands.toArray(), false);
-    }
-
-    public Expression notIn(char[] operands) {
-        long[] values = new long[operands.length];
-        for(int i = 0; i < operands.length; i++) {
-            values[i] = operands[i];
-        }
-        return in(values, true);
     }
 
     public Expression notIn(short[] operands) {
@@ -1004,10 +924,6 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return binaryOperate(operand, BinaryOperatorType.Is, false);
     }
 
-    public Expression is(char operand) {
-        return binaryOperate(operand, BinaryOperatorType.Is, false);
-    }
-
     public Expression is(short operand) {
         return binaryOperate(operand, BinaryOperatorType.Is, false);
     }
@@ -1037,10 +953,6 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     }
 
     public Expression isNot(boolean operand) {
-        return binaryOperate(operand, BinaryOperatorType.Is, true);
-    }
-
-    public Expression isNot(char operand) {
         return binaryOperate(operand, BinaryOperatorType.Is, true);
     }
 

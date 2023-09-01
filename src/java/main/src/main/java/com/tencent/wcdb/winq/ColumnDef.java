@@ -72,10 +72,6 @@ public class ColumnDef extends Identifier{
         return constraint(new ColumnConstraint().defaultTo(value));
     }
 
-    public ColumnDef makeDefaultTo(char value) {
-        return constraint(new ColumnConstraint().defaultTo(value));
-    }
-
     public ColumnDef makeDefaultTo(short value) {
         return constraint(new ColumnConstraint().defaultTo(value));
     }

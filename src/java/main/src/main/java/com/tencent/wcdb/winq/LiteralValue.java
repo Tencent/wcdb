@@ -38,10 +38,6 @@ public class LiteralValue extends Identifier implements ExpressionConvertible {
         cppObj = createCppObj(CPPType.Int.ordinal(), value, 0, null);
     }
 
-    public LiteralValue(char value) {
-        cppObj = createCppObj(CPPType.Int.ordinal(), value, 0, null);
-    }
-
     public LiteralValue(short value) {
         cppObj = createCppObj(CPPType.Int.ordinal(), value, 0, null);
     }

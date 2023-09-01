@@ -26,7 +26,6 @@ package com.tencent.wcdb.compiler
 internal val AllKotlinPropertyORMInfo = mapOf<String, KotlinPropertyORMInfo>(
     Boolean::class.qualifiedName!! to KotlinPropertyORMInfo("Integer", "bindBool", "getBool(index)"),
     Byte::class.qualifiedName!! to KotlinPropertyORMInfo("Integer", "bindInteger", "getByte(index)"),
-    Char::class.qualifiedName!! to KotlinPropertyORMInfo("Integer", "bindInteger", "getChar(index)"),
     Short::class.qualifiedName!! to KotlinPropertyORMInfo("Integer", "bindInteger", "getShort(index)"),
     Int::class.qualifiedName!! to KotlinPropertyORMInfo("Integer", "bindInteger", "getInt(index)"),
     Long::class.qualifiedName!! to KotlinPropertyORMInfo("Integer", "bindInteger", "getLong(index)"),
@@ -41,7 +40,6 @@ internal val AllKotlinPropertyTypes = AllKotlinPropertyORMInfo.keys
 internal val K2JTypeMap = mapOf<String, String>(
     Boolean::class.qualifiedName!! to "boolean",
     Byte::class.qualifiedName!! to "byte",
-    Char::class.qualifiedName!! to "char",
     Short::class.qualifiedName!! to "short",
     Int::class.qualifiedName!! to "int",
     Long::class.qualifiedName!! to "long",

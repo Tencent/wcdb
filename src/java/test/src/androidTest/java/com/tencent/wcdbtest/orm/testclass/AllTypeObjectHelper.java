@@ -12,8 +12,6 @@ public class AllTypeObjectHelper {
         max.aBoolean2 = true;
         max.aByte = Byte.MAX_VALUE;
         max.aByte2 = Byte.MAX_VALUE;
-        max.aChar = Character.MAX_VALUE;
-        max.character = Character.MAX_VALUE;
         max.aShort = Short.MAX_VALUE;
         max.aShort2 = Short.MAX_VALUE;
         max.anInt = Integer.MAX_VALUE;
@@ -36,8 +34,6 @@ public class AllTypeObjectHelper {
         min.aBoolean2 = false;
         min.aByte = Byte.MIN_VALUE;
         min.aByte2 = Byte.MIN_VALUE;
-        min.aChar = Character.MIN_VALUE;
-        min.character = Character.MIN_VALUE;
         min.aShort = Short.MIN_VALUE;
         min.aShort2 = Short.MIN_VALUE;
         min.anInt = Integer.MIN_VALUE;
@@ -61,8 +57,6 @@ public class AllTypeObjectHelper {
         object.aBoolean2 = random.nextBoolean();
         object.aByte = (byte) random.nextInt();
         object.aByte2 = (byte) random.nextInt();
-        object.aChar = (char) random.nextInt();
-        object.character = (char) random.nextInt();
         object.aShort = (short) random.nextInt();
         object.aShort2 = (short) random.nextInt();
         object.anInt = random.nextInt();

@@ -134,11 +134,6 @@ public class Upsert extends Identifier{
         return this;
     }
 
-    public Upsert to(char value) {
-        configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
-        return this;
-    }
-
     public Upsert to(short value) {
         configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
         return this;

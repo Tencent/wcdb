@@ -66,11 +66,6 @@ public class StatementPragma extends Statement {
         return this;
     }
 
-    public StatementPragma withValue(char value) {
-        configWithValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
-        return this;
-    }
-
     public StatementPragma withValue(short value) {
         configWithValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
         return this;
@@ -113,11 +108,6 @@ public class StatementPragma extends Statement {
     }
 
     public StatementPragma toValue(byte value) {
-        configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
-        return this;
-    }
-
-    public StatementPragma toValue(char value) {
         configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
         return this;
     }

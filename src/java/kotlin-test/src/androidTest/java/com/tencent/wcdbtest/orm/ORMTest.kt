@@ -88,7 +88,6 @@ class ORMTest : DatabaseTestCase() {
             arrayOf(
                 "CREATE TABLE IF NOT EXISTS testTable(type TEXT, " +
                         "aBoolean INTEGER, aBoolean2 INTEGER, " +
-                        "aChar INTEGER, character INTEGER, " +
                         "aByte INTEGER, aByte2 INTEGER, " +
                         "aShort INTEGER, aShort2 INTEGER, " +
                         "anInt INTEGER, integer INTEGER, " +

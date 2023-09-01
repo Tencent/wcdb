@@ -39,10 +39,6 @@ public class AllTypeObject {
     @WCDBField
     Boolean aBoolean2;
     @WCDBField
-    char aChar;
-    @WCDBField
-    Character character;
-    @WCDBField
     byte aByte;
     @WCDBField
     Byte aByte2;
@@ -85,8 +81,6 @@ public class AllTypeObject {
         AllTypeObject other = (AllTypeObject) obj;
         return aBoolean == other.aBoolean &&
                 getIntegerValue(aBoolean2) == getIntegerValue(other.aBoolean2) &&
-                aChar == other.aChar &&
-                getIntegerValue(character) == getIntegerValue(other.character)  &&
                 aShort == other.aShort &&
                 getIntegerValue(aShort2) == getIntegerValue(other.aShort2) &&
                 anInt == other.anInt &&
@@ -107,8 +101,6 @@ public class AllTypeObject {
         }
         if (object instanceof Boolean) {
             return (Boolean)object ? 1: 0;
-        } else if (object instanceof Character) {
-            return (Character)object;
         } else if (object instanceof Byte) {
             return (Byte) object;
         } else if (object instanceof Short) {

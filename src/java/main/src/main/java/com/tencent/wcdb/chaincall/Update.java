@@ -75,10 +75,6 @@ public class Update<T> extends ChainCall<StatementUpdate> {
         return toRow(new Value[]{new Value(value)});
     }
 
-    public Update<T> toValue(char value) {
-        return toRow(new Value[]{new Value(value)});
-    }
-
     public Update<T> toValue(short value) {
         return toRow(new Value[]{new Value(value)});
     }

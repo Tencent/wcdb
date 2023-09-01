@@ -223,19 +223,6 @@ public class ExpressionTest {
     public void testInOperation() {
         Column column = new Column("testColumn");
 
-        winqEqual(column.in(new char[]{'a', 'b', 'c'}), "testColumn IN(97, 98, 99)");
-        Set<Character> charSet = new HashSet<Character>();
-        charSet.add('a');
-        charSet.add('b');
-        charSet.add('c');
-        winqEqual(column.in(charSet), "testColumn IN(97, 98, 99)");
-        winqEqual(column.in(new Character[]{'a', 'b', 'c'}), "testColumn IN(97, 98, 99)");
-        List<Character> charList = new ArrayList<Character>();
-        charList.add('a');
-        charList.add('b');
-        charList.add('c');
-        winqEqual(column.in(charList), "testColumn IN(97, 98, 99)");
-
         winqEqual(column.in(new short[]{1, 2, 3}), "testColumn IN(1, 2, 3)");
         Set<Short> shortSet = new HashSet<Short>();
         shortSet.add((short) 1);
@@ -321,19 +308,6 @@ public class ExpressionTest {
     @Test
     public void testNotInOperation() {
         Column column = new Column("testColumn");
-
-        winqEqual(column.notIn(new char[]{'a', 'b', 'c'}), "testColumn NOT IN(97, 98, 99)");
-        Set<Character> charSet = new HashSet<Character>();
-        charSet.add('a');
-        charSet.add('b');
-        charSet.add('c');
-        winqEqual(column.notIn(charSet), "testColumn NOT IN(97, 98, 99)");
-        winqEqual(column.notIn(new Character[]{'a', 'b', 'c'}), "testColumn NOT IN(97, 98, 99)");
-        List<Character> charList = new ArrayList<Character>();
-        charList.add('a');
-        charList.add('b');
-        charList.add('c');
-        winqEqual(column.notIn(charList), "testColumn NOT IN(97, 98, 99)");
 
         winqEqual(column.notIn(new short[]{1, 2, 3}), "testColumn NOT IN(1, 2, 3)");
         Set<Short> shortSet = new HashSet<Short>();

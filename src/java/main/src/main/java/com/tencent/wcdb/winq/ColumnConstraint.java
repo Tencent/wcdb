@@ -99,11 +99,6 @@ public class ColumnConstraint extends Identifier {
         return this;
     }
 
-    public ColumnConstraint defaultTo(char value) {
-        defaultTo(cppObj, CPPType.Int.ordinal(), value, 0, null);
-        return this;
-    }
-
     public ColumnConstraint defaultTo(short value) {
         defaultTo(cppObj, CPPType.Int.ordinal(), value, 0, null);
         return this;

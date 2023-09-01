@@ -39,10 +39,6 @@ class AllTypeObject {
     @WCDBField
     var aBoolean2: Boolean? = null
     @WCDBField
-    var aChar = 0.toChar()
-    @WCDBField
-    var character: Char? = null
-    @WCDBField
     var aByte: Byte = 0
     @WCDBField
     var aByte2: Byte? = null
@@ -88,8 +84,6 @@ class AllTypeObject {
         }
         return aBoolean == other.aBoolean &&
                 getIntegerValue(aBoolean2) == getIntegerValue(other.aBoolean2) &&
-                aChar == other.aChar &&
-                getIntegerValue(character ) == getIntegerValue(other.character) &&
                 aShort == other.aShort &&
                 getIntegerValue(aShort2) == getIntegerValue(other.aShort2) &&
                 anInt == other.anInt &&
@@ -162,8 +156,6 @@ class AllTypeObject {
             max.aBoolean2 = true
             max.aByte = Byte.MAX_VALUE
             max.aByte2 = Byte.MAX_VALUE
-            max.aChar = Character.MAX_VALUE
-            max.character = Character.MAX_VALUE
             max.aShort = Short.MAX_VALUE
             max.aShort2 = Short.MAX_VALUE
             max.anInt = Int.MAX_VALUE
@@ -187,8 +179,6 @@ class AllTypeObject {
             min.aBoolean2 = false
             min.aByte = Byte.MIN_VALUE
             min.aByte2 = Byte.MIN_VALUE
-            min.aChar = Character.MIN_VALUE
-            min.character = Character.MIN_VALUE
             min.aShort = Short.MIN_VALUE
             min.aShort2 = Short.MIN_VALUE
             min.anInt = Int.MIN_VALUE
@@ -213,8 +203,6 @@ class AllTypeObject {
             `object`.aBoolean2 = random.nextBoolean()
             `object`.aByte = random.nextInt().toByte()
             `object`.aByte2 = random.nextInt().toByte()
-            `object`.aChar = random.nextInt().toChar()
-            `object`.character = random.nextInt().toChar()
             `object`.aShort = random.nextInt().toShort()
             `object`.aShort2 = random.nextInt().toShort()
             `object`.anInt = random.nextInt()

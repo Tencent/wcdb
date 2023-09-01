@@ -42,10 +42,6 @@ public class Value {
         this.value = (long)value;
     }
 
-    public Value(char value) {
-        this.value = String.valueOf(value);
-    }
-
     public Value(int value) {
         this.value = (long)value;
     }
@@ -107,10 +103,6 @@ public class Value {
 
     public byte getByte() {
         return (byte) getLong();
-    }
-
-    public char getChar() {
-        return (char) getLong();
     }
 
     public short getShort() {

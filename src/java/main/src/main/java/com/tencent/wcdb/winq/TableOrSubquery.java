@@ -114,11 +114,6 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
         return this;
     }
 
-    public TableOrSubquery argument(char arg) {
-        argument(cppObj, CPPType.Int.ordinal(), arg, 0, null);
-        return this;
-    }
-
     public TableOrSubquery argument(short arg) {
         argument(cppObj, CPPType.Int.ordinal(), arg, 0, null);
         return this;
