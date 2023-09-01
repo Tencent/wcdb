@@ -86,7 +86,7 @@ public class Value {
     }
 
     public Value(Value other) {
-        this(other.value);
+        this(other == null ? null : other.value);
     }
 
     public ColumnType getType() {
