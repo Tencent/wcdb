@@ -73,13 +73,15 @@ public class Value {
     public Value(Object value) {
         if (value == null) {
             this.value = null;
-        } else if (value instanceof Long || value instanceof Integer ||
-                value instanceof Short || value instanceof Byte) {
-            this.value = ((Number) value).longValue();
-        } else if (value instanceof Float || value instanceof Double) {
-            this.value = ((Number) value).doubleValue();
-        } else if (value instanceof byte[]) {
+            return;
+        }
+        Class cls = value.getClass();
+        if(cls == Long.class || cls == Double.class || cls == String.class || cls == byte[].class) {
             this.value = value;
+        } else if (cls == Integer.class || cls == Short.class || cls == Byte.class) {
+            this.value = ((Number) value).longValue();
+        }else if(cls == Float.class) {
+            this.value = ((Number) value).doubleValue();
         } else {
             this.value = value.toString();
         }
