@@ -502,11 +502,15 @@ public class WCDBException extends RuntimeException {
 
     @Override
     public String getMessage() {
-        StringBuilder sb = new StringBuilder(512);
-        sb.append('[').append(level).append("] ").append("Code: ").append(code.value());
+        StringBuilder sb = new StringBuilder(256);
+        sb.append("Code: ").append(code.value());
         for (Map.Entry<String, Object> entry : info.entrySet()) {
             sb.append("; ").append(entry.getKey()).append(": ").append(entry.getValue());
         }
         return sb.toString();
+    }
+
+    public String toStringForLog() {
+        return "[WCDB] [" + level + "] " + getMessage();
     }
 }
