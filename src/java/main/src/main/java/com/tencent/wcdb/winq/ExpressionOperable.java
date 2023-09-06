@@ -1221,7 +1221,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
 
     private Expression in(Object[] operands, boolean isNot) {
         if(operands == null || operands.length == 0) {
-            return in((long[]) null);
+            return in((long[]) null, isNot);
         }
 
         ObjectType dataType = MultiTypeArray.getObjectType(operands[0]);
