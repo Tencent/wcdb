@@ -3,8 +3,8 @@ include(CMakeParseArguments)
 include(CheckFunctionExists)
 
 # read WCONAN_PACKAGE_NAME from wconan_package.yaml
-if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../../WeChat/wconan_package.yaml")
-    file(READ "${CMAKE_CURRENT_SOURCE_DIR}/../../WeChat/wconan_package.yaml" TEMP_YAML)
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../WeChat/wconan_package.yaml")
+    file(READ "${CMAKE_CURRENT_SOURCE_DIR}/../WeChat/wconan_package.yaml" TEMP_YAML)
     string(REGEX MATCH "[ \t]*name[ \t]*:[ \t]*([0-9a-zA-Z\\.\\_\\-]*)" _ ${TEMP_YAML})
     set(WCONAN_PACKAGE_NAME ${CMAKE_MATCH_1})
     message(STATUS "WCONAN_PACKAGE_NAME: ${WCONAN_PACKAGE_NAME}")
@@ -32,7 +32,7 @@ message(STATUS "wconan.cmake - WCONAN_PACKAGE_NAME: [${WCONAN_PACKAGE_NAME}], WC
 # auto generate lib_version.c
 # when build with cmake, lib_version.c should contain a function like this:
 #     extern "C" const char* get_owl_version();
-set(SRC_LIB_VERSION ${CMAKE_CURRENT_SOURCE_DIR}/../../WeChat/wconan_build/cmake/lib_version.c)
+set(SRC_LIB_VERSION ${CMAKE_CURRENT_SOURCE_DIR}/../WeChat/wconan_build/cmake/lib_version.c)
 execute_process(
         COMMAND git rev-parse --abbrev-ref HEAD
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
@@ -48,7 +48,7 @@ execute_process(
 message(STATUS "GIT_BRANCH ${GIT_BRANCH}, GIT_COMMIT_ID: ${GIT_COMMIT_ID}")
 string(TOLOWER ${WCONAN_LIB_NAME} WCONAN_LIB_NAME_LOWER)
 file(WRITE "${SRC_LIB_VERSION}" "const char* get_${WCONAN_LIB_NAME_LOWER}_version() { return \"${WCONAN_LIB_NAME} ${WCONAN_LIB_VERSION} ${GIT_BRANCH} ${GIT_COMMIT_ID}(\" __DATE__ \" \" __TIME__ \")\"; }")
-set(DEFAULT_GIT_IGNORE ${CMAKE_CURRENT_SOURCE_DIR}/../../WeChat/wconan_build/cmake/.gitignore)
+set(DEFAULT_GIT_IGNORE ${CMAKE_CURRENT_SOURCE_DIR}/../WeChat/wconan_build/cmake/.gitignore)
 if (NOT EXISTS "${DEFAULT_GIT_IGNORE}")
     file(WRITE "${DEFAULT_GIT_IGNORE}" "*")
 endif ()
@@ -130,7 +130,7 @@ message(STATUS "CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR}")
 message(STATUS "CMAKE_SIZEOF_VOID_P: ${CMAKE_SIZEOF_VOID_P}")
 
 function(wconan_get_libraries_dir out_libraries_dir download_dir)
-    set(libraries_dir "${CMAKE_CURRENT_SOURCE_DIR}/../../WeChat/${download_dir}/${CMAKE_BUILD_TYPE}/${WCONAN_TARGET_PLATFORM}")
+    set(libraries_dir "${CMAKE_CURRENT_SOURCE_DIR}/../WeChat/${download_dir}/${CMAKE_BUILD_TYPE}/${WCONAN_TARGET_PLATFORM}")
     set(${out_libraries_dir} ${libraries_dir} PARENT_SCOPE)
     message(STATUS "out_libraries_dir ${libraries_dir}")
 endfunction()
