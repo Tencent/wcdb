@@ -23,7 +23,7 @@ xcuserdata/*
 DerivedData
 
 #CMake
-tools/version/build/
+src/build/
 
 # WCDB
 WCDB.framework
