@@ -73,7 +73,7 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey>: TableBindin
                 assert(columnType != nil, "It should not be failed. If you think it's a bug, please report an issue to us.")
                 let columnDef = ColumnDef(named: key.rawValue, and: columnType!)
                 withExtendedLifetime(columnDef) {
-                    WCDBBindingAddColumnDef(cppBinding, key.rawValue.cString, $0.cppObj)
+                    WCDBBindingAddColumnDef(cppBinding, $0.cppObj)
                 }
             }
 

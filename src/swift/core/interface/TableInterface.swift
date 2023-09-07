@@ -30,7 +30,7 @@ public protocol TableInterface: AnyObject {
     /// Create table, related indexes and constraints with specific type
     ///
     /// Note that it will create defined indexes automatically.
-    /// The name of index is `"\(tableName)\(indexSubfixName)"` while `indexSubfixName` is defined by `IndexBinding`.
+    /// The name of index is `"\(tableName)\(indexSuffixName)"` while `indexSuffixName` is defined by `IndexBinding`.
     /// BUT, it will not drop the undefined indexes. You should drop it manually.
     ///
     /// Note that it will add the newly defined column automatically.
@@ -141,7 +141,7 @@ extension TableInterface where Self: HandleRepresentable {
     public func create<Root: TableDecodable>(
         table name: String,
         of rootType: Root.Type) throws {
-            let handle = try getHandle()
+            let handle = try getHandle(writeHint: true)
             let ret = WCDBBindingCreateTable(rootType.CodingKeys.objectRelationalMapping.innerBinding, name.cString, handle.cppHandle)
             if !ret {
                 throw handle.getError()
@@ -149,7 +149,7 @@ extension TableInterface where Self: HandleRepresentable {
     }
 
     public func create<Root: TableDecodable>(virtualTable name: String, of rootType: Root.Type) throws {
-        let handle = try getHandle()
+        let handle = try getHandle(writeHint: true)
         let ret = WCDBBindingCreateVirtualTable(rootType.CodingKeys.objectRelationalMapping.innerBinding, name.cString, handle.cppHandle)
         if !ret {
             throw handle.getError()
@@ -165,7 +165,7 @@ extension TableInterface where Self: HandleRepresentable {
     public func create(table name: String,
                        with columnDefList: [ColumnDef],
                        and constraintList: [TableConstraint]? = nil) throws {
-        try getHandle().exec(StatementCreateTable().create(table: name).ifNotExists().with(columns: columnDefList).constraint(constraintList))
+        try getHandle(writeHint: true).exec(StatementCreateTable().create(table: name).ifNotExists().with(columns: columnDefList).constraint(constraintList))
     }
 
     public func getTable<Root: TableCodable>(
@@ -175,7 +175,7 @@ extension TableInterface where Self: HandleRepresentable {
     }
 
     public func isTableExists(_ table: String) throws -> Bool {
-        let handle = try getHandle()
+        let handle = try getHandle(writeHint: false)
         let ret = WCDBHandleExistTable(handle.cppHandle, table)
         if !ret.hasValue {
             let error = WCDBHandleGetError(handle.cppHandle)
@@ -185,11 +185,11 @@ extension TableInterface where Self: HandleRepresentable {
     }
 
     public func addColumn(with columnDef: ColumnDef, forTable table: String) throws {
-        try getHandle().exec(StatementAlterTable().alter(table: table).addColumn(with: columnDef))
+        try getHandle(writeHint: true).exec(StatementAlterTable().alter(table: table).addColumn(with: columnDef))
     }
 
     public func drop(table name: String) throws {
-        try getHandle().exec(StatementDropTable().drop(table: name).ifExists())
+        try getHandle(writeHint: true).exec(StatementDropTable().drop(table: name).ifExists())
     }
 
     public func create(index name: String,
@@ -201,10 +201,10 @@ extension TableInterface where Self: HandleRepresentable {
     public func create(index name: String,
                        with indexedColumnConvertibleList: [IndexedColumnConvertible],
                        forTable table: String) throws {
-        try getHandle().exec(StatementCreateIndex().create(index: name).on(table: table).ifNotExists().indexesBy( indexedColumnConvertibleList))
+        try getHandle(writeHint: true).exec(StatementCreateIndex().create(index: name).on(table: table).ifNotExists().indexesBy( indexedColumnConvertibleList))
     }
 
     public func drop(index name: String) throws {
-        try getHandle().exec(StatementDropIndex().drop(index: name).ifExists())
+        try getHandle(writeHint: true).exec(StatementDropIndex().drop(index: name).ifExists())
     }
 }

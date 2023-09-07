@@ -95,33 +95,33 @@ public protocol TransactionInterface {
 
 extension TransactionInterface where Self: HandleRepresentable {
     public func begin() throws {
-        let handle = try getHandle()
+        let handle = try getHandle(writeHint: true)
         if !WCDBHandleBeginTransaction(handle.cppHandle) {
             throw handle.getError()
         }
     }
 
     public func commit() throws {
-        let handle = try getHandle()
+        let handle = try getHandle(writeHint: true)
         if !WCDBHandleCommitTransaction(handle.cppHandle) {
             throw handle.getError()
         }
     }
 
     public func rollback() throws {
-        let handle = try getHandle()
+        let handle = try getHandle(writeHint: true)
         WCDBHandleRollbackTransaction(handle.cppHandle)
     }
 
     public var isInTransaction: Bool {
-        guard let handle = try? getHandle() else {
+        guard let handle = try? getHandle(writeHint: true) else {
             return false
         }
         return WCDBHandleIsInTransaction(handle.cppHandle)
     }
 
     public func run(transaction: @escaping TransactionClosure) throws {
-        let handle = try getHandle()
+        let handle = try getHandle(writeHint: true)
         if handle.isInTransaction {
             try transaction(handle)
             return
@@ -157,14 +157,14 @@ extension TransactionInterface where Self: HandleRepresentable {
             return ret && transactionRet
         }
         let transactionBlockImp = imp_implementationWithBlock(transactionBlock)
-        let handle = try getHandle()
+        let handle = try getHandle(writeHint: true)
         if !WCDBHandleRunTransaction(handle.cppHandle, transactionBlockImp) && transactionRet {
             throw handle.getError()
         }
     }
 
     public func run(pausableTransaction: @escaping PausableTransactionClosure) throws {
-        let handle = try getHandle()
+        let handle = try getHandle(writeHint: true)
         let transactionBlock: @convention(block) (CPPHandle, UnsafeMutablePointer<Bool>, Bool) -> Bool = {
             _, cStop, isNewTransaction in
             var ret = true

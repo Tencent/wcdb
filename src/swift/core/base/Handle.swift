@@ -145,12 +145,13 @@ public final class Handle {
 }
 
 public protocol HandleRepresentable {
-    func getHandle() throws -> Handle
+
+    func getHandle(writeHint: Bool) throws -> Handle
     func getDatabase() -> Database
 }
 
 extension Handle: HandleRepresentable {
-    public func getHandle() throws -> Handle {
+    public func getHandle(writeHint: Bool) throws -> Handle {
         return self
     }
 

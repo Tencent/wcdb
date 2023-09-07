@@ -76,6 +76,9 @@ public:                                                                        \
 #define WCDB_CPP_PRIMARY_ASC_AUTO_INCREMENT(fieldName)                         \
     __WCDB_CPP_ORDERED_PRIMARY_IMP(fieldName, WCDB::Order::ASC, true)
 
+#define WCDB_CPP_PRIMARY_ENABLE_AUTOINCREMENT_FOR_EXISTING_TABLE               \
+    __WCDB_CPP_PRIMARY_ENABLE_AUTOINCREMENT_FOR_EXISTING_TABLE
+
 #define WCDB_CPP_NOT_NULL(fieldName) __WCDB_CPP_NOT_NULL_IMP(fieldName)
 
 #define WCDB_CPP_UNIQUE(fieldName) __WCDB_CPP_UNIQUE_IMP(fieldName)

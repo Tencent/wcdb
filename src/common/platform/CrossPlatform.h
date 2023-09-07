@@ -92,6 +92,12 @@ WCDB_EXTERN_C_END
 #include <io.h>
 #endif
 
+#ifndef _WIN32
+#include <unistd.h>
+#else
+#include <io.h>
+#endif
+
 #ifdef __ANDROID__
 WCDB_EXTERN_C_BEGIN
 int getdtablesize();

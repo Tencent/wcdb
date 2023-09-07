@@ -27,6 +27,36 @@
 #include "ObjectBridge.hpp"
 #include <cstdint>
 
+CPPLiteralValue WCDBLiteralValueCreate(CPPCommonValue value)
+{
+    switch (value.type) {
+    case WCDBBridgedType_Null:
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPLiteralValue, WCDB::LiteralValue, nullptr);
+    case WCDBBridgedType_Bool:
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPLiteralValue, WCDB::LiteralValue, (bool) value.intValue);
+    case WCDBBridgedType_Int:
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPLiteralValue, WCDB::LiteralValue, (int64_t) value.intValue);
+    case WCDBBridgedType_UInt:
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPLiteralValue, WCDB::LiteralValue, (uint64_t) value.intValue);
+    case WCDBBridgedType_Double:
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPLiteralValue, WCDB::LiteralValue, value.doubleValue);
+    case WCDBBridgedType_String:
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPLiteralValue,
+        WCDB::LiteralValue,
+        WCDB::StringView((const char*) value.intValue));
+    default:
+        assert(0);
+    }
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPLiteralValue, WCDB::LiteralValue, nullptr);
+}
+
 CPPLiteralValue WCDBLiteralValueCreateWithInt64(long long value)
 {
     return WCDBCreateCPPBridgedObjectWithParameters(

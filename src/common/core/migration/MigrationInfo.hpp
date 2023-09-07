@@ -24,39 +24,82 @@
 
 #pragma once
 
+#include "Lock.hpp"
 #include "StringView.hpp"
 #include "WINQ.h"
 #include <set>
 
 namespace WCDB {
 
+class MigrationUserInfo;
+
+#pragma mark - MigrationDatabaseInfo
+class MigrationDatabaseInfo {
+public:
+    typedef std::function<void(MigrationUserInfo&)> TableFilter;
+
+    MigrationDatabaseInfo(const UnsafeStringView& path,
+                          const UnsafeData& cipher,
+                          const TableFilter& filter);
+
+    bool isCrossDatabase() const;
+
+    static const char* getSchemaPrefix();
+    const StringView& getSourceDatabase() const;
+
+    Data getCipher() const;
+    void setRawCipher(const UnsafeData& rawCipher) const;
+    bool needRawCipher() const;
+
+    const TableFilter& getFilter() const;
+
+    const Schema& getSchemaForSourceDatabase() const;
+    const StatementAttach& getStatementForAttachingSchema() const;
+
+private:
+    StringView m_sourcePath;
+    mutable Data m_cipher;
+    TableFilter m_filter;
+
+    mutable bool m_needRawCipher;
+    mutable SharedLock m_lock;
+
+    // wcdb_migration_ + hash(m_sourcePath)
+    Schema m_schema;
+    StatementAttach m_statementForAttachingSchema;
+};
+
 #pragma mark - MigrationBaseInfo
 class MigrationBaseInfo {
 public:
     MigrationBaseInfo();
-    MigrationBaseInfo(const UnsafeStringView& database, const UnsafeStringView& table);
+    MigrationBaseInfo(MigrationDatabaseInfo& databaseInfo, const UnsafeStringView& table);
     virtual ~MigrationBaseInfo() = 0;
 
     const StringView& getTable() const;
-    const StringView& getDatabase() const;
     const StringView& getSourceTable() const;
-    const StringView& getSourceDatabase() const;
+    const Expression& getFilterCondition() const;
 
     bool shouldMigrate() const;
     bool isCrossDatabase() const;
+    const StringView& getSourceDatabase() const;
 
-    // wcdb_migration_
-    static const char* getSchemaPrefix();
+    Data getSourceCipher() const;
+    void setRawSourceCipher(const UnsafeData& rawCipher) const;
+    bool needRawSourceCipher() const;
+
+    const Schema& getSchemaForSourceDatabase() const;
+    const StatementAttach& getStatementForAttachingSchema() const;
 
 protected:
-    static Schema getSchemaForDatabase(const UnsafeStringView& database);
-    void setSource(const UnsafeStringView& table, const UnsafeStringView& database = "");
+    void setSource(const UnsafeStringView& table);
+    void setFilter(Expression filterCondition);
+    void tryFallbackToSourceTable(Syntax::Schema& schema, StringView& table) const;
 
-private:
-    StringView m_database;
+    MigrationDatabaseInfo& m_databaseInfo;
     StringView m_table;
-    StringView m_sourceDatabase;
     StringView m_sourceTable;
+    Expression m_filterCondition;
 };
 
 #pragma mark - MigrationUserInfo
@@ -66,14 +109,7 @@ public:
     ~MigrationUserInfo() override final;
 
     using MigrationBaseInfo::setSource;
-
-    /*
-     ATTACH [sourceDatabase]
-     AS [schemaForSourceDatabase]
-     */
-    StatementAttach getStatementForAttachingSchema() const;
-
-    Schema getSchemaForSourceDatabase() const;
+    using MigrationBaseInfo::setFilter;
 };
 
 #pragma mark - MigrationInfo
@@ -81,23 +117,19 @@ class MigrationInfo final : public MigrationBaseInfo {
 public:
     MigrationInfo(const MigrationUserInfo& userInfo,
                   const std::set<StringView>& columns,
-                  bool integerPrimaryKey);
+                  bool autoincrement,
+                  const UnsafeStringView& integerPrimaryKey);
     ~MigrationInfo() override final;
 
+    bool isAutoIncrement() const;
+    const StringView& getIntegerPrimaryKey() const;
+
 protected:
-    bool m_integerPrimaryKey;
+    bool m_autoincrement;
+    StringView m_integerPrimaryKey;
 
 #pragma mark - Schema
 public:
-    // Schema
-    const Schema& getSchemaForSourceDatabase() const;
-
-    /*
-     ATTACH [sourceDatabase]
-     AS [schemaForSourceDatabase]
-     */
-    const StatementAttach& getStatementForAttachingSchema() const;
-
     /*
      DETACH [schemaForSourceDatabase]
      */
@@ -107,11 +139,6 @@ public:
      PRAGMA main.database_list
      */
     static StatementPragma getStatementForSelectingDatabaseList();
-
-protected:
-    // wcdb_migration_ + hash([sourceDatabase])
-    Schema m_schemaForSourceDatabase;
-    StatementAttach m_statementForAttachingSchema;
 
 #pragma mark - View
 public:
@@ -152,48 +179,64 @@ protected:
 
 #pragma mark - Compatible
 public:
-    /*
-     DELETE FROM [schemaForSourceDatabase].[sourceTable] WHERE rowid == ?1
-     */
-    const StatementDelete& getStatementForDeletingSpecifiedRow() const;
+    static const int indexOfRowIdOrPrimaryKey = SQLITE_MAX_VARIABLE_NUMBER;
 
     /*
-     INSERT rowid, [columns]
-     ...
-     VALUES (?rowidIndex, ...)
+     Firstly,
      
-     Note that newRowid is
-     1. rowid in source table when it's an integer primary key table
-     2. SELECT max(rowid)+1 FROM temp.[unionedView] when the table does not contain an integer primary key
+     INSERT INTO [schemaForSourceDatabase].[sourceTable]([columns]) VALUES (...)
+     DELETE FROM [schemaForSourceDatabase].[sourceTable] WHERE rowid == ?1
+     
+     And then
+     
+     1. for the tables with autoincrement integer primary key:
+     
+        INSERT INTO main.targetTable([columns]) VALUES (...)
+     
+     2. for the tables with integer primary key:
+     
+        INSERT INTO main.targetTable([columns], rowid) VALUES (..., ?rowidIndex)
+     
+        Note that newRowid is
+        (1) the primmay key assigned from statement
+        (2) or SELECT max(primary key)+1 FROM temp.[unionedView]
+     
+     3. for the tables with normal primary key or no primary key:
+     
+        INSERT INTO main.targetTable([columns], rowid) VALUES (..., ?rowidIndex)
+     
+        Note that newRowid is SELECT max(rowid)+1 FROM temp.[unionedView]
      */
-    StatementInsert getStatementForMigrating(const Syntax::InsertSTMT& stmt) const;
-
-    int getRowIDIndexOfMigratingStatement() const;
+    void generateStatementsForInsertMigrating(const Statement& sourceStatement,
+                                              std::list<Statement>& statements,
+                                              int& primaryKeyIndex,
+                                              Optional<int64_t>& assignedPrimaryKey) const;
 
     /*
-     UPDATE ...
-     SET ...
-     WHERE rowid IN(
-     SELECT rowid FROM temp.[unionedView] WHERE ... ORDER BY ... LIMIT ... OFFSET ...
-     )
+     SELECT [rowid/primary key] FROM temp.[unionedView] WHERE ... ORDER BY ... LIMIT ... OFFSET ...
+     UPDATE [schemaForSourceDatabase].[sourceTable] SET ... TO ... WHERE [rowid/primary key] == ?index
+     UPDATE main.targetTable SET ... TO ... WHERE [rowid/primary key] == ?index
+     
+     For the tables with integer primary key, it uses primary key. For the other tables, it uses rowid.
      */
-    StatementUpdate
-    getStatementForLimitedUpdatingTable(const Statement& sourceStatement) const;
+    void generateStatementsForUpdateMigrating(const Statement& sourceStatement,
+                                              std::list<Statement>& statements) const;
 
     /*
-     DELETE FROM ...
-     WHERE rowid IN(
-     SELECT rowid FROM temp.[unionedView] WHERE ... ORDER BY ... LIMIT ... OFFSET ...
-     )
+     SELECT [rowid/primary key] FROM temp.[unionedView] WHERE ... ORDER BY ... LIMIT ... OFFSET ...
+     DELETE FROM [schemaForSourceDatabase].[sourceTable] WHERE [rowid/primary key] == ?index
+     DELETE FROM main.targetTable WHERE [rowid/primary key] == ?index
+     
+     For the tables with integer primary key, it uses primary key. For the other tables, it uses rowid.
      */
-    StatementDelete
-    getStatementForLimitedDeletingFromTable(const Statement& sourceStatement) const;
+    void generateStatementsForDeleteMigrating(const Statement& sourceStatement,
+                                              std::list<Statement>& statements) const;
 
     StatementDelete getStatementForDeletingFromTable(const Statement& sourceStatement) const;
 
 protected:
     StatementDelete m_statementForDeletingSpecifiedRow;
-    StatementSelect m_statementForSelectingMaxRowID;
+    StatementSelect m_statementForSelectingMaxID;
 
 #pragma mark - Migrate
 public:
@@ -202,17 +245,26 @@ public:
      INTO rowid, main.[table]
      SELECT rowid, [columns]
      FROM [schemaForSourceDatabase].[sourceTable]
-     ORDER BY rowid DESC
+     ORDER BY [rowid/primary key] DESC
      LIMIT 1
+     
+     For the tables with integer primary key, it uses primary key. For the other tables, it uses rowid.
      */
     const StatementInsert& getStatementForMigratingOneRow() const;
 
     /*
      DELETE FROM [schemaForSourceDatabase].[sourceTable]
-     ORDER BY rowid DESC
+     ORDER BY [rowid/primary key] DESC
      LIMIT 1
+     
+     For the tables with integer primary key, it uses primary key. For the other tables, it uses rowid.
      */
     const StatementDelete& getStatementForDeletingMigratedOneRow() const;
+
+    /*
+     SELECT * FROM [schemaForSourceDatabase].[sourceTable] LIMIT 1
+     */
+    const StatementSelect& getStatementForSelectingAnyRowFromSourceTable() const;
 
     /*
      DROP TABLE IF EXISTS [schemaForSourceDatabase].[sourceTable]
@@ -223,6 +275,7 @@ protected:
     StatementInsert m_statementForMigratingOneRow;
     StatementDelete m_statementForDeletingMigratedOneRow;
     StatementDropTable m_statementForDroppingSourceTable;
+    StatementSelect m_statementForSelectingAnyRowFromSourceTable;
 };
 
 } // namespace WCDB

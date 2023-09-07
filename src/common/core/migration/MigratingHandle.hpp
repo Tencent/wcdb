@@ -48,7 +48,7 @@ public:
                            const ColumnDef &column) override final;
     bool rebindUnionView(const UnsafeStringView &table, const Columns &columns);
     bool checkSourceTable(const UnsafeStringView &table, const UnsafeStringView &sourceTable);
-    bool executeAttach(const StatementAttach &attach);
+    bool attachDatabase(const MigrationBaseInfo *attachInfo);
 
 #pragma mark - Binder
 protected:
@@ -68,10 +68,8 @@ private:
 
 #pragma mark - Info Initializer
 protected:
-    // integer primary, columns
-    Optional<std::pair<bool, std::set<StringView>>>
-    getColumnsOfUserInfo(const MigrationUserInfo &userInfo) override final;
-    Optional<bool> sourceTableExists(const MigrationUserInfo &userInfo) override final;
+    bool attachSourceDatabase(const MigrationUserInfo &userInfo) override final;
+    InnerHandle *getCurrentHandle() override final;
     const StringView &getDatabasePath() const override final;
 
 #pragma mark - Statement

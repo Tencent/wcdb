@@ -35,6 +35,10 @@ void WCDBStatementDeleteConfigWith(CPPStatementDelete deleteStatement,
 void WCDBStatementDeleteConfigRecursive(CPPStatementDelete deleteStatement);
 void WCDBStatementDeleteConfigDeleteFrom(CPPStatementDelete deleteStatement,
                                          CPPQualifiedTable table);
+
+void WCDBStatementDeleteConfigDeleteFrom2(CPPStatementDelete deleteStatement,
+                                          CPPCommonValue table);
+
 void WCDBStatementDeleteConfigWhere(CPPStatementDelete deleteStatement, CPPExpression expression);
 void WCDBStatementDeleteConfigOrder(CPPStatementDelete deleteStatement,
                                     const CPPOrderingTerm* _Nullable orders,
@@ -45,5 +49,12 @@ void WCDBStatementDeleteConfigLimitRange(CPPStatementDelete deleteStatement,
 void WCDBStatementDeleteConfigLimitCount(CPPStatementDelete deleteStatement,
                                          CPPExpression limit);
 void WCDBStatementDeleteConfigOffset(CPPStatementDelete deleteStatement, CPPExpression offset);
+
+void WCDBStatementDeleteConfigLimitRange2(CPPStatementDelete deleteStatement,
+                                          CPPCommonValue from,
+                                          CPPCommonValue to);
+void WCDBStatementDeleteConfigLimitCount2(CPPStatementDelete deleteStatement,
+                                          CPPCommonValue limit);
+void WCDBStatementDeleteConfigOffset2(CPPStatementDelete deleteStatement, CPPCommonValue offset);
 
 WCDB_EXTERN_C_END

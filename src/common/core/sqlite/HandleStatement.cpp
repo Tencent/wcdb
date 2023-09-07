@@ -221,7 +221,7 @@ bool HandleStatement::tryExtractColumnInfo(const Statement &statement,
                                    tableName.length() - prefixLength);
             schemaName = "";
             schemaSpecified = false;
-        } else if (schemaName.hasPrefix(MigrationInfo::getSchemaPrefix())) {
+        } else if (schemaName.hasPrefix(MigrationDatabaseInfo::getSchemaPrefix())) {
             schemaName = "";
             schemaSpecified = false;
         }
@@ -296,7 +296,7 @@ bool HandleStatement::tryExtractColumnInfo(const Statement &statement,
                                       curTableName.length() - prefixLength);
             curSchema = Schema::main();
         }
-        if (curSchema.name.hasPrefix(MigrationInfo::getSchemaPrefix())) {
+        if (curSchema.name.hasPrefix(MigrationDatabaseInfo::getSchemaPrefix())) {
             curSchema = Schema::main();
         }
 
@@ -412,6 +412,12 @@ const UnsafeStringView HandleStatement::getColumnTableName(int index)
     return sqlite3_column_table_name(m_stmt, index);
 }
 
+int HandleStatement::getBindParameterCount()
+{
+    WCTAssert(isPrepared());
+    return sqlite3_bind_parameter_count(m_stmt);
+}
+
 ColumnType HandleStatement::getType(int index)
 {
     WCTAssert(isPrepared());
@@ -454,6 +460,16 @@ void HandleStatement::bindText(const Text &value, int index)
     // use SQLITE_STATIC if auto_commit?
     bool succeed = APIExit(sqlite3_bind_text(
     m_stmt, index, value.data(), (int) value.length(), SQLITE_TRANSIENT));
+    WCTAssert(succeed);
+    WCDB_UNUSED(succeed);
+}
+
+void HandleStatement::bindText16(const char16_t *value, size_t valueLength, int index)
+{
+    WCTAssert(isPrepared());
+    WCTAssert(!isBusy());
+    bool succeed = APIExit(sqlite3_bind_text16(
+    m_stmt, index, value, (int) valueLength * 2, SQLITE_TRANSIENT));
     WCTAssert(succeed);
     WCDB_UNUSED(succeed);
 }
@@ -517,6 +533,20 @@ HandleStatement::Text HandleStatement::getText(int index)
     return UnsafeStringView(
     reinterpret_cast<const char *>(sqlite3_column_text(m_stmt, index)),
     sqlite3_column_bytes(m_stmt, index));
+}
+
+const char16_t *HandleStatement::getText16(int index)
+{
+    WCTAssert(isPrepared());
+    WCTAssert(isBusy());
+    return reinterpret_cast<const char16_t *>(sqlite3_column_text16(m_stmt, index));
+}
+
+size_t HandleStatement::getText16Length(int index)
+{
+    WCTAssert(isPrepared());
+    WCTAssert(isBusy());
+    return sqlite3_column_bytes16(m_stmt, index) / 2;
 }
 
 const HandleStatement::BLOB HandleStatement::getBLOB(int index)

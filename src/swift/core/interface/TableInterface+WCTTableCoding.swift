@@ -32,7 +32,7 @@ public protocol TableInterfaceForObjc: AnyObject {
     /// Create table, related indexes and constraints with specific type
     ///
     /// Note that it will create defined indexes automatically.
-    /// The name of index is `"\(tableName)\(indexSubfixName)"` while `indexSubfixName` is defined by `IndexBinding`.
+    /// The name of index is `"\(tableName)\(indexSuffixName)"` while `indexSuffixName` is defined by `IndexBinding`.
     /// BUT, it will not drop the undefined indexes. You should drop it manually.
     ///
     /// Note that it will add the newly defined column automatically.
@@ -65,7 +65,7 @@ extension TableInterfaceForObjc where Self: Database {
     public func create<Root: WCTTableCoding>(
         table name: String,
         of rootType: Root.Type) throws {
-            let handle = try getHandle()
+            let handle = try getHandle(writeHint: true)
             try withExtendedLifetime(handle) {
                 if !WCTAPIBridge.createTable(name, withClass: rootType, with: $0.cppHandle) {
                     throw handle.getError()
@@ -74,7 +74,7 @@ extension TableInterfaceForObjc where Self: Database {
         }
 
     public func create<Root: WCTTableCoding>(virtualTable name: String, of rootType: Root.Type) throws {
-        let handle = try getHandle()
+        let handle = try getHandle(writeHint: true)
         if !WCTAPIBridge.createVirtualTable(name, withClass: rootType, with: handle.cppHandle) {
             throw handle.getError()
         }

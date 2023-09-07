@@ -148,8 +148,9 @@ static jint nativeReleaseMemory(JNIEnv *env, jclass clazz)
     return sqlite3_release_memory(SOFT_HEAP_LIMIT);
 }
 
-static void nativeSetDefaultCipherSettings(JNIEnv *env, jclass clazz, jint pageSize)
+static void nativeInitialize(JNIEnv *env, jclass clazz, jint pageSize)
 {
+    sqliteInitialize();
     sqlcipher_set_default_pagesize(pageSize);
 
     // Keep compatibility to WCDB version 1.0, mainly the same as SQLCipher 3.
@@ -162,14 +163,13 @@ static void nativeSetDefaultCipherSettings(JNIEnv *env, jclass clazz, jint pageS
 
 static JNINativeMethod sMethods[] = {
     /* name, signature, funcPtr */
+    {"nativeInitialize", "(I)V", (void *) nativeInitialize},
     {"nativeReleaseMemory", "()I", (void *) nativeReleaseMemory},
-    {"nativeSetDefaultCipherSettings", "(I)V", (void *) nativeSetDefaultCipherSettings},
 };
 
 static int register_wcdb_SQLiteGlobal(JavaVM *vm, JNIEnv *env)
 {
     gVM = vm;
-    sqliteInitialize();
 
     jclass clazz;
     FIND_CLASS(clazz, "com/tencent/wcdb/database/WCDBInitializationProbe");

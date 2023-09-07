@@ -1,0 +1,150 @@
+// Created by qiuwenchen on 2023/4/13.
+//
+
+/*
+ * Tencent is pleased to support the open source community by making
+ * WCDB available.
+ *
+ * Copyright (C) 2017 THL A29 Limited, a Tencent company.
+ * All rights reserved.
+ *
+ * Licensed under the BSD 3-Clause License (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ *       https://opensource.org/licenses/BSD-3-Clause
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.tencent.wcdb.winq;
+
+import com.tencent.wcdb.base.CppObject;
+
+public class StatementPragma extends Statement {
+    @Override
+    protected CPPType getType() {
+        return CPPType.PragmaSTMT;
+    }
+
+    public StatementPragma(){
+        cppObj = createCppObj();
+    }
+
+    private static native long createCppObj();
+
+    public StatementPragma pragma(Pragma pragma){
+        configPragma(cppObj, CppObject.get(pragma));
+        return this;
+    }
+
+    private static native void configPragma(long self, long pragma);
+
+    public StatementPragma of(String schemaName) {
+        configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
+        return this;
+    }
+
+    public StatementPragma of(Schema schema) {
+        configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
+        return this;
+    }
+
+    private static native void configSchema(long self, int type, long schema, String schemaName);
+
+    public StatementPragma withValue(boolean value) {
+        configWithValue(cppObj, CPPType.Bool.ordinal(), value ? 1 : 0, 0, null);
+        return this;
+    }
+
+    public StatementPragma withValue(byte value) {
+        configWithValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
+    public StatementPragma withValue(short value) {
+        configWithValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
+    public StatementPragma withValue(int value) {
+        configWithValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
+    public StatementPragma withValue(long value) {
+        configWithValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
+    public StatementPragma withValue(float value) {
+        configWithValue(cppObj, CPPType.Double.ordinal(), 0, value, null);
+        return this;
+    }
+
+    public StatementPragma withValue(double value) {
+        configWithValue(cppObj, CPPType.Double.ordinal(), 0, value, null);
+        return this;
+    }
+
+    public StatementPragma withValue(String value) {
+        if(value != null){
+            configWithValue(cppObj, CPPType.String.ordinal(), 0, 0, value);
+        } else {
+            configWithValue(cppObj, CPPType.Null.ordinal(), 0, 0, null);
+        }
+        return this;
+    }
+
+    private static native void configWithValue(long self, int type, long longValue, double doubleValue, String stringValue);
+
+    public StatementPragma toValue(boolean value) {
+        configToValue(cppObj, CPPType.Bool.ordinal(), value ? 1 : 0, 0, null);
+        return this;
+    }
+
+    public StatementPragma toValue(byte value) {
+        configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
+    public StatementPragma toValue(short value) {
+        configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
+    public StatementPragma toValue(int value) {
+        configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
+    public StatementPragma toValue(long value) {
+        configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        return this;
+    }
+
+    public StatementPragma toValue(float value) {
+        configToValue(cppObj, CPPType.Double.ordinal(), 0, value, null);
+        return this;
+    }
+
+    public StatementPragma toValue(double value) {
+        configToValue(cppObj, CPPType.Double.ordinal(), 0, value, null);
+        return this;
+    }
+
+    public StatementPragma toValue(String value) {
+        if(value != null){
+            configToValue(cppObj, CPPType.String.ordinal(), 0, 0, value);
+        } else {
+            configToValue(cppObj, CPPType.Null.ordinal(), 0, 0, null);
+        }
+        return this;
+    }
+
+    private static native void configToValue(long self, int type, long longValue, double doubleValue, String stringValue);
+}

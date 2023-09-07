@@ -32,9 +32,8 @@
 {
     if (self = [super init]) {
         _table = [NSString stringWithView:info.getTable()];
-        _database = [NSString stringWithView:info.getDatabase()];
         _sourceTable = [NSString stringWithView:info.getSourceTable()];
-        _sourceDatabase = [NSString stringWithView:info.getSourceDatabase()];
+        _filterCondition = info.getFilterCondition();
     }
     return self;
 }
@@ -48,9 +47,9 @@
     _sourceTable = table;
 }
 
-- (void)setSourceDatabase:(NSString *)database
+- (void)setFilterCondition:(const WCDB::Expression &)condition
 {
-    _sourceDatabase = [database wcdb_stringByStandardizingPath];
+    _filterCondition = condition;
 }
 
 @end

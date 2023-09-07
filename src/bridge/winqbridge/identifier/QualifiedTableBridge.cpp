@@ -25,11 +25,19 @@
 #include "QualifiedTableBridge.h"
 #include "ObjectBridge.hpp"
 #include "QualifiedTable.hpp"
+#include "Schema.hpp"
+#include "WinqBridge.hpp"
 
 CPPQualifiedTable WCDBQualifiedTableCreateWithTable(const char* _Nullable name)
 {
     return WCDBCreateCPPBridgedObjectWithParameters(
     CPPQualifiedTable, WCDB::QualifiedTable, name);
+}
+
+void WCDBQualifiedTableConfigSchema2(CPPQualifiedTable table, CPPCommonValue schema)
+{
+    WCDBGetObjectOrReturn(table, WCDB::QualifiedTable, cppTable);
+    cppTable->schema(WCDBCreateSchemaFromCommonValue(schema));
 }
 
 void WCDBQualifiedTableConfigSchema(CPPQualifiedTable table, CPPSchema schema)

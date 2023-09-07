@@ -23,9 +23,15 @@
  */
 
 #include "ColumnConstraintBridge.h"
+#include "Column.hpp"
 #include "ColumnConstraint.hpp"
+#include "Expression.hpp"
+#include "ExpressionBridge.h"
 #include "ForeignKey.hpp"
+#include "LiteralValue.hpp"
 #include "ObjectBridge.hpp"
+#include "RaiseFunction.hpp"
+#include "StatementSelect.hpp"
 #include "WinqBridge.hpp"
 
 CPPColumnConstraint WCDBColumnConstraintCreate(const char* _Nullable name)
@@ -90,6 +96,12 @@ void WCDBColumnConstraintConfigDefaultValue(CPPColumnConstraint constraint, CPPE
     WCDBGetObjectOrReturn(constraint, WCDB::ColumnConstraint, cppColumnConstraint);
     WCDBGetObjectOrReturn(expression, WCDB::Expression, cppExpression);
     cppColumnConstraint->default_(*cppExpression);
+}
+
+void WCDBColumnConstraintConfigDefaultValue2(CPPColumnConstraint constraint, CPPCommonValue expression)
+{
+    WCDBGetObjectOrReturn(constraint, WCDB::ColumnConstraint, cppColumnConstraint);
+    cppColumnConstraint->default_(WCDBCreateExpressionFromCommonValue(expression));
 }
 
 void WCDBColumnConstraintConfigCollation(CPPColumnConstraint constraint, const char* collation)

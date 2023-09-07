@@ -31,6 +31,8 @@ WCDB_EXTERN_C_BEGIN
 CPPStatementDropIndex WCDBStatementDropIndexCreate(void);
 void WCDBStatementDropIndexConfigSchema(CPPStatementDropIndex dropIndexStatement,
                                         CPPSchema schema);
+void WCDBStatementDropIndexConfigSchema2(CPPStatementDropIndex dropIndexStatement,
+                                         CPPCommonValue schema);
 void WCDBStatementDropIndexConfigIndex(CPPStatementDropIndex dropIndexStatement,
                                        const char* _Nullable name);
 void WCDBStatementDropIndexConfigIfExists(CPPStatementDropIndex dropIndexStatement);

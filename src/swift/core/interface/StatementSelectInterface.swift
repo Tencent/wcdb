@@ -64,7 +64,7 @@ public protocol StatementSelectInterface: AnyObject {
 extension StatementSelectInterface where Self: HandleRepresentable {
 
     public func getValue(from statement: Statement) throws -> Value? {
-        let handle = try getHandle()
+        let handle = try getHandle(writeHint: false)
         try handle.prepare(statement)
         guard try handle.step() else {
             return nil
@@ -75,7 +75,7 @@ extension StatementSelectInterface where Self: HandleRepresentable {
     }
 
     public func getColumn(from statement: Statement) throws -> OneColumnValue {
-        let handle = try getHandle()
+        let handle = try getHandle(writeHint: false)
         try handle.prepare(statement)
         let result = try handle.oneColumnValue(atIndex: 0)
         handle.finalize()
@@ -83,7 +83,7 @@ extension StatementSelectInterface where Self: HandleRepresentable {
     }
 
     public func getRow(from statement: Statement) throws -> OneRowValue? {
-        let handle = try getHandle()
+        let handle = try getHandle(writeHint: false)
         try handle.prepare(statement)
         guard try handle.step() else {
             return nil
@@ -94,7 +94,7 @@ extension StatementSelectInterface where Self: HandleRepresentable {
     }
 
     public func getRows(from statement: Statement) throws -> MultiRowsValue {
-        let handle = try getHandle()
+        let handle = try getHandle(writeHint: false)
         try handle.prepare(statement)
         let result = try handle.multiRowsValue()
         handle.finalize()

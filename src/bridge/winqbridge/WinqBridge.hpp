@@ -31,11 +31,22 @@
     WCDB::SyntaxList<CPPObjType> cppList                                       \
     = WCDB::WinqBridge::createSyntaxList<CPPObjType>(rawList, rawCount);
 
-#define WCDBGetCPPSyntaxListOrReturn(CPPObjType, cppList, rawList, rawCount)              \
-    WCDBGetCPPSyntaxList(CPPObjType, cppList, rawList, rawCount) if (cppList.size() <= 0) \
-    {                                                                                     \
-        return;                                                                           \
+#define WCDBGetCPPSyntaxListOrReturn(CPPObjType, cppList, rawList, rawCount)   \
+    WCDBGetCPPSyntaxList(CPPObjType, cppList, rawList, rawCount);              \
+    if (cppList.size() <= 0) {                                                 \
+        return;                                                                \
     }
+
+#define WCDBCreateSchemaFromCommonValue(data)                                  \
+    WCDB::WinqBridge::createSchema(data)
+#define WCDBCreateLiteralValueFromCommonValue(data)                            \
+    WCDB::WinqBridge::createLiteralValue(data)
+#define WCDBCreateExpressionFromCommonValue(data)                              \
+    WCDB::WinqBridge::createExpression(data)
+#define WCDBCreateTableOrSubqueryFromCommonValue(data)                         \
+    WCDB::WinqBridge::createTableOrSubquery(data)
+#define WCDBCreateColumnFromCommonValue(data)                                  \
+    WCDB::WinqBridge::createColumn(data)
 
 namespace WCDB {
 
@@ -71,6 +82,12 @@ public:
         }
         return result;
     }
+
+    static Schema createSchema(CPPCommonValue schema);
+    static LiteralValue createLiteralValue(CPPCommonValue data);
+    static Expression createExpression(CPPCommonValue exp);
+    static TableOrSubquery createTableOrSubquery(CPPCommonValue tableOrSubquery);
+    static Column createColumn(CPPCommonValue column);
 };
 
 } // namespace WCDB

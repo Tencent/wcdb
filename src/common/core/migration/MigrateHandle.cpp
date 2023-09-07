@@ -45,45 +45,43 @@ MigrateHandle::~MigrateHandle()
     returnStatement(m_removeMigratedStatement);
 }
 
-bool MigrateHandle::reAttach(const UnsafeStringView& newPath, const Schema& newSchema)
+bool MigrateHandle::reAttach(const MigrationBaseInfo* info)
 {
     WCTAssert(!isInTransaction());
     WCTAssert(!isPrepared());
 
     bool succeed = true;
-    if (!m_attached.syntax().isTargetingSameSchema(newSchema.syntax())) {
-        succeed = detach() && attach(newPath, newSchema);
+    if (!m_attached.syntax().isTargetingSameSchema(
+        info->getSchemaForSourceDatabase().syntax())) {
+        succeed = detach() && attach(info);
     }
     m_migratingInfo = nullptr;
     finalizeMigrationStatement();
     return succeed;
 }
 
-bool MigrateHandle::attach(const UnsafeStringView& newPath, const Schema& newSchema)
+bool MigrateHandle::attach(const MigrationBaseInfo* info)
 {
     WCTAssert(!isInTransaction());
     WCTAssert(!isPrepared());
     WCTAssert(m_attached.syntax().isMain());
 
-    bool succeed = true;
-    if (!newSchema.syntax().isMain()) {
-        UnsafeData cipherKey = getCipherKey();
-        StatementAttach attach = StatementAttach().attach(newPath).as(newSchema);
-        if (cipherKey.size() == 0) {
-            succeed = executeStatement(attach);
-        } else {
-            attach.key(WCDB::BindParameter(1));
-            HandleStatement handleStatement(this);
-            succeed = handleStatement.prepare(attach);
-            if (succeed) {
-                handleStatement.bindBLOB(cipherKey);
-                succeed = handleStatement.step();
-                handleStatement.finalize();
-            }
+    const StatementAttach& attach = info->getStatementForAttachingSchema();
+    const Data& cipher = info->getSourceCipher();
+    HandleStatement handleStatement(this);
+    bool succeed = handleStatement.prepare(attach);
+    if (succeed) {
+        if (!cipher.empty()) {
+            handleStatement.bindBLOB(cipher);
         }
-        if (succeed) {
-            m_attached = newSchema;
+        succeed = handleStatement.step();
+        handleStatement.finalize();
+    }
+    if (succeed) {
+        if (info->needRawSourceCipher()) {
+            info->setRawSourceCipher(getRawCipherKey(info->getSchemaForSourceDatabase()));
         }
+        m_attached = info->getSchemaForSourceDatabase();
     }
     return succeed;
 }
@@ -120,12 +118,23 @@ Optional<std::set<StringView>> MigrateHandle::getAllTables()
 bool MigrateHandle::dropSourceTable(const MigrationInfo* info)
 {
     WCTAssert(info != nullptr);
-    bool succeed = false;
-    if (reAttach(info->getSourceDatabase(), info->getSchemaForSourceDatabase())) {
-        m_migratingInfo = info;
-        succeed = execute(m_migratingInfo->getStatementForDroppingSourceTable());
+    if (!reAttach(info)) {
+        return false;
     }
-    return succeed;
+    m_migratingInfo = info;
+    if (!prepare(m_migratingInfo->getStatementForSelectingAnyRowFromSourceTable())) {
+        return false;
+    }
+    if (!step()) {
+        finalize();
+        return false;
+    }
+    bool hasContent = !done();
+    finalize();
+    if (!hasContent) {
+        return execute(m_migratingInfo->getStatementForDroppingSourceTable());
+    }
+    return true;
 }
 
 Optional<bool> MigrateHandle::migrateRows(const MigrationInfo* info)
@@ -141,7 +150,7 @@ Optional<bool> MigrateHandle::migrateRows(const MigrationInfo* info)
     }
 
     if (m_migratingInfo != info) {
-        if (!reAttach(info->getSourceDatabase(), info->getSchemaForSourceDatabase())) {
+        if (!reAttach(info)) {
             return NullOpt;
         }
         m_migratingInfo = info;
@@ -251,36 +260,14 @@ double MigrateHandle::calculateTimeIntervalWithinTransaction() const
 }
 
 #pragma mark - Info Initializer
-Optional<bool> MigrateHandle::sourceTableExists(const MigrationUserInfo& userInfo)
+bool MigrateHandle::attachSourceDatabase(const MigrationUserInfo& userInfo)
 {
-    Schema schema = userInfo.getSchemaForSourceDatabase();
-    if (!reAttach(userInfo.getSourceDatabase(), schema)) {
-        return NullOpt;
-    }
-    return tableExists(schema, userInfo.getSourceTable());
+    return reAttach(&userInfo);
 }
 
-Optional<std::pair<bool, std::set<StringView>>>
-MigrateHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
+InnerHandle* MigrateHandle::getCurrentHandle()
 {
-    auto exists = tableExists(Schema::main(), userInfo.getTable());
-    if (!exists.succeed()) {
-        return NullOpt;
-    }
-    bool integerPrimary = false;
-    std::set<StringView> names;
-    if (exists.value()) {
-        auto optionalMetas = getTableMeta(Schema::main(), userInfo.getTable());
-        if (!optionalMetas.succeed()) {
-            return NullOpt;
-        }
-        auto& metas = optionalMetas.value();
-        integerPrimary = ColumnMeta::getIndexOfIntegerPrimary(metas) >= 0;
-        for (const auto& meta : metas) {
-            names.emplace(meta.name);
-        }
-    }
-    return std::make_pair(integerPrimary, names);
+    return this;
 }
 
 const StringView& MigrateHandle::getDatabasePath() const

@@ -36,7 +36,7 @@ public class WCDBConcurrentTest extends ConcurrentTest {
     @Override
     @Before
     public void doBefore() {
-        SQLiteGlobal.loadLib();
+        SQLiteGlobal.initialize();
         super.doBefore();
     }
 

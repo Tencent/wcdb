@@ -36,14 +36,19 @@ void WCDBStatementSelectConfigRecursive(CPPStatementSelect select);
 void WCDBStatementSelectConfigResultColumns(CPPStatementSelect select,
                                             const CPPResultColumn* _Nullable resultColumn,
                                             int columnNum);
+void WCDBStatementSelectConfigResultColumns2(CPPStatementSelect select,
+                                             CPPMultiTypeArray resultColumns);
 void WCDBStatementSelectConfigDistinct(CPPStatementSelect select);
 void WCDBStatementSelectConfigFromTableOrSubqueries(CPPStatementSelect select,
                                                     const CPPTableOrSubquery* _Nullable tableOrSubqueries,
                                                     int queryNum);
+void WCDBStatementSelectConfigFromTableOrSubqueries2(CPPStatementSelect select,
+                                                     CPPMultiTypeArray tableOrSubqueries);
 void WCDBStatementSelectConfigWhere(CPPStatementSelect select, CPPExpression condition);
 void WCDBStatementSelectConfigGroups(CPPStatementSelect select,
                                      const CPPExpression* _Nullable exps,
                                      int expNum);
+void WCDBStatementSelectConfigGroups2(CPPStatementSelect select, CPPMultiTypeArray groups);
 void WCDBStatementSelectConfigHaving(CPPStatementSelect select, CPPExpression expression);
 void WCDBStatementSelectConfigWindow(CPPStatementSelect select, const char* _Nullable windowName);
 void WCDBStatementSelectConfigAs(CPPStatementSelect select, CPPWindowDef windowDef);
@@ -57,10 +62,16 @@ void WCDBStatementSelectConfigExcept(CPPStatementSelect select);
 void WCDBStatementSelectConfigOrders(CPPStatementSelect select,
                                      const CPPOrderingTerm* _Nullable orders,
                                      int orderNum);
-void WCDBStatementSelectConfigLimitFromTo(CPPStatementSelect select,
-                                          CPPExpression from,
-                                          CPPExpression to);
-void WCDBStatementSelectConfigLimitFrom(CPPStatementSelect select, CPPExpression limit);
+void WCDBStatementSelectConfigLimitRange(CPPStatementSelect select,
+                                         CPPExpression from,
+                                         CPPExpression to);
+void WCDBStatementSelectConfigLimitCount(CPPStatementSelect select, CPPExpression limit);
 void WCDBStatementSelectConfigLimitOffset(CPPStatementSelect select, CPPExpression offset);
+
+void WCDBStatementSelectConfigLimitRange2(CPPStatementSelect select,
+                                          CPPCommonValue from,
+                                          CPPCommonValue to);
+void WCDBStatementSelectConfigLimitCount2(CPPStatementSelect select, CPPCommonValue limit);
+void WCDBStatementSelectConfigOffset2(CPPStatementSelect select, CPPCommonValue offset);
 
 WCDB_EXTERN_C_END

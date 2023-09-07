@@ -30,5 +30,6 @@ WCDB_EXTERN_C_BEGIN
 
 CPPStatementDetach WCDBStatementDetachCreate(void);
 void WCDBStatementDetachConfigSchema(CPPStatementDetach detachStatement, CPPSchema schema);
+void WCDBStatementDetachConfigSchema2(CPPStatementDetach detachStatement, CPPCommonValue schema);
 
 WCDB_EXTERN_C_END

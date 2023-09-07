@@ -139,6 +139,7 @@ public abstract class SQLiteProgram extends SQLiteClosable {
 
         if (isCorruption) {
             SQLiteDebug.collectLastIOTraceStats(mDatabase);
+            SQLiteDebug.setLastCorruptionException(e);
             mDatabase.onCorruption();
         }
     }
@@ -231,6 +232,12 @@ public abstract class SQLiteProgram extends SQLiteClosable {
             for (int i = bindArgs.length; i != 0; i--) {
                 bindString(i, bindArgs[i - 1]);
             }
+        }
+    }
+
+    public void bindAllArgs(Object[] bindArgs) {
+        for (int i = bindArgs.length; i != 0; i--) {
+            bind(i, bindArgs[i - 1]);
         }
     }
 

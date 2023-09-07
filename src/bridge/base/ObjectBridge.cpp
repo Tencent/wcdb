@@ -39,10 +39,37 @@ void WCDBReleaseCPPObject(CPPObject* _Nonnull obj)
     free(obj);
 }
 
+#ifdef __ANDROID__
+
+char* _Nullable* _Nullable WCDBPreAllocStringMemorySlot(int count)
+{
+    return WCDB::StringView::preAllocStringMemorySlot(count);
+}
+
+void WCDBAllocStringMemory(char* _Nullable* _Nullable slot, int size)
+{
+    WCDB::StringView::allocStringMemory(slot, size);
+}
+
+void WCDBClearAllocatedMemory(int count)
+{
+    WCDB::StringView::clearAllocatedMemory(count);
+}
+
+void WCDBClearAllPreAllocatedMemory()
+{
+    WCDB::StringView::clearAllPreAllocatedMemory();
+}
+
+#endif
+
 namespace WCDB {
 
-CPPObject* _Nonnull ObjectBridge::createUnmanagedCPPObject(void* _Nonnull obj)
+CPPObject* _Nullable ObjectBridge::createUnmanagedCPPObject(void* _Nullable obj)
 {
+    if (obj == nullptr) {
+        return nullptr;
+    }
     CPPObject* cppObj = (CPPObject*) malloc(sizeof(CPPObject));
     cppObj->realValue = obj;
     cppObj->isRecyclableObj = false;

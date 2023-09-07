@@ -44,3 +44,9 @@ void WCDBStatementVacuumConfigSchema(CPPStatementVacuum vacuum, CPPSchema schema
     WCDBGetObjectOrReturn(schema, WCDB::Schema, cppSchema);
     cppVacuum->vacuum(*cppSchema);
 }
+
+void WCDBStatementVacuumConfigSchema2(CPPStatementVacuum vacuum, CPPCommonValue schema)
+{
+    WCDBGetObjectOrReturn(vacuum, WCDB::StatementVacuum, cppVacuum);
+    cppVacuum->vacuum(WCDBCreateSchemaFromCommonValue(schema));
+}

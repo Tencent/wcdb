@@ -24,6 +24,9 @@
 
 #include "Migration.hpp"
 #include "Assertion.hpp"
+#include "HandleStatement.hpp"
+#include "InnerHandle.hpp"
+#include "Notifier.hpp"
 #include "StringView.hpp"
 #include "WCDBError.hpp"
 
@@ -33,15 +36,23 @@ MigrationEvent::~MigrationEvent() = default;
 
 #pragma mark - Initialize
 Migration::Migration(MigrationEvent* event)
-: m_filter(nullptr), m_tableAcquired(false), m_migrated(true), m_event(event)
+: m_tableAcquired(false), m_migrated(true), m_event(event)
 {
 }
 
-void Migration::filterTable(const Filter& filter)
+void Migration::addMigration(const UnsafeStringView& sourcePath,
+                             const UnsafeData& sourceCipher,
+                             const TableFilter& filter)
 {
     LockGuard lockGuard(m_lock);
+    if (filter != nullptr) {
+        m_migrationInfo.insert_or_assign(
+        sourcePath,
+        std::make_shared<MigrationDatabaseInfo>(sourcePath, sourceCipher, filter));
+    } else {
+        m_migrationInfo.erase(sourcePath);
+    }
     purge();
-    m_filter = filter;
 }
 
 void Migration::purge()
@@ -60,7 +71,7 @@ void Migration::purge()
 bool Migration::shouldMigrate() const
 {
     SharedLockGuard lockGuard(m_lock);
-    return m_filter != nullptr;
+    return !m_migrationInfo.empty();
 }
 
 std::set<StringView> Migration::getPathsOfSourceDatabases() const
@@ -68,9 +79,9 @@ std::set<StringView> Migration::getPathsOfSourceDatabases() const
     std::set<StringView> paths;
     {
         SharedLockGuard lockGuard(m_lock);
-        for (const auto& info : m_holder) {
-            if (info.isCrossDatabase()) {
-                paths.emplace(info.getSourceDatabase());
+        for (const auto& info : m_migrationInfo) {
+            if (info.second->isCrossDatabase()) {
+                paths.emplace(info.second->getSourceDatabase());
             }
         }
     }
@@ -87,48 +98,63 @@ bool Migration::initInfo(InfoInitializer& initializer, const UnsafeStringView& t
         return true;
     }
 
-    MigrationUserInfo userInfo(initializer.getDatabasePath(), table);
-    {
-        SharedLockGuard lockGuard(m_lock);
-        WCTAssert(m_filter != nullptr);
-        m_filter(userInfo);
-    }
-    if (!userInfo.shouldMigrate()) {
-        markAsNoNeedToMigrate(table);
-        return true;
-    }
+    StringView targetTable = StringView(table);
 
-    auto exists = initializer.sourceTableExists(userInfo);
-    if (!exists.succeed()) {
-        return false;
-    }
-    if (!exists.value()) {
-        markAsNoNeedToMigrate(table);
-        return true;
-    }
-
-    auto optionalColumns = initializer.getColumnsOfUserInfo(userInfo);
-    if (!optionalColumns.succeed()) {
-        return false;
-    }
-    bool containsPrimaryKey = optionalColumns.value().first;
-    std::set<StringView>& columns = optionalColumns.value().second;
-    LockGuard lockGuard(m_lock);
-    if (m_filted.find(table) == m_filted.end()) {
-        m_migrated = false;
-        if (columns.empty()) {
-            // it's not created
-            m_hints.emplace(table);
-            m_tableAcquired = false;
-        } else {
-            m_holder.push_back(MigrationInfo(userInfo, columns, containsPrimaryKey));
-            const MigrationInfo* hold = &m_holder.back();
-            m_migratings.emplace(hold);
-            m_referenceds.emplace(hold, 0);
-            m_filted.insert_or_assign(table, hold);
-            m_hints.erase(table);
+    for (auto& info : m_migrationInfo) {
+        MigrationUserInfo userInfo = MigrationUserInfo(*info.second, targetTable);
+        info.second->getFilter()(userInfo);
+        if (!userInfo.shouldMigrate()) {
+            continue;
         }
+
+        if (!initializer.attachSourceDatabase(userInfo)) {
+            return false;
+        }
+
+        auto exists = initializer.checkSourceTableExistsAndHasRowid(userInfo);
+        if (!exists.succeed()) {
+            return false;
+        }
+        if (!exists.value()) {
+            markAsNoNeedToMigrate(targetTable);
+            return true;
+        }
+
+        bool targetTableExsits = false;
+        bool autoincrement = false;
+        std::set<StringView> columns;
+        StringView integerPrimaryKey;
+        if (!initializer.getTargetTableInfo(
+            userInfo, targetTableExsits, columns, autoincrement, integerPrimaryKey)) {
+            return false;
+        }
+
+        if (targetTableExsits && autoincrement
+            && !initializer.tryUpdateSequence(userInfo, integerPrimaryKey)) {
+            return false;
+        }
+
+        LockGuard lockGuard(m_lock);
+        if (m_filted.find(targetTable) == m_filted.end()) {
+            m_migrated = false;
+            if (!targetTableExsits || columns.empty()) {
+                // it's not created
+                m_hints.emplace(targetTable);
+                m_tableAcquired = false;
+            } else {
+                m_holder.push_back(MigrationInfo(
+                userInfo, columns, autoincrement, integerPrimaryKey));
+                const MigrationInfo* hold = &m_holder.back();
+                m_migratings.emplace(hold);
+                m_referenceds.emplace(hold, 0);
+                m_filted.insert_or_assign(targetTable, hold);
+                m_hints.erase(targetTable);
+            }
+        }
+        return true;
     }
+
+    markAsNoNeedToMigrate(targetTable);
     return true;
 }
 
@@ -230,6 +256,144 @@ Optional<RecyclableMigrationInfo> Migration::getInfo(const UnsafeStringView& tab
         return nullptr;
     }
     return NullOpt;
+}
+
+#pragma mark - InfoInitializer
+Optional<bool>
+Migration::InfoInitializer::checkSourceTableExistsAndHasRowid(const MigrationUserInfo& userInfo)
+{
+    const Schema& schema = userInfo.getSchemaForSourceDatabase();
+    const StringView& tableName = userInfo.getSourceTable();
+    InnerHandle* handle = getCurrentHandle();
+    Optional<bool> optionalExists = handle->tableExists(schema, tableName);
+    if (!optionalExists.hasValue() || !optionalExists.value()) {
+        return optionalExists;
+    }
+    auto tableConfig = handle->getTableAttribute(schema, tableName);
+    if (!tableConfig.succeed()) {
+        return NullOpt;
+    }
+    if (tableConfig.value().withoutRowid) {
+        StringView msg = StringView::formatted(
+        "Does not support migrating data from the table without rowid: %s",
+        tableName.data());
+        handle->notifyError((int) Error::Code::Error, nullptr, msg.data());
+        return NullOpt;
+    }
+    return optionalExists;
+}
+
+bool Migration::InfoInitializer::getTargetTableInfo(const MigrationUserInfo& userInfo,
+                                                    bool& exists,
+                                                    std::set<StringView>& columns,
+                                                    bool& autoincrement,
+                                                    StringView& integerPrimaryKey)
+{
+    const StringView& tableName = userInfo.getTable();
+    InnerHandle* handle = getCurrentHandle();
+    auto optionalExists = handle->tableExists(Schema::main(), tableName);
+    if (!optionalExists.hasValue()) {
+        return false;
+    }
+    exists = optionalExists.value();
+    if (!exists) {
+        return true;
+    }
+    auto optionalMetas = handle->getTableMeta(Schema::main(), userInfo.getTable());
+    if (!optionalMetas.succeed()) {
+        return false;
+    }
+    auto& metas = optionalMetas.value();
+    for (const auto& meta : metas) {
+        columns.emplace(meta.name);
+    }
+    auto tableConfig = handle->getTableAttribute(Schema::main(), tableName);
+    if (!tableConfig.succeed()) {
+        return false;
+    }
+    if (tableConfig.value().withoutRowid) {
+        StringView msg = StringView::formatted(
+        "Does not support migrating data to the table without rowid: %s",
+        tableName.data());
+        handle->notifyError((int) Error::Code::Error, nullptr, msg.data());
+        return false;
+    }
+    autoincrement = tableConfig.value().autoincrement;
+    integerPrimaryKey = tableConfig.value().integerPrimaryKey;
+    return true;
+}
+
+bool Migration::InfoInitializer::tryUpdateSequence(const MigrationUserInfo& userInfo,
+                                                   const UnsafeStringView& primaryKey)
+{
+    const StringView& targetTable = userInfo.getTable();
+    InnerHandle* handle = getCurrentHandle();
+    Column name("name");
+    auto sequenceTable = TableOrSubquery(Syntax::sequenceTable).schema(Schema::main());
+    auto selectTable
+    = StatementSelect().select(name).from(sequenceTable).where(name == targetTable);
+    auto tableNames = handle->getValues(selectTable, 1);
+    if (!tableNames.hasValue()) {
+        if (handle->getError().getMessage().compare("no such table: main.sqlite_sequence") == 0) {
+            bool ret = handle->execute(
+            StatementPragma().pragma(Pragma::writableSchema()).to(true));
+            StatementCreateTable createSeq
+            = StatementCreateTable().createTable(Syntax::sequenceTable).ifNotExists();
+            createSeq.define(ColumnDef("name"));
+            createSeq.define(ColumnDef("seq"));
+            ret = ret && handle->execute(createSeq);
+            ret = ret
+                  && handle->execute(
+                  StatementPragma().pragma(Pragma::writableSchema()).to(false));
+            if (!ret) {
+                return false;
+            }
+            tableNames = std::set<StringView>();
+        } else {
+            return false;
+        }
+    }
+    if (tableNames.value().size() > 0) {
+        return true;
+    }
+    return handle->runTransactionIfNotInTransaction([&](InnerHandle* handle) {
+        auto tableNames = handle->getValues(selectTable, 1);
+        if (!tableNames.hasValue()) {
+            return false;
+        }
+        if (tableNames.value().size() > 0) {
+            return true;
+        }
+        const StringView& sourceTable = userInfo.getSourceTable();
+        const Schema& sourceSchema = userInfo.getSchemaForSourceDatabase();
+        auto selectMaxPrimaryKey
+        = StatementSelect()
+          .select(Column(primaryKey).max())
+          .from(TableOrSubquery(sourceTable).schema(sourceSchema));
+        HandleStatement handleStatement(handle);
+        if (!handleStatement.prepare(selectMaxPrimaryKey)) {
+            return false;
+        }
+        if (!handleStatement.step()) {
+            handleStatement.finalize();
+            return false;
+        }
+        int64_t seq = 0;
+        if (!handleStatement.done()) {
+            seq = handleStatement.getInteger();
+        }
+        handleStatement.finalize();
+        auto insertSeq = StatementInsert()
+                         .insertIntoTable(Syntax::sequenceTable)
+                         .schema(Schema::main())
+                         .values({ targetTable, seq });
+        if (!handleStatement.prepare(insertSeq)) {
+            return false;
+        }
+        bool ret = handleStatement.step();
+        handleStatement.finalize();
+        return ret;
+    });
 }
 
 #pragma mark - Bind

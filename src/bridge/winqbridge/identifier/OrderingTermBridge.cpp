@@ -36,6 +36,12 @@ CPPOrderingTerm WCDBOrderingTermCreate(CPPExpression expression)
     CPPOrderingTerm, WCDB::OrderingTerm, *cppExpression);
 }
 
+CPPOrderingTerm WCDBOrderingTermCreate2(CPPCommonValue expression)
+{
+    return WCDBCreateCPPBridgedObjectWithParameters(
+    CPPOrderingTerm, WCDB::OrderingTerm, WCDBCreateExpressionFromCommonValue(expression));
+}
+
 void WCDBOrderingTermConfigCollation(CPPOrderingTerm orderingTerm, const char* _Nullable collation)
 {
     WCDBGetObjectOrReturn(orderingTerm, WCDB::OrderingTerm, cppOrderingTerm);

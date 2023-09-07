@@ -59,7 +59,6 @@ public:
 
 protected:
     bool configure();
-    UnsafeData getCipherKey();
 
 private:
     Configs m_invokeds;

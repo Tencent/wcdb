@@ -57,7 +57,7 @@ internal final class FTSBridge {
 
     static func initializeCPPAPI() {
         WCDBSwiftTokenizerCreate = {
-            (typeId: Int32, argc: Int32, argv: UnsafePointer<UnsafePointer<Int8>>?) -> OpaquePointer? in
+            (typeId: Int32, argc: Int32, argv: UnsafePointer<UnsafePointer<Int8>>?) -> UnsafeMutableRawPointer? in
             let type = FTSBridge.getTokenizer(of: typeId)
             var args: [String] = []
             if argc > 0, let argv = argv {
@@ -69,7 +69,7 @@ internal final class FTSBridge {
             return ObjectBridge.getUntypeSwiftObject(tokenizer)
         }
         WCDBSwiftTokenizerLoadInput = {
-            (obj: OpaquePointer, input: UnsafePointer<Int8>?, length: Int32, flag: Int32) -> Void in
+            (obj: UnsafeMutableRawPointer, input: UnsafePointer<Int8>?, length: Int32, flag: Int32) -> Void in
             let tokenizer: Tokenizer? = ObjectBridge.extractTypedSwiftObject(obj)
             guard let tokenizer = tokenizer else {
                 return
@@ -77,7 +77,7 @@ internal final class FTSBridge {
             tokenizer.load(input: input, length: Int(length), flags: Int(flag))
         }
         WCDBSwiftTokenizerNextToken = {
-            (obj: OpaquePointer,
+            (obj: UnsafeMutableRawPointer,
              ppToken: UnsafeMutablePointer<UnsafePointer<Int8>?>,
              pnBytes: UnsafeMutablePointer<Int32>,
              piStart: UnsafeMutablePointer<Int32>,

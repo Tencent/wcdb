@@ -197,9 +197,9 @@ Expression Expression::windowFunction(const UnsafeStringView& function)
     return expression;
 }
 
-Expression& Expression::filter(const Filter& filter)
+Expression& Expression::filter(const Expression& condition)
 {
-    syntax().filter() = filter;
+    syntax().filter() = Filter().where(condition);
     return *this;
 }
 

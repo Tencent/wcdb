@@ -23,15 +23,26 @@
  */
 
 #include "WinqBridge.hpp"
+#include "Column.hpp"
+#include "Expression.hpp"
+#include "LiteralValue.hpp"
 #include "ObjectBridge.hpp"
 #include "Recyclable.hpp"
 #include "SQL.hpp"
+#include "Schema.hpp"
 #include "Statement.hpp"
+#include "TableOrSubquery.hpp"
 
 const char* _Nonnull WCDBWinqGetDescription(CPPObject* statement)
 {
     WCDB::SQL* innerValue = (WCDB::SQL*) statement->realValue;
     return innerValue->getDescription().data();
+}
+
+bool WCDBStatementNeedToWrite(CPPObject* _Nonnull statement)
+{
+    WCDB::Statement* innerValue = (WCDB::Statement*) statement->realValue;
+    return innerValue->isWriteStatement();
 }
 
 namespace WCDB {
@@ -141,7 +152,7 @@ MatchType WinqBridge::changeMatchType(enum WCDBSyntaxMatchType type)
         return MatchType::Full;
     case WCDBSyntaxMatchType_Simple:
         return MatchType::Simple;
-    case WCDBSyntaxMatchType_Patial:
+    case WCDBSyntaxMatchType_Partial:
         return MatchType::Partial;
     }
 }
@@ -159,6 +170,104 @@ ColumnType WinqBridge::changeColumnType(enum WCDBSyntaxColumnType type)
         return ColumnType::Text;
     case WCDBSyntaxColumnType_BLOB:
         return ColumnType::BLOB;
+    }
+}
+
+Schema WinqBridge::createSchema(CPPCommonValue schema)
+{
+    switch (schema.type) {
+    case WCDBBridgedType_String:
+        return Schema((const char*) schema.intValue);
+    case WCDBBridgedType_Schema:
+        return WCDBGetBridgedData(WCDB::Schema, schema);
+    default:
+        assert(schema.type == WCDBBridgedType_Null);
+        return Schema();
+    }
+}
+
+LiteralValue WinqBridge::createLiteralValue(CPPCommonValue data)
+{
+    switch (data.type) {
+    case WCDBBridgedType_Null:
+        return LiteralValue(nullptr);
+    case WCDBBridgedType_Bool:
+        return LiteralValue((bool) data.intValue);
+    case WCDBBridgedType_Int:
+        return LiteralValue((int64_t) data.intValue);
+    case WCDBBridgedType_UInt:
+        return LiteralValue((uint64_t) data.intValue);
+    case WCDBBridgedType_Double:
+        return LiteralValue(data.doubleValue);
+    case WCDBBridgedType_String:
+        return LiteralValue(StringView((const char*) data.intValue));
+    default:
+        assert(0);
+    }
+    return LiteralValue(nullptr);
+}
+
+Expression WinqBridge::createExpression(CPPCommonValue exp)
+{
+    switch (exp.type) {
+    case WCDBBridgedType_Null:
+        return LiteralValue(nullptr);
+    case WCDBBridgedType_Bool:
+        return LiteralValue((bool) exp.intValue);
+    case WCDBBridgedType_Int:
+        return LiteralValue((int64_t) exp.intValue);
+    case WCDBBridgedType_UInt:
+        return LiteralValue((uint64_t) exp.intValue);
+    case WCDBBridgedType_Double:
+        return LiteralValue(exp.doubleValue);
+    case WCDBBridgedType_String:
+        return LiteralValue(StringView((const char*) exp.intValue));
+    case WCDBBridgedType_Column:
+        return WCDBGetBridgedData(WCDB::Column, exp);
+    case WCDBBridgedType_BindParameter:
+        return WCDBGetBridgedData(WCDB::BindParameter, exp);
+    case WCDBBridgedType_LiteralValue:
+        return WCDBGetBridgedData(WCDB::LiteralValue, exp);
+    case WCDBBridgedType_RaiseFunction:
+        return WCDBGetBridgedData(WCDB::RaiseFunction, exp);
+    case WCDBBridgedType_Expression:
+        return WCDBGetBridgedData(WCDB::Expression, exp);
+        break;
+    default:
+        assert(0);
+        break;
+    }
+    return Expression();
+}
+
+TableOrSubquery WinqBridge::createTableOrSubquery(CPPCommonValue tableOrSubquery)
+{
+    switch (tableOrSubquery.type) {
+    case WCDBBridgedType_String:
+        return StringView((const char*) tableOrSubquery.intValue);
+    case WCDBBridgedType_TableOrSubquery:
+        return WCDBGetBridgedData(TableOrSubquery, tableOrSubquery);
+    case WCDBBridgedType_SelectSTMT:
+        return WCDBGetBridgedData(StatementSelect, tableOrSubquery);
+    case WCDBBridgedType_JoinClause:
+        return WCDBGetBridgedData(Join, tableOrSubquery);
+    default:
+        break;
+    }
+    assert(tableOrSubquery.type == WCDBBridgedType_Null);
+    return TableOrSubquery();
+}
+
+Column WinqBridge::createColumn(CPPCommonValue column)
+{
+    switch (column.type) {
+    case WCDBBridgedType_String:
+        return StringView((const char*) column.intValue);
+    case WCDBBridgedType_Column:
+        return WCDBGetBridgedData(WCDB::Column, column);
+    default:
+        assert(column.type == WCDBBridgedType_Null);
+        return Column();
     }
 }
 

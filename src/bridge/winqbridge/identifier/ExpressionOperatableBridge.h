@@ -38,6 +38,8 @@ CPPExpression WCDBExpressionUnaryOperate(CPPExpression expression,
                                          enum WCDBExpressionUnaryOperateType operatorType);
 CPPExpression WCDBExpressionNullOperate(CPPExpression expression, bool isNot);
 
+CPPExpression WCDBExpressionNullOperate2(CPPCommonValue expression, bool isNot);
+
 enum WCDBExpressionBinaryOperatorType {
     WCDBExpressionBinaryOperatorType_Concatenate = 1,
     WCDBExpressionBinaryOperatorType_Multiply,
@@ -68,65 +70,52 @@ CPPExpression WCDBExpressionBinaryOperate(CPPExpression left,
                                           enum WCDBExpressionBinaryOperatorType operatorType,
                                           bool isNot);
 
-CPPExpression WCDBExpressionBinaryOperateBool(CPPExpression left,
-                                              bool right,
-                                              enum WCDBExpressionBinaryOperatorType operatorType,
-                                              bool isNot);
-
-CPPExpression WCDBExpressionBinaryOperateLong(CPPExpression left,
-                                              long long right,
-                                              enum WCDBExpressionBinaryOperatorType operatorType,
-                                              bool isNot);
-
-CPPExpression WCDBExpressionBinaryOperateDouble(CPPExpression left,
-                                                double right,
-                                                enum WCDBExpressionBinaryOperatorType operatorType,
-                                                bool isNot);
-
-CPPExpression WCDBExpressionBinaryOperateString(CPPExpression left,
-                                                const char* _Nullable right,
-                                                enum WCDBExpressionBinaryOperatorType operatorType,
-                                                bool isNot);
+CPPExpression WCDBExpressionBinaryOperate2(CPPCommonValue left,
+                                           CPPCommonValue right,
+                                           enum WCDBExpressionBinaryOperatorType operatorType,
+                                           bool isNot);
 
 CPPExpression WCDBExpressionBetweenOperate(CPPExpression operand,
                                            CPPExpression left,
                                            CPPExpression right,
                                            bool isNot);
 
-CPPExpression WCDBExpressionInOperate(CPPExpression operand, bool isNot);
+CPPExpression WCDBExpressionBetweenOperate2(CPPCommonValue operand,
+                                            CPPCommonValue left,
+                                            CPPCommonValue right,
+                                            bool isNot);
+
+CPPExpression
+WCDBExpressionInOperate(CPPCommonValue operand, CPPCommonArray valueArray, bool isNot);
+
 CPPExpression
 WCDBExpressionInTableOperate(CPPExpression operand, const char* _Nullable table, bool isNot);
 CPPExpression
+WCDBExpressionInTableOperate2(CPPCommonValue operand, const char* _Nullable table, bool isNot);
+
+CPPExpression
 WCDBExpressionInSelectionOperate(CPPExpression operand, CPPStatementSelect select, bool isNot);
+
+CPPExpression WCDBExpressionInSelectionOperate2(CPPCommonValue operand,
+                                                CPPStatementSelect select,
+                                                bool isNot);
+
 CPPExpression WCDBExpressionInExpressionOperate(CPPExpression operand,
                                                 const CPPExpression* _Nullable expressions,
                                                 int num,
                                                 bool isNot);
 
-CPPExpression WCDBExpressionInIntOperate(CPPExpression operand,
-                                         const int* _Nullable expressions,
-                                         int num,
-                                         bool isNot);
-
-CPPExpression WCDBExpressionInLongOperate(CPPExpression operand,
-                                          const long long* _Nullable expressions,
-                                          int num,
-                                          bool isNot);
-
-CPPExpression WCDBExpressionInDoubleOperate(CPPExpression operand,
-                                            const double* _Nullable expressions,
-                                            int num,
-                                            bool isNot);
-
-CPPExpression WCDBExpressionInStringOperate(CPPExpression operand,
-                                            const char* _Nullable* _Nullable expressions,
-                                            int num,
-                                            bool isNot);
-
 CPPExpression
 WCDBExpressionInFunctionOperate(CPPExpression operand, const char* _Nullable func, bool isNot);
 
+CPPExpression WCDBExpressionInFunctionOperate2(CPPCommonValue operand,
+                                               const char* _Nullable func,
+                                               bool isNot);
+
 CPPExpression
 WCDBExpressionCollateOperate(CPPExpression operand, const char* _Nullable collation);
+
+CPPExpression
+WCDBExpressionCollateOperate2(CPPCommonValue operand, const char* _Nullable collation);
 
 WCDB_EXTERN_C_END
