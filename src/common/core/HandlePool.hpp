@@ -90,10 +90,10 @@ protected:
 
     mutable SharedLock m_memory;
 
+    std::array<std::set<std::shared_ptr<InnerHandle>>, HandleSlotCount> m_handles;
+
 private:
     void flowBack(HandleType type, const std::shared_ptr<InnerHandle> &handle);
-
-    std::array<std::set<std::shared_ptr<InnerHandle>>, HandleSlotCount> m_handles;
     std::array<std::list<std::shared_ptr<InnerHandle>>, HandleSlotCount> m_frees;
     HandleCounter m_counter;
 

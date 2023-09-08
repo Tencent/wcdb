@@ -92,7 +92,7 @@
 // For debugging only
 + (void)enableSQLTrace
 {
-    [WCTDatabase globalTraceSQL:^(WCTTag, NSString*, UInt64, NSString* sql) {
+    [WCTDatabase globalTraceSQL:^(WCTTag, NSString*, UInt64, NSString* sql, NSString*) {
         NSThread* currentThread = [NSThread currentThread];
         NSString* threadName = currentThread.name;
         if (threadName.length == 0) {
@@ -135,7 +135,8 @@
         TestCaseResult* trace = [TestCaseResult no];
         NSMutableArray<NSString*>* expectedSQLs = [NSMutableArray arrayWithArray:testSQLs];
         NSThread* tracedThread = [NSThread currentThread];
-        [self.database traceSQL:^(WCTTag, NSString*, UInt64, NSString* sql) {
+        [self.database enableFullSQLTrace:!_skipFullSQLTrace];
+        [self.database traceSQL:^(WCTTag, NSString*, UInt64, NSString* sql, NSString* info) {
             if (!self.expectSQLsInAllThreads && tracedThread != [NSThread currentThread]) {
                 // skip other thread sqls due to the setting
                 return;
@@ -144,6 +145,7 @@
                 return;
             }
             @synchronized(expectedSQLs) {
+                [self checkInfo:info withSQL:sql];
                 [self doTestSQLAsExpected:expectedSQLs sql:sql];
             }
         }];
@@ -169,8 +171,44 @@
             }
         }
         [trace makeNO];
+        [self.database enableFullSQLTrace:NO];
     } while (false);
     [self.database traceSQL:nil];
+}
+
+- (void)checkInfo:(NSString*)info withSQL:(NSString*)sql
+{
+    if (_skipFullSQLTrace) {
+        XCTAssertNil(info);
+        return;
+    }
+    NSArray* components = [info componentsSeparatedByString:@";"];
+    if (components.count > 2) {
+        for (int i = 0; i < components.count - 2; i++) {
+            NSArray* subComponents = [[components objectAtIndex:i] componentsSeparatedByString:@":"];
+            XCTAssertTrue(subComponents.count > 1);
+            XCTAssertTrue([subComponents.firstObject intValue] > 0);
+        }
+    }
+    if ([sql hasPrefix:@"INSERT"]) {
+        XCTAssertTrue(components.count > 1);
+        NSArray* subComponents = [[components objectAtIndex:components.count - 1] componentsSeparatedByString:@":"];
+        XCTAssertEqual(subComponents.count, 2);
+        XCTAssertTrue([subComponents[0] isEqualToString:@"LastInsertedId"]);
+        XCTAssertTrue([subComponents[1] intValue] >= 0);
+    } else if ([sql hasPrefix:@"SELECT"]) {
+        XCTAssertTrue(components.count > 0);
+        NSArray* subComponents = [[components objectAtIndex:components.count - 1] componentsSeparatedByString:@":"];
+        XCTAssertEqual(subComponents.count, 2);
+        XCTAssertTrue([subComponents[0] isEqualToString:@"StepCount"]);
+        XCTAssertTrue([subComponents[1] intValue] >= 0);
+    } else if ([sql hasPrefix:@"DELETE"] || [sql hasPrefix:@"UPDATE"]) {
+        XCTAssertTrue(components.count > 0);
+        NSArray* subComponents = [[components objectAtIndex:components.count - 1] componentsSeparatedByString:@":"];
+        XCTAssertEqual(subComponents.count, 2);
+        XCTAssertTrue([subComponents[0] isEqualToString:@"Changes"]);
+        XCTAssertTrue([subComponents[1] intValue] >= 0);
+    }
 }
 
 - (void)doTestSQLAsExpected:(NSMutableArray<NSString*>*)expectedSQLs sql:(NSString*)sql

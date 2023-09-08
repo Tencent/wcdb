@@ -44,7 +44,7 @@ class HandleTests: DatabaseTestCase {
         XCTAssertNoThrow(try database.insert(objects, intoTable: TestObject.name))
 
         var hasTestInterrupt = false
-        database.trace { error in
+        database.traceError { error in
             guard error.level == .Error else {
                 return
             }
@@ -68,18 +68,18 @@ class HandleTests: DatabaseTestCase {
         signal.cancel()
         group.wait()
         XCTAssertTrue(hasTestInterrupt)
-        self.database.trace(ofError: nil)
+        self.database.traceError(nil)
     }
 
     func testWriteWithHandleCountLimit() {
         var maxHandleCount = 0
-        Database.globalTrace(ofDatabaseOperation: {
+        Database.globalTraceDatabaseOperation {
             _, operation, info in
             guard operation == .OpenHandle else {
                 return
             }
             maxHandleCount = max(maxHandleCount, info[Database.OperationInfoKeyHandleCount]?.intValue ?? 0)
-        })
+        }
         XCTAssertNoThrow(try database.create(table: TestObject.name, of: TestObject.self))
         let table = database.getTable(named: TestObject.name, of: TestObject.self)
         let group = DispatchGroup()
@@ -122,18 +122,18 @@ class HandleTests: DatabaseTestCase {
         }
         group.wait()
         XCTAssertTrue(maxHandleCount <= 4)
-        Database.globalTrace(ofDatabaseOperation: nil)
+        Database.globalTraceDatabaseOperation(nil)
     }
 
     func testReadWithHandleCountLimit() {
         var maxHandleCount = 0
-        Database.globalTrace(ofDatabaseOperation: {
+        Database.globalTraceDatabaseOperation {
             _, operation, info in
             guard operation == .OpenHandle else {
                 return
             }
             maxHandleCount = max(maxHandleCount, info[Database.OperationInfoKeyHandleCount]?.intValue ?? 0)
-        })
+        }
         XCTAssertNoThrow(try database.create(table: TestObject.name, of: TestObject.self))
         let table = database.getTable(named: TestObject.name, of: TestObject.self)
         let objects = Random.testObjects(startWith: 0, count: 64000)
@@ -185,12 +185,12 @@ class HandleTests: DatabaseTestCase {
 
         group.wait()
         XCTAssertTrue(maxHandleCount > 4 && maxHandleCount <= 32)
-        Database.globalTrace(ofDatabaseOperation: nil)
+        Database.globalTraceDatabaseOperation(nil)
     }
 
     func testReadWriteWithHandleCountLimit() {
         var maxHandleCount = 0
-        Database.globalTrace(ofDatabaseOperation: {
+        Database.globalTraceDatabaseOperation({
             _, operation, info in
             guard operation == .OpenHandle else {
                 return
@@ -224,6 +224,6 @@ class HandleTests: DatabaseTestCase {
 
         group.wait()
         XCTAssertTrue(maxHandleCount > 4 && maxHandleCount <= 32)
-        Database.globalTrace(ofDatabaseOperation: nil)
+        Database.globalTraceDatabaseOperation(nil)
     }
 }

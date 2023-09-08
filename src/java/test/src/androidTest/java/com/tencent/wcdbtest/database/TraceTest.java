@@ -55,7 +55,7 @@ public class TraceTest extends TableTestCase {
         final WrappedValue tested = new WrappedValue();
         database.traceSQL(new Database.SQLTracer() {
             @Override
-            public void onTrace(long tag, String path, long handleId, String sql) {
+            public void onTrace(long tag, String path, long handleId, String sql, String info) {
                 assertEquals(tag, database.getTag());
                 assertEquals(path, database.getPath());
                 if(sql.equals(statement.getDescription())) {
@@ -76,7 +76,7 @@ public class TraceTest extends TableTestCase {
         Database.globalTraceSQL(null);
         Database.globalTraceSQL(new Database.SQLTracer() {
             @Override
-            public void onTrace(long tag, String path, long handleId, String sql) {
+            public void onTrace(long tag, String path, long handleId, String sql, String info) {
                 if(!database.getPath().equals(path)) {
                     return;
                 }

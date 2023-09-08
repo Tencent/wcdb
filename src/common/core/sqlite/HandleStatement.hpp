@@ -114,6 +114,16 @@ private:
     StringView m_newTable;
     StringView m_modifiedTable;
     bool m_needAutoAddColumn;
+
+#pragma mark - Full trace sql
+private:
+    void tryReportSQL();
+    void clearReport();
+
+    bool m_fullTrace;
+    bool m_needReport;
+    int m_stepCount;
+    std::ostringstream m_stream;
 };
 
 } //namespace WCDB

@@ -232,7 +232,9 @@ public:
     /**
      Triggered when a SQL is executed.
      */
-    typedef std::function<void(long tag, const UnsafeStringView &path, const UnsafeStringView &sql, const void *handleIdentifier)> SQLNotification;
+    typedef std::function<void(
+    long tag, const UnsafeStringView &path, const void *handleIdentifier, const UnsafeStringView &sql, const UnsafeStringView &info)>
+    SQLNotification;
 
     /**
      @brief You can register a tracer to monitor the execution of all SQLs.
@@ -241,18 +243,21 @@ public:
          2. Tag of database.
          3. Path of database.
          4. The id of the handle executing this SQL.
+         5. Detailed execution information of SQL. It is valid only when full sql trace is enable.
      
      @note  You should register trace before all db operations. Global tracer and db tracer do not interfere with each other.
      
          WCDB::Database::globalTraceSQL([](long tag,
                                            const WCDB::UnsafeStringView &path,
                                            const WCDB::UnsafeStringView &sql,
-                                           const void *handleIdentifier) {
+                                           const void *handleIdentifier
+                                           const WCDB::UnsafeStringView &info) {
              printf("Tag: %ld", tag);
              printf("Path: %s", path.data());
              printf("The handle with id %p executed %s",
                     handleIdentifier,
                     sql.data());
+             printf("Excution info %s", info.data());
          });
      
      @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
@@ -269,6 +274,18 @@ public:
      @see `SQLNotification`
      */
     void traceSQL(SQLNotification trace);
+
+    /**
+     @brief Enable to collect more SQL execution information in SQL tracer.
+     @note  The detailed execution information of sql will include all bind parameters, step counts of `SELECT` statement,
+        last inserted rowid of `INSERT` statement, changes of `UPDATE` and `DELETE` statements.
+        These informations will be returned in the last parameter of `SQLNotification`.
+     @warning Collecting these informations will significantly reduce the performance of wcdb,
+        please enable it only when necessary, and disable it when unnecessary.
+     @see `SQLNotification`
+     @param enable enable or not.
+     */
+    void setFullSQLTraceEnable(bool enable);
 
     enum Operation : short {
         Create = 0,

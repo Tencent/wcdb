@@ -42,6 +42,7 @@
 {
     [super setUp];
     self.skipDebugLog = YES;
+    self.skipFullSQLTrace = YES;
 }
 
 - (void)doTestMigration:(void (^)(void))operation

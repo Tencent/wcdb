@@ -101,9 +101,11 @@ public:
                    const std::shared_ptr<Config> &config,
                    int priority = Configs::Priority::Default);
     void removeConfig(const UnsafeStringView &name);
+    void setFullSQLTraceEnable(bool enable);
 
 private:
     Configs m_configs;
+    bool m_fullSQLTrace = false;
 
 #pragma mark - Threaded
 private:

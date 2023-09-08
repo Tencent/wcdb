@@ -60,6 +60,7 @@ void WCDBJNIDatabaseClassMethod(tracePerformance, jlong self, jobject tracer);
 
 void WCDBJNIDatabaseClassMethod(globalTraceSQL, jobject tracer);
 void WCDBJNIDatabaseClassMethod(traceSQL, jlong self, jobject tracer);
+void WCDBJNIDatabaseClassMethod(setFullSQLTraceEnable, jlong self, jboolean enable);
 
 void WCDBJNIDatabaseClassMethod(globalTraceError, jobject tracer);
 void WCDBJNIDatabaseClassMethod(traceError, jlong self, jobject tracer);
