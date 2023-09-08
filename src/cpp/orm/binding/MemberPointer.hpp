@@ -43,6 +43,7 @@ void* castMemberPointer(T O::*memberPointer)
         T O::*memberp;
         void* voidp;
     };
+    voidp = nullptr;
     memberp = memberPointer;
     return voidp;
 }
