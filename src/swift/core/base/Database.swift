@@ -349,7 +349,6 @@ public extension Database {
     }
 
     typealias PerformanceTracer = (Tag, String, UInt64, String, Double) -> Void // Tag, Path, handleIdentifier, SQL, cost
-    typealias SQLTracer = (Tag, String, UInt64, String) -> Void // Tag, Path, handleIdentifier, SQL
 
     /// You can register a tracer to monitor the performance of all SQLs.
     /// It returns
@@ -363,16 +362,16 @@ public extension Database {
     /// 1. You should register trace before all db operations.
     /// 2. Global tracer will be recovered by db tracer.
     ///
-    ///     Database.globalTrace(ofPerformance: { (tag, path, handleId, sql, cost) in
+    ///     Database.globalTracePerformance{ (tag, path, handleId, sql, cost) in
     ///         print("Tag: \(tag)")
     ///         print("Path: \(path)")
     ///         print("The handle with id \(handleId) took \(cost) seconds to execute \(sql)")
-    ///     })
+    ///     }
     ///
     /// Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
     ///
     /// - Parameter trace: trace. Nil to disable global preformance trace.
-    static func globalTrace(ofPerformance trace: @escaping PerformanceTracer) {
+    static func globalTracePerformance(_ trace: @escaping PerformanceTracer) {
         let callback: @convention(block) (Int, UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>, Double) -> Void = {
             (tag, path, handleId, sql, cost) in
             trace(tag, String(cString: path), handleId, String(cString: sql), cost)
@@ -380,7 +379,7 @@ public extension Database {
         let imp = imp_implementationWithBlock(callback)
         WCDBDatabaseGlobalTracePerformance(imp)
     }
-    static func globalTrace(ofPerformance: Void?) {
+    static func globalTracePerformance(_ trace: Void?) {
         WCDBDatabaseGlobalTracePerformance(nil)
     }
 
@@ -400,32 +399,36 @@ public extension Database {
         WCDBDatabaseTracePerformance(database, nil)
     }
 
+    typealias SQLTracer = (Tag, String, UInt64, String, String) -> Void // Tag, Path, handleIdentifier, SQL, info
+
     /// You can register a tracer to monitor the execution of all SQLs.
     /// It returns
     /// 1. Every SQL executed by the database.
     /// 2. Tag of database.
     /// 3. Path of database.
     /// 4. The id of the handle executing this SQL.
+    /// 5. Detailed execution information of SQL. It is valid only when full sql trace is enable.
     /// Note that you should register trace before all db operations.
     ///
-    ///     Database.globalTrace(ofSQL: { (tag, path, handleId, sql) in
+    ///     Database.globalTraceSQL{ (tag, path, handleId, sql, info) in
     ///         print("Tag: \(tag)")
     ///         print("Path: \(path)")
     ///         print("The handle with id \(handleId) executed \(sql)")
-    ///     })
+    ///         print("Excution info \(info)")
+    ///     }
     ///
     /// Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
     ///
     /// - Parameter trace: trace. Nil to disable global sql trace.
-    static func globalTrace(ofSQL trace: @escaping SQLTracer) {
-        let callback: @convention(block) (Int, UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>) -> Void = {
-            (tag, path, handleId, sql) in
-            trace(tag, String(cString: path), handleId, String(cString: sql))
+    static func globalTraceSQL(_ trace: @escaping SQLTracer) {
+        let callback: @convention(block) (Int, UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>, UnsafePointer<CChar>) -> Void = {
+            (tag, path, handleId, sql, info) in
+            trace(tag, String(cString: path), handleId, String(cString: sql), String(cString: info))
         }
         let imp = imp_implementationWithBlock(callback)
         WCDBDatabaseGlobalTraceSQL(imp)
     }
-    static func globalTrace(ofSQL: Void?) {
+    static func globalTraceSQL(_ trace: Void?) {
         WCDBDatabaseGlobalTraceSQL(nil)
     }
 
@@ -433,26 +436,41 @@ public extension Database {
     /// Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
     ///
     /// - Parameter trace: trace. Nil to disable sql trace.
-    func trace(ofSQL trace: @escaping SQLTracer) {
-        let callback: @convention(block) (Int, UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>) -> Void = {
-            (tag, path, handleId, sql) in
-            trace(tag, String(cString: path), handleId, String(cString: sql))
+    func traceSQL(_ trace: @escaping SQLTracer) {
+        let callback: @convention(block) (Int, UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>, UnsafePointer<CChar>) -> Void = {
+            (tag, path, handleId, sql, info) in
+            trace(tag, String(cString: path), handleId, String(cString: sql), String(cString: info))
         }
         let imp = imp_implementationWithBlock(callback)
         WCDBDatabaseTraceSQL(database, imp)
     }
-    func trace(ofSQL: Void?) {
+    func traceSQL(_ trace: Void?) {
         WCDBDatabaseTraceSQL(database, nil)
+    }
+
+    /// Enable to collect more SQL execution information in SQL tracer.
+    ///
+    /// The detailed execution information of sql will include all bind parameters,
+    /// step counts of `SELECT` statement, last inserted rowid of `INSERT` statement,
+    /// changes of `UPDATE` and `DELETE` statements.
+    /// These informations will be returned in the last parameter of `SQLTracer`.
+    ///
+    /// Note That collecting these informations will significantly reduce the performance of wcdb,
+    /// please enable it only when necessary, and disable it when unnecessary.
+    ///
+    /// - Parameter enable: enable or not.
+    func setFullSQL(enable: Bool) {
+        WCDBDatabaseSetFullSQLTraceEnable(database, enable)
     }
 
     /// You can register a reporter to monitor all errors.
     ///
-    ///     Database.globalTrace(ofError: { (error) in
+    ///     Database.globalTraceError{ (error) in
     ///         print("[WCDB] \(error.description)")
-    ///     })
+    ///     }
     ///
     /// - Parameter errorReporter: report. Nil to disable error trace.
-    static func globalTrace(ofError errorReporter: @escaping (WCDBError) -> Void) {
+    static func globalTraceError(_ errorReporter: @escaping (WCDBError) -> Void) {
         let callback: @convention(block) (CPPError) -> Void = {
             (cppError) in
             let error = ErrorBridge.getErrorFrom(cppError: cppError)
@@ -461,14 +479,14 @@ public extension Database {
         let imp = imp_implementationWithBlock(callback)
         WCDBDatabaseGlobalTraceError(imp)
     }
-    static func globalTrace(ofError: Void?) {
+    static func globalTraceError(_ trace: Void?) {
         WCDBDatabaseGlobalTraceError(nil)
     }
 
     /// You can register a reporter to monitor all errors of current database.
     ///
     /// - Parameter errorReporter: report. Nil to disable error trace.
-    func trace(ofError errorReporter: @escaping (WCDBError) -> Void) {
+    func traceError(_ errorReporter: @escaping (WCDBError) -> Void) {
         let callback: @convention(block) (CPPError) -> Void = {
             (cppError) in
             let error = ErrorBridge.getErrorFrom(cppError: cppError)
@@ -477,7 +495,7 @@ public extension Database {
         let imp = imp_implementationWithBlock(callback)
         WCDBDatabaseTraceError(database, imp)
     }
-    func trace(ofError: Void?) {
+    func traceError(_ trace: Void?) {
         WCDBDatabaseTraceError(database, nil)
     }
 
@@ -506,7 +524,7 @@ public extension Database {
     /// 3. opening a new database handle.
     ///
     /// - Parameter trace: trace. Nil to disable error trace.
-    static func globalTrace(ofDatabaseOperation trace: @escaping OperationTracer) {
+    static func globalTraceDatabaseOperation(_ trace: @escaping OperationTracer) {
         let tracerWrap = ValueWrap(trace)
         let tracerWrapPointer = ObjectBridge.getUntypeSwiftObject(tracerWrap)
         let callback: @convention(c) (UnsafeMutableRawPointer?, CPPDatabase, Int, UnsafeRawPointer) -> Void = {
@@ -543,7 +561,7 @@ public extension Database {
         WCDBDatabaseGlobalTraceOperation(callback, tracerWrapPointer, ObjectBridge.objectDestructor)
     }
 
-    static func globalTrace(ofDatabaseOperation trace: Void?) {
+    static func globalTraceDatabaseOperation(_ trace: Void?) {
         WCDBDatabaseGlobalTraceOperation(nil, nil, nil)
     }
 }

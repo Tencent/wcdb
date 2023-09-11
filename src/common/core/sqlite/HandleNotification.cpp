@@ -75,7 +75,8 @@ void HandleNotification::postTraceNotification(unsigned int flag, void *P, void 
         const char *sql = static_cast<const char *>(X);
         if (sql) {
             AbstractHandle *handle = getHandle();
-            postSQLTraceNotification(handle->getTag(), handle->getPath(), sql, getHandle());
+            postSQLTraceNotification(
+            handle->getTag(), handle->getPath(), getHandle(), sql, "");
         }
     } break;
     case SQLITE_TRACE_PROFILE: {
@@ -93,7 +94,7 @@ void HandleNotification::postTraceNotification(unsigned int flag, void *P, void 
 void HandleNotification::setupTraceNotifications()
 {
     unsigned flag = 0;
-    if (!m_sqlNotifications.empty()) {
+    if (!m_sqlNotifications.empty() && !m_fullSQLTrace) {
         flag |= SQLITE_TRACE_STMT;
     }
     if (!m_performanceNotifications.empty()) {
@@ -107,6 +108,15 @@ void HandleNotification::setupTraceNotifications()
 }
 
 #pragma mark - SQL
+void HandleNotification::setFullSQLTraceEnable(bool enable)
+{
+    bool before = m_fullSQLTrace;
+    m_fullSQLTrace = enable;
+    if (before != enable) {
+        setupTraceNotifications();
+    }
+}
+
 bool HandleNotification::areSQLTraceNotificationsSet() const
 {
     return !m_sqlNotifications.empty();
@@ -129,12 +139,12 @@ void HandleNotification::setNotificationWhenSQLTraced(const UnsafeStringView &na
 
 void HandleNotification::postSQLTraceNotification(const Tag &tag,
                                                   const UnsafeStringView &path,
+                                                  const void *handle,
                                                   const UnsafeStringView &sql,
-                                                  const void *handle)
+                                                  const UnsafeStringView &info)
 {
-    WCTAssert(!m_sqlNotifications.empty());
     for (const auto &element : m_sqlNotifications) {
-        element.second(tag, path, sql, handle);
+        element.second(tag, path, handle, sql, info);
     }
 }
 

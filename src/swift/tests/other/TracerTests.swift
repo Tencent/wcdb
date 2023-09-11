@@ -28,9 +28,9 @@ import WCDB
 class TracerTests: DatabaseTestCase {
 
     func reset() {
-        Database.globalTrace(ofPerformance: nil)
-        Database.globalTrace(ofSQL: nil)
-        Database.globalTrace(ofError: nil)
+        Database.globalTracePerformance(nil)
+        Database.globalTraceSQL(nil)
+        Database.globalTraceError(nil)
     }
 
     override func setUp() {
@@ -49,7 +49,7 @@ class TracerTests: DatabaseTestCase {
 
         // Then
         var pass = false
-        Database.globalTrace { (tag, path, _, sql) in
+        Database.globalTraceSQL { (tag, path, _, sql, _) in
             guard path == self.database.path else {
                 return
             }
@@ -76,7 +76,7 @@ class TracerTests: DatabaseTestCase {
 
         // Then
         var `catch` = false
-        Database.globalTrace { (error: WCDBError) in
+        Database.globalTraceError { (error: WCDBError) in
             let tag = error.tag
             XCTAssertNotNil(tag)
             XCTAssertEqual(tag!, expectedTag)
@@ -129,7 +129,7 @@ class TracerTests: DatabaseTestCase {
 
         // Then
         var `catch` = false
-        database.trace { (error: WCDBError) in
+        database.traceError { (error: WCDBError) in
             let tag = error.tag
             XCTAssertNotNil(tag)
             XCTAssertEqual(tag!, expectedTag)
@@ -192,7 +192,7 @@ class TracerTests: DatabaseTestCase {
 
         // Then
         var `catch` = false
-        Database.globalTrace { (tag, path, _, sql, cost) in
+        Database.globalTracePerformance { (tag, path, _, sql, cost) in
             guard path == self.database.path else {
                 return
             }
@@ -231,7 +231,7 @@ class TracerTests: DatabaseTestCase {
         // Then
         var catchInsert = false
         var catchRollback = false
-        Database.globalTrace { (tag, path, _, sql, _) in
+        Database.globalTraceSQL { (tag, path, _, sql, _) in
             guard path == self.database.path else {
                 return
             }
@@ -268,7 +268,7 @@ class TracerTests: DatabaseTestCase {
         var openCount = 0
         var tableCount = 0
         var indexCount = 0
-        Database.globalTrace(ofDatabaseOperation: {
+        Database.globalTraceDatabaseOperation {
             (database, operation, info) in
             switch operation {
             case .Create:
@@ -286,7 +286,7 @@ class TracerTests: DatabaseTestCase {
             @unknown default:
                 fatalError()
             }
-        })
+        }
         let database = Database(at: "\(self.recommendedPath.path)_testOperation")
         database.tag = self.recommendTag
         XCTAssertNoThrow(try database.create(table: TracerObject.name, of: TracerObject.self))
@@ -306,6 +306,6 @@ class TracerTests: DatabaseTestCase {
         XCTAssertTrue(openCount == 2)
         XCTAssertTrue(tableCount == 4)
         XCTAssertTrue(indexCount == 1)
-        Database.globalTrace(ofPerformance: nil)
+        Database.globalTracePerformance(nil)
     }
 }

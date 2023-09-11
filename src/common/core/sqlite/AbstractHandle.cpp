@@ -42,6 +42,7 @@ AbstractHandle::AbstractHandle()
 , m_cacheTransactionError(TransactionError::Allowed)
 , m_notification(this)
 , m_tableMonitorForbidden(false)
+, m_fullSQLTrace(false)
 , m_canBeSuspended(false)
 {
 }
@@ -694,6 +695,25 @@ bool AbstractHandle::needMonitorTable()
 void AbstractHandle::setTableMonitorEnable(bool enable)
 {
     m_tableMonitorForbidden = !enable;
+}
+
+void AbstractHandle::setFullSQLTraceEnable(bool enable)
+{
+    m_fullSQLTrace = enable;
+    if (isOpened()) {
+        m_notification.setFullSQLTraceEnable(enable);
+    }
+}
+
+bool AbstractHandle::isFullSQLEnable()
+{
+    return m_fullSQLTrace;
+}
+
+void AbstractHandle::postSQLNotification(const UnsafeStringView &sql,
+                                         const UnsafeStringView &info)
+{
+    m_notification.postSQLTraceNotification(m_tag, m_path, m_handle, sql, info);
 }
 
 #pragma mark - Error

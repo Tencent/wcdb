@@ -239,18 +239,23 @@ void WCDBJNIDatabaseClassMethod(tracePerformance, jlong self, jobject tracer)
     selfStruct, tracer != NULL ? WCDBJNIDatabasePerformanceTrace : NULL, tracer, WCDBJNIDestructContext);
 }
 
-void WCDBJNIDatabaseSQLTrace(
-jobject tracer, long tag, const char* path, unsigned long long handleId, const char* sql)
+void WCDBJNIDatabaseSQLTrace(jobject tracer,
+                             long tag,
+                             const char* path,
+                             unsigned long long handleId,
+                             const char* sql,
+                             const char* info)
 {
     WCDBJNITryGetEnvOr(return );
     WCDBJNITryGetDatabaseMethodId("onTraceSQL",
                                   "(" WCDBJNIDatabaseSignature "$SQLTracer;J" WCDBJNIStringSignature
-                                  "J" WCDBJNIStringSignature ")V",
+                                  "J" WCDBJNIStringSignature WCDBJNIStringSignature ")V",
                                   return );
     WCDBJNICreateJavaString(path);
     WCDBJNICreateJavaString(sql);
+    WCDBJNICreateJavaString(info);
     (*env)->CallStaticVoidMethod(
-    env, WCDBJNIGetDatabaseClass(), g_methodId, tracer, (jlong) tag, jpath, (jlong) handleId, jsql);
+    env, WCDBJNIGetDatabaseClass(), g_methodId, tracer, (jlong) tag, jpath, (jlong) handleId, jsql, jinfo);
     WCDBJNITryDetach;
 }
 
@@ -269,6 +274,12 @@ void WCDBJNIDatabaseClassMethod(traceSQL, jlong self, jobject tracer)
     WCDBJNICreateGlobalRel(tracer);
     WCDBDatabaseTraceSQL2(
     selfStruct, tracer != NULL ? WCDBJNIDatabaseSQLTrace : NULL, tracer, WCDBJNIDestructContext);
+}
+
+void WCDBJNIDatabaseClassMethod(setFullSQLTraceEnable, jlong self, jboolean enable)
+{
+    WCDBJNIBridgeStruct(CPPDatabase, self);
+    WCDBDatabaseSetFullSQLTraceEnable(selfStruct, enable);
 }
 
 void WCDBJNIDatabaseErrorTrace(jobject tracer, CPPError error)

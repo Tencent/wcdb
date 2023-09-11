@@ -18,7 +18,7 @@ default: &default_config
 
   build: &default_build_config
     system: cmake
-    path: ../tools/version
+    path: ../src
     arguments:
 
   outputs:
@@ -27,12 +27,28 @@ default: &default_config
 
 android:
   options:
-    auto_synthesis_aar: true
+    auto_synthesis_aar: false
 
-  build:
+  build: &android_build_config
     <<: *default_build_config
     api_level: 21
 
+  product_flavors:
+    generic:
+      is_default: true
+      build:
+        <<: *android_build_config 
+        api_level: 19
+    ammdev:
+      dependencies:
+        <<: *default_dependencies
+      dependency_options: &default_dependency_options
+        shared:
+          default: false
+      version_suffix: '-ammdev'
+      build:
+        <<: *android_build_config
+        arguments: '-DFLAVOR_AMMDEV=ON'
 
 ios:
   build_types: static
@@ -108,6 +124,12 @@ macos-all:
 
 
 # windows:
+windows:
+  build_types: static
+  build_archs: x86, x64
+  dependencies:
+    <<: *default_dependencies
+    zlib: 1.2.13
 
 #linux
 linux-x86_64-gcc-5.4.0: &linux_config
@@ -122,3 +144,8 @@ linux-arm64-gcc-linaro-7.5.0:
 
 mips-loongson-linux-gnu:
   <<: *linux_config
+
+
+loongarch64-linux-gnu:
+  <<: *linux_config
+

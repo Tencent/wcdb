@@ -40,7 +40,7 @@ typedef void (^WCTPerformanceTraceBlock)(WCTTag /*tag*/, NSString* /* path */, u
 /**
  Triggered when a SQL is executed.
  */
-typedef void (^WCTSQLTraceBlock)(WCTTag /*tag*/, NSString* /* path */, uint64_t /*handleIdentifier*/, NSString* /* sql */);
+typedef void (^WCTSQLTraceBlock)(WCTTag /*tag*/, NSString* /* path */, uint64_t /*handleIdentifier*/, NSString* /* sql */, NSString* /*info*/);
 
 typedef NS_ENUM(NSUInteger, WCTDatabaseOperation) {
     WCTDatabaseOperation_Create = 0,
@@ -101,10 +101,10 @@ WCDB_API @interface WCTDatabase(Monitor)
  
  @note  You should register trace before all db operations. Global tracer and db tracer do not interfere with each other.
  
-     [WCTDatabase globalTracePerformance:^(WCTTag tag, NSString* path,  uint64_t handleIdentifier, NSString* sql , double cost) {
+     [WCTDatabase globalTracePerformance:^(WCTTag tag, NSString* path, uint64_t handleIdentifier, NSString* sql, double cost) {
         NSLog(@"Tag: %ld", tag);
         NSLog(@"Path: %@", path);
-        NSLog(@"The handle with id %llu took %f seconds to execute %@",  handleIdentifier, cost, sql);
+        NSLog(@"The handle with id %llu took %f seconds to execute %@", handleIdentifier, cost, sql);
      }];
  
  @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
@@ -128,13 +128,15 @@ WCDB_API @interface WCTDatabase(Monitor)
      2. Tag of database.
      3. Path of database.
      4. The id of the handle executing this SQL.
+     5. Detailed execution information of SQL. It is valid only when full sql trace is enable.
  
  @note  You should register trace before all db operations. Global tracer and db tracer do not interfere with each other.
  
-     [WCTDatabase globalTraceSQL:^(WCTTag tag, NSString* path,  uint64_t handleIdentifier, NSString* sql , double cost) {
+     [WCTDatabase globalTraceSQL:^(WCTTag tag, NSString* path, uint64_t handleIdentifier, NSString* sql, NSString *info) {
         NSLog(@"Tag: %ld", tag);
         NSLog(@"Path: %%@", path);
-        NSLog(@"The handle with id %llu executed %@",  handleIdentifier, sql);
+        NSLog(@"The handle with id %llu executed %@", handleIdentifier, sql);
+        NSLog(@"Excution info %@", info);
      }];
  
  @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
@@ -151,6 +153,18 @@ WCDB_API @interface WCTDatabase(Monitor)
  @param trace trace
  */
 - (void)traceSQL:(nullable WCDB_ESCAPE WCTSQLTraceBlock)trace;
+
+/**
+ @brief Enable to collect more SQL execution information in SQL tracer.
+ @note  The detailed execution information of sql will include all bind parameters, step counts of `SELECT` statement,
+    last inserted rowid of `INSERT` statement, changes of `UPDATE` and `DELETE` statements.
+    These informations will be returned in the last parameter of `WCTSQLTraceBlock`.
+ @warning Collecting these informations will significantly reduce the performance of wcdb,
+    please enable it only when necessary, and disable it when unnecessary.
+ @see `WCTSQLTraceBlock`
+ @param enable enable or not.
+ */
+- (void)enableFullSQLTrace:(BOOL)enable;
 
 /**
  @brief You can register a tracer to these database events:

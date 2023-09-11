@@ -35,7 +35,7 @@
     WCDB::StatementPragma statement = WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion());
 
     __block BOOL tested = NO;
-    [self.database traceSQL:^(WCTTag tag, NSString* path, UInt64, NSString* sql) {
+    [self.database traceSQL:^(WCTTag tag, NSString* path, UInt64, NSString* sql, NSString*) {
         XCTAssertEqual(tag, self.database.tag);
         XCTAssertTrue([path isEqualToString:self.database.path]);
         if ([sql isEqualToString:@(statement.getDescription().data())]) {
@@ -122,7 +122,7 @@
     WCDB::StatementPragma statement = WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion());
 
     __block BOOL tested = NO;
-    [WCTDatabase globalTraceSQL:^(WCTTag tag, NSString* path, UInt64, NSString* sql) {
+    [WCTDatabase globalTraceSQL:^(WCTTag tag, NSString* path, UInt64, NSString* sql, NSString*) {
         if (![path isEqualToString:self.database.path]) {
             return;
         }

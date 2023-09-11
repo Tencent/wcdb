@@ -202,9 +202,14 @@ public:
     bool needMonitorTable();
     void setTableMonitorEnable(bool enable);
 
+    void setFullSQLTraceEnable(bool enable);
+    bool isFullSQLEnable();
+    void postSQLNotification(const UnsafeStringView &sql, const UnsafeStringView &info);
+
 private:
     HandleNotification m_notification;
     bool m_tableMonitorForbidden;
+    bool m_fullSQLTrace;
 
 #pragma mark - Error
 public:

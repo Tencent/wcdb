@@ -50,6 +50,7 @@ InnerDatabase::InnerDatabase(const UnsafeStringView &path)
 , m_initialized(false)
 , m_closing(0)
 , m_tag(Tag::invalid())
+, m_fullSQLTrace(false)
 , m_factory(path)
 , m_migration(this)
 , m_migratedCallback(nullptr)
@@ -200,6 +201,11 @@ void InnerDatabase::removeConfig(const UnsafeStringView &name)
     m_configs.erase(StringView(name));
 }
 
+void InnerDatabase::setFullSQLTraceEnable(bool enable)
+{
+    m_fullSQLTrace = enable;
+}
+
 #pragma mark - Handle
 RecyclableHandle InnerDatabase::getHandle(bool writeHint)
 {
@@ -318,6 +324,7 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
     WCTAssert(handle != nullptr);
 
     handle->setType(type);
+    handle->setFullSQLTraceEnable(m_fullSQLTrace);
     HandleSlot slot = slotOfHandleType(type);
     HandleCategory category = categoryOfHandleType(type);
 

@@ -49,17 +49,22 @@ private:
 
 #pragma mark - SQL
 public:
-    typedef std::function<void(const Tag &tag, const UnsafeStringView &path, const UnsafeStringView &sql, const void *handle)> SQLNotification;
+    typedef std::function<void(const Tag &tag, const UnsafeStringView &path, const void *handle, const UnsafeStringView &sql, const UnsafeStringView &info)> SQLNotification;
     void setNotificationWhenSQLTraced(const UnsafeStringView &name,
                                       const SQLNotification &onTraced);
 
-private:
-    bool areSQLTraceNotificationsSet() const;
     void postSQLTraceNotification(const Tag &tag,
                                   const UnsafeStringView &path,
+                                  const void *handle,
                                   const UnsafeStringView &sql,
-                                  const void *handle);
+                                  const UnsafeStringView &info);
+
+    void setFullSQLTraceEnable(bool enable);
+
+private:
+    bool areSQLTraceNotificationsSet() const;
     StringViewMap<SQLNotification> m_sqlNotifications;
+    bool m_fullSQLTrace = false;
 
 #pragma mark - Performance
 public:

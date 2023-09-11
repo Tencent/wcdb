@@ -172,7 +172,9 @@ class WeChatPublishExtension {
     }
 
     private void checkVersion() {
-        if (!(fullVersion ==~ /\d+\.\d+(?:\.\d+)?(?:\.\d+)?(?:-[\w-]+)?/)) {
+        // Support Maven or Conan version
+        if (!(fullVersion ==~ /\d+\.\d+(?:\.\d+)?(?:\.\d+)?(?:-[\w-]+)?/) &&
+            !(fullVersion ==~ /\d+\.\d+(?:\.\d+)?(?:-[\w_-]+(?:\.[\w_-]+)*)?(?:\+[\w_-]+(?:\.[\w_-]+)*)?/)) {
             def message = "Invalid version: ${fullVersion}"
             if (!isSnapshot)
                 throw new GradleException(message)
