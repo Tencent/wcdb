@@ -27,6 +27,7 @@
 #include "ObjectBridge.hpp"
 #include "Schema.hpp"
 #include "StatementAttach.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementAttach WCDBStatementAttachCreate()
 {
@@ -40,9 +41,34 @@ void WCDBStatementAttachConfigPath(CPPStatementAttach attach, CPPExpression path
     cppAttach->attach(*cppPath);
 }
 
+void WCDBStatementAttachConfigPath2(CPPStatementAttach attach, CPPCommonValue path)
+{
+    WCDBGetObjectOrReturn(attach, WCDB::StatementAttach, cppAttach);
+    cppAttach->attach(WCDBCreateExpressionFromCommonValue(path));
+}
+
 void WCDBStatementAttachConfigSchema(CPPStatementAttach attach, CPPSchema schema)
 {
     WCDBGetObjectOrReturn(attach, WCDB::StatementAttach, cppAttach);
     WCDBGetObjectOrReturn(schema, WCDB::Schema, cppSchema);
     cppAttach->as(*cppSchema);
+}
+
+void WCDBStatementAttachConfigSchema2(CPPStatementAttach attach, CPPCommonValue schema)
+{
+    WCDBGetObjectOrReturn(attach, WCDB::StatementAttach, cppAttach);
+    cppAttach->as(WCDBCreateSchemaFromCommonValue(schema));
+}
+
+void WCDBStatementAttachConfigKey(CPPStatementAttach attach, CPPExpression key)
+{
+    WCDBGetObjectOrReturn(attach, WCDB::StatementAttach, cppAttach);
+    WCDBGetObjectOrReturn(key, WCDB::Expression, cppKey);
+    cppAttach->key(*cppKey);
+}
+
+void WCDBStatementAttachConfigKey2(CPPStatementAttach attach, CPPCommonValue key)
+{
+    WCDBGetObjectOrReturn(attach, WCDB::StatementAttach, cppAttach);
+    cppAttach->key(WCDBCreateExpressionFromCommonValue(key));
 }

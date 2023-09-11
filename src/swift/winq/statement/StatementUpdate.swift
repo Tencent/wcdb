@@ -120,7 +120,7 @@ public final class StatementUpdate: Identifier<CPPStatementUpdate>, Statement {
         let from = expressionConvertibleFrom.asExpression()
         let to = expressionConvertibleTo.asExpression()
         ObjectBridge.extendLifetime(from, to) {
-            WCDBStatementUpdateConfigLimitFromTo(self.cppObj, from.cppObj, to.cppObj)
+            WCDBStatementUpdateConfigLimitRange(self.cppObj, from.cppObj, to.cppObj)
         }
         return self
     }
@@ -129,7 +129,7 @@ public final class StatementUpdate: Identifier<CPPStatementUpdate>, Statement {
     public func limit(_ expressionConvertibleLimit: ExpressionConvertible) -> StatementUpdate {
         let limit = expressionConvertibleLimit.asExpression()
         withExtendedLifetime(limit) {
-            WCDBStatementUpdateConfigLimitFrom(cppObj, $0.cppObj)
+            WCDBStatementUpdateConfigLimitCount(cppObj, $0.cppObj)
         }
         return self
     }

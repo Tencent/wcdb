@@ -6,7 +6,7 @@ OPENSSL_CONFIG="no-rc2 no-cast \
   no-rsa no-dsa no-dh no-ec no-ecdsa no-ecdh \
   no-sock no-ssl no-tls no-krb5 \
   no-shared no-comp no-hw no-engine no-zlib no-fips \
-  -ffunction-sections -fdata-sections -Wl,--gc-sections"
+  -ffunction-sections -fdata-sections -fvisibility=hidden -Wl,--gc-sections"
 
 SQLCIPHER_CFLAGS="-DSQLITE_DEFAULT_WORKER_THREADS=2 \
   -DSQLITE_DEFAULT_JOURNAL_SIZE_LIMIT=1048576 \
@@ -199,8 +199,8 @@ for android_arch in $BUILD_ARCHS; do
 
   android_cc="$gcc_prefix-gcc --sysroot=$android_sysroot"
   android_cflags="$android_cflags -g -Wall -funwind-tables -fstack-protector -fomit-frame-pointer -DNDEBUG -DANDROID -D__ANDROID_API__=$android_api"
-  android_path="$ANDROID_NDK_ROOT/toolchains/$android_eabi-4.9/prebuilt/$ndk_host/bin"
-  android_prefix="$(pwd)/android/prebuilt/$android_arch"
+  android_path="$ANDROID_NDK_ROOT/toolchains/$android_eabi-4.9/prebuilt/$ndk_host/bin:$ANDROID_NDK_ROOT/prebuilt/$ndk_host/bin"
+  android_prefix="$(pwd)/prebuilt/android/$android_arch"
   
   if [ "$USE_CLANG" == 1 ]; then
     android_cc="clang -target $clang_target -gcc-toolchain $ANDROID_NDK_ROOT/toolchains/$android_eabi-4.9/prebuilt/$ndk_host --sysroot=$android_sysroot"
@@ -225,8 +225,8 @@ for android_arch in $BUILD_ARCHS; do
     sed -i -e \
       '/^CFLAG=/ s/ \+-O[0-3s] \+/ /2; /^MAKEDEPPROG=/ s/^MAKEDEPPROG=.*$/MAKEDEPPROG=$(CC)/; /^DIRS=/ s/^DIRS=.*$/DIRS= crypto/' \
       Makefile
-    make depend -j2 || exit 1
-    make build_crypto libcrypto.pc libssl.pc openssl.pc -j2 || exit 1
+    make depend -j4 || exit 1
+    make build_crypto libcrypto.pc libssl.pc openssl.pc -j4 || exit 1
     make install_sw || exit 1
     make clean dclean || exit 1
     cd ..

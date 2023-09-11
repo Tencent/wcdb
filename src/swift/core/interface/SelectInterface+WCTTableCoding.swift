@@ -112,7 +112,7 @@ extension SelectInterfaceForObjc where Self: HandleRepresentable {
         orderBy orderList: [OrderBy]? = nil,
         limit: Limit? = nil,
         offset: Offset? = nil) throws -> [Object] {
-        let select = Select(with: try getHandle(), on: propertyConvertibleList, table: table, isDistinct: false)
+        let select = Select(with: try getHandle(writeHint: false), on: propertyConvertibleList, table: table, isDistinct: false)
         if condition != nil {
             select.where(condition!)
         }

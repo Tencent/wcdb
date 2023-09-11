@@ -27,7 +27,9 @@ class RandomData {
         var data = Data(capacity: capacity)
         while data.count < capacity {
             var value = arc4random()
-            data.append(UnsafeBufferPointer(start: &value, count: 1))
+            withUnsafePointer(to: &value) {
+                data.append(UnsafeBufferPointer(start: $0, count: 1))
+            }
         }
         return data
     }()

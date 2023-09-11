@@ -94,7 +94,7 @@ public final class ForeignKey: Identifier<CPPForeignKey> {
     public enum MatchType {
         case Simple
         case Full
-        case Patial
+        case Partial
     }
 
     @discardableResult
@@ -104,8 +104,8 @@ public final class ForeignKey: Identifier<CPPForeignKey> {
             WCDBForeignKeyConfigMatch(cppObj, WCDBSyntaxMatchType_Simple)
         case .Full:
             WCDBForeignKeyConfigMatch(cppObj, WCDBSyntaxMatchType_Full)
-        case .Patial:
-            WCDBForeignKeyConfigMatch(cppObj, WCDBSyntaxMatchType_Patial)
+        case .Partial:
+            WCDBForeignKeyConfigMatch(cppObj, WCDBSyntaxMatchType_Partial)
         }
         return self
     }

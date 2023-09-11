@@ -154,7 +154,7 @@ extension UpdateInterface where Self: HandleRepresentable {
         orderBy orderList: [OrderBy]? = nil,
         limit: Limit? = nil,
         offset: Offset? = nil) throws {
-        let update = Update(with: try getHandle(), on: propertyConvertibleList, andTable: table)
+        let update = Update(with: try getHandle(writeHint: true), on: propertyConvertibleList, andTable: table)
         if condition != nil {
             update.where(condition!)
         }
@@ -243,7 +243,7 @@ extension UpdateInterface where Self: HandleRepresentable {
                        orderBy orderList: [OrderBy]? = nil,
                        limit: Limit? = nil,
                        offset: Offset? = nil) throws {
-        let update = Update(with: try getHandle(), on: propertyConvertibleList, andTable: table)
+        let update = Update(with: try getHandle(writeHint: true), on: propertyConvertibleList, andTable: table)
         if condition != nil {
             update.where(condition!)
         }

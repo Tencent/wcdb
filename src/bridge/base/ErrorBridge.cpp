@@ -28,9 +28,6 @@
 #include "Notifier.hpp"
 #include "ObjectBridge.hpp"
 
-WCDBDefineMultiArgumentSwiftClosureBridgedType(
-WCDBErrorInfoEnumerator, void, const char*, WCDBErrorValueType, long, double, const char*)
-
 long WCDBErrorGetCode(CPPError error)
 {
     WCDBGetObjectOrReturnValue(error, WCDB::Error, cppError, INT_MAX);
@@ -56,45 +53,10 @@ const char* WCDBErrorGetMsg(CPPError obj)
     return cppError->getMessage().data();
 }
 
-void WCDBErrorEnumerateAllInfo(CPPError error, SwiftClosure* _Nonnull callback)
+void WCDBErrorEnumerateAllInfo(CPPError error, void* _Nonnull context, StringViewMapEnumerator callback)
 {
-    WCDBErrorInfoEnumerator enumerator
-    = WCDBCreateSwiftBridgedClosure(WCDBErrorInfoEnumerator, callback);
-    WCTAssert(WCDBGetSwiftClosure(enumerator) != nullptr);
-    if (!WCDBGetSwiftClosure(enumerator)) {
-        return;
-    }
     WCDBGetObjectOrReturn(error, WCDB::Error, cppError);
-    for (const auto& info : cppError->infos) {
-        switch (info.second.getType()) {
-        case WCDB::Value::Type::Text:
-            WCDBSwiftClosureCallWithMultiArgument(enumerator,
-                                                  info.first.data(),
-                                                  WCDBErrorValueTypeString,
-                                                  0,
-                                                  0,
-                                                  info.second.textValue().data());
-            break;
-        case WCDB::Value::Type::Integer:
-            WCDBSwiftClosureCallWithMultiArgument(enumerator,
-                                                  info.first.data(),
-                                                  WCDBErrorValueTypeInterger,
-                                                  info.second.intValue(),
-                                                  0,
-                                                  nullptr);
-            break;
-        case WCDB::Value::Type::Float:
-            WCDBSwiftClosureCallWithMultiArgument(enumerator,
-                                                  info.first.data(),
-                                                  WCDBErrorValueTypeFloat,
-                                                  0,
-                                                  info.second.floatValue(),
-                                                  nullptr);
-            break;
-        default:
-            break;
-        }
-    }
+    WCDBEnumerateStringViewMap(&cppError->infos, context, callback);
 }
 
 void WCDBErrorReport(WCDBErrorLevel level, long code, const char* content, const char* _Nullable path, long tag)

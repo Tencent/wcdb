@@ -27,6 +27,8 @@
 
 WCDB_EXTERN_C_BEGIN
 
+CPPLiteralValue WCDBLiteralValueCreate(CPPCommonValue value);
+
 CPPLiteralValue WCDBLiteralValueCreateWithInt64(long long value);
 CPPLiteralValue WCDBLiteralValueCreateWithUInt64(unsigned long long value);
 CPPLiteralValue WCDBLiteralValueCreateWithDouble(double value);

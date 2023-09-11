@@ -122,7 +122,7 @@ public final class StatementInsert: Identifier<CPPStatementInsert>, Statement {
 
     public func upsert(_ upsert: Upsert) -> StatementInsert {
         withExtendedLifetime(upsert) {
-            WCDBStatementInsertConfigDefaultUpsert(cppObj, $0.cppObj)
+            WCDBStatementInsertConfigUpsert(cppObj, $0.cppObj)
         }
         return self
     }

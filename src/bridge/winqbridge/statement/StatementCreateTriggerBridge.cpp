@@ -52,6 +52,13 @@ void WCDBStatementCreateTriggerConfigSchema(CPPStatementCreateTrigger createTrig
     cppCreateTrigger->schema(*cppSchema);
 }
 
+void WCDBStatementCreateTriggerConfigSchema2(CPPStatementCreateTrigger createTrigger,
+                                             CPPCommonValue schema)
+{
+    WCDBGetObjectOrReturn(createTrigger, WCDB::StatementCreateTrigger, cppCreateTrigger);
+    cppCreateTrigger->schema(WCDBCreateSchemaFromCommonValue(schema));
+}
+
 void WCDBStatementCreateTriggerConfigTemp(CPPStatementCreateTrigger createTrigger)
 {
     WCDBGetObjectOrReturn(createTrigger, WCDB::StatementCreateTrigger, cppCreateTrigger);
@@ -75,7 +82,7 @@ void WCDBStatementCreateTriggerConfigAfter(CPPStatementCreateTrigger createTrigg
     WCDBGetObjectOrReturn(createTrigger, WCDB::StatementCreateTrigger, cppCreateTrigger);
     cppCreateTrigger->after();
 }
-void WCDBStatementCreateTriggerConfigInsteadof(CPPStatementCreateTrigger createTrigger)
+void WCDBStatementCreateTriggerConfigInsteadOf(CPPStatementCreateTrigger createTrigger)
 {
     WCDBGetObjectOrReturn(createTrigger, WCDB::StatementCreateTrigger, cppCreateTrigger);
     cppCreateTrigger->insteadOf();
@@ -105,6 +112,28 @@ void WCDBStatementCreateTriggerConfigColumns(CPPStatementCreateTrigger createTri
 {
     WCDBGetObjectOrReturn(createTrigger, WCDB::StatementCreateTrigger, cppCreateTrigger);
     WCDBGetCPPSyntaxListOrReturn(WCDB::Column, cppColumns, columns, colNum);
+    cppCreateTrigger->syntax().columns = cppColumns;
+}
+
+void WCDBStatementCreateTriggerConfigColumns2(CPPStatementCreateTrigger createTrigger,
+                                              CPPCommonArray columns)
+{
+    WCDBGetObjectOrReturn(createTrigger, WCDB::StatementCreateTrigger, cppCreateTrigger);
+    WCDB::Columns cppColumns;
+    for (int i = 0; i < columns.length; i++) {
+        switch (columns.type) {
+        case WCDBBridgedType_String:
+            cppColumns.emplace_back(WCDB::UnsafeStringView(
+            WCDBGetCommonArrayLiteralValue(const char*, columns, i)));
+            break;
+        case WCDBBridgedType_Column:
+            cppColumns.push_back(WCDBGetCommonArrayObject(WCDB::Column, columns, i));
+            break;
+        default:
+            assert(0);
+            break;
+        }
+    }
     cppCreateTrigger->syntax().columns = cppColumns;
 }
 

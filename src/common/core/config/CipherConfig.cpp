@@ -37,8 +37,17 @@ CipherConfig::~CipherConfig() = default;
 
 bool CipherConfig::invoke(InnerHandle* handle)
 {
-    bool ret = handle->setCipherKey(m_key);
-    if (handle->setCipherKey(m_key) && m_cipherVersion != 0) {
+    bool ret = false;
+    {
+        SharedLockGuard lockGuard(m_lock);
+        if (!m_rawKey.empty()) {
+            ret = handle->setCipherKey(m_rawKey);
+        } else {
+            ret = handle->setCipherKey(m_key);
+        }
+    }
+
+    if (ret && m_cipherVersion != 0) {
         ret = handle->execute(
         StatementPragma().pragma(Pragma::cipherCompatibility()).to(m_cipherVersion));
     }
@@ -48,9 +57,22 @@ bool CipherConfig::invoke(InnerHandle* handle)
     return ret;
 }
 
-UnsafeData CipherConfig::getCipherKey()
+void CipherConfig::trySaveRawKey(InnerHandle* handle)
 {
-    return m_key;
+    {
+        SharedLockGuard lockGuard(m_lock);
+        if (!m_rawKey.empty()) {
+            return;
+        }
+    }
+    LockGuard lockGuard(m_lock);
+    if (!m_rawKey.empty()) {
+        return;
+    }
+    m_rawKey = handle->getRawCipherKey();
+    if (!m_rawKey.empty()) {
+        m_key = Data();
+    }
 }
 
 } //namespace WCDB

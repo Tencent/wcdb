@@ -46,7 +46,7 @@ public abstract class SQLiteOpenHelper {
 
     static {
         // Ensure libwcdb.so is loaded.
-        SQLiteGlobal.loadLib();
+        SQLiteGlobal.initialize();
     }
 
     // When true, getReadableDatabase returns a read-only database if it is just being opened.

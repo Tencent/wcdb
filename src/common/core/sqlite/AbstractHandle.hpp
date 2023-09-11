@@ -29,10 +29,12 @@
 #include "HandleNotification.hpp"
 #include "HandleStatement.hpp"
 #include "StringView.hpp"
+#include "TableAttribute.hpp"
 #include "Tag.hpp"
 #include "WCDBOptional.hpp"
 #include "WINQ.h"
 #include <set>
+#include <tuple>
 #include <vector>
 
 namespace WCDB {
@@ -98,9 +100,11 @@ public:
     virtual void resetAllStatements();
     virtual void finalizeStatements();
     HandleStatement *getOrCreatePreparedStatement(const Statement &statement);
+    HandleStatement *getOrCreatePreparedStatement(const UnsafeStringView &sql);
     virtual void returnAllPreparedStatement();
 
 private:
+    HandleStatement *getOrCreateStatement(const UnsafeStringView &sql);
     std::list<HandleStatement> m_handleStatements;
     StringViewMap<HandleStatement *> m_preparedStatements;
 
@@ -121,6 +125,9 @@ public:
     Optional<std::vector<ColumnMeta>>
     getTableMeta(const Schema &schema, const UnsafeStringView &table);
     Optional<std::set<StringView>> getValues(const Statement &statement, int index);
+    Optional<TableAttribute>
+    getTableAttribute(const Schema &schema, const UnsafeStringView &tableName);
+    bool configAutoIncrement(const UnsafeStringView &tableName);
 
     bool getSchemaInfo(int &memoryUsed, int &tableCount, int &indexCount, int &triggerCount);
 
@@ -201,6 +208,7 @@ private:
 
 #pragma mark - Error
 public:
+    void notifyError(int rc, const char *sql, const char *msg = nullptr);
     // call it as push/pop in stack structure.
     void markErrorAsIgnorable(Error::Code ignorableCode);
     void markErrorAsUnignorable(int count = 1);
@@ -211,8 +219,6 @@ private:
     bool APIExit(int rc);
     bool APIExit(int rc, const UnsafeStringView &sql);
     bool APIExit(int rc, const char *sql);
-
-    void notifyError(int rc, const char *sql);
 
     std::vector<int> m_ignorableCodes;
 
@@ -241,6 +247,7 @@ public:
     size_t getCipherPageSize();
     void *getCipherContext();
     bool setCipherKey(const UnsafeData &data);
+    Data getRawCipherKey(const Schema &schema = Schema::main());
     bool setCipherPageSize(int pageSize);
     StringView getCipherSalt();
     bool setCipherSalt(const UnsafeStringView &salt);

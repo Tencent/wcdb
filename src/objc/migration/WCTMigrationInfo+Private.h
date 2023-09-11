@@ -31,6 +31,7 @@ WCDB_API @interface WCTMigrationBaseInfo() {
 @protected
     NSString* _sourceTable;
     NSString* _sourceDatabase;
+    WCDB::Expression _filterCondition;
 }
 
 - (instancetype)initWithBaseInfo:(const WCDB::MigrationBaseInfo&)info;

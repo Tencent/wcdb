@@ -175,6 +175,20 @@
     TestCaseAssertFalse([self.database canOpen]);
 }
 
+- (void)test_cipher_with_multi_handle
+{
+    NSData* cipher = Random.shared.data;
+    [self.database setCipherKey:cipher];
+    WCTHandle* handle = [self.database getHandle];
+    TestCaseAssertTrue([handle tableExists:@"abc"].succeed());
+    [self.dispatch async:^{
+        WCTHandle* newHandle = [self.database getHandle];
+        TestCaseAssertTrue([newHandle tableExists:@"abc"].succeed());
+    }];
+    sleep(1);
+    [self.dispatch waitUntilDone];
+}
+
 - (void)test_cipher_with_page_size
 {
     NSData* cipher = Random.shared.data;

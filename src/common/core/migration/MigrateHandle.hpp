@@ -41,8 +41,8 @@ public:
 
 #pragma mark - Schema
 protected:
-    bool reAttach(const UnsafeStringView& newPath, const Schema& newSchema);
-    bool attach(const UnsafeStringView& newPath, const Schema& newSchema);
+    bool reAttach(const MigrationBaseInfo* info);
+    bool attach(const MigrationBaseInfo* info);
     bool detach();
 
 private:
@@ -81,9 +81,8 @@ private:
 
 #pragma mark - Info Initializer
 protected:
-    Optional<bool> sourceTableExists(const MigrationUserInfo& userInfo) override final;
-    Optional<std::pair<bool, std::set<StringView>>>
-    getColumnsOfUserInfo(const MigrationUserInfo& userInfo) override final;
+    bool attachSourceDatabase(const MigrationUserInfo& userInfo) override final;
+    InnerHandle* getCurrentHandle() override final;
     const StringView& getDatabasePath() const override final;
 };
 

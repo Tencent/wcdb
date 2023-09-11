@@ -108,11 +108,6 @@ public class Database {
         return WCDBDatabaseIsOpened(database)
     }
 
-    /// Check whether database is blockaded.
-    public var isBlockaded: Bool {
-        return WCDBDatabaseIsBlockaded(database)
-    }
-
     public typealias OnClosed = () throws -> Void
 
     /// Close the database.  
@@ -172,12 +167,17 @@ public class Database {
 
     /// Blockade the database.
     public func blockade() {
-        WCDBDatabaseBlockaded(database)
+        WCDBDatabaseBlockade(database)
     }
 
     /// Unblockade the database.
     public func unblockade() {
-        WCDBDatabaseUnblockaded(database)
+        WCDBDatabaseUnblockade(database)
+    }
+
+    /// Check whether database is blockaded.
+    public var isBlockaded: Bool {
+        return WCDBDatabaseIsBlockaded(database)
     }
 
     /// Purge all unused memory of this database.  
@@ -205,11 +205,11 @@ public class Database {
     /// and the sqlite db handle is lazy initialized and will not be actually generated until the first operation on current handle takes place.
     /// Note that all `Handle` created by the current database in the current thread will share the same sqlite db handle internally,
     /// so it can avoid the deadlock between different sqlite db handles in some extreme cases.
-    ///
+    /// - Parameter writeHint: A hint as to whether the handle will be used to update content in the database. It doesn't need to be precise.
     /// - Returns: A new `Handle`.
     /// - Throws: `Error`
-    public func getHandle() throws -> Handle {
-        let cppHandle = WCDBDatabaseGetHandle(database)
+    public func getHandle(writeHint: Bool = false) throws -> Handle {
+        let cppHandle = WCDBDatabaseGetHandle(database, writeHint)
         let handle = Handle(withCPPHandle: cppHandle, database: self)
         if !WCDBHandleCheckValid(cppHandle) {
             throw getError()
@@ -227,7 +227,10 @@ public class Database {
     /// - Parameter statement: WINQ statement
     /// - Throws: `Error`
     public func exec(_ statement: Statement) throws {
-        return try getHandle().exec(statement)
+        let hint = withExtendedLifetime(statement) {
+            WCDBStatementNeedToWrite($0.rawCPPObj)
+        }
+        return try getHandle(writeHint: hint).exec(statement)
     }
 }
 
@@ -272,6 +275,65 @@ public extension Database {
         WCDBCoreSetDefaultCipherConfig(version.rawValue)
     }
 
+    enum ConfigPriority: Int32 {
+        case highest = -2147483648 // Only For cipher config
+        case high = -100
+        case `default` = 0
+        case low = 100
+    }
+
+    typealias Config = (Handle) throws -> Void
+    /// Set config for this database.
+    ///
+    /// Since WCDB is a multi-handle database, an executing handle will not apply this config immediately.  
+    /// Instead, all handles will run this config before its next operation.
+    ///
+    /// If you want to add cipher config, please use `ConfigPriority.highest`.
+    ///
+    ///     database.setConfig(named: "demo", withInvocation: { (handle: Handle) throws in
+    ///         try handle.exec(StatementPragma().pragma(.secureDelete).to(true))
+    ///     }, withUninvocation: { (handle: Handle) throws in
+    ///         try handle.exec(StatementPragma().pragma(.secureDelete).to(false))
+    ///     }, withPriority: .high)
+    ///
+    /// - Parameters:
+    ///   - name: The Identifier for this config
+    ///   - callback: config
+    ///   - order: The smaller number is called first
+    func setConfig(named name: String,
+                   withInvocation invocation: @escaping Config,
+                   withUninvocation uninvocation: Config? = nil,
+                   withPriority priority: ConfigPriority = ConfigPriority.default) {
+        let invocationBlock: @convention(block) (CPPHandle) -> Bool = {
+            cppHandle in
+            let handle = Handle(withCPPHandle: cppHandle, database: self)
+            var ret = true
+            do {
+                try invocation(handle)
+            } catch {
+                ret = false
+            }
+            return ret
+        }
+        let invocationImp = imp_implementationWithBlock(invocationBlock)
+        var uninvocationImp: IMP?
+        if let uninvocation = uninvocation {
+            let uninvocationBlock: @convention(block) (CPPHandle) -> Bool = {
+                cppHandle in
+                let handle = Handle(withCPPHandle: cppHandle, database: self)
+                var ret = true
+                do {
+                    try uninvocation(handle)
+                } catch {
+                    ret = false
+                }
+                return ret
+            }
+            uninvocationImp = imp_implementationWithBlock(uninvocationBlock)
+        }
+        WCDBDatabaseConfig(database, name, invocationImp, uninvocationImp, priority.rawValue)
+    }
+
     /// Set the default directory for temporary database files.
     /// If not set, an existing directory will be selected as the temporary database files directory in the following order:
     ///     1. TMPDIR environment value;
@@ -289,17 +351,17 @@ public extension Database {
     typealias PerformanceTracer = (Tag, String, UInt64, String, Double) -> Void // Tag, Path, handleIdentifier, SQL, cost
     typealias SQLTracer = (Tag, String, UInt64, String) -> Void // Tag, Path, handleIdentifier, SQL
 
-    /// You can register a tracer to monitor the performance of all SQLs.  
-    /// It returns  
+    /// You can register a tracer to monitor the performance of all SQLs.
+    /// It returns
     /// 1. Every SQL executed by the database.
     /// 2. Time consuming in seconds.
     /// 3. Tag of database.
     /// 4. Path of database.
     /// 5. The id of the handle executing this SQL.
     ///
-    /// Note that:  
-    /// 1. You should register trace before all db operations.   
-    /// 2. Global tracer will be recovered by db tracer.  
+    /// Note that:
+    /// 1. You should register trace before all db operations.
+    /// 2. Global tracer will be recovered by db tracer.
     ///
     ///     Database.globalTrace(ofPerformance: { (tag, path, handleId, sql, cost) in
     ///         print("Tag: \(tag)")
@@ -413,10 +475,10 @@ public extension Database {
             errorReporter(error)
         }
         let imp = imp_implementationWithBlock(callback)
-        WCDBDatabaseTraceError(path, imp)
+        WCDBDatabaseTraceError(database, imp)
     }
     func trace(ofError: Void?) {
-        WCDBDatabaseTraceError(path, nil)
+        WCDBDatabaseTraceError(database, nil)
     }
 
     enum Operation: Int {
@@ -425,7 +487,18 @@ public extension Database {
         case OpenHandle = 2
     }
 
-    typealias OperationTracer = (Database, Database.Operation) -> Void
+    /// The following are the keys in the infos from the callback of database operation monitoring.
+    static let OperationInfoKeyHandleCount = String(cString: WCDBDatabaseOperationTracerInfoKeyHandleCount)
+    static let OperationInfoKeyHandleOpenTime = String(cString: WCDBDatabaseOperationTracerInfoKeyHandleOpenTime)
+    static let OperationInfoKeySchemaUsage = String(cString: WCDBDatabaseOperationTracerInfoKeySchemaUsage)
+    static let OperationInfoKeyTableCount = String(cString: WCDBDatabaseOperationTracerInfoKeyTableCount)
+    static let OperationInfoKeyIndexCount = String(cString: WCDBDatabaseOperationTracerInfoKeyIndexCount)
+    static let OperationInfoKeyTriggerCount = String(cString: WCDBDatabaseOperationTracerInfoKeyTriggerCount)
+
+    typealias OperationTracer = (Database, /* database */
+                                 Database.Operation, /* type of operation*/
+                                 [String: Value]/* infos about current operation */
+    ) -> Void
 
     /// You can register a tracer to these database events:
     /// 1. creating a database object for the first time;
@@ -434,76 +507,44 @@ public extension Database {
     ///
     /// - Parameter trace: trace. Nil to disable error trace.
     static func globalTrace(ofDatabaseOperation trace: @escaping OperationTracer) {
-        let callback: @convention(block) (CPPDatabase, Int) -> Void = {
-            (cppDatabase, operation) in
+        let tracerWrap = ValueWrap(trace)
+        let tracerWrapPointer = ObjectBridge.getUntypeSwiftObject(tracerWrap)
+        let callback: @convention(c) (UnsafeMutableRawPointer?, CPPDatabase, Int, UnsafeRawPointer) -> Void = {
+            ctx, cppDatabase, type, info in
+            let tracerWrap: ValueWrap<OperationTracer>? = ObjectBridge.extractTypedSwiftObject(ctx)
+            guard let tracerWrap = tracerWrap else {
+                return
+            }
             let database = Database(with: cppDatabase)
-            trace(database, Operation(rawValue: operation) ?? .Create)
+            let operation = Operation(rawValue: type) ?? .Create
+            let wrapInfo: ValueWrap<[String: Value]> = ValueWrap([:])
+            let wrapInfoPointer = ObjectBridge.getUntypeSwiftObject(wrapInfo)
+            let enumerator: @convention(c) (UnsafeMutableRawPointer, UnsafePointer<CChar>, CPPCommonValue) -> Void = {
+                valueWrapPointer, key, value in
+                let valueWrap: ValueWrap<[String: Value]>? = ObjectBridge.extractTypedSwiftObject(valueWrapPointer)
+                guard let valueWrap = valueWrap else {
+                    return
+                }
+                switch value.type {
+                case WCDBBridgedType_Int:
+                    valueWrap.value[String(cString: key)] = Value(value.intValue)
+                case WCDBBridgedType_Double:
+                    valueWrap.value[String(cString: key)] = Value(value.doubleValue)
+                case WCDBBridgedType_String:
+                    valueWrap.value[String(cString: key)] = Value(String(cString: unsafeBitCast(value.intValue, to: UnsafePointer<CChar>.self)))
+                default:
+                    return
+                }
+            }
+            WCDBEnumerateStringViewMap(info, wrapInfoPointer, enumerator)
+            tracerWrap.value(database, operation, wrapInfo.value)
+            ObjectBridge.releaseSwiftObject(wrapInfoPointer)
         }
-        let imp = imp_implementationWithBlock(callback)
-        WCDBDatabaseGlobalTraceOperation(imp)
+        WCDBDatabaseGlobalTraceOperation(callback, tracerWrapPointer, ObjectBridge.objectDestructor)
     }
 
     static func globalTrace(ofDatabaseOperation trace: Void?) {
-        WCDBDatabaseGlobalTraceOperation(nil)
-    }
-
-    enum ConfigPriority: Int32 {
-        case highest = -2147483648 // Only For cipher config
-        case high = -100
-        case `default` = 0
-        case low = 100
-    }
-
-    typealias Config = (Handle) throws -> Void
-    /// Set config for this database.
-    ///
-    /// Since WCDB is a multi-handle database, an executing handle will not apply this config immediately.  
-    /// Instead, all handles will run this config before its next operation.
-    ///
-    /// If you want to add cipher config, please use `ConfigPriority.highest`.
-    ///
-    ///     database.setConfig(named: "demo", withInvocation: { (handle: Handle) throws in
-    ///         try handle.exec(StatementPragma().pragma(.secureDelete).to(true))
-    ///     }, withUninvocation: { (handle: Handle) throws in
-    ///         try handle.exec(StatementPragma().pragma(.secureDelete).to(false))
-    ///     }, withPriority: .high)
-    ///
-    /// - Parameters:
-    ///   - name: The Identifier for this config
-    ///   - callback: config
-    ///   - order: The smaller number is called first
-    func setConfig(named name: String,
-                   withInvocation invocation: @escaping Config,
-                   withUninvocation uninvocation: Config? = nil,
-                   withPriority priority: ConfigPriority = ConfigPriority.default) {
-        let invocationBlock: @convention(block) (CPPHandle) -> Bool = {
-            cppHandle in
-            let handle = Handle(withCPPHandle: cppHandle, database: self)
-            var ret = true
-            do {
-                try invocation(handle)
-            } catch {
-                ret = false
-            }
-            return ret
-        }
-        let invocationImp = imp_implementationWithBlock(invocationBlock)
-        var uninvocationImp: IMP?
-        if let uninvocation = uninvocation {
-            let uninvocationBlock: @convention(block) (CPPHandle) -> Bool = {
-                cppHandle in
-                let handle = Handle(withCPPHandle: cppHandle, database: self)
-                var ret = true
-                do {
-                    try uninvocation(handle)
-                } catch {
-                    ret = false
-                }
-                return ret
-            }
-            uninvocationImp = imp_implementationWithBlock(uninvocationBlock)
-        }
-        WCDBDatabaseConfig(database, name, invocationImp, uninvocationImp, priority.rawValue)
+        WCDBDatabaseGlobalTraceOperation(nil, nil, nil)
     }
 }
 
@@ -691,16 +732,15 @@ public extension Database {
 // Migration
 public extension Database {
     struct MigrationInfo {
-        public var database: String = ""        // Target database of migration
         public var table: String = ""           // Target table of migration
-        public var sourceDatabase: String?      // Source datatase of migration
         public var sourceTable: String?         // Source table of migration
+        public var filterCondition: Expression? // Filter condition of source table
     }
 
     /**
-     Triggered at any time when WCDB needs to know whether a table in the current database needs to migrate data, mainly including creating a new table, reading and writing a table, and starting to migrate a new table. If the current table does not need to migrate data, you need to set the sourceTable and sourceDatabase in `MigrationInfo` to nil.
+     Triggered at any time when WCDB needs to know whether a table in the current database needs to migrate data, mainly including creating a new table, reading and writing a table, and starting to migrate a new table. If the current table does not need to migrate data, you need to set the sourceTable in `MigrationInfo` to nil.
      */
-    typealias MigrationFilter = (_ info: inout MigrationInfo) -> Void
+    typealias TableFilter = (_ info: inout MigrationInfo) -> Void
 
     /// Configure which tables in the current database need to migrate data, and the source table they need to migrate data from.
     ///
@@ -714,34 +754,39 @@ public extension Database {
     /// If the source table is not in the current database, the database containing the source table will be attached to the current database before the migration is complete.
     /// After migration, source tables will be dropped.
     ///
-    /// - Parameter filter: see `MigrationFilter`.
-    func filterMigration(_ filter: MigrationFilter?) {
+    /// - Parameter sourcePath: path of source database.
+    /// - Parameter sourceCipher: cipher of source database. It is optional.
+    /// - Parameter filter: see `TableFilter`.
+    func addMigration(sourcePath: String?, sourceCipher: Data? = nil, _ filter: TableFilter?) {
         if let filter = filter {
-            let internalFilter: @convention(block) (UnsafePointer<CChar>, UnsafePointer<CChar>, UnsafeMutablePointer<UnsafeMutablePointer<CChar>>, UnsafeMutablePointer<UnsafeMutablePointer<CChar>>) -> Void = {
-                targetDatabase, targetTable, pSouceDatabase, pSourceTable in
-                var info = MigrationInfo(database: String(cString: targetDatabase), table: String(cString: targetTable))
-                filter(&info)
-                if let sourceTable = info.sourceTable {
-                    let length = sourceTable.lengthOfBytes(using: .utf8) + 1
-                    let buffer = malloc(length)
-                    if let buffer = buffer {
-                        memcpy(buffer, sourceTable.cString, length)
-                        pSourceTable.pointee = buffer.assumingMemoryBound(to: Int8.self)
-                    }
-                    if let sourceDatabase = info.sourceDatabase {
-                        let length = sourceDatabase.lengthOfBytes(using: .utf8) + 1
-                        let buffer = malloc(length)
-                        if let buffer = buffer {
-                            memcpy(buffer, sourceDatabase.cString, length)
-                            pSouceDatabase.pointee = buffer.assumingMemoryBound(to: Int8.self)
+            let filterWrap = ValueWrap(filter)
+            let filterPointer = ObjectBridge.getUntypeSwiftObject(filterWrap)
+            let cppFilter: @convention(c) (UnsafeMutableRawPointer?, UnsafePointer<CChar>, UnsafeMutableRawPointer, @convention(c) (UnsafeMutableRawPointer, UnsafePointer<CChar>?, CPPExpression) -> Void) -> Void  = {
+                filter, table, cppInfo, setter in
+                let filterWrap: ValueWrap<TableFilter>? = ObjectBridge.extractTypedSwiftObject(filter)
+                if let filterWrap = filterWrap {
+                    var info = MigrationInfo(table: String(cString: table))
+                    filterWrap.value(&info)
+                    if let sourceTable = info.sourceTable {
+                        if let filtercCondition = info.filterCondition {
+                            withExtendedLifetime(filtercCondition) {
+                                setter(cppInfo, sourceTable.cString, $0.cppObj)
+                            }
+                        } else {
+                            setter(cppInfo, sourceTable.cString, CPPExpression())
                         }
                     }
                 }
             }
-            let internalFilterImp = imp_implementationWithBlock(internalFilter)
-            WCDBDatabaseFilterMigration(database, internalFilterImp)
+            if let sourceCipher = sourceCipher {
+                sourceCipher.withUnsafeBytes { (buffer: UnsafeRawBufferPointer) in
+                    WCDBDatabaseAddMigration(database, sourcePath?.cString, buffer.bindMemory(to: UInt8.self).baseAddress, Int32(buffer.count), cppFilter, filterPointer, ObjectBridge.objectDestructor)
+                }
+            } else {
+                WCDBDatabaseAddMigration(database, sourcePath?.cString, nil, 0, cppFilter, filterPointer, ObjectBridge.objectDestructor)
+            }
         } else {
-            WCDBDatabaseFilterMigration(database, nil)
+            WCDBDatabaseAddMigration(database, sourcePath?.cString, nil, 0, nil, nil, nil)
         }
     }
 
@@ -775,17 +820,13 @@ public extension Database {
     /// - Parameter callback: see `MigratedCallback`.
     func setNotification(whenMigrated callback: MigratedCallback?) {
         if let callback = callback {
-            let internalCallBack: @convention(block) (CPPDatabase, UnsafePointer<CChar>?, UnsafePointer<CChar>?, UnsafePointer<CChar>?, UnsafePointer<CChar>?) -> Void = {
-                cppDatabase, databasePath, tableName, sourceDatabasePath, sourceTableName in
+            let internalCallBack: @convention(block) (CPPDatabase, UnsafePointer<CChar>?, UnsafePointer<CChar>?) -> Void = {
+                cppDatabase, tableName, sourceTableName in
                 let database = Database(with: cppDatabase)
                 var info: MigrationInfo?
-                if let databasePath = databasePath,
-                   let tableName = tableName,
-                   let sourceDatabasePath = sourceDatabasePath,
+                if let tableName = tableName,
                    let sourceTableName = sourceTableName {
-                    info = MigrationInfo(database: String(cString: databasePath),
-                                         table: String(cString: tableName),
-                                         sourceDatabase: String(cString: sourceDatabasePath),
+                    info = MigrationInfo(table: String(cString: tableName),
                                          sourceTable: String(cString: sourceTableName))
                 }
                 callback(database, info)

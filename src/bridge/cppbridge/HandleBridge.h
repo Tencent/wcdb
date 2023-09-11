@@ -39,8 +39,11 @@ bool WCDBHandleCheckValid(CPPHandle handle);
 CPPHandleStatement WCDBHandleGetMainStatement(CPPHandle handle);
 CPPHandleStatement
 WCDBHandleGetOrCreatePreparedStatement(CPPHandle handle, CPPObject* _Nonnull statement);
+CPPHandleStatement
+WCDBHandleGetOrCreatePreparedSQL(CPPHandle handle, const char* _Nonnull sql);
 void WCDBHandleFinalizeStatements(CPPHandle handle);
 bool WCDBHandleExecute(CPPHandle handle, CPPObject* _Nonnull statement);
+bool WCDBHandleExecuteSQL(CPPHandle handle, const char* _Nonnull sql);
 OptionalBool WCDBHandleExistTable(CPPHandle handle, const char* _Nonnull tableName);
 int WCDBHandleGetChange(CPPHandle handle);
 int WCDBHandleGetTotalChange(CPPHandle handle);
@@ -52,7 +55,15 @@ bool WCDBHandleCommitTransaction(CPPHandle handle);
 void WCDBHandleRollbackTransaction(CPPHandle handle);
 
 bool WCDBHandleRunTransaction(CPPHandle handle, SwiftClosure* _Nullable transaction);
+typedef bool (*TransactionCallback)(void* _Nonnull context, CPPHandle handle);
+bool WCDBHandleRunTransaction2(CPPHandle handle,
+                               void* _Nonnull context,
+                               TransactionCallback _Nonnull transaction);
 bool WCDBHandleRunPausableTransaction(CPPHandle handle, SwiftClosure* _Nullable pausableTransaction);
+typedef bool (*PausableTransaction)(void* _Nonnull context, CPPHandle, bool* _Nonnull, bool);
+bool WCDBHandleRunPausableTransaction2(CPPHandle handle,
+                                       void* _Nonnull context,
+                                       PausableTransaction _Nonnull pausableTransaction);
 
 CPPCancellationSignal WCDBCancellationSignalCreate();
 void WCDBCancellationSignalCancel(CPPCancellationSignal signal);

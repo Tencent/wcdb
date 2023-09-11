@@ -51,9 +51,9 @@ class ExpresssionTests: BaseTestCase {
 
         WINQAssertEqual(Expression.cast(1).as(.integer64), "CAST(1 AS INTEGER)")
 
-        WINQAssertEqual(Expression.windowFunction("testWindowFunction").invoke().arguments(1).filter(Filter().where(1)), "testWindowFunction(1) FILTER(WHERE 1)")
-        WINQAssertEqual(Expression.windowFunction("testWindowFunction").invoke().arguments(1, 2).filter(Filter().where(1)).over("testWindow"), "testWindowFunction(1, 2) FILTER(WHERE 1) OVER testWindow")
-        WINQAssertEqual(Expression.windowFunction("testWindowFunction").invoke().arguments(1, 2).filter(Filter().where(1)).over(WindowDef().partition(1, 2)), "testWindowFunction(1, 2) FILTER(WHERE 1) OVER(PARTITION BY 1, 2)")
+        WINQAssertEqual(Expression.windowFunction("testWindowFunction").invoke().arguments(1).filter(1), "testWindowFunction(1) FILTER(WHERE 1)")
+        WINQAssertEqual(Expression.windowFunction("testWindowFunction").invoke().arguments(1, 2).filter(1).over("testWindow"), "testWindowFunction(1, 2) FILTER(WHERE 1) OVER testWindow")
+        WINQAssertEqual(Expression.windowFunction("testWindowFunction").invoke().arguments(1, 2).filter(1).over(WindowDef().partition(1, 2)), "testWindowFunction(1, 2) FILTER(WHERE 1) OVER(PARTITION BY 1, 2)")
     }
 
     func testCaseWhenThen() {

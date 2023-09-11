@@ -44,6 +44,35 @@ void WCDBUpsertConfigIndexdColumn(CPPUpsert upsert,
     cppUpsert->syntax().indexedColumns = cppColumns;
 }
 
+void WCDBUpsertConfigIndexdColumn2(CPPUpsert upsert, CPPCommonArray columns)
+{
+    WCDBGetObjectOrReturn(upsert, WCDB::Upsert, cppUpsert);
+    WCDB::IndexedColumns indexedColumns;
+    for (int i = 0; i < columns.length; i++) {
+        switch (columns.type) {
+        case WCDBBridgedType_String:
+            indexedColumns.emplace_back(
+            WCDB::Column(WCDBGetCommonArrayLiteralValue(const char*, columns, i)));
+            break;
+        case WCDBBridgedType_Column:
+            indexedColumns.emplace_back(WCDBGetCommonArrayObject(WCDB::Column, columns, i));
+            break;
+        case WCDBBridgedType_Expression:
+            indexedColumns.emplace_back(
+            WCDBGetCommonArrayObject(WCDB::Expression, columns, i));
+            break;
+        case WCDBBridgedType_IndexedColumn:
+            indexedColumns.push_back(
+            WCDBGetCommonArrayObject(WCDB::IndexedColumn, columns, i));
+            break;
+        default:
+            assert(0);
+            break;
+        }
+    }
+    cppUpsert->syntax().indexedColumns = indexedColumns;
+}
+
 void WCDBUpsertConfigWhere(CPPUpsert upsert, CPPExpression expression)
 {
     WCDBGetObjectOrReturn(upsert, WCDB::Upsert, cppUpsert);
@@ -70,9 +99,36 @@ void WCDBUpsertConfigSetColumns(CPPUpsert upsert, const CPPColumn* _Nullable col
     cppUpsert->set(cppColumns);
 }
 
+void WCDBUpsertConfigSetColumns2(CPPUpsert upsert, CPPCommonArray columns)
+{
+    WCDBGetObjectOrReturn(upsert, WCDB::Upsert, cppUpsert);
+    WCDB::Columns cppColumns;
+    for (int i = 0; i < columns.length; i++) {
+        switch (columns.type) {
+        case WCDBBridgedType_String:
+            cppColumns.emplace_back(
+            WCDB::Column(WCDBGetCommonArrayLiteralValue(const char*, columns, i)));
+            break;
+        case WCDBBridgedType_Column:
+            cppColumns.emplace_back(WCDBGetCommonArrayObject(WCDB::Column, columns, i));
+            break;
+        default:
+            assert(0);
+            break;
+        }
+    }
+    cppUpsert->set(cppColumns);
+}
+
 void WCDBUpsertConfigToValue(CPPUpsert upsert, CPPExpression expression)
 {
     WCDBGetObjectOrReturn(upsert, WCDB::Upsert, cppUpsert);
     WCDBGetObjectOrReturn(expression, WCDB::Expression, cppExpression);
     cppUpsert->to(*cppExpression);
+}
+
+void WCDBUpsertConfigToValue2(CPPUpsert upsert, CPPCommonValue expression)
+{
+    WCDBGetObjectOrReturn(upsert, WCDB::Upsert, cppUpsert);
+    cppUpsert->to(WCDBCreateExpressionFromCommonValue(expression));
 }

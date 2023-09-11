@@ -35,6 +35,7 @@
 namespace WCDB {
 
 typedef Recyclable<const MigrationInfo*> RecyclableMigrationInfo;
+class InnerHandle;
 
 class MigrationEvent {
 public:
@@ -52,9 +53,11 @@ class Migration final {
 public:
     Migration(MigrationEvent* event);
 
-    typedef std::function<void(MigrationUserInfo&)> Filter;
-    // filter should be called at the very beginning.
-    void filterTable(const Filter& filter);
+    using TableFilter = MigrationDatabaseInfo::TableFilter;
+    // addMigration should be called at the very beginning.
+    void addMigration(const UnsafeStringView& sourcePath,
+                      const UnsafeData& sourceCipher,
+                      const TableFilter& filter);
 
     bool shouldMigrate() const;
 
@@ -70,12 +73,18 @@ protected:
         virtual ~InfoInitializer() = 0;
 
     protected:
-        virtual Optional<bool> sourceTableExists(const MigrationUserInfo& userInfo) = 0;
-        // When succeed, empty column indicates that table does not exist.
-        // succeed, contains integer primary key, columns
-        virtual Optional<std::pair<bool, std::set<StringView>>>
-        getColumnsOfUserInfo(const MigrationUserInfo& userInfo) = 0;
+        virtual bool attachSourceDatabase(const MigrationUserInfo& userInfo) = 0;
+        virtual InnerHandle* getCurrentHandle() = 0;
         virtual const StringView& getDatabasePath() const = 0;
+
+        Optional<bool> checkSourceTableExistsAndHasRowid(const MigrationUserInfo& userInfo);
+        bool getTargetTableInfo(const MigrationUserInfo& userInfo,
+                                bool& exists,
+                                std::set<StringView>& columns,
+                                bool& autoincrement,
+                                StringView& integerPrimaryKey);
+        bool tryUpdateSequence(const MigrationUserInfo& userInfo,
+                               const UnsafeStringView& primaryKey);
     };
 
     bool initInfo(InfoInitializer& initializer, const UnsafeStringView& table);
@@ -114,7 +123,7 @@ private:
 
     mutable SharedLock m_lock;
 
-    Filter m_filter;
+    StringViewMap<std::shared_ptr<MigrationDatabaseInfo>> m_migrationInfo;
 
 #pragma mark - Bind
 public:

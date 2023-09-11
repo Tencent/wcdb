@@ -31,6 +31,8 @@ WCDB_EXTERN_C_BEGIN
 CPPStatementDropTrigger WCDBStatementDropTriggerCreate(void);
 void WCDBStatementDropTriggerConfigSchema(CPPStatementDropTrigger dropTriggerStatement,
                                           CPPSchema schema);
+void WCDBStatementDropTriggerConfigSchema2(CPPStatementDropTrigger dropTriggerStatement,
+                                           CPPCommonValue schema);
 void WCDBStatementDropTriggerConfigTrigger(CPPStatementDropTrigger dropTriggerStatement,
                                            const char* _Nullable name);
 void WCDBStatementDropTriggerConfigIfExists(CPPStatementDropTrigger dropTriggerStatement);

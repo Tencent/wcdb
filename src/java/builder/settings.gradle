@@ -1,0 +1,8 @@
+includeBuild('../annotation') {
+    dependencySubstitution {
+        substitute module('com.tencent.wcdb:annotation') using project(':')
+    }
+}
+
+include ':compiler'
+include ':gradle-plugin'

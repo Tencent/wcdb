@@ -41,6 +41,14 @@ void WCDBStatementDropTriggerConfigSchema(CPPStatementDropTrigger dropTriggerSta
     cppDropTriggerStatement->schema(*cppSchema);
 }
 
+void WCDBStatementDropTriggerConfigSchema2(CPPStatementDropTrigger dropTriggerStatement,
+                                           CPPCommonValue schema)
+{
+    WCDBGetObjectOrReturn(
+    dropTriggerStatement, WCDB::StatementDropTrigger, cppDropTriggerStatement);
+    cppDropTriggerStatement->schema(WCDBCreateSchemaFromCommonValue(schema));
+}
+
 void WCDBStatementDropTriggerConfigTrigger(CPPStatementDropTrigger dropTriggerStatement,
                                            const char* _Nullable name)
 {

@@ -175,8 +175,9 @@ public final class Expression: Identifier<CPPExpression> {
     }
 
     @discardableResult
-    public func filter(_ filter: Filter) -> Expression {
-        withExtendedLifetime(filter) {
+    public func filter(_ expressionConvertible: ExpressionConvertible) -> Expression {
+        let expression = expressionConvertible.asExpression()
+        withExtendedLifetime(expression) {
             WCDBExpressionFilter(cppObj, $0.cppObj)
         }
         return self

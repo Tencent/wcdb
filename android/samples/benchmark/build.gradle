@@ -1,13 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 32
 
     defaultConfig {
         applicationId "com.tencent.wcdb.benchmark"
         minSdkVersion 14
-        targetSdkVersion 28
+        targetSdkVersion 32
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

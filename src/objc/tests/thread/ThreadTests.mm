@@ -382,11 +382,11 @@
         }
         maxHandleCount = MAX(maxHandleCount, ((NSNumber*) info[WCTDatabaseMonitorInfoKeyHandleCount]).intValue);
     }];
-    
+
     TestCaseAssertTrue([self createTable]);
     NSArray* objects = [Random.shared testCaseObjectsWithCount:32000 startingFromIdentifier:0];
     TestCaseAssertTrue([self.table insertObjects:objects]);
-    
+
     for (int i = 0; i < 320; i++) {
         if (i % 8 == 0) {
             [self.dispatch async:^{

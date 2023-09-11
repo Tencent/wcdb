@@ -32,6 +32,8 @@ void WCDBTableConstraintConfigUnique(CPPTableConstraint constraint);
 void WCDBTableConstraintConfigIndexedColumn(CPPTableConstraint constraint,
                                             const CPPIndexedColumn* _Nullable columns,
                                             int colNum);
+void WCDBTableConstraintConfigIndexedColumn2(CPPTableConstraint constraint,
+                                             CPPCommonArray columns);
 void WCDBTableConstraintConfigConfliction(CPPTableConstraint constraint,
                                           enum WCDBSyntaxConflictAction conflict);
 void WCDBTableConstraintConfigCheckCondition(CPPTableConstraint constraint,
@@ -40,5 +42,9 @@ void WCDBTableConstraintConfigForeignKey(CPPTableConstraint constraint,
                                          const CPPColumn* _Nullable columns,
                                          int colNum,
                                          CPPForeignKey foreignKey);
+
+void WCDBTableConstraintConfigForeignKey2(CPPTableConstraint constraint,
+                                          CPPCommonArray columns,
+                                          CPPForeignKey foreignKey);
 
 WCDB_EXTERN_C_END

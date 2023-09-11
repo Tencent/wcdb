@@ -32,6 +32,7 @@ CPPWindowDef WCDBWindowDefCreate(void);
 void WCDBWindowDefConfigPartition(CPPWindowDef def,
                                   const CPPExpression* _Nullable partitions,
                                   int partitionNum);
+void WCDBWindowDefConfigPartition2(CPPWindowDef def, CPPMultiTypeArray partitions);
 void WCDBWindowDefConfigOrder(CPPWindowDef def,
                               const CPPOrderingTerm* _Nullable orderingTerms,
                               int orderingTermNum);

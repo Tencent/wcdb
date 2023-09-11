@@ -25,10 +25,12 @@
 #pragma once
 
 #include "HandleStatement.hpp"
+#include <list>
 
 namespace WCDB {
 
 class MigratingHandle;
+class MigrationInfo;
 
 class MigratingHandleStatement final : public HandleStatement {
     friend class MigratingHandle;
@@ -56,6 +58,7 @@ public:
     void bindInteger(const Integer &value, int index = 1) override final;
     void bindDouble(const Float &value, int index = 1) override final;
     void bindText(const Text &value, int index = 1) override final;
+    void bindText16(const char16_t *value, size_t valueLength, int index = 1) override final;
     void bindBLOB(const BLOB &value, int index = 1) override final;
     void bindNull(int index) override final;
     void bindPointer(void *ptr, int index, const Text &type, void (*destructor)(void *)) override final;
@@ -66,6 +69,8 @@ public:
     using Super::getInteger;
     using Super::getDouble;
     using Super::getText;
+    using Super::getText16;
+    using Super::getText16Length;
     using Super::getBLOB;
 
     using Super::getValue;
@@ -87,25 +92,27 @@ protected:
     bool tryFallbackToUnionedView(Syntax::Schema &schema, StringView &table);
     bool tryFallbackToSourceTable(Syntax::Schema &schema, StringView &table);
     bool m_processing;
-    std::shared_ptr<HandleStatement> m_additionalStatement;
+
+    using StatementType = Syntax::Identifier::Type;
+    StatementType m_currentStatementType;
+    std::list<HandleStatement> m_additionalStatements;
 
 protected:
     MigratingHandleStatement(MigratingHandle *handle);
 
-#pragma mark - Migrate
+#pragma mark - Insert
 protected:
-    // For Insert Statement Only
-    bool isMigratedPrepared();
-    bool prepareMigrate(const Syntax::InsertSTMT &migrated,
-                        const Syntax::InsertSTMT &falledBack);
-    bool stepMigration(const int64_t &rowid);
-    void finalizeMigrate();
-    void resetMigrate();
+    bool stepInsert(const int64_t &rowid);
+    void clearMigrateStatus();
 
 private:
-    std::shared_ptr<HandleStatement> m_migrateStatement;
-    std::shared_ptr<HandleStatement> m_removeMigratedStatement;
-    int m_rowidIndexOfMigratingStatement;
+    const MigrationInfo *m_migratingInfo;
+    Optional<int64_t> m_assignedPrimaryKey;
+    int m_primaryKeyIndex;
+
+#pragma mark - Update/Delete
+protected:
+    bool stepUpdateOrDelete();
 };
 
 } //namespace WCDB

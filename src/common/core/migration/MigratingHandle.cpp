@@ -85,12 +85,8 @@ MigratingHandle::getColumns(const Schema& schema, const UnsafeStringView& table)
     if (info.value() == nullptr) {
         return ret;
     }
-
-    WCDB::StatementPragma statement = StatementPragma()
-                                      .pragma(Pragma::tableInfo())
-                                      .schema(info.value()->getSchemaForSourceDatabase())
-                                      .with(info.value()->getSourceTable());
-    auto sourceColumns = getValues(statement, 1);
+    auto sourceColumns = Super::getColumns(
+    info.value()->getSchemaForSourceDatabase(), info.value()->getSourceTable());
     if (!sourceColumns.succeed()) {
         return NullOpt;
     }
@@ -169,67 +165,49 @@ bool MigratingHandle::checkSourceTable(const UnsafeStringView& table,
     return info.value()->getSourceTable().compare(sourceTable) == 0;
 }
 
-bool MigratingHandle::executeAttach(const StatementAttach& attach)
+bool MigratingHandle::attachDatabase(const MigrationBaseInfo* attachInfo)
 {
-    UnsafeData cipherKey = getCipherKey();
-    if (cipherKey.size() == 0) {
-        return executeStatement(attach);
-    }
-    StatementAttach newAttach = attach;
-    newAttach.key(WCDB::BindParameter(1));
+    const StatementAttach& attach = attachInfo->getStatementForAttachingSchema();
+    const Data& cipher = attachInfo->getSourceCipher();
     HandleStatement handleStatement(this);
-    bool succeed = handleStatement.prepare(newAttach);
+    bool succeed = handleStatement.prepare(attach);
     if (succeed) {
-        handleStatement.bindBLOB(cipherKey);
+        if (!cipher.empty()) {
+            handleStatement.bindBLOB(cipher);
+        }
         succeed = handleStatement.step();
         handleStatement.finalize();
+    }
+    if (succeed && attachInfo->needRawSourceCipher()) {
+        attachInfo->setRawSourceCipher(
+        getRawCipherKey(attachInfo->getSchemaForSourceDatabase()));
     }
     return succeed;
 }
 
 #pragma mark - Info Initializer
-Optional<std::pair<bool, std::set<StringView>>>
-MigratingHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
+bool MigratingHandle::attachSourceDatabase(const MigrationUserInfo& userInfo)
 {
-    auto exists = tableExists(Schema::main(), userInfo.getTable());
-    if (!exists.succeed()) {
-        return NullOpt;
-    }
-
-    bool integerPrimary = false;
-    std::set<StringView> names;
-    if (exists.value()) {
-        auto optionalMetas = getTableMeta(Schema::main(), userInfo.getTable());
-        if (!optionalMetas.succeed()) {
-            return NullOpt;
-        }
-        auto& metas = optionalMetas.value();
-        integerPrimary = ColumnMeta::getIndexOfIntegerPrimary(metas) >= 0;
-        for (const auto& meta : metas) {
-            names.emplace(meta.name);
-        }
-    }
-    return std::make_pair(integerPrimary, names);
-}
-
-Optional<bool> MigratingHandle::sourceTableExists(const MigrationUserInfo& userInfo)
-{
-    Schema schema = userInfo.getSchemaForSourceDatabase();
+    const Schema& schema = userInfo.getSchemaForSourceDatabase();
     if (!schema.syntax().isMain()) {
         auto optionalAttacheds
         = getValues(MigrationInfo::getStatementForSelectingDatabaseList(), 1);
         if (!optionalAttacheds.succeed()) {
-            return NullOpt;
+            return false;
         }
         std::set<StringView>& attacheds = optionalAttacheds.value();
         if (attacheds.find(schema.getDescription()) == attacheds.end()) {
-            if (!executeAttach(userInfo.getStatementForAttachingSchema())
-                || !trySynchronousTransactionAfterAttached()) {
-                return NullOpt;
+            if (!attachDatabase(&userInfo) || !trySynchronousTransactionAfterAttached()) {
+                return false;
             }
         }
     }
-    return tableExists(schema, userInfo.getSourceTable());
+    return true;
+}
+
+InnerHandle* MigratingHandle::getCurrentHandle()
+{
+    return this;
 }
 
 const StringView& MigratingHandle::getDatabasePath() const
@@ -308,7 +286,7 @@ bool MigratingHandle::rebindSchemas(const StringViewMap<const MigrationInfo*>& m
     }
 
     for (const auto& existingSchema : existingSchemas.value()) {
-        if (existingSchema.hasPrefix(MigrationInfo::getSchemaPrefix())) {
+        if (existingSchema.hasPrefix(MigrationDatabaseInfo::getSchemaPrefix())) {
             auto iter = schemas2MigratingInfos.find(existingSchema);
             if (iter != schemas2MigratingInfos.end()) {
                 // it is already attached
@@ -327,7 +305,7 @@ bool MigratingHandle::rebindSchemas(const StringViewMap<const MigrationInfo*>& m
     bool attached = false;
     // attach all needed schemas
     for (const auto& iter : schemas2MigratingInfos) {
-        if (!executeAttach(iter.second->getStatementForAttachingSchema())) {
+        if (!attachDatabase(iter.second)) {
             return false;
         }
         attached = true;

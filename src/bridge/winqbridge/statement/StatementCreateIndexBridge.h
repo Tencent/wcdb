@@ -28,18 +28,22 @@
 
 WCDB_EXTERN_C_BEGIN
 
-CPPStatementCreateIndex WCDBStatementCreatIndexCreate(void);
-void WCDBStatementCreatIndexConfigIndexName(CPPStatementCreateIndex creatIndex,
-                                            const char* _Nullable name);
-void WCDBStatementCreatIndexConfigSchema(CPPStatementCreateIndex creatIndex, CPPSchema schema);
-void WCDBStatementCreatIndexConfigUniqe(CPPStatementCreateIndex creatIndex);
-void WCDBStatementCreatIndexConfigIfNotExist(CPPStatementCreateIndex creatIndex);
-void WCDBStatementCreatIndexConfigTable(CPPStatementCreateIndex creatIndex,
-                                        const char* _Nullable name);
-void WCDBStatementCreatIndexConfigIndexColumns(CPPStatementCreateIndex creatIndex,
-                                               const CPPIndexedColumn* _Nullable columns,
-                                               int columnNum);
-void WCDBStatementCreatIndexConfigWhere(CPPStatementCreateIndex creatIndex,
-                                        CPPExpression condition);
+CPPStatementCreateIndex WCDBStatementCreateIndexCreate(void);
+void WCDBStatementCreateIndexConfigIndexName(CPPStatementCreateIndex createIndex,
+                                             const char* _Nullable name);
+void WCDBStatementCreateIndexConfigSchema(CPPStatementCreateIndex createIndex, CPPSchema schema);
+void WCDBStatementCreateIndexConfigSchema2(CPPStatementCreateIndex createIndex,
+                                           CPPCommonValue schema);
+void WCDBStatementCreateIndexConfigUniqe(CPPStatementCreateIndex createIndex);
+void WCDBStatementCreateIndexConfigIfNotExist(CPPStatementCreateIndex createIndex);
+void WCDBStatementCreateIndexConfigTable(CPPStatementCreateIndex createIndex,
+                                         const char* _Nullable name);
+void WCDBStatementCreateIndexConfigIndexColumns(CPPStatementCreateIndex createIndex,
+                                                const CPPIndexedColumn* _Nullable columns,
+                                                int columnNum);
+void WCDBStatementCreateIndexConfigIndexColumns2(CPPStatementCreateIndex createIndex,
+                                                 CPPCommonArray columns);
+void WCDBStatementCreateIndexConfigWhere(CPPStatementCreateIndex createIndex,
+                                         CPPExpression condition);
 
 WCDB_EXTERN_C_END

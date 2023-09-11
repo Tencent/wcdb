@@ -23,62 +23,100 @@
  */
 
 #include "StatementCreateIndexBridge.h"
+#include "Column.hpp"
 #include "Expression.hpp"
 #include "IndexedColumn.hpp"
 #include "Schema.hpp"
 #include "StatementCreateIndex.hpp"
 #include "WinqBridge.hpp"
 
-CPPStatementCreateIndex WCDBStatementCreatIndexCreate()
+CPPStatementCreateIndex WCDBStatementCreateIndexCreate()
 {
     return WCDBCreateCPPBridgedObject(CPPStatementCreateIndex, WCDB::StatementCreateIndex);
 }
 
-void WCDBStatementCreatIndexConfigIndexName(CPPStatementCreateIndex creatIndex,
-                                            const char* _Nullable name)
+void WCDBStatementCreateIndexConfigIndexName(CPPStatementCreateIndex createIndex,
+                                             const char* _Nullable name)
 {
-    WCDBGetObjectOrReturn(creatIndex, WCDB::StatementCreateIndex, cppCreateIndex);
+    WCDBGetObjectOrReturn(createIndex, WCDB::StatementCreateIndex, cppCreateIndex);
     cppCreateIndex->createIndex(name);
 }
 
-void WCDBStatementCreatIndexConfigSchema(CPPStatementCreateIndex creatIndex, CPPSchema schema)
+void WCDBStatementCreateIndexConfigSchema(CPPStatementCreateIndex createIndex, CPPSchema schema)
 {
-    WCDBGetObjectOrReturn(creatIndex, WCDB::StatementCreateIndex, cppCreateIndex);
+    WCDBGetObjectOrReturn(createIndex, WCDB::StatementCreateIndex, cppCreateIndex);
     WCDBGetObjectOrReturn(schema, WCDB::Schema, cppSchema);
     cppCreateIndex->schema(*cppSchema);
 }
 
-void WCDBStatementCreatIndexConfigUniqe(CPPStatementCreateIndex creatIndex)
+void WCDBStatementCreateIndexConfigSchema2(CPPStatementCreateIndex createIndex,
+                                           CPPCommonValue schema)
 {
-    WCDBGetObjectOrReturn(creatIndex, WCDB::StatementCreateIndex, cppCreateIndex);
+    WCDBGetObjectOrReturn(createIndex, WCDB::StatementCreateIndex, cppCreateIndex);
+    cppCreateIndex->schema(WCDBCreateSchemaFromCommonValue(schema));
+}
+
+void WCDBStatementCreateIndexConfigUniqe(CPPStatementCreateIndex createIndex)
+{
+    WCDBGetObjectOrReturn(createIndex, WCDB::StatementCreateIndex, cppCreateIndex);
     cppCreateIndex->unique();
 }
 
-void WCDBStatementCreatIndexConfigIfNotExist(CPPStatementCreateIndex creatIndex)
+void WCDBStatementCreateIndexConfigIfNotExist(CPPStatementCreateIndex createIndex)
 {
-    WCDBGetObjectOrReturn(creatIndex, WCDB::StatementCreateIndex, cppCreateIndex);
+    WCDBGetObjectOrReturn(createIndex, WCDB::StatementCreateIndex, cppCreateIndex);
     cppCreateIndex->ifNotExists();
 }
 
-void WCDBStatementCreatIndexConfigTable(CPPStatementCreateIndex creatIndex,
-                                        const char* _Nullable name)
+void WCDBStatementCreateIndexConfigTable(CPPStatementCreateIndex createIndex,
+                                         const char* _Nullable name)
 {
-    WCDBGetObjectOrReturn(creatIndex, WCDB::StatementCreateIndex, cppCreateIndex);
+    WCDBGetObjectOrReturn(createIndex, WCDB::StatementCreateIndex, cppCreateIndex);
     cppCreateIndex->table(name);
 }
 
-void WCDBStatementCreatIndexConfigIndexColumns(CPPStatementCreateIndex creatIndex,
-                                               const CPPIndexedColumn* _Nullable columns,
-                                               int columnNum)
+void WCDBStatementCreateIndexConfigIndexColumns(CPPStatementCreateIndex createIndex,
+                                                const CPPIndexedColumn* _Nullable columns,
+                                                int columnNum)
 {
-    WCDBGetObjectOrReturn(creatIndex, WCDB::StatementCreateIndex, cppCreateIndex);
+    WCDBGetObjectOrReturn(createIndex, WCDB::StatementCreateIndex, cppCreateIndex);
     WCDBGetCPPSyntaxListOrReturn(WCDB::IndexedColumn, cppColumns, columns, columnNum);
     cppCreateIndex->syntax().indexedColumns = cppColumns;
 }
 
-void WCDBStatementCreatIndexConfigWhere(CPPStatementCreateIndex creatIndex, CPPExpression condition)
+void WCDBStatementCreateIndexConfigIndexColumns2(CPPStatementCreateIndex createIndex,
+                                                 CPPCommonArray columns)
 {
-    WCDBGetObjectOrReturn(creatIndex, WCDB::StatementCreateIndex, cppCreateIndex);
+    WCDBGetObjectOrReturn(createIndex, WCDB::StatementCreateIndex, cppCreateIndex);
+    WCDB::IndexedColumns indexedColumns;
+    for (int i = 0; i < columns.length; i++) {
+        switch (columns.type) {
+        case WCDBBridgedType_String:
+            indexedColumns.emplace_back(
+            WCDB::Column(WCDBGetCommonArrayLiteralValue(const char*, columns, i)));
+            break;
+        case WCDBBridgedType_Column:
+            indexedColumns.emplace_back(WCDBGetCommonArrayObject(WCDB::Column, columns, i));
+            break;
+        case WCDBBridgedType_Expression:
+            indexedColumns.emplace_back(
+            WCDBGetCommonArrayObject(WCDB::Expression, columns, i));
+            break;
+        case WCDBBridgedType_IndexedColumn:
+            indexedColumns.push_back(
+            WCDBGetCommonArrayObject(WCDB::IndexedColumn, columns, i));
+            break;
+        default:
+            assert(0);
+            break;
+        }
+    }
+    cppCreateIndex->syntax().indexedColumns = indexedColumns;
+}
+
+void WCDBStatementCreateIndexConfigWhere(CPPStatementCreateIndex createIndex, CPPExpression condition)
+{
+    WCDBGetObjectOrReturn(createIndex, WCDB::StatementCreateIndex, cppCreateIndex);
     WCDBGetObjectOrReturn(condition, WCDB::Expression, cppCondition);
     cppCreateIndex->where(*cppCondition);
 }

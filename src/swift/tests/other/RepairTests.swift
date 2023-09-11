@@ -42,7 +42,7 @@ class RepairTests: DatabaseTestCase {
         XCTAssertNoThrow(try database.insert(preInsertedObjects, intoTable: TestObject.name))
         XCTAssertNoThrow(try operation())
         XCTAssertNoThrow(try database.removeFiles())
-        database.setCipher(key: RandomData(withSeed: 0).data(withLength: 32))
+        database.setCipher(key: Random.data(withLength: 32))
         XCTAssertNoThrow(try database.create(table: TestObject.name, of: TestObject.self))
         XCTAssertNoThrow(try database.insert(preInsertedObjects, intoTable: TestObject.name))
         XCTAssertNoThrow(try operation())
