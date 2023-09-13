@@ -25,6 +25,7 @@
 #pragma once
 
 #include "Cipher.hpp"
+#include "IncrementalMaterial.hpp"
 #include "MasterCrawler.hpp"
 #include "Material.hpp"
 #include "SequenceCrawler.hpp"
@@ -34,15 +35,13 @@ namespace WCDB {
 
 namespace Repair {
 
-class BackupBaseDelegate : public CipherDelegate {
+class BackupBaseDelegate {
 public:
     virtual ~BackupBaseDelegate() = 0;
-
     virtual void setBackupPath(const UnsafeStringView &path) = 0;
     virtual const StringView &getBackupPath() const = 0;
 
     virtual const Error &getBackupError() const = 0;
-
     virtual void finishBackup() = 0;
 };
 
@@ -98,14 +97,26 @@ protected:
 
 #pragma mark - Backup
 public:
-    bool work();
+    bool work(SharedIncrementalMaterial material);
 
     const Material &getMaterial() const;
+    SharedIncrementalMaterial getIncrementalMaterial();
 
 protected:
+    Optional<bool> tryLoadLatestMaterial(SharedIncrementalMaterial incrementalMaterial);
+    bool fullBackup();
+    bool incrementalBackup();
+    bool loadWal();
+    void updateMaterial(bool isIncremental);
+
     Material m_material;
+    SharedIncrementalMaterial m_incrementalMaterial;
     Material::Content &getOrCreateContent(const UnsafeStringView &tableName);
     std::map<uint32_t, uint32_t> m_verifiedPagenos;
+
+    typedef IncrementalMaterial::Pages IncrementalPages;
+    IncrementalPages m_verifyingPagenos;
+    std::set<uint32_t> m_unchangedLeaves;
 
 #pragma mark - Filter
 public:
@@ -118,12 +129,14 @@ protected:
 
 #pragma mark - Crawlable
 protected:
+    bool canCrawlPage(uint32_t pageno) override final;
     void onCellCrawled(const Cell &cell) override final;
     bool willCrawlPage(const Page &page, int height) override final;
     void onCrawlerError() override final;
 
 #pragma mark - MasterCrawlerDelegate
 protected:
+    void onMasterPageCrawled(const Page &page) override final;
     void onMasterCellCrawled(const Cell &cell, const MasterItem &master) override final;
     void onMasterCrawlerError() override final;
 
@@ -131,6 +144,7 @@ protected:
 
 #pragma mark - SequenceCrawlerDelegate
 protected:
+    void onSequencePageCrawled(const Page &page) override final;
     void onSequenceCellCrawled(const Cell &cell, const SequenceItem &sequence) override final;
     void onSequenceCrawlerError() override final;
 };

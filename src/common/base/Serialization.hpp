@@ -85,9 +85,12 @@ public:
     void reset(const UnsafeData &data);
 
     const UnsafeData &data() const override final;
+    uint32_t version() const;
+    void setDataVersion(uint32_t version);
 
 protected:
     UnsafeData m_data;
+    uint32_t m_dataVersion;
 
     static constexpr const uint32_t slot_2_0 = 0x001fc07f;
     static constexpr const uint32_t slot_4_2_0 = 0xf01fc07f;

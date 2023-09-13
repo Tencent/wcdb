@@ -45,7 +45,7 @@ public:
 
     const int number;
 
-    enum class Type : int {
+    enum Type : char {
         Unknown = 0,
         InteriorIndex = 2,
         InteriorTable = 5,
@@ -53,6 +53,7 @@ public:
         LeafTable = 13,
     };
 
+    static Type convertToPageType(int type);
     Optional<Type> acquireType();
     Type getType() const;
 

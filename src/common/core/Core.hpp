@@ -112,6 +112,10 @@ private:
 public:
     void enableAutoBackup(InnerDatabase* database, bool enable);
 
+    void tryRegisterIncrementalMaterial(const UnsafeStringView& path,
+                                        SharedIncrementalMaterial material);
+    SharedIncrementalMaterial tryGetIncrementalMaterial(const UnsafeStringView& path);
+
 protected:
     std::shared_ptr<Config> m_autoBackupConfig;
 

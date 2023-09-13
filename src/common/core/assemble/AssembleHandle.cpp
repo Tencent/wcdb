@@ -28,7 +28,7 @@
 namespace WCDB {
 
 AssembleHandle::AssembleHandle()
-: InnerHandle()
+: BackupRelatedHandle()
 , Repair::AssembleDelegate()
 , m_statementForDisableJounral(StatementPragma().pragma(Pragma::journalMode()).to("OFF"))
 , m_statementForEnableMMap(StatementPragma().pragma(Pragma::mmapSize()).to(2147418112))
@@ -43,9 +43,6 @@ AssembleHandle::AssembleHandle()
                                .insertIntoTable("sqlite_sequence")
                                .columns({ Column("name"), Column("seq") })
                                .values(BindParameter::bindParameters(2)))
-, m_statementForReadTransaction(StatementBegin().beginDeferred())
-, m_statementForAcquireReadLock(
-  StatementSelect().select(1).from(Syntax::masterTable).limit(0))
 {
 }
 
@@ -263,98 +260,6 @@ bool AssembleHandle::markSequenceAsAssembling()
 bool AssembleHandle::markSequenceAsAssembled()
 {
     return executeStatement(StatementDropTable().dropTable(s_dummySequence).ifExists());
-}
-
-#pragma mark - Backup
-void AssembleHandle::setBackupPath(const UnsafeStringView &path)
-{
-    InnerHandle::setPath(path);
-}
-
-const StringView &AssembleHandle::getBackupPath() const
-{
-    return InnerHandle::getPath();
-}
-
-const Error &AssembleHandle::getBackupError() const
-{
-    return InnerHandle::getError();
-}
-
-void AssembleHandle::finishBackup()
-{
-    InnerHandle::close();
-}
-
-bool AssembleHandle::acquireBackupSharedLock()
-{
-    return open() && execute(m_statementForReadTransaction)
-           && execute(m_statementForAcquireReadLock);
-}
-
-bool AssembleHandle::releaseBackupSharedLock()
-{
-    rollbackTransaction();
-    return true;
-}
-
-bool AssembleHandle::acquireBackupExclusiveLock()
-{
-    return open() && beginTransaction();
-}
-
-bool AssembleHandle::releaseBackupExclusiveLock()
-{
-    rollbackTransaction();
-    return true;
-}
-
-const Error &AssembleHandle::getCipherError() const
-{
-    return InnerHandle::getError();
-}
-
-bool AssembleHandle::openCipherInMemory(bool onlyUsedCipherKey)
-{
-    InnerHandle::setPath(":memory:");
-    if (onlyUsedCipherKey) {
-        return InnerHandle::openPureCipherDB();
-    } else {
-        return InnerHandle::open();
-    }
-}
-
-bool AssembleHandle::isCipherDB() const
-{
-    return InnerHandle::isCipherDB();
-}
-
-void AssembleHandle::closeCipher()
-{
-    InnerHandle::close();
-}
-
-void *AssembleHandle::getCipherContext()
-{
-    if (!isOpened()) {
-        return nullptr;
-    }
-    return AbstractHandle::getCipherContext();
-}
-
-size_t AssembleHandle::getCipherPageSize()
-{
-    return AbstractHandle::getCipherPageSize();
-}
-
-StringView AssembleHandle::getCipherSalt()
-{
-    return AbstractHandle::getCipherSalt();
-}
-
-bool AssembleHandle::setCipherSalt(const UnsafeStringView &salt)
-{
-    return AbstractHandle::setCipherSalt(salt);
 }
 
 } // namespace WCDB

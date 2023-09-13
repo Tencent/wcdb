@@ -1,5 +1,5 @@
 //
-// Created by qiuwenchen on 2022/11/28.
+// Created by 陈秋文 on 2023/9/8.
 //
 
 /*
@@ -24,36 +24,35 @@
 
 #pragma once
 
-#include "StringView.hpp"
-#include "WCDBError.hpp"
+#include "Backup.hpp"
+#include "InnerHandle.hpp"
 
 namespace WCDB {
 
 namespace Repair {
 
-class CipherDelegate {
+class BackupRelatedHandle : public InnerHandle,
+                            public BackupSharedDelegate,
+                            public BackupExclusiveDelegate {
 public:
-    virtual ~CipherDelegate() = 0;
-    virtual bool isCipherDB() = 0;
-    virtual const Error &getCipherError() const = 0;
-    virtual bool openCipherInMemory() = 0;
-    virtual void closeCipher() = 0;
-    virtual void *getCipherContext() = 0;
-    virtual size_t getCipherPageSize() = 0;
-    virtual StringView getCipherSalt() = 0;
-    virtual bool setCipherSalt(const UnsafeStringView &salt) = 0;
+    BackupRelatedHandle();
+    ~BackupRelatedHandle() override;
+
+#pragma mark - Backup
+public:
+    void setBackupPath(const UnsafeStringView &path) override final;
+    const StringView &getBackupPath() const override final;
+    const Error &getBackupError() const override final;
+
+    bool acquireBackupSharedLock() override final;
+    bool releaseBackupSharedLock() override final;
+
+    bool acquireBackupExclusiveLock() override final;
+    bool releaseBackupExclusiveLock() override final;
+
+    void finishBackup() override final;
 };
 
-class CipherDelegateHolder {
-public:
-    CipherDelegateHolder();
-    virtual ~CipherDelegateHolder() = 0;
-    void setCipherDelegate(CipherDelegate *delegate);
+} // namespace Repair
 
-protected:
-    CipherDelegate *m_cipherDelegate;
-};
-
-} //namespace Repair
-
-} //namespace WCDB
+} // namespace WCDB

@@ -302,10 +302,36 @@ void Core::enableAutoBackup(InnerDatabase* database, bool enable)
         database->setConfig(
         AutoBackupConfigName, m_autoBackupConfig, WCDB::Configs::Priority::Highest);
         m_operationQueue->registerAsRequiredBackup(database->getPath());
+        database->markNeedLoadIncremetalMaterial();
     } else {
         database->removeConfig(AutoBackupConfigName);
         m_operationQueue->registerAsNoBackupRequired(database->getPath());
     }
+}
+
+void Core::tryRegisterIncrementalMaterial(const UnsafeStringView& path,
+                                          SharedIncrementalMaterial material)
+{
+    if (!m_operationQueue->isAutoBackup(path)) {
+        return;
+    }
+    AutoBackupConfig* backupConfig
+    = dynamic_cast<AutoBackupConfig*>(m_autoBackupConfig.get());
+    WCTAssert(backupConfig != nullptr);
+    if (backupConfig != nullptr) {
+        backupConfig->tryRegisterIncrementalMaterial(path, material);
+    }
+}
+
+SharedIncrementalMaterial Core::tryGetIncrementalMaterial(const UnsafeStringView& path)
+{
+    AutoBackupConfig* backupConfig
+    = dynamic_cast<AutoBackupConfig*>(m_autoBackupConfig.get());
+    WCTAssert(backupConfig != nullptr);
+    if (backupConfig != nullptr) {
+        return backupConfig->tryGetIncrementalMaterial(path);
+    }
+    return nullptr;
 }
 
 #pragma mark - Migration

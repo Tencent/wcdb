@@ -135,11 +135,6 @@ protected:
 
 private:
     TransactionEvent *m_transactionEvent;
-
-#pragma mark - Cipher
-protected:
-    bool openPureCipherDB();
-    bool isCipherDB() const;
 };
 
 class ConfiguredHandle final : public InnerHandle {

@@ -57,20 +57,20 @@ bool Material::serialize(Serialization &serialization) const
 
     //Contents
     Serialization encoder;
-    for (const auto &element : contents) {
-        if (element.first.empty()) {
+    for (const auto &element : contentsList) {
+        if (element->tableName.empty()) {
             markAsEmpty("TableName");
             return false;
         }
-        if (element.second.sql.length() == 0) {
+        if (element->sql.length() == 0) {
             markAsEmpty("SQL");
             return false;
         }
-        if (element.second.verifiedPagenos.size() == 0) {
+        if (element->verifiedPagenos.size() == 0) {
             markAsEmpty("Pageno");
             return false;
         }
-        if (!encoder.putSizedString(element.first) || !element.second.serialize(encoder)) {
+        if (!element->serialize(encoder)) {
             return false;
         }
     }
@@ -81,96 +81,6 @@ bool Material::serializeData(Serialization &serialization, const Data &data)
 {
     uint32_t checksum = data.empty() ? 0 : data.hash();
     return serialization.put4BytesUInt(checksum) && serialization.putSizedData(data);
-}
-
-bool Material::encryptedSerialize(const UnsafeStringView &path,
-                                  const UnsafeStringView &salt) const
-{
-    WCTAssert(path.length() > 0 && salt.size() == saltBytes * 2);
-    Data rawData = serialize();
-    if (rawData.empty()) {
-        return false;
-    }
-
-    WCTAssert(m_cipherDelegate != nullptr);
-    m_cipherDelegate->closeCipher();
-    if (!m_cipherDelegate->openCipherInMemory(true)) {
-        setThreadedError(std::move(m_cipherDelegate->getCipherError()));
-        return false;
-    }
-
-    size_t pageSize = m_cipherDelegate->getCipherPageSize();
-    if (pageSize == 0) {
-        setThreadedError(std::move(m_cipherDelegate->getCipherError()));
-        return false;
-    }
-    WCTAssert((pageSize & (pageSize - 1)) == 0);
-
-    if (!m_cipherDelegate->setCipherSalt(salt)) {
-        setThreadedError(std::move(m_cipherDelegate->getCipherError()));
-        return false;
-    }
-
-    void *pCodec = m_cipherDelegate->getCipherContext();
-    WCTAssert(pCodec != nullptr);
-
-    int reserveBytes = sqlcipher_codec_ctx_get_reservesize(pCodec);
-    WCTAssert(reserveBytes > 0);
-    size_t usableSize = pageSize - reserveBytes;
-    int pageCount = int((rawData.size() + saltBytes - 1) / usableSize) + 1;
-    size_t totalSize = pageCount * pageSize;
-
-    Data encryptData(totalSize);
-    if (encryptData.size() != totalSize) {
-        return false;
-    }
-
-    memset(encryptData.buffer(), 0, encryptData.size());
-    unsigned char *encryptAddr = encryptData.buffer();
-    unsigned char *dataAddr = rawData.buffer();
-
-    for (int pageNo = 1; pageNo <= pageCount; pageNo++) {
-        if (pageNo == 1) {
-            size_t length = usableSize > rawData.size() + saltBytes ?
-                            rawData.size() :
-                            usableSize - saltBytes;
-            memcpy(encryptAddr + saltBytes, dataAddr, length);
-        } else {
-            size_t length = pageNo * usableSize > rawData.size() + saltBytes ?
-                            rawData.size() + saltBytes - (pageNo - 1) * usableSize :
-                            usableSize;
-            memcpy(encryptAddr, dataAddr, length);
-        }
-
-        unsigned char *pData
-        = (unsigned char *) sqlite3Codec(pCodec, encryptAddr, pageNo, 6);
-        WCTAssert(pData != nullptr);
-        if (*pData == 0 && memcmp(pData, pData + 1, pageSize - 1) == 0) {
-            Error error(Error::Code::Error,
-                        Error::Level::Error,
-                        StringView::formatted(
-                        "fail to encrypt data at page %d, total page %d", pageNo, pageCount));
-            Notifier::shared().notify(error);
-            setThreadedError(std::move(error));
-            return false;
-        }
-        memcpy(encryptAddr, pData, pageSize);
-        encryptAddr += pageSize;
-        if (pageNo == 1) {
-            dataAddr += usableSize - saltBytes;
-        } else {
-            dataAddr += usableSize;
-        }
-    }
-    WCTAssert(salt.compare(StringView::hexString(encryptData.subdata(saltBytes))) == 0);
-    FileHandle fileHandle(path);
-    if (!fileHandle.open(FileHandle::Mode::OverWrite)) {
-        return false;
-    }
-    bool succeed = fileHandle.write(encryptData);
-    fileHandle.close();
-    FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
-    return succeed;
 }
 
 void Material::markAsEmpty(const UnsafeStringView &element)
@@ -196,10 +106,11 @@ bool Material::deserialize(Deserialization &deserialization)
         markAsCorrupt("Magic");
         return false;
     }
-    if (versionValue != 0x01000000) {
+    if (versionValue != 0x01000000 && versionValue != version) {
         markAsCorrupt("Version");
         return false;
     }
+    deserialization.setDataVersion(versionValue);
 
     //Info
     if (!info.deserialize(deserialization)) {
@@ -213,19 +124,13 @@ bool Material::deserialize(Deserialization &deserialization)
 
     Deserialization decoder(decompressed.value());
     while (!decoder.ended()) {
-        size_t lengthOfSizedString;
-        StringView tableName;
-        std::tie(lengthOfSizedString, tableName) = decoder.advanceSizedString();
-        if (lengthOfSizedString == 0 || tableName.empty()) {
-            markAsCorrupt("TableName");
-            return false;
-        }
-
         Content content;
         if (!content.deserialize(decoder)) {
             return false;
         }
-        contents[std::move(tableName)] = std::move(content);
+        StringView tableName = content.tableName;
+        contentsMap[tableName] = std::move(content);
+        contentsList.push_back(&contentsMap[tableName]);
     }
     return true;
 }
@@ -256,79 +161,9 @@ Optional<Data> Material::deserializeData(Deserialization &deserialization)
     return data;
 }
 
-bool Material::decryptedDeserialize(const UnsafeStringView &path)
+void Material::decryptFail(const UnsafeStringView &element) const
 {
-    FileHandle fileHandle(path);
-    if (!fileHandle.open(FileHandle::Mode::ReadOnly)) {
-        return false;
-    }
-
-    Data rawData = fileHandle.mapOrReadAllData();
-    if (rawData.empty()) {
-        return false;
-    }
-
-    WCTAssert(m_cipherDelegate != nullptr);
-    m_cipherDelegate->closeCipher();
-    if (!m_cipherDelegate->openCipherInMemory(true)) {
-        setThreadedError(std::move(m_cipherDelegate->getCipherError()));
-        return false;
-    }
-
-    size_t pageSize = m_cipherDelegate->getCipherPageSize();
-    if (pageSize == 0) {
-        setThreadedError(std::move(m_cipherDelegate->getCipherError()));
-        return false;
-    }
-    WCTAssert((pageSize & (pageSize - 1)) == 0);
-    if (rawData.size() % pageSize != 0) {
-        markAsCorrupt("Material");
-        return false;
-    }
-
-    StringView salt = StringView::hexString(rawData.subdata(saltBytes));
-    if (!m_cipherDelegate->setCipherSalt(salt)) {
-        setThreadedError(std::move(m_cipherDelegate->getCipherError()));
-        return false;
-    }
-
-    void *pCodec = m_cipherDelegate->getCipherContext();
-    WCTAssert(pCodec != nullptr);
-
-    int reserveBytes = sqlcipher_codec_ctx_get_reservesize(pCodec);
-    WCTAssert(reserveBytes > 0);
-    int pageCount = int(rawData.size() / pageSize);
-    size_t usableSize = pageSize - reserveBytes;
-    size_t totalSize = pageCount * usableSize - saltBytes;
-
-    Data decryptData(totalSize);
-    if (decryptData.size() != totalSize) {
-        return false;
-    }
-
-    unsigned char *rawAdder = rawData.buffer();
-    unsigned char *dataAdder = decryptData.buffer();
-    for (int pageNo = 1; pageNo <= pageCount; pageNo++) {
-        unsigned char *pData
-        = (unsigned char *) sqlite3Codec(pCodec, rawAdder, pageNo, 4);
-        if (pData == nullptr) {
-            markAsCorrupt(StringView::formatted("Page %d", pageNo));
-            return false;
-        }
-        if (pageNo == 1) {
-            memcpy(dataAdder, pData + saltBytes, usableSize - saltBytes);
-            dataAdder += usableSize - saltBytes;
-        } else {
-            memcpy(dataAdder, pData, usableSize);
-            dataAdder += usableSize;
-        }
-        rawAdder += pageSize;
-    }
-    if (!deserialize(decryptData)) {
-        return false;
-    }
-    info.cipherSalt = salt;
-    return true;
+    markAsCorrupt(element);
 }
 
 void Material::markAsCorrupt(const UnsafeStringView &element)
@@ -340,11 +175,16 @@ void Material::markAsCorrupt(const UnsafeStringView &element)
     setThreadedError(std::move(error));
 }
 
+CipherDelegate *Material::getCipherDelegate() const
+{
+    return m_cipherDelegate;
+}
+
 #pragma mark - Info
 Material::Info::Info()
-: pageSize(0), reservedBytes(0), walSalt({ 0, 0 }), numberOfWalFrames(0)
+: pageSize(0), reservedBytes(0), walSalt({ 0, 0 }), nBackFill(0), seqTableRootPage(UnknownPageNo)
 {
-    static_assert(size == 20, "");
+    static_assert(size == 24, "");
 }
 
 Material::Info::~Info() = default;
@@ -359,14 +199,15 @@ bool Material::Info::serialize(Serialization &serialization) const
     serialization.put4BytesUInt(reservedBytes);
     serialization.put4BytesUInt(walSalt.first);
     serialization.put4BytesUInt(walSalt.second);
-    serialization.put4BytesUInt(numberOfWalFrames);
+    serialization.put4BytesUInt(nBackFill);
+    serialization.put4BytesUInt(seqTableRootPage);
     return true;
 }
 
 #pragma mark - Deserialization
 bool Material::Info::deserialize(Deserialization &deserialization)
 {
-    if (!deserialization.canAdvance(Info::size)) {
+    if (!deserialization.canAdvance(Info::size - sizeof(uint32_t))) {
         markAsCorrupt("Info");
         return false;
     }
@@ -374,12 +215,21 @@ bool Material::Info::deserialize(Deserialization &deserialization)
     reservedBytes = deserialization.advance4BytesUInt();
     walSalt.first = deserialization.advance4BytesUInt();
     walSalt.second = deserialization.advance4BytesUInt();
-    numberOfWalFrames = deserialization.advance4BytesUInt();
+    nBackFill = deserialization.advance4BytesUInt();
+    if (deserialization.version() >= 0x01000001) {
+        if (!deserialization.canAdvance(sizeof(uint32_t))) {
+            markAsCorrupt("SeqTableRootPage");
+            return false;
+        }
+        seqTableRootPage = deserialization.advance4BytesUInt();
+        WCTAssert(seqTableRootPage != UnknownPageNo);
+    }
     return true;
 }
 
 #pragma mark - Content
-Material::Content::Content() : sequence(0)
+Material::Content::Content()
+: rootPage(UnknownPageNo), sequence(0), checked(false)
 {
 }
 
@@ -388,7 +238,8 @@ Material::Content::~Content() = default;
 #pragma mark - Serialization
 bool Material::Content::serialize(Serialization &serialization) const
 {
-    if (!serialization.putVarint(sequence) || !serialization.putSizedString(sql)) {
+    if (!serialization.putSizedString(tableName) || !serialization.putVarint(rootPage)
+        || !serialization.putVarint(sequence) || !serialization.putSizedString(sql)) {
         return false;
     }
 
@@ -416,6 +267,27 @@ bool Material::Content::serialize(Serialization &serialization) const
 #pragma mark - Deserialization
 bool Material::Content::deserialize(Deserialization &deserialization)
 {
+    size_t lengthOfSizedString;
+    StringView table;
+    std::tie(lengthOfSizedString, table) = deserialization.advanceSizedString();
+    if (lengthOfSizedString == 0 || table.empty()) {
+        markAsCorrupt("TableName");
+        return false;
+    }
+    tableName = table;
+
+    if (deserialization.version() >= 0x01000001) {
+        size_t lengthOfPageNo;
+        uint64_t pageNo;
+        std::tie(lengthOfPageNo, pageNo) = deserialization.advanceVarint();
+        if (lengthOfPageNo == 0) {
+            markAsCorrupt("rootPage");
+            return false;
+        }
+        rootPage = (uint32_t) pageNo;
+        WCTAssert(rootPage != UnknownPageNo);
+    }
+
     size_t lengthOfVarint;
     uint64_t varint;
     std::tie(lengthOfVarint, varint) = deserialization.advanceVarint();
@@ -425,7 +297,6 @@ bool Material::Content::deserialize(Deserialization &deserialization)
     }
     sequence = (int64_t) varint;
 
-    size_t lengthOfSizedString;
     std::tie(lengthOfSizedString, sql) = deserialization.advanceSizedString();
     if (lengthOfSizedString == 0 || sql.empty()) {
         markAsCorrupt("SQL");

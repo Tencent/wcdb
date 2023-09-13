@@ -26,6 +26,7 @@
 
 #include "Backup.hpp"
 #include "FactoryRelated.hpp"
+#include "IncrementalMaterial.hpp"
 
 namespace WCDB {
 
@@ -38,12 +39,20 @@ class FactoryBackup final : public FactoryRelated,
 public:
     using FactoryRelated::FactoryRelated;
     ~FactoryBackup() override final;
-    bool work(const UnsafeStringView& database);
+    bool work(const UnsafeStringView& database, bool interruptible = false);
 
+protected:
+    bool doBackUp(const UnsafeStringView& database, bool interruptible);
+    Optional<size_t> saveIncrementalMaterial(const UnsafeStringView& database,
+                                             SharedIncrementalMaterial material);
+    Optional<size_t>
+    saveMaterial(const UnsafeStringView& database, const Material& material);
     void notifiyBackupBegin(const UnsafeStringView& database);
     void notifiyBackupEnd(const UnsafeStringView& database,
-                          const UnsafeStringView& materialPath,
-                          Backup& backup);
+                          size_t materialSize,
+                          size_t incrementalMaterialSize,
+                          const Material& material,
+                          SharedIncrementalMaterial incrementalMaterial);
 };
 
 } //namespace Repair

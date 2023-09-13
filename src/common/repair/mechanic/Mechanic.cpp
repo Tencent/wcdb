@@ -62,18 +62,19 @@ bool Mechanic::work()
     }
 
     m_pager.setWalImportance(false);
-    m_pager.setMaxWalFrame(m_material->info.numberOfWalFrames);
+    m_pager.setNBackFill(m_material->info.nBackFill);
+    m_pager.setWalSalt(m_material->info.walSalt);
     m_pager.setPageSize(m_material->info.pageSize);
     m_pager.setReservedBytes(m_material->info.reservedBytes);
 
-    if (!m_material->info.cipherSalt.empty()) {
+    if (!m_material->getCipherSalt().empty()) {
         WCTAssert(m_cipherDelegate != nullptr);
         m_cipherDelegate->closeCipher();
         if (!m_cipherDelegate->openCipherInMemory()) {
             setCriticalError(m_cipherDelegate->getCipherError());
             return exit(false);
         }
-        m_cipherDelegate->setCipherSalt(m_material->info.cipherSalt);
+        m_cipherDelegate->setCipherSalt(m_material->getCipherSalt());
         m_pager.setCipherContext(m_cipherDelegate->getCipherContext());
     }
 
@@ -88,24 +89,10 @@ bool Mechanic::work()
         }
     }
 
-    if (m_pager.getNumberOfWalFrames() > 0) {
-        if (m_pager.getWalSalt() != m_material->info.walSalt) {
-            m_pager.disposeWal();
-            Error error(Error::Code::Notice, Error::Level::Notice, "Dispose WAL of non-match salt.");
-            error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
-            error.infos.insert_or_assign(ErrorStringKeyAssociatePath, m_pager.getPath());
-            error.infos.insert_or_assign("WalSalt1", m_pager.getWalSalt().first);
-            error.infos.insert_or_assign("WalSalt2", m_pager.getWalSalt().second);
-            error.infos.insert_or_assign("MaterialSalt1",
-                                         m_material->info.walSalt.first);
-            error.infos.insert_or_assign("MaterialSalt2",
-                                         m_material->info.walSalt.second);
-            Notifier::shared().notify(error);
-        }
-    }
+    m_pager.disposeWal();
 
     int numberOfPages = 0;
-    for (const auto &element : m_material->contents) {
+    for (const auto &element : m_material->contentsMap) {
         numberOfPages += element.second.verifiedPagenos.size();
     }
     if (numberOfPages == 0) {
@@ -114,7 +101,7 @@ bool Mechanic::work()
     setPageWeight(Fraction(1, numberOfPages + m_pager.getDisposedWalPages()));
 
     if (markAsAssembling()) {
-        for (const auto &contentElement : m_material->contents) {
+        for (const auto &contentElement : m_material->contentsMap) {
             if (isErrorCritial()) {
                 break;
             }

@@ -61,15 +61,7 @@ Optional<Page::Type> Page::acquireType()
         m_deserialization.seek(getOffsetOfHeader());
         type = m_deserialization.get1ByteInt(0);
     }
-    switch (type) {
-    case (int) Type::InteriorIndex:
-    case (int) Type::InteriorTable:
-    case (int) Type::LeafIndex:
-    case (int) Type::LeafTable:
-        return (Type) type;
-    default:
-        return Type::Unknown;
-    }
+    return convertToPageType(type);
 }
 
 const Data &Page::getData() const
@@ -82,6 +74,19 @@ Page::Type Page::getType() const
 {
     WCTAssert(isInitialized());
     return m_type;
+}
+
+Page::Type Page::convertToPageType(int type)
+{
+    switch (type) {
+    case (int) Type::InteriorIndex:
+    case (int) Type::InteriorTable:
+    case (int) Type::LeafIndex:
+    case (int) Type::LeafTable:
+        return (Type) type;
+    default:
+        return Type::Unknown;
+    }
 }
 
 #pragma mark - Interior Table
@@ -159,15 +164,8 @@ bool Page::doInitialize()
     m_deserialization.seek(getOffsetOfHeader());
     WCTAssert(m_deserialization.canAdvance(1));
     int type = m_deserialization.advance1ByteInt();
-    switch (type) {
-    case (int) Type::InteriorIndex:
-    case (int) Type::InteriorTable:
-    case (int) Type::LeafIndex:
-    case (int) Type::LeafTable:
-        m_type = (Type) type;
-        break;
-    default:
-        m_type = Type::Unknown;
+    m_type = convertToPageType(type);
+    if (m_type == Type::Unknown) {
         return true;
     }
     WCTAssert(m_deserialization.canAdvance(4));

@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2018/05/25
+// Created by 陈秋文 on 2023/9/2.
 //
 
 /*
@@ -25,9 +25,8 @@
 #pragma once
 
 #include "EncryptedSerialization.hpp"
+#include "Page.hpp"
 #include "StringView.hpp"
-#include "WCDBOptional.hpp"
-#include <list>
 #include <map>
 #include <stdlib.h>
 #include <vector>
@@ -40,15 +39,15 @@ class Deserialization;
 
 namespace Repair {
 
-class Material final : public EncryptedSerializable,
-                       public DecryptedDeserializable,
-                       public CipherDelegateHolder {
+class IncrementalMaterial final : public EncryptedSerializable,
+                                  public DecryptedDeserializable,
+                                  public CipherDelegateHolder {
 #pragma mark - Serializable
 public:
     bool serialize(Serialization &serialization) const override final;
     using Serializable::serialize;
 
-    ~Material() override final;
+    ~IncrementalMaterial() override final;
 
 protected:
     static bool serializeData(Serialization &serialization, const Data &data);
@@ -67,26 +66,24 @@ protected:
 
 #pragma mark - Header
 protected:
-    static constexpr const uint32_t magic = 0x57434442;
-    static constexpr const uint32_t version = 0x01000001; //1.0.0.1
-    static constexpr const uint8_t saltBytes = 16;
+    static constexpr const uint32_t magic = 0x57434441;
+    static constexpr const uint32_t version = 0x01000000; //1.0.0.0
     static constexpr const int headerSize = sizeof(magic) + sizeof(version); //magic + version
 
 #pragma mark - Info
-public:
-    static constexpr const uint32_t UnknownPageNo = UINT32_MAX;
-
     class Info final : public Serializable, public Deserializable {
     public:
-        static constexpr const int size = sizeof(uint32_t) * 6;
+        static constexpr const int saltSize = sizeof(uint32_t) * 4;
         Info();
         ~Info() override final;
-
-        uint32_t pageSize;
-        uint32_t reservedBytes;
-        std::pair<uint32_t, uint32_t> walSalt;
-        uint32_t nBackFill;
-        uint32_t seqTableRootPage;
+        std::pair<uint32_t, uint32_t> lastWalSalt;
+        std::pair<uint32_t, uint32_t> currentWalSalt;
+        uint32_t lastNBackFill;
+        uint32_t currentNBackFill;
+        uint32_t lastSchemaCookie;
+        bool lastCheckPointFinish;
+        uint32_t lastBackupTime;
+        int32_t incrementalBackupTimes;
 #pragma mark - Serializable
     public:
         bool serialize(Serialization &serialization) const override final;
@@ -95,22 +92,22 @@ public:
         bool deserialize(Deserialization &deserialization) override final;
     };
 
+public:
     Info info;
 
-#pragma mark - Content
+#pragma mark - Page
 public:
-    class Content final : public Serializable, public Deserializable {
+    class Page final : public Serializable, public Deserializable {
     public:
-        Content();
-        ~Content() override final;
+        Page();
+        ~Page() override final;
 
-        StringView tableName;
-        StringView sql;
-        std::list<StringView> associatedSQLs;
-        uint32_t rootPage;
-        int64_t sequence;
-        std::map<uint32_t, uint32_t> verifiedPagenos;
-        bool checked; //It will not be saved to file
+        typedef Repair::Page::Type Type;
+
+        uint32_t number;
+        Type type;
+        uint32_t hash;
+
 #pragma mark - Serializable
     public:
         bool serialize(Serialization &serialization) const override final;
@@ -119,10 +116,13 @@ public:
         bool deserialize(Deserialization &deserialization) override final;
     };
 
-    std::list<Content *> contentsList;
-    StringViewMap<Content> contentsMap;
+    typedef std::map<uint32_t, Page> Pages;
+
+    Pages pages;
 };
 
 } //namespace Repair
+
+typedef std::shared_ptr<Repair::IncrementalMaterial> SharedIncrementalMaterial;
 
 } //namespace WCDB

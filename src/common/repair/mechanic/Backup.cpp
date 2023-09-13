@@ -26,6 +26,7 @@
 #include "Assertion.hpp"
 #include "Cell.hpp"
 #include "CoreConst.h"
+#include "Factory.hpp"
 #include "FileManager.hpp"
 #include "MasterItem.hpp"
 #include "Notifier.hpp"
@@ -82,7 +83,7 @@ bool BackupDelegateHolder::isDelegateValid() const
 
 #pragma mark - Initialize
 Backup::Backup(const UnsafeStringView &path)
-: Crawlable(), m_pager(path), m_masterCrawler()
+: Crawlable(), m_pager(path), m_incrementalMaterial(nullptr), m_masterCrawler()
 {
     setAssociatedPager(&m_pager);
     m_masterCrawler.setAssociatedPager(&m_pager);
@@ -91,43 +92,89 @@ Backup::Backup(const UnsafeStringView &path)
 Backup::~Backup() = default;
 
 #pragma mark - Backup
-bool Backup::work()
+bool Backup::work(SharedIncrementalMaterial incrementalMaterial)
 {
     WCTRemedialAssert(isDelegateValid(), "Read/Write locker is not avaiable.", return false;);
 
-    m_sharedDelegate->setBackupPath(m_pager.getPath());
-    m_exclusiveDelegate->setBackupPath(m_pager.getPath());
+    auto materialLoad = tryLoadLatestMaterial(incrementalMaterial);
+    if (!materialLoad.hasValue()) {
+        return false;
+    }
+    if (!materialLoad.value()) {
+        if (!fullBackup()) {
+            return false;
+        }
+        m_incrementalMaterial = incrementalMaterial;
+    } else {
+        m_incrementalMaterial = incrementalMaterial;
+        if (!incrementalBackup()) {
+            return false;
+        }
+    }
 
-    bool shared = false;
+    updateMaterial(materialLoad.value());
+
+    return true;
+}
+
+Optional<bool> Backup::tryLoadLatestMaterial(SharedIncrementalMaterial incrementalMaterial)
+{
+    if (incrementalMaterial == nullptr
+        || incrementalMaterial->info.incrementalBackupTimes >= BackupMaxIncrementalTimes) {
+        return false;
+    }
+    auto materialPath = Factory::latestMaterialForDatabase(m_pager.getPath());
+    if (materialPath.failed()) {
+        return NullOpt;
+    }
+    if (materialPath->empty()) {
+        return false;
+    }
+    m_cipherDelegate->openCipherInMemory();
+    bool useMaterial = false;
+    if (m_cipherDelegate->isCipherDB()) {
+        m_material.setCipherDelegate(m_cipherDelegate);
+        useMaterial = m_material.decryptedDeserialize(materialPath.value());
+    } else {
+        useMaterial = m_material.deserialize(materialPath.value());
+    }
+    if (!useMaterial) {
+        m_material = Material();
+        return NullOpt;
+    }
+    if (m_material.info.walSalt != incrementalMaterial->info.lastWalSalt
+        || m_material.info.nBackFill != incrementalMaterial->info.lastNBackFill) {
+        m_material = Material();
+        return false;
+    }
+    return true;
+}
+
+bool Backup::fullBackup()
+{
     bool exclusive = false;
     bool succeed = false;
     do {
-        //acquire read lock to avoid shm changed during initialize
+        //acquire write lock to avoid shm changed during initialize
         if (!m_exclusiveDelegate->acquireBackupExclusiveLock()) {
             setError(m_exclusiveDelegate->getBackupError());
             break;
         }
         exclusive = true;
 
-        //acquire read lock to avoid wal truncated/restarted during whole iteration of pager
-        if (!m_sharedDelegate->acquireBackupSharedLock()) {
-            setError(m_sharedDelegate->getBackupError());
-            break;
-        }
-        shared = true;
-
-        if (m_sharedDelegate->isCipherDB()) {
-            size_t pageSize = m_sharedDelegate->getCipherPageSize();
+        if (m_cipherDelegate->isCipherDB()) {
+            size_t pageSize = m_cipherDelegate->getCipherPageSize();
             if (pageSize == 0) {
-                setError(m_sharedDelegate->getBackupError());
+                setError(m_cipherDelegate->getCipherError());
                 break;
             }
-            void *pCodec = m_sharedDelegate->getCipherContext();
+            void *pCodec = m_cipherDelegate->getCipherContext();
             m_pager.setCipherContext(pCodec);
             m_pager.setPageSize((int) pageSize);
         }
 
         if (!m_pager.initialize()) {
+            setError(m_pager.getError());
             break;
         }
 
@@ -138,13 +185,13 @@ bool Backup::work()
         exclusive = false;
 
         m_material.setCipherDelegate(m_cipherDelegate);
-        m_material.info.pageSize = m_pager.getPageSize();
-        m_material.info.reservedBytes = m_pager.getReservedBytes();
-        if (m_pager.getNumberOfWalFrames() > 0) {
-            m_material.info.walSalt = m_pager.getWalSalt();
-            m_material.info.numberOfWalFrames = m_pager.getNumberOfWalFrames();
-        }
         succeed = m_masterCrawler.work(this);
+        if (!succeed) {
+            setError(m_pager.getError());
+        }
+        if (m_material.info.seqTableRootPage == Material::UnknownPageNo) {
+            m_material.info.seqTableRootPage = 0;
+        }
     } while (false);
 
     if (exclusive && !m_exclusiveDelegate->releaseBackupExclusiveLock() && succeed) {
@@ -152,11 +199,132 @@ bool Backup::work()
         succeed = false;
     }
 
-    if (shared && !m_sharedDelegate->releaseBackupSharedLock() && succeed) {
-        setError(m_sharedDelegate->getBackupError());
+    return succeed;
+}
+
+bool Backup::incrementalBackup()
+{
+    if (m_cipherDelegate->isCipherDB()) {
+        size_t pageSize = m_cipherDelegate->getCipherPageSize();
+        if (pageSize == 0) {
+            setError(m_cipherDelegate->getCipherError());
+            return false;
+        }
+        void *pCodec = m_cipherDelegate->getCipherContext();
+        m_pager.setCipherContext(pCodec);
+        m_pager.setPageSize((int) pageSize);
+    }
+    m_pager.setWalSkipped();
+    if (!m_pager.initialize()) {
+        setError(m_pager.getError());
+        return false;
+    }
+    m_verifyingPagenos = m_incrementalMaterial->pages;
+    int schemaCookie = m_pager.getSchemaCookie();
+    if (schemaCookie != m_incrementalMaterial->info.lastSchemaCookie
+        || m_material.info.seqTableRootPage == Material::UnknownPageNo) {
+        if (!loadWal()) {
+            setError(m_pager.getError());
+            return false;
+        }
+        if (!m_masterCrawler.work(this)) {
+            setError(m_pager.getError());
+            return false;
+        }
+        if (m_material.info.seqTableRootPage == Material::UnknownPageNo) {
+            m_material.info.seqTableRootPage = 0;
+        }
+        m_pager.disposeWal();
+        for (auto iter = m_material.contentsList.begin();
+             iter != m_material.contentsList.end();) {
+            auto &content = **iter;
+            if (content.checked) {
+                iter++;
+            } else {
+                // Deleted table
+                iter = m_material.contentsList.erase(iter);
+                m_material.contentsMap.erase(content.tableName);
+            }
+        }
+    } else if (m_material.info.seqTableRootPage != 0
+               && m_material.info.seqTableRootPage != Material::UnknownPageNo) {
+        SequenceCrawler crawler;
+        crawler.setAssociatedPager(&m_pager);
+        if (!crawler.work(m_material.info.seqTableRootPage, this)) {
+            setError(m_pager.getError());
+            return false;
+        }
+    }
+    if (m_verifyingPagenos.size() == 0) {
+        return true;
+    }
+    auto &contentList = m_material.contentsList;
+    for (auto &content : contentList) {
+        auto &pages = content->verifiedPagenos;
+        for (auto page = pages.begin(); page != pages.end();) {
+            if (m_verifyingPagenos.find(page->first) != m_verifyingPagenos.end()) {
+                page = pages.erase(page);
+            } else {
+                m_unchangedLeaves.insert(page->first);
+                page++;
+            }
+        }
+    }
+    for (auto iter = m_verifyingPagenos.begin(); iter != m_verifyingPagenos.end();) {
+        auto &page = iter->second;
+        if (page.type != Page::Type::LeafTable) {
+            iter = m_verifyingPagenos.erase(iter);
+        } else {
+            iter++;
+        }
+    }
+    if (m_verifyingPagenos.size() == 0) {
+        return true;
+    }
+    for (auto iter = contentList.begin(); iter != contentList.end();) {
+        WCTAssert((*iter)->rootPage > 1 && (*iter)->rootPage != Material::UnknownPageNo);
+        if (!crawl((*iter)->rootPage)) {
+            setError(m_pager.getError());
+            return false;
+        }
+        if (m_verifiedPagenos.size() > 0) {
+            (*iter)->verifiedPagenos.insert(m_verifiedPagenos.begin(),
+                                            m_verifiedPagenos.end());
+            m_verifiedPagenos.clear();
+            contentList.insert(contentList.begin(), *iter);
+            iter = contentList.erase(iter);
+        } else {
+            iter++;
+        }
+        if (m_verifyingPagenos.size() == 0) {
+            return true;
+        }
+    }
+    return true;
+}
+
+bool Backup::loadWal()
+{
+    bool exclusive = false;
+    bool succeed = false;
+    do {
+        //acquire write lock to avoid shm changed during initialize
+        if (!m_exclusiveDelegate->acquireBackupExclusiveLock()) {
+            setError(m_exclusiveDelegate->getBackupError());
+            break;
+        }
+        exclusive = true;
+
+        WCTAssert(m_incrementalMaterial != nullptr);
+        m_pager.setNBackFill(m_incrementalMaterial->info.currentNBackFill);
+        m_pager.setWalSalt(m_incrementalMaterial->info.currentWalSalt);
+        succeed = m_pager.loadWal();
+    } while (false);
+
+    if (exclusive && !m_exclusiveDelegate->releaseBackupExclusiveLock() && succeed) {
+        setError(m_exclusiveDelegate->getBackupError());
         succeed = false;
     }
-
     return succeed;
 }
 
@@ -165,13 +333,53 @@ const Material &Backup::getMaterial() const
     return m_material;
 }
 
+SharedIncrementalMaterial Backup::getIncrementalMaterial()
+{
+    return m_incrementalMaterial;
+}
+
+void Backup::updateMaterial(bool isIncremental)
+{
+    auto &info = m_material.info;
+
+    if (m_incrementalMaterial != nullptr) {
+        info.walSalt = m_incrementalMaterial->info.currentWalSalt;
+        info.nBackFill = m_incrementalMaterial->info.currentNBackFill;
+    } else {
+        m_incrementalMaterial = std::make_shared<Repair::IncrementalMaterial>();
+        info.walSalt = m_pager.getWalSalt();
+        info.nBackFill = m_pager.getNBackFill();
+        m_incrementalMaterial->info.lastCheckPointFinish
+        = info.nBackFill == m_pager.getMaxFrame();
+    }
+
+    auto &incrementalInfo = m_incrementalMaterial->info;
+
+    m_material.info.pageSize = m_pager.getPageSize();
+    m_material.info.reservedBytes = m_pager.getReservedBytes();
+    incrementalInfo.lastWalSalt = info.walSalt;
+    incrementalInfo.lastNBackFill = info.nBackFill;
+    incrementalInfo.currentWalSalt = info.walSalt;
+    incrementalInfo.currentNBackFill = info.nBackFill;
+    incrementalInfo.lastSchemaCookie = m_pager.getSchemaCookie();
+    incrementalInfo.lastBackupTime = (uint32_t) Time::now().seconds();
+    m_incrementalMaterial->pages.clear();
+    if (!isIncremental) {
+        incrementalInfo.incrementalBackupTimes = 0;
+    } else {
+        incrementalInfo.incrementalBackupTimes++;
+    }
+}
+
 Material::Content &Backup::getOrCreateContent(const UnsafeStringView &tableName)
 {
-    auto &contents = m_material.contents;
-    auto iter = contents.find(tableName);
-    if (iter == contents.end()) {
-        iter = contents.emplace(tableName, Material::Content()).first;
+    auto &contentsMap = m_material.contentsMap;
+    auto iter = contentsMap.find(tableName);
+    if (iter == contentsMap.end()) {
+        iter = contentsMap.emplace(tableName, Material::Content()).first;
+        m_material.contentsList.push_back(&(iter->second));
     }
+    iter->second.tableName = tableName;
     return iter->second;
 }
 
@@ -191,6 +399,23 @@ bool Backup::filter(const UnsafeStringView &tableName)
 }
 
 #pragma mark - Crawlable
+bool Backup::canCrawlPage(uint32_t pageno)
+{
+    if (m_unchangedLeaves.find(pageno) != m_unchangedLeaves.end()) {
+        return false;
+    }
+    auto iter = m_verifyingPagenos.find(pageno);
+    if (iter != m_verifyingPagenos.end()) {
+        m_verifiedPagenos[iter->first] = iter->second.hash;
+        m_verifyingPagenos.erase(iter);
+        if (m_verifyingPagenos.size() == 0) {
+            suspend();
+        }
+        return false;
+    }
+    return true;
+}
+
 void Backup::onCellCrawled(const Cell &cell)
 {
     WCDB_UNUSED(cell)
@@ -208,6 +433,7 @@ bool Backup::willCrawlPage(const Page &page, int height)
     case Page::Type::InteriorTable:
         return true;
     case Page::Type::LeafTable: {
+        WCTAssert(m_unchangedLeaves.size() == 0);
         bool emplaced
         = m_verifiedPagenos.emplace(page.number, page.getData().hash()).second;
         if (!emplaced) {
@@ -225,13 +451,20 @@ bool Backup::willCrawlPage(const Page &page, int height)
 void Backup::onCrawlerError()
 {
     m_masterCrawler.suspend();
+    suspend();
 }
 
 #pragma mark - MasterCrawlerDelegate
+void Backup::onMasterPageCrawled(const Page &page)
+{
+    m_verifyingPagenos.erase(page.number);
+}
+
 void Backup::onMasterCellCrawled(const Cell &cell, const MasterItem &master)
 {
     WCDB_UNUSED(cell)
     if (master.name == Syntax::sequenceTable) {
+        m_material.info.seqTableRootPage = master.rootpage;
         SequenceCrawler crawler;
         crawler.setAssociatedPager(&m_pager);
         crawler.work(master.rootpage, this);
@@ -241,11 +474,16 @@ void Backup::onMasterCellCrawled(const Cell &cell, const MasterItem &master)
         Material::Content &content = getOrCreateContent(master.tableName);
         if (master.type.caseInsensitiveEqual("table")
             && master.name.caseInsensitiveEqual(master.tableName)) {
+            content.sql = master.sql;
+            content.rootPage = master.rootpage;
+            content.checked = true;
+            if (m_incrementalMaterial != nullptr) {
+                return;
+            }
             if (!crawl(master.rootpage)) {
                 return;
             }
             content.verifiedPagenos = std::move(m_verifiedPagenos);
-            content.sql = master.sql;
         } else {
             if (!master.sql.empty()) {
                 content.associatedSQLs.push_back(master.sql);
@@ -260,6 +498,11 @@ void Backup::onMasterCrawlerError()
 }
 
 #pragma mark - SequenceCrawlerDelegate
+void Backup::onSequencePageCrawled(const Page &page)
+{
+    m_verifyingPagenos.erase(page.number);
+}
+
 void Backup::onSequenceCellCrawled(const Cell &cell, const SequenceItem &sequence)
 {
     WCDB_UNUSED(cell)

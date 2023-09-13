@@ -633,6 +633,15 @@ void AbstractHandle::setWALFilePersist(int persist)
     m_handle, Syntax::mainSchema.data(), SQLITE_FCNTL_PERSIST_WAL, &persist));
 }
 
+bool AbstractHandle::setCheckPointLock(bool enable)
+{
+    if (m_path.compare(":memory:") == 0) {
+        return true;
+    }
+    WCTAssert(isOpened());
+    return APIExit(sqlite3_lock_checkpoint(m_handle, enable));
+}
+
 #pragma mark - Notification
 void AbstractHandle::setNotificationWhenSQLTraced(const UnsafeStringView &name,
                                                   const SQLNotification &onTraced)
@@ -663,10 +672,10 @@ void AbstractHandle::unsetNotificationWhenCommitted(const UnsafeStringView &name
 }
 
 void AbstractHandle::setNotificationWhenCheckpointed(const UnsafeStringView &name,
-                                                     const CheckpointedNotification &checkpointed)
+                                                     Optional<CheckPointNotification> notification)
 {
     WCTAssert(isOpened());
-    m_notification.setNotificationWhenCheckpointed(name, checkpointed);
+    m_notification.setNotificationWhenCheckpointed(name, notification);
 }
 
 void AbstractHandle::setNotificationWhenBusy(const BusyNotification &busyNotification)

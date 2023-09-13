@@ -140,6 +140,9 @@ bool FactoryRenewer::prepare()
             setError(m_assembleDelegate->getAssembleError());
             break;
         }
+        for (const auto &iter : element.second.associatedSQLs) {
+            m_assembleDelegate->assembleSQL(iter);
+        }
     }
     if (!m_assembleDelegate->markAsAssembled()) {
         if (!succeed) {
@@ -208,7 +211,7 @@ bool FactoryRenewer::resolveInfosForDatabase(StringViewMap<Info> &infos,
     for (const auto &materialPath : materialPaths) {
         Material material;
         bool succeed = false;
-        if (!m_sharedDelegate->isCipherDB()) {
+        if (!m_cipherDelegate->isCipherDB()) {
             succeed = material.deserialize(materialPath);
         } else {
             material.setCipherDelegate(m_cipherDelegate);
@@ -222,11 +225,12 @@ bool FactoryRenewer::resolveInfosForDatabase(StringViewMap<Info> &infos,
             }
         }
 
-        for (auto &element : material.contents) {
+        for (auto &element : material.contentsMap) {
             auto iter = infos.find(element.first);
             if (iter == infos.end()) {
                 iter = infos.emplace(std::move(element.first), Info()).first;
                 iter->second.sql = std::move(element.second.sql);
+                iter->second.associatedSQLs = std::move(element.second.associatedSQLs);
             } else {
                 if (iter->second.sql != element.second.sql) {
                     Error error(Error::Code::Mismatch,

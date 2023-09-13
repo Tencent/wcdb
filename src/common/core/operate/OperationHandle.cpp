@@ -32,11 +32,9 @@
 namespace WCDB {
 
 OperationHandle::OperationHandle()
-: m_statementForIntegrityCheck(
-StatementPragma().pragma(Pragma::integrityCheck()).schema(Schema::main()).with(1))
-, m_statementForReadTransaction(StatementBegin().beginDeferred())
-, m_statementForAcquireReadLock(
-  StatementSelect().select(1).from(Syntax::masterTable).limit(0))
+: BackupRelatedHandle()
+, m_statementForIntegrityCheck(
+  StatementPragma().pragma(Pragma::integrityCheck()).schema(Schema::main()).with(1))
 , m_statementForGetFTSTable(
   StatementSelect()
   .select(Column("name"))
@@ -92,99 +90,6 @@ void OperationHandle::checkIntegrity()
             break;
         }
     }
-}
-
-#pragma mark - Backup
-void OperationHandle::setBackupPath(const UnsafeStringView &path)
-{
-    InnerHandle::setPath(path);
-}
-
-const StringView &OperationHandle::getBackupPath() const
-{
-    return InnerHandle::getPath();
-}
-
-const Error &OperationHandle::getBackupError() const
-{
-    return InnerHandle::getError();
-}
-
-bool OperationHandle::acquireBackupSharedLock()
-{
-    return execute(m_statementForReadTransaction) && execute(m_statementForAcquireReadLock);
-}
-
-bool OperationHandle::releaseBackupSharedLock()
-{
-    rollbackTransaction();
-    return true;
-}
-
-bool OperationHandle::acquireBackupExclusiveLock()
-{
-    return beginTransaction();
-}
-
-bool OperationHandle::releaseBackupExclusiveLock()
-{
-    rollbackTransaction();
-    return true;
-}
-
-void OperationHandle::finishBackup()
-{
-    InnerHandle::close();
-}
-
-#pragma mark - Cipher
-
-const Error &OperationHandle::getCipherError() const
-{
-    return InnerHandle::getError();
-}
-
-bool OperationHandle::openCipherInMemory(bool onlyUsedCipherKey)
-{
-    InnerHandle::setPath(":memory:");
-    if (onlyUsedCipherKey) {
-        return InnerHandle::openPureCipherDB();
-    } else {
-        return InnerHandle::open();
-    }
-}
-
-bool OperationHandle::isCipherDB() const
-{
-    return InnerHandle::isCipherDB();
-}
-
-void OperationHandle::closeCipher()
-{
-    InnerHandle::close();
-}
-
-void *OperationHandle::getCipherContext()
-{
-    if (!isOpened()) {
-        return nullptr;
-    }
-    return AbstractHandle::getCipherContext();
-}
-
-size_t OperationHandle::getCipherPageSize()
-{
-    return AbstractHandle::getCipherPageSize();
-}
-
-StringView OperationHandle::getCipherSalt()
-{
-    return AbstractHandle::getCipherSalt();
-}
-
-bool OperationHandle::setCipherSalt(const UnsafeStringView &salt)
-{
-    return AbstractHandle::setCipherSalt(salt);
 }
 
 } // namespace WCDB

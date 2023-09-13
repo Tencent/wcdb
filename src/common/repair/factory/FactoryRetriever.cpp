@@ -169,7 +169,7 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
         Time materialTime;
         StringView path;
         for (const auto &materialPath : materialPaths) {
-            if (!m_sharedDelegate->isCipherDB()) {
+            if (!m_cipherDelegate->isCipherDB()) {
                 useMaterial = material.deserialize(materialPath);
             } else {
                 material.setCipherDelegate(m_cipherDelegate);

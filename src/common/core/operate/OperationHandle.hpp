@@ -24,15 +24,12 @@
 
 #pragma once
 
+#include "BackupRelatedHandle.hpp"
 #include "CoreConst.h"
-#include "InnerHandle.hpp"
-#include "RepairKit.h"
 
 namespace WCDB {
 
-class OperationHandle final : public InnerHandle,
-                              public Repair::BackupSharedDelegate,
-                              public Repair::BackupExclusiveDelegate {
+class OperationHandle final : public Repair::BackupRelatedHandle {
 public:
     OperationHandle();
     ~OperationHandle() override final;
@@ -46,36 +43,6 @@ public:
 
 protected:
     StatementPragma m_statementForIntegrityCheck;
-
-#pragma mark - Backup
-public:
-    void setBackupPath(const UnsafeStringView &path) override final;
-    const StringView &getBackupPath() const override final;
-    const Error &getBackupError() const override final;
-
-    bool acquireBackupSharedLock() override final;
-    bool releaseBackupSharedLock() override final;
-
-    bool acquireBackupExclusiveLock() override final;
-    bool releaseBackupExclusiveLock() override final;
-
-    void finishBackup() override final;
-
-#pragma mark - Cipher
-public:
-    const Error &getCipherError() const override final;
-    bool openCipherInMemory(bool onlyUsedCipherKey) override final;
-    bool isCipherDB() const override final;
-    void closeCipher() override final;
-
-    void *getCipherContext() override final;
-    size_t getCipherPageSize() override final;
-    StringView getCipherSalt() override final;
-    bool setCipherSalt(const UnsafeStringView &salt) override final;
-
-protected:
-    StatementBegin m_statementForReadTransaction;
-    StatementSelect m_statementForAcquireReadLock;
     StatementSelect m_statementForGetFTSTable;
 };
 

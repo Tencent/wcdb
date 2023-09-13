@@ -104,6 +104,7 @@ enum HandleSlot : unsigned char {
     HandleSlotCheckPoint,
     HandleSlotOperation,
     HandleSlotAssemble,
+    HandleSlotCipher,
     HandleSlotCount,
 };
 enum HandleCategory : unsigned char {
@@ -112,10 +113,11 @@ enum HandleCategory : unsigned char {
     HandleCategoryMigrate,
     HandleCategoryBackupRead,
     HandleCategoryBackupWrite,
+    HandleCategoryBackupCipher,
     HandleCategoryCheckpoint,
     HandleCategoryIntegrity,
     HandleCategoryAssemble,
-    HandleCategoryCipher,
+    HandleCategoryAssembleCipher,
     HandleCategoryMergeIndex,
     HandleCategoryCount,
 };
@@ -124,13 +126,13 @@ enum class HandleType : unsigned int {
     Normal = (HandleCategoryNormal << 8) | HandleSlotNormal,
     Migrating = (HandleCategoryMigrating << 8) | HandleSlotMigrating,
     Migrate = (HandleCategoryMigrate << 8) | HandleSlotMigrate,
+    BackupCipher = (HandleCategoryBackupCipher << 8) | HandleSlotCipher,
     BackupRead = (HandleCategoryBackupRead << 8) | HandleSlotOperation,
     BackupWrite = (HandleCategoryBackupWrite << 8) | HandleSlotOperation,
-    BackupCipher = (HandleCategoryCipher << 8) | HandleSlotOperation,
     Checkpoint = (HandleCategoryCheckpoint << 8) | HandleSlotCheckPoint,
     Integrity = (HandleCategoryIntegrity << 8) | HandleSlotOperation,
     Assemble = (HandleCategoryAssemble << 8) | HandleSlotAssemble,
-    AssembleCipher = (HandleCategoryCipher << 8) | HandleSlotAssemble,
+    AssembleCipher = (HandleCategoryAssembleCipher << 8) | HandleSlotCipher,
     AssembleBackupRead = (HandleCategoryBackupRead << 8) | HandleSlotAssemble,
     AssembleBackupWrite = (HandleCategoryBackupWrite << 8) | HandleSlotAssemble,
     MergeIndex = (HandleCategoryMergeIndex << 8) | HandleSlotOperation,
@@ -148,6 +150,11 @@ static constexpr bool handleShouldWaitWhenFull(HandleType type)
     HandleSlot slot = slotOfHandleType(type);
     return slot == HandleSlotNormal || slot == HandleSlotMigrating;
 }
+
+#pragma mark - Backup
+static constexpr const int BackupMaxIncrementalTimes = 1000;
+static constexpr const int BackupMaxIncrementalPageCount = 1000;
+static constexpr const int BackupMaxAllowIncrementalPageCount = 1000000;
 
 #pragma mark - Migrate
 static constexpr const double MigrateMaxExpectingDuration = 0.01;

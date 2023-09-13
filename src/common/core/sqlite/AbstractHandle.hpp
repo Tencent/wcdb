@@ -169,6 +169,7 @@ public:
     bool checkpoint(CheckpointMode mode);
     void disableCheckpointWhenClosing(bool disable);
     void setWALFilePersist(int persist);
+    bool setCheckPointLock(bool enable);
 
 #pragma mark - Notification
 public:
@@ -185,9 +186,9 @@ public:
                                       const UnsafeStringView &name,
                                       const CommittedNotification &onCommitted);
 
-    typedef HandleNotification::CheckpointedNotification CheckpointedNotification;
+    typedef HandleNotification::CheckPointNotification CheckPointNotification;
     void setNotificationWhenCheckpointed(const UnsafeStringView &name,
-                                         const CheckpointedNotification &checkpointed);
+                                         Optional<CheckPointNotification> notification);
     void unsetNotificationWhenCommitted(const UnsafeStringView &name);
 
     typedef HandleNotification::BusyNotification BusyNotification;

@@ -35,7 +35,7 @@ namespace Repair {
 
 class Cell;
 
-class AssembleDelegate : public CipherDelegate {
+class AssembleDelegate {
 public:
     AssembleDelegate();
     virtual ~AssembleDelegate() = 0;

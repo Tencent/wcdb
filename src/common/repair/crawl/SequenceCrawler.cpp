@@ -35,11 +35,8 @@ namespace Repair {
 
 SequenceCrawlerDelegate::~SequenceCrawlerDelegate() = default;
 
-void SequenceCrawlerDelegate::onSequencePageCrawled(const Page &page){ WCDB_UNUSED(page) }
-
 #pragma mark - Initialize
-SequenceCrawler::SequenceCrawler()
-: Crawlable(), m_delegate(nullptr)
+SequenceCrawler::SequenceCrawler() : Crawlable(), m_delegate(nullptr)
 {
 }
 

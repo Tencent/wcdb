@@ -219,7 +219,6 @@ public class Database extends HandleORMOperation {
     public void tracePerformance(PerformanceTracer tracer) {
         tracePerformance(cppObj, tracer);
     }
-
     private static native void tracePerformance(long self, PerformanceTracer tracer);
 
     public interface SQLTracer {

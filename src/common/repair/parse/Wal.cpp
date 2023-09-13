@@ -30,6 +30,7 @@
 #include "Notifier.hpp"
 #include "Pager.hpp"
 #include "Path.hpp"
+#include "SQLite.h"
 #include "Serialization.hpp"
 #include "StringView.hpp"
 
@@ -43,7 +44,6 @@ Wal::Wal(Pager *pager)
 , m_fileHandle(Path::addExtention(m_pager->getPath(), "-wal"))
 , m_fileSize(0)
 , m_truncate(std::numeric_limits<uint32_t>::max())
-, m_maxAllowedFrame(std::numeric_limits<int>::max())
 , m_maxFrame(0)
 , m_isNativeChecksum(false)
 , m_salt({ 0, 0 })
@@ -108,6 +108,11 @@ int Wal::getMaxPageno() const
 }
 
 #pragma mark - Wal
+bool Wal::isCheckpointIncreasedSalt(const Salt &before, const Salt &after)
+{
+    return before.first + 1 == after.first && before.second != after.second;
+}
+
 void Wal::setShmLegality(bool flag)
 {
     WCTAssert(!isInitialized());
@@ -120,15 +125,26 @@ MappedData Wal::acquireFrameData(int frameno)
     return acquireData(headerSize + getFrameSize() * (frameno - 1), getFrameSize());
 }
 
-void Wal::setMaxAllowedFrame(int maxAllowedFrame)
+int Wal::getNBackFill() const
+{
+    WCTAssert(isInitialized());
+    return m_shm.getBackfill();
+}
+
+void Wal::setNBackFill(int nbackfill)
 {
     WCTAssert(!isInitialized());
-    m_maxAllowedFrame = maxAllowedFrame;
+    m_nbackfill = nbackfill;
+}
+
+int Wal::getMaxFrame() const
+{
+    return m_maxFrame;
 }
 
 int Wal::getNumberOfFrames() const
 {
-    return m_maxFrame;
+    return (int) m_pages2Frames.size();
 }
 
 int Wal::getPageSize() const
@@ -144,6 +160,12 @@ int Wal::getFrameSize() const
 const std::pair<uint32_t, uint32_t> &Wal::getSalt() const
 {
     return m_salt;
+}
+
+void Wal::setSalt(const std::pair<uint32_t, uint32_t> &salt)
+{
+    WCTAssert(!isInitialized());
+    m_salt = salt;
 }
 
 bool Wal::isBigEndian()
@@ -191,16 +213,18 @@ bool Wal::doInitialize()
 {
     WCTAssert(m_pager->isInitialized() || m_pager->isInitializing());
 
-    int maxWalFrame = m_maxAllowedFrame;
+    int maxWalFrame = std::numeric_limits<int>::max();
     if (m_shmLegality) {
         if (!m_shm.initialize()) {
             return false;
         }
-        if (m_shm.getBackfill() >= m_shm.getMaxFrame()) {
-            // dispose all wal frames since they are already checkpointed.
-            return true;
-        }
-        maxWalFrame = std::min(maxWalFrame, (int) m_shm.getMaxFrame());
+        WCTAssert(m_nbackfill == 0 || (m_salt == Salt{ 0, 0 })
+                  || (m_nbackfill == m_shm.getBackfill() && m_salt == m_shm.getSalt())
+                  || (m_shm.getBackfill() == 0
+                      && isCheckpointIncreasedSalt(m_shm.getSalt(), m_salt)));
+        m_nbackfill = m_shm.getBackfill();
+        m_salt = m_shm.getSalt();
+        maxWalFrame = m_shm.getMaxFrame();
     }
 
     auto fileSize = FileManager::getFileSize(getPath());
@@ -212,8 +236,6 @@ bool Wal::doInitialize()
     if (m_fileSize == 0) {
         return true;
     }
-    const int numberOfFramesInFile = ((int) m_fileSize - headerSize) / getFrameSize();
-    maxWalFrame = std::min(numberOfFramesInFile, maxWalFrame);
 
     if (!m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
         assignWithSharedThreadedError();
@@ -234,10 +256,26 @@ bool Wal::doInitialize()
     }
     m_isNativeChecksum = (magic & 0x00000001) == isBigEndian();
     deserialization.seek(16);
+    std::pair<uint32_t, uint32_t> salt = { 0, 0 };
     WCTAssert(deserialization.canAdvance(4));
-    m_salt.first = deserialization.advance4BytesUInt();
+    salt.first = deserialization.advance4BytesUInt();
     WCTAssert(deserialization.canAdvance(4));
-    m_salt.second = deserialization.advance4BytesUInt();
+    salt.second = deserialization.advance4BytesUInt();
+
+    if (m_salt != Salt{ 0, 0 } && m_salt != salt
+        && !(isCheckpointIncreasedSalt(m_salt, salt) && m_nbackfill > 0)) {
+        m_nbackfill = 0;
+        maxWalFrame = std::numeric_limits<int>::max();
+    }
+    m_salt = salt;
+
+    const int numberOfFramesInFile = ((int) m_fileSize - headerSize) / getFrameSize();
+    maxWalFrame = std::min(numberOfFramesInFile, maxWalFrame);
+
+    if (m_nbackfill >= maxWalFrame) {
+        // dispose all wal frames since they are already checkpointed.
+        return true;
+    }
 
     std::pair<uint32_t, uint32_t> checksum = { 0, 0 };
     checksum = calculateChecksum(data.subdata(headerSize - 2 * sizeof(uint32_t)), checksum);
@@ -258,8 +296,17 @@ bool Wal::doInitialize()
         return false;
     }
 
+    if (m_nbackfill > 0) {
+        Frame frame(m_nbackfill, this);
+        if (!frame.initialize()) {
+            dispose();
+            return false;
+        }
+        checksum = frame.getChecksum();
+    }
+
     std::map<int, int> committedRecords;
-    for (int frameno = 1; frameno <= maxWalFrame; ++frameno) {
+    for (int frameno = m_nbackfill + 1; frameno <= maxWalFrame; ++frameno) {
         Frame frame(frameno, this);
         if (!frame.initialize()) {
             dispose();
