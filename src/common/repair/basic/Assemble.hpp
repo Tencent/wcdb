@@ -54,6 +54,7 @@ public:
     virtual bool assembleSequence(const UnsafeStringView &tableName, int64_t sequence) = 0;
     virtual bool assembleCell(const Cell &cell) = 0;
     void markDuplicatedAsIgnorable(bool ignorable);
+    virtual void markDuplicatedAsReplaceable(bool replaceable);
 
     virtual bool assembleSQL(const UnsafeStringView &sql) = 0;
 
@@ -63,9 +64,11 @@ public:
 
 protected:
     bool isDuplicatedIgnorable() const;
+    bool isDuplicatedReplaceable() const;
 
 private:
     bool m_duplicatedIgnorable;
+    bool m_duplicatedReplaceable;
 };
 
 class AssembleDelegateHolder {

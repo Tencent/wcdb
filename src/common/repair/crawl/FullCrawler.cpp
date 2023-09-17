@@ -125,6 +125,8 @@ bool FullCrawler::willCrawlPage(const Page &page, int)
     if (page.getType() == Page::Type::LeafTable) {
         increaseProgress(getPageWeight().value());
     }
+    m_assembleDelegate->markDuplicatedAsReplaceable(
+    m_pager.containPageInWal(page.number));
     return true;
 }
 

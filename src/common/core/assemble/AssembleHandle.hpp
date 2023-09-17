@@ -60,6 +60,7 @@ public:
                        const UnsafeStringView &sql) override final;
     bool isAssemblingTableWithoutRowid() const override final;
     bool assembleCell(const Repair::Cell &cell) override final;
+    void markDuplicatedAsReplaceable(bool replaceable) override final;
 
 protected:
     bool lazyPrepareCell();

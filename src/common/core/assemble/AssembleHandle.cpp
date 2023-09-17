@@ -188,6 +188,14 @@ bool AssembleHandle::assembleCell(const Repair::Cell &cell)
     return succeed;
 }
 
+void AssembleHandle::markDuplicatedAsReplaceable(bool replaceable)
+{
+    if (isDuplicatedReplaceable() != replaceable && m_cellStatement->isPrepared()) {
+        m_cellStatement->finalize();
+    }
+    AssembleDelegate::markDuplicatedAsReplaceable(replaceable);
+}
+
 bool AssembleHandle::lazyPrepareCell()
 {
     if (m_cellStatement->isPrepared()) {
@@ -209,7 +217,9 @@ bool AssembleHandle::lazyPrepareCell()
         columns.push_back(Column(meta.name));
     }
     StatementInsert statement = StatementInsert().insertIntoTable(m_table);
-    if (isDuplicatedIgnorable()) {
+    if (isDuplicatedReplaceable()) {
+        statement.orReplace();
+    } else if (isDuplicatedIgnorable()) {
         statement.orIgnore();
     }
     statement.columns(columns).values(BindParameter::bindParameters(columns.size()));
